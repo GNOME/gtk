@@ -2001,8 +2001,7 @@ GObject
   | | | | `GtkVButtonBox
   | | | +GtkVBox
   | | | | +GtkColorSelection
-  | | | | +GtkFontSelection
-  | | | | `GtkGammaCurve
+  | | | | `GtkFontSelection
   | | | `GtkHBox
   | | |   +GtkCombo
   | | |   `GtkStatusbar
@@ -2022,7 +2021,6 @@ GObject
   | | `GtkTreeView
   | +GtkCalendar
   | +GtkDrawingArea
-  | | `GtkCurve
   | +GtkEditable
   | | +GtkEntry
   | |   `GtkSpinButton
@@ -5744,7 +5742,7 @@ static void calendar_select_font( GtkWidget    *button,
 			     calendar-&gt;font_dialog);
   }
   window = calendar-&gt;font_dialog;
-  if (!GTK_WIDGET_VISIBLE (window))
+  if (!gtk_widget_get_visible (window))
     gtk_widget_show (window);
   else
     gtk_widget_destroy (window);
@@ -6134,7 +6132,7 @@ gint main( gint   argc,
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   gtk_window_set_title (GTK_WINDOW (window), "Color selection test");
-  gtk_window_set_policy (GTK_WINDOW (window), TRUE, TRUE, TRUE);
+  gtk_window_set_resizable ((GTK_WINDOW (window), TRUE);
 
   /* Attach to the "delete" and "destroy" events so we can exit */
 
@@ -6473,15 +6471,15 @@ the position specified by <literal>x</literal> and <literal>y</literal>.</para>
 position.</para>
 
 <programlisting role="C">
-void gtk_fixed_set_has_window( GtkFixed  *fixed,
-                               gboolean   has_window );
+void gtk_widget_set_has_window( GtkWidget  *widget,
+                                gboolean    has_window );
 
-gboolean gtk_fixed_get_has_window( GtkFixed *fixed );
+gboolean gtk_widget_get_has_window( GtkWidget *widget );
 </programlisting>
 
 <para>Normally, Fixed widgets don't have their own X window. Since this is
 different from the behaviour of Fixed widgets in earlier releases of GTK, 
-the function gtk_fixed_set_has_window() allows the creation of Fixed widgets 
+the function gtk_widget_set_has_window() allows the creation of Fixed widgets
 <emphasis>with</emphasis> their own window. It has to be called before
 realizing the widget.</para>
 
@@ -7328,7 +7326,6 @@ static GtkWidget *create_bbox( gint  horizontal,
   /* Set the appearance of the Button Box */
   gtk_button_box_set_layout (GTK_BUTTON_BOX (bbox), layout);
   gtk_box_set_spacing (GTK_BOX (bbox), spacing);
-  /*gtk_button_box_set_child_size (GTK_BUTTON_BOX (bbox), child_w, child_h);*/
 
   button = gtk_button_new_from_stock (GTK_STOCK_OK);
   gtk_container_add (GTK_CONTAINER (bbox), button);
@@ -9375,20 +9372,20 @@ What if you have a function which you want to be called when nothing
 else is happening ?</para>
 
 <programlisting role="C">
-gint gtk_idle_add( GtkFunction function,
-                   gpointer    data );
+guint g_idle_add( GSourceFunc function,
+                  gpointer    data );
 </programlisting>
 
 <para>This causes GTK to call the specified function whenever nothing else
 is happening.</para>
 
 <programlisting role="C">
-void gtk_idle_remove( gint tag );
+void g_source_remove( guint tag );
 </programlisting>
 
 <para>I won't explain the meaning of the arguments as they follow very much
 like the ones above. The function pointed to by the first argument to
-gtk_idle_add will be called whenever the opportunity arises. As with
+g_idle_add will be called whenever the opportunity arises. As with
 the others, returning FALSE will stop the idle function from being
 called.</para>
 
@@ -9945,7 +9942,7 @@ protocols.</para>
 <para>An application capable of GTK+ drag-and-drop first defines and sets up
 the GTK+ widget(s) for drag-and-drop. Each widget can be a source
 and/or destination for drag-and-drop. Note that these GTK+ widgets must have
-an associated X Window, check using GTK_WIDGET_NO_WINDOW(widget)).</para>
+an associated X Window, check using gtk_widget_get_has_window (widget).</para>
 
 <para>Source widgets can send out drag data, thus allowing the user to drag
 things off of them, while destination widgets can receive drag data.
@@ -13966,17 +13963,6 @@ void GtkStatusbar::text-popped	(GtkStatusbar *,
 </sect1>
 
 <!-- ----------------------------------------------------------------- -->
-<sect1 id="sec-GtkCurve">
-<title>GtkCurve</title>
-
-<programlisting role="C">
-void GtkCurve::curve-type-changed	(GtkCurve *,
-                                 	 gpointer);
-</programlisting>
-
-</sect1>
-
-<!-- ----------------------------------------------------------------- -->
 <sect1 id="sec-GtkAdjustment">
 <title>GtkAdjustment</title>
 
@@ -16024,7 +16010,6 @@ create_input_dialog ()
     }
 }
 
-void
 int
 main (int argc, char *argv[])
 {

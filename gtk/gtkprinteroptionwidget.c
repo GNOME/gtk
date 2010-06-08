@@ -792,7 +792,7 @@ construct_widgets (GtkPrinterOptionWidget *widget)
 
         /* TODO: make this a gtkfilechooserentry once we move to GTK */
         priv->entry = gtk_entry_new ();
-        priv->combo = gtk_file_chooser_button_new (source->display_text,
+        priv->combo = gtk_file_chooser_button_new (_("Select a folder"),
                                                    GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER);
 
         g_object_set (priv->combo, "local-only", FALSE, NULL);

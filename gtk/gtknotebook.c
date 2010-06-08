@@ -105,14 +105,9 @@ enum {
   PROP_SHOW_TABS,
   PROP_SHOW_BORDER,
   PROP_SCROLLABLE,
-  PROP_TAB_BORDER,
-  PROP_TAB_HBORDER,
-  PROP_TAB_VBORDER,
   PROP_PAGE,
   PROP_ENABLE_POPUP,
-  PROP_GROUP_ID,
   PROP_GROUP,
-  PROP_HOMOGENEOUS
 };
 
 enum {
@@ -417,15 +412,6 @@ static void gtk_notebook_menu_detacher       (GtkWidget        *widget,
 					      GtkMenu          *menu);
 
 /*** GtkNotebook Private Setters ***/
-static void gtk_notebook_set_homogeneous_tabs_internal (GtkNotebook *notebook,
-							gboolean     homogeneous);
-static void gtk_notebook_set_tab_border_internal       (GtkNotebook *notebook,
-							guint        border_width);
-static void gtk_notebook_set_tab_hborder_internal      (GtkNotebook *notebook,
-							guint        tab_hborder);
-static void gtk_notebook_set_tab_vborder_internal      (GtkNotebook *notebook,
-							guint        tab_vborder);
-
 static void gtk_notebook_update_tab_states             (GtkNotebook *notebook);
 static gboolean gtk_notebook_mnemonic_activate_switch_page (GtkWidget *child,
 							    gboolean overload,
@@ -597,33 +583,6 @@ gtk_notebook_class_init (GtkNotebookClass *class)
  						      GTK_POS_TOP,
  						      GTK_PARAM_READWRITE));
   g_object_class_install_property (gobject_class,
-				   PROP_TAB_BORDER,
-				   g_param_spec_uint ("tab-border",
- 						      P_("Tab Border"),
- 						      P_("Width of the border around the tab labels"),
- 						      0,
- 						      G_MAXUINT,
- 						      2,
- 						      GTK_PARAM_WRITABLE));
-  g_object_class_install_property (gobject_class,
-				   PROP_TAB_HBORDER,
-				   g_param_spec_uint ("tab-hborder",
- 						      P_("Horizontal Tab Border"),
- 						      P_("Width of the horizontal border of tab labels"),
- 						      0,
- 						      G_MAXUINT,
- 						      2,
- 						      GTK_PARAM_READWRITE));
-  g_object_class_install_property (gobject_class,
-				   PROP_TAB_VBORDER,
-				   g_param_spec_uint ("tab-vborder",
- 						      P_("Vertical Tab Border"),
- 						      P_("Width of the vertical border of tab labels"),
- 						      0,
- 						      G_MAXUINT,
- 						      2,
- 						      GTK_PARAM_READWRITE));
-  g_object_class_install_property (gobject_class,
 				   PROP_SHOW_TABS,
 				   g_param_spec_boolean ("show-tabs",
  							 P_("Show Tabs"),
@@ -651,22 +610,6 @@ gtk_notebook_class_init (GtkNotebookClass *class)
  							 P_("If TRUE, pressing the right mouse button on the notebook pops up a menu that you can use to go to a page"),
  							 FALSE,
  							 GTK_PARAM_READWRITE));
-  g_object_class_install_property (gobject_class,
-				   PROP_HOMOGENEOUS,
-				   g_param_spec_boolean ("homogeneous",
- 							 P_("Homogeneous"),
- 							 P_("Whether tabs should have homogeneous sizes"),
- 							 FALSE,
-							 GTK_PARAM_READWRITE));
-  g_object_class_install_property (gobject_class,
-				   PROP_GROUP_ID,
-				   g_param_spec_int ("group-id",
-						     P_("Group ID"),
-						     P_("Group ID for tabs drag and drop"),
-						     -1,
-						     G_MAXINT,
-						     -1,
-						     GTK_PARAM_READWRITE));
 
   /**
    * GtkNotebook:group:
@@ -1530,26 +1473,11 @@ gtk_notebook_set_property (GObject         *object,
       else
 	gtk_notebook_popup_disable (notebook);
       break;
-    case PROP_HOMOGENEOUS:
-      gtk_notebook_set_homogeneous_tabs_internal (notebook, g_value_get_boolean (value));
-      break;  
     case PROP_PAGE:
       gtk_notebook_set_current_page (notebook, g_value_get_int (value));
       break;
     case PROP_TAB_POS:
       gtk_notebook_set_tab_pos (notebook, g_value_get_enum (value));
-      break;
-    case PROP_TAB_BORDER:
-      gtk_notebook_set_tab_border_internal (notebook, g_value_get_uint (value));
-      break;
-    case PROP_TAB_HBORDER:
-      gtk_notebook_set_tab_hborder_internal (notebook, g_value_get_uint (value));
-      break;
-    case PROP_TAB_VBORDER:
-      gtk_notebook_set_tab_vborder_internal (notebook, g_value_get_uint (value));
-      break;
-    case PROP_GROUP_ID:
-      gtk_notebook_set_group_id (notebook, g_value_get_int (value));
       break;
     case PROP_GROUP:
       gtk_notebook_set_group (notebook, g_value_get_pointer (value));
@@ -1586,23 +1514,11 @@ gtk_notebook_get_property (GObject         *object,
     case PROP_ENABLE_POPUP:
       g_value_set_boolean (value, notebook->menu != NULL);
       break;
-    case PROP_HOMOGENEOUS:
-      g_value_set_boolean (value, notebook->homogeneous);
-      break;
     case PROP_PAGE:
       g_value_set_int (value, gtk_notebook_get_current_page (notebook));
       break;
     case PROP_TAB_POS:
       g_value_set_enum (value, notebook->tab_pos);
-      break;
-    case PROP_TAB_HBORDER:
-      g_value_set_uint (value, notebook->tab_hborder);
-      break;
-    case PROP_TAB_VBORDER:
-      g_value_set_uint (value, notebook->tab_vborder);
-      break;
-    case PROP_GROUP_ID:
-      g_value_set_int (value, gtk_notebook_get_group_id (notebook));
       break;
     case PROP_GROUP:
       g_value_set_pointer (value, priv->group);
@@ -2835,7 +2751,8 @@ get_drop_position (GtkNotebook *notebook,
 static void
 show_drag_window (GtkNotebook        *notebook,
 		  GtkNotebookPrivate *priv,
-		  GtkNotebookPage    *page)
+		  GtkNotebookPage    *page,
+                  GdkDevice          *device)
 {
   GtkWidget *widget = GTK_WIDGET (notebook);
 
@@ -2870,10 +2787,10 @@ show_drag_window (GtkNotebook        *notebook,
   gdk_window_show (priv->drag_window);
 
   /* the grab will dissapear when the window is hidden */
-  gdk_pointer_grab (priv->drag_window,
-		    FALSE,
-		    GDK_POINTER_MOTION_MASK | GDK_BUTTON_RELEASE_MASK,
-		    NULL, NULL, GDK_CURRENT_TIME);
+  gdk_device_grab (device, priv->drag_window,
+                   GDK_OWNERSHIP_WINDOW, FALSE,
+                   GDK_POINTER_MOTION_MASK | GDK_BUTTON_RELEASE_MASK,
+                   NULL, GDK_CURRENT_TIME);
 }
 
 /* This function undoes the reparenting that happens both when drag_window
@@ -3213,7 +3130,7 @@ gtk_notebook_motion_notify (GtkWidget      *widget,
 	  if (priv->operation != DRAG_OPERATION_REORDER)
 	    {
 	      priv->operation = DRAG_OPERATION_REORDER;
-	      show_drag_window (notebook, priv, page);
+	      show_drag_window (notebook, priv, page, event->device);
 	    }
 
 	  gtk_notebook_pages_allocate (notebook);
@@ -3833,7 +3750,7 @@ gtk_notebook_get_child_property (GtkContainer    *container,
       label = gtk_notebook_get_tab_label (notebook, child);
 
       if (GTK_IS_LABEL (label))
-	g_value_set_string (value, GTK_LABEL (label)->label);
+	g_value_set_string (value, gtk_label_get_label (GTK_LABEL (label)));
       else
 	g_value_set_string (value, NULL);
       break;
@@ -3841,7 +3758,7 @@ gtk_notebook_get_child_property (GtkContainer    *container,
       label = gtk_notebook_get_menu_label (notebook, child);
 
       if (GTK_IS_LABEL (label))
-	g_value_set_string (value, GTK_LABEL (label)->label);
+	g_value_set_string (value, gtk_label_get_label (GTK_LABEL (label)));
       else
 	g_value_set_string (value, NULL);
       break;
@@ -4727,7 +4644,7 @@ gtk_notebook_update_labels (GtkNotebook *notebook)
 	{
 	  if (GTK_IS_LABEL (page->tab_label))
 	    gtk_label_set_text (GTK_LABEL (page->menu_label),
-                                GTK_LABEL (page->tab_label)->label);
+                                gtk_label_get_label (GTK_LABEL (page->tab_label)));
 	  else
 	    gtk_label_set_text (GTK_LABEL (page->menu_label), string);
 	}
@@ -6273,7 +6190,7 @@ gtk_notebook_menu_item_create (GtkNotebook *notebook,
   if (page->default_menu)
     {
       if (GTK_IS_LABEL (page->tab_label))
-	page->menu_label = gtk_label_new (GTK_LABEL (page->tab_label)->label);
+	page->menu_label = gtk_label_new (gtk_label_get_label (GTK_LABEL (page->tab_label)));
       else
 	page->menu_label = gtk_label_new ("");
       gtk_misc_set_alignment (GTK_MISC (page->menu_label), 0.0, 0.5);
@@ -6308,75 +6225,6 @@ gtk_notebook_menu_detacher (GtkWidget *widget,
   g_return_if_fail (notebook->menu == (GtkWidget*) menu);
 
   notebook->menu = NULL;
-}
-
-/* Private GtkNotebook Setter Functions:
- *
- * gtk_notebook_set_homogeneous_tabs_internal
- * gtk_notebook_set_tab_border_internal
- * gtk_notebook_set_tab_hborder_internal
- * gtk_notebook_set_tab_vborder_internal
- */
-static void
-gtk_notebook_set_homogeneous_tabs_internal (GtkNotebook *notebook,
-				            gboolean     homogeneous)
-{
-  if (homogeneous == notebook->homogeneous)
-    return;
-
-  notebook->homogeneous = homogeneous;
-  gtk_widget_queue_resize (GTK_WIDGET (notebook));
-
-  g_object_notify (G_OBJECT (notebook), "homogeneous");
-}
-
-static void
-gtk_notebook_set_tab_border_internal (GtkNotebook *notebook,
-				      guint        border_width)
-{
-  notebook->tab_hborder = border_width;
-  notebook->tab_vborder = border_width;
-
-  if (notebook->show_tabs &&
-      gtk_widget_get_visible (GTK_WIDGET (notebook)))
-    gtk_widget_queue_resize (GTK_WIDGET (notebook));
-
-  g_object_freeze_notify (G_OBJECT (notebook));
-  g_object_notify (G_OBJECT (notebook), "tab-hborder");
-  g_object_notify (G_OBJECT (notebook), "tab-vborder");
-  g_object_thaw_notify (G_OBJECT (notebook));
-}
-
-static void
-gtk_notebook_set_tab_hborder_internal (GtkNotebook *notebook,
-				       guint        tab_hborder)
-{
-  if (notebook->tab_hborder == tab_hborder)
-    return;
-
-  notebook->tab_hborder = tab_hborder;
-
-  if (notebook->show_tabs &&
-      gtk_widget_get_visible (GTK_WIDGET (notebook)))
-    gtk_widget_queue_resize (GTK_WIDGET (notebook));
-
-  g_object_notify (G_OBJECT (notebook), "tab-hborder");
-}
-
-static void
-gtk_notebook_set_tab_vborder_internal (GtkNotebook *notebook,
-				       guint        tab_vborder)
-{
-  if (notebook->tab_vborder == tab_vborder)
-    return;
-
-  notebook->tab_vborder = tab_vborder;
-
-  if (notebook->show_tabs &&
-      gtk_widget_get_visible (GTK_WIDGET (notebook)))
-    gtk_widget_queue_resize (GTK_WIDGET (notebook));
-
-  g_object_notify (G_OBJECT (notebook), "tab-vborder");
 }
 
 /* Public GtkNotebook Page Insert/Remove Methods :
@@ -7000,73 +6848,6 @@ gtk_notebook_get_tab_pos (GtkNotebook *notebook)
 }
 
 /**
- * gtk_notebook_set_homogeneous_tabs:
- * @notebook: a #GtkNotebook
- * @homogeneous: %TRUE if all tabs should be the same size.
- * 
- * Sets whether the tabs must have all the same size or not.
- **/
-void
-gtk_notebook_set_homogeneous_tabs (GtkNotebook *notebook,
-				   gboolean     homogeneous)
-{
-  g_return_if_fail (GTK_IS_NOTEBOOK (notebook));
-
-  gtk_notebook_set_homogeneous_tabs_internal (notebook, homogeneous);
-}
-
-/**
- * gtk_notebook_set_tab_border:
- * @notebook: a #GtkNotebook
- * @border_width: width of the border around the tab labels.
- * 
- * Sets the width the border around the tab labels
- * in a notebook. This is equivalent to calling
- * gtk_notebook_set_tab_hborder (@notebook, @border_width) followed
- * by gtk_notebook_set_tab_vborder (@notebook, @border_width).
- **/
-void
-gtk_notebook_set_tab_border (GtkNotebook *notebook,
-			     guint        border_width)
-{
-  g_return_if_fail (GTK_IS_NOTEBOOK (notebook));
-
-  gtk_notebook_set_tab_border_internal (notebook, border_width);
-}
-
-/**
- * gtk_notebook_set_tab_hborder:
- * @notebook: a #GtkNotebook
- * @tab_hborder: width of the horizontal border of tab labels.
- * 
- * Sets the width of the horizontal border of tab labels.
- **/
-void
-gtk_notebook_set_tab_hborder (GtkNotebook *notebook,
-			      guint        tab_hborder)
-{
-  g_return_if_fail (GTK_IS_NOTEBOOK (notebook));
-
-  gtk_notebook_set_tab_hborder_internal (notebook, tab_hborder);
-}
-
-/**
- * gtk_notebook_set_tab_vborder:
- * @notebook: a #GtkNotebook
- * @tab_vborder: width of the vertical border of tab labels.
- * 
- * Sets the width of the vertical border of tab labels.
- **/
-void
-gtk_notebook_set_tab_vborder (GtkNotebook *notebook,
-			      guint        tab_vborder)
-{
-  g_return_if_fail (GTK_IS_NOTEBOOK (notebook));
-
-  gtk_notebook_set_tab_vborder_internal (notebook, tab_vborder);
-}
-
-/**
  * gtk_notebook_set_scrollable:
  * @notebook: a #GtkNotebook
  * @scrollable: %TRUE if scroll arrows should be added
@@ -7687,32 +7468,6 @@ gtk_notebook_set_window_creation_hook (GtkNotebookWindowCreationFunc  func,
 }
 
 /**
- * gtk_notebook_set_group_id:
- * @notebook: a #GtkNotebook
- * @group_id: a group identificator, or -1 to unset it
- *
- * Sets an group identificator for @notebook, notebooks sharing
- * the same group identificator will be able to exchange tabs
- * via drag and drop. A notebook with group identificator -1 will
- * not be able to exchange tabs with any other notebook.
- * 
- * Since: 2.10
- * Deprecated: 2.12: use gtk_notebook_set_group() instead.
- */
-void
-gtk_notebook_set_group_id (GtkNotebook *notebook,
-			   gint         group_id)
-{
-  gpointer group;
-
-  g_return_if_fail (GTK_IS_NOTEBOOK (notebook));
-
-  /* add 1 to get rid of the -1/NULL difference */
-  group = GINT_TO_POINTER (group_id + 1);
-  gtk_notebook_set_group (notebook, group);
-}
-
-/**
  * gtk_notebook_set_group:
  * @notebook: a #GtkNotebook
  * @group: (allow-none): a pointer to identify the notebook group, or %NULL to unset it
@@ -7740,30 +7495,6 @@ gtk_notebook_set_group (GtkNotebook *notebook,
       g_object_notify (G_OBJECT (notebook), "group-id");
       g_object_notify (G_OBJECT (notebook), "group");
     }
-}
-
-/**
- * gtk_notebook_get_group_id:
- * @notebook: a #GtkNotebook
- * 
- * Gets the current group identificator for @notebook.
- * 
- * Return Value: the group identificator, or -1 if none is set.
- *
- * Since: 2.10
- * Deprecated: 2.12: use gtk_notebook_get_group() instead.
- */
-gint
-gtk_notebook_get_group_id (GtkNotebook *notebook)
-{
-  GtkNotebookPrivate *priv;
-
-  g_return_val_if_fail (GTK_IS_NOTEBOOK (notebook), -1);
-
-  priv = GTK_NOTEBOOK_GET_PRIVATE (notebook);
-
-  /* substract 1 to get rid of the -1/NULL difference */
-  return GPOINTER_TO_INT (priv->group) - 1;
 }
 
 /**

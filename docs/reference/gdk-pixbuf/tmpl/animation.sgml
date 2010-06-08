@@ -23,6 +23,9 @@ Animated images.
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### STRUCT GdkPixbufAnimation ##### -->
 <para>
 An opaque struct representing an animation.
@@ -44,23 +47,6 @@ certain position in an animation.
 @filename: 
 @error: 
 @Returns: 
-
-
-<!-- ##### FUNCTION gdk_pixbuf_animation_ref ##### -->
-<para>
-
-</para>
-
-@animation: 
-@Returns: 
-
-
-<!-- ##### FUNCTION gdk_pixbuf_animation_unref ##### -->
-<para>
-
-</para>
-
-@animation: 
 
 
 <!-- ##### FUNCTION gdk_pixbuf_animation_get_width ##### -->

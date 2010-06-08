@@ -195,8 +195,6 @@ test_colourmaps (void)
 static void
 test_colours (void)
 {
-  ASSERT (gdk_color_white (system_colourmap, &white));
-  ASSERT (gdk_color_black (system_colourmap, &black));
   red.red = 65535;
   red.green = red.blue = 0;
   TEST (gdk_colormap_alloc_color (system_colourmap, &red, FALSE, TRUE));
@@ -361,15 +359,15 @@ test_pixmaps (gint depth)
       {
 	pixmap = gdk_pixmap_new (NULL, width, height, depth);
 	ASSERT (pixmap != NULL);
-	gdk_window_get_size (pixmap, &w, &h);
+	gdk_drawable_get_size (pixmap, &w, &h);
 	QTESTF (w == width, (" w:%d", w));
 	QTESTF (h == height, (" h:%d", h));
-	image = gdk_image_get (pixmap, 0, 0, w, h);
+	image = gdk_drawable_get_image (pixmap, 0, 0, w, h);
 	QTEST (image != NULL);
 	QTEST (image->width == width);
 	QTEST (image->height == height);
 	QTEST (image->depth == depth);
-	gdk_image_destroy (image);
+	g_object_unref (image);
 	g_object_unref (pixmap);
       }
   TEST (retval);
@@ -405,7 +403,7 @@ test_images (void)
 	      QTEST (image->depth == system_visual->depth);
 	      QTEST (image->bpp >= (image->depth-1)/8 + 1);
 	      QTEST (image->mem != NULL);
-	      gdk_image_destroy (image);
+	      g_object_unref (image);
 	    }
 	}
   TEST (retval);
@@ -444,10 +442,10 @@ test_temp_windows (void)
 	gdk_window_get_geometry (window, &x, &y, &w, &h, &d);
 	QTESTF (w == 37, ("w:%d", w));
 	QTESTF (h == 19, ("h:%d", h));
-	visual = gdk_window_get_visual (window);
+	visual = gdk_drawable_get_visual (window);
 	QTEST (visual == system_visual);
 	gdk_window_hide (window);
-	gdk_window_unref (window);
+	g_object_unref (window);
       }
   TEST (retval);
 }
@@ -512,14 +510,14 @@ test_one_point_on_drawable (GdkDrawable *drawable,
 
   gdk_gc_get_values (gc, &gcvalues);
 
-  image = gdk_image_get (drawable, x+-1, y+-1, 3, 3);
+  image = gdk_drawable_get_image (drawable, x+-1, y+-1, 3, 3);
   QTEST (image != NULL);
   for (xoff = -1; xoff <= 1; xoff++)
     for (yoff = -1; yoff <= 1; yoff++)
       {
 	oldpixels[xoff+1][yoff+1] = gdk_image_get_pixel (image, xoff+1, yoff+1);
       }
-  gdk_image_destroy (image);
+  g_object_unref (image);
 
   if (depth == 32)
     mask = 0xFFFFFFFF;
@@ -528,7 +526,7 @@ test_one_point_on_drawable (GdkDrawable *drawable,
 
   gdk_draw_point (drawable, gc, x, y);
 
-  image = gdk_image_get (drawable, x-1, y-1, 3, 3);
+  image = gdk_drawable_get_image (drawable, x-1, y-1, 3, 3);
   QTEST (image != NULL);
   for (xoff = -1; xoff <= 1; xoff++)
     for (yoff = -1; yoff <= 1; yoff++)
@@ -540,7 +538,7 @@ test_one_point_on_drawable (GdkDrawable *drawable,
 	else
 	  QTEST (newpixel == oldpixels[xoff+1][yoff+1]);
       }
-  gdk_image_destroy (image);
+  g_object_unref (image);
 }
 
 
@@ -600,8 +598,8 @@ test_one_line_on_drawable (GdkDrawable *drawable,
   line_width = gcvalues.line_width > 0 ? gcvalues.line_width : 1;
   w_up = w_left = line_width/2;
   w_down = w_right = (line_width & 1) ? line_width/2 : line_width/2-1;
-  gdk_window_get_size (drawable, &w, &h);
-  oldimage = gdk_image_get (drawable, 0, 0, w, h);
+  gdk_drawable_get_size (drawable, &w, &h);
+  oldimage = gdk_drawable_get_image (drawable, 0, 0, w, h);
 
   if (depth == 32)
     mask = 0xFFFFFFFF;
@@ -616,7 +614,7 @@ test_one_line_on_drawable (GdkDrawable *drawable,
       const gint y2 = y1;
 
       gdk_draw_line (drawable, gc, x1, y1, x2, y2);
-      newimage = gdk_image_get (drawable, 0, 0, w, h);
+      newimage = gdk_drawable_get_image (drawable, 0, 0, w, h);
       for (x = x1-1; x <= x2+1; x++)
 	for (y = y1-w_up-1; y <= y1+w_down+1; y++)
 	  {
@@ -637,7 +635,7 @@ test_one_line_on_drawable (GdkDrawable *drawable,
       const gint y2 = 13;
 
       gdk_draw_line (drawable, gc, x1, y1, x2, y2);
-      newimage = gdk_image_get (drawable, 0, 0, w, h);
+      newimage = gdk_drawable_get_image (drawable, 0, 0, w, h);
       for (x = x1-w_left-1; x <= x1+w_right+1; x++)
 	for (y = y1-1; y <= y2+1; y++)
 	  {
@@ -651,8 +649,8 @@ test_one_line_on_drawable (GdkDrawable *drawable,
 	  }
     }
   
-  gdk_image_destroy (oldimage);
-  gdk_image_destroy (newimage);
+  g_object_unref (oldimage);
+  g_object_unref (newimage);
 }
 
 /* Test drawing lines.
@@ -714,8 +712,8 @@ test_one_rectangle_on_drawable (GdkDrawable *drawable,
       w_down = w_right = (line_width & 1) ? line_width/2 : line_width/2-1;
     }
 
-  gdk_window_get_size (drawable, &w, &h);
-  oldimage = gdk_image_get (drawable, 0, 0, w, h);
+  gdk_drawable_get_size (drawable, &w, &h);
+  oldimage = gdk_drawable_get_image (drawable, 0, 0, w, h);
 
   if (depth == 32)
     mask = 0xFFFFFFFF;
@@ -723,7 +721,7 @@ test_one_rectangle_on_drawable (GdkDrawable *drawable,
     mask = (1 << depth) - 1;
 
   gdk_draw_rectangle (drawable, gc, filled, x0, y0, width, height);
-  newimage = gdk_image_get (drawable, 0, 0, w, h);
+  newimage = gdk_drawable_get_image (drawable, 0, 0, w, h);
 
   for (x = x0 - 1; x <= x0 + width + 1; x++)
     for (y = y0 - 1; y < y0 + height + 1; y++)
@@ -757,8 +755,8 @@ test_one_rectangle_on_drawable (GdkDrawable *drawable,
 	  }
       }
   
-  gdk_image_destroy (oldimage);
-  gdk_image_destroy (newimage);
+  g_object_unref (oldimage);
+  g_object_unref (newimage);
 }
 
 /* Test drawing rectangles.
@@ -820,8 +818,8 @@ test_some_arcs_on_drawable (GdkDrawable *drawable,
       w_down = w_right = (line_width & 1) ? line_width/2 : line_width/2-1;
     }
 
-  gdk_window_get_size (drawable, &w, &h);
-  oldimage = gdk_image_get (drawable, 0, 0, w, h);
+  gdk_drawable_get_size (drawable, &w, &h);
+  oldimage = gdk_drawable_get_image (drawable, 0, 0, w, h);
 
   if (depth == 32)
     mask = 0xFFFFFFFF;
@@ -829,7 +827,7 @@ test_some_arcs_on_drawable (GdkDrawable *drawable,
     mask = (1 << depth) - 1;
 
   /* XXX */
-  newimage = gdk_image_get (drawable, 0, 0, w, h);
+  newimage = gdk_drawable_get_image (drawable, 0, 0, w, h);
 
   for (x = x0 - 1; x <= x0 + width + 1; x++)
     for (y = y0 - 1; y < y0 + height + 1; y++)
@@ -847,8 +845,8 @@ test_some_arcs_on_drawable (GdkDrawable *drawable,
 	  }
       }
   
-  gdk_image_destroy (oldimage);
-  gdk_image_destroy (newimage);
+  g_object_unref (oldimage);
+  g_object_unref (newimage);
 }
 
 /* Test drawing arcs. Results don't have to be exactly as on X11,

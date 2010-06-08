@@ -21,7 +21,7 @@
  *      Mark McLoughlin <mark@skynet.ie>
  */
 
-#if defined(GTK_DISABLE_SINGLE_INCLUDES) && !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
+#if !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
 #error "Only <gtk/gtk.h> can be included directly."
 #endif
 
@@ -110,10 +110,6 @@ void                  gtk_status_icon_set_screen         (GtkStatusIcon      *st
                                                           GdkScreen          *screen);
 GdkScreen            *gtk_status_icon_get_screen         (GtkStatusIcon      *status_icon);
 
-#ifndef GTK_DISABLE_DEPRECATED
-void                  gtk_status_icon_set_tooltip        (GtkStatusIcon      *status_icon,
-                                                          const gchar        *tooltip_text);
-#endif
 void                  gtk_status_icon_set_has_tooltip    (GtkStatusIcon      *status_icon,
                                                           gboolean            has_tooltip);
 void                  gtk_status_icon_set_tooltip_text   (GtkStatusIcon      *status_icon,

@@ -35,10 +35,27 @@
 #include "gtkmarshalers.h"
 #include "gtkorientable.h"
 #include "gtkrange.h"
+#include "gtkscale.h"
 #include "gtkscrollbar.h"
 #include "gtkprivate.h"
 #include "gtkintl.h"
 #include "gtkalias.h"
+
+
+/**
+ * SECTION:gtkrange
+ * @Short_description: Base class for widgets which visualize an adjustment
+ * @Title: GtkRange
+ *
+ * #GtkRange is the common base class for widgets which visualize an
+ * adjustment, e.g #GtkScale or #GtkScrollbar.
+ *
+ * Apart from signals for monitoring the parameters of the adjustment,
+ * #GtkRange provides properties and methods for influencing the sensitivity
+ * of the "steppers". It also provides properties and methods for setting a
+ * "fill level" on range widgets. See gtk_range_set_fill_level().
+ */
+
 
 #define SCROLL_DELAY_FACTOR 5    /* Scroll repeat multiplier */
 #define UPDATE_DELAY        300  /* Delay for queued update */
@@ -122,6 +139,8 @@ struct _GtkRangeLayout
   gint *mark_pos;
   gint n_marks;
   gboolean recalc_marks;
+
+  GdkDevice *grab_device;
 };
 
 
@@ -271,7 +290,7 @@ gtk_range_class_init (GtkRangeClass *class)
 
   /**
    * GtkRange::value-changed:
-   * @range: the #GtkRange
+   * @range: the #GtkRange that received the signal
    *
    * Emitted when the range value changes.
    */
@@ -283,7 +302,15 @@ gtk_range_class_init (GtkRangeClass *class)
                   NULL, NULL,
                   _gtk_marshal_VOID__VOID,
                   G_TYPE_NONE, 0);
-  
+
+  /**
+   * GtkRange::adjust-bounds:
+   * @range: the #GtkRange that received the signal
+   * @value: the value before we clamp
+   *
+   * Emitted before clamping a value, to give the application a
+   * chance to adjust the bounds.
+   */
   signals[ADJUST_BOUNDS] =
     g_signal_new (I_("adjust-bounds"),
                   G_TYPE_FROM_CLASS (gobject_class),
@@ -296,7 +323,7 @@ gtk_range_class_init (GtkRangeClass *class)
   
   /**
    * GtkRange::move-slider:
-   * @range: the #GtkRange
+   * @range: the #GtkRange that received the signal
    * @step: how to move the slider
    *
    * Virtual function that moves the slider. Used for keybindings.
@@ -313,7 +340,7 @@ gtk_range_class_init (GtkRangeClass *class)
 
   /**
    * GtkRange::change-value:
-   * @range: the range that received the signal
+   * @range: the #GtkRange that received the signal
    * @scroll: the type of scroll action that was performed
    * @value: the new value resulting from the scroll action
    * @returns: %TRUE to prevent other handlers from being invoked for the
@@ -1185,9 +1212,6 @@ gtk_range_set_range (GtkRange *range,
     value = MIN (value, MAX (range->adjustment->lower,
                              range->layout->fill_level));
 
-  value = CLAMP (value, range->adjustment->lower,
-                 (range->adjustment->upper - range->adjustment->page_size));
-
   gtk_adjustment_set_value (range->adjustment, value);
   gtk_adjustment_changed (range->adjustment);
 }
@@ -1211,9 +1235,6 @@ gtk_range_set_value (GtkRange *range,
   if (range->layout->restrict_to_fill_level)
     value = MIN (value, MAX (range->adjustment->lower,
                              range->layout->fill_level));
-
-  value = CLAMP (value, range->adjustment->lower,
-                 (range->adjustment->upper - range->adjustment->page_size));
 
   gtk_adjustment_set_value (range->adjustment, value);
 }
@@ -2013,16 +2034,28 @@ gtk_range_expose (GtkWidget      *widget,
 
 static void
 range_grab_add (GtkRange      *range,
+                GdkDevice     *device,
                 MouseLocation  location,
                 gint           button)
 {
-  /* we don't actually gtk_grab, since a button is down */
+  GtkRangeLayout *layout = range->layout;
 
-  gtk_grab_add (GTK_WIDGET (range));
-  
+  if (device == layout->grab_device)
+    return;
+
+  if (layout->grab_device != NULL)
+    {
+      g_warning ("GtkRange already had a grab device, releasing device grab");
+      gtk_device_grab_remove (GTK_WIDGET (range), layout->grab_device);
+    }
+
+  /* we don't actually gdk_grab, since a button is down */
+  gtk_device_grab_add (GTK_WIDGET (range), device, TRUE);
+
   range->layout->grab_location = location;
   range->layout->grab_button = button;
-  
+  range->layout->grab_device = device;
+
   if (gtk_range_update_mouse_location (range))
     gtk_widget_queue_draw (GTK_WIDGET (range));
 }
@@ -2030,10 +2063,16 @@ range_grab_add (GtkRange      *range,
 static void
 range_grab_remove (GtkRange *range)
 {
+  GtkRangeLayout *layout = range->layout;
   MouseLocation location;
 
-  gtk_grab_remove (GTK_WIDGET (range));
- 
+  if (layout->grab_device)
+    {
+      gtk_device_grab_remove (GTK_WIDGET (range),
+                              layout->grab_device);
+      layout->grab_device = NULL;
+    }
+
   location = range->layout->grab_location; 
   range->layout->grab_location = MOUSE_OUTSIDE;
   range->layout->grab_button = 0;
@@ -2158,9 +2197,15 @@ static gboolean
 gtk_range_key_press (GtkWidget   *widget,
 		     GdkEventKey *event)
 {
+  GdkDevice *device;
   GtkRange *range = GTK_RANGE (widget);
+  GtkRangeLayout *layout = range->layout;
 
-  if (event->keyval == GDK_Escape &&
+  device = gdk_event_get_device ((GdkEvent *) event);
+  device = gdk_device_get_associated_device (device);
+
+  if (device == layout->grab_device &&
+      event->keyval == GDK_Escape &&
       range->layout->grab_location != MOUSE_OUTSIDE)
     {
       stop_scrolling (range);
@@ -2180,6 +2225,7 @@ gtk_range_button_press (GtkWidget      *widget,
 			GdkEventButton *event)
 {
   GtkRange *range = GTK_RANGE (widget);
+  GdkDevice *device;
   
   if (!gtk_widget_has_focus (widget))
     gtk_widget_grab_focus (widget);
@@ -2188,8 +2234,10 @@ gtk_range_button_press (GtkWidget      *widget,
   if (range->layout->grab_location != MOUSE_OUTSIDE)
     return FALSE;
 
+  device = gdk_event_get_device ((GdkEvent *) event);
   range->layout->mouse_x = event->x;
   range->layout->mouse_y = event->y;
+
   if (gtk_range_update_mouse_location (range))
     gtk_widget_queue_draw (widget);
     
@@ -2206,7 +2254,7 @@ gtk_range_button_press (GtkWidget      *widget,
                                     event->y : event->x);
       
       range->trough_click_forward = click_value > range->adjustment->value;
-      range_grab_add (range, MOUSE_TROUGH, event->button);
+      range_grab_add (range, device, MOUSE_TROUGH, event->button);
       
       scroll = range_get_scroll_for_grab (range);
       
@@ -2223,7 +2271,7 @@ gtk_range_button_press (GtkWidget      *widget,
       GdkRectangle *stepper_area;
       GtkScrollType scroll;
       
-      range_grab_add (range, range->layout->mouse_location, event->button);
+      range_grab_add (range, device, range->layout->mouse_location, event->button);
 
       stepper_area = get_area (range, range->layout->mouse_location);
       gtk_widget_queue_draw_area (widget,
@@ -2290,7 +2338,7 @@ gtk_range_button_press (GtkWidget      *widget,
           range->slide_initial_coordinate = event->x;
         }
 
-      range_grab_add (range, MOUSE_SLIDER, event->button);
+      range_grab_add (range, device, MOUSE_SLIDER, event->button);
 
       gtk_widget_style_get (widget, "activate-slider", &activate_slider, NULL);
 
@@ -2367,8 +2415,12 @@ gtk_range_grab_broken (GtkWidget          *widget,
 		       GdkEventGrabBroken *event)
 {
   GtkRange *range = GTK_RANGE (widget);
+  GdkDevice *device;
 
-  if (range->layout->grab_location != MOUSE_OUTSIDE)
+  device = gdk_event_get_device ((GdkEvent *) event);
+
+  if (device == range->layout->grab_device &&
+      range->layout->grab_location != MOUSE_OUTSIDE)
     {
       if (range->layout->grab_location == MOUSE_SLIDER)
 	update_slider_position (range, range->layout->mouse_x, range->layout->mouse_y);
@@ -2386,6 +2438,7 @@ gtk_range_button_release (GtkWidget      *widget,
 			  GdkEventButton *event)
 {
   GtkRange *range = GTK_RANGE (widget);
+  GdkDevice *device;
 
   if (event->window == range->event_window)
     {
@@ -2394,13 +2447,17 @@ gtk_range_button_release (GtkWidget      *widget,
     }
   else
     {
-      gdk_window_get_pointer (range->event_window,
-			      &range->layout->mouse_x,
-			      &range->layout->mouse_y,
-			      NULL);
+      gdk_window_get_device_position (range->event_window,
+                                      event->device,
+                                      &range->layout->mouse_x,
+                                      &range->layout->mouse_y,
+                                      NULL);
     }
-  
-  if (range->layout->grab_button == event->button)
+
+  device = gdk_event_get_device ((GdkEvent *) event);
+
+  if (range->layout->grab_device == device &&
+      range->layout->grab_button == event->button)
     {
       if (range->layout->grab_location == MOUSE_SLIDER)
         update_slider_position (range, range->layout->mouse_x, range->layout->mouse_y);
@@ -2532,7 +2589,10 @@ static void
 gtk_range_grab_notify (GtkWidget *widget,
 		       gboolean   was_grabbed)
 {
-  if (!was_grabbed)
+  GtkRangeLayout *layout = GTK_RANGE (widget)->layout;
+
+  if (layout->grab_device &&
+      gtk_widget_device_is_shadowed (widget, layout->grab_device))
     stop_scrolling (GTK_RANGE (widget));
 }
 
@@ -2618,7 +2678,8 @@ gtk_range_adjustment_value_changed (GtkAdjustment *adjustment,
   gtk_range_calc_layout (range, range->adjustment->value);
   
   /* now check whether the layout changed  */
-  if (layout_changed (range->layout, &layout))
+  if (layout_changed (range->layout, &layout) ||
+      (GTK_IS_SCALE (range) && GTK_SCALE (range)->draw_value))
     {
       gtk_widget_queue_draw (GTK_WIDGET (range));
       /* setup a timer to ensure the range isn't lagging too much behind the scroll position */
@@ -3629,7 +3690,7 @@ gtk_range_real_change_value (GtkRange     *range,
                              GtkScrollType scroll,
                              gdouble       value)
 {
-  /* potentially adjust the bounds _before we clamp */
+  /* potentially adjust the bounds _before_ we clamp */
   g_signal_emit (range, signals[ADJUST_BOUNDS], 0, value);
 
   if (range->layout->restrict_to_fill_level)

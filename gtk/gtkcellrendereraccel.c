@@ -30,6 +30,8 @@
 #include "gtkalias.h"
 
 
+#define GTK_CELL_RENDERER_ACCEL_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), GTK_TYPE_CELL_RENDERER_ACCEL, GtkCellRendererAccelPrivate))
+
 static void gtk_cell_renderer_accel_get_property (GObject         *object,
                                                   guint            param_id,
                                                   GValue          *value,
@@ -70,6 +72,14 @@ enum {
   PROP_ACCEL_MODS,
   PROP_KEYCODE,
   PROP_ACCEL_MODE
+};
+
+typedef struct GtkCellRendererAccelPrivate GtkCellRendererAccelPrivate;
+
+struct GtkCellRendererAccelPrivate
+{
+  GdkDevice *grab_keyboard;
+  GdkDevice *grab_pointer;
 };
 
 static guint signals[LAST_SIGNAL] = { 0 };
@@ -213,6 +223,8 @@ gtk_cell_renderer_accel_class_init (GtkCellRendererAccelClass *cell_accel_class)
 					 g_cclosure_marshal_VOID__STRING,
 					 G_TYPE_NONE, 1,
 					 G_TYPE_STRING);
+
+  g_type_class_add_private (object_class, sizeof (GtkCellRendererAccelPrivate));
 }
 
 
@@ -405,6 +417,7 @@ grab_key_callback (GtkWidget            *widget,
                    GdkEventKey          *event,
                    GtkCellRendererAccel *accel)
 {
+  GtkCellRendererAccelPrivate *priv;
   GdkModifierType accel_mods = 0;
   guint accel_key;
   gchar *path;
@@ -413,6 +426,7 @@ grab_key_callback (GtkWidget            *widget,
   GdkModifierType consumed_modifiers;
   GdkDisplay *display;
 
+  priv = GTK_CELL_RENDERER_ACCEL_GET_PRIVATE (accel);
   display = gtk_widget_get_display (widget);
 
   if (event->is_modifier)
@@ -471,9 +485,9 @@ grab_key_callback (GtkWidget            *widget,
   edited = TRUE;
 
  out:
-  gtk_grab_remove (accel->grab_widget);
-  gdk_display_keyboard_ungrab (display, event->time);
-  gdk_display_pointer_ungrab (display, event->time);
+  gtk_device_grab_remove (accel->grab_widget, priv->grab_pointer);
+  gdk_device_ungrab (priv->grab_keyboard, event->time);
+  gdk_device_ungrab (priv->grab_pointer, event->time);
 
   path = g_strdup (g_object_get_data (G_OBJECT (accel->edit_widget), "gtk-cell-renderer-text"));
 
@@ -481,7 +495,9 @@ grab_key_callback (GtkWidget            *widget,
   gtk_cell_editable_remove_widget (GTK_CELL_EDITABLE (accel->edit_widget));
   accel->edit_widget = NULL;
   accel->grab_widget = NULL;
-  
+  priv->grab_keyboard = NULL;
+  priv->grab_pointer = NULL;
+
   if (edited)
     g_signal_emit (accel, signals[ACCEL_EDITED], 0, path, 
 		   accel_key, accel_mods, event->hardware_keycode);
@@ -497,11 +513,16 @@ static void
 ungrab_stuff (GtkWidget            *widget,
               GtkCellRendererAccel *accel)
 {
-  GdkDisplay *display = gtk_widget_get_display (widget);
+  GtkCellRendererAccelPrivate *priv;
 
-  gtk_grab_remove (accel->grab_widget);
-  gdk_display_keyboard_ungrab (display, GDK_CURRENT_TIME);
-  gdk_display_pointer_ungrab (display, GDK_CURRENT_TIME);
+  priv = GTK_CELL_RENDERER_ACCEL_GET_PRIVATE (accel);
+
+  gtk_device_grab_remove (accel->grab_widget, priv->grab_pointer);
+  gdk_device_ungrab (priv->grab_keyboard, GDK_CURRENT_TIME);
+  gdk_device_ungrab (priv->grab_pointer, GDK_CURRENT_TIME);
+
+  priv->grab_keyboard = NULL;
+  priv->grab_pointer = NULL;
 
   g_signal_handlers_disconnect_by_func (G_OBJECT (accel->grab_widget),
                                         G_CALLBACK (grab_key_callback),
@@ -548,34 +569,62 @@ gtk_cell_renderer_accel_start_editing (GtkCellRenderer      *cell,
                                        GdkRectangle         *cell_area,
                                        GtkCellRendererState  flags)
 {
+  GtkCellRendererAccelPrivate *priv;
   GtkCellRendererText *celltext;
   GtkCellRendererAccel *accel;
   GtkWidget *label;
   GtkWidget *eventbox;
-  
+  GdkDevice *device, *keyb, *pointer;
+  guint32 time;
+
   celltext = GTK_CELL_RENDERER_TEXT (cell);
   accel = GTK_CELL_RENDERER_ACCEL (cell);
+  priv = GTK_CELL_RENDERER_ACCEL_GET_PRIVATE (cell);
 
   /* If the cell isn't editable we return NULL. */
   if (celltext->editable == FALSE)
     return NULL;
 
   g_return_val_if_fail (widget->window != NULL, NULL);
-  
-  if (gdk_keyboard_grab (widget->window, FALSE,
-                         gdk_event_get_time (event)) != GDK_GRAB_SUCCESS)
+
+  if (event)
+    device = gdk_event_get_device (event);
+  else
+    device = gtk_get_current_event_device ();
+
+  if (!device)
     return NULL;
 
-  if (gdk_pointer_grab (widget->window, FALSE,
-                        GDK_BUTTON_PRESS_MASK,
-                        NULL, NULL,
-                        gdk_event_get_time (event)) != GDK_GRAB_SUCCESS)
+  if (device->source == GDK_SOURCE_KEYBOARD)
     {
-      gdk_display_keyboard_ungrab (gtk_widget_get_display (widget),
-                                   gdk_event_get_time (event));
+      keyb = device;
+      pointer = gdk_device_get_associated_device (device);
+    }
+  else
+    {
+      pointer = device;
+      keyb = gdk_device_get_associated_device (device);
+    }
+
+  time = gdk_event_get_time (event);
+
+  if (gdk_device_grab (keyb, widget->window,
+                       GDK_OWNERSHIP_WINDOW, FALSE,
+                       GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK,
+                       NULL, time) != GDK_GRAB_SUCCESS)
+    return NULL;
+
+  if (gdk_device_grab (pointer, widget->window,
+                       GDK_OWNERSHIP_WINDOW, FALSE,
+                       GDK_BUTTON_PRESS_MASK,
+                       NULL, time) != GDK_GRAB_SUCCESS)
+    {
+      gdk_device_ungrab (keyb, time);
       return NULL;
     }
-  
+
+  priv->grab_keyboard = keyb;
+  priv->grab_pointer = pointer;
   accel->grab_widget = widget;
 
   g_signal_connect (G_OBJECT (widget), "key-press-event",
@@ -609,7 +658,7 @@ gtk_cell_renderer_accel_start_editing (GtkCellRenderer      *cell,
   
   gtk_widget_show_all (accel->edit_widget);
 
-  gtk_grab_add (accel->grab_widget);
+  gtk_device_grab_add (accel->grab_widget, pointer, TRUE);
 
   g_signal_connect (G_OBJECT (accel->edit_widget), "unrealize",
                     G_CALLBACK (ungrab_stuff), accel);

@@ -941,8 +941,8 @@ main (int argc, char **argv)
   if (g_file_test ("../../gdk-pixbuf/libpixbufloader-pnm.la",
                    G_FILE_TEST_EXISTS))
     {
-      g_setenv ("GDK_PIXBUF_MODULE_FILE", "../../gdk-pixbuf/gdk-pixbuf.loaders", TRUE);
-      g_setenv ("GTK_IM_MODULE_FILE", "../../modules/input/gtk.immodules", TRUE);
+      g_setenv ("GDK_PIXBUF_MODULE_FILE", "../../gdk-pixbuf/loaders.cache", TRUE);
+      g_setenv ("GTK_IM_MODULE_FILE", "../../modules/input/immodules.cache", TRUE);
     }
   /* -- End of hack -- */
   

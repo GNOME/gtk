@@ -18,8 +18,9 @@
  * Boston, MA 02111-1307, USA.
  */
 
-
 #import "GdkQuartzView.h"
+#include "gdkregion.h"
+#include "gdkregion-generic.h"
 #include "gdkwindow-quartz.h"
 #include "gdkprivate-quartz.h"
 
@@ -92,33 +93,16 @@
     }
 
   [self getRectsBeingDrawn:&drawn_rects count:&count];
-
-  /* Note: arbitrary limit here to not degrade performace too much. It would
-   * be better to optimize the construction of the region below, by using
-   * _gdk_region_new_from_yxbanded_rects.
-   */
-  if (count > 25)
+  region = gdk_region_new ();
+  
+  for (i = 0; i < count; i++)
     {
-      gdk_rect.x = rect.origin.x;
-      gdk_rect.y = rect.origin.y;
-      gdk_rect.width = rect.size.width;
-      gdk_rect.height = rect.size.height;
-
-      region = gdk_region_rectangle (&gdk_rect);
-    }
-  else
-    {
-      region = gdk_region_new ();
-
-      for (i = 0; i < count; i++)
-        {
-          gdk_rect.x = drawn_rects[i].origin.x;
-          gdk_rect.y = drawn_rects[i].origin.y;
-          gdk_rect.width = drawn_rects[i].size.width;
-          gdk_rect.height = drawn_rects[i].size.height;
-
-          gdk_region_union_with_rect (region, &gdk_rect);
-        }
+      gdk_rect.x = drawn_rects[i].origin.x;
+      gdk_rect.y = drawn_rects[i].origin.y;
+      gdk_rect.width = drawn_rects[i].size.width;
+      gdk_rect.height = drawn_rects[i].size.height;
+      
+      gdk_region_union_with_rect (region, &gdk_rect);
     }
 
   impl->in_paint_rect_count++;

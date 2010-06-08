@@ -18,7 +18,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
  */
 
-#if defined(GTK_DISABLE_SINGLE_INCLUDES) && !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
+#if !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
 #error "Only <gtk/gtk.h> can be included directly."
 #endif
 
@@ -139,12 +139,6 @@ GType 		  gtk_recent_manager_get_type       (void) G_GNUC_CONST;
 
 GtkRecentManager *gtk_recent_manager_new            (void);
 GtkRecentManager *gtk_recent_manager_get_default    (void);
-
-#ifndef GTK_DISABLE_DEPRECATED
-GtkRecentManager *gtk_recent_manager_get_for_screen (GdkScreen            *screen);
-void              gtk_recent_manager_set_screen     (GtkRecentManager     *manager,
-						     GdkScreen            *screen);
-#endif
 
 gboolean          gtk_recent_manager_add_item       (GtkRecentManager     *manager,
 						     const gchar          *uri);

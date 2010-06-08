@@ -22,8 +22,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#undef GTK_DISABLE_DEPRECATED
-
 #include <gtk/gtk.h>
 #include "gail.h"
 #include "gailfactory.h"
@@ -82,7 +80,6 @@ GAIL_IMPLEMENT_FACTORY_WITH_FUNC (GAIL_TYPE_MENU_ITEM, GailMenuItem, gail_menu_i
 GAIL_IMPLEMENT_FACTORY (GAIL_TYPE_TOGGLE_BUTTON, GailToggleButton, gail_toggle_button, GTK_TYPE_TOGGLE_BUTTON)
 GAIL_IMPLEMENT_FACTORY (GAIL_TYPE_IMAGE, GailImage, gail_image, GTK_TYPE_IMAGE)
 GAIL_IMPLEMENT_FACTORY (GAIL_TYPE_TEXT_VIEW, GailTextView, gail_text_view, GTK_TYPE_TEXT_VIEW)
-GAIL_IMPLEMENT_FACTORY (GAIL_TYPE_COMBO, GailCombo, gail_combo, GTK_TYPE_COMBO)
 GAIL_IMPLEMENT_FACTORY (GAIL_TYPE_COMBO_BOX, GailComboBox, gail_combo_box, GTK_TYPE_COMBO_BOX)
 GAIL_IMPLEMENT_FACTORY (GAIL_TYPE_ENTRY, GailEntry, gail_entry, GTK_TYPE_ENTRY)
 GAIL_IMPLEMENT_FACTORY (GAIL_TYPE_MENU_SHELL, GailMenuShell, gail_menu_shell, GTK_TYPE_MENU_SHELL)
@@ -91,7 +88,6 @@ GAIL_IMPLEMENT_FACTORY (GAIL_TYPE_WINDOW, GailWindow, gail_window, GTK_TYPE_BIN)
 GAIL_IMPLEMENT_FACTORY (GAIL_TYPE_RANGE, GailRange, gail_range, GTK_TYPE_RANGE)
 GAIL_IMPLEMENT_FACTORY (GAIL_TYPE_SCALE, GailScale, gail_scale, GTK_TYPE_SCALE)
 GAIL_IMPLEMENT_FACTORY (GAIL_TYPE_SCALE_BUTTON, GailScaleButton, gail_scale_button, GTK_TYPE_SCALE_BUTTON)
-GAIL_IMPLEMENT_FACTORY (GAIL_TYPE_CLIST, GailCList, gail_clist, GTK_TYPE_CLIST)
 GAIL_IMPLEMENT_FACTORY (GAIL_TYPE_LABEL, GailLabel, gail_label, GTK_TYPE_LABEL)
 GAIL_IMPLEMENT_FACTORY (GAIL_TYPE_STATUSBAR, GailStatusbar, gail_statusbar, GTK_TYPE_STATUSBAR)
 GAIL_IMPLEMENT_FACTORY (GAIL_TYPE_NOTEBOOK, GailNotebook, gail_notebook, GTK_TYPE_NOTEBOOK)
@@ -102,14 +98,11 @@ GAIL_IMPLEMENT_FACTORY (GAIL_TYPE_TREE_VIEW, GailTreeView, gail_tree_view, GTK_T
 GAIL_IMPLEMENT_FACTORY (GAIL_TYPE_FRAME, GailFrame, gail_frame, GTK_TYPE_FRAME)
 GAIL_IMPLEMENT_FACTORY (GAIL_TYPE_RADIO_BUTTON, GailRadioButton, gail_radio_button, GTK_TYPE_RADIO_BUTTON)
 GAIL_IMPLEMENT_FACTORY (GAIL_TYPE_ARROW, GailArrow, gail_arrow, GTK_TYPE_ARROW)
-GAIL_IMPLEMENT_FACTORY (GAIL_TYPE_PIXMAP, GailPixmap, gail_pixmap, GTK_TYPE_PIXMAP)
 GAIL_IMPLEMENT_FACTORY (GAIL_TYPE_SEPARATOR, GailSeparator, gail_separator, GTK_TYPE_SEPARATOR)
 GAIL_IMPLEMENT_FACTORY (GAIL_TYPE_BOX, GailBox, gail_box, GTK_TYPE_BOX)
 GAIL_IMPLEMENT_FACTORY (GAIL_TYPE_SCROLLED_WINDOW, GailScrolledWindow, gail_scrolled_window, GTK_TYPE_SCROLLED_WINDOW)
-GAIL_IMPLEMENT_FACTORY (GAIL_TYPE_LIST, GailList, gail_list, GTK_TYPE_LIST)
 GAIL_IMPLEMENT_FACTORY (GAIL_TYPE_PANED, GailPaned, gail_paned, GTK_TYPE_PANED)
 GAIL_IMPLEMENT_FACTORY (GAIL_TYPE_SCROLLBAR, GailScrollbar, gail_scrollbar, GTK_TYPE_SCROLLBAR)
-GAIL_IMPLEMENT_FACTORY (GAIL_TYPE_OPTION_MENU, GailOptionMenu, gail_option_menu, GTK_TYPE_OPTION_MENU)
 GAIL_IMPLEMENT_FACTORY_WITH_FUNC (GAIL_TYPE_CHECK_MENU_ITEM, GailCheckMenuItem, gail_check_menu_item, gail_check_menu_item_new)
 GAIL_IMPLEMENT_FACTORY_WITH_FUNC (GAIL_TYPE_RADIO_MENU_ITEM, GailRadioMenuItem, gail_radio_menu_item, gail_radio_menu_item_new)
 GAIL_IMPLEMENT_FACTORY (GAIL_TYPE_EXPANDER, GailExpander, gail_expander, GTK_TYPE_EXPANDER)
@@ -132,14 +125,7 @@ gail_get_accessible_for_widget (GtkWidget *widget,
     return NULL;
 
   if (GTK_IS_ENTRY (widget))
-    {
-      GtkWidget *other_widget = widget->parent;
-      if (GTK_IS_COMBO (other_widget))
-        {
-          gail_set_focus_widget (other_widget, widget);
-          widget = other_widget;
-        }
-    } 
+    ;
   else if (GTK_IS_NOTEBOOK (widget)) 
     {
       GtkNotebook *notebook;
@@ -160,7 +146,7 @@ gail_get_accessible_for_widget (GtkWidget *widget,
           g_object_unref (obj);
         }
     }
-  else if (GTK_CHECK_TYPE ((widget), gnome_canvas))
+  else if (G_TYPE_CHECK_INSTANCE_TYPE ((widget), gnome_canvas))
     {
       GObject *focused_item;
       GValue value = {0, };
@@ -896,7 +882,6 @@ gail_accessibility_module_init (void)
   GAIL_WIDGET_SET_FACTORY (GTK_TYPE_TOGGLE_BUTTON, gail_toggle_button);
   GAIL_WIDGET_SET_FACTORY (GTK_TYPE_IMAGE, gail_image);
   GAIL_WIDGET_SET_FACTORY (GTK_TYPE_TEXT_VIEW, gail_text_view);
-  GAIL_WIDGET_SET_FACTORY (GTK_TYPE_COMBO, gail_combo);
   GAIL_WIDGET_SET_FACTORY (GTK_TYPE_COMBO_BOX, gail_combo_box);
   GAIL_WIDGET_SET_FACTORY (GTK_TYPE_ENTRY, gail_entry);
   GAIL_WIDGET_SET_FACTORY (GTK_TYPE_MENU_BAR, gail_menu_shell);
@@ -905,7 +890,6 @@ gail_accessibility_module_init (void)
   GAIL_WIDGET_SET_FACTORY (GTK_TYPE_RANGE, gail_range);
   GAIL_WIDGET_SET_FACTORY (GTK_TYPE_SCALE, gail_scale);
   GAIL_WIDGET_SET_FACTORY (GTK_TYPE_SCALE_BUTTON, gail_scale_button);
-  GAIL_WIDGET_SET_FACTORY (GTK_TYPE_CLIST, gail_clist);
   GAIL_WIDGET_SET_FACTORY (GTK_TYPE_LABEL, gail_label);
   GAIL_WIDGET_SET_FACTORY (GTK_TYPE_STATUSBAR, gail_statusbar);
   GAIL_WIDGET_SET_FACTORY (GTK_TYPE_NOTEBOOK, gail_notebook);
@@ -920,14 +904,11 @@ gail_accessibility_module_init (void)
   GAIL_WIDGET_SET_FACTORY (GTK_TYPE_CELL_RENDERER, gail_renderer_cell);
   GAIL_WIDGET_SET_FACTORY (GTK_TYPE_RADIO_BUTTON, gail_radio_button);
   GAIL_WIDGET_SET_FACTORY (GTK_TYPE_ARROW, gail_arrow);
-  GAIL_WIDGET_SET_FACTORY (GTK_TYPE_PIXMAP, gail_pixmap);
   GAIL_WIDGET_SET_FACTORY (GTK_TYPE_SEPARATOR, gail_separator);
   GAIL_WIDGET_SET_FACTORY (GTK_TYPE_BOX, gail_box);
   GAIL_WIDGET_SET_FACTORY (GTK_TYPE_SCROLLED_WINDOW, gail_scrolled_window);
-  GAIL_WIDGET_SET_FACTORY (GTK_TYPE_LIST, gail_list);
   GAIL_WIDGET_SET_FACTORY (GTK_TYPE_PANED, gail_paned);
   GAIL_WIDGET_SET_FACTORY (GTK_TYPE_SCROLLBAR, gail_scrollbar);
-  GAIL_WIDGET_SET_FACTORY (GTK_TYPE_OPTION_MENU, gail_option_menu);
   GAIL_WIDGET_SET_FACTORY (GTK_TYPE_CHECK_MENU_ITEM, gail_check_menu_item);
   GAIL_WIDGET_SET_FACTORY (GTK_TYPE_RADIO_MENU_ITEM, gail_radio_menu_item);
   GAIL_WIDGET_SET_FACTORY (GTK_TYPE_EXPANDER, gail_expander);

@@ -318,36 +318,6 @@ gdk_events_pending (void)
   return _gdk_event_queue_find_first (display) ? TRUE : FALSE;
 }
 
-GdkEvent *
-gdk_event_get_graphics_expose (GdkWindow *window)
-{
-  GdkDisplay *display;
-  GList      *list;
-
-  g_return_val_if_fail (GDK_IS_WINDOW (window), NULL);
-
-  display = gdk_drawable_get_display (GDK_DRAWABLE (window));
-
-  for (list = _gdk_event_queue_find_first (display); list; list = list->next)
-    {
-      GdkEvent *event = list->data;
-      if (event->type == GDK_EXPOSE && event->expose.window == window)
-        break;
-    }
-
-  if (list)
-    {
-      GdkEvent *retval = list->data;
-
-      _gdk_event_queue_remove_link (display, list);
-      g_list_free_1 (list);
-
-      return retval;
-    }
-
-  return NULL;
-}
-
 void
 _gdk_events_queue (GdkDisplay *display)
 {

@@ -24,7 +24,7 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
-#if defined(GTK_DISABLE_SINGLE_INCLUDES) && !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
+#if !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
 #error "Only <gtk/gtk.h> can be included directly."
 #endif
 
@@ -84,10 +84,6 @@ GtkWidget* gtk_radio_button_new_with_mnemonic_from_widget (GtkRadioButton *radio
 GSList*    gtk_radio_button_get_group                     (GtkRadioButton *radio_button);
 void       gtk_radio_button_set_group                     (GtkRadioButton *radio_button,
                                                            GSList         *group);
-
-#ifndef GTK_DISABLE_DEPRECATED
-#define gtk_radio_button_group gtk_radio_button_get_group
-#endif
 
 G_END_DECLS
 

@@ -20,7 +20,7 @@ progs_ldadd = \
 	$(top_builddir)/gtk/$(gtktargetlib)				\
 	$(GTK_DEP_LIBS)
 
-noinst_PROGRAMS = $(TEST_PROGS)
+noinst_PROGRAMS = $(TEST_PROGS) $(SAMPLE_PROGS)
 
 
 TEST_PROGS			+= testing
@@ -62,11 +62,10 @@ object_LDADD			 = $(progs_ldadd)
 crossingevents_SOURCES		 = crossingevents.c
 crossingevents_LDADD		 = $(progs_ldadd)
 
-# this doesn't work in make distcheck, since it doesn't
-# find file-chooser-test-dir 
-# TEST_PROGS			+= filechooser
-filechooser_SOURCES		 = filechooser.c pixbuf-init.c
-filechooser_LDADD		 = $(progs_ldadd)
+# Should be ported to new API's
+#TEST_PROGS			+= filechooser
+#filechooser_SOURCES		 = filechooser.c pixbuf-init.c
+#filechooser_LDADD		 = $(progs_ldadd)
 
 TEST_PROGS			+= builder
 builder_SOURCES			 = builder.c
@@ -76,7 +75,7 @@ builder_LDFLAGS			 = -export-dynamic
 if OS_UNIX
 TEST_PROGS			+= defaultvalue
 endif
-defaultvalue_SOURCES		 = defaultvalue.c pixbuf-init.c	
+defaultvalue_SOURCES		 = defaultvalue.c pixbuf-init.c
 defaultvalue_LDADD 		 = $(progs_ldadd)
 
 TEST_PROGS			+= textbuffer
@@ -94,5 +93,14 @@ expander_LDADD		 = $(progs_ldadd)
 TEST_PROGS			+= action
 action_SOURCES			 = action.c
 action_LDADD			 = $(progs_ldadd)
+
+SAMPLE_PROGS = gtk-example-application
+gtk_example_application_SOURCES	= gtk-example-application.c
+gtk_example_application_LDADD	= $(progs_ldadd)
+
+
+EXTRA_DIST +=				\
+	file-chooser-test-dir/empty     \
+	file-chooser-test-dir/text.txt
 
 -include $(top_srcdir)/git.mk

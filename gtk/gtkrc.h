@@ -24,7 +24,7 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
-#if defined(GTK_DISABLE_SINGLE_INCLUDES) && !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
+#if !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
 #error "Only <gtk/gtk.h> can be included directly."
 #endif
 
@@ -159,24 +159,9 @@ void	  gtk_rc_parse			(const gchar *filename);
 void	  gtk_rc_parse_string		(const gchar *rc_string);
 gboolean  gtk_rc_reparse_all		(void);
 
-#ifndef GTK_DISABLE_DEPRECATED
-void	  gtk_rc_add_widget_name_style	(GtkRcStyle   *rc_style,
-					 const gchar  *pattern);
-void	  gtk_rc_add_widget_class_style (GtkRcStyle   *rc_style,
-					 const gchar  *pattern);
-void	  gtk_rc_add_class_style	(GtkRcStyle   *rc_style,
-					 const gchar  *pattern);
-#endif /* GTK_DISABLE_DEPRECATED */
-
-
 GType       gtk_rc_style_get_type   (void) G_GNUC_CONST;
 GtkRcStyle* gtk_rc_style_new        (void);
 GtkRcStyle* gtk_rc_style_copy       (GtkRcStyle *orig);
-
-#ifndef GTK_DISABLE_DEPRECATED
-void        gtk_rc_style_ref        (GtkRcStyle *rc_style);
-void        gtk_rc_style_unref      (GtkRcStyle *rc_style);
-#endif
 
 gchar*		gtk_rc_find_module_in_path	(const gchar 	*module_file);
 gchar*		gtk_rc_get_theme_dir		(void);
@@ -262,6 +247,10 @@ void	      _gtk_rc_style_unset_rc_property	      (GtkRcStyle *rc_style,
 						       GQuark      property_name);
 
 GSList     * _gtk_rc_style_get_color_hashes        (GtkRcStyle *rc_style);
+
+void         _gtk_rc_style_set_symbolic_color       (GtkRcStyle     *rc_style,
+                                                     const gchar    *name,
+                                                     const GdkColor *color);
 
 const gchar* _gtk_rc_context_get_default_font_name (GtkSettings *settings);
 void         _gtk_rc_context_destroy               (GtkSettings *settings);

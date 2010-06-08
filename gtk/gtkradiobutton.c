@@ -33,6 +33,78 @@
 #include "gtkalias.h"
 
 
+/**
+ * SECTION:gtkradiobutton
+ * @Short_description: A choice from multiple check buttons
+ * @Title: GtkRadioButton
+ * @See_also: #GtkComboBox
+ *
+ * A single radio button performs the same basic function as a #GtkCheckButton,
+ * as its position in the object hierarchy reflects. It is only when multiple
+ * radio buttons are grouped together that they become a different user
+ * interface component in their own right.
+ *
+ * Every radio button is a member of some group of radio buttons. When one is
+ * selected, all other radio buttons in the same group are deselected. A
+ * #GtkRadioButton is one way of giving the user a choice from many options.
+ *
+ * Radio button widgets are created with gtk_radio_button_new(), passing %NULL
+ * as the argument if this is the first radio button in a group. In subsequent
+ * calls, the group you wish to add this button to should be passed as an
+ * argument. Optionally, gtk_radio_button_new_with_label() can be used if you
+ * want a text label on the radio button.
+ *
+ * Alternatively, when adding widgets to an existing group of radio buttons,
+ * use gtk_radio_button_new_from_widget() with a #GtkRadioButton that already
+ * has a group assigned to it. The convenience function
+ * gtk_radio_button_new_with_label_from_widget() is also provided.
+ *
+ * To retrieve the group a #GtkRadioButton is assigned to, use
+ * gtk_radio_button_get_group().
+ *
+ * To remove a #GtkRadioButton from one group and make it part of a new one,
+ * use gtk_radio_button_set_group().
+ *
+ * The group list does not need to be freed, as each #GtkRadioButton will remove
+ * itself and its list item when it is destroyed.
+ *
+ * <example>
+ * <title>How to create a group of two radio buttons.</title>
+ * <programlisting>
+ * void create_radio_buttons (void) {
+ *
+ *    GtkWidget *window, *radio1, *radio2, *box, *entry;
+ *    window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+ *    box = gtk_vbox_new (TRUE, 2);
+ *
+ *    /&ast; Create a radio button with a GtkEntry widget &ast;/
+ *    radio1 = gtk_radio_button_new (NULL);
+ *    entry = gtk_entry_new (<!-- -->);
+ *    gtk_container_add (GTK_CONTAINER (radio1), entry);
+ *
+ *
+ *    /&ast; Create a radio button with a label &ast;/
+ *    radio2 = gtk_radio_button_new_with_label_from_widget (GTK_RADIO_BUTTON (radio1),
+ *                                                          "I'm the second radio button.");
+ *
+ *    /&ast; Pack them into a box, then show all the widgets &ast;/
+ *    gtk_box_pack_start (GTK_BOX (box), radio1, TRUE, TRUE, 2);
+ *    gtk_box_pack_start (GTK_BOX (box), radio2, TRUE, TRUE, 2);
+ *    gtk_container_add (GTK_CONTAINER (window), box);
+ *    gtk_widget_show_all (window);
+ *    return;
+ * }
+ * </programlisting>
+ * </example>
+ *
+ * When an unselected button in the group is clicked the clicked button
+ * receives the #GtkToggleButton::toggled signal, as does the previously
+ * selected button.
+ * Inside the #GtkToggleButton::toggled handler, gtk_toggle_button_get_active()
+ * can be used to determine if the button has been selected or deselected.
+ */
+
+
 enum {
   PROP_0,
   PROP_GROUP
@@ -76,6 +148,11 @@ gtk_radio_button_class_init (GtkRadioButtonClass *class)
   gobject_class->set_property = gtk_radio_button_set_property;
   gobject_class->get_property = gtk_radio_button_get_property;
 
+  /**
+   * GtkRadioButton:group:
+   *
+   * Sets a new group for a radio button.
+   */
   g_object_class_install_property (gobject_class,
 				   PROP_GROUP,
 				   g_param_spec_object ("group",
@@ -175,6 +252,17 @@ gtk_radio_button_get_property (GObject    *object,
     }
 }
 
+/**
+ * gtk_radio_button_set_group:
+ * @radio_button: a #GtkRadioButton.
+ * @group: an existing radio button group, such as one returned from
+ *  gtk_radio_button_get_group().
+ *
+ * Sets a #GtkRadioButton's group. It should be noted that this does not change
+ * the layout of your interface in any way, so if you are changing the group,
+ * it is likely you will need to re-arrange the user interface to reflect these
+ * changes.
+ */
 void
 gtk_radio_button_set_group (GtkRadioButton *radio_button,
 			    GSList         *group)
@@ -243,6 +331,15 @@ gtk_radio_button_set_group (GtkRadioButton *radio_button,
   g_object_unref (radio_button);
 }
 
+/**
+ * gtk_radio_button_new:
+ * @group: an existing radio button group, or %NULL if you are creating a new group.
+ *
+ * Creates a new #GtkRadioButton. To be of any practical value, a widget should
+ * then be packed into the radio button.
+ *
+ * Returns: a new radio button.
+ */
 GtkWidget*
 gtk_radio_button_new (GSList *group)
 {
@@ -256,6 +353,16 @@ gtk_radio_button_new (GSList *group)
   return GTK_WIDGET (radio_button);
 }
 
+/**
+ * gtk_radio_button_new_with_label:
+ * @group: an existing radio button group, or %NULL if you are creating a new
+ *  group.
+ * @label: the text label to display next to the radio button.
+ *
+ * Creates a new #GtkRadioButton with a text label.
+ *
+ * Returns: a new radio button.
+ */
 GtkWidget*
 gtk_radio_button_new_with_label (GSList      *group,
 				 const gchar *label)
@@ -300,6 +407,15 @@ gtk_radio_button_new_with_mnemonic (GSList      *group,
   return radio_button;
 }
 
+/**
+ * gtk_radio_button_new_from_widget:
+ * @radio_group_member: an existing #GtkRadioButton.
+ *
+ * Creates a new #GtkRadioButton, adding it to the same group as @radio_group_member.
+ * As with gtk_radio_button_new(), a widget should be packed into the radio button.
+ *
+ * Returns: a new radio button.
+ */
 GtkWidget*
 gtk_radio_button_new_from_widget (GtkRadioButton *radio_group_member)
 {
@@ -309,7 +425,16 @@ gtk_radio_button_new_from_widget (GtkRadioButton *radio_group_member)
   return gtk_radio_button_new (l);
 }
 
-
+/**
+ * gtk_radio_button_new_with_label_from_widget:
+ * @radio_group_member: widget to get radio group from or %NULL
+ * @label: a text string to display next to the radio button.
+ *
+ * Creates a new #GtkRadioButton with a text label, adding it to the same group
+ * as @radio_group_member.
+ *
+ * Returns: a new radio button.
+ */
 GtkWidget*
 gtk_radio_button_new_with_label_from_widget (GtkRadioButton *radio_group_member,
 					     const gchar    *label)

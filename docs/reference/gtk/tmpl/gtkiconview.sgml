@@ -22,6 +22,9 @@ rubberband selection, which is controlled by dragging the pointer.
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### STRUCT GtkIconView ##### -->
 <para>
 The <structname>GtkIconView</structname> struct contains only
@@ -200,6 +203,7 @@ selected rows.  It will be called on every selected row in the view.
 
 </para>
 
+@void: 
 @Returns: 
 
 

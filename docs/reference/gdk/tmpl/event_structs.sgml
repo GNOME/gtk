@@ -23,6 +23,9 @@ required events are received. See gtk_widget_set_events().
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### UNION GdkEvent ##### -->
 <para>
 The #GdkEvent struct contains a union of all of the event structs,
@@ -380,7 +383,7 @@ union, 16-bit data uses the s array, and 32-bit data uses the l array.
 <!-- ##### STRUCT GdkEventNoExpose ##### -->
 <para>
 Generated when the area of a #GdkDrawable being copied, with gdk_draw_drawable()
-or gdk_window_copy_area(), was completely available.
+, was completely available.
 </para>
 <para>
 FIXME: add more here.

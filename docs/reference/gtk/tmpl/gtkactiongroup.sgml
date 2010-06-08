@@ -70,6 +70,9 @@ it doesn't allow you to specify a signal.
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### STRUCT GtkActionGroup ##### -->
 <para>
 The <structname>GtkActionGroup</structname> struct contains only private 
@@ -351,6 +354,19 @@ gtk_action_group_add_radio_actions() to construct groups of radio actions.
 @on_change: 
 @user_data: 
 @destroy: 
+
+
+<!-- ##### USER_FUNCTION GtkTranslateFunc ##### -->
+<para>
+The function used to translate messages in e.g. #GtkIconFactory
+and #GtkActionGroup. 
+</para>
+
+@path: The id of the message. In #GtkItemFactory this will be a path
+  from a #GtkItemFactoryEntry, in #GtkActionGroup, it will be a label
+  or tooltip from a #GtkActionEntry.
+@func_data: user data passed in when registering the function
+@Returns: the translated message
 
 
 <!-- ##### FUNCTION gtk_action_group_set_translate_func ##### -->

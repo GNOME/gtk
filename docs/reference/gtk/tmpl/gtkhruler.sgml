@@ -33,6 +33,9 @@ rulers.
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### STRUCT GtkHRuler ##### -->
 <para>
 The #GtkHRuler struct contains private data and should be accessed
@@ -45,6 +48,7 @@ with the functions below.
 Creates a new horizontal ruler.
 </para>
 
+@void: 
 @Returns: a new #GtkHRuler.
 
 

@@ -72,6 +72,9 @@ gtk_widget_set_size_request (frame2, 50, -1);
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### STRUCT GtkPaned ##### -->
 <para>
 </para>
@@ -169,6 +172,15 @@ gtk_widget_set_size_request (frame2, 50, -1);
 
 </para>
 
+<!-- ##### FUNCTION gtk_paned_new ##### -->
+<para>
+
+</para>
+
+@orientation: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gtk_paned_add1 ##### -->
 <para>
 Adds a child to the top or left pane with
@@ -189,15 +201,6 @@ parameters. This is equivalent to
 
 @paned: a paned widget
 @child: the child to add
-
-
-<!-- ##### MACRO gtk_paned_gutter_size ##### -->
-<para>
-Old name for gtk_paned_set_gutter_size().
-</para>
-
-@p: a paned widget
-@s: the width of the gutter in pixels
 
 
 <!-- ##### FUNCTION gtk_paned_pack1 ##### -->
@@ -240,16 +243,6 @@ Adds a child to the bottom or right pane.
 @Returns: 
 
 
-<!-- ##### MACRO gtk_paned_set_gutter_size ##### -->
-<para>
-In older versions of GTK+, this function used to set the width of the 
-gutter (the area between the two panes). It does nothing now.
-</para>
-
-@p: a paned widget
-@s: the width of the gutter in pixels
-
-
 <!-- ##### FUNCTION gtk_paned_set_position ##### -->
 <para>
 
@@ -260,6 +253,15 @@ gutter (the area between the two panes). It does nothing now.
 
 
 <!-- ##### FUNCTION gtk_paned_get_position ##### -->
+<para>
+
+</para>
+
+@paned: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_paned_get_handle_window ##### -->
 <para>
 
 </para>

@@ -205,7 +205,10 @@ int main (int argc, char **argv)
       window = info->window->window;
 
       gtk_widget_show_now (info->window);
-      gtk_widget_draw (info->window, &(info->window->allocation));
+      gtk_widget_queue_draw_area (info->window,
+        info->window->allocation.x, info->window->allocation.y,
+        info->window->allocation.width, info->window->allocation.height);
+      gdk_window_process_updates (info->window->window, TRUE);
 
       while (gtk_events_pending ())
 	{

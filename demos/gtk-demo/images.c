@@ -317,6 +317,7 @@ do_images (GtkWidget *do_widget)
   GtkWidget *align;
   GtkWidget *button;
   GdkPixbuf *pixbuf;
+  GIcon     *gicon;
   GError *error = NULL;
   char *filename;
 
@@ -415,6 +416,26 @@ do_images (GtkWidget *do_widget)
 
       gtk_container_add (GTK_CONTAINER (frame), image);
 
+      /* Symbolic icon */
+
+      label = gtk_label_new (NULL);
+      gtk_label_set_markup (GTK_LABEL (label),
+			    "<u>Symbolic themed icon</u>");
+      gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, FALSE, 0);
+
+      frame = gtk_frame_new (NULL);
+      gtk_frame_set_shadow_type (GTK_FRAME (frame), GTK_SHADOW_IN);
+      /* The alignment keeps the frame from growing when users resize
+       * the window
+       */
+      align = gtk_alignment_new (0.5, 0.5, 0, 0);
+      gtk_container_add (GTK_CONTAINER (align), frame);
+      gtk_box_pack_start (GTK_BOX (vbox), align, FALSE, FALSE, 0);
+
+      gicon = g_themed_icon_new_with_default_fallbacks ("battery-critical-charging-symbolic");
+      image = gtk_image_new_from_gicon (gicon, GTK_ICON_SIZE_DIALOG);
+
+      gtk_container_add (GTK_CONTAINER (frame), image);
 
       /* Progressive */
 

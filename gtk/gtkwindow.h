@@ -24,7 +24,7 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
-#if defined(GTK_DISABLE_SINGLE_INCLUDES) && !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
+#if !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
 #error "Only <gtk/gtk.h> can be included directly."
 #endif
 
@@ -34,6 +34,8 @@
 
 #include <gtk/gtkaccelgroup.h>
 #include <gtk/gtkbin.h>
+
+#include "gtk/gtkaccelgroupprivate.h"
 
 
 G_BEGIN_DECLS
@@ -352,14 +354,6 @@ void gtk_window_begin_move_drag   (GtkWindow     *window,
                                    gint           root_y,
                                    guint32        timestamp);
 
-#ifndef GTK_DISABLE_DEPRECATED
-void       gtk_window_set_policy               (GtkWindow           *window,
-						gint                 allow_shrink,
-						gint                 allow_grow,
-						gint                 auto_shrink);
-#define	gtk_window_position			gtk_window_set_position
-#endif /* GTK_DISABLE_DEPRECATED */
-
 /* Set initial default size of the window (does not constrain user
  * resize operations)
  */
@@ -384,6 +378,7 @@ void     gtk_window_get_position     (GtkWindow   *window,
 gboolean gtk_window_parse_geometry   (GtkWindow   *window,
                                       const gchar *geometry);
 GtkWindowGroup *gtk_window_get_group (GtkWindow   *window);
+gboolean gtk_window_has_group        (GtkWindow   *window);
 
 /* Ignore this unless you are writing a GUI builder */
 void     gtk_window_reshow_with_initial_size (GtkWindow *window);
@@ -400,6 +395,9 @@ void             gtk_window_group_add_window    (GtkWindowGroup     *window_grou
 void             gtk_window_group_remove_window (GtkWindowGroup     *window_group,
 					         GtkWindow          *window);
 GList *          gtk_window_group_list_windows  (GtkWindowGroup     *window_group);
+
+GtkWidget *      gtk_window_group_get_current_device_grab (GtkWindowGroup *window_group,
+                                                           GdkDevice      *device);
 
 
 /* --- internal functions --- */
@@ -418,6 +416,17 @@ void            _gtk_window_constrain_size     (GtkWindow *window,
 						gint      *new_width,
 						gint      *new_height);
 GtkWidget      *_gtk_window_group_get_current_grab (GtkWindowGroup *window_group);
+void            _gtk_window_group_add_device_grab    (GtkWindowGroup   *window_group,
+                                                      GtkWidget        *widget,
+                                                      GdkDevice        *device,
+                                                      gboolean          block_others);
+void            _gtk_window_group_remove_device_grab (GtkWindowGroup   *window_group,
+                                                      GtkWidget        *widget,
+                                                      GdkDevice        *device);
+
+gboolean        _gtk_window_group_widget_is_blocked_for_device (GtkWindowGroup *window_group,
+                                                                GtkWidget      *widget,
+                                                                GdkDevice      *device);
 
 void            _gtk_window_set_has_toplevel_focus (GtkWindow *window,
 						    gboolean   has_toplevel_focus);

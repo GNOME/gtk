@@ -27,7 +27,7 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
-#if defined(GTK_DISABLE_SINGLE_INCLUDES) && !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
+#if !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
 #error "Only <gtk/gtk.h> can be included directly."
 #endif
 
@@ -185,11 +185,6 @@ void		gtk_spin_button_set_snap_to_ticks  (GtkSpinButton  *spin_button,
 						    gboolean	    snap_to_ticks);
 gboolean        gtk_spin_button_get_snap_to_ticks  (GtkSpinButton  *spin_button);
 void            gtk_spin_button_update             (GtkSpinButton  *spin_button);
-
-
-#ifndef GTK_DISABLE_DEPRECATED
-#define gtk_spin_button_get_value_as_float gtk_spin_button_get_value
-#endif
 
 G_END_DECLS
 

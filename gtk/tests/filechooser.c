@@ -29,8 +29,6 @@
  * - More tests!
  */
 
-#define GTK_FILE_SYSTEM_ENABLE_UNSUPPORTED
-#undef GTK_DISABLE_DEPRECATED
 #define SLEEP_DURATION  100
 
 #include "config.h"

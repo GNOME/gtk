@@ -24,7 +24,7 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
-#if defined(GTK_DISABLE_SINGLE_INCLUDES) && !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
+#if !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
 #error "Only <gtk/gtk.h> can be included directly."
 #endif
 
@@ -84,10 +84,6 @@ GtkWidget *gtk_radio_menu_item_new_with_label_from_widget    (GtkRadioMenuItem *
 GSList*    gtk_radio_menu_item_get_group                     (GtkRadioMenuItem *radio_menu_item);
 void       gtk_radio_menu_item_set_group                     (GtkRadioMenuItem *radio_menu_item,
 							      GSList           *group);
-
-#ifndef GTK_DISABLE_DEPRECATED
-#define gtk_radio_menu_item_group gtk_radio_menu_item_get_group
-#endif
 
 G_END_DECLS
 

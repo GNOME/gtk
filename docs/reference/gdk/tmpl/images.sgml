@@ -12,7 +12,6 @@ It has now been superceded to a large extent by the much more flexible
 </para>
 <para>
 To create an empty #GdkImage use gdk_image_new().
-To create a #GdkImage from bitmap data use gdk_image_new_bitmap().
 To create an image from part of a #GdkWindow use gdk_drawable_get_image().
 </para>
 <para>
@@ -25,7 +24,7 @@ the different formats that may be used.
 To draw a #GdkImage in a #GdkWindow or #GdkPixmap use gdk_draw_image().
 </para>
 <para>
-To destroy a #GdkImage use gdk_image_destroy().
+To destroy a #GdkImage use g_object_unref().
 </para>
 
 <!-- ##### SECTION See_Also ##### -->
@@ -58,23 +57,15 @@ displays.
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### STRUCT GdkImage ##### -->
 <para>
 The #GdkImage struct contains information on the image and the pixel data.
 </para>
 
 @parent_instance: the parent instance
-@type: the type of the image.
-@visual: the visual.
-@byte_order: the byte order.
-@width: the width of the image in pixels.
-@height: the height of the image in pixels.
-@depth: the depth of the image, i.e. the number of bits per pixel.
-@bpp: the number of bytes per pixel.
-@bpl: the number of bytes per line of the image.
-@bits_per_pixel: the number of bits per pixel.
-@mem: the pixel data.
-@colormap: the #GdkColormap associated with the image
 
 <!-- ##### FUNCTION gdk_image_new ##### -->
 <para>
@@ -105,55 +96,6 @@ is supported by the server.
 @GDK_IMAGE_FASTEST: Specifies that %GDK_IMAGE_SHARED should be tried first,
 and if that fails then %GDK_IMAGE_NORMAL will be used.
 
-<!-- ##### FUNCTION gdk_image_new_bitmap ##### -->
-<para>
-</para>
-
-@visual: 
-@data: 
-@width: 
-@height: 
-@Returns: 
-
-
-<!-- ##### FUNCTION gdk_image_get ##### -->
-<para>
-</para>
-
-@drawable: 
-@x: 
-@y: 
-@width: 
-@height: 
-@Returns: 
-
-
-<!-- ##### FUNCTION gdk_image_ref ##### -->
-<para>
-
-</para>
-
-@image: 
-@Returns: 
-
-
-<!-- ##### FUNCTION gdk_image_unref ##### -->
-<para>
-
-</para>
-
-@image: 
-
-
-<!-- ##### MACRO gdk_image_destroy ##### -->
-<para>
-Destroys a #GdkImage, freeing any resources allocated for it.
-</para>
-
-<!-- # Unused Parameters # -->
-@image: a #GdkImage.
-
-
 <!-- ##### FUNCTION gdk_image_get_colormap ##### -->
 <para>
 
@@ -170,6 +112,87 @@ Destroys a #GdkImage, freeing any resources allocated for it.
 
 @image: 
 @colormap: 
+
+
+<!-- ##### FUNCTION gdk_image_get_bits_per_pixel ##### -->
+<para>
+
+</para>
+
+@image: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_image_get_bytes_per_pixel ##### -->
+<para>
+
+</para>
+
+@image: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_image_get_bytes_per_line ##### -->
+<para>
+
+</para>
+
+@image: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_image_get_byte_order ##### -->
+<para>
+
+</para>
+
+@image: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_image_get_depth ##### -->
+<para>
+
+</para>
+
+@image: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_image_get_height ##### -->
+<para>
+
+</para>
+
+@image: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_image_get_image_type ##### -->
+<para>
+
+</para>
+
+@image: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_image_get_visual ##### -->
+<para>
+
+</para>
+
+@image: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_image_get_width ##### -->
+<para>
+
+</para>
+
+@image: 
+@Returns: 
 
 
 <!-- ##### FUNCTION gdk_image_put_pixel ##### -->

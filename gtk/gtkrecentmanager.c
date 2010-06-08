@@ -641,58 +641,6 @@ gtk_recent_manager_get_default (void)
 }
 
 /**
- * gtk_recent_manager_get_for_screen:
- * @screen: a #GdkScreen
- *
- * Gets the recent manager object associated with @screen; if this
- * function has not previously been called for the given screen,
- * a new recent manager object will be created and associated with
- * the screen. Recent manager objects are fairly expensive to create,
- * so using this function is usually a better choice than calling 
- * gtk_recent_manager_new() and setting the screen yourself; by using
- * this function a single recent manager object will be shared between
- * users.
- *
- * Return value: A unique #GtkRecentManager associated with the given
- *   screen. This recent manager is associated to the with the screen
- *   and can be used as long as the screen is open. Do not ref or
- *   unref it.
- *
- * Deprecated: 2.12: This function has been deprecated and should
- *   not be used in newly written code. Calling this function is
- *   equivalent to calling gtk_recent_manager_get_default().
- *
- * Since: 2.10
- */
-GtkRecentManager *
-gtk_recent_manager_get_for_screen (GdkScreen *screen)
-{
-  return gtk_recent_manager_get_default ();
-}
-
-/**
- * gtk_recent_manager_set_screen:
- * @manager: a #GtkRecentManager
- * @screen: a #GdkScreen
- *
- * Sets the screen for a recent manager; the screen is used to
- * track the user's currently configured recently used documents
- * storage.
- * 
- * Since: 2.10
- *
- * Deprecated: 2.12: This function has been deprecated and should
- *   not be used in newly written code. Calling this function has
- *   no effect.
- */
-void
-gtk_recent_manager_set_screen (GtkRecentManager *manager,
-			       GdkScreen        *screen)
-{
-
-}
-
-/**
  * gtk_recent_manager_set_limit:
  * @manager: a #GtkRecentManager
  * @limit: the maximum number of items to return, or -1.

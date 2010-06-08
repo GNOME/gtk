@@ -28,7 +28,7 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
-#if defined(GTK_DISABLE_SINGLE_INCLUDES) && !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
+#if !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
 #error "Only <gtk/gtk.h> can be included directly."
 #endif
 
@@ -81,6 +81,8 @@ GtkRadioAction *gtk_radio_action_new               (const gchar           *name,
 GSList         *gtk_radio_action_get_group         (GtkRadioAction        *action);
 void            gtk_radio_action_set_group         (GtkRadioAction        *action,
                                                     GSList                *group);
+void            gtk_radio_action_join_group        (GtkRadioAction        *action,
+                                                    GtkRadioAction        *group_source);
 gint            gtk_radio_action_get_current_value (GtkRadioAction        *action);
 void            gtk_radio_action_set_current_value (GtkRadioAction        *action,
                                                     gint                   current_value);

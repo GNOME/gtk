@@ -19,15 +19,15 @@
     <formalpara>
       <title>Why</title>
       <para>
-	By handling this signal, you let widgets have
-	context-sensitive menus that can be invoked with the standard
-	key bindings.
+        By handling this signal, you let widgets have
+        context-sensitive menus that can be invoked with the standard
+        key bindings.
       </para>
     </formalpara>
 
     <para>
-      The #GtkWidget::popup-menu signal instructs the widget for which 
-      it is emitted to create a context-sensitive popup menu. By default, 
+      The #GtkWidget::popup-menu signal instructs the widget for which
+      it is emitted to create a context-sensitive popup menu. By default,
       the <link linkend="gtk-bindings">key binding mechanism</link> is set to
       emit this signal when the
       <keycombo><keycap>Shift</keycap><keycap>F10</keycap></keycombo>
@@ -39,14 +39,14 @@
 
     <orderedlist>
       <listitem>
-	<para>
-	  Write a function to create and show a popup menu.  This
-	  function needs to know the button number and the event's
-	  time to pass them to gtk_menu_popup().  You can implement
-	  such a function like this:
-	</para>
+        <para>
+          Write a function to create and show a popup menu.  This
+          function needs to know the button number and the event's
+          time to pass them to gtk_menu_popup().  You can implement
+          such a function like this:
+        </para>
 
-	<programlisting id="do_popup_menu">
+        <programlisting id="do_popup_menu">
 static void
 do_popup_menu (GtkWidget *my_widget, GdkEventButton *event)
 {
@@ -54,7 +54,7 @@ do_popup_menu (GtkWidget *my_widget, GdkEventButton *event)
   int button, event_time;
 
   menu = gtk_menu_new (<!-- -->);
-  g_signal_connect (menu, "deactivate", 
+  g_signal_connect (menu, "deactivate",
                     G_CALLBACK (gtk_widget_destroy), NULL);
 
   /* ... add menu items ... */
@@ -71,19 +71,19 @@ do_popup_menu (GtkWidget *my_widget, GdkEventButton *event)
     }
 
   gtk_menu_attach_to_widget (GTK_MENU (menu), my_widget, NULL);
-  gtk_menu_popup (GTK_MENU (menu), NULL, NULL, NULL, NULL, 
+  gtk_menu_popup (GTK_MENU (menu), NULL, NULL, NULL, NULL,
                   button, event_time);
 }
-	</programlisting>
+        </programlisting>
       </listitem>
 
       <listitem>
-	<para>
-	  In your #GtkWidget::button-press-event handler, call this function 
+        <para>
+          In your #GtkWidget::button-press-event handler, call this function
           when you need to pop up a menu:
-	</para>
+        </para>
 
-	<programlisting>
+        <programlisting>
 static gboolean
 my_widget_button_press_event_handler (GtkWidget *widget, GdkEventButton *event)
 {
@@ -96,52 +96,52 @@ my_widget_button_press_event_handler (GtkWidget *widget, GdkEventButton *event)
 
   return FALSE;
 }
-	</programlisting>
+        </programlisting>
       </listitem>
 
       <listitem>
-	<para>
-	  Implement a handler for the #GtkWidget::popup-menu signal:
-	</para>
+        <para>
+          Implement a handler for the #GtkWidget::popup-menu signal:
+        </para>
 
-	<programlisting>
+        <programlisting>
 static gboolean
 my_widget_popup_menu_handler (GtkWidget *widget)
 {
   do_popup_menu (widget, NULL);
   return TRUE;
 }
-	</programlisting>
+        </programlisting>
       </listitem>
     </orderedlist>
 
     <note>
       <para>
-	If you do not pass a positioning function to gtk_menu_popup(),
-	it will show the menu at the mouse position by default.  This
-	is what you usually want when the menu is shown as a result of
-	pressing a mouse button.  However, if you press the
-	<keycombo><keycap>Shift</keycap><keycap>F10</keycap></keycombo>
-	or <keycap>Menu</keycap> keys while the widget is focused, the
-	mouse cursor may not be near the widget at all.  In the <link
-	linkend="do_popup_menu">example above</link>, you may want to
-	provide your own <link
-	linkend="GtkMenuPositionFunc">menu-positioning function</link>
-	in the case where the <parameter>event</parameter> is
-	%NULL.  This function should compute the desired position for 
-        a menu when it is invoked through the keyboard.  For example, 
-        #GtkEntry aligns the top edge of its popup menu with the bottom 
+        If you do not pass a positioning function to gtk_menu_popup(),
+        it will show the menu at the mouse position by default.  This
+        is what you usually want when the menu is shown as a result of
+        pressing a mouse button.  However, if you press the
+        <keycombo><keycap>Shift</keycap><keycap>F10</keycap></keycombo>
+        or <keycap>Menu</keycap> keys while the widget is focused, the
+        mouse cursor may not be near the widget at all.  In the <link
+        linkend="do_popup_menu">example above</link>, you may want to
+        provide your own <link
+        linkend="GtkMenuPositionFunc">menu-positioning function</link>
+        in the case where the <parameter>event</parameter> is
+        %NULL.  This function should compute the desired position for
+        a menu when it is invoked through the keyboard.  For example,
+        #GtkEntry aligns the top edge of its popup menu with the bottom
         edge of the entry.
       </para>
     </note>
 
     <note>
       <para>
-	For the standard key bindings to work, your widget must be
-	able to take the keyboard focus.  In general, widgets should
-	be fully usable through the keyboard and not just the mouse.
-	The very first step of this is to ensure that your widget
-	turns on the %GTK_CAN_FOCUS <link linkend="gtkwidgetflags">flag</link>.
+        For the standard key bindings to work, your widget must be
+        able to take the keyboard focus.  In general, widgets should
+        be fully usable through the keyboard and not just the mouse.
+        The very first step of this is to ensure that your widget
+        turns on the %GTK_CAN_FOCUS <link linkend="gtkwidgetflags">flag</link>.
       </para>
     </note>
   </section>
@@ -152,23 +152,21 @@ my_widget_popup_menu_handler (GtkWidget *widget)
     <formalpara>
       <title>Why</title>
       <para>
-	The <structfield>region</structfield> field of
-	<structname>GdkEventExpose</structname> allows you to redraw
-	less than the traditional
-	<structfield>GdkEventRegion.area</structfield>.
+        The <structfield>region</structfield> field of
+        <structname>GdkEventExpose</structname> allows you to redraw
+        less than the traditional <structfield>GdkEventRegion.area</structfield>.
       </para>
     </formalpara>
 
     <para>
-      In GTK+ 1.x, the <structname>GdkEventExpose</structname>
+      In early GTK+ versions, the <structname>GdkEventExpose</structname>
       structure only had an <structfield>area</structfield> field to
-      let you determine the region that you needed to redraw.  In GTK+
-      2.x, this field exists for compatibility and as a simple
-      interface.  However, there is also a
-      <structfield>region</structfield> field which contains a
-      fine-grained region.  The <structfield>area</structfield> field
-      is simply the bounding rectangle of the
-      <structfield>region</structfield>.
+      let you determine the region that you needed to redraw. In current
+      GTK+, this field still exists for compatibility and as a simple
+      interface. However, there is also a <structfield>region</structfield>
+      field which contains a fine-grained region. The
+      <structfield>area</structfield> field is simply the bounding rectangle
+      of the <structfield>region</structfield>.
     </para>
 
     <para>
@@ -183,7 +181,7 @@ my_widget_popup_menu_handler (GtkWidget *widget)
 
     <para>
       Regions have an internal representation that is accessible as a
-      list of rectangles.  To turn the 
+      list of rectangles.  To turn the
       <structfield>GdkEventExpose.region</structfield> field into such
       a list, use gdk_region_get_rectangles():
     </para>
@@ -200,7 +198,7 @@ my_widget_expose_event_handler (GtkWidget *widget, GdkEventExpose *event)
 
   for (i = 0; i &lt; n_rects; i++)
     {
-      /* Repaint rectangle: (rects[i].x, rects[i].y), 
+      /* Repaint rectangle: (rects[i].x, rects[i].y),
        *                    (rects[i].width, rects[i].height)
        */
     }
@@ -218,9 +216,9 @@ my_widget_expose_event_handler (GtkWidget *widget, GdkEventExpose *event)
     <formalpara>
       <title>Why</title>
       <para>
-	With gtk_accelerator_get_default_mod_mask() you can test for 
-        modifier keys reliably; this way your key event handlers will 
-        work correctly even if <keycap>NumLock</keycap> or 
+        With gtk_accelerator_get_default_mod_mask() you can test for
+        modifier keys reliably; this way your key event handlers will
+        work correctly even if <keycap>NumLock</keycap> or
         <keycap>CapsLock</keycap> are activated.
       </para>
     </formalpara>
@@ -230,8 +228,8 @@ my_widget_expose_event_handler (GtkWidget *widget, GdkEventExpose *event)
       <structfield>state</structfield> field is a bit mask which
       indicates the modifier state at the time the key was pressed.
       Modifiers are keys like <keycap>Control</keycap> and
-      <keycap>NumLock</keycap>.  When implementing a 
-      #GtkWidget::key-press-event handler, you should use 
+      <keycap>NumLock</keycap>.  When implementing a
+      #GtkWidget::key-press-event handler, you should use
       gtk_accelerator_get_default_mod_mask() to
       test against modifier keys.  This function returns a bit mask
       which encompasses all the modifiers which the user may be
@@ -289,17 +287,16 @@ my_widget_key_press_event_handler (GtkWidget *widget, GdkEventKey *event)
     <formalpara>
       <title>Why</title>
       <para>
-	Named icons automatically adapt to theme changes, giving your
+        Named icons automatically adapt to theme changes, giving your
         application a much more integrated appearance.
       </para>
     </formalpara>
 
     <para>
-      Since GTK+ 2.6, named icons can be used for window icons (see
-      gtk_window_set_icon_name()) and images (see gtk_image_set_icon_name()).
-      In GTK+ 2.8, you can also use named icons for drag-and-drop (see 
-      gtk_drag_source_set_icon_name()) and in treeview cells (see the
-      #GtkCellRendererPixbuf:icon-name property).
+      Named icons can be used for window icons (see gtk_window_set_icon_name())
+      and images (see gtk_image_set_icon_name()). You can also use named icons
+      for drag-and-drop (see gtk_drag_source_set_icon_name()) and in treeview
+      cells (see the #GtkCellRendererPixbuf:icon-name property).
     </para>
   </section>
 </chapter>

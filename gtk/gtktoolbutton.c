@@ -470,11 +470,11 @@ gtk_tool_button_construct_contents (GtkToolItem *tool_item)
 	  gtk_widget_show (icon);
 	}
 
-      if (icon && text_orientation == GTK_ORIENTATION_HORIZONTAL)
+      if (GTK_IS_MISC (icon) && text_orientation == GTK_ORIENTATION_HORIZONTAL)
 	gtk_misc_set_alignment (GTK_MISC (icon),
 				1.0 - gtk_tool_item_get_text_alignment (GTK_TOOL_ITEM (button)),
 				0.5);
-      else if (icon)
+      else if (GTK_IS_MISC (icon))
 	gtk_misc_set_alignment (GTK_MISC (icon),
 				0.5,
 				gtk_tool_item_get_text_alignment (GTK_TOOL_ITEM (button)));
@@ -928,7 +928,7 @@ gtk_tool_button_new_from_stock (const gchar *stock_id)
 /**
  * gtk_tool_button_new:
  * @label: (allow-none): a string that will be used as label, or %NULL
- * @icon_widget: (allow-none): a widget that will be used as icon widget, or %NULL
+ * @icon_widget: (allow-none): a #GtkMisc widget that will be used as icon widget, or %NULL
  *
  * Creates a new %GtkToolButton using @icon_widget as icon and @label as
  * label.
@@ -942,6 +942,8 @@ gtk_tool_button_new (GtkWidget	 *icon_widget,
 		     const gchar *label)
 {
   GtkToolButton *button;
+
+  g_return_val_if_fail (icon_widget == NULL || GTK_IS_MISC (icon_widget), NULL);
 
   button = g_object_new (GTK_TYPE_TOOL_BUTTON,
                          "label", label,

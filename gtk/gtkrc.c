@@ -117,9 +117,10 @@ struct _GtkRcContext
   /* The files we have parsed, to reread later if necessary */
   GSList *rc_files;
 
-  gchar *theme_name;
-  gchar *key_theme_name;
-  gchar *font_name;
+  gchar    *theme_name;
+  gboolean  prefer_dark_theme;
+  gchar    *key_theme_name;
+  gchar    *font_name;
   
   gchar **pixmap_path;
 
@@ -160,9 +161,10 @@ static GtkStyle *  gtk_rc_style_to_style             (GtkRcContext    *context,
 static GtkStyle*   gtk_rc_init_style                 (GtkRcContext    *context,
 						      GSList          *rc_styles);
 static void        gtk_rc_parse_default_files        (GtkRcContext    *context);
-static void        gtk_rc_parse_named                (GtkRcContext    *context,
+static gboolean    gtk_rc_parse_named                (GtkRcContext    *context,
 						      const gchar     *name,
-						      const gchar     *type);
+						      const gchar     *type,
+						      const gchar     *variant);
 static void        gtk_rc_context_parse_file         (GtkRcContext    *context,
 						      const gchar     *filename,
 						      gint             priority,
@@ -399,9 +401,9 @@ gtk_rc_make_default_dir (const gchar *type)
   var = g_getenv ("GTK_EXE_PREFIX");
 
   if (var)
-    path = g_build_filename (var, "lib", "gtk-2.0", GTK_BINARY_VERSION, type, NULL);
+    path = g_build_filename (var, "lib", "gtk-3.0", GTK_BINARY_VERSION, type, NULL);
   else
-    path = g_build_filename (GTK_LIBDIR, "gtk-2.0", GTK_BINARY_VERSION, type, NULL);
+    path = g_build_filename (GTK_LIBDIR, "gtk-3.0", GTK_BINARY_VERSION, type, NULL);
 
   return path;
 }
@@ -448,9 +450,9 @@ gtk_rc_get_im_module_file (void)
   if (!result)
     {
       if (im_module_file)
-	result = g_strdup (im_module_file);
+        result = g_strdup (im_module_file);
       else
-	result = g_build_filename (GTK_SYSCONFDIR, "gtk-2.0", "gtk.immodules", NULL);
+        result = gtk_rc_make_default_dir ("immodules.cache");
     }
 
   return result;
@@ -522,7 +524,7 @@ gtk_rc_add_initial_default_files (void)
   else
     {
       const gchar *home;
-      str = g_build_filename (GTK_SYSCONFDIR, "gtk-2.0", "gtkrc", NULL);
+      str = g_build_filename (GTK_SYSCONFDIR, "gtk-3.0", "gtkrc", NULL);
 
       gtk_rc_add_default_file (str);
       g_free (str);
@@ -530,7 +532,7 @@ gtk_rc_add_initial_default_files (void)
       home = g_get_home_dir ();
       if (home)
 	{
-	  str = g_build_filename (home, ".gtkrc-2.0", NULL);
+	  str = g_build_filename (home, ".gtkrc-3.0", NULL);
 	  gtk_rc_add_default_file (str);
 	  g_free (str);
 	}
@@ -624,6 +626,7 @@ gtk_rc_settings_changed (GtkSettings  *settings,
 {
   gchar *new_theme_name;
   gchar *new_key_theme_name;
+  gboolean new_prefer_dark_theme;
 
   if (context->reloading)
     return;
@@ -631,12 +634,14 @@ gtk_rc_settings_changed (GtkSettings  *settings,
   g_object_get (settings,
 		"gtk-theme-name", &new_theme_name,
 		"gtk-key-theme-name", &new_key_theme_name,
+		"gtk-application-prefer-dark-theme", &new_prefer_dark_theme,
 		NULL);
 
   if ((new_theme_name != context->theme_name && 
        !(new_theme_name && context->theme_name && strcmp (new_theme_name, context->theme_name) == 0)) ||
       (new_key_theme_name != context->key_theme_name &&
-       !(new_key_theme_name && context->key_theme_name && strcmp (new_key_theme_name, context->key_theme_name) == 0)))
+       !(new_key_theme_name && context->key_theme_name && strcmp (new_key_theme_name, context->key_theme_name) == 0)) ||
+      new_prefer_dark_theme != context->prefer_dark_theme)
     {
       gtk_rc_reparse_all_for_settings (settings, TRUE);
     }
@@ -692,6 +697,7 @@ gtk_rc_context_get (GtkSettings *settings)
 		    "gtk-key-theme-name", &context->key_theme_name,
 		    "gtk-font-name", &context->font_name,
 		    "color-hash", &context->color_hash,
+		    "gtk-application-prefer-dark-theme", &context->prefer_dark_theme,
 		    NULL);
 
       g_signal_connect (settings,
@@ -709,6 +715,10 @@ gtk_rc_context_get (GtkSettings *settings)
       g_signal_connect (settings,
 			"notify::color-hash",
 			G_CALLBACK (gtk_rc_color_hash_changed),
+			context);
+      g_signal_connect (settings,
+			"notify::gtk-application-prefer-dark-theme",
+			G_CALLBACK (gtk_rc_settings_changed),
 			context);
 
       context->pixmap_path = NULL;
@@ -785,22 +795,27 @@ _gtk_rc_context_destroy (GtkSettings *settings)
   settings->rc_context = NULL;
 }
 
-static void
+static gboolean
 gtk_rc_parse_named (GtkRcContext *context,
 		    const gchar  *name,
-		    const gchar  *type)
+		    const gchar  *type,
+		    const gchar  *variant)
 {
   gchar *path = NULL;
   const gchar *home_dir;
   gchar *subpath;
+  gboolean retval;
+
+  retval = FALSE;
 
   if (type)
-    subpath = g_strconcat ("gtk-2.0-", type,
+    subpath = g_strconcat ("gtk-3.0-", type,
 			   G_DIR_SEPARATOR_S "gtkrc",
 			   NULL);
   else
-    subpath = g_strdup ("gtk-2.0" G_DIR_SEPARATOR_S "gtkrc");
-  
+    subpath = g_strconcat ("gtk-3.0" G_DIR_SEPARATOR_S "gtkrc",
+			   variant, NULL);
+
   /* First look in the users home directory
    */
   home_dir = g_get_home_dir ();
@@ -831,9 +846,12 @@ gtk_rc_parse_named (GtkRcContext *context,
     {
       gtk_rc_context_parse_file (context, path, GTK_PATH_PRIO_THEME, FALSE);
       g_free (path);
+      retval = TRUE;
     }
 
   g_free (subpath);
+
+  return retval;
 }
 
 static void
@@ -1304,22 +1322,6 @@ _gtk_rc_style_unset_rc_property (GtkRcStyle *rc_style,
     }
 }
 
-void      
-gtk_rc_style_ref (GtkRcStyle *rc_style)
-{
-  g_return_if_fail (GTK_IS_RC_STYLE (rc_style));
-
-  g_object_ref (rc_style);
-}
-
-void      
-gtk_rc_style_unref (GtkRcStyle *rc_style)
-{
-  g_return_if_fail (GTK_IS_RC_STYLE (rc_style));
-
-  g_object_unref (rc_style);
-}
-
 static GtkRcStyle *
 gtk_rc_style_real_create_rc_style (GtkRcStyle *style)
 {
@@ -1332,6 +1334,34 @@ _gtk_rc_style_get_color_hashes (GtkRcStyle *rc_style)
   GtkRcStylePrivate *priv = GTK_RC_STYLE_GET_PRIVATE (rc_style);
 
   return priv->color_hashes;
+}
+
+static void gtk_rc_style_prepend_empty_color_hash (GtkRcStyle *rc_style);
+
+void
+_gtk_rc_style_set_symbolic_color (GtkRcStyle     *rc_style,
+                                  const gchar    *name,
+                                  const GdkColor *color)
+{
+  GtkRcStylePrivate *priv = GTK_RC_STYLE_GET_PRIVATE (rc_style);
+  GHashTable *our_hash = NULL;
+
+  if (priv->color_hashes)
+    our_hash = priv->color_hashes->data;
+
+  if (our_hash == NULL)
+    {
+      if (color == NULL)
+        return;
+
+      gtk_rc_style_prepend_empty_color_hash (rc_style);
+      our_hash = priv->color_hashes->data;
+    }
+
+  if (color)
+    g_hash_table_insert (our_hash, g_strdup (name), gdk_color_copy (color));
+  else
+    g_hash_table_remove (our_hash, name);
 }
 
 static gint
@@ -1812,12 +1842,23 @@ gtk_rc_reparse_all_for_settings (GtkSettings *settings,
       g_object_get (context->settings,
 		    "gtk-theme-name", &context->theme_name,
 		    "gtk-key-theme-name", &context->key_theme_name,
+		    "gtk-application-prefer-dark-theme", &context->prefer_dark_theme,
 		    NULL);
 
       if (context->theme_name && context->theme_name[0])
-	gtk_rc_parse_named (context, context->theme_name, NULL);
+        {
+          if (context->prefer_dark_theme)
+            {
+              if (!gtk_rc_parse_named (context, context->theme_name, NULL, "-dark"))
+                gtk_rc_parse_named (context, context->theme_name, NULL, NULL);
+	    }
+	  else
+	    {
+	      gtk_rc_parse_named (context, context->theme_name, NULL, NULL);
+	    }
+	}
       if (context->key_theme_name && context->key_theme_name[0])
-	gtk_rc_parse_named (context, context->key_theme_name, "key");
+	gtk_rc_parse_named (context, context->key_theme_name, "key", NULL);
 
       context->reloading = FALSE;
 
@@ -2132,86 +2173,6 @@ gtk_rc_get_style_by_paths (GtkSettings *settings,
     return gtk_rc_init_style (context, rc_styles);
 
   return NULL;
-}
-
-static GSList *
-gtk_rc_add_rc_sets (GSList      *slist,
-		    GtkRcStyle  *rc_style,
-		    const gchar *pattern,
-		    GtkPathType  path_type)
-{
-  GtkRcStyle *new_style;
-  GtkRcSet *rc_set;
-  guint i;
-  
-  new_style = gtk_rc_style_new ();
-  *new_style = *rc_style;
-  new_style->name = g_strdup (rc_style->name);
-  if (rc_style->font_desc)
-    new_style->font_desc = pango_font_description_copy (rc_style->font_desc);
-  
-  for (i = 0; i < 5; i++)
-    new_style->bg_pixmap_name[i] = g_strdup (rc_style->bg_pixmap_name[i]);
-  
-  rc_set = g_new (GtkRcSet, 1);
-  rc_set->type = path_type;
-  
-  if (path_type == GTK_PATH_WIDGET_CLASS)
-    {
-      rc_set->pspec = NULL;
-      rc_set->path = _gtk_rc_parse_widget_class_path (pattern);
-    }
-  else
-    {
-      rc_set->pspec = g_pattern_spec_new (pattern);
-      rc_set->path = NULL;
-    }
-  
-  rc_set->rc_style = rc_style;
-  
-  return g_slist_prepend (slist, rc_set);
-}
-
-void
-gtk_rc_add_widget_name_style (GtkRcStyle  *rc_style,
-			      const gchar *pattern)
-{
-  GtkRcContext *context;
-  
-  g_return_if_fail (rc_style != NULL);
-  g_return_if_fail (pattern != NULL);
-
-  context = gtk_rc_context_get (gtk_settings_get_default ());
-  
-  context->rc_sets_widget = gtk_rc_add_rc_sets (context->rc_sets_widget, rc_style, pattern, GTK_PATH_WIDGET);
-}
-
-void
-gtk_rc_add_widget_class_style (GtkRcStyle  *rc_style,
-			       const gchar *pattern)
-{
-  GtkRcContext *context;
-  
-  g_return_if_fail (rc_style != NULL);
-  g_return_if_fail (pattern != NULL);
-
-  context = gtk_rc_context_get (gtk_settings_get_default ());
-  
-  context->rc_sets_widget_class = gtk_rc_add_rc_sets (context->rc_sets_widget_class, rc_style, pattern, GTK_PATH_WIDGET_CLASS);
-}
-
-void
-gtk_rc_add_class_style (GtkRcStyle  *rc_style,
-			const gchar *pattern)
-{
-  GtkRcContext *context;
-  
-  g_return_if_fail (rc_style != NULL);
-  g_return_if_fail (pattern != NULL);
-
-  context = gtk_rc_context_get (gtk_settings_get_default ());
-  
-  context->rc_sets_class = gtk_rc_add_rc_sets (context->rc_sets_class, rc_style, pattern, GTK_PATH_CLASS);
 }
 
 GScanner*

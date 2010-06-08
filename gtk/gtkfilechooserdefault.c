@@ -5440,10 +5440,6 @@ gtk_file_chooser_default_set_property (GObject      *object,
       }
       break;
 
-    case GTK_FILE_CHOOSER_PROP_FILE_SYSTEM_BACKEND:
-      /* Ignore property */
-      break;
-
     case GTK_FILE_CHOOSER_PROP_FILTER:
       set_current_filter (impl, g_value_get_object (value));
       break;
@@ -6123,7 +6119,7 @@ size_sort_func (GtkTreeModel *model,
       size_a = g_value_get_int64 (_gtk_file_system_model_get_value (fs_model, a, MODEL_COL_SIZE));
       size_b = g_value_get_int64 (_gtk_file_system_model_get_value (fs_model, b, MODEL_COL_SIZE));
 
-      return size_a > size_b ? -1 : (size_a == size_b ? 0 : 1);
+      return size_a < size_b ? -1 : (size_a == size_b ? 0 : 1);
     }
 }
 
@@ -6142,7 +6138,7 @@ mtime_sort_func (GtkTreeModel *model,
       ta = g_value_get_long (_gtk_file_system_model_get_value (fs_model, a, MODEL_COL_MTIME));
       tb = g_value_get_long (_gtk_file_system_model_get_value (fs_model, b, MODEL_COL_MTIME));
 
-      return ta > tb ? -1 : (ta == tb ? 0 : 1);
+      return ta < tb ? -1 : (ta == tb ? 0 : 1);
     }
 }
 

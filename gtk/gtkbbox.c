@@ -24,6 +24,34 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
+/**
+ * SECTION:gtkbbox
+ * @Short_description: Base class for GtkHButtonBox and GtkVButtonBox
+ * @Title: GtkButtonBox
+ * @See_also: #GtkVButtonBox, #GtkHButtonBox
+ *
+ * The primary purpose of this class is to keep track of the various properties
+ * of #GtkHButtonBox and #GtkVButtonBox widgets.
+ *
+ * gtk_button_box_get_child_size() retrieves the minimum width and height
+ * for widgets in a given button box.
+ *
+ * The internal padding of buttons can be retrieved and changed per button box
+ * using gtk_button_box_get_child_ipadding() and
+ * gtk_button_box_set_child_ipadding() respectively.
+ *
+ * gtk_button_box_get_spacing() and gtk_button_box_set_spacing() retrieve and
+ * change default number of pixels between buttons, respectively.
+ *
+ * gtk_button_box_get_layout() and gtk_button_box_set_layout() retrieve and
+ * alter the method used to spread the buttons in a button box across the
+ * container, respectively.
+ *
+ * The main purpose of GtkButtonBox is to make sure the children have all the
+ * same size. Therefore it ignores the homogeneous property which it inherited
+ * from GtkBox, and always behaves as if homogeneous was %TRUE.
+ */
+
 #include "config.h"
 #include "gtkbbox.h"
 #include "gtkhbbox.h"
@@ -71,7 +99,7 @@ static void gtk_button_box_get_child_property (GtkContainer      *container,
 #define DEFAULT_CHILD_IPAD_X 4
 #define DEFAULT_CHILD_IPAD_Y 0
 
-G_DEFINE_ABSTRACT_TYPE (GtkButtonBox, gtk_button_box, GTK_TYPE_BOX)
+G_DEFINE_TYPE (GtkButtonBox, gtk_button_box, GTK_TYPE_BOX)
 
 static void
 gtk_button_box_class_init (GtkButtonBoxClass *class)
@@ -234,28 +262,13 @@ gtk_button_box_get_child_property (GtkContainer *container,
     }
 }
 
-/* set per widget values for spacing, child size and child internal padding */
-
-void 
-gtk_button_box_set_child_size (GtkButtonBox *widget, 
-                               gint width, gint height)
-{
-  g_return_if_fail (GTK_IS_BUTTON_BOX (widget));
-
-  widget->child_min_width = width;
-  widget->child_min_height = height;
-}
-
-void 
-gtk_button_box_set_child_ipadding (GtkButtonBox *widget,
-                                   gint ipad_x, gint ipad_y)
-{
-  g_return_if_fail (GTK_IS_BUTTON_BOX (widget));
-
-  widget->child_ipad_x = ipad_x;
-  widget->child_ipad_y = ipad_y;
-}
-
+/**
+ * gtk_button_box_set_layout:
+ * @widget: a #GtkButtonBox
+ * @layout_style: the new layout style
+ *
+ * Changes the way buttons are arranged in their container.
+ */
 void
 gtk_button_box_set_layout (GtkButtonBox      *widget, 
                            GtkButtonBoxStyle  layout_style)
@@ -272,33 +285,14 @@ gtk_button_box_set_layout (GtkButtonBox      *widget,
     }
 }
 
-
-/* get per widget values for spacing, child size and child internal padding */
-
-void 
-gtk_button_box_get_child_size (GtkButtonBox *widget,
-                               gint *width, gint *height)
-{
-  g_return_if_fail (GTK_IS_BUTTON_BOX (widget));
-  g_return_if_fail (width != NULL);
-  g_return_if_fail (height != NULL);
-
-  *width  = widget->child_min_width;
-  *height = widget->child_min_height;
-}
-
-void
-gtk_button_box_get_child_ipadding (GtkButtonBox *widget,
-                                   gint* ipad_x, gint *ipad_y)
-{
-  g_return_if_fail (GTK_IS_BUTTON_BOX (widget));
-  g_return_if_fail (ipad_x != NULL);
-  g_return_if_fail (ipad_y != NULL);
-
-  *ipad_x = widget->child_ipad_x;
-  *ipad_y = widget->child_ipad_y;
-}
-
+/**
+ * gtk_button_box_get_layout:
+ * @widget: a #GtkButtonBox
+ *
+ * Retrieves the method being used to arrange the buttons in a button box.
+ *
+ * Returns: the method used to layout buttons in @widget.
+ */
 GtkButtonBoxStyle 
 gtk_button_box_get_layout (GtkButtonBox *widget)
 {
@@ -817,6 +811,24 @@ gtk_button_box_size_allocate (GtkWidget     *widget,
           gtk_widget_size_allocate (child->widget, &child_allocation);
         }
     }
+}
+
+/**
+ * gtk_button_box_new:
+ * @orientation: the box' orientation.
+ *
+ * Creates a new #GtkButtonBox.
+ *
+ * Return value: a new #GtkButtonBox.
+ *
+ * Since: 3.0
+ */
+GtkWidget *
+gtk_button_box_new (GtkOrientation orientation)
+{
+  return g_object_new (GTK_TYPE_BUTTON_BOX,
+                       "orientation", orientation,
+                       NULL);
 }
 
 #define __GTK_BUTTON_BOX_C__

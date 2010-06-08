@@ -19,8 +19,6 @@
 
 #include "config.h"
 
-#undef GTK_DISABLE_DEPRECATED
-
 #include "gailmenu.h"
 
 static void gail_menu_class_init (GailMenuClass *klass);
@@ -92,7 +90,7 @@ gail_menu_get_parent (AtkObject *accessible)
        */
       parent_widget = gtk_menu_get_attach_widget (GTK_MENU (widget));
 
-      if (!GTK_IS_MENU_ITEM (parent_widget) && !GTK_IS_BUTTON (parent_widget) && !GTK_IS_COMBO_BOX (parent_widget) && !GTK_IS_OPTION_MENU (parent_widget))
+      if (!GTK_IS_MENU_ITEM (parent_widget) && !GTK_IS_BUTTON (parent_widget) && !GTK_IS_COMBO_BOX (parent_widget))
         parent_widget = widget->parent;
 
       if (parent_widget == NULL)

@@ -31,8 +31,8 @@
 /* --- defines --- */
 #undef	G_LOG_DOMAIN
 #define	G_LOG_DOMAIN	"Gdk-Pixbuf-CSource"
-#define PRG_NAME        "gdk-pixbuf-csource"
-#define PKG_NAME        "Gtk+"
+#define PRG_NAME        "gdk-pixbuf-csource-3.0"
+#define PKG_NAME        "GTK+"
 #define PKG_HTTP_HOME   "http://www.gtk.org"
 
 

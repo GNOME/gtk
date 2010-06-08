@@ -17,6 +17,9 @@ An input method context supporting table-based input methods
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### STRUCT GtkIMContextSimple ##### -->
 <para>
 
@@ -28,6 +31,7 @@ An input method context supporting table-based input methods
 
 </para>
 
+@void: 
 @Returns: 
 
 

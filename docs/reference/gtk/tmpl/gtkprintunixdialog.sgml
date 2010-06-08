@@ -79,6 +79,9 @@ The GtkPrintUnixDialog implementation of the GtkBuildable interface exposes its
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### STRUCT GtkPrintUnixDialog ##### -->
 <para>
 

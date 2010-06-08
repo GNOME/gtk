@@ -283,17 +283,6 @@ gtk_check_menu_item_toggle_size_request (GtkMenuItem *menu_item,
 }
 
 void
-gtk_check_menu_item_set_show_toggle (GtkCheckMenuItem *menu_item,
-				     gboolean          always)
-{
-  g_return_if_fail (GTK_IS_CHECK_MENU_ITEM (menu_item));
-
-#if 0
-  menu_item->always_show_toggle = always != FALSE;
-#endif  
-}
-
-void
 gtk_check_menu_item_toggled (GtkCheckMenuItem *check_menu_item)
 {
   g_signal_emit (check_menu_item, check_menu_item_signals[TOGGLED], 0);

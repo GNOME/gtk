@@ -30,6 +30,22 @@
 #include "gtkorientable.h"
 #include "gtkalias.h"
 
+
+/**
+ * SECTION:gtkhbox
+ * @Short_description: A horizontal container box
+ * @Title: GtkHBox
+ * @See_also: #GtkVBox
+ *
+ * #GtkHBox is a container that organizes child widgets into a single row.
+ *
+ * Use the #GtkBox packing interface to determine the arrangement,
+ * spacing, width, and alignment of #GtkHBox children.
+ *
+ * All children are allocated the same height.
+ */
+
+
 G_DEFINE_TYPE (GtkHBox, gtk_hbox, GTK_TYPE_BOX)
 
 static void
@@ -46,6 +62,15 @@ gtk_hbox_init (GtkHBox *hbox)
   _gtk_box_set_old_defaults (GTK_BOX (hbox));
 }
 
+/**
+ * gtk_hbox_new:
+ * @homogeneous: %TRUE if all children are to be given equal space allotments.
+ * @spacing: the number of pixels to place by default between children.
+ *
+ * Creates a new #GtkHBox.
+ *
+ * Returns: a new #GtkHBox.
+ */
 GtkWidget *
 gtk_hbox_new (gboolean homogeneous,
 	      gint     spacing)

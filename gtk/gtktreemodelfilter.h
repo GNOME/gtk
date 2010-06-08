@@ -18,7 +18,7 @@
  * Boston, MA 02111-1307, USA.
  */
 
-#if defined(GTK_DISABLE_SINGLE_INCLUDES) && !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
+#if !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
 #error "Only <gtk/gtk.h> can be included directly."
 #endif
 
@@ -62,11 +62,18 @@ struct _GtkTreeModelFilterClass
 {
   GObjectClass parent_class;
 
+  gboolean (* visible) (GtkTreeModelFilter *self,
+                        GtkTreeModel       *child_model,
+                        GtkTreeIter        *iter);
+  void (* modify) (GtkTreeModelFilter *self,
+                   GtkTreeModel       *child_model,
+                   GtkTreeIter        *iter,
+                   GValue             *value,
+                   gint                column);
+
   /* Padding for future expansion */
   void (*_gtk_reserved0) (void);
   void (*_gtk_reserved1) (void);
-  void (*_gtk_reserved2) (void);
-  void (*_gtk_reserved3) (void);
 };
 
 /* base */

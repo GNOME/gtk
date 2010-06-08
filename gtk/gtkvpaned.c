@@ -30,6 +30,17 @@
 #include "gtkvpaned.h"
 #include "gtkalias.h"
 
+/**
+ * SECTION:gtkvpaned
+ * @Short_description: A container with two panes arranged vertically
+ * @Title: GtkVPaned
+ *
+ * The VPaned widget is a container widget with two
+ * children arranged vertically. The division between
+ * the two panes is adjustable by the user by dragging
+ * a handle. See #GtkPaned for details.
+ */
+
 G_DEFINE_TYPE (GtkVPaned, gtk_vpaned, GTK_TYPE_PANED)
 
 static void
@@ -44,6 +55,13 @@ gtk_vpaned_init (GtkVPaned *vpaned)
                                   GTK_ORIENTATION_VERTICAL);
 }
 
+/**
+ * gtk_vpaned_new:
+ *
+ * Create a new #GtkVPaned
+ *
+ * Returns: the new #GtkVPaned
+ */
 GtkWidget *
 gtk_vpaned_new (void)
 {

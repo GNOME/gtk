@@ -24,7 +24,7 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
-#if defined(GTK_DISABLE_SINGLE_INCLUDES) && !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
+#if !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
 #error "Only <gtk/gtk.h> can be included directly."
 #endif
 
@@ -44,20 +44,6 @@ G_BEGIN_DECLS
 /* Priorities for redrawing and resizing
  */
 #define GTK_PRIORITY_RESIZE     (G_PRIORITY_HIGH_IDLE + 10)
-
-#ifndef GTK_DISABLE_DEPRECATED
-
-/* Use GDK_PRIORITY_REDRAW */
-#define GTK_PRIORITY_REDRAW     (G_PRIORITY_HIGH_IDLE + 20)
-
-/* Deprecated. Use G_PRIORITY #define's instead
- */
-#define GTK_PRIORITY_HIGH       G_PRIORITY_HIGH
-#define GTK_PRIORITY_INTERNAL   GTK_PRIORITY_REDRAW
-#define GTK_PRIORITY_DEFAULT	G_PRIORITY_DEFAULT_IDLE
-#define GTK_PRIORITY_LOW	G_PRIORITY_LOW
-
-#endif /* GTK_DISABLE_DEPRECATED */
 
 typedef gint	(*GtkKeySnoopFunc)	    (GtkWidget	  *grab_widget,
 					     GdkEventKey  *event,
@@ -127,10 +113,6 @@ gboolean gtk_init_check_abi_check (int	  *argc,
 
 #endif
 
-#ifndef GTK_DISABLE_DEPRECATED
-void     gtk_exit                 (gint    error_code);
-#endif /* GTK_DISABLE_DEPRECATED */
-
 void           gtk_disable_setlocale    (void);
 gchar *        gtk_set_locale           (void);
 PangoLanguage *gtk_get_default_language (void);
@@ -156,6 +138,12 @@ void	   gtk_grab_add		   (GtkWidget	       *widget);
 GtkWidget* gtk_grab_get_current	   (void);
 void	   gtk_grab_remove	   (GtkWidget	       *widget);
 
+void       gtk_device_grab_add     (GtkWidget          *widget,
+                                    GdkDevice          *device,
+                                    gboolean            block_others);
+void       gtk_device_grab_remove  (GtkWidget          *widget,
+                                    GdkDevice          *device);
+
 void	   gtk_init_add		   (GtkFunction	       function,
 				    gpointer	       data);
 void	   gtk_quit_add_destroy	   (guint	       main_level,
@@ -170,37 +158,6 @@ guint	   gtk_quit_add_full	   (guint	       main_level,
 				    GDestroyNotify     destroy);
 void	   gtk_quit_remove	   (guint	       quit_handler_id);
 void	   gtk_quit_remove_by_data (gpointer	       data);
-#ifndef GTK_DISABLE_DEPRECATED
-guint	   gtk_timeout_add	   (guint32	       interval,
-				    GtkFunction	       function,
-				    gpointer	       data);
-guint	   gtk_timeout_add_full	   (guint32	       interval,
-				    GtkFunction	       function,
-				    GtkCallbackMarshal marshal,
-				    gpointer	       data,
-				    GDestroyNotify     destroy);
-void	   gtk_timeout_remove	   (guint	       timeout_handler_id);
-
-guint	   gtk_idle_add		   (GtkFunction	       function,
-				    gpointer	       data);
-guint	   gtk_idle_add_priority   (gint	       priority,
-				    GtkFunction	       function,
-				    gpointer	       data);
-guint	   gtk_idle_add_full	   (gint	       priority,
-				    GtkFunction	       function,
-				    GtkCallbackMarshal marshal,
-				    gpointer	       data,
-				    GDestroyNotify     destroy);
-void	   gtk_idle_remove	   (guint	       idle_handler_id);
-void	   gtk_idle_remove_by_data (gpointer	       data);
-guint	   gtk_input_add_full	   (gint	       source,
-				    GdkInputCondition  condition,
-				    GdkInputFunction   function,
-				    GtkCallbackMarshal marshal,
-				    gpointer	       data,
-				    GDestroyNotify     destroy);
-void	   gtk_input_remove	   (guint	       input_handler_id);
-#endif /* GTK_DISABLE_DEPRECATED */
 
 guint	   gtk_key_snooper_install (GtkKeySnoopFunc snooper,
 				    gpointer	    func_data);
@@ -209,6 +166,7 @@ void	   gtk_key_snooper_remove  (guint	    snooper_handler_id);
 GdkEvent*       gtk_get_current_event       (void);
 guint32         gtk_get_current_event_time  (void);
 gboolean        gtk_get_current_event_state (GdkModifierType *state);
+GdkDevice *     gtk_get_current_event_device (void);
 
 GtkWidget* gtk_get_event_widget	   (GdkEvent	   *event);
 

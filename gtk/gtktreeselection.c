@@ -327,7 +327,7 @@ gtk_tree_selection_get_tree_view (GtkTreeSelection *selection)
 /**
  * gtk_tree_selection_get_selected:
  * @selection: A #GtkTreeSelection.
- * @model: (out) (allow-none): A pointer to set to the #GtkTreeModel, or NULL.
+ * @model: (out) (allow-none) (transfer none): A pointer to set to the #GtkTreeModel, or NULL.
  * @iter: (allow-none): The #GtkTreeIter, or NULL.
  *
  * Sets @iter to the currently selected node if @selection is set to

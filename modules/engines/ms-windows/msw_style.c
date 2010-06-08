@@ -2024,7 +2024,7 @@ draw_box (GtkStyle *style,
   if (detail &&
       (!strcmp (detail, "button") || !strcmp (detail, "buttondefault")))
     {
-      if (GTK_IS_TREE_VIEW (widget->parent) || GTK_IS_CLIST (widget->parent))
+      if (GTK_IS_TREE_VIEW (widget->parent))
       {
         if (xp_theme_draw
 	      (window, XP_THEME_ELEMENT_LIST_HEADER, style, x, y,
@@ -3489,8 +3489,7 @@ draw_focus (GtkStyle *style,
     {
       return;
     }
-  if (GTK_IS_TREE_VIEW (widget->parent)	/* list view bheader */
-      || GTK_IS_CLIST (widget->parent))
+  if (GTK_IS_TREE_VIEW (widget->parent)	/* list view bheader */)
     {
       return;
     }

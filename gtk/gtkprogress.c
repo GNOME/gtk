@@ -274,7 +274,7 @@ static gboolean
 gtk_progress_expose (GtkWidget      *widget,
 		     GdkEventExpose *event)
 {
-  if (GTK_WIDGET_DRAWABLE (widget))
+  if (gtk_widget_is_drawable (widget))
     gdk_draw_drawable (widget->window,
 		       widget->style->black_gc,
 		       GTK_PROGRESS (widget)->offscreen_pixmap,
@@ -636,7 +636,7 @@ gtk_progress_set_text_alignment (GtkProgress *progress,
 	}
       g_object_thaw_notify (G_OBJECT (progress));
 
-      if (GTK_WIDGET_DRAWABLE (GTK_WIDGET (progress)))
+      if (gtk_widget_is_drawable (GTK_WIDGET (progress)))
 	gtk_widget_queue_resize (GTK_WIDGET (progress));
     }
 }
@@ -703,7 +703,7 @@ gtk_progress_set_activity_mode (GtkProgress *progress,
       if (progress->activity_mode)
 	GTK_PROGRESS_GET_CLASS (progress)->act_mode_enter (progress);
 
-      if (GTK_WIDGET_DRAWABLE (GTK_WIDGET (progress)))
+      if (gtk_widget_is_drawable (GTK_WIDGET (progress)))
 	gtk_widget_queue_resize (GTK_WIDGET (progress));
 
       g_object_notify (G_OBJECT (progress), "activity-mode");

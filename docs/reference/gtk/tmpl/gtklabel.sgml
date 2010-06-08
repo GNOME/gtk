@@ -141,7 +141,7 @@ the clipboard. Only labels that contain useful-to-copy information
 </para>
 </refsect2>
 
-<refsect2>
+<refsect2 id="label-text-layout">
 <title>Text layout</title>
 
 <para>
@@ -155,11 +155,23 @@ Labels can automatically wrap text if you call
 gtk_label_set_line_wrap().
 </para>
 <para>
-gtk_label_set_justify() sets how the lines in a label align 
-with one another. If you want to set how the label as a whole 
+gtk_label_set_justify() sets how the lines in a label align
+with one another. If you want to set how the label as a whole
 aligns in its available space, see gtk_misc_set_alignment().
 </para>
-
+<para>
+The #GtkLabel:width-chars and #GtkLabel:max-width-chars properties
+can be used to control the size allocation of ellipsized or wrapped
+labels. For ellipsizing labels, if either is specified (and less
+than the actual text size), it is used as the minimum width, and the actual
+text size is used as the natural width of the label. For wrapping labels,
+width-chars is used as the minimum width, if specified, and max-width-chars
+is used as the natural width. Even if max-width-chars specified, wrapping
+labels will be rewrapped to use all of the available width.
+</para>
+<note><para>Note that the interpretation of #GtkLabel:width-chars and
+#GtkLabel:max-width-chars has changed a bit with the introduction of
+width-for-height geometry management and #GtkExtendedLayout.</para></note>
 </refsect2>
 
 <refsect2>
@@ -186,6 +198,9 @@ the #GtkLabel::activate-link signal and the gtk_label_get_current_uri() function
 </para>
 
 <!-- ##### SECTION Stability_Level ##### -->
+
+
+<!-- ##### SECTION Image ##### -->
 
 
 <!-- ##### STRUCT GtkLabel ##### -->
@@ -424,33 +439,6 @@ The pattern of underlines you want under the existing text within the
 @n_chars: 
 
 
-<!-- ##### FUNCTION gtk_label_get ##### -->
-<para>
-Gets the current string of text within the #GtkLabel and writes it to
-the given @str argument.  It does not make a copy of this string so you
-must not write to it.
-</para>
-
-@label: The #GtkLabel widget you want to get the text from.
-@str: The reference to the pointer you want to point to the text.
-@Deprecated: Use gtk_label_get_text() instead.
-
-
-<!-- ##### FUNCTION gtk_label_parse_uline ##### -->
-<para>
-Parses the given string for underscores and converts the next
-character to an underlined character.  The last character that
-was underlined will have its lower-cased accelerator keyval returned  (i.e.
-&quot;_File&quot; would return the keyval for &quot;f&quot;.  This is
-probably only used within the GTK+ library itself for menu items and such.
-</para>
-
-@label: The #GtkLabel you want to affect.
-@string: The string you want to parse for underlines.
-@Returns: The lowercase keyval of the last character underlined.
-@Deprecated: Use gtk_label_set_use_underline() instead.
-
-
 <!-- ##### FUNCTION gtk_label_set_line_wrap ##### -->
 <para>
 
@@ -467,14 +455,6 @@ probably only used within the GTK+ library itself for menu items and such.
 
 @label: 
 @wrap_mode: 
-
-
-<!-- ##### MACRO gtk_label_set ##### -->
-<para>
-Sets the text within the GtkLabel widget.
-</para>
-
-@Deprecated: Use gtk_label_set_text() instead.
 
 
 <!-- ##### FUNCTION gtk_label_get_layout_offsets ##### -->

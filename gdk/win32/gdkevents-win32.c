@@ -47,8 +47,10 @@
 
 #include "gdk.h"
 #include "gdkprivate-win32.h"
-#include "gdkinput-win32.h"
 #include "gdkkeysyms.h"
+#include "gdkdevicemanager-win32.h"
+#include "gdkdeviceprivate.h"
+#include "gdkdevice-wintab.h"
 
 #include <windowsx.h>
 
@@ -101,6 +103,7 @@ static gboolean is_modally_blocked (GdkWindow   *window);
  */
 
 static GList *client_filters;	/* Filters for client messages */
+extern gint       _gdk_input_ignore_core;
 
 static HCURSOR p_grab_cursor;
 
@@ -199,31 +202,44 @@ _gdk_win32_get_next_tick (gulong suggested_tick)
 }
 
 static void
-generate_focus_event (GdkWindow *window,
-		      gboolean   in)
+generate_focus_event (GdkDeviceManager *device_manager,
+                      GdkWindow        *window,
+                      gboolean          in)
 {
+  GdkDevice *device;
   GdkEvent *event;
+
+  device = GDK_DEVICE_MANAGER_WIN32 (device_manager)->core_keyboard;
 
   event = gdk_event_new (GDK_FOCUS_CHANGE);
   event->focus_change.window = window;
   event->focus_change.in = in;
+  gdk_event_set_device (event, device);
 
   append_event (event);
 }
 
 static void
-generate_grab_broken_event (GdkWindow *window,
-			    gboolean   keyboard,
-			    GdkWindow *grab_window)
+generate_grab_broken_event (GdkDeviceManager *device_manager,
+                            GdkWindow        *window,
+                            gboolean          keyboard,
+                            GdkWindow        *grab_window)
 {
   GdkEvent *event = gdk_event_new (GDK_GRAB_BROKEN);
+  GdkDevice *device;
+
+  if (keyboard)
+    device = GDK_DEVICE_MANAGER_WIN32 (device_manager)->core_keyboard;
+  else
+    device = GDK_DEVICE_MANAGER_WIN32 (device_manager)->core_pointer;
 
   event->grab_broken.window = window;
   event->grab_broken.send_event = 0;
   event->grab_broken.keyboard = keyboard;
   event->grab_broken.implicit = FALSE;
   event->grab_broken.grab_window = grab_window;
-	  
+  gdk_event_set_device (event, device);
+
   append_event (event);
 }
 
@@ -377,6 +393,7 @@ _gdk_events_init (void)
 #endif
 
   source = g_source_new (&event_funcs, sizeof (GSource));
+  g_source_set_name (source, "GDK Win32 event source"); 
   g_source_set_priority (source, GDK_PRIORITY_EVENTS);
 
 #ifdef G_WITH_CYGWIN
@@ -400,30 +417,6 @@ gdk_events_pending (void)
   return (_gdk_event_queue_find_first (_gdk_display) ||
 	  (modal_win32_dialog == NULL &&
 	   PeekMessageW (&msg, NULL, 0, 0, PM_NOREMOVE)));
-}
-
-GdkEvent*
-gdk_event_get_graphics_expose (GdkWindow *window)
-{
-  MSG msg;
-  GdkEvent *event = NULL;
-
-  g_return_val_if_fail (window != NULL, NULL);
-  
-  GDK_NOTE (EVENTS, g_print ("gdk_event_get_graphics_expose\n"));
-
-  if (PeekMessageW (&msg, GDK_WINDOW_HWND (window), WM_PAINT, WM_PAINT, PM_REMOVE))
-    {
-      handle_wm_paint (&msg, window, TRUE, &event);
-      if (event != NULL)
-	{
-	  GDK_NOTE (EVENTS, g_print ("gdk_event_get_graphics_expose: got it!\n"));
-	  return event;
-	}
-    }
-  
-  GDK_NOTE (EVENTS, g_print ("gdk_event_get_graphics_expose: nope\n"));
-  return NULL;	
 }
 
 #if 0 /* Unused, but might be useful to re-introduce in some debugging output? */
@@ -467,17 +460,19 @@ event_mask_string (GdkEventMask mask)
 #endif
 
 GdkGrabStatus
-_gdk_windowing_pointer_grab (GdkWindow    *window,
-			     GdkWindow    *native_window,
-			     gboolean	owner_events,
-			     GdkEventMask	event_mask,
-			     GdkWindow    *confine_to,
-			     GdkCursor    *cursor,
-			     guint32	time)
+_gdk_windowing_device_grab (GdkDevice    *device,
+                            GdkWindow    *window,
+                            GdkWindow    *native_window,
+                            gboolean      owner_events,
+                            GdkEventMask	event_mask,
+                            GdkWindow    *confine_to,
+                            GdkCursor    *cursor,
+                            guint32	      time)
 {
   HCURSOR hcursor;
   GdkCursorPrivate *cursor_private;
   gint return_val;
+  GdkWindowImplWin32 *impl = GDK_WINDOW_IMPL_WIN32 (((GdkWindowObject *) native_window)->impl);
 
   g_return_val_if_fail (window != NULL, 0);
   g_return_val_if_fail (GDK_IS_WINDOW (window), 0);
@@ -490,54 +485,53 @@ _gdk_windowing_pointer_grab (GdkWindow    *window,
   else if ((hcursor = CopyCursor (cursor_private->hcursor)) == NULL)
     WIN32_API_FAILED ("CopyCursor");
 
-  return_val = _gdk_input_grab_pointer (native_window,
-					owner_events,
-					event_mask,
-					confine_to,
-					time);
+  return_val = GDK_DEVICE_GET_CLASS (device)->grab (device,
+                                                    native_window,
+                                                    owner_events,
+                                                    event_mask,
+                                                    confine_to,
+                                                    cursor,
+                                                    time);
 
-  if (return_val == GDK_GRAB_SUCCESS)
+  /* TODO_CSW: grab brokens, confine window, input_grab */
+  if (p_grab_cursor != NULL)
     {
-      GdkWindowImplWin32 *impl = GDK_WINDOW_IMPL_WIN32 (((GdkWindowObject *) native_window)->impl);
-
-      SetCapture (GDK_WINDOW_HWND (native_window));
-      /* TODO_CSW: grab brokens, confine window, input_grab */
-      if (p_grab_cursor != NULL)
-	{
-	  if (GetCursor () == p_grab_cursor)
-	    SetCursor (NULL);
-	  DestroyCursor (p_grab_cursor);
-	}
-
-      p_grab_cursor = hcursor;
-
-      if (p_grab_cursor != NULL)
-	SetCursor (p_grab_cursor);
-      else if (impl->hcursor != NULL)
-	SetCursor (impl->hcursor);
-      else
-	SetCursor (LoadCursor (NULL, IDC_ARROW));
-
+      if (GetCursor () == p_grab_cursor)
+        SetCursor (NULL);
+      DestroyCursor (p_grab_cursor);
     }
+
+  p_grab_cursor = hcursor;
+
+  if (p_grab_cursor != NULL)
+    SetCursor (p_grab_cursor);
+  else if (impl->hcursor != NULL)
+    SetCursor (impl->hcursor);
+  else
+    SetCursor (LoadCursor (NULL, IDC_ARROW));
 
   return return_val;
 }
 
 void
-gdk_display_pointer_ungrab (GdkDisplay *display,
-                            guint32     time)
+gdk_device_ungrab (GdkDevice *device,
+                   guint32    time)
 {
-  GdkPointerGrabInfo *info;
+  GdkDeviceGrabInfo *info;
+  GdkDisplay *display;
 
-  info = _gdk_display_get_last_pointer_grab (display);
+  g_return_if_fail (GDK_IS_DEVICE (device));
+
+  display = gdk_device_get_display (device);
+  info = _gdk_display_get_last_device_grab (display, device);
+
   if (info)
     {
       info->serial_end = 0;
-      ReleaseCapture ();
+      GDK_DEVICE_GET_CLASS (device)->ungrab (device, time);
     }
-  /* TODO_CSW: cursor, confines, etc */
 
-  _gdk_display_pointer_grab_update (display, 0);
+  _gdk_display_device_grab_update (display, device, 0);
 }
 
 
@@ -549,8 +543,11 @@ find_window_for_mouse_event (GdkWindow* reported_window,
   POINTS points;
   POINT pt;
   GdkWindow* other_window = NULL;
+  GdkDeviceManagerWin32 *device_manager;
 
-  if (!_gdk_display_get_last_pointer_grab (_gdk_display))
+  device_manager = GDK_DEVICE_MANAGER_WIN32 (gdk_display_get_device_manager (_gdk_display));
+
+  if (!_gdk_display_get_last_device_grab (_gdk_display, device_manager->core_pointer))
     return reported_window;
 
   points = MAKEPOINTS (msg->lParam);
@@ -584,41 +581,6 @@ find_window_for_mouse_event (GdkWindow* reported_window,
   msg->lParam = MAKELPARAM (pt.x, pt.y);
 
   return other_window;
-}
-
-GdkGrabStatus
-gdk_keyboard_grab (GdkWindow *window,
-		   gboolean   owner_events,
-		   guint32    time)
-{
-  GdkDisplay *display;
-  GdkWindow  *toplevel;
-
-  g_return_val_if_fail (window != NULL, 0);
-  g_return_val_if_fail (GDK_IS_WINDOW (window), 0);
-  
-  GDK_NOTE (EVENTS, g_print ("gdk_keyboard_grab %p%s\n",
-			     GDK_WINDOW_HWND (window), owner_events ? " OWNER_EVENTS" : ""));
-
-  display = gdk_drawable_get_display (window);
-  toplevel = gdk_window_get_toplevel (window);
-
-  _gdk_display_set_has_keyboard_grab (display,
-				      window,
-				      toplevel,
-				      owner_events,
-				      0,
-				      time);
-
-  return GDK_GRAB_SUCCESS;
-}
-
-void
-gdk_display_keyboard_ungrab (GdkDisplay *display,
-                             guint32 time)
-{
-  GDK_NOTE (EVENTS, g_print ("gdk_display_keyboard_ungrab\n"));
-  _gdk_display_unset_has_keyboard_grab (display, FALSE);
 }
 
 void 
@@ -1219,11 +1181,11 @@ do_show_window (GdkWindow *window, gboolean hide_window)
 }
 
 static void
-synthesize_enter_or_leave_event (GdkWindow    	*window,
-				 MSG          	*msg,
-				 GdkEventType 	 type,
-				 GdkCrossingMode mode,
-				 GdkNotifyType detail)
+synthesize_enter_or_leave_event (GdkWindow        *window,
+                                 MSG          	  *msg,
+                                 GdkEventType 	   type,
+                                 GdkCrossingMode   mode,
+                                 GdkNotifyType     detail)
 {
   GdkEvent *event;
   POINT pt;
@@ -1243,12 +1205,13 @@ synthesize_enter_or_leave_event (GdkWindow    	*window,
   event->crossing.detail = detail;
   event->crossing.focus = TRUE; /* FIXME: Set correctly */
   event->crossing.state = 0;	/* FIXME: Set correctly */
+  gdk_event_set_device (event, _gdk_display->core_pointer);
 
   append_event (event);
   
   if (type == GDK_ENTER_NOTIFY &&
       ((GdkWindowObject *) window)->extension_events != 0)
-    _gdk_input_enter_event (window);
+    _gdk_device_wintab_update_window_coords (window);
 }
 			 
 static void
@@ -1708,10 +1671,10 @@ handle_display_change (void)
 }
 
 static void
-generate_button_event (GdkEventType type,
-		       gint         button,
-		       GdkWindow   *window,
-		       MSG         *msg)
+generate_button_event (GdkEventType      type,
+                       gint              button,
+                       GdkWindow        *window,
+                       MSG              *msg)
 {
   GdkEvent *event = gdk_event_new (type);
 
@@ -1724,7 +1687,7 @@ generate_button_event (GdkEventType type,
   event->button.axes = NULL;
   event->button.state = build_pointer_event_state (msg);
   event->button.button = button;
-  event->button.device = _gdk_display->core_pointer;
+  gdk_event_set_device (event, _gdk_display->core_pointer);
 
   append_event (event);
 }
@@ -1892,7 +1855,10 @@ gdk_event_translate (MSG  *msg,
 
   GdkWindow *orig_window, *new_window, *toplevel;
 
-  GdkPointerGrabInfo *grab = NULL;
+  GdkDeviceManager *device_manager;
+
+  GdkDeviceGrabInfo *keyboard_grab = NULL;
+  GdkDeviceGrabInfo *pointer_grab = NULL;
   GdkWindow *grab_window = NULL;
 
   static gint update_colors_counter = 0;
@@ -1953,7 +1919,14 @@ gdk_event_translate (MSG  *msg,
 	}
       return FALSE;
     }
-  
+
+  device_manager = gdk_display_get_device_manager (_gdk_display);
+
+  keyboard_grab = _gdk_display_get_last_device_grab (_gdk_display,
+                                                     GDK_DEVICE_MANAGER_WIN32 (device_manager)->core_keyboard);
+  pointer_grab = _gdk_display_get_last_device_grab (_gdk_display,
+                                                    GDK_DEVICE_MANAGER_WIN32 (device_manager)->core_pointer);
+
   g_object_ref (window);
 
   /* window's refcount has now been increased, so code below should
@@ -2071,7 +2044,7 @@ gdk_event_translate (MSG  *msg,
       /* Let the system handle Alt-Tab, Alt-Space and Alt-F4 unless
        * the keyboard is grabbed.
        */
-      if (_gdk_display->keyboard_grab.window == NULL &&
+      if (!keyboard_grab &&
 	  (msg->wParam == VK_TAB ||
 	   msg->wParam == VK_SPACE ||
 	   msg->wParam == VK_F4))
@@ -2095,9 +2068,10 @@ gdk_event_translate (MSG  *msg,
 	  in_ime_composition)
 	break;
 
-      if (!propagate (&window, msg,
-		      _gdk_display->keyboard_grab.window,
-		      _gdk_display->keyboard_grab.owner_events,
+      if (keyboard_grab &&
+          !propagate (&window, msg,
+		      keyboard_grab->window,
+		      keyboard_grab->owner_events,
 		      GDK_ALL_EVENTS_MASK,
 		      doesnt_want_key, FALSE))
 	break;
@@ -2114,6 +2088,7 @@ gdk_event_translate (MSG  *msg,
       event->key.string = NULL;
       event->key.length = 0;
       event->key.hardware_keycode = msg->wParam;
+      gdk_event_set_device (event, GDK_DEVICE_MANAGER_WIN32 (device_manager)->core_keyboard);
       if (HIWORD (msg->lParam) & KF_EXTENDED)
 	{
 	  switch (msg->wParam)
@@ -2199,9 +2174,10 @@ gdk_event_translate (MSG  *msg,
       if (!(msg->lParam & GCS_RESULTSTR))
 	break;
 
-      if (!propagate (&window, msg,
-		      _gdk_display->keyboard_grab.window,
-		      _gdk_display->keyboard_grab.owner_events,
+      if (keyboard_grab &&
+          !propagate (&window, msg,
+		      keyboard_grab->window,
+		      keyboard_grab->owner_events,
 		      GDK_ALL_EVENTS_MASK,
 		      doesnt_want_char, FALSE))
 	break;
@@ -2225,6 +2201,7 @@ gdk_event_translate (MSG  *msg,
 	      /* Build a key press event */
 	      event = gdk_event_new (GDK_KEY_PRESS);
 	      event->key.window = window;
+        gdk_event_set_device (event, GDK_DEVICE_MANAGER_WIN32 (device_manager)->core_keyboard);
 	      build_wm_ime_composition_event (event, msg, wbuf[i], key_state);
 
 	      append_event (event);
@@ -2235,6 +2212,7 @@ gdk_event_translate (MSG  *msg,
 	      /* Build a key release event.  */
 	      event = gdk_event_new (GDK_KEY_RELEASE);
 	      event->key.window = window;
+        gdk_event_set_device (event, GDK_DEVICE_MANAGER_WIN32 (device_manager)->core_keyboard);
 	      build_wm_ime_composition_event (event, msg, wbuf[i], key_state);
 
 	      append_event (event);
@@ -2331,10 +2309,10 @@ gdk_event_translate (MSG  *msg,
 	      current_toplevel ? GDK_WINDOW_HWND (current_toplevel) : NULL, 
 	      toplevel ? GDK_WINDOW_HWND (toplevel) : NULL));
 	  if (current_toplevel)
-	    synthesize_enter_or_leave_event (current_toplevel, msg, 
-					     GDK_LEAVE_NOTIFY, GDK_CROSSING_NORMAL, GDK_NOTIFY_ANCESTOR);
-	  synthesize_enter_or_leave_event (toplevel, msg, 
-					   GDK_ENTER_NOTIFY, GDK_CROSSING_NORMAL, GDK_NOTIFY_ANCESTOR);
+	    synthesize_enter_or_leave_event (current_toplevel, msg,
+                                       GDK_LEAVE_NOTIFY, GDK_CROSSING_NORMAL, GDK_NOTIFY_ANCESTOR);
+	  synthesize_enter_or_leave_event (toplevel, msg,
+                                     GDK_ENTER_NOTIFY, GDK_CROSSING_NORMAL, GDK_NOTIFY_ANCESTOR);
 	  assign_object (&current_toplevel, toplevel);
 	  track_mouse_event (TME_LEAVE, GDK_WINDOW_HWND (toplevel));
 	}
@@ -2360,7 +2338,7 @@ gdk_event_translate (MSG  *msg,
       event->motion.axes = NULL;
       event->motion.state = build_pointer_event_state (msg);
       event->motion.is_hint = FALSE;
-      event->motion.device = _gdk_display->core_pointer;
+      gdk_event_set_device (event, _gdk_display->core_pointer);
 
       append_event (event);
 
@@ -2389,8 +2367,8 @@ gdk_event_translate (MSG  *msg,
 	{
 	  /* we are only interested if we don't know the new window */
 	  if (current_toplevel)
-	    synthesize_enter_or_leave_event (current_toplevel, msg, 
-					     GDK_LEAVE_NOTIFY, GDK_CROSSING_NORMAL, GDK_NOTIFY_ANCESTOR);
+	    synthesize_enter_or_leave_event (current_toplevel, msg,
+                                       GDK_LEAVE_NOTIFY, GDK_CROSSING_NORMAL, GDK_NOTIFY_ANCESTOR);
 	  assign_object (&current_toplevel, NULL);
 	}
       else
@@ -2436,7 +2414,7 @@ gdk_event_translate (MSG  *msg,
       event->scroll.x_root = (gint16) GET_X_LPARAM (msg->lParam) + _gdk_offset_x;
       event->scroll.y_root = (gint16) GET_Y_LPARAM (msg->lParam) + _gdk_offset_y;
       event->scroll.state = build_pointer_event_state (msg);
-      event->scroll.device = _gdk_display->core_pointer;
+      gdk_event_set_device (event, _gdk_display->core_pointer);
 
       append_event (event);
       
@@ -2536,16 +2514,16 @@ gdk_event_translate (MSG  *msg,
        break;
 
     case WM_KILLFOCUS:
-      if (_gdk_display->keyboard_grab.window != NULL &&
-	  !GDK_WINDOW_DESTROYED (_gdk_display->keyboard_grab.window))
+      if (keyboard_grab != NULL &&
+	  !GDK_WINDOW_DESTROYED (keyboard_grab->window))
 	{
-	  generate_grab_broken_event (_gdk_display->keyboard_grab.window, FALSE, NULL);
+	  generate_grab_broken_event (device_manager, keyboard_grab->window, FALSE, NULL);
 	}
 
       /* fallthrough */
     case WM_SETFOCUS:
-      if (_gdk_display->keyboard_grab.window != NULL &&
-	  !_gdk_display->keyboard_grab.owner_events)
+      if (keyboard_grab != NULL &&
+	  !keyboard_grab->owner_events)
 	break;
 
       if (!(((GdkWindowObject *) window)->event_mask & GDK_FOCUS_CHANGE_MASK))
@@ -2554,7 +2532,7 @@ gdk_event_translate (MSG  *msg,
       if (GDK_WINDOW_DESTROYED (window))
 	break;
 
-      generate_focus_event (window, (msg->message == WM_SETFOCUS));
+      generate_focus_event (device_manager, window, (msg->message == WM_SETFOCUS));
       return_val = TRUE;
       break;
 
@@ -2582,11 +2560,8 @@ gdk_event_translate (MSG  *msg,
       GDK_NOTE (EVENTS, g_print (" %#x %#x",
 				 LOWORD (msg->lParam), HIWORD (msg->lParam)));
 
-      grab = _gdk_display_get_last_pointer_grab (_gdk_display);
-      if (grab != NULL)
-	{
-	  grab_window = grab->window;
-	}
+      if (pointer_grab != NULL)
+        grab_window = pointer_grab->window;
 
       if (grab_window == NULL && LOWORD (msg->lParam) != HTCLIENT)
 	break;
@@ -2641,14 +2616,14 @@ gdk_event_translate (MSG  *msg,
 	      SetForegroundWindow (GDK_WINDOW_HWND (impl->transient_owner));
 	    }
 
-	  grab = _gdk_display_get_last_pointer_grab (_gdk_display);
-	  if (grab != NULL)
+	  if (pointer_grab != NULL)
 	    {
-	      if (grab->window == window)
+	      if (pointer_grab->window == window)
 		gdk_pointer_ungrab (msg->time);
 	    }
 
-	  if (_gdk_display->keyboard_grab.window == window)
+	  if (keyboard_grab &&
+        keyboard_grab->window == window)
 	    gdk_keyboard_ungrab (msg->time);
 	}
 
@@ -2679,13 +2654,13 @@ gdk_event_translate (MSG  *msg,
       if (msg->wParam == SIZE_MINIMIZED)
 	{
 	  /* Don't generate any GDK event. This is *not* an UNMAP. */
-	  grab = _gdk_display_get_last_pointer_grab (_gdk_display);
-	  if (grab != NULL)
+	  if (pointer_grab != NULL)
 	    {
-	      if (grab->window == window)
+	      if (pointer_grab->window == window)
 		gdk_pointer_ungrab (msg->time);
 	    }
-	  if (_gdk_display->keyboard_grab.window == window)
+	  if (keyboard_grab &&
+        keyboard_grab->window == window)
 	    gdk_keyboard_ungrab (msg->time);
 
 	  gdk_synthesize_window_state (window,
@@ -2731,7 +2706,7 @@ gdk_event_translate (MSG  *msg,
 	    ((GdkWindowObject *) window)->resize_count -= 1;
 	  
 	  if (((GdkWindowObject *) window)->extension_events != 0)
-	    _gdk_input_configure_event (window);
+      _gdk_device_wintab_update_window_coords (window);
 
 	  return_val = TRUE;
 	}
@@ -3113,14 +3088,14 @@ gdk_event_translate (MSG  *msg,
       break;
 
     case WM_DESTROY:
-      grab = _gdk_display_get_last_pointer_grab (_gdk_display);
-      if (grab != NULL)
+      if (pointer_grab != NULL)
 	{
-	  if (grab->window == window)
+	  if (pointer_grab->window == window)
 	    gdk_pointer_ungrab (msg->time);
 	}
 
-      if (_gdk_display->keyboard_grab.window == window)
+      if (keyboard_grab &&
+          keyboard_grab->window == window)
 	gdk_keyboard_ungrab (msg->time);
 
       if ((window != NULL) && (msg->hwnd != GetDesktopWindow ()))

@@ -996,11 +996,11 @@ relevant packages. These are:</para>
 or on any GNU mirror.</para>
 
 <para>In order to use the powerful autoconf/automake scheme,
-you must create a configure.in which may look like:</para>
+you must create a configure.ac which may look like:</para>
 
 <programlisting role="C">
 dnl Process this file with autoconf to produce a configure script.
-dnl configure.in for a GTK+ based program
+dnl configure.ac for a GTK+ based program
 
 AC_INIT(myprg.c)
 AM_INIT_AUTOMAKE(mypkgname, 0.0.1)
@@ -1137,8 +1137,7 @@ myapp --display=:1
      | | | +GtkCombo
      | | | `GtkStatusbar
      | | `GtkVBox
-     | |   +GtkColorSelection
-     | |   `GtkGammaCurve
+     | |   `GtkColorSelection
      | +GtkButton
      | | +GtkOptionMenu
      | | `GtkToggleButton
@@ -1160,7 +1159,6 @@ myapp --display=:1
      | +GtkToolbar
      | `GtkTree
      +GtkDrawingArea
-     | `GtkCurve
      +GtkEditable
      | +GtkEntry
      | | `GtkSpinButton
@@ -1629,11 +1627,7 @@ int main(int argc, char *argv[])
   g_signal_connect(G_OBJECT (window), "destroy",
 		     G_CALLBACK(destroy), NULL);
 
-#if (GTK_MAJOR_VERSION == 1) &amp;&amp; (GTK_MINOR_VERSION == 0)
-  gtk_container_border_width(GTK_CONTAINER (window), 10);
-#else  
   gtk_container_set_border_width(GTK_CONTAINER (window), 10);
-#endif
 
   /* add a button to do something useful */
   button = gtk_button_new_with_label("Fork me!");
@@ -1898,7 +1892,7 @@ not applied you'll have to use the
 function. <literal>gtk_object_class_user_signal_new</literal> allows you
 to add a new signal to a predefined GTK+ widget without any
 modification of the GTK+ source code. The new signal can be
-emited with <literal>gtk_signal_emit</literal> and can be
+emited with <literal>g_signal_emit</literal> and can be
 handled in the same way as other signals.</para>
 
 <para>Tim Janik posted this code snippet:</para>
@@ -1920,7 +1914,7 @@ gtk_widget_user_action (GtkWidget *widget,
 {
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
-  gtk_signal_emit (GTK_OBJECT (widget), signal_user_action, act_data);
+  g_signal_emit (widget, signal_user_action, act_data);
 }
 </programlisting>
 
@@ -2527,15 +2521,15 @@ using the following expression:</para>
 
 <para>If you don't want the user to be able to modify the
 content of this entry, you can use the
-gtk_entry_set_editable() function:</para>
+gtk_editable_set_editable() function:</para>
 
 
 <programlisting role="C">
-      void gtk_entry_set_editable(GtkEntry *entry, 
-                                  gboolean editable);
+void gtk_editable_set_editable (GtkEditable *editable,
+                                gboolean     is_editable);
 </programlisting>
 
-<para>Set the editable parameter to FALSE to disable typing
+<para>Set the is_editable parameter to FALSE to disable typing
 into the entry.</para>
 </sect1>
 
@@ -2559,10 +2553,10 @@ into the entry.</para>
 signal handler with</para>
 
 <programlisting role="C">
-      gtk_signal_connect(GTK_COMBO(cb)->entry,
-                         "changed",
-                         GTK_SIGNAL_FUNC(my_cb_change_handler),
-                         NULL);
+      g_signal_connect(GTK_COMBO(cb)->entry,
+                       "changed",
+                       G_CALLBACK(my_cb_change_handler),
+                       NULL);
 </programlisting>
 
 </sect1>
@@ -2629,8 +2623,8 @@ underlined, and the relevant accelerators are created.</para>
   gtk_box_pack_start (GTK_BOX (vbox1), menubar1, FALSE, FALSE, 0);
 
   file1 = gtk_menu_item_new_with_label ("");
-  tmp_key = gtk_label_parse_uline (GTK_LABEL (GTK_BIN (file1)->child),
-                                   _("_File"));
+  gtk_label_set_use_underline (GTK_LABEL (gtk_bin_get_child (GTK_BIN (file1))),
+                               TRUE);
   gtk_widget_add_accelerator (file1, "activate_item", accel_group,
                               tmp_key, GDK_MOD1_MASK, 0);
   gtk_object_set_data (GTK_OBJECT (window1), "file1", file1);
@@ -2643,8 +2637,8 @@ underlined, and the relevant accelerators are created.</para>
   gtk_menu_item_set_submenu (GTK_MENU_ITEM (file1), file1_menu);
 
   new1 = gtk_menu_item_new_with_label ("");
-  tmp_key = gtk_label_parse_uline (GTK_LABEL (GTK_BIN (new1)->child),
-                                   _("_New"));
+  gtk_label_set_use_underline (GTK_LABEL (gtk_bin_get_child (GTK_BIN (new1))),
+                               TRUE);
   gtk_widget_add_accelerator (new1, "activate_item", file1_menu_accels,
                               tmp_key, 0, 0);
   gtk_object_set_data (GTK_OBJECT (window1), "new1", new1);
@@ -2670,9 +2664,9 @@ GtkMenuItem with:</para>
       /* do stuff with child */
       if (GTK_IS_LABEL (child))
       {
-        gchar *text;
+        const gchar *text;
     
-        gtk_label_get (GTK_LABEL (child), &amp;text);
+        text = gtk_label_get_text (GTK_LABEL (child));
         g_print ("menu item text: %s\n", text);
       }
     }
@@ -2864,9 +2858,9 @@ be:</para>
 
 <programlisting role="C">
   entry = gtk_entry_new();
-  gtk_signal_connect (GTK_OBJECT(entry), "activate",
-                      GTK_SIGNAL_FUNC(entry_callback),
-                      NULL);
+  g_signal_connect (entry, "activate",
+                    G_CALLBACK(entry_callback),
+                    NULL);
 </programlisting>
 
 </sect1>
@@ -3044,8 +3038,8 @@ main (int argc, char *argv[])
   gtk_container_add (GTK_CONTAINER (window), text);
 
   /* connect after everything else */
-  gtk_signal_connect_after (GTK_OBJECT(text), "button_press_event",
-    GTK_SIGNAL_FUNC (insert_bar), NULL);
+  g_signal_connect_after (text, "button_press_event",
+                          G_CALLBACK (insert_bar), NULL);
 
   gtk_widget_show_all(window);
   gtk_main();
@@ -3108,7 +3102,7 @@ like this:</para>
   gc = gdk_gc_new(widget->window);
 
   /* find proper dimensions for rectangle */
-  gdk_window_get_size(widget->window, &amp;width, &amp;height);
+  gdk_drawable_get_size(widget->window, &amp;width, &amp;height);
 
   /* the color we want to use */
   color = (GdkColor *)malloc(sizeof(GdkColor));
@@ -3130,7 +3124,7 @@ like this:</para>
    * displays. Therefore, this call is required so that GDK and X can
    * give us the closest color available in the colormap
    */
-  gdk_color_alloc(gtk_widget_get_colormap(widget), color);
+  gdk_colormap_alloc_color(gtk_widget_get_colormap(widget), color, FALSE, TRUE);
 
   /* set the foreground to our color */
   gdk_gc_set_foreground(gc, color);

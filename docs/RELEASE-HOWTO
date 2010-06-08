@@ -29,9 +29,9 @@ Make sure that gtk-doc is the latest released version.
  3) In particular, if this is a major, stable, release, verify that
     README.in contains the relevant release notes and that the
     required versions of dependencies in INSTALL.in are in sync
-    with configure.in.
+    with configure.ac.
 
- 4) Verify that the version in configure.in has been bumped after the last
+ 4) Verify that the version in configure.ac has been bumped after the last
     release. (Note that this is critical, a slip-up here will cause the
     soname to change).
 
@@ -78,7 +78,7 @@ Make sure that gtk-doc is the latest released version.
 
     git push origin refs/tags/2.12.10
 
-13) Bump the version number in configure.in and commit and push this change
+13) Bump the version number in configure.ac and commit and push this change
 
 14) Upload the tarball to master.gnome.org and run install-module to transfer
     it to download.gnome.org. If you don't have an account on master.gnome.org,

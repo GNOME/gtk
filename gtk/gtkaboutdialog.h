@@ -22,7 +22,7 @@
    Author: Anders Carlsson <andersca@codefactory.se>
 */
 
-#if defined(GTK_DISABLE_SINGLE_INCLUDES) && !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
+#if !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
 #error "Only <gtk/gtk.h> can be included directly."
 #endif
 
@@ -42,6 +42,7 @@ G_BEGIN_DECLS
 
 typedef struct _GtkAboutDialog        GtkAboutDialog;
 typedef struct _GtkAboutDialogClass   GtkAboutDialogClass;
+typedef struct _GtkAboutDialogPrivate GtkAboutDialogPrivate;
 
 /**
  * GtkAboutDialog:
@@ -54,7 +55,7 @@ struct _GtkAboutDialog
   GtkDialog parent_instance;
 
   /*< private >*/
-  gpointer GSEAL (private_data);
+  GtkAboutDialogPrivate *priv;
 };
 
 struct _GtkAboutDialogClass 
@@ -73,12 +74,6 @@ GtkWidget             *gtk_about_dialog_new                    (void);
 void                   gtk_show_about_dialog                   (GtkWindow       *parent,
 								const gchar     *first_property_name,
 								...) G_GNUC_NULL_TERMINATED;
-
-#ifndef GTK_DISABLE_DEPRECATED
-G_CONST_RETURN gchar  *gtk_about_dialog_get_name               (GtkAboutDialog  *about);
-void                   gtk_about_dialog_set_name               (GtkAboutDialog  *about,
-								const gchar     *name);
-#endif /* GTK_DISABLE_DEPRECATED */
 G_CONST_RETURN gchar  *gtk_about_dialog_get_program_name       (GtkAboutDialog  *about);
 void                   gtk_about_dialog_set_program_name       (GtkAboutDialog  *about,
 								const gchar     *name);

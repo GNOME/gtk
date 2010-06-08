@@ -31,6 +31,25 @@
 #include "gtkprintjob.h"
 #include "gtkalias.h"
 
+
+/**
+ * SECTION:gtkprinter
+ * @Short_description: Represents a printer
+ * @Title: GtkPrinter
+ *
+ * A #GtkPrinter object represents a printer. You only need to
+ * deal directly with printers if you use the non-portable
+ * #GtkPrintUnixDialog API.
+ *
+ * A #GtkPrinter allows to get status information about the printer,
+ * such as its description, its location, the number of queued jobs,
+ * etc. Most importantly, a #GtkPrinter object can be used to create
+ * a #GtkPrintJob object, which lets you print to the printer.
+ *
+ * Printing support was added in GTK+ 2.10.
+ */
+
+
 #define GTK_PRINTER_GET_PRIVATE(o)  \
    (G_TYPE_INSTANCE_GET_PRIVATE ((o), GTK_TYPE_PRINTER, GtkPrinterPrivate))
 

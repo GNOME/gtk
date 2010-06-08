@@ -25,6 +25,9 @@ toggles the value.
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### STRUCT GtkCheckMenuItem ##### -->
 <para>
 The #GtkCheckMenuItem-struct struct contains the following fields.
@@ -81,6 +84,7 @@ field of the #GtkCheckMenuItem-struct struct to discover the new state.
 Creates a new #GtkCheckMenuItem.
 </para>
 
+@void: 
 @Returns: a new #GtkCheckMenuItem.
 
 
@@ -102,14 +106,6 @@ Creates a new #GtkCheckMenuItem with a label.
 @Returns: 
 
 
-<!-- ##### MACRO gtk_check_menu_item_set_state ##### -->
-<para>
-Sets the active state of the menu item's check box.
-</para>
-
-@Deprecated: Use gtk_check_menu_item_set_active() instead.
-
-
 <!-- ##### FUNCTION gtk_check_menu_item_get_active ##### -->
 <para>
 
@@ -126,17 +122,6 @@ Sets the active state of the menu item's check box.
 
 @check_menu_item: a #GtkCheckMenuItem.
 @is_active: boolean value indicating whether the check box is active.
-
-
-<!-- ##### FUNCTION gtk_check_menu_item_set_show_toggle ##### -->
-<para>
-Controls whether the check box is shown at all times.
-Normally the check box is shown only when it is active or while the 
-menu item is selected.
-</para>
-
-@menu_item: a #GtkCheckMenuItem.
-@always: boolean value indicating whether to always show the check box.
 
 
 <!-- ##### FUNCTION gtk_check_menu_item_toggled ##### -->

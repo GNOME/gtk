@@ -53,7 +53,7 @@
     <xi:include href="xml/threads.xml" />
 
     <xi:include href="xml/input.xml" />
-    <xi:include href="xml/input_devices.xml" />
+    <xi:include href="xml/gdkdevicemanager.xml" />
 
     <xi:include href="xml/pango_interaction.xml" />
     <xi:include href="xml/cairo_interaction.xml" />
@@ -72,45 +72,9 @@
     <title>Index of deprecated symbols</title>
     <xi:include href="xml/api-index-deprecated.xml"><xi:fallback /></xi:include>
   </index>
-  <index id="api-index-2-2" role="2.2">
-    <title>Index of new symbols in 2.2</title>
-    <xi:include href="xml/api-index-2.2.xml"><xi:fallback /></xi:include>
-  </index>
-  <index id="api-index-2-4" role="2.4">
-    <title>Index of new symbols in 2.4</title>
-    <xi:include href="xml/api-index-2.4.xml"><xi:fallback /></xi:include>
-  </index>
-  <index id="api-index-2-6" role="2.6">
-    <title>Index of new symbols in 2.6</title>
-    <xi:include href="xml/api-index-2.6.xml"><xi:fallback /></xi:include>
-  </index>
-  <index id="api-index-2-8" role="2.8">
-    <title>Index of new symbols in 2.8</title>
-    <xi:include href="xml/api-index-2.8.xml"><xi:fallback /></xi:include>
-  </index>
-  <index id="api-index-2-10" role="2.10">
-    <title>Index of new symbols in 2.10</title>
-    <xi:include href="xml/api-index-2.10.xml"><xi:fallback /></xi:include>
-  </index>
-  <index id="api-index-2-12" role="2.12">
-    <title>Index of new symbols in 2.12</title>
-    <xi:include href="xml/api-index-2.12.xml"><xi:fallback /></xi:include>
-  </index>
-  <index id="api-index-2-14" role="2.14">
-    <title>Index of new symbols in 2.14</title>
-    <xi:include href="xml/api-index-2.14.xml"><xi:fallback /></xi:include>
-  </index>
-  <index id="api-index-2-16" role="2.16">
-    <title>Index of new symbols in 2.16</title>
-    <xi:include href="xml/api-index-2.16.xml"><xi:fallback /></xi:include>
-  </index>
-  <index id="api-index-2-18" role="2.18">
-    <title>Index of new symbols in 2.18</title>
-    <xi:include href="xml/api-index-2.18.xml"><xi:fallback /></xi:include>
-  </index>
-  <index id="api-index-2-20" role="2.20">
-    <title>Index of new symbols in 2.20</title>
-    <xi:include href="xml/api-index-2.20.xml"><xi:fallback /></xi:include>
+  <index id="api-index-3-0" role="3.0">
+    <title>Index of new symbols in 3.0</title>
+    <xi:include href="xml/api-index-3.0.xml"><xi:fallback /></xi:include>
   </index>
 
   <xi:include href="xml/annotation-glossary.xml"><xi:fallback /></xi:include>

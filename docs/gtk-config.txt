@@ -152,10 +152,10 @@ and the AM_PATH_GTK macro. The program used here is the testinput.c
 You should first read the introductory portions of the automake
 Manual, if you are not already familiar with it.
 
-Two files are needed, 'configure.in', which is used to build the
+Two files are needed, 'configure.ac', which is used to build the
 configure script:
 
-==configure.in===
+==configure.ac===
 dnl Process this file with autoconf to produce a configure script.
 AC_INIT(testinput.c)
 

@@ -42,10 +42,32 @@ string utilities, file utilities, a main loop abstraction, and so on.
 </varlistentry>
 
 <varlistentry>
+<term>GObject</term>
+<listitem><para>A library that provides a type system, a collection of
+fundamental types including an object type, a signal system.
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term>GIO</term>
+<listitem><para>A modern, easy-to-use VFS API including abstractions for
+files, drives, volumes, stream IO, as well as network programming and
+DBus communication.
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term>cairo</term>
+<listitem><para>Cairo is a 2D graphics library with support for multiple
+output devices.
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
 <term>Pango</term>
 <listitem><para>
 Pango is a library for internationalized text handling. It centers
-around the #PangoLayout object, representing a paragraph of text. 
+around the #PangoLayout object, representing a paragraph of text.
 Pango provides the engine for #GtkTextView, #GtkLabel, #GtkEntry, and
 other widgets that display text.
 </para></listitem>
@@ -67,7 +89,7 @@ framework.
 <term>GdkPixbuf</term>
 <listitem><para>
 This is a small library which allows you to create #GdkPixbuf
-("pixel buffer") objects from image data or image files. 
+("pixel buffer") objects from image data or image files.
 Use a #GdkPixbuf in combination with #GtkImage to display images.
 </para></listitem>
 </varlistentry>
@@ -84,7 +106,7 @@ on X11, Windows, and the Linux framebuffer device.
 <varlistentry>
 <term>GTK+</term>
 <listitem><para>
-The GTK+ library itself contains <firstterm>widgets</firstterm>, 
+The GTK+ library itself contains <firstterm>widgets</firstterm>,
 that is, GUI components such as #GtkButton or #GtkTextView.
 </para></listitem>
 </varlistentry>
@@ -122,7 +144,6 @@ that is, GUI components such as #GtkButton or #GtkTextView.
     <xi:include href="xml/gtkstyle.xml" />
     <xi:include href="xml/gtkselection.xml" />
     <xi:include href="xml/gtkfeatures.xml" />
-    <xi:include href="xml/gtksignal.xml" />
     <xi:include href="xml/gtktypeutils.xml" />
     <xi:include href="xml/gtktesting.xml" />
     <xi:include href="xml/filesystem.xml" />
@@ -181,6 +202,7 @@ that is, GUI components such as #GtkButton or #GtkTextView.
       <xi:include href="xml/gtkentry.xml" />
       <xi:include href="xml/gtkentrybuffer.xml" />
       <xi:include href="xml/gtkentrycompletion.xml" />
+      <xi:include href="xml/gtkscale.xml" />
       <xi:include href="xml/gtkhscale.xml" />
       <xi:include href="xml/gtkvscale.xml" />
       <xi:include href="xml/gtkspinbutton.xml" />
@@ -275,18 +297,20 @@ that is, GUI components such as #GtkButton or #GtkTextView.
       <xi:include href="xml/gtkfontbutton.xml" />
       <xi:include href="xml/gtkfontsel.xml" />
       <xi:include href="xml/gtkfontseldlg.xml" />
-      <xi:include href="xml/gtkinputdialog.xml" />
     </chapter>
     
     <chapter id="LayoutContainers">
       <title>Layout Containers</title>
       <xi:include href="xml/gtkalignment.xml" />
       <xi:include href="xml/gtkaspectframe.xml" />
+      <xi:include href="xml/gtkbox.xml" />
       <xi:include href="xml/gtkhbox.xml" />
       <xi:include href="xml/gtkvbox.xml" />
+      <xi:include href="xml/gtkbbox.xml" />
       <xi:include href="xml/gtkhbbox.xml" />
       <xi:include href="xml/gtkvbbox.xml" />
       <xi:include href="xml/gtkfixed.xml" />
+      <xi:include href="xml/gtkpaned.xml" />
       <xi:include href="xml/gtkhpaned.xml" />
       <xi:include href="xml/gtkvpaned.xml" />
       <xi:include href="xml/gtklayout.xml" />
@@ -294,17 +318,20 @@ that is, GUI components such as #GtkButton or #GtkTextView.
       <xi:include href="xml/gtktable.xml" />
       <xi:include href="xml/gtkexpander.xml" />
       <xi:include href="xml/gtkorientable.xml" />
+      <xi:include href="xml/gtkextendedlayout.xml" />
     </chapter>
 
     <chapter id="Ornaments">
       <title>Ornaments</title>
       <xi:include href="xml/gtkframe.xml" />
+      <xi:include href="xml/gtkseparator.xml" />
       <xi:include href="xml/gtkhseparator.xml" />
       <xi:include href="xml/gtkvseparator.xml" />
     </chapter>
 
     <chapter id="ScrollingWidgets">
       <title>Scrolling</title>
+      <xi:include href="xml/gtkscrollbar.xml" />
       <xi:include href="xml/gtkhscrollbar.xml" />
       <xi:include href="xml/gtkvscrollbar.xml" />
       <xi:include href="xml/gtkscrolledwindow.xml" />
@@ -342,18 +369,12 @@ that is, GUI components such as #GtkButton or #GtkTextView.
     <chapter id="AbstractObjects">
       <title>Abstract Base Classes</title>
       <xi:include href="xml/gtkbin.xml" />
-      <xi:include href="xml/gtkbox.xml" />
-      <xi:include href="xml/gtkbbox.xml" />
       <xi:include href="xml/gtkcontainer.xml" />
       <xi:include href="xml/gtkitem.xml" />
       <xi:include href="xml/gtkmenushell.xml" />
       <xi:include href="xml/gtkmisc.xml" />
       <xi:include href="xml/gtkobject.xml" />
-      <xi:include href="xml/gtkpaned.xml" />
       <xi:include href="xml/gtkrange.xml" />
-      <xi:include href="xml/gtkscale.xml" />
-      <xi:include href="xml/gtkscrollbar.xml" />
-      <xi:include href="xml/gtkseparator.xml" />
       <xi:include href="xml/gtkwidget.xml" />
       <xi:include href="xml/gtkimcontext.xml" />
     </chapter>
@@ -366,8 +387,6 @@ that is, GUI components such as #GtkButton or #GtkTextView.
 
     <chapter id="SpecialObjects">
       <title>Special-purpose features</title>
-      <xi:include href="xml/gtkcurve.xml" />
-      <xi:include href="xml/gtkgamma.xml" />
       <xi:include href="xml/gtkruler.xml" />
       <xi:include href="xml/gtkhruler.xml" />
       <xi:include href="xml/gtkvruler.xml" />
@@ -389,25 +408,9 @@ that is, GUI components such as #GtkButton or #GtkTextView.
       <xi:include href="xml/gtkbuilder.xml" />
     </chapter>
 
-    <chapter id="DeprecatedObjects">
-      <title>Deprecated</title>
-      <xi:include href="xml/gtkclist.xml" />
-      <xi:include href="xml/gtkctree.xml" />
-      <xi:include href="xml/gtkcombo.xml" />
-      <xi:include href="xml/gtkfilesel.xml" />
-      <xi:include href="xml/gtkitemfactory.xml" />
-      <xi:include href="xml/gtklist.xml" />
-      <xi:include href="xml/gtklistitem.xml" />
-      <xi:include href="xml/gtkoldeditable.xml" />
-      <xi:include href="xml/gtkoptionmenu.xml" />
-      <xi:include href="xml/gtkpixmap.xml" />
-      <xi:include href="xml/gtkpreview.xml" />
-      <xi:include href="xml/gtkprogress.xml" />
-      <xi:include href="xml/gtktext.xml" />
-      <xi:include href="xml/gtktooltips.xml" />
-      <xi:include href="xml/gtktipsquery.xml" />
-      <xi:include href="xml/gtktree.xml" />
-      <xi:include href="xml/gtktreeitem.xml" />
+    <chapter id="Application">
+      <title>Application support</title>
+      <xi:include href="xml/gtkapplication.xml" />
     </chapter>
   </part>
 
@@ -416,8 +419,8 @@ that is, GUI components such as #GtkButton or #GtkTextView.
 
     <partintro>
       <para>
-	This part describes what you need to change in programs use
-	older versions of GTK+ so that they can use the new features.
+        This part describes what you need to change in programs use
+        older versions of GTK+ so that they can use the new features.
         It also mentions how to convert applications using widgets
         found in the libgnomeui library to use their counterparts
         in GTK+.
@@ -425,29 +428,14 @@ that is, GUI components such as #GtkButton or #GtkTextView.
     </partintro>
 
     <xi:include href="xml/migrating-checklist.sgml" />
-    <xi:include href="changes-1.2.sgml" />
-    <xi:include href="changes-2.0.sgml" />
-    <xi:include href="xml/migrating-GtkFileChooser.sgml" />
-    <xi:include href="xml/migrating-GtkAction.sgml" />
-    <xi:include href="xml/migrating-GtkComboBox.sgml" />
-    <xi:include href="xml/migrating-GtkIconView.sgml" />
-    <xi:include href="xml/migrating-GtkAboutDialog.sgml" />
-    <xi:include href="xml/migrating-GtkColorButton.sgml" />
-    <xi:include href="xml/migrating-GtkAssistant.sgml" />
-    <xi:include href="xml/migrating-GtkRecentChooser.sgml" />
-    <xi:include href="xml/migrating-GtkLinkButton.sgml" />
-    <xi:include href="xml/migrating-GtkBuilder.sgml" />
-    <xi:include href="xml/migrating-GtkTooltip.sgml" />
-    <xi:include href="xml/migrating-GtkEntry-icons.sgml" />
-    <xi:include href="xml/migrating-GtkLabel-links.sgml" />
-    <xi:include href="xml/migrating-ClientSideWindows.sgml" />
+    <xi:include href="migrating-2to3.xml" />
   </part>
 
   <part>
     <title>GTK+ Tools</title>
-    <xi:include href="gtk-query-immodules-2.0.xml" />
-    <xi:include href="gtk-update-icon-cache.xml" />
-    <xi:include href="gtk-builder-convert.xml" />
+    <xi:include href="gtk-query-immodules-3.0.xml" />
+    <xi:include href="gtk-update-icon-cache-3.0.xml" />
+    <xi:include href="gtk-builder-convert-3.0.xml" />
   </part>
 
   <xi:include href="glossary.xml" />
@@ -460,45 +448,9 @@ that is, GUI components such as #GtkButton or #GtkTextView.
     <title>Index of deprecated symbols</title>
     <xi:include href="xml/api-index-deprecated.xml"><xi:fallback /></xi:include>
   </index>
-  <index id="api-index-2-2" role="2.2">
-    <title>Index of new symbols in 2.2</title>
-    <xi:include href="xml/api-index-2.2.xml"><xi:fallback /></xi:include>
-  </index>
-  <index id="api-index-2-4" role="2.4">
-    <title>Index of new symbols in 2.4</title>
-    <xi:include href="xml/api-index-2.4.xml"><xi:fallback /></xi:include>
-  </index>
-  <index id="api-index-2-6" role="2.6">
-    <title>Index of new symbols in 2.6</title>
-    <xi:include href="xml/api-index-2.6.xml"><xi:fallback /></xi:include>
-  </index>
-  <index id="api-index-2-8" role="2.8">
-    <title>Index of new symbols in 2.8</title>
-    <xi:include href="xml/api-index-2.8.xml"><xi:fallback /></xi:include>
-  </index>
-  <index id="api-index-2-10" role="2.10">
-    <title>Index of new symbols in 2.10</title>
-    <xi:include href="xml/api-index-2.10.xml"><xi:fallback /></xi:include>
-  </index>
-  <index id="api-index-2-12" role="2.12">
-    <title>Index of new symbols in 2.12</title>
-    <xi:include href="xml/api-index-2.12.xml"><xi:fallback /></xi:include>
-  </index>
-  <index id="api-index-2-14" role="2.14">
-    <title>Index of new symbols in 2.14</title>
-    <xi:include href="xml/api-index-2.14.xml"><xi:fallback /></xi:include>
-  </index>
-  <index id="api-index-2-16" role="2.16">
-    <title>Index of new symbols in 2.16</title>
-    <xi:include href="xml/api-index-2.16.xml"><xi:fallback /></xi:include>
-  </index>
-  <index id="api-index-2-18" role="2.18">
-    <title>Index of new symbols in 2.18</title>
-    <xi:include href="xml/api-index-2.18.xml"><xi:fallback /></xi:include>
-  </index>
-  <index id="api-index-2-20" role="2.20">
-    <title>Index of new symbols in 2.20</title>
-    <xi:include href="xml/api-index-2.20.xml"><xi:fallback /></xi:include>
+  <index id="api-index-3-0" role="3.0">
+    <title>Index of new symbols in 3.0</title>
+    <xi:include href="xml/api-index-3.0.xml"><xi:fallback /></xi:include>
   </index>
 
   <xi:include href="xml/annotation-glossary.xml"><xi:fallback /></xi:include>

@@ -24,7 +24,7 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
-#if defined(GTK_DISABLE_SINGLE_INCLUDES) && !defined (__GDK_H_INSIDE__) && !defined (GDK_COMPILATION)
+#if !defined (__GDK_H_INSIDE__) && !defined (GDK_COMPILATION)
 #error "Only <gdk/gdk.h> can be included directly."
 #endif
 
@@ -126,9 +126,9 @@ typedef enum
 
 struct _GdkCursor
 {
-  GdkCursorType type;
+  GdkCursorType GSEAL (type);
   /*< private >*/
-  guint ref_count;
+  guint GSEAL (ref_count);
 };
 
 /* Cursors
@@ -158,9 +158,6 @@ GdkCursor*  gdk_cursor_new_from_name	 (GdkDisplay      *display,
 					  const gchar     *name);
 GdkPixbuf*  gdk_cursor_get_image         (GdkCursor       *cursor);
 
-#ifndef GDK_DISABLE_DEPRECATED
-#define gdk_cursor_destroy             gdk_cursor_unref
-#endif /* GDK_DISABLE_DEPRECATED */
 
 G_END_DECLS
 

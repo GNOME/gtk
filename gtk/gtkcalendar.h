@@ -26,7 +26,7 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
-#if defined(GTK_DISABLE_SINGLE_INCLUDES) && !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
+#if !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
 #error "Only <gtk/gtk.h> can be included directly."
 #endif
 
@@ -35,9 +35,6 @@
 
 
 #include <gtk/gtkwidget.h>
-
-/* Not needed, retained for compatibility -Yosh */
-#include <gtk/gtksignal.h>
 
 
 G_BEGIN_DECLS
@@ -176,11 +173,6 @@ void	   gtk_calendar_set_display_options (GtkCalendar    	      *calendar,
 					     GtkCalendarDisplayOptions flags);
 GtkCalendarDisplayOptions
            gtk_calendar_get_display_options (GtkCalendar   	      *calendar);
-#ifndef GTK_DISABLE_DEPRECATED
-void	   gtk_calendar_display_options (GtkCalendar		  *calendar,
-					 GtkCalendarDisplayOptions flags);
-#endif
-
 void	   gtk_calendar_get_date	(GtkCalendar *calendar, 
 					 guint	     *year,
 					 guint	     *month,
@@ -198,11 +190,6 @@ void       gtk_calendar_set_detail_height_rows (GtkCalendar    *calendar,
 
 gint       gtk_calendar_get_detail_width_chars (GtkCalendar    *calendar);
 gint       gtk_calendar_get_detail_height_rows (GtkCalendar    *calendar);
-
-#ifndef GTK_DISABLE_DEPRECATED
-void	   gtk_calendar_freeze		(GtkCalendar *calendar);
-void	   gtk_calendar_thaw		(GtkCalendar *calendar);
-#endif
 
 G_END_DECLS
 

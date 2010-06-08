@@ -2,8 +2,6 @@
  * testoffscreen.c
  */
 
-#undef GTK_DISABLE_DEPRECATED
-
 #include <math.h>
 #include <gtk/gtk.h>
 #include "gtkoffscreenbox.h"
@@ -186,7 +184,6 @@ create_widgets (void)
   GtkWidget *main_hbox, *main_vbox;
   GtkWidget *vbox, *hbox, *label, *combo, *entry, *button, *cb;
   GtkWidget *sw, *text_view;
-  GList *cbitems = NULL;
 
   main_vbox = gtk_vbox_new (0, FALSE);
 
@@ -228,14 +225,19 @@ create_widgets (void)
   button = gtk_check_button_new_with_mnemonic ("_Check button");
   gtk_box_pack_start (GTK_BOX (vbox), button, FALSE, FALSE, 0);
 
-  cb = gtk_combo_new ();
-  cbitems = g_list_append (cbitems, "item0");
-  cbitems = g_list_append (cbitems, "item1 item1");
-  cbitems = g_list_append (cbitems, "item2 item2 item2");
-  gtk_combo_set_popdown_strings (GTK_COMBO (cb), cbitems);
-  gtk_entry_set_text (GTK_ENTRY (GTK_COMBO (cb)->entry), "hello world ♥ foo");
-  gtk_editable_select_region (GTK_EDITABLE (GTK_COMBO (cb)->entry),
-			      0, -1);
+  cb = gtk_combo_box_new_text ();
+  entry = gtk_entry_new ();
+  gtk_widget_show (entry);
+  gtk_container_add (GTK_CONTAINER (cb), entry);
+
+  gtk_combo_box_append_text (GTK_COMBO_BOX (cb), "item0");
+  gtk_combo_box_append_text (GTK_COMBO_BOX (cb), "item1");
+  gtk_combo_box_append_text (GTK_COMBO_BOX (cb), "item1");
+  gtk_combo_box_append_text (GTK_COMBO_BOX (cb), "item2");
+  gtk_combo_box_append_text (GTK_COMBO_BOX (cb), "item2");
+  gtk_combo_box_append_text (GTK_COMBO_BOX (cb), "item2");
+  gtk_entry_set_text (GTK_ENTRY (entry), "hello world ♥ foo");
+  gtk_editable_select_region (GTK_EDITABLE (entry), 0, -1);
   gtk_box_pack_start (GTK_BOX (vbox), cb, TRUE, TRUE, 0);
 
   sw = gtk_scrolled_window_new (NULL, NULL);

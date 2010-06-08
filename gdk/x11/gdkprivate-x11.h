@@ -177,8 +177,7 @@ void _gdk_x11_precache_atoms (GdkDisplay          *display,
 			      const gchar * const *atom_names,
 			      gint                 n_atoms);
 
-void _gdk_x11_events_init_screen   (GdkScreen *screen);
-void _gdk_x11_events_uninit_screen (GdkScreen *screen);
+void _gdk_screen_x11_events_init   (GdkScreen *screen);
 
 void _gdk_events_init           (GdkDisplay *display);
 void _gdk_events_uninit         (GdkDisplay *display);
@@ -186,7 +185,6 @@ void _gdk_windowing_window_init (GdkScreen *screen);
 void _gdk_visual_init           (GdkScreen *screen);
 void _gdk_dnd_init		(GdkDisplay *display);
 void _gdk_windowing_image_init  (GdkDisplay *display);
-void _gdk_input_init            (GdkDisplay *display);
 
 PangoRenderer *_gdk_x11_renderer_get (GdkDrawable *drawable,
 				      GdkGC       *gc);
@@ -197,6 +195,9 @@ void _gdk_x11_cursor_display_finalize (GdkDisplay *display);
 gboolean _gdk_x11_get_xft_setting (GdkScreen   *screen,
 				   const gchar *name,
 				   GValue      *value);
+
+GdkGrabStatus _gdk_x11_convert_grab_status (gint status);
+
 
 extern GdkDrawableClass  _gdk_x11_drawable_class;
 extern gboolean	         _gdk_use_xshm;

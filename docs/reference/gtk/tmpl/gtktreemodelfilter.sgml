@@ -37,6 +37,9 @@ a #GtkTreePath indicating the root node for the filter at construction time.
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### STRUCT GtkTreeModelFilter ##### -->
 <para>
 The GtkTreeModelFilter struct contains only private fields.

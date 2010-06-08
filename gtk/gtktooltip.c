@@ -647,13 +647,17 @@ window_to_alloc (GtkWidget *dest_widget,
 /* Translates coordinates from window relative (x, y) to
  * allocation relative (x, y) of the returned widget.
  */
-static GtkWidget *
-find_widget_under_pointer (GdkWindow *window,
-			   gint      *x,
-			   gint      *y)
+GtkWidget *
+_gtk_widget_find_at_coords (GdkWindow *window,
+                            gint       window_x,
+                            gint       window_y,
+                            gint      *widget_x,
+                            gint      *widget_y)
 {
   GtkWidget *event_widget;
   struct ChildLocation child_loc = { NULL, NULL, 0, 0 };
+
+  g_return_val_if_fail (GDK_IS_WINDOW (window), NULL);
 
   gdk_window_get_user_data (window, (void **)&event_widget);
 
@@ -663,12 +667,12 @@ find_widget_under_pointer (GdkWindow *window,
 #ifdef DEBUG_TOOLTIP
   g_print ("event window %p (belonging to %p (%s))  (%d, %d)\n",
 	   window, event_widget, gtk_widget_get_name (event_widget),
-	   *x, *y);
+	   window_x, window_y);
 #endif
 
   /* Coordinates are relative to event window */
-  child_loc.x = *x;
-  child_loc.y = *y;
+  child_loc.x = window_x;
+  child_loc.y = window_y;
 
   /* We go down the window hierarchy to the widget->window,
    * coordinates stay relative to the current window.
@@ -725,14 +729,13 @@ find_widget_under_pointer (GdkWindow *window,
       gtk_widget_translate_coordinates (container, event_widget,
 					child_loc.x, child_loc.y,
 					&child_loc.x, &child_loc.y);
-
     }
 
   /* We return (x, y) relative to the allocation of event_widget. */
-  if (x)
-    *x = child_loc.x;
-  if (y)
-    *y = child_loc.y;
+  if (widget_x)
+    *widget_x = child_loc.x;
+  if (widget_y)
+    *widget_y = child_loc.y;
 
   return event_widget;
 }
@@ -750,11 +753,9 @@ find_topmost_widget_coords_from_event (GdkEvent *event,
   GtkWidget *tmp;
 
   gdk_event_get_coords (event, &dx, &dy);
-  tx = dx;
-  ty = dy;
 
   /* Returns coordinates relative to tmp's allocation. */
-  tmp = find_widget_under_pointer (event->any.window, &tx, &ty);
+  tmp = _gtk_widget_find_at_coords (event->any.window, dx, dy, &tx, &ty);
 
   if (!tmp)
     return NULL;
@@ -903,53 +904,128 @@ gtk_tooltip_position (GtkTooltip *tooltip,
 {
   gint x, y;
   GdkScreen *screen;
+  gint monitor_num;
+  GdkRectangle monitor;
+  GtkRequisition requisition;
+  guint cursor_size;
+  GdkRectangle bounds;
+
+#define MAX_DISTANCE 32
 
   tooltip->tooltip_widget = new_tooltip_widget;
 
+  screen = gtk_widget_get_screen (new_tooltip_widget);
+
+  gtk_widget_size_request (GTK_WIDGET (tooltip->current_window), &requisition);
+
+  monitor_num = gdk_screen_get_monitor_at_point (screen,
+                                                 tooltip->last_x,
+                                                 tooltip->last_y);
+  gdk_screen_get_monitor_geometry (screen, monitor_num, &monitor);
+
+  get_bounding_box (new_tooltip_widget, &bounds);
+
   /* Position the tooltip */
-  /* FIXME: should we swap this when RTL is enabled? */
+
+  cursor_size = gdk_display_get_default_cursor_size (display);
+
+  /* Try below */
+  x = bounds.x + bounds.width / 2 - requisition.width / 2;
+  y = bounds.y + bounds.height + 4;
+
+  if (y + requisition.height <= monitor.y + monitor.height)
+    {
+      if (tooltip->keyboard_mode_enabled)
+        goto found;
+
+      if (y <= tooltip->last_y + cursor_size + MAX_DISTANCE)
+        {
+          if (tooltip->last_x + cursor_size + MAX_DISTANCE < x)
+            x = tooltip->last_x + cursor_size + MAX_DISTANCE;
+          else if (x + requisition.width < tooltip->last_x - MAX_DISTANCE)
+            x = tooltip->last_x - MAX_DISTANCE - requisition.width;
+
+          goto found;
+        }
+   }
+
+  /* Try above */
+  x = bounds.x + bounds.width / 2 - requisition.width / 2;
+  y = bounds.y - requisition.height - 4;
+
+  if (y >= monitor.y)
+    {
+      if (tooltip->keyboard_mode_enabled)
+        goto found;
+
+      if (y + requisition.height >= tooltip->last_y - MAX_DISTANCE)
+        {
+          if (tooltip->last_x + cursor_size + MAX_DISTANCE < x)
+            x = tooltip->last_x + cursor_size + MAX_DISTANCE;
+          else if (x + requisition.width < tooltip->last_x - MAX_DISTANCE)
+            x = tooltip->last_x - MAX_DISTANCE - requisition.width;
+
+          goto found;
+        }
+    }
+
+  /* Try right FIXME: flip on rtl ? */
+  x = bounds.x + bounds.width + 4;
+  y = bounds.y + bounds.height / 2 - requisition.height / 2;
+
+  if (x + requisition.width <= monitor.x + monitor.width)
+    {
+      if (tooltip->keyboard_mode_enabled)
+        goto found;
+
+      if (x <= tooltip->last_x + cursor_size + MAX_DISTANCE)
+        {
+          if (tooltip->last_y + cursor_size + MAX_DISTANCE < y)
+            y = tooltip->last_y + cursor_size + MAX_DISTANCE;
+          else if (y + requisition.height < tooltip->last_y - MAX_DISTANCE)
+            y = tooltip->last_y - MAX_DISTANCE - requisition.height;
+
+          goto found;
+        }
+    }
+
+  /* Try left FIXME: flip on rtl ? */
+  x = bounds.x - requisition.width - 4;
+  y = bounds.y + bounds.height / 2 - requisition.height / 2;
+
+  if (x >= monitor.x)
+    {
+      if (tooltip->keyboard_mode_enabled)
+        goto found;
+
+      if (x + requisition.width >= tooltip->last_x - MAX_DISTANCE)
+        {
+          if (tooltip->last_y + cursor_size + MAX_DISTANCE < y)
+            y = tooltip->last_y + cursor_size + MAX_DISTANCE;
+          else if (y + requisition.height < tooltip->last_y - MAX_DISTANCE)
+            y = tooltip->last_y - MAX_DISTANCE - requisition.height;
+
+          goto found;
+        }
+    }
+
+   /* Fallback */
   if (tooltip->keyboard_mode_enabled)
     {
-      GdkRectangle bounds;
-
-      get_bounding_box (new_tooltip_widget, &bounds);
-
-      /* For keyboard mode we position the tooltip below the widget,
-       * right of the center of the widget.
-       */
-      x = bounds.x + bounds.width / 2;
+      x = bounds.x + bounds.width / 2 - requisition.width / 2;
       y = bounds.y + bounds.height + 4;
     }
   else
     {
-      guint cursor_size;
-
-      x = tooltip->last_x;
-      y = tooltip->last_y;
-
-      /* For mouse mode, we position the tooltip right of the cursor,
-       * a little below the cursor's center.
-       */
-      cursor_size = gdk_display_get_default_cursor_size (display);
-      x += cursor_size / 2;
-      y += cursor_size / 2;
+      /* At cursor */
+      x = tooltip->last_x + cursor_size * 3 / 4;
+      y = tooltip->last_y + cursor_size * 3 / 4;
     }
 
-  screen = gtk_widget_get_screen (new_tooltip_widget);
-
+found:
   /* Show it */
   if (tooltip->current_window)
     {
-      gint monitor_num;
-      GdkRectangle monitor;
-      GtkRequisition requisition;
-
-      gtk_widget_size_request (GTK_WIDGET (tooltip->current_window),
-                               &requisition);
-
-      monitor_num = gdk_screen_get_monitor_at_point (screen, x, y);
-      gdk_screen_get_monitor_geometry (screen, monitor_num, &monitor);
-
       if (x + requisition.width > monitor.x + monitor.width)
         x -= x - (monitor.x + monitor.width) + requisition.width;
       else if (x < monitor.x)
@@ -957,7 +1033,9 @@ gtk_tooltip_position (GtkTooltip *tooltip,
 
       if (y + requisition.height > monitor.y + monitor.height)
         y -= y - (monitor.y + monitor.height) + requisition.height;
-  
+      else if (y < monitor.y)
+        y = monitor.y;
+
       if (!tooltip->keyboard_mode_enabled)
         {
           /* don't pop up under the pointer */
@@ -965,7 +1043,7 @@ gtk_tooltip_position (GtkTooltip *tooltip,
               y <= tooltip->last_y && tooltip->last_y < y + requisition.height)
             y = tooltip->last_y - requisition.height - 2;
         }
-  
+
       gtk_window_move (GTK_WINDOW (tooltip->current_window), x, y);
       gtk_widget_show (GTK_WIDGET (tooltip->current_window));
     }
@@ -1007,8 +1085,9 @@ gtk_tooltip_show_tooltip (GdkDisplay *display)
       tooltip->last_x = tx;
       tooltip->last_y = ty;
 
-      pointer_widget = tooltip_widget = find_widget_under_pointer (window,
-								   &x, &y);
+      pointer_widget = tooltip_widget = _gtk_widget_find_at_coords (window,
+                                                                    x, y,
+                                                                    &x, &y);
     }
 
   if (!tooltip_widget)
@@ -1169,6 +1248,7 @@ _gtk_tooltip_focus_in (GtkWidget *widget)
   gboolean return_value = FALSE;
   GdkDisplay *display;
   GtkTooltip *tooltip;
+  GdkDevice *device;
 
   /* Get current tooltip for this display */
   display = gtk_widget_get_display (widget);
@@ -1179,12 +1259,23 @@ _gtk_tooltip_focus_in (GtkWidget *widget)
   if (!tooltip || !tooltip->keyboard_mode_enabled)
     return;
 
+  device = gtk_get_current_event_device ();
+
+  if (device && device->source == GDK_SOURCE_KEYBOARD)
+    device = gdk_device_get_associated_device (device);
+
+  /* This function should be called by either a focus in event,
+   * or a key binding. In either case there should be a device.
+   */
+  if (!device)
+    return;
+
   if (tooltip->keyboard_widget)
     g_object_unref (tooltip->keyboard_widget);
 
   tooltip->keyboard_widget = g_object_ref (widget);
 
-  gdk_window_get_pointer (widget->window, &x, &y, NULL);
+  gdk_window_get_device_position (widget->window, device, &x, &y, NULL);
 
   return_value = gtk_tooltip_run_requery (&widget, tooltip, &x, &y);
   if (!return_value)

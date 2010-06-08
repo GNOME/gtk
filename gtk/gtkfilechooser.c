@@ -255,7 +255,7 @@
  * You can change these defaults to something else.  For
  * example, to add a <keycap>Shift</keycap> modifier to a few
  * of the default bindings, you can include the following
- * fragment in your <filename>.gtkrc-2.0</filename> file:
+ * fragment in your <filename>.gtkrc-3.0</filename> file:
  * </para>
  * <programlisting>
  * binding "my-own-gtkfilechooser-bindings" {
@@ -323,14 +323,14 @@
  * 	</variablelist>
  * <note>
  *    You can create your own bindings for the
- *    GtkFileChooserDefault::location-popup signal with custom
+ *    #GtkFileChooserDefault::location-popup signal with custom
  *    <parameter>path</parameter> strings, and have a crude form
  *    of easily-to-type bookmarks.  For example, say you access
  *    the path <filename>/home/username/misc</filename> very
  *    frequently.  You could then create an <keycombo>
  *    <keycap>Alt</keycap> <keycap>M</keycap> </keycombo>
  *    shortcut by including the following in your
- *    <filename>.gtkrc-2.0</filename>:
+ *    <filename>.gtkrc-3.0</filename>:
  *    <programlisting>
  *    binding "misc-shortcut" {
  *       bind "&lt;Alt&gt;M" {
@@ -761,12 +761,6 @@ gtk_file_chooser_class_init (gpointer g_iface)
 							  GTK_TYPE_FILE_CHOOSER_ACTION,
 							  GTK_FILE_CHOOSER_ACTION_OPEN,
 							  GTK_PARAM_READWRITE));
-  g_object_interface_install_property (g_iface,
-				       g_param_spec_string ("file-system-backend",
-							    P_("File System Backend"),
-							    P_("Name of file system backend to use"),
-							    NULL, 
-							    GTK_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY));
   g_object_interface_install_property (g_iface,
 				       g_param_spec_object ("filter",
 							    P_("Filter"),

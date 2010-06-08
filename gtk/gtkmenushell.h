@@ -24,7 +24,7 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
-#if defined(GTK_DISABLE_SINGLE_INCLUDES) && !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
+#if !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
 #error "Only <gtk/gtk.h> can be included directly."
 #endif
 
@@ -118,6 +118,14 @@ void _gtk_menu_shell_select_last       (GtkMenuShell *menu_shell,
 					gboolean      search_sensitive);
 void  _gtk_menu_shell_activate         (GtkMenuShell *menu_shell);
 gint  _gtk_menu_shell_get_popup_delay  (GtkMenuShell *menu_shell);
+
+void     _gtk_menu_shell_set_grab_devices (GtkMenuShell *menu_shell,
+                                           GdkDevice    *keyboard,
+                                           GdkDevice    *pointer);
+gboolean _gtk_menu_shell_get_grab_devices (GtkMenuShell  *menu_shell,
+                                           GdkDevice    **keyboard,
+                                           GdkDevice    **pointer);
+
 void  gtk_menu_shell_cancel            (GtkMenuShell *menu_shell);
 
 void  _gtk_menu_shell_add_mnemonic     (GtkMenuShell *menu_shell,

@@ -23,7 +23,6 @@
 #include <gtk/gtk.h>
 #include <gdk/gdkkeysyms.h>
 #include "gailentry.h"
-#include "gailcombo.h"
 #include "gailcombobox.h"
 #include <libgail-util/gailmisc.h>
 
@@ -361,8 +360,7 @@ gail_entry_get_index_in_parent (AtkObject *accessible)
    * otherwise do the normal thing.
    */
   if (accessible->accessible_parent)
-    if (GAIL_IS_COMBO (accessible->accessible_parent) ||
-        GAIL_IS_COMBO_BOX (accessible->accessible_parent))
+    if (GAIL_IS_COMBO_BOX (accessible->accessible_parent))
       return 1;
 
   return ATK_OBJECT_CLASS (gail_entry_parent_class)->get_index_in_parent (accessible);
@@ -1022,6 +1020,12 @@ gail_entry_idle_notify_insert (gpointer data)
 static void
 gail_entry_notify_insert (GailEntry *entry)
 {
+  GtkWidget *widget;
+
+  widget = GTK_ACCESSIBLE (entry)->widget;
+  if (gtk_entry_get_text_length (GTK_ENTRY (widget)) == 0)
+    return;
+
   if (entry->signal_name_insert)
     {
       g_signal_emit_by_name (entry, 
@@ -1044,6 +1048,9 @@ _gail_entry_insert_text_cb (GtkEntry *entry,
   AtkObject *accessible;
   GailEntry *gail_entry;
   gint *position = (gint *) arg3;
+
+  if (arg2 == 0)
+    return;
 
   accessible = gtk_widget_get_accessible (GTK_WIDGET (entry));
   gail_entry = GAIL_ENTRY (accessible);

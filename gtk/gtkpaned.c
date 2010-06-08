@@ -150,12 +150,13 @@ struct _GtkPanedPrivate
   GtkWidget      *saved_focus;
   GtkPaned       *first_paned;
   guint32         grab_time;
+  GdkDevice      *grab_device;
 };
 
 
-G_DEFINE_ABSTRACT_TYPE_WITH_CODE (GtkPaned, gtk_paned, GTK_TYPE_CONTAINER,
-                                  G_IMPLEMENT_INTERFACE (GTK_TYPE_ORIENTABLE,
-                                                         NULL))
+G_DEFINE_TYPE_WITH_CODE (GtkPaned, gtk_paned, GTK_TYPE_CONTAINER,
+                         G_IMPLEMENT_INTERFACE (GTK_TYPE_ORIENTABLE,
+                                                NULL))
 
 static guint signals[LAST_SIGNAL] = { 0 };
 
@@ -1215,18 +1216,20 @@ gtk_paned_button_press (GtkWidget      *widget,
     {
       /* We need a server grab here, not gtk_grab_add(), since
        * we don't want to pass events on to the widget's children */
-      if (gdk_pointer_grab (paned->handle, FALSE,
-			    GDK_POINTER_MOTION_HINT_MASK
-			    | GDK_BUTTON1_MOTION_MASK
-			    | GDK_BUTTON_RELEASE_MASK
-			    | GDK_ENTER_NOTIFY_MASK
-			    | GDK_LEAVE_NOTIFY_MASK,
-			    NULL, NULL,
-			    event->time) != GDK_GRAB_SUCCESS)
+      if (gdk_device_grab (event->device,
+                           paned->handle,
+                           GDK_OWNERSHIP_WINDOW, FALSE,
+                           GDK_POINTER_MOTION_HINT_MASK
+                           | GDK_BUTTON1_MOTION_MASK
+                           | GDK_BUTTON_RELEASE_MASK
+                           | GDK_ENTER_NOTIFY_MASK
+                           | GDK_LEAVE_NOTIFY_MASK,
+                           NULL, event->time) != GDK_GRAB_SUCCESS)
 	return FALSE;
 
       paned->in_drag = TRUE;
       paned->priv->grab_time = event->time;
+      paned->priv->grab_device = event->device;
 
       if (paned->priv->orientation == GTK_ORIENTATION_HORIZONTAL)
 	paned->drag_pos = event->x;
@@ -1258,8 +1261,10 @@ stop_drag (GtkPaned *paned)
   paned->in_drag = FALSE;
   paned->drag_pos = -1;
   paned->position_set = TRUE;
-  gdk_display_pointer_ungrab (gtk_widget_get_display (GTK_WIDGET (paned)),
-			      paned->priv->grab_time);
+
+  gdk_device_ungrab (paned->priv->grab_device,
+                     paned->priv->grab_time);
+  paned->priv->grab_device = NULL;
 }
 
 static void
@@ -1267,8 +1272,12 @@ gtk_paned_grab_notify (GtkWidget *widget,
 		       gboolean   was_grabbed)
 {
   GtkPaned *paned = GTK_PANED (widget);
+  GdkDevice *grab_device;
 
-  if (!was_grabbed && paned->in_drag)
+  grab_device = paned->priv->grab_device;
+
+  if (paned->in_drag && grab_device &&
+      gtk_widget_device_is_shadowed (widget, grab_device))
     stop_drag (paned);
 }
 
@@ -1325,7 +1334,6 @@ gtk_paned_motion (GtkWidget      *widget,
   return FALSE;
 }
 
-#if 0
 /**
  * gtk_paned_new:
  * @orientation: the paned's orientation.
@@ -1334,7 +1342,7 @@ gtk_paned_motion (GtkWidget      *widget,
  *
  * Return value: a new #GtkPaned.
  *
- * Since: 2.16
+ * Since: 3.0
  **/
 GtkWidget *
 gtk_paned_new (GtkOrientation orientation)
@@ -1343,7 +1351,6 @@ gtk_paned_new (GtkOrientation orientation)
                        "orientation", orientation,
                        NULL);
 }
-#endif
 
 void
 gtk_paned_add1 (GtkPaned  *paned,
@@ -1568,17 +1575,6 @@ gtk_paned_get_child2 (GtkPaned *paned)
   g_return_val_if_fail (GTK_IS_PANED (paned), NULL);
 
   return paned->child2;
-}
-
-void
-gtk_paned_compute_position (GtkPaned *paned,
-			    gint      allocation,
-			    gint      child1_req,
-			    gint      child2_req)
-{
-  g_return_if_fail (GTK_IS_PANED (paned));
-
-  gtk_paned_calc_position (paned, allocation, child1_req, child2_req);
 }
 
 static void
@@ -2233,7 +2229,7 @@ gtk_paned_toggle_handle_focus (GtkPaned *paned)
 
 /**
  * gtk_paned_get_handle_window:
- * @panede: a #GtkPaned
+ * @paned: a #GtkPaned
  *
  * Returns the #GdkWindow of the handle. This function is
  * useful when handling button or motion events because it

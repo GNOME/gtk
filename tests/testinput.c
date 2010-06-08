@@ -269,40 +269,6 @@ leave_notify_event (GtkWidget *widget, GdkEventCrossing *event)
 }
 
 void
-input_dialog_destroy (GtkWidget *w, gpointer data)
-{
-  *((GtkWidget **)data) = NULL;
-}
-
-void
-create_input_dialog (void)
-{
-  static GtkWidget *inputd = NULL;
-
-  if (!inputd)
-    {
-      inputd = gtk_input_dialog_new ();
-
-      g_signal_connect (inputd, "destroy",
-			G_CALLBACK (input_dialog_destroy), &inputd);
-      g_signal_connect_swapped (GTK_INPUT_DIALOG (inputd)->close_button,
-			        "clicked",
-			        G_CALLBACK (gtk_widget_hide),
-			        inputd);
-      gtk_widget_hide (GTK_INPUT_DIALOG (inputd)->save_button);
-
-      gtk_widget_show (inputd);
-    }
-  else
-    {
-      if (!gtk_widget_get_mapped(inputd))
-	gtk_widget_show(inputd);
-      else
-	gdk_window_raise(inputd->window);
-    }
-}
-
-void
 quit (void)
 {
   gtk_main_quit ();
@@ -376,13 +342,6 @@ main (int argc, char *argv[])
   gtk_widget_grab_focus (drawing_area);
 
   /* .. And create some buttons */
-  button = gtk_button_new_with_label ("Input Dialog");
-  gtk_box_pack_start (GTK_BOX (vbox), button, FALSE, FALSE, 0);
-
-  g_signal_connect (button, "clicked",
-		    G_CALLBACK (create_input_dialog), NULL);
-  gtk_widget_show (button);
-
   button = gtk_button_new_with_label ("Quit");
   gtk_box_pack_start (GTK_BOX (vbox), button, FALSE, FALSE, 0);
 

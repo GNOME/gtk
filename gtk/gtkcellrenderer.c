@@ -940,28 +940,6 @@ gtk_cell_renderer_get_sensitive (GtkCellRenderer *cell)
 }
 
 /**
- * gtk_cell_renderer_editing_canceled:
- * @cell: A #GtkCellRenderer
- * 
- * Causes the cell renderer to emit the #GtkCellRenderer::editing-canceled 
- * signal.  
- *
- * This function is for use only by implementations of cell renderers that 
- * need to notify the client program that an editing process was canceled 
- * and the changes were not committed.
- *
- * Since: 2.4
- * Deprecated: 2.6: Use gtk_cell_renderer_stop_editing() instead
- **/
-void
-gtk_cell_renderer_editing_canceled (GtkCellRenderer *cell)
-{
-  g_return_if_fail (GTK_IS_CELL_RENDERER (cell));
-
-  gtk_cell_renderer_stop_editing (cell, TRUE);
-}
-
-/**
  * gtk_cell_renderer_stop_editing:
  * @cell: A #GtkCellRenderer
  * @canceled: %TRUE if the editing has been canceled

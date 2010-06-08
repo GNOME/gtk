@@ -30,6 +30,9 @@ area.
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### STRUCT GtkLayout ##### -->
 <para>
 
@@ -125,22 +128,6 @@ area.
 @layout: 
 @width: 
 @height: 
-
-
-<!-- ##### FUNCTION gtk_layout_freeze ##### -->
-<para>
-
-</para>
-
-@layout: 
-
-
-<!-- ##### FUNCTION gtk_layout_thaw ##### -->
-<para>
-
-</para>
-
-@layout: 
 
 
 <!-- ##### FUNCTION gtk_layout_get_hadjustment ##### -->

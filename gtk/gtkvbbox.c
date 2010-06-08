@@ -30,8 +30,31 @@
 #include "gtkintl.h"
 #include "gtkalias.h"
 
+/**
+ * SECTION:gtkvbbox
+ * @Short_description: A container for arranging buttons vertically
+ * @Title: GtkVButtonBox
+ * @See_also: #GtkBox, #GtkButtonBox, #GtkHButtonBox
+ *
+ * A button box should be used to provide a consistent layout of buttons
+ * throughout your application. The layout/spacing can be altered by the
+ * programmer, or if desired, by the user to alter the 'feel' of a
+ * program to a small degree.
+ *
+ * A #GtkVButtonBox is created with gtk_vbutton_box_new(). Buttons are
+ * packed into a button box the same way widgets are added to any other
+ * container, using gtk_container_add(). You can also use
+ * gtk_box_pack_start() or gtk_box_pack_end(), but for button boxes both
+ * these functions work just like gtk_container_add(), ie., they pack the
+ * button in a way that depends on the current layout style and on
+ * whether the button has had gtk_button_box_set_child_secondary() called
+ * on it.
+ *
+ * The spacing between buttons can be set with gtk_box_set_spacing(). The
+ * arrangement and layout of the buttons can be changed with
+ * gtk_button_box_set_layout().
+ */
 
-static gint default_spacing = 10;
 static GtkButtonBoxStyle default_layout_style = GTK_BUTTONBOX_EDGE;
 
 G_DEFINE_TYPE (GtkVButtonBox, gtk_vbutton_box, GTK_TYPE_BUTTON_BOX)
@@ -48,51 +71,19 @@ gtk_vbutton_box_init (GtkVButtonBox *vbutton_box)
                                   GTK_ORIENTATION_VERTICAL);
 }
 
+/**
+ * gtk_vbutton_box_new:
+ *
+ * Creates a new vertical button box.
+ *
+ * Returns: a new button box #GtkWidget.
+ */
 GtkWidget *
 gtk_vbutton_box_new (void)
 {
   return g_object_new (GTK_TYPE_VBUTTON_BOX, NULL);
 }
 
-
-
-/* set default value for spacing */
-
-void
-gtk_vbutton_box_set_spacing_default (gint spacing)
-{
-  default_spacing = spacing;
-}
-
-
-/* set default value for layout style */
-
-void
-gtk_vbutton_box_set_layout_default (GtkButtonBoxStyle layout)
-{
-  g_return_if_fail (layout >= GTK_BUTTONBOX_DEFAULT_STYLE &&
-		    layout <= GTK_BUTTONBOX_CENTER);
-
-  default_layout_style = layout;
-}
-
-/* get default value for spacing */
-
-gint
-gtk_vbutton_box_get_spacing_default (void)
-{
-  return default_spacing;
-}
-
-
-
-/* get default value for layout style */
-
-GtkButtonBoxStyle
-gtk_vbutton_box_get_layout_default (void)
-{
-  return default_layout_style;
-}
 
 GtkButtonBoxStyle
 _gtk_vbutton_box_get_layout_default (void)

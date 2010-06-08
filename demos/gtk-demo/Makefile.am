@@ -1,7 +1,7 @@
 ## Makefile.am for gtk+/demos
 include $(top_srcdir)/Makefile.decl
 
-democodedir=$(datadir)/gtk-2.0/demo
+democodedir=$(datadir)/gtk-$(GTK_API_VERSION)/demo
 
 ## These should be in the order you want them to appear in the
 ## demo app, which means alphabetized by demo title, not filename
@@ -65,7 +65,7 @@ LDADDS = \
 	$(top_builddir)/gtk/$(gtktargetlib)				\
 	$(GTK_DEP_LIBS)
 
-bin_PROGRAMS = gtk-demo
+bin_PROGRAMS = gtk3-demo
 
 BUILT_SOURCES = demos.h
 
@@ -76,15 +76,15 @@ EXTRA_DIST += 		\
 demos.h: @REBUILD@ $(demos) geninclude.pl
 	(here=`pwd` ; cd $(srcdir) && $(PERL) $$here/geninclude.pl $(demos)) > demos.h
 
-gtk_demo_SOURCES = 		\
+gtk3_demo_SOURCES = 		\
 	$(demos)		\
 	demo-common.h		\
 	main.c			\
 	demos.h
 
-gtk_demo_DEPENDENCIES = $(DEPS)
-gtk_demo_LDADD = $(LDADDS)
-gtk_demo_LDFLAGS = -export-dynamic
+gtk3_demo_DEPENDENCIES = $(DEPS)
+gtk3_demo_LDADD = $(LDADDS)
+gtk3_demo_LDFLAGS = -export-dynamic
 
 IMAGEFILES=	alphatest.png		\
 	        apple-red.png		\
@@ -99,7 +99,7 @@ IMAGEFILES=	alphatest.png		\
 		gnome-gmush.png		\
 		gnome-gsame.png		\
 		gnu-keys.png		\
-		gtk-logo-rgb.gif		
+		gtk-logo-rgb.gif
 
 democode_DATA = $(demos) $(IMAGEFILES) demo.ui
 

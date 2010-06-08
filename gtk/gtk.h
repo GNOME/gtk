@@ -40,6 +40,7 @@
 #include <gtk/gtkactivatable.h>
 #include <gtk/gtkadjustment.h>
 #include <gtk/gtkalignment.h>
+#include <gtk/gtkapplication.h>
 #include <gtk/gtkarrow.h>
 #include <gtk/gtkaspectframe.h>
 #include <gtk/gtkassistant.h>
@@ -83,6 +84,7 @@
 #include <gtk/gtkenums.h>
 #include <gtk/gtkeventbox.h>
 #include <gtk/gtkexpander.h>
+#include <gtk/gtkextendedlayout.h>
 #include <gtk/gtkfixed.h>
 #include <gtk/gtkfilechooser.h>
 #include <gtk/gtkfilechooserbutton.h>
@@ -216,31 +218,6 @@
 #include <gtk/gtkvseparator.h>
 #include <gtk/gtkwidget.h>
 #include <gtk/gtkwindow.h>
-
-/* Broken */
-#include <gtk/gtktext.h>
-#include <gtk/gtktree.h>
-#include <gtk/gtktreeitem.h>
-
-/* Deprecated */
-#include <gtk/gtkclist.h>
-#include <gtk/gtkcombo.h>
-#include <gtk/gtkctree.h>
-#include <gtk/gtkcurve.h>
-#include <gtk/gtkfilesel.h>
-#include <gtk/gtkgamma.h>
-#include <gtk/gtkinputdialog.h>
-#include <gtk/gtkitemfactory.h>
-#include <gtk/gtklist.h>
-#include <gtk/gtklistitem.h>
-#include <gtk/gtkoldeditable.h>
-#include <gtk/gtkoptionmenu.h>
-#include <gtk/gtkpixmap.h>
-#include <gtk/gtkpreview.h>
-#include <gtk/gtkprogress.h>
-#include <gtk/gtksignal.h>
-#include <gtk/gtktipsquery.h>
-#include <gtk/gtktooltips.h>
 
 #undef __GTK_H_INSIDE__
 

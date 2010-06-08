@@ -8,7 +8,8 @@ INCLUDES =				\
 	-DGDK_DISABLE_DEPRECATED	\
 	-DGTK_DISABLE_DEPRECATED	\
 	$(GTK_DEBUG_FLAGS)		\
-	$(GTK_DEP_CFLAGS)
+	$(GTK_DEP_CFLAGS)		\
+	$(GDK_DEP_CFLAGS)
 
 DEPS =									\
 	$(top_builddir)/gdk-pixbuf/libgdk_pixbuf-$(GTK_API_VERSION).la	\
@@ -29,7 +30,9 @@ noinst_PROGRAMS =  $(TEST_PROGS)	\
 	simple				\
 	flicker				\
 	print-editor			\
+	extendedlayoutexample		\
 	testaccel			\
+	testapplication			\
 	testassistant			\
 	testbbox			\
 	testbuttons			\
@@ -48,10 +51,10 @@ noinst_PROGRAMS =  $(TEST_PROGS)	\
 	testframe			\
 	testgtk				\
 	testiconview			\
+	testiconview-keynav		\
 	testicontheme			\
 	testimage			\
 	testinput			\
-	testmenus			\
 	testmenubars			\
 	testmountoperation		\
 	testmultidisplay		\
@@ -71,7 +74,6 @@ noinst_PROGRAMS =  $(TEST_PROGS)	\
 	$(testsocket_programs)		\
 	testspinbutton			\
 	teststatusicon			\
-	testtext			\
 	testtoolbar			\
 	stresstest-toolbar		\
 	testtreeedit			\
@@ -112,9 +114,11 @@ endif
 flicker_DEPENDENCIES = $(TEST_DEPS)
 simple_DEPENDENCIES = $(TEST_DEPS)
 print_editor_DEPENDENCIES = $(TEST_DEPS)
+extendedlayoutexample_DEPENDENCIES = $(TEST_DEPS)
 testicontheme_DEPENDENCIES = $(TEST_DEPS)
 testiconview_DEPENDENCIES = $(TEST_DEPS)
 testaccel_DEPENDENCIES = $(TEST_DEPS)
+testapplication_DEPENDENCIES = $(TEST_DEPS)
 testassistant_DEPENDENCIES = $(TEST_DEPS)
 testbbox_DEPENDENCIES = $(TEST_DEPS)
 testbuttons_DEPENDENCIES = $(TEST_DEPS)
@@ -134,7 +138,6 @@ testfilechooserbutton_DEPENDENCIES = $(TEST_DEPS)
 testgtk_DEPENDENCIES = $(TEST_DEPS)
 testinput_DEPENDENCIES = $(TEST_DEPS)
 testimage_DEPENDENCIES = $(TEST_DEPS)
-testmenus_DEPENDENCIES = $(TEST_DEPS)
 testmenubars_DEPENDENCIES = $(TEST_DEPS)
 testmountoperation_DEPENDENCIES = $(TEST_DEPS)
 testmultidisplay_DEPENDENCIES = $(TEST_DEPS)
@@ -155,7 +158,7 @@ testsocket_DEPENDENCIES = $(DEPS)
 testsocket_child_DEPENDENCIES = $(DEPS)
 testspinbutton_DEPENDENCIES = $(TEST_DEPS)
 teststatusicon_DEPENDENCIES = $(TEST_DEPS)
-testtext_DEPENDENCIES = $(TEST_DEPS)
+#testtext_DEPENDENCIES = $(TEST_DEPS)
 testtreeedit_DEPENDENCIES = $(DEPS)
 testtreemodel_DEPENDENCIES = $(DEPS)
 testtreeview_DEPENDENCIES = $(DEPS)
@@ -176,7 +179,9 @@ testwindows_DEPENDENCIES = $(TEST_DEPS)
 flicker_LDADD = $(LDADDS)
 simple_LDADD = $(LDADDS)
 print_editor_LDADD = $(LDADDS)
+extendedlayoutexample_LDADD = $(LDADDS)
 testaccel_LDADD = $(LDADDS)
+testapplication_LDADD = $(LDADDS)
 testassistant_LDADD = $(LDADDS)
 testbbox_LDADD = $(LDADDS)
 testbuttons_LDADD = $(LDADDS)
@@ -196,9 +201,9 @@ testfilechooserbutton_LDADD = $(LDADDS)
 testgtk_LDADD = $(LDADDS)
 testicontheme_LDADD = $(LDADDS)
 testiconview_LDADD = $(LDADDS)
+testiconview_keynav_LDADD = $(LDADDS)
 testinput_LDADD = $(LDADDS)
 testimage_LDADD = $(LDADDS)
-testmenus_LDADD = $(LDADDS)
 testmenubars_LDADD = $(LDADDS)
 testmountoperation_LDADD = $(LDADDS)
 testmultidisplay_LDADD = $(LDADDS)
@@ -229,7 +234,7 @@ testtreeflow_LDADD = $(LDADDS)
 testtreecolumns_LDADD = $(LDADDS)
 testtreecolumnsizing_LDADD = $(LDADDS)
 testtreesort_LDADD = $(LDADDS)
-testtext_LDADD = $(LDADDS)
+#testtext_LDADD = $(LDADDS)
 treestoretest_LDADD = $(LDADDS)
 testxinerama_LDADD = $(LDADDS)
 pixbuf_read_LDADD = $(LDADDS)
@@ -244,7 +249,6 @@ testtooltips_LDADD = $(LDADDS)
 testvolumebutton_LDADD = $(LDADDS)
 testwindows_LDADD = $(LDADDS)
 
-
 testentrycompletion_SOURCES = 	\
 	prop-editor.c		\
 	testentrycompletion.c
@@ -255,15 +259,15 @@ testentryicons_SOURCES =	\
 
 testfilechooser_SOURCES = 	\
 	prop-editor.c		\
-	testfilechooser.c 	
+	testfilechooser.c
 
 testfilechooserbutton_SOURCES =	\
 	prop-editor.c		\
-	testfilechooserbutton.c 	
+	testfilechooserbutton.c
 
 testgtk_SOURCES =	\
 	prop-editor.c   \
-	testgtk.c 	
+	testgtk.c
 
 testtreeedit_SOURCES = 	\
 	testtreeedit.c
@@ -273,11 +277,11 @@ testtreemodel_SOURCES = \
 
 testtreeview_SOURCES =	\
 	prop-editor.c	\
-	testtreeview.c 
+	testtreeview.c
 
-testtext_SOURCES =	\
-	prop-editor.c	\
-	testtext.c 
+#testtext_SOURCES =	\
+#	prop-editor.c	\
+#	testtext.c
 
 testtoolbar_SOURCES =	\
 	testtoolbar.c	\
@@ -321,6 +325,9 @@ testframe_SOURCES = 		\
 testiconview_SOURCES = 		\
 	testiconview.c		\
 	prop-editor.c
+
+testiconview_keynav_SOURCES = 	\
+	testiconview-keynav.c
 
 testrecentchooser_SOURCES = 	\
 	prop-editor.c 		\
@@ -369,9 +376,7 @@ EXTRA_DIST += 			\
 	merge-2.ui		\
 	merge-3.ui		\
 	gnome-textfile.png	\
-	makefile.msc		\
-	file-chooser-test-dir/empty \
-	file-chooser-test-dir/text.txt
+	makefile.msc
 
 
 -include $(top_srcdir)/git.mk

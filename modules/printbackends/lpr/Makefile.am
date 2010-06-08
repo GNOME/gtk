@@ -16,9 +16,9 @@ INCLUDES = \
 
 LDADDS = \
 	$(GTK_DEP_LIBS)					\
-	$(top_builddir)/gtk/$(gtktargetlib)		
+	$(top_builddir)/gtk/$(gtktargetlib)
 
-backenddir = $(libdir)/gtk-2.0/$(GTK_BINARY_VERSION)/printbackends
+backenddir = $(libdir)/gtk-3.0/$(GTK_BINARY_VERSION)/printbackends
 
 backend_LTLIBRARIES = libprintbackend-lpr.la
 

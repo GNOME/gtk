@@ -126,9 +126,9 @@ static void     gtk_scale_buildable_custom_finished  (GtkBuildable  *buildable,
                                                       gpointer       user_data);
 
 
-G_DEFINE_ABSTRACT_TYPE_WITH_CODE (GtkScale, gtk_scale, GTK_TYPE_RANGE,
-                                  G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE,
-                                                         gtk_scale_buildable_interface_init))
+G_DEFINE_TYPE_WITH_CODE (GtkScale, gtk_scale, GTK_TYPE_RANGE,
+                         G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE,
+                                                gtk_scale_buildable_interface_init))
 
 
 static gboolean
@@ -463,7 +463,6 @@ gtk_scale_get_property (GObject      *object,
     }
 }
 
-#if 0
 /**
  * gtk_scale_new:
  * @orientation: the scale's orientation.
@@ -474,7 +473,7 @@ gtk_scale_get_property (GObject      *object,
  *
  * Return value: a new #GtkScale
  *
- * Since: 2.16
+ * Since: 3.0
  **/
 GtkWidget *
 gtk_scale_new (GtkOrientation  orientation,
@@ -508,8 +507,8 @@ gtk_scale_new (GtkOrientation  orientation,
  *
  * Return value: a new #GtkScale
  *
- * Since: 2.16
- **/
+ * Since: 3.0
+ */
 GtkWidget *
 gtk_scale_new_with_range (GtkOrientation orientation,
                           gdouble        min,
@@ -541,14 +540,13 @@ gtk_scale_new_with_range (GtkOrientation orientation,
                        "digits",      digits,
                        NULL);
 }
-#endif
 
 /**
  * gtk_scale_set_digits:
  * @scale: a #GtkScale
- * @digits: the number of decimal places to display, 
+ * @digits: the number of decimal places to display,
  *     e.g. use 1 to display 1.0, 2 to display 1.00, etc
- * 
+ *
  * Sets the number of decimal places that are displayed in the value.
  * Also causes the value of the adjustment to be rounded off to this
  * number of digits, so the retrieved value matches the value the user saw.
@@ -946,7 +944,10 @@ find_next_pos (GtkWidget      *widget,
         return marks[i];
     }
 
-  return widget->allocation.width;
+  if (pos == GTK_POS_TOP || pos == GTK_POS_BOTTOM)
+    return widget->allocation.width;
+  else
+    return widget->allocation.height;
 }
 
 static gboolean
@@ -1074,7 +1075,7 @@ gtk_scale_expose (GtkWidget      *widget,
                 {
                   pango_layout_set_markup (layout, mark->markup, -1);
                   pango_layout_get_pixel_extents (layout, NULL, &logical_rect);
-              
+
                   y3 = y1 - logical_rect.height / 2;
                   if (y3 < min_pos)
                     y3 = min_pos;

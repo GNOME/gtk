@@ -497,6 +497,7 @@ gtk_cell_renderer_pixbuf_create_themed_pixbuf (GtkCellRendererPixbuf *cellpixbuf
   GtkIconTheme *icon_theme;
   GtkSettings *settings;
   gint width, height;
+  GtkIconInfo *info;
 
   priv = GTK_CELL_RENDERER_PIXBUF_GET_PRIVATE (cellpixbuf);
 
@@ -519,27 +520,138 @@ gtk_cell_renderer_pixbuf_create_themed_pixbuf (GtkCellRendererPixbuf *cellpixbuf
     }
 
   if (priv->icon_name)
-    cellpixbuf->pixbuf = gtk_icon_theme_load_icon (icon_theme,
-			                           priv->icon_name,
-			                           MIN (width, height), 
-                                                   GTK_ICON_LOOKUP_USE_BUILTIN,
-                                                   NULL);
+    info = gtk_icon_theme_lookup_icon (icon_theme,
+                                       priv->icon_name,
+                                       MIN (width, height),
+                                       GTK_ICON_LOOKUP_USE_BUILTIN);
   else if (priv->gicon)
-    {
-      GtkIconInfo *info;
+    info = gtk_icon_theme_lookup_by_gicon (icon_theme,
+                                           priv->gicon,
+                                           MIN (width, height),
+                                           GTK_ICON_LOOKUP_USE_BUILTIN);
+  else
+    info = NULL;
 
-      info = gtk_icon_theme_lookup_by_gicon (icon_theme,
-                                             priv->gicon,
-			                     MIN (width, height), 
-                                             GTK_ICON_LOOKUP_USE_BUILTIN);
-      if (info)
-        {
-          cellpixbuf->pixbuf = gtk_icon_info_load_icon (info, NULL);
-          gtk_icon_info_free (info);
-        }
+  if (info)
+    {
+      GdkColor error_color, warning_color, success_color;
+      GdkColor *error_ptr, *warning_ptr, *success_ptr;
+      GtkStyle *style;
+
+      style = gtk_widget_get_style (GTK_WIDGET (widget));
+      if (!gtk_style_lookup_color (style, "error_color", &error_color))
+        error_ptr = NULL;
+      else
+        error_ptr = &error_color;
+      if (!gtk_style_lookup_color (style, "warning_color", &warning_color))
+        warning_ptr = NULL;
+      else
+        warning_ptr = &warning_color;
+      if (!gtk_style_lookup_color (style, "success_color", &success_color))
+        success_ptr = NULL;
+      else
+        success_ptr = &success_color;
+
+      cellpixbuf->pixbuf = gtk_icon_info_load_symbolic (info,
+                                                        &style->fg[GTK_STATE_NORMAL],
+                                                        success_ptr,
+                                                        warning_ptr,
+                                                        error_ptr,
+                                                        NULL,
+                                                        NULL);
+      gtk_icon_info_free (info);
     }
 
   g_object_notify (G_OBJECT (cellpixbuf), "pixbuf");
+}
+
+static GdkPixbuf *
+create_symbolic_pixbuf (GtkCellRendererPixbuf *cellpixbuf,
+			GtkWidget             *widget,
+			GdkColor              *fg)
+{
+  GtkCellRendererPixbufPrivate *priv;
+  GdkScreen *screen;
+  GtkIconTheme *icon_theme;
+  GtkSettings *settings;
+  gint width, height;
+  GtkIconInfo *info;
+  GdkPixbuf *pixbuf;
+
+  priv = GTK_CELL_RENDERER_PIXBUF_GET_PRIVATE (cellpixbuf);
+
+  /* Not a named symbolic icon? */
+  if (priv->icon_name) {
+    if (!g_str_has_suffix (priv->icon_name, "-symbolic"))
+      return NULL;
+  } else if (priv->gicon) {
+    const gchar * const *names;
+    if (!G_IS_THEMED_ICON (priv->gicon))
+      return NULL;
+    names = g_themed_icon_get_names (G_THEMED_ICON (priv->gicon));
+    if (names == NULL || !g_str_has_suffix (names[0], "-symbolic"))
+      return NULL;
+  } else {
+    return NULL;
+  }
+
+  screen = gtk_widget_get_screen (GTK_WIDGET (widget));
+  icon_theme = gtk_icon_theme_get_for_screen (screen);
+  settings = gtk_settings_get_for_screen (screen);
+
+  if (!gtk_icon_size_lookup_for_settings (settings,
+					  priv->stock_size,
+					  &width, &height))
+    {
+      g_warning ("Invalid icon size %u\n", priv->stock_size);
+      width = height = 24;
+    }
+
+
+  if (priv->icon_name)
+    info = gtk_icon_theme_lookup_icon (icon_theme,
+                                       priv->icon_name,
+                                       MIN (width, height),
+                                       GTK_ICON_LOOKUP_USE_BUILTIN);
+  else if (priv->gicon)
+    info = gtk_icon_theme_lookup_by_gicon (icon_theme,
+                                           priv->gicon,
+                                           MIN (width, height),
+                                           GTK_ICON_LOOKUP_USE_BUILTIN);
+  else
+    return NULL;
+
+  if (info)
+    {
+      GdkColor error_color, warning_color, success_color;
+      GdkColor *error_ptr, *warning_ptr, *success_ptr;
+      GtkStyle *style;
+
+      style = gtk_widget_get_style (GTK_WIDGET (widget));
+      if (!gtk_style_lookup_color (style, "error_color", &error_color))
+        error_ptr = NULL;
+      else
+        error_ptr = &error_color;
+      if (!gtk_style_lookup_color (style, "warning_color", &warning_color))
+        warning_ptr = NULL;
+      else
+        warning_ptr = &warning_color;
+      if (!gtk_style_lookup_color (style, "success_color", &success_color))
+        success_ptr = NULL;
+      else
+        success_ptr = &success_color;
+
+      pixbuf = gtk_icon_info_load_symbolic (info,
+                                            fg,
+                                            success_ptr,
+                                            warning_ptr,
+                                            error_ptr,
+                                            NULL,
+                                            NULL);
+      gtk_icon_info_free (info);
+      return pixbuf;
+    }
+  return NULL;
 }
 
 static GdkPixbuf *
@@ -678,6 +790,7 @@ gtk_cell_renderer_pixbuf_render (GtkCellRenderer      *cell,
   GdkPixbuf *pixbuf;
   GdkPixbuf *invisible = NULL;
   GdkPixbuf *colorized = NULL;
+  GdkPixbuf *symbolic = NULL;
   GdkRectangle pix_rect;
   GdkRectangle draw_rect;
   cairo_t *cr;
@@ -755,10 +868,15 @@ gtk_cell_renderer_pixbuf_render (GtkCellRenderer      *cell,
       else
 	state = GTK_STATE_PRELIGHT;
 
-      colorized = create_colorized_pixbuf (pixbuf,
-					   &widget->style->base[state]);
+      symbolic = create_symbolic_pixbuf (cellpixbuf, widget, &widget->style->fg[state]);
+      if (!symbolic) {
+        colorized = create_colorized_pixbuf (pixbuf,
+					     &widget->style->base[state]);
 
-      pixbuf = colorized;
+	pixbuf = colorized;
+      } else {
+        pixbuf = symbolic;
+      }
     }
 
   cr = gdk_cairo_create (window);
@@ -774,6 +892,9 @@ gtk_cell_renderer_pixbuf_render (GtkCellRenderer      *cell,
 
   if (colorized)
     g_object_unref (colorized);
+
+  if (symbolic)
+    g_object_unref (symbolic);
 }
 
 #define __GTK_CELL_RENDERER_PIXBUF_C__

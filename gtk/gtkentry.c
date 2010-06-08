@@ -139,6 +139,8 @@ struct _GtkEntryPrivate
   gint start_y;
 
   gchar *im_module;
+
+  GdkDevice *completion_device;
 };
 
 typedef struct _GtkEntryPasswordHint GtkEntryPasswordHint;
@@ -5807,6 +5809,55 @@ _gtk_entry_reset_im_context (GtkEntry *entry)
     }
 }
 
+/**
+ * gtk_entry_reset_im_context:
+ * @entry: a #GtkEntry
+ *
+ * Reset the input method context of the entry if needed.
+ *
+ * This can be necessary in the case where modifying the buffer
+ * would confuse on-going input method behavior.
+ *
+ * Since: 2.22
+ */
+void
+gtk_entry_reset_im_context (GtkEntry *entry)
+{
+  g_return_if_fail (GTK_IS_ENTRY (entry));
+
+  _gtk_entry_reset_im_context (entry);
+}
+
+/**
+ * gtk_entry_im_context_filter_keypress:
+ * @entry: a #GtkEntry
+ * @event: the key event
+ *
+ * Allow the #GtkEntry input method to internally handle key press
+ * and release events. If this function returns %TRUE, then no further
+ * processing should be done for this key event. See
+ * gtk_im_context_filter_keypress().
+ *
+ * Note that you are expected to call this function from your handler
+ * when overriding key event handling. This is needed in the case when
+ * you need to insert your own key handling between the input method
+ * and the default key event handling of the #GtkEntry.
+ * See gtk_text_view_reset_im_context() for an example of use.
+ *
+ * Return value: %TRUE if the input method handled the key event.
+ *
+ * Since: 2.22
+ */
+gboolean
+gtk_entry_im_context_filter_keypress (GtkEntry    *entry,
+                                      GdkEventKey *event)
+{
+  g_return_val_if_fail (GTK_IS_ENTRY (entry), FALSE);
+
+  return gtk_im_context_filter_keypress (entry->im_context, event);
+}
+
+
 static gint
 gtk_entry_find_position (GtkEntry *entry,
 			 gint      x)
@@ -6591,32 +6642,6 @@ gtk_entry_new_with_buffer (GtkEntryBuffer *buffer)
   return g_object_new (GTK_TYPE_ENTRY, "buffer", buffer, NULL);
 }
 
-/**
- * gtk_entry_new_with_max_length:
- * @max: the maximum length of the entry, or 0 for no maximum.
- *   (other than the maximum length of entries.) The value passed in will
- *   be clamped to the range 0-65536.
- *
- * Creates a new #GtkEntry widget with the given maximum length.
- * 
- * Return value: a new #GtkEntry
- *
- * Deprecated: 2.0: Use gtk_entry_set_max_length() instead.
- **/
-GtkWidget*
-gtk_entry_new_with_max_length (gint max)
-{
-  GtkEntry *entry;
-
-  max = CLAMP (max, 0, GTK_ENTRY_BUFFER_MAX_SIZE);
-
-  entry = g_object_new (GTK_TYPE_ENTRY, NULL);
-  gtk_entry_buffer_set_max_length (get_buffer (entry), max);
-
-  return GTK_WIDGET (entry);
-}
-
-
 static GtkEntryBuffer*
 get_buffer (GtkEntry *entry)
 {
@@ -6785,75 +6810,6 @@ gtk_entry_set_text (GtkEntry    *entry,
 }
 
 /**
- * gtk_entry_append_text:
- * @entry: a #GtkEntry
- * @text: the text to append
- *
- * Appends the given text to the contents of the widget.
- *
- * Deprecated: 2.0: Use gtk_editable_insert_text() instead.
- */
-void
-gtk_entry_append_text (GtkEntry *entry,
-		       const gchar *text)
-{
-  GtkEntryPrivate *priv;
-  gint tmp_pos;
-
-  g_return_if_fail (GTK_IS_ENTRY (entry));
-  g_return_if_fail (text != NULL);
-  priv = GTK_ENTRY_GET_PRIVATE (entry);
-
-  tmp_pos = gtk_entry_buffer_get_length (get_buffer (entry));
-  gtk_editable_insert_text (GTK_EDITABLE (entry), text, -1, &tmp_pos);
-}
-
-/**
- * gtk_entry_prepend_text:
- * @entry: a #GtkEntry
- * @text: the text to prepend
- *
- * Prepends the given text to the contents of the widget.
- *
- * Deprecated: 2.0: Use gtk_editable_insert_text() instead.
- */
-void
-gtk_entry_prepend_text (GtkEntry *entry,
-			const gchar *text)
-{
-  gint tmp_pos;
-
-  g_return_if_fail (GTK_IS_ENTRY (entry));
-  g_return_if_fail (text != NULL);
-
-  tmp_pos = 0;
-  gtk_editable_insert_text (GTK_EDITABLE (entry), text, -1, &tmp_pos);
-}
-
-/**
- * gtk_entry_set_position:
- * @entry: a #GtkEntry
- * @position: the position of the cursor. The cursor is displayed
- *    before the character with the given (base 0) index in the widget. 
- *    The value must be less than or equal to the number of characters 
- *    in the widget. A value of -1 indicates that the position should
- *    be set after the last character in the entry. Note that this 
- *    position is in characters, not in bytes.
- *
- * Sets the cursor position in an entry to the given value. 
- *
- * Deprecated: 2.0: Use gtk_editable_set_position() instead.
- */
-void
-gtk_entry_set_position (GtkEntry *entry,
-			gint      position)
-{
-  g_return_if_fail (GTK_IS_ENTRY (entry));
-
-  gtk_editable_set_position (GTK_EDITABLE (entry), position);
-}
-
-/**
  * gtk_entry_set_visibility:
  * @entry: a #GtkEntry
  * @visible: %TRUE if the contents of the entry are displayed
@@ -6994,26 +6950,6 @@ gtk_entry_unset_invisible_char (GtkEntry *entry)
 }
 
 /**
- * gtk_entry_set_editable:
- * @entry: a #GtkEntry
- * @editable: %TRUE if the user is allowed to edit the text
- *   in the widget
- *
- * Determines if the user can edit the text in the editable
- * widget or not. 
- *
- * Deprecated: 2.0: Use gtk_editable_set_editable() instead.
- */
-void
-gtk_entry_set_editable (GtkEntry *entry,
-			gboolean  editable)
-{
-  g_return_if_fail (GTK_IS_ENTRY (entry));
-
-  gtk_editable_set_editable (GTK_EDITABLE (entry), editable);
-}
-
-/**
  * gtk_entry_set_overwrite_mode:
  * @entry: a #GtkEntry
  * @overwrite: new value
@@ -7077,28 +7013,6 @@ gtk_entry_get_text (GtkEntry *entry)
 {
   g_return_val_if_fail (GTK_IS_ENTRY (entry), NULL);
   return gtk_entry_buffer_get_text (get_buffer (entry));
-}
-
-/**
- * gtk_entry_select_region:
- * @entry: a #GtkEntry
- * @start: the starting position
- * @end: the end position
- *
- * Selects a region of text. The characters that are selected are 
- * those characters at positions from @start_pos up to, but not 
- * including @end_pos. If @end_pos is negative, then the the characters 
- * selected will be those characters from @start_pos to the end of 
- * the text. 
- *
- * Deprecated: 2.0: Use gtk_editable_select_region() instead.
- */
-void       
-gtk_entry_select_region  (GtkEntry       *entry,
-			  gint            start,
-			  gint            end)
-{
-  gtk_editable_select_region (GTK_EDITABLE (entry), start, end);
 }
 
 /**
@@ -9245,6 +9159,7 @@ static gint
 gtk_entry_completion_timeout (gpointer data)
 {
   GtkEntryCompletion *completion = GTK_ENTRY_COMPLETION (data);
+  GtkEntryPrivate *priv = GTK_ENTRY_GET_PRIVATE (completion->priv->entry);
 
   completion->priv->completion_timeout = 0;
 
@@ -9274,7 +9189,7 @@ gtk_entry_completion_timeout (gpointer data)
 	  if (gtk_widget_get_visible (completion->priv->popup_window))
 	    _gtk_entry_completion_resize_popup (completion);
           else
-	    _gtk_entry_completion_popup (completion);
+	    _gtk_entry_completion_popup (completion, priv->completion_device);
 	}
       else 
 	_gtk_entry_completion_popdown (completion);
@@ -9403,6 +9318,7 @@ gtk_entry_completion_key_press (GtkWidget   *widget,
             {
 
               GtkTreeIter iter;
+              GtkTreeIter child_iter;
               GtkTreeModel *model = NULL;
               GtkTreeSelection *sel;
               gboolean entry_set;
@@ -9410,12 +9326,15 @@ gtk_entry_completion_key_press (GtkWidget   *widget,
               sel = gtk_tree_view_get_selection (GTK_TREE_VIEW (completion->priv->tree_view));
               if (!gtk_tree_selection_get_selected (sel, &model, &iter))
                 return FALSE;
+
+              gtk_tree_model_filter_convert_iter_to_child_iter (GTK_TREE_MODEL_FILTER (model), &child_iter, &iter);
+              model = gtk_tree_model_filter_get_model (GTK_TREE_MODEL_FILTER (model));
               
               if (completion->priv->completion_prefix == NULL)
                 completion->priv->completion_prefix = g_strdup (gtk_entry_get_text (GTK_ENTRY (completion->priv->entry)));
 
               g_signal_emit_by_name (completion, "cursor-on-match", model,
-                                     &iter, &entry_set);
+                                     &child_iter, &entry_set);
             }
         }
       else if (completion->priv->current_selected - matches >= 0)
@@ -9575,7 +9494,9 @@ static void
 gtk_entry_completion_changed (GtkWidget *entry,
                               gpointer   user_data)
 {
+  GtkEntryPrivate *priv = GTK_ENTRY_GET_PRIVATE (entry);
   GtkEntryCompletion *completion = GTK_ENTRY_COMPLETION (user_data);
+  GdkDevice *device;
 
   /* (re)install completion timeout */
   if (completion->priv->completion_timeout)
@@ -9592,6 +9513,14 @@ gtk_entry_completion_changed (GtkWidget *entry,
         _gtk_entry_completion_popdown (completion);
       return;
     }
+
+  device = gtk_get_current_event_device ();
+
+  if (device && device->source == GDK_SOURCE_KEYBOARD)
+    device = gdk_device_get_associated_device (device);
+
+  if (device)
+    priv->completion_device = device;
 
   completion->priv->completion_timeout =
     gdk_threads_add_timeout (COMPLETION_TIMEOUT,

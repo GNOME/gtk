@@ -17,6 +17,9 @@ Limit the effect of grabs
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### STRUCT GtkWindowGroup ##### -->
 <para>
 
@@ -28,6 +31,7 @@ Limit the effect of grabs
 
 </para>
 
+@void: 
 @Returns: 
 
 
@@ -55,6 +59,16 @@ Limit the effect of grabs
 </para>
 
 @window_group: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_window_group_get_current_device_grab ##### -->
+<para>
+
+</para>
+
+@window_group: 
+@device: 
 @Returns: 
 
 

@@ -6,7 +6,7 @@ if PLATFORM_WIN32
 no_undefined = -no-undefined
 endif
 
-moduledir = $(libdir)/gtk-2.0/modules
+moduledir = $(libdir)/gtk-3.0/modules
 module_LTLIBRARIES = libgail.la
 
 gail_c_sources =			\
@@ -22,9 +22,6 @@ gail_c_sources =			\
 	gailcellparent.c		\
 	gailcheckmenuitem.c		\
 	gailchecksubmenuitem.c		\
-	gailclist.c			\
-	gailclistcell.c			\
-	gailcombo.c			\
 	gailcombobox.c			\
 	gailcontainer.c			\
 	gailcontainercell.c		\
@@ -35,16 +32,13 @@ gail_c_sources =			\
 	gailimagecell.c			\
 	gailitem.c			\
 	gaillabel.c			\
-	gaillist.c			\
 	gailmenu.c			\
 	gailmenushell.c			\
 	gailmenuitem.c			\
 	gailnotebook.c			\
 	gailnotebookpage.c		\
 	gailobject.c			\
-	gailoptionmenu.c		\
 	gailpaned.c			\
-	gailpixmap.c			\
 	gailprogressbar.c		\
 	gailradiobutton.c		\
 	gailradiomenuitem.c		\
@@ -68,7 +62,7 @@ gail_c_sources =			\
 	gailwidget.c			\
 	gailwindow.c
 
-libgailincludedir=$(includedir)/gail-1.0/gail
+libgailincludedir=$(includedir)/gail-3.0/gail
 
 gail_private_h_sources =		\
 	gail.h				\
@@ -82,9 +76,6 @@ gail_private_h_sources =		\
 	gailcellparent.h		\
 	gailcheckmenuitem.h		\
 	gailchecksubmenuitem.h		\
-	gailclist.h			\
-	gailclistcell.h			\
-	gailcombo.h			\
 	gailcombobox.h			\
 	gailcontainercell.h		\
 	gailcontainer.h			\
@@ -96,16 +87,13 @@ gail_private_h_sources =		\
 	gailimagecell.h			\
 	gailitem.h			\
 	gaillabel.h			\
-	gaillist.h			\
 	gailmenu.h			\
 	gailmenushell.h			\
 	gailmenuitem.h			\
 	gailnotebook.h			\
 	gailnotebookpage.h		\
 	gailobject.h			\
-	gailoptionmenu.h		\
 	gailpaned.h			\
-	gailpixmap.h			\
 	gailprogressbar.h		\
 	gailradiobutton.h		\
 	gailradiomenuitem.h		\
@@ -160,7 +148,7 @@ libgail_la_LIBADD =  \
 	$(top_builddir)/gdk-pixbuf/libgdk_pixbuf-$(GTK_API_VERSION).la 	\
 	$(top_builddir)/gdk/$(gdktargetlib) 				\
 	$(top_builddir)/gtk/$(gtktargetlib)				\
-	$(top_builddir)/modules/other/gail/libgail-util/libgailutil.la	\
+	$(top_builddir)/modules/other/gail/libgail-util/libgailutil-3.0.la	\
 	$(GTK_DEP_LIBS)							\
 	$(INTLLIBS)
 

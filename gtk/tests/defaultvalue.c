@@ -18,8 +18,6 @@
  * Boston, MA 02111-1307, USA.
  */
 
-#undef GTK_DISABLE_DEPRECATED
-#define GTK_ENABLE_BROKEN
 #include <string.h>
 #include <gtk/gtk.h>
 #include <gtk/gtkunixprint.h>
@@ -79,13 +77,6 @@ test_type (gconstpointer data)
   if (g_type_is_a (type, GTK_TYPE_PRINT_JOB) ||
       g_type_is_a (type, GDK_TYPE_PIXBUF_LOADER) ||
       g_type_is_a (type, gdk_pixbuf_simple_anim_iter_get_type ()))
-    return;
-
-  /* The gtk_arg compat wrappers can't set up default values */
-  if (g_type_is_a (type, GTK_TYPE_CLIST) ||
-      g_type_is_a (type, GTK_TYPE_CTREE) ||
-      g_type_is_a (type, GTK_TYPE_LIST) ||
-      g_type_is_a (type, GTK_TYPE_TIPS_QUERY)) 
     return;
 
   klass = g_type_class_ref (type);
@@ -177,11 +168,6 @@ test_type (gconstpointer data)
            strcmp (pspec->name, "buffer") == 0))
 	continue;
 
-      /* Gets set to the cwd */
-      if (g_type_is_a (type, GTK_TYPE_FILE_SELECTION) &&
-	  strcmp (pspec->name, "filename") == 0)
-	continue;
-
       if (g_type_is_a (type, GTK_TYPE_FONT_SELECTION) &&
 	  strcmp (pspec->name, "font") == 0)
 	continue;
@@ -193,6 +179,10 @@ test_type (gconstpointer data)
 
       if (g_type_is_a (type, GTK_TYPE_MESSAGE_DIALOG) &&
 	  strcmp (pspec->name, "image") == 0)
+	continue;
+
+      if (g_type_is_a (type, GTK_TYPE_PANED) &&
+	  strcmp (pspec->name, "max-position") == 0)
 	continue;
 
       if (g_type_is_a (type, GTK_TYPE_PRINT_OPERATION) &&
@@ -267,11 +257,6 @@ test_type (gconstpointer data)
 	   strcmp (pspec->name, "language") == 0 ||
 	   strcmp (pspec->name, "font") == 0 ||
 	   strcmp (pspec->name, "font-desc") == 0))
-        continue;
-
-      if (g_type_is_a (type, GTK_TYPE_TEXT) &&
-	  (strcmp (pspec->name, "hadjustment") == 0 ||
-           strcmp (pspec->name, "vadjustment") == 0))
         continue;
 
       if (g_type_is_a (type, GTK_TYPE_TEXT_VIEW) &&

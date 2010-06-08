@@ -3500,22 +3500,6 @@ gtk_calendar_new (void)
 }
 
 /**
- * gtk_calendar_display_options:
- * @calendar: a #GtkCalendar.
- * @flags: the display options to set.
- *
- * Sets display options (whether to display the heading and the month headings).
- * 
- * Deprecated: 2.4: Use gtk_calendar_set_display_options() instead
- **/
-void
-gtk_calendar_display_options (GtkCalendar	       *calendar,
-			      GtkCalendarDisplayOptions flags)
-{
-  gtk_calendar_set_display_options (calendar, flags);
-}
-
-/**
  * gtk_calendar_get_display_options:
  * @calendar: a #GtkCalendar
  * 
@@ -3981,36 +3965,6 @@ gtk_calendar_get_detail_height_rows (GtkCalendar *calendar)
 {
   g_return_val_if_fail (GTK_IS_CALENDAR (calendar), 0);
   return GTK_CALENDAR_GET_PRIVATE (calendar)->detail_height_rows;
-}
-
-/**
- * gtk_calendar_freeze:
- * @calendar: a #GtkCalendar
- * 
- * Does nothing. Previously locked the display of the calendar until
- * it was thawed with gtk_calendar_thaw().
- *
- * Deprecated: 2.8: 
- **/
-void
-gtk_calendar_freeze (GtkCalendar *calendar)
-{
-  g_return_if_fail (GTK_IS_CALENDAR (calendar));
-}
-
-/**
- * gtk_calendar_thaw:
- * @calendar: a #GtkCalendar
- * 
- * Does nothing. Previously defrosted a calendar; all the changes made
- * since the last gtk_calendar_freeze() were displayed.
- *
- * Deprecated: 2.8: 
- **/
-void
-gtk_calendar_thaw (GtkCalendar *calendar)
-{
-  g_return_if_fail (GTK_IS_CALENDAR (calendar));
 }
 
 #define __GTK_CALENDAR_C__

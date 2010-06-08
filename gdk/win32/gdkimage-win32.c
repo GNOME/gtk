@@ -163,41 +163,6 @@ _gdk_win32_new_image (GdkVisual *visual,
   return image;
 }
 
-GdkImage *
-gdk_image_new_bitmap (GdkVisual *visual,
-		      gpointer   data,
-		      gint       w,
-		      gint       h)
-{
-  GdkPixmap *pixmap;
-  GdkImage *image;
-  guchar *bits;
-  gint data_bpl = (w-1)/8 + 1;
-  gint i;
-
-  pixmap = gdk_pixmap_new (NULL, w, h, 1);
-
-  if (pixmap == NULL)
-    return NULL;
-
-  GDK_NOTE (IMAGE, g_print ("gdk_image_new_bitmap: %dx%d=%p\n",
-			    w, h, GDK_PIXMAP_HBITMAP (pixmap)));
-
-  bits = GDK_PIXMAP_IMPL_WIN32 (GDK_PIXMAP_OBJECT (pixmap)->impl)->bits;
-  image = _gdk_win32_new_image (visual, w, h, 1, bits);
-  image->windowing_data = pixmap;
-  
-  if (data_bpl != image->bpl)
-    {
-      for (i = 0; i < h; i++)
-	memmove ((guchar *) image->mem + i*image->bpl, ((guchar *) data) + i*data_bpl, data_bpl);
-    }
-  else
-    memmove (image->mem, data, data_bpl*h);
-
-  return image;
-}
-
 void
 _gdk_windowing_image_init (void)
 {

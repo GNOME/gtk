@@ -24,7 +24,7 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
-#if defined(GTK_DISABLE_SINGLE_INCLUDES) && !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
+#if !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
 #error "Only <gtk/gtk.h> can be included directly."
 #endif
 
@@ -65,8 +65,8 @@ struct _GtkButtonBoxClass
 };
 
 
-GType gtk_button_box_get_type (void) G_GNUC_CONST;
-
+GType             gtk_button_box_get_type            (void) G_GNUC_CONST;
+GtkWidget       * gtk_button_box_new                 (GtkOrientation     orientation);
 GtkButtonBoxStyle gtk_button_box_get_layout          (GtkButtonBox      *widget);
 void              gtk_button_box_set_layout          (GtkButtonBox      *widget,
 						      GtkButtonBoxStyle  layout_style);
@@ -75,24 +75,6 @@ gboolean          gtk_button_box_get_child_secondary (GtkButtonBox      *widget,
 void              gtk_button_box_set_child_secondary (GtkButtonBox      *widget,
 						      GtkWidget         *child,
 						      gboolean           is_secondary);
-
-#ifndef GTK_DISABLE_DEPRECATED
-#define gtk_button_box_set_spacing(b,s) gtk_box_set_spacing (GTK_BOX (b), s)
-#define gtk_button_box_get_spacing(b)   gtk_box_get_spacing (GTK_BOX (b))
-
-void gtk_button_box_set_child_size     (GtkButtonBox *widget,
-					gint          min_width,
-					gint          min_height);
-void gtk_button_box_set_child_ipadding (GtkButtonBox *widget,
-					gint          ipad_x,
-					gint          ipad_y);
-void gtk_button_box_get_child_size     (GtkButtonBox *widget,
-					gint         *min_width,
-					gint         *min_height);
-void gtk_button_box_get_child_ipadding (GtkButtonBox *widget,
-					gint         *ipad_x,
-					gint         *ipad_y);
-#endif
 
 /* Internal method - do not use. */
 void _gtk_button_box_child_requisition (GtkWidget *widget,

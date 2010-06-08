@@ -49,6 +49,9 @@ recorded at the time it was added. This is done using gtk_statusbar_remove().
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### STRUCT GtkStatusbar ##### -->
 <para>
 Contains private data that should be modified with the functions described 
@@ -89,6 +92,7 @@ below.
 
 </para>
 
+@void: 
 @Returns: 
 
 

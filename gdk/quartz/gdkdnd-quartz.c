@@ -87,18 +87,6 @@ gdk_drag_context_new (void)
   return (GdkDragContext *)g_object_new (gdk_drag_context_get_type (), NULL);
 }
 
-void            
-gdk_drag_context_ref (GdkDragContext *context)
-{
-  g_object_ref (context);
-}
-
-void            
-gdk_drag_context_unref (GdkDragContext *context)
-{
-  g_object_unref (context);
-}
-
 GdkDragContext *_gdk_quartz_drag_source_context = NULL;
 
 GdkDragContext *

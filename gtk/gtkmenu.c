@@ -64,6 +64,7 @@
 
 typedef struct _GtkMenuAttachData	GtkMenuAttachData;
 typedef struct _GtkMenuPrivate  	GtkMenuPrivate;
+typedef struct _GtkMenuPopdownData      GtkMenuPopdownData;
 
 struct _GtkMenuAttachData
 {
@@ -98,6 +99,12 @@ struct _GtkMenuPrivate
   guint have_position         : 1;
   guint ignore_button_release : 1;
   guint no_toggle_size        : 1;
+};
+
+struct _GtkMenuPopdownData
+{
+  GtkMenu *menu;
+  GdkDevice *device;
 };
 
 typedef struct
@@ -1370,33 +1377,38 @@ gtk_menu_tearoff_bg_copy (GtkMenu *menu)
 
 static gboolean
 popup_grab_on_window (GdkWindow *window,
-		      guint32    activate_time,
-		      gboolean   grab_keyboard)
+                      GdkDevice *keyboard,
+                      GdkDevice *pointer,
+		      guint32    activate_time)
 {
-  if ((gdk_pointer_grab (window, TRUE,
-			 GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK |
-			 GDK_ENTER_NOTIFY_MASK | GDK_LEAVE_NOTIFY_MASK |
-			 GDK_POINTER_MOTION_MASK,
-			 NULL, NULL, activate_time) == 0))
+  if (keyboard &&
+      gdk_device_grab (keyboard, window,
+                       GDK_OWNERSHIP_WINDOW, TRUE,
+                       GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK,
+                       NULL, activate_time) != GDK_GRAB_SUCCESS)
+    return FALSE;
+
+  if (pointer &&
+      gdk_device_grab (pointer, window,
+                       GDK_OWNERSHIP_WINDOW, TRUE,
+                       GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK |
+                       GDK_ENTER_NOTIFY_MASK | GDK_LEAVE_NOTIFY_MASK |
+                       GDK_POINTER_MOTION_MASK,
+                       NULL, activate_time) != GDK_GRAB_SUCCESS)
     {
-      if (!grab_keyboard ||
-	  gdk_keyboard_grab (window, TRUE,
-			     activate_time) == 0)
-	return TRUE;
-      else
-	{
-	  gdk_display_pointer_ungrab (gdk_drawable_get_display (window),
-				      activate_time);
-	  return FALSE;
-	}
+      if (keyboard)
+        gdk_device_ungrab (keyboard, activate_time);
+
+      return FALSE;
     }
 
-  return FALSE;
+  return TRUE;
 }
 
 /**
- * gtk_menu_popup:
+ * gtk_menu_popup_for_device:
  * @menu: a #GtkMenu.
+ * @device: (allow-none): a #GdkDevice
  * @parent_menu_shell: (allow-none): the menu shell containing the triggering menu item, or %NULL
  * @parent_menu_item: (allow-none): the menu item whose activation triggered the popup, or %NULL
  * @func: (allow-none): a user supplied function used to position the menu, or %NULL
@@ -1406,9 +1418,9 @@ popup_grab_on_window (GdkWindow *window,
  *
  * Displays a menu and makes it available for selection.  Applications can use
  * this function to display context-sensitive menus, and will typically supply
- * %NULL for the @parent_menu_shell, @parent_menu_item, @func and @data 
+ * %NULL for the @parent_menu_shell, @parent_menu_item, @func and @data
  * parameters. The default menu positioning function will position the menu
- * at the current mouse cursor position.
+ * at the current position of @device (or its corresponding pointer).
  *
  * The @button parameter should be the mouse button pressed to initiate
  * the menu popup. If the menu popup was initiated by something other than
@@ -1421,15 +1433,18 @@ popup_grab_on_window (GdkWindow *window,
  * a mouse click or key press) that caused the initiation of the popup.
  * Only if no such event is available, gtk_get_current_event_time() can
  * be used instead.
+ *
+ * Since: 3.0
  */
 void
-gtk_menu_popup (GtkMenu		    *menu,
-		GtkWidget	    *parent_menu_shell,
-		GtkWidget	    *parent_menu_item,
-		GtkMenuPositionFunc  func,
-		gpointer	     data,
-		guint		     button,
-		guint32		     activate_time)
+gtk_menu_popup_for_device (GtkMenu             *menu,
+                           GdkDevice           *device,
+                           GtkWidget           *parent_menu_shell,
+                           GtkWidget           *parent_menu_item,
+                           GtkMenuPositionFunc  func,
+                           gpointer             data,
+                           guint                button,
+                           guint32              activate_time)
 {
   GtkWidget *widget;
   GtkWidget *xgrab_shell;
@@ -1439,12 +1454,25 @@ gtk_menu_popup (GtkMenu		    *menu,
   gboolean grab_keyboard;
   GtkMenuPrivate *priv;
   GtkWidget *parent_toplevel;
+  GdkDevice *keyboard, *pointer;
 
   g_return_if_fail (GTK_IS_MENU (menu));
+  g_return_if_fail (GDK_IS_DEVICE (device));
 
   widget = GTK_WIDGET (menu);
   menu_shell = GTK_MENU_SHELL (menu);
   priv = gtk_menu_get_private (menu);
+
+  if (device->source == GDK_SOURCE_KEYBOARD)
+    {
+      keyboard = device;
+      pointer = gdk_device_get_associated_device (device);
+    }
+  else
+    {
+      pointer = device;
+      keyboard = gdk_device_get_associated_device (device);
+    }
 
   menu_shell->parent_menu_shell = parent_menu_shell;
 
@@ -1493,10 +1521,16 @@ gtk_menu_popup (GtkMenu		    *menu,
   grab_keyboard = gtk_menu_shell_get_take_focus (menu_shell);
   gtk_window_set_accept_focus (GTK_WINDOW (menu->toplevel), grab_keyboard);
 
+  if (!grab_keyboard)
+    keyboard = NULL;
+
   if (xgrab_shell && xgrab_shell != widget)
     {
-      if (popup_grab_on_window (xgrab_shell->window, activate_time, grab_keyboard))
-	GTK_MENU_SHELL (xgrab_shell)->have_xgrab = TRUE;
+      if (popup_grab_on_window (xgrab_shell->window, keyboard, pointer, activate_time))
+        {
+          _gtk_menu_shell_set_grab_devices (GTK_MENU_SHELL (xgrab_shell), keyboard, pointer);
+          GTK_MENU_SHELL (xgrab_shell)->have_xgrab = TRUE;
+        }
     }
   else
     {
@@ -1504,8 +1538,11 @@ gtk_menu_popup (GtkMenu		    *menu,
 
       xgrab_shell = widget;
       transfer_window = menu_grab_transfer_window_get (menu);
-      if (popup_grab_on_window (transfer_window, activate_time, grab_keyboard))
-	GTK_MENU_SHELL (xgrab_shell)->have_xgrab = TRUE;
+      if (popup_grab_on_window (transfer_window, keyboard, pointer, activate_time))
+        {
+          _gtk_menu_shell_set_grab_devices (GTK_MENU_SHELL (xgrab_shell), keyboard, pointer);
+          GTK_MENU_SHELL (xgrab_shell)->have_xgrab = TRUE;
+        }
     }
 
   if (!GTK_MENU_SHELL (xgrab_shell)->have_xgrab)
@@ -1519,6 +1556,7 @@ gtk_menu_popup (GtkMenu		    *menu,
       return;
     }
 
+  _gtk_menu_shell_set_grab_devices (GTK_MENU_SHELL (menu), keyboard, pointer);
   menu_shell->active = TRUE;
   menu_shell->button = button;
 
@@ -1614,8 +1652,9 @@ gtk_menu_popup (GtkMenu		    *menu,
   gtk_widget_show (menu->toplevel);
 
   if (xgrab_shell == widget)
-    popup_grab_on_window (widget->window, activate_time, grab_keyboard); /* Should always succeed */
-  gtk_grab_add (GTK_WIDGET (menu));
+    popup_grab_on_window (widget->window, keyboard, pointer, activate_time); /* Should always succeed */
+
+  gtk_device_grab_add (GTK_WIDGET (menu), pointer, TRUE);
 
   if (parent_menu_shell)
     {
@@ -1630,11 +1669,77 @@ gtk_menu_popup (GtkMenu		    *menu,
   _gtk_menu_shell_update_mnemonics (menu_shell);
 }
 
+/**
+ * gtk_menu_popup:
+ * @menu: a #GtkMenu.
+ * @parent_menu_shell: (allow-none): the menu shell containing the triggering menu item, or %NULL
+ * @parent_menu_item: (allow-none): the menu item whose activation triggered the popup, or %NULL
+ * @func: (allow-none): a user supplied function used to position the menu, or %NULL
+ * @data: (allow-none): user supplied data to be passed to @func.
+ * @button: the mouse button which was pressed to initiate the event.
+ * @activate_time: the time at which the activation event occurred.
+ *
+ * Displays a menu and makes it available for selection.  Applications can use
+ * this function to display context-sensitive menus, and will typically supply
+ * %NULL for the @parent_menu_shell, @parent_menu_item, @func and @data 
+ * parameters. The default menu positioning function will position the menu
+ * at the current mouse cursor position.
+ *
+ * The @button parameter should be the mouse button pressed to initiate
+ * the menu popup. If the menu popup was initiated by something other than
+ * a mouse button press, such as a mouse button release or a keypress,
+ * @button should be 0.
+ *
+ * The @activate_time parameter is used to conflict-resolve initiation of
+ * concurrent requests for mouse/keyboard grab requests. To function
+ * properly, this needs to be the time stamp of the user event (such as
+ * a mouse click or key press) that caused the initiation of the popup.
+ * Only if no such event is available, gtk_get_current_event_time() can
+ * be used instead.
+ */
+void
+gtk_menu_popup (GtkMenu		    *menu,
+		GtkWidget	    *parent_menu_shell,
+		GtkWidget	    *parent_menu_item,
+		GtkMenuPositionFunc  func,
+		gpointer	     data,
+		guint		     button,
+		guint32		     activate_time)
+{
+  GdkDevice *device;
+
+  g_return_if_fail (GTK_IS_MENU (menu));
+
+  device = gtk_get_current_event_device ();
+
+  if (!device)
+    {
+      GdkDisplay *display;
+      GdkDeviceManager *device_manager;
+      GList *devices;
+
+      display = gtk_widget_get_display (GTK_WIDGET (menu));
+      device_manager = gdk_display_get_device_manager (display);
+      devices = gdk_device_manager_list_devices (device_manager, GDK_DEVICE_TYPE_MASTER);
+
+      device = devices->data;
+
+      g_list_free (devices);
+    }
+
+  gtk_menu_popup_for_device (menu, device,
+                             parent_menu_shell,
+                             parent_menu_item,
+                             func, data,
+                             button, activate_time);
+}
+
 void
 gtk_menu_popdown (GtkMenu *menu)
 {
   GtkMenuPrivate *private;
   GtkMenuShell *menu_shell;
+  GdkDevice *pointer;
 
   g_return_if_fail (GTK_IS_MENU (menu));
   
@@ -1676,15 +1781,16 @@ gtk_menu_popdown (GtkMenu *menu)
 	} 
       else
 	{
-	  /* We popped up the menu from the tearoff, so we need to 
+          GdkDevice *keyboard, *pointer;
+
+          /* We popped up the menu from the tearoff, so we need to
 	   * release the grab - we aren't actually hiding the menu.
 	   */
-	  if (menu_shell->have_xgrab)
+	  if (menu_shell->have_xgrab &&
+              _gtk_menu_shell_get_grab_devices (menu_shell, &keyboard, &pointer))
 	    {
-	      GdkDisplay *display = gtk_widget_get_display (GTK_WIDGET (menu));
-	      
-	      gdk_display_pointer_ungrab (display, GDK_CURRENT_TIME);
-	      gdk_display_keyboard_ungrab (display, GDK_CURRENT_TIME);
+	      gdk_device_ungrab (keyboard, GDK_CURRENT_TIME);
+	      gdk_device_ungrab (pointer, GDK_CURRENT_TIME);
 	    }
 	}
 
@@ -1700,7 +1806,13 @@ gtk_menu_popdown (GtkMenu *menu)
     gtk_widget_hide (GTK_WIDGET (menu));
 
   menu_shell->have_xgrab = FALSE;
-  gtk_grab_remove (GTK_WIDGET (menu));
+
+  _gtk_menu_shell_get_grab_devices (menu_shell, NULL, &pointer);
+
+  if (pointer)
+    gtk_device_grab_remove (GTK_WIDGET (menu), pointer);
+
+  _gtk_menu_shell_set_grab_devices (menu_shell, NULL, NULL);
 
   menu_grab_transfer_window_destroy (menu);
 }
@@ -3034,7 +3146,7 @@ get_accel_path (GtkWidget *menu_item,
 		{
 		  accel_group = gtk_accel_group_from_accel_closure (accel_closure);
 		  
-		  *locked = accel_group->lock_count > 0;
+		  *locked = gtk_accel_group_get_is_locked (accel_group);
 		}
 	    }
 	}
@@ -3293,6 +3405,7 @@ gtk_menu_motion_notify (GtkWidget      *widget,
 	  send_event->crossing.x = event->x;
 	  send_event->crossing.y = event->y;
           send_event->crossing.state = event->state;
+          gdk_event_set_device (send_event, gdk_event_get_device ((GdkEvent *) event));
 
 	  /* We send the event to 'widget', the currently active menu,
 	   * instead of 'menu', the menu that the pointer is in. This
@@ -3967,14 +4080,17 @@ gtk_menu_stop_navigating_submenu (GtkMenu *menu)
 static gboolean
 gtk_menu_stop_navigating_submenu_cb (gpointer user_data)
 {
-  GtkMenu *menu = user_data;
+  GtkMenuPopdownData *popdown_data = user_data;
+  GtkMenu *menu = popdown_data->menu;
   GdkWindow *child_window;
 
   gtk_menu_stop_navigating_submenu (menu);
   
   if (gtk_widget_get_realized (GTK_WIDGET (menu)))
     {
-      child_window = gdk_window_get_pointer (menu->bin_window, NULL, NULL, NULL);
+      child_window = gdk_window_get_device_position (menu->bin_window,
+                                                     popdown_data->device,
+                                                     NULL, NULL, NULL);
 
       if (child_window)
 	{
@@ -3983,6 +4099,7 @@ gtk_menu_stop_navigating_submenu_cb (gpointer user_data)
 	  send_event->crossing.window = g_object_ref (child_window);
 	  send_event->crossing.time = GDK_CURRENT_TIME; /* Bogus */
 	  send_event->crossing.send_event = TRUE;
+          gdk_event_set_device (send_event, popdown_data->device);
 
 	  GTK_WIDGET_CLASS (gtk_menu_parent_class)->enter_notify_event (GTK_WIDGET (menu), (GdkEventCrossing *)send_event);
 
@@ -4089,6 +4206,7 @@ gtk_menu_set_submenu_navigation_region (GtkMenu          *menu,
   gint height = 0;
   GdkPoint point[3];
   GtkWidget *event_widget;
+  GtkMenuPopdownData *popdown_data;
 
   g_return_if_fail (menu_item->submenu != NULL);
   g_return_if_fail (event != NULL);
@@ -4163,9 +4281,15 @@ gtk_menu_set_submenu_navigation_region (GtkMenu          *menu,
 		    "gtk-menu-popdown-delay", &popdown_delay,
 		    NULL);
 
-      menu->navigation_timeout = gdk_threads_add_timeout (popdown_delay,
-                                                          gtk_menu_stop_navigating_submenu_cb,
-                                                          menu);
+      popdown_data = g_new (GtkMenuPopdownData, 1);
+      popdown_data->menu = menu;
+      popdown_data->device = gdk_event_get_device ((GdkEvent *) event);
+
+      menu->navigation_timeout = gdk_threads_add_timeout_full (G_PRIORITY_DEFAULT,
+                                                               popdown_delay,
+                                                               gtk_menu_stop_navigating_submenu_cb,
+                                                               popdown_data,
+                                                               (GDestroyNotify) g_free);
 
 #ifdef DRAW_STAY_UP_TRIANGLE
       draw_stay_up_triangle (gdk_get_default_root_window(),
@@ -4202,15 +4326,17 @@ gtk_menu_position (GtkMenu *menu)
   GdkScreen *screen;
   GdkScreen *pointer_screen;
   GdkRectangle monitor;
-  
+  GdkDevice *pointer;
+
   g_return_if_fail (GTK_IS_MENU (menu));
 
   widget = GTK_WIDGET (menu);
 
   screen = gtk_widget_get_screen (widget);
-  gdk_display_get_pointer (gdk_screen_get_display (screen),
-			   &pointer_screen, &x, &y, NULL);
-  
+  _gtk_menu_shell_get_grab_devices (GTK_MENU_SHELL (menu), NULL, &pointer);
+  gdk_display_get_device_state (gdk_screen_get_display (screen),
+                                pointer, &pointer_screen, &x, &y, NULL);
+
   /* We need the requisition to figure out the right place to
    * popup the menu. In fact, we always need to ask here, since
    * if a size_request was queued while we weren't popped up,
@@ -5324,16 +5450,24 @@ gtk_menu_grab_notify (GtkWidget *widget,
   GtkWidget *toplevel;
   GtkWindowGroup *group;
   GtkWidget *grab;
+  GdkDevice *pointer;
+
+  _gtk_menu_shell_get_grab_devices (GTK_MENU_SHELL (widget), NULL, &pointer);
+
+  if (!pointer ||
+      !gtk_widget_device_is_shadowed (widget, pointer))
+    return;
 
   toplevel = gtk_widget_get_toplevel (widget);
-  group = gtk_window_get_group (GTK_WINDOW (toplevel));
-  grab = _gtk_window_group_get_current_grab (group); 
 
-  if (!was_grabbed)
-    {
-      if (GTK_MENU_SHELL (widget)->active && !GTK_IS_MENU_SHELL (grab))
-        gtk_menu_shell_cancel (GTK_MENU_SHELL (widget));
-    }
+  if (!GTK_IS_WINDOW (toplevel))
+    return;
+
+  group = gtk_window_get_group (GTK_WINDOW (toplevel));
+  grab = gtk_window_group_get_current_device_grab (group, pointer);
+
+  if (GTK_MENU_SHELL (widget)->active && !GTK_IS_MENU_SHELL (grab))
+    gtk_menu_shell_cancel (GTK_MENU_SHELL (widget));
 }
 
 /**

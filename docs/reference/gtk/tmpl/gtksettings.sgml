@@ -45,6 +45,9 @@ GtkSettings instance for the default screen.
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### STRUCT GtkSettings ##### -->
 <para>
 
@@ -62,6 +65,11 @@ GtkSettings instance for the default screen.
 </para>
 
 <!-- ##### ARG GtkSettings:gtk-alternative-sort-arrows ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkSettings:gtk-application-prefer-dark-theme ##### -->
 <para>
 
 </para>
@@ -394,6 +402,7 @@ GtkSettings instance for the default screen.
 
 </para>
 
+@void: 
 @Returns: 
 
 

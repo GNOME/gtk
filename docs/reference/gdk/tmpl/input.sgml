@@ -34,6 +34,9 @@ callbacks.</para></listitem>
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### FUNCTION gdk_input_add_full ##### -->
 
 
@@ -70,16 +73,6 @@ occurs.
 @data: the user data passed to gdk_input_add() or gdk_input_add_full().
 @source: the source where the condition occurred.
 @condition: the triggering condition.
-
-
-<!-- ##### USER_FUNCTION GdkDestroyNotify ##### -->
-<para>
-A callback function called when a piece of user data is 
-no longer being stored by GDK. Will typically free the
-structure or object that @data points to.
-</para>
-
-@data: the user data.
 
 
 <!-- ##### FUNCTION gdk_input_add ##### -->

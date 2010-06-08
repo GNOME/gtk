@@ -24,12 +24,10 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
  */
 
-#undef GTK_DISABLE_DEPRECATED
 
 #include "config.h"
 #include <stdio.h>
 #include <string.h>
-#define GTK_ENABLE_BROKEN
 #include "gtk/gtk.h"
 
 typedef enum {
@@ -273,6 +271,7 @@ selection_received (GtkWidget *widget, GtkSelectionData *data)
   int i;
   SelType seltype;
   char *str;
+  GtkTextBuffer *buffer;
   
   if (data->length < 0)
     {
@@ -303,10 +302,8 @@ selection_received (GtkWidget *widget, GtkSelectionData *data)
 
   selection_string = g_string_new (NULL);
 
-  gtk_text_freeze (GTK_TEXT (selection_text));
-  gtk_text_set_point (GTK_TEXT (selection_text), 0);
-  gtk_text_forward_delete (GTK_TEXT (selection_text), 
-			   gtk_text_get_length (GTK_TEXT (selection_text)));
+  buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (selection_text));
+  gtk_text_buffer_set_text (buffer, "", -1);
 
   position = 0;
   while (position < data->length)
@@ -344,16 +341,11 @@ selection_received (GtkWidget *widget, GtkSelectionData *data)
 	    continue;
 	  }
 	}
-      gtk_text_insert (GTK_TEXT (selection_text), NULL, 
-		       &selection_text->style->black, 
-		       NULL, str, -1);
-      gtk_text_insert (GTK_TEXT (selection_text), NULL, 
-		       &selection_text->style->black, 
-		       NULL, "\n", -1);
+      gtk_text_buffer_insert_at_cursor (buffer, str, -1);
+      gtk_text_buffer_insert_at_cursor (buffer, "\n", -1);
       g_string_append (selection_string, str);
       g_free (str);
     }
-  gtk_text_thaw (GTK_TEXT (selection_text));
 }
 
 void
@@ -378,7 +370,7 @@ paste (GtkWidget *widget, GtkWidget *entry)
 void
 quit (void)
 {
-  gtk_exit (0);
+  gtk_main_quit ();
 }
 
 int
@@ -389,9 +381,8 @@ main (int argc, char *argv[])
   GtkWidget *table;
   GtkWidget *label;
   GtkWidget *entry;
-  GtkWidget *hscrollbar;
-  GtkWidget *vscrollbar;
   GtkWidget *hbox;
+  GtkWidget *scrolled;
 
   static GtkTargetEntry targetlist[] = {
     { "STRING",        0, STRING },
@@ -442,19 +433,11 @@ main (int argc, char *argv[])
   g_signal_connect (selection_widget, "selection_get",
 		    G_CALLBACK (selection_get), NULL);
 
-  selection_text = gtk_text_new (NULL, NULL);
-  gtk_table_attach_defaults (GTK_TABLE (table), selection_text, 0, 1, 1, 2);
+  selection_text = gtk_text_view_new ();
+  scrolled = gtk_scrolled_window_new (NULL, NULL);
+  gtk_container_add (GTK_CONTAINER (scrolled), selection_text);
+  gtk_table_attach_defaults (GTK_TABLE (table), scrolled, 0, 1, 1, 2);
   gtk_widget_show (selection_text);
-  
-  hscrollbar = gtk_hscrollbar_new (GTK_TEXT (selection_text)->hadj);
-  gtk_table_attach (GTK_TABLE (table), hscrollbar, 0, 1, 2, 3,
-		    GTK_EXPAND | GTK_FILL, GTK_FILL, 0, 0);
-  gtk_widget_show (hscrollbar);
-  
-  vscrollbar = gtk_vscrollbar_new (GTK_TEXT (selection_text)->vadj);
-  gtk_table_attach (GTK_TABLE (table), vscrollbar, 1, 2, 1, 2,
-		    GTK_FILL, GTK_EXPAND | GTK_FILL, 0, 0);
-  gtk_widget_show (vscrollbar);
 
   hbox = gtk_hbox_new (FALSE, 2);
   gtk_table_attach (GTK_TABLE (table), hbox, 0, 2, 3, 4,

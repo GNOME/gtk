@@ -19,7 +19,6 @@
  */
 
 /* need to get the prototypes of all get_type functions */
-#define GTK_ENABLE_BROKEN
 #undef GTK_DISABLE_DEPRECATED
 /* Need to get GDK_WINDOW_OBJECT */
 #undef GDK_DISABLE_DEPRECATED
@@ -34,7 +33,12 @@
 #include <math.h>
 
 
-/* --- test utilities --- */
+/**
+ * SECTION:gtktesting
+ * @Short_description: Utilities for testing GTK+ applications
+ * @Title: Testing
+ */
+
 /**
  * gtk_test_init:
  * @argcp: Address of the <parameter>argc</parameter> parameter of the

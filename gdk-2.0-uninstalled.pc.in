@@ -1,8 +1,0 @@
-target=@gdktarget@
-
-Name: GDK Uninstalled
-Description: GTK+ Drawing Kit (${target} target), Not Installed
-Version: @VERSION@
-Requires: gdk-pixbuf-2.0-uninstalled @GDK_PACKAGES@
-Libs: ${pc_top_builddir}/${pcfiledir}/gdk/libgdk-${target}-@GTK_API_VERSION@.la @GDK_EXTRA_LIBS@
-Cflags: -I${pc_top_builddir}/${pcfiledir}/@srcdir@/gdk -I${pc_top_builddir}/${pcfiledir}/@srcdir@ -I${pc_top_builddir}/${pcfiledir} @GDK_EXTRA_CFLAGS@

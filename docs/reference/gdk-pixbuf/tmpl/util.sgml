@@ -20,6 +20,9 @@ Utility and miscellaneous convenience functions.
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### FUNCTION gdk_pixbuf_add_alpha ##### -->
 <para>
 

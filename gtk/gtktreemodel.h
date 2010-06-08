@@ -17,7 +17,7 @@
  * Boston, MA 02111-1307, USA.
  */
 
-#if defined(GTK_DISABLE_SINGLE_INCLUDES) && !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
+#if !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
 #error "Only <gtk/gtk.h> can be included directly."
 #endif
 
@@ -134,6 +134,10 @@ void         gtk_tree_path_prepend_index    (GtkTreePath       *path,
 					     gint               index_);
 gint         gtk_tree_path_get_depth        (GtkTreePath       *path);
 gint        *gtk_tree_path_get_indices      (GtkTreePath       *path);
+
+gint        *gtk_tree_path_get_indices_with_depth (GtkTreePath *path,
+						   gint        *depth);
+
 void         gtk_tree_path_free             (GtkTreePath       *path);
 GtkTreePath *gtk_tree_path_copy             (const GtkTreePath *path);
 GType        gtk_tree_path_get_type         (void) G_GNUC_CONST;
@@ -148,10 +152,6 @@ gboolean     gtk_tree_path_is_ancestor      (GtkTreePath       *path,
                                              GtkTreePath       *descendant);
 gboolean     gtk_tree_path_is_descendant    (GtkTreePath       *path,
                                              GtkTreePath       *ancestor);
-
-#ifndef GTK_DISABLE_DEPRECATED
-#define gtk_tree_path_new_root() gtk_tree_path_new_first()
-#endif /* !GTK_DISABLE_DEPRECATED */
 
 /* Row reference (an object that tracks model changes so it refers to the same
  * row always; a path refers to a position, not a fixed row).  You almost always
@@ -240,11 +240,6 @@ void              gtk_tree_model_get_valist      (GtkTreeModel *tree_model,
 void              gtk_tree_model_foreach         (GtkTreeModel            *model,
 						  GtkTreeModelForeachFunc  func,
 						  gpointer                 user_data);
-
-
-#ifndef GTK_DISABLE_DEPRECATED
-#define gtk_tree_model_get_iter_root(tree_model, iter) gtk_tree_model_get_iter_first(tree_model, iter)
-#endif /* !GTK_DISABLE_DEPRECATED */
 
 /* Signals */
 void gtk_tree_model_row_changed           (GtkTreeModel *tree_model,

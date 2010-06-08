@@ -29,6 +29,22 @@
 #include "gtkalias.h"
 
 
+/**
+ * SECTION:gtkorientable
+ * @Short_description: An interface for flippable widgets
+ * @Title: GtkOrientable
+ *
+ * The #GtkOrientable interface is implemented by all widgets that can be
+ * oriented horizontally or vertically. Historically, such widgets have been
+ * realized as subclasses of a common base class (e.g #GtkBox/#GtkHBox/#GtkVBox
+ * or #GtkScale/#GtkHScale/#GtkVScale). #GtkOrientable is more flexible in that
+ * it allows the orientation to be changed at runtime, allowing the widgets
+ * to 'flip'.
+ *
+ * #GtkOrientable was introduced in GTK+ 2.16.
+ */
+
+
 typedef GtkOrientableIface GtkOrientableInterface;
 G_DEFINE_INTERFACE (GtkOrientable, gtk_orientable, G_TYPE_OBJECT)
 

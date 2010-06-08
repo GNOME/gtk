@@ -129,11 +129,6 @@ GdkVisual* gdk_x11_screen_lookup_visual (GdkScreen *screen,
 GdkVisual* gdkx_visual_get            (VisualID   xvisualid);
 #endif
 
-#ifdef GDK_ENABLE_BROKEN
-/* XXX: An X Colormap is useless unless we also have the visual. */
-GdkColormap* gdkx_colormap_get (Colormap xcolormap);
-#endif
-
 GdkColormap *gdk_x11_colormap_foreign_new (GdkVisual *visual,
 					   Colormap   xcolormap);
 

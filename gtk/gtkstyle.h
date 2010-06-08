@@ -24,7 +24,7 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
-#if defined(GTK_DISABLE_SINGLE_INCLUDES) && !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
+#if !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
 #error "Only <gtk/gtk.h> can be included directly."
 #endif
 
@@ -68,6 +68,12 @@ typedef gboolean (*GtkRcPropertyParser) (const GParamSpec *pspec,
  */
 typedef struct _GtkWidget      GtkWidget;
 
+/**
+ * GTK_STYLE_ATTACHED:
+ * @style: a #GtkStyle.
+ *
+ * Returns whether the style is attached to a window.
+ */
 #define GTK_STYLE_ATTACHED(style)	(GTK_STYLE (style)->attach_count > 0)
 
 struct _GtkStyle
@@ -234,15 +240,6 @@ struct _GtkStyleClass
 				 gint			 y,
 				 gint			 width,
 				 gint			 height);
-  void (*draw_string)		(GtkStyle		*style,
-				 GdkWindow		*window,
-				 GtkStateType		 state_type,
-				 GdkRectangle		*area,
-				 GtkWidget		*widget,
-				 const gchar		*detail,
-				 gint			 x,
-				 gint			 y,
-				 const gchar		*string);
   void (*draw_box)		(GtkStyle		*style,
 				 GdkWindow		*window,
 				 GtkStateType		 state_type,
@@ -429,6 +426,16 @@ struct _GtkStyleClass
   void (*_gtk_reserved11) (void);
 };
 
+/**
+ * GtkBorder:
+ * @left: The width of the left border.
+ * @right: The width of the right border.
+ * @top: The width of the top border.
+ * @bottom: The width of the bottom border.
+ *
+ * A struct that specifies a border around a rectangular area that can
+ * be of different width on each side.
+ */
 struct _GtkBorder
 {
   gint left;
@@ -443,16 +450,6 @@ GtkStyle* gtk_style_copy		     (GtkStyle	   *style);
 GtkStyle* gtk_style_attach		     (GtkStyle	   *style,
 					      GdkWindow	   *window) G_GNUC_WARN_UNUSED_RESULT;
 void	  gtk_style_detach		     (GtkStyle	   *style);
-
-#ifndef GTK_DISABLE_DEPRECATED
-GtkStyle* gtk_style_ref			     (GtkStyle	   *style);
-void	  gtk_style_unref		     (GtkStyle	   *style);
-
-GdkFont * gtk_style_get_font                 (GtkStyle     *style);
-void      gtk_style_set_font                 (GtkStyle     *style,
-					      GdkFont      *font);
-#endif /* GTK_DISABLE_DEPRECATED */
-
 void	  gtk_style_set_background	     (GtkStyle	   *style,
 					      GdkWindow	   *window,
 					      GtkStateType  state_type);
@@ -479,170 +476,6 @@ GdkPixbuf*  gtk_style_render_icon     (GtkStyle            *style,
                                        GtkIconSize          size,
                                        GtkWidget           *widget,
                                        const gchar         *detail);
-
-#ifndef GTK_DISABLE_DEPRECATED
-void gtk_draw_hline      (GtkStyle        *style,
-			  GdkWindow       *window,
-			  GtkStateType     state_type,
-			  gint             x1,
-			  gint             x2,
-			  gint             y);
-void gtk_draw_vline      (GtkStyle        *style,
-			  GdkWindow       *window,
-			  GtkStateType     state_type,
-			  gint             y1_,
-			  gint             y2_,
-			  gint             x);
-void gtk_draw_shadow     (GtkStyle        *style,
-			  GdkWindow       *window,
-			  GtkStateType     state_type,
-			  GtkShadowType    shadow_type,
-			  gint             x,
-			  gint             y,
-			  gint             width,
-			  gint             height);
-void gtk_draw_polygon    (GtkStyle        *style,
-			  GdkWindow       *window,
-			  GtkStateType     state_type,
-			  GtkShadowType    shadow_type,
-			  GdkPoint        *points,
-			  gint             npoints,
-			  gboolean         fill);
-void gtk_draw_arrow      (GtkStyle        *style,
-			  GdkWindow       *window,
-			  GtkStateType     state_type,
-			  GtkShadowType    shadow_type,
-			  GtkArrowType     arrow_type,
-			  gboolean         fill,
-			  gint             x,
-			  gint             y,
-			  gint             width,
-			  gint             height);
-void gtk_draw_diamond    (GtkStyle        *style,
-			  GdkWindow       *window,
-			  GtkStateType     state_type,
-			  GtkShadowType    shadow_type,
-			  gint             x,
-			  gint             y,
-			  gint             width,
-			  gint             height);
-void gtk_draw_box        (GtkStyle        *style,
-			  GdkWindow       *window,
-			  GtkStateType     state_type,
-			  GtkShadowType    shadow_type,
-			  gint             x,
-			  gint             y,
-			  gint             width,
-			  gint             height);
-void gtk_draw_flat_box   (GtkStyle        *style,
-			  GdkWindow       *window,
-			  GtkStateType     state_type,
-			  GtkShadowType    shadow_type,
-			  gint             x,
-			  gint             y,
-			  gint             width,
-			  gint             height);
-void gtk_draw_check      (GtkStyle        *style,
-			  GdkWindow       *window,
-			  GtkStateType     state_type,
-			  GtkShadowType    shadow_type,
-			  gint             x,
-			  gint             y,
-			  gint             width,
-			  gint             height);
-void gtk_draw_option     (GtkStyle        *style,
-			  GdkWindow       *window,
-			  GtkStateType     state_type,
-			  GtkShadowType    shadow_type,
-			  gint             x,
-			  gint             y,
-			  gint             width,
-			  gint             height);
-void gtk_draw_tab        (GtkStyle        *style,
-			  GdkWindow       *window,
-			  GtkStateType     state_type,
-			  GtkShadowType    shadow_type,
-			  gint             x,
-			  gint             y,
-			  gint             width,
-			  gint             height);
-void gtk_draw_shadow_gap (GtkStyle        *style,
-			  GdkWindow       *window,
-			  GtkStateType     state_type,
-			  GtkShadowType    shadow_type,
-			  gint             x,
-			  gint             y,
-			  gint             width,
-			  gint             height,
-			  GtkPositionType  gap_side,
-			  gint             gap_x,
-			  gint             gap_width);
-void gtk_draw_box_gap    (GtkStyle        *style,
-			  GdkWindow       *window,
-			  GtkStateType     state_type,
-			  GtkShadowType    shadow_type,
-			  gint             x,
-			  gint             y,
-			  gint             width,
-			  gint             height,
-			  GtkPositionType  gap_side,
-			  gint             gap_x,
-			  gint             gap_width);
-void gtk_draw_extension  (GtkStyle        *style,
-			  GdkWindow       *window,
-			  GtkStateType     state_type,
-			  GtkShadowType    shadow_type,
-			  gint             x,
-			  gint             y,
-			  gint             width,
-			  gint             height,
-			  GtkPositionType  gap_side);
-void gtk_draw_focus      (GtkStyle        *style,
-			  GdkWindow       *window,
-			  gint             x,
-			  gint             y,
-			  gint             width,
-			  gint             height);
-void gtk_draw_slider     (GtkStyle        *style,
-			  GdkWindow       *window,
-			  GtkStateType     state_type,
-			  GtkShadowType    shadow_type,
-			  gint             x,
-			  gint             y,
-			  gint             width,
-			  gint             height,
-			  GtkOrientation   orientation);
-void gtk_draw_handle     (GtkStyle        *style,
-			  GdkWindow       *window,
-			  GtkStateType     state_type,
-			  GtkShadowType    shadow_type,
-			  gint             x,
-			  gint             y,
-			  gint             width,
-			  gint             height,
-			  GtkOrientation   orientation);
-void gtk_draw_expander   (GtkStyle        *style,
-                          GdkWindow       *window,
-                          GtkStateType     state_type,
-                          gint             x,
-                          gint             y,
-			  GtkExpanderStyle expander_style);
-void gtk_draw_layout     (GtkStyle        *style,
-                          GdkWindow       *window,
-                          GtkStateType     state_type,
-			  gboolean         use_text,
-                          gint             x,
-                          gint             y,
-                          PangoLayout     *layout);
-void gtk_draw_resize_grip (GtkStyle       *style,
-                           GdkWindow      *window,
-                           GtkStateType    state_type,
-                           GdkWindowEdge   edge,
-                           gint            x,
-                           gint            y,
-                           gint            width,
-                           gint            height);
-#endif /* GTK_DISABLE_DEPRECATED */
 
 void gtk_paint_hline       (GtkStyle           *style,
 			    GdkWindow          *window,
@@ -908,26 +741,6 @@ void          _gtk_style_init_for_settings   (GtkStyle           *style,
 void          _gtk_style_shade               (const GdkColor     *a,
                                               GdkColor           *b,
                                               gdouble             k);
-
-/* deprecated */
-#ifndef GTK_DISABLE_DEPRECATED
-#define gtk_style_apply_default_pixmap(s,gw,st,a,x,y,w,h) gtk_style_apply_default_background (s,gw,1,st,a,x,y,w,h)
-void gtk_draw_string      (GtkStyle           *style,
-			   GdkWindow          *window,
-                           GtkStateType        state_type,
-                           gint                x,
-                           gint                y,
-                           const gchar        *string);
-void gtk_paint_string     (GtkStyle           *style,
-			   GdkWindow          *window,
-			   GtkStateType        state_type,
-			   const GdkRectangle *area,
-			   GtkWidget          *widget,
-			   const gchar        *detail,
-			   gint                x,
-			   gint                y,
-			   const gchar        *string);
-#endif /* GTK_DISABLE_DEPRECATED */
 
 void   gtk_draw_insertion_cursor    (GtkWidget          *widget,
                                      GdkDrawable        *drawable,

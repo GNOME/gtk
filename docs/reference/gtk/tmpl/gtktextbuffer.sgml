@@ -24,6 +24,9 @@ types related to the text widget and how they work together.
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### STRUCT GtkTextBuffer ##### -->
 <para>
 

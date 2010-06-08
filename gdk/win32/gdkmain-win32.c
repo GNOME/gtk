@@ -39,10 +39,11 @@
 #include "gdkinternals.h"
 #include "gdkintl.h"
 #include "gdkprivate-win32.h"
-#include "gdkinput-win32.h"
 
 #include <objbase.h>
 
+#include <windows.h>
+#include <wintab.h>
 #include <imm.h>
 
 static gboolean gdk_synchronize = FALSE;
@@ -149,18 +150,6 @@ _gdk_other_api_failed (const gchar *where,
 		      const gchar *api)
 {
   g_warning ("%s: %s failed", where, api);
-}
-
-void
-gdk_set_use_xshm (gboolean use_xshm)
-{
-  /* Always on */
-}
-
-gboolean
-gdk_get_use_xshm (void)
-{
-  return TRUE;
 }
 
 gint

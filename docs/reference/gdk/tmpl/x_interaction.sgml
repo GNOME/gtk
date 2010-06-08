@@ -17,16 +17,12 @@ X backend-specific functions
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### MACRO GDK_ROOT_WINDOW ##### -->
 <para>
 Obtains the Xlib window id of the root window of the current screen. 
-</para>
-
-
-
-<!-- ##### MACRO GDK_ROOT_PARENT ##### -->
-<para>
-Obtains the Xlib window id of the root window of the default screen.
 </para>
 
 
@@ -250,14 +246,6 @@ Another name for GDK_DRAWABLE_XID().
 </para>
 
 @xvisualid: 
-@Returns: 
-
-
-<!-- ##### FUNCTION gdkx_colormap_get ##### -->
-<para>
-</para>
-
-@xcolormap: 
 @Returns: 
 
 
@@ -657,6 +645,7 @@ Since: 2.2
 
 </para>
 
+@void: 
 @Returns: 
 
 
@@ -665,6 +654,7 @@ Since: 2.2
 
 </para>
 
+@void: 
 @Returns: 
 
 
@@ -673,6 +663,7 @@ Since: 2.2
 
 </para>
 
+@void: 
 @Returns: 
 
 
@@ -681,6 +672,7 @@ Since: 2.2
 
 </para>
 
+@void: 
 
 
 <!-- ##### FUNCTION gdk_x11_image_get_xdisplay ##### -->
@@ -724,6 +716,7 @@ Since: 2.2
 
 </para>
 
+@void: 
 
 
 <!-- ##### FUNCTION gdk_x11_visual_get_xvisual ##### -->

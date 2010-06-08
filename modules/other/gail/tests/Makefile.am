@@ -5,7 +5,7 @@ if PLATFORM_WIN32
 no_undefined = -no-undefined
 endif
 
-moduledir = $(libdir)/gtk-2.0/modules
+moduledir = $(libdir)/gtk-3.0/modules
 
 if !OS_WIN32
 module_LTLIBRARIES = \
@@ -21,7 +21,6 @@ noinst_LTLIBRARIES = 		\
 	libtestnotebook.la	\
 	libtestobject.la	\
 	libtestmenuitem.la	\
-	libtestoptionmenu.la	\
 	libtestpaned.la		\
 	libtestprops.la		\
 	libtestselection.la	\
@@ -146,18 +145,6 @@ libtestobject_la_SOURCES = 	\
 	testobject.c
 
 libtestobject_la_LDFLAGS =		\
-	-rpath $(moduledir) -module -avoid-version $(no_undefined) \
-	$(top_builddir)/gtk/$(gtktargetlib) \
-	$(top_builddir)/gdk/$(gdktargetlib) \
-	$(GTK_DEP_LIBS)	\
-	$(LDFLAGS)
-
-libtestoptionmenu_la_SOURCES = 	\
-	testlib.c		\
-	testlib.h		\
-	testoptionmenu.c
-
-libtestoptionmenu_la_LDFLAGS =	\
 	-rpath $(moduledir) -module -avoid-version $(no_undefined) \
 	$(top_builddir)/gtk/$(gtktargetlib) \
 	$(top_builddir)/gdk/$(gdktargetlib) \

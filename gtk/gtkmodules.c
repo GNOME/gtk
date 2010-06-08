@@ -66,15 +66,15 @@ get_module_path (void)
 
   home_dir = g_get_home_dir();
   if (home_dir)
-    home_gtk_dir = g_build_filename (home_dir, ".gtk-2.0", NULL);
+    home_gtk_dir = g_build_filename (home_dir, ".gtk-3.0", NULL);
 
   module_path_env = g_getenv ("GTK_PATH");
   exe_prefix = g_getenv ("GTK_EXE_PREFIX");
 
   if (exe_prefix)
-    default_dir = g_build_filename (exe_prefix, "lib", "gtk-2.0", NULL);
+    default_dir = g_build_filename (exe_prefix, "lib", "gtk-3.0", NULL);
   else
-    default_dir = g_build_filename (GTK_LIBDIR, "gtk-2.0", NULL);
+    default_dir = g_build_filename (GTK_LIBDIR, "gtk-3.0", NULL);
 
   if (module_path_env && home_gtk_dir)
     module_path = g_build_path (G_SEARCHPATH_SEPARATOR_S,

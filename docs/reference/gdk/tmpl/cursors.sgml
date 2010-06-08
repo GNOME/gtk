@@ -31,12 +31,14 @@ gdk_window_set_cursor() or by setting the cursor member of the
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### STRUCT GdkCursor ##### -->
 <para>
 A <type>GdkCursor</type> structure represents a cursor.
 </para>
 
-@type: the #GdkCursorType of the cursor
 
 <!-- ##### ENUM GdkCursorType ##### -->
 <para>
@@ -212,12 +214,5 @@ The standard cursors available.
 </para>
 
 @cursor: 
-
-
-<!-- ##### MACRO gdk_cursor_destroy ##### -->
-<para>
-Destroys a cursor, freeing any resources allocated for it.
-</para>
-
 
 

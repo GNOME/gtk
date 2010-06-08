@@ -21,8 +21,6 @@
 
 #include <string.h>
 
-#undef GTK_DISABLE_DEPRECATED
-
 #include <gtk/gtk.h>
 #include "gailitem.h"
 #include <libgail-util/gailmisc.h>
@@ -233,13 +231,6 @@ gail_item_get_name (AtkObject *obj)
           if (GTK_IS_MENU (parent))
             {
               attach = gtk_menu_get_attach_widget (GTK_MENU (parent)); 
-
-              if (GTK_IS_OPTION_MENU (attach))
-                {
-                  label = get_label_from_container (attach);
-                  if (GTK_IS_LABEL (label))
-	            return gtk_label_get_text (GTK_LABEL(label));
-                }
               list = gtk_container_get_children (GTK_CONTAINER (parent));
               index = g_list_index (list, widget);
 

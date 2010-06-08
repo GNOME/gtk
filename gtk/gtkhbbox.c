@@ -30,8 +30,6 @@
 #include "gtkintl.h"
 #include "gtkalias.h"
 
-
-static gint default_spacing = 30;
 static gint default_layout_style = GTK_BUTTONBOX_EDGE;
 
 G_DEFINE_TYPE (GtkHButtonBox, gtk_hbutton_box, GTK_TYPE_BUTTON_BOX)
@@ -52,44 +50,6 @@ GtkWidget *
 gtk_hbutton_box_new (void)
 {
   return g_object_new (GTK_TYPE_HBUTTON_BOX, NULL);
-}
-
-
-/* set default value for spacing */
-
-void
-gtk_hbutton_box_set_spacing_default (gint spacing)
-{
-  default_spacing = spacing;
-}
-
-
-/* set default value for layout style */
-
-void
-gtk_hbutton_box_set_layout_default (GtkButtonBoxStyle layout)
-{
-  g_return_if_fail (layout >= GTK_BUTTONBOX_DEFAULT_STYLE &&
-		    layout <= GTK_BUTTONBOX_CENTER);
-
-  default_layout_style = layout;
-}
-
-/* get default value for spacing */
-
-gint
-gtk_hbutton_box_get_spacing_default (void)
-{
-  return default_spacing;
-}
-
-
-/* get default value for layout style */
-
-GtkButtonBoxStyle
-gtk_hbutton_box_get_layout_default (void)
-{
-  return default_layout_style;
 }
 
 GtkButtonBoxStyle

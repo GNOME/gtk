@@ -219,7 +219,7 @@ main (int argc, char **argv)
 
       output_pixbuf (outfile, ext_symbols, argv[i], pixbuf);
       
-      gdk_pixbuf_unref (pixbuf);
+      g_object_unref (pixbuf);
       
       i += 2;
     }

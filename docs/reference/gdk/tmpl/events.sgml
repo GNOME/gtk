@@ -30,6 +30,9 @@ The structs used for each type of event.
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### ENUM GdkEventType ##### -->
 <para>
 Specifies the type of the event.
@@ -165,6 +168,7 @@ is given in the <link linkend="glib-The-Main-Event-Loop">GLib Main Loop</link>.
 <para>
 </para>
 
+@void: 
 @Returns: 
 
 
@@ -172,6 +176,7 @@ is given in the <link linkend="glib-The-Main-Event-Loop">GLib Main Loop</link>.
 <para>
 </para>
 
+@void: 
 @Returns: 
 
 
@@ -179,14 +184,7 @@ is given in the <link linkend="glib-The-Main-Event-Loop">GLib Main Loop</link>.
 <para>
 </para>
 
-@Returns: 
-
-
-<!-- ##### FUNCTION gdk_event_get_graphics_expose ##### -->
-<para>
-</para>
-
-@window: 
+@void: 
 @Returns: 
 
 
@@ -280,6 +278,40 @@ is given in the <link linkend="glib-The-Main-Event-Loop">GLib Main Loop</link>.
 @event: 
 
 
+<!-- ##### FUNCTION gdk_events_get_angle ##### -->
+<para>
+
+</para>
+
+@event1: 
+@event2: 
+@angle: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_events_get_center ##### -->
+<para>
+
+</para>
+
+@event1: 
+@event2: 
+@x: 
+@y: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_events_get_distance ##### -->
+<para>
+
+</para>
+
+@event1: 
+@event2: 
+@distance: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gdk_event_handler_set ##### -->
 <para>
 </para>
@@ -340,6 +372,7 @@ gdk_event_handler_set().
 <para>
 </para>
 
+@void: 
 @Returns: 
 
 
@@ -366,6 +399,24 @@ gdk_event_handler_set().
 
 @event: 
 @Returns: 
+
+
+<!-- ##### FUNCTION gdk_event_get_device ##### -->
+<para>
+
+</para>
+
+@event: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_event_set_device ##### -->
+<para>
+
+</para>
+
+@event: 
+@device: 
 
 
 <!-- ##### FUNCTION gdk_setting_get ##### -->

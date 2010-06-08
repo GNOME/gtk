@@ -33,7 +33,6 @@
 
 #include "gdkpixmap.h"
 #include "gdkinternals.h"
-#include "gdki18n.h"
 #include "gdkwin32.h"
 
 gchar*

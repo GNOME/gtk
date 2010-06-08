@@ -1370,6 +1370,9 @@ _gtk_container_queue_resize (GtkContainer *container)
     {
       GTK_PRIVATE_SET_FLAG (widget, GTK_ALLOC_NEEDED);
       GTK_PRIVATE_SET_FLAG (widget, GTK_REQUEST_NEEDED);
+      GTK_PRIVATE_SET_FLAG (widget, GTK_WIDTH_REQUEST_NEEDED);
+      GTK_PRIVATE_SET_FLAG (widget, GTK_HEIGHT_REQUEST_NEEDED);
+
       if ((resize_container && widget == GTK_WIDGET (resize_container)) ||
 	  !widget->parent)
 	break;
@@ -1525,63 +1528,6 @@ gtk_container_foreach (GtkContainer *container,
 
   if (class->forall)
     class->forall (container, FALSE, callback, callback_data);
-}
-
-typedef struct _GtkForeachData	GtkForeachData;
-struct _GtkForeachData
-{
-  GtkObject         *container;
-  GtkCallbackMarshal callback;
-  gpointer           callback_data;
-};
-
-static void
-gtk_container_foreach_unmarshal (GtkWidget *child,
-				 gpointer data)
-{
-  GtkForeachData *fdata = (GtkForeachData*) data;
-  GtkArg args[2];
-  
-  /* first argument */
-  args[0].name = NULL;
-  args[0].type = G_TYPE_FROM_INSTANCE (child);
-  GTK_VALUE_OBJECT (args[0]) = GTK_OBJECT (child);
-  
-  /* location for return value */
-  args[1].name = NULL;
-  args[1].type = G_TYPE_NONE;
-  
-  fdata->callback (fdata->container, fdata->callback_data, 1, args);
-}
-
-void
-gtk_container_foreach_full (GtkContainer       *container,
-			    GtkCallback         callback,
-			    GtkCallbackMarshal  marshal,
-			    gpointer            callback_data,
-			    GDestroyNotify      notify)
-{
-  g_return_if_fail (GTK_IS_CONTAINER (container));
-
-  if (marshal)
-    {
-      GtkForeachData fdata;
-  
-      fdata.container     = GTK_OBJECT (container);
-      fdata.callback      = marshal;
-      fdata.callback_data = callback_data;
-
-      gtk_container_foreach (container, gtk_container_foreach_unmarshal, &fdata);
-    }
-  else
-    {
-      g_return_if_fail (callback != NULL);
-
-      gtk_container_foreach (container, callback, &callback_data);
-    }
-
-  if (notify)
-    notify (callback_data);
 }
 
 /**

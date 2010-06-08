@@ -33,7 +33,7 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
-#if defined(GTK_DISABLE_SINGLE_INCLUDES) && !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
+#if !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
 #error "Only <gtk/gtk.h> can be included directly."
 #endif
 
@@ -98,14 +98,6 @@ void             gtk_scale_button_set_adjustment   (GtkScaleButton  *button,
 GtkWidget *      gtk_scale_button_get_plus_button  (GtkScaleButton  *button);
 GtkWidget *      gtk_scale_button_get_minus_button (GtkScaleButton  *button);
 GtkWidget *      gtk_scale_button_get_popup        (GtkScaleButton  *button);
-
-#ifndef GTK_DISABLE_DEPRECATED
-
-GtkOrientation   gtk_scale_button_get_orientation  (GtkScaleButton  *button);
-void             gtk_scale_button_set_orientation  (GtkScaleButton  *button,
-                                                    GtkOrientation   orientation);
-
-#endif /* GTK_DISABLE_DEPRECATED */
 
 G_END_DECLS
 

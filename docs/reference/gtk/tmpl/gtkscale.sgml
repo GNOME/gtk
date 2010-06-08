@@ -13,11 +13,6 @@ To set the value of a scale, you would normally use gtk_range_set_value().
 To detect changes to the value, you would normally use the "value_changed"
 signal.
 </para>
-<para>
-The #GtkScale widget is an abstract class, used only for deriving the
-subclasses #GtkHScale and #GtkVScale. To create a scale widget,
-call gtk_hscale_new_with_range() or gtk_vscale_new_with_range().
-</para>
 
 <refsect2 id="GtkScale-BUILDER-UI"><title>GtkScale as GtkBuildable</title>
 <para>
@@ -36,6 +31,9 @@ to show at the mark. It can be translated with the usual "translatable and
 </para>
 
 <!-- ##### SECTION Stability_Level ##### -->
+
+
+<!-- ##### SECTION Image ##### -->
 
 
 <!-- ##### STRUCT GtkScale ##### -->
@@ -78,6 +76,28 @@ the accessor functions.
 <para>
 
 </para>
+
+<!-- ##### FUNCTION gtk_scale_new ##### -->
+<para>
+
+</para>
+
+@orientation: 
+@adjustment: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_scale_new_with_range ##### -->
+<para>
+
+</para>
+
+@orientation: 
+@min: 
+@max: 
+@step: 
+@Returns: 
+
 
 <!-- ##### FUNCTION gtk_scale_set_digits ##### -->
 <para>

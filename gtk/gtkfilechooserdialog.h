@@ -18,7 +18,7 @@
  * Boston, MA 02111-1307, USA.
  */
 
-#if defined(GTK_DISABLE_SINGLE_INCLUDES) && !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
+#if !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
 #error "Only <gtk/gtk.h> can be included directly."
 #endif
 
@@ -59,15 +59,6 @@ GtkWidget *gtk_file_chooser_dialog_new              (const gchar          *title
 						     GtkFileChooserAction  action,
 						     const gchar          *first_button_text,
 						     ...) G_GNUC_NULL_TERMINATED;
-
-#ifndef GTK_DISABLE_DEPRECATED
-GtkWidget *gtk_file_chooser_dialog_new_with_backend (const gchar          *title,
-						     GtkWindow            *parent,
-						     GtkFileChooserAction  action,
-						     const gchar          *backend,
-						     const gchar          *first_button_text,
-						     ...) G_GNUC_NULL_TERMINATED;
-#endif /* GTK_DISABLE_DEPRECATED */
 
 G_END_DECLS
 

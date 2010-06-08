@@ -21,7 +21,7 @@
  * Boston, MA 02111-1307, USA.
  */
 
-#if defined(GTK_DISABLE_SINGLE_INCLUDES) && !defined (__GDK_H_INSIDE__) && !defined (GDK_COMPILATION)
+#if !defined (__GDK_H_INSIDE__) && !defined (GDK_COMPILATION)
 #error "Only <gdk/gdk.h> can be included directly."
 #endif
 
@@ -47,14 +47,14 @@ struct _GdkScreen
 {
   GObject parent_instance;
 
-  guint closed : 1;
+  guint GSEAL (closed) : 1;
 
-  GdkGC *normal_gcs[32];
-  GdkGC *exposure_gcs[32];
-  GdkGC *subwindow_gcs[32];
+  GdkGC *GSEAL (normal_gcs[32]);
+  GdkGC *GSEAL (exposure_gcs[32]);
+  GdkGC *GSEAL (subwindow_gcs[32]);
 
-  cairo_font_options_t *font_options;
-  double resolution;		/* pixels/points scale factor for fonts */
+  cairo_font_options_t *GSEAL (font_options);
+  double GSEAL (resolution);	/* pixels/points scale factor for fonts */
 };
 
 struct _GdkScreenClass

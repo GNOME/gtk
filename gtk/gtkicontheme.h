@@ -17,7 +17,7 @@
  * Boston, MA 02111-1307, USA.
  */
 
-#if defined(GTK_DISABLE_SINGLE_INCLUDES) && !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
+#if !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
 #error "Only <gtk/gtk.h> can be included directly."
 #endif
 
@@ -179,6 +179,13 @@ G_CONST_RETURN gchar *gtk_icon_info_get_filename       (GtkIconInfo   *icon_info
 GdkPixbuf *           gtk_icon_info_get_builtin_pixbuf (GtkIconInfo   *icon_info);
 GdkPixbuf *           gtk_icon_info_load_icon          (GtkIconInfo   *icon_info,
 							GError       **error);
+GdkPixbuf *           gtk_icon_info_load_symbolic      (GtkIconInfo   *icon_info,
+                                                        GdkColor      *fg,
+                                                        GdkColor      *success_color,
+							GdkColor      *warning_color,
+							GdkColor      *error_color,
+							gboolean      *was_symbolic,
+                                                        GError       **error);
 void                  gtk_icon_info_set_raw_coordinates (GtkIconInfo  *icon_info,
 							 gboolean      raw_coordinates);
 

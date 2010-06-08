@@ -386,31 +386,6 @@ gdk_init (int *argc, char ***argv)
     }
 }
 
-/*
- *--------------------------------------------------------------
- * gdk_exit
- *
- *   Restores the library to an un-itialized state and exits
- *   the program using the "exit" system call.
- *
- * Arguments:
- *   "errorcode" is the error value to pass to "exit".
- *
- * Results:
- *   Allocated structures are freed and the program exits
- *   cleanly.
- *
- * Side effects:
- *
- *--------------------------------------------------------------
- */
-
-void
-gdk_exit (gint errorcode)
-{
-  exit (errorcode);
-}
-
 void
 gdk_threads_enter (void)
 {
@@ -810,6 +785,29 @@ gdk_set_program_class (const char *program_class)
   g_free (gdk_progclass);
 
   gdk_progclass = g_strdup (program_class);
+}
+
+/**
+ * gdk_enable_multidevice:
+ *
+ * Enables multidevice support in GDK. This call must happen prior
+ * to gdk_display_open(), gtk_init(), gtk_init_with_args() or
+ * gtk_init_check() in order to take effect.
+ *
+ * Note that individual #GdkWindow<!-- -->s still need to explicitly
+ * enable multidevice awareness through gdk_window_set_support_multidevice().
+ *
+ * This function must be called before initializing GDK.
+ *
+ * Since: 3.0
+ **/
+void
+gdk_enable_multidevice (void)
+{
+  if (gdk_initialized)
+    return;
+
+  _gdk_enable_multidevice = TRUE;
 }
 
 #define __GDK_C__

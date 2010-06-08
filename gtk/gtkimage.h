@@ -24,7 +24,7 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
-#if defined(GTK_DISABLE_SINGLE_INCLUDES) && !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
+#if !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
 #error "Only <gtk/gtk.h> can be included directly."
 #endif
 
@@ -257,17 +257,6 @@ void       gtk_image_get_gicon     (GtkImage              *image,
 				    GIcon                **gicon,
 				    GtkIconSize           *size);
 gint       gtk_image_get_pixel_size (GtkImage             *image);
-
-#ifndef GTK_DISABLE_DEPRECATED
-/* These three are deprecated */
-
-void       gtk_image_set      (GtkImage   *image,
-			       GdkImage   *val,
-			       GdkBitmap  *mask);
-void       gtk_image_get      (GtkImage   *image,
-			       GdkImage  **val,
-			       GdkBitmap **mask);
-#endif /* GTK_DISABLE_DEPRECATED */
 
 G_END_DECLS
 

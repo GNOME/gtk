@@ -24,7 +24,7 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
-#if defined(GTK_DISABLE_SINGLE_INCLUDES) && !defined (__GDK_H_INSIDE__) && !defined (GDK_COMPILATION)
+#if !defined (__GDK_H_INSIDE__) && !defined (GDK_COMPILATION)
 #error "Only <gdk/gdk.h> can be included directly."
 #endif
 
@@ -34,7 +34,7 @@
 #include <gdk/gdkcolor.h>
 #include <gdk/gdktypes.h>
 #include <gdk/gdkdnd.h>
-#include <gdk/gdkinput.h>
+#include <gdk/gdkdevice.h>
 
 G_BEGIN_DECLS
 
@@ -72,10 +72,25 @@ typedef void (*GdkEventFunc) (GdkEvent *event,
 
 /* Event filtering */
 
+/**
+ * GdkXEvent:
+ *
+ * Used to represent native events (<type>XEvent</type>s for the X11
+ * backend, <type>MSG</type>s for Win32).
+ */
 typedef void GdkXEvent;	  /* Can be cast to window system specific
 			   * even type, XEvent on X11, MSG on Win32.
 			   */
 
+/**
+ * GdkFilterReturn:
+ * @GDK_FILTER_CONTINUE: event not handled, continue processing.
+ * @GDK_FILTER_TRANSLATE: native event translated into a GDK event and stored
+ *  in the <literal>event</literal> structure that was passed in.
+ * @GDK_FILTER_REMOVE: event handled, terminate processing.
+ *
+ * Specifies the result of applying a #GdkFilterFunc to a native event.
+ */
 typedef enum {
   GDK_FILTER_CONTINUE,	  /* Event not handled, continue processesing */
   GDK_FILTER_TRANSLATE,	  /* Native event translated into a GDK event and
@@ -84,6 +99,23 @@ typedef enum {
   GDK_FILTER_REMOVE	  /* Terminate processing, removing event */
 } GdkFilterReturn;
 
+/**
+ * GdkFilterFunc:
+ * @xevent: the native event to filter.
+ * @event: the GDK event to which the X event will be translated.
+ * @data: user data set when the filter was installed.
+ *
+ * Specifies the type of function used to filter native events before they are
+ * converted to GDK events.
+ *
+ * When a filter is called, @event is unpopulated, except for
+ * <literal>event->window</literal>. The filter may translate the native
+ * event to a GDK event and store the result in @event, or handle it without
+ * translation. If the filter translates the event and processing should
+ * continue, it should return %GDK_FILTER_TRANSLATE.
+ *
+ * Returns: a #GdkFilterReturn value.
+ */
 typedef GdkFilterReturn (*GdkFilterFunc) (GdkXEvent *xevent,
 					  GdkEvent *event,
 					  gpointer  data);
@@ -154,35 +186,6 @@ typedef enum
   GDK_DAMAGE            = 36,
   GDK_EVENT_LAST        /* helper variable for decls */
 } GdkEventType;
-
-/* Event masks. (Used to select what types of events a window
- *  will receive).
- */
-typedef enum
-{
-  GDK_EXPOSURE_MASK		= 1 << 1,
-  GDK_POINTER_MOTION_MASK	= 1 << 2,
-  GDK_POINTER_MOTION_HINT_MASK	= 1 << 3,
-  GDK_BUTTON_MOTION_MASK	= 1 << 4,
-  GDK_BUTTON1_MOTION_MASK	= 1 << 5,
-  GDK_BUTTON2_MOTION_MASK	= 1 << 6,
-  GDK_BUTTON3_MOTION_MASK	= 1 << 7,
-  GDK_BUTTON_PRESS_MASK		= 1 << 8,
-  GDK_BUTTON_RELEASE_MASK	= 1 << 9,
-  GDK_KEY_PRESS_MASK		= 1 << 10,
-  GDK_KEY_RELEASE_MASK		= 1 << 11,
-  GDK_ENTER_NOTIFY_MASK		= 1 << 12,
-  GDK_LEAVE_NOTIFY_MASK		= 1 << 13,
-  GDK_FOCUS_CHANGE_MASK		= 1 << 14,
-  GDK_STRUCTURE_MASK		= 1 << 15,
-  GDK_PROPERTY_CHANGE_MASK	= 1 << 16,
-  GDK_VISIBILITY_NOTIFY_MASK	= 1 << 17,
-  GDK_PROXIMITY_IN_MASK		= 1 << 18,
-  GDK_PROXIMITY_OUT_MASK	= 1 << 19,
-  GDK_SUBSTRUCTURE_MASK		= 1 << 20,
-  GDK_SCROLL_MASK               = 1 << 21,
-  GDK_ALL_EVENTS_MASK		= 0x3FFFFE
-} GdkEventMask;
 
 typedef enum
 {
@@ -519,9 +522,6 @@ gboolean  gdk_events_pending	 	(void);
 GdkEvent* gdk_event_get			(void);
 
 GdkEvent* gdk_event_peek                (void);
-#ifndef GDK_DISABLE_DEPRECATED
-GdkEvent* gdk_event_get_graphics_expose (GdkWindow 	*window);
-#endif
 void      gdk_event_put	 		(const GdkEvent *event);
 
 GdkEvent* gdk_event_new                 (GdkEventType    type);
@@ -540,7 +540,22 @@ gboolean  gdk_event_get_root_coords	(const GdkEvent  *event,
 gboolean  gdk_event_get_axis            (const GdkEvent  *event,
                                          GdkAxisUse       axis_use,
                                          gdouble         *value);
+void       gdk_event_set_device         (GdkEvent        *event,
+                                         GdkDevice       *device);
+GdkDevice* gdk_event_get_device         (const GdkEvent  *event);
 void      gdk_event_request_motions     (const GdkEventMotion *event);
+
+gboolean  gdk_events_get_distance       (GdkEvent        *event1,
+                                         GdkEvent        *event2,
+                                         gdouble         *distance);
+gboolean  gdk_events_get_angle          (GdkEvent        *event1,
+                                         GdkEvent        *event2,
+                                         gdouble         *angle);
+gboolean  gdk_events_get_center         (GdkEvent        *event1,
+                                         GdkEvent        *event2,
+                                         gdouble         *x,
+                                         gdouble         *y);
+
 void	  gdk_event_handler_set 	(GdkEventFunc    func,
 					 gpointer        data,
 					 GDestroyNotify  notify);

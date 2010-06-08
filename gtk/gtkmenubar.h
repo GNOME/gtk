@@ -24,7 +24,7 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
-#if defined(GTK_DISABLE_SINGLE_INCLUDES) && !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
+#if !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
 #error "Only <gtk/gtk.h> can be included directly."
 #endif
 
@@ -74,12 +74,6 @@ void             gtk_menu_bar_set_pack_direction (GtkMenuBar       *menubar,
 GtkPackDirection gtk_menu_bar_get_child_pack_direction (GtkMenuBar       *menubar);
 void             gtk_menu_bar_set_child_pack_direction (GtkMenuBar       *menubar,
 							GtkPackDirection  child_pack_dir);
-
-#ifndef GTK_DISABLE_DEPRECATED
-#define gtk_menu_bar_append(menu,child)	    gtk_menu_shell_append  ((GtkMenuShell *)(menu),(child))
-#define gtk_menu_bar_prepend(menu,child)    gtk_menu_shell_prepend ((GtkMenuShell *)(menu),(child))
-#define gtk_menu_bar_insert(menu,child,pos) gtk_menu_shell_insert ((GtkMenuShell *)(menu),(child),(pos))
-#endif /* GTK_DISABLE_DEPRECATED */
 
 /* Private functions */
 void _gtk_menu_bar_cycle_focus (GtkMenuBar       *menubar,

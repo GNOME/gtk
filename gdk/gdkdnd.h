@@ -24,7 +24,7 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
-#if defined(GTK_DISABLE_SINGLE_INCLUDES) && !defined (__GDK_H_INSIDE__) && !defined (GDK_COMPILATION)
+#if !defined (__GDK_H_INSIDE__) && !defined (GDK_COMPILATION)
 #error "Only <gdk/gdk.h> can be included directly."
 #endif
 
@@ -32,6 +32,7 @@
 #define __GDK_DND_H__
 
 #include <gdk/gdktypes.h>
+#include <gdk/gdkdevice.h>
 
 G_BEGIN_DECLS
 
@@ -77,29 +78,28 @@ struct _GdkDragContext {
 
   /*< public >*/
   
-  GdkDragProtocol protocol;
-  
-  gboolean is_source;
-  
-  GdkWindow *source_window;
-  GdkWindow *dest_window;
+  GdkDragProtocol GSEAL (protocol);
 
-  GList *targets;
-  GdkDragAction actions;
-  GdkDragAction suggested_action;
-  GdkDragAction action; 
+  gboolean GSEAL (is_source);
+  
+  GdkWindow *GSEAL (source_window);
+  GdkWindow *GSEAL (dest_window);
 
-  guint32 start_time;
+  GList *GSEAL (targets);
+  GdkDragAction GSEAL (actions);
+  GdkDragAction GSEAL (suggested_action);
+  GdkDragAction GSEAL (action);
+
+  guint32 GSEAL (start_time);
 
   /*< private >*/
   
-  gpointer windowing_data;
+  gpointer GSEAL (windowing_data);
 };
 
 struct _GdkDragContextClass {
   GObjectClass parent_class;
 
-  
 };
 
 /* Drag and Drop */
@@ -107,10 +107,14 @@ struct _GdkDragContextClass {
 GType            gdk_drag_context_get_type   (void) G_GNUC_CONST;
 GdkDragContext * gdk_drag_context_new        (void);
 
-#ifndef GDK_DISABLE_DEPRECATED
-void             gdk_drag_context_ref        (GdkDragContext *context);
-void             gdk_drag_context_unref      (GdkDragContext *context);
-#endif
+void             gdk_drag_context_set_device           (GdkDragContext *context,
+                                                        GdkDevice      *device);
+GdkDevice *      gdk_drag_context_get_device           (GdkDragContext *context);
+
+GList           *gdk_drag_context_list_targets         (GdkDragContext *context);
+GdkDragAction    gdk_drag_context_get_actions          (GdkDragContext *context);
+GdkDragAction    gdk_drag_context_get_suggested_action (GdkDragContext *context);
+GdkDragAction    gdk_drag_context_get_selected_action  (GdkDragContext *context);
 
 /* Destination side */
 

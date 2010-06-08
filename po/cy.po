@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-03-22 23:34-0400\n"
+"POT-Creation-Date: 2010-05-25 20:10-0400\n"
 "PO-Revision-Date: 2009-12-24 23:10+0100\n"
 "Last-Translator: Iestyn Pryce <dylunio@gmail.com>\n"
 "Language-Team: Cymraeg <gnome-cy@pengwyn.linux.org.uk>\n"
@@ -78,7 +78,7 @@ msgstr "Pa opsiynau datnamu Gdk i'w gosod"
 #. Placeholder in --gdk-no-debug=FLAGS in --help output
 #. Placeholder in --gtk-debug=FLAGS in --help output
 #. Placeholder in --gtk-no-debug=FLAGS in --help output
-#: gdk/gdk.c:165 gdk/gdk.c:168 gtk/gtkmain.c:459 gtk/gtkmain.c:462
+#: gdk/gdk.c:165 gdk/gdk.c:168 gtk/gtkmain.c:454 gtk/gtkmain.c:457
 msgid "FLAGS"
 msgstr "OPSIYNAU"
 
@@ -388,7 +388,7 @@ msgstr "Dim digon o gof er mwyn cadw delwedd at fyffer"
 msgid "Error writing to image stream"
 msgstr "Gwall wrth ysgrifennu at llif delwedd"
 
-#: gdk-pixbuf/gdk-pixbuf-loader.c:330
+#: gdk-pixbuf/gdk-pixbuf-loader.c:334
 #, c-format
 msgid ""
 "Internal error: Image loader module '%s' failed to complete an operation, "
@@ -397,7 +397,7 @@ msgstr ""
 "Gwall mewnol: fe fethodd y modiwl llwytho delweddau '%s' gwblhau'r weithred, "
 "ond ni ddarparodd reswm am y methiant"
 
-#: gdk-pixbuf/gdk-pixbuf-loader.c:372
+#: gdk-pixbuf/gdk-pixbuf-loader.c:376
 #, c-format
 msgid "Incremental loading of image type '%s' is not supported"
 msgstr "Ni chynhelir llwytho delweddau o'r math '%s' yn gynyddol"
@@ -1207,37 +1207,37 @@ msgid "The WMF image format"
 msgstr "Y fformat delwedd WMF"
 
 #. Description of --sync in --help output
-#: gdk/win32/gdkmain-win32.c:54
+#: gdk/win32/gdkmain-win32.c:55
 msgid "Don't batch GDI requests"
 msgstr "Peidio â thrin ceisiadau GDI fel pentwr"
 
 #. Description of --no-wintab in --help output
-#: gdk/win32/gdkmain-win32.c:56
+#: gdk/win32/gdkmain-win32.c:57
 msgid "Don't use the Wintab API for tablet support"
 msgstr "Peidio â defnyddio API Wintab er mwyn cynnal tabledi"
 
 #. Description of --ignore-wintab in --help output
-#: gdk/win32/gdkmain-win32.c:58
+#: gdk/win32/gdkmain-win32.c:59
 msgid "Same as --no-wintab"
 msgstr "Yr un peth â --no-wintab"
 
 #. Description of --use-wintab in --help output
-#: gdk/win32/gdkmain-win32.c:60
+#: gdk/win32/gdkmain-win32.c:61
 msgid "Do use the Wintab API [default]"
 msgstr "Defnyddio API Wintab [dewis rhagosodedig]"
 
 #. Description of --max-colors=COLORS in --help output
-#: gdk/win32/gdkmain-win32.c:62
+#: gdk/win32/gdkmain-win32.c:63
 msgid "Size of the palette in 8 bit mode"
 msgstr "Maint y paled mewn modd 8-did"
 
 #. Placeholder in --max-colors=COLORS in --help output
-#: gdk/win32/gdkmain-win32.c:63
+#: gdk/win32/gdkmain-win32.c:64
 msgid "COLORS"
 msgstr "LLIWIAU"
 
 #. Description of --sync in --help output
-#: gdk/x11/gdkmain-x11.c:93
+#: gdk/x11/gdkmain-x11.c:95
 msgid "Make X calls synchronous"
 msgstr "Gwneud galwadau X yn gydamserol"
 
@@ -1262,7 +1262,7 @@ msgstr[1] "Agor %d o Eitemau"
 msgid "Could not show link"
 msgstr "Methwyd dangos cyswllt"
 
-#: gtk/gtkaboutdialog.c:365 gtk/gtkaboutdialog.c:2263
+#: gtk/gtkaboutdialog.c:365 gtk/gtkaboutdialog.c:2228
 msgid "License"
 msgstr "Trwydded"
 
@@ -1271,37 +1271,37 @@ msgid "The license of the program"
 msgstr "Trwydded y rhaglen"
 
 #. Add the credits button
-#: gtk/gtkaboutdialog.c:625
+#: gtk/gtkaboutdialog.c:629
 msgid "C_redits"
 msgstr "_Diolchiadau"
 
 #. Add the license button
-#: gtk/gtkaboutdialog.c:639
+#: gtk/gtkaboutdialog.c:643
 msgid "_License"
 msgstr "_Trwydded"
 
-#: gtk/gtkaboutdialog.c:917
+#: gtk/gtkaboutdialog.c:902
 #, c-format
 msgid "About %s"
 msgstr "Ynglyn â %s"
 
-#: gtk/gtkaboutdialog.c:2186
+#: gtk/gtkaboutdialog.c:2145
 msgid "Credits"
 msgstr "Diolchiadau"
 
-#: gtk/gtkaboutdialog.c:2215
+#: gtk/gtkaboutdialog.c:2178
 msgid "Written by"
 msgstr "Ysgrifennwyd gan"
 
-#: gtk/gtkaboutdialog.c:2218
+#: gtk/gtkaboutdialog.c:2181
 msgid "Documented by"
 msgstr "Dogfennwyd gan"
 
-#: gtk/gtkaboutdialog.c:2230
+#: gtk/gtkaboutdialog.c:2193
 msgid "Translated by"
 msgstr "Cyfieithwyd gan"
 
-#: gtk/gtkaboutdialog.c:2234
+#: gtk/gtkaboutdialog.c:2197
 msgid "Artwork by"
 msgstr "Graffeg gan"
 
@@ -1310,7 +1310,7 @@ msgstr "Graffeg gan"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccellabel.c:146
+#: gtk/gtkaccellabel.c:157
 msgctxt "keyboard label"
 msgid "Shift"
 msgstr "Shift"
@@ -1320,7 +1320,7 @@ msgstr "Shift"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccellabel.c:152
+#: gtk/gtkaccellabel.c:163
 msgctxt "keyboard label"
 msgid "Ctrl"
 msgstr "Ctrl"
@@ -1330,7 +1330,7 @@ msgstr "Ctrl"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccellabel.c:158
+#: gtk/gtkaccellabel.c:169
 msgctxt "keyboard label"
 msgid "Alt"
 msgstr "Alt"
@@ -1340,7 +1340,7 @@ msgstr "Alt"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccellabel.c:743
+#: gtk/gtkaccellabel.c:767
 msgctxt "keyboard label"
 msgid "Super"
 msgstr "Super"
@@ -1350,7 +1350,7 @@ msgstr "Super"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccellabel.c:756
+#: gtk/gtkaccellabel.c:780
 msgctxt "keyboard label"
 msgid "Hyper"
 msgstr "Hyper"
@@ -1360,17 +1360,17 @@ msgstr "Hyper"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccellabel.c:770
+#: gtk/gtkaccellabel.c:794
 msgctxt "keyboard label"
 msgid "Meta"
 msgstr "Meta"
 
-#: gtk/gtkaccellabel.c:787
+#: gtk/gtkaccellabel.c:811
 msgctxt "keyboard label"
 msgid "Space"
 msgstr "Gofod"
 
-#: gtk/gtkaccellabel.c:790
+#: gtk/gtkaccellabel.c:814
 msgctxt "keyboard label"
 msgid "Backslash"
 msgstr "Slaes ôl"
@@ -1477,7 +1477,7 @@ msgstr "%Y"
 #. This label is displayed in a treeview cell displaying
 #. * a disabled accelerator key combination.
 #.
-#: gtk/gtkcellrendereraccel.c:244
+#: gtk/gtkcellrendereraccel.c:256
 msgctxt "Accelerator"
 msgid "Disabled"
 msgstr "Analluogwyd"
@@ -1486,7 +1486,7 @@ msgstr "Analluogwyd"
 #. * an accelerator key combination that is not valid according
 #. * to gtk_accelerator_valid().
 #.
-#: gtk/gtkcellrendereraccel.c:254
+#: gtk/gtkcellrendereraccel.c:266
 msgctxt "Accelerator"
 msgid "Invalid"
 msgstr "Annilys"
@@ -1495,7 +1495,7 @@ msgstr "Annilys"
 #. * an accelerator when the cell is clicked to change the
 #. * acelerator.
 #.
-#: gtk/gtkcellrendereraccel.c:389 gtk/gtkcellrendereraccel.c:603
+#: gtk/gtkcellrendereraccel.c:401 gtk/gtkcellrendereraccel.c:652
 msgid "New accelerator..."
 msgstr "Cyflymydd newydd..."
 
@@ -1513,7 +1513,7 @@ msgstr "Dewiswch Liw"
 msgid "Received invalid color data\n"
 msgstr "Derbyniwyd data lliw annilys\n"
 
-#: gtk/gtkcolorsel.c:354
+#: gtk/gtkcolorsel.c:356
 msgid ""
 "Select the color you want from the outer ring. Select the darkness or "
 "lightness of that color using the inner triangle."
@@ -1521,7 +1521,7 @@ msgstr ""
 "Dewiswch y lliw rydych ei eisiau o'r cylch allanol. Dewiswch tywyllwch neu "
 "oleuni y lliw hwnnw gan ddefnyddio'r triongl mewnol."
 
-#: gtk/gtkcolorsel.c:378
+#: gtk/gtkcolorsel.c:380
 msgid ""
 "Click the eyedropper, then click a color anywhere on your screen to select "
 "that color."
@@ -1529,67 +1529,67 @@ msgstr ""
 "Clicwch y dewiswr lliw, yna cliciwch ar liw unrhywle ar eich sgrÃ®n er mwyn "
 "dewis y lliw hwnnw."
 
-#: gtk/gtkcolorsel.c:387
+#: gtk/gtkcolorsel.c:389
 msgid "_Hue:"
 msgstr "_Arlliw:"
 
-#: gtk/gtkcolorsel.c:388
+#: gtk/gtkcolorsel.c:390
 msgid "Position on the color wheel."
 msgstr "Lleoliad ar yr olwyn lliw."
 
-#: gtk/gtkcolorsel.c:390
+#: gtk/gtkcolorsel.c:392
 msgid "_Saturation:"
 msgstr "_Dirlawnder:"
 
-#: gtk/gtkcolorsel.c:391
+#: gtk/gtkcolorsel.c:393
 msgid "\"Deepness\" of the color."
 msgstr "\"Dyfnder\" y lliw."
 
-#: gtk/gtkcolorsel.c:392
+#: gtk/gtkcolorsel.c:394
 msgid "_Value:"
 msgstr "_Gwerth:"
 
-#: gtk/gtkcolorsel.c:393
+#: gtk/gtkcolorsel.c:395
 msgid "Brightness of the color."
 msgstr "Gloywder y lliw."
 
-#: gtk/gtkcolorsel.c:394
+#: gtk/gtkcolorsel.c:396
 msgid "_Red:"
 msgstr "_Coch:"
 
-#: gtk/gtkcolorsel.c:395
+#: gtk/gtkcolorsel.c:397
 msgid "Amount of red light in the color."
 msgstr "Faint o olau coch sydd yn y lliw."
 
-#: gtk/gtkcolorsel.c:396
+#: gtk/gtkcolorsel.c:398
 msgid "_Green:"
 msgstr "G_wyrdd:"
 
-#: gtk/gtkcolorsel.c:397
+#: gtk/gtkcolorsel.c:399
 msgid "Amount of green light in the color."
 msgstr "Faint o olau gwyrdd sydd yn y lliw."
 
-#: gtk/gtkcolorsel.c:398
+#: gtk/gtkcolorsel.c:400
 msgid "_Blue:"
 msgstr "G_las:"
 
-#: gtk/gtkcolorsel.c:399
+#: gtk/gtkcolorsel.c:401
 msgid "Amount of blue light in the color."
 msgstr "Faint o olau glas sydd yn y lliw."
 
-#: gtk/gtkcolorsel.c:402
+#: gtk/gtkcolorsel.c:404
 msgid "Op_acity:"
 msgstr "_Didreiddedd:"
 
-#: gtk/gtkcolorsel.c:409 gtk/gtkcolorsel.c:419
+#: gtk/gtkcolorsel.c:411 gtk/gtkcolorsel.c:421
 msgid "Transparency of the color."
 msgstr "Tryloywder y lliw."
 
-#: gtk/gtkcolorsel.c:426
+#: gtk/gtkcolorsel.c:428
 msgid "Color _name:"
 msgstr "_Enw lliw:"
 
-#: gtk/gtkcolorsel.c:440
+#: gtk/gtkcolorsel.c:442
 msgid ""
 "You can enter an HTML-style hexadecimal color value, or simply a color name "
 "such as 'orange' in this entry."
@@ -1597,15 +1597,15 @@ msgstr ""
 "Fe allwch benodi gwerth lliw hecsadegol, yn yr un modd a defnyddir yn HTML, "
 "new enw lliw megis 'oren' yma."
 
-#: gtk/gtkcolorsel.c:470
+#: gtk/gtkcolorsel.c:472
 msgid "_Palette:"
 msgstr "_Palet:"
 
-#: gtk/gtkcolorsel.c:499
+#: gtk/gtkcolorsel.c:501
 msgid "Color Wheel"
 msgstr "Olwyn Lliw"
 
-#: gtk/gtkcolorsel.c:958
+#: gtk/gtkcolorsel.c:960
 msgid ""
 "The previously-selected color, for comparison to the color you're selecting "
 "now. You can drag this color to a palette entry, or select this color as "
@@ -1615,7 +1615,7 @@ msgstr ""
 "ddewis nawr. Fe allwch lusgo'r lliw yma at gofnod palet, neu dewis y lliw "
 "yma gan ei lusgo at y sampl arall ar ei bwys."
 
-#: gtk/gtkcolorsel.c:961
+#: gtk/gtkcolorsel.c:963
 msgid ""
 "The color you've chosen. You can drag this color to a palette entry to save "
 "it for use in the future."
@@ -1623,21 +1623,21 @@ msgstr ""
 "Y lliw rydych chi wedi ei ddewis. Fe allwch lusgo'r lliw yma at gofnod palet "
 "er mwyn ei gadw fel y gallwch ei ddefnyddio yn y dyfodol."
 
-#: gtk/gtkcolorsel.c:966
+#: gtk/gtkcolorsel.c:968
 msgid ""
 "The previously-selected color, for comparison to the color you're selecting "
 "now."
 msgstr ""
 
-#: gtk/gtkcolorsel.c:969
+#: gtk/gtkcolorsel.c:971
 msgid "The color you've chosen."
 msgstr "Y lliw a ddewisoch."
 
-#: gtk/gtkcolorsel.c:1382
+#: gtk/gtkcolorsel.c:1384
 msgid "_Save color here"
 msgstr "_Cadw'r lliw fan hyn"
 
-#: gtk/gtkcolorsel.c:1587
+#: gtk/gtkcolorsel.c:1589
 msgid ""
 "Click this palette entry to make it the current color. To change this entry, "
 "drag a color swatch here or right-click it and select \"Save color here.\""
@@ -1665,11 +1665,11 @@ msgstr "default:mm"
 msgid "Manage Custom Sizes"
 msgstr "Trefnu Meintiau Addasedig"
 
-#: gtk/gtkcustompaperunixdialog.c:533 gtk/gtkpagesetupunixdialog.c:778
+#: gtk/gtkcustompaperunixdialog.c:533 gtk/gtkpagesetupunixdialog.c:793
 msgid "inch"
 msgstr "modfedd"
 
-#: gtk/gtkcustompaperunixdialog.c:535 gtk/gtkpagesetupunixdialog.c:776
+#: gtk/gtkcustompaperunixdialog.c:535 gtk/gtkpagesetupunixdialog.c:791
 msgid "mm"
 msgstr "mm"
 
@@ -1714,15 +1714,15 @@ msgstr "_De:"
 msgid "Paper Margins"
 msgstr "Ymylon Papur"
 
-#: gtk/gtkentry.c:8698 gtk/gtktextview.c:7881
+#: gtk/gtkentry.c:8612 gtk/gtktextview.c:8002
 msgid "Input _Methods"
 msgstr "Moddau _Mewnbwn"
 
-#: gtk/gtkentry.c:8712 gtk/gtktextview.c:7895
+#: gtk/gtkentry.c:8626 gtk/gtktextview.c:8016
 msgid "_Insert Unicode Control Character"
 msgstr "_Mewnosod Nod Rheoli Unicode"
 
-#: gtk/gtkentry.c:10091
+#: gtk/gtkentry.c:10020
 #, fuzzy
 msgid "Caps Lock is on"
 msgstr "Copïo _Lleoliad"
@@ -1731,7 +1731,7 @@ msgstr "Copïo _Lleoliad"
 msgid "Select A File"
 msgstr "Dewiswch Ffeil"
 
-#: gtk/gtkfilechooserbutton.c:65 gtk/gtkfilechooserdefault.c:1848
+#: gtk/gtkfilechooserbutton.c:65 gtk/gtkfilechooserdefault.c:1839
 msgid "Desktop"
 msgstr "Penbwrdd"
 
@@ -1739,7 +1739,7 @@ msgstr "Penbwrdd"
 msgid "(None)"
 msgstr "(Dim)"
 
-#: gtk/gtkfilechooserbutton.c:2021
+#: gtk/gtkfilechooserbutton.c:2016
 msgid "Other..."
 msgstr "Arall..."
 
@@ -1747,23 +1747,23 @@ msgstr "Arall..."
 msgid "Type name of new folder"
 msgstr "Teipiwch enw'r plygell newydd"
 
-#: gtk/gtkfilechooserdefault.c:974
+#: gtk/gtkfilechooserdefault.c:965
 msgid "Could not retrieve information about the file"
 msgstr "Methwyd cyrchu gwybodaeth ynghylch y ffeil"
 
-#: gtk/gtkfilechooserdefault.c:985
+#: gtk/gtkfilechooserdefault.c:976
 msgid "Could not add a bookmark"
 msgstr "Methwyd ychwanegu llyfrnod"
 
-#: gtk/gtkfilechooserdefault.c:996
+#: gtk/gtkfilechooserdefault.c:987
 msgid "Could not remove bookmark"
 msgstr "Methwyd dileu'r llyfrnod"
 
-#: gtk/gtkfilechooserdefault.c:1007
+#: gtk/gtkfilechooserdefault.c:998
 msgid "The folder could not be created"
 msgstr "Methu creu'r blygell"
 
-#: gtk/gtkfilechooserdefault.c:1020
+#: gtk/gtkfilechooserdefault.c:1011
 msgid ""
 "The folder could not be created, as a file with the same name already "
 "exists.  Try using a different name for the folder, or rename the file first."
@@ -1771,11 +1771,11 @@ msgstr ""
 "Methu creu'r blygell, am fod ffeil â'r un enw yn bodoli eisoes. Ceisiwch roi "
 "enw gwahanol i'r blygell, neu ail-enwi'r ffeil yn gyntaf."
 
-#: gtk/gtkfilechooserdefault.c:1031
+#: gtk/gtkfilechooserdefault.c:1022
 msgid "Invalid file name"
 msgstr "Enw ffeil annilys"
 
-#: gtk/gtkfilechooserdefault.c:1041
+#: gtk/gtkfilechooserdefault.c:1032
 msgid "The folder contents could not be displayed"
 msgstr "Ni fedrwyd dangos cynnwys y blygell"
 
@@ -1783,186 +1783,186 @@ msgstr "Ni fedrwyd dangos cynnwys y blygell"
 #. * is a hostname. Nautilus and the panel contain the same string
 #. * to translate.
 #.
-#: gtk/gtkfilechooserdefault.c:1591
+#: gtk/gtkfilechooserdefault.c:1582
 #, c-format
 msgid "%1$s on %2$s"
 msgstr "%1$s ar %2$s"
 
-#: gtk/gtkfilechooserdefault.c:1767
+#: gtk/gtkfilechooserdefault.c:1758
 msgid "Search"
 msgstr "Chwilio"
 
-#: gtk/gtkfilechooserdefault.c:1791 gtk/gtkfilechooserdefault.c:9462
+#: gtk/gtkfilechooserdefault.c:1782 gtk/gtkfilechooserdefault.c:9454
 msgid "Recently Used"
 msgstr "Defnyddiwyd yn Ddiweddar"
 
-#: gtk/gtkfilechooserdefault.c:2434
+#: gtk/gtkfilechooserdefault.c:2422
 msgid "Select which types of files are shown"
 msgstr "Dewis pa fathau o ffeiliau a ddangosir"
 
-#: gtk/gtkfilechooserdefault.c:2793
+#: gtk/gtkfilechooserdefault.c:2781
 #, c-format
 msgid "Add the folder '%s' to the bookmarks"
 msgstr "Ychwanegu'r blygell '%s' at y llyfrnodau"
 
-#: gtk/gtkfilechooserdefault.c:2837
+#: gtk/gtkfilechooserdefault.c:2825
 #, c-format
 msgid "Add the current folder to the bookmarks"
 msgstr "Ychwanegu'r blygell bresennol at y llyfrnodau"
 
-#: gtk/gtkfilechooserdefault.c:2839
+#: gtk/gtkfilechooserdefault.c:2827
 #, c-format
 msgid "Add the selected folders to the bookmarks"
 msgstr "Ychwanegu'r plygellau sydd wedi eu dewis at y llyfrnodau"
 
-#: gtk/gtkfilechooserdefault.c:2877
+#: gtk/gtkfilechooserdefault.c:2865
 #, c-format
 msgid "Remove the bookmark '%s'"
 msgstr "Tynnu'r llyfrnod '%s'"
 
-#: gtk/gtkfilechooserdefault.c:2879
+#: gtk/gtkfilechooserdefault.c:2867
 #, c-format
 msgid "Bookmark '%s' cannot be removed"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:2886 gtk/gtkfilechooserdefault.c:3910
+#: gtk/gtkfilechooserdefault.c:2874 gtk/gtkfilechooserdefault.c:3898
 msgid "Remove the selected bookmark"
 msgstr "Dileu'r llyfrnod sydd wedi ei ddewis"
 
-#: gtk/gtkfilechooserdefault.c:3606
+#: gtk/gtkfilechooserdefault.c:3594
 msgid "Remove"
 msgstr "Tynnu"
 
-#: gtk/gtkfilechooserdefault.c:3615
+#: gtk/gtkfilechooserdefault.c:3603
 msgid "Rename..."
 msgstr "Ailenwi..."
 
 #. Accessible object name for the file chooser's shortcuts pane
-#: gtk/gtkfilechooserdefault.c:3778
+#: gtk/gtkfilechooserdefault.c:3766
 msgid "Places"
 msgstr "Llefydd"
 
 #. Column header for the file chooser's shortcuts pane
-#: gtk/gtkfilechooserdefault.c:3835
+#: gtk/gtkfilechooserdefault.c:3823
 msgid "_Places"
 msgstr "_Llefydd"
 
-#: gtk/gtkfilechooserdefault.c:3891
+#: gtk/gtkfilechooserdefault.c:3879
 msgid "_Add"
 msgstr "_Ychwanegu"
 
-#: gtk/gtkfilechooserdefault.c:3898
+#: gtk/gtkfilechooserdefault.c:3886
 msgid "Add the selected folder to the Bookmarks"
 msgstr "Ychwanegu'r blygell sydd wedi ei dewis at y Llyfrnodau"
 
-#: gtk/gtkfilechooserdefault.c:3903
+#: gtk/gtkfilechooserdefault.c:3891
 msgid "_Remove"
 msgstr "_Tynnu"
 
-#: gtk/gtkfilechooserdefault.c:4038
+#: gtk/gtkfilechooserdefault.c:4026
 msgid "Could not select file"
 msgstr "Methu dewis ffeil"
 
-#: gtk/gtkfilechooserdefault.c:4213
+#: gtk/gtkfilechooserdefault.c:4201
 msgid "_Add to Bookmarks"
 msgstr "_Ychwanegu at y Llyfrnodau"
 
-#: gtk/gtkfilechooserdefault.c:4226
+#: gtk/gtkfilechooserdefault.c:4214
 msgid "Show _Hidden Files"
 msgstr "Dangos Ffeiliau _Cudd"
 
-#: gtk/gtkfilechooserdefault.c:4233
+#: gtk/gtkfilechooserdefault.c:4221
 msgid "Show _Size Column"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:4453 gtk/gtkfilesel.c:730
+#: gtk/gtkfilechooserdefault.c:4441
 msgid "Files"
 msgstr "Ffeiliau"
 
-#: gtk/gtkfilechooserdefault.c:4504
+#: gtk/gtkfilechooserdefault.c:4492
 msgid "Name"
 msgstr "Enw"
 
-#: gtk/gtkfilechooserdefault.c:4527
+#: gtk/gtkfilechooserdefault.c:4515
 msgid "Size"
 msgstr "Maint"
 
-#: gtk/gtkfilechooserdefault.c:4541
+#: gtk/gtkfilechooserdefault.c:4529
 msgid "Modified"
 msgstr "Wedi newid"
 
 #. Label
-#: gtk/gtkfilechooserdefault.c:4796 gtk/gtkprinteroptionwidget.c:802
+#: gtk/gtkfilechooserdefault.c:4784 gtk/gtkprinteroptionwidget.c:802
 msgid "_Name:"
 msgstr "_Enw:"
 
-#: gtk/gtkfilechooserdefault.c:4839
+#: gtk/gtkfilechooserdefault.c:4827
 msgid "_Browse for other folders"
 msgstr "_Pori am blygellau eraill"
 
-#: gtk/gtkfilechooserdefault.c:5111
+#: gtk/gtkfilechooserdefault.c:5099
 msgid "Type a file name"
 msgstr "Teipiwch enw ffeil"
 
 #. Create Folder
-#: gtk/gtkfilechooserdefault.c:5152
+#: gtk/gtkfilechooserdefault.c:5140
 msgid "Create Fo_lder"
 msgstr "Creu _Plygell"
 
-#: gtk/gtkfilechooserdefault.c:5162
+#: gtk/gtkfilechooserdefault.c:5150
 msgid "_Location:"
 msgstr "_Lleoliad:"
 
-#: gtk/gtkfilechooserdefault.c:5366
+#: gtk/gtkfilechooserdefault.c:5354
 msgid "Save in _folder:"
 msgstr "Cadw mewn _plygell:"
 
-#: gtk/gtkfilechooserdefault.c:5368
+#: gtk/gtkfilechooserdefault.c:5356
 msgid "Create in _folder:"
 msgstr "Creu mewn _plygell:"
 
-#: gtk/gtkfilechooserdefault.c:6435
+#: gtk/gtkfilechooserdefault.c:6419
 #, c-format
 msgid "Could not read the contents of %s"
 msgstr "Methu darllen cynnwys %s"
 
-#: gtk/gtkfilechooserdefault.c:6439
+#: gtk/gtkfilechooserdefault.c:6423
 msgid "Could not read the contents of the folder"
 msgstr "Methu darllen cynnwys y plygell"
 
-#: gtk/gtkfilechooserdefault.c:6532 gtk/gtkfilechooserdefault.c:6600
-#: gtk/gtkfilechooserdefault.c:6745
+#: gtk/gtkfilechooserdefault.c:6516 gtk/gtkfilechooserdefault.c:6584
+#: gtk/gtkfilechooserdefault.c:6729
 msgid "Unknown"
 msgstr "Anhysbys"
 
-#: gtk/gtkfilechooserdefault.c:6547
+#: gtk/gtkfilechooserdefault.c:6531
 msgid "%H:%M"
 msgstr "%H:%M"
 
-#: gtk/gtkfilechooserdefault.c:6549
+#: gtk/gtkfilechooserdefault.c:6533
 msgid "Yesterday at %H:%M"
 msgstr "Ddoe am %H:%M"
 
-#: gtk/gtkfilechooserdefault.c:7215
+#: gtk/gtkfilechooserdefault.c:7199
 msgid "Cannot change to folder because it is not local"
 msgstr "Methwyd newid i'r blygell am nad yw'n lleol"
 
-#: gtk/gtkfilechooserdefault.c:7812 gtk/gtkfilechooserdefault.c:7833
+#: gtk/gtkfilechooserdefault.c:7796 gtk/gtkfilechooserdefault.c:7817
 #, c-format
 msgid "Shortcut %s already exists"
 msgstr "Byrlwybr %s yn bodoli'n barod"
 
-#: gtk/gtkfilechooserdefault.c:7923
+#: gtk/gtkfilechooserdefault.c:7907
 #, c-format
 msgid "Shortcut %s does not exist"
 msgstr "Nid yw'r byrlwybr %s yn bodoli"
 
-#: gtk/gtkfilechooserdefault.c:8178 gtk/gtkprintunixdialog.c:480
+#: gtk/gtkfilechooserdefault.c:8162 gtk/gtkprintunixdialog.c:480
 #, c-format
 msgid "A file named \"%s\" already exists.  Do you want to replace it?"
 msgstr "Mae ffeil o'r enw \"%s\" eisoes yn bodoli. Ydych chi am ei hamnewid?"
 
-#: gtk/gtkfilechooserdefault.c:8181 gtk/gtkprintunixdialog.c:484
+#: gtk/gtkfilechooserdefault.c:8165 gtk/gtkprintunixdialog.c:484
 #, c-format
 msgid ""
 "The file already exists in \"%s\".  Replacing it will overwrite its contents."
@@ -1970,15 +1970,15 @@ msgstr ""
 "Mae'r ffeil eisoes yn bodoli yn \"%s\". Bydd amnewid y ffeil yn "
 "trosysgrifo'i chynnwys."
 
-#: gtk/gtkfilechooserdefault.c:8186 gtk/gtkprintunixdialog.c:491
+#: gtk/gtkfilechooserdefault.c:8170 gtk/gtkprintunixdialog.c:491
 msgid "_Replace"
 msgstr "_Amnewid"
 
-#: gtk/gtkfilechooserdefault.c:8830
+#: gtk/gtkfilechooserdefault.c:8822
 msgid "Could not start the search process"
 msgstr "Methu cychwyn y broses chwilio"
 
-#: gtk/gtkfilechooserdefault.c:8831
+#: gtk/gtkfilechooserdefault.c:8823
 msgid ""
 "The program was not able to create a connection to the indexer daemon.  "
 "Please make sure it is running."
@@ -1986,15 +1986,15 @@ msgstr ""
 "Methodd y rhaglen a chreu cysylltiad â'r ellyll mynegai.  Gwnewch yn siŵr ei "
 "fod yn rhedeg."
 
-#: gtk/gtkfilechooserdefault.c:8845
+#: gtk/gtkfilechooserdefault.c:8837
 msgid "Could not send the search request"
 msgstr "Methu anfon y cais chwilio"
 
-#: gtk/gtkfilechooserdefault.c:9034
+#: gtk/gtkfilechooserdefault.c:9026
 msgid "Search:"
 msgstr "Chwilio:"
 
-#: gtk/gtkfilechooserdefault.c:9638
+#: gtk/gtkfilechooserdefault.c:9630
 #, c-format
 msgid "Could not mount %s"
 msgstr "Methu â gosod %s"
@@ -2056,144 +2056,10 @@ msgstr ""
 msgid "Path does not exist"
 msgstr "Nid yw'r lwybr yn bodoli"
 
-#: gtk/gtkfilechoosersettings.c:487 gtk/gtkfilesel.c:1349
-#: gtk/gtkfilesel.c:1360
+#: gtk/gtkfilechoosersettings.c:487
 #, c-format
 msgid "Error creating folder '%s': %s"
 msgstr "Gwall wrth greu'r plygell '%s': %s"
-
-#: gtk/gtkfilesel.c:694
-msgid "Folders"
-msgstr "Plygellau"
-
-#: gtk/gtkfilesel.c:698
-msgid "Fol_ders"
-msgstr "_Plygellau"
-
-#: gtk/gtkfilesel.c:734
-msgid "_Files"
-msgstr "_Ffeiliau"
-
-#: gtk/gtkfilesel.c:821 gtk/gtkfilesel.c:2154
-#, c-format
-msgid "Folder unreadable: %s"
-msgstr "Plygell annarllenadwy: %s"
-
-#: gtk/gtkfilesel.c:905
-#, c-format
-msgid ""
-"The file \"%s\" resides on another machine (called %s) and may not be "
-"available to this program.\n"
-"Are you sure that you want to select it?"
-msgstr ""
-"Mae'r ffeil \"%s\" ar gyfrifiadur arall (o'r enw %s) ac mae'n bosib nad yw "
-"ar gael i'r rhaglen hwn.\n"
-"Ydych chi'n siwr eich bod chi eisiau ei ddewis?"
-
-#: gtk/gtkfilesel.c:1020
-msgid "_New Folder"
-msgstr "_Plygell Newydd"
-
-#: gtk/gtkfilesel.c:1031
-msgid "De_lete File"
-msgstr "_Dileu Ffeil"
-
-#: gtk/gtkfilesel.c:1042
-msgid "_Rename File"
-msgstr "_Ailenwi Ffeil"
-
-#: gtk/gtkfilesel.c:1347
-#, c-format
-msgid ""
-"The folder name \"%s\" contains symbols that are not allowed in filenames"
-msgstr ""
-"Mae'r enw plygell \"%s\" yn cynnwys symbolau ni chaniateir mewn enwau "
-"ffeiliau"
-
-#: gtk/gtkfilesel.c:1394
-msgid "New Folder"
-msgstr "Plygell Newydd"
-
-#: gtk/gtkfilesel.c:1409
-msgid "_Folder name:"
-msgstr "_Enw'r plygell:"
-
-#: gtk/gtkfilesel.c:1433
-msgid "C_reate"
-msgstr "_Creu"
-
-#: gtk/gtkfilesel.c:1476 gtk/gtkfilesel.c:1585 gtk/gtkfilesel.c:1598
-#, c-format
-msgid "The filename \"%s\" contains symbols that are not allowed in filenames"
-msgstr ""
-"Mae'r enw ffeil \"%s\" yn cynnwys symbolau ni chaniateir mewn enwau ffeiliau"
-
-#: gtk/gtkfilesel.c:1479 gtk/gtkfilesel.c:1491
-#, c-format
-msgid "Error deleting file '%s': %s"
-msgstr "Gwall wrth ddileu'r ffeil '%s': %s"
-
-#: gtk/gtkfilesel.c:1534
-#, c-format
-msgid "Really delete file \"%s\"?"
-msgstr "Dileu'r ffeil \"%s\" go iawn?"
-
-#: gtk/gtkfilesel.c:1539
-msgid "Delete File"
-msgstr "Dileu Ffeil"
-
-#: gtk/gtkfilesel.c:1587
-#, c-format
-msgid "Error renaming file to \"%s\": %s"
-msgstr "Gwall wrth ailenwi ffeil i \"%s\": %s"
-
-#: gtk/gtkfilesel.c:1600
-#, c-format
-msgid "Error renaming file \"%s\": %s"
-msgstr "Gwall ailenwi ffeil \"%s\": %s"
-
-#: gtk/gtkfilesel.c:1611
-#, c-format
-msgid "Error renaming file \"%s\" to \"%s\": %s"
-msgstr "Gwall wrth ailenwi'r ffeil \"%s\" at \"%s\": %s"
-
-#: gtk/gtkfilesel.c:1658
-msgid "Rename File"
-msgstr "Ailenwi Ffeil"
-
-#: gtk/gtkfilesel.c:1673
-#, c-format
-msgid "Rename file \"%s\" to:"
-msgstr "Ailenwi Ffeil \"%s\" i:"
-
-#: gtk/gtkfilesel.c:1702
-msgid "_Rename"
-msgstr "_Ailenwi"
-
-#: gtk/gtkfilesel.c:2134
-msgid "_Selection: "
-msgstr "_Dewis: "
-
-#: gtk/gtkfilesel.c:3056
-#, c-format
-msgid ""
-"The filename \"%s\" couldn't be converted to UTF-8. (try setting the "
-"environment variable G_FILENAME_ENCODING): %s"
-msgstr ""
-"Ni ellwyd trosi'r enw ffeil \"%s\" i UTF-8 (ceisiwch osod y newidyn "
-"amgylchol G_FILENAME_ENCODING): %s"
-
-#: gtk/gtkfilesel.c:3059
-msgid "Invalid UTF-8"
-msgstr "UTF-8 Annilys"
-
-#: gtk/gtkfilesel.c:3935
-msgid "Name too long"
-msgstr "Mae'r enw yn rhy hir"
-
-#: gtk/gtkfilesel.c:3937
-msgid "Couldn't convert filename"
-msgstr "Methu trawsnewid enw y ffeil"
 
 #. The pointers we return for a GtkFileSystemVolume are opaque tokens; they are
 #. * really pointers to GDrive, GVolume or GMount objects.  We need an extra
@@ -2240,22 +2106,14 @@ msgstr "_Maint:"
 msgid "_Preview:"
 msgstr "_Rhagolwg:"
 
-#: gtk/gtkfontsel.c:1649
+#: gtk/gtkfontsel.c:1631
 msgid "Font Selection"
 msgstr "Dewis Ffont"
-
-#: gtk/gtkgamma.c:410
-msgid "Gamma"
-msgstr "Gamma"
-
-#: gtk/gtkgamma.c:420
-msgid "_Gamma value"
-msgstr "_Gwerth Gamma"
 
 #. Remove this icon source so we don't keep trying to
 #. * load it.
 #.
-#: gtk/gtkiconfactory.c:1401
+#: gtk/gtkiconfactory.c:1400
 #, c-format
 msgid "Error loading icon: %s"
 msgstr "Gwall wrth lwytho eicon: %s"
@@ -2303,92 +2161,13 @@ msgctxt "input method menu"
 msgid "System (%s)"
 msgstr "System (%s)"
 
-#: gtk/gtkinputdialog.c:192
-msgid "Input"
-msgstr "Mewnbwn"
-
-#: gtk/gtkinputdialog.c:207
-msgid "No extended input devices"
-msgstr "Dim dyfeisiau mewnbwn estynedig"
-
-#: gtk/gtkinputdialog.c:220
-msgid "_Device:"
-msgstr "_Dyfais:"
-
-#: gtk/gtkinputdialog.c:237
-msgid "Disabled"
-msgstr "Analluogwyd"
-
-#: gtk/gtkinputdialog.c:244
-msgid "Screen"
-msgstr "Sgrin"
-
-#: gtk/gtkinputdialog.c:251
-msgid "Window"
-msgstr "Ffenestr"
-
-#: gtk/gtkinputdialog.c:258
-msgid "_Mode:"
-msgstr "_Modd:"
-
-#. The axis listbox
-#: gtk/gtkinputdialog.c:279
-msgid "Axes"
-msgstr "Echelinau"
-
-#. Keys listbox
-#: gtk/gtkinputdialog.c:297
-msgid "Keys"
-msgstr "Bysellau"
-
-#: gtk/gtkinputdialog.c:524
-msgid "_X:"
-msgstr "_X:"
-
-#: gtk/gtkinputdialog.c:525
-msgid "_Y:"
-msgstr "_Y:"
-
-#: gtk/gtkinputdialog.c:526
-msgid "_Pressure:"
-msgstr "_Pwysedd:"
-
-#: gtk/gtkinputdialog.c:527
-msgid "X _tilt:"
-msgstr "_Osgo X:"
-
-#: gtk/gtkinputdialog.c:528
-msgid "Y t_ilt:"
-msgstr "O_sgo Y:"
-
-#: gtk/gtkinputdialog.c:529
-msgid "_Wheel:"
-msgstr "_Olwyn:"
-
-#: gtk/gtkinputdialog.c:581
-msgid "none"
-msgstr "dim"
-
-#: gtk/gtkinputdialog.c:618 gtk/gtkinputdialog.c:654
-msgid "(disabled)"
-msgstr "(analluogwyd)"
-
-#: gtk/gtkinputdialog.c:647
-msgid "(unknown)"
-msgstr "(anhysbys)"
-
-#. and clear button
-#: gtk/gtkinputdialog.c:751
-msgid "Cl_ear"
-msgstr "_Clirio"
-
 #. Open Link
-#: gtk/gtklabel.c:5685
+#: gtk/gtklabel.c:6076
 msgid "_Open Link"
 msgstr "_Agor y Cyswllt"
 
 #. Copy Link Address
-#: gtk/gtklabel.c:5697
+#: gtk/gtklabel.c:6088
 msgid "Copy _Link Address"
 msgstr "Copïo Cyfeiriad Cysw_llt"
 
@@ -2401,27 +2180,27 @@ msgid "Invalid URI"
 msgstr "URI annilys"
 
 #. Description of --gtk-module=MODULES in --help output
-#: gtk/gtkmain.c:452
+#: gtk/gtkmain.c:447
 msgid "Load additional GTK+ modules"
 msgstr "Llwytho modylau GTK+ ychwanegol"
 
 #. Placeholder in --gtk-module=MODULES in --help output
-#: gtk/gtkmain.c:453
+#: gtk/gtkmain.c:448
 msgid "MODULES"
 msgstr "MODYLAU"
 
 #. Description of --g-fatal-warnings in --help output
-#: gtk/gtkmain.c:455
+#: gtk/gtkmain.c:450
 msgid "Make all warnings fatal"
 msgstr "Gwneud pob gwall yn farwol"
 
 #. Description of --gtk-debug=FLAGS in --help output
-#: gtk/gtkmain.c:458
+#: gtk/gtkmain.c:453
 msgid "GTK+ debugging flags to set"
 msgstr "Opsiynau datnamu GTK+ i'w gosod"
 
 #. Description of --gtk-no-debug=FLAGS in --help output
-#: gtk/gtkmain.c:461
+#: gtk/gtkmain.c:456
 msgid "GTK+ debugging flags to unset"
 msgstr "Opsiynau datnamu GTK+ i'w dadosod"
 
@@ -2430,20 +2209,20 @@ msgstr "Opsiynau datnamu GTK+ i'w dadosod"
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
 #.
-#: gtk/gtkmain.c:713
+#: gtk/gtkmain.c:708
 msgid "default:LTR"
 msgstr "default:LTR"
 
-#: gtk/gtkmain.c:778
+#: gtk/gtkmain.c:773
 #, c-format
 msgid "Cannot open display: %s"
 msgstr ""
 
-#: gtk/gtkmain.c:815
+#: gtk/gtkmain.c:810
 msgid "GTK+ Options"
 msgstr "Opsiynau GTK+"
 
-#: gtk/gtkmain.c:815
+#: gtk/gtkmain.c:810
 msgid "Show GTK+ Options"
 msgstr "Dangos Opsiynau GTK+"
 
@@ -2532,28 +2311,28 @@ msgstr "Cragen Z"
 msgid "Cannot end process with pid %d: %s"
 msgstr ""
 
-#: gtk/gtknotebook.c:4704 gtk/gtknotebook.c:7269
+#: gtk/gtknotebook.c:4621 gtk/gtknotebook.c:7050
 #, c-format
 msgid "Page %u"
 msgstr "Tudalen %u"
 
-#: gtk/gtkpagesetup.c:597 gtk/gtkpapersize.c:825 gtk/gtkpapersize.c:867
+#: gtk/gtkpagesetup.c:597 gtk/gtkpapersize.c:826 gtk/gtkpapersize.c:868
 msgid "Not a valid page setup file"
 msgstr ""
 
-#: gtk/gtkpagesetupunixdialog.c:167
+#: gtk/gtkpagesetupunixdialog.c:182
 #, fuzzy
 msgid "Any Printer"
 msgstr "Argraffydd"
 
-#: gtk/gtkpagesetupunixdialog.c:167
+#: gtk/gtkpagesetupunixdialog.c:182
 #, fuzzy
 msgid "For portable documents"
 msgstr ""
 "<b>Unrhyw Argraffydd</b>\n"
 "Ar gyfer dogfennau cludadwy"
 
-#: gtk/gtkpagesetupunixdialog.c:797
+#: gtk/gtkpagesetupunixdialog.c:812
 #, c-format
 msgid ""
 "Margins:\n"
@@ -2568,23 +2347,23 @@ msgstr ""
 " Top: %s %s\n"
 " Gwaelod: %s %s"
 
-#: gtk/gtkpagesetupunixdialog.c:846 gtk/gtkprintunixdialog.c:3277
+#: gtk/gtkpagesetupunixdialog.c:861 gtk/gtkprintunixdialog.c:3277
 msgid "Manage Custom Sizes..."
 msgstr "Trefnu Meintiau Addasedig..."
 
-#: gtk/gtkpagesetupunixdialog.c:894
+#: gtk/gtkpagesetupunixdialog.c:909
 msgid "_Format for:"
 msgstr "_Ffurf ar gyfer:"
 
-#: gtk/gtkpagesetupunixdialog.c:916 gtk/gtkprintunixdialog.c:3449
+#: gtk/gtkpagesetupunixdialog.c:931 gtk/gtkprintunixdialog.c:3449
 msgid "_Paper size:"
 msgstr "Maint _papur:"
 
-#: gtk/gtkpagesetupunixdialog.c:947
+#: gtk/gtkpagesetupunixdialog.c:962
 msgid "_Orientation:"
 msgstr "_Gogwydd:"
 
-#: gtk/gtkpagesetupunixdialog.c:1011 gtk/gtkprintunixdialog.c:3511
+#: gtk/gtkpagesetupunixdialog.c:1026 gtk/gtkprintunixdialog.c:3511
 msgid "Page Setup"
 msgstr "Gosodiad Tudalen"
 
@@ -2596,7 +2375,7 @@ msgstr "I Fyny'r Llwybr"
 msgid "Down Path"
 msgstr "I Lawr y Llwybr"
 
-#: gtk/gtkpathbar.c:1469
+#: gtk/gtkpathbar.c:1480
 msgid "File System Root"
 msgstr "Gwraidd System Ffeiliau"
 
@@ -2608,6 +2387,11 @@ msgstr "Rhaglen"
 #: gtk/gtkprinteroptionwidget.c:695
 msgid "Not available"
 msgstr "Ddim ar gael"
+
+#: gtk/gtkprinteroptionwidget.c:795
+#, fuzzy
+msgid "Select a folder"
+msgstr "Dewiswch Ffeil"
 
 #: gtk/gtkprinteroptionwidget.c:814
 msgid "_Save in folder:"
@@ -2717,7 +2501,7 @@ msgstr "Allan o bapur"
 
 #. Translators: this is a printer status.
 #: gtk/gtkprintoperation-win32.c:616
-#: modules/printbackends/cups/gtkprintbackendcups.c:1997
+#: modules/printbackends/cups/gtkprintbackendcups.c:1999
 msgid "Paused"
 msgstr "Wedi seibio"
 
@@ -2846,42 +2630,42 @@ msgstr "Cyffredinol"
 #. * multiple pages on a sheet when printing
 #.
 #: gtk/gtkprintunixdialog.c:3010
-#: modules/printbackends/cups/gtkprintbackendcups.c:3505
+#: modules/printbackends/cups/gtkprintbackendcups.c:3509
 msgid "Left to right, top to bottom"
 msgstr ""
 
 #: gtk/gtkprintunixdialog.c:3010
-#: modules/printbackends/cups/gtkprintbackendcups.c:3505
+#: modules/printbackends/cups/gtkprintbackendcups.c:3509
 msgid "Left to right, bottom to top"
 msgstr ""
 
 #: gtk/gtkprintunixdialog.c:3011
-#: modules/printbackends/cups/gtkprintbackendcups.c:3506
+#: modules/printbackends/cups/gtkprintbackendcups.c:3510
 msgid "Right to left, top to bottom"
 msgstr ""
 
 #: gtk/gtkprintunixdialog.c:3011
-#: modules/printbackends/cups/gtkprintbackendcups.c:3506
+#: modules/printbackends/cups/gtkprintbackendcups.c:3510
 msgid "Right to left, bottom to top"
 msgstr ""
 
 #: gtk/gtkprintunixdialog.c:3012
-#: modules/printbackends/cups/gtkprintbackendcups.c:3507
+#: modules/printbackends/cups/gtkprintbackendcups.c:3511
 msgid "Top to bottom, left to right"
 msgstr ""
 
 #: gtk/gtkprintunixdialog.c:3012
-#: modules/printbackends/cups/gtkprintbackendcups.c:3507
+#: modules/printbackends/cups/gtkprintbackendcups.c:3511
 msgid "Top to bottom, right to left"
 msgstr ""
 
 #: gtk/gtkprintunixdialog.c:3013
-#: modules/printbackends/cups/gtkprintbackendcups.c:3508
+#: modules/printbackends/cups/gtkprintbackendcups.c:3512
 msgid "Bottom to top, left to right"
 msgstr ""
 
 #: gtk/gtkprintunixdialog.c:3013
-#: modules/printbackends/cups/gtkprintbackendcups.c:3508
+#: modules/printbackends/cups/gtkprintbackendcups.c:3512
 msgid "Bottom to top, right to left"
 msgstr ""
 
@@ -2889,7 +2673,7 @@ msgstr ""
 #. * dialog that controls in what order multiple pages are arranged
 #.
 #: gtk/gtkprintunixdialog.c:3017 gtk/gtkprintunixdialog.c:3030
-#: modules/printbackends/cups/gtkprintbackendcups.c:3540
+#: modules/printbackends/cups/gtkprintbackendcups.c:3544
 #, fuzzy
 msgid "Page Ordering"
 msgstr "Wrthi'n paratoi"
@@ -3092,18 +2876,18 @@ msgstr "Mae rhai o'r gosodiadau o fewn y ddeialog yn gwrthdaro"
 msgid "Print"
 msgstr "Argraffu"
 
-#: gtk/gtkrc.c:2878
+#: gtk/gtkrc.c:2839
 #, c-format
 msgid "Unable to find include file: \"%s\""
 msgstr "Methu canfod ffeil cynnwys: \"%s\""
 
-#: gtk/gtkrc.c:3508 gtk/gtkrc.c:3511
+#: gtk/gtkrc.c:3469 gtk/gtkrc.c:3472
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "Methu canfod ffeil delwedd yn pixmap_path: \"%s\""
 
-#: gtk/gtkrecentaction.c:154 gtk/gtkrecentaction.c:162
-#: gtk/gtkrecentchoosermenu.c:588 gtk/gtkrecentchoosermenu.c:596
+#: gtk/gtkrecentaction.c:171 gtk/gtkrecentaction.c:179
+#: gtk/gtkrecentchoosermenu.c:616 gtk/gtkrecentchoosermenu.c:624
 #, c-format
 msgid "This function is not implemented for widgets of class '%s'"
 msgstr "Nid yw'r swyddogaeth hon ar gael i declynnau o'r dosbarth '%s'"
@@ -3155,21 +2939,21 @@ msgstr "Dangos Adnoddau _Preifat"
 #. * user appended or prepended custom menu items to the
 #. * recent chooser menu widget.
 #.
-#: gtk/gtkrecentchoosermenu.c:342
+#: gtk/gtkrecentchoosermenu.c:370
 msgid "No items found"
 msgstr "Dim eitemau wedi'u canfod"
 
-#: gtk/gtkrecentchoosermenu.c:508 gtk/gtkrecentchoosermenu.c:564
+#: gtk/gtkrecentchoosermenu.c:536 gtk/gtkrecentchoosermenu.c:592
 #, c-format
 msgid "No recently used resource found with URI `%s'"
 msgstr "Heb ddefnyddio adnodd yn ddiweddar â'r URI `%s'"
 
-#: gtk/gtkrecentchoosermenu.c:775
+#: gtk/gtkrecentchoosermenu.c:803
 #, c-format
 msgid "Open '%s'"
 msgstr "Agor '%s'"
 
-#: gtk/gtkrecentchoosermenu.c:805
+#: gtk/gtkrecentchoosermenu.c:833
 msgid "Unknown item"
 msgstr "Eitem anhysbys"
 
@@ -3178,7 +2962,7 @@ msgstr "Eitem anhysbys"
 #. * the %s is the name of the item. Please keep the _ in front
 #. * of the number to give these menu items a mnemonic.
 #.
-#: gtk/gtkrecentchoosermenu.c:816
+#: gtk/gtkrecentchoosermenu.c:844
 #, c-format
 msgctxt "recent menu label"
 msgid "_%d. %s"
@@ -3187,16 +2971,16 @@ msgstr "_%d. %s"
 #. This is the format that is used for items in a recent files menu.
 #. * The %d is the number of the item, the %s is the name of the item.
 #.
-#: gtk/gtkrecentchoosermenu.c:821
+#: gtk/gtkrecentchoosermenu.c:849
 #, fuzzy, c-format
 msgctxt "recent menu label"
 msgid "%d. %s"
 msgstr "%d. %s"
 
-#: gtk/gtkrecentmanager.c:1020 gtk/gtkrecentmanager.c:1033
-#: gtk/gtkrecentmanager.c:1171 gtk/gtkrecentmanager.c:1181
-#: gtk/gtkrecentmanager.c:1234 gtk/gtkrecentmanager.c:1243
-#: gtk/gtkrecentmanager.c:1258
+#: gtk/gtkrecentmanager.c:968 gtk/gtkrecentmanager.c:981
+#: gtk/gtkrecentmanager.c:1119 gtk/gtkrecentmanager.c:1129
+#: gtk/gtkrecentmanager.c:1182 gtk/gtkrecentmanager.c:1191
+#: gtk/gtkrecentmanager.c:1206
 #, c-format
 msgid "Unable to find an item with URI '%s'"
 msgstr "Methu canfod eitem gyda'r URI '%s'"
@@ -3882,10 +3666,6 @@ msgstr "ZWNJ _Nid-ymunydd lled sero"
 msgid "Unable to locate theme engine in module_path: \"%s\","
 msgstr "Methu canfod peiriant thema yn module_path: \"%s\","
 
-#: gtk/gtktipsquery.c:188
-msgid "--- No Tip ---"
-msgstr "--- Dim Cyngor ---"
-
 #: gtk/gtkuimanager.c:1505
 #, c-format
 msgid "Unexpected start tag '%s' on line %d char %d"
@@ -3900,39 +3680,39 @@ msgstr "Data nod annisgwyl ar linell %d nod %d"
 msgid "Empty"
 msgstr "Gwag"
 
-#: gtk/gtkvolumebutton.c:73
+#: gtk/gtkvolumebutton.c:83
 msgid "Volume"
 msgstr "Lefel Sain"
 
-#: gtk/gtkvolumebutton.c:75
+#: gtk/gtkvolumebutton.c:85
 msgid "Turns volume down or up"
 msgstr ""
 
-#: gtk/gtkvolumebutton.c:78
+#: gtk/gtkvolumebutton.c:88
 msgid "Adjusts the volume"
 msgstr ""
 
-#: gtk/gtkvolumebutton.c:81 gtk/gtkvolumebutton.c:84
+#: gtk/gtkvolumebutton.c:91 gtk/gtkvolumebutton.c:94
 msgid "Volume Down"
 msgstr "Lefel Sain i Lawr"
 
-#: gtk/gtkvolumebutton.c:83
+#: gtk/gtkvolumebutton.c:93
 msgid "Decreases the volume"
 msgstr ""
 
-#: gtk/gtkvolumebutton.c:87 gtk/gtkvolumebutton.c:90
+#: gtk/gtkvolumebutton.c:97 gtk/gtkvolumebutton.c:100
 msgid "Volume Up"
 msgstr "Lefel Sain i Fyny"
 
-#: gtk/gtkvolumebutton.c:89
+#: gtk/gtkvolumebutton.c:99
 msgid "Increases the volume"
 msgstr ""
 
-#: gtk/gtkvolumebutton.c:147
+#: gtk/gtkvolumebutton.c:157
 msgid "Muted"
 msgstr "Wedi'i Fudo"
 
-#: gtk/gtkvolumebutton.c:151
+#: gtk/gtkvolumebutton.c:161
 msgid "Full Volume"
 msgstr ""
 
@@ -3941,7 +3721,7 @@ msgstr ""
 #. * Translate the "%d" to "%Id" if you want to use localised digits,
 #. * or otherwise translate the "%d" to "%d".
 #.
-#: gtk/gtkvolumebutton.c:164
+#: gtk/gtkvolumebutton.c:174
 #, c-format
 msgctxt "volume percentage"
 msgid "%d %%"
@@ -4935,264 +4715,264 @@ msgstr "Fietnameg (VIQR)"
 msgid "X Input Method"
 msgstr "Modd Mewnbwn X"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:809
-#: modules/printbackends/cups/gtkprintbackendcups.c:1018
+#: modules/printbackends/cups/gtkprintbackendcups.c:811
+#: modules/printbackends/cups/gtkprintbackendcups.c:1020
 #, fuzzy
 msgid "Username:"
 msgstr "_Ailenwi"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:810
-#: modules/printbackends/cups/gtkprintbackendcups.c:1027
+#: modules/printbackends/cups/gtkprintbackendcups.c:812
+#: modules/printbackends/cups/gtkprintbackendcups.c:1029
 #, fuzzy
 msgid "Password:"
 msgstr "_Pwysedd:"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:848
+#: modules/printbackends/cups/gtkprintbackendcups.c:850
 #, c-format
 msgid "Authentication is required to get a file from %s"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:852
-#: modules/printbackends/cups/gtkprintbackendcups.c:1040
+#: modules/printbackends/cups/gtkprintbackendcups.c:854
+#: modules/printbackends/cups/gtkprintbackendcups.c:1042
 #, c-format
 msgid "Authentication is required to print document '%s' on printer %s"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:854
+#: modules/printbackends/cups/gtkprintbackendcups.c:856
 #, c-format
 msgid "Authentication is required to print a document on %s"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:858
+#: modules/printbackends/cups/gtkprintbackendcups.c:860
 #, c-format
 msgid "Authentication is required to get attributes of job '%s'"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:860
+#: modules/printbackends/cups/gtkprintbackendcups.c:862
 msgid "Authentication is required to get attributes of a job"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:864
+#: modules/printbackends/cups/gtkprintbackendcups.c:866
 #, c-format
 msgid "Authentication is required to get attributes of printer %s"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:866
+#: modules/printbackends/cups/gtkprintbackendcups.c:868
 msgid "Authentication is required to get attributes of a printer"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:869
+#: modules/printbackends/cups/gtkprintbackendcups.c:871
 #, c-format
 msgid "Authentication is required to get default printer of %s"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:872
+#: modules/printbackends/cups/gtkprintbackendcups.c:874
 #, c-format
 msgid "Authentication is required to get printers from %s"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:875
+#: modules/printbackends/cups/gtkprintbackendcups.c:877
 #, c-format
 msgid "Authentication is required on %s"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1012
+#: modules/printbackends/cups/gtkprintbackendcups.c:1014
 #, fuzzy
 msgid "Domain:"
 msgstr "_Lleoliad:"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1042
+#: modules/printbackends/cups/gtkprintbackendcups.c:1044
 #, c-format
 msgid "Authentication is required to print document '%s'"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1047
+#: modules/printbackends/cups/gtkprintbackendcups.c:1049
 #, c-format
 msgid "Authentication is required to print this document on printer %s"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1049
+#: modules/printbackends/cups/gtkprintbackendcups.c:1051
 msgid "Authentication is required to print this document"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1670
+#: modules/printbackends/cups/gtkprintbackendcups.c:1672
 #, c-format
 msgid "Printer '%s' is low on toner."
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1671
+#: modules/printbackends/cups/gtkprintbackendcups.c:1673
 #, c-format
 msgid "Printer '%s' has no toner left."
 msgstr ""
 
 #. Translators: "Developer" like on photo development context
-#: modules/printbackends/cups/gtkprintbackendcups.c:1673
+#: modules/printbackends/cups/gtkprintbackendcups.c:1675
 #, c-format
 msgid "Printer '%s' is low on developer."
 msgstr ""
 
 #. Translators: "Developer" like on photo development context
-#: modules/printbackends/cups/gtkprintbackendcups.c:1675
+#: modules/printbackends/cups/gtkprintbackendcups.c:1677
 #, c-format
 msgid "Printer '%s' is out of developer."
 msgstr ""
 
 #. Translators: "marker" is one color bin of the printer
-#: modules/printbackends/cups/gtkprintbackendcups.c:1677
+#: modules/printbackends/cups/gtkprintbackendcups.c:1679
 #, c-format
 msgid "Printer '%s' is low on at least one marker supply."
 msgstr ""
 
 #. Translators: "marker" is one color bin of the printer
-#: modules/printbackends/cups/gtkprintbackendcups.c:1679
+#: modules/printbackends/cups/gtkprintbackendcups.c:1681
 #, c-format
 msgid "Printer '%s' is out of at least one marker supply."
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1680
+#: modules/printbackends/cups/gtkprintbackendcups.c:1682
 #, c-format
 msgid "The cover is open on printer '%s'."
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1681
+#: modules/printbackends/cups/gtkprintbackendcups.c:1683
 #, c-format
 msgid "The door is open on printer '%s'."
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1682
+#: modules/printbackends/cups/gtkprintbackendcups.c:1684
 #, c-format
 msgid "Printer '%s' is low on paper."
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1683
+#: modules/printbackends/cups/gtkprintbackendcups.c:1685
 #, c-format
 msgid "Printer '%s' is out of paper."
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1684
+#: modules/printbackends/cups/gtkprintbackendcups.c:1686
 #, fuzzy, c-format
 msgid "Printer '%s' is currently off-line."
 msgstr "Argraffydd ddim ar-lein"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1685
+#: modules/printbackends/cups/gtkprintbackendcups.c:1687
 #, c-format
 msgid "Printer '%s' may not be connected."
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1686
+#: modules/printbackends/cups/gtkprintbackendcups.c:1688
 #, c-format
 msgid "There is a problem on printer '%s'."
 msgstr ""
 
 #. Translators: this is a printer status.
-#: modules/printbackends/cups/gtkprintbackendcups.c:1994
+#: modules/printbackends/cups/gtkprintbackendcups.c:1996
 msgid "Paused ; Rejecting Jobs"
 msgstr ""
 
 #. Translators: this is a printer status.
-#: modules/printbackends/cups/gtkprintbackendcups.c:2000
+#: modules/printbackends/cups/gtkprintbackendcups.c:2002
 msgid "Rejecting Jobs"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2774
+#: modules/printbackends/cups/gtkprintbackendcups.c:2778
 msgid "Two Sided"
 msgstr "Dwy Ochr"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2775
+#: modules/printbackends/cups/gtkprintbackendcups.c:2779
 msgid "Paper Type"
 msgstr "Math y Papur"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2776
+#: modules/printbackends/cups/gtkprintbackendcups.c:2780
 msgid "Paper Source"
 msgstr "Ffynhonnell y Papur"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2777
+#: modules/printbackends/cups/gtkprintbackendcups.c:2781
 msgid "Output Tray"
 msgstr "Lleoliad Terfynol y Papur"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2778
+#: modules/printbackends/cups/gtkprintbackendcups.c:2782
 #, fuzzy
 msgid "Resolution"
 msgstr "Cwestiwn"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2779
+#: modules/printbackends/cups/gtkprintbackendcups.c:2783
 msgid "GhostScript pre-filtering"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2788
+#: modules/printbackends/cups/gtkprintbackendcups.c:2792
 msgid "One Sided"
 msgstr "Un Ochr"
 
 #. Translators: this is an option of "Two Sided"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2790
+#: modules/printbackends/cups/gtkprintbackendcups.c:2794
 msgid "Long Edge (Standard)"
 msgstr ""
 
 #. Translators: this is an option of "Two Sided"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2792
+#: modules/printbackends/cups/gtkprintbackendcups.c:2796
 msgid "Short Edge (Flip)"
 msgstr ""
 
 #. Translators: this is an option of "Paper Source"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2794
-#: modules/printbackends/cups/gtkprintbackendcups.c:2796
-#: modules/printbackends/cups/gtkprintbackendcups.c:2804
+#: modules/printbackends/cups/gtkprintbackendcups.c:2798
+#: modules/printbackends/cups/gtkprintbackendcups.c:2800
+#: modules/printbackends/cups/gtkprintbackendcups.c:2808
 msgid "Auto Select"
 msgstr "Dewis yn Awtomatig"
 
 #. Translators: this is an option of "Paper Source"
 #. Translators: this is an option of "Resolution"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2798
-#: modules/printbackends/cups/gtkprintbackendcups.c:2800
 #: modules/printbackends/cups/gtkprintbackendcups.c:2802
+#: modules/printbackends/cups/gtkprintbackendcups.c:2804
 #: modules/printbackends/cups/gtkprintbackendcups.c:2806
-#: modules/printbackends/cups/gtkprintbackendcups.c:3292
+#: modules/printbackends/cups/gtkprintbackendcups.c:2810
+#: modules/printbackends/cups/gtkprintbackendcups.c:3296
 msgid "Printer Default"
 msgstr "Rhagosodiad yr Argraffydd"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2808
+#: modules/printbackends/cups/gtkprintbackendcups.c:2812
 msgid "Embed GhostScript fonts only"
 msgstr ""
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2810
+#: modules/printbackends/cups/gtkprintbackendcups.c:2814
 msgid "Convert to PS level 1"
 msgstr ""
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2812
+#: modules/printbackends/cups/gtkprintbackendcups.c:2816
 msgid "Convert to PS level 2"
 msgstr ""
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2814
+#: modules/printbackends/cups/gtkprintbackendcups.c:2818
 #, fuzzy
 msgid "No pre-filtering"
 msgstr "Dim eitemau wedi'u canfod"
 
 #. Translators: "Miscellaneous" is the label for a button, that opens
 #. up an extra panel of settings in a print dialog.
-#: modules/printbackends/cups/gtkprintbackendcups.c:2823
+#: modules/printbackends/cups/gtkprintbackendcups.c:2827
 msgid "Miscellaneous"
 msgstr ""
 
 #. Translators: These strings name the possible values of the
 #. * job priority option in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3500
+#: modules/printbackends/cups/gtkprintbackendcups.c:3504
 msgid "Urgent"
 msgstr "Pwysig"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3500
+#: modules/printbackends/cups/gtkprintbackendcups.c:3504
 msgid "High"
 msgstr "Uchel"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3500
+#: modules/printbackends/cups/gtkprintbackendcups.c:3504
 msgid "Medium"
 msgstr "Canolig"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3500
+#: modules/printbackends/cups/gtkprintbackendcups.c:3504
 msgid "Low"
 msgstr "Isel"
 
@@ -5200,7 +4980,7 @@ msgstr "Isel"
 #. Translators, this string is used to label the pages-per-sheet option
 #. * in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3524
+#: modules/printbackends/cups/gtkprintbackendcups.c:3528
 #, fuzzy
 msgid "Pages per Sheet"
 msgstr "Nifer o Dudalennau'r Ddalen"
@@ -5208,7 +4988,7 @@ msgstr "Nifer o Dudalennau'r Ddalen"
 #. Translators, this string is used to label the job priority option
 #. * in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3561
+#: modules/printbackends/cups/gtkprintbackendcups.c:3565
 #, fuzzy
 msgid "Job Priority"
 msgstr "_Blaenoriaeth:"
@@ -5216,7 +4996,7 @@ msgstr "_Blaenoriaeth:"
 #. Translators, this string is used to label the billing info entry
 #. * in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3572
+#: modules/printbackends/cups/gtkprintbackendcups.c:3576
 #, fuzzy
 msgid "Billing Info"
 msgstr "_Gwybodaeth bilio:"
@@ -5224,38 +5004,38 @@ msgstr "_Gwybodaeth bilio:"
 #. Translators, these strings are names for various 'standard' cover
 #. * pages that the printing system may support.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3587
+#: modules/printbackends/cups/gtkprintbackendcups.c:3591
 msgid "None"
 msgstr "Dim"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3587
+#: modules/printbackends/cups/gtkprintbackendcups.c:3591
 msgid "Classified"
 msgstr "Dosbarthol"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3587
+#: modules/printbackends/cups/gtkprintbackendcups.c:3591
 msgid "Confidential"
 msgstr "Cyfrinachol"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3587
+#: modules/printbackends/cups/gtkprintbackendcups.c:3591
 msgid "Secret"
 msgstr "Cyfrinach"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3587
+#: modules/printbackends/cups/gtkprintbackendcups.c:3591
 msgid "Standard"
 msgstr "Arferol"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3587
+#: modules/printbackends/cups/gtkprintbackendcups.c:3591
 msgid "Top Secret"
 msgstr "Cyfrinachol Iawn"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3587
+#: modules/printbackends/cups/gtkprintbackendcups.c:3591
 msgid "Unclassified"
 msgstr "Di-ddosbarth"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the front cover page.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3622
+#: modules/printbackends/cups/gtkprintbackendcups.c:3626
 #, fuzzy
 msgid "Before"
 msgstr "_Cyn:"
@@ -5263,7 +5043,7 @@ msgstr "_Cyn:"
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the back cover page.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3637
+#: modules/printbackends/cups/gtkprintbackendcups.c:3641
 #, fuzzy
 msgid "After"
 msgstr "_Ar ôl:"
@@ -5272,7 +5052,7 @@ msgstr "_Ar ôl:"
 #. * a print job is printed. Possible values are 'now', a specified time,
 #. * or 'on hold'
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3657
+#: modules/printbackends/cups/gtkprintbackendcups.c:3661
 #, fuzzy
 msgid "Print at"
 msgstr "Argraffu"
@@ -5280,7 +5060,7 @@ msgstr "Argraffu"
 #. Translators: this is the name of the option that allows the user
 #. * to specify a time when a print job will be printed.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3668
+#: modules/printbackends/cups/gtkprintbackendcups.c:3672
 #, fuzzy
 msgid "Print at time"
 msgstr "Argraffu i Ffeil"
@@ -5289,7 +5069,7 @@ msgstr "Argraffu i Ffeil"
 #. * size. The two placeholders are replaced with the width and height
 #. * in points. E.g: "Custom 230.4x142.9"
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3703
+#: modules/printbackends/cups/gtkprintbackendcups.c:3707
 #, fuzzy, c-format
 msgid "Custom %sx%s"
 msgstr "Addasedig %.2fx%.2f"
@@ -5384,6 +5164,169 @@ msgstr "Argraffu ar Argraffydd Prawf"
 #, c-format
 msgid "Could not get information for file '%s': %s"
 msgstr "Methwyd cyrchu gwybodaeth ar gyfer y ffeil '%s': %s"
+
+#~ msgid "Folders"
+#~ msgstr "Plygellau"
+
+#~ msgid "Fol_ders"
+#~ msgstr "_Plygellau"
+
+#~ msgid "_Files"
+#~ msgstr "_Ffeiliau"
+
+#~ msgid "Folder unreadable: %s"
+#~ msgstr "Plygell annarllenadwy: %s"
+
+#~ msgid ""
+#~ "The file \"%s\" resides on another machine (called %s) and may not be "
+#~ "available to this program.\n"
+#~ "Are you sure that you want to select it?"
+#~ msgstr ""
+#~ "Mae'r ffeil \"%s\" ar gyfrifiadur arall (o'r enw %s) ac mae'n bosib nad "
+#~ "yw ar gael i'r rhaglen hwn.\n"
+#~ "Ydych chi'n siwr eich bod chi eisiau ei ddewis?"
+
+#~ msgid "_New Folder"
+#~ msgstr "_Plygell Newydd"
+
+#~ msgid "De_lete File"
+#~ msgstr "_Dileu Ffeil"
+
+#~ msgid "_Rename File"
+#~ msgstr "_Ailenwi Ffeil"
+
+#~ msgid ""
+#~ "The folder name \"%s\" contains symbols that are not allowed in filenames"
+#~ msgstr ""
+#~ "Mae'r enw plygell \"%s\" yn cynnwys symbolau ni chaniateir mewn enwau "
+#~ "ffeiliau"
+
+#~ msgid "New Folder"
+#~ msgstr "Plygell Newydd"
+
+#~ msgid "_Folder name:"
+#~ msgstr "_Enw'r plygell:"
+
+#~ msgid "C_reate"
+#~ msgstr "_Creu"
+
+#~ msgid ""
+#~ "The filename \"%s\" contains symbols that are not allowed in filenames"
+#~ msgstr ""
+#~ "Mae'r enw ffeil \"%s\" yn cynnwys symbolau ni chaniateir mewn enwau "
+#~ "ffeiliau"
+
+#~ msgid "Error deleting file '%s': %s"
+#~ msgstr "Gwall wrth ddileu'r ffeil '%s': %s"
+
+#~ msgid "Really delete file \"%s\"?"
+#~ msgstr "Dileu'r ffeil \"%s\" go iawn?"
+
+#~ msgid "Delete File"
+#~ msgstr "Dileu Ffeil"
+
+#~ msgid "Error renaming file to \"%s\": %s"
+#~ msgstr "Gwall wrth ailenwi ffeil i \"%s\": %s"
+
+#~ msgid "Error renaming file \"%s\": %s"
+#~ msgstr "Gwall ailenwi ffeil \"%s\": %s"
+
+#~ msgid "Error renaming file \"%s\" to \"%s\": %s"
+#~ msgstr "Gwall wrth ailenwi'r ffeil \"%s\" at \"%s\": %s"
+
+#~ msgid "Rename File"
+#~ msgstr "Ailenwi Ffeil"
+
+#~ msgid "Rename file \"%s\" to:"
+#~ msgstr "Ailenwi Ffeil \"%s\" i:"
+
+#~ msgid "_Rename"
+#~ msgstr "_Ailenwi"
+
+#~ msgid "_Selection: "
+#~ msgstr "_Dewis: "
+
+#~ msgid ""
+#~ "The filename \"%s\" couldn't be converted to UTF-8. (try setting the "
+#~ "environment variable G_FILENAME_ENCODING): %s"
+#~ msgstr ""
+#~ "Ni ellwyd trosi'r enw ffeil \"%s\" i UTF-8 (ceisiwch osod y newidyn "
+#~ "amgylchol G_FILENAME_ENCODING): %s"
+
+#~ msgid "Invalid UTF-8"
+#~ msgstr "UTF-8 Annilys"
+
+#~ msgid "Name too long"
+#~ msgstr "Mae'r enw yn rhy hir"
+
+#~ msgid "Couldn't convert filename"
+#~ msgstr "Methu trawsnewid enw y ffeil"
+
+#~ msgid "Gamma"
+#~ msgstr "Gamma"
+
+#~ msgid "_Gamma value"
+#~ msgstr "_Gwerth Gamma"
+
+#~ msgid "Input"
+#~ msgstr "Mewnbwn"
+
+#~ msgid "No extended input devices"
+#~ msgstr "Dim dyfeisiau mewnbwn estynedig"
+
+#~ msgid "_Device:"
+#~ msgstr "_Dyfais:"
+
+#~ msgid "Disabled"
+#~ msgstr "Analluogwyd"
+
+#~ msgid "Screen"
+#~ msgstr "Sgrin"
+
+#~ msgid "Window"
+#~ msgstr "Ffenestr"
+
+#~ msgid "_Mode:"
+#~ msgstr "_Modd:"
+
+#~ msgid "Axes"
+#~ msgstr "Echelinau"
+
+#~ msgid "Keys"
+#~ msgstr "Bysellau"
+
+#~ msgid "_X:"
+#~ msgstr "_X:"
+
+#~ msgid "_Y:"
+#~ msgstr "_Y:"
+
+#~ msgid "_Pressure:"
+#~ msgstr "_Pwysedd:"
+
+#~ msgid "X _tilt:"
+#~ msgstr "_Osgo X:"
+
+#~ msgid "Y t_ilt:"
+#~ msgstr "O_sgo Y:"
+
+#~ msgid "_Wheel:"
+#~ msgstr "_Olwyn:"
+
+#~ msgid "none"
+#~ msgstr "dim"
+
+#~ msgid "(disabled)"
+#~ msgstr "(analluogwyd)"
+
+#~ msgid "(unknown)"
+#~ msgstr "(anhysbys)"
+
+#~ msgid "Cl_ear"
+#~ msgstr "_Clirio"
+
+#~ msgid "--- No Tip ---"
+#~ msgstr "--- Dim Cyngor ---"
 
 #~ msgid "(Empty)"
 #~ msgstr "(Gwag)"

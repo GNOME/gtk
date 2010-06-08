@@ -272,7 +272,6 @@ gtk_file_chooser_dialog_constructor (GType                  type,
 
   if (priv->file_system)
     priv->widget = g_object_new (GTK_TYPE_FILE_CHOOSER_WIDGET,
-				 "file-system-backend", priv->file_system,
 				 NULL);
   else
     priv->widget = g_object_new (GTK_TYPE_FILE_CHOOSER_WIDGET, NULL);
@@ -308,10 +307,6 @@ gtk_file_chooser_dialog_set_property (GObject         *object,
 
   switch (prop_id)
     {
-    case GTK_FILE_CHOOSER_PROP_FILE_SYSTEM_BACKEND:
-      g_free (priv->file_system);
-      priv->file_system = g_value_dup_string (value);
-      break;
     default:
       g_object_set_property (G_OBJECT (priv->widget), pspec->name, value);
       break;
@@ -408,7 +403,6 @@ static GtkWidget *
 gtk_file_chooser_dialog_new_valist (const gchar          *title,
 				    GtkWindow            *parent,
 				    GtkFileChooserAction  action,
-				    const gchar          *backend,
 				    const gchar          *first_button_text,
 				    va_list               varargs)
 {
@@ -461,46 +455,7 @@ gtk_file_chooser_dialog_new (const gchar         *title,
   
   va_start (varargs, first_button_text);
   result = gtk_file_chooser_dialog_new_valist (title, parent, action,
-					       NULL, first_button_text,
-					       varargs);
-  va_end (varargs);
-
-  return result;
-}
-
-/**
- * gtk_file_chooser_dialog_new_with_backend:
- * @title: (allow-none): Title of the dialog, or %NULL
- * @parent: (allow-none): Transient parent of the dialog, or %NULL
- * @action: Open or save mode for the dialog
- * @backend: The name of the specific filesystem backend to use.
- * @first_button_text: (allow-none): stock ID or text to go in the first button, or %NULL
- * @Varargs: response ID for the first button, then additional (button, id) pairs, ending with %NULL
- *
- * Creates a new #GtkFileChooserDialog with a specified backend. This is
- * especially useful if you use gtk_file_chooser_set_local_only() to allow
- * non-local files and you use a more expressive vfs, such as gnome-vfs,
- * to load files.
- *
- * Return value: a new #GtkFileChooserDialog
- *
- * Since: 2.4
- * Deprecated: 2.14: Use gtk_file_chooser_dialog_new() instead.
- **/
-GtkWidget *
-gtk_file_chooser_dialog_new_with_backend (const gchar          *title,
-					  GtkWindow            *parent,
-					  GtkFileChooserAction  action,
-					  const gchar          *backend,
-					  const gchar          *first_button_text,
-					  ...)
-{
-  GtkWidget *result;
-  va_list varargs;
-  
-  va_start (varargs, first_button_text);
-  result = gtk_file_chooser_dialog_new_valist (title, parent, action,
-					       backend, first_button_text,
+					       first_button_text,
 					       varargs);
   va_end (varargs);
 

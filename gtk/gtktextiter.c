@@ -34,6 +34,18 @@
 #include "gtkalias.h"
 #include <string.h>
 
+
+/**
+ * SECTION:gtktextiter
+ * @Short_description: Text buffer iterator
+ * @Title: GtkTextIter
+ *
+ * You may wish to begin by reading the <link linkend="TextWidget">text widget
+ * conceptual overview</link> which gives an overview of all the objects and data
+ * types related to the text widget and how they work together.
+ */
+
+
 #define FIX_OVERFLOWS(varname) if ((varname) == G_MININT) (varname) = G_MININT + 1
 
 typedef struct _GtkTextRealIter GtkTextRealIter;

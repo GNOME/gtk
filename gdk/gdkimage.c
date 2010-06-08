@@ -35,71 +35,6 @@
 #include "gdkalias.h"
 
 /**
- * gdk_image_ref:
- * @image: a #GdkImage
- *
- * Deprecated function; use g_object_ref() instead.
- * 
- * Return value: the image
- *
- * Deprecated: 2.0: Use g_object_ref() instead.
- **/
-GdkImage *
-gdk_image_ref (GdkImage *image)
-{
-  g_return_val_if_fail (GDK_IS_IMAGE (image), NULL);
-
-  return g_object_ref (image);
-}
-
-/**
- * gdk_image_unref:
- * @image: a #GdkImage
- *
- * Deprecated function; use g_object_unref() instead.
- *
- * Deprecated: 2.0: Use g_object_unref() instead.
- **/
-void
-gdk_image_unref (GdkImage *image)
-{
-  g_return_if_fail (GDK_IS_IMAGE (image));
-
-  g_object_unref (image);
-}
-
-/**
- * gdk_image_get:
- * @drawable: a #GdkDrawable
- * @x: x coordinate in @window
- * @y: y coordinate in @window
- * @width: width of area in @window
- * @height: height of area in @window
- * 
- * This is a deprecated wrapper for gdk_drawable_get_image();
- * gdk_drawable_get_image() should be used instead. Or even better: in
- * most cases gdk_pixbuf_get_from_drawable() is the most convenient
- * choice.
- * 
- * Return value: a new #GdkImage or %NULL
- **/
-GdkImage*
-gdk_image_get (GdkWindow *drawable,
-	       gint       x,
-	       gint       y,
-	       gint       width,
-	       gint       height)
-{
-  g_return_val_if_fail (GDK_IS_DRAWABLE (drawable), NULL);
-  g_return_val_if_fail (x >= 0, NULL);
-  g_return_val_if_fail (y >= 0, NULL);
-  g_return_val_if_fail (width >= 0, NULL);
-  g_return_val_if_fail (height >= 0, NULL);
-  
-  return gdk_drawable_get_image (drawable, x, y, width, height);
-}
-
-/**
  * gdk_image_set_colormap:
  * @image: a #GdkImage
  * @colormap: a #GdkColormap
@@ -144,6 +79,168 @@ gdk_image_get_colormap (GdkImage *image)
   g_return_val_if_fail (GDK_IS_IMAGE (image), NULL);
 
   return image->colormap;
+}
+
+/**
+ * gdk_image_get_image_type:
+ * @image: a #GdkImage
+ *
+ * Determines the type of a given image.
+ *
+ * Return value: the #GdkImageType of the image
+ *
+ * Since: 2.22
+ **/
+GdkImageType
+gdk_image_get_image_type (GdkImage *image)
+{
+  g_return_val_if_fail (GDK_IS_IMAGE (image), 0);
+
+  return image->type;
+}
+
+/**
+ * gdk_image_get_visual:
+ * @image: a #GdkImage
+ *
+ * Determines the visual that was used to create the image.
+ *
+ * Return value: a #GdkVisual
+ *
+ * Since: 2.22
+ **/
+GdkVisual *
+gdk_image_get_visual (GdkImage *image)
+{
+  g_return_val_if_fail (GDK_IS_IMAGE (image), NULL);
+
+  return image->visual;
+}
+
+/**
+ * gdk_image_get_byte_order:
+ * @image: a #GdkImage
+ *
+ * Determines the byte order of the image.
+ *
+ * Return value: a #GdkVisual
+ *
+ * Since: 2.22
+ **/
+GdkByteOrder
+gdk_image_get_byte_order (GdkImage *image)
+{
+  g_return_val_if_fail (GDK_IS_IMAGE (image), 0);
+
+  return image->byte_order;
+}
+
+/**
+ * gdk_image_get_width:
+ * @image: a #GdkImage
+ *
+ * Determines the width of the image.
+ *
+ * Return value: the width
+ *
+ * Since: 2.22
+ **/
+gint
+gdk_image_get_width (GdkImage *image)
+{
+  g_return_val_if_fail (GDK_IS_IMAGE (image), 0);
+
+  return image->width;
+}
+
+/**
+ * gdk_image_get_height:
+ * @image: a #GdkImage
+ *
+ * Determines the height of the image.
+ *
+ * Return value: the height
+ *
+ * Since: 2.22
+ **/
+gint
+gdk_image_get_height (GdkImage *image)
+{
+  g_return_val_if_fail (GDK_IS_IMAGE (image), 0);
+
+  return image->height;
+}
+
+/**
+ * gdk_image_get_depth:
+ * @image: a #GdkImage
+ *
+ * Determines the depth of the image.
+ *
+ * Return value: the depth
+ *
+ * Since: 2.22
+ **/
+guint16
+gdk_image_get_depth (GdkImage *image)
+{
+  g_return_val_if_fail (GDK_IS_IMAGE (image), 0);
+
+  return image->depth;
+}
+
+/**
+ * gdk_image_get_bytes_per_pixel:
+ * @image: a #GdkImage
+ *
+ * Determines the number of bytes per pixel of the image.
+ *
+ * Return value: the bytes per pixel
+ *
+ * Since: 2.22
+ **/
+guint16
+gdk_image_get_bytes_per_pixel (GdkImage *image)
+{
+  g_return_val_if_fail (GDK_IS_IMAGE (image), 0);
+
+  return image->bpp;
+}
+
+/**
+ * gdk_image_get_bytes_per_line:
+ * @image: a #GdkImage
+ *
+ * Determines the number of bytes per line of the image.
+ *
+ * Return value: the bytes per line
+ *
+ * Since: 2.22
+ **/
+guint16
+gdk_image_get_bytes_per_line (GdkImage *image)
+{
+  g_return_val_if_fail (GDK_IS_IMAGE (image), 0);
+
+  return image->bpl;
+}
+
+/**
+ * gdk_image_get_bits_per_pixel:
+ * @image: a #GdkImage
+ *
+ * Determines the number of bits per pixel of the image.
+ *
+ * Return value: the bits per pixel
+ *
+ * Since: 2.22
+ **/
+guint16
+gdk_image_get_bits_per_pixel (GdkImage *image)
+{
+  g_return_val_if_fail (GDK_IS_IMAGE (image), 0);
+
+  return image->bits_per_pixel;
 }
 
 /* We have N_REGION GDK_SCRATCH_IMAGE_WIDTH x GDK_SCRATCH_IMAGE_HEIGHT regions divided

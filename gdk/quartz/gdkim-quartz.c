@@ -28,7 +28,6 @@
 
 #include <locale.h>
 
-#include "gdki18n.h"
 #include "gdkinternals.h"
 #include "gdkprivate-quartz.h"
 

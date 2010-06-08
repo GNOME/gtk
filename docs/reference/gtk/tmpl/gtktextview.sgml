@@ -23,6 +23,9 @@ types related to the text widget and how they work together.
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### STRUCT GtkTextView ##### -->
 <para>
 
@@ -254,6 +257,7 @@ types related to the text widget and how they work together.
 
 </para>
 
+@void: 
 @Returns: 
 
 
@@ -276,6 +280,24 @@ types related to the text widget and how they work together.
 
 
 <!-- ##### FUNCTION gtk_text_view_get_buffer ##### -->
+<para>
+
+</para>
+
+@text_view: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_text_view_get_hadjustment ##### -->
+<para>
+
+</para>
+
+@text_view: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_text_view_get_vadjustment ##### -->
 <para>
 
 </para>
@@ -554,6 +576,7 @@ multiple views.
 
 </para>
 
+@void: 
 @Returns: 
 
 
@@ -839,6 +862,24 @@ multiple views.
 
 @text_view: 
 @Returns: 
+
+
+<!-- ##### FUNCTION gtk_text_view_im_context_filter_keypress ##### -->
+<para>
+
+</para>
+
+@text_view: 
+@event: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_text_view_reset_im_context ##### -->
+<para>
+
+</para>
+
+@text_view: 
 
 
 <!-- ##### MACRO GTK_TEXT_VIEW_PRIORITY_VALIDATE ##### -->

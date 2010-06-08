@@ -39,6 +39,9 @@ menu window.
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### STRUCT GtkTearoffMenuItem ##### -->
 <para>
 The #GtkTearoffMenuItem-struct struct contains private data only, and
@@ -51,6 +54,7 @@ should be accessed using the functions below.
 Creates a new #GtkTearoffMenuItem.
 </para>
 
+@void: 
 @Returns: a new #GtkTearoffMenuItem.
 
 

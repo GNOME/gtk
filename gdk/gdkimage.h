@@ -24,7 +24,7 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
-#if defined(GTK_DISABLE_SINGLE_INCLUDES) && !defined (__GDK_H_INSIDE__) && !defined (GDK_COMPILATION)
+#if !defined (__GDK_H_INSIDE__) && !defined (GDK_COMPILATION)
 #error "Only <gdk/gdk.h> can be included directly."
 #endif
 
@@ -68,21 +68,21 @@ struct _GdkImage
 
   /*< public >*/
   
-  GdkImageType	type; /* read only. */
-  GdkVisual    *visual;	    /* read only. visual used to create the image */
-  GdkByteOrder	byte_order; /* read only. */
-  gint		width; /* read only. */
-  gint		height; /* read only. */
-  guint16	depth; /* read only. */
-  guint16	bpp;	        /* read only. bytes per pixel */
-  guint16	bpl;	        /* read only. bytes per line */
-  guint16       bits_per_pixel; /* read only. bits per pixel */
-  gpointer	mem;
+  GdkImageType	GSEAL (type); /* read only. */
+  GdkVisual    *GSEAL (visual);	    /* read only. visual used to create the image */
+  GdkByteOrder	GSEAL (byte_order); /* read only. */
+  gint		GSEAL (width);  /* read only. */
+  gint		GSEAL (height); /* read only. */
+  guint16	GSEAL (depth);  /* read only. */
+  guint16	GSEAL (bpp);    /* read only. bytes per pixel */
+  guint16	GSEAL (bpl);    /* read only. bytes per line */
+  guint16       GSEAL (bits_per_pixel); /* read only. bits per pixel */
+  gpointer	GSEAL (mem);
 
-  GdkColormap  *colormap; /* read only. */
+  GdkColormap  *GSEAL (colormap); /* read only. */
 
   /*< private >*/
-  gpointer windowing_data; /* read only. */
+  gpointer GSEAL (windowing_data); /* read only. */
 };
 
 struct _GdkImageClass
@@ -97,17 +97,6 @@ GdkImage*  gdk_image_new       (GdkImageType  type,
 				gint	      width,
 				gint	      height);
 
-#ifndef GDK_DISABLE_DEPRECATED
-GdkImage*  gdk_image_get       (GdkDrawable  *drawable,
-				gint	      x,
-				gint	      y,
-				gint	      width,
-				gint	      height);
-
-GdkImage * gdk_image_ref       (GdkImage     *image);
-void       gdk_image_unref     (GdkImage     *image);
-#endif
-
 void	   gdk_image_put_pixel (GdkImage     *image,
 				gint	      x,
 				gint	      y,
@@ -120,17 +109,16 @@ void       gdk_image_set_colormap (GdkImage    *image,
                                    GdkColormap *colormap);
 GdkColormap* gdk_image_get_colormap (GdkImage    *image);
 
+GdkImageType  gdk_image_get_image_type     (GdkImage *image);
+GdkVisual    *gdk_image_get_visual         (GdkImage *image);
+GdkByteOrder  gdk_image_get_byte_order     (GdkImage *image);
+gint          gdk_image_get_width          (GdkImage *image);
+gint          gdk_image_get_height         (GdkImage *image);
+guint16       gdk_image_get_depth          (GdkImage *image);
+guint16       gdk_image_get_bytes_per_pixel(GdkImage *image);
+guint16       gdk_image_get_bytes_per_line (GdkImage *image);
+guint16       gdk_image_get_bits_per_pixel (GdkImage *image);
 
-#ifdef GDK_ENABLE_BROKEN
-GdkImage* gdk_image_new_bitmap (GdkVisual     *visual,
-				gpointer      data,
-				gint          width,
-				gint          height);
-#endif /* GDK_ENABLE_BROKEN */
-
-#ifndef GDK_DISABLE_DEPRECATED
-#define gdk_image_destroy              g_object_unref
-#endif /* GDK_DISABLE_DEPRECATED */
 
 G_END_DECLS
 

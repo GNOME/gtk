@@ -24,7 +24,7 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
-#if defined(GTK_DISABLE_SINGLE_INCLUDES) && !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
+#if !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
 #error "Only <gtk/gtk.h> can be included directly."
 #endif
 
@@ -36,15 +36,6 @@
 
 G_BEGIN_DECLS
 
-typedef enum
-{
-  GTK_BUTTONS_NONE,
-  GTK_BUTTONS_OK,
-  GTK_BUTTONS_CLOSE,
-  GTK_BUTTONS_CANCEL,
-  GTK_BUTTONS_YES_NO,
-  GTK_BUTTONS_OK_CANCEL
-} GtkButtonsType;
 
 #define GTK_TYPE_MESSAGE_DIALOG                  (gtk_message_dialog_get_type ())
 #define GTK_MESSAGE_DIALOG(obj)                  (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_MESSAGE_DIALOG, GtkMessageDialog))
@@ -76,6 +67,34 @@ struct _GtkMessageDialogClass
   void (*_gtk_reserved3) (void);
   void (*_gtk_reserved4) (void);
 };
+
+/**
+ * GtkButtonsType:
+ * @GTK_BUTTONS_NONE: no buttons at all
+ * @GTK_BUTTONS_OK: an OK button
+ * @GTK_BUTTONS_CLOSE: a Close button
+ * @GTK_BUTTONS_CANCEL: a Cancel button
+ * @GTK_BUTTONS_YES_NO: Yes and No buttons
+ * @GTK_BUTTONS_OK_CANCEL: OK and Cancel buttons
+ *
+ * Prebuilt sets of buttons for the dialog. If
+ * none of these choices are appropriate, simply use %GTK_BUTTONS_NONE
+ * then call gtk_dialog_add_buttons().
+ * <note>
+ *  Please note that %GTK_BUTTONS_OK, %GTK_BUTTONS_YES_NO
+ *  and %GTK_BUTTONS_OK_CANCEL are discouraged by the
+ *  <ulink url="http://library.gnome.org/devel/hig-book/stable/">GNOME HIG</ulink>.
+ * </note>
+ */
+typedef enum
+{
+  GTK_BUTTONS_NONE,
+  GTK_BUTTONS_OK,
+  GTK_BUTTONS_CLOSE,
+  GTK_BUTTONS_CANCEL,
+  GTK_BUTTONS_YES_NO,
+  GTK_BUTTONS_OK_CANCEL
+} GtkButtonsType;
 
 GType      gtk_message_dialog_get_type (void) G_GNUC_CONST;
 

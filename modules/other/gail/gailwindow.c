@@ -21,8 +21,6 @@
 
 #include <string.h>
 
-#undef GTK_DISABLE_DEPRECATED
-
 #include <gtk/gtk.h>
 
 #include "gailwindow.h"
@@ -210,7 +208,7 @@ gail_window_real_initialize (AtkObject *obj,
   g_object_set_data (G_OBJECT (obj), "atk-component-layer",
                      GINT_TO_POINTER (ATK_LAYER_WINDOW));
 
-  if (GTK_IS_FILE_SELECTION (widget))
+  if (GTK_IS_FILE_CHOOSER_DIALOG (widget))
     obj->role = ATK_ROLE_FILE_CHOOSER;
   else if (GTK_IS_COLOR_SELECTION_DIALOG (widget))
     obj->role = ATK_ROLE_COLOR_CHOOSER;

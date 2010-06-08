@@ -3,6 +3,7 @@ include $(top_srcdir)/Makefile.decl
 -include $(INTROSPECTION_MAKEFILE)
 INTROSPECTION_GIRS =
 INTROSPECTION_SCANNER_ARGS = \
+   --add-include-path=../gdk \
    --add-include-path=../gdk-pixbuf
 INTROSPECTION_COMPILER_ARGS = \
    --includedir=$(srcdir) \
@@ -77,6 +78,8 @@ gdk_public_h_sources =				\
 	gdkcairo.h				\
 	gdkcolor.h				\
 	gdkcursor.h				\
+	gdkdevice.h				\
+	gdkdevicemanager.h			\
 	gdkdisplay.h				\
 	gdkdisplaymanager.h			\
 	gdkdnd.h				\
@@ -84,7 +87,6 @@ gdk_public_h_sources =				\
 	gdkevents.h				\
 	gdkfont.h				\
 	gdkgc.h					\
-	gdki18n.h				\
 	gdkimage.h				\
 	gdkinput.h				\
 	gdkkeys.h				\
@@ -110,10 +112,11 @@ gdk_built_public_sources =			\
 gdk_built_private_headers =			\
 	gdkalias.h
 
-gdk_private_headers =   \
-	gdkinternals.h \
-	gdkintl.h \
-    gdkpoly-generic.h	\
+gdk_private_headers =				\
+	gdkinternals.h				\
+	gdkdeviceprivate.h			\
+	gdkintl.h				\
+	gdkpoly-generic.h			\
 	gdkregion-generic.h
 
 gdk_c_sources =                 \
@@ -123,6 +126,8 @@ gdk_c_sources =                 \
 	gdkcairo.c		\
 	gdkcolor.c		\
 	gdkcursor.c		\
+	gdkdevice.c		\
+	gdkdevicemanager.c	\
 	gdkdisplay.c		\
 	gdkdisplaymanager.c	\
 	gdkdnd.c		\
@@ -161,7 +166,7 @@ gdk_built_sources =				\
 # setup GDK sources and their dependencies
 #
 
-gdkincludedir = $(includedir)/gtk-2.0/gdk
+gdkincludedir = $(includedir)/gtk-3.0/gdk
 gdkinclude_HEADERS = $(gdk_public_h_sources) $(gdk_built_public_sources)
 
 common_sources =                \
@@ -171,26 +176,26 @@ common_sources =                \
 	gdkmarshalers.c		\
 	gdkmarshalers.h
 
-libgdk_directfb_2_0_la_SOURCES = $(common_sources) 
-libgdk_directfb_2_0_la_LIBADD = directfb/libgdk-directfb.la $(GDK_DEP_LIBS) \
+libgdk_directfb_3_0_la_SOURCES = $(common_sources) 
+libgdk_directfb_3_0_la_LIBADD = directfb/libgdk-directfb.la $(GDK_DEP_LIBS) \
   $(top_builddir)/gdk-pixbuf/libgdk_pixbuf-$(GTK_API_VERSION).la
-libgdk_directfb_2_0_la_LDFLAGS = $(LDADD)
+libgdk_directfb_3_0_la_LDFLAGS = $(LDADD)
 
-libgdk_x11_2_0_la_SOURCES = $(common_sources)
-libgdk_x11_2_0_la_LIBADD = x11/libgdk-x11.la $(GDK_DEP_LIBS) \
+libgdk_x11_3_0_la_SOURCES = $(common_sources)
+libgdk_x11_3_0_la_LIBADD = x11/libgdk-x11.la $(GDK_DEP_LIBS) \
   $(top_builddir)/gdk-pixbuf/libgdk_pixbuf-$(GTK_API_VERSION).la
-libgdk_x11_2_0_la_LDFLAGS = $(LDADD)
+libgdk_x11_3_0_la_LDFLAGS = $(LDADD)
 
-libgdk_quartz_2_0_la_SOURCES = $(common_sources) gdkkeynames.c
-libgdk_quartz_2_0_la_LIBADD = quartz/libgdk-quartz.la $(GDK_DEP_LIBS) \
+libgdk_quartz_3_0_la_SOURCES = $(common_sources) gdkkeynames.c
+libgdk_quartz_3_0_la_LIBADD = quartz/libgdk-quartz.la $(GDK_DEP_LIBS) \
   $(top_builddir)/gdk-pixbuf/libgdk_pixbuf-$(GTK_API_VERSION).la
-libgdk_quartz_2_0_la_LDFLAGS = $(LDADD)
+libgdk_quartz_3_0_la_LDFLAGS = $(LDADD)
 
-libgdk_win32_2_0_la_SOURCES = $(common_sources) gdkkeynames.c
-libgdk_win32_2_0_la_LIBADD = win32/libgdk-win32.la $(GDK_DEP_LIBS) \
+libgdk_win32_3_0_la_SOURCES = $(common_sources) gdkkeynames.c
+libgdk_win32_3_0_la_LIBADD = win32/libgdk-win32.la $(GDK_DEP_LIBS) \
   $(top_builddir)/gdk-pixbuf/libgdk_pixbuf-$(GTK_API_VERSION).la
-libgdk_win32_2_0_la_DEPENDENCIES = win32/libgdk-win32.la win32/rc/gdk-win32-res.o gdk.def
-libgdk_win32_2_0_la_LDFLAGS = -Wl,win32/rc/gdk-win32-res.o -export-symbols $(srcdir)/gdk.def $(LDADD)
+libgdk_win32_3_0_la_DEPENDENCIES = win32/libgdk-win32.la win32/rc/gdk-win32-res.o gdk.def
+libgdk_win32_3_0_la_LDFLAGS = -Wl,win32/rc/gdk-win32-res.o -export-symbols $(srcdir)/gdk.def $(LDADD)
 
 if HAVE_INTROSPECTION
 
@@ -198,16 +203,29 @@ introspection_files = \
 		$(gdk_public_h_sources) \
 		$(gdk_c_sources) \
         gdkenumtypes.c \
-        gdkenumtypes.h \
-        $(srcdir)/x11/*.c
+        gdkenumtypes.h
 
-Gdk-2.0.gir: $(gdktargetlib) Makefile
-Gdk_2_0_gir_SCANNERFLAGS = --strip-prefix=Gdk --add-include-path=../gdk-pixbuf
-Gdk_2_0_gir_INCLUDES = Gio-2.0 GdkPixbuf-2.0 Pango-1.0
-Gdk_2_0_gir_LIBS = $(gdktargetlib)
-Gdk_2_0_gir_FILES = $(addprefix $(srcdir)/,$(introspection_files))
-Gdk_2_0_gir_CFLAGS = $(INCLUDES)
-INTROSPECTION_GIRS += Gdk-2.0.gir
+Gdk-3.0.gir: $(gdktargetlib) Makefile
+Gdk_3_0_gir_SCANNERFLAGS = --strip-prefix=Gdk --add-include-path=../gdk-pixbuf
+Gdk_3_0_gir_INCLUDES = Gio-2.0 GdkPixbuf-3.0 Pango-1.0
+Gdk_3_0_gir_LIBS = $(gdktargetlib)
+Gdk_3_0_gir_FILES = $(addprefix $(srcdir)/,$(introspection_files))
+Gdk_3_0_gir_CFLAGS = $(INCLUDES)
+INTROSPECTION_GIRS += Gdk-3.0.gir
+
+if USE_X11
+x11_introspection_files = \
+        x11/*.c \
+        x11/gdkx.h
+
+GdkX11-3.0.gir: $(gdktargetlib) Makefile
+GdkX11_3_0_gir_SCANNERFLAGS = --strip-prefix=gdk_x11 --add-include-path=../gdk-pixbuf
+GdkX11_3_0_gir_INCLUDES = Gio-2.0 Gdk-3.0 GdkPixbuf-3.0 Pango-1.0 xlib-2.0
+GdkX11_3_0_gir_LIBS = $(gdktargetlib)
+GdkX11_3_0_gir_FILES = $(addprefix $(srcdir)/,$(x11_introspection_files))
+GdkX11_3_0_gir_CFLAGS = $(INCLUDES)
+INTROSPECTION_GIRS += GdkX11-3.0.gir
+endif # USE_X11
 
 girdir = $(datadir)/gir-1.0
 dist_gir_DATA = $(INTROSPECTION_GIRS)
@@ -216,13 +234,14 @@ typelibsdir = $(libdir)/girepository-1.0
 typelibs_DATA = $(INTROSPECTION_GIRS:.gir=.typelib)
 
 CLEANFILES += $(dist_gir_DATA) $(typelibs_DATA)
-endif
+
+endif # HAVE_INTROSPECTION
 
 if OS_WIN32
 install-def-file: gdk.def
-	$(INSTALL) $(srcdir)/gdk.def $(DESTDIR)$(libdir)/gdk-win32-2.0.def
+	$(INSTALL) $(srcdir)/gdk.def $(DESTDIR)$(libdir)/gdk-win32-3.0.def
 uninstall-def-file:
-	-rm $(DESTDIR)$(libdir)/gdk-win32-2.0.def
+	-rm $(DESTDIR)$(libdir)/gdk-win32-3.0.def
 else
 install-def-file:
 uninstall-def-file:
@@ -262,7 +281,7 @@ endif
 
 lib_LTLIBRARIES = $(gdktargetlib)
 
-EXTRA_LTLIBRARIES = libgdk-x11-2.0.la libgdk-win32-2.0.la libgdk-quartz-2.0.la libgdk-directfb-2.0.la
+EXTRA_LTLIBRARIES = libgdk-x11-3.0.la libgdk-win32-3.0.la libgdk-quartz-3.0.la libgdk-directfb-3.0.la
 
 MAINTAINERCLEANFILES = $(gdk_built_sources) stamp-gdkenumtypes.h
 EXTRA_DIST += $(gdk_built_sources)
@@ -271,7 +290,7 @@ EXTRA_HEADERS =
 #
 # Rule to install gdkconfig.h header file
 #
-configexecincludedir = $(libdir)/gtk-2.0/include
+configexecincludedir = $(libdir)/gtk-3.0/include
 #configexecinclude_DATA = gdkconfig.h
 
 install-exec-local: gdkconfig.h
@@ -326,7 +345,7 @@ stamp-gc-h: $(top_builddir)/config.status
 dist-hook: ../build/win32/vs9/gdk.vcproj
 
 ../build/win32/vs9/gdk.vcproj: ../build/win32/vs9/gdk.vcprojin
-	for F in $(libgdk_win32_2_0_la_SOURCES); do \
+	for F in $(libgdk_win32_3_0_la_SOURCES); do \
 		case $$F in \
 		*.c) echo '   <File RelativePath="..\..\..\gdk\'$$F'" />' \
 		     ;; \

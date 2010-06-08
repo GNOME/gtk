@@ -4,7 +4,7 @@ include $(top_srcdir)/Makefile.decl
 AUTOMAKE_OPTIONS = 1.6
 
 # The name of the module.
-DOC_MODULE=gdk-pixbuf
+DOC_MODULE=gdk-pixbuf3
 
 # The top-level SGML file.
 DOC_MAIN_SGML_FILE=gdk-pixbuf.sgml
@@ -56,8 +56,8 @@ content_files =				\
 	gdk-pixbuf-rendering.sgml	\
 	gdk-pixbuf.sgml			\
 	porting-from-imlib.sgml		\
-	gdk-pixbuf-csource.xml		\
-	gdk-pixbuf-query-loaders.xml
+	gdk-pixbuf-csource-3.0.xml	\
+	gdk-pixbuf-query-loaders-3.0.xml
 
 # Images to copy into HTML directory
 HTML_IMAGES = composite.png
@@ -79,21 +79,38 @@ EXTRA_DIST += version.xml.in \
 
 ########################################################################
 
+man_MANS = 				\
+	gdk-pixbuf-csource-3.0.1	\
+	gdk-pixbuf-query-loaders-3.0.1
+
 if ENABLE_MAN
 
-man_MANS = gdk-pixbuf-csource.1 gdk-pixbuf-query-loaders.1 
-
-%.1 : %.xml 
+.xml.1:
 	@XSLTPROC@ -nonet http://docbook.sourceforge.net/release/xsl/current/manpages/docbook.xsl $<
 
-BUILT_EXTRA_DIST = $(man_MANS)
+dist-local-check-mans-enabled:
+	if grep "Man generation disabled" $(man_MANS) >/dev/null; then $(RM) $(man_MANS); fi
+
+else
+
+$(man_MANS):
+	echo Man generation disabled.  Creating dummy $@.  Configure with --enable-man to enable it.
+	echo Man generation disabled.  Remove this file, configure with --enable-man, and rebuild > $@
+
+
+dist-local-check-mans-enabled:
+	echo "*** --enable-man must be used in order to make dist"
+	false
 
 endif
 
-dist-hook-local: $(BUILT_EXTRA_DIST)
-	files='$(BUILT_EXTRA_DIST)';				\
-	for f in $$files; do					\
-	  if test -f $$f; then d=.; else d=$(srcdir); fi;	\
-	  cp $$d/$$f $(distdir) || exit 1; done
+MAINTAINERCLEANFILES = $(man_MANS) $(BUILT_SOURCES)
+
+EXTRA_DIST += $(man_MANS)
+
+dist-hook-local: dist-local-check-mans-enabled gtk-docs-clean all-local
+
+gtk-docs-clean: clean
+	cd $(srcdir) && rm -rf xml html
 
 -include $(top_srcdir)/git.mk

@@ -24,7 +24,7 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
-#if defined(GTK_DISABLE_SINGLE_INCLUDES) && !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
+#if !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
 #error "Only <gtk/gtk.h> can be included directly."
 #endif
 
@@ -133,6 +133,15 @@ void	   gtk_menu_popup		  (GtkMenu	       *menu,
 					   gpointer		data,
 					   guint		button,
 					   guint32		activate_time);
+void       gtk_menu_popup_for_device      (GtkMenu             *menu,
+                                           GdkDevice           *device,
+                                           GtkWidget           *parent_menu_shell,
+                                           GtkWidget           *parent_menu_item,
+                                           GtkMenuPositionFunc  func,
+                                           gpointer             data,
+                                           guint                button,
+                                           guint32              activate_time);
+
 
 /* Position the menu according to its position function. Called
  * from gtkmenuitem.c when a menu-item changes its allocation
@@ -202,12 +211,6 @@ void       gtk_menu_set_monitor           (GtkMenu             *menu,
                                            gint                 monitor_num);
 gint       gtk_menu_get_monitor           (GtkMenu             *menu);
 GList*     gtk_menu_get_for_attach_widget (GtkWidget           *widget); 
-
-#ifndef GTK_DISABLE_DEPRECATED
-#define gtk_menu_append(menu,child)	gtk_menu_shell_append  ((GtkMenuShell *)(menu),(child))
-#define gtk_menu_prepend(menu,child)    gtk_menu_shell_prepend ((GtkMenuShell *)(menu),(child))
-#define gtk_menu_insert(menu,child,pos)	gtk_menu_shell_insert ((GtkMenuShell *)(menu),(child),(pos))
-#endif /* GTK_DISABLE_DEPRECATED */
 
 void     gtk_menu_set_reserve_toggle_size (GtkMenu  *menu,
                                           gboolean   reserve_toggle_size);

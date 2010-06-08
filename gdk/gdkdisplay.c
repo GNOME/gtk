@@ -33,12 +33,44 @@
 #include "gdkalias.h"
 
 enum {
+  OPENED,
   CLOSED,
   LAST_SIGNAL
 };
 
-static void gdk_display_dispose    (GObject         *object);
-static void gdk_display_finalize   (GObject         *object);
+static void gdk_display_dispose     (GObject         *object);
+static void gdk_display_finalize    (GObject         *object);
+
+static void        multihead_get_device_state           (GdkDisplay       *display,
+                                                         GdkDevice        *device,
+                                                         GdkScreen       **screen,
+                                                         gint             *x,
+                                                         gint             *y,
+                                                         GdkModifierType  *mask);
+static GdkWindow * multihead_window_get_device_position (GdkDisplay       *display,
+                                                         GdkDevice        *device,
+                                                         GdkWindow        *window,
+                                                         gint             *x,
+                                                         gint             *y,
+                                                         GdkModifierType  *mask);
+static GdkWindow * multihead_window_at_device_position  (GdkDisplay       *display,
+                                                         GdkDevice        *device,
+                                                         gint             *win_x,
+                                                         gint             *win_y);
+
+static void        multihead_default_get_pointer        (GdkDisplay       *display,
+                                                         GdkScreen       **screen,
+                                                         gint             *x,
+                                                         gint             *y,
+                                                         GdkModifierType  *mask);
+static GdkWindow * multihead_default_window_get_pointer (GdkDisplay      *display,
+                                                         GdkWindow       *window,
+                                                         gint            *x,
+                                                         gint            *y,
+                                                         GdkModifierType *mask);
+static GdkWindow * multihead_default_window_at_pointer  (GdkDisplay      *display,
+                                                         gint            *win_x,
+                                                         gint            *win_y);
 
 
 static void       singlehead_get_pointer (GdkDisplay       *display,
@@ -62,23 +94,37 @@ static GdkWindow* singlehead_default_window_get_pointer (GdkWindow       *window
 static GdkWindow* singlehead_default_window_at_pointer  (GdkScreen       *screen,
 							 gint            *win_x,
 							 gint            *win_y);
-static GdkWindow *gdk_window_real_window_get_pointer     (GdkDisplay       *display,
-                                                          GdkWindow        *window,
-                                                          gint             *x,
-                                                          gint             *y,
-                                                          GdkModifierType  *mask);
-static GdkWindow *gdk_display_real_get_window_at_pointer (GdkDisplay       *display,
-                                                          gint             *win_x,
-                                                          gint             *win_y);
+static GdkWindow *gdk_window_real_window_get_device_position     (GdkDisplay       *display,
+                                                                  GdkDevice        *device,
+                                                                  GdkWindow        *window,
+                                                                  gint             *x,
+                                                                  gint             *y,
+                                                                  GdkModifierType  *mask);
+static GdkWindow *gdk_display_real_get_window_at_device_position (GdkDisplay       *display,
+                                                                  GdkDevice        *device,
+                                                                  gint             *win_x,
+                                                                  gint             *win_y);
 
 static guint signals[LAST_SIGNAL] = { 0 };
 
 static char *gdk_sm_client_id;
 
-static const GdkDisplayPointerHooks default_pointer_hooks = {
-  _gdk_windowing_get_pointer,
-  gdk_window_real_window_get_pointer,
-  gdk_display_real_get_window_at_pointer
+static const GdkDisplayDeviceHooks default_device_hooks = {
+  _gdk_windowing_get_device_state,
+  gdk_window_real_window_get_device_position,
+  gdk_display_real_get_window_at_device_position
+};
+
+static const GdkDisplayDeviceHooks multihead_pointer_hooks = {
+  multihead_get_device_state,
+  multihead_window_get_device_position,
+  multihead_window_at_device_position
+};
+
+static const GdkDisplayPointerHooks multihead_default_pointer_hooks = {
+  multihead_default_get_pointer,
+  multihead_default_window_get_pointer,
+  multihead_default_window_at_pointer
 };
 
 static const GdkDisplayPointerHooks singlehead_pointer_hooks = {
@@ -93,6 +139,7 @@ static const GdkPointerHooks singlehead_default_pointer_hooks = {
 };
 
 static const GdkPointerHooks *singlehead_current_pointer_hooks = &singlehead_default_pointer_hooks;
+static const GdkDisplayPointerHooks *multihead_current_pointer_hooks = &multihead_default_pointer_hooks;
 
 G_DEFINE_TYPE (GdkDisplay, gdk_display, G_TYPE_OBJECT)
 
@@ -100,9 +147,24 @@ static void
 gdk_display_class_init (GdkDisplayClass *class)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (class);
-  
+
   object_class->finalize = gdk_display_finalize;
   object_class->dispose = gdk_display_dispose;
+
+  /**
+   * GdkDisplay::opened:
+   * @display: the object on which the signal is emitted
+   *
+   * The ::opened signal is emitted when the connection to the windowing
+   * system for @display is opened.
+   */
+  signals[OPENED] =
+    g_signal_new (g_intern_static_string ("opened"),
+		  G_OBJECT_CLASS_TYPE (object_class),
+                  G_SIGNAL_RUN_LAST,
+                  0, NULL, NULL,
+                  g_cclosure_marshal_VOID__VOID,
+                  G_TYPE_NONE, 0);
 
   /**
    * GdkDisplay::closed:
@@ -127,26 +189,87 @@ gdk_display_class_init (GdkDisplayClass *class)
 }
 
 static void
+free_pointer_info (GdkPointerWindowInfo *info)
+{
+  g_object_unref (info->toplevel_under_pointer);
+  g_slice_free (GdkPointerWindowInfo, info);
+}
+
+static void
+free_device_grab (GdkDeviceGrabInfo *info)
+{
+  g_object_unref (info->window);
+  g_object_unref (info->native_window);
+  g_free (info);
+}
+
+static gboolean
+free_device_grabs_foreach (gpointer key,
+                           gpointer value,
+                           gpointer user_data)
+{
+  GList *list = value;
+
+  g_list_foreach (list, (GFunc) free_device_grab, NULL);
+  g_list_free (list);
+
+  return TRUE;
+}
+
+static void
+device_removed_cb (GdkDeviceManager *device_manager,
+                   GdkDevice        *device,
+                   GdkDisplay       *display)
+{
+  g_hash_table_remove (display->multiple_click_info, device);
+  g_hash_table_remove (display->device_grabs, device);
+  g_hash_table_remove (display->pointers_info, device);
+
+  /* FIXME: change core pointer and remove from device list */
+}
+
+static void
+gdk_display_opened (GdkDisplay *display)
+{
+  GdkDeviceManager *device_manager;
+
+  device_manager = gdk_display_get_device_manager (display);
+
+  g_signal_connect (device_manager, "device-removed",
+                    G_CALLBACK (device_removed_cb), display);
+}
+
+static void
 gdk_display_init (GdkDisplay *display)
 {
   _gdk_displays = g_slist_prepend (_gdk_displays, display);
 
-  display->button_click_time[0] = display->button_click_time[1] = 0;
-  display->button_window[0] = display->button_window[1] = NULL;
-  display->button_number[0] = display->button_number[1] = -1;
-  display->button_x[0] = display->button_x[1] = 0;
-  display->button_y[0] = display->button_y[1] = 0;
-
   display->double_click_time = 250;
   display->double_click_distance = 5;
 
-  display->pointer_hooks = &default_pointer_hooks;
+  display->device_hooks = &default_device_hooks;
+
+  display->device_grabs = g_hash_table_new (NULL, NULL);
+  display->motion_hint_info = g_hash_table_new_full (NULL, NULL, NULL,
+                                                     (GDestroyNotify) g_free);
+
+  display->pointers_info = g_hash_table_new_full (NULL, NULL, NULL,
+                                                  (GDestroyNotify) free_pointer_info);
+
+  display->multiple_click_info = g_hash_table_new_full (NULL, NULL, NULL,
+                                                        (GDestroyNotify) g_free);
+
+  g_signal_connect (display, "opened",
+                    G_CALLBACK (gdk_display_opened), NULL);
 }
 
 static void
 gdk_display_dispose (GObject *object)
 {
   GdkDisplay *display = GDK_DISPLAY_OBJECT (object);
+  GdkDeviceManager *device_manager;
+
+  device_manager = gdk_display_get_device_manager (GDK_DISPLAY_OBJECT (object));
 
   g_list_foreach (display->queued_events, (GFunc)gdk_event_free, NULL);
   g_list_free (display->queued_events);
@@ -165,12 +288,28 @@ gdk_display_dispose (GObject *object)
                                                  NULL);
     }
 
+  if (device_manager)
+    g_signal_handlers_disconnect_by_func (device_manager, device_removed_cb, object);
+
   G_OBJECT_CLASS (gdk_display_parent_class)->dispose (object);
 }
 
 static void
 gdk_display_finalize (GObject *object)
 {
+  GdkDisplay *display = GDK_DISPLAY_OBJECT (object);
+
+  g_hash_table_foreach_remove (display->device_grabs,
+                               free_device_grabs_foreach,
+                               NULL);
+  g_hash_table_destroy (display->device_grabs);
+
+  g_hash_table_destroy (display->pointers_info);
+  g_hash_table_destroy (display->multiple_click_info);
+
+  if (display->device_manager)
+    g_object_unref (display->device_manager);
+
   G_OBJECT_CLASS (gdk_display_parent_class)->finalize (object);
 }
 
@@ -273,12 +412,55 @@ gdk_display_put_event (GdkDisplay     *display,
 }
 
 /**
+ * gdk_display_pointer_ungrab:
+ * @display: a #GdkDisplay.
+ * @time_: a timestap (e.g. %GDK_CURRENT_TIME).
+ *
+ * Release any pointer grab.
+ *
+ * Since: 2.2
+ *
+ * Deprecated: 3.0: Use gdk_device_ungrab(), together with gdk_device_grab()
+ *             instead.
+ */
+void
+gdk_display_pointer_ungrab (GdkDisplay *display,
+			    guint32     time_)
+{
+  GdkDeviceManager *device_manager;
+  GList *devices, *dev;
+  GdkDevice *device;
+
+  g_return_if_fail (GDK_IS_DISPLAY (display));
+
+  device_manager = gdk_display_get_device_manager (display);
+  devices = gdk_device_manager_list_devices (device_manager, GDK_DEVICE_TYPE_MASTER);
+
+  /* FIXME: Should this be generic to all backends? */
+  /* FIXME: What happens with extended devices? */
+  for (dev = devices; dev; dev = dev->next)
+    {
+      device = dev->data;
+
+      if (device->source != GDK_SOURCE_MOUSE)
+        continue;
+
+      gdk_device_ungrab (device, time_);
+    }
+
+  g_list_free (devices);
+}
+
+/**
  * gdk_pointer_ungrab:
  * @time_: a timestamp from a #GdkEvent, or %GDK_CURRENT_TIME if no 
  *  timestamp is available.
  *
  * Ungrabs the pointer on the default display, if it is grabbed by this 
  * application.
+ *
+ * Deprecated: 3.0: Use gdk_device_ungrab(), together with gdk_device_grab()
+ *             instead.
  **/
 void
 gdk_pointer_ungrab (guint32 time)
@@ -294,13 +476,55 @@ gdk_pointer_ungrab (guint32 time)
  *
  * Note that this does not take the inmplicit pointer grab on button
  * presses into account.
-
- * Return value: %TRUE if the pointer is currently grabbed by this application.* 
+ *
+ * Return value: %TRUE if the pointer is currently grabbed by this application.
+ *
+ * Deprecated: 3.0: Use gdk_display_device_is_grabbed() instead.
  **/
 gboolean
 gdk_pointer_is_grabbed (void)
 {
   return gdk_display_pointer_is_grabbed (gdk_display_get_default ());
+}
+
+/**
+ * gdk_display_keyboard_ungrab:
+ * @display: a #GdkDisplay.
+ * @time_: a timestap (e.g #GDK_CURRENT_TIME).
+ *
+ * Release any keyboard grab
+ *
+ * Since: 2.2
+ *
+ * Deprecated: 3.0: Use gdk_device_ungrab(), together with gdk_device_grab()
+ *             instead.
+ */
+void
+gdk_display_keyboard_ungrab (GdkDisplay *display,
+			     guint32     time)
+{
+  GdkDeviceManager *device_manager;
+  GList *devices, *dev;
+  GdkDevice *device;
+
+  g_return_if_fail (GDK_IS_DISPLAY (display));
+
+  device_manager = gdk_display_get_device_manager (display);
+  devices = gdk_device_manager_list_devices (device_manager, GDK_DEVICE_TYPE_MASTER);
+
+  /* FIXME: Should this be generic to all backends? */
+  /* FIXME: What happens with extended devices? */
+  for (dev = devices; dev; dev = dev->next)
+    {
+      device = dev->data;
+
+      if (device->source != GDK_SOURCE_KEYBOARD)
+        continue;
+
+      gdk_device_ungrab (device, time);
+    }
+
+  g_list_free (devices);
 }
 
 /**
@@ -310,6 +534,9 @@ gdk_pointer_is_grabbed (void)
  * 
  * Ungrabs the keyboard on the default display, if it is grabbed by this 
  * application.
+ *
+ * Deprecated: 3.0: Use gdk_device_ungrab(), together with gdk_device_grab()
+ *             instead.
  **/
 void
 gdk_keyboard_ungrab (guint32 time)
@@ -377,6 +604,10 @@ gdk_event_send_clientmessage_toall (GdkEvent *event)
  * 
  * Return value: the core pointer device; this is owned by the
  *   display and should not be freed.
+ *
+ * Deprecated: 3.0: Use gdk_display_get_device_manager() instead, or
+ *             gdk_event_get_device() if a #GdkEvent with pointer device
+ *             information is available.
  **/
 GdkDevice *
 gdk_device_get_core_pointer (void)
@@ -394,6 +625,10 @@ gdk_device_get_core_pointer (void)
  *   display and should not be freed.
  *
  * Since: 2.2
+ *
+ * Deprecated: 3.0: Use gdk_display_get_device_manager() instead, or
+ *             gdk_event_get_device() if a #GdkEvent with device
+ *             information is available.
  **/
 GdkDevice *
 gdk_display_get_core_pointer (GdkDisplay *display)
@@ -445,11 +680,21 @@ _gdk_get_sm_client_id (void)
 }
 
 void
-_gdk_display_enable_motion_hints (GdkDisplay *display)
+_gdk_display_enable_motion_hints (GdkDisplay *display,
+                                  GdkDevice  *device)
 {
-  gulong serial;
-  
-  if (display->pointer_info.motion_hint_serial != 0)
+  gulong *device_serial, serial;
+
+  device_serial = g_hash_table_lookup (display->motion_hint_info, device);
+
+  if (!device_serial)
+    {
+      device_serial = g_new0 (gulong, 1);
+      *device_serial = G_MAXULONG;
+      g_hash_table_insert (display->motion_hint_info, device, device_serial);
+    }
+
+  if (*device_serial != 0)
     {
       serial = _gdk_windowing_window_get_next_serial (display);
       /* We might not actually generate the next request, so
@@ -458,9 +703,116 @@ _gdk_display_enable_motion_hints (GdkDisplay *display)
 	 anyway. */
       if (serial > 0)
 	serial--;
-      if (serial < display->pointer_info.motion_hint_serial)
-	display->pointer_info.motion_hint_serial = serial;
+      if (serial < *device_serial)
+	*device_serial = serial;
     }
+}
+
+/**
+ * gdk_display_get_device_state:
+ * @display: a #GdkDisplay.
+ * @device: device to query status to.
+ * @screen: location to store the #GdkScreen the @device is on, or %NULL.
+ * @x: location to store root window X coordinate of @device, or %NULL.
+ * @y: location to store root window Y coordinate of @device, or %NULL.
+ * @mask: location to store current modifier mask for @device, or %NULL.
+ *
+ * Gets the current location and state of @device for a given display.
+ *
+ * Since: 3.0
+ **/
+void
+gdk_display_get_device_state (GdkDisplay       *display,
+                              GdkDevice        *device,
+                              GdkScreen       **screen,
+                              gint             *x,
+                              gint             *y,
+                              GdkModifierType  *mask)
+{
+  GdkScreen *tmp_screen;
+  gint tmp_x, tmp_y;
+  GdkModifierType tmp_mask;
+
+  g_return_if_fail (GDK_IS_DISPLAY (display));
+  g_return_if_fail (GDK_IS_DEVICE (device));
+
+  display->device_hooks->get_device_state (display, device, &tmp_screen, &tmp_x, &tmp_y, &tmp_mask);
+
+  if (screen)
+    *screen = tmp_screen;
+  if (x)
+    *x = tmp_x;
+  if (y)
+    *y = tmp_y;
+  if (mask)
+    *mask = tmp_mask;
+}
+
+/**
+ * gdk_display_get_window_at_device_position:
+ * @display: a #GdkDisplay.
+ * @device: #GdkDevice to query info to.
+ * @win_x: return location for the X coordinate of the device location, relative to the window origin, or %NULL.
+ * @win_y: return location for the Y coordinate of the device location, relative to the window origin, or %NULL.
+ *
+ * Obtains the window underneath @device, returning the location of the device in @win_x and @win_y. Returns
+ * %NULL if the window tree under @device is not known to GDK (for example, belongs to another application).
+ *
+ * Returns: the #GdkWindow under the device position, or %NULL.
+ *
+ * Since: 3.0
+ **/
+GdkWindow *
+gdk_display_get_window_at_device_position (GdkDisplay *display,
+                                           GdkDevice  *device,
+                                           gint       *win_x,
+                                           gint       *win_y)
+{
+  gint tmp_x, tmp_y;
+  GdkWindow *window;
+
+  g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
+  g_return_val_if_fail (GDK_IS_DEVICE (device), NULL);
+
+  window = display->device_hooks->window_at_device_position (display, device, &tmp_x, &tmp_y);
+
+  if (win_x)
+    *win_x = tmp_x;
+  if (win_y)
+    *win_y = tmp_y;
+
+  return window;
+}
+
+/**
+ * gdk_display_set_device_hooks:
+ * @display: a #GdkDisplay.
+ * @new_hooks: a table of pointers to functions for getting quantities related to all
+ *             devices position, or %NULL to restore the default table.
+ *
+ * This function allows for hooking into the operation of getting the current location of any
+ * #GdkDevice on a particular #GdkDisplay. This is only useful for such low-level tools as
+ * an event recorder. Applications should never have any reason to use this facility.
+ *
+ * Returns: The previous device hook table.
+ *
+ * Since: 3.0
+ **/
+GdkDisplayDeviceHooks *
+gdk_display_set_device_hooks (GdkDisplay                  *display,
+                              const GdkDisplayDeviceHooks *new_hooks)
+{
+  const GdkDisplayDeviceHooks *result;
+
+  g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
+  result = display->device_hooks;
+
+  if (new_hooks)
+    display->device_hooks = new_hooks;
+  else
+    display->device_hooks = &default_device_hooks;
+
+  return (GdkDisplayDeviceHooks *) result;
 }
 
 /**
@@ -476,6 +828,8 @@ _gdk_display_enable_motion_hints (GdkDisplay *display)
  * mask for a given display.
  *
  * Since: 2.2
+ *
+ * Deprecated: 3.0: Use gdk_display_get_device_state() instead.
  **/
 void
 gdk_display_get_pointer (GdkDisplay      *display,
@@ -484,33 +838,21 @@ gdk_display_get_pointer (GdkDisplay      *display,
 			 gint            *y,
 			 GdkModifierType *mask)
 {
-  GdkScreen *tmp_screen;
-  gint tmp_x, tmp_y;
-  GdkModifierType tmp_mask;
-  
   g_return_if_fail (GDK_IS_DISPLAY (display));
 
-  display->pointer_hooks->get_pointer (display, &tmp_screen, &tmp_x, &tmp_y, &tmp_mask);
-
-  if (screen)
-    *screen = tmp_screen;
-  if (x)
-    *x = tmp_x;
-  if (y)
-    *y = tmp_y;
-  if (mask)
-    *mask = tmp_mask;
+  gdk_display_get_device_state (display, display->core_pointer, screen, x, y, mask);
 }
 
 static GdkWindow *
-gdk_display_real_get_window_at_pointer (GdkDisplay *display,
-                                        gint       *win_x,
-                                        gint       *win_y)
+gdk_display_real_get_window_at_device_position (GdkDisplay *display,
+                                                GdkDevice  *device,
+                                                gint       *win_x,
+                                                gint       *win_y)
 {
   GdkWindow *window;
   gint x, y;
 
-  window = _gdk_windowing_window_at_pointer (display, &x, &y, NULL, FALSE);
+  window = _gdk_windowing_window_at_device_position (display, device, &x, &y, NULL, FALSE);
 
   /* This might need corrections, as the native window returned
      may contain client side children */
@@ -532,11 +874,12 @@ gdk_display_real_get_window_at_pointer (GdkDisplay *display,
 }
 
 static GdkWindow *
-gdk_window_real_window_get_pointer (GdkDisplay       *display,
-                                    GdkWindow        *window,
-                                    gint             *x,
-                                    gint             *y,
-                                    GdkModifierType  *mask)
+gdk_window_real_window_get_device_position (GdkDisplay       *display,
+                                            GdkDevice        *device,
+                                            GdkWindow        *window,
+                                            gint             *x,
+                                            gint             *y,
+                                            GdkModifierType  *mask)
 {
   GdkWindowObject *private;
   gint tmpx, tmpy;
@@ -545,9 +888,10 @@ gdk_window_real_window_get_pointer (GdkDisplay       *display,
 
   private = (GdkWindowObject *) window;
 
-  normal_child = GDK_WINDOW_IMPL_GET_IFACE (private->impl)->get_pointer (window,
-									 &tmpx, &tmpy,
-									 &tmp_mask);
+  normal_child = GDK_WINDOW_IMPL_GET_IFACE (private->impl)->get_device_state (window,
+                                                                              device,
+                                                                              &tmpx, &tmpy,
+                                                                              &tmp_mask);
   /* We got the coords on the impl, convert to the window */
   tmpx -= private->abs_x;
   tmpy -= private->abs_y;
@@ -580,25 +924,82 @@ gdk_window_real_window_get_pointer (GdkDisplay       *display,
  * Returns: (transfer none): the window under the mouse pointer, or %NULL
  *
  * Since: 2.2
+ *
+ * Deprecated: 3.0: Use gdk_display_get_window_at_device_position() instead.
  **/
 GdkWindow *
 gdk_display_get_window_at_pointer (GdkDisplay *display,
 				   gint       *win_x,
 				   gint       *win_y)
 {
-  gint tmp_x, tmp_y;
-  GdkWindow *window;
-
   g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
 
-  window = display->pointer_hooks->window_at_pointer (display, &tmp_x, &tmp_y);
+  return gdk_display_get_window_at_device_position (display, display->core_pointer, win_x, win_y);
+}
 
-  if (win_x)
-    *win_x = tmp_x;
-  if (win_y)
-    *win_y = tmp_y;
+static void
+multihead_get_device_state (GdkDisplay       *display,
+                            GdkDevice        *device,
+                            GdkScreen       **screen,
+                            gint             *x,
+                            gint             *y,
+                            GdkModifierType  *mask)
+{
+  multihead_current_pointer_hooks->get_pointer (display, screen, x, y, mask);
+}
 
-  return window;
+static GdkWindow *
+multihead_window_get_device_position (GdkDisplay      *display,
+                                      GdkDevice       *device,
+                                      GdkWindow       *window,
+                                      gint            *x,
+                                      gint            *y,
+                                      GdkModifierType *mask)
+{
+  return multihead_current_pointer_hooks->window_get_pointer (display, window, x, y, mask);
+}
+
+static GdkWindow *
+multihead_window_at_device_position (GdkDisplay *display,
+                                     GdkDevice  *device,
+                                     gint       *win_x,
+                                     gint       *win_y)
+{
+  return multihead_current_pointer_hooks->window_at_pointer (display, win_x, win_y);
+}
+
+static void
+multihead_default_get_pointer (GdkDisplay       *display,
+                               GdkScreen       **screen,
+                               gint             *x,
+                               gint             *y,
+                               GdkModifierType  *mask)
+{
+  return _gdk_windowing_get_device_state (display,
+                                          display->core_pointer,
+                                          screen, x, y, mask);
+}
+
+static GdkWindow *
+multihead_default_window_get_pointer (GdkDisplay      *display,
+                                      GdkWindow       *window,
+                                      gint            *x,
+                                      gint            *y,
+                                      GdkModifierType *mask)
+{
+  return gdk_window_real_window_get_device_position (display,
+                                                     display->core_pointer,
+                                                     window, x, y, mask);
+}
+
+static GdkWindow *
+multihead_default_window_at_pointer (GdkDisplay *display,
+                                     gint       *win_x,
+                                     gint       *win_y)
+{
+  return gdk_display_real_get_window_at_device_position (display,
+                                                         display->core_pointer,
+                                                         win_x, win_y);
 }
 
 /**
@@ -617,20 +1018,23 @@ gdk_display_get_window_at_pointer (GdkDisplay *display,
  * Return value: the previous pointer hook table
  *
  * Since: 2.2
+ *
+ * Deprecated: 3.0: Use gdk_display_set_device_hooks() instead.
  **/
 GdkDisplayPointerHooks *
 gdk_display_set_pointer_hooks (GdkDisplay                   *display,
 			       const GdkDisplayPointerHooks *new_hooks)
 {
-  const GdkDisplayPointerHooks *result;
+  const GdkDisplayPointerHooks *result = multihead_current_pointer_hooks;
 
   g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
-  result = display->pointer_hooks;
 
   if (new_hooks)
-    display->pointer_hooks = new_hooks;
+    multihead_current_pointer_hooks = new_hooks;
   else
-    display->pointer_hooks = &default_pointer_hooks;
+    multihead_current_pointer_hooks = &multihead_default_pointer_hooks;
+
+  gdk_display_set_device_hooks (display, &multihead_pointer_hooks);
 
   return (GdkDisplayPointerHooks *)result;
 }
@@ -677,8 +1081,13 @@ singlehead_default_window_get_pointer (GdkWindow       *window,
 				       gint            *y,
 				       GdkModifierType *mask)
 {
-  return gdk_window_real_window_get_pointer (gdk_drawable_get_display (window),
-                                             window, x, y, mask);
+  GdkDisplay *display;
+
+  display = gdk_drawable_get_display (window);
+
+  return gdk_window_real_window_get_device_position (display,
+                                                     display->core_pointer,
+                                                     window, x, y, mask);
 }
 
 static GdkWindow*
@@ -686,8 +1095,13 @@ singlehead_default_window_at_pointer  (GdkScreen       *screen,
 				       gint            *win_x,
 				       gint            *win_y)
 {
-  return gdk_display_real_get_window_at_pointer (gdk_screen_get_display (screen),
-                                                 win_x, win_y);
+  GdkDisplay *display;
+
+  display = gdk_screen_get_display (screen);
+
+  return gdk_display_real_get_window_at_device_position (display,
+                                                         display->core_pointer,
+                                                         win_x, win_y);
 }
 
 /**
@@ -706,6 +1120,8 @@ singlehead_default_window_at_pointer  (GdkScreen       *screen,
  * see gdk_display_set_pointer_hooks().
  * 
  * Return value: the previous pointer hook table
+ *
+ * Deprecated: 3.0: Use gdk_display_set_device_hooks() instead.
  **/
 GdkPointerHooks *
 gdk_set_pointer_hooks (const GdkPointerHooks *new_hooks)
@@ -725,7 +1141,7 @@ gdk_set_pointer_hooks (const GdkPointerHooks *new_hooks)
 
 static void
 generate_grab_broken_event (GdkWindow *window,
-			    gboolean   keyboard,
+                            GdkDevice *device,
 			    gboolean   implicit,
 			    GdkWindow *grab_window)
 {
@@ -733,45 +1149,54 @@ generate_grab_broken_event (GdkWindow *window,
 
   if (!GDK_WINDOW_DESTROYED (window))
     {
-      GdkEvent event;
-      event.type = GDK_GRAB_BROKEN;
-      event.grab_broken.window = window;
-      event.grab_broken.send_event = 0;
-      event.grab_broken.keyboard = keyboard;
-      event.grab_broken.implicit = implicit;
-      event.grab_broken.grab_window = grab_window;
-      gdk_event_put (&event);
+      GdkEvent *event;
+
+      event = gdk_event_new (GDK_GRAB_BROKEN);
+      event->grab_broken.window = g_object_ref (window);
+      event->grab_broken.send_event = FALSE;
+      event->grab_broken.implicit = implicit;
+      event->grab_broken.grab_window = grab_window;
+      gdk_event_set_device (event, device);
+      event->grab_broken.keyboard = (device->source == GDK_SOURCE_KEYBOARD) ? TRUE : FALSE;
+
+      gdk_event_put (event);
+      gdk_event_free (event);
     }
 }
 
-GdkPointerGrabInfo *
-_gdk_display_get_last_pointer_grab (GdkDisplay *display)
+GdkDeviceGrabInfo *
+_gdk_display_get_last_device_grab (GdkDisplay *display,
+                                   GdkDevice  *device)
 {
   GList *l;
 
-  l = g_list_last (display->pointer_grabs);
+  l = g_hash_table_lookup (display->device_grabs, device);
 
-  if (l == NULL)
-    return NULL;
-  else
-    return (GdkPointerGrabInfo *)l->data;
+  if (l)
+    {
+      l = g_list_last (l);
+      return l->data;
+    }
+
+  return NULL;
 }
 
-
-GdkPointerGrabInfo *
-_gdk_display_add_pointer_grab (GdkDisplay *display,
-			       GdkWindow *window,
-			       GdkWindow *native_window,
-			       gboolean owner_events,
-			       GdkEventMask event_mask,
-			       unsigned long serial_start,
-			       guint32 time,
-			       gboolean implicit)
+GdkDeviceGrabInfo *
+_gdk_display_add_device_grab (GdkDisplay       *display,
+                              GdkDevice        *device,
+                              GdkWindow        *window,
+                              GdkWindow        *native_window,
+                              GdkGrabOwnership  grab_ownership,
+                              gboolean          owner_events,
+                              GdkEventMask      event_mask,
+                              unsigned long     serial_start,
+                              guint32           time,
+                              gboolean          implicit)
 {
-  GdkPointerGrabInfo *info, *other_info;
-  GList *l;
+  GdkDeviceGrabInfo *info, *other_info;
+  GList *grabs, *l;
 
-  info = g_new0 (GdkPointerGrabInfo, 1);
+  info = g_new0 (GdkDeviceGrabInfo, 1);
 
   info->window = g_object_ref (window);
   info->native_window = g_object_ref (native_window);
@@ -781,19 +1206,22 @@ _gdk_display_add_pointer_grab (GdkDisplay *display,
   info->event_mask = event_mask;
   info->time = time;
   info->implicit = implicit;
+  info->ownership = grab_ownership;
+
+  grabs = g_hash_table_lookup (display->device_grabs, device);
 
   /* Find the first grab that has a larger start time (if any) and insert
    * before that. I.E we insert after already existing grabs with same
    * start time */
-  for (l = display->pointer_grabs; l != NULL; l = l->next)
+  for (l = grabs; l != NULL; l = l->next)
     {
       other_info = l->data;
-      
+
       if (info->serial_start < other_info->serial_start)
 	break;
     }
-  display->pointer_grabs =
-    g_list_insert_before (display->pointer_grabs, l, info);
+
+  grabs = g_list_insert_before (grabs, l, info);
 
   /* Make sure the new grab end before next grab */
   if (l)
@@ -801,9 +1229,9 @@ _gdk_display_add_pointer_grab (GdkDisplay *display,
       other_info = l->data;
       info->serial_end = other_info->serial_start;
     }
-  
+
   /* Find any previous grab and update its end time */
-  l = g_list_find  (display->pointer_grabs, info);
+  l = g_list_find (grabs, info);
   l = l->prev;
   if (l)
     {
@@ -811,27 +1239,22 @@ _gdk_display_add_pointer_grab (GdkDisplay *display,
       other_info->serial_end = serial_start;
     }
 
-  return info;
-}
+  g_hash_table_insert (display->device_grabs, device, grabs);
 
-static void
-free_pointer_grab (GdkPointerGrabInfo *info)
-{
-  g_object_unref (info->window);
-  g_object_unref (info->native_window);
-  g_free (info);
+  return info;
 }
 
 /* _gdk_synthesize_crossing_events only works inside one toplevel.
    This function splits things into two calls if needed, converting the
    coordinates to the right toplevel */
 static void
-synthesize_crossing_events (GdkDisplay *display,
-			    GdkWindow *src_window,
-			    GdkWindow *dest_window,
-			    GdkCrossingMode crossing_mode,
-			    guint32 time,
-			    gulong serial)
+synthesize_crossing_events (GdkDisplay      *display,
+                            GdkDevice       *device,
+			    GdkWindow       *src_window,
+			    GdkWindow       *dest_window,
+			    GdkCrossingMode  crossing_mode,
+			    guint32          time,
+			    gulong           serial)
 {
   GdkWindow *src_toplevel, *dest_toplevel;
   GdkModifierType state;
@@ -862,6 +1285,7 @@ synthesize_crossing_events (GdkDisplay *display,
       _gdk_synthesize_crossing_events (display,
 				       src_window,
 				       dest_window,
+                                       device,
 				       crossing_mode,
 				       x, y, state,
 				       time,
@@ -873,13 +1297,14 @@ synthesize_crossing_events (GdkDisplay *display,
       gdk_window_get_pointer (src_toplevel,
 			      &x, &y, &state);
       _gdk_synthesize_crossing_events (display,
-				       src_window,
-				       NULL,
-				       crossing_mode,
-				       x, y, state,
-				       time,
-				       NULL,
-				       serial, FALSE);
+                                       src_window,
+                                       NULL,
+                                       device,
+                                       crossing_mode,
+                                       x, y, state,
+                                       time,
+                                       NULL,
+                                       serial, FALSE);
     }
   else
     {
@@ -889,6 +1314,7 @@ synthesize_crossing_events (GdkDisplay *display,
       _gdk_synthesize_crossing_events (display,
 				       src_window,
 				       NULL,
+                                       device,
 				       crossing_mode,
 				       x, y, state,
 				       time,
@@ -899,6 +1325,7 @@ synthesize_crossing_events (GdkDisplay *display,
       _gdk_synthesize_crossing_events (display,
 				       NULL,
 				       dest_window,
+                                       device,
 				       crossing_mode,
 				       x, y, state,
 				       time,
@@ -908,15 +1335,18 @@ synthesize_crossing_events (GdkDisplay *display,
 }
 
 static GdkWindow *
-get_current_toplevel (GdkDisplay *display,
-		      int *x_out, int *y_out,
+get_current_toplevel (GdkDisplay      *display,
+                      GdkDevice       *device,
+                      int             *x_out,
+                      int             *y_out,
 		      GdkModifierType *state_out)
 {
   GdkWindow *pointer_window;
   int x, y;
   GdkModifierType state;
 
-  pointer_window = _gdk_windowing_window_at_pointer (display,  &x, &y, &state, TRUE);
+  pointer_window = _gdk_windowing_window_at_device_position (display, device, &x, &y, &state, TRUE);
+
   if (pointer_window != NULL &&
       (GDK_WINDOW_DESTROYED (pointer_window) ||
        GDK_WINDOW_TYPE (pointer_window) == GDK_WINDOW_ROOT ||
@@ -930,29 +1360,32 @@ get_current_toplevel (GdkDisplay *display,
 }
 
 static void
-switch_to_pointer_grab (GdkDisplay *display,
-			GdkPointerGrabInfo *grab,
-			GdkPointerGrabInfo *last_grab,
-			guint32 time,
-			gulong serial)
+switch_to_pointer_grab (GdkDisplay        *display,
+                        GdkDevice         *device,
+			GdkDeviceGrabInfo *grab,
+			GdkDeviceGrabInfo *last_grab,
+			guint32            time,
+			gulong             serial)
 {
   GdkWindow *src_window, *pointer_window, *new_toplevel;
+  GdkPointerWindowInfo *info;
   GList *old_grabs;
   GdkModifierType state;
   int x, y;
 
   /* Temporarily unset pointer to make sure we send the crossing events below */
-  old_grabs = display->pointer_grabs;
-  display->pointer_grabs = NULL;
-  
+  old_grabs = g_hash_table_lookup (display->device_grabs, device);
+  g_hash_table_steal (display->device_grabs, device);
+  info = _gdk_display_get_pointer_info (display, device);
+
   if (grab)
     {
       /* New grab is in effect */
-      
+
       /* We need to generate crossing events for the grab.
        * However, there are never any crossing events for implicit grabs
        * TODO: ... Actually, this could happen if the pointer window
-       *           doesn't have button mask so a parent gets the event... 
+       *           doesn't have button mask so a parent gets the event...
        */
       if (!grab->implicit)
 	{
@@ -961,19 +1394,17 @@ switch_to_pointer_grab (GdkDisplay *display,
 	  if (last_grab)
 	    src_window = last_grab->window;
 	  else
-	    src_window = display->pointer_info.window_under_pointer;
-	  
+	    src_window = info->window_under_pointer;
+
 	  if (src_window != grab->window)
-	    {
-	      synthesize_crossing_events (display,
-					  src_window, grab->window,
-					  GDK_CROSSING_GRAB, time, serial);
-	    }
+            synthesize_crossing_events (display, device,
+                                        src_window, grab->window,
+                                        GDK_CROSSING_GRAB, time, serial);
 
 	  /* !owner_event Grabbing a window that we're not inside, current status is
 	     now NULL (i.e. outside grabbed window) */
-	  if (!grab->owner_events && display->pointer_info.window_under_pointer != grab->window)
-	    _gdk_display_set_window_under_pointer (display, NULL);
+	  if (!grab->owner_events && info->window_under_pointer != grab->window)
+	    _gdk_display_set_window_under_pointer (display, device, NULL);
 	}
 
       grab->activated = TRUE;
@@ -989,18 +1420,18 @@ switch_to_pointer_grab (GdkDisplay *display,
 	  /* We force check what window we're in, and update the toplevel_under_pointer info,
 	   * as that won't get told of this change with toplevel enter events.
 	   */
-	  if (display->pointer_info.toplevel_under_pointer)
-	    g_object_unref (display->pointer_info.toplevel_under_pointer);
-	  display->pointer_info.toplevel_under_pointer = NULL;
+	  if (info->toplevel_under_pointer)
+	    g_object_unref (info->toplevel_under_pointer);
+	  info->toplevel_under_pointer = NULL;
 
-	  new_toplevel = get_current_toplevel (display, &x, &y, &state);
+	  new_toplevel = get_current_toplevel (display, device, &x, &y, &state);
 	  if (new_toplevel)
 	    {
 	      /* w is now toplevel and x,y in toplevel coords */
-	      display->pointer_info.toplevel_under_pointer = g_object_ref (new_toplevel);
-	      display->pointer_info.toplevel_x = x;
-	      display->pointer_info.toplevel_y = y;
-	      display->pointer_info.state = state;
+	      info->toplevel_under_pointer = g_object_ref (new_toplevel);
+	      info->toplevel_x = x;
+	      info->toplevel_y = y;
+	      info->state = state;
 	    }
 	}
 
@@ -1015,55 +1446,59 @@ switch_to_pointer_grab (GdkDisplay *display,
 						x, y,
 						NULL, NULL);
 	    }
-	  
+
 	  if (pointer_window != last_grab->window)
-	    synthesize_crossing_events (display,
-					last_grab->window, pointer_window,
-					GDK_CROSSING_UNGRAB, time, serial);
-	  
+            synthesize_crossing_events (display, device,
+                                        last_grab->window, pointer_window,
+                                        GDK_CROSSING_UNGRAB, time, serial);
+
 	  /* We're now ungrabbed, update the window_under_pointer */
-	  _gdk_display_set_window_under_pointer (display, pointer_window);
+	  _gdk_display_set_window_under_pointer (display, device, pointer_window);
 	}
     }
-  
-  display->pointer_grabs = old_grabs;
 
+  g_hash_table_insert (display->device_grabs, device, old_grabs);
 }
 
 void
-_gdk_display_pointer_grab_update (GdkDisplay *display,
-				  gulong current_serial)
+_gdk_display_device_grab_update (GdkDisplay *display,
+                                 GdkDevice  *device,
+                                 gulong      current_serial)
 {
-  GdkPointerGrabInfo *current_grab, *next_grab;
+  GdkDeviceGrabInfo *current_grab, *next_grab;
+  GList *grabs;
   guint32 time;
-  
-  time = display->last_event_time;
 
-  while (display->pointer_grabs != NULL)
+  time = display->last_event_time;
+  grabs = g_hash_table_lookup (display->device_grabs, device);
+
+  while (grabs != NULL)
     {
-      current_grab = display->pointer_grabs->data;
+      current_grab = grabs->data;
 
       if (current_grab->serial_start > current_serial)
 	return; /* Hasn't started yet */
-      
+
       if (current_grab->serial_end > current_serial)
 	{
 	  /* This one hasn't ended yet.
 	     its the currently active one or scheduled to be active */
 
 	  if (!current_grab->activated)
-	    switch_to_pointer_grab (display, current_grab, NULL, time, current_serial);
-	  
+            {
+              if (device->source != GDK_SOURCE_KEYBOARD)
+                switch_to_pointer_grab (display, device, current_grab, NULL, time, current_serial);
+            }
+
 	  break;
 	}
 
-
       next_grab = NULL;
-      if (display->pointer_grabs->next)
+      if (grabs->next)
 	{
 	  /* This is the next active grab */
-	  next_grab = display->pointer_grabs->next->data;
-	  
+	  next_grab = grabs->next->data;
+
 	  if (next_grab->serial_start > current_serial)
 	    next_grab = NULL; /* Actually its not yet active */
 	}
@@ -1071,52 +1506,64 @@ _gdk_display_pointer_grab_update (GdkDisplay *display,
       if ((next_grab == NULL && current_grab->implicit_ungrab) ||
 	  (next_grab != NULL && current_grab->window != next_grab->window))
 	generate_grab_broken_event (GDK_WINDOW (current_grab->window),
-				    FALSE, current_grab->implicit,
+                                    device,
+				    current_grab->implicit,
 				    next_grab? next_grab->window : NULL);
 
       /* Remove old grab */
-      display->pointer_grabs =
-	g_list_delete_link (display->pointer_grabs,
-			    display->pointer_grabs);
-      
-      switch_to_pointer_grab (display,
-			      next_grab, current_grab,
-			      time, current_serial);
-      
-      free_pointer_grab (current_grab);
+      grabs = g_list_delete_link (grabs, grabs);
+      g_hash_table_insert (display->device_grabs, device, grabs);
+
+      if (device->source != GDK_SOURCE_KEYBOARD)
+        switch_to_pointer_grab (display, device,
+                                next_grab, current_grab,
+                                time, current_serial);
+
+      free_device_grab (current_grab);
     }
 }
 
 static GList *
-find_pointer_grab (GdkDisplay *display,
-		   gulong serial)
+grab_list_find (GList  *grabs,
+                gulong  serial)
 {
-  GdkPointerGrabInfo *grab;
-  GList *l;
+  GdkDeviceGrabInfo *grab;
 
-  for (l = display->pointer_grabs; l != NULL; l = l->next)
+  while (grabs)
     {
-      grab = l->data;
+      grab = grabs->data;
 
       if (serial >= grab->serial_start && serial < grab->serial_end)
-	return l;
+	return grabs;
+
+      grabs = grabs->next;
     }
-  
+
   return NULL;
 }
 
-
-
-GdkPointerGrabInfo *
-_gdk_display_has_pointer_grab (GdkDisplay *display,
-			       gulong serial)
+static GList *
+find_device_grab (GdkDisplay *display,
+                   GdkDevice  *device,
+                   gulong      serial)
 {
   GList *l;
 
-  l = find_pointer_grab (display, serial);
+  l = g_hash_table_lookup (display->device_grabs, device);
+  return grab_list_find (l, serial);
+}
+
+GdkDeviceGrabInfo *
+_gdk_display_has_device_grab (GdkDisplay *display,
+                              GdkDevice  *device,
+                              gulong      serial)
+{
+  GList *l;
+
+  l = find_device_grab (display, device, serial);
   if (l)
     return l->data;
-  
+
   return NULL;
 }
 
@@ -1124,16 +1571,17 @@ _gdk_display_has_pointer_grab (GdkDisplay *display,
  * If if_child is non-NULL, end the grab only if the grabbed
  * window is the same as if_child or a descendant of it */
 gboolean
-_gdk_display_end_pointer_grab (GdkDisplay *display,
-			       gulong serial,
-			       GdkWindow *if_child,
-			       gboolean implicit)
+_gdk_display_end_device_grab (GdkDisplay *display,
+                              GdkDevice  *device,
+                              gulong      serial,
+                              GdkWindow  *if_child,
+                              gboolean    implicit)
 {
-  GdkPointerGrabInfo *grab;
+  GdkDeviceGrabInfo *grab;
   GList *l;
 
-  l = find_pointer_grab (display, serial);
-  
+  l = find_device_grab (display, device, serial);
+
   if (l == NULL)
     return FALSE;
 
@@ -1150,96 +1598,128 @@ _gdk_display_end_pointer_grab (GdkDisplay *display,
   return FALSE;
 }
 
-void
-_gdk_display_set_has_keyboard_grab (GdkDisplay *display,
-				    GdkWindow *window,
-				    GdkWindow *native_window,
-				    gboolean owner_events,
-				    unsigned long serial,
-				    guint32 time)
+/* Returns TRUE if device events are not blocked by any grab */
+gboolean
+_gdk_display_check_grab_ownership (GdkDisplay *display,
+                                   GdkDevice  *device,
+                                   gulong      serial)
 {
-  if (display->keyboard_grab.window != NULL &&
-      display->keyboard_grab.window != window)
-    generate_grab_broken_event (display->keyboard_grab.window,
-				TRUE, FALSE, window);
-  
-  display->keyboard_grab.window = window;
-  display->keyboard_grab.native_window = native_window;
-  display->keyboard_grab.owner_events = owner_events;
-  display->keyboard_grab.serial = serial;
-  display->keyboard_grab.time = time;      
+  GHashTableIter iter;
+  gpointer key, value;
+  GdkGrabOwnership higher_ownership, device_ownership;
+  gboolean device_is_keyboard;
+
+  g_hash_table_iter_init (&iter, display->device_grabs);
+  higher_ownership = device_ownership = GDK_OWNERSHIP_NONE;
+  device_is_keyboard = (device->source == GDK_SOURCE_KEYBOARD);
+
+  while (g_hash_table_iter_next (&iter, &key, &value))
+    {
+      GdkDeviceGrabInfo *grab;
+      GdkDevice *dev;
+      GList *grabs;
+
+      dev = key;
+      grabs = value;
+      grabs = grab_list_find (grabs, serial);
+
+      if (!grabs)
+        continue;
+
+      /* Discard device if it's not of the same type */
+      if ((device_is_keyboard && dev->source != GDK_SOURCE_KEYBOARD) ||
+          (!device_is_keyboard && dev->source == GDK_SOURCE_KEYBOARD))
+        continue;
+
+      grab = grabs->data;
+
+      if (dev == device)
+        device_ownership = grab->ownership;
+      else
+        {
+          if (grab->ownership > higher_ownership)
+            higher_ownership = grab->ownership;
+        }
+    }
+
+  if (higher_ownership > device_ownership)
+    {
+      /* There's a higher priority ownership
+       * going on for other device(s)
+       */
+      return FALSE;
+    }
+
+  return TRUE;
+}
+
+GdkPointerWindowInfo *
+_gdk_display_get_pointer_info (GdkDisplay *display,
+                               GdkDevice  *device)
+{
+  GdkPointerWindowInfo *info;
+
+  if (G_UNLIKELY (!device))
+    return NULL;
+
+  info = g_hash_table_lookup (display->pointers_info, device);
+
+  if (G_UNLIKELY (!info))
+    {
+      info = g_slice_new0 (GdkPointerWindowInfo);
+      g_hash_table_insert (display->pointers_info, device, info);
+    }
+
+  return info;
 }
 
 void
-_gdk_display_unset_has_keyboard_grab (GdkDisplay *display,
-				      gboolean implicit)
+_gdk_display_pointer_info_foreach (GdkDisplay                   *display,
+                                   GdkDisplayPointerInfoForeach  func,
+                                   gpointer                      user_data)
 {
-  if (implicit)
-    generate_grab_broken_event (display->keyboard_grab.window,
-				TRUE, FALSE, NULL);
-  display->keyboard_grab.window = NULL;  
+  GHashTableIter iter;
+  gpointer key, value;
+
+  g_hash_table_iter_init (&iter, display->pointers_info);
+
+  while (g_hash_table_iter_next (&iter, &key, &value))
+    {
+      GdkPointerWindowInfo *info = value;
+      GdkDevice *device = key;
+
+      (func) (display, device, info, user_data);
+    }
 }
 
 /**
- * gdk_keyboard_grab_info_libgtk_only:
+ * gdk_device_grab_info_libgtk_only:
  * @display: the display for which to get the grab information
+ * @device: device to get the grab information from
  * @grab_window: location to store current grab window
  * @owner_events: location to store boolean indicating whether
- *   the @owner_events flag to gdk_keyboard_grab() was %TRUE.
- * 
+ *   the @owner_events flag to gdk_keyboard_grab() or
+ *   gdk_pointer_grab() was %TRUE.
+ *
  * Determines information about the current keyboard grab.
  * This is not public API and must not be used by applications.
- * 
+ *
  * Return value: %TRUE if this application currently has the
  *  keyboard grabbed.
  **/
 gboolean
-gdk_keyboard_grab_info_libgtk_only (GdkDisplay *display,
-				    GdkWindow **grab_window,
-				    gboolean   *owner_events)
+gdk_device_grab_info_libgtk_only (GdkDisplay  *display,
+                                  GdkDevice   *device,
+                                  GdkWindow  **grab_window,
+                                  gboolean    *owner_events)
 {
+  GdkDeviceGrabInfo *info;
+
   g_return_val_if_fail (GDK_IS_DISPLAY (display), FALSE);
+  g_return_val_if_fail (GDK_IS_DEVICE (device), FALSE);
 
-  if (display->keyboard_grab.window)
-    {
-      if (grab_window)
-        *grab_window = display->keyboard_grab.window;
-      if (owner_events)
-        *owner_events = display->keyboard_grab.owner_events;
+  info = _gdk_display_get_last_device_grab (display, device);
 
-      return TRUE;
-    }
-  else
-    return FALSE;
-}
-
-/**
- * gdk_pointer_grab_info_libgtk_only:
- * @display: the #GdkDisplay for which to get the grab information
- * @grab_window: location to store current grab window
- * @owner_events: location to store boolean indicating whether
- *   the @owner_events flag to gdk_pointer_grab() was %TRUE.
- * 
- * Determines information about the current pointer grab.
- * This is not public API and must not be used by applications.
- * 
- * Return value: %TRUE if this application currently has the
- *  pointer grabbed.
- **/
-gboolean
-gdk_pointer_grab_info_libgtk_only (GdkDisplay *display,
-				   GdkWindow **grab_window,
-				   gboolean   *owner_events)
-{
-  GdkPointerGrabInfo *info;
-  
-  g_return_val_if_fail (GDK_IS_DISPLAY (display), FALSE);
-
-  /* What we're interested in is the steady state (ie last grab),
-     because we're interested e.g. if we grabbed so that we
-     can ungrab, even if our grab is not active just yet. */
-  info = _gdk_display_get_last_pointer_grab (display);
-  
   if (info)
     {
       if (grab_window)
@@ -1253,7 +1733,6 @@ gdk_pointer_grab_info_libgtk_only (GdkDisplay *display,
     return FALSE;
 }
 
-
 /**
  * gdk_display_pointer_is_grabbed:
  * @display: a #GdkDisplay
@@ -1263,20 +1742,76 @@ gdk_pointer_grab_info_libgtk_only (GdkDisplay *display,
  * Returns: %TRUE if an active X pointer grab is in effect
  *
  * Since: 2.2
+ *
+ * Deprecated: 3.0: Use gdk_display_device_is_grabbed() instead.
  */
 gboolean
 gdk_display_pointer_is_grabbed (GdkDisplay *display)
 {
-  GdkPointerGrabInfo *info;
-  
+  GdkDeviceManager *device_manager;
+  GList *devices, *dev;
+  GdkDevice *device;
+
   g_return_val_if_fail (GDK_IS_DISPLAY (display), TRUE);
+
+  device_manager = gdk_display_get_device_manager (display);
+  devices = gdk_device_manager_list_devices (device_manager, GDK_DEVICE_TYPE_MASTER);
+
+  for (dev = devices; dev; dev = dev->next)
+    {
+      device = dev->data;
+
+      if (device->source == GDK_SOURCE_MOUSE &&
+          gdk_display_device_is_grabbed (display, device))
+        return TRUE;
+    }
+
+  return FALSE;
+}
+
+/**
+ * gdk_display_device_is_grabbed:
+ * @display: a #GdkDisplay
+ * @device: a #GdkDevice
+ *
+ * Returns %TRUE if there is an ongoing grab on @device for @display.
+ *
+ * Returns: %TRUE if there is a grab in effect for @device.
+ **/
+gboolean
+gdk_display_device_is_grabbed (GdkDisplay *display,
+                               GdkDevice  *device)
+{
+  GdkDeviceGrabInfo *info;
+
+  g_return_val_if_fail (GDK_IS_DISPLAY (display), TRUE);
+  g_return_val_if_fail (GDK_IS_DEVICE (device), TRUE);
 
   /* What we're interested in is the steady state (ie last grab),
      because we're interested e.g. if we grabbed so that we
      can ungrab, even if our grab is not active just yet. */
-  info = _gdk_display_get_last_pointer_grab (display);
-  
+  info = _gdk_display_get_last_device_grab (display, device);
+
   return (info && !info->implicit);
+}
+
+/**
+ * gdk_display_get_device_manager:
+ * @display: a #GdkDisplay.
+ *
+ * Returns the #GdkDeviceManager associated to @display.
+ *
+ * Returns: A #GdkDeviceManager, or %NULL. This memory is
+ *          owned by GDK and must not be freed or unreferenced.
+ *
+ * Since: 3.0
+ **/
+GdkDeviceManager *
+gdk_display_get_device_manager (GdkDisplay *display)
+{
+  g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
+
+  return display->device_manager;
 }
 
 #define __GDK_DISPLAY_C__

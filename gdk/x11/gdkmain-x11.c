@@ -47,10 +47,12 @@
 #include "gdkasync.h"
 #include "gdkdisplay-x11.h"
 #include "gdkinternals.h"
+#include "gdkprivate-x11.h"
 #include "gdkintl.h"
 #include "gdkregion-generic.h"
-#include "gdkinputprivate.h"
 #include "gdkalias.h"
+
+#include <gdk/gdkdeviceprivate.h>
 
 typedef struct _GdkPredicate  GdkPredicate;
 typedef struct _GdkErrorTrap  GdkErrorTrap;
@@ -105,19 +107,8 @@ _gdk_windowing_init (void)
   _gdk_selection_property = gdk_atom_intern_static_string ("GDK_SELECTION");
 }
 
-void
-gdk_set_use_xshm (gboolean use_xshm)
-{
-}
-
-gboolean
-gdk_get_use_xshm (void)
-{
-  return GDK_DISPLAY_X11 (gdk_display_get_default ())->use_xshm;
-}
-
-static GdkGrabStatus
-gdk_x11_convert_grab_status (gint status)
+GdkGrabStatus
+_gdk_x11_convert_grab_status (gint status)
 {
   switch (status)
     {
@@ -143,171 +134,46 @@ has_pointer_grab_callback (GdkDisplay *display,
 			   gpointer data,
 			   gulong serial)
 {
-  _gdk_display_pointer_grab_update (display, serial);
+  GdkDevice *device = data;
+
+  _gdk_display_device_grab_update (display, device, serial);
 }
 
 GdkGrabStatus
-_gdk_windowing_pointer_grab (GdkWindow *window,
-			     GdkWindow *native,
-			     gboolean owner_events,
-			     GdkEventMask event_mask,
-			     GdkWindow *confine_to,
-			     GdkCursor *cursor,
-			     guint32 time)
+_gdk_windowing_device_grab (GdkDevice    *device,
+                            GdkWindow    *window,
+                            GdkWindow    *native,
+                            gboolean      owner_events,
+                            GdkEventMask  event_mask,
+                            GdkWindow    *confine_to,
+                            GdkCursor    *cursor,
+                            guint32       time)
 {
-  gint return_val;
-  GdkCursorPrivate *cursor_private;
-  GdkDisplayX11 *display_x11;
-  guint xevent_mask;
-  Window xwindow;
-  Window xconfine_to;
-  Cursor xcursor;
-  int i;
-
-  if (confine_to)
-    confine_to = _gdk_window_get_impl_window (confine_to);
-
-  display_x11 = GDK_DISPLAY_X11 (GDK_WINDOW_DISPLAY (native));
-
-  cursor_private = (GdkCursorPrivate*) cursor;
-
-  xwindow = GDK_WINDOW_XID (native);
-
-  if (!confine_to || GDK_WINDOW_DESTROYED (confine_to))
-    xconfine_to = None;
-  else
-    xconfine_to = GDK_WINDOW_XID (confine_to);
-
-  if (!cursor)
-    xcursor = None;
-  else
-    {
-      _gdk_x11_cursor_update_theme (cursor);
-      xcursor = cursor_private->xcursor;
-    }
-
-  xevent_mask = 0;
-  for (i = 0; i < _gdk_nenvent_masks; i++)
-    {
-      if (event_mask & (1 << (i + 1)))
-	xevent_mask |= _gdk_event_mask_table[i];
-    }
-
-  /* We don't want to set a native motion hint mask, as we're emulating motion
-   * hints. If we set a native one we just wouldn't get any events.
-   */
-  xevent_mask &= ~PointerMotionHintMask;
-
-  return_val = _gdk_input_grab_pointer (window,
-					native,
-					owner_events,
-					event_mask,
-					confine_to,
-					time);
-
-  if (return_val == GrabSuccess ||
-      G_UNLIKELY (!display_x11->trusted_client && return_val == AlreadyGrabbed))
-    {
-      if (!GDK_WINDOW_DESTROYED (native))
-	{
-#ifdef G_ENABLE_DEBUG
-	  if (_gdk_debug_flags & GDK_DEBUG_NOGRABS)
-	    return_val = GrabSuccess;
-	  else
-#endif
-	    return_val = XGrabPointer (GDK_WINDOW_XDISPLAY (native),
-				       xwindow,
-				       owner_events,
-				       xevent_mask,
-				       GrabModeAsync, GrabModeAsync,
-				       xconfine_to,
-				       xcursor,
-				       time);
-	}
-      else
-	return_val = AlreadyGrabbed;
-    }
-
-  if (return_val == GrabSuccess)
-    _gdk_x11_roundtrip_async (GDK_DISPLAY_OBJECT (display_x11),
-			      has_pointer_grab_callback,
-			      NULL);
-
-  return gdk_x11_convert_grab_status (return_val);
-}
-
-/*
- *--------------------------------------------------------------
- * gdk_keyboard_grab
- *
- *   Grabs the keyboard to a specific window
- *
- * Arguments:
- *   "window" is the window which will receive the grab
- *   "owner_events" specifies whether events will be reported as is,
- *     or relative to "window"
- *   "time" specifies the time
- *
- * Results:
- *
- * Side effects:
- *   requires a corresponding call to gdk_keyboard_ungrab
- *
- *--------------------------------------------------------------
- */
-
-GdkGrabStatus
-gdk_keyboard_grab (GdkWindow *	   window,
-		   gboolean	   owner_events,
-		   guint32	   time)
-{
-  gint return_val;
-  unsigned long serial;
   GdkDisplay *display;
-  GdkDisplayX11 *display_x11;
-  GdkWindow *native;
+  GdkGrabStatus status = GDK_GRAB_SUCCESS;
 
-  g_return_val_if_fail (window != NULL, 0);
-  g_return_val_if_fail (GDK_IS_WINDOW (window), 0);
+  if (!window || GDK_WINDOW_DESTROYED (window))
+    return GDK_GRAB_NOT_VIEWABLE;
 
-  native = gdk_window_get_toplevel (window);
+  display = gdk_device_get_display (device);
 
-  /* TODO: What do we do for offscreens and  children? We need to proxy the grab somehow */
-  if (!GDK_IS_WINDOW_IMPL_X11 (GDK_WINDOW_OBJECT (native)->impl))
-    return GDK_GRAB_SUCCESS;
-
-  display = GDK_WINDOW_DISPLAY (native);
-  display_x11 = GDK_DISPLAY_X11 (display);
-
-  serial = NextRequest (GDK_WINDOW_XDISPLAY (native));
-
-  if (!GDK_WINDOW_DESTROYED (native))
-    {
 #ifdef G_ENABLE_DEBUG
-      if (_gdk_debug_flags & GDK_DEBUG_NOGRABS)
-	return_val = GrabSuccess;
-      else
-#endif
-	return_val = XGrabKeyboard (GDK_WINDOW_XDISPLAY (native),
-				    GDK_WINDOW_XID (native),
-				    owner_events,
-				    GrabModeAsync, GrabModeAsync,
-				    time);
-	if (G_UNLIKELY (!display_x11->trusted_client && 
-			return_val == AlreadyGrabbed))
-	  /* we can't grab the keyboard, but we can do a GTK-local grab */
-	  return_val = GrabSuccess;
-    }
+  if (_gdk_debug_flags & GDK_DEBUG_NOGRABS)
+    status = GrabSuccess;
   else
-    return_val = AlreadyGrabbed;
-
-  if (return_val == GrabSuccess)
-    _gdk_display_set_has_keyboard_grab (display,
-					window,	native,
-					owner_events,
-					serial, time);
-
-  return gdk_x11_convert_grab_status (return_val);
+#endif
+    status = GDK_DEVICE_GET_CLASS (device)->grab (device,
+                                                  native,
+                                                  owner_events,
+                                                  event_mask,
+                                                  confine_to,
+                                                  cursor,
+                                                  time);
+  if (status == GDK_GRAB_SUCCESS)
+    _gdk_x11_roundtrip_async (display,
+			      has_pointer_grab_callback,
+                              device);
+  return status;
 }
 
 /**
@@ -325,21 +191,21 @@ _gdk_xgrab_check_unmap (GdkWindow *window,
 			gulong     serial)
 {
   GdkDisplay *display = gdk_drawable_get_display (window);
+  GdkDeviceManager *device_manager;
+  GList *devices, *d;
 
-  _gdk_display_end_pointer_grab (display, serial, window, TRUE);
+  device_manager = gdk_display_get_device_manager (display);
 
-  if (display->keyboard_grab.window &&
-      serial >= display->keyboard_grab.serial)
-    {
-      GdkWindowObject *private = GDK_WINDOW_OBJECT (window);
-      GdkWindowObject *tmp = GDK_WINDOW_OBJECT (display->keyboard_grab.window);
+  /* Get all devices */
+  devices = gdk_device_manager_list_devices (device_manager, GDK_DEVICE_TYPE_MASTER);
+  devices = g_list_concat (devices, gdk_device_manager_list_devices (device_manager, GDK_DEVICE_TYPE_SLAVE));
+  devices = g_list_concat (devices, gdk_device_manager_list_devices (device_manager, GDK_DEVICE_TYPE_FLOATING));
 
-      while (tmp && tmp != private)
-	tmp = tmp->parent;
+  /* End all grabs on the newly hidden window */
+  for (d = devices; d; d = d->next)
+    _gdk_display_end_device_grab (display, d->data, serial, window, TRUE);
 
-      if (tmp)
-	_gdk_display_unset_has_keyboard_grab (display, TRUE);
-    }
+  g_list_free (devices);
 }
 
 /**
@@ -353,25 +219,35 @@ void
 _gdk_xgrab_check_destroy (GdkWindow *window)
 {
   GdkDisplay *display = gdk_drawable_get_display (window);
-  GdkPointerGrabInfo *grab;
+  GdkDeviceManager *device_manager;
+  GdkDeviceGrabInfo *grab;
+  GList *devices, *d;
 
-  /* Make sure there is no lasting grab in this native
-     window */
-  grab = _gdk_display_get_last_pointer_grab (display);
-  if (grab && grab->native_window == window)
+  device_manager = gdk_display_get_device_manager (display);
+
+  /* Get all devices */
+  devices = gdk_device_manager_list_devices (device_manager, GDK_DEVICE_TYPE_MASTER);
+  devices = g_list_concat (devices, gdk_device_manager_list_devices (device_manager, GDK_DEVICE_TYPE_SLAVE));
+  devices = g_list_concat (devices, gdk_device_manager_list_devices (device_manager, GDK_DEVICE_TYPE_FLOATING));
+
+  for (d = devices; d; d = d->next)
     {
-      /* We don't know the actual serial to end, but it
-	 doesn't really matter as this only happens
-	 after we get told of the destroy from the
-	 server so we know its ended in the server,
-	 just make sure its ended. */
-      grab->serial_end = grab->serial_start;
-      grab->implicit_ungrab = TRUE;
+      /* Make sure there is no lasting grab in this native window */
+      grab = _gdk_display_get_last_device_grab (display, d->data);
+
+      if (grab && grab->native_window == window)
+        {
+          /* We don't know the actual serial to end, but it
+             doesn't really matter as this only happens
+             after we get told of the destroy from the
+             server so we know its ended in the server,
+             just make sure its ended. */
+          grab->serial_end = grab->serial_start;
+          grab->implicit_ungrab = TRUE;
+        }
     }
-  
-  if (window == display->keyboard_grab.native_window &&
-      display->keyboard_grab.window != NULL)
-    _gdk_display_unset_has_keyboard_grab (display, TRUE);
+
+  g_list_free (devices);
 }
 
 void
@@ -732,6 +608,17 @@ Display *
 gdk_x11_get_default_xdisplay (void)
 {
   return GDK_DISPLAY_XDISPLAY (gdk_display_get_default ());
+}
+
+void
+_gdk_windowing_event_data_copy (const GdkEvent *src,
+                                GdkEvent       *dst)
+{
+}
+
+void
+_gdk_windowing_event_data_free (GdkEvent *event)
+{
 }
 
 #define __GDK_MAIN_X11_C__

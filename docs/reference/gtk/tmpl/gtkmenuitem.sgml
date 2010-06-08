@@ -54,6 +54,9 @@ attribute of a &lt;child&gt; element.
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### STRUCT GtkMenuItem ##### -->
 <para>
 
@@ -151,6 +154,7 @@ submenu. For normal applications, the relevant signal is "activate".
 Creates a new #GtkMenuItem.
 </para>
 
+@void: 
 @Returns: the newly created #GtkMenuItem
 
 
@@ -244,14 +248,6 @@ Creates a new #GtkMenuItem whose child is a #GtkLabel.
 @Returns: 
 
 
-<!-- ##### FUNCTION gtk_menu_item_remove_submenu ##### -->
-<para>
-
-</para>
-
-@menu_item: 
-
-
 <!-- ##### FUNCTION gtk_menu_item_set_accel_path ##### -->
 <para>
 
@@ -312,13 +308,5 @@ Emits the "toggle_size_allocate" signal on the given item.
 
 @menu_item: the menu item.
 @allocation: the allocation to use as signal data.
-
-
-<!-- ##### MACRO gtk_menu_item_right_justify ##### -->
-<para>
-Sets the menu item to be right-justified. Only useful for menu bars.
-</para>
-
-@menu_item: the menu item
 
 

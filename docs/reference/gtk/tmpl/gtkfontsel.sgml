@@ -38,6 +38,9 @@ gtk_font_selection_set_preview_text().
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### STRUCT GtkFontSelection ##### -->
 <para>
 The #GtkFontSelection struct contains private data only, and should
@@ -65,15 +68,7 @@ only be accessed using the functions below.
 
 </para>
 
-@Returns: 
-
-
-<!-- ##### FUNCTION gtk_font_selection_get_font ##### -->
-<para>
-
-</para>
-
-@fontsel: 
+@void: 
 @Returns: 
 
 

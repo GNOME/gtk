@@ -6,100 +6,107 @@ Base class for widgets which contain other widgets
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>
-A GTK+ user interface is constructed by nesting widgets inside widgets. 
-Container widgets are the inner nodes in the resulting tree of widgets: 
-they contain other widgets. So, for example, you might have a #GtkWindow 
-containing a #GtkFrame containing a GtkLabel. If you wanted an image instead 
-of a textual label inside the frame, you might replace the #GtkLabel widget 
+A GTK+ user interface is constructed by nesting widgets inside widgets.
+Container widgets are the inner nodes in the resulting tree of widgets:
+they contain other widgets. So, for example, you might have a #GtkWindow
+containing a #GtkFrame containing a GtkLabel. If you wanted an image instead
+of a textual label inside the frame, you might replace the #GtkLabel widget
 with a #GtkImage widget.
 </para>
 <para>
-There are two major kinds of container widgets in GTK+. Both are subclasses 
+There are two major kinds of container widgets in GTK+. Both are subclasses
 of the abstract #GtkContainer base class.
 </para>
 <para>
-The first type of container widget has a single child widget and derives 
-from #GtkBin. These containers are <firstterm>decorators</firstterm>, which 
-add some kind of functionality to the child. For example, a #GtkButton makes 
-its child into a clickable button; a #GtkFrame draws a frame around its child 
+The first type of container widget has a single child widget and derives
+from #GtkBin. These containers are <firstterm>decorators</firstterm>, which
+add some kind of functionality to the child. For example, a #GtkButton makes
+its child into a clickable button; a #GtkFrame draws a frame around its child
 and a #GtkWindow places its child widget inside a top-level window.
 </para>
 <para>
-The second type of container can have more than one child; its purpose is to 
-manage <firstterm>layout</firstterm>. This means that these containers assign 
-sizes and positions to their children. For example, a #GtkHBox arranges its 
-children in a horizontal row, and a #GtkTable arranges the widgets it contains 
-in a two-dimensional grid. 
+The second type of container can have more than one child; its purpose is to
+manage <firstterm>layout</firstterm>. This means that these containers assign
+sizes and positions to their children. For example, a #GtkHBox arranges its
+children in a horizontal row, and a #GtkTable arranges the widgets it contains
+in a two-dimensional grid.
 </para>
 <para>
-To fulfill its task, a layout container must negotiate the size requirements 
-with its parent and its children. This negotiation is carried out in two 
-phases, <firstterm>size requisition</firstterm> and <firstterm>size 
-allocation</firstterm>. 
+To fulfill its task, a layout container must negotiate the size requirements
+with its parent and its children. The basic form of this negotiation is
+carried out in two phases, <firstterm>size requisition</firstterm> and
+<firstterm>size allocation</firstterm>, which are implemented by the
+size_request() and size_allocate() virtual functions in #GtkWidget.
+</para>
+<para>
+GTK+ also supports a more complicated form of size negotiation called
+<firstterm>width-for-height</firstterm> (and its dual
+<firstterm>height-for-width</firstterm>). See #GtkExtendedLayout
+to learn more about width-for-height geometry management.
 </para>
 <refsect2 id="size-requisition"><title>Size Requisition</title>
 <para>
-The size requisition of a widget is it's desired width and height. 
+The size requisition of a widget is it's desired width and height.
 This is represented by a #GtkRequisition.
 </para>
 <para>
-How a widget determines its desired size depends on the widget. 
-A #GtkLabel, for example, requests enough space to display all its text. 
-Container widgets generally base their size request on the requisitions 
-of their children.  
+How a widget determines its desired size depends on the widget.
+A #GtkLabel, for example, requests enough space to display all its text.
+Container widgets generally base their size request on the requisitions
+of their children.
 </para>
 <para>
-The size requisition phase of the widget layout process operates top-down. 
-It starts at a top-level widget, typically a #GtkWindow. The top-level widget 
-asks its child for its size requisition by calling gtk_widget_size_request(). 
-To determine its requisition, the child asks its own children for their 
-requisitions and so on. Finally, the top-level widget will get a requisition 
-back from its child. 
+The size requisition phase of the widget layout process operates top-down.
+It starts at a top-level widget, typically a #GtkWindow. The top-level widget
+asks its child for its size requisition by calling gtk_widget_size_request().
+To determine its requisition, the child asks its own children for their
+requisitions and so on. Finally, the top-level widget will get a requisition
+back from its child.
 </para>
 </refsect2>
 <refsect2 id="size-allocation"><title>Size Allocation</title>
 <para>
-When the top-level widget has determined how much space its child would like 
-to have, the second phase of the size negotiation, size allocation, begins. 
-Depending on its configuration (see gtk_window_set_resizable()), the top-level 
-widget may be able to expand in order to satisfy the size request or it may 
-have to ignore the size request and keep its fixed size. It then tells its 
-child widget how much space it gets by calling gtk_widget_size_allocate(). 
-The child widget divides the space among its children and tells each child 
-how much space it got, and so on. Under normal circumstances, a #GtkWindow 
+When the top-level widget has determined how much space its child would like
+to have, the second phase of the size negotiation, size allocation, begins.
+Depending on its configuration (see gtk_window_set_resizable()), the top-level
+widget may be able to expand in order to satisfy the size request or it may
+have to ignore the size request and keep its fixed size. It then tells its
+child widget how much space it gets by calling gtk_widget_size_allocate().
+The child widget divides the space among its children and tells each child
+how much space it got, and so on. Under normal circumstances, a #GtkWindow
 will always give its child the amount of space the child requested.
 </para>
 <para>
-A child's size allocation is represented by a #GtkAllocation. This struct 
-contains not only a width and height, but also a position (i.e. X and Y 
+A child's size allocation is represented by a #GtkAllocation. This struct
+contains not only a width and height, but also a position (i.e. X and Y
 coordinates), so that containers can tell their children not only how much
-space they have gotten, but also where they are positioned inside the space 
-available to the container. 
+space they have gotten, but also where they are positioned inside the space
+available to the container.
 </para>
 <para>
-Widgets are required to honor the size allocation they receive; a size 
+Widgets are required to honor the size allocation they receive; a size
 request is only a request, and widgets must be able to cope with any size.
 </para>
 </refsect2>
 <refsect2 id="child-properties"><title>Child properties</title>
 <para>
-<structname>GtkContainer</structname> introduces <firstterm>child 
+<structname>GtkContainer</structname> introduces <firstterm>child
 properties</firstterm> - these are object properties that are not specific
 to either the container or the contained widget, but rather to their relation.
 Typical examples of child properties are the position or pack-type of a widget
 which is contained in a #GtkBox.</para>
 <para>
-Use gtk_container_class_install_child_property() to install child properties 
+Use gtk_container_class_install_child_property() to install child properties
 for a container class and gtk_container_class_find_child_property() or
 gtk_container_class_list_child_properties() to get information about existing
 child properties.
 </para>
 <para>
-To set the value of a child property, use gtk_container_child_set_property(), 
-gtk_container_child_set() or gtk_container_child_set_valist(). 
-To obtain the value of a child property, use 
+To set the value of a child property, use gtk_container_child_set_property(),
+gtk_container_child_set() or gtk_container_child_set_valist().
+To obtain the value of a child property, use
 gtk_container_child_get_property(), gtk_container_child_get() or
-gtk_container_child_get_valist(). To emit notification about child property 
+gtk_container_child_get_valist(). To emit notification about child property
 changes, use gtk_widget_child_notify().
 </para>
 </refsect2>
@@ -107,7 +114,7 @@ changes, use gtk_widget_child_notify().
 <refsect2 id="GtkContainer-BUILDER-UI">
 <title>GtkContainer as GtkBuildable</title>
 <para>
-The GtkContainer implementation of the GtkBuildable interface 
+The GtkContainer implementation of the GtkBuildable interface
 supports a &lt;packing&gt; element for children, which can
 contain multiple &lt;property&gt; elements that specify
 child properties for the child.
@@ -138,6 +145,9 @@ for regular properties.
 </para>
 
 <!-- ##### SECTION Stability_Level ##### -->
+
+
+<!-- ##### SECTION Image ##### -->
 
 
 <!-- ##### STRUCT GtkContainer ##### -->
@@ -206,18 +216,10 @@ This macro should be used to emit a standard warning about unexpected
 properties in set_child_property() and get_child_property() implementations.
 </para>
 
-@object: the #GObject on which set_child_property() or get_child_property() 
+@object: the #GObject on which set_child_property() or get_child_property()
    was called
 @property_id: the numeric id of the property
 @pspec: the #GParamSpec of the property
-
-
-<!-- ##### MACRO gtk_container_border_width ##### -->
-<para>
-Does the same as gtk_container_set_border_width().
-</para>
-
-@Deprecated: Use gtk_container_set_border_width() instead.
 
 
 <!-- ##### FUNCTION gtk_container_add ##### -->
@@ -283,27 +285,6 @@ Does the same as gtk_container_set_border_width().
 @container: 
 @callback: 
 @callback_data: 
-
-
-<!-- ##### FUNCTION gtk_container_foreach_full ##### -->
-<para>
-
-</para>
-
-@container: 
-@callback: 
-@marshal: 
-@callback_data: 
-@notify: 
-@Deprecated: Use gtk_container_foreach() instead.
-
-
-<!-- ##### MACRO gtk_container_children ##### -->
-<para>
-Does the same as gtk_container_get_children().
-</para>
-
-@Deprecated: Use gtk_container_get_children() instead.
 
 
 <!-- ##### FUNCTION gtk_container_get_children ##### -->

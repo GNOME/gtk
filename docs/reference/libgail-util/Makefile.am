@@ -4,7 +4,7 @@ include $(top_srcdir)/Makefile.decl
 AUTOMAKE_OPTIONS = 1.7
 
 # The name of the module.
-DOC_MODULE=gail-libgail-util
+DOC_MODULE=gail-libgail-util3
 
 # The top-level SGML file.
 DOC_MAIN_SGML_FILE=gail-libgail-util-docs.sgml

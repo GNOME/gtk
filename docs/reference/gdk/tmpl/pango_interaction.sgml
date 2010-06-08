@@ -132,6 +132,9 @@ g_object_unref (gc);
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### STRUCT GdkPangoRenderer ##### -->
 <para>
 
@@ -210,6 +213,7 @@ g_object_unref (gc);
 
 </para>
 
+@void: 
 @Returns: 
 
 
@@ -220,15 +224,6 @@ g_object_unref (gc);
 
 @screen: 
 @Returns: 
-
-
-<!-- ##### FUNCTION gdk_pango_context_set_colormap ##### -->
-<para>
-
-</para>
-
-@context: 
-@colormap: 
 
 
 <!-- ##### STRUCT GdkPangoAttrEmbossed ##### -->

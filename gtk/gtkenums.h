@@ -24,7 +24,7 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
-#if defined(GTK_DISABLE_SINGLE_INCLUDES) && !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
+#if !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
 #error "Only <gtk/gtk.h> can be included directly."
 #endif
 
@@ -94,16 +94,6 @@ typedef enum
   GTK_BUTTONBOX_CENTER
 } GtkButtonBoxStyle;
 
-#ifndef GTK_DISABLE_DEPRECATED
-/* Curve types */
-typedef enum
-{
-  GTK_CURVE_TYPE_LINEAR,       /* linear interpolation */
-  GTK_CURVE_TYPE_SPLINE,       /* spline interpolation */
-  GTK_CURVE_TYPE_FREE          /* free form curve */
-} GtkCurveType;
-#endif
-
 typedef enum
 {
   GTK_DELETE_CHARS,
@@ -150,24 +140,22 @@ typedef enum
   GTK_ICON_SIZE_DIALOG
 } GtkIconSize;
 
-/* automatic sensitivity */
+/**
+ * GtkSensitivityType:
+ * @GTK_SENSITIVITY_AUTO: The arrow is made insensitive if the
+ *   thumb is at the end
+ * @GTK_SENSITIVITY_ON: The arrow is always sensitive
+ * @GTK_SENSITIVITY_OFF: The arrow is always insensitive
+ *
+ * Determines how GTK+ handles the sensitivity of stepper arrows
+ * at the end of range widgets.
+ */
 typedef enum
 {
   GTK_SENSITIVITY_AUTO,
   GTK_SENSITIVITY_ON,
   GTK_SENSITIVITY_OFF
 } GtkSensitivityType;
-
-#ifndef GTK_DISABLE_DEPRECATED
-/* side types */
-typedef enum
-{
-  GTK_SIDE_TOP,
-  GTK_SIDE_BOTTOM,
-  GTK_SIDE_LEFT,
-  GTK_SIDE_RIGHT
-} GtkSideType;
-#endif /* GTK_DISABLE_DEPRECATED */
 
 /* Reading directions for text */
 typedef enum
@@ -186,19 +174,6 @@ typedef enum
   GTK_JUSTIFY_FILL
 } GtkJustification;
 
-#ifndef GTK_DISABLE_DEPRECATED
-/* GtkPatternSpec match types */
-typedef enum
-{
-  GTK_MATCH_ALL,       /* "*A?A*" */
-  GTK_MATCH_ALL_TAIL,  /* "*A?AA" */
-  GTK_MATCH_HEAD,      /* "AAAA*" */
-  GTK_MATCH_TAIL,      /* "*AAAA" */
-  GTK_MATCH_EXACT,     /* "AAAAA" */
-  GTK_MATCH_LAST
-} GtkMatchType;
-#endif /* GTK_DISABLE_DEPRECATED */
-
 /* Menu keyboard movement types */
 typedef enum
 {
@@ -208,6 +183,16 @@ typedef enum
   GTK_MENU_DIR_PREV
 } GtkMenuDirectionType;
 
+/**
+ * GtkMessageType:
+ * @GTK_MESSAGE_INFO: Informational message
+ * @GTK_MESSAGE_WARNING: Nonfatal warning message
+ * @GTK_MESSAGE_QUESTION: Question requiring a choice
+ * @GTK_MESSAGE_ERROR: Fatal error message
+ * @GTK_MESSAGE_OTHER: None of the above, doesn't get an icon
+ *
+ * The type of message being displayed in the dialog.
+ */
 typedef enum
 {
   GTK_MESSAGE_INFO,
@@ -224,18 +209,31 @@ typedef enum
   GTK_CENTIMETERS
 } GtkMetricType;
 
+/**
+ * GtkMovementStep:
+ * @GTK_MOVEMENT_LOGICAL_POSITIONS: Move forward or back by graphemes
+ * @GTK_MOVEMENT_VISUAL_POSITIONS:  Move left or right by graphemes
+ * @GTK_MOVEMENT_WORDS:             Move forward or back by words
+ * @GTK_MOVEMENT_DISPLAY_LINES:     Move up or down lines (wrapped lines)
+ * @GTK_MOVEMENT_DISPLAY_LINE_ENDS: Move to either end of a line
+ * @GTK_MOVEMENT_PARAGRAPHS:        Move up or down paragraphs (newline-ended lines)
+ * @GTK_MOVEMENT_PARAGRAPH_ENDS:    Move to either end of a paragraph
+ * @GTK_MOVEMENT_PAGES:             Move by pages
+ * @GTK_MOVEMENT_BUFFER_ENDS:       Move to ends of the buffer
+ * @GTK_MOVEMENT_HORIZONTAL_PAGES:  Move horizontally by pages
+ */
 typedef enum
 {
-  GTK_MOVEMENT_LOGICAL_POSITIONS, /* move by forw/back graphemes */
-  GTK_MOVEMENT_VISUAL_POSITIONS,  /* move by left/right graphemes */
-  GTK_MOVEMENT_WORDS,             /* move by forward/back words */
-  GTK_MOVEMENT_DISPLAY_LINES,     /* move up/down lines (wrapped lines) */
-  GTK_MOVEMENT_DISPLAY_LINE_ENDS, /* move to either end of a line */
-  GTK_MOVEMENT_PARAGRAPHS,        /* move up/down paragraphs (newline-ended lines) */
-  GTK_MOVEMENT_PARAGRAPH_ENDS,    /* move to either end of a paragraph */
-  GTK_MOVEMENT_PAGES,	          /* move by pages */
-  GTK_MOVEMENT_BUFFER_ENDS,       /* move to ends of the buffer */
-  GTK_MOVEMENT_HORIZONTAL_PAGES   /* move horizontally by pages */
+  GTK_MOVEMENT_LOGICAL_POSITIONS,
+  GTK_MOVEMENT_VISUAL_POSITIONS,
+  GTK_MOVEMENT_WORDS,
+  GTK_MOVEMENT_DISPLAY_LINES,
+  GTK_MOVEMENT_DISPLAY_LINE_ENDS,
+  GTK_MOVEMENT_PARAGRAPHS,
+  GTK_MOVEMENT_PARAGRAPH_ENDS,
+  GTK_MOVEMENT_PAGES,
+  GTK_MOVEMENT_BUFFER_ENDS,
+  GTK_MOVEMENT_HORIZONTAL_PAGES
 } GtkMovementStep;
 
 typedef enum
@@ -307,14 +305,6 @@ typedef enum
   GTK_POS_BOTTOM
 } GtkPositionType;
 
-#ifndef GTK_DISABLE_DEPRECATED
-typedef enum
-{
-  GTK_PREVIEW_COLOR,
-  GTK_PREVIEW_GRAYSCALE
-} GtkPreviewType;
-#endif /* GTK_DISABLE_DEPRECATED */
-
 /* Style for buttons */
 typedef enum
 {
@@ -330,19 +320,6 @@ typedef enum
   GTK_RESIZE_QUEUE,		/* Queue resizes on this widget */
   GTK_RESIZE_IMMEDIATE		/* Perform the resizes now */
 } GtkResizeMode;
-
-#ifndef GTK_DISABLE_DEPRECATED
-/* signal run types */
-typedef enum			/*< flags >*/
-{
-  GTK_RUN_FIRST      = G_SIGNAL_RUN_FIRST,
-  GTK_RUN_LAST       = G_SIGNAL_RUN_LAST,
-  GTK_RUN_BOTH       = (GTK_RUN_FIRST | GTK_RUN_LAST),
-  GTK_RUN_NO_RECURSE = G_SIGNAL_NO_RECURSE,
-  GTK_RUN_ACTION     = G_SIGNAL_ACTION,
-  GTK_RUN_NO_HOOKS   = G_SIGNAL_NO_HOOKS
-} GtkSignalRunType;
-#endif /* GTK_DISABLE_DEPRECATED */
 
 /* scrolling types */
 typedef enum

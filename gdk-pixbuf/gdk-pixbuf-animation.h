@@ -24,7 +24,7 @@
  * Boston, MA 02111-1307, USA.
  */
 
-#if defined(GDK_PIXBUF_DISABLE_SINGLE_INCLUDES) && !defined (GDK_PIXBUF_H_INSIDE) && !defined (GDK_PIXBUF_COMPILATION)
+#if !defined (GDK_PIXBUF_H_INSIDE) && !defined (GDK_PIXBUF_COMPILATION)
 #error "Only <gdk-pixbuf/gdk-pixbuf.h> can be included directly."
 #endif
 
@@ -57,11 +57,6 @@ GType               gdk_pixbuf_animation_get_type        (void) G_GNUC_CONST;
 
 GdkPixbufAnimation *gdk_pixbuf_animation_new_from_file   (const char         *filename,
                                                           GError            **error);
-
-#ifndef GDK_PIXBUF_DISABLE_DEPRECATED
-GdkPixbufAnimation *gdk_pixbuf_animation_ref             (GdkPixbufAnimation *animation);
-void                gdk_pixbuf_animation_unref           (GdkPixbufAnimation *animation);
-#endif
 
 int                 gdk_pixbuf_animation_get_width       (GdkPixbufAnimation *animation);
 int                 gdk_pixbuf_animation_get_height      (GdkPixbufAnimation *animation);

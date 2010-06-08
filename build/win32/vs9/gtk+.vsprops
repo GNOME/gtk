@@ -31,7 +31,7 @@ copy ..\..\..\gdk\gdkconfig.h.win32 ..\..\..\gdk\gdkconfig.h&#x0D;&#x0A;
 	/>
 	<UserMacro
 		Name="GtkApiVersion"
-		Value="2.0"
+		Value="3.0"
 	/>
 	<UserMacro
 		Name="GtkBinaryVersion"

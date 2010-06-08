@@ -67,6 +67,9 @@ widget. But you should be aware of the tradeoffs.
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### STRUCT GtkFixed ##### -->
 <para>
 The #GtkFixed-struct struct contains the following fields.
@@ -102,6 +105,7 @@ their positions.</entry>
 Creates a new #GtkFixed.
 </para>
 
+@void: 
 @Returns: a new #GtkFixed.
 
 
@@ -125,23 +129,5 @@ Moves a child of a #GtkFixed container to the given position.
 @widget: the child widget.
 @x: the horizontal position to move the widget to.
 @y: the vertical position to move the widget to.
-
-
-<!-- ##### FUNCTION gtk_fixed_get_has_window ##### -->
-<para>
-
-</para>
-
-@fixed: 
-@Returns: 
-
-
-<!-- ##### FUNCTION gtk_fixed_set_has_window ##### -->
-<para>
-
-</para>
-
-@fixed: 
-@has_window: 
 
 

@@ -23,6 +23,7 @@
 #include "gdk.h"
 #include "gdkprivate-quartz.h"
 #include "gdkscreen-quartz.h"
+#include "gdkdevicemanager-core.h"
 
 GdkWindow *
 gdk_display_get_default_group (GdkDisplay *display)
@@ -40,6 +41,14 @@ _gdk_windowing_set_default_display (GdkDisplay *display)
   g_assert (display == NULL || _gdk_display == display);
 }
 
+GdkDeviceManager *
+_gdk_device_manager_new (GdkDisplay *display)
+{
+  return g_object_new (GDK_TYPE_DEVICE_MANAGER_CORE,
+                       "display", display,
+                       NULL);
+}
+
 GdkDisplay *
 gdk_display_open (const gchar *display_name)
 {
@@ -50,6 +59,7 @@ gdk_display_open (const gchar *display_name)
   [NSApplication sharedApplication];
 
   _gdk_display = g_object_new (GDK_TYPE_DISPLAY, NULL);
+  _gdk_display->device_manager = _gdk_device_manager_new (_gdk_display);
 
   _gdk_visual_init ();
 
@@ -58,6 +68,7 @@ gdk_display_open (const gchar *display_name)
   _gdk_windowing_window_init ();
 
   _gdk_events_init ();
+
   _gdk_input_init ();
 
 #if 0

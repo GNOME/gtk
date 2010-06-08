@@ -67,6 +67,9 @@ via the context menu of the entry.
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### STRUCT GtkEntry ##### -->
 <para>
 The #GtkEntry-struct struct contains only private data.
@@ -411,6 +414,7 @@ The #GtkEntry-struct struct contains only private data.
 
 </para>
 
+@void: 
 @Returns: 
 
 
@@ -420,14 +424,6 @@ The #GtkEntry-struct struct contains only private data.
 </para>
 
 @buffer: 
-@Returns: 
-
-
-<!-- ##### FUNCTION gtk_entry_new_with_max_length ##### -->
-<para>
-</para>
-
-@max: 
 @Returns: 
 
 
@@ -458,33 +454,6 @@ The #GtkEntry-struct struct contains only private data.
 @text: 
 
 
-<!-- ##### FUNCTION gtk_entry_append_text ##### -->
-<para>
-
-</para>
-
-@entry: 
-@text: 
-
-
-<!-- ##### FUNCTION gtk_entry_prepend_text ##### -->
-<para>
-
-</para>
-
-@entry: 
-@text: 
-
-
-<!-- ##### FUNCTION gtk_entry_set_position ##### -->
-<para>
-
-</para>
-
-@entry: 
-@position: 
-
-
 <!-- ##### FUNCTION gtk_entry_get_text ##### -->
 <para>
 
@@ -501,16 +470,6 @@ The #GtkEntry-struct struct contains only private data.
 
 @entry: 
 @Returns: 
-
-
-<!-- ##### FUNCTION gtk_entry_select_region ##### -->
-<para>
-
-</para>
-
-@entry: 
-@start: 
-@end: 
 
 
 <!-- ##### FUNCTION gtk_entry_set_visibility ##### -->
@@ -537,15 +496,6 @@ The #GtkEntry-struct struct contains only private data.
 </para>
 
 @entry: 
-
-
-<!-- ##### FUNCTION gtk_entry_set_editable ##### -->
-<para>
-
-</para>
-
-@entry: 
-@editable: 
 
 
 <!-- ##### FUNCTION gtk_entry_set_max_length ##### -->
@@ -803,6 +753,24 @@ The #GtkEntry-struct struct contains only private data.
 
 
 <!-- ##### FUNCTION gtk_entry_progress_pulse ##### -->
+<para>
+
+</para>
+
+@entry: 
+
+
+<!-- ##### FUNCTION gtk_entry_im_context_filter_keypress ##### -->
+<para>
+
+</para>
+
+@entry: 
+@event: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_entry_reset_im_context ##### -->
 <para>
 
 </para>

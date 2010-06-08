@@ -1,7 +1,7 @@
 ## Process this file with automake to produce Makefile.in
 include $(top_srcdir)/Makefile.decl
 
-libgdkincludedir = $(includedir)/gtk-2.0/gdk
+libgdkincludedir = $(includedir)/gtk-3.0/gdk
 
 INCLUDES = 			\
 	-DG_LOG_DOMAIN=\"Gdk\"	\
@@ -23,19 +23,27 @@ libgdk_x11_la_SOURCES =    	\
 	gdkasync.h		\
 	gdkcolor-x11.c	   	\
 	gdkcursor-x11.c	   	\
+	gdkdevice-core.h	\
+	gdkdevice-core.c	\
+	gdkdevicemanager-core.h \
+	gdkdevicemanager-core.c \
+	gdkdevicemanager-x11.c	\
 	gdkdisplay-x11.c	\
 	gdkdisplay-x11.h	\
 	gdkdnd-x11.c	   	\
 	gdkdrawable-x11.c  	\
 	gdkdrawable-x11.h	\
-	gdkevents-x11.c	   	\
+	gdkeventsource.c	\
+	gdkeventsource.h	\
+	gdkeventtranslator.c	\
+	gdkeventtranslator.h	\
 	gdkfont-x11.c	   	\
 	gdkgc-x11.c 	   	\
 	gdkgeometry-x11.c  	\
 	gdkglobals-x11.c   	\
 	gdkim-x11.c	   	\
 	gdkimage-x11.c	   	\
-	gdkinput.c	   	\
+	gdkinput.c		\
 	gdkkeys-x11.c		\
 	gdkmain-x11.c	   	\
 	gdkpixmap-x11.c	   	\
@@ -53,16 +61,24 @@ libgdk_x11_la_SOURCES =    	\
 	gdkxid.c	   	\
 	gdkx.h		   	\
 	gdkprivate-x11.h   	\
-	gdkinputprivate.h  	\
 	xsettings-client.h	\
 	xsettings-client.c	\
 	xsettings-common.h	\
 	xsettings-common.c
 
 if XINPUT_XFREE
-libgdk_x11_la_SOURCES += gdkinput-x11.c gdkinput-xfree.c
-else
-libgdk_x11_la_SOURCES += gdkinput-none.c
+libgdk_x11_la_SOURCES += 	\
+	gdkdevicemanager-xi.c 	\
+	gdkdevicemanager-xi.h 	\
+	gdkdevice-xi.c		\
+	gdkdevice-xi.h
+if XINPUT_2
+libgdk_x11_la_SOURCES += 	\
+	gdkdevicemanager-xi2.c 	\
+	gdkdevicemanager-xi2.h 	\
+	gdkdevice-xi2.c		\
+	gdkdevice-xi2.h
+endif
 endif
 
 
@@ -78,9 +94,6 @@ TESTS = checksettings
 # We need to include all these C files here since the conditionals
 # don't seem to be correctly expanded for the dist files.
 EXTRA_DIST += 			\
-	gdkinput-x11.c		\
-	gdkinput-xfree.c	\
-	gdkinput-none.c		\
 	gdksettings.c
 
 -include $(top_srcdir)/git.mk

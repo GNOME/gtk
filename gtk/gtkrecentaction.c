@@ -32,6 +32,23 @@
 #include "gtkprivate.h"
 #include "gtkalias.h"
 
+
+/**
+ * SECTION:gtkrecentaction
+ * @Short_description: An action of which represents a list of recently used files
+ * @Title: GtkRecentAction
+ *
+ * A #GtkRecentAction represents a list of recently used files, which
+ * can be shown by widgets such as #GtkRecentChooserDialog or
+ * #GtkRecentChooserMenu.
+ *
+ * To construct a submenu showing recently used files, use a #GtkRecentAction
+ * as the action for a &lt;menuitem&gt;. To construct a menu toolbutton showing
+ * the recently used files in the popup menu, use a #GtkRecentAction as the
+ * action for a &lt;toolitem&gt; element.
+ */
+
+
 #define FALLBACK_ITEM_LIMIT     10
 
 #define GTK_RECENT_ACTION_GET_PRIVATE(obj)      \

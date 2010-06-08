@@ -1097,7 +1097,8 @@ gtk_tree_view_column_button_event (GtkWidget *widget,
 				 (gint) ((GdkEventMotion *)event)->y)))
     {
       column->maybe_reordered = FALSE;
-      _gtk_tree_view_column_start_drag (GTK_TREE_VIEW (column->tree_view), column);
+      _gtk_tree_view_column_start_drag (GTK_TREE_VIEW (column->tree_view), column,
+                                        event->motion.device);
       return TRUE;
     }
   if (column->clickable == FALSE)
@@ -1584,23 +1585,6 @@ gtk_tree_view_column_cell_layout_get_cells (GtkCellLayout *layout)
     }
 
   return retval;
-}
-
-/**
- * gtk_tree_view_column_get_cell_renderers:
- * @tree_column: A #GtkTreeViewColumn
- *
- * Returns a newly-allocated #GList of all the cell renderers in the column,
- * in no particular order.  The list must be freed with g_list_free().
- *
- * Return value: A list of #GtkCellRenderers
- *
- * Deprecated: 2.18: use gtk_cell_layout_get_cells() instead.
- **/
-GList *
-gtk_tree_view_column_get_cell_renderers (GtkTreeViewColumn *tree_column)
-{
-  return gtk_tree_view_column_cell_layout_get_cells (GTK_CELL_LAYOUT (tree_column));
 }
 
 /**

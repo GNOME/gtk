@@ -4,16 +4,13 @@ include $(top_srcdir)/Makefile.decl
 AUTOMAKE_OPTIONS = 1.6
 
 # The name of the module.
-DOC_MODULE=gtk
+DOC_MODULE=gtk3
 
 # The top-level SGML file.
 DOC_MAIN_SGML_FILE=gtk-docs.sgml
 
 # Extra options to supply to gtkdoc-scan
-SCAN_OPTIONS=--deprecated-guards="GTK_ENABLE_BROKEN|GTK_DISABLE_DEPRECATED" 
-
-# Extra options to pass to gtkdoc-scangobj
-SCANGOBJ_OPTIONS=--type-init-func="gtk_type_init(0)" 
+SCAN_OPTIONS=--deprecated-guards="GTK_ENABLE_BROKEN|GTK_DISABLE_DEPRECATED"
 
 # The directory containing the source code. Relative to $(srcdir)
 DOC_SOURCE_DIR=../../../gtk
@@ -123,27 +120,12 @@ content_files =					\
 	version.xml				\
 	running.sgml				\
 	building.sgml				\
-	changes-1.2.sgml			\
-	changes-2.0.sgml			\
 	compiling.sgml				\
 	directfb.sgml				\
 	drawing-model.xml			\
 	glossary.xml				\
+	migrating-2to3.xml			\
 	migrating-checklist.sgml		\
-        migrating-ClientSideWindows.sgml	\
-	migrating-GtkAboutDialog.sgml		\
-	migrating-GtkAction.sgml		\
-	migrating-GtkAssistant.sgml		\
-	migrating-GtkBuilder.sgml		\
-	migrating-GtkColorButton.sgml		\
-	migrating-GtkComboBox.sgml		\
-	migrating-GtkEntry-icons.sgml		\
-	migrating-GtkFileChooser.sgml		\
-	migrating-GtkIconView.sgml		\
-	migrating-GtkLabel-links.sgml		\
-	migrating-GtkLinkButton.sgml		\
-	migrating-GtkRecentChooser.sgml 	\
-        migrating-GtkTooltip.sgml		\
 	objects_grouped.sgml			\
 	osx.sgml				\
 	question_index.sgml			\
@@ -152,14 +134,15 @@ content_files =					\
 	tree_widget.sgml			\
 	windows.sgml				\
 	x11.sgml				\
-	gtk-query-immodules-2.0.xml		\
-	gtk-update-icon-cache.xml		\
-	gtk-builder-convert.xml			\
+	gtk-query-immodules-3.0.xml		\
+	gtk-update-icon-cache-3.0.xml		\
+	gtk-builder-convert-3.0.xml		\
 	visual_index.xml
 
 expand_content_files = 				\
 	drawing-model.xml			\
 	glossary.xml				\
+	migrating-2to3.xml			\
 	migrating-checklist.sgml		\
         migrating-ClientSideWindows.sgml	\
 	migrating-GtkAction.sgml		\
@@ -368,21 +351,38 @@ EXTRA_DIST += version.xml.in
 
 ########################################################################
 
+man_MANS = 				\
+	gtk-query-immodules-3.0.1	\
+	gtk-update-icon-cache-3.0.1	\
+	gtk-builder-convert-3.0.1
+
 if ENABLE_MAN
 
-man_MANS = gtk-query-immodules-2.0.1 gtk-update-icon-cache.1 gtk-builder-convert.1
-
-%.1 : %.xml 
+.xml.1:
 	@XSLTPROC@ -nonet http://docbook.sourceforge.net/release/xsl/current/manpages/docbook.xsl $<
 
-BUILT_EXTRA_DIST = $(man_MANS)
+dist-local-check-mans-enabled:
+	if grep "Man generation disabled" $(man_MANS) >/dev/null; then $(RM) $(man_MANS); fi
+
+else
+
+$(man_MANS):
+	echo Man generation disabled.  Creating dummy $@.  Configure with --enable-man to enable it.
+	echo Man generation disabled.  Remove this file, configure with --enable-man, and rebuild > $@
+
+dist-local-check-mans-enabled:
+	echo "*** --enable-man must be used in order to make dist"
+	false
 
 endif
 
-dist-hook-local: $(BUILT_EXTRA_DIST)
-	files='$(BUILT_EXTRA_DIST)';				\
-	for f in $$files; do					\
-	  if test -f $$f; then d=.; else d=$(srcdir); fi;	\
-	  cp $$d/$$f $(distdir) || exit 1; done
+MAINTAINERCLEANFILES = $(man_MANS) $(BUILT_SOURCES)
+
+EXTRA_DIST += $(man_MANS)
+
+dist-hook-local: dist-local-check-mans-enabled gtk-docs-clean all-local
+
+gtk-docs-clean: clean
+	cd $(srcdir) && rm -rf xml html
 
 -include $(top_srcdir)/git.mk

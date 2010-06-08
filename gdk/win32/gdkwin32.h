@@ -41,8 +41,6 @@ G_BEGIN_DECLS
 
 #include "gdkprivate-win32.h"
 
-#undef GDK_ROOT_PARENT /* internal access is direct */
-#define GDK_ROOT_PARENT()             ((GdkWindow *) _gdk_parent_root)
 #define GDK_WINDOW_HWND(win)          (GDK_DRAWABLE_IMPL_WIN32(((GdkWindowObject *)win)->impl)->handle)
 #define GDK_PIXMAP_HBITMAP(pixmap)    (GDK_DRAWABLE_IMPL_WIN32(((GdkPixmapObject *)pixmap)->impl)->handle)
 #define GDK_DRAWABLE_IMPL_WIN32_HANDLE(d) (((GdkDrawableImplWin32 *) d)->handle)

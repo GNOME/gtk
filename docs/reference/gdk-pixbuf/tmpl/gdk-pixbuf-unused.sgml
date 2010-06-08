@@ -8,12 +8,6 @@
   </para>
 
 
-<!-- ##### SECTION ./tmpl/from-drawables.sgml:See_Also ##### -->
-  <para>
-    gdk_image_get().
-  </para>
-
-
 <!-- ##### SECTION ./tmpl/from-drawables.sgml:Short_Description ##### -->
 Getting parts of a drawable's image data into a pixbuf.
 
@@ -220,14 +214,6 @@ GnomeCanvasPixbuf
     information to create a bi-level clipping mask (black and white),
     and use that to draw the image onto a drawable.
   </para>
-
-  <important>
-    <para>
-      Since these functions use GdkRGB for rendering, you must
-      initialize GdkRGB before using any of them.  You can do this by
-      calling gdk_rgb_init() near the beginning of your program.
-    </para>
-  </important>
 
 
 <!-- ##### SECTION ./tmpl/rendering.sgml:See_Also ##### -->
@@ -566,4 +552,34 @@ End:
     default is %FALSE.
   </para>
 
+
+<!-- ##### FUNCTION gdk_pixbuf_animation_ref ##### -->
+<para>
+
+</para>
+
+@animation: 
+@Returns: 
+
+<!-- ##### FUNCTION gdk_pixbuf_animation_unref ##### -->
+<para>
+
+</para>
+
+@animation: 
+
+<!-- ##### FUNCTION gdk_pixbuf_ref ##### -->
+  <para>
+
+  </para>
+
+@pixbuf: 
+@Returns: 
+
+<!-- ##### FUNCTION gdk_pixbuf_unref ##### -->
+<para>
+
+</para>
+
+@pixbuf: 
 

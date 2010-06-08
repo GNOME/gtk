@@ -59,19 +59,6 @@ gtk_drawing_area_new (void)
   return g_object_new (GTK_TYPE_DRAWING_AREA, NULL);
 }
 
-void
-gtk_drawing_area_size (GtkDrawingArea *darea,
-		       gint            width,
-		       gint            height)
-{
-  g_return_if_fail (GTK_IS_DRAWING_AREA (darea));
-
-  GTK_WIDGET (darea)->requisition.width = width;
-  GTK_WIDGET (darea)->requisition.height = height;
-
-  gtk_widget_queue_resize (GTK_WIDGET (darea));
-}
-
 static void
 gtk_drawing_area_realize (GtkWidget *widget)
 {

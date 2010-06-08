@@ -68,6 +68,9 @@ static void     gdk_colormap_sync        (GdkColormap *colormap,
 
 static void gdk_colormap_finalize   (GObject              *object);
 
+static void     gdk_colormap_change      (GdkColormap *colormap,
+                                          gint         ncolors);
+
 G_DEFINE_TYPE (GdkColormap, gdk_colormap, G_TYPE_OBJECT)
 
 static void
@@ -408,23 +411,7 @@ gdk_screen_get_system_colormap (GdkScreen *screen)
   return colormap;
 }
 
-/**
- * gdk_colormap_get_system_size:
- * 
- * Returns the size of the system's default colormap.
- * (See the description of struct #GdkColormap for an
- * explanation of the size of a colormap.)
- * 
- * Return value: the size of the system's default colormap.
- **/
-gint
-gdk_colormap_get_system_size (void)
-{
-  return DisplayCells (GDK_SCREEN_XDISPLAY (gdk_screen_get_default()),
-		       GDK_SCREEN_X11 (gdk_screen_get_default())->screen_num);
-}
-
-/**
+/*
  * gdk_colormap_change:
  * @colormap: a #GdkColormap.
  * @ncolors: the number of colors to change.
@@ -432,9 +419,9 @@ gdk_colormap_get_system_size (void)
  * Changes the value of the first @ncolors in a private colormap
  * to match the values in the <structfield>colors</structfield>
  * array in the colormap. This function is obsolete and
- * should not be used. See gdk_color_change().
- **/
-void
+ * should not be used.
+ */
+static void
 gdk_colormap_change (GdkColormap *colormap,
 		     gint         ncolors)
 {
@@ -522,123 +509,6 @@ gdk_colormap_change (GdkColormap *colormap,
 
   g_free (palette);
 }
-
-/**
- * gdk_colors_alloc:
- * @colormap: a #GdkColormap.
- * @contiguous: if %TRUE, the colors should be allocated
- *    in contiguous color cells.
- * @planes: an array in which to store the plane masks.
- * @nplanes: the number of planes to allocate. (Or zero,
- *    to indicate that the color allocation should not be planar.)
- * @pixels: an array into which to store allocated pixel values.
- * @npixels: the number of pixels in each plane to allocate.
- * 
- * Allocates colors from a colormap. This function
- * is obsolete. See gdk_colormap_alloc_colors().
- * For full documentation of the fields, see 
- * the Xlib documentation for <function>XAllocColorCells()</function>.
- * 
- * Return value: %TRUE if the allocation was successful
- **/
-gboolean
-gdk_colors_alloc (GdkColormap   *colormap,
-		  gboolean       contiguous,
-		  gulong        *planes,
-		  gint           nplanes,
-		  gulong        *pixels,
-		  gint           npixels)
-{
-  GdkColormapPrivateX11 *private;
-  gint return_val;
-  gint i;
-
-  g_return_val_if_fail (GDK_IS_COLORMAP (colormap), FALSE);
-
-  private = GDK_COLORMAP_PRIVATE_DATA (colormap);
-
-  if (private->screen->closed)
-    return FALSE;
-
-  return_val = XAllocColorCells (GDK_SCREEN_XDISPLAY (private->screen),
-				 private->xcolormap,contiguous, planes,
-				 nplanes, pixels, npixels);
-  if (return_val)
-    {
-      for (i = 0; i < npixels; i++)
-	{
-	  private->info[pixels[i]].ref_count++;
-	  private->info[pixels[i]].flags |= GDK_COLOR_WRITEABLE;
-	}
-    }
-
-  return return_val != 0;
-}
-
-/* This is almost identical to gdk_colormap_free_colors.
- * Keep them in sync!
- */
-
-
-/**
- * gdk_colors_free:
- * @colormap: a #GdkColormap.
- * @pixels: the pixel values of the colors to free.
- * @npixels: the number of values in @pixels.
- * @planes: the plane masks for all planes to free, OR'd together.
- * 
- * Frees colors allocated with gdk_colors_alloc(). This
- * function is obsolete. See gdk_colormap_free_colors().
- **/
-void
-gdk_colors_free (GdkColormap *colormap,
-		 gulong      *pixels,
-		 gint         npixels,
-		 gulong       planes)
-{
-  GdkColormapPrivateX11 *private;
-  gulong *pixels_to_free;
-  gint npixels_to_free = 0;
-  gint i;
-
-  g_return_if_fail (GDK_IS_COLORMAP (colormap));
-  g_return_if_fail (pixels != NULL);
-
-  private = GDK_COLORMAP_PRIVATE_DATA (colormap);
-
-  if ((colormap->visual->type != GDK_VISUAL_PSEUDO_COLOR) &&
-      (colormap->visual->type != GDK_VISUAL_GRAYSCALE))
-    return;
-  
-  pixels_to_free = g_new (gulong, npixels);
-
-  for (i = 0; i < npixels; i++)
-    {
-      gulong pixel = pixels[i];
-      
-      if (private->info[pixel].ref_count)
-	{
-	  private->info[pixel].ref_count--;
-
-	  if (private->info[pixel].ref_count == 0)
-	    {
-	      pixels_to_free[npixels_to_free++] = pixel;
-	      if (!(private->info[pixel].flags & GDK_COLOR_WRITEABLE))
-		g_hash_table_remove (private->hash, &colormap->colors[pixel]);
-	      private->info[pixel].flags = 0;
-	    }
-	}
-    }
-
-  if (npixels_to_free && !private->private_val && !private->screen->closed)
-    XFreeColors (GDK_SCREEN_XDISPLAY (private->screen), private->xcolormap,
-		 pixels_to_free, npixels_to_free, planes);
-  g_free (pixels_to_free);
-}
-
-/* This is almost identical to gdk_colors_free.
- * Keep them in sync!
- */
 
 /**
  * gdk_colormap_free_colors:
@@ -1039,17 +909,16 @@ gdk_colormap_alloc_colors_pseudocolor (GdkColormap *colormap,
  * @colors: The color values to allocate. On return, the pixel
  *    values for allocated colors will be filled in.
  * @n_colors: The number of colors in @colors.
- * @writeable: If %TRUE, the colors are allocated writeable
- *    (their values can later be changed using gdk_color_change()).
- *    Writeable colors cannot be shared between applications.
+ * @writeable: this parameter has no effect, and it's here for mere
+ *   compatibility.
  * @best_match: If %TRUE, GDK will attempt to do matching against
  *    existing colors if the colors cannot be allocated as requested.
  * @success: An array of length @ncolors. On return, this
  *   indicates whether the corresponding color in @colors was
  *   successfully allocated or not.
- * 
+ *
  * Allocates colors from a colormap.
- * 
+ *
  * Return value: The number of colors that were not successfully 
  * allocated.
  **/
@@ -1209,44 +1078,6 @@ gdk_colormap_query_color (GdkColormap *colormap,
 }
 
 /**
- * gdk_color_change:
- * @colormap: a #GdkColormap.
- * @color: a #GdkColor, with the color to change
- * in the <structfield>pixel</structfield> field,
- * and the new value in the remaining fields.
- * 
- * Changes the value of a color that has already
- * been allocated. If @colormap is not a private
- * colormap, then the color must have been allocated
- * using gdk_colormap_alloc_colors() with the 
- * @writeable set to %TRUE.
- * 
- * Return value: %TRUE if the color was successfully changed.
- **/
-gboolean
-gdk_color_change (GdkColormap *colormap,
-		  GdkColor    *color)
-{
-  GdkColormapPrivateX11 *private;
-  XColor xcolor;
-
-  g_return_val_if_fail (GDK_IS_COLORMAP (colormap), FALSE);
-  g_return_val_if_fail (color != NULL, FALSE);
-
-  xcolor.pixel = color->pixel;
-  xcolor.red = color->red;
-  xcolor.green = color->green;
-  xcolor.blue = color->blue;
-  xcolor.flags = DoRed | DoGreen | DoBlue;
-
-  private = GDK_COLORMAP_PRIVATE_DATA (colormap);
-  if (!private->screen->closed)
-    XStoreColor (GDK_SCREEN_XDISPLAY (private->screen), private->xcolormap, &xcolor);
-
-  return TRUE;
-}
-
-/**
  * gdk_x11_colormap_foreign_new:
  * @visual: a #GdkVisual
  * @xcolormap: The XID of a colormap with visual @visual
@@ -1318,41 +1149,6 @@ gdk_x11_colormap_foreign_new (GdkVisual *visual,
 
   return colormap;
   
-}
-
-/**
- * gdkx_colormap_get:
- * @xcolormap: the XID of a colormap for the default screen.
- * 
- * Returns a #GdkColormap corresponding to a X colormap;
- * this function only works if the colormap is already
- * known to GTK+ (a colormap created by GTK+ or the default
- * colormap for the screen), since GTK+ 
- *
- * Always use gdk_x11_colormap_foreign_new() instead.
- *
- * Return value: the existing #GdkColormap object if it was
- *  already known to GTK+, otherwise warns and return
- *  %NULL.
- **/
-GdkColormap*
-gdkx_colormap_get (Colormap xcolormap)
-{
-  GdkScreen *screen = gdk_screen_get_default ();
-  GdkColormap *colormap;
-
-  if (xcolormap == DefaultColormap (GDK_SCREEN_XDISPLAY (screen),
-				    GDK_SCREEN_XNUMBER (screen)))
-    return g_object_ref (gdk_screen_get_system_colormap (screen));
-
-  colormap = gdk_colormap_lookup (screen, xcolormap);
-  if (colormap)
-    return g_object_ref (colormap);
-
-  g_warning ("Colormap passed to gdkx_colormap_get\n"
-	     "does not previously exist");
-
-  return NULL;
 }
 
 static gint

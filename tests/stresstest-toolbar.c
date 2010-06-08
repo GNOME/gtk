@@ -17,7 +17,6 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
  * Boston, MA 02111-1307, USA.
  */
-#undef GTK_DISABLE_DEPRECATED
 #include "config.h"
 #include <gtk/gtk.h>
 
@@ -35,23 +34,24 @@ add_random (GtkToolbar *toolbar, gint n)
   gint position;
   gchar *label = g_strdup_printf ("Button %d", n);
 
-  GtkWidget *widget = gtk_button_new_with_label (label);
+  GtkToolItem *toolitem = gtk_tool_button_new (NULL, label);
+  gtk_tool_item_set_tooltip_text (toolitem, "Bar");
 
   g_free (label);
-  gtk_widget_show_all (widget);
+  gtk_widget_show_all (GTK_WIDGET (toolitem));
 
   if (g_list_length (toolbar->children) == 0)
     position = 0;
   else
     position = g_random_int_range (0, g_list_length (toolbar->children));
 
-  gtk_toolbar_insert_widget (toolbar, widget, "Bar", "Baz", position);
+  gtk_toolbar_insert (toolbar, toolitem, position);
 }
 
 static void
 remove_random (GtkToolbar *toolbar)
 {
-  GtkToolbarChild *child;
+  GtkWidget *child;
   gint position;
 
   if (!toolbar->children)
@@ -61,7 +61,7 @@ remove_random (GtkToolbar *toolbar)
 
   child = g_list_nth_data (toolbar->children, position);
   
-  gtk_container_remove (GTK_CONTAINER (toolbar), child->widget);
+  gtk_container_remove (GTK_CONTAINER (toolbar), child);
 }
 
 static gboolean

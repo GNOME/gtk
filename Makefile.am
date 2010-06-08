@@ -4,9 +4,7 @@ include $(top_srcdir)/Makefile.decl
 SRC_SUBDIRS = gdk-pixbuf gdk gtk modules demos tests perf contrib
 SUBDIRS = po po-properties $(SRC_SUBDIRS) docs m4macros build
 
-# require automake 1.4
-AUTOMAKE_OPTIONS = 1.7
-ACLOCAL_AMFLAGS = -I m4
+ACLOCAL_AMFLAGS = -I m4 ${ACLOCAL_FLAGS}
 
 EXTRA_DIST +=			\
 	HACKING			\
@@ -50,14 +48,10 @@ EXTRA_DIST +=			\
 	examples/buttons/info.xpm  \
 	examples/calendar/Makefile  \
 	examples/calendar/calendar.c  \
-	examples/clist/Makefile  \
-	examples/clist/clist.c  \
 	examples/entry/Makefile  \
 	examples/entry/entry.c  \
 	examples/eventbox/Makefile  \
 	examples/eventbox/eventbox.c  \
-	examples/filesel/Makefile  \
-	examples/filesel/filesel.c  \
 	examples/gtkdial/Makefile  \
 	examples/gtkdial/dial_test.c  \
 	examples/gtkdial/gtkdial.c  \
@@ -68,11 +62,8 @@ EXTRA_DIST +=			\
 	examples/helloworld2/helloworld2.c  \
 	examples/label/Makefile	\
 	examples/label/label.c	\
-	examples/list/Makefile  \
-	examples/list/list.c  \
 	examples/menu/Makefile  \
 	examples/menu/menu.c  \
-	examples/menu/itemfactory.c  \
 	examples/notebook/Makefile  \
 	examples/notebook/notebook.c  \
 	examples/packbox/Makefile  \
@@ -102,14 +93,10 @@ EXTRA_DIST +=			\
 	examples/statusbar/statusbar.c  \
 	examples/table/Makefile  \
 	examples/table/table.c  \
-	examples/text/Makefile  \
-	examples/text/text.c  \
 	examples/tictactoe/Makefile  \
 	examples/tictactoe/tictactoe.c  \
 	examples/tictactoe/tictactoe.h  \
 	examples/tictactoe/ttt_test.c  \
-	examples/tree/Makefile  \
-	examples/tree/tree.c  \
 	examples/wheelbarrow/Makefile  \
 	examples/wheelbarrow/wheelbarrow.c  \
 	examples/fixed/fixed.c  \
@@ -143,37 +130,37 @@ MAINTAINERCLEANFILES = \
 GDKTARGET=@gdktarget@
 
 ## Copy .pc files to target-specific names
-gtk+-$(GDKTARGET)-2.0.pc: gtk+-2.0.pc
-	rm -f gtk+-$(GDKTARGET)-2.0.pc && \
-	cp gtk+-2.0.pc gtk+-$(GDKTARGET)-2.0.pc
+gtk+-$(GDKTARGET)-3.0.pc: gtk+-3.0.pc
+	rm -f gtk+-$(GDKTARGET)-3.0.pc && \
+	cp gtk+-3.0.pc gtk+-$(GDKTARGET)-3.0.pc
 
-gdk-$(GDKTARGET)-2.0.pc: gdk-2.0.pc
-	rm -f gdk-$(GDKTARGET)-2.0.pc && \
-	cp gdk-2.0.pc gdk-$(GDKTARGET)-2.0.pc
+gdk-$(GDKTARGET)-3.0.pc: gdk-3.0.pc
+	rm -f gdk-$(GDKTARGET)-3.0.pc && \
+	cp gdk-3.0.pc gdk-$(GDKTARGET)-3.0.pc
 
-gtk+-$(GDKTARGET)-2.0-uninstalled.pc: gtk+-2.0-uninstalled.pc
-	rm -f gtk+-$(GDKTARGET)-2.0-uninstalled.pc && \
-	cp gtk+-2.0-uninstalled.pc gtk+-$(GDKTARGET)-2.0-uninstalled.pc
+gtk+-$(GDKTARGET)-3.0-uninstalled.pc: gtk+-3.0-uninstalled.pc
+	rm -f gtk+-$(GDKTARGET)-3.0-uninstalled.pc && \
+	cp gtk+-3.0-uninstalled.pc gtk+-$(GDKTARGET)-3.0-uninstalled.pc
 
-gdk-$(GDKTARGET)-2.0-uninstalled.pc: gdk-2.0-uninstalled.pc
-	rm -f gdk-$(GDKTARGET)-2.0-uninstalled.pc && \
-	cp gdk-2.0-uninstalled.pc gdk-$(GDKTARGET)-2.0-uninstalled.pc
+gdk-$(GDKTARGET)-3.0-uninstalled.pc: gdk-3.0-uninstalled.pc
+	rm -f gdk-$(GDKTARGET)-3.0-uninstalled.pc && \
+	cp gdk-3.0-uninstalled.pc gdk-$(GDKTARGET)-3.0-uninstalled.pc
 
 pkgconfigdir = $(libdir)/pkgconfig
-pkgconfig_DATA= gdk-pixbuf-2.0.pc gdk-$(GDKTARGET)-2.0.pc gtk+-$(GDKTARGET)-2.0.pc gail.pc
+pkgconfig_DATA = gdk-pixbuf-3.0.pc gdk-$(GDKTARGET)-3.0.pc gtk+-$(GDKTARGET)-3.0.pc gail-3.0.pc
 
 if OS_UNIX
-pkgconfig_DATA += gtk+-unix-print-2.0.pc
+pkgconfig_DATA += gtk+-unix-print-3.0.pc
 endif
 
 DISTCLEANFILES =				\
-	gtk+-unix-print-2.0.pc			\
-	gtk+-$(GDKTARGET)-2.0.pc		\
-	gdk-$(GDKTARGET)-2.0.pc			\
-	gail.pc					\
-	gtk+-$(GDKTARGET)-2.0-uninstalled.pc	\
-	gdk-$(GDKTARGET)-2.0-uninstalled.pc	\
-	gail-uninstalled.pc 			\
+	gtk+-unix-print-3.0.pc			\
+	gtk+-$(GDKTARGET)-3.0.pc		\
+	gdk-$(GDKTARGET)-3.0.pc			\
+	gail-3.0.pc				\
+	gtk+-$(GDKTARGET)-3.0-uninstalled.pc	\
+	gdk-$(GDKTARGET)-3.0-uninstalled.pc	\
+	gail-3.0-uninstalled.pc			\
 	config.lt
 
 distclean-local:
@@ -195,21 +182,21 @@ ChangeLog:
 	  echo A git checkout and git-log is required to generate this file >> $@); \
 	fi
 
-## copy the default target for this platform to gdk-2.0.pc and gtk+-2.0.pc
+## copy the default target for this platform to gdk-3.0.pc and gtk+-3.0.pc
 DEFAULT_GDKTARGET=x11
 install-data-hook:
 	(cd $(DESTDIR)$(pkgconfigdir) && \
-	 test -f gdk-$(DEFAULT_GDKTARGET)-2.0.pc && \
-	 test -f gtk+-$(DEFAULT_GDKTARGET)-2.0.pc && \
-	 rm -f gdk-2.0.pc && cp -f gdk-$(DEFAULT_GDKTARGET)-2.0.pc gdk-2.0.pc && \
-	 rm -f gtk+-2.0.pc && cp -f gtk+-$(DEFAULT_GDKTARGET)-2.0.pc gtk+-2.0.pc) || \
+	 test -f gdk-$(DEFAULT_GDKTARGET)-3.0.pc && \
+	 test -f gtk+-$(DEFAULT_GDKTARGET)-3.0.pc && \
+	 rm -f gdk-3.0.pc && cp -f gdk-$(DEFAULT_GDKTARGET)-3.0.pc gdk-3.0.pc && \
+	 rm -f gtk+-3.0.pc && cp -f gtk+-$(DEFAULT_GDKTARGET)-3.0.pc gtk+-3.0.pc) || \
 	(cd $(DESTDIR)$(pkgconfigdir) && \
-	 rm -f gdk-2.0.pc && cp -f gdk-$(GDKTARGET)-2.0.pc gdk-2.0.pc && \
-	 rm -f gtk+-2.0.pc && cp -f gtk+-$(GDKTARGET)-2.0.pc gtk+-2.0.pc)
+	 rm -f gdk-3.0.pc && cp -f gdk-$(GDKTARGET)-3.0.pc gdk-3.0.pc && \
+	 rm -f gtk+-3.0.pc && cp -f gtk+-$(GDKTARGET)-3.0.pc gtk+-3.0.pc)
 
 uninstall-local:
-	rm -f $(DESTDIR)$(pkgconfigdir)/gdk-2.0.pc
-	rm -f $(DESTDIR)$(pkgconfigdir)/gtk+-2.0.pc
+	rm -f $(DESTDIR)$(pkgconfigdir)/gdk-3.0.pc
+	rm -f $(DESTDIR)$(pkgconfigdir)/gtk+-3.0.pc
 
 dist-hook:
 	if test -f $(srcdir)/INSTALL.in && test -f $(srcdir)/README.in ; then \
@@ -243,7 +230,11 @@ sanity:
 snapshot:
 	$(MAKE) dist distdir=$(PACKAGE)-snap`date +"%Y%m%d"`
 
-DISTCHECK_CONFIGURE_FLAGS = --enable-gtk-doc --enable-man --disable-rebuilds --enable-introspection
+DISTCHECK_CONFIGURE_FLAGS =		\
+		--enable-gtk-doc 	\
+		--enable-man 		\
+		--disable-rebuilds 	\
+		--enable-introspection
 
 GITIGNOREFILES = \
 	po-properties/Makefile.in.in \

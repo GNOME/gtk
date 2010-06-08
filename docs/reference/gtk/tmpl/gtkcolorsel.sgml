@@ -21,6 +21,9 @@ color selection dialog box #GtkColorSelectionDialog.
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### STRUCT GtkColorSelection ##### -->
 <para>
 The #GtkColorSelection-struct struct contains private data only, 
@@ -61,38 +64,8 @@ according to its update policy.
 
 </para>
 
+@void: 
 @Returns: 
-
-
-<!-- ##### FUNCTION gtk_color_selection_set_update_policy ##### -->
-<para>
-Sets the policy controlling when the color_changed signals are emitted.
-The available policies are:
-<itemizedlist>
-<listitem>
-<para>
-%GTK_UPDATE_CONTINUOUS - signals are sent continuously as the color
-selection changes.
-</para>
-</listitem>
-<listitem>
-<para>
-%GTK_UPDATE_DISCONTINUOUS - signals are sent only when the mouse 
-button is released.
-</para>
-</listitem>
-<listitem>
-<para>
-%GTK_UPDATE_DELAYED - signals are sent when the mouse button is
-released or when the mouse has been motionless for a period of
-time.
-</para>
-</listitem>
-</itemizedlist>
-</para>
-
-@colorsel: a #GtkColorSelection.
-@policy: a #GtkUpdateType value indicating the desired policy.
 
 
 <!-- ##### FUNCTION gtk_color_selection_set_has_opacity_control ##### -->
@@ -233,15 +206,6 @@ time.
 @Returns: 
 
 
-<!-- ##### FUNCTION gtk_color_selection_set_change_palette_hook ##### -->
-<para>
-
-</para>
-
-@func: 
-@Returns: 
-
-
 <!-- ##### USER_FUNCTION GtkColorSelectionChangePaletteFunc ##### -->
 <para>
 
@@ -269,23 +233,5 @@ time.
 @colors: 
 @n_colors: 
 @Since: 2.2
-
-
-<!-- ##### FUNCTION gtk_color_selection_set_color ##### -->
-<para>
-
-</para>
-
-@colorsel: 
-@color: 
-
-
-<!-- ##### FUNCTION gtk_color_selection_get_color ##### -->
-<para>
-
-</para>
-
-@colorsel: 
-@color: 
 
 

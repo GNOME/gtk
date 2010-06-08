@@ -150,6 +150,9 @@ dialog = gtk_file_chooser_dialog_new ("Open File",
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### STRUCT GtkFileChooserDialog ##### -->
 <para>
 
@@ -167,27 +170,5 @@ dialog = gtk_file_chooser_dialog_new ("Open File",
 @first_button_text: 
 @Varargs: 
 @Returns: 
-
-
-<!-- ##### FUNCTION gtk_file_chooser_dialog_new_with_backend ##### -->
-<para>
-
-</para>
-
-@title: 
-@parent: 
-@action: 
-@backend: 
-@first_button_text: 
-@Varargs: 
-@Returns: 
-
-
-<!--
-Local variables:
-mode: sgml
-sgml-parent-document: ("../gtk-docs.sgml" "book" "refsect1")
-End:
--->
 
 

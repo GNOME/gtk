@@ -27,7 +27,7 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
-#if defined(GTK_DISABLE_SINGLE_INCLUDES) && !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
+#if !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
 #error "Only <gtk/gtk.h> can be included directly."
 #endif
 
@@ -48,8 +48,9 @@ G_BEGIN_DECLS
 #define GTK_ACCEL_LABEL_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_ACCEL_LABEL, GtkAccelLabelClass))
 
 
-typedef struct _GtkAccelLabel	    GtkAccelLabel;
-typedef struct _GtkAccelLabelClass  GtkAccelLabelClass;
+typedef struct _GtkAccelLabel	     GtkAccelLabel;
+typedef struct _GtkAccelLabelClass   GtkAccelLabelClass;
+typedef struct _GtkAccelLabelPrivate GtkAccelLabelPrivate;
 
 /**
  * GtkAccelLabel:
@@ -60,14 +61,7 @@ typedef struct _GtkAccelLabelClass  GtkAccelLabelClass;
 struct _GtkAccelLabel
 {
   GtkLabel label;
-
-  guint          GSEAL (gtk_reserved);
-  guint          GSEAL (accel_padding);      /* should be style property? */
-  GtkWidget     *GSEAL (accel_widget);       /* done*/
-  GClosure      *GSEAL (accel_closure);      /* has set function */
-  GtkAccelGroup *GSEAL (accel_group);        /* set by set_accel_closure() */
-  gchar         *GSEAL (accel_string);       /* has set function */
-  guint16        GSEAL (accel_string_width); /* seems to be private */
+  GtkAccelLabelPrivate *priv;
 };
 
 struct _GtkAccelLabelClass
@@ -90,9 +84,6 @@ struct _GtkAccelLabelClass
   void (*_gtk_reserved4) (void);
 };
 
-#ifndef GTK_DISABLE_DEPRECATED
-#define	gtk_accel_label_accelerator_width	gtk_accel_label_get_accel_width
-#endif /* GTK_DISABLE_DEPRECATED */
 
 GType	   gtk_accel_label_get_type	     (void) G_GNUC_CONST;
 GtkWidget* gtk_accel_label_new		     (const gchar   *string);

@@ -32,10 +32,7 @@ directly.
 In previous revisions of this interface, a number
 of functions that take a #GdkColormap parameter
 were replaced with functions whose names began
-with "gdk_colormap_". This process will probably
-be extended somewhat in the future - 
-gdk_color_white(), gdk_color_black(), and 
-gdk_color_change() will probably become aliases.
+with "gdk_colormap_".
 </para>
 
 <!-- ##### SECTION See_Also ##### -->
@@ -44,6 +41,9 @@ gdk_color_change() will probably become aliases.
 </para>
 
 <!-- ##### SECTION Stability_Level ##### -->
+
+
+<!-- ##### SECTION Image ##### -->
 
 
 <!-- ##### STRUCT GdkColor ##### -->
@@ -57,20 +57,14 @@ allocated or unallocated color.
 @red: The red component of the color. This is
   a value between 0 and 65535, with 65535 indicating
   full intensitiy.
-@green: The blue component of the color.
-@blue: The green component of the color.
+@green: The green component of the color.
+@blue: The blue component of the color.
 
 <!-- ##### STRUCT GdkColormap ##### -->
 <para>
 The colormap structure contains the following public fields.
 </para>
 
-@size: For pseudo-color colormaps, the number of colors
-  in the colormap.
-@colors: An array containing the current values in the
-  colormap. This can be used to map from pixel values
-  back to RGB values. This is only meaningful for
-  pseudo-color colormaps.
 
 <!-- ##### FUNCTION gdk_colormap_new ##### -->
 <para>
@@ -81,43 +75,12 @@ The colormap structure contains the following public fields.
 @Returns: 
 
 
-<!-- ##### FUNCTION gdk_colormap_ref ##### -->
-<para>
-
-</para>
-
-@cmap: 
-@Returns: 
-
-
-<!-- ##### FUNCTION gdk_colormap_unref ##### -->
-<para>
-
-</para>
-
-@cmap: 
-
-
 <!-- ##### FUNCTION gdk_colormap_get_system ##### -->
 <para>
 </para>
 
+@void: 
 @Returns: 
-
-
-<!-- ##### FUNCTION gdk_colormap_get_system_size ##### -->
-<para>
-</para>
-
-@Returns: 
-
-
-<!-- ##### FUNCTION gdk_colormap_change ##### -->
-<para>
-</para>
-
-@colormap: 
-@ncolors: 
 
 
 <!-- ##### FUNCTION gdk_colormap_alloc_colors ##### -->
@@ -180,15 +143,6 @@ The colormap structure contains the following public fields.
 @Returns: 
 
 
-<!-- ##### FUNCTION gdk_colors_store ##### -->
-<para>
-</para>
-
-@colormap: 
-@colors: 
-@ncolors: 
-
-
 <!-- ##### FUNCTION gdk_color_copy ##### -->
 <para>
 </para>
@@ -204,70 +158,11 @@ The colormap structure contains the following public fields.
 @color: 
 
 
-<!-- ##### FUNCTION gdk_colors_alloc ##### -->
-<para>
-</para>
-
-@colormap: 
-@contiguous: 
-@planes: 
-@nplanes: 
-@pixels: 
-@npixels: 
-@Returns: 
-
-
-<!-- ##### FUNCTION gdk_colors_free ##### -->
-<para>
-</para>
-
-@colormap: 
-@pixels: 
-@npixels: 
-@planes: 
-
-
-<!-- ##### FUNCTION gdk_color_white ##### -->
-<para>
-</para>
-
-@colormap: 
-@color: 
-@Returns: 
-
-
-<!-- ##### FUNCTION gdk_color_black ##### -->
-<para>
-</para>
-
-@colormap: 
-@color: 
-@Returns: 
-
-
 <!-- ##### FUNCTION gdk_color_parse ##### -->
 <para>
 </para>
 
 @spec: 
-@color: 
-@Returns: 
-
-
-<!-- ##### FUNCTION gdk_color_alloc ##### -->
-<para>
-</para>
-
-@colormap: 
-@color: 
-@Returns: 
-
-
-<!-- ##### FUNCTION gdk_color_change ##### -->
-<para>
-</para>
-
-@colormap: 
 @color: 
 @Returns: 
 

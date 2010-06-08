@@ -25,8 +25,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-#undef GTK_DISABLE_DEPRECATED
-
 #include <gtk/gtk.h>
 #include <gdk/gdkkeysyms.h>
 
@@ -472,7 +470,7 @@ fill_example_buffer (GtkTextBuffer *buffer)
   tag = gtk_text_buffer_create_tag (buffer, "fg_blue", NULL);
 
 #ifdef DO_BLINK
-  gtk_timeout_add (1000, blink_timeout, tag);
+  g_timeout_add (1000, (GSourceFunc)blink_timeout, tag);
 #endif     
  
   setup_tag (tag);
@@ -3033,8 +3031,8 @@ test_init (void)
   if (g_file_test ("../gdk-pixbuf/libpixbufloader-pnm.la",
 		   G_FILE_TEST_EXISTS))
     {
-      g_setenv ("GDK_PIXBUF_MODULE_FILE", "../gdk-pixbuf/gdk-pixbuf.loaders", TRUE);
-      g_setenv ("GTK_IM_MODULE_FILE", "../modules/input/gtk.immodules", TRUE);
+      g_setenv ("GDK_PIXBUF_MODULE_FILE", "../gdk-pixbuf/loaders.cache", TRUE);
+      g_setenv ("GTK_IM_MODULE_FILE", "../modules/input/immodules.cache", TRUE);
     }
 }
 
