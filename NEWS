@@ -1,3 +1,64 @@
+Overview of Changes from GTK+ 2.90.1 to 2.90.2
+==============================================
+
+* GtkApplication: an application class, based on GApplication. Currently,
+  this is fairly minimal, but it is good enough already to replace libunique.
+  Future work:
+  - Add a way to say "This is my application menubar", which gets
+    put into all toplevel windows on non-OS-X, and into the top
+    on OS X
+  - Support session management
+  - Maybe support application settings
+
+* Misc new api:
+ - gtk_window_has_group: determines if a window is part of a window group
+ - gtk_status_bar_remove_all: removes all messages from a statusbar
+
+* DND on offscreen windows works now
+
+* GtkIconView:
+ - arrow keynav can now be connected over adjacent icon views
+
+* GtkAssistant:
+ - gtk_assistant_commits: prevents going back beyond a certain
+   point in the page sequence, adjust shown buttons appropriately
+ - It is now officially supported to have a progress page at the
+   end of the page sequence
+
+* Introspection:
+ - Many annotation fixes
+ - gdkx.h api is exported in a separate typelib, GdkX11-3.0
+
+* Cleanups:
+ - the draw_string function has been removed from GtkStyle
+ - gdk_get/set_use_xshm have been removed
+ - Deprecated gdk_color api has been removed
+
+* Documentation related to GTK+ 1.2, etc has been removed. Instead
+  there is an initial GTK+ 3 porting guide now.
+
+* Bugs fixed:
+ 620509 Progress bar rendering is broken
+ 607628 DnD operation doesn't work when using offscreen.
+ 619838 kill off references to gtk 1.2 in docs/comments
+ 608218 GtkOffscreenWindow causes bad window with GtkEntry
+ 619649 Remove deprecated code from GdkColor
+ 619080 text-inserted events should not be emitted unless text...
+ 620511 Use g_source_set_name for all custom GSources in GTK+
+ 603637 gtk printer dialog does not show remote printer
+ 618271 Add gtk_window_has_group()
+ 617863 Actually expose the X11 funcs through introspection
+ 620244 misprint in the description of the function gtk_widget_list_...
+ 549127 Print error dialog not shown
+ 611709 gseal hides GtkStatusBar->messages but doesn't give anything...
+ 596428 GtkAssistant: Support ending with a progress page
+
+* Translation updates:
+Esperanto
+Hebrew
+Irish
+
+
 Overview of Changes from GTK+ 2.90.0 to 2.90.1
 ==============================================
 
