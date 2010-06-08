@@ -450,9 +450,6 @@ setup_default_window_decorations (void)
       title = g_key_file_get_locale_string (keyfile, G_KEY_FILE_DESKTOP_GROUP, G_KEY_FILE_DESKTOP_KEY_NAME, NULL, NULL);
       icon_name = g_key_file_get_string (keyfile, G_KEY_FILE_DESKTOP_GROUP, G_KEY_FILE_DESKTOP_KEY_ICON, NULL);
 
-      g_print ("default title: %s\n", title);
-      g_print ("default icon: %s\n", icon_name);
-
       if (default_title == NULL)
         default_title = title;
 
