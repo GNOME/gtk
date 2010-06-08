@@ -31,6 +31,22 @@
 #include "gdkalias.h"
 
 /**
+ * SECTION:dnd
+ * @title: Drag And Drop
+ * @short_description: Functions for controlling drag and drop handling
+ *
+ * These functions provide a low level interface for drag and drop.
+ * The X backend of GDK supports both the Xdnd and Motif drag and drop
+ * protocols transparently, the Win32 backend supports the WM_DROPFILES
+ * protocol.
+ *
+ * GTK+ provides a higher level abstraction based on top of these functions,
+ * and so they are not normally needed in GTK+ applications.
+ * See the <link linkend="gtk-Drag-and-Drop">Drag and Drop</link> section of
+ * the GTK+ documentation for more information.
+ */
+
+/**
  * gdk_drag_find_window:
  * @context: a #GdkDragContext.
  * @drag_window: a window which may be at the pointer position, but
