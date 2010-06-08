@@ -75,6 +75,7 @@ test_type (gconstpointer data)
 
   /* These can't be freely constructed/destroyed */
   if (g_type_is_a (type, GTK_TYPE_PRINT_JOB) ||
+      g_type_is_a (type, GTK_TYPE_APPLICATION) ||
       g_type_is_a (type, GDK_TYPE_PIXBUF_LOADER) ||
       g_type_is_a (type, gdk_pixbuf_simple_anim_iter_get_type ()))
     return;

@@ -223,7 +223,7 @@ GdkX11_3_0_gir_SCANNERFLAGS = --strip-prefix=gdk_x11 --add-include-path=../gdk-p
 GdkX11_3_0_gir_INCLUDES = Gio-2.0 Gdk-3.0 GdkPixbuf-3.0 Pango-1.0 xlib-2.0
 GdkX11_3_0_gir_LIBS = $(gdktargetlib)
 GdkX11_3_0_gir_FILES = $(addprefix $(srcdir)/,$(x11_introspection_files))
-GdkX11_3_0_gir_CFLAGS = $(INCLUDES)
+GdkX11_3_0_gir_CFLAGS = $(INCLUDES) -L$(top_builddir)/gdk
 INTROSPECTION_GIRS += GdkX11-3.0.gir
 endif # USE_X11
 
@@ -274,6 +274,7 @@ gdkalias.h: gdk.symbols
 gdkaliasdef.c: gdk.symbols
 	 $(PERL) $(srcdir)/makegdkalias.pl -def < $(srcdir)/gdk.symbols > gdkaliasdef.c
 
+TESTS_ENVIRONMENT = srcdir="$(srcdir)"
 if OS_LINUX
 TESTS = abicheck.sh pltcheck.sh
 endif
