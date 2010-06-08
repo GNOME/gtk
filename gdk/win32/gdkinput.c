@@ -156,7 +156,7 @@ gdk_device_get_key (GdkDevice       *device,
                     guint           *keyval,
                     GdkModifierType *modifiers)
 {
-  g_return__if_fail (GDK_IS_DEVICE (device));
+  g_return_if_fail (GDK_IS_DEVICE (device));
   g_return_if_fail (index < device->num_keys);
 
   if (!device->keys[index].keyval &&
