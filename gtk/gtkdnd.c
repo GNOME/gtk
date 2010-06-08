@@ -2375,7 +2375,10 @@ gtk_drag_begin_internal (GtkWidget         *widget,
     }
   else
     {
-      pointer = gdk_display_get_core_pointer (gtk_widget_get_display (widget));
+      GdkDeviceManager *device_manager;
+
+      device_manager = gdk_display_get_device_manager (gtk_widget_get_display (widget));
+      pointer = gdk_device_manager_get_client_pointer (device_manager);
       keyboard = gdk_device_get_associated_device (pointer);
     }
 
