@@ -1135,7 +1135,8 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   /**
    * GtkWidget::button-press-event:
    * @widget: the object which received the signal.
-   * @event: the #GdkEventButton which triggered this signal
+   * @event: (type Gdk.EventButton): the #GdkEventButton which triggered
+   *   this signal.
    *
    * The ::button-press-event signal will be emitted when a button
    * (typically from a mouse) is pressed.
@@ -1161,7 +1162,8 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   /**
    * GtkWidget::button-release-event:
    * @widget: the object which received the signal.
-   * @event: the #GdkEventButton which triggered this signal
+   * @event: (type Gdk.EventButton): the #GdkEventButton which triggered
+   *   this signal.
    *
    * The ::button-release-event signal will be emitted when a button
    * (typically from a mouse) is released.
@@ -1187,7 +1189,8 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   /**
    * GtkWidget::scroll-event:
    * @widget: the object which received the signal.
-   * @event: the #GdkEventScroll which triggered this signal
+   * @event: (type Gdk.EventScroll): the #GdkEventScroll which triggered
+   *   this signal.
    *
    * The ::scroll-event signal is emitted when a button in the 4 to 7
    * range is pressed. Wheel mice are usually configured to generate 
@@ -1213,7 +1216,8 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   /**
    * GtkWidget::motion-notify-event:
    * @widget: the object which received the signal.
-   * @event: the #GdkEventMotion which triggered this signal
+   * @event: (type Gdk.EventMotion): the #GdkEventMotion which triggered
+   *   this signal.
    *
    * The ::motion-notify-event signal is emitted when the pointer moves 
    * over the widget's #GdkWindow.
@@ -1331,7 +1335,8 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   /**
    * GtkWidget::expose-event:
    * @widget: the object which received the signal.
-   * @event: the #GdkEventExpose which triggered this signal
+   * @event: (type Gdk.EventExpose): the #GdkEventExpose which triggered
+   *   this signal.
    *
    * The ::expose-event signal is emitted when an area of a previously
    * obscured #GdkWindow is made visible and needs to be redrawn.
@@ -1357,7 +1362,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   /**
    * GtkWidget::key-press-event:
    * @widget: the object which received the signal
-   * @event: the #GdkEventKey which triggered this signal
+   * @event: (type Gdk.EventKey): the #GdkEventKey which triggered this signal.
    *
    * The ::key-press-event signal is emitted when a key is pressed.
    *
@@ -1382,7 +1387,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   /**
    * GtkWidget::key-release-event:
    * @widget: the object which received the signal
-   * @event: the #GdkEventKey which triggered this signal
+   * @event: (type Gdk.EventKey): the #GdkEventKey which triggered this signal.
    *
    * The ::key-release-event signal is emitted when a key is pressed.
    *
@@ -1407,7 +1412,8 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   /**
    * GtkWidget::enter-notify-event:
    * @widget: the object which received the signal
-   * @event: the #GdkEventCrossing which triggered this signal
+   * @event: (type Gdk.EventCrossing): the #GdkEventCrossing which triggered
+   *   this signal.
    *
    * The ::enter-notify-event will be emitted when the pointer enters
    * the @widget's window.
@@ -1433,7 +1439,8 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   /**
    * GtkWidget::leave-notify-event:
    * @widget: the object which received the signal
-   * @event: the #GdkEventCrossing which triggered this signal
+   * @event: (type Gdk.EventCrossing): the #GdkEventCrossing which triggered
+   *   this signal.
    *
    * The ::leave-notify-event will be emitted when the pointer leaves
    * the @widget's window.
@@ -1459,7 +1466,8 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   /**
    * GtkWidget::configure-event
    * @widget: the object which received the signal
-   * @event: the #GdkEventConfigure which triggered this signal
+   * @event: (type Gdk.EventConfigure): the #GdkEventConfigure which triggered
+   *   this signal.
    *
    * The ::configure-event signal will be emitted when the size, position or
    * stacking of the @widget's window has changed.
@@ -1484,7 +1492,8 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   /**
    * GtkWidget::focus-in-event
    * @widget: the object which received the signal
-   * @event: the #GdkEventFocus which triggered this signal
+   * @event: (type Gdk.EventFocus): the #GdkEventFocus which triggered
+   *   this signal.
    *
    * The ::focus-in-event signal will be emitted when the keyboard focus
    * enters the @widget's window.
@@ -1508,7 +1517,8 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   /**
    * GtkWidget::focus-out-event
    * @widget: the object which received the signal
-   * @event: the #GdkEventFocus which triggered this signal
+   * @event: (type Gdk.EventFocus): the #GdkEventFocus which triggered this
+   *   signal.
    *
    * The ::focus-out-event signal will be emitted when the keyboard focus
    * leaves the @widget's window.
@@ -1532,7 +1542,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   /**
    * GtkWidget::map-event
    * @widget: the object which received the signal
-   * @event: the #GdkEventAny which triggered this signal
+   * @event: (type Gdk.EventAny): the #GdkEventAny which triggered this signal.
    *
    * The ::map-event signal will be emitted when the @widget's window is
    * mapped. A window is mapped when it becomes visible on the screen.
@@ -1557,7 +1567,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   /**
    * GtkWidget::unmap-event
    * @widget: the object which received the signal
-   * @event: the #GdkEventAny which triggered this signal
+   * @event: (type Gdk.EventAny): the #GdkEventAny which triggered this signal
    *
    * The ::unmap-event signal will be emitted when the @widget's window is
    * unmapped. A window is unmapped when it becomes invisible on the screen.
@@ -1582,7 +1592,8 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   /**
    * GtkWidget::property-notify-event
    * @widget: the object which received the signal
-   * @event: the #GdkEventProperty which triggered this signal
+   * @event: (type Gdk.EventProperty): the #GdkEventProperty which triggered
+   *   this signal.
    *
    * The ::property-notify-event signal will be emitted when a property on
    * the @widget's window has been changed or deleted.
@@ -1606,7 +1617,8 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   /**
    * GtkWidget::selection-clear-event
    * @widget: the object which received the signal
-   * @event: the #GdkEventSelection which triggered this signal
+   * @event: (type Gdk.EventSelection): the #GdkEventSelection which triggered
+   *   this signal.
    *
    * The ::selection-clear-event signal will be emitted when the
    * the @widget's window has lost ownership of a selection.
@@ -1627,7 +1639,8 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   /**
    * GtkWidget::selection-request-event
    * @widget: the object which received the signal
-   * @event: the #GdkEventSelection which triggered this signal
+   * @event: (type Gdk.EventSelection): the #GdkEventSelection which triggered
+   *   this signal.
    *
    * The ::selection-request-event signal will be emitted when
    * another client requests ownership of the selection owned by
@@ -1702,7 +1715,8 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   /**
    * GtkWidget::proximity-in-event
    * @widget: the object which received the signal
-   * @event: the #GdkEventProximity which triggered this signal
+   * @event: (type Gdk.EventProximity): the #GdkEventProximity which triggered
+   *   this signal.
    *
    * To receive this signal the #GdkWindow associated to the widget needs
    * to enable the #GDK_PROXIMITY_IN_MASK mask.
@@ -1725,7 +1739,8 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   /**
    * GtkWidget::proximity-out-event
    * @widget: the object which received the signal
-   * @event: the #GdkEventProximity which triggered this signal
+   * @event: (type Gdk.EventProximity): the #GdkEventProximity which triggered
+   *   this signal.
    *
    * To receive this signal the #GdkWindow associated to the widget needs
    * to enable the #GDK_PROXIMITY_OUT_MASK mask.
@@ -2104,7 +2119,8 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   /**
    * GtkWidget::visibility-notify-event:
    * @widget: the object which received the signal
-   * @event: the #GdkEventVisibility which triggered this signal
+   * @event: (type Gdk.EventVisibility): the #GdkEventVisibility which
+   *   triggered this signal.
    *
    * The ::visibility-notify-event will be emitted when the @widget's window
    * is obscured or unobscured.
@@ -2128,7 +2144,8 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   /**
    * GtkWidget::client-event:
    * @widget: the object which received the signal
-   * @event: the #GdkEventClient which triggered this signal
+   * @event: (type Gdk.EventClient): the #GdkEventClient which triggered
+   *   this signal.
    *
    * The ::client-event will be emitted when the @widget's window
    * receives a message (via a ClientMessage event) from another
@@ -2150,7 +2167,8 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   /**
    * GtkWidget::no-expose-event:
    * @widget: the object which received the signal
-   * @event: the #GdkEventNoExpose which triggered this signal
+   * @event: (type Gdk.EventNoExpose): the #GdkEventNoExpose which triggered
+   *   this signal.
    *
    * The ::no-expose-event will be emitted when the @widget's window is 
    * drawn as a copy of another #GdkDrawable (with gdk_draw_drawable() or
@@ -2174,7 +2192,8 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   /**
    * GtkWidget::window-state-event:
    * @widget: the object which received the signal
-   * @event: the #GdkEventWindowState which triggered this signal
+   * @event: (type Gdk.EventWindowState): the #GdkEventWindowState which
+   *   triggered this signal.
    *
    * The ::window-state-event will be emitted when the state of the 
    * toplevel window associated to the @widget changes.
