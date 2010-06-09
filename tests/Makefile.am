@@ -32,7 +32,6 @@ noinst_PROGRAMS =  $(TEST_PROGS)	\
 	print-editor			\
 	extendedlayoutexample		\
 	testaccel			\
-	testapplication			\
 	testassistant			\
 	testbbox			\
 	testbuttons			\
@@ -97,6 +96,10 @@ noinst_PROGRAMS =  $(TEST_PROGS)	\
 	testgrouping			\
 	testtooltips			\
 	testvolumebutton
+
+if OS_UNIX
+noinst_PROGRAMS += testapplication
+endif
 
 if HAVE_CXX
 noinst_PROGRAMS += autotestkeywords
