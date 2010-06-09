@@ -277,6 +277,9 @@ quit (void)
 int
 main (int argc, char *argv[])
 {
+  GdkDeviceManager *device_manager;
+  GList *devices, *d;
+  GdkEventMask event_mask;
   GtkWidget *window;
   GtkWidget *drawing_area;
   GtkWidget *vbox;
@@ -285,7 +288,8 @@ main (int argc, char *argv[])
 
   gtk_init (&argc, &argv);
 
-  current_device = gdk_device_get_core_pointer ();
+  device_manager = gdk_display_get_device_manager (gdk_display_get_default ());
+  current_device = gdk_device_manager_get_client_pointer (device_manager);
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   gtk_widget_set_name (window, "Test Input");
@@ -326,17 +330,28 @@ main (int argc, char *argv[])
   g_signal_connect (drawing_area, "proximity_out_event",
 		    G_CALLBACK (proximity_out_event), NULL);
 
-  gtk_widget_set_events (drawing_area, GDK_EXPOSURE_MASK
-			 | GDK_LEAVE_NOTIFY_MASK
-			 | GDK_BUTTON_PRESS_MASK
-			 | GDK_KEY_PRESS_MASK
-			 | GDK_POINTER_MOTION_MASK
-			 | GDK_POINTER_MOTION_HINT_MASK
-			 | GDK_PROXIMITY_OUT_MASK);
+  event_mask = GDK_EXPOSURE_MASK |
+    GDK_LEAVE_NOTIFY_MASK |
+    GDK_BUTTON_PRESS_MASK |
+    GDK_KEY_PRESS_MASK |
+    GDK_POINTER_MOTION_MASK |
+    GDK_POINTER_MOTION_HINT_MASK |
+    GDK_PROXIMITY_OUT_MASK;
 
-  /* The following call enables tracking and processing of extension
-     events for the drawing area */
-  gtk_widget_set_extension_events (drawing_area, GDK_EXTENSION_EVENTS_ALL);
+  gtk_widget_set_events (drawing_area, event_mask);
+
+  devices = gdk_device_manager_list_devices (device_manager, GDK_DEVICE_TYPE_FLOATING);
+
+  for (d = devices; d; d = d->next)
+    {
+      GdkDevice *device;
+
+      device = d->data;
+      gtk_widget_set_device_events (drawing_area, device, event_mask);
+      gdk_device_set_mode (device, GDK_MODE_SCREEN);
+    }
+
+  g_list_free (devices);
 
   gtk_widget_set_can_focus (drawing_area, TRUE);
   gtk_widget_grab_focus (drawing_area);
