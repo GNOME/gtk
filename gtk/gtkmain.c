@@ -821,12 +821,12 @@ gtk_get_option_group (gboolean open_default_display)
  * Since: 2.6
  */
 gboolean
-gtk_init_with_args (int            *argc,
-		    char         ***argv,
-		    const char     *parameter_string,
-		    GOptionEntry   *entries,
-		    const char     *translation_domain,
-		    GError        **error)
+gtk_init_with_args (gint                 *argc,
+                    gchar              ***argv,
+                    const gchar          *parameter_string,
+                    const GOptionEntry   *entries,
+                    const gchar          *translation_domain,
+                    GError              **error)
 {
   GOptionContext *context;
   GOptionGroup *gtk_group;

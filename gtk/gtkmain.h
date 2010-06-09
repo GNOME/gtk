@@ -82,13 +82,13 @@ void     gtk_init                 (int    *argc,
 
 gboolean gtk_init_check           (int    *argc,
                                    char ***argv);
-  
-gboolean gtk_init_with_args       (int            *argc,
-				   char         ***argv,
-				   const char     *parameter_string,
-				   GOptionEntry   *entries,
-				   const char     *translation_domain,
-				   GError        **error);
+
+gboolean gtk_init_with_args       (gint                 *argc,
+                                   gchar              ***argv,
+                                   const gchar          *parameter_string,
+                                   const GOptionEntry   *entries,
+                                   const gchar          *translation_domain,
+                                   GError              **error);
 
 GOptionGroup *gtk_get_option_group (gboolean open_default_display);
   
