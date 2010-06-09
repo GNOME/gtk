@@ -84,6 +84,7 @@ void           gtk_viewport_set_shadow_type (GtkViewport   *viewport,
 					     GtkShadowType  type);
 GtkShadowType  gtk_viewport_get_shadow_type (GtkViewport   *viewport);
 GdkWindow*     gtk_viewport_get_bin_window  (GtkViewport   *viewport);
+GdkWindow*     gtk_viewport_get_view_window (GtkViewport   *viewport);
 
 
 G_END_DECLS

@@ -5433,6 +5433,7 @@ gtk_viewport_set_vadjustment
 gtk_viewport_set_shadow_type
 gtk_viewport_get_shadow_type
 gtk_viewport_get_bin_window
+gtk_viewport_get_view_window
 <SUBSECTION Standard>
 GTK_VIEWPORT
 GTK_IS_VIEWPORT
