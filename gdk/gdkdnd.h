@@ -38,6 +38,21 @@ G_BEGIN_DECLS
 
 typedef struct _GdkDragContext        GdkDragContext;
 
+/**
+ * GdkDragAction:
+ * @GDK_ACTION_DEFAULT: Means nothing, and should not be used.
+ * @GDK_ACTION_COPY: Copy the data.
+ * @GDK_ACTION_MOVE: Move the data, i.e. first copy it, then delete
+ *  it from the source using the DELETE target of the X selection protocol.
+ * @GDK_ACTION_LINK: Add a link to the data. Note that this is only
+ *  useful if source and destination agree on what it means.
+ * @GDK_ACTION_PRIVATE: Special action which tells the source that the
+ *  destination will do something that the source doesn't understand.
+ * @GDK_ACTION_ASK: Ask the user what to do with the data.
+ *
+ * Used in #GdkDragContext to indicate what the destination
+ * should do with the dropped data.
+ */
 typedef enum
 {
   GDK_ACTION_DEFAULT = 1 << 0,
@@ -48,6 +63,20 @@ typedef enum
   GDK_ACTION_ASK     = 1 << 5
 } GdkDragAction;
 
+/**
+ * GdkDragProtocol:
+ * @GDK_DRAG_PROTO_MOTIF: The Motif DND protocol.
+ * @GDK_DRAG_PROTO_XDND: The Xdnd protocol.
+ * @GDK_DRAG_PROTO_ROOTWIN: An extension to the Xdnd protocol for
+ *  unclaimed root window drops.
+ * @GDK_DRAG_PROTO_NONE: no protocol.
+ * @GDK_DRAG_PROTO_WIN32_DROPFILES: The simple WM_DROPFILES protocol.
+ * @GDK_DRAG_PROTO_OLE2: The complex OLE2 DND protocol (not implemented).
+ * @GDK_DRAG_PROTO_LOCAL: Intra-application DND.
+ *
+ * Used in #GdkDragContext to indicate the protocol according to
+ * which DND is done.
+ */
 typedef enum
 {
   GDK_DRAG_PROTO_MOTIF,
