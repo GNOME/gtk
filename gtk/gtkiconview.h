@@ -43,10 +43,30 @@ typedef struct _GtkIconView           GtkIconView;
 typedef struct _GtkIconViewClass      GtkIconViewClass;
 typedef struct _GtkIconViewPrivate    GtkIconViewPrivate;
 
+/**
+ * GtkIconViewForeachFunc:
+ * @icon_view: a #GtkIconView
+ * @path: The #GtkTreePath of a selected row
+ * @data: user data
+ *
+ * A function used by gtk_icon_view_selected_foreach() to map all
+ * selected rows.  It will be called on every selected row in the view.
+ */
 typedef void (* GtkIconViewForeachFunc)     (GtkIconView      *icon_view,
 					     GtkTreePath      *path,
 					     gpointer          data);
 
+/**
+ * GtkIconViewDropPosition:
+ * @GTK_ICON_VIEW_NO_DROP: no drop possible
+ * @GTK_ICON_VIEW_DROP_INTO: dropped item replaces the item
+ * @GTK_ICON_VIEW_DROP_LEFT: droppped item is inserted to the left
+ * @GTK_ICON_VIEW_DROP_RIGHT: dropped item is inserted to the right
+ * @GTK_ICON_VIEW_DROP_ABOVE: dropped item is inserted above
+ * @GTK_ICON_VIEW_DROP_BELOW: dropped item is inserted below
+ *
+ * An enum for determining where a dropped item goes.
+ */
 typedef enum
 {
   GTK_ICON_VIEW_NO_DROP,
