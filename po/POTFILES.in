@@ -169,7 +169,6 @@ gtk/gtkprintoperation-unix.c
 gtk/gtkprintoperation-win32.c
 gtk/gtkprintunixdialog.c
 gtk/gtkprogressbar.c
-gtk/gtkprogress.c
 gtk/gtkradioaction.c
 gtk/gtkradiobutton.c
 gtk/gtkradiomenuitem.c
