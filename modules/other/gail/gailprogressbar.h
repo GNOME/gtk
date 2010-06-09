@@ -37,8 +37,6 @@ typedef struct _GailProgressBarClass	GailProgressBarClass;
 struct _GailProgressBar
 {
   GailWidget parent;
-
-  AtkObject *adjustment;
 };
 
 GType gail_progress_bar_get_type (void);

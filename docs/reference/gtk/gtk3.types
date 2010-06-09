@@ -111,7 +111,6 @@ gtk_print_operation_preview_get_type
 gtk_print_settings_get_type
 gtk_print_unix_dialog_get_type
 gtk_progress_bar_get_type
-gtk_progress_get_type
 gtk_radio_action_get_type
 gtk_radio_button_get_type
 gtk_radio_menu_item_get_type

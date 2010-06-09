@@ -31,9 +31,7 @@
 #ifndef __GTK_PROGRESS_BAR_H__
 #define __GTK_PROGRESS_BAR_H__
 
-
-#include <gtk/gtkprogress.h>
-
+#include <gtk/gtkwidget.h>
 
 G_BEGIN_DECLS
 
@@ -50,12 +48,6 @@ typedef struct _GtkProgressBarClass  GtkProgressBarClass;
 
 typedef enum
 {
-  GTK_PROGRESS_CONTINUOUS,
-  GTK_PROGRESS_DISCRETE
-} GtkProgressBarStyle;
-
-typedef enum
-{
   GTK_PROGRESS_LEFT_TO_RIGHT,
   GTK_PROGRESS_RIGHT_TO_LEFT,
   GTK_PROGRESS_BOTTOM_TO_TOP,
@@ -64,9 +56,10 @@ typedef enum
 
 struct _GtkProgressBar
 {
-  GtkProgress progress;
+  GtkWidget parent;
 
-  GtkProgressBarStyle       GSEAL (bar_style);
+  GdkPixmap     *GSEAL (offscreen_pixmap);
+
   GtkProgressBarOrientation GSEAL (orientation);
 
   guint GSEAL (blocks);
@@ -81,17 +74,27 @@ struct _GtkProgressBar
   guint GSEAL (activity_dir) : 1;
   guint GSEAL (ellipsize) : 3;
   guint GSEAL (dirty) : 1;
+  guint GSEAL (activity_mode) : 1;
+  guint GSEAL (show_text) : 1;
 };
 
 struct _GtkProgressBarClass
 {
-  GtkProgressClass parent_class;
+  GtkWidgetClass parent_class;
+
+  void (* paint)            (GtkProgressBar *progress);
+  void (* update)           (GtkProgressBar *progress);
+  void (* act_mode_enter)   (GtkProgressBar *progress);
 
   /* Padding for future expansion */
   void (*_gtk_reserved1) (void);
   void (*_gtk_reserved2) (void);
   void (*_gtk_reserved3) (void);
   void (*_gtk_reserved4) (void);
+  void (*_gtk_reserved5) (void);
+  void (*_gtk_reserved6) (void);
+  void (*_gtk_reserved7) (void);
+  void (*_gtk_reserved8) (void);
 };
 
 
@@ -107,7 +110,7 @@ void       gtk_progress_bar_set_fraction         (GtkProgressBar *pbar,
 void       gtk_progress_bar_set_pulse_step       (GtkProgressBar *pbar,
                                                   gdouble         fraction);
 void       gtk_progress_bar_set_orientation      (GtkProgressBar *pbar,
-						  GtkProgressBarOrientation orientation);
+                                                  GtkProgressBarOrientation orientation);
 
 G_CONST_RETURN gchar* gtk_progress_bar_get_text       (GtkProgressBar *pbar);
 gdouble               gtk_progress_bar_get_fraction   (GtkProgressBar *pbar);
@@ -115,9 +118,12 @@ gdouble               gtk_progress_bar_get_pulse_step (GtkProgressBar *pbar);
 
 GtkProgressBarOrientation gtk_progress_bar_get_orientation (GtkProgressBar *pbar);
 void               gtk_progress_bar_set_ellipsize (GtkProgressBar     *pbar,
-						   PangoEllipsizeMode  mode);
+                                                   PangoEllipsizeMode  mode);
 PangoEllipsizeMode gtk_progress_bar_get_ellipsize (GtkProgressBar     *pbar);
 
+void               gtk_progress_bar_set_show_text (GtkProgressBar     *pbar,
+                                                   gboolean            show_text);
+gboolean           gtk_progress_bar_get_show_text (GtkProgressBar     *pbar);
 
 G_END_DECLS
 

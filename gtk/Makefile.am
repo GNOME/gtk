@@ -634,12 +634,6 @@ gtk_base_c_sources =            \
 	gtkwindow.c		\
 	$(gtk_clipboard_dnd_c_sources)
 
-# Deprecated
-gtk_public_h_sources += \
-	gtkprogress.h
-gtk_base_c_sources += \
-	gtkprogress.c
-
 gtk_c_sources = $(gtk_base_c_sources)
 gtk_all_c_sources = $(gtk_base_c_sources)
 

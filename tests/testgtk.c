@@ -8908,10 +8908,7 @@ toggle_show_text (GtkWidget *widget, ProgressData *pdata)
   gboolean active;
 
   active = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget));
-  gtk_progress_bar_set_text (GTK_PROGRESS_BAR (pdata->pbar),
-                             active ? gtk_entry_get_text (GTK_ENTRY (pdata->entry)) : NULL);
-
-  gtk_widget_set_sensitive (pdata->entry, active);
+  gtk_progress_bar_set_show_text (GTK_PROGRESS_BAR (pdata->pbar), active);
 }
 
 static void
@@ -9061,13 +9058,11 @@ create_progress_bar (GtkWidget *widget)
       gtk_box_pack_start (GTK_BOX (hbox), label, FALSE, TRUE, 0);
 
       pdata->entry = gtk_entry_new ();
-      gtk_entry_set_text (GTK_ENTRY (pdata->entry), "Installing ...");
       g_signal_connect (pdata->entry, "changed",
 			G_CALLBACK (entry_changed),
 			pdata);
       gtk_box_pack_start (GTK_BOX (hbox), pdata->entry, TRUE, TRUE, 0);
       gtk_widget_set_size_request (pdata->entry, 100, -1);
-      gtk_widget_set_sensitive (pdata->entry, FALSE);
 
       label = gtk_label_new ("Ellipsize text :");
       gtk_table_attach (GTK_TABLE (tab), label, 0, 1, 10, 11,

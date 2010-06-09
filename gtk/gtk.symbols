@@ -365,7 +365,6 @@ gtk_recent_filter_flags_get_type G_GNUC_CONST
 gtk_print_operation_action_get_type G_GNUC_CONST
 gtk_private_flags_get_type G_GNUC_CONST
 gtk_progress_bar_orientation_get_type G_GNUC_CONST
-gtk_progress_bar_style_get_type G_GNUC_CONST
 gtk_rc_flags_get_type G_GNUC_CONST
 gtk_rc_token_type_get_type G_GNUC_CONST
 gtk_recent_chooser_error_get_type G_GNUC_CONST
@@ -2676,26 +2675,6 @@ gtk_print_win32_devnames_from_printer_name
 #endif
 #endif
 
-#if IN_HEADER(__GTK_PROGRESS_H__)
-#if IN_FILE(__GTK_PROGRESS_C__)
-#ifndef GTK_DISABLE_DEPRECATED
-gtk_progress_configure
-gtk_progress_get_current_percentage
-gtk_progress_get_current_text
-gtk_progress_get_percentage_from_value
-gtk_progress_get_text_from_value
-gtk_progress_get_type
-gtk_progress_get_value
-gtk_progress_set_activity_mode
-gtk_progress_set_adjustment
-gtk_progress_set_format_string
-gtk_progress_set_percentage
-gtk_progress_set_show_text
-gtk_progress_set_text_alignment
-gtk_progress_set_value
-#endif
-#endif
-#endif
 
 #if IN_HEADER(__GTK_PROGRESS_BAR_H__)
 #if IN_FILE(__GTK_PROGRESS_BAR_C__)
@@ -2712,6 +2691,8 @@ gtk_progress_bar_set_orientation
 gtk_progress_bar_set_pulse_step
 gtk_progress_bar_set_text
 gtk_progress_bar_set_ellipsize
+gtk_progress_bar_set_show_text
+gtk_progress_bar_get_show_text
 #endif
 #endif
 
