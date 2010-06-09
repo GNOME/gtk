@@ -1574,7 +1574,6 @@ if test "x$gdktarget" = "xx11"; then
               [Define to 1 if no XInput should be used])
   fi
 
-  AM_CONDITIONAL(XINPUT_NONE,  test "x$with_xinput" = "xno")
   AM_CONDITIONAL(XINPUT_XFREE, test "x$with_xinput" != "xno")
   AM_CONDITIONAL(XINPUT_2,     test "x$have_xinput2" = "xyes")
 
