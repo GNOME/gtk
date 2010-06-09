@@ -2,6 +2,7 @@ gtkbbox.sgml
 gtkbox.sgml
 gtkbuilder.sgml
 gtkhbox.sgml
+gtkiconview.sgml
 gtkmessagedialog.sgml
 gtkobject.sgml
 gtkorientable.sgml
@@ -19,9 +20,11 @@ gtkscalebutton.sgml
 gtkseparator.sgml
 gtkseparatormenuitem.sgml
 gtkseparatortoolitem.sgml
+gtkstatusbar.sgml
 gtkstyle.sgml
 gtktesting.sgml
 gtktextiter.sgml
 gtktoggleaction.sgml
 gtktoolitem.sgml
 gtktreednd.sgml
+gtkwindow.sgml
