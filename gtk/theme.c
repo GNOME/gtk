@@ -4525,15 +4525,13 @@ meta_frame_style_draw_with_style (MetaFrameStyle          *style,
 
           if (op_list)
             {
-              GdkRectangle m_rect;
-              m_rect = meta_rect (rect.x, rect.y, rect.width, rect.height);
               meta_draw_op_list_draw_with_style (op_list,
                                                  style_gtk,
                                       widget,
                                       drawable,
                                       &combined_clip,
                                       &draw_info,
-                                      m_rect);
+                                      rect);
             }
         }
 
@@ -4567,16 +4565,13 @@ meta_frame_style_draw_with_style (MetaFrameStyle          *style,
                   
                   if (op_list)
                     {
-                      GdkRectangle m_rect;
-                      m_rect = meta_rect (rect.x, rect.y,
-                                          rect.width, rect.height);
                       meta_draw_op_list_draw_with_style (op_list,
                                                          style_gtk,
                                                          widget,
                                                          drawable,
                                                          &combined_clip,
                                                          &draw_info,
-                                                         m_rect);
+                                                         rect);
                     }
                 }
 

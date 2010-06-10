@@ -1609,8 +1609,12 @@ check_expression (PosToken            *tokens,
    * it's possible we should instead guarantee that widths and heights
    * are at least 1.
    */
-  
-  env.rect = meta_rect (0, 0, 0, 0);
+
+  env.rect.x = 0;
+  env.rect.y = 0;
+  env.rect.width = 0;
+  env.rect.height = 0;
+
   if (has_object)
     {
       env.object_width = 0;
