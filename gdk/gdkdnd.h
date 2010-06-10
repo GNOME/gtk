@@ -111,6 +111,8 @@ GdkDragAction    gdk_drag_context_get_actions          (GdkDragContext *context)
 GdkDragAction    gdk_drag_context_get_suggested_action (GdkDragContext *context);
 GdkDragAction    gdk_drag_context_get_selected_action  (GdkDragContext *context);
 
+GdkWindow       *gdk_drag_context_get_source_window    (GdkDragContext *context);
+
 #ifndef GDK_DISABLE_DEPRECATED
 void             gdk_drag_context_ref        (GdkDragContext *context);
 void             gdk_drag_context_unref      (GdkDragContext *context);
