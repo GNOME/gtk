@@ -1,3 +1,24 @@
+Overview of Changes from GTK+ 2.21.1 to 2.21.2
+==============================================
+
+* The newly added gdk_drag_context_get_action function has been
+  renamed to gdk_drag_context_get_selected_action to make the
+  name less confusing.
+
+* Introspection annotations have been added in many places
+
+* New accessors for sealed struct members:
+ gtk_viewport_get_view_window
+
+* Bug fixes:
+ 608218 GtkOffscreenWindow causes bad window with GtkEntry
+ 611709 Add gtk_statusbar_remove_all
+ 596428 GtkAssistant: Support ending with a progress page
+ 620511 Use g_source_set_name for all custom GSources in GTK+
+ 608537 Make the file chooser's sort arrows consistent
+ 620863
+
+
 Overview of Changes from GTK+ 2.21.0 to 2.21.1
 ==============================================
 
