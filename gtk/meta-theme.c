@@ -61,8 +61,6 @@
 #include <stdlib.h>
 #include <math.h>
 
-#include "gtk-compat.h"
-
 #define GDK_COLOR_RGBA(color)                                           \
                          ((guint32) (0xff                         |     \
                                      (((color).red / 256) << 24)   |    \
