@@ -53,9 +53,9 @@
  */
 
 #include <config.h>
-#include "theme.h"
-#include "theme-parser.h"
-#include "gradient.h"
+#include "meta-theme.h"
+#include "meta-theme-parser.h"
+#include "meta-gradient.h"
 #include <gtk/gtk.h>
 #include <string.h>
 #include <stdlib.h>

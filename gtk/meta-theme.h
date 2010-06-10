@@ -24,8 +24,8 @@
 #ifndef META_THEME_H
 #define META_THEME_H
 
-#include "gradient.h"
-#include "common.h"
+#include "meta-gradient.h"
+#include "meta-common.h"
 #include <gtk/gtk.h>
 
 typedef struct _MetaFrameStyle MetaFrameStyle;

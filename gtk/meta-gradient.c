@@ -22,7 +22,7 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
  * 02111-1307, USA.  */
 
-#include "gradient.h"
+#include "meta-gradient.h"
 #include <string.h>
 
 /* This is all Alfredo's and Dan's usual very nice WindowMaker code,

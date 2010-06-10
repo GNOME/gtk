@@ -22,7 +22,7 @@
  */
 
 #include <config.h>
-#include "theme-parser.h"
+#include "meta-theme-parser.h"
 #include <string.h>
 #include <stdlib.h>
 

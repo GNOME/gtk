@@ -21,7 +21,7 @@
  * 02111-1307, USA.
  */
 
-#include "theme.h"
+#include "meta-theme.h"
 
 #ifndef META_THEME_PARSER_H
 #define META_THEME_PARSER_H
