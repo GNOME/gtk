@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-05-30 18:04-0400\n"
+"POT-Creation-Date: 2010-06-10 11:56-0400\n"
 "PO-Revision-Date: 2008-08-19 10:51+0200\n"
 "Last-Translator: Laurent Dhima <laurenti@alblinux.net>\n"
 "Language-Team: albanian <gnome-albanian-perkthyesit@lists.sourceforge.net>\n"
@@ -656,59 +656,59 @@ msgstr "Përshtatja birit"
 msgid "Force aspect ratio to match that of the frame's child"
 msgstr "Përshtat proporcionet sipas atyre të birit të frame"
 
-#: gtk/gtkassistant.c:306
+#: gtk/gtkassistant.c:308
 msgid "Header Padding"
 msgstr "Mbushja e kreut"
 
-#: gtk/gtkassistant.c:307
+#: gtk/gtkassistant.c:309
 msgid "Number of pixels around the header."
 msgstr "Numri i pixels rreth kreut."
 
-#: gtk/gtkassistant.c:314
+#: gtk/gtkassistant.c:316
 msgid "Content Padding"
 msgstr "Mbushja e përmbajtjes"
 
-#: gtk/gtkassistant.c:315
+#: gtk/gtkassistant.c:317
 msgid "Number of pixels around the content pages."
 msgstr "Numri i pixels rreth faqeve të përmbajtjes."
 
-#: gtk/gtkassistant.c:331
+#: gtk/gtkassistant.c:333
 msgid "Page type"
 msgstr "Lloji i faqes"
 
-#: gtk/gtkassistant.c:332
+#: gtk/gtkassistant.c:334
 msgid "The type of the assistant page"
 msgstr "Lloji i faqes së asistencës"
 
-#: gtk/gtkassistant.c:349
+#: gtk/gtkassistant.c:351
 msgid "Page title"
 msgstr "Titulli i faqes"
 
-#: gtk/gtkassistant.c:350
+#: gtk/gtkassistant.c:352
 msgid "The title of the assistant page"
 msgstr "Titulli i faqes së asistencës"
 
-#: gtk/gtkassistant.c:366
+#: gtk/gtkassistant.c:368
 msgid "Header image"
 msgstr "Figura e kreut"
 
-#: gtk/gtkassistant.c:367
+#: gtk/gtkassistant.c:369
 msgid "Header image for the assistant page"
 msgstr "Figura e kreut për faqen e asistencës"
 
-#: gtk/gtkassistant.c:383
+#: gtk/gtkassistant.c:385
 msgid "Sidebar image"
 msgstr "Figura e shtyllës anësore"
 
-#: gtk/gtkassistant.c:384
+#: gtk/gtkassistant.c:386
 msgid "Sidebar image for the assistant page"
 msgstr "Figura e shtyllës ansore për faqen e asistencës"
 
-#: gtk/gtkassistant.c:399
+#: gtk/gtkassistant.c:401
 msgid "Page complete"
 msgstr "Faqe e plotësuar"
 
-#: gtk/gtkassistant.c:400
+#: gtk/gtkassistant.c:402
 msgid "Whether all required fields on the page have been filled out"
 msgstr "Tregon që të gjitha fushat e kërkuara në faqe janë plotësuar"
 
@@ -7395,52 +7395,52 @@ msgstr "Buffer"
 msgid "Whether or not the widget is double buffered"
 msgstr "Tregon nëse plug është i trupëzuar"
 
-#: gtk/gtkwidget.c:2404
+#: gtk/gtkwidget.c:2423
 msgid "Interior Focus"
 msgstr "Fokus i brendshëm"
 
-#: gtk/gtkwidget.c:2405
+#: gtk/gtkwidget.c:2424
 msgid "Whether to draw the focus indicator inside widgets"
 msgstr "Tregon nëse duhet vizatuar treguesi i fokus në brendësi të widget"
 
-#: gtk/gtkwidget.c:2411
+#: gtk/gtkwidget.c:2430
 msgid "Focus linewidth"
 msgstr "Gjërësia e vijës të treguesit të fokus"
 
-#: gtk/gtkwidget.c:2412
+#: gtk/gtkwidget.c:2431
 msgid "Width, in pixels, of the focus indicator line"
 msgstr "Gjerësia, në pixel, e vijës për treguesin e fokus"
 
-#: gtk/gtkwidget.c:2418
+#: gtk/gtkwidget.c:2437
 msgid "Focus line dash pattern"
 msgstr "Lloji i vijës së ndërprerë për treguesin e fokus"
 
-#: gtk/gtkwidget.c:2419
+#: gtk/gtkwidget.c:2438
 msgid "Dash pattern used to draw the focus indicator"
 msgstr ""
 "Lloji i vijës së ndërprerë të përdorur për të vizatuar treguesin e fokus"
 
-#: gtk/gtkwidget.c:2424
+#: gtk/gtkwidget.c:2443
 msgid "Focus padding"
 msgstr "Hapësira për treguesin e fokus"
 
-#: gtk/gtkwidget.c:2425
+#: gtk/gtkwidget.c:2444
 msgid "Width, in pixels, between focus indicator and the widget 'box'"
 msgstr "Gjerësia, në pixel, midis treguesit të fokus dhe widget 'box'"
 
-#: gtk/gtkwidget.c:2430
+#: gtk/gtkwidget.c:2449
 msgid "Cursor color"
 msgstr "Ngjyra e kursorit"
 
-#: gtk/gtkwidget.c:2431
+#: gtk/gtkwidget.c:2450
 msgid "Color with which to draw insertion cursor"
 msgstr "Ngjyra me të cilën duhet vizatuar kursori i shtimit"
 
-#: gtk/gtkwidget.c:2436
+#: gtk/gtkwidget.c:2455
 msgid "Secondary cursor color"
 msgstr "Ngjyra e kursorit dytësor"
 
-#: gtk/gtkwidget.c:2437
+#: gtk/gtkwidget.c:2456
 msgid ""
 "Color with which to draw the secondary insertion cursor when editing mixed "
 "right-to-left and left-to-right text"
@@ -7449,43 +7449,43 @@ msgstr ""
 "editing të përzier nga e djathta në të majtë e nga e majta në të djathtë "
 "teksti"
 
-#: gtk/gtkwidget.c:2442
+#: gtk/gtkwidget.c:2461
 msgid "Cursor line aspect ratio"
 msgstr "Proporcionet e kursorit të rreshtit"
 
-#: gtk/gtkwidget.c:2443
+#: gtk/gtkwidget.c:2462
 msgid "Aspect ratio with which to draw insertion cursor"
 msgstr "Proporcionet me të cilat duhet vizatuar kursori"
 
-#: gtk/gtkwidget.c:2457
+#: gtk/gtkwidget.c:2476
 msgid "Draw Border"
 msgstr "Krijo kornizë"
 
-#: gtk/gtkwidget.c:2458
+#: gtk/gtkwidget.c:2477
 msgid "Size of areas outside the widget's allocation to draw"
 msgstr "Madhësia e zonave jashtë pozicionit të instrumentit për t'u vizatuar"
 
-#: gtk/gtkwidget.c:2471
+#: gtk/gtkwidget.c:2490
 msgid "Unvisited Link Color"
 msgstr "Ngjyra e lidhjeve të pavizituara"
 
-#: gtk/gtkwidget.c:2472
+#: gtk/gtkwidget.c:2491
 msgid "Color of unvisited links"
 msgstr "Ngjyra për lidhjet e pavizituara"
 
-#: gtk/gtkwidget.c:2485
+#: gtk/gtkwidget.c:2504
 msgid "Visited Link Color"
 msgstr "Ngjyra e lidhjeve të vizituara"
 
-#: gtk/gtkwidget.c:2486
+#: gtk/gtkwidget.c:2505
 msgid "Color of visited links"
 msgstr "Ngjyra për lidhjet e vizituara"
 
-#: gtk/gtkwidget.c:2500
+#: gtk/gtkwidget.c:2519
 msgid "Wide Separators"
 msgstr "Ndarës të rregullueshëm"
 
-#: gtk/gtkwidget.c:2501
+#: gtk/gtkwidget.c:2520
 msgid ""
 "Whether separators have configurable width and should be drawn using a box "
 "instead of a line"
@@ -7493,37 +7493,37 @@ msgstr ""
 "Tregon nëse ndarësit kanë gjerësi të konfigurueshme dhe duhen vizatuar duke "
 "përdorur një kuadër në vend të një vize"
 
-#: gtk/gtkwidget.c:2515
+#: gtk/gtkwidget.c:2534
 msgid "Separator Width"
 msgstr "Gjerësia e ndarësit"
 
 # (pofilter) doublequoting: checks whether doublequoting is consistent between the two strings
-#: gtk/gtkwidget.c:2516
+#: gtk/gtkwidget.c:2535
 msgid "The width of separators if wide-separators is TRUE"
 msgstr "Gjerësia e ndarësve nëse «wide-separators» është TRUE"
 
-#: gtk/gtkwidget.c:2530
+#: gtk/gtkwidget.c:2549
 msgid "Separator Height"
 msgstr "Lartësia e ndarësit"
 
 # (pofilter) doublequoting: checks whether doublequoting is consistent between the two strings
-#: gtk/gtkwidget.c:2531
+#: gtk/gtkwidget.c:2550
 msgid "The height of separators if \"wide-separators\" is TRUE"
 msgstr "Lartësia e ndarësve nëse «wide-separators» është TRUE"
 
-#: gtk/gtkwidget.c:2545
+#: gtk/gtkwidget.c:2564
 msgid "Horizontal Scroll Arrow Length"
 msgstr "Gjatësia e shigjetës së rrëshqitjes horizontale"
 
-#: gtk/gtkwidget.c:2546
+#: gtk/gtkwidget.c:2565
 msgid "The length of horizontal scroll arrows"
 msgstr "Gjatësia e shigjetave të rrëshqitjes horizontale"
 
-#: gtk/gtkwidget.c:2560
+#: gtk/gtkwidget.c:2579
 msgid "Vertical Scroll Arrow Length"
 msgstr "Gjatësia e shigjetës së rrëshqitjes vertikale"
 
-#: gtk/gtkwidget.c:2561
+#: gtk/gtkwidget.c:2580
 msgid "The length of vertical scroll arrows"
 msgstr "Gjatësia e shigjetave të rrëshqitjes vertikale"
 

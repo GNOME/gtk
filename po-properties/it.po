@@ -33,7 +33,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-05-30 18:04-0400\n"
+"POT-Creation-Date: 2010-06-10 11:56-0400\n"
 "PO-Revision-Date: 2010-03-13 15:41+0100\n"
 "Last-Translator: Luca Ferretti <lferrett@gnome.org>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
@@ -683,60 +683,60 @@ msgstr "Adatta al figlio"
 msgid "Force aspect ratio to match that of the frame's child"
 msgstr "Adatta le proporzioni a quelle del figlio del frame"
 
-#: gtk/gtkassistant.c:306
+#: gtk/gtkassistant.c:308
 msgid "Header Padding"
 msgstr "Riempimento intestazione"
 
-#: gtk/gtkassistant.c:307
+#: gtk/gtkassistant.c:309
 msgid "Number of pixels around the header."
 msgstr "Il numero di pixel intorno all'intestazione."
 
-#: gtk/gtkassistant.c:314
+#: gtk/gtkassistant.c:316
 msgid "Content Padding"
 msgstr "Riempimento contenuto"
 
-#: gtk/gtkassistant.c:315
+#: gtk/gtkassistant.c:317
 msgid "Number of pixels around the content pages."
 msgstr "Il numero di pixel intorno alle pagine di contenuto."
 
-#: gtk/gtkassistant.c:331
+#: gtk/gtkassistant.c:333
 msgid "Page type"
 msgstr "Tipo di pagina"
 
-#: gtk/gtkassistant.c:332
+#: gtk/gtkassistant.c:334
 msgid "The type of the assistant page"
 msgstr "Il tipo di pagina dell'assistente"
 
-#: gtk/gtkassistant.c:349
+#: gtk/gtkassistant.c:351
 msgid "Page title"
 msgstr "Titolo pagina"
 
-#: gtk/gtkassistant.c:350
+#: gtk/gtkassistant.c:352
 msgid "The title of the assistant page"
 msgstr "Il titolo della pagina dell'assistente"
 
-#: gtk/gtkassistant.c:366
+#: gtk/gtkassistant.c:368
 msgid "Header image"
 msgstr "Immagine intestazione"
 
-#: gtk/gtkassistant.c:367
+#: gtk/gtkassistant.c:369
 msgid "Header image for the assistant page"
 msgstr "L'immagine di intestazione per la pagina dell'assistente"
 
-#: gtk/gtkassistant.c:383
+#: gtk/gtkassistant.c:385
 msgid "Sidebar image"
 msgstr "Immagine riquadro laterale"
 
-#: gtk/gtkassistant.c:384
+#: gtk/gtkassistant.c:386
 msgid "Sidebar image for the assistant page"
 msgstr "L'immagine del riquadro laterale per la pagina dell'assistente"
 
-#: gtk/gtkassistant.c:399
+#: gtk/gtkassistant.c:401
 msgid "Page complete"
 msgstr "Pagina completa"
 
 # FIXME
-#: gtk/gtkassistant.c:400
+#: gtk/gtkassistant.c:402
 msgid "Whether all required fields on the page have been filled out"
 msgstr "Indica se tutti i campi richiesti della pagina sono stati riempiti"
 
@@ -7534,51 +7534,51 @@ msgstr "Con doppio buffer"
 msgid "Whether or not the widget is double buffered"
 msgstr "Indica se il widget ha oppure no il doppio buffer"
 
-#: gtk/gtkwidget.c:2404
+#: gtk/gtkwidget.c:2423
 msgid "Interior Focus"
 msgstr "Focus interno"
 
-#: gtk/gtkwidget.c:2405
+#: gtk/gtkwidget.c:2424
 msgid "Whether to draw the focus indicator inside widgets"
 msgstr "Indica se disegnare l'indicatore di focus all'interno dei widget"
 
-#: gtk/gtkwidget.c:2411
+#: gtk/gtkwidget.c:2430
 msgid "Focus linewidth"
 msgstr "Larghezza linea dell'indicatore di focus"
 
-#: gtk/gtkwidget.c:2412
+#: gtk/gtkwidget.c:2431
 msgid "Width, in pixels, of the focus indicator line"
 msgstr "Larghezza, in pixel, della linea per l'indicatore di focus"
 
-#: gtk/gtkwidget.c:2418
+#: gtk/gtkwidget.c:2437
 msgid "Focus line dash pattern"
 msgstr "Linea tratteggiata per l'indicatore del focus"
 
-#: gtk/gtkwidget.c:2419
+#: gtk/gtkwidget.c:2438
 msgid "Dash pattern used to draw the focus indicator"
 msgstr "Tipo di tratteggio impiegato per disegnare l'indicatore di focus"
 
-#: gtk/gtkwidget.c:2424
+#: gtk/gtkwidget.c:2443
 msgid "Focus padding"
 msgstr "Spaziatura per l'indicatore di focus"
 
-#: gtk/gtkwidget.c:2425
+#: gtk/gtkwidget.c:2444
 msgid "Width, in pixels, between focus indicator and the widget 'box'"
 msgstr "Larghezza, in pixel, tra l'indicatore di focus e il widget box"
 
-#: gtk/gtkwidget.c:2430
+#: gtk/gtkwidget.c:2449
 msgid "Cursor color"
 msgstr "Colore del cursore"
 
-#: gtk/gtkwidget.c:2431
+#: gtk/gtkwidget.c:2450
 msgid "Color with which to draw insertion cursor"
 msgstr "Colore con cui disegnare il cursore di inserimento"
 
-#: gtk/gtkwidget.c:2436
+#: gtk/gtkwidget.c:2455
 msgid "Secondary cursor color"
 msgstr "Colore del cursore secondario"
 
-#: gtk/gtkwidget.c:2437
+#: gtk/gtkwidget.c:2456
 msgid ""
 "Color with which to draw the secondary insertion cursor when editing mixed "
 "right-to-left and left-to-right text"
@@ -7586,45 +7586,45 @@ msgstr ""
 "Colore con cui disegnare il cursore secondario quando si è in editing misto "
 "destra-sinistra e sinistra-destra"
 
-#: gtk/gtkwidget.c:2442
+#: gtk/gtkwidget.c:2461
 msgid "Cursor line aspect ratio"
 msgstr "Proporzioni del cursore di linea"
 
-#: gtk/gtkwidget.c:2443
+#: gtk/gtkwidget.c:2462
 msgid "Aspect ratio with which to draw insertion cursor"
 msgstr "Proporzioni con le quali disegnare il cursore di inserimento"
 
-#: gtk/gtkwidget.c:2457
+#: gtk/gtkwidget.c:2476
 msgid "Draw Border"
 msgstr "Disegna bordo"
 
 # spazio di allocazione ? -Luca
-#: gtk/gtkwidget.c:2458
+#: gtk/gtkwidget.c:2477
 msgid "Size of areas outside the widget's allocation to draw"
 msgstr ""
 "Dimensione delle aree all'esterno dell'allocazione del widget da disegnare"
 
-#: gtk/gtkwidget.c:2471
+#: gtk/gtkwidget.c:2490
 msgid "Unvisited Link Color"
 msgstr "Colore collegamento non visitato"
 
-#: gtk/gtkwidget.c:2472
+#: gtk/gtkwidget.c:2491
 msgid "Color of unvisited links"
 msgstr "Il colore dei link non ancora visitati"
 
-#: gtk/gtkwidget.c:2485
+#: gtk/gtkwidget.c:2504
 msgid "Visited Link Color"
 msgstr "Colore collegamento visitato"
 
-#: gtk/gtkwidget.c:2486
+#: gtk/gtkwidget.c:2505
 msgid "Color of visited links"
 msgstr "Il colore dei collegamenti visitati"
 
-#: gtk/gtkwidget.c:2500
+#: gtk/gtkwidget.c:2519
 msgid "Wide Separators"
 msgstr "Separatori regolabili"
 
-#: gtk/gtkwidget.c:2501
+#: gtk/gtkwidget.c:2520
 msgid ""
 "Whether separators have configurable width and should be drawn using a box "
 "instead of a line"
@@ -7632,35 +7632,35 @@ msgstr ""
 "Indica se i separatori hanno larghezza configurabile e devono essere "
 "disegnati usando un riquadro invece di una linea"
 
-#: gtk/gtkwidget.c:2515
+#: gtk/gtkwidget.c:2534
 msgid "Separator Width"
 msgstr "Larghezza separatore"
 
-#: gtk/gtkwidget.c:2516
+#: gtk/gtkwidget.c:2535
 msgid "The width of separators if wide-separators is TRUE"
 msgstr "La larghezza dei separatori se «wide-separators» è VERO"
 
-#: gtk/gtkwidget.c:2530
+#: gtk/gtkwidget.c:2549
 msgid "Separator Height"
 msgstr "Altezza separatore"
 
-#: gtk/gtkwidget.c:2531
+#: gtk/gtkwidget.c:2550
 msgid "The height of separators if \"wide-separators\" is TRUE"
 msgstr "L'altezza dei separatori se «wide-separators» è VERO"
 
-#: gtk/gtkwidget.c:2545
+#: gtk/gtkwidget.c:2564
 msgid "Horizontal Scroll Arrow Length"
 msgstr "Lunghezza della freccia di scorrimento orizzontale"
 
-#: gtk/gtkwidget.c:2546
+#: gtk/gtkwidget.c:2565
 msgid "The length of horizontal scroll arrows"
 msgstr "La lunghezza delle frecce di scorrimento orizzontale"
 
-#: gtk/gtkwidget.c:2560
+#: gtk/gtkwidget.c:2579
 msgid "Vertical Scroll Arrow Length"
 msgstr "Lunghezza della freccia di scorrimento verticale"
 
-#: gtk/gtkwidget.c:2561
+#: gtk/gtkwidget.c:2580
 msgid "The length of vertical scroll arrows"
 msgstr "La lunghezza delle frecce di scorrimento verticale"
 

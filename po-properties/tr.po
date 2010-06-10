@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-05-30 18:04-0400\n"
+"POT-Creation-Date: 2010-06-10 11:56-0400\n"
 "PO-Revision-Date: 2009-02-16 19:01+0200\n"
 "Last-Translator: Baris Cicek <baris@teamforce.name.tr>\n"
 "Language-Team: Turkish <gnome-turk@gnome.org>\n"
@@ -701,67 +701,67 @@ msgstr "Alta uy"
 msgid "Force aspect ratio to match that of the frame's child"
 msgstr "Çerçevenin altıyla en-boy oranının eşleşmesini sağlar"
 
-#: gtk/gtkassistant.c:306
+#: gtk/gtkassistant.c:308
 msgid "Header Padding"
 msgstr "Başlık Doldurma"
 
 # gtk/gtkmenubar.c:155
-#: gtk/gtkassistant.c:307
+#: gtk/gtkassistant.c:309
 msgid "Number of pixels around the header."
 msgstr "Başlığın çevresindeki piksellerin sayısı."
 
-#: gtk/gtkassistant.c:314
+#: gtk/gtkassistant.c:316
 msgid "Content Padding"
 msgstr "İçerik Doldurma"
 
 # gtk/gtkmenubar.c:155
-#: gtk/gtkassistant.c:315
+#: gtk/gtkassistant.c:317
 msgid "Number of pixels around the content pages."
 msgstr "İçerik sayfalarının çevresindeki piksellerin sayısı."
 
 # gtk/gtktoolbar.c:259
-#: gtk/gtkassistant.c:331
+#: gtk/gtkassistant.c:333
 msgid "Page type"
 msgstr "Sayfa türü"
 
 # gtk/gtklabel.c:199
-#: gtk/gtkassistant.c:332
+#: gtk/gtkassistant.c:334
 msgid "The type of the assistant page"
 msgstr "Yardımcı sayfanın türü"
 
 # gtk/gtkruler.c:148
-#: gtk/gtkassistant.c:349
+#: gtk/gtkassistant.c:351
 msgid "Page title"
 msgstr "Sayfa başlığı"
 
 # gtk/gtkwindow.c:333
-#: gtk/gtkassistant.c:350
+#: gtk/gtkassistant.c:352
 msgid "The title of the assistant page"
 msgstr "Yardımcı sayfanın başlığı"
 
 # gtk/gtktreeview.c:489
-#: gtk/gtkassistant.c:366
+#: gtk/gtkassistant.c:368
 msgid "Header image"
 msgstr "Başlık resmi"
 
-#: gtk/gtkassistant.c:367
+#: gtk/gtkassistant.c:369
 msgid "Header image for the assistant page"
 msgstr "Yardımcı sayfa için başlık resmi"
 
 # gtk/gtksettings.c:175
-#: gtk/gtkassistant.c:383
+#: gtk/gtkassistant.c:385
 msgid "Sidebar image"
 msgstr "Kenar çubuğu resmi"
 
-#: gtk/gtkassistant.c:384
+#: gtk/gtkassistant.c:386
 msgid "Sidebar image for the assistant page"
 msgstr "Yardımcı sayfa için kenar çubuğu resmi"
 
-#: gtk/gtkassistant.c:399
+#: gtk/gtkassistant.c:401
 msgid "Page complete"
 msgstr "Sayfa tamamlanmış"
 
-#: gtk/gtkassistant.c:400
+#: gtk/gtkassistant.c:402
 msgid "Whether all required fields on the page have been filled out"
 msgstr "Sayfadaki gerekli tüm alanların doldurulmuş olması"
 
@@ -8116,58 +8116,58 @@ msgid "Whether or not the widget is double buffered"
 msgstr "Fişin gömülü olup olmadığı"
 
 # gtk/gtkwidget.c:1068
-#: gtk/gtkwidget.c:2404
+#: gtk/gtkwidget.c:2423
 msgid "Interior Focus"
 msgstr "İç Odak"
 
 # gtk/gtkwidget.c:1069
-#: gtk/gtkwidget.c:2405
+#: gtk/gtkwidget.c:2424
 msgid "Whether to draw the focus indicator inside widgets"
 msgstr "Odak belirtecinin parçanın içine çizilmesi"
 
-#: gtk/gtkwidget.c:2411
+#: gtk/gtkwidget.c:2430
 msgid "Focus linewidth"
 msgstr "Odaklama çizgisi genişliği"
 
 # gtk/gtkwidget.c:1069
-#: gtk/gtkwidget.c:2412
+#: gtk/gtkwidget.c:2431
 msgid "Width, in pixels, of the focus indicator line"
 msgstr "Odaklama çizgisinin piksel cinsinden genişliği"
 
-#: gtk/gtkwidget.c:2418
+#: gtk/gtkwidget.c:2437
 msgid "Focus line dash pattern"
 msgstr "Odak çizgisi deseni"
 
 # gtk/gtkwidget.c:1069
-#: gtk/gtkwidget.c:2419
+#: gtk/gtkwidget.c:2438
 msgid "Dash pattern used to draw the focus indicator"
 msgstr "Odak belirteci çizgisi çizmede kullanılacak kesik çizgi deseni"
 
-#: gtk/gtkwidget.c:2424
+#: gtk/gtkwidget.c:2443
 msgid "Focus padding"
 msgstr "Odak doldurma"
 
 # gtk/gtkwidget.c:1069
-#: gtk/gtkwidget.c:2425
+#: gtk/gtkwidget.c:2444
 msgid "Width, in pixels, between focus indicator and the widget 'box'"
 msgstr "Odak belirteci ve 'box' parçası arasındaki piksel cinsinden uzaklık"
 
 # gtk/gtkentry.c:456
-#: gtk/gtkwidget.c:2430
+#: gtk/gtkwidget.c:2449
 msgid "Cursor color"
 msgstr "İmleç rengi"
 
 # gtk/gtkentry.c:457
-#: gtk/gtkwidget.c:2431
+#: gtk/gtkwidget.c:2450
 msgid "Color with which to draw insertion cursor"
 msgstr "Ekleme imlecinin çizileceği renk"
 
 # gtk/gtkentry.c:456
-#: gtk/gtkwidget.c:2436
+#: gtk/gtkwidget.c:2455
 msgid "Secondary cursor color"
 msgstr "İkincil imleç rengi"
 
-#: gtk/gtkwidget.c:2437
+#: gtk/gtkwidget.c:2456
 msgid ""
 "Color with which to draw the secondary insertion cursor when editing mixed "
 "right-to-left and left-to-right text"
@@ -8175,50 +8175,50 @@ msgstr ""
 "Karışık sağdan-sola veya soldan-sağa metin düzenlemesi yaparken ikincil "
 "imlecin çizileceği renk"
 
-#: gtk/gtkwidget.c:2442
+#: gtk/gtkwidget.c:2461
 msgid "Cursor line aspect ratio"
 msgstr "İmleç satırının en boy oranı"
 
 # gtk/gtkentry.c:457
-#: gtk/gtkwidget.c:2443
+#: gtk/gtkwidget.c:2462
 msgid "Aspect ratio with which to draw insertion cursor"
 msgstr "Ekleme imlecinin çizileceği en boy oranı"
 
 # gtk/gtknotebook.c:341
-#: gtk/gtkwidget.c:2457
+#: gtk/gtkwidget.c:2476
 msgid "Draw Border"
 msgstr "Kenarlık Çiz"
 
-#: gtk/gtkwidget.c:2458
+#: gtk/gtkwidget.c:2477
 msgid "Size of areas outside the widget's allocation to draw"
 msgstr "Parçanın ayırdığının dışında kalan alanın çizilecek boyutu"
 
 # gtk/gtkcolorsel.c:1682
-#: gtk/gtkwidget.c:2471
+#: gtk/gtkwidget.c:2490
 msgid "Unvisited Link Color"
 msgstr "Ziyaret Edilmemiş Bağ Rengi"
 
 # gtk/gtkwindow.c:333
-#: gtk/gtkwidget.c:2472
+#: gtk/gtkwidget.c:2491
 msgid "Color of unvisited links"
 msgstr "Ziyaret edilmemiş bağların rengi"
 
 # gtk/gtkcolorsel.c:1682
-#: gtk/gtkwidget.c:2485
+#: gtk/gtkwidget.c:2504
 msgid "Visited Link Color"
 msgstr "Ziyaret Edilmiş Bağ Rengi"
 
 # gtk/gtkwindow.c:333
-#: gtk/gtkwidget.c:2486
+#: gtk/gtkwidget.c:2505
 msgid "Color of visited links"
 msgstr "Ziyaret edilmiş bağların rengi"
 
 # gtk/gtkdialog.c:125
-#: gtk/gtkwidget.c:2500
+#: gtk/gtkwidget.c:2519
 msgid "Wide Separators"
 msgstr "Geniş Ayraçlar"
 
-#: gtk/gtkwidget.c:2501
+#: gtk/gtkwidget.c:2520
 msgid ""
 "Whether separators have configurable width and should be drawn using a box "
 "instead of a line"
@@ -8227,38 +8227,38 @@ msgstr ""
 "kullanılarak çizilmesi"
 
 # gtk/gtktreeview.c:535
-#: gtk/gtkwidget.c:2515
+#: gtk/gtkwidget.c:2534
 msgid "Separator Width"
 msgstr "Ayraç Genişliği"
 
-#: gtk/gtkwidget.c:2516
+#: gtk/gtkwidget.c:2535
 msgid "The width of separators if wide-separators is TRUE"
 msgstr "Eğer wide-separators TRUE ise ayraçların genişliği"
 
 # gtk/gtkwindow.c:399
-#: gtk/gtkwidget.c:2530
+#: gtk/gtkwidget.c:2549
 msgid "Separator Height"
 msgstr "Ayraç Yüksekliği"
 
-#: gtk/gtkwidget.c:2531
+#: gtk/gtkwidget.c:2550
 msgid "The height of separators if \"wide-separators\" is TRUE"
 msgstr "Eğer \"wide-separators\" TRUE ise ayraçların yüksekliği"
 
 # gtk/gtkalignment.c:121
-#: gtk/gtkwidget.c:2545
+#: gtk/gtkwidget.c:2564
 msgid "Horizontal Scroll Arrow Length"
 msgstr "Yatay Kaydırma Ok Uzunluğu"
 
-#: gtk/gtkwidget.c:2546
+#: gtk/gtkwidget.c:2565
 msgid "The length of horizontal scroll arrows"
 msgstr "Yatay kaydırma oklarının uzunluğu"
 
 # gtk/gtkalignment.c:130
-#: gtk/gtkwidget.c:2560
+#: gtk/gtkwidget.c:2579
 msgid "Vertical Scroll Arrow Length"
 msgstr "Düşey Kaydırma Ok Uzunluğu"
 
-#: gtk/gtkwidget.c:2561
+#: gtk/gtkwidget.c:2580
 msgid "The length of vertical scroll arrows"
 msgstr "Düşey kaydırma oklarının uzunluğu"
 

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ka\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-05-30 18:04-0400\n"
+"POT-Creation-Date: 2010-06-10 11:56-0400\n"
 "PO-Revision-Date: 2008-03-19 16:31+0100\n"
 "Last-Translator: Vladimer Sichinava ვლადიმერ სიჭინავა <vsichi@gnome.org>\n"
 "Language-Team: Georgian <http://mail.gnome.org/mailman/listinfo/gnome-ge-"
@@ -635,59 +635,59 @@ msgstr "ქვეელემენტზე დაქვემდებარ�
 msgid "Force aspect ratio to match that of the frame's child"
 msgstr "პროპორციის კოეფიციენტის მითითება ბლოკის ქვეელემენტის შესაბამისად"
 
-#: gtk/gtkassistant.c:306
+#: gtk/gtkassistant.c:308
 msgid "Header Padding"
 msgstr "თავსართის ზომა"
 
-#: gtk/gtkassistant.c:307
+#: gtk/gtkassistant.c:309
 msgid "Number of pixels around the header."
 msgstr "თავსართის გარშემო ცარიელი პიქსელების რაოდენობა."
 
-#: gtk/gtkassistant.c:314
+#: gtk/gtkassistant.c:316
 msgid "Content Padding"
 msgstr "შიგთავსის ზომა"
 
-#: gtk/gtkassistant.c:315
+#: gtk/gtkassistant.c:317
 msgid "Number of pixels around the content pages."
 msgstr "შიგთავსის გარშემო ცარიელი პიქსელების რაოდენობა."
 
-#: gtk/gtkassistant.c:331
+#: gtk/gtkassistant.c:333
 msgid "Page type"
 msgstr "გვერდის ტიპი"
 
-#: gtk/gtkassistant.c:332
+#: gtk/gtkassistant.c:334
 msgid "The type of the assistant page"
 msgstr "დამხმარეს ფანჯრის ტიპი"
 
-#: gtk/gtkassistant.c:349
+#: gtk/gtkassistant.c:351
 msgid "Page title"
 msgstr "გვერდის სათაური"
 
-#: gtk/gtkassistant.c:350
+#: gtk/gtkassistant.c:352
 msgid "The title of the assistant page"
 msgstr "დამხმარე გვერდის სათაური"
 
-#: gtk/gtkassistant.c:366
+#: gtk/gtkassistant.c:368
 msgid "Header image"
 msgstr "თავსართის გამოსახულება"
 
-#: gtk/gtkassistant.c:367
+#: gtk/gtkassistant.c:369
 msgid "Header image for the assistant page"
 msgstr ""
 
-#: gtk/gtkassistant.c:383
+#: gtk/gtkassistant.c:385
 msgid "Sidebar image"
 msgstr "გვერდითა პანელის გამოსახულება"
 
-#: gtk/gtkassistant.c:384
+#: gtk/gtkassistant.c:386
 msgid "Sidebar image for the assistant page"
 msgstr ""
 
-#: gtk/gtkassistant.c:399
+#: gtk/gtkassistant.c:401
 msgid "Page complete"
 msgstr "გვერდი შევსებულია"
 
-#: gtk/gtkassistant.c:400
+#: gtk/gtkassistant.c:402
 msgid "Whether all required fields on the page have been filled out"
 msgstr ""
 
@@ -7210,51 +7210,51 @@ msgstr "ბუფერი"
 msgid "Whether or not the widget is double buffered"
 msgstr "მართვის ელემენტების ხილულობა"
 
-#: gtk/gtkwidget.c:2404
+#: gtk/gtkwidget.c:2423
 msgid "Interior Focus"
 msgstr "მონაცემთა შეტანის შიდა ფოკუსი"
 
-#: gtk/gtkwidget.c:2405
+#: gtk/gtkwidget.c:2424
 msgid "Whether to draw the focus indicator inside widgets"
 msgstr "ფოკუსირების მაჩვენებლის ასახვა მართვის ელემენტებში"
 
-#: gtk/gtkwidget.c:2411
+#: gtk/gtkwidget.c:2430
 msgid "Focus linewidth"
 msgstr "მონაცემთა შეტანის ფოკუსირების ზოლის სიგანე"
 
-#: gtk/gtkwidget.c:2412
+#: gtk/gtkwidget.c:2431
 msgid "Width, in pixels, of the focus indicator line"
 msgstr "მონაცემთა შეტანის ფოკუსირების ზოლის სიგანე რასტრულ პიქსელებში"
 
-#: gtk/gtkwidget.c:2418
+#: gtk/gtkwidget.c:2437
 msgid "Focus line dash pattern"
 msgstr "მონაცემთა შეტანის ფოკუსირების ზოლის დაშტრიხვა"
 
-#: gtk/gtkwidget.c:2419
+#: gtk/gtkwidget.c:2438
 msgid "Dash pattern used to draw the focus indicator"
 msgstr "მონაცემთა შეტანის ფოკუსირების ზოლის დაშტრიხვის ნიმუში"
 
-#: gtk/gtkwidget.c:2424
+#: gtk/gtkwidget.c:2443
 msgid "Focus padding"
 msgstr "ფოკუსირების წანაცვლება"
 
-#: gtk/gtkwidget.c:2425
+#: gtk/gtkwidget.c:2444
 msgid "Width, in pixels, between focus indicator and the widget 'box'"
 msgstr "მანძილი მონაცემთა ელემენტსა და ფოკუსირების მაჩვენებლის 'ჩარჩოს' შორის"
 
-#: gtk/gtkwidget.c:2430
+#: gtk/gtkwidget.c:2449
 msgid "Cursor color"
 msgstr "კურსორის ფერი"
 
-#: gtk/gtkwidget.c:2431
+#: gtk/gtkwidget.c:2450
 msgid "Color with which to draw insertion cursor"
 msgstr "კურსორისთვის გამოყენებული ფერი"
 
-#: gtk/gtkwidget.c:2436
+#: gtk/gtkwidget.c:2455
 msgid "Secondary cursor color"
 msgstr "მეორადი კურსორის ფერი"
 
-#: gtk/gtkwidget.c:2437
+#: gtk/gtkwidget.c:2456
 msgid ""
 "Color with which to draw the secondary insertion cursor when editing mixed "
 "right-to-left and left-to-right text"
@@ -7262,87 +7262,87 @@ msgstr ""
 "მეორადი კურსორისთვის გამოყენებული ფერი შერეული (მარცხნიდან–მარჯვენა და "
 "მარჯვნიდან–მარცხენა) ტექსტებისთვის"
 
-#: gtk/gtkwidget.c:2442
+#: gtk/gtkwidget.c:2461
 msgid "Cursor line aspect ratio"
 msgstr "კურსორის პროპორცია"
 
-#: gtk/gtkwidget.c:2443
+#: gtk/gtkwidget.c:2462
 msgid "Aspect ratio with which to draw insertion cursor"
 msgstr "კურსორის პროპორცია"
 
-#: gtk/gtkwidget.c:2457
+#: gtk/gtkwidget.c:2476
 msgid "Draw Border"
 msgstr "კონტურის დახაზვა"
 
-#: gtk/gtkwidget.c:2458
+#: gtk/gtkwidget.c:2477
 msgid "Size of areas outside the widget's allocation to draw"
 msgstr "მართვის ელემენტის გარეთ სახატავი არის ზომა"
 
-#: gtk/gtkwidget.c:2471
+#: gtk/gtkwidget.c:2490
 #, fuzzy
 msgid "Unvisited Link Color"
 msgstr "ბმის ფერი"
 
-#: gtk/gtkwidget.c:2472
+#: gtk/gtkwidget.c:2491
 #, fuzzy
 msgid "Color of unvisited links"
 msgstr "ჰიპერბმების ფერი"
 
-#: gtk/gtkwidget.c:2485
+#: gtk/gtkwidget.c:2504
 #, fuzzy
 msgid "Visited Link Color"
 msgstr "ბმის ფერი"
 
-#: gtk/gtkwidget.c:2486
+#: gtk/gtkwidget.c:2505
 #, fuzzy
 msgid "Color of visited links"
 msgstr "ჰიპერბმების ფერი"
 
-#: gtk/gtkwidget.c:2500
+#: gtk/gtkwidget.c:2519
 #, fuzzy
 msgid "Wide Separators"
 msgstr "გამყოფის გამოყენება"
 
-#: gtk/gtkwidget.c:2501
+#: gtk/gtkwidget.c:2520
 msgid ""
 "Whether separators have configurable width and should be drawn using a box "
 "instead of a line"
 msgstr ""
 
-#: gtk/gtkwidget.c:2515
+#: gtk/gtkwidget.c:2534
 #, fuzzy
 msgid "Separator Width"
 msgstr "მართობული გამყოფის სიგანე"
 
-#: gtk/gtkwidget.c:2516
+#: gtk/gtkwidget.c:2535
 msgid "The width of separators if wide-separators is TRUE"
 msgstr ""
 
-#: gtk/gtkwidget.c:2530
+#: gtk/gtkwidget.c:2549
 #, fuzzy
 msgid "Separator Height"
 msgstr "ნაგულისხმები სიმაღლე"
 
-#: gtk/gtkwidget.c:2531
+#: gtk/gtkwidget.c:2550
 msgid "The height of separators if \"wide-separators\" is TRUE"
 msgstr ""
 
-#: gtk/gtkwidget.c:2545
+#: gtk/gtkwidget.c:2564
 #, fuzzy
 msgid "Horizontal Scroll Arrow Length"
 msgstr "გადახვევის განივი ზოლის წესები"
 
-#: gtk/gtkwidget.c:2546
+#: gtk/gtkwidget.c:2565
 #, fuzzy
 msgid "The length of horizontal scroll arrows"
 msgstr "გადახვევის განივი ზოლის ჩვენების წესები"
 
-#: gtk/gtkwidget.c:2560
+#: gtk/gtkwidget.c:2579
 #, fuzzy
 msgid "Vertical Scroll Arrow Length"
 msgstr "გადახვევის მართობული ზოლის წესები"
 
-#: gtk/gtkwidget.c:2561
+#: gtk/gtkwidget.c:2580
 #, fuzzy
 msgid "The length of vertical scroll arrows"
 msgstr "გადახვევის მართობული ზოლის ჩვენების წესები"

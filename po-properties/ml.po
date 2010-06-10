@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties.master.ml\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-05-30 18:04-0400\n"
+"POT-Creation-Date: 2010-06-10 11:56-0400\n"
 "PO-Revision-Date: 2009-08-24 14:19+0530\n"
 "Last-Translator: \n"
 "Language-Team:  <en@li.org>\n"
@@ -627,59 +627,59 @@ msgstr "Obey child"
 msgid "Force aspect ratio to match that of the frame's child"
 msgstr "ഫ്രെയിമിന്‍റെ ചൈള്‍ഡുമായി പൊരുത്തപ്പെടുന്നതിന് ആസ്പക്റ്റ് റേഷ്യോയെ നിര്‍ബന്ധമാക്കുക"
 
-#: gtk/gtkassistant.c:306
+#: gtk/gtkassistant.c:308
 msgid "Header Padding"
 msgstr "ഹെഡര്‍ പാഡിങ്"
 
-#: gtk/gtkassistant.c:307
+#: gtk/gtkassistant.c:309
 msgid "Number of pixels around the header."
 msgstr "ഹെഡറിലുള്ള പിക്സലുകളുടെ എണ്ണം."
 
-#: gtk/gtkassistant.c:314
+#: gtk/gtkassistant.c:316
 msgid "Content Padding"
 msgstr "കണ്‍ട്ടന്ര് പാഡിങ്"
 
-#: gtk/gtkassistant.c:315
+#: gtk/gtkassistant.c:317
 msgid "Number of pixels around the content pages."
 msgstr "ഉള്ളടക്കം ലഭ്യമാക്കുന്ന പേജുകളുടെ പിക്സലുകളുടെ എണ്ണം."
 
-#: gtk/gtkassistant.c:331
+#: gtk/gtkassistant.c:333
 msgid "Page type"
 msgstr "ഏത് തരം പേജ്"
 
-#: gtk/gtkassistant.c:332
+#: gtk/gtkassistant.c:334
 msgid "The type of the assistant page"
 msgstr "ഏത് തരം അസിസ്റ്റന്ര് പേജ്"
 
-#: gtk/gtkassistant.c:349
+#: gtk/gtkassistant.c:351
 msgid "Page title"
 msgstr "പേജിന്റെ തലക്കെട്ട്"
 
-#: gtk/gtkassistant.c:350
+#: gtk/gtkassistant.c:352
 msgid "The title of the assistant page"
 msgstr "അസിസ്റ്റന്റ് പേജിന്റെ തലക്കെട്ട്"
 
-#: gtk/gtkassistant.c:366
+#: gtk/gtkassistant.c:368
 msgid "Header image"
 msgstr "ഹെഡറിനുള്ള ഇമേജ്"
 
-#: gtk/gtkassistant.c:367
+#: gtk/gtkassistant.c:369
 msgid "Header image for the assistant page"
 msgstr "അസിസ്റ്റന്റ് പേജിനുള്ള ഹെഡര്‍ ഇമേജ്"
 
-#: gtk/gtkassistant.c:383
+#: gtk/gtkassistant.c:385
 msgid "Sidebar image"
 msgstr "സൈഡ്ബാര്‍ ഇമേജ്"
 
-#: gtk/gtkassistant.c:384
+#: gtk/gtkassistant.c:386
 msgid "Sidebar image for the assistant page"
 msgstr "അസിസ്റ്റന്റ് പേജിനുള്ള സൈഡ്ബാര്‍ ഇമേജ്"
 
-#: gtk/gtkassistant.c:399
+#: gtk/gtkassistant.c:401
 msgid "Page complete"
 msgstr "പേജ് പൂറ്‍ണ്ണമായിരിക്കുന്നു"
 
-#: gtk/gtkassistant.c:400
+#: gtk/gtkassistant.c:402
 msgid "Whether all required fields on the page have been filled out"
 msgstr "പേജില്‍ ആവശ്യമുള്ള ഫീള്‍ഡുകള്‍ എല്ലാം പൂരിപ്പിച്ചോ എന്ന്"
 
@@ -6965,51 +6965,51 @@ msgstr "ഡബിള്‍ ബഫേര്‍ഡ്"
 msgid "Whether or not the widget is double buffered"
 msgstr "വിഡ്ജറ്റ് ഡബിള്‍ ബഫേര്‍ഡ് ആണോ എന്ന്"
 
-#: gtk/gtkwidget.c:2404
+#: gtk/gtkwidget.c:2423
 msgid "Interior Focus"
 msgstr "ആന്തരിക ഫോക്കസ്"
 
-#: gtk/gtkwidget.c:2405
+#: gtk/gtkwidget.c:2424
 msgid "Whether to draw the focus indicator inside widgets"
 msgstr "വിഡ്ജറ്റിനുള്ളില്‍ ഫോക്കസ് സൂചന ലഭ്യമാക്കണമോ എന്നു്"
 
-#: gtk/gtkwidget.c:2411
+#: gtk/gtkwidget.c:2430
 msgid "Focus linewidth"
 msgstr "വരിയുടെ വീതി കേന്ദ്രീകരിക്കൂ"
 
-#: gtk/gtkwidget.c:2412
+#: gtk/gtkwidget.c:2431
 msgid "Width, in pixels, of the focus indicator line"
 msgstr "ഫോക്കസ് ഇന്‍ഡിക്കേറ്റര്‍ വരിയുടെ വീതി, പിക്സലുകളില്‍"
 
-#: gtk/gtkwidget.c:2418
+#: gtk/gtkwidget.c:2437
 msgid "Focus line dash pattern"
 msgstr "ഘടന മായ്‍ക്കാന്‌ കഴിയില്ല"
 
-#: gtk/gtkwidget.c:2419
+#: gtk/gtkwidget.c:2438
 msgid "Dash pattern used to draw the focus indicator"
 msgstr "ശ്രദ്ധ കേന്ദ്രീകരിക്കുന്നതിനുള്ള സൂചിക ലഭ്യമാക്കുന്നതിനുള്ള ഡാഷ് ശൈലി"
 
-#: gtk/gtkwidget.c:2424
+#: gtk/gtkwidget.c:2443
 msgid "Focus padding"
 msgstr "ക്ഷേപകം കേന്ദ്രീകരിക്കൂ"
 
-#: gtk/gtkwidget.c:2425
+#: gtk/gtkwidget.c:2444
 msgid "Width, in pixels, between focus indicator and the widget 'box'"
 msgstr "ഫോക്കസ് ഇന്‍ഡിക്കേറ്ററും വിഡ്ജറ്റ് ബോക്സും തമ്മിലുള്ള വീതി, പിക്സലുകളില്‍"
 
-#: gtk/gtkwidget.c:2430
+#: gtk/gtkwidget.c:2449
 msgid "Cursor color"
 msgstr "സ്ഥാനസൂചിയുടെ നിറം"
 
-#: gtk/gtkwidget.c:2431
+#: gtk/gtkwidget.c:2450
 msgid "Color with which to draw insertion cursor"
 msgstr "ചേറ്‍ക്കുന്നതിനായി ആവശ്യമുള്ള കേറ്‍സറിന്റെ നിറം"
 
-#: gtk/gtkwidget.c:2436
+#: gtk/gtkwidget.c:2455
 msgid "Secondary cursor color"
 msgstr "ദ്വീതീയ സ്ഥാനസൂചി നിറം"
 
-#: gtk/gtkwidget.c:2437
+#: gtk/gtkwidget.c:2456
 msgid ""
 "Color with which to draw the secondary insertion cursor when editing mixed "
 "right-to-left and left-to-right text"
@@ -7017,43 +7017,43 @@ msgstr ""
 "വലതു് മുതല്‍ ഇടതു് വരെയും ഇടതു് മുതല്‍ വലതു് വരെയുള്ള വാചകം ചിട്ടപ്പെടുത്തുമ്പോള്‍ സെക്കന്‍ഡറി ഇന്‍സേര്‍ഷന്‍ "
 "കര്‍സര്‍ വരയ്ക്കുവാനുള്ള നിറം"
 
-#: gtk/gtkwidget.c:2442
+#: gtk/gtkwidget.c:2461
 msgid "Cursor line aspect ratio"
 msgstr "ആകാരാനുപാതം"
 
-#: gtk/gtkwidget.c:2443
+#: gtk/gtkwidget.c:2462
 msgid "Aspect ratio with which to draw insertion cursor"
 msgstr "ചേറ്‍ക്കുന്നതിനായി ആവശ്യമുള്ള കേറ്‍സറ്‍ വരയ്ക്കുന്നതിനുള്ള ആസ്പെക്ട് റേഷ്യോ"
 
-#: gtk/gtkwidget.c:2457
+#: gtk/gtkwidget.c:2476
 msgid "Draw Border"
 msgstr "അതിര് വരയ്ക്കുക"
 
-#: gtk/gtkwidget.c:2458
+#: gtk/gtkwidget.c:2477
 msgid "Size of areas outside the widget's allocation to draw"
 msgstr "വിഡ്ജറ്റുകള്‍ വരയ്ക്കുവാനുള്ള സ്ഥലത്തിന് പുറത്തേക്കുള്ളവയുടെ വ്യാപ്തി"
 
-#: gtk/gtkwidget.c:2471
+#: gtk/gtkwidget.c:2490
 msgid "Unvisited Link Color"
 msgstr "സന്ദറ്‍ശിക്കാത്ത ലിങ്കുകളുടെ നിറം"
 
-#: gtk/gtkwidget.c:2472
+#: gtk/gtkwidget.c:2491
 msgid "Color of unvisited links"
 msgstr "സന്ദറ്‍ശിക്കാത്ത ലിങ്കുകളുടെ നിറം"
 
-#: gtk/gtkwidget.c:2485
+#: gtk/gtkwidget.c:2504
 msgid "Visited Link Color"
 msgstr "സന്ദറ്‍ശിച്ച ലിങ്കുകളുടെ നിറം"
 
-#: gtk/gtkwidget.c:2486
+#: gtk/gtkwidget.c:2505
 msgid "Color of visited links"
 msgstr "സന്ദറ്‍ശിച്ച ലിങ്കുകളുടെ നിറം"
 
-#: gtk/gtkwidget.c:2500
+#: gtk/gtkwidget.c:2519
 msgid "Wide Separators"
 msgstr "വീതിയുള്ള വിടവടയാളങ്ങള്‍"
 
-#: gtk/gtkwidget.c:2501
+#: gtk/gtkwidget.c:2520
 msgid ""
 "Whether separators have configurable width and should be drawn using a box "
 "instead of a line"
@@ -7061,35 +7061,35 @@ msgstr ""
 "വിടവടയാളങ്ങള്‍ക്ക് ക്റമികരിക്കുവാന്‍ സാധിക്കുന്ന വീതിയുണ്ടോ എന്നും അവ ബോക്സ് ഉപയോഗിച്ച് വരയ്ക്കണമോ "
 "എന്നും"
 
-#: gtk/gtkwidget.c:2515
+#: gtk/gtkwidget.c:2534
 msgid "Separator Width"
 msgstr "വേ‌ര്തിരിവിന്റെ വീതി"
 
-#: gtk/gtkwidget.c:2516
+#: gtk/gtkwidget.c:2535
 msgid "The width of separators if wide-separators is TRUE"
 msgstr "wide-separators TRUE എങ്കില്‍ വിടവടയാളത്തിന്റെ വീതി"
 
-#: gtk/gtkwidget.c:2530
+#: gtk/gtkwidget.c:2549
 msgid "Separator Height"
 msgstr "ഉയരം"
 
-#: gtk/gtkwidget.c:2531
+#: gtk/gtkwidget.c:2550
 msgid "The height of separators if \"wide-separators\" is TRUE"
 msgstr "\"wide-separators\" TRUE എങ്കില്‍ വിടവടയാളത്തിന്റെ ഉയരം"
 
-#: gtk/gtkwidget.c:2545
+#: gtk/gtkwidget.c:2564
 msgid "Horizontal Scroll Arrow Length"
 msgstr "ഇടത്തേക്കും വലത്തേക്കും ഉള്ള സ്ക്രോള്‍ ആരോകളുടെ നീളം"
 
-#: gtk/gtkwidget.c:2546
+#: gtk/gtkwidget.c:2565
 msgid "The length of horizontal scroll arrows"
 msgstr "ഇടത്തേക്കും വലത്തേക്കും ഉള്ള സ്ക്രോള്‍ ആരോകളുടെ നീളം"
 
-#: gtk/gtkwidget.c:2560
+#: gtk/gtkwidget.c:2579
 msgid "Vertical Scroll Arrow Length"
 msgstr "തോത്"
 
-#: gtk/gtkwidget.c:2561
+#: gtk/gtkwidget.c:2580
 msgid "The length of vertical scroll arrows"
 msgstr "മുകളിലേക്കും താഴേക്കും ഉള്ള സ്ക്രോള്‍ ആരോകളുടെ നീളം"
 

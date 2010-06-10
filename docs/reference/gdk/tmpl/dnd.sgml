@@ -102,6 +102,51 @@ the GTK+ documentation for more information.
 @context: 
 
 
+<!-- ##### FUNCTION gdk_drag_context_get_actions ##### -->
+<para>
+
+</para>
+
+@context: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_drag_context_get_selected_action ##### -->
+<para>
+
+</para>
+
+@context: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_drag_context_get_suggested_action ##### -->
+<para>
+
+</para>
+
+@context: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_drag_context_list_targets ##### -->
+<para>
+
+</para>
+
+@context: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_drag_context_get_source_window ##### -->
+<para>
+
+</para>
+
+@context: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gdk_drag_begin ##### -->
 <para>
 </para>

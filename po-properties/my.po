@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-05-30 18:04-0400\n"
+"POT-Creation-Date: 2010-06-10 11:56-0400\n"
 "PO-Revision-Date: 2010-01-19 16:26+0200\n"
 "Last-Translator: Russell Kyaw <rkyaw@yahoo.com>\n"
 "Language-Team: Burmese <my@li.org>\n"
@@ -632,59 +632,59 @@ msgstr "နာခံတဲ့ ကလေး"
 msgid "Force aspect ratio to match that of the frame's child"
 msgstr "ဘောင်ရဲ့ ကလေးနဲ့ ကိုက်ညီဖို့ စွမ်းအား ပုံပန်း အချိုးအစား"
 
-#: gtk/gtkassistant.c:306
+#: gtk/gtkassistant.c:308
 msgid "Header Padding"
 msgstr "ခေါင်းစီး အခုအခံ"
 
-#: gtk/gtkassistant.c:307
+#: gtk/gtkassistant.c:309
 msgid "Number of pixels around the header."
 msgstr "ခေါင်းစီး ၀န်းကျင်ရှိ pixelများ အရေအတွက်"
 
-#: gtk/gtkassistant.c:314
+#: gtk/gtkassistant.c:316
 msgid "Content Padding"
 msgstr "အကြောင်းအရာ အခုအခံ"
 
-#: gtk/gtkassistant.c:315
+#: gtk/gtkassistant.c:317
 msgid "Number of pixels around the content pages."
 msgstr "အကြောင်းအရာ စာမျက်နှာများ၀န်းကျင်ရှိ pixelများ အရေအတွက်"
 
-#: gtk/gtkassistant.c:331
+#: gtk/gtkassistant.c:333
 msgid "Page type"
 msgstr "စာမျက်နှာ အမျိုးအစား"
 
-#: gtk/gtkassistant.c:332
+#: gtk/gtkassistant.c:334
 msgid "The type of the assistant page"
 msgstr "အကူ စာမျက်နှာ အမျိုးအစား"
 
-#: gtk/gtkassistant.c:349
+#: gtk/gtkassistant.c:351
 msgid "Page title"
 msgstr "စာမျက်နှာ ခေါင်းစဉ်"
 
-#: gtk/gtkassistant.c:350
+#: gtk/gtkassistant.c:352
 msgid "The title of the assistant page"
 msgstr "အကူ စာမျက်နှာရဲ့ ခေါင်းစဉ်"
 
-#: gtk/gtkassistant.c:366
+#: gtk/gtkassistant.c:368
 msgid "Header image"
 msgstr "ခေါင်းစီး ရုပ်ပုံ"
 
-#: gtk/gtkassistant.c:367
+#: gtk/gtkassistant.c:369
 msgid "Header image for the assistant page"
 msgstr "အကူ စာမျက်နှာအတွက် ခေါင်းစီး ရုပ်ပုံ"
 
-#: gtk/gtkassistant.c:383
+#: gtk/gtkassistant.c:385
 msgid "Sidebar image"
 msgstr "ဘေးတန်း ရုပ်ပုံ"
 
-#: gtk/gtkassistant.c:384
+#: gtk/gtkassistant.c:386
 msgid "Sidebar image for the assistant page"
 msgstr "အကူ စာမျက်နှာအတွက် ဘေးတန်း ရုပ်ပုံ"
 
-#: gtk/gtkassistant.c:399
+#: gtk/gtkassistant.c:401
 msgid "Page complete"
 msgstr "ပြီးစီးတဲ့ စာမျက်နှာ"
 
-#: gtk/gtkassistant.c:400
+#: gtk/gtkassistant.c:402
 msgid "Whether all required fields on the page have been filled out"
 msgstr "စာမျက်နှာပေါ်မှ လိုအပ်တဲ့ နေရာလပ်များကို ဖြည့်စွတ်ထားပြီး မပြီး"
 
@@ -7043,51 +7043,51 @@ msgstr ""
 msgid "Whether or not the widget is double buffered"
 msgstr "ပလတ်ကို ထည့်မြုပ်ထား၊ မထား"
 
-#: gtk/gtkwidget.c:2404
+#: gtk/gtkwidget.c:2423
 msgid "Interior Focus"
 msgstr "အတွင်းပိုင်း ဗဟိုပြုချက်"
 
-#: gtk/gtkwidget.c:2405
+#: gtk/gtkwidget.c:2424
 msgid "Whether to draw the focus indicator inside widgets"
 msgstr "widget များ အတွင်းမှာ ဗဟိုပြုချက် ညွှန်တံကို ရေးဆွဲ၊ မဆွဲ"
 
-#: gtk/gtkwidget.c:2411
+#: gtk/gtkwidget.c:2430
 msgid "Focus linewidth"
 msgstr "ဗဟိုပြုတဲ့ linewidth"
 
-#: gtk/gtkwidget.c:2412
+#: gtk/gtkwidget.c:2431
 msgid "Width, in pixels, of the focus indicator line"
 msgstr "ဗဟိုပြုထားတဲ့ ညွှန်တံလိုင်းရဲ့ pixel များအလိုက် အကျယ်"
 
-#: gtk/gtkwidget.c:2418
+#: gtk/gtkwidget.c:2437
 msgid "Focus line dash pattern"
 msgstr "ဗဟိုပြုချက် လိုင်း မျဉ်းတို ပုံစံ"
 
-#: gtk/gtkwidget.c:2419
+#: gtk/gtkwidget.c:2438
 msgid "Dash pattern used to draw the focus indicator"
 msgstr "ဗဟိုပြုထားတဲ့ ညွှန်တံကို ရေးဆွဲဖို့ သုံးစွဲတဲ့ မျဉ်းတို ပုံစံ"
 
-#: gtk/gtkwidget.c:2424
+#: gtk/gtkwidget.c:2443
 msgid "Focus padding"
 msgstr "ဗဟိုပြုချက် အခုအခံ"
 
-#: gtk/gtkwidget.c:2425
+#: gtk/gtkwidget.c:2444
 msgid "Width, in pixels, between focus indicator and the widget 'box'"
 msgstr "ဗဟိုပြုချက် ညွှန်တံနဲ့ widget 'အကွက်' အကြား pixel များအလိုက် အကျယ်"
 
-#: gtk/gtkwidget.c:2430
+#: gtk/gtkwidget.c:2449
 msgid "Cursor color"
 msgstr "ခါဆာ အရောင်"
 
-#: gtk/gtkwidget.c:2431
+#: gtk/gtkwidget.c:2450
 msgid "Color with which to draw insertion cursor"
 msgstr "ထည့်သွင်းချက် ခါဆာကို ရေးဆွဲမဲ့ အရောင်"
 
-#: gtk/gtkwidget.c:2436
+#: gtk/gtkwidget.c:2455
 msgid "Secondary cursor color"
 msgstr "ဒုတိယအဆင့်ခါဆာ အရောင်"
 
-#: gtk/gtkwidget.c:2437
+#: gtk/gtkwidget.c:2456
 msgid ""
 "Color with which to draw the secondary insertion cursor when editing mixed "
 "right-to-left and left-to-right text"
@@ -7095,43 +7095,43 @@ msgstr ""
 "ညာ-မှ-ဘယ်နဲ့ ဘယ်-မှ-ညာ စာသား ရောနှောချက်ကို တည်းဖြတ်တဲ့အခါ ဒုတိယအဆင့် ထည့်သွင်းချက် "
 "ခါဆာကို​ ရေးဆွဲမဲ့ အရောင်"
 
-#: gtk/gtkwidget.c:2442
+#: gtk/gtkwidget.c:2461
 msgid "Cursor line aspect ratio"
 msgstr "ခါဆာ လိုင်း ရှုထောင့် အချိုး"
 
-#: gtk/gtkwidget.c:2443
+#: gtk/gtkwidget.c:2462
 msgid "Aspect ratio with which to draw insertion cursor"
 msgstr "ထည့်သွင်းချက် ခါဆာကို ရေးဆွဲပေးတဲ့ ရှုထောင့် အချိုး"
 
-#: gtk/gtkwidget.c:2457
+#: gtk/gtkwidget.c:2476
 msgid "Draw Border"
 msgstr "အနားသတ်ကို ရေးဆွဲပါ"
 
-#: gtk/gtkwidget.c:2458
+#: gtk/gtkwidget.c:2477
 msgid "Size of areas outside the widget's allocation to draw"
 msgstr "widget ရဲ့ ခွဲဝေသတ်မှတ်ခြင်းကို ရေးဆွဲမဲ့ ပြင်ပမှ နယ်ပယ်များရဲ့ အရွယ်"
 
-#: gtk/gtkwidget.c:2471
+#: gtk/gtkwidget.c:2490
 msgid "Unvisited Link Color"
 msgstr "လည်ပတ်မထားတဲ့ အချိတ်အဆက် အရောင်"
 
-#: gtk/gtkwidget.c:2472
+#: gtk/gtkwidget.c:2491
 msgid "Color of unvisited links"
 msgstr "လည်ပတ်မထားတဲ့ အချိတ်အဆက်များရဲ့ အရောင်"
 
-#: gtk/gtkwidget.c:2485
+#: gtk/gtkwidget.c:2504
 msgid "Visited Link Color"
 msgstr "လည်ပတ်ထားတဲ့ အချိတ်အဆက် အရောင်"
 
-#: gtk/gtkwidget.c:2486
+#: gtk/gtkwidget.c:2505
 msgid "Color of visited links"
 msgstr "လည်ပတ်ထားတဲ့ အချိတ်အဆက်များရဲ့ အရောင်"
 
-#: gtk/gtkwidget.c:2500
+#: gtk/gtkwidget.c:2519
 msgid "Wide Separators"
 msgstr "ကျယ်ပြန့်တဲ့ ပုဒ်ခွဲများ"
 
-#: gtk/gtkwidget.c:2501
+#: gtk/gtkwidget.c:2520
 msgid ""
 "Whether separators have configurable width and should be drawn using a box "
 "instead of a line"
@@ -7139,35 +7139,35 @@ msgstr ""
 "ပုဒ်ခွဲများမှာ ပြုပြင်ဖန်တီးနိုင်တဲ့ အကျယ်ရှိပြီး လိုင်းအစား အကွက်တခုကို သုံးစွဲကာ ရေးဆွဲသင့်၊ "
 "မသင့်"
 
-#: gtk/gtkwidget.c:2515
+#: gtk/gtkwidget.c:2534
 msgid "Separator Width"
 msgstr "ပုဒ်ခွဲ အကျယ်"
 
-#: gtk/gtkwidget.c:2516
+#: gtk/gtkwidget.c:2535
 msgid "The width of separators if wide-separators is TRUE"
 msgstr "wide-separators မှန်ကန်နေရင် ပုဒ်ခွဲများရဲ့ အကျယ်"
 
-#: gtk/gtkwidget.c:2530
+#: gtk/gtkwidget.c:2549
 msgid "Separator Height"
 msgstr "ပုဒ်ခွဲ အမြင့်"
 
-#: gtk/gtkwidget.c:2531
+#: gtk/gtkwidget.c:2550
 msgid "The height of separators if \"wide-separators\" is TRUE"
 msgstr "အကယ်၍ \"wide-separators\" ဟာ မှန်နေရင် ပုဒ်ခွဲများရဲ့ အမြင့်"
 
-#: gtk/gtkwidget.c:2545
+#: gtk/gtkwidget.c:2564
 msgid "Horizontal Scroll Arrow Length"
 msgstr "ပြင်ညီ လှိမ့်ဆင်းတဲ့ မြှား အရှည်"
 
-#: gtk/gtkwidget.c:2546
+#: gtk/gtkwidget.c:2565
 msgid "The length of horizontal scroll arrows"
 msgstr "ပြင်ညီ လှိမ့်ဆင်းတဲ့ မြှားရဲ့ အရှည်"
 
-#: gtk/gtkwidget.c:2560
+#: gtk/gtkwidget.c:2579
 msgid "Vertical Scroll Arrow Length"
 msgstr "ဒေါင်လိုက် လှိမ့်ဆင်းတဲ့ မြှား အရှည်"
 
-#: gtk/gtkwidget.c:2561
+#: gtk/gtkwidget.c:2580
 msgid "The length of vertical scroll arrows"
 msgstr "ဒေါင်လိုက် လှိမ့်ဆင်းတဲ့ မြှားရဲ့ အရှည်"
 

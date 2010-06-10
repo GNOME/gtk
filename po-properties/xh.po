@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-05-30 18:04-0400\n"
+"POT-Creation-Date: 2010-06-10 11:56-0400\n"
 "PO-Revision-Date: 2005-02-08 08:59+0200\n"
 "Last-Translator: Canonical Ltd <translations@canonical.com>\n"
 "Language-Team: Xhosa <xh-translate@ubuntu.com>\n"
@@ -656,70 +656,70 @@ msgid "Force aspect ratio to match that of the frame's child"
 msgstr ""
 "Nyanzelisa ukuba umba wolwalamano ungqamane ne-frame yenkqubo engumntwana"
 
-#: gtk/gtkassistant.c:306
+#: gtk/gtkassistant.c:308
 #, fuzzy
 msgid "Header Padding"
 msgstr "Ukongeza Iinkcukacha Ngasekhohlo"
 
-#: gtk/gtkassistant.c:307
+#: gtk/gtkassistant.c:309
 #, fuzzy
 msgid "Number of pixels around the header."
 msgstr "Isimbo somphetho othambekileyo ongaphandle komgca wemenyu"
 
-#: gtk/gtkassistant.c:314
+#: gtk/gtkassistant.c:316
 #, fuzzy
 msgid "Content Padding"
 msgstr "Ukongeza Iinkcukacha Emazantsi"
 
-#: gtk/gtkassistant.c:315
+#: gtk/gtkassistant.c:317
 #, fuzzy
 msgid "Number of pixels around the content pages."
 msgstr "Isimbo somphetho othambekileyo ngokujikeleze iziqulatho"
 
-#: gtk/gtkassistant.c:331
+#: gtk/gtkassistant.c:333
 #, fuzzy
 msgid "Page type"
 msgstr "Uhlobo lokupakisha"
 
-#: gtk/gtkassistant.c:332
+#: gtk/gtkassistant.c:334
 #, fuzzy
 msgid "The type of the assistant page"
 msgstr "Isimbo somyalezo"
 
-#: gtk/gtkassistant.c:349
+#: gtk/gtkassistant.c:351
 #, fuzzy
 msgid "Page title"
 msgstr "Ubungakanani Bephepha"
 
-#: gtk/gtkassistant.c:350
+#: gtk/gtkassistant.c:352
 #, fuzzy
 msgid "The title of the assistant page"
 msgstr "Uhlobo lwefestile"
 
-#: gtk/gtkassistant.c:366
+#: gtk/gtkassistant.c:368
 #, fuzzy
 msgid "Header image"
 msgstr "Okubhalwe Emantla Ephepha Kuyacofeka"
 
-#: gtk/gtkassistant.c:367
+#: gtk/gtkassistant.c:369
 msgid "Header image for the assistant page"
 msgstr ""
 
-#: gtk/gtkassistant.c:383
+#: gtk/gtkassistant.c:385
 #, fuzzy
 msgid "Sidebar image"
 msgstr "Ixabiso"
 
-#: gtk/gtkassistant.c:384
+#: gtk/gtkassistant.c:386
 msgid "Sidebar image for the assistant page"
 msgstr ""
 
-#: gtk/gtkassistant.c:399
+#: gtk/gtkassistant.c:401
 #, fuzzy
 msgid "Page complete"
 msgstr "Ukwandiswa Kwephepha"
 
-#: gtk/gtkassistant.c:400
+#: gtk/gtkassistant.c:402
 msgid "Whether all required fields on the page have been filled out"
 msgstr ""
 
@@ -7594,53 +7594,53 @@ msgstr "Isigcini sethutyana"
 msgid "Whether or not the widget is double buffered"
 msgstr "Nokuba ngaba isenzo siyabonakala na."
 
-#: gtk/gtkwidget.c:2404
+#: gtk/gtkwidget.c:2423
 msgid "Interior Focus"
 msgstr "Ukugxila ngaphakathi"
 
-#: gtk/gtkwidget.c:2405
+#: gtk/gtkwidget.c:2424
 msgid "Whether to draw the focus indicator inside widgets"
 msgstr "Nokuba ngaba isibonisi esigxilayo sizotywe ngaphakathi kwezixhobo na"
 
-#: gtk/gtkwidget.c:2411
+#: gtk/gtkwidget.c:2430
 msgid "Focus linewidth"
 msgstr "Gxila kububanzi bomgca"
 
-#: gtk/gtkwidget.c:2412
+#: gtk/gtkwidget.c:2431
 msgid "Width, in pixels, of the focus indicator line"
 msgstr "Ububanzi, bomgca osisibonisi ogxilayo, ngokwee-pixels"
 
-#: gtk/gtkwidget.c:2418
+#: gtk/gtkwidget.c:2437
 msgid "Focus line dash pattern"
 msgstr "Ipateni yomgca oqhawu-qhawukayo yogxilo"
 
-#: gtk/gtkwidget.c:2419
+#: gtk/gtkwidget.c:2438
 msgid "Dash pattern used to draw the focus indicator"
 msgstr "Ipateni eqhawu-qhawukayo esetyenziswa ukuzoba isibonisi esigxilayo"
 
-#: gtk/gtkwidget.c:2424
+#: gtk/gtkwidget.c:2443
 msgid "Focus padding"
 msgstr "Isongezo seenkcukacha esigxininisiweyo"
 
-#: gtk/gtkwidget.c:2425
+#: gtk/gtkwidget.c:2444
 msgid "Width, in pixels, between focus indicator and the widget 'box'"
 msgstr ""
 "Ububanzi, ngokwee-pixel, phakathi kwesibonisi sogxininiso kunye 'nebhokisi' "
 "yesixhobo"
 
-#: gtk/gtkwidget.c:2430
+#: gtk/gtkwidget.c:2449
 msgid "Cursor color"
 msgstr "Umbala wekhesa"
 
-#: gtk/gtkwidget.c:2431
+#: gtk/gtkwidget.c:2450
 msgid "Color with which to draw insertion cursor"
 msgstr "Umbala ekungazotywa ngawo ikhesa yokufakela"
 
-#: gtk/gtkwidget.c:2436
+#: gtk/gtkwidget.c:2455
 msgid "Secondary cursor color"
 msgstr "Umbala wekhesa okudidi lwesibini"
 
-#: gtk/gtkwidget.c:2437
+#: gtk/gtkwidget.c:2456
 msgid ""
 "Color with which to draw the secondary insertion cursor when editing mixed "
 "right-to-left and left-to-right text"
@@ -7648,88 +7648,88 @@ msgstr ""
 "Umbala ekungazotywa ngawo ikhesa yokufakela ekudidi lwesibini xa kuhlelwa "
 "umbhalo oyingxubevange yokunene-ukuya-ekhohlo nekhohlo-ukuya ekunene"
 
-#: gtk/gtkwidget.c:2442
+#: gtk/gtkwidget.c:2461
 msgid "Cursor line aspect ratio"
 msgstr "Umba wolalwamano lomgca wekhesa"
 
-#: gtk/gtkwidget.c:2443
+#: gtk/gtkwidget.c:2462
 msgid "Aspect ratio with which to draw insertion cursor"
 msgstr "Umba wolalwamano ezotywa ngawo ikhesa yokufakela"
 
-#: gtk/gtkwidget.c:2457
+#: gtk/gtkwidget.c:2476
 #, fuzzy
 msgid "Draw Border"
 msgstr "Umda Ka-Tab"
 
-#: gtk/gtkwidget.c:2458
+#: gtk/gtkwidget.c:2477
 msgid "Size of areas outside the widget's allocation to draw"
 msgstr ""
 
-#: gtk/gtkwidget.c:2471
+#: gtk/gtkwidget.c:2490
 #, fuzzy
 msgid "Unvisited Link Color"
 msgstr "Umbala Wesinxulumanisi"
 
-#: gtk/gtkwidget.c:2472
+#: gtk/gtkwidget.c:2491
 #, fuzzy
 msgid "Color of unvisited links"
 msgstr "Umbala wezinxulumanisi ezisuka kwezinye"
 
-#: gtk/gtkwidget.c:2485
+#: gtk/gtkwidget.c:2504
 #, fuzzy
 msgid "Visited Link Color"
 msgstr "Umbala Wesinxulumanisi"
 
-#: gtk/gtkwidget.c:2486
+#: gtk/gtkwidget.c:2505
 #, fuzzy
 msgid "Color of visited links"
 msgstr "Umbala wezinxulumanisi ezisuka kwezinye"
 
-#: gtk/gtkwidget.c:2500
+#: gtk/gtkwidget.c:2519
 #, fuzzy
 msgid "Wide Separators"
 msgstr "Sebenzisa isahluli"
 
-#: gtk/gtkwidget.c:2501
+#: gtk/gtkwidget.c:2520
 msgid ""
 "Whether separators have configurable width and should be drawn using a box "
 "instead of a line"
 msgstr ""
 
-#: gtk/gtkwidget.c:2515
+#: gtk/gtkwidget.c:2534
 #, fuzzy
 msgid "Separator Width"
 msgstr "Ububanzi Besahluli Ngokuthe Nkqo"
 
-#: gtk/gtkwidget.c:2516
+#: gtk/gtkwidget.c:2535
 msgid "The width of separators if wide-separators is TRUE"
 msgstr ""
 
-#: gtk/gtkwidget.c:2530
+#: gtk/gtkwidget.c:2549
 #, fuzzy
 msgid "Separator Height"
 msgstr "Umphakamo Omiselweyo"
 
-#: gtk/gtkwidget.c:2531
+#: gtk/gtkwidget.c:2550
 msgid "The height of separators if \"wide-separators\" is TRUE"
 msgstr ""
 
-#: gtk/gtkwidget.c:2545
+#: gtk/gtkwidget.c:2564
 #, fuzzy
 msgid "Horizontal Scroll Arrow Length"
 msgstr "Umgaqo-nkqubo Womgca Wokwehlisa Usenyusa Othe Tyaba"
 
-#: gtk/gtkwidget.c:2546
+#: gtk/gtkwidget.c:2565
 #, fuzzy
 msgid "The length of horizontal scroll arrows"
 msgstr "Xa umgca wokwehlisa usenyusa othe tyaba ubonakalisiwe"
 
-#: gtk/gtkwidget.c:2560
+#: gtk/gtkwidget.c:2579
 #, fuzzy
 msgid "Vertical Scroll Arrow Length"
 msgstr "Umgaqo-nkqubo Womgca Wokwehlisa Usenyusa Othe Nkqo"
 
-#: gtk/gtkwidget.c:2561
+#: gtk/gtkwidget.c:2580
 #, fuzzy
 msgid "The length of vertical scroll arrows"
 msgstr "Xa umgca wokwehlisa usenyusa othe nkqo ubonakalisiwe"
