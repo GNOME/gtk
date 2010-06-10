@@ -28,9 +28,6 @@
 
 #include <string.h>
 
-#undef GTK_DISABLE_DEPRECATED
-#define __GTK_PROGRESS_BAR_C__
-
 #include "gtkprogressbar.h"
 #include "gtkprivate.h"
 #include "gtkintl.h"
