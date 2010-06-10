@@ -9,6 +9,7 @@ Overview of Changes from GTK+ 2.21.1 to 2.21.2
 
 * New accessors for sealed struct members:
  gtk_viewport_get_view_window
+ gdk_drag_context_get_source_window
 
 * Bug fixes:
  608218 GtkOffscreenWindow causes bad window with GtkEntry
