@@ -23,7 +23,6 @@
  * 02111-1307, USA.  */
 
 #include "gradient.h"
-#include "util.h"
 #include <string.h>
 
 /* This is all Alfredo's and Dan's usual very nice WindowMaker code,
