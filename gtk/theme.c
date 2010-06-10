@@ -3440,7 +3440,7 @@ draw_op_as_pixbuf (const MetaDrawOp    *op,
 static void
 fill_env (MetaPositionExprEnv *env,
           const MetaDrawInfo  *info,
-          MetaRectangle        logical_region)
+          GdkRectangle         logical_region)
 {
   /* FIXME this stuff could be raised into draw_op_list_draw() probably
    */
@@ -3483,7 +3483,7 @@ meta_draw_op_draw_with_env (const MetaDrawOp    *op,
                             GdkDrawable         *drawable,
                             const GdkRectangle  *clip,
                             const MetaDrawInfo  *info,
-                            MetaRectangle        rect,
+                            GdkRectangle         rect,
                             MetaPositionExprEnv *env)
 {
   GdkGC *gc;
@@ -3820,7 +3820,7 @@ meta_draw_op_draw_with_env (const MetaDrawOp    *op,
 
     case META_DRAW_OP_LIST:
       {
-        MetaRectangle d_rect;
+        GdkRectangle d_rect;
 
         d_rect.x = parse_x_position_unchecked (op->data.op_list.x, env);
         d_rect.y = parse_y_position_unchecked (op->data.op_list.y, env);
@@ -3829,7 +3829,7 @@ meta_draw_op_draw_with_env (const MetaDrawOp    *op,
 
         meta_draw_op_list_draw_with_style (op->data.op_list.op_list,
                                            style_gtk, widget, drawable, clip, info,
-                                d_rect);
+                                           d_rect);
       }
       break;
 
@@ -3838,7 +3838,7 @@ meta_draw_op_draw_with_env (const MetaDrawOp    *op,
         int rx, ry, rwidth, rheight;
         int tile_xoffset, tile_yoffset; 
         GdkRectangle new_clip;
-        MetaRectangle tile;
+        GdkRectangle tile;
         
         rx = parse_x_position_unchecked (op->data.tile.x, env);
         ry = parse_y_position_unchecked (op->data.tile.y, env);
@@ -3891,7 +3891,7 @@ meta_draw_op_draw_with_style (const MetaDrawOp    *op,
                    GdkDrawable         *drawable,
                    const GdkRectangle  *clip,
                    const MetaDrawInfo  *info,
-                   MetaRectangle        logical_region)
+                   GdkRectangle         logical_region)
 {
   MetaPositionExprEnv env;
 
@@ -3971,7 +3971,7 @@ meta_draw_op_list_draw_with_style  (const MetaDrawOpList *op_list,
                          GdkDrawable          *drawable,
                          const GdkRectangle   *clip,
                          const MetaDrawInfo   *info,
-                         MetaRectangle         rect)
+                         GdkRectangle          rect)
 {
   int i;
   GdkRectangle active_clip;
@@ -4040,7 +4040,7 @@ meta_draw_op_list_draw  (const MetaDrawOpList *op_list,
                          GdkDrawable          *drawable,
                          const GdkRectangle   *clip,
                          const MetaDrawInfo   *info,
-                         MetaRectangle         rect)
+                         GdkRectangle          rect)
 
 {
   meta_draw_op_list_draw_with_style (op_list, gtk_widget_get_style (widget), widget,
@@ -4525,7 +4525,7 @@ meta_frame_style_draw_with_style (MetaFrameStyle          *style,
 
           if (op_list)
             {
-              MetaRectangle m_rect;
+              GdkRectangle m_rect;
               m_rect = meta_rect (rect.x, rect.y, rect.width, rect.height);
               meta_draw_op_list_draw_with_style (op_list,
                                                  style_gtk,
@@ -4567,16 +4567,16 @@ meta_frame_style_draw_with_style (MetaFrameStyle          *style,
                   
                   if (op_list)
                     {
-                      MetaRectangle m_rect;
+                      GdkRectangle m_rect;
                       m_rect = meta_rect (rect.x, rect.y,
                                           rect.width, rect.height);
                       meta_draw_op_list_draw_with_style (op_list,
                                                          style_gtk,
-                                              widget,
-                                              drawable,
-                                              &combined_clip,
-                                              &draw_info,
-                                              m_rect);
+                                                         widget,
+                                                         drawable,
+                                                         &combined_clip,
+                                                         &draw_info,
+                                                         m_rect);
                     }
                 }
 

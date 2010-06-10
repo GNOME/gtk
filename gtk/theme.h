@@ -24,7 +24,6 @@
 #ifndef META_THEME_H
 #define META_THEME_H
 
-#include "boxes.h"
 #include "gradient.h"
 #include "common.h"
 #include <gtk/gtk.h>
@@ -826,7 +825,7 @@ struct _MetaTheme
 
 struct _MetaPositionExprEnv
 {
-  MetaRectangle rect;
+  GdkRectangle rect;
   /* size of an object being drawn, if it has a natural size */
   int object_width;
   int object_height;
@@ -904,7 +903,7 @@ void           meta_draw_op_draw (const MetaDrawOp    *op,
                                   const GdkRectangle  *clip,
                                   const MetaDrawInfo  *info,
                                   /* logical region being drawn */
-                                  MetaRectangle        logical_region);
+                                  GdkRectangle         logical_region);
 
 void           meta_draw_op_draw_with_style (const MetaDrawOp    *op,
                                              GtkStyle            *style_gtk,
@@ -913,7 +912,7 @@ void           meta_draw_op_draw_with_style (const MetaDrawOp    *op,
                                              const GdkRectangle  *clip,
                                              const MetaDrawInfo  *info,
                                              /* logical region being drawn */
-                                             MetaRectangle        logical_region);
+                                             GdkRectangle         logical_region);
 
 MetaDrawOpList* meta_draw_op_list_new   (int                   n_preallocs);
 void            meta_draw_op_list_ref   (MetaDrawOpList       *op_list);
@@ -923,14 +922,14 @@ void            meta_draw_op_list_draw  (const MetaDrawOpList *op_list,
                                          GdkDrawable          *drawable,
                                          const GdkRectangle   *clip,
                                          const MetaDrawInfo   *info,
-                                         MetaRectangle         rect);
+                                         GdkRectangle          rect);
 void            meta_draw_op_list_draw_with_style  (const MetaDrawOpList *op_list,
                                                     GtkStyle             *style_gtk,
                                                     GtkWidget            *widget,
                                                     GdkDrawable          *drawable,
                                                     const GdkRectangle   *clip,
                                                     const MetaDrawInfo   *info,
-                                                    MetaRectangle         rect);
+                                                    GdkRectangle          rect);
 void           meta_draw_op_list_append (MetaDrawOpList       *op_list,
                                          MetaDrawOp           *op);
 gboolean       meta_draw_op_list_validate (MetaDrawOpList    *op_list,
