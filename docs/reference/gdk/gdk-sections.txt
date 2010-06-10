@@ -1235,6 +1235,10 @@ gdk_drag_drop
 gdk_drag_find_window
 gdk_drag_find_window_for_screen
 gdk_drag_context_ref
+gdk_drag_context_get_actions
+gdk_drag_context_get_selected_action
+gdk_drag_context_get_suggested_action
+gdk_drag_context_list_targets
 gdk_drag_context_get_source_window
 gdk_drag_begin
 gdk_drag_motion
