@@ -23,7 +23,6 @@
 
 #include <config.h>
 #include "theme-parser.h"
-#include "util.h"
 #include <string.h>
 #include <stdlib.h>
 
@@ -4151,7 +4150,7 @@ load_theme (const char *theme_dir,
                             error))
     goto out;
 
-  meta_topic (META_DEBUG_THEMES, "Parsing theme file %s\n", theme_file);
+  g_debug ("Parsing theme file %s\n", theme_file);
 
   parse_info_init (&info);
 
@@ -4179,8 +4178,8 @@ load_theme (const char *theme_dir,
  out:
   if (*error && !theme_error_is_fatal (*error))
     {
-      meta_topic (META_DEBUG_THEMES, "Failed to read theme from file %s: %s\n",
-                  theme_file, (*error)->message);
+      g_debug ("Failed to read theme from file %s: %s\n",
+               theme_file, (*error)->message);
     }
 
   g_free (theme_filename);

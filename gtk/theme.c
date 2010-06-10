@@ -55,7 +55,6 @@
 #include <config.h>
 #include "theme.h"
 #include "theme-parser.h"
-#include "util.h"
 #include "gradient.h"
 #include <gtk/gtk.h>
 #include <string.h>
@@ -4818,7 +4817,7 @@ meta_theme_set_current (const char *name,
   MetaTheme *new_theme;
   GError *err;
 
-  meta_topic (META_DEBUG_THEMES, "Setting current theme to \"%s\"\n", name);
+  g_debug ("Setting current theme to \"%s\"\n", name);
   
   if (!force_reload &&
       meta_current_theme &&
@@ -4841,7 +4840,7 @@ meta_theme_set_current (const char *name,
 
       meta_current_theme = new_theme;
 
-      meta_topic (META_DEBUG_THEMES, "New theme is \"%s\"\n", meta_current_theme->name);
+      g_debug ("New theme is \"%s\"\n", meta_current_theme->name);
     }
 }
 
