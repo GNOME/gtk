@@ -166,5 +166,23 @@ gdk_drag_context_get_selected_action (GdkDragContext *context)
   return context->action;
 }
 
+/**
+ * gdk_drag_context_get_source_window:
+ * @context: a #GdkDragContext
+ *
+ * Returns the #GdkWindow where the DND operation started.
+ *
+ * Return value: (transfer none): a #GdkWindow
+ *
+ * Since: 2.22
+ **/
+GdkWindow *
+gdk_drag_context_get_source_window (GdkDragContext *context)
+{
+  g_return_val_if_fail (GDK_IS_DRAG_CONTEXT (context), NULL);
+
+  return context->source_window;
+}
+
 #define __GDK_DND_C__
 #include "gdkaliasdef.c"
