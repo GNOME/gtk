@@ -2484,7 +2484,7 @@ gtk_color_selection_set_current_alpha (GtkColorSelection *colorsel,
 /**
  * gtk_color_selection_get_current_color:
  * @colorsel: a #GtkColorSelection.
- * @color: a #GdkColor to fill in with the current color.
+ * @color: (out): a #GdkColor to fill in with the current color.
  *
  * Sets @color to be the current color in the GtkColorSelection widget.
  **/
