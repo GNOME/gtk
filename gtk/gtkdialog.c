@@ -192,7 +192,7 @@ gtk_dialog_class_init (GtkDialogClass *class)
 							     P_("Separator"),
 							     P_("The separator above the action buttons"),
 							     GTK_TYPE_SEPARATOR, 
-							     GTK_PARAM_WRITABLE));
+							     GTK_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY));
 
   /**
    * GtkDialog:vbox:
