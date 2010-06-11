@@ -1,9 +1,8 @@
 /* GTK - The GIMP Toolkit
- * Copyright (C) 2007-2010 Openismus GmbH
+ * Copyright (C) 2007 Openismus GmbH
  *
- * Authors:
+ * Author:
  *      Mathias Hasselmann <mathias@openismus.com>
- *      Tristan Van Berkom <tristan.van.berkom@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public

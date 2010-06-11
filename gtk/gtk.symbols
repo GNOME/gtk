@@ -674,6 +674,8 @@ gtk_cell_renderer_toggle_set_radio
 
 #if IN_HEADER(__GTK_CELL_VIEW_H__)
 #if IN_FILE(__GTK_CELL_VIEW_C__)
+gtk_cell_view_get_desired_height_of_row
+gtk_cell_view_get_desired_width_of_row
 gtk_cell_view_get_displayed_row
 gtk_cell_view_get_model
 gtk_cell_view_get_size_of_row
@@ -1214,6 +1216,16 @@ gtk_expander_set_label_widget
 gtk_expander_set_spacing
 gtk_expander_set_use_markup
 gtk_expander_set_use_underline
+#endif
+#endif
+
+#if IN_HEADER(__GTK_EXTENDED_CELL_H__)
+#if IN_FILE(__GTK_EXTENDED_CELL_C__)
+gtk_extended_cell_get_type G_GNUC_CONST
+gtk_extended_cell_get_desired_height
+gtk_extended_cell_get_desired_width
+gtk_extended_cell_get_height_for_width
+gtk_extended_cell_get_width_for_height
 #endif
 #endif
 
@@ -4053,6 +4065,7 @@ gtk_tree_view_column_clicked
 gtk_tree_view_column_focus_cell
 gtk_tree_view_column_get_alignment
 gtk_tree_view_column_get_clickable
+gtk_tree_view_column_get_desired_size
 gtk_tree_view_column_get_expand
 gtk_tree_view_column_get_fixed_width
 gtk_tree_view_column_get_max_width

@@ -51,6 +51,7 @@ typedef enum
 
 typedef struct _GtkTreeViewColumn      GtkTreeViewColumn;
 typedef struct _GtkTreeViewColumnClass GtkTreeViewColumnClass;
+typedef struct _GtkTreeViewColumnPrivate GtkTreeViewColumnPrivate;
 
 typedef void (* GtkTreeCellDataFunc) (GtkTreeViewColumn *tree_column,
 				      GtkCellRenderer   *cell,
@@ -225,6 +226,9 @@ void                    gtk_tree_view_column_cell_get_size       (GtkTreeViewCol
 								  gint                    *y_offset,
 								  gint                    *width,
 								  gint                    *height);
+void                    gtk_tree_view_column_get_desired_size    (GtkTreeViewColumn       *column,
+								  GtkRequisition          *minimal_size,
+								  GtkRequisition          *desired_size);
 gboolean                gtk_tree_view_column_cell_is_visible     (GtkTreeViewColumn       *tree_column);
 void                    gtk_tree_view_column_focus_cell          (GtkTreeViewColumn       *tree_column,
 								  GtkCellRenderer         *cell);

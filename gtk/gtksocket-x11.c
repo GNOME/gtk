@@ -39,6 +39,7 @@
 #include "gtkdnd.h"
 
 #include "x11/gdkx.h"
+#include <X11/Xatom.h>
 
 #ifdef HAVE_XFIXES
 #include <X11/extensions/Xfixes.h>
@@ -120,6 +121,63 @@ _gtk_socket_windowing_size_request (GtkSocket *socket)
   socket->have_size = TRUE;
   
   gdk_error_trap_pop ();
+}
+
+void
+_gtk_socket_windowing_get_natural_size (GtkSocket *socket)
+{
+  GtkSocketPrivate *priv;
+  GdkDisplay *display;
+
+  Atom property, type;
+  int format, status;
+
+  unsigned long nitems, bytes_after;
+  unsigned char *data;
+  gint32 *data_long;
+
+  priv = _gtk_socket_get_private (socket);
+
+  priv->natural_width = 1;
+  priv->natural_height = 1;
+
+  if (gtk_widget_get_mapped (GTK_WIDGET (socket)))
+    {
+      display = gdk_drawable_get_display (socket->plug_window);
+      property = gdk_x11_get_xatom_by_name_for_display (display, "_GTK_NATURAL_SIZE");
+
+      gdk_error_trap_push ();
+      status = XGetWindowProperty (GDK_DISPLAY_XDISPLAY (display),
+                                   GDK_WINDOW_XWINDOW (socket->plug_window),
+                                   property, 0, 2, False, XA_CARDINAL,
+                                   &type, &format, &nitems, &bytes_after,
+                                   &data);
+      gdk_error_trap_pop ();
+
+      priv->have_natural_size = TRUE;
+
+      if (Success != status || !type)
+        return;
+
+      if (type != XA_CARDINAL)
+        {
+          g_warning ("_GTK_NATURAL_SIZE property has wrong type: %d\n", (int)type);
+          return;
+        }
+
+      if (nitems < 2)
+        {
+          g_warning ("_GTK_NATURAL_SIZE too short\n");
+          XFree (data);
+          return;
+        }
+
+      data_long = (gint32*) data;
+      priv->natural_width = MAX (1, data_long[0]);
+      priv->natural_height = MAX (1, data_long[1]);
+
+      XFree (data);
+    }
 }
 
 void
@@ -602,6 +660,10 @@ _gtk_socket_windowing_filter_func (GdkXEvent *gdk_xevent,
 		}
 	      return_val = GDK_FILTER_REMOVE;
 	    }
+          else if (xevent->xproperty.atom == gdk_x11_get_xatom_by_name_for_display (display, "_GTK_NATURAL_SIZE"))
+            {
+              _gtk_socket_windowing_get_natural_size (socket);
+            }
 	}
       break;
     case ReparentNotify:
