@@ -101,6 +101,7 @@ gtk_OBJECTS_deprecated = \
 	gtklistitem.obj \
 	gtkprogress.obj \
 	gtktipsquery.obj \
+	gtkshow.obj \
 	gtksignal.obj \
 	gtkpixmap.obj \
 	gtkpreview.obj \
@@ -144,7 +145,6 @@ gtk_OBJECTS_file = \
 	gtkfilefilter.obj \
 	gtkfilesystem.obj \
 	gtkfilesystemmodel.obj \
-	gtkfilesystemwin32.obj \
 
 gtk_OBJECTS_print = \
 	gtkprint-win32.obj \
@@ -193,6 +193,7 @@ gtk_OBJECTS = \
 	gtkaccessible.obj \
 	gtkaction.obj \
 	gtkactiongroup.obj \
+	gtkactivatable.obj \
 	gtkadjustment.obj \
 	gtkalignment.obj \
 	gtkarrow.obj \
@@ -273,6 +274,7 @@ gtk_OBJECTS = \
 	gtkmountoperation.obj \
 	gtknotebook.obj \
 	gtkobject.obj \
+	gtkorientable.obj \
 	gtkpagesetup.obj \
 	gtkpaned.obj \
 	gtkpapersize.obj \
@@ -347,6 +349,7 @@ gtk_public_h_sources =		\
 	gtkaccessible.h		\
 	gtkaction.h		\
 	gtkactiongroup.h	\
+	gtkactivatable.h	\
 	gtkadjustment.h		\
 	gtkalignment.h		\
 	gtkarrow.h		\
