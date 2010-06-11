@@ -22,6 +22,7 @@
 #include "gtkaccelgroup.h"
 #include "gtkmarshalers.h"
 #include "gtkcellrendereraccel.h"
+#include "gtkmain.h"
 #include "gtklabel.h"
 #include "gtkeventbox.h"
 #include "gtkprivate.h"
