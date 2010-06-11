@@ -113,6 +113,26 @@ typedef enum
   XP_THEME_FONT_MESSAGE
 } XpThemeFont;
 
+typedef struct
+{
+  GdkDrawable *drawable;
+  GdkGC *gc;
+  
+  gint x_offset;
+  gint y_offset;
+  
+  /*< private >*/
+  gpointer data;
+} XpDCInfo;
+
+HDC get_window_dc (GtkStyle *style,
+		   GdkWindow *window,
+		   GtkStateType state_type,
+		   XpDCInfo *dc_info_out,
+		   gint x, gint y, gint width, gint height,
+		   RECT *rect_out);
+void release_window_dc (XpDCInfo *dc_info);
+
 void xp_theme_init (void);
 void xp_theme_reset (void);
 void xp_theme_exit (void);

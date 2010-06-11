@@ -47,12 +47,6 @@
 #include "gdk/win32/gdkwin32.h"
 #endif
 
-static HDC get_window_dc (GtkStyle *style, GdkWindow *window,
-			  GtkStateType state_type, gint x, gint y, gint width,
-			  gint height, RECT *rect);
-static void release_window_dc (GtkStyle *style, GdkWindow *window,
-			       GtkStateType state_type);
-
 
 /* Default values, not normally used
  */
@@ -1113,8 +1107,9 @@ combo_box_draw_arrow (GtkStyle *style,
       DWORD border;
       RECT rect;
       HDC dc;
+      XpDCInfo dc_info;
 
-      dc = get_window_dc (style, window, state, area->x, area->y, area->width,
+      dc = get_window_dc (style, window, state, &dc_info, area->x, area->y, area->width,
 			  area->height, &rect);
       border = (GTK_TOGGLE_BUTTON (widget->parent)->
 		active ? DFCS_PUSHED | DFCS_FLAT : 0);
@@ -1122,7 +1117,7 @@ combo_box_draw_arrow (GtkStyle *style,
       InflateRect (&rect, 1, 1);
       DrawFrameControl (dc, &rect, DFC_SCROLL, DFCS_SCROLLDOWN | border);
 
-      release_window_dc (style, window, state);
+      release_window_dc (&dc_info);
 
       return TRUE;
     }
@@ -1270,8 +1265,9 @@ draw_expander (GtkStyle *style,
       RECT rect;
       HPEN pen;
       HGDIOBJ old_pen;
+      XpDCInfo dc_info;
 
-      dc = get_window_dc (style, window, state, x, y, expander_size,
+      dc = get_window_dc (style, window, state, &dc_info, x, y, expander_size,
 			  expander_size, &rect);
       FrameRect (dc, &rect, GetSysColorBrush (COLOR_GRAYTEXT));
       InflateRect (&rect, -1, -1);
@@ -1297,7 +1293,7 @@ draw_expander (GtkStyle *style,
 
       SelectObject (dc, old_pen);
       DeleteObject (pen);
-      release_window_dc (style, window, state);
+      release_window_dc (&dc_info);
     }
 
   if (area)
@@ -1510,6 +1506,7 @@ draw_arrow (GtkStyle *style,
   const gchar *name;
   HDC dc;
   RECT rect;
+  XpDCInfo dc_info;
 
   name = gtk_widget_get_name (widget);
 
@@ -1601,13 +1598,13 @@ draw_arrow (GtkStyle *style,
 	    {
 	      sanitize_size (window, &width, &height);
 
-	      dc = get_window_dc (style, window, state,
+	      dc = get_window_dc (style, window, state, &dc_info,
 				  box_x, box_y, box_width, box_height, &rect);
 	      DrawFrameControl (dc, &rect, DFC_SCROLL,
 				btn_type | (shadow ==
 					    GTK_SHADOW_IN ? (DFCS_PUSHED |
 							     DFCS_FLAT) : 0));
-	      release_window_dc (style, window, state);
+	      release_window_dc (&dc_info);
 	    }
 	}
     }
@@ -1716,50 +1713,6 @@ is_menu_tool_button_child (GtkWidget *wid)
   return FALSE;
 }
 
-HDC
-get_window_dc (GtkStyle *style, GdkWindow *window, GtkStateType state_type,
-	       gint x, gint y, gint width, gint height, RECT *rect)
-{
-  int xoff, yoff;
-  GdkDrawable *drawable;
-
-  if (!GDK_IS_WINDOW (window))
-    {
-      xoff = 0;
-      yoff = 0;
-      drawable = window;
-    }
-  else
-    {
-      gdk_window_get_internal_paint_info (window, &drawable, &xoff, &yoff);
-    }
-
-  rect->left = x - xoff;
-  rect->top = y - yoff;
-  rect->right = rect->left + width;
-  rect->bottom = rect->top + height;
-
-  return gdk_win32_hdc_get (drawable, style->dark_gc[state_type], 0);
-}
-
-void
-release_window_dc (GtkStyle *style, GdkWindow *window,
-		   GtkStateType state_type)
-{
-  GdkDrawable *drawable;
-
-  if (!GDK_IS_WINDOW (window))
-    {
-      drawable = window;
-    }
-  else
-    {
-      gdk_window_get_internal_paint_info (window, &drawable, NULL, NULL);
-    }
-
-  gdk_win32_hdc_release (drawable, style->dark_gc[state_type], 0);
-}
-
 static HPEN
 get_light_pen ()
 {
@@ -1823,6 +1776,7 @@ draw_menu_item (GdkWindow *window, GtkWidget *widget, GtkStyle *style,
   GtkMenuShell *bar;
   HDC dc;
   RECT rect;
+  XpDCInfo dc_info;
 
   if (xp_theme_is_active ())
     {
@@ -1835,14 +1789,14 @@ draw_menu_item (GdkWindow *window, GtkWidget *widget, GtkStyle *style,
     {
       bar = GTK_MENU_SHELL (parent);
 
-      dc = get_window_dc (style, window, state_type, x, y, width, height, &rect);
+      dc = get_window_dc (style, window, state_type, &dc_info, x, y, width, height, &rect);
 
       if (state_type == GTK_STATE_PRELIGHT)
 	{
 	  draw_3d_border (dc, &rect, bar->active);
 	}
 
-      release_window_dc (style, window, state_type);
+      release_window_dc (&dc_info);
 
       return TRUE;
     }
@@ -1883,6 +1837,7 @@ draw_tool_button (GdkWindow *window, GtkWidget *widget, GtkStyle *style,
 {
   HDC dc;
   RECT rect;
+  XpDCInfo dc_info;
   gboolean is_toggled = FALSE;
 
   if (xp_theme_is_active ())
@@ -1905,7 +1860,7 @@ draw_tool_button (GdkWindow *window, GtkWidget *widget, GtkStyle *style,
       return FALSE;
     }
 
-  dc = get_window_dc (style, window, state_type, x, y, width, height, &rect);
+  dc = get_window_dc (style, window, state_type, &dc_info, x, y, width, height, &rect);
   if (state_type == GTK_STATE_PRELIGHT)
     {
       if (is_toggled)
@@ -1927,7 +1882,7 @@ draw_tool_button (GdkWindow *window, GtkWidget *widget, GtkStyle *style,
       draw_3d_border (dc, &rect, TRUE);
     }
 
-  release_window_dc (style, window, state_type);
+  release_window_dc (&dc_info);
 
   return TRUE;
 }
@@ -1939,8 +1894,9 @@ draw_push_button (GdkWindow *window, GtkWidget *widget, GtkStyle *style,
 {
   HDC dc;
   RECT rect;
+  XpDCInfo dc_info;
 
-  dc = get_window_dc (style, window, state_type, x, y, width, height, &rect);
+  dc = get_window_dc (style, window, state_type, &dc_info, x, y, width, height, &rect);
 
   if (GTK_IS_TOGGLE_BUTTON (widget))
     {
@@ -1980,7 +1936,7 @@ draw_push_button (GdkWindow *window, GtkWidget *widget, GtkStyle *style,
       DrawFrameControl (dc, &rect, DFC_BUTTON, DFCS_BUTTONPUSH);
     }
 
-  release_window_dc (style, window, state_type);
+  release_window_dc (&dc_info);
 }
 
 static void
@@ -1995,15 +1951,16 @@ draw_box (GtkStyle *style,
   if (is_combo_box_child (widget) && detail && !strcmp (detail, "button"))
     {
       RECT rect;
+      XpDCInfo dc_info;
       DWORD border;
       HDC dc;
       int cx;
 
       border = (GTK_TOGGLE_BUTTON (widget)->active ? DFCS_PUSHED | DFCS_FLAT : 0);
 
-      dc = get_window_dc (style, window, state_type, x, y, width, height, &rect);
+      dc = get_window_dc (style, window, state_type, &dc_info, x, y, width, height, &rect);
       DrawFrameControl (dc, &rect, DFC_SCROLL, DFCS_SCROLLDOWN | border);
-      release_window_dc (style, window, state_type);
+      release_window_dc (&dc_info);
 
       if (xp_theme_is_active ()
 	  && xp_theme_draw (window, XP_THEME_ELEMENT_COMBOBUTTON, style, x, y,
@@ -2014,9 +1971,9 @@ draw_box (GtkStyle *style,
       width = cx;
 
 
-      dc = get_window_dc (style, window, state_type, x, y, width - cx, height, &rect);
+      dc = get_window_dc (style, window, state_type, &dc_info, x, y, width - cx, height, &rect);
       FillRect (dc, &rect, GetSysColorBrush (COLOR_WINDOW));
-      release_window_dc (style, window, state_type);
+      release_window_dc (&dc_info);
       return;
 	}
     }
@@ -2036,13 +1993,14 @@ draw_box (GtkStyle *style,
 	    {
 	      HDC dc;
 	      RECT rect;
-	      dc = get_window_dc (style, window, state_type, x, y, width, height, &rect);
+	      XpDCInfo dc_info;
+	      dc = get_window_dc (style, window, state_type, &dc_info, x, y, width, height, &rect);
 
 	      DrawFrameControl (dc, &rect, DFC_BUTTON, DFCS_BUTTONPUSH |
 				(state_type ==
 				 GTK_STATE_ACTIVE ? (DFCS_PUSHED | DFCS_FLAT)
 				 : 0));
-	      release_window_dc (style, window, state_type);
+	      release_window_dc (&dc_info);
 	    }
 	}
       else if (is_toolbar_child (widget->parent)
@@ -2092,14 +2050,15 @@ draw_box (GtkStyle *style,
 			  style, x, y, width, height, state_type, area))
 	{
 	  RECT rect;
+	  XpDCInfo dc_info;
 	  HDC dc;
 
-	  dc = get_window_dc (style, window, state_type,
+	  dc = get_window_dc (style, window, state_type, &dc_info,
 			      x, y, width, height, &rect);
 	  DrawEdge (dc, &rect,
 		    state_type ==
 		    GTK_STATE_ACTIVE ? EDGE_SUNKEN : EDGE_RAISED, BF_RECT);
-	  release_window_dc (style, window, state_type);
+	  release_window_dc (&dc_info);
 	}
       return;
     }
@@ -2208,15 +2167,16 @@ draw_box (GtkStyle *style,
 	    {
 	      HDC dc;
 	      RECT rect;
+	      XpDCInfo dc_info;
 
 	      sanitize_size (window, &width, &height);
-	      dc = get_window_dc (style, window, state_type, x, y, width, height, &rect);
+	      dc = get_window_dc (style, window, state_type, &dc_info, x, y, width, height, &rect);
 
 	      SetTextColor (dc, GetSysColor (COLOR_3DHILIGHT));
 	      SetBkColor (dc, GetSysColor (COLOR_BTNFACE));
 	      FillRect (dc, &rect, get_dither_brush ());
 
-	      release_window_dc (style, window, state_type);
+	      release_window_dc (&dc_info);
 
 	      return;
 	    }
@@ -2326,9 +2286,10 @@ draw_box (GtkStyle *style,
 	    {
 	      HBRUSH brush;
 	      RECT rect;
+	      XpDCInfo dc_info;
 	      HDC hdc;
 
-	      hdc = get_window_dc (style, window, state_type, x, y, width, height, &rect);
+	      hdc = get_window_dc (style, window, state_type, &dc_info, x, y, width, height, &rect);
 
 	      brush = GetSysColorBrush (COLOR_3DDKSHADOW);
 
@@ -2340,7 +2301,7 @@ draw_box (GtkStyle *style,
 	      InflateRect (&rect, -1, -1);
 	      FillRect (hdc, &rect, (HBRUSH) (COLOR_INFOBK + 1));
 
-	      release_window_dc (style, window, state_type);
+	      release_window_dc (&dc_info);
 
 	      return;
 	    }
@@ -2771,10 +2732,11 @@ draw_tab_button (GtkStyle *style,
     {
       /* experimental tab-drawing code from mozilla */
       RECT rect;
+      XpDCInfo dc_info;
       HDC dc;
       gint32 aPosition;
 
-      dc = get_window_dc (style, window, state_type, x, y, width, height, &rect);
+      dc = get_window_dc (style, window, state_type, &dc_info, x, y, width, height, &rect);
 
       if (gap_side == GTK_POS_TOP)
 	aPosition = BF_TOP;
@@ -2797,7 +2759,7 @@ draw_tab_button (GtkStyle *style,
       if (area)
 	gdk_gc_set_clip_rectangle (style->dark_gc[state_type], NULL);
 
-      release_window_dc (style, window, state_type);
+      release_window_dc (&dc_info);
       return TRUE;
     }
 
@@ -2949,9 +2911,10 @@ draw_menu_border (GdkWindow *win, GtkStyle *style,
 		  gint x, gint y, gint width, gint height)
 {
   RECT rect;
+  XpDCInfo dc_info;
   HDC dc;
 
-  dc = get_window_dc (style, win, GTK_STATE_NORMAL, x, y, width, height, &rect);
+  dc = get_window_dc (style, win, GTK_STATE_NORMAL, &dc_info, x, y, width, height, &rect);
 
   if (!dc)
     return FALSE;
@@ -2965,7 +2928,7 @@ draw_menu_border (GdkWindow *win, GtkStyle *style,
       DrawEdge (dc, &rect, EDGE_RAISED, BF_RECT);
     }
 
-  release_window_dc (style, win, GTK_STATE_NORMAL);
+  release_window_dc (&dc_info);
 
   return TRUE;
 }
@@ -2987,10 +2950,11 @@ draw_shadow (GtkStyle *style,
 
       HDC dc;
       RECT rect;
+      XpDCInfo dc_info;
 
 
 
-      dc = get_window_dc (style, window, state_type, x, y, width, height, &rect);
+      dc = get_window_dc (style, window, state_type, &dc_info, x, y, width, height, &rect);
       if (is_combo_box_child (widget))
         {
           FillRect (dc, &rect, GetSysColorBrush (COLOR_WINDOW));
@@ -3028,7 +2992,7 @@ draw_shadow (GtkStyle *style,
 	    }
 	}
 
-      release_window_dc (style, window, state_type);
+      release_window_dc (&dc_info);
 
       return;
     }
@@ -3042,12 +3006,13 @@ draw_shadow (GtkStyle *style,
 	{
 	  HDC dc;
 	  RECT rect;
+	  XpDCInfo dc_info;
 
-	  dc = get_window_dc (style, window, state_type,
+	  dc = get_window_dc (style, window, state_type, &dc_info,
 			      x, y, width, height, &rect);
 
 	  DrawEdge (dc, &rect, EDGE_SUNKEN, BF_RECT);
-	  release_window_dc (style, window, state_type);
+	  release_window_dc (&dc_info);
 	}
 
       return;
@@ -3090,6 +3055,7 @@ draw_shadow (GtkStyle *style,
 	{
 	  HDC dc;
 	  RECT rect;
+	  XpDCInfo dc_info;
 	  HGDIOBJ old_pen = NULL;
 	  GtkPositionType pos;
 
@@ -3142,7 +3108,7 @@ draw_shadow (GtkStyle *style,
 		}
 	    }
 
-	  dc = get_window_dc (style, window, state_type, x, y, width, height, &rect);
+	  dc = get_window_dc (style, window, state_type, &dc_info, x, y, width, height, &rect);
 
 	  if (pos != GTK_POS_LEFT)
 	    {
@@ -3170,7 +3136,7 @@ draw_shadow (GtkStyle *style,
 	    }
 	  if (old_pen)
 	    SelectObject (dc, old_pen);
-	  release_window_dc (style, window, state_type);
+	  release_window_dc (&dc_info);
 	}
 
       return;
@@ -3322,13 +3288,14 @@ draw_resize_grip (GtkStyle *style,
       else
 	{
 	  RECT rect;
-	  HDC dc = get_window_dc (style, window, state_type, x, y, width, height, &rect);
+	  XpDCInfo dc_info;
+	  HDC dc = get_window_dc (style, window, state_type, &dc_info, x, y, width, height, &rect);
 
 	  if (area)
 	    gdk_gc_set_clip_rectangle (style->dark_gc[state_type], area);
 
 	  DrawFrameControl (dc, &rect, DFC_SCROLL, DFCS_SCROLLSIZEGRIP);
-	  release_window_dc (style, window, state_type);
+	  release_window_dc (&dc_info);
 
 	  if (area)
 	    gdk_gc_set_clip_rectangle (style->dark_gc[state_type], NULL);
@@ -3354,6 +3321,7 @@ draw_handle (GtkStyle *style,
 {
   HDC dc;
   RECT rect;
+  XpDCInfo dc_info;
 
   if (is_toolbar_child (widget))
     {
@@ -3387,7 +3355,7 @@ draw_handle (GtkStyle *style,
 	  return;
 	}
 
-      dc = get_window_dc (style, window, state_type, x, y, width, height, &rect);
+      dc = get_window_dc (style, window, state_type, &dc_info, x, y, width, height, &rect);
 
       if (orientation == GTK_ORIENTATION_VERTICAL)
 	{
@@ -3405,7 +3373,7 @@ draw_handle (GtkStyle *style,
 	}
 
       draw_3d_border (dc, &rect, FALSE);
-      release_window_dc (style, window, state_type);
+      release_window_dc (&dc_info);
       return;
     }
 
@@ -3478,6 +3446,7 @@ draw_focus (GtkStyle *style,
 {
   HDC dc;
   RECT rect;
+  XpDCInfo dc_info;
 
   if (!gtk_widget_get_can_focus (widget))
     {
@@ -3494,9 +3463,9 @@ draw_focus (GtkStyle *style,
       return;
     }
 
-  dc = get_window_dc (style, window, state_type, x, y, width, height, &rect);
+  dc = get_window_dc (style, window, state_type, &dc_info, x, y, width, height, &rect);
   DrawFocusRect (dc, &rect);
-  release_window_dc (style, window, state_type);
+  release_window_dc (&dc_info);
 /*
     parent_class->draw_focus (style, window, state_type,
 						     area, widget, detail, x, y, width, height);

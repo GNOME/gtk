@@ -105,6 +105,14 @@ GdkPixbuf    *gdk_win32_icon_to_pixbuf_libgtk_only (HICON hicon);
 HICON         gdk_win32_pixbuf_to_hicon_libgtk_only (GdkPixbuf *pixbuf);
 void          gdk_win32_set_modal_dialog_libgtk_only (HWND window);
 
+GdkDrawable  *gdk_win32_begin_direct_draw_libgtk_only (GdkDrawable *drawable,
+						       GdkGC *gc,
+						       gpointer *priv_data,
+						       gint *x_offset_out,
+						       gint *y_offset_out);
+void          gdk_win32_end_direct_draw_libgtk_only (gpointer priv_data);
+
+
 G_END_DECLS
 
 #endif /* __GDK_WIN32_H__ */

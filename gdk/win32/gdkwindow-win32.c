@@ -3377,3 +3377,27 @@ gdk_window_impl_iface_init (GdkWindowImplIface *iface)
   iface->queue_translation = _gdk_win32_window_queue_translation;
   iface->destroy = _gdk_win32_window_destroy;
 }
+
+GdkDrawable *
+gdk_win32_begin_direct_draw_libgtk_only (GdkDrawable *drawable,
+					 GdkGC *gc,
+					 gpointer *priv_data,
+					 gint *x_offset_out,
+					 gint *y_offset_out)
+{
+  GdkDrawable *impl;
+
+  impl = _gdk_drawable_begin_direct_draw (drawable,
+					  gc,
+					  priv_data,
+					  x_offset_out,
+					  y_offset_out);
+
+  return impl;
+}
+
+void
+gdk_win32_end_direct_draw_libgtk_only (gpointer priv_data)
+{
+  _gdk_drawable_end_direct_draw (priv_data);
+}
