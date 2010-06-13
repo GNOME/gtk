@@ -905,6 +905,14 @@ parse_value (GType        type,
       g_value_set_double (value, g_ascii_strtod (value_str, NULL));
       return TRUE;
     }
+  else if (type == GTK_TYPE_THEMING_ENGINE)
+    {
+      GtkThemingEngine *engine;
+
+      engine = gtk_theming_engine_load (value_str);
+      g_value_set_object (value, engine);
+      return TRUE;
+    }
   else
     g_warning ("Cannot parse string '%s' for type %s", value_str, g_type_name (type));
 

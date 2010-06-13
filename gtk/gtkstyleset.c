@@ -25,6 +25,7 @@
 #include "gtkstyleprovider.h"
 #include "gtkstyleset.h"
 #include "gtkprivate.h"
+#include "gtkthemingengine.h"
 #include "gtkintl.h"
 
 #include "gtkalias.h"
@@ -78,6 +79,7 @@ gtk_style_set_class_init (GtkStyleSetClass *klass)
   gtk_style_set_register_property ("font", PANGO_TYPE_FONT_DESCRIPTION);
 
   gtk_style_set_register_property ("padding", GTK_TYPE_BORDER);
+  gtk_style_set_register_property ("engine", GTK_TYPE_THEMING_ENGINE);
 
   g_type_class_add_private (object_class, sizeof (GtkStyleSetPrivate));
 }

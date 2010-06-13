@@ -145,6 +145,10 @@ rebuild_properties (GtkStyleContext *context)
           g_object_unref (provider_style);
         }
     }
+
+  gtk_style_set_get (priv->store, GTK_STATE_NORMAL,
+                     "engine", &priv->theming_engine,
+                     NULL);
 }
 
 void
