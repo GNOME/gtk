@@ -498,7 +498,7 @@ gtk_style_context_list_child_classes (GtkStyleContext *context)
       link = link->next;
 
       child_class = g_quark_to_string (link_class->class_quark);
-      classes = g_list_prepend (classes, child_class);
+      classes = g_list_prepend (classes, (gchar *) child_class);
     }
 
   return classes;
