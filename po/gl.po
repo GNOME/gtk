@@ -21,8 +21,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-master-po-gl-77922___.merged\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-06-12 18:57+0200\n"
-"PO-Revision-Date: 2010-06-12 18:57+0200\n"
+"POT-Creation-Date: 2010-06-13 18:05+0200\n"
+"PO-Revision-Date: 2010-06-13 18:05+0200\n"
 "Last-Translator: Fran Diéguez <frandieguez@ubuntu.com>\n"
 "Language-Team: Galician <gnome@g11.net>\n"
 "MIME-Version: 1.0\n"
@@ -1416,7 +1416,7 @@ msgstr "Etiqueta non compatíbel: '%s'"
 #.
 #: ../gtk/gtkcalendar.c:759
 msgid "calendar:MY"
-msgstr "calendario:MY"
+msgstr "calendar:MY"
 
 #. Translate to calendar:week_start:0 if you want Sunday to be the
 #. * first day of the week to calendar:week_start:1 if you want Monday
