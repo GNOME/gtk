@@ -983,7 +983,7 @@ parse_rule (GtkCssProvider *css_provider,
 
       value_str = g_strstrip (scanner->value.v_identifier);
 
-      if (gtk_style_set_lookup_property (prop, &prop_type, NULL) &&
+      if (gtk_style_set_lookup_property (prop, &prop_type) &&
           parse_value (prop_type, value_str, &value))
         {
           GValue *val;

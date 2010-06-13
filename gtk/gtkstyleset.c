@@ -37,7 +37,6 @@ struct PropertyNode
 {
   GQuark property_quark;
   GType property_type;
-  GValue default_value;
 };
 
 struct PropertyData
@@ -67,24 +66,18 @@ static void
 gtk_style_set_class_init (GtkStyleSetClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
-  GdkColor black = { 0, 0, 0, 0 };
-  GdkColor white = { 0, 65535, 65535, 65535 };
-  PangoFontDescription *font_desc;
-  GtkBorder padding = { 0 };
 
   object_class->finalize = gtk_style_set_finalize;
 
   /* Initialize default property set */
-  gtk_style_set_register_property_color ("foreground-color", &white);
-  gtk_style_set_register_property_color ("background-color", &black);
-  gtk_style_set_register_property_color ("text-color", &white);
-  gtk_style_set_register_property_color ("base-color", &white);
+  gtk_style_set_register_property ("foreground-color", GDK_TYPE_COLOR);
+  gtk_style_set_register_property ("background-color", GDK_TYPE_COLOR);
+  gtk_style_set_register_property ("text-color", GDK_TYPE_COLOR);
+  gtk_style_set_register_property ("base-color", GDK_TYPE_COLOR);
 
-  font_desc = pango_font_description_from_string ("Sans 10");
-  gtk_style_set_register_property_font ("font", font_desc);
-  pango_font_description_free (font_desc);
+  gtk_style_set_register_property ("font", PANGO_TYPE_FONT_DESCRIPTION);
 
-  gtk_style_set_register_property_border ("padding", &padding);
+  gtk_style_set_register_property ("padding", GTK_TYPE_BORDER);
 
   g_type_class_add_private (object_class, sizeof (GtkStyleSetPrivate));
 }
@@ -178,16 +171,14 @@ property_node_lookup (GQuark quark)
 /* Property registration functions */
 void
 gtk_style_set_register_property (const gchar  *property_name,
-                                 GType         type,
-                                 const GValue *default_value)
+                                 GType         type)
 {
   PropertyNode *node, new = { 0 };
   GQuark quark;
   gint i;
 
   g_return_if_fail (property_name != NULL);
-  g_return_if_fail (default_value != NULL);
-  g_return_if_fail (type == G_VALUE_TYPE (default_value));
+  g_return_if_fail (type != 0);
 
   if (G_UNLIKELY (!properties))
     properties = g_array_new (FALSE, TRUE, sizeof (PropertyNode));
@@ -206,9 +197,6 @@ gtk_style_set_register_property (const gchar  *property_name,
   new.property_quark = quark;
   new.property_type = type;
 
-  g_value_init (&new.default_value, type);
-  g_value_copy (default_value, &new.default_value);
-
   for (i = 0; i < properties->len; i++)
     {
       node = &g_array_index (properties, PropertyNode, i);
@@ -222,11 +210,11 @@ gtk_style_set_register_property (const gchar  *property_name,
 
 gboolean
 gtk_style_set_lookup_property (const gchar *property_name,
-                               GType       *type,
-                               GValue      *default_value)
+                               GType       *type)
 {
   PropertyNode *node;
   GtkStyleSetClass *klass;
+  gboolean found = FALSE;
   GQuark quark;
   gint i;
 
@@ -250,15 +238,8 @@ gtk_style_set_lookup_property (const gchar *property_name,
           if (type)
             *type = node->property_type;
 
-          if (default_value)
-            {
-              g_value_init (default_value, G_VALUE_TYPE (&node->default_value));
-              g_value_copy (&node->default_value, default_value);
-            }
-
-          g_type_class_unref (klass);
-
-          return TRUE;
+          found = TRUE;
+          break;
         }
       else if (node->property_quark > quark)
         break;
@@ -266,106 +247,7 @@ gtk_style_set_lookup_property (const gchar *property_name,
 
   g_type_class_unref (klass);
 
-  return FALSE;
-}
-
-void
-gtk_style_set_register_property_color (const gchar *property_name,
-                                       GdkColor    *initial_value)
-{
-  GValue value = { 0 };
-
-  g_return_if_fail (property_name != NULL);
-  g_return_if_fail (initial_value != NULL);
-
-  g_value_init (&value, GDK_TYPE_COLOR);
-  g_value_set_boxed (&value, initial_value);
-
-  gtk_style_set_register_property (property_name, GDK_TYPE_COLOR, &value);
-
-  g_value_unset (&value);
-}
-
-void
-gtk_style_set_register_property_font (const gchar          *property_name,
-                                      PangoFontDescription *initial_value)
-{
-  GValue value = { 0 };
-
-  g_return_if_fail (property_name != NULL);
-  g_return_if_fail (initial_value != NULL);
-
-  g_value_init (&value, PANGO_TYPE_FONT_DESCRIPTION);
-  g_value_set_boxed (&value, initial_value);
-
-  gtk_style_set_register_property (property_name, PANGO_TYPE_FONT_DESCRIPTION, &value);
-
-  g_value_unset (&value);
-}
-
-void
-gtk_style_set_register_property_border (const gchar *property_name,
-                                        GtkBorder   *initial_value)
-{
-  GValue value = { 0 };
-
-  g_return_if_fail (property_name != NULL);
-  g_return_if_fail (initial_value != NULL);
-
-  g_value_init (&value, GTK_TYPE_BORDER);
-  g_value_set_boxed (&value, initial_value);
-
-  gtk_style_set_register_property (property_name, GTK_TYPE_BORDER, &value);
-
-  g_value_unset (&value);
-}
-
-void
-gtk_style_set_register_property_int (const gchar *property_name,
-                                     gint         initial_value)
-{
-  GValue value = { 0 };
-
-  g_return_if_fail (property_name != NULL);
-
-  g_value_init (&value, G_TYPE_INT);
-  g_value_set_int (&value, initial_value);
-
-  gtk_style_set_register_property (property_name, G_TYPE_INT, &value);
-
-  g_value_unset (&value);
-}
-
-void
-gtk_style_set_register_property_uint (const gchar *property_name,
-                                      guint        initial_value)
-{
-  GValue value = { 0 };
-
-  g_return_if_fail (property_name != NULL);
-
-  g_value_init (&value, G_TYPE_UINT);
-  g_value_set_uint (&value, initial_value);
-
-  gtk_style_set_register_property (property_name, G_TYPE_UINT, &value);
-
-  g_value_unset (&value);
-}
-
-void
-gtk_style_set_register_property_double (const gchar *property_name,
-                                        gdouble      initial_value)
-{
-  GValue value = { 0 };
-
-  g_return_if_fail (property_name != NULL);
-
-  g_value_init (&value, G_TYPE_DOUBLE);
-  g_value_set_double (&value, initial_value);
-
-  gtk_style_set_register_property (property_name, G_TYPE_DOUBLE, &value);
-
-  g_value_unset (&value);
+  return found;
 }
 
 /* GtkStyleSet methods */
@@ -545,13 +427,12 @@ gtk_style_set_get_property (GtkStyleSet  *set,
   prop = g_hash_table_lookup (priv->properties,
                               GINT_TO_POINTER (node->property_quark));
 
+  if (!prop)
+    return FALSE;
+
   g_value_init (value, node->property_type);
 
-  if (!prop ||
-      (!G_IS_VALUE (&prop->values[state]) &&
-       !G_IS_VALUE (&prop->default_value)))
-    g_value_copy (&node->default_value, value);
-  else if (!G_IS_VALUE (&prop->values[state]))
+  if (!G_IS_VALUE (&prop->values[state]))
     g_value_copy (&prop->default_value, value);
   else
     g_value_copy (&prop->values[state], value);
@@ -590,10 +471,15 @@ gtk_style_set_get_valist (GtkStyleSet  *set,
       prop = g_hash_table_lookup (priv->properties,
                                   GINT_TO_POINTER (node->property_quark));
 
-      if (!prop ||
-          (!G_IS_VALUE (&prop->values[state]) &&
-           !G_IS_VALUE (&prop->default_value)))
-        G_VALUE_LCOPY (&node->default_value, args, 0, &error);
+      if (!prop)
+        {
+          GValue *empty_value = { 0 };
+
+          g_warning ("No value for style property \"%s\"", property_name);
+
+          g_value_init (&empty_value, node->property_type);
+          G_VALUE_LCOPY (&empty_value, args, 0, &error);
+        }
       else if (!G_IS_VALUE (&prop->values[state]))
         G_VALUE_LCOPY (&prop->default_value, args, 0, &error);
       else
@@ -602,7 +488,7 @@ gtk_style_set_get_valist (GtkStyleSet  *set,
       if (error)
         {
           g_warning ("Could not get style property \"%s\": %s", property_name, error);
-	  g_free (error);
+          g_free (error);
           break;
         }
 

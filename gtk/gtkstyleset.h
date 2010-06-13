@@ -53,25 +53,9 @@ GType gtk_style_set_get_type (void) G_GNUC_CONST;
 
 /* Functions to register style properties */
 void     gtk_style_set_register_property (const gchar  *property_name,
-                                          GType         type,
-                                          const GValue *default_value);
+                                          GType         type);
 gboolean gtk_style_set_lookup_property   (const gchar  *property_name,
-                                          GType        *type,
-                                          GValue       *default_value);
-
-void gtk_style_set_register_property_color  (const gchar *property_name,
-                                             GdkColor    *default_value);
-void gtk_style_set_register_property_font   (const gchar          *property_name,
-                                             PangoFontDescription *initial_value);
-void gtk_style_set_register_property_border (const gchar *property_name,
-                                             GtkBorder   *initial_value);
-void gtk_style_set_register_property_int    (const gchar *property_name,
-                                             gint         default_value);
-void gtk_style_set_register_property_uint   (const gchar *property_name,
-                                             guint        default_value);
-void gtk_style_set_register_property_double (const gchar *property_name,
-                                             gdouble      default_value);
-
+                                          GType        *type);
 
 GtkStyleSet * gtk_style_set_new (void);
 
