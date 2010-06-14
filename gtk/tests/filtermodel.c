@@ -455,7 +455,7 @@ strip_virtual_root (GtkTreePath *path,
 
       for (j = 0; j < depth - root_depth; j++)
         gtk_tree_path_append_index (real_path,
-                                    gtk_tree_path_get_indices (path)[root_depth + j]);
+                                    gtk_tree_path_get_indices (path, NULL)[root_depth + j]);
     }
   else
     real_path = gtk_tree_path_copy (path);
@@ -826,7 +826,7 @@ insert_path_with_visibility (FilterTest  *fixture,
   GtkTreeIter parent, iter;
 
   path = gtk_tree_path_new_from_string (path_string);
-  position = gtk_tree_path_get_indices (path)[gtk_tree_path_get_depth (path)];
+  position = gtk_tree_path_get_indices (path, NULL)[gtk_tree_path_get_depth (path)];
   gtk_tree_path_up (path);
 
   if (gtk_tree_model_get_iter (GTK_TREE_MODEL (fixture->store), &parent, path))
@@ -1822,7 +1822,7 @@ specific_path_dependent_filter_func (GtkTreeModel *model,
   GtkTreePath *path;
 
   path = gtk_tree_model_get_path (model, iter);
-  if (gtk_tree_path_get_indices (path)[0] < 4)
+  if (gtk_tree_path_get_indices (path, NULL)[0] < 4)
     return FALSE;
 
   return TRUE;

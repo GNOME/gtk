@@ -9474,7 +9474,7 @@ keypress_completion_out:
 
               path = gtk_tree_path_new_from_indices (completion->priv->current_selected - matches, -1);
               g_signal_emit_by_name (completion, "action-activated",
-                                     gtk_tree_path_get_indices (path)[0]);
+                                     gtk_tree_path_get_indices (path, NULL)[0]);
               gtk_tree_path_free (path);
             }
           else

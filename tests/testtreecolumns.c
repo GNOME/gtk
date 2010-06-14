@@ -116,7 +116,7 @@ view_column_model_get_iter (GtkTreeModel *tree_model,
 
   g_return_val_if_fail (gtk_tree_path_get_depth (path) > 0, FALSE);
 
-  i = gtk_tree_path_get_indices (path)[0];
+  i = gtk_tree_path_get_indices (path, NULL)[0];
   list = g_list_nth (view_model->columns, i);
 
   if (list == NULL)
@@ -659,7 +659,7 @@ move_to_right (GtkTreeIter  *src_iter,
   if (dest_iter)
     {
       GtkTreePath *path = gtk_tree_model_get_path (dest, dest_iter);
-      before = (gtk_tree_path_get_indices (path))[0];
+      before = (gtk_tree_path_get_indices (path, NULL))[0];
       gtk_tree_path_free (path);
     }
   
@@ -686,7 +686,7 @@ move_up_or_down (GtkTreeModel *src,
   if (dest_iter)
     {
       GtkTreePath *path = gtk_tree_model_get_path (dest, dest_iter);
-      before = (gtk_tree_path_get_indices (path))[0];
+      before = (gtk_tree_path_get_indices (path, NULL))[0];
       gtk_tree_path_free (path);
     }
   

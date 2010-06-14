@@ -1439,7 +1439,7 @@ get_file_info_finished (GCancellable *cancellable,
     /* Handle doesn't exist anymore in the model */
     goto out;
 
-  pos = gtk_tree_path_get_indices (path)[0];
+  pos = gtk_tree_path_get_indices (path, NULL)[0];
   gtk_tree_model_get_iter (GTK_TREE_MODEL (request->impl->shortcuts_model),
 			   &iter, path);
   gtk_tree_path_free (path);
@@ -2237,7 +2237,7 @@ shortcuts_pane_filter_cb (GtkTreeModel *model,
   if (!path)
     return FALSE;
 
-  pos = *gtk_tree_path_get_indices (path);
+  pos = *gtk_tree_path_get_indices (path, NULL);
   gtk_tree_path_free (path);
 
   return (pos < shortcuts_get_index (impl, SHORTCUTS_CURRENT_FOLDER_SEPARATOR));
@@ -3166,7 +3166,7 @@ shortcuts_compute_drop_position (GtkFileChooserDefault   *impl,
       return;
     }
 
-  row = *gtk_tree_path_get_indices (*path);
+  row = *gtk_tree_path_get_indices (*path, NULL);
   gtk_tree_view_get_background_area (tree_view, *path, column, &cell);
   gtk_tree_path_free (*path);
 
@@ -3317,7 +3317,7 @@ shortcuts_reorder (GtkFileChooserDefault *impl,
     g_assert_not_reached ();
 
   path = gtk_tree_model_get_path (GTK_TREE_MODEL (impl->shortcuts_model), &iter);
-  old_position = *gtk_tree_path_get_indices (path);
+  old_position = *gtk_tree_path_get_indices (path, NULL);
   gtk_tree_path_free (path);
 
   bookmarks_index = shortcuts_get_index (impl, SHORTCUTS_BOOKMARKS);
@@ -3383,7 +3383,7 @@ shortcuts_drag_data_received_cb (GtkWidget          *widget,
   bookmarks_index = shortcuts_get_index (impl, SHORTCUTS_BOOKMARKS);
 
   shortcuts_compute_drop_position (impl, x, y, &tree_path, &tree_pos);
-  position = *gtk_tree_path_get_indices (tree_path);
+  position = *gtk_tree_path_get_indices (tree_path, NULL);
   gtk_tree_path_free (tree_path);
 
   if (tree_pos == GTK_TREE_VIEW_DROP_AFTER)
@@ -4681,7 +4681,7 @@ shortcuts_combo_filter_func (GtkTreeModel *model,
   tree_path = gtk_tree_model_get_path (GTK_TREE_MODEL (impl->shortcuts_model), iter);
   g_assert (tree_path != NULL);
 
-  indices = gtk_tree_path_get_indices (tree_path);
+  indices = gtk_tree_path_get_indices (tree_path, NULL);
 
   retval = TRUE;
 
@@ -10293,7 +10293,7 @@ shortcuts_pane_model_filter_row_draggable (GtkTreeDragSource *drag_source,
 
   model = SHORTCUTS_PANE_MODEL_FILTER (drag_source);
 
-  pos = *gtk_tree_path_get_indices (path);
+  pos = *gtk_tree_path_get_indices (path, NULL);
   bookmarks_pos = shortcuts_get_index (model->impl, SHORTCUTS_BOOKMARKS);
 
   return (pos >= bookmarks_pos && pos < bookmarks_pos + model->impl->num_bookmarks);

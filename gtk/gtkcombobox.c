@@ -744,7 +744,7 @@ gtk_combo_box_class_init (GtkComboBoxClass *klass)
    * The item which is currently active. If the model is a non-flat treemodel,
    * and the active item is not an immediate child of the root of the tree,
    * this property has the value 
-   * <literal>gtk_tree_path_get_indices (path)[0]</literal>,
+   * <literal>gtk_tree_path_get_indices (path, NULL)[0]</literal>,
    * where <literal>path</literal> is the #GtkTreePath of the active item.
    *
    * Since: 2.4
@@ -1836,7 +1836,7 @@ gtk_combo_box_menu_popup (GtkComboBox *combo_box,
   if (gtk_tree_row_reference_valid (priv->active_row))
     {
       path = gtk_tree_row_reference_get_path (priv->active_row);
-      active_item = gtk_tree_path_get_indices (path)[0];
+      active_item = gtk_tree_path_get_indices (path, NULL)[0];
       gtk_tree_path_free (path);
       
       if (priv->add_tearoffs)
@@ -3552,7 +3552,7 @@ gtk_combo_box_menu_row_inserted (GtkTreeModel *model,
     return;
 
   depth = gtk_tree_path_get_depth (path);
-  pos = gtk_tree_path_get_indices (path)[depth - 1];
+  pos = gtk_tree_path_get_indices (path, NULL)[depth - 1];
   if (depth > 1)
     {
       ppath = gtk_tree_path_copy (path);
@@ -4901,7 +4901,7 @@ gtk_combo_box_set_column_span_column (GtkComboBox *combo_box,
  * Returns the index of the currently active item, or -1 if there's no
  * active item. If the model is a non-flat treemodel, and the active item 
  * is not an immediate child of the root of the tree, this function returns 
- * <literal>gtk_tree_path_get_indices (path)[0]</literal>, where 
+ * <literal>gtk_tree_path_get_indices (path, NULL)[0]</literal>, where 
  * <literal>path</literal> is the #GtkTreePath of the active item.
  *
  * Return value: An integer which is the index of the currently active item, 
@@ -4924,7 +4924,7 @@ gtk_combo_box_get_active (GtkComboBox *combo_box)
       GtkTreePath *path;
 
       path = gtk_tree_row_reference_get_path (priv->active_row);      
-      result = gtk_tree_path_get_indices (path)[0];
+      result = gtk_tree_path_get_indices (path, NULL)[0];
       gtk_tree_path_free (path);
     }
   else
@@ -5030,7 +5030,7 @@ gtk_combo_box_set_active_internal (GtkComboBox *combo_box,
         {
 	  /* FIXME handle nested menus better */
 	  gtk_menu_set_active (GTK_MENU (priv->popup_widget), 
-			       gtk_tree_path_get_indices (path)[0]);
+			       gtk_tree_path_get_indices (path, NULL)[0]);
         }
 
       if (priv->cell_view)

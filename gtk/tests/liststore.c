@@ -54,7 +54,7 @@ iter_position (GtkListStore *store,
   if (!path)
     return FALSE;
 
-  if (gtk_tree_path_get_indices (path)[0] != n)
+  if (gtk_tree_path_get_indices (path, NULL)[0] != n)
     ret = FALSE;
 
   gtk_tree_path_free (path);

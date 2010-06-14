@@ -1572,7 +1572,7 @@ gtk_icon_view_expose (GtkWidget *widget,
 
   if (path)
     {
-      dest_index = gtk_tree_path_get_indices (path)[0];
+      dest_index = gtk_tree_path_get_indices (path, NULL)[0];
       gtk_tree_path_free (path);
     }
   else
@@ -2035,7 +2035,7 @@ gtk_icon_view_set_cursor (GtkIconView     *icon_view,
 
   if (gtk_tree_path_get_depth (path) == 1)
     item = g_list_nth_data (icon_view->priv->items,
-			    gtk_tree_path_get_indices(path)[0]);
+			    gtk_tree_path_get_indices(path, NULL)[0]);
   
   if (!item)
     return;
@@ -3355,7 +3355,7 @@ gtk_icon_view_queue_draw_path (GtkIconView *icon_view,
   GList *l;
   gint index;
 
-  index = gtk_tree_path_get_indices (path)[0];
+  index = gtk_tree_path_get_indices (path, NULL)[0];
 
   for (l = icon_view->priv->items; l; l = l->next) 
     {
@@ -3616,7 +3616,7 @@ gtk_icon_view_row_changed (GtkTreeModel *model,
 
   gtk_icon_view_stop_editing (icon_view, TRUE);
   
-  index = gtk_tree_path_get_indices(path)[0];
+  index = gtk_tree_path_get_indices(path, NULL)[0];
   item = g_list_nth_data (icon_view->priv->items, index);
 
   gtk_icon_view_item_invalidate_size (item);
@@ -3641,7 +3641,7 @@ gtk_icon_view_row_inserted (GtkTreeModel *model,
 
   iters_persist = gtk_tree_model_get_flags (icon_view->priv->model) & GTK_TREE_MODEL_ITERS_PERSIST;
   
-  index = gtk_tree_path_get_indices(path)[0];
+  index = gtk_tree_path_get_indices(path, NULL)[0];
 
   item = gtk_icon_view_item_new ();
 
@@ -3683,7 +3683,7 @@ gtk_icon_view_row_deleted (GtkTreeModel *model,
   
   icon_view = GTK_ICON_VIEW (data);
 
-  index = gtk_tree_path_get_indices(path)[0];
+  index = gtk_tree_path_get_indices(path, NULL)[0];
 
   list = g_list_nth (icon_view->priv->items, index);
   item = list->data;
@@ -4396,7 +4396,7 @@ gtk_icon_view_scroll_to_path (GtkIconView *icon_view,
 
   if (gtk_tree_path_get_depth (path) > 0)
     item = g_list_nth_data (icon_view->priv->items,
-			    gtk_tree_path_get_indices(path)[0]);
+			    gtk_tree_path_get_indices(path, NULL)[0]);
   
   if (!item || item->width < 0 ||
       !gtk_widget_get_realized (GTK_WIDGET (icon_view)))
@@ -4967,7 +4967,7 @@ gtk_icon_view_set_tooltip_cell (GtkIconView     *icon_view,
 
   if (gtk_tree_path_get_depth (path) > 0)
     item = g_list_nth_data (icon_view->priv->items,
-                            gtk_tree_path_get_indices(path)[0]);
+                            gtk_tree_path_get_indices(path, NULL)[0]);
  
   if (!item)
     return;
@@ -5788,7 +5788,7 @@ gtk_icon_view_select_path (GtkIconView *icon_view,
 
   if (gtk_tree_path_get_depth (path) > 0)
     item = g_list_nth_data (icon_view->priv->items,
-			    gtk_tree_path_get_indices(path)[0]);
+			    gtk_tree_path_get_indices(path, NULL)[0]);
 
   if (item)
     gtk_icon_view_select_item (icon_view, item);
@@ -5814,7 +5814,7 @@ gtk_icon_view_unselect_path (GtkIconView *icon_view,
   g_return_if_fail (path != NULL);
 
   item = g_list_nth_data (icon_view->priv->items,
-			  gtk_tree_path_get_indices(path)[0]);
+			  gtk_tree_path_get_indices(path, NULL)[0]);
 
   if (!item)
     return;
@@ -5947,7 +5947,7 @@ gtk_icon_view_path_is_selected (GtkIconView *icon_view,
   g_return_val_if_fail (path != NULL, FALSE);
   
   item = g_list_nth_data (icon_view->priv->items,
-			  gtk_tree_path_get_indices(path)[0]);
+			  gtk_tree_path_get_indices(path, NULL)[0]);
 
   if (!item)
     return FALSE;
@@ -5978,7 +5978,7 @@ gtk_icon_view_get_item_row (GtkIconView *icon_view,
   g_return_val_if_fail (path != NULL, FALSE);
 
   item = g_list_nth_data (icon_view->priv->items,
-                          gtk_tree_path_get_indices(path)[0]);
+                          gtk_tree_path_get_indices(path, NULL)[0]);
 
   if (!item)
     return -1;
@@ -6009,7 +6009,7 @@ gtk_icon_view_get_item_column (GtkIconView *icon_view,
   g_return_val_if_fail (path != NULL, FALSE);
 
   item = g_list_nth_data (icon_view->priv->items,
-                          gtk_tree_path_get_indices(path)[0]);
+                          gtk_tree_path_get_indices(path, NULL)[0]);
 
   if (!item)
     return -1;
@@ -7325,7 +7325,7 @@ gtk_icon_view_set_drag_dest_item (GtkIconView              *icon_view,
   icon_view->priv->empty_view_drop = FALSE;
   if (pos == GTK_ICON_VIEW_DROP_ABOVE && path
       && gtk_tree_path_get_depth (path) == 1
-      && gtk_tree_path_get_indices (path)[0] == 0)
+      && gtk_tree_path_get_indices (path, NULL)[0] == 0)
     {
       gint n_children;
 
@@ -7472,7 +7472,7 @@ gtk_icon_view_create_drag_icon (GtkIconView *icon_view,
   if (!gtk_widget_get_realized (widget))
     return NULL;
 
-  index = gtk_tree_path_get_indices (path)[0];
+  index = gtk_tree_path_get_indices (path, NULL)[0];
 
   for (l = icon_view->priv->items; l; l = l->next) 
     {
@@ -9184,7 +9184,7 @@ gtk_icon_view_accessible_model_row_changed (GtkTreeModel *tree_model,
 
   atk_obj = gtk_widget_get_accessible (GTK_WIDGET (user_data));
   a11y_view = GTK_ICON_VIEW_ACCESSIBLE (atk_obj);
-  index = gtk_tree_path_get_indices(path)[0];
+  index = gtk_tree_path_get_indices(path, NULL)[0];
   a11y_item = GTK_ICON_VIEW_ITEM_ACCESSIBLE (
       gtk_icon_view_accessible_find_child (atk_obj, index));
 
@@ -9228,7 +9228,7 @@ gtk_icon_view_accessible_model_row_inserted (GtkTreeModel *tree_model,
   AtkObject *atk_obj;
   gint index;
 
-  index = gtk_tree_path_get_indices(path)[0];
+  index = gtk_tree_path_get_indices(path, NULL)[0];
   atk_obj = gtk_widget_get_accessible (GTK_WIDGET (user_data));
   view = GTK_ICON_VIEW_ACCESSIBLE (atk_obj);
   priv = gtk_icon_view_accessible_get_priv (atk_obj);
@@ -9273,7 +9273,7 @@ gtk_icon_view_accessible_model_row_deleted (GtkTreeModel *tree_model,
   AtkObject *atk_obj;
   gint index;
 
-  index = gtk_tree_path_get_indices(path)[0];
+  index = gtk_tree_path_get_indices(path, NULL)[0];
   atk_obj = gtk_widget_get_accessible (GTK_WIDGET (user_data));
   view = GTK_ICON_VIEW_ACCESSIBLE (atk_obj);
   priv = gtk_icon_view_accessible_get_priv (atk_obj);
