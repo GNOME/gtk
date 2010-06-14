@@ -73,6 +73,9 @@ G_BEGIN_DECLS
 #endif
 
 
+/* Return true if the GdkWindow is a win32 implemented window */
+gboolean      gdk_win32_window_is_win32 (GdkWindow *window);
+
 /* Return the Gdk* for a particular HANDLE */
 gpointer      gdk_win32_handle_table_lookup (GdkNativeWindow handle);
 

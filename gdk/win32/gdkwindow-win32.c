@@ -3378,6 +3378,12 @@ gdk_window_impl_iface_init (GdkWindowImplIface *iface)
   iface->destroy = _gdk_win32_window_destroy;
 }
 
+gboolean
+gdk_win32_window_is_win32 (GdkWindow *window)
+{
+  return GDK_WINDOW_IS_WIN32 (window);
+}
+
 GdkDrawable *
 gdk_win32_begin_direct_draw_libgtk_only (GdkDrawable *drawable,
 					 GdkGC *gc,

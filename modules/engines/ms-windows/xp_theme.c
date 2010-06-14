@@ -909,7 +909,8 @@ xp_theme_draw (GdkWindow *win, XpThemeElement element, GtkStyle *style,
     return FALSE;
 
   /* FIXME: Recheck its function */
-  enable_theme_dialog_texture_func (GDK_WINDOW_HWND (win), ETDT_ENABLETAB);
+  if (GDK_IS_WINDOW (win) && gdk_win32_window_is_win32 (win))
+    enable_theme_dialog_texture_func (GDK_WINDOW_HWND (win), ETDT_ENABLETAB);
 
   dc = get_window_dc (style, win, state_type, &dc_info,
 		      x, y, width, height,
