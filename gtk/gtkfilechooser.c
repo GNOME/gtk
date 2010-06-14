@@ -44,7 +44,7 @@
  *
  * #GtkFileChooser allows for shortcuts to various places in the filesystem.
  * In the default implementation these are displayed in the left pane. It
- * may be a bit confusing at first taht these shortcuts come from various
+ * may be a bit confusing at first that these shortcuts come from various
  * sources and in various flavours, so lets explain the terminology here:
  * <variablelist>
  *    <varlistentry>
