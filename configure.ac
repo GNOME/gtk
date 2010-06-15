@@ -1562,6 +1562,8 @@ if test "x$gdktarget" = "xx11"; then
 
   # set up things for XInput
   if test "x$with_xinput" != "xno" && $PKG_CONFIG --exists "xi" ; then
+    have_xinput=yes
+
     AC_DEFINE(XINPUT_XFREE, 1,
               [Define to 1 if XFree XInput should be used])
 
@@ -1574,7 +1576,7 @@ if test "x$gdktarget" = "xx11"; then
               [Define to 1 if no XInput should be used])
   fi
 
-  AM_CONDITIONAL(XINPUT_XFREE, test "x$with_xinput" != "xno")
+  AM_CONDITIONAL(XINPUT_XFREE, test "x$have_xinput" = "xyes")
   AM_CONDITIONAL(XINPUT_2,     test "x$have_xinput2" = "xyes")
 
   # Check for the RANDR extension
