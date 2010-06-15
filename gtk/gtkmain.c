@@ -1466,31 +1466,21 @@ gtk_main_do_event (GdkEvent *event)
   window_group = gtk_main_get_window_group (event_widget);
   device = gdk_event_get_device (event);
 
-  /* If there is a grab in effect...
+  /* check whether there is a (device) grab in effect...
    */
-  if (window_group->grabs)
-    {
-      grab_widget = window_group->grabs->data;
-      
-      /* If the grab widget is an ancestor of the event widget
-       *  then we send the event to the original event widget.
-       *  This is the key to implementing modality.
-       */
-      if (gtk_widget_is_sensitive (event_widget) &&
-	  gtk_widget_is_ancestor (event_widget, grab_widget))
-	grab_widget = event_widget;
-    }
-  else if (device)
-    {
-      grab_widget = gtk_window_group_get_current_device_grab (window_group, device);
+  if (device)
+    grab_widget = gtk_window_group_get_current_device_grab (window_group, device);
 
-      if (grab_widget &&
-          gtk_widget_get_sensitive (event_widget) &&
-          gtk_widget_is_ancestor (event_widget, grab_widget))
-        grab_widget = event_widget;
-    }
+  if (!grab_widget && window_group->grabs)
+    grab_widget = window_group->grabs->data;
 
-  if (!grab_widget)
+  /* If the grab widget is an ancestor of the event widget
+   *  then we send the event to the original event widget.
+   *  This is the key to implementing modality.
+   */
+  if (!grab_widget ||
+      (gtk_widget_is_sensitive (event_widget) &&
+       gtk_widget_is_ancestor (event_widget, grab_widget)))
     grab_widget = event_widget;
 
   /* If the widget receiving events is actually blocked by another device GTK+ grab */

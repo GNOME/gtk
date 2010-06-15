@@ -242,7 +242,7 @@ gtk_ui_manager_class_init (GtkUIManagerClass *klass)
    * @merge: a #GtkUIManager
    * @widget: the added widget
    *
-   * The add_widget signal is emitted for each generated menubar and toolbar.
+   * The ::add-widget signal is emitted for each generated menubar and toolbar.
    * It is not emitted for generated popup menus, which can be obtained by 
    * gtk_ui_manager_get_widget().
    *
@@ -262,7 +262,7 @@ gtk_ui_manager_class_init (GtkUIManagerClass *klass)
    * GtkUIManager::actions-changed:
    * @merge: a #GtkUIManager
    *
-   * The "actions-changed" signal is emitted whenever the set of actions
+   * The ::actions-changed signal is emitted whenever the set of actions
    * changes.
    *
    * Since: 2.4
@@ -282,7 +282,7 @@ gtk_ui_manager_class_init (GtkUIManagerClass *klass)
    * @action: the action
    * @proxy: the proxy
    *
-   * The connect_proxy signal is emitted after connecting a proxy to 
+   * The ::connect-proxy signal is emitted after connecting a proxy to
    * an action in the group. 
    *
    * This is intended for simple customizations for which a custom action
@@ -308,7 +308,7 @@ gtk_ui_manager_class_init (GtkUIManagerClass *klass)
    * @action: the action
    * @proxy: the proxy
    *
-   * The disconnect_proxy signal is emitted after disconnecting a proxy 
+   * The ::disconnect-proxy signal is emitted after disconnecting a proxy
    * from an action in the group. 
    *
    * Since: 2.4
@@ -329,7 +329,7 @@ gtk_ui_manager_class_init (GtkUIManagerClass *klass)
    * @uimanager: the ui manager
    * @action: the action
    *
-   * The pre_activate signal is emitted just before the @action
+   * The ::pre-activate signal is emitted just before the @action
    * is activated.
    *
    * This is intended for applications to get notification
@@ -352,7 +352,7 @@ gtk_ui_manager_class_init (GtkUIManagerClass *klass)
    * @uimanager: the ui manager
    * @action: the action
    *
-   * The post_activate signal is emitted just after the @action
+   * The ::post-activate signal is emitted just after the @action
    * is activated.
    *
    * This is intended for applications to get notification

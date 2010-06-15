@@ -3220,6 +3220,55 @@ gtk_icon_info_load_symbolic (GtkIconInfo  *icon_info,
 }
 
 /**
+ * gtk_icon_info_load_symbolic_for_style:
+ * @icon_info: a #GtkIconInfo
+ * @style: a #GtkStyle to take the colors from
+ * @state: the widget state to use for colors
+ * @was_symbolic: (allow-none): a #gboolean, returns whether the loaded icon
+ *     was a symbolic one and whether the @fg color was applied to it.
+ * @error: (allow-none): location to store error information on failure,
+ *     or %NULL.
+ *
+ * Loads an icon, modifying it to match the system colours for the foreground,
+ * success, warning and error colors provided. If the icon is not a symbolic
+ * one, the function will return the result from gtk_icon_info_load_icon().
+ *
+ * This allows loading symbolic icons that will match the system theme.
+ *
+ * See gtk_icon_info_load_symbolic() for more details.
+ *
+ * Return value: a #GdkPixbuf representing the loaded icon
+ *
+ * Since: 3.0
+ **/
+GdkPixbuf *
+gtk_icon_info_load_symbolic_for_style (GtkIconInfo   *icon_info,
+                                       GtkStyle      *style,
+                                       GtkStateType   state,
+                                       gboolean      *was_symbolic,
+                                       GError       **error)
+{
+  GdkColor success_color;
+  GdkColor warning_color;
+  GdkColor error_color;
+  GdkColor *fg;
+  GdkColor *success = NULL;
+  GdkColor *warning = NULL;
+  GdkColor *err = NULL;
+
+  fg = &style->fg[state];
+  if (gtk_style_lookup_color (style, "success_color", &success_color))
+    success = &success_color;
+  if (gtk_style_lookup_color (style, "warning_color", &warning_color))
+    warning = &warning_color;
+  if (gtk_style_lookup_color (style, "error_color", &error_color))
+    err = &error_color;
+
+  return gtk_icon_info_load_symbolic (icon_info, fg, success, warning, err,
+                                      &was_symbolic, error);
+}
+
+/**
  * gtk_icon_info_set_raw_coordinates:
  * @icon_info: a #GtkIconInfo
  * @raw_coordinates: whether the coordinates of embedded rectangles

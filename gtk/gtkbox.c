@@ -54,15 +54,10 @@
  * end to start.  You may intersperse these calls and add widgets from
  * both ends of the same GtkBox.
  *
- * Use gtk_box_pack_start_defaults() or gtk_box_pack_end_defaults()
- * to pack widgets into a GtkBox if you do not need to specify the
- * #GtkBox:expand, #GtkBox:fill, or #GtkBox:padding child properties
- * for the child to be added.
- *
  * Because GtkBox is a #GtkContainer, you may also use
  * gtk_container_add() to insert widgets into the box, and they will be
- * packed as if with gtk_box_pack_start_defaults().  Use
- * gtk_container_remove() to remove widgets from the GtkBox.
+ * packed with the default values for #GtkBox:expand and #GtkBox:fill.
+ * Use gtk_container_remove() to remove widgets from the GtkBox.
  *
  * Use gtk_box_set_homogeneous() to specify whether or not all children
  * of the GtkBox are forced to get the same amount of space.
@@ -229,30 +224,50 @@ gtk_box_class_init (GtkBoxClass *class)
 							 FALSE,
 							 GTK_PARAM_READWRITE));
 
+  /**
+   * GtkBox:expand:
+   *
+   * Whether the child should receive extra space when the parent grows.
+   *
+   * Note that the default value for this property is %FALSE for GtkBox,
+   * but #GtkHBox, #GtkVBox and other subclasses use the old default
+   * of %TRUE.
+   */
   gtk_container_class_install_child_property (container_class,
 					      CHILD_PROP_EXPAND,
-					      g_param_spec_boolean ("expand", 
-								    P_("Expand"), 
+					      g_param_spec_boolean ("expand",
+								    P_("Expand"),
 								    P_("Whether the child should receive extra space when the parent grows"),
-								    TRUE,
+								    FALSE,
 								    GTK_PARAM_READWRITE));
+
+  /**
+   * GtkBox:fill:
+   *
+   * Whether the child should receive extra space when the parent grows.
+   *
+   * Note that the default value for this property is %FALSE for GtkBox,
+   * but #GtkHBox, #GtkVBox and other subclasses use the old default
+   * of %TRUE.
+   */
   gtk_container_class_install_child_property (container_class,
 					      CHILD_PROP_FILL,
-					      g_param_spec_boolean ("fill", 
-								    P_("Fill"), 
+					      g_param_spec_boolean ("fill",
+								    P_("Fill"),
 								    P_("Whether extra space given to the child should be allocated to the child or used as padding"),
-								    TRUE,
+								    FALSE,
 								    GTK_PARAM_READWRITE));
+
   gtk_container_class_install_child_property (container_class,
 					      CHILD_PROP_PADDING,
-					      g_param_spec_uint ("padding", 
-								 P_("Padding"), 
+					      g_param_spec_uint ("padding",
+								 P_("Padding"),
 								 P_("Extra space to put between the child and its neighbors, in pixels"),
 								 0, G_MAXINT, 0,
 								 GTK_PARAM_READWRITE));
   gtk_container_class_install_child_property (container_class,
 					      CHILD_PROP_PACK_TYPE,
-					      g_param_spec_enum ("pack-type", 
+					      g_param_spec_enum ("pack-type",
 								 P_("Pack type"), 
 								 P_("A GtkPackType indicating whether the child is packed with reference to the start or end of the parent"),
 								 GTK_TYPE_PACK_TYPE, GTK_PACK_START,
@@ -502,7 +517,6 @@ gtk_box_size_allocate (GtkWidget     *widget,
            */
 
           /* Sort descending by gap and position. */
-
           g_qsort_with_data (spreading,
                              nvis_children, sizeof (GtkBoxSpreading),
                              gtk_box_compare_gap, sizes);
@@ -510,7 +524,7 @@ gtk_box_size_allocate (GtkWidget     *widget,
           /* Distribute available space.
            * This master piece of a loop was conceived by Behdad Esfahbod.
            */
-          for (i = nvis_children - 1; i >= 0; --i)
+          for (i = nvis_children - 1; size > 0 && i >= 0; --i)
             {
               /* Divide remaining space by number of remaining children.
                * Sort order and reducing remaining space by assigned space
@@ -736,8 +750,8 @@ gtk_box_get_child_property (GtkContainer *container,
 			    GValue       *value,
 			    GParamSpec   *pspec)
 {
-  gboolean expand = 0;
-  gboolean fill = 0;
+  gboolean expand = FALSE;
+  gboolean fill = FALSE;
   guint padding = 0;
   GtkPackType pack_type = 0;
   GList *list;
@@ -1046,7 +1060,7 @@ gtk_box_compute_size_for_opposing_orientation (GtkBox *box,
           /* Distribute available space.
            * This master piece of a loop was conceived by Behdad Esfahbod.
            */
-          for (i = nvis_children - 1; i >= 0; --i)
+          for (i = nvis_children - 1; size > 0 && i >= 0; --i)
             {
               /* Divide remaining space by number of remaining children.
                * Sort order and reducing remaining space by assigned space

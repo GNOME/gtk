@@ -1697,32 +1697,15 @@ ensure_pixbuf_for_icon_name (GtkImage     *image,
                                          MIN (width, height), flags);
       if (info)
         {
-          GdkColor error_color, warning_color, success_color;
-          GdkColor *error_ptr, *warning_ptr, *success_ptr;
           GtkStyle *style;
           gboolean was_symbolic;
 
           style = gtk_widget_get_style (GTK_WIDGET (image));
-          if (!gtk_style_lookup_color (style, "error_color", &error_color))
-            error_ptr = NULL;
-          else
-            error_ptr = &error_color;
-          if (!gtk_style_lookup_color (style, "warning_color", &warning_color))
-            warning_ptr = NULL;
-          else
-            warning_ptr = &warning_color;
-          if (!gtk_style_lookup_color (style, "success_color", &success_color))
-            success_ptr = NULL;
-          else
-            success_ptr = &success_color;
-
-          image->data.name.pixbuf = gtk_icon_info_load_symbolic (info,
-                                                                 &style->fg[state],
-                                                                 success_ptr,
-                                                                 warning_ptr,
-                                                                 error_ptr,
-                                                                 &was_symbolic,
-                                                                 NULL);
+          image->data.name.pixbuf =
+            gtk_icon_info_load_symbolic_for_style (info,
+                                                   style, state,
+                                                   &was_symbolic,
+                                                   NULL);
           priv->was_symbolic = was_symbolic;
           gtk_icon_info_free (info);
         }
@@ -1790,32 +1773,15 @@ ensure_pixbuf_for_gicon (GtkImage     *image,
 					     MIN (width, height), flags);
       if (info)
         {
-          GdkColor error_color, warning_color, success_color;
-          GdkColor *error_ptr, *warning_ptr, *success_ptr;
           GtkStyle *style;
           gboolean was_symbolic;
 
           style = gtk_widget_get_style (GTK_WIDGET (image));
-          if (!gtk_style_lookup_color (style, "error_color", &error_color))
-            error_ptr = NULL;
-          else
-            error_ptr = &error_color;
-          if (!gtk_style_lookup_color (style, "warning_color", &warning_color))
-            warning_ptr = NULL;
-          else
-            warning_ptr = &warning_color;
-          if (!gtk_style_lookup_color (style, "success_color", &success_color))
-            success_ptr = NULL;
-          else
-            success_ptr = &success_color;
-
-          image->data.gicon.pixbuf = gtk_icon_info_load_symbolic (info,
-                                                                  &style->fg[state],
-                                                                  success_ptr,
-                                                                  warning_ptr,
-                                                                  error_ptr,
-                                                                  &was_symbolic,
-                                                                  NULL);
+          image->data.gicon.pixbuf =
+            gtk_icon_info_load_symbolic_for_style (info,
+                                                   style, state,
+                                                   &was_symbolic,
+                                                   NULL);
           priv->was_symbolic = was_symbolic;
           gtk_icon_info_free (info);
         }

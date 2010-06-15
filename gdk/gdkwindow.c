@@ -3844,6 +3844,111 @@ start_draw_helper (GdkDrawable *drawable,
      }                                                      \
   }
 
+#define BEGIN_DRAW_MACRO \
+  {
+
+#define END_DRAW_MACRO \
+  }
+
+typedef struct
+{
+  GdkDrawable *drawable;
+  GdkGC *gc;
+
+  gint x_offset;
+  gint y_offset;
+
+  gint clip_x;
+  gint clip_y;
+  gint ts_x;
+  gint ts_y;
+} DirectDrawInfo;
+
+GdkDrawable *
+_gdk_drawable_begin_direct_draw (GdkDrawable *drawable,
+				 GdkGC *gc,
+				 gpointer *priv_data,
+				 gint *x_offset_out,
+				 gint *y_offset_out)
+{
+  g_return_val_if_fail (priv_data != NULL, NULL);
+
+  GdkDrawable *out_impl = NULL;
+
+  *priv_data = NULL;
+
+  if (GDK_IS_PIXMAP (drawable))
+    {
+      /* We bypass the GdkPixmap functions, so do this ourself */
+      _gdk_gc_remove_drawable_clip (gc);
+
+      out_impl = drawable;
+
+      *x_offset_out = 0;
+      *y_offset_out = 0;
+    }
+  else
+    {
+      if (GDK_WINDOW_DESTROYED (drawable))
+        return NULL;
+
+      BEGIN_DRAW;
+
+      if (impl == NULL)
+        return NULL;
+
+      out_impl = impl;
+
+      *x_offset_out = x_offset;
+      *y_offset_out = y_offset;
+
+      DirectDrawInfo *priv = g_new (DirectDrawInfo, 1);
+
+      priv->drawable = impl;
+      priv->gc = gc;
+
+      priv->x_offset = x_offset;
+      priv->y_offset = y_offset;
+      priv->clip_x = old_clip_x;
+      priv->clip_y = old_clip_y;
+      priv->ts_x = old_ts_x;
+      priv->ts_y = old_ts_y;
+
+      *priv_data = (gpointer) priv;
+
+      END_DRAW_MACRO;
+    }
+
+  return out_impl;
+}
+
+void
+_gdk_drawable_end_direct_draw (gpointer priv_data)
+{
+  /* Its a GdkPixmap or the call to _gdk_drawable_begin_direct_draw failed. */
+  if (priv_data == NULL)
+    return;
+
+  DirectDrawInfo *priv = priv_data;
+  GdkGC *gc = priv->gc;
+
+  /* This is only for GdkWindows - if GdkPixmaps need any handling here in
+   * the future, then we should keep track of what type of drawable it is in
+   * DirectDrawInfo. */
+  BEGIN_DRAW_MACRO;
+
+  gint x_offset = priv->x_offset;
+  gint y_offset = priv->y_offset;
+  gint old_clip_x = priv->clip_x;
+  gint old_clip_y = priv->clip_y;
+  gint old_ts_x = priv->ts_x;
+  gint old_ts_y = priv->ts_y;
+
+  END_DRAW;
+
+  g_free (priv_data);
+}
+
 static GdkGC *
 gdk_window_create_gc (GdkDrawable     *drawable,
 		      GdkGCValues     *values,

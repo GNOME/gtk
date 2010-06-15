@@ -34,6 +34,7 @@
 
 #include "gtkapplication.h"
 #include "gtkmain.h"
+#include "gtkmarshalers.h"
 #include "gtkintl.h"
 #include "gtkprivate.h"
 
@@ -76,6 +77,8 @@ enum
 enum
 {
   ACTIVATED,
+  QUIT,
+  ACTION,
 
   LAST_SIGNAL
 };
@@ -92,12 +95,30 @@ struct _GtkApplicationPrivate
 
 G_DEFINE_TYPE (GtkApplication, gtk_application, G_TYPE_APPLICATION)
 
+static void
+process_timestamp_from_platform_data (GVariant *platform_data)
+{
+  /* TODO - extract timestamp from here, update GDK time */
+}
+
 static gboolean
-gtk_application_default_quit (GApplication *application,
-                              guint         timestamp)
+gtk_application_default_quit (GtkApplication *application)
 {
   gtk_main_quit ();
   return TRUE;
+}
+
+static gboolean
+gtk_application_default_quit_with_data (GApplication *application,
+					GVariant     *platform_data)
+{
+  gboolean result;
+
+  process_timestamp_from_platform_data (platform_data);
+  
+  g_signal_emit (application, gtk_application_signals[QUIT], 0, &result);
+
+  return result;
 }
 
 static void
@@ -128,7 +149,7 @@ gtk_application_default_prepare_activation (GApplication *application,
 }
 
 static void
-gtk_application_default_activated (GApplication *application,
+gtk_application_default_activated (GtkApplication *application,
                                    GVariant     *arguments)
 {
   GtkApplication *app = GTK_APPLICATION (application);
@@ -139,19 +160,26 @@ gtk_application_default_activated (GApplication *application,
 }
 
 static void
-gtk_application_default_action (GApplication *application,
-                                const gchar  *action_name,
-                                guint         timestamp)
+gtk_application_default_action (GtkApplication *application,
+				const gchar    *action_name)
 {
-  GtkApplication *app = GTK_APPLICATION (application);
   GtkAction *action;
 
-  action = gtk_action_group_get_action (app->priv->main_actions, action_name);
+  action = gtk_action_group_get_action (application->priv->main_actions, action_name);
   if (action)
     {
-      /* TODO set timestamp */
       gtk_action_activate (action);
     }
+}
+				
+static void
+gtk_application_default_action_with_data (GApplication *application,
+					  const gchar  *action_name,
+					  GVariant     *platform_data)
+{
+  process_timestamp_from_platform_data (platform_data);
+
+  g_signal_emit (application, gtk_application_signals[ACTION], g_quark_from_string (action_name));
 }
 
 static GVariant *
@@ -377,15 +405,32 @@ gtk_application_run (GtkApplication *app)
  * gtk_application_quit:
  * @app: a #GtkApplication
  *
- * Request the application exit.
- * By default, this method will exit the main loop; see gtk_main_quit().
+ * Request the application exit.  This function invokes
+ * g_application_quit_with_data(), which normally will
+ * in turn cause @app to emit #GtkApplication::quit.
+ *
+ * To control an application's quit behavior (for example, to ask for
+ * files to be saved), connect to the #GtkApplication::quit signal
+ * handler.
  *
  * Since: 3.0
  */
 void
 gtk_application_quit (GtkApplication *app)
 {
-  g_application_quit (G_APPLICATION (app), gtk_get_current_event_time ());
+  GVariantBuilder builder;
+  GVariant *platform_data;
+
+  g_variant_builder_init (&builder, G_VARIANT_TYPE ("a{sv}"));
+  g_variant_builder_add (&builder, "{sv}",
+			 "timestamp",
+			 g_variant_new ("u",
+					gtk_get_current_event_time ()));
+  platform_data = g_variant_builder_end (&builder);
+    
+  g_application_quit_with_data (G_APPLICATION (app), platform_data);
+
+  g_variant_unref (platform_data);
 }
 
 static void
@@ -495,9 +540,12 @@ gtk_application_class_init (GtkApplicationClass *klass)
   gobject_class->set_property = gtk_application_set_property;
 
   application_class->run = gtk_application_default_run;
-  application_class->quit = gtk_application_default_quit;
-  application_class->action = gtk_application_default_action;
+  application_class->quit_with_data = gtk_application_default_quit_with_data;
+  application_class->action_with_data = gtk_application_default_action_with_data;
   application_class->prepare_activation = gtk_application_default_prepare_activation;
+
+  klass->quit = gtk_application_default_quit;
+  klass->action = gtk_application_default_action;
 
   klass->activated = gtk_application_default_activated;
 
@@ -522,6 +570,53 @@ gtk_application_class_init (GtkApplicationClass *klass)
                   G_TYPE_NONE, 1,
                   G_TYPE_VARIANT);
 
+  /**
+   * GtkApplication::quit:
+   * @application: the object on which the signal is emitted
+   *
+   * This signal is emitted when a quit is initiated.  See also
+   * the #GApplication::quit-with-data signal which may in
+   * turn trigger this signal.
+   *
+   * The default handler for this signal exits the mainloop of the
+   * application.
+   *
+   * Returns: %TRUE if the signal has been handled, %FALSE to continue
+   *   signal emission
+   */
+  gtk_application_signals[QUIT] =
+    g_signal_new (g_intern_static_string ("quit"),
+                  G_OBJECT_CLASS_TYPE (klass),
+                  G_SIGNAL_RUN_LAST,
+                  G_STRUCT_OFFSET (GtkApplicationClass, quit),
+                  g_signal_accumulator_true_handled, NULL,
+                  _gtk_marshal_BOOLEAN__VOID,
+                  G_TYPE_BOOLEAN, 0);
+
+  /**
+   * GtkApplication::action:
+   * @application: the object on which the signal is emitted
+   * @name: The name of the activated action
+   *
+   * This signal is emitted when an action is activated. The action name
+   * is passed as the first argument, but also as signal detail, so it
+   * is possible to connect to this signal for individual actions.
+   *
+   * See also the #GApplication::action-with-data signal which may in
+   * turn trigger this signal.
+   *
+   * The signal is never emitted for disabled actions.
+   */
+  gtk_application_signals[ACTION] =
+    g_signal_new (g_intern_static_string ("action"),
+                  G_OBJECT_CLASS_TYPE (klass),
+                  G_SIGNAL_RUN_FIRST | G_SIGNAL_NO_RECURSE | G_SIGNAL_DETAILED,
+                  G_STRUCT_OFFSET (GtkApplicationClass, action),
+                  NULL, NULL,
+                  g_cclosure_marshal_VOID__STRING,
+                  G_TYPE_NONE, 1,
+                  G_TYPE_STRING);
+                 
   g_type_class_add_private (gobject_class, sizeof (GtkApplicationPrivate));
 }
 
