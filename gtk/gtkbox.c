@@ -517,7 +517,6 @@ gtk_box_size_allocate (GtkWidget     *widget,
            */
 
           /* Sort descending by gap and position. */
-
           g_qsort_with_data (spreading,
                              nvis_children, sizeof (GtkBoxSpreading),
                              gtk_box_compare_gap, sizes);
@@ -525,7 +524,7 @@ gtk_box_size_allocate (GtkWidget     *widget,
           /* Distribute available space.
            * This master piece of a loop was conceived by Behdad Esfahbod.
            */
-          for (i = nvis_children - 1; i >= 0; --i)
+          for (i = nvis_children - 1; size > 0 && i >= 0; --i)
             {
               /* Divide remaining space by number of remaining children.
                * Sort order and reducing remaining space by assigned space
@@ -1061,7 +1060,7 @@ gtk_box_compute_size_for_opposing_orientation (GtkBox *box,
           /* Distribute available space.
            * This master piece of a loop was conceived by Behdad Esfahbod.
            */
-          for (i = nvis_children - 1; i >= 0; --i)
+          for (i = nvis_children - 1; size > 0 && i >= 0; --i)
             {
               /* Divide remaining space by number of remaining children.
                * Sort order and reducing remaining space by assigned space
