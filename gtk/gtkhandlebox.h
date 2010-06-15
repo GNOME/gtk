@@ -49,32 +49,16 @@ G_BEGIN_DECLS
 #define GTK_IS_HANDLE_BOX_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_HANDLE_BOX))
 #define GTK_HANDLE_BOX_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_HANDLE_BOX, GtkHandleBoxClass))
 
-
 typedef struct _GtkHandleBox       GtkHandleBox;
+typedef struct _GtkHandleBoxPriv   GtkHandleBoxPriv;
 typedef struct _GtkHandleBoxClass  GtkHandleBoxClass;
 
 struct _GtkHandleBox
 {
   GtkBin bin;
 
-  GdkWindow      *GSEAL (bin_window);	/* parent window for children */
-  GdkWindow      *GSEAL (float_window);
-  GtkShadowType   GSEAL (shadow_type);
-  guint           GSEAL (handle_position) : 2;
-  guint           GSEAL (float_window_mapped) : 1;
-  guint           GSEAL (child_detached) : 1;
-  guint           GSEAL (in_drag) : 1;
-  guint           GSEAL (shrink_on_detach) : 1;
-
-  signed int      GSEAL (snap_edge : 3); /* -1 == unset */
-
-  /* Variables used during a drag
-   */
-  gint            GSEAL (deskoff_x); /* Offset between root relative coords */
-  gint            GSEAL (deskoff_y); /* and deskrelative coords             */
-
-  GtkAllocation   GSEAL (attach_allocation);
-  GtkAllocation   GSEAL (float_allocation);
+  /* <private> */
+  GtkHandleBoxPriv *priv;
 };
 
 struct _GtkHandleBoxClass
