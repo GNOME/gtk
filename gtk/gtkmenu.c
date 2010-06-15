@@ -1528,7 +1528,7 @@ gtk_menu_popup_for_device (GtkMenu             *menu,
     {
       if (popup_grab_on_window (xgrab_shell->window, keyboard, pointer, activate_time))
         {
-          _gtk_menu_shell_set_grab_devices (GTK_MENU_SHELL (xgrab_shell), keyboard, pointer);
+          _gtk_menu_shell_set_grab_device (GTK_MENU_SHELL (xgrab_shell), pointer);
           GTK_MENU_SHELL (xgrab_shell)->have_xgrab = TRUE;
         }
     }
@@ -1540,7 +1540,7 @@ gtk_menu_popup_for_device (GtkMenu             *menu,
       transfer_window = menu_grab_transfer_window_get (menu);
       if (popup_grab_on_window (transfer_window, keyboard, pointer, activate_time))
         {
-          _gtk_menu_shell_set_grab_devices (GTK_MENU_SHELL (xgrab_shell), keyboard, pointer);
+          _gtk_menu_shell_set_grab_device (GTK_MENU_SHELL (xgrab_shell), pointer);
           GTK_MENU_SHELL (xgrab_shell)->have_xgrab = TRUE;
         }
     }
@@ -1556,7 +1556,7 @@ gtk_menu_popup_for_device (GtkMenu             *menu,
       return;
     }
 
-  _gtk_menu_shell_set_grab_devices (GTK_MENU_SHELL (menu), keyboard, pointer);
+  _gtk_menu_shell_set_grab_device (GTK_MENU_SHELL (menu), pointer);
   menu_shell->active = TRUE;
   menu_shell->button = button;
 
@@ -1771,6 +1771,8 @@ gtk_menu_popdown (GtkMenu *menu)
   gtk_widget_hide (menu->toplevel);
   gtk_window_set_transient_for (GTK_WINDOW (menu->toplevel), NULL);
 
+  pointer = _gtk_menu_shell_get_grab_device (menu_shell);
+
   if (menu->torn_off)
     {
       gtk_widget_set_size_request (menu->tearoff_window, -1, -1);
@@ -1781,17 +1783,19 @@ gtk_menu_popdown (GtkMenu *menu)
 	} 
       else
 	{
-          GdkDevice *keyboard, *pointer;
-
           /* We popped up the menu from the tearoff, so we need to
 	   * release the grab - we aren't actually hiding the menu.
 	   */
-	  if (menu_shell->have_xgrab &&
-              _gtk_menu_shell_get_grab_devices (menu_shell, &keyboard, &pointer))
-	    {
-	      gdk_device_ungrab (keyboard, GDK_CURRENT_TIME);
-	      gdk_device_ungrab (pointer, GDK_CURRENT_TIME);
-	    }
+	  if (menu_shell->have_xgrab && pointer)
+            {
+              GdkDevice *keyboard;
+
+              gdk_device_ungrab (pointer, GDK_CURRENT_TIME);
+              keyboard = gdk_device_get_associated_device (pointer);
+
+              if (keyboard)
+                gdk_device_ungrab (keyboard, GDK_CURRENT_TIME);
+            }
 	}
 
       /* gtk_menu_popdown is called each time a menu item is selected from
@@ -1807,12 +1811,10 @@ gtk_menu_popdown (GtkMenu *menu)
 
   menu_shell->have_xgrab = FALSE;
 
-  _gtk_menu_shell_get_grab_devices (menu_shell, NULL, &pointer);
-
   if (pointer)
     gtk_device_grab_remove (GTK_WIDGET (menu), pointer);
 
-  _gtk_menu_shell_set_grab_devices (menu_shell, NULL, NULL);
+  _gtk_menu_shell_set_grab_device (menu_shell, NULL);
 
   menu_grab_transfer_window_destroy (menu);
 }
@@ -4333,7 +4335,7 @@ gtk_menu_position (GtkMenu *menu)
   widget = GTK_WIDGET (menu);
 
   screen = gtk_widget_get_screen (widget);
-  _gtk_menu_shell_get_grab_devices (GTK_MENU_SHELL (menu), NULL, &pointer);
+  pointer = _gtk_menu_shell_get_grab_device (GTK_MENU_SHELL (menu));
   gdk_display_get_device_state (gdk_screen_get_display (screen),
                                 pointer, &pointer_screen, &x, &y, NULL);
 
@@ -5452,7 +5454,7 @@ gtk_menu_grab_notify (GtkWidget *widget,
   GtkWidget *grab;
   GdkDevice *pointer;
 
-  _gtk_menu_shell_get_grab_devices (GTK_MENU_SHELL (widget), NULL, &pointer);
+  pointer = _gtk_menu_shell_get_grab_device (GTK_MENU_SHELL (widget));
 
   if (!pointer ||
       !gtk_widget_device_is_shadowed (widget, pointer))

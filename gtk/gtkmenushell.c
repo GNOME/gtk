@@ -135,7 +135,6 @@ struct _GtkMenuShellPrivate
   GtkMnemonicHash *mnemonic_hash;
   GtkKeyHash *key_hash;
 
-  GdkDevice *grab_keyboard;
   GdkDevice *grab_pointer;
 
   guint take_focus : 1;
@@ -1097,12 +1096,16 @@ gtk_real_menu_shell_deactivate (GtkMenuShell *menu_shell)
 	}
       if (menu_shell->have_xgrab)
 	{
-          gdk_device_ungrab (priv->grab_pointer, GDK_CURRENT_TIME);
-          gdk_device_ungrab (priv->grab_keyboard, GDK_CURRENT_TIME);
+          GdkDevice *keyboard;
 
-	  menu_shell->have_xgrab = FALSE;
-          priv->grab_pointer = NULL;
-          priv->grab_keyboard = NULL;
+          gdk_device_ungrab (priv->grab_pointer, GDK_CURRENT_TIME);
+          keyboard = gdk_device_get_associated_device (priv->grab_pointer);
+
+          if (keyboard)
+            gdk_device_ungrab (keyboard, GDK_CURRENT_TIME);
+
+          menu_shell->have_xgrab = FALSE;
+          _gtk_menu_shell_set_grab_device (menu_shell, NULL);
 	}
 
       menu_shell->keyboard_mode = FALSE;
@@ -1752,36 +1755,34 @@ _gtk_menu_shell_remove_mnemonic (GtkMenuShell *menu_shell,
 }
 
 void
-_gtk_menu_shell_set_grab_devices (GtkMenuShell *menu_shell,
-                                  GdkDevice    *keyboard,
-                                  GdkDevice    *pointer)
+_gtk_menu_shell_set_grab_device (GtkMenuShell *menu_shell,
+                                 GdkDevice    *device)
 {
-  GtkMenuShellPrivate *priv = GTK_MENU_SHELL_GET_PRIVATE (menu_shell);
+  GtkMenuShellPrivate *priv;
 
   g_return_if_fail (GTK_IS_MENU_SHELL (menu_shell));
-  g_return_if_fail (!keyboard || GDK_IS_DEVICE (keyboard));
-  g_return_if_fail (!pointer || GDK_IS_DEVICE (pointer));
+  g_return_if_fail (!device || GDK_IS_DEVICE (device));
 
-  priv->grab_keyboard = keyboard;
-  priv->grab_pointer = pointer;
+  priv = GTK_MENU_SHELL_GET_PRIVATE (menu_shell);
+
+  if (!device)
+    priv->grab_pointer = NULL;
+  else if (device->source == GDK_SOURCE_KEYBOARD)
+    priv->grab_pointer = gdk_device_get_associated_device (device);
+  else
+    priv->grab_pointer = device;
 }
 
-gboolean
-_gtk_menu_shell_get_grab_devices (GtkMenuShell  *menu_shell,
-                                  GdkDevice    **keyboard,
-                                  GdkDevice    **pointer)
+GdkDevice *
+_gtk_menu_shell_get_grab_device (GtkMenuShell  *menu_shell)
 {
-  GtkMenuShellPrivate *priv = GTK_MENU_SHELL_GET_PRIVATE (menu_shell);
+  GtkMenuShellPrivate *priv;
 
   g_return_val_if_fail (GTK_IS_MENU_SHELL (menu_shell), FALSE);
 
-  if (keyboard)
-    *keyboard = priv->grab_keyboard;
+  priv = GTK_MENU_SHELL_GET_PRIVATE (menu_shell);
 
-  if (pointer)
-    *pointer = priv->grab_pointer;
-
-  return TRUE;
+  return priv->grab_pointer;
 }
 
 /**
