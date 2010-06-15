@@ -113,7 +113,7 @@ gboolean       _gtk_file_chooser_is_file_in_root (GtkFileChooser *chooser,
 GSList *       _gtk_file_chooser_get_visible_roots (GtkFileChooser *chooser);
 
 gboolean       _gtk_file_chooser_uri_has_prefix (const char   *uri,
-                                                 const GSList *prefixes);
+                                                 GSList *prefixes);
 
 /* GtkFileChooserDialog private */
 
