@@ -2201,8 +2201,7 @@ test_if_file_is_visible (GtkFileSystem *fs,
     return FALSE;
 
   uri = g_file_get_uri (file);
-  result = (root_uris == NULL ||
-            _gtk_file_chooser_uri_has_prefix (uri, root_uris));
+  result = _gtk_file_chooser_uri_has_prefix (uri, root_uris);
   g_free (uri);
 
   if (!result)
