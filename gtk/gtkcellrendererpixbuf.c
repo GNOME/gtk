@@ -534,31 +534,15 @@ gtk_cell_renderer_pixbuf_create_themed_pixbuf (GtkCellRendererPixbuf *cellpixbuf
 
   if (info)
     {
-      GdkColor error_color, warning_color, success_color;
-      GdkColor *error_ptr, *warning_ptr, *success_ptr;
       GtkStyle *style;
 
       style = gtk_widget_get_style (GTK_WIDGET (widget));
-      if (!gtk_style_lookup_color (style, "error_color", &error_color))
-        error_ptr = NULL;
-      else
-        error_ptr = &error_color;
-      if (!gtk_style_lookup_color (style, "warning_color", &warning_color))
-        warning_ptr = NULL;
-      else
-        warning_ptr = &warning_color;
-      if (!gtk_style_lookup_color (style, "success_color", &success_color))
-        success_ptr = NULL;
-      else
-        success_ptr = &success_color;
-
-      cellpixbuf->pixbuf = gtk_icon_info_load_symbolic (info,
-                                                        &style->fg[GTK_STATE_NORMAL],
-                                                        success_ptr,
-                                                        warning_ptr,
-                                                        error_ptr,
-                                                        NULL,
-                                                        NULL);
+      cellpixbuf->pixbuf =
+        gtk_icon_info_load_symbolic_for_style (info,
+                                               style,
+                                               GTK_STATE_NORMAL,
+                                               NULL,
+                                               NULL);
       gtk_icon_info_free (info);
     }
 
@@ -568,7 +552,7 @@ gtk_cell_renderer_pixbuf_create_themed_pixbuf (GtkCellRendererPixbuf *cellpixbuf
 static GdkPixbuf *
 create_symbolic_pixbuf (GtkCellRendererPixbuf *cellpixbuf,
 			GtkWidget             *widget,
-			GdkColor              *fg)
+			GtkStateType           state)
 {
   GtkCellRendererPixbufPrivate *priv;
   GdkScreen *screen;
@@ -623,34 +607,16 @@ create_symbolic_pixbuf (GtkCellRendererPixbuf *cellpixbuf,
 
   if (info)
     {
-      GdkColor error_color, warning_color, success_color;
-      GdkColor *error_ptr, *warning_ptr, *success_ptr;
       GtkStyle *style;
 
       style = gtk_widget_get_style (GTK_WIDGET (widget));
-      if (!gtk_style_lookup_color (style, "error_color", &error_color))
-        error_ptr = NULL;
-      else
-        error_ptr = &error_color;
-      if (!gtk_style_lookup_color (style, "warning_color", &warning_color))
-        warning_ptr = NULL;
-      else
-        warning_ptr = &warning_color;
-      if (!gtk_style_lookup_color (style, "success_color", &success_color))
-        success_ptr = NULL;
-      else
-        success_ptr = &success_color;
-
-      pixbuf = gtk_icon_info_load_symbolic (info,
-                                            fg,
-                                            success_ptr,
-                                            warning_ptr,
-                                            error_ptr,
-                                            NULL,
-                                            NULL);
+      pixbuf = gtk_icon_info_load_symbolic_for_style (info,
+                                                      style, state,
+                                                      NULL, NULL);
       gtk_icon_info_free (info);
       return pixbuf;
     }
+
   return NULL;
 }
 
@@ -868,7 +834,7 @@ gtk_cell_renderer_pixbuf_render (GtkCellRenderer      *cell,
       else
 	state = GTK_STATE_PRELIGHT;
 
-      symbolic = create_symbolic_pixbuf (cellpixbuf, widget, &widget->style->fg[state]);
+      symbolic = create_symbolic_pixbuf (cellpixbuf, widget, state);
       if (!symbolic) {
         colorized = create_colorized_pixbuf (pixbuf,
 					     &widget->style->base[state]);
