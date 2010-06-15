@@ -550,9 +550,13 @@ _gtk_menu_shell_activate (GtkMenuShell *menu_shell)
 {
   if (!menu_shell->active)
     {
-      gtk_device_grab_add (GTK_WIDGET (menu_shell),
-                           gtk_get_current_event_device (),
-                           TRUE);
+      GdkDevice *device;
+
+      device = gtk_get_current_event_device ();
+
+      _gtk_menu_shell_set_grab_device (menu_shell, device);
+      gtk_device_grab_add (GTK_WIDGET (menu_shell), device, TRUE);
+
       menu_shell->have_grab = TRUE;
       menu_shell->active = TRUE;
     }
@@ -1105,10 +1109,10 @@ gtk_real_menu_shell_deactivate (GtkMenuShell *menu_shell)
             gdk_device_ungrab (keyboard, GDK_CURRENT_TIME);
 
           menu_shell->have_xgrab = FALSE;
-          _gtk_menu_shell_set_grab_device (menu_shell, NULL);
 	}
 
       menu_shell->keyboard_mode = FALSE;
+      _gtk_menu_shell_set_grab_device (menu_shell, NULL);
 
       _gtk_menu_shell_update_mnemonics (menu_shell);
     }
