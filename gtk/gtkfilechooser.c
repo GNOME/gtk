@@ -2841,48 +2841,41 @@ gtk_file_chooser_list_shortcut_folders (GtkFileChooser *chooser)
 
 #endif
 
-gboolean
-_gtk_file_chooser_uri_has_prefix (const char   *uri,
-                                  const GSList *prefixes)
+static gboolean
+uri_has_prefix (const char *uri, const char *prefix)
 {
-  int uri_len;
-  gboolean result = FALSE;
-  const GSList *l;
+  int prefix_len;
+  const char *remainder;
+
+  prefix_len = strlen (prefix);
+  if (prefix_len > 0 && prefix[prefix_len - 1] == '/')
+    prefix_len--;
+
+  if (strncmp (uri, prefix, prefix_len) != 0)
+    return FALSE;
+
+  remainder = uri + prefix_len;
+
+  return (*remainder == '/') || (*remainder == '\0');
+}
+
+gboolean
+_gtk_file_chooser_uri_has_prefix (const char *uri, GSList *prefixes)
+{
+  GSList *l;
 
   g_return_val_if_fail (uri != NULL, FALSE);
   g_return_val_if_fail (prefixes != NULL, FALSE);
 
-  uri_len = strlen (uri);
-
-  for (l = prefixes; l != NULL && !result; l = l->next)
+  for (l = prefixes; l != NULL; l = l->next)
     {
-      char *new_prefix = NULL;
-      char *prefix = (char *)l->data;
-      int prefix_len = strlen (prefix);
+      const char *prefix = l->data;
 
-      if (prefix[prefix_len - 1] != '/')
-        {
-          new_prefix = g_strdup_printf ("%s/", prefix);
-          prefix = new_prefix;
-          prefix_len++;
-        }
-
-      if (prefix_len == uri_len + 1)
-        {
-          /*
-           * Special case. The prefix URI may contain a trailing slash while the
-           * URI we're comparing against may not (or vice-versa), despite the
-           * URIs being equal.
-           */
-          result = !strncmp (prefix, uri, uri_len);
-        }
-      else
-        result = (uri_len >= prefix_len && g_str_has_prefix (uri, prefix));
-
-      g_free (new_prefix);
+      if (uri_has_prefix (uri, prefix))
+	return TRUE;
     }
 
-  return result;
+  return FALSE;
 }
 
 gboolean
