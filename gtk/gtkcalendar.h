@@ -159,15 +159,15 @@ struct _GtkCalendarClass
 GType	   gtk_calendar_get_type	(void) G_GNUC_CONST;
 GtkWidget* gtk_calendar_new		(void);
 
-gboolean   gtk_calendar_select_month	(GtkCalendar *calendar, 
+void       gtk_calendar_select_month	(GtkCalendar *calendar,
 					 guint	      month,
 					 guint	      year);
 void	   gtk_calendar_select_day	(GtkCalendar *calendar,
 					 guint	      day);
 
-gboolean   gtk_calendar_mark_day	(GtkCalendar *calendar,
+void       gtk_calendar_mark_day	(GtkCalendar *calendar,
 					 guint	      day);
-gboolean   gtk_calendar_unmark_day	(GtkCalendar *calendar,
+void       gtk_calendar_unmark_day	(GtkCalendar *calendar,
 					 guint	      day);
 void	   gtk_calendar_clear_marks	(GtkCalendar *calendar);
 

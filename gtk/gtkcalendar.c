@@ -3676,22 +3676,20 @@ gtk_calendar_set_display_options (GtkCalendar	       *calendar,
  * @calendar: a #GtkCalendar
  * @month: a month number between 0 and 11.
  * @year: the year the month is in.
- * 
+ *
  * Shifts the calendar to a different month.
- * 
- * Return value: %TRUE, always
  **/
-gboolean
+void
 gtk_calendar_select_month (GtkCalendar *calendar,
 			   guint	month,
 			   guint	year)
 {
-  g_return_val_if_fail (GTK_IS_CALENDAR (calendar), FALSE);
-  g_return_val_if_fail (month <= 11, FALSE);
-  
+  g_return_if_fail (GTK_IS_CALENDAR (calendar));
+  g_return_if_fail (month <= 11);
+
   calendar->month = month;
   calendar->year  = year;
-  
+
   calendar_compute_days (calendar);
   calendar_queue_refresh (calendar);
 
@@ -3703,7 +3701,6 @@ gtk_calendar_select_month (GtkCalendar *calendar,
   g_signal_emit (calendar,
 		 gtk_calendar_signals[MONTH_CHANGED_SIGNAL],
 		 0);
-  return TRUE;
 }
 
 /**
@@ -3772,52 +3769,44 @@ gtk_calendar_clear_marks (GtkCalendar *calendar)
 
 /**
  * gtk_calendar_mark_day:
- * @calendar: a #GtkCalendar 
+ * @calendar: a #GtkCalendar
  * @day: the day number to mark between 1 and 31.
- * 
+ *
  * Places a visual marker on a particular day.
- * 
- * Return value: %TRUE, always
- **/
-gboolean
+ */
+void
 gtk_calendar_mark_day (GtkCalendar *calendar,
 		       guint	    day)
 {
-  g_return_val_if_fail (GTK_IS_CALENDAR (calendar), FALSE);
-  
-  if (day >= 1 && day <= 31 && calendar->marked_date[day-1] == FALSE)
+  g_return_if_fail (GTK_IS_CALENDAR (calendar));
+
+  if (day >= 1 && day <= 31 && !calendar->marked_date[day-1])
     {
       calendar->marked_date[day - 1] = TRUE;
       calendar->num_marked_dates++;
       calendar_invalidate_day_num (calendar, day);
     }
-  
-  return TRUE;
 }
 
 /**
  * gtk_calendar_unmark_day:
  * @calendar: a #GtkCalendar.
  * @day: the day number to unmark between 1 and 31.
- * 
+ *
  * Removes the visual marker from a particular day.
- * 
- * Return value: %TRUE, always
- **/
-gboolean
+ */
+void
 gtk_calendar_unmark_day (GtkCalendar *calendar,
 			 guint	      day)
 {
-  g_return_val_if_fail (GTK_IS_CALENDAR (calendar), FALSE);
-  
-  if (day >= 1 && day <= 31 && calendar->marked_date[day-1] == TRUE)
+  g_return_if_fail (GTK_IS_CALENDAR (calendar));
+
+  if (day >= 1 && day <= 31 && calendar->marked_date[day-1])
     {
       calendar->marked_date[day - 1] = FALSE;
       calendar->num_marked_dates--;
       calendar_invalidate_day_num (calendar, day);
     }
-  
-  return TRUE;
 }
 
 /**
