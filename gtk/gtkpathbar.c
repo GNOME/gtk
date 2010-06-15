@@ -1666,8 +1666,7 @@ is_file_in_root (GtkPathBar *path_bar,
                  GFile      *file)
 {
   char *uri = g_file_get_uri (file);
-  gboolean result = path_bar->root_uris == NULL ||
-                    _gtk_file_chooser_uri_has_prefix (uri, path_bar->root_uris);
+  gboolean result = _gtk_file_chooser_uri_has_prefix (uri, path_bar->root_uris);
   g_free(uri);
 
   return result;

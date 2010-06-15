@@ -454,9 +454,7 @@ is_file_in_root (GtkFileChooserEntry *chooser_entry,
                  GFile               *file)
 {
   char *uri = g_file_get_uri (file);
-  gboolean result =
-    chooser_entry->root_uris == NULL ||
-    _gtk_file_chooser_uri_has_prefix (uri, chooser_entry->root_uris);
+  gboolean result = _gtk_file_chooser_uri_has_prefix (uri, chooser_entry->root_uris);
   g_free (uri);
 
   return result;

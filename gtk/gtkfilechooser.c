@@ -2890,7 +2890,9 @@ _gtk_file_chooser_uri_has_prefix (const char *uri, GSList *prefixes)
   GSList *l;
 
   g_return_val_if_fail (uri != NULL, FALSE);
-  g_return_val_if_fail (prefixes != NULL, FALSE);
+
+  if (prefixes == NULL)
+    return TRUE; /* No prefix means all URIs are good */
 
   for (l = prefixes; l != NULL; l = l->next)
     {
@@ -2914,8 +2916,7 @@ _gtk_file_chooser_is_uri_in_root (GtkFileChooser *chooser,
 
   root_uris = gtk_file_chooser_get_root_uris (chooser);
 
-  return root_uris == NULL ||
-         _gtk_file_chooser_uri_has_prefix (uri, root_uris);
+  return _gtk_file_chooser_uri_has_prefix (uri, root_uris);
 }
 
 gboolean
