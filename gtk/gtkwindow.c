@@ -573,6 +573,14 @@ gtk_window_class_init (GtkWindowClass *klass)
 							NULL,
 							GTK_PARAM_WRITABLE));
 
+  /**
+   * GtkWindow:allow-shrink:
+   *
+   * If %TRUE, the window has no mimimum size. Setting this to %TRUE is
+   * 99&percnt; of the time a bad idea.
+   *
+   * Deprecated: 2.22: Use GtkWindow:resizable property instead.
+   */
   g_object_class_install_property (gobject_class,
                                    PROP_ALLOW_SHRINK,
                                    g_param_spec_boolean ("allow-shrink",
@@ -580,15 +588,22 @@ gtk_window_class_init (GtkWindowClass *klass)
 							 /* xgettext:no-c-format */
 							 P_("If TRUE, the window has no mimimum size. Setting this to TRUE is 99% of the time a bad idea"),
 							 FALSE,
-							 GTK_PARAM_READWRITE));
+							 GTK_PARAM_READWRITE | G_PARAM_DEPRECATED));
 
+  /**
+   * GtkWindow:allow-grow:
+   *
+   * If %TRUE, users can expand the window beyond its minimum size.
+   *
+   * Deprecated: 2.22: Use GtkWindow:resizable property instead.
+   */
   g_object_class_install_property (gobject_class,
                                    PROP_ALLOW_GROW,
                                    g_param_spec_boolean ("allow-grow",
 							 P_("Allow Grow"),
 							 P_("If TRUE, users can expand the window beyond its minimum size"),
 							 TRUE,
-							 GTK_PARAM_READWRITE));
+							 GTK_PARAM_READWRITE | G_PARAM_DEPRECATED));
 
   g_object_class_install_property (gobject_class,
                                    PROP_RESIZABLE,
