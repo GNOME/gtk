@@ -611,7 +611,7 @@ reload_shortcuts (GtkFileChooserButton *button)
     {
       GFile *shortcut = (GFile *)l->data;
 
-      if (_gtk_file_chooser_is_file_in_root (filechooser, shortcut))
+      if (_gtk_file_chooser_is_file_in_roots (filechooser, shortcut))
         {
           add_shortcut_to_list (button, shortcut);
         }
@@ -643,8 +643,8 @@ gtk_file_chooser_button_add_shortcut_folder (GtkFileChooser  *chooser,
       g_object_ref (G_OBJECT (file));
       priv->shortcuts = g_slist_append (priv->shortcuts, file);
 
-      if (_gtk_file_chooser_is_file_in_root (GTK_FILE_CHOOSER (priv->dialog),
-                                             file))
+      if (_gtk_file_chooser_is_file_in_roots (GTK_FILE_CHOOSER (priv->dialog),
+					      file))
         {
           add_shortcut_to_list (button, file);
           gtk_tree_model_filter_refilter (GTK_TREE_MODEL_FILTER (priv->filter_model));
@@ -916,8 +916,7 @@ gtk_file_chooser_button_set_property (GObject      *object,
     case GTK_FILE_CHOOSER_PROP_ROOT_URIS:
       g_object_set_property (G_OBJECT (priv->dialog), pspec->name, value);
 
-      if (!_gtk_file_chooser_is_file_in_root (filechooser,
-            gtk_file_chooser_get_current_folder_file (filechooser)))
+      if (!_gtk_file_chooser_is_file_in_roots (filechooser, gtk_file_chooser_get_current_folder_file (filechooser)))
         {
           GSList *root_uris = gtk_file_chooser_get_root_uris (filechooser);
 
@@ -1905,7 +1904,7 @@ model_add_volumes (GtkFileChooserButton *button,
         skip = TRUE;
       else if (root_uris != NULL &&
                (base_file == NULL ||
-                !_gtk_file_chooser_is_file_in_root (filechooser, base_file)))
+                !_gtk_file_chooser_is_file_in_roots (filechooser, base_file)))
         skip = TRUE;
 
       if (base_file != NULL)
@@ -1968,7 +1967,7 @@ model_add_bookmarks (GtkFileChooserButton *button,
 
       file = l->data;
 
-      if (!_gtk_file_chooser_is_file_in_root (filechooser, file))
+      if (!_gtk_file_chooser_is_file_in_roots (filechooser, file))
         continue;
 
       if (g_file_is_native (file))

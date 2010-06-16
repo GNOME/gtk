@@ -1690,8 +1690,8 @@ struct SetFileInfo
 };
 
 static gboolean
-is_file_in_root (GtkPathBar *path_bar,
-                 GFile      *file)
+is_file_in_roots (GtkPathBar *path_bar,
+		  GFile      *file)
 {
   char *uri = g_file_get_uri (file);
   gboolean result = _gtk_file_chooser_uri_has_prefix (uri, path_bar->root_uris);
@@ -1771,7 +1771,7 @@ gtk_path_bar_get_info_callback (GCancellable *cancellable,
   display_name = g_file_info_get_display_name (info);
   is_hidden = g_file_info_get_is_hidden (info) || g_file_info_get_is_backup (info);
 
-  if (!is_file_in_root (file_info->path_bar, file_info->file))
+  if (!is_file_in_roots (file_info->path_bar, file_info->file))
     {
       gtk_path_bar_set_file_finish (file_info, TRUE);
       return;

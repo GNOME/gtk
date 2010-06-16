@@ -1807,7 +1807,7 @@ gtk_file_chooser_get_files (GtkFileChooser *chooser)
     {
       GFile *file = (GFile *)l->data;
 
-      g_return_val_if_fail (_gtk_file_chooser_is_file_in_root (chooser, file),
+      g_return_val_if_fail (_gtk_file_chooser_is_file_in_roots (chooser, file),
                             NULL);
     }
 
@@ -2881,8 +2881,8 @@ _gtk_file_chooser_uri_has_prefix (const char *uri, GSList *prefixes)
 }
 
 gboolean
-_gtk_file_chooser_is_uri_in_root (GtkFileChooser *chooser,
-                                  const char     *uri)
+_gtk_file_chooser_is_uri_in_roots (GtkFileChooser *chooser,
+				   const char     *uri)
 {
   GSList *root_uris;
 
@@ -2895,8 +2895,8 @@ _gtk_file_chooser_is_uri_in_root (GtkFileChooser *chooser,
 }
 
 gboolean
-_gtk_file_chooser_is_file_in_root (GtkFileChooser *chooser,
-                                   GFile          *file)
+_gtk_file_chooser_is_file_in_roots (GtkFileChooser *chooser,
+				    GFile          *file)
 {
   char *uri;
   gboolean result;
@@ -2905,7 +2905,7 @@ _gtk_file_chooser_is_file_in_root (GtkFileChooser *chooser,
   g_return_val_if_fail (file != NULL, FALSE);
 
   uri = g_file_get_uri (file);
-  result = _gtk_file_chooser_is_uri_in_root (chooser, uri);
+  result = _gtk_file_chooser_is_uri_in_roots (chooser, uri);
   g_free (uri);
 
   return result;
@@ -2965,8 +2965,7 @@ _gtk_file_chooser_get_visible_roots (GtkFileChooser *chooser)
 
           if (fs_root != NULL)
             {
-              if (_gtk_file_chooser_is_file_in_root (GTK_FILE_CHOOSER (chooser),
-                                                     fs_root))
+              if (_gtk_file_chooser_is_file_in_roots (GTK_FILE_CHOOSER (chooser), fs_root))
                 {
                   // This is going to be listed already. Ignore it for now.
                   skip = TRUE;
