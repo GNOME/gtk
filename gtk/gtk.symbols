@@ -1223,9 +1223,11 @@ gtk_expander_set_use_underline
 #if IN_FILE(__GTK_EXTENDED_CELL_C__)
 gtk_extended_cell_get_type G_GNUC_CONST
 gtk_extended_cell_get_desired_height
+gtk_extended_cell_get_desired_size
 gtk_extended_cell_get_desired_width
 gtk_extended_cell_get_height_for_width
 gtk_extended_cell_get_width_for_height
+gtk_extended_cell_is_height_for_width
 #endif
 #endif
 

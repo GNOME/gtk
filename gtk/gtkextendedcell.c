@@ -48,6 +48,33 @@ gtk_extended_cell_get_type (void)
 }
 
 /**
+ * gtk_extended_cell_is_height_for_width:
+ * @cell: a #GtkExtendedCell instance
+ *
+ * Gets whether the cell renderer prefers a height-for-width layout
+ * or a width-for-height layout.
+ *
+ * Returns: %TRUE if the cell prefers height-for-width, %FALSE if
+ * the cell should be treated with a width-for-height preference.
+ *
+ * Since: 3.0
+ */
+gboolean
+gtk_extended_cell_is_height_for_width (GtkExtendedCell *cell)
+{
+  GtkExtendedCellIface *iface;
+
+  g_return_val_if_fail (GTK_IS_EXTENDED_CELL (cell), FALSE);
+
+  iface = GTK_EXTENDED_CELL_GET_IFACE (cell);
+  if (iface->is_height_for_width)
+    return iface->is_height_for_width (cell);
+
+  /* By default cell renderers are height-for-width. */
+  return TRUE;
+}
+
+/**
  * gtk_extended_cell_get_desired_width:
  * @cell: a #GtkExtendedCell instance
  * @widget: the #GtkWidget this cell will be rendering to
@@ -188,6 +215,63 @@ gtk_extended_cell_get_height_for_width (GtkExtendedCell *cell,
 	     natural_height ? *natural_height : 20000);
 #endif
 }
+
+/**
+ * gtk_extended_cell_get_desired_size:
+ * @cell: a #GtkExtendedCell instance
+ * @request_natural: Whether to base the contextual request off of the
+ *     base natural or the base minimum
+ * @minimum_size: (out) (allow-none): location for storing the minimum size, or %NULL
+ * @natural_size: (out) (allow-none): location for storing the natural size, or %NULL
+ *
+ * Retrieves the minimum and natural size of a cell taking
+ * into account the widget's preference for height-for-width management.
+ *
+ * If request_natural is specified, the non-contextual natural value will
+ * be used to make the contextual request; otherwise the minimum will be used.
+ *
+ * Since: 3.0
+ */
+void
+gtk_extended_cell_get_desired_size (GtkExtendedCell *cell,
+				    GtkWidget       *widget,
+				    gboolean         request_natural,
+				    GtkRequisition  *minimum_size,
+				    GtkRequisition  *natural_size)
+{
+  gint min_width, nat_width;
+  gint min_height, nat_height;
+
+  g_return_if_fail (GTK_IS_EXTENDED_CELL (cell));
+
+  if (gtk_extended_cell_is_height_for_width (cell))
+    {
+      gtk_extended_cell_get_desired_width (cell, widget, &min_width, &nat_width);
+      gtk_extended_cell_get_height_for_width (cell, widget, 
+					      request_natural ? nat_width : min_width,
+					      &min_height, &nat_height);
+    }
+  else
+    {
+      gtk_extended_cell_get_desired_height (cell, widget, &min_height, &nat_height);
+      gtk_extended_cell_get_width_for_height (cell, widget, 
+					      request_natural ? nat_height : min_height,
+					      &min_width, &nat_width);
+    }
+
+  if (minimum_size)
+    {
+      minimum_size->width  = min_width;
+      minimum_size->height = min_height;
+    }
+
+  if (natural_size)
+    {
+      natural_size->width  = nat_width;
+      natural_size->height = nat_height;
+    }
+}
+
 
 #define __GTK_EXTENDED_CELL_C__
 #include "gtkaliasdef.c"

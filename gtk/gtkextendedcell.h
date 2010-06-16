@@ -41,6 +41,7 @@ struct _GtkExtendedCellIface
   GTypeInterface g_iface;
 
   /* virtual table */
+  gboolean  (* is_height_for_width)  (GtkExtendedCell    *cell);
 
   void      (* get_desired_width)    (GtkExtendedCell    *cell,
 				      GtkWidget          *widget,
@@ -62,26 +63,34 @@ struct _GtkExtendedCellIface
 				      gint               *natural_height);
 };
 
-GType gtk_extended_cell_get_type             (void) G_GNUC_CONST;
+GType     gtk_extended_cell_get_type             (void) G_GNUC_CONST;
 
-void  gtk_extended_cell_get_desired_width    (GtkExtendedCell   *cell,
-					      GtkWidget         *widget,
-					      gint              *minimum_size,
-					      gint              *natural_size);
-void  gtk_extended_cell_get_desired_height   (GtkExtendedCell   *cell,
-					      GtkWidget         *widget,
-					      gint              *minimum_size,
-					      gint              *natural_size);
-void  gtk_extended_cell_get_width_for_height (GtkExtendedCell   *cell,
-					      GtkWidget         *widget,
-					      gint               height,
-					      gint              *minimum_width,
-					      gint              *natural_width);
-void  gtk_extended_cell_get_height_for_width (GtkExtendedCell   *cell,
-					      GtkWidget         *widget,
-					      gint               width,
-					      gint              *minimum_height,
-					      gint              *natural_height);
+gboolean  gtk_extended_cell_is_height_for_width  (GtkExtendedCell   *cell);
+
+void      gtk_extended_cell_get_desired_width    (GtkExtendedCell   *cell,
+						  GtkWidget         *widget,
+						  gint              *minimum_size,
+						  gint              *natural_size);
+void      gtk_extended_cell_get_desired_height   (GtkExtendedCell   *cell,
+						  GtkWidget         *widget,
+						  gint              *minimum_size,
+						  gint              *natural_size);
+void      gtk_extended_cell_get_width_for_height (GtkExtendedCell   *cell,
+						  GtkWidget         *widget,
+						  gint               height,
+						  gint              *minimum_width,
+						  gint              *natural_width);
+void      gtk_extended_cell_get_height_for_width (GtkExtendedCell   *cell,
+						  GtkWidget         *widget,
+						  gint               width,
+						  gint              *minimum_height,
+						  gint              *natural_height);
+
+void      gtk_extended_cell_get_desired_size     (GtkExtendedCell   *cell,
+						  GtkWidget         *widget,
+						  gboolean           request_natural,
+						  GtkRequisition    *minimum_size,
+						  GtkRequisition    *natural_size);
 
 G_END_DECLS
 
