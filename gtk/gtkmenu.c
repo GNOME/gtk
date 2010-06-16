@@ -1225,6 +1225,8 @@ gtk_menu_attach_to_widget (GtkMenu	       *menu,
 
   /* Fallback title for menu comes from attach widget */
   gtk_menu_update_title (menu);
+
+  g_object_notify (G_OBJECT (menu), "attach-widget");
 }
 
 GtkWidget*
