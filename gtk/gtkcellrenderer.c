@@ -1124,6 +1124,39 @@ gtk_cell_renderer_get_width_for_height (GtkExtendedCell *cell,
   gtk_extended_cell_get_desired_width (cell, widget, minimum_width, natural_width);
 }
 
+/* An internal convenience function for some containers to peek at the
+ * cell alignment in a target allocation (used to draw focus and align
+ * cells in the icon view).
+ *
+ * Note this is only a trivial 'align * (allocation - request)' operation.
+ */
+void
+_gtk_cell_renderer_calc_offset    (GtkCellRenderer      *cell,
+				   GdkRectangle         *cell_area,
+				   GtkTextDirection      direction,
+				   gint                  width,
+				   gint                  height,
+				   gint                 *x_offset,
+				   gint                 *y_offset)
+{
+  g_return_if_fail (GTK_IS_CELL_RENDERER (cell));
+  g_return_if_fail (cell_area != NULL);
+  g_return_if_fail (x_offset || y_offset);
+
+  if (x_offset)
+    {
+      *x_offset = (((direction == GTK_TEXT_DIR_RTL) ?
+		    (1.0 - cell->xalign) : cell->xalign) * 
+		   (cell_area->width - width));
+      *x_offset = MAX (*x_offset, 0);
+    }
+  if (y_offset)
+    {
+      *y_offset = (cell->yalign *
+		   (cell_area->height - height));
+      *y_offset = MAX (*y_offset, 0);
+    }
+}
 
 #define __GTK_CELL_RENDERER_C__
 #include "gtkaliasdef.c"

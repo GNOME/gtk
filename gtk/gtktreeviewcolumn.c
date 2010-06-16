@@ -2874,11 +2874,15 @@ gtk_tree_view_column_cell_process_action (GtkTreeViewColumn  *tree_column,
 	{
 	  gint x_offset, y_offset, width, height;
 
+
 	  gtk_cell_renderer_get_size (info->cell,
 				      tree_column->tree_view,
-				      &rtl_cell_area,
-				      &x_offset, &y_offset,
+				      NULL, NULL, NULL,
 				      &width, &height);
+
+	  _gtk_cell_renderer_calc_offset (info->cell, &rtl_cell_area,
+					  gtk_widget_get_direction (tree_column->tree_view),
+					  width, height, &x_offset, &y_offset);
 
 	  if (special_cells > 1)
 	    {
@@ -3037,13 +3041,16 @@ gtk_tree_view_column_cell_process_action (GtkTreeViewColumn  *tree_column,
       /* FOCUS */
       else if (action == CELL_ACTION_FOCUS)
 	{
-	  gint x_offset, y_offset, width, height;
+	  gint width, height, x_offset, y_offset;
 
 	  gtk_cell_renderer_get_size (info->cell,
 				      tree_column->tree_view,
-				      &rtl_cell_area,
-				      &x_offset, &y_offset,
+				      NULL, NULL, NULL,
 				      &width, &height);
+
+	  _gtk_cell_renderer_calc_offset (info->cell, &rtl_cell_area,
+					  gtk_widget_get_direction (tree_column->tree_view),
+					  width, height, &x_offset, &y_offset);
 
 	  if (special_cells > 1)
 	    {

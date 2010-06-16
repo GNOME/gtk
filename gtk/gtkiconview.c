@@ -3094,10 +3094,13 @@ gtk_icon_view_calculate_item_size2 (GtkIconView     *icon_view,
 	    cell_area.height = max_height[i];
 	  }
 	
-	gtk_cell_renderer_get_size (info->cell, GTK_WIDGET (icon_view), 
-				    &cell_area,
-				    &item->box[info->position].x, &item->box[info->position].y,
+	gtk_cell_renderer_get_size (info->cell, GTK_WIDGET (icon_view), NULL, NULL, NULL,
 				    &item->box[info->position].width, &item->box[info->position].height);
+
+	_gtk_cell_renderer_calc_offset (info->cell, &cell_area,
+					gtk_widget_get_direction (GTK_WIDGET (icon_view)),
+					item->box[info->position].width, item->box[info->position].height,
+					&item->box[info->position].x, &item->box[info->position].y);
 	
 	item->box[info->position].x += cell_area.x;
 	item->box[info->position].y += cell_area.y;
