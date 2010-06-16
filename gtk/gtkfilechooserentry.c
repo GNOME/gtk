@@ -450,8 +450,8 @@ beep (GtkFileChooserEntry *chooser_entry)
 }
 
 static gboolean
-is_file_in_root (GtkFileChooserEntry *chooser_entry,
-                 GFile               *file)
+is_file_in_roots (GtkFileChooserEntry *chooser_entry,
+		  GFile               *file)
 {
   char *uri = g_file_get_uri (file);
   gboolean result = _gtk_file_chooser_uri_has_prefix (uri, chooser_entry->root_uris);
@@ -1338,7 +1338,7 @@ populate_completion_store (GtkFileChooserEntry *chooser_entry)
 
       file = tmp_list->data;
 
-      if (!is_file_in_root (chooser_entry, file))
+      if (!is_file_in_roots (chooser_entry, file))
         continue;
 
       info = _gtk_folder_get_info (chooser_entry->current_folder, file);
@@ -1484,8 +1484,7 @@ start_loading_current_folder (GtkFileChooserEntry *chooser_entry)
   if ((chooser_entry->local_only
        && !g_file_is_native (chooser_entry->current_folder_file)) ||
       (chooser_entry->root_uris != NULL
-       && !is_file_in_root (chooser_entry,
-                            chooser_entry->current_folder_file)))
+       && !is_file_in_roots (chooser_entry, chooser_entry->current_folder_file)))
     {
       g_object_unref (chooser_entry->current_folder_file);
       chooser_entry->current_folder_file = NULL;
