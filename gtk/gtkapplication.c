@@ -204,11 +204,32 @@ gtk_application_format_activation_data (void)
   return g_variant_builder_end (&builder);
 }
 
+static GVariant *
+variant_from_argv (int    argc,
+		   char **argv)
+{
+  GVariantBuilder builder;
+  int i;
+
+  g_variant_builder_init (&builder, G_VARIANT_TYPE ("aay"));
+
+  for (i = 1; i < argc; i++)
+    {
+      guint8 *argv_bytes;
+
+      argv_bytes = (guint8*) argv[i];
+      g_variant_builder_add_value (&builder,
+				   g_variant_new_byte_array (argv_bytes, -1));
+    }
+  
+  return g_variant_builder_end (&builder);
+}
+
 /**
  * gtk_application_new:
+ * @appid: System-dependent application identifier
  * @argc: (allow-none) (inout): System argument count
  * @argv: (allow-none) (inout): System argument vector
- * @appid: System-dependent application identifier
  *
  * Create a new #GtkApplication, or if one has already been initialized
  * in this process, return the existing instance. This function will as
@@ -222,14 +243,15 @@ gtk_application_format_activation_data (void)
  * Since: 3.0
  */
 GtkApplication*
-gtk_application_new (gint          *argc,
-                     gchar       ***argv,
-                     const gchar   *appid)
+gtk_application_new (const gchar   *appid,
+		     gint          *argc,
+                     gchar       ***argv)
 {
   GtkApplication *app;
   gint argc_for_app;
   gchar **argv_for_app;
-  GVariant *platform_data;
+  GVariant *argv_variant;
+  GError *error = NULL;
 
   gtk_init (argc, argv);
 
@@ -242,12 +264,20 @@ gtk_application_new (gint          *argc,
   else
     argv_for_app = NULL;
 
-  app = g_object_new (GTK_TYPE_APPLICATION, "application-id", appid, NULL);
+  argv_variant = variant_from_argv (argc_for_app, argv_for_app);
 
-  platform_data = gtk_application_format_activation_data ();
-  g_application_register_with_data (G_APPLICATION (app), argc_for_app, argv_for_app,
-				    platform_data);
-  g_variant_unref (platform_data);
+  app = g_initable_new (GTK_TYPE_APPLICATION, 
+			NULL,
+			&error,
+			"application-id", appid, 
+			"argv", argv_variant, 
+			NULL);
+  if (!app)
+    {
+      g_error ("%s", error->message);
+      g_clear_error (&error);
+      return NULL;
+    }
 
   return app;
 }
@@ -504,6 +534,8 @@ static void
 gtk_application_init (GtkApplication *application)
 {
   application->priv = G_TYPE_INSTANCE_GET_PRIVATE (application, GTK_TYPE_APPLICATION, GtkApplicationPrivate);
+
+  g_object_set (application, "platform-data", gtk_application_format_activation_data (), NULL);
 
   setup_default_window_decorations ();
 }

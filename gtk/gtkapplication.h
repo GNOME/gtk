@@ -87,9 +87,9 @@ struct _GtkApplicationClass
 };
 
 GType           gtk_application_get_type         (void) G_GNUC_CONST;
-GtkApplication* gtk_application_new              (gint             *argc,
-                                                  gchar          ***argv,
-                                                  const gchar      *appid);
+GtkApplication* gtk_application_new              (const gchar      *appid,
+						  gint             *argc,
+                                                  gchar          ***argv);
 void            gtk_application_set_action_group (GtkApplication   *app,
                                                   GtkActionGroup   *group);
 GtkWindow *     gtk_application_get_window       (GtkApplication   *app);

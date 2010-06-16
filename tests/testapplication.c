@@ -75,7 +75,7 @@ main (int argc, char **argv)
       exit (0);
     }
 
-  app = gtk_application_new (&argc, &argv, "org.gtk.TestApp");
+  app = gtk_application_new ("org.gtk.TestApp", &argc, &argv);
   builder = gtk_builder_new ();
   if (!gtk_builder_add_from_string (builder, builder_data, -1, NULL))
     g_error ("failed to parse UI");
