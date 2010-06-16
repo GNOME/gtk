@@ -74,6 +74,7 @@ G_BEGIN_DECLS
 #define GTK_OBJECT_TYPE_NAME              G_OBJECT_TYPE_NAME
 #endif
 
+#if !defined (GTK_DISABLE_DEPRECATED) || defined (GTK_COMPILATION)
 /* GtkObject only uses the first 4 bits of the flags field.
  * Derived objects may use the remaining bits. Though this
  * is a kinda nasty break up, it does make the size of
@@ -82,9 +83,7 @@ G_BEGIN_DECLS
 typedef enum
 {
   GTK_IN_DESTRUCTION	= 1 << 0, /* Used internally during dispose */
-#if !defined (GTK_DISABLE_DEPRECATED) || defined (GTK_COMPILATION)
   GTK_FLOATING		= 1 << 1,
-#endif
   GTK_RESERVED_1	= 1 << 2,
   GTK_RESERVED_2	= 1 << 3
 } GtkObjectFlags;
@@ -100,6 +99,7 @@ typedef enum
  */
 #define GTK_OBJECT_SET_FLAGS(obj,flag)	  G_STMT_START{ (GTK_OBJECT_FLAGS (obj) |= (flag)); }G_STMT_END
 #define GTK_OBJECT_UNSET_FLAGS(obj,flag)  G_STMT_START{ (GTK_OBJECT_FLAGS (obj) &= ~(flag)); }G_STMT_END
+#endif
 
 typedef struct _GtkObjectClass	GtkObjectClass;
 
