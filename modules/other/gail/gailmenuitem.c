@@ -164,9 +164,9 @@ get_children (GtkWidget *submenu)
        */
       if (!gtk_widget_get_visible (submenu))
         {
-          GTK_WIDGET_SET_FLAGS (submenu, GTK_VISIBLE);
+          /* FIXME GTK_WIDGET_SET_FLAGS (submenu, GTK_VISIBLE); */
           g_signal_emit_by_name (submenu, "show");
-          GTK_WIDGET_UNSET_FLAGS (submenu, GTK_VISIBLE);
+          /* FIXME GTK_WIDGET_UNSET_FLAGS (submenu, GTK_VISIBLE); */
         }
       g_list_free (children);
       children = gtk_container_get_children (GTK_CONTAINER (submenu));
