@@ -77,7 +77,7 @@ the class name of the widget, while for the class path, the class name is
 always used.
 </para>
 <para>
-Since GTK+ 2.10,<literal>widget_class</literal> paths can also contain
+Since GTK+ 2.10, <literal>widget_class</literal> paths can also contain
 <literal>&lt;classname&gt;</literal> substrings, which are matching
 the class with the given name and any derived classes. For instance,
 <informalexample><programlisting>
