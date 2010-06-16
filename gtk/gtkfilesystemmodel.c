@@ -739,7 +739,7 @@ gtk_file_system_model_sort (GtkFileSystemModel *model)
                   continue;
                 }
 
-              new_order[r] = node->row;
+              new_order[r] = node->row - 1;
               r++;
               node->row = r;
             }
