@@ -789,7 +789,7 @@ disgrace to the widget set will gladly be included.</para>
 <para>The new widgets that get added to GTK+ are generally either
 replacements for existing widgets that are no longer
 deemed to be adequate, or have been developed externally to GTK+ but
-have been widely tested. 
+have been widely tested.</para>
 
 <para>Before you spend months of your valuable time implementing your
 revolutionary widget, it is highly recommended that you get some
