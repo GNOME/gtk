@@ -1,3 +1,55 @@
+Overview of Changes from GTK+ 2.90.2 to 2.90.3
+==============================================
+
+* GtkProgress has been removed. It was entirely deprecated for
+  a long time
+
+* GtkApplication has been updated to match the GApplication API
+  as of GLib 2.25.9
+
+* XI2:
+ - Device grabs now take precedence over GTK+ grabs
+ - Various other bug fixes
+
+* Extended Layout:
+ - Prevent negative allocations (as seen in emacs and gedit)
+
+* Win32: XP theming is back !
+
+* Misc new API:
+ - Add an accessor for GtkViewport->view_window
+ - Add an accessor for GdkDragContext->source_window
+ - gtk_icon_theme_load_symbolic_for_style a variant of
+   gtk_icon_theme_load_symbolic taking a GtkStyle
+
+* Introspection:
+ - Misc annotation fixes
+
+* Cleanups:
+ - GTK_OBJECT_FLAGS and GtkObjectFlags have been depreated
+
+* Bugs fixed:
+ 620618 get rid of GtkProgress
+ 615666 GTK_OBJECT_FLAGS() should be deprecated
+ 617444 GNU emacs warnings with extended layout GTK+
+ 621631 Non-consistent style in GtkUIManager docs
+ 621136 GtkCalendar: Some functions always return TRUE
+ 621003 GtkApplication] Update for GApplication API changes
+ 621683 gtk_menu_attach_to_widget() should emit an "attach-widget"...
+ 621479 typo in GTK docs on library.gnome.org
+ 621081 GtkViewport missing accessor for view_window.
+ 620440 Combo-boxes loose focus
+ 621775 Space symbol missed in Resources chapter
+ 621578 Symbolic color cut-and-paste mess
+ 621111 gtk_init_with_args()'s GOptionEntry argument should be const
+ 602289 gdk_spawn_on_screen(_with_pipes) uses gint for pid
+
+* Updated translations:
+ Galician
+ Norwegian bokmål
+ Spanish
+
+
 Overview of Changes from GTK+ 2.90.1 to 2.90.2
 ==============================================
 
