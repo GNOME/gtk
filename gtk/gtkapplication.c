@@ -655,7 +655,7 @@ gtk_application_class_init (GtkApplicationClass *klass)
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (GtkApplicationClass, activated),
                   NULL, NULL,
-                  g_cclosure_marshal_VOID__BOXED,
+                  g_cclosure_marshal_VOID__VARIANT,
                   G_TYPE_NONE, 1,
                   G_TYPE_VARIANT);
 
