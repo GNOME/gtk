@@ -135,7 +135,7 @@ gtk_tree_sortable_get_sort_column_id (GtkTreeSortable  *sortable,
  * 
  * Sets the current sort column to be @sort_column_id. The @sortable will
  * resort itself to reflect this change, after emitting a
- * #GtkTreeSortable::sort-column-changed signal. @sortable may either be 
+ * #GtkTreeSortable::sort-column-changed signal. @sort_column_id may either be
  * a regular column id, or one of the following special values:
  * <variablelist>
  * <varlistentry>
