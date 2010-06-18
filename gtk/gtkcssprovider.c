@@ -874,6 +874,8 @@ parse_value (GType        type,
              const gchar *value_str,
              GValue      *value)
 {
+  gboolean parsed = TRUE;
+
   g_value_init (value, type);
 
   if (type == GDK_TYPE_COLOR)
@@ -884,7 +886,6 @@ parse_value (GType        type,
         return FALSE;
 
       g_value_set_boxed (value, &color);
-      return TRUE;
     }
   else if (type == PANGO_TYPE_FONT_DESCRIPTION)
     {
@@ -892,31 +893,25 @@ parse_value (GType        type,
 
       font_desc = pango_font_description_from_string (value_str);
       g_value_take_boxed (value, font_desc);
-
-      return TRUE;
     }
   else if (type == G_TYPE_INT)
-    {
-      g_value_set_int (value, atoi (value_str));
-      return TRUE;
-    }
+    g_value_set_int (value, atoi (value_str));
   else if (type == G_TYPE_DOUBLE)
-    {
-      g_value_set_double (value, g_ascii_strtod (value_str, NULL));
-      return TRUE;
-    }
+    g_value_set_double (value, g_ascii_strtod (value_str, NULL));
   else if (type == GTK_TYPE_THEMING_ENGINE)
     {
       GtkThemingEngine *engine;
 
       engine = gtk_theming_engine_load (value_str);
       g_value_set_object (value, engine);
-      return TRUE;
     }
   else
-    g_warning ("Cannot parse string '%s' for type %s", value_str, g_type_name (type));
+    {
+      g_warning ("Cannot parse string '%s' for type %s", value_str, g_type_name (type));
+      parsed = FALSE;
+    }
 
-  return FALSE;
+  return parsed;
 }
 
 static GTokenType
