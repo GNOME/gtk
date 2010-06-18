@@ -68,8 +68,12 @@ gboolean gtk_widget_path_iter_has_region    (GtkWidgetPath      *path,
                                              const gchar        *name,
                                              GtkChildClassFlags *flags);
 
-gboolean        gtk_widget_path_has_parent          (const GtkWidgetPath *path,
-                                                     GType                type);
+GType           gtk_widget_path_get_widget_type (const GtkWidgetPath *path);
+
+gboolean        gtk_widget_path_is_type    (const GtkWidgetPath *path,
+                                            GType                type);
+gboolean        gtk_widget_path_has_parent (const GtkWidgetPath *path,
+                                            GType                type);
 
 G_END_DECLS
 

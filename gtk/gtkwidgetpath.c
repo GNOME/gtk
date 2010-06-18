@@ -305,6 +305,35 @@ gtk_widget_path_iter_has_region (GtkWidgetPath      *path,
   return TRUE;
 }
 
+GType
+gtk_widget_path_get_widget_type (const GtkWidgetPath *path)
+{
+  GtkPathElement *elem;
+
+  g_return_val_if_fail (path != NULL, G_TYPE_INVALID);
+
+  elem = &g_array_index (path->elems, GtkPathElement, 0);
+  return elem->type;
+}
+
+gboolean
+gtk_widget_path_is_type (const GtkWidgetPath *path,
+                         GType                type)
+{
+  GtkPathElement *elem;
+
+  g_return_val_if_fail (path != NULL, FALSE);
+  g_return_val_if_fail (g_type_is_a (type, GTK_TYPE_WIDGET), FALSE);
+
+  elem = &g_array_index (path->elems, GtkPathElement, 0);
+
+  if (elem->type == type ||
+      g_type_is_a (elem->type, type))
+    return TRUE;
+
+  return FALSE;
+}
+
 gboolean
 gtk_widget_path_has_parent (const GtkWidgetPath *path,
                             GType                type)
