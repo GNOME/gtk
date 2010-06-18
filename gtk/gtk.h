@@ -63,6 +63,7 @@
 #include <gtk/gtkcellrendererspinner.h>
 #include <gtk/gtkcellrenderertext.h>
 #include <gtk/gtkcellrenderertoggle.h>
+#include <gtk/gtkcellsizerequest.h>
 #include <gtk/gtkcellview.h>
 #include <gtk/gtkcheckbutton.h>
 #include <gtk/gtkcheckmenuitem.h>
@@ -84,7 +85,6 @@
 #include <gtk/gtkenums.h>
 #include <gtk/gtkeventbox.h>
 #include <gtk/gtkexpander.h>
-#include <gtk/gtkextendedcell.h>
 #include <gtk/gtkfixed.h>
 #include <gtk/gtkfilechooser.h>
 #include <gtk/gtkfilechooserbutton.h>

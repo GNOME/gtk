@@ -25,7 +25,7 @@
 #include "gtkcellrenderertext.h"
 #include "gtkcellrendererpixbuf.h"
 #include "gtksizerequest.h"
-#include "gtkextendedcell.h"
+#include "gtkcellsizerequest.h"
 #include "gtkprivate.h"
 #include <gobject/gmarshal.h>
 #include "gtkbuildable.h"
@@ -1207,8 +1207,8 @@ gtk_cell_view_get_size (GtkSizeRequest *widget,
 
 	  if (orientation == GTK_ORIENTATION_HORIZONTAL)
 	    {
-	      gtk_extended_cell_get_desired_width (GTK_EXTENDED_CELL (info->cell),
-						   GTK_WIDGET (cellview), &cell_min, &cell_nat);
+	      gtk_cell_size_request_get_width (GTK_CELL_SIZE_REQUEST (info->cell),
+					       GTK_WIDGET (cellview), &cell_min, &cell_nat);
 
 	      info->requested_width = cell_min;
 	      info->natural_width   = cell_nat;
@@ -1218,8 +1218,8 @@ gtk_cell_view_get_size (GtkSizeRequest *widget,
 	    }
 	  else
 	    {
-	      gtk_extended_cell_get_desired_height (GTK_EXTENDED_CELL (info->cell),
-						    GTK_WIDGET (cellview), &cell_min, &cell_nat);
+	      gtk_cell_size_request_get_height (GTK_CELL_SIZE_REQUEST (info->cell),
+						GTK_WIDGET (cellview), &cell_min, &cell_nat);
 	      minimum = MAX (minimum, cell_min);
 	      natural = MAX (natural, cell_nat);
 	    }

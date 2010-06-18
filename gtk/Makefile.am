@@ -193,6 +193,7 @@ gtk_public_h_sources =          \
 	gtkcellrendererspinner.h\
 	gtkcellrenderertext.h	\
 	gtkcellrenderertoggle.h	\
+	gtkcellsizerequest.h	\
 	gtkcellview.h		\
 	gtkcheckbutton.h	\
 	gtkcheckmenuitem.h	\
@@ -214,7 +215,6 @@ gtk_public_h_sources =          \
 	gtkenums.h		\
 	gtkeventbox.h		\
 	gtkexpander.h		\
-	gtkextendedcell.h	\
 	gtkfilechooser.h        \
 	gtkfilechooserbutton.h  \
 	gtkfilechooserdialog.h  \
@@ -454,6 +454,7 @@ gtk_base_c_sources =            \
 	gtkcellrendererspinner.c\
 	gtkcellrenderertext.c	\
 	gtkcellrenderertoggle.c	\
+	gtkcellsizerequest.c	\
 	gtkcellview.c		\
 	gtkcheckbutton.c	\
 	gtkcheckmenuitem.c	\
@@ -471,7 +472,6 @@ gtk_base_c_sources =            \
 	gtkentrycompletion.c	\
 	gtkeventbox.c		\
 	gtkexpander.c		\
-	gtkextendedcell.c	\
 	gtkfilechooser.c	\
 	gtkfilechooserbutton.c	\
 	gtkfilechooserdefault.c	\

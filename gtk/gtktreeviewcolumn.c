@@ -26,7 +26,7 @@
 #include "gtkbutton.h"
 #include "gtkalignment.h"
 #include "gtklabel.h"
-#include "gtkextendedcell.h"
+#include "gtkcellsizerequest.h"
 #include "gtkhbox.h"
 #include "gtkmarshalers.h"
 #include "gtkarrow.h"
@@ -2628,15 +2628,15 @@ gtk_tree_view_column_cell_get_real_size (GtkTreeViewColumn  *tree_column,
 	  nat_req.width += tree_column->spacing;
         }
 
-      /* XXX TODO: Cell renderers are not really doing height-for-width yet.
+      /* XXX TODO: Update to use w4h of cell-renderer apis...
        */
-      gtk_extended_cell_get_desired_width (GTK_EXTENDED_CELL (info->cell),
-					   tree_column->tree_view,
-					   &min_req.width, &nat_req.width);
-      gtk_extended_cell_get_height_for_width (GTK_EXTENDED_CELL (info->cell),
-					      tree_column->tree_view,
-					      nat_req.width,
-					      &min_req.height, &nat_req.height);
+      gtk_cell_size_request_get_width (GTK_CELL_SIZE_REQUEST (info->cell),
+				       tree_column->tree_view,
+				       &min_req.width, &nat_req.width);
+      gtk_cell_size_request_get_height_for_width (GTK_CELL_SIZE_REQUEST (info->cell),
+						  tree_column->tree_view,
+						  nat_req.width,
+						  &min_req.height, &nat_req.height);
 
       min_req.width += focus_line_width * 2;
       min_req.height += focus_line_width * 2;
@@ -2873,12 +2873,13 @@ gtk_tree_view_column_cell_process_action (GtkTreeViewColumn  *tree_column,
       else if (action == CELL_ACTION_FOCUS)
 	{
 	  gint x_offset, y_offset, width, height;
+	  GtkRequisition min_size;
 
-
-	  gtk_cell_renderer_get_size (info->cell,
-				      tree_column->tree_view,
-				      NULL, NULL, NULL,
-				      &width, &height);
+	  gtk_cell_size_request_get_size (GTK_CELL_SIZE_REQUEST (info->cell), 
+					  tree_column->tree_view, 
+					  &min_size, NULL);
+	  width  = min_size.width;
+	  height = min_size.height;
 
 	  _gtk_cell_renderer_calc_offset (info->cell, &rtl_cell_area,
 					  gtk_widget_get_direction (tree_column->tree_view),
@@ -3042,11 +3043,13 @@ gtk_tree_view_column_cell_process_action (GtkTreeViewColumn  *tree_column,
       else if (action == CELL_ACTION_FOCUS)
 	{
 	  gint width, height, x_offset, y_offset;
+	  GtkRequisition min_size;
 
-	  gtk_cell_renderer_get_size (info->cell,
-				      tree_column->tree_view,
-				      NULL, NULL, NULL,
-				      &width, &height);
+	  gtk_cell_size_request_get_size (GTK_CELL_SIZE_REQUEST (info->cell), 
+					  tree_column->tree_view, 
+					  &min_size, NULL);
+	  width  = min_size.width;
+	  height = min_size.height;
 
 	  _gtk_cell_renderer_calc_offset (info->cell, &rtl_cell_area,
 					  gtk_widget_get_direction (tree_column->tree_view),

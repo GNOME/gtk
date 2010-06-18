@@ -19,7 +19,7 @@
 
 #include "config.h"
 #include "gtkcellrenderer.h"
-#include "gtkextendedcell.h"
+#include "gtkcellsizerequest.h"
 #include "gtkintl.h"
 #include "gtkmarshalers.h"
 #include "gtkprivate.h"
@@ -39,26 +39,26 @@ static void gtk_cell_renderer_set_property  (GObject              *object,
 static void set_cell_bg_color               (GtkCellRenderer      *cell,
 					     GdkColor             *color);
 
-/* Fallback GtkExtendedCell implementation to use remaining ->get_size() implementations */
-static void gtk_cell_renderer_extended_cell_init   (GtkExtendedCellIface *iface);
-static void gtk_cell_renderer_get_desired_width    (GtkExtendedCell   *cell,
-						    GtkWidget         *widget,
-						    gint              *minimum_size,
-						    gint              *natural_size);
-static void gtk_cell_renderer_get_desired_height   (GtkExtendedCell   *cell,
-						    GtkWidget         *widget,
-						    gint              *minimum_size,
-						    gint              *natural_size);
-static void gtk_cell_renderer_get_height_for_width (GtkExtendedCell   *cell,
-						    GtkWidget         *widget,
-						    gint               width,
-						    gint              *minimum_height,
-						    gint              *natural_height);
-static void gtk_cell_renderer_get_width_for_height (GtkExtendedCell   *cell,
-						    GtkWidget         *widget,
-						    gint               height,
-						    gint              *minimum_width,
-						    gint              *natural_width);
+/* Fallback GtkCellSizeRequest implementation to use remaining ->get_size() implementations */
+static void gtk_cell_renderer_cell_size_request_init   (GtkCellSizeRequestIface *iface);
+static void gtk_cell_renderer_get_width                (GtkCellSizeRequest      *cell,
+							GtkWidget               *widget,
+							gint                    *minimum_size,
+							gint                    *natural_size);
+static void gtk_cell_renderer_get_height               (GtkCellSizeRequest      *cell,
+							GtkWidget               *widget,
+							gint                    *minimum_size,
+							gint                    *natural_size);
+static void gtk_cell_renderer_get_height_for_width     (GtkCellSizeRequest      *cell,
+							GtkWidget               *widget,
+							gint                     width,
+							gint                    *minimum_height,
+							gint                    *natural_height);
+static void gtk_cell_renderer_get_width_for_height     (GtkCellSizeRequest      *cell,
+							GtkWidget               *widget,
+							gint                     height,
+							gint                    *minimum_width,
+							gint                    *natural_width);
 
 
 
@@ -124,9 +124,9 @@ gtk_cell_renderer_get_type (void)
 	NULL,		/* value_table */
       };
 
-      const GInterfaceInfo extended_cell_info =
+      const GInterfaceInfo cell_size_request_info =
       {
-	(GInterfaceInitFunc) gtk_cell_renderer_extended_cell_init,
+	(GInterfaceInitFunc) gtk_cell_renderer_cell_size_request_init,
 	(GInterfaceFinalizeFunc) NULL,
 	NULL /* interface data */
       };
@@ -134,8 +134,8 @@ gtk_cell_renderer_get_type (void)
       cell_renderer_type = g_type_register_static (GTK_TYPE_OBJECT, "GtkCellRenderer",
 						   &cell_renderer_info, G_TYPE_FLAG_ABSTRACT);
 
-      g_type_add_interface_static (cell_renderer_type, GTK_TYPE_EXTENDED_CELL,
-                                   &extended_cell_info) ;
+      g_type_add_interface_static (cell_renderer_type, GTK_TYPE_CELL_SIZE_REQUEST,
+                                   &cell_size_request_info) ;
     }
 
   return cell_renderer_type;
@@ -558,6 +558,9 @@ set_cell_bg_color (GtkCellRenderer *cell,
  *
  * Please note that the values set in @width and @height, as well as those 
  * in @x_offset and @y_offset are inclusive of the xpad and ypad properties.
+ *
+ *
+ * Deprecated: 3.0: Use gtk_cell_size_request_get_size() instead.
  **/
 void
 gtk_cell_renderer_get_size (GtkCellRenderer    *cell,
@@ -1035,17 +1038,17 @@ gtk_cell_renderer_stop_editing (GtkCellRenderer *cell,
 }
 
 static void
-gtk_cell_renderer_extended_cell_init (GtkExtendedCellIface *iface)
+gtk_cell_renderer_cell_size_request_init (GtkCellSizeRequestIface *iface)
 {
-  iface->get_desired_width     = gtk_cell_renderer_get_desired_width;
-  iface->get_desired_height    = gtk_cell_renderer_get_desired_height;
+  iface->get_width     = gtk_cell_renderer_get_width;
+  iface->get_height    = gtk_cell_renderer_get_height;
 
   iface->get_width_for_height  = gtk_cell_renderer_get_width_for_height;
   iface->get_height_for_width  = gtk_cell_renderer_get_height_for_width;
 }
 
 static void
-gtk_cell_renderer_get_desired_size (GtkExtendedCell   *cell,
+gtk_cell_renderer_get_desired_size (GtkCellSizeRequest   *cell,
 				    GtkWidget         *widget,
 				    GtkOrientation     orientation,
 				    gint              *minimum_size,
@@ -1082,20 +1085,20 @@ gtk_cell_renderer_get_desired_size (GtkExtendedCell   *cell,
 }
 
 static void
-gtk_cell_renderer_get_desired_width (GtkExtendedCell   *cell,
-				     GtkWidget         *widget,
-				     gint              *minimum_size,
-				     gint              *natural_size)
+gtk_cell_renderer_get_width (GtkCellSizeRequest   *cell,
+			     GtkWidget         *widget,
+			     gint              *minimum_size,
+			     gint              *natural_size)
 {
   gtk_cell_renderer_get_desired_size (cell, widget, GTK_ORIENTATION_HORIZONTAL, 
 				      minimum_size, natural_size);
 }
 
 static void
-gtk_cell_renderer_get_desired_height (GtkExtendedCell   *cell,
-				      GtkWidget         *widget,
-				      gint              *minimum_size,
-				      gint              *natural_size)
+gtk_cell_renderer_get_height (GtkCellSizeRequest   *cell,
+			      GtkWidget         *widget,
+			      gint              *minimum_size,
+			      gint              *natural_size)
 {
   gtk_cell_renderer_get_desired_size (cell, widget, GTK_ORIENTATION_VERTICAL, 
 				      minimum_size, natural_size);
@@ -1103,25 +1106,25 @@ gtk_cell_renderer_get_desired_height (GtkExtendedCell   *cell,
 
 
 static void
-gtk_cell_renderer_get_height_for_width (GtkExtendedCell *cell,
+gtk_cell_renderer_get_height_for_width (GtkCellSizeRequest *cell,
 					GtkWidget       *widget,
 					gint             width,
 					gint            *minimum_height,
 					gint            *natural_height)
 {
   /* Fall back on the height reported from ->get_size() */
-  gtk_extended_cell_get_desired_height (cell, widget, minimum_height, natural_height);
+  gtk_cell_size_request_get_height (cell, widget, minimum_height, natural_height);
 }
 
 static void
-gtk_cell_renderer_get_width_for_height (GtkExtendedCell *cell,
+gtk_cell_renderer_get_width_for_height (GtkCellSizeRequest *cell,
 					GtkWidget       *widget,
 					gint             height,
 					gint            *minimum_width,
 					gint            *natural_width)
 {
   /* Fall back on the width reported from ->get_size() */
-  gtk_extended_cell_get_desired_width (cell, widget, minimum_width, natural_width);
+  gtk_cell_size_request_get_width (cell, widget, minimum_width, natural_width);
 }
 
 /* An internal convenience function for some containers to peek at the

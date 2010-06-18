@@ -40,6 +40,7 @@
 #include "gtkcombobox.h"
 #include "gtktextbuffer.h"
 #include "gtktreednd.h"
+#include "gtkcellsizerequest.h"
 #include "gtkprivate.h"
 #include "gtkalias.h"
 
@@ -2943,6 +2944,7 @@ adjust_wrap_width (GtkIconView     *icon_view,
   if (icon_view->priv->text_cell != -1 &&
       icon_view->priv->pixbuf_cell != -1)
     {
+      GtkRequisition min_size;
       gint item_width;
 
       text_info = g_list_nth_data (icon_view->priv->cell_list,
@@ -2950,12 +2952,10 @@ adjust_wrap_width (GtkIconView     *icon_view,
       pixbuf_info = g_list_nth_data (icon_view->priv->cell_list,
 				     icon_view->priv->pixbuf_cell);
       
-      gtk_cell_renderer_get_size (pixbuf_info->cell, 
-				  GTK_WIDGET (icon_view), 
-				  NULL, NULL, NULL,
-				  &pixbuf_width, 
-				  NULL);
-	  
+      gtk_cell_size_request_get_size (GTK_CELL_SIZE_REQUEST (pixbuf_info->cell), 
+				      GTK_WIDGET (icon_view),
+				      &min_size, NULL);
+      pixbuf_width = min_size.width;
 
       if (icon_view->priv->item_width > 0)
 	item_width = icon_view->priv->item_width;
@@ -3010,14 +3010,16 @@ gtk_icon_view_calculate_item_size (GtkIconView     *icon_view,
   for (l = icon_view->priv->cell_list; l; l = l->next)
     {
       GtkIconViewCellInfo *info = (GtkIconViewCellInfo *)l->data;
-      
+      GtkRequisition min_size;
+
       if (!info->cell->visible)
 	continue;
       
-      gtk_cell_renderer_get_size (info->cell, GTK_WIDGET (icon_view), 
-				  NULL, NULL, NULL,
-				  &item->box[info->position].width, 
-				  &item->box[info->position].height);
+      gtk_cell_size_request_get_size (GTK_CELL_SIZE_REQUEST (info->cell), 
+				      GTK_WIDGET (icon_view), 
+				      &min_size, NULL);
+      item->box[info->position].width  = min_size.width;
+      item->box[info->position].height = min_size.height;
 
       if (icon_view->priv->orientation == GTK_ORIENTATION_HORIZONTAL)
 	{
@@ -3069,7 +3071,8 @@ gtk_icon_view_calculate_item_size2 (GtkIconView     *icon_view,
     for (l = icon_view->priv->cell_list, i = 0; l; l = l->next, i++)
       {
 	GtkIconViewCellInfo *info = (GtkIconViewCellInfo *)l->data;
-	
+	GtkRequisition min_size;
+
 	if (info->pack == (k ? GTK_PACK_START : GTK_PACK_END))
 	  continue;
 
@@ -3094,9 +3097,13 @@ gtk_icon_view_calculate_item_size2 (GtkIconView     *icon_view,
 	    cell_area.height = max_height[i];
 	  }
 	
-	gtk_cell_renderer_get_size (info->cell, GTK_WIDGET (icon_view), NULL, NULL, NULL,
-				    &item->box[info->position].width, &item->box[info->position].height);
-
+      
+	gtk_cell_size_request_get_size (GTK_CELL_SIZE_REQUEST (info->cell), 
+					GTK_WIDGET (icon_view), 
+					&min_size, NULL);
+	item->box[info->position].width  = min_size.width;
+	item->box[info->position].height = min_size.height;
+      
 	_gtk_cell_renderer_calc_offset (info->cell, &cell_area,
 					gtk_widget_get_direction (GTK_WIDGET (icon_view)),
 					item->box[info->position].width, item->box[info->position].height,
