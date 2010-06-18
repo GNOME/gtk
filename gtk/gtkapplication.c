@@ -171,7 +171,13 @@ gtk_application_default_action (GtkApplication *application,
       gtk_action_activate (action);
     }
 }
-				
+
+static GtkWindow *
+gtk_application_default_create_window (GtkApplication *application)
+{
+  return GTK_WINDOW (gtk_window_new (GTK_WINDOW_TOPLEVEL));
+}
+
 static void
 gtk_application_default_action_with_data (GApplication *application,
 					  const gchar  *action_name,
@@ -204,11 +210,32 @@ gtk_application_format_activation_data (void)
   return g_variant_builder_end (&builder);
 }
 
+static GVariant *
+variant_from_argv (int    argc,
+		   char **argv)
+{
+  GVariantBuilder builder;
+  int i;
+
+  g_variant_builder_init (&builder, G_VARIANT_TYPE ("aay"));
+
+  for (i = 1; i < argc; i++)
+    {
+      guint8 *argv_bytes;
+
+      argv_bytes = (guint8*) argv[i];
+      g_variant_builder_add_value (&builder,
+				   g_variant_new_byte_array (argv_bytes, -1));
+    }
+  
+  return g_variant_builder_end (&builder);
+}
+
 /**
  * gtk_application_new:
+ * @appid: System-dependent application identifier
  * @argc: (allow-none) (inout): System argument count
  * @argv: (allow-none) (inout): System argument vector
- * @appid: System-dependent application identifier
  *
  * Create a new #GtkApplication, or if one has already been initialized
  * in this process, return the existing instance. This function will as
@@ -222,14 +249,15 @@ gtk_application_format_activation_data (void)
  * Since: 3.0
  */
 GtkApplication*
-gtk_application_new (gint          *argc,
-                     gchar       ***argv,
-                     const gchar   *appid)
+gtk_application_new (const gchar   *appid,
+		     gint          *argc,
+                     gchar       ***argv)
 {
   GtkApplication *app;
   gint argc_for_app;
   gchar **argv_for_app;
-  GVariant *platform_data;
+  GVariant *argv_variant;
+  GError *error = NULL;
 
   gtk_init (argc, argv);
 
@@ -242,12 +270,20 @@ gtk_application_new (gint          *argc,
   else
     argv_for_app = NULL;
 
-  app = g_object_new (GTK_TYPE_APPLICATION, "application-id", appid, NULL);
+  argv_variant = variant_from_argv (argc_for_app, argv_for_app);
 
-  platform_data = gtk_application_format_activation_data ();
-  g_application_register_with_data (G_APPLICATION (app), argc_for_app, argv_for_app,
-				    platform_data);
-  g_variant_unref (platform_data);
+  app = g_initable_new (GTK_TYPE_APPLICATION, 
+			NULL,
+			&error,
+			"application-id", appid, 
+			"argv", argv_variant, 
+			NULL);
+  if (!app)
+    {
+      g_error ("%s", error->message);
+      g_clear_error (&error);
+      return NULL;
+    }
 
   return app;
 }
@@ -333,7 +369,12 @@ static gchar *default_title;
  * behaviour is to call gtk_application_quit().
  *
  * If your application uses only a single toplevel window, you can
- * use gtk_application_get_window().
+ * use gtk_application_get_window(). If you are using a sub-class
+ * of #GtkApplication you should call gtk_application_create_window()
+ * to let the #GtkApplication instance create a #GtkWindow and add
+ * it to the list of toplevels of the application. You should call
+ * this function only to add #GtkWindow<!-- -->s that you created
+ * directly using gtk_window_new().
  *
  * Since: 3.0
  */
@@ -341,13 +382,27 @@ void
 gtk_application_add_window (GtkApplication *app,
                             GtkWindow      *window)
 {
-  app->priv->windows = g_slist_prepend (app->priv->windows, window);
+  GtkApplicationPrivate *priv;
+
+  g_return_if_fail (GTK_IS_APPLICATION (app));
+  g_return_if_fail (GTK_IS_WINDOW (window));
+
+  priv = app->priv;
+
+  if (g_slist_find (priv->windows, window) != NULL)
+    return;
+
+  priv->windows = g_slist_prepend (priv->windows, window);
+
+  if (priv->default_window == NULL)
+    priv->default_window = window;
 
   if (gtk_window_get_title (window) == NULL && default_title != NULL)
     gtk_window_set_title (window, default_title);
 
   g_signal_connect (window, "destroy",
-                    G_CALLBACK (gtk_application_on_window_destroy), app);
+                    G_CALLBACK (gtk_application_on_window_destroy),
+                    app);
 }
 
 /**
@@ -366,7 +421,8 @@ gtk_application_add_window (GtkApplication *app,
  * If your application has more than one toplevel window (e.g. an
  * single-document-interface application with multiple open documents),
  * or if you are constructing your toplevel windows yourself (e.g. using
- * #GtkBuilder), use gtk_application_add_window() instead.
+ * #GtkBuilder), use gtk_application_create_window() or
+ * gtk_application_add_window() instead.
  *
  * Returns: (transfer none): The default #GtkWindow for this application
  *
@@ -375,15 +431,45 @@ gtk_application_add_window (GtkApplication *app,
 GtkWindow *
 gtk_application_get_window (GtkApplication *app)
 {
-  if (app->priv->default_window != NULL)
-    return app->priv->default_window;
+  GtkApplicationPrivate *priv;
+  GtkWindow *window;
 
-  app->priv->default_window = GTK_WINDOW (gtk_window_new (GTK_WINDOW_TOPLEVEL));
-  g_object_ref_sink (app->priv->default_window);
+  g_return_val_if_fail (GTK_IS_APPLICATION (app), NULL);
 
-  gtk_application_add_window (app, app->priv->default_window);
+  priv = app->priv;
 
-  return app->priv->default_window;
+  if (priv->default_window != NULL)
+    return priv->default_window;
+
+  return gtk_application_create_window (app);
+}
+
+/**
+ * gtk_application_create_window:
+ * @app: a #GtkApplication
+ *
+ * Creates a new #GtkWindow for the application.
+ *
+ * This function calls the #GtkApplication::create_window() virtual function,
+ * which can be overridden by sub-classes, for instance to use #GtkBuilder to
+ * create the user interface. After creating a new #GtkWindow instance, it will
+ * be added to the list of toplevels associated to the application.
+ *
+ * Return value: (transfer none): the newly created application #GtkWindow
+ *
+ * Since: 3.0
+ */
+GtkWindow *
+gtk_application_create_window (GtkApplication *app)
+{
+  GtkWindow *window;
+
+  g_return_val_if_fail (GTK_IS_APPLICATION (app), NULL);
+
+  window = GTK_APPLICATION_GET_CLASS (app)->create_window (app);
+  gtk_application_add_window (app, window);
+
+  return window;
 }
 
 /**
@@ -505,6 +591,8 @@ gtk_application_init (GtkApplication *application)
 {
   application->priv = G_TYPE_INSTANCE_GET_PRIVATE (application, GTK_TYPE_APPLICATION, GtkApplicationPrivate);
 
+  g_object_set (application, "platform-data", gtk_application_format_activation_data (), NULL);
+
   setup_default_window_decorations ();
 }
 
@@ -546,6 +634,7 @@ gtk_application_class_init (GtkApplicationClass *klass)
 
   klass->quit = gtk_application_default_quit;
   klass->action = gtk_application_default_action;
+  klass->create_window = gtk_application_default_create_window;
 
   klass->activated = gtk_application_default_activated;
 
@@ -566,7 +655,7 @@ gtk_application_class_init (GtkApplicationClass *klass)
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (GtkApplicationClass, activated),
                   NULL, NULL,
-                  g_cclosure_marshal_VOID__BOXED,
+                  g_cclosure_marshal_VOID__VARIANT,
                   G_TYPE_NONE, 1,
                   G_TYPE_VARIANT);
 

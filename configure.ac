@@ -12,7 +12,7 @@ AC_PREREQ([2.62])
 
 m4_define([gtk_major_version], [2])
 m4_define([gtk_minor_version], [90])
-m4_define([gtk_micro_version], [3])
+m4_define([gtk_micro_version], [4])
 m4_define([gtk_interface_age], [0])
 m4_define([gtk_binary_age],
           [m4_eval(100 * gtk_minor_version + gtk_micro_version)])
@@ -31,7 +31,7 @@ m4_define([gtk_api_version], [3.0])
 m4_define([gtk_binary_version], [3.0.0])
 
 # required versions of other packages
-m4_define([glib_required_version], [2.25.8])
+m4_define([glib_required_version], [2.25.9])
 m4_define([pango_required_version], [1.20])
 m4_define([atk_required_version], [1.29.2])
 m4_define([cairo_required_version], [1.6])
@@ -1562,6 +1562,8 @@ if test "x$gdktarget" = "xx11"; then
 
   # set up things for XInput
   if test "x$with_xinput" != "xno" && $PKG_CONFIG --exists "xi" ; then
+    have_xinput=yes
+
     AC_DEFINE(XINPUT_XFREE, 1,
               [Define to 1 if XFree XInput should be used])
 
@@ -1574,7 +1576,7 @@ if test "x$gdktarget" = "xx11"; then
               [Define to 1 if no XInput should be used])
   fi
 
-  AM_CONDITIONAL(XINPUT_XFREE, test "x$with_xinput" != "xno")
+  AM_CONDITIONAL(XINPUT_XFREE, test "x$have_xinput" = "xyes")
   AM_CONDITIONAL(XINPUT_2,     test "x$have_xinput2" = "xyes")
 
   # Check for the RANDR extension

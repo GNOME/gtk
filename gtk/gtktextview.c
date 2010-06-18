@@ -110,6 +110,7 @@ struct _GtkTextViewPrivate
   guint im_spot_idle;
   gchar *im_module;
   GdkDevice *grab_device;
+  GdkDevice *dnd_device;
   guint scroll_after_paste : 1;
 };
 
@@ -6078,15 +6079,15 @@ static gint
 drag_scan_timeout (gpointer data)
 {
   GtkTextView *text_view;
+  GtkTextViewPrivate *priv;
   GtkTextIter newplace;
   gint x, y, width, height;
   gdouble pointer_xoffset, pointer_yoffset;
-  GdkDevice *device;
 
   text_view = GTK_TEXT_VIEW (data);
-  device = gdk_display_get_core_pointer (gtk_widget_get_display (GTK_WIDGET (data)));
+  priv = GTK_TEXT_VIEW_GET_PRIVATE (text_view);
 
-  get_iter_at_pointer (text_view, device, &newplace, &x, &y);
+  get_iter_at_pointer (text_view, priv->dnd_device, &newplace, &x, &y);
   gdk_drawable_get_size (text_view->text_window->bin_window, &width, &height);
 
   gtk_text_buffer_move_mark (get_buffer (text_view),
@@ -6814,11 +6815,16 @@ gtk_text_view_drag_leave (GtkWidget        *widget,
                           guint             time)
 {
   GtkTextView *text_view;
+  GtkTextViewPrivate *priv;
 
   text_view = GTK_TEXT_VIEW (widget);
+  priv = GTK_TEXT_VIEW_GET_PRIVATE (text_view);
 
   gtk_text_mark_set_visible (text_view->dnd_mark, FALSE);
-  
+
+  if (priv->dnd_device)
+    priv->dnd_device = NULL;
+
   if (text_view->scroll_timeout != 0)
     g_source_remove (text_view->scroll_timeout);
 
@@ -6834,6 +6840,7 @@ gtk_text_view_drag_motion (GtkWidget        *widget,
 {
   GtkTextIter newplace;
   GtkTextView *text_view;
+  GtkTextViewPrivate *priv;
   GtkTextIter start;
   GtkTextIter end;
   GdkRectangle target_rect;
@@ -6842,6 +6849,7 @@ gtk_text_view_drag_motion (GtkWidget        *widget,
   GdkDragAction suggested_action = 0;
   
   text_view = GTK_TEXT_VIEW (widget);
+  priv = GTK_TEXT_VIEW_GET_PRIVATE (text_view);
 
   target_rect = text_view->text_window->allocation;
   
@@ -6911,7 +6919,9 @@ gtk_text_view_drag_motion (GtkWidget        *widget,
       gdk_drag_status (context, 0, time);
       gtk_text_mark_set_visible (text_view->dnd_mark, FALSE);
     }
-      
+
+  priv->dnd_device = gdk_drag_context_get_device (context);
+
   if (!text_view->scroll_timeout)
     text_view->scroll_timeout =
       gdk_threads_add_timeout (100, drag_scan_timeout, text_view);

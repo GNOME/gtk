@@ -614,20 +614,24 @@ translate_keyboard_string (GdkEventKey *event)
 
 static void
 generate_focus_event (GdkWindow *window,
-		      gboolean   in)
+                      GdkDevice *device,
+                      gboolean   in)
 {
-  GdkEvent event;
+  GdkEvent *event;
 
-  event.type = GDK_FOCUS_CHANGE;
-  event.focus_change.window = window;
-  event.focus_change.send_event = FALSE;
-  event.focus_change.in = in;
+  event = gdk_event_new (GDK_FOCUS_CHANGE);
+  event->focus_change.window = g_object_ref (window);
+  event->focus_change.send_event = FALSE;
+  event->focus_change.in = in;
+  gdk_event_set_device (event, device);
 
-  gdk_event_put (&event);
+  gdk_event_put (event);
+  gdk_event_free (event);
 }
 
 static void
 handle_focus_change (GdkWindow *window,
+                     GdkDevice *device,
                      gint       detail,
                      gint       mode,
                      gboolean   in)
@@ -687,7 +691,7 @@ handle_focus_change (GdkWindow *window,
     }
 
   if (HAS_FOCUS (toplevel) != had_focus)
-    generate_focus_event (window, (in) ? TRUE : FALSE);
+    generate_focus_event (window, device, (in) ? TRUE : FALSE);
 }
 
 static gdouble *
@@ -1071,8 +1075,12 @@ gdk_device_manager_xi2_translate_event (GdkEventTranslator *translator,
     case XI_FocusOut:
       {
         XIEnterEvent *xev = (XIEnterEvent *) ev;
+        GdkDevice *device;
 
-        handle_focus_change (window, xev->detail, xev->mode,
+        device = g_hash_table_lookup (device_manager->id_table,
+                                      GINT_TO_POINTER (xev->deviceid));
+
+        handle_focus_change (window, device, xev->detail, xev->mode,
                              (ev->evtype == XI_FocusIn) ? TRUE : FALSE);
 
         return_val = FALSE;

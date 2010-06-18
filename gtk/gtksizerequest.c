@@ -27,7 +27,7 @@
  * @Short_Description: Height-for-width geometry management
  * @Title: GtkSizeRequest
  *
- * The GtkSizeGroup interface is GTK+'s height-for-width (and width-for-height)
+ * The GtkSizeRequest interface is GTK+'s height-for-width (and width-for-height)
  * geometry management system. Height-for-width means that a widget can
  * change how much vertical space it needs, depending on the amount
  * of horizontal space that it is given (and similar for width-for-height).
@@ -36,7 +36,7 @@
  *
  * GTK+'s traditional two-pass <link linkend="size-allocation">size-allocation</link>
  * algorithm does not allow this flexibility. #GtkWidget provides a default
- * implementation of the #GtkSizeGroup interface for existing widgets,
+ * implementation of the #GtkSizeRequest interface for existing widgets,
  * which always requests the same height, regardless of the available width.
  *
  * <refsect2>
@@ -150,8 +150,8 @@ gtk_size_request_get_type (void)
  */
 static gboolean
 get_cached_size (gint           for_size,
-                         SizeRequest   *cached_sizes,
-                         SizeRequest  **result)
+		 SizeRequest   *cached_sizes,
+		 SizeRequest  **result)
 {
   guint i;
 

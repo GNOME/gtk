@@ -51,6 +51,7 @@ G_BEGIN_DECLS
 #define GTK_IS_OBJECT_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_OBJECT))
 #define GTK_OBJECT_GET_CLASS(object) (G_TYPE_INSTANCE_GET_CLASS ((object), GTK_TYPE_OBJECT, GtkObjectClass))
 
+#if !defined (GTK_DISABLE_DEPRECATED) || defined (GTK_COMPILATION)
 /* GtkObject only uses the first 4 bits of the flags field.
  * Derived objects may use the remaining bits. Though this
  * is a kinda nasty break up, it does make the size of
@@ -64,6 +65,9 @@ G_BEGIN_DECLS
  * @GTK_RESERVED_2: reserved for future use
  *
  * Tells about the state of the object.
+ *
+ * Deprecated: 2.22: Do not re-use #GtkObject flags but use your own variable to
+ *   store flags.
  */
 typedef enum
 {
@@ -78,6 +82,9 @@ typedef enum
  *
  * Gets the #GtkObjectFlags for an object without directly
  * accessing its members.
+ *
+ * Deprecated: 2.22: Do not re-use #GtkObject flags but use your own variable to
+ *   store flags.
  */
 #define GTK_OBJECT_FLAGS(obj)		  (GTK_OBJECT (obj)->flags)
 
@@ -85,6 +92,7 @@ typedef enum
  */
 #define GTK_OBJECT_SET_FLAGS(obj,flag)	  G_STMT_START{ (GTK_OBJECT_FLAGS (obj) |= (flag)); }G_STMT_END
 #define GTK_OBJECT_UNSET_FLAGS(obj,flag)  G_STMT_START{ (GTK_OBJECT_FLAGS (obj) &= ~(flag)); }G_STMT_END
+#endif
 
 typedef struct _GtkObjectClass	GtkObjectClass;
 
