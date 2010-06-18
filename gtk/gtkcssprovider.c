@@ -472,17 +472,15 @@ struct StylePriorityInfo
   GtkStateType state;
 };
 
-static GtkStyleSet *
-gtk_style_get_style (GtkStyleProvider *provider,
-                     GtkWidgetPath    *path)
+static GArray *
+css_provider_get_selectors (GtkCssProvider *css_provider,
+                            GtkWidgetPath  *path)
 {
   GtkCssProviderPrivate *priv;
-  GtkStyleSet *set;
   GArray *priority_info;
   guint i, j;
 
-  priv = GTK_CSS_PROVIDER_GET_PRIVATE (provider);
-  set = gtk_style_set_new ();
+  priv = GTK_CSS_PROVIDER_GET_PRIVATE (css_provider);
   priority_info = g_array_new (FALSE, FALSE, sizeof (StylePriorityInfo));
 
   for (i = 0; i < priv->selectors_info->len; i++)
@@ -519,6 +517,23 @@ gtk_style_get_style (GtkStyleProvider *provider,
       if (!added)
         g_array_append_val (priority_info, new);
     }
+
+  return priority_info;
+}
+
+static GtkStyleSet *
+gtk_css_provider_get_style (GtkStyleProvider *provider,
+                            GtkWidgetPath    *path)
+{
+  GtkCssProviderPrivate *priv;
+  GtkStyleSet *set;
+  GArray *priority_info;
+  guint i;
+
+  priv = GTK_CSS_PROVIDER_GET_PRIVATE (provider);
+  set = gtk_style_set_new ();
+
+  priority_info = css_provider_get_selectors (GTK_CSS_PROVIDER (provider), path);
 
   for (i = 0; i < priority_info->len; i++)
     {
