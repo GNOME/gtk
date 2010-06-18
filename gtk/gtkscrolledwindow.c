@@ -28,7 +28,7 @@
 #include <math.h>
 #include <gdk/gdkkeysyms.h>
 #include "gtkbindings.h"
-#include "gtkextendedlayout.h"
+#include "gtksizerequest.h"
 #include "gtkmarshalers.h"
 #include "gtkscrolledwindow.h"
 #include "gtkwindow.h"
@@ -141,27 +141,27 @@ static void     gtk_scrolled_window_adjustment_changed (GtkAdjustment     *adjus
 
 static void  gtk_scrolled_window_update_real_placement (GtkScrolledWindow *scrolled_window);
 
-static void  gtk_scrolled_window_extended_layout_init  (GtkExtendedLayoutIface *iface);
-static void  gtk_scrolled_window_get_desired_width     (GtkExtendedLayout      *layout,
-							gint                   *minimum_size,
-							gint                   *natural_size);
-static void  gtk_scrolled_window_get_desired_height    (GtkExtendedLayout      *layout,
-							gint                   *minimum_size,
-							gint                   *natural_size);
-static void  gtk_scrolled_window_get_height_for_width  (GtkExtendedLayout      *layout,
-							gint                    width,
-							gint                   *minimum_height,
-							gint                   *natural_height);
-static void  gtk_scrolled_window_get_width_for_height  (GtkExtendedLayout      *layout,
-							gint                    width,
-							gint                   *minimum_height,
-							gint                   *natural_height);
+static void  gtk_scrolled_window_size_request_init     (GtkSizeRequestIface *iface);
+static void  gtk_scrolled_window_get_width             (GtkSizeRequest      *widget,
+							gint                *minimum_size,
+							gint                *natural_size);
+static void  gtk_scrolled_window_get_height            (GtkSizeRequest      *widget,
+							gint                *minimum_size,
+							gint                *natural_size);
+static void  gtk_scrolled_window_get_height_for_width  (GtkSizeRequest      *layout,
+							gint                 width,
+							gint                *minimum_height,
+							gint                *natural_height);
+static void  gtk_scrolled_window_get_width_for_height  (GtkSizeRequest      *layout,
+							gint                 width,
+							gint                *minimum_height,
+							gint                *natural_height);
 
 static guint signals[LAST_SIGNAL] = {0};
 
 G_DEFINE_TYPE_WITH_CODE (GtkScrolledWindow, gtk_scrolled_window, GTK_TYPE_BIN,
-                         G_IMPLEMENT_INTERFACE (GTK_TYPE_EXTENDED_LAYOUT,
-                                                gtk_scrolled_window_extended_layout_init))
+                         G_IMPLEMENT_INTERFACE (GTK_TYPE_SIZE_REQUEST,
+                                                gtk_scrolled_window_size_request_init))
 
 
 static void
@@ -1718,19 +1718,19 @@ _gtk_scrolled_window_get_scrollbar_spacing (GtkScrolledWindow *scrolled_window)
 
 
 static void
-gtk_scrolled_window_extended_layout_init (GtkExtendedLayoutIface *iface)
+gtk_scrolled_window_size_request_init (GtkSizeRequestIface *iface)
 {
-  iface->get_desired_width    = gtk_scrolled_window_get_desired_width;
-  iface->get_desired_height   = gtk_scrolled_window_get_desired_height;
+  iface->get_width            = gtk_scrolled_window_get_width;
+  iface->get_height           = gtk_scrolled_window_get_height;
   iface->get_height_for_width = gtk_scrolled_window_get_height_for_width;
   iface->get_width_for_height = gtk_scrolled_window_get_width_for_height;
 }
 
 static void
-gtk_scrolled_window_get_desired_size (GtkExtendedLayout *layout,
-				      GtkOrientation     orientation,
-				      gint              *minimum_size,
-				      gint              *natural_size)
+gtk_scrolled_window_get_size (GtkSizeRequest *widget,
+			      GtkOrientation  orientation,
+			      gint           *minimum_size,
+			      gint           *natural_size)
 {
   GtkScrolledWindow *scrolled_window;
   GtkBin *bin;
@@ -1742,7 +1742,7 @@ gtk_scrolled_window_get_desired_size (GtkExtendedLayout *layout,
   GtkRequisition minimum_req, natural_req;
   gint min_child_size, nat_child_size;
 
-  scrolled_window = GTK_SCROLLED_WINDOW (layout);
+  scrolled_window = GTK_SCROLLED_WINDOW (widget);
   bin = GTK_BIN (scrolled_window);
 
   scrollbar_spacing = _gtk_scrolled_window_get_scrollbar_spacing (scrolled_window);
@@ -1763,9 +1763,9 @@ gtk_scrolled_window_get_desired_size (GtkExtendedLayout *layout,
     {
       if (orientation == GTK_ORIENTATION_HORIZONTAL)
 	{
-	  gtk_extended_layout_get_desired_width (GTK_EXTENDED_LAYOUT (bin->child),
-						 &min_child_size,
-						 &nat_child_size);
+	  gtk_size_request_get_width (GTK_SIZE_REQUEST (bin->child),
+				      &min_child_size,
+				      &nat_child_size);
 	  
 	  if (scrolled_window->hscrollbar_policy == GTK_POLICY_NEVER)
 	    {
@@ -1791,9 +1791,9 @@ gtk_scrolled_window_get_desired_size (GtkExtendedLayout *layout,
 	}
       else /* GTK_ORIENTATION_VERTICAL */
 	{
-	  gtk_extended_layout_get_desired_height (GTK_EXTENDED_LAYOUT (bin->child),
-						  &min_child_size,
-						  &nat_child_size);
+	  gtk_size_request_get_height (GTK_SIZE_REQUEST (bin->child),
+				       &min_child_size,
+				       &nat_child_size);
 	  
 	  if (scrolled_window->vscrollbar_policy == GTK_POLICY_NEVER)
 	    {
@@ -1837,17 +1837,17 @@ gtk_scrolled_window_get_desired_size (GtkExtendedLayout *layout,
 	extra_width = scrollbar_spacing + vscrollbar_requisition.width;
     }
 
-  minimum_req.width += GTK_CONTAINER (layout)->border_width * 2 + MAX (0, extra_width);
-  minimum_req.height += GTK_CONTAINER (layout)->border_width * 2 + MAX (0, extra_height);
-  natural_req.width += GTK_CONTAINER (layout)->border_width * 2 + MAX (0, extra_width);
-  natural_req.height += GTK_CONTAINER (layout)->border_width * 2 + MAX (0, extra_height);
+  minimum_req.width += GTK_CONTAINER (widget)->border_width * 2 + MAX (0, extra_width);
+  minimum_req.height += GTK_CONTAINER (widget)->border_width * 2 + MAX (0, extra_height);
+  natural_req.width += GTK_CONTAINER (widget)->border_width * 2 + MAX (0, extra_width);
+  natural_req.height += GTK_CONTAINER (widget)->border_width * 2 + MAX (0, extra_height);
 
   if (scrolled_window->shadow_type != GTK_SHADOW_NONE)
     {
-      minimum_req.width += 2 * GTK_WIDGET (layout)->style->xthickness;
-      minimum_req.height += 2 * GTK_WIDGET (layout)->style->ythickness;
-      natural_req.width += 2 * GTK_WIDGET (layout)->style->xthickness;
-      natural_req.height += 2 * GTK_WIDGET (layout)->style->ythickness;
+      minimum_req.width += 2 * GTK_WIDGET (widget)->style->xthickness;
+      minimum_req.height += 2 * GTK_WIDGET (widget)->style->ythickness;
+      natural_req.width += 2 * GTK_WIDGET (widget)->style->xthickness;
+      natural_req.height += 2 * GTK_WIDGET (widget)->style->ythickness;
     }
 
   if (orientation == GTK_ORIENTATION_HORIZONTAL)
@@ -1867,41 +1867,41 @@ gtk_scrolled_window_get_desired_size (GtkExtendedLayout *layout,
 }
 
 static void     
-gtk_scrolled_window_get_desired_width (GtkExtendedLayout      *layout,
-				       gint                   *minimum_size,
-				       gint                   *natural_size)
+gtk_scrolled_window_get_width (GtkSizeRequest      *widget,
+			       gint                   *minimum_size,
+			       gint                   *natural_size)
 {
-  gtk_scrolled_window_get_desired_size (layout, GTK_ORIENTATION_HORIZONTAL, minimum_size, natural_size);
+  gtk_scrolled_window_get_size (widget, GTK_ORIENTATION_HORIZONTAL, minimum_size, natural_size);
 }
 
 static void
-gtk_scrolled_window_get_desired_height (GtkExtendedLayout      *layout,
-					gint                   *minimum_size,
-					gint                   *natural_size)
+gtk_scrolled_window_get_height (GtkSizeRequest      *widget,
+				gint                *minimum_size,
+				gint                *natural_size)
 {  
-  gtk_scrolled_window_get_desired_size (layout, GTK_ORIENTATION_VERTICAL, minimum_size, natural_size);
+  gtk_scrolled_window_get_size (widget, GTK_ORIENTATION_VERTICAL, minimum_size, natural_size);
 }
 
 static void
-gtk_scrolled_window_get_height_for_width (GtkExtendedLayout *layout,
-					  gint       width,
-					  gint      *minimum_height,
-					  gint      *natural_height)
+gtk_scrolled_window_get_height_for_width (GtkSizeRequest *widget,
+					  gint            width,
+					  gint           *minimum_height,
+					  gint           *natural_height)
 {
-  g_return_if_fail (GTK_IS_WIDGET (layout));
+  g_return_if_fail (GTK_IS_WIDGET (widget));
 
-  GTK_EXTENDED_LAYOUT_GET_IFACE (layout)->get_desired_height (layout, minimum_height, natural_height);
+  GTK_SIZE_REQUEST_GET_IFACE (widget)->get_height (widget, minimum_height, natural_height);
 }
 
 static void
-gtk_scrolled_window_get_width_for_height (GtkExtendedLayout *layout,
+gtk_scrolled_window_get_width_for_height (GtkSizeRequest *widget,
 					  gint       height,
 					  gint      *minimum_width,
 					  gint      *natural_width)
 {
-  g_return_if_fail (GTK_IS_WIDGET (layout));
+  g_return_if_fail (GTK_IS_WIDGET (widget));
 
-  GTK_EXTENDED_LAYOUT_GET_IFACE (layout)->get_desired_width (layout, minimum_width, natural_width);
+  GTK_SIZE_REQUEST_GET_IFACE (widget)->get_width (widget, minimum_width, natural_width);
 }
 
 #define __GTK_SCROLLED_WINDOW_C__

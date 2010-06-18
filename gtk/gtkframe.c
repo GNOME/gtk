@@ -31,7 +31,7 @@
 #include "gtkprivate.h"
 #include "gtkintl.h"
 #include "gtkbuildable.h"
-#include "gtkextendedlayout.h"
+#include "gtksizerequest.h"
 #include "gtkalias.h"
 
 #define LABEL_PAD 1
@@ -80,19 +80,19 @@ static void gtk_frame_buildable_add_child           (GtkBuildable *buildable,
 						     GObject      *child,
 						     const gchar  *type);
 
-static void gtk_frame_extended_layout_init (GtkExtendedLayoutIface *iface);
-static void gtk_frame_get_desired_width    (GtkExtendedLayout      *layout,
-                                            gint                   *minimum_size,
-                                            gint                   *natural_size);
-static void gtk_frame_get_desired_height   (GtkExtendedLayout      *layout,
-                                            gint                   *minimum_size,
-                                            gint                   *natural_size);
+static void gtk_frame_size_request_init             (GtkSizeRequestIface *iface);
+static void gtk_frame_get_width                     (GtkSizeRequest      *widget,
+                                                     gint                *minimum_size,
+						     gint                *natural_size);
+static void gtk_frame_get_height                    (GtkSizeRequest      *widget,
+						     gint                *minimum_size,
+						     gint                *natural_size);
 
 G_DEFINE_TYPE_WITH_CODE (GtkFrame, gtk_frame, GTK_TYPE_BIN,
 			 G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE,
 						gtk_frame_buildable_init)
-                         G_IMPLEMENT_INTERFACE (GTK_TYPE_EXTENDED_LAYOUT,
-                                                gtk_frame_extended_layout_init))
+                         G_IMPLEMENT_INTERFACE (GTK_TYPE_SIZE_REQUEST,
+                                                gtk_frame_size_request_init))
 
 static void
 gtk_frame_class_init (GtkFrameClass *class)
@@ -705,12 +705,12 @@ gtk_frame_real_compute_child_allocation (GtkFrame      *frame,
 }
 
 static void
-gtk_frame_get_desired_size (GtkExtendedLayout *layout,
-                            GtkOrientation     orientation,
-                            gint              *minimum_size,
-                            gint              *natural_size)
+gtk_frame_get_size (GtkSizeRequest *request,
+		    GtkOrientation  orientation,
+		    gint           *minimum_size,
+		    gint           *natural_size)
 {
-  GtkWidget *widget = GTK_WIDGET (layout);
+  GtkWidget *widget = GTK_WIDGET (request);
   GtkFrame *frame = GTK_FRAME (widget);
   GtkBin *bin = GTK_BIN (widget);
   gint child_min, child_nat;
@@ -720,15 +720,15 @@ gtk_frame_get_desired_size (GtkExtendedLayout *layout,
     {
       if (orientation == GTK_ORIENTATION_HORIZONTAL)
         {
-          gtk_extended_layout_get_desired_width (GTK_EXTENDED_LAYOUT (frame->label_widget),
-                                                 &child_min, &child_nat);
+          gtk_size_request_get_width (GTK_SIZE_REQUEST (frame->label_widget),
+				      &child_min, &child_nat);
           minimum = child_min + 2 * LABEL_PAD + 2 * LABEL_SIDE_PAD;
           natural = child_nat + 2 * LABEL_PAD + 2 * LABEL_SIDE_PAD;
         }
       else
         {
-          gtk_extended_layout_get_desired_height (GTK_EXTENDED_LAYOUT (frame->label_widget),
-                                                  &child_min, &child_nat);
+          gtk_size_request_get_height (GTK_SIZE_REQUEST (frame->label_widget),
+				       &child_min, &child_nat);
           minimum = MAX (0, child_min - widget->style->ythickness);
           natural = MAX (0, child_nat - widget->style->ythickness);
         }
@@ -743,15 +743,15 @@ gtk_frame_get_desired_size (GtkExtendedLayout *layout,
     {
       if (orientation == GTK_ORIENTATION_HORIZONTAL)
         {
-          gtk_extended_layout_get_desired_width (GTK_EXTENDED_LAYOUT (bin->child),
-                                                 &child_min, &child_nat);
+          gtk_size_request_get_width (GTK_SIZE_REQUEST (bin->child),
+				      &child_min, &child_nat);
           minimum = MAX (minimum, child_min);
           natural = MAX (natural, child_nat);
         }
       else
         {
-          gtk_extended_layout_get_desired_height (GTK_EXTENDED_LAYOUT (bin->child),
-                                                  &child_min, &child_nat);
+          gtk_size_request_get_height (GTK_SIZE_REQUEST (bin->child),
+				       &child_min, &child_nat);
           minimum += child_min;
           natural += child_nat;
         }
@@ -780,26 +780,26 @@ gtk_frame_get_desired_size (GtkExtendedLayout *layout,
 }
 
 static void
-gtk_frame_get_desired_width (GtkExtendedLayout *layout,
-                             gint              *minimum_size,
-                             gint              *natural_size)
+gtk_frame_get_width (GtkSizeRequest *widget,
+		     gint           *minimum_size,
+		     gint           *natural_size)
 {
-  gtk_frame_get_desired_size (layout, GTK_ORIENTATION_HORIZONTAL, minimum_size, natural_size);
+  gtk_frame_get_size (widget, GTK_ORIENTATION_HORIZONTAL, minimum_size, natural_size);
 }
 
 static void
-gtk_frame_get_desired_height (GtkExtendedLayout *layout,
-                              gint              *minimum_size,
-                              gint              *natural_size)
+gtk_frame_get_height (GtkSizeRequest *widget,
+		      gint           *minimum_size,
+		      gint           *natural_size)
 {
-  gtk_frame_get_desired_size (layout, GTK_ORIENTATION_VERTICAL, minimum_size, natural_size);
+  gtk_frame_get_size (widget, GTK_ORIENTATION_VERTICAL, minimum_size, natural_size);
 }
 
 static void
-gtk_frame_extended_layout_init (GtkExtendedLayoutIface *iface)
+gtk_frame_size_request_init (GtkSizeRequestIface *iface)
 {
-  iface->get_desired_width = gtk_frame_get_desired_width;
-  iface->get_desired_height = gtk_frame_get_desired_height;
+  iface->get_width = gtk_frame_get_width;
+  iface->get_height = gtk_frame_get_height;
 }
 
 #define __GTK_FRAME_C__

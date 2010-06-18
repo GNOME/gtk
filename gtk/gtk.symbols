@@ -1229,18 +1229,6 @@ gtk_extended_cell_get_width_for_height
 #endif
 #endif
 
-#if IN_HEADER(__GTK_EXTENDED_LAYOUT_H__)
-#if IN_FILE(__GTK_EXTENDED_LAYOUT_C__)
-gtk_extended_layout_get_type G_GNUC_CONST
-gtk_extended_layout_get_desired_height
-gtk_extended_layout_get_desired_size
-gtk_extended_layout_get_desired_width
-gtk_extended_layout_get_height_for_width
-gtk_extended_layout_get_width_for_height
-gtk_extended_layout_is_height_for_width
-#endif
-#endif
-
 #if IN_HEADER(__GTK_FILE_CHOOSER_H__)
 #if IN_FILE(__GTK_FILE_CHOOSER_C__)
 gtk_file_chooser_add_filter
@@ -3191,6 +3179,18 @@ gtk_size_group_new
 gtk_size_group_remove_widget
 gtk_size_group_set_ignore_hidden
 gtk_size_group_set_mode
+#endif
+#endif
+
+#if IN_HEADER(__GTK_SIZE_REQUEST_H__)
+#if IN_FILE(__GTK_SIZE_REQUEST_C__)
+gtk_size_request_get_height
+gtk_size_request_get_height_for_width
+gtk_size_request_get_request_mode
+gtk_size_request_get_size
+gtk_size_request_get_type G_GNUC_CONST
+gtk_size_request_get_width
+gtk_size_request_get_width_for_height
 #endif
 #endif
 

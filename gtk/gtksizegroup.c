@@ -25,7 +25,7 @@
 #include "gtkprivate.h"
 #include "gtksizegroup.h"
 #include "gtkbuildable.h"
-#include "gtkextendedlayout.h"
+#include "gtksizerequest.h"
 #include "gtkalias.h"
 
 enum {
@@ -630,7 +630,7 @@ get_base_dimension (GtkWidget        *widget,
 	  /* XXX Possibly we should be using natural values and not minimums here. */
 	  gint width;
 
-	  gtk_extended_layout_get_desired_width (GTK_EXTENDED_LAYOUT (widget), &width, NULL);
+	  gtk_size_request_get_width (GTK_SIZE_REQUEST (widget), &width, NULL);
 
 	  return width;
 	}
@@ -644,7 +644,7 @@ get_base_dimension (GtkWidget        *widget,
 	  /* XXX Possibly we should be using natural values and not minimums here. */
 	  gint height;
 
-	  gtk_extended_layout_get_desired_height (GTK_EXTENDED_LAYOUT (widget), &height, NULL);
+	  gtk_size_request_get_height (GTK_SIZE_REQUEST (widget), &height, NULL);
 
 	  return height;
 	}
@@ -741,7 +741,7 @@ compute_dimension (GtkWidget        *widget,
  * value in the dimension @mode.
  *
  * This function is used to update sizegroup minimum size information
- * in multiple passes from the new #GtkExtendedLayout manager.
+ * in multiple passes from the new #GtkSizeRequest manager.
  */
 gint
 _gtk_size_group_bump_requisition (GtkWidget        *widget,
