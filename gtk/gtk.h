@@ -84,7 +84,6 @@
 #include <gtk/gtkenums.h>
 #include <gtk/gtkeventbox.h>
 #include <gtk/gtkexpander.h>
-#include <gtk/gtkextendedlayout.h>
 #include <gtk/gtkfixed.h>
 #include <gtk/gtkfilechooser.h>
 #include <gtk/gtkfilechooserbutton.h>
@@ -167,6 +166,7 @@
 #include <gtk/gtksettings.h>
 #include <gtk/gtkshow.h>
 #include <gtk/gtksizegroup.h>
+#include <gtk/gtksizerequest.h>
 #include <gtk/gtksocket.h>
 #include <gtk/gtkspinbutton.h>
 #include <gtk/gtkspinner.h>

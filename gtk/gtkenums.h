@@ -546,6 +546,21 @@ typedef enum
   GTK_DRAG_RESULT_ERROR
 } GtkDragResult;
 
+/**
+ * GtkSizeRequestMode:
+ * @GTK_SIZE_REQUEST_HEIGHT_FOR_WIDTH: Prefer height-for-width geometry management
+ * @GTK_SIZE_REQUEST_WIDTH_FOR_HEIGHT: Prefer width-for-height geometry management
+ * 
+ * Specifies a preference for height-for-width or
+ * width-for-height geometry management.
+ */
+typedef enum
+{
+  GTK_SIZE_REQUEST_HEIGHT_FOR_WIDTH = 0,
+  GTK_SIZE_REQUEST_WIDTH_FOR_HEIGHT,
+} GtkSizeRequestMode;
+
+
 G_END_DECLS
 
 #endif /* __GTK_ENUMS_H__ */

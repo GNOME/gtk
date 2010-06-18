@@ -48,7 +48,7 @@
 #include "gtkmarshalers.h"
 #include "gtkplug.h"
 #include "gtkbuildable.h"
-#include "gtkextendedlayout.h"
+#include "gtksizerequest.h"
 #include "gtkalias.h"
 
 #ifdef GDK_WINDOWING_X11
@@ -395,19 +395,19 @@ static void gtk_window_buildable_custom_finished (GtkBuildable  *buildable,
 						      gpointer       user_data);
 
 
-static void gtk_window_extended_layout_init      (GtkExtendedLayoutIface *iface);
-static void gtk_window_get_desired_width         (GtkExtendedLayout      *layout,
-						  gint                   *minimum_size,
-						  gint                   *natural_size);
-static void gtk_window_get_desired_height        (GtkExtendedLayout      *layout,
-						  gint                   *minimum_size,
-						  gint                   *natural_size);
+static void gtk_window_size_request_init      (GtkSizeRequestIface *iface);
+static void gtk_window_get_width              (GtkSizeRequest      *widget,
+					       gint                *minimum_size,
+					       gint                *natural_size);
+static void gtk_window_get_height             (GtkSizeRequest      *widget,
+					       gint                *minimum_size,
+					       gint                *natural_size);
 
 G_DEFINE_TYPE_WITH_CODE (GtkWindow, gtk_window, GTK_TYPE_BIN,
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE,
 						gtk_window_buildable_interface_init)
-			 G_IMPLEMENT_INTERFACE (GTK_TYPE_EXTENDED_LAYOUT,
-						gtk_window_extended_layout_init))
+			 G_IMPLEMENT_INTERFACE (GTK_TYPE_SIZE_REQUEST,
+						gtk_window_size_request_init))
 
 static void
 add_tab_bindings (GtkBindingSet    *binding_set,
@@ -5593,22 +5593,22 @@ gtk_window_real_set_focus (GtkWindow *window,
 
 
 static void
-gtk_window_extended_layout_init (GtkExtendedLayoutIface *iface)
+gtk_window_size_request_init (GtkSizeRequestIface *iface)
 {
-  iface->get_desired_width  = gtk_window_get_desired_width;
-  iface->get_desired_height = gtk_window_get_desired_height;
+  iface->get_width  = gtk_window_get_width;
+  iface->get_height = gtk_window_get_height;
 }
 
 
 static void 
-gtk_window_get_desired_width (GtkExtendedLayout      *layout,
-			      gint                   *minimum_size,
-			      gint                   *natural_size)
+gtk_window_get_width (GtkSizeRequest      *widget,
+		      gint                *minimum_size,
+		      gint                *natural_size)
 {
   GtkWindow *window;
   GtkWidget *child;
 
-  window = GTK_WINDOW (layout);
+  window = GTK_WINDOW (widget);
   child  = gtk_bin_get_child (GTK_BIN (window));
   
   *minimum_size = GTK_CONTAINER (window)->border_width * 2;
@@ -5617,7 +5617,7 @@ gtk_window_get_desired_width (GtkExtendedLayout      *layout,
   if (child && gtk_widget_get_visible (child))
     {
       gint child_min, child_nat;
-      gtk_extended_layout_get_desired_width (GTK_EXTENDED_LAYOUT (child), &child_min, &child_nat);
+      gtk_size_request_get_width (GTK_SIZE_REQUEST (child), &child_min, &child_nat);
 
       *minimum_size += child_min;
       *natural_size += child_nat;
@@ -5625,14 +5625,14 @@ gtk_window_get_desired_width (GtkExtendedLayout      *layout,
 }
 
 static void 
-gtk_window_get_desired_height (GtkExtendedLayout      *layout,
-			       gint                   *minimum_size,
-			       gint                   *natural_size)
+gtk_window_get_height (GtkSizeRequest      *widget,
+		       gint                *minimum_size,
+		       gint                *natural_size)
 {
   GtkWindow *window;
   GtkWidget *child;
 
-  window = GTK_WINDOW (layout);
+  window = GTK_WINDOW (widget);
   child  = gtk_bin_get_child (GTK_BIN (window));
   
   *minimum_size = GTK_CONTAINER (window)->border_width * 2;
@@ -5641,7 +5641,7 @@ gtk_window_get_desired_height (GtkExtendedLayout      *layout,
   if (child && gtk_widget_get_visible (child))
     {
       gint child_min, child_nat;
-      gtk_extended_layout_get_desired_height (GTK_EXTENDED_LAYOUT (child), &child_min, &child_nat);
+      gtk_size_request_get_height (GTK_SIZE_REQUEST (child), &child_min, &child_nat);
 
       *minimum_size += child_min;
       *natural_size += child_nat;

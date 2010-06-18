@@ -39,7 +39,7 @@
 
 #include "config.h"
 #include "gtkbin.h"
-#include "gtkextendedlayout.h"
+#include "gtksizerequest.h"
 #include "gtkintl.h"
 #include "gtkalias.h"
 
@@ -54,22 +54,22 @@ static void gtk_bin_forall      (GtkContainer   *container,
 static GType gtk_bin_child_type (GtkContainer   *container);
 
 
-static void     gtk_bin_extended_layout_init  (GtkExtendedLayoutIface *iface);
-static gboolean gtk_bin_is_height_for_width   (GtkExtendedLayout      *layout);
-static void     gtk_bin_get_width_for_height  (GtkExtendedLayout      *layout,
-					       gint                    height,
-					       gint                   *minimum_width,
-					       gint                   *natural_width);
-static void     gtk_bin_get_height_for_width  (GtkExtendedLayout      *layout,
-					       gint                    width,
-					       gint                   *minimum_height,
-					       gint                   *natural_height);
+static void               gtk_bin_size_request_init     (GtkSizeRequestIface *iface);
+static GtkSizeRequestMode gtk_bin_get_request_mode      (GtkSizeRequest      *widget);
+static void               gtk_bin_get_width_for_height  (GtkSizeRequest      *widget,
+							 gint                 height,
+							 gint                *minimum_width,
+							 gint                *natural_width);
+static void               gtk_bin_get_height_for_width  (GtkSizeRequest      *widget,
+							 gint                 width,
+							 gint                *minimum_height,
+							 gint                *natural_height);
 
-static GtkExtendedLayoutIface *parent_extended_layout_iface;
+static GtkSizeRequestIface *parent_size_request_iface;
 
 G_DEFINE_ABSTRACT_TYPE_WITH_CODE (GtkBin, gtk_bin, GTK_TYPE_CONTAINER,
-				  G_IMPLEMENT_INTERFACE (GTK_TYPE_EXTENDED_LAYOUT,
-							 gtk_bin_extended_layout_init))
+				  G_IMPLEMENT_INTERFACE (GTK_TYPE_SIZE_REQUEST,
+							 gtk_bin_size_request_init))
 
 static void
 gtk_bin_class_init (GtkBinClass *class)
@@ -159,7 +159,7 @@ gtk_bin_forall (GtkContainer *container,
 
 
 /* GtkBin widgets define the padding and borders independantly so
- * we cannot provide a generic get_desired_size() for the same reason
+ * we cannot provide a generic get_size() for the same reason
  * we never implemented size_request() here.
  *
  * But for cases where the GtkBin class's padding is constant and
@@ -168,24 +168,24 @@ gtk_bin_forall (GtkContainer *container,
  * cases by using the delta of the base size requsts.
  */
 static void 
-gtk_bin_extended_layout_init (GtkExtendedLayoutIface *iface)
+gtk_bin_size_request_init (GtkSizeRequestIface *iface)
 {
-  parent_extended_layout_iface = g_type_interface_peek_parent (iface);
+  parent_size_request_iface = g_type_interface_peek_parent (iface);
 
-  iface->is_height_for_width   = gtk_bin_is_height_for_width;
+  iface->get_request_mode      = gtk_bin_get_request_mode;
   iface->get_width_for_height  = gtk_bin_get_width_for_height;
   iface->get_height_for_width  = gtk_bin_get_height_for_width;
 }
 
-static gboolean 
-gtk_bin_is_height_for_width (GtkExtendedLayout      *layout)
+static GtkSizeRequestMode
+gtk_bin_get_request_mode (GtkSizeRequest      *widget)
 {
-  GtkBin *bin = GTK_BIN (layout);
+  GtkBin *bin = GTK_BIN (widget);
 
   if (bin->child)
-    return gtk_extended_layout_is_height_for_width (GTK_EXTENDED_LAYOUT (bin->child));
+    return gtk_size_request_get_request_mode (GTK_SIZE_REQUEST (bin->child));
 
-  return TRUE;
+  return GTK_SIZE_REQUEST_HEIGHT_FOR_WIDTH;
 }
 
 static void
@@ -195,30 +195,30 @@ get_child_padding_delta (GtkBin         *bin,
 {
   gint hmin, vmin, child_hmin, child_vmin;
 
-  gtk_extended_layout_get_desired_width (GTK_EXTENDED_LAYOUT (bin), &hmin, NULL);
-  gtk_extended_layout_get_desired_height (GTK_EXTENDED_LAYOUT (bin), &vmin, NULL);
+  gtk_size_request_get_width (GTK_SIZE_REQUEST (bin), &hmin, NULL);
+  gtk_size_request_get_height (GTK_SIZE_REQUEST (bin), &vmin, NULL);
 
-  gtk_extended_layout_get_desired_width (GTK_EXTENDED_LAYOUT (bin->child), &child_hmin, NULL);
-  gtk_extended_layout_get_desired_height (GTK_EXTENDED_LAYOUT (bin->child), &child_vmin, NULL);
+  gtk_size_request_get_width (GTK_SIZE_REQUEST (bin->child), &child_hmin, NULL);
+  gtk_size_request_get_height (GTK_SIZE_REQUEST (bin->child), &child_vmin, NULL);
 
   *delta_h = hmin - child_hmin;
   *delta_v = vmin - child_vmin;
 }
 
 static void 
-gtk_bin_get_width_for_height (GtkExtendedLayout      *layout,
-			      gint                    height,
-			      gint                   *minimum_width,
-			      gint                   *natural_width)
+gtk_bin_get_width_for_height (GtkSizeRequest      *widget,
+			      gint                 height,
+			      gint                *minimum_width,
+			      gint                *natural_width)
 {
-  GtkBin *bin = GTK_BIN (layout);
+  GtkBin *bin = GTK_BIN (widget);
   gint    hdelta, vdelta, child_min, child_nat;
 
   if (bin->child)
     {
       get_child_padding_delta (bin, &hdelta, &vdelta);
       
-      gtk_extended_layout_get_width_for_height (GTK_EXTENDED_LAYOUT (bin->child),
+      gtk_size_request_get_width_for_height (GTK_SIZE_REQUEST (bin->child),
 						height - vdelta,
 						&child_min, &child_nat);
       
@@ -229,23 +229,23 @@ gtk_bin_get_width_for_height (GtkExtendedLayout      *layout,
 	*natural_width = child_nat + hdelta;
     }
   else
-    GTK_EXTENDED_LAYOUT_GET_IFACE (layout)->get_desired_width (layout, minimum_width, natural_width);
+    GTK_SIZE_REQUEST_GET_IFACE (widget)->get_width (widget, minimum_width, natural_width);
 }
 
 static void
-gtk_bin_get_height_for_width  (GtkExtendedLayout      *layout,
-			       gint                    width,
-			       gint                   *minimum_height,
-			       gint                   *natural_height)
+gtk_bin_get_height_for_width  (GtkSizeRequest      *widget,
+			       gint                 width,
+			       gint                *minimum_height,
+			       gint                *natural_height)
 {
-  GtkBin *bin = GTK_BIN (layout);
+  GtkBin *bin = GTK_BIN (widget);
   gint    hdelta, vdelta, child_min, child_nat;
 
   if (bin->child)
     {
       get_child_padding_delta (bin, &hdelta, &vdelta);
       
-      gtk_extended_layout_get_height_for_width (GTK_EXTENDED_LAYOUT (bin->child),
+      gtk_size_request_get_height_for_width (GTK_SIZE_REQUEST (bin->child),
 						width - hdelta,
 						&child_min, &child_nat);
       
@@ -256,7 +256,7 @@ gtk_bin_get_height_for_width  (GtkExtendedLayout      *layout,
 	*natural_height = child_nat + vdelta;
     }
   else
-    GTK_EXTENDED_LAYOUT_GET_IFACE (layout)->get_desired_height (layout, minimum_height, natural_height);
+    GTK_SIZE_REQUEST_GET_IFACE (widget)->get_height (widget, minimum_height, natural_height);
 }
 
 
