@@ -13271,18 +13271,19 @@ gtk_widget_get_style_context (GtkWidget *widget)
           g_object_unref (css_file);
         }
 
-      gtk_style_context_add_provider (context, css_provider,
+      gtk_style_context_add_provider (context,
+                                      GTK_STYLE_PROVIDER (css_provider),
                                       GTK_STYLE_PROVIDER_PRIORITY_USER);
-    }
 
-  if (widget->parent ||
-      gtk_widget_is_toplevel (widget))
-    {
-      GtkWidgetPath *path;
+      if (widget->parent ||
+          gtk_widget_is_toplevel (widget))
+        {
+          GtkWidgetPath *path;
 
-      path = gtk_widget_get_path (widget);
-      gtk_style_context_set_path (context, path);
-      gtk_widget_path_free (path);
+          path = gtk_widget_get_path (widget);
+          gtk_style_context_set_path (context, path);
+          gtk_widget_path_free (path);
+        }
     }
 
   return context;
