@@ -1871,7 +1871,7 @@ _gtk_path_bar_set_root_uris   (GtkPathBar         *path_bar,
    */
   gtk_path_bar_clear_buttons (path_bar);
 
-  // Also clear the root icon, as we'll be using this for the root URI button.
+  /* Also clear the root icon, as we'll be using this for the root URI button. */
   if (path_bar->root_icon)
     {
       g_object_unref (path_bar->root_icon);
@@ -1936,4 +1936,4 @@ _gtk_path_bar_down (GtkPathBar *path_bar)
 #define __GTK_PATH_BAR_C__
 #include "gtkaliasdef.c"
 
-// vim: et sw=2 cinoptions=(0,t0,f1s,n-1s,{1s,>2s,^-1s
+/* vim: et sw=2 cinoptions=(0,t0,f1s,n-1s,{1s,>2s,^-1s */
