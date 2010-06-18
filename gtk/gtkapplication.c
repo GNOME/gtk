@@ -434,7 +434,6 @@ GtkWindow *
 gtk_application_get_window (GtkApplication *app)
 {
   GtkApplicationPrivate *priv;
-  GtkWindow *window;
 
   g_return_val_if_fail (GTK_IS_APPLICATION (app), NULL);
 
