@@ -54,7 +54,7 @@
  * For instance when queried in the normal height-for-width mode:
  * First the default minimum and natural width for each widget
  * in the interface will computed and collectively returned to
- * the toplevel by way of gtk_size_request_get_desired_width().
+ * the toplevel by way of gtk_size_request_get_width().
  * Next, the toplevel will use the minimum width to query for the
  * minimum height contextual to that width using
  * gtk_size_request_get_height_for_width(), which will also be a
@@ -363,8 +363,7 @@ compute_size_for_orientation (GtkSizeRequest    *request,
  * context of their children or in context of their allocation
  * capabilities.</para></note>
  *
- * Returns: %TRUE if the widget prefers height-for-width, %FALSE if
- * the widget should be treated with a width-for-height preference.
+ * Returns: The #GtkSizeRequestMode preferred by @widget.
  *
  * Since: 3.0
  */
@@ -398,8 +397,8 @@ gtk_size_request_get_request_mode (GtkSizeRequest *widget)
  */
 void
 gtk_size_request_get_width (GtkSizeRequest *widget,
-                                       gint              *minimum_width,
-                                       gint              *natural_width)
+			    gint           *minimum_width,
+			    gint           *natural_width)
 {
   compute_size_for_orientation (widget, GTK_SIZE_GROUP_HORIZONTAL,
                                 -1, minimum_width, natural_width);
@@ -436,7 +435,7 @@ gtk_size_request_get_height (GtkSizeRequest *widget,
  * @minimum_width: (out) (allow-none): location for storing the minimum width, or %NULL
  * @natural_width: (out) (allow-none): location for storing the natural width, or %NULL
  *
- * Retrieves a widget's desired width if it would be given
+ * Retrieves a widget's minimum and natural width if it would be given
  * the specified @height.
  *
  * Since: 3.0
@@ -458,7 +457,7 @@ gtk_size_request_get_width_for_height (GtkSizeRequest *widget,
  * @minimum_height: (out) (allow-none): location for storing the minimum height, or %NULL
  * @natural_height: (out) (allow-none): location for storing the natural height, or %NULL
  *
- * Retrieves a widget's desired height if it would be given
+ * Retrieves a widget's minimum and natural height if it would be given
  * the specified @width.
  *
  * Since: 3.0
@@ -515,7 +514,7 @@ gtk_size_request_get_size (GtkSizeRequest    *widget,
 						 NULL, &natural_size->height);
 	}
     }
-  else
+  else /* GTK_SIZE_REQUEST_WIDTH_FOR_HEIGHT */
     {
       gtk_size_request_get_height (widget, &min_height, &nat_height);
 
