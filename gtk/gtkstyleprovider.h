@@ -40,19 +40,17 @@ G_BEGIN_DECLS
 typedef struct GtkStyleProviderIface GtkStyleProviderIface;
 typedef struct GtkStyleProvider GtkStyleProvider; /* dummy typedef */
 
-typedef enum {
-  GTK_SELECTOR_TYPE_PATH,
-  GTK_SELECTOR_TYPE_NAME,
-  GTK_SELECTOR_TYPE_CLASS_PATH,
-  GTK_SELECTOR_TYPE_CLASS_NAME
-} GtkSelectorType;
-
 struct GtkStyleProviderIface
 {
   GTypeInterface g_iface;
 
   GtkStyleSet * (* get_style) (GtkStyleProvider *provider,
                                GtkWidgetPath    *path);
+
+  gboolean (* get_style_property) (GtkStyleProvider *provider,
+                                   GtkWidgetPath    *path,
+                                   const gchar      *property_name,
+                                   GValue           *value);
 };
 
 GType gtk_style_provider_get_type (void) G_GNUC_CONST;
@@ -60,6 +58,10 @@ GType gtk_style_provider_get_type (void) G_GNUC_CONST;
 GtkStyleSet *gtk_style_provider_get_style (GtkStyleProvider *provider,
                                            GtkWidgetPath    *path);
 
+gboolean gtk_style_provider_get_style_property (GtkStyleProvider *provider,
+                                                GtkWidgetPath    *path,
+                                                const gchar      *property_name,
+                                                GValue           *value);
 
 G_END_DECLS
 

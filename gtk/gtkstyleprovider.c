@@ -44,7 +44,6 @@ gtk_style_provider_get_type (void)
 static void
 gtk_style_provider_iface_init (gpointer g_iface)
 {
-  GType iface_type = G_TYPE_FROM_INTERFACE (g_iface);
 }
 
 GtkStyleSet *
@@ -62,6 +61,28 @@ gtk_style_provider_get_style (GtkStyleProvider *provider,
 
   return iface->get_style (provider, path);
 }
+
+gboolean
+gtk_style_provider_get_style_property (GtkStyleProvider *provider,
+                                       GtkWidgetPath    *widget_path,
+                                       const gchar      *property_name,
+                                       GValue           *value)
+{
+  GtkStyleProviderIface *iface;
+
+  g_return_val_if_fail (GTK_IS_STYLE_PROVIDER (provider), FALSE);
+  g_return_val_if_fail (widget_path != NULL, FALSE);
+  g_return_val_if_fail (property_name != NULL, FALSE);
+  g_return_val_if_fail (value != NULL, FALSE);
+
+  iface = GTK_STYLE_PROVIDER_GET_IFACE (provider);
+
+  if (!iface->get_style_property)
+    return FALSE;
+
+  return iface->get_style_property (provider, widget_path, property_name, value);
+}
+
 
 #define __GTK_STYLE_PROVIDER_C__
 #include "gtkaliasdef.c"
