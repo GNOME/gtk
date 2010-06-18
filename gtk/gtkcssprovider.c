@@ -596,7 +596,7 @@ css_provider_apply_scope (GtkCssProvider *css_provider,
     {
       priv->scanner->config->cset_identifier_first = G_CSET_a_2_z "#-_0123456789" G_CSET_A_2_Z;
       priv->scanner->config->cset_identifier_nth = G_CSET_a_2_z "#-_ 0123456789" G_CSET_A_2_Z;
-      priv->scanner->config->scan_identifier_1char = FALSE;
+      priv->scanner->config->scan_identifier_1char = TRUE;
     }
   else if (scope == SCOPE_SELECTOR)
     {
@@ -893,6 +893,14 @@ parse_value (GType        type,
 
       font_desc = pango_font_description_from_string (value_str);
       g_value_take_boxed (value, font_desc);
+    }
+  else if (type == G_TYPE_BOOLEAN)
+    {
+      if (value_str[0] == '1' ||
+          g_ascii_strcasecmp (value_str, "true") == 0)
+        g_value_set_boolean (value, TRUE);
+      else
+        g_value_set_boolean (value, FALSE);
     }
   else if (type == G_TYPE_INT)
     g_value_set_int (value, atoi (value_str));
