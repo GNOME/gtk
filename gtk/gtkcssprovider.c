@@ -604,12 +604,16 @@ css_provider_apply_scope (GtkCssProvider *css_provider,
       priv->scanner->config->cset_identifier_nth = G_CSET_a_2_z "-" G_CSET_A_2_Z;
       priv->scanner->config->scan_identifier_1char = TRUE;
     }
-  else
+  else if (scope == SCOPE_PSEUDO_CLASS ||
+           scope == SCOPE_NTH_CHILD ||
+           scope == SCOPE_DECLARATION)
     {
       priv->scanner->config->cset_identifier_first = G_CSET_a_2_z G_CSET_A_2_Z;
       priv->scanner->config->cset_identifier_nth = G_CSET_a_2_z "-" G_CSET_A_2_Z;
       priv->scanner->config->scan_identifier_1char = FALSE;
     }
+  else
+    g_assert_not_reached ();
 
   priv->scanner->config->scan_float = FALSE;
 }
