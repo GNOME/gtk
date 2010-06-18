@@ -95,6 +95,15 @@ gboolean gtk_style_context_has_child_class   (GtkStyleContext    *context,
                                               const gchar        *class_name,
                                               GtkChildClassFlags *flags_return);
 
+void gtk_style_context_get_style_property (GtkStyleContext *context,
+                                           const gchar     *property_name,
+                                           GValue          *value);
+
+/* Semi-private API */
+const GValue * _gtk_style_context_peek_style_property (GtkStyleContext *context,
+                                                       GType            widget_type,
+                                                       GParamSpec      *pspec);
+
 /* Paint methods */
 void gtk_render_check (GtkStyleContext *context,
                        cairo_t         *cr,

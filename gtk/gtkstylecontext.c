@@ -20,17 +20,20 @@
 #include "config.h"
 
 #include <gdk/gdk.h>
+#include <stdlib.h>
 
 #include "gtkstylecontext.h"
 #include "gtktypebuiltins.h"
 #include "gtkthemingengine.h"
 #include "gtkintl.h"
+#include "gtkwidget.h"
 
 #include "gtkalias.h"
 
 typedef struct GtkStyleContextPrivate GtkStyleContextPrivate;
 typedef struct GtkStyleProviderData GtkStyleProviderData;
 typedef struct GtkChildClass GtkChildClass;
+typedef struct PropertyValue PropertyValue;
 
 struct GtkChildClass
 {
@@ -44,11 +47,22 @@ struct GtkStyleProviderData
   guint priority;
 };
 
+struct PropertyValue
+{
+  GType       widget_type;
+  GParamSpec *pspec;
+  GValue      value;
+};
+
 struct GtkStyleContextPrivate
 {
   GList *providers;
+  GList *providers_last;
+
   GtkStyleSet *store;
   GtkWidgetPath *widget_path;
+
+  GArray *property_cache;
 
   GtkStateFlags state_flags;
   GList *style_classes;
@@ -105,6 +119,30 @@ style_provider_data_free (GtkStyleProviderData *data)
 }
 
 static void
+clear_property_cache (GtkStyleContext *context)
+{
+  GtkStyleContextPrivate *priv;
+
+  priv = GTK_STYLE_CONTEXT_GET_PRIVATE (context);
+
+  if (priv->property_cache)
+    {
+      guint i;
+
+      for (i = 0; i < priv->property_cache->len; i++)
+	{
+	  PropertyValue *node = &g_array_index (priv->property_cache, PropertyValue, i);
+
+	  g_param_spec_unref (node->pspec);
+	  g_value_unset (&node->value);
+	}
+
+      g_array_free (priv->property_cache, TRUE);
+      priv->property_cache = NULL;
+    }
+}
+
+static void
 gtk_style_context_finalize (GObject *object)
 {
   GtkStyleContextPrivate *priv;
@@ -113,6 +151,8 @@ gtk_style_context_finalize (GObject *object)
 
   g_list_foreach (priv->providers, (GFunc) style_provider_data_free, NULL);
   g_list_free (priv->providers);
+
+  clear_property_cache (GTK_STYLE_CONTEXT (object));
 
   G_OBJECT_CLASS (gtk_style_context_parent_class)->finalize (object);
 }
@@ -205,8 +245,13 @@ gtk_style_context_add_provider (GtkStyleContext  *context,
   if (!added)
     priv->providers = g_list_append (priv->providers, new_data);
 
+  priv->providers_last = g_list_last (priv->providers);
+
   if (priv->widget_path)
-    rebuild_properties (context);
+    {
+      rebuild_properties (context);
+      clear_property_cache (context);
+    }
 }
 
 void
@@ -243,8 +288,16 @@ gtk_style_context_remove_provider (GtkStyleContext  *context,
       list = list->next;
     }
 
-  if (removed && priv->widget_path)
-    rebuild_properties (context);
+  if (removed)
+    {
+      priv->providers_last = g_list_last (priv->providers);
+
+      if (priv->widget_path)
+        {
+          rebuild_properties (context);
+          clear_property_cache (context);
+        }
+    }
 }
 
 void
@@ -371,6 +424,7 @@ gtk_style_context_set_path (GtkStyleContext *context,
     {
       priv->widget_path = gtk_widget_path_copy (path);
       rebuild_properties (context);
+      clear_property_cache (context);
     }
 }
 
@@ -623,6 +677,127 @@ gtk_style_context_has_child_class (GtkStyleContext    *context,
   return FALSE;
 }
 
+static gint
+style_property_values_cmp (gconstpointer bsearch_node1,
+			   gconstpointer bsearch_node2)
+{
+  const PropertyValue *val1 = bsearch_node1;
+  const PropertyValue *val2 = bsearch_node2;
+
+  if (val1->widget_type == val2->widget_type)
+    return val1->pspec < val2->pspec ? -1 : val1->pspec == val2->pspec ? 0 : 1;
+  else
+    return val1->widget_type < val2->widget_type ? -1 : 1;
+}
+
+const GValue *
+_gtk_style_context_peek_style_property (GtkStyleContext *context,
+                                        GType            widget_type,
+                                        GParamSpec      *pspec)
+{
+  GtkStyleContextPrivate *priv;
+  PropertyValue *pcache, key = { 0 };
+  GList *list;
+  guint i;
+
+  priv = GTK_STYLE_CONTEXT_GET_PRIVATE (context);
+
+  key.widget_type = widget_type;
+  key.pspec = pspec;
+
+  /* need value cache array */
+  if (!priv->property_cache)
+    priv->property_cache = g_array_new (FALSE, FALSE, sizeof (PropertyValue));
+  else
+    {
+      pcache = bsearch (&key,
+                        priv->property_cache->data, priv->property_cache->len,
+                        sizeof (PropertyValue), style_property_values_cmp);
+      if (pcache)
+        return &pcache->value;
+    }
+
+  i = 0;
+  while (i < priv->property_cache->len &&
+	 style_property_values_cmp (&key, &g_array_index (priv->property_cache, PropertyValue, i)) >= 0)
+    i++;
+
+  g_array_insert_val (priv->property_cache, i, key);
+  pcache = &g_array_index (priv->property_cache, PropertyValue, i);
+
+  /* cache miss, initialize value type, then set contents */
+  g_param_spec_ref (pcache->pspec);
+  g_value_init (&pcache->value, G_PARAM_SPEC_VALUE_TYPE (pspec));
+
+  if (priv->widget_path)
+    {
+      for (list = priv->providers_last; list; list = list->prev)
+        {
+          GtkStyleProviderData *data;
+
+          data = list->data;
+
+          if (gtk_style_provider_get_style_property (data->provider, priv->widget_path,
+                                                     pspec->name, &pcache->value))
+            return &pcache->value;
+        }
+    }
+
+  /* not supplied by any provider, revert to default */
+  g_param_value_set_default (pspec, &pcache->value);
+
+  return &pcache->value;
+}
+
+void
+gtk_style_context_get_style_property (GtkStyleContext *context,
+                                      const gchar     *property_name,
+                                      GValue          *value)
+{
+  GtkStyleContextPrivate *priv;
+  GtkWidgetClass *widget_class;
+  GParamSpec *pspec;
+  const GValue *peek_value;
+  GType widget_type;
+
+  g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
+  g_return_if_fail (property_name != NULL);
+  g_return_if_fail (value != NULL);
+
+  priv = GTK_STYLE_CONTEXT_GET_PRIVATE (context);
+
+  if (!priv->widget_path)
+    return;
+
+  widget_type = gtk_widget_path_get_widget_type (priv->widget_path);
+
+  widget_class = g_type_class_ref (widget_type);
+  pspec = gtk_widget_class_find_style_property (widget_class, property_name);
+  g_type_class_unref (widget_class);
+
+  if (!pspec)
+    {
+      g_warning ("%s: widget class `%s' has no style property named `%s'",
+                 G_STRLOC,
+                 g_type_name (widget_type),
+                 property_name);
+      return;
+    }
+
+  peek_value = _gtk_style_context_peek_style_property (context,
+                                                       widget_type,
+                                                       pspec);
+
+  if (G_VALUE_TYPE (value) == G_VALUE_TYPE (peek_value))
+    g_value_copy (peek_value, value);
+  else if (g_value_type_transformable (G_VALUE_TYPE (peek_value), G_VALUE_TYPE (value)))
+    g_value_transform (peek_value, value);
+  else
+    g_warning ("can't retrieve style property `%s' of type `%s' as value of type `%s'",
+               pspec->name,
+               G_VALUE_TYPE_NAME (peek_value),
+               G_VALUE_TYPE_NAME (value));
+}
 
 /* Paint methods */
 void
