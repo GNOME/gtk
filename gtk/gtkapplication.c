@@ -71,6 +71,7 @@
 enum
 {
   PROP_0,
+
   PROP_WINDOW
 };
 
@@ -142,6 +143,8 @@ gtk_application_default_prepare_activation (GApplication *application,
       if (strcmp (key, "startup-notification-id") == 0 &&
           g_variant_is_of_type (value, G_VARIANT_TYPE_STRING))
         gdk_notify_startup_complete_with_id (g_variant_get_string (value, NULL));
+
+      g_free (key);
       g_variant_unref (value);
     }
   
@@ -150,26 +153,25 @@ gtk_application_default_prepare_activation (GApplication *application,
 
 static void
 gtk_application_default_activated (GtkApplication *application,
-                                   GVariant     *arguments)
+                                   GVariant       *arguments)
 {
-  GtkApplication *app = GTK_APPLICATION (application);
+  GtkApplicationPrivate *priv = application->priv;
 
   /* TODO: should we raise the last focused window instead ? */
-  if (app->priv->default_window != NULL)
-    gtk_window_present (app->priv->default_window);
+  if (priv->default_window != NULL)
+    gtk_window_present (priv->default_window);
 }
 
 static void
 gtk_application_default_action (GtkApplication *application,
 				const gchar    *action_name)
 {
+  GtkApplicationPrivate *priv = application->priv;
   GtkAction *action;
 
-  action = gtk_action_group_get_action (application->priv->main_actions, action_name);
+  action = gtk_action_group_get_action (priv->main_actions, action_name);
   if (action)
-    {
-      gtk_action_activate (action);
-    }
+    gtk_action_activate (action);
 }
 
 static GtkWindow *
@@ -265,6 +267,7 @@ gtk_application_new (const gchar   *appid,
     argc_for_app = *argc;
   else
     argc_for_app = 0;
+
   if (argv)
     argv_for_app = *argv;
   else
@@ -278,7 +281,7 @@ gtk_application_new (const gchar   *appid,
 			"application-id", appid, 
 			"argv", argv_variant, 
 			NULL);
-  if (!app)
+  if (app == NULL)
     {
       g_error ("%s", error->message);
       g_clear_error (&error);
@@ -326,6 +329,7 @@ gtk_application_set_action_group (GtkApplication *app,
   GList *actions, *iter;
 
   g_return_if_fail (GTK_IS_APPLICATION (app));
+  g_return_if_fail (GTK_IS_ACTION_GROUP (group));
   g_return_if_fail (app->priv->main_actions == NULL);
 
   app->priv->main_actions = g_object_ref (group);
@@ -510,10 +514,9 @@ gtk_application_quit (GtkApplication *app)
   g_variant_builder_init (&builder, G_VARIANT_TYPE ("a{sv}"));
   g_variant_builder_add (&builder, "{sv}",
 			 "timestamp",
-			 g_variant_new ("u",
-					gtk_get_current_event_time ()));
+			 g_variant_new ("u", gtk_get_current_event_time ()));
   platform_data = g_variant_builder_end (&builder);
-    
+
   g_application_quit_with_data (G_APPLICATION (app), platform_data);
 
   g_variant_unref (platform_data);
