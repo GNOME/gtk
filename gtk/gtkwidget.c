@@ -10680,14 +10680,11 @@ gtk_widget_style_get_property (GtkWidget   *widget,
 			       const gchar *property_name,
 			       GValue      *value)
 {
-  GtkWidgetPrivate *priv;
   GParamSpec *pspec;
 
   g_return_if_fail (GTK_IS_WIDGET (widget));
   g_return_if_fail (property_name != NULL);
   g_return_if_fail (G_IS_VALUE (value));
-
-  priv = widget->priv;
 
   g_object_ref (widget);
   pspec = g_param_spec_pool_lookup (style_property_spec_pool,
@@ -10701,12 +10698,13 @@ gtk_widget_style_get_property (GtkWidget   *widget,
 	       property_name);
   else
     {
+      GtkStyleContext *context;
       const GValue *peek_value;
 
-      peek_value = _gtk_style_peek_property_value (priv->style,
-						   G_OBJECT_TYPE (widget),
-						   pspec,
-						   (GtkRcPropertyParser) g_param_spec_get_qdata (pspec, quark_property_parser));
+      context = gtk_widget_get_style_context (widget);
+      peek_value = _gtk_style_context_peek_style_property (context,
+                                                           G_OBJECT_TYPE (widget),
+                                                           pspec);
 
       /* auto-conversion of the caller's value type
        */
@@ -10739,14 +10737,13 @@ gtk_widget_style_get_valist (GtkWidget   *widget,
 			     const gchar *first_property_name,
 			     va_list      var_args)
 {
-  GtkWidgetPrivate *priv;
+  GtkStyleContext *context;
   const gchar *name;
 
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
-  priv = widget->priv;
-
   g_object_ref (widget);
+  context = gtk_widget_get_style_context (widget);
 
   name = first_property_name;
   while (name)
@@ -10769,10 +10766,10 @@ gtk_widget_style_get_valist (GtkWidget   *widget,
 	}
       /* style pspecs are always readable so we can spare that check here */
 
-      peek_value = _gtk_style_peek_property_value (priv->style,
-						   G_OBJECT_TYPE (widget),
-						   pspec,
-						   (GtkRcPropertyParser) g_param_spec_get_qdata (pspec, quark_property_parser));
+      peek_value = _gtk_style_context_peek_style_property (context,
+                                                           G_OBJECT_TYPE (widget),
+                                                           pspec);
+
       G_VALUE_LCOPY (peek_value, var_args, 0, &error);
       if (error)
 	{
