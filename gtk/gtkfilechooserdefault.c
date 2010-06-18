@@ -9579,7 +9579,7 @@ recent_idle_load (gpointer data)
 
           if (_gtk_file_chooser_is_uri_in_roots (GTK_FILE_CHOOSER (impl), uri))
             {
-              // We'll sort this later, so prepend for efficiency.
+              /* We'll sort this later, so prepend for efficiency. */
               load_data->items = g_list_prepend(load_data->items, info);
             }
         }
@@ -10630,4 +10630,4 @@ shortcuts_pane_model_filter_new (GtkFileChooserDefault *impl,
   return GTK_TREE_MODEL (model);
 }
 
-// vim: et sw=2 cinoptions=(0,t0,f1s,n-1s,{1s,>2s,^-1s
+/* vim: et sw=2 cinoptions=(0,t0,f1s,n-1s,{1s,>2s,^-1s */

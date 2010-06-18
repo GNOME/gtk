@@ -2967,7 +2967,7 @@ _gtk_file_chooser_get_visible_roots (GtkFileChooser *chooser)
             {
               if (_gtk_file_chooser_is_file_in_roots (GTK_FILE_CHOOSER (chooser), fs_root))
                 {
-                  // This is going to be listed already. Ignore it for now.
+		  /* This is going to be listed already. Ignore it for now. */
                   skip = TRUE;
                 }
 
@@ -2991,4 +2991,4 @@ _gtk_file_chooser_get_visible_roots (GtkFileChooser *chooser)
 #define __GTK_FILE_CHOOSER_C__
 #include "gtkaliasdef.c"
 
-// vim: et sw=2 cinoptions=(0,t0,f1s,n-1s,{1s,>2s,^-1s
+/* vim: et sw=2 cinoptions=(0,t0,f1s,n-1s,{1s,>2s,^-1s */

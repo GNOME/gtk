@@ -3045,4 +3045,4 @@ gtk_file_chooser_button_get_focus_on_click (GtkFileChooserButton *button)
 #define __GTK_FILE_CHOOSER_BUTTON_C__
 #include "gtkaliasdef.c"
 
-// vim: et sw=2 cinoptions=(0,t0,f1s,n-1s,{1s,>2s,^-1s
+/* vim: et sw=2 cinoptions=(0,t0,f1s,n-1s,{1s,>2s,^-1s */
