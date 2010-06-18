@@ -134,7 +134,7 @@ gtk_application_default_prepare_activation (GApplication *application,
 					    GVariant     *platform_data)
 {
   GVariantIter iter;
-  gchar *key;
+  const gchar *key;
   GVariant *value;
 
   g_variant_iter_init (&iter, platform_data);
@@ -143,8 +143,6 @@ gtk_application_default_prepare_activation (GApplication *application,
       if (strcmp (key, "startup-notification-id") == 0 &&
           g_variant_is_of_type (value, G_VARIANT_TYPE_STRING))
         gdk_notify_startup_complete_with_id (g_variant_get_string (value, NULL));
-
-      g_free (key);
       g_variant_unref (value);
     }
   
