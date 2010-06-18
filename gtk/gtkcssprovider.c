@@ -123,6 +123,8 @@ static void gtk_css_style_provider_iface_init (GtkStyleProviderIface *iface);
 
 static void css_provider_apply_scope (GtkCssProvider *css_provider,
                                       ParserScope     scope);
+static gboolean css_provider_parse_value (const gchar *value_str,
+                                          GValue      *value);
 
 G_DEFINE_TYPE_EXTENDED (GtkCssProvider, gtk_css_provider, G_TYPE_OBJECT, 0,
                         G_IMPLEMENT_INTERFACE (GTK_TYPE_STYLE_PROVIDER,
@@ -546,6 +548,11 @@ gtk_css_provider_get_style (GtkStyleProvider *provider,
 
       while (g_hash_table_iter_next (&iter, &key, &value))
         {
+          gchar *prop = key;
+
+          if (prop[0] == '-')
+            continue;
+
           if (info->state == GTK_STATE_NORMAL)
             gtk_style_set_set_default (set, key, value);
           else
@@ -558,10 +565,57 @@ gtk_css_provider_get_style (GtkStyleProvider *provider,
   return set;
 }
 
+static gboolean
+gtk_css_provider_get_style_property (GtkStyleProvider *provider,
+                                     GtkWidgetPath    *path,
+                                     const gchar      *property_name,
+                                     GValue           *value)
+{
+  GArray *priority_info;
+  gboolean found = FALSE;
+  gchar *prop_name;
+  GType path_type;
+  gint i;
+
+  path_type = gtk_widget_path_get_widget_type (path);
+
+  prop_name = g_strdup_printf ("-%s-%s",
+                               g_type_name (path_type),
+                               property_name);
+
+  priority_info = css_provider_get_selectors (GTK_CSS_PROVIDER (provider), path);
+
+  for (i = priority_info->len - 1; i >= 0; i--)
+    {
+      StylePriorityInfo *info;
+      GValue *val;
+
+      info = &g_array_index (priority_info, StylePriorityInfo, i);
+      val = g_hash_table_lookup (info->style, prop_name);
+
+      if (val)
+        {
+          const gchar *val_str;
+
+          val_str = g_value_get_string (val);
+          found = TRUE;
+
+          css_provider_parse_value (val_str, value);
+          break;
+        }
+    }
+
+  g_array_free (priority_info, TRUE);
+  g_free (prop_name);
+
+  return found;
+}
+
 static void
 gtk_css_style_provider_iface_init (GtkStyleProviderIface *iface)
 {
-  iface->get_style = gtk_style_get_style;
+  iface->get_style = gtk_css_provider_get_style;
+  iface->get_style_property = gtk_css_provider_get_style_property;
 }
 
 static void
@@ -623,7 +677,7 @@ css_provider_apply_scope (GtkCssProvider *css_provider,
            scope == SCOPE_NTH_CHILD ||
            scope == SCOPE_DECLARATION)
     {
-      priv->scanner->config->cset_identifier_first = G_CSET_a_2_z G_CSET_A_2_Z;
+      priv->scanner->config->cset_identifier_first = G_CSET_a_2_z "-" G_CSET_A_2_Z;
       priv->scanner->config->cset_identifier_nth = G_CSET_a_2_z "-" G_CSET_A_2_Z;
       priv->scanner->config->scan_identifier_1char = FALSE;
     }
@@ -889,13 +943,13 @@ parse_selector (GtkCssProvider  *css_provider,
 }
 
 static gboolean
-parse_value (GType        type,
-             const gchar *value_str,
-             GValue      *value)
+css_provider_parse_value (const gchar *value_str,
+                          GValue      *value)
 {
+  GType type;
   gboolean parsed = TRUE;
 
-  g_value_init (value, type);
+  type = G_VALUE_TYPE (value);
 
   if (type == GDK_TYPE_COLOR)
     {
@@ -989,7 +1043,6 @@ parse_rule (GtkCssProvider *css_provider,
   while (scanner->token == G_TOKEN_IDENTIFIER)
     {
       const gchar *value_str = NULL;
-      GValue value = { 0 };
       GType prop_type;
       gchar *prop;
 
@@ -1013,16 +1066,34 @@ parse_rule (GtkCssProvider *css_provider,
 
       value_str = g_strstrip (scanner->value.v_identifier);
 
-      if (gtk_style_set_lookup_property (prop, &prop_type) &&
-          parse_value (prop_type, value_str, &value))
+      if (prop[0] == '-' &&
+          g_ascii_isupper (prop[1]))
+        {
+          GValue *val;
+
+          val = g_slice_new0 (GValue);
+          g_value_init (val, G_TYPE_STRING);
+          g_value_set_string (val, value_str);
+
+          g_hash_table_insert (priv->cur_properties, prop, val);
+        }
+      else if (gtk_style_set_lookup_property (prop, &prop_type))
         {
           GValue *val;
 
           val = g_slice_new0 (GValue);
           g_value_init (val, prop_type);
-          g_value_copy (&value, val);
 
-          g_hash_table_insert (priv->cur_properties, prop, val);
+          if (css_provider_parse_value (value_str, val))
+            g_hash_table_insert (priv->cur_properties, prop, val);
+          else
+            {
+              g_value_unset (val);
+              g_slice_free (GValue, val);
+              g_free (prop);
+
+              return G_TOKEN_IDENTIFIER;
+            }
         }
       else
         g_free (prop);
