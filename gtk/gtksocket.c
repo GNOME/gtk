@@ -37,7 +37,7 @@
 #include "gtksocket.h"
 #include "gtksocketprivate.h"
 #include "gtkdnd.h"
-#include "gtkextendedlayout.h"
+#include "gtksizerequest.h"
 #include "gtkintl.h"
 
 #include "gtkalias.h"
@@ -139,13 +139,13 @@ static void     gtk_socket_forall               (GtkContainer     *container,
 						 GtkCallback       callback,
 						 gpointer          callback_data);
 
-static void gtk_socket_extended_layout_init     (GtkExtendedLayoutIface *iface);
-static void gtk_socket_get_desired_width        (GtkExtendedLayout      *layout,
-						 gint                   *minimum_size,
-						 gint                   *natural_size);
-static void gtk_socket_get_desired_height       (GtkExtendedLayout      *layout,
-						 gint                   *minimum_size,
-						 gint                   *natural_size);
+static void gtk_socket_size_request_init        (GtkSizeRequestIface *iface);
+static void gtk_socket_get_width                (GtkSizeRequest      *widget,
+						 gint                *minimum_size,
+						 gint                *natural_size);
+static void gtk_socket_get_height               (GtkSizeRequest      *widget,
+						 gint                *minimum_size,
+						 gint                *natural_size);
 
 /* Local data */
 
@@ -178,8 +178,8 @@ _gtk_socket_get_private (GtkSocket *socket)
 }
 
 G_DEFINE_TYPE_WITH_CODE (GtkSocket, gtk_socket, GTK_TYPE_CONTAINER,
-                         G_IMPLEMENT_INTERFACE (GTK_TYPE_EXTENDED_LAYOUT,
-                                                gtk_socket_extended_layout_init))
+                         G_IMPLEMENT_INTERFACE (GTK_TYPE_SIZE_REQUEST,
+                                                gtk_socket_size_request_init))
 
 
 static void
@@ -1064,29 +1064,29 @@ _gtk_socket_advance_toplevel_focus (GtkSocket        *socket,
 }
 
 static void
-gtk_socket_extended_layout_init (GtkExtendedLayoutIface *iface)
+gtk_socket_size_request_init (GtkSizeRequestIface *iface)
 {
-  iface->get_desired_width  = gtk_socket_get_desired_width;
-  iface->get_desired_height = gtk_socket_get_desired_height;
+  iface->get_width  = gtk_socket_get_width;
+  iface->get_height = gtk_socket_get_height;
 }
 
 static void
-gtk_socket_get_desired_size (GtkExtendedLayout *layout,
-			     GtkOrientation     orientation,
-			     gint              *minimum_size,
-			     gint              *natural_size)
+gtk_socket_get_size (GtkSizeRequest *widget,
+		     GtkOrientation  orientation,
+		     gint           *minimum_size,
+		     gint           *natural_size)
 {
-  GtkSocket *socket = GTK_SOCKET (layout);
+  GtkSocket *socket = GTK_SOCKET (widget);
   GtkSocketPrivate *priv;
 
   if (socket->plug_widget)
     {
       if (orientation == GTK_ORIENTATION_HORIZONTAL)
-	gtk_extended_layout_get_desired_width (GTK_EXTENDED_LAYOUT (socket->plug_widget),
-					       minimum_size, natural_size); 
+	gtk_size_request_get_width (GTK_SIZE_REQUEST (socket->plug_widget),
+				    minimum_size, natural_size); 
       else
-	gtk_extended_layout_get_desired_height (GTK_EXTENDED_LAYOUT (socket->plug_widget),
-						minimum_size, natural_size); 
+	gtk_size_request_get_height (GTK_SIZE_REQUEST (socket->plug_widget),
+				     minimum_size, natural_size); 
     }
   else
     {
@@ -1125,19 +1125,19 @@ gtk_socket_get_desired_size (GtkExtendedLayout *layout,
 }
 
 static void
-gtk_socket_get_desired_width (GtkExtendedLayout *layout,
-			      gint              *minimum_size,
-			      gint              *natural_size)
+gtk_socket_get_width (GtkSizeRequest *widget,
+		      gint           *minimum_size,
+		      gint           *natural_size)
 {
-  gtk_socket_get_desired_size (layout, GTK_ORIENTATION_HORIZONTAL, minimum_size, natural_size);
+  gtk_socket_get_size (widget, GTK_ORIENTATION_HORIZONTAL, minimum_size, natural_size);
 }
 
 static void
-gtk_socket_get_desired_height (GtkExtendedLayout *layout,
-			       gint              *minimum_size,
-			       gint              *natural_size)
+gtk_socket_get_height (GtkSizeRequest *widget,
+		       gint           *minimum_size,
+		       gint           *natural_size)
 {
-  gtk_socket_get_desired_size (layout, GTK_ORIENTATION_VERTICAL, minimum_size, natural_size);
+  gtk_socket_get_size (widget, GTK_ORIENTATION_VERTICAL, minimum_size, natural_size);
 }
 
 

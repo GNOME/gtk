@@ -30,7 +30,7 @@
 #include "gtkmain.h"
 #include "gtkmarshalers.h"
 #include "gtkplug.h"
-#include "gtkextendedlayout.h"
+#include "gtksizerequest.h"
 #include "gtkintl.h"
 #include "gtkprivate.h"
 #include "gtkplugprivate.h"
@@ -781,8 +781,8 @@ gtk_plug_size_allocate (GtkWidget     *widget,
       
     }
 
-  gtk_extended_layout_get_desired_size (GTK_EXTENDED_LAYOUT (bin->child),
-					TRUE, NULL, &natural_size);
+  gtk_size_request_get_size (GTK_SIZE_REQUEST (bin->child),
+			     NULL, &natural_size);
   _gtk_plug_windowing_publish_natural_size (GTK_PLUG (widget), &natural_size);
 }
 

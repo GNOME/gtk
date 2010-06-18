@@ -24,7 +24,7 @@
 #include "gtkintl.h"
 #include "gtkcellrenderertext.h"
 #include "gtkcellrendererpixbuf.h"
-#include "gtkextendedlayout.h"
+#include "gtksizerequest.h"
 #include "gtkextendedcell.h"
 #include "gtkprivate.h"
 #include <gobject/gmarshal.h>
@@ -121,13 +121,13 @@ static void       gtk_cell_view_buildable_custom_tag_end       (GtkBuildable  	 
 								const gchar   	      *tagname,
 								gpointer      	      *data);
 
-static void       gtk_cell_view_extended_layout_init           (GtkExtendedLayoutIface *iface);
-static void       gtk_cell_view_get_desired_width              (GtkExtendedLayout      *layout,
-								gint                   *minimum_size,
-								gint                   *natural_size);
-static void       gtk_cell_view_get_desired_height             (GtkExtendedLayout      *layout,
-								gint                   *minimum_size,
-								gint                   *natural_size);
+static void       gtk_cell_view_size_request_init              (GtkSizeRequestIface   *iface);
+static void       gtk_cell_view_get_width                      (GtkSizeRequest        *widget,
+								gint                  *minimum_size,
+								gint                  *natural_size);
+static void       gtk_cell_view_get_height                     (GtkSizeRequest        *widget,
+								gint                  *minimum_size,
+								gint                  *natural_size);
 
 static GtkBuildableIface *parent_buildable_iface;
 
@@ -147,8 +147,8 @@ G_DEFINE_TYPE_WITH_CODE (GtkCellView, gtk_cell_view, GTK_TYPE_WIDGET,
 						gtk_cell_view_cell_layout_init)
 			 G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE,
 						gtk_cell_view_buildable_init)
-                         G_IMPLEMENT_INTERFACE (GTK_TYPE_EXTENDED_LAYOUT,
-						gtk_cell_view_extended_layout_init))
+                         G_IMPLEMENT_INTERFACE (GTK_TYPE_SIZE_REQUEST,
+						gtk_cell_view_size_request_init))
 
 
 static void
@@ -1013,18 +1013,18 @@ gtk_cell_view_get_desired_size_of_row (GtkCellView     *cell_view,
     gtk_tree_row_reference_new (cell_view->priv->model, path);
 
   if (orientation == GTK_ORIENTATION_HORIZONTAL)
-    gtk_cell_view_get_desired_width (GTK_EXTENDED_LAYOUT (cell_view), minimum_size, natural_size);
+    gtk_cell_view_get_width (GTK_SIZE_REQUEST (cell_view), minimum_size, natural_size);
   else
-    gtk_cell_view_get_desired_height (GTK_EXTENDED_LAYOUT (cell_view), minimum_size, natural_size);
+    gtk_cell_view_get_height (GTK_SIZE_REQUEST (cell_view), minimum_size, natural_size);
 
   gtk_tree_row_reference_free (cell_view->priv->displayed_row);
   cell_view->priv->displayed_row = tmp;
 
   /* Restore active size */
   if (orientation == GTK_ORIENTATION_HORIZONTAL)
-    gtk_cell_view_get_desired_width (GTK_EXTENDED_LAYOUT (cell_view), NULL, NULL);
+    gtk_cell_view_get_width (GTK_SIZE_REQUEST (cell_view), NULL, NULL);
   else
-    gtk_cell_view_get_desired_height (GTK_EXTENDED_LAYOUT (cell_view), NULL, NULL);
+    gtk_cell_view_get_height (GTK_SIZE_REQUEST (cell_view), NULL, NULL);
 }
 
 /**
@@ -1169,22 +1169,22 @@ gtk_cell_view_buildable_custom_tag_end (GtkBuildable *buildable,
 
 
 static void
-gtk_cell_view_extended_layout_init (GtkExtendedLayoutIface *iface)
+gtk_cell_view_size_request_init (GtkSizeRequestIface *iface)
 {
-  iface->get_desired_width  = gtk_cell_view_get_desired_width;
-  iface->get_desired_height = gtk_cell_view_get_desired_height;
+  iface->get_width  = gtk_cell_view_get_width;
+  iface->get_height = gtk_cell_view_get_height;
 }
 
 static void
-gtk_cell_view_get_desired_size (GtkExtendedLayout *layout,
-				GtkOrientation     orientation,
-				gint              *minimum_size,
-				gint              *natural_size)
+gtk_cell_view_get_size (GtkSizeRequest *widget,
+			GtkOrientation  orientation,
+			gint           *minimum_size,
+			gint           *natural_size)
 {
   GList *i;
   gint cell_min, cell_nat;
   gboolean first_cell = TRUE;
-  GtkCellView *cellview = GTK_CELL_VIEW (layout);
+  GtkCellView *cellview = GTK_CELL_VIEW (widget);
   gint minimum, natural;
 
   minimum = natural = 0;
@@ -1235,19 +1235,19 @@ gtk_cell_view_get_desired_size (GtkExtendedLayout *layout,
 }
 
 static void
-gtk_cell_view_get_desired_width  (GtkExtendedLayout      *layout,
-				  gint                   *minimum_size,
-				  gint                   *natural_size)
+gtk_cell_view_get_width  (GtkSizeRequest      *widget,
+			  gint                *minimum_size,
+			  gint                *natural_size)
 {
-  gtk_cell_view_get_desired_size (layout, GTK_ORIENTATION_HORIZONTAL, minimum_size, natural_size);
+  gtk_cell_view_get_size (widget, GTK_ORIENTATION_HORIZONTAL, minimum_size, natural_size);
 }
 
 static void       
-gtk_cell_view_get_desired_height (GtkExtendedLayout      *layout,
-				  gint                   *minimum_size,
-				  gint                   *natural_size)
+gtk_cell_view_get_height (GtkSizeRequest      *widget,
+			  gint                *minimum_size,
+			  gint                *natural_size)
 {
-  gtk_cell_view_get_desired_size (layout, GTK_ORIENTATION_VERTICAL, minimum_size, natural_size);
+  gtk_cell_view_get_size (widget, GTK_ORIENTATION_VERTICAL, minimum_size, natural_size);
 }
 
 

@@ -27,7 +27,7 @@
 #include "gtktreednd.h"
 #include "gtktreeprivate.h"
 #include "gtkcellrenderer.h"
-#include "gtkextendedlayout.h"
+#include "gtksizerequest.h"
 #include "gtkmain.h"
 #include "gtkmarshalers.h"
 #include "gtkbuildable.h"
@@ -470,13 +470,13 @@ static void gtk_tree_view_buildable_add_child (GtkBuildable *tree_view,
 					       GObject     *child,
 					       const gchar *type);
 static void gtk_tree_view_buildable_init      (GtkBuildableIface *iface);
-static void gtk_tree_view_extended_layout_init (GtkExtendedLayoutIface *iface);
-static void gtk_tree_view_get_desired_width    (GtkExtendedLayout *layout,
-						gint              *minimum_size,
-						gint              *natural_size);
-static void gtk_tree_view_get_desired_height   (GtkExtendedLayout *layout,
-						gint              *minimum_size,
-						gint              *natural_size);
+static void gtk_tree_view_size_request_init   (GtkSizeRequestIface *iface);
+static void gtk_tree_view_get_width           (GtkSizeRequest *widget,
+					       gint           *minimum_size,
+					       gint           *natural_size);
+static void gtk_tree_view_get_height          (GtkSizeRequest *widget,
+					       gint           *minimum_size,
+					       gint           *natural_size);
 
 
 static gboolean scroll_row_timeout                   (gpointer     data);
@@ -493,8 +493,8 @@ static guint tree_view_signals [LAST_SIGNAL] = { 0 };
 G_DEFINE_TYPE_WITH_CODE (GtkTreeView, gtk_tree_view, GTK_TYPE_CONTAINER,
 			 G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE,
 						gtk_tree_view_buildable_init)
-                         G_IMPLEMENT_INTERFACE (GTK_TYPE_EXTENDED_LAYOUT,
-                                                gtk_tree_view_extended_layout_init))
+                         G_IMPLEMENT_INTERFACE (GTK_TYPE_SIZE_REQUEST,
+                                                gtk_tree_view_size_request_init))
 
 
 static void
@@ -2156,8 +2156,8 @@ gtk_tree_view_get_real_natural_width_from_column (GtkTreeView       *tree_view,
 
   if (GTK_TREE_VIEW_FLAG_SET (tree_view, GTK_TREE_VIEW_HEADERS_VISIBLE))
     {
-      gtk_extended_layout_get_desired_size (GTK_EXTENDED_LAYOUT (column->button),
-					    TRUE, NULL, &button_natural_size);
+      gtk_size_request_get_size (GTK_SIZE_REQUEST (column->button),
+				 NULL, &button_natural_size);
 
       column_natural_width = MAX (column_natural_width, button_natural_size.width);
     }
@@ -15701,26 +15701,26 @@ gtk_tree_view_get_minimum_size (GtkWidget      *widget,
 }
 
 static void
-gtk_tree_view_extended_layout_init (GtkExtendedLayoutIface *iface)
+gtk_tree_view_size_request_init (GtkSizeRequestIface *iface)
 {
-  iface->get_desired_width  = gtk_tree_view_get_desired_width;
-  iface->get_desired_height = gtk_tree_view_get_desired_height;
+  iface->get_width  = gtk_tree_view_get_width;
+  iface->get_height = gtk_tree_view_get_height;
 }
 
 static void
-gtk_tree_view_get_desired_size (GtkExtendedLayout *layout,
-				GtkOrientation     orientation,
-				gint              *minimum_size,
-				gint              *natural_size)
+gtk_tree_view_get_size (GtkSizeRequest *widget,
+			GtkOrientation  orientation,
+			gint           *minimum_size,
+			gint           *natural_size)
 {
   GtkTreeView *tree_view;
   gint natural_width = 0;
   GList *column_iter;
   GtkRequisition requisition;
 
-  tree_view = GTK_TREE_VIEW (layout);
+  tree_view = GTK_TREE_VIEW (widget);
 
-  gtk_tree_view_get_minimum_size (GTK_WIDGET (layout), &requisition);
+  gtk_tree_view_get_minimum_size (GTK_WIDGET (widget), &requisition);
 
   if (orientation == GTK_ORIENTATION_HORIZONTAL)
     {
@@ -15751,19 +15751,19 @@ gtk_tree_view_get_desired_size (GtkExtendedLayout *layout,
 }
 
 static void
-gtk_tree_view_get_desired_width (GtkExtendedLayout *layout,
-				 gint              *minimum_size,
-				 gint              *natural_size)
+gtk_tree_view_get_width (GtkSizeRequest *widget,
+			 gint           *minimum_size,
+			 gint           *natural_size)
 {
-  gtk_tree_view_get_desired_size (layout, GTK_ORIENTATION_HORIZONTAL, minimum_size, natural_size);
+  gtk_tree_view_get_size (widget, GTK_ORIENTATION_HORIZONTAL, minimum_size, natural_size);
 }
 
 static void
-gtk_tree_view_get_desired_height (GtkExtendedLayout *layout,
-				 gint              *minimum_size,
-				 gint              *natural_size)
+gtk_tree_view_get_height (GtkSizeRequest *widget,
+			  gint           *minimum_size,
+			  gint           *natural_size)
 {
-  gtk_tree_view_get_desired_size (layout, GTK_ORIENTATION_VERTICAL, minimum_size, natural_size);
+  gtk_tree_view_get_size (widget, GTK_ORIENTATION_VERTICAL, minimum_size, natural_size);
 }
 
 #define __GTK_TREE_VIEW_C__
