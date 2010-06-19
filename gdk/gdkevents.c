@@ -36,8 +36,6 @@ typedef struct _GdkIOClosure GdkIOClosure;
 
 struct _GdkIOClosure
 {
-  GdkInputFunction function;
-  GdkInputCondition condition;
   GDestroyNotify notify;
   gpointer data;
 };
@@ -1313,123 +1311,11 @@ gdk_get_show_events (void)
   return (_gdk_debug_flags & GDK_DEBUG_EVENTS) != 0;
 }
 
-static void
-gdk_io_destroy (gpointer data)
-{
-  GdkIOClosure *closure = data;
-
-  if (closure->notify)
-    closure->notify (closure->data);
-
-  g_free (closure);
-}
-
 /* What do we do with G_IO_NVAL?
  */
 #define READ_CONDITION (G_IO_IN | G_IO_HUP | G_IO_ERR)
 #define WRITE_CONDITION (G_IO_OUT | G_IO_ERR)
 #define EXCEPTION_CONDITION (G_IO_PRI)
-
-static gboolean  
-gdk_io_invoke (GIOChannel   *source,
-	       GIOCondition  condition,
-	       gpointer      data)
-{
-  GdkIOClosure *closure = data;
-  GdkInputCondition gdk_cond = 0;
-
-  if (condition & READ_CONDITION)
-    gdk_cond |= GDK_INPUT_READ;
-  if (condition & WRITE_CONDITION)
-    gdk_cond |= GDK_INPUT_WRITE;
-  if (condition & EXCEPTION_CONDITION)
-    gdk_cond |= GDK_INPUT_EXCEPTION;
-
-  if (closure->condition & gdk_cond)
-    closure->function (closure->data, g_io_channel_unix_get_fd (source), gdk_cond);
-
-  return TRUE;
-}
-
-/**
- * gdk_input_add_full:
- * @source: a file descriptor.
- * @condition: the condition.
- * @function: the callback function.
- * @data: callback data passed to @function.
- * @destroy: callback function to call with @data when the input
- * handler is removed.
- *
- * Establish a callback when a condition becomes true on
- * a file descriptor.
- *
- * Returns: a tag that can later be used as an argument to
- * gdk_input_remove().
- *
- * Deprecated: 2.14: Use g_io_add_watch_full() on a #GIOChannel
- */
-gint
-gdk_input_add_full (gint	      source,
-		    GdkInputCondition condition,
-		    GdkInputFunction  function,
-		    gpointer	      data,
-		    GDestroyNotify    destroy)
-{
-  guint result;
-  GdkIOClosure *closure = g_new (GdkIOClosure, 1);
-  GIOChannel *channel;
-  GIOCondition cond = 0;
-
-  closure->function = function;
-  closure->condition = condition;
-  closure->notify = destroy;
-  closure->data = data;
-
-  if (condition & GDK_INPUT_READ)
-    cond |= READ_CONDITION;
-  if (condition & GDK_INPUT_WRITE)
-    cond |= WRITE_CONDITION;
-  if (condition & GDK_INPUT_EXCEPTION)
-    cond |= EXCEPTION_CONDITION;
-
-  channel = g_io_channel_unix_new (source);
-  result = g_io_add_watch_full (channel, G_PRIORITY_DEFAULT, cond, 
-				gdk_io_invoke,
-				closure, gdk_io_destroy);
-  g_io_channel_unref (channel);
-
-  return result;
-}
-
-/**
- * gdk_input_add:
- * @source: a file descriptor.
- * @condition: the condition.
- * @function: the callback function.
- * @data: callback data passed to @function.
- *
- * Establish a callback when a condition becomes true on
- * a file descriptor.
- *
- * Returns: a tag that can later be used as an argument to
- * gdk_input_remove().
- *
- * Deprecated: 2.14: Use g_io_add_watch() on a #GIOChannel
- */
-gint
-gdk_input_add (gint		 source,
-	       GdkInputCondition condition,
-	       GdkInputFunction	 function,
-	       gpointer		 data)
-{
-  return gdk_input_add_full (source, condition, function, data, NULL);
-}
-
-void
-gdk_input_remove (gint tag)
-{
-  g_source_remove (tag);
-}
 
 static void
 gdk_synthesize_click (GdkDisplay *display,

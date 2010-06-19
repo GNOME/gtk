@@ -81,7 +81,6 @@ gdk_grab_ownership_get_type
 gdk_grab_status_get_type
 gdk_gravity_get_type
 gdk_image_type_get_type
-gdk_input_condition_get_type
 gdk_input_mode_get_type
 gdk_input_source_get_type
 gdk_join_style_get_type
@@ -1221,18 +1220,6 @@ GDK_TYPE_CURSOR
 gdk_cursor_get_type
 </SECTION>
 
-<SECTION>
-<TITLE>Input</TITLE>
-<FILE>input</FILE>
-gdk_input_add_full
-GdkInputCondition
-GdkInputFunction
-gdk_input_add
-gdk_input_remove
-
-<SUBSECTION Standard>
-GDK_TYPE_INPUT_CONDITION
-</SECTION>
 
 <SECTION>
 <TITLE>Drag and Drop</TITLE>
