@@ -344,8 +344,6 @@ static void hls_to_rgb			(gdouble	 *h,
 
 static void style_unrealize_cursor_gcs (GtkStyle *style);
 
-static GdkFont *gtk_style_get_font_internal (GtkStyle *style);
-
 /*
  * Data for default check and radio buttons
  */
@@ -6075,58 +6073,6 @@ gtk_border_get_type (void)
 					     (GBoxedFreeFunc) gtk_border_free);
 
   return our_type;
-}
-
-static GdkFont *
-gtk_style_get_font_internal (GtkStyle *style)
-{
-  g_return_val_if_fail (GTK_IS_STYLE (style), NULL);
-
-  if (style->private_font && style->private_font_desc)
-    {
-      if (!style->font_desc ||
-	  !pango_font_description_equal (style->private_font_desc, style->font_desc))
-	{
-	  gdk_font_unref (style->private_font);
-	  style->private_font = NULL;
-	  
-	  if (style->private_font_desc)
-	    {
-	      pango_font_description_free (style->private_font_desc);
-	      style->private_font_desc = NULL;
-	    }
-	}
-    }
-  
-  if (!style->private_font)
-    {
-      GdkDisplay *display;
-
-      if (style->colormap)
-	{
-	  display = gdk_screen_get_display (gdk_colormap_get_screen (style->colormap));
-	}
-      else
-	{
-	  display = gdk_display_get_default ();
-	  GTK_NOTE (MULTIHEAD,
-		    g_warning ("gtk_style_get_font() should not be called on an unattached style"));
-	}
-      
-      if (style->font_desc)
-	{
-	  style->private_font = gdk_font_from_description_for_display (display, style->font_desc);
-	  style->private_font_desc = pango_font_description_copy (style->font_desc);
-	}
-
-      if (!style->private_font)
-	style->private_font = gdk_font_load_for_display (display, "fixed");
-      
-      if (!style->private_font) 
-	g_error ("Unable to load \"fixed\" font");
-    }
-
-  return style->private_font;
 }
 
 typedef struct _CursorInfo CursorInfo;
