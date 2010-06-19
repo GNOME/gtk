@@ -140,10 +140,6 @@ gdk_display_pointer_is_grabbed
 
 #if IN_HEADER(__GDK_H__)
 #if IN_FILE(__GDK_IM_X11_C__)
-#ifndef GDK_DISABLE_DEPRECATED
-gdk_mbstowcs
-gdk_wcstombs
-#endif
 gdk_set_locale
 #endif
 #endif

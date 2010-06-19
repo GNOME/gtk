@@ -77,13 +77,6 @@ typedef struct _GdkRectangle	      GdkRectangle;
 typedef struct _GdkSegment	      GdkSegment;
 typedef struct _GdkSpan	              GdkSpan;
 
-/*
- * Note that on some platforms the wchar_t type
- * is not the same as GdkWChar. For instance
- * on Win32, wchar_t is unsigned short.
- */
-typedef guint32			    GdkWChar;
-
 typedef struct _GdkAtom            *GdkAtom;
 
 #define GDK_ATOM_TO_POINTER(atom) (atom)

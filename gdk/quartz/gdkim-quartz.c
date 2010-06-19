@@ -39,34 +39,3 @@ gdk_set_locale (void)
   
   return setlocale (LC_ALL, NULL);
 }
-
-gchar *
-gdk_wcstombs (const GdkWChar *src)
-{
-  gchar *mbstr;
-
-  gint length = 0;
-  gint i;
-
-  while (src[length] != 0)
-    length++;
-  
-  mbstr = g_new (gchar, length + 1);
-  
-  for (i = 0; i < length + 1; i++)
-    mbstr[i] = src[i];
-
-  return mbstr;
-}
-
-gint
-gdk_mbstowcs (GdkWChar *dest, const gchar *src, gint dest_max)
-{
-  gint i;
-  
-  for (i = 0; i < dest_max && src[i]; i++)
-    dest[i] = src[i];
-
-  return i;
-}
-

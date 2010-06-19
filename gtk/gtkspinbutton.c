@@ -1426,8 +1426,8 @@ gtk_spin_button_insert_text (GtkEditable *editable,
       gboolean sign;
       gint dotpos = -1;
       gint i;
-      GdkWChar pos_sign;
-      GdkWChar neg_sign;
+      guint32 pos_sign;
+      guint32 neg_sign;
       gint entry_length;
       const gchar *entry_text;
 

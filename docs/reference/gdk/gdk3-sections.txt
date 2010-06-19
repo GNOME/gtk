@@ -411,11 +411,6 @@ gdk_font_unref
 gdk_font_id
 gdk_font_equal
 
-<SUBSECTION>
-GdkWChar
-gdk_wcstombs
-gdk_mbstowcs
-
 <SUBSECTION Standard>
 GDK_TYPE_FONT
 GDK_TYPE_FONT_TYPE
