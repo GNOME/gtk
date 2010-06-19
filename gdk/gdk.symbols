@@ -321,14 +321,10 @@ gdk_font_unref
 #ifndef GDK_DISABLE_DEPRECATED
 gdk_font_load
 gdk_string_width
-gdk_char_width
-gdk_char_width_wc
 gdk_string_measure
 gdk_text_measure
-gdk_char_measure
 gdk_string_height
 gdk_text_height
-gdk_char_height
 gdk_string_extents
 #endif
 #endif

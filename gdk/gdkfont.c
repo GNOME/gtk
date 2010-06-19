@@ -108,45 +108,6 @@ gdk_string_width (GdkFont     *font,
 }
 
 /**
- * gdk_char_width:
- * @font: a #GdkFont
- * @character: the character to measure.
- * 
- * Determines the width of a given character.
- * 
- * Return value: the width of the character in pixels.
- *
- * Deprecated: 2.2: Use gdk_text_extents() instead.
- **/
-gint
-gdk_char_width (GdkFont *font,
-		gchar    character)
-{
-  g_return_val_if_fail (font != NULL, -1);
-
-  return gdk_text_width (font, &character, 1);
-}
-
-/**
- * gdk_char_width_wc:
- * @font: a #GdkFont
- * @character: the character to measure.
- * 
- * Determines the width of a given wide character. (Encoded
- * in the wide-character encoding of the current locale).
- * 
- * Return value: the width of the character in pixels.
- **/
-gint
-gdk_char_width_wc (GdkFont *font,
-		   GdkWChar character)
-{
-  g_return_val_if_fail (font != NULL, -1);
-
-  return gdk_text_width_wc (font, &character, 1);
-}
-
-/**
  * gdk_string_measure:
  * @font: a #GdkFont
  * @string: the nul-terminated string to measure.
@@ -227,27 +188,6 @@ gdk_text_measure (GdkFont     *font,
 }
 
 /**
- * gdk_char_measure:
- * @font: a #GdkFont
- * @character: the character to measure.
- * 
- * Determines the distance from the origin to the rightmost
- * portion of a character when drawn. This is not the
- * correct value for determining the origin of the next
- * portion when drawing text in multiple pieces. 
- * 
- * Return value: the right bearing of the character in pixels.
- **/
-gint
-gdk_char_measure (GdkFont *font,
-                  gchar    character)
-{
-  g_return_val_if_fail (font != NULL, -1);
-
-  return gdk_text_measure (font, &character, 1);
-}
-
-/**
  * gdk_string_height:
  * @font: a #GdkFont
  * @string: the nul-terminated string to measure.
@@ -294,29 +234,6 @@ gdk_text_height (GdkFont     *font,
 
   gdk_text_extents (font, text, text_length, NULL, NULL, NULL, &ascent, &descent);
   return ascent + descent;
-}
-
-/**
- * gdk_char_height:
- * @font: a #GdkFont
- * @character: the character to measure.
- * 
- * Determines the total height of a given character.
- * This value is not generally useful, because you cannot
- * determine how this total height will be drawn in
- * relation to the baseline. See gdk_text_extents().
- * 
- * Return value: the height of the character in pixels.
- *
- * Deprecated: 2.2: Use gdk_text_extents() instead.
- **/
-gint
-gdk_char_height (GdkFont *font,
-		 gchar    character)
-{
-  g_return_val_if_fail (font != NULL, -1);
-
-  return gdk_text_height (font, &character, 1);
 }
 
 /**

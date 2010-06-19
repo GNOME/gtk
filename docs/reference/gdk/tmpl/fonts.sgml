@@ -457,24 +457,6 @@ are currently:
 @Returns: 
 
 
-<!-- ##### FUNCTION gdk_char_width ##### -->
-<para>
-</para>
-
-@font: 
-@character: 
-@Returns: 
-
-
-<!-- ##### FUNCTION gdk_char_width_wc ##### -->
-<para>
-</para>
-
-@font: 
-@character: 
-@Returns: 
-
-
 <!-- ##### FUNCTION gdk_string_measure ##### -->
 <para>
 </para>
@@ -494,15 +476,6 @@ are currently:
 @Returns: 
 
 
-<!-- ##### FUNCTION gdk_char_measure ##### -->
-<para>
-</para>
-
-@font: 
-@character: 
-@Returns: 
-
-
 <!-- ##### FUNCTION gdk_string_height ##### -->
 <para>
 </para>
@@ -519,15 +492,6 @@ are currently:
 @font: 
 @text: 
 @text_length: 
-@Returns: 
-
-
-<!-- ##### FUNCTION gdk_char_height ##### -->
-<para>
-</para>
-
-@font: 
-@character: 
 @Returns: 
 
 

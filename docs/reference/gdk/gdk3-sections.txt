@@ -418,14 +418,10 @@ gdk_text_extents_wc
 gdk_string_width
 gdk_text_width
 gdk_text_width_wc
-gdk_char_width
-gdk_char_width_wc
 gdk_string_measure
 gdk_text_measure
-gdk_char_measure
 gdk_string_height
 gdk_text_height
-gdk_char_height
 
 <SUBSECTION>
 GdkWChar

@@ -84,24 +84,16 @@ gint	 gdk_text_width	    (GdkFont        *font,
 gint	 gdk_text_width_wc  (GdkFont        *font,
 			     const GdkWChar *text,
 			     gint            text_length);
-gint	 gdk_char_width	    (GdkFont        *font,
-			     gchar           character);
-gint	 gdk_char_width_wc  (GdkFont        *font,
-			     GdkWChar        character);
 gint	 gdk_string_measure (GdkFont        *font,
 			     const gchar    *string);
 gint	 gdk_text_measure   (GdkFont        *font,
 			     const gchar    *text,
 			     gint            text_length);
-gint	 gdk_char_measure   (GdkFont        *font,
-			     gchar           character);
 gint	 gdk_string_height  (GdkFont        *font,
 			     const gchar    *string);
 gint	 gdk_text_height    (GdkFont        *font,
 			     const gchar    *text,
 			     gint            text_length);
-gint	 gdk_char_height    (GdkFont        *font,
-			     gchar           character);
 
 void     gdk_text_extents   (GdkFont     *font,
 			     const gchar *text,
