@@ -159,4 +159,4 @@ PangoAttribute *gdk_pango_attr_emboss_color_new (const GdkColor *color);
 
 G_END_DECLS
 
-#endif /* __GDK_FONT_H__ */
+#endif /* __GDK_PANGO_H__ */
