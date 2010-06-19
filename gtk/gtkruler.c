@@ -693,8 +693,7 @@ gtk_ruler_real_draw_ticks (GtkRuler *ruler)
   increment = (gdouble) width / (upper - lower);
 
   /* determine the scale H
-   *  We calculate the text size as for the vruler instead of using
-   *  text_width = gdk_string_width(font, unit_str), so that the result
+   *  We calculate the text size as for the vruler, so that the result
    *  for the scale looks consistent with an accompanying vruler
    */
   /* determine the scale V

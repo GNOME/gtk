@@ -412,18 +412,6 @@ gdk_font_id
 gdk_font_equal
 
 <SUBSECTION>
-gdk_string_extents
-gdk_text_extents
-gdk_text_extents_wc
-gdk_string_width
-gdk_text_width
-gdk_text_width_wc
-gdk_string_measure
-gdk_text_measure
-gdk_string_height
-gdk_text_height
-
-<SUBSECTION>
 GdkWChar
 gdk_wcstombs
 gdk_mbstowcs

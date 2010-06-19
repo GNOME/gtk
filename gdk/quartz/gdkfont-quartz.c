@@ -52,51 +52,6 @@ gdk_fontset_load (const gchar *fontset_name)
   return NULL;
 }
 
-gint
-gdk_text_width (GdkFont      *font,
-		const gchar  *text,
-		gint          text_length)
-{
-  /* FIXME: Implement */
-  return -1;
-}
-
-void
-gdk_text_extents (GdkFont     *font,
-                  const gchar *text,
-                  gint         text_length,
-		  gint        *lbearing,
-		  gint        *rbearing,
-		  gint        *width,
-		  gint        *ascent,
-		  gint        *descent)
-{
-  /* FIXME: Implement */
-}
-
-gint
-gdk_text_width_wc (GdkFont	  *font,
-		   const GdkWChar *text,
-		   gint		   text_length)
-{
-  /* FIXME: Implement */
-  return 0;
-}
-
-
-void
-gdk_text_extents_wc (GdkFont        *font,
-		     const GdkWChar *text,
-		     gint            text_length,
-		     gint           *lbearing,
-		     gint           *rbearing,
-		     gint           *width,
-		     gint           *ascent,
-		     gint           *descent)
-{
-  /* FIXME: Implement */
-}
-
 void
 _gdk_font_destroy (GdkFont *font)
 {

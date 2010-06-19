@@ -320,12 +320,6 @@ gdk_font_ref
 gdk_font_unref
 #ifndef GDK_DISABLE_DEPRECATED
 gdk_font_load
-gdk_string_width
-gdk_string_measure
-gdk_text_measure
-gdk_string_height
-gdk_text_height
-gdk_string_extents
 #endif
 #endif
 #endif
@@ -333,10 +327,6 @@ gdk_string_extents
 #if IN_HEADER(__GDK_FONT_H__)
 #if IN_FILE(__GDK_FONT_X11_C__)
 #ifndef GDK_DISABLE_DEPRECATED
-gdk_text_extents
-gdk_text_extents_wc
-gdk_text_width
-gdk_text_width_wc
 gdk_font_get_display
 gdk_fontset_load
 #endif

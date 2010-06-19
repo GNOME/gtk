@@ -76,49 +76,6 @@ GdkFont* gdk_fontset_load          (const gchar          *fontset_name);
 GdkFont* gdk_font_from_description (PangoFontDescription *font_desc);
 #endif
 
-gint	 gdk_string_width   (GdkFont        *font,
-			     const gchar    *string);
-gint	 gdk_text_width	    (GdkFont        *font,
-			     const gchar    *text,
-			     gint            text_length);
-gint	 gdk_text_width_wc  (GdkFont        *font,
-			     const GdkWChar *text,
-			     gint            text_length);
-gint	 gdk_string_measure (GdkFont        *font,
-			     const gchar    *string);
-gint	 gdk_text_measure   (GdkFont        *font,
-			     const gchar    *text,
-			     gint            text_length);
-gint	 gdk_string_height  (GdkFont        *font,
-			     const gchar    *string);
-gint	 gdk_text_height    (GdkFont        *font,
-			     const gchar    *text,
-			     gint            text_length);
-
-void     gdk_text_extents   (GdkFont     *font,
-			     const gchar *text,
-			     gint         text_length,
-			     gint        *lbearing,
-			     gint        *rbearing,
-			     gint        *width,
-			     gint        *ascent,
-			     gint        *descent);
-void    gdk_text_extents_wc (GdkFont        *font,
-			     const GdkWChar *text,
-			     gint            text_length,
-			     gint           *lbearing,
-			     gint           *rbearing,
-			     gint           *width,
-			     gint           *ascent,
-			     gint           *descent);
-void     gdk_string_extents (GdkFont     *font,
-			     const gchar *string,
-			     gint        *lbearing,
-			     gint        *rbearing,
-			     gint        *width,
-			     gint        *ascent,
-			     gint        *descent);
-
 GdkDisplay * gdk_font_get_display (GdkFont *font);
 
 #endif /* GDK_DISABLE_DEPRECATED */

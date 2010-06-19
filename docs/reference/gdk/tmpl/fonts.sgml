@@ -196,7 +196,7 @@ of forms of string input:
     <term>Wide character string</term>
     <listitem><para>
     For a number of the text-measuring functions, GDK
-    provides a variant (such as gdk_text_width_wc()) which
+    provides a variant which
     takes a <type>GdkWChar *</type> instead of a 
     <type>gchar *</type>. The input is then taken to
     be a wide character string in the encoding of the
@@ -384,114 +384,6 @@ are currently:
 
 @fonta: 
 @fontb: 
-@Returns: 
-
-
-<!-- ##### FUNCTION gdk_string_extents ##### -->
-<para>
-</para>
-
-@font: 
-@string: 
-@lbearing: 
-@rbearing: 
-@width: 
-@ascent: 
-@descent: 
-
-
-<!-- ##### FUNCTION gdk_text_extents ##### -->
-<para>
-</para>
-
-@font: 
-@text: 
-@text_length: 
-@lbearing: 
-@rbearing: 
-@width: 
-@ascent: 
-@descent: 
-
-
-<!-- ##### FUNCTION gdk_text_extents_wc ##### -->
-<para>
-</para>
-
-@font: 
-@text: 
-@text_length: 
-@lbearing: 
-@rbearing: 
-@width: 
-@ascent: 
-@descent: 
-
-
-<!-- ##### FUNCTION gdk_string_width ##### -->
-<para>
-</para>
-
-@font: 
-@string: 
-@Returns: 
-
-
-<!-- ##### FUNCTION gdk_text_width ##### -->
-<para>
-</para>
-
-@font: 
-@text: 
-@text_length: 
-@Returns: 
-
-
-<!-- ##### FUNCTION gdk_text_width_wc ##### -->
-<para>
-</para>
-
-@font: 
-@text: 
-@text_length: 
-@Returns: 
-
-
-<!-- ##### FUNCTION gdk_string_measure ##### -->
-<para>
-</para>
-
-@font: 
-@string: 
-@Returns: 
-
-
-<!-- ##### FUNCTION gdk_text_measure ##### -->
-<para>
-</para>
-
-@font: 
-@text: 
-@text_length: 
-@Returns: 
-
-
-<!-- ##### FUNCTION gdk_string_height ##### -->
-<para>
-</para>
-
-@font: 
-@string: 
-@Returns: 
-
-
-<!-- ##### FUNCTION gdk_text_height ##### -->
-<para>
-</para>
-
-@font: 
-@text: 
-@text_length: 
 @Returns: 
 
 
