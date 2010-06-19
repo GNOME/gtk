@@ -444,10 +444,6 @@ gdk_font_get_type
 <TITLE>Drawing Primitives</TITLE>
 <FILE>drawing</FILE>
 GdkDrawable
-gdk_drawable_ref
-gdk_drawable_unref
-gdk_drawable_set_data
-gdk_drawable_get_data
 gdk_drawable_get_display
 gdk_drawable_get_screen
 gdk_drawable_get_visual
@@ -477,10 +473,6 @@ gdk_draw_layout_line
 gdk_draw_layout_line_with_colors
 gdk_draw_layout
 gdk_draw_layout_with_colors
-<SUBSECTION>
-gdk_draw_string
-gdk_draw_text
-gdk_draw_text_wc
 
 <SUBSECTION>
 gdk_draw_pixmap

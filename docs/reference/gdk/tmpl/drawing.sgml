@@ -45,44 +45,6 @@ or a #GdkWindow.
 </para>
 
 
-<!-- ##### FUNCTION gdk_drawable_ref ##### -->
-<para>
-
-</para>
-
-@drawable: 
-@Returns: 
-
-
-<!-- ##### FUNCTION gdk_drawable_unref ##### -->
-<para>
-
-</para>
-
-@drawable: 
-
-
-<!-- ##### FUNCTION gdk_drawable_set_data ##### -->
-<para>
-
-</para>
-
-@drawable: 
-@key: 
-@data: 
-@destroy_func: 
-
-
-<!-- ##### FUNCTION gdk_drawable_get_data ##### -->
-<para>
-
-</para>
-
-@drawable: 
-@key: 
-@Returns: 
-
-
 <!-- ##### FUNCTION gdk_drawable_get_display ##### -->
 <para>
 
@@ -393,44 +355,6 @@ bottom edges.
 @layout: 
 @foreground: 
 @background: 
-
-
-<!-- ##### FUNCTION gdk_draw_string ##### -->
-<para>
-</para>
-
-@drawable: 
-@font: 
-@gc: 
-@x: 
-@y: 
-@string: 
-
-
-<!-- ##### FUNCTION gdk_draw_text ##### -->
-<para>
-</para>
-
-@drawable: 
-@font: 
-@gc: 
-@x: 
-@y: 
-@text: 
-@text_length: 
-
-
-<!-- ##### FUNCTION gdk_draw_text_wc ##### -->
-<para>
-</para>
-
-@drawable: 
-@font: 
-@gc: 
-@x: 
-@y: 
-@text: 
-@text_length: 
 
 
 <!-- ##### MACRO gdk_draw_pixmap ##### -->

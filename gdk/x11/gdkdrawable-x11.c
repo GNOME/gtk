@@ -71,20 +71,6 @@ static void gdk_x11_draw_polygon   (GdkDrawable    *drawable,
 				    gboolean        filled,
 				    GdkPoint       *points,
 				    gint            npoints);
-static void gdk_x11_draw_text      (GdkDrawable    *drawable,
-				    GdkFont        *font,
-				    GdkGC          *gc,
-				    gint            x,
-				    gint            y,
-				    const gchar    *text,
-				    gint            text_length);
-static void gdk_x11_draw_text_wc   (GdkDrawable    *drawable,
-				    GdkFont        *font,
-				    GdkGC          *gc,
-				    gint            x,
-				    gint            y,
-				    const GdkWChar *text,
-				    gint            text_length);
 static void gdk_x11_draw_drawable  (GdkDrawable    *drawable,
 				    GdkGC          *gc,
 				    GdkPixmap      *src,
@@ -158,8 +144,6 @@ _gdk_drawable_impl_x11_class_init (GdkDrawableImplX11Class *klass)
   drawable_class->draw_rectangle = gdk_x11_draw_rectangle;
   drawable_class->draw_arc = gdk_x11_draw_arc;
   drawable_class->draw_polygon = gdk_x11_draw_polygon;
-  drawable_class->draw_text = gdk_x11_draw_text;
-  drawable_class->draw_text_wc = gdk_x11_draw_text_wc;
   drawable_class->draw_drawable_with_src = gdk_x11_draw_drawable;
   drawable_class->draw_points = gdk_x11_draw_points;
   drawable_class->draw_segments = gdk_x11_draw_segments;
@@ -529,103 +513,6 @@ gdk_x11_draw_polygon (GdkDrawable *drawable,
 		GDK_GC_GET_XGC (gc), tmp_points, tmp_npoints, CoordModeOrigin);
 
   g_free (tmp_points);
-}
-
-/* gdk_x11_draw_text
- *
- * Modified by Li-Da Lho to draw 16 bits and Multibyte strings
- *
- * Interface changed: add "GdkFont *font" to specify font or fontset explicitely
- */
-static void
-gdk_x11_draw_text (GdkDrawable *drawable,
-		   GdkFont     *font,
-		   GdkGC       *gc,
-		   gint         x,
-		   gint         y,
-		   const gchar *text,
-		   gint         text_length)
-{
-  GdkDrawableImplX11 *impl;
-  Display *xdisplay;
-
-  impl = GDK_DRAWABLE_IMPL_X11 (drawable);
-  xdisplay = GDK_SCREEN_XDISPLAY (impl->screen);
-  
-  if (font->type == GDK_FONT_FONT)
-    {
-      XFontStruct *xfont = (XFontStruct *) GDK_FONT_XFONT (font);
-      XSetFont(xdisplay, GDK_GC_GET_XGC (gc), xfont->fid);
-      if ((xfont->min_byte1 == 0) && (xfont->max_byte1 == 0))
-	{
-	  XDrawString (xdisplay, impl->xid,
-		       GDK_GC_GET_XGC (gc), x, y, text, text_length);
-	}
-      else
-	{
-	  XDrawString16 (xdisplay, impl->xid,
-			 GDK_GC_GET_XGC (gc), x, y, (XChar2b *) text, text_length / 2);
-	}
-    }
-  else if (font->type == GDK_FONT_FONTSET)
-    {
-      XFontSet fontset = (XFontSet) GDK_FONT_XFONT (font);
-      XmbDrawString (xdisplay, impl->xid,
-		     fontset, GDK_GC_GET_XGC (gc), x, y, text, text_length);
-    }
-  else
-    g_error("undefined font type\n");
-}
-
-static void
-gdk_x11_draw_text_wc (GdkDrawable    *drawable,
-		      GdkFont	     *font,
-		      GdkGC	     *gc,
-		      gint	      x,
-		      gint	      y,
-		      const GdkWChar *text,
-		      gint	      text_length)
-{
-  GdkDrawableImplX11 *impl;
-  Display *xdisplay;
-
-  impl = GDK_DRAWABLE_IMPL_X11 (drawable);
-  xdisplay = GDK_SCREEN_XDISPLAY (impl->screen);
-  
-  if (font->type == GDK_FONT_FONT)
-    {
-      XFontStruct *xfont = (XFontStruct *) GDK_FONT_XFONT (font);
-      gchar *text_8bit;
-      gint i;
-      XSetFont(xdisplay, GDK_GC_GET_XGC (gc), xfont->fid);
-      text_8bit = g_new (gchar, text_length);
-      for (i=0; i<text_length; i++) text_8bit[i] = text[i];
-      XDrawString (xdisplay, impl->xid,
-                   GDK_GC_GET_XGC (gc), x, y, text_8bit, text_length);
-      g_free (text_8bit);
-    }
-  else if (font->type == GDK_FONT_FONTSET)
-    {
-      if (sizeof(GdkWChar) == sizeof(wchar_t))
-	{
-	  XwcDrawString (xdisplay, impl->xid,
-			 (XFontSet) GDK_FONT_XFONT (font),
-			 GDK_GC_GET_XGC (gc), x, y, (wchar_t *)text, text_length);
-	}
-      else
-	{
-	  wchar_t *text_wchar;
-	  gint i;
-	  text_wchar = g_new (wchar_t, text_length);
-	  for (i=0; i<text_length; i++) text_wchar[i] = text[i];
-	  XwcDrawString (xdisplay, impl->xid,
-			 (XFontSet) GDK_FONT_XFONT (font),
-			 GDK_GC_GET_XGC (gc), x, y, text_wchar, text_length);
-	  g_free (text_wchar);
-	}
-    }
-  else
-    g_error("undefined font type\n");
 }
 
 static void

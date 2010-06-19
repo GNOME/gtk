@@ -601,15 +601,6 @@ gdk_drag_get_protocol
 gdk_drawable_copy_to_image
 gdk_drawable_get_clip_region
 gdk_drawable_get_colormap
-#ifndef GDK_DISABLE_DEPRECATED
-gdk_drawable_get_data
-gdk_drawable_set_data
-gdk_drawable_ref
-gdk_drawable_unref
-gdk_draw_string
-gdk_draw_text
-gdk_draw_text_wc
-#endif
 gdk_drawable_get_depth
 gdk_drawable_get_display
 gdk_drawable_get_image

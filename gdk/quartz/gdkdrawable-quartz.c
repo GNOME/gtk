@@ -299,30 +299,6 @@ gdk_quartz_draw_polygon (GdkDrawable *drawable,
 }
 
 static void
-gdk_quartz_draw_text (GdkDrawable *drawable,
-		      GdkFont     *font,
-		      GdkGC       *gc,
-		      gint         x,
-		      gint         y,
-		      const gchar *text,
-		      gint         text_length)
-{
-  /* FIXME: Implement */
-}
-
-static void
-gdk_quartz_draw_text_wc (GdkDrawable    *drawable,
-			 GdkFont	*font,
-			 GdkGC	        *gc,
-			 gint	         x,
-			 gint	         y,
-			 const GdkWChar *text,
-			 gint	         text_length)
-{
-  /* FIXME: Implement */
-}
-
-static void
 gdk_quartz_draw_drawable (GdkDrawable *drawable,
 			  GdkGC       *gc,
 			  GdkPixmap   *src,
@@ -659,8 +635,6 @@ gdk_drawable_impl_quartz_class_init (GdkDrawableImplQuartzClass *klass)
   drawable_class->draw_rectangle = gdk_quartz_draw_rectangle;
   drawable_class->draw_arc = gdk_quartz_draw_arc;
   drawable_class->draw_polygon = gdk_quartz_draw_polygon;
-  drawable_class->draw_text = gdk_quartz_draw_text;
-  drawable_class->draw_text_wc = gdk_quartz_draw_text_wc;
   drawable_class->draw_drawable_with_src = gdk_quartz_draw_drawable;
   drawable_class->draw_points = gdk_quartz_draw_points;
   drawable_class->draw_segments = gdk_quartz_draw_segments;

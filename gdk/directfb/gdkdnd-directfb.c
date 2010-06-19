@@ -338,7 +338,7 @@ gdk_drag_get_protocol_for_display(GdkDisplay *display, guint32          xid,
   window = gdk_window_lookup ((GdkNativeWindow) xid);
 
   if (window &&
-      GPOINTER_TO_INT (gdk_drawable_get_data (window, "gdk-dnd-registered")))
+      g_object_get_data (G_OBJECT (window), "gdk-dnd-registered") != NULL)
     {
       *protocol = GDK_DRAG_PROTO_LOCAL;
       return xid;
@@ -606,11 +606,13 @@ gdk_window_register_dnd (GdkWindow      *window)
 {
   g_return_if_fail (window != NULL);
 
-  if (GPOINTER_TO_INT (gdk_drawable_get_data (window, "gdk-dnd-registered")))
+  if (g_object_get_data (G_OBJECT (window), "gdk-dnd-registered") != NULL)
     return;
 
-  gdk_drawable_set_data (window, "gdk-dnd-registered",
-                         GINT_TO_POINTER (TRUE), NULL);
+  g_object_set_data (G_OBJECT (window),
+                     "gdk-dnd-registered",
+                     GINT_TO_POINTER (TRUE));
+
 }
 
 /*************************************************************

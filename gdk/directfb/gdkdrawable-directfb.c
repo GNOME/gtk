@@ -659,30 +659,6 @@ gdk_directfb_draw_polygon (GdkDrawable *drawable,
 }
 
 static void
-gdk_directfb_draw_text (GdkDrawable *drawable,
-                        GdkFont     *font,
-                        GdkGC       *gc,
-                        gint         x,
-                        gint         y,
-                        const gchar *text,
-                        gint         text_length)
-{
-  D_UNIMPLEMENTED();
-}
-
-static void
-gdk_directfb_draw_text_wc (GdkDrawable    *drawable,
-                           GdkFont        *font,
-                           GdkGC          *gc,
-                           gint            x,
-                           gint            y,
-                           const GdkWChar *text,
-                           gint            text_length)
-{
-  D_UNIMPLEMENTED();
-}
-
-static void
 gdk_directfb_draw_drawable (GdkDrawable *drawable,
                             GdkGC       *gc,
                             GdkDrawable *src,
@@ -1522,16 +1498,10 @@ gdk_drawable_impl_directfb_class_init (GdkDrawableImplDirectFBClass *klass)
   drawable_class->draw_rectangle = gdk_directfb_draw_rectangle;
   drawable_class->draw_arc       = gdk_directfb_draw_arc;
   drawable_class->draw_polygon   = gdk_directfb_draw_polygon;
-  drawable_class->draw_text      = gdk_directfb_draw_text;
-  drawable_class->draw_text_wc   = gdk_directfb_draw_text_wc;
   drawable_class->draw_drawable  = gdk_directfb_draw_drawable;
   drawable_class->draw_points    = gdk_directfb_draw_points;
   drawable_class->draw_segments  = gdk_directfb_draw_segments;
   drawable_class->draw_lines     = gdk_directfb_draw_lines;
-#if 0
-  drawable_class->draw_glyphs    = NULL;
-  drawable_class->draw_glyphs_transformed    = NULL;
-#endif
   drawable_class->draw_image     = gdk_directfb_draw_image;
 
   drawable_class->ref_cairo_surface = gdk_directfb_ref_cairo_surface;
