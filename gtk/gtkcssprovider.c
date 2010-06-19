@@ -84,6 +84,8 @@ struct SelectorStyleInfo
 struct GtkCssProviderPrivate
 {
   GScanner *scanner;
+  const gchar *filename;
+
   GPtrArray *selectors_info;
 
   /* Current parser state */
@@ -293,7 +295,6 @@ gtk_css_provider_init (GtkCssProvider *css_provider)
   priv->selectors_info = g_ptr_array_new_with_free_func ((GDestroyNotify) selector_style_info_free);
 
   scanner = g_scanner_new (NULL);
-  /* scanner->input_name = path; */
 
   g_scanner_scope_add_symbol (scanner, SCOPE_PSEUDO_CLASS, "active", GUINT_TO_POINTER (GTK_STATE_ACTIVE));
   g_scanner_scope_add_symbol (scanner, SCOPE_PSEUDO_CLASS, "prelight", GUINT_TO_POINTER (GTK_STATE_PRELIGHT));
@@ -624,7 +625,9 @@ gtk_css_provider_finalize (GObject *object)
   GtkCssProviderPrivate *priv;
 
   priv = GTK_CSS_PROVIDER_GET_PRIVATE (object);
+
   g_scanner_destroy (priv->scanner);
+  g_free (priv->filename);
 
   g_ptr_array_free (priv->selectors_info, TRUE);
 
@@ -1169,6 +1172,7 @@ gtk_css_provider_load_from_data (GtkCssProvider *css_provider,
     g_ptr_array_remove_range (priv->selectors_info, 0, priv->selectors_info->len);
 
   css_provider_reset_parser (css_provider);
+  priv->scanner->input_name = "-";
   g_scanner_input_text (priv->scanner, data, (guint) length);
 
   parse_stylesheet (css_provider);
@@ -1202,7 +1206,11 @@ gtk_css_provider_load_from_file (GtkCssProvider  *css_provider,
   if (priv->selectors_info->len > 0)
     g_ptr_array_remove_range (priv->selectors_info, 0, priv->selectors_info->len);
 
+  g_free (priv->filename);
+  priv->filename = g_file_get_path (file);
+
   css_provider_reset_parser (css_provider);
+  priv->scanner->input_name = priv->filename;
   g_scanner_input_text (priv->scanner, data, (guint) length);
 
   parse_stylesheet (css_provider);
