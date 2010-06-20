@@ -151,7 +151,7 @@ gtk_cell_size_request_get_height (GtkCellSizeRequest *cell,
  * @minimum_width: location for storing the minimum size, or %NULL
  * @natural_width: location for storing the preferred size, or %NULL
  *
- * Retreives a cell renderers's natural width if it were rendered to 
+ * Retreives a cell renderers's minimum and natural width if it were rendered to 
  * @widget with the specified @height.
  *
  * Since: 3.0
@@ -188,7 +188,7 @@ gtk_cell_size_request_get_width_for_height (GtkCellSizeRequest *cell,
  * @minimum_height: location for storing the minimum size, or %NULL
  * @natural_height: location for storing the preferred size, or %NULL
  *
- * Retreives a cell renderers's natural height if it were rendered to 
+ * Retreives a cell renderers's minimum and natural height if it were rendered to 
  * @widget with the specified @width.
  *
  * Since: 3.0
