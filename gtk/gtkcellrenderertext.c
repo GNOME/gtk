@@ -1372,7 +1372,7 @@ add_attr (PangoAttrList  *attr_list,
 static PangoLayout*
 get_layout (GtkCellRendererText *celltext,
             GtkWidget           *widget,
-            gboolean             will_render,
+            GdkRectangle        *cell_area,
             GtkCellRendererState flags)
 {
   PangoAttrList *attr_list;
@@ -1391,7 +1391,7 @@ get_layout (GtkCellRendererText *celltext,
 
   pango_layout_set_single_paragraph_mode (layout, priv->single_paragraph);
 
-  if (will_render)
+  if (cell_area)
     {
       /* Add options that affect appearance but not size */
       
@@ -1459,7 +1459,12 @@ get_layout (GtkCellRendererText *celltext,
 
   if (priv->wrap_width != -1)
     {
-      pango_layout_set_width (layout, priv->wrap_width * PANGO_SCALE);
+      if (cell_area)
+	pango_layout_set_width (layout, 
+				(cell_area->width - GTK_CELL_RENDERER (celltext)->xpad * 2) * PANGO_SCALE);
+      else
+	pango_layout_set_width (layout, priv->wrap_width * PANGO_SCALE);
+
       pango_layout_set_wrap (layout, priv->wrap_mode);
     }
   else
@@ -1548,7 +1553,7 @@ get_size (GtkCellRenderer *cell,
   if (layout)
     g_object_ref (layout);
   else
-    layout = get_layout (celltext, widget, FALSE, 0);
+    layout = get_layout (celltext, widget, NULL, 0);
 
   pango_layout_get_pixel_extents (layout, NULL, &rect);
 
@@ -1624,7 +1629,7 @@ gtk_cell_renderer_text_render (GtkCellRenderer      *cell,
 
   priv = GTK_CELL_RENDERER_TEXT_GET_PRIVATE (cell);
 
-  layout = get_layout (celltext, widget, TRUE, flags);
+  layout = get_layout (celltext, widget, cell_area, flags);
   get_size (cell, widget, cell_area, layout, &x_offset, &y_offset, NULL, NULL);
 
   if (!cell->sensitive) 
@@ -1965,8 +1970,7 @@ gtk_cell_renderer_text_get_width (GtkCellSizeRequest *cell,
   priv = GTK_CELL_RENDERER_TEXT_GET_PRIVATE (cell);
   xpad = GTK_CELL_RENDERER (cell)->xpad;
 
-
-  layout = get_layout (celltext, widget, FALSE, 0);
+  layout = get_layout (celltext, widget, NULL, 0);
 
   /* Get the layout with the text possibly wrapping at wrap_width */
   pango_layout_get_pixel_extents (layout, NULL, &rect);
@@ -2000,8 +2004,10 @@ gtk_cell_renderer_text_get_width (GtkCellSizeRequest *cell,
       if ((priv->ellipsize_set && priv->ellipsize != PANGO_ELLIPSIZE_NONE) || priv->width_chars > 0)
 	*minimum_size = 
 	  xpad * 2 + (PANGO_PIXELS (char_width) * MAX (priv->width_chars, ellipsize_chars));
-      else
 	/* If no width-chars set, minimum for wrapping text will be the wrap-width */
+      else if (priv->wrap_width > -1)
+	*minimum_size = xpad * 2 + rect.x + priv->wrap_width;
+      else
 	*minimum_size = xpad * 2 + rect.x + guess_width;
     }
 
