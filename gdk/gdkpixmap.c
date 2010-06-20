@@ -55,20 +55,6 @@ static void   gdk_pixmap_draw_polygon   (GdkDrawable     *drawable,
 					 gboolean         filled,
 					 GdkPoint        *points,
 					 gint             npoints);
-static void   gdk_pixmap_draw_text      (GdkDrawable     *drawable,
-					 GdkFont         *font,
-					 GdkGC           *gc,
-					 gint             x,
-					 gint             y,
-					 const gchar     *text,
-					 gint             text_length);
-static void   gdk_pixmap_draw_text_wc   (GdkDrawable     *drawable,
-					 GdkFont         *font,
-					 GdkGC           *gc,
-					 gint             x,
-					 gint             y,
-					 const GdkWChar  *text,
-					 gint             text_length);
 static void   gdk_pixmap_draw_drawable  (GdkDrawable     *drawable,
 					 GdkGC           *gc,
 					 GdkPixmap       *src,
@@ -201,8 +187,6 @@ gdk_pixmap_class_init (GdkPixmapObjectClass *klass)
   drawable_class->draw_rectangle = gdk_pixmap_draw_rectangle;
   drawable_class->draw_arc = gdk_pixmap_draw_arc;
   drawable_class->draw_polygon = gdk_pixmap_draw_polygon;
-  drawable_class->draw_text = gdk_pixmap_draw_text;
-  drawable_class->draw_text_wc = gdk_pixmap_draw_text_wc;
   drawable_class->draw_drawable_with_src = gdk_pixmap_draw_drawable;
   drawable_class->draw_points = gdk_pixmap_draw_points;
   drawable_class->draw_segments = gdk_pixmap_draw_segments;
@@ -337,38 +321,6 @@ gdk_pixmap_draw_polygon (GdkDrawable *drawable,
 
   _gdk_gc_remove_drawable_clip (gc);  
   gdk_draw_polygon (private->impl, gc, filled, points, npoints);
-}
-
-static void
-gdk_pixmap_draw_text (GdkDrawable *drawable,
-		      GdkFont     *font,
-		      GdkGC       *gc,
-		      gint         x,
-		      gint         y,
-		      const gchar *text,
-		      gint         text_length)
-{
-  GdkPixmapObject *private = (GdkPixmapObject *)drawable;
-
-  _gdk_gc_remove_drawable_clip (gc);  
-  gdk_draw_text (private->impl, font, gc,
-                 x, y, text, text_length);
-}
-
-static void
-gdk_pixmap_draw_text_wc (GdkDrawable    *drawable,
-			 GdkFont        *font,
-			 GdkGC          *gc,
-			 gint            x,
-			 gint            y,
-			 const GdkWChar *text,
-			 gint            text_length)
-{
-  GdkPixmapObject *private = (GdkPixmapObject *)drawable;
-
-  _gdk_gc_remove_drawable_clip (gc);  
-  gdk_draw_text_wc (private->impl, font, gc,
-                    x, y, text, text_length);
 }
 
 static void

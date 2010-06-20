@@ -95,51 +95,6 @@ gdk_drawable_init (GdkDrawable *drawable)
  */
 
 /**
- * gdk_drawable_set_data:
- * @drawable: a #GdkDrawable
- * @key: name to store the data under
- * @data: arbitrary data
- * @destroy_func: (allow-none): function to free @data, or %NULL
- *
- * This function is equivalent to g_object_set_data(),
- * the #GObject variant should be used instead.
- * 
- **/
-void          
-gdk_drawable_set_data (GdkDrawable   *drawable,
-		       const gchar   *key,
-		       gpointer	      data,
-		       GDestroyNotify destroy_func)
-{
-  g_return_if_fail (GDK_IS_DRAWABLE (drawable));
-  
-  g_object_set_qdata_full (G_OBJECT (drawable),
-                           g_quark_from_string (key),
-                           data,
-                           destroy_func);
-}
-
-/**
- * gdk_drawable_get_data:
- * @drawable: a #GdkDrawable
- * @key: name the data was stored under
- * 
- * Equivalent to g_object_get_data(); the #GObject variant should be
- * used instead.
- * 
- * Return value: the data stored at @key
- **/
-gpointer
-gdk_drawable_get_data (GdkDrawable   *drawable,
-		       const gchar   *key)
-{
-  g_return_val_if_fail (GDK_IS_DRAWABLE (drawable), NULL);
-  
-  return g_object_get_qdata (G_OBJECT (drawable),
-                             g_quark_try_string (key));
-}
-
-/**
  * gdk_drawable_get_size:
  * @drawable: a #GdkDrawable
  * @width: (allow-none): (out): location to store drawable's width, or %NULL
@@ -274,39 +229,6 @@ gdk_drawable_get_colormap (GdkDrawable *drawable)
   g_return_val_if_fail (GDK_IS_DRAWABLE (drawable), NULL);
 
   return GDK_DRAWABLE_GET_CLASS (drawable)->get_colormap (drawable);
-}
-
-/**
- * gdk_drawable_ref:
- * @drawable: a #GdkDrawable
- * 
- * Deprecated equivalent of calling g_object_ref() on @drawable.
- * (Drawables were not objects in previous versions of GDK.)
- * 
- * Return value: the same @drawable passed in
- *
- * Deprecated: 2.0: Use g_object_ref() instead.
- **/
-GdkDrawable*
-gdk_drawable_ref (GdkDrawable *drawable)
-{
-  return (GdkDrawable *) g_object_ref (drawable);
-}
-
-/**
- * gdk_drawable_unref:
- * @drawable: a #GdkDrawable
- *
- * Deprecated equivalent of calling g_object_unref() on @drawable.
- * 
- * Deprecated: 2.0: Use g_object_unref() instead.
- **/
-void
-gdk_drawable_unref (GdkDrawable *drawable)
-{
-  g_return_if_fail (GDK_IS_DRAWABLE (drawable));
-
-  g_object_unref (drawable);
 }
 
 /* Drawing
@@ -496,106 +418,6 @@ gdk_draw_polygon (GdkDrawable    *drawable,
   GDK_DRAWABLE_GET_CLASS (drawable)->draw_polygon (drawable, gc, filled,
                                                    (GdkPoint *) points,
                                                    n_points);
-}
-
-/* gdk_draw_string
- *
- * Modified by Li-Da Lho to draw 16 bits and Multibyte strings
- *
- * Interface changed: add "GdkFont *font" to specify font or fontset explicitely
- */
-/**
- * gdk_draw_string:
- * @drawable: a #GdkDrawable (a #GdkWindow or a #GdkPixmap).
- * @font: a #GdkFont.
- * @gc: a #GdkGC.
- * @x: the x coordinate of the left edge of the text.
- * @y: the y coordinate of the baseline of the text.
- * @string:  the string of characters to draw.
- * 
- * Draws a string of characters in the given font or fontset.
- * 
- * Deprecated: 2.4: Use gdk_draw_layout() instead.
- **/
-void
-gdk_draw_string (GdkDrawable *drawable,
-		 GdkFont     *font,
-		 GdkGC       *gc,
-		 gint         x,
-		 gint         y,
-		 const gchar *string)
-{
-  gdk_draw_text (drawable, font, gc, x, y, string, _gdk_font_strlen (font, string));
-}
-
-/* gdk_draw_text
- *
- * Modified by Li-Da Lho to draw 16 bits and Multibyte strings
- *
- * Interface changed: add "GdkFont *font" to specify font or fontset explicitely
- */
-/**
- * gdk_draw_text:
- * @drawable: a #GdkDrawable (a #GdkWindow or a #GdkPixmap).
- * @font: a #GdkFont.
- * @gc: a #GdkGC.
- * @x: the x coordinate of the left edge of the text.
- * @y: the y coordinate of the baseline of the text.
- * @text:  the characters to draw.
- * @text_length: the number of characters of @text to draw.
- * 
- * Draws a number of characters in the given font or fontset.
- *
- * Deprecated: 2.4: Use gdk_draw_layout() instead.
- **/
-void
-gdk_draw_text (GdkDrawable *drawable,
-	       GdkFont     *font,
-	       GdkGC       *gc,
-	       gint         x,
-	       gint         y,
-	       const gchar *text,
-	       gint         text_length)
-{
-  g_return_if_fail (GDK_IS_DRAWABLE (drawable));
-  g_return_if_fail (font != NULL);
-  g_return_if_fail (GDK_IS_GC (gc));
-  g_return_if_fail (text != NULL);
-
-  GDK_DRAWABLE_GET_CLASS (drawable)->draw_text (drawable, font, gc, x, y, text, text_length);
-}
-
-/**
- * gdk_draw_text_wc:
- * @drawable: a #GdkDrawable (a #GdkWindow or a #GdkPixmap).
- * @font: a #GdkFont.
- * @gc: a #GdkGC.
- * @x: the x coordinate of the left edge of the text.
- * @y: the y coordinate of the baseline of the text.
- * @text: the wide characters to draw.
- * @text_length: the number of characters to draw.
- * 
- * Draws a number of wide characters using the given font of fontset.
- * If the font is a 1-byte font, the string is converted into 1-byte 
- * characters (discarding the high bytes) before output.
- * 
- * Deprecated: 2.4: Use gdk_draw_layout() instead.
- **/
-void
-gdk_draw_text_wc (GdkDrawable	 *drawable,
-		  GdkFont	 *font,
-		  GdkGC		 *gc,
-		  gint		  x,
-		  gint		  y,
-		  const GdkWChar *text,
-		  gint		  text_length)
-{
-  g_return_if_fail (GDK_IS_DRAWABLE (drawable));
-  g_return_if_fail (font != NULL);
-  g_return_if_fail (GDK_IS_GC (gc));
-  g_return_if_fail (text != NULL);
-
-  GDK_DRAWABLE_GET_CLASS (drawable)->draw_text_wc (drawable, font, gc, x, y, text, text_length);
 }
 
 /**

@@ -407,56 +407,6 @@ gdk_offscreen_window_draw_polygon (GdkDrawable  *drawable,
 }
 
 static void
-gdk_offscreen_window_draw_text (GdkDrawable  *drawable,
-				GdkFont      *font,
-				GdkGC	       *gc,
-				gint		x,
-				gint		y,
-				const gchar  *text,
-				gint		text_length)
-{
-  GdkOffscreenWindow *offscreen = GDK_OFFSCREEN_WINDOW (drawable);
-  GdkDrawable *real_drawable = get_real_drawable (offscreen);
-  GdkWindowObject *private = GDK_WINDOW_OBJECT (offscreen->wrapper);
-
-  gdk_draw_text (real_drawable,
-		 font,
-		 gc,
-		 x,
-		 y,
-		 text,
-		 text_length);
-
-  /* Hard to compute the minimal size, not that often used anyway. */
-  add_damage (offscreen, 0, 0, private->width, private->height, FALSE);
-}
-
-static void
-gdk_offscreen_window_draw_text_wc (GdkDrawable	 *drawable,
-				   GdkFont	 *font,
-				   GdkGC		 *gc,
-				   gint		  x,
-				   gint		  y,
-				   const GdkWChar *text,
-				   gint		  text_length)
-{
-  GdkOffscreenWindow *offscreen = GDK_OFFSCREEN_WINDOW (drawable);
-  GdkDrawable *real_drawable = get_real_drawable (offscreen);
-  GdkWindowObject *private = GDK_WINDOW_OBJECT (offscreen->wrapper);
-
-  gdk_draw_text_wc (real_drawable,
-		    font,
-		    gc,
-		    x,
-		    y,
-		    text,
-		    text_length);
-
-  /* Hard to compute the minimal size, not that often used anyway. */
-  add_damage (offscreen, 0, 0, private->width, private->height, FALSE);
-}
-
-static void
 gdk_offscreen_window_draw_points (GdkDrawable  *drawable,
 				  GdkGC	       *gc,
 				  GdkPoint     *points,
@@ -1245,8 +1195,6 @@ gdk_offscreen_window_class_init (GdkOffscreenWindowClass *klass)
   drawable_class->draw_rectangle = gdk_offscreen_window_draw_rectangle;
   drawable_class->draw_arc = gdk_offscreen_window_draw_arc;
   drawable_class->draw_polygon = gdk_offscreen_window_draw_polygon;
-  drawable_class->draw_text = gdk_offscreen_window_draw_text;
-  drawable_class->draw_text_wc = gdk_offscreen_window_draw_text_wc;
   drawable_class->draw_drawable_with_src = gdk_offscreen_window_draw_drawable;
   drawable_class->draw_points = gdk_offscreen_window_draw_points;
   drawable_class->draw_segments = gdk_offscreen_window_draw_segments;

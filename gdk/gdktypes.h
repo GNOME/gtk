@@ -77,13 +77,6 @@ typedef struct _GdkRectangle	      GdkRectangle;
 typedef struct _GdkSegment	      GdkSegment;
 typedef struct _GdkSpan	              GdkSpan;
 
-/*
- * Note that on some platforms the wchar_t type
- * is not the same as GdkWChar. For instance
- * on Win32, wchar_t is unsigned short.
- */
-typedef guint32			    GdkWChar;
-
 typedef struct _GdkAtom            *GdkAtom;
 
 #define GDK_ATOM_TO_POINTER(atom) (atom)
@@ -209,13 +202,6 @@ typedef enum
 
 typedef enum
 {
-  GDK_INPUT_READ       = 1 << 0,
-  GDK_INPUT_WRITE      = 1 << 1,
-  GDK_INPUT_EXCEPTION  = 1 << 2
-} GdkInputCondition;
-
-typedef enum
-{
   GDK_OK	  = 0,
   GDK_ERROR	  = -1,
   GDK_ERROR_PARAM = -2,
@@ -279,10 +265,6 @@ typedef enum
   GDK_SCROLL_MASK               = 1 << 21,
   GDK_ALL_EVENTS_MASK           = 0x3FFFFE
 } GdkEventMask;
-
-typedef void (*GdkInputFunction) (gpointer	    data,
-				  gint		    source,
-				  GdkInputCondition condition);
 
 struct _GdkPoint
 {

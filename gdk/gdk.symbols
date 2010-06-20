@@ -140,10 +140,6 @@ gdk_display_pointer_is_grabbed
 
 #if IN_HEADER(__GDK_H__)
 #if IN_FILE(__GDK_IM_X11_C__)
-#ifndef GDK_DISABLE_DEPRECATED
-gdk_mbstowcs
-gdk_wcstombs
-#endif
 gdk_set_locale
 #endif
 #endif
@@ -195,16 +191,6 @@ gdk_threads_add_timeout
 gdk_threads_add_timeout_full
 gdk_threads_add_timeout_seconds
 gdk_threads_add_timeout_seconds_full
-#endif
-#endif
-
-#if IN_HEADER(__GDK_H__)
-#if IN_FILE(__GDK_EVENTS_C__)
-#ifndef GDK_DISABLE_DEPRECATED
-gdk_input_add
-gdk_input_remove
-gdk_input_add_full
-#endif
 #endif
 #endif
 
@@ -262,7 +248,6 @@ gdk_utf8_to_compound_text_for_display
 gdk_rgb_dither_get_type G_GNUC_CONST
 gdk_drag_protocol_get_type G_GNUC_CONST
 gdk_input_source_get_type G_GNUC_CONST
-gdk_input_condition_get_type G_GNUC_CONST
 gdk_input_mode_get_type G_GNUC_CONST
 gdk_axis_use_get_type G_GNUC_CONST
 gdk_byte_order_get_type G_GNUC_CONST
@@ -320,16 +305,6 @@ gdk_font_ref
 gdk_font_unref
 #ifndef GDK_DISABLE_DEPRECATED
 gdk_font_load
-gdk_string_width
-gdk_char_width
-gdk_char_width_wc
-gdk_string_measure
-gdk_text_measure
-gdk_char_measure
-gdk_string_height
-gdk_text_height
-gdk_char_height
-gdk_string_extents
 #endif
 #endif
 #endif
@@ -337,10 +312,6 @@ gdk_string_extents
 #if IN_HEADER(__GDK_FONT_H__)
 #if IN_FILE(__GDK_FONT_X11_C__)
 #ifndef GDK_DISABLE_DEPRECATED
-gdk_text_extents
-gdk_text_extents_wc
-gdk_text_width
-gdk_text_width_wc
 gdk_font_get_display
 gdk_fontset_load
 #endif
@@ -601,15 +572,6 @@ gdk_drag_get_protocol
 gdk_drawable_copy_to_image
 gdk_drawable_get_clip_region
 gdk_drawable_get_colormap
-#ifndef GDK_DISABLE_DEPRECATED
-gdk_drawable_get_data
-gdk_drawable_set_data
-gdk_drawable_ref
-gdk_drawable_unref
-gdk_draw_string
-gdk_draw_text
-gdk_draw_text_wc
-#endif
 gdk_drawable_get_depth
 gdk_drawable_get_display
 gdk_drawable_get_image

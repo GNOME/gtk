@@ -83,20 +83,6 @@ struct _GdkDrawableClass
 			  gboolean	filled,
 			  GdkPoint     *points,
 			  gint		npoints);
-  void (*draw_text)      (GdkDrawable  *drawable,
-			  GdkFont      *font,
-			  GdkGC	       *gc,
-			  gint		x,
-			  gint		y,
-			  const gchar  *text,
-			  gint		text_length);
-  void (*draw_text_wc)   (GdkDrawable	 *drawable,
-			  GdkFont	 *font,
-			  GdkGC		 *gc,
-			  gint		  x,
-			  gint		  y,
-			  const GdkWChar *text,
-			  gint		  text_length);
   void (*draw_drawable)  (GdkDrawable  *drawable,
 			  GdkGC	       *gc,
 			  GdkDrawable  *src,
@@ -240,16 +226,6 @@ GType           gdk_drawable_get_type     (void) G_GNUC_CONST;
 
 /* Manipulation of drawables
  */
-
-#ifndef GDK_DISABLE_DEPRECATED
-void            gdk_drawable_set_data     (GdkDrawable    *drawable,
-					   const gchar    *key,
-					   gpointer	  data,
-					   GDestroyNotify  destroy_func);
-gpointer        gdk_drawable_get_data     (GdkDrawable    *drawable,
-					   const gchar    *key);
-#endif /* GDK_DISABLE_DEPRECATED */
-
 void            gdk_drawable_get_size     (GdkDrawable	  *drawable,
 					   gint	          *width,
 					   gint  	  *height);
@@ -260,11 +236,6 @@ GdkVisual*      gdk_drawable_get_visual   (GdkDrawable	  *drawable);
 gint            gdk_drawable_get_depth    (GdkDrawable	  *drawable);
 GdkScreen*	gdk_drawable_get_screen   (GdkDrawable    *drawable);
 GdkDisplay*	gdk_drawable_get_display  (GdkDrawable    *drawable);
-
-#ifndef GDK_DISABLE_DEPRECATED
-GdkDrawable*    gdk_drawable_ref          (GdkDrawable    *drawable);
-void            gdk_drawable_unref        (GdkDrawable    *drawable);
-#endif /* GDK_DISABLE_DEPRECATED */
 
 /* Drawing
  */
@@ -299,33 +270,6 @@ void gdk_draw_polygon   (GdkDrawable      *drawable,
 			 gboolean          filled,
 			 const GdkPoint   *points,
 			 gint              n_points);
-#if !defined (GDK_DISABLE_DEPRECATED) || defined (GTK_COMPILATION)
-/* Used by gtk_default_draw_string () */
-void gdk_draw_string    (GdkDrawable      *drawable,
-			 GdkFont          *font,
-			 GdkGC            *gc,
-			 gint              x,
-			 gint              y,
-			 const gchar      *string);
-#endif /* !GDK_DISABLE_DEPRECATED || GTK_COMPILATION */
-#if !defined (GDK_DISABLE_DEPRECATED) || defined (GDK_COMPILATION)
-/* Used by gdk_pixmap_draw_text (), gdk_window_draw_text() */
-void gdk_draw_text      (GdkDrawable      *drawable,
-			 GdkFont          *font,
-			 GdkGC            *gc,
-			 gint              x,
-			 gint              y,
-			 const gchar      *text,
-			 gint              text_length);
-/* Used by gdk_pixmap_draw_text_wc (), gdk_window_draw_text_wc () */
-void gdk_draw_text_wc   (GdkDrawable      *drawable,
-			 GdkFont          *font,
-			 GdkGC            *gc,
-			 gint              x,
-			 gint              y,
-			 const GdkWChar   *text,
-			 gint              text_length);
-#endif /* !GDK_DISABLE_DEPRECATED || GDK_COMPILATION */
 void gdk_draw_drawable  (GdkDrawable      *drawable,
 			 GdkGC            *gc,
 			 GdkDrawable      *src,

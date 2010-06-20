@@ -252,20 +252,6 @@ static void   gdk_window_draw_polygon   (GdkDrawable     *drawable,
 					 gboolean         filled,
 					 GdkPoint        *points,
 					 gint             npoints);
-static void   gdk_window_draw_text      (GdkDrawable     *drawable,
-					 GdkFont         *font,
-					 GdkGC           *gc,
-					 gint             x,
-					 gint             y,
-					 const gchar     *text,
-					 gint             text_length);
-static void   gdk_window_draw_text_wc   (GdkDrawable     *drawable,
-					 GdkFont         *font,
-					 GdkGC           *gc,
-					 gint             x,
-					 gint             y,
-					 const GdkWChar  *text,
-					 gint             text_length);
 static void   gdk_window_draw_drawable  (GdkDrawable     *drawable,
 					 GdkGC           *gc,
 					 GdkPixmap       *src,
@@ -520,8 +506,6 @@ gdk_window_class_init (GdkWindowObjectClass *klass)
   drawable_class->draw_rectangle = gdk_window_draw_rectangle;
   drawable_class->draw_arc = gdk_window_draw_arc;
   drawable_class->draw_polygon = gdk_window_draw_polygon;
-  drawable_class->draw_text = gdk_window_draw_text;
-  drawable_class->draw_text_wc = gdk_window_draw_text_wc;
   drawable_class->draw_drawable_with_src = gdk_window_draw_drawable;
   drawable_class->draw_points = gdk_window_draw_points;
   drawable_class->draw_segments = gdk_window_draw_segments;
@@ -4035,42 +4019,6 @@ gdk_window_draw_polygon (GdkDrawable *drawable,
   if (new_points != points)
     g_free (new_points);
 
-  END_DRAW;
-}
-
-static void
-gdk_window_draw_text (GdkDrawable *drawable,
-		      GdkFont     *font,
-		      GdkGC       *gc,
-		      gint         x,
-		      gint         y,
-		      const gchar *text,
-		      gint         text_length)
-{
-  if (GDK_WINDOW_DESTROYED (drawable))
-    return;
-
-  BEGIN_DRAW;
-  gdk_draw_text (impl, font, gc,
-		 x - x_offset, y - y_offset, text, text_length);
-  END_DRAW;
-}
-
-static void
-gdk_window_draw_text_wc (GdkDrawable    *drawable,
-			 GdkFont        *font,
-			 GdkGC          *gc,
-			 gint            x,
-			 gint            y,
-			 const GdkWChar *text,
-			 gint            text_length)
-{
-  if (GDK_WINDOW_DESTROYED (drawable))
-    return;
-
-  BEGIN_DRAW;
-  gdk_draw_text_wc (impl, font, gc,
-		    x - x_offset, y - y_offset, text, text_length);
   END_DRAW;
 }
 

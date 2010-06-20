@@ -70,20 +70,6 @@ static void gdk_win32_draw_polygon   (GdkDrawable    *drawable,
 				      gboolean        filled,
 				      GdkPoint       *points,
 				      gint            npoints);
-static void gdk_win32_draw_text      (GdkDrawable    *drawable,
-				      GdkFont        *font,
-				      GdkGC          *gc,
-				      gint            x,
-				      gint            y,
-				      const gchar    *text,
-				      gint            text_length);
-static void gdk_win32_draw_text_wc   (GdkDrawable    *drawable,
-				      GdkFont        *font,
-				      GdkGC          *gc,
-				      gint            x,
-				      gint            y,
-				      const GdkWChar *text,
-				      gint            text_length);
 static void gdk_win32_draw_drawable  (GdkDrawable    *drawable,
 				      GdkGC          *gc,
 				      GdkPixmap      *src,
@@ -160,8 +146,6 @@ _gdk_drawable_impl_win32_class_init (GdkDrawableImplWin32Class *klass)
   drawable_class->draw_rectangle = gdk_win32_draw_rectangle;
   drawable_class->draw_arc = gdk_win32_draw_arc;
   drawable_class->draw_polygon = gdk_win32_draw_polygon;
-  drawable_class->draw_text = gdk_win32_draw_text;
-  drawable_class->draw_text_wc = gdk_win32_draw_text_wc;
   drawable_class->draw_drawable_with_src = gdk_win32_draw_drawable;
   drawable_class->draw_points = gdk_win32_draw_points;
   drawable_class->draw_segments = gdk_win32_draw_segments;
@@ -1003,129 +987,6 @@ gdk_win32_draw_polygon (GdkDrawable *drawable,
 
   gdk_region_destroy (region);
   g_free (pts);
-}
-
-typedef struct
-{
-  gint x, y;
-  HDC hdc;
-} gdk_draw_text_arg;
-
-static void
-gdk_draw_text_handler (GdkWin32SingleFont *singlefont,
-		       const wchar_t      *wcstr,
-		       int                 wclen,
-		       void               *arg)
-{
-  HGDIOBJ oldfont;
-  SIZE size;
-  gdk_draw_text_arg *argp = (gdk_draw_text_arg *) arg;
-
-  if (!singlefont)
-    return;
-
-  if ((oldfont = SelectObject (argp->hdc, singlefont->hfont)) == NULL)
-    {
-      WIN32_GDI_FAILED ("SelectObject");
-      return;
-    }
-  
-  if (!TextOutW (argp->hdc, argp->x, argp->y, wcstr, wclen))
-    WIN32_GDI_FAILED ("TextOutW");
-  GetTextExtentPoint32W (argp->hdc, wcstr, wclen, &size);
-  argp->x += size.cx;
-
-  SelectObject (argp->hdc, oldfont);
-}
-
-static void
-gdk_win32_draw_text (GdkDrawable *drawable,
-		     GdkFont     *font,
-		     GdkGC       *gc,
-		     gint         x,
-		     gint         y,
-		     const gchar *text,
-		     gint         text_length)
-{
-  const GdkGCValuesMask mask = GDK_GC_FOREGROUND|GDK_GC_FONT;
-  wchar_t *wcstr, wc;
-  glong wlen;
-  gdk_draw_text_arg arg;
-
-  if (text_length == 0)
-    return;
-
-  g_assert (font->type == GDK_FONT_FONT || font->type == GDK_FONT_FONTSET);
-
-  arg.x = x;
-  arg.y = y;
-  arg.hdc = gdk_win32_hdc_get (drawable, gc, mask);
-
-  GDK_NOTE (DRAW, g_print ("gdk_win32_draw_text: %s (%d,%d) \"%.*s\" (len %d)\n",
-			   _gdk_win32_drawable_description (drawable),
-			   x, y,
-			   (text_length > 10 ? 10 : text_length),
-			   text, text_length));
-  
-  if (text_length == 1)
-    {
-      /* For single characters, don't try to interpret as UTF-8. */
-      wc = (guchar) text[0];
-      _gdk_wchar_text_handle (font, &wc, 1, gdk_draw_text_handler, &arg);
-    }
-  else
-    {
-      wcstr = g_utf8_to_utf16 (text, text_length, NULL, &wlen, NULL);
-      _gdk_wchar_text_handle (font, wcstr, wlen, gdk_draw_text_handler, &arg);
-      g_free (wcstr);
-    }
-
-  gdk_win32_hdc_release (drawable, gc, mask);
-}
-
-static void
-gdk_win32_draw_text_wc (GdkDrawable	 *drawable,
-			GdkFont          *font,
-			GdkGC		 *gc,
-			gint		  x,
-			gint		  y,
-			const GdkWChar *text,
-			gint		  text_length)
-{
-  const GdkGCValuesMask mask = GDK_GC_FOREGROUND|GDK_GC_FONT;
-  gint i;
-  wchar_t *wcstr;
-  gdk_draw_text_arg arg;
-
-  if (text_length == 0)
-    return;
-
-  g_assert (font->type == GDK_FONT_FONT || font->type == GDK_FONT_FONTSET);
-
-  arg.x = x;
-  arg.y = y;
-  arg.hdc = gdk_win32_hdc_get (drawable, gc, mask);
-
-  GDK_NOTE (DRAW, g_print ("gdk_win32_draw_text_wc: %s (%d,%d) len: %d\n",
-			   _gdk_win32_drawable_description (drawable),
-			   x, y, text_length));
-      
-  if (sizeof (wchar_t) != sizeof (GdkWChar))
-    {
-      wcstr = g_new (wchar_t, text_length);
-      for (i = 0; i < text_length; i++)
-	wcstr[i] = text[i];
-    }
-  else
-    wcstr = (wchar_t *) text;
-
-  _gdk_wchar_text_handle (font, wcstr, text_length,
-			 gdk_draw_text_handler, &arg);
-
-  if (sizeof (wchar_t) != sizeof (GdkWChar))
-    g_free (wcstr);
-
-  gdk_win32_hdc_release (drawable, gc, mask);
 }
 
 static void

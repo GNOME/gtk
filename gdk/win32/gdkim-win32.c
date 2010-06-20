@@ -43,34 +43,3 @@ gdk_set_locale (void)
   
   return g_win32_getlocale ();
 }
-
-gchar *
-gdk_wcstombs (const GdkWChar *src)
-{
-  const gchar *charset;
-
-  g_get_charset (&charset);
-  return g_convert ((char *) src, -1, charset, "UCS-4LE", NULL, NULL, NULL);
-}
-
-gint
-gdk_mbstowcs (GdkWChar    *dest,
-	      const gchar *src,
-	      gint         dest_max)
-{
-  gint retval;
-  gsize nwritten;
-  gint n_ucs4;
-  gunichar *ucs4;
-  const gchar *charset;
-
-  g_get_charset (&charset);
-  ucs4 = (gunichar *) g_convert (src, -1, "UCS-4LE", charset, NULL, &nwritten, NULL);
-  n_ucs4 = nwritten * sizeof (GdkWChar);
-
-  retval = MIN (dest_max, n_ucs4);
-  memmove (dest, ucs4, retval * sizeof (GdkWChar));
-  g_free (ucs4);
-
-  return retval;
-}

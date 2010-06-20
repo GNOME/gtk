@@ -91,22 +91,6 @@ gint      gdk_error_trap_pop            (void);
 gchar*	                  gdk_get_display		(void);
 G_CONST_RETURN gchar*	  gdk_get_display_arg_name	(void);
 
-#if !defined (GDK_DISABLE_DEPRECATED) || defined (GTK_COMPILATION)
-/* Used by gtk_input_add_full () */
-gint gdk_input_add_full	  (gint		     source,
-			   GdkInputCondition condition,
-			   GdkInputFunction  function,
-			   gpointer	     data,
-			   GDestroyNotify    destroy);
-#endif /* !GDK_DISABLE_DEPRECATED || GTK_COMPILATION */
-#ifndef GDK_DISABLE_DEPRECATED
-gint gdk_input_add	  (gint		     source,
-			   GdkInputCondition condition,
-			   GdkInputFunction  function,
-			   gpointer	     data);
-void gdk_input_remove	  (gint		     tag);
-#endif /* GDK_DISABLE_DEPRECATED */
-
 #ifndef GDK_MULTIDEVICE_SAFE
 GdkGrabStatus gdk_pointer_grab       (GdkWindow    *window,
 				      gboolean      owner_events,
@@ -154,15 +138,6 @@ void     gdk_rectangle_union     (const GdkRectangle *src1,
 GType gdk_rectangle_get_type (void) G_GNUC_CONST;
 
 #define GDK_TYPE_RECTANGLE (gdk_rectangle_get_type ())
-
-/* Conversion functions between wide char and multibyte strings. 
- */
-#ifndef GDK_DISABLE_DEPRECATED
-gchar     *gdk_wcstombs          (const GdkWChar   *src);
-gint       gdk_mbstowcs          (GdkWChar         *dest,
-				  const gchar      *src,
-				  gint              dest_max);
-#endif
 
 /* Miscellaneous */
 #ifndef GDK_MULTIHEAD_SAFE

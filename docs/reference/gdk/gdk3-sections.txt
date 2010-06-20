@@ -81,7 +81,6 @@ gdk_grab_ownership_get_type
 gdk_grab_status_get_type
 gdk_gravity_get_type
 gdk_image_type_get_type
-gdk_input_condition_get_type
 gdk_input_mode_get_type
 gdk_input_source_get_type
 gdk_join_style_get_type
@@ -411,27 +410,6 @@ gdk_font_unref
 gdk_font_id
 gdk_font_equal
 
-<SUBSECTION>
-gdk_string_extents
-gdk_text_extents
-gdk_text_extents_wc
-gdk_string_width
-gdk_text_width
-gdk_text_width_wc
-gdk_char_width
-gdk_char_width_wc
-gdk_string_measure
-gdk_text_measure
-gdk_char_measure
-gdk_string_height
-gdk_text_height
-gdk_char_height
-
-<SUBSECTION>
-GdkWChar
-gdk_wcstombs
-gdk_mbstowcs
-
 <SUBSECTION Standard>
 GDK_TYPE_FONT
 GDK_TYPE_FONT_TYPE
@@ -444,10 +422,6 @@ gdk_font_get_type
 <TITLE>Drawing Primitives</TITLE>
 <FILE>drawing</FILE>
 GdkDrawable
-gdk_drawable_ref
-gdk_drawable_unref
-gdk_drawable_set_data
-gdk_drawable_get_data
 gdk_drawable_get_display
 gdk_drawable_get_screen
 gdk_drawable_get_visual
@@ -477,10 +451,6 @@ gdk_draw_layout_line
 gdk_draw_layout_line_with_colors
 gdk_draw_layout
 gdk_draw_layout_with_colors
-<SUBSECTION>
-gdk_draw_string
-gdk_draw_text
-gdk_draw_text_wc
 
 <SUBSECTION>
 gdk_draw_pixmap
@@ -1250,18 +1220,6 @@ GDK_TYPE_CURSOR
 gdk_cursor_get_type
 </SECTION>
 
-<SECTION>
-<TITLE>Input</TITLE>
-<FILE>input</FILE>
-gdk_input_add_full
-GdkInputCondition
-GdkInputFunction
-gdk_input_add
-gdk_input_remove
-
-<SUBSECTION Standard>
-GDK_TYPE_INPUT_CONDITION
-</SECTION>
 
 <SECTION>
 <TITLE>Drag and Drop</TITLE>

@@ -51,7 +51,6 @@ gtk_entry_completion_get_type
 gtk_entry_get_type
 gtk_event_box_get_type
 gtk_expander_get_type
-gtk_extended_layout_get_type
 gtk_file_chooser_button_get_type
 gtk_file_chooser_dialog_get_type
 gtk_file_chooser_get_type
@@ -133,6 +132,7 @@ gtk_separator_menu_item_get_type
 gtk_separator_tool_item_get_type
 gtk_settings_get_type
 gtk_size_group_get_type
+gtk_size_request_get_type
 gtk_socket_get_type
 gtk_spin_button_get_type
 gtk_spinner_get_type
