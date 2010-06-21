@@ -386,7 +386,7 @@ gtk_entry_buffer_class_init (GtkEntryBufferClass *klass)
                                    GTK_PARAM_READWRITE));
 
   /**
-   * GtkEntry::inserted-text:
+   * GtkEntryBuffer::inserted-text:
    * @buffer: a #GtkEntryBuffer
    * @position: the position the text was inserted at.
    * @chars: The text that was inserted.
@@ -408,7 +408,7 @@ gtk_entry_buffer_class_init (GtkEntryBufferClass *klass)
                                          G_TYPE_UINT);
 
   /**
-   * GtkEntry::deleted-text:
+   * GtkEntryBuffer::deleted-text:
    * @buffer: a #GtkEntryBuffer
    * @position: the position the text was deleted at.
    * @n_chars: The number of characters that were deleted.
