@@ -557,7 +557,7 @@ typedef enum
 typedef enum
 {
   GTK_SIZE_REQUEST_HEIGHT_FOR_WIDTH = 0,
-  GTK_SIZE_REQUEST_WIDTH_FOR_HEIGHT,
+  GTK_SIZE_REQUEST_WIDTH_FOR_HEIGHT
 } GtkSizeRequestMode;
 
 
