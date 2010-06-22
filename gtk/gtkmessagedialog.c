@@ -93,6 +93,7 @@ typedef struct _GtkMessageDialogPrivate GtkMessageDialogPrivate;
 
 struct _GtkMessageDialogPrivate
 {
+  GtkWidget *message_area; /* vbox for the primary and secondary labels, and any extra content from the caller */
   GtkWidget *secondary_label;
   guint message_type : 3;
   guint has_primary_markup : 1;
@@ -121,7 +122,8 @@ enum {
   PROP_USE_MARKUP,
   PROP_SECONDARY_TEXT,
   PROP_SECONDARY_USE_MARKUP,
-  PROP_IMAGE
+  PROP_IMAGE,
+  PROP_MESSAGE_AREA
 };
 
 G_DEFINE_TYPE (GtkMessageDialog, gtk_message_dialog, GTK_TYPE_DIALOG)
@@ -264,6 +266,23 @@ gtk_message_dialog_class_init (GtkMessageDialogClass *class)
                                                         GTK_TYPE_WIDGET,
                                                         GTK_PARAM_READWRITE));
 
+  /**
+   * GtkMessageDialog:message-area
+   *
+   * The #GtkVBox that corresponds to the message area of this dialog.  See
+   * gtk_message_dialog_get_message_area() for a detailed description of this
+   * area.
+   *
+   * Since: 2.22
+   */
+  g_object_class_install_property (gobject_class,
+				   PROP_MESSAGE_AREA,
+				   g_param_spec_object ("message-area",
+							P_("Message area"),
+							P_("GtkVBox that holds the dialog's primary and secondary labels"),
+							GTK_TYPE_WIDGET,
+							GTK_PARAM_READABLE));
+
   g_type_class_add_private (gobject_class,
 			    sizeof (GtkMessageDialogPrivate));
 }
@@ -298,18 +317,18 @@ gtk_message_dialog_init (GtkMessageDialog *dialog)
   gtk_misc_set_alignment   (GTK_MISC  (priv->secondary_label), 0.0, 0.0);
 
   hbox = gtk_hbox_new (FALSE, 12);
-  vbox = gtk_vbox_new (FALSE, 12);
+  priv->message_area = gtk_vbox_new (FALSE, 12);
 
-  gtk_box_pack_start (GTK_BOX (vbox), dialog->label,
+  gtk_box_pack_start (GTK_BOX (priv->message_area), dialog->label,
                       FALSE, FALSE, 0);
 
-  gtk_box_pack_start (GTK_BOX (vbox), priv->secondary_label,
+  gtk_box_pack_start (GTK_BOX (priv->message_area), priv->secondary_label,
                       TRUE, TRUE, 0);
 
   gtk_box_pack_start (GTK_BOX (hbox), dialog->image,
                       FALSE, FALSE, 0);
 
-  gtk_box_pack_start (GTK_BOX (hbox), vbox,
+  gtk_box_pack_start (GTK_BOX (hbox), priv->message_area,
                       TRUE, TRUE, 0);
 
   gtk_box_pack_start (GTK_BOX (GTK_DIALOG (dialog)->vbox),
@@ -513,6 +532,9 @@ gtk_message_dialog_get_property (GObject     *object,
       break;
     case PROP_IMAGE:
       g_value_set_object (value, dialog->image);
+      break;
+    case PROP_MESSAGE_AREA:
+      g_value_set_object (value, priv->message_area);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -850,6 +872,31 @@ gtk_message_dialog_format_secondary_markup (GtkMessageDialog *message_dialog,
     }
 
   setup_primary_label_font (message_dialog);
+}
+
+/**
+ * gtk_message_dialog_get_message_area:
+ * @message_dialog: a #GtkMessageDialog
+ *
+ * Return value: A #GtkVBox corresponding to the "message area" in the
+ * @message_dialog.  This is the box where the dialog's primary and secondary
+ * labels are packed.  You can add your own extra content to that box and it
+ * will appear below those labels, on the right side of the dialog's image (or
+ * on the left for right-to-left languages).  See gtk_dialog_get_content_area()
+ * for the corresponding function in the parent #GtkDialog.
+ *
+ * Since: 2.22
+ **/
+GtkWidget *
+gtk_message_dialog_get_message_area (GtkMessageDialog *message_dialog)
+{
+  GtkMessageDialogPrivate *priv;
+
+  g_return_val_if_fail (GTK_IS_MESSAGE_DIALOG (message_dialog), NULL);
+
+  priv = GTK_MESSAGE_DIALOG_GET_PRIVATE (message_dialog);
+
+  return priv->message_area;
 }
 
 static void
