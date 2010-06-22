@@ -226,9 +226,20 @@ void                    gtk_tree_view_column_cell_get_size       (GtkTreeViewCol
 								  gint                    *y_offset,
 								  gint                    *width,
 								  gint                    *height);
-void                    gtk_tree_view_column_get_desired_size    (GtkTreeViewColumn       *column,
-								  GtkRequisition          *minimal_size,
-								  GtkRequisition          *desired_size);
+
+/* XXX: this ones going away ... */
+void gtk_tree_view_column_get_desired_size (GtkTreeViewColumn *column,
+					    GtkRequisition    *minimal_size,
+					    GtkRequisition    *desired_size);
+
+void                    gtk_tree_view_column_get_natural_width   (GtkTreeViewColumn       *column,
+								  gint                    *minimum_width,
+								  gint                    *natural_width);
+void                    gtk_tree_view_column_get_height_for_width(GtkTreeViewColumn       *column,
+								  gint                     width,
+								  gint                    *minimum_height,
+								  gint                    *natural_height);
+
 gboolean                gtk_tree_view_column_cell_is_visible     (GtkTreeViewColumn       *tree_column);
 void                    gtk_tree_view_column_focus_cell          (GtkTreeViewColumn       *tree_column,
 								  GtkCellRenderer         *cell);

@@ -27,6 +27,7 @@
 #include "gtkalignment.h"
 #include "gtklabel.h"
 #include "gtkcellsizerequest.h"
+#include "gtksizerequestprivate.h"
 #include "gtkhbox.h"
 #include "gtkmarshalers.h"
 #include "gtkarrow.h"
@@ -71,6 +72,7 @@ struct _GtkTreeViewColumnCellInfo
   gpointer func_data;
   GDestroyNotify destroy;
   gint requested_width;
+  gint natural_width;
   gint real_width;
   guint expand : 1;
   guint pack : 1;
@@ -374,6 +376,8 @@ gtk_tree_view_column_cell_layout_init (GtkCellLayoutIface *iface)
 static void
 gtk_tree_view_column_init (GtkTreeViewColumn *tree_column)
 {
+  GtkTreeViewColumnPrivate *priv;
+
   tree_column->button = NULL;
   tree_column->xalign = 0.0;
   tree_column->width = 0;
@@ -399,6 +403,9 @@ gtk_tree_view_column_init (GtkTreeViewColumn *tree_column)
   tree_column->fixed_width = 1;
   tree_column->use_resized_width = FALSE;
   tree_column->title = g_strdup ("");
+
+  priv = GTK_TREE_VIEW_COLUMN_GET_PRIVATE (tree_column);
+  priv->natural_width = -1;
 }
 
 static void
@@ -2622,14 +2629,6 @@ gtk_tree_view_column_cell_get_real_size (GtkTreeViewColumn  *tree_column,
       if (visible == FALSE)
 	continue;
 
-      if (first_cell == FALSE)
-        {
-	  min_req.width += tree_column->spacing;
-	  nat_req.width += tree_column->spacing;
-        }
-
-      /* XXX TODO: Update to use w4h of cell-renderer apis...
-       */
       gtk_cell_size_request_get_width (GTK_CELL_SIZE_REQUEST (info->cell),
 				       tree_column->tree_view,
 				       &min_req.width, &nat_req.width);
@@ -2638,12 +2637,19 @@ gtk_tree_view_column_cell_get_real_size (GtkTreeViewColumn  *tree_column,
 						  nat_req.width,
 						  &min_req.height, &nat_req.height);
 
+      if (first_cell == FALSE)
+        {
+	  min_req.width += tree_column->spacing;
+	  nat_req.width += tree_column->spacing;
+        }
+
       min_req.width += focus_line_width * 2;
       min_req.height += focus_line_width * 2;
       nat_req.width += focus_line_width * 2;
       nat_req.height += focus_line_width * 2;
 
       info->requested_width = MAX (info->requested_width, min_req.width);
+      info->natural_width   = MAX (info->natural_width,   nat_req.width);
 
       first_cell = FALSE;
 
@@ -2872,39 +2878,37 @@ gtk_tree_view_column_cell_process_action (GtkTreeViewColumn  *tree_column,
       /* FOCUS */
       else if (action == CELL_ACTION_FOCUS)
 	{
-	  gint x_offset, y_offset, width, height;
+	  gint x_offset, y_offset;
 	  GtkRequisition min_size;
 
 	  gtk_cell_size_request_get_size (GTK_CELL_SIZE_REQUEST (info->cell), 
 					  tree_column->tree_view, 
 					  &min_size, NULL);
-	  width  = min_size.width;
-	  height = min_size.height;
 
 	  _gtk_cell_renderer_calc_offset (info->cell, &rtl_cell_area,
 					  gtk_widget_get_direction (tree_column->tree_view),
-					  width, height, &x_offset, &y_offset);
+					  min_size.width, min_size.height, &x_offset, &y_offset);
 
 	  if (special_cells > 1)
 	    {
 	      if (info->has_focus)
 	        {
 		  min_x = rtl_cell_area.x + x_offset;
-		  max_x = min_x + width;
+		  max_x = min_x + min_size.width;
 		  min_y = rtl_cell_area.y + y_offset;
-		  max_y = min_y + height;
+		  max_y = min_y + min_size.height;
 		}
 	    }
 	  else
 	    {
 	      if (min_x > (rtl_cell_area.x + x_offset))
 		min_x = rtl_cell_area.x + x_offset;
-	      if (max_x < rtl_cell_area.x + x_offset + width)
-		max_x = rtl_cell_area.x + x_offset + width;
+	      if (max_x < rtl_cell_area.x + x_offset + min_size.width)
+		max_x = rtl_cell_area.x + x_offset + min_size.width;
 	      if (min_y > (rtl_cell_area.y + y_offset))
 		min_y = rtl_cell_area.y + y_offset;
-	      if (max_y < rtl_cell_area.y + y_offset + height)
-		max_y = rtl_cell_area.y + y_offset + height;
+	      if (max_y < rtl_cell_area.y + y_offset + min_size.height)
+		max_y = rtl_cell_area.y + y_offset + min_size.height;
 	    }
 	}
       /* EVENT */
@@ -3042,39 +3046,37 @@ gtk_tree_view_column_cell_process_action (GtkTreeViewColumn  *tree_column,
       /* FOCUS */
       else if (action == CELL_ACTION_FOCUS)
 	{
-	  gint width, height, x_offset, y_offset;
+	  gint x_offset, y_offset;
 	  GtkRequisition min_size;
 
 	  gtk_cell_size_request_get_size (GTK_CELL_SIZE_REQUEST (info->cell), 
 					  tree_column->tree_view, 
 					  &min_size, NULL);
-	  width  = min_size.width;
-	  height = min_size.height;
 
 	  _gtk_cell_renderer_calc_offset (info->cell, &rtl_cell_area,
 					  gtk_widget_get_direction (tree_column->tree_view),
-					  width, height, &x_offset, &y_offset);
+					  min_size.width, min_size.height, &x_offset, &y_offset);
 
 	  if (special_cells > 1)
 	    {
 	      if (info->has_focus)
 	        {
 		  min_x = rtl_cell_area.x + x_offset;
-		  max_x = min_x + width;
+		  max_x = min_x + min_size.width;
 		  min_y = rtl_cell_area.y + y_offset;
-		  max_y = min_y + height;
+		  max_y = min_y + min_size.height;
 		}
 	    }
 	  else
 	    {
 	      if (min_x > (rtl_cell_area.x + x_offset))
 		min_x = rtl_cell_area.x + x_offset;
-	      if (max_x < rtl_cell_area.x + x_offset + width)
-		max_x = rtl_cell_area.x + x_offset + width;
+	      if (max_x < rtl_cell_area.x + x_offset + min_size.width)
+		max_x = rtl_cell_area.x + x_offset + min_size.width;
 	      if (min_y > (rtl_cell_area.y + y_offset))
 		min_y = rtl_cell_area.y + y_offset;
-	      if (max_y < rtl_cell_area.y + y_offset + height)
-		max_y = rtl_cell_area.y + y_offset + height;
+	      if (max_y < rtl_cell_area.y + y_offset + min_size.height)
+		max_y = rtl_cell_area.y + y_offset + min_size.height;
 	    }
 	}
       /* EVENT */
@@ -3645,16 +3647,21 @@ _gtk_tree_view_column_cell_set_dirty (GtkTreeViewColumn *tree_column,
 				      gboolean           install_handler)
 {
   GList *list;
+  GtkTreeViewColumnPrivate *priv;
+
+  priv = GTK_TREE_VIEW_COLUMN_GET_PRIVATE (tree_column);
 
   for (list = tree_column->cell_list; list; list = list->next)
     {
       GtkTreeViewColumnCellInfo *info = (GtkTreeViewColumnCellInfo *) list->data;
 
       info->requested_width = 0;
+      info->natural_width = 0;
     }
   tree_column->dirty = TRUE;
   tree_column->requested_width = -1;
   tree_column->width = 0;
+  priv->natural_width = -1;
 
   if (tree_column->tree_view &&
       gtk_widget_get_realized (tree_column->tree_view))
@@ -3846,6 +3853,191 @@ gtk_tree_view_column_get_desired_size (GtkTreeViewColumn *column,
                                            NULL, NULL, NULL,
                                            minimal_size, desired_size);
 }
+
+/**
+ * gtk_tree_view_column_get_natural_width:
+ * @tree_column: A #GtkTreeViewColumn
+ * @minimum_width: location for storing the minimum width, or %NULL
+ * @natural_width: location for storing the natural width, or %NULL
+ *
+ * Retreives @tree_column's minimum and natural width.
+ *
+ * Since: 3.0
+ */
+void
+gtk_tree_view_column_get_natural_width (GtkTreeViewColumn       *column,
+					gint                    *minimum_width,
+					gint                    *natural_width)
+{
+  GList         *list;
+  gboolean       first_cell = TRUE;
+  gint           focus_line_width;
+  gint           min = 0, nat = 0;
+
+  g_return_if_fail (GTK_IS_TREE_VIEW_COLUMN (column));
+
+  gtk_widget_style_get (column->tree_view, "focus-line-width", &focus_line_width, NULL);
+  
+  for (list = column->cell_list; list; list = list->next)
+    {
+      GtkTreeViewColumnCellInfo *info = (GtkTreeViewColumnCellInfo *) list->data;
+      gint                       cell_min, cell_nat;
+      gboolean                   visible;
+
+      g_object_get (info->cell, "visible", &visible, NULL);
+
+      if (visible == FALSE)
+	continue;
+
+      if (first_cell == FALSE)
+        {
+	  min += column->spacing;
+	  nat += column->spacing;
+        }
+
+      gtk_cell_size_request_get_width (GTK_CELL_SIZE_REQUEST (info->cell),
+				       column->tree_view, &cell_min, &cell_nat);
+
+      cell_min += focus_line_width * 2;
+      cell_nat += focus_line_width * 2;
+
+      min += cell_min;
+      nat += cell_nat;
+
+      /* Store 'requested_width' and 'natural_width' to cache all the requests
+       * for every row in the column; natural space distribution is only calculated
+       * once for the whole column for now. */
+      info->requested_width = MAX (info->requested_width, cell_min);
+      info->natural_width   = MAX (info->natural_width,   cell_nat);
+
+      first_cell = FALSE;
+    }
+
+  if (minimum_width)
+    *minimum_width = min;
+
+  if (natural_width)
+    *natural_width = nat;
+}
+
+/**
+ * gtk_tree_view_column_get_height_for_width:
+ * @tree_column: A #GtkTreeViewColumn
+ * @width: the width available for allocation
+ * @minimum_height: location for storing the minimum height, or %NULL
+ * @natural_height: location for storing the natural height, or %NULL
+ *
+ * Retreives @tree_column's minimum and natural height if it were rendered to 
+ * @widget with the specified @height.
+ *
+ * Since: 3.0
+ */
+void
+gtk_tree_view_column_get_height_for_width (GtkTreeViewColumn *column,
+					   gint               width,
+					   gint              *minimum_height,
+					   gint              *natural_height)
+{
+  GList      *list;
+  GArray     *array;
+  gint        size = width;
+  gint        focus_line_width;
+  gint        expand_cell_count = 0, i;
+  gboolean    first_cell = TRUE;
+  gint        min_height = 0, nat_height = 0;
+  GtkRequestedSize *sizes;
+
+  g_return_if_fail (GTK_IS_TREE_VIEW_COLUMN (column));
+
+  gtk_widget_style_get (column->tree_view, "focus-line-width", &focus_line_width, NULL);
+
+  array = g_array_new (0, TRUE, sizeof (GtkRequestedSize));
+
+
+  /* First get the overall expand space and collect the cell requests */
+  for (list = column->cell_list; list; list = list->next)
+    {
+      GtkTreeViewColumnCellInfo *info = (GtkTreeViewColumnCellInfo *) list->data;
+      gboolean                   visible;
+      GtkRequestedSize           requested;
+
+      g_object_get (info->cell, "visible", &visible, NULL);
+
+      if (visible == FALSE)
+	continue;
+
+      if (info->expand == TRUE)
+	expand_cell_count++;
+
+      if (first_cell == FALSE)
+	size -= column->spacing;
+
+      size -= focus_line_width * 2;
+
+      /* Here the collective minimum/natural width for all rows
+       * has necessarily been cached by gtk_tree_view_column_get_natural_width().
+       *
+       * As the allocated width is based on the collective widths of all rows,
+       * the allocated width for a cell will be the same in each row.
+       *
+       * However the height-for-width must also be calculated for each
+       * row based on the aligned width in order to determine the row height.
+       *
+       * OPTIMIZE ME: It would be better to calculate the allocations of the cells once
+       * and caching an extra info->allocated_width in order to avoid this
+       * calculation for every row.
+       *
+       * Note we would use the real minimums/naturals as reported
+       * by the cells for each row here if we were to display
+       * the cells unaligned (which is more expensive to calculate
+       * but would allow cells to flow more naturally inside columns).
+       */
+      requested.data         = info;
+      requested.minimum_size = info->requested_width;
+      requested.natural_size = info->natural_width;
+      g_array_append_val (array, requested);
+
+      first_cell = FALSE;
+    }
+
+  /* Distribute as much of remaining 'size' as possible before sharing expand space */
+  sizes = (GtkRequestedSize *)array->data;
+  size  = _gtk_distribute_allocation (size, array->len, sizes);
+
+  /* The rest gets split up evenly among expanding cells */
+  size /= expand_cell_count;
+
+  /* Collect the minimum and natural height for the allocations of cells */
+  for (i = 0, list = column->cell_list; list; list = list->next)
+    {
+      GtkTreeViewColumnCellInfo *info = (GtkTreeViewColumnCellInfo *) list->data;
+      gint                       cell_min, cell_nat;
+      gboolean                   visible;
+
+      g_object_get (info->cell, "visible", &visible, NULL);
+
+      if (visible == FALSE)
+	continue;
+
+      gtk_cell_size_request_get_height_for_width (GTK_CELL_SIZE_REQUEST (info->cell),
+						  column->tree_view,
+						  sizes[i].minimum_size + (info->expand ? size : 0),
+						  &cell_min, &cell_nat);
+
+      min_height = MAX (min_height, cell_min);
+      nat_height = MAX (nat_height, cell_nat);
+
+      i++;
+    }
+  g_array_free (array, TRUE);
+
+  if (minimum_height)
+    *minimum_height = min_height;
+
+  if (natural_height)
+    *natural_height = nat_height;
+}
+
 
 #define __GTK_TREE_VIEW_COLUMN_C__
 #include "gtkaliasdef.c"
