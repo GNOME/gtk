@@ -192,7 +192,9 @@ test_type (gconstpointer data)
 	continue;
 
       if (g_type_is_a (type, GTK_TYPE_MESSAGE_DIALOG) &&
-	  strcmp (pspec->name, "image") == 0)
+          (strcmp (pspec->name, "image") == 0 ||
+           strcmp (pspec->name, "message-area") == 0))
+
 	continue;
 
       if (g_type_is_a (type, GTK_TYPE_PRINT_OPERATION) &&
