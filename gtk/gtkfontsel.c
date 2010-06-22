@@ -1657,6 +1657,25 @@ gtk_font_selection_dialog_new (const gchar *title)
 }
 
 /**
+ * gtk_font_selection_dialog_get_font_selection:
+ * @colorsel: a #GtkFontSelectionDialog
+ *
+ * Retrieves the #GtkFontSelection widget embedded in the dialog.
+ *
+ * Returns: the embedded #GtkFontSelection
+ *
+ * Since: 2.22
+ **/
+GtkWidget*
+gtk_font_selection_dialog_get_font_selection (GtkFontSelectionDialog *fsd)
+{
+  g_return_val_if_fail (GTK_IS_FONT_SELECTION_DIALOG (fsd), NULL);
+
+  return fsd->fontsel;
+}
+
+
+/**
  * gtk_font_selection_dialog_get_ok_button:
  * @fsd: a #GtkFontSelectionDialog
  *
