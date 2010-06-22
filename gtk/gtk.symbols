@@ -135,6 +135,7 @@ gtk_accel_map_unlock_path
 gtk_accessible_connect_widget_destroyed
 gtk_accessible_get_type G_GNUC_CONST
 gtk_accessible_get_widget
+gtk_accessible_set_widget
 #endif
 #endif
 
@@ -2115,6 +2116,7 @@ gtk_menu_tool_button_set_menu
 #if IN_FILE(__GTK_MESSAGE_DIALOG_C__)
 gtk_message_dialog_format_secondary_markup G_GNUC_PRINTF(2,3)
 gtk_message_dialog_format_secondary_text G_GNUC_PRINTF(2,3)
+gtk_message_dialog_get_message_area
 gtk_message_dialog_get_type G_GNUC_CONST
 gtk_message_dialog_new G_GNUC_PRINTF(5,6)
 gtk_message_dialog_new_with_markup G_GNUC_PRINTF(5,6)
