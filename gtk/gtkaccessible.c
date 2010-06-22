@@ -60,8 +60,7 @@ void
 gtk_accessible_set_widget (GtkAccessible *accessible,
                            GtkWidget     *widget)
 {
-  g_return_val_if_fail (GTK_IS_ACCESSIBLE (accessible), NULL);
-  g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
+  g_return_if_fail (GTK_IS_ACCESSIBLE (accessible));
 
   accessible->widget = widget;
 }
