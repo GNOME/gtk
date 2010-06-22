@@ -2517,7 +2517,7 @@ gdk_event_translate (MSG  *msg,
       if (keyboard_grab != NULL &&
 	  !GDK_WINDOW_DESTROYED (keyboard_grab->window))
 	{
-	  generate_grab_broken_event (device_manager, keyboard_grab->window, FALSE, NULL);
+	  generate_grab_broken_event (device_manager, keyboard_grab->window, TRUE, NULL);
 	}
 
       /* fallthrough */
