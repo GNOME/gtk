@@ -2539,7 +2539,7 @@ gdk_event_translate (MSG  *msg,
       if (_gdk_display->keyboard_grab.window != NULL &&
 	  !GDK_WINDOW_DESTROYED (_gdk_display->keyboard_grab.window))
 	{
-	  generate_grab_broken_event (_gdk_display->keyboard_grab.window, FALSE, NULL);
+	  generate_grab_broken_event (_gdk_display->keyboard_grab.window, TRUE, NULL);
 	}
 
       /* fallthrough */
