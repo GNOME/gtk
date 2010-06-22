@@ -2738,6 +2738,7 @@ gtk_tree_view_column_cell_process_action (GtkTreeViewColumn  *tree_column,
   /* If we have rtl text, we need to transform our areas */
   GdkRectangle rtl_cell_area;
   GdkRectangle rtl_background_area;
+  GtkPackType packing;
 
   min_x = G_MAXINT;
   min_y = G_MAXINT;
@@ -2815,349 +2816,188 @@ gtk_tree_view_column_cell_process_action (GtkTreeViewColumn  *tree_column,
   else if (extra_space > 0 && expand_cell_count > 0)
     extra_space /= expand_cell_count;
 
-  /* iterate list for GTK_PACK_START cells */
-  for (list = tree_column->cell_list; list; list = list->next)
+
+  for (packing = GTK_PACK_START; packing <= GTK_PACK_END; ++packing)
     {
-      GtkTreeViewColumnCellInfo *info = (GtkTreeViewColumnCellInfo *) list->data;
 
-      if (info->pack == GTK_PACK_END)
-	continue;
-
-      if (! info->cell->visible)
-	continue;
-
-      if ((info->has_focus || special_cells == 1) && cursor_row)
-	flags |= GTK_CELL_RENDERER_FOCUSED;
-      else
-        flags &= ~GTK_CELL_RENDERER_FOCUSED;
-
-      info->real_width = info->requested_width + (info->expand?extra_space:0);
-
-      /* We constrain ourselves to only the width available */
-      if (real_cell_area.x - focus_line_width + info->real_width > cell_area->x + cell_area->width)
+      for (list = tree_column->cell_list; list; list = list->next)
 	{
-	  info->real_width = cell_area->x + cell_area->width - real_cell_area.x;
-	}   
+	  GtkTreeViewColumnCellInfo *info = (GtkTreeViewColumnCellInfo *) list->data;
 
-      if (real_cell_area.x > cell_area->x + cell_area->width)
-	break;
+	  if (info->pack != packing)
+	    continue;
 
-      real_cell_area.width = info->real_width;
-      real_cell_area.width -= 2 * focus_line_width;
+	  if (! info->cell->visible)
+	    continue;
 
-      if (list->next)
-	{
-	  real_background_area.width = info->real_width + depth;
-	}
-      else
-	{
-          /* fill the rest of background for the last cell */
-	  real_background_area.width = background_area->x + background_area->width - real_background_area.x;
-	}
+	  if ((info->has_focus || special_cells == 1) && cursor_row)
+	    flags |= GTK_CELL_RENDERER_FOCUSED;
+	  else
+	    flags &= ~GTK_CELL_RENDERER_FOCUSED;
 
-      rtl_cell_area = real_cell_area;
-      rtl_background_area = real_background_area;
+	  info->real_width = info->requested_width + (info->expand?extra_space:0);
+	  
+	  /* We constrain ourselves to only the width available */
+	  if (real_cell_area.x - focus_line_width + info->real_width > cell_area->x + cell_area->width)
+	    {
+	      info->real_width = cell_area->x + cell_area->width - real_cell_area.x;
+	    }   
+	  
+	  /* Break out of the inner loop once we itterate out of our allocation 
+	   * (and possibly start the other packing direction) */
+	  if (real_cell_area.x > cell_area->x + cell_area->width)
+	    break;
+
+	  real_cell_area.width = info->real_width;
+	  real_cell_area.width -= 2 * focus_line_width;
+
+	  if (list->next)
+	    {
+	      real_background_area.width = info->real_width + depth;
+	    }
+	  else
+	    {
+	      /* fill the rest of background for the last cell */
+	      real_background_area.width = background_area->x + background_area->width - real_background_area.x;
+	    }
+	  
+	  rtl_cell_area = real_cell_area;
+	  rtl_background_area = real_background_area;
       
-      if (rtl)
-	{
-	  rtl_cell_area.x = cell_area->x + cell_area->width - (real_cell_area.x - cell_area->x) - real_cell_area.width;
-	  rtl_background_area.x = background_area->x + background_area->width - (real_background_area.x - background_area->x) - real_background_area.width;
-	}
-
-      /* RENDER */
-      if (action == CELL_ACTION_RENDER)
-	{
-	  gtk_cell_renderer_render (info->cell,
-				    window,
-				    tree_column->tree_view,
-				    &rtl_background_area,
-				    &rtl_cell_area,
-				    &real_expose_area, 
-				    flags);
-	}
-      /* FOCUS */
-      else if (action == CELL_ACTION_FOCUS)
-	{
-	  gint x_offset, y_offset;
-	  GtkRequisition min_size;
-
-	  gtk_cell_size_request_get_size (GTK_CELL_SIZE_REQUEST (info->cell), 
-					  tree_column->tree_view, 
-					  &min_size, NULL);
-
-	  _gtk_cell_renderer_calc_offset (info->cell, &rtl_cell_area,
-					  gtk_widget_get_direction (tree_column->tree_view),
-					  min_size.width, min_size.height, &x_offset, &y_offset);
-
-	  if (special_cells > 1)
+	  if (rtl)
 	    {
-	      if (info->has_focus)
-	        {
-		  min_x = rtl_cell_area.x + x_offset;
-		  max_x = min_x + min_size.width;
-		  min_y = rtl_cell_area.y + y_offset;
-		  max_y = min_y + min_size.height;
-		}
+	      rtl_cell_area.x = cell_area->x + cell_area->width - (real_cell_area.x - cell_area->x) - real_cell_area.width;
+	      rtl_background_area.x = background_area->x + background_area->width - (real_background_area.x - background_area->x) - real_background_area.width;
 	    }
-	  else
+
+	  /* RENDER */
+	  if (action == CELL_ACTION_RENDER)
 	    {
-	      if (min_x > (rtl_cell_area.x + x_offset))
-		min_x = rtl_cell_area.x + x_offset;
-	      if (max_x < rtl_cell_area.x + x_offset + min_size.width)
-		max_x = rtl_cell_area.x + x_offset + min_size.width;
-	      if (min_y > (rtl_cell_area.y + y_offset))
-		min_y = rtl_cell_area.y + y_offset;
-	      if (max_y < rtl_cell_area.y + y_offset + min_size.height)
-		max_y = rtl_cell_area.y + y_offset + min_size.height;
+	      gtk_cell_renderer_render (info->cell,
+					window,
+					tree_column->tree_view,
+					&rtl_background_area,
+					&rtl_cell_area,
+					&real_expose_area, 
+					flags);
 	    }
-	}
-      /* EVENT */
-      else if (action == CELL_ACTION_EVENT)
-	{
-	  gboolean try_event = FALSE;
-
-	  if (event)
+	  /* FOCUS */
+	  else if (action == CELL_ACTION_FOCUS)
 	    {
-	      if (special_cells == 1)
-	        {
-		  /* only 1 activatable cell -> whole column can activate */
-		  if (cell_area->x <= ((GdkEventButton *)event)->x &&
-		      cell_area->x + cell_area->width > ((GdkEventButton *)event)->x)
-		    try_event = TRUE;
-		}
-	      else if (rtl_cell_area.x <= ((GdkEventButton *)event)->x &&
-		  rtl_cell_area.x + rtl_cell_area.width > ((GdkEventButton *)event)->x)
-		  /* only activate cell if the user clicked on an individual
-		   * cell
-		   */
-		try_event = TRUE;
-	    }
-	  else if (special_cells > 1 && info->has_focus)
-	    try_event = TRUE;
-	  else if (special_cells == 1)
-	    try_event = TRUE;
-
-	  if (try_event)
-	    {
-	      gboolean visible, mode;
-
-	      g_object_get (info->cell,
-			    "visible", &visible,
-			    "mode", &mode,
-			    NULL);
-	      if (visible && mode == GTK_CELL_RENDERER_MODE_ACTIVATABLE)
+	      gint x_offset, y_offset;
+	      GtkRequisition min_size;
+	      
+	      gtk_cell_size_request_get_size (GTK_CELL_SIZE_REQUEST (info->cell), 
+					      tree_column->tree_view, 
+					      &min_size, NULL);
+	      
+	      _gtk_cell_renderer_calc_offset (info->cell, &rtl_cell_area,
+					      gtk_widget_get_direction (tree_column->tree_view),
+					      min_size.width, min_size.height, &x_offset, &y_offset);
+	      
+	      if (special_cells > 1)
 		{
-		  if (gtk_cell_renderer_activate (info->cell,
-						  event,
-						  tree_column->tree_view,
-						  path_string,
-						  &rtl_background_area,
-						  &rtl_cell_area,
-						  flags))
+		  if (info->has_focus)
 		    {
-                      flags &= ~GTK_CELL_RENDERER_FOCUSED;
-		      return TRUE;
+		      min_x = rtl_cell_area.x + x_offset;
+		      max_x = min_x + min_size.width;
+		      min_y = rtl_cell_area.y + y_offset;
+		      max_y = min_y + min_size.height;
 		    }
 		}
-	      else if (visible && mode == GTK_CELL_RENDERER_MODE_EDITABLE)
+	      else
 		{
-		  *editable_widget =
-		    gtk_cell_renderer_start_editing (info->cell,
-						     event,
-						     tree_column->tree_view,
-						     path_string,
-						     &rtl_background_area,
-						     &rtl_cell_area,
-						     flags);
-
-		  if (*editable_widget != NULL)
+		  if (min_x > (rtl_cell_area.x + x_offset))
+		    min_x = rtl_cell_area.x + x_offset;
+		  if (max_x < rtl_cell_area.x + x_offset + min_size.width)
+		    max_x = rtl_cell_area.x + x_offset + min_size.width;
+		  if (min_y > (rtl_cell_area.y + y_offset))
+		    min_y = rtl_cell_area.y + y_offset;
+		  if (max_y < rtl_cell_area.y + y_offset + min_size.height)
+		    max_y = rtl_cell_area.y + y_offset + min_size.height;
+		}
+	    }
+	  /* EVENT */
+	  else if (action == CELL_ACTION_EVENT)
+	    {
+	      gboolean try_event = FALSE;
+	      
+	      if (event)
+		{
+		  if (special_cells == 1)
 		    {
-		      g_return_val_if_fail (GTK_IS_CELL_EDITABLE (*editable_widget), FALSE);
-		      info->in_editing_mode = TRUE;
-		      gtk_tree_view_column_focus_cell (tree_column, info->cell);
+		      /* only 1 activatable cell -> whole column can activate */
+		      if (cell_area->x <= ((GdkEventButton *)event)->x &&
+			  cell_area->x + cell_area->width > ((GdkEventButton *)event)->x)
+			try_event = TRUE;
+		    }
+		  else if (rtl_cell_area.x <= ((GdkEventButton *)event)->x &&
+			   rtl_cell_area.x + rtl_cell_area.width > ((GdkEventButton *)event)->x)
+		    /* only activate cell if the user clicked on an individual
+		     * cell
+		     */
+		    try_event = TRUE;
+		}
+	      else if (special_cells > 1 && info->has_focus)
+		try_event = TRUE;
+	      else if (special_cells == 1)
+		try_event = TRUE;
+	      
+	      if (try_event)
+		{
+		  gboolean visible, mode;
+		  
+		  g_object_get (info->cell,
+				"visible", &visible,
+				"mode", &mode,
+				NULL);
+		  if (visible && mode == GTK_CELL_RENDERER_MODE_ACTIVATABLE)
+		    {
+		      if (gtk_cell_renderer_activate (info->cell,
+						      event,
+						      tree_column->tree_view,
+						      path_string,
+						      &rtl_background_area,
+						      &rtl_cell_area,
+						      flags))
+			{
+			  flags &= ~GTK_CELL_RENDERER_FOCUSED;
+			  return TRUE;
+			}
+		    }
+		  else if (visible && mode == GTK_CELL_RENDERER_MODE_EDITABLE)
+		    {
+		      *editable_widget =
+			gtk_cell_renderer_start_editing (info->cell,
+							 event,
+							 tree_column->tree_view,
+							 path_string,
+							 &rtl_background_area,
+							 &rtl_cell_area,
+							 flags);
 		      
-                      flags &= ~GTK_CELL_RENDERER_FOCUSED;
-
-		      return TRUE;
+		      if (*editable_widget != NULL)
+			{
+			  g_return_val_if_fail (GTK_IS_CELL_EDITABLE (*editable_widget), FALSE);
+			  info->in_editing_mode = TRUE;
+			  gtk_tree_view_column_focus_cell (tree_column, info->cell);
+			  
+			  flags &= ~GTK_CELL_RENDERER_FOCUSED;
+			  
+			  return TRUE;
+			}
 		    }
 		}
 	    }
+
+	  flags &= ~GTK_CELL_RENDERER_FOCUSED;
+	  
+	  real_cell_area.x += (real_cell_area.width + 2 * focus_line_width + tree_column->spacing);
+	  real_background_area.x += real_background_area.width + tree_column->spacing;
+	  
+	  /* Only needed for first cell */
+	  depth = 0;
 	}
-
-      flags &= ~GTK_CELL_RENDERER_FOCUSED;
-
-      real_cell_area.x += (real_cell_area.width + 2 * focus_line_width + tree_column->spacing);
-      real_background_area.x += real_background_area.width + tree_column->spacing;
-
-      /* Only needed for first cell */
-      depth = 0;
-    }
-
-  /* iterate list for PACK_END cells */
-  for (list = g_list_last (tree_column->cell_list); list; list = list->prev)
-    {
-      GtkTreeViewColumnCellInfo *info = (GtkTreeViewColumnCellInfo *) list->data;
-
-      if (info->pack == GTK_PACK_START)
-	continue;
-
-      if (! info->cell->visible)
-	continue;
-
-      if ((info->has_focus || special_cells == 1) && cursor_row)
-	flags |= GTK_CELL_RENDERER_FOCUSED;
-      else
-        flags &= ~GTK_CELL_RENDERER_FOCUSED;
-
-      info->real_width = info->requested_width + (info->expand?extra_space:0);
-
-      /* We constrain ourselves to only the width available */
-      if (real_cell_area.x - focus_line_width + info->real_width > cell_area->x + cell_area->width)
-	{
-	  info->real_width = cell_area->x + cell_area->width - real_cell_area.x;
-	}   
-
-      if (real_cell_area.x > cell_area->x + cell_area->width)
-	break;
-
-      real_cell_area.width = info->real_width;
-      real_cell_area.width -= 2 * focus_line_width;
-      real_background_area.width = info->real_width + depth;
-
-      rtl_cell_area = real_cell_area;
-      rtl_background_area = real_background_area;
-      if (rtl)
-	{
-	  rtl_cell_area.x = cell_area->x + cell_area->width - (real_cell_area.x - cell_area->x) - real_cell_area.width;
-	  rtl_background_area.x = background_area->x + background_area->width - (real_background_area.x - background_area->x) - real_background_area.width;
-	}
-
-      /* RENDER */
-      if (action == CELL_ACTION_RENDER)
-	{
-	  gtk_cell_renderer_render (info->cell,
-				    window,
-				    tree_column->tree_view,
-				    &rtl_background_area,
-				    &rtl_cell_area,
-				    &real_expose_area,
-				    flags);
-	}
-      /* FOCUS */
-      else if (action == CELL_ACTION_FOCUS)
-	{
-	  gint x_offset, y_offset;
-	  GtkRequisition min_size;
-
-	  gtk_cell_size_request_get_size (GTK_CELL_SIZE_REQUEST (info->cell), 
-					  tree_column->tree_view, 
-					  &min_size, NULL);
-
-	  _gtk_cell_renderer_calc_offset (info->cell, &rtl_cell_area,
-					  gtk_widget_get_direction (tree_column->tree_view),
-					  min_size.width, min_size.height, &x_offset, &y_offset);
-
-	  if (special_cells > 1)
-	    {
-	      if (info->has_focus)
-	        {
-		  min_x = rtl_cell_area.x + x_offset;
-		  max_x = min_x + min_size.width;
-		  min_y = rtl_cell_area.y + y_offset;
-		  max_y = min_y + min_size.height;
-		}
-	    }
-	  else
-	    {
-	      if (min_x > (rtl_cell_area.x + x_offset))
-		min_x = rtl_cell_area.x + x_offset;
-	      if (max_x < rtl_cell_area.x + x_offset + min_size.width)
-		max_x = rtl_cell_area.x + x_offset + min_size.width;
-	      if (min_y > (rtl_cell_area.y + y_offset))
-		min_y = rtl_cell_area.y + y_offset;
-	      if (max_y < rtl_cell_area.y + y_offset + min_size.height)
-		max_y = rtl_cell_area.y + y_offset + min_size.height;
-	    }
-	}
-      /* EVENT */
-      else if (action == CELL_ACTION_EVENT)
-        {
-	  gboolean try_event = FALSE;
-
-	  if (event)
-	    {
-	      if (special_cells == 1)
-	        {
-		  /* only 1 activatable cell -> whole column can activate */
-		  if (cell_area->x <= ((GdkEventButton *)event)->x &&
-		      cell_area->x + cell_area->width > ((GdkEventButton *)event)->x)
-		    try_event = TRUE;
-		}
-	      else if (rtl_cell_area.x <= ((GdkEventButton *)event)->x &&
-		  rtl_cell_area.x + rtl_cell_area.width > ((GdkEventButton *)event)->x)
-		/* only activate cell if the user clicked on an individual
-		 * cell
-		 */
-		try_event = TRUE;
-	    }
-	  else if (special_cells > 1 && info->has_focus)
-	    try_event = TRUE;
-	  else if (special_cells == 1)
-	    try_event = TRUE;
-
-	  if (try_event)
-	    {
-	      gboolean visible, mode;
-
-	      g_object_get (info->cell,
-			    "visible", &visible,
-			    "mode", &mode,
-			    NULL);
-	      if (visible && mode == GTK_CELL_RENDERER_MODE_ACTIVATABLE)
-	        {
-		  if (gtk_cell_renderer_activate (info->cell,
-						  event,
-						  tree_column->tree_view,
-						  path_string,
-						  &rtl_background_area,
-						  &rtl_cell_area,
-						  flags))
-		    {
-		      flags &= ~GTK_CELL_RENDERER_FOCUSED;
-		      return TRUE;
-		    }
-		}
-	      else if (visible && mode == GTK_CELL_RENDERER_MODE_EDITABLE)
-	        {
-		  *editable_widget =
-		    gtk_cell_renderer_start_editing (info->cell,
-						     event,
-						     tree_column->tree_view,
-						     path_string,
-						     &rtl_background_area,
-						     &rtl_cell_area,
-						     flags);
-
-		  if (*editable_widget != NULL)
-		    {
-		      g_return_val_if_fail (GTK_IS_CELL_EDITABLE (*editable_widget), FALSE);
-		      info->in_editing_mode = TRUE;
-		      gtk_tree_view_column_focus_cell (tree_column, info->cell);
-
-		      flags &= ~GTK_CELL_RENDERER_FOCUSED;
-		      return TRUE;
-		    }
-		}
-	    }
-	}
-
-      flags &= ~GTK_CELL_RENDERER_FOCUSED;
-
-      real_cell_area.x += (real_cell_area.width + 2 * focus_line_width + tree_column->spacing);
-      real_background_area.x += (real_background_area.width + tree_column->spacing);
-
-      /* Only needed for first cell */
-      depth = 0;
     }
 
   /* fill focus_rectangle when required */
