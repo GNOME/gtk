@@ -104,16 +104,5 @@ gdk_set_locale (void)
   return setlocale (LC_ALL, NULL);
 }
 
-static GdkDisplay *
-find_a_display (void)
-{
-  GdkDisplay *display = gdk_display_get_default ();
-
-  if (!display)
-    display = _gdk_displays->data;
-
-  return display;
-}
-
 #define __GDK_IM_X11_C__
 #include "gdkaliasdef.c"
