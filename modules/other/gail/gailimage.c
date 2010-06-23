@@ -125,6 +125,7 @@ gail_image_get_name (AtkObject *accessible)
   GtkImage *image;
   GailImage *image_accessible;
   GtkStockItem stock_item;
+  gchar *stock_id;
   const gchar *name;
 
   name = ATK_OBJECT_CLASS (gail_image_parent_class)->get_name (accessible);
@@ -145,11 +146,12 @@ gail_image_get_name (AtkObject *accessible)
   g_free (image_accessible->stock_name);
   image_accessible->stock_name = NULL;
 
-  if (image->storage_type != GTK_IMAGE_STOCK ||
-      image->data.stock.stock_id == NULL)
+  gtk_image_get_stock (image, &stock_id, NULL);
+  if (gtk_image_get_storage_type (image) != GTK_IMAGE_STOCK ||
+      stock_id == NULL)
     return NULL;
 
-  if (!gtk_stock_lookup (image->data.stock.stock_id, &stock_item))
+  if (!gtk_stock_lookup (stock_id, &stock_item))
     return NULL;
 
   image_accessible->stock_name = elide_underscores (stock_item.label);
