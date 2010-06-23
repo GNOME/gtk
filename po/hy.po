@@ -1,1417 +1,1126 @@
-# translation of gtk+.HEAD.hy.po to armenian
+# Translation of gtk+ to Armenian
 # This file is distributed under the same license as the gtk+ package.
-# Copyright (C) 2005 THE PACKAGE'S COPYRIGHT HOLDER.
 # Lilit Azizbekyan <l@freenet.am>, 2005.
 # Lilit Sargsyan <magicliliac@yahoo.co.uk>, 2005.
 # Norayr Chilingaryan <norik@freenet.am>, 2005.
+# Lusine Karlovich <lusinekarlovich@yahoo.com>, 2010
+# Instigate Training Center: Narine Martirosyan <training@instigate.am>, 2010
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.HEAD.hy\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-05-25 20:10-0400\n"
-"PO-Revision-Date: 2006-09-04 13:36+0200\n"
-"Last-Translator: Norayr Chilingaryan <norik@freenet.am>\n"
+"POT-Creation-Date: 2010-06-21 12:39+0500\n"
+"PO-Revision-Date: 2010-06-23 12:21+0400\n"
+"Last-Translator: Nune <nune@instigatedesign.com>\n"
 "Language-Team:  <norik@freenet.am>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 16bit\n"
+"Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
 "X-Generator: KBabel 1.9.1\n"
 
-#: gdk/gdk.c:103
+#: ../gdk/gdk.c:103
 #, c-format
 msgid "Error parsing option --gdk-debug"
-msgstr ""
+msgstr "Տեղի է ունեցել սխալ --gdk-debug ընտրանքի վերլուծման ընթացքում"
 
-#: gdk/gdk.c:123
+#: ../gdk/gdk.c:123
 #, c-format
 msgid "Error parsing option --gdk-no-debug"
-msgstr ""
+msgstr "Տեղի է ունեցել սխալ --gdk-no-debug ընտրանքի վերլուծման ընթացքում"
 
 #. Description of --class=CLASS in --help output
-#: gdk/gdk.c:151
+#: ../gdk/gdk.c:151
 msgid "Program class as used by the window manager"
 msgstr "Ծրագրային դաս, որն օգտագործվում է պատուհանային ղեկավարի կողմից"
 
 #. Placeholder in --class=CLASS in --help output
-#: gdk/gdk.c:152
+#: ../gdk/gdk.c:152
 msgid "CLASS"
 msgstr "ԴԱՍ"
 
 #. Description of --name=NAME in --help output
-#: gdk/gdk.c:154
+#: ../gdk/gdk.c:154
 msgid "Program name as used by the window manager"
-msgstr "Ծրագրի անուն, օգտագործվող պատուհանային ղեկավարի կողմից"
+msgstr "Պատուհանային ղեկավարի կողմից օգտագործվող ծրագրի անուն"
 
 #. Placeholder in --name=NAME in --help output
-#: gdk/gdk.c:155
+#: ../gdk/gdk.c:155
 msgid "NAME"
 msgstr "ԱՆՈՒՆ"
 
 #. Description of --display=DISPLAY in --help output
-#: gdk/gdk.c:157
+#: ../gdk/gdk.c:157
 msgid "X display to use"
-msgstr "Կիրառել X դիսփլեյը"
+msgstr "Կիրառել X դիսփլեյ"
 
 #. Placeholder in --display=DISPLAY in --help output
-#: gdk/gdk.c:158
+#: ../gdk/gdk.c:158
 msgid "DISPLAY"
 msgstr "ՑՈՒՑԱԴՐԵԼ"
 
 #. Description of --screen=SCREEN in --help output
-#: gdk/gdk.c:160
+#: ../gdk/gdk.c:160
 msgid "X screen to use"
 msgstr "Կիրառել X էկրանը"
 
 #. Placeholder in --screen=SCREEN in --help output
-#: gdk/gdk.c:161
+#: ../gdk/gdk.c:161
 msgid "SCREEN"
 msgstr "ԷԿՐԱՆ"
 
 #. Description of --gdk-debug=FLAGS in --help output
-#: gdk/gdk.c:164
+#: ../gdk/gdk.c:164
 msgid "Gdk debugging flags to set"
-msgstr "Միացնել Gdk կարգաբերման դրոշները"
+msgstr "Gdk վրիպազերծման դրոշները, որոնք պետք է սահմանվեն"
 
 #. Placeholder in --gdk-debug=FLAGS in --help output
 #. Placeholder in --gdk-no-debug=FLAGS in --help output
 #. Placeholder in --gtk-debug=FLAGS in --help output
 #. Placeholder in --gtk-no-debug=FLAGS in --help output
-#: gdk/gdk.c:165 gdk/gdk.c:168 gtk/gtkmain.c:454 gtk/gtkmain.c:457
-#, fuzzy
+#: ../gdk/gdk.c:165
+#: ../gdk/gdk.c:168
+#: ../gtk/gtkmain.c:439
+#: ../gtk/gtkmain.c:442
 msgid "FLAGS"
 msgstr "ԴՐՈՇՆԵՐ"
 
 #. Description of --gdk-no-debug=FLAGS in --help output
-#: gdk/gdk.c:167
+#: ../gdk/gdk.c:167
 msgid "Gdk debugging flags to unset"
-msgstr "Անջատել Gdk կարգաբերման դրոշները"
+msgstr "Gdk վրիպազերծման դրոշները, որոնք պետք է անջատվեն"
 
-#: gdk/keyname-table.h:3940
-#, fuzzy
-msgctxt "keyboard label"
-msgid "BackSpace"
-msgstr "_Վերանվանել"
-
-#: gdk/keyname-table.h:3941
-msgctxt "keyboard label"
-msgid "Tab"
-msgstr ""
-
-#: gdk/keyname-table.h:3942
-msgctxt "keyboard label"
-msgid "Return"
-msgstr ""
-
-#: gdk/keyname-table.h:3943
-#, fuzzy
-msgctxt "keyboard label"
-msgid "Pause"
-msgstr "_Փակցնել"
-
-#: gdk/keyname-table.h:3944
-msgctxt "keyboard label"
-msgid "Scroll_Lock"
-msgstr ""
-
-#: gdk/keyname-table.h:3945
-#, fuzzy
-msgctxt "keyboard label"
-msgid "Sys_Req"
-msgstr "Ֆայլային համակարգ"
-
-#: gdk/keyname-table.h:3946
-msgctxt "keyboard label"
-msgid "Escape"
-msgstr ""
-
-#: gdk/keyname-table.h:3947
-msgctxt "keyboard label"
-msgid "Multi_key"
-msgstr ""
-
-#: gdk/keyname-table.h:3948
-#, fuzzy
-msgctxt "keyboard label"
-msgid "Home"
-msgstr "Տուն"
-
-#: gdk/keyname-table.h:3949
-msgctxt "keyboard label"
-msgid "Left"
-msgstr ""
-
-#: gdk/keyname-table.h:3950
-msgctxt "keyboard label"
-msgid "Up"
-msgstr ""
-
-#: gdk/keyname-table.h:3951
-#, fuzzy
-msgctxt "keyboard label"
-msgid "Right"
-msgstr "_Երանգ."
-
-#: gdk/keyname-table.h:3952
-msgctxt "keyboard label"
-msgid "Down"
-msgstr ""
-
-#: gdk/keyname-table.h:3953
-#, fuzzy
-msgctxt "keyboard label"
-msgid "Page_Up"
-msgstr "Էջ %u"
-
-#: gdk/keyname-table.h:3954
-msgctxt "keyboard label"
-msgid "Page_Down"
-msgstr ""
-
-#: gdk/keyname-table.h:3955
-msgctxt "keyboard label"
-msgid "End"
-msgstr ""
-
-#: gdk/keyname-table.h:3956
-msgctxt "keyboard label"
-msgid "Begin"
-msgstr ""
-
-#: gdk/keyname-table.h:3957
-#, fuzzy
-msgctxt "keyboard label"
-msgid "Print"
-msgstr "_Տպել"
-
-#: gdk/keyname-table.h:3958
-msgctxt "keyboard label"
-msgid "Insert"
-msgstr ""
-
-#: gdk/keyname-table.h:3959
-msgctxt "keyboard label"
-msgid "Num_Lock"
-msgstr ""
-
-#: gdk/keyname-table.h:3960
-#, fuzzy
-msgctxt "keyboard label"
-msgid "KP_Space"
-msgstr "_Վերանվանել"
-
-#: gdk/keyname-table.h:3961
-msgctxt "keyboard label"
-msgid "KP_Tab"
-msgstr ""
-
-#: gdk/keyname-table.h:3962
-#, fuzzy
-msgctxt "keyboard label"
-msgid "KP_Enter"
-msgstr "_Տպել"
-
-#: gdk/keyname-table.h:3963
-#, fuzzy
-msgctxt "keyboard label"
-msgid "KP_Home"
-msgstr "_Տուն"
-
-#: gdk/keyname-table.h:3964
-msgctxt "keyboard label"
-msgid "KP_Left"
-msgstr ""
-
-#: gdk/keyname-table.h:3965
-msgctxt "keyboard label"
-msgid "KP_Up"
-msgstr ""
-
-#: gdk/keyname-table.h:3966
-#, fuzzy
-msgctxt "keyboard label"
-msgid "KP_Right"
-msgstr "_Երանգ."
-
-#: gdk/keyname-table.h:3967
-msgctxt "keyboard label"
-msgid "KP_Down"
-msgstr ""
-
-#: gdk/keyname-table.h:3968
-msgctxt "keyboard label"
-msgid "KP_Page_Up"
-msgstr ""
-
-#: gdk/keyname-table.h:3969
-msgctxt "keyboard label"
-msgid "KP_Prior"
-msgstr ""
-
-#: gdk/keyname-table.h:3970
-msgctxt "keyboard label"
-msgid "KP_Page_Down"
-msgstr ""
-
-#: gdk/keyname-table.h:3971
-msgctxt "keyboard label"
-msgid "KP_Next"
-msgstr ""
-
-#: gdk/keyname-table.h:3972
-msgctxt "keyboard label"
-msgid "KP_End"
-msgstr ""
-
-#: gdk/keyname-table.h:3973
-msgctxt "keyboard label"
-msgid "KP_Begin"
-msgstr ""
-
-#: gdk/keyname-table.h:3974
-msgctxt "keyboard label"
-msgid "KP_Insert"
-msgstr ""
-
-#: gdk/keyname-table.h:3975
-#, fuzzy
-msgctxt "keyboard label"
-msgid "KP_Delete"
-msgstr "_Ջնջել"
-
-#: gdk/keyname-table.h:3976
-#, fuzzy
-msgctxt "keyboard label"
-msgid "Delete"
-msgstr "_Ջնջել"
-
-#: gdk-pixbuf/gdk-pixbuf-animation.c:133 gdk-pixbuf/gdk-pixbuf-io.c:982
-#: gdk-pixbuf/gdk-pixbuf-io.c:1242 tests/testfilechooser.c:222
+#: ../gdk-pixbuf/gdk-pixbuf-animation.c:133
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:982
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:1242
+#: ../tests/testfilechooser.c:222
 #, c-format
 msgid "Failed to open file '%s': %s"
-msgstr "Չհաջողվեց բացել '%s' ֆայլը` %s"
+msgstr "Չհաջողվեց բացել '%s' ֆայլը․ %s"
 
-#: gdk-pixbuf/gdk-pixbuf-animation.c:146 gdk-pixbuf/gdk-pixbuf-io.c:994
+#: ../gdk-pixbuf/gdk-pixbuf-animation.c:146
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:994
 #, c-format
 msgid "Image file '%s' contains no data"
 msgstr "Պատկերային '%s' ֆայլը տվյալ չի պարունակում"
 
-#: gdk-pixbuf/gdk-pixbuf-animation.c:188 gdk-pixbuf/gdk-pixbuf-io.c:1030
-#: gdk-pixbuf/gdk-pixbuf-io.c:1294 tests/testfilechooser.c:267
+#: ../gdk-pixbuf/gdk-pixbuf-animation.c:188
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:1030
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:1294
+#: ../tests/testfilechooser.c:267
 #, c-format
-msgid ""
-"Failed to load image '%s': reason not known, probably a corrupt image file"
-msgstr ""
-"Չհաջողվեց բացել '%s' պատկերը. պատճառն անհայտ է, հավանաբար ֆայլը վնասված է "
+msgid "Failed to load image '%s': reason not known, probably a corrupt image file"
+msgstr "Չհաջողվեց բացել '%s' նկարը. պատճառն անհայտ է, հավանաբար ֆայլը վնասված է"
 
-#: gdk-pixbuf/gdk-pixbuf-animation.c:221
+#: ../gdk-pixbuf/gdk-pixbuf-animation.c:221
 #, c-format
-msgid ""
-"Failed to load animation '%s': reason not known, probably a corrupt "
-"animation file"
-msgstr ""
-"Չհաջողվեց բացել '%s' անիմացիան. պատճառն անհայտ է, հավանաբար վնասված է "
-"անիմացիոն ֆայլը"
+msgid "Failed to load animation '%s': reason not known, probably a corrupt animation file"
+msgstr "Չհաջողվեց բացել '%s' անիմացիան. պատճառն անհայտ է, հավանաբար վնասված է անիմացիոն ֆայլը"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:715
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:715
 #, c-format
 msgid "Unable to load image-loading module: %s: %s"
-msgstr "Չի հաջողվում բեռնել պատկեր բեռնող մոդուլը՝ %s: %s"
+msgstr "Չհաջողվեց բեռնել պատկեր բեռնող մոդուլը. %s. %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:730
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:730
 #, c-format
-msgid ""
-"Image-loading module %s does not export the proper interface; perhaps it's "
-"from a different GTK version?"
-msgstr ""
-"Image-loading module %s does not export the proper interface; perhaps it's "
-"from a different GTK version?"
+msgid "Image-loading module %s does not export the proper interface; perhaps it's from a different GTK version?"
+msgstr "Պատկեր բեռնող %s մոդուլը չի ցուցաբերում համապատասխան ինտերֆեյս․ հավանաբար այն այլ GTK տարբերակից է։"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:739 gdk-pixbuf/gdk-pixbuf-io.c:790
-#, fuzzy, c-format
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:739
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:790
+#, c-format
 msgid "Image type '%s' is not supported"
 msgstr "Պատկերի '%s' տեսակը չի ապահովվում"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:863
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:863
 #, c-format
 msgid "Couldn't recognize the image file format for file '%s'"
 msgstr "Չի հաջողվում ճանաչել պատկերային ֆայլի ֆորմատը '%s' ֆայլի համար"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:871
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:871
 msgid "Unrecognized image file format"
 msgstr "Պատկերային ֆայլի անճանաչելի ֆորմատ"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1039
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:1039
 #, c-format
 msgid "Failed to load image '%s': %s"
-msgstr "Չհաջողվեց բացել '%s' պատկերը՝ %s"
+msgstr "Չհաջողվեց բացել '%s' պատկերը․ %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1673 gdk-pixbuf/io-gdip-utils.c:961
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:1673
+#: ../gdk-pixbuf/io-gdip-utils.c:961
 #, c-format
 msgid "Error writing to image file: %s"
-msgstr "Պատկերային ֆայլում գրառման սխալ՝ %s"
+msgstr "Պատկերային ֆայլում գրառման սխալ․ %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1718 gdk-pixbuf/gdk-pixbuf-io.c:1848
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:1718
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:1848
 #, c-format
 msgid "This build of gdk-pixbuf does not support saving the image format: %s"
-msgstr ""
-"gdk-pixbuf գրադարանի այս տարբերակը չի թույլատրում պահել %s ֆորմատի ֆայլ"
+msgstr "gdk-pixbuf գրադարանի այս տարբերակը չի թույլատրում պահել պատկերի ֆորմատը․ %s "
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1752
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:1752
 msgid "Insufficient memory to save image to callback"
 msgstr "Հիշողությունը անբավարար է պատկերը հիշելու համար"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1765
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:1765
 msgid "Failed to open temporary file"
 msgstr "Չհաջողվեց բացել ժամանակավոր ֆայլը"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1791
-#, fuzzy
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:1791
 msgid "Failed to read from temporary file"
-msgstr "Չհաջողվեց կարդալ ժամանակավոր ֆայլը"
+msgstr "Չհաջողվեց կարդալ ժամանակավոր ֆայլից"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:2044
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:2044
 #, c-format
 msgid "Failed to open '%s' for writing: %s"
 msgstr "Չհաջողվեց բացել '%s' գրելու համար՝ %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:2070
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:2070
 #, c-format
-msgid ""
-"Failed to close '%s' while writing image, all data may not have been saved: %"
-"s"
-msgstr ""
-"Պատկերը գրելուց չհաջողվեց փակել '%s' , հնարավոր է տվյալներըչեն պահպանվել՝ %s"
+msgid "Failed to close '%s' while writing image, all data may not have been saved: %s"
+msgstr "Պատկերը գրելու ընթացքում չհաջողվեց փակել '%s', հնարավոր է բոլոր տվյալները չեն պահպանվել՝ %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:2290 gdk-pixbuf/gdk-pixbuf-io.c:2341
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:2290
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:2341
 msgid "Insufficient memory to save image into a buffer"
 msgstr "Հիշողությունը անբավարար է պատկերը բուֆերում պահելու համար"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:2387
-#, fuzzy
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:2387
 msgid "Error writing to image stream"
 msgstr "Պատկերային ֆայլում գրառման սխալ՝ %s"
 
-#: gdk-pixbuf/gdk-pixbuf-loader.c:334
-#, fuzzy, c-format
-msgid ""
-"Internal error: Image loader module '%s' failed to complete an operation, "
-"but didn't give a reason for the failure"
-msgstr ""
-"Ներքին սխալ. '%s' պատկեր բեռնող մոդուլը չի կարող սկսել պատկերի բեռնումը, "
-"սակայն սխալի պատճառը չի նշվում"
+#: ../gdk-pixbuf/gdk-pixbuf-loader.c:334
+#, c-format
+msgid "Internal error: Image loader module '%s' failed to complete an operation, but didn't give a reason for the failure"
+msgstr "Ներքին սխալ. պատկեր բեռնող  '%s' մոդուլը չկարողացավ ավարտել պատկերի բեռնումը, սակայն սխալի պատճառը չի նշվում"
 
-#: gdk-pixbuf/gdk-pixbuf-loader.c:376
+#: ../gdk-pixbuf/gdk-pixbuf-loader.c:376
 #, c-format
 msgid "Incremental loading of image type '%s' is not supported"
-msgstr " '%s' տեսակ պատկերի աստիճանաբար բեռնելը չի ապահովվում"
+msgstr " '%s' տեսակ պատկերի աստիճանաբար բեռնումը չի ապահովվում"
 
-#: gdk-pixbuf/gdk-pixdata.c:147
+#: ../gdk-pixbuf/gdk-pixdata.c:147
 msgid "Image header corrupt"
 msgstr "Պատկերի վերնագիրը վնասված է"
 
-#: gdk-pixbuf/gdk-pixdata.c:152
+#: ../gdk-pixbuf/gdk-pixdata.c:152
 msgid "Image format unknown"
 msgstr "Պատկերի անհայտ ֆորմատ"
 
-#: gdk-pixbuf/gdk-pixdata.c:157 gdk-pixbuf/gdk-pixdata.c:488
-#, fuzzy
+#: ../gdk-pixbuf/gdk-pixdata.c:157
+#: ../gdk-pixbuf/gdk-pixdata.c:488
 msgid "Image pixel data corrupt"
 msgstr "Պատկերի պիքսելային տվյալները վնասված են"
 
-#: gdk-pixbuf/gdk-pixdata.c:432
-#, c-format
-msgid "failed to allocate image buffer of %u byte"
-msgid_plural "failed to allocate image buffer of %u bytes"
-msgstr[0] "Չհաջողվեց հատկացնել պատկերի %u բայթանոց բուֆեր"
-msgstr[1] "Չհաջողվեց հատկացնել պատկերի %u բայթանոց բուֆեր"
-
-#: gdk-pixbuf/io-ani.c:244
-#, fuzzy
+#: ../gdk-pixbuf/io-ani.c:244
 msgid "Unexpected icon chunk in animation"
-msgstr "Անիմացիայում բացակայում է սպասելի պատկերակ"
+msgstr "Անիմացիայում անսպասելի կադրերի մասնատում"
 
-#: gdk-pixbuf/io-ani.c:337
+#: ../gdk-pixbuf/io-ani.c:337
 msgid "Unsupported animation type"
-msgstr "Անապահովվող անիմացիայի տեսակ"
+msgstr "Անիմացիայի տեսակը չի անապահովվում"
 
-#: gdk-pixbuf/io-ani.c:348 gdk-pixbuf/io-ani.c:406 gdk-pixbuf/io-ani.c:432
-#: gdk-pixbuf/io-ani.c:455 gdk-pixbuf/io-ani.c:482 gdk-pixbuf/io-ani.c:569
+#: ../gdk-pixbuf/io-ani.c:348
+#: ../gdk-pixbuf/io-ani.c:406
+#: ../gdk-pixbuf/io-ani.c:432
+#: ../gdk-pixbuf/io-ani.c:455
+#: ../gdk-pixbuf/io-ani.c:482
+#: ../gdk-pixbuf/io-ani.c:569
 msgid "Invalid header in animation"
 msgstr "Անիմացիոն ֆայլը պարունակում է սխալ վերնագիր"
 
-#: gdk-pixbuf/io-ani.c:358 gdk-pixbuf/io-ani.c:380 gdk-pixbuf/io-ani.c:464
-#: gdk-pixbuf/io-ani.c:491 gdk-pixbuf/io-ani.c:542 gdk-pixbuf/io-ani.c:614
+#: ../gdk-pixbuf/io-ani.c:358
+#: ../gdk-pixbuf/io-ani.c:380
+#: ../gdk-pixbuf/io-ani.c:464
+#: ../gdk-pixbuf/io-ani.c:491
+#: ../gdk-pixbuf/io-ani.c:542
+#: ../gdk-pixbuf/io-ani.c:614
 msgid "Not enough memory to load animation"
 msgstr "Անիմացիան բացելու համար հիշողությունը բավարար չէ"
 
-#: gdk-pixbuf/io-ani.c:398 gdk-pixbuf/io-ani.c:424 gdk-pixbuf/io-ani.c:443
+#: ../gdk-pixbuf/io-ani.c:398
+#: ../gdk-pixbuf/io-ani.c:424
+#: ../gdk-pixbuf/io-ani.c:443
 msgid "Malformed chunk in animation"
-msgstr "Անիմացիան պարունակում է սխալ կտոր"
+msgstr "Անիմացիան պարունակում է վատ ձևավորված կտոր"
 
-#: gdk-pixbuf/io-ani.c:711
+#: ../gdk-pixbuf/io-ani.c:711
 msgid "The ANI image format"
 msgstr "Պատկերի ANI ֆորմատ"
 
-#: gdk-pixbuf/io-bmp.c:230 gdk-pixbuf/io-bmp.c:267 gdk-pixbuf/io-bmp.c:338
-#: gdk-pixbuf/io-bmp.c:370 gdk-pixbuf/io-bmp.c:393 gdk-pixbuf/io-bmp.c:496
+#: ../gdk-pixbuf/io-bmp.c:230
+#: ../gdk-pixbuf/io-bmp.c:267
+#: ../gdk-pixbuf/io-bmp.c:338
+#: ../gdk-pixbuf/io-bmp.c:370
+#: ../gdk-pixbuf/io-bmp.c:393
+#: ../gdk-pixbuf/io-bmp.c:496
 msgid "BMP image has bogus header data"
 msgstr "BMP պատկերի վերնագիրը պարունակում է կեղծ տվյալ"
 
-#: gdk-pixbuf/io-bmp.c:241 gdk-pixbuf/io-bmp.c:433
+#: ../gdk-pixbuf/io-bmp.c:241
+#: ../gdk-pixbuf/io-bmp.c:433
 msgid "Not enough memory to load bitmap image"
-msgstr "Հիշողությունը բավարար չէ պատկեր բեռնելու համար"
+msgstr "Հիշողությունը բավարար չէ կետպատկեր բեռնելու համար"
 
-#: gdk-pixbuf/io-bmp.c:319
+#: ../gdk-pixbuf/io-bmp.c:319
 msgid "BMP image has unsupported header size"
 msgstr "BMP պատկերը ունի չապահովվող վերնագրի չափ"
 
-#: gdk-pixbuf/io-bmp.c:357
+#: ../gdk-pixbuf/io-bmp.c:357
 msgid "Topdown BMP images cannot be compressed"
 msgstr "Այս տեսակի (topdown) BMP պատկերնեը չեն կարող սեղմվել"
 
-#: gdk-pixbuf/io-bmp.c:717 gdk-pixbuf/io-pnm.c:709
+#: ../gdk-pixbuf/io-bmp.c:717
+#: ../gdk-pixbuf/io-pnm.c:709
 msgid "Premature end-of-file encountered"
 msgstr "Ֆայլի վաղահաս վերջ"
 
-#: gdk-pixbuf/io-bmp.c:1329
+#: ../gdk-pixbuf/io-bmp.c:1329
 msgid "Couldn't allocate memory for saving BMP file"
-msgstr "Հնարավոր չէ հիշողություն հատկացնելBMP ֆայլը պահելու համար"
+msgstr "Հնարավոր չեղավ հիշողություն հատկացնել BMP ֆայլը պահելու համար"
 
-#: gdk-pixbuf/io-bmp.c:1370
+#: ../gdk-pixbuf/io-bmp.c:1370
 msgid "Couldn't write to BMP file"
-msgstr "Հնարավոր չէ փոփոխել BMP ֆայլը"
+msgstr "Հնարավոր չեղավ BMP ֆայլում գրել"
 
-#: gdk-pixbuf/io-bmp.c:1423 gdk-pixbuf/io-gdip-bmp.c:82
+#: ../gdk-pixbuf/io-bmp.c:1423
+#: ../gdk-pixbuf/io-gdip-bmp.c:82
 msgid "The BMP image format"
 msgstr "Պատկերի BMP ֆորմատ"
 
-#: gdk-pixbuf/io-gif.c:222
+#: ../gdk-pixbuf/io-gif.c:222
 #, c-format
 msgid "Failure reading GIF: %s"
 msgstr "Չի հաջողվում GIF կարդալ՝ %s"
 
-#: gdk-pixbuf/io-gif.c:496 gdk-pixbuf/io-gif.c:1481 gdk-pixbuf/io-gif.c:1642
+#: ../gdk-pixbuf/io-gif.c:496
+#: ../gdk-pixbuf/io-gif.c:1481
+#: ../gdk-pixbuf/io-gif.c:1642
 msgid "GIF file was missing some data (perhaps it was truncated somehow?)"
-msgstr "GIF ֆայլում բացակայում էին որոշ տվյալներ . հնարավոր է այն վնասվել է"
+msgstr "GIF ֆայլում բացակայում էին որոշ տվյալներ. հնարավոր է այն ինչ որ կերպ կրճատվել է"
 
-#: gdk-pixbuf/io-gif.c:505
+#: ../gdk-pixbuf/io-gif.c:505
 #, c-format
 msgid "Internal error in the GIF loader (%s)"
 msgstr "GIF բեռնիչի ներքին սխալ (%s)"
 
-#: gdk-pixbuf/io-gif.c:579
+#: ../gdk-pixbuf/io-gif.c:579
 msgid "Stack overflow"
 msgstr "Ստեկի գերլցում"
 
-#: gdk-pixbuf/io-gif.c:639
+#: ../gdk-pixbuf/io-gif.c:639
 msgid "GIF image loader cannot understand this image."
-msgstr "GIF պատկերների բեռնիչը չի հասկանում այս պատկերը"
+msgstr "GIF պատկերի բեռնիչը չի հասկանում այս պատկերը"
 
-#: gdk-pixbuf/io-gif.c:668
+#: ../gdk-pixbuf/io-gif.c:668
 msgid "Bad code encountered"
-msgstr "Հանդիպեց փչացած կոդ"
+msgstr "Հայտնաբերվել է սխալ կոդ"
 
-#: gdk-pixbuf/io-gif.c:678
+#: ../gdk-pixbuf/io-gif.c:678
 msgid "Circular table entry in GIF file"
 msgstr "GIF ֆայլ ներմուծված է շրջանային աղյուսակ"
 
-#: gdk-pixbuf/io-gif.c:866 gdk-pixbuf/io-gif.c:1468 gdk-pixbuf/io-gif.c:1515
-#: gdk-pixbuf/io-gif.c:1630
+#: ../gdk-pixbuf/io-gif.c:866
+#: ../gdk-pixbuf/io-gif.c:1468
+#: ../gdk-pixbuf/io-gif.c:1515
+#: ../gdk-pixbuf/io-gif.c:1630
 msgid "Not enough memory to load GIF file"
 msgstr "Հիշողությունը բավարար չէ GIF ֆայլը բեռնելու համար"
 
-#: gdk-pixbuf/io-gif.c:960
+#: ../gdk-pixbuf/io-gif.c:960
 msgid "Not enough memory to composite a frame in GIF file"
-msgstr "Հիշողությունը բավարար չէ ստեղծելու GIF ֆայլի կադր"
+msgstr "Հիշողությունը բավարար չէ ստեղծելու կադր GIF ֆայլում"
 
-#: gdk-pixbuf/io-gif.c:1132
+#: ../gdk-pixbuf/io-gif.c:1132
 msgid "GIF image is corrupt (incorrect LZW compression)"
 msgstr "GIF պատկերը վնասված է (սխալ LZW խտացում)"
 
-#: gdk-pixbuf/io-gif.c:1182
+#: ../gdk-pixbuf/io-gif.c:1182
 msgid "File does not appear to be a GIF file"
 msgstr "Ֆայլը նման չէ GIF ֆայլի"
 
-#: gdk-pixbuf/io-gif.c:1194
+#: ../gdk-pixbuf/io-gif.c:1194
 #, c-format
 msgid "Version %s of the GIF file format is not supported"
-msgstr "GIF ֆորմատի %s տարբերակը չր ապահովվում"
+msgstr "GIF ֆորմատի %s տարբերակը չի ապահովվում"
 
-#: gdk-pixbuf/io-gif.c:1303
-msgid ""
-"GIF image has no global colormap, and a frame inside it has no local "
-"colormap."
-msgstr ""
-"GIF պատկերը չունի հիմնական գունային քարտեզ, և միջի ֆրեյմը զուրկ է տեղական "
-"քարտեզից"
+#: ../gdk-pixbuf/io-gif.c:1303
+msgid "GIF image has no global colormap, and a frame inside it has no local colormap."
+msgstr "GIF պատկերը չունի գլոբալ գունային քարտեզ, և ներքին շրջանակը զուրկ է տեղային գունային քարտեզից"
 
-#: gdk-pixbuf/io-gif.c:1537
+#: ../gdk-pixbuf/io-gif.c:1537
 msgid "GIF image was truncated or incomplete."
 msgstr "GIF պատկերը կտրված կամ կիսատ է"
 
-#: gdk-pixbuf/io-gif.c:1693 gdk-pixbuf/io-gdip-gif.c:80
+#: ../gdk-pixbuf/io-gif.c:1693
+#: ../gdk-pixbuf/io-gdip-gif.c:80
 msgid "The GIF image format"
 msgstr "Պատկերի GIF ֆորմատ"
 
-#: gdk-pixbuf/io-ico.c:211 gdk-pixbuf/io-ico.c:225 gdk-pixbuf/io-ico.c:277
-#: gdk-pixbuf/io-ico.c:290 gdk-pixbuf/io-ico.c:359
+#: ../gdk-pixbuf/io-ico.c:211
+#: ../gdk-pixbuf/io-ico.c:225
+#: ../gdk-pixbuf/io-ico.c:277
+#: ../gdk-pixbuf/io-ico.c:290
+#: ../gdk-pixbuf/io-ico.c:359
 msgid "Invalid header in icon"
 msgstr "Սխալ վերնագիր պատկերակում"
 
-#: gdk-pixbuf/io-ico.c:240 gdk-pixbuf/io-ico.c:300 gdk-pixbuf/io-ico.c:369
-#: gdk-pixbuf/io-ico.c:432 gdk-pixbuf/io-ico.c:462
+#: ../gdk-pixbuf/io-ico.c:240
+#: ../gdk-pixbuf/io-ico.c:300
+#: ../gdk-pixbuf/io-ico.c:369
+#: ../gdk-pixbuf/io-ico.c:432
+#: ../gdk-pixbuf/io-ico.c:462
 msgid "Not enough memory to load icon"
 msgstr "Հիշողությունը բավարար չէ պատկերակը բեռնելու համար"
 
-#: gdk-pixbuf/io-ico.c:322
+#: ../gdk-pixbuf/io-ico.c:322
 msgid "Icon has zero width"
 msgstr "Պատկերակի լայնությունը զրո է"
 
-#: gdk-pixbuf/io-ico.c:332
+#: ../gdk-pixbuf/io-ico.c:332
 msgid "Icon has zero height"
 msgstr "Պատկերակի բարձրությունը զրո է"
 
-#: gdk-pixbuf/io-ico.c:384
+#: ../gdk-pixbuf/io-ico.c:384
 msgid "Compressed icons are not supported"
 msgstr "Խտացված պատկերակները չեն ապահովվում"
 
-#: gdk-pixbuf/io-ico.c:417
+#: ../gdk-pixbuf/io-ico.c:417
 msgid "Unsupported icon type"
 msgstr "Չապահովվող պատկերակի տեսակ"
 
-#: gdk-pixbuf/io-ico.c:511
+#: ../gdk-pixbuf/io-ico.c:511
 msgid "Not enough memory to load ICO file"
 msgstr "Հիշողությունը բավարար չէ ICO ֆայլը բեռնելու համար"
 
-#: gdk-pixbuf/io-ico.c:976
+#: ../gdk-pixbuf/io-ico.c:976
 msgid "Image too large to be saved as ICO"
 msgstr "Պատկերը չափազանց մեծ է որպես ICO պահելու համար"
 
-#: gdk-pixbuf/io-ico.c:987
+#: ../gdk-pixbuf/io-ico.c:987
 msgid "Cursor hotspot outside image"
 msgstr "Սլաքի ցուցամասը պատկերից դուրս է"
 
-#: gdk-pixbuf/io-ico.c:1010
+#: ../gdk-pixbuf/io-ico.c:1010
 #, c-format
 msgid "Unsupported depth for ICO file: %d"
 msgstr "ICO ֆայլի չապահովվող խորություն՝ %d"
 
-#: gdk-pixbuf/io-ico.c:1245 gdk-pixbuf/io-gdip-ico.c:59
+#: ../gdk-pixbuf/io-ico.c:1245
+#: ../gdk-pixbuf/io-gdip-ico.c:59
 msgid "The ICO image format"
 msgstr "Պատկերի ICO ֆորմատ"
 
-#: gdk-pixbuf/io-icns.c:347
-#, fuzzy, c-format
+#: ../gdk-pixbuf/io-icns.c:347
+#, c-format
 msgid "Error reading ICNS image: %s"
-msgstr "PNG պատկերային ֆայլը կարդալու անուղղելի սխալ՝ %s"
+msgstr "ICNS պատկերային ֆայլը կարդալու սխալ՝ %s"
 
-#: gdk-pixbuf/io-icns.c:364
-#, fuzzy
+#: ../gdk-pixbuf/io-icns.c:364
 msgid "Could not decode ICNS file"
-msgstr "Չհաջողվեց ընտրել միավորը"
+msgstr "Չհաջողվեց ապակոդավորել ICNS ֆայլը"
 
-#: gdk-pixbuf/io-icns.c:397
-#, fuzzy
+#: ../gdk-pixbuf/io-icns.c:397
 msgid "The ICNS image format"
-msgstr "Պատկերի ICO ֆորմատ"
+msgstr "ICNS պատկերի ֆորմատ"
 
-#: gdk-pixbuf/io-jasper.c:75
-#, fuzzy
+#: ../gdk-pixbuf/io-jasper.c:75
 msgid "Couldn't allocate memory for stream"
-msgstr "Հնարավոր չէ հիշողություն հատկացնել վերնագրի համար"
+msgstr "Հնարավոր չէ հիշողություն հատկացնել հոսքի համար"
 
-#: gdk-pixbuf/io-jasper.c:105
-#, fuzzy
+#: ../gdk-pixbuf/io-jasper.c:105
 msgid "Couldn't decode image"
-msgstr "Չհաջողվեց փոխակերպել ֆայլի անվանումը"
+msgstr "Չհաջողվեց ապակոդավորել պատկերային ֆայլը"
 
-#: gdk-pixbuf/io-jasper.c:123
-#, fuzzy
+#: ../gdk-pixbuf/io-jasper.c:123
 msgid "Transformed JPEG2000 has zero width or height"
-msgstr "Ձևափոխված PNG–ն ունի զրոյական լայնք կամ բարձրություն"
+msgstr "Ձևափոխված  JPEG2000 - ն ունի զրոյական լայնություն կամ բարձրություն"
 
-#: gdk-pixbuf/io-jasper.c:137
-#, fuzzy
+#: ../gdk-pixbuf/io-jasper.c:137
 msgid "Image type currently not supported"
-msgstr "Պատկերի '%s' տեսակը չի ապահովվում"
+msgstr "Պատկերի տեսակը ներկայումս չի ապահովվում "
 
-#: gdk-pixbuf/io-jasper.c:149 gdk-pixbuf/io-jasper.c:157
-#, fuzzy
+#: ../gdk-pixbuf/io-jasper.c:149
+#: ../gdk-pixbuf/io-jasper.c:157
 msgid "Couldn't allocate memory for color profile"
-msgstr "Չի հաջողվել հիշողություն հատկացնել JPEG ֆայլ բեռնելու համար"
+msgstr "Չի հաջողվել հիշողություն հատկացնել գույնային պրոֆիլին"
 
-#: gdk-pixbuf/io-jasper.c:183
-#, fuzzy
+#: ../gdk-pixbuf/io-jasper.c:183
 msgid "Insufficient memory to open JPEG 2000 file"
-msgstr "Հիշողությունը անբավարար է TIFF պատկերը բացելու համար"
+msgstr "Անբավարար հիշողություն JPEG 2000 ֆայլը բացելու համար "
 
-#: gdk-pixbuf/io-jasper.c:262
-#, fuzzy
+#: ../gdk-pixbuf/io-jasper.c:262
 msgid "Couldn't allocate memory to buffer image data"
-msgstr "Հնարավոր չէ հիշողություն հատկացնել գծային տվյալների համար"
+msgstr "Հնարավոր չէ հիշողություն հատկացնել բուֆերային պատկերների տվյալների համար"
 
-#: gdk-pixbuf/io-jasper.c:306
-#, fuzzy
+#: ../gdk-pixbuf/io-jasper.c:306
 msgid "The JPEG 2000 image format"
-msgstr "Պատկերի JPEG ֆորմատ"
+msgstr "JPEG 2000 պատկերի ֆորմատ"
 
-#: gdk-pixbuf/io-jpeg.c:117
+#: ../gdk-pixbuf/io-jpeg.c:117
 #, c-format
 msgid "Error interpreting JPEG image file (%s)"
 msgstr "JPEG պատկերային ֆայլի մեկնաբանման սխալ՝ (%s)"
 
-#: gdk-pixbuf/io-jpeg.c:528
-msgid ""
-"Insufficient memory to load image, try exiting some applications to free "
-"memory"
-msgstr ""
-"Հիշողությունը բավական չէ պատկերը բեռնելու համար. փորձեք ազատել "
-"հիշողությունը, փակելով որոշ ծրագրեր"
+#: ../gdk-pixbuf/io-jpeg.c:528
+msgid "Insufficient memory to load image, try exiting some applications to free memory"
+msgstr "Հիշողությունը բավական չէ պատկերը բեռնելու համար. փորձեք ազատել հիշողությունը՝ փակելով որոշ ծրագրեր"
 
-#: gdk-pixbuf/io-jpeg.c:569 gdk-pixbuf/io-jpeg.c:775
+#: ../gdk-pixbuf/io-jpeg.c:569
+#: ../gdk-pixbuf/io-jpeg.c:775
 #, c-format
 msgid "Unsupported JPEG color space (%s)"
 msgstr "Չապահովվող JPEG գունային երանգ (%s)"
 
-#: gdk-pixbuf/io-jpeg.c:674 gdk-pixbuf/io-jpeg.c:944 gdk-pixbuf/io-jpeg.c:1177
-#: gdk-pixbuf/io-jpeg.c:1186
+#: ../gdk-pixbuf/io-jpeg.c:674
+#: ../gdk-pixbuf/io-jpeg.c:944
+#: ../gdk-pixbuf/io-jpeg.c:1177
+#: ../gdk-pixbuf/io-jpeg.c:1186
 msgid "Couldn't allocate memory for loading JPEG file"
 msgstr "Չի հաջողվել հիշողություն հատկացնել JPEG ֆայլ բեռնելու համար"
 
-#: gdk-pixbuf/io-jpeg.c:919
-#, fuzzy
+#: ../gdk-pixbuf/io-jpeg.c:919
 msgid "Transformed JPEG has zero width or height."
-msgstr "Ձևափոխված PNG–ն ունի զրոյական լայնք կամ բարձրություն"
+msgstr "Ձևափոխված JPEG–ն ունի զրոյական լայնություն կամ բարձրություն։"
 
-#: gdk-pixbuf/io-jpeg.c:1133 gdk-pixbuf/io-gdip-jpeg.c:53
+#: ../gdk-pixbuf/io-jpeg.c:1133
+#: ../gdk-pixbuf/io-gdip-jpeg.c:53
 #, c-format
-msgid ""
-"JPEG quality must be a value between 0 and 100; value '%s' could not be "
-"parsed."
-msgstr "JPEG որակը պետք է ունենա 0–ից 100 արժեք. '%s' արժեքը անվերլուծելի է"
+msgid "JPEG quality must be a value between 0 and 100; value '%s' could not be parsed."
+msgstr "JPEG որակը պետք է ունենա 0–ից 100 միջակայքի արժեք. '%s' արժեքը չի կարող մշակվել"
 
-#: gdk-pixbuf/io-jpeg.c:1148 gdk-pixbuf/io-gdip-jpeg.c:68
+#: ../gdk-pixbuf/io-jpeg.c:1148
+#: ../gdk-pixbuf/io-gdip-jpeg.c:68
 #, c-format
-msgid ""
-"JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
-msgstr "JPEG որակը պետք է ունենա 0–ից 100 արժեք. '%d' արժեքը անթույլատրելի է"
+msgid "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
+msgstr "JPEG որակը պետք է ունենա 0–ից 100 միջակայքից արժեք. '%d' արժեքը անթույլատրելի է"
 
-#: gdk-pixbuf/io-jpeg.c:1310 gdk-pixbuf/io-gdip-jpeg.c:136
+#: ../gdk-pixbuf/io-jpeg.c:1310
+#: ../gdk-pixbuf/io-gdip-jpeg.c:136
 msgid "The JPEG image format"
 msgstr "Պատկերի JPEG ֆորմատ"
 
-#: gdk-pixbuf/io-pcx.c:187
+#: ../gdk-pixbuf/io-pcx.c:187
 msgid "Couldn't allocate memory for header"
 msgstr "Հնարավոր չէ հիշողություն հատկացնել վերնագրի համար"
 
-#: gdk-pixbuf/io-pcx.c:202 gdk-pixbuf/io-pcx.c:560
+#: ../gdk-pixbuf/io-pcx.c:202
+#: ../gdk-pixbuf/io-pcx.c:560
 msgid "Couldn't allocate memory for context buffer"
 msgstr "Հնարավոր չէ հիշողություն հատկացնել միջավայրի բուֆերի համար"
 
-#: gdk-pixbuf/io-pcx.c:601
+#: ../gdk-pixbuf/io-pcx.c:601
 msgid "Image has invalid width and/or height"
-msgstr "Պատկերն ունի անվավեր լայնք կամ/և բարձրություն"
+msgstr "Պատկերն ունի անվավեր լայնություն կամ/և բարձրություն"
 
-#: gdk-pixbuf/io-pcx.c:613 gdk-pixbuf/io-pcx.c:674
+#: ../gdk-pixbuf/io-pcx.c:613
+#: ../gdk-pixbuf/io-pcx.c:674
 msgid "Image has unsupported bpp"
-msgstr "Պատկերն ունի չապահովվող bpp"
+msgstr "Պատկերն ունի չապահովվող պիքսելների քանակ 1 բիթում"
 
-#: gdk-pixbuf/io-pcx.c:618 gdk-pixbuf/io-pcx.c:626
+#: ../gdk-pixbuf/io-pcx.c:618
+#: ../gdk-pixbuf/io-pcx.c:626
 #, c-format
 msgid "Image has unsupported number of %d-bit planes"
-msgstr "Պատկերն ունի չապահովվող %d–բիթային չափի քանակ"
+msgstr "Պատկերն ունի չապահովվող քանակի %d–բիթային հարթություն"
 
-#: gdk-pixbuf/io-pcx.c:642
+#: ../gdk-pixbuf/io-pcx.c:642
 msgid "Couldn't create new pixbuf"
 msgstr "Չհաջողվեց ստեղծել նոր pixbuf"
 
-#: gdk-pixbuf/io-pcx.c:650
+#: ../gdk-pixbuf/io-pcx.c:650
 msgid "Couldn't allocate memory for line data"
 msgstr "Հնարավոր չէ հիշողություն հատկացնել գծային տվյալների համար"
 
-#: gdk-pixbuf/io-pcx.c:657
+#: ../gdk-pixbuf/io-pcx.c:657
 msgid "Couldn't allocate memory for paletted data"
 msgstr "Հնարավոր չէ հիշողություն հատկացնել գունային տվյալների համար"
 
-#: gdk-pixbuf/io-pcx.c:704
+#: ../gdk-pixbuf/io-pcx.c:704
 msgid "Didn't get all lines of PCX image"
 msgstr "PCX պատկերի ոչ բոլոր տողերն են առկա"
 
-#: gdk-pixbuf/io-pcx.c:711
+#: ../gdk-pixbuf/io-pcx.c:711
 msgid "No palette found at end of PCX data"
-msgstr "PCX -ի վերջում ոչ մի գունակազմ չի հայտնաբերվել"
+msgstr "PCX տվյալի վերջում ոչ մի գունակազմ չի հայտնաբերվել"
 
-#: gdk-pixbuf/io-pcx.c:756
+#: ../gdk-pixbuf/io-pcx.c:756
 msgid "The PCX image format"
 msgstr "Պատկերների PCX ֆորմատ"
 
-#: gdk-pixbuf/io-png.c:55
+#: ../gdk-pixbuf/io-png.c:55
 msgid "Bits per channel of PNG image is invalid."
-msgstr "Սխալ էն PNG պատկերի բիթերն ըստ ալիքի"
+msgstr "Սխալ են PNG պատկերի բիթերն ըստ ալիքի"
 
-#: gdk-pixbuf/io-png.c:136 gdk-pixbuf/io-png.c:642
+#: ../gdk-pixbuf/io-png.c:136
+#: ../gdk-pixbuf/io-png.c:642
 msgid "Transformed PNG has zero width or height."
-msgstr "Ձևափոխված PNG–ն ունի զրոյական լայնք կամ բարձրություն"
+msgstr "Ձևափոխված PNG–ն ունի զրոյական լայնություն կամ բարձրություն"
 
-#: gdk-pixbuf/io-png.c:144
+#: ../gdk-pixbuf/io-png.c:144
 msgid "Bits per channel of transformed PNG is not 8."
-msgstr "Ձևափոխված PNG–ի բիթ առ հոսք հատկանիշը 8 չէ"
+msgstr "Ձևափոխված PNG–ի բիթերի քանակը հոսքում 8 չէ"
 
-#: gdk-pixbuf/io-png.c:153
+#: ../gdk-pixbuf/io-png.c:153
 msgid "Transformed PNG not RGB or RGBA."
-msgstr "Ձևափոխված PNG,  ոչ RGB կամ RGBA"
+msgstr "Ձևափոխված PNG -ն ո՛չ RGB է, ո՛չ էլ RGBA"
 
-#: gdk-pixbuf/io-png.c:162
+#: ../gdk-pixbuf/io-png.c:162
 msgid "Transformed PNG has unsupported number of channels, must be 3 or 4."
-msgstr ""
-"Ձևափոխված PNG ֆայլը ունի չապահովվող քանակությամբ ալիքներ. վավեր են 3-ը կամ 4-"
-"ը"
+msgstr "Ձևափոխված PNG ֆայլը ունի չապահովվող քանակությամբ ալիքներ. պետք է լինի 3 կամ 4"
 
-#: gdk-pixbuf/io-png.c:183
+#: ../gdk-pixbuf/io-png.c:183
 #, c-format
 msgid "Fatal error in PNG image file: %s"
-msgstr "Անուղղելի սխալ PNG պատկերային ֆայլում՝ %s"
+msgstr "Վճռորոշ սխալ PNG պատկերային ֆայլում՝ %s"
 
-#: gdk-pixbuf/io-png.c:316
+#: ../gdk-pixbuf/io-png.c:316
 msgid "Insufficient memory to load PNG file"
 msgstr "Հիշողությունը բավարար չէ PNG ֆալը բեռնելու համար"
 
-#: gdk-pixbuf/io-png.c:657
+#: ../gdk-pixbuf/io-png.c:657
 #, c-format
-msgid ""
-"Insufficient memory to store a %ld by %ld image; try exiting some "
-"applications to reduce memory usage"
-msgstr ""
-"Հիշողությունը բավարար չէ %ld –ը %ld –ով փոխարինելու համար. փորձեք փակել որոշ "
-"ծրագրեր որպեսզի հիշողություն ազատեք"
+msgid "Insufficient memory to store a %ld by %ld image; try exiting some applications to reduce memory usage"
+msgstr "Հիշողությունը բավարար չէ %ld –ը %ld –ով փոխարինելու համար. փորձեք փակել որոշ աշխատածրագրեր, որպեսզի հիշողություն ազատեք"
 
-#: gdk-pixbuf/io-png.c:720
+#: ../gdk-pixbuf/io-png.c:720
 msgid "Fatal error reading PNG image file"
-msgstr "PNG պատկերային ֆայլը կարդալու սխալ"
+msgstr "Վճռորոշ սխալ՝ PNG պատկերային ֆայլը կարդալու ժամանակ"
 
-#: gdk-pixbuf/io-png.c:769
+#: ../gdk-pixbuf/io-png.c:769
 #, c-format
 msgid "Fatal error reading PNG image file: %s"
-msgstr "PNG պատկերային ֆայլը կարդալու անուղղելի սխալ՝ %s"
+msgstr "Վճռորոշ սխալ՝ PNG պատկերային ֆայլը կարդալու ժամանակ․ %s"
 
-#: gdk-pixbuf/io-png.c:863
-msgid ""
-"Keys for PNG text chunks must have at least 1 and at most 79 characters."
-msgstr ""
-"PNG տեքստային կտորների ստեղները պետք է ունենան առնվազն 1 և առավելագույնը 79 "
-"նիշ"
+#: ../gdk-pixbuf/io-png.c:863
+msgid "Keys for PNG text chunks must have at least 1 and at most 79 characters."
+msgstr "PNG տեքստային կտորների բանալիները պետք է ունենան առնվազն 1 և առավելագույնը 79 նիշ"
 
-#: gdk-pixbuf/io-png.c:872
+#: ../gdk-pixbuf/io-png.c:872
 msgid "Keys for PNG text chunks must be ASCII characters."
-msgstr "PNG տեքստային ստեղները պետք է լինեն ASCII տեսակի"
+msgstr "PNG տեքստային կտորների բանալիները պետք է լինեն ASCII տեսակի"
 
-#: gdk-pixbuf/io-png.c:886 gdk-pixbuf/io-tiff.c:738
+#: ../gdk-pixbuf/io-png.c:886
+#: ../gdk-pixbuf/io-tiff.c:738
 #, c-format
 msgid "Color profile has invalid length %d."
-msgstr ""
+msgstr "Գույնային պրոֆիլը ունի անվավեր երկարություն %d։"
 
-#: gdk-pixbuf/io-png.c:899 gdk-pixbuf/io-gdip-png.c:56
+#: ../gdk-pixbuf/io-png.c:899
+#: ../gdk-pixbuf/io-gdip-png.c:56
 #, c-format
-msgid ""
-"PNG compression level must be a value between 0 and 9; value '%s' could not "
-"be parsed."
-msgstr ""
-"PNG սեղման աստիճանը կարող է ունենալ 0-ից 9արժեք. '%s' արժեքը վերլուծելի չէ"
+msgid "PNG compression level must be a value between 0 and 9; value '%s' could not be parsed."
+msgstr "PNG սեղմման աստիճանը կարող է ունենալ 0-ից 9 արժեք. '%s' արժեքը վերլուծելի չէ"
 
-#: gdk-pixbuf/io-png.c:912 gdk-pixbuf/io-gdip-png.c:68
+#: ../gdk-pixbuf/io-png.c:912
+#: ../gdk-pixbuf/io-gdip-png.c:68
 #, c-format
-msgid ""
-"PNG compression level must be a value between 0 and 9; value '%d' is not "
-"allowed."
-msgstr ""
-"PNG սեղման աստիճանը կարող է ունենալ 0-ից 9արժեք. '%d' արժեքը անթույլատրելի է"
+msgid "PNG compression level must be a value between 0 and 9; value '%d' is not allowed."
+msgstr "PNG սեղմման աստիճանը կարող է ունենալ 0-ից 9 արժեք. '%d' արժեքը անթույլատրելի է"
 
-#: gdk-pixbuf/io-png.c:951
+#: ../gdk-pixbuf/io-png.c:951
 #, c-format
 msgid "Value for PNG text chunk %s cannot be converted to ISO-8859-1 encoding."
-msgstr "PNG տեքստային %s արժեքը չի կարող ձևափոխվել ISO-8859-1 կոդի"
+msgstr "PNG տեքստային կտորի %s արժեքը չի կարող ձևափոխվել ISO-8859-1 կոդի։"
 
-#: gdk-pixbuf/io-png.c:1112 gdk-pixbuf/io-gdip-png.c:133
+#: ../gdk-pixbuf/io-png.c:1112
+#: ../gdk-pixbuf/io-gdip-png.c:133
 msgid "The PNG image format"
 msgstr "Պատկերի PNG ֆորմատ"
 
-#: gdk-pixbuf/io-pnm.c:250
+#: ../gdk-pixbuf/io-pnm.c:250
 msgid "PNM loader expected to find an integer, but didn't"
-msgstr "PNM բեռնիչը ակնկալում եր գտնել ամբողջ թիվ"
+msgstr "PNM բեռնիչը ակնկալում էր գտնել ամբողջ թիվ, բայց չգտավ"
 
-#: gdk-pixbuf/io-pnm.c:282
+#: ../gdk-pixbuf/io-pnm.c:282
 msgid "PNM file has an incorrect initial byte"
 msgstr "PNM ֆայլն ունի սխալ սկզբնաբայթ "
 
-#: gdk-pixbuf/io-pnm.c:312
+#: ../gdk-pixbuf/io-pnm.c:312
 msgid "PNM file is not in a recognized PNM subformat"
 msgstr "PNM ֆայլը ճանաչելի PNM ենթաֆորմատով չէ"
 
-#: gdk-pixbuf/io-pnm.c:337
+#: ../gdk-pixbuf/io-pnm.c:337
 msgid "PNM file has an image width of 0"
-msgstr "PNM ֆայլի պատկերի լայնքը 0 է"
+msgstr "PNM ֆայլի պատկերի լայնությունը 0 է"
 
-#: gdk-pixbuf/io-pnm.c:358
+#: ../gdk-pixbuf/io-pnm.c:358
 msgid "PNM file has an image height of 0"
 msgstr "PNM ֆայլի պատկերի բարձրությունը 0 է"
 
-#: gdk-pixbuf/io-pnm.c:381
+#: ../gdk-pixbuf/io-pnm.c:381
 msgid "Maximum color value in PNM file is 0"
 msgstr "PNM ֆայլում գույների առավելագույն արժեքը 0 է"
 
-#: gdk-pixbuf/io-pnm.c:389
+#: ../gdk-pixbuf/io-pnm.c:389
 msgid "Maximum color value in PNM file is too large"
-msgstr "Գունային առավելագույն արժեքը PNM ֆայլում չափազանց մեծ է"
+msgstr "Առավելագույն գունային արժեքը PNM ֆայլում չափազանց մեծ է"
 
-#: gdk-pixbuf/io-pnm.c:429 gdk-pixbuf/io-pnm.c:459 gdk-pixbuf/io-pnm.c:504
+#: ../gdk-pixbuf/io-pnm.c:429
+#: ../gdk-pixbuf/io-pnm.c:459
+#: ../gdk-pixbuf/io-pnm.c:504
 msgid "Raw PNM image type is invalid"
-msgstr "Անմշակ PNM պատկերի տեսակը սխալ է"
+msgstr "PNM ֆորմատի պատկերի տվյալ տեսակը անվավեր է"
 
-#: gdk-pixbuf/io-pnm.c:654
+#: ../gdk-pixbuf/io-pnm.c:654
 msgid "PNM image loader does not support this PNM subformat"
 msgstr "PNM պատկերի բեռնիչը չի ապահովում այս PNM ենթաֆորմատը"
 
-#: gdk-pixbuf/io-pnm.c:741 gdk-pixbuf/io-pnm.c:968
+#: ../gdk-pixbuf/io-pnm.c:741
+#: ../gdk-pixbuf/io-pnm.c:968
 msgid "Raw PNM formats require exactly one whitespace before sample data"
-msgstr ""
-"Անմշակ PNM ֆորմատները պահանջում են ուղիղ մեկ միավոր ազատ տարածություն "
-"նմուշային տվյալներից առաջ"
+msgstr "PNM ֆորմատները պահանջում են ուղիղ մեկ միավոր ազատ տարածություն նմուշային տվյալներից առաջ"
 
-#: gdk-pixbuf/io-pnm.c:768
+#: ../gdk-pixbuf/io-pnm.c:768
 msgid "Cannot allocate memory for loading PNM image"
 msgstr "Չի հաջողվում հատկացնել հիշողություն PNM պատկերը բեռնելու համար"
 
-#: gdk-pixbuf/io-pnm.c:818
+#: ../gdk-pixbuf/io-pnm.c:818
 msgid "Insufficient memory to load PNM context struct"
-msgstr "Հիշողությունը բավարար չէ PNM կոնտեքստ կառուցվածքըը բեռնելու համար"
+msgstr "Հիշողությունը բավարար չէ PNM կոնտեքստային կառուցվածքը բեռնելու համար"
 
-#: gdk-pixbuf/io-pnm.c:869
+#: ../gdk-pixbuf/io-pnm.c:869
 msgid "Unexpected end of PNM image data"
 msgstr "PNM պատկերային տվյալների անսպասելի ավարտ"
 
-#: gdk-pixbuf/io-pnm.c:997
+#: ../gdk-pixbuf/io-pnm.c:997
 msgid "Insufficient memory to load PNM file"
 msgstr "Հիշողությունը անբավարար է PNM ֆայլը բեռնելու համար"
 
-#: gdk-pixbuf/io-pnm.c:1081
+#: ../gdk-pixbuf/io-pnm.c:1081
 msgid "The PNM/PBM/PGM/PPM image format family"
 msgstr "PNM/PBM/PGM/PPM պատկերային ֆորմատի ընտանիք"
 
-#: gdk-pixbuf/io-qtif.c:128
+#: ../gdk-pixbuf/io-qtif.c:128
 msgid "Input file descriptor is NULL."
-msgstr ""
+msgstr "Մուտքային ֆայլի նկարագրիչը  NULL է։"
 
-#: gdk-pixbuf/io-qtif.c:143
-#, fuzzy
+#: ../gdk-pixbuf/io-qtif.c:143
 msgid "Failed to read QTIF header"
-msgstr "Չհաջողվեց բացել TIFF պատկերը"
+msgstr "QTIF վերնագիրը չհաջողվեց կարդալ"
 
-#: gdk-pixbuf/io-qtif.c:152 gdk-pixbuf/io-qtif.c:182 gdk-pixbuf/io-qtif.c:446
+#: ../gdk-pixbuf/io-qtif.c:152
+#: ../gdk-pixbuf/io-qtif.c:182
+#: ../gdk-pixbuf/io-qtif.c:446
 #, c-format
 msgid "QTIF atom size too large (%d bytes)"
-msgstr ""
+msgstr "QTIF ատոմի չափը շատ մեծ է (%d բիթերով)"
 
-#: gdk-pixbuf/io-qtif.c:172
-#, fuzzy, c-format
+#: ../gdk-pixbuf/io-qtif.c:172
+#, c-format
 msgid "Failed to allocate %d bytes for file read buffer"
-msgstr "Չհաջողվեց հատկացնել պատկերի %u բայթանոց բուֆեր"
+msgstr "Չհաջողվեց %d բայթանոց հիշողություն հատկացնել բուֆերին՝ ֆայլից կարդալու կամար"
 
-#: gdk-pixbuf/io-qtif.c:196
-#, fuzzy, c-format
+#: ../gdk-pixbuf/io-qtif.c:196
+#, c-format
 msgid "File error when reading QTIF atom: %s"
-msgstr "Չի հաջողվում GIF կարդալ՝ %s"
+msgstr "QTIF ատոմը կարդալիս ֆայլային սխալ՝ %s"
 
-#: gdk-pixbuf/io-qtif.c:233
+#: ../gdk-pixbuf/io-qtif.c:233
 #, c-format
 msgid "Failed to skip the next %d bytes with seek()."
-msgstr ""
+msgstr "Չհաջողվեց բաց թողնել հաջորդ %d բայթերը seek() ֆունկցիայի միջոցով"
 
-#: gdk-pixbuf/io-qtif.c:257
-#, fuzzy
+#: ../gdk-pixbuf/io-qtif.c:257
 msgid "Failed to allocate QTIF context structure."
-msgstr "Չի հաջողվում հիշողություն հատկացնել TGA կոնտեքստի կառուցվածքին"
+msgstr "Չհաջողվեց հատկացնել QTIF կոնտեքստային կառուցվածք։"
 
-#: gdk-pixbuf/io-qtif.c:317
-#, fuzzy
+#: ../gdk-pixbuf/io-qtif.c:317
 msgid "Failed to create GdkPixbufLoader object."
-msgstr "Չհաջողվեց կարդալ ժամանակավոր ֆայլը"
+msgstr "Չհաջողվեց ստեղծել GdkPixbufLoader օբյեկտ։"
 
-#: gdk-pixbuf/io-qtif.c:421
-#, fuzzy
+#: ../gdk-pixbuf/io-qtif.c:421
 msgid "Failed to find an image data atom."
-msgstr "Չհաջողվեց բացել TIFF պատկերը"
+msgstr "Չհաջողվեց գտնել պատկերի տվյալների ատոմը"
 
-#: gdk-pixbuf/io-qtif.c:602
-#, fuzzy
+#: ../gdk-pixbuf/io-qtif.c:602
 msgid "The QTIF image format"
-msgstr "TIFF պատկերային ֆորմատ"
+msgstr "QTIF պատկերային ֆորմատ"
 
-#: gdk-pixbuf/io-ras.c:126
+#: ../gdk-pixbuf/io-ras.c:126
 msgid "RAS image has bogus header data"
-msgstr "RAS պատկերի վերնագիրն պարունակում է կեղծ տվյալ"
+msgstr "RAS պատկերի վերնագիրը պարունակում է կեղծ տվյալ"
 
-#: gdk-pixbuf/io-ras.c:148
+#: ../gdk-pixbuf/io-ras.c:148
 msgid "RAS image has unknown type"
 msgstr "RAS պատկերի տեսակն անհայտ է"
 
-#: gdk-pixbuf/io-ras.c:156
+#: ../gdk-pixbuf/io-ras.c:156
 msgid "unsupported RAS image variation"
-msgstr "չապահովվող RAS պատկերի փոփոխություն"
+msgstr "Չապահովվող RAS պատկերի տարբերակ"
 
-#: gdk-pixbuf/io-ras.c:171 gdk-pixbuf/io-ras.c:200
+#: ../gdk-pixbuf/io-ras.c:171
+#: ../gdk-pixbuf/io-ras.c:200
 msgid "Not enough memory to load RAS image"
 msgstr "Հիշողությունը անբավարար է RAS պատկերը բեռնելու համար"
 
-#: gdk-pixbuf/io-ras.c:545
+#: ../gdk-pixbuf/io-ras.c:545
 msgid "The Sun raster image format"
 msgstr "Sun–ի պատկերացանցային ֆորմատ"
 
-#: gdk-pixbuf/io-tga.c:154
+#: ../gdk-pixbuf/io-tga.c:154
 msgid "Cannot allocate memory for IOBuffer struct"
-msgstr ""
-"Չի հաջողվում հիշողություն հատկացնել IOBuffer կառուցվածքի (struct) համար"
+msgstr "Չի հաջողվում հիշողություն հատկացնել IOBuffer կառուցվածքի (struct) համար"
 
-#: gdk-pixbuf/io-tga.c:173
+#: ../gdk-pixbuf/io-tga.c:173
 msgid "Cannot allocate memory for IOBuffer data"
 msgstr "Չի հաջողվում հիշողություն հատկացնել IOBuffer տվյալներին"
 
-#: gdk-pixbuf/io-tga.c:184
+#: ../gdk-pixbuf/io-tga.c:184
 msgid "Cannot realloc IOBuffer data"
 msgstr "Չի հաջողվում վերաբաշխել IOBuffer տվյալները"
 
-#: gdk-pixbuf/io-tga.c:214
+#: ../gdk-pixbuf/io-tga.c:214
 msgid "Cannot allocate temporary IOBuffer data"
-msgstr "Չի հաջողվում վերաբաշխել IOBuffer ժամանակավոր տվյալները"
+msgstr "Չի հաջողվում հատկացնել IOBuffer-ի ժամանակավոր տվյալները"
 
-#: gdk-pixbuf/io-tga.c:347
+#: ../gdk-pixbuf/io-tga.c:347
 msgid "Cannot allocate new pixbuf"
 msgstr "Չի հաջողվում հատկացնել նոր pixbuf գրադարան"
 
-#: gdk-pixbuf/io-tga.c:686
-#, fuzzy
+#: ../gdk-pixbuf/io-tga.c:686
 msgid "Image is corrupted or truncated"
-msgstr "GIF պատկերը կտրված կամ կիսատ է"
+msgstr "Պատկերը վնասված է կամ կտրված է"
 
-#: gdk-pixbuf/io-tga.c:693
-#, fuzzy
+#: ../gdk-pixbuf/io-tga.c:693
 msgid "Cannot allocate colormap structure"
-msgstr "Չի հաջողվում հատկացնել գունային քարտեզի կառուցվածք"
+msgstr "Չի հաջողվում հիշողություն հատկացնել գունային քարտեզի տվյալների կառուցվածքին"
 
-#: gdk-pixbuf/io-tga.c:700
+#: ../gdk-pixbuf/io-tga.c:700
 msgid "Cannot allocate colormap entries"
-msgstr "Չի հաջողվում հատկացնել գունային քարտեզի միավորները"
+msgstr "Չի հաջողվում հատկացնել հիշողություն գունային քարտեզի տարրերի համար"
 
-#: gdk-pixbuf/io-tga.c:722
+#: ../gdk-pixbuf/io-tga.c:722
 msgid "Unexpected bitdepth for colormap entries"
-msgstr "Գունային քարտեզի միավորների անսպասելի բիթային խորություն"
+msgstr "Գունային քարտեզի տարրերի անսպասելի բիթային խորություն"
 
-#: gdk-pixbuf/io-tga.c:740
+#: ../gdk-pixbuf/io-tga.c:740
 msgid "Cannot allocate TGA header memory"
-msgstr "Չի հաջողվում հատկացնել TGA հեդերի հիշողություն"
+msgstr "Չի հաջողվում հիշողություն հատկացնել TGA վերնագրին"
 
-#: gdk-pixbuf/io-tga.c:773
+#: ../gdk-pixbuf/io-tga.c:773
 msgid "TGA image has invalid dimensions"
 msgstr "TGA պատկերի չափերը սխալ են"
 
-#: gdk-pixbuf/io-tga.c:779 gdk-pixbuf/io-tga.c:788 gdk-pixbuf/io-tga.c:798
-#: gdk-pixbuf/io-tga.c:808 gdk-pixbuf/io-tga.c:815
+#: ../gdk-pixbuf/io-tga.c:779
+#: ../gdk-pixbuf/io-tga.c:788
+#: ../gdk-pixbuf/io-tga.c:798
+#: ../gdk-pixbuf/io-tga.c:808
+#: ../gdk-pixbuf/io-tga.c:815
 msgid "TGA image type not supported"
 msgstr "Պատկերի TGA տեսակը չի ապահովվում"
 
-#: gdk-pixbuf/io-tga.c:862
+#: ../gdk-pixbuf/io-tga.c:862
 msgid "Cannot allocate memory for TGA context struct"
 msgstr "Չի հաջողվում հիշողություն հատկացնել TGA կոնտեքստի կառուցվածքին"
 
-#: gdk-pixbuf/io-tga.c:927
+#: ../gdk-pixbuf/io-tga.c:927
 msgid "Excess data in file"
 msgstr "Ավելցուկային տվյալներ ֆայլում"
 
-#: gdk-pixbuf/io-tga.c:1008
+#: ../gdk-pixbuf/io-tga.c:1008
 msgid "The Targa image format"
 msgstr "Պատկերային Targa ֆորմատ"
 
-#: gdk-pixbuf/io-tiff.c:165
+#: ../gdk-pixbuf/io-tiff.c:165
 msgid "Could not get image width (bad TIFF file)"
-msgstr "Չհաջողվեց ստանալ պատկերի լայնքը՝ սխալ TIFF ֆայլ"
+msgstr "Չհաջողվեց ստանալ պատկերի լայնությունը՝ սխալ TIFF ֆայլ"
 
-#: gdk-pixbuf/io-tiff.c:172
+#: ../gdk-pixbuf/io-tiff.c:172
 msgid "Could not get image height (bad TIFF file)"
 msgstr "Չհաջողվեց ստանալ պատկերի բարձրությունը՝ սխալ TIFF ֆայլ"
 
-#: gdk-pixbuf/io-tiff.c:180
+#: ../gdk-pixbuf/io-tiff.c:180
 msgid "Width or height of TIFF image is zero"
-msgstr "TIFF պատկերն ունի զրոյական լայնք կամ բարձրություն"
+msgstr "TIFF պատկերն ունի զրոյական լայնություն կամ բարձրություն"
 
-#: gdk-pixbuf/io-tiff.c:189 gdk-pixbuf/io-tiff.c:198
+#: ../gdk-pixbuf/io-tiff.c:189
+#: ../gdk-pixbuf/io-tiff.c:198
 msgid "Dimensions of TIFF image too large"
 msgstr "TIFF պատկերի չափերը չափազանց մեծ են"
 
-#: gdk-pixbuf/io-tiff.c:222 gdk-pixbuf/io-tiff.c:234 gdk-pixbuf/io-tiff.c:561
+#: ../gdk-pixbuf/io-tiff.c:222
+#: ../gdk-pixbuf/io-tiff.c:234
+#: ../gdk-pixbuf/io-tiff.c:561
 msgid "Insufficient memory to open TIFF file"
 msgstr "Հիշողությունը անբավարար է TIFF պատկերը բացելու համար"
 
-#: gdk-pixbuf/io-tiff.c:295
+#: ../gdk-pixbuf/io-tiff.c:295
 msgid "Failed to load RGB data from TIFF file"
 msgstr "Չհաջողվեց TIFF ֆայլից բեռնել RGB տվյալները"
 
-#: gdk-pixbuf/io-tiff.c:351
+#: ../gdk-pixbuf/io-tiff.c:351
 msgid "Failed to open TIFF image"
 msgstr "Չհաջողվեց բացել TIFF պատկերը"
 
-#: gdk-pixbuf/io-tiff.c:363 gdk-pixbuf/io-tiff.c:778
+#: ../gdk-pixbuf/io-tiff.c:363
+#: ../gdk-pixbuf/io-tiff.c:778
 msgid "TIFFClose operation failed"
 msgstr "Չհաջողվեց փակել TIFF–ը"
 
-#: gdk-pixbuf/io-tiff.c:493 gdk-pixbuf/io-tiff.c:506
+#: ../gdk-pixbuf/io-tiff.c:493
+#: ../gdk-pixbuf/io-tiff.c:506
 msgid "Failed to load TIFF image"
 msgstr "Չհաջողվեց բեռնել TIFF պատկերը"
 
-#: gdk-pixbuf/io-tiff.c:692
-#, fuzzy
+#: ../gdk-pixbuf/io-tiff.c:692
 msgid "Failed to save TIFF image"
-msgstr "Չհաջողվեց բացել TIFF պատկերը"
+msgstr "Չհաջողվեց պահպանել TIFF պատկերը"
 
-#: gdk-pixbuf/io-tiff.c:727
+#: ../gdk-pixbuf/io-tiff.c:727
 msgid "TIFF compression doesn't refer to a valid codec."
-msgstr ""
+msgstr "TIFF սեղմումը չի հղվում վավերական կոդավորչի վրա"
 
-#: gdk-pixbuf/io-tiff.c:767
-#, fuzzy
+#: ../gdk-pixbuf/io-tiff.c:767
 msgid "Failed to write TIFF data"
-msgstr "Չհաջողվեց բացել TIFF պատկերը"
+msgstr "Չհաջողվեց գրել TIFF տվյալները"
 
-#: gdk-pixbuf/io-tiff.c:814
-#, fuzzy
+#: ../gdk-pixbuf/io-tiff.c:814
 msgid "Couldn't write to TIFF file"
-msgstr "Հնարավոր չէ փոփոխել BMP ֆայլը"
+msgstr "Չկարողացավ գրել TIFF ֆայլում"
 
-#: gdk-pixbuf/io-tiff.c:869
+#: ../gdk-pixbuf/io-tiff.c:869
 msgid "The TIFF image format"
 msgstr "TIFF պատկերային ֆորմատ"
 
-#: gdk-pixbuf/io-wbmp.c:246
+#: ../gdk-pixbuf/io-wbmp.c:246
 msgid "Image has zero width"
-msgstr "Պատկերն ունի զրոյական լայնք"
+msgstr "Պատկերն ունի զրոյական լայնութուն"
 
-#: gdk-pixbuf/io-wbmp.c:264
+#: ../gdk-pixbuf/io-wbmp.c:264
 msgid "Image has zero height"
 msgstr "Պատկերն ունի զրոյական բարձրություն"
 
-#: gdk-pixbuf/io-wbmp.c:275
+#: ../gdk-pixbuf/io-wbmp.c:275
 msgid "Not enough memory to load image"
-msgstr "Հիշողությունը անբավարար է նկար բեռնելու"
+msgstr "Հիշողությունը անբավարար է նկար բեռնելու համար"
 
-#: gdk-pixbuf/io-wbmp.c:334
-#, fuzzy
+#: ../gdk-pixbuf/io-wbmp.c:334
 msgid "Couldn't save the rest"
 msgstr "Չհաջողվեց պահպանել մնացածը"
 
-#: gdk-pixbuf/io-wbmp.c:375
+#: ../gdk-pixbuf/io-wbmp.c:375
 msgid "The WBMP image format"
 msgstr "Պատկերի WBMP ֆորմատ"
 
-#: gdk-pixbuf/io-xbm.c:295
+#: ../gdk-pixbuf/io-xbm.c:295
 msgid "Invalid XBM file"
-msgstr "Սխալ XBM ֆայլ"
+msgstr "Անվավեր XBM ֆայլ"
 
-#: gdk-pixbuf/io-xbm.c:305
+#: ../gdk-pixbuf/io-xbm.c:305
 msgid "Insufficient memory to load XBM image file"
 msgstr "Հիշողությունը բավարար չէ XBM պատկերային ֆայլ բեռնելու համար"
 
-#: gdk-pixbuf/io-xbm.c:453
+#: ../gdk-pixbuf/io-xbm.c:453
 msgid "Failed to write to temporary file when loading XBM image"
-msgstr "Չհաջողվեց ժամանակավոր ֆայլ գրել XBM պատկերը բեռնելիս"
+msgstr "Չհաջողվեց ժամանակավոր ֆայլում գրել XBM պատկերը բեռնելիս"
 
-#: gdk-pixbuf/io-xbm.c:492
+#: ../gdk-pixbuf/io-xbm.c:492
 msgid "The XBM image format"
 msgstr "XBM պատկերային ֆորմատ"
 
-#: gdk-pixbuf/io-xpm.c:468
+#: ../gdk-pixbuf/io-xpm.c:468
 msgid "No XPM header found"
-msgstr "XPM վերնագիր չի հայտնաբերվել"
+msgstr "XPM-ի վերնագիր չի հայտնաբերվել"
 
-#: gdk-pixbuf/io-xpm.c:477
+#: ../gdk-pixbuf/io-xpm.c:477
 msgid "Invalid XPM header"
-msgstr "Սխալ XPM վերնագիր"
+msgstr "Անվավեր XPM-ի վերնագիր"
 
-#: gdk-pixbuf/io-xpm.c:485
+#: ../gdk-pixbuf/io-xpm.c:485
 msgid "XPM file has image width <= 0"
-msgstr "XPM ֆայլի պատկերի լայնքը <= 0"
+msgstr "XPM ֆայլում պատկերի լայնությունը <= 0"
 
-#: gdk-pixbuf/io-xpm.c:493
+#: ../gdk-pixbuf/io-xpm.c:493
 msgid "XPM file has image height <= 0"
-msgstr "XPM ֆայլի պատկերի բարձրությունը <= 0"
+msgstr "XPM ֆայլում պատկերի բարձրությունը <= 0"
 
-#: gdk-pixbuf/io-xpm.c:501
+#: ../gdk-pixbuf/io-xpm.c:501
 msgid "XPM has invalid number of chars per pixel"
-msgstr "XPM նկարը պարունակում է սխալ քանակությամբ նիշ ըստ փիքսելի"
+msgstr "XPM նկարը պարունակում է անվավեր քանակությամբ նիշեր ըստ պիքսելի"
 
-#: gdk-pixbuf/io-xpm.c:510
+#: ../gdk-pixbuf/io-xpm.c:510
 msgid "XPM file has invalid number of colors"
-msgstr "XPM ֆայլում գույների քանակը սխալ է"
+msgstr "XPM ֆայլում գույների քանակը անվավեր է"
 
-#: gdk-pixbuf/io-xpm.c:522 gdk-pixbuf/io-xpm.c:531 gdk-pixbuf/io-xpm.c:583
+#: ../gdk-pixbuf/io-xpm.c:522
+#: ../gdk-pixbuf/io-xpm.c:531
+#: ../gdk-pixbuf/io-xpm.c:583
 msgid "Cannot allocate memory for loading XPM image"
 msgstr "Չի հաջողվում հիշողություն հատկացնել XPM պատկերը բեռնելու համար"
 
-#: gdk-pixbuf/io-xpm.c:545
+#: ../gdk-pixbuf/io-xpm.c:545
 msgid "Cannot read XPM colormap"
-msgstr "Չի հաջողվում կարդալ XPM գունային քարտեզը"
+msgstr "Չի հաջողվում կարդալ XPM-ի գունային քարտեզը"
 
-#: gdk-pixbuf/io-xpm.c:777
+#: ../gdk-pixbuf/io-xpm.c:777
 msgid "Failed to write to temporary file when loading XPM image"
 msgstr "Չհաջողվեց գրել ժամանակավոր ֆայլ XPM պատկերը բեռնելիս"
 
-#: gdk-pixbuf/io-xpm.c:816
+#: ../gdk-pixbuf/io-xpm.c:816
 msgid "The XPM image format"
 msgstr "Պատկերային XPM ֆորմատ"
 
-#: gdk-pixbuf/io-gdip-emf.c:59
-#, fuzzy
+#: ../gdk-pixbuf/io-gdip-emf.c:59
 msgid "The EMF image format"
-msgstr "Պատկերի BMP ֆորմատ"
+msgstr "EMF պատկերային ֆորմատ"
 
-#: gdk-pixbuf/io-gdip-utils.c:232
-#, fuzzy, c-format
+#: ../gdk-pixbuf/io-gdip-utils.c:232
+#, c-format
 msgid "Could not allocate memory: %s"
-msgstr "Հնարավոր չէ հիշողություն հատկացնել վերնագրի համար"
+msgstr "Չհաջողվեց հատկացնել հիշողություն․ %s"
 
-#: gdk-pixbuf/io-gdip-utils.c:257 gdk-pixbuf/io-gdip-utils.c:371
-#: gdk-pixbuf/io-gdip-utils.c:411
-#, fuzzy, c-format
+#: ../gdk-pixbuf/io-gdip-utils.c:257
+#: ../gdk-pixbuf/io-gdip-utils.c:371
+#: ../gdk-pixbuf/io-gdip-utils.c:411
+#, c-format
 msgid "Could not create stream: %s"
-msgstr "Տեղի է ունեցել սխալ '%s': %s ֆայլացուցակը ստեղծելիս"
+msgstr "Չհաջողվեց ստեղծել հոսք․ %s"
 
-#: gdk-pixbuf/io-gdip-utils.c:271
-#, fuzzy, c-format
+#: ../gdk-pixbuf/io-gdip-utils.c:271
+#, c-format
 msgid "Could not seek stream: %s"
-msgstr "Չհաջողվեց ընտրել միավորը"
+msgstr "Չհաջողվեց փոխել դիրքը հոսքում․ %s"
 
-#: gdk-pixbuf/io-gdip-utils.c:283
-#, fuzzy, c-format
+#: ../gdk-pixbuf/io-gdip-utils.c:283
+#, c-format
 msgid "Could not read from stream: %s"
-msgstr "Տեղի է ունեցել սխալ '%s': %s ֆայլացուցակը ստեղծելիս"
+msgstr "Չկարողացավ կարդալ հոսքից․ %s"
 
-#: gdk-pixbuf/io-gdip-utils.c:694 gdk-pixbuf/io-gdip-utils.c:825
-#, fuzzy
+#: ../gdk-pixbuf/io-gdip-utils.c:694
+#: ../gdk-pixbuf/io-gdip-utils.c:825
 msgid "Couldn't load bitmap"
-msgstr "Չհաջողվեց փոխակերպել ֆայլի անվանումը"
+msgstr "Չհաջողվեց բեռնել նկարը"
 
-#: gdk-pixbuf/io-gdip-utils.c:847
-#, fuzzy
+#: ../gdk-pixbuf/io-gdip-utils.c:847
 msgid "Couldn't load metafile"
-msgstr "Չհաջողվեց փոխակերպել ֆայլի անվանումը"
+msgstr "Չհաջողվեց բեռնել մետաֆայլը"
 
-#: gdk-pixbuf/io-gdip-utils.c:1006
-#, fuzzy
+#: ../gdk-pixbuf/io-gdip-utils.c:1006
 msgid "Unsupported image format for GDI+"
-msgstr "չապահովվող RAS պատկերի փոփոխություն"
+msgstr "Չապահովվող պատկերի ֆորմատ GDI+ - ի համար"
 
-#: gdk-pixbuf/io-gdip-utils.c:1013
-#, fuzzy
+#: ../gdk-pixbuf/io-gdip-utils.c:1013
 msgid "Couldn't save"
-msgstr "Չհաջողվեց պահպանել մնացածը"
+msgstr "Չհաջողվեց պահպանել "
 
-#: gdk-pixbuf/io-gdip-wmf.c:58
-#, fuzzy
+#: ../gdk-pixbuf/io-gdip-wmf.c:58
 msgid "The WMF image format"
 msgstr "Պատկերի WBMP ֆորմատ"
 
 #. Description of --sync in --help output
-#: gdk/win32/gdkmain-win32.c:55
+#: ../gdk/win32/gdkmain-win32.c:55
 msgid "Don't batch GDI requests"
-msgstr "Մի՛ խմբավորեք GDI հարցումները"
+msgstr "GDI հարցումները չխմբավորել"
 
 #. Description of --no-wintab in --help output
-#: gdk/win32/gdkmain-win32.c:57
+#: ../gdk/win32/gdkmain-win32.c:57
 msgid "Don't use the Wintab API for tablet support"
-msgstr "Don't use the Wintab API for tablet support"
+msgstr "Մի օգտագործեք  Wintab API  ցուցանակի ապահովման համար"
 
 #. Description of --ignore-wintab in --help output
-#: gdk/win32/gdkmain-win32.c:59
+#: ../gdk/win32/gdkmain-win32.c:59
 msgid "Same as --no-wintab"
 msgstr "Նույնն է, ինչ --no-wintab"
 
 #. Description of --use-wintab in --help output
-#: gdk/win32/gdkmain-win32.c:61
+#: ../gdk/win32/gdkmain-win32.c:61
 msgid "Do use the Wintab API [default]"
-msgstr "Օգտագործե՛ք Wintab API [դեֆոլթ]"
+msgstr "Օգտագործե՛ք Wintab API [լռելյայն]"
 
 #. Description of --max-colors=COLORS in --help output
-#: gdk/win32/gdkmain-win32.c:63
+#: ../gdk/win32/gdkmain-win32.c:63
 msgid "Size of the palette in 8 bit mode"
 msgstr "Գունակազմի չափը 8 բիթային ռեժիմում է"
 
 #. Placeholder in --max-colors=COLORS in --help output
-#: gdk/win32/gdkmain-win32.c:64
+#: ../gdk/win32/gdkmain-win32.c:64
 msgid "COLORS"
 msgstr "ԳՈՒՅՆԵՐ"
 
 #. Description of --sync in --help output
-#: gdk/x11/gdkmain-x11.c:95
+#: ../gdk/x11/gdkmain-x11.c:95
 msgid "Make X calls synchronous"
 msgstr "Սինխրոնացնել X կանչերը"
 
-#: gdk/x11/gdkapplaunchcontext-x11.c:313
-#, fuzzy, c-format
+#: ../gdk/x11/gdkapplaunchcontext-x11.c:313
+#, c-format
 msgid "Starting %s"
-msgstr "_Տպել"
+msgstr "Սկսել  %s"
 
-#: gdk/x11/gdkapplaunchcontext-x11.c:315
+#: ../gdk/x11/gdkapplaunchcontext-x11.c:315
 #, c-format
 msgid "Opening %s"
-msgstr ""
+msgstr "Բացվում է %s"
 
-#: gdk/x11/gdkapplaunchcontext-x11.c:318
-#, c-format
-msgid "Opening %d Item"
-msgid_plural "Opening %d Items"
-msgstr[0] ""
-msgstr[1] ""
-
-#: gtk/gtkaboutdialog.c:242
-#, fuzzy
+#: ../gtk/gtkaboutdialog.c:242
 msgid "Could not show link"
-msgstr "Չհաջողվեց ընտրել միավորը"
+msgstr "Չհաջողվեց ցույց տալ հղումը"
 
-#: gtk/gtkaboutdialog.c:365 gtk/gtkaboutdialog.c:2228
+#: ../gtk/gtkaboutdialog.c:365
+#: ../gtk/gtkaboutdialog.c:2228
 msgid "License"
 msgstr "Արտոնագիր"
 
-#: gtk/gtkaboutdialog.c:366
+#: ../gtk/gtkaboutdialog.c:366
 msgid "The license of the program"
 msgstr "Ծրագրի արտոնագիրը"
 
 #. Add the credits button
-#: gtk/gtkaboutdialog.c:629
+#: ../gtk/gtkaboutdialog.c:629
 msgid "C_redits"
-msgstr "Ե_րախտիք"
+msgstr "Ե_րախտիքներ"
 
 #. Add the license button
-#: gtk/gtkaboutdialog.c:643
+#: ../gtk/gtkaboutdialog.c:643
 msgid "_License"
 msgstr "_Արտոնագիր"
 
-#: gtk/gtkaboutdialog.c:902
+#: ../gtk/gtkaboutdialog.c:902
 #, c-format
 msgid "About %s"
 msgstr "%s–ի մասին"
 
-#: gtk/gtkaboutdialog.c:2145
+#: ../gtk/gtkaboutdialog.c:2145
 msgid "Credits"
-msgstr "Երախտիք"
+msgstr "Երախտիքներ"
 
-#: gtk/gtkaboutdialog.c:2178
+#: ../gtk/gtkaboutdialog.c:2178
 msgid "Written by"
 msgstr "Հեղինակ՝"
 
-#: gtk/gtkaboutdialog.c:2181
+#: ../gtk/gtkaboutdialog.c:2181
 msgid "Documented by"
 msgstr "Փաստաթղթերը պատրաստել է՝"
 
-#: gtk/gtkaboutdialog.c:2193
-#, fuzzy
+#: ../gtk/gtkaboutdialog.c:2193
 msgid "Translated by"
-msgstr "Թարգմանիչ՝"
+msgstr "Թարգմանված՝"
 
-#: gtk/gtkaboutdialog.c:2197
+#: ../gtk/gtkaboutdialog.c:2197
 msgid "Artwork by"
 msgstr "Ձևավորող՝"
 
-#. This is the text that should appear next to menu accelerators
-#. * that use the shift key. If the text on this key isn't typically
-#. * translated on keyboards used for your language, don't translate
-#. * this.
-#.
-#: gtk/gtkaccellabel.c:157
-#, fuzzy
-msgctxt "keyboard label"
-msgid "Shift"
-msgstr "Shift"
-
-#. This is the text that should appear next to menu accelerators
-#. * that use the control key. If the text on this key isn't typically
-#. * translated on keyboards used for your language, don't translate
-#. * this.
-#.
-#: gtk/gtkaccellabel.c:163
-#, fuzzy
-msgctxt "keyboard label"
-msgid "Ctrl"
-msgstr "Ctrl"
-
-#. This is the text that should appear next to menu accelerators
-#. * that use the alt key. If the text on this key isn't typically
-#. * translated on keyboards used for your language, don't translate
-#. * this.
-#.
-#: gtk/gtkaccellabel.c:169
-#, fuzzy
-msgctxt "keyboard label"
-msgid "Alt"
-msgstr "Alt"
-
-#. This is the text that should appear next to menu accelerators
-#. * that use the super key. If the text on this key isn't typically
-#. * translated on keyboards used for your language, don't translate
-#. * this.
-#.
-#: gtk/gtkaccellabel.c:767
-msgctxt "keyboard label"
-msgid "Super"
-msgstr ""
-
-#. This is the text that should appear next to menu accelerators
-#. * that use the hyper key. If the text on this key isn't typically
-#. * translated on keyboards used for your language, don't translate
-#. * this.
-#.
-#: gtk/gtkaccellabel.c:780
-msgctxt "keyboard label"
-msgid "Hyper"
-msgstr ""
-
-#. This is the text that should appear next to menu accelerators
-#. * that use the meta key. If the text on this key isn't typically
-#. * translated on keyboards used for your language, don't translate
-#. * this.
-#.
-#: gtk/gtkaccellabel.c:794
-msgctxt "keyboard label"
-msgid "Meta"
-msgstr ""
-
-#: gtk/gtkaccellabel.c:811
-#, fuzzy
-msgctxt "keyboard label"
-msgid "Space"
-msgstr "_Վերանվանել"
-
-#: gtk/gtkaccellabel.c:814
-msgctxt "keyboard label"
-msgid "Backslash"
-msgstr ""
-
-#: gtk/gtkbuilderparser.c:343
-#, fuzzy, c-format
+#: ../gtk/gtkbuilderparser.c:343
+#, c-format
 msgid "Invalid type function on line %d: '%s'"
-msgstr "Ֆայլի սխալ անվանում: %s"
+msgstr "Ֆունկցիայի անթույլատրելի տիպ %d տողում․ '%s'"
 
-#: gtk/gtkbuilderparser.c:407
+#: ../gtk/gtkbuilderparser.c:407
 #, c-format
 msgid "Duplicate object id '%s' on line %d (previously on line %d)"
-msgstr ""
+msgstr "Օբյեկտի կրկնվող id '%s'  %d տողում (նախկինում %d տողում)"
 
-#: gtk/gtkbuilderparser.c:859
-#, fuzzy, c-format
+#: ../gtk/gtkbuilderparser.c:859
+#, c-format
 msgid "Invalid root element: '%s'"
-msgstr "Ֆայլի սխալ անվանում: %s"
+msgstr "Անվավեր արմատային տարր․ %s"
 
-#: gtk/gtkbuilderparser.c:898
+#: ../gtk/gtkbuilderparser.c:898
 #, c-format
 msgid "Unhandled tag: '%s'"
-msgstr ""
+msgstr "Չմշակված պիտակ․ '%s'"
 
 #. Translate to calendar:YM if you want years to be displayed
 #. * before months; otherwise translate to calendar:MY.
@@ -1423,8 +1132,7 @@ msgstr ""
 #. * text direction of RTL and specify "calendar:YM", then the year
 #. * will appear to the right of the month.
 #.
-#: gtk/gtkcalendar.c:759
-#, fuzzy
+#: ../gtk/gtkcalendar.c:759
 msgid "calendar:MY"
 msgstr "օրացույց:MY"
 
@@ -1432,249 +1140,134 @@ msgstr "օրացույց:MY"
 #. * first day of the week to calendar:week_start:1 if you want Monday
 #. * to be the first day of the week, and so on.
 #.
-#: gtk/gtkcalendar.c:797
-#, fuzzy
+#: ../gtk/gtkcalendar.c:797
 msgid "calendar:week_start:0"
-msgstr "օրացույց:week_start:0"
-
-#. Translators:  This is a text measurement template.
-#. * Translate it to the widest year text
-#. *
-#. * If you don't understand this, leave it as "2000"
-#.
-#: gtk/gtkcalendar.c:1807
-msgctxt "year measurement template"
-msgid "2000"
-msgstr ""
-
-#. Translators: this defines whether the day numbers should use
-#. * localized digits or the ones used in English (0123...).
-#. *
-#. * Translate to "%Id" if you want to use localized digits, or
-#. * translate to "%d" otherwise.
-#. *
-#. * Note that translating this doesn't guarantee that you get localized
-#. * digits. That needs support from your system and locale definition
-#. * too.
-#.
-#: gtk/gtkcalendar.c:1838 gtk/gtkcalendar.c:2496
-#, c-format
-msgctxt "calendar:day:digits"
-msgid "%d"
-msgstr ""
-
-#. Translators: this defines whether the week numbers should use
-#. * localized digits or the ones used in English (0123...).
-#. *
-#. * Translate to "%Id" if you want to use localized digits, or
-#. * translate to "%d" otherwise.
-#. *
-#. * Note that translating this doesn't guarantee that you get localized
-#. * digits. That needs support from your system and locale definition
-#. * too.
-#.
-#: gtk/gtkcalendar.c:1870 gtk/gtkcalendar.c:2359
-#, c-format
-msgctxt "calendar:week:digits"
-msgid "%d"
-msgstr ""
-
-#. Translators: This dictates how the year is displayed in
-#. * gtkcalendar widget.  See strftime() manual for the format.
-#. * Use only ASCII in the translation.
-#. *
-#. * Also look for the msgid "2000".
-#. * Translate that entry to a year with the widest output of this
-#. * msgid.
-#. *
-#. * "%Y" is appropriate for most locales.
-#.
-#: gtk/gtkcalendar.c:2150
-#, fuzzy
-msgctxt "calendar year format"
-msgid "%Y"
-msgstr "Y"
-
-#. This label is displayed in a treeview cell displaying
-#. * a disabled accelerator key combination.
-#.
-#: gtk/gtkcellrendereraccel.c:256
-#, fuzzy
-msgctxt "Accelerator"
-msgid "Disabled"
-msgstr "Անջատված է"
-
-#. This label is displayed in a treeview cell displaying
-#. * an accelerator key combination that is not valid according
-#. * to gtk_accelerator_valid().
-#.
-#: gtk/gtkcellrendereraccel.c:266
-#, fuzzy
-msgctxt "Accelerator"
-msgid "Invalid"
-msgstr "Սխալ UTF-8"
+msgstr "calendar:week_start:0"
 
 #. This label is displayed in a treeview cell displaying
 #. * an accelerator when the cell is clicked to change the
 #. * acelerator.
 #.
-#: gtk/gtkcellrendereraccel.c:401 gtk/gtkcellrendereraccel.c:652
+#: ../gtk/gtkcellrendereraccel.c:401
+#: ../gtk/gtkcellrendereraccel.c:652
 msgid "New accelerator..."
-msgstr ""
+msgstr "նոր արագացուցիչ"
 
-#: gtk/gtkcellrendererprogress.c:361 gtk/gtkcellrendererprogress.c:448
-#, c-format
-msgctxt "progress bar label"
-msgid "%d %%"
-msgstr ""
-
-#: gtk/gtkcolorbutton.c:188 gtk/gtkcolorbutton.c:559
+#: ../gtk/gtkcolorbutton.c:188
+#: ../gtk/gtkcolorbutton.c:559
 msgid "Pick a Color"
-msgstr "Ընտրե՛ք գույնը"
+msgstr "Ընտրեք գույնը"
 
-#: gtk/gtkcolorbutton.c:448
-#, fuzzy
+#: ../gtk/gtkcolorbutton.c:448
 msgid "Received invalid color data\n"
 msgstr "Ստացվել են սխալ գունային տվյալներ\n"
 
-#: gtk/gtkcolorsel.c:356
-msgid ""
-"Select the color you want from the outer ring. Select the darkness or "
-"lightness of that color using the inner triangle."
-msgstr ""
-"Արտաքին օղակից ընտրե՛ք Ձեր ցանկացած գույնը։ Ընտրե՛ք այդ գույնի մգությունը "
-"կամ լուսավորությունը, կիրառելով ներսի եռանկյունը։"
+#: ../gtk/gtkcolorsel.c:356
+msgid "Select the color you want from the outer ring. Select the darkness or lightness of that color using the inner triangle."
+msgstr "Արտաքին օղակից ընտրեք Ձեր ցանկացած գույնը։ Ընտրեք այդ գույնի մգությունը կամ լուսավորությունը՝ կիրառելով ներսի եռանկյունը։"
 
-#: gtk/gtkcolorsel.c:380
-msgid ""
-"Click the eyedropper, then click a color anywhere on your screen to select "
-"that color."
-msgstr ""
-"Կտացրեք ակնակաթիլը, այնուհետև կտացրեք Ձեր էկրանի ցանկացած մասում գտնվող որևէ "
-"մի գույնի վրա, որպեսզի ընտրեք այդ գույնը։"
+#: ../gtk/gtkcolorsel.c:380
+msgid "Click the eyedropper, then click a color anywhere on your screen to select that color."
+msgstr "Սեղմեք կաթոցիկը, այնուհետև սեղմեք Ձեր էկրանի ցանկացած մասում այդ գույնն ընտրելու համար։"
 
-#: gtk/gtkcolorsel.c:389
+#: ../gtk/gtkcolorsel.c:389
 msgid "_Hue:"
 msgstr "_Երանգ."
 
-#: gtk/gtkcolorsel.c:390
+#: ../gtk/gtkcolorsel.c:390
 msgid "Position on the color wheel."
 msgstr "Դիրքը գունային անիվի վրա։"
 
-#: gtk/gtkcolorsel.c:392
+#: ../gtk/gtkcolorsel.c:392
 msgid "_Saturation:"
-msgstr "_Հագեցում."
+msgstr "_Հագեցվածություն."
 
-#: gtk/gtkcolorsel.c:393
-msgid "\"Deepness\" of the color."
-msgstr "Գույնի \"խորություն\"։"
+#: ../gtk/gtkcolorsel.c:393
+msgid "Intensity of the color."
+msgstr "Գույնի ինտենսիվությունը։"
 
-#: gtk/gtkcolorsel.c:394
+#: ../gtk/gtkcolorsel.c:394
 msgid "_Value:"
 msgstr "_Արժեք."
 
-#: gtk/gtkcolorsel.c:395
+#: ../gtk/gtkcolorsel.c:395
 msgid "Brightness of the color."
 msgstr "Գույնի պայծառություն։"
 
-#: gtk/gtkcolorsel.c:396
+#: ../gtk/gtkcolorsel.c:396
 msgid "_Red:"
 msgstr "_Կարմիր."
 
-#: gtk/gtkcolorsel.c:397
+#: ../gtk/gtkcolorsel.c:397
 msgid "Amount of red light in the color."
-msgstr "Կարմիր երանգի քանակը գույնի մեջ։"
+msgstr "Կարմիր երանգի քանակությունը գույնի մեջ։"
 
-#: gtk/gtkcolorsel.c:398
+#: ../gtk/gtkcolorsel.c:398
 msgid "_Green:"
 msgstr "_Կանաչ."
 
-#: gtk/gtkcolorsel.c:399
+#: ../gtk/gtkcolorsel.c:399
 msgid "Amount of green light in the color."
-msgstr "Կանաչ երանգի քանակը գույնի մեջ։"
+msgstr "Կանաչ երանգի քանակությունը գույնի մեջ։"
 
-#: gtk/gtkcolorsel.c:400
+#: ../gtk/gtkcolorsel.c:400
 msgid "_Blue:"
 msgstr "_Կապույտ."
 
-#: gtk/gtkcolorsel.c:401
+#: ../gtk/gtkcolorsel.c:401
 msgid "Amount of blue light in the color."
-msgstr "Կապույտ երանգի քանակը գույնի մեջ։"
+msgstr "Կապույտ երանգի քանակությունը գույնի մեջ։"
 
-#: gtk/gtkcolorsel.c:404
-#, fuzzy
+#: ../gtk/gtkcolorsel.c:404
 msgid "Op_acity:"
-msgstr "_Մգություն."
+msgstr "մ_գություն"
 
-#: gtk/gtkcolorsel.c:411 gtk/gtkcolorsel.c:421
+#: ../gtk/gtkcolorsel.c:411
+#: ../gtk/gtkcolorsel.c:421
 msgid "Transparency of the color."
 msgstr "Գույնի թափանցիկություն։"
 
-#: gtk/gtkcolorsel.c:428
-#, fuzzy
+#: ../gtk/gtkcolorsel.c:428
 msgid "Color _name:"
 msgstr "Գույնի _Անվանումը."
 
-#: gtk/gtkcolorsel.c:442
-msgid ""
-"You can enter an HTML-style hexadecimal color value, or simply a color name "
-"such as 'orange' in this entry."
-msgstr ""
-"Դուք կարող եք մուտքագրել HTML ոճի տասնվեցական գույնային արժեքկամ պարզապես "
-"գույնի անվանում, ինչպիսին է ՛նարնջագույն՛ այս տարբերակում։"
+#: ../gtk/gtkcolorsel.c:442
+msgid "You can enter an HTML-style hexadecimal color value, or simply a color name such as 'orange' in this entry."
+msgstr "Դուք կարող եք մուտքագրել HTML ոճի տասնվեցական գույնային արժեք կամ պարզապես գույնի անվանում, օրինակ՝ 'orange'։"
 
-#: gtk/gtkcolorsel.c:472
-#, fuzzy
+#: ../gtk/gtkcolorsel.c:472
 msgid "_Palette:"
-msgstr "_Գունակազմ"
+msgstr "_Գունապնակ"
 
-#: gtk/gtkcolorsel.c:501
+#: ../gtk/gtkcolorsel.c:501
 msgid "Color Wheel"
 msgstr "Գունային Անիվ"
 
-#: gtk/gtkcolorsel.c:960
-#, fuzzy
-msgid ""
-"The previously-selected color, for comparison to the color you're selecting "
-"now. You can drag this color to a palette entry, or select this color as "
-"current by dragging it to the other color swatch alongside."
-msgstr ""
-"Այժմ ընտրվող գույնի հետ համեմատելու համար մինչ այդ ընտրված գույնը։ Դուք "
-"կարող եք քաշելով տանել այս գույնը դեպի գունակազմի միավորը կամ ընտրել այս "
-"գույնը որպես ընթացիկ քաշելով այն դեպի հարակից գունանմուշը։"
+#: ../gtk/gtkcolorsel.c:960
+msgid "The previously-selected color, for comparison to the color you're selecting now. You can drag this color to a palette entry, or select this color as current by dragging it to the other color swatch alongside."
+msgstr "Նախկինում ընտրված գույնը, համեմատելու համար այն գույնի հետ, որ ընտրել եք հիմա։ Դուք կարող եք տեղադրել այս գույնը գունապնակում, կամ ընտրել այս գույնը որպես ներկա գույն՝ միևնույն ժամանակ մեկ այլ գունային օրինակ տեղադրել գունապնակում։"
 
-#: gtk/gtkcolorsel.c:963
-msgid ""
-"The color you've chosen. You can drag this color to a palette entry to save "
-"it for use in the future."
-msgstr ""
-"Ձեր ընտրած գույնը։ Դուք չեք կարող քաշելով տանել այս գույնը դեպի գունակազմի "
-"միավորը, որպեսզի այն պահպանեք հետագայում օգտագործման համար։"
+#: ../gtk/gtkcolorsel.c:963
+msgid "The color you've chosen. You can drag this color to a palette entry to save it for use in the future."
+msgstr "Ձեր ընտրած գույնը։ Դուք կարող եք քաշելով տանել այս գույնը դեպի գունապնակ, որպեսզի այն պահպանեք հետագայում օգտագործման համար։"
 
-#: gtk/gtkcolorsel.c:968
-msgid ""
-"The previously-selected color, for comparison to the color you're selecting "
-"now."
-msgstr ""
+#: ../gtk/gtkcolorsel.c:968
+msgid "The previously-selected color, for comparison to the color you're selecting now."
+msgstr "Նախկինում ընտրված գույնը համեմատած այն գույնի հետ, որը դուք ընտրում եք հիմա։"
 
-#: gtk/gtkcolorsel.c:971
+#: ../gtk/gtkcolorsel.c:971
 msgid "The color you've chosen."
-msgstr ""
+msgstr "Գույնը որ դուք ընտրել եք։"
 
-#: gtk/gtkcolorsel.c:1384
+#: ../gtk/gtkcolorsel.c:1384
 msgid "_Save color here"
 msgstr "_Պահպանեք գույնն այստեղ"
 
-#: gtk/gtkcolorsel.c:1589
-msgid ""
-"Click this palette entry to make it the current color. To change this entry, "
-"drag a color swatch here or right-click it and select \"Save color here.\""
-msgstr ""
-"Կտացրեք այս գունակազմի վրա այն ընթացիկ գույնը դարձնելու համար։Այս միավորը "
-"փոխելու համար, քաշեք գունանմուշը այստեղ կամ աջ կտտոց արեք և ընտրեք "
-"\"Պահպանել գույնն այստեղ։\""
+#: ../gtk/gtkcolorsel.c:1589
+msgid "Click this palette entry to make it the current color. To change this entry, drag a color swatch here or right-click it and select \"Save color here.\""
+msgstr "Սեղմեք գունապնակի այս տարրի վրա՝ այն ընթացիկ գույնը դարձնելու համար։ Այս տարրը փոխելու համար, քաշեք գունանմուշը այստեղ կամ աջ հարվածով ընտրեք \"Պահպանել գույնն այստեղ։\""
 
-#: gtk/gtkcolorseldialog.c:170
+#: ../gtk/gtkcolorseldialog.c:170
 msgid "Color Selection"
 msgstr "Գույնի ընտրություն"
 
@@ -1684,130 +1277,127 @@ msgstr "Գույնի ընտրություն"
 #. * Do *not* translate it to "predefinito:mm", if it
 #. * it isn't default:mm or default:inch it will not work
 #.
-#: gtk/gtkcustompaperunixdialog.c:118
-#, fuzzy
+#: ../gtk/gtkcustompaperunixdialog.c:118
 msgid "default:mm"
 msgstr "default:mm"
 
 #. And show the custom paper dialog
-#: gtk/gtkcustompaperunixdialog.c:373 gtk/gtkprintunixdialog.c:3226
+#: ../gtk/gtkcustompaperunixdialog.c:373
+#: ../gtk/gtkprintunixdialog.c:3226
 msgid "Manage Custom Sizes"
-msgstr ""
+msgstr "Կառավարել օգտագործողի չափերը"
 
-#: gtk/gtkcustompaperunixdialog.c:533 gtk/gtkpagesetupunixdialog.c:793
+#: ../gtk/gtkcustompaperunixdialog.c:533
+#: ../gtk/gtkpagesetupunixdialog.c:793
 msgid "inch"
-msgstr ""
+msgstr "դյույմ"
 
-#: gtk/gtkcustompaperunixdialog.c:535 gtk/gtkpagesetupunixdialog.c:791
+#: ../gtk/gtkcustompaperunixdialog.c:535
+#: ../gtk/gtkpagesetupunixdialog.c:791
 msgid "mm"
-msgstr ""
+msgstr "mm"
 
-#: gtk/gtkcustompaperunixdialog.c:580
+#: ../gtk/gtkcustompaperunixdialog.c:580
 msgid "Margins from Printer..."
-msgstr ""
+msgstr "Տպիչի լուսանցքները․․․"
 
-#: gtk/gtkcustompaperunixdialog.c:746
+#: ../gtk/gtkcustompaperunixdialog.c:746
 #, c-format
 msgid "Custom Size %d"
-msgstr ""
+msgstr "Պատվիրված չափ %d"
 
-#: gtk/gtkcustompaperunixdialog.c:1054
+#: ../gtk/gtkcustompaperunixdialog.c:1054
 msgid "_Width:"
-msgstr ""
+msgstr "_Լայնություն"
 
-#: gtk/gtkcustompaperunixdialog.c:1066
-#, fuzzy
+#: ../gtk/gtkcustompaperunixdialog.c:1066
 msgid "_Height:"
-msgstr "_Երանգ."
+msgstr "_Բարձրություն"
 
-#: gtk/gtkcustompaperunixdialog.c:1078
-#, fuzzy
+#: ../gtk/gtkcustompaperunixdialog.c:1078
 msgid "Paper Size"
-msgstr "_Հատկություններ"
+msgstr "Թղթի Չափը"
 
-#: gtk/gtkcustompaperunixdialog.c:1087
-#, fuzzy
+#: ../gtk/gtkcustompaperunixdialog.c:1087
 msgid "_Top:"
-msgstr "_Կանգ"
+msgstr "_Վերև․"
 
-#: gtk/gtkcustompaperunixdialog.c:1099
+#: ../gtk/gtkcustompaperunixdialog.c:1099
 msgid "_Bottom:"
-msgstr ""
+msgstr "_Ներքև․"
 
-#: gtk/gtkcustompaperunixdialog.c:1111
+#: ../gtk/gtkcustompaperunixdialog.c:1111
 msgid "_Left:"
-msgstr ""
+msgstr "_Ձախ․"
 
-#: gtk/gtkcustompaperunixdialog.c:1123
-#, fuzzy
+#: ../gtk/gtkcustompaperunixdialog.c:1123
 msgid "_Right:"
-msgstr "_Երանգ."
+msgstr "_Աջ."
 
-#: gtk/gtkcustompaperunixdialog.c:1164
+#: ../gtk/gtkcustompaperunixdialog.c:1164
 msgid "Paper Margins"
-msgstr ""
+msgstr "Թղթի լուսանցքները"
 
-#: gtk/gtkentry.c:8612 gtk/gtktextview.c:8002
+#: ../gtk/gtkentry.c:8612
+#: ../gtk/gtktextview.c:8012
 msgid "Input _Methods"
-msgstr "Ներմուծման _Ձևեր"
+msgstr "Ներմուծման _Մեթոդներ"
 
-#: gtk/gtkentry.c:8626 gtk/gtktextview.c:8016
-#, fuzzy
+#: ../gtk/gtkentry.c:8626
+#: ../gtk/gtktextview.c:8026
 msgid "_Insert Unicode Control Character"
-msgstr "_Ներմուծել Unicode Control Նիշ"
+msgstr "_Ներմուծել Unicode-ի ղեկավարող նիշը"
 
-#: gtk/gtkentry.c:10020
-#, fuzzy
+#: ../gtk/gtkentry.c:10020
 msgid "Caps Lock is on"
-msgstr "Բացել _տեղադրությունը"
+msgstr "Caps Lock-ը միացված է"
 
-#: gtk/gtkfilechooserbutton.c:64
+#: ../gtk/gtkfilechooserbutton.c:64
 msgid "Select A File"
-msgstr "Ընտրեք Ֆայլը"
+msgstr "Ընտրեք Ֆայլ"
 
-#: gtk/gtkfilechooserbutton.c:65 gtk/gtkfilechooserdefault.c:1839
+#: ../gtk/gtkfilechooserbutton.c:65
+#: ../gtk/gtkfilechooserdefault.c:1839
 msgid "Desktop"
 msgstr "Աշխատանքային սեղան"
 
-#: gtk/gtkfilechooserbutton.c:66
+#: ../gtk/gtkfilechooserbutton.c:66
 msgid "(None)"
-msgstr "(Ոչ մեկը)"
+msgstr "(Ոչինչ)"
 
-#: gtk/gtkfilechooserbutton.c:2016
+#: ../gtk/gtkfilechooserbutton.c:2016
 msgid "Other..."
 msgstr "Այլ..."
 
-#: gtk/gtkfilechooserdefault.c:148
+#: ../gtk/gtkfilechooserdefault.c:148
 msgid "Type name of new folder"
-msgstr "Տպե՛ք նոր պանակի անվանումը"
+msgstr "Տպեք նոր պանակի անվանումը"
 
-#: gtk/gtkfilechooserdefault.c:965
+#: ../gtk/gtkfilechooserdefault.c:965
 msgid "Could not retrieve information about the file"
 msgstr "Չհաջողվեց վերստանալ ֆայլի մասին ինֆորմացիա"
 
-#: gtk/gtkfilechooserdefault.c:976
+#: ../gtk/gtkfilechooserdefault.c:976
 msgid "Could not add a bookmark"
-msgstr "Չհաջողվեց ավելացնել էջանշան"
+msgstr "Չհաջողվեց ավելացնել էջանիշ"
 
-#: gtk/gtkfilechooserdefault.c:987
+#: ../gtk/gtkfilechooserdefault.c:987
 msgid "Could not remove bookmark"
-msgstr "Չհաջողվեց հանել էջանշանը"
+msgstr "Չհաջողվեց հանել էջանիշը"
 
-#: gtk/gtkfilechooserdefault.c:998
+#: ../gtk/gtkfilechooserdefault.c:998
 msgid "The folder could not be created"
 msgstr "Չհաջողվեց ստեղծել պանակ"
 
-#: gtk/gtkfilechooserdefault.c:1011
-msgid ""
-"The folder could not be created, as a file with the same name already "
-"exists.  Try using a different name for the folder, or rename the file first."
-msgstr ""
+#: ../gtk/gtkfilechooserdefault.c:1011
+msgid "The folder could not be created, as a file with the same name already exists.  Try using a different name for the folder, or rename the file first."
+msgstr "Պանակը չստեղծվեց, քանի որ նույնանուն ֆայլ արդեն գոյություն ունի։ Փորձեք օգտագործել այլ անուն, կամ անվանափոխեք առաջին ֆայլը։"
 
-#: gtk/gtkfilechooserdefault.c:1022
+#: ../gtk/gtkfilechooserdefault.c:1022
 msgid "Invalid file name"
 msgstr "Ֆայլի սխալ անուն"
 
-#: gtk/gtkfilechooserdefault.c:1032
+#: ../gtk/gtkfilechooserdefault.c:1032
 msgid "The folder contents could not be displayed"
 msgstr "Հնարավոր չէ ցուցադրել պանակի պարունակությունը"
 
@@ -1815,356 +1405,346 @@ msgstr "Հնարավոր չէ ցուցադրել պանակի պարունակո
 #. * is a hostname. Nautilus and the panel contain the same string
 #. * to translate.
 #.
-#: gtk/gtkfilechooserdefault.c:1582
+#: ../gtk/gtkfilechooserdefault.c:1582
 #, c-format
 msgid "%1$s on %2$s"
-msgstr ""
+msgstr "%1$s on %2$s"
 
-#: gtk/gtkfilechooserdefault.c:1758
+#: ../gtk/gtkfilechooserdefault.c:1758
 msgid "Search"
-msgstr ""
+msgstr "Փնտրում"
 
-#: gtk/gtkfilechooserdefault.c:1782 gtk/gtkfilechooserdefault.c:9454
+#: ../gtk/gtkfilechooserdefault.c:1782
+#: ../gtk/gtkfilechooserdefault.c:9454
 msgid "Recently Used"
-msgstr ""
+msgstr "Վերջերս օգտագործված"
 
-#: gtk/gtkfilechooserdefault.c:2422
+#: ../gtk/gtkfilechooserdefault.c:2422
 msgid "Select which types of files are shown"
 msgstr "Ընտրեք որ տեսակի ֆայլերն են ցուցադրված"
 
-#: gtk/gtkfilechooserdefault.c:2781
+#: ../gtk/gtkfilechooserdefault.c:2781
 #, c-format
 msgid "Add the folder '%s' to the bookmarks"
-msgstr "Ավելացնել '%s' պանակը էջանշաններին"
+msgstr "Ավելացնել '%s' պանակը էջանիշերին"
 
-#: gtk/gtkfilechooserdefault.c:2825
+#: ../gtk/gtkfilechooserdefault.c:2825
 #, c-format
 msgid "Add the current folder to the bookmarks"
-msgstr "Ավելացնել ընթացիկ պանակը էջանշաններին"
+msgstr "Ավելացնել ընթացիկ պանակը էջանիշերին"
 
-#: gtk/gtkfilechooserdefault.c:2827
+#: ../gtk/gtkfilechooserdefault.c:2827
 #, c-format
 msgid "Add the selected folders to the bookmarks"
-msgstr "Ավելացնել ընտրված պանակը էջանշաններին"
+msgstr "Ավելացնել ընտրված պանակը էջանիշերին"
 
-#: gtk/gtkfilechooserdefault.c:2865
+#: ../gtk/gtkfilechooserdefault.c:2865
 #, c-format
 msgid "Remove the bookmark '%s'"
-msgstr "Հանել '%s' էջանշանը"
+msgstr "Հանել '%s' էջանիշը"
 
-#: gtk/gtkfilechooserdefault.c:2867
+#: ../gtk/gtkfilechooserdefault.c:2867
 #, c-format
 msgid "Bookmark '%s' cannot be removed"
-msgstr ""
+msgstr "'%s'  Էջանիշը չի կարող հեռացվել"
 
-#: gtk/gtkfilechooserdefault.c:2874 gtk/gtkfilechooserdefault.c:3898
+#: ../gtk/gtkfilechooserdefault.c:2874
+#: ../gtk/gtkfilechooserdefault.c:3898
 msgid "Remove the selected bookmark"
-msgstr "Հեռացնել ընտրված էջանշանը"
+msgstr "Հեռացնել ընտրված էջանիշը"
 
-#: gtk/gtkfilechooserdefault.c:3594
+#: ../gtk/gtkfilechooserdefault.c:3594
 msgid "Remove"
 msgstr "Հեռացնել"
 
-#: gtk/gtkfilechooserdefault.c:3603
+#: ../gtk/gtkfilechooserdefault.c:3603
 msgid "Rename..."
 msgstr "Վերանվանել..."
 
 #. Accessible object name for the file chooser's shortcuts pane
-#: gtk/gtkfilechooserdefault.c:3766
+#: ../gtk/gtkfilechooserdefault.c:3766
 msgid "Places"
-msgstr ""
+msgstr "Դիրքերը"
 
 #. Column header for the file chooser's shortcuts pane
-#: gtk/gtkfilechooserdefault.c:3823
-#, fuzzy
+#: ../gtk/gtkfilechooserdefault.c:3823
 msgid "_Places"
-msgstr "_Վերանվանել"
+msgstr "_Դիրքերը"
 
-#: gtk/gtkfilechooserdefault.c:3879
+#: ../gtk/gtkfilechooserdefault.c:3879
 msgid "_Add"
 msgstr "_Ավելացնել"
 
-#: gtk/gtkfilechooserdefault.c:3886
+#: ../gtk/gtkfilechooserdefault.c:3886
 msgid "Add the selected folder to the Bookmarks"
-msgstr "Ավելացնել ընտրված պանակը Էջանշաններին"
+msgstr "Ավելացնել ընտրված պանակը Էջանիշերին"
 
-#: gtk/gtkfilechooserdefault.c:3891
+#: ../gtk/gtkfilechooserdefault.c:3891
 msgid "_Remove"
 msgstr "_Հեռացնել"
 
-#: gtk/gtkfilechooserdefault.c:4026
-#, fuzzy
+#: ../gtk/gtkfilechooserdefault.c:4026
 msgid "Could not select file"
-msgstr "Չհաջողվեց ընտրել միավորը"
+msgstr "Չհաջողվեց ընտրել ֆայլը"
 
-#: gtk/gtkfilechooserdefault.c:4201
+#: ../gtk/gtkfilechooserdefault.c:4201
 msgid "_Add to Bookmarks"
-msgstr "_Ավելացնել Էջանշաններին"
+msgstr "_Ավելացնել Էջանիշերին"
 
-#: gtk/gtkfilechooserdefault.c:4214
+#: ../gtk/gtkfilechooserdefault.c:4214
 msgid "Show _Hidden Files"
 msgstr "Ցուցադրել _Թաքցված Ֆայլերը"
 
-#: gtk/gtkfilechooserdefault.c:4221
+#: ../gtk/gtkfilechooserdefault.c:4221
 msgid "Show _Size Column"
-msgstr ""
+msgstr "Ցուցադրել _Չափի Սյունը"
 
-#: gtk/gtkfilechooserdefault.c:4441
+#: ../gtk/gtkfilechooserdefault.c:4441
 msgid "Files"
 msgstr "Ֆայլեր"
 
-#: gtk/gtkfilechooserdefault.c:4492
+#: ../gtk/gtkfilechooserdefault.c:4492
 msgid "Name"
 msgstr "Անվանում"
 
-#: gtk/gtkfilechooserdefault.c:4515
+#: ../gtk/gtkfilechooserdefault.c:4515
 msgid "Size"
 msgstr "Չափս"
 
-#: gtk/gtkfilechooserdefault.c:4529
+#: ../gtk/gtkfilechooserdefault.c:4529
 msgid "Modified"
 msgstr "Ձևափոխված"
 
 #. Label
-#: gtk/gtkfilechooserdefault.c:4784 gtk/gtkprinteroptionwidget.c:802
+#: ../gtk/gtkfilechooserdefault.c:4784
+#: ../gtk/gtkprinteroptionwidget.c:802
 msgid "_Name:"
 msgstr "_Անվանում."
 
-#: gtk/gtkfilechooserdefault.c:4827
+#: ../gtk/gtkfilechooserdefault.c:4827
 msgid "_Browse for other folders"
-msgstr "_Browse for other folders"
+msgstr "_Զննել այլ թղթապանակներ"
 
-#: gtk/gtkfilechooserdefault.c:5099
-#, fuzzy
+#: ../gtk/gtkfilechooserdefault.c:5099
 msgid "Type a file name"
-msgstr "Ֆայլի սխալ անուն"
+msgstr "Մուտքագրեք ֆայլի անունը"
 
 #. Create Folder
-#: gtk/gtkfilechooserdefault.c:5140
+#: ../gtk/gtkfilechooserdefault.c:5140
 msgid "Create Fo_lder"
-msgstr "Ստեղծել Ֆո_լդեր"
+msgstr "Ստեղծել Թղթա_պանակ"
 
-#: gtk/gtkfilechooserdefault.c:5150
-#, fuzzy
+#: ../gtk/gtkfilechooserdefault.c:5150
 msgid "_Location:"
-msgstr "_Տեղադրություն."
+msgstr "_Տեղադրություն․"
 
-#: gtk/gtkfilechooserdefault.c:5354
+#: ../gtk/gtkfilechooserdefault.c:5354
 msgid "Save in _folder:"
 msgstr "Պահպանել _պանակում."
 
-#: gtk/gtkfilechooserdefault.c:5356
+#: ../gtk/gtkfilechooserdefault.c:5356
 msgid "Create in _folder:"
 msgstr "Ստեղծել _պանակում."
 
-#: gtk/gtkfilechooserdefault.c:6419
-#, fuzzy, c-format
+#: ../gtk/gtkfilechooserdefault.c:6419
+#, c-format
 msgid "Could not read the contents of %s"
-msgstr "Տեղի է ունեցել սխալ '%s': %s ֆայլացուցակը ստեղծելիս"
+msgstr "%s - ի պարունակությունը չհաջողվեց կարդալ"
 
-#: gtk/gtkfilechooserdefault.c:6423
-#, fuzzy
+#: ../gtk/gtkfilechooserdefault.c:6423
 msgid "Could not read the contents of the folder"
-msgstr "Չհաջողվեց ստանալ պահուստային պատկերակ %s–ի համար"
+msgstr "Չհաջողվեց կարդալ պնակի պարունակությունը"
 
-#: gtk/gtkfilechooserdefault.c:6516 gtk/gtkfilechooserdefault.c:6584
-#: gtk/gtkfilechooserdefault.c:6729
-#, fuzzy
+#: ../gtk/gtkfilechooserdefault.c:6516
+#: ../gtk/gtkfilechooserdefault.c:6584
+#: ../gtk/gtkfilechooserdefault.c:6729
 msgid "Unknown"
 msgstr "Անհայտ"
 
-#: gtk/gtkfilechooserdefault.c:6531
+#: ../gtk/gtkfilechooserdefault.c:6531
 msgid "%H:%M"
-msgstr ""
+msgstr "%H:%M"
 
-#: gtk/gtkfilechooserdefault.c:6533
-#, fuzzy
+#: ../gtk/gtkfilechooserdefault.c:6533
 msgid "Yesterday at %H:%M"
-msgstr "Երեկ"
+msgstr "Երեկ %H:%M - ին"
 
-#: gtk/gtkfilechooserdefault.c:7199
-#, fuzzy
+#: ../gtk/gtkfilechooserdefault.c:7199
 msgid "Cannot change to folder because it is not local"
-msgstr "Չի հաջողվում փոխել պանակը, քանի որ այն տեղական չէ"
+msgstr "Չի հաջողվում անցնել պանակին, քանի որ այն տեղային չէ"
 
-#: gtk/gtkfilechooserdefault.c:7796 gtk/gtkfilechooserdefault.c:7817
-#, fuzzy, c-format
+#: ../gtk/gtkfilechooserdefault.c:7796
+#: ../gtk/gtkfilechooserdefault.c:7817
+#, c-format
 msgid "Shortcut %s already exists"
-msgstr "%s պիտակը գոյություն չունի"
+msgstr "%s պիտակը արդեն գոյություն ունի"
 
-#: gtk/gtkfilechooserdefault.c:7907
+#: ../gtk/gtkfilechooserdefault.c:7907
 #, c-format
 msgid "Shortcut %s does not exist"
 msgstr "%s պիտակը գոյություն չունի"
 
-#: gtk/gtkfilechooserdefault.c:8162 gtk/gtkprintunixdialog.c:480
+#: ../gtk/gtkfilechooserdefault.c:8162
+#: ../gtk/gtkprintunixdialog.c:480
 #, c-format
 msgid "A file named \"%s\" already exists.  Do you want to replace it?"
-msgstr ""
+msgstr "\"%s\" անունով ֆայլ արդեն գոյություն ունի։ Դուք ուզու՞մ եք այն փոխարինել։"
 
-#: gtk/gtkfilechooserdefault.c:8165 gtk/gtkprintunixdialog.c:484
+#: ../gtk/gtkfilechooserdefault.c:8165
+#: ../gtk/gtkprintunixdialog.c:484
 #, c-format
-msgid ""
-"The file already exists in \"%s\".  Replacing it will overwrite its contents."
-msgstr ""
+msgid "The file already exists in \"%s\".  Replacing it will overwrite its contents."
+msgstr "Ֆայլը արդեն գոյություն ունի \"%s\" -ում։ Այն փոխարինելով  նրա պարունակությունը կվերագրանցվի։"
 
-#: gtk/gtkfilechooserdefault.c:8170 gtk/gtkprintunixdialog.c:491
-#, fuzzy
+#: ../gtk/gtkfilechooserdefault.c:8170
+#: ../gtk/gtkprintunixdialog.c:491
 msgid "_Replace"
-msgstr "_Վերանվանել"
+msgstr "_Փոխարինել"
 
-#: gtk/gtkfilechooserdefault.c:8822
-#, fuzzy
+#: ../gtk/gtkfilechooserdefault.c:8822
 msgid "Could not start the search process"
-msgstr "Չհաջողվեց պահպանել մնացածը"
+msgstr "Չհաջողվեց սկսել փնտրման ընթացքը"
 
-#: gtk/gtkfilechooserdefault.c:8823
-msgid ""
-"The program was not able to create a connection to the indexer daemon.  "
-"Please make sure it is running."
-msgstr ""
+#: ../gtk/gtkfilechooserdefault.c:8823
+msgid "The program was not able to create a connection to the indexer daemon.  Please make sure it is running."
+msgstr "Ծրագիրը իվիճակի չեղավ կապ հաստատել daemon ցուցչի հետ։ Խնդրում եմ համոզվեք, որ այն աշխատում է։"
 
-#: gtk/gtkfilechooserdefault.c:8837
-#, fuzzy
+#: ../gtk/gtkfilechooserdefault.c:8837
 msgid "Could not send the search request"
-msgstr "Չհաջողվեց պահպանել մնացածը"
+msgstr "Չհաջողվեց ուղարկել փնտրման հրաման"
 
-#: gtk/gtkfilechooserdefault.c:9026
+#: ../gtk/gtkfilechooserdefault.c:9026
 msgid "Search:"
-msgstr ""
+msgstr "Փնտրում․"
 
-#: gtk/gtkfilechooserdefault.c:9630
-#, fuzzy, c-format
+#: ../gtk/gtkfilechooserdefault.c:9630
+#, c-format
 msgid "Could not mount %s"
-msgstr "Չհաջողվեց միացնել՝ %s"
+msgstr "Չհաջողվեց տեղադրել %s"
 
 #. Translators: this is shown in the feedback for Tab-completion in a file
 #. * chooser's text entry, when the user enters an invalid path.
-#: gtk/gtkfilechooserentry.c:698 gtk/gtkfilechooserentry.c:1163
-#, fuzzy
+#: ../gtk/gtkfilechooserentry.c:698
+#: ../gtk/gtkfilechooserentry.c:1163
 msgid "Invalid path"
-msgstr "Սխալ UTF-8"
+msgstr "Սխալ ուղի"
 
 #. translators: this text is shown when there are no completions
 #. * for something the user typed in a file chooser entry
 #.
-#: gtk/gtkfilechooserentry.c:1095
+#: ../gtk/gtkfilechooserentry.c:1095
 msgid "No match"
-msgstr ""
+msgstr "Համընկնում չկա"
 
 #. translators: this text is shown when there is exactly one completion
 #. * for something the user typed in a file chooser entry
 #.
-#: gtk/gtkfilechooserentry.c:1106
-#, fuzzy
+#: ../gtk/gtkfilechooserentry.c:1106
 msgid "Sole completion"
-msgstr "Գույնի ընտրություն"
+msgstr "Միակ համընկնումը"
 
 #. translators: this text is shown when the text in a file chooser
 #. * entry is a complete filename, but could be continued to find
 #. * a longer match
 #.
-#: gtk/gtkfilechooserentry.c:1122
+#: ../gtk/gtkfilechooserentry.c:1122
 msgid "Complete, but not unique"
-msgstr ""
+msgstr "Համապատասխան, բայց ոչ եզակի"
 
 #. Translators: this text is shown while the system is searching
 #. * for possible completions for filenames in a file chooser entry.
-#: gtk/gtkfilechooserentry.c:1154
+#: ../gtk/gtkfilechooserentry.c:1154
 msgid "Completing..."
-msgstr ""
+msgstr "Ավարտում է․․․"
 
 #. hostnames in a local_only file chooser?  user error
 #. Translators: this is shown in the feedback for Tab-completion in a
 #. * file chooser's text entry when the user enters something like
 #. * "sftp://blahblah" in an app that only supports local filenames.
-#: gtk/gtkfilechooserentry.c:1176 gtk/gtkfilechooserentry.c:1201
+#: ../gtk/gtkfilechooserentry.c:1176
+#: ../gtk/gtkfilechooserentry.c:1201
 msgid "Only local files may be selected"
-msgstr ""
+msgstr "Միայն լոկալ ֆայլերը կարող են ընտրվել"
 
 #. Another option is to complete the hostname based on the remote volumes that are mounted
 #. Translators: this is shown in the feedback for Tab-completion in a
 #. * file chooser's text entry when the user hasn't entered the first '/'
 #. * after a hostname and yet hits Tab (such as "sftp://blahblah[Tab]")
-#: gtk/gtkfilechooserentry.c:1185
+#: ../gtk/gtkfilechooserentry.c:1185
 msgid "Incomplete hostname; end it with '/'"
-msgstr ""
+msgstr "Անավարտ հոսթի անուն․ այն ավարտեք «/»-ով"
 
 #. Translators: this is shown in the feedback for Tab-completion in a file
 #. * chooser's text entry when the user enters a path that does not exist
 #. * and then hits Tab
-#: gtk/gtkfilechooserentry.c:1196
-#, fuzzy
+#: ../gtk/gtkfilechooserentry.c:1196
 msgid "Path does not exist"
-msgstr "%s պիտակը գոյություն չունի"
+msgstr "ՈՒղին գոյություն չունի"
 
-#: gtk/gtkfilechoosersettings.c:487
-#, fuzzy, c-format
+#: ../gtk/gtkfilechoosersettings.c:487
+#, c-format
 msgid "Error creating folder '%s': %s"
-msgstr ""
-"\"%s\": %s\n"
-" պանակը ստեղծելու սխալ"
+msgstr "'%s' պանակը ստեղծելու սխալ․ %s"
 
 #. The pointers we return for a GtkFileSystemVolume are opaque tokens; they are
 #. * really pointers to GDrive, GVolume or GMount objects.  We need an extra
 #. * token for the fake "File System" volume.  So, we'll return a pointer to
 #. * this particular string.
 #.
-#: gtk/gtkfilesystem.c:52
-#, fuzzy
+#: ../gtk/gtkfilesystem.c:52
 msgid "File System"
 msgstr "Ֆայլային համակարգ"
 
-#: gtk/gtkfontbutton.c:144 gtk/gtkfontbutton.c:266
+#: ../gtk/gtkfontbutton.c:144
+#: ../gtk/gtkfontbutton.c:266
 msgid "Pick a Font"
 msgstr "Ընտրեք Տառատեսակը"
 
 #. Initialize fields
-#: gtk/gtkfontbutton.c:260
-#, fuzzy
+#: ../gtk/gtkfontbutton.c:260
 msgid "Sans 12"
 msgstr "Sans 12"
 
-#: gtk/gtkfontbutton.c:785
+#: ../gtk/gtkfontbutton.c:785
 msgid "Font"
 msgstr "Տառատեսակ"
 
 #. This is the default text shown in the preview entry, though the user
 #. can set it. Remember that some fonts only have capital letters.
-#: gtk/gtkfontsel.c:75
+#: ../gtk/gtkfontsel.c:75
 msgid "abcdefghijk ABCDEFGHIJK"
-msgstr ""
+msgstr "abcdefghijk ABCDEFGHIJK"
 
-#: gtk/gtkfontsel.c:343
+#: ../gtk/gtkfontsel.c:343
 msgid "_Family:"
 msgstr "_Ընտանիք."
 
-#: gtk/gtkfontsel.c:349
+#: ../gtk/gtkfontsel.c:349
 msgid "_Style:"
 msgstr "_Ոճ."
 
-#: gtk/gtkfontsel.c:355
+#: ../gtk/gtkfontsel.c:355
 msgid "Si_ze:"
-msgstr "Չա_փս."
+msgstr "Չա_փ."
 
 #. create the text entry widget
-#: gtk/gtkfontsel.c:532
+#: ../gtk/gtkfontsel.c:532
 msgid "_Preview:"
-msgstr "_Նախնական ցուցադրում."
+msgstr "_Նախնական դիտում."
 
-#: gtk/gtkfontsel.c:1631
+#: ../gtk/gtkfontsel.c:1631
 msgid "Font Selection"
 msgstr "Տառատեսակի Ընտրություն"
 
 #. Remove this icon source so we don't keep trying to
 #. * load it.
 #.
-#: gtk/gtkiconfactory.c:1400
+#: ../gtk/gtkiconfactory.c:1400
 #, c-format
 msgid "Error loading icon: %s"
-msgstr "Սխալ է տեղի ունեցել: %s պատկերակը բեռնելիս"
+msgstr "Սխալ է տեղի ունեցել պատկերակը բեռնելիս․ %s "
 
-#: gtk/gtkicontheme.c:1363
+#: ../gtk/gtkicontheme.c:1363
 #, c-format
 msgid ""
 "Could not find the icon '%s'. The '%s' theme\n"
@@ -2173,215 +1753,189 @@ msgid ""
 "\t%s"
 msgstr ""
 "Չհաջողվեց գտնել '%s' պատկերակը։ '%s' թեման\n"
-"նույնպես չի գտնվել, միգուցե Ձեզ անհրաժեշտ է այն ինստալացիա անել։\n"
+"ևս չի գտնվել, միգուցե Ձեզ անհրաժեշտ է այն տեղադրել։\n"
 "Դրա օրինակը կարող եք ձեռք բերել այստեղից.\n"
 "\t%s"
 
-#: gtk/gtkicontheme.c:1543
+#: ../gtk/gtkicontheme.c:1543
 #, c-format
 msgid "Icon '%s' not present in theme"
 msgstr "'%s' պատկերակը թեմայում չկա"
 
-#: gtk/gtkicontheme.c:3074
-#, fuzzy
+#: ../gtk/gtkicontheme.c:3074
 msgid "Failed to load icon"
-msgstr "Չհաջողվեց բեռնել TIFF պատկերը"
+msgstr "Չհաջողվեց բեռնել պատկերակը"
 
-#: gtk/gtkimmodule.c:527
-#, fuzzy
+#: ../gtk/gtkimmodule.c:527
 msgid "Simple"
-msgstr "Չափս"
-
-#: gtk/gtkimmulticontext.c:563
-#, fuzzy
-msgctxt "input method menu"
-msgid "System"
-msgstr "Ֆայլային համակարգ"
-
-#: gtk/gtkimmulticontext.c:573
-#, fuzzy
-msgctxt "input method menu"
-msgid "None"
-msgstr "(Ոչ մեկը)"
-
-#: gtk/gtkimmulticontext.c:656
-#, fuzzy, c-format
-msgctxt "input method menu"
-msgid "System (%s)"
-msgstr "%s (%s)"
+msgstr "Պարզ"
 
 #. Open Link
-#: gtk/gtklabel.c:6076
-#, fuzzy
+#: ../gtk/gtklabel.c:6072
 msgid "_Open Link"
-msgstr "Բացել տեղադրությունը"
+msgstr "_Բացել Հղումը"
 
 #. Copy Link Address
-#: gtk/gtklabel.c:6088
+#: ../gtk/gtklabel.c:6084
 msgid "Copy _Link Address"
-msgstr ""
+msgstr "Պատճենել _Հղման հասցեն"
 
-#: gtk/gtklinkbutton.c:428
-#, fuzzy
+#: ../gtk/gtklinkbutton.c:428
 msgid "Copy URL"
-msgstr "_Պատճենել"
+msgstr "Պատճենել URL-ը"
 
-#: gtk/gtklinkbutton.c:586
-#, fuzzy
+#: ../gtk/gtklinkbutton.c:586
 msgid "Invalid URI"
-msgstr "Սխալ UTF-8"
+msgstr "Անվավեր URI"
 
 #. Description of --gtk-module=MODULES in --help output
-#: gtk/gtkmain.c:447
+#: ../gtk/gtkmain.c:432
 msgid "Load additional GTK+ modules"
 msgstr "Բեռնել հավելյալ GTK+ մոդուլներ"
 
 #. Placeholder in --gtk-module=MODULES in --help output
-#: gtk/gtkmain.c:448
+#: ../gtk/gtkmain.c:433
 msgid "MODULES"
 msgstr "ՄՈԴՈՒԼՆԵՐ"
 
 #. Description of --g-fatal-warnings in --help output
-#: gtk/gtkmain.c:450
+#: ../gtk/gtkmain.c:435
 msgid "Make all warnings fatal"
-msgstr "Սարքել բոլոր զգուշացումները անխուսափելի"
+msgstr "Բոլոր զգուշացումները դարձնել վճռորոշ"
 
 #. Description of --gtk-debug=FLAGS in --help output
-#: gtk/gtkmain.c:453
+#: ../gtk/gtkmain.c:438
 msgid "GTK+ debugging flags to set"
-msgstr "Դնել GTK+ կարգաբերման դրոշները"
+msgstr "Սահմանել GTK+ վրիպազերծման դրոշները"
 
 #. Description of --gtk-no-debug=FLAGS in --help output
-#: gtk/gtkmain.c:456
+#: ../gtk/gtkmain.c:441
 msgid "GTK+ debugging flags to unset"
-msgstr "Հանել GTK+ կարգաբերման դրոշները"
+msgstr "Հանել GTK+ վրիպազերծման դրոշները"
 
 #. Translate to default:RTL if you want your widgets
 #. * to be RTL, otherwise translate to default:LTR.
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
 #.
-#: gtk/gtkmain.c:708
+#: ../gtk/gtkmain.c:704
 msgid "default:LTR"
 msgstr "default:LTR"
 
-#: gtk/gtkmain.c:773
+#: ../gtk/gtkmain.c:769
 #, c-format
 msgid "Cannot open display: %s"
-msgstr ""
+msgstr "Չի կարող բացել %s դիսփլեյը"
 
-#: gtk/gtkmain.c:810
+#: ../gtk/gtkmain.c:806
 msgid "GTK+ Options"
-msgstr "GTK+ Ընտրության տարբերակներ"
+msgstr "GTK+ Ընտրանքներ"
 
-#: gtk/gtkmain.c:810
+#: ../gtk/gtkmain.c:806
 msgid "Show GTK+ Options"
-msgstr "Ցուցադրել GTK+ Ընտրության տարբերակները"
+msgstr "Ցուցադրել GTK+ Ընտրանքները"
 
-#: gtk/gtkmountoperation.c:489
-#, fuzzy
+#: ../gtk/gtkmountoperation.c:489
 msgid "Co_nnect"
-msgstr "_Ձևափոխել"
+msgstr "Միա_նալ"
 
-#: gtk/gtkmountoperation.c:556
+#: ../gtk/gtkmountoperation.c:556
 msgid "Connect _anonymously"
-msgstr ""
+msgstr "_Միանալ անանուն"
 
-#: gtk/gtkmountoperation.c:565
+#: ../gtk/gtkmountoperation.c:565
 msgid "Connect as u_ser:"
-msgstr ""
+msgstr "Միանալ որպես․"
 
-#: gtk/gtkmountoperation.c:603
-#, fuzzy
+#: ../gtk/gtkmountoperation.c:603
 msgid "_Username:"
-msgstr "_Վերանվանել"
+msgstr "_Օգտվողի անունը․"
 
-#: gtk/gtkmountoperation.c:608
-#, fuzzy
+#: ../gtk/gtkmountoperation.c:608
 msgid "_Domain:"
-msgstr "_Տեղադրություն."
+msgstr "_Դոմեն․"
 
-#: gtk/gtkmountoperation.c:614
-#, fuzzy
+#: ../gtk/gtkmountoperation.c:614
 msgid "_Password:"
-msgstr "Ճնշում"
+msgstr "_Գաղտնաբառ"
 
-#: gtk/gtkmountoperation.c:632
+#: ../gtk/gtkmountoperation.c:632
 msgid "Forget password _immediately"
-msgstr ""
+msgstr "_Անհապաղ մոռանալ գաղտնաբառը"
 
-#: gtk/gtkmountoperation.c:642
+#: ../gtk/gtkmountoperation.c:642
 msgid "Remember password until you _logout"
-msgstr ""
+msgstr "Հիշել գաղտնաբառը մինչ սեանսից _դուրս գալը"
 
-#: gtk/gtkmountoperation.c:652
+#: ../gtk/gtkmountoperation.c:652
 msgid "Remember _forever"
-msgstr ""
+msgstr "Հիշել _ընդմիշտ "
 
-#: gtk/gtkmountoperation.c:881
+#: ../gtk/gtkmountoperation.c:881
 #, c-format
 msgid "Unknown Application (pid %d)"
-msgstr ""
+msgstr "Անհայտ աշխատածրագիր (pid %d)"
 
-#: gtk/gtkmountoperation.c:1064
-#, c-format
+#: ../gtk/gtkmountoperation.c:1064
 msgid "Unable to end process"
-msgstr ""
+msgstr "Անկարող է ավարտել պրոցեսը"
 
-#: gtk/gtkmountoperation.c:1101
+#: ../gtk/gtkmountoperation.c:1101
 msgid "_End Process"
-msgstr ""
+msgstr "_Ավարտել պրոցեսը"
 
-#: gtk/gtkmountoperation-stub.c:64
+#: ../gtk/gtkmountoperation-stub.c:64
 #, c-format
 msgid "Cannot kill process with pid %d. Operation is not implemented."
-msgstr ""
+msgstr "Չի կարող սպանել %d pid -ով պրոցեսը։ Գործողությունը իրականացված չէ։"
 
 #. translators: this string is a name for the 'less' command
-#: gtk/gtkmountoperation-x11.c:865
+#: ../gtk/gtkmountoperation-x11.c:865
 msgid "Terminal Pager"
-msgstr ""
+msgstr "Տերմինալի փեյջեր"
 
-#: gtk/gtkmountoperation-x11.c:866
+#: ../gtk/gtkmountoperation-x11.c:866
 msgid "Top Command"
-msgstr ""
+msgstr "Top հրաման "
 
-#: gtk/gtkmountoperation-x11.c:867
+#: ../gtk/gtkmountoperation-x11.c:867
 msgid "Bourne Again Shell"
-msgstr ""
+msgstr "Bourne Again Shell"
 
-#: gtk/gtkmountoperation-x11.c:868
+#: ../gtk/gtkmountoperation-x11.c:868
 msgid "Bourne Shell"
-msgstr ""
+msgstr "Bourne Shell"
 
-#: gtk/gtkmountoperation-x11.c:869
+#: ../gtk/gtkmountoperation-x11.c:869
 msgid "Z Shell"
-msgstr ""
+msgstr "Z Թաղանթ"
 
-#: gtk/gtkmountoperation-x11.c:966
+#: ../gtk/gtkmountoperation-x11.c:966
 #, c-format
 msgid "Cannot end process with pid %d: %s"
-msgstr ""
+msgstr "Չի հաջողվում ավարտել %d pid -ով պրոցեսը․ %s "
 
-#: gtk/gtknotebook.c:4621 gtk/gtknotebook.c:7050
+#: ../gtk/gtknotebook.c:4621
+#: ../gtk/gtknotebook.c:7050
 #, c-format
 msgid "Page %u"
 msgstr "Էջ %u"
 
-#: gtk/gtkpagesetup.c:597 gtk/gtkpapersize.c:826 gtk/gtkpapersize.c:868
+#: ../gtk/gtkpagesetup.c:597
+#: ../gtk/gtkpapersize.c:826
+#: ../gtk/gtkpapersize.c:868
 msgid "Not a valid page setup file"
-msgstr ""
+msgstr "Անվավեր էջի տեղակայման ֆայլ"
 
-#: gtk/gtkpagesetupunixdialog.c:182
-#, fuzzy
+#: ../gtk/gtkpagesetupunixdialog.c:182
 msgid "Any Printer"
-msgstr "_Տպել"
+msgstr "Ցանկացած տպիչ"
 
-#: gtk/gtkpagesetupunixdialog.c:182
+#: ../gtk/gtkpagesetupunixdialog.c:182
 msgid "For portable documents"
-msgstr ""
+msgstr "Տեղափոխելի փաստաթղթերի համար"
 
-#: gtk/gtkpagesetupunixdialog.c:812
+#: ../gtk/gtkpagesetupunixdialog.c:812
 #, c-format
 msgid ""
 "Margins:\n"
@@ -2390,299 +1944,235 @@ msgid ""
 " Top: %s %s\n"
 " Bottom: %s %s"
 msgstr ""
+"Լուսանցք:\n"
+"ձախ: %s %s\n"
+"աջ: %s %s\n"
+"վերև: %s %s\n"
+"ներքև: %s %s"
 
-#: gtk/gtkpagesetupunixdialog.c:861 gtk/gtkprintunixdialog.c:3277
+#: ../gtk/gtkpagesetupunixdialog.c:861
+#: ../gtk/gtkprintunixdialog.c:3277
 msgid "Manage Custom Sizes..."
-msgstr ""
+msgstr "Օգտագործողի չափերի կառավարում"
 
-#: gtk/gtkpagesetupunixdialog.c:909
+#: ../gtk/gtkpagesetupunixdialog.c:909
 msgid "_Format for:"
-msgstr ""
+msgstr "_Ֆորմատ․"
 
-#: gtk/gtkpagesetupunixdialog.c:931 gtk/gtkprintunixdialog.c:3449
-#, fuzzy
+#: ../gtk/gtkpagesetupunixdialog.c:931
+#: ../gtk/gtkprintunixdialog.c:3449
 msgid "_Paper size:"
-msgstr "_Հատկություններ"
+msgstr "_Էջի չափը"
 
-#: gtk/gtkpagesetupunixdialog.c:962
-#, fuzzy
+#: ../gtk/gtkpagesetupunixdialog.c:962
 msgid "_Orientation:"
-msgstr "_Հագեցում."
+msgstr "_Ուղղություն"
 
-#: gtk/gtkpagesetupunixdialog.c:1026 gtk/gtkprintunixdialog.c:3511
-#, fuzzy
+#: ../gtk/gtkpagesetupunixdialog.c:1026
+#: ../gtk/gtkprintunixdialog.c:3511
 msgid "Page Setup"
-msgstr "Էջ %u"
+msgstr "Էջի պարամետրեր"
 
-#: gtk/gtkpathbar.c:151
+#: ../gtk/gtkpathbar.c:151
 msgid "Up Path"
-msgstr ""
+msgstr "Մի քայլ վերև"
 
-#: gtk/gtkpathbar.c:153
+#: ../gtk/gtkpathbar.c:153
 msgid "Down Path"
-msgstr ""
+msgstr "Մի քայլ ներքև"
 
-#: gtk/gtkpathbar.c:1480
-#, fuzzy
+#: ../gtk/gtkpathbar.c:1480
 msgid "File System Root"
-msgstr "Ֆայլային համակարգ"
+msgstr "Ֆայլային համակարգի արմատ"
 
-#: gtk/gtkprintbackend.c:749
-#, fuzzy
+#: ../gtk/gtkprintbackend.c:749
 msgid "Authentication"
-msgstr "_Տեղադրություն."
+msgstr "Վավերացում"
 
-#: gtk/gtkprinteroptionwidget.c:695
+#: ../gtk/gtkprinteroptionwidget.c:695
 msgid "Not available"
-msgstr ""
+msgstr "Հասանելի չէ"
 
-#: gtk/gtkprinteroptionwidget.c:795
-#, fuzzy
+#: ../gtk/gtkprinteroptionwidget.c:795
 msgid "Select a folder"
-msgstr "Ընտրեք Ֆայլը"
+msgstr "Ընտրեք պանակ"
 
-#: gtk/gtkprinteroptionwidget.c:814
-#, fuzzy
+#: ../gtk/gtkprinteroptionwidget.c:814
 msgid "_Save in folder:"
-msgstr "Պահպանել _պանակում."
+msgstr "Պահպանել _պանակում․"
 
 #. translators: this string is the default job title for print
 #. * jobs. %s gets replaced by the application name, %d gets replaced
 #. * by the job number.
 #.
-#: gtk/gtkprintoperation.c:190
+#: ../gtk/gtkprintoperation.c:190
 #, c-format
 msgid "%s job #%d"
-msgstr ""
+msgstr "%s առաջադրանք #%d"
 
-#: gtk/gtkprintoperation.c:1687
-msgctxt "print operation status"
-msgid "Initial state"
-msgstr ""
-
-#: gtk/gtkprintoperation.c:1688
-#, fuzzy
-msgctxt "print operation status"
-msgid "Preparing to print"
-msgstr "Նախազգուշացում"
-
-#: gtk/gtkprintoperation.c:1689
-msgctxt "print operation status"
-msgid "Generating data"
-msgstr ""
-
-#: gtk/gtkprintoperation.c:1690
-msgctxt "print operation status"
-msgid "Sending data"
-msgstr ""
-
-#: gtk/gtkprintoperation.c:1691
-#, fuzzy
-msgctxt "print operation status"
-msgid "Waiting"
-msgstr "Նախազգուշացում"
-
-#: gtk/gtkprintoperation.c:1692
-msgctxt "print operation status"
-msgid "Blocking on issue"
-msgstr ""
-
-#: gtk/gtkprintoperation.c:1693
-#, fuzzy
-msgctxt "print operation status"
-msgid "Printing"
-msgstr "_Տպել"
-
-#: gtk/gtkprintoperation.c:1694
-#, fuzzy
-msgctxt "print operation status"
-msgid "Finished"
-msgstr "_Գտնել"
-
-#: gtk/gtkprintoperation.c:1695
-msgctxt "print operation status"
-msgid "Finished with error"
-msgstr ""
-
-#: gtk/gtkprintoperation.c:2254
+#: ../gtk/gtkprintoperation.c:2270
 #, c-format
 msgid "Preparing %d"
-msgstr ""
+msgstr "Պատրաստում է  %d"
 
-#: gtk/gtkprintoperation.c:2256 gtk/gtkprintoperation.c:2875
-#, fuzzy, c-format
+#: ../gtk/gtkprintoperation.c:2272
+#: ../gtk/gtkprintoperation.c:2902
 msgid "Preparing"
-msgstr "Նախազգուշացում"
+msgstr "Պատրաստում է"
 
-#: gtk/gtkprintoperation.c:2259
-#, fuzzy, c-format
+#: ../gtk/gtkprintoperation.c:2275
+#, c-format
 msgid "Printing %d"
-msgstr "_Տպել"
+msgstr "Տպում է %d"
 
-#: gtk/gtkprintoperation.c:2905
-#, c-format
+#: ../gtk/gtkprintoperation.c:2932
 msgid "Error creating print preview"
-msgstr ""
+msgstr "Չհաջողվեց ստեղծել նախնական դիտում"
 
-#: gtk/gtkprintoperation.c:2908
-#, c-format
+#: ../gtk/gtkprintoperation.c:2935
 msgid "The most probable reason is that a temporary file could not be created."
-msgstr ""
+msgstr "Ամենահավանական պատճառն այն է, որ չի կարող ստեղծվել ժամանակավոր ֆայլը"
 
-#: gtk/gtkprintoperation-unix.c:297 gtk/gtkprintoperation-unix.c:314
-#, c-format
+#: ../gtk/gtkprintoperation-unix.c:297
 msgid "Error launching preview"
-msgstr ""
+msgstr "Նախնական դիտման ընթացքում առաջացած սխալ"
 
-#: gtk/gtkprintoperation-unix.c:358
-#, c-format
-msgid "Error printing"
-msgstr ""
-
-#: gtk/gtkprintoperation-unix.c:494 gtk/gtkprintoperation-win32.c:1447
-#, fuzzy
+#: ../gtk/gtkprintoperation-unix.c:470
+#: ../gtk/gtkprintoperation-win32.c:1447
 msgid "Application"
-msgstr "_Տեղադրություն."
+msgstr "Աշխատածրագիր"
 
-#: gtk/gtkprintoperation-win32.c:612
+#: ../gtk/gtkprintoperation-win32.c:612
 msgid "Printer offline"
-msgstr ""
+msgstr "Տպիչն անջատված է"
 
-#: gtk/gtkprintoperation-win32.c:614
+#: ../gtk/gtkprintoperation-win32.c:614
 msgid "Out of paper"
-msgstr ""
+msgstr "Թուղթ չկա"
 
 #. Translators: this is a printer status.
-#: gtk/gtkprintoperation-win32.c:616
-#: modules/printbackends/cups/gtkprintbackendcups.c:1999
-#, fuzzy
+#: ../gtk/gtkprintoperation-win32.c:616
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2000
 msgid "Paused"
-msgstr "_Փակցնել"
+msgstr "Կանգնեցված է"
 
-#: gtk/gtkprintoperation-win32.c:618
+#: ../gtk/gtkprintoperation-win32.c:618
 msgid "Need user intervention"
-msgstr ""
+msgstr "Անհրաժեշտ է օգտվողի միջամտությունը"
 
-#: gtk/gtkprintoperation-win32.c:718
+#: ../gtk/gtkprintoperation-win32.c:718
 msgid "Custom size"
-msgstr ""
+msgstr "Օգտագործողի չափ"
 
-#: gtk/gtkprintoperation-win32.c:1539
-#, fuzzy
+#: ../gtk/gtkprintoperation-win32.c:1539
 msgid "No printer found"
-msgstr "XPM վերնագիր չի հայտնաբերվել"
+msgstr "Ոչ մի տպիչ չի գտնվել"
 
-#: gtk/gtkprintoperation-win32.c:1566
-#, fuzzy
+#: ../gtk/gtkprintoperation-win32.c:1566
 msgid "Invalid argument to CreateDC"
-msgstr "Սխալ վերնագիր պատկերակում"
+msgstr "CreateDC-ի սխալ արգումենտ"
 
-#: gtk/gtkprintoperation-win32.c:1602 gtk/gtkprintoperation-win32.c:1829
+#: ../gtk/gtkprintoperation-win32.c:1602
+#: ../gtk/gtkprintoperation-win32.c:1829
 msgid "Error from StartDoc"
-msgstr ""
+msgstr "StartDoc-ի սխալ"
 
-#: gtk/gtkprintoperation-win32.c:1684 gtk/gtkprintoperation-win32.c:1707
-#: gtk/gtkprintoperation-win32.c:1755
-#, fuzzy
+#: ../gtk/gtkprintoperation-win32.c:1684
+#: ../gtk/gtkprintoperation-win32.c:1707
+#: ../gtk/gtkprintoperation-win32.c:1755
 msgid "Not enough free memory"
-msgstr "Հիշողությունը բավարար չէ պատկերակը բեռնելու համար"
+msgstr "Բավարար ազատ հիշողություն չկա"
 
-#: gtk/gtkprintoperation-win32.c:1760
+#: ../gtk/gtkprintoperation-win32.c:1760
 msgid "Invalid argument to PrintDlgEx"
-msgstr ""
+msgstr "PrintDlgEx-ի սխալ արգումենտ"
 
-#: gtk/gtkprintoperation-win32.c:1765
+#: ../gtk/gtkprintoperation-win32.c:1765
 msgid "Invalid pointer to PrintDlgEx"
-msgstr ""
+msgstr "PrintDlgEx-ի սխալ ցուցիչ"
 
-#: gtk/gtkprintoperation-win32.c:1770
-#, fuzzy
+#: ../gtk/gtkprintoperation-win32.c:1770
 msgid "Invalid handle to PrintDlgEx"
-msgstr "Սխալ վերնագիր պատկերակում"
+msgstr "PrintDlgEx -ի սխալ դեսկրիպտոր"
 
-#: gtk/gtkprintoperation-win32.c:1775
+#: ../gtk/gtkprintoperation-win32.c:1775
 msgid "Unspecified error"
-msgstr ""
+msgstr "Չնշված սխալ"
 
-#: gtk/gtkprintunixdialog.c:614
+#: ../gtk/gtkprintunixdialog.c:614
 msgid "Getting printer information failed"
-msgstr ""
+msgstr "Չհաջողվեց Տպիչի մասին տեղեկություն ստանալ"
 
-#: gtk/gtkprintunixdialog.c:1862
+#: ../gtk/gtkprintunixdialog.c:1862
 msgid "Getting printer information..."
-msgstr ""
+msgstr "Ստանում է տպիչի մասին տեղեկություն․․․"
 
-#: gtk/gtkprintunixdialog.c:2132
-#, fuzzy
+#: ../gtk/gtkprintunixdialog.c:2132
 msgid "Printer"
-msgstr "_Տպել"
+msgstr "Տպիչ"
 
 #. Translators: this is the header for the location column in the print dialog
-#: gtk/gtkprintunixdialog.c:2142
-#, fuzzy
+#: ../gtk/gtkprintunixdialog.c:2142
 msgid "Location"
-msgstr "_Տեղադրություն."
+msgstr "Տեղադրություն"
 
 #. Translators: this is the header for the printer status column in the print dialog
-#: gtk/gtkprintunixdialog.c:2153
+#: ../gtk/gtkprintunixdialog.c:2153
 msgid "Status"
-msgstr ""
+msgstr "Կարգավիճակ"
 
-#: gtk/gtkprintunixdialog.c:2179
+#: ../gtk/gtkprintunixdialog.c:2179
 msgid "Range"
-msgstr ""
+msgstr "Միջակայք"
 
-#: gtk/gtkprintunixdialog.c:2183
+#: ../gtk/gtkprintunixdialog.c:2183
 msgid "_All Pages"
-msgstr ""
+msgstr "_Բոլոր Էջերը"
 
-#: gtk/gtkprintunixdialog.c:2190
-#, fuzzy
+#: ../gtk/gtkprintunixdialog.c:2190
 msgid "C_urrent Page"
-msgstr "Ս_տեղծել"
+msgstr "Տ_վյալ էջը"
 
-#: gtk/gtkprintunixdialog.c:2200
-#, fuzzy
+#: ../gtk/gtkprintunixdialog.c:2200
 msgid "Se_lection"
-msgstr "_Ընտրություն. "
+msgstr "Ընտ_րություն"
 
-#: gtk/gtkprintunixdialog.c:2209
+#: ../gtk/gtkprintunixdialog.c:2209
 msgid "Pag_es:"
-msgstr ""
+msgstr "Էջ_եր:"
 
-#: gtk/gtkprintunixdialog.c:2210
+#: ../gtk/gtkprintunixdialog.c:2210
 msgid ""
 "Specify one or more page ranges,\n"
 " e.g. 1-3,7,11"
 msgstr ""
+"Նշել մեկ կամ մի քանի էջային միջակայքեր,\n"
+"  օրինակ՝ 1-3,7,11"
 
-#: gtk/gtkprintunixdialog.c:2220
-#, fuzzy
+#: ../gtk/gtkprintunixdialog.c:2220
 msgid "Pages"
-msgstr "_Վերանվանել"
+msgstr "Էջեր"
 
-#: gtk/gtkprintunixdialog.c:2233
+#: ../gtk/gtkprintunixdialog.c:2233
 msgid "Copies"
-msgstr ""
+msgstr "Կրկնօրինակներ"
 
 #. FIXME chpe: too much space between Copies and spinbutton, put those 2 in a hbox and make it span 2 columns
-#: gtk/gtkprintunixdialog.c:2238
+#: ../gtk/gtkprintunixdialog.c:2238
 msgid "Copie_s:"
-msgstr ""
+msgstr "Կրկնօրինակնե_ր․"
 
-#: gtk/gtkprintunixdialog.c:2256
-#, fuzzy
+#: ../gtk/gtkprintunixdialog.c:2256
 msgid "C_ollate"
-msgstr "Ս_տեղծել"
+msgstr "Դասա_կարգել"
 
-#: gtk/gtkprintunixdialog.c:2264
-#, fuzzy
+#: ../gtk/gtkprintunixdialog.c:2264
 msgid "_Reverse"
-msgstr "_Վերադառնալ նախկին վիճակին"
+msgstr "_Հակառակ"
 
-#: gtk/gtkprintunixdialog.c:2284
+#: ../gtk/gtkprintunixdialog.c:2284
 msgid "General"
-msgstr ""
+msgstr "Ընդհանուր "
 
 #. Translators: These strings name the possible arrangements of
 #. * multiple pages on a sheet when printing (same as in gtkprintbackendcups.c)
@@ -2690,317 +2180,305 @@ msgstr ""
 #. Translators: These strings name the possible arrangements of
 #. * multiple pages on a sheet when printing
 #.
-#: gtk/gtkprintunixdialog.c:3010
-#: modules/printbackends/cups/gtkprintbackendcups.c:3509
+#: ../gtk/gtkprintunixdialog.c:3010
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3510
 msgid "Left to right, top to bottom"
-msgstr ""
+msgstr "Ձախից աջ, վերևից ներքև"
 
-#: gtk/gtkprintunixdialog.c:3010
-#: modules/printbackends/cups/gtkprintbackendcups.c:3509
+#: ../gtk/gtkprintunixdialog.c:3010
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3510
 msgid "Left to right, bottom to top"
-msgstr ""
+msgstr "Ձախից աջ, ներքևից վերև"
 
-#: gtk/gtkprintunixdialog.c:3011
-#: modules/printbackends/cups/gtkprintbackendcups.c:3510
+#: ../gtk/gtkprintunixdialog.c:3011
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3511
 msgid "Right to left, top to bottom"
-msgstr ""
+msgstr "Աջից ձախ, վերևից ներքև"
 
-#: gtk/gtkprintunixdialog.c:3011
-#: modules/printbackends/cups/gtkprintbackendcups.c:3510
+#: ../gtk/gtkprintunixdialog.c:3011
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3511
 msgid "Right to left, bottom to top"
-msgstr ""
+msgstr "Աջից ձախ, ներքևից վերև"
 
-#: gtk/gtkprintunixdialog.c:3012
-#: modules/printbackends/cups/gtkprintbackendcups.c:3511
+#: ../gtk/gtkprintunixdialog.c:3012
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3512
 msgid "Top to bottom, left to right"
-msgstr ""
+msgstr "Վերևից ներքև, ձախից աձ"
 
-#: gtk/gtkprintunixdialog.c:3012
-#: modules/printbackends/cups/gtkprintbackendcups.c:3511
+#: ../gtk/gtkprintunixdialog.c:3012
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3512
 msgid "Top to bottom, right to left"
-msgstr ""
+msgstr "Վերևից ներքև, աջից ձախ"
 
-#: gtk/gtkprintunixdialog.c:3013
-#: modules/printbackends/cups/gtkprintbackendcups.c:3512
+#: ../gtk/gtkprintunixdialog.c:3013
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3513
 msgid "Bottom to top, left to right"
-msgstr ""
+msgstr "Ներքևից վերև, ձախից աջ"
 
-#: gtk/gtkprintunixdialog.c:3013
-#: modules/printbackends/cups/gtkprintbackendcups.c:3512
+#: ../gtk/gtkprintunixdialog.c:3013
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3513
 msgid "Bottom to top, right to left"
-msgstr ""
+msgstr "Ներքևից վերև, աջից ձախ"
 
 #. Translators, this string is used to label the option in the print
 #. * dialog that controls in what order multiple pages are arranged
 #.
-#: gtk/gtkprintunixdialog.c:3017 gtk/gtkprintunixdialog.c:3030
-#: modules/printbackends/cups/gtkprintbackendcups.c:3544
-#, fuzzy
+#: ../gtk/gtkprintunixdialog.c:3017
+#: ../gtk/gtkprintunixdialog.c:3030
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3545
 msgid "Page Ordering"
-msgstr "Նախազգուշացում"
+msgstr "Էջերի հերթականություն"
 
-#: gtk/gtkprintunixdialog.c:3046
+#: ../gtk/gtkprintunixdialog.c:3046
 msgid "Left to right"
-msgstr ""
+msgstr "Ձախից աջ"
 
-#: gtk/gtkprintunixdialog.c:3047
-#, fuzzy
+#: ../gtk/gtkprintunixdialog.c:3047
 msgid "Right to left"
-msgstr "_Տպել"
+msgstr "Աջից ձախ"
 
-#: gtk/gtkprintunixdialog.c:3059
+#: ../gtk/gtkprintunixdialog.c:3059
 msgid "Top to bottom"
-msgstr ""
+msgstr "Վերևից Ներքև"
 
-#: gtk/gtkprintunixdialog.c:3060
+#: ../gtk/gtkprintunixdialog.c:3060
 msgid "Bottom to top"
-msgstr ""
+msgstr "Ներքևից վերև"
 
-#: gtk/gtkprintunixdialog.c:3300
+#: ../gtk/gtkprintunixdialog.c:3300
 msgid "Layout"
-msgstr ""
+msgstr "Դասավորություն"
 
-#: gtk/gtkprintunixdialog.c:3304
+#: ../gtk/gtkprintunixdialog.c:3304
 msgid "T_wo-sided:"
-msgstr ""
+msgstr "Եր_կկողմանի"
 
-#: gtk/gtkprintunixdialog.c:3319
-#, fuzzy
+#: ../gtk/gtkprintunixdialog.c:3319
 msgid "Pages per _side:"
-msgstr "_Հատկություններ"
+msgstr "Էջերի քանակը յուրաքանչյուր _կողմում."
 
-#: gtk/gtkprintunixdialog.c:3336
-#, fuzzy
+#: ../gtk/gtkprintunixdialog.c:3336
 msgid "Page or_dering:"
-msgstr "_Հատկություններ"
+msgstr "Էջերի _հերթականություն"
 
-#: gtk/gtkprintunixdialog.c:3352
-#, fuzzy
+#: ../gtk/gtkprintunixdialog.c:3352
 msgid "_Only print:"
-msgstr "_Տպել"
+msgstr "_Միայն Տպել․"
 
 #. In enum order
-#: gtk/gtkprintunixdialog.c:3367
+#: ../gtk/gtkprintunixdialog.c:3367
 msgid "All sheets"
-msgstr ""
+msgstr "Բոլոր թերթերը"
 
-#: gtk/gtkprintunixdialog.c:3368
+#: ../gtk/gtkprintunixdialog.c:3368
 msgid "Even sheets"
-msgstr ""
+msgstr "Զույգ թերթեր"
 
-#: gtk/gtkprintunixdialog.c:3369
+#: ../gtk/gtkprintunixdialog.c:3369
 msgid "Odd sheets"
-msgstr ""
+msgstr "Կենտ թերթեր"
 
-#: gtk/gtkprintunixdialog.c:3372
-#, fuzzy
+#: ../gtk/gtkprintunixdialog.c:3372
 msgid "Sc_ale:"
-msgstr "_Արժեք."
+msgstr "Մաս_շտաբ․"
 
-#: gtk/gtkprintunixdialog.c:3399
+#: ../gtk/gtkprintunixdialog.c:3399
 msgid "Paper"
-msgstr ""
+msgstr "Թուղթ"
 
-#: gtk/gtkprintunixdialog.c:3403
-#, fuzzy
+#: ../gtk/gtkprintunixdialog.c:3403
 msgid "Paper _type:"
-msgstr "_Հատկություններ"
+msgstr "Թղթի _Տեսակ․"
 
-#: gtk/gtkprintunixdialog.c:3418
-#, fuzzy
+#: ../gtk/gtkprintunixdialog.c:3418
 msgid "Paper _source:"
-msgstr "_Հատկություններ"
+msgstr "Թղթի _աղբյուրը․"
 
-#: gtk/gtkprintunixdialog.c:3433
+#: ../gtk/gtkprintunixdialog.c:3433
 msgid "Output t_ray:"
-msgstr ""
+msgstr "Արտածման դ_արակ․"
 
-#: gtk/gtkprintunixdialog.c:3473
-#, fuzzy
+#: ../gtk/gtkprintunixdialog.c:3473
 msgid "Or_ientation:"
-msgstr "_Հագեցում."
+msgstr "Ուղ_ղություն"
 
 #. In enum order
-#: gtk/gtkprintunixdialog.c:3488
-#, fuzzy
+#: ../gtk/gtkprintunixdialog.c:3488
 msgid "Portrait"
-msgstr "_Տպել"
+msgstr "Դիմանկար"
 
-#: gtk/gtkprintunixdialog.c:3489
+#: ../gtk/gtkprintunixdialog.c:3489
 msgid "Landscape"
-msgstr ""
+msgstr "Բնանկար"
 
-#: gtk/gtkprintunixdialog.c:3490
+#: ../gtk/gtkprintunixdialog.c:3490
 msgid "Reverse portrait"
-msgstr ""
+msgstr "Շրջված դիմանկար"
 
-#: gtk/gtkprintunixdialog.c:3491
+#: ../gtk/gtkprintunixdialog.c:3491
 msgid "Reverse landscape"
-msgstr ""
+msgstr "Շրջված Բնանկար"
 
-#: gtk/gtkprintunixdialog.c:3536
+#: ../gtk/gtkprintunixdialog.c:3536
 msgid "Job Details"
-msgstr ""
+msgstr "Առաջադրանքի մանրամասներ"
 
-#: gtk/gtkprintunixdialog.c:3542
+#: ../gtk/gtkprintunixdialog.c:3542
 msgid "Pri_ority:"
-msgstr ""
+msgstr "Առաջնա_հերթություն․"
 
-#: gtk/gtkprintunixdialog.c:3557
+#: ../gtk/gtkprintunixdialog.c:3557
 msgid "_Billing info:"
-msgstr ""
+msgstr "_Հաշվային տեղեկություն․"
 
-#: gtk/gtkprintunixdialog.c:3575
+#: ../gtk/gtkprintunixdialog.c:3575
 msgid "Print Document"
-msgstr ""
+msgstr "Տպել փաստաթուղթը"
 
 #. Translators: this is one of the choices for the print at option
 #. * in the print dialog
 #.
-#: gtk/gtkprintunixdialog.c:3584
-#, fuzzy
+#: ../gtk/gtkprintunixdialog.c:3584
 msgid "_Now"
-msgstr "_Ոչ"
+msgstr "_Հիմա"
 
-#: gtk/gtkprintunixdialog.c:3595
+#: ../gtk/gtkprintunixdialog.c:3595
 msgid "A_t:"
-msgstr ""
+msgstr "Նշված դիրքում․"
 
 #. Translators: Ability to parse the am/pm format depends on actual locale.
 #. * You can remove the am/pm values below for your locale if they are not
 #. * supported.
 #.
-#: gtk/gtkprintunixdialog.c:3601
+#: ../gtk/gtkprintunixdialog.c:3601
 msgid ""
 "Specify the time of print,\n"
 " e.g. 15:30, 2:35 pm, 14:15:20, 11:46:30 am, 4 pm"
 msgstr ""
+"Նշել տպելու ժամանակը ,\n"
+"օրինակ՝ 15:30, 2:35 pm, 14:15:20, 11:46:30 am, 4 pm"
 
-#: gtk/gtkprintunixdialog.c:3611
+#: ../gtk/gtkprintunixdialog.c:3611
 msgid "Time of print"
-msgstr ""
+msgstr "Տպելու ժամանակը"
 
-#: gtk/gtkprintunixdialog.c:3627
-#, fuzzy
+#: ../gtk/gtkprintunixdialog.c:3627
 msgid "On _hold"
-msgstr "_Թավատառ"
+msgstr "Սպասման _ռեժիմում"
 
-#: gtk/gtkprintunixdialog.c:3628
+#: ../gtk/gtkprintunixdialog.c:3628
 msgid "Hold the job until it is explicitly released"
-msgstr ""
+msgstr "Աշխատանքը սպասեցնել մինչև լրացուցիչ հրահանգ ստանալը"
 
-#: gtk/gtkprintunixdialog.c:3648
+#: ../gtk/gtkprintunixdialog.c:3648
 msgid "Add Cover Page"
-msgstr ""
+msgstr "Ավելացնել տիտղոսաթերթ"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the front cover page.
 #.
-#: gtk/gtkprintunixdialog.c:3657
+#: ../gtk/gtkprintunixdialog.c:3657
 msgid "Be_fore:"
-msgstr ""
+msgstr "Առ_աջ․"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the back cover page.
 #.
-#: gtk/gtkprintunixdialog.c:3675
+#: ../gtk/gtkprintunixdialog.c:3675
 msgid "_After:"
-msgstr ""
+msgstr "_Հետո․"
 
 #. Translators: this is the tab label for the notebook tab containing
 #. * job-specific options in the print dialog
 #.
-#: gtk/gtkprintunixdialog.c:3693
+#: ../gtk/gtkprintunixdialog.c:3693
 msgid "Job"
-msgstr ""
+msgstr "Աշխատանք"
 
-#: gtk/gtkprintunixdialog.c:3759
+#: ../gtk/gtkprintunixdialog.c:3759
 msgid "Advanced"
-msgstr ""
+msgstr "Առաջավոր"
 
 #. Translators: this will appear as tab label in print dialog.
-#: gtk/gtkprintunixdialog.c:3794
+#: ../gtk/gtkprintunixdialog.c:3794
 msgid "Image Quality"
-msgstr ""
+msgstr "Նկարի Որակ"
 
 #. Translators: this will appear as tab label in print dialog.
-#: gtk/gtkprintunixdialog.c:3798
-#, fuzzy
+#: ../gtk/gtkprintunixdialog.c:3798
 msgid "Color"
-msgstr "_Գույն"
+msgstr "Գույն"
 
 #. Translators: this will appear as tab label in print dialog.
 #. It's a typographical term, as in "Binding and finishing"
-#: gtk/gtkprintunixdialog.c:3803
+#: ../gtk/gtkprintunixdialog.c:3803
 msgid "Finishing"
-msgstr ""
+msgstr "Ավարտում է"
 
-#: gtk/gtkprintunixdialog.c:3813
+#: ../gtk/gtkprintunixdialog.c:3813
 msgid "Some of the settings in the dialog conflict"
-msgstr ""
+msgstr "Որոշ պարամետրեր երկխոսությունում կոնֆլիկտ են առաջացնում"
 
-#: gtk/gtkprintunixdialog.c:3836
-#, fuzzy
+#: ../gtk/gtkprintunixdialog.c:3836
 msgid "Print"
-msgstr "_Տպել"
+msgstr "Տպել"
 
-#: gtk/gtkrc.c:2839
-#, fuzzy, c-format
+#: ../gtk/gtkrc.c:2839
+#, c-format
 msgid "Unable to find include file: \"%s\""
-msgstr "Չի հաջողվում գտնել include ֆայլը՝ \"%s\""
+msgstr "Չի հաջողվում գտնել include file․ \"%s\""
 
-#: gtk/gtkrc.c:3469 gtk/gtkrc.c:3472
+#: ../gtk/gtkrc.c:3469
+#: ../gtk/gtkrc.c:3472
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
-msgstr "Չի հաջողվում գտնել պատկերային ֆայլը pixmap_path–ի մեջ՝ \"%s\""
+msgstr "Չի հաջողվում գտնել պատկերային ֆայլը pixmap_path–ից․ \"%s\""
 
-#: gtk/gtkrecentaction.c:171 gtk/gtkrecentaction.c:179
-#: gtk/gtkrecentchoosermenu.c:616 gtk/gtkrecentchoosermenu.c:624
+#: ../gtk/gtkrecentaction.c:171
+#: ../gtk/gtkrecentaction.c:179
+#: ../gtk/gtkrecentchoosermenu.c:616
+#: ../gtk/gtkrecentchoosermenu.c:624
 #, c-format
 msgid "This function is not implemented for widgets of class '%s'"
-msgstr ""
+msgstr "Այս ֆունկցիան իրականացված չէ '%s' դասի վիջեթների համար"
 
-#: gtk/gtkrecentchooserdefault.c:481
-#, fuzzy
+#: ../gtk/gtkrecentchooserdefault.c:481
 msgid "Select which type of documents are shown"
-msgstr "Ընտրեք որ տեսակի ֆայլերն են ցուցադրված"
+msgstr "Ընտրեք ցուցադրվող փաստաթղթերի տեսակները"
 
-#: gtk/gtkrecentchooserdefault.c:1134 gtk/gtkrecentchooserdefault.c:1171
+#: ../gtk/gtkrecentchooserdefault.c:1134
+#: ../gtk/gtkrecentchooserdefault.c:1171
 #, c-format
 msgid "No item for URI '%s' found"
-msgstr ""
+msgstr "Ոչ մի էլէմենտ չի գտնվել URI '%s' - ի համար"
 
-#: gtk/gtkrecentchooserdefault.c:1298
+#: ../gtk/gtkrecentchooserdefault.c:1298
 msgid "Untitled filter"
-msgstr ""
+msgstr "Չվերնագրված ֆիլտր"
 
-#: gtk/gtkrecentchooserdefault.c:1651
-#, fuzzy
+#: ../gtk/gtkrecentchooserdefault.c:1651
 msgid "Could not remove item"
-msgstr "Չհաջողվեց ընտրել միավորը"
+msgstr "Չհաջողվեց հեռացնել տարր"
 
-#: gtk/gtkrecentchooserdefault.c:1695
-#, fuzzy
+#: ../gtk/gtkrecentchooserdefault.c:1695
 msgid "Could not clear list"
-msgstr "Չհաջողվեց ընտրել միավորը"
+msgstr "Չհաջողվեց մաքրել ցուցակը"
 
-#: gtk/gtkrecentchooserdefault.c:1779
-#, fuzzy
+#: ../gtk/gtkrecentchooserdefault.c:1779
 msgid "Copy _Location"
-msgstr "Բացել _տեղադրությունը"
+msgstr "Պատճենել _հասցեն"
 
-#: gtk/gtkrecentchooserdefault.c:1792
+#: ../gtk/gtkrecentchooserdefault.c:1792
 msgid "_Remove From List"
-msgstr ""
+msgstr "_Հեռացնել ցուցակից"
 
-#: gtk/gtkrecentchooserdefault.c:1801
-#, fuzzy
+#: ../gtk/gtkrecentchooserdefault.c:1801
 msgid "_Clear List"
-msgstr "_Մաքրել"
+msgstr "_Մաքրել ցուցակը"
 
-#: gtk/gtkrecentchooserdefault.c:1815
+#: ../gtk/gtkrecentchooserdefault.c:1815
 msgid "Show _Private Resources"
-msgstr ""
+msgstr "Ցուցադրել _անձնական աղբյուրները"
 
 #. we create a placeholder menuitem, to be used in case
 #. * the menu is empty. this placeholder will stay around
@@ -3012,2714 +2490,850 @@ msgstr ""
 #. * user appended or prepended custom menu items to the
 #. * recent chooser menu widget.
 #.
-#: gtk/gtkrecentchoosermenu.c:370
-#, fuzzy
+#: ../gtk/gtkrecentchoosermenu.c:370
 msgid "No items found"
-msgstr "XPM վերնագիր չի հայտնաբերվել"
+msgstr "Ոչ մի տարր չի գտնվել"
 
-#: gtk/gtkrecentchoosermenu.c:536 gtk/gtkrecentchoosermenu.c:592
+#: ../gtk/gtkrecentchoosermenu.c:536
+#: ../gtk/gtkrecentchoosermenu.c:592
 #, c-format
 msgid "No recently used resource found with URI `%s'"
-msgstr ""
+msgstr "%s' հասցեում վերջերս օգտագործված աղբյուր չի գտնվել"
 
-#: gtk/gtkrecentchoosermenu.c:803
+#: ../gtk/gtkrecentchoosermenu.c:803
 #, c-format
 msgid "Open '%s'"
-msgstr ""
+msgstr "Բացել '%s'"
 
-#: gtk/gtkrecentchoosermenu.c:833
-#, fuzzy
+#: ../gtk/gtkrecentchoosermenu.c:833
 msgid "Unknown item"
-msgstr "Անհայտ"
+msgstr "Անհայտ տարր"
 
-#. This is the label format that is used for the first 10 items
-#. * in a recent files menu. The %d is the number of the item,
-#. * the %s is the name of the item. Please keep the _ in front
-#. * of the number to give these menu items a mnemonic.
-#.
-#: gtk/gtkrecentchoosermenu.c:844
+#: ../gtk/gtkrecentmanager.c:968
+#: ../gtk/gtkrecentmanager.c:981
+#: ../gtk/gtkrecentmanager.c:1119
+#: ../gtk/gtkrecentmanager.c:1129
+#: ../gtk/gtkrecentmanager.c:1182
+#: ../gtk/gtkrecentmanager.c:1191
+#: ../gtk/gtkrecentmanager.c:1206
 #, c-format
-msgctxt "recent menu label"
-msgid "_%d. %s"
-msgstr ""
-
-#. This is the format that is used for items in a recent files menu.
-#. * The %d is the number of the item, the %s is the name of the item.
-#.
-#: gtk/gtkrecentchoosermenu.c:849
-#, fuzzy, c-format
-msgctxt "recent menu label"
-msgid "%d. %s"
-msgstr "%s (%s)"
-
-#: gtk/gtkrecentmanager.c:968 gtk/gtkrecentmanager.c:981
-#: gtk/gtkrecentmanager.c:1119 gtk/gtkrecentmanager.c:1129
-#: gtk/gtkrecentmanager.c:1182 gtk/gtkrecentmanager.c:1191
-#: gtk/gtkrecentmanager.c:1206
-#, fuzzy, c-format
 msgid "Unable to find an item with URI '%s'"
-msgstr "Չի հաջողվում գտնել include ֆայլը՝ \"%s\""
+msgstr "Չհաջողվեց գտնել տարր URI '%s' հասցեում"
 
-#: gtk/gtkspinner.c:458
-msgctxt "throbbing progress animation widget"
-msgid "Spinner"
-msgstr ""
-
-#: gtk/gtkspinner.c:459
+#: ../gtk/gtkspinner.c:459
 msgid "Provides visual indication of progress"
-msgstr ""
+msgstr "Տրամադրում է տեսանելի կատարման ինդիկատոր"
 
-#. KEEP IN SYNC with gtkiconfactory.c stock icons, when appropriate
-#: gtk/gtkstock.c:314
-#, fuzzy
-msgctxt "Stock label"
-msgid "Information"
-msgstr "Տեղեկատվություն"
-
-#: gtk/gtkstock.c:315
-#, fuzzy
-msgctxt "Stock label"
-msgid "Warning"
-msgstr "Նախազգուշացում"
-
-#: gtk/gtkstock.c:316
-#, fuzzy
-msgctxt "Stock label"
-msgid "Error"
-msgstr "Սխալ"
-
-#: gtk/gtkstock.c:317
-#, fuzzy
-msgctxt "Stock label"
-msgid "Question"
-msgstr "Հարց"
-
-#. FIXME these need accelerators when appropriate, and
-#. * need the mnemonics to be rationalized
-#.
-#: gtk/gtkstock.c:322
-#, fuzzy
-msgctxt "Stock label"
-msgid "_About"
-msgstr "_Ծրագրի Մասին"
-
-#: gtk/gtkstock.c:323
-#, fuzzy
-msgctxt "Stock label"
-msgid "_Add"
-msgstr "_Ավելացնել"
-
-#: gtk/gtkstock.c:324
-#, fuzzy
-msgctxt "Stock label"
-msgid "_Apply"
-msgstr "_Կիրառել"
-
-#: gtk/gtkstock.c:325
-#, fuzzy
-msgctxt "Stock label"
-msgid "_Bold"
-msgstr "_Թավատառ"
-
-#: gtk/gtkstock.c:326
-#, fuzzy
-msgctxt "Stock label"
-msgid "_Cancel"
-msgstr "_Հրաժարվել"
-
-#: gtk/gtkstock.c:327
-#, fuzzy
-msgctxt "Stock label"
-msgid "_CD-Rom"
-msgstr "_CD-Rom"
-
-#: gtk/gtkstock.c:328
-#, fuzzy
-msgctxt "Stock label"
-msgid "_Clear"
-msgstr "_Մաքրել"
-
-#: gtk/gtkstock.c:329
-#, fuzzy
-msgctxt "Stock label"
-msgid "_Close"
-msgstr "_Փակել"
-
-#: gtk/gtkstock.c:330
-#, fuzzy
-msgctxt "Stock label"
-msgid "C_onnect"
-msgstr "_Ձևափոխել"
-
-#: gtk/gtkstock.c:331
-#, fuzzy
-msgctxt "Stock label"
-msgid "_Convert"
-msgstr "_Ձևափոխել"
-
-#: gtk/gtkstock.c:332
-#, fuzzy
-msgctxt "Stock label"
-msgid "_Copy"
-msgstr "_Պատճենել"
-
-#: gtk/gtkstock.c:333
-#, fuzzy
-msgctxt "Stock label"
-msgid "Cu_t"
-msgstr "Կտր_ել"
-
-#: gtk/gtkstock.c:334
-#, fuzzy
-msgctxt "Stock label"
-msgid "_Delete"
-msgstr "_Ջնջել"
-
-#: gtk/gtkstock.c:335
-#, fuzzy
-msgctxt "Stock label"
-msgid "_Discard"
-msgstr "Անջատված է"
-
-#: gtk/gtkstock.c:336
-#, fuzzy
-msgctxt "Stock label"
-msgid "_Disconnect"
-msgstr "_Ձևափոխել"
-
-#: gtk/gtkstock.c:337
-#, fuzzy
-msgctxt "Stock label"
-msgid "_Execute"
-msgstr "_Կատարել"
-
-#: gtk/gtkstock.c:338
-#, fuzzy
-msgctxt "Stock label"
-msgid "_Edit"
-msgstr "_Խմբագրել"
-
-#: gtk/gtkstock.c:339
-#, fuzzy
-msgctxt "Stock label"
-msgid "_Find"
-msgstr "_Գտնել"
-
-#: gtk/gtkstock.c:340
-#, fuzzy
-msgctxt "Stock label"
-msgid "Find and _Replace"
-msgstr "Գտնել և _Փոխարինել"
-
-#: gtk/gtkstock.c:341
-#, fuzzy
-msgctxt "Stock label"
-msgid "_Floppy"
-msgstr "_Ճկուն մագնիսական սկավառակ"
-
-#: gtk/gtkstock.c:342
-#, fuzzy
-msgctxt "Stock label"
-msgid "_Fullscreen"
-msgstr "Ամբթղջ էկրանով"
-
-#: gtk/gtkstock.c:343
-#, fuzzy
-msgctxt "Stock label"
-msgid "_Leave Fullscreen"
-msgstr "Թողել ամբողջ էկրանով"
-
-#. This is a navigation label as in "go to the bottom of the page"
-#: gtk/gtkstock.c:345
-msgctxt "Stock label, navigation"
-msgid "_Bottom"
-msgstr ""
-
-#. This is a navigation label as in "go to the first page"
-#: gtk/gtkstock.c:347
-#, fuzzy
-msgctxt "Stock label, navigation"
-msgid "_First"
-msgstr "_Ֆայլեր"
-
-#. This is a navigation label as in "go to the last page"
-#: gtk/gtkstock.c:349
-#, fuzzy
-msgctxt "Stock label, navigation"
-msgid "_Last"
-msgstr "_Փակցնել"
-
-#. This is a navigation label as in "go to the top of the page"
-#: gtk/gtkstock.c:351
-#, fuzzy
-msgctxt "Stock label, navigation"
-msgid "_Top"
-msgstr "_Կանգ"
-
-#. This is a navigation label as in "go back"
-#: gtk/gtkstock.c:353
-msgctxt "Stock label, navigation"
-msgid "_Back"
-msgstr ""
-
-#. This is a navigation label as in "go down"
-#: gtk/gtkstock.c:355
-#, fuzzy
-msgctxt "Stock label, navigation"
-msgid "_Down"
-msgstr "_Ոչ"
-
-#. This is a navigation label as in "go forward"
-#: gtk/gtkstock.c:357
-#, fuzzy
-msgctxt "Stock label, navigation"
-msgid "_Forward"
-msgstr "Առաջ"
-
-#. This is a navigation label as in "go up"
-#: gtk/gtkstock.c:359
-msgctxt "Stock label, navigation"
-msgid "_Up"
-msgstr ""
-
-#: gtk/gtkstock.c:360
-#, fuzzy
-msgctxt "Stock label"
-msgid "_Harddisk"
-msgstr "_Կոշտ սկավառակ"
-
-#: gtk/gtkstock.c:361
-#, fuzzy
-msgctxt "Stock label"
-msgid "_Help"
-msgstr "_Ձեռնարկ"
-
-#: gtk/gtkstock.c:362
-#, fuzzy
-msgctxt "Stock label"
-msgid "_Home"
-msgstr "_Տուն"
-
-#: gtk/gtkstock.c:363
-msgctxt "Stock label"
-msgid "Increase Indent"
-msgstr ""
-
-#: gtk/gtkstock.c:364
-msgctxt "Stock label"
-msgid "Decrease Indent"
-msgstr ""
-
-#: gtk/gtkstock.c:365
-#, fuzzy
-msgctxt "Stock label"
-msgid "_Index"
-msgstr "_Ցանկ"
-
-#: gtk/gtkstock.c:366
-#, fuzzy
-msgctxt "Stock label"
-msgid "_Information"
-msgstr "Տեղեկատվություն"
-
-#: gtk/gtkstock.c:367
-#, fuzzy
-msgctxt "Stock label"
-msgid "_Italic"
-msgstr "_Շեղատառ"
-
-#: gtk/gtkstock.c:368
-#, fuzzy
-msgctxt "Stock label"
-msgid "_Jump to"
-msgstr "_Անցնել դեպի"
-
-#. This is about text justification, "centered text"
-#: gtk/gtkstock.c:370
-#, fuzzy
-msgctxt "Stock label"
-msgid "_Center"
-msgstr "_Ձևափոխել"
-
-#. This is about text justification
-#: gtk/gtkstock.c:372
-#, fuzzy
-msgctxt "Stock label"
-msgid "_Fill"
-msgstr "_Ֆայլեր"
-
-#. This is about text justification, "left-justified text"
-#: gtk/gtkstock.c:374
-msgctxt "Stock label"
-msgid "_Left"
-msgstr ""
-
-#. This is about text justification, "right-justified text"
-#: gtk/gtkstock.c:376
-#, fuzzy
-msgctxt "Stock label"
-msgid "_Right"
-msgstr "_Երանգ."
-
-#. Media label, as in "fast forward"
-#: gtk/gtkstock.c:379
-#, fuzzy
-msgctxt "Stock label, media"
-msgid "_Forward"
-msgstr "Առաջ"
-
-#. Media label, as in "next song"
-#: gtk/gtkstock.c:381
-#, fuzzy
-msgctxt "Stock label, media"
-msgid "_Next"
-msgstr "_Նոր"
-
-#. Media label, as in "pause music"
-#: gtk/gtkstock.c:383
-#, fuzzy
-msgctxt "Stock label, media"
-msgid "P_ause"
-msgstr "_Փակցնել"
-
-#. Media label, as in "play music"
-#: gtk/gtkstock.c:385
-#, fuzzy
-msgctxt "Stock label, media"
-msgid "_Play"
-msgstr "_Վերանվանել"
-
-#. Media label, as in  "previous song"
-#: gtk/gtkstock.c:387
-#, fuzzy
-msgctxt "Stock label, media"
-msgid "Pre_vious"
-msgstr "Նախորդը"
-
-#. Media label
-#: gtk/gtkstock.c:389
-#, fuzzy
-msgctxt "Stock label, media"
-msgid "_Record"
-msgstr "Ձայնագրել"
-
-#. Media label
-#: gtk/gtkstock.c:391
-#, fuzzy
-msgctxt "Stock label, media"
-msgid "R_ewind"
-msgstr "դեպի սկիզբ"
-
-#. Media label
-#: gtk/gtkstock.c:393
-#, fuzzy
-msgctxt "Stock label, media"
-msgid "_Stop"
-msgstr "_Կանգ"
-
-#: gtk/gtkstock.c:394
-#, fuzzy
-msgctxt "Stock label"
-msgid "_Network"
-msgstr "Ցանց"
-
-#: gtk/gtkstock.c:395
-#, fuzzy
-msgctxt "Stock label"
-msgid "_New"
-msgstr "_Նոր"
-
-#: gtk/gtkstock.c:396
-#, fuzzy
-msgctxt "Stock label"
-msgid "_No"
-msgstr "_Ոչ"
-
-#: gtk/gtkstock.c:397
-#, fuzzy
-msgctxt "Stock label"
-msgid "_OK"
-msgstr "_Այո"
-
-#: gtk/gtkstock.c:398
-#, fuzzy
-msgctxt "Stock label"
-msgid "_Open"
-msgstr "_Բացել"
-
-#. Page orientation
-#: gtk/gtkstock.c:400
-msgctxt "Stock label"
-msgid "Landscape"
-msgstr ""
-
-#. Page orientation
-#: gtk/gtkstock.c:402
-#, fuzzy
-msgctxt "Stock label"
-msgid "Portrait"
-msgstr "_Տպել"
-
-#. Page orientation
-#: gtk/gtkstock.c:404
-msgctxt "Stock label"
-msgid "Reverse landscape"
-msgstr ""
-
-#. Page orientation
-#: gtk/gtkstock.c:406
-msgctxt "Stock label"
-msgid "Reverse portrait"
-msgstr ""
-
-#: gtk/gtkstock.c:407
-#, fuzzy
-msgctxt "Stock label"
-msgid "Page Set_up"
-msgstr "Էջ %u"
-
-#: gtk/gtkstock.c:408
-#, fuzzy
-msgctxt "Stock label"
-msgid "_Paste"
-msgstr "_Փակցնել"
-
-#: gtk/gtkstock.c:409
-#, fuzzy
-msgctxt "Stock label"
-msgid "_Preferences"
-msgstr "_Նախընտրանքներ"
-
-#: gtk/gtkstock.c:410
-#, fuzzy
-msgctxt "Stock label"
-msgid "_Print"
-msgstr "_Տպել"
-
-#: gtk/gtkstock.c:411
-#, fuzzy
-msgctxt "Stock label"
-msgid "Print Pre_view"
-msgstr "_Նախնական ցուցադրում."
-
-#: gtk/gtkstock.c:412
-#, fuzzy
-msgctxt "Stock label"
-msgid "_Properties"
-msgstr "_Հատկություններ"
-
-#: gtk/gtkstock.c:413
-#, fuzzy
-msgctxt "Stock label"
-msgid "_Quit"
-msgstr "_Ելք"
-
-#: gtk/gtkstock.c:414
-#, fuzzy
-msgctxt "Stock label"
-msgid "_Redo"
-msgstr "_Առաջ"
-
-#: gtk/gtkstock.c:415
-#, fuzzy
-msgctxt "Stock label"
-msgid "_Refresh"
-msgstr "_Թարմացնել"
-
-#: gtk/gtkstock.c:416
-#, fuzzy
-msgctxt "Stock label"
-msgid "_Remove"
-msgstr "_Հեռացնել"
-
-#: gtk/gtkstock.c:417
-#, fuzzy
-msgctxt "Stock label"
-msgid "_Revert"
-msgstr "_Վերադառնալ նախկին վիճակին"
-
-#: gtk/gtkstock.c:418
-#, fuzzy
-msgctxt "Stock label"
-msgid "_Save"
-msgstr "_Պահել"
-
-#: gtk/gtkstock.c:419
-#, fuzzy
-msgctxt "Stock label"
-msgid "Save _As"
-msgstr "Պահել _Որպես"
-
-#: gtk/gtkstock.c:420
-#, fuzzy
-msgctxt "Stock label"
-msgid "Select _All"
-msgstr "Ընտրել _Ամբողջը"
-
-#: gtk/gtkstock.c:421
-#, fuzzy
-msgctxt "Stock label"
-msgid "_Color"
-msgstr "_Գույն"
-
-#: gtk/gtkstock.c:422
-#, fuzzy
-msgctxt "Stock label"
-msgid "_Font"
-msgstr "_Տառատեսակ"
-
-#. Sorting direction
-#: gtk/gtkstock.c:424
-#, fuzzy
-msgctxt "Stock label"
-msgid "_Ascending"
-msgstr "_Բարձրացում"
-
-#. Sorting direction
-#: gtk/gtkstock.c:426
-#, fuzzy
-msgctxt "Stock label"
-msgid "_Descending"
-msgstr "_Իջեցում"
-
-#: gtk/gtkstock.c:427
-#, fuzzy
-msgctxt "Stock label"
-msgid "_Spell Check"
-msgstr "_Ուղղագրության Ստուգում"
-
-#: gtk/gtkstock.c:428
-#, fuzzy
-msgctxt "Stock label"
-msgid "_Stop"
-msgstr "_Կանգ"
-
-#. Font variant
-#: gtk/gtkstock.c:430
-#, fuzzy
-msgctxt "Stock label"
-msgid "_Strikethrough"
-msgstr "_Համատարած հարված"
-
-#: gtk/gtkstock.c:431
-#, fuzzy
-msgctxt "Stock label"
-msgid "_Undelete"
-msgstr "_Հետ բերել ջնջածը"
-
-#. Font variant
-#: gtk/gtkstock.c:433
-#, fuzzy
-msgctxt "Stock label"
-msgid "_Underline"
-msgstr "_Ընդգծել"
-
-#: gtk/gtkstock.c:434
-#, fuzzy
-msgctxt "Stock label"
-msgid "_Undo"
-msgstr "_Հետ"
-
-#: gtk/gtkstock.c:435
-#, fuzzy
-msgctxt "Stock label"
-msgid "_Yes"
-msgstr "_Այո"
-
-#. Zoom
-#: gtk/gtkstock.c:437
-#, fuzzy
-msgctxt "Stock label"
-msgid "_Normal Size"
-msgstr "_Նորմալ Չափս"
-
-#. Zoom
-#: gtk/gtkstock.c:439
-#, fuzzy
-msgctxt "Stock label"
-msgid "Best _Fit"
-msgstr "Լավագույն Դարսվածք"
-
-#: gtk/gtkstock.c:440
-#, fuzzy
-msgctxt "Stock label"
-msgid "Zoom _In"
-msgstr "Մեծացնել"
-
-#: gtk/gtkstock.c:441
-#, fuzzy
-msgctxt "Stock label"
-msgid "Zoom _Out"
-msgstr "Փոքրացնել"
-
-#: gtk/gtktextbufferrichtext.c:651
+#: ../gtk/gtktextbufferrichtext.c:651
 #, c-format
 msgid "Unknown error when trying to deserialize %s"
-msgstr ""
+msgstr "Անհայտ սխալ %s -ի դեսերիալիզացիայի ընթացքում"
 
-#: gtk/gtktextbufferrichtext.c:710
+#: ../gtk/gtktextbufferrichtext.c:710
 #, c-format
 msgid "No deserialize function found for format %s"
-msgstr ""
+msgstr "%s ֆորմատի համար չի գտնվել որևէ դեսերիալիզացիայի ֆունկցիա"
 
-#: gtk/gtktextbufferserialize.c:796 gtk/gtktextbufferserialize.c:822
+#: ../gtk/gtktextbufferserialize.c:796
+#: ../gtk/gtktextbufferserialize.c:822
 #, c-format
 msgid "Both \"id\" and \"name\" were found on the <%s> element"
-msgstr ""
+msgstr "\"id\" և \"name\" գտնվել են <%s> տարրում"
 
-#: gtk/gtktextbufferserialize.c:806 gtk/gtktextbufferserialize.c:832
+#: ../gtk/gtktextbufferserialize.c:806
+#: ../gtk/gtktextbufferserialize.c:832
 #, c-format
 msgid "The attribute \"%s\" was found twice on the <%s> element"
-msgstr ""
+msgstr "\"%s\" ատրիբուտը երկու անգամ է գտնվել <%s> տարրում"
 
-#: gtk/gtktextbufferserialize.c:846
+#: ../gtk/gtktextbufferserialize.c:846
 #, c-format
 msgid "<%s> element has invalid id \"%s\""
-msgstr ""
+msgstr "<%s> տարրն ունի անվավեր id \"%s\""
 
-#: gtk/gtktextbufferserialize.c:856
+#: ../gtk/gtktextbufferserialize.c:856
 #, c-format
 msgid "<%s> element has neither a \"name\" nor an \"id\" attribute"
-msgstr ""
+msgstr "<%s> տարրը չունի ոչ \"name\", ոչ  էլ \"id\" ատրիբուտ"
 
-#: gtk/gtktextbufferserialize.c:943
+#: ../gtk/gtktextbufferserialize.c:943
 #, c-format
 msgid "Attribute \"%s\" repeated twice on the same <%s> element"
-msgstr ""
+msgstr "\"%s\" ատրիբուտը կրկնվել է <%s> տարրում"
 
-#: gtk/gtktextbufferserialize.c:961 gtk/gtktextbufferserialize.c:986
+#: ../gtk/gtktextbufferserialize.c:961
+#: ../gtk/gtktextbufferserialize.c:986
 #, c-format
 msgid "Attribute \"%s\" is invalid on <%s> element in this context"
-msgstr ""
+msgstr "\"%s\" ատրիբուտը անվավեր է <%s> տարրում այս կոնտեքստում"
 
-#: gtk/gtktextbufferserialize.c:1022
+#: ../gtk/gtktextbufferserialize.c:1022
 #, c-format
 msgid "Tag \"%s\" has not been defined."
-msgstr ""
+msgstr " \"%s\" տեգը սահմանված չէ"
 
-#: gtk/gtktextbufferserialize.c:1034
+#: ../gtk/gtktextbufferserialize.c:1034
 msgid "Anonymous tag found and tags can not be created."
-msgstr ""
+msgstr "Գտնվել է անանուն տեգ, հնարավոր չէ ստեղծել տեգեր"
 
-#: gtk/gtktextbufferserialize.c:1045
+#: ../gtk/gtktextbufferserialize.c:1045
 #, c-format
 msgid "Tag \"%s\" does not exist in buffer and tags can not be created."
-msgstr ""
+msgstr "Բուֆերում \"%s\" տեգ գոյություն չունի, հնարավոր չէ ստեղծել տեգեր"
 
-#: gtk/gtktextbufferserialize.c:1144 gtk/gtktextbufferserialize.c:1219
-#: gtk/gtktextbufferserialize.c:1320 gtk/gtktextbufferserialize.c:1394
+#: ../gtk/gtktextbufferserialize.c:1144
+#: ../gtk/gtktextbufferserialize.c:1219
+#: ../gtk/gtktextbufferserialize.c:1320
+#: ../gtk/gtktextbufferserialize.c:1394
 #, c-format
 msgid "Element <%s> is not allowed below <%s>"
-msgstr ""
+msgstr "<%s> տարրը չի կարող տեղադրվել <%s> -ի տակ"
 
-#: gtk/gtktextbufferserialize.c:1175
+#: ../gtk/gtktextbufferserialize.c:1175
 #, c-format
 msgid "\"%s\" is not a valid attribute type"
-msgstr ""
+msgstr "\"%s\" -ը սխալ ատրիբուտի տեսակ է"
 
-#: gtk/gtktextbufferserialize.c:1183
+#: ../gtk/gtktextbufferserialize.c:1183
 #, c-format
 msgid "\"%s\" is not a valid attribute name"
-msgstr ""
+msgstr "\"%s\" -ը սխալ ատրիբուտի անուն է"
 
-#: gtk/gtktextbufferserialize.c:1193
+#: ../gtk/gtktextbufferserialize.c:1193
 #, c-format
-msgid ""
-"\"%s\" could not be converted to a value of type \"%s\" for attribute \"%s\""
-msgstr ""
+msgid "\"%s\" could not be converted to a value of type \"%s\" for attribute \"%s\""
+msgstr "\"%s\" չի կարող փոխարկվել \"%s\" տեսակի արժեքի \"%s\" ատրիբուտի համար"
 
-#: gtk/gtktextbufferserialize.c:1202
+#: ../gtk/gtktextbufferserialize.c:1202
 #, c-format
 msgid "\"%s\" is not a valid value for attribute \"%s\""
-msgstr ""
+msgstr "\"%s\" -ը սխալ արժեք է \"%s\" ատրիբուտի համար"
 
-#: gtk/gtktextbufferserialize.c:1285
+#: ../gtk/gtktextbufferserialize.c:1285
 #, c-format
 msgid "Tag \"%s\" already defined"
-msgstr ""
+msgstr "\"%s\" տեգը արդեն սահմանված է"
 
-#: gtk/gtktextbufferserialize.c:1296
+#: ../gtk/gtktextbufferserialize.c:1296
 #, c-format
 msgid "Tag \"%s\" has invalid priority \"%s\""
-msgstr ""
+msgstr "\"%s\" տեգն ունի անվավեր առաջնահերթություն \"%s\""
 
-#: gtk/gtktextbufferserialize.c:1349
+#: ../gtk/gtktextbufferserialize.c:1349
 #, c-format
 msgid "Outermost element in text must be <text_view_markup> not <%s>"
-msgstr ""
+msgstr "Տեքստում ամենահեռավոր տարրը  պետք է լինի <text_view_markup>, այլ ոչ թե <%s>"
 
-#: gtk/gtktextbufferserialize.c:1358 gtk/gtktextbufferserialize.c:1374
+#: ../gtk/gtktextbufferserialize.c:1358
+#: ../gtk/gtktextbufferserialize.c:1374
 #, c-format
 msgid "A <%s> element has already been specified"
-msgstr ""
+msgstr "<%s> տարրն արդեն սահմանված է"
 
-#: gtk/gtktextbufferserialize.c:1380
+#: ../gtk/gtktextbufferserialize.c:1380
 msgid "A <text> element can't occur before a <tags> element"
-msgstr ""
+msgstr "<text> տարրը չի կարող հանդիպել <tags> տարրից առաջ"
 
-#: gtk/gtktextbufferserialize.c:1779
+#: ../gtk/gtktextbufferserialize.c:1779
 msgid "Serialized data is malformed"
-msgstr ""
+msgstr "Սերիալիզացված տվյալները սխալ են կազմակերպված"
 
-#: gtk/gtktextbufferserialize.c:1857
-msgid ""
-"Serialized data is malformed. First section isn't GTKTEXTBUFFERCONTENTS-0001"
-msgstr ""
+#: ../gtk/gtktextbufferserialize.c:1857
+msgid "Serialized data is malformed. First section isn't GTKTEXTBUFFERCONTENTS-0001"
+msgstr "Սերիալիզացված տվյալները սխալ են կազմակերպված։ Առաջին բաժինը GTKTEXTBUFFERCONTENTS-0001 չէ։"
 
-#: gtk/gtktextutil.c:61
+#: ../gtk/gtktextutil.c:61
 msgid "LRM _Left-to-right mark"
-msgstr ""
+msgstr "LRM _ձախից աջ նշան"
 
-#: gtk/gtktextutil.c:62
+#: ../gtk/gtktextutil.c:62
 msgid "RLM _Right-to-left mark"
-msgstr ""
+msgstr "RLM _աջից ձախ նշան"
 
-#: gtk/gtktextutil.c:63
+#: ../gtk/gtktextutil.c:63
 msgid "LRE Left-to-right _embedding"
-msgstr ""
+msgstr "LRE ձախից աջ տեղադրում"
 
-#: gtk/gtktextutil.c:64
+#: ../gtk/gtktextutil.c:64
 msgid "RLE Right-to-left e_mbedding"
-msgstr "RLE Աջից ձախ դ_արսում"
+msgstr "RLE Աջից ձախ տ_եղադրում"
 
-#: gtk/gtktextutil.c:65
+#: ../gtk/gtktextutil.c:65
 msgid "LRO Left-to-right _override"
-msgstr "LRO Ձախից աջ _վերանցում"
+msgstr "LRO Ձախից աջ _անցում"
 
-#: gtk/gtktextutil.c:66
+#: ../gtk/gtktextutil.c:66
 msgid "RLO Right-to-left o_verride"
-msgstr "RLO Աջից ձախ վ_րանցում"
+msgstr "RLO Աջից ձախ _անցում"
 
-#: gtk/gtktextutil.c:67
+#: ../gtk/gtktextutil.c:67
 msgid "PDF _Pop directional formatting"
-msgstr ""
+msgstr "PDF _Pop ուղղությամբ ֆորմատավորում"
 
-#: gtk/gtktextutil.c:68
-#, fuzzy
+#: ../gtk/gtktextutil.c:68
 msgid "ZWS _Zero width space"
-msgstr "ZWS _Զրոյական լայնքային տարածություն"
+msgstr "ZWS _Զրո լայնքով բացատ"
 
-#: gtk/gtktextutil.c:69
+#: ../gtk/gtktextutil.c:69
 msgid "ZWJ Zero width _joiner"
-msgstr ""
+msgstr "ZWJ Զրո լայնքով _կապիչ"
 
-#: gtk/gtktextutil.c:70
+#: ../gtk/gtktextutil.c:70
 msgid "ZWNJ Zero width _non-joiner"
-msgstr ""
+msgstr "ZWNJ Զրո լայնքով _բաժանիչ"
 
-#: gtk/gtkthemes.c:71
+#: ../gtk/gtkthemes.c:71
 #, c-format
 msgid "Unable to locate theme engine in module_path: \"%s\","
-msgstr "Չի հաջողվում գտնել թեմաների շարժիչը module_path մեջ՝ \"%s\","
+msgstr "Չի հաջողվում գտնել թեմաների մոդուլը module_path-ում․ \"%s\","
 
-#: gtk/gtkuimanager.c:1505
+#: ../gtk/gtkuimanager.c:1505
 #, c-format
 msgid "Unexpected start tag '%s' on line %d char %d"
-msgstr ""
-"Անսպասելի սկզբնային '%s' տվյալների տեսակը որոշող հատկանիշ %d տողի %d նիշում"
+msgstr "Անսպասելի տեգի սկիզբ '%s' %d տողում %d նիշում"
 
-#: gtk/gtkuimanager.c:1595
+#: ../gtk/gtkuimanager.c:1595
 #, c-format
 msgid "Unexpected character data on line %d char %d"
 msgstr "Անսպասելի նիշային տվյալներ %d տողի %d նիշում"
 
-#: gtk/gtkuimanager.c:2427
+#: ../gtk/gtkuimanager.c:2427
 msgid "Empty"
 msgstr "Դատարկ"
 
-#: gtk/gtkvolumebutton.c:83
-#, fuzzy
+#: ../gtk/gtkvolumebutton.c:83
 msgid "Volume"
-msgstr "_Արժեք."
+msgstr "Ձայնի բարձրություն"
 
-#: gtk/gtkvolumebutton.c:85
+#: ../gtk/gtkvolumebutton.c:85
 msgid "Turns volume down or up"
-msgstr ""
+msgstr "Բարձրացնում կամ իջեցնում է ձայնը"
 
-#: gtk/gtkvolumebutton.c:88
+#: ../gtk/gtkvolumebutton.c:88
 msgid "Adjusts the volume"
-msgstr ""
+msgstr "Հարմարեցնել ձայնի բարձրությունը"
 
-#: gtk/gtkvolumebutton.c:91 gtk/gtkvolumebutton.c:94
+#: ../gtk/gtkvolumebutton.c:91
+#: ../gtk/gtkvolumebutton.c:94
 msgid "Volume Down"
-msgstr ""
+msgstr "Ձայնը ցածր է"
 
-#: gtk/gtkvolumebutton.c:93
+#: ../gtk/gtkvolumebutton.c:93
 msgid "Decreases the volume"
-msgstr ""
+msgstr "Իջեցնել ձայնը"
 
-#: gtk/gtkvolumebutton.c:97 gtk/gtkvolumebutton.c:100
+#: ../gtk/gtkvolumebutton.c:97
+#: ../gtk/gtkvolumebutton.c:100
 msgid "Volume Up"
-msgstr ""
+msgstr "Ձայնը բարձր է"
 
-#: gtk/gtkvolumebutton.c:99
+#: ../gtk/gtkvolumebutton.c:99
 msgid "Increases the volume"
-msgstr ""
+msgstr "Բարձրացնել ձայնը"
 
-#: gtk/gtkvolumebutton.c:157
+#: ../gtk/gtkvolumebutton.c:157
 msgid "Muted"
-msgstr ""
+msgstr "Ձայնը անջատված է"
 
-#: gtk/gtkvolumebutton.c:161
+#: ../gtk/gtkvolumebutton.c:161
 msgid "Full Volume"
-msgstr ""
+msgstr "Լրիվ ձայնային ուժգնություն"
 
-#. Translators: this is the percentage of the current volume,
-#. * as used in the tooltip, eg. "49 %".
-#. * Translate the "%d" to "%Id" if you want to use localised digits,
-#. * or otherwise translate the "%d" to "%d".
-#.
-#: gtk/gtkvolumebutton.c:174
-#, c-format
-msgctxt "volume percentage"
-msgid "%d %%"
-msgstr ""
-
-#: gtk/paper_names_offsets.c:4
-#, fuzzy
-msgctxt "paper size"
-msgid "asme_f"
-msgstr "Անվանում"
-
-#: gtk/paper_names_offsets.c:5
-msgctxt "paper size"
-msgid "A0x2"
-msgstr ""
-
-#: gtk/paper_names_offsets.c:6
-msgctxt "paper size"
-msgid "A0"
-msgstr ""
-
-#: gtk/paper_names_offsets.c:7
-msgctxt "paper size"
-msgid "A0x3"
-msgstr ""
-
-#: gtk/paper_names_offsets.c:8
-msgctxt "paper size"
-msgid "A1"
-msgstr ""
-
-#: gtk/paper_names_offsets.c:9
-msgctxt "paper size"
-msgid "A10"
-msgstr ""
-
-#: gtk/paper_names_offsets.c:10
-msgctxt "paper size"
-msgid "A1x3"
-msgstr ""
-
-#: gtk/paper_names_offsets.c:11
-msgctxt "paper size"
-msgid "A1x4"
-msgstr ""
-
-#: gtk/paper_names_offsets.c:12
-msgctxt "paper size"
-msgid "A2"
-msgstr ""
-
-#: gtk/paper_names_offsets.c:13
-msgctxt "paper size"
-msgid "A2x3"
-msgstr ""
-
-#: gtk/paper_names_offsets.c:14
-msgctxt "paper size"
-msgid "A2x4"
-msgstr ""
-
-#: gtk/paper_names_offsets.c:15
-msgctxt "paper size"
-msgid "A2x5"
-msgstr ""
-
-#: gtk/paper_names_offsets.c:16
-msgctxt "paper size"
-msgid "A3"
-msgstr ""
-
-#: gtk/paper_names_offsets.c:17
-msgctxt "paper size"
-msgid "A3 Extra"
-msgstr ""
-
-#: gtk/paper_names_offsets.c:18
-msgctxt "paper size"
-msgid "A3x3"
-msgstr ""
-
-#: gtk/paper_names_offsets.c:19
-msgctxt "paper size"
-msgid "A3x4"
-msgstr ""
-
-#: gtk/paper_names_offsets.c:20
-msgctxt "paper size"
-msgid "A3x5"
-msgstr ""
-
-#: gtk/paper_names_offsets.c:21
-msgctxt "paper size"
-msgid "A3x6"
-msgstr ""
-
-#: gtk/paper_names_offsets.c:22
-msgctxt "paper size"
-msgid "A3x7"
-msgstr ""
-
-#: gtk/paper_names_offsets.c:23
-msgctxt "paper size"
-msgid "A4"
-msgstr ""
-
-#: gtk/paper_names_offsets.c:24
-msgctxt "paper size"
-msgid "A4 Extra"
-msgstr ""
-
-#: gtk/paper_names_offsets.c:25
-msgctxt "paper size"
-msgid "A4 Tab"
-msgstr ""
-
-#: gtk/paper_names_offsets.c:26
-msgctxt "paper size"
-msgid "A4x3"
-msgstr ""
-
-#: gtk/paper_names_offsets.c:27
-msgctxt "paper size"
-msgid "A4x4"
-msgstr ""
-
-#: gtk/paper_names_offsets.c:28
-msgctxt "paper size"
-msgid "A4x5"
-msgstr ""
-
-#: gtk/paper_names_offsets.c:29
-msgctxt "paper size"
-msgid "A4x6"
-msgstr ""
-
-#: gtk/paper_names_offsets.c:30
-msgctxt "paper size"
-msgid "A4x7"
-msgstr ""
-
-#: gtk/paper_names_offsets.c:31
-msgctxt "paper size"
-msgid "A4x8"
-msgstr ""
-
-#: gtk/paper_names_offsets.c:32
-msgctxt "paper size"
-msgid "A4x9"
-msgstr ""
-
-#: gtk/paper_names_offsets.c:33
-msgctxt "paper size"
-msgid "A5"
-msgstr ""
-
-#: gtk/paper_names_offsets.c:34
-msgctxt "paper size"
-msgid "A5 Extra"
-msgstr ""
-
-#: gtk/paper_names_offsets.c:35
-msgctxt "paper size"
-msgid "A6"
-msgstr ""
-
-#: gtk/paper_names_offsets.c:36
-msgctxt "paper size"
-msgid "A7"
-msgstr ""
-
-#: gtk/paper_names_offsets.c:37
-msgctxt "paper size"
-msgid "A8"
-msgstr ""
-
-#: gtk/paper_names_offsets.c:38
-msgctxt "paper size"
-msgid "A9"
-msgstr ""
-
-#: gtk/paper_names_offsets.c:39
-msgctxt "paper size"
-msgid "B0"
-msgstr ""
-
-#: gtk/paper_names_offsets.c:40
-msgctxt "paper size"
-msgid "B1"
-msgstr ""
-
-#: gtk/paper_names_offsets.c:41
-msgctxt "paper size"
-msgid "B10"
-msgstr ""
-
-#: gtk/paper_names_offsets.c:42
-msgctxt "paper size"
-msgid "B2"
-msgstr ""
-
-#: gtk/paper_names_offsets.c:43
-msgctxt "paper size"
-msgid "B3"
-msgstr ""
-
-#: gtk/paper_names_offsets.c:44
-msgctxt "paper size"
-msgid "B4"
-msgstr ""
-
-#: gtk/paper_names_offsets.c:45
-msgctxt "paper size"
-msgid "B5"
-msgstr ""
-
-#: gtk/paper_names_offsets.c:46
-msgctxt "paper size"
-msgid "B5 Extra"
-msgstr ""
-
-#: gtk/paper_names_offsets.c:47
-msgctxt "paper size"
-msgid "B6"
-msgstr ""
-
-#: gtk/paper_names_offsets.c:48
-msgctxt "paper size"
-msgid "B6/C4"
-msgstr ""
-
-#: gtk/paper_names_offsets.c:49
-msgctxt "paper size"
-msgid "B7"
-msgstr ""
-
-#: gtk/paper_names_offsets.c:50
-msgctxt "paper size"
-msgid "B8"
-msgstr ""
-
-#: gtk/paper_names_offsets.c:51
-msgctxt "paper size"
-msgid "B9"
-msgstr ""
-
-#: gtk/paper_names_offsets.c:52
-msgctxt "paper size"
-msgid "C0"
-msgstr ""
-
-#: gtk/paper_names_offsets.c:53
-msgctxt "paper size"
-msgid "C1"
-msgstr ""
-
-#: gtk/paper_names_offsets.c:54
-msgctxt "paper size"
-msgid "C10"
-msgstr ""
-
-#: gtk/paper_names_offsets.c:55
-msgctxt "paper size"
-msgid "C2"
-msgstr ""
-
-#: gtk/paper_names_offsets.c:56
-msgctxt "paper size"
-msgid "C3"
-msgstr ""
-
-#: gtk/paper_names_offsets.c:57
-msgctxt "paper size"
-msgid "C4"
-msgstr ""
-
-#: gtk/paper_names_offsets.c:58
-msgctxt "paper size"
-msgid "C5"
-msgstr ""
-
-#: gtk/paper_names_offsets.c:59
-msgctxt "paper size"
-msgid "C6"
-msgstr ""
-
-#: gtk/paper_names_offsets.c:60
-msgctxt "paper size"
-msgid "C6/C5"
-msgstr ""
-
-#: gtk/paper_names_offsets.c:61
-msgctxt "paper size"
-msgid "C7"
-msgstr ""
-
-#: gtk/paper_names_offsets.c:62
-msgctxt "paper size"
-msgid "C7/C6"
-msgstr ""
-
-#: gtk/paper_names_offsets.c:63
-msgctxt "paper size"
-msgid "C8"
-msgstr ""
-
-#: gtk/paper_names_offsets.c:64
-msgctxt "paper size"
-msgid "C9"
-msgstr ""
-
-#: gtk/paper_names_offsets.c:65
-msgctxt "paper size"
-msgid "DL Envelope"
-msgstr ""
-
-#: gtk/paper_names_offsets.c:66
-msgctxt "paper size"
-msgid "RA0"
-msgstr ""
-
-#: gtk/paper_names_offsets.c:67
-msgctxt "paper size"
-msgid "RA1"
-msgstr ""
-
-#: gtk/paper_names_offsets.c:68
-msgctxt "paper size"
-msgid "RA2"
-msgstr ""
-
-#: gtk/paper_names_offsets.c:69
-msgctxt "paper size"
-msgid "SRA0"
-msgstr ""
-
-#: gtk/paper_names_offsets.c:70
-msgctxt "paper size"
-msgid "SRA1"
-msgstr ""
-
-#: gtk/paper_names_offsets.c:71
-msgctxt "paper size"
-msgid "SRA2"
-msgstr ""
-
-#: gtk/paper_names_offsets.c:72
-msgctxt "paper size"
-msgid "JB0"
-msgstr ""
-
-#: gtk/paper_names_offsets.c:73
-msgctxt "paper size"
-msgid "JB1"
-msgstr ""
-
-#: gtk/paper_names_offsets.c:74
-msgctxt "paper size"
-msgid "JB10"
-msgstr ""
-
-#: gtk/paper_names_offsets.c:75
-msgctxt "paper size"
-msgid "JB2"
-msgstr ""
-
-#: gtk/paper_names_offsets.c:76
-msgctxt "paper size"
-msgid "JB3"
-msgstr ""
-
-#: gtk/paper_names_offsets.c:77
-msgctxt "paper size"
-msgid "JB4"
-msgstr ""
-
-#: gtk/paper_names_offsets.c:78
-msgctxt "paper size"
-msgid "JB5"
-msgstr ""
-
-#: gtk/paper_names_offsets.c:79
-msgctxt "paper size"
-msgid "JB6"
-msgstr ""
-
-#: gtk/paper_names_offsets.c:80
-msgctxt "paper size"
-msgid "JB7"
-msgstr ""
-
-#: gtk/paper_names_offsets.c:81
-msgctxt "paper size"
-msgid "JB8"
-msgstr ""
-
-#: gtk/paper_names_offsets.c:82
-msgctxt "paper size"
-msgid "JB9"
-msgstr ""
-
-#: gtk/paper_names_offsets.c:83
-msgctxt "paper size"
-msgid "jis exec"
-msgstr ""
-
-#: gtk/paper_names_offsets.c:84
-msgctxt "paper size"
-msgid "Choukei 2 Envelope"
-msgstr ""
-
-#: gtk/paper_names_offsets.c:85
-msgctxt "paper size"
-msgid "Choukei 3 Envelope"
-msgstr ""
-
-#: gtk/paper_names_offsets.c:86
-msgctxt "paper size"
-msgid "Choukei 4 Envelope"
-msgstr ""
-
-#: gtk/paper_names_offsets.c:87
-msgctxt "paper size"
-msgid "hagaki (postcard)"
-msgstr ""
-
-#: gtk/paper_names_offsets.c:88
-msgctxt "paper size"
-msgid "kahu Envelope"
-msgstr ""
-
-#: gtk/paper_names_offsets.c:89
-msgctxt "paper size"
-msgid "kaku2 Envelope"
-msgstr ""
-
-#: gtk/paper_names_offsets.c:90
-msgctxt "paper size"
-msgid "oufuku (reply postcard)"
-msgstr ""
-
-#: gtk/paper_names_offsets.c:91
-msgctxt "paper size"
-msgid "you4 Envelope"
-msgstr ""
-
-#: gtk/paper_names_offsets.c:92
-msgctxt "paper size"
-msgid "10x11"
-msgstr ""
-
-#: gtk/paper_names_offsets.c:93
-msgctxt "paper size"
-msgid "10x13"
-msgstr ""
-
-#: gtk/paper_names_offsets.c:94
-msgctxt "paper size"
-msgid "10x14"
-msgstr ""
-
-#: gtk/paper_names_offsets.c:95 gtk/paper_names_offsets.c:96
-msgctxt "paper size"
-msgid "10x15"
-msgstr ""
-
-#: gtk/paper_names_offsets.c:97
-msgctxt "paper size"
-msgid "11x12"
-msgstr ""
-
-#: gtk/paper_names_offsets.c:98
-msgctxt "paper size"
-msgid "11x15"
-msgstr ""
-
-#: gtk/paper_names_offsets.c:99
-msgctxt "paper size"
-msgid "12x19"
-msgstr ""
-
-#: gtk/paper_names_offsets.c:100
-msgctxt "paper size"
-msgid "5x7"
-msgstr ""
-
-#: gtk/paper_names_offsets.c:101
-msgctxt "paper size"
-msgid "6x9 Envelope"
-msgstr ""
-
-#: gtk/paper_names_offsets.c:102
-msgctxt "paper size"
-msgid "7x9 Envelope"
-msgstr ""
-
-#: gtk/paper_names_offsets.c:103
-msgctxt "paper size"
-msgid "9x11 Envelope"
-msgstr ""
-
-#: gtk/paper_names_offsets.c:104
-msgctxt "paper size"
-msgid "a2 Envelope"
-msgstr ""
-
-#: gtk/paper_names_offsets.c:105
-msgctxt "paper size"
-msgid "Arch A"
-msgstr ""
-
-#: gtk/paper_names_offsets.c:106
-msgctxt "paper size"
-msgid "Arch B"
-msgstr ""
-
-#: gtk/paper_names_offsets.c:107
-msgctxt "paper size"
-msgid "Arch C"
-msgstr ""
-
-#: gtk/paper_names_offsets.c:108
-msgctxt "paper size"
-msgid "Arch D"
-msgstr ""
-
-#: gtk/paper_names_offsets.c:109
-msgctxt "paper size"
-msgid "Arch E"
-msgstr ""
-
-#: gtk/paper_names_offsets.c:110
-msgctxt "paper size"
-msgid "b-plus"
-msgstr ""
-
-#: gtk/paper_names_offsets.c:111
-msgctxt "paper size"
-msgid "c"
-msgstr ""
-
-#: gtk/paper_names_offsets.c:112
-msgctxt "paper size"
-msgid "c5 Envelope"
-msgstr ""
-
-#: gtk/paper_names_offsets.c:113
-msgctxt "paper size"
-msgid "d"
-msgstr ""
-
-#: gtk/paper_names_offsets.c:114
-msgctxt "paper size"
-msgid "e"
-msgstr ""
-
-#: gtk/paper_names_offsets.c:115
-msgctxt "paper size"
-msgid "edp"
-msgstr ""
-
-#: gtk/paper_names_offsets.c:116
-msgctxt "paper size"
-msgid "European edp"
-msgstr ""
-
-#: gtk/paper_names_offsets.c:117
-#, fuzzy
-msgctxt "paper size"
-msgid "Executive"
-msgstr "_Կատարել"
-
-#: gtk/paper_names_offsets.c:118
-msgctxt "paper size"
-msgid "f"
-msgstr ""
-
-#: gtk/paper_names_offsets.c:119
-msgctxt "paper size"
-msgid "FanFold European"
-msgstr ""
-
-#: gtk/paper_names_offsets.c:120
-msgctxt "paper size"
-msgid "FanFold US"
-msgstr ""
-
-#: gtk/paper_names_offsets.c:121
-msgctxt "paper size"
-msgid "FanFold German Legal"
-msgstr ""
-
-#: gtk/paper_names_offsets.c:122
-msgctxt "paper size"
-msgid "Government Legal"
-msgstr ""
-
-#: gtk/paper_names_offsets.c:123
-msgctxt "paper size"
-msgid "Government Letter"
-msgstr ""
-
-#: gtk/paper_names_offsets.c:124
-#, fuzzy
-msgctxt "paper size"
-msgid "Index 3x5"
-msgstr "_Ցանկ"
-
-#: gtk/paper_names_offsets.c:125
-msgctxt "paper size"
-msgid "Index 4x6 (postcard)"
-msgstr ""
-
-#: gtk/paper_names_offsets.c:126
-#, fuzzy
-msgctxt "paper size"
-msgid "Index 4x6 ext"
-msgstr "_Ցանկ"
-
-#: gtk/paper_names_offsets.c:127
-#, fuzzy
-msgctxt "paper size"
-msgid "Index 5x8"
-msgstr "_Ցանկ"
-
-#: gtk/paper_names_offsets.c:128
-msgctxt "paper size"
-msgid "Invoice"
-msgstr ""
-
-#: gtk/paper_names_offsets.c:129
-msgctxt "paper size"
-msgid "Tabloid"
-msgstr ""
-
-#: gtk/paper_names_offsets.c:130
-msgctxt "paper size"
-msgid "US Legal"
-msgstr ""
-
-#: gtk/paper_names_offsets.c:131
-msgctxt "paper size"
-msgid "US Legal Extra"
-msgstr ""
-
-#: gtk/paper_names_offsets.c:132
-msgctxt "paper size"
-msgid "US Letter"
-msgstr ""
-
-#: gtk/paper_names_offsets.c:133
-msgctxt "paper size"
-msgid "US Letter Extra"
-msgstr ""
-
-#: gtk/paper_names_offsets.c:134
-msgctxt "paper size"
-msgid "US Letter Plus"
-msgstr ""
-
-#: gtk/paper_names_offsets.c:135
-msgctxt "paper size"
-msgid "Monarch Envelope"
-msgstr ""
-
-#: gtk/paper_names_offsets.c:136
-msgctxt "paper size"
-msgid "#10 Envelope"
-msgstr ""
-
-#: gtk/paper_names_offsets.c:137
-msgctxt "paper size"
-msgid "#11 Envelope"
-msgstr ""
-
-#: gtk/paper_names_offsets.c:138
-msgctxt "paper size"
-msgid "#12 Envelope"
-msgstr ""
-
-#: gtk/paper_names_offsets.c:139
-msgctxt "paper size"
-msgid "#14 Envelope"
-msgstr ""
-
-#: gtk/paper_names_offsets.c:140
-msgctxt "paper size"
-msgid "#9 Envelope"
-msgstr ""
-
-#: gtk/paper_names_offsets.c:141
-msgctxt "paper size"
-msgid "Personal Envelope"
-msgstr ""
-
-#: gtk/paper_names_offsets.c:142
-msgctxt "paper size"
-msgid "Quarto"
-msgstr ""
-
-#: gtk/paper_names_offsets.c:143
-msgctxt "paper size"
-msgid "Super A"
-msgstr ""
-
-#: gtk/paper_names_offsets.c:144
-msgctxt "paper size"
-msgid "Super B"
-msgstr ""
-
-#: gtk/paper_names_offsets.c:145
-msgctxt "paper size"
-msgid "Wide Format"
-msgstr ""
-
-#: gtk/paper_names_offsets.c:146
-msgctxt "paper size"
-msgid "Dai-pa-kai"
-msgstr ""
-
-#: gtk/paper_names_offsets.c:147
-#, fuzzy
-msgctxt "paper size"
-msgid "Folio"
-msgstr "_Գույն"
-
-#: gtk/paper_names_offsets.c:148
-msgctxt "paper size"
-msgid "Folio sp"
-msgstr ""
-
-#: gtk/paper_names_offsets.c:149
-msgctxt "paper size"
-msgid "Invite Envelope"
-msgstr ""
-
-#: gtk/paper_names_offsets.c:150
-msgctxt "paper size"
-msgid "Italian Envelope"
-msgstr ""
-
-#: gtk/paper_names_offsets.c:151
-msgctxt "paper size"
-msgid "juuro-ku-kai"
-msgstr ""
-
-#: gtk/paper_names_offsets.c:152
-msgctxt "paper size"
-msgid "pa-kai"
-msgstr ""
-
-#: gtk/paper_names_offsets.c:153
-msgctxt "paper size"
-msgid "Postfix Envelope"
-msgstr ""
-
-#: gtk/paper_names_offsets.c:154
-msgctxt "paper size"
-msgid "Small Photo"
-msgstr ""
-
-#: gtk/paper_names_offsets.c:155
-msgctxt "paper size"
-msgid "prc1 Envelope"
-msgstr ""
-
-#: gtk/paper_names_offsets.c:156
-msgctxt "paper size"
-msgid "prc10 Envelope"
-msgstr ""
-
-#: gtk/paper_names_offsets.c:157
-msgctxt "paper size"
-msgid "prc 16k"
-msgstr ""
-
-#: gtk/paper_names_offsets.c:158
-msgctxt "paper size"
-msgid "prc2 Envelope"
-msgstr ""
-
-#: gtk/paper_names_offsets.c:159
-msgctxt "paper size"
-msgid "prc3 Envelope"
-msgstr ""
-
-#: gtk/paper_names_offsets.c:160
-msgctxt "paper size"
-msgid "prc 32k"
-msgstr ""
-
-#: gtk/paper_names_offsets.c:161
-msgctxt "paper size"
-msgid "prc4 Envelope"
-msgstr ""
-
-#: gtk/paper_names_offsets.c:162
-msgctxt "paper size"
-msgid "prc5 Envelope"
-msgstr ""
-
-#: gtk/paper_names_offsets.c:163
-msgctxt "paper size"
-msgid "prc6 Envelope"
-msgstr ""
-
-#: gtk/paper_names_offsets.c:164
-msgctxt "paper size"
-msgid "prc7 Envelope"
-msgstr ""
-
-#: gtk/paper_names_offsets.c:165
-msgctxt "paper size"
-msgid "prc8 Envelope"
-msgstr ""
-
-#: gtk/paper_names_offsets.c:166
-msgctxt "paper size"
-msgid "prc9 Envelope"
-msgstr ""
-
-#: gtk/paper_names_offsets.c:167
-msgctxt "paper size"
-msgid "ROC 16k"
-msgstr ""
-
-#: gtk/paper_names_offsets.c:168
-msgctxt "paper size"
-msgid "ROC 8k"
-msgstr ""
-
-#: gtk/updateiconcache.c:492 gtk/updateiconcache.c:552
+#: ../gtk/updateiconcache.c:492
+#: ../gtk/updateiconcache.c:552
 #, c-format
 msgid "different idatas found for symlinked '%s' and '%s'\n"
-msgstr ""
+msgstr "Տարբեր իդենտիֆիկատորներ են գտնվել հետևյալ հղումների համար՝ '%s' և '%s'\n"
 
-#: gtk/updateiconcache.c:1374
-#, fuzzy, c-format
+#: ../gtk/updateiconcache.c:1374
+#, c-format
 msgid "Failed to write header\n"
-msgstr "Չհաջողվեց բացել TIFF պատկերը"
+msgstr "Չհաջողվեց գրել վերնագիրը\n"
 
-#: gtk/updateiconcache.c:1380
-#, fuzzy, c-format
+#: ../gtk/updateiconcache.c:1380
+#, c-format
 msgid "Failed to write hash table\n"
-msgstr "Չհաջողվեց բացել TIFF պատկերը"
+msgstr "Չհաջողվեց գրել Հաշ-աղյուսակ\n"
 
-#: gtk/updateiconcache.c:1386
-#, fuzzy, c-format
+#: ../gtk/updateiconcache.c:1386
+#, c-format
 msgid "Failed to write folder index\n"
-msgstr "Չհաջողվեց կարդալ ժամանակավոր ֆայլը"
+msgstr "Չհաջողվեց գրել պանակի ինդեքսը\n"
 
-#: gtk/updateiconcache.c:1394
-#, fuzzy, c-format
+#: ../gtk/updateiconcache.c:1394
+#, c-format
 msgid "Failed to rewrite header\n"
-msgstr "Չհաջողվեց բացել TIFF պատկերը"
+msgstr "Չհաջողվեց վերագրել վերնագիրը\n"
 
-#: gtk/updateiconcache.c:1463
-#, fuzzy, c-format
+#: ../gtk/updateiconcache.c:1463
+#, c-format
 msgid "Failed to open file %s : %s\n"
-msgstr "Չհաջողվեց բացել '%s' ֆայլը` %s"
+msgstr "Չհաջողվեց բացել '%s ֆայլը․ %s\n"
 
-#: gtk/updateiconcache.c:1471
-#, fuzzy, c-format
+#: ../gtk/updateiconcache.c:1471
+#, c-format
 msgid "Failed to write cache file: %s\n"
-msgstr "Չհաջողվեց բացել '%s' ֆայլը` %s"
+msgstr "Չհաջողվեց փոխել քեշ ֆայլը․ %s\n"
 
-#: gtk/updateiconcache.c:1507
+#: ../gtk/updateiconcache.c:1507
 #, c-format
 msgid "The generated cache was invalid.\n"
-msgstr ""
+msgstr "Գեներացված քեշը սխալ է.\n"
 
-#: gtk/updateiconcache.c:1521
+#: ../gtk/updateiconcache.c:1521
 #, c-format
 msgid "Could not rename %s to %s: %s, removing %s then.\n"
-msgstr ""
+msgstr "Չհաջողվեց անվանափոխել %s -ը  %s -ով․ %s, հետո հեռացնելով %s.\n"
 
-#: gtk/updateiconcache.c:1535
-#, fuzzy, c-format
+#: ../gtk/updateiconcache.c:1535
+#, c-format
 msgid "Could not rename %s to %s: %s\n"
-msgstr "Տեղի է ունեցել սխալ '%s': %s ֆայլացուցակը ստեղծելիս"
+msgstr "Չհաջողվեց անվանափոխել %s -ը %s -ով․ %s\n"
 
-#: gtk/updateiconcache.c:1545
-#, fuzzy, c-format
+#: ../gtk/updateiconcache.c:1545
+#, c-format
 msgid "Could not rename %s back to %s: %s.\n"
-msgstr "Տեղի է ունեցել սխալ '%s': %s ֆայլացուցակը ստեղծելիս"
+msgstr "Չհաջողվեց հետ անվանափոխել %s -ը %s -ով․ %s.\n"
 
-#: gtk/updateiconcache.c:1572
+#: ../gtk/updateiconcache.c:1572
 #, c-format
 msgid "Cache file created successfully.\n"
-msgstr ""
+msgstr "Քեշ ֆայլը հաջողությամբ ստեղծված է.\n"
 
-#: gtk/updateiconcache.c:1611
+#: ../gtk/updateiconcache.c:1611
 msgid "Overwrite an existing cache, even if up to date"
-msgstr ""
+msgstr "Վերագրանցել առկա քեշը, նույնիսկ եթե այն թարմ է"
 
-#: gtk/updateiconcache.c:1612
+#: ../gtk/updateiconcache.c:1612
 msgid "Don't check for the existence of index.theme"
-msgstr ""
+msgstr "Չստուգել index.theme -ի գոյությունը"
 
-#: gtk/updateiconcache.c:1613
+#: ../gtk/updateiconcache.c:1613
 msgid "Don't include image data in the cache"
-msgstr ""
+msgstr "Չներառել պատկերային տվյալ քեշում"
 
-#: gtk/updateiconcache.c:1614
+#: ../gtk/updateiconcache.c:1614
 msgid "Output a C header file"
-msgstr ""
+msgstr "Արտածել C գլխամասային ֆայլը"
 
-#: gtk/updateiconcache.c:1615
+#: ../gtk/updateiconcache.c:1615
 msgid "Turn off verbose output"
-msgstr ""
+msgstr "Անջատել ընդլայնված արտածումը"
 
-#: gtk/updateiconcache.c:1616
+#: ../gtk/updateiconcache.c:1616
 msgid "Validate existing icon cache"
-msgstr ""
+msgstr "Հաստատել պատկերակների առկա քեշը"
 
-#: gtk/updateiconcache.c:1683
-#, fuzzy, c-format
+#: ../gtk/updateiconcache.c:1683
+#, c-format
 msgid "File not found: %s\n"
-msgstr "Չհաջողվեց միացնել՝ %s"
+msgstr "Չհաջողվեց գտնել ֆայլը․ %s\n"
 
-#: gtk/updateiconcache.c:1689
+#: ../gtk/updateiconcache.c:1689
 #, c-format
 msgid "Not a valid icon cache: %s\n"
-msgstr ""
+msgstr "Անվավեր պատկերակների քեշ․ %s\n"
 
-#: gtk/updateiconcache.c:1702
+#: ../gtk/updateiconcache.c:1702
 #, c-format
 msgid "No theme index file.\n"
-msgstr ""
+msgstr "Թեմայի ինդեքսներով ֆայլ գոյություն չունի.\n"
 
-#: gtk/updateiconcache.c:1706
+#: ../gtk/updateiconcache.c:1706
 #, c-format
 msgid ""
 "No theme index file in '%s'.\n"
 "If you really want to create an icon cache here, use --ignore-theme-index.\n"
 msgstr ""
+"Թեմայի ինդեքսներով ֆայլ գոյություն չունի '%s' -ում։\n"
+"Եթե դուք իսկապես ուզում եք ստեղծել պատկերակների քեշ այստեղ, ապա օգտագործեք --ignore-theme-index.\n"
 
 #. ID
-#: modules/input/imam-et.c:454
+#: ../modules/input/imam-et.c:454
 msgid "Amharic (EZ+)"
-msgstr ""
+msgstr "Amharic (EZ+)"
 
 #. ID
-#: modules/input/imcedilla.c:92
+#: ../modules/input/imcedilla.c:92
 msgid "Cedilla"
-msgstr "Ենթակետ"
+msgstr "Սեդիլ"
 
 #. ID
-#: modules/input/imcyrillic-translit.c:217
-#, fuzzy
+#: ../modules/input/imcyrillic-translit.c:217
 msgid "Cyrillic (Transliterated)"
-msgstr "Կիրիլիցա (Տառափոխված)"
+msgstr "Կիրիլիկ (Տառափոխված)"
 
 #. ID
-#: modules/input/iminuktitut.c:127
-#, fuzzy
+#: ../modules/input/iminuktitut.c:127
 msgid "Inuktitut (Transliterated)"
-msgstr "Inuktitut (Տառափոխված)"
+msgstr "Ինուկտիտուտ (Տառափոխված)"
 
 #. ID
-#: modules/input/imipa.c:145
+#: ../modules/input/imipa.c:145
 msgid "IPA"
 msgstr "IPA"
 
 #. ID
-#: modules/input/immultipress.c:31
+#: ../modules/input/immultipress.c:31
 msgid "Multipress"
-msgstr ""
+msgstr "Բազմասեղմիչ"
 
 #. ID
-#: modules/input/imthai.c:35
+#: ../modules/input/imthai.c:35
 msgid "Thai-Lao"
-msgstr ""
+msgstr "Թաի-Լաոս"
 
 #. ID
-#: modules/input/imti-er.c:453
+#: ../modules/input/imti-er.c:453
 msgid "Tigrigna-Eritrean (EZ+)"
-msgstr ""
+msgstr "Տիգրինիա-Էրիթրեա (EZ+)"
 
 #. ID
-#: modules/input/imti-et.c:453
+#: ../modules/input/imti-et.c:453
 msgid "Tigrigna-Ethiopian (EZ+)"
-msgstr ""
+msgstr "Տիգրինիա-Եթովպիա (EZ+)"
 
 #. ID
-#: modules/input/imviqr.c:244
+#: ../modules/input/imviqr.c:244
 msgid "Vietnamese (VIQR)"
-msgstr "Վիետնամերեն (VIQR)"
+msgstr "Վիետնամական (VIQR)"
 
 #. ID
-#: modules/input/imxim.c:28
+#: ../modules/input/imxim.c:28
 msgid "X Input Method"
-msgstr ""
+msgstr "X Input Մեթոդ"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:811
-#: modules/printbackends/cups/gtkprintbackendcups.c:1020
-#, fuzzy
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:811
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1020
 msgid "Username:"
-msgstr "_Վերանվանել"
+msgstr "Օգտվողի անուն․"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:812
-#: modules/printbackends/cups/gtkprintbackendcups.c:1029
-#, fuzzy
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:812
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1029
 msgid "Password:"
-msgstr "Ճնշում"
+msgstr "Գաղտնաբառ․"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:850
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:850
 #, c-format
 msgid "Authentication is required to get a file from %s"
-msgstr ""
+msgstr "%s - ից ֆայլ ստանալու համար վավերացում է անհրաժեշտ"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:854
-#: modules/printbackends/cups/gtkprintbackendcups.c:1042
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:854
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1042
 #, c-format
 msgid "Authentication is required to print document '%s' on printer %s"
-msgstr ""
+msgstr "'%s' փաստաթուղթը %s տպիչով տպելու համար վավերացում է անհրաժեշտ"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:856
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:856
 #, c-format
 msgid "Authentication is required to print a document on %s"
-msgstr ""
+msgstr "Փաստաթուղթը %s տպիչով տպելու համար վավերացում է անհրաժեշտ"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:860
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:860
 #, c-format
 msgid "Authentication is required to get attributes of job '%s'"
-msgstr ""
+msgstr "'%s' աշխատանքի ատրիբուտներն ստանալու համար վավերացում է անհրաժեշտ"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:862
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:862
 msgid "Authentication is required to get attributes of a job"
-msgstr ""
+msgstr "Աշխատանքի ատրիբուտներն ստանալու համար վավերացում է անհրաժեշտ"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:866
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:866
 #, c-format
 msgid "Authentication is required to get attributes of printer %s"
-msgstr ""
+msgstr "%s տպիչի ատրիբուտներն ստանալու համար վավերացում է անհրաժեշտ"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:868
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:868
 msgid "Authentication is required to get attributes of a printer"
-msgstr ""
+msgstr "Տպիչի ատրիբուտներն ստանալու համար վավերացում է անհրաժեշտ"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:871
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:871
 #, c-format
 msgid "Authentication is required to get default printer of %s"
-msgstr ""
+msgstr "%s -ի լռելյայն տպիչ ստանալու համար վավերացում է անհրաժեշտ"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:874
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:874
 #, c-format
 msgid "Authentication is required to get printers from %s"
-msgstr ""
+msgstr " %s-ից տպիչներ ստանալու համար վավերացում է անհրաժեշտ։"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:877
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:877
 #, c-format
 msgid "Authentication is required on %s"
-msgstr ""
+msgstr "%s -ի հասանելիության համար վավերացում է պահանջվում"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1014
-#, fuzzy
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1014
 msgid "Domain:"
-msgstr "_Տեղադրություն."
+msgstr "Դոմեն։"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1044
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1044
 #, c-format
 msgid "Authentication is required to print document '%s'"
-msgstr ""
+msgstr "'%s' փասթաթուղթը տպելու համար վավերացում է անհրաժեշտ։"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1049
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1049
 #, c-format
 msgid "Authentication is required to print this document on printer %s"
-msgstr ""
+msgstr "Փաստաթուղթը %s տպիչով տպելու համար վավերացում է անհրաժեշտ"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1051
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1051
 msgid "Authentication is required to print this document"
-msgstr ""
+msgstr "Այս փաստաթուղթը տպելու համար վավերացում է անհրաժեշտ"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1672
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1673
 #, c-format
 msgid "Printer '%s' is low on toner."
-msgstr ""
+msgstr "'%s' տպիչում քիչ ներկափոշի կա։"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1673
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1674
 #, c-format
 msgid "Printer '%s' has no toner left."
-msgstr ""
+msgstr "'%s' տպիչում ներկափոշի չկա։"
 
 #. Translators: "Developer" like on photo development context
-#: modules/printbackends/cups/gtkprintbackendcups.c:1675
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1676
 #, c-format
 msgid "Printer '%s' is low on developer."
-msgstr ""
+msgstr "'%s' տպիչում քիչ երևակիչ կա։"
 
 #. Translators: "Developer" like on photo development context
-#: modules/printbackends/cups/gtkprintbackendcups.c:1677
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1678
 #, c-format
 msgid "Printer '%s' is out of developer."
-msgstr ""
+msgstr "'%s' տպիչում չկա երևակիչ։"
 
 #. Translators: "marker" is one color bin of the printer
-#: modules/printbackends/cups/gtkprintbackendcups.c:1679
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1680
 #, c-format
 msgid "Printer '%s' is low on at least one marker supply."
-msgstr ""
+msgstr "'%s' տպիչում վերջանում է ներկափոշիներից առնվազն մեկը։"
 
 #. Translators: "marker" is one color bin of the printer
-#: modules/printbackends/cups/gtkprintbackendcups.c:1681
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1682
 #, c-format
 msgid "Printer '%s' is out of at least one marker supply."
-msgstr ""
+msgstr "'%s' տպիչում վերջացել է ներկափոշիներից առնվազն մեկը։"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1682
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1683
 #, c-format
 msgid "The cover is open on printer '%s'."
-msgstr ""
+msgstr "'%s' տպիչի ծածկոցը բաց է։"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1683
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1684
 #, c-format
 msgid "The door is open on printer '%s'."
-msgstr ""
+msgstr " '%s' տպիչի դուռը բաց է։"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1684
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1685
 #, c-format
 msgid "Printer '%s' is low on paper."
-msgstr ""
+msgstr "'%s' տպիչում քիչ թուղթ կա։"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1685
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1686
 #, c-format
 msgid "Printer '%s' is out of paper."
-msgstr ""
+msgstr "'%s' տպիչում թուղթ չկա։"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1686
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1687
 #, c-format
 msgid "Printer '%s' is currently off-line."
-msgstr ""
+msgstr "Տվյալ պահին '%s' տպիչը անջատված է։"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1687
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1688
 #, c-format
 msgid "Printer '%s' may not be connected."
-msgstr ""
+msgstr "'%s' տպիչը կարող է միացված չլինել։"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1688
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1689
 #, c-format
 msgid "There is a problem on printer '%s'."
-msgstr ""
+msgstr "'%s' տպիչի հետ խնդիր կա։"
 
 #. Translators: this is a printer status.
-#: modules/printbackends/cups/gtkprintbackendcups.c:1996
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1997
 msgid "Paused ; Rejecting Jobs"
-msgstr ""
+msgstr "Դադարեցված է․ Մերժված Աշխատանքներ"
 
 #. Translators: this is a printer status.
-#: modules/printbackends/cups/gtkprintbackendcups.c:2002
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2003
 msgid "Rejecting Jobs"
-msgstr ""
+msgstr "Մերժված Աշխատանքները"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2778
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2779
 msgid "Two Sided"
-msgstr ""
+msgstr "Երկկողմանի"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2779
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2780
 msgid "Paper Type"
-msgstr ""
+msgstr "Թղթի տեսակ"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2780
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2781
 msgid "Paper Source"
-msgstr ""
+msgstr "Թղթի աղբյուր"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2781
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2782
 msgid "Output Tray"
-msgstr ""
+msgstr "Արտածման դարակ"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2782
-#, fuzzy
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2783
 msgid "Resolution"
-msgstr "Հարց"
+msgstr "Որոշում"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2783
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2784
 msgid "GhostScript pre-filtering"
-msgstr ""
+msgstr "GhostScript նախաֆիլտրում"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2792
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2793
 msgid "One Sided"
-msgstr ""
+msgstr "Միակողմանի"
 
 #. Translators: this is an option of "Two Sided"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2794
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2795
 msgid "Long Edge (Standard)"
-msgstr ""
+msgstr "Երկար եզրով (ստանդարտր)"
 
 #. Translators: this is an option of "Two Sided"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2796
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2797
 msgid "Short Edge (Flip)"
-msgstr ""
+msgstr "Կարճ եզրով (հայելային շրջել)"
 
 #. Translators: this is an option of "Paper Source"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2798
-#: modules/printbackends/cups/gtkprintbackendcups.c:2800
-#: modules/printbackends/cups/gtkprintbackendcups.c:2808
-#, fuzzy
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2799
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2801
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2809
 msgid "Auto Select"
-msgstr "Տառատեսակի Ընտրություն"
+msgstr "Ավտոընտրություն"
 
 #. Translators: this is an option of "Paper Source"
 #. Translators: this is an option of "Resolution"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2802
-#: modules/printbackends/cups/gtkprintbackendcups.c:2804
-#: modules/printbackends/cups/gtkprintbackendcups.c:2806
-#: modules/printbackends/cups/gtkprintbackendcups.c:2810
-#: modules/printbackends/cups/gtkprintbackendcups.c:3296
-#, fuzzy
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2803
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2805
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2807
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2811
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3297
 msgid "Printer Default"
-msgstr "Դեֆոլթ"
+msgstr "Լռելյայն Տպիչ"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2812
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2813
 msgid "Embed GhostScript fonts only"
-msgstr ""
+msgstr "Միայն Embed GhostScript տառատեսակ"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2814
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2815
 msgid "Convert to PS level 1"
-msgstr ""
+msgstr "Փոխակերպել PS level 1 ֆորմատի"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2816
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2817
 msgid "Convert to PS level 2"
-msgstr ""
+msgstr "Փոխակերպել PS level 2 ֆորմատի"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2818
-#, fuzzy
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2819
 msgid "No pre-filtering"
-msgstr "XPM վերնագիր չի հայտնաբերվել"
+msgstr "Տպելուց առաջ չֆիլտրել"
 
 #. Translators: "Miscellaneous" is the label for a button, that opens
 #. up an extra panel of settings in a print dialog.
-#: modules/printbackends/cups/gtkprintbackendcups.c:2827
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2828
 msgid "Miscellaneous"
-msgstr ""
+msgstr "Հավելյալ"
 
 #. Translators: These strings name the possible values of the
 #. * job priority option in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3504
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3505
 msgid "Urgent"
-msgstr ""
+msgstr "Հրատապ"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3504
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3505
 msgid "High"
-msgstr ""
+msgstr "Բարձր"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3504
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3505
 msgid "Medium"
-msgstr ""
+msgstr "Միջին"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3504
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3505
 msgid "Low"
-msgstr ""
+msgstr "Ցածր"
 
 #. Cups specific, non-ppd related settings
 #. Translators, this string is used to label the pages-per-sheet option
 #. * in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3528
-#, fuzzy
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3529
 msgid "Pages per Sheet"
-msgstr "Պատկերն ունի զրոյական բարձրություն"
+msgstr "էջերի քանակը թերթի վրա"
 
 #. Translators, this string is used to label the job priority option
 #. * in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3565
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3566
 msgid "Job Priority"
-msgstr ""
+msgstr "Աշխատանքի առաջնահերթություն"
 
 #. Translators, this string is used to label the billing info entry
 #. * in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3576
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3577
 msgid "Billing Info"
-msgstr ""
+msgstr "Հաշվային տեղեկություն"
 
 #. Translators, these strings are names for various 'standard' cover
 #. * pages that the printing system may support.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3591
-#, fuzzy
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3592
 msgid "None"
-msgstr "(Ոչ մեկը)"
+msgstr "Ոչ մեկը"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3591
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3592
 msgid "Classified"
-msgstr ""
+msgstr "Դասակարգված"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3591
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3592
 msgid "Confidential"
-msgstr ""
+msgstr "Կոնֆիդենցիալ"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3591
-#, fuzzy
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3592
 msgid "Secret"
-msgstr "Էկրան"
+msgstr "Գաղտնի"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3591
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3592
 msgid "Standard"
-msgstr ""
+msgstr "Ստանդարտ"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3591
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3592
 msgid "Top Secret"
-msgstr ""
+msgstr "Հույժ գաղտնի"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3591
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3592
 msgid "Unclassified"
-msgstr ""
+msgstr "Չդասակարգված"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the front cover page.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3626
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3627
 msgid "Before"
-msgstr ""
+msgstr "Առաջ"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the back cover page.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3641
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3642
 msgid "After"
-msgstr ""
+msgstr "Հետո"
 
 #. Translators: this is the name of the option that controls when
 #. * a print job is printed. Possible values are 'now', a specified time,
 #. * or 'on hold'
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3661
-#, fuzzy
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3662
 msgid "Print at"
-msgstr "_Տպել"
+msgstr "Տպել"
 
 #. Translators: this is the name of the option that allows the user
 #. * to specify a time when a print job will be printed.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3672
-#, fuzzy
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3673
 msgid "Print at time"
-msgstr "_Տպել"
+msgstr "Տպել տվյալ ժամանակին"
 
 #. Translators: this format is used to display a custom paper
 #. * size. The two placeholders are replaced with the width and height
 #. * in points. E.g: "Custom 230.4x142.9"
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3707
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3708
 #, c-format
 msgid "Custom %sx%s"
-msgstr ""
+msgstr "Պատվիրված %sx%s"
 
 #. default filename used for print-to-file
-#: modules/printbackends/file/gtkprintbackendfile.c:250
+#: ../modules/printbackends/file/gtkprintbackendfile.c:250
 #, c-format
 msgid "output.%s"
-msgstr ""
+msgstr "ելք.%s"
 
-#: modules/printbackends/file/gtkprintbackendfile.c:493
-#, fuzzy
+#: ../modules/printbackends/file/gtkprintbackendfile.c:493
 msgid "Print to File"
-msgstr "_Տպել"
+msgstr "Տպել ֆայլում"
 
-#: modules/printbackends/file/gtkprintbackendfile.c:570
+#: ../modules/printbackends/file/gtkprintbackendfile.c:570
 msgid "PDF"
-msgstr ""
+msgstr "PDF"
 
-#: modules/printbackends/file/gtkprintbackendfile.c:570
-#, fuzzy
+#: ../modules/printbackends/file/gtkprintbackendfile.c:570
 msgid "Postscript"
-msgstr "_Տպել"
+msgstr "Postscript"
 
-#: modules/printbackends/file/gtkprintbackendfile.c:570
+#: ../modules/printbackends/file/gtkprintbackendfile.c:570
 msgid "SVG"
-msgstr ""
+msgstr "SVG"
 
-#: modules/printbackends/file/gtkprintbackendfile.c:582
-#: modules/printbackends/test/gtkprintbackendtest.c:503
+#: ../modules/printbackends/file/gtkprintbackendfile.c:582
+#: ../modules/printbackends/test/gtkprintbackendtest.c:503
 msgid "Pages per _sheet:"
-msgstr ""
+msgstr "Էջերի քանակը _թերթի վրա"
 
-#: modules/printbackends/file/gtkprintbackendfile.c:641
-#, fuzzy
+#: ../modules/printbackends/file/gtkprintbackendfile.c:641
 msgid "File"
-msgstr "Ֆայլեր"
+msgstr "Ֆայլ"
 
-#: modules/printbackends/file/gtkprintbackendfile.c:651
+#: ../modules/printbackends/file/gtkprintbackendfile.c:651
 msgid "_Output format"
-msgstr ""
+msgstr "_ելքային ֆորմատ"
 
-#: modules/printbackends/lpr/gtkprintbackendlpr.c:395
+#: ../modules/printbackends/lpr/gtkprintbackendlpr.c:395
 msgid "Print to LPR"
-msgstr ""
+msgstr "Տպել LPR-ում"
 
-#: modules/printbackends/lpr/gtkprintbackendlpr.c:421
-#, fuzzy
+#: ../modules/printbackends/lpr/gtkprintbackendlpr.c:421
 msgid "Pages Per Sheet"
-msgstr "Պատկերն ունի զրոյական բարձրություն"
+msgstr "Էջերի Քանակը Թերթի Վրա"
 
-#: modules/printbackends/lpr/gtkprintbackendlpr.c:428
+#: ../modules/printbackends/lpr/gtkprintbackendlpr.c:428
 msgid "Command Line"
-msgstr ""
+msgstr "Հրամանային Տող"
 
 #. SUN_BRANDING
-#: modules/printbackends/papi/gtkprintbackendpapi.c:811
-#, fuzzy
+#: ../modules/printbackends/papi/gtkprintbackendpapi.c:811
 msgid "printer offline"
-msgstr "XPM վերնագիր չի հայտնաբերվել"
+msgstr "Տպիչը անհասանելի է"
 
 #. SUN_BRANDING
-#: modules/printbackends/papi/gtkprintbackendpapi.c:829
-#, fuzzy
+#: ../modules/printbackends/papi/gtkprintbackendpapi.c:829
 msgid "ready to print"
-msgstr "Նախազգուշացում"
+msgstr "Պատրաստ է տպելու"
 
 #. SUN_BRANDING
-#: modules/printbackends/papi/gtkprintbackendpapi.c:832
+#: ../modules/printbackends/papi/gtkprintbackendpapi.c:832
 msgid "processing job"
-msgstr ""
+msgstr "աշխատանքի մշակում"
 
 #. SUN_BRANDING
-#: modules/printbackends/papi/gtkprintbackendpapi.c:836
-#, fuzzy
+#: ../modules/printbackends/papi/gtkprintbackendpapi.c:836
 msgid "paused"
-msgstr "_Փակցնել"
+msgstr "կանգնեցված է"
 
 #. SUN_BRANDING
-#: modules/printbackends/papi/gtkprintbackendpapi.c:839
-#, fuzzy
+#: ../modules/printbackends/papi/gtkprintbackendpapi.c:839
 msgid "unknown"
-msgstr "(անհայտ)"
+msgstr "անհայտ"
 
 #. default filename used for print-to-test
-#: modules/printbackends/test/gtkprintbackendtest.c:234
+#: ../modules/printbackends/test/gtkprintbackendtest.c:234
 #, c-format
 msgid "test-output.%s"
-msgstr ""
+msgstr "տպման թեստ. %s"
 
-#: modules/printbackends/test/gtkprintbackendtest.c:467
-#, fuzzy
+#: ../modules/printbackends/test/gtkprintbackendtest.c:467
 msgid "Print to Test Printer"
-msgstr "_Տպել"
+msgstr "_Տպել տպիչը փորձարկելու համար"
 
-#: tests/testfilechooser.c:207
+#: ../tests/testfilechooser.c:207
 #, c-format
 msgid "Could not get information for file '%s': %s"
-msgstr "Չհաջողվեց ստանալ '%s' ֆայլի մասին տեղեկատվություն՝ %s"
+msgstr "Չհաջողվեց ստանալ '%s' ֆայլի մասին տեղեկատվություն․ %s"
 
-#~ msgid "Folders"
-#~ msgstr "Պանակներ"
-
-#~ msgid "Fol_ders"
-#~ msgstr "Պան_ակներ"
-
-#~ msgid "_Files"
-#~ msgstr "_Ֆայլեր"
-
-#~ msgid "Folder unreadable: %s"
-#~ msgstr "Պանակն անընթեռնելի է: %s"
-
-#, fuzzy
-#~ msgid ""
-#~ "The file \"%s\" resides on another machine (called %s) and may not be "
-#~ "available to this program.\n"
-#~ "Are you sure that you want to select it?"
-#~ msgstr ""
-#~ "\"%s\" ֆայլը գտնվում է մեկ այլ մեքենայի կամ սարքի վրա (որը կոչվում է %s) "
-#~ "և կարող է այս ծրագրի համար հասանելի չլինել։\n"
-#~ "Համոզվա՞ծ եք, որ ցանկանում եք ընտրել այն։"
-
-#~ msgid "_New Folder"
-#~ msgstr "_Նոր պանակ"
-
-#~ msgid "De_lete File"
-#~ msgstr "Ջն_ջել Ֆայլը"
-
-#~ msgid "_Rename File"
-#~ msgstr "_Վերանվանել Ֆայլը"
-
-#~ msgid ""
-#~ "The folder name \"%s\" contains symbols that are not allowed in filenames"
-#~ msgstr ""
-#~ "\"%s\" պանակի անվանումը պարունակում է նշաններ, որոնք չի թույլատրվում "
-#~ "օգտագործել ֆայլերի անվանման մեջ"
-
-#~ msgid "New Folder"
-#~ msgstr "Նոր Պանակ"
-
-#~ msgid "_Folder name:"
-#~ msgstr "_Պանակի վերնագիր՝"
-
-#~ msgid "C_reate"
-#~ msgstr "Ս_տեղծել"
-
-#~ msgid ""
-#~ "The filename \"%s\" contains symbols that are not allowed in filenames"
-#~ msgstr ""
-#~ "\"%s\" ֆայլի անվանումը պարունակում է նշաններ, որոնք չի թույլատրվում "
-#~ "օգտագործել ֆայլերի անվանման մեջ"
-
-#, fuzzy
-#~ msgid "Error deleting file '%s': %s"
-#~ msgstr "Սխալ \"%s\": %s ֆայլը ջնջելիս Կամ \"%s\": %s ֆայլը ջնջելու սխալ"
-
-#, fuzzy
-#~ msgid "Really delete file \"%s\"?"
-#~ msgstr "Իսկապե՞ս ջնջել \"%s\"ֆայլը։"
-
-#~ msgid "Delete File"
-#~ msgstr "Ջնջել Ֆայլը"
-
-#, fuzzy
-#~ msgid "Error renaming file to \"%s\": %s"
-#~ msgstr ""
-#~ "Ֆայլի անունը \"%s\": %s\n"
-#~ "–ի վերանվանելիս տեղի է ունեցել սխալ%s"
-
-#, fuzzy
-#~ msgid "Error renaming file \"%s\": %s"
-#~ msgstr ""
-#~ "\"%s\": %s\n"
-#~ " ֆայլը վերանվանելիս տեղի է ունեցել սխալ%s"
-
-#~ msgid "Error renaming file \"%s\" to \"%s\": %s"
-#~ msgstr "\"%s\" ֆայլը \"%s\": %s–ի վերանվանելիս տեղի է ունեցել սխալ"
-
-#~ msgid "Rename File"
-#~ msgstr "Վերանվանել Ֆայլը"
-
-#~ msgid "Rename file \"%s\" to:"
-#~ msgstr "Վերանվանել \"%s\" ֆայլը."
-
-#~ msgid "_Rename"
-#~ msgstr "_Վերանվանել"
-
-#~ msgid "_Selection: "
-#~ msgstr "_Ընտրություն. "
-
-#~ msgid ""
-#~ "The filename \"%s\" couldn't be converted to UTF-8. (try setting the "
-#~ "environment variable G_FILENAME_ENCODING): %s"
-#~ msgstr ""
-#~ "Չհաջողվեց \"%s\" ֆայլի անվանումը դարձնել UTF-8. (փորձեք միջավայրի "
-#~ "փոփոխականը դնել G_FILENAME_ENCODING). %s"
-
-#~ msgid "Invalid UTF-8"
-#~ msgstr "Սխալ UTF-8"
-
-#~ msgid "Name too long"
-#~ msgstr "Անվանումը չափազանց երկար է"
-
-#~ msgid "Couldn't convert filename"
-#~ msgstr "Չհաջողվեց փոխակերպել ֆայլի անվանումը"
-
-#~ msgid "Gamma"
-#~ msgstr "Գամմա"
-
-#~ msgid "_Gamma value"
-#~ msgstr "_Գամմա արժեք"
-
-#~ msgid "_Device:"
-#~ msgstr "_Սարք."
-
-#~ msgid "Disabled"
-#~ msgstr "Անջատված է"
-
-#~ msgid "Screen"
-#~ msgstr "Էկրան"
-
-#~ msgid "Window"
-#~ msgstr "Պատուհան"
-
-#, fuzzy
-#~ msgid "_Mode:"
-#~ msgstr "_Ռեժիիմ. "
-
-#, fuzzy
-#~ msgid "Axes"
-#~ msgstr "_Առանցքներ"
-
-#, fuzzy
-#~ msgid "Keys"
-#~ msgstr "_Ստեղներ"
-
-#, fuzzy
-#~ msgid "_Pressure:"
-#~ msgstr "Ճնշում"
-
-#, fuzzy
-#~ msgid "X _tilt:"
-#~ msgstr "X Tilt"
-
-#, fuzzy
-#~ msgid "Y t_ilt:"
-#~ msgstr "Y Tilt"
-
-#, fuzzy
-#~ msgid "_Wheel:"
-#~ msgstr "Անիվ"
-
-#~ msgid "none"
-#~ msgstr "ոչ մեկը"
-
-#~ msgid "(disabled)"
-#~ msgstr "(անջատված է)"
-
-#~ msgid "(unknown)"
-#~ msgstr "(անհայտ)"
-
-#, fuzzy
-#~ msgid "Cl_ear"
-#~ msgstr "_Մաքրել"
-
-#, fuzzy
-#~ msgid "--- No Tip ---"
-#~ msgstr "--- Հուշում չկա ---"
-
-#~ msgid "(Empty)"
-#~ msgstr "(Դատարկ)"
-
-#, fuzzy
-#~ msgid "Couldn't create pixbuf"
-#~ msgstr "Չհաջողվեց ստեղծել նոր pixbuf"
-
-#, fuzzy
-#~ msgid "calendar:week:digits|%d"
-#~ msgstr "օրացույց:week_start:0"
-
-#, fuzzy
-#~ msgid "%.1f KB"
-#~ msgstr "%.1f K"
-
-#, fuzzy
-#~ msgid "%.1f MB"
-#~ msgstr "%.1f M"
-
-#, fuzzy
-#~ msgid "%.1f GB"
-#~ msgstr "%.1f G"
-
-#, fuzzy
-#~ msgid "Navigation|_Bottom"
-#~ msgstr "Ստորին մաս"
-
-#~ msgid "Navigation|_First"
-#~ msgstr "Առաջին"
-
-#~ msgid "Navigation|_Last"
-#~ msgstr "Վերջին"
-
-#~ msgid "Navigation|_Top"
-#~ msgstr "Վերին մաս"
-
-#~ msgid "Navigation|_Back"
-#~ msgstr "Հետ"
-
-#~ msgid "Navigation|_Down"
-#~ msgstr "Ներքև"
-
-#~ msgid "Navigation|_Forward"
-#~ msgstr "Առաջ"
-
-#~ msgid "Navigation|_Up"
-#~ msgstr "Վերև"
-
-#, fuzzy
-#~ msgid "Justify|_Center"
-#~ msgstr "Կենտրոն"
-
-#~ msgid "Justify|_Fill"
-#~ msgstr "Լցնել"
-
-#~ msgid "Justify|_Left"
-#~ msgstr "Ձախ"
-
-#~ msgid "Justify|_Right"
-#~ msgstr "Աջ"
-
-#~ msgid "Media|_Next"
-#~ msgstr "Հաջորդը"
-
-#~ msgid "Media|P_ause"
-#~ msgstr "Սպասել"
-
-#, fuzzy
-#~ msgid "Media|_Play"
-#~ msgstr "Նվագել"
-
-#, fuzzy
-#~ msgid "Media|_Stop"
-#~ msgstr "Կանգ"
-
-#~ msgid "Group"
-#~ msgstr "Խումբ"
-
-#~ msgid "The radio tool button whose group this button belongs to."
-#~ msgstr "Ռադիո գործիքի կոճակ, որի խմբին պատկանում է այս կոճակը։"
-
-#~ msgid "Invalid filename: %s"
-#~ msgstr "Ֆայլի սխալ անվանում: %s"
-
-#~ msgid ""
-#~ "Could not add a bookmark for '%s' because it is an invalid path name."
-#~ msgstr ""
-#~ "Չհաջողվեց էջանշան ավելացնել '%s'–ի համար, քանի որ այն ուղու սխալ անվանում "
-#~ "է։"
-
-#, fuzzy
-#~ msgid "Could not select file '%s' because it is an invalid path name."
-#~ msgstr ""
-#~ "Չհաջողվեց էջանշան ավելացնել '%s'–ի համար, քանի որ այն ուղու սխալ անվանում "
-#~ "է։"
-
-#~ msgid "%d byte"
-#~ msgid_plural "%d bytes"
-#~ msgstr[0] "%d բայթ"
-#~ msgstr[1] "%d բայթ"
-
-#, fuzzy
-#~ msgid "Could not get a stock icon for %s\n"
-#~ msgstr "Չհաջողվեց ստանալ պահուստային պատկերակ %s–ի համար"
-
-#~ msgid "Error getting information for '%s': %s"
-#~ msgstr "Տեղի է ունեցել սխալ '%s': %s–ի վերաբերյալ ինֆորմացիա ստանալիս"
-
-#, fuzzy
-#~ msgid "This file system does not support mounting"
-#~ msgstr "Այս ֆայլային համակարգը հնարավոր չէ միացնել"
-
-#~ msgid ""
-#~ "The name \"%s\" is not valid because it contains the character \"%s\". "
-#~ "Please use a different name."
-#~ msgstr ""
-#~ "\"%s\" անվանումը սխալ է, քանի որ այն պարունակում է \"%s\" նիշը։ Խնդրում "
-#~ "ենք օգտագործել մեկ այլ անվանում։"
-
-#~ msgid "Bookmark saving failed: %s"
-#~ msgstr "Չհաջողվեց պահպանել էջանշանը %s"
-
-#~ msgid "'%s' already exists in the bookmarks list"
-#~ msgstr "'%s' արդեն էջանշանների ցանկում է"
-
-#~ msgid "'%s' does not exist in the bookmarks list"
-#~ msgstr "'%s' էջանշանների ցանկում չկա"
-
-#, fuzzy
-#~ msgid "Network Drive (%s)"
-#~ msgstr "Ցանցային Սկավառակ (%s)"
-
-#~ msgid "Unknown attribute '%s' on line %d char %d"
-#~ msgstr "Անհայտ '%s' հատկանիշ %d տողի %d նիշում"
-
-#~ msgid "Default"
-#~ msgstr "Դեֆոլթ"
-
-#, fuzzy
-#~ msgid "_All"
-#~ msgstr "_Կիրառել"
-
-#~ msgid "Today"
-#~ msgstr "Այսօր"
-
-#, fuzzy
-#~ msgid "Location:"
-#~ msgstr "_Տեղադրություն."
-
-#~ msgid "PNM image format is invalid"
-#~ msgstr "PNM պատկերի սխալ ֆորմատ"
-
-#~ msgid "Error creating directory '%s': %s"
-#~ msgstr "Տեղի է ունեցել սխալ '%s': %s ֆայլացուցակը ստեղծելիս"
-
-#, fuzzy
-#~ msgid "Thai (Broken)"
-#~ msgstr "Թայլանդերեն (Broken)"
-
-#~ msgid ""
-#~ "Error creating folder \"%s\": %s\n"
-#~ "%s"
-#~ msgstr ""
-#~ "Պանակը ստեղծելու սխալ \"%s\": %s\n"
-#~ "%s"
-
-#~ msgid "You probably used symbols not allowed in filenames."
-#~ msgstr ""
-#~ "Դուք հավանաբար օգտագործել եք նշաններ, որոնք թույլատրված չէ օգտագործել "
-#~ "ֆայլերի անվանման մեջ"
-
-#~ msgid ""
-#~ "Error deleting file \"%s\": %s\n"
-#~ "%s"
-#~ msgstr ""
-#~ "\"%s\": %s\n"
-#~ " ֆայլը ջնջելու սխալ%s"
-
-#~ msgid "It probably contains symbols not allowed in filenames."
-#~ msgstr ""
-#~ "Այն հավանաբար պարունակում է նշաններ, որոնք չի թույլատրվում օգտագործել "
-#~ "ֆայլերի անվանման մեջ։"
-
-#~ msgid ""
-#~ "The file name \"%s\" contains symbols that are not allowed in filenames"
-#~ msgstr ""
-#~ "\"%s\" ֆայլի անվանումը պարունակում է նշաններ, որոնք չի թույլատրվում "
-#~ "օգտագործել ֆայլերի անվանման մեջ"
-
-#~ msgid "Error getting information for '/': %s"
-#~ msgstr "'/': %s–ի համար ինֆորմացիա ստանալիս սխալ է տեղի ունեցել "
-
-#~ msgid "Select All"
-#~ msgstr "Ընտրել Ամբողջը"
-
-#, fuzzy
-#~ msgid "shortcut %s already exists"
-#~ msgstr "%s պիտակը գոյություն չունի"
-
-#~ msgid "Cannot handle PNM files with maximum color values greater than 255"
-#~ msgstr "Անհնար է օգտագործել 255–ից մեծ գունային արժեքներով PNM ֆայլեր"
-
-#~ msgid "Could not get information about '%s': %s"
-#~ msgstr "Չհաջողվեց ինֆորմացիա ստանալ '%s': %s–ի մասին"
-
-#~ msgid "Shortcuts"
-#~ msgstr "Պիտակներ"
-
-#~ msgid "Folder"
-#~ msgstr "Պանակ"
-
-#~ msgid "Cannot change folder"
-#~ msgstr "Չի հաջողվում փոխել պանակը"
-
-#~ msgid "The folder you specified is an invalid path."
-#~ msgstr "Նշած պանակը սխալ ուղի է։"
-
-#~ msgid "Could not build file name from '%s' and '%s'"
-#~ msgstr "Չհաջողվեց ֆայլի անուն ստեղծել '%s' –ից և '%s'–ից"
-
-#~ msgid "Save in Location"
-#~ msgstr "Պահպանել այս տեղում"
-
-#~ msgid "X"
-#~ msgstr "X"
-
-#~ msgid "clear"
-#~ msgstr "մաքրել"
-
-#, fuzzy
-#~ msgid "Pixmap path element: \"%s\" must be absolute, %s, line %d"
-#~ msgstr "Pixmap ուղու: \"%s\" տարրը պետք է լինի բացարձակ, %s, տող %d"
-
-#~ msgid "Writing %s failed: %s"
-#~ msgstr "Չհաջողվեց %s գրել. %s"
