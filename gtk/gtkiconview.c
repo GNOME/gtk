@@ -59,8 +59,6 @@
 
 #define SCROLL_EDGE_SIZE 15
 
-#define GTK_ICON_VIEW_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), GTK_TYPE_ICON_VIEW, GtkIconViewPrivate))
-
 typedef struct _GtkIconViewItem GtkIconViewItem;
 struct _GtkIconViewItem
 {
@@ -1105,8 +1103,10 @@ gtk_icon_view_cell_layout_init (GtkCellLayoutIface *iface)
 static void
 gtk_icon_view_init (GtkIconView *icon_view)
 {
-  icon_view->priv = GTK_ICON_VIEW_GET_PRIVATE (icon_view);
-  
+  icon_view->priv = G_TYPE_INSTANCE_GET_PRIVATE (icon_view,
+                                                 GTK_TYPE_ICON_VIEW,
+                                                 GtkIconViewPrivate);
+
   icon_view->priv->width = 0;
   icon_view->priv->height = 0;
   icon_view->priv->selection_mode = GTK_SELECTION_SINGLE;
