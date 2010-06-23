@@ -5,6 +5,7 @@
 # Norayr Chilingaryan <norik@freenet.am>, 2005.
 # Lusine Karlovich <lusinekarlovich@yahoo.com>, 2010
 # Instigate Training Center: Narine Martirosyan <training@instigate.am>, 2010
+# Nune <nune@instigatedesign.com>, 2010
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.HEAD.hy\n"
