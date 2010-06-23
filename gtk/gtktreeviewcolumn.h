@@ -239,6 +239,8 @@ void                    gtk_tree_view_column_get_height_for_width(GtkTreeViewCol
 								  gint                     width,
 								  gint                    *minimum_height,
 								  gint                    *natural_height);
+void                    gtk_tree_view_column_allocate_width      (GtkTreeViewColumn       *column,
+								  gint                     width);
 
 gboolean                gtk_tree_view_column_cell_is_visible     (GtkTreeViewColumn       *tree_column);
 void                    gtk_tree_view_column_focus_cell          (GtkTreeViewColumn       *tree_column,

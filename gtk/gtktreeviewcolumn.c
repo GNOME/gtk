@@ -31,6 +31,7 @@
 #include "gtkhbox.h"
 #include "gtkmarshalers.h"
 #include "gtkarrow.h"
+#include "gtkdebug.h"
 #include "gtkprivate.h"
 #include "gtkintl.h"
 #include "gtkalias.h"
@@ -2835,8 +2836,6 @@ gtk_tree_view_column_cell_process_action (GtkTreeViewColumn  *tree_column,
 	  else
 	    flags &= ~GTK_CELL_RENDERER_FOCUSED;
 
-	  info->real_width = info->requested_width + (info->expand?extra_space:0);
-	  
 	  /* We constrain ourselves to only the width available */
 	  if (real_cell_area.x - focus_line_width + info->real_width > cell_area->x + cell_area->width)
 	    {
@@ -3845,7 +3844,8 @@ gtk_tree_view_column_get_height_for_width (GtkTreeViewColumn *column,
   size  = _gtk_distribute_allocation (size, array->len, sizes);
 
   /* The rest gets split up evenly among expanding cells */
-  size /= expand_cell_count;
+  if (expand_cell_count)
+    size /= expand_cell_count;
 
   /* Collect the minimum and natural height for the allocations of cells */
   for (i = 0, list = column->cell_list; list; list = list->next)
@@ -3877,6 +3877,106 @@ gtk_tree_view_column_get_height_for_width (GtkTreeViewColumn *column,
   if (natural_height)
     *natural_height = nat_height;
 }
+
+/**
+ * gtk_tree_view_column_allocate_width:
+ * @tree_column: A #GtkTreeViewColumn
+ * @width: the overall width of the column
+ *
+ * This allocates a good size for each cell in the column
+ * based on the overall minimum and natural widths of the
+ * cells after having been tested for each column.
+ *
+ * A width must be allocated after the request phase
+ * and before handling events
+ *
+ * Since: 3.0
+ */
+void
+gtk_tree_view_column_allocate_width (GtkTreeViewColumn       *column,
+				     gint                     width)
+{
+  GList      *list;
+  GArray     *array;
+  gint        size = width;
+  gint        focus_line_width;
+  gint        expand_cell_count = 0, i;
+  gboolean    first_cell = TRUE;
+  GtkRequestedSize *sizes;
+
+  g_return_if_fail (GTK_IS_TREE_VIEW_COLUMN (column));
+
+  column->width = width;
+
+  gtk_widget_style_get (column->tree_view, "focus-line-width", &focus_line_width, NULL);
+
+  array = g_array_new (0, TRUE, sizeof (GtkRequestedSize));
+
+  /* First get the overall expand space and collect the cell requests */
+  for (list = column->cell_list; list; list = list->next)
+    {
+      GtkTreeViewColumnCellInfo *info = (GtkTreeViewColumnCellInfo *) list->data;
+      gboolean                   visible;
+      GtkRequestedSize           requested;
+
+      g_object_get (info->cell, "visible", &visible, NULL);
+
+      if (visible == FALSE)
+	continue;
+
+      if (info->expand == TRUE)
+	expand_cell_count++;
+
+      if (first_cell == FALSE)
+	size -= column->spacing;
+
+      size -= focus_line_width * 2;
+      size -= info->requested_width;
+
+      requested.data         = info;
+      requested.minimum_size = info->requested_width;
+      requested.natural_size = info->natural_width;
+      g_array_append_val (array, requested);
+
+      first_cell = FALSE;
+    }
+
+  /* Distribute as much of remaining 'size' as possible before sharing expand space */
+  sizes = (GtkRequestedSize *)array->data;
+  size  = _gtk_distribute_allocation (size, array->len, sizes);
+
+  /* The rest gets split up evenly among expanding cells */
+  if (expand_cell_count > 0)
+    size /= expand_cell_count;
+
+  /* Allocate/assign info->real_width based in minimum/natural size + expand space */
+  for (i = 0, list = column->cell_list; list; list = list->next)
+    {
+      GtkTreeViewColumnCellInfo *info = (GtkTreeViewColumnCellInfo *) list->data;
+      gboolean                   visible;
+
+      g_object_get (info->cell, "visible", &visible, NULL);
+
+      if (visible == FALSE)
+	continue;
+
+      info->real_width = sizes[i].minimum_size + (info->expand ? size : 0);
+
+      GTK_NOTE (SIZE_REQUEST, 
+		g_print ("Allocating renderer '%d' (type %s) width: %d "
+			 "(min %d nat %d expand space %d full column width %d)\n",
+			 i, G_OBJECT_TYPE_NAME (info->cell),
+			 info->real_width, info->requested_width, info->natural_width, 
+			 (info->expand ? size : 0), width));
+
+      i++;
+    }
+  g_array_free (array, TRUE);
+
+  g_object_notify (G_OBJECT (column), "width");
+}
+
+
 
 
 #define __GTK_TREE_VIEW_COLUMN_C__
