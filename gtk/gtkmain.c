@@ -215,7 +215,7 @@ static const GDebugKey gtk_debug_keys[] = {
   {"icontheme", GTK_DEBUG_ICONTHEME},
   {"printing", GTK_DEBUG_PRINTING},
   {"builder", GTK_DEBUG_BUILDER},
-  {"extended-layout", GTK_DEBUG_EXTENDED_LAYOUT},
+  {"size-request", GTK_DEBUG_SIZE_REQUEST},
 };
 #endif /* G_ENABLE_DEBUG */
 
