@@ -290,7 +290,7 @@ gtk_message_dialog_class_init (GtkMessageDialogClass *class)
 static void
 gtk_message_dialog_init (GtkMessageDialog *dialog)
 {
-  GtkWidget *hbox, *vbox;
+  GtkWidget *hbox;
   GtkMessageDialogPrivate *priv;
 
   priv = GTK_MESSAGE_DIALOG_GET_PRIVATE (dialog);
