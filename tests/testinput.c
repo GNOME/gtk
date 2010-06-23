@@ -204,7 +204,7 @@ static gint
 motion_notify_event (GtkWidget *widget, GdkEventMotion *event)
 {
   GdkTimeCoord **events;
-  int n_events;
+  guint n_events;
   int i;
 
   current_device = event->device;
