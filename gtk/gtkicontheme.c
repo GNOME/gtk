@@ -3265,7 +3265,7 @@ gtk_icon_info_load_symbolic_for_style (GtkIconInfo   *icon_info,
     err = &error_color;
 
   return gtk_icon_info_load_symbolic (icon_info, fg, success, warning, err,
-                                      &was_symbolic, error);
+                                      was_symbolic, error);
 }
 
 /**
