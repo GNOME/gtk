@@ -47,6 +47,7 @@ G_BEGIN_DECLS
 
 
 typedef struct _GtkImage       GtkImage;
+typedef struct _GtkImagePriv   GtkImagePriv;
 typedef struct _GtkImageClass  GtkImageClass;
 
 typedef struct _GtkImagePixmapData  GtkImagePixmapData;
@@ -150,25 +151,8 @@ struct _GtkImage
 {
   GtkMisc misc;
 
-  GtkImageType GSEAL (storage_type);
-  
-  union
-  {
-    GtkImagePixmapData pixmap;
-    GtkImageImageData image;
-    GtkImagePixbufData pixbuf;
-    GtkImageStockData stock;
-    GtkImageIconSetData icon_set;
-    GtkImageAnimationData anim;
-    GtkImageIconNameData name;
-    GtkImageGIconData gicon;
-  } GSEAL (data);
-
-  /* Only used with GTK_IMAGE_PIXMAP, GTK_IMAGE_IMAGE */
-  GdkBitmap *GSEAL (mask);
-
-  /* Only used with GTK_IMAGE_STOCK, GTK_IMAGE_ICON_SET, GTK_IMAGE_ICON_NAME */
-  GtkIconSize GSEAL (icon_size);
+  /* <private> */
+  GtkImagePriv *priv;
 };
 
 struct _GtkImageClass
