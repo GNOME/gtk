@@ -38,6 +38,26 @@
 #include "gtkprivate.h"
 
 
+
+struct _GtkImageMenuItemPriv
+{
+  GtkWidget     *image;
+
+  gchar         *label;
+  guint          use_stock         : 1;
+  guint          always_show_image : 1;
+};
+
+enum {
+  PROP_0,
+  PROP_IMAGE,
+  PROP_USE_STOCK,
+  PROP_ACCEL_GROUP,
+  PROP_ALWAYS_SHOW_IMAGE
+};
+
+static GtkActivatableIface *parent_activatable_iface;
+
 static void gtk_image_menu_item_destroy              (GtkObject        *object);
 static void gtk_image_menu_item_size_request         (GtkWidget        *widget,
                                                       GtkRequisition   *requisition);
@@ -78,29 +98,11 @@ static void gtk_image_menu_item_update                     (GtkActivatable      
 static void gtk_image_menu_item_sync_action_properties     (GtkActivatable       *activatable,
 							    GtkAction            *action);
 
-typedef struct {
-  gchar *label;
-  guint  use_stock         : 1;
-  guint  always_show_image : 1;
-} GtkImageMenuItemPrivate;
-
-enum {
-  PROP_0,
-  PROP_IMAGE,
-  PROP_USE_STOCK,
-  PROP_ACCEL_GROUP,
-  PROP_ALWAYS_SHOW_IMAGE
-};
-
-static GtkActivatableIface *parent_activatable_iface;
-
 
 G_DEFINE_TYPE_WITH_CODE (GtkImageMenuItem, gtk_image_menu_item, GTK_TYPE_MENU_ITEM,
 			 G_IMPLEMENT_INTERFACE (GTK_TYPE_ACTIVATABLE,
 						gtk_image_menu_item_activatable_interface_init))
 
-#define GET_PRIVATE(object)  \
-  (G_TYPE_INSTANCE_GET_PRIVATE ((object), GTK_TYPE_IMAGE_MENU_ITEM, GtkImageMenuItemPrivate))
 
 static void
 gtk_image_menu_item_class_init (GtkImageMenuItemClass *klass)
@@ -191,27 +193,29 @@ gtk_image_menu_item_class_init (GtkImageMenuItemClass *klass)
 						       P_("Whether images should be shown in menus"),
 						       TRUE,
 						       GTK_PARAM_READWRITE));
-  
 
-  g_type_class_add_private (object_class, sizeof (GtkImageMenuItemPrivate));
-
+  g_type_class_add_private (object_class, sizeof (GtkImageMenuItemPriv));
 }
 
 static void
 gtk_image_menu_item_init (GtkImageMenuItem *image_menu_item)
 {
-  GtkImageMenuItemPrivate *priv = GET_PRIVATE (image_menu_item);
+  GtkImageMenuItemPriv *priv;
 
-  priv->use_stock   = FALSE;
+  image_menu_item->priv = G_TYPE_INSTANCE_GET_PRIVATE (image_menu_item,
+                                                       GTK_TYPE_IMAGE_MENU_ITEM,
+                                                       GtkImageMenuItemPriv);
+  priv = image_menu_item->priv;
+
+  priv->image = NULL;
+  priv->use_stock = FALSE;
   priv->label  = NULL;
-
-  image_menu_item->image = NULL;
 }
 
 static void 
 gtk_image_menu_item_finalize (GObject *object)
 {
-  GtkImageMenuItemPrivate *priv = GET_PRIVATE (object);
+  GtkImageMenuItemPriv *priv = GTK_IMAGE_MENU_ITEM (object)->priv;
 
   g_free (priv->label);
   priv->label  = NULL;
@@ -275,7 +279,7 @@ gtk_image_menu_item_get_property (GObject         *object,
 static gboolean
 show_image (GtkImageMenuItem *image_menu_item)
 {
-  GtkImageMenuItemPrivate *priv = GET_PRIVATE (image_menu_item);
+  GtkImageMenuItemPriv *priv = image_menu_item->priv;
   GtkSettings *settings = gtk_widget_get_settings (GTK_WIDGET (image_menu_item));
   gboolean show;
 
@@ -291,11 +295,12 @@ static void
 gtk_image_menu_item_map (GtkWidget *widget)
 {
   GtkImageMenuItem *image_menu_item = GTK_IMAGE_MENU_ITEM (widget);
+  GtkImageMenuItemPriv *priv = image_menu_item->priv;
 
   GTK_WIDGET_CLASS (gtk_image_menu_item_parent_class)->map (widget);
 
-  if (image_menu_item->image)
-    g_object_set (image_menu_item->image,
+  if (priv->image)
+    g_object_set (priv->image,
                   "visible", show_image (image_menu_item),
                   NULL);
 }
@@ -304,10 +309,11 @@ static void
 gtk_image_menu_item_destroy (GtkObject *object)
 {
   GtkImageMenuItem *image_menu_item = GTK_IMAGE_MENU_ITEM (object);
+  GtkImageMenuItemPriv *priv = image_menu_item->priv;
 
-  if (image_menu_item->image)
+  if (priv->image)
     gtk_container_remove (GTK_CONTAINER (image_menu_item),
-                          image_menu_item->image);
+                          priv->image);
 
   GTK_OBJECT_CLASS (gtk_image_menu_item_parent_class)->destroy (object);
 }
@@ -317,8 +323,9 @@ gtk_image_menu_item_toggle_size_request (GtkMenuItem *menu_item,
 					 gint        *requisition)
 {
   GtkImageMenuItem *image_menu_item = GTK_IMAGE_MENU_ITEM (menu_item);
+  GtkImageMenuItemPriv *priv = image_menu_item->priv;
   GtkPackDirection pack_dir;
-  
+
   if (GTK_IS_MENU_BAR (GTK_WIDGET (menu_item)->parent))
     pack_dir = gtk_menu_bar_get_child_pack_direction (GTK_MENU_BAR (GTK_WIDGET (menu_item)->parent));
   else
@@ -326,11 +333,11 @@ gtk_image_menu_item_toggle_size_request (GtkMenuItem *menu_item,
 
   *requisition = 0;
 
-  if (image_menu_item->image && gtk_widget_get_visible (image_menu_item->image))
+  if (priv->image && gtk_widget_get_visible (priv->image))
     {
       GtkRequisition image_requisition;
       guint toggle_spacing;
-      gtk_widget_get_child_requisition (image_menu_item->image,
+      gtk_widget_get_child_requisition (priv->image,
                                         &image_requisition);
 
       gtk_widget_style_get (GTK_WIDGET (menu_item),
@@ -353,7 +360,7 @@ gtk_image_menu_item_toggle_size_request (GtkMenuItem *menu_item,
 static void
 gtk_image_menu_item_recalculate (GtkImageMenuItem *image_menu_item)
 {
-  GtkImageMenuItemPrivate *priv = GET_PRIVATE (image_menu_item);
+  GtkImageMenuItemPriv    *priv = image_menu_item->priv;
   GtkStockItem             stock_item;
   GtkWidget               *image;
   const gchar             *resolved_label = priv->label;
@@ -361,7 +368,7 @@ gtk_image_menu_item_recalculate (GtkImageMenuItem *image_menu_item)
   if (priv->use_stock && priv->label)
     {
 
-      if (!image_menu_item->image)
+      if (!priv->image)
 	{
 	  image = gtk_image_new_from_stock (priv->label, GTK_ICON_SIZE_MENU);
 	  gtk_image_menu_item_set_image (image_menu_item, image);
@@ -382,7 +389,7 @@ static void
 gtk_image_menu_item_set_label (GtkMenuItem      *menu_item,
 			       const gchar      *label)
 {
-  GtkImageMenuItemPrivate *priv = GET_PRIVATE (menu_item);
+  GtkImageMenuItemPriv *priv = GTK_IMAGE_MENU_ITEM (menu_item)->priv;
 
   if (priv->label != label)
     {
@@ -399,8 +406,8 @@ gtk_image_menu_item_set_label (GtkMenuItem      *menu_item,
 static G_CONST_RETURN gchar *
 gtk_image_menu_item_get_label (GtkMenuItem *menu_item)
 {
-  GtkImageMenuItemPrivate *priv = GET_PRIVATE (menu_item);
-  
+  GtkImageMenuItemPriv *priv = GTK_IMAGE_MENU_ITEM (menu_item)->priv;
+
   return priv->label;
 }
 
@@ -408,7 +415,8 @@ static void
 gtk_image_menu_item_size_request (GtkWidget      *widget,
                                   GtkRequisition *requisition)
 {
-  GtkImageMenuItem *image_menu_item;
+  GtkImageMenuItem *image_menu_item = GTK_IMAGE_MENU_ITEM (widget);
+  GtkImageMenuItemPriv *priv = image_menu_item->priv;
   gint child_width = 0;
   gint child_height = 0;
   GtkPackDirection pack_dir;
@@ -418,13 +426,11 @@ gtk_image_menu_item_size_request (GtkWidget      *widget,
   else
     pack_dir = GTK_PACK_DIRECTION_LTR;
 
-  image_menu_item = GTK_IMAGE_MENU_ITEM (widget);
-
-  if (image_menu_item->image && gtk_widget_get_visible (image_menu_item->image))
+  if (priv->image && gtk_widget_get_visible (priv->image))
     {
       GtkRequisition child_requisition;
-      
-      gtk_widget_size_request (image_menu_item->image,
+
+      gtk_widget_size_request (priv->image,
                                &child_requisition);
 
       child_width = child_requisition.width;
@@ -444,7 +450,7 @@ gtk_image_menu_item_size_request (GtkWidget      *widget,
   
   /* Note that GtkMenuShell always size requests before
    * toggle_size_request, so toggle_size_request will be able to use
-   * image_menu_item->image->requisition
+   * priv->image->requisition
    */
 }
 
@@ -452,19 +458,18 @@ static void
 gtk_image_menu_item_size_allocate (GtkWidget     *widget,
                                    GtkAllocation *allocation)
 {
-  GtkImageMenuItem *image_menu_item;
+  GtkImageMenuItem *image_menu_item = GTK_IMAGE_MENU_ITEM (widget);
+  GtkImageMenuItemPriv *priv = image_menu_item->priv;
   GtkPackDirection pack_dir;
   
   if (GTK_IS_MENU_BAR (widget->parent))
     pack_dir = gtk_menu_bar_get_child_pack_direction (GTK_MENU_BAR (widget->parent));
   else
     pack_dir = GTK_PACK_DIRECTION_LTR;
-  
-  image_menu_item = GTK_IMAGE_MENU_ITEM (widget);  
 
   GTK_WIDGET_CLASS (gtk_image_menu_item_parent_class)->size_allocate (widget, allocation);
 
-  if (image_menu_item->image && gtk_widget_get_visible (image_menu_item->image))
+  if (priv->image && gtk_widget_get_visible (priv->image))
     {
       gint x, y, offset;
       GtkRequisition child_requisition;
@@ -480,7 +485,7 @@ gtk_image_menu_item_size_allocate (GtkWidget     *widget,
        * come up with a solution that's really better.
        */
 
-      gtk_widget_get_child_requisition (image_menu_item->image,
+      gtk_widget_get_child_requisition (priv->image,
                                         &child_requisition);
 
       if (pack_dir == GTK_PACK_DIRECTION_LTR ||
@@ -526,7 +531,7 @@ gtk_image_menu_item_size_allocate (GtkWidget     *widget,
       child_allocation.x = widget->allocation.x + MAX (x, 0);
       child_allocation.y = widget->allocation.y + MAX (y, 0);
 
-      gtk_widget_size_allocate (image_menu_item->image, &child_allocation);
+      gtk_widget_size_allocate (priv->image, &child_allocation);
     }
 }
 
@@ -537,14 +542,15 @@ gtk_image_menu_item_forall (GtkContainer   *container,
                             gpointer        callback_data)
 {
   GtkImageMenuItem *image_menu_item = GTK_IMAGE_MENU_ITEM (container);
+  GtkImageMenuItemPriv *priv = image_menu_item->priv;
 
   GTK_CONTAINER_CLASS (gtk_image_menu_item_parent_class)->forall (container,
                                                                   include_internals,
                                                                   callback,
                                                                   callback_data);
 
-  if (include_internals && image_menu_item->image)
-    (* callback) (image_menu_item->image, callback_data);
+  if (include_internals && priv->image)
+    (* callback) (priv->image, callback_data);
 }
 
 
@@ -765,11 +771,11 @@ void
 gtk_image_menu_item_set_use_stock (GtkImageMenuItem *image_menu_item,
 				   gboolean          use_stock)
 {
-  GtkImageMenuItemPrivate *priv;
+  GtkImageMenuItemPriv *priv;
 
   g_return_if_fail (GTK_IS_IMAGE_MENU_ITEM (image_menu_item));
 
-  priv = GET_PRIVATE (image_menu_item);
+  priv = image_menu_item->priv;
 
   if (priv->use_stock != use_stock)
     {
@@ -796,13 +802,9 @@ gtk_image_menu_item_set_use_stock (GtkImageMenuItem *image_menu_item,
 gboolean
 gtk_image_menu_item_get_use_stock (GtkImageMenuItem *image_menu_item)
 {
-  GtkImageMenuItemPrivate *priv;
-
   g_return_val_if_fail (GTK_IS_IMAGE_MENU_ITEM (image_menu_item), FALSE);
 
-  priv = GET_PRIVATE (image_menu_item);
-
-  return priv->use_stock;
+  return image_menu_item->priv->use_stock;
 }
 
 /**
@@ -822,22 +824,22 @@ void
 gtk_image_menu_item_set_always_show_image (GtkImageMenuItem *image_menu_item,
                                            gboolean          always_show)
 {
-  GtkImageMenuItemPrivate *priv;
+  GtkImageMenuItemPriv *priv;
 
   g_return_if_fail (GTK_IS_IMAGE_MENU_ITEM (image_menu_item));
 
-  priv = GET_PRIVATE (image_menu_item);
+  priv = image_menu_item->priv;
 
   if (priv->always_show_image != always_show)
     {
       priv->always_show_image = always_show;
 
-      if (image_menu_item->image)
+      if (priv->image)
         {
           if (show_image (image_menu_item))
-            gtk_widget_show (image_menu_item->image);
+            gtk_widget_show (priv->image);
           else
-            gtk_widget_hide (image_menu_item->image);
+            gtk_widget_hide (priv->image);
         }
 
       g_object_notify (G_OBJECT (image_menu_item), "always-show-image");
@@ -858,13 +860,9 @@ gtk_image_menu_item_set_always_show_image (GtkImageMenuItem *image_menu_item,
 gboolean
 gtk_image_menu_item_get_always_show_image (GtkImageMenuItem *image_menu_item)
 {
-  GtkImageMenuItemPrivate *priv;
-
   g_return_val_if_fail (GTK_IS_IMAGE_MENU_ITEM (image_menu_item), FALSE);
 
-  priv = GET_PRIVATE (image_menu_item);
-
-  return priv->always_show_image;
+  return image_menu_item->priv->always_show_image;
 }
 
 
@@ -887,7 +885,7 @@ void
 gtk_image_menu_item_set_accel_group (GtkImageMenuItem *image_menu_item, 
 				     GtkAccelGroup    *accel_group)
 {
-  GtkImageMenuItemPrivate *priv;
+  GtkImageMenuItemPriv    *priv;
   GtkStockItem             stock_item;
 
   /* Silent return for the constructor */
@@ -897,7 +895,7 @@ gtk_image_menu_item_set_accel_group (GtkImageMenuItem *image_menu_item,
   g_return_if_fail (GTK_IS_IMAGE_MENU_ITEM (image_menu_item));
   g_return_if_fail (GTK_IS_ACCEL_GROUP (accel_group));
 
-  priv = GET_PRIVATE (image_menu_item);
+  priv = image_menu_item->priv;
 
   if (priv->use_stock && priv->label && gtk_stock_lookup (priv->label, &stock_item))
     if (stock_item.keyval)
@@ -926,16 +924,20 @@ void
 gtk_image_menu_item_set_image (GtkImageMenuItem *image_menu_item,
                                GtkWidget        *image)
 {
+  GtkImageMenuItemPriv *priv;
+
   g_return_if_fail (GTK_IS_IMAGE_MENU_ITEM (image_menu_item));
 
-  if (image == image_menu_item->image)
+  priv = image_menu_item->priv;
+
+  if (image == priv->image)
     return;
 
-  if (image_menu_item->image)
+  if (priv->image)
     gtk_container_remove (GTK_CONTAINER (image_menu_item),
-			  image_menu_item->image);
+                          priv->image);
 
-  image_menu_item->image = image;
+  priv->image = image;
 
   if (image == NULL)
     return;
@@ -962,26 +964,25 @@ gtk_image_menu_item_get_image (GtkImageMenuItem *image_menu_item)
 {
   g_return_val_if_fail (GTK_IS_IMAGE_MENU_ITEM (image_menu_item), NULL);
 
-  return image_menu_item->image;
+  return image_menu_item->priv->image;
 }
 
 static void
 gtk_image_menu_item_remove (GtkContainer *container,
                             GtkWidget    *child)
 {
-  GtkImageMenuItem *image_menu_item;
+  GtkImageMenuItem *image_menu_item = GTK_IMAGE_MENU_ITEM (container);
+  GtkImageMenuItemPriv *priv = image_menu_item->priv;
 
-  image_menu_item = GTK_IMAGE_MENU_ITEM (container);
-
-  if (child == image_menu_item->image)
+  if (child == priv->image)
     {
       gboolean widget_was_visible;
       
       widget_was_visible = gtk_widget_get_visible (child);
       
       gtk_widget_unparent (child);
-      image_menu_item->image = NULL;
-      
+      priv->image = NULL;
+
       if (widget_was_visible &&
           gtk_widget_get_visible (GTK_WIDGET (container)))
         gtk_widget_queue_resize (GTK_WIDGET (container));
@@ -997,12 +998,14 @@ gtk_image_menu_item_remove (GtkContainer *container,
 static void 
 show_image_change_notify (GtkImageMenuItem *image_menu_item)
 {
-  if (image_menu_item->image)
+  GtkImageMenuItemPriv *priv = image_menu_item->priv;
+
+  if (priv->image)
     {
       if (show_image (image_menu_item))
-	gtk_widget_show (image_menu_item->image);
+	gtk_widget_show (priv->image);
       else
-	gtk_widget_hide (image_menu_item->image);
+	gtk_widget_hide (priv->image);
     }
 }
 
