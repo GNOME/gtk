@@ -52,7 +52,6 @@ G_DEFINE_TYPE_WITH_CODE (GailProgressBar, gail_progress_bar, GAIL_TYPE_WIDGET,
 static void
 gail_progress_bar_class_init		(GailProgressBarClass *klass)
 {
-  GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
   AtkObjectClass *class = ATK_OBJECT_CLASS (klass);
   GailWidgetClass *widget_class;
 
@@ -72,8 +71,6 @@ static void
 gail_progress_bar_real_initialize (AtkObject *obj,
                                    gpointer  data)
 {
-  GailProgressBar *progress_bar = GAIL_PROGRESS_BAR (obj);
-
   ATK_OBJECT_CLASS (gail_progress_bar_parent_class)->initialize (obj, data);
 
   obj->role = ATK_ROLE_PROGRESS_BAR;
