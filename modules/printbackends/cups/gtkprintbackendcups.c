@@ -1665,7 +1665,6 @@ cups_request_printer_list_cb (GtkPrintBackendCups *cups_backend,
           "media-low",
           "media-empty",
           "offline",
-          "connecting-to-device",
           "other"
         };
       static const char * reasons_descs[] =
@@ -1685,7 +1684,6 @@ cups_request_printer_list_cb (GtkPrintBackendCups *cups_backend,
           N_("Printer '%s' is low on paper."),
           N_("Printer '%s' is out of paper."),
           N_("Printer '%s' is currently off-line."),
-          N_("Printer '%s' may not be connected."),
           N_("There is a problem on printer '%s'.")
         };
       gboolean is_paused = FALSE;
