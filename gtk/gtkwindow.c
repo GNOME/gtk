@@ -4023,8 +4023,8 @@ gtk_window_resize (GtkWindow *window,
 /**
  * gtk_window_get_size:
  * @window: a #GtkWindow
- * @width: (allow-none): (out): return location for width, or %NULL
- * @height: (allow-none): (out): return location for height, or %NULL
+ * @width: (out) (allow-none): return location for width, or %NULL
+ * @height: (out) (allow-none): return location for height, or %NULL
  *
  * Obtains the current size of @window. If @window is not onscreen,
  * it returns the size GTK+ will suggest to the <link
@@ -7346,10 +7346,10 @@ gtk_window_begin_resize_drag  (GtkWindow    *window,
 /**
  * gtk_window_get_frame_dimensions:
  * @window: a #GtkWindow
- * @left: (allow-none): location to store the width of the frame at the left, or %NULL
- * @top: (allow-none): location to store the height of the frame at the top, or %NULL
- * @right: (allow-none): location to store the width of the frame at the returns, or %NULL
- * @bottom: (allow-none): location to store the height of the frame at the bottom, or %NULL
+ * @left: (out) (allow-none): location to store the width of the frame at the left, or %NULL
+ * @top: (out) (allow-none): location to store the height of the frame at the top, or %NULL
+ * @right: (out) (allow-none): location to store the width of the frame at the returns, or %NULL
+ * @bottom: (out) (allow-none): location to store the height of the frame at the bottom, or %NULL
  *
  * (Note: this is a special-purpose function intended for the
  *  framebuffer port; see gtk_window_set_has_frame(). It will not

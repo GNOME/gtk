@@ -799,9 +799,9 @@ gtk_table_get_homogeneous (GtkTable *table)
 /**
  * gtk_table_get_size:
  * @table: a #GtkTable
- * @rows: (allow-none): (out): return location for the number of
+ * @rows: (out) (allow-none): return location for the number of
  *   rows, or %NULL
- * @columns: (allow-none): (out): return location for the number
+ * @columns: (out) (allow-none): return location for the number
  *   of columns, or %NULL
  *
  * Returns the number of rows and columns in the table.
