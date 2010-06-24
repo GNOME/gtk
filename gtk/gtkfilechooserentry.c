@@ -1488,9 +1488,8 @@ start_loading_current_folder (GtkFileChooserEntry *chooser_entry)
   g_assert (chooser_entry->load_folder_cancellable == NULL);
 
   if ((chooser_entry->local_only
-       && !g_file_is_native (chooser_entry->current_folder_file)) ||
-      (chooser_entry->root_uris != NULL
-       && !is_file_in_roots (chooser_entry, chooser_entry->current_folder_file)))
+       && !g_file_is_native (chooser_entry->current_folder_file))
+      || !is_file_in_roots (chooser_entry, chooser_entry->current_folder_file))
     {
       g_object_unref (chooser_entry->current_folder_file);
       chooser_entry->current_folder_file = NULL;
