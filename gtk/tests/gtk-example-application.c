@@ -35,7 +35,7 @@ main (int argc, char **argv)
   GtkAction *action;
   GtkActionGroup *actions;
 
-  app = gtk_application_new (&argc, &argv, "org.gtk.Example");
+  app = gtk_application_new ("org.gtk.Example", &argc, &argv);
   builder = gtk_builder_new ();
   if (!gtk_builder_add_from_string (builder, builder_data, -1, NULL))
     g_error ("failed to parse UI");
