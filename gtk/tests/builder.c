@@ -1494,6 +1494,36 @@ test_dialog (void)
 }
 
 static void
+test_message_dialog (void)
+{
+  GtkBuilder * builder;
+  const gchar buffer1[] =
+    "<interface>"
+    "  <object class=\"GtkMessageDialog\" id=\"dialog1\">"
+    "    <child internal-child=\"message_area\">"
+    "      <object class=\"GtkVBox\" id=\"dialog-message-area\">"
+    "        <child>"
+    "          <object class=\"GtkExpander\" id=\"expander\"/>"
+    "        </child>"
+    "      </object>"
+    "    </child>"
+    "  </object>"
+    "</interface>";
+
+  GObject *dialog1;
+  GObject *expander;
+
+  builder = builder_new_from_string (buffer1, -1, NULL);
+  dialog1 = gtk_builder_get_object (builder, "dialog1");
+  expander = gtk_builder_get_object (builder, "expander");
+  g_assert (GTK_IS_EXPANDER (expander));
+  g_assert (gtk_widget_get_parent (GTK_WIDGET (expander)) == gtk_message_dialog_get_message_area (GTK_MESSAGE_DIALOG (dialog1)));
+
+  gtk_widget_destroy (GTK_WIDGET (dialog1));
+  g_object_unref (builder);
+}
+
+static void
 test_accelerators (void)
 {
   GtkBuilder *builder;
@@ -2586,6 +2616,7 @@ main (int argc, char **argv)
   g_test_add_func ("/Builder/AddObjects", test_add_objects);
   g_test_add_func ("/Builder/Menus", test_menus);
   g_test_add_func ("/Builder/MessageArea", test_message_area);
+  g_test_add_func ("/Builder/MessageDialog", test_message_dialog);
 
   return g_test_run();
 }
