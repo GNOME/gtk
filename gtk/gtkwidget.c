@@ -7939,8 +7939,8 @@ gtk_widget_set_size_request (GtkWidget *widget,
 /**
  * gtk_widget_get_size_request:
  * @widget: a #GtkWidget
- * @width: (allow-none): (out): return location for width, or %NULL
- * @height: (allow-none): (out): return location for height, or %NULL
+ * @width: (out) (allow-none): return location for width, or %NULL
+ * @height: (out) (allow-none): return location for height, or %NULL
  *
  * Gets the size request that was explicitly set for the widget using
  * gtk_widget_set_size_request(). A value of -1 stored in @width or

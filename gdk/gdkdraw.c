@@ -97,8 +97,8 @@ gdk_drawable_init (GdkDrawable *drawable)
 /**
  * gdk_drawable_get_size:
  * @drawable: a #GdkDrawable
- * @width: (allow-none): (out): location to store drawable's width, or %NULL
- * @height: (allow-none): (out): location to store drawable's height, or %NULL
+ * @width: (out) (allow-none): location to store drawable's width, or %NULL
+ * @height: (out) (allow-none): location to store drawable's height, or %NULL
  *
  * Fills *@width and *@height with the size of @drawable.
  * @width or @height can be %NULL if you only want the other one.
