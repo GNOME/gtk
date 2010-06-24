@@ -3499,7 +3499,6 @@ _gtk_tree_view_column_cell_set_dirty (GtkTreeViewColumn *tree_column,
     }
   tree_column->dirty = TRUE;
   tree_column->requested_width = -1;
-  tree_column->width = 0;
   priv->natural_width = -1;
 
   if (tree_column->tree_view &&
@@ -3740,14 +3739,16 @@ gtk_tree_view_column_get_natural_width (GtkTreeViewColumn       *column,
       cell_min += focus_line_width * 2;
       cell_nat += focus_line_width * 2;
 
-      min += cell_min;
-      nat += cell_nat;
-
       /* Store 'requested_width' and 'natural_width' to cache all the requests
        * for every row in the column; natural space distribution is only calculated
        * once for the whole column for now. */
       info->requested_width = MAX (info->requested_width, cell_min);
       info->natural_width   = MAX (info->natural_width,   cell_nat);
+
+      /* Return the collective minimum/natural width of all
+       * cached sizes */
+      min += info->requested_width;
+      nat += info->natural_width;
 
       first_cell = FALSE;
     }
@@ -3812,6 +3813,7 @@ gtk_tree_view_column_get_height_for_width (GtkTreeViewColumn *column,
 	size -= column->spacing;
 
       size -= focus_line_width * 2;
+      size -= info->requested_width;
 
       /* Here the collective minimum/natural width for all rows
        * has necessarily been cached by gtk_tree_view_column_get_natural_width().
@@ -3838,6 +3840,7 @@ gtk_tree_view_column_get_height_for_width (GtkTreeViewColumn *column,
 
       first_cell = FALSE;
     }
+
 
   /* Distribute as much of remaining 'size' as possible before sharing expand space */
   sizes = (GtkRequestedSize *)array->data;
@@ -3961,13 +3964,6 @@ gtk_tree_view_column_allocate_width (GtkTreeViewColumn       *column,
 	continue;
 
       info->real_width = sizes[i].minimum_size + (info->expand ? size : 0);
-
-      GTK_NOTE (SIZE_REQUEST, 
-		g_print ("Allocating renderer '%d' (type %s) width: %d "
-			 "(min %d nat %d expand space %d full column width %d)\n",
-			 i, G_OBJECT_TYPE_NAME (info->cell),
-			 info->real_width, info->requested_width, info->natural_width, 
-			 (info->expand ? size : 0), width));
 
       i++;
     }
