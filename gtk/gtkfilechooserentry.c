@@ -2032,10 +2032,4 @@ _gtk_file_chooser_entry_set_root_uris (GtkFileChooserEntry *chooser_entry,
   clear_completions (chooser_entry);
 }
 
-const GSList *
-_gtk_file_chooser_entry_get_root_uris (GtkFileChooserEntry *chooser_entry)
-{
-  return chooser_entry->root_uris;
-}
-
 /* vim: et sw=2 cinoptions=(0,t0,f1s,n-1s,{1s,>2s,^-1s */
