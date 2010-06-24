@@ -2159,7 +2159,7 @@ gtk_text_buffer_move_mark (GtkTextBuffer     *buffer,
 /**
  * gtk_text_buffer_get_iter_at_mark:
  * @buffer: a #GtkTextBuffer
- * @iter: (out): iterator to initialize
+ * @iter: (out caller-allocates): iterator to initialize
  * @mark: a #GtkTextMark in @buffer
  *
  * Initializes @iter with the current position of @mark.
@@ -2346,7 +2346,7 @@ gtk_text_buffer_get_selection_bound (GtkTextBuffer *buffer)
 /**
  * gtk_text_buffer_get_iter_at_child_anchor:
  * @buffer: a #GtkTextBuffer
- * @iter: (out): an iterator to be initialized
+ * @iter: (out caller-allocates): an iterator to be initialized
  * @anchor: a child anchor that appears in @buffer
  *
  * Obtains the location of @anchor within @buffer.
@@ -2829,7 +2829,7 @@ gtk_text_buffer_remove_all_tags (GtkTextBuffer     *buffer,
 /**
  * gtk_text_buffer_get_iter_at_line_offset:
  * @buffer: a #GtkTextBuffer
- * @iter: (out): iterator to initialize
+ * @iter: (out caller-allocates): iterator to initialize
  * @line_number: line number counting from 0
  * @char_offset: char offset from start of line
  *
@@ -2854,7 +2854,7 @@ gtk_text_buffer_get_iter_at_line_offset (GtkTextBuffer *buffer,
 /**
  * gtk_text_buffer_get_iter_at_line_index:
  * @buffer: a #GtkTextBuffer 
- * @iter: (out): iterator to initialize 
+ * @iter: (out caller-allocates): iterator to initialize 
  * @line_number: line number counting from 0
  * @byte_index: byte index from start of line
  *
@@ -2879,7 +2879,7 @@ gtk_text_buffer_get_iter_at_line_index  (GtkTextBuffer *buffer,
 /**
  * gtk_text_buffer_get_iter_at_line:
  * @buffer: a #GtkTextBuffer 
- * @iter: (out): iterator to initialize
+ * @iter: (out caller-allocates): iterator to initialize
  * @line_number: line number counting from 0
  * 
  * Initializes @iter to the start of the given line.
@@ -2898,7 +2898,7 @@ gtk_text_buffer_get_iter_at_line (GtkTextBuffer *buffer,
 /**
  * gtk_text_buffer_get_iter_at_offset:
  * @buffer: a #GtkTextBuffer 
- * @iter: (out): iterator to initialize
+ * @iter: (out caller-allocates): iterator to initialize
  * @char_offset: char offset from start of buffer, counting from 0, or -1
  *
  * Initializes @iter to a position @char_offset chars from the start
@@ -2920,7 +2920,7 @@ gtk_text_buffer_get_iter_at_offset (GtkTextBuffer *buffer,
 /**
  * gtk_text_buffer_get_start_iter:
  * @buffer: a #GtkTextBuffer
- * @iter: (out): iterator to initialize
+ * @iter: (out caller-allocates): iterator to initialize
  *
  * Initialized @iter with the first position in the text buffer. This
  * is the same as using gtk_text_buffer_get_iter_at_offset() to get
@@ -2939,7 +2939,7 @@ gtk_text_buffer_get_start_iter (GtkTextBuffer *buffer,
 /**
  * gtk_text_buffer_get_end_iter:
  * @buffer: a #GtkTextBuffer 
- * @iter: (out): iterator to initialize
+ * @iter: (out caller-allocates): iterator to initialize
  *
  * Initializes @iter with the "end iterator," one past the last valid
  * character in the text buffer. If dereferenced with
@@ -2961,8 +2961,8 @@ gtk_text_buffer_get_end_iter (GtkTextBuffer *buffer,
 /**
  * gtk_text_buffer_get_bounds:
  * @buffer: a #GtkTextBuffer 
- * @start: (out): iterator to initialize with first position in the buffer
- * @end: (out): iterator to initialize with the end iterator
+ * @start: (out caller-allocates): iterator to initialize with first position in the buffer
+ * @end: (out caller-allocates): iterator to initialize with the end iterator
  *
  * Retrieves the first and last iterators in the buffer, i.e. the
  * entire buffer lies within the range [@start,@end).
