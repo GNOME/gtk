@@ -5321,6 +5321,7 @@ gtk_window_group_get_type G_GNUC_CONST
 gtk_window_group_new
 gtk_window_group_remove_window
 gtk_window_group_list_windows
+gtk_window_group_get_current_grab
 gtk_window_has_group
 gtk_window_has_toplevel_focus
 gtk_window_iconify

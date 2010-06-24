@@ -418,7 +418,7 @@ void            _gtk_window_constrain_size     (GtkWindow *window,
 						gint       height,
 						gint      *new_width,
 						gint      *new_height);
-GtkWidget      *_gtk_window_group_get_current_grab (GtkWindowGroup *window_group);
+GtkWidget      *gtk_window_group_get_current_grab (GtkWindowGroup *window_group);
 
 void            _gtk_window_set_has_toplevel_focus (GtkWindow *window,
 						    gboolean   has_toplevel_focus);

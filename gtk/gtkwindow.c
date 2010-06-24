@@ -7761,10 +7761,19 @@ gtk_window_has_group (GtkWindow *window)
   return window->group != NULL;
 }
 
-/* Return the current grab widget of the given group 
+/**
+ * gtk_window_group_get_current_current_grab:
+ * @window_group: a #GtkWindowGroup
+ *
+ * Gets the current grab widget of the given group,
+ * see gtk_grab_add().
+ *
+ * Returns: the current grab widget of the group
+ *
+ * Since: 2.22
  */
 GtkWidget *
-_gtk_window_group_get_current_grab (GtkWindowGroup *window_group)
+gtk_window_group_get_current_grab (GtkWindowGroup *window_group)
 {
   if (window_group->grabs)
     return GTK_WIDGET (window_group->grabs->data);

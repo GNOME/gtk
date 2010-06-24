@@ -5915,6 +5915,7 @@ gtk_window_group_new
 gtk_window_group_add_window
 gtk_window_group_remove_window
 gtk_window_group_list_windows
+gtk_window_group_get_current_grab
 <SUBSECTION Standard>
 GTK_IS_WINDOW_GROUP
 GTK_IS_WINDOW_GROUP_CLASS
