@@ -3729,6 +3729,7 @@ gtk_table_get_homogeneous
 gtk_table_get_row_spacing
 gtk_table_get_col_spacing
 gtk_table_get_default_col_spacing
+gtk_table_get_size
 <SUBSECTION Standard>
 GTK_TABLE
 GTK_IS_TABLE

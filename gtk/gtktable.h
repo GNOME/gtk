@@ -141,6 +141,9 @@ guint      gtk_table_get_default_col_spacing (GtkTable        *table);
 void	   gtk_table_set_homogeneous  (GtkTable	       *table,
 				       gboolean		homogeneous);
 gboolean   gtk_table_get_homogeneous  (GtkTable        *table);
+void       gtk_table_get_size         (GtkTable        *table,
+                                       guint           *rows,
+                                       guint           *columns);
 
 
 G_END_DECLS
