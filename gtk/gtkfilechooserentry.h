@@ -53,7 +53,6 @@ void               _gtk_file_chooser_entry_set_local_only     (GtkFileChooserEnt
 gboolean           _gtk_file_chooser_entry_get_local_only     (GtkFileChooserEntry *chooser_entry);
 void               _gtk_file_chooser_entry_set_root_uris    (GtkFileChooserEntry *chooser_entry,
                                                              const GSList        *root_uris);
-const GSList      *_gtk_file_chooser_entry_get_root_uris    (GtkFileChooserEntry *chooser_entry);
 
 G_END_DECLS
 
