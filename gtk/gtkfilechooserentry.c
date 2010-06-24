@@ -1338,9 +1338,6 @@ populate_completion_store (GtkFileChooserEntry *chooser_entry)
 
       file = tmp_list->data;
 
-      if (!is_file_in_roots (chooser_entry, file))
-        continue;
-
       info = _gtk_folder_get_info (chooser_entry->current_folder, file);
 
       if (info)
