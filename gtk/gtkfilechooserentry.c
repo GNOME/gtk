@@ -67,7 +67,7 @@ struct _GtkFileChooserEntry
   GtkFileChooserAction action;
 
   GtkFileSystem *file_system;
-  const GSList *root_uris;
+  GSList *root_uris;
   GFile *base_folder;
   GFile *current_folder_file;
   gchar *file_part;
@@ -2019,7 +2019,7 @@ _gtk_file_chooser_entry_get_local_only (GtkFileChooserEntry *chooser_entry)
 
 void
 _gtk_file_chooser_entry_set_root_uris (GtkFileChooserEntry *chooser_entry,
-                                       const GSList        *root_uris)
+                                       GSList        *root_uris)
 {
   /* This doesn't need its own copy. */
   chooser_entry->root_uris = root_uris;
