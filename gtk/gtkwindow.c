@@ -7884,6 +7884,8 @@ gtk_window_has_group (GtkWindow *window)
 GtkWidget *
 gtk_window_group_get_current_grab (GtkWindowGroup *window_group)
 {
+  g_return_val_if_fail (GTK_IS_WINDOW_GROUP (window_group), NULL);
+
   if (window_group->grabs)
     return GTK_WIDGET (window_group->grabs->data);
   return NULL;
@@ -7963,6 +7965,9 @@ gtk_window_group_get_current_device_grab (GtkWindowGroup *window_group,
   GtkDeviceGrabInfo *info;
   GdkDevice *other_device;
   GSList *list;
+
+  g_return_val_if_fail (GTK_IS_WINDOW_GROUP (window_group), NULL);
+  g_return_val_if_fail (GDK_IS_DEVICE (device), NULL);
 
   priv = GTK_WINDOW_GROUP_GET_PRIVATE (window_group);
   list = priv->device_grabs;
