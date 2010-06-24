@@ -45,6 +45,8 @@ struct _GdkDeviceManagerXI2
   GList *slave_devices;
   GList *floating_devices;
 
+  GdkDevice *client_pointer;
+
   int opcode;
 };
 

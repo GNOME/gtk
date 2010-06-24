@@ -4066,8 +4066,8 @@ gtk_window_resize (GtkWindow *window,
 /**
  * gtk_window_get_size:
  * @window: a #GtkWindow
- * @width: (allow-none): (out): return location for width, or %NULL
- * @height: (allow-none): (out): return location for height, or %NULL
+ * @width: (out) (allow-none): return location for width, or %NULL
+ * @height: (out) (allow-none): return location for height, or %NULL
  *
  * Obtains the current size of @window. If @window is not onscreen,
  * it returns the size GTK+ will suggest to the <link
@@ -5828,11 +5828,13 @@ get_monitor_containing_pointer (GtkWindow *window)
   GdkScreen *window_screen;
   GdkScreen *pointer_screen;
   GdkDisplay *display;
+  GdkDeviceManager *device_manager;
   GdkDevice *pointer;
 
   window_screen = gtk_window_check_screen (window);
   display = gdk_screen_get_display (window_screen);
-  pointer = gdk_display_get_core_pointer (display);
+  device_manager = gdk_display_get_device_manager (display);
+  pointer = gdk_device_manager_get_client_pointer (device_manager);
 
   gdk_display_get_device_state (display, pointer,
                                 &pointer_screen,
@@ -6020,12 +6022,15 @@ gtk_window_compute_configure_request (GtkWindow    *window,
 	    gint monitor_num;
 	    GdkRectangle monitor;
             GdkDisplay *display;
+            GdkDeviceManager *device_manager;
             GdkDevice *pointer;
             GdkScreen *pointer_screen;
             gint px, py;
 
             display = gdk_screen_get_display (screen);
-            pointer = gdk_display_get_core_pointer (display);
+            device_manager = gdk_display_get_device_manager (display);
+            pointer = gdk_device_manager_get_client_pointer (device_manager);
+
             gdk_display_get_device_state (display, pointer,
                                           &pointer_screen,
                                           &px, &py, NULL);
@@ -7460,10 +7465,10 @@ gtk_window_begin_resize_drag  (GtkWindow    *window,
 /**
  * gtk_window_get_frame_dimensions:
  * @window: a #GtkWindow
- * @left: (allow-none) (out): location to store the width of the frame at the left, or %NULL
- * @top: (allow-none) (out): location to store the height of the frame at the top, or %NULL
- * @right: (allow-none) (out): location to store the width of the frame at the returns, or %NULL
- * @bottom: (allow-none) (out): location to store the height of the frame at the bottom, or %NULL
+ * @left: (out) (allow-none): location to store the width of the frame at the left, or %NULL
+ * @top: (out) (allow-none): location to store the height of the frame at the top, or %NULL
+ * @right: (out) (allow-none): location to store the width of the frame at the returns, or %NULL
+ * @bottom: (out) (allow-none): location to store the height of the frame at the bottom, or %NULL
  *
  * (Note: this is a special-purpose function intended for the
  *  framebuffer port; see gtk_window_set_has_frame(). It will not
@@ -7899,10 +7904,19 @@ gtk_window_has_group (GtkWindow *window)
   return window->group != NULL;
 }
 
-/* Return the current grab widget of the given group 
+/**
+ * gtk_window_group_get_current_current_grab:
+ * @window_group: a #GtkWindowGroup
+ *
+ * Gets the current grab widget of the given group,
+ * see gtk_grab_add().
+ *
+ * Returns: the current grab widget of the group
+ *
+ * Since: 2.22
  */
 GtkWidget *
-_gtk_window_group_get_current_grab (GtkWindowGroup *window_group)
+gtk_window_group_get_current_grab (GtkWindowGroup *window_group)
 {
   if (window_group->grabs)
     return GTK_WIDGET (window_group->grabs->data);

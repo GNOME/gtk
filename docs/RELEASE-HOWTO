@@ -26,16 +26,21 @@ Make sure that gtk-doc is the latest released version.
     committers, etc. Anybody who is mentioned in ChangeLog gets
     credits, but only real names, not email addresses or nicknames.
 
- 3) In particular, if this is a major, stable, release, verify that
+ 3) Update the pot files and commit the changes:
+
+    make -C po gtk30.pot
+    make -C po-properties gtk30-properties.pot
+
+ 4) In particular, if this is a major, stable, release, verify that
     README.in contains the relevant release notes and that the
     required versions of dependencies in INSTALL.in are in sync
     with configure.ac.
 
- 4) Verify that the version in configure.ac has been bumped after the last
+ 5) Verify that the version in configure.ac has been bumped after the last
     release. (Note that this is critical, a slip-up here will cause the
     soname to change).
 
- 5) Make sure that make check is happy (If you don't do it here, make distcheck
+ 6) Make sure that make check is happy (If you don't do it here, make distcheck
     will also catch it, but it is kind of disheartening to see make distcheck
     fail due to an extraneous symbol after watching it build the docs for an
     hour...).
@@ -49,7 +54,7 @@ Make sure that gtk-doc is the latest released version.
       using a function from a different library, which is not yet allowed
       by the filter in pltcheck.sh
 
- 6) If this is a devel release, make sure that the docs for new symbols
+ 7) If this is a devel release, make sure that the docs for new symbols
     are in good shape. Look at the -unused.txt files and add stuff found
     there to the corresponding -sections.txt file. Look at the
     -undocumented.txt files and see if there is anything in there that
@@ -58,12 +63,12 @@ Make sure that gtk-doc is the latest released version.
     Since: tags, and that there is an index in the main -docs.sgml for
     the next stable version.
 
- 7) make distcheck
+ 8) make distcheck
 
- 8) Fix broken stuff found by 7), repeat
+ 9) Fix broken stuff found by 8), commit changes: git commit -a, repeat.
 
- 9) Commit all changes: git commit -a. You will have a bunch of po file
-    changes, NEWS and maybe some doc changes too
+10) Once distcheck succeeds, verify that the tree is clean: git diff should
+    come up empty.
 
 10) Now you've got the tarball. Check that the tarball size looks
     reasonable compared to previous releases. If the size goes down

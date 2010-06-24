@@ -30,6 +30,7 @@
 
 #include "gtkmessagedialog.h"
 #include "gtkaccessible.h"
+#include "gtkbuildable.h"
 #include "gtklabel.h"
 #include "gtkhbox.h"
 #include "gtkvbox.h"
@@ -85,6 +86,14 @@
  *                            dialog);
  * </programlisting>
  * </example>
+ *
+ * <refsect2 id="GtkMessageDialog-BUILDER-UI">
+ * <title>GtkMessageDialog as GtkBuildable</title>
+ * <para>
+ * The GtkMessageDialog implementation of the GtkBuildable interface exposes
+ * the message area as an internal child with the name "message_area".
+ * </para>
+ * </refsect2>
  */
 
 #define GTK_MESSAGE_DIALOG_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), GTK_TYPE_MESSAGE_DIALOG, GtkMessageDialogPrivate))
@@ -113,6 +122,11 @@ static void gtk_message_dialog_get_property (GObject          *object,
 					     GParamSpec       *pspec);
 static void gtk_message_dialog_add_buttons  (GtkMessageDialog *message_dialog,
 					     GtkButtonsType    buttons);
+static void      gtk_message_dialog_buildable_interface_init     (GtkBuildableIface *iface);
+static GObject * gtk_message_dialog_buildable_get_internal_child (GtkBuildable  *buildable,
+                                                                  GtkBuilder    *builder,
+                                                                  const gchar   *childname);
+
 
 enum {
   PROP_0,
@@ -126,7 +140,32 @@ enum {
   PROP_MESSAGE_AREA
 };
 
-G_DEFINE_TYPE (GtkMessageDialog, gtk_message_dialog, GTK_TYPE_DIALOG)
+G_DEFINE_TYPE_WITH_CODE (GtkMessageDialog, gtk_message_dialog, GTK_TYPE_DIALOG,
+                         G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE,
+                                                gtk_message_dialog_buildable_interface_init))
+
+static GtkBuildableIface *parent_buildable_iface;
+
+static void
+gtk_message_dialog_buildable_interface_init (GtkBuildableIface *iface)
+{
+  parent_buildable_iface = g_type_interface_peek_parent (iface);
+  iface->get_internal_child = gtk_message_dialog_buildable_get_internal_child;
+  iface->custom_tag_start = parent_buildable_iface->custom_tag_start;
+  iface->custom_finished = parent_buildable_iface->custom_finished;
+}
+
+static GObject *
+gtk_message_dialog_buildable_get_internal_child (GtkBuildable *buildable,
+                                                 GtkBuilder   *builder,
+                                                 const gchar  *childname)
+{
+  if (strcmp (childname, "message_area") == 0)
+    return G_OBJECT (gtk_message_dialog_get_message_area (GTK_MESSAGE_DIALOG (buildable)));
+
+  return parent_buildable_iface->get_internal_child (buildable, builder, childname);
+}
+
 
 static void
 gtk_message_dialog_class_init (GtkMessageDialogClass *class)
@@ -290,7 +329,7 @@ gtk_message_dialog_class_init (GtkMessageDialogClass *class)
 static void
 gtk_message_dialog_init (GtkMessageDialog *dialog)
 {
-  GtkWidget *hbox, *vbox;
+  GtkWidget *hbox;
   GtkMessageDialogPrivate *priv;
 
   priv = GTK_MESSAGE_DIALOG_GET_PRIVATE (dialog);

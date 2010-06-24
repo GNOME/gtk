@@ -796,6 +796,32 @@ gtk_table_get_homogeneous (GtkTable *table)
   return table->homogeneous;
 }
 
+/**
+ * gtk_table_get_size:
+ * @table: a #GtkTable
+ * @rows: (out) (allow-none): return location for the number of
+ *   rows, or %NULL
+ * @columns: (out) (allow-none): return location for the number
+ *   of columns, or %NULL
+ *
+ * Returns the number of rows and columns in the table.
+ *
+ * Since: 2.22
+ **/
+void
+gtk_table_get_size (GtkTable *table,
+                    guint    *rows,
+                    guint    *columns)
+{
+  g_return_if_fail (GTK_IS_TABLE (table));
+
+  if (rows)
+    *rows = table->nrows;
+
+  if (columns)
+    *columns = table->ncols;
+}
+
 static void
 gtk_table_finalize (GObject *object)
 {

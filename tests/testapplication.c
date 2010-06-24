@@ -19,6 +19,9 @@
  */
 
 #include "config.h"
+
+#include <stdlib.h>
+
 #include <gtk/gtk.h>
 #include <gio/gdesktopappinfo.h>
 
@@ -64,12 +67,12 @@ main (int argc, char **argv)
 {
   GtkApplication *app;
   GtkWindow *window;
-  GtkWindow *window2;
+  GtkWidget *window2;
   GtkBuilder *builder;
   GtkAction *action;
   GtkActionGroup *actions;
 
-  if (argc > 1 && strcmp (argv[1], "--launch-yourself") == 0)
+  if (argc > 1 && g_strcmp0 (argv[1], "--launch-yourself") == 0)
     {
       launch_myself ();
       exit (0);
@@ -96,8 +99,8 @@ main (int argc, char **argv)
 
   window2 = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   gtk_container_add (GTK_CONTAINER (window2), gtk_label_new ("Hello again"));
-  gtk_widget_show_all (GTK_WIDGET (window2));
-  gtk_application_add_window (app, window2);
+  gtk_widget_show_all (window2);
+  gtk_application_add_window (app, GTK_WINDOW (window2));
 
   gtk_application_run (app);
 

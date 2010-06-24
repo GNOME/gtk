@@ -43,6 +43,7 @@
     <programlisting>
     make CFLAGS+="-DGSEAL_ENABLE"
     </programlisting>
+    Starting with 2.90.4, GTK+'s .pc files turn on GSEAL_ENABLE by default.
   </para>
   </section>
 

@@ -95,6 +95,7 @@ noinst_PROGRAMS =  $(TEST_PROGS)	\
 	testactions			\
 	testgrouping			\
 	testtooltips			\
+	testexpander			\
 	testvolumebutton
 
 if OS_UNIX
@@ -178,6 +179,7 @@ testgrouping_DEPENDENCIES = $(TEST_DEPS)
 testtooltips_DEPENDENCIES = $(TEST_DEPS)
 testvolumebutton_DEPENDENCIES = $(TEST_DEPS)
 testwindows_DEPENDENCIES = $(TEST_DEPS)
+testexpander_DEPENDENCIES = $(TEST_DEPS)
 
 flicker_LDADD = $(LDADDS)
 simple_LDADD = $(LDADDS)
@@ -251,6 +253,7 @@ testgrouping_LDADD = $(LDADDS)
 testtooltips_LDADD = $(LDADDS)
 testvolumebutton_LDADD = $(LDADDS)
 testwindows_LDADD = $(LDADDS)
+testexpander_LDADD = $(LDADDS)
 
 testentrycompletion_SOURCES = 	\
 	prop-editor.c		\
@@ -358,6 +361,8 @@ testoffscreenwindow_SOURCES =	\
 
 testwindows_SOURCES = 	\
 	testwindows.c
+
+testexpander_SOURCES = testexpander.c
 
 EXTRA_DIST += 			\
 	prop-editor.h		\

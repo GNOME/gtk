@@ -21,7 +21,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-master-po-gl-77922___.merged\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-06-13 18:05+0200\n"
+"POT-Creation-Date: 2010-06-24 00:58+0200\n"
 "PO-Revision-Date: 2010-06-13 18:05+0200\n"
 "Last-Translator: Fran Diéguez <frandieguez@ubuntu.com>\n"
 "Language-Team: Galician <gnome@g11.net>\n"
@@ -1726,11 +1726,11 @@ msgstr "_Dereito:"
 msgid "Paper Margins"
 msgstr "Marxes do papel"
 
-#: ../gtk/gtkentry.c:8612 ../gtk/gtktextview.c:8002
+#: ../gtk/gtkentry.c:8612 ../gtk/gtktextview.c:8012
 msgid "Input _Methods"
 msgstr "_Métodos de entrada"
 
-#: ../gtk/gtkentry.c:8626 ../gtk/gtktextview.c:8016
+#: ../gtk/gtkentry.c:8626 ../gtk/gtktextview.c:8026
 msgid "_Insert Unicode Control Character"
 msgstr "_Inserir un carácter de control Unicode"
 
@@ -2172,12 +2172,12 @@ msgid "System (%s)"
 msgstr "Sistema (%s)"
 
 #. Open Link
-#: ../gtk/gtklabel.c:6076
+#: ../gtk/gtklabel.c:6072
 msgid "_Open Link"
 msgstr "_Abrir a ligazón"
 
 #. Copy Link Address
-#: ../gtk/gtklabel.c:6088
+#: ../gtk/gtklabel.c:6084
 msgid "Copy _Link Address"
 msgstr "Copiar o enderezo da _ligazón"
 
@@ -2219,20 +2219,20 @@ msgstr "Marcas de depuración GTK+ para desconfigurar"
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
 #.
-#: ../gtk/gtkmain.c:686
+#: ../gtk/gtkmain.c:704
 msgid "default:LTR"
 msgstr "default:LTR"
 
-#: ../gtk/gtkmain.c:751
+#: ../gtk/gtkmain.c:769
 #, c-format
 msgid "Cannot open display: %s"
 msgstr "Non é posíbel abrir a pantalla: %s"
 
-#: ../gtk/gtkmain.c:788
+#: ../gtk/gtkmain.c:806
 msgid "GTK+ Options"
 msgstr "Opcións GTK+"
 
-#: ../gtk/gtkmain.c:788
+#: ../gtk/gtkmain.c:806
 msgid "Show GTK+ Options"
 msgstr "Mostrar opcións GTK+"
 

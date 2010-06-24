@@ -38,6 +38,7 @@ static void    gdk_device_manager_xi2_finalize    (GObject *object);
 
 static GList * gdk_device_manager_xi2_list_devices (GdkDeviceManager *device_manager,
                                                     GdkDeviceType     type);
+static GdkDevice * gdk_device_manager_xi2_get_client_pointer (GdkDeviceManager *device_manager);
 
 static void     gdk_device_manager_xi2_event_translator_init (GdkEventTranslatorIface *iface);
 
@@ -66,6 +67,7 @@ gdk_device_manager_xi2_class_init (GdkDeviceManagerXI2Class *klass)
   object_class->finalize = gdk_device_manager_xi2_finalize;
 
   device_manager_class->list_devices = gdk_device_manager_xi2_list_devices;
+  device_manager_class->get_client_pointer = gdk_device_manager_xi2_get_client_pointer;
 }
 
 static void
@@ -417,6 +419,23 @@ gdk_device_manager_xi2_list_devices (GdkDeviceManager *device_manager,
     }
 
   return g_list_copy (list);
+}
+
+static GdkDevice *
+gdk_device_manager_xi2_get_client_pointer (GdkDeviceManager *device_manager)
+{
+  GdkDeviceManagerXI2 *device_manager_xi2;
+  GdkDisplay *display;
+  int device_id;
+
+  device_manager_xi2 = (GdkDeviceManagerXI2 *) device_manager;
+  display = gdk_device_manager_get_display (device_manager);
+
+  XIGetClientPointer (GDK_DISPLAY_XDISPLAY (display),
+                      None, &device_id);
+
+  return g_hash_table_lookup (device_manager_xi2->id_table,
+                              GINT_TO_POINTER (device_id));
 }
 
 static void

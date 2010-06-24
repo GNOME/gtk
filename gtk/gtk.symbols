@@ -3292,6 +3292,7 @@ gtk_table_get_default_col_spacing
 gtk_table_get_default_row_spacing
 gtk_table_get_homogeneous
 gtk_table_get_row_spacing
+gtk_table_get_size
 gtk_table_get_type G_GNUC_CONST
 gtk_table_new
 gtk_table_resize
@@ -4560,6 +4561,7 @@ gtk_window_group_get_type G_GNUC_CONST
 gtk_window_group_new
 gtk_window_group_remove_window
 gtk_window_group_list_windows
+gtk_window_group_get_current_grab
 gtk_window_group_get_current_device_grab
 gtk_window_has_group
 gtk_window_has_toplevel_focus

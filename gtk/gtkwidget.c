@@ -363,6 +363,9 @@ static void gtk_widget_set_usize_internal (GtkWidget *widget,
 static void gtk_widget_get_draw_rectangle (GtkWidget    *widget,
 					   GdkRectangle *rect);
 
+static void gtk_widget_add_events_internal (GtkWidget *widget,
+                                            GdkDevice *device,
+                                            gint       events);
 
 /* --- variables --- */
 static gpointer         gtk_widget_parent_class = NULL;
@@ -3468,6 +3471,31 @@ gtk_widget_set_extension_events_internal (GtkWidget        *widget,
     g_list_free (free_list);
 }
 
+static void
+_gtk_widget_enable_device_events (GtkWidget *widget)
+{
+  GHashTable *device_events;
+  GHashTableIter iter;
+  gpointer key, value;
+
+  device_events = g_object_get_qdata (G_OBJECT (widget), quark_device_event_mask);
+
+  if (!device_events)
+    return;
+
+  g_hash_table_iter_init (&iter, device_events);
+
+  while (g_hash_table_iter_next (&iter, &key, &value))
+    {
+      GdkDevice *device;
+      GdkEventMask event_mask;
+
+      device = key;
+      event_mask = GPOINTER_TO_UINT (value);
+      gtk_widget_add_events_internal (widget, device, event_mask);
+    }
+}
+
 /**
  * gtk_widget_realize:
  * @widget: a #GtkWidget
@@ -3547,6 +3575,8 @@ gtk_widget_realize (GtkWidget *widget)
 
       if ((GTK_WIDGET_FLAGS (widget) & GTK_MULTIDEVICE) != 0)
         gdk_window_set_support_multidevice (widget->window, TRUE);
+
+      _gtk_widget_enable_device_events (widget);
     }
 }
 
@@ -7909,8 +7939,8 @@ gtk_widget_set_size_request (GtkWidget *widget,
 /**
  * gtk_widget_get_size_request:
  * @widget: a #GtkWidget
- * @width: (allow-none): (out): return location for width, or %NULL
- * @height: (allow-none): (out): return location for height, or %NULL
+ * @width: (out) (allow-none): return location for width, or %NULL
+ * @height: (out) (allow-none): return location for height, or %NULL
  *
  * Gets the size request that was explicitly set for the widget using
  * gtk_widget_set_size_request(). A value of -1 stored in @width or
@@ -8009,10 +8039,10 @@ gtk_widget_set_device_events (GtkWidget    *widget,
 }
 
 static void
-gtk_widget_add_events_internal (GtkWidget *widget,
-                                GdkDevice *device,
-                                gint       events,
-                                GList     *window_list)
+gtk_widget_add_events_internal_list (GtkWidget *widget,
+                                     GdkDevice *device,
+                                     gint       events,
+                                     GList     *window_list)
 {
   GList *l;
 
@@ -8032,10 +8062,27 @@ gtk_widget_add_events_internal (GtkWidget *widget,
             gdk_window_set_events (window, gdk_window_get_events (window) | events);
 
           children = gdk_window_get_children (window);
-          gtk_widget_add_events_internal (widget, device, events, children);
+          gtk_widget_add_events_internal_list (widget, device, events, children);
           g_list_free (children);
         }
     }
+}
+
+static void
+gtk_widget_add_events_internal (GtkWidget *widget,
+                                GdkDevice *device,
+                                gint       events)
+{
+  GList *window_list;
+
+  if (!gtk_widget_get_has_window (widget))
+    window_list = gdk_window_get_children (widget->window);
+  else
+    window_list = g_list_prepend (NULL, widget->window);
+
+  gtk_widget_add_events_internal_list (widget, device, events, window_list);
+
+  g_list_free (window_list);
 }
 
 /**
@@ -8059,18 +8106,7 @@ gtk_widget_add_events (GtkWidget *widget,
                       GINT_TO_POINTER (old_events | events));
 
   if (gtk_widget_get_realized (widget))
-    {
-      GList *window_list;
-
-      if (!gtk_widget_get_has_window (widget))
-	window_list = gdk_window_get_children (widget->window);
-      else
-	window_list = g_list_prepend (NULL, widget->window);
-
-      gtk_widget_add_events_internal (widget, NULL, events, window_list);
-
-      g_list_free (window_list);
-    }
+    gtk_widget_add_events_internal (widget, NULL, events);
 
   g_object_notify (G_OBJECT (widget), "events");
 }
@@ -8112,18 +8148,7 @@ gtk_widget_add_device_events (GtkWidget    *widget,
                        GUINT_TO_POINTER (old_events | events));
 
   if (gtk_widget_get_realized (widget))
-    {
-      GList *window_list;
-
-      if (!gtk_widget_get_has_window (widget))
-        window_list = gdk_window_get_children (widget->window);
-      else
-        window_list = g_list_prepend (NULL, widget->window);
-
-      gtk_widget_add_events_internal (widget, device, events, window_list);
-
-      g_list_free (window_list);
-    }
+    gtk_widget_add_events_internal (widget, device, events);
 
   g_object_notify (G_OBJECT (widget), "events");
 }
