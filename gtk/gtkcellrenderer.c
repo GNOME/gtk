@@ -571,30 +571,22 @@ gtk_cell_renderer_get_size (GtkCellRenderer    *cell,
 			    gint               *width,
 			    gint               *height)
 {
-  gint *real_width = width;
-  gint *real_height = height;
+  GtkRequisition request;
 
   g_return_if_fail (GTK_IS_CELL_RENDERER (cell));
-  g_return_if_fail (GTK_CELL_RENDERER_GET_CLASS (cell)->get_size != NULL);
 
-  if (width && cell->width != -1)
-    {
-      real_width = NULL;
-      *width = cell->width;
-    }
-  if (height && cell->height != -1)
-    {
-      real_height = NULL;
-      *height = cell->height;
-    }
+  gtk_cell_size_request_get_size (GTK_CELL_SIZE_REQUEST (cell),
+				  widget, &request, NULL);
 
-  GTK_CELL_RENDERER_GET_CLASS (cell)->get_size (cell,
-						widget,
-						(GdkRectangle *) cell_area,
-						x_offset,
-						y_offset,
-						real_width,
-						real_height);
+  if (width)
+    *width = request.width;
+  
+  if (height)
+    *height = request.height;
+
+  if (cell_area)
+    _gtk_cell_renderer_calc_offset (cell, cell_area, gtk_widget_get_direction (widget),
+				    request.width, request.height, x_offset, y_offset);
 }
 
 /**
@@ -1058,8 +1050,8 @@ gtk_cell_renderer_get_desired_size (GtkCellSizeRequest   *cell,
 
   /* Fallback on the old API to get the size. */
   if (GTK_CELL_RENDERER_GET_CLASS (cell)->get_size)
-    gtk_cell_renderer_get_size (GTK_CELL_RENDERER (cell), widget, NULL, NULL, NULL,
-				&min_req.width, &min_req.height);
+    GTK_CELL_RENDERER_GET_CLASS (cell)->get_size (GTK_CELL_RENDERER (cell), widget, NULL, NULL, NULL,
+						  &min_req.width, &min_req.height);
   else
     {
       min_req.width = 0;
@@ -1135,7 +1127,7 @@ gtk_cell_renderer_get_width_for_height (GtkCellSizeRequest *cell,
  */
 void
 _gtk_cell_renderer_calc_offset    (GtkCellRenderer      *cell,
-				   GdkRectangle         *cell_area,
+				   const GdkRectangle   *cell_area,
 				   GtkTextDirection      direction,
 				   gint                  width,
 				   gint                  height,

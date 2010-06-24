@@ -188,7 +188,7 @@ void             gtk_cell_renderer_stop_editing   (GtkCellRenderer      *cell,
 
 
 void            _gtk_cell_renderer_calc_offset    (GtkCellRenderer      *cell,
-						   GdkRectangle         *cell_area,
+						   const GdkRectangle   *cell_area,
 						   GtkTextDirection      direction,
 						   gint                  width,
 						   gint                  height,
