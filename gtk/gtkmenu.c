@@ -5294,7 +5294,7 @@ gtk_menu_grab_notify (GtkWidget *widget,
 
   toplevel = gtk_widget_get_toplevel (widget);
   group = gtk_window_get_group (GTK_WINDOW (toplevel));
-  grab = _gtk_window_group_get_current_grab (group); 
+  grab = gtk_window_group_get_current_grab (group);
 
   if (!was_grabbed)
     {
