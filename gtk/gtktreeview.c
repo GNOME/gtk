@@ -2228,12 +2228,7 @@ gtk_tree_view_size_allocate_columns (GtkWidget *widget,
       if (!column->visible)
 	continue;
 
-      requested.data         = column;
-      requested.minimum_size = gtk_tree_view_get_real_requested_width_from_column (tree_view, column);
-      requested.natural_size = gtk_tree_view_get_real_natural_width_from_column (tree_view, column);
-      g_array_append_val (array, requested);
-
-      /* Subtract each column's padding from the remaining allocation space */
+      /* Calculate padding for this column and store it in our client pointer for the next loop */
       padding = horizontal_separator;
       if (draw_vgrid_lines)
         {
@@ -2243,11 +2238,14 @@ gtk_tree_view_size_allocate_columns (GtkWidget *widget,
 	    padding += grid_line_width;
 	}
 
+      requested.data         = GINT_TO_POINTER (padding);
+      requested.minimum_size = gtk_tree_view_get_real_requested_width_from_column (tree_view, column);
+      requested.natural_size = gtk_tree_view_get_real_natural_width_from_column (tree_view, column);
+      g_array_append_val (array, requested);
+
+      /* Subtract each column's request and padding from the remaining allocation */
       extra -= requested.minimum_size;
       extra -= padding;
-
-      /* Accumulate padding for the overall width */
-      width += padding;
 
       if (column->expand)
 	number_of_expand_columns++;
@@ -2285,6 +2283,7 @@ gtk_tree_view_size_allocate_columns (GtkWidget *widget,
        list = (rtl ? list->prev : list->next)) 
     {
       gint old_width;
+      gint padding;
 
       column = list->data;
       old_width = column->width;
@@ -2310,8 +2309,8 @@ gtk_tree_view_size_allocate_columns (GtkWidget *widget,
 	  continue;
 	}
 
-      allocation.x = width;
       column_width = sizes[i].minimum_size;
+      padding      = GPOINTER_TO_INT (sizes[i].data);
 
       if (column->expand)
 	{
@@ -2323,15 +2322,17 @@ gtk_tree_view_size_allocate_columns (GtkWidget *widget,
 	  column_width += extra;
 	}
 
-      allocation.width = column_width;
-      width += column_width;
-
       gtk_tree_view_column_allocate_width (column, column_width);
+
+      /* Add padding between columns and allocate the buttons... */
+      allocation.x      = width;
+      allocation.width  = column_width + padding;
+      width            += allocation.width;
+
+      gtk_widget_size_allocate (column->button, &allocation);
 
       if (column_width > old_width)
         column_changed = TRUE;
-
-      gtk_widget_size_allocate (column->button, &allocation);
 
       if (column->window)
 	gdk_window_move_resize (column->window,
