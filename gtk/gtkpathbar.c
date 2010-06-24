@@ -1483,7 +1483,7 @@ static ButtonType
 find_button_type (GtkPathBar  *path_bar,
 		  GFile       *file)
 {
-  const GSList *l;
+  GSList *l;
 
   if (path_bar->root_file != NULL &&
       g_file_equal (file, path_bar->root_file))
@@ -1885,8 +1885,8 @@ _gtk_path_bar_set_file_system (GtkPathBar    *path_bar,
 }
 
 void
-_gtk_path_bar_set_root_uris   (GtkPathBar         *path_bar,
-                               const GSList       *root_uris)
+_gtk_path_bar_set_root_uris   (GtkPathBar   *path_bar,
+                               GSList       *root_uris)
 {
   g_return_if_fail (GTK_IS_PATH_BAR (path_bar));
 
