@@ -3278,6 +3278,7 @@ gtk_table_get_default_col_spacing
 gtk_table_get_default_row_spacing
 gtk_table_get_homogeneous
 gtk_table_get_row_spacing
+gtk_table_get_size
 gtk_table_get_type G_GNUC_CONST
 gtk_table_new
 gtk_table_resize

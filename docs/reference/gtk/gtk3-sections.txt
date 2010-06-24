@@ -3081,6 +3081,7 @@ gtk_status_icon_get_type
 GtkTable
 gtk_table_new
 gtk_table_resize
+gtk_table_get_size
 gtk_table_attach
 gtk_table_attach_defaults
 gtk_table_set_row_spacing
