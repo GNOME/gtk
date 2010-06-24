@@ -1935,12 +1935,9 @@ gtk_cell_renderer_text_set_fixed_height_from_font (GtkCellRendererText *renderer
 static void
 gtk_cell_renderer_text_cell_size_request_init (GtkCellSizeRequestIface *iface)
 {
-  /* Currently cell renderers do natural widths for ellipsizing text 
-   * but dont yet do height-for-width/width-for-height calculations for
-   * wordwrapping 
-   */
-  iface->get_width  = gtk_cell_renderer_text_get_width;
-  iface->get_height = gtk_cell_renderer_text_get_height;
+  iface->get_width            = gtk_cell_renderer_text_get_width;
+  iface->get_height           = gtk_cell_renderer_text_get_height;
+  iface->get_height_for_width = gtk_cell_renderer_text_get_height_for_width;
 }
 
 static void
@@ -2066,9 +2063,11 @@ gtk_cell_renderer_text_get_height (GtkCellSizeRequest *cell,
   /* Thankfully cell renderers dont rotate, so they only have to do
    * height-for-width and not the opposite. Here we have only to return
    * the height for the base minimum width of the renderer.
+   *
+   * Note this code path wont be followed by GtkTreeView which is
+   * height-for-width specifically.
    */
   gtk_cell_size_request_get_width (cell, widget, &min_width, NULL);
-
   gtk_cell_renderer_text_get_height_for_width (cell, widget, min_width,
 					       minimum_size, natural_size);
 }
