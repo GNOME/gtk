@@ -2176,9 +2176,9 @@ gtk_tree_view_size_allocate_columns (GtkWidget *widget,
   GtkTreeViewColumn *column;
   GtkAllocation allocation;
   gint width = 0;
-  gint extra, extra_per_column, extra_for_last;
-  gint full_requested_width = 0;
-  gint column_width, i;
+  gint extra, extra_per_column;
+  gint column_width, i, horizontal_separator;
+  gint grid_line_width, draw_vgrid_lines;
   gint number_of_expand_columns = 0;
   gboolean column_changed = FALSE;
   gboolean rtl;
@@ -2187,6 +2187,11 @@ gtk_tree_view_size_allocate_columns (GtkWidget *widget,
   GtkRequestedSize *sizes;
   
   tree_view = GTK_TREE_VIEW (widget);
+
+  gtk_widget_style_get (widget,
+			"horizontal-separator", &horizontal_separator,
+			"grid-line-width", &grid_line_width,
+			NULL);
 
   for (last_column = g_list_last (tree_view->priv->columns);
        last_column && !(GTK_TREE_VIEW_COLUMN (last_column->data)->visible);
@@ -2200,6 +2205,10 @@ gtk_tree_view_size_allocate_columns (GtkWidget *widget,
        first_column = first_column->next)
     ;
 
+  draw_vgrid_lines =
+    tree_view->priv->grid_lines == GTK_TREE_VIEW_GRID_LINES_VERTICAL
+    || tree_view->priv->grid_lines == GTK_TREE_VIEW_GRID_LINES_BOTH;
+
   allocation.y = 0;
   allocation.height = tree_view->priv->header_height;
 
@@ -2212,6 +2221,7 @@ gtk_tree_view_size_allocate_columns (GtkWidget *widget,
   for (list = tree_view->priv->columns; list != last_column->next; list = list->next)
     {
       GtkRequestedSize requested;
+      gint padding;
 
       column = (GtkTreeViewColumn *)list->data;
 
@@ -2223,26 +2233,29 @@ gtk_tree_view_size_allocate_columns (GtkWidget *widget,
       requested.natural_size = gtk_tree_view_get_real_natural_width_from_column (tree_view, column);
       g_array_append_val (array, requested);
 
+      /* Subtract each column's padding from the remaining allocation space */
+      padding = horizontal_separator;
+      if (draw_vgrid_lines)
+        {
+	  if (list->data == first_column || list->data == last_column)
+	    padding += grid_line_width / 2.0;
+	  else
+	    padding += grid_line_width;
+	}
+
       extra -= requested.minimum_size;
+      extra -= padding;
+
+      /* Accumulate padding for the overall width */
+      width += padding;
 
       if (column->expand)
 	number_of_expand_columns++;
-
-      GTK_NOTE (SIZE_REQUEST, 
-		g_print ("Treeview allocating columns, requested column %d; min %d nat %d\n",
-			 array->len -1, requested.minimum_size, requested.natural_size));
-
     }
 
   /* Distribute as much of remaining 'size' as possible before sharing expand space */
   sizes = (GtkRequestedSize *)array->data;
   extra = _gtk_distribute_allocation (MAX (extra, 0), array->len, sizes);
-
-  GTK_NOTE (SIZE_REQUEST, 
-	    g_print ("Treeview allocating columns with allocation width %d and full request %d; "
-		     "remaining space %d\n",
-		     widget->allocation.width, full_requested_width, extra));
-
 
   /* Only update the expand value if the width of the widget has changed,
    * or the number of expand columns has changed, or if there are no expand
@@ -2256,33 +2269,16 @@ gtk_tree_view_size_allocate_columns (GtkWidget *widget,
 
   tree_view->priv->post_validation_flag = FALSE;
 
-  /* if (!update_expand) */
-  /*   { */
-  /*     extra = tree_view->priv->last_extra_space; */
-  /*     extra_for_last = MAX (allocation_width - extra, 0); */
-  /*   } */
-  /* else */
-  /*   { */
-  /*     extra = allocation_width; */
-  /*     extra_for_last = 0; */
-
-  /*     tree_view->priv->last_extra_space = extra; */
-  /*   } */
-
   if (number_of_expand_columns > 0)
     extra_per_column = extra / number_of_expand_columns;
   else
     extra_per_column = 0;
 
-  GTK_NOTE (SIZE_REQUEST, 
-	    g_print ("Treeview allocating columns... expand columns %d expand per column %d\n",
-		     number_of_expand_columns, extra_per_column));
-
-  /* if (update_expand) */
-  /*   { */
-  /*     tree_view->priv->last_extra_space_per_column = extra_per_column; */
-  /*     tree_view->priv->last_number_of_expand_columns = number_of_expand_columns; */
-  /*   } */
+  if (update_expand)
+    {
+      tree_view->priv->last_extra_space_per_column = extra_per_column;
+      tree_view->priv->last_number_of_expand_columns = number_of_expand_columns;
+    }
 
   for (list = (rtl ? last_column : first_column), i = 0; 
        list != (rtl ? first_column->prev : last_column->next);
@@ -2321,29 +2317,16 @@ gtk_tree_view_size_allocate_columns (GtkWidget *widget,
 	{
 	  column_width += extra_per_column;
 	}
-      else if (number_of_expand_columns == 0 &&
-	       list == last_column)
+      /* If no columns expand, the last one takes the remaining space */
+      else if (number_of_expand_columns == 0 && list == last_column)
 	{
-	  column_width += MAX (extra, 0);
+	  column_width += extra;
 	}
-
-      /* In addition to expand, the last column can get even more
-       * extra space so all available space is filled up.
-       */
-#if 0
-      if (extra_for_last > 0 && list == last_column)
-	column_width += extra_for_last;
-#endif
-
-      GTK_NOTE (SIZE_REQUEST, 
-		g_print ("Treeview allocating column %i with final width %d\n",
-			 i, column_width));
-
-
-      gtk_tree_view_column_allocate_width (column, column_width);
 
       allocation.width = column_width;
       width += column_width;
+
+      gtk_tree_view_column_allocate_width (column, column_width);
 
       if (column_width > old_width)
         column_changed = TRUE;
@@ -2521,6 +2504,32 @@ gtk_tree_view_size_allocate (GtkWidget     *widget,
 	    invalidate_last_column (tree_view);
 	  else
 	    gtk_widget_queue_draw (widget);
+	}
+
+      /* XXX For some reason (allocation->width == old_width && width_changed == TRUE) !!! */
+      if (allocation->width != old_width &&
+	  !tree_view->priv->fixed_height_mode)
+	{
+
+	  /* Have the tree recalculate height-for-width of all rows when the width changes
+	   *
+	   * XXX We have to do this when columns resize too  
+	   */
+	  _gtk_rbtree_mark_invalid (tree_view->priv->tree);
+	  for (tmp_list = tree_view->priv->columns; tmp_list; tmp_list = tmp_list->next)
+	    {
+	      GtkTreeViewColumn *column;
+	      
+	      column = tmp_list->data;
+	      if (! column->visible)
+	  	continue;
+	      
+	      if (column->column_type == GTK_TREE_VIEW_COLUMN_AUTOSIZE ||
+		  column->column_type == GTK_TREE_VIEW_COLUMN_GROW_ONLY)
+		_gtk_tree_view_column_cell_set_dirty (column, TRUE);
+	    }
+
+	  gtk_widget_queue_resize (GTK_WIDGET (tree_view));
 	}
     }
 }
@@ -4493,10 +4502,55 @@ gtk_tree_view_bin_expose (GtkWidget      *widget,
 	  if (!column->visible)
             continue;
 
+	  /* Adjust 'background_area' for this column's portion of this row */
+	  background_area.x     = cell_offset;
+	  background_area.width = column->width;
+
+	  /* Create 'cell_area' to render this column inside this row */
+          cell_area         = background_area;
+          cell_area.y      += vertical_separator / 2;
+          cell_area.x      += horizontal_separator / 2;
+          cell_area.height -= vertical_separator;
+
+	  /* Calculate padding */
+	  if (draw_vgrid_lines)
+	    {
+	      if (list == first_column)
+	        {
+		  background_area.width += grid_line_width / 2;
+		}
+	      else if (list == last_column)
+	        {
+		  cell_area.x += grid_line_width / 2;
+		  background_area.width += grid_line_width / 2;
+		}
+	      else
+	        {
+	          cell_area.x += grid_line_width / 2;
+		  background_area.width += grid_line_width;
+		}
+	    }
+	  
+	  if (draw_hgrid_lines)
+	    {
+	      cell_area.y += grid_line_width / 2;
+	      cell_area.height -= grid_line_width;
+	    }
+
+	  /* Now that we've deduced the real rendering area,
+	   * do a couple of assertions to make sure we're rendereing
+	   * a relevant area. 
+	   */
 	  if (cell_offset > event->area.x + event->area.width ||
 	      cell_offset + column->width < event->area.x)
 	    {
-	      cell_offset += column->width;
+	      cell_offset += background_area.width;
+	      continue;
+	    }
+
+	  if (gdk_region_rect_in (event->region, &background_area) == GDK_OVERLAP_RECTANGLE_OUT)
+	    {
+	      cell_offset += background_area.width;
 	      continue;
 	    }
 
@@ -4509,47 +4563,6 @@ gtk_tree_view_bin_expose (GtkWidget      *widget,
             flags |= GTK_CELL_RENDERER_FOCUSED;
           else
             flags &= ~GTK_CELL_RENDERER_FOCUSED;
-
-	  /* Adjust 'background_area' for this column's portion of this row */
-	  background_area.x     = cell_offset;
-	  background_area.width = column->width;
-
-	  if (gdk_region_rect_in (event->region, &background_area) == GDK_OVERLAP_RECTANGLE_OUT)
-	    {
-	      cell_offset += column->width;
-	      continue;
-	    }
-
-	  /* Create 'cell_area' to render this column inside this row */
-          cell_area         = background_area;
-          cell_area.y      += vertical_separator / 2;
-          cell_area.x      += horizontal_separator / 2;
-          cell_area.height -= vertical_separator;
-	  cell_area.width  -= horizontal_separator;
-
-	  if (draw_vgrid_lines)
-	    {
-	      if (list == first_column)
-	        {
-		  cell_area.width -= grid_line_width / 2;
-		}
-	      else if (list == last_column)
-	        {
-		  cell_area.x += grid_line_width / 2;
-		  cell_area.width -= grid_line_width / 2;
-		}
-	      else
-	        {
-	          cell_area.x += grid_line_width / 2;
-	          cell_area.width -= grid_line_width;
-		}
-	    }
-
-	  if (draw_hgrid_lines)
-	    {
-	      cell_area.y += grid_line_width / 2;
-	      cell_area.height -= grid_line_width;
-	    }
 
 	  gtk_tree_view_column_cell_set_cell_data (column,
 						   tree_view->priv->model,
@@ -4814,7 +4827,7 @@ gtk_tree_view_bin_expose (GtkWidget      *widget,
 						     flags);
 	    }
 
-	  cell_offset += column->width;
+	  cell_offset += background_area.width;
 	}
 
       if (node == drag_highlight)
@@ -5813,6 +5826,7 @@ validate_row (GtkTreeView *tree_view,
 	  else
 	    gtk_tree_view_column_get_height_for_width (column, column->requested_width, 
 						       &column_height, NULL);
+
 	  
 	  column_height += vertical_separator;
 	  height = MAX (height, column_height);
