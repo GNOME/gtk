@@ -7588,7 +7588,7 @@ gtk_widget_get_screen_unchecked (GtkWidget *widget)
       if (GTK_IS_WINDOW (toplevel))
 	return GTK_WINDOW (toplevel)->screen;
       else if (GTK_IS_INVISIBLE (toplevel))
-	return GTK_INVISIBLE (widget)->screen;
+	return gtk_invisible_get_screen (GTK_INVISIBLE (widget));
     }
 
   return NULL;
