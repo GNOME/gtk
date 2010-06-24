@@ -118,11 +118,6 @@
  * </refsect2>
  */
 
-#define GTK_INFO_BAR_GET_PRIVATE(object) \
-  (G_TYPE_INSTANCE_GET_PRIVATE ((object), \
-                                GTK_TYPE_INFO_BAR, \
-                                GtkInfoBarPrivate))
-
 enum
 {
   PROP_0,
@@ -197,7 +192,7 @@ gtk_info_bar_set_property (GObject      *object,
   GtkInfoBarPrivate *priv;
 
   info_bar = GTK_INFO_BAR (object);
-  priv = GTK_INFO_BAR_GET_PRIVATE (info_bar);
+  priv = info_bar->priv;
 
   switch (prop_id)
     {
@@ -220,7 +215,7 @@ gtk_info_bar_get_property (GObject    *object,
   GtkInfoBarPrivate *priv;
 
   info_bar = GTK_INFO_BAR (object);
-  priv = GTK_INFO_BAR_GET_PRIVATE (info_bar);
+  priv = info_bar->priv;
 
   switch (prop_id)
     {
@@ -304,7 +299,7 @@ static gboolean
 gtk_info_bar_expose (GtkWidget      *widget,
                      GdkEventExpose *event)
 {
-  GtkInfoBarPrivate *priv = GTK_INFO_BAR_GET_PRIVATE (widget);
+  GtkInfoBarPrivate *priv = GTK_INFO_BAR (widget)->priv;
   const char* type_detail[] = {
     "infobar-info",
     "infobar-warning",
@@ -500,8 +495,8 @@ gtk_info_bar_class_init (GtkInfoBarClass *klass)
 static void
 gtk_info_bar_update_colors (GtkInfoBar *info_bar)
 {
-  GtkWidget *widget = (GtkWidget*)info_bar;
-  GtkInfoBarPrivate *priv;
+  GtkWidget *widget = GTK_WIDGET (info_bar);
+  GtkInfoBarPrivate *priv = info_bar->priv;
   GdkColor info_default_border_color     = { 0, 0xb800, 0xad00, 0x9d00 };
   GdkColor info_default_fill_color       = { 0, 0xff00, 0xff00, 0xbf00 };
   GdkColor warning_default_border_color  = { 0, 0xb000, 0x7a00, 0x2b00 };
@@ -530,7 +525,6 @@ gtk_info_bar_update_colors (GtkInfoBar *info_bar)
     "other_bg_color"
   };
 
-  priv = GTK_INFO_BAR_GET_PRIVATE (info_bar);
   style = gtk_widget_get_style (widget);
 
   if (gtk_style_lookup_color (style, fg_color_name[priv->message_type], &sym_fg) &&
@@ -616,7 +610,9 @@ gtk_info_bar_init (GtkInfoBar *info_bar)
 
   gtk_widget_push_composite_child ();
 
-  info_bar->priv = GTK_INFO_BAR_GET_PRIVATE (info_bar);
+  info_bar->priv = G_TYPE_INSTANCE_GET_PRIVATE (info_bar,
+                                                GTK_TYPE_INFO_BAR,
+                                                GtkInfoBarPrivate);
 
   content_area = gtk_hbox_new (FALSE, 0);
   gtk_widget_show (content_area);
@@ -1182,7 +1178,7 @@ gtk_info_bar_set_message_type (GtkInfoBar     *info_bar,
 
   g_return_if_fail (GTK_IS_INFO_BAR (info_bar));
 
-  priv = GTK_INFO_BAR_GET_PRIVATE (info_bar);
+  priv = info_bar->priv;
 
   if (priv->message_type != message_type)
     {
@@ -1249,11 +1245,7 @@ gtk_info_bar_set_message_type (GtkInfoBar     *info_bar,
 GtkMessageType
 gtk_info_bar_get_message_type (GtkInfoBar *info_bar)
 {
-  GtkInfoBarPrivate *priv;
-
   g_return_val_if_fail (GTK_IS_INFO_BAR (info_bar), GTK_MESSAGE_OTHER);
 
-  priv = GTK_INFO_BAR_GET_PRIVATE (info_bar);
-
-  return priv->message_type;
+  return info_bar->priv->message_type;
 }
