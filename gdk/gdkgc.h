@@ -161,7 +161,6 @@ struct _GdkGCValues
 {
   GdkColor	    foreground;
   GdkColor	    background;
-  GdkFont	   *font;
   GdkFunction	    function;
   GdkFill	    fill;
   GdkPixmap	   *tile;

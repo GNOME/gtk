@@ -206,8 +206,6 @@ gdk_x11_gc_get_values (GdkGC       *gc,
     {
       values->foreground.pixel = xvalues.foreground;
       values->background.pixel = xvalues.background;
-      values->font = gdk_font_lookup_for_display (GDK_GC_DISPLAY (gc),
-						  xvalues.font);
 
       switch (xvalues.function)
 	{
@@ -407,11 +405,6 @@ gdk_x11_gc_values_to_xvalues (GdkGCValues    *values,
     {
       xvalues->background = values->background.pixel;
       *xvalues_mask |= GCBackground;
-    }
-  if ((mask & GDK_GC_FONT) && (values->font->type == GDK_FONT_FONT))
-    {
-      xvalues->font = ((XFontStruct *) (GDK_FONT_XFONT (values->font)))->fid;
-      *xvalues_mask |= GCFont;
     }
   if (mask & GDK_GC_FUNCTION)
     {

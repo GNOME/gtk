@@ -33,7 +33,6 @@
 #include <string.h>
 
 #include "gdkgc.h"
-#include "gdkfont.h"
 #include "gdkpixmap.h"
 #include "gdkregion-generic.h"
 #include "gdkprivate-win32.h"
@@ -103,10 +102,7 @@ gdk_gc_win32_finalize (GObject *object)
   
   if (win32_gc->hcliprgn != NULL)
     DeleteObject (win32_gc->hcliprgn);
-  
-  if (win32_gc->values_mask & GDK_GC_FONT)
-    gdk_font_unref (win32_gc->font);
-  
+
   g_free (win32_gc->pen_dashes);
   
   G_OBJECT_CLASS (parent_class)->finalize (object);
@@ -223,27 +219,6 @@ gdk_win32_gc_values_to_win32values (GdkGCValues    *values,
       GDK_NOTE (GC, (g_print ("%sbg=%.06x", s,
 			      _gdk_gc_get_bg_pixel (&win32_gc->parent_instance)),
 		     s = ","));
-    }
-
-  if ((mask & GDK_GC_FONT) && (values->font->type == GDK_FONT_FONT
-			       || values->font->type == GDK_FONT_FONTSET))
-    {
-      if (win32_gc->font != NULL)
-	gdk_font_unref (win32_gc->font);
-      win32_gc->font = values->font;
-      if (win32_gc->font != NULL)
-	{
-	  gdk_font_ref (win32_gc->font);
-	  win32_gc->values_mask |= GDK_GC_FONT;
-	  GDK_NOTE (GC, (g_print ("%sfont=%p", s, win32_gc->font),
-			 s = ","));
-	}
-      else
-	{
-	  win32_gc->values_mask &= ~GDK_GC_FONT;
-	  GDK_NOTE (GC, (g_print ("%sfont=NULL", s),
-			 s = ","));
-	}
     }
 
   if (mask & GDK_GC_FUNCTION)
@@ -440,7 +415,6 @@ _gdk_win32_gc_new (GdkDrawable	  *drawable,
 
   win32_gc->hcliprgn = NULL;
 
-  win32_gc->font = NULL;
   win32_gc->rop2 = R2_COPYPEN;
   win32_gc->subwindow_mode = GDK_CLIP_BY_CHILDREN;
   win32_gc->graphics_exposures = TRUE;
@@ -477,7 +451,6 @@ gdk_win32_gc_get_values (GdkGC       *gc,
 
   values->foreground.pixel = _gdk_gc_get_fg_pixel (gc);
   values->background.pixel = _gdk_gc_get_bg_pixel (gc);
-  values->font = win32_gc->font;
 
   switch (win32_gc->rop2)
     {
@@ -617,9 +590,6 @@ _gdk_windowing_gc_copy (GdkGC *dst_gc,
   if (dst_win32_gc->hcliprgn != NULL)
     DeleteObject (dst_win32_gc->hcliprgn);
 
-  if (dst_win32_gc->font != NULL)
-    gdk_font_unref (dst_win32_gc->font);
-
   g_free (dst_win32_gc->pen_dashes);
   
   dst_win32_gc->hcliprgn = src_win32_gc->hcliprgn;
@@ -633,9 +603,6 @@ _gdk_windowing_gc_copy (GdkGC *dst_gc,
     }
 
   dst_win32_gc->values_mask = src_win32_gc->values_mask; 
-  dst_win32_gc->font = src_win32_gc->font;
-  if (dst_win32_gc->font != NULL)
-    gdk_font_ref (dst_win32_gc->font);
 
   dst_win32_gc->rop2 = src_win32_gc->rop2;
 

@@ -36,8 +36,6 @@ gdk_quartz_gc_get_values (GdkGC       *gc,
   values->foreground.pixel = _gdk_gc_get_fg_pixel (gc);
   values->background.pixel = _gdk_gc_get_bg_pixel (gc);
 
-  values->font = private->font;
-
   values->function = private->function;
 
   values->fill = _gdk_gc_get_fill (gc);
@@ -129,11 +127,6 @@ gdk_quartz_gc_set_values (GdkGC           *gc,
 			  GdkGCValuesMask  mask)
 {
   GdkGCQuartz *private = GDK_GC_QUARTZ (gc);
-
-  if (mask & GDK_GC_FONT)
-    {
-      /* FIXME: implement font */
-    }
 
   if (mask & GDK_GC_FUNCTION)
     private->function = values->function;
@@ -301,12 +294,6 @@ _gdk_windowing_gc_copy (GdkGC *dst_gc,
 {
   GdkGCQuartz *dst_quartz_gc = GDK_GC_QUARTZ (dst_gc);
   GdkGCQuartz *src_quartz_gc = GDK_GC_QUARTZ (src_gc);
-
-  if (dst_quartz_gc->font)
-    gdk_font_unref (dst_quartz_gc->font);
-  dst_quartz_gc->font = src_quartz_gc->font;
-  if (dst_quartz_gc->font)
-    gdk_font_ref (dst_quartz_gc->font);
 
   dst_quartz_gc->function = src_quartz_gc->function;
   dst_quartz_gc->subwindow_mode = src_quartz_gc->subwindow_mode;

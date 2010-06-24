@@ -53,7 +53,6 @@ struct _GdkGCQuartz
 {
   GdkGC             parent_instance;
 
-  GdkFont          *font;
   GdkFunction       function;
   GdkSubwindowMode  subwindow_mode;
   gboolean          graphics_exposures;

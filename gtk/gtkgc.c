@@ -208,10 +208,6 @@ gtk_gc_key_hash (gpointer key)
     {
       hash_val += keyval->values.background.pixel;
     }
-  if (keyval->mask & GDK_GC_FONT)
-    {
-      hash_val += gdk_font_id (keyval->values.font);
-    }
   if (keyval->mask & GDK_GC_FUNCTION)
     {
       hash_val += (gint) keyval->values.function;
@@ -314,11 +310,6 @@ gtk_gc_key_equal (gpointer a,
   if (akey->mask & GDK_GC_BACKGROUND)
     {
       if (avalues->background.pixel != bvalues->background.pixel)
-	return FALSE;
-    }
-  if (akey->mask & GDK_GC_FONT)
-    {
-      if (!gdk_font_equal (avalues->font, bvalues->font))
 	return FALSE;
     }
   if (akey->mask & GDK_GC_FUNCTION)

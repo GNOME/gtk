@@ -188,7 +188,6 @@ struct _GdkGCWin32
 
   GdkGCValuesMask values_mask;
 
-  GdkFont *font;
   gint rop2;
   GdkSubwindowMode subwindow_mode;
   gint graphics_exposures;
