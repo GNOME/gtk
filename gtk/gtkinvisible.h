@@ -44,14 +44,15 @@ G_BEGIN_DECLS
 
 
 typedef struct _GtkInvisible	   GtkInvisible;
+typedef struct _GtkInvisiblePriv   GtkInvisiblePriv;
 typedef struct _GtkInvisibleClass  GtkInvisibleClass;
 
 struct _GtkInvisible
 {
   GtkWidget widget;
 
-  gboolean   GSEAL (has_user_ref_count);
-  GdkScreen *GSEAL (screen);
+  /* <private> */
+  GtkInvisiblePriv *priv;
 };
 
 struct _GtkInvisibleClass
