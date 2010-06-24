@@ -85,41 +85,6 @@ gdk_font_unref (GdkFont *font)
     _gdk_font_destroy (font);
 }
 
-/**
- * gdk_font_from_description:
- * @font_desc: a #PangoFontDescription.
- * 
- * Load a #GdkFont based on a Pango font description. This font will
- * only be an approximation of the Pango font, and
- * internationalization will not be handled correctly. This function
- * should only be used for legacy code that cannot be easily converted
- * to use Pango. Using Pango directly will produce better results.
- * 
- * Return value: the newly loaded font, or %NULL if the font
- * cannot be loaded.
- **/
-GdkFont*
-gdk_font_from_description (PangoFontDescription *font_desc)
-{
-  return gdk_font_from_description_for_display (gdk_display_get_default (),font_desc);
-}
-
-/**
- * gdk_font_load:
- * @font_name: a XLFD describing the font to load.
- * 
- * Loads a font.
- * 
- * The font may be newly loaded or looked up the font in a cache. 
- * You should make no assumptions about the initial reference count.
- * 
- * Return value: a #GdkFont, or %NULL if the font could not be loaded.
- **/
-GdkFont*
-gdk_font_load (const gchar *font_name)
-{  
-   return gdk_font_load_for_display (gdk_display_get_default(), font_name);
-}
 
 #define __GDK_FONT_C__
 #include "gdkaliasdef.c"

@@ -297,15 +297,9 @@ gdk_visual_type_get_type G_GNUC_CONST
 
 #if IN_HEADER(__GDK_FONT_H__)
 #if IN_FILE(__GDK_FONT_C__)
-#ifndef GDK_DISABLE_DEPRECATED
-gdk_font_from_description
-#endif
 gdk_font_get_type G_GNUC_CONST
 gdk_font_ref
 gdk_font_unref
-#ifndef GDK_DISABLE_DEPRECATED
-gdk_font_load
-#endif
 #endif
 #endif
 
@@ -317,8 +311,6 @@ gdk_fontset_load
 #endif
 gdk_font_id
 gdk_font_equal
-gdk_font_load_for_display
-gdk_font_from_description_for_display
 gdk_fontset_load_for_display
 #endif
 #endif
@@ -1260,14 +1252,6 @@ gdk_x11_drawable_get_xdisplay
 gdk_x11_drawable_get_xid
 gdk_x11_window_get_drawable_impl
 gdk_x11_pixmap_get_drawable_impl
-#endif
-
-#if IN_FILE(__GDK_FONT_X11_C__)
-#ifndef GDK_DISABLE_DEPRECATED
-gdk_x11_font_get_name
-gdk_x11_font_get_xdisplay
-#endif
-gdk_x11_font_get_xfont
 #endif
 
 #if IN_FILE(__GDK_GC_X11_C__)

@@ -179,24 +179,6 @@ Returns the X visual belonging to a #GdkVisual.
 @Returns: an Xlib <type>Visual*</type>.
 
 
-<!-- ##### MACRO GDK_FONT_XDISPLAY ##### -->
-<para>
-Returns the display of a #GdkFont.
-</para>
-
-@font: a #GdkFont.
-@Returns: an Xlib <type>Display*</type>.
-
-
-<!-- ##### MACRO GDK_FONT_XFONT ##### -->
-<para>
-Returns the X font belonging to a #GdkFont.
-</para>
-
-@font: a #GdkFont.
-@Returns: an Xlib <type>XFontStruct*</type> or an <type>XFontSet</type>.
-
-
 <!-- ##### MACRO GDK_CURSOR_XCURSOR ##### -->
 <para>
 Returns the X cursor belonging to a #GdkCursor.
@@ -353,26 +335,6 @@ Another name for GDK_DRAWABLE_XID().
 @display: 
 @anid: 
 @Returns: 
-
-
-<!-- ##### MACRO gdk_font_lookup ##### -->
-<para>
-Obtains the #GdkFont for the given Xlib font ID, or %NULL if no #GdkFont has
-been created for @xid.
-</para>
-
-@xid: an Xlib font ID
-
-
-<!-- ##### MACRO gdk_font_lookup_for_display ##### -->
-<para>
-Obtains the #GdkFont for the given Xlib font ID on @display, or %NULL if no
-#GdkFont has been created for @xid.
-</para>
-
-@display: a #GdkDisplay
-@xid: an Xlib font ID
-Since: 2.2
 
 
 <!-- ##### FUNCTION gdk_x11_lookup_xdisplay ##### -->
@@ -592,33 +554,6 @@ Since: 2.2
 </para>
 
 @drawable: 
-@Returns: 
-
-
-<!-- ##### FUNCTION gdk_x11_font_get_name ##### -->
-<para>
-
-</para>
-
-@font: 
-@Returns: 
-
-
-<!-- ##### FUNCTION gdk_x11_font_get_xdisplay ##### -->
-<para>
-
-</para>
-
-@font: 
-@Returns: 
-
-
-<!-- ##### FUNCTION gdk_x11_font_get_xfont ##### -->
-<para>
-
-</para>
-
-@font: 
 @Returns: 
 
 

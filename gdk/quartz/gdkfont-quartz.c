@@ -23,21 +23,6 @@
 
 #include "gdkfont.h"
 
-GdkFont*
-gdk_font_load_for_display (GdkDisplay  *display,
-			   const gchar *font_name)
-{
-  /* FIXME: Implement */
-  return NULL;
-}
-
-GdkFont*
-gdk_font_from_description_for_display (GdkDisplay           *display,
-				       PangoFontDescription *desc)
-{
-  /* FIXME: Implement */
-  return NULL;
-}
 
 GdkFont *
 gdk_fontset_load_for_display (GdkDisplay  *display,

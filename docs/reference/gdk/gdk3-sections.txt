@@ -400,11 +400,8 @@ gdk_color_get_type
 GdkFont
 GdkFontType
 gdk_font_load
-gdk_font_load_for_display
 gdk_fontset_load
 gdk_fontset_load_for_display
-gdk_font_from_description
-gdk_font_from_description_for_display
 gdk_font_get_display
 gdk_font_ref
 gdk_font_unref
@@ -1286,8 +1283,6 @@ GDK_SCREEN_XDISPLAY
 GDK_SCREEN_XNUMBER
 GDK_SCREEN_XSCREEN
 GDK_VISUAL_XVISUAL
-GDK_FONT_XDISPLAY
-GDK_FONT_XFONT
 GDK_CURSOR_XCURSOR
 GDK_CURSOR_XDISPLAY
 GDK_GC_XGC
@@ -1305,8 +1300,6 @@ gdk_window_lookup
 gdk_window_lookup_for_display
 gdk_pixmap_lookup
 gdk_pixmap_lookup_for_display
-gdk_font_lookup
-gdk_font_lookup_for_display
 gdk_x11_lookup_xdisplay
 gdk_x11_get_server_time
 gdk_net_wm_supports
@@ -1331,9 +1324,6 @@ gdk_x11_display_set_cursor_theme
 gdk_x11_register_standard_event_type
 gdk_x11_drawable_get_xdisplay
 gdk_x11_drawable_get_xid
-gdk_x11_font_get_name
-gdk_x11_font_get_xdisplay
-gdk_x11_font_get_xfont
 gdk_x11_gc_get_xdisplay
 gdk_x11_gc_get_xgc
 gdk_x11_get_default_root_xwindow

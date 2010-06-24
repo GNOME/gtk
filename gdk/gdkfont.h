@@ -61,19 +61,13 @@ gint	 gdk_font_id	    (const GdkFont  *font);
 gboolean gdk_font_equal	    (const GdkFont  *fonta,
 			     const GdkFont  *fontb);
 
-GdkFont *gdk_font_load_for_display             (GdkDisplay           *display,
-						const gchar          *font_name);
 GdkFont *gdk_fontset_load_for_display          (GdkDisplay           *display,
 						const gchar          *fontset_name);
-GdkFont *gdk_font_from_description_for_display (GdkDisplay           *display,
-						PangoFontDescription *font_desc);
 
 #ifndef GDK_DISABLE_DEPRECATED
 
 #ifndef GDK_MULTIHEAD_SAFE
-GdkFont* gdk_font_load             (const gchar          *font_name);
 GdkFont* gdk_fontset_load          (const gchar          *fontset_name);
-GdkFont* gdk_font_from_description (PangoFontDescription *font_desc);
 #endif
 
 GdkDisplay * gdk_font_get_display (GdkFont *font);

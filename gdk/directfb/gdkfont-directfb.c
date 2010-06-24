@@ -73,17 +73,6 @@ gdk_directfb_bogus_font (gint height)
   return font;
 }
 
-GdkFont*
-gdk_font_from_description_for_display (GdkDisplay * display,PangoFontDescription *font_desc)
-{
-  gint size;
-
-  g_return_val_if_fail (font_desc, NULL);
-
-  size = pango_font_description_get_size (font_desc);
-
-  return gdk_directfb_bogus_font (PANGO_PIXELS (size));
-}
 
 /* ********************* */
 
@@ -95,12 +84,6 @@ gdk_fontset_load (const gchar *fontset_name)
 
 GdkFont *
 gdk_fontset_load_for_display (GdkDisplay *display,const gchar *font_name) {
-  return gdk_directfb_bogus_font (10);
-}
-
-GdkFont *
-gdk_font_load_for_display (GdkDisplay *display,const gchar *font_name)
-{
   return gdk_directfb_bogus_font (10);
 }
 
@@ -188,19 +171,6 @@ gdk_font_equal (const GdkFont *fonta,
   return FALSE;
 }
 
-GdkFont *
-gdk_font_lookup (GdkNativeWindow xid)
-{
-	g_warning(" gdk_font_lookup unimplemented \n");
-  return NULL;
-}
-
-GdkDisplay*
-gdk_font_get_display (GdkFont* font)
-{
-	g_warning(" gdk_font_get_display unimplemented \n");
-  return NULL;
-}
 
 #define __GDK_FONT_X11_C__
 #include "gdkaliasdef.c"
