@@ -631,9 +631,6 @@ gtk_style_finalize (GObject *object)
   g_slist_free (priv->color_hashes);
 
   pango_font_description_free (style->font_desc);
-  
-  if (style->private_font)
-    gdk_font_unref (style->private_font);
 
   if (style->private_font_desc)
     pango_font_description_free (style->private_font_desc);
@@ -772,12 +769,6 @@ gtk_style_attach (GtkStyle  *style,
   if (!new_style)
     {
       new_style = gtk_style_duplicate (style);
-      if (gdk_colormap_get_screen (style->colormap) != gdk_colormap_get_screen (colormap) &&
-	  new_style->private_font)
-	{
-	  gdk_font_unref (new_style->private_font);
-	  new_style->private_font = NULL;
-	}
       gtk_style_realize (new_style, colormap);
     }
 
@@ -821,12 +812,6 @@ gtk_style_detach (GtkStyle *style)
 
       if (style->private_font_desc)
 	{
-	  if (style->private_font)
-	    {
-	      gdk_font_unref (style->private_font);
-	      style->private_font = NULL;
-	    }
-	  
 	  pango_font_description_free (style->private_font_desc);
 	  style->private_font_desc = NULL;
 	}
@@ -974,12 +959,6 @@ gtk_style_real_copy (GtkStyle *style,
       if (style->bg_pixmap[i])
 	g_object_ref (style->bg_pixmap[i]);
     }
-
-  if (style->private_font)
-    gdk_font_unref (style->private_font);
-  style->private_font = src->private_font;
-  if (style->private_font)
-    gdk_font_ref (style->private_font);
 
   if (style->font_desc)
     pango_font_description_free (style->font_desc);
