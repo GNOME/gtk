@@ -2232,7 +2232,7 @@ gtk_tree_view_size_allocate_columns (GtkWidget *widget,
       padding = horizontal_separator;
       if (draw_vgrid_lines)
         {
-	  if (list->data == first_column || list->data == last_column)
+	  if (list == first_column || list == last_column)
 	    padding += grid_line_width / 2.0;
 	  else
 	    padding += grid_line_width;
@@ -5781,7 +5781,7 @@ validate_row (GtkTreeView *tree_view,
 
       if (draw_vgrid_lines)
         {
-	  if (list->data == first_column || list->data == last_column)
+	  if (list->data == first_column || list == last_column)
 	    padding += grid_line_width / 2.0;
 	  else
 	    padding += grid_line_width;
