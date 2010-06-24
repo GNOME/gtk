@@ -97,7 +97,6 @@ static const guint16 font_sizes[] = {
 enum {
    PROP_0,
    PROP_FONT_NAME,
-   PROP_FONT,
    PROP_PREVIEW_TEXT
 };
 
@@ -164,7 +163,6 @@ static void     gtk_font_selection_scroll_to_selection   (GtkFontSelection *font
 static void    gtk_font_selection_load_font          (GtkFontSelection *fs);
 static void    gtk_font_selection_update_preview     (GtkFontSelection *fs);
 
-static GdkFont* gtk_font_selection_get_font_internal (GtkFontSelection *fontsel);
 static PangoFontDescription *gtk_font_selection_get_font_description (GtkFontSelection *fontsel);
 static gboolean gtk_font_selection_select_font_desc  (GtkFontSelection      *fontsel,
 						      PangoFontDescription  *new_desc,
@@ -197,13 +195,6 @@ gtk_font_selection_class_init (GtkFontSelectionClass *klass)
                                                         P_("The string that represents this font"),
                                                         DEFAULT_FONT_NAME,
                                                         GTK_PARAM_READWRITE));
-  g_object_class_install_property (gobject_class,
-				   PROP_FONT,
-				   g_param_spec_boxed ("font",
-						       P_("Font"),
-						       P_("The GdkFont that is currently selected"),
-						       GDK_TYPE_FONT,
-						       GTK_PARAM_READABLE));
   g_object_class_install_property (gobject_class,
                                    PROP_PREVIEW_TEXT,
                                    g_param_spec_string ("preview-text",
@@ -251,9 +242,6 @@ static void gtk_font_selection_get_property (GObject         *object,
     {
     case PROP_FONT_NAME:
       g_value_take_string (value, gtk_font_selection_get_font_name (fontsel));
-      break;
-    case PROP_FONT:
-      g_value_set_boxed (value, gtk_font_selection_get_font_internal (fontsel));
       break;
     case PROP_PREVIEW_TEXT:
       g_value_set_string (value, gtk_font_selection_get_preview_text (fontsel));
@@ -577,9 +565,6 @@ gtk_font_selection_finalize (GObject *object)
   g_return_if_fail (GTK_IS_FONT_SELECTION (object));
   
   fontsel = GTK_FONT_SELECTION (object);
-
-  if (fontsel->font)
-    gdk_font_unref (fontsel->font);
 
   gtk_font_selection_ref_family (fontsel, NULL);
   gtk_font_selection_ref_face (fontsel, NULL);
@@ -1106,10 +1091,6 @@ gtk_font_selection_select_size (GtkTreeSelection *selection,
 static void
 gtk_font_selection_load_font (GtkFontSelection *fontsel)
 {
-  if (fontsel->font)
-    gdk_font_unref (fontsel->font);
-  fontsel->font = NULL;
-
   gtk_font_selection_update_preview (fontsel);
 }
 
@@ -1165,19 +1146,6 @@ gtk_font_selection_update_preview (GtkFontSelection *fontsel)
   if (strlen (text) == 0)
     gtk_entry_set_text (GTK_ENTRY (preview_entry), _(PREVIEW_TEXT));
   gtk_editable_set_position (GTK_EDITABLE (preview_entry), 0);
-}
-
-static GdkFont*
-gtk_font_selection_get_font_internal (GtkFontSelection *fontsel)
-{
-  if (!fontsel->font)
-    {
-      PangoFontDescription *font_desc = gtk_font_selection_get_font_description (fontsel);
-      fontsel->font = gdk_font_from_description_for_display (gtk_widget_get_display (GTK_WIDGET (fontsel)), font_desc);
-      pango_font_description_free (font_desc);
-    }
-  
-  return fontsel->font;
 }
 
 

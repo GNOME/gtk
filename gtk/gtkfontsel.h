@@ -83,10 +83,6 @@ struct _GtkFontSelection
   PangoFontFace *GSEAL (face);		/* Current face */
   
   gint GSEAL (size);
-  
-  GdkFont *GSEAL (font);		/* Cache for gdk_font_selection_get_font, so we can preserve
-                                         * refcounting behavior
-                                         */
 };
 
 struct _GtkFontSelectionClass
