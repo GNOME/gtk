@@ -136,6 +136,73 @@ gtk_symbolic_color_unref (GtkSymbolicColor *color)
   color->ref_count--;
 }
 
+gboolean
+gtk_symbolic_color_resolve (GtkSymbolicColor    *color,
+                            GtkStyleSet         *style_set,
+                            GdkColor            *resolved_color)
+{
+  g_return_val_if_fail (color != NULL, FALSE);
+  g_return_val_if_fail (GTK_IS_STYLE_SET (style_set), FALSE);
+  g_return_val_if_fail (resolved_color != NULL, FALSE);
+
+  switch (color->type)
+    {
+    case COLOR_TYPE_LITERAL:
+      *resolved_color = color->color;
+      return TRUE;
+    case COLOR_TYPE_NAME:
+      {
+        GtkSymbolicColor *named_color;
+
+        named_color = gtk_style_set_lookup_color (style_set, color->name);
+
+        if (!named_color)
+          return FALSE;
+
+        return gtk_symbolic_color_resolve (named_color, style_set, resolved_color);
+      }
+
+      break;
+    case COLOR_TYPE_SHADE:
+      {
+        GdkColor shade;
+
+        if (!gtk_symbolic_color_resolve (color->shade.color, style_set, &shade))
+          return FALSE;
+
+        resolved_color->red = CLAMP (shade.red * color->shade.factor, 0, 65535);
+        resolved_color->green = CLAMP (shade.green * color->shade.factor, 0, 65535);
+        resolved_color->blue = CLAMP (shade.blue * color->shade.factor, 0, 65535);
+
+        return TRUE;
+      }
+
+      break;
+    case COLOR_TYPE_MIX:
+      {
+        GdkColor color1, color2;
+
+        if (!gtk_symbolic_color_resolve (color->mix.color1, style_set, &color1))
+          return FALSE;
+
+        if (!gtk_symbolic_color_resolve (color->mix.color2, style_set, &color2))
+          return FALSE;
+
+        resolved_color->red = CLAMP (color1.red + ((color2.red - color1.red) * color->mix.factor), 0, 65535);
+        resolved_color->green = CLAMP (color1.green + ((color2.green - color1.green) * color->mix.factor), 0, 65535);
+        resolved_color->blue = CLAMP (color1.blue + ((color2.blue - color1.blue) * color->mix.factor), 0, 65535);
+
+        return TRUE;
+      }
+
+      break;
+    default:
+      g_assert_not_reached ();
+    }
+
+  return FALSE;
+}
+
 GType
 gtk_symbolic_color_get_type (void)
 {

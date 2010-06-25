@@ -98,6 +98,10 @@ void     gtk_style_set_merge          (GtkStyleSet       *set,
                                        const GtkStyleSet *set_to_merge,
                                        gboolean           replace);
 
+gboolean gtk_symbolic_color_resolve (GtkSymbolicColor    *color,
+				     GtkStyleSet         *style_set,
+                                     GdkColor            *resolved_color);
+
 G_END_DECLS
 
 #endif /* __GTK_STYLE_PROPERTY_SET_H__ */
