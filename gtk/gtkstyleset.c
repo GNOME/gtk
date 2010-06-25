@@ -48,6 +48,7 @@ struct PropertyData
 
 struct GtkStyleSetPrivate
 {
+  GHashTable *color_map;
   GHashTable *properties;
 };
 
@@ -125,6 +126,9 @@ gtk_style_set_finalize (GObject *object)
 
   priv = GTK_STYLE_SET_GET_PRIVATE (object);
   g_hash_table_destroy (priv->properties);
+
+  if (priv->color_map)
+    g_hash_table_destroy (priv->color_map);
 
   G_OBJECT_CLASS (gtk_style_set_parent_class)->finalize (object);
 }
@@ -258,6 +262,47 @@ GtkStyleSet *
 gtk_style_set_new (void)
 {
   return g_object_new (GTK_TYPE_STYLE_SET, NULL);
+}
+
+void
+gtk_style_set_map_color (GtkStyleSet      *set,
+			 const gchar      *name,
+			 GtkSymbolicColor *color)
+{
+  GtkStyleSetPrivate *priv;
+
+  g_return_if_fail (GTK_IS_STYLE_SET (set));
+  g_return_if_fail (name != NULL);
+  g_return_if_fail (color != NULL);
+
+  priv = GTK_STYLE_SET_GET_PRIVATE (set);
+
+  if (G_UNLIKELY (!priv->color_map))
+    priv->color_map = g_hash_table_new_full (g_str_hash,
+                                             g_str_equal,
+                                             (GDestroyNotify) g_free,
+                                             (GDestroyNotify) gtk_symbolic_color_unref);
+
+  g_hash_table_replace (priv->color_map,
+                        g_strdup (name),
+                        gtk_symbolic_color_ref (color));
+}
+
+GtkSymbolicColor *
+gtk_style_set_lookup_color (GtkStyleSet *set,
+			    const gchar *name)
+{
+  GtkStyleSetPrivate *priv;
+
+  g_return_val_if_fail (GTK_IS_STYLE_SET (set), NULL);
+  g_return_val_if_fail (name != NULL, NULL);
+
+  priv = GTK_STYLE_SET_GET_PRIVATE (set);
+
+  if (!priv->color_map)
+    return NULL;
+
+  return g_hash_table_lookup (priv->color_map, name);
 }
 
 static void
@@ -570,6 +615,28 @@ gtk_style_set_merge (GtkStyleSet       *set,
   priv = GTK_STYLE_SET_GET_PRIVATE (set);
   priv_to_merge = GTK_STYLE_SET_GET_PRIVATE (set_to_merge);
 
+  /* Merge symbolic color map */
+  if (priv_to_merge->color_map)
+    {
+      g_hash_table_iter_init (&iter, priv_to_merge->color_map);
+
+      while (g_hash_table_iter_next (&iter, &key, &value))
+        {
+          const gchar *name;
+          GtkSymbolicColor *color;
+
+          name = key;
+          color = value;
+
+          if (!replace &&
+              g_hash_table_lookup (priv->color_map, name))
+            continue;
+
+          gtk_style_set_map_color (set, name, color);
+        }
+    }
+
+  /* Merge symbolic style properties */
   g_hash_table_iter_init (&iter, priv_to_merge->properties);
 
   while (g_hash_table_iter_next (&iter, &key, &value))

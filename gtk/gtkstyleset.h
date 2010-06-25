@@ -23,9 +23,7 @@
 #include <glib-object.h>
 #include <gdk/gdk.h>
 #include "gtkenums.h"
-
-/* GtkBorder is defined there */
-#include "gtkstyle.h"
+#include "gtksymboliccolor.h"
 
 G_BEGIN_DECLS
 
@@ -58,6 +56,12 @@ gboolean gtk_style_set_lookup_property   (const gchar  *property_name,
                                           GType        *type);
 
 GtkStyleSet * gtk_style_set_new (void);
+
+void               gtk_style_set_map_color    (GtkStyleSet      *set,
+                                               const gchar      *name,
+                                               GtkSymbolicColor *color);
+GtkSymbolicColor * gtk_style_set_lookup_color (GtkStyleSet *set,
+                                               const gchar *name);
 
 void     gtk_style_set_set_default  (GtkStyleSet  *set,
                                      const gchar  *property,
