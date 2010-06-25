@@ -464,11 +464,14 @@ static GtkTreeViewColumn *gtk_tree_view_get_drop_column (GtkTreeView       *tree
 							 gint               drop_position);
 
 /* GtkBuildable */
-static void gtk_tree_view_buildable_add_child (GtkBuildable *tree_view,
-					       GtkBuilder  *builder,
-					       GObject     *child,
-					       const gchar *type);
-static void gtk_tree_view_buildable_init      (GtkBuildableIface *iface);
+static void     gtk_tree_view_buildable_add_child          (GtkBuildable      *tree_view,
+							    GtkBuilder        *builder,
+							    GObject           *child,
+							    const gchar       *type);
+static GObject *gtk_tree_view_buildable_get_internal_child (GtkBuildable      *buildable,
+							    GtkBuilder        *builder,
+							    const gchar       *childname);
+static void     gtk_tree_view_buildable_init               (GtkBuildableIface *iface);
 
 
 static gboolean scroll_row_timeout                   (gpointer     data);
@@ -1316,12 +1319,6 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
 }
 
 static void
-gtk_tree_view_buildable_init (GtkBuildableIface *iface)
-{
-  iface->add_child = gtk_tree_view_buildable_add_child;
-}
-
-static void
 gtk_tree_view_init (GtkTreeView *tree_view)
 {
   tree_view->priv = G_TYPE_INSTANCE_GET_PRIVATE (tree_view, GTK_TYPE_TREE_VIEW, GtkTreeViewPrivate);
@@ -1543,7 +1540,16 @@ gtk_tree_view_finalize (GObject *object)
   G_OBJECT_CLASS (gtk_tree_view_parent_class)->finalize (object);
 }
 
-
+
+static GtkBuildableIface *parent_buildable_iface;
+
+static void
+gtk_tree_view_buildable_init (GtkBuildableIface *iface)
+{
+  parent_buildable_iface = g_type_interface_peek_parent (iface);
+  iface->add_child = gtk_tree_view_buildable_add_child;
+  iface->get_internal_child = gtk_tree_view_buildable_get_internal_child;
+}
 
 static void
 gtk_tree_view_buildable_add_child (GtkBuildable *tree_view,
@@ -1552,6 +1558,19 @@ gtk_tree_view_buildable_add_child (GtkBuildable *tree_view,
 				   const gchar *type)
 {
   gtk_tree_view_append_column (GTK_TREE_VIEW (tree_view), GTK_TREE_VIEW_COLUMN (child));
+}
+
+static GObject *
+gtk_tree_view_buildable_get_internal_child (GtkBuildable      *buildable,
+					    GtkBuilder        *builder,
+					    const gchar       *childname)
+{
+    if (strcmp (childname, "selection") == 0)
+      return G_OBJECT (GTK_TREE_VIEW (buildable)->priv->selection);
+    
+    return parent_buildable_iface->get_internal_child (buildable,
+						       builder,
+						       childname);
 }
 
 /* GtkObject Methods
