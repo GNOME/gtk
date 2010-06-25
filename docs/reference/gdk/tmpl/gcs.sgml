@@ -79,7 +79,6 @@ A set of bit flags used to indicate which fields
 
 @GDK_GC_FOREGROUND: the @foreground is set.
 @GDK_GC_BACKGROUND: the @background is set.
-@GDK_GC_FONT: the @font is set.
 @GDK_GC_FUNCTION: the @function is set.
 @GDK_GC_FILL: the @fill is set.
 @GDK_GC_TILE: the @tile is set.

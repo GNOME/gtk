@@ -744,11 +744,6 @@ get_impl_drawable (GdkDrawable *drawable)
  * width and stule is created and selected into the HDC. Note that the
  * dash properties are not completely implemented.
  *
- * If the %GDK_GC_FONT flag is set, the background mix mode is set to
- * %TRANSPARENT. and the text alignment is set to
- * %TA_BASELINE|%TA_LEFT. Note that no font gets selected into the HDC
- * by this function.
- *
  * Some things are done regardless of @mask: If the function in @gc is
  * any other than %GDK_COPY, the raster operation of the HDC is
  * set. If @gc has a clip mask, the clip region of the HDC is set.
@@ -846,15 +841,6 @@ gdk_win32_hdc_get (GdkDrawable    *drawable,
 	}
     }
 
-  if (ok && (usage & GDK_GC_FONT))
-    {
-      if (SetBkMode (win32_gc->hdc, TRANSPARENT) == 0)
-	WIN32_GDI_FAILED ("SetBkMode"), ok = FALSE;
-  
-      if (ok && SetTextAlign (win32_gc->hdc, TA_BASELINE|TA_LEFT|TA_NOUPDATECP) == GDI_ERROR)
-	WIN32_GDI_FAILED ("SetTextAlign"), ok = FALSE;
-    }
-  
   if (ok && win32_gc->rop2 != R2_COPYPEN)
     if (SetROP2 (win32_gc->hdc, win32_gc->rop2) == 0)
       WIN32_GDI_FAILED ("SetROP2"), ok = FALSE;

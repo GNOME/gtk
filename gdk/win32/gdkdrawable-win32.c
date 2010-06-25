@@ -574,10 +574,6 @@ generic_draw (GdkDrawable    *drawable,
 	  drawing_mask |= LINE_ATTRIBUTES;
 	}
 
-      /* Ditto, if the drawing function draws text, set up for that. */
-      if (mask & GDK_GC_FONT)
-	drawing_mask |= GDK_GC_FONT;
-
       mask_hdc = gdk_win32_hdc_get (mask_pixmap, mask_gc, drawing_mask);
       (*function) (GDK_GC_WIN32 (mask_gc), mask_hdc,
 		   region->extents.x1, region->extents.y1, args);

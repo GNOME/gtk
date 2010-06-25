@@ -139,22 +139,21 @@ typedef enum
 {
   GDK_GC_FOREGROUND    = 1 << 0,
   GDK_GC_BACKGROUND    = 1 << 1,
-  GDK_GC_FONT	       = 1 << 2,
-  GDK_GC_FUNCTION      = 1 << 3,
-  GDK_GC_FILL	       = 1 << 4,
-  GDK_GC_TILE	       = 1 << 5,
-  GDK_GC_STIPPLE       = 1 << 6,
-  GDK_GC_CLIP_MASK     = 1 << 7,
-  GDK_GC_SUBWINDOW     = 1 << 8,
-  GDK_GC_TS_X_ORIGIN   = 1 << 9,
-  GDK_GC_TS_Y_ORIGIN   = 1 << 10,
-  GDK_GC_CLIP_X_ORIGIN = 1 << 11,
-  GDK_GC_CLIP_Y_ORIGIN = 1 << 12,
-  GDK_GC_EXPOSURES     = 1 << 13,
-  GDK_GC_LINE_WIDTH    = 1 << 14,
-  GDK_GC_LINE_STYLE    = 1 << 15,
-  GDK_GC_CAP_STYLE     = 1 << 16,
-  GDK_GC_JOIN_STYLE    = 1 << 17
+  GDK_GC_FUNCTION      = 1 << 2,
+  GDK_GC_FILL	       = 1 << 3,
+  GDK_GC_TILE	       = 1 << 4,
+  GDK_GC_STIPPLE       = 1 << 5,
+  GDK_GC_CLIP_MASK     = 1 << 6,
+  GDK_GC_SUBWINDOW     = 1 << 7,
+  GDK_GC_TS_X_ORIGIN   = 1 << 8,
+  GDK_GC_TS_Y_ORIGIN   = 1 << 9,
+  GDK_GC_CLIP_X_ORIGIN = 1 << 10,
+  GDK_GC_CLIP_Y_ORIGIN = 1 << 11,
+  GDK_GC_EXPOSURES     = 1 << 12,
+  GDK_GC_LINE_WIDTH    = 1 << 13,
+  GDK_GC_LINE_STYLE    = 1 << 14,
+  GDK_GC_CAP_STYLE     = 1 << 15,
+  GDK_GC_JOIN_STYLE    = 1 << 16
 } GdkGCValuesMask;
 
 struct _GdkGCValues
