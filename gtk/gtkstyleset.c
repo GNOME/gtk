@@ -315,8 +315,10 @@ set_property_internal (GtkStyleSet  *set,
   GtkStyleSetPrivate *priv;
   PropertyNode *node;
   PropertyData *prop;
+  GType value_type;
   GValue *val;
 
+  value_type = G_VALUE_TYPE (value);
   node = property_node_lookup (g_quark_try_string (property));
 
   if (!node)
@@ -325,7 +327,13 @@ set_property_internal (GtkStyleSet  *set,
       return;
     }
 
-  g_return_if_fail (node->property_type == G_VALUE_TYPE (value));
+  if (node->property_type == GDK_TYPE_COLOR)
+    {
+      /* Allow GtkSymbolicColor as well */
+      g_return_if_fail (value_type == GDK_TYPE_COLOR || value_type == GTK_TYPE_SYMBOLIC_COLOR);
+    }
+  else
+    g_return_if_fail (node->property_type == G_VALUE_TYPE (value));
 
   priv = GTK_STYLE_SET_GET_PRIVATE (set);
   prop = g_hash_table_lookup (priv->properties,
@@ -344,10 +352,15 @@ set_property_internal (GtkStyleSet  *set,
   else
     val = &prop->values[state];
 
-  if (G_IS_VALUE (val))
+  if (G_VALUE_TYPE (val) == value_type)
     g_value_reset (val);
   else
-    g_value_init (val, node->property_type);
+    {
+      if (G_IS_VALUE (val))
+        g_value_unset (val);
+
+      g_value_init (val, value_type);
+    }
 
   g_value_copy (value, val);
 }
@@ -447,6 +460,24 @@ gtk_style_set_set (GtkStyleSet  *set,
   va_end (args);
 }
 
+static gboolean
+resolve_color (GtkStyleSet *set,
+	       GValue      *value)
+{
+  GdkColor color;
+
+  /* Resolve symbolic color to GdkColor */
+  if (!gtk_symbolic_color_resolve (g_value_get_boxed (value), set, &color))
+    return FALSE;
+
+  /* Store it back, this is where GdkColor caching happens */
+  g_value_unset (value);
+  g_value_init (value, GDK_TYPE_COLOR);
+  g_value_set_boxed (value, &color);
+
+  return TRUE;
+}
+
 gboolean
 gtk_style_set_get_property (GtkStyleSet  *set,
                             const gchar  *property,
@@ -456,6 +487,7 @@ gtk_style_set_get_property (GtkStyleSet  *set,
   GtkStyleSetPrivate *priv;
   PropertyNode *node;
   PropertyData *prop;
+  GValue *val;
 
   g_return_val_if_fail (GTK_IS_STYLE_SET (set), FALSE);
   g_return_val_if_fail (property != NULL, FALSE);
@@ -479,10 +511,22 @@ gtk_style_set_get_property (GtkStyleSet  *set,
 
   g_value_init (value, node->property_type);
 
-  if (!G_IS_VALUE (&prop->values[state]))
-    g_value_copy (&prop->default_value, value);
+  if (G_IS_VALUE (&prop->values[state]))
+    val = &prop->values[state];
   else
-    g_value_copy (&prop->values[state], value);
+    val = &prop->default_value;
+
+  g_return_val_if_fail (G_IS_VALUE (val), FALSE);
+
+  if (G_VALUE_TYPE (val) == GTK_TYPE_SYMBOLIC_COLOR)
+    {
+      g_return_val_if_fail (node->property_type == GDK_TYPE_COLOR, FALSE);
+
+      if (!resolve_color (set, val))
+        return FALSE;
+    }
+
+  g_value_copy (val, value);
 
   return TRUE;
 }
@@ -527,10 +571,25 @@ gtk_style_set_get_valist (GtkStyleSet  *set,
           g_value_init (&empty_value, node->property_type);
           G_VALUE_LCOPY (&empty_value, args, 0, &error);
         }
-      else if (!G_IS_VALUE (&prop->values[state]))
-        G_VALUE_LCOPY (&prop->default_value, args, 0, &error);
       else
-        G_VALUE_LCOPY (&prop->values[state], args, 0, &error);
+        {
+          GValue *val;
+
+          if (G_IS_VALUE (&prop->values[state]))
+            val = &prop->values[state];
+          else
+            val = &prop->default_value;
+
+          if (G_VALUE_TYPE (val) == GTK_TYPE_SYMBOLIC_COLOR)
+            {
+              g_return_if_fail (node->property_type == GDK_TYPE_COLOR);
+
+              if (!resolve_color (set, val))
+                return;
+            }
+
+          G_VALUE_LCOPY (val, args, 0, &error);
+        }
 
       if (error)
         {
