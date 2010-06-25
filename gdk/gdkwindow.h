@@ -491,68 +491,6 @@ typedef struct _GdkWindowObjectClass GdkWindowObjectClass;
 #define GDK_IS_WINDOW_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE ((klass), GDK_TYPE_WINDOW))
 #define GDK_WINDOW_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), GDK_TYPE_WINDOW, GdkWindowObjectClass))
 
-#ifndef GDK_DISABLE_DEPRECATED
-#define GDK_WINDOW_OBJECT(object)    ((GdkWindowObject *) GDK_WINDOW (object))
-
-#ifndef GDK_COMPILATION
-
-/* We used to export all of GdkWindowObject, but we don't want to keep doing so.
-   However, there are various parts of it accessed by macros and other code,
-   so we keep the old exported version public, but in reality it is larger. */
-
-/**** DON'T CHANGE THIS STRUCT, the real version is in gdkinternals.h ****/
-struct _GdkWindowObject
-{
-  GdkDrawable parent_instance;
-
-  GdkDrawable *GSEAL (impl); /* window-system-specific delegate object */
-  
-  GdkWindowObject *GSEAL (parent);
-
-  gpointer GSEAL (user_data);
-
-  gint GSEAL (x);
-  gint GSEAL (y);
-  
-  gint GSEAL (extension_events);
-
-  GList *GSEAL (filters);
-  GList *GSEAL (children);
-
-  GdkColor GSEAL (bg_color);
-  GdkPixmap *GSEAL (bg_pixmap);
-  
-  GSList *GSEAL (paint_stack);
-  
-  cairo_region_t *GSEAL (update_area);
-  guint GSEAL (update_freeze_count);
-  
-  guint8 GSEAL (window_type);
-  guint8 GSEAL (depth);
-  guint8 GSEAL (resize_count);
-
-  GdkWindowState GSEAL (state);
-  
-  guint GSEAL (guffaw_gravity) : 1;
-  guint GSEAL (input_only) : 1;
-  guint GSEAL (modal_hint) : 1;
-  guint GSEAL (composited) : 1;
-  
-  guint GSEAL (destroyed) : 2;
-
-  guint GSEAL (accept_focus) : 1;
-  guint GSEAL (focus_on_map) : 1;
-  guint GSEAL (shaped) : 1;
-  guint GSEAL (support_multidevice) : 1;
-  
-  GdkEventMask GSEAL (event_mask);
-
-  guint GSEAL (update_and_descendants_freeze_count);
-
-  GdkWindowRedirect *GSEAL (redirect);
-};
-#endif
-#endif
 
 struct _GdkWindowObjectClass
 {

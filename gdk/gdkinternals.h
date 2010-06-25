@@ -188,9 +188,10 @@ typedef void (* GdkDisplayPointerInfoForeach) (GdkDisplay           *display,
    is public for historical reasons. Don't change that part */
 typedef struct _GdkWindowPaint             GdkWindowPaint;
 
+#define GDK_WINDOW_OBJECT(object)    ((GdkWindowObject *) GDK_WINDOW (object))
+
 struct _GdkWindowObject
 {
-  /* vvvvvvv THIS PART IS PUBLIC. DON'T CHANGE vvvvvvvvvvvvvv */
   GdkDrawable parent_instance;
 
   GdkDrawable *impl; /* window-system-specific delegate object */  
@@ -239,8 +240,6 @@ struct _GdkWindowObject
 
   GdkWindowRedirect *redirect;
 
-  /* ^^^^^^^^^^ THIS PART IS PUBLIC. DON'T CHANGE ^^^^^^^^^^ */
-  
   /* The GdkWindowObject that has the impl, ref:ed if another window.
    * This ref is required to keep the wrapper of the impl window alive
    * for as long as any GdkWindow references the impl. */
