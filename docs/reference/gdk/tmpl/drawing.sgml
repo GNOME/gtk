@@ -357,14 +357,6 @@ bottom edges.
 @background: 
 
 
-<!-- ##### MACRO gdk_draw_pixmap ##### -->
-<para>
-Draws a pixmap, or a part of a pixmap, onto another drawable.
-</para>
-
-@Deprecated: Use gdk_draw_drawable() instead.
-
-
 <!-- ##### FUNCTION gdk_draw_drawable ##### -->
 <para>
 

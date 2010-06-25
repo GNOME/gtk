@@ -928,7 +928,10 @@ introspection_files = \
     gtktypebuiltins.c
 
 Gtk-3.0.gir: $(INTROSPECTION_SCANNER) $(gtktargetlib) $(top_builddir)/gdk/Gdk-3.0.gir Makefile
-Gtk_3_0_gir_SCANNERFLAGS = --strip-prefix=Gtk
+Gtk_3_0_gir_SCANNERFLAGS = --strip-prefix=Gtk --add-include-path=$(top_builddir)/gdk
+if USE_X11
+Gtk_3_0_gir_SCANNERFLAGS += --add-include-path=$(top_builddir)/gdk/x11
+endif
 Gtk_3_0_gir_INCLUDES = Atk-1.0 Gdk-3.0
 Gtk_3_0_gir_CFLAGS = \
 		$(INCLUDES) \

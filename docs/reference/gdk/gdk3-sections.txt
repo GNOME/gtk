@@ -453,7 +453,6 @@ gdk_draw_layout
 gdk_draw_layout_with_colors
 
 <SUBSECTION>
-gdk_draw_pixmap
 gdk_draw_drawable
 gdk_draw_image
 gdk_drawable_get_image
@@ -469,7 +468,6 @@ GDK_IS_DRAWABLE_CLASS
 
 <SUBSECTION Private>
 GdkDrawableClass
-gdk_draw_bitmap
 </SECTION>
 
 <SECTION>
