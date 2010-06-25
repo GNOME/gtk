@@ -861,8 +861,6 @@ parse_selector (GtkCssProvider  *css_provider,
       scanner->token != G_TOKEN_IDENTIFIER)
     return G_TOKEN_IDENTIFIER;
 
-  path = selector_path_new ();
-
   while (scanner->token == G_TOKEN_IDENTIFIER)
     {
       if (g_ascii_isupper (scanner->value.v_identifier[0]))
@@ -939,8 +937,6 @@ parse_selector (GtkCssProvider  *css_provider,
        */
       return G_TOKEN_LEFT_CURLY;
     }
-
-  *selector_out = path;
 
   return G_TOKEN_NONE;
 }
