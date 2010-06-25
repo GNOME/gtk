@@ -86,6 +86,8 @@ struct GtkCssProviderPrivate
   GScanner *scanner;
   gchar *filename;
 
+  GHashTable *symbolic_colors;
+
   GPtrArray *selectors_info;
 
   /* Current parser state */
@@ -313,6 +315,10 @@ gtk_css_provider_init (GtkCssProvider *css_provider)
 
   priv->scanner = scanner;
   css_provider_apply_scope (css_provider, SCOPE_SELECTOR);
+
+  priv->symbolic_colors = g_hash_table_new_full (g_str_hash, g_str_equal,
+                                                 (GDestroyNotify) g_free,
+                                                 (GDestroyNotify) gtk_symbolic_color_unref);
 }
 
 typedef struct ComparePathData ComparePathData;
@@ -524,6 +530,29 @@ css_provider_get_selectors (GtkCssProvider *css_provider,
   return priority_info;
 }
 
+static void
+css_provider_dump_symbolic_colors (GtkCssProvider *css_provider,
+                                   GtkStyleSet    *set)
+{
+  GtkCssProviderPrivate *priv;
+  GHashTableIter iter;
+  gpointer key, value;
+
+  priv = GTK_CSS_PROVIDER_GET_PRIVATE (css_provider);
+  g_hash_table_iter_init (&iter, priv->symbolic_colors);
+
+  while (g_hash_table_iter_next (&iter, &key, &value))
+    {
+      const gchar *name;
+      GtkSymbolicColor *color;
+
+      name = key;
+      color = value;
+
+      gtk_style_set_map_color (set, name, color);
+    }
+}
+
 static GtkStyleSet *
 gtk_css_provider_get_style (GtkStyleProvider *provider,
                             GtkWidgetPath    *path)
@@ -536,6 +565,7 @@ gtk_css_provider_get_style (GtkStyleProvider *provider,
   priv = GTK_CSS_PROVIDER_GET_PRIVATE (provider);
   set = gtk_style_set_new ();
 
+  css_provider_dump_symbolic_colors ((GtkCssProvider *) provider, set);
   priority_info = css_provider_get_selectors (GTK_CSS_PROVIDER (provider), path);
 
   for (i = 0; i < priority_info->len; i++)
@@ -635,6 +665,7 @@ gtk_css_provider_finalize (GObject *object)
   g_slist_free (priv->cur_selectors);
 
   g_hash_table_unref (priv->cur_properties);
+  g_hash_table_destroy (priv->symbolic_colors);
 
   G_OBJECT_CLASS (gtk_css_provider_parent_class)->finalize (object);
 }
@@ -666,13 +697,13 @@ css_provider_apply_scope (GtkCssProvider *css_provider,
 
   if (scope == SCOPE_VALUE)
     {
-      priv->scanner->config->cset_identifier_first = G_CSET_a_2_z "#-_0123456789" G_CSET_A_2_Z;
-      priv->scanner->config->cset_identifier_nth = G_CSET_a_2_z "#-_ 0123456789" G_CSET_A_2_Z;
+      priv->scanner->config->cset_identifier_first = G_CSET_a_2_z "@#-_0123456789" G_CSET_A_2_Z;
+      priv->scanner->config->cset_identifier_nth = G_CSET_a_2_z "@#-_ 0123456789(),." G_CSET_A_2_Z;
       priv->scanner->config->scan_identifier_1char = TRUE;
     }
   else if (scope == SCOPE_SELECTOR)
     {
-      priv->scanner->config->cset_identifier_first = G_CSET_a_2_z G_CSET_A_2_Z "*";
+      priv->scanner->config->cset_identifier_first = G_CSET_a_2_z G_CSET_A_2_Z "*@";
       priv->scanner->config->cset_identifier_nth = G_CSET_a_2_z "-" G_CSET_A_2_Z;
       priv->scanner->config->scan_identifier_1char = TRUE;
     }
@@ -941,6 +972,206 @@ parse_selector (GtkCssProvider  *css_provider,
   return G_TOKEN_NONE;
 }
 
+#define SKIP_SPACES(s) while (s[0] == ' ') s++;
+
+static GtkSymbolicColor *
+symbolic_color_parse_str (const gchar  *string,
+			  gchar       **end_ptr)
+{
+  GtkSymbolicColor *symbolic_color = NULL;
+  gchar *str;
+
+  str = (gchar *) string;
+
+  if (str[0] == '#')
+    {
+      GdkColor color;
+      gchar *color_str;
+      const gchar *end;
+
+      end = str + 1;
+
+      while (g_ascii_isxdigit (*end))
+        end++;
+
+      color_str = g_strndup (str, end - str);
+      *end_ptr = (gchar *) end;
+
+      if (!gdk_color_parse (color_str, &color))
+        {
+          g_free (color_str);
+          return NULL;
+        }
+
+      symbolic_color = gtk_symbolic_color_new_literal (&color);
+      g_free (color_str);
+    }
+  else if (str[0] == '@')
+    {
+      const gchar *end;
+      gchar *name;
+
+      str++;
+      end = str;
+
+      while (*end == '-' || *end == '_' ||
+             g_ascii_isalpha (*end))
+        end++;
+
+      name = g_strndup (str, end - str);
+      symbolic_color = gtk_symbolic_color_new_name (name);
+      g_free (name);
+
+      *end_ptr = (gchar *) end;
+    }
+  else if (g_str_has_prefix (str, "shade"))
+    {
+      GtkSymbolicColor *param_color;
+      gdouble factor;
+
+      str += strlen ("shade");
+
+      SKIP_SPACES (str);
+
+      if (*str != '(')
+        {
+          *end_ptr = (gchar *) str;
+          return NULL;
+        }
+
+      str++;
+      SKIP_SPACES (str);
+      param_color = symbolic_color_parse_str (str, end_ptr);
+
+      if (!param_color)
+        return NULL;
+
+      str = *end_ptr;
+      SKIP_SPACES (str);
+
+      if (str[0] != ',')
+        {
+          gtk_symbolic_color_unref (param_color);
+          *end_ptr = (gchar *) str;
+          return NULL;
+        }
+
+      str++;
+      SKIP_SPACES (str);
+      factor = g_ascii_strtod (str, end_ptr);
+
+      str = *end_ptr;
+      SKIP_SPACES (str);
+      *end_ptr = (gchar *) str;
+
+      if (str[0] != ')')
+        {
+          gtk_symbolic_color_unref (param_color);
+          return NULL;
+        }
+
+      symbolic_color = gtk_symbolic_color_new_shade (param_color, factor);
+      (*end_ptr)++;
+    }
+  else if (g_str_has_prefix (str, "mix"))
+    {
+      GtkSymbolicColor *color1, *color2;
+      gdouble factor;
+
+      str += strlen ("mix");
+      SKIP_SPACES (str);
+
+      if (*str != '(')
+        {
+          *end_ptr = (gchar *) str;
+          return NULL;
+        }
+
+      str++;
+      SKIP_SPACES (str);
+      color1 = symbolic_color_parse_str (str, end_ptr);
+
+      if (!color1)
+        return NULL;
+
+      str = *end_ptr;
+      SKIP_SPACES (str);
+
+      if (str[0] != ',')
+        {
+          gtk_symbolic_color_unref (color1);
+          *end_ptr = (gchar *) str;
+          return NULL;
+        }
+
+      str++;
+      SKIP_SPACES (str);
+      color2 = symbolic_color_parse_str (str, end_ptr);
+
+      if (!color2 || *end_ptr[0] != ',')
+        {
+          gtk_symbolic_color_unref (color1);
+          return NULL;
+        }
+
+      str = *end_ptr;
+      SKIP_SPACES (str);
+
+      if (str[0] != ',')
+        {
+          gtk_symbolic_color_unref (color1);
+          gtk_symbolic_color_unref (color2);
+          *end_ptr = (gchar *) str;
+          return NULL;
+        }
+
+      str++;
+      SKIP_SPACES (str);
+      factor = g_ascii_strtod (str, end_ptr);
+
+      str = *end_ptr;
+      SKIP_SPACES (str);
+      *end_ptr = (gchar *) str;
+
+      if (str[0] != ')')
+	{
+          gtk_symbolic_color_unref (color1);
+          gtk_symbolic_color_unref (color2);
+          return NULL;
+        }
+
+      symbolic_color = gtk_symbolic_color_new_mix (color1, color2, factor);
+      (*end_ptr)++;
+    }
+
+  return symbolic_color;
+}
+
+#undef SKIP_SPACES
+
+static GtkSymbolicColor *
+symbolic_color_parse (const gchar *str)
+{
+  GtkSymbolicColor *color;
+  gchar *end;
+
+  color = symbolic_color_parse_str (str, &end);
+
+  if (*end != '\0')
+    {
+      g_warning ("Error parsing symbolic color \"%s\", stopped at char %ld : '%c'",
+                 str, end - str, *end);
+
+      if (color)
+        {
+          gtk_symbolic_color_unref (color);
+          color = NULL;
+        }
+    }
+
+  return color;
+}
+
 static gboolean
 css_provider_parse_value (const gchar *value_str,
                           GValue      *value)
@@ -1005,6 +1236,42 @@ parse_rule (GtkCssProvider *css_provider,
   priv = GTK_CSS_PROVIDER_GET_PRIVATE (css_provider);
 
   css_provider_push_scope (css_provider, SCOPE_SELECTOR);
+
+  if (scanner->token == G_TOKEN_IDENTIFIER &&
+      scanner->value.v_identifier[0] == '@')
+    {
+      GtkSymbolicColor *color;
+      gchar *color_name;
+
+      /* Rule is a color mapping */
+      color_name = g_strdup (&scanner->value.v_identifier[1]);
+      g_scanner_get_next_token (scanner);
+
+      if (scanner->token != ':')
+        return ':';
+
+      css_provider_push_scope (css_provider, SCOPE_VALUE);
+      g_scanner_get_next_token (scanner);
+
+      if (scanner->token != G_TOKEN_IDENTIFIER)
+        return G_TOKEN_IDENTIFIER;
+
+      color = symbolic_color_parse (scanner->value.v_identifier);
+
+      if (!color)
+        return G_TOKEN_IDENTIFIER;
+
+      g_hash_table_insert (priv->symbolic_colors, color_name, color);
+
+      css_provider_pop_scope (css_provider);
+      g_scanner_get_next_token (scanner);
+
+      if (scanner->token != ';')
+        return ';';
+
+      return G_TOKEN_NONE;
+    }
+
   expected_token = parse_selector (css_provider, scanner, &selector);
 
   if (expected_token != G_TOKEN_NONE)
