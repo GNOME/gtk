@@ -84,7 +84,7 @@ struct SelectorStyleInfo
 struct GtkCssProviderPrivate
 {
   GScanner *scanner;
-  const gchar *filename;
+  gchar *filename;
 
   GPtrArray *selectors_info;
 
