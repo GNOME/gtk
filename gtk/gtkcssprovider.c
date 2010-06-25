@@ -1185,10 +1185,21 @@ css_provider_parse_value (const gchar *value_str,
     {
       GdkColor color;
 
-      if (gdk_color_parse (value_str, &color) == FALSE)
-        return FALSE;
+      if (gdk_color_parse (value_str, &color) == TRUE)
+        g_value_set_boxed (value, &color);
+      else
+        {
+          GtkSymbolicColor *symbolic_color;
 
-      g_value_set_boxed (value, &color);
+          symbolic_color = symbolic_color_parse (value_str);
+
+          if (!symbolic_color)
+            return FALSE;
+
+          g_value_unset (value);
+          g_value_init (value, GTK_TYPE_SYMBOLIC_COLOR);
+          g_value_take_boxed (value, symbolic_color);
+        }
     }
   else if (type == PANGO_TYPE_FONT_DESCRIPTION)
     {
