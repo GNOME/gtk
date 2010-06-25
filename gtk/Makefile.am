@@ -297,6 +297,7 @@ gtk_public_h_sources =          \
 	gtkstyleset.h		\
 	gtkstyle.h		\
 	gtkswitch.h		\
+	gtksymboliccolor.h	\
 	gtktable.h		\
 	gtktearoffmenuitem.h    \
 	gtktestutils.h		\
@@ -599,6 +600,7 @@ gtk_base_c_sources =            \
 	gtkstyleset.c		\
 	gtkstyle.c		\
 	gtkswitch.c		\
+	gtksymboliccolor.c	\
 	gtktable.c		\
 	gtktearoffmenuitem.c    \
 	gtktestutils.c		\
