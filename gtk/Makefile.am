@@ -3,12 +3,10 @@ include $(top_srcdir)/Makefile.decl
 -include $(INTROSPECTION_MAKEFILE)
 INTROSPECTION_GIRS =
 INTROSPECTION_SCANNER_ARGS = \
-	--add-include-path=../gdk-pixbuf \
 	--add-include-path=../gdk
 INTROSPECTION_COMPILER_ARGS = \
 	--includedir=$(srcdir) \
     --includedir=. \
-    --includedir=../gdk-pixbuf \
     --includedir=../gdk
 
 if USE_QUARTZ
@@ -50,7 +48,6 @@ INCLUDES =						\
 	-I$(top_builddir)/gtk				\
 	-I$(top_srcdir) -I../gdk			\
 	-I$(top_srcdir)/gdk				\
-	-I$(top_srcdir)/gdk-pixbuf -I../gdk-pixbuf	\
 	-DGDK_DISABLE_DEPRECATED			\
 	-DGTK_DISABLE_DEPRECATED			\
 	-DGTK_FILE_SYSTEM_ENABLE_UNSUPPORTED		\
@@ -124,7 +121,6 @@ endif
 
 libgtkincludedir = $(includedir)/gtk-2.0/gtk
 libadd =								\
-	$(top_builddir)/gdk-pixbuf/libgdk_pixbuf-$(GTK_API_VERSION).la	\
 	$(top_builddir)/gdk/$(gdktargetlib)				\
 	$(GTK_DEP_LIBS)
 deps =
@@ -976,13 +972,12 @@ distclean-local:
 	  rm -f $(MAINTAINERCLEANFILES); \
 	fi
 
-DEPS = $(gtktargetlib) $(top_builddir)/gdk-pixbuf/libgdk_pixbuf-$(GTK_API_VERSION).la $(top_builddir)/gdk/$(gdktargetlib)
+DEPS = $(gtktargetlib) $(top_builddir)/gdk/$(gdktargetlib)
 
 TEST_DEPS = $(DEPS) gtk.immodules
 
 LDADDS =								\
 	$(gtktargetlib)							\
-	$(top_builddir)/gdk-pixbuf/libgdk_pixbuf-$(GTK_API_VERSION).la	\
 	$(top_builddir)/gdk/$(gdktargetlib)                             \
 	$(GTK_DEP_LIBS)
 
@@ -1058,16 +1053,10 @@ endif
 
 gtk_query_immodules_2_0_DEPENDENCIES = $(DEPS)
 gtk_query_immodules_2_0_LDADD = $(LDADDS)
-
 gtk_query_immodules_2_0_SOURCES = queryimmodules.c
 
-gtk_update_icon_cache_LDADD = \
-	$(top_builddir)/gdk-pixbuf/libgdk_pixbuf-$(GTK_API_VERSION).la \
-	$(GDK_PIXBUF_DEP_LIBS)
-
-
-gtk_update_icon_cache_SOURCES = \
-	updateiconcache.c 
+gtk_update_icon_cache_LDADD = $(GDK_PIXBUF_LIBS)
+gtk_update_icon_cache_SOURCES = updateiconcache.c 
 
 .PHONY: files test test-debug
 
@@ -1372,7 +1361,6 @@ if CROSS_COMPILING
 gtk_update_icon_cache_program = $(GTK_UPDATE_ICON_CACHE)
 else
 gtk_update_icon_cache_program =							\
-	GDK_PIXBUF_MODULE_FILE=$(top_builddir)/gdk-pixbuf/gdk-pixbuf.loaders	\
 	   ./gtk-update-icon-cache
 endif
 

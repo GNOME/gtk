@@ -71,7 +71,7 @@ libgdkinclude_HEADERS = 	\
 
 
 noinst_PROGRAMS = checksettings
-checksettings_LDADD = libgdk-x11.la $(GLIB_LIBS) $(top_builddir)/gdk-pixbuf/libgdk_pixbuf-$(GTK_API_VERSION).la 
+checksettings_LDADD = libgdk-x11.la $(GLIB_LIBS)
 
 TESTS = checksettings
 

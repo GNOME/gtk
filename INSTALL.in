@@ -3,9 +3,9 @@ Prerequisites
 
 GTK+ requires the following packages:
 
- - The GLib, Pango, ATK and cairo libraries, available at the same
+ - The GLib, Pango, GdkPixbuf, ATK and cairo libraries, available at the same
    location as GTK+. GTK+ @GTK_VERSION@ requires at least GLib 2.23.6,
-   Pango 1.20, ATK 1.29.2 and cairo 1.6.0.
+   Pango 1.20, GdkPixbuf 2.21.0, ATK 1.29.2 and cairo 1.6.0.
 
  - gobject-introspection 0.6.7 or newer.
 

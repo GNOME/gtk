@@ -12,12 +12,10 @@ INCLUDES = 				\
 	$(GTK_DEP_CFLAGS)
 
 DEPS = 									\
-	$(top_builddir)/gdk-pixbuf/libgdk_pixbuf-$(GTK_API_VERSION).la	\
 	$(top_builddir)/gdk/$(gdktargetlib) 				\
 	$(top_builddir)/gtk/$(gtktargetlib)
 
 LDADDS = 								\
-	$(top_builddir)/gdk-pixbuf/libgdk_pixbuf-$(GTK_API_VERSION).la	\
 	$(top_builddir)/gdk/$(gdktargetlib)        			\
 	$(top_builddir)/gtk/$(gtktargetlib)				\
 	$(GTK_DEP_LIBS)							\
@@ -32,21 +30,11 @@ noinst_PROGRAMS = 		\
 	pixbuf-demo
 
 # Need to build test-inline-pixbufs.h for testpixbuf
-if HAVE_PNG
 noinst_PROGRAMS += testpixbuf
 BUILT_SOURCES = test-inline-pixbufs.h
-endif
 
-if CROSS_COMPILING
-pixbuf_csource=$(GDK_PIXBUF_CSOURCE)
-pixbuf_csource_deps=
-else
-pixbuf_csource=GDK_PIXBUF_MODULE_FILE=$(top_builddir)/gdk-pixbuf/gdk-pixbuf.loaders $(top_builddir)/gdk-pixbuf/gdk-pixbuf-csource
-pixbuf_csource_deps=$(top_builddir)/gdk-pixbuf/gdk-pixbuf-csource $(top_builddir)/gdk-pixbuf/gdk-pixbuf.loaders 
-endif
-
-test-inline-pixbufs.h: $(pixbuf_csource_deps) apple-red.png gnome-foot.png
-	$(pixbuf_csource) --raw --build-list		\
+test-inline-pixbufs.h: apple-red.png gnome-foot.png
+	$(GDK_PIXBUF_CSOURCE) --raw --build-list		\
 	        apple_red  $(srcdir)/apple-red.png	\
                 gnome_foot $(srcdir)/gnome-foot.png	\
         > test-inline-pixbufs.h				\

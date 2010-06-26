@@ -35,6 +35,7 @@ m4_define([glib_required_version], [2.25.8])
 m4_define([pango_required_version], [1.20])
 m4_define([atk_required_version], [1.29.2])
 m4_define([cairo_required_version], [1.6])
++m4_define([gdk_pixbuf_required_version], [2.21.0])
 
 
 AC_INIT([gtk+], [gtk_version],
@@ -107,19 +108,6 @@ m4_define([gail_lt_version_info],[gail_lt_current:gail_lt_revision:gail_lt_age])
 m4_define([gail_lt_current_minus_age],[m4_eval(gail_lt_current - gail_lt_age)])
 AC_SUBST([GAIL_LT_VERSION_INFO],[gail_lt_version_info])
 AC_SUBST([GAIL_LT_CURRENT_MINUS_AGE],[gail_lt_current_minus_age])
-
-#
-# gdk-pixbuf gets versioned separately, and for now, using standard
-# libtool versioning, not GTK+-style versioning
-#
-GDK_PIXBUF_MAJOR=gtk_major_version
-GDK_PIXBUF_MINOR=gtk_minor_version
-GDK_PIXBUF_MICRO=gtk_micro_version
-GDK_PIXBUF_VERSION="${GDK_PIXBUF_MAJOR}.${GDK_PIXBUF_MINOR}.${GDK_PIXBUF_MICRO}"
-AC_SUBST(GDK_PIXBUF_MAJOR)
-AC_SUBST(GDK_PIXBUF_MINOR)
-AC_SUBST(GDK_PIXBUF_MICRO)
-AC_SUBST(GDK_PIXBUF_VERSION)
 
 GETTEXT_PACKAGE=gtk20
 AC_SUBST(GETTEXT_PACKAGE)
@@ -387,7 +375,8 @@ PKG_CHECK_MODULES(BASE_DEPENDENCIES,
   [glib-2.0 >= glib_required_version dnl
    atk >= atk_required_version dnl
    pango >= pango_required_version dnl
-   cairo >= cairo_required_version])
+   cairo >= cairo_required_version dnl
+   gdk-pixbuf-2.0 >= gdk_pixbuf_required_version])
 
 ## In addition to checking that cairo is present, we also need to
 ## check that the correct cairo backend is there. E.g. if the GDK
@@ -407,7 +396,7 @@ if test "$os_win32" != yes; then
     # right now, symbols starting with _ are not exported
     LIBTOOL_EXPORT_OPTIONS='-export-symbols-regex "^[[^_]].*"'
 else
-    # We currently use .def files on Windows (for gdk-pixbuf, gdk and gtk)
+    # We currently use .def files on Windows (for gdk and gtk)
     LIBTOOL_EXPORT_OPTIONS=
 fi
 AC_SUBST(LIBTOOL_EXPORT_OPTIONS)
@@ -616,7 +605,7 @@ AC_TRY_COMPILE([#include <dirent.h>], [DIR *dir;],
 # Run AM_PATH_GLIB_2_0 to make sure that GLib is installed and working
 # 
 
-GLIB_PACKAGES="gobject-2.0 gmodule-no-export-2.0"
+GLIB_PACKAGES="gobject-2.0 gio-2.0 gmodule-no-export-2.0"
 
 AM_PATH_GLIB_2_0(glib_required_version, :,
   AC_MSG_ERROR([
@@ -763,27 +752,6 @@ AC_CHECK_HEADERS(crt_externs.h)
 AC_CHECK_FUNCS(_NSGetEnviron)
 
 
-##################################################
-# Checks for gdk-pixbuf
-##################################################
-
-dnl ********************************************************
-dnl * See whether we need to load our modules as .la files *
-dnl ********************************************************
-
-use_la_modules=false
-case $host in
-  *-aix*) use_la_modules=true
-esac
-
-if $use_la_modules ; then
-   AC_DEFINE(USE_LA_MODULES, 1,
-             [Whether to load modules via .la files rather than directly])
-fi
-
-
-AC_MSG_CHECKING(whether to build gmodulized gdk-pixbuf)
-
 AC_ARG_ENABLE(modules,
               [AC_HELP_STRING([--disable-modules],
                               [disable dynamic module loading])])
@@ -804,13 +772,13 @@ else
     dnl Now we check to see if our libtool supports shared lib deps
     dnl (in a rather ugly way even)
     if $dynworks; then
-        pixbuf_libtool_config="${CONFIG_SHELL-/bin/sh} ./libtool --config"
-        pixbuf_deplibs_check=`$pixbuf_libtool_config | \
+        module_libtool_config="${CONFIG_SHELL-/bin/sh} ./libtool --config"
+        module_deplibs_check=`$pixbuf_libtool_config | \
             grep '^[[a-z_]]*check[[a-z_]]*_method=[['\''"]]' | \
             sed 's/.*[['\''"]]\(.*\)[['\''"]]$/\1/'`
-        if test "x$pixbuf_deplibs_check" = "xnone" || \
-           test "x$pixbuf_deplibs_check" = "xunknown" || \
-           test "x$pixbuf_deplibs_check" = "x"; then
+        if test "x$module_deplibs_check" = "xnone" || \
+           test "x$module_deplibs_check" = "xunknown" || \
+           test "x$module_deplibs_check" = "x"; then
             dynworks=false
         fi
     fi
@@ -824,296 +792,7 @@ else
     fi
 fi
 
-dnl We allow people to disable image loaders explicitely, but if they don't we error
-dnl out so that people don't accidentally build without them.
-
-AC_ARG_WITH(libpng,
-            [AC_HELP_STRING([--without-libpng],
-                            [disable PNG loader for gdk-pixbuf])])
-AC_ARG_WITH(libjpeg,
-            [AC_HELP_STRING([--without-libjpeg],
-                            [disable JPEG loader for gdk-pixbuf])])
-AC_ARG_WITH(libtiff,
-            [AC_HELP_STRING([--without-libtiff],
-                            [disable TIFF loader for gdk-pixbuf])])
-AC_ARG_WITH(libjasper,
-            [AC_HELP_STRING([--with-libjasper],
-                            [enable JPEG2000 loader for gdk-pixbuf])])
-
-AC_ARG_ENABLE(gdiplus,
-            [AC_HELP_STRING([--enable-gdiplus],
-                            [enble GDI+ loaders for gdk-pixbuf (currently known to be broken)])],,
-	    [enable_gdiplus=no])
-
-AM_CONDITIONAL(BUILD_GDIPLUS_LOADERS, [ test x$os_win32 = xyes && test x$enable_gdiplus != xno ])
-
-dnl Test for libtiff
-if test x$os_win32 = xno || test x$enable_gdiplus = xno; then
-  if test x$with_libtiff != xno && test -z "$LIBTIFF"; then
-    AC_CHECK_LIB(tiff, TIFFReadRGBAImageOriented,
-      [AC_CHECK_HEADER(tiffio.h,
-        TIFF='tiff'; LIBTIFF='-ltiff',
-        AC_MSG_WARN(*** TIFF loader will not be built (TIFF header files not found) ***))],
-      [AC_CHECK_LIB(tiff, TIFFWriteScanline,
-        [AC_CHECK_HEADER(tiffio.h,
-          TIFF='tiff'; LIBTIFF='-ltiff -ljpeg -lz',
-          AC_MSG_WARN(*** TIFF loader will not be built (TIFF header files not found) ***))],
-        [AC_CHECK_LIB(tiff34, TIFFFlushData,
-          [AC_CHECK_HEADER(tiffio.h,
-            TIFF='tiff'; LIBTIFF='-ltiff34 -ljpeg -lz',
-            AC_MSG_WARN(*** TIFF loader will not be built (TIFF header files not found) ***))],
-        AC_MSG_WARN(*** TIFF loader will not be built (TIFF library not found) ***), -ljpeg -lz -lm)], -ljpeg -lz -lm)], -lm)
-  fi
-
-  if test x$with_libtiff != xno && test -z "$LIBTIFF"; then
-     AC_MSG_ERROR([
-*** Checks for TIFF loader failed. You can build without it by passing 
-*** --without-libtiff to configure but some programs using GTK+ may
-*** not work properly])
-  fi
-fi
-
-dnl Test for libjpeg
-if test x$os_win32 = xno || test x$enable_gdiplus = xno; then
-  if test x$with_libjpeg != xno && test -z "$LIBJPEG"; then
-    AC_CHECK_LIB(jpeg, jpeg_destroy_decompress,
-      jpeg_ok=yes,
-      jpeg_ok=no
-      AC_MSG_WARN(*** JPEG loader will not be built (JPEG library not found) ***))
-    if test "$jpeg_ok" = yes; then
-      AC_MSG_CHECKING([for jpeglib.h])
-      AC_TRY_CPP(
-[#include <stdio.h>
-#undef PACKAGE
-#undef VERSION
-#undef HAVE_STDLIB_H
-#include <jpeglib.h>],
-        jpeg_ok=yes,
-        jpeg_ok=no)
-      AC_MSG_RESULT($jpeg_ok)
-      if test "$jpeg_ok" = yes; then
-        LIBJPEG='-ljpeg'
-        AC_CHECK_LIB(jpeg, jpeg_simple_progression,     
-          AC_DEFINE(HAVE_PROGRESSIVE_JPEG, 1,
-                    [Define to 1 is libjpeg supports progressive JPEG]),
-          AC_MSG_WARN(JPEG library does not support progressive saving.))
-      else
-          AC_MSG_WARN(*** JPEG loader will not be built (JPEG header file not found) ***)
-      fi
-    fi
-  fi
-
-  if test x$with_libjpeg != xno && test -z "$LIBJPEG"; then
-     AC_MSG_ERROR([
-*** Checks for JPEG loader failed. You can build without it by passing 
-*** --without-libjpeg to configure but some programs using GTK+ may
-*** not work properly])
-  fi
-fi
-
-dnl Test for libpng
-  if test x$with_libpng != xno && test -z "$LIBPNG"; then
-    AC_MSG_CHECKING(for libpng12)
-    if $PKG_CONFIG --exists libpng12 ; then
-        AC_MSG_RESULT(yes)
-        PNG='png'
-	PNG_DEP_CFLAGS_PACKAGES=libpng12
-	LIBPNG=`$PKG_CONFIG --libs libpng12`
-    else
-      AC_MSG_RESULT(no)
-      AC_CHECK_LIB(png, png_read_info,
-        [AC_CHECK_HEADER(png.h,
-          png_ok=yes,
-          png_ok=no)],
-        AC_MSG_WARN(*** PNG loader will not be built (PNG library not found) ***), -lz -lm)
-      if test "$png_ok" = yes; then
-        AC_MSG_CHECKING([for png_structp in png.h])
-        AC_TRY_COMPILE([#include <png.h>],
-          [png_structp pp; png_infop info; png_colorp cmap; png_create_read_struct;],
-          png_ok=yes,
-          png_ok=no)
-        AC_MSG_RESULT($png_ok)
-        if test "$png_ok" = yes; then
-          PNG='png'; LIBPNG='-lpng -lz'
-        else
-          AC_MSG_WARN(*** PNG loader will not be built (PNG library is too old) ***)
-        fi
-      else
-       AC_MSG_WARN(*** PNG loader will not be built (PNG header file not found) ***)
-      fi
-    fi
-  fi
-
-  if test x$with_libpng != xno && test -z "$LIBPNG"; then
-     AC_MSG_ERROR([
-*** Checks for PNG loader failed. You can build without it by passing 
-*** --without-libpng to configure but many programs using GTK+ will
-*** not work properly. The PNG loader is also needed if you are compiling
-*** from CVS.])
-  fi
-
-dnl Test for libjasper
-  if test x$with_libjasper = xyes && test -z "$LIBJASPER"; then
-    AC_CHECK_LIB(jasper, jas_init, LIBJASPER=-ljasper, [], -ljpeg -lm)
-  fi
-
-  if test x$with_libjasper = xyes && test -z "$LIBJASPER"; then
-     AC_MSG_ERROR([
-*** Checks for JPEG2000 loader failed. You can build without it by passing 
-*** --without-libjasper to configure])
-  fi
-
-AC_SUBST(LIBTIFF)
-AC_SUBST(LIBJPEG)
-AC_SUBST(LIBPNG)
-AC_SUBST(LIBJASPER)
-
 AM_CONDITIONAL(BUILD_DYNAMIC_MODULES, $dynworks)
-
-#
-# Allow building some or all gdk-pixbuf loaders included
-#
-AC_MSG_CHECKING(pixbuf loaders to build)
-
-dnl due to an autoconf bug, commas in the first arg to
-dnl AC_HELP_STRING cause problems.
-dnl AC_HELP_STRING([--with-included-loaders=LOADER1 LOADER2 ...],
-dnl                [build the specified loaders into gdk-pixbuf])
-AC_ARG_WITH(included_loaders,
-[  --with-included-loaders=LOADER1,LOADER2,...
-                          build the specified loaders into gdk-pixbuf])
-
-if $dynworks; then 
-   :
-else
-   ## if the option was specified, leave it; otherwise disable included loaders
-   if test x$with_included_loaders = xno; then
-           with_included_loaders=yes
-   fi
-fi
-
-# Use the traditional png loader instead of the GDI+ one on Windows,
-# because some important apps like GIMP need to read and write
-# arbitrary tEXt chunks which doesn't seem to be possible through GDI+
-
-all_loaders="ani,icns,pcx,ras,tga,png,pnm,wbmp,xbm,xpm,qtif"
-if test x$with_libjasper != xno; then
-  all_loaders="$all_loaders,jasper"
-fi
-if test x$os_win32 = xyes && test x$enable_gdiplus != xno; then
-  # Skip PNG, see comment above
-  gdip_formats="bmp emf gif ico jpeg tiff wmf"
-  for f in $gdip_formats; do
-    all_loaders="$all_loaders,gdip-$f"
-  done
-else
-  all_loaders="$all_loaders,bmp,gif,ico,jpeg,tiff"
-fi
-included_loaders=""
-# If no loaders specified, include all
-if test "x$with_included_loaders" = xyes ; then
-  included_loaders="$all_loaders"
-else
-  included_loaders="$with_included_loaders"
-fi
-
-AC_MSG_RESULT($included_loaders)
-
-INCLUDED_LOADER_OBJ=
-INCLUDED_LOADER_DEFINE=
-
-IFS="${IFS= 	}"; gtk_save_ifs="$IFS"; IFS=","
-for loader in $included_loaders; do
- if echo "$all_loaders" | egrep "(^|,)$loader(\$|,)" > /dev/null; then
-   :
- else
-   AC_MSG_ERROR([the specified loader $loader does not exist])
- fi
-
- loader_underscores=`echo $loader | sed -e 's/-/_/g'`
- INCLUDED_LOADER_OBJ="$INCLUDED_LOADER_OBJ libstatic-pixbufloader-$loader.la"
-
- # Don't bother defining separate -DINCLUDE_gdip_foo for each gdip-foo loader
- case $loader in
-   gdip-*) ;;
-   *) INCLUDED_LOADER_DEFINE="$INCLUDED_LOADER_DEFINE -DINCLUDE_$loader_underscores";;
- esac
- eval INCLUDE_$loader_underscores=yes
-done
-
-# Just define one -DINCLUDE_gdiplus for all the gdip-foo loaders
-# (except gdip-png, which isn't built at all)
-if test x"$INCLUDE_gdip_ico" = xyes; then
-  INCLUDED_LOADER_DEFINE="$INCLUDED_LOADER_DEFINE -DINCLUDE_gdiplus"
-fi
-
-IFS="$gtk_save_ifs"
-AC_SUBST(INCLUDED_LOADER_OBJ)
-AC_SUBST(INCLUDED_LOADER_DEFINE)
-
-AM_CONDITIONAL(INCLUDE_PNG, [test x"$INCLUDE_png" = xyes])
-AM_CONDITIONAL(INCLUDE_BMP, [test x"$INCLUDE_bmp" = xyes])
-AM_CONDITIONAL(INCLUDE_WBMP, [test x"$INCLUDE_wbmp" = xyes])
-AM_CONDITIONAL(INCLUDE_GIF, [test x"$INCLUDE_gif" = xyes])
-AM_CONDITIONAL(INCLUDE_ICO, [test x"$INCLUDE_ico" = xyes])
-AM_CONDITIONAL(INCLUDE_ANI, [test x"$INCLUDE_ani" = xyes])
-AM_CONDITIONAL(INCLUDE_JPEG, [test x"$INCLUDE_jpeg" = xyes])
-AM_CONDITIONAL(INCLUDE_PNM, [test x"$INCLUDE_pnm" = xyes])
-AM_CONDITIONAL(INCLUDE_RAS, [test x"$INCLUDE_ras" = xyes])
-AM_CONDITIONAL(INCLUDE_TIFF, [test x"$INCLUDE_tiff" = xyes])
-AM_CONDITIONAL(INCLUDE_XPM, [test x"$INCLUDE_xpm" = xyes])
-AM_CONDITIONAL(INCLUDE_XBM, [test x"$INCLUDE_xbm" = xyes])
-AM_CONDITIONAL(INCLUDE_TGA, [test x"$INCLUDE_tga" = xyes])
-AM_CONDITIONAL(INCLUDE_PCX, [test x"$INCLUDE_pcx" = xyes])
-AM_CONDITIONAL(INCLUDE_ICNS, [test x"$INCLUDE_icns" = xyes])
-AM_CONDITIONAL(INCLUDE_JASPER, [test x"$INCLUDE_jasper" = xyes])
-AM_CONDITIONAL(INCLUDE_QTIF, [test x"$INCLUDE_qtif" = xyes])
-# As all GDI+ loaders are either built-in or not, arbitrarily just
-# check one of the variables here
-AM_CONDITIONAL(INCLUDE_GDIPLUS, [test x"$INCLUDE_gdip_ico" = xyes])
-
-if test x$gio_can_sniff = x; then
-  AC_MSG_CHECKING([if gio can sniff png])
-  gtk_save_LIBS="$LIBS"
-  gtk_save_CFLAGS="$CFLAGS"
-  LIBS="`$PKG_CONFIG --libs gio-2.0`"
-  CFLAGS="`$PKG_CONFIG --cflags gio-2.0`"
-  AC_RUN_IFELSE([AC_LANG_SOURCE([[
-  #include <gio/gio.h>
-  static const gsize data_size = 159;
-  static const guint8 data[] = 
-  {
-    0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a, 0x00, 0x00, 0x00, 0x0d, 
-    0x49, 0x48, 0x44, 0x52, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x01, 
-    0x08, 0x02, 0x00, 0x00, 0x00, 0x90, 0x77, 0x53, 0xde, 0x00, 0x00, 0x00, 
-    0x01, 0x73, 0x52, 0x47, 0x42, 0x00, 0xae, 0xce, 0x1c, 0xe9, 0x00, 0x00, 
-    0x00, 0x09, 0x70, 0x48, 0x59, 0x73, 0x00, 0x00, 0x0b, 0x13, 0x00, 0x00, 
-    0x0b, 0x13, 0x01, 0x00, 0x9a, 0x9c, 0x18, 0x00, 0x00, 0x00, 0x07, 0x74, 
-    0x49, 0x4d, 0x45, 0x07, 0xd8, 0x07, 0x0f, 0x10, 0x08, 0x15, 0x61, 0xd8, 
-    0x35, 0x37, 0x00, 0x00, 0x00, 0x19, 0x74, 0x45, 0x58, 0x74, 0x43, 0x6f, 
-    0x6d, 0x6d, 0x65, 0x6e, 0x74, 0x00, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 
-    0x64, 0x20, 0x77, 0x69, 0x74, 0x68, 0x20, 0x47, 0x49, 0x4d, 0x50, 0x57, 
-    0x81, 0x0e, 0x17, 0x00, 0x00, 0x00, 0x0c, 0x49, 0x44, 0x41, 0x54, 0x08, 
-    0xd7, 0x63, 0xf8, 0xff, 0xff, 0x3f, 0x00, 0x05, 0xfe, 0x02, 0xfe, 0xdc, 
-    0xcc, 0x59, 0xe7, 0x00, 0x00, 0x00, 0x00, 0x49, 0x45, 0x4e, 0x44, 0xae, 
-    0x42, 0x60, 0x82
-  };
-  int
-  main (int argc, char **argv)
-  {
-    char *content_type;
-    char *image_png;
-    content_type = g_content_type_guess (NULL, data, data_size, NULL);  
-    image_png = g_content_type_from_mime_type ("image/png");
-    return !!strcmp (content_type, image_png);
-  }]])],
-    [gio_can_sniff=yes
-     AC_DEFINE(GDK_PIXBUF_USE_GIO_MIME, 1, [Define if gio can sniff image data])],
-    [gio_can_sniff=no])
-  AC_MSG_RESULT($gio_can_sniff)
-  LIBS="$gtk_save_LIBS"
-  CFLAGS="$gtk_save_CFLAGS"
-fi
 
 #
 # Allow building some or all immodules included
@@ -1194,29 +873,6 @@ AC_HEADER_SYS_WAIT
 
 AC_TYPE_SIGNAL
 
-AM_CONDITIONAL(HAVE_TIFF, test "x$LIBTIFF" != x)
-AM_CONDITIONAL(HAVE_PNG, test "x$LIBPNG" != x)
-AM_CONDITIONAL(HAVE_JPEG, test "x$LIBJPEG" != x)
-AM_CONDITIONAL(HAVE_JASPER, test "x$LIBJASPER" != x)
-
-if $dynworks ; then
-  STATIC_LIB_DEPS=
-  if echo "$included_loaders" | egrep '(^|,)tiff($|,)' > /dev/null; then
-    STATIC_LIB_DEPS="$STATIC_LIB_DEPS $LIBTIFF"
-  fi
-  if echo "$included_loaders" | egrep '(^|,)jpeg($|,)' > /dev/null; then
-    STATIC_LIB_DEPS="$STATIC_LIB_DEPS $LIBJPEG"
-  fi
-  if echo "$included_loaders" | egrep '(^|,)png($|,)' > /dev/null; then
-    STATIC_LIB_DEPS="$STATIC_LIB_DEPS $LIBPNG"
-  fi
-  if echo "$included_loaders" | egrep '(^|,)jasper($|,)' > /dev/null; then
-    STATIC_LIB_DEPS="$STATIC_LIB_DEPS $LIBJASPER"
-  fi
-else
-  STATIC_LIB_DEPS="$LIBTIFF $LIBJPEG $LIBPNG $LIBJASPER"
-fi
-
 # Checks to see whether we should include mediaLib
 # support.
 #
@@ -1249,63 +905,18 @@ fi
 AM_CONDITIONAL(USE_MEDIALIB, test $use_mlib = yes)
 AM_CONDITIONAL(USE_MEDIALIB25, test $use_mlib25 = yes)
 
-# Checks to see if we should compile in MMX support (there will be
-# a runtime test when the code is actually run to see if it should
-# be used - this just checks if we can compile it.)
-#
-# This code is partially taken from Mesa
-#
-AC_MSG_CHECKING(for x86 platform)
-case $host_cpu in
-  i386|i486|i586|i686|i786|k6|k7)
-	use_x86_asm=yes
-        ;;
-   *)
-  	use_x86_asm=no
-esac
-AC_MSG_RESULT($use_x86_asm)
-
-use_mmx_asm=no
-if test $use_x86_asm = yes; then
-    save_ac_ext=$ac_ext
-    ac_ext=S
-    
-    AC_MSG_CHECKING(compiler support for MMX)
-    cp $srcdir/gdk-pixbuf/pixops/scale_line_22_33_mmx.S conftest.S
-    if AC_TRY_EVAL(ac_compile); then
-        use_mmx_asm=yes
-    fi
-
-    rm -rf conftest*
-
-    ac_ext=$save_ac_ext
-    if test $use_mmx_asm = yes; then
-      AC_DEFINE(USE_MMX, 1,
-                [Define to 1 if XXM is available and should be used])
-      AC_MSG_RESULT(yes)
-    else
-      AC_MSG_RESULT(no)
-    fi
-fi
-
-AM_CONDITIONAL(USE_MMX, test x$use_mmx_asm = xyes)
-
-REBUILD_PNGS=
-if test -z "$LIBPNG" && test x"$os_win32" = xno -o x$enable_gdiplus = xno; then
-  REBUILD_PNGS=#
-fi
-
 dnl Look for a host system's gdk-pixbuf-csource if we are cross-compiling
 
 AM_CONDITIONAL(CROSS_COMPILING, test $cross_compiling = yes)
 
 if test $cross_compiling = yes; then
-  AC_PATH_PROG(GDK_PIXBUF_CSOURCE, gdk-pixbuf-csource, no)
   AC_PATH_PROG(GTK_UPDATE_ICON_CACHE, gtk-update-icon-cache, no)
   if test x$GTK_UPDATE_ICON_CACHE = xno; then
     REBUILD_PNGS=#
   fi
 fi
+
+AC_PATH_PROG(GDK_PIXBUF_CSOURCE, gdk-pixbuf-csource, no)
 
 if test ! -f $srcdir/gtk/gtkbuiltincache.h && 
    test "x$REBUILD_PNGS" = "x#" ; then
@@ -1315,22 +926,10 @@ if test ! -f $srcdir/gtk/gtkbuiltincache.h &&
 *** don't have a prebuilt gtk-update-icon-cache on the build system.])
 fi
 
-AC_SUBST(REBUILD_PNGS)
-
-GDK_PIXBUF_PACKAGES="gmodule-no-export-2.0 gobject-2.0 gio-2.0"
-GDK_PIXBUF_EXTRA_LIBS="$STATIC_LIB_DEPS $MATH_LIB $MEDIA_LIB"
-GDK_PIXBUF_EXTRA_CFLAGS= 
-GDK_PIXBUF_DEP_LIBS="`$PKG_CONFIG --libs $GDK_PIXBUF_PACKAGES` $GDK_PIXBUF_EXTRA_LIBS"
-GDK_PIXBUF_DEP_CFLAGS="`$PKG_CONFIG --cflags  gthread-2.0 $GDK_PIXBUF_PACKAGES $PNG_DEP_CFLAGS_PACKAGES` $GDK_PIXBUF_EXTRA_CFLAGS"
-
 ########################################
 # Windowing system checks
 ########################################
 
-GDK_PIXBUF_XLIB_PACKAGES=
-GDK_PIXBUF_XLIB_EXTRA_CFLAGS=
-GDK_PIXBUF_XLIB_EXTRA_LIBS=
-	
 GDK_EXTRA_LIBS="$GDK_WLIBS"
 GDK_EXTRA_CFLAGS=
 	
@@ -1368,8 +967,7 @@ if test "x$gdktarget" = "xx11"; then
         *) x_libs_for_checks="$x_libs_for_checks $I" ;;
       esac
     done
-    
-    GDK_PIXBUF_XLIB_PACKAGES="x11"
+
     GTK_PACKAGES_FOR_X="x11"
   else
     have_base_x_pc=false
@@ -1381,8 +979,6 @@ if test "x$gdktarget" = "xx11"; then
     x_cflags="$X_CFLAGS"
     x_libs_for_checks="$X_LIBS -lXext -lXrender -lX11 $X_EXTRA_LIBS"
 
-    GDK_PIXBUF_XLIB_EXTRA_CFLAGS="$x_cflags"
-    GDK_PIXBUF_XLIB_EXTRA_LIBS="$X_LIBS -lX11 $X_EXTRA_LIBS"
     GTK_DEP_LIBS_FOR_X="$X_LIBS -lXrender -lX11 $X_EXTRA_LIBS"
   fi
 
@@ -1662,15 +1258,6 @@ else
   AM_CONDITIONAL(USE_QUARTZ, false)
 fi
 
-GDK_PIXBUF_XLIB_DEP_LIBS="`$PKG_CONFIG --libs $GDK_PIXBUF_PACKAGES $GDK_PIXBUF_XLIB_PACKAGES` $GDK_PIXBUF_XLIB_EXTRA_LIBS $GDK_PIXBUF_EXTRA_LIBS"
-GDK_PIXBUF_XLIB_DEP_CFLAGS="`$PKG_CONFIG --cflags  gthread-2.0 $GDK_PIXBUF_PACKAGES $GDK_PIXBUF_XLIB_PACKAGES` $GDK_PIXBUF_EXTRA_CFLAGS $GDK_PIXBUF_XLIB_EXTRA_CFLAGS"
-
-AC_SUBST(GDK_PIXBUF_XLIB_PACKAGES)
-AC_SUBST(GDK_PIXBUF_XLIB_EXTRA_LIBS)
-AC_SUBST(GDK_PIXBUF_XLIB_EXTRA_CFLAGS)
-AC_SUBST(GDK_PIXBUF_XLIB_DEP_LIBS)
-AC_SUBST(GDK_PIXBUF_XLIB_DEP_CFLAGS)
-
 if test "x$gdktarget" = "xdirectfb"; then
   DIRECTFB_REQUIRED_VERSION=1.0.0
   AC_MSG_CHECKING(for DirectFB)
@@ -1721,13 +1308,13 @@ LDFLAGS="$saved_ldflags"
 
 # Pull in gio-unix for GDesktopAppInfo usage, see at least gdkapplaunchcontext-x11.c
 if test "x$gdktarget" = "xx11"; then
-  GDK_PACKAGES="$PANGO_PACKAGES gio-unix-2.0 $X_PACKAGES cairo-$cairo_backend"
+  GDK_PACKAGES="$PANGO_PACKAGES gio-unix-2.0 $X_PACKAGES gdk-pixbuf-2.0 cairo-$cairo_backend"
 else
-  GDK_PACKAGES="$PANGO_PACKAGES $X_PACKAGES cairo-$cairo_backend"
+  GDK_PACKAGES="$PANGO_PACKAGES $X_PACKAGES gdk-pixbuf-2.0 cairo-$cairo_backend"
 fi
 
-GDK_DEP_LIBS="$GDK_EXTRA_LIBS `$PKG_CONFIG --libs $GDK_PIXBUF_PACKAGES $GDK_PACKAGES` $GDK_PIXBUF_EXTRA_LIBS"
-GDK_DEP_CFLAGS="`$PKG_CONFIG --cflags  gthread-2.0 $GDK_PIXBUF_PACKAGES $GDK_PACKAGES` $GDK_PIXBUF_EXTRA_CFLAGS $GDK_EXTRA_CFLAGS"
+GDK_DEP_LIBS="$GDK_EXTRA_LIBS `$PKG_CONFIG --libs $GDK_PACKAGES`"
+GDK_DEP_CFLAGS="`$PKG_CONFIG --cflags  gthread-2.0 $GDK_PACKAGES` $GDK_EXTRA_CFLAGS"
 #
 # If we aren't writing explicit dependencies, then don't put the extra libraries we need
 # into the pkg-config files
@@ -1773,14 +1360,14 @@ else
         LIBS="$gtk_save_LIBS"
 fi
 
-GTK_PACKAGES="atk cairo gio-2.0"
+GTK_PACKAGES="atk cairo gdk-pixbuf-2.0 gio-2.0"
 if test "x$gdktarget" = "xx11"; then
   GTK_PACKAGES="$GTK_PACKAGES pangoft2"
 fi
 GTK_EXTRA_LIBS=
 GTK_EXTRA_CFLAGS= 
-GTK_DEP_LIBS="$GDK_EXTRA_LIBS $GTK_DEP_LIBS_FOR_X `$PKG_CONFIG --libs $GDK_PIXBUF_PACKAGES $PANGO_PACKAGES $GTK_PACKAGES_FOR_X $GTK_PACKAGES` $GTK_EXTRA_LIBS $GDK_PIXBUF_EXTRA_LIBS"
-GTK_DEP_CFLAGS="`$PKG_CONFIG --cflags  gthread-2.0 $GDK_PIXBUF_PACKAGES $GDK_PACKAGES $GTK_PACKAGES` $GDK_PIXBUF_EXTRA_CFLAGS $GDK_EXTRA_CFLAGS $GTK_EXTRA_CFLAGS"
+GTK_DEP_LIBS="$GDK_EXTRA_LIBS $GTK_DEP_LIBS_FOR_X `$PKG_CONFIG --libs $PANGO_PACKAGES $GTK_PACKAGES_FOR_X $GTK_PACKAGES` $GTK_EXTRA_LIBS"
+GTK_DEP_CFLAGS="`$PKG_CONFIG --cflags  gthread-2.0 $GDK_PACKAGES $GTK_PACKAGES` $GDK_EXTRA_CFLAGS $GTK_EXTRA_CFLAGS"
 
 if test x"$os_win32" = xyes; then
   GTK_EXTRA_CFLAGS="$msnative_struct"
@@ -1790,16 +1377,6 @@ GLIB_PREFIX="`$PKG_CONFIG --variable=prefix glib-2.0`"
 ATK_PREFIX="`$PKG_CONFIG --variable=prefix atk`"
 PANGO_PREFIX="`$PKG_CONFIG --variable=prefix pango`"
 CAIRO_PREFIX="`pkg-config --variable=prefix cairo`"
-
-if test $enable_explicit_deps != yes ; then
-  GDK_PIXBUF_EXTRA_LIBS=
-fi
-
-AC_SUBST(GDK_PIXBUF_PACKAGES)
-AC_SUBST(GDK_PIXBUF_EXTRA_LIBS)
-AC_SUBST(GDK_PIXBUF_EXTRA_CFLAGS)
-AC_SUBST(GDK_PIXBUF_DEP_LIBS)
-AC_SUBST(GDK_PIXBUF_DEP_CFLAGS)
 
 AC_SUBST(GTK_PACKAGES)
 AC_SUBST(GTK_EXTRA_LIBS)
@@ -1814,6 +1391,9 @@ AC_SUBST(CAIRO_PREFIX)
 
 AC_SUBST(GTK_DEBUG_FLAGS)
 AC_SUBST(GTK_XIM_FLAGS)
+
+GDK_PIXBUF_LIBS=`$PKG_CONFIG --libs gdk-pixbuf-2.0`
+AC_SUBST(GDK_PIXBUF_LIBS)
 
 ########################
 # Checks needed for gail
@@ -1976,8 +1556,6 @@ AM_CONDITIONAL(TEST_PRINT_BACKEND, test "x$enable_test_print_backend" != "xno")
 export SED
 export_dynamic=`(./libtool --config; echo eval echo \\$export_dynamic_flag_spec) | sh`
 if test -n "$export_dynamic"; then
-  GDK_PIXBUF_DEP_LIBS=`echo $GDK_PIXBUF_DEP_LIBS | sed -e "s/$export_dynamic//"`
-  GDK_PIXBUF_XLIB_DEP_LIBS=`echo $GDK_PIXBUF_XLIB_DEP_LIBS | sed -e "s/$export_dynamic//"`
   GDK_DEP_LIBS=`echo $GDK_DEP_LIBS | sed -e "s/$export_dynamic//"`
   GTK_DEP_LIBS=`echo $GTK_DEP_LIBS | sed -e "s/$export_dynamic//"`
 fi
@@ -2109,12 +1687,10 @@ AC_CONFIG_FILES([
 config.h.win32
 gtk-zip.sh
 Makefile
-gdk-pixbuf-2.0.pc
 gdk-2.0.pc
 gtk+-2.0.pc
 gtk+-unix-print-2.0.pc
 gail.pc
-gdk-pixbuf-2.0-uninstalled.pc
 gdk-2.0-uninstalled.pc
 gtk+-2.0-uninstalled.pc
 gail-uninstalled.pc
@@ -2127,8 +1703,6 @@ demos/gtk-demo/geninclude.pl
 tests/Makefile
 docs/Makefile
 docs/reference/Makefile
-docs/reference/gdk-pixbuf/Makefile
-docs/reference/gdk-pixbuf/version.xml
 docs/reference/gdk/Makefile
 docs/reference/gdk/version.xml
 docs/reference/gtk/Makefile
@@ -2140,10 +1714,6 @@ docs/tutorial/Makefile
 build/Makefile
 build/win32/Makefile
 build/win32/vs9/Makefile
-gdk-pixbuf/Makefile
-gdk-pixbuf/gdk_pixbuf.rc
-gdk-pixbuf/gdk-pixbuf-features.h
-gdk-pixbuf/pixops/Makefile
 gdk/Makefile
 gdk/x11/Makefile
 gdk/win32/Makefile
@@ -2176,9 +1746,6 @@ modules/printbackends/file/Makefile
 modules/printbackends/papi/Makefile
 modules/printbackends/test/Makefile
 perf/Makefile
-contrib/Makefile
-contrib/gdk-pixbuf-xlib/Makefile
-contrib/gdk-pixbuf-xlib/gdk-pixbuf-xlib-2.0.pc
 ])
 
 AC_OUTPUT

@@ -11,15 +11,14 @@ INCLUDES =				\
 	$(GTK_DEP_CFLAGS)
 
 DEPS =									\
-	$(top_builddir)/gdk-pixbuf/libgdk_pixbuf-$(GTK_API_VERSION).la	\
 	$(top_builddir)/gdk/$(gdktargetlib)				\
 	$(top_builddir)/gtk/$(gtktargetlib)
 
 LDADDS =								\
-	$(top_builddir)/gdk-pixbuf/libgdk_pixbuf-$(GTK_API_VERSION).la	\
 	$(top_builddir)/gdk/$(gdktargetlib)				\
 	$(top_builddir)/gtk/$(gtktargetlib)				\
-	$(GTK_DEP_LIBS)
+	$(GTK_DEP_LIBS)							\
+	-lm
 
 if USE_X11
 testsocket_programs = testsocket testsocket_child
@@ -86,11 +85,6 @@ noinst_PROGRAMS =  $(TEST_PROGS)	\
 	treestoretest			\
 	testxinerama			\
 	testwindows			\
-	pixbuf-read			\
-	pixbuf-lowmem			\
-	pixbuf-randomly-modified	\
-	pixbuf-random			\
-	pixbuf-threads			\
 	testmerge			\
 	testactions			\
 	testgrouping			\
@@ -234,11 +228,6 @@ testtreesort_LDADD = $(LDADDS)
 testtext_LDADD = $(LDADDS)
 treestoretest_LDADD = $(LDADDS)
 testxinerama_LDADD = $(LDADDS)
-pixbuf_read_LDADD = $(LDADDS)
-pixbuf_lowmem_LDADD = $(LDADDS)
-pixbuf_randomly_modified_LDADD = $(LDADDS)
-pixbuf_random_LDADD = $(LDADDS)
-pixbuf_threads_LDADD = $(LDADDS) $(GLIB_LIBS)
 testmerge_LDADD = $(LDADDS)
 testactions_LDADD = $(LDADDS)
 testgrouping_LDADD = $(LDADDS)

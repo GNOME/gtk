@@ -27,12 +27,12 @@
 #include "config.h"
 #include <math.h>
 #include <pango/pangocairo.h>
+#include <gdk-pixbuf/gdk-pixbuf.h>
 #include "gdkcairo.h"
 #include "gdkdrawable.h"
 #include "gdkinternals.h"
 #include "gdkwindow.h"
 #include "gdkscreen.h"
-#include "gdk-pixbuf-private.h"
 #include "gdkpixbuf.h"
 #include "gdkalias.h"
 
@@ -1555,20 +1555,21 @@ gdk_drawable_real_draw_pixbuf (GdkDrawable  *drawable,
   GdkDrawable  *real_drawable;
 
   g_return_if_fail (GDK_IS_PIXBUF (pixbuf));
-  g_return_if_fail (pixbuf->colorspace == GDK_COLORSPACE_RGB);
-  g_return_if_fail (pixbuf->n_channels == 3 || pixbuf->n_channels == 4);
-  g_return_if_fail (pixbuf->bits_per_sample == 8);
+  g_return_if_fail (gdk_pixbuf_get_colorspace (pixbuf) == GDK_COLORSPACE_RGB);
+  g_return_if_fail (gdk_pixbuf_get_n_channels (pixbuf) == 3 ||
+                    gdk_pixbuf_get_n_channels (pixbuf) == 4);
+  g_return_if_fail (gdk_pixbuf_get_bits_per_sample (pixbuf) == 8);
 
   g_return_if_fail (drawable != NULL);
 
   if (width == -1) 
-    width = pixbuf->width;
+    width = gdk_pixbuf_get_width (pixbuf);
   if (height == -1)
-    height = pixbuf->height;
+    height = gdk_pixbuf_get_height (pixbuf);
 
   g_return_if_fail (width >= 0 && height >= 0);
-  g_return_if_fail (src_x >= 0 && src_x + width <= pixbuf->width);
-  g_return_if_fail (src_y >= 0 && src_y + height <= pixbuf->height);
+  g_return_if_fail (src_x >= 0 && src_x + width <= gdk_pixbuf_get_width (pixbuf));
+  g_return_if_fail (src_y >= 0 && src_y + height <= gdk_pixbuf_get_height (pixbuf));
 
   /* Clip to the drawable; this is required for get_from_drawable() so
    * can't be done implicitly
@@ -1638,7 +1639,7 @@ gdk_drawable_real_draw_pixbuf (GdkDrawable  *drawable,
   else
     real_drawable = GDK_PIXMAP_OBJECT (drawable)->impl;
 
-  if (pixbuf->has_alpha)
+  if (gdk_pixbuf_get_has_alpha (pixbuf))
     {
       GdkVisual *visual = gdk_drawable_get_visual (drawable);
       void (*composite_func) (guchar       *src_buf,
@@ -1701,8 +1702,8 @@ gdk_drawable_real_draw_pixbuf (GdkDrawable  *drawable,
 					      dest_x + x0, dest_y + y0,
 					      xs0, ys0,
 					      width1, height1);
-		  (*composite_func) (pixbuf->pixels + (src_y + y0) * pixbuf->rowstride + (src_x + x0) * 4,
-				     pixbuf->rowstride,
+		  (*composite_func) (gdk_pixbuf_get_pixels (pixbuf) + (src_y + y0) * gdk_pixbuf_get_rowstride (pixbuf) + (src_x + x0) * 4,
+				     gdk_pixbuf_get_rowstride (pixbuf),
 				     (guchar*)image->mem + ys0 * image->bpl + xs0 * image->bpp,
 				     image->bpl,
 				     visual->byte_order,
@@ -1729,10 +1730,10 @@ gdk_drawable_real_draw_pixbuf (GdkDrawable  *drawable,
 						     width, height);
 	  
 	  if (composited)
-	    composite (pixbuf->pixels + src_y * pixbuf->rowstride + src_x * 4,
-		       pixbuf->rowstride,
-		       composited->pixels,
-		       composited->rowstride,
+	    composite (gdk_pixbuf_get_pixels (pixbuf) + src_y * gdk_pixbuf_get_rowstride (pixbuf) + src_x * 4,
+		       gdk_pixbuf_get_rowstride (pixbuf),
+		       gdk_pixbuf_get_pixels (composited),
+		       gdk_pixbuf_get_rowstride (composited),
 		       width, height);
 	}
     }
@@ -1744,26 +1745,26 @@ gdk_drawable_real_draw_pixbuf (GdkDrawable  *drawable,
       pixbuf = composited;
     }
   
-  if (pixbuf->n_channels == 4)
+  if (gdk_pixbuf_get_n_channels (pixbuf) == 4)
     {
-      guchar *buf = pixbuf->pixels + src_y * pixbuf->rowstride + src_x * 4;
+      guchar *buf = gdk_pixbuf_get_pixels (pixbuf) + src_y * gdk_pixbuf_get_rowstride (pixbuf) + src_x * 4;
 
       gdk_draw_rgb_32_image_dithalign (real_drawable, gc,
 				       dest_x, dest_y,
 				       width, height,
 				       dither,
-				       buf, pixbuf->rowstride,
+				       buf, gdk_pixbuf_get_rowstride (pixbuf),
 				       x_dither, y_dither);
     }
   else				/* n_channels == 3 */
     {
-      guchar *buf = pixbuf->pixels + src_y * pixbuf->rowstride + src_x * 3;
+      guchar *buf = gdk_pixbuf_get_pixels (pixbuf) + src_y * gdk_pixbuf_get_rowstride (pixbuf) + src_x * 3;
 
       gdk_draw_rgb_image_dithalign (real_drawable, gc,
 				    dest_x, dest_y,
 				    width, height,
 				    dither,
-				    buf, pixbuf->rowstride,
+				    buf, gdk_pixbuf_get_rowstride (pixbuf),
 				    x_dither, y_dither);
     }
 

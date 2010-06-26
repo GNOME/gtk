@@ -17,12 +17,10 @@ INCLUDES = \
 	$(INCLUDED_IMMODULE_DEFINE)
 
 DEPS = \
-	$(top_builddir)/gdk-pixbuf/libgdk_pixbuf-$(GTK_API_VERSION).la	\
 	$(top_builddir)/gdk/$(gdktargetlib) 				\
 	$(top_builddir)/gtk/$(gtktargetlib)
 
 LDADDS = \
-	$(top_builddir)/gdk-pixbuf/libgdk_pixbuf-$(GTK_API_VERSION).la	\
 	$(top_builddir)/gdk/$(gdktargetlib)        			\
 	$(top_builddir)/gtk/$(gtktargetlib) 				\
 	$(GTK_DEP_LIBS)

@@ -2,12 +2,10 @@
 include $(top_srcdir)/Makefile.decl
 -include $(INTROSPECTION_MAKEFILE)
 INTROSPECTION_GIRS =
-INTROSPECTION_SCANNER_ARGS = \
-   --add-include-path=../gdk-pixbuf
+INTROSPECTION_SCANNER_ARGS =
 INTROSPECTION_COMPILER_ARGS = \
    --includedir=$(srcdir) \
-   --includedir=. \
-   --includedir=../gdk-pixbuf
+   --includedir=.
 
 SUBDIRS = $(gdktarget) . tests
 DIST_SUBDIRS = win32 x11 quartz directfb tests
@@ -38,7 +36,6 @@ INCLUDES =                              \
 	-DGDK_COMPILATION		\
 	-I$(top_srcdir)			\
 	-I$(top_builddir)/gdk		\
-	-I$(top_srcdir)/gdk-pixbuf 	\
 	$(GTK_DEBUG_FLAGS) 		\
 	$(GDK_DEP_CFLAGS)
 
@@ -171,24 +168,20 @@ common_sources =                \
 	gdkmarshalers.c		\
 	gdkmarshalers.h
 
-libgdk_directfb_2_0_la_SOURCES = $(common_sources) 
-libgdk_directfb_2_0_la_LIBADD = directfb/libgdk-directfb.la $(GDK_DEP_LIBS) \
-  $(top_builddir)/gdk-pixbuf/libgdk_pixbuf-$(GTK_API_VERSION).la
+libgdk_directfb_2_0_la_SOURCES = $(common_sources)
+libgdk_directfb_2_0_la_LIBADD = directfb/libgdk-directfb.la $(GDK_DEP_LIBS)
 libgdk_directfb_2_0_la_LDFLAGS = $(LDADD)
 
 libgdk_x11_2_0_la_SOURCES = $(common_sources)
-libgdk_x11_2_0_la_LIBADD = x11/libgdk-x11.la $(GDK_DEP_LIBS) \
-  $(top_builddir)/gdk-pixbuf/libgdk_pixbuf-$(GTK_API_VERSION).la
+libgdk_x11_2_0_la_LIBADD = x11/libgdk-x11.la $(GDK_DEP_LIBS)
 libgdk_x11_2_0_la_LDFLAGS = $(LDADD)
 
 libgdk_quartz_2_0_la_SOURCES = $(common_sources) gdkkeynames.c
-libgdk_quartz_2_0_la_LIBADD = quartz/libgdk-quartz.la $(GDK_DEP_LIBS) \
-  $(top_builddir)/gdk-pixbuf/libgdk_pixbuf-$(GTK_API_VERSION).la
+libgdk_quartz_2_0_la_LIBADD = quartz/libgdk-quartz.la $(GDK_DEP_LIBS)
 libgdk_quartz_2_0_la_LDFLAGS = $(LDADD)
 
 libgdk_win32_2_0_la_SOURCES = $(common_sources) gdkkeynames.c
-libgdk_win32_2_0_la_LIBADD = win32/libgdk-win32.la $(GDK_DEP_LIBS) \
-  $(top_builddir)/gdk-pixbuf/libgdk_pixbuf-$(GTK_API_VERSION).la
+libgdk_win32_2_0_la_LIBADD = win32/libgdk-win32.la $(GDK_DEP_LIBS)
 libgdk_win32_2_0_la_DEPENDENCIES = win32/libgdk-win32.la win32/rc/gdk-win32-res.o gdk.def
 libgdk_win32_2_0_la_LDFLAGS = -Wl,win32/rc/gdk-win32-res.o -export-symbols $(srcdir)/gdk.def $(LDADD)
 
@@ -202,7 +195,7 @@ introspection_files = \
         x11/*.c
 
 Gdk-2.0.gir: $(gdktargetlib) Makefile
-Gdk_2_0_gir_SCANNERFLAGS = --strip-prefix=Gdk --add-include-path=../gdk-pixbuf
+Gdk_2_0_gir_SCANNERFLAGS = --strip-prefix=Gdk
 Gdk_2_0_gir_INCLUDES = Gio-2.0 GdkPixbuf-2.0 Pango-1.0
 Gdk_2_0_gir_LIBS = $(gdktargetlib)
 Gdk_2_0_gir_FILES = $(addprefix $(srcdir)/,$(introspection_files))
