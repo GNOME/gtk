@@ -60,6 +60,69 @@ gdk_quartz_gc_get_values (GdkGC       *gc,
   values->join_style = private->join_style;
 }
 
+
+static void
+data_provider_release (void *info, const void *data, size_t size)
+{
+  g_free (info);
+}
+
+static CGImageRef
+create_clip_mask (GdkPixmap *source_pixmap)
+{
+  int width, height, bytes_per_row, bits_per_pixel;
+  void *data;
+  CGImageRef source;
+  CGImageRef clip_mask;
+  CGContextRef cg_context;
+  CGDataProviderRef data_provider;
+
+  /* We need to flip the clip mask here, because this cannot be done during
+   * the drawing process when this mask will be used to do clipping.  We
+   * quickly create a new CGImage, set up a CGContext, draw the source
+   * image while flipping, and done.  If this appears too slow in the
+   * future, we would look into doing this by hand on the actual raw
+   * data.
+   */
+  source = GDK_PIXMAP_IMPL_QUARTZ (GDK_PIXMAP_OBJECT (source_pixmap)->impl)->image;
+
+  width = CGImageGetWidth (source);
+  height = CGImageGetHeight (source);
+  bytes_per_row = CGImageGetBytesPerRow (source);
+  bits_per_pixel = CGImageGetBitsPerPixel (source);
+
+  data = g_malloc (height * bytes_per_row);
+  data_provider = CGDataProviderCreateWithData (data, data,
+                                                height * bytes_per_row,
+                                                data_provider_release);
+
+  clip_mask = CGImageCreate (width, height, 8,
+                             bits_per_pixel,
+                             bytes_per_row,
+                             CGImageGetColorSpace (source),
+                             CGImageGetAlphaInfo (source),
+                             data_provider, NULL, FALSE,
+                             kCGRenderingIntentDefault);
+  CGDataProviderRelease (data_provider);
+
+  cg_context = CGBitmapContextCreate (data,
+                                      width, height,
+                                      CGImageGetBitsPerComponent (source),
+                                      bytes_per_row,
+                                      CGImageGetColorSpace (source),
+                                      CGImageGetBitmapInfo (source));
+
+  CGContextTranslateCTM (cg_context, 0, height);
+  CGContextScaleCTM (cg_context, 1.0, -1.0);
+
+  CGContextDrawImage (cg_context,
+                      CGRectMake (0, 0, width, height), source);
+
+  CGContextRelease (cg_context);
+
+  return clip_mask;
+}
+
 static void
 gdk_quartz_gc_set_values (GdkGC           *gc,
 			  GdkGCValues     *values,
@@ -89,7 +152,7 @@ gdk_quartz_gc_set_values (GdkGC           *gc,
 	CGImageRelease (private->clip_mask);
 
       if (values->clip_mask)
-	private->clip_mask = CGImageCreateCopy (GDK_PIXMAP_IMPL_QUARTZ (GDK_PIXMAP_OBJECT (values->clip_mask)->impl)->image);
+        private->clip_mask = create_clip_mask (values->clip_mask);
       else
 	private->clip_mask = NULL;
     }
