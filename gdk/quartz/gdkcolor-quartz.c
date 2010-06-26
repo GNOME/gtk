@@ -163,20 +163,46 @@ gdk_colormap_get_screen (GdkColormap *cmap)
   return gdk_screen_get_default ();
 }
 
-void
-_gdk_quartz_colormap_get_rgba_from_pixel (GdkColormap *colormap,
-					  guint32      pixel,
-					  CGFloat      *red,
-					  CGFloat      *green,
-					  CGFloat      *blue,
-					  CGFloat      *alpha)
+CGColorRef
+_gdk_quartz_colormap_get_cgcolor_from_pixel (GdkDrawable *drawable,
+                                             guint32      pixel)
 {
-  *red   = (pixel >> 16 & 0xff) / 255.0;
-  *green = (pixel >> 8  & 0xff) / 255.0;
-  *blue  = (pixel       & 0xff) / 255.0;
- 
-  if (colormap && gdk_colormap_get_visual (colormap)->depth == 32)
-    *alpha = (pixel >> 24 & 0xff) / 255.0;
+  CGFloat r, g, b, a;
+  CGColorRef color;
+  const GdkVisual *visual;
+  GdkColormap *colormap;
+
+  colormap = gdk_drawable_get_colormap (drawable);
+  if (colormap)
+    visual = gdk_colormap_get_visual (colormap);
   else
-    *alpha = 1.0;
+    visual = gdk_visual_get_best_with_depth (gdk_drawable_get_depth (drawable));
+
+  switch (visual->type)
+    {
+      case GDK_VISUAL_STATIC_GRAY:
+      case GDK_VISUAL_GRAYSCALE:
+        g = (pixel & 0xff) / 255.0f;
+
+        if (visual->depth == 1)
+          g = g == 0.0f ? 0.0f : 1.0f;
+
+        color = CGColorCreateGenericGray (g, 1.0f);
+        break;
+
+      default:
+        r = (pixel >> 16 & 0xff) / 255.0;
+        g = (pixel >> 8  & 0xff) / 255.0;
+        b = (pixel       & 0xff) / 255.0;
+
+        if (visual->depth == 32)
+          a = (pixel >> 24 & 0xff) / 255.0;
+        else
+          a = 1.0;
+
+        color = CGColorCreateGenericRGB (r, g, b, a);
+        break;
+    }
+
+  return color;
 }
