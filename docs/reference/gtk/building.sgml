@@ -160,9 +160,9 @@ How to compile GTK+ itself
       </listitem>
     </itemizedlist>
     <para>
-      Three of the libraries that GTK+ depends on are maintained by
-      by the GTK+ team: GLib, Pango, and ATK. Other libraries are
-      maintained separately.
+      Some of the libraries that GTK+ depends on are maintained by
+      by the GTK+ team: GLib, GdkPixbuf, Pango, and ATK. Other libraries
+      are maintained separately.
     </para>
     <itemizedlist>
       <listitem>
@@ -324,9 +324,6 @@ How to compile GTK+ itself
             <arg>--enable-modules</arg>
           </group>
           <group>
-            <arg>--with-included-loaders==LOADER1,LOADER2,...</arg>
-          </group>
-          <group>
             <arg>--with-included-immodules=MODULE1,MODULE2,...</arg>
           </group>
           <group>
@@ -385,8 +382,8 @@ How to compile GTK+ itself
           <systemitem>--enable-modules</systemitem></title>
 
         <para>
-          Normally GTK+ will try to build the GdkPixbuf image file
-          format loaders as little shared libraries that are loaded on
+          Normally GTK+ will try to build the input method modules
+          as little shared libraries that are loaded on
           demand.  The <systemitem>--disable-modules</systemitem>
           argument indicates that they should all be built statically
           into the GTK+ library instead.  This is useful for
@@ -395,16 +392,6 @@ How to compile GTK+ itself
           <systemitem>--enable-modules</systemitem> is specified, then
           the <command>configure</command> script will try to
           auto-detect whether shared modules work on your system.
-        </para>
-      </formalpara>
-
-      <formalpara>
-        <title><systemitem>--with-included-loaders</systemitem></title>
-
-        <para>
-         This option allows you to specify which image loaders you
-         want to include; for example, you might include only the PNG
-         loader to create a smaller GdkPixbuf binary.
         </para>
       </formalpara>
 

@@ -1,7 +1,7 @@
 ## Makefile.am for GTK+
 include $(top_srcdir)/Makefile.decl
 
-SRC_SUBDIRS = gdk-pixbuf gdk gtk modules demos tests perf contrib
+SRC_SUBDIRS = gdk gtk modules demos tests perf
 SUBDIRS = po po-properties $(SRC_SUBDIRS) docs m4macros build
 
 ACLOCAL_AMFLAGS = -I m4 ${ACLOCAL_FLAGS}
@@ -147,7 +147,7 @@ gdk-$(GDKTARGET)-3.0-uninstalled.pc: gdk-3.0-uninstalled.pc
 	cp gdk-3.0-uninstalled.pc gdk-$(GDKTARGET)-3.0-uninstalled.pc
 
 pkgconfigdir = $(libdir)/pkgconfig
-pkgconfig_DATA = gdk-pixbuf-3.0.pc gdk-$(GDKTARGET)-3.0.pc gtk+-$(GDKTARGET)-3.0.pc gail-3.0.pc
+pkgconfig_DATA = gdk-$(GDKTARGET)-3.0.pc gtk+-$(GDKTARGET)-3.0.pc gail-3.0.pc
 
 if OS_UNIX
 pkgconfig_DATA += gtk+-unix-print-3.0.pc

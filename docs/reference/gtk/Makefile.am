@@ -23,7 +23,6 @@ CFILE_GLOB=$(top_srcdir)/gtk/*.c
 IGNORE_HFILES=				\
 	gtkalias.h			\
 	fnmatch.h			\
-	gdk-pixbuf-loader.h		\
 	gtkdebug.h			\
 	gtkbuilderprivate.h		\
 	gtkdndcursors.h			\
@@ -107,7 +106,6 @@ CPPFLAGS += \
 	-UGTK_DISABLE_SINGLE_INCLUDES
 
 GTKDOC_LIBS = \
-	$(top_builddir)/gdk-pixbuf/libgdk_pixbuf-$(GTK_API_VERSION).la	\
 	$(top_builddir)/gdk/$(gdktargetlib)        			\
 	$(top_builddir)/gtk/$(gtktargetlib)
 
@@ -323,7 +321,7 @@ HTML_IMAGES = \
 	$(srcdir)/images/layout-tbrl.png
 
 # Extra options to supply to gtkdoc-fixref
-FIXXREF_OPTIONS=--extra-dir=../gdk-pixbuf/html --extra-dir=../gdk/html \
+FIXXREF_OPTIONS=--extra-dir=../gdk/html \
 	--extra-dir=$(GLIB_PREFIX)/share/gtk-doc/html/gobject \
 	--extra-dir=$(GLIB_PREFIX)/share/gtk-doc/html/glib \
 	--extra-dir=$(ATK_PREFIX)/share/gtk-doc/html/atk \
