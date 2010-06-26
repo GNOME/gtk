@@ -839,6 +839,7 @@ gdk_image_ref
 gdk_image_unref
 gdk_image_get
 #endif
+gdk_image_get_pixels
 gdk_image_set_colormap
 gdk_image_get_colormap
 gdk_image_new

@@ -129,6 +129,7 @@ guint16       gdk_image_get_depth          (GdkImage *image);
 guint16       gdk_image_get_bytes_per_pixel(GdkImage *image);
 guint16       gdk_image_get_bytes_per_line (GdkImage *image);
 guint16       gdk_image_get_bits_per_pixel (GdkImage *image);
+gpointer      gdk_image_get_pixels         (GdkImage *image);
 
 #ifdef GDK_ENABLE_BROKEN
 GdkImage* gdk_image_new_bitmap (GdkVisual     *visual,

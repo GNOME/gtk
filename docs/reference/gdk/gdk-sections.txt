@@ -292,6 +292,16 @@ gdk_image_unref
 gdk_image_destroy
 gdk_image_get_colormap
 gdk_image_set_colormap
+gdk_image_get_bits_per_pixel
+gdk_image_get_bytes_per_pixel
+gdk_image_get_bytes_per_line
+gdk_image_get_byte_order
+gdk_image_get_depth
+gdk_image_get_height
+gdk_image_get_image_type
+gdk_image_get_visual
+gdk_image_get_width
+gdk_image_get_pixels
 
 <SUBSECTION>
 gdk_image_put_pixel
