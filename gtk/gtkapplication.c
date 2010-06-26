@@ -346,8 +346,9 @@ static gchar *default_title;
  *
  * Adds a window to the #GtkApplication.
  *
- * If the user closes all of the windows added to @app, the default
- * behaviour is to call gtk_application_quit().
+ * If all the windows managed by #GtkApplication are closed, the
+ * #GtkApplication will call gtk_application_quit(), and quit
+ * the application.
  *
  * If your application uses only a single toplevel window, you can
  * use gtk_application_get_window(). If you are using a sub-class
@@ -626,8 +627,9 @@ gtk_application_class_init (GtkApplicationClass *klass)
    * example, when a file browser launches your program to open a
    * file.  The raw operating system arguments are passed in the
    * variant @arguments.
+   *
+   * Since: 3.0
    */
-
   gtk_application_signals[ACTIVATED] =
     g_signal_new (g_intern_static_string ("activated"),
                   G_OBJECT_CLASS_TYPE (klass),
@@ -647,10 +649,30 @@ gtk_application_class_init (GtkApplicationClass *klass)
    * turn trigger this signal.
    *
    * The default handler for this signal exits the mainloop of the
-   * application.
+   * application. It is possible to override the default handler
+   * by simply returning %TRUE from a callback, e.g.:
+   *
+   * |[
+   * static gboolean
+   * my_application_quit (GtkApplication *application)
+   * {
+   *   /&ast; if some_condition is TRUE, do not quit &ast;/
+   *   if (some_condition)
+   *     return TRUE;
+   *
+   *   /&ast; this will cause the application to quit &ast;
+   *   return FALSE;
+   * }
+   *
+   *   g_signal_connect (application, "quit",
+   *                     G_CALLBACK (my_application_quit),
+   *                     NULL);
+   * ]|
    *
    * Returns: %TRUE if the signal has been handled, %FALSE to continue
    *   signal emission
+   *
+   * Since: 3.0
    */
   gtk_application_signals[QUIT] =
     g_signal_new (g_intern_static_string ("quit"),
@@ -674,6 +696,8 @@ gtk_application_class_init (GtkApplicationClass *klass)
    * turn trigger this signal.
    *
    * The signal is never emitted for disabled actions.
+   *
+   * Since: 3.0
    */
   gtk_application_signals[ACTION] =
     g_signal_new (g_intern_static_string ("action"),
