@@ -228,6 +228,16 @@ static gboolean gtk_notebook_reorder_tab         (GtkNotebook      *notebook,
 						  gboolean          move_to_last);
 static void     gtk_notebook_remove_tab_label    (GtkNotebook      *notebook,
 						  GtkNotebookPage  *page);
+static void     gtk_notebook_set_tab_label_packing   (GtkNotebook  *notebook,
+                                                      GtkWidget    *child,
+                                                      gboolean      expand,
+                                                      gboolean      fill,
+                                                      GtkPackType   pack_type);
+static void     gtk_notebook_query_tab_label_packing (GtkNotebook  *notebook,
+                                                      GtkWidget    *child,
+                                                      gboolean     *expand,
+                                                      gboolean     *fill,
+                                                      GtkPackType  *pack_type);
 
 /*** GtkObject Methods ***/
 static void gtk_notebook_destroy             (GtkObject        *object);
@@ -7280,29 +7290,12 @@ gtk_notebook_child_reordered (GtkNotebook     *notebook,
   gtk_notebook_update_labels (notebook);
 }
 
-/**
- * gtk_notebook_set_tab_label_packing:
- * @notebook: a #GtkNotebook
- * @child: the child widget
- * @expand: whether to expand the tab label or not
- * @fill: whether the tab label should fill the allocated area or not
- * @pack_type: the position of the tab label
- *
- * Sets the packing parameters for the tab label of the page
- * containing @child. See gtk_box_pack_start() for the exact meaning
- * of the parameters.
- *
- * Deprecated: 2.20: Modify the #GtkNotebook:tab-expand and
- *   #GtkNotebook:tab-fill child properties instead.
- *   Modifying the packing of the tab label is a deprecated feature and
- *   shouldn't be done anymore.
- **/
-void
+static void
 gtk_notebook_set_tab_label_packing (GtkNotebook *notebook,
-				    GtkWidget   *child,
-				    gboolean     expand,
-				    gboolean     fill,
-				    GtkPackType  pack_type)
+                                    GtkWidget   *child,
+                                    gboolean     expand,
+                                    gboolean     fill,
+                                    GtkPackType  pack_type)
 {
   GtkNotebookPage *page;
   GList *list;
@@ -7337,26 +7330,12 @@ gtk_notebook_set_tab_label_packing (GtkNotebook *notebook,
   gtk_widget_thaw_child_notify (child);
 }  
 
-/**
- * gtk_notebook_query_tab_label_packing:
- * @notebook: a #GtkNotebook
- * @child: the page
- * @expand: location to store the expand value (or NULL)
- * @fill: location to store the fill value (or NULL)
- * @pack_type: location to store the pack_type (or NULL)
- * 
- * Query the packing attributes for the tab label of the page
- * containing @child.
- *
- * Deprecated: 2.20: Modify the #GtkNotebook:tab-expand and
- *   #GtkNotebook:tab-fill child properties instead.
- **/
-void
+static void
 gtk_notebook_query_tab_label_packing (GtkNotebook *notebook,
-				      GtkWidget   *child,
-				      gboolean    *expand,
-				      gboolean    *fill,
-				      GtkPackType *pack_type)
+                                      GtkWidget   *child,
+                                      gboolean    *expand,
+                                      gboolean    *fill,
+                                      GtkPackType *pack_type)
 {
   GList *list;
 
