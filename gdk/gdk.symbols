@@ -851,6 +851,7 @@ gdk_image_get_height
 gdk_image_get_image_type
 gdk_image_get_visual
 gdk_image_get_width
+gdk_image_get_pixels
 gdk_image_set_colormap
 gdk_image_new
 #endif
