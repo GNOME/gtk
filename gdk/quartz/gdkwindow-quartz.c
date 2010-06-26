@@ -259,6 +259,9 @@ gdk_window_impl_quartz_begin_paint_region (GdkPaintable    *paintable,
 
   gdk_region_get_rectangles (clipped_and_offset_region, &rects, &n_rects);
 
+  if (n_rects == 0)
+    goto done;
+
   if (bg_pixmap == NULL)
     {
       CGContextRef cg_context;
