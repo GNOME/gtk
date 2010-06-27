@@ -76,6 +76,13 @@ typedef enum {
   MOUSE_WIDGET /* inside widget but not in any of the above GUI elements */
 } MouseLocation;
 
+typedef enum {
+  STEPPER_A,
+  STEPPER_B,
+  STEPPER_C,
+  STEPPER_D
+} Stepper;
+
 #define GTK_RANGE_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), GTK_TYPE_RANGE, GtkRangeLayout))
 
 struct _GtkRangeLayout
@@ -92,7 +99,7 @@ struct _GtkRangeLayout
   GdkRectangle slider;
 
   /* Layout-related state */
-  
+
   MouseLocation mouse_location;
   /* last mouse coords we got, or -1 if mouse is outside the range */
   gint mouse_x;
@@ -117,8 +124,8 @@ struct _GtkRangeLayout
   gdouble fill_level;
 
   GQuark slider_detail_quark;
-  GQuark stepper_detail_quark;
- 
+  GQuark stepper_detail_quark[4];
+
   gdouble *marks;
   gint *mark_pos;
   gint n_marks;
@@ -558,6 +565,21 @@ gtk_range_class_init (GtkRangeClass *class)
 							       0.0, 1.0, 0.5,
 							       GTK_PARAM_READABLE));
 
+  /**
+   * GtkRange:stepper-position-details:
+   *
+   * When %TRUE, the detail string for rendering the steppers will be
+   * suffixed with information about the stepper position.
+   *
+   * Since: 2.22
+   */
+  gtk_widget_class_install_style_property (widget_class,
+                                           g_param_spec_boolean ("stepper-position-details",
+                                                                 P_("Stepper Position Details"),
+                                                                 P_("When TRUE, the detail string for rendering the steppers is suffixed with position information"),
+                                                                 FALSE,
+                                                                 GTK_PARAM_READABLE));
+
   g_type_class_add_private (class, sizeof (GtkRangeLayout));
 }
 
@@ -575,7 +597,10 @@ gtk_range_set_property (GObject      *object,
       range->orientation = g_value_get_enum (value);
 
       range->layout->slider_detail_quark = 0;
-      range->layout->stepper_detail_quark = 0;
+      range->layout->stepper_detail_quark[0] = 0;
+      range->layout->stepper_detail_quark[1] = 0;
+      range->layout->stepper_detail_quark[2] = 0;
+      range->layout->stepper_detail_quark[3] = 0;
 
       gtk_widget_queue_resize (GTK_WIDGET (range));
       break;
@@ -1588,26 +1613,66 @@ gtk_range_get_slider_detail (GtkRange *range)
 }
 
 static const gchar *
-gtk_range_get_stepper_detail (GtkRange *range)
+gtk_range_get_stepper_detail (GtkRange *range,
+                              Stepper   stepper)
 {
   const gchar *stepper_detail;
+  gboolean need_orientation;
+  gboolean need_position;
 
-  if (range->layout->stepper_detail_quark)
-    return g_quark_to_string (range->layout->stepper_detail_quark);
+  if (range->layout->stepper_detail_quark[stepper])
+    return g_quark_to_string (range->layout->stepper_detail_quark[stepper]);
 
   stepper_detail = GTK_RANGE_GET_CLASS (range)->stepper_detail;
 
-  if (stepper_detail && stepper_detail[0] == 'X')
+  need_orientation = stepper_detail && stepper_detail[0] == 'X';
+
+  gtk_widget_style_get (GTK_WIDGET (range),
+                        "stepper-position-details", &need_position,
+                        NULL);
+
+  if (need_orientation || need_position)
     {
-      gchar *detail = g_strdup (stepper_detail);
+      gchar *detail;
+      const gchar *position = NULL;
 
-      detail[0] = range->orientation == GTK_ORIENTATION_HORIZONTAL ? 'h' : 'v';
+      if (need_position)
+        {
+          switch (stepper)
+            {
+            case STEPPER_A:
+              position = "_start";
+              break;
+            case STEPPER_B:
+              if (range->has_stepper_a)
+                position = "_middle";
+              else
+                position = "_start";
+              break;
+            case STEPPER_C:
+              if (range->has_stepper_d)
+                position = "_middle";
+              else
+                position = "_end";
+              break;
+            case STEPPER_D:
+              position = "_end";
+              break;
+            default:
+              g_assert_not_reached ();
+            }
+        }
 
-      range->layout->stepper_detail_quark = g_quark_from_string (detail);
+      detail = g_strconcat (stepper_detail, position, NULL);
+
+      if (need_orientation)
+        detail[0] = range->orientation == GTK_ORIENTATION_HORIZONTAL ? 'h' : 'v';
+
+      range->layout->stepper_detail_quark[stepper] = g_quark_from_string (detail);
 
       g_free (detail);
 
-      return g_quark_to_string (range->layout->stepper_detail_quark);
+      return g_quark_to_string (range->layout->stepper_detail_quark[stepper]);
     }
 
   return stepper_detail;
@@ -1615,7 +1680,7 @@ gtk_range_get_stepper_detail (GtkRange *range)
 
 static void
 draw_stepper (GtkRange     *range,
-              GdkRectangle *rect,
+              Stepper       stepper,
               GtkArrowType  arrow_type,
               gboolean      clicked,
               gboolean      prelighted,
@@ -1626,11 +1691,29 @@ draw_stepper (GtkRange     *range,
   GdkRectangle intersection;
   GtkWidget *widget = GTK_WIDGET (range);
   gfloat arrow_scaling;
-
+  GdkRectangle *rect;
   gint arrow_x;
   gint arrow_y;
   gint arrow_width;
   gint arrow_height;
+
+  switch (stepper)
+    {
+    case STEPPER_A:
+      rect = &range->layout->stepper_a;
+      break;
+    case STEPPER_B:
+      rect = &range->layout->stepper_b;
+      break;
+    case STEPPER_C:
+      rect = &range->layout->stepper_c;
+      break;
+    case STEPPER_D:
+      rect = &range->layout->stepper_d;
+      break;
+    default:
+      g_assert_not_reached ();
+    };
 
   gboolean arrow_sensitive = TRUE;
 
@@ -1671,7 +1754,7 @@ draw_stepper (GtkRange     *range,
 		 widget->window,
 		 state_type, shadow_type,
 		 &intersection, widget,
-		 gtk_range_get_stepper_detail (range),
+		 gtk_range_get_stepper_detail (range, stepper),
 		 widget->allocation.x + rect->x,
 		 widget->allocation.y + rect->y,
 		 rect->width,
@@ -1699,9 +1782,9 @@ draw_stepper (GtkRange     *range,
   
   gtk_paint_arrow (widget->style,
                    widget->window,
-                   state_type, shadow_type, 
+                   state_type, shadow_type,
                    &intersection, widget,
-                   gtk_range_get_stepper_detail (range),
+                   gtk_range_get_stepper_detail (range, stepper),
                    arrow_type,
                    TRUE,
 		   arrow_x, arrow_y, arrow_width, arrow_height);
@@ -1982,28 +2065,28 @@ gtk_range_expose (GtkWidget      *widget,
     }
   
   if (range->has_stepper_a)
-    draw_stepper (range, &range->layout->stepper_a,
+    draw_stepper (range, STEPPER_A,
                   range->orientation == GTK_ORIENTATION_VERTICAL ? GTK_ARROW_UP : GTK_ARROW_LEFT,
                   range->layout->grab_location == MOUSE_STEPPER_A,
                   !touchscreen && range->layout->mouse_location == MOUSE_STEPPER_A,
                   &expose_area);
 
   if (range->has_stepper_b)
-    draw_stepper (range, &range->layout->stepper_b,
+    draw_stepper (range, STEPPER_B,
                   range->orientation == GTK_ORIENTATION_VERTICAL ? GTK_ARROW_DOWN : GTK_ARROW_RIGHT,
                   range->layout->grab_location == MOUSE_STEPPER_B,
                   !touchscreen && range->layout->mouse_location == MOUSE_STEPPER_B,
                   &expose_area);
 
   if (range->has_stepper_c)
-    draw_stepper (range, &range->layout->stepper_c,
+    draw_stepper (range, STEPPER_C,
                   range->orientation == GTK_ORIENTATION_VERTICAL ? GTK_ARROW_UP : GTK_ARROW_LEFT,
                   range->layout->grab_location == MOUSE_STEPPER_C,
                   !touchscreen && range->layout->mouse_location == MOUSE_STEPPER_C,
                   &expose_area);
 
   if (range->has_stepper_d)
-    draw_stepper (range, &range->layout->stepper_d,
+    draw_stepper (range, STEPPER_D,
                   range->orientation == GTK_ORIENTATION_VERTICAL ? GTK_ARROW_DOWN : GTK_ARROW_RIGHT,
                   range->layout->grab_location == MOUSE_STEPPER_D,
                   !touchscreen && range->layout->mouse_location == MOUSE_STEPPER_D,
