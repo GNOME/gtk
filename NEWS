@@ -1,3 +1,46 @@
+Overview of Changes from GTK+ 2.90.3 to 2.90.4
+==============================================
+
+* GSEAL is now enabled by default
+
+* gdk-pixbuf has been moved into a separate module
+
+* The GtkExtendedLayout interface has been renamed to
+  GtkSizeRequest
+
+* gtk_init warns if it detects GTK2.x and GTK3 being used
+  in the same process
+
+* Misc new API:
+ gtk_accessible_set_widget
+ gtk_message_dialog_get_message_area
+ gtk_font_selection_dialog_get_font_selection
+ gtk_window_group_get_current_grab
+ gtk_table_get_size
+ gtk_button_get_event_window
+ gdk_device_manager_get_client_pointer
+ gdk_image_get_pixels
+
+* Bugs fixed:
+ 522756 gnome-appearance-properties crashed with SIGSEGV...
+ 620832 make _gtk_window_group_get_current_grab() public
+ 621250 Missing accessors for GtkRange has_stepper_X
+ 621685 Add gdk_device_manager_get_client_pointer() ...
+ 621690 Enable per-device events on gtk_widget_realize()
+ 621927 Bug in gtk/Makefile.in: affects gtktypefuncs.c
+ 622011 Don't handle "connecting-to-device" state reason
+ 622581 [GSEAL] GtkButton has no accessor for event_window
+ 622765 Duplicate symbols in Gdk on OSX
+ 622827 test/testapplication.c doesn't build in quartz
+
+* Translation updates:
+ Arabic
+ Armenian
+ Galician
+ Slovenian
+ Spanish
+
+
 Overview of Changes from GTK+ 2.90.2 to 2.90.3
 ==============================================
 
