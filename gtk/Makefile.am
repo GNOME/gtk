@@ -815,9 +815,9 @@ gtktypebuiltins.c: @REBUILD@ $(gtk_public_h_sources) gtktypebuiltins.c.template
 gtktypefuncs.c: @REBUILD@ $(top_srcdir)/gtk/*.h $(top_srcdir)/gdk/*.h Makefile
 	echo '#include <gtk/gtk.h>' > xgen-gtfsrc.c && \
 	  ${CPP} $(DEFS) $(INCLUDES) -DGTK_ENABLE_BROKEN $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) xgen-gtfsrc.c | \
-	  grep -o '\bg[td]k_[a-zA-Z0-9_]*_get_type\b' | \
+	  $(GREP) -o '\bg[td]k_[a-zA-Z0-9_]*_get_type\b' | \
 	  sort | uniq | \
-	  sed '{ s/^/*tp++ = /; s/$$/();/; }' > xgen-gtf \
+	  $(SED) '{ s/^/*tp++ = /; s/$$/();/; }' > xgen-gtf \
 	&& cp xgen-gtf $@ && rm -f xgen-gtf
 gtktestutils.c: gtktypefuncs.c
 
