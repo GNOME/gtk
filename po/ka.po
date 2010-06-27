@@ -10,11 +10,12 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ka\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-05-25 20:10-0400\n"
+"POT-Creation-Date: 2010-06-26 23:16-0400\n"
 "PO-Revision-Date: 2008-10-17 18:05+0200\n"
 "Last-Translator: Vladimer Sichinava ვლადიმერ სიჭინავა <vsichi@gnome.org>\n"
 "Language-Team: Georgian <http://mail.gnome.org/mailman/listinfo/gnome-ge-"
 "list>\n"
+"Language: ka\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -80,7 +81,7 @@ msgstr "Gdk გამართვის ალმების მითითე
 #. Placeholder in --gdk-no-debug=FLAGS in --help output
 #. Placeholder in --gtk-debug=FLAGS in --help output
 #. Placeholder in --gtk-no-debug=FLAGS in --help output
-#: gdk/gdk.c:165 gdk/gdk.c:168 gtk/gtkmain.c:454 gtk/gtkmain.c:457
+#: gdk/gdk.c:165 gdk/gdk.c:168 gtk/gtkmain.c:439 gtk/gtkmain.c:442
 msgid "FLAGS"
 msgstr "ალმები"
 
@@ -292,910 +293,6 @@ msgstr "_წაშლა"
 msgctxt "keyboard label"
 msgid "Delete"
 msgstr "_წაშლა"
-
-#: gdk-pixbuf/gdk-pixbuf-animation.c:133 gdk-pixbuf/gdk-pixbuf-io.c:982
-#: gdk-pixbuf/gdk-pixbuf-io.c:1242 tests/testfilechooser.c:222
-#, c-format
-msgid "Failed to open file '%s': %s"
-msgstr "ვერ გაიხსნა ფაილი \"%s\": %s"
-
-#: gdk-pixbuf/gdk-pixbuf-animation.c:146 gdk-pixbuf/gdk-pixbuf-io.c:994
-#, c-format
-msgid "Image file '%s' contains no data"
-msgstr "გამოსახულების ფაილი \"%s\" არ შეიცავს მონაცემებს"
-
-#: gdk-pixbuf/gdk-pixbuf-animation.c:188 gdk-pixbuf/gdk-pixbuf-io.c:1030
-#: gdk-pixbuf/gdk-pixbuf-io.c:1294 tests/testfilechooser.c:267
-#, c-format
-msgid ""
-"Failed to load image '%s': reason not known, probably a corrupt image file"
-msgstr ""
-"გამოსახულება \"%s\" ვერ ჩამოიტვირთა: მიზეზი უცნობია, შესაძლოა გამოსახულების "
-"ფაილია დაზიანებული"
-
-#: gdk-pixbuf/gdk-pixbuf-animation.c:221
-#, c-format
-msgid ""
-"Failed to load animation '%s': reason not known, probably a corrupt "
-"animation file"
-msgstr ""
-"ანიმაცია \"%s\" ვერ ჩამოიტვირთა: მიზეზი უცნობია, შესაძლოა ანიმაციის ფაილია "
-"დაზიანებული"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:715
-#, c-format
-msgid "Unable to load image-loading module: %s: %s"
-msgstr "ვერ იტვირთება ნახატების ჩამოტვირთვის მოდული: %s: %s"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:730
-#, c-format
-msgid ""
-"Image-loading module %s does not export the proper interface; perhaps it's "
-"from a different GTK version?"
-msgstr ""
-"ნახატების ჩამოტვირთვის მოდული \"%s\" ვერ ახდენს მართებული ინტერფეისის "
-"ექსპორტს; შესაძლოა იგი GTK–ს სხვა ვერსიიდანაა?"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:739 gdk-pixbuf/gdk-pixbuf-io.c:790
-#, c-format
-msgid "Image type '%s' is not supported"
-msgstr "გამოსახულების ტიპი \"%s\"  ვერ გამოიყენება"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:863
-#, c-format
-msgid "Couldn't recognize the image file format for file '%s'"
-msgstr "ვერ ვახდენ გამოსახულების \"%s\" ფაილის ფორმატის ამოცნობას"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:871
-msgid "Unrecognized image file format"
-msgstr "გამოსახულების ფაილის უცნობი ფორმატი"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:1039
-#, c-format
-msgid "Failed to load image '%s': %s"
-msgstr "ფაილის ჩამოტვირთვის შეცდომა \"%s\": %s"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:1673 gdk-pixbuf/io-gdip-utils.c:961
-#, c-format
-msgid "Error writing to image file: %s"
-msgstr "გამოსახულების ფაილის ჩაწერის შეცდომა: %s"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:1718 gdk-pixbuf/gdk-pixbuf-io.c:1848
-#, c-format
-msgid "This build of gdk-pixbuf does not support saving the image format: %s"
-msgstr ""
-"ეს ქვესისტემა \"gdk-pixbuf\" ვერ უზრუნველყოფს ფაილის შენახვას ფორმატით: %s"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:1752
-msgid "Insufficient memory to save image to callback"
-msgstr "მეხსიერების უკმარისობა გამოსახულების ფაილის შესანახად"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:1765
-msgid "Failed to open temporary file"
-msgstr "დროებითი ფაილი ვერ იხსნება"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:1791
-msgid "Failed to read from temporary file"
-msgstr "დროებითი ფაილი ვერ იკითხება"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:2044
-#, c-format
-msgid "Failed to open '%s' for writing: %s"
-msgstr "ვერ იხსნება ფაილი \"%s\" ჩასაწერად: %s"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:2070
-#, c-format
-msgid ""
-"Failed to close '%s' while writing image, all data may not have been saved: %"
-"s"
-msgstr ""
-"ვერ დაიხურა ფაილი \"%s\" გამოსახულების ჩაწერისას, შესაძლოა ყველა მონაცემი არ "
-"შენახულა: %s"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:2290 gdk-pixbuf/gdk-pixbuf-io.c:2341
-msgid "Insufficient memory to save image into a buffer"
-msgstr "მეხსიერების უკმარისობა გამოსახულების ბუფერში შესანახად"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:2387
-msgid "Error writing to image stream"
-msgstr "გამოსახულების ნაკადში ჩაწერისას დაიშვა შეცდომა"
-
-#: gdk-pixbuf/gdk-pixbuf-loader.c:334
-#, c-format
-msgid ""
-"Internal error: Image loader module '%s' failed to complete an operation, "
-"but didn't give a reason for the failure"
-msgstr ""
-"შიდა შეცდომა: გამოსახულების ჩატვირთვის მოდული '%s' ვერ ასრულებს ოპერაციას, "
-"მაგრამ არ იტყობინება მიზეზს"
-
-#: gdk-pixbuf/gdk-pixbuf-loader.c:376
-#, c-format
-msgid "Incremental loading of image type '%s' is not supported"
-msgstr "გამოსახულების \"%s\" ფორმატით საფეხურებრივი ჩატვირთვა  ვერ გამოიყენება"
-
-#: gdk-pixbuf/gdk-pixdata.c:147
-msgid "Image header corrupt"
-msgstr "გამოსახულების თავსართი დაზიანებულია"
-
-#: gdk-pixbuf/gdk-pixdata.c:152
-msgid "Image format unknown"
-msgstr "გამოსახულების ფორმატი უცნობია"
-
-#: gdk-pixbuf/gdk-pixdata.c:157 gdk-pixbuf/gdk-pixdata.c:488
-msgid "Image pixel data corrupt"
-msgstr "გამოსახულების წერტილოვანი მონაცემები მცდარია"
-
-#: gdk-pixbuf/gdk-pixdata.c:432
-#, c-format
-msgid "failed to allocate image buffer of %u byte"
-msgid_plural "failed to allocate image buffer of %u bytes"
-msgstr[0] "გამოსახულების ბუფერისთვის ვერ ვიყენებ %u ბაიტს"
-
-#: gdk-pixbuf/io-ani.c:244
-msgid "Unexpected icon chunk in animation"
-msgstr "კადრების მცდარი მიმდევრობა ანიმაციაში"
-
-#: gdk-pixbuf/io-ani.c:337
-msgid "Unsupported animation type"
-msgstr "ანიმაციის ეს ტიპი  ვერ გამოიყენება"
-
-#: gdk-pixbuf/io-ani.c:348 gdk-pixbuf/io-ani.c:406 gdk-pixbuf/io-ani.c:432
-#: gdk-pixbuf/io-ani.c:455 gdk-pixbuf/io-ani.c:482 gdk-pixbuf/io-ani.c:569
-msgid "Invalid header in animation"
-msgstr "ანიმაციის თავსართი მცდარია"
-
-#: gdk-pixbuf/io-ani.c:358 gdk-pixbuf/io-ani.c:380 gdk-pixbuf/io-ani.c:464
-#: gdk-pixbuf/io-ani.c:491 gdk-pixbuf/io-ani.c:542 gdk-pixbuf/io-ani.c:614
-msgid "Not enough memory to load animation"
-msgstr "არასაკმარისი მეხსიერება ანიმაციის ჩასატვირთად"
-
-#: gdk-pixbuf/io-ani.c:398 gdk-pixbuf/io-ani.c:424 gdk-pixbuf/io-ani.c:443
-msgid "Malformed chunk in animation"
-msgstr "ანიმაციის კადრების მცდარი მიმდევრობა"
-
-#: gdk-pixbuf/io-ani.c:711
-msgid "The ANI image format"
-msgstr "გამოსახულების ANI ფორმატი"
-
-#: gdk-pixbuf/io-bmp.c:230 gdk-pixbuf/io-bmp.c:267 gdk-pixbuf/io-bmp.c:338
-#: gdk-pixbuf/io-bmp.c:370 gdk-pixbuf/io-bmp.c:393 gdk-pixbuf/io-bmp.c:496
-msgid "BMP image has bogus header data"
-msgstr "BMP გამოსახულების ფორმატის თავსართი მცდარია"
-
-#: gdk-pixbuf/io-bmp.c:241 gdk-pixbuf/io-bmp.c:433
-msgid "Not enough memory to load bitmap image"
-msgstr "არასაკმარისი მეხსიერება bitmap გამოსახულების ჩასატვირთად"
-
-#: gdk-pixbuf/io-bmp.c:319
-msgid "BMP image has unsupported header size"
-msgstr "BMP გამოსახულების თავსართის ეს ზომა  ვერ გამოიყენება"
-
-#: gdk-pixbuf/io-bmp.c:357
-msgid "Topdown BMP images cannot be compressed"
-msgstr "Topdown BMP ნახატები ვერ შეიკუმშება"
-
-#: gdk-pixbuf/io-bmp.c:717 gdk-pixbuf/io-pnm.c:709
-msgid "Premature end-of-file encountered"
-msgstr "ფაილის ადრეული ბოლო"
-
-#: gdk-pixbuf/io-bmp.c:1329
-msgid "Couldn't allocate memory for saving BMP file"
-msgstr "ვერ ვიყენებ მეხსიერებას BMP ფაილის შესანახად"
-
-#: gdk-pixbuf/io-bmp.c:1370
-msgid "Couldn't write to BMP file"
-msgstr "ვერ ვწერ BMP ფაილს"
-
-#: gdk-pixbuf/io-bmp.c:1423 gdk-pixbuf/io-gdip-bmp.c:82
-msgid "The BMP image format"
-msgstr "გამოსახულების BMP ფორმატი"
-
-#: gdk-pixbuf/io-gif.c:222
-#, c-format
-msgid "Failure reading GIF: %s"
-msgstr "ვერ იკითხება GIF: %s"
-
-#: gdk-pixbuf/io-gif.c:496 gdk-pixbuf/io-gif.c:1481 gdk-pixbuf/io-gif.c:1642
-msgid "GIF file was missing some data (perhaps it was truncated somehow?)"
-msgstr "GIF ფორმატის ფაილს აკლია მონაცემები (შესაძლოა ჩამოიჭრა?)"
-
-#: gdk-pixbuf/io-gif.c:505
-#, c-format
-msgid "Internal error in the GIF loader (%s)"
-msgstr "GIF ჩამტვირთავის შიდა შეცდომა(%s)"
-
-#: gdk-pixbuf/io-gif.c:579
-msgid "Stack overflow"
-msgstr "მჭიდე გადავსებულია"
-
-#: gdk-pixbuf/io-gif.c:639
-msgid "GIF image loader cannot understand this image."
-msgstr "GIF გამოსახულების ჩამტვირთავმა ეს გამოსახულება ვერ აღიქვა."
-
-#: gdk-pixbuf/io-gif.c:668
-msgid "Bad code encountered"
-msgstr "მცდარი კოდი"
-
-#: gdk-pixbuf/io-gif.c:678
-msgid "Circular table entry in GIF file"
-msgstr "წრიული ცხრილის ელემენტი GIF ფაილში"
-
-#: gdk-pixbuf/io-gif.c:866 gdk-pixbuf/io-gif.c:1468 gdk-pixbuf/io-gif.c:1515
-#: gdk-pixbuf/io-gif.c:1630
-msgid "Not enough memory to load GIF file"
-msgstr "მეხსიერების უკმარისობა GIF ფაილის ჩასატვირთად"
-
-#: gdk-pixbuf/io-gif.c:960
-msgid "Not enough memory to composite a frame in GIF file"
-msgstr "მეხსიერების უკმარისობა GIF ფაილის კადრის ასაგებად"
-
-#: gdk-pixbuf/io-gif.c:1132
-msgid "GIF image is corrupt (incorrect LZW compression)"
-msgstr "GIF გამოსახულება დაზიანებულია (მცდარი LZW შეკუმშვა)"
-
-#: gdk-pixbuf/io-gif.c:1182
-msgid "File does not appear to be a GIF file"
-msgstr "ფაილი როგორც ჩანს GIF ფორმატის არაა"
-
-#: gdk-pixbuf/io-gif.c:1194
-#, c-format
-msgid "Version %s of the GIF file format is not supported"
-msgstr "GIF ფაილის ფორმატის %s ვერსია  ვერ გამოიყენება"
-
-#: gdk-pixbuf/io-gif.c:1303
-msgid ""
-"GIF image has no global colormap, and a frame inside it has no local "
-"colormap."
-msgstr "GIF ნახატს და მის შიდა კადრს არა აქვს გლობალური პალიტრა"
-
-#: gdk-pixbuf/io-gif.c:1537
-msgid "GIF image was truncated or incomplete."
-msgstr "GIF გამოსახულება ჩამოჭრილია ან არასრულია."
-
-#: gdk-pixbuf/io-gif.c:1693 gdk-pixbuf/io-gdip-gif.c:80
-msgid "The GIF image format"
-msgstr "GIF გამოსახულების ფორმატი"
-
-#: gdk-pixbuf/io-ico.c:211 gdk-pixbuf/io-ico.c:225 gdk-pixbuf/io-ico.c:277
-#: gdk-pixbuf/io-ico.c:290 gdk-pixbuf/io-ico.c:359
-msgid "Invalid header in icon"
-msgstr "პიქტოგრამის მცდარი თავსართი"
-
-#: gdk-pixbuf/io-ico.c:240 gdk-pixbuf/io-ico.c:300 gdk-pixbuf/io-ico.c:369
-#: gdk-pixbuf/io-ico.c:432 gdk-pixbuf/io-ico.c:462
-msgid "Not enough memory to load icon"
-msgstr "არასაკმარისი მეხსიერება პიქტოგრამის ჩასატვირთად"
-
-#: gdk-pixbuf/io-ico.c:322
-msgid "Icon has zero width"
-msgstr "პიქტოგრამის სიგანე ნულია"
-
-#: gdk-pixbuf/io-ico.c:332
-msgid "Icon has zero height"
-msgstr "პიქტოგრამის სიმაღლე ნულია"
-
-#: gdk-pixbuf/io-ico.c:384
-msgid "Compressed icons are not supported"
-msgstr "შეკუმშული პიქტოგრამები ვერ გამოიყენება"
-
-#: gdk-pixbuf/io-ico.c:417
-msgid "Unsupported icon type"
-msgstr "პიქტოგრამის ეს ტიპი ვერ გამოიყენება"
-
-#: gdk-pixbuf/io-ico.c:511
-msgid "Not enough memory to load ICO file"
-msgstr "მეხსიერების უკმარისობა ICO ფაილის ჩასატვირთად"
-
-#: gdk-pixbuf/io-ico.c:976
-msgid "Image too large to be saved as ICO"
-msgstr "გამოსახულება ძალიან დიდია ICO ფორმატში შესანახად"
-
-#: gdk-pixbuf/io-ico.c:987
-msgid "Cursor hotspot outside image"
-msgstr "კურსორის ველი გამოსახულების გარეთაა"
-
-#: gdk-pixbuf/io-ico.c:1010
-#, c-format
-msgid "Unsupported depth for ICO file: %d"
-msgstr "ICO ფაილის ფორმატის ფერის სიღრმე %d ვერ გამოიყენება"
-
-#: gdk-pixbuf/io-ico.c:1245 gdk-pixbuf/io-gdip-ico.c:59
-msgid "The ICO image format"
-msgstr "გამოსახულების ICO ფაილის ფორმატი"
-
-#: gdk-pixbuf/io-icns.c:347
-#, c-format
-msgid "Error reading ICNS image: %s"
-msgstr "დაიშვა შეცდომა ICNS გამოსახულების კითხვისას: %s"
-
-#: gdk-pixbuf/io-icns.c:364
-msgid "Could not decode ICNS file"
-msgstr "შეუძლებელი გახდა ICNS ფაილის დეკოდირება"
-
-#: gdk-pixbuf/io-icns.c:397
-msgid "The ICNS image format"
-msgstr "გამოსახულების ფორმატი ICNS"
-
-#: gdk-pixbuf/io-jasper.c:75
-msgid "Couldn't allocate memory for stream"
-msgstr "შეუძლებელი გახდა ნაკადისთვის მეხსიერების მინიჭება"
-
-#: gdk-pixbuf/io-jasper.c:105
-msgid "Couldn't decode image"
-msgstr "შეუძლებელია გამოსახულების დეკოდირება"
-
-#: gdk-pixbuf/io-jasper.c:123
-msgid "Transformed JPEG2000 has zero width or height"
-msgstr "დამუშავებული JPEG2000-ს სიმაღლე ან სიგანე ნულის ტოლია"
-
-#: gdk-pixbuf/io-jasper.c:137
-msgid "Image type currently not supported"
-msgstr "გამოსახულების ტიპი მოცემულ ვერსიაში მხარდაუჭერელია"
-
-#: gdk-pixbuf/io-jasper.c:149 gdk-pixbuf/io-jasper.c:157
-msgid "Couldn't allocate memory for color profile"
-msgstr "შეუძლებელი გახდა ფერების პროფილისთვის მეხსიერების მინიჭება"
-
-#: gdk-pixbuf/io-jasper.c:183
-msgid "Insufficient memory to open JPEG 2000 file"
-msgstr "მეხსიერების უკმარისობა JPEG 2000 გახსნისთვის"
-
-#: gdk-pixbuf/io-jasper.c:262
-msgid "Couldn't allocate memory to buffer image data"
-msgstr ""
-"შეუძლებელია მეხსიერების გამოყოფა გამოსახულების მონაცემების ბუფერიზაციისთვის"
-
-#: gdk-pixbuf/io-jasper.c:306
-msgid "The JPEG 2000 image format"
-msgstr "სურათის ფორმატი JPEG 2000"
-
-#: gdk-pixbuf/io-jpeg.c:117
-#, c-format
-msgid "Error interpreting JPEG image file (%s)"
-msgstr "JPEG გამოსახულების ფაილის კითხვის შეცდომა (%s)"
-
-#: gdk-pixbuf/io-jpeg.c:528
-msgid ""
-"Insufficient memory to load image, try exiting some applications to free "
-"memory"
-msgstr ""
-"მეხსიერების უკმარისობა ფაილის ჩასატვირთად; შეეცადეთ დახუროთ რამდენიმე "
-"პროგრამა მეხსიერების გასათავისუფლებლად"
-
-#: gdk-pixbuf/io-jpeg.c:569 gdk-pixbuf/io-jpeg.c:775
-#, c-format
-msgid "Unsupported JPEG color space (%s)"
-msgstr "JPEG პალიტრა(%s) ვერ გამოიყენება"
-
-#: gdk-pixbuf/io-jpeg.c:674 gdk-pixbuf/io-jpeg.c:944 gdk-pixbuf/io-jpeg.c:1177
-#: gdk-pixbuf/io-jpeg.c:1186
-msgid "Couldn't allocate memory for loading JPEG file"
-msgstr "შეუძლებელია მეხსიერების მინიჭება JPEG ფაილის ჩასატვირთად"
-
-#: gdk-pixbuf/io-jpeg.c:919
-msgid "Transformed JPEG has zero width or height."
-msgstr "დამუშავებული JPEG-ის სიმაღლე და სიგანე ნულის ტოლია."
-
-#: gdk-pixbuf/io-jpeg.c:1133 gdk-pixbuf/io-gdip-jpeg.c:53
-#, c-format
-msgid ""
-"JPEG quality must be a value between 0 and 100; value '%s' could not be "
-"parsed."
-msgstr ""
-"JPEG ხარისხის მნიშვნელობა უნდა იყოს 0–დან 100–მდე; მნიშვნელობა \"%s\" ვერ "
-"მუშავდება."
-
-#: gdk-pixbuf/io-jpeg.c:1148 gdk-pixbuf/io-gdip-jpeg.c:68
-#, c-format
-msgid ""
-"JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
-msgstr ""
-"JPEG ხარისხის მნიშვნელობა უნდა იყოს 0–დან 100–მდე; მნიშვნელობა '%"
-"d'დაუშვებელია."
-
-#: gdk-pixbuf/io-jpeg.c:1310 gdk-pixbuf/io-gdip-jpeg.c:136
-msgid "The JPEG image format"
-msgstr "JPEG გამოსახულების ფორმატი"
-
-#: gdk-pixbuf/io-pcx.c:187
-msgid "Couldn't allocate memory for header"
-msgstr "შეუძლებელია თავსართისთვის მეხსიერების მინიჭება"
-
-#: gdk-pixbuf/io-pcx.c:202 gdk-pixbuf/io-pcx.c:560
-msgid "Couldn't allocate memory for context buffer"
-msgstr "შეუძლებელია მეხსიერების მინიჭება კონტექსტური ბუფერისთვის"
-
-#: gdk-pixbuf/io-pcx.c:601
-msgid "Image has invalid width and/or height"
-msgstr "გამოსახულების სიგანე და/ან სიმაღლე ნულოვანია"
-
-#: gdk-pixbuf/io-pcx.c:613 gdk-pixbuf/io-pcx.c:674
-msgid "Image has unsupported bpp"
-msgstr "გამოსახულების ბიტი წერტილზე პარამეტრი ვერ გამოიყენება"
-
-#: gdk-pixbuf/io-pcx.c:618 gdk-pixbuf/io-pcx.c:626
-#, c-format
-msgid "Image has unsupported number of %d-bit planes"
-msgstr "გამოსახულების მრავალბიტიანი (%d) სიბრტყეების რაოდენობა ვერ გამოიყენება"
-
-#: gdk-pixbuf/io-pcx.c:642
-msgid "Couldn't create new pixbuf"
-msgstr "შეუძლებელია ახალი pixbuf შექმნა"
-
-#: gdk-pixbuf/io-pcx.c:650
-msgid "Couldn't allocate memory for line data"
-msgstr "ვერ ვიყენებ მეხსიერებას ხაზობრივი მონაცემებისთვის"
-
-#: gdk-pixbuf/io-pcx.c:657
-msgid "Couldn't allocate memory for paletted data"
-msgstr "ვერ ვიყენებ მეხსიერებას პალიტრის მონაცემებისთვის"
-
-#: gdk-pixbuf/io-pcx.c:704
-msgid "Didn't get all lines of PCX image"
-msgstr "ვერ მივიღე PCX ფორმატის ყველა ხაზი"
-
-#: gdk-pixbuf/io-pcx.c:711
-msgid "No palette found at end of PCX data"
-msgstr "PCX ფორმატის ბოლოს პალიტრა არ აღმოჩნდა"
-
-#: gdk-pixbuf/io-pcx.c:756
-msgid "The PCX image format"
-msgstr "PCX გამოსახულების ფორმატი"
-
-#: gdk-pixbuf/io-png.c:55
-msgid "Bits per channel of PNG image is invalid."
-msgstr "გარდაქმნილი PNG–ს ბიტები არხზე მცდარია."
-
-#: gdk-pixbuf/io-png.c:136 gdk-pixbuf/io-png.c:642
-msgid "Transformed PNG has zero width or height."
-msgstr "გარდაქმნილი PNG–ს სიმაღლე ან სიგანე 0–ია."
-
-#: gdk-pixbuf/io-png.c:144
-msgid "Bits per channel of transformed PNG is not 8."
-msgstr "გარდაქმნილი PNG–ს ბიტები არხზე 8–ის ტოლი არაა."
-
-#: gdk-pixbuf/io-png.c:153
-msgid "Transformed PNG not RGB or RGBA."
-msgstr "გარდაქმნილი PNG არ გახლავთ  RGB ან RGBA ტიპის"
-
-#: gdk-pixbuf/io-png.c:162
-msgid "Transformed PNG has unsupported number of channels, must be 3 or 4."
-msgstr "გარდაქმნილი PNG–ს გამოუყენებელი არხების რაოდენობა 3 ან 4 უნდა იყოს."
-
-#: gdk-pixbuf/io-png.c:183
-#, c-format
-msgid "Fatal error in PNG image file: %s"
-msgstr "კრიტიკული შეცდომა PNG გამოსახულების ფაილში: %s"
-
-#: gdk-pixbuf/io-png.c:316
-msgid "Insufficient memory to load PNG file"
-msgstr "მეხსიერების უკმარისობა PNG ფაილის ჩასატვირთად"
-
-#: gdk-pixbuf/io-png.c:657
-#, c-format
-msgid ""
-"Insufficient memory to store a %ld by %ld image; try exiting some "
-"applications to reduce memory usage"
-msgstr ""
-"მეხსიერების უკმარისობა %ld შესანახად %ld გამოსახულებადან; შეეცადეთ რამდენიმე "
-"პროგრამის დახურვას მეხსიერების გასათავისუფლებლად"
-
-#: gdk-pixbuf/io-png.c:720
-msgid "Fatal error reading PNG image file"
-msgstr "PNG გამოსახულების ფაილის კითხვის კრიტიკული შეცდომა"
-
-#: gdk-pixbuf/io-png.c:769
-#, c-format
-msgid "Fatal error reading PNG image file: %s"
-msgstr "PNG გამოსახულების ფაილის კითხვის კრიტიკული შეცდომა: %s"
-
-#: gdk-pixbuf/io-png.c:863
-msgid ""
-"Keys for PNG text chunks must have at least 1 and at most 79 characters."
-msgstr "PNG ტექსტური ბლოკი უნდა შეიცავდეს 1–დან 79 სიმბოლომდე."
-
-#: gdk-pixbuf/io-png.c:872
-msgid "Keys for PNG text chunks must be ASCII characters."
-msgstr "PNG ტექსტური ბლოკის კოდი ASCII სიმბოლოებისგან უნდა შედგებოდეს."
-
-#: gdk-pixbuf/io-png.c:886 gdk-pixbuf/io-tiff.c:738
-#, c-format
-msgid "Color profile has invalid length %d."
-msgstr ""
-
-#: gdk-pixbuf/io-png.c:899 gdk-pixbuf/io-gdip-png.c:56
-#, c-format
-msgid ""
-"PNG compression level must be a value between 0 and 9; value '%s' could not "
-"be parsed."
-msgstr ""
-"PNG შეკუმშვის ხარისხი 0-დან 9-მდე უნდა იყოს; მნიშვნელობა '%s' ვერ დამუშავდება"
-
-#: gdk-pixbuf/io-png.c:912 gdk-pixbuf/io-gdip-png.c:68
-#, c-format
-msgid ""
-"PNG compression level must be a value between 0 and 9; value '%d' is not "
-"allowed."
-msgstr ""
-"PNG შეკუმშვის ხარისხი 0-დან 9-მდე უნდა იყოს; მნიშვნელობა '%d' არ დაიშვება"
-
-#: gdk-pixbuf/io-png.c:951
-#, c-format
-msgid "Value for PNG text chunk %s cannot be converted to ISO-8859-1 encoding."
-msgstr "PNG ტექსტური ბლოკი %s ვერ გარდაიქმნება ISO-8859-1 კოდირებაში."
-
-#: gdk-pixbuf/io-png.c:1112 gdk-pixbuf/io-gdip-png.c:133
-msgid "The PNG image format"
-msgstr "გამოსახულების PNG ფორმატი"
-
-#: gdk-pixbuf/io-pnm.c:250
-msgid "PNM loader expected to find an integer, but didn't"
-msgstr "PNM ჩამტვირთავი მთელ რიცხვს ეძებდა, მაგრამ ვერ იპოვნა"
-
-#: gdk-pixbuf/io-pnm.c:282
-msgid "PNM file has an incorrect initial byte"
-msgstr "PNM ფაილის საწყისი ბაიტი მცდარია"
-
-#: gdk-pixbuf/io-pnm.c:312
-msgid "PNM file is not in a recognized PNM subformat"
-msgstr "PNM ფაილია ქვეფორმატი PNM ამოუცნობია"
-
-#: gdk-pixbuf/io-pnm.c:337
-msgid "PNM file has an image width of 0"
-msgstr "PNM ფაილის სიგანე ნულოვანია"
-
-#: gdk-pixbuf/io-pnm.c:358
-msgid "PNM file has an image height of 0"
-msgstr "PNM ფაილის სიმაღლე ნულოვანია"
-
-#: gdk-pixbuf/io-pnm.c:381
-msgid "Maximum color value in PNM file is 0"
-msgstr "ფერის მაქსიმალური მნიშვნელობები PNM ფაილისთვის 0–ია"
-
-#: gdk-pixbuf/io-pnm.c:389
-msgid "Maximum color value in PNM file is too large"
-msgstr "ფერის მაქსიმალური მნიშვნელობები PNM ფაილისთვის მეტისმეტად დიდია"
-
-#: gdk-pixbuf/io-pnm.c:429 gdk-pixbuf/io-pnm.c:459 gdk-pixbuf/io-pnm.c:504
-msgid "Raw PNM image type is invalid"
-msgstr "PNM გამოსახულების ტიპი მცდარია"
-
-#: gdk-pixbuf/io-pnm.c:654
-msgid "PNM image loader does not support this PNM subformat"
-msgstr "PNM გამოსახულების ჩამტვირთავი PNM–ის ამ ფორმატს ვერ იყენებს"
-
-#: gdk-pixbuf/io-pnm.c:741 gdk-pixbuf/io-pnm.c:968
-msgid "Raw PNM formats require exactly one whitespace before sample data"
-msgstr "PNM ფორმატი სანიმუშო მონაცემების წინ ზუსტად ერთ ხარეს ითხოვს"
-
-#: gdk-pixbuf/io-pnm.c:768
-msgid "Cannot allocate memory for loading PNM image"
-msgstr "ვერ ვიყენებ მეხსიერებას PNM გამოსახულების ჩასატვირთად"
-
-#: gdk-pixbuf/io-pnm.c:818
-msgid "Insufficient memory to load PNM context struct"
-msgstr "მეხსიერების უკმარისობა PNM გამოსახულების სტრუქტურის ჩასატვირთად"
-
-#: gdk-pixbuf/io-pnm.c:869
-msgid "Unexpected end of PNM image data"
-msgstr "PNM გამოსახულების ფაილის გაუთვალისწინებელი დასასრული"
-
-#: gdk-pixbuf/io-pnm.c:997
-msgid "Insufficient memory to load PNM file"
-msgstr "მეხსიერების უკმარისობა PNM გამოსახულების ჩასატვირთად"
-
-#: gdk-pixbuf/io-pnm.c:1081
-msgid "The PNM/PBM/PGM/PPM image format family"
-msgstr "გამოსახულების PNM/PBM/PGM/PPM ფორმატები"
-
-#: gdk-pixbuf/io-qtif.c:128
-msgid "Input file descriptor is NULL."
-msgstr ""
-
-#: gdk-pixbuf/io-qtif.c:143
-#, fuzzy
-msgid "Failed to read QTIF header"
-msgstr "თავსართის ჩაწერა ვერ მოხერხდ\n"
-
-#: gdk-pixbuf/io-qtif.c:152 gdk-pixbuf/io-qtif.c:182 gdk-pixbuf/io-qtif.c:446
-#, c-format
-msgid "QTIF atom size too large (%d bytes)"
-msgstr ""
-
-#: gdk-pixbuf/io-qtif.c:172
-#, fuzzy, c-format
-msgid "Failed to allocate %d bytes for file read buffer"
-msgstr "გამოსახულების ბუფერისთვის ვერ ვიყენებ %u ბაიტს"
-
-#: gdk-pixbuf/io-qtif.c:196
-#, fuzzy, c-format
-msgid "File error when reading QTIF atom: %s"
-msgstr "ვერ იკითხება GIF: %s"
-
-#: gdk-pixbuf/io-qtif.c:233
-#, c-format
-msgid "Failed to skip the next %d bytes with seek()."
-msgstr ""
-
-#: gdk-pixbuf/io-qtif.c:257
-#, fuzzy
-msgid "Failed to allocate QTIF context structure."
-msgstr "ვერ ვიყენებ მეხსიერებას TGA შიგთავსის სტრუქტურისთვის"
-
-#: gdk-pixbuf/io-qtif.c:317
-#, fuzzy
-msgid "Failed to create GdkPixbufLoader object."
-msgstr "ვერ განხორციელდა დასტის ინდექსის ჩაწერა\n"
-
-#: gdk-pixbuf/io-qtif.c:421
-#, fuzzy
-msgid "Failed to find an image data atom."
-msgstr "TIFF გამოსახულება ვერ გაიხსნა"
-
-#: gdk-pixbuf/io-qtif.c:602
-#, fuzzy
-msgid "The QTIF image format"
-msgstr "გამოსახულების TIFF ფორმატი"
-
-#: gdk-pixbuf/io-ras.c:126
-msgid "RAS image has bogus header data"
-msgstr "RAS გამოსახულების თავსართი მცდარია"
-
-#: gdk-pixbuf/io-ras.c:148
-msgid "RAS image has unknown type"
-msgstr "RAS გამოსახულების ეს ტიპი უცნობია"
-
-#: gdk-pixbuf/io-ras.c:156
-msgid "unsupported RAS image variation"
-msgstr "RAS გამოსახულების ეს ვერსია ვერ გამოიყენება"
-
-#: gdk-pixbuf/io-ras.c:171 gdk-pixbuf/io-ras.c:200
-msgid "Not enough memory to load RAS image"
-msgstr "მეხსიერების უკმარისობა RAS გამოსახულების ჩასატვირთად"
-
-#: gdk-pixbuf/io-ras.c:545
-msgid "The Sun raster image format"
-msgstr "გამოსახულების Sun რასტრული ფორმატი"
-
-#: gdk-pixbuf/io-tga.c:154
-msgid "Cannot allocate memory for IOBuffer struct"
-msgstr "ვერ ვიყენებ მეხსიერებას IOBuffer სტრუქტურისთვის"
-
-#: gdk-pixbuf/io-tga.c:173
-msgid "Cannot allocate memory for IOBuffer data"
-msgstr "ვერ ვიყენებ მეხსიერებას IOBuffer მონაცემებისთვის"
-
-#: gdk-pixbuf/io-tga.c:184
-msgid "Cannot realloc IOBuffer data"
-msgstr "ვერ ვიყენებ IOBuffer მონაცემებს"
-
-#: gdk-pixbuf/io-tga.c:214
-msgid "Cannot allocate temporary IOBuffer data"
-msgstr "ვერ ვიყენებ დროებით IOBuffer მონაცემებს"
-
-#: gdk-pixbuf/io-tga.c:347
-msgid "Cannot allocate new pixbuf"
-msgstr "ვერ ვიყენებ მეხსიერებას ახალი pixbuf სტრუქტურისთვის"
-
-#: gdk-pixbuf/io-tga.c:686
-#, fuzzy
-msgid "Image is corrupted or truncated"
-msgstr "GIF გამოსახულება ჩამოჭრილია ან არასრულია."
-
-#: gdk-pixbuf/io-tga.c:693
-msgid "Cannot allocate colormap structure"
-msgstr "ვერ ვიყენებ მეხსიერებას პალიტრის სტრუქტურისთვის"
-
-#: gdk-pixbuf/io-tga.c:700
-msgid "Cannot allocate colormap entries"
-msgstr "ვერ ვიყენებ მეხსიერებას პალიტრის ელემენტებისთვის"
-
-#: gdk-pixbuf/io-tga.c:722
-msgid "Unexpected bitdepth for colormap entries"
-msgstr "პალიტრის ელემენტის ფერის გაუთვალისწინებელი სიღრმე"
-
-#: gdk-pixbuf/io-tga.c:740
-msgid "Cannot allocate TGA header memory"
-msgstr "ვერ ვიყენებ მეხსიერებას TGA თავსართისთვის"
-
-#: gdk-pixbuf/io-tga.c:773
-msgid "TGA image has invalid dimensions"
-msgstr "TGA ნახატს უმართებლო ზომები აქვს"
-
-#: gdk-pixbuf/io-tga.c:779 gdk-pixbuf/io-tga.c:788 gdk-pixbuf/io-tga.c:798
-#: gdk-pixbuf/io-tga.c:808 gdk-pixbuf/io-tga.c:815
-msgid "TGA image type not supported"
-msgstr "გამოსახულების TGA ტიპი ვერ გამოიყენება"
-
-#: gdk-pixbuf/io-tga.c:862
-msgid "Cannot allocate memory for TGA context struct"
-msgstr "ვერ ვიყენებ მეხსიერებას TGA შიგთავსის სტრუქტურისთვის"
-
-#: gdk-pixbuf/io-tga.c:927
-msgid "Excess data in file"
-msgstr "ფაილში მეტისმეტი მონაცემია"
-
-#: gdk-pixbuf/io-tga.c:1008
-msgid "The Targa image format"
-msgstr "გამოსახულების Targa ფორმატი"
-
-#: gdk-pixbuf/io-tiff.c:165
-msgid "Could not get image width (bad TIFF file)"
-msgstr "ვერ ისაზღვრება გამოსახულების სიგანე (მცდარი TIFF ფაილი)"
-
-#: gdk-pixbuf/io-tiff.c:172
-msgid "Could not get image height (bad TIFF file)"
-msgstr "ვერ ისაზღვრება გამოსახულების სიმაღლე (მცდარი TIFF ფაილი)"
-
-#: gdk-pixbuf/io-tiff.c:180
-msgid "Width or height of TIFF image is zero"
-msgstr "TIFF გამოსახულების სიმაღლე ან სიგანე ნულია"
-
-#: gdk-pixbuf/io-tiff.c:189 gdk-pixbuf/io-tiff.c:198
-msgid "Dimensions of TIFF image too large"
-msgstr "TIFF გამოსახულების განზომილებები ძალიან დიდია"
-
-#: gdk-pixbuf/io-tiff.c:222 gdk-pixbuf/io-tiff.c:234 gdk-pixbuf/io-tiff.c:561
-msgid "Insufficient memory to open TIFF file"
-msgstr "მეხსიერების უკმარისობა TIFF გამოსახულების გასახსნელად"
-
-#: gdk-pixbuf/io-tiff.c:295
-msgid "Failed to load RGB data from TIFF file"
-msgstr "RGB მონაცემების ჩატვირთვა TIFF ფაილიდან ვერ შედგა"
-
-#: gdk-pixbuf/io-tiff.c:351
-msgid "Failed to open TIFF image"
-msgstr "TIFF გამოსახულება ვერ გაიხსნა"
-
-#: gdk-pixbuf/io-tiff.c:363 gdk-pixbuf/io-tiff.c:778
-msgid "TIFFClose operation failed"
-msgstr "TIFFClose ოპერაცია ვერ შედგა"
-
-#: gdk-pixbuf/io-tiff.c:493 gdk-pixbuf/io-tiff.c:506
-msgid "Failed to load TIFF image"
-msgstr "TIFF გამოსახულება ვერ ჩამოიტვირთა"
-
-#: gdk-pixbuf/io-tiff.c:692
-msgid "Failed to save TIFF image"
-msgstr "ვერ განხორციელდა TIFF გრაფიკული გამოსახულების დამახსოვრება"
-
-#: gdk-pixbuf/io-tiff.c:727
-msgid "TIFF compression doesn't refer to a valid codec."
-msgstr ""
-
-#: gdk-pixbuf/io-tiff.c:767
-msgid "Failed to write TIFF data"
-msgstr "ვერ განხორციელდა მონაცემების TIFF-ში ჩაწერა"
-
-#: gdk-pixbuf/io-tiff.c:814
-msgid "Couldn't write to TIFF file"
-msgstr "ვერ ვწერ TIFF ფაილს"
-
-#: gdk-pixbuf/io-tiff.c:869
-msgid "The TIFF image format"
-msgstr "გამოსახულების TIFF ფორმატი"
-
-#: gdk-pixbuf/io-wbmp.c:246
-msgid "Image has zero width"
-msgstr "გამოსახულების სიგანე ნულოვანია"
-
-#: gdk-pixbuf/io-wbmp.c:264
-msgid "Image has zero height"
-msgstr "გამოსახულების სიმაღლე ნულოვანია"
-
-#: gdk-pixbuf/io-wbmp.c:275
-msgid "Not enough memory to load image"
-msgstr "მეხსიერების უკმარისობა გამოსახულების ჩასატვირთად"
-
-#: gdk-pixbuf/io-wbmp.c:334
-msgid "Couldn't save the rest"
-msgstr "დანარჩენი ნაწილის შენახვა ვერ ხერხდება"
-
-#: gdk-pixbuf/io-wbmp.c:375
-msgid "The WBMP image format"
-msgstr "გამოსახულების WBMP ფორმატი"
-
-#: gdk-pixbuf/io-xbm.c:295
-msgid "Invalid XBM file"
-msgstr "მცდარი XBM ფაილი"
-
-#: gdk-pixbuf/io-xbm.c:305
-msgid "Insufficient memory to load XBM image file"
-msgstr "მეხსიერების უკმარისობა XBM გამოსახულების ჩასატვირთად"
-
-#: gdk-pixbuf/io-xbm.c:453
-msgid "Failed to write to temporary file when loading XBM image"
-msgstr "ვერ ვწერ დროებით ფაილს XBM გამოსახულების ჩატვირთვისას"
-
-#: gdk-pixbuf/io-xbm.c:492
-msgid "The XBM image format"
-msgstr "გამოსახულების XBM ფორმატი"
-
-#: gdk-pixbuf/io-xpm.c:468
-msgid "No XPM header found"
-msgstr "XPM თავსართი ვერ მოიძებნა"
-
-#: gdk-pixbuf/io-xpm.c:477
-msgid "Invalid XPM header"
-msgstr "მცდარი XBM თავსართი"
-
-#: gdk-pixbuf/io-xpm.c:485
-msgid "XPM file has image width <= 0"
-msgstr "XPM ფაილში გამოსახულების სიგანე <= 0"
-
-#: gdk-pixbuf/io-xpm.c:493
-msgid "XPM file has image height <= 0"
-msgstr "XPM ფაილში გამოსახულების სიმაღლე <= 0"
-
-#: gdk-pixbuf/io-xpm.c:501
-msgid "XPM has invalid number of chars per pixel"
-msgstr "XPM ფაილს პიქსელზე სიმბოლოების მცდარი რაოდენობა აქვს"
-
-#: gdk-pixbuf/io-xpm.c:510
-msgid "XPM file has invalid number of colors"
-msgstr "XPM ფაილს ფერების მცდარი რაოდენობა აქვს"
-
-#: gdk-pixbuf/io-xpm.c:522 gdk-pixbuf/io-xpm.c:531 gdk-pixbuf/io-xpm.c:583
-msgid "Cannot allocate memory for loading XPM image"
-msgstr "ვერ ვიყენებ მეხსიერებს XPM გამოსახულების ჩასატვირთად"
-
-#: gdk-pixbuf/io-xpm.c:545
-msgid "Cannot read XPM colormap"
-msgstr "ვერ ვკითხულობ XPM პალიტრას"
-
-#: gdk-pixbuf/io-xpm.c:777
-msgid "Failed to write to temporary file when loading XPM image"
-msgstr "ვერ ვწერ დროებით ფაილს XPM გამოსახულების ჩატვირთვისას"
-
-#: gdk-pixbuf/io-xpm.c:816
-msgid "The XPM image format"
-msgstr "გამოსახულების XPM ფორმატი"
-
-#: gdk-pixbuf/io-gdip-emf.c:59
-msgid "The EMF image format"
-msgstr "გამოსახულების EMF ფორმატი"
-
-#: gdk-pixbuf/io-gdip-utils.c:232
-#, c-format
-msgid "Could not allocate memory: %s"
-msgstr "შეუძლებელი გახდა მეხსიერების მინიჭება: %s"
-
-#: gdk-pixbuf/io-gdip-utils.c:257 gdk-pixbuf/io-gdip-utils.c:371
-#: gdk-pixbuf/io-gdip-utils.c:411
-#, c-format
-msgid "Could not create stream: %s"
-msgstr "შეუძლებელი გახდა ნაკადის შექმნა: %s"
-
-#: gdk-pixbuf/io-gdip-utils.c:271
-#, c-format
-msgid "Could not seek stream: %s"
-msgstr "შეუძლებელი გახდა ნაკადის მოძებნა: %s"
-
-#: gdk-pixbuf/io-gdip-utils.c:283
-#, c-format
-msgid "Could not read from stream: %s"
-msgstr "შეუძლებელი გახდა ნაკადიდან წაკითხვა: %s"
-
-#: gdk-pixbuf/io-gdip-utils.c:694 gdk-pixbuf/io-gdip-utils.c:825
-msgid "Couldn't load bitmap"
-msgstr "შეუძლებელი გახდა გამოსახულების ჩატვირთვა"
-
-#: gdk-pixbuf/io-gdip-utils.c:847
-msgid "Couldn't load metafile"
-msgstr "შეუძლებელი გახდა მეტაფაილის ჩატვირთვა"
-
-#: gdk-pixbuf/io-gdip-utils.c:1006
-msgid "Unsupported image format for GDI+"
-msgstr "მოცემული გამოსახულების ფორმატი GDI+ თვის მიუღებელია"
-
-#: gdk-pixbuf/io-gdip-utils.c:1013
-msgid "Couldn't save"
-msgstr "შეუძლებელია დამახსოვრება"
-
-#: gdk-pixbuf/io-gdip-wmf.c:58
-msgid "The WMF image format"
-msgstr "WMF გამოსახულების ფორმატი"
 
 #. Description of --sync in --help output
 #: gdk/win32/gdkmain-win32.c:55
@@ -1537,8 +634,9 @@ msgid "_Saturation:"
 msgstr "_სიმსუყე:"
 
 #: gtk/gtkcolorsel.c:393
-msgid "\"Deepness\" of the color."
-msgstr "ფერის \"სიღრმე\"."
+#, fuzzy
+msgid "Intensity of the color."
+msgstr "ფერის გამჭვირვალობა."
 
 #: gtk/gtkcolorsel.c:394
 msgid "_Value:"
@@ -1708,11 +806,11 @@ msgstr "მა_რჯვნივ:"
 msgid "Paper Margins"
 msgstr "გვერდის ველები"
 
-#: gtk/gtkentry.c:8612 gtk/gtktextview.c:8002
+#: gtk/gtkentry.c:8612 gtk/gtktextview.c:8012
 msgid "Input _Methods"
 msgstr "შეტანის _მეთოდები"
 
-#: gtk/gtkentry.c:8626 gtk/gtktextview.c:8016
+#: gtk/gtkentry.c:8626 gtk/gtktextview.c:8026
 msgid "_Insert Unicode Control Character"
 msgstr "_უნიკოდის საკონტროლო სიმბოლოს ჩასმა"
 
@@ -2160,13 +1258,13 @@ msgid "System (%s)"
 msgstr "%s (%s)"
 
 #. Open Link
-#: gtk/gtklabel.c:6076
+#: gtk/gtklabel.c:6072
 #, fuzzy
 msgid "_Open Link"
 msgstr "_გახსნა"
 
 #. Copy Link Address
-#: gtk/gtklabel.c:6088
+#: gtk/gtklabel.c:6084
 msgid "Copy _Link Address"
 msgstr ""
 
@@ -2179,27 +1277,27 @@ msgid "Invalid URI"
 msgstr "მცდარი URI"
 
 #. Description of --gtk-module=MODULES in --help output
-#: gtk/gtkmain.c:447
+#: gtk/gtkmain.c:432
 msgid "Load additional GTK+ modules"
 msgstr "GTK+ დამატებითი მოდულების ჩატვირთვა"
 
 #. Placeholder in --gtk-module=MODULES in --help output
-#: gtk/gtkmain.c:448
+#: gtk/gtkmain.c:433
 msgid "MODULES"
 msgstr "MODULES"
 
 #. Description of --g-fatal-warnings in --help output
-#: gtk/gtkmain.c:450
+#: gtk/gtkmain.c:435
 msgid "Make all warnings fatal"
 msgstr "ყველა გაფრთხილების გადამწყვეტად მითითება"
 
 #. Description of --gtk-debug=FLAGS in --help output
-#: gtk/gtkmain.c:453
+#: gtk/gtkmain.c:438
 msgid "GTK+ debugging flags to set"
 msgstr "GTK+ გამართვის ალმების მითითება"
 
 #. Description of --gtk-no-debug=FLAGS in --help output
-#: gtk/gtkmain.c:456
+#: gtk/gtkmain.c:441
 msgid "GTK+ debugging flags to unset"
 msgstr "GTK+ გამართვის ალმების მოხსნა"
 
@@ -2208,20 +1306,20 @@ msgstr "GTK+ გამართვის ალმების მოხსნ�
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
 #.
-#: gtk/gtkmain.c:708
+#: gtk/gtkmain.c:704
 msgid "default:LTR"
 msgstr "default:LTR"
 
-#: gtk/gtkmain.c:773
+#: gtk/gtkmain.c:769
 #, c-format
 msgid "Cannot open display: %s"
 msgstr "შეუძლებელია დისპლეის გახსნა: %s"
 
-#: gtk/gtkmain.c:810
+#: gtk/gtkmain.c:806
 msgid "GTK+ Options"
 msgstr "GTK+ პარამეტრები"
 
-#: gtk/gtkmain.c:810
+#: gtk/gtkmain.c:806
 msgid "Show GTK+ Options"
 msgstr "GTK+ პარამეტრების ჩვენება"
 
@@ -2307,7 +1405,7 @@ msgstr ""
 msgid "Cannot end process with pid %d: %s"
 msgstr ""
 
-#: gtk/gtknotebook.c:4621 gtk/gtknotebook.c:7050
+#: gtk/gtknotebook.c:4631 gtk/gtknotebook.c:7060
 #, c-format
 msgid "Page %u"
 msgstr "გვერდი %u"
@@ -2402,92 +1500,86 @@ msgstr "_დასტაში შენახვა:"
 msgid "%s job #%d"
 msgstr "%s ამოცანა #%d"
 
-#: gtk/gtkprintoperation.c:1687
+#: gtk/gtkprintoperation.c:1695
 msgctxt "print operation status"
 msgid "Initial state"
 msgstr ""
 
-#: gtk/gtkprintoperation.c:1688
+#: gtk/gtkprintoperation.c:1696
 #, fuzzy
 msgctxt "print operation status"
 msgid "Preparing to print"
 msgstr "მზადება - %d"
 
-#: gtk/gtkprintoperation.c:1689
+#: gtk/gtkprintoperation.c:1697
 msgctxt "print operation status"
 msgid "Generating data"
 msgstr ""
 
-#: gtk/gtkprintoperation.c:1690
+#: gtk/gtkprintoperation.c:1698
 msgctxt "print operation status"
 msgid "Sending data"
 msgstr ""
 
-#: gtk/gtkprintoperation.c:1691
+#: gtk/gtkprintoperation.c:1699
 #, fuzzy
 msgctxt "print operation status"
 msgid "Waiting"
 msgstr "გაფრთხილება"
 
-#: gtk/gtkprintoperation.c:1692
+#: gtk/gtkprintoperation.c:1700
 msgctxt "print operation status"
 msgid "Blocking on issue"
 msgstr ""
 
-#: gtk/gtkprintoperation.c:1693
+#: gtk/gtkprintoperation.c:1701
 #, fuzzy
 msgctxt "print operation status"
 msgid "Printing"
 msgstr "ბეჭდვა %d"
 
-#: gtk/gtkprintoperation.c:1694
+#: gtk/gtkprintoperation.c:1702
 #, fuzzy
 msgctxt "print operation status"
 msgid "Finished"
 msgstr "სრულდება"
 
-#: gtk/gtkprintoperation.c:1695
+#: gtk/gtkprintoperation.c:1703
 #, fuzzy
 msgctxt "print operation status"
 msgid "Finished with error"
 msgstr "დასრულდა შეცდომით"
 
-#: gtk/gtkprintoperation.c:2254
+#: gtk/gtkprintoperation.c:2270
 #, c-format
 msgid "Preparing %d"
 msgstr "მზადება - %d"
 
-#: gtk/gtkprintoperation.c:2256 gtk/gtkprintoperation.c:2875
+#: gtk/gtkprintoperation.c:2272 gtk/gtkprintoperation.c:2902
 #, c-format
 msgid "Preparing"
 msgstr "მომზადება"
 
-#: gtk/gtkprintoperation.c:2259
+#: gtk/gtkprintoperation.c:2275
 #, c-format
 msgid "Printing %d"
 msgstr "ბეჭდვა %d"
 
-#: gtk/gtkprintoperation.c:2905
+#: gtk/gtkprintoperation.c:2932
 #, c-format
 msgid "Error creating print preview"
 msgstr "საბეჭდი ესკიზის შექმნისას დაიშვა შეცდომა"
 
-#: gtk/gtkprintoperation.c:2908
+#: gtk/gtkprintoperation.c:2935
 #, c-format
 msgid "The most probable reason is that a temporary file could not be created."
 msgstr "ყველაზე სავარაუდო მიზეზია, ის რომ ვერ შეიქმნა დროებითი ფაილი."
 
-#: gtk/gtkprintoperation-unix.c:297 gtk/gtkprintoperation-unix.c:314
-#, c-format
+#: gtk/gtkprintoperation-unix.c:297
 msgid "Error launching preview"
 msgstr "ესკიზის ჩვენების შეცდომა"
 
-#: gtk/gtkprintoperation-unix.c:358
-#, c-format
-msgid "Error printing"
-msgstr "ბეჭდვის შეცდომა"
-
-#: gtk/gtkprintoperation-unix.c:494 gtk/gtkprintoperation-win32.c:1447
+#: gtk/gtkprintoperation-unix.c:470 gtk/gtkprintoperation-win32.c:1447
 msgid "Application"
 msgstr "პროგრამა"
 
@@ -2501,7 +1593,7 @@ msgstr "არ არის ქაღალდი"
 
 #. Translators: this is a printer status.
 #: gtk/gtkprintoperation-win32.c:616
-#: modules/printbackends/cups/gtkprintbackendcups.c:1999
+#: modules/printbackends/cups/gtkprintbackendcups.c:1998
 msgid "Paused"
 msgstr "შეჩერებული"
 
@@ -2630,42 +1722,42 @@ msgstr "საერთო"
 #. * multiple pages on a sheet when printing
 #.
 #: gtk/gtkprintunixdialog.c:3010
-#: modules/printbackends/cups/gtkprintbackendcups.c:3509
+#: modules/printbackends/cups/gtkprintbackendcups.c:3508
 msgid "Left to right, top to bottom"
 msgstr "მარცხნიდან მარჯვნივ, ქვევიდან ზემოთ"
 
 #: gtk/gtkprintunixdialog.c:3010
-#: modules/printbackends/cups/gtkprintbackendcups.c:3509
+#: modules/printbackends/cups/gtkprintbackendcups.c:3508
 msgid "Left to right, bottom to top"
 msgstr "მარცხნიდან მარჯვნივ, ქვემოდან ზემოთ"
 
 #: gtk/gtkprintunixdialog.c:3011
-#: modules/printbackends/cups/gtkprintbackendcups.c:3510
+#: modules/printbackends/cups/gtkprintbackendcups.c:3509
 msgid "Right to left, top to bottom"
 msgstr "მარჯვნიდან მარცხნივ, ზევიდან ქვემოთ"
 
 #: gtk/gtkprintunixdialog.c:3011
-#: modules/printbackends/cups/gtkprintbackendcups.c:3510
+#: modules/printbackends/cups/gtkprintbackendcups.c:3509
 msgid "Right to left, bottom to top"
 msgstr "მარჯვნიდან მარცხნივ, ქვემოდან ზემოთ"
 
 #: gtk/gtkprintunixdialog.c:3012
-#: modules/printbackends/cups/gtkprintbackendcups.c:3511
+#: modules/printbackends/cups/gtkprintbackendcups.c:3510
 msgid "Top to bottom, left to right"
 msgstr "ზემოდან ქვემოთ, მარცხნიდან მარჯვნივ"
 
 #: gtk/gtkprintunixdialog.c:3012
-#: modules/printbackends/cups/gtkprintbackendcups.c:3511
+#: modules/printbackends/cups/gtkprintbackendcups.c:3510
 msgid "Top to bottom, right to left"
 msgstr "ზემოდან ქვემოთ, მარჯვნიდან მარცხნივ"
 
 #: gtk/gtkprintunixdialog.c:3013
-#: modules/printbackends/cups/gtkprintbackendcups.c:3512
+#: modules/printbackends/cups/gtkprintbackendcups.c:3511
 msgid "Bottom to top, left to right"
 msgstr "ქვემოდან ზემოთ, მარცხნიდან მარჯვნივ"
 
 #: gtk/gtkprintunixdialog.c:3013
-#: modules/printbackends/cups/gtkprintbackendcups.c:3512
+#: modules/printbackends/cups/gtkprintbackendcups.c:3511
 msgid "Bottom to top, right to left"
 msgstr "ქვემოდან ზემოთ, მარჯვნიდან მარცხნივ"
 
@@ -2673,7 +1765,7 @@ msgstr "ქვემოდან ზემოთ, მარჯვნიდან
 #. * dialog that controls in what order multiple pages are arranged
 #.
 #: gtk/gtkprintunixdialog.c:3017 gtk/gtkprintunixdialog.c:3030
-#: modules/printbackends/cups/gtkprintbackendcups.c:3544
+#: modules/printbackends/cups/gtkprintbackendcups.c:3543
 msgid "Page Ordering"
 msgstr "გვერდის დალაგება"
 
@@ -4988,123 +4080,118 @@ msgstr "'%s' პრინტერი ამჟამად ხაზგარ�
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:1687
 #, c-format
-msgid "Printer '%s' may not be connected."
-msgstr "შესაძლებელია რომ '%s' პრინტერი არ იყოს მიერთებული."
-
-#: modules/printbackends/cups/gtkprintbackendcups.c:1688
-#, c-format
 msgid "There is a problem on printer '%s'."
 msgstr "'%s' პრინტერთან წარმოიშვა შეცდომა."
 
 #. Translators: this is a printer status.
-#: modules/printbackends/cups/gtkprintbackendcups.c:1996
+#: modules/printbackends/cups/gtkprintbackendcups.c:1995
 msgid "Paused ; Rejecting Jobs"
 msgstr "შეყოვნებულია; დავალებების უარყოფა"
 
 #. Translators: this is a printer status.
-#: modules/printbackends/cups/gtkprintbackendcups.c:2002
+#: modules/printbackends/cups/gtkprintbackendcups.c:2001
 msgid "Rejecting Jobs"
 msgstr "დავალებების უარყოფა"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2778
+#: modules/printbackends/cups/gtkprintbackendcups.c:2777
 msgid "Two Sided"
 msgstr "ორმხრივი"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2779
+#: modules/printbackends/cups/gtkprintbackendcups.c:2778
 msgid "Paper Type"
 msgstr "ქაღალდის ტიპი"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2780
+#: modules/printbackends/cups/gtkprintbackendcups.c:2779
 msgid "Paper Source"
 msgstr "ქაღალდის წყარო"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2781
+#: modules/printbackends/cups/gtkprintbackendcups.c:2780
 msgid "Output Tray"
 msgstr "ფურცლების უჯრა"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2782
+#: modules/printbackends/cups/gtkprintbackendcups.c:2781
 #, fuzzy
 msgid "Resolution"
 msgstr "შეკითხვა"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2783
+#: modules/printbackends/cups/gtkprintbackendcups.c:2782
 msgid "GhostScript pre-filtering"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2792
+#: modules/printbackends/cups/gtkprintbackendcups.c:2791
 msgid "One Sided"
 msgstr "ცალმხრივი"
 
 #. Translators: this is an option of "Two Sided"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2794
+#: modules/printbackends/cups/gtkprintbackendcups.c:2793
 msgid "Long Edge (Standard)"
 msgstr ""
 
 #. Translators: this is an option of "Two Sided"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2796
+#: modules/printbackends/cups/gtkprintbackendcups.c:2795
 msgid "Short Edge (Flip)"
 msgstr ""
 
 #. Translators: this is an option of "Paper Source"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2798
-#: modules/printbackends/cups/gtkprintbackendcups.c:2800
-#: modules/printbackends/cups/gtkprintbackendcups.c:2808
+#: modules/printbackends/cups/gtkprintbackendcups.c:2797
+#: modules/printbackends/cups/gtkprintbackendcups.c:2799
+#: modules/printbackends/cups/gtkprintbackendcups.c:2807
 msgid "Auto Select"
 msgstr "ავტოშერჩევა"
 
 #. Translators: this is an option of "Paper Source"
 #. Translators: this is an option of "Resolution"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2802
-#: modules/printbackends/cups/gtkprintbackendcups.c:2804
-#: modules/printbackends/cups/gtkprintbackendcups.c:2806
-#: modules/printbackends/cups/gtkprintbackendcups.c:2810
-#: modules/printbackends/cups/gtkprintbackendcups.c:3296
+#: modules/printbackends/cups/gtkprintbackendcups.c:2801
+#: modules/printbackends/cups/gtkprintbackendcups.c:2803
+#: modules/printbackends/cups/gtkprintbackendcups.c:2805
+#: modules/printbackends/cups/gtkprintbackendcups.c:2809
+#: modules/printbackends/cups/gtkprintbackendcups.c:3295
 msgid "Printer Default"
 msgstr "ნაგულისხმევი პრინტერი"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2812
+#: modules/printbackends/cups/gtkprintbackendcups.c:2811
 msgid "Embed GhostScript fonts only"
 msgstr ""
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2814
+#: modules/printbackends/cups/gtkprintbackendcups.c:2813
 msgid "Convert to PS level 1"
 msgstr ""
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2816
+#: modules/printbackends/cups/gtkprintbackendcups.c:2815
 msgid "Convert to PS level 2"
 msgstr ""
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2818
+#: modules/printbackends/cups/gtkprintbackendcups.c:2817
 #, fuzzy
 msgid "No pre-filtering"
 msgstr "პრინტერი ვერ მოიძებნა"
 
 #. Translators: "Miscellaneous" is the label for a button, that opens
 #. up an extra panel of settings in a print dialog.
-#: modules/printbackends/cups/gtkprintbackendcups.c:2827
+#: modules/printbackends/cups/gtkprintbackendcups.c:2826
 msgid "Miscellaneous"
 msgstr ""
 
 #. Translators: These strings name the possible values of the
 #. * job priority option in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3504
+#: modules/printbackends/cups/gtkprintbackendcups.c:3503
 msgid "Urgent"
 msgstr "სასწრაფო"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3504
+#: modules/printbackends/cups/gtkprintbackendcups.c:3503
 msgid "High"
 msgstr "მაღალი"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3504
+#: modules/printbackends/cups/gtkprintbackendcups.c:3503
 msgid "Medium"
 msgstr "საშუალო"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3504
+#: modules/printbackends/cups/gtkprintbackendcups.c:3503
 msgid "Low"
 msgstr "დაბალი"
 
@@ -5112,66 +4199,66 @@ msgstr "დაბალი"
 #. Translators, this string is used to label the pages-per-sheet option
 #. * in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3528
+#: modules/printbackends/cups/gtkprintbackendcups.c:3527
 msgid "Pages per Sheet"
 msgstr "გვერდები ფურცელზე"
 
 #. Translators, this string is used to label the job priority option
 #. * in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3565
+#: modules/printbackends/cups/gtkprintbackendcups.c:3564
 msgid "Job Priority"
 msgstr "ამოცანის პრიორიტეტი"
 
 #. Translators, this string is used to label the billing info entry
 #. * in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3576
+#: modules/printbackends/cups/gtkprintbackendcups.c:3575
 msgid "Billing Info"
 msgstr "ანგარიშთა ინფორმაცია"
 
 #. Translators, these strings are names for various 'standard' cover
 #. * pages that the printing system may support.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3591
+#: modules/printbackends/cups/gtkprintbackendcups.c:3590
 msgid "None"
 msgstr "არა"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3591
+#: modules/printbackends/cups/gtkprintbackendcups.c:3590
 msgid "Classified"
 msgstr "კლასიფიცირებული"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3591
+#: modules/printbackends/cups/gtkprintbackendcups.c:3590
 msgid "Confidential"
 msgstr "კონფიდენციალური"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3591
+#: modules/printbackends/cups/gtkprintbackendcups.c:3590
 msgid "Secret"
 msgstr "საიდუმლო"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3591
+#: modules/printbackends/cups/gtkprintbackendcups.c:3590
 msgid "Standard"
 msgstr "სტანდარტული"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3591
+#: modules/printbackends/cups/gtkprintbackendcups.c:3590
 msgid "Top Secret"
 msgstr "ზესაიდუმლოა"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3591
+#: modules/printbackends/cups/gtkprintbackendcups.c:3590
 msgid "Unclassified"
 msgstr "გადაურჩევი"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the front cover page.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3626
+#: modules/printbackends/cups/gtkprintbackendcups.c:3625
 msgid "Before"
 msgstr "მანამდე"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the back cover page.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3641
+#: modules/printbackends/cups/gtkprintbackendcups.c:3640
 msgid "After"
 msgstr "შემდეგ"
 
@@ -5179,14 +4266,14 @@ msgstr "შემდეგ"
 #. * a print job is printed. Possible values are 'now', a specified time,
 #. * or 'on hold'
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3661
+#: modules/printbackends/cups/gtkprintbackendcups.c:3660
 msgid "Print at"
 msgstr "დრო"
 
 #. Translators: this is the name of the option that allows the user
 #. * to specify a time when a print job will be printed.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3672
+#: modules/printbackends/cups/gtkprintbackendcups.c:3671
 msgid "Print at time"
 msgstr "ბეჭდვის დაწყების დრო"
 
@@ -5194,7 +4281,7 @@ msgstr "ბეჭდვის დაწყების დრო"
 #. * size. The two placeholders are replaced with the width and height
 #. * in points. E.g: "Custom 230.4x142.9"
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3707
+#: modules/printbackends/cups/gtkprintbackendcups.c:3706
 #, c-format
 msgid "Custom %sx%s"
 msgstr "განსაკუთრებული %sx%s"
@@ -5289,6 +4376,664 @@ msgstr "ტესტირებად პრინტერზე ბეჭდ�
 #, c-format
 msgid "Could not get information for file '%s': %s"
 msgstr "ვერ მივიღე ინფორმაცია ფაილზე \"%s\": %s"
+
+#: tests/testfilechooser.c:222
+#, c-format
+msgid "Failed to open file '%s': %s"
+msgstr "ვერ გაიხსნა ფაილი \"%s\": %s"
+
+#: tests/testfilechooser.c:267
+#, c-format
+msgid ""
+"Failed to load image '%s': reason not known, probably a corrupt image file"
+msgstr ""
+"გამოსახულება \"%s\" ვერ ჩამოიტვირთა: მიზეზი უცნობია, შესაძლოა გამოსახულების "
+"ფაილია დაზიანებული"
+
+#~ msgid "Image file '%s' contains no data"
+#~ msgstr "გამოსახულების ფაილი \"%s\" არ შეიცავს მონაცემებს"
+
+#~ msgid ""
+#~ "Failed to load animation '%s': reason not known, probably a corrupt "
+#~ "animation file"
+#~ msgstr ""
+#~ "ანიმაცია \"%s\" ვერ ჩამოიტვირთა: მიზეზი უცნობია, შესაძლოა ანიმაციის "
+#~ "ფაილია დაზიანებული"
+
+#~ msgid "Unable to load image-loading module: %s: %s"
+#~ msgstr "ვერ იტვირთება ნახატების ჩამოტვირთვის მოდული: %s: %s"
+
+#~ msgid ""
+#~ "Image-loading module %s does not export the proper interface; perhaps "
+#~ "it's from a different GTK version?"
+#~ msgstr ""
+#~ "ნახატების ჩამოტვირთვის მოდული \"%s\" ვერ ახდენს მართებული ინტერფეისის "
+#~ "ექსპორტს; შესაძლოა იგი GTK–ს სხვა ვერსიიდანაა?"
+
+#~ msgid "Image type '%s' is not supported"
+#~ msgstr "გამოსახულების ტიპი \"%s\"  ვერ გამოიყენება"
+
+#~ msgid "Couldn't recognize the image file format for file '%s'"
+#~ msgstr "ვერ ვახდენ გამოსახულების \"%s\" ფაილის ფორმატის ამოცნობას"
+
+#~ msgid "Unrecognized image file format"
+#~ msgstr "გამოსახულების ფაილის უცნობი ფორმატი"
+
+#~ msgid "Failed to load image '%s': %s"
+#~ msgstr "ფაილის ჩამოტვირთვის შეცდომა \"%s\": %s"
+
+#~ msgid "Error writing to image file: %s"
+#~ msgstr "გამოსახულების ფაილის ჩაწერის შეცდომა: %s"
+
+#~ msgid ""
+#~ "This build of gdk-pixbuf does not support saving the image format: %s"
+#~ msgstr ""
+#~ "ეს ქვესისტემა \"gdk-pixbuf\" ვერ უზრუნველყოფს ფაილის შენახვას ფორმატით: %s"
+
+#~ msgid "Insufficient memory to save image to callback"
+#~ msgstr "მეხსიერების უკმარისობა გამოსახულების ფაილის შესანახად"
+
+#~ msgid "Failed to open temporary file"
+#~ msgstr "დროებითი ფაილი ვერ იხსნება"
+
+#~ msgid "Failed to read from temporary file"
+#~ msgstr "დროებითი ფაილი ვერ იკითხება"
+
+#~ msgid "Failed to open '%s' for writing: %s"
+#~ msgstr "ვერ იხსნება ფაილი \"%s\" ჩასაწერად: %s"
+
+#~ msgid ""
+#~ "Failed to close '%s' while writing image, all data may not have been "
+#~ "saved: %s"
+#~ msgstr ""
+#~ "ვერ დაიხურა ფაილი \"%s\" გამოსახულების ჩაწერისას, შესაძლოა ყველა მონაცემი "
+#~ "არ შენახულა: %s"
+
+#~ msgid "Insufficient memory to save image into a buffer"
+#~ msgstr "მეხსიერების უკმარისობა გამოსახულების ბუფერში შესანახად"
+
+#~ msgid "Error writing to image stream"
+#~ msgstr "გამოსახულების ნაკადში ჩაწერისას დაიშვა შეცდომა"
+
+#~ msgid ""
+#~ "Internal error: Image loader module '%s' failed to complete an operation, "
+#~ "but didn't give a reason for the failure"
+#~ msgstr ""
+#~ "შიდა შეცდომა: გამოსახულების ჩატვირთვის მოდული '%s' ვერ ასრულებს "
+#~ "ოპერაციას, მაგრამ არ იტყობინება მიზეზს"
+
+#~ msgid "Incremental loading of image type '%s' is not supported"
+#~ msgstr ""
+#~ "გამოსახულების \"%s\" ფორმატით საფეხურებრივი ჩატვირთვა  ვერ გამოიყენება"
+
+#~ msgid "Image header corrupt"
+#~ msgstr "გამოსახულების თავსართი დაზიანებულია"
+
+#~ msgid "Image format unknown"
+#~ msgstr "გამოსახულების ფორმატი უცნობია"
+
+#~ msgid "Image pixel data corrupt"
+#~ msgstr "გამოსახულების წერტილოვანი მონაცემები მცდარია"
+
+#~ msgid "failed to allocate image buffer of %u byte"
+#~ msgid_plural "failed to allocate image buffer of %u bytes"
+#~ msgstr[0] "გამოსახულების ბუფერისთვის ვერ ვიყენებ %u ბაიტს"
+
+#~ msgid "Unexpected icon chunk in animation"
+#~ msgstr "კადრების მცდარი მიმდევრობა ანიმაციაში"
+
+#~ msgid "Unsupported animation type"
+#~ msgstr "ანიმაციის ეს ტიპი  ვერ გამოიყენება"
+
+#~ msgid "Invalid header in animation"
+#~ msgstr "ანიმაციის თავსართი მცდარია"
+
+#~ msgid "Not enough memory to load animation"
+#~ msgstr "არასაკმარისი მეხსიერება ანიმაციის ჩასატვირთად"
+
+#~ msgid "Malformed chunk in animation"
+#~ msgstr "ანიმაციის კადრების მცდარი მიმდევრობა"
+
+#~ msgid "The ANI image format"
+#~ msgstr "გამოსახულების ANI ფორმატი"
+
+#~ msgid "BMP image has bogus header data"
+#~ msgstr "BMP გამოსახულების ფორმატის თავსართი მცდარია"
+
+#~ msgid "Not enough memory to load bitmap image"
+#~ msgstr "არასაკმარისი მეხსიერება bitmap გამოსახულების ჩასატვირთად"
+
+#~ msgid "BMP image has unsupported header size"
+#~ msgstr "BMP გამოსახულების თავსართის ეს ზომა  ვერ გამოიყენება"
+
+#~ msgid "Topdown BMP images cannot be compressed"
+#~ msgstr "Topdown BMP ნახატები ვერ შეიკუმშება"
+
+#~ msgid "Premature end-of-file encountered"
+#~ msgstr "ფაილის ადრეული ბოლო"
+
+#~ msgid "Couldn't allocate memory for saving BMP file"
+#~ msgstr "ვერ ვიყენებ მეხსიერებას BMP ფაილის შესანახად"
+
+#~ msgid "Couldn't write to BMP file"
+#~ msgstr "ვერ ვწერ BMP ფაილს"
+
+#~ msgid "The BMP image format"
+#~ msgstr "გამოსახულების BMP ფორმატი"
+
+#~ msgid "Failure reading GIF: %s"
+#~ msgstr "ვერ იკითხება GIF: %s"
+
+#~ msgid "GIF file was missing some data (perhaps it was truncated somehow?)"
+#~ msgstr "GIF ფორმატის ფაილს აკლია მონაცემები (შესაძლოა ჩამოიჭრა?)"
+
+#~ msgid "Internal error in the GIF loader (%s)"
+#~ msgstr "GIF ჩამტვირთავის შიდა შეცდომა(%s)"
+
+#~ msgid "Stack overflow"
+#~ msgstr "მჭიდე გადავსებულია"
+
+#~ msgid "GIF image loader cannot understand this image."
+#~ msgstr "GIF გამოსახულების ჩამტვირთავმა ეს გამოსახულება ვერ აღიქვა."
+
+#~ msgid "Bad code encountered"
+#~ msgstr "მცდარი კოდი"
+
+#~ msgid "Circular table entry in GIF file"
+#~ msgstr "წრიული ცხრილის ელემენტი GIF ფაილში"
+
+#~ msgid "Not enough memory to load GIF file"
+#~ msgstr "მეხსიერების უკმარისობა GIF ფაილის ჩასატვირთად"
+
+#~ msgid "Not enough memory to composite a frame in GIF file"
+#~ msgstr "მეხსიერების უკმარისობა GIF ფაილის კადრის ასაგებად"
+
+#~ msgid "GIF image is corrupt (incorrect LZW compression)"
+#~ msgstr "GIF გამოსახულება დაზიანებულია (მცდარი LZW შეკუმშვა)"
+
+#~ msgid "File does not appear to be a GIF file"
+#~ msgstr "ფაილი როგორც ჩანს GIF ფორმატის არაა"
+
+#~ msgid "Version %s of the GIF file format is not supported"
+#~ msgstr "GIF ფაილის ფორმატის %s ვერსია  ვერ გამოიყენება"
+
+#~ msgid ""
+#~ "GIF image has no global colormap, and a frame inside it has no local "
+#~ "colormap."
+#~ msgstr "GIF ნახატს და მის შიდა კადრს არა აქვს გლობალური პალიტრა"
+
+#~ msgid "GIF image was truncated or incomplete."
+#~ msgstr "GIF გამოსახულება ჩამოჭრილია ან არასრულია."
+
+#~ msgid "The GIF image format"
+#~ msgstr "GIF გამოსახულების ფორმატი"
+
+#~ msgid "Invalid header in icon"
+#~ msgstr "პიქტოგრამის მცდარი თავსართი"
+
+#~ msgid "Not enough memory to load icon"
+#~ msgstr "არასაკმარისი მეხსიერება პიქტოგრამის ჩასატვირთად"
+
+#~ msgid "Icon has zero width"
+#~ msgstr "პიქტოგრამის სიგანე ნულია"
+
+#~ msgid "Icon has zero height"
+#~ msgstr "პიქტოგრამის სიმაღლე ნულია"
+
+#~ msgid "Compressed icons are not supported"
+#~ msgstr "შეკუმშული პიქტოგრამები ვერ გამოიყენება"
+
+#~ msgid "Unsupported icon type"
+#~ msgstr "პიქტოგრამის ეს ტიპი ვერ გამოიყენება"
+
+#~ msgid "Not enough memory to load ICO file"
+#~ msgstr "მეხსიერების უკმარისობა ICO ფაილის ჩასატვირთად"
+
+#~ msgid "Image too large to be saved as ICO"
+#~ msgstr "გამოსახულება ძალიან დიდია ICO ფორმატში შესანახად"
+
+#~ msgid "Cursor hotspot outside image"
+#~ msgstr "კურსორის ველი გამოსახულების გარეთაა"
+
+#~ msgid "Unsupported depth for ICO file: %d"
+#~ msgstr "ICO ფაილის ფორმატის ფერის სიღრმე %d ვერ გამოიყენება"
+
+#~ msgid "The ICO image format"
+#~ msgstr "გამოსახულების ICO ფაილის ფორმატი"
+
+#~ msgid "Error reading ICNS image: %s"
+#~ msgstr "დაიშვა შეცდომა ICNS გამოსახულების კითხვისას: %s"
+
+#~ msgid "Could not decode ICNS file"
+#~ msgstr "შეუძლებელი გახდა ICNS ფაილის დეკოდირება"
+
+#~ msgid "The ICNS image format"
+#~ msgstr "გამოსახულების ფორმატი ICNS"
+
+#~ msgid "Couldn't allocate memory for stream"
+#~ msgstr "შეუძლებელი გახდა ნაკადისთვის მეხსიერების მინიჭება"
+
+#~ msgid "Couldn't decode image"
+#~ msgstr "შეუძლებელია გამოსახულების დეკოდირება"
+
+#~ msgid "Transformed JPEG2000 has zero width or height"
+#~ msgstr "დამუშავებული JPEG2000-ს სიმაღლე ან სიგანე ნულის ტოლია"
+
+#~ msgid "Image type currently not supported"
+#~ msgstr "გამოსახულების ტიპი მოცემულ ვერსიაში მხარდაუჭერელია"
+
+#~ msgid "Couldn't allocate memory for color profile"
+#~ msgstr "შეუძლებელი გახდა ფერების პროფილისთვის მეხსიერების მინიჭება"
+
+#~ msgid "Insufficient memory to open JPEG 2000 file"
+#~ msgstr "მეხსიერების უკმარისობა JPEG 2000 გახსნისთვის"
+
+#~ msgid "Couldn't allocate memory to buffer image data"
+#~ msgstr ""
+#~ "შეუძლებელია მეხსიერების გამოყოფა გამოსახულების მონაცემების "
+#~ "ბუფერიზაციისთვის"
+
+#~ msgid "The JPEG 2000 image format"
+#~ msgstr "სურათის ფორმატი JPEG 2000"
+
+#~ msgid "Error interpreting JPEG image file (%s)"
+#~ msgstr "JPEG გამოსახულების ფაილის კითხვის შეცდომა (%s)"
+
+#~ msgid ""
+#~ "Insufficient memory to load image, try exiting some applications to free "
+#~ "memory"
+#~ msgstr ""
+#~ "მეხსიერების უკმარისობა ფაილის ჩასატვირთად; შეეცადეთ დახუროთ რამდენიმე "
+#~ "პროგრამა მეხსიერების გასათავისუფლებლად"
+
+#~ msgid "Unsupported JPEG color space (%s)"
+#~ msgstr "JPEG პალიტრა(%s) ვერ გამოიყენება"
+
+#~ msgid "Couldn't allocate memory for loading JPEG file"
+#~ msgstr "შეუძლებელია მეხსიერების მინიჭება JPEG ფაილის ჩასატვირთად"
+
+#~ msgid "Transformed JPEG has zero width or height."
+#~ msgstr "დამუშავებული JPEG-ის სიმაღლე და სიგანე ნულის ტოლია."
+
+#~ msgid ""
+#~ "JPEG quality must be a value between 0 and 100; value '%s' could not be "
+#~ "parsed."
+#~ msgstr ""
+#~ "JPEG ხარისხის მნიშვნელობა უნდა იყოს 0–დან 100–მდე; მნიშვნელობა \"%s\" ვერ "
+#~ "მუშავდება."
+
+#~ msgid ""
+#~ "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
+#~ msgstr ""
+#~ "JPEG ხარისხის მნიშვნელობა უნდა იყოს 0–დან 100–მდე; მნიშვნელობა "
+#~ "'%d'დაუშვებელია."
+
+#~ msgid "The JPEG image format"
+#~ msgstr "JPEG გამოსახულების ფორმატი"
+
+#~ msgid "Couldn't allocate memory for header"
+#~ msgstr "შეუძლებელია თავსართისთვის მეხსიერების მინიჭება"
+
+#~ msgid "Couldn't allocate memory for context buffer"
+#~ msgstr "შეუძლებელია მეხსიერების მინიჭება კონტექსტური ბუფერისთვის"
+
+#~ msgid "Image has invalid width and/or height"
+#~ msgstr "გამოსახულების სიგანე და/ან სიმაღლე ნულოვანია"
+
+#~ msgid "Image has unsupported bpp"
+#~ msgstr "გამოსახულების ბიტი წერტილზე პარამეტრი ვერ გამოიყენება"
+
+#~ msgid "Image has unsupported number of %d-bit planes"
+#~ msgstr ""
+#~ "გამოსახულების მრავალბიტიანი (%d) სიბრტყეების რაოდენობა ვერ გამოიყენება"
+
+#~ msgid "Couldn't create new pixbuf"
+#~ msgstr "შეუძლებელია ახალი pixbuf შექმნა"
+
+#~ msgid "Couldn't allocate memory for line data"
+#~ msgstr "ვერ ვიყენებ მეხსიერებას ხაზობრივი მონაცემებისთვის"
+
+#~ msgid "Couldn't allocate memory for paletted data"
+#~ msgstr "ვერ ვიყენებ მეხსიერებას პალიტრის მონაცემებისთვის"
+
+#~ msgid "Didn't get all lines of PCX image"
+#~ msgstr "ვერ მივიღე PCX ფორმატის ყველა ხაზი"
+
+#~ msgid "No palette found at end of PCX data"
+#~ msgstr "PCX ფორმატის ბოლოს პალიტრა არ აღმოჩნდა"
+
+#~ msgid "The PCX image format"
+#~ msgstr "PCX გამოსახულების ფორმატი"
+
+#~ msgid "Bits per channel of PNG image is invalid."
+#~ msgstr "გარდაქმნილი PNG–ს ბიტები არხზე მცდარია."
+
+#~ msgid "Transformed PNG has zero width or height."
+#~ msgstr "გარდაქმნილი PNG–ს სიმაღლე ან სიგანე 0–ია."
+
+#~ msgid "Bits per channel of transformed PNG is not 8."
+#~ msgstr "გარდაქმნილი PNG–ს ბიტები არხზე 8–ის ტოლი არაა."
+
+#~ msgid "Transformed PNG not RGB or RGBA."
+#~ msgstr "გარდაქმნილი PNG არ გახლავთ  RGB ან RGBA ტიპის"
+
+#~ msgid "Transformed PNG has unsupported number of channels, must be 3 or 4."
+#~ msgstr "გარდაქმნილი PNG–ს გამოუყენებელი არხების რაოდენობა 3 ან 4 უნდა იყოს."
+
+#~ msgid "Fatal error in PNG image file: %s"
+#~ msgstr "კრიტიკული შეცდომა PNG გამოსახულების ფაილში: %s"
+
+#~ msgid "Insufficient memory to load PNG file"
+#~ msgstr "მეხსიერების უკმარისობა PNG ფაილის ჩასატვირთად"
+
+#~ msgid ""
+#~ "Insufficient memory to store a %ld by %ld image; try exiting some "
+#~ "applications to reduce memory usage"
+#~ msgstr ""
+#~ "მეხსიერების უკმარისობა %ld შესანახად %ld გამოსახულებადან; შეეცადეთ "
+#~ "რამდენიმე პროგრამის დახურვას მეხსიერების გასათავისუფლებლად"
+
+#~ msgid "Fatal error reading PNG image file"
+#~ msgstr "PNG გამოსახულების ფაილის კითხვის კრიტიკული შეცდომა"
+
+#~ msgid "Fatal error reading PNG image file: %s"
+#~ msgstr "PNG გამოსახულების ფაილის კითხვის კრიტიკული შეცდომა: %s"
+
+#~ msgid ""
+#~ "Keys for PNG text chunks must have at least 1 and at most 79 characters."
+#~ msgstr "PNG ტექსტური ბლოკი უნდა შეიცავდეს 1–დან 79 სიმბოლომდე."
+
+#~ msgid "Keys for PNG text chunks must be ASCII characters."
+#~ msgstr "PNG ტექსტური ბლოკის კოდი ASCII სიმბოლოებისგან უნდა შედგებოდეს."
+
+#~ msgid ""
+#~ "PNG compression level must be a value between 0 and 9; value '%s' could "
+#~ "not be parsed."
+#~ msgstr ""
+#~ "PNG შეკუმშვის ხარისხი 0-დან 9-მდე უნდა იყოს; მნიშვნელობა '%s' ვერ "
+#~ "დამუშავდება"
+
+#~ msgid ""
+#~ "PNG compression level must be a value between 0 and 9; value '%d' is not "
+#~ "allowed."
+#~ msgstr ""
+#~ "PNG შეკუმშვის ხარისხი 0-დან 9-მდე უნდა იყოს; მნიშვნელობა '%d' არ დაიშვება"
+
+#~ msgid ""
+#~ "Value for PNG text chunk %s cannot be converted to ISO-8859-1 encoding."
+#~ msgstr "PNG ტექსტური ბლოკი %s ვერ გარდაიქმნება ISO-8859-1 კოდირებაში."
+
+#~ msgid "The PNG image format"
+#~ msgstr "გამოსახულების PNG ფორმატი"
+
+#~ msgid "PNM loader expected to find an integer, but didn't"
+#~ msgstr "PNM ჩამტვირთავი მთელ რიცხვს ეძებდა, მაგრამ ვერ იპოვნა"
+
+#~ msgid "PNM file has an incorrect initial byte"
+#~ msgstr "PNM ფაილის საწყისი ბაიტი მცდარია"
+
+#~ msgid "PNM file is not in a recognized PNM subformat"
+#~ msgstr "PNM ფაილია ქვეფორმატი PNM ამოუცნობია"
+
+#~ msgid "PNM file has an image width of 0"
+#~ msgstr "PNM ფაილის სიგანე ნულოვანია"
+
+#~ msgid "PNM file has an image height of 0"
+#~ msgstr "PNM ფაილის სიმაღლე ნულოვანია"
+
+#~ msgid "Maximum color value in PNM file is 0"
+#~ msgstr "ფერის მაქსიმალური მნიშვნელობები PNM ფაილისთვის 0–ია"
+
+#~ msgid "Maximum color value in PNM file is too large"
+#~ msgstr "ფერის მაქსიმალური მნიშვნელობები PNM ფაილისთვის მეტისმეტად დიდია"
+
+#~ msgid "Raw PNM image type is invalid"
+#~ msgstr "PNM გამოსახულების ტიპი მცდარია"
+
+#~ msgid "PNM image loader does not support this PNM subformat"
+#~ msgstr "PNM გამოსახულების ჩამტვირთავი PNM–ის ამ ფორმატს ვერ იყენებს"
+
+#~ msgid "Raw PNM formats require exactly one whitespace before sample data"
+#~ msgstr "PNM ფორმატი სანიმუშო მონაცემების წინ ზუსტად ერთ ხარეს ითხოვს"
+
+#~ msgid "Cannot allocate memory for loading PNM image"
+#~ msgstr "ვერ ვიყენებ მეხსიერებას PNM გამოსახულების ჩასატვირთად"
+
+#~ msgid "Insufficient memory to load PNM context struct"
+#~ msgstr "მეხსიერების უკმარისობა PNM გამოსახულების სტრუქტურის ჩასატვირთად"
+
+#~ msgid "Unexpected end of PNM image data"
+#~ msgstr "PNM გამოსახულების ფაილის გაუთვალისწინებელი დასასრული"
+
+#~ msgid "Insufficient memory to load PNM file"
+#~ msgstr "მეხსიერების უკმარისობა PNM გამოსახულების ჩასატვირთად"
+
+#~ msgid "The PNM/PBM/PGM/PPM image format family"
+#~ msgstr "გამოსახულების PNM/PBM/PGM/PPM ფორმატები"
+
+#, fuzzy
+#~ msgid "Failed to read QTIF header"
+#~ msgstr "თავსართის ჩაწერა ვერ მოხერხდ\n"
+
+#, fuzzy
+#~ msgid "Failed to allocate %d bytes for file read buffer"
+#~ msgstr "გამოსახულების ბუფერისთვის ვერ ვიყენებ %u ბაიტს"
+
+#, fuzzy
+#~ msgid "File error when reading QTIF atom: %s"
+#~ msgstr "ვერ იკითხება GIF: %s"
+
+#, fuzzy
+#~ msgid "Failed to allocate QTIF context structure."
+#~ msgstr "ვერ ვიყენებ მეხსიერებას TGA შიგთავსის სტრუქტურისთვის"
+
+#, fuzzy
+#~ msgid "Failed to create GdkPixbufLoader object."
+#~ msgstr "ვერ განხორციელდა დასტის ინდექსის ჩაწერა\n"
+
+#, fuzzy
+#~ msgid "Failed to find an image data atom."
+#~ msgstr "TIFF გამოსახულება ვერ გაიხსნა"
+
+#, fuzzy
+#~ msgid "The QTIF image format"
+#~ msgstr "გამოსახულების TIFF ფორმატი"
+
+#~ msgid "RAS image has bogus header data"
+#~ msgstr "RAS გამოსახულების თავსართი მცდარია"
+
+#~ msgid "RAS image has unknown type"
+#~ msgstr "RAS გამოსახულების ეს ტიპი უცნობია"
+
+#~ msgid "unsupported RAS image variation"
+#~ msgstr "RAS გამოსახულების ეს ვერსია ვერ გამოიყენება"
+
+#~ msgid "Not enough memory to load RAS image"
+#~ msgstr "მეხსიერების უკმარისობა RAS გამოსახულების ჩასატვირთად"
+
+#~ msgid "The Sun raster image format"
+#~ msgstr "გამოსახულების Sun რასტრული ფორმატი"
+
+#~ msgid "Cannot allocate memory for IOBuffer struct"
+#~ msgstr "ვერ ვიყენებ მეხსიერებას IOBuffer სტრუქტურისთვის"
+
+#~ msgid "Cannot allocate memory for IOBuffer data"
+#~ msgstr "ვერ ვიყენებ მეხსიერებას IOBuffer მონაცემებისთვის"
+
+#~ msgid "Cannot realloc IOBuffer data"
+#~ msgstr "ვერ ვიყენებ IOBuffer მონაცემებს"
+
+#~ msgid "Cannot allocate temporary IOBuffer data"
+#~ msgstr "ვერ ვიყენებ დროებით IOBuffer მონაცემებს"
+
+#~ msgid "Cannot allocate new pixbuf"
+#~ msgstr "ვერ ვიყენებ მეხსიერებას ახალი pixbuf სტრუქტურისთვის"
+
+#, fuzzy
+#~ msgid "Image is corrupted or truncated"
+#~ msgstr "GIF გამოსახულება ჩამოჭრილია ან არასრულია."
+
+#~ msgid "Cannot allocate colormap structure"
+#~ msgstr "ვერ ვიყენებ მეხსიერებას პალიტრის სტრუქტურისთვის"
+
+#~ msgid "Cannot allocate colormap entries"
+#~ msgstr "ვერ ვიყენებ მეხსიერებას პალიტრის ელემენტებისთვის"
+
+#~ msgid "Unexpected bitdepth for colormap entries"
+#~ msgstr "პალიტრის ელემენტის ფერის გაუთვალისწინებელი სიღრმე"
+
+#~ msgid "Cannot allocate TGA header memory"
+#~ msgstr "ვერ ვიყენებ მეხსიერებას TGA თავსართისთვის"
+
+#~ msgid "TGA image has invalid dimensions"
+#~ msgstr "TGA ნახატს უმართებლო ზომები აქვს"
+
+#~ msgid "TGA image type not supported"
+#~ msgstr "გამოსახულების TGA ტიპი ვერ გამოიყენება"
+
+#~ msgid "Cannot allocate memory for TGA context struct"
+#~ msgstr "ვერ ვიყენებ მეხსიერებას TGA შიგთავსის სტრუქტურისთვის"
+
+#~ msgid "Excess data in file"
+#~ msgstr "ფაილში მეტისმეტი მონაცემია"
+
+#~ msgid "The Targa image format"
+#~ msgstr "გამოსახულების Targa ფორმატი"
+
+#~ msgid "Could not get image width (bad TIFF file)"
+#~ msgstr "ვერ ისაზღვრება გამოსახულების სიგანე (მცდარი TIFF ფაილი)"
+
+#~ msgid "Could not get image height (bad TIFF file)"
+#~ msgstr "ვერ ისაზღვრება გამოსახულების სიმაღლე (მცდარი TIFF ფაილი)"
+
+#~ msgid "Width or height of TIFF image is zero"
+#~ msgstr "TIFF გამოსახულების სიმაღლე ან სიგანე ნულია"
+
+#~ msgid "Dimensions of TIFF image too large"
+#~ msgstr "TIFF გამოსახულების განზომილებები ძალიან დიდია"
+
+#~ msgid "Insufficient memory to open TIFF file"
+#~ msgstr "მეხსიერების უკმარისობა TIFF გამოსახულების გასახსნელად"
+
+#~ msgid "Failed to load RGB data from TIFF file"
+#~ msgstr "RGB მონაცემების ჩატვირთვა TIFF ფაილიდან ვერ შედგა"
+
+#~ msgid "Failed to open TIFF image"
+#~ msgstr "TIFF გამოსახულება ვერ გაიხსნა"
+
+#~ msgid "TIFFClose operation failed"
+#~ msgstr "TIFFClose ოპერაცია ვერ შედგა"
+
+#~ msgid "Failed to load TIFF image"
+#~ msgstr "TIFF გამოსახულება ვერ ჩამოიტვირთა"
+
+#~ msgid "Failed to save TIFF image"
+#~ msgstr "ვერ განხორციელდა TIFF გრაფიკული გამოსახულების დამახსოვრება"
+
+#~ msgid "Failed to write TIFF data"
+#~ msgstr "ვერ განხორციელდა მონაცემების TIFF-ში ჩაწერა"
+
+#~ msgid "Couldn't write to TIFF file"
+#~ msgstr "ვერ ვწერ TIFF ფაილს"
+
+#~ msgid "The TIFF image format"
+#~ msgstr "გამოსახულების TIFF ფორმატი"
+
+#~ msgid "Image has zero width"
+#~ msgstr "გამოსახულების სიგანე ნულოვანია"
+
+#~ msgid "Image has zero height"
+#~ msgstr "გამოსახულების სიმაღლე ნულოვანია"
+
+#~ msgid "Not enough memory to load image"
+#~ msgstr "მეხსიერების უკმარისობა გამოსახულების ჩასატვირთად"
+
+#~ msgid "Couldn't save the rest"
+#~ msgstr "დანარჩენი ნაწილის შენახვა ვერ ხერხდება"
+
+#~ msgid "The WBMP image format"
+#~ msgstr "გამოსახულების WBMP ფორმატი"
+
+#~ msgid "Invalid XBM file"
+#~ msgstr "მცდარი XBM ფაილი"
+
+#~ msgid "Insufficient memory to load XBM image file"
+#~ msgstr "მეხსიერების უკმარისობა XBM გამოსახულების ჩასატვირთად"
+
+#~ msgid "Failed to write to temporary file when loading XBM image"
+#~ msgstr "ვერ ვწერ დროებით ფაილს XBM გამოსახულების ჩატვირთვისას"
+
+#~ msgid "The XBM image format"
+#~ msgstr "გამოსახულების XBM ფორმატი"
+
+#~ msgid "No XPM header found"
+#~ msgstr "XPM თავსართი ვერ მოიძებნა"
+
+#~ msgid "Invalid XPM header"
+#~ msgstr "მცდარი XBM თავსართი"
+
+#~ msgid "XPM file has image width <= 0"
+#~ msgstr "XPM ფაილში გამოსახულების სიგანე <= 0"
+
+#~ msgid "XPM file has image height <= 0"
+#~ msgstr "XPM ფაილში გამოსახულების სიმაღლე <= 0"
+
+#~ msgid "XPM has invalid number of chars per pixel"
+#~ msgstr "XPM ფაილს პიქსელზე სიმბოლოების მცდარი რაოდენობა აქვს"
+
+#~ msgid "XPM file has invalid number of colors"
+#~ msgstr "XPM ფაილს ფერების მცდარი რაოდენობა აქვს"
+
+#~ msgid "Cannot allocate memory for loading XPM image"
+#~ msgstr "ვერ ვიყენებ მეხსიერებს XPM გამოსახულების ჩასატვირთად"
+
+#~ msgid "Cannot read XPM colormap"
+#~ msgstr "ვერ ვკითხულობ XPM პალიტრას"
+
+#~ msgid "Failed to write to temporary file when loading XPM image"
+#~ msgstr "ვერ ვწერ დროებით ფაილს XPM გამოსახულების ჩატვირთვისას"
+
+#~ msgid "The XPM image format"
+#~ msgstr "გამოსახულების XPM ფორმატი"
+
+#~ msgid "The EMF image format"
+#~ msgstr "გამოსახულების EMF ფორმატი"
+
+#~ msgid "Could not allocate memory: %s"
+#~ msgstr "შეუძლებელი გახდა მეხსიერების მინიჭება: %s"
+
+#~ msgid "Could not create stream: %s"
+#~ msgstr "შეუძლებელი გახდა ნაკადის შექმნა: %s"
+
+#~ msgid "Could not seek stream: %s"
+#~ msgstr "შეუძლებელი გახდა ნაკადის მოძებნა: %s"
+
+#~ msgid "Could not read from stream: %s"
+#~ msgstr "შეუძლებელი გახდა ნაკადიდან წაკითხვა: %s"
+
+#~ msgid "Couldn't load bitmap"
+#~ msgstr "შეუძლებელი გახდა გამოსახულების ჩატვირთვა"
+
+#~ msgid "Couldn't load metafile"
+#~ msgstr "შეუძლებელი გახდა მეტაფაილის ჩატვირთვა"
+
+#~ msgid "Unsupported image format for GDI+"
+#~ msgstr "მოცემული გამოსახულების ფორმატი GDI+ თვის მიუღებელია"
+
+#~ msgid "Couldn't save"
+#~ msgstr "შეუძლებელია დამახსოვრება"
+
+#~ msgid "The WMF image format"
+#~ msgstr "WMF გამოსახულების ფორმატი"
+
+#~ msgid "\"Deepness\" of the color."
+#~ msgstr "ფერის \"სიღრმე\"."
+
+#~ msgid "Error printing"
+#~ msgstr "ბეჭდვის შეცდომა"
+
+#~ msgid "Printer '%s' may not be connected."
+#~ msgstr "შესაძლებელია რომ '%s' პრინტერი არ იყოს მიერთებული."
 
 #~ msgid "Folders"
 #~ msgstr "დასტები"

@@ -10,10 +10,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-05-25 20:10-0400\n"
+"POT-Creation-Date: 2010-06-26 23:16-0400\n"
 "PO-Revision-Date: 2010-02-03 18:25+0100\n"
 "Last-Translator: Pavol Šimo <palo.simo@gmail.com>\n"
 "Language-Team: Slovak <gnome-sk-list@gnome.org>\n"
+"Language: sk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -78,7 +79,7 @@ msgstr "Ladiace príznaky Gdk, ktoré nastaviť"
 #. Placeholder in --gdk-no-debug=FLAGS in --help output
 #. Placeholder in --gtk-debug=FLAGS in --help output
 #. Placeholder in --gtk-no-debug=FLAGS in --help output
-#: gdk/gdk.c:165 gdk/gdk.c:168 gtk/gtkmain.c:454 gtk/gtkmain.c:457
+#: gdk/gdk.c:165 gdk/gdk.c:168 gtk/gtkmain.c:439 gtk/gtkmain.c:442
 msgid "FLAGS"
 msgstr "PRÍZNAKY"
 
@@ -271,912 +272,6 @@ msgstr "KP_Delete"
 msgctxt "keyboard label"
 msgid "Delete"
 msgstr "Delete"
-
-#: gdk-pixbuf/gdk-pixbuf-animation.c:133 gdk-pixbuf/gdk-pixbuf-io.c:982
-#: gdk-pixbuf/gdk-pixbuf-io.c:1242 tests/testfilechooser.c:222
-#, c-format
-msgid "Failed to open file '%s': %s"
-msgstr "Nepodarilo sa otvoriť súbor '%s': %s"
-
-#: gdk-pixbuf/gdk-pixbuf-animation.c:146 gdk-pixbuf/gdk-pixbuf-io.c:994
-#, c-format
-msgid "Image file '%s' contains no data"
-msgstr "Súbor obrázku '%s' nič neobsahuje"
-
-#: gdk-pixbuf/gdk-pixbuf-animation.c:188 gdk-pixbuf/gdk-pixbuf-io.c:1030
-#: gdk-pixbuf/gdk-pixbuf-io.c:1294 tests/testfilechooser.c:267
-#, c-format
-msgid ""
-"Failed to load image '%s': reason not known, probably a corrupt image file"
-msgstr ""
-"Nepodarilo sa načítať obrázok '%s': príčina neznáma, asi poškodený súbor"
-
-#: gdk-pixbuf/gdk-pixbuf-animation.c:221
-#, c-format
-msgid ""
-"Failed to load animation '%s': reason not known, probably a corrupt "
-"animation file"
-msgstr ""
-"Nepodarilo sa načítať animáciu '%s': príčina neznáma, asi poškodený súbor"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:715
-#, c-format
-msgid "Unable to load image-loading module: %s: %s"
-msgstr "Nepodarilo sa načítať modul pre načítanie obrázkov: %s: %s"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:730
-#, c-format
-msgid ""
-"Image-loading module %s does not export the proper interface; perhaps it's "
-"from a different GTK version?"
-msgstr ""
-"Modul pre načítanie obrázku %s neexportuje správne rozhranie, možno je z "
-"inej verzie GTK?"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:739 gdk-pixbuf/gdk-pixbuf-io.c:790
-#, c-format
-msgid "Image type '%s' is not supported"
-msgstr "Typ obrázku '%s' nie je podporovaný"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:863
-#, c-format
-msgid "Couldn't recognize the image file format for file '%s'"
-msgstr "Nepodarilo sa určiť formát súboru obrázku pre '%s'"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:871
-msgid "Unrecognized image file format"
-msgstr "Nerozpoznaný formát súboru obrázku"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:1039
-#, c-format
-msgid "Failed to load image '%s': %s"
-msgstr "Nepodarilo sa načítať obrázok '%s': %s"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:1673 gdk-pixbuf/io-gdip-utils.c:961
-#, c-format
-msgid "Error writing to image file: %s"
-msgstr "Chyba pri zápise obrázku: %s"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:1718 gdk-pixbuf/gdk-pixbuf-io.c:1848
-#, c-format
-msgid "This build of gdk-pixbuf does not support saving the image format: %s"
-msgstr "Táto verzia gdk-pixbuf nepodporuje ukladanie vo formáte: %s"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:1752
-msgid "Insufficient memory to save image to callback"
-msgstr "Nedostatok pamäte pre uloženie obrázku pre spätné volanie"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:1765
-msgid "Failed to open temporary file"
-msgstr "Nepodarilo sa otvoriť dočasný súbor"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:1791
-msgid "Failed to read from temporary file"
-msgstr "Nepodarilo sa prečítať dočasný súbor"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:2044
-#, c-format
-msgid "Failed to open '%s' for writing: %s"
-msgstr "Nepodarilo sa otvoriť pre zápis '%s': %s"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:2070
-#, c-format
-msgid ""
-"Failed to close '%s' while writing image, all data may not have been saved: %"
-"s"
-msgstr ""
-"Nepodarilo sa zavrieť '%s' počas zápisu obrázku. Niektoré dáta nemusia byť "
-"uložené: %s"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:2290 gdk-pixbuf/gdk-pixbuf-io.c:2341
-msgid "Insufficient memory to save image into a buffer"
-msgstr "Nedostatok pamäte pre uloženie obrázku do medzipamäte"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:2387
-msgid "Error writing to image stream"
-msgstr "Chyba pri zápise do prúdu obrázku"
-
-#: gdk-pixbuf/gdk-pixbuf-loader.c:334
-#, c-format
-msgid ""
-"Internal error: Image loader module '%s' failed to complete an operation, "
-"but didn't give a reason for the failure"
-msgstr ""
-"Interná chyba: Modul pre načítavanie obrázku '%s' neskončil načítavať "
-"obrázok, ale pre toto zlyhanie nepodal žiadny dôvod"
-
-#: gdk-pixbuf/gdk-pixbuf-loader.c:376
-#, c-format
-msgid "Incremental loading of image type '%s' is not supported"
-msgstr "Postupné načítavanie typu obrázku '%s' nie je podporované"
-
-#: gdk-pixbuf/gdk-pixdata.c:147
-msgid "Image header corrupt"
-msgstr "Hlavička obrázku poškodená"
-
-#: gdk-pixbuf/gdk-pixdata.c:152
-msgid "Image format unknown"
-msgstr "Neznámy formát obrázku"
-
-#: gdk-pixbuf/gdk-pixdata.c:157 gdk-pixbuf/gdk-pixdata.c:488
-msgid "Image pixel data corrupt"
-msgstr "Dáta obrázku poškodené"
-
-#: gdk-pixbuf/gdk-pixdata.c:432
-#, fuzzy, c-format
-msgid "failed to allocate image buffer of %u byte"
-msgid_plural "failed to allocate image buffer of %u bytes"
-msgstr[0] "nepodarilo sa alokovať pamäť pre obrázok s veľkosťou %u bajtov"
-msgstr[1] "nepodarilo sa alokovať pamäť pre obrázok s veľkosťou %u bajtov"
-msgstr[2] "nepodarilo sa alokovať pamäť pre obrázok s veľkosťou %u bajtov"
-
-#: gdk-pixbuf/io-ani.c:244
-msgid "Unexpected icon chunk in animation"
-msgstr "Neočakávaný kus ikony v animácii"
-
-#: gdk-pixbuf/io-ani.c:337
-msgid "Unsupported animation type"
-msgstr "Nepodporovaný typ animácie"
-
-#: gdk-pixbuf/io-ani.c:348 gdk-pixbuf/io-ani.c:406 gdk-pixbuf/io-ani.c:432
-#: gdk-pixbuf/io-ani.c:455 gdk-pixbuf/io-ani.c:482 gdk-pixbuf/io-ani.c:569
-msgid "Invalid header in animation"
-msgstr "Neplatná hlavička v animácii"
-
-#: gdk-pixbuf/io-ani.c:358 gdk-pixbuf/io-ani.c:380 gdk-pixbuf/io-ani.c:464
-#: gdk-pixbuf/io-ani.c:491 gdk-pixbuf/io-ani.c:542 gdk-pixbuf/io-ani.c:614
-msgid "Not enough memory to load animation"
-msgstr "Nedostatok pamäte pre načítanie animácie"
-
-#: gdk-pixbuf/io-ani.c:398 gdk-pixbuf/io-ani.c:424 gdk-pixbuf/io-ani.c:443
-msgid "Malformed chunk in animation"
-msgstr "Neplatný kus v animácii"
-
-#: gdk-pixbuf/io-ani.c:711
-msgid "The ANI image format"
-msgstr "Formát obrázkov ANI"
-
-#: gdk-pixbuf/io-bmp.c:230 gdk-pixbuf/io-bmp.c:267 gdk-pixbuf/io-bmp.c:338
-#: gdk-pixbuf/io-bmp.c:370 gdk-pixbuf/io-bmp.c:393 gdk-pixbuf/io-bmp.c:496
-msgid "BMP image has bogus header data"
-msgstr "Obrázok BMP má divné dáta v hlavičke"
-
-#: gdk-pixbuf/io-bmp.c:241 gdk-pixbuf/io-bmp.c:433
-msgid "Not enough memory to load bitmap image"
-msgstr "Nedostatok pamäte pre načítanie obrázku"
-
-#: gdk-pixbuf/io-bmp.c:319
-msgid "BMP image has unsupported header size"
-msgstr "Obrázok BMP má nepodporovanú veľkosť hlavičky"
-
-#: gdk-pixbuf/io-bmp.c:357
-msgid "Topdown BMP images cannot be compressed"
-msgstr "BMP obrázky zhora-dole nemôžu byť komprimované"
-
-#: gdk-pixbuf/io-bmp.c:717 gdk-pixbuf/io-pnm.c:709
-msgid "Premature end-of-file encountered"
-msgstr "Nájdený predčasný koniec súboru"
-
-#: gdk-pixbuf/io-bmp.c:1329
-msgid "Couldn't allocate memory for saving BMP file"
-msgstr "Nepodarilo sa alokovať pamäť pre uloženie súboru BMP"
-
-#: gdk-pixbuf/io-bmp.c:1370
-msgid "Couldn't write to BMP file"
-msgstr "Nepodarilo sa zapísať súbor BMP"
-
-#: gdk-pixbuf/io-bmp.c:1423 gdk-pixbuf/io-gdip-bmp.c:82
-msgid "The BMP image format"
-msgstr "Formát obrázkov BMP"
-
-#: gdk-pixbuf/io-gif.c:222
-#, c-format
-msgid "Failure reading GIF: %s"
-msgstr "Chyba pri čítaní GIF: %s"
-
-#: gdk-pixbuf/io-gif.c:496 gdk-pixbuf/io-gif.c:1481 gdk-pixbuf/io-gif.c:1642
-msgid "GIF file was missing some data (perhaps it was truncated somehow?)"
-msgstr "Súbor GIF neobsahuje niektoré dáta (možno bola jeho časť odrezaná)"
-
-#: gdk-pixbuf/io-gif.c:505
-#, c-format
-msgid "Internal error in the GIF loader (%s)"
-msgstr "Interná chyba modulu pre GIF (%s)"
-
-#: gdk-pixbuf/io-gif.c:579
-msgid "Stack overflow"
-msgstr "Pretečenie zásobníka"
-
-#: gdk-pixbuf/io-gif.c:639
-msgid "GIF image loader cannot understand this image."
-msgstr "Modul načítavania obrázkov GIF nerozpoznal tento obrázok."
-
-#: gdk-pixbuf/io-gif.c:668
-msgid "Bad code encountered"
-msgstr "Nájdený chybný kód"
-
-#: gdk-pixbuf/io-gif.c:678
-msgid "Circular table entry in GIF file"
-msgstr "Cyklická položka v tabuľke v súbore GIF"
-
-#: gdk-pixbuf/io-gif.c:866 gdk-pixbuf/io-gif.c:1468 gdk-pixbuf/io-gif.c:1515
-#: gdk-pixbuf/io-gif.c:1630
-msgid "Not enough memory to load GIF file"
-msgstr "Nedostatok pamäte pre načítanie obrázku GIF"
-
-#: gdk-pixbuf/io-gif.c:960
-msgid "Not enough memory to composite a frame in GIF file"
-msgstr "Nedostatok pamäte pre zloženie rámca súboru GIF"
-
-#: gdk-pixbuf/io-gif.c:1132
-msgid "GIF image is corrupt (incorrect LZW compression)"
-msgstr "Obrázok GIF je poškodený (neplatná kompresia LZW)"
-
-#: gdk-pixbuf/io-gif.c:1182
-msgid "File does not appear to be a GIF file"
-msgstr "Súbor nevyzerá ako GIF"
-
-#: gdk-pixbuf/io-gif.c:1194
-#, c-format
-msgid "Version %s of the GIF file format is not supported"
-msgstr "Verzia %s formátu GIF nie je podporovaná"
-
-#: gdk-pixbuf/io-gif.c:1303
-msgid ""
-"GIF image has no global colormap, and a frame inside it has no local "
-"colormap."
-msgstr ""
-"Obrázok GIF neobsahuje globálnu farebnú mapu a rámec v ňom neobsahuje mapu "
-"lokálnu."
-
-#: gdk-pixbuf/io-gif.c:1537
-msgid "GIF image was truncated or incomplete."
-msgstr "Obrázok GIF bol skrátený alebo nie je úplný."
-
-#: gdk-pixbuf/io-gif.c:1693 gdk-pixbuf/io-gdip-gif.c:80
-msgid "The GIF image format"
-msgstr "Formát obrázkov GIF"
-
-#: gdk-pixbuf/io-ico.c:211 gdk-pixbuf/io-ico.c:225 gdk-pixbuf/io-ico.c:277
-#: gdk-pixbuf/io-ico.c:290 gdk-pixbuf/io-ico.c:359
-msgid "Invalid header in icon"
-msgstr "Neplatná hlavička ikony"
-
-#: gdk-pixbuf/io-ico.c:240 gdk-pixbuf/io-ico.c:300 gdk-pixbuf/io-ico.c:369
-#: gdk-pixbuf/io-ico.c:432 gdk-pixbuf/io-ico.c:462
-msgid "Not enough memory to load icon"
-msgstr "Nedostatok pamäte pre načítanie ikony"
-
-#: gdk-pixbuf/io-ico.c:322
-msgid "Icon has zero width"
-msgstr "Ikona má nulovú šírku"
-
-#: gdk-pixbuf/io-ico.c:332
-msgid "Icon has zero height"
-msgstr "Ikona má nulovú výšku"
-
-#: gdk-pixbuf/io-ico.c:384
-msgid "Compressed icons are not supported"
-msgstr "Komprimované ikony nie sú podporované"
-
-#: gdk-pixbuf/io-ico.c:417
-msgid "Unsupported icon type"
-msgstr "Nepodporovaný typ ikony"
-
-#: gdk-pixbuf/io-ico.c:511
-msgid "Not enough memory to load ICO file"
-msgstr "Nedostatok pamäte pre načítanie súboru ICO"
-
-#: gdk-pixbuf/io-ico.c:976
-msgid "Image too large to be saved as ICO"
-msgstr "Obrázok príliš veľký na uloženie do formátu ICO"
-
-#: gdk-pixbuf/io-ico.c:987
-msgid "Cursor hotspot outside image"
-msgstr "Aktívny bod kurzoru mimo obrázok"
-
-#: gdk-pixbuf/io-ico.c:1010
-#, c-format
-msgid "Unsupported depth for ICO file: %d"
-msgstr "Nepodporovaná farebná hĺbka pre súbor ICO: %d"
-
-#: gdk-pixbuf/io-ico.c:1245 gdk-pixbuf/io-gdip-ico.c:59
-msgid "The ICO image format"
-msgstr "Formát obrázkov ICO"
-
-#: gdk-pixbuf/io-icns.c:347
-#, c-format
-msgid "Error reading ICNS image: %s"
-msgstr "Chyba pri čítaní obrázku ICNS: %s"
-
-#: gdk-pixbuf/io-icns.c:364
-msgid "Could not decode ICNS file"
-msgstr "Nepodarilo sa dekódovať súbor ICNS"
-
-#: gdk-pixbuf/io-icns.c:397
-msgid "The ICNS image format"
-msgstr "Formát obrázkov ICNS"
-
-#: gdk-pixbuf/io-jasper.c:75
-msgid "Couldn't allocate memory for stream"
-msgstr "Nepodarilo sa alokovať pamäť pre prúd"
-
-#: gdk-pixbuf/io-jasper.c:105
-msgid "Couldn't decode image"
-msgstr "Nie je možné dekódovať obrázok"
-
-#: gdk-pixbuf/io-jasper.c:123
-msgid "Transformed JPEG2000 has zero width or height"
-msgstr "Transformovaný JPEG2000 má nulovú výšku alebo šírku."
-
-#: gdk-pixbuf/io-jasper.c:137
-msgid "Image type currently not supported"
-msgstr "Typ obrázku nie je momentálne podporovaný"
-
-#: gdk-pixbuf/io-jasper.c:149 gdk-pixbuf/io-jasper.c:157
-msgid "Couldn't allocate memory for color profile"
-msgstr "Nepodarilo sa alokovať pamäť pre farebný profil"
-
-#: gdk-pixbuf/io-jasper.c:183
-msgid "Insufficient memory to open JPEG 2000 file"
-msgstr "Nedostatok pamäte pre otvorenie súboru JPEG2000"
-
-#: gdk-pixbuf/io-jasper.c:262
-msgid "Couldn't allocate memory to buffer image data"
-msgstr "Nepodarilo sa alokovať pamäť pre dáta obrázku"
-
-#: gdk-pixbuf/io-jasper.c:306
-msgid "The JPEG 2000 image format"
-msgstr "Formát obrázkov JPEG2000"
-
-#: gdk-pixbuf/io-jpeg.c:117
-#, c-format
-msgid "Error interpreting JPEG image file (%s)"
-msgstr "Chyba pri interpretácii obrázku JPEG (%s)"
-
-#: gdk-pixbuf/io-jpeg.c:528
-msgid ""
-"Insufficient memory to load image, try exiting some applications to free "
-"memory"
-msgstr ""
-"Nedostatočná pamäť pre načítanie obrázku, skúste ukončiť niektoré aplikácie "
-"a tým uvoľniť pamäť"
-
-#: gdk-pixbuf/io-jpeg.c:569 gdk-pixbuf/io-jpeg.c:775
-#, c-format
-msgid "Unsupported JPEG color space (%s)"
-msgstr "Nepodporovaný priestor farieb JPEG (%s)"
-
-#: gdk-pixbuf/io-jpeg.c:674 gdk-pixbuf/io-jpeg.c:944 gdk-pixbuf/io-jpeg.c:1177
-#: gdk-pixbuf/io-jpeg.c:1186
-msgid "Couldn't allocate memory for loading JPEG file"
-msgstr "Nepodarilo sa alokovať pamäť pre načítanie súboru JPEG"
-
-#: gdk-pixbuf/io-jpeg.c:919
-msgid "Transformed JPEG has zero width or height."
-msgstr "Transformovaný JPEG má nulovú výšku alebo šírku."
-
-#: gdk-pixbuf/io-jpeg.c:1133 gdk-pixbuf/io-gdip-jpeg.c:53
-#, c-format
-msgid ""
-"JPEG quality must be a value between 0 and 100; value '%s' could not be "
-"parsed."
-msgstr ""
-"Kvalita JPEG musí byť medzi 0 a 100, hodnotu '%s' nie je možné spracovať."
-
-#: gdk-pixbuf/io-jpeg.c:1148 gdk-pixbuf/io-gdip-jpeg.c:68
-#, c-format
-msgid ""
-"JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
-msgstr "Kvalita JPEG musí byť medzi 0 a 100, hodnota '%d' nie je povolená."
-
-#: gdk-pixbuf/io-jpeg.c:1310 gdk-pixbuf/io-gdip-jpeg.c:136
-msgid "The JPEG image format"
-msgstr "Formát obrázkov JPEG"
-
-#: gdk-pixbuf/io-pcx.c:187
-msgid "Couldn't allocate memory for header"
-msgstr "Nepodarilo sa alokovať pamäť pre hlavičku"
-
-#: gdk-pixbuf/io-pcx.c:202 gdk-pixbuf/io-pcx.c:560
-msgid "Couldn't allocate memory for context buffer"
-msgstr "Nepodarilo sa alokovať pamäť pre vyrovnávaciu pamäť obsahu"
-
-#: gdk-pixbuf/io-pcx.c:601
-msgid "Image has invalid width and/or height"
-msgstr "Obrázok má neplatnú šírku alebo výšku"
-
-#: gdk-pixbuf/io-pcx.c:613 gdk-pixbuf/io-pcx.c:674
-msgid "Image has unsupported bpp"
-msgstr "Obrázok má nepodporovanú farebnú hĺbku"
-
-#: gdk-pixbuf/io-pcx.c:618 gdk-pixbuf/io-pcx.c:626
-#, c-format
-msgid "Image has unsupported number of %d-bit planes"
-msgstr "Obrázok má nepodporovaný počet %d-bitových vrstiev"
-
-#: gdk-pixbuf/io-pcx.c:642
-msgid "Couldn't create new pixbuf"
-msgstr "Nepodarilo sa vytvoriť nový obrázok"
-
-#: gdk-pixbuf/io-pcx.c:650
-msgid "Couldn't allocate memory for line data"
-msgstr "Nepodarilo sa alokovať pamäť pre dáta riadku"
-
-#: gdk-pixbuf/io-pcx.c:657
-msgid "Couldn't allocate memory for paletted data"
-msgstr "Nepodarilo sa alokovať pamäť pre dáta palety"
-
-#: gdk-pixbuf/io-pcx.c:704
-msgid "Didn't get all lines of PCX image"
-msgstr "Nezískané všetky riadky obrázku PCX"
-
-#: gdk-pixbuf/io-pcx.c:711
-msgid "No palette found at end of PCX data"
-msgstr "Na konci dát PCX nenájdená paleta"
-
-#: gdk-pixbuf/io-pcx.c:756
-msgid "The PCX image format"
-msgstr "Formát obrázkov PCX"
-
-#: gdk-pixbuf/io-png.c:55
-msgid "Bits per channel of PNG image is invalid."
-msgstr "Počet bitov kanálu obrázku PNG nie je platný."
-
-#: gdk-pixbuf/io-png.c:136 gdk-pixbuf/io-png.c:642
-msgid "Transformed PNG has zero width or height."
-msgstr "Transformovaný PNG má nulovú výšku alebo šírku."
-
-#: gdk-pixbuf/io-png.c:144
-msgid "Bits per channel of transformed PNG is not 8."
-msgstr "Počet bitov kanálu transformovaného PNG nie je 8."
-
-#: gdk-pixbuf/io-png.c:153
-msgid "Transformed PNG not RGB or RGBA."
-msgstr "Transformovaný PNG nie je RGB alebo RGBA."
-
-#: gdk-pixbuf/io-png.c:162
-msgid "Transformed PNG has unsupported number of channels, must be 3 or 4."
-msgstr ""
-"Transformovaný PNG má nepodporovaný počet kanálov, musí to byť 3 alebo 4."
-
-#: gdk-pixbuf/io-png.c:183
-#, c-format
-msgid "Fatal error in PNG image file: %s"
-msgstr "Fatálna chyba v súbore PNG: %s"
-
-#: gdk-pixbuf/io-png.c:316
-msgid "Insufficient memory to load PNG file"
-msgstr "Nedostatok pamäte pre načítanie súboru PNG"
-
-#: gdk-pixbuf/io-png.c:657
-#, c-format
-msgid ""
-"Insufficient memory to store a %ld by %ld image; try exiting some "
-"applications to reduce memory usage"
-msgstr ""
-"Nedostatok pamäte pre uloženie obrázku %ld krát %ld, skúste ukončiť niektoré "
-"aplikácie a tým uvoľniť pamäť"
-
-#: gdk-pixbuf/io-png.c:720
-msgid "Fatal error reading PNG image file"
-msgstr "Fatálna chyba pri čítaní súboru PNG"
-
-#: gdk-pixbuf/io-png.c:769
-#, c-format
-msgid "Fatal error reading PNG image file: %s"
-msgstr "Fatálna chyba pri čítaní súboru PNG: %s"
-
-#: gdk-pixbuf/io-png.c:863
-msgid ""
-"Keys for PNG text chunks must have at least 1 and at most 79 characters."
-msgstr "Kľúče pre kusy PNG textu musia mať aspoň 1 znak a maximálne 79 znakov."
-
-#: gdk-pixbuf/io-png.c:872
-msgid "Keys for PNG text chunks must be ASCII characters."
-msgstr "Kľúče pre kusy PNG textu musia byť znaky ASCII."
-
-#: gdk-pixbuf/io-png.c:886 gdk-pixbuf/io-tiff.c:738
-#, c-format
-msgid "Color profile has invalid length %d."
-msgstr ""
-
-#: gdk-pixbuf/io-png.c:899 gdk-pixbuf/io-gdip-png.c:56
-#, c-format
-msgid ""
-"PNG compression level must be a value between 0 and 9; value '%s' could not "
-"be parsed."
-msgstr ""
-"Úroveň kompresie PNG musí byť hodnota medzi 0 a 9; hodnotu '%s' sa "
-"nepodarilo analyzovať."
-
-#: gdk-pixbuf/io-png.c:912 gdk-pixbuf/io-gdip-png.c:68
-#, c-format
-msgid ""
-"PNG compression level must be a value between 0 and 9; value '%d' is not "
-"allowed."
-msgstr ""
-"Úroveň kompresie PNG musí byť hodnota medzi 0 a 9; hodnota '%d' nie je "
-"povolená."
-
-#: gdk-pixbuf/io-png.c:951
-#, c-format
-msgid "Value for PNG text chunk %s cannot be converted to ISO-8859-1 encoding."
-msgstr ""
-"Hodnotu pre kus PNG textu %s nie je možné previesť do kódovania ISO-8859-1."
-
-#: gdk-pixbuf/io-png.c:1112 gdk-pixbuf/io-gdip-png.c:133
-msgid "The PNG image format"
-msgstr "Formát obrázkov PNG"
-
-#: gdk-pixbuf/io-pnm.c:250
-msgid "PNM loader expected to find an integer, but didn't"
-msgstr "Modul pre načítanie PNM očakával celé číslo, ale nenašiel ho"
-
-#: gdk-pixbuf/io-pnm.c:282
-msgid "PNM file has an incorrect initial byte"
-msgstr "Súbor PNM obsahuje nesprávny počiatočný bajt"
-
-#: gdk-pixbuf/io-pnm.c:312
-msgid "PNM file is not in a recognized PNM subformat"
-msgstr "Súbor PNM nie je rozpoznaný pod-formát PNM"
-
-#: gdk-pixbuf/io-pnm.c:337
-msgid "PNM file has an image width of 0"
-msgstr "Súbor PNM obsahuje obrázok so šírkou 0"
-
-#: gdk-pixbuf/io-pnm.c:358
-msgid "PNM file has an image height of 0"
-msgstr "Súbor PNM obsahuje obrázok s výškou 0"
-
-#: gdk-pixbuf/io-pnm.c:381
-msgid "Maximum color value in PNM file is 0"
-msgstr "Maximálna hodnota farby v súbore PNM je 0"
-
-#: gdk-pixbuf/io-pnm.c:389
-msgid "Maximum color value in PNM file is too large"
-msgstr "Maximálna hodnota farby v súbore PNM je príliš veľká"
-
-#: gdk-pixbuf/io-pnm.c:429 gdk-pixbuf/io-pnm.c:459 gdk-pixbuf/io-pnm.c:504
-msgid "Raw PNM image type is invalid"
-msgstr "Typ obrázku PNM 'raw' nie je platný"
-
-#: gdk-pixbuf/io-pnm.c:654
-msgid "PNM image loader does not support this PNM subformat"
-msgstr "Modul pre načítanie PNM nepodporuje tento pod-formát PNM"
-
-#: gdk-pixbuf/io-pnm.c:741 gdk-pixbuf/io-pnm.c:968
-msgid "Raw PNM formats require exactly one whitespace before sample data"
-msgstr ""
-"Čisté formáty PNM vyžadujú presne jednu medzeru pred náhľadovými dátami"
-
-#: gdk-pixbuf/io-pnm.c:768
-msgid "Cannot allocate memory for loading PNM image"
-msgstr "Nepodarilo sa alokovať pamäť pre načítanie obrázku PNM"
-
-#: gdk-pixbuf/io-pnm.c:818
-msgid "Insufficient memory to load PNM context struct"
-msgstr "Nedostatok pamäte pre načítanie štruktúry kontextu pre PNM"
-
-#: gdk-pixbuf/io-pnm.c:869
-msgid "Unexpected end of PNM image data"
-msgstr "Neočakávaný koniec dát obrázku PNM"
-
-#: gdk-pixbuf/io-pnm.c:997
-msgid "Insufficient memory to load PNM file"
-msgstr "Nedostatok pamäte pre načítanie súboru PNM"
-
-#: gdk-pixbuf/io-pnm.c:1081
-msgid "The PNM/PBM/PGM/PPM image format family"
-msgstr "Rodina formátov obrázkov PNM/PBM/PGM/PPM"
-
-#: gdk-pixbuf/io-qtif.c:128
-msgid "Input file descriptor is NULL."
-msgstr ""
-
-#: gdk-pixbuf/io-qtif.c:143
-#, fuzzy
-msgid "Failed to read QTIF header"
-msgstr "Nepodarilo sa uložiť hlavičku\n"
-
-#: gdk-pixbuf/io-qtif.c:152 gdk-pixbuf/io-qtif.c:182 gdk-pixbuf/io-qtif.c:446
-#, c-format
-msgid "QTIF atom size too large (%d bytes)"
-msgstr ""
-
-#: gdk-pixbuf/io-qtif.c:172
-#, fuzzy, c-format
-msgid "Failed to allocate %d bytes for file read buffer"
-msgstr "nepodarilo sa alokovať pamäť pre obrázok s veľkosťou %u bajtov"
-
-#: gdk-pixbuf/io-qtif.c:196
-#, fuzzy, c-format
-msgid "File error when reading QTIF atom: %s"
-msgstr "Chyba pri čítaní GIF: %s"
-
-#: gdk-pixbuf/io-qtif.c:233
-#, c-format
-msgid "Failed to skip the next %d bytes with seek()."
-msgstr ""
-
-#: gdk-pixbuf/io-qtif.c:257
-#, fuzzy
-msgid "Failed to allocate QTIF context structure."
-msgstr "Nepodarilo sa alokovať pamäť pre kontextovú štruktúru TGA"
-
-#: gdk-pixbuf/io-qtif.c:317
-#, fuzzy
-msgid "Failed to create GdkPixbufLoader object."
-msgstr "Nepodarilo sa zapísať index priečinka\n"
-
-#: gdk-pixbuf/io-qtif.c:421
-#, fuzzy
-msgid "Failed to find an image data atom."
-msgstr "Nepodarilo sa otvoriť obrázok TIFF"
-
-#: gdk-pixbuf/io-qtif.c:602
-#, fuzzy
-msgid "The QTIF image format"
-msgstr "Formát obrázkov TIFF"
-
-#: gdk-pixbuf/io-ras.c:126
-msgid "RAS image has bogus header data"
-msgstr "Obrázok RAS má neplatné dáta v hlavičke"
-
-#: gdk-pixbuf/io-ras.c:148
-msgid "RAS image has unknown type"
-msgstr "Neznámy typ obrázku RAS"
-
-#: gdk-pixbuf/io-ras.c:156
-msgid "unsupported RAS image variation"
-msgstr "Nepodporovaný variant obrázku RAS"
-
-#: gdk-pixbuf/io-ras.c:171 gdk-pixbuf/io-ras.c:200
-msgid "Not enough memory to load RAS image"
-msgstr "Nedostatok pamäte pre načítanie obrázku RAS"
-
-#: gdk-pixbuf/io-ras.c:545
-msgid "The Sun raster image format"
-msgstr "Formát rastrových obrázkov Sun"
-
-#: gdk-pixbuf/io-tga.c:154
-msgid "Cannot allocate memory for IOBuffer struct"
-msgstr "Nepodarilo sa alokovať pamäť pre štruktúru IOBuffer"
-
-#: gdk-pixbuf/io-tga.c:173
-msgid "Cannot allocate memory for IOBuffer data"
-msgstr "Nepodarilo sa alokovať pamäť pre dáta IOBuffer"
-
-#: gdk-pixbuf/io-tga.c:184
-msgid "Cannot realloc IOBuffer data"
-msgstr "Nepodarilo sa zmeniť alokáciu pre dáta IOBuffer"
-
-#: gdk-pixbuf/io-tga.c:214
-msgid "Cannot allocate temporary IOBuffer data"
-msgstr "Nepodarilo sa alokovať dočasné dáta IOBuffer"
-
-#: gdk-pixbuf/io-tga.c:347
-msgid "Cannot allocate new pixbuf"
-msgstr "Nepodarilo sa alokovať nový pixbuf"
-
-#: gdk-pixbuf/io-tga.c:686
-#, fuzzy
-msgid "Image is corrupted or truncated"
-msgstr "Obrázok GIF bol skrátený alebo nie je úplný."
-
-#: gdk-pixbuf/io-tga.c:693
-msgid "Cannot allocate colormap structure"
-msgstr "Nepodarilo sa alokovať štruktúru pre farebnú mapu"
-
-#: gdk-pixbuf/io-tga.c:700
-msgid "Cannot allocate colormap entries"
-msgstr "Nepodarilo sa alokovať položky farebnej mapy"
-
-#: gdk-pixbuf/io-tga.c:722
-msgid "Unexpected bitdepth for colormap entries"
-msgstr "Neočakávaná farebná hĺbka v položkách farebnej mapy"
-
-#: gdk-pixbuf/io-tga.c:740
-msgid "Cannot allocate TGA header memory"
-msgstr "Nepodarilo sa alokovať pamäť pre hlavičku TGA"
-
-#: gdk-pixbuf/io-tga.c:773
-msgid "TGA image has invalid dimensions"
-msgstr "Obrázok TGA má neplatné rozmery"
-
-#: gdk-pixbuf/io-tga.c:779 gdk-pixbuf/io-tga.c:788 gdk-pixbuf/io-tga.c:798
-#: gdk-pixbuf/io-tga.c:808 gdk-pixbuf/io-tga.c:815
-msgid "TGA image type not supported"
-msgstr "Typ obrázku TGA nie je podporovaný"
-
-#: gdk-pixbuf/io-tga.c:862
-msgid "Cannot allocate memory for TGA context struct"
-msgstr "Nepodarilo sa alokovať pamäť pre kontextovú štruktúru TGA"
-
-#: gdk-pixbuf/io-tga.c:927
-msgid "Excess data in file"
-msgstr "Dáta naviac v súbore"
-
-#: gdk-pixbuf/io-tga.c:1008
-msgid "The Targa image format"
-msgstr "Formát obrázkov Targa"
-
-#: gdk-pixbuf/io-tiff.c:165
-msgid "Could not get image width (bad TIFF file)"
-msgstr "Nepodarilo sa získať šírku obrázku (neplatný súbor TIFF)"
-
-#: gdk-pixbuf/io-tiff.c:172
-msgid "Could not get image height (bad TIFF file)"
-msgstr "Nepodarilo sa získať výšku obrázku (neplatný súbor TIFF)"
-
-#: gdk-pixbuf/io-tiff.c:180
-msgid "Width or height of TIFF image is zero"
-msgstr "Výška alebo šírka obrázku TIFF je 0"
-
-#: gdk-pixbuf/io-tiff.c:189 gdk-pixbuf/io-tiff.c:198
-msgid "Dimensions of TIFF image too large"
-msgstr "Rozmery obrázku TIFF príliš veľké"
-
-#: gdk-pixbuf/io-tiff.c:222 gdk-pixbuf/io-tiff.c:234 gdk-pixbuf/io-tiff.c:561
-msgid "Insufficient memory to open TIFF file"
-msgstr "Nedostatok pamäte pre otvorenie súboru TIFF"
-
-#: gdk-pixbuf/io-tiff.c:295
-msgid "Failed to load RGB data from TIFF file"
-msgstr "Nepodarilo sa načítať dáta RGB zo súboru TIFF"
-
-#: gdk-pixbuf/io-tiff.c:351
-msgid "Failed to open TIFF image"
-msgstr "Nepodarilo sa otvoriť obrázok TIFF"
-
-#: gdk-pixbuf/io-tiff.c:363 gdk-pixbuf/io-tiff.c:778
-msgid "TIFFClose operation failed"
-msgstr "Operácia TIFFClose zlyhala"
-
-#: gdk-pixbuf/io-tiff.c:493 gdk-pixbuf/io-tiff.c:506
-msgid "Failed to load TIFF image"
-msgstr "Nepodarilo sa načítať obrázok TIFF"
-
-#: gdk-pixbuf/io-tiff.c:692
-msgid "Failed to save TIFF image"
-msgstr "Nepodarilo sa uložiť obrázok TIFF"
-
-#: gdk-pixbuf/io-tiff.c:727
-msgid "TIFF compression doesn't refer to a valid codec."
-msgstr ""
-
-#: gdk-pixbuf/io-tiff.c:767
-msgid "Failed to write TIFF data"
-msgstr "Nepodarilo sa zapísať dáta obrázku TIFF"
-
-#: gdk-pixbuf/io-tiff.c:814
-msgid "Couldn't write to TIFF file"
-msgstr "Nepodarilo sa zapísať súbor TIFF"
-
-#: gdk-pixbuf/io-tiff.c:869
-msgid "The TIFF image format"
-msgstr "Formát obrázkov TIFF"
-
-#: gdk-pixbuf/io-wbmp.c:246
-msgid "Image has zero width"
-msgstr "Obrázok má nulovú šírku"
-
-#: gdk-pixbuf/io-wbmp.c:264
-msgid "Image has zero height"
-msgstr "Obrázok má nulovú výšku"
-
-#: gdk-pixbuf/io-wbmp.c:275
-msgid "Not enough memory to load image"
-msgstr "Nedostatok pamäte pre načítanie obrázku"
-
-#: gdk-pixbuf/io-wbmp.c:334
-msgid "Couldn't save the rest"
-msgstr "Nepodarilo sa uložiť zvyšok"
-
-#: gdk-pixbuf/io-wbmp.c:375
-msgid "The WBMP image format"
-msgstr "Formát obrázkov WBMP"
-
-#: gdk-pixbuf/io-xbm.c:295
-msgid "Invalid XBM file"
-msgstr "Neplatný súbor XBM"
-
-#: gdk-pixbuf/io-xbm.c:305
-msgid "Insufficient memory to load XBM image file"
-msgstr "Nedostatok pamäte pre načítanie súboru obrázku XBM"
-
-#: gdk-pixbuf/io-xbm.c:453
-msgid "Failed to write to temporary file when loading XBM image"
-msgstr "Nepodarilo sa zapísať dočasný súbor pri načítavaní obrázku XBM"
-
-#: gdk-pixbuf/io-xbm.c:492
-msgid "The XBM image format"
-msgstr "Formát obrázkov XBM"
-
-#: gdk-pixbuf/io-xpm.c:468
-msgid "No XPM header found"
-msgstr "Hlavička XPM nenájdená"
-
-#: gdk-pixbuf/io-xpm.c:477
-msgid "Invalid XPM header"
-msgstr "Neplatná hlavička XPM"
-
-#: gdk-pixbuf/io-xpm.c:485
-msgid "XPM file has image width <= 0"
-msgstr "Súbor XPM obsahuje obrázok so šírkou <=0"
-
-#: gdk-pixbuf/io-xpm.c:493
-msgid "XPM file has image height <= 0"
-msgstr "Súbor XPM obsahuje obrázok s výškou <=0"
-
-#: gdk-pixbuf/io-xpm.c:501
-msgid "XPM has invalid number of chars per pixel"
-msgstr "XPM obsahuje neplatný počet znakov na bod"
-
-#: gdk-pixbuf/io-xpm.c:510
-msgid "XPM file has invalid number of colors"
-msgstr "Súbor XPM má neplatný počet farieb"
-
-#: gdk-pixbuf/io-xpm.c:522 gdk-pixbuf/io-xpm.c:531 gdk-pixbuf/io-xpm.c:583
-msgid "Cannot allocate memory for loading XPM image"
-msgstr "Nepodarilo sa alokovať pamäť pre načítanie obrázku XPM"
-
-#: gdk-pixbuf/io-xpm.c:545
-msgid "Cannot read XPM colormap"
-msgstr "Nepodarilo sa načítať farebnú mapu XPM"
-
-#: gdk-pixbuf/io-xpm.c:777
-msgid "Failed to write to temporary file when loading XPM image"
-msgstr "Nepodarilo sa zapísať dočasný súbor pri načítavaní obrázku XPM"
-
-#: gdk-pixbuf/io-xpm.c:816
-msgid "The XPM image format"
-msgstr "Formát obrázkov XPM"
-
-#: gdk-pixbuf/io-gdip-emf.c:59
-msgid "The EMF image format"
-msgstr "Formát obrázkov EMF"
-
-#: gdk-pixbuf/io-gdip-utils.c:232
-#, c-format
-msgid "Could not allocate memory: %s"
-msgstr "Nepodarilo sa alokovať pamäť: %s"
-
-#: gdk-pixbuf/io-gdip-utils.c:257 gdk-pixbuf/io-gdip-utils.c:371
-#: gdk-pixbuf/io-gdip-utils.c:411
-#, c-format
-msgid "Could not create stream: %s"
-msgstr "Nepodarilo sa vytvoriť prúd: %s"
-
-#: gdk-pixbuf/io-gdip-utils.c:271
-#, c-format
-msgid "Could not seek stream: %s"
-msgstr "Nepodarilo sa presunutie v prúde: %s"
-
-#: gdk-pixbuf/io-gdip-utils.c:283
-#, c-format
-msgid "Could not read from stream: %s"
-msgstr "Nepodarilo sa čítanie z prúdu: %s"
-
-#: gdk-pixbuf/io-gdip-utils.c:694 gdk-pixbuf/io-gdip-utils.c:825
-msgid "Couldn't load bitmap"
-msgstr "Nie je možné načítať obrázok"
-
-#: gdk-pixbuf/io-gdip-utils.c:847
-msgid "Couldn't load metafile"
-msgstr "Nie je možné načítať metasúbor"
-
-#: gdk-pixbuf/io-gdip-utils.c:1006
-msgid "Unsupported image format for GDI+"
-msgstr "Nepodporovaný formát obrázku pre GDI+"
-
-#: gdk-pixbuf/io-gdip-utils.c:1013
-msgid "Couldn't save"
-msgstr "Nepodarilo sa uložiť"
-
-#: gdk-pixbuf/io-gdip-wmf.c:58
-msgid "The WMF image format"
-msgstr "Formát obrázkov WMF"
 
 #. Description of --sync in --help output
 #: gdk/win32/gdkmain-win32.c:55
@@ -1515,8 +610,9 @@ msgid "_Saturation:"
 msgstr "_Sýtosť:"
 
 #: gtk/gtkcolorsel.c:393
-msgid "\"Deepness\" of the color."
-msgstr "\"Hĺbka\" farby."
+#, fuzzy
+msgid "Intensity of the color."
+msgstr "Priehľadnosť farby."
 
 #: gtk/gtkcolorsel.c:394
 msgid "_Value:"
@@ -1687,11 +783,11 @@ msgstr "_Pravý:"
 msgid "Paper Margins"
 msgstr "Okraje papiera"
 
-#: gtk/gtkentry.c:8612 gtk/gtktextview.c:8002
+#: gtk/gtkentry.c:8612 gtk/gtktextview.c:8012
 msgid "Input _Methods"
 msgstr "_Metódy vstupu"
 
-#: gtk/gtkentry.c:8626 gtk/gtktextview.c:8016
+#: gtk/gtkentry.c:8626 gtk/gtktextview.c:8026
 msgid "_Insert Unicode Control Character"
 msgstr "_Vložiť ovládací znak Unicode"
 
@@ -2134,12 +1230,12 @@ msgid "System (%s)"
 msgstr "Systémová (%s)"
 
 #. Open Link
-#: gtk/gtklabel.c:6076
+#: gtk/gtklabel.c:6072
 msgid "_Open Link"
 msgstr "_Otvoriť odkaz"
 
 #. Copy Link Address
-#: gtk/gtklabel.c:6088
+#: gtk/gtklabel.c:6084
 msgid "Copy _Link Address"
 msgstr "Kopírovať _adresu odkazu"
 
@@ -2152,27 +1248,27 @@ msgid "Invalid URI"
 msgstr "Neplatné URI"
 
 #. Description of --gtk-module=MODULES in --help output
-#: gtk/gtkmain.c:447
+#: gtk/gtkmain.c:432
 msgid "Load additional GTK+ modules"
 msgstr "Načítať prídavné moduly GTK+"
 
 #. Placeholder in --gtk-module=MODULES in --help output
-#: gtk/gtkmain.c:448
+#: gtk/gtkmain.c:433
 msgid "MODULES"
 msgstr "MODULY"
 
 #. Description of --g-fatal-warnings in --help output
-#: gtk/gtkmain.c:450
+#: gtk/gtkmain.c:435
 msgid "Make all warnings fatal"
 msgstr "Zmeniť všetky upozornenia na závažné"
 
 #. Description of --gtk-debug=FLAGS in --help output
-#: gtk/gtkmain.c:453
+#: gtk/gtkmain.c:438
 msgid "GTK+ debugging flags to set"
 msgstr "Ladiace príznaky GTK+, ktoré nastaviť"
 
 #. Description of --gtk-no-debug=FLAGS in --help output
-#: gtk/gtkmain.c:456
+#: gtk/gtkmain.c:441
 msgid "GTK+ debugging flags to unset"
 msgstr "Ladiace príznaky GTK+, ktoré vypnúť"
 
@@ -2181,20 +1277,20 @@ msgstr "Ladiace príznaky GTK+, ktoré vypnúť"
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
 #.
-#: gtk/gtkmain.c:708
+#: gtk/gtkmain.c:704
 msgid "default:LTR"
 msgstr "default:LTR"
 
-#: gtk/gtkmain.c:773
+#: gtk/gtkmain.c:769
 #, c-format
 msgid "Cannot open display: %s"
 msgstr "Nepodarilo sa otvoriť displej: %s"
 
-#: gtk/gtkmain.c:810
+#: gtk/gtkmain.c:806
 msgid "GTK+ Options"
 msgstr "Voľby GTK+"
 
-#: gtk/gtkmain.c:810
+#: gtk/gtkmain.c:806
 msgid "Show GTK+ Options"
 msgstr "Zobraziť voľby GTK+"
 
@@ -2279,7 +1375,7 @@ msgstr "Z shell"
 msgid "Cannot end process with pid %d: %s"
 msgstr "Nepodarilo sa ukončiť proces s pid %d: %s"
 
-#: gtk/gtknotebook.c:4621 gtk/gtknotebook.c:7050
+#: gtk/gtknotebook.c:4631 gtk/gtknotebook.c:7060
 #, c-format
 msgid "Page %u"
 msgstr "Stránka %u"
@@ -2369,88 +1465,82 @@ msgstr "Uložiť do _priečinka:"
 msgid "%s job #%d"
 msgstr "%s: úloha %d"
 
-#: gtk/gtkprintoperation.c:1687
+#: gtk/gtkprintoperation.c:1695
 msgctxt "print operation status"
 msgid "Initial state"
 msgstr "Východzí stav"
 
-#: gtk/gtkprintoperation.c:1688
+#: gtk/gtkprintoperation.c:1696
 msgctxt "print operation status"
 msgid "Preparing to print"
 msgstr "Pripravuje sa na tlač"
 
-#: gtk/gtkprintoperation.c:1689
+#: gtk/gtkprintoperation.c:1697
 msgctxt "print operation status"
 msgid "Generating data"
 msgstr "Generujú sa údaje"
 
-#: gtk/gtkprintoperation.c:1690
+#: gtk/gtkprintoperation.c:1698
 msgctxt "print operation status"
 msgid "Sending data"
 msgstr "Odosielajú sa údaje"
 
-#: gtk/gtkprintoperation.c:1691
+#: gtk/gtkprintoperation.c:1699
 msgctxt "print operation status"
 msgid "Waiting"
 msgstr "Čaká sa"
 
-#: gtk/gtkprintoperation.c:1692
+#: gtk/gtkprintoperation.c:1700
 msgctxt "print operation status"
 msgid "Blocking on issue"
 msgstr "Zablokované na probléme"
 
-#: gtk/gtkprintoperation.c:1693
+#: gtk/gtkprintoperation.c:1701
 msgctxt "print operation status"
 msgid "Printing"
 msgstr "Prebieha tlač"
 
-#: gtk/gtkprintoperation.c:1694
+#: gtk/gtkprintoperation.c:1702
 msgctxt "print operation status"
 msgid "Finished"
 msgstr "Tlač ukončená"
 
-#: gtk/gtkprintoperation.c:1695
+#: gtk/gtkprintoperation.c:1703
 msgctxt "print operation status"
 msgid "Finished with error"
 msgstr "Tlač ukončená s chybou"
 
-#: gtk/gtkprintoperation.c:2254
+#: gtk/gtkprintoperation.c:2270
 #, c-format
 msgid "Preparing %d"
 msgstr "Pripravuje sa %d"
 
-#: gtk/gtkprintoperation.c:2256 gtk/gtkprintoperation.c:2875
+#: gtk/gtkprintoperation.c:2272 gtk/gtkprintoperation.c:2902
 #, c-format
 msgid "Preparing"
 msgstr "Pripravuje sa"
 
-#: gtk/gtkprintoperation.c:2259
+#: gtk/gtkprintoperation.c:2275
 #, c-format
 msgid "Printing %d"
 msgstr "Tlačí sa %d"
 
-#: gtk/gtkprintoperation.c:2905
+#: gtk/gtkprintoperation.c:2932
 #, c-format
 msgid "Error creating print preview"
 msgstr "Chyba pri vytváraní náhľadu"
 
-#: gtk/gtkprintoperation.c:2908
+#: gtk/gtkprintoperation.c:2935
 #, c-format
 msgid "The most probable reason is that a temporary file could not be created."
 msgstr ""
 "Najpravdepodobnejšia príčina je, že sa nepodarilo vytvoriť dočasný súbor."
 
-#: gtk/gtkprintoperation-unix.c:297 gtk/gtkprintoperation-unix.c:314
-#, c-format
+#: gtk/gtkprintoperation-unix.c:297
 msgid "Error launching preview"
 msgstr "Chyba pri spustení náhľadu"
 
-#: gtk/gtkprintoperation-unix.c:358
-#, c-format
-msgid "Error printing"
-msgstr "Chyba pri tlači"
-
-#: gtk/gtkprintoperation-unix.c:494 gtk/gtkprintoperation-win32.c:1447
+#: gtk/gtkprintoperation-unix.c:470 gtk/gtkprintoperation-win32.c:1447
 msgid "Application"
 msgstr "Aplikácia"
 
@@ -2464,7 +1554,7 @@ msgstr "Došiel papier"
 
 #. Translators: this is a printer status.
 #: gtk/gtkprintoperation-win32.c:616
-#: modules/printbackends/cups/gtkprintbackendcups.c:1999
+#: modules/printbackends/cups/gtkprintbackendcups.c:1998
 msgid "Paused"
 msgstr "Pozastavená"
 
@@ -2591,42 +1681,42 @@ msgstr "Všeobecné"
 #. * multiple pages on a sheet when printing
 #.
 #: gtk/gtkprintunixdialog.c:3010
-#: modules/printbackends/cups/gtkprintbackendcups.c:3509
+#: modules/printbackends/cups/gtkprintbackendcups.c:3508
 msgid "Left to right, top to bottom"
 msgstr "Zľava doprava, zhora nadol"
 
 #: gtk/gtkprintunixdialog.c:3010
-#: modules/printbackends/cups/gtkprintbackendcups.c:3509
+#: modules/printbackends/cups/gtkprintbackendcups.c:3508
 msgid "Left to right, bottom to top"
 msgstr "Zľava doprava, zdola nahor"
 
 #: gtk/gtkprintunixdialog.c:3011
-#: modules/printbackends/cups/gtkprintbackendcups.c:3510
+#: modules/printbackends/cups/gtkprintbackendcups.c:3509
 msgid "Right to left, top to bottom"
 msgstr "Sprava doľava, zhora nadol"
 
 #: gtk/gtkprintunixdialog.c:3011
-#: modules/printbackends/cups/gtkprintbackendcups.c:3510
+#: modules/printbackends/cups/gtkprintbackendcups.c:3509
 msgid "Right to left, bottom to top"
 msgstr "Sprava doľava, zdola nahor"
 
 #: gtk/gtkprintunixdialog.c:3012
-#: modules/printbackends/cups/gtkprintbackendcups.c:3511
+#: modules/printbackends/cups/gtkprintbackendcups.c:3510
 msgid "Top to bottom, left to right"
 msgstr "Zhora nadol, zľava doprava"
 
 #: gtk/gtkprintunixdialog.c:3012
-#: modules/printbackends/cups/gtkprintbackendcups.c:3511
+#: modules/printbackends/cups/gtkprintbackendcups.c:3510
 msgid "Top to bottom, right to left"
 msgstr "Zhora nadol, sprava doľava"
 
 #: gtk/gtkprintunixdialog.c:3013
-#: modules/printbackends/cups/gtkprintbackendcups.c:3512
+#: modules/printbackends/cups/gtkprintbackendcups.c:3511
 msgid "Bottom to top, left to right"
 msgstr "Zdola nahor, zľava doprava"
 
 #: gtk/gtkprintunixdialog.c:3013
-#: modules/printbackends/cups/gtkprintbackendcups.c:3512
+#: modules/printbackends/cups/gtkprintbackendcups.c:3511
 msgid "Bottom to top, right to left"
 msgstr "Zdola nahor, sprava doľava"
 
@@ -2634,7 +1724,7 @@ msgstr "Zdola nahor, sprava doľava"
 #. * dialog that controls in what order multiple pages are arranged
 #.
 #: gtk/gtkprintunixdialog.c:3017 gtk/gtkprintunixdialog.c:3030
-#: modules/printbackends/cups/gtkprintbackendcups.c:3544
+#: modules/printbackends/cups/gtkprintbackendcups.c:3543
 msgid "Page Ordering"
 msgstr "Poradie strán"
 
@@ -4799,121 +3889,116 @@ msgstr "Tlačiareň '%s' je vypnutá."
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:1687
 #, c-format
-msgid "Printer '%s' may not be connected."
-msgstr "Tlačiareň '%s' asi nie je pripojená."
-
-#: modules/printbackends/cups/gtkprintbackendcups.c:1688
-#, c-format
 msgid "There is a problem on printer '%s'."
 msgstr "Na tlačiarni '%s' sa vyskytol problém."
 
 #. Translators: this is a printer status.
-#: modules/printbackends/cups/gtkprintbackendcups.c:1996
+#: modules/printbackends/cups/gtkprintbackendcups.c:1995
 msgid "Paused ; Rejecting Jobs"
 msgstr "Pozastavená, odmieta úlohy"
 
 #. Translators: this is a printer status.
-#: modules/printbackends/cups/gtkprintbackendcups.c:2002
+#: modules/printbackends/cups/gtkprintbackendcups.c:2001
 msgid "Rejecting Jobs"
 msgstr "Odmieta úlohy"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2778
+#: modules/printbackends/cups/gtkprintbackendcups.c:2777
 msgid "Two Sided"
 msgstr "Obojstranne"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2779
+#: modules/printbackends/cups/gtkprintbackendcups.c:2778
 msgid "Paper Type"
 msgstr "Typ papiera"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2780
+#: modules/printbackends/cups/gtkprintbackendcups.c:2779
 msgid "Paper Source"
 msgstr "Zdroj papiera"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2781
+#: modules/printbackends/cups/gtkprintbackendcups.c:2780
 msgid "Output Tray"
 msgstr "Výstupné úložisko"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2782
+#: modules/printbackends/cups/gtkprintbackendcups.c:2781
 msgid "Resolution"
 msgstr "Rozlíšenie"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2783
+#: modules/printbackends/cups/gtkprintbackendcups.c:2782
 msgid "GhostScript pre-filtering"
 msgstr "Predfiltrovanie GhostScriptom"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2792
+#: modules/printbackends/cups/gtkprintbackendcups.c:2791
 msgid "One Sided"
 msgstr "Jednostranne"
 
 #. Translators: this is an option of "Two Sided"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2794
+#: modules/printbackends/cups/gtkprintbackendcups.c:2793
 msgid "Long Edge (Standard)"
 msgstr "Dlhý okraj (štandard)"
 
 #. Translators: this is an option of "Two Sided"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2796
+#: modules/printbackends/cups/gtkprintbackendcups.c:2795
 msgid "Short Edge (Flip)"
 msgstr "Krátky okraj (prevrátiť)"
 
 #. Translators: this is an option of "Paper Source"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2798
-#: modules/printbackends/cups/gtkprintbackendcups.c:2800
-#: modules/printbackends/cups/gtkprintbackendcups.c:2808
+#: modules/printbackends/cups/gtkprintbackendcups.c:2797
+#: modules/printbackends/cups/gtkprintbackendcups.c:2799
+#: modules/printbackends/cups/gtkprintbackendcups.c:2807
 msgid "Auto Select"
 msgstr "Automatický výber"
 
 #. Translators: this is an option of "Paper Source"
 #. Translators: this is an option of "Resolution"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2802
-#: modules/printbackends/cups/gtkprintbackendcups.c:2804
-#: modules/printbackends/cups/gtkprintbackendcups.c:2806
-#: modules/printbackends/cups/gtkprintbackendcups.c:2810
-#: modules/printbackends/cups/gtkprintbackendcups.c:3296
+#: modules/printbackends/cups/gtkprintbackendcups.c:2801
+#: modules/printbackends/cups/gtkprintbackendcups.c:2803
+#: modules/printbackends/cups/gtkprintbackendcups.c:2805
+#: modules/printbackends/cups/gtkprintbackendcups.c:2809
+#: modules/printbackends/cups/gtkprintbackendcups.c:3295
 msgid "Printer Default"
 msgstr "Predvolené v tlačiarni"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2812
+#: modules/printbackends/cups/gtkprintbackendcups.c:2811
 msgid "Embed GhostScript fonts only"
 msgstr "Vložiť len GhostScriptové fonty"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2814
+#: modules/printbackends/cups/gtkprintbackendcups.c:2813
 msgid "Convert to PS level 1"
 msgstr "Previesť na PS level 1"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2816
+#: modules/printbackends/cups/gtkprintbackendcups.c:2815
 msgid "Convert to PS level 2"
 msgstr "Previesť na PS level 2"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2818
+#: modules/printbackends/cups/gtkprintbackendcups.c:2817
 msgid "No pre-filtering"
 msgstr "Žiadne predfiltrovanie"
 
 #. Translators: "Miscellaneous" is the label for a button, that opens
 #. up an extra panel of settings in a print dialog.
-#: modules/printbackends/cups/gtkprintbackendcups.c:2827
+#: modules/printbackends/cups/gtkprintbackendcups.c:2826
 msgid "Miscellaneous"
 msgstr "Rôzne"
 
 #. Translators: These strings name the possible values of the
 #. * job priority option in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3504
+#: modules/printbackends/cups/gtkprintbackendcups.c:3503
 msgid "Urgent"
 msgstr "Urgentná"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3504
+#: modules/printbackends/cups/gtkprintbackendcups.c:3503
 msgid "High"
 msgstr "Vysoká"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3504
+#: modules/printbackends/cups/gtkprintbackendcups.c:3503
 msgid "Medium"
 msgstr "Stredná"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3504
+#: modules/printbackends/cups/gtkprintbackendcups.c:3503
 msgid "Low"
 msgstr "Nízka"
 
@@ -4921,66 +4006,66 @@ msgstr "Nízka"
 #. Translators, this string is used to label the pages-per-sheet option
 #. * in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3528
+#: modules/printbackends/cups/gtkprintbackendcups.c:3527
 msgid "Pages per Sheet"
 msgstr "Stránok na list"
 
 #. Translators, this string is used to label the job priority option
 #. * in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3565
+#: modules/printbackends/cups/gtkprintbackendcups.c:3564
 msgid "Job Priority"
 msgstr "Priorita úlohy"
 
 #. Translators, this string is used to label the billing info entry
 #. * in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3576
+#: modules/printbackends/cups/gtkprintbackendcups.c:3575
 msgid "Billing Info"
 msgstr "Zúčtovacie info"
 
 #. Translators, these strings are names for various 'standard' cover
 #. * pages that the printing system may support.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3591
+#: modules/printbackends/cups/gtkprintbackendcups.c:3590
 msgid "None"
 msgstr "(žiadne)"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3591
+#: modules/printbackends/cups/gtkprintbackendcups.c:3590
 msgid "Classified"
 msgstr "Prísne tajný"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3591
+#: modules/printbackends/cups/gtkprintbackendcups.c:3590
 msgid "Confidential"
 msgstr "Dôverný"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3591
+#: modules/printbackends/cups/gtkprintbackendcups.c:3590
 msgid "Secret"
 msgstr "Tajný"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3591
+#: modules/printbackends/cups/gtkprintbackendcups.c:3590
 msgid "Standard"
 msgstr "Štandardný"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3591
+#: modules/printbackends/cups/gtkprintbackendcups.c:3590
 msgid "Top Secret"
 msgstr "Najtajnejší"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3591
+#: modules/printbackends/cups/gtkprintbackendcups.c:3590
 msgid "Unclassified"
 msgstr "Nezaradený"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the front cover page.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3626
+#: modules/printbackends/cups/gtkprintbackendcups.c:3625
 msgid "Before"
 msgstr "Pred"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the back cover page.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3641
+#: modules/printbackends/cups/gtkprintbackendcups.c:3640
 msgid "After"
 msgstr "Za"
 
@@ -4988,14 +4073,14 @@ msgstr "Za"
 #. * a print job is printed. Possible values are 'now', a specified time,
 #. * or 'on hold'
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3661
+#: modules/printbackends/cups/gtkprintbackendcups.c:3660
 msgid "Print at"
 msgstr "Kedy tlačiť"
 
 #. Translators: this is the name of the option that allows the user
 #. * to specify a time when a print job will be printed.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3672
+#: modules/printbackends/cups/gtkprintbackendcups.c:3671
 msgid "Print at time"
 msgstr "Čas tlače"
 
@@ -5003,7 +4088,7 @@ msgstr "Čas tlače"
 #. * size. The two placeholders are replaced with the width and height
 #. * in points. E.g: "Custom 230.4x142.9"
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3707
+#: modules/printbackends/cups/gtkprintbackendcups.c:3706
 #, c-format
 msgid "Custom %sx%s"
 msgstr "Vlastná - %sx%s"
@@ -5094,6 +4179,665 @@ msgstr "Vytlačiť na skúšobnej tlačiarni"
 #, c-format
 msgid "Could not get information for file '%s': %s"
 msgstr "Nepodarilo sa určiť formát súboru obrázku pre \"%s\": %s"
+
+#: tests/testfilechooser.c:222
+#, c-format
+msgid "Failed to open file '%s': %s"
+msgstr "Nepodarilo sa otvoriť súbor '%s': %s"
+
+#: tests/testfilechooser.c:267
+#, c-format
+msgid ""
+"Failed to load image '%s': reason not known, probably a corrupt image file"
+msgstr ""
+"Nepodarilo sa načítať obrázok '%s': príčina neznáma, asi poškodený súbor"
+
+#~ msgid "Image file '%s' contains no data"
+#~ msgstr "Súbor obrázku '%s' nič neobsahuje"
+
+#~ msgid ""
+#~ "Failed to load animation '%s': reason not known, probably a corrupt "
+#~ "animation file"
+#~ msgstr ""
+#~ "Nepodarilo sa načítať animáciu '%s': príčina neznáma, asi poškodený súbor"
+
+#~ msgid "Unable to load image-loading module: %s: %s"
+#~ msgstr "Nepodarilo sa načítať modul pre načítanie obrázkov: %s: %s"
+
+#~ msgid ""
+#~ "Image-loading module %s does not export the proper interface; perhaps "
+#~ "it's from a different GTK version?"
+#~ msgstr ""
+#~ "Modul pre načítanie obrázku %s neexportuje správne rozhranie, možno je z "
+#~ "inej verzie GTK?"
+
+#~ msgid "Image type '%s' is not supported"
+#~ msgstr "Typ obrázku '%s' nie je podporovaný"
+
+#~ msgid "Couldn't recognize the image file format for file '%s'"
+#~ msgstr "Nepodarilo sa určiť formát súboru obrázku pre '%s'"
+
+#~ msgid "Unrecognized image file format"
+#~ msgstr "Nerozpoznaný formát súboru obrázku"
+
+#~ msgid "Failed to load image '%s': %s"
+#~ msgstr "Nepodarilo sa načítať obrázok '%s': %s"
+
+#~ msgid "Error writing to image file: %s"
+#~ msgstr "Chyba pri zápise obrázku: %s"
+
+#~ msgid ""
+#~ "This build of gdk-pixbuf does not support saving the image format: %s"
+#~ msgstr "Táto verzia gdk-pixbuf nepodporuje ukladanie vo formáte: %s"
+
+#~ msgid "Insufficient memory to save image to callback"
+#~ msgstr "Nedostatok pamäte pre uloženie obrázku pre spätné volanie"
+
+#~ msgid "Failed to open temporary file"
+#~ msgstr "Nepodarilo sa otvoriť dočasný súbor"
+
+#~ msgid "Failed to read from temporary file"
+#~ msgstr "Nepodarilo sa prečítať dočasný súbor"
+
+#~ msgid "Failed to open '%s' for writing: %s"
+#~ msgstr "Nepodarilo sa otvoriť pre zápis '%s': %s"
+
+#~ msgid ""
+#~ "Failed to close '%s' while writing image, all data may not have been "
+#~ "saved: %s"
+#~ msgstr ""
+#~ "Nepodarilo sa zavrieť '%s' počas zápisu obrázku. Niektoré dáta nemusia "
+#~ "byť uložené: %s"
+
+#~ msgid "Insufficient memory to save image into a buffer"
+#~ msgstr "Nedostatok pamäte pre uloženie obrázku do medzipamäte"
+
+#~ msgid "Error writing to image stream"
+#~ msgstr "Chyba pri zápise do prúdu obrázku"
+
+#~ msgid ""
+#~ "Internal error: Image loader module '%s' failed to complete an operation, "
+#~ "but didn't give a reason for the failure"
+#~ msgstr ""
+#~ "Interná chyba: Modul pre načítavanie obrázku '%s' neskončil načítavať "
+#~ "obrázok, ale pre toto zlyhanie nepodal žiadny dôvod"
+
+#~ msgid "Incremental loading of image type '%s' is not supported"
+#~ msgstr "Postupné načítavanie typu obrázku '%s' nie je podporované"
+
+#~ msgid "Image header corrupt"
+#~ msgstr "Hlavička obrázku poškodená"
+
+#~ msgid "Image format unknown"
+#~ msgstr "Neznámy formát obrázku"
+
+#~ msgid "Image pixel data corrupt"
+#~ msgstr "Dáta obrázku poškodené"
+
+#, fuzzy
+#~ msgid "failed to allocate image buffer of %u byte"
+#~ msgid_plural "failed to allocate image buffer of %u bytes"
+#~ msgstr[0] "nepodarilo sa alokovať pamäť pre obrázok s veľkosťou %u bajtov"
+#~ msgstr[1] "nepodarilo sa alokovať pamäť pre obrázok s veľkosťou %u bajtov"
+#~ msgstr[2] "nepodarilo sa alokovať pamäť pre obrázok s veľkosťou %u bajtov"
+
+#~ msgid "Unexpected icon chunk in animation"
+#~ msgstr "Neočakávaný kus ikony v animácii"
+
+#~ msgid "Unsupported animation type"
+#~ msgstr "Nepodporovaný typ animácie"
+
+#~ msgid "Invalid header in animation"
+#~ msgstr "Neplatná hlavička v animácii"
+
+#~ msgid "Not enough memory to load animation"
+#~ msgstr "Nedostatok pamäte pre načítanie animácie"
+
+#~ msgid "Malformed chunk in animation"
+#~ msgstr "Neplatný kus v animácii"
+
+#~ msgid "The ANI image format"
+#~ msgstr "Formát obrázkov ANI"
+
+#~ msgid "BMP image has bogus header data"
+#~ msgstr "Obrázok BMP má divné dáta v hlavičke"
+
+#~ msgid "Not enough memory to load bitmap image"
+#~ msgstr "Nedostatok pamäte pre načítanie obrázku"
+
+#~ msgid "BMP image has unsupported header size"
+#~ msgstr "Obrázok BMP má nepodporovanú veľkosť hlavičky"
+
+#~ msgid "Topdown BMP images cannot be compressed"
+#~ msgstr "BMP obrázky zhora-dole nemôžu byť komprimované"
+
+#~ msgid "Premature end-of-file encountered"
+#~ msgstr "Nájdený predčasný koniec súboru"
+
+#~ msgid "Couldn't allocate memory for saving BMP file"
+#~ msgstr "Nepodarilo sa alokovať pamäť pre uloženie súboru BMP"
+
+#~ msgid "Couldn't write to BMP file"
+#~ msgstr "Nepodarilo sa zapísať súbor BMP"
+
+#~ msgid "The BMP image format"
+#~ msgstr "Formát obrázkov BMP"
+
+#~ msgid "Failure reading GIF: %s"
+#~ msgstr "Chyba pri čítaní GIF: %s"
+
+#~ msgid "GIF file was missing some data (perhaps it was truncated somehow?)"
+#~ msgstr "Súbor GIF neobsahuje niektoré dáta (možno bola jeho časť odrezaná)"
+
+#~ msgid "Internal error in the GIF loader (%s)"
+#~ msgstr "Interná chyba modulu pre GIF (%s)"
+
+#~ msgid "Stack overflow"
+#~ msgstr "Pretečenie zásobníka"
+
+#~ msgid "GIF image loader cannot understand this image."
+#~ msgstr "Modul načítavania obrázkov GIF nerozpoznal tento obrázok."
+
+#~ msgid "Bad code encountered"
+#~ msgstr "Nájdený chybný kód"
+
+#~ msgid "Circular table entry in GIF file"
+#~ msgstr "Cyklická položka v tabuľke v súbore GIF"
+
+#~ msgid "Not enough memory to load GIF file"
+#~ msgstr "Nedostatok pamäte pre načítanie obrázku GIF"
+
+#~ msgid "Not enough memory to composite a frame in GIF file"
+#~ msgstr "Nedostatok pamäte pre zloženie rámca súboru GIF"
+
+#~ msgid "GIF image is corrupt (incorrect LZW compression)"
+#~ msgstr "Obrázok GIF je poškodený (neplatná kompresia LZW)"
+
+#~ msgid "File does not appear to be a GIF file"
+#~ msgstr "Súbor nevyzerá ako GIF"
+
+#~ msgid "Version %s of the GIF file format is not supported"
+#~ msgstr "Verzia %s formátu GIF nie je podporovaná"
+
+#~ msgid ""
+#~ "GIF image has no global colormap, and a frame inside it has no local "
+#~ "colormap."
+#~ msgstr ""
+#~ "Obrázok GIF neobsahuje globálnu farebnú mapu a rámec v ňom neobsahuje "
+#~ "mapu lokálnu."
+
+#~ msgid "GIF image was truncated or incomplete."
+#~ msgstr "Obrázok GIF bol skrátený alebo nie je úplný."
+
+#~ msgid "The GIF image format"
+#~ msgstr "Formát obrázkov GIF"
+
+#~ msgid "Invalid header in icon"
+#~ msgstr "Neplatná hlavička ikony"
+
+#~ msgid "Not enough memory to load icon"
+#~ msgstr "Nedostatok pamäte pre načítanie ikony"
+
+#~ msgid "Icon has zero width"
+#~ msgstr "Ikona má nulovú šírku"
+
+#~ msgid "Icon has zero height"
+#~ msgstr "Ikona má nulovú výšku"
+
+#~ msgid "Compressed icons are not supported"
+#~ msgstr "Komprimované ikony nie sú podporované"
+
+#~ msgid "Unsupported icon type"
+#~ msgstr "Nepodporovaný typ ikony"
+
+#~ msgid "Not enough memory to load ICO file"
+#~ msgstr "Nedostatok pamäte pre načítanie súboru ICO"
+
+#~ msgid "Image too large to be saved as ICO"
+#~ msgstr "Obrázok príliš veľký na uloženie do formátu ICO"
+
+#~ msgid "Cursor hotspot outside image"
+#~ msgstr "Aktívny bod kurzoru mimo obrázok"
+
+#~ msgid "Unsupported depth for ICO file: %d"
+#~ msgstr "Nepodporovaná farebná hĺbka pre súbor ICO: %d"
+
+#~ msgid "The ICO image format"
+#~ msgstr "Formát obrázkov ICO"
+
+#~ msgid "Error reading ICNS image: %s"
+#~ msgstr "Chyba pri čítaní obrázku ICNS: %s"
+
+#~ msgid "Could not decode ICNS file"
+#~ msgstr "Nepodarilo sa dekódovať súbor ICNS"
+
+#~ msgid "The ICNS image format"
+#~ msgstr "Formát obrázkov ICNS"
+
+#~ msgid "Couldn't allocate memory for stream"
+#~ msgstr "Nepodarilo sa alokovať pamäť pre prúd"
+
+#~ msgid "Couldn't decode image"
+#~ msgstr "Nie je možné dekódovať obrázok"
+
+#~ msgid "Transformed JPEG2000 has zero width or height"
+#~ msgstr "Transformovaný JPEG2000 má nulovú výšku alebo šírku."
+
+#~ msgid "Image type currently not supported"
+#~ msgstr "Typ obrázku nie je momentálne podporovaný"
+
+#~ msgid "Couldn't allocate memory for color profile"
+#~ msgstr "Nepodarilo sa alokovať pamäť pre farebný profil"
+
+#~ msgid "Insufficient memory to open JPEG 2000 file"
+#~ msgstr "Nedostatok pamäte pre otvorenie súboru JPEG2000"
+
+#~ msgid "Couldn't allocate memory to buffer image data"
+#~ msgstr "Nepodarilo sa alokovať pamäť pre dáta obrázku"
+
+#~ msgid "The JPEG 2000 image format"
+#~ msgstr "Formát obrázkov JPEG2000"
+
+#~ msgid "Error interpreting JPEG image file (%s)"
+#~ msgstr "Chyba pri interpretácii obrázku JPEG (%s)"
+
+#~ msgid ""
+#~ "Insufficient memory to load image, try exiting some applications to free "
+#~ "memory"
+#~ msgstr ""
+#~ "Nedostatočná pamäť pre načítanie obrázku, skúste ukončiť niektoré "
+#~ "aplikácie a tým uvoľniť pamäť"
+
+#~ msgid "Unsupported JPEG color space (%s)"
+#~ msgstr "Nepodporovaný priestor farieb JPEG (%s)"
+
+#~ msgid "Couldn't allocate memory for loading JPEG file"
+#~ msgstr "Nepodarilo sa alokovať pamäť pre načítanie súboru JPEG"
+
+#~ msgid "Transformed JPEG has zero width or height."
+#~ msgstr "Transformovaný JPEG má nulovú výšku alebo šírku."
+
+#~ msgid ""
+#~ "JPEG quality must be a value between 0 and 100; value '%s' could not be "
+#~ "parsed."
+#~ msgstr ""
+#~ "Kvalita JPEG musí byť medzi 0 a 100, hodnotu '%s' nie je možné spracovať."
+
+#~ msgid ""
+#~ "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
+#~ msgstr "Kvalita JPEG musí byť medzi 0 a 100, hodnota '%d' nie je povolená."
+
+#~ msgid "The JPEG image format"
+#~ msgstr "Formát obrázkov JPEG"
+
+#~ msgid "Couldn't allocate memory for header"
+#~ msgstr "Nepodarilo sa alokovať pamäť pre hlavičku"
+
+#~ msgid "Couldn't allocate memory for context buffer"
+#~ msgstr "Nepodarilo sa alokovať pamäť pre vyrovnávaciu pamäť obsahu"
+
+#~ msgid "Image has invalid width and/or height"
+#~ msgstr "Obrázok má neplatnú šírku alebo výšku"
+
+#~ msgid "Image has unsupported bpp"
+#~ msgstr "Obrázok má nepodporovanú farebnú hĺbku"
+
+#~ msgid "Image has unsupported number of %d-bit planes"
+#~ msgstr "Obrázok má nepodporovaný počet %d-bitových vrstiev"
+
+#~ msgid "Couldn't create new pixbuf"
+#~ msgstr "Nepodarilo sa vytvoriť nový obrázok"
+
+#~ msgid "Couldn't allocate memory for line data"
+#~ msgstr "Nepodarilo sa alokovať pamäť pre dáta riadku"
+
+#~ msgid "Couldn't allocate memory for paletted data"
+#~ msgstr "Nepodarilo sa alokovať pamäť pre dáta palety"
+
+#~ msgid "Didn't get all lines of PCX image"
+#~ msgstr "Nezískané všetky riadky obrázku PCX"
+
+#~ msgid "No palette found at end of PCX data"
+#~ msgstr "Na konci dát PCX nenájdená paleta"
+
+#~ msgid "The PCX image format"
+#~ msgstr "Formát obrázkov PCX"
+
+#~ msgid "Bits per channel of PNG image is invalid."
+#~ msgstr "Počet bitov kanálu obrázku PNG nie je platný."
+
+#~ msgid "Transformed PNG has zero width or height."
+#~ msgstr "Transformovaný PNG má nulovú výšku alebo šírku."
+
+#~ msgid "Bits per channel of transformed PNG is not 8."
+#~ msgstr "Počet bitov kanálu transformovaného PNG nie je 8."
+
+#~ msgid "Transformed PNG not RGB or RGBA."
+#~ msgstr "Transformovaný PNG nie je RGB alebo RGBA."
+
+#~ msgid "Transformed PNG has unsupported number of channels, must be 3 or 4."
+#~ msgstr ""
+#~ "Transformovaný PNG má nepodporovaný počet kanálov, musí to byť 3 alebo 4."
+
+#~ msgid "Fatal error in PNG image file: %s"
+#~ msgstr "Fatálna chyba v súbore PNG: %s"
+
+#~ msgid "Insufficient memory to load PNG file"
+#~ msgstr "Nedostatok pamäte pre načítanie súboru PNG"
+
+#~ msgid ""
+#~ "Insufficient memory to store a %ld by %ld image; try exiting some "
+#~ "applications to reduce memory usage"
+#~ msgstr ""
+#~ "Nedostatok pamäte pre uloženie obrázku %ld krát %ld, skúste ukončiť "
+#~ "niektoré aplikácie a tým uvoľniť pamäť"
+
+#~ msgid "Fatal error reading PNG image file"
+#~ msgstr "Fatálna chyba pri čítaní súboru PNG"
+
+#~ msgid "Fatal error reading PNG image file: %s"
+#~ msgstr "Fatálna chyba pri čítaní súboru PNG: %s"
+
+#~ msgid ""
+#~ "Keys for PNG text chunks must have at least 1 and at most 79 characters."
+#~ msgstr ""
+#~ "Kľúče pre kusy PNG textu musia mať aspoň 1 znak a maximálne 79 znakov."
+
+#~ msgid "Keys for PNG text chunks must be ASCII characters."
+#~ msgstr "Kľúče pre kusy PNG textu musia byť znaky ASCII."
+
+#~ msgid ""
+#~ "PNG compression level must be a value between 0 and 9; value '%s' could "
+#~ "not be parsed."
+#~ msgstr ""
+#~ "Úroveň kompresie PNG musí byť hodnota medzi 0 a 9; hodnotu '%s' sa "
+#~ "nepodarilo analyzovať."
+
+#~ msgid ""
+#~ "PNG compression level must be a value between 0 and 9; value '%d' is not "
+#~ "allowed."
+#~ msgstr ""
+#~ "Úroveň kompresie PNG musí byť hodnota medzi 0 a 9; hodnota '%d' nie je "
+#~ "povolená."
+
+#~ msgid ""
+#~ "Value for PNG text chunk %s cannot be converted to ISO-8859-1 encoding."
+#~ msgstr ""
+#~ "Hodnotu pre kus PNG textu %s nie je možné previesť do kódovania "
+#~ "ISO-8859-1."
+
+#~ msgid "The PNG image format"
+#~ msgstr "Formát obrázkov PNG"
+
+#~ msgid "PNM loader expected to find an integer, but didn't"
+#~ msgstr "Modul pre načítanie PNM očakával celé číslo, ale nenašiel ho"
+
+#~ msgid "PNM file has an incorrect initial byte"
+#~ msgstr "Súbor PNM obsahuje nesprávny počiatočný bajt"
+
+#~ msgid "PNM file is not in a recognized PNM subformat"
+#~ msgstr "Súbor PNM nie je rozpoznaný pod-formát PNM"
+
+#~ msgid "PNM file has an image width of 0"
+#~ msgstr "Súbor PNM obsahuje obrázok so šírkou 0"
+
+#~ msgid "PNM file has an image height of 0"
+#~ msgstr "Súbor PNM obsahuje obrázok s výškou 0"
+
+#~ msgid "Maximum color value in PNM file is 0"
+#~ msgstr "Maximálna hodnota farby v súbore PNM je 0"
+
+#~ msgid "Maximum color value in PNM file is too large"
+#~ msgstr "Maximálna hodnota farby v súbore PNM je príliš veľká"
+
+#~ msgid "Raw PNM image type is invalid"
+#~ msgstr "Typ obrázku PNM 'raw' nie je platný"
+
+#~ msgid "PNM image loader does not support this PNM subformat"
+#~ msgstr "Modul pre načítanie PNM nepodporuje tento pod-formát PNM"
+
+#~ msgid "Raw PNM formats require exactly one whitespace before sample data"
+#~ msgstr ""
+#~ "Čisté formáty PNM vyžadujú presne jednu medzeru pred náhľadovými dátami"
+
+#~ msgid "Cannot allocate memory for loading PNM image"
+#~ msgstr "Nepodarilo sa alokovať pamäť pre načítanie obrázku PNM"
+
+#~ msgid "Insufficient memory to load PNM context struct"
+#~ msgstr "Nedostatok pamäte pre načítanie štruktúry kontextu pre PNM"
+
+#~ msgid "Unexpected end of PNM image data"
+#~ msgstr "Neočakávaný koniec dát obrázku PNM"
+
+#~ msgid "Insufficient memory to load PNM file"
+#~ msgstr "Nedostatok pamäte pre načítanie súboru PNM"
+
+#~ msgid "The PNM/PBM/PGM/PPM image format family"
+#~ msgstr "Rodina formátov obrázkov PNM/PBM/PGM/PPM"
+
+#, fuzzy
+#~ msgid "Failed to read QTIF header"
+#~ msgstr "Nepodarilo sa uložiť hlavičku\n"
+
+#, fuzzy
+#~ msgid "Failed to allocate %d bytes for file read buffer"
+#~ msgstr "nepodarilo sa alokovať pamäť pre obrázok s veľkosťou %u bajtov"
+
+#, fuzzy
+#~ msgid "File error when reading QTIF atom: %s"
+#~ msgstr "Chyba pri čítaní GIF: %s"
+
+#, fuzzy
+#~ msgid "Failed to allocate QTIF context structure."
+#~ msgstr "Nepodarilo sa alokovať pamäť pre kontextovú štruktúru TGA"
+
+#, fuzzy
+#~ msgid "Failed to create GdkPixbufLoader object."
+#~ msgstr "Nepodarilo sa zapísať index priečinka\n"
+
+#, fuzzy
+#~ msgid "Failed to find an image data atom."
+#~ msgstr "Nepodarilo sa otvoriť obrázok TIFF"
+
+#, fuzzy
+#~ msgid "The QTIF image format"
+#~ msgstr "Formát obrázkov TIFF"
+
+#~ msgid "RAS image has bogus header data"
+#~ msgstr "Obrázok RAS má neplatné dáta v hlavičke"
+
+#~ msgid "RAS image has unknown type"
+#~ msgstr "Neznámy typ obrázku RAS"
+
+#~ msgid "unsupported RAS image variation"
+#~ msgstr "Nepodporovaný variant obrázku RAS"
+
+#~ msgid "Not enough memory to load RAS image"
+#~ msgstr "Nedostatok pamäte pre načítanie obrázku RAS"
+
+#~ msgid "The Sun raster image format"
+#~ msgstr "Formát rastrových obrázkov Sun"
+
+#~ msgid "Cannot allocate memory for IOBuffer struct"
+#~ msgstr "Nepodarilo sa alokovať pamäť pre štruktúru IOBuffer"
+
+#~ msgid "Cannot allocate memory for IOBuffer data"
+#~ msgstr "Nepodarilo sa alokovať pamäť pre dáta IOBuffer"
+
+#~ msgid "Cannot realloc IOBuffer data"
+#~ msgstr "Nepodarilo sa zmeniť alokáciu pre dáta IOBuffer"
+
+#~ msgid "Cannot allocate temporary IOBuffer data"
+#~ msgstr "Nepodarilo sa alokovať dočasné dáta IOBuffer"
+
+#~ msgid "Cannot allocate new pixbuf"
+#~ msgstr "Nepodarilo sa alokovať nový pixbuf"
+
+#, fuzzy
+#~ msgid "Image is corrupted or truncated"
+#~ msgstr "Obrázok GIF bol skrátený alebo nie je úplný."
+
+#~ msgid "Cannot allocate colormap structure"
+#~ msgstr "Nepodarilo sa alokovať štruktúru pre farebnú mapu"
+
+#~ msgid "Cannot allocate colormap entries"
+#~ msgstr "Nepodarilo sa alokovať položky farebnej mapy"
+
+#~ msgid "Unexpected bitdepth for colormap entries"
+#~ msgstr "Neočakávaná farebná hĺbka v položkách farebnej mapy"
+
+#~ msgid "Cannot allocate TGA header memory"
+#~ msgstr "Nepodarilo sa alokovať pamäť pre hlavičku TGA"
+
+#~ msgid "TGA image has invalid dimensions"
+#~ msgstr "Obrázok TGA má neplatné rozmery"
+
+#~ msgid "TGA image type not supported"
+#~ msgstr "Typ obrázku TGA nie je podporovaný"
+
+#~ msgid "Cannot allocate memory for TGA context struct"
+#~ msgstr "Nepodarilo sa alokovať pamäť pre kontextovú štruktúru TGA"
+
+#~ msgid "Excess data in file"
+#~ msgstr "Dáta naviac v súbore"
+
+#~ msgid "The Targa image format"
+#~ msgstr "Formát obrázkov Targa"
+
+#~ msgid "Could not get image width (bad TIFF file)"
+#~ msgstr "Nepodarilo sa získať šírku obrázku (neplatný súbor TIFF)"
+
+#~ msgid "Could not get image height (bad TIFF file)"
+#~ msgstr "Nepodarilo sa získať výšku obrázku (neplatný súbor TIFF)"
+
+#~ msgid "Width or height of TIFF image is zero"
+#~ msgstr "Výška alebo šírka obrázku TIFF je 0"
+
+#~ msgid "Dimensions of TIFF image too large"
+#~ msgstr "Rozmery obrázku TIFF príliš veľké"
+
+#~ msgid "Insufficient memory to open TIFF file"
+#~ msgstr "Nedostatok pamäte pre otvorenie súboru TIFF"
+
+#~ msgid "Failed to load RGB data from TIFF file"
+#~ msgstr "Nepodarilo sa načítať dáta RGB zo súboru TIFF"
+
+#~ msgid "Failed to open TIFF image"
+#~ msgstr "Nepodarilo sa otvoriť obrázok TIFF"
+
+#~ msgid "TIFFClose operation failed"
+#~ msgstr "Operácia TIFFClose zlyhala"
+
+#~ msgid "Failed to load TIFF image"
+#~ msgstr "Nepodarilo sa načítať obrázok TIFF"
+
+#~ msgid "Failed to save TIFF image"
+#~ msgstr "Nepodarilo sa uložiť obrázok TIFF"
+
+#~ msgid "Failed to write TIFF data"
+#~ msgstr "Nepodarilo sa zapísať dáta obrázku TIFF"
+
+#~ msgid "Couldn't write to TIFF file"
+#~ msgstr "Nepodarilo sa zapísať súbor TIFF"
+
+#~ msgid "The TIFF image format"
+#~ msgstr "Formát obrázkov TIFF"
+
+#~ msgid "Image has zero width"
+#~ msgstr "Obrázok má nulovú šírku"
+
+#~ msgid "Image has zero height"
+#~ msgstr "Obrázok má nulovú výšku"
+
+#~ msgid "Not enough memory to load image"
+#~ msgstr "Nedostatok pamäte pre načítanie obrázku"
+
+#~ msgid "Couldn't save the rest"
+#~ msgstr "Nepodarilo sa uložiť zvyšok"
+
+#~ msgid "The WBMP image format"
+#~ msgstr "Formát obrázkov WBMP"
+
+#~ msgid "Invalid XBM file"
+#~ msgstr "Neplatný súbor XBM"
+
+#~ msgid "Insufficient memory to load XBM image file"
+#~ msgstr "Nedostatok pamäte pre načítanie súboru obrázku XBM"
+
+#~ msgid "Failed to write to temporary file when loading XBM image"
+#~ msgstr "Nepodarilo sa zapísať dočasný súbor pri načítavaní obrázku XBM"
+
+#~ msgid "The XBM image format"
+#~ msgstr "Formát obrázkov XBM"
+
+#~ msgid "No XPM header found"
+#~ msgstr "Hlavička XPM nenájdená"
+
+#~ msgid "Invalid XPM header"
+#~ msgstr "Neplatná hlavička XPM"
+
+#~ msgid "XPM file has image width <= 0"
+#~ msgstr "Súbor XPM obsahuje obrázok so šírkou <=0"
+
+#~ msgid "XPM file has image height <= 0"
+#~ msgstr "Súbor XPM obsahuje obrázok s výškou <=0"
+
+#~ msgid "XPM has invalid number of chars per pixel"
+#~ msgstr "XPM obsahuje neplatný počet znakov na bod"
+
+#~ msgid "XPM file has invalid number of colors"
+#~ msgstr "Súbor XPM má neplatný počet farieb"
+
+#~ msgid "Cannot allocate memory for loading XPM image"
+#~ msgstr "Nepodarilo sa alokovať pamäť pre načítanie obrázku XPM"
+
+#~ msgid "Cannot read XPM colormap"
+#~ msgstr "Nepodarilo sa načítať farebnú mapu XPM"
+
+#~ msgid "Failed to write to temporary file when loading XPM image"
+#~ msgstr "Nepodarilo sa zapísať dočasný súbor pri načítavaní obrázku XPM"
+
+#~ msgid "The XPM image format"
+#~ msgstr "Formát obrázkov XPM"
+
+#~ msgid "The EMF image format"
+#~ msgstr "Formát obrázkov EMF"
+
+#~ msgid "Could not allocate memory: %s"
+#~ msgstr "Nepodarilo sa alokovať pamäť: %s"
+
+#~ msgid "Could not create stream: %s"
+#~ msgstr "Nepodarilo sa vytvoriť prúd: %s"
+
+#~ msgid "Could not seek stream: %s"
+#~ msgstr "Nepodarilo sa presunutie v prúde: %s"
+
+#~ msgid "Could not read from stream: %s"
+#~ msgstr "Nepodarilo sa čítanie z prúdu: %s"
+
+#~ msgid "Couldn't load bitmap"
+#~ msgstr "Nie je možné načítať obrázok"
+
+#~ msgid "Couldn't load metafile"
+#~ msgstr "Nie je možné načítať metasúbor"
+
+#~ msgid "Unsupported image format for GDI+"
+#~ msgstr "Nepodporovaný formát obrázku pre GDI+"
+
+#~ msgid "Couldn't save"
+#~ msgstr "Nepodarilo sa uložiť"
+
+#~ msgid "The WMF image format"
+#~ msgstr "Formát obrázkov WMF"
+
+#~ msgid "\"Deepness\" of the color."
+#~ msgstr "\"Hĺbka\" farby."
+
+#~ msgid "Error printing"
+#~ msgstr "Chyba pri tlači"
+
+#~ msgid "Printer '%s' may not be connected."
+#~ msgstr "Tlačiareň '%s' asi nie je pripojená."
 
 #~ msgid "Folders"
 #~ msgstr "Priečinky"

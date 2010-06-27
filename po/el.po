@@ -30,10 +30,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.20.1.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-05-25 20:10-0400\n"
+"POT-Creation-Date: 2010-06-26 23:16-0400\n"
 "PO-Revision-Date: 2010-03-07 00:06+0100\n"
 "Last-Translator: Jennie Petoumenou <epetoumenou@gmail.com>\n"
 "Language-Team: Greek <team@gnome.gr>\n"
+"Language: el\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -98,7 +99,7 @@ msgstr "Σημαίες αποσφαλμάτωσης του Gdk που θα επ�
 #. Placeholder in --gdk-no-debug=FLAGS in --help output
 #. Placeholder in --gtk-debug=FLAGS in --help output
 #. Placeholder in --gtk-no-debug=FLAGS in --help output
-#: gdk/gdk.c:165 gdk/gdk.c:168 gtk/gtkmain.c:454 gtk/gtkmain.c:457
+#: gdk/gdk.c:165 gdk/gdk.c:168 gtk/gtkmain.c:439 gtk/gtkmain.c:442
 msgid "FLAGS"
 msgstr "ΣΗΜΑΙΕΣ"
 
@@ -292,923 +293,6 @@ msgctxt "keyboard label"
 msgid "Delete"
 msgstr "Delete"
 
-#: gdk-pixbuf/gdk-pixbuf-animation.c:133 gdk-pixbuf/gdk-pixbuf-io.c:982
-#: gdk-pixbuf/gdk-pixbuf-io.c:1242 tests/testfilechooser.c:222
-#, c-format
-msgid "Failed to open file '%s': %s"
-msgstr "Αποτυχία ανοίγματος αρχείου '%s': %s"
-
-#: gdk-pixbuf/gdk-pixbuf-animation.c:146 gdk-pixbuf/gdk-pixbuf-io.c:994
-#, c-format
-msgid "Image file '%s' contains no data"
-msgstr "Το αρχείο εικόνας '%s' δεν περιέχει δεδομένα"
-
-#: gdk-pixbuf/gdk-pixbuf-animation.c:188 gdk-pixbuf/gdk-pixbuf-io.c:1030
-#: gdk-pixbuf/gdk-pixbuf-io.c:1294 tests/testfilechooser.c:267
-#, c-format
-msgid ""
-"Failed to load image '%s': reason not known, probably a corrupt image file"
-msgstr ""
-"Αποτυχία φόρτωσης εικόνας '%s': Άγνωστη αιτία, πιθανόν πρόκειται για "
-"κατεστραμμένο αρχείο εικόνας"
-
-#: gdk-pixbuf/gdk-pixbuf-animation.c:221
-#, c-format
-msgid ""
-"Failed to load animation '%s': reason not known, probably a corrupt "
-"animation file"
-msgstr ""
-"Αποτυχία φόρτωσης κινούμενης εικόνας '%s': Άγνωστη αιτία, πιθανόν πρόκειται "
-"για κατεστραμμένο αρχείο"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:715
-#, c-format
-msgid "Unable to load image-loading module: %s: %s"
-msgstr "Αποτυχία φόρτωσης αρθρώματος φόρτωσης εικόνων: %s: %s"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:730
-#, c-format
-msgid ""
-"Image-loading module %s does not export the proper interface; perhaps it's "
-"from a different GTK version?"
-msgstr ""
-"Το άρθρωμα φόρτωσης εικόνων %s δεν εξάγει την κατάλληλη διεπαφή. Μήπως "
-"προέρχεται από διαφορετική έκδοση του GTK;"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:739 gdk-pixbuf/gdk-pixbuf-io.c:790
-#, c-format
-msgid "Image type '%s' is not supported"
-msgstr "Ο τύπος εικόνας '%s' δεν υποστηρίζεται"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:863
-#, c-format
-msgid "Couldn't recognize the image file format for file '%s'"
-msgstr "Αδυναμία αναγνώρισης του τύπου αρχείου εικόνας για το αρχείο '%s'"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:871
-msgid "Unrecognized image file format"
-msgstr "Άγνωστος τύπος αρχείου εικόνας"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:1039
-#, c-format
-msgid "Failed to load image '%s': %s"
-msgstr "Αποτυχία φόρτωσης εικόνας '%s': %s"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:1673 gdk-pixbuf/io-gdip-utils.c:961
-#, c-format
-msgid "Error writing to image file: %s"
-msgstr "Σφάλμα κατά την εγγραφή στο αρχείο εικόνας: %s"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:1718 gdk-pixbuf/gdk-pixbuf-io.c:1848
-#, c-format
-msgid "This build of gdk-pixbuf does not support saving the image format: %s"
-msgstr ""
-"Αυτή η έκδοση του gdk-pixbuf δεν υποστηρίζει αποθήκευση του τύπου εικόνας : %"
-"s"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:1752
-msgid "Insufficient memory to save image to callback"
-msgstr "Ανεπάρκεια μνήμης για την αποθήκευση της εικόνας στο callback"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:1765
-msgid "Failed to open temporary file"
-msgstr "Αποτυχία ανοίγματος προσωρινού αρχείου"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:1791
-msgid "Failed to read from temporary file"
-msgstr "Αποτυχία ανάγνωσης από το προσωρινό αρχείο"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:2044
-#, c-format
-msgid "Failed to open '%s' for writing: %s"
-msgstr "Αποτυχία ανοίγματος του '%s' για εγγραφή: %s"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:2070
-#, c-format
-msgid ""
-"Failed to close '%s' while writing image, all data may not have been saved: %"
-"s"
-msgstr ""
-"Αποτυχία κλεισίματος του '%s' κατά την εγγραφή της εικόνας. Μπορεί να μην "
-"έχουν αποθηκευτεί όλα τα δεδομένα: %s"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:2290 gdk-pixbuf/gdk-pixbuf-io.c:2341
-msgid "Insufficient memory to save image into a buffer"
-msgstr "Ανεπάρκεια μνήμης για την αποθήκευση της εικόνας σε ενδιάμεση μνήμη"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:2387
-msgid "Error writing to image stream"
-msgstr "Σφάλμα κατά την εγγραφή στη ροή της εικόνας"
-
-#: gdk-pixbuf/gdk-pixbuf-loader.c:334
-#, c-format
-msgid ""
-"Internal error: Image loader module '%s' failed to complete an operation, "
-"but didn't give a reason for the failure"
-msgstr ""
-"Εσωτερικό σφάλμα: Το άρθρωμα φόρτωσης εικόνων '%s' απέτυχε να ολοκληρώσει "
-"μια ενέργεια, αλλά δεν εξήγησε το λόγο της αποτυχίας"
-
-#: gdk-pixbuf/gdk-pixbuf-loader.c:376
-#, c-format
-msgid "Incremental loading of image type '%s' is not supported"
-msgstr "Δεν υποστηρίζεται η σταδιακή φόρτωση για τον τύπο εικόνας '%s'"
-
-#: gdk-pixbuf/gdk-pixdata.c:147
-msgid "Image header corrupt"
-msgstr "Κατεστραμμένη κεφαλίδα εικόνας"
-
-#: gdk-pixbuf/gdk-pixdata.c:152
-msgid "Image format unknown"
-msgstr "Άγνωστος τύπος εικόνας"
-
-#: gdk-pixbuf/gdk-pixdata.c:157 gdk-pixbuf/gdk-pixdata.c:488
-msgid "Image pixel data corrupt"
-msgstr "Κατεστραμμένα δεδομένα εικονοστοιχείων εικόνας"
-
-#: gdk-pixbuf/gdk-pixdata.c:432
-#, c-format
-msgid "failed to allocate image buffer of %u byte"
-msgid_plural "failed to allocate image buffer of %u bytes"
-msgstr[0] "Αποτυχία διάθεσης %u byte ως ενδιάμεσης μνήμης εικόνας"
-msgstr[1] "Αποτυχία διάθεσης %u bytes ως ενδιάμεσης μνήμης εικόνας"
-
-#: gdk-pixbuf/io-ani.c:244
-msgid "Unexpected icon chunk in animation"
-msgstr "Μη αναμενόμενο κομμάτι εικονιδίου στην κινούμενη εικόνα"
-
-#: gdk-pixbuf/io-ani.c:337
-msgid "Unsupported animation type"
-msgstr "Μη υποστηριζόμενος τύπος κινούμενης εικόνας"
-
-#: gdk-pixbuf/io-ani.c:348 gdk-pixbuf/io-ani.c:406 gdk-pixbuf/io-ani.c:432
-#: gdk-pixbuf/io-ani.c:455 gdk-pixbuf/io-ani.c:482 gdk-pixbuf/io-ani.c:569
-msgid "Invalid header in animation"
-msgstr "Μη έγκυρη κεφαλίδα στην κινούμενη εικόνα"
-
-#: gdk-pixbuf/io-ani.c:358 gdk-pixbuf/io-ani.c:380 gdk-pixbuf/io-ani.c:464
-#: gdk-pixbuf/io-ani.c:491 gdk-pixbuf/io-ani.c:542 gdk-pixbuf/io-ani.c:614
-msgid "Not enough memory to load animation"
-msgstr "Ανεπάρκεια μνήμης για τη φόρτωση της κινούμενης εικόνας"
-
-#: gdk-pixbuf/io-ani.c:398 gdk-pixbuf/io-ani.c:424 gdk-pixbuf/io-ani.c:443
-msgid "Malformed chunk in animation"
-msgstr "Η κινούμενη εικόνα περιέχει κομμάτι εσφαλμένης μορφής"
-
-#: gdk-pixbuf/io-ani.c:711
-msgid "The ANI image format"
-msgstr "Ο τύπος εικόνας ΑΝΙ"
-
-#: gdk-pixbuf/io-bmp.c:230 gdk-pixbuf/io-bmp.c:267 gdk-pixbuf/io-bmp.c:338
-#: gdk-pixbuf/io-bmp.c:370 gdk-pixbuf/io-bmp.c:393 gdk-pixbuf/io-bmp.c:496
-msgid "BMP image has bogus header data"
-msgstr "Η εικόνα BMP περιέχει εσφαλμένα δεδομένα κεφαλίδας"
-
-#: gdk-pixbuf/io-bmp.c:241 gdk-pixbuf/io-bmp.c:433
-msgid "Not enough memory to load bitmap image"
-msgstr "Ανεπάρκεια μνήμης για τη φόρτωση της εικόνας bitmap"
-
-#: gdk-pixbuf/io-bmp.c:319
-msgid "BMP image has unsupported header size"
-msgstr "Δεν υποστηρίζεται αυτό το μέγεθος κεφαλίδας εικόνας BMP"
-
-#: gdk-pixbuf/io-bmp.c:357
-msgid "Topdown BMP images cannot be compressed"
-msgstr "Δεν είναι δυνατή η συμπίεση εικόνων Topdown BMP"
-
-#: gdk-pixbuf/io-bmp.c:717 gdk-pixbuf/io-pnm.c:709
-msgid "Premature end-of-file encountered"
-msgstr "Εντοπίστηκε πρόωρος τερματισμός αρχείου"
-
-#: gdk-pixbuf/io-bmp.c:1329
-msgid "Couldn't allocate memory for saving BMP file"
-msgstr "Αδυναμία διάθεσης μνήμης για την αποθήκευση του αρχείου BMP"
-
-#: gdk-pixbuf/io-bmp.c:1370
-msgid "Couldn't write to BMP file"
-msgstr "Αδυναμία εγγραφής στο αρχείο BMP"
-
-#: gdk-pixbuf/io-bmp.c:1423 gdk-pixbuf/io-gdip-bmp.c:82
-msgid "The BMP image format"
-msgstr "Ο τύπος εικόνας BMP"
-
-#: gdk-pixbuf/io-gif.c:222
-#, c-format
-msgid "Failure reading GIF: %s"
-msgstr "Αποτυχία ανάγνωσης GIF: %s"
-
-#: gdk-pixbuf/io-gif.c:496 gdk-pixbuf/io-gif.c:1481 gdk-pixbuf/io-gif.c:1642
-msgid "GIF file was missing some data (perhaps it was truncated somehow?)"
-msgstr ""
-"Λείπουν κάποια δεδομένα από το αρχείο GIF (μήπως αποκόπηκαν με κάποιο τρόπο;)"
-
-#: gdk-pixbuf/io-gif.c:505
-#, c-format
-msgid "Internal error in the GIF loader (%s)"
-msgstr "Εσωτερικό σφάλμα στην εφαρμογή φόρτωσης εικόνων GIF (%s)"
-
-#: gdk-pixbuf/io-gif.c:579
-msgid "Stack overflow"
-msgstr "Υπερχείλιση στοίβας"
-
-#: gdk-pixbuf/io-gif.c:639
-msgid "GIF image loader cannot understand this image."
-msgstr "Η εφαρμογή φόρτωσης εικόνων GIF δεν μπορεί να αναγνωρίσει την εικόνα."
-
-#: gdk-pixbuf/io-gif.c:668
-msgid "Bad code encountered"
-msgstr "Εντοπίστηκε εσφαλμένος κώδικας"
-
-#: gdk-pixbuf/io-gif.c:678
-msgid "Circular table entry in GIF file"
-msgstr "Κυκλική εγγραφή πίνακα στο αρχείο GIF"
-
-#: gdk-pixbuf/io-gif.c:866 gdk-pixbuf/io-gif.c:1468 gdk-pixbuf/io-gif.c:1515
-#: gdk-pixbuf/io-gif.c:1630
-msgid "Not enough memory to load GIF file"
-msgstr "Ανεπάρκεια μνήμης για τη φόρτωση του αρχείου GIF"
-
-#: gdk-pixbuf/io-gif.c:960
-msgid "Not enough memory to composite a frame in GIF file"
-msgstr "Ανεπάρκεια μνήμης για τη σύνθεση πλαισίου στο αρχείο GIF"
-
-#: gdk-pixbuf/io-gif.c:1132
-msgid "GIF image is corrupt (incorrect LZW compression)"
-msgstr "Η εικόνα GIF είναι κατεστραμμένη (εσφαλμένη συμπίεση LZW)"
-
-#: gdk-pixbuf/io-gif.c:1182
-msgid "File does not appear to be a GIF file"
-msgstr "Το αρχείο δε φαίνεται να είναι αρχείο GIF"
-
-#: gdk-pixbuf/io-gif.c:1194
-#, c-format
-msgid "Version %s of the GIF file format is not supported"
-msgstr "Η έκδοση %s του τύπου αρχείων GIF δεν υποστηρίζεται"
-
-#: gdk-pixbuf/io-gif.c:1303
-msgid ""
-"GIF image has no global colormap, and a frame inside it has no local "
-"colormap."
-msgstr ""
-"Η εικόνα GIF δεν περιέχει γενικό χάρτη χρωμάτων, ενώ ένα εσωτερικό πλαίσιο "
-"δεν περιέχει τοπικό χάρτη χρωμάτων."
-
-#: gdk-pixbuf/io-gif.c:1537
-msgid "GIF image was truncated or incomplete."
-msgstr "Η εικόνα GIF είτε ήταν ημιτελής είτε είχε αποκοπεί κάποιο κομμάτι της."
-
-#: gdk-pixbuf/io-gif.c:1693 gdk-pixbuf/io-gdip-gif.c:80
-msgid "The GIF image format"
-msgstr "Ο τύπος εικόνας GIF"
-
-#: gdk-pixbuf/io-ico.c:211 gdk-pixbuf/io-ico.c:225 gdk-pixbuf/io-ico.c:277
-#: gdk-pixbuf/io-ico.c:290 gdk-pixbuf/io-ico.c:359
-msgid "Invalid header in icon"
-msgstr "Μη έγκυρη κεφαλίδα στο εικονίδιο"
-
-#: gdk-pixbuf/io-ico.c:240 gdk-pixbuf/io-ico.c:300 gdk-pixbuf/io-ico.c:369
-#: gdk-pixbuf/io-ico.c:432 gdk-pixbuf/io-ico.c:462
-msgid "Not enough memory to load icon"
-msgstr "Ανεπάρκεια μνήμης για τη φόρτωση του εικονιδίου"
-
-#: gdk-pixbuf/io-ico.c:322
-msgid "Icon has zero width"
-msgstr "Το εικονίδιο έχει μηδενικό πλάτος"
-
-#: gdk-pixbuf/io-ico.c:332
-msgid "Icon has zero height"
-msgstr "Το εικονίδιο έχει μηδενικό ύψος"
-
-#: gdk-pixbuf/io-ico.c:384
-msgid "Compressed icons are not supported"
-msgstr "Δεν υποστηρίζονται συμπιεσμένα εικονίδια"
-
-#: gdk-pixbuf/io-ico.c:417
-msgid "Unsupported icon type"
-msgstr "Μη υποστηριζόμενος τύπος εικονιδίου"
-
-#: gdk-pixbuf/io-ico.c:511
-msgid "Not enough memory to load ICO file"
-msgstr "Ανεπάρκεια μνήμης για τη φόρτωση του αρχείου ICO"
-
-#: gdk-pixbuf/io-ico.c:976
-msgid "Image too large to be saved as ICO"
-msgstr "Η εικόνα είναι πολύ μεγάλη για να αποθηκευτεί ως ICO"
-
-#: gdk-pixbuf/io-ico.c:987
-msgid "Cursor hotspot outside image"
-msgstr "Το επίκεντρο του δρομέα βρίσκεται έξω από την εικόνα"
-
-#: gdk-pixbuf/io-ico.c:1010
-#, c-format
-msgid "Unsupported depth for ICO file: %d"
-msgstr "Μη υποστηριζόμενο βάθος στο αρχείο ICO: %d"
-
-#: gdk-pixbuf/io-ico.c:1245 gdk-pixbuf/io-gdip-ico.c:59
-msgid "The ICO image format"
-msgstr "Ο τύπος εικόνας ICO"
-
-#: gdk-pixbuf/io-icns.c:347
-#, c-format
-msgid "Error reading ICNS image: %s"
-msgstr "Σφάλμα κατά την ανάγνωση της εικόνας ICNS: %s"
-
-#: gdk-pixbuf/io-icns.c:364
-msgid "Could not decode ICNS file"
-msgstr "Αδυναμία αποκωδικοποίησης του αρχείου ICNS"
-
-#: gdk-pixbuf/io-icns.c:397
-msgid "The ICNS image format"
-msgstr "Ο τύπος εικόνας ICNS"
-
-#: gdk-pixbuf/io-jasper.c:75
-msgid "Couldn't allocate memory for stream"
-msgstr "Αδυναμία διάθεσης μνήμης για τη ροή"
-
-#: gdk-pixbuf/io-jasper.c:105
-msgid "Couldn't decode image"
-msgstr "Αδυναμία αποκωδικοποίησης της εικόνας"
-
-#: gdk-pixbuf/io-jasper.c:123
-msgid "Transformed JPEG2000 has zero width or height"
-msgstr "Το μετασχηματισμένο JPEG 2000 έχει μηδενικό ύψος ή πλάτος."
-
-#: gdk-pixbuf/io-jasper.c:137
-msgid "Image type currently not supported"
-msgstr "Αυτός ο τύπος εικόνας δεν υποστηρίζεται προς το παρόν"
-
-#: gdk-pixbuf/io-jasper.c:149 gdk-pixbuf/io-jasper.c:157
-msgid "Couldn't allocate memory for color profile"
-msgstr "Αδυναμία διάθεση μνήμης για το προφίλ χρωμάτων"
-
-#: gdk-pixbuf/io-jasper.c:183
-msgid "Insufficient memory to open JPEG 2000 file"
-msgstr "Ανεπάρκεια μνήμης για το άνοιγμα του αρχείου JPEG 2000"
-
-#: gdk-pixbuf/io-jasper.c:262
-msgid "Couldn't allocate memory to buffer image data"
-msgstr ""
-"Αδυναμία διάθεσης μνήμης για την αποθήκευση των δεδομένων της εικόνας στην "
-"ενδιάμεση μνήμη"
-
-#: gdk-pixbuf/io-jasper.c:306
-msgid "The JPEG 2000 image format"
-msgstr "Ο τύπος εικόνας JPEG 2000"
-
-#: gdk-pixbuf/io-jpeg.c:117
-#, c-format
-msgid "Error interpreting JPEG image file (%s)"
-msgstr "Σφάλμα κατά την ερμηνεία του αρχείου εικόνας JPEG (%s)"
-
-#: gdk-pixbuf/io-jpeg.c:528
-msgid ""
-"Insufficient memory to load image, try exiting some applications to free "
-"memory"
-msgstr ""
-"Ανεπάρκεια μνήμης για τη φόρτωση της εικόνας. Δοκιμάστε να τερματίσετε "
-"ορισμένες εφαρμογές για να απελευθερώσετε μνήμη"
-
-#: gdk-pixbuf/io-jpeg.c:569 gdk-pixbuf/io-jpeg.c:775
-#, c-format
-msgid "Unsupported JPEG color space (%s)"
-msgstr "Μη υποστηριζόμενο εύρος χρωμάτων JPEG (%s)"
-
-#: gdk-pixbuf/io-jpeg.c:674 gdk-pixbuf/io-jpeg.c:944 gdk-pixbuf/io-jpeg.c:1177
-#: gdk-pixbuf/io-jpeg.c:1186
-msgid "Couldn't allocate memory for loading JPEG file"
-msgstr "Αδυναμία διάθεσης μνήμης για τη φόρτωση του αρχείου JPEG"
-
-#: gdk-pixbuf/io-jpeg.c:919
-msgid "Transformed JPEG has zero width or height."
-msgstr "Το μετασχηματισμένο JPEG έχει μηδενικό ύψος ή πλάτος."
-
-#: gdk-pixbuf/io-jpeg.c:1133 gdk-pixbuf/io-gdip-jpeg.c:53
-#, c-format
-msgid ""
-"JPEG quality must be a value between 0 and 100; value '%s' could not be "
-"parsed."
-msgstr ""
-"Η ποιότητα του JPEG πρέπει να έχει τιμή μεταξύ 0 και 100. Η τιμή '%s' δεν "
-"μπορεί να ερμηνευθεί."
-
-#: gdk-pixbuf/io-jpeg.c:1148 gdk-pixbuf/io-gdip-jpeg.c:68
-#, c-format
-msgid ""
-"JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
-msgstr ""
-"Η ποιότητα του JPEG πρέπει να έχει τιμή μεταξύ 0 και 100. Η τιμή '%d' δεν "
-"επιτρέπεται."
-
-#: gdk-pixbuf/io-jpeg.c:1310 gdk-pixbuf/io-gdip-jpeg.c:136
-msgid "The JPEG image format"
-msgstr "Ο τύπος εικόνας JPEG"
-
-#: gdk-pixbuf/io-pcx.c:187
-msgid "Couldn't allocate memory for header"
-msgstr "Αδυναμία διάθεσης μνήμης για την κεφαλίδα"
-
-#: gdk-pixbuf/io-pcx.c:202 gdk-pixbuf/io-pcx.c:560
-msgid "Couldn't allocate memory for context buffer"
-msgstr "Αδυναμία διάθεσης μνήμης για τη σχετική ενδιάμεση μνήμη"
-
-#: gdk-pixbuf/io-pcx.c:601
-msgid "Image has invalid width and/or height"
-msgstr "Μη έγκυρο ύψος ή/και πλάτος εικόνας"
-
-#: gdk-pixbuf/io-pcx.c:613 gdk-pixbuf/io-pcx.c:674
-msgid "Image has unsupported bpp"
-msgstr "Εικόνα με μη υποστηριζόμενο bpp"
-
-#: gdk-pixbuf/io-pcx.c:618 gdk-pixbuf/io-pcx.c:626
-#, c-format
-msgid "Image has unsupported number of %d-bit planes"
-msgstr "Εικόνα με μη υποστηριζόμενο αριθμό επιφανειών %d-bit"
-
-#: gdk-pixbuf/io-pcx.c:642
-msgid "Couldn't create new pixbuf"
-msgstr "Αδυναμία δημιουργίας νέου pixbuf"
-
-#: gdk-pixbuf/io-pcx.c:650
-msgid "Couldn't allocate memory for line data"
-msgstr "Αδυναμία διάθεσης μνήμης για τα δεδομένα των γραμμών"
-
-#: gdk-pixbuf/io-pcx.c:657
-msgid "Couldn't allocate memory for paletted data"
-msgstr "Δεν είναι δυνατή η διάθεση μνήμης για τα δεδομένα σε παλέτα"
-
-#: gdk-pixbuf/io-pcx.c:704
-msgid "Didn't get all lines of PCX image"
-msgstr "Αδυναμία λήψης όλων των γραμμών της εικόνας PCX"
-
-#: gdk-pixbuf/io-pcx.c:711
-msgid "No palette found at end of PCX data"
-msgstr "Δε βρέθηκε παλέτα στο τέλος των δεδομένων PCX"
-
-#: gdk-pixbuf/io-pcx.c:756
-msgid "The PCX image format"
-msgstr "Ο τύπος εικόνας PCX"
-
-#: gdk-pixbuf/io-png.c:55
-msgid "Bits per channel of PNG image is invalid."
-msgstr "Μη έγκυρος αριθμός bits ανά κανάλι στην εικόνα PNG."
-
-#: gdk-pixbuf/io-png.c:136 gdk-pixbuf/io-png.c:642
-msgid "Transformed PNG has zero width or height."
-msgstr "Το μετασχηματισμένο PNG έχει μηδενικό ύψος ή πλάτος."
-
-#: gdk-pixbuf/io-png.c:144
-msgid "Bits per channel of transformed PNG is not 8."
-msgstr "Τα bits ανά κανάλι του μετασχηματισμένου PNG δεν είναι 8."
-
-#: gdk-pixbuf/io-png.c:153
-msgid "Transformed PNG not RGB or RGBA."
-msgstr "Το μετασχηματισμένο PNG δεν είναι RGB ή RGBA."
-
-#: gdk-pixbuf/io-png.c:162
-msgid "Transformed PNG has unsupported number of channels, must be 3 or 4."
-msgstr ""
-"Το μετασχηματισμένο PNG περιέχει μη υποστηριζόμενο αριθμό καναλιών· θα "
-"έπρεπε να είναι 3 ή 4."
-
-#: gdk-pixbuf/io-png.c:183
-#, c-format
-msgid "Fatal error in PNG image file: %s"
-msgstr "Μοιραίο σφάλμα στο αρχείο εικόνας PNG: %s"
-
-#: gdk-pixbuf/io-png.c:316
-msgid "Insufficient memory to load PNG file"
-msgstr "Ανεπάρκεια μνήμης για τη φόρτωση του αρχείου PNG"
-
-#: gdk-pixbuf/io-png.c:657
-#, c-format
-msgid ""
-"Insufficient memory to store a %ld by %ld image; try exiting some "
-"applications to reduce memory usage"
-msgstr ""
-"Ανεπάρκεια μνήμης για την αποθήκευση εικόνας %ld επί %ld. Δοκιμάστε να "
-"τερματίσετε μερικές εφαρμογές για να απελευθερώσετε μνήμη"
-
-#: gdk-pixbuf/io-png.c:720
-msgid "Fatal error reading PNG image file"
-msgstr "Μοιραίο σφάλμα κατά την ανάγνωση του αρχείου εικόνας PNG"
-
-#: gdk-pixbuf/io-png.c:769
-#, c-format
-msgid "Fatal error reading PNG image file: %s"
-msgstr "Μοιραίο σφάλμα κατά την ανάγνωση του αρχείου εικόνας PNG: %s"
-
-#: gdk-pixbuf/io-png.c:863
-msgid ""
-"Keys for PNG text chunks must have at least 1 and at most 79 characters."
-msgstr ""
-"Τα κλειδιά για τα κομμάτια κειμένου του PNG θα πρέπει να περιέχουν "
-"τουλάχιστον 1 και όχι περισσότερους από 79 χαρακτήρες."
-
-#: gdk-pixbuf/io-png.c:872
-msgid "Keys for PNG text chunks must be ASCII characters."
-msgstr ""
-"Τα κλειδιά για τα κομμάτια κειμένου του PNG θα πρέπει να απαρτίζονται από "
-"χαρακτήρες ASCII."
-
-#: gdk-pixbuf/io-png.c:886 gdk-pixbuf/io-tiff.c:738
-#, c-format
-msgid "Color profile has invalid length %d."
-msgstr "Το προφίλ χρωμάτων έχει μη έγκυρο μήκος %d."
-
-#: gdk-pixbuf/io-png.c:899 gdk-pixbuf/io-gdip-png.c:56
-#, c-format
-msgid ""
-"PNG compression level must be a value between 0 and 9; value '%s' could not "
-"be parsed."
-msgstr ""
-"Η ποιότητα συμπίεσης του PNG πρέπει να έχει τιμή μεταξύ 0 και 9. Η τιμή '%s' "
-"δεν μπορεί να ερμηνευτεί."
-
-#: gdk-pixbuf/io-png.c:912 gdk-pixbuf/io-gdip-png.c:68
-#, c-format
-msgid ""
-"PNG compression level must be a value between 0 and 9; value '%d' is not "
-"allowed."
-msgstr ""
-"Η ποιότητα συμπίεσης του PNG πρέπει να έχει τιμή μεταξύ 0 και 9. Η τιμή '%d' "
-"δεν επιτρέπεται."
-
-#: gdk-pixbuf/io-png.c:951
-#, c-format
-msgid "Value for PNG text chunk %s cannot be converted to ISO-8859-1 encoding."
-msgstr ""
-"Η τιμή του κομματιού κειμένου του PNG %s δεν μπορεί να μετατραπεί σε "
-"κωδικοποίηση ISO-8859-1."
-
-#: gdk-pixbuf/io-png.c:1112 gdk-pixbuf/io-gdip-png.c:133
-msgid "The PNG image format"
-msgstr "O τύπος εικόνας PNG"
-
-#: gdk-pixbuf/io-pnm.c:250
-msgid "PNM loader expected to find an integer, but didn't"
-msgstr ""
-"Η εφαρμογή φόρτωσης εικόνων PNM ανέμενε ακέραιο αριθμό, αλλά δεν τον βρήκε"
-
-#: gdk-pixbuf/io-pnm.c:282
-msgid "PNM file has an incorrect initial byte"
-msgstr "Το αρχείο PNM περιέχει εσφαλμένο αρχικό byte"
-
-#: gdk-pixbuf/io-pnm.c:312
-msgid "PNM file is not in a recognized PNM subformat"
-msgstr "Ο τύπος του αρχείου PNM δεν είναι αναγνωρίσιμος τύπος PNM"
-
-#: gdk-pixbuf/io-pnm.c:337
-msgid "PNM file has an image width of 0"
-msgstr "Το πλάτος εικόνας του αρχείου PNM είναι 0"
-
-#: gdk-pixbuf/io-pnm.c:358
-msgid "PNM file has an image height of 0"
-msgstr "Το ύψος εικόνας του αρχείου PNM είναι 0"
-
-#: gdk-pixbuf/io-pnm.c:381
-msgid "Maximum color value in PNM file is 0"
-msgstr "Η μέγιστη τιμή χρώματος στο αρχείο PNM είναι 0"
-
-#: gdk-pixbuf/io-pnm.c:389
-msgid "Maximum color value in PNM file is too large"
-msgstr "Η μέγιστη τιμή χρώματος στο αρχείο PNM είναι πολύ μεγάλη"
-
-#: gdk-pixbuf/io-pnm.c:429 gdk-pixbuf/io-pnm.c:459 gdk-pixbuf/io-pnm.c:504
-msgid "Raw PNM image type is invalid"
-msgstr "Μη έγκυρος τύπος ακατέργαστης εικόνας PNM"
-
-#: gdk-pixbuf/io-pnm.c:654
-msgid "PNM image loader does not support this PNM subformat"
-msgstr "Η εφαρμογή φόρτωσης εικόνων PNM δεν υποστηρίζει αυτόν τον τύπο PNM"
-
-#: gdk-pixbuf/io-pnm.c:741 gdk-pixbuf/io-pnm.c:968
-msgid "Raw PNM formats require exactly one whitespace before sample data"
-msgstr ""
-"Οι ακατέργαστοι τύποι PNM πρέπει να περιέχουν ακριβώς ένα κενό διάστημα πριν "
-"από τα δεδομένα του δείγματος"
-
-#: gdk-pixbuf/io-pnm.c:768
-msgid "Cannot allocate memory for loading PNM image"
-msgstr "Αδυναμία διάθεσης μνήμης για τη φόρτωση της εικόνας PNM"
-
-#: gdk-pixbuf/io-pnm.c:818
-msgid "Insufficient memory to load PNM context struct"
-msgstr "Ανεπάρκεια μνήμης για τη φόρτωση της δομής περιεχομένων του PNΜ"
-
-#: gdk-pixbuf/io-pnm.c:869
-msgid "Unexpected end of PNM image data"
-msgstr "Μη αναμενόμενος τερματισμός των δεδομένων της εικόνας PNM"
-
-#: gdk-pixbuf/io-pnm.c:997
-msgid "Insufficient memory to load PNM file"
-msgstr "Ανεπάρκεια μνήμης για τη φόρτωση του αρχείου PNM"
-
-#: gdk-pixbuf/io-pnm.c:1081
-msgid "The PNM/PBM/PGM/PPM image format family"
-msgstr "Η οικογένεια τύπων εικόνας PNM/PBM/PGM/PPM"
-
-#: gdk-pixbuf/io-qtif.c:128
-msgid "Input file descriptor is NULL."
-msgstr "Ο περιγραφέας του αρχείου εισόδου είναι NULL."
-
-#: gdk-pixbuf/io-qtif.c:143
-msgid "Failed to read QTIF header"
-msgstr "Αποτυχία ανάγνωσης κεφαλίδας QTIF"
-
-#: gdk-pixbuf/io-qtif.c:152 gdk-pixbuf/io-qtif.c:182 gdk-pixbuf/io-qtif.c:446
-#, c-format
-msgid "QTIF atom size too large (%d bytes)"
-msgstr "Το άτομο QTIF είναι πολύ μεγάλο (%d byte)"
-
-#: gdk-pixbuf/io-qtif.c:172
-#, c-format
-msgid "Failed to allocate %d bytes for file read buffer"
-msgstr "Αποτυχία διάθεσης %d byte ως ενδιάμεσης μνήμης ανάγνωσης αρχείων"
-
-#: gdk-pixbuf/io-qtif.c:196
-#, c-format
-msgid "File error when reading QTIF atom: %s"
-msgstr "Αποτυχία αρχείου κατά την ανάγνωση του ατόμου QTIF: %s"
-
-#: gdk-pixbuf/io-qtif.c:233
-#, c-format
-msgid "Failed to skip the next %d bytes with seek()."
-msgstr "Αποτυχία υπερπήδησης των επόμενων %d byte με χρήση του seek()."
-
-#: gdk-pixbuf/io-qtif.c:257
-msgid "Failed to allocate QTIF context structure."
-msgstr "Αδυναμία διάθεσης μνήμης για τη δομή περιεχομένων του QTIF."
-
-#: gdk-pixbuf/io-qtif.c:317
-msgid "Failed to create GdkPixbufLoader object."
-msgstr "Αποτυχία δημιουργίας αντικειμένου GdkPixbufLoader."
-
-#: gdk-pixbuf/io-qtif.c:421
-msgid "Failed to find an image data atom."
-msgstr "Αποτυχία εύρεσης ατόμου δεδομένων εικόνας."
-
-#: gdk-pixbuf/io-qtif.c:602
-msgid "The QTIF image format"
-msgstr "Ο τύπος εικόνας QTIF"
-
-#: gdk-pixbuf/io-ras.c:126
-msgid "RAS image has bogus header data"
-msgstr "Η εικόνα RAS περιέχει εσφαλμένα δεδομένα κεφαλίδας"
-
-#: gdk-pixbuf/io-ras.c:148
-msgid "RAS image has unknown type"
-msgstr "Άγνωστος τύπος εικόνας RAS"
-
-#: gdk-pixbuf/io-ras.c:156
-msgid "unsupported RAS image variation"
-msgstr "μη υποστηριζόμενη παραλλαγή εικόνας RAS"
-
-#: gdk-pixbuf/io-ras.c:171 gdk-pixbuf/io-ras.c:200
-msgid "Not enough memory to load RAS image"
-msgstr "Ανεπάρκεια μνήμης για τη φόρτωση της εικόνας RAS"
-
-#: gdk-pixbuf/io-ras.c:545
-msgid "The Sun raster image format"
-msgstr "Ο τύπος εικόνας Sun raster"
-
-#: gdk-pixbuf/io-tga.c:154
-msgid "Cannot allocate memory for IOBuffer struct"
-msgstr "Αδυναμία διάθεσης μνήμης για τη δομή του IOBuffer"
-
-#: gdk-pixbuf/io-tga.c:173
-msgid "Cannot allocate memory for IOBuffer data"
-msgstr "Αδυναμία διάθεσης μνήμης για τα δεδομένα του IOBuffer"
-
-#: gdk-pixbuf/io-tga.c:184
-msgid "Cannot realloc IOBuffer data"
-msgstr "Αδυναμία αλλαγής της διάθεσης μνήμης για το IOBuffer"
-
-#: gdk-pixbuf/io-tga.c:214
-msgid "Cannot allocate temporary IOBuffer data"
-msgstr "Αδυναμία διάθεσης μνήμης για τα προσωρινά δεδομένα του IOBuffer"
-
-#: gdk-pixbuf/io-tga.c:347
-msgid "Cannot allocate new pixbuf"
-msgstr "Αδυναμία διάθεσης μνήμης για το νέο pixbuf"
-
-#: gdk-pixbuf/io-tga.c:686
-msgid "Image is corrupted or truncated"
-msgstr "Η εικόνα είναι κατεστραμμένη ή έχει αποκοπεί κάποιο κομμάτι της"
-
-#: gdk-pixbuf/io-tga.c:693
-msgid "Cannot allocate colormap structure"
-msgstr "Αδυναμία διάθεσης μνήμης για τη δομή του χάρτη χρωμάτων"
-
-#: gdk-pixbuf/io-tga.c:700
-msgid "Cannot allocate colormap entries"
-msgstr "Αδυναμία διάθεσης μνήμης για τις εγγραφές του χάρτη χρωμάτων"
-
-#: gdk-pixbuf/io-tga.c:722
-msgid "Unexpected bitdepth for colormap entries"
-msgstr "Μη αναμενόμενο βάθος χρωμάτων στις εγγραφές του χάρτη χρωμάτων"
-
-#: gdk-pixbuf/io-tga.c:740
-msgid "Cannot allocate TGA header memory"
-msgstr "Αδυναμία διάθεσης μνήμης για την κεφαλίδα του TGA"
-
-#: gdk-pixbuf/io-tga.c:773
-msgid "TGA image has invalid dimensions"
-msgstr "Η εικόνα TGA δεν έχει έγκυρες διαστάσεις"
-
-#: gdk-pixbuf/io-tga.c:779 gdk-pixbuf/io-tga.c:788 gdk-pixbuf/io-tga.c:798
-#: gdk-pixbuf/io-tga.c:808 gdk-pixbuf/io-tga.c:815
-msgid "TGA image type not supported"
-msgstr "Ο τύπος εικόνας TGA δεν υποστηρίζεται"
-
-#: gdk-pixbuf/io-tga.c:862
-msgid "Cannot allocate memory for TGA context struct"
-msgstr "Αδυναμία διάθεσης μνήμης για τη δομή περιεχομένων του TGA"
-
-#: gdk-pixbuf/io-tga.c:927
-msgid "Excess data in file"
-msgstr "Περίσσεια δεδομένων στο αρχείο"
-
-#: gdk-pixbuf/io-tga.c:1008
-msgid "The Targa image format"
-msgstr "Ο τύπος εικόνας Targa"
-
-#: gdk-pixbuf/io-tiff.c:165
-msgid "Could not get image width (bad TIFF file)"
-msgstr "Αδυναμία λήψης του πλάτους της εικόνας (εσφαλμένο αρχείο TIFF)"
-
-#: gdk-pixbuf/io-tiff.c:172
-msgid "Could not get image height (bad TIFF file)"
-msgstr "Αδυναμία λήψης του ύψους της εικόνας (εσφαλμένο αρχείο TIFF)"
-
-#: gdk-pixbuf/io-tiff.c:180
-msgid "Width or height of TIFF image is zero"
-msgstr "Το ύψος ή το πλάτος της εικόνας TIFF είναι μηδενικό"
-
-#: gdk-pixbuf/io-tiff.c:189 gdk-pixbuf/io-tiff.c:198
-msgid "Dimensions of TIFF image too large"
-msgstr "Οι διαστάσεις της εικόνας TIFF είναι πολύ μεγάλες"
-
-#: gdk-pixbuf/io-tiff.c:222 gdk-pixbuf/io-tiff.c:234 gdk-pixbuf/io-tiff.c:561
-msgid "Insufficient memory to open TIFF file"
-msgstr "Ανεπάρκεια μνήμης για το άνοιγμα του αρχείου TIFF"
-
-#: gdk-pixbuf/io-tiff.c:295
-msgid "Failed to load RGB data from TIFF file"
-msgstr "Αποτυχία φόρτωσης των δεδομένων RGB από το αρχείο TIFF"
-
-#: gdk-pixbuf/io-tiff.c:351
-msgid "Failed to open TIFF image"
-msgstr "Αποτυχία ανοίγματος της εικόνας TIFF"
-
-#: gdk-pixbuf/io-tiff.c:363 gdk-pixbuf/io-tiff.c:778
-msgid "TIFFClose operation failed"
-msgstr "Αποτυχία ενέργειας TIFFClose"
-
-#: gdk-pixbuf/io-tiff.c:493 gdk-pixbuf/io-tiff.c:506
-msgid "Failed to load TIFF image"
-msgstr "Αποτυχία φόρτωσης της εικόνας TIFF"
-
-#: gdk-pixbuf/io-tiff.c:692
-msgid "Failed to save TIFF image"
-msgstr "Αποτυχία αποθήκευσης της εικόνας TIFF"
-
-#: gdk-pixbuf/io-tiff.c:727
-msgid "TIFF compression doesn't refer to a valid codec."
-msgstr "Η συμπίεση TIFF δεν αναφέρεται σε έγκυρο codec."
-
-#: gdk-pixbuf/io-tiff.c:767
-msgid "Failed to write TIFF data"
-msgstr "Αποτυχία εγγραφής των δεδομένων TIFF"
-
-#: gdk-pixbuf/io-tiff.c:814
-msgid "Couldn't write to TIFF file"
-msgstr "Αδυναμία εγγραφής στο αρχείο TIFF"
-
-#: gdk-pixbuf/io-tiff.c:869
-msgid "The TIFF image format"
-msgstr "Ο τύπος εικόνας TIFF"
-
-#: gdk-pixbuf/io-wbmp.c:246
-msgid "Image has zero width"
-msgstr "Η εικόνα έχει μηδενικό πλάτος"
-
-#: gdk-pixbuf/io-wbmp.c:264
-msgid "Image has zero height"
-msgstr "Η εικόνα έχει μηδενικό ύψος"
-
-#: gdk-pixbuf/io-wbmp.c:275
-msgid "Not enough memory to load image"
-msgstr "Ανεπάρκεια μνήμης για τη φόρτωση της εικόνας"
-
-#: gdk-pixbuf/io-wbmp.c:334
-msgid "Couldn't save the rest"
-msgstr "Αποτυχία αποθήκευσης των υπολοίπων"
-
-#: gdk-pixbuf/io-wbmp.c:375
-msgid "The WBMP image format"
-msgstr "Ο τύπος εικόνας WBMP"
-
-#: gdk-pixbuf/io-xbm.c:295
-msgid "Invalid XBM file"
-msgstr "Μη έγκυρο αρχείο XBM"
-
-#: gdk-pixbuf/io-xbm.c:305
-msgid "Insufficient memory to load XBM image file"
-msgstr "Ανεπάρκεια μνήμης για τη φόρτωση του αρχείου εικόνας XBM"
-
-#: gdk-pixbuf/io-xbm.c:453
-msgid "Failed to write to temporary file when loading XBM image"
-msgstr "Αποτυχία εγγραφής σε προσωρινό αρχείο κατά τη φόρτωση της εικόνας XBM"
-
-#: gdk-pixbuf/io-xbm.c:492
-msgid "The XBM image format"
-msgstr "Ο τύπος εικόνας XBM"
-
-#: gdk-pixbuf/io-xpm.c:468
-msgid "No XPM header found"
-msgstr "Δε βρέθηκε κεφαλίδα XBM"
-
-#: gdk-pixbuf/io-xpm.c:477
-msgid "Invalid XPM header"
-msgstr "Μη έγκυρη κεφαλίδα XBM"
-
-#: gdk-pixbuf/io-xpm.c:485
-msgid "XPM file has image width <= 0"
-msgstr "Το αρχείο XPM έχει πλάτος εικόνας <= 0"
-
-#: gdk-pixbuf/io-xpm.c:493
-msgid "XPM file has image height <= 0"
-msgstr "Το αρχείο XPM έχει ύψος εικόνας <= 0"
-
-#: gdk-pixbuf/io-xpm.c:501
-msgid "XPM has invalid number of chars per pixel"
-msgstr "Το αρχείο XPM περιέχει μη έγκυρο αριθμό χαρακτήρων ανά εικονοστοιχείο"
-
-#: gdk-pixbuf/io-xpm.c:510
-msgid "XPM file has invalid number of colors"
-msgstr "Το αρχείο XPM περιέχει μη έγκυρο αριθμό χρωμάτων"
-
-#: gdk-pixbuf/io-xpm.c:522 gdk-pixbuf/io-xpm.c:531 gdk-pixbuf/io-xpm.c:583
-msgid "Cannot allocate memory for loading XPM image"
-msgstr "Αδυναμία διάθεσης μνήμης για τη φόρτωση της εικόνας XPM"
-
-#: gdk-pixbuf/io-xpm.c:545
-msgid "Cannot read XPM colormap"
-msgstr "Αδυναμία ανάγνωσης του χάρτη χρωμάτων XPM"
-
-#: gdk-pixbuf/io-xpm.c:777
-msgid "Failed to write to temporary file when loading XPM image"
-msgstr "Αποτυχία εγγραφής σε προσωρινό αρχείο κατά τη φόρτωση της εικόνας XPM"
-
-#: gdk-pixbuf/io-xpm.c:816
-msgid "The XPM image format"
-msgstr "Ο τύπος εικόνας XPM"
-
-#: gdk-pixbuf/io-gdip-emf.c:59
-msgid "The EMF image format"
-msgstr "Ο τύπος εικόνας EMF"
-
-#: gdk-pixbuf/io-gdip-utils.c:232
-#, c-format
-msgid "Could not allocate memory: %s"
-msgstr "Αδυναμία διάθεσης μνήμης: %s"
-
-#: gdk-pixbuf/io-gdip-utils.c:257 gdk-pixbuf/io-gdip-utils.c:371
-#: gdk-pixbuf/io-gdip-utils.c:411
-#, c-format
-msgid "Could not create stream: %s"
-msgstr "Αδυναμία δημιουργίας ροής: %s"
-
-#: gdk-pixbuf/io-gdip-utils.c:271
-#, c-format
-msgid "Could not seek stream: %s"
-msgstr "Αδυναμία αναζήτησης μέσα στη ροή: %s"
-
-#: gdk-pixbuf/io-gdip-utils.c:283
-#, c-format
-msgid "Could not read from stream: %s"
-msgstr "Αδυναμία ανάγνωσης από τη ροή: %s"
-
-#: gdk-pixbuf/io-gdip-utils.c:694 gdk-pixbuf/io-gdip-utils.c:825
-msgid "Couldn't load bitmap"
-msgstr "Αδυναμία φόρτωσης του bitmap"
-
-#: gdk-pixbuf/io-gdip-utils.c:847
-msgid "Couldn't load metafile"
-msgstr "Αδυναμία φόρτωσης του αρχείου μεταδεδομένων"
-
-#: gdk-pixbuf/io-gdip-utils.c:1006
-msgid "Unsupported image format for GDI+"
-msgstr "Μη υποστηριζόμενος τύπος εικόνας για το GDI+"
-
-#: gdk-pixbuf/io-gdip-utils.c:1013
-msgid "Couldn't save"
-msgstr "Αποτυχία αποθήκευσης"
-
-#: gdk-pixbuf/io-gdip-wmf.c:58
-msgid "The WMF image format"
-msgstr "Ο τύπος εικόνας WMF"
-
 #. Description of --sync in --help output
 #: gdk/win32/gdkmain-win32.c:55
 msgid "Don't batch GDI requests"
@@ -1387,8 +471,8 @@ msgstr "Μη έγκυρος τύπος συνάρτησης στη γραμμή 
 #, c-format
 msgid "Duplicate object id '%s' on line %d (previously on line %d)"
 msgstr ""
-"Διπλή εμφάνιση id αντικειμένου '%s' στη γραμμή %d (προηγουμένως στη γραμμή %"
-"d)"
+"Διπλή εμφάνιση id αντικειμένου '%s' στη γραμμή %d (προηγουμένως στη γραμμή "
+"%d)"
 
 #: gtk/gtkbuilderparser.c:859
 #, c-format
@@ -1547,8 +631,9 @@ msgid "_Saturation:"
 msgstr "Κ_ορεσμός:"
 
 #: gtk/gtkcolorsel.c:393
-msgid "\"Deepness\" of the color."
-msgstr "\"Βάθος\" του χρώματος."
+#, fuzzy
+msgid "Intensity of the color."
+msgstr "Διαφάνεια του χρώματος."
 
 #: gtk/gtkcolorsel.c:394
 msgid "_Value:"
@@ -1719,11 +804,11 @@ msgstr "_Δεξιά:"
 msgid "Paper Margins"
 msgstr "Περιθώρια χαρτιού"
 
-#: gtk/gtkentry.c:8612 gtk/gtktextview.c:8002
+#: gtk/gtkentry.c:8612 gtk/gtktextview.c:8012
 msgid "Input _Methods"
 msgstr "_Μέθοδοι εισαγωγής"
 
-#: gtk/gtkentry.c:8626 gtk/gtktextview.c:8016
+#: gtk/gtkentry.c:8626 gtk/gtktextview.c:8026
 msgid "_Insert Unicode Control Character"
 msgstr "_Εισαγωγή χαρακτήρα ελέγχου Unicode"
 
@@ -2166,12 +1251,12 @@ msgid "System (%s)"
 msgstr "Σύστημα (%s)"
 
 #. Open Link
-#: gtk/gtklabel.c:6076
+#: gtk/gtklabel.c:6072
 msgid "_Open Link"
 msgstr "Άν_οιγμα συνδέσμου"
 
 #. Copy Link Address
-#: gtk/gtklabel.c:6088
+#: gtk/gtklabel.c:6084
 msgid "Copy _Link Address"
 msgstr "Αντιγραφή διεύθυνσης _συνδέσμου"
 
@@ -2184,27 +1269,27 @@ msgid "Invalid URI"
 msgstr "Μη έγκυρο URI"
 
 #. Description of --gtk-module=MODULES in --help output
-#: gtk/gtkmain.c:447
+#: gtk/gtkmain.c:432
 msgid "Load additional GTK+ modules"
 msgstr "Φόρτωση πρόσθετων αρθρωμάτων GTK+"
 
 #. Placeholder in --gtk-module=MODULES in --help output
-#: gtk/gtkmain.c:448
+#: gtk/gtkmain.c:433
 msgid "MODULES"
 msgstr "ΑΡΘΡΩΜΑΤΑ"
 
 #. Description of --g-fatal-warnings in --help output
-#: gtk/gtkmain.c:450
+#: gtk/gtkmain.c:435
 msgid "Make all warnings fatal"
 msgstr "Να είναι όλες οι προειδοποιήσεις μοιραίες"
 
 #. Description of --gtk-debug=FLAGS in --help output
-#: gtk/gtkmain.c:453
+#: gtk/gtkmain.c:438
 msgid "GTK+ debugging flags to set"
 msgstr "Σημαίες αποσφαλμάτωσης του GTK+ που θα ενεργοποιηθούν"
 
 #. Description of --gtk-no-debug=FLAGS in --help output
-#: gtk/gtkmain.c:456
+#: gtk/gtkmain.c:441
 msgid "GTK+ debugging flags to unset"
 msgstr "Σημαίες αποσφαλμάτωσης του GTK+ που θα απενεργοποιηθούν"
 
@@ -2213,20 +1298,20 @@ msgstr "Σημαίες αποσφαλμάτωσης του GTK+ που θα απ
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
 #.
-#: gtk/gtkmain.c:708
+#: gtk/gtkmain.c:704
 msgid "default:LTR"
 msgstr "default:LTR"
 
-#: gtk/gtkmain.c:773
+#: gtk/gtkmain.c:769
 #, c-format
 msgid "Cannot open display: %s"
 msgstr "Αδυναμία ανοίγματος της οθόνης: %s"
 
-#: gtk/gtkmain.c:810
+#: gtk/gtkmain.c:806
 msgid "GTK+ Options"
 msgstr "Επιλογές GTK+"
 
-#: gtk/gtkmain.c:810
+#: gtk/gtkmain.c:806
 msgid "Show GTK+ Options"
 msgstr "Εμφάνιση επιλογών GTK+"
 
@@ -2313,7 +1398,7 @@ msgstr "Z Shell"
 msgid "Cannot end process with pid %d: %s"
 msgstr "Αδυναμία τερματισμού διεργασίας με pid %d: %s"
 
-#: gtk/gtknotebook.c:4621 gtk/gtknotebook.c:7050
+#: gtk/gtknotebook.c:4631 gtk/gtknotebook.c:7060
 #, c-format
 msgid "Page %u"
 msgstr "Σελίδα %u"
@@ -2403,87 +1488,81 @@ msgstr "Αποθήκευ_ση στο φάκελο:"
 msgid "%s job #%d"
 msgstr "%s εκτύπωση #%d"
 
-#: gtk/gtkprintoperation.c:1687
+#: gtk/gtkprintoperation.c:1695
 msgctxt "print operation status"
 msgid "Initial state"
 msgstr "Αρχική κατάσταση"
 
-#: gtk/gtkprintoperation.c:1688
+#: gtk/gtkprintoperation.c:1696
 msgctxt "print operation status"
 msgid "Preparing to print"
 msgstr "Προετοιμασία εκτύπωσης"
 
-#: gtk/gtkprintoperation.c:1689
+#: gtk/gtkprintoperation.c:1697
 msgctxt "print operation status"
 msgid "Generating data"
 msgstr "Παραγωγή δεδομένων"
 
-#: gtk/gtkprintoperation.c:1690
+#: gtk/gtkprintoperation.c:1698
 msgctxt "print operation status"
 msgid "Sending data"
 msgstr "Αποστολή δεδομένων"
 
-#: gtk/gtkprintoperation.c:1691
+#: gtk/gtkprintoperation.c:1699
 msgctxt "print operation status"
 msgid "Waiting"
 msgstr "Αναμονή"
 
-#: gtk/gtkprintoperation.c:1692
+#: gtk/gtkprintoperation.c:1700
 msgctxt "print operation status"
 msgid "Blocking on issue"
 msgstr "Διακοπή λόγω προβλήματος"
 
-#: gtk/gtkprintoperation.c:1693
+#: gtk/gtkprintoperation.c:1701
 msgctxt "print operation status"
 msgid "Printing"
 msgstr "Εκτύπωση"
 
-#: gtk/gtkprintoperation.c:1694
+#: gtk/gtkprintoperation.c:1702
 msgctxt "print operation status"
 msgid "Finished"
 msgstr "Ολοκληρώθηκε"
 
-#: gtk/gtkprintoperation.c:1695
+#: gtk/gtkprintoperation.c:1703
 msgctxt "print operation status"
 msgid "Finished with error"
 msgstr "Ολοκληρώθηκε με σφάλμα"
 
-#: gtk/gtkprintoperation.c:2254
+#: gtk/gtkprintoperation.c:2270
 #, c-format
 msgid "Preparing %d"
 msgstr "Προετοιμασία %d"
 
-#: gtk/gtkprintoperation.c:2256 gtk/gtkprintoperation.c:2875
+#: gtk/gtkprintoperation.c:2272 gtk/gtkprintoperation.c:2902
 #, c-format
 msgid "Preparing"
 msgstr "Προετοιμασία"
 
-#: gtk/gtkprintoperation.c:2259
+#: gtk/gtkprintoperation.c:2275
 #, c-format
 msgid "Printing %d"
 msgstr "Εκτύπωση %d"
 
-#: gtk/gtkprintoperation.c:2905
+#: gtk/gtkprintoperation.c:2932
 #, c-format
 msgid "Error creating print preview"
 msgstr "Σφάλμα κατά την παραγωγή της προεπισκόπησης"
 
-#: gtk/gtkprintoperation.c:2908
+#: gtk/gtkprintoperation.c:2935
 #, c-format
 msgid "The most probable reason is that a temporary file could not be created."
 msgstr "Η πιθανότερη αιτία είναι η αδυναμία δημιουργίας προσωρινού αρχείου."
 
-#: gtk/gtkprintoperation-unix.c:297 gtk/gtkprintoperation-unix.c:314
-#, c-format
+#: gtk/gtkprintoperation-unix.c:297
 msgid "Error launching preview"
 msgstr "Σφάλμα κατά την εκκίνηση της προεπισκόπησης"
 
-#: gtk/gtkprintoperation-unix.c:358
-#, c-format
-msgid "Error printing"
-msgstr "Σφάλμα κατά την εκτύπωση"
-
-#: gtk/gtkprintoperation-unix.c:494 gtk/gtkprintoperation-win32.c:1447
+#: gtk/gtkprintoperation-unix.c:470 gtk/gtkprintoperation-win32.c:1447
 msgid "Application"
 msgstr "Εφαρμογή"
 
@@ -2497,7 +1576,7 @@ msgstr "Τελείωσε το χαρτί"
 
 #. Translators: this is a printer status.
 #: gtk/gtkprintoperation-win32.c:616
-#: modules/printbackends/cups/gtkprintbackendcups.c:1999
+#: modules/printbackends/cups/gtkprintbackendcups.c:1998
 msgid "Paused"
 msgstr "Παύθηκε"
 
@@ -2624,42 +1703,42 @@ msgstr "Γενικά"
 #. * multiple pages on a sheet when printing
 #.
 #: gtk/gtkprintunixdialog.c:3010
-#: modules/printbackends/cups/gtkprintbackendcups.c:3509
+#: modules/printbackends/cups/gtkprintbackendcups.c:3508
 msgid "Left to right, top to bottom"
 msgstr "Από αριστερά προς δεξιά, από πάνω προς τα κάτω"
 
 #: gtk/gtkprintunixdialog.c:3010
-#: modules/printbackends/cups/gtkprintbackendcups.c:3509
+#: modules/printbackends/cups/gtkprintbackendcups.c:3508
 msgid "Left to right, bottom to top"
 msgstr "Από αριστερά προς δεξιά, από κάτω προς τα πάνω"
 
 #: gtk/gtkprintunixdialog.c:3011
-#: modules/printbackends/cups/gtkprintbackendcups.c:3510
+#: modules/printbackends/cups/gtkprintbackendcups.c:3509
 msgid "Right to left, top to bottom"
 msgstr "Από δεξιά προς αριστερά, από πάνω προς τα κάτω"
 
 #: gtk/gtkprintunixdialog.c:3011
-#: modules/printbackends/cups/gtkprintbackendcups.c:3510
+#: modules/printbackends/cups/gtkprintbackendcups.c:3509
 msgid "Right to left, bottom to top"
 msgstr "Από δεξιά προς αριστερά, από κάτω προς τα πάνω"
 
 #: gtk/gtkprintunixdialog.c:3012
-#: modules/printbackends/cups/gtkprintbackendcups.c:3511
+#: modules/printbackends/cups/gtkprintbackendcups.c:3510
 msgid "Top to bottom, left to right"
 msgstr "Από πάνω προς τα κάτω, από αριστερά προς δεξιά"
 
 #: gtk/gtkprintunixdialog.c:3012
-#: modules/printbackends/cups/gtkprintbackendcups.c:3511
+#: modules/printbackends/cups/gtkprintbackendcups.c:3510
 msgid "Top to bottom, right to left"
 msgstr "Από πάνω προς τα κάτω, από δεξιά προς αριστερά"
 
 #: gtk/gtkprintunixdialog.c:3013
-#: modules/printbackends/cups/gtkprintbackendcups.c:3512
+#: modules/printbackends/cups/gtkprintbackendcups.c:3511
 msgid "Bottom to top, left to right"
 msgstr "Από κάτω προς τα πάνω, από αριστερά προς δεξιά"
 
 #: gtk/gtkprintunixdialog.c:3013
-#: modules/printbackends/cups/gtkprintbackendcups.c:3512
+#: modules/printbackends/cups/gtkprintbackendcups.c:3511
 msgid "Bottom to top, right to left"
 msgstr "Από κάτω προς τα πάνω, από δεξιά προς αριστερά"
 
@@ -2667,7 +1746,7 @@ msgstr "Από κάτω προς τα πάνω, από δεξιά προς αρ�
 #. * dialog that controls in what order multiple pages are arranged
 #.
 #: gtk/gtkprintunixdialog.c:3017 gtk/gtkprintunixdialog.c:3030
-#: modules/printbackends/cups/gtkprintbackendcups.c:3544
+#: modules/printbackends/cups/gtkprintbackendcups.c:3543
 msgid "Page Ordering"
 msgstr "Σειρά σελίδων"
 
@@ -4839,121 +3918,116 @@ msgstr "Ο εκτυπωτής '%s' είναι αποσυνδεδεμένος."
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:1687
 #, c-format
-msgid "Printer '%s' may not be connected."
-msgstr "Ο εκτυπωτής '%s' μπορεί να μην είναι συνδεδεμένος."
-
-#: modules/printbackends/cups/gtkprintbackendcups.c:1688
-#, c-format
 msgid "There is a problem on printer '%s'."
 msgstr "Υπάρχει πρόβλημα στον εκτυπωτή '%s'."
 
 #. Translators: this is a printer status.
-#: modules/printbackends/cups/gtkprintbackendcups.c:1996
+#: modules/printbackends/cups/gtkprintbackendcups.c:1995
 msgid "Paused ; Rejecting Jobs"
 msgstr "Σε παύση· δε γίνονται δεκτές εκτυπώσεις"
 
 #. Translators: this is a printer status.
-#: modules/printbackends/cups/gtkprintbackendcups.c:2002
+#: modules/printbackends/cups/gtkprintbackendcups.c:2001
 msgid "Rejecting Jobs"
 msgstr "Δε γίνονται δεκτές εκτυπώσεις"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2778
+#: modules/printbackends/cups/gtkprintbackendcups.c:2777
 msgid "Two Sided"
 msgstr "Διπλής όψης"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2779
+#: modules/printbackends/cups/gtkprintbackendcups.c:2778
 msgid "Paper Type"
 msgstr "Τύπος χαρτιού"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2780
+#: modules/printbackends/cups/gtkprintbackendcups.c:2779
 msgid "Paper Source"
 msgstr "Πηγή χαρτιού"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2781
+#: modules/printbackends/cups/gtkprintbackendcups.c:2780
 msgid "Output Tray"
 msgstr "Συρτάρι εξόδου"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2782
+#: modules/printbackends/cups/gtkprintbackendcups.c:2781
 msgid "Resolution"
 msgstr "Ανάλυση"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2783
+#: modules/printbackends/cups/gtkprintbackendcups.c:2782
 msgid "GhostScript pre-filtering"
 msgstr "GhostScript pre-filtering"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2792
+#: modules/printbackends/cups/gtkprintbackendcups.c:2791
 msgid "One Sided"
 msgstr "Μονής όψης"
 
 #. Translators: this is an option of "Two Sided"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2794
+#: modules/printbackends/cups/gtkprintbackendcups.c:2793
 msgid "Long Edge (Standard)"
 msgstr "Μακρύ άκρο (κανονικό)"
 
 #. Translators: this is an option of "Two Sided"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2796
+#: modules/printbackends/cups/gtkprintbackendcups.c:2795
 msgid "Short Edge (Flip)"
 msgstr "Βραχύ άκρο (αναστροφή)"
 
 #. Translators: this is an option of "Paper Source"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2798
-#: modules/printbackends/cups/gtkprintbackendcups.c:2800
-#: modules/printbackends/cups/gtkprintbackendcups.c:2808
+#: modules/printbackends/cups/gtkprintbackendcups.c:2797
+#: modules/printbackends/cups/gtkprintbackendcups.c:2799
+#: modules/printbackends/cups/gtkprintbackendcups.c:2807
 msgid "Auto Select"
 msgstr "Αυτόματη επιλογή"
 
 #. Translators: this is an option of "Paper Source"
 #. Translators: this is an option of "Resolution"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2802
-#: modules/printbackends/cups/gtkprintbackendcups.c:2804
-#: modules/printbackends/cups/gtkprintbackendcups.c:2806
-#: modules/printbackends/cups/gtkprintbackendcups.c:2810
-#: modules/printbackends/cups/gtkprintbackendcups.c:3296
+#: modules/printbackends/cups/gtkprintbackendcups.c:2801
+#: modules/printbackends/cups/gtkprintbackendcups.c:2803
+#: modules/printbackends/cups/gtkprintbackendcups.c:2805
+#: modules/printbackends/cups/gtkprintbackendcups.c:2809
+#: modules/printbackends/cups/gtkprintbackendcups.c:3295
 msgid "Printer Default"
 msgstr "Προεπιλογή εκτυπωτή"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2812
+#: modules/printbackends/cups/gtkprintbackendcups.c:2811
 msgid "Embed GhostScript fonts only"
 msgstr "Ενσωμάτωση μόνο των γραμματοσειρών GhostScript"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2814
+#: modules/printbackends/cups/gtkprintbackendcups.c:2813
 msgid "Convert to PS level 1"
 msgstr "Μετατροπή σε PS επιπέδου 1"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2816
+#: modules/printbackends/cups/gtkprintbackendcups.c:2815
 msgid "Convert to PS level 2"
 msgstr "Μετατροπή σε PS επιπέδου 2"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2818
+#: modules/printbackends/cups/gtkprintbackendcups.c:2817
 msgid "No pre-filtering"
 msgstr "Χωρίς pre-filtering"
 
 #. Translators: "Miscellaneous" is the label for a button, that opens
 #. up an extra panel of settings in a print dialog.
-#: modules/printbackends/cups/gtkprintbackendcups.c:2827
+#: modules/printbackends/cups/gtkprintbackendcups.c:2826
 msgid "Miscellaneous"
 msgstr "Διάφορα"
 
 #. Translators: These strings name the possible values of the
 #. * job priority option in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3504
+#: modules/printbackends/cups/gtkprintbackendcups.c:3503
 msgid "Urgent"
 msgstr "Επείγον"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3504
+#: modules/printbackends/cups/gtkprintbackendcups.c:3503
 msgid "High"
 msgstr "Υψηλή"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3504
+#: modules/printbackends/cups/gtkprintbackendcups.c:3503
 msgid "Medium"
 msgstr "Μεσαία"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3504
+#: modules/printbackends/cups/gtkprintbackendcups.c:3503
 msgid "Low"
 msgstr "Χαμηλή"
 
@@ -4961,66 +4035,66 @@ msgstr "Χαμηλή"
 #. Translators, this string is used to label the pages-per-sheet option
 #. * in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3528
+#: modules/printbackends/cups/gtkprintbackendcups.c:3527
 msgid "Pages per Sheet"
 msgstr "Σελίδες ανά φύλλο"
 
 #. Translators, this string is used to label the job priority option
 #. * in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3565
+#: modules/printbackends/cups/gtkprintbackendcups.c:3564
 msgid "Job Priority"
 msgstr "Προτεραιότητα"
 
 #. Translators, this string is used to label the billing info entry
 #. * in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3576
+#: modules/printbackends/cups/gtkprintbackendcups.c:3575
 msgid "Billing Info"
 msgstr "Πληροφορίες τιμολόγησης"
 
 #. Translators, these strings are names for various 'standard' cover
 #. * pages that the printing system may support.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3591
+#: modules/printbackends/cups/gtkprintbackendcups.c:3590
 msgid "None"
 msgstr "Κανένα"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3591
+#: modules/printbackends/cups/gtkprintbackendcups.c:3590
 msgid "Classified"
 msgstr "Διαβαθμισμένο"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3591
+#: modules/printbackends/cups/gtkprintbackendcups.c:3590
 msgid "Confidential"
 msgstr "Εμπιστευτικό"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3591
+#: modules/printbackends/cups/gtkprintbackendcups.c:3590
 msgid "Secret"
 msgstr "Απόρρητο"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3591
+#: modules/printbackends/cups/gtkprintbackendcups.c:3590
 msgid "Standard"
 msgstr "Κανονικό"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3591
+#: modules/printbackends/cups/gtkprintbackendcups.c:3590
 msgid "Top Secret"
 msgstr "Άκρως απόρρητο"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3591
+#: modules/printbackends/cups/gtkprintbackendcups.c:3590
 msgid "Unclassified"
 msgstr "Αδιαβάθμητο"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the front cover page.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3626
+#: modules/printbackends/cups/gtkprintbackendcups.c:3625
 msgid "Before"
 msgstr "Πριν"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the back cover page.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3641
+#: modules/printbackends/cups/gtkprintbackendcups.c:3640
 msgid "After"
 msgstr "Μετά"
 
@@ -5028,14 +4102,14 @@ msgstr "Μετά"
 #. * a print job is printed. Possible values are 'now', a specified time,
 #. * or 'on hold'
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3661
+#: modules/printbackends/cups/gtkprintbackendcups.c:3660
 msgid "Print at"
 msgstr "Ώρα εκτύπωσης"
 
 #. Translators: this is the name of the option that allows the user
 #. * to specify a time when a print job will be printed.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3672
+#: modules/printbackends/cups/gtkprintbackendcups.c:3671
 msgid "Print at time"
 msgstr "Ώρα εκτύπωσης"
 
@@ -5043,7 +4117,7 @@ msgstr "Ώρα εκτύπωσης"
 #. * size. The two placeholders are replaced with the width and height
 #. * in points. E.g: "Custom 230.4x142.9"
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3707
+#: modules/printbackends/cups/gtkprintbackendcups.c:3706
 #, c-format
 msgid "Custom %sx%s"
 msgstr "Προσαρμοσμένο %sx%s"
@@ -5134,6 +4208,692 @@ msgstr "Εκτύπωση σε δοκιμαστικό εκτυπωτή"
 #, c-format
 msgid "Could not get information for file '%s': %s"
 msgstr "Αδυναμία λήψης πληροφοριών για το αρχείο '%s': %s"
+
+#: tests/testfilechooser.c:222
+#, c-format
+msgid "Failed to open file '%s': %s"
+msgstr "Αποτυχία ανοίγματος αρχείου '%s': %s"
+
+#: tests/testfilechooser.c:267
+#, c-format
+msgid ""
+"Failed to load image '%s': reason not known, probably a corrupt image file"
+msgstr ""
+"Αποτυχία φόρτωσης εικόνας '%s': Άγνωστη αιτία, πιθανόν πρόκειται για "
+"κατεστραμμένο αρχείο εικόνας"
+
+#~ msgid "Image file '%s' contains no data"
+#~ msgstr "Το αρχείο εικόνας '%s' δεν περιέχει δεδομένα"
+
+#~ msgid ""
+#~ "Failed to load animation '%s': reason not known, probably a corrupt "
+#~ "animation file"
+#~ msgstr ""
+#~ "Αποτυχία φόρτωσης κινούμενης εικόνας '%s': Άγνωστη αιτία, πιθανόν "
+#~ "πρόκειται για κατεστραμμένο αρχείο"
+
+#~ msgid "Unable to load image-loading module: %s: %s"
+#~ msgstr "Αποτυχία φόρτωσης αρθρώματος φόρτωσης εικόνων: %s: %s"
+
+#~ msgid ""
+#~ "Image-loading module %s does not export the proper interface; perhaps "
+#~ "it's from a different GTK version?"
+#~ msgstr ""
+#~ "Το άρθρωμα φόρτωσης εικόνων %s δεν εξάγει την κατάλληλη διεπαφή. Μήπως "
+#~ "προέρχεται από διαφορετική έκδοση του GTK;"
+
+#~ msgid "Image type '%s' is not supported"
+#~ msgstr "Ο τύπος εικόνας '%s' δεν υποστηρίζεται"
+
+#~ msgid "Couldn't recognize the image file format for file '%s'"
+#~ msgstr "Αδυναμία αναγνώρισης του τύπου αρχείου εικόνας για το αρχείο '%s'"
+
+#~ msgid "Unrecognized image file format"
+#~ msgstr "Άγνωστος τύπος αρχείου εικόνας"
+
+#~ msgid "Failed to load image '%s': %s"
+#~ msgstr "Αποτυχία φόρτωσης εικόνας '%s': %s"
+
+#~ msgid "Error writing to image file: %s"
+#~ msgstr "Σφάλμα κατά την εγγραφή στο αρχείο εικόνας: %s"
+
+#~ msgid ""
+#~ "This build of gdk-pixbuf does not support saving the image format: %s"
+#~ msgstr ""
+#~ "Αυτή η έκδοση του gdk-pixbuf δεν υποστηρίζει αποθήκευση του τύπου "
+#~ "εικόνας : %s"
+
+#~ msgid "Insufficient memory to save image to callback"
+#~ msgstr "Ανεπάρκεια μνήμης για την αποθήκευση της εικόνας στο callback"
+
+#~ msgid "Failed to open temporary file"
+#~ msgstr "Αποτυχία ανοίγματος προσωρινού αρχείου"
+
+#~ msgid "Failed to read from temporary file"
+#~ msgstr "Αποτυχία ανάγνωσης από το προσωρινό αρχείο"
+
+#~ msgid "Failed to open '%s' for writing: %s"
+#~ msgstr "Αποτυχία ανοίγματος του '%s' για εγγραφή: %s"
+
+#~ msgid ""
+#~ "Failed to close '%s' while writing image, all data may not have been "
+#~ "saved: %s"
+#~ msgstr ""
+#~ "Αποτυχία κλεισίματος του '%s' κατά την εγγραφή της εικόνας. Μπορεί να μην "
+#~ "έχουν αποθηκευτεί όλα τα δεδομένα: %s"
+
+#~ msgid "Insufficient memory to save image into a buffer"
+#~ msgstr "Ανεπάρκεια μνήμης για την αποθήκευση της εικόνας σε ενδιάμεση μνήμη"
+
+#~ msgid "Error writing to image stream"
+#~ msgstr "Σφάλμα κατά την εγγραφή στη ροή της εικόνας"
+
+#~ msgid ""
+#~ "Internal error: Image loader module '%s' failed to complete an operation, "
+#~ "but didn't give a reason for the failure"
+#~ msgstr ""
+#~ "Εσωτερικό σφάλμα: Το άρθρωμα φόρτωσης εικόνων '%s' απέτυχε να ολοκληρώσει "
+#~ "μια ενέργεια, αλλά δεν εξήγησε το λόγο της αποτυχίας"
+
+#~ msgid "Incremental loading of image type '%s' is not supported"
+#~ msgstr "Δεν υποστηρίζεται η σταδιακή φόρτωση για τον τύπο εικόνας '%s'"
+
+#~ msgid "Image header corrupt"
+#~ msgstr "Κατεστραμμένη κεφαλίδα εικόνας"
+
+#~ msgid "Image format unknown"
+#~ msgstr "Άγνωστος τύπος εικόνας"
+
+#~ msgid "Image pixel data corrupt"
+#~ msgstr "Κατεστραμμένα δεδομένα εικονοστοιχείων εικόνας"
+
+#~ msgid "failed to allocate image buffer of %u byte"
+#~ msgid_plural "failed to allocate image buffer of %u bytes"
+#~ msgstr[0] "Αποτυχία διάθεσης %u byte ως ενδιάμεσης μνήμης εικόνας"
+#~ msgstr[1] "Αποτυχία διάθεσης %u bytes ως ενδιάμεσης μνήμης εικόνας"
+
+#~ msgid "Unexpected icon chunk in animation"
+#~ msgstr "Μη αναμενόμενο κομμάτι εικονιδίου στην κινούμενη εικόνα"
+
+#~ msgid "Unsupported animation type"
+#~ msgstr "Μη υποστηριζόμενος τύπος κινούμενης εικόνας"
+
+#~ msgid "Invalid header in animation"
+#~ msgstr "Μη έγκυρη κεφαλίδα στην κινούμενη εικόνα"
+
+#~ msgid "Not enough memory to load animation"
+#~ msgstr "Ανεπάρκεια μνήμης για τη φόρτωση της κινούμενης εικόνας"
+
+#~ msgid "Malformed chunk in animation"
+#~ msgstr "Η κινούμενη εικόνα περιέχει κομμάτι εσφαλμένης μορφής"
+
+#~ msgid "The ANI image format"
+#~ msgstr "Ο τύπος εικόνας ΑΝΙ"
+
+#~ msgid "BMP image has bogus header data"
+#~ msgstr "Η εικόνα BMP περιέχει εσφαλμένα δεδομένα κεφαλίδας"
+
+#~ msgid "Not enough memory to load bitmap image"
+#~ msgstr "Ανεπάρκεια μνήμης για τη φόρτωση της εικόνας bitmap"
+
+#~ msgid "BMP image has unsupported header size"
+#~ msgstr "Δεν υποστηρίζεται αυτό το μέγεθος κεφαλίδας εικόνας BMP"
+
+#~ msgid "Topdown BMP images cannot be compressed"
+#~ msgstr "Δεν είναι δυνατή η συμπίεση εικόνων Topdown BMP"
+
+#~ msgid "Premature end-of-file encountered"
+#~ msgstr "Εντοπίστηκε πρόωρος τερματισμός αρχείου"
+
+#~ msgid "Couldn't allocate memory for saving BMP file"
+#~ msgstr "Αδυναμία διάθεσης μνήμης για την αποθήκευση του αρχείου BMP"
+
+#~ msgid "Couldn't write to BMP file"
+#~ msgstr "Αδυναμία εγγραφής στο αρχείο BMP"
+
+#~ msgid "The BMP image format"
+#~ msgstr "Ο τύπος εικόνας BMP"
+
+#~ msgid "Failure reading GIF: %s"
+#~ msgstr "Αποτυχία ανάγνωσης GIF: %s"
+
+#~ msgid "GIF file was missing some data (perhaps it was truncated somehow?)"
+#~ msgstr ""
+#~ "Λείπουν κάποια δεδομένα από το αρχείο GIF (μήπως αποκόπηκαν με κάποιο "
+#~ "τρόπο;)"
+
+#~ msgid "Internal error in the GIF loader (%s)"
+#~ msgstr "Εσωτερικό σφάλμα στην εφαρμογή φόρτωσης εικόνων GIF (%s)"
+
+#~ msgid "Stack overflow"
+#~ msgstr "Υπερχείλιση στοίβας"
+
+#~ msgid "GIF image loader cannot understand this image."
+#~ msgstr ""
+#~ "Η εφαρμογή φόρτωσης εικόνων GIF δεν μπορεί να αναγνωρίσει την εικόνα."
+
+#~ msgid "Bad code encountered"
+#~ msgstr "Εντοπίστηκε εσφαλμένος κώδικας"
+
+#~ msgid "Circular table entry in GIF file"
+#~ msgstr "Κυκλική εγγραφή πίνακα στο αρχείο GIF"
+
+#~ msgid "Not enough memory to load GIF file"
+#~ msgstr "Ανεπάρκεια μνήμης για τη φόρτωση του αρχείου GIF"
+
+#~ msgid "Not enough memory to composite a frame in GIF file"
+#~ msgstr "Ανεπάρκεια μνήμης για τη σύνθεση πλαισίου στο αρχείο GIF"
+
+#~ msgid "GIF image is corrupt (incorrect LZW compression)"
+#~ msgstr "Η εικόνα GIF είναι κατεστραμμένη (εσφαλμένη συμπίεση LZW)"
+
+#~ msgid "File does not appear to be a GIF file"
+#~ msgstr "Το αρχείο δε φαίνεται να είναι αρχείο GIF"
+
+#~ msgid "Version %s of the GIF file format is not supported"
+#~ msgstr "Η έκδοση %s του τύπου αρχείων GIF δεν υποστηρίζεται"
+
+#~ msgid ""
+#~ "GIF image has no global colormap, and a frame inside it has no local "
+#~ "colormap."
+#~ msgstr ""
+#~ "Η εικόνα GIF δεν περιέχει γενικό χάρτη χρωμάτων, ενώ ένα εσωτερικό "
+#~ "πλαίσιο δεν περιέχει τοπικό χάρτη χρωμάτων."
+
+#~ msgid "GIF image was truncated or incomplete."
+#~ msgstr ""
+#~ "Η εικόνα GIF είτε ήταν ημιτελής είτε είχε αποκοπεί κάποιο κομμάτι της."
+
+#~ msgid "The GIF image format"
+#~ msgstr "Ο τύπος εικόνας GIF"
+
+#~ msgid "Invalid header in icon"
+#~ msgstr "Μη έγκυρη κεφαλίδα στο εικονίδιο"
+
+#~ msgid "Not enough memory to load icon"
+#~ msgstr "Ανεπάρκεια μνήμης για τη φόρτωση του εικονιδίου"
+
+#~ msgid "Icon has zero width"
+#~ msgstr "Το εικονίδιο έχει μηδενικό πλάτος"
+
+#~ msgid "Icon has zero height"
+#~ msgstr "Το εικονίδιο έχει μηδενικό ύψος"
+
+#~ msgid "Compressed icons are not supported"
+#~ msgstr "Δεν υποστηρίζονται συμπιεσμένα εικονίδια"
+
+#~ msgid "Unsupported icon type"
+#~ msgstr "Μη υποστηριζόμενος τύπος εικονιδίου"
+
+#~ msgid "Not enough memory to load ICO file"
+#~ msgstr "Ανεπάρκεια μνήμης για τη φόρτωση του αρχείου ICO"
+
+#~ msgid "Image too large to be saved as ICO"
+#~ msgstr "Η εικόνα είναι πολύ μεγάλη για να αποθηκευτεί ως ICO"
+
+#~ msgid "Cursor hotspot outside image"
+#~ msgstr "Το επίκεντρο του δρομέα βρίσκεται έξω από την εικόνα"
+
+#~ msgid "Unsupported depth for ICO file: %d"
+#~ msgstr "Μη υποστηριζόμενο βάθος στο αρχείο ICO: %d"
+
+#~ msgid "The ICO image format"
+#~ msgstr "Ο τύπος εικόνας ICO"
+
+#~ msgid "Error reading ICNS image: %s"
+#~ msgstr "Σφάλμα κατά την ανάγνωση της εικόνας ICNS: %s"
+
+#~ msgid "Could not decode ICNS file"
+#~ msgstr "Αδυναμία αποκωδικοποίησης του αρχείου ICNS"
+
+#~ msgid "The ICNS image format"
+#~ msgstr "Ο τύπος εικόνας ICNS"
+
+#~ msgid "Couldn't allocate memory for stream"
+#~ msgstr "Αδυναμία διάθεσης μνήμης για τη ροή"
+
+#~ msgid "Couldn't decode image"
+#~ msgstr "Αδυναμία αποκωδικοποίησης της εικόνας"
+
+#~ msgid "Transformed JPEG2000 has zero width or height"
+#~ msgstr "Το μετασχηματισμένο JPEG 2000 έχει μηδενικό ύψος ή πλάτος."
+
+#~ msgid "Image type currently not supported"
+#~ msgstr "Αυτός ο τύπος εικόνας δεν υποστηρίζεται προς το παρόν"
+
+#~ msgid "Couldn't allocate memory for color profile"
+#~ msgstr "Αδυναμία διάθεση μνήμης για το προφίλ χρωμάτων"
+
+#~ msgid "Insufficient memory to open JPEG 2000 file"
+#~ msgstr "Ανεπάρκεια μνήμης για το άνοιγμα του αρχείου JPEG 2000"
+
+#~ msgid "Couldn't allocate memory to buffer image data"
+#~ msgstr ""
+#~ "Αδυναμία διάθεσης μνήμης για την αποθήκευση των δεδομένων της εικόνας "
+#~ "στην ενδιάμεση μνήμη"
+
+#~ msgid "The JPEG 2000 image format"
+#~ msgstr "Ο τύπος εικόνας JPEG 2000"
+
+#~ msgid "Error interpreting JPEG image file (%s)"
+#~ msgstr "Σφάλμα κατά την ερμηνεία του αρχείου εικόνας JPEG (%s)"
+
+#~ msgid ""
+#~ "Insufficient memory to load image, try exiting some applications to free "
+#~ "memory"
+#~ msgstr ""
+#~ "Ανεπάρκεια μνήμης για τη φόρτωση της εικόνας. Δοκιμάστε να τερματίσετε "
+#~ "ορισμένες εφαρμογές για να απελευθερώσετε μνήμη"
+
+#~ msgid "Unsupported JPEG color space (%s)"
+#~ msgstr "Μη υποστηριζόμενο εύρος χρωμάτων JPEG (%s)"
+
+#~ msgid "Couldn't allocate memory for loading JPEG file"
+#~ msgstr "Αδυναμία διάθεσης μνήμης για τη φόρτωση του αρχείου JPEG"
+
+#~ msgid "Transformed JPEG has zero width or height."
+#~ msgstr "Το μετασχηματισμένο JPEG έχει μηδενικό ύψος ή πλάτος."
+
+#~ msgid ""
+#~ "JPEG quality must be a value between 0 and 100; value '%s' could not be "
+#~ "parsed."
+#~ msgstr ""
+#~ "Η ποιότητα του JPEG πρέπει να έχει τιμή μεταξύ 0 και 100. Η τιμή '%s' δεν "
+#~ "μπορεί να ερμηνευθεί."
+
+#~ msgid ""
+#~ "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
+#~ msgstr ""
+#~ "Η ποιότητα του JPEG πρέπει να έχει τιμή μεταξύ 0 και 100. Η τιμή '%d' δεν "
+#~ "επιτρέπεται."
+
+#~ msgid "The JPEG image format"
+#~ msgstr "Ο τύπος εικόνας JPEG"
+
+#~ msgid "Couldn't allocate memory for header"
+#~ msgstr "Αδυναμία διάθεσης μνήμης για την κεφαλίδα"
+
+#~ msgid "Couldn't allocate memory for context buffer"
+#~ msgstr "Αδυναμία διάθεσης μνήμης για τη σχετική ενδιάμεση μνήμη"
+
+#~ msgid "Image has invalid width and/or height"
+#~ msgstr "Μη έγκυρο ύψος ή/και πλάτος εικόνας"
+
+#~ msgid "Image has unsupported bpp"
+#~ msgstr "Εικόνα με μη υποστηριζόμενο bpp"
+
+#~ msgid "Image has unsupported number of %d-bit planes"
+#~ msgstr "Εικόνα με μη υποστηριζόμενο αριθμό επιφανειών %d-bit"
+
+#~ msgid "Couldn't create new pixbuf"
+#~ msgstr "Αδυναμία δημιουργίας νέου pixbuf"
+
+#~ msgid "Couldn't allocate memory for line data"
+#~ msgstr "Αδυναμία διάθεσης μνήμης για τα δεδομένα των γραμμών"
+
+#~ msgid "Couldn't allocate memory for paletted data"
+#~ msgstr "Δεν είναι δυνατή η διάθεση μνήμης για τα δεδομένα σε παλέτα"
+
+#~ msgid "Didn't get all lines of PCX image"
+#~ msgstr "Αδυναμία λήψης όλων των γραμμών της εικόνας PCX"
+
+#~ msgid "No palette found at end of PCX data"
+#~ msgstr "Δε βρέθηκε παλέτα στο τέλος των δεδομένων PCX"
+
+#~ msgid "The PCX image format"
+#~ msgstr "Ο τύπος εικόνας PCX"
+
+#~ msgid "Bits per channel of PNG image is invalid."
+#~ msgstr "Μη έγκυρος αριθμός bits ανά κανάλι στην εικόνα PNG."
+
+#~ msgid "Transformed PNG has zero width or height."
+#~ msgstr "Το μετασχηματισμένο PNG έχει μηδενικό ύψος ή πλάτος."
+
+#~ msgid "Bits per channel of transformed PNG is not 8."
+#~ msgstr "Τα bits ανά κανάλι του μετασχηματισμένου PNG δεν είναι 8."
+
+#~ msgid "Transformed PNG not RGB or RGBA."
+#~ msgstr "Το μετασχηματισμένο PNG δεν είναι RGB ή RGBA."
+
+#~ msgid "Transformed PNG has unsupported number of channels, must be 3 or 4."
+#~ msgstr ""
+#~ "Το μετασχηματισμένο PNG περιέχει μη υποστηριζόμενο αριθμό καναλιών· θα "
+#~ "έπρεπε να είναι 3 ή 4."
+
+#~ msgid "Fatal error in PNG image file: %s"
+#~ msgstr "Μοιραίο σφάλμα στο αρχείο εικόνας PNG: %s"
+
+#~ msgid "Insufficient memory to load PNG file"
+#~ msgstr "Ανεπάρκεια μνήμης για τη φόρτωση του αρχείου PNG"
+
+#~ msgid ""
+#~ "Insufficient memory to store a %ld by %ld image; try exiting some "
+#~ "applications to reduce memory usage"
+#~ msgstr ""
+#~ "Ανεπάρκεια μνήμης για την αποθήκευση εικόνας %ld επί %ld. Δοκιμάστε να "
+#~ "τερματίσετε μερικές εφαρμογές για να απελευθερώσετε μνήμη"
+
+#~ msgid "Fatal error reading PNG image file"
+#~ msgstr "Μοιραίο σφάλμα κατά την ανάγνωση του αρχείου εικόνας PNG"
+
+#~ msgid "Fatal error reading PNG image file: %s"
+#~ msgstr "Μοιραίο σφάλμα κατά την ανάγνωση του αρχείου εικόνας PNG: %s"
+
+#~ msgid ""
+#~ "Keys for PNG text chunks must have at least 1 and at most 79 characters."
+#~ msgstr ""
+#~ "Τα κλειδιά για τα κομμάτια κειμένου του PNG θα πρέπει να περιέχουν "
+#~ "τουλάχιστον 1 και όχι περισσότερους από 79 χαρακτήρες."
+
+#~ msgid "Keys for PNG text chunks must be ASCII characters."
+#~ msgstr ""
+#~ "Τα κλειδιά για τα κομμάτια κειμένου του PNG θα πρέπει να απαρτίζονται από "
+#~ "χαρακτήρες ASCII."
+
+#~ msgid "Color profile has invalid length %d."
+#~ msgstr "Το προφίλ χρωμάτων έχει μη έγκυρο μήκος %d."
+
+#~ msgid ""
+#~ "PNG compression level must be a value between 0 and 9; value '%s' could "
+#~ "not be parsed."
+#~ msgstr ""
+#~ "Η ποιότητα συμπίεσης του PNG πρέπει να έχει τιμή μεταξύ 0 και 9. Η τιμή "
+#~ "'%s' δεν μπορεί να ερμηνευτεί."
+
+#~ msgid ""
+#~ "PNG compression level must be a value between 0 and 9; value '%d' is not "
+#~ "allowed."
+#~ msgstr ""
+#~ "Η ποιότητα συμπίεσης του PNG πρέπει να έχει τιμή μεταξύ 0 και 9. Η τιμή "
+#~ "'%d' δεν επιτρέπεται."
+
+#~ msgid ""
+#~ "Value for PNG text chunk %s cannot be converted to ISO-8859-1 encoding."
+#~ msgstr ""
+#~ "Η τιμή του κομματιού κειμένου του PNG %s δεν μπορεί να μετατραπεί σε "
+#~ "κωδικοποίηση ISO-8859-1."
+
+#~ msgid "The PNG image format"
+#~ msgstr "O τύπος εικόνας PNG"
+
+#~ msgid "PNM loader expected to find an integer, but didn't"
+#~ msgstr ""
+#~ "Η εφαρμογή φόρτωσης εικόνων PNM ανέμενε ακέραιο αριθμό, αλλά δεν τον βρήκε"
+
+#~ msgid "PNM file has an incorrect initial byte"
+#~ msgstr "Το αρχείο PNM περιέχει εσφαλμένο αρχικό byte"
+
+#~ msgid "PNM file is not in a recognized PNM subformat"
+#~ msgstr "Ο τύπος του αρχείου PNM δεν είναι αναγνωρίσιμος τύπος PNM"
+
+#~ msgid "PNM file has an image width of 0"
+#~ msgstr "Το πλάτος εικόνας του αρχείου PNM είναι 0"
+
+#~ msgid "PNM file has an image height of 0"
+#~ msgstr "Το ύψος εικόνας του αρχείου PNM είναι 0"
+
+#~ msgid "Maximum color value in PNM file is 0"
+#~ msgstr "Η μέγιστη τιμή χρώματος στο αρχείο PNM είναι 0"
+
+#~ msgid "Maximum color value in PNM file is too large"
+#~ msgstr "Η μέγιστη τιμή χρώματος στο αρχείο PNM είναι πολύ μεγάλη"
+
+#~ msgid "Raw PNM image type is invalid"
+#~ msgstr "Μη έγκυρος τύπος ακατέργαστης εικόνας PNM"
+
+#~ msgid "PNM image loader does not support this PNM subformat"
+#~ msgstr "Η εφαρμογή φόρτωσης εικόνων PNM δεν υποστηρίζει αυτόν τον τύπο PNM"
+
+#~ msgid "Raw PNM formats require exactly one whitespace before sample data"
+#~ msgstr ""
+#~ "Οι ακατέργαστοι τύποι PNM πρέπει να περιέχουν ακριβώς ένα κενό διάστημα "
+#~ "πριν από τα δεδομένα του δείγματος"
+
+#~ msgid "Cannot allocate memory for loading PNM image"
+#~ msgstr "Αδυναμία διάθεσης μνήμης για τη φόρτωση της εικόνας PNM"
+
+#~ msgid "Insufficient memory to load PNM context struct"
+#~ msgstr "Ανεπάρκεια μνήμης για τη φόρτωση της δομής περιεχομένων του PNΜ"
+
+#~ msgid "Unexpected end of PNM image data"
+#~ msgstr "Μη αναμενόμενος τερματισμός των δεδομένων της εικόνας PNM"
+
+#~ msgid "Insufficient memory to load PNM file"
+#~ msgstr "Ανεπάρκεια μνήμης για τη φόρτωση του αρχείου PNM"
+
+#~ msgid "The PNM/PBM/PGM/PPM image format family"
+#~ msgstr "Η οικογένεια τύπων εικόνας PNM/PBM/PGM/PPM"
+
+#~ msgid "Input file descriptor is NULL."
+#~ msgstr "Ο περιγραφέας του αρχείου εισόδου είναι NULL."
+
+#~ msgid "Failed to read QTIF header"
+#~ msgstr "Αποτυχία ανάγνωσης κεφαλίδας QTIF"
+
+#~ msgid "QTIF atom size too large (%d bytes)"
+#~ msgstr "Το άτομο QTIF είναι πολύ μεγάλο (%d byte)"
+
+#~ msgid "Failed to allocate %d bytes for file read buffer"
+#~ msgstr "Αποτυχία διάθεσης %d byte ως ενδιάμεσης μνήμης ανάγνωσης αρχείων"
+
+#~ msgid "File error when reading QTIF atom: %s"
+#~ msgstr "Αποτυχία αρχείου κατά την ανάγνωση του ατόμου QTIF: %s"
+
+#~ msgid "Failed to skip the next %d bytes with seek()."
+#~ msgstr "Αποτυχία υπερπήδησης των επόμενων %d byte με χρήση του seek()."
+
+#~ msgid "Failed to allocate QTIF context structure."
+#~ msgstr "Αδυναμία διάθεσης μνήμης για τη δομή περιεχομένων του QTIF."
+
+#~ msgid "Failed to create GdkPixbufLoader object."
+#~ msgstr "Αποτυχία δημιουργίας αντικειμένου GdkPixbufLoader."
+
+#~ msgid "Failed to find an image data atom."
+#~ msgstr "Αποτυχία εύρεσης ατόμου δεδομένων εικόνας."
+
+#~ msgid "The QTIF image format"
+#~ msgstr "Ο τύπος εικόνας QTIF"
+
+#~ msgid "RAS image has bogus header data"
+#~ msgstr "Η εικόνα RAS περιέχει εσφαλμένα δεδομένα κεφαλίδας"
+
+#~ msgid "RAS image has unknown type"
+#~ msgstr "Άγνωστος τύπος εικόνας RAS"
+
+#~ msgid "unsupported RAS image variation"
+#~ msgstr "μη υποστηριζόμενη παραλλαγή εικόνας RAS"
+
+#~ msgid "Not enough memory to load RAS image"
+#~ msgstr "Ανεπάρκεια μνήμης για τη φόρτωση της εικόνας RAS"
+
+#~ msgid "The Sun raster image format"
+#~ msgstr "Ο τύπος εικόνας Sun raster"
+
+#~ msgid "Cannot allocate memory for IOBuffer struct"
+#~ msgstr "Αδυναμία διάθεσης μνήμης για τη δομή του IOBuffer"
+
+#~ msgid "Cannot allocate memory for IOBuffer data"
+#~ msgstr "Αδυναμία διάθεσης μνήμης για τα δεδομένα του IOBuffer"
+
+#~ msgid "Cannot realloc IOBuffer data"
+#~ msgstr "Αδυναμία αλλαγής της διάθεσης μνήμης για το IOBuffer"
+
+#~ msgid "Cannot allocate temporary IOBuffer data"
+#~ msgstr "Αδυναμία διάθεσης μνήμης για τα προσωρινά δεδομένα του IOBuffer"
+
+#~ msgid "Cannot allocate new pixbuf"
+#~ msgstr "Αδυναμία διάθεσης μνήμης για το νέο pixbuf"
+
+#~ msgid "Image is corrupted or truncated"
+#~ msgstr "Η εικόνα είναι κατεστραμμένη ή έχει αποκοπεί κάποιο κομμάτι της"
+
+#~ msgid "Cannot allocate colormap structure"
+#~ msgstr "Αδυναμία διάθεσης μνήμης για τη δομή του χάρτη χρωμάτων"
+
+#~ msgid "Cannot allocate colormap entries"
+#~ msgstr "Αδυναμία διάθεσης μνήμης για τις εγγραφές του χάρτη χρωμάτων"
+
+#~ msgid "Unexpected bitdepth for colormap entries"
+#~ msgstr "Μη αναμενόμενο βάθος χρωμάτων στις εγγραφές του χάρτη χρωμάτων"
+
+#~ msgid "Cannot allocate TGA header memory"
+#~ msgstr "Αδυναμία διάθεσης μνήμης για την κεφαλίδα του TGA"
+
+#~ msgid "TGA image has invalid dimensions"
+#~ msgstr "Η εικόνα TGA δεν έχει έγκυρες διαστάσεις"
+
+#~ msgid "TGA image type not supported"
+#~ msgstr "Ο τύπος εικόνας TGA δεν υποστηρίζεται"
+
+#~ msgid "Cannot allocate memory for TGA context struct"
+#~ msgstr "Αδυναμία διάθεσης μνήμης για τη δομή περιεχομένων του TGA"
+
+#~ msgid "Excess data in file"
+#~ msgstr "Περίσσεια δεδομένων στο αρχείο"
+
+#~ msgid "The Targa image format"
+#~ msgstr "Ο τύπος εικόνας Targa"
+
+#~ msgid "Could not get image width (bad TIFF file)"
+#~ msgstr "Αδυναμία λήψης του πλάτους της εικόνας (εσφαλμένο αρχείο TIFF)"
+
+#~ msgid "Could not get image height (bad TIFF file)"
+#~ msgstr "Αδυναμία λήψης του ύψους της εικόνας (εσφαλμένο αρχείο TIFF)"
+
+#~ msgid "Width or height of TIFF image is zero"
+#~ msgstr "Το ύψος ή το πλάτος της εικόνας TIFF είναι μηδενικό"
+
+#~ msgid "Dimensions of TIFF image too large"
+#~ msgstr "Οι διαστάσεις της εικόνας TIFF είναι πολύ μεγάλες"
+
+#~ msgid "Insufficient memory to open TIFF file"
+#~ msgstr "Ανεπάρκεια μνήμης για το άνοιγμα του αρχείου TIFF"
+
+#~ msgid "Failed to load RGB data from TIFF file"
+#~ msgstr "Αποτυχία φόρτωσης των δεδομένων RGB από το αρχείο TIFF"
+
+#~ msgid "Failed to open TIFF image"
+#~ msgstr "Αποτυχία ανοίγματος της εικόνας TIFF"
+
+#~ msgid "TIFFClose operation failed"
+#~ msgstr "Αποτυχία ενέργειας TIFFClose"
+
+#~ msgid "Failed to load TIFF image"
+#~ msgstr "Αποτυχία φόρτωσης της εικόνας TIFF"
+
+#~ msgid "Failed to save TIFF image"
+#~ msgstr "Αποτυχία αποθήκευσης της εικόνας TIFF"
+
+#~ msgid "TIFF compression doesn't refer to a valid codec."
+#~ msgstr "Η συμπίεση TIFF δεν αναφέρεται σε έγκυρο codec."
+
+#~ msgid "Failed to write TIFF data"
+#~ msgstr "Αποτυχία εγγραφής των δεδομένων TIFF"
+
+#~ msgid "Couldn't write to TIFF file"
+#~ msgstr "Αδυναμία εγγραφής στο αρχείο TIFF"
+
+#~ msgid "The TIFF image format"
+#~ msgstr "Ο τύπος εικόνας TIFF"
+
+#~ msgid "Image has zero width"
+#~ msgstr "Η εικόνα έχει μηδενικό πλάτος"
+
+#~ msgid "Image has zero height"
+#~ msgstr "Η εικόνα έχει μηδενικό ύψος"
+
+#~ msgid "Not enough memory to load image"
+#~ msgstr "Ανεπάρκεια μνήμης για τη φόρτωση της εικόνας"
+
+#~ msgid "Couldn't save the rest"
+#~ msgstr "Αποτυχία αποθήκευσης των υπολοίπων"
+
+#~ msgid "The WBMP image format"
+#~ msgstr "Ο τύπος εικόνας WBMP"
+
+#~ msgid "Invalid XBM file"
+#~ msgstr "Μη έγκυρο αρχείο XBM"
+
+#~ msgid "Insufficient memory to load XBM image file"
+#~ msgstr "Ανεπάρκεια μνήμης για τη φόρτωση του αρχείου εικόνας XBM"
+
+#~ msgid "Failed to write to temporary file when loading XBM image"
+#~ msgstr ""
+#~ "Αποτυχία εγγραφής σε προσωρινό αρχείο κατά τη φόρτωση της εικόνας XBM"
+
+#~ msgid "The XBM image format"
+#~ msgstr "Ο τύπος εικόνας XBM"
+
+#~ msgid "No XPM header found"
+#~ msgstr "Δε βρέθηκε κεφαλίδα XBM"
+
+#~ msgid "Invalid XPM header"
+#~ msgstr "Μη έγκυρη κεφαλίδα XBM"
+
+#~ msgid "XPM file has image width <= 0"
+#~ msgstr "Το αρχείο XPM έχει πλάτος εικόνας <= 0"
+
+#~ msgid "XPM file has image height <= 0"
+#~ msgstr "Το αρχείο XPM έχει ύψος εικόνας <= 0"
+
+#~ msgid "XPM has invalid number of chars per pixel"
+#~ msgstr ""
+#~ "Το αρχείο XPM περιέχει μη έγκυρο αριθμό χαρακτήρων ανά εικονοστοιχείο"
+
+#~ msgid "XPM file has invalid number of colors"
+#~ msgstr "Το αρχείο XPM περιέχει μη έγκυρο αριθμό χρωμάτων"
+
+#~ msgid "Cannot allocate memory for loading XPM image"
+#~ msgstr "Αδυναμία διάθεσης μνήμης για τη φόρτωση της εικόνας XPM"
+
+#~ msgid "Cannot read XPM colormap"
+#~ msgstr "Αδυναμία ανάγνωσης του χάρτη χρωμάτων XPM"
+
+#~ msgid "Failed to write to temporary file when loading XPM image"
+#~ msgstr ""
+#~ "Αποτυχία εγγραφής σε προσωρινό αρχείο κατά τη φόρτωση της εικόνας XPM"
+
+#~ msgid "The XPM image format"
+#~ msgstr "Ο τύπος εικόνας XPM"
+
+#~ msgid "The EMF image format"
+#~ msgstr "Ο τύπος εικόνας EMF"
+
+#~ msgid "Could not allocate memory: %s"
+#~ msgstr "Αδυναμία διάθεσης μνήμης: %s"
+
+#~ msgid "Could not create stream: %s"
+#~ msgstr "Αδυναμία δημιουργίας ροής: %s"
+
+#~ msgid "Could not seek stream: %s"
+#~ msgstr "Αδυναμία αναζήτησης μέσα στη ροή: %s"
+
+#~ msgid "Could not read from stream: %s"
+#~ msgstr "Αδυναμία ανάγνωσης από τη ροή: %s"
+
+#~ msgid "Couldn't load bitmap"
+#~ msgstr "Αδυναμία φόρτωσης του bitmap"
+
+#~ msgid "Couldn't load metafile"
+#~ msgstr "Αδυναμία φόρτωσης του αρχείου μεταδεδομένων"
+
+#~ msgid "Unsupported image format for GDI+"
+#~ msgstr "Μη υποστηριζόμενος τύπος εικόνας για το GDI+"
+
+#~ msgid "Couldn't save"
+#~ msgstr "Αποτυχία αποθήκευσης"
+
+#~ msgid "The WMF image format"
+#~ msgstr "Ο τύπος εικόνας WMF"
+
+#~ msgid "\"Deepness\" of the color."
+#~ msgstr "\"Βάθος\" του χρώματος."
+
+#~ msgid "Error printing"
+#~ msgstr "Σφάλμα κατά την εκτύπωση"
+
+#~ msgid "Printer '%s' may not be connected."
+#~ msgstr "Ο εκτυπωτής '%s' μπορεί να μην είναι συνδεδεμένος."
 
 #~ msgid "Folders"
 #~ msgstr "Φάκελοι"

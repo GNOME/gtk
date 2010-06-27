@@ -8,10 +8,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-05-25 20:10-0400\n"
+"POT-Creation-Date: 2010-06-26 23:16-0400\n"
 "PO-Revision-Date: 2010-02-16 05:30+0900\n"
 "Last-Translator: Changwoo Ryu <cwryu@debian.org>\n"
 "Language-Team: Gnome Korea <gnome-kr@googlegroups.com>\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -76,7 +77,7 @@ msgstr "설정할 GDK 디버깅 플래그"
 #. Placeholder in --gdk-no-debug=FLAGS in --help output
 #. Placeholder in --gtk-debug=FLAGS in --help output
 #. Placeholder in --gtk-no-debug=FLAGS in --help output
-#: gdk/gdk.c:165 gdk/gdk.c:168 gtk/gtkmain.c:454 gtk/gtkmain.c:457
+#: gdk/gdk.c:165 gdk/gdk.c:168 gtk/gtkmain.c:439 gtk/gtkmain.c:442
 msgid "FLAGS"
 msgstr "<플래그>"
 
@@ -295,902 +296,6 @@ msgstr "키패드 Delete"
 msgctxt "keyboard label"
 msgid "Delete"
 msgstr "Delete"
-
-#: gdk-pixbuf/gdk-pixbuf-animation.c:133 gdk-pixbuf/gdk-pixbuf-io.c:982
-#: gdk-pixbuf/gdk-pixbuf-io.c:1242 tests/testfilechooser.c:222
-#, c-format
-msgid "Failed to open file '%s': %s"
-msgstr "파일 '%s' 열기 실패 : %s"
-
-#: gdk-pixbuf/gdk-pixbuf-animation.c:146 gdk-pixbuf/gdk-pixbuf-io.c:994
-#, c-format
-msgid "Image file '%s' contains no data"
-msgstr "그림 파일 '%s'에 데이터가 없습니다"
-
-#: gdk-pixbuf/gdk-pixbuf-animation.c:188 gdk-pixbuf/gdk-pixbuf-io.c:1030
-#: gdk-pixbuf/gdk-pixbuf-io.c:1294 tests/testfilechooser.c:267
-#, c-format
-msgid ""
-"Failed to load image '%s': reason not known, probably a corrupt image file"
-msgstr ""
-"그림 '%s' 읽기 실패: 이유를 알 수 없습니다, 아마 그림파일이 깨졌을 것입니다"
-
-#: gdk-pixbuf/gdk-pixbuf-animation.c:221
-#, c-format
-msgid ""
-"Failed to load animation '%s': reason not known, probably a corrupt "
-"animation file"
-msgstr ""
-"움직이는 그림 '%s' 읽기 실패 : 이유를 알 수 없습니다, 아마 움직이는 그림파일"
-"이 깨졌을 것입니다"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:715
-#, c-format
-msgid "Unable to load image-loading module: %s: %s"
-msgstr "그림 읽기 모듈을 읽을 수 없습니다: %s: %s"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:730
-#, c-format
-msgid ""
-"Image-loading module %s does not export the proper interface; perhaps it's "
-"from a different GTK version?"
-msgstr ""
-"%s 그림 읽기 모듈이 올바른 인터페이스를 내놓지 않습니다; 아마 다른 GTK 버전"
-"의 모듈일 것입니다"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:739 gdk-pixbuf/gdk-pixbuf-io.c:790
-#, c-format
-msgid "Image type '%s' is not supported"
-msgstr "그림 형식 '%s'을(를) 지원하지 않습니다"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:863
-#, c-format
-msgid "Couldn't recognize the image file format for file '%s'"
-msgstr "파일 '%s'의 그림파일 형식을 알 수 없습니다"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:871
-msgid "Unrecognized image file format"
-msgstr "알 수 없는 그림 파일 형식"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:1039
-#, c-format
-msgid "Failed to load image '%s': %s"
-msgstr "그림 '%s' 읽기 실패: %s"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:1673 gdk-pixbuf/io-gdip-utils.c:961
-#, c-format
-msgid "Error writing to image file: %s"
-msgstr "그림 파일을 쓰는 중 오류가 발생했습니다: %s"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:1718 gdk-pixbuf/gdk-pixbuf-io.c:1848
-#, c-format
-msgid "This build of gdk-pixbuf does not support saving the image format: %s"
-msgstr "gtk-pixbuf의 이 빌드에서는 그림 형식 저장을 지원하지 않습니다: %s"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:1752
-msgid "Insufficient memory to save image to callback"
-msgstr "콜백에 그림을 저장하기에는 메모리가 부족합니다"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:1765
-msgid "Failed to open temporary file"
-msgstr "임시 파일을 여는 데 실패했습니다"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:1791
-msgid "Failed to read from temporary file"
-msgstr "임시 파일을 읽는 데 실패했습니다"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:2044
-#, c-format
-msgid "Failed to open '%s' for writing: %s"
-msgstr "쓰기용 '%s' 열기 실패: %s"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:2070
-#, c-format
-msgid ""
-"Failed to close '%s' while writing image, all data may not have been saved: %"
-"s"
-msgstr ""
-"그림을 저장하는 동안 '%s'을(를) 닫는 데 실패하였습니다, 모든 데이터를 저장하"
-"지 않았을 것입니다: %s"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:2290 gdk-pixbuf/gdk-pixbuf-io.c:2341
-msgid "Insufficient memory to save image into a buffer"
-msgstr "버퍼에 그림을 저장하기에는 메모리가 부족합니다"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:2387
-msgid "Error writing to image stream"
-msgstr "그림 스트림을 쓰는 중 오류가 발생했습니다"
-
-#: gdk-pixbuf/gdk-pixbuf-loader.c:334
-#, c-format
-msgid ""
-"Internal error: Image loader module '%s' failed to complete an operation, "
-"but didn't give a reason for the failure"
-msgstr ""
-"내부 오류: 그림 읽어들이기 모듈 '%s'이(가) 작업 완료에 실패했지만, 실패한 이"
-"유를 넘겨주지 않았습니다"
-
-#: gdk-pixbuf/gdk-pixbuf-loader.c:376
-#, c-format
-msgid "Incremental loading of image type '%s' is not supported"
-msgstr "'%s' 타입의 그림에서는 점진적 읽어들이기를 지원하지 않습니다"
-
-#: gdk-pixbuf/gdk-pixdata.c:147
-msgid "Image header corrupt"
-msgstr "잘못된 그림 헤더"
-
-#: gdk-pixbuf/gdk-pixdata.c:152
-msgid "Image format unknown"
-msgstr "알 수 없는 그림 형식"
-
-#: gdk-pixbuf/gdk-pixdata.c:157 gdk-pixbuf/gdk-pixdata.c:488
-msgid "Image pixel data corrupt"
-msgstr "잘못된 그림 픽셀 데이터"
-
-#: gdk-pixbuf/gdk-pixdata.c:432
-#, fuzzy, c-format
-msgid "failed to allocate image buffer of %u byte"
-msgid_plural "failed to allocate image buffer of %u bytes"
-msgstr[0] "파일 읽기 버퍼에 %d 바이트를 할당하는 데 실패"
-
-#: gdk-pixbuf/io-ani.c:244
-msgid "Unexpected icon chunk in animation"
-msgstr "움직이는 그림안에 뜻밖의 아이콘 부분이 있습니다"
-
-#: gdk-pixbuf/io-ani.c:337
-msgid "Unsupported animation type"
-msgstr "지원하지 않는 움직이는 그림 형식"
-
-#: gdk-pixbuf/io-ani.c:348 gdk-pixbuf/io-ani.c:406 gdk-pixbuf/io-ani.c:432
-#: gdk-pixbuf/io-ani.c:455 gdk-pixbuf/io-ani.c:482 gdk-pixbuf/io-ani.c:569
-msgid "Invalid header in animation"
-msgstr "움직이는 그림의 헤더가 잘못되었습니다"
-
-#: gdk-pixbuf/io-ani.c:358 gdk-pixbuf/io-ani.c:380 gdk-pixbuf/io-ani.c:464
-#: gdk-pixbuf/io-ani.c:491 gdk-pixbuf/io-ani.c:542 gdk-pixbuf/io-ani.c:614
-msgid "Not enough memory to load animation"
-msgstr "움직이는 그림을 읽어 들이는 데 메모리가 부족합니다"
-
-#: gdk-pixbuf/io-ani.c:398 gdk-pixbuf/io-ani.c:424 gdk-pixbuf/io-ani.c:443
-msgid "Malformed chunk in animation"
-msgstr "움직이는 그림에 잘못된 부분이 있습니다"
-
-#: gdk-pixbuf/io-ani.c:711
-msgid "The ANI image format"
-msgstr "ANI 그림 형식"
-
-#: gdk-pixbuf/io-bmp.c:230 gdk-pixbuf/io-bmp.c:267 gdk-pixbuf/io-bmp.c:338
-#: gdk-pixbuf/io-bmp.c:370 gdk-pixbuf/io-bmp.c:393 gdk-pixbuf/io-bmp.c:496
-msgid "BMP image has bogus header data"
-msgstr "BMP 그림의 헤더 데이터가 잘못되었습니다"
-
-#: gdk-pixbuf/io-bmp.c:241 gdk-pixbuf/io-bmp.c:433
-msgid "Not enough memory to load bitmap image"
-msgstr "비트맵 그림을 읽을 메모리가 충분하지 않습니다"
-
-#: gdk-pixbuf/io-bmp.c:319
-msgid "BMP image has unsupported header size"
-msgstr "BMP 그림이 지원되지 않는 헤더 크기를 가지고 있습니다"
-
-#: gdk-pixbuf/io-bmp.c:357
-msgid "Topdown BMP images cannot be compressed"
-msgstr "톱다운 BMP 그림은 압축할 수 없습니다"
-
-#: gdk-pixbuf/io-bmp.c:717 gdk-pixbuf/io-pnm.c:709
-msgid "Premature end-of-file encountered"
-msgstr "파일이 갑작스럽게 끝났습니다"
-
-#: gdk-pixbuf/io-bmp.c:1329
-msgid "Couldn't allocate memory for saving BMP file"
-msgstr "BMP 파일을 저장하는 데 필요한 메모리 할당을 할 수 없습니다"
-
-#: gdk-pixbuf/io-bmp.c:1370
-msgid "Couldn't write to BMP file"
-msgstr "BMP 파일에 쓸 수 없습니다"
-
-#: gdk-pixbuf/io-bmp.c:1423 gdk-pixbuf/io-gdip-bmp.c:82
-msgid "The BMP image format"
-msgstr "BMP 그림 형식"
-
-#: gdk-pixbuf/io-gif.c:222
-#, c-format
-msgid "Failure reading GIF: %s"
-msgstr "GIF 읽는 중 실패: %s"
-
-#: gdk-pixbuf/io-gif.c:496 gdk-pixbuf/io-gif.c:1481 gdk-pixbuf/io-gif.c:1642
-msgid "GIF file was missing some data (perhaps it was truncated somehow?)"
-msgstr "GIF 파일에 데이터가 부족합니다 (중간에 잘린 파일?)"
-
-#: gdk-pixbuf/io-gif.c:505
-#, c-format
-msgid "Internal error in the GIF loader (%s)"
-msgstr "GIF 읽기에서 내부 오류 (%s)"
-
-#: gdk-pixbuf/io-gif.c:579
-msgid "Stack overflow"
-msgstr "스택 넘침"
-
-#: gdk-pixbuf/io-gif.c:639
-msgid "GIF image loader cannot understand this image."
-msgstr "GIF 그림 읽기에서 이 그림을 이해할 수 없습니다."
-
-#: gdk-pixbuf/io-gif.c:668
-msgid "Bad code encountered"
-msgstr "잘못된 코드 발견"
-
-#: gdk-pixbuf/io-gif.c:678
-msgid "Circular table entry in GIF file"
-msgstr "GIF 파일에 순환 테이블 항목"
-
-#: gdk-pixbuf/io-gif.c:866 gdk-pixbuf/io-gif.c:1468 gdk-pixbuf/io-gif.c:1515
-#: gdk-pixbuf/io-gif.c:1630
-msgid "Not enough memory to load GIF file"
-msgstr "GIF 파일을 읽는 데 메모리가 충분하지 않습니다"
-
-#: gdk-pixbuf/io-gif.c:960
-msgid "Not enough memory to composite a frame in GIF file"
-msgstr "GIF 파일의 프레임을 만드는 데 메모리가 충분하지 않습니다"
-
-#: gdk-pixbuf/io-gif.c:1132
-msgid "GIF image is corrupt (incorrect LZW compression)"
-msgstr "GIF 그림이 잘못되었습니다 (잘못된 LZW 압축)"
-
-#: gdk-pixbuf/io-gif.c:1182
-msgid "File does not appear to be a GIF file"
-msgstr "GIF 파일이 아닌 것 같습니다"
-
-#: gdk-pixbuf/io-gif.c:1194
-#, c-format
-msgid "Version %s of the GIF file format is not supported"
-msgstr "GIF 파일 형식의 버전 %s은(는) 지원되지 않습니다."
-
-#: gdk-pixbuf/io-gif.c:1303
-msgid ""
-"GIF image has no global colormap, and a frame inside it has no local "
-"colormap."
-msgstr "GIF 그림에 전체 컬러맵이 없고, 프레임 내부에 부분 컬러맵이 없습니다."
-
-#: gdk-pixbuf/io-gif.c:1537
-msgid "GIF image was truncated or incomplete."
-msgstr "GIF 그림이 잘려져 있거나 불완전합니다."
-
-#: gdk-pixbuf/io-gif.c:1693 gdk-pixbuf/io-gdip-gif.c:80
-msgid "The GIF image format"
-msgstr "GIF 그림 형식"
-
-#: gdk-pixbuf/io-ico.c:211 gdk-pixbuf/io-ico.c:225 gdk-pixbuf/io-ico.c:277
-#: gdk-pixbuf/io-ico.c:290 gdk-pixbuf/io-ico.c:359
-msgid "Invalid header in icon"
-msgstr "아이콘의 헤더가 잘못되었습니다"
-
-#: gdk-pixbuf/io-ico.c:240 gdk-pixbuf/io-ico.c:300 gdk-pixbuf/io-ico.c:369
-#: gdk-pixbuf/io-ico.c:432 gdk-pixbuf/io-ico.c:462
-msgid "Not enough memory to load icon"
-msgstr "아이콘을 읽어 들이는 데 메모리가 부족합니다"
-
-#: gdk-pixbuf/io-ico.c:322
-msgid "Icon has zero width"
-msgstr "아이콘의 너비가 0입니다"
-
-#: gdk-pixbuf/io-ico.c:332
-msgid "Icon has zero height"
-msgstr "아이콘의 높이가 0입니다"
-
-#: gdk-pixbuf/io-ico.c:384
-msgid "Compressed icons are not supported"
-msgstr "압축된 아이콘은 지원하지 않습니다"
-
-#: gdk-pixbuf/io-ico.c:417
-msgid "Unsupported icon type"
-msgstr "지원하지 않는 아이콘 형식"
-
-#: gdk-pixbuf/io-ico.c:511
-msgid "Not enough memory to load ICO file"
-msgstr "ICO 파일을 읽는 데 메모리가 충분하지 않습니다"
-
-#: gdk-pixbuf/io-ico.c:976
-msgid "Image too large to be saved as ICO"
-msgstr "그림을 ICO로 저장하기에는 너무 큽니다"
-
-#: gdk-pixbuf/io-ico.c:987
-msgid "Cursor hotspot outside image"
-msgstr "핫스폿이 그림 바깥에 있습니다"
-
-#: gdk-pixbuf/io-ico.c:1010
-#, c-format
-msgid "Unsupported depth for ICO file: %d"
-msgstr "ICO 파일에서 지원하지 않는 색상 모드: %d"
-
-#: gdk-pixbuf/io-ico.c:1245 gdk-pixbuf/io-gdip-ico.c:59
-msgid "The ICO image format"
-msgstr "ICO 그림 형식"
-
-#: gdk-pixbuf/io-icns.c:347
-#, c-format
-msgid "Error reading ICNS image: %s"
-msgstr "ICNS 그림을 읽어들이는 데 오류: %s"
-
-#: gdk-pixbuf/io-icns.c:364
-msgid "Could not decode ICNS file"
-msgstr "ICNS 파일을 디코딩할 수 없습니다"
-
-#: gdk-pixbuf/io-icns.c:397
-msgid "The ICNS image format"
-msgstr "ICNS 그림 형식"
-
-#: gdk-pixbuf/io-jasper.c:75
-msgid "Couldn't allocate memory for stream"
-msgstr "스트림에 필요한 메모리를 할당할 수 없습니다"
-
-#: gdk-pixbuf/io-jasper.c:105
-msgid "Couldn't decode image"
-msgstr "그림을 디코딩할 수 없습니다"
-
-#: gdk-pixbuf/io-jasper.c:123
-msgid "Transformed JPEG2000 has zero width or height"
-msgstr "변환된 JPEG 2000의 너비나 높이가 0입니다."
-
-#: gdk-pixbuf/io-jasper.c:137
-msgid "Image type currently not supported"
-msgstr "그림 형식을 현재 지원하지 않습니다"
-
-#: gdk-pixbuf/io-jasper.c:149 gdk-pixbuf/io-jasper.c:157
-msgid "Couldn't allocate memory for color profile"
-msgstr "컬러 프로파일에 필요한 메모리를 할당할 수 없습니다"
-
-#: gdk-pixbuf/io-jasper.c:183
-msgid "Insufficient memory to open JPEG 2000 file"
-msgstr "JPEG 2000 파일 여는 데 메모리 부족"
-
-#: gdk-pixbuf/io-jasper.c:262
-msgid "Couldn't allocate memory to buffer image data"
-msgstr "그림 데이터를 버퍼링하는 데 사용할 메모리를 할당할 수 없습니다"
-
-#: gdk-pixbuf/io-jasper.c:306
-msgid "The JPEG 2000 image format"
-msgstr "JPEG 2000 그림 형식"
-
-#: gdk-pixbuf/io-jpeg.c:117
-#, c-format
-msgid "Error interpreting JPEG image file (%s)"
-msgstr "JPEG 파일 해석 중 오류 (%s)"
-
-#: gdk-pixbuf/io-jpeg.c:528
-msgid ""
-"Insufficient memory to load image, try exiting some applications to free "
-"memory"
-msgstr ""
-"그림을 읽어들이기에 메모리가 부족합니다.  메모리를 확보하려면 실행중인 프로그"
-"램을 끝내보십시오"
-
-#: gdk-pixbuf/io-jpeg.c:569 gdk-pixbuf/io-jpeg.c:775
-#, c-format
-msgid "Unsupported JPEG color space (%s)"
-msgstr "지원하지 않는 JPEG 색 공간 (%s)"
-
-#: gdk-pixbuf/io-jpeg.c:674 gdk-pixbuf/io-jpeg.c:944 gdk-pixbuf/io-jpeg.c:1177
-#: gdk-pixbuf/io-jpeg.c:1186
-msgid "Couldn't allocate memory for loading JPEG file"
-msgstr "JPEG파일을 읽는 중 메모리 할당을 할 수 없습니다"
-
-#: gdk-pixbuf/io-jpeg.c:919
-msgid "Transformed JPEG has zero width or height."
-msgstr "변환된 JPEG의 너비나 높이가 0입니다."
-
-#: gdk-pixbuf/io-jpeg.c:1133 gdk-pixbuf/io-gdip-jpeg.c:53
-#, c-format
-msgid ""
-"JPEG quality must be a value between 0 and 100; value '%s' could not be "
-"parsed."
-msgstr ""
-"JPEG 화질은 0에서 100 사이의 값이어야 합니다; '%s' 값을 분석할 수 없습니다."
-
-#: gdk-pixbuf/io-jpeg.c:1148 gdk-pixbuf/io-gdip-jpeg.c:68
-#, c-format
-msgid ""
-"JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
-msgstr ""
-"JPEG 화질은 0에서 100 사이의 값이어야 합니다; '%d' 값은 쓸 수 없습니다."
-
-#: gdk-pixbuf/io-jpeg.c:1310 gdk-pixbuf/io-gdip-jpeg.c:136
-msgid "The JPEG image format"
-msgstr "JPEG 그림 형식"
-
-#: gdk-pixbuf/io-pcx.c:187
-msgid "Couldn't allocate memory for header"
-msgstr "헤더에 필요한 메모리를 할당할 수 없습니다"
-
-#: gdk-pixbuf/io-pcx.c:202 gdk-pixbuf/io-pcx.c:560
-msgid "Couldn't allocate memory for context buffer"
-msgstr "컨텍스트 버퍼에 필요한 메모리를 할당할 수 없습니다"
-
-#: gdk-pixbuf/io-pcx.c:601
-msgid "Image has invalid width and/or height"
-msgstr "그림의 폭이나 높이, 혹은 둘 다 잘못되었습니다"
-
-#: gdk-pixbuf/io-pcx.c:613 gdk-pixbuf/io-pcx.c:674
-msgid "Image has unsupported bpp"
-msgstr "그림의 픽셀당 비트수를 지원하지 않습니다"
-
-#: gdk-pixbuf/io-pcx.c:618 gdk-pixbuf/io-pcx.c:626
-#, c-format
-msgid "Image has unsupported number of %d-bit planes"
-msgstr "그림의 %d비트 플레인을 지원하지 않습니다"
-
-#: gdk-pixbuf/io-pcx.c:642
-msgid "Couldn't create new pixbuf"
-msgstr "새 픽스버퍼를 만들 수 없습니다"
-
-#: gdk-pixbuf/io-pcx.c:650
-msgid "Couldn't allocate memory for line data"
-msgstr "라인 데이터에 쓸 메모리를 할당할 수 없습니다"
-
-#: gdk-pixbuf/io-pcx.c:657
-msgid "Couldn't allocate memory for paletted data"
-msgstr "팔레트 데이터에 쓸 메모리를 할당할 수 없습니다"
-
-#: gdk-pixbuf/io-pcx.c:704
-msgid "Didn't get all lines of PCX image"
-msgstr "PCXX 그림에서 읽지 못한 라인이 있습니다"
-
-#: gdk-pixbuf/io-pcx.c:711
-msgid "No palette found at end of PCX data"
-msgstr "PCX 데이터의 끝까지 팔레트를 발견하지 못했습니다"
-
-#: gdk-pixbuf/io-pcx.c:756
-msgid "The PCX image format"
-msgstr "PCX 그림 형식"
-
-#: gdk-pixbuf/io-png.c:55
-msgid "Bits per channel of PNG image is invalid."
-msgstr "PNG 그림의 채널 당 비트수가 잘못되었습니다."
-
-#: gdk-pixbuf/io-png.c:136 gdk-pixbuf/io-png.c:642
-msgid "Transformed PNG has zero width or height."
-msgstr "변환된 PNG의 너비나 높이가 0입니다."
-
-#: gdk-pixbuf/io-png.c:144
-msgid "Bits per channel of transformed PNG is not 8."
-msgstr "변환된 PNG의 채널 당 비트수가 8이 아닙니다."
-
-#: gdk-pixbuf/io-png.c:153
-msgid "Transformed PNG not RGB or RGBA."
-msgstr "변환된 PNG가 RGB나 RGBA 형식이 아닙니다."
-
-#: gdk-pixbuf/io-png.c:162
-msgid "Transformed PNG has unsupported number of channels, must be 3 or 4."
-msgstr "변환된 PNG의 채널 수를 지원하지 않습니다. 3이나 4가 되어야 합니다."
-
-#: gdk-pixbuf/io-png.c:183
-#, c-format
-msgid "Fatal error in PNG image file: %s"
-msgstr "PNG 그림 파일에서 치명적인 오류: %s"
-
-#: gdk-pixbuf/io-png.c:316
-msgid "Insufficient memory to load PNG file"
-msgstr "PNG 파일을 읽어들이는 데 메모리가 부족합니다"
-
-#: gdk-pixbuf/io-png.c:657
-#, c-format
-msgid ""
-"Insufficient memory to store a %ld by %ld image; try exiting some "
-"applications to reduce memory usage"
-msgstr ""
-"폭 %ld 높이 %ld의 그림을 저장할 메모리가 부족합니다.  메모리를 확보하려면 실"
-"행중인 프로그램을 끝내보십시오"
-
-#: gdk-pixbuf/io-png.c:720
-msgid "Fatal error reading PNG image file"
-msgstr "PNG 그림 파일을 읽어들이는 데 치명적인 오류"
-
-#: gdk-pixbuf/io-png.c:769
-#, c-format
-msgid "Fatal error reading PNG image file: %s"
-msgstr "PNG 그림 파일을 읽어들이는 데 치명적인 오류: %s"
-
-#: gdk-pixbuf/io-png.c:863
-msgid ""
-"Keys for PNG text chunks must have at least 1 and at most 79 characters."
-msgstr "PNG 텍스트 부분의 키에서는 최소 1 최대 79 문자까지 쓸 수 있습니다."
-
-#: gdk-pixbuf/io-png.c:872
-msgid "Keys for PNG text chunks must be ASCII characters."
-msgstr "PNG 텍스트 부분의 키는 아스키 문자로 되어 있어야 합니다."
-
-#: gdk-pixbuf/io-png.c:886 gdk-pixbuf/io-tiff.c:738
-#, c-format
-msgid "Color profile has invalid length %d."
-msgstr "색 프로파일의 길이가 (%d) 올바르지 않습니다."
-
-#: gdk-pixbuf/io-png.c:899 gdk-pixbuf/io-gdip-png.c:56
-#, c-format
-msgid ""
-"PNG compression level must be a value between 0 and 9; value '%s' could not "
-"be parsed."
-msgstr ""
-"PNG 압축 단계는 0에서 9 사이의 값이어야 합니다; '%s' 값을 분석할 수 없습니다."
-
-#: gdk-pixbuf/io-png.c:912 gdk-pixbuf/io-gdip-png.c:68
-#, c-format
-msgid ""
-"PNG compression level must be a value between 0 and 9; value '%d' is not "
-"allowed."
-msgstr ""
-"PNG 압축 단계는 0에서 9 사이의값이어야 합니다; '%d' 값을 쓸 수 없습니다."
-
-#: gdk-pixbuf/io-png.c:951
-#, c-format
-msgid "Value for PNG text chunk %s cannot be converted to ISO-8859-1 encoding."
-msgstr "PNG 텍스트 부분 %s의 값을 ISO-8859-1 인코딩으로 변환할 수 없습니다."
-
-#: gdk-pixbuf/io-png.c:1112 gdk-pixbuf/io-gdip-png.c:133
-msgid "The PNG image format"
-msgstr "PNG 그림 형식"
-
-#: gdk-pixbuf/io-pnm.c:250
-msgid "PNM loader expected to find an integer, but didn't"
-msgstr ""
-"PNM 읽어들이기에서 정수가 나와야 하는 상황에서, 정수가 나오지 않았습니다"
-
-#: gdk-pixbuf/io-pnm.c:282
-msgid "PNM file has an incorrect initial byte"
-msgstr "PNM 파일의 최초 바이트가 올바르지 못합니다"
-
-#: gdk-pixbuf/io-pnm.c:312
-msgid "PNM file is not in a recognized PNM subformat"
-msgstr "PNM 파일이 인식 가능한 PNM 서브포맷에 맞지 않습니다"
-
-#: gdk-pixbuf/io-pnm.c:337
-msgid "PNM file has an image width of 0"
-msgstr "PNM 파일의 그림 너비가 0입니다"
-
-#: gdk-pixbuf/io-pnm.c:358
-msgid "PNM file has an image height of 0"
-msgstr "PNM 파일의 그림 높이가 0입니다"
-
-#: gdk-pixbuf/io-pnm.c:381
-msgid "Maximum color value in PNM file is 0"
-msgstr "PNM 파일의 최대 색 값이 0입니다"
-
-#: gdk-pixbuf/io-pnm.c:389
-msgid "Maximum color value in PNM file is too large"
-msgstr "PNM 파일의 최대 색 값이 너무 큽니다"
-
-#: gdk-pixbuf/io-pnm.c:429 gdk-pixbuf/io-pnm.c:459 gdk-pixbuf/io-pnm.c:504
-msgid "Raw PNM image type is invalid"
-msgstr "로우 PNM 그림 형식이 잘못되었습니다"
-
-#: gdk-pixbuf/io-pnm.c:654
-msgid "PNM image loader does not support this PNM subformat"
-msgstr "PNM 그림 읽어들이기가 이 PNM 서브포맷을 지원하지 않습니다"
-
-#: gdk-pixbuf/io-pnm.c:741 gdk-pixbuf/io-pnm.c:968
-msgid "Raw PNM formats require exactly one whitespace before sample data"
-msgstr "로우 PNM 형식에서는 견본 데이터 앞에 정확히 한 개의 공백이 와야 합니다"
-
-#: gdk-pixbuf/io-pnm.c:768
-msgid "Cannot allocate memory for loading PNM image"
-msgstr "PNM 그림을 읽어들이는 데 필요한 메모리를 할당할 수 없습니다"
-
-#: gdk-pixbuf/io-pnm.c:818
-msgid "Insufficient memory to load PNM context struct"
-msgstr "PNM 컨텍스트 구조를 읽어들이는 데 메모리가 부족합니다"
-
-#: gdk-pixbuf/io-pnm.c:869
-msgid "Unexpected end of PNM image data"
-msgstr "PNM 그림 데이터가 갑자기 끝났습니다"
-
-#: gdk-pixbuf/io-pnm.c:997
-msgid "Insufficient memory to load PNM file"
-msgstr "PNM 파일 읽는 데 메모리 부족"
-
-#: gdk-pixbuf/io-pnm.c:1081
-msgid "The PNM/PBM/PGM/PPM image format family"
-msgstr "PNM/PBM/PGM/PPM 그림 형식 패밀리"
-
-#: gdk-pixbuf/io-qtif.c:128
-msgid "Input file descriptor is NULL."
-msgstr "입력 파일 디스크립터가 NULL입니다"
-
-#: gdk-pixbuf/io-qtif.c:143
-msgid "Failed to read QTIF header"
-msgstr "QTIF 헤더를 읽는 데 실패"
-
-#: gdk-pixbuf/io-qtif.c:152 gdk-pixbuf/io-qtif.c:182 gdk-pixbuf/io-qtif.c:446
-#, c-format
-msgid "QTIF atom size too large (%d bytes)"
-msgstr "QTIF 아톰 크기가 너무 큽니다 (%d 바이트)"
-
-#: gdk-pixbuf/io-qtif.c:172
-#, c-format
-msgid "Failed to allocate %d bytes for file read buffer"
-msgstr "파일 읽기 버퍼에 %d 바이트를 할당하는 데 실패"
-
-#: gdk-pixbuf/io-qtif.c:196
-#, c-format
-msgid "File error when reading QTIF atom: %s"
-msgstr "GIF 아톰을 읽는 중 파일 오류: %s"
-
-#: gdk-pixbuf/io-qtif.c:233
-#, c-format
-msgid "Failed to skip the next %d bytes with seek()."
-msgstr "seek()을 이용해 다음 %d 바이트 위치로 이동하는 데 실패."
-
-#: gdk-pixbuf/io-qtif.c:257
-#, fuzzy
-msgid "Failed to allocate QTIF context structure."
-msgstr "QTIF 컨텍스트를 만드는 데 실패."
-
-#: gdk-pixbuf/io-qtif.c:317
-msgid "Failed to create GdkPixbufLoader object."
-msgstr "GdkPixbufLoader 오브젝트를 만드는 데 실패."
-
-#: gdk-pixbuf/io-qtif.c:421
-msgid "Failed to find an image data atom."
-msgstr "그림 데이터 아톰을 찾는 데 실패"
-
-#: gdk-pixbuf/io-qtif.c:602
-msgid "The QTIF image format"
-msgstr "QTIF 그림 형식"
-
-#: gdk-pixbuf/io-ras.c:126
-msgid "RAS image has bogus header data"
-msgstr "RAS 그림의 헤더 데이터가 잘못되었습니다"
-
-#: gdk-pixbuf/io-ras.c:148
-msgid "RAS image has unknown type"
-msgstr "RAS 그림의 형식을 알 수 없습니다"
-
-#: gdk-pixbuf/io-ras.c:156
-msgid "unsupported RAS image variation"
-msgstr "지원하지 않는 RAS 그림 형식"
-
-#: gdk-pixbuf/io-ras.c:171 gdk-pixbuf/io-ras.c:200
-msgid "Not enough memory to load RAS image"
-msgstr "RAS 그림을 읽어들이는 데 메모리가 충분하지 않습니다"
-
-#: gdk-pixbuf/io-ras.c:545
-msgid "The Sun raster image format"
-msgstr "Sun 래스터 그림 형식"
-
-#: gdk-pixbuf/io-tga.c:154
-msgid "Cannot allocate memory for IOBuffer struct"
-msgstr "IOBuffer 구조에 쓸 메모리를 할당할 수 없습니다"
-
-#: gdk-pixbuf/io-tga.c:173
-msgid "Cannot allocate memory for IOBuffer data"
-msgstr "IOBuffer 데이터에 쓸 메모리를 할당할 수 없습니다"
-
-#: gdk-pixbuf/io-tga.c:184
-msgid "Cannot realloc IOBuffer data"
-msgstr "IOBuffer 데이터를 다시 할당할 수 없습니다"
-
-#: gdk-pixbuf/io-tga.c:214
-msgid "Cannot allocate temporary IOBuffer data"
-msgstr "임시 IOBuffer 데이터를 할당할 수 없습니다"
-
-#: gdk-pixbuf/io-tga.c:347
-msgid "Cannot allocate new pixbuf"
-msgstr "새 픽스버퍼를 할당할 수 없습니다"
-
-#: gdk-pixbuf/io-tga.c:686
-#, fuzzy
-msgid "Image is corrupted or truncated"
-msgstr "GIF 그림이 잘려져 있거나 불완전합니다."
-
-#: gdk-pixbuf/io-tga.c:693
-msgid "Cannot allocate colormap structure"
-msgstr "컬러맵 구조를 할당할 수 없습니다"
-
-#: gdk-pixbuf/io-tga.c:700
-msgid "Cannot allocate colormap entries"
-msgstr "컬러맵 항목을 할당할 수 없습니다"
-
-#: gdk-pixbuf/io-tga.c:722
-msgid "Unexpected bitdepth for colormap entries"
-msgstr "지원하지 않는 컬러맵 항목의 색상 모드"
-
-#: gdk-pixbuf/io-tga.c:740
-msgid "Cannot allocate TGA header memory"
-msgstr "TGA 헤더 메모리를 할당할 수 없습니다"
-
-#: gdk-pixbuf/io-tga.c:773
-msgid "TGA image has invalid dimensions"
-msgstr "TGA 그림의 크기가 잘못되었습니다"
-
-#: gdk-pixbuf/io-tga.c:779 gdk-pixbuf/io-tga.c:788 gdk-pixbuf/io-tga.c:798
-#: gdk-pixbuf/io-tga.c:808 gdk-pixbuf/io-tga.c:815
-msgid "TGA image type not supported"
-msgstr "TGA 그림 형식은 지원하지 않습니다"
-
-#: gdk-pixbuf/io-tga.c:862
-msgid "Cannot allocate memory for TGA context struct"
-msgstr "TGA 컨텍스트 구조에 필요한 메모리를 할당할 수 없습니다"
-
-#: gdk-pixbuf/io-tga.c:927
-msgid "Excess data in file"
-msgstr "파일에 데이터가 너무 많습니다"
-
-#: gdk-pixbuf/io-tga.c:1008
-msgid "The Targa image format"
-msgstr "Targa 그림 형식"
-
-#: gdk-pixbuf/io-tiff.c:165
-msgid "Could not get image width (bad TIFF file)"
-msgstr "그림 너비를 얻을 수 없습니다 (틀린 TIFF 파일)"
-
-#: gdk-pixbuf/io-tiff.c:172
-msgid "Could not get image height (bad TIFF file)"
-msgstr "그림 높이를 얻을 수 없습니다 (틀린 TIFF 파일)"
-
-#: gdk-pixbuf/io-tiff.c:180
-msgid "Width or height of TIFF image is zero"
-msgstr "TIFF 그림의 너비나 높이가 0입니다"
-
-#: gdk-pixbuf/io-tiff.c:189 gdk-pixbuf/io-tiff.c:198
-msgid "Dimensions of TIFF image too large"
-msgstr "TIFF 그림의 크기가 너무 큽니다"
-
-#: gdk-pixbuf/io-tiff.c:222 gdk-pixbuf/io-tiff.c:234 gdk-pixbuf/io-tiff.c:561
-msgid "Insufficient memory to open TIFF file"
-msgstr "TIFF 파일 여는 데 메모리 부족"
-
-#: gdk-pixbuf/io-tiff.c:295
-msgid "Failed to load RGB data from TIFF file"
-msgstr "TIFF 파일에서 RGB 데이터 읽기 실패"
-
-#: gdk-pixbuf/io-tiff.c:351
-msgid "Failed to open TIFF image"
-msgstr "TIFF 그림 열기 실패"
-
-#: gdk-pixbuf/io-tiff.c:363 gdk-pixbuf/io-tiff.c:778
-msgid "TIFFClose operation failed"
-msgstr "TIFFClose 작업 실패"
-
-#: gdk-pixbuf/io-tiff.c:493 gdk-pixbuf/io-tiff.c:506
-msgid "Failed to load TIFF image"
-msgstr "TIFF 그림을 읽어들이는 데 실패"
-
-#: gdk-pixbuf/io-tiff.c:692
-msgid "Failed to save TIFF image"
-msgstr "TIFF 그림을 저장하는 데 실패"
-
-#: gdk-pixbuf/io-tiff.c:727
-msgid "TIFF compression doesn't refer to a valid codec."
-msgstr "TIFF 압축이 가리키는 코덱이 올바르지 않습니다."
-
-#: gdk-pixbuf/io-tiff.c:767
-msgid "Failed to write TIFF data"
-msgstr "TIFF 데이터를 쓰는 데 실패"
-
-#: gdk-pixbuf/io-tiff.c:814
-msgid "Couldn't write to TIFF file"
-msgstr "TIFF 파일에 쓸 수 없습니다"
-
-#: gdk-pixbuf/io-tiff.c:869
-msgid "The TIFF image format"
-msgstr "TIFF 그림 형식"
-
-#: gdk-pixbuf/io-wbmp.c:246
-msgid "Image has zero width"
-msgstr "그림의 너비가 0입니다"
-
-#: gdk-pixbuf/io-wbmp.c:264
-msgid "Image has zero height"
-msgstr "그림의 높이가 0입니다"
-
-#: gdk-pixbuf/io-wbmp.c:275
-msgid "Not enough memory to load image"
-msgstr "그림을 읽어들이는 데 메모리가 충분하지 않습니다"
-
-#: gdk-pixbuf/io-wbmp.c:334
-msgid "Couldn't save the rest"
-msgstr "나머지를 저장할 수 없습니다"
-
-#: gdk-pixbuf/io-wbmp.c:375
-msgid "The WBMP image format"
-msgstr "WBMP 그림 형식"
-
-#: gdk-pixbuf/io-xbm.c:295
-msgid "Invalid XBM file"
-msgstr "잘못된 XBM 파일"
-
-#: gdk-pixbuf/io-xbm.c:305
-msgid "Insufficient memory to load XBM image file"
-msgstr "XBM 그림 파일을 읽어들이기에 메모리가 부족합니다"
-
-#: gdk-pixbuf/io-xbm.c:453
-msgid "Failed to write to temporary file when loading XBM image"
-msgstr "XBM 그림을 읽어들이는 데 임시 파일을 쓸 수 없습니다"
-
-#: gdk-pixbuf/io-xbm.c:492
-msgid "The XBM image format"
-msgstr "XBM 그림 형식"
-
-#: gdk-pixbuf/io-xpm.c:468
-msgid "No XPM header found"
-msgstr "XPM 헤더를 찾을 수 없습니다"
-
-#: gdk-pixbuf/io-xpm.c:477
-msgid "Invalid XPM header"
-msgstr "잘못된 XPM 헤더"
-
-#: gdk-pixbuf/io-xpm.c:485
-msgid "XPM file has image width <= 0"
-msgstr "XPM 파일의 그림 너비가 0보다 같거나 작습니다"
-
-#: gdk-pixbuf/io-xpm.c:493
-msgid "XPM file has image height <= 0"
-msgstr "XPM 파일의 그림 높이가 0보다 같거나 작습니다"
-
-#: gdk-pixbuf/io-xpm.c:501
-msgid "XPM has invalid number of chars per pixel"
-msgstr "XPM 파일이 잘못된 픽셀당 문자 수를 가지고 있습니다"
-
-#: gdk-pixbuf/io-xpm.c:510
-msgid "XPM file has invalid number of colors"
-msgstr "XPM 파일이 잘못된 색 개수를 가지고 있습니다"
-
-#: gdk-pixbuf/io-xpm.c:522 gdk-pixbuf/io-xpm.c:531 gdk-pixbuf/io-xpm.c:583
-msgid "Cannot allocate memory for loading XPM image"
-msgstr "XPM 그림을 읽어들이는 데 필요한 메모리를 할당할 수 없습니다"
-
-#: gdk-pixbuf/io-xpm.c:545
-msgid "Cannot read XPM colormap"
-msgstr "XPM 컬러맵을 읽을 수 없습니다"
-
-#: gdk-pixbuf/io-xpm.c:777
-msgid "Failed to write to temporary file when loading XPM image"
-msgstr "XPM 그림을 읽어들이는 데 임시 파일을 쓸 수 없습니다"
-
-#: gdk-pixbuf/io-xpm.c:816
-msgid "The XPM image format"
-msgstr "XPM 그림 형식"
-
-#: gdk-pixbuf/io-gdip-emf.c:59
-msgid "The EMF image format"
-msgstr "EMF 그림 형식"
-
-#: gdk-pixbuf/io-gdip-utils.c:232
-#, c-format
-msgid "Could not allocate memory: %s"
-msgstr "메모리를 할당할 수 없습니다: %s"
-
-#: gdk-pixbuf/io-gdip-utils.c:257 gdk-pixbuf/io-gdip-utils.c:371
-#: gdk-pixbuf/io-gdip-utils.c:411
-#, c-format
-msgid "Could not create stream: %s"
-msgstr "스트림을 만들 수 없습니다: %s"
-
-#: gdk-pixbuf/io-gdip-utils.c:271
-#, c-format
-msgid "Could not seek stream: %s"
-msgstr "스트림에서 이동할 수 없습니다: %s"
-
-#: gdk-pixbuf/io-gdip-utils.c:283
-#, c-format
-msgid "Could not read from stream: %s"
-msgstr "스트림을 읽을 수 없습니다: %s"
-
-#: gdk-pixbuf/io-gdip-utils.c:694 gdk-pixbuf/io-gdip-utils.c:825
-msgid "Couldn't load bitmap"
-msgstr "비트맵을 읽어들일 수 없습니다"
-
-#: gdk-pixbuf/io-gdip-utils.c:847
-msgid "Couldn't load metafile"
-msgstr "메타파일을 읽어들일 수 없습니다"
-
-#: gdk-pixbuf/io-gdip-utils.c:1006
-msgid "Unsupported image format for GDI+"
-msgstr "GDI+에서 지원하지 않는 그림 형식"
-
-#: gdk-pixbuf/io-gdip-utils.c:1013
-msgid "Couldn't save"
-msgstr "저장할 수 없습니다"
-
-#: gdk-pixbuf/io-gdip-wmf.c:58
-msgid "The WMF image format"
-msgstr "WMF 그림 형식"
 
 #. Description of --sync in --help output
 #: gdk/win32/gdkmain-win32.c:55
@@ -1526,8 +631,9 @@ msgid "_Saturation:"
 msgstr "채도(_S):"
 
 #: gtk/gtkcolorsel.c:393
-msgid "\"Deepness\" of the color."
-msgstr "색의 \"깊이\"."
+#, fuzzy
+msgid "Intensity of the color."
+msgstr "색의 투명한 정도."
 
 #: gtk/gtkcolorsel.c:394
 msgid "_Value:"
@@ -1698,11 +804,11 @@ msgstr "오른쪽(_R):"
 msgid "Paper Margins"
 msgstr "용지 여백"
 
-#: gtk/gtkentry.c:8612 gtk/gtktextview.c:8002
+#: gtk/gtkentry.c:8612 gtk/gtktextview.c:8012
 msgid "Input _Methods"
 msgstr "입력기(_M)"
 
-#: gtk/gtkentry.c:8626 gtk/gtktextview.c:8016
+#: gtk/gtkentry.c:8626 gtk/gtktextview.c:8026
 msgid "_Insert Unicode Control Character"
 msgstr "유니코드 제어 문자 넣기(_I)"
 
@@ -2143,12 +1249,12 @@ msgid "System (%s)"
 msgstr "시스템 (%s)"
 
 #. Open Link
-#: gtk/gtklabel.c:6076
+#: gtk/gtklabel.c:6072
 msgid "_Open Link"
 msgstr "링크 열기(_O)"
 
 #. Copy Link Address
-#: gtk/gtklabel.c:6088
+#: gtk/gtklabel.c:6084
 msgid "Copy _Link Address"
 msgstr "링크 주소 복사(_L)"
 
@@ -2161,27 +1267,27 @@ msgid "Invalid URI"
 msgstr "올바르지 않은 URI"
 
 #. Description of --gtk-module=MODULES in --help output
-#: gtk/gtkmain.c:447
+#: gtk/gtkmain.c:432
 msgid "Load additional GTK+ modules"
 msgstr "GTK+ 모듈을 추가로 읽어들입니다"
 
 #. Placeholder in --gtk-module=MODULES in --help output
-#: gtk/gtkmain.c:448
+#: gtk/gtkmain.c:433
 msgid "MODULES"
 msgstr "<모듈>"
 
 #. Description of --g-fatal-warnings in --help output
-#: gtk/gtkmain.c:450
+#: gtk/gtkmain.c:435
 msgid "Make all warnings fatal"
 msgstr "모든 경고를 치명적인 것으로 간주합니다"
 
 #. Description of --gtk-debug=FLAGS in --help output
-#: gtk/gtkmain.c:453
+#: gtk/gtkmain.c:438
 msgid "GTK+ debugging flags to set"
 msgstr "설정할 GTK+ 디버깅 플래그"
 
 #. Description of --gtk-no-debug=FLAGS in --help output
-#: gtk/gtkmain.c:456
+#: gtk/gtkmain.c:441
 msgid "GTK+ debugging flags to unset"
 msgstr "설정 해제할 GTK+ 디버깅 플래그"
 
@@ -2190,20 +1296,20 @@ msgstr "설정 해제할 GTK+ 디버깅 플래그"
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
 #.
-#: gtk/gtkmain.c:708
+#: gtk/gtkmain.c:704
 msgid "default:LTR"
 msgstr "default:LTR"
 
-#: gtk/gtkmain.c:773
+#: gtk/gtkmain.c:769
 #, c-format
 msgid "Cannot open display: %s"
 msgstr "디스플레이를 열 수 없습니다: %s"
 
-#: gtk/gtkmain.c:810
+#: gtk/gtkmain.c:806
 msgid "GTK+ Options"
 msgstr "GTK+ 옵션"
 
-#: gtk/gtkmain.c:810
+#: gtk/gtkmain.c:806
 msgid "Show GTK+ Options"
 msgstr "GTK+ 옵션 표시"
 
@@ -2289,7 +1395,7 @@ msgstr "Z 셸"
 msgid "Cannot end process with pid %d: %s"
 msgstr "PID %d 프로세스를 끝낼 수 없습니다: %s"
 
-#: gtk/gtknotebook.c:4621 gtk/gtknotebook.c:7050
+#: gtk/gtknotebook.c:4631 gtk/gtknotebook.c:7060
 #, c-format
 msgid "Page %u"
 msgstr "%u페이지"
@@ -2379,87 +1485,81 @@ msgstr "폴더에 저장(_S):"
 msgid "%s job #%d"
 msgstr "%s 작업 #%d"
 
-#: gtk/gtkprintoperation.c:1687
+#: gtk/gtkprintoperation.c:1695
 msgctxt "print operation status"
 msgid "Initial state"
 msgstr "최초 상태"
 
-#: gtk/gtkprintoperation.c:1688
+#: gtk/gtkprintoperation.c:1696
 msgctxt "print operation status"
 msgid "Preparing to print"
 msgstr "인쇄 준비하는 중"
 
-#: gtk/gtkprintoperation.c:1689
+#: gtk/gtkprintoperation.c:1697
 msgctxt "print operation status"
 msgid "Generating data"
 msgstr "데이터 생성하는 중"
 
-#: gtk/gtkprintoperation.c:1690
+#: gtk/gtkprintoperation.c:1698
 msgctxt "print operation status"
 msgid "Sending data"
 msgstr "데이터 보내는 중"
 
-#: gtk/gtkprintoperation.c:1691
+#: gtk/gtkprintoperation.c:1699
 msgctxt "print operation status"
 msgid "Waiting"
 msgstr "기다리는 중"
 
-#: gtk/gtkprintoperation.c:1692
+#: gtk/gtkprintoperation.c:1700
 msgctxt "print operation status"
 msgid "Blocking on issue"
 msgstr "문제가 발생해 멈춤"
 
-#: gtk/gtkprintoperation.c:1693
+#: gtk/gtkprintoperation.c:1701
 msgctxt "print operation status"
 msgid "Printing"
 msgstr "인쇄하는 중"
 
-#: gtk/gtkprintoperation.c:1694
+#: gtk/gtkprintoperation.c:1702
 msgctxt "print operation status"
 msgid "Finished"
 msgstr "인쇄 종료"
 
-#: gtk/gtkprintoperation.c:1695
+#: gtk/gtkprintoperation.c:1703
 msgctxt "print operation status"
 msgid "Finished with error"
 msgstr "오류가 발생해 인쇄 종료"
 
-#: gtk/gtkprintoperation.c:2254
+#: gtk/gtkprintoperation.c:2270
 #, c-format
 msgid "Preparing %d"
 msgstr "%d페이지 준비하는 중"
 
-#: gtk/gtkprintoperation.c:2256 gtk/gtkprintoperation.c:2875
+#: gtk/gtkprintoperation.c:2272 gtk/gtkprintoperation.c:2902
 #, c-format
 msgid "Preparing"
 msgstr "준비하는 중"
 
-#: gtk/gtkprintoperation.c:2259
+#: gtk/gtkprintoperation.c:2275
 #, c-format
 msgid "Printing %d"
 msgstr "%d페이지 인쇄하는 중"
 
-#: gtk/gtkprintoperation.c:2905
+#: gtk/gtkprintoperation.c:2932
 #, c-format
 msgid "Error creating print preview"
 msgstr "인쇄 미리 보기를 만드는 데 오류"
 
-#: gtk/gtkprintoperation.c:2908
+#: gtk/gtkprintoperation.c:2935
 #, c-format
 msgid "The most probable reason is that a temporary file could not be created."
 msgstr "임시 파일을 만들 수 없는 경우일 가능성이 가장 높습니다."
 
-#: gtk/gtkprintoperation-unix.c:297 gtk/gtkprintoperation-unix.c:314
-#, c-format
+#: gtk/gtkprintoperation-unix.c:297
 msgid "Error launching preview"
 msgstr "미리 보기 실행 오류"
 
-#: gtk/gtkprintoperation-unix.c:358
-#, c-format
-msgid "Error printing"
-msgstr "인쇄 오류"
-
-#: gtk/gtkprintoperation-unix.c:494 gtk/gtkprintoperation-win32.c:1447
+#: gtk/gtkprintoperation-unix.c:470 gtk/gtkprintoperation-win32.c:1447
 msgid "Application"
 msgstr "프로그램"
 
@@ -2473,7 +1573,7 @@ msgstr "용지 부족"
 
 #. Translators: this is a printer status.
 #: gtk/gtkprintoperation-win32.c:616
-#: modules/printbackends/cups/gtkprintbackendcups.c:1999
+#: modules/printbackends/cups/gtkprintbackendcups.c:1998
 msgid "Paused"
 msgstr "일시 정지"
 
@@ -2601,42 +1701,42 @@ msgstr "일반"
 #. * multiple pages on a sheet when printing
 #.
 #: gtk/gtkprintunixdialog.c:3010
-#: modules/printbackends/cups/gtkprintbackendcups.c:3509
+#: modules/printbackends/cups/gtkprintbackendcups.c:3508
 msgid "Left to right, top to bottom"
 msgstr "왼쪽에서 오른쪽, 위에서 아래"
 
 #: gtk/gtkprintunixdialog.c:3010
-#: modules/printbackends/cups/gtkprintbackendcups.c:3509
+#: modules/printbackends/cups/gtkprintbackendcups.c:3508
 msgid "Left to right, bottom to top"
 msgstr "왼쪽에서 오른쪽, 아래에서 위"
 
 #: gtk/gtkprintunixdialog.c:3011
-#: modules/printbackends/cups/gtkprintbackendcups.c:3510
+#: modules/printbackends/cups/gtkprintbackendcups.c:3509
 msgid "Right to left, top to bottom"
 msgstr "오른쪽에서 왼쪽, 위에서 아래"
 
 #: gtk/gtkprintunixdialog.c:3011
-#: modules/printbackends/cups/gtkprintbackendcups.c:3510
+#: modules/printbackends/cups/gtkprintbackendcups.c:3509
 msgid "Right to left, bottom to top"
 msgstr "오른쪽에서 왼쪽, 아래에서 위"
 
 #: gtk/gtkprintunixdialog.c:3012
-#: modules/printbackends/cups/gtkprintbackendcups.c:3511
+#: modules/printbackends/cups/gtkprintbackendcups.c:3510
 msgid "Top to bottom, left to right"
 msgstr "위에서 아래, 왼쪽에서 오른쪽"
 
 #: gtk/gtkprintunixdialog.c:3012
-#: modules/printbackends/cups/gtkprintbackendcups.c:3511
+#: modules/printbackends/cups/gtkprintbackendcups.c:3510
 msgid "Top to bottom, right to left"
 msgstr "위에서 아래, 오른쪽에서 왼쪽"
 
 #: gtk/gtkprintunixdialog.c:3013
-#: modules/printbackends/cups/gtkprintbackendcups.c:3512
+#: modules/printbackends/cups/gtkprintbackendcups.c:3511
 msgid "Bottom to top, left to right"
 msgstr "아래에서 위, 왼쪽에서 오른쪽"
 
 #: gtk/gtkprintunixdialog.c:3013
-#: modules/printbackends/cups/gtkprintbackendcups.c:3512
+#: modules/printbackends/cups/gtkprintbackendcups.c:3511
 msgid "Bottom to top, right to left"
 msgstr "아래에서 위, 오른쪽에서 왼쪽"
 
@@ -2644,7 +1744,7 @@ msgstr "아래에서 위, 오른쪽에서 왼쪽"
 #. * dialog that controls in what order multiple pages are arranged
 #.
 #: gtk/gtkprintunixdialog.c:3017 gtk/gtkprintunixdialog.c:3030
-#: modules/printbackends/cups/gtkprintbackendcups.c:3544
+#: modules/printbackends/cups/gtkprintbackendcups.c:3543
 msgid "Page Ordering"
 msgstr "페이지 순서"
 
@@ -3574,8 +2674,8 @@ msgstr "일렬화된 데이터의 형식이 잘못되었습니다"
 msgid ""
 "Serialized data is malformed. First section isn't GTKTEXTBUFFERCONTENTS-0001"
 msgstr ""
-"일렬화된 데이터의 형식이 잘못되었습니다. 첫번째 섹션이 GTKTEXTBUFFERCONTENTS-"
-"0001이 아닙니다"
+"일렬화된 데이터의 형식이 잘못되었습니다. 첫번째 섹션이 "
+"GTKTEXTBUFFERCONTENTS-0001이 아닙니다"
 
 #: gtk/gtktextutil.c:61
 msgid "LRM _Left-to-right mark"
@@ -4807,121 +3907,116 @@ msgstr "'%s' 프린터의 연결이 현재 끊겼습니다."
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:1687
 #, c-format
-msgid "Printer '%s' may not be connected."
-msgstr "'%s' 프린터가 연결이 되지 않는 것 같습니다."
-
-#: modules/printbackends/cups/gtkprintbackendcups.c:1688
-#, c-format
 msgid "There is a problem on printer '%s'."
 msgstr "'%s' 프린터에 문제가 있습니다."
 
 #. Translators: this is a printer status.
-#: modules/printbackends/cups/gtkprintbackendcups.c:1996
+#: modules/printbackends/cups/gtkprintbackendcups.c:1995
 msgid "Paused ; Rejecting Jobs"
 msgstr "일시 정지, 작업을 거부하는 중"
 
 #. Translators: this is a printer status.
-#: modules/printbackends/cups/gtkprintbackendcups.c:2002
+#: modules/printbackends/cups/gtkprintbackendcups.c:2001
 msgid "Rejecting Jobs"
 msgstr "작업을 거부하는 중"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2778
+#: modules/printbackends/cups/gtkprintbackendcups.c:2777
 msgid "Two Sided"
 msgstr "양면"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2779
+#: modules/printbackends/cups/gtkprintbackendcups.c:2778
 msgid "Paper Type"
 msgstr "용지 종류"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2780
+#: modules/printbackends/cups/gtkprintbackendcups.c:2779
 msgid "Paper Source"
 msgstr "용지 공급"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2781
+#: modules/printbackends/cups/gtkprintbackendcups.c:2780
 msgid "Output Tray"
 msgstr "출력 트레이"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2782
+#: modules/printbackends/cups/gtkprintbackendcups.c:2781
 msgid "Resolution"
 msgstr "해상도"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2783
+#: modules/printbackends/cups/gtkprintbackendcups.c:2782
 msgid "GhostScript pre-filtering"
 msgstr "고스트스크립트 미리 필터링"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2792
+#: modules/printbackends/cups/gtkprintbackendcups.c:2791
 msgid "One Sided"
 msgstr "단면"
 
 #. Translators: this is an option of "Two Sided"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2794
+#: modules/printbackends/cups/gtkprintbackendcups.c:2793
 msgid "Long Edge (Standard)"
 msgstr "긴 방향 (표준)"
 
 #. Translators: this is an option of "Two Sided"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2796
+#: modules/printbackends/cups/gtkprintbackendcups.c:2795
 msgid "Short Edge (Flip)"
 msgstr "짧은 방향 (거꾸로)"
 
 #. Translators: this is an option of "Paper Source"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2798
-#: modules/printbackends/cups/gtkprintbackendcups.c:2800
-#: modules/printbackends/cups/gtkprintbackendcups.c:2808
+#: modules/printbackends/cups/gtkprintbackendcups.c:2797
+#: modules/printbackends/cups/gtkprintbackendcups.c:2799
+#: modules/printbackends/cups/gtkprintbackendcups.c:2807
 msgid "Auto Select"
 msgstr "자동 선택"
 
 #. Translators: this is an option of "Paper Source"
 #. Translators: this is an option of "Resolution"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2802
-#: modules/printbackends/cups/gtkprintbackendcups.c:2804
-#: modules/printbackends/cups/gtkprintbackendcups.c:2806
-#: modules/printbackends/cups/gtkprintbackendcups.c:2810
-#: modules/printbackends/cups/gtkprintbackendcups.c:3296
+#: modules/printbackends/cups/gtkprintbackendcups.c:2801
+#: modules/printbackends/cups/gtkprintbackendcups.c:2803
+#: modules/printbackends/cups/gtkprintbackendcups.c:2805
+#: modules/printbackends/cups/gtkprintbackendcups.c:2809
+#: modules/printbackends/cups/gtkprintbackendcups.c:3295
 msgid "Printer Default"
 msgstr "프린터 기본값"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2812
+#: modules/printbackends/cups/gtkprintbackendcups.c:2811
 msgid "Embed GhostScript fonts only"
 msgstr "고스트스크립트 글꼴만 문서에 포함"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2814
+#: modules/printbackends/cups/gtkprintbackendcups.c:2813
 msgid "Convert to PS level 1"
 msgstr "PS 레벨 1로 변환"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2816
+#: modules/printbackends/cups/gtkprintbackendcups.c:2815
 msgid "Convert to PS level 2"
 msgstr "PS 레벨 2로 변환"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2818
+#: modules/printbackends/cups/gtkprintbackendcups.c:2817
 msgid "No pre-filtering"
 msgstr "미리 필터링 기능이 없습니다"
 
 #. Translators: "Miscellaneous" is the label for a button, that opens
 #. up an extra panel of settings in a print dialog.
-#: modules/printbackends/cups/gtkprintbackendcups.c:2827
+#: modules/printbackends/cups/gtkprintbackendcups.c:2826
 msgid "Miscellaneous"
 msgstr "기타"
 
 #. Translators: These strings name the possible values of the
 #. * job priority option in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3504
+#: modules/printbackends/cups/gtkprintbackendcups.c:3503
 msgid "Urgent"
 msgstr "긴급"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3504
+#: modules/printbackends/cups/gtkprintbackendcups.c:3503
 msgid "High"
 msgstr "높음"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3504
+#: modules/printbackends/cups/gtkprintbackendcups.c:3503
 msgid "Medium"
 msgstr "중간"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3504
+#: modules/printbackends/cups/gtkprintbackendcups.c:3503
 msgid "Low"
 msgstr "낮음"
 
@@ -4929,66 +4024,66 @@ msgstr "낮음"
 #. Translators, this string is used to label the pages-per-sheet option
 #. * in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3528
+#: modules/printbackends/cups/gtkprintbackendcups.c:3527
 msgid "Pages per Sheet"
 msgstr "한 장당 페이지 수"
 
 #. Translators, this string is used to label the job priority option
 #. * in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3565
+#: modules/printbackends/cups/gtkprintbackendcups.c:3564
 msgid "Job Priority"
 msgstr "작업 우선순위"
 
 #. Translators, this string is used to label the billing info entry
 #. * in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3576
+#: modules/printbackends/cups/gtkprintbackendcups.c:3575
 msgid "Billing Info"
 msgstr "요금 정보"
 
 #. Translators, these strings are names for various 'standard' cover
 #. * pages that the printing system may support.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3591
+#: modules/printbackends/cups/gtkprintbackendcups.c:3590
 msgid "None"
 msgstr "없음"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3591
+#: modules/printbackends/cups/gtkprintbackendcups.c:3590
 msgid "Classified"
 msgstr "비밀 분류"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3591
+#: modules/printbackends/cups/gtkprintbackendcups.c:3590
 msgid "Confidential"
 msgstr "기밀"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3591
+#: modules/printbackends/cups/gtkprintbackendcups.c:3590
 msgid "Secret"
 msgstr "비밀"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3591
+#: modules/printbackends/cups/gtkprintbackendcups.c:3590
 msgid "Standard"
 msgstr "표준"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3591
+#: modules/printbackends/cups/gtkprintbackendcups.c:3590
 msgid "Top Secret"
 msgstr "일급 비밀"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3591
+#: modules/printbackends/cups/gtkprintbackendcups.c:3590
 msgid "Unclassified"
 msgstr "비밀 분류 해제"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the front cover page.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3626
+#: modules/printbackends/cups/gtkprintbackendcups.c:3625
 msgid "Before"
 msgstr "앞에"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the back cover page.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3641
+#: modules/printbackends/cups/gtkprintbackendcups.c:3640
 msgid "After"
 msgstr "뒤에"
 
@@ -4996,14 +4091,14 @@ msgstr "뒤에"
 #. * a print job is printed. Possible values are 'now', a specified time,
 #. * or 'on hold'
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3661
+#: modules/printbackends/cups/gtkprintbackendcups.c:3660
 msgid "Print at"
 msgstr "인쇄할 때"
 
 #. Translators: this is the name of the option that allows the user
 #. * to specify a time when a print job will be printed.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3672
+#: modules/printbackends/cups/gtkprintbackendcups.c:3671
 msgid "Print at time"
 msgstr "인쇄할 시각"
 
@@ -5011,7 +4106,7 @@ msgstr "인쇄할 시각"
 #. * size. The two placeholders are replaced with the width and height
 #. * in points. E.g: "Custom 230.4x142.9"
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3707
+#: modules/printbackends/cups/gtkprintbackendcups.c:3706
 #, c-format
 msgid "Custom %sx%s"
 msgstr "사용자 지정 %sx%s"
@@ -5102,6 +4197,670 @@ msgstr "테스트 프린터로 인쇄"
 #, c-format
 msgid "Could not get information for file '%s': %s"
 msgstr "파일 '%s'의 정보를 가져올 수 없습니다: %s"
+
+#: tests/testfilechooser.c:222
+#, c-format
+msgid "Failed to open file '%s': %s"
+msgstr "파일 '%s' 열기 실패 : %s"
+
+#: tests/testfilechooser.c:267
+#, c-format
+msgid ""
+"Failed to load image '%s': reason not known, probably a corrupt image file"
+msgstr ""
+"그림 '%s' 읽기 실패: 이유를 알 수 없습니다, 아마 그림파일이 깨졌을 것입니다"
+
+#~ msgid "Image file '%s' contains no data"
+#~ msgstr "그림 파일 '%s'에 데이터가 없습니다"
+
+#~ msgid ""
+#~ "Failed to load animation '%s': reason not known, probably a corrupt "
+#~ "animation file"
+#~ msgstr ""
+#~ "움직이는 그림 '%s' 읽기 실패 : 이유를 알 수 없습니다, 아마 움직이는 그림파"
+#~ "일이 깨졌을 것입니다"
+
+#~ msgid "Unable to load image-loading module: %s: %s"
+#~ msgstr "그림 읽기 모듈을 읽을 수 없습니다: %s: %s"
+
+#~ msgid ""
+#~ "Image-loading module %s does not export the proper interface; perhaps "
+#~ "it's from a different GTK version?"
+#~ msgstr ""
+#~ "%s 그림 읽기 모듈이 올바른 인터페이스를 내놓지 않습니다; 아마 다른 GTK 버"
+#~ "전의 모듈일 것입니다"
+
+#~ msgid "Image type '%s' is not supported"
+#~ msgstr "그림 형식 '%s'을(를) 지원하지 않습니다"
+
+#~ msgid "Couldn't recognize the image file format for file '%s'"
+#~ msgstr "파일 '%s'의 그림파일 형식을 알 수 없습니다"
+
+#~ msgid "Unrecognized image file format"
+#~ msgstr "알 수 없는 그림 파일 형식"
+
+#~ msgid "Failed to load image '%s': %s"
+#~ msgstr "그림 '%s' 읽기 실패: %s"
+
+#~ msgid "Error writing to image file: %s"
+#~ msgstr "그림 파일을 쓰는 중 오류가 발생했습니다: %s"
+
+#~ msgid ""
+#~ "This build of gdk-pixbuf does not support saving the image format: %s"
+#~ msgstr "gtk-pixbuf의 이 빌드에서는 그림 형식 저장을 지원하지 않습니다: %s"
+
+#~ msgid "Insufficient memory to save image to callback"
+#~ msgstr "콜백에 그림을 저장하기에는 메모리가 부족합니다"
+
+#~ msgid "Failed to open temporary file"
+#~ msgstr "임시 파일을 여는 데 실패했습니다"
+
+#~ msgid "Failed to read from temporary file"
+#~ msgstr "임시 파일을 읽는 데 실패했습니다"
+
+#~ msgid "Failed to open '%s' for writing: %s"
+#~ msgstr "쓰기용 '%s' 열기 실패: %s"
+
+#~ msgid ""
+#~ "Failed to close '%s' while writing image, all data may not have been "
+#~ "saved: %s"
+#~ msgstr ""
+#~ "그림을 저장하는 동안 '%s'을(를) 닫는 데 실패하였습니다, 모든 데이터를 저장"
+#~ "하지 않았을 것입니다: %s"
+
+#~ msgid "Insufficient memory to save image into a buffer"
+#~ msgstr "버퍼에 그림을 저장하기에는 메모리가 부족합니다"
+
+#~ msgid "Error writing to image stream"
+#~ msgstr "그림 스트림을 쓰는 중 오류가 발생했습니다"
+
+#~ msgid ""
+#~ "Internal error: Image loader module '%s' failed to complete an operation, "
+#~ "but didn't give a reason for the failure"
+#~ msgstr ""
+#~ "내부 오류: 그림 읽어들이기 모듈 '%s'이(가) 작업 완료에 실패했지만, 실패한 "
+#~ "이유를 넘겨주지 않았습니다"
+
+#~ msgid "Incremental loading of image type '%s' is not supported"
+#~ msgstr "'%s' 타입의 그림에서는 점진적 읽어들이기를 지원하지 않습니다"
+
+#~ msgid "Image header corrupt"
+#~ msgstr "잘못된 그림 헤더"
+
+#~ msgid "Image format unknown"
+#~ msgstr "알 수 없는 그림 형식"
+
+#~ msgid "Image pixel data corrupt"
+#~ msgstr "잘못된 그림 픽셀 데이터"
+
+#, fuzzy
+#~ msgid "failed to allocate image buffer of %u byte"
+#~ msgid_plural "failed to allocate image buffer of %u bytes"
+#~ msgstr[0] "파일 읽기 버퍼에 %d 바이트를 할당하는 데 실패"
+
+#~ msgid "Unexpected icon chunk in animation"
+#~ msgstr "움직이는 그림안에 뜻밖의 아이콘 부분이 있습니다"
+
+#~ msgid "Unsupported animation type"
+#~ msgstr "지원하지 않는 움직이는 그림 형식"
+
+#~ msgid "Invalid header in animation"
+#~ msgstr "움직이는 그림의 헤더가 잘못되었습니다"
+
+#~ msgid "Not enough memory to load animation"
+#~ msgstr "움직이는 그림을 읽어 들이는 데 메모리가 부족합니다"
+
+#~ msgid "Malformed chunk in animation"
+#~ msgstr "움직이는 그림에 잘못된 부분이 있습니다"
+
+#~ msgid "The ANI image format"
+#~ msgstr "ANI 그림 형식"
+
+#~ msgid "BMP image has bogus header data"
+#~ msgstr "BMP 그림의 헤더 데이터가 잘못되었습니다"
+
+#~ msgid "Not enough memory to load bitmap image"
+#~ msgstr "비트맵 그림을 읽을 메모리가 충분하지 않습니다"
+
+#~ msgid "BMP image has unsupported header size"
+#~ msgstr "BMP 그림이 지원되지 않는 헤더 크기를 가지고 있습니다"
+
+#~ msgid "Topdown BMP images cannot be compressed"
+#~ msgstr "톱다운 BMP 그림은 압축할 수 없습니다"
+
+#~ msgid "Premature end-of-file encountered"
+#~ msgstr "파일이 갑작스럽게 끝났습니다"
+
+#~ msgid "Couldn't allocate memory for saving BMP file"
+#~ msgstr "BMP 파일을 저장하는 데 필요한 메모리 할당을 할 수 없습니다"
+
+#~ msgid "Couldn't write to BMP file"
+#~ msgstr "BMP 파일에 쓸 수 없습니다"
+
+#~ msgid "The BMP image format"
+#~ msgstr "BMP 그림 형식"
+
+#~ msgid "Failure reading GIF: %s"
+#~ msgstr "GIF 읽는 중 실패: %s"
+
+#~ msgid "GIF file was missing some data (perhaps it was truncated somehow?)"
+#~ msgstr "GIF 파일에 데이터가 부족합니다 (중간에 잘린 파일?)"
+
+#~ msgid "Internal error in the GIF loader (%s)"
+#~ msgstr "GIF 읽기에서 내부 오류 (%s)"
+
+#~ msgid "Stack overflow"
+#~ msgstr "스택 넘침"
+
+#~ msgid "GIF image loader cannot understand this image."
+#~ msgstr "GIF 그림 읽기에서 이 그림을 이해할 수 없습니다."
+
+#~ msgid "Bad code encountered"
+#~ msgstr "잘못된 코드 발견"
+
+#~ msgid "Circular table entry in GIF file"
+#~ msgstr "GIF 파일에 순환 테이블 항목"
+
+#~ msgid "Not enough memory to load GIF file"
+#~ msgstr "GIF 파일을 읽는 데 메모리가 충분하지 않습니다"
+
+#~ msgid "Not enough memory to composite a frame in GIF file"
+#~ msgstr "GIF 파일의 프레임을 만드는 데 메모리가 충분하지 않습니다"
+
+#~ msgid "GIF image is corrupt (incorrect LZW compression)"
+#~ msgstr "GIF 그림이 잘못되었습니다 (잘못된 LZW 압축)"
+
+#~ msgid "File does not appear to be a GIF file"
+#~ msgstr "GIF 파일이 아닌 것 같습니다"
+
+#~ msgid "Version %s of the GIF file format is not supported"
+#~ msgstr "GIF 파일 형식의 버전 %s은(는) 지원되지 않습니다."
+
+#~ msgid ""
+#~ "GIF image has no global colormap, and a frame inside it has no local "
+#~ "colormap."
+#~ msgstr ""
+#~ "GIF 그림에 전체 컬러맵이 없고, 프레임 내부에 부분 컬러맵이 없습니다."
+
+#~ msgid "GIF image was truncated or incomplete."
+#~ msgstr "GIF 그림이 잘려져 있거나 불완전합니다."
+
+#~ msgid "The GIF image format"
+#~ msgstr "GIF 그림 형식"
+
+#~ msgid "Invalid header in icon"
+#~ msgstr "아이콘의 헤더가 잘못되었습니다"
+
+#~ msgid "Not enough memory to load icon"
+#~ msgstr "아이콘을 읽어 들이는 데 메모리가 부족합니다"
+
+#~ msgid "Icon has zero width"
+#~ msgstr "아이콘의 너비가 0입니다"
+
+#~ msgid "Icon has zero height"
+#~ msgstr "아이콘의 높이가 0입니다"
+
+#~ msgid "Compressed icons are not supported"
+#~ msgstr "압축된 아이콘은 지원하지 않습니다"
+
+#~ msgid "Unsupported icon type"
+#~ msgstr "지원하지 않는 아이콘 형식"
+
+#~ msgid "Not enough memory to load ICO file"
+#~ msgstr "ICO 파일을 읽는 데 메모리가 충분하지 않습니다"
+
+#~ msgid "Image too large to be saved as ICO"
+#~ msgstr "그림을 ICO로 저장하기에는 너무 큽니다"
+
+#~ msgid "Cursor hotspot outside image"
+#~ msgstr "핫스폿이 그림 바깥에 있습니다"
+
+#~ msgid "Unsupported depth for ICO file: %d"
+#~ msgstr "ICO 파일에서 지원하지 않는 색상 모드: %d"
+
+#~ msgid "The ICO image format"
+#~ msgstr "ICO 그림 형식"
+
+#~ msgid "Error reading ICNS image: %s"
+#~ msgstr "ICNS 그림을 읽어들이는 데 오류: %s"
+
+#~ msgid "Could not decode ICNS file"
+#~ msgstr "ICNS 파일을 디코딩할 수 없습니다"
+
+#~ msgid "The ICNS image format"
+#~ msgstr "ICNS 그림 형식"
+
+#~ msgid "Couldn't allocate memory for stream"
+#~ msgstr "스트림에 필요한 메모리를 할당할 수 없습니다"
+
+#~ msgid "Couldn't decode image"
+#~ msgstr "그림을 디코딩할 수 없습니다"
+
+#~ msgid "Transformed JPEG2000 has zero width or height"
+#~ msgstr "변환된 JPEG 2000의 너비나 높이가 0입니다."
+
+#~ msgid "Image type currently not supported"
+#~ msgstr "그림 형식을 현재 지원하지 않습니다"
+
+#~ msgid "Couldn't allocate memory for color profile"
+#~ msgstr "컬러 프로파일에 필요한 메모리를 할당할 수 없습니다"
+
+#~ msgid "Insufficient memory to open JPEG 2000 file"
+#~ msgstr "JPEG 2000 파일 여는 데 메모리 부족"
+
+#~ msgid "Couldn't allocate memory to buffer image data"
+#~ msgstr "그림 데이터를 버퍼링하는 데 사용할 메모리를 할당할 수 없습니다"
+
+#~ msgid "The JPEG 2000 image format"
+#~ msgstr "JPEG 2000 그림 형식"
+
+#~ msgid "Error interpreting JPEG image file (%s)"
+#~ msgstr "JPEG 파일 해석 중 오류 (%s)"
+
+#~ msgid ""
+#~ "Insufficient memory to load image, try exiting some applications to free "
+#~ "memory"
+#~ msgstr ""
+#~ "그림을 읽어들이기에 메모리가 부족합니다.  메모리를 확보하려면 실행중인 프"
+#~ "로그램을 끝내보십시오"
+
+#~ msgid "Unsupported JPEG color space (%s)"
+#~ msgstr "지원하지 않는 JPEG 색 공간 (%s)"
+
+#~ msgid "Couldn't allocate memory for loading JPEG file"
+#~ msgstr "JPEG파일을 읽는 중 메모리 할당을 할 수 없습니다"
+
+#~ msgid "Transformed JPEG has zero width or height."
+#~ msgstr "변환된 JPEG의 너비나 높이가 0입니다."
+
+#~ msgid ""
+#~ "JPEG quality must be a value between 0 and 100; value '%s' could not be "
+#~ "parsed."
+#~ msgstr ""
+#~ "JPEG 화질은 0에서 100 사이의 값이어야 합니다; '%s' 값을 분석할 수 없습니"
+#~ "다."
+
+#~ msgid ""
+#~ "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
+#~ msgstr ""
+#~ "JPEG 화질은 0에서 100 사이의 값이어야 합니다; '%d' 값은 쓸 수 없습니다."
+
+#~ msgid "The JPEG image format"
+#~ msgstr "JPEG 그림 형식"
+
+#~ msgid "Couldn't allocate memory for header"
+#~ msgstr "헤더에 필요한 메모리를 할당할 수 없습니다"
+
+#~ msgid "Couldn't allocate memory for context buffer"
+#~ msgstr "컨텍스트 버퍼에 필요한 메모리를 할당할 수 없습니다"
+
+#~ msgid "Image has invalid width and/or height"
+#~ msgstr "그림의 폭이나 높이, 혹은 둘 다 잘못되었습니다"
+
+#~ msgid "Image has unsupported bpp"
+#~ msgstr "그림의 픽셀당 비트수를 지원하지 않습니다"
+
+#~ msgid "Image has unsupported number of %d-bit planes"
+#~ msgstr "그림의 %d비트 플레인을 지원하지 않습니다"
+
+#~ msgid "Couldn't create new pixbuf"
+#~ msgstr "새 픽스버퍼를 만들 수 없습니다"
+
+#~ msgid "Couldn't allocate memory for line data"
+#~ msgstr "라인 데이터에 쓸 메모리를 할당할 수 없습니다"
+
+#~ msgid "Couldn't allocate memory for paletted data"
+#~ msgstr "팔레트 데이터에 쓸 메모리를 할당할 수 없습니다"
+
+#~ msgid "Didn't get all lines of PCX image"
+#~ msgstr "PCXX 그림에서 읽지 못한 라인이 있습니다"
+
+#~ msgid "No palette found at end of PCX data"
+#~ msgstr "PCX 데이터의 끝까지 팔레트를 발견하지 못했습니다"
+
+#~ msgid "The PCX image format"
+#~ msgstr "PCX 그림 형식"
+
+#~ msgid "Bits per channel of PNG image is invalid."
+#~ msgstr "PNG 그림의 채널 당 비트수가 잘못되었습니다."
+
+#~ msgid "Transformed PNG has zero width or height."
+#~ msgstr "변환된 PNG의 너비나 높이가 0입니다."
+
+#~ msgid "Bits per channel of transformed PNG is not 8."
+#~ msgstr "변환된 PNG의 채널 당 비트수가 8이 아닙니다."
+
+#~ msgid "Transformed PNG not RGB or RGBA."
+#~ msgstr "변환된 PNG가 RGB나 RGBA 형식이 아닙니다."
+
+#~ msgid "Transformed PNG has unsupported number of channels, must be 3 or 4."
+#~ msgstr "변환된 PNG의 채널 수를 지원하지 않습니다. 3이나 4가 되어야 합니다."
+
+#~ msgid "Fatal error in PNG image file: %s"
+#~ msgstr "PNG 그림 파일에서 치명적인 오류: %s"
+
+#~ msgid "Insufficient memory to load PNG file"
+#~ msgstr "PNG 파일을 읽어들이는 데 메모리가 부족합니다"
+
+#~ msgid ""
+#~ "Insufficient memory to store a %ld by %ld image; try exiting some "
+#~ "applications to reduce memory usage"
+#~ msgstr ""
+#~ "폭 %ld 높이 %ld의 그림을 저장할 메모리가 부족합니다.  메모리를 확보하려면 "
+#~ "실행중인 프로그램을 끝내보십시오"
+
+#~ msgid "Fatal error reading PNG image file"
+#~ msgstr "PNG 그림 파일을 읽어들이는 데 치명적인 오류"
+
+#~ msgid "Fatal error reading PNG image file: %s"
+#~ msgstr "PNG 그림 파일을 읽어들이는 데 치명적인 오류: %s"
+
+#~ msgid ""
+#~ "Keys for PNG text chunks must have at least 1 and at most 79 characters."
+#~ msgstr "PNG 텍스트 부분의 키에서는 최소 1 최대 79 문자까지 쓸 수 있습니다."
+
+#~ msgid "Keys for PNG text chunks must be ASCII characters."
+#~ msgstr "PNG 텍스트 부분의 키는 아스키 문자로 되어 있어야 합니다."
+
+#~ msgid "Color profile has invalid length %d."
+#~ msgstr "색 프로파일의 길이가 (%d) 올바르지 않습니다."
+
+#~ msgid ""
+#~ "PNG compression level must be a value between 0 and 9; value '%s' could "
+#~ "not be parsed."
+#~ msgstr ""
+#~ "PNG 압축 단계는 0에서 9 사이의 값이어야 합니다; '%s' 값을 분석할 수 없습니"
+#~ "다."
+
+#~ msgid ""
+#~ "PNG compression level must be a value between 0 and 9; value '%d' is not "
+#~ "allowed."
+#~ msgstr ""
+#~ "PNG 압축 단계는 0에서 9 사이의값이어야 합니다; '%d' 값을 쓸 수 없습니다."
+
+#~ msgid ""
+#~ "Value for PNG text chunk %s cannot be converted to ISO-8859-1 encoding."
+#~ msgstr "PNG 텍스트 부분 %s의 값을 ISO-8859-1 인코딩으로 변환할 수 없습니다."
+
+#~ msgid "The PNG image format"
+#~ msgstr "PNG 그림 형식"
+
+#~ msgid "PNM loader expected to find an integer, but didn't"
+#~ msgstr ""
+#~ "PNM 읽어들이기에서 정수가 나와야 하는 상황에서, 정수가 나오지 않았습니다"
+
+#~ msgid "PNM file has an incorrect initial byte"
+#~ msgstr "PNM 파일의 최초 바이트가 올바르지 못합니다"
+
+#~ msgid "PNM file is not in a recognized PNM subformat"
+#~ msgstr "PNM 파일이 인식 가능한 PNM 서브포맷에 맞지 않습니다"
+
+#~ msgid "PNM file has an image width of 0"
+#~ msgstr "PNM 파일의 그림 너비가 0입니다"
+
+#~ msgid "PNM file has an image height of 0"
+#~ msgstr "PNM 파일의 그림 높이가 0입니다"
+
+#~ msgid "Maximum color value in PNM file is 0"
+#~ msgstr "PNM 파일의 최대 색 값이 0입니다"
+
+#~ msgid "Maximum color value in PNM file is too large"
+#~ msgstr "PNM 파일의 최대 색 값이 너무 큽니다"
+
+#~ msgid "Raw PNM image type is invalid"
+#~ msgstr "로우 PNM 그림 형식이 잘못되었습니다"
+
+#~ msgid "PNM image loader does not support this PNM subformat"
+#~ msgstr "PNM 그림 읽어들이기가 이 PNM 서브포맷을 지원하지 않습니다"
+
+#~ msgid "Raw PNM formats require exactly one whitespace before sample data"
+#~ msgstr ""
+#~ "로우 PNM 형식에서는 견본 데이터 앞에 정확히 한 개의 공백이 와야 합니다"
+
+#~ msgid "Cannot allocate memory for loading PNM image"
+#~ msgstr "PNM 그림을 읽어들이는 데 필요한 메모리를 할당할 수 없습니다"
+
+#~ msgid "Insufficient memory to load PNM context struct"
+#~ msgstr "PNM 컨텍스트 구조를 읽어들이는 데 메모리가 부족합니다"
+
+#~ msgid "Unexpected end of PNM image data"
+#~ msgstr "PNM 그림 데이터가 갑자기 끝났습니다"
+
+#~ msgid "Insufficient memory to load PNM file"
+#~ msgstr "PNM 파일 읽는 데 메모리 부족"
+
+#~ msgid "The PNM/PBM/PGM/PPM image format family"
+#~ msgstr "PNM/PBM/PGM/PPM 그림 형식 패밀리"
+
+#~ msgid "Input file descriptor is NULL."
+#~ msgstr "입력 파일 디스크립터가 NULL입니다"
+
+#~ msgid "Failed to read QTIF header"
+#~ msgstr "QTIF 헤더를 읽는 데 실패"
+
+#~ msgid "QTIF atom size too large (%d bytes)"
+#~ msgstr "QTIF 아톰 크기가 너무 큽니다 (%d 바이트)"
+
+#~ msgid "Failed to allocate %d bytes for file read buffer"
+#~ msgstr "파일 읽기 버퍼에 %d 바이트를 할당하는 데 실패"
+
+#~ msgid "File error when reading QTIF atom: %s"
+#~ msgstr "GIF 아톰을 읽는 중 파일 오류: %s"
+
+#~ msgid "Failed to skip the next %d bytes with seek()."
+#~ msgstr "seek()을 이용해 다음 %d 바이트 위치로 이동하는 데 실패."
+
+#, fuzzy
+#~ msgid "Failed to allocate QTIF context structure."
+#~ msgstr "QTIF 컨텍스트를 만드는 데 실패."
+
+#~ msgid "Failed to create GdkPixbufLoader object."
+#~ msgstr "GdkPixbufLoader 오브젝트를 만드는 데 실패."
+
+#~ msgid "Failed to find an image data atom."
+#~ msgstr "그림 데이터 아톰을 찾는 데 실패"
+
+#~ msgid "The QTIF image format"
+#~ msgstr "QTIF 그림 형식"
+
+#~ msgid "RAS image has bogus header data"
+#~ msgstr "RAS 그림의 헤더 데이터가 잘못되었습니다"
+
+#~ msgid "RAS image has unknown type"
+#~ msgstr "RAS 그림의 형식을 알 수 없습니다"
+
+#~ msgid "unsupported RAS image variation"
+#~ msgstr "지원하지 않는 RAS 그림 형식"
+
+#~ msgid "Not enough memory to load RAS image"
+#~ msgstr "RAS 그림을 읽어들이는 데 메모리가 충분하지 않습니다"
+
+#~ msgid "The Sun raster image format"
+#~ msgstr "Sun 래스터 그림 형식"
+
+#~ msgid "Cannot allocate memory for IOBuffer struct"
+#~ msgstr "IOBuffer 구조에 쓸 메모리를 할당할 수 없습니다"
+
+#~ msgid "Cannot allocate memory for IOBuffer data"
+#~ msgstr "IOBuffer 데이터에 쓸 메모리를 할당할 수 없습니다"
+
+#~ msgid "Cannot realloc IOBuffer data"
+#~ msgstr "IOBuffer 데이터를 다시 할당할 수 없습니다"
+
+#~ msgid "Cannot allocate temporary IOBuffer data"
+#~ msgstr "임시 IOBuffer 데이터를 할당할 수 없습니다"
+
+#~ msgid "Cannot allocate new pixbuf"
+#~ msgstr "새 픽스버퍼를 할당할 수 없습니다"
+
+#, fuzzy
+#~ msgid "Image is corrupted or truncated"
+#~ msgstr "GIF 그림이 잘려져 있거나 불완전합니다."
+
+#~ msgid "Cannot allocate colormap structure"
+#~ msgstr "컬러맵 구조를 할당할 수 없습니다"
+
+#~ msgid "Cannot allocate colormap entries"
+#~ msgstr "컬러맵 항목을 할당할 수 없습니다"
+
+#~ msgid "Unexpected bitdepth for colormap entries"
+#~ msgstr "지원하지 않는 컬러맵 항목의 색상 모드"
+
+#~ msgid "Cannot allocate TGA header memory"
+#~ msgstr "TGA 헤더 메모리를 할당할 수 없습니다"
+
+#~ msgid "TGA image has invalid dimensions"
+#~ msgstr "TGA 그림의 크기가 잘못되었습니다"
+
+#~ msgid "TGA image type not supported"
+#~ msgstr "TGA 그림 형식은 지원하지 않습니다"
+
+#~ msgid "Cannot allocate memory for TGA context struct"
+#~ msgstr "TGA 컨텍스트 구조에 필요한 메모리를 할당할 수 없습니다"
+
+#~ msgid "Excess data in file"
+#~ msgstr "파일에 데이터가 너무 많습니다"
+
+#~ msgid "The Targa image format"
+#~ msgstr "Targa 그림 형식"
+
+#~ msgid "Could not get image width (bad TIFF file)"
+#~ msgstr "그림 너비를 얻을 수 없습니다 (틀린 TIFF 파일)"
+
+#~ msgid "Could not get image height (bad TIFF file)"
+#~ msgstr "그림 높이를 얻을 수 없습니다 (틀린 TIFF 파일)"
+
+#~ msgid "Width or height of TIFF image is zero"
+#~ msgstr "TIFF 그림의 너비나 높이가 0입니다"
+
+#~ msgid "Dimensions of TIFF image too large"
+#~ msgstr "TIFF 그림의 크기가 너무 큽니다"
+
+#~ msgid "Insufficient memory to open TIFF file"
+#~ msgstr "TIFF 파일 여는 데 메모리 부족"
+
+#~ msgid "Failed to load RGB data from TIFF file"
+#~ msgstr "TIFF 파일에서 RGB 데이터 읽기 실패"
+
+#~ msgid "Failed to open TIFF image"
+#~ msgstr "TIFF 그림 열기 실패"
+
+#~ msgid "TIFFClose operation failed"
+#~ msgstr "TIFFClose 작업 실패"
+
+#~ msgid "Failed to load TIFF image"
+#~ msgstr "TIFF 그림을 읽어들이는 데 실패"
+
+#~ msgid "Failed to save TIFF image"
+#~ msgstr "TIFF 그림을 저장하는 데 실패"
+
+#~ msgid "TIFF compression doesn't refer to a valid codec."
+#~ msgstr "TIFF 압축이 가리키는 코덱이 올바르지 않습니다."
+
+#~ msgid "Failed to write TIFF data"
+#~ msgstr "TIFF 데이터를 쓰는 데 실패"
+
+#~ msgid "Couldn't write to TIFF file"
+#~ msgstr "TIFF 파일에 쓸 수 없습니다"
+
+#~ msgid "The TIFF image format"
+#~ msgstr "TIFF 그림 형식"
+
+#~ msgid "Image has zero width"
+#~ msgstr "그림의 너비가 0입니다"
+
+#~ msgid "Image has zero height"
+#~ msgstr "그림의 높이가 0입니다"
+
+#~ msgid "Not enough memory to load image"
+#~ msgstr "그림을 읽어들이는 데 메모리가 충분하지 않습니다"
+
+#~ msgid "Couldn't save the rest"
+#~ msgstr "나머지를 저장할 수 없습니다"
+
+#~ msgid "The WBMP image format"
+#~ msgstr "WBMP 그림 형식"
+
+#~ msgid "Invalid XBM file"
+#~ msgstr "잘못된 XBM 파일"
+
+#~ msgid "Insufficient memory to load XBM image file"
+#~ msgstr "XBM 그림 파일을 읽어들이기에 메모리가 부족합니다"
+
+#~ msgid "Failed to write to temporary file when loading XBM image"
+#~ msgstr "XBM 그림을 읽어들이는 데 임시 파일을 쓸 수 없습니다"
+
+#~ msgid "The XBM image format"
+#~ msgstr "XBM 그림 형식"
+
+#~ msgid "No XPM header found"
+#~ msgstr "XPM 헤더를 찾을 수 없습니다"
+
+#~ msgid "Invalid XPM header"
+#~ msgstr "잘못된 XPM 헤더"
+
+#~ msgid "XPM file has image width <= 0"
+#~ msgstr "XPM 파일의 그림 너비가 0보다 같거나 작습니다"
+
+#~ msgid "XPM file has image height <= 0"
+#~ msgstr "XPM 파일의 그림 높이가 0보다 같거나 작습니다"
+
+#~ msgid "XPM has invalid number of chars per pixel"
+#~ msgstr "XPM 파일이 잘못된 픽셀당 문자 수를 가지고 있습니다"
+
+#~ msgid "XPM file has invalid number of colors"
+#~ msgstr "XPM 파일이 잘못된 색 개수를 가지고 있습니다"
+
+#~ msgid "Cannot allocate memory for loading XPM image"
+#~ msgstr "XPM 그림을 읽어들이는 데 필요한 메모리를 할당할 수 없습니다"
+
+#~ msgid "Cannot read XPM colormap"
+#~ msgstr "XPM 컬러맵을 읽을 수 없습니다"
+
+#~ msgid "Failed to write to temporary file when loading XPM image"
+#~ msgstr "XPM 그림을 읽어들이는 데 임시 파일을 쓸 수 없습니다"
+
+#~ msgid "The XPM image format"
+#~ msgstr "XPM 그림 형식"
+
+#~ msgid "The EMF image format"
+#~ msgstr "EMF 그림 형식"
+
+#~ msgid "Could not allocate memory: %s"
+#~ msgstr "메모리를 할당할 수 없습니다: %s"
+
+#~ msgid "Could not create stream: %s"
+#~ msgstr "스트림을 만들 수 없습니다: %s"
+
+#~ msgid "Could not seek stream: %s"
+#~ msgstr "스트림에서 이동할 수 없습니다: %s"
+
+#~ msgid "Could not read from stream: %s"
+#~ msgstr "스트림을 읽을 수 없습니다: %s"
+
+#~ msgid "Couldn't load bitmap"
+#~ msgstr "비트맵을 읽어들일 수 없습니다"
+
+#~ msgid "Couldn't load metafile"
+#~ msgstr "메타파일을 읽어들일 수 없습니다"
+
+#~ msgid "Unsupported image format for GDI+"
+#~ msgstr "GDI+에서 지원하지 않는 그림 형식"
+
+#~ msgid "Couldn't save"
+#~ msgstr "저장할 수 없습니다"
+
+#~ msgid "The WMF image format"
+#~ msgstr "WMF 그림 형식"
+
+#~ msgid "\"Deepness\" of the color."
+#~ msgstr "색의 \"깊이\"."
+
+#~ msgid "Error printing"
+#~ msgstr "인쇄 오류"
+
+#~ msgid "Printer '%s' may not be connected."
+#~ msgstr "'%s' 프린터가 연결이 되지 않는 것 같습니다."
 
 #~ msgid "Folders"
 #~ msgstr "폴더"

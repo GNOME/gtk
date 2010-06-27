@@ -10,10 +10,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.master.te\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-05-25 20:10-0400\n"
+"POT-Creation-Date: 2010-06-26 23:16-0400\n"
 "PO-Revision-Date: 2009-08-31 18:31+0530\n"
 "Last-Translator: Krishna Babu K <kkrothap@redhat.com>\n"
 "Language-Team: Telugu <en@li.org>\n"
+"Language: te\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -83,7 +84,7 @@ msgstr "అమర్చవలసిన Gdk లోప నిర్మూలన fl
 #. Placeholder in --gdk-no-debug=FLAGS in --help output
 #. Placeholder in --gtk-debug=FLAGS in --help output
 #. Placeholder in --gtk-no-debug=FLAGS in --help output
-#: gdk/gdk.c:165 gdk/gdk.c:168 gtk/gtkmain.c:454 gtk/gtkmain.c:457
+#: gdk/gdk.c:165 gdk/gdk.c:168 gtk/gtkmain.c:439 gtk/gtkmain.c:442
 msgid "FLAGS"
 msgstr "ఫ్లాగ్"
 
@@ -276,901 +277,6 @@ msgstr "KP_Delete"
 msgctxt "keyboard label"
 msgid "Delete"
 msgstr "Delete"
-
-#: gdk-pixbuf/gdk-pixbuf-animation.c:133 gdk-pixbuf/gdk-pixbuf-io.c:982
-#: gdk-pixbuf/gdk-pixbuf-io.c:1242 tests/testfilechooser.c:222
-#, c-format
-msgid "Failed to open file '%s': %s"
-msgstr "'%s': దస్త్రమును తెరచుటలో విఫలమైంది %s"
-
-#: gdk-pixbuf/gdk-pixbuf-animation.c:146 gdk-pixbuf/gdk-pixbuf-io.c:994
-#, c-format
-msgid "Image file '%s' contains no data"
-msgstr "'%s' ప్రతిబింబ దస్త్రంలో ఏ దత్తాంశమూ లేదు"
-
-#: gdk-pixbuf/gdk-pixbuf-animation.c:188 gdk-pixbuf/gdk-pixbuf-io.c:1030
-#: gdk-pixbuf/gdk-pixbuf-io.c:1294 tests/testfilechooser.c:267
-#, c-format
-msgid ""
-"Failed to load image '%s': reason not known, probably a corrupt image file"
-msgstr ""
-" ప్రతిబింబం   '%s'ను నింపుటలో విఫలమైంది. కారణం తెలియదు.  బహుశా    ఈ దస్త్రం చెడిపోయి వుండవచ్చు."
-
-#: gdk-pixbuf/gdk-pixbuf-animation.c:221
-#, c-format
-msgid ""
-"Failed to load animation '%s': reason not known, probably a corrupt "
-"animation file"
-msgstr ""
-"'%s': సచేతనాన్ని నింపుటలో విఫలమైంది. కారణం తెలియదు . బహుశా  సచేతన దస్త్రము చెడిపోయి  వుండవచ్చు."
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:715
-#, c-format
-msgid "Unable to load image-loading module: %s: %s"
-msgstr "%s ప్రతిబింబ  ప్రమాణాన్ని  నింపలేకపోతున్నాం.: %s"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:730
-#, c-format
-msgid ""
-"Image-loading module %s does not export the proper interface; perhaps it's "
-"from a different GTK version?"
-msgstr ""
-"ప్రతిబింబ ప్రమాణం  %s సరైన అనుసంథానాన్ని  ఎగుమతి చేయలేదు. బహుశా ఇది మరొక జీటికే వివరణం నుండి "
-"అయివుండవచ్చు."
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:739 gdk-pixbuf/gdk-pixbuf-io.c:790
-#, c-format
-msgid "Image type '%s' is not supported"
-msgstr "'%s' ప్రతిబింబ రకానికి  సహకరించలేము."
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:863
-#, c-format
-msgid "Couldn't recognize the image file format for file '%s'"
-msgstr "'%sదస్త్రం ప్రతిబింబ రూప లావణ్యాన్ని గుర్తించ లేకపోయింది.'"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:871
-msgid "Unrecognized image file format"
-msgstr "గుర్తింపలేని ప్రతిబింబ దస్త్ర రూపలావణ్యం"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:1039
-#, c-format
-msgid "Failed to load image '%s': %s"
-msgstr "'%s'ప్రతిబింబాన్ని నింపుటలో  విఫలమైంది: %s"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:1673 gdk-pixbuf/io-gdip-utils.c:961
-#, c-format
-msgid "Error writing to image file: %s"
-msgstr "%s ప్రతిబింబ దస్ర్తాన్ని రాయుటలో దోషం"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:1718 gdk-pixbuf/gdk-pixbuf-io.c:1848
-#, c-format
-msgid "This build of gdk-pixbuf does not support saving the image format: %s"
-msgstr "%s నిర్మాణం ప్రతిబింబ రూప లావణాన్ని దాచడానికి సహకరించటంలేదు."
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:1752
-msgid "Insufficient memory to save image to callback"
-msgstr "ప్రతిబింబాన్ని వెనక్కు రప్పించి దాచుటకు జ్ఞాపక శక్తి చాలదు."
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:1765
-msgid "Failed to open temporary file"
-msgstr "తాత్కాలిక దస్త్రమును తెరచుటలో విఫలమైంది."
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:1791
-msgid "Failed to read from temporary file"
-msgstr "తాత్కాలిక దస్త్రము నుండి చదువుట విఫలమంది."
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:2044
-#, c-format
-msgid "Failed to open '%s' for writing: %s"
-msgstr "'%s' వ్రాయుట కొరకు  తెరచుట  విఫలమైంది %s"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:2070
-#, c-format
-msgid ""
-"Failed to close '%s' while writing image, all data may not have been saved: %"
-"s"
-msgstr ""
-" '%s' ప్రతిబింబాన్ని రాస్తున్నప్పుడు  %sను మూయుటలో విఫలమైంది. దత్తాంశమంతా దాచిపెట్టబడి వుండకపోవచ్చు."
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:2290 gdk-pixbuf/gdk-pixbuf-io.c:2341
-msgid "Insufficient memory to save image into a buffer"
-msgstr "ప్రతిబింబాన్ని వాటికయందు దాచుటకు శక్తి చాలదు"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:2387
-msgid "Error writing to image stream"
-msgstr "ప్రతిబింబ స్ట్రీమ్‌కు వ్రాయుటలో దోషము"
-
-#: gdk-pixbuf/gdk-pixbuf-loader.c:334
-#, c-format
-msgid ""
-"Internal error: Image loader module '%s' failed to complete an operation, "
-"but didn't give a reason for the failure"
-msgstr ""
-"అంతర్గత దోషం : ప్రతిబింబాన్ని నింపేటప్పుడు ప్రతిబింబ ప్రమాణం '%s' విఫలం అయింది. వైఫల్యానికి కారణం "
-"చెప్పబడలేదు."
-
-#: gdk-pixbuf/gdk-pixbuf-loader.c:376
-#, c-format
-msgid "Incremental loading of image type '%s' is not supported"
-msgstr "'%s' రకం ప్రతిబింబాన్ని ఆరోహణలో నింపుటకు సహకారం లేదు."
-
-#: gdk-pixbuf/gdk-pixdata.c:147
-msgid "Image header corrupt"
-msgstr "ప్రతిబింబ శీర్షిక చెడిపోయింది."
-
-#: gdk-pixbuf/gdk-pixdata.c:152
-msgid "Image format unknown"
-msgstr "ప్రతిబింబ రూపలావణ్యాలు అపరిచితం"
-
-#: gdk-pixbuf/gdk-pixdata.c:157 gdk-pixbuf/gdk-pixdata.c:488
-msgid "Image pixel data corrupt"
-msgstr "ప్రతిబింబ పిక్సెల్ దత్తాంశం చెడిపోయింది."
-
-#: gdk-pixbuf/gdk-pixdata.c:432
-#, c-format
-msgid "failed to allocate image buffer of %u byte"
-msgid_plural "failed to allocate image buffer of %u bytes"
-msgstr[0] ""
-msgstr[1] ""
-
-#: gdk-pixbuf/io-ani.c:244
-msgid "Unexpected icon chunk in animation"
-msgstr "సచేతనంలో ఊహించని ప్రతిమా ఖండం"
-
-#: gdk-pixbuf/io-ani.c:337
-msgid "Unsupported animation type"
-msgstr "సహకారం లేని సచేతన రకం"
-
-#: gdk-pixbuf/io-ani.c:348 gdk-pixbuf/io-ani.c:406 gdk-pixbuf/io-ani.c:432
-#: gdk-pixbuf/io-ani.c:455 gdk-pixbuf/io-ani.c:482 gdk-pixbuf/io-ani.c:569
-msgid "Invalid header in animation"
-msgstr "సచేతనంలో చెల్లుబాటుకాని శీర్షిక"
-
-#: gdk-pixbuf/io-ani.c:358 gdk-pixbuf/io-ani.c:380 gdk-pixbuf/io-ani.c:464
-#: gdk-pixbuf/io-ani.c:491 gdk-pixbuf/io-ani.c:542 gdk-pixbuf/io-ani.c:614
-msgid "Not enough memory to load animation"
-msgstr "సచేతనాన్ని నింపుటకు సరిపడే జ్ఞాపక శక్తి లేదు"
-
-#: gdk-pixbuf/io-ani.c:398 gdk-pixbuf/io-ani.c:424 gdk-pixbuf/io-ani.c:443
-msgid "Malformed chunk in animation"
-msgstr "సచేతనంలో వికృత ఖండం"
-
-#: gdk-pixbuf/io-ani.c:711
-msgid "The ANI image format"
-msgstr "ANI ప్రతిబింబ రూపలావణ్యం"
-
-#: gdk-pixbuf/io-bmp.c:230 gdk-pixbuf/io-bmp.c:267 gdk-pixbuf/io-bmp.c:338
-#: gdk-pixbuf/io-bmp.c:370 gdk-pixbuf/io-bmp.c:393 gdk-pixbuf/io-bmp.c:496
-msgid "BMP image has bogus header data"
-msgstr "BMP ప్రతిబింబం నకిలీ శీర్షిక దత్తాంశాన్ని కలిగివుంది."
-
-#: gdk-pixbuf/io-bmp.c:241 gdk-pixbuf/io-bmp.c:433
-msgid "Not enough memory to load bitmap image"
-msgstr "బిట్_మ్యాప్ ప్రతిబింబాన్ని నింపుటకు సరిపడే జ్ఞాపక శక్తి లేదు."
-
-#: gdk-pixbuf/io-bmp.c:319
-msgid "BMP image has unsupported header size"
-msgstr "సహకారంలేని BMP ప్రతిబింబ శీర్షిక పరిమాణం"
-
-#: gdk-pixbuf/io-bmp.c:357
-msgid "Topdown BMP images cannot be compressed"
-msgstr "టాప్‌డౌన్ BMP చిత్రాలు కుచింపబడవు"
-
-#: gdk-pixbuf/io-bmp.c:717 gdk-pixbuf/io-pnm.c:709
-msgid "Premature end-of-file encountered"
-msgstr "పరిపక్వం చెందని దత్తాంశ అంతం కనిపెట్టబడింది"
-
-#: gdk-pixbuf/io-bmp.c:1329
-msgid "Couldn't allocate memory for saving BMP file"
-msgstr "BMP దస్త్రాన్ని దాచటానికి జ్ఞాపకశక్తిని సమకూర్చలేదు"
-
-#: gdk-pixbuf/io-bmp.c:1370
-msgid "Couldn't write to BMP file"
-msgstr "BMP దస్త్రమునకు వ్రయలేము"
-
-#: gdk-pixbuf/io-bmp.c:1423 gdk-pixbuf/io-gdip-bmp.c:82
-msgid "The BMP image format"
-msgstr "BMP ప్రతిబింబ రూపలావణ్యం"
-
-#: gdk-pixbuf/io-gif.c:222
-#, c-format
-msgid "Failure reading GIF: %s"
-msgstr "GIF చదువుటలో విఫలమైంది.: %s"
-
-#: gdk-pixbuf/io-gif.c:496 gdk-pixbuf/io-gif.c:1481 gdk-pixbuf/io-gif.c:1642
-msgid "GIF file was missing some data (perhaps it was truncated somehow?)"
-msgstr ""
-"GIF దస్త్రము కొంత దత్తాంశాన్ని కోల్పోయింది.  (బహుశా దాని చివరి భాగం  ఎలాగో కత్తిరించబడి వుంటుంది?)"
-
-#: gdk-pixbuf/io-gif.c:505
-#, c-format
-msgid "Internal error in the GIF loader (%s)"
-msgstr "GIF నింపుదారులో     అంతర్గత దోషం(%s) "
-
-#: gdk-pixbuf/io-gif.c:579
-msgid "Stack overflow"
-msgstr "దొంతర పొంగిపొరలు"
-
-#: gdk-pixbuf/io-gif.c:639
-msgid "GIF image loader cannot understand this image."
-msgstr "ఈ ప్రతిబింబాన్ని GIF ప్రతిబింబనింపుదారు అర్థంచేసుకోలేదు."
-
-#: gdk-pixbuf/io-gif.c:668
-msgid "Bad code encountered"
-msgstr "తప్పడు సంకేతం కనిపెట్టబడింది"
-
-#: gdk-pixbuf/io-gif.c:678
-msgid "Circular table entry in GIF file"
-msgstr "GIF దస్త్రంలో వృత్త పట్టీ "
-
-#: gdk-pixbuf/io-gif.c:866 gdk-pixbuf/io-gif.c:1468 gdk-pixbuf/io-gif.c:1515
-#: gdk-pixbuf/io-gif.c:1630
-msgid "Not enough memory to load GIF file"
-msgstr "GIF దస్త్రంను నింపుటకు సరిపడా జ్ఞాపకశక్తి లేదు "
-
-#: gdk-pixbuf/io-gif.c:960
-msgid "Not enough memory to composite a frame in GIF file"
-msgstr "GIF దస్త్రమునందు ఒక ఫ్రేము ను మిళితం చేయుటకు సరిపోవు మెమోరీ లేదు"
-
-#: gdk-pixbuf/io-gif.c:1132
-msgid "GIF image is corrupt (incorrect LZW compression)"
-msgstr "GIF ప్రతిబింబం చెడిపోయింది. (తప్పడు  LZW కుదింపు)"
-
-#: gdk-pixbuf/io-gif.c:1182
-msgid "File does not appear to be a GIF file"
-msgstr "ఈ దస్త్రం GIF దస్త్రంలా కనిపించుటలేదు"
-
-#: gdk-pixbuf/io-gif.c:1194
-#, c-format
-msgid "Version %s of the GIF file format is not supported"
-msgstr "GIF దస్త్ర రూప లావణ్యం%s వివరణానికి సహకరించుటలేదు"
-
-#: gdk-pixbuf/io-gif.c:1303
-msgid ""
-"GIF image has no global colormap, and a frame inside it has no local "
-"colormap."
-msgstr ""
-"GIF ప్రతిబింబానికి ప్రాపంచిక వర్ణసంధానం లేదుమరియు ఫలకములోపల దానికి స్థానిక వర్ణసంధానం కూడా లేదు."
-
-#: gdk-pixbuf/io-gif.c:1537
-msgid "GIF image was truncated or incomplete."
-msgstr "GIF ప్రతిబింబం కత్తిరింపబడింది లేదా అసంపూర్ణం"
-
-#: gdk-pixbuf/io-gif.c:1693 gdk-pixbuf/io-gdip-gif.c:80
-msgid "The GIF image format"
-msgstr "GIF ప్రతిబింబం ఉపలావణ్యం"
-
-#: gdk-pixbuf/io-ico.c:211 gdk-pixbuf/io-ico.c:225 gdk-pixbuf/io-ico.c:277
-#: gdk-pixbuf/io-ico.c:290 gdk-pixbuf/io-ico.c:359
-msgid "Invalid header in icon"
-msgstr "ప్రతిమలో చెల్లని శీర్షిక"
-
-#: gdk-pixbuf/io-ico.c:240 gdk-pixbuf/io-ico.c:300 gdk-pixbuf/io-ico.c:369
-#: gdk-pixbuf/io-ico.c:432 gdk-pixbuf/io-ico.c:462
-msgid "Not enough memory to load icon"
-msgstr "ప్రతిమను నింపుటకు కావలసిన జ్ఞాపకశక్తి లేదు"
-
-#: gdk-pixbuf/io-ico.c:322
-msgid "Icon has zero width"
-msgstr "ప్రతిమవెడల్పుసున్నా"
-
-#: gdk-pixbuf/io-ico.c:332
-msgid "Icon has zero height"
-msgstr "ప్రతిమ ఎత్తు సున్నా"
-
-#: gdk-pixbuf/io-ico.c:384
-msgid "Compressed icons are not supported"
-msgstr "కుదింపబడిన ప్రతిమలకు సహకారంలేదు"
-
-#: gdk-pixbuf/io-ico.c:417
-msgid "Unsupported icon type"
-msgstr "ఈ రకం ప్రతిమకు సహకారం లేదు"
-
-#: gdk-pixbuf/io-ico.c:511
-msgid "Not enough memory to load ICO file"
-msgstr "ICO దస్త్రం నింపుటకు కావలసిన జ్ఞాపకశక్తి లేదు"
-
-#: gdk-pixbuf/io-ico.c:976
-msgid "Image too large to be saved as ICO"
-msgstr "ICOగా దాచుటకు ప్రతిబింబం పెద్దదైపోతుంది"
-
-#: gdk-pixbuf/io-ico.c:987
-msgid "Cursor hotspot outside image"
-msgstr "ప్రతిబింబం వెలుపలిములుకు సంచరించు స్థలం"
-
-#: gdk-pixbuf/io-ico.c:1010
-#, c-format
-msgid "Unsupported depth for ICO file: %d"
-msgstr "ICO దస్త్ర లోతునకు సహకారం లేదుక: %d"
-
-#: gdk-pixbuf/io-ico.c:1245 gdk-pixbuf/io-gdip-ico.c:59
-msgid "The ICO image format"
-msgstr "ICO ప్రతిబింబ రూపలావణ్యం"
-
-#: gdk-pixbuf/io-icns.c:347
-#, c-format
-msgid "Error reading ICNS image: %s"
-msgstr "ICNS ప్రతిబింబం చదువుటలో దోషము: %s"
-
-#: gdk-pixbuf/io-icns.c:364
-msgid "Could not decode ICNS file"
-msgstr "ICNS దస్త్రాన్ని డీకో‍డ్ చేయలేకపోయింది"
-
-#: gdk-pixbuf/io-icns.c:397
-msgid "The ICNS image format"
-msgstr "ICNS ప్రతిబింబ రూపం"
-
-#: gdk-pixbuf/io-jasper.c:75
-msgid "Couldn't allocate memory for stream"
-msgstr "స్ట్రీమ్‌కు జ్ఞాపకశక్తిని స్థాననిర్దేశకం చేయలేము."
-
-#: gdk-pixbuf/io-jasper.c:105
-msgid "Couldn't decode image"
-msgstr "ప్రతిబింబంను డీకోడ్ చేయలేము"
-
-#: gdk-pixbuf/io-jasper.c:123
-msgid "Transformed JPEG2000 has zero width or height"
-msgstr "మార్పుకు లోనైన JPEG2000 పొడువు లేదా వెడల్పులు శూన్యం."
-
-#: gdk-pixbuf/io-jasper.c:137
-msgid "Image type currently not supported"
-msgstr "ప్రతిబింబం రకము ప్రస్తుతం మద్దతీయుటలేదు."
-
-#: gdk-pixbuf/io-jasper.c:149 gdk-pixbuf/io-jasper.c:157
-msgid "Couldn't allocate memory for color profile"
-msgstr "వర్ణ ప్రొఫైల్‌కు జ్ఞాపకశక్తిని కేటాయింటలేక పోయింది"
-
-#: gdk-pixbuf/io-jasper.c:183
-msgid "Insufficient memory to open JPEG 2000 file"
-msgstr "JPEG 2000 దస్త్రాన్ని తెరువుటకు చాలని జ్ఞాపకశక్తి"
-
-#: gdk-pixbuf/io-jasper.c:262
-msgid "Couldn't allocate memory to buffer image data"
-msgstr "బఫర్ ప్రతిబింబ డాటాకు జ్ఞాపకశక్తిని కేటాయించలేక పోయింది"
-
-#: gdk-pixbuf/io-jasper.c:306
-msgid "The JPEG 2000 image format"
-msgstr "JPEG2000 ప్రతిబింబ రూపలావణ్యం"
-
-#: gdk-pixbuf/io-jpeg.c:117
-#, c-format
-msgid "Error interpreting JPEG image file (%s)"
-msgstr " JPEG ప్రతిబింబ విశ్లేషణలో దోషం(%s)"
-
-#: gdk-pixbuf/io-jpeg.c:528
-msgid ""
-"Insufficient memory to load image, try exiting some applications to free "
-"memory"
-msgstr "ప్రతిబింబమును నింపుటకు జ్ఞాపకశక్తి చాలదు. కొన్ని కార్యక్షేత్రములను తొలగించి మరలా ప్రయత్నించండి"
-
-#: gdk-pixbuf/io-jpeg.c:569 gdk-pixbuf/io-jpeg.c:775
-#, c-format
-msgid "Unsupported JPEG color space (%s)"
-msgstr " సహకారం లేనిJPEG వర్ణప్రదేశము (%s)"
-
-#: gdk-pixbuf/io-jpeg.c:674 gdk-pixbuf/io-jpeg.c:944 gdk-pixbuf/io-jpeg.c:1177
-#: gdk-pixbuf/io-jpeg.c:1186
-msgid "Couldn't allocate memory for loading JPEG file"
-msgstr "JPEG దస్త్రంను నింపుటకుస్థాననిర్దేశకం చేయలేము."
-
-#: gdk-pixbuf/io-jpeg.c:919
-msgid "Transformed JPEG has zero width or height."
-msgstr "మార్పుకు లోనైన JPEG పొడువు లేదా వెడల్పులు శూన్యం."
-
-#: gdk-pixbuf/io-jpeg.c:1133 gdk-pixbuf/io-gdip-jpeg.c:53
-#, c-format
-msgid ""
-"JPEG quality must be a value between 0 and 100; value '%s' could not be "
-"parsed."
-msgstr "JPEG నాణ్యత 0కు100 మధ్య విలువఅయివుండవలెను'%s' విలువను పదానుబంధీకరణ చేయలేము."
-
-#: gdk-pixbuf/io-jpeg.c:1148 gdk-pixbuf/io-gdip-jpeg.c:68
-#, c-format
-msgid ""
-"JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
-msgstr "JPEG నాణ్యత 0కు100కు మధ్య విలువ అయివుండవలెను '%d విలువ ఆమోదింపబడదు"
-
-#: gdk-pixbuf/io-jpeg.c:1310 gdk-pixbuf/io-gdip-jpeg.c:136
-msgid "The JPEG image format"
-msgstr "JPEG ప్రతిబింబరూప లావణ్యం"
-
-#: gdk-pixbuf/io-pcx.c:187
-msgid "Couldn't allocate memory for header"
-msgstr "శీర్షికకు జ్ఞాపకశక్తిని స్థాననిర్దేశకం చేయలేము."
-
-#: gdk-pixbuf/io-pcx.c:202 gdk-pixbuf/io-pcx.c:560
-msgid "Couldn't allocate memory for context buffer"
-msgstr "ప్రకరణవాటికకు జ్ఞాపకశక్తిని స్థాననిర్దేశకం చేయలేము."
-
-#: gdk-pixbuf/io-pcx.c:601
-msgid "Image has invalid width and/or height"
-msgstr "ప్రతిబింబం చెల్లని ఎత్తు  లేదా / మరియు వెడల్పులను కలిగివుంది"
-
-#: gdk-pixbuf/io-pcx.c:613 gdk-pixbuf/io-pcx.c:674
-msgid "Image has unsupported bpp"
-msgstr "ప్రతిబింబం సహకారంలేని bpp కలిగివుంది."
-
-#: gdk-pixbuf/io-pcx.c:618 gdk-pixbuf/io-pcx.c:626
-#, c-format
-msgid "Image has unsupported number of %d-bit planes"
-msgstr "ప్రతిబింబం సహకారంలేని   %d బిట్తలాలసంఖ్యను కలిగివుంది."
-
-#: gdk-pixbuf/io-pcx.c:642
-msgid "Couldn't create new pixbuf"
-msgstr "కొత్త  pixbufను సృష్టించలేము"
-
-#: gdk-pixbuf/io-pcx.c:650
-msgid "Couldn't allocate memory for line data"
-msgstr "వరుస దత్తాంశానికి జ్ఞాపకశక్తిని స్థాననిర్దేశకం చేయలేము"
-
-#: gdk-pixbuf/io-pcx.c:657
-msgid "Couldn't allocate memory for paletted data"
-msgstr "పాలెటెడ్ డాటాకు మెమోరీని సమకూర్చలేము"
-
-#: gdk-pixbuf/io-pcx.c:704
-msgid "Didn't get all lines of PCX image"
-msgstr "PCX ప్రతిబింబం యెఉక్క అన్ని వరుసలను తీసుకురాలేదు."
-
-#: gdk-pixbuf/io-pcx.c:711
-msgid "No palette found at end of PCX data"
-msgstr "PCX దత్తాంశం చివరలో వర్ణపలకం కనిపించలేదు"
-
-#: gdk-pixbuf/io-pcx.c:756
-msgid "The PCX image format"
-msgstr "PCX ప్రతిబింబ రూపలావణ్యం"
-
-#: gdk-pixbuf/io-png.c:55
-msgid "Bits per channel of PNG image is invalid."
-msgstr "PNG ప్రతిబింబ ప్రసారమార్గబిట్ చెల్లవు."
-
-#: gdk-pixbuf/io-png.c:136 gdk-pixbuf/io-png.c:642
-msgid "Transformed PNG has zero width or height."
-msgstr "మార్పుకు లోనైన PNG పొడువు వెడల్పులు ౯శూన్యం."
-
-#: gdk-pixbuf/io-png.c:144
-msgid "Bits per channel of transformed PNG is not 8."
-msgstr "మార్పుకు లోనైన  PNG ప్రసార మార్గ  Bits సంఖ్య 8కాదు."
-
-#: gdk-pixbuf/io-png.c:153
-msgid "Transformed PNG not RGB or RGBA."
-msgstr "మార్పునకు లోనైన PNG RGB లేదా RGBA కాదు."
-
-#: gdk-pixbuf/io-png.c:162
-msgid "Transformed PNG has unsupported number of channels, must be 3 or 4."
-msgstr "మార్పునకు లోనైన PNG మద్దతుకానన్ని చానల్సును కలిగిఉంది, 3 లేదా 4౪"
-
-#: gdk-pixbuf/io-png.c:183
-#, c-format
-msgid "Fatal error in PNG image file: %s"
-msgstr "PNG ప్రతిబింబదస్త్రం  లో అనివార్య దోషం %s"
-
-#: gdk-pixbuf/io-png.c:316
-msgid "Insufficient memory to load PNG file"
-msgstr "PNG దస్త్రంను నింపుటకు జ్ఞాపకశక్తి చాలదు. "
-
-#: gdk-pixbuf/io-png.c:657
-#, c-format
-msgid ""
-"Insufficient memory to store a %ld by %ld image; try exiting some "
-"applications to reduce memory usage"
-msgstr ""
-"%ld ను  %ldపతిబింబంతోదాచుటకు జ్ఞాపకశక్తి చాలదు జ్ఞాపకశక్తి వాడికను తగ్గించుటకు కొన్ని కార్యక్షేత్రాలను "
-"తొలగించును"
-
-#: gdk-pixbuf/io-png.c:720
-msgid "Fatal error reading PNG image file"
-msgstr "PNG ప్రతిబింబ దస్ర్తాన్ని చదువుటలో అనివార్యదోషం"
-
-#: gdk-pixbuf/io-png.c:769
-#, c-format
-msgid "Fatal error reading PNG image file: %s"
-msgstr "PNG ప్రతిబింబ దస్త్రం %s ను చదువుటలో అనివార్య దోషం"
-
-#: gdk-pixbuf/io-png.c:863
-msgid ""
-"Keys for PNG text chunks must have at least 1 and at most 79 characters."
-msgstr ""
-"PNG పాఠ్య ఖండాలకొరకు మీటలు అతి తక్కువగా ఒకఅక్షరాన్ని అతి ఎక్కువగా 79అక్షరములను కలిగివుండవలెను"
-
-#: gdk-pixbuf/io-png.c:872
-msgid "Keys for PNG text chunks must be ASCII characters."
-msgstr "PNG పాఠ్య ఖండాల కొరకు మీటలు ASCII అక్షరములై౯ వుండవలెను."
-
-#: gdk-pixbuf/io-png.c:886 gdk-pixbuf/io-tiff.c:738
-#, c-format
-msgid "Color profile has invalid length %d."
-msgstr ""
-
-#: gdk-pixbuf/io-png.c:899 gdk-pixbuf/io-gdip-png.c:56
-#, c-format
-msgid ""
-"PNG compression level must be a value between 0 and 9; value '%s' could not "
-"be parsed."
-msgstr "JPEG నాణ్యత 0కు9 మధ్య విలువఅయివుండవలెను, '%s' విలువను పదానుబంధీకరణ చేయలేము."
-
-#: gdk-pixbuf/io-png.c:912 gdk-pixbuf/io-gdip-png.c:68
-#, c-format
-msgid ""
-"PNG compression level must be a value between 0 and 9; value '%d' is not "
-"allowed."
-msgstr "JPEG నాణ్యత 0కు9కు మధ్య విలువ అయివుండవలెను; '%d విలువ ఆమోదింపబడదు"
-
-#: gdk-pixbuf/io-png.c:951
-#, c-format
-msgid "Value for PNG text chunk %s cannot be converted to ISO-8859-1 encoding."
-msgstr "PNG పాఠ్య చంక్ %s విలువ ISO-8859-1 సంకేతరచనకు మార్చబడలేదు."
-
-#: gdk-pixbuf/io-png.c:1112 gdk-pixbuf/io-gdip-png.c:133
-msgid "The PNG image format"
-msgstr "PNG ప్రతిబింబ రూపలావణ్యం"
-
-#: gdk-pixbuf/io-pnm.c:250
-msgid "PNM loader expected to find an integer, but didn't"
-msgstr "PNM నింపుదారు పూర్ణాంకం వస్తుందని ౯ఊహించింది కాని అది రాలేదు"
-
-#: gdk-pixbuf/io-pnm.c:282
-msgid "PNM file has an incorrect initial byte"
-msgstr "PNM దస్త్రం లో మెఉదటి బైట్ తప్పుగా వుంది"
-
-#: gdk-pixbuf/io-pnm.c:312
-msgid "PNM file is not in a recognized PNM subformat"
-msgstr "PNM దస్త్రం గుర్తింపుపొందిన  PNM ఉపరూపలావణ్యం ౯కాదు"
-
-#: gdk-pixbuf/io-pnm.c:337
-msgid "PNM file has an image width of 0"
-msgstr "PNM దస్త్రం లో ప్రతిబింబ వెడల్పు 0"
-
-#: gdk-pixbuf/io-pnm.c:358
-msgid "PNM file has an image height of 0"
-msgstr "PNM దస్త్రంలో ప్రతిబింబ పొడవు  0"
-
-#: gdk-pixbuf/io-pnm.c:381
-msgid "Maximum color value in PNM file is 0"
-msgstr "PNM దస్త్రంలో అత్యధిక వర్ణసంఖ్య 0"
-
-#: gdk-pixbuf/io-pnm.c:389
-msgid "Maximum color value in PNM file is too large"
-msgstr "PNM దస్త్రంలో అత్యధిక వర్ణసంఖ్య చాలా ఎక్కువగా వుంది "
-
-#: gdk-pixbuf/io-pnm.c:429 gdk-pixbuf/io-pnm.c:459 gdk-pixbuf/io-pnm.c:504
-msgid "Raw PNM image type is invalid"
-msgstr "అపక్వ PNM ప్రతిబింబ రకం చెల్లదు "
-
-#: gdk-pixbuf/io-pnm.c:654
-msgid "PNM image loader does not support this PNM subformat"
-msgstr "PNM ప్రతిబింబ నింపుదారు ఈ రకం PNM ఉపరూప లావణ్యాన్ని సహకరించుటలేదు"
-
-#: gdk-pixbuf/io-pnm.c:741 gdk-pixbuf/io-pnm.c:968
-msgid "Raw PNM formats require exactly one whitespace before sample data"
-msgstr "అపక్వ PNM రూపలావణ్యాలు ఉదాహరణదత్తాంశానికి ముందు  ఖచ్ఛితంగా ఒక ఖాళీ ప్రదేశం వుండవలెను "
-
-#: gdk-pixbuf/io-pnm.c:768
-msgid "Cannot allocate memory for loading PNM image"
-msgstr "PNM ప్రతిబింబం నింపుటకు జ్ఞాపకశక్తి ని స్థాననిర్దేశకం చేయలేము"
-
-#: gdk-pixbuf/io-pnm.c:818
-msgid "Insufficient memory to load PNM context struct"
-msgstr "PNM  context structను నింపుటకు జ్ఞాపకశక్తి చాలదు  "
-
-#: gdk-pixbuf/io-pnm.c:869
-msgid "Unexpected end of PNM image data"
-msgstr "PNM ప్రతిబింబ దత్తాంశంలో ఊహించని అంతం "
-
-#: gdk-pixbuf/io-pnm.c:997
-msgid "Insufficient memory to load PNM file"
-msgstr "PNM దస్ర్తాన్ని నింపుటకు జ్ఞాపకశక్తి చాలదు "
-
-#: gdk-pixbuf/io-pnm.c:1081
-msgid "The PNM/PBM/PGM/PPM image format family"
-msgstr "PNM/PBM/PGM/PPM ప్రతిబింబ రూప లావణ్య  కుటుంబం"
-
-#: gdk-pixbuf/io-qtif.c:128
-msgid "Input file descriptor is NULL."
-msgstr ""
-
-#: gdk-pixbuf/io-qtif.c:143
-#, fuzzy
-msgid "Failed to read QTIF header"
-msgstr "పీఠిక కు వ్రాయుటలో విఫైలమైంది\n"
-
-#: gdk-pixbuf/io-qtif.c:152 gdk-pixbuf/io-qtif.c:182 gdk-pixbuf/io-qtif.c:446
-#, c-format
-msgid "QTIF atom size too large (%d bytes)"
-msgstr ""
-
-#: gdk-pixbuf/io-qtif.c:172
-#, c-format
-msgid "Failed to allocate %d bytes for file read buffer"
-msgstr ""
-
-#: gdk-pixbuf/io-qtif.c:196
-#, fuzzy, c-format
-msgid "File error when reading QTIF atom: %s"
-msgstr "GIF చదువుటలో విఫలమైంది.: %s"
-
-#: gdk-pixbuf/io-qtif.c:233
-#, c-format
-msgid "Failed to skip the next %d bytes with seek()."
-msgstr ""
-
-#: gdk-pixbuf/io-qtif.c:257
-#, fuzzy
-msgid "Failed to allocate QTIF context structure."
-msgstr "Cannot allocate memory for TGA context structకు స్థాన నిర్దేశకం చేయులేము"
-
-#: gdk-pixbuf/io-qtif.c:317
-#, fuzzy
-msgid "Failed to create GdkPixbufLoader object."
-msgstr "సంచయపు ఇండేక్స్ కు వ్రాయుటలో విఫలమైంది\n"
-
-#: gdk-pixbuf/io-qtif.c:421
-#, fuzzy
-msgid "Failed to find an image data atom."
-msgstr "TIFF ప్రతిబింబాన్ని తెరుచుటలో విఫలమైంది"
-
-#: gdk-pixbuf/io-qtif.c:602
-#, fuzzy
-msgid "The QTIF image format"
-msgstr "TIFF ప్రతిబింబ రూపలావణ్యం"
-
-#: gdk-pixbuf/io-ras.c:126
-msgid "RAS image has bogus header data"
-msgstr "RAS  ప్రతిబింబ శీర్షిక దత్తాంశం నకిలీది"
-
-#: gdk-pixbuf/io-ras.c:148
-msgid "RAS image has unknown type"
-msgstr "RAS ప్రతిబింబ రకం అపరిచితం"
-
-#: gdk-pixbuf/io-ras.c:156
-msgid "unsupported RAS image variation"
-msgstr "RAS ప్రతిబింబ మార్పిడికి సహకారంలేదు "
-
-#: gdk-pixbuf/io-ras.c:171 gdk-pixbuf/io-ras.c:200
-msgid "Not enough memory to load RAS image"
-msgstr "RAS  ప్రతిబింబాన్ని నింపుటకు సరిపడా జ్ఞాపకశక్తి లేదు"
-
-#: gdk-pixbuf/io-ras.c:545
-msgid "The Sun raster image format"
-msgstr "సన్ రాస్టర్ ప్రతిబింబరూపలావణ్యం"
-
-#: gdk-pixbuf/io-tga.c:154
-msgid "Cannot allocate memory for IOBuffer struct"
-msgstr "IOBuffer structకు జ్ఞాపకశక్తిని స్థానాన్ని నిర్దేశించలేము"
-
-#: gdk-pixbuf/io-tga.c:173
-msgid "Cannot allocate memory for IOBuffer data"
-msgstr "IOBuffer దత్తాంశానికి జ్ఞాపకశక్తినిస్థానాన్ని నిర్దేశించలేము"
-
-#: gdk-pixbuf/io-tga.c:184
-msgid "Cannot realloc IOBuffer data"
-msgstr "IOBuffer దత్తాంశానికి మరల స్థానాన్ని నిర్దేశించలేము."
-
-#: gdk-pixbuf/io-tga.c:214
-msgid "Cannot allocate temporary IOBuffer data"
-msgstr "IOBuffer దత్తాంశానికి తాత్కాలికంగా జ్ఞాపకశక్తిని స్థాననిర్దేశకం చేయలేము."
-
-#: gdk-pixbuf/io-tga.c:347
-msgid "Cannot allocate new pixbuf"
-msgstr "కొత్తpixbuf కు స్థాన నిర్దేశకం చేయలేము"
-
-#: gdk-pixbuf/io-tga.c:686
-#, fuzzy
-msgid "Image is corrupted or truncated"
-msgstr "GIF ప్రతిబింబం కత్తిరింపబడింది లేదా అసంపూర్ణం"
-
-#: gdk-pixbuf/io-tga.c:693
-msgid "Cannot allocate colormap structure"
-msgstr "వర్ణమాపక నిర్మాణానికి స్థాననిర్దేశకం చేయలేము"
-
-#: gdk-pixbuf/io-tga.c:700
-msgid "Cannot allocate colormap entries"
-msgstr "వర్ణమాపక ప్రవేశకాలకు స్థాననిర్దేశకం చేయలేము"
-
-#: gdk-pixbuf/io-tga.c:722
-msgid "Unexpected bitdepth for colormap entries"
-msgstr "వర్ణమాపక ప్రవేశకాలలో ఊహించని  బిట్ లోతు"
-
-#: gdk-pixbuf/io-tga.c:740
-msgid "Cannot allocate TGA header memory"
-msgstr "TGA శీర్షిక అగ్ర జ్ఞాపకశక్తిని స్థాననిర్దేశకం చేయలేము"
-
-#: gdk-pixbuf/io-tga.c:773
-msgid "TGA image has invalid dimensions"
-msgstr "TGA ప్రతిబింబం కొలతలు చెల్లవు"
-
-#: gdk-pixbuf/io-tga.c:779 gdk-pixbuf/io-tga.c:788 gdk-pixbuf/io-tga.c:798
-#: gdk-pixbuf/io-tga.c:808 gdk-pixbuf/io-tga.c:815
-msgid "TGA image type not supported"
-msgstr "TGA ప్రతిబింబ రకానికి సహకారం లేదు"
-
-#: gdk-pixbuf/io-tga.c:862
-msgid "Cannot allocate memory for TGA context struct"
-msgstr "Cannot allocate memory for TGA context structకు స్థాన నిర్దేశకం చేయులేము"
-
-#: gdk-pixbuf/io-tga.c:927
-msgid "Excess data in file"
-msgstr "దస్త్రములలోమిగిలిపోయిన దత్తాంశం"
-
-#: gdk-pixbuf/io-tga.c:1008
-msgid "The Targa image format"
-msgstr "Targa ప్రతిరూప లావణ్యం"
-
-#: gdk-pixbuf/io-tiff.c:165
-msgid "Could not get image width (bad TIFF file)"
-msgstr "ప్రతిబింబ వెడల్పు ను గ్రహించలేకపోయాము (దోషపూరిత TIFF దస్త్రం)"
-
-#: gdk-pixbuf/io-tiff.c:172
-msgid "Could not get image height (bad TIFF file)"
-msgstr "ప్రతిబింబ పొడవును గుర్తించలేకపోయాము (దోషపూరిత TIFF దస్త్రం)"
-
-#: gdk-pixbuf/io-tiff.c:180
-msgid "Width or height of TIFF image is zero"
-msgstr "TIFF ప్రతిబింబం ౦0అయిన పొడవును వెడల్పు ను కలిగి వుంది"
-
-#: gdk-pixbuf/io-tiff.c:189 gdk-pixbuf/io-tiff.c:198
-msgid "Dimensions of TIFF image too large"
-msgstr "TIFFకొలతలు పెద్దవిగా వున్నవి"
-
-#: gdk-pixbuf/io-tiff.c:222 gdk-pixbuf/io-tiff.c:234 gdk-pixbuf/io-tiff.c:561
-msgid "Insufficient memory to open TIFF file"
-msgstr "TIFF దస్త్రం తెరుచుటకు జ్ఞాపకశక్తి చాలదు"
-
-#: gdk-pixbuf/io-tiff.c:295
-msgid "Failed to load RGB data from TIFF file"
-msgstr " TIFF దస్త్రం నుండి RGB దత్తాంశాన్ని నింపుకొనుటలో విఫలమైంది"
-
-#: gdk-pixbuf/io-tiff.c:351
-msgid "Failed to open TIFF image"
-msgstr "TIFF ప్రతిబింబాన్ని తెరుచుటలో విఫలమైంది"
-
-#: gdk-pixbuf/io-tiff.c:363 gdk-pixbuf/io-tiff.c:778
-msgid "TIFFClose operation failed"
-msgstr "TIFFను మూసివేసే ప్రయత్నం విఫలమైంది"
-
-#: gdk-pixbuf/io-tiff.c:493 gdk-pixbuf/io-tiff.c:506
-msgid "Failed to load TIFF image"
-msgstr "TIFF ప్రతిబింబాన్ని నింపుకొనుటలో విఫలమైంది"
-
-#: gdk-pixbuf/io-tiff.c:692
-msgid "Failed to save TIFF image"
-msgstr "TIFF ప్రతిబింబాన్ని దాచుటలో విఫలమైంది"
-
-#: gdk-pixbuf/io-tiff.c:727
-msgid "TIFF compression doesn't refer to a valid codec."
-msgstr ""
-
-#: gdk-pixbuf/io-tiff.c:767
-msgid "Failed to write TIFF data"
-msgstr "TIFF డాటాకు వ్రాయుటలో దోషం"
-
-#: gdk-pixbuf/io-tiff.c:814
-msgid "Couldn't write to TIFF file"
-msgstr "TIFF దస్త్రముకు వ్రాయలేకపోయింది"
-
-#: gdk-pixbuf/io-tiff.c:869
-msgid "The TIFF image format"
-msgstr "TIFF ప్రతిబింబ రూపలావణ్యం"
-
-#: gdk-pixbuf/io-wbmp.c:246
-msgid "Image has zero width"
-msgstr "ప్రతిబింబ వెడల్పు 0"
-
-#: gdk-pixbuf/io-wbmp.c:264
-msgid "Image has zero height"
-msgstr "ప్రతిబింబ పొడవు 0"
-
-#: gdk-pixbuf/io-wbmp.c:275
-msgid "Not enough memory to load image"
-msgstr "ప్రతిబింబాన్ని నింపుటకు తగిన జ్ఞాపకశక్తి లేదు"
-
-#: gdk-pixbuf/io-wbmp.c:334
-msgid "Couldn't save the rest"
-msgstr "మిగిలిన వాటిని దాచలేము"
-
-#: gdk-pixbuf/io-wbmp.c:375
-msgid "The WBMP image format"
-msgstr "WBMP ప్రతిరూప లావణ్యం"
-
-#: gdk-pixbuf/io-xbm.c:295
-msgid "Invalid XBM file"
-msgstr "XBM దస్త్రం చెల్లదు"
-
-#: gdk-pixbuf/io-xbm.c:305
-msgid "Insufficient memory to load XBM image file"
-msgstr "XBM  ప్రతిబింబ దస్ర్తాన్ని నింపుటకు జ్ఞాపకశక్తి చాలదు"
-
-#: gdk-pixbuf/io-xbm.c:453
-msgid "Failed to write to temporary file when loading XBM image"
-msgstr "XBM ప్రతిబింబాన్ని నింపునపుడు తాత్కాలిక దస్త్రంనకు రాయుట విఫలమైంది "
-
-#: gdk-pixbuf/io-xbm.c:492
-msgid "The XBM image format"
-msgstr "XBM ప్రతిబింబ రూపలావణ్యం"
-
-#: gdk-pixbuf/io-xpm.c:468
-msgid "No XPM header found"
-msgstr "ఏXPM శీర్షికా కనుగొనబడలేదు "
-
-#: gdk-pixbuf/io-xpm.c:477
-msgid "Invalid XPM header"
-msgstr "చెల్లని XPM హెడర్"
-
-#: gdk-pixbuf/io-xpm.c:485
-msgid "XPM file has image width <= 0"
-msgstr "XPM దస్త్ర ప్రతిబింబ  వెడల్పు  <= 0"
-
-#: gdk-pixbuf/io-xpm.c:493
-msgid "XPM file has image height <= 0"
-msgstr "XPM దస్త్ర ప్రతిబింబ పొడవు  <= 0"
-
-#: gdk-pixbuf/io-xpm.c:501
-msgid "XPM has invalid number of chars per pixel"
-msgstr "XPM లో pixel కు అక్షరముల సంఖ్య చెల్లదు"
-
-#: gdk-pixbuf/io-xpm.c:510
-msgid "XPM file has invalid number of colors"
-msgstr "XPM దస్త్రం లో వర్ణముల సంఖ్య చెల్లదు"
-
-#: gdk-pixbuf/io-xpm.c:522 gdk-pixbuf/io-xpm.c:531 gdk-pixbuf/io-xpm.c:583
-msgid "Cannot allocate memory for loading XPM image"
-msgstr "XPM ప్రతిబింబాన్ని నింపుటకు జ్ఞాపకశక్తి ని స్థాననిర్దేశకం చేయలేము"
-
-#: gdk-pixbuf/io-xpm.c:545
-msgid "Cannot read XPM colormap"
-msgstr "XPM వర్ణమాపాన్ని చదవలేము"
-
-#: gdk-pixbuf/io-xpm.c:777
-msgid "Failed to write to temporary file when loading XPM image"
-msgstr "XPM ప్రతిబింబాన్ని నింపునపుడు తాత్కాలిక దస్త్రంనకు రాయుట విఫలమైంది"
-
-#: gdk-pixbuf/io-xpm.c:816
-msgid "The XPM image format"
-msgstr "XPM ప్రతిబింబ రూపలావణ్యం"
-
-#: gdk-pixbuf/io-gdip-emf.c:59
-msgid "The EMF image format"
-msgstr "EMF ప్రతిబింబ రూపలావణ్యం"
-
-#: gdk-pixbuf/io-gdip-utils.c:232
-#, c-format
-msgid "Could not allocate memory: %s"
-msgstr "జ్ఞాపకశక్తిని కేటాయించలేక పోయింది: %s"
-
-#: gdk-pixbuf/io-gdip-utils.c:257 gdk-pixbuf/io-gdip-utils.c:371
-#: gdk-pixbuf/io-gdip-utils.c:411
-#, c-format
-msgid "Could not create stream: %s"
-msgstr "స్ట్రీమ్‌ను సృష్టించలేక పోయింది: %s"
-
-#: gdk-pixbuf/io-gdip-utils.c:271
-#, c-format
-msgid "Could not seek stream: %s"
-msgstr "స్ట్రీమ్‌ను కోరలేము: %s"
-
-#: gdk-pixbuf/io-gdip-utils.c:283
-#, c-format
-msgid "Could not read from stream: %s"
-msgstr "స్ట్రీమ్‌నుండి చదువలేక పోయింది: %s"
-
-#: gdk-pixbuf/io-gdip-utils.c:694 gdk-pixbuf/io-gdip-utils.c:825
-msgid "Couldn't load bitmap"
-msgstr "బిట్‌మాప్‌ను లోడ్‌ చేయలేక పోయింది"
-
-#: gdk-pixbuf/io-gdip-utils.c:847
-msgid "Couldn't load metafile"
-msgstr "మెటాఫైల్‌ను లోడ్ చేయలేక పోయింది"
-
-#: gdk-pixbuf/io-gdip-utils.c:1006
-msgid "Unsupported image format for GDI+"
-msgstr "GDI+ కొరకు మద్దతీయని ప్రతిబింబం రూపలావణ్యం"
-
-#: gdk-pixbuf/io-gdip-utils.c:1013
-msgid "Couldn't save"
-msgstr "భద్రపరచలేక పోయింది"
-
-#: gdk-pixbuf/io-gdip-wmf.c:58
-msgid "The WMF image format"
-msgstr "WMF ప్రతిబింబ రూపలావణ్యం"
 
 #. Description of --sync in --help output
 #: gdk/win32/gdkmain-win32.c:55
@@ -1506,8 +612,9 @@ msgid "_Saturation:"
 msgstr "చిక్కని(_S):"
 
 #: gtk/gtkcolorsel.c:393
-msgid "\"Deepness\" of the color."
-msgstr "వర్ణముయొక్క\"ఘాడత\" "
+#, fuzzy
+msgid "Intensity of the color."
+msgstr "వర్ణముయొక్క పారదర్శకత."
 
 #: gtk/gtkcolorsel.c:394
 msgid "_Value:"
@@ -1675,11 +782,11 @@ msgstr "కుడి(_R):"
 msgid "Paper Margins"
 msgstr "పుట అంచులు"
 
-#: gtk/gtkentry.c:8612 gtk/gtktextview.c:8002
+#: gtk/gtkentry.c:8612 gtk/gtktextview.c:8012
 msgid "Input _Methods"
 msgstr "ఎగుబడి విధానములు(_M)"
 
-#: gtk/gtkentry.c:8626 gtk/gtktextview.c:8016
+#: gtk/gtkentry.c:8626 gtk/gtktextview.c:8026
 msgid "_Insert Unicode Control Character"
 msgstr "యునికోడ్ నియంత్రణ అక్షరాన్ని ప్రవేశపెట్టుము(_I)"
 
@@ -2118,12 +1225,12 @@ msgid "System (%s)"
 msgstr "సిస్టమ్ (%s)"
 
 #. Open Link
-#: gtk/gtklabel.c:6076
+#: gtk/gtklabel.c:6072
 msgid "_Open Link"
 msgstr "లింకును తెరచుము(_O)"
 
 #. Copy Link Address
-#: gtk/gtklabel.c:6088
+#: gtk/gtklabel.c:6084
 msgid "Copy _Link Address"
 msgstr "లింకు చిరునామాను నకలుతీయుము (_L)"
 
@@ -2136,27 +1243,27 @@ msgid "Invalid URI"
 msgstr "చెల్లని URI"
 
 #. Description of --gtk-module=MODULES in --help output
-#: gtk/gtkmain.c:447
+#: gtk/gtkmain.c:432
 msgid "Load additional GTK+ modules"
 msgstr "అదనపు  GTK+ ప్రమాణం నింపుకొనండి"
 
 #. Placeholder in --gtk-module=MODULES in --help output
-#: gtk/gtkmain.c:448
+#: gtk/gtkmain.c:433
 msgid "MODULES"
 msgstr "ప్రమాణాలు"
 
 #. Description of --g-fatal-warnings in --help output
-#: gtk/gtkmain.c:450
+#: gtk/gtkmain.c:435
 msgid "Make all warnings fatal"
 msgstr "అన్ని హెచ్చరికలను అనివార్యం చేయండి"
 
 #. Description of --gtk-debug=FLAGS in --help output
-#: gtk/gtkmain.c:453
+#: gtk/gtkmain.c:438
 msgid "GTK+ debugging flags to set"
 msgstr "GTK+ లోపనిర్మూలన  ఫ్లాగ్స్ను అమర్చుము"
 
 #. Description of --gtk-no-debug=FLAGS in --help output
-#: gtk/gtkmain.c:456
+#: gtk/gtkmain.c:441
 msgid "GTK+ debugging flags to unset"
 msgstr "GTK+ లోప నిర్మూలనా ఫ్లాగ్స్ను తిరిగి అమర్చుము"
 
@@ -2165,20 +1272,20 @@ msgstr "GTK+ లోప నిర్మూలనా ఫ్లాగ్స్న�
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
 #.
-#: gtk/gtkmain.c:708
+#: gtk/gtkmain.c:704
 msgid "default:LTR"
 msgstr "default:LTR"
 
-#: gtk/gtkmain.c:773
+#: gtk/gtkmain.c:769
 #, c-format
 msgid "Cannot open display: %s"
 msgstr "ప్రదర్శనను తెరువలేదు: %s"
 
-#: gtk/gtkmain.c:810
+#: gtk/gtkmain.c:806
 msgid "GTK+ Options"
 msgstr "GTK+ ఇచ్ఛాపూర్వకాలు"
 
-#: gtk/gtkmain.c:810
+#: gtk/gtkmain.c:806
 msgid "Show GTK+ Options"
 msgstr " GTK+ ఇచ్ఛాపూర్వకాలను చూపుము"
 
@@ -2263,7 +1370,7 @@ msgstr "Z Shell"
 msgid "Cannot end process with pid %d: %s"
 msgstr "pid %dతో కార్యక్రమమును ముగించలేదు: %s"
 
-#: gtk/gtknotebook.c:4621 gtk/gtknotebook.c:7050
+#: gtk/gtknotebook.c:4631 gtk/gtknotebook.c:7060
 #, c-format
 msgid "Page %u"
 msgstr "పుట %u"
@@ -2353,87 +1460,81 @@ msgstr "సంచయంనందు దాచు(_S):"
 msgid "%s job #%d"
 msgstr "%s కార్యము #%d"
 
-#: gtk/gtkprintoperation.c:1687
+#: gtk/gtkprintoperation.c:1695
 msgctxt "print operation status"
 msgid "Initial state"
 msgstr "ప్రారంభ స్థితి"
 
-#: gtk/gtkprintoperation.c:1688
+#: gtk/gtkprintoperation.c:1696
 msgctxt "print operation status"
 msgid "Preparing to print"
 msgstr "ముద్రించుటకు సిద్దమౌతోంది"
 
-#: gtk/gtkprintoperation.c:1689
+#: gtk/gtkprintoperation.c:1697
 msgctxt "print operation status"
 msgid "Generating data"
 msgstr "డాటాను ఉద్భవింపజేస్తోంది"
 
-#: gtk/gtkprintoperation.c:1690
+#: gtk/gtkprintoperation.c:1698
 msgctxt "print operation status"
 msgid "Sending data"
 msgstr "డాటాను పంపుతోంది"
 
-#: gtk/gtkprintoperation.c:1691
+#: gtk/gtkprintoperation.c:1699
 msgctxt "print operation status"
 msgid "Waiting"
 msgstr "వేచివుంది"
 
-#: gtk/gtkprintoperation.c:1692
+#: gtk/gtkprintoperation.c:1700
 msgctxt "print operation status"
 msgid "Blocking on issue"
 msgstr "సమస్యపై బ్లాక్‌చేస్తోంది"
 
-#: gtk/gtkprintoperation.c:1693
+#: gtk/gtkprintoperation.c:1701
 msgctxt "print operation status"
 msgid "Printing"
 msgstr "ముద్రించుచున్నది"
 
-#: gtk/gtkprintoperation.c:1694
+#: gtk/gtkprintoperation.c:1702
 msgctxt "print operation status"
 msgid "Finished"
 msgstr "ముగిసినది"
 
-#: gtk/gtkprintoperation.c:1695
+#: gtk/gtkprintoperation.c:1703
 msgctxt "print operation status"
 msgid "Finished with error"
 msgstr "దోషముతో ముగిసినది"
 
-#: gtk/gtkprintoperation.c:2254
+#: gtk/gtkprintoperation.c:2270
 #, c-format
 msgid "Preparing %d"
 msgstr "సిద్దమౌతోంది %d"
 
-#: gtk/gtkprintoperation.c:2256 gtk/gtkprintoperation.c:2875
+#: gtk/gtkprintoperation.c:2272 gtk/gtkprintoperation.c:2902
 #, c-format
 msgid "Preparing"
 msgstr "సిద్దమౌతోంది"
 
-#: gtk/gtkprintoperation.c:2259
+#: gtk/gtkprintoperation.c:2275
 #, c-format
 msgid "Printing %d"
 msgstr "ముద్రణ %d"
 
-#: gtk/gtkprintoperation.c:2905
+#: gtk/gtkprintoperation.c:2932
 #, c-format
 msgid "Error creating print preview"
 msgstr "ముద్రణ ఉపదర్శనం సృష్టించుటలో దోషము"
 
-#: gtk/gtkprintoperation.c:2908
+#: gtk/gtkprintoperation.c:2935
 #, c-format
 msgid "The most probable reason is that a temporary file could not be created."
 msgstr "తాత్కాలిక దస్త్రము సృష్టించబడదు అనేది ఎక్కువ సంభవమున్న కారణం."
 
-#: gtk/gtkprintoperation-unix.c:297 gtk/gtkprintoperation-unix.c:314
-#, c-format
+#: gtk/gtkprintoperation-unix.c:297
 msgid "Error launching preview"
 msgstr "ఉపదర్శనం దించుటలో దోషం"
 
-#: gtk/gtkprintoperation-unix.c:358
-#, c-format
-msgid "Error printing"
-msgstr "ముద్రించుటలో దోషం"
-
-#: gtk/gtkprintoperation-unix.c:494 gtk/gtkprintoperation-win32.c:1447
+#: gtk/gtkprintoperation-unix.c:470 gtk/gtkprintoperation-win32.c:1447
 msgid "Application"
 msgstr "అప్లికేషన్"
 
@@ -2447,7 +1548,7 @@ msgstr "పుటలు అయిపోయాయి"
 
 #. Translators: this is a printer status.
 #: gtk/gtkprintoperation-win32.c:616
-#: modules/printbackends/cups/gtkprintbackendcups.c:1999
+#: modules/printbackends/cups/gtkprintbackendcups.c:1998
 msgid "Paused"
 msgstr "నిలుపబడింది"
 
@@ -2575,42 +1676,42 @@ msgstr "సాధారణ"
 #. * multiple pages on a sheet when printing
 #.
 #: gtk/gtkprintunixdialog.c:3010
-#: modules/printbackends/cups/gtkprintbackendcups.c:3509
+#: modules/printbackends/cups/gtkprintbackendcups.c:3508
 msgid "Left to right, top to bottom"
 msgstr "ఎడమనుండి కుడికి, పైనుండి క్రిందికి"
 
 #: gtk/gtkprintunixdialog.c:3010
-#: modules/printbackends/cups/gtkprintbackendcups.c:3509
+#: modules/printbackends/cups/gtkprintbackendcups.c:3508
 msgid "Left to right, bottom to top"
 msgstr "ఎడమనుండి కుడికి, క్రిందినుండి పైకి"
 
 #: gtk/gtkprintunixdialog.c:3011
-#: modules/printbackends/cups/gtkprintbackendcups.c:3510
+#: modules/printbackends/cups/gtkprintbackendcups.c:3509
 msgid "Right to left, top to bottom"
 msgstr "కుడినుండి ఎడమకి, పైనుండి క్రిందికి"
 
 #: gtk/gtkprintunixdialog.c:3011
-#: modules/printbackends/cups/gtkprintbackendcups.c:3510
+#: modules/printbackends/cups/gtkprintbackendcups.c:3509
 msgid "Right to left, bottom to top"
 msgstr "కుడినుండి ఎడమకు, క్రిందినుండి పైకి"
 
 #: gtk/gtkprintunixdialog.c:3012
-#: modules/printbackends/cups/gtkprintbackendcups.c:3511
+#: modules/printbackends/cups/gtkprintbackendcups.c:3510
 msgid "Top to bottom, left to right"
 msgstr "పైనుండి క్రిందికి, ఎడమనుండి కుడికి"
 
 #: gtk/gtkprintunixdialog.c:3012
-#: modules/printbackends/cups/gtkprintbackendcups.c:3511
+#: modules/printbackends/cups/gtkprintbackendcups.c:3510
 msgid "Top to bottom, right to left"
 msgstr "పైనుండి క్రిందికి, కుడినుండి ఎడముకు"
 
 #: gtk/gtkprintunixdialog.c:3013
-#: modules/printbackends/cups/gtkprintbackendcups.c:3512
+#: modules/printbackends/cups/gtkprintbackendcups.c:3511
 msgid "Bottom to top, left to right"
 msgstr "క్రిందినుండి పైకి, ఎడమనుండి కుడికి"
 
 #: gtk/gtkprintunixdialog.c:3013
-#: modules/printbackends/cups/gtkprintbackendcups.c:3512
+#: modules/printbackends/cups/gtkprintbackendcups.c:3511
 msgid "Bottom to top, right to left"
 msgstr "క్రిందినుండి పైకి, కుడినుండి ఎడమకు"
 
@@ -2618,7 +1719,7 @@ msgstr "క్రిందినుండి పైకి, కుడినుం
 #. * dialog that controls in what order multiple pages are arranged
 #.
 #: gtk/gtkprintunixdialog.c:3017 gtk/gtkprintunixdialog.c:3030
-#: modules/printbackends/cups/gtkprintbackendcups.c:3544
+#: modules/printbackends/cups/gtkprintbackendcups.c:3543
 msgid "Page Ordering"
 msgstr "పేజీ క్రమపరుచుట"
 
@@ -4778,121 +3879,116 @@ msgstr "ముద్రణాయంత్రం '%s' ప్రస్తుతం
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:1687
 #, c-format
-msgid "Printer '%s' may not be connected."
-msgstr "ముద్రణాయంత్రం '%s' అనుసంధానించబడి వుండకపోవచ్చు."
-
-#: modules/printbackends/cups/gtkprintbackendcups.c:1688
-#, c-format
 msgid "There is a problem on printer '%s'."
 msgstr "ముద్రణాయంత్రం '%s'నందు వొక సమస్యవుంది."
 
 #. Translators: this is a printer status.
-#: modules/printbackends/cups/gtkprintbackendcups.c:1996
+#: modules/printbackends/cups/gtkprintbackendcups.c:1995
 msgid "Paused ; Rejecting Jobs"
 msgstr "నిలిపివుంచబడింది ; కార్యములను తిరస్కరిస్తోంది"
 
 #. Translators: this is a printer status.
-#: modules/printbackends/cups/gtkprintbackendcups.c:2002
+#: modules/printbackends/cups/gtkprintbackendcups.c:2001
 msgid "Rejecting Jobs"
 msgstr "కార్యములను తిరస్కరిస్తోంది"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2778
+#: modules/printbackends/cups/gtkprintbackendcups.c:2777
 msgid "Two Sided"
 msgstr "రెండు వైపుల"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2779
+#: modules/printbackends/cups/gtkprintbackendcups.c:2778
 msgid "Paper Type"
 msgstr "పుట రకం"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2780
+#: modules/printbackends/cups/gtkprintbackendcups.c:2779
 msgid "Paper Source"
 msgstr "పుట మూలం"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2781
+#: modules/printbackends/cups/gtkprintbackendcups.c:2780
 msgid "Output Tray"
 msgstr "అవుట్‌పుట్ ట్రే"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2782
+#: modules/printbackends/cups/gtkprintbackendcups.c:2781
 msgid "Resolution"
 msgstr "తీవ్రత"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2783
+#: modules/printbackends/cups/gtkprintbackendcups.c:2782
 msgid "GhostScript pre-filtering"
 msgstr "గోస్టుస్క్రిప్టు ప్రి-ఫిల్టరింగ్"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2792
+#: modules/printbackends/cups/gtkprintbackendcups.c:2791
 msgid "One Sided"
 msgstr "ఒక ప్రక్క"
 
 #. Translators: this is an option of "Two Sided"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2794
+#: modules/printbackends/cups/gtkprintbackendcups.c:2793
 msgid "Long Edge (Standard)"
 msgstr "పొడవు అంచు (ప్రామాణికమైన)"
 
 #. Translators: this is an option of "Two Sided"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2796
+#: modules/printbackends/cups/gtkprintbackendcups.c:2795
 msgid "Short Edge (Flip)"
 msgstr "పొట్టి అంచు (మడుచు)"
 
 #. Translators: this is an option of "Paper Source"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2798
-#: modules/printbackends/cups/gtkprintbackendcups.c:2800
-#: modules/printbackends/cups/gtkprintbackendcups.c:2808
+#: modules/printbackends/cups/gtkprintbackendcups.c:2797
+#: modules/printbackends/cups/gtkprintbackendcups.c:2799
+#: modules/printbackends/cups/gtkprintbackendcups.c:2807
 msgid "Auto Select"
 msgstr "స్వయంచాలకంగా ఎంచుకొను"
 
 #. Translators: this is an option of "Paper Source"
 #. Translators: this is an option of "Resolution"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2802
-#: modules/printbackends/cups/gtkprintbackendcups.c:2804
-#: modules/printbackends/cups/gtkprintbackendcups.c:2806
-#: modules/printbackends/cups/gtkprintbackendcups.c:2810
-#: modules/printbackends/cups/gtkprintbackendcups.c:3296
+#: modules/printbackends/cups/gtkprintbackendcups.c:2801
+#: modules/printbackends/cups/gtkprintbackendcups.c:2803
+#: modules/printbackends/cups/gtkprintbackendcups.c:2805
+#: modules/printbackends/cups/gtkprintbackendcups.c:2809
+#: modules/printbackends/cups/gtkprintbackendcups.c:3295
 msgid "Printer Default"
 msgstr "ముద్రణాయంత్రం అప్రమేయం"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2812
+#: modules/printbackends/cups/gtkprintbackendcups.c:2811
 msgid "Embed GhostScript fonts only"
 msgstr "కూర్చిన గోస్టుస్క్రిప్టు ఫాంట్లు మాత్రమే"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2814
+#: modules/printbackends/cups/gtkprintbackendcups.c:2813
 msgid "Convert to PS level 1"
 msgstr "PS స్థాయి 1కు మార్చుము"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2816
+#: modules/printbackends/cups/gtkprintbackendcups.c:2815
 msgid "Convert to PS level 2"
 msgstr "PS స్థాయి 2కు మార్చుము"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2818
+#: modules/printbackends/cups/gtkprintbackendcups.c:2817
 msgid "No pre-filtering"
 msgstr "ముందస్తు-వడపోత లేదు"
 
 #. Translators: "Miscellaneous" is the label for a button, that opens
 #. up an extra panel of settings in a print dialog.
-#: modules/printbackends/cups/gtkprintbackendcups.c:2827
+#: modules/printbackends/cups/gtkprintbackendcups.c:2826
 msgid "Miscellaneous"
 msgstr "కలగలిసిన"
 
 #. Translators: These strings name the possible values of the
 #. * job priority option in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3504
+#: modules/printbackends/cups/gtkprintbackendcups.c:3503
 msgid "Urgent"
 msgstr "అత్యవసరం"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3504
+#: modules/printbackends/cups/gtkprintbackendcups.c:3503
 msgid "High"
 msgstr "ఎక్కువ"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3504
+#: modules/printbackends/cups/gtkprintbackendcups.c:3503
 msgid "Medium"
 msgstr "మద్యమం"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3504
+#: modules/printbackends/cups/gtkprintbackendcups.c:3503
 msgid "Low"
 msgstr "తక్కువ"
 
@@ -4900,66 +3996,66 @@ msgstr "తక్కువ"
 #. Translators, this string is used to label the pages-per-sheet option
 #. * in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3528
+#: modules/printbackends/cups/gtkprintbackendcups.c:3527
 msgid "Pages per Sheet"
 msgstr "ఒక్కో షీట్‌కు పేజీలు"
 
 #. Translators, this string is used to label the job priority option
 #. * in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3565
+#: modules/printbackends/cups/gtkprintbackendcups.c:3564
 msgid "Job Priority"
 msgstr "కార్యపు ప్రాముఖ్యత"
 
 #. Translators, this string is used to label the billing info entry
 #. * in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3576
+#: modules/printbackends/cups/gtkprintbackendcups.c:3575
 msgid "Billing Info"
 msgstr "బిల్లింగ్ సామాచారం"
 
 #. Translators, these strings are names for various 'standard' cover
 #. * pages that the printing system may support.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3591
+#: modules/printbackends/cups/gtkprintbackendcups.c:3590
 msgid "None"
 msgstr "ఏదీకాదు"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3591
+#: modules/printbackends/cups/gtkprintbackendcups.c:3590
 msgid "Classified"
 msgstr "విభజించిన"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3591
+#: modules/printbackends/cups/gtkprintbackendcups.c:3590
 msgid "Confidential"
 msgstr "గుంభనంగా"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3591
+#: modules/printbackends/cups/gtkprintbackendcups.c:3590
 msgid "Secret"
 msgstr "రహస్యం"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3591
+#: modules/printbackends/cups/gtkprintbackendcups.c:3590
 msgid "Standard"
 msgstr "ప్రమాణికం"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3591
+#: modules/printbackends/cups/gtkprintbackendcups.c:3590
 msgid "Top Secret"
 msgstr "అతిరహస్యం"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3591
+#: modules/printbackends/cups/gtkprintbackendcups.c:3590
 msgid "Unclassified"
 msgstr "విభంజించని"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the front cover page.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3626
+#: modules/printbackends/cups/gtkprintbackendcups.c:3625
 msgid "Before"
 msgstr "ముందు"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the back cover page.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3641
+#: modules/printbackends/cups/gtkprintbackendcups.c:3640
 msgid "After"
 msgstr "తరువాత"
 
@@ -4967,14 +4063,14 @@ msgstr "తరువాత"
 #. * a print job is printed. Possible values are 'now', a specified time,
 #. * or 'on hold'
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3661
+#: modules/printbackends/cups/gtkprintbackendcups.c:3660
 msgid "Print at"
 msgstr "దీనివద్ద ముద్రించు"
 
 #. Translators: this is the name of the option that allows the user
 #. * to specify a time when a print job will be printed.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3672
+#: modules/printbackends/cups/gtkprintbackendcups.c:3671
 msgid "Print at time"
 msgstr "ఈ సమయమువద్ద ముద్రించు"
 
@@ -4982,7 +4078,7 @@ msgstr "ఈ సమయమువద్ద ముద్రించు"
 #. * size. The two placeholders are replaced with the width and height
 #. * in points. E.g: "Custom 230.4x142.9"
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3707
+#: modules/printbackends/cups/gtkprintbackendcups.c:3706
 #, c-format
 msgid "Custom %sx%s"
 msgstr "మలుచుకొనిన %sx%s"
@@ -5073,6 +4169,644 @@ msgstr "పరిశీలనా ముద్రణాయంత్రం కు 
 #, c-format
 msgid "Could not get information for file '%s': %s"
 msgstr "దస్త్రము '%s' కొరకు సమాచారం ను పొందలేకపోయింది: %s"
+
+#: tests/testfilechooser.c:222
+#, c-format
+msgid "Failed to open file '%s': %s"
+msgstr "'%s': దస్త్రమును తెరచుటలో విఫలమైంది %s"
+
+#: tests/testfilechooser.c:267
+#, c-format
+msgid ""
+"Failed to load image '%s': reason not known, probably a corrupt image file"
+msgstr ""
+" ప్రతిబింబం   '%s'ను నింపుటలో విఫలమైంది. కారణం తెలియదు.  బహుశా    ఈ దస్త్రం చెడిపోయి వుండవచ్చు."
+
+#~ msgid "Image file '%s' contains no data"
+#~ msgstr "'%s' ప్రతిబింబ దస్త్రంలో ఏ దత్తాంశమూ లేదు"
+
+#~ msgid ""
+#~ "Failed to load animation '%s': reason not known, probably a corrupt "
+#~ "animation file"
+#~ msgstr ""
+#~ "'%s': సచేతనాన్ని నింపుటలో విఫలమైంది. కారణం తెలియదు . బహుశా  సచేతన దస్త్రము చెడిపోయి  వుండవచ్చు."
+
+#~ msgid "Unable to load image-loading module: %s: %s"
+#~ msgstr "%s ప్రతిబింబ  ప్రమాణాన్ని  నింపలేకపోతున్నాం.: %s"
+
+#~ msgid ""
+#~ "Image-loading module %s does not export the proper interface; perhaps "
+#~ "it's from a different GTK version?"
+#~ msgstr ""
+#~ "ప్రతిబింబ ప్రమాణం  %s సరైన అనుసంథానాన్ని  ఎగుమతి చేయలేదు. బహుశా ఇది మరొక జీటికే వివరణం నుండి "
+#~ "అయివుండవచ్చు."
+
+#~ msgid "Image type '%s' is not supported"
+#~ msgstr "'%s' ప్రతిబింబ రకానికి  సహకరించలేము."
+
+#~ msgid "Couldn't recognize the image file format for file '%s'"
+#~ msgstr "'%sదస్త్రం ప్రతిబింబ రూప లావణ్యాన్ని గుర్తించ లేకపోయింది.'"
+
+#~ msgid "Unrecognized image file format"
+#~ msgstr "గుర్తింపలేని ప్రతిబింబ దస్త్ర రూపలావణ్యం"
+
+#~ msgid "Failed to load image '%s': %s"
+#~ msgstr "'%s'ప్రతిబింబాన్ని నింపుటలో  విఫలమైంది: %s"
+
+#~ msgid "Error writing to image file: %s"
+#~ msgstr "%s ప్రతిబింబ దస్ర్తాన్ని రాయుటలో దోషం"
+
+#~ msgid ""
+#~ "This build of gdk-pixbuf does not support saving the image format: %s"
+#~ msgstr "%s నిర్మాణం ప్రతిబింబ రూప లావణాన్ని దాచడానికి సహకరించటంలేదు."
+
+#~ msgid "Insufficient memory to save image to callback"
+#~ msgstr "ప్రతిబింబాన్ని వెనక్కు రప్పించి దాచుటకు జ్ఞాపక శక్తి చాలదు."
+
+#~ msgid "Failed to open temporary file"
+#~ msgstr "తాత్కాలిక దస్త్రమును తెరచుటలో విఫలమైంది."
+
+#~ msgid "Failed to read from temporary file"
+#~ msgstr "తాత్కాలిక దస్త్రము నుండి చదువుట విఫలమంది."
+
+#~ msgid "Failed to open '%s' for writing: %s"
+#~ msgstr "'%s' వ్రాయుట కొరకు  తెరచుట  విఫలమైంది %s"
+
+#~ msgid ""
+#~ "Failed to close '%s' while writing image, all data may not have been "
+#~ "saved: %s"
+#~ msgstr ""
+#~ " '%s' ప్రతిబింబాన్ని రాస్తున్నప్పుడు  %sను మూయుటలో విఫలమైంది. దత్తాంశమంతా దాచిపెట్టబడి "
+#~ "వుండకపోవచ్చు."
+
+#~ msgid "Insufficient memory to save image into a buffer"
+#~ msgstr "ప్రతిబింబాన్ని వాటికయందు దాచుటకు శక్తి చాలదు"
+
+#~ msgid "Error writing to image stream"
+#~ msgstr "ప్రతిబింబ స్ట్రీమ్‌కు వ్రాయుటలో దోషము"
+
+#~ msgid ""
+#~ "Internal error: Image loader module '%s' failed to complete an operation, "
+#~ "but didn't give a reason for the failure"
+#~ msgstr ""
+#~ "అంతర్గత దోషం : ప్రతిబింబాన్ని నింపేటప్పుడు ప్రతిబింబ ప్రమాణం '%s' విఫలం అయింది. వైఫల్యానికి కారణం "
+#~ "చెప్పబడలేదు."
+
+#~ msgid "Incremental loading of image type '%s' is not supported"
+#~ msgstr "'%s' రకం ప్రతిబింబాన్ని ఆరోహణలో నింపుటకు సహకారం లేదు."
+
+#~ msgid "Image header corrupt"
+#~ msgstr "ప్రతిబింబ శీర్షిక చెడిపోయింది."
+
+#~ msgid "Image format unknown"
+#~ msgstr "ప్రతిబింబ రూపలావణ్యాలు అపరిచితం"
+
+#~ msgid "Image pixel data corrupt"
+#~ msgstr "ప్రతిబింబ పిక్సెల్ దత్తాంశం చెడిపోయింది."
+
+#~ msgid "Unexpected icon chunk in animation"
+#~ msgstr "సచేతనంలో ఊహించని ప్రతిమా ఖండం"
+
+#~ msgid "Unsupported animation type"
+#~ msgstr "సహకారం లేని సచేతన రకం"
+
+#~ msgid "Invalid header in animation"
+#~ msgstr "సచేతనంలో చెల్లుబాటుకాని శీర్షిక"
+
+#~ msgid "Not enough memory to load animation"
+#~ msgstr "సచేతనాన్ని నింపుటకు సరిపడే జ్ఞాపక శక్తి లేదు"
+
+#~ msgid "Malformed chunk in animation"
+#~ msgstr "సచేతనంలో వికృత ఖండం"
+
+#~ msgid "The ANI image format"
+#~ msgstr "ANI ప్రతిబింబ రూపలావణ్యం"
+
+#~ msgid "BMP image has bogus header data"
+#~ msgstr "BMP ప్రతిబింబం నకిలీ శీర్షిక దత్తాంశాన్ని కలిగివుంది."
+
+#~ msgid "Not enough memory to load bitmap image"
+#~ msgstr "బిట్_మ్యాప్ ప్రతిబింబాన్ని నింపుటకు సరిపడే జ్ఞాపక శక్తి లేదు."
+
+#~ msgid "BMP image has unsupported header size"
+#~ msgstr "సహకారంలేని BMP ప్రతిబింబ శీర్షిక పరిమాణం"
+
+#~ msgid "Topdown BMP images cannot be compressed"
+#~ msgstr "టాప్‌డౌన్ BMP చిత్రాలు కుచింపబడవు"
+
+#~ msgid "Premature end-of-file encountered"
+#~ msgstr "పరిపక్వం చెందని దత్తాంశ అంతం కనిపెట్టబడింది"
+
+#~ msgid "Couldn't allocate memory for saving BMP file"
+#~ msgstr "BMP దస్త్రాన్ని దాచటానికి జ్ఞాపకశక్తిని సమకూర్చలేదు"
+
+#~ msgid "Couldn't write to BMP file"
+#~ msgstr "BMP దస్త్రమునకు వ్రయలేము"
+
+#~ msgid "The BMP image format"
+#~ msgstr "BMP ప్రతిబింబ రూపలావణ్యం"
+
+#~ msgid "Failure reading GIF: %s"
+#~ msgstr "GIF చదువుటలో విఫలమైంది.: %s"
+
+#~ msgid "GIF file was missing some data (perhaps it was truncated somehow?)"
+#~ msgstr ""
+#~ "GIF దస్త్రము కొంత దత్తాంశాన్ని కోల్పోయింది.  (బహుశా దాని చివరి భాగం  ఎలాగో కత్తిరించబడి వుంటుంది?)"
+
+#~ msgid "Internal error in the GIF loader (%s)"
+#~ msgstr "GIF నింపుదారులో     అంతర్గత దోషం(%s) "
+
+#~ msgid "Stack overflow"
+#~ msgstr "దొంతర పొంగిపొరలు"
+
+#~ msgid "GIF image loader cannot understand this image."
+#~ msgstr "ఈ ప్రతిబింబాన్ని GIF ప్రతిబింబనింపుదారు అర్థంచేసుకోలేదు."
+
+#~ msgid "Bad code encountered"
+#~ msgstr "తప్పడు సంకేతం కనిపెట్టబడింది"
+
+#~ msgid "Circular table entry in GIF file"
+#~ msgstr "GIF దస్త్రంలో వృత్త పట్టీ "
+
+#~ msgid "Not enough memory to load GIF file"
+#~ msgstr "GIF దస్త్రంను నింపుటకు సరిపడా జ్ఞాపకశక్తి లేదు "
+
+#~ msgid "Not enough memory to composite a frame in GIF file"
+#~ msgstr "GIF దస్త్రమునందు ఒక ఫ్రేము ను మిళితం చేయుటకు సరిపోవు మెమోరీ లేదు"
+
+#~ msgid "GIF image is corrupt (incorrect LZW compression)"
+#~ msgstr "GIF ప్రతిబింబం చెడిపోయింది. (తప్పడు  LZW కుదింపు)"
+
+#~ msgid "File does not appear to be a GIF file"
+#~ msgstr "ఈ దస్త్రం GIF దస్త్రంలా కనిపించుటలేదు"
+
+#~ msgid "Version %s of the GIF file format is not supported"
+#~ msgstr "GIF దస్త్ర రూప లావణ్యం%s వివరణానికి సహకరించుటలేదు"
+
+#~ msgid ""
+#~ "GIF image has no global colormap, and a frame inside it has no local "
+#~ "colormap."
+#~ msgstr ""
+#~ "GIF ప్రతిబింబానికి ప్రాపంచిక వర్ణసంధానం లేదుమరియు ఫలకములోపల దానికి స్థానిక వర్ణసంధానం కూడా లేదు."
+
+#~ msgid "GIF image was truncated or incomplete."
+#~ msgstr "GIF ప్రతిబింబం కత్తిరింపబడింది లేదా అసంపూర్ణం"
+
+#~ msgid "The GIF image format"
+#~ msgstr "GIF ప్రతిబింబం ఉపలావణ్యం"
+
+#~ msgid "Invalid header in icon"
+#~ msgstr "ప్రతిమలో చెల్లని శీర్షిక"
+
+#~ msgid "Not enough memory to load icon"
+#~ msgstr "ప్రతిమను నింపుటకు కావలసిన జ్ఞాపకశక్తి లేదు"
+
+#~ msgid "Icon has zero width"
+#~ msgstr "ప్రతిమవెడల్పుసున్నా"
+
+#~ msgid "Icon has zero height"
+#~ msgstr "ప్రతిమ ఎత్తు సున్నా"
+
+#~ msgid "Compressed icons are not supported"
+#~ msgstr "కుదింపబడిన ప్రతిమలకు సహకారంలేదు"
+
+#~ msgid "Unsupported icon type"
+#~ msgstr "ఈ రకం ప్రతిమకు సహకారం లేదు"
+
+#~ msgid "Not enough memory to load ICO file"
+#~ msgstr "ICO దస్త్రం నింపుటకు కావలసిన జ్ఞాపకశక్తి లేదు"
+
+#~ msgid "Image too large to be saved as ICO"
+#~ msgstr "ICOగా దాచుటకు ప్రతిబింబం పెద్దదైపోతుంది"
+
+#~ msgid "Cursor hotspot outside image"
+#~ msgstr "ప్రతిబింబం వెలుపలిములుకు సంచరించు స్థలం"
+
+#~ msgid "Unsupported depth for ICO file: %d"
+#~ msgstr "ICO దస్త్ర లోతునకు సహకారం లేదుక: %d"
+
+#~ msgid "The ICO image format"
+#~ msgstr "ICO ప్రతిబింబ రూపలావణ్యం"
+
+#~ msgid "Error reading ICNS image: %s"
+#~ msgstr "ICNS ప్రతిబింబం చదువుటలో దోషము: %s"
+
+#~ msgid "Could not decode ICNS file"
+#~ msgstr "ICNS దస్త్రాన్ని డీకో‍డ్ చేయలేకపోయింది"
+
+#~ msgid "The ICNS image format"
+#~ msgstr "ICNS ప్రతిబింబ రూపం"
+
+#~ msgid "Couldn't allocate memory for stream"
+#~ msgstr "స్ట్రీమ్‌కు జ్ఞాపకశక్తిని స్థాననిర్దేశకం చేయలేము."
+
+#~ msgid "Couldn't decode image"
+#~ msgstr "ప్రతిబింబంను డీకోడ్ చేయలేము"
+
+#~ msgid "Transformed JPEG2000 has zero width or height"
+#~ msgstr "మార్పుకు లోనైన JPEG2000 పొడువు లేదా వెడల్పులు శూన్యం."
+
+#~ msgid "Image type currently not supported"
+#~ msgstr "ప్రతిబింబం రకము ప్రస్తుతం మద్దతీయుటలేదు."
+
+#~ msgid "Couldn't allocate memory for color profile"
+#~ msgstr "వర్ణ ప్రొఫైల్‌కు జ్ఞాపకశక్తిని కేటాయింటలేక పోయింది"
+
+#~ msgid "Insufficient memory to open JPEG 2000 file"
+#~ msgstr "JPEG 2000 దస్త్రాన్ని తెరువుటకు చాలని జ్ఞాపకశక్తి"
+
+#~ msgid "Couldn't allocate memory to buffer image data"
+#~ msgstr "బఫర్ ప్రతిబింబ డాటాకు జ్ఞాపకశక్తిని కేటాయించలేక పోయింది"
+
+#~ msgid "The JPEG 2000 image format"
+#~ msgstr "JPEG2000 ప్రతిబింబ రూపలావణ్యం"
+
+#~ msgid "Error interpreting JPEG image file (%s)"
+#~ msgstr " JPEG ప్రతిబింబ విశ్లేషణలో దోషం(%s)"
+
+#~ msgid ""
+#~ "Insufficient memory to load image, try exiting some applications to free "
+#~ "memory"
+#~ msgstr ""
+#~ "ప్రతిబింబమును నింపుటకు జ్ఞాపకశక్తి చాలదు. కొన్ని కార్యక్షేత్రములను తొలగించి మరలా ప్రయత్నించండి"
+
+#~ msgid "Unsupported JPEG color space (%s)"
+#~ msgstr " సహకారం లేనిJPEG వర్ణప్రదేశము (%s)"
+
+#~ msgid "Couldn't allocate memory for loading JPEG file"
+#~ msgstr "JPEG దస్త్రంను నింపుటకుస్థాననిర్దేశకం చేయలేము."
+
+#~ msgid "Transformed JPEG has zero width or height."
+#~ msgstr "మార్పుకు లోనైన JPEG పొడువు లేదా వెడల్పులు శూన్యం."
+
+#~ msgid ""
+#~ "JPEG quality must be a value between 0 and 100; value '%s' could not be "
+#~ "parsed."
+#~ msgstr "JPEG నాణ్యత 0కు100 మధ్య విలువఅయివుండవలెను'%s' విలువను పదానుబంధీకరణ చేయలేము."
+
+#~ msgid ""
+#~ "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
+#~ msgstr "JPEG నాణ్యత 0కు100కు మధ్య విలువ అయివుండవలెను '%d విలువ ఆమోదింపబడదు"
+
+#~ msgid "The JPEG image format"
+#~ msgstr "JPEG ప్రతిబింబరూప లావణ్యం"
+
+#~ msgid "Couldn't allocate memory for header"
+#~ msgstr "శీర్షికకు జ్ఞాపకశక్తిని స్థాననిర్దేశకం చేయలేము."
+
+#~ msgid "Couldn't allocate memory for context buffer"
+#~ msgstr "ప్రకరణవాటికకు జ్ఞాపకశక్తిని స్థాననిర్దేశకం చేయలేము."
+
+#~ msgid "Image has invalid width and/or height"
+#~ msgstr "ప్రతిబింబం చెల్లని ఎత్తు  లేదా / మరియు వెడల్పులను కలిగివుంది"
+
+#~ msgid "Image has unsupported bpp"
+#~ msgstr "ప్రతిబింబం సహకారంలేని bpp కలిగివుంది."
+
+#~ msgid "Image has unsupported number of %d-bit planes"
+#~ msgstr "ప్రతిబింబం సహకారంలేని   %d బిట్తలాలసంఖ్యను కలిగివుంది."
+
+#~ msgid "Couldn't create new pixbuf"
+#~ msgstr "కొత్త  pixbufను సృష్టించలేము"
+
+#~ msgid "Couldn't allocate memory for line data"
+#~ msgstr "వరుస దత్తాంశానికి జ్ఞాపకశక్తిని స్థాననిర్దేశకం చేయలేము"
+
+#~ msgid "Couldn't allocate memory for paletted data"
+#~ msgstr "పాలెటెడ్ డాటాకు మెమోరీని సమకూర్చలేము"
+
+#~ msgid "Didn't get all lines of PCX image"
+#~ msgstr "PCX ప్రతిబింబం యెఉక్క అన్ని వరుసలను తీసుకురాలేదు."
+
+#~ msgid "No palette found at end of PCX data"
+#~ msgstr "PCX దత్తాంశం చివరలో వర్ణపలకం కనిపించలేదు"
+
+#~ msgid "The PCX image format"
+#~ msgstr "PCX ప్రతిబింబ రూపలావణ్యం"
+
+#~ msgid "Bits per channel of PNG image is invalid."
+#~ msgstr "PNG ప్రతిబింబ ప్రసారమార్గబిట్ చెల్లవు."
+
+#~ msgid "Transformed PNG has zero width or height."
+#~ msgstr "మార్పుకు లోనైన PNG పొడువు వెడల్పులు ౯శూన్యం."
+
+#~ msgid "Bits per channel of transformed PNG is not 8."
+#~ msgstr "మార్పుకు లోనైన  PNG ప్రసార మార్గ  Bits సంఖ్య 8కాదు."
+
+#~ msgid "Transformed PNG not RGB or RGBA."
+#~ msgstr "మార్పునకు లోనైన PNG RGB లేదా RGBA కాదు."
+
+#~ msgid "Transformed PNG has unsupported number of channels, must be 3 or 4."
+#~ msgstr "మార్పునకు లోనైన PNG మద్దతుకానన్ని చానల్సును కలిగిఉంది, 3 లేదా 4౪"
+
+#~ msgid "Fatal error in PNG image file: %s"
+#~ msgstr "PNG ప్రతిబింబదస్త్రం  లో అనివార్య దోషం %s"
+
+#~ msgid "Insufficient memory to load PNG file"
+#~ msgstr "PNG దస్త్రంను నింపుటకు జ్ఞాపకశక్తి చాలదు. "
+
+#~ msgid ""
+#~ "Insufficient memory to store a %ld by %ld image; try exiting some "
+#~ "applications to reduce memory usage"
+#~ msgstr ""
+#~ "%ld ను  %ldపతిబింబంతోదాచుటకు జ్ఞాపకశక్తి చాలదు జ్ఞాపకశక్తి వాడికను తగ్గించుటకు కొన్ని "
+#~ "కార్యక్షేత్రాలను తొలగించును"
+
+#~ msgid "Fatal error reading PNG image file"
+#~ msgstr "PNG ప్రతిబింబ దస్ర్తాన్ని చదువుటలో అనివార్యదోషం"
+
+#~ msgid "Fatal error reading PNG image file: %s"
+#~ msgstr "PNG ప్రతిబింబ దస్త్రం %s ను చదువుటలో అనివార్య దోషం"
+
+#~ msgid ""
+#~ "Keys for PNG text chunks must have at least 1 and at most 79 characters."
+#~ msgstr ""
+#~ "PNG పాఠ్య ఖండాలకొరకు మీటలు అతి తక్కువగా ఒకఅక్షరాన్ని అతి ఎక్కువగా 79అక్షరములను కలిగివుండవలెను"
+
+#~ msgid "Keys for PNG text chunks must be ASCII characters."
+#~ msgstr "PNG పాఠ్య ఖండాల కొరకు మీటలు ASCII అక్షరములై౯ వుండవలెను."
+
+#~ msgid ""
+#~ "PNG compression level must be a value between 0 and 9; value '%s' could "
+#~ "not be parsed."
+#~ msgstr "JPEG నాణ్యత 0కు9 మధ్య విలువఅయివుండవలెను, '%s' విలువను పదానుబంధీకరణ చేయలేము."
+
+#~ msgid ""
+#~ "PNG compression level must be a value between 0 and 9; value '%d' is not "
+#~ "allowed."
+#~ msgstr "JPEG నాణ్యత 0కు9కు మధ్య విలువ అయివుండవలెను; '%d విలువ ఆమోదింపబడదు"
+
+#~ msgid ""
+#~ "Value for PNG text chunk %s cannot be converted to ISO-8859-1 encoding."
+#~ msgstr "PNG పాఠ్య చంక్ %s విలువ ISO-8859-1 సంకేతరచనకు మార్చబడలేదు."
+
+#~ msgid "The PNG image format"
+#~ msgstr "PNG ప్రతిబింబ రూపలావణ్యం"
+
+#~ msgid "PNM loader expected to find an integer, but didn't"
+#~ msgstr "PNM నింపుదారు పూర్ణాంకం వస్తుందని ౯ఊహించింది కాని అది రాలేదు"
+
+#~ msgid "PNM file has an incorrect initial byte"
+#~ msgstr "PNM దస్త్రం లో మెఉదటి బైట్ తప్పుగా వుంది"
+
+#~ msgid "PNM file is not in a recognized PNM subformat"
+#~ msgstr "PNM దస్త్రం గుర్తింపుపొందిన  PNM ఉపరూపలావణ్యం ౯కాదు"
+
+#~ msgid "PNM file has an image width of 0"
+#~ msgstr "PNM దస్త్రం లో ప్రతిబింబ వెడల్పు 0"
+
+#~ msgid "PNM file has an image height of 0"
+#~ msgstr "PNM దస్త్రంలో ప్రతిబింబ పొడవు  0"
+
+#~ msgid "Maximum color value in PNM file is 0"
+#~ msgstr "PNM దస్త్రంలో అత్యధిక వర్ణసంఖ్య 0"
+
+#~ msgid "Maximum color value in PNM file is too large"
+#~ msgstr "PNM దస్త్రంలో అత్యధిక వర్ణసంఖ్య చాలా ఎక్కువగా వుంది "
+
+#~ msgid "Raw PNM image type is invalid"
+#~ msgstr "అపక్వ PNM ప్రతిబింబ రకం చెల్లదు "
+
+#~ msgid "PNM image loader does not support this PNM subformat"
+#~ msgstr "PNM ప్రతిబింబ నింపుదారు ఈ రకం PNM ఉపరూప లావణ్యాన్ని సహకరించుటలేదు"
+
+#~ msgid "Raw PNM formats require exactly one whitespace before sample data"
+#~ msgstr "అపక్వ PNM రూపలావణ్యాలు ఉదాహరణదత్తాంశానికి ముందు  ఖచ్ఛితంగా ఒక ఖాళీ ప్రదేశం వుండవలెను "
+
+#~ msgid "Cannot allocate memory for loading PNM image"
+#~ msgstr "PNM ప్రతిబింబం నింపుటకు జ్ఞాపకశక్తి ని స్థాననిర్దేశకం చేయలేము"
+
+#~ msgid "Insufficient memory to load PNM context struct"
+#~ msgstr "PNM  context structను నింపుటకు జ్ఞాపకశక్తి చాలదు  "
+
+#~ msgid "Unexpected end of PNM image data"
+#~ msgstr "PNM ప్రతిబింబ దత్తాంశంలో ఊహించని అంతం "
+
+#~ msgid "Insufficient memory to load PNM file"
+#~ msgstr "PNM దస్ర్తాన్ని నింపుటకు జ్ఞాపకశక్తి చాలదు "
+
+#~ msgid "The PNM/PBM/PGM/PPM image format family"
+#~ msgstr "PNM/PBM/PGM/PPM ప్రతిబింబ రూప లావణ్య  కుటుంబం"
+
+#, fuzzy
+#~ msgid "Failed to read QTIF header"
+#~ msgstr "పీఠిక కు వ్రాయుటలో విఫైలమైంది\n"
+
+#, fuzzy
+#~ msgid "File error when reading QTIF atom: %s"
+#~ msgstr "GIF చదువుటలో విఫలమైంది.: %s"
+
+#, fuzzy
+#~ msgid "Failed to allocate QTIF context structure."
+#~ msgstr "Cannot allocate memory for TGA context structకు స్థాన నిర్దేశకం చేయులేము"
+
+#, fuzzy
+#~ msgid "Failed to create GdkPixbufLoader object."
+#~ msgstr "సంచయపు ఇండేక్స్ కు వ్రాయుటలో విఫలమైంది\n"
+
+#, fuzzy
+#~ msgid "Failed to find an image data atom."
+#~ msgstr "TIFF ప్రతిబింబాన్ని తెరుచుటలో విఫలమైంది"
+
+#, fuzzy
+#~ msgid "The QTIF image format"
+#~ msgstr "TIFF ప్రతిబింబ రూపలావణ్యం"
+
+#~ msgid "RAS image has bogus header data"
+#~ msgstr "RAS  ప్రతిబింబ శీర్షిక దత్తాంశం నకిలీది"
+
+#~ msgid "RAS image has unknown type"
+#~ msgstr "RAS ప్రతిబింబ రకం అపరిచితం"
+
+#~ msgid "unsupported RAS image variation"
+#~ msgstr "RAS ప్రతిబింబ మార్పిడికి సహకారంలేదు "
+
+#~ msgid "Not enough memory to load RAS image"
+#~ msgstr "RAS  ప్రతిబింబాన్ని నింపుటకు సరిపడా జ్ఞాపకశక్తి లేదు"
+
+#~ msgid "The Sun raster image format"
+#~ msgstr "సన్ రాస్టర్ ప్రతిబింబరూపలావణ్యం"
+
+#~ msgid "Cannot allocate memory for IOBuffer struct"
+#~ msgstr "IOBuffer structకు జ్ఞాపకశక్తిని స్థానాన్ని నిర్దేశించలేము"
+
+#~ msgid "Cannot allocate memory for IOBuffer data"
+#~ msgstr "IOBuffer దత్తాంశానికి జ్ఞాపకశక్తినిస్థానాన్ని నిర్దేశించలేము"
+
+#~ msgid "Cannot realloc IOBuffer data"
+#~ msgstr "IOBuffer దత్తాంశానికి మరల స్థానాన్ని నిర్దేశించలేము."
+
+#~ msgid "Cannot allocate temporary IOBuffer data"
+#~ msgstr "IOBuffer దత్తాంశానికి తాత్కాలికంగా జ్ఞాపకశక్తిని స్థాననిర్దేశకం చేయలేము."
+
+#~ msgid "Cannot allocate new pixbuf"
+#~ msgstr "కొత్తpixbuf కు స్థాన నిర్దేశకం చేయలేము"
+
+#, fuzzy
+#~ msgid "Image is corrupted or truncated"
+#~ msgstr "GIF ప్రతిబింబం కత్తిరింపబడింది లేదా అసంపూర్ణం"
+
+#~ msgid "Cannot allocate colormap structure"
+#~ msgstr "వర్ణమాపక నిర్మాణానికి స్థాననిర్దేశకం చేయలేము"
+
+#~ msgid "Cannot allocate colormap entries"
+#~ msgstr "వర్ణమాపక ప్రవేశకాలకు స్థాననిర్దేశకం చేయలేము"
+
+#~ msgid "Unexpected bitdepth for colormap entries"
+#~ msgstr "వర్ణమాపక ప్రవేశకాలలో ఊహించని  బిట్ లోతు"
+
+#~ msgid "Cannot allocate TGA header memory"
+#~ msgstr "TGA శీర్షిక అగ్ర జ్ఞాపకశక్తిని స్థాననిర్దేశకం చేయలేము"
+
+#~ msgid "TGA image has invalid dimensions"
+#~ msgstr "TGA ప్రతిబింబం కొలతలు చెల్లవు"
+
+#~ msgid "TGA image type not supported"
+#~ msgstr "TGA ప్రతిబింబ రకానికి సహకారం లేదు"
+
+#~ msgid "Cannot allocate memory for TGA context struct"
+#~ msgstr "Cannot allocate memory for TGA context structకు స్థాన నిర్దేశకం చేయులేము"
+
+#~ msgid "Excess data in file"
+#~ msgstr "దస్త్రములలోమిగిలిపోయిన దత్తాంశం"
+
+#~ msgid "The Targa image format"
+#~ msgstr "Targa ప్రతిరూప లావణ్యం"
+
+#~ msgid "Could not get image width (bad TIFF file)"
+#~ msgstr "ప్రతిబింబ వెడల్పు ను గ్రహించలేకపోయాము (దోషపూరిత TIFF దస్త్రం)"
+
+#~ msgid "Could not get image height (bad TIFF file)"
+#~ msgstr "ప్రతిబింబ పొడవును గుర్తించలేకపోయాము (దోషపూరిత TIFF దస్త్రం)"
+
+#~ msgid "Width or height of TIFF image is zero"
+#~ msgstr "TIFF ప్రతిబింబం ౦0అయిన పొడవును వెడల్పు ను కలిగి వుంది"
+
+#~ msgid "Dimensions of TIFF image too large"
+#~ msgstr "TIFFకొలతలు పెద్దవిగా వున్నవి"
+
+#~ msgid "Insufficient memory to open TIFF file"
+#~ msgstr "TIFF దస్త్రం తెరుచుటకు జ్ఞాపకశక్తి చాలదు"
+
+#~ msgid "Failed to load RGB data from TIFF file"
+#~ msgstr " TIFF దస్త్రం నుండి RGB దత్తాంశాన్ని నింపుకొనుటలో విఫలమైంది"
+
+#~ msgid "Failed to open TIFF image"
+#~ msgstr "TIFF ప్రతిబింబాన్ని తెరుచుటలో విఫలమైంది"
+
+#~ msgid "TIFFClose operation failed"
+#~ msgstr "TIFFను మూసివేసే ప్రయత్నం విఫలమైంది"
+
+#~ msgid "Failed to load TIFF image"
+#~ msgstr "TIFF ప్రతిబింబాన్ని నింపుకొనుటలో విఫలమైంది"
+
+#~ msgid "Failed to save TIFF image"
+#~ msgstr "TIFF ప్రతిబింబాన్ని దాచుటలో విఫలమైంది"
+
+#~ msgid "Failed to write TIFF data"
+#~ msgstr "TIFF డాటాకు వ్రాయుటలో దోషం"
+
+#~ msgid "Couldn't write to TIFF file"
+#~ msgstr "TIFF దస్త్రముకు వ్రాయలేకపోయింది"
+
+#~ msgid "The TIFF image format"
+#~ msgstr "TIFF ప్రతిబింబ రూపలావణ్యం"
+
+#~ msgid "Image has zero width"
+#~ msgstr "ప్రతిబింబ వెడల్పు 0"
+
+#~ msgid "Image has zero height"
+#~ msgstr "ప్రతిబింబ పొడవు 0"
+
+#~ msgid "Not enough memory to load image"
+#~ msgstr "ప్రతిబింబాన్ని నింపుటకు తగిన జ్ఞాపకశక్తి లేదు"
+
+#~ msgid "Couldn't save the rest"
+#~ msgstr "మిగిలిన వాటిని దాచలేము"
+
+#~ msgid "The WBMP image format"
+#~ msgstr "WBMP ప్రతిరూప లావణ్యం"
+
+#~ msgid "Invalid XBM file"
+#~ msgstr "XBM దస్త్రం చెల్లదు"
+
+#~ msgid "Insufficient memory to load XBM image file"
+#~ msgstr "XBM  ప్రతిబింబ దస్ర్తాన్ని నింపుటకు జ్ఞాపకశక్తి చాలదు"
+
+#~ msgid "Failed to write to temporary file when loading XBM image"
+#~ msgstr "XBM ప్రతిబింబాన్ని నింపునపుడు తాత్కాలిక దస్త్రంనకు రాయుట విఫలమైంది "
+
+#~ msgid "The XBM image format"
+#~ msgstr "XBM ప్రతిబింబ రూపలావణ్యం"
+
+#~ msgid "No XPM header found"
+#~ msgstr "ఏXPM శీర్షికా కనుగొనబడలేదు "
+
+#~ msgid "Invalid XPM header"
+#~ msgstr "చెల్లని XPM హెడర్"
+
+#~ msgid "XPM file has image width <= 0"
+#~ msgstr "XPM దస్త్ర ప్రతిబింబ  వెడల్పు  <= 0"
+
+#~ msgid "XPM file has image height <= 0"
+#~ msgstr "XPM దస్త్ర ప్రతిబింబ పొడవు  <= 0"
+
+#~ msgid "XPM has invalid number of chars per pixel"
+#~ msgstr "XPM లో pixel కు అక్షరముల సంఖ్య చెల్లదు"
+
+#~ msgid "XPM file has invalid number of colors"
+#~ msgstr "XPM దస్త్రం లో వర్ణముల సంఖ్య చెల్లదు"
+
+#~ msgid "Cannot allocate memory for loading XPM image"
+#~ msgstr "XPM ప్రతిబింబాన్ని నింపుటకు జ్ఞాపకశక్తి ని స్థాననిర్దేశకం చేయలేము"
+
+#~ msgid "Cannot read XPM colormap"
+#~ msgstr "XPM వర్ణమాపాన్ని చదవలేము"
+
+#~ msgid "Failed to write to temporary file when loading XPM image"
+#~ msgstr "XPM ప్రతిబింబాన్ని నింపునపుడు తాత్కాలిక దస్త్రంనకు రాయుట విఫలమైంది"
+
+#~ msgid "The XPM image format"
+#~ msgstr "XPM ప్రతిబింబ రూపలావణ్యం"
+
+#~ msgid "The EMF image format"
+#~ msgstr "EMF ప్రతిబింబ రూపలావణ్యం"
+
+#~ msgid "Could not allocate memory: %s"
+#~ msgstr "జ్ఞాపకశక్తిని కేటాయించలేక పోయింది: %s"
+
+#~ msgid "Could not create stream: %s"
+#~ msgstr "స్ట్రీమ్‌ను సృష్టించలేక పోయింది: %s"
+
+#~ msgid "Could not seek stream: %s"
+#~ msgstr "స్ట్రీమ్‌ను కోరలేము: %s"
+
+#~ msgid "Could not read from stream: %s"
+#~ msgstr "స్ట్రీమ్‌నుండి చదువలేక పోయింది: %s"
+
+#~ msgid "Couldn't load bitmap"
+#~ msgstr "బిట్‌మాప్‌ను లోడ్‌ చేయలేక పోయింది"
+
+#~ msgid "Couldn't load metafile"
+#~ msgstr "మెటాఫైల్‌ను లోడ్ చేయలేక పోయింది"
+
+#~ msgid "Unsupported image format for GDI+"
+#~ msgstr "GDI+ కొరకు మద్దతీయని ప్రతిబింబం రూపలావణ్యం"
+
+#~ msgid "Couldn't save"
+#~ msgstr "భద్రపరచలేక పోయింది"
+
+#~ msgid "The WMF image format"
+#~ msgstr "WMF ప్రతిబింబ రూపలావణ్యం"
+
+#~ msgid "\"Deepness\" of the color."
+#~ msgstr "వర్ణముయొక్క\"ఘాడత\" "
+
+#~ msgid "Error printing"
+#~ msgstr "ముద్రించుటలో దోషం"
+
+#~ msgid "Printer '%s' may not be connected."
+#~ msgstr "ముద్రణాయంత్రం '%s' అనుసంధానించబడి వుండకపోవచ్చు."
 
 #~ msgid "Folders"
 #~ msgstr "సంచులు"

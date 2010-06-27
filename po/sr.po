@@ -11,10 +11,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.14\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-05-25 20:10-0400\n"
+"POT-Creation-Date: 2010-06-26 23:16-0400\n"
 "PO-Revision-Date: 2010-03-23 10:32+0100\n"
 "Last-Translator: Милош Поповић <gpopac@gmail.com>\n"
 "Language-Team: Serbian <gnome@prevod.org>\n"
+"Language: sr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -80,7 +81,7 @@ msgstr "Које Гдк опције за налажење грешака укљ
 #. Placeholder in --gdk-no-debug=FLAGS in --help output
 #. Placeholder in --gtk-debug=FLAGS in --help output
 #. Placeholder in --gtk-no-debug=FLAGS in --help output
-#: gdk/gdk.c:165 gdk/gdk.c:168 gtk/gtkmain.c:454 gtk/gtkmain.c:457
+#: gdk/gdk.c:165 gdk/gdk.c:168 gtk/gtkmain.c:439 gtk/gtkmain.c:442
 msgid "FLAGS"
 msgstr "ОПЦИЈЕ"
 
@@ -275,933 +276,6 @@ msgstr "KP_Delete"
 msgctxt "keyboard label"
 msgid "Delete"
 msgstr "Delete"
-
-#: gdk-pixbuf/gdk-pixbuf-animation.c:133 gdk-pixbuf/gdk-pixbuf-io.c:982
-#: gdk-pixbuf/gdk-pixbuf-io.c:1242 tests/testfilechooser.c:222
-#, c-format
-msgid "Failed to open file '%s': %s"
-msgstr "Не могу да отворим датотеку „%s“: %s"
-
-#: gdk-pixbuf/gdk-pixbuf-animation.c:146 gdk-pixbuf/gdk-pixbuf-io.c:994
-#, c-format
-msgid "Image file '%s' contains no data"
-msgstr "Слика „%s“ не садржи податке"
-
-# ово има највише смисла
-#: gdk-pixbuf/gdk-pixbuf-animation.c:188 gdk-pixbuf/gdk-pixbuf-io.c:1030
-#: gdk-pixbuf/gdk-pixbuf-io.c:1294 tests/testfilechooser.c:267
-#, c-format
-msgid ""
-"Failed to load image '%s': reason not known, probably a corrupt image file"
-msgstr ""
-"Не могу да учитам слику „%s“: разлог непознат, вероватно неисправан запис"
-
-#: gdk-pixbuf/gdk-pixbuf-animation.c:221
-#, c-format
-msgid ""
-"Failed to load animation '%s': reason not known, probably a corrupt "
-"animation file"
-msgstr ""
-"Не могу да учитам анимацију „%s“: разлог непознат, вероватно неисправан запис"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:715
-#, c-format
-msgid "Unable to load image-loading module: %s: %s"
-msgstr "Не могу да учитам део за учитавање слике: %s: %s"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:730
-#, c-format
-msgid ""
-"Image-loading module %s does not export the proper interface; perhaps it's "
-"from a different GTK version?"
-msgstr ""
-"Део за учитавање слике %s не подржава одговарајућу спрегу; можда је из "
-"различитог ГТК издања?"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:739 gdk-pixbuf/gdk-pixbuf-io.c:790
-#, c-format
-msgid "Image type '%s' is not supported"
-msgstr "Врста слике „%s“ није подржана"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:863
-#, c-format
-msgid "Couldn't recognize the image file format for file '%s'"
-msgstr "Не могу препознати начин записа слике у датотеци „%s“"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:871
-msgid "Unrecognized image file format"
-msgstr "Непознат начин записа слике"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:1039
-#, c-format
-msgid "Failed to load image '%s': %s"
-msgstr "Не могу да учитам слику „%s“: %s"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:1673 gdk-pixbuf/io-gdip-utils.c:961
-#, c-format
-msgid "Error writing to image file: %s"
-msgstr "Грешка при упису у датотеку слике: %s"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:1718 gdk-pixbuf/gdk-pixbuf-io.c:1848
-#, c-format
-msgid "This build of gdk-pixbuf does not support saving the image format: %s"
-msgstr "Ово издање програма gdk-pixbuf не подржава чување ове врсте слике: %s"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:1752
-msgid "Insufficient memory to save image to callback"
-msgstr "Недовољно меморије за чување слике у позивну функцију"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:1765
-msgid "Failed to open temporary file"
-msgstr "Не могу да отворим привремену датотеку"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:1791
-msgid "Failed to read from temporary file"
-msgstr "Не могу да читам из привремене датотеке"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:2044
-#, c-format
-msgid "Failed to open '%s' for writing: %s"
-msgstr "Не могу да отворим „%s“ ради уписа: %s"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:2070
-#, c-format
-msgid ""
-"Failed to close '%s' while writing image, all data may not have been saved: %"
-"s"
-msgstr ""
-"Не могу да затворим „%s“ при упису слике, могуће је да нису сви подаци "
-"сачувани: %s"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:2290 gdk-pixbuf/gdk-pixbuf-io.c:2341
-msgid "Insufficient memory to save image into a buffer"
-msgstr "Недовољно меморије за чување слике у бафер"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:2387
-msgid "Error writing to image stream"
-msgstr "Грешка при упису у ток слике"
-
-#: gdk-pixbuf/gdk-pixbuf-loader.c:334
-#, c-format
-msgid ""
-"Internal error: Image loader module '%s' failed to complete an operation, "
-"but didn't give a reason for the failure"
-msgstr ""
-"Унутрашња грешка: део за учитавање слика „%s“ није успео да обави операцију, "
-"а није навео ни разлог неуспеха"
-
-#: gdk-pixbuf/gdk-pixbuf-loader.c:376
-#, c-format
-msgid "Incremental loading of image type '%s' is not supported"
-msgstr "Није подржано постепено учитавање слике врсте „%s“"
-
-#: gdk-pixbuf/gdk-pixdata.c:147
-msgid "Image header corrupt"
-msgstr "Заглавље слике оштећено"
-
-#: gdk-pixbuf/gdk-pixdata.c:152
-msgid "Image format unknown"
-msgstr "Непозната врста слике"
-
-#: gdk-pixbuf/gdk-pixdata.c:157 gdk-pixbuf/gdk-pixdata.c:488
-msgid "Image pixel data corrupt"
-msgstr "Оштећени подаци о тачкама слике"
-
-#: gdk-pixbuf/gdk-pixdata.c:432
-#, c-format
-msgid "failed to allocate image buffer of %u byte"
-msgid_plural "failed to allocate image buffer of %u bytes"
-msgstr[0] "неуспела потражња бафера слике од %u бајта"
-msgstr[1] "неуспела потражња бафера слике од %u бајта"
-msgstr[2] "неуспела потражња бафера слике од %u бајтова"
-
-#: gdk-pixbuf/io-ani.c:244
-msgid "Unexpected icon chunk in animation"
-msgstr "Неочекивани део иконе у анимацији"
-
-#: gdk-pixbuf/io-ani.c:337
-msgid "Unsupported animation type"
-msgstr "Неподржана врста анимације"
-
-#: gdk-pixbuf/io-ani.c:348 gdk-pixbuf/io-ani.c:406 gdk-pixbuf/io-ani.c:432
-#: gdk-pixbuf/io-ani.c:455 gdk-pixbuf/io-ani.c:482 gdk-pixbuf/io-ani.c:569
-msgid "Invalid header in animation"
-msgstr "Неисправно заглавље анимације"
-
-#: gdk-pixbuf/io-ani.c:358 gdk-pixbuf/io-ani.c:380 gdk-pixbuf/io-ani.c:464
-#: gdk-pixbuf/io-ani.c:491 gdk-pixbuf/io-ani.c:542 gdk-pixbuf/io-ani.c:614
-msgid "Not enough memory to load animation"
-msgstr "Нема довољно меморије да учита анимацију"
-
-#: gdk-pixbuf/io-ani.c:398 gdk-pixbuf/io-ani.c:424 gdk-pixbuf/io-ani.c:443
-msgid "Malformed chunk in animation"
-msgstr "Неисправан део анимације"
-
-# забрљано
-#: gdk-pixbuf/io-ani.c:711
-msgid "The ANI image format"
-msgstr "ANI запис слика"
-
-#: gdk-pixbuf/io-bmp.c:230 gdk-pixbuf/io-bmp.c:267 gdk-pixbuf/io-bmp.c:338
-#: gdk-pixbuf/io-bmp.c:370 gdk-pixbuf/io-bmp.c:393 gdk-pixbuf/io-bmp.c:496
-msgid "BMP image has bogus header data"
-msgstr "BMP слика има неисправно заглавље"
-
-# шта нам нарочито битмап каже?
-#: gdk-pixbuf/io-bmp.c:241 gdk-pixbuf/io-bmp.c:433
-msgid "Not enough memory to load bitmap image"
-msgstr "Нема довољно меморије да учита слику"
-
-# или неподржану величину заглавља???
-#: gdk-pixbuf/io-bmp.c:319
-msgid "BMP image has unsupported header size"
-msgstr "BMP слика садржи заглавље неподржане величине"
-
-#: gdk-pixbuf/io-bmp.c:357
-msgid "Topdown BMP images cannot be compressed"
-msgstr "Одозго-надоле BMP слике се не могу компресовати"
-
-#: gdk-pixbuf/io-bmp.c:717 gdk-pixbuf/io-pnm.c:709
-msgid "Premature end-of-file encountered"
-msgstr "Наишао на превремен крај датотеке"
-
-#: gdk-pixbuf/io-bmp.c:1329
-msgid "Couldn't allocate memory for saving BMP file"
-msgstr "Не могу обезбедити меморију за чување BMP датотеке"
-
-#: gdk-pixbuf/io-bmp.c:1370
-msgid "Couldn't write to BMP file"
-msgstr "Не могу да упишем у BMP датотеку"
-
-#: gdk-pixbuf/io-bmp.c:1423 gdk-pixbuf/io-gdip-bmp.c:82
-msgid "The BMP image format"
-msgstr "BMP запис слике"
-
-#: gdk-pixbuf/io-gif.c:222
-#, c-format
-msgid "Failure reading GIF: %s"
-msgstr "Грешка при читању GIF-а: %s"
-
-#: gdk-pixbuf/io-gif.c:496 gdk-pixbuf/io-gif.c:1481 gdk-pixbuf/io-gif.c:1642
-msgid "GIF file was missing some data (perhaps it was truncated somehow?)"
-msgstr "GIF датотеци недостаје нешто података (можда је некако одсечена?)"
-
-#: gdk-pixbuf/io-gif.c:505
-#, c-format
-msgid "Internal error in the GIF loader (%s)"
-msgstr "Унутрашња грешка при учитавању GIF-а (%s)"
-
-#: gdk-pixbuf/io-gif.c:579
-msgid "Stack overflow"
-msgstr "Прекорачење стека"
-
-#: gdk-pixbuf/io-gif.c:639
-msgid "GIF image loader cannot understand this image."
-msgstr "Део за учитавање GIF слика не препознаје ову слику."
-
-#: gdk-pixbuf/io-gif.c:668
-msgid "Bad code encountered"
-msgstr "Наишао је на лош запис"
-
-#: gdk-pixbuf/io-gif.c:678
-msgid "Circular table entry in GIF file"
-msgstr "Кружни унос у табели GIF датотеке"
-
-#: gdk-pixbuf/io-gif.c:866 gdk-pixbuf/io-gif.c:1468 gdk-pixbuf/io-gif.c:1515
-#: gdk-pixbuf/io-gif.c:1630
-msgid "Not enough memory to load GIF file"
-msgstr "Нема довољно меморије да учита GIF датотеку"
-
-#: gdk-pixbuf/io-gif.c:960
-msgid "Not enough memory to composite a frame in GIF file"
-msgstr "Нема довољно меморије за слагање кадра у GIF датотеци"
-
-#: gdk-pixbuf/io-gif.c:1132
-msgid "GIF image is corrupt (incorrect LZW compression)"
-msgstr "GIF слика је оштећена (неисправно LZW сажимање)"
-
-#: gdk-pixbuf/io-gif.c:1182
-msgid "File does not appear to be a GIF file"
-msgstr "Изгледа да се не ради о GIF датотеци"
-
-#: gdk-pixbuf/io-gif.c:1194
-#, c-format
-msgid "Version %s of the GIF file format is not supported"
-msgstr "Издање %s GIF врсте записа није подржано"
-
-#: gdk-pixbuf/io-gif.c:1303
-msgid ""
-"GIF image has no global colormap, and a frame inside it has no local "
-"colormap."
-msgstr "GIF слика нема општу мапу боја, а кадар у њему нема засебну мапу боја."
-
-#: gdk-pixbuf/io-gif.c:1537
-msgid "GIF image was truncated or incomplete."
-msgstr "GIF слика је одсечена или непотпуна."
-
-# забрљано
-#: gdk-pixbuf/io-gif.c:1693 gdk-pixbuf/io-gdip-gif.c:80
-msgid "The GIF image format"
-msgstr "GIF запис слике"
-
-#: gdk-pixbuf/io-ico.c:211 gdk-pixbuf/io-ico.c:225 gdk-pixbuf/io-ico.c:277
-#: gdk-pixbuf/io-ico.c:290 gdk-pixbuf/io-ico.c:359
-msgid "Invalid header in icon"
-msgstr "Неисправно заглавље иконе"
-
-# негде сам видео добар превод за иконицу, али не сећам се који је, а ни где
-#: gdk-pixbuf/io-ico.c:240 gdk-pixbuf/io-ico.c:300 gdk-pixbuf/io-ico.c:369
-#: gdk-pixbuf/io-ico.c:432 gdk-pixbuf/io-ico.c:462
-msgid "Not enough memory to load icon"
-msgstr "Недовољно меморије за учитавање иконе"
-
-#: gdk-pixbuf/io-ico.c:322
-msgid "Icon has zero width"
-msgstr "Икона је ширине нула"
-
-#: gdk-pixbuf/io-ico.c:332
-msgid "Icon has zero height"
-msgstr "Икона је висине нула"
-
-#: gdk-pixbuf/io-ico.c:384
-msgid "Compressed icons are not supported"
-msgstr "Не подржавам компресоване иконе"
-
-#: gdk-pixbuf/io-ico.c:417
-msgid "Unsupported icon type"
-msgstr "Неподржана врста икона"
-
-#: gdk-pixbuf/io-ico.c:511
-msgid "Not enough memory to load ICO file"
-msgstr "Недовољно меморије аз учитавање ICO датотеке"
-
-#: gdk-pixbuf/io-ico.c:976
-msgid "Image too large to be saved as ICO"
-msgstr "Слика је превелика да би се сачувала као ICO"
-
-#: gdk-pixbuf/io-ico.c:987
-msgid "Cursor hotspot outside image"
-msgstr "Показивач курсора је ван слике"
-
-#: gdk-pixbuf/io-ico.c:1010
-#, c-format
-msgid "Unsupported depth for ICO file: %d"
-msgstr "Неподржана дубина за ICO датотеку: %d"
-
-#
-#: gdk-pixbuf/io-ico.c:1245 gdk-pixbuf/io-gdip-ico.c:59
-msgid "The ICO image format"
-msgstr "ICO запис слике"
-
-#: gdk-pixbuf/io-icns.c:347
-#, c-format
-msgid "Error reading ICNS image: %s"
-msgstr "Грешка при читању ICNS слике: %s"
-
-#: gdk-pixbuf/io-icns.c:364
-msgid "Could not decode ICNS file"
-msgstr "Не могу да декодирам ICNS датотеку"
-
-#
-#: gdk-pixbuf/io-icns.c:397
-msgid "The ICNS image format"
-msgstr "ICNS формат слике"
-
-#: gdk-pixbuf/io-jasper.c:75
-msgid "Couldn't allocate memory for stream"
-msgstr "Не могу да обезбедим меморију за ток"
-
-#: gdk-pixbuf/io-jasper.c:105
-msgid "Couldn't decode image"
-msgstr "Не могу да декодирам слику"
-
-# колико њих ће ме тући због „преиначени"?
-#: gdk-pixbuf/io-jasper.c:123
-msgid "Transformed JPEG2000 has zero width or height"
-msgstr "Преиначени ЈПЕГ2000 има висину или ширину нула."
-
-#: gdk-pixbuf/io-jasper.c:137
-msgid "Image type currently not supported"
-msgstr "Врста слике за сада није подржана"
-
-#: gdk-pixbuf/io-jasper.c:149 gdk-pixbuf/io-jasper.c:157
-msgid "Couldn't allocate memory for color profile"
-msgstr "Не могу да обезбедим меморију за палету боја"
-
-#: gdk-pixbuf/io-jasper.c:183
-msgid "Insufficient memory to open JPEG 2000 file"
-msgstr "Недовољно меморије за отварање ЈПЕГ2000 датотеке"
-
-#: gdk-pixbuf/io-jasper.c:262
-msgid "Couldn't allocate memory to buffer image data"
-msgstr "Не могу да обезбедим меморију за бафер података слике"
-
-#: gdk-pixbuf/io-jasper.c:306
-msgid "The JPEG 2000 image format"
-msgstr "ЈПЕГ2000 запис слике"
-
-# као код фотоапарата/развијања слика ;)
-#: gdk-pixbuf/io-jpeg.c:117
-#, c-format
-msgid "Error interpreting JPEG image file (%s)"
-msgstr "Грешка при развијању JPEG слике (%s)"
-
-#: gdk-pixbuf/io-jpeg.c:528
-msgid ""
-"Insufficient memory to load image, try exiting some applications to free "
-"memory"
-msgstr ""
-"Недовољно меморије за учитавање слике, затворите неке програме да ослободите "
-"меморију"
-
-# графички дизајнери, како се ово преводи?
-#: gdk-pixbuf/io-jpeg.c:569 gdk-pixbuf/io-jpeg.c:775
-#, c-format
-msgid "Unsupported JPEG color space (%s)"
-msgstr "Неподржан JPEG простор боја (%s)"
-
-#: gdk-pixbuf/io-jpeg.c:674 gdk-pixbuf/io-jpeg.c:944 gdk-pixbuf/io-jpeg.c:1177
-#: gdk-pixbuf/io-jpeg.c:1186
-msgid "Couldn't allocate memory for loading JPEG file"
-msgstr "Не могу обезбедити меморију за учитавање JPEG датотеке"
-
-# колико њих ће ме тући због „преиначени"?
-#: gdk-pixbuf/io-jpeg.c:919
-msgid "Transformed JPEG has zero width or height."
-msgstr "Преиначени ЈПЕГ има висину или ширину нула."
-
-#: gdk-pixbuf/io-jpeg.c:1133 gdk-pixbuf/io-gdip-jpeg.c:53
-#, c-format
-msgid ""
-"JPEG quality must be a value between 0 and 100; value '%s' could not be "
-"parsed."
-msgstr ""
-"Квалитет JPEG-а мора бити вредност између 0 и 100; не могу да разумем "
-"вредност „%s“."
-
-#: gdk-pixbuf/io-jpeg.c:1148 gdk-pixbuf/io-gdip-jpeg.c:68
-#, c-format
-msgid ""
-"JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
-msgstr ""
-"Квалитет JPEG-а мора бити вредност између 0 и 100; није дозвољена вредност „%"
-"d“."
-
-#: gdk-pixbuf/io-jpeg.c:1310 gdk-pixbuf/io-gdip-jpeg.c:136
-msgid "The JPEG image format"
-msgstr "JPEG запис слике"
-
-#: gdk-pixbuf/io-pcx.c:187
-msgid "Couldn't allocate memory for header"
-msgstr "Не могу да обезбедим меморију за заглавље"
-
-#: gdk-pixbuf/io-pcx.c:202 gdk-pixbuf/io-pcx.c:560
-msgid "Couldn't allocate memory for context buffer"
-msgstr "Не могу да обезбедим меморију за податке о контексту"
-
-#: gdk-pixbuf/io-pcx.c:601
-msgid "Image has invalid width and/or height"
-msgstr "Слика је неисправне ширине и/или висине"
-
-#: gdk-pixbuf/io-pcx.c:613 gdk-pixbuf/io-pcx.c:674
-msgid "Image has unsupported bpp"
-msgstr "Слика користи неподржан број битова по тачки"
-
-#: gdk-pixbuf/io-pcx.c:618 gdk-pixbuf/io-pcx.c:626
-#, c-format
-msgid "Image has unsupported number of %d-bit planes"
-msgstr "Слика садржи неподржан број %d-битних равни"
-
-#: gdk-pixbuf/io-pcx.c:642
-msgid "Couldn't create new pixbuf"
-msgstr "Не могу да направим нови pixbuf"
-
-#: gdk-pixbuf/io-pcx.c:650
-msgid "Couldn't allocate memory for line data"
-msgstr "Не могу обезбедити меморију за податке линије"
-
-#: gdk-pixbuf/io-pcx.c:657
-msgid "Couldn't allocate memory for paletted data"
-msgstr "Не могу обезбедити меморију за податке палете"
-
-#: gdk-pixbuf/io-pcx.c:704
-msgid "Didn't get all lines of PCX image"
-msgstr "Нисам учитао све линије из PCX слике"
-
-#: gdk-pixbuf/io-pcx.c:711
-msgid "No palette found at end of PCX data"
-msgstr "Није нађена палета на крају PCX података"
-
-#: gdk-pixbuf/io-pcx.c:756
-msgid "The PCX image format"
-msgstr "PCX запис слике"
-
-#: gdk-pixbuf/io-png.c:55
-msgid "Bits per channel of PNG image is invalid."
-msgstr "Неисправан број битова по каналу PNG слике."
-
-# колико њих ће ме тући због „преиначени"?
-#: gdk-pixbuf/io-png.c:136 gdk-pixbuf/io-png.c:642
-msgid "Transformed PNG has zero width or height."
-msgstr "Преиначени PNG има висину или ширину нула."
-
-#: gdk-pixbuf/io-png.c:144
-msgid "Bits per channel of transformed PNG is not 8."
-msgstr "Број битова по каналу преиначеног PNG није 8."
-
-#: gdk-pixbuf/io-png.c:153
-msgid "Transformed PNG not RGB or RGBA."
-msgstr "Преиначени PNG није RGB или RGBA."
-
-#: gdk-pixbuf/io-png.c:162
-msgid "Transformed PNG has unsupported number of channels, must be 3 or 4."
-msgstr "Неподржан број канала у преиначеној PNG слици; мора бити 3 или 4."
-
-#: gdk-pixbuf/io-png.c:183
-#, c-format
-msgid "Fatal error in PNG image file: %s"
-msgstr "Кобна грешка у PNG слици: %s"
-
-#: gdk-pixbuf/io-png.c:316
-msgid "Insufficient memory to load PNG file"
-msgstr "Нема довољно меморије да учита PNG датотеку"
-
-# не морамо ваљда све дословно?
-#: gdk-pixbuf/io-png.c:657
-#, c-format
-msgid ""
-"Insufficient memory to store a %ld by %ld image; try exiting some "
-"applications to reduce memory usage"
-msgstr ""
-"Недовољно меморије за смештај слике величине %ld×%ld; покушајте да "
-"ослободите нешто меморије затварањем неких програма"
-
-#: gdk-pixbuf/io-png.c:720
-msgid "Fatal error reading PNG image file"
-msgstr "Кобна грешка при читању PNG слике"
-
-#: gdk-pixbuf/io-png.c:769
-#, c-format
-msgid "Fatal error reading PNG image file: %s"
-msgstr "Кобна грешка при читању PNG слике: %s"
-
-#: gdk-pixbuf/io-png.c:863
-msgid ""
-"Keys for PNG text chunks must have at least 1 and at most 79 characters."
-msgstr ""
-"Кључеви за текстуалне одељке PNG-а морају имати бар 1, а највише 79 знакова."
-
-#: gdk-pixbuf/io-png.c:872
-msgid "Keys for PNG text chunks must be ASCII characters."
-msgstr "Кључеви за текстуалне одељке PNG-а морају бити АСКРИ знакови."
-
-#: gdk-pixbuf/io-png.c:886 gdk-pixbuf/io-tiff.c:738
-#, c-format
-msgid "Color profile has invalid length %d."
-msgstr "Профил боја није исправне дужине %d."
-
-#: gdk-pixbuf/io-png.c:899 gdk-pixbuf/io-gdip-png.c:56
-#, c-format
-msgid ""
-"PNG compression level must be a value between 0 and 9; value '%s' could not "
-"be parsed."
-msgstr ""
-"Ниво компресије PNG-а мора бити вредност између 0 и 9; не разумем вредност „%"
-"s“."
-
-#: gdk-pixbuf/io-png.c:912 gdk-pixbuf/io-gdip-png.c:68
-#, c-format
-msgid ""
-"PNG compression level must be a value between 0 and 9; value '%d' is not "
-"allowed."
-msgstr ""
-"Ниво компресије PNG-а мора бити вредност између 0 и 9; вредност „%d“ није "
-"допуштена."
-
-#: gdk-pixbuf/io-png.c:951
-#, c-format
-msgid "Value for PNG text chunk %s cannot be converted to ISO-8859-1 encoding."
-msgstr ""
-"Вредност текстуалног одељка PNG-а %s се не може претворити у ИСО-8859-1 "
-"запис."
-
-#: gdk-pixbuf/io-png.c:1112 gdk-pixbuf/io-gdip-png.c:133
-msgid "The PNG image format"
-msgstr "PNG запис слике"
-
-# Да ли користити аорист?? Ја сам за, а шта кажу остали...
-#: gdk-pixbuf/io-pnm.c:250
-msgid "PNM loader expected to find an integer, but didn't"
-msgstr "Део за учитавање PNM слика је очекивао цео број, али није га нашао"
-
-#: gdk-pixbuf/io-pnm.c:282
-msgid "PNM file has an incorrect initial byte"
-msgstr "PNM датотека садржи неисправан почетни бајт"
-
-#: gdk-pixbuf/io-pnm.c:312
-msgid "PNM file is not in a recognized PNM subformat"
-msgstr "PNM датотека није у познатом PNM подзапису"
-
-#: gdk-pixbuf/io-pnm.c:337
-msgid "PNM file has an image width of 0"
-msgstr "PNM датотека садржи слику ширине 0"
-
-#: gdk-pixbuf/io-pnm.c:358
-msgid "PNM file has an image height of 0"
-msgstr "PNM датотека садржи слику висине 0"
-
-#: gdk-pixbuf/io-pnm.c:381
-msgid "Maximum color value in PNM file is 0"
-msgstr "Највећа вредност боје у PNM датотеци је 0"
-
-#: gdk-pixbuf/io-pnm.c:389
-msgid "Maximum color value in PNM file is too large"
-msgstr "Највећа вредност боје у PNM датотеци је превелика"
-
-#: gdk-pixbuf/io-pnm.c:429 gdk-pixbuf/io-pnm.c:459 gdk-pixbuf/io-pnm.c:504
-msgid "Raw PNM image type is invalid"
-msgstr "Сирова PNM врста слике неисправна"
-
-#: gdk-pixbuf/io-pnm.c:654
-msgid "PNM image loader does not support this PNM subformat"
-msgstr "Део за учитавање PNM слика не подржава овај PNM подзапис"
-
-#: gdk-pixbuf/io-pnm.c:741 gdk-pixbuf/io-pnm.c:968
-msgid "Raw PNM formats require exactly one whitespace before sample data"
-msgstr "Сиров PNM запис захтева тачно један размак пре садржаја"
-
-#: gdk-pixbuf/io-pnm.c:768
-msgid "Cannot allocate memory for loading PNM image"
-msgstr "Не могу да обезбедим меморију за учитавање PNM слике"
-
-# у сваком структу (Це језик) су неки подаци
-#: gdk-pixbuf/io-pnm.c:818
-msgid "Insufficient memory to load PNM context struct"
-msgstr "Недовољно меморије за учитавање PNM података о смислу"
-
-#: gdk-pixbuf/io-pnm.c:869
-msgid "Unexpected end of PNM image data"
-msgstr "Неочекиван крај PNM слике"
-
-#: gdk-pixbuf/io-pnm.c:997
-msgid "Insufficient memory to load PNM file"
-msgstr "Недовољно меморије за учитавање PNM датотеке"
-
-#: gdk-pixbuf/io-pnm.c:1081
-msgid "The PNM/PBM/PGM/PPM image format family"
-msgstr "Породица PNM/PBM/PGM/PPM записа слика"
-
-#: gdk-pixbuf/io-qtif.c:128
-msgid "Input file descriptor is NULL."
-msgstr "Описивач улазне датотеке је NULL."
-
-#: gdk-pixbuf/io-qtif.c:143
-msgid "Failed to read QTIF header"
-msgstr "Не могу да прочитам QTIF заглавље"
-
-#: gdk-pixbuf/io-qtif.c:152 gdk-pixbuf/io-qtif.c:182 gdk-pixbuf/io-qtif.c:446
-#, c-format
-msgid "QTIF atom size too large (%d bytes)"
-msgstr "Величина QTIF атома је прекорачена (%d битова)"
-
-#: gdk-pixbuf/io-qtif.c:172
-#, c-format
-msgid "Failed to allocate %d bytes for file read buffer"
-msgstr "Не могу да обезбедим %d битова у оставу за читање датотека"
-
-#: gdk-pixbuf/io-qtif.c:196
-#, c-format
-msgid "File error when reading QTIF atom: %s"
-msgstr "Грешка у датотеци при читању QTIF атома: %s"
-
-#: gdk-pixbuf/io-qtif.c:233
-#, c-format
-msgid "Failed to skip the next %d bytes with seek()."
-msgstr "Не могу да прескочим наредних %d битова са seek()."
-
-#: gdk-pixbuf/io-qtif.c:257
-msgid "Failed to allocate QTIF context structure."
-msgstr "Не могу да обезбедим QTIF структуру за  контекст."
-
-#: gdk-pixbuf/io-qtif.c:317
-msgid "Failed to create GdkPixbufLoader object."
-msgstr "Не могу да образујем GdkPixbufLoader објекат."
-
-#: gdk-pixbuf/io-qtif.c:421
-msgid "Failed to find an image data atom."
-msgstr "Не могу да пронађем атом са подацима слике."
-
-#: gdk-pixbuf/io-qtif.c:602
-msgid "The QTIF image format"
-msgstr "QTIF запис слике"
-
-#: gdk-pixbuf/io-ras.c:126
-msgid "RAS image has bogus header data"
-msgstr "RAS слика има неисправно заглавље"
-
-#: gdk-pixbuf/io-ras.c:148
-msgid "RAS image has unknown type"
-msgstr "RAS слика је непознате врсте"
-
-# мало слободе овак'оме уметнику се мора дати
-#: gdk-pixbuf/io-ras.c:156
-msgid "unsupported RAS image variation"
-msgstr "неподржана врста RAS слике"
-
-#: gdk-pixbuf/io-ras.c:171 gdk-pixbuf/io-ras.c:200
-msgid "Not enough memory to load RAS image"
-msgstr "Недовољно меморије за учитавање RAS слике"
-
-#: gdk-pixbuf/io-ras.c:545
-msgid "The Sun raster image format"
-msgstr "Sun-ов запис растерских слика"
-
-# овде не можемо ставити „податке“ пошто ова структура показује на податке, види ниже
-#: gdk-pixbuf/io-tga.c:154
-msgid "Cannot allocate memory for IOBuffer struct"
-msgstr "Не могу да обезбедим меморију за IOBuffer структуру"
-
-#: gdk-pixbuf/io-tga.c:173
-msgid "Cannot allocate memory for IOBuffer data"
-msgstr "Не могу да обезбедим меморију за IOBuffer податке"
-
-# мало опширније него што би требало: део „помоћу...“ се може избацити
-# bug: don't use slang
-#: gdk-pixbuf/io-tga.c:184
-msgid "Cannot realloc IOBuffer data"
-msgstr "Не могу да проширим IOBuffer податке помоћу realloc()"
-
-#: gdk-pixbuf/io-tga.c:214
-msgid "Cannot allocate temporary IOBuffer data"
-msgstr "Не могу да обезбедим привремене IOBuffer податке"
-
-#: gdk-pixbuf/io-tga.c:347
-msgid "Cannot allocate new pixbuf"
-msgstr "Не могу да обезбедим нови pixbuf"
-
-#: gdk-pixbuf/io-tga.c:686
-msgid "Image is corrupted or truncated"
-msgstr "Слика је одсечена или неисправна."
-
-#: gdk-pixbuf/io-tga.c:693
-msgid "Cannot allocate colormap structure"
-msgstr "Не могу да обезбедим структуру за мапу боја"
-
-#: gdk-pixbuf/io-tga.c:700
-msgid "Cannot allocate colormap entries"
-msgstr "Не могу да обезбедим ставке за мапу боја"
-
-# bitdepth непосредно утиче на број боја
-#: gdk-pixbuf/io-tga.c:722
-msgid "Unexpected bitdepth for colormap entries"
-msgstr "Неочекиван број боја за ставке мапе боја"
-
-#: gdk-pixbuf/io-tga.c:740
-msgid "Cannot allocate TGA header memory"
-msgstr "Не могу да обезбедим меморију за TGA заглавље"
-
-#: gdk-pixbuf/io-tga.c:773
-msgid "TGA image has invalid dimensions"
-msgstr "TGA слика је неисправне величине"
-
-#: gdk-pixbuf/io-tga.c:779 gdk-pixbuf/io-tga.c:788 gdk-pixbuf/io-tga.c:798
-#: gdk-pixbuf/io-tga.c:808 gdk-pixbuf/io-tga.c:815
-msgid "TGA image type not supported"
-msgstr "TGA запис слике није подржан"
-
-#: gdk-pixbuf/io-tga.c:862
-msgid "Cannot allocate memory for TGA context struct"
-msgstr "Не могу да обезбедим меморију за TGA податке о контексту"
-
-#: gdk-pixbuf/io-tga.c:927
-msgid "Excess data in file"
-msgstr "Претерано података у датотеци"
-
-#: gdk-pixbuf/io-tga.c:1008
-msgid "The Targa image format"
-msgstr "Targa запис слика"
-
-#: gdk-pixbuf/io-tiff.c:165
-msgid "Could not get image width (bad TIFF file)"
-msgstr "Не могу да прочитам ширину слике (лоша TIFF датотека)"
-
-#: gdk-pixbuf/io-tiff.c:172
-msgid "Could not get image height (bad TIFF file)"
-msgstr "Не могу да сазнам висину слике (лоша TIFF датотека)"
-
-#: gdk-pixbuf/io-tiff.c:180
-msgid "Width or height of TIFF image is zero"
-msgstr "Висина или ширина TIFF слике је нула"
-
-#: gdk-pixbuf/io-tiff.c:189 gdk-pixbuf/io-tiff.c:198
-msgid "Dimensions of TIFF image too large"
-msgstr "TIFF слика је превелика"
-
-#: gdk-pixbuf/io-tiff.c:222 gdk-pixbuf/io-tiff.c:234 gdk-pixbuf/io-tiff.c:561
-msgid "Insufficient memory to open TIFF file"
-msgstr "Недовољно меморије за отварање TIFF датотеке"
-
-#: gdk-pixbuf/io-tiff.c:295
-msgid "Failed to load RGB data from TIFF file"
-msgstr "Неуспело учитавање RGB података из TIFF датотеке"
-
-#: gdk-pixbuf/io-tiff.c:351
-msgid "Failed to open TIFF image"
-msgstr "Неуспело отварање TIFF слике"
-
-# да ли је ово нешто нарочито за TIFF, или се и то може превести?
-#: gdk-pixbuf/io-tiff.c:363 gdk-pixbuf/io-tiff.c:778
-msgid "TIFFClose operation failed"
-msgstr "TIFFClose операција није успела"
-
-#: gdk-pixbuf/io-tiff.c:493 gdk-pixbuf/io-tiff.c:506
-msgid "Failed to load TIFF image"
-msgstr "Неуспело учитавање TIFF слике"
-
-#: gdk-pixbuf/io-tiff.c:692
-msgid "Failed to save TIFF image"
-msgstr "Неуспело чување TIFF слике"
-
-#: gdk-pixbuf/io-tiff.c:727
-msgid "TIFF compression doesn't refer to a valid codec."
-msgstr "Паковање TIFF података се не односи на одговарајући кодек."
-
-#: gdk-pixbuf/io-tiff.c:767
-msgid "Failed to write TIFF data"
-msgstr "Неуспео упис TIFF слике"
-
-#: gdk-pixbuf/io-tiff.c:814
-msgid "Couldn't write to TIFF file"
-msgstr "Не могу да упишем у TIFF датотеку"
-
-#: gdk-pixbuf/io-tiff.c:869
-msgid "The TIFF image format"
-msgstr "TIFF запис слика"
-
-#: gdk-pixbuf/io-wbmp.c:246
-msgid "Image has zero width"
-msgstr "Слика је ширине нула"
-
-#: gdk-pixbuf/io-wbmp.c:264
-msgid "Image has zero height"
-msgstr "Слика је висине нула"
-
-#: gdk-pixbuf/io-wbmp.c:275
-msgid "Not enough memory to load image"
-msgstr "Недовољно меморије за учитавање слике"
-
-#: gdk-pixbuf/io-wbmp.c:334
-msgid "Couldn't save the rest"
-msgstr "Не могу да сачувам остатак"
-
-#: gdk-pixbuf/io-wbmp.c:375
-msgid "The WBMP image format"
-msgstr "WBMP запис слика"
-
-#: gdk-pixbuf/io-xbm.c:295
-msgid "Invalid XBM file"
-msgstr "Неисправна XBM датотека"
-
-#: gdk-pixbuf/io-xbm.c:305
-msgid "Insufficient memory to load XBM image file"
-msgstr "Недовољно меморије за учитавање XBM слике"
-
-#: gdk-pixbuf/io-xbm.c:453
-msgid "Failed to write to temporary file when loading XBM image"
-msgstr "Неуспео упис у привремену датотеку при учитавању XBM слике"
-
-#: gdk-pixbuf/io-xbm.c:492
-msgid "The XBM image format"
-msgstr "XBM запис слика"
-
-#: gdk-pixbuf/io-xpm.c:468
-msgid "No XPM header found"
-msgstr "Није нашао XPM заглавље"
-
-#: gdk-pixbuf/io-xpm.c:477
-msgid "Invalid XPM header"
-msgstr "Неисправно XPM заглавље"
-
-#: gdk-pixbuf/io-xpm.c:485
-msgid "XPM file has image width <= 0"
-msgstr "XPM слика је ширине ≤0"
-
-# можда боље речима?
-#: gdk-pixbuf/io-xpm.c:493
-msgid "XPM file has image height <= 0"
-msgstr "XPM слика је висине ≤0"
-
-# или можда пикселу?
-#: gdk-pixbuf/io-xpm.c:501
-msgid "XPM has invalid number of chars per pixel"
-msgstr "XPM има неисправан број знакова по тачки"
-
-# можда боље речима?
-#: gdk-pixbuf/io-xpm.c:510
-msgid "XPM file has invalid number of colors"
-msgstr "XPM датотека има неисправан број боја"
-
-#: gdk-pixbuf/io-xpm.c:522 gdk-pixbuf/io-xpm.c:531 gdk-pixbuf/io-xpm.c:583
-msgid "Cannot allocate memory for loading XPM image"
-msgstr "Не могу да обезбедим меморију за учитавање XPM слике"
-
-#: gdk-pixbuf/io-xpm.c:545
-msgid "Cannot read XPM colormap"
-msgstr "Не могу да учитам XPM мапу боја"
-
-#: gdk-pixbuf/io-xpm.c:777
-msgid "Failed to write to temporary file when loading XPM image"
-msgstr "Неуспео упис у привремену датотеку при учитавању XPM слике"
-
-#: gdk-pixbuf/io-xpm.c:816
-msgid "The XPM image format"
-msgstr "XPM запис слике"
-
-#: gdk-pixbuf/io-gdip-emf.c:59
-msgid "The EMF image format"
-msgstr "ЕМФ запис слике"
-
-#: gdk-pixbuf/io-gdip-utils.c:232
-#, c-format
-msgid "Could not allocate memory: %s"
-msgstr "Не могу да обезбедим меморију: %s"
-
-#: gdk-pixbuf/io-gdip-utils.c:257 gdk-pixbuf/io-gdip-utils.c:371
-#: gdk-pixbuf/io-gdip-utils.c:411
-#, c-format
-msgid "Could not create stream: %s"
-msgstr "Не могу да направим ток: %s"
-
-#: gdk-pixbuf/io-gdip-utils.c:271
-#, c-format
-msgid "Could not seek stream: %s"
-msgstr "Не могу да се крећем по току: %s"
-
-#: gdk-pixbuf/io-gdip-utils.c:283
-#, c-format
-msgid "Could not read from stream: %s"
-msgstr "Не могу да читам из тока: %s"
-
-#: gdk-pixbuf/io-gdip-utils.c:694 gdk-pixbuf/io-gdip-utils.c:825
-msgid "Couldn't load bitmap"
-msgstr "Не могу да отворим битмапу"
-
-#: gdk-pixbuf/io-gdip-utils.c:847
-msgid "Couldn't load metafile"
-msgstr "Не могу да отворим metafile"
-
-# мало слободе овак'оме уметнику се мора дати
-#: gdk-pixbuf/io-gdip-utils.c:1006
-msgid "Unsupported image format for GDI+"
-msgstr "Неподржана врста слике за ГДИ+"
-
-#: gdk-pixbuf/io-gdip-utils.c:1013
-msgid "Couldn't save"
-msgstr "Не могу да сачувам"
-
-#: gdk-pixbuf/io-gdip-wmf.c:58
-msgid "The WMF image format"
-msgstr "WMF запис слика"
 
 #. Description of --sync in --help output
 #: gdk/win32/gdkmain-win32.c:55
@@ -1540,8 +614,9 @@ msgid "_Saturation:"
 msgstr "_Засићеност:"
 
 #: gtk/gtkcolorsel.c:393
-msgid "\"Deepness\" of the color."
-msgstr "„Дубина“ боје."
+#, fuzzy
+msgid "Intensity of the color."
+msgstr "Провидност боје."
 
 #: gtk/gtkcolorsel.c:394
 msgid "_Value:"
@@ -1714,11 +789,11 @@ msgstr "Д_есно:"
 msgid "Paper Margins"
 msgstr "Маргине"
 
-#: gtk/gtkentry.c:8612 gtk/gtktextview.c:8002
+#: gtk/gtkentry.c:8612 gtk/gtktextview.c:8012
 msgid "Input _Methods"
 msgstr "_Начини уноса"
 
-#: gtk/gtkentry.c:8626 gtk/gtktextview.c:8016
+#: gtk/gtkentry.c:8626 gtk/gtktextview.c:8026
 msgid "_Insert Unicode Control Character"
 msgstr "_Убаци контролни Уникод знак"
 
@@ -2160,12 +1235,12 @@ msgid "System (%s)"
 msgstr "Систем (%s)"
 
 #. Open Link
-#: gtk/gtklabel.c:6076
+#: gtk/gtklabel.c:6072
 msgid "_Open Link"
 msgstr "Отвори _везу"
 
 #. Copy Link Address
-#: gtk/gtklabel.c:6088
+#: gtk/gtklabel.c:6084
 msgid "Copy _Link Address"
 msgstr "Умножи _адресу везе"
 
@@ -2179,27 +1254,27 @@ msgstr "Неисправан УРЛ"
 
 # допунски додаци? „добар фазон“... црни Данило
 #. Description of --gtk-module=MODULES in --help output
-#: gtk/gtkmain.c:447
+#: gtk/gtkmain.c:432
 msgid "Load additional GTK+ modules"
 msgstr "Учитај допунске Гтк+ додатке"
 
 #. Placeholder in --gtk-module=MODULES in --help output
-#: gtk/gtkmain.c:448
+#: gtk/gtkmain.c:433
 msgid "MODULES"
 msgstr "ДОДАЦИ"
 
 #. Description of --g-fatal-warnings in --help output
-#: gtk/gtkmain.c:450
+#: gtk/gtkmain.c:435
 msgid "Make all warnings fatal"
 msgstr "Учини сва упозорења кобним"
 
 #. Description of --gtk-debug=FLAGS in --help output
-#: gtk/gtkmain.c:453
+#: gtk/gtkmain.c:438
 msgid "GTK+ debugging flags to set"
 msgstr "Које Гтк+ опције за налажење грешака укључити"
 
 #. Description of --gtk-no-debug=FLAGS in --help output
-#: gtk/gtkmain.c:456
+#: gtk/gtkmain.c:441
 msgid "GTK+ debugging flags to unset"
 msgstr "Које Гтк+ опције за налажење грешака искључити"
 
@@ -2208,20 +1283,20 @@ msgstr "Које Гтк+ опције за налажење грешака ис�
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
 #.
-#: gtk/gtkmain.c:708
+#: gtk/gtkmain.c:704
 msgid "default:LTR"
 msgstr "default:LTR"
 
-#: gtk/gtkmain.c:773
+#: gtk/gtkmain.c:769
 #, c-format
 msgid "Cannot open display: %s"
 msgstr "Не могу да приступим екрану: %s"
 
-#: gtk/gtkmain.c:810
+#: gtk/gtkmain.c:806
 msgid "GTK+ Options"
 msgstr "Гтк+ опције"
 
-#: gtk/gtkmain.c:810
+#: gtk/gtkmain.c:806
 msgid "Show GTK+ Options"
 msgstr "Прикажи Гтк+ опције"
 
@@ -2306,7 +1381,7 @@ msgstr "Z љуска"
 msgid "Cannot end process with pid %d: %s"
 msgstr "Не могу да окончам процес под бројем %d: %s"
 
-#: gtk/gtknotebook.c:4621 gtk/gtknotebook.c:7050
+#: gtk/gtknotebook.c:4631 gtk/gtknotebook.c:7060
 #, c-format
 msgid "Page %u"
 msgstr "Лист %u"
@@ -2396,87 +1471,81 @@ msgstr "_Сачувај у фасцикли:"
 msgid "%s job #%d"
 msgstr "%s — посао #%d"
 
-#: gtk/gtkprintoperation.c:1687
+#: gtk/gtkprintoperation.c:1695
 msgctxt "print operation status"
 msgid "Initial state"
 msgstr "Покретање"
 
-#: gtk/gtkprintoperation.c:1688
+#: gtk/gtkprintoperation.c:1696
 msgctxt "print operation status"
 msgid "Preparing to print"
 msgstr "Припремам за штампу"
 
-#: gtk/gtkprintoperation.c:1689
+#: gtk/gtkprintoperation.c:1697
 msgctxt "print operation status"
 msgid "Generating data"
 msgstr "Образујем податке"
 
-#: gtk/gtkprintoperation.c:1690
+#: gtk/gtkprintoperation.c:1698
 msgctxt "print operation status"
 msgid "Sending data"
 msgstr "Шаљем податке"
 
-#: gtk/gtkprintoperation.c:1691
+#: gtk/gtkprintoperation.c:1699
 msgctxt "print operation status"
 msgid "Waiting"
 msgstr "Чекам"
 
-#: gtk/gtkprintoperation.c:1692
+#: gtk/gtkprintoperation.c:1700
 msgctxt "print operation status"
 msgid "Blocking on issue"
 msgstr "Заустављено због проблема"
 
-#: gtk/gtkprintoperation.c:1693
+#: gtk/gtkprintoperation.c:1701
 msgctxt "print operation status"
 msgid "Printing"
 msgstr "Штампам"
 
-#: gtk/gtkprintoperation.c:1694
+#: gtk/gtkprintoperation.c:1702
 msgctxt "print operation status"
 msgid "Finished"
 msgstr "Завршено"
 
-#: gtk/gtkprintoperation.c:1695
+#: gtk/gtkprintoperation.c:1703
 msgctxt "print operation status"
 msgid "Finished with error"
 msgstr "Завршено уз грешку"
 
-#: gtk/gtkprintoperation.c:2254
+#: gtk/gtkprintoperation.c:2270
 #, c-format
 msgid "Preparing %d"
 msgstr "Припремам %d"
 
-#: gtk/gtkprintoperation.c:2256 gtk/gtkprintoperation.c:2875
+#: gtk/gtkprintoperation.c:2272 gtk/gtkprintoperation.c:2902
 #, c-format
 msgid "Preparing"
 msgstr "Припремам"
 
-#: gtk/gtkprintoperation.c:2259
+#: gtk/gtkprintoperation.c:2275
 #, c-format
 msgid "Printing %d"
 msgstr "Штампам %d"
 
-#: gtk/gtkprintoperation.c:2905
+#: gtk/gtkprintoperation.c:2932
 #, c-format
 msgid "Error creating print preview"
 msgstr "Грешка при изради прегледа"
 
-#: gtk/gtkprintoperation.c:2908
+#: gtk/gtkprintoperation.c:2935
 #, c-format
 msgid "The most probable reason is that a temporary file could not be created."
 msgstr "Најчешћи разлог је да није могуће направити привремену датотеку."
 
-#: gtk/gtkprintoperation-unix.c:297 gtk/gtkprintoperation-unix.c:314
-#, c-format
+#: gtk/gtkprintoperation-unix.c:297
 msgid "Error launching preview"
 msgstr "Грешка при покретању прегледа"
 
-#: gtk/gtkprintoperation-unix.c:358
-#, c-format
-msgid "Error printing"
-msgstr "Грешка при штампању"
-
-#: gtk/gtkprintoperation-unix.c:494 gtk/gtkprintoperation-win32.c:1447
+#: gtk/gtkprintoperation-unix.c:470 gtk/gtkprintoperation-win32.c:1447
 msgid "Application"
 msgstr "Програм"
 
@@ -2490,7 +1559,7 @@ msgstr "Нема папира"
 
 #. Translators: this is a printer status.
 #: gtk/gtkprintoperation-win32.c:616
-#: modules/printbackends/cups/gtkprintbackendcups.c:1999
+#: modules/printbackends/cups/gtkprintbackendcups.c:1998
 msgid "Paused"
 msgstr "Заустављено"
 
@@ -2617,42 +1686,42 @@ msgstr "Опште"
 #. * multiple pages on a sheet when printing
 #.
 #: gtk/gtkprintunixdialog.c:3010
-#: modules/printbackends/cups/gtkprintbackendcups.c:3509
+#: modules/printbackends/cups/gtkprintbackendcups.c:3508
 msgid "Left to right, top to bottom"
 msgstr "С лева на десно, одозго на доле"
 
 #: gtk/gtkprintunixdialog.c:3010
-#: modules/printbackends/cups/gtkprintbackendcups.c:3509
+#: modules/printbackends/cups/gtkprintbackendcups.c:3508
 msgid "Left to right, bottom to top"
 msgstr "С лева на десно, одоздо на горе"
 
 #: gtk/gtkprintunixdialog.c:3011
-#: modules/printbackends/cups/gtkprintbackendcups.c:3510
+#: modules/printbackends/cups/gtkprintbackendcups.c:3509
 msgid "Right to left, top to bottom"
 msgstr "С десна на лево, одозго на доле"
 
 #: gtk/gtkprintunixdialog.c:3011
-#: modules/printbackends/cups/gtkprintbackendcups.c:3510
+#: modules/printbackends/cups/gtkprintbackendcups.c:3509
 msgid "Right to left, bottom to top"
 msgstr "С десна на лево, одоздо на горе"
 
 #: gtk/gtkprintunixdialog.c:3012
-#: modules/printbackends/cups/gtkprintbackendcups.c:3511
+#: modules/printbackends/cups/gtkprintbackendcups.c:3510
 msgid "Top to bottom, left to right"
 msgstr "Одозго на доле, с лева на десно"
 
 #: gtk/gtkprintunixdialog.c:3012
-#: modules/printbackends/cups/gtkprintbackendcups.c:3511
+#: modules/printbackends/cups/gtkprintbackendcups.c:3510
 msgid "Top to bottom, right to left"
 msgstr "Одозго на доле, с десна на лево"
 
 #: gtk/gtkprintunixdialog.c:3013
-#: modules/printbackends/cups/gtkprintbackendcups.c:3512
+#: modules/printbackends/cups/gtkprintbackendcups.c:3511
 msgid "Bottom to top, left to right"
 msgstr "Одоздо на горе, с лева на десно"
 
 #: gtk/gtkprintunixdialog.c:3013
-#: modules/printbackends/cups/gtkprintbackendcups.c:3512
+#: modules/printbackends/cups/gtkprintbackendcups.c:3511
 msgid "Bottom to top, right to left"
 msgstr "Одоздо на горе, с десна на лево"
 
@@ -2660,7 +1729,7 @@ msgstr "Одоздо на горе, с десна на лево"
 #. * dialog that controls in what order multiple pages are arranged
 #.
 #: gtk/gtkprintunixdialog.c:3017 gtk/gtkprintunixdialog.c:3030
-#: modules/printbackends/cups/gtkprintbackendcups.c:3544
+#: modules/printbackends/cups/gtkprintbackendcups.c:3543
 msgid "Page Ordering"
 msgstr "Слагање страна"
 
@@ -3592,8 +2661,8 @@ msgstr "Подаци нису лепо запаковани у ниску"
 msgid ""
 "Serialized data is malformed. First section isn't GTKTEXTBUFFERCONTENTS-0001"
 msgstr ""
-"Подаци нису лепо запаковани у ниску. Прва област није GTKTEXTBUFFERCONTENTS-"
-"0001"
+"Подаци нису лепо запаковани у ниску. Прва област није "
+"GTKTEXTBUFFERCONTENTS-0001"
 
 #: gtk/gtktextutil.c:61
 msgid "LRM _Left-to-right mark"
@@ -4824,121 +3893,116 @@ msgstr "Штампач „%s“ је искључен."
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:1687
 #, c-format
-msgid "Printer '%s' may not be connected."
-msgstr "Штампач „%s“ изгледа није повезан."
-
-#: modules/printbackends/cups/gtkprintbackendcups.c:1688
-#, c-format
 msgid "There is a problem on printer '%s'."
 msgstr "Проблем на штампачу „%s“."
 
 #. Translators: this is a printer status.
-#: modules/printbackends/cups/gtkprintbackendcups.c:1996
+#: modules/printbackends/cups/gtkprintbackendcups.c:1995
 msgid "Paused ; Rejecting Jobs"
 msgstr "Заустављен ; Одбија послове"
 
 #. Translators: this is a printer status.
-#: modules/printbackends/cups/gtkprintbackendcups.c:2002
+#: modules/printbackends/cups/gtkprintbackendcups.c:2001
 msgid "Rejecting Jobs"
 msgstr "Одбија послове"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2778
+#: modules/printbackends/cups/gtkprintbackendcups.c:2777
 msgid "Two Sided"
 msgstr "Двострано"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2779
+#: modules/printbackends/cups/gtkprintbackendcups.c:2778
 msgid "Paper Type"
 msgstr "Тип папира"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2780
+#: modules/printbackends/cups/gtkprintbackendcups.c:2779
 msgid "Paper Source"
 msgstr "Извор папира"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2781
+#: modules/printbackends/cups/gtkprintbackendcups.c:2780
 msgid "Output Tray"
 msgstr "Излазна трака"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2782
+#: modules/printbackends/cups/gtkprintbackendcups.c:2781
 msgid "Resolution"
 msgstr "Резолуција"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2783
+#: modules/printbackends/cups/gtkprintbackendcups.c:2782
 msgid "GhostScript pre-filtering"
 msgstr "GhostScript предфилтер"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2792
+#: modules/printbackends/cups/gtkprintbackendcups.c:2791
 msgid "One Sided"
 msgstr "Једнострано"
 
 #. Translators: this is an option of "Two Sided"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2794
+#: modules/printbackends/cups/gtkprintbackendcups.c:2793
 msgid "Long Edge (Standard)"
 msgstr "По дужој страни (стандардно)"
 
 #. Translators: this is an option of "Two Sided"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2796
+#: modules/printbackends/cups/gtkprintbackendcups.c:2795
 msgid "Short Edge (Flip)"
 msgstr "По краћој страни (окренуто)"
 
 #. Translators: this is an option of "Paper Source"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2798
-#: modules/printbackends/cups/gtkprintbackendcups.c:2800
-#: modules/printbackends/cups/gtkprintbackendcups.c:2808
+#: modules/printbackends/cups/gtkprintbackendcups.c:2797
+#: modules/printbackends/cups/gtkprintbackendcups.c:2799
+#: modules/printbackends/cups/gtkprintbackendcups.c:2807
 msgid "Auto Select"
 msgstr "Сам одреди"
 
 #. Translators: this is an option of "Paper Source"
 #. Translators: this is an option of "Resolution"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2802
-#: modules/printbackends/cups/gtkprintbackendcups.c:2804
-#: modules/printbackends/cups/gtkprintbackendcups.c:2806
-#: modules/printbackends/cups/gtkprintbackendcups.c:2810
-#: modules/printbackends/cups/gtkprintbackendcups.c:3296
+#: modules/printbackends/cups/gtkprintbackendcups.c:2801
+#: modules/printbackends/cups/gtkprintbackendcups.c:2803
+#: modules/printbackends/cups/gtkprintbackendcups.c:2805
+#: modules/printbackends/cups/gtkprintbackendcups.c:2809
+#: modules/printbackends/cups/gtkprintbackendcups.c:3295
 msgid "Printer Default"
 msgstr "Подразумевано"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2812
+#: modules/printbackends/cups/gtkprintbackendcups.c:2811
 msgid "Embed GhostScript fonts only"
 msgstr "Само угњеждени GhostScript фонтови"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2814
+#: modules/printbackends/cups/gtkprintbackendcups.c:2813
 msgid "Convert to PS level 1"
 msgstr "Преведи у 1. ниво постскрипта"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2816
+#: modules/printbackends/cups/gtkprintbackendcups.c:2815
 msgid "Convert to PS level 2"
 msgstr "Преведи у 2. ниво постскрипта"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2818
+#: modules/printbackends/cups/gtkprintbackendcups.c:2817
 msgid "No pre-filtering"
 msgstr "Без предфилтрирања"
 
 #. Translators: "Miscellaneous" is the label for a button, that opens
 #. up an extra panel of settings in a print dialog.
-#: modules/printbackends/cups/gtkprintbackendcups.c:2827
+#: modules/printbackends/cups/gtkprintbackendcups.c:2826
 msgid "Miscellaneous"
 msgstr "Додатна подешавања"
 
 #. Translators: These strings name the possible values of the
 #. * job priority option in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3504
+#: modules/printbackends/cups/gtkprintbackendcups.c:3503
 msgid "Urgent"
 msgstr "Хитно"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3504
+#: modules/printbackends/cups/gtkprintbackendcups.c:3503
 msgid "High"
 msgstr "Важно"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3504
+#: modules/printbackends/cups/gtkprintbackendcups.c:3503
 msgid "Medium"
 msgstr "Средње"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3504
+#: modules/printbackends/cups/gtkprintbackendcups.c:3503
 msgid "Low"
 msgstr "Небитно"
 
@@ -4946,14 +4010,14 @@ msgstr "Небитно"
 #. Translators, this string is used to label the pages-per-sheet option
 #. * in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3528
+#: modules/printbackends/cups/gtkprintbackendcups.c:3527
 msgid "Pages per Sheet"
 msgstr "Страна на листу"
 
 #. Translators, this string is used to label the job priority option
 #. * in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3565
+#: modules/printbackends/cups/gtkprintbackendcups.c:3564
 msgid "Job Priority"
 msgstr "Важност"
 
@@ -4961,52 +4025,52 @@ msgstr "Важност"
 #. Translators, this string is used to label the billing info entry
 #. * in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3576
+#: modules/printbackends/cups/gtkprintbackendcups.c:3575
 msgid "Billing Info"
 msgstr "Фактурисање"
 
 #. Translators, these strings are names for various 'standard' cover
 #. * pages that the printing system may support.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3591
+#: modules/printbackends/cups/gtkprintbackendcups.c:3590
 msgid "None"
 msgstr "Нема"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3591
+#: modules/printbackends/cups/gtkprintbackendcups.c:3590
 msgid "Classified"
 msgstr "Категорисано"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3591
+#: modules/printbackends/cups/gtkprintbackendcups.c:3590
 msgid "Confidential"
 msgstr "Поверљиво"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3591
+#: modules/printbackends/cups/gtkprintbackendcups.c:3590
 msgid "Secret"
 msgstr "Тајна"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3591
+#: modules/printbackends/cups/gtkprintbackendcups.c:3590
 msgid "Standard"
 msgstr "Обично"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3591
+#: modules/printbackends/cups/gtkprintbackendcups.c:3590
 msgid "Top Secret"
 msgstr "Велика тајна"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3591
+#: modules/printbackends/cups/gtkprintbackendcups.c:3590
 msgid "Unclassified"
 msgstr "Некатегорисано"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the front cover page.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3626
+#: modules/printbackends/cups/gtkprintbackendcups.c:3625
 msgid "Before"
 msgstr "Пре"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the back cover page.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3641
+#: modules/printbackends/cups/gtkprintbackendcups.c:3640
 msgid "After"
 msgstr "После"
 
@@ -5014,14 +4078,14 @@ msgstr "После"
 #. * a print job is printed. Possible values are 'now', a specified time,
 #. * or 'on hold'
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3661
+#: modules/printbackends/cups/gtkprintbackendcups.c:3660
 msgid "Print at"
 msgstr "Закажи штампу"
 
 #. Translators: this is the name of the option that allows the user
 #. * to specify a time when a print job will be printed.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3672
+#: modules/printbackends/cups/gtkprintbackendcups.c:3671
 msgid "Print at time"
 msgstr "Штампај у"
 
@@ -5029,7 +4093,7 @@ msgstr "Штампај у"
 #. * size. The two placeholders are replaced with the width and height
 #. * in points. E.g: "Custom 230.4x142.9"
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3707
+#: modules/printbackends/cups/gtkprintbackendcups.c:3706
 #, c-format
 msgid "Custom %sx%s"
 msgstr "Посебно %sx%s"
@@ -5120,6 +4184,700 @@ msgstr "Тестирај штампу"
 #, c-format
 msgid "Could not get information for file '%s': %s"
 msgstr "Не могу да сазнам податке о датотеци „%s“: %s"
+
+#: tests/testfilechooser.c:222
+#, c-format
+msgid "Failed to open file '%s': %s"
+msgstr "Не могу да отворим датотеку „%s“: %s"
+
+# ово има највише смисла
+#: tests/testfilechooser.c:267
+#, c-format
+msgid ""
+"Failed to load image '%s': reason not known, probably a corrupt image file"
+msgstr ""
+"Не могу да учитам слику „%s“: разлог непознат, вероватно неисправан запис"
+
+#~ msgid "Image file '%s' contains no data"
+#~ msgstr "Слика „%s“ не садржи податке"
+
+#~ msgid ""
+#~ "Failed to load animation '%s': reason not known, probably a corrupt "
+#~ "animation file"
+#~ msgstr ""
+#~ "Не могу да учитам анимацију „%s“: разлог непознат, вероватно неисправан "
+#~ "запис"
+
+#~ msgid "Unable to load image-loading module: %s: %s"
+#~ msgstr "Не могу да учитам део за учитавање слике: %s: %s"
+
+#~ msgid ""
+#~ "Image-loading module %s does not export the proper interface; perhaps "
+#~ "it's from a different GTK version?"
+#~ msgstr ""
+#~ "Део за учитавање слике %s не подржава одговарајућу спрегу; можда је из "
+#~ "различитог ГТК издања?"
+
+#~ msgid "Image type '%s' is not supported"
+#~ msgstr "Врста слике „%s“ није подржана"
+
+#~ msgid "Couldn't recognize the image file format for file '%s'"
+#~ msgstr "Не могу препознати начин записа слике у датотеци „%s“"
+
+#~ msgid "Unrecognized image file format"
+#~ msgstr "Непознат начин записа слике"
+
+#~ msgid "Failed to load image '%s': %s"
+#~ msgstr "Не могу да учитам слику „%s“: %s"
+
+#~ msgid "Error writing to image file: %s"
+#~ msgstr "Грешка при упису у датотеку слике: %s"
+
+#~ msgid ""
+#~ "This build of gdk-pixbuf does not support saving the image format: %s"
+#~ msgstr ""
+#~ "Ово издање програма gdk-pixbuf не подржава чување ове врсте слике: %s"
+
+#~ msgid "Insufficient memory to save image to callback"
+#~ msgstr "Недовољно меморије за чување слике у позивну функцију"
+
+#~ msgid "Failed to open temporary file"
+#~ msgstr "Не могу да отворим привремену датотеку"
+
+#~ msgid "Failed to read from temporary file"
+#~ msgstr "Не могу да читам из привремене датотеке"
+
+#~ msgid "Failed to open '%s' for writing: %s"
+#~ msgstr "Не могу да отворим „%s“ ради уписа: %s"
+
+#~ msgid ""
+#~ "Failed to close '%s' while writing image, all data may not have been "
+#~ "saved: %s"
+#~ msgstr ""
+#~ "Не могу да затворим „%s“ при упису слике, могуће је да нису сви подаци "
+#~ "сачувани: %s"
+
+#~ msgid "Insufficient memory to save image into a buffer"
+#~ msgstr "Недовољно меморије за чување слике у бафер"
+
+#~ msgid "Error writing to image stream"
+#~ msgstr "Грешка при упису у ток слике"
+
+#~ msgid ""
+#~ "Internal error: Image loader module '%s' failed to complete an operation, "
+#~ "but didn't give a reason for the failure"
+#~ msgstr ""
+#~ "Унутрашња грешка: део за учитавање слика „%s“ није успео да обави "
+#~ "операцију, а није навео ни разлог неуспеха"
+
+#~ msgid "Incremental loading of image type '%s' is not supported"
+#~ msgstr "Није подржано постепено учитавање слике врсте „%s“"
+
+#~ msgid "Image header corrupt"
+#~ msgstr "Заглавље слике оштећено"
+
+#~ msgid "Image format unknown"
+#~ msgstr "Непозната врста слике"
+
+#~ msgid "Image pixel data corrupt"
+#~ msgstr "Оштећени подаци о тачкама слике"
+
+#~ msgid "failed to allocate image buffer of %u byte"
+#~ msgid_plural "failed to allocate image buffer of %u bytes"
+#~ msgstr[0] "неуспела потражња бафера слике од %u бајта"
+#~ msgstr[1] "неуспела потражња бафера слике од %u бајта"
+#~ msgstr[2] "неуспела потражња бафера слике од %u бајтова"
+
+#~ msgid "Unexpected icon chunk in animation"
+#~ msgstr "Неочекивани део иконе у анимацији"
+
+#~ msgid "Unsupported animation type"
+#~ msgstr "Неподржана врста анимације"
+
+#~ msgid "Invalid header in animation"
+#~ msgstr "Неисправно заглавље анимације"
+
+#~ msgid "Not enough memory to load animation"
+#~ msgstr "Нема довољно меморије да учита анимацију"
+
+#~ msgid "Malformed chunk in animation"
+#~ msgstr "Неисправан део анимације"
+
+# забрљано
+#~ msgid "The ANI image format"
+#~ msgstr "ANI запис слика"
+
+#~ msgid "BMP image has bogus header data"
+#~ msgstr "BMP слика има неисправно заглавље"
+
+# шта нам нарочито битмап каже?
+#~ msgid "Not enough memory to load bitmap image"
+#~ msgstr "Нема довољно меморије да учита слику"
+
+# или неподржану величину заглавља???
+#~ msgid "BMP image has unsupported header size"
+#~ msgstr "BMP слика садржи заглавље неподржане величине"
+
+#~ msgid "Topdown BMP images cannot be compressed"
+#~ msgstr "Одозго-надоле BMP слике се не могу компресовати"
+
+#~ msgid "Premature end-of-file encountered"
+#~ msgstr "Наишао на превремен крај датотеке"
+
+#~ msgid "Couldn't allocate memory for saving BMP file"
+#~ msgstr "Не могу обезбедити меморију за чување BMP датотеке"
+
+#~ msgid "Couldn't write to BMP file"
+#~ msgstr "Не могу да упишем у BMP датотеку"
+
+#~ msgid "The BMP image format"
+#~ msgstr "BMP запис слике"
+
+#~ msgid "Failure reading GIF: %s"
+#~ msgstr "Грешка при читању GIF-а: %s"
+
+#~ msgid "GIF file was missing some data (perhaps it was truncated somehow?)"
+#~ msgstr "GIF датотеци недостаје нешто података (можда је некако одсечена?)"
+
+#~ msgid "Internal error in the GIF loader (%s)"
+#~ msgstr "Унутрашња грешка при учитавању GIF-а (%s)"
+
+#~ msgid "Stack overflow"
+#~ msgstr "Прекорачење стека"
+
+#~ msgid "GIF image loader cannot understand this image."
+#~ msgstr "Део за учитавање GIF слика не препознаје ову слику."
+
+#~ msgid "Bad code encountered"
+#~ msgstr "Наишао је на лош запис"
+
+#~ msgid "Circular table entry in GIF file"
+#~ msgstr "Кружни унос у табели GIF датотеке"
+
+#~ msgid "Not enough memory to load GIF file"
+#~ msgstr "Нема довољно меморије да учита GIF датотеку"
+
+#~ msgid "Not enough memory to composite a frame in GIF file"
+#~ msgstr "Нема довољно меморије за слагање кадра у GIF датотеци"
+
+#~ msgid "GIF image is corrupt (incorrect LZW compression)"
+#~ msgstr "GIF слика је оштећена (неисправно LZW сажимање)"
+
+#~ msgid "File does not appear to be a GIF file"
+#~ msgstr "Изгледа да се не ради о GIF датотеци"
+
+#~ msgid "Version %s of the GIF file format is not supported"
+#~ msgstr "Издање %s GIF врсте записа није подржано"
+
+#~ msgid ""
+#~ "GIF image has no global colormap, and a frame inside it has no local "
+#~ "colormap."
+#~ msgstr ""
+#~ "GIF слика нема општу мапу боја, а кадар у њему нема засебну мапу боја."
+
+#~ msgid "GIF image was truncated or incomplete."
+#~ msgstr "GIF слика је одсечена или непотпуна."
+
+# забрљано
+#~ msgid "The GIF image format"
+#~ msgstr "GIF запис слике"
+
+#~ msgid "Invalid header in icon"
+#~ msgstr "Неисправно заглавље иконе"
+
+# негде сам видео добар превод за иконицу, али не сећам се који је, а ни где
+#~ msgid "Not enough memory to load icon"
+#~ msgstr "Недовољно меморије за учитавање иконе"
+
+#~ msgid "Icon has zero width"
+#~ msgstr "Икона је ширине нула"
+
+#~ msgid "Icon has zero height"
+#~ msgstr "Икона је висине нула"
+
+#~ msgid "Compressed icons are not supported"
+#~ msgstr "Не подржавам компресоване иконе"
+
+#~ msgid "Unsupported icon type"
+#~ msgstr "Неподржана врста икона"
+
+#~ msgid "Not enough memory to load ICO file"
+#~ msgstr "Недовољно меморије аз учитавање ICO датотеке"
+
+#~ msgid "Image too large to be saved as ICO"
+#~ msgstr "Слика је превелика да би се сачувала као ICO"
+
+#~ msgid "Cursor hotspot outside image"
+#~ msgstr "Показивач курсора је ван слике"
+
+#~ msgid "Unsupported depth for ICO file: %d"
+#~ msgstr "Неподржана дубина за ICO датотеку: %d"
+
+#
+#~ msgid "The ICO image format"
+#~ msgstr "ICO запис слике"
+
+#~ msgid "Error reading ICNS image: %s"
+#~ msgstr "Грешка при читању ICNS слике: %s"
+
+#~ msgid "Could not decode ICNS file"
+#~ msgstr "Не могу да декодирам ICNS датотеку"
+
+#
+#~ msgid "The ICNS image format"
+#~ msgstr "ICNS формат слике"
+
+#~ msgid "Couldn't allocate memory for stream"
+#~ msgstr "Не могу да обезбедим меморију за ток"
+
+#~ msgid "Couldn't decode image"
+#~ msgstr "Не могу да декодирам слику"
+
+# колико њих ће ме тући због „преиначени"?
+#~ msgid "Transformed JPEG2000 has zero width or height"
+#~ msgstr "Преиначени ЈПЕГ2000 има висину или ширину нула."
+
+#~ msgid "Image type currently not supported"
+#~ msgstr "Врста слике за сада није подржана"
+
+#~ msgid "Couldn't allocate memory for color profile"
+#~ msgstr "Не могу да обезбедим меморију за палету боја"
+
+#~ msgid "Insufficient memory to open JPEG 2000 file"
+#~ msgstr "Недовољно меморије за отварање ЈПЕГ2000 датотеке"
+
+#~ msgid "Couldn't allocate memory to buffer image data"
+#~ msgstr "Не могу да обезбедим меморију за бафер података слике"
+
+#~ msgid "The JPEG 2000 image format"
+#~ msgstr "ЈПЕГ2000 запис слике"
+
+# као код фотоапарата/развијања слика ;)
+#~ msgid "Error interpreting JPEG image file (%s)"
+#~ msgstr "Грешка при развијању JPEG слике (%s)"
+
+#~ msgid ""
+#~ "Insufficient memory to load image, try exiting some applications to free "
+#~ "memory"
+#~ msgstr ""
+#~ "Недовољно меморије за учитавање слике, затворите неке програме да "
+#~ "ослободите меморију"
+
+# графички дизајнери, како се ово преводи?
+#~ msgid "Unsupported JPEG color space (%s)"
+#~ msgstr "Неподржан JPEG простор боја (%s)"
+
+#~ msgid "Couldn't allocate memory for loading JPEG file"
+#~ msgstr "Не могу обезбедити меморију за учитавање JPEG датотеке"
+
+# колико њих ће ме тући због „преиначени"?
+#~ msgid "Transformed JPEG has zero width or height."
+#~ msgstr "Преиначени ЈПЕГ има висину или ширину нула."
+
+#~ msgid ""
+#~ "JPEG quality must be a value between 0 and 100; value '%s' could not be "
+#~ "parsed."
+#~ msgstr ""
+#~ "Квалитет JPEG-а мора бити вредност између 0 и 100; не могу да разумем "
+#~ "вредност „%s“."
+
+#~ msgid ""
+#~ "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
+#~ msgstr ""
+#~ "Квалитет JPEG-а мора бити вредност између 0 и 100; није дозвољена "
+#~ "вредност „%d“."
+
+#~ msgid "The JPEG image format"
+#~ msgstr "JPEG запис слике"
+
+#~ msgid "Couldn't allocate memory for header"
+#~ msgstr "Не могу да обезбедим меморију за заглавље"
+
+#~ msgid "Couldn't allocate memory for context buffer"
+#~ msgstr "Не могу да обезбедим меморију за податке о контексту"
+
+#~ msgid "Image has invalid width and/or height"
+#~ msgstr "Слика је неисправне ширине и/или висине"
+
+#~ msgid "Image has unsupported bpp"
+#~ msgstr "Слика користи неподржан број битова по тачки"
+
+#~ msgid "Image has unsupported number of %d-bit planes"
+#~ msgstr "Слика садржи неподржан број %d-битних равни"
+
+#~ msgid "Couldn't create new pixbuf"
+#~ msgstr "Не могу да направим нови pixbuf"
+
+#~ msgid "Couldn't allocate memory for line data"
+#~ msgstr "Не могу обезбедити меморију за податке линије"
+
+#~ msgid "Couldn't allocate memory for paletted data"
+#~ msgstr "Не могу обезбедити меморију за податке палете"
+
+#~ msgid "Didn't get all lines of PCX image"
+#~ msgstr "Нисам учитао све линије из PCX слике"
+
+#~ msgid "No palette found at end of PCX data"
+#~ msgstr "Није нађена палета на крају PCX података"
+
+#~ msgid "The PCX image format"
+#~ msgstr "PCX запис слике"
+
+#~ msgid "Bits per channel of PNG image is invalid."
+#~ msgstr "Неисправан број битова по каналу PNG слике."
+
+# колико њих ће ме тући због „преиначени"?
+#~ msgid "Transformed PNG has zero width or height."
+#~ msgstr "Преиначени PNG има висину или ширину нула."
+
+#~ msgid "Bits per channel of transformed PNG is not 8."
+#~ msgstr "Број битова по каналу преиначеног PNG није 8."
+
+#~ msgid "Transformed PNG not RGB or RGBA."
+#~ msgstr "Преиначени PNG није RGB или RGBA."
+
+#~ msgid "Transformed PNG has unsupported number of channels, must be 3 or 4."
+#~ msgstr "Неподржан број канала у преиначеној PNG слици; мора бити 3 или 4."
+
+#~ msgid "Fatal error in PNG image file: %s"
+#~ msgstr "Кобна грешка у PNG слици: %s"
+
+#~ msgid "Insufficient memory to load PNG file"
+#~ msgstr "Нема довољно меморије да учита PNG датотеку"
+
+# не морамо ваљда све дословно?
+#~ msgid ""
+#~ "Insufficient memory to store a %ld by %ld image; try exiting some "
+#~ "applications to reduce memory usage"
+#~ msgstr ""
+#~ "Недовољно меморије за смештај слике величине %ld×%ld; покушајте да "
+#~ "ослободите нешто меморије затварањем неких програма"
+
+#~ msgid "Fatal error reading PNG image file"
+#~ msgstr "Кобна грешка при читању PNG слике"
+
+#~ msgid "Fatal error reading PNG image file: %s"
+#~ msgstr "Кобна грешка при читању PNG слике: %s"
+
+#~ msgid ""
+#~ "Keys for PNG text chunks must have at least 1 and at most 79 characters."
+#~ msgstr ""
+#~ "Кључеви за текстуалне одељке PNG-а морају имати бар 1, а највише 79 "
+#~ "знакова."
+
+#~ msgid "Keys for PNG text chunks must be ASCII characters."
+#~ msgstr "Кључеви за текстуалне одељке PNG-а морају бити АСКРИ знакови."
+
+#~ msgid "Color profile has invalid length %d."
+#~ msgstr "Профил боја није исправне дужине %d."
+
+#~ msgid ""
+#~ "PNG compression level must be a value between 0 and 9; value '%s' could "
+#~ "not be parsed."
+#~ msgstr ""
+#~ "Ниво компресије PNG-а мора бити вредност између 0 и 9; не разумем "
+#~ "вредност „%s“."
+
+#~ msgid ""
+#~ "PNG compression level must be a value between 0 and 9; value '%d' is not "
+#~ "allowed."
+#~ msgstr ""
+#~ "Ниво компресије PNG-а мора бити вредност између 0 и 9; вредност „%d“ није "
+#~ "допуштена."
+
+#~ msgid ""
+#~ "Value for PNG text chunk %s cannot be converted to ISO-8859-1 encoding."
+#~ msgstr ""
+#~ "Вредност текстуалног одељка PNG-а %s се не може претворити у ИСО-8859-1 "
+#~ "запис."
+
+#~ msgid "The PNG image format"
+#~ msgstr "PNG запис слике"
+
+# Да ли користити аорист?? Ја сам за, а шта кажу остали...
+#~ msgid "PNM loader expected to find an integer, but didn't"
+#~ msgstr "Део за учитавање PNM слика је очекивао цео број, али није га нашао"
+
+#~ msgid "PNM file has an incorrect initial byte"
+#~ msgstr "PNM датотека садржи неисправан почетни бајт"
+
+#~ msgid "PNM file is not in a recognized PNM subformat"
+#~ msgstr "PNM датотека није у познатом PNM подзапису"
+
+#~ msgid "PNM file has an image width of 0"
+#~ msgstr "PNM датотека садржи слику ширине 0"
+
+#~ msgid "PNM file has an image height of 0"
+#~ msgstr "PNM датотека садржи слику висине 0"
+
+#~ msgid "Maximum color value in PNM file is 0"
+#~ msgstr "Највећа вредност боје у PNM датотеци је 0"
+
+#~ msgid "Maximum color value in PNM file is too large"
+#~ msgstr "Највећа вредност боје у PNM датотеци је превелика"
+
+#~ msgid "Raw PNM image type is invalid"
+#~ msgstr "Сирова PNM врста слике неисправна"
+
+#~ msgid "PNM image loader does not support this PNM subformat"
+#~ msgstr "Део за учитавање PNM слика не подржава овај PNM подзапис"
+
+#~ msgid "Raw PNM formats require exactly one whitespace before sample data"
+#~ msgstr "Сиров PNM запис захтева тачно један размак пре садржаја"
+
+#~ msgid "Cannot allocate memory for loading PNM image"
+#~ msgstr "Не могу да обезбедим меморију за учитавање PNM слике"
+
+# у сваком структу (Це језик) су неки подаци
+#~ msgid "Insufficient memory to load PNM context struct"
+#~ msgstr "Недовољно меморије за учитавање PNM података о смислу"
+
+#~ msgid "Unexpected end of PNM image data"
+#~ msgstr "Неочекиван крај PNM слике"
+
+#~ msgid "Insufficient memory to load PNM file"
+#~ msgstr "Недовољно меморије за учитавање PNM датотеке"
+
+#~ msgid "The PNM/PBM/PGM/PPM image format family"
+#~ msgstr "Породица PNM/PBM/PGM/PPM записа слика"
+
+#~ msgid "Input file descriptor is NULL."
+#~ msgstr "Описивач улазне датотеке је NULL."
+
+#~ msgid "Failed to read QTIF header"
+#~ msgstr "Не могу да прочитам QTIF заглавље"
+
+#~ msgid "QTIF atom size too large (%d bytes)"
+#~ msgstr "Величина QTIF атома је прекорачена (%d битова)"
+
+#~ msgid "Failed to allocate %d bytes for file read buffer"
+#~ msgstr "Не могу да обезбедим %d битова у оставу за читање датотека"
+
+#~ msgid "File error when reading QTIF atom: %s"
+#~ msgstr "Грешка у датотеци при читању QTIF атома: %s"
+
+#~ msgid "Failed to skip the next %d bytes with seek()."
+#~ msgstr "Не могу да прескочим наредних %d битова са seek()."
+
+#~ msgid "Failed to allocate QTIF context structure."
+#~ msgstr "Не могу да обезбедим QTIF структуру за  контекст."
+
+#~ msgid "Failed to create GdkPixbufLoader object."
+#~ msgstr "Не могу да образујем GdkPixbufLoader објекат."
+
+#~ msgid "Failed to find an image data atom."
+#~ msgstr "Не могу да пронађем атом са подацима слике."
+
+#~ msgid "The QTIF image format"
+#~ msgstr "QTIF запис слике"
+
+#~ msgid "RAS image has bogus header data"
+#~ msgstr "RAS слика има неисправно заглавље"
+
+#~ msgid "RAS image has unknown type"
+#~ msgstr "RAS слика је непознате врсте"
+
+# мало слободе овак'оме уметнику се мора дати
+#~ msgid "unsupported RAS image variation"
+#~ msgstr "неподржана врста RAS слике"
+
+#~ msgid "Not enough memory to load RAS image"
+#~ msgstr "Недовољно меморије за учитавање RAS слике"
+
+#~ msgid "The Sun raster image format"
+#~ msgstr "Sun-ов запис растерских слика"
+
+# овде не можемо ставити „податке“ пошто ова структура показује на податке, види ниже
+#~ msgid "Cannot allocate memory for IOBuffer struct"
+#~ msgstr "Не могу да обезбедим меморију за IOBuffer структуру"
+
+#~ msgid "Cannot allocate memory for IOBuffer data"
+#~ msgstr "Не могу да обезбедим меморију за IOBuffer податке"
+
+# мало опширније него што би требало: део „помоћу...“ се може избацити
+# bug: don't use slang
+#~ msgid "Cannot realloc IOBuffer data"
+#~ msgstr "Не могу да проширим IOBuffer податке помоћу realloc()"
+
+#~ msgid "Cannot allocate temporary IOBuffer data"
+#~ msgstr "Не могу да обезбедим привремене IOBuffer податке"
+
+#~ msgid "Cannot allocate new pixbuf"
+#~ msgstr "Не могу да обезбедим нови pixbuf"
+
+#~ msgid "Image is corrupted or truncated"
+#~ msgstr "Слика је одсечена или неисправна."
+
+#~ msgid "Cannot allocate colormap structure"
+#~ msgstr "Не могу да обезбедим структуру за мапу боја"
+
+#~ msgid "Cannot allocate colormap entries"
+#~ msgstr "Не могу да обезбедим ставке за мапу боја"
+
+# bitdepth непосредно утиче на број боја
+#~ msgid "Unexpected bitdepth for colormap entries"
+#~ msgstr "Неочекиван број боја за ставке мапе боја"
+
+#~ msgid "Cannot allocate TGA header memory"
+#~ msgstr "Не могу да обезбедим меморију за TGA заглавље"
+
+#~ msgid "TGA image has invalid dimensions"
+#~ msgstr "TGA слика је неисправне величине"
+
+#~ msgid "TGA image type not supported"
+#~ msgstr "TGA запис слике није подржан"
+
+#~ msgid "Cannot allocate memory for TGA context struct"
+#~ msgstr "Не могу да обезбедим меморију за TGA податке о контексту"
+
+#~ msgid "Excess data in file"
+#~ msgstr "Претерано података у датотеци"
+
+#~ msgid "The Targa image format"
+#~ msgstr "Targa запис слика"
+
+#~ msgid "Could not get image width (bad TIFF file)"
+#~ msgstr "Не могу да прочитам ширину слике (лоша TIFF датотека)"
+
+#~ msgid "Could not get image height (bad TIFF file)"
+#~ msgstr "Не могу да сазнам висину слике (лоша TIFF датотека)"
+
+#~ msgid "Width or height of TIFF image is zero"
+#~ msgstr "Висина или ширина TIFF слике је нула"
+
+#~ msgid "Dimensions of TIFF image too large"
+#~ msgstr "TIFF слика је превелика"
+
+#~ msgid "Insufficient memory to open TIFF file"
+#~ msgstr "Недовољно меморије за отварање TIFF датотеке"
+
+#~ msgid "Failed to load RGB data from TIFF file"
+#~ msgstr "Неуспело учитавање RGB података из TIFF датотеке"
+
+#~ msgid "Failed to open TIFF image"
+#~ msgstr "Неуспело отварање TIFF слике"
+
+# да ли је ово нешто нарочито за TIFF, или се и то може превести?
+#~ msgid "TIFFClose operation failed"
+#~ msgstr "TIFFClose операција није успела"
+
+#~ msgid "Failed to load TIFF image"
+#~ msgstr "Неуспело учитавање TIFF слике"
+
+#~ msgid "Failed to save TIFF image"
+#~ msgstr "Неуспело чување TIFF слике"
+
+#~ msgid "TIFF compression doesn't refer to a valid codec."
+#~ msgstr "Паковање TIFF података се не односи на одговарајући кодек."
+
+#~ msgid "Failed to write TIFF data"
+#~ msgstr "Неуспео упис TIFF слике"
+
+#~ msgid "Couldn't write to TIFF file"
+#~ msgstr "Не могу да упишем у TIFF датотеку"
+
+#~ msgid "The TIFF image format"
+#~ msgstr "TIFF запис слика"
+
+#~ msgid "Image has zero width"
+#~ msgstr "Слика је ширине нула"
+
+#~ msgid "Image has zero height"
+#~ msgstr "Слика је висине нула"
+
+#~ msgid "Not enough memory to load image"
+#~ msgstr "Недовољно меморије за учитавање слике"
+
+#~ msgid "Couldn't save the rest"
+#~ msgstr "Не могу да сачувам остатак"
+
+#~ msgid "The WBMP image format"
+#~ msgstr "WBMP запис слика"
+
+#~ msgid "Invalid XBM file"
+#~ msgstr "Неисправна XBM датотека"
+
+#~ msgid "Insufficient memory to load XBM image file"
+#~ msgstr "Недовољно меморије за учитавање XBM слике"
+
+#~ msgid "Failed to write to temporary file when loading XBM image"
+#~ msgstr "Неуспео упис у привремену датотеку при учитавању XBM слике"
+
+#~ msgid "The XBM image format"
+#~ msgstr "XBM запис слика"
+
+#~ msgid "No XPM header found"
+#~ msgstr "Није нашао XPM заглавље"
+
+#~ msgid "Invalid XPM header"
+#~ msgstr "Неисправно XPM заглавље"
+
+#~ msgid "XPM file has image width <= 0"
+#~ msgstr "XPM слика је ширине ≤0"
+
+# можда боље речима?
+#~ msgid "XPM file has image height <= 0"
+#~ msgstr "XPM слика је висине ≤0"
+
+# или можда пикселу?
+#~ msgid "XPM has invalid number of chars per pixel"
+#~ msgstr "XPM има неисправан број знакова по тачки"
+
+# можда боље речима?
+#~ msgid "XPM file has invalid number of colors"
+#~ msgstr "XPM датотека има неисправан број боја"
+
+#~ msgid "Cannot allocate memory for loading XPM image"
+#~ msgstr "Не могу да обезбедим меморију за учитавање XPM слике"
+
+#~ msgid "Cannot read XPM colormap"
+#~ msgstr "Не могу да учитам XPM мапу боја"
+
+#~ msgid "Failed to write to temporary file when loading XPM image"
+#~ msgstr "Неуспео упис у привремену датотеку при учитавању XPM слике"
+
+#~ msgid "The XPM image format"
+#~ msgstr "XPM запис слике"
+
+#~ msgid "The EMF image format"
+#~ msgstr "ЕМФ запис слике"
+
+#~ msgid "Could not allocate memory: %s"
+#~ msgstr "Не могу да обезбедим меморију: %s"
+
+#~ msgid "Could not create stream: %s"
+#~ msgstr "Не могу да направим ток: %s"
+
+#~ msgid "Could not seek stream: %s"
+#~ msgstr "Не могу да се крећем по току: %s"
+
+#~ msgid "Could not read from stream: %s"
+#~ msgstr "Не могу да читам из тока: %s"
+
+#~ msgid "Couldn't load bitmap"
+#~ msgstr "Не могу да отворим битмапу"
+
+#~ msgid "Couldn't load metafile"
+#~ msgstr "Не могу да отворим metafile"
+
+# мало слободе овак'оме уметнику се мора дати
+#~ msgid "Unsupported image format for GDI+"
+#~ msgstr "Неподржана врста слике за ГДИ+"
+
+#~ msgid "Couldn't save"
+#~ msgstr "Не могу да сачувам"
+
+#~ msgid "The WMF image format"
+#~ msgstr "WMF запис слика"
+
+#~ msgid "\"Deepness\" of the color."
+#~ msgstr "„Дубина“ боје."
+
+#~ msgid "Error printing"
+#~ msgstr "Грешка при штампању"
+
+#~ msgid "Printer '%s' may not be connected."
+#~ msgstr "Штампач „%s“ изгледа није повезан."
 
 #~ msgid "Folders"
 #~ msgstr "Фасцикле"

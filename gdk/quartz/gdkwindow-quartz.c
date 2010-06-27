@@ -259,17 +259,20 @@ gdk_window_impl_quartz_begin_paint_region (GdkPaintable    *paintable,
 
   gdk_region_get_rectangles (clipped_and_offset_region, &rects, &n_rects);
 
+  if (n_rects == 0)
+    goto done;
+
   if (bg_pixmap == NULL)
     {
       CGContextRef cg_context;
-      CGFloat r, g, b, a;
+      CGColorRef color;
       gint i;
 
       cg_context = gdk_quartz_drawable_get_context (GDK_DRAWABLE (impl), FALSE);
-      _gdk_quartz_colormap_get_rgba_from_pixel (gdk_drawable_get_colormap (window),
-                                                private->bg_color.pixel,
-                                                &r, &g, &b, &a);
-      CGContextSetRGBFillColor (cg_context, r, g, b, a);
+      color = _gdk_quartz_colormap_get_cgcolor_from_pixel (window,
+                                                           private->bg_color.pixel);
+      CGContextSetFillColorWithColor (cg_context, color);
+      CGColorRelease (color);
  
       for (i = 0; i < n_rects; i++)
         {

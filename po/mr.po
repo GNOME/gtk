@@ -8,10 +8,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mr\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-05-25 20:10-0400\n"
+"POT-Creation-Date: 2010-06-26 23:16-0400\n"
 "PO-Revision-Date: 2010-04-14 15:50+0530\n"
 "Last-Translator: Sandeep Shedmake <sshedmak@redhat.com>\n"
 "Language-Team: Marathi <maajhe-sanganak@freelists.org>\n"
+"Language: mr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -77,7 +78,7 @@ msgstr "निर्धारित करायचे Gdk त्रुटीन
 #. Placeholder in --gdk-no-debug=FLAGS in --help output
 #. Placeholder in --gtk-debug=FLAGS in --help output
 #. Placeholder in --gtk-no-debug=FLAGS in --help output
-#: gdk/gdk.c:165 gdk/gdk.c:168 gtk/gtkmain.c:454 gtk/gtkmain.c:457
+#: gdk/gdk.c:165 gdk/gdk.c:168 gtk/gtkmain.c:439 gtk/gtkmain.c:442
 msgid "FLAGS"
 msgstr "FLAGS"
 
@@ -270,902 +271,6 @@ msgstr "KP_Delete"
 msgctxt "keyboard label"
 msgid "Delete"
 msgstr "नष्ट करा"
-
-#: gdk-pixbuf/gdk-pixbuf-animation.c:133 gdk-pixbuf/gdk-pixbuf-io.c:982
-#: gdk-pixbuf/gdk-pixbuf-io.c:1242 tests/testfilechooser.c:222
-#, c-format
-msgid "Failed to open file '%s': %s"
-msgstr "'%1s' फाइल उघडण्यात असफल: %2s"
-
-#: gdk-pixbuf/gdk-pixbuf-animation.c:146 gdk-pixbuf/gdk-pixbuf-io.c:994
-#, c-format
-msgid "Image file '%s' contains no data"
-msgstr "प्रतिमा फाइल '%s' मध्ये कोणतीही माहीती नाही "
-
-#: gdk-pixbuf/gdk-pixbuf-animation.c:188 gdk-pixbuf/gdk-pixbuf-io.c:1030
-#: gdk-pixbuf/gdk-pixbuf-io.c:1294 tests/testfilechooser.c:267
-#, c-format
-msgid ""
-"Failed to load image '%s': reason not known, probably a corrupt image file"
-msgstr ""
-"प्रतिमा '%s' ला सुरु करण्यात असफल: कारण माहीत नाही , बहुदा ही एक दुषित प्रतिमा फाइल "
-"असावी "
-
-#: gdk-pixbuf/gdk-pixbuf-animation.c:221
-#, c-format
-msgid ""
-"Failed to load animation '%s': reason not known, probably a corrupt "
-"animation file"
-msgstr ""
-"प्रतिमा '%s' ला सुरु करण्यात असफल: कारण माहीत नाही, बहुदा ही एक दुषित प्रतिमा फाइल "
-"असावी "
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:715
-#, c-format
-msgid "Unable to load image-loading module: %s: %s"
-msgstr "प्रतिमा सुरु करण्याची पध्दत %1s: सुरु करण्यास असमर्थ: %2s"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:730
-#, c-format
-msgid ""
-"Image-loading module %s does not export the proper interface; perhaps it's "
-"from a different GTK version?"
-msgstr ""
-"प्रतिमा सुरु करण्यासाठी %s द्वारा योग्य संवाद साधता येत नाही; बहुदा एका भिन्न जीटीके "
-"मजकुरापासून ही प्रतिमा घेतली असावी?"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:739 gdk-pixbuf/gdk-pixbuf-io.c:790
-#, c-format
-msgid "Image type '%s' is not supported"
-msgstr "'%s' प्रतिमेला आधार नाही"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:863
-#, c-format
-msgid "Couldn't recognize the image file format for file '%s'"
-msgstr "फाइल '%s' कोणत्या प्रकारची फाइल आहे ते उमगले नाही"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:871
-msgid "Unrecognized image file format"
-msgstr "अपरिचित असणारी प्रतिमा फाइल"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:1039
-#, c-format
-msgid "Failed to load image '%s': %s"
-msgstr "'%1s' प्रतिमा उघडण्यास असमर्थ: %2s"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:1673 gdk-pixbuf/io-gdip-utils.c:961
-#, c-format
-msgid "Error writing to image file: %s"
-msgstr "प्रतिमा फाइलवर लिहिण्यात चूक: %s"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:1718 gdk-pixbuf/gdk-pixbuf-io.c:1848
-#, c-format
-msgid "This build of gdk-pixbuf does not support saving the image format: %s"
-msgstr "प्रतिमेची रचना रक्षित करण्यासाठी या भागातgdk-pixbf चे सहकार्य नाही : %s"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:1752
-msgid "Insufficient memory to save image to callback"
-msgstr "कॉलबॅकसाठी प्रतिमा सुरक्षित करण्यासाठी पुरेशी स्मृती नाही"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:1765
-msgid "Failed to open temporary file"
-msgstr "तात्कालिक फाइल उघडण्यात असफल"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:1791
-msgid "Failed to read from temporary file"
-msgstr "तात्कालिक फाइलमधून वाचण्यास असफल"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:2044
-#, c-format
-msgid "Failed to open '%s' for writing: %s"
-msgstr "लिहण्यासाठी '%1$s' ही फाइल उघडण्यास अपयशी: %2$s"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:2070
-#, c-format
-msgid ""
-"Failed to close '%s' while writing image, all data may not have been saved: %"
-"s"
-msgstr ""
-"लेखन करताना '%s' ला बन्द करता आले नाही,  बहुदा सर्व माहीती रक्षित झाली नसेल:%s"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:2290 gdk-pixbuf/gdk-pixbuf-io.c:2341
-msgid "Insufficient memory to save image into a buffer"
-msgstr "प्रतिमा बफरमध्ये सुरक्षित करण्यासाठी अपुरी स्मृती"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:2387
-msgid "Error writing to image stream"
-msgstr "प्रतिमा स्ट्रीम करीता लिहीतेवेळी त्रुटी आढळली"
-
-#: gdk-pixbuf/gdk-pixbuf-loader.c:334
-#, c-format
-msgid ""
-"Internal error: Image loader module '%s' failed to complete an operation, "
-"but didn't give a reason for the failure"
-msgstr ""
-"अंतर्गत चूक: प्रतिमा लोडर माड्यूल '%s' संक्रिया पूर्ण करू शकला नाही, परंतू याचे कारण दिलेले "
-"नाही"
-
-#: gdk-pixbuf/gdk-pixbuf-loader.c:376
-#, c-format
-msgid "Incremental loading of image type '%s' is not supported"
-msgstr "प्रतिमा प्रकार '%s' चे वाढीव लोडिंग करण्यासाठी कोणतीही मदत नाही"
-
-#: gdk-pixbuf/gdk-pixdata.c:147
-msgid "Image header corrupt"
-msgstr "प्रतिमेची शिर्षक पट्टी भ्रष्ट आहे "
-
-#: gdk-pixbuf/gdk-pixdata.c:152
-msgid "Image format unknown"
-msgstr "प्रतिमेची रचना अपरिचीत आहे"
-
-#: gdk-pixbuf/gdk-pixdata.c:157 gdk-pixbuf/gdk-pixdata.c:488
-msgid "Image pixel data corrupt"
-msgstr "प्रतिमेमधील चित्रकणविषयक माहिती दुषित आहे "
-
-#: gdk-pixbuf/gdk-pixdata.c:432
-#, fuzzy, c-format
-msgid "failed to allocate image buffer of %u byte"
-msgid_plural "failed to allocate image buffer of %u bytes"
-msgstr[0] "फाइल रीड बफरकरीता %d बाईट्स्चे वाटप करण्यास अपयशी"
-msgstr[1] "फाइल रीड बफरकरीता %d बाईट्स्चे वाटप करण्यास अपयशी"
-
-#: gdk-pixbuf/io-ani.c:244
-msgid "Unexpected icon chunk in animation"
-msgstr "एनिमेशनमध्ये अनपेक्षित चिन्ह चंक"
-
-#: gdk-pixbuf/io-ani.c:337
-msgid "Unsupported animation type"
-msgstr "असमर्थनीय एनिमेशन प्रकार"
-
-#: gdk-pixbuf/io-ani.c:348 gdk-pixbuf/io-ani.c:406 gdk-pixbuf/io-ani.c:432
-#: gdk-pixbuf/io-ani.c:455 gdk-pixbuf/io-ani.c:482 gdk-pixbuf/io-ani.c:569
-msgid "Invalid header in animation"
-msgstr "एनिमेशनमधील मथळा अयोग्य आहे"
-
-#: gdk-pixbuf/io-ani.c:358 gdk-pixbuf/io-ani.c:380 gdk-pixbuf/io-ani.c:464
-#: gdk-pixbuf/io-ani.c:491 gdk-pixbuf/io-ani.c:542 gdk-pixbuf/io-ani.c:614
-msgid "Not enough memory to load animation"
-msgstr "एनिमेशन भारीत करण्यासाठी पुरेशी स्मृती नाही"
-
-#: gdk-pixbuf/io-ani.c:398 gdk-pixbuf/io-ani.c:424 gdk-pixbuf/io-ani.c:443
-msgid "Malformed chunk in animation"
-msgstr "एनिमेशनमध्ये बिघडलेला चंक"
-
-#: gdk-pixbuf/io-ani.c:711
-msgid "The ANI image format"
-msgstr "ANI प्रतिमा स्वरूप"
-
-#: gdk-pixbuf/io-bmp.c:230 gdk-pixbuf/io-bmp.c:267 gdk-pixbuf/io-bmp.c:338
-#: gdk-pixbuf/io-bmp.c:370 gdk-pixbuf/io-bmp.c:393 gdk-pixbuf/io-bmp.c:496
-msgid "BMP image has bogus header data"
-msgstr "BMP प्रतिमेमध्ये असणाऱ्या शिर्षकपट्टी विषयीची माहीती खोटी आहे"
-
-#: gdk-pixbuf/io-bmp.c:241 gdk-pixbuf/io-bmp.c:433
-msgid "Not enough memory to load bitmap image"
-msgstr "प्रतिमा उघडण्यासाठी पुरेशी जागा नाही"
-
-#: gdk-pixbuf/io-bmp.c:319
-msgid "BMP image has unsupported header size"
-msgstr ""
-"BMP प्रतीमेमध्ये असणाऱ्या शिर्षकपट्टी व्यतीरिक्त अन्य शिर्षकपट्या बनवता वाचता येणार नाहीत"
-
-#: gdk-pixbuf/io-bmp.c:357
-msgid "Topdown BMP images cannot be compressed"
-msgstr "टॉपडाउन BMP प्रतिमा संकुचित नाही करता येत"
-
-#: gdk-pixbuf/io-bmp.c:717 gdk-pixbuf/io-pnm.c:709
-msgid "Premature end-of-file encountered"
-msgstr "फाइल अपूर्ण अवस्थेत बंद झाल्याचे नजरेस आले हे"
-
-#: gdk-pixbuf/io-bmp.c:1329
-msgid "Couldn't allocate memory for saving BMP file"
-msgstr "BMP फाइल सुरक्षित करण्यासाठी स्मृती राखू शकता आली नाही"
-
-#: gdk-pixbuf/io-bmp.c:1370
-msgid "Couldn't write to BMP file"
-msgstr "BMP फाइलमध्ये लिहिता आले नाही"
-
-#: gdk-pixbuf/io-bmp.c:1423 gdk-pixbuf/io-gdip-bmp.c:82
-msgid "The BMP image format"
-msgstr "BMP फाइल स्वरूप"
-
-#: gdk-pixbuf/io-gif.c:222
-#, c-format
-msgid "Failure reading GIF: %s"
-msgstr "GIF %s मधील मजकूर वाचता येत नाहीः"
-
-#: gdk-pixbuf/io-gif.c:496 gdk-pixbuf/io-gif.c:1481 gdk-pixbuf/io-gif.c:1642
-msgid "GIF file was missing some data (perhaps it was truncated somehow?)"
-msgstr "GIF फाइल मधील काही माहीती हरवली आहे (बहुदा ती माहीती अन्यत्र साठलेली असेल)"
-
-#: gdk-pixbuf/io-gif.c:505
-#, c-format
-msgid "Internal error in the GIF loader (%s)"
-msgstr "GIF प्रतिमेमध्ये (%s) अंतर्गत त्रुटी आहेत"
-
-#: gdk-pixbuf/io-gif.c:579
-msgid "Stack overflow"
-msgstr "माहीती साठवण क्षमतेपेक्षा अधिक आहे"
-
-#: gdk-pixbuf/io-gif.c:639
-msgid "GIF image loader cannot understand this image."
-msgstr "GIF प्रतिमा भारक ही प्रतिमा समजू शकत नाही."
-
-#: gdk-pixbuf/io-gif.c:668
-msgid "Bad code encountered"
-msgstr "सदोष सुत्रे मिळाली"
-
-#: gdk-pixbuf/io-gif.c:678
-msgid "Circular table entry in GIF file"
-msgstr "GIF फाइल मध्ये वर्तुळाकार तक्त्याची नोंद आहे"
-
-#: gdk-pixbuf/io-gif.c:866 gdk-pixbuf/io-gif.c:1468 gdk-pixbuf/io-gif.c:1515
-#: gdk-pixbuf/io-gif.c:1630
-msgid "Not enough memory to load GIF file"
-msgstr "GIF फाइलसाठी पुरेशी स्मरणशक्ती उपलब्ध नाही"
-
-#: gdk-pixbuf/io-gif.c:960
-msgid "Not enough memory to composite a frame in GIF file"
-msgstr "GIF फाइलमध्ये चौकट बसवण्यासाठी पुरेशी स्मृती नाही"
-
-#: gdk-pixbuf/io-gif.c:1132
-msgid "GIF image is corrupt (incorrect LZW compression)"
-msgstr "GIF प्रतिमा खराब आहे  (चुकीचे  LZW संक्षेप )"
-
-#: gdk-pixbuf/io-gif.c:1182
-msgid "File does not appear to be a GIF file"
-msgstr "ही फाइल GIF फाइल वाटत नाही "
-
-#: gdk-pixbuf/io-gif.c:1194
-#, c-format
-msgid "Version %s of the GIF file format is not supported"
-msgstr "GIF फाइल मधील %s भागाला समर्थन नाही"
-
-#: gdk-pixbuf/io-gif.c:1303
-msgid ""
-"GIF image has no global colormap, and a frame inside it has no local "
-"colormap."
-msgstr ""
-"GIF प्रतिमेमध्ये व्यापक रंगसंगती नाही आणि चित्रामधील चौकटीत स्थानिकरंगसंगती उपलब्ध नाहीत."
-
-#: gdk-pixbuf/io-gif.c:1537
-msgid "GIF image was truncated or incomplete."
-msgstr "GIF प्रतिमा अपूर्ण किंवा सदोष होते."
-
-#: gdk-pixbuf/io-gif.c:1693 gdk-pixbuf/io-gdip-gif.c:80
-msgid "The GIF image format"
-msgstr "GIF प्रतिमा स्वरूप"
-
-#: gdk-pixbuf/io-ico.c:211 gdk-pixbuf/io-ico.c:225 gdk-pixbuf/io-ico.c:277
-#: gdk-pixbuf/io-ico.c:290 gdk-pixbuf/io-ico.c:359
-msgid "Invalid header in icon"
-msgstr "अक्षरमालिकेतील शिर्षकपट्टी अयोग्य आहे"
-
-#: gdk-pixbuf/io-ico.c:240 gdk-pixbuf/io-ico.c:300 gdk-pixbuf/io-ico.c:369
-#: gdk-pixbuf/io-ico.c:432 gdk-pixbuf/io-ico.c:462
-msgid "Not enough memory to load icon"
-msgstr "चिन्ह भारित करण्यासाठी पुरेशी स्मृती नाही"
-
-#: gdk-pixbuf/io-ico.c:322
-msgid "Icon has zero width"
-msgstr "अक्षरमालिकेची रुंदी शुन्य आहे "
-
-#: gdk-pixbuf/io-ico.c:332
-msgid "Icon has zero height"
-msgstr "अक्षरमालिकेची उंची शुन्य आहे"
-
-#: gdk-pixbuf/io-ico.c:384
-msgid "Compressed icons are not supported"
-msgstr ""
-"संक्षेपित अक्षरमालिकेतील अक्षरांना मदत नसल्यामुळे त्या मालिकेचा वापर करता येनार नाही"
-
-#: gdk-pixbuf/io-ico.c:417
-msgid "Unsupported icon type"
-msgstr "या प्रकारच्या अक्षरमालिकेचा वापर केला जाऊ शकत नाही"
-
-#: gdk-pixbuf/io-ico.c:511
-msgid "Not enough memory to load ICO file"
-msgstr "ICO फाइल सुरू करण्यासाठी पुरेशी स्मरणशक्ती उपलब्ध नाही"
-
-#: gdk-pixbuf/io-ico.c:976
-msgid "Image too large to be saved as ICO"
-msgstr "ICO प्रमाणे सुरक्षित करण्यासाठी प्रतिमा खूप मोठी आहे"
-
-#: gdk-pixbuf/io-ico.c:987
-msgid "Cursor hotspot outside image"
-msgstr "कर्सर हॉटस्पॉट प्रतिमे बाहेर"
-
-#: gdk-pixbuf/io-ico.c:1010
-#, c-format
-msgid "Unsupported depth for ICO file: %d"
-msgstr "ICO फाइलसाठी असमर्थनीय खोली: %d"
-
-#: gdk-pixbuf/io-ico.c:1245 gdk-pixbuf/io-gdip-ico.c:59
-msgid "The ICO image format"
-msgstr "ICO प्रतिमा स्वरूप"
-
-#: gdk-pixbuf/io-icns.c:347
-#, c-format
-msgid "Error reading ICNS image: %s"
-msgstr "ICNS प्रतिमा वाचतेवेळी त्रुटी आढळली: %s"
-
-#: gdk-pixbuf/io-icns.c:364
-msgid "Could not decode ICNS file"
-msgstr "ICNS फाइल डीकोड करण्यास अपयशी"
-
-#: gdk-pixbuf/io-icns.c:397
-msgid "The ICNS image format"
-msgstr "ICNS प्रतिमा स्वरूपन"
-
-#: gdk-pixbuf/io-jasper.c:75
-msgid "Couldn't allocate memory for stream"
-msgstr "स्ट्रीम करीता स्मृती वाटप करू शकले नाही"
-
-#: gdk-pixbuf/io-jasper.c:105
-msgid "Couldn't decode image"
-msgstr "प्रतिमा डीकोड करू शकले नाही"
-
-#: gdk-pixbuf/io-jasper.c:123
-msgid "Transformed JPEG2000 has zero width or height"
-msgstr "रूपांतरीत JPEG2000 ची रूंदी किंवा ऊंची शून्य आहे"
-
-#: gdk-pixbuf/io-jasper.c:137
-msgid "Image type currently not supported"
-msgstr "प्रतिमा स्वरूपन वर्तमानक्षणी समर्थीत नाही"
-
-#: gdk-pixbuf/io-jasper.c:149 gdk-pixbuf/io-jasper.c:157
-msgid "Couldn't allocate memory for color profile"
-msgstr "रंग प्रोफाइल करीता स्मृती वाटप करण्यास अपयशी"
-
-#: gdk-pixbuf/io-jasper.c:183
-msgid "Insufficient memory to open JPEG 2000 file"
-msgstr "JPEG 2000 फाइल उघडण्यास अपुरे स्मृती आढळली"
-
-#: gdk-pixbuf/io-jasper.c:262
-msgid "Couldn't allocate memory to buffer image data"
-msgstr "बफर प्रतिमा माहिती करीता स्मृती वाटप करण्यास अपयशी"
-
-#: gdk-pixbuf/io-jasper.c:306
-msgid "The JPEG 2000 image format"
-msgstr "JPEG 2000 प्रतिमा स्वरूपन"
-
-#: gdk-pixbuf/io-jpeg.c:117
-#, c-format
-msgid "Error interpreting JPEG image file (%s)"
-msgstr "JPEG फाइल (%s) मधील चित्रणाचा अर्थ/आशय कळण्यात चुक आढळते"
-
-#: gdk-pixbuf/io-jpeg.c:528
-msgid ""
-"Insufficient memory to load image, try exiting some applications to free "
-"memory"
-msgstr ""
-"प्रतिमा सुरू करण्यासाठी पुरेशी स्मरणशक्ती नाही, त्यातील काही भाग काढून स्मरणशक्ती वाढवावी"
-
-#: gdk-pixbuf/io-jpeg.c:569 gdk-pixbuf/io-jpeg.c:775
-#, c-format
-msgid "Unsupported JPEG color space (%s)"
-msgstr "असमर्थनीय JPEG रंग अंतराळ (%s)"
-
-#: gdk-pixbuf/io-jpeg.c:674 gdk-pixbuf/io-jpeg.c:944 gdk-pixbuf/io-jpeg.c:1177
-#: gdk-pixbuf/io-jpeg.c:1186
-msgid "Couldn't allocate memory for loading JPEG file"
-msgstr "JPEG मधील फाइल सुरु करण्यासाठी आवश्यक ती स्मरणशक्ती देता येत नाही"
-
-#: gdk-pixbuf/io-jpeg.c:919
-msgid "Transformed JPEG has zero width or height."
-msgstr "रूपांतरीत JPEG मधील ऊंची किंवा रुंदी शून्य आहे."
-
-#: gdk-pixbuf/io-jpeg.c:1133 gdk-pixbuf/io-gdip-jpeg.c:53
-#, c-format
-msgid ""
-"JPEG quality must be a value between 0 and 100; value '%s' could not be "
-"parsed."
-msgstr ""
-"JPEG ची  गुणवत्ता ० ते 1०0 दरम्यान असायला हवी; %s ची गुणवत्ता मोजली जाऊ शकत नाही."
-
-#: gdk-pixbuf/io-jpeg.c:1148 gdk-pixbuf/io-gdip-jpeg.c:68
-#, c-format
-msgid ""
-"JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
-msgstr "JPEG मधील गुणवत्ता किंमत  ० ते 1०0 दरम्यान असायला हवी; '%d' वैध नाही."
-
-#: gdk-pixbuf/io-jpeg.c:1310 gdk-pixbuf/io-gdip-jpeg.c:136
-msgid "The JPEG image format"
-msgstr "JPEG प्रतिमा स्वरूप"
-
-#: gdk-pixbuf/io-pcx.c:187
-msgid "Couldn't allocate memory for header"
-msgstr "मथळ्यासाठी स्मृती राखू शकता आली नाही"
-
-#: gdk-pixbuf/io-pcx.c:202 gdk-pixbuf/io-pcx.c:560
-msgid "Couldn't allocate memory for context buffer"
-msgstr "संदर्भ बफरसाठी स्मृती राखता आली नाही"
-
-#: gdk-pixbuf/io-pcx.c:601
-msgid "Image has invalid width and/or height"
-msgstr "प्रतिमेची रूंदी आणि/किंवा उंची अवैध आहे"
-
-#: gdk-pixbuf/io-pcx.c:613 gdk-pixbuf/io-pcx.c:674
-msgid "Image has unsupported bpp"
-msgstr "प्रतिमेत असमर्थनीय bpp आहेत"
-
-#: gdk-pixbuf/io-pcx.c:618 gdk-pixbuf/io-pcx.c:626
-#, c-format
-msgid "Image has unsupported number of %d-bit planes"
-msgstr "प्रतिमेत %d-bit  प्रतलांची असमर्थनीय संख्या आहे"
-
-#: gdk-pixbuf/io-pcx.c:642
-msgid "Couldn't create new pixbuf"
-msgstr "नविन Pixbuf निर्माण करता येत नाही"
-
-#: gdk-pixbuf/io-pcx.c:650
-msgid "Couldn't allocate memory for line data"
-msgstr "लाइन डेटासाठी स्मृती राखता आली नाही"
-
-#: gdk-pixbuf/io-pcx.c:657
-msgid "Couldn't allocate memory for paletted data"
-msgstr "पॅलेटेड डेटासाठी स्मृती राखता आली नाही"
-
-#: gdk-pixbuf/io-pcx.c:704
-msgid "Didn't get all lines of PCX image"
-msgstr "PCX प्रतिमेच्या सर्व ओळी मिळाल्या नाहीत"
-
-#: gdk-pixbuf/io-pcx.c:711
-msgid "No palette found at end of PCX data"
-msgstr "PCX डेटाच्या शेवटी पॅलेट डेटा सापडला नाही"
-
-#: gdk-pixbuf/io-pcx.c:756
-msgid "The PCX image format"
-msgstr "PCX प्रतिमा स्वरूप"
-
-#: gdk-pixbuf/io-png.c:55
-msgid "Bits per channel of PNG image is invalid."
-msgstr "PNG चित्रामधील प्रती ओळीतील कणसमुहांची(बिट्स) संख्या अवैध आहे."
-
-#: gdk-pixbuf/io-png.c:136 gdk-pixbuf/io-png.c:642
-msgid "Transformed PNG has zero width or height."
-msgstr "परिवर्तित PNG मधील ऊंची  किंवा रुंदी शुन्य आहे."
-
-#: gdk-pixbuf/io-png.c:144
-msgid "Bits per channel of transformed PNG is not 8."
-msgstr "परिवर्तित PNG चित्रामधील प्रती ओळीतील कणसमुहांची(बिट्स) 8 ही संख्या अवैध  आहे."
-
-#: gdk-pixbuf/io-png.c:153
-msgid "Transformed PNG not RGB or RGBA."
-msgstr "परिवर्तित PNG, हे प्रतिमा RGB किंवा RGBA प्रतिमा नाही."
-
-#: gdk-pixbuf/io-png.c:162
-msgid "Transformed PNG has unsupported number of channels, must be 3 or 4."
-msgstr ""
-"परिवर्तित PNG प्रतिमेमधील ओळींमधे समर्थन नसनार्या ओळी आहेत, त्या 3 किंवा 4 असाव्यात."
-
-#: gdk-pixbuf/io-png.c:183
-#, c-format
-msgid "Fatal error in PNG image file: %s"
-msgstr "PNG प्रतिमा %s फाइल मध्ये  घातक त्रुटी आहेः"
-
-#: gdk-pixbuf/io-png.c:316
-msgid "Insufficient memory to load PNG file"
-msgstr "PNG फाइल सुरु करण्यासाठी पुरेशी स्मरणशक्ती नाही"
-
-#: gdk-pixbuf/io-png.c:657
-#, c-format
-msgid ""
-"Insufficient memory to store a %ld by %ld image; try exiting some "
-"applications to reduce memory usage"
-msgstr ""
-"%ld x %ld आकाराचे प्रतिमा साठविण्यासाठी पुरेशी स्मरणशक्ती नाही; नको असणाऱ्या "
-"बाबीकाढून उपलब्ध स्मरणशक्तीचा साठा वाढवा"
-
-#: gdk-pixbuf/io-png.c:720
-msgid "Fatal error reading PNG image file"
-msgstr "PNG प्रतिमेची फाइल वाचताना घातक चुक झाली आहे"
-
-#: gdk-pixbuf/io-png.c:769
-#, c-format
-msgid "Fatal error reading PNG image file: %s"
-msgstr "PNG प्रतिमा फाइल वाचतेवेळी त्रुटी आढळली: %s"
-
-#: gdk-pixbuf/io-png.c:863
-msgid ""
-"Keys for PNG text chunks must have at least 1 and at most 79 characters."
-msgstr "PNG पाठ चंकसाठी कळा किमान 1 आणि कमाल 7९ अक्षरी असाव्यात."
-
-#: gdk-pixbuf/io-png.c:872
-msgid "Keys for PNG text chunks must be ASCII characters."
-msgstr "PNG पाठ चंकसाठी कळा ASCII अक्षरांच्याच असाव्यात."
-
-#: gdk-pixbuf/io-png.c:886 gdk-pixbuf/io-tiff.c:738
-#, c-format
-msgid "Color profile has invalid length %d."
-msgstr "रंग प्रोफाइलची अवैध लांबी %d."
-
-#: gdk-pixbuf/io-png.c:899 gdk-pixbuf/io-gdip-png.c:56
-#, c-format
-msgid ""
-"PNG compression level must be a value between 0 and 9; value '%s' could not "
-"be parsed."
-msgstr ""
-"PNG संकुचन स्तराचे मुल्य 0 ते 9 च्या दरम्यानच असायला हवे; मुल्य '%s' विश्लेषित केले जाऊ शकत "
-"नाही."
-
-#: gdk-pixbuf/io-png.c:912 gdk-pixbuf/io-gdip-png.c:68
-#, c-format
-msgid ""
-"PNG compression level must be a value between 0 and 9; value '%d' is not "
-"allowed."
-msgstr "PNG संकुचन स्तराचे मुल्य 0 ते 9 च्या दरम्यानच असायला हवे; मुल्य '%d' अनुमत केलेलेनाही."
-
-#: gdk-pixbuf/io-png.c:951
-#, c-format
-msgid "Value for PNG text chunk %s cannot be converted to ISO-8859-1 encoding."
-msgstr "PNG पाठ चंक %s चे मुल्य ISO-8859-1 एनकोडिंगमध्ये परिवर्तीत केले जाऊ शकत नाही."
-
-#: gdk-pixbuf/io-png.c:1112 gdk-pixbuf/io-gdip-png.c:133
-msgid "The PNG image format"
-msgstr "PNM प्रतिमा स्वरूप"
-
-#: gdk-pixbuf/io-pnm.c:250
-msgid "PNM loader expected to find an integer, but didn't"
-msgstr "PNM लोडर ला एक पूर्णांक संख्या पाहीजे, जी आढळली नाही"
-
-#: gdk-pixbuf/io-pnm.c:282
-msgid "PNM file has an incorrect initial byte"
-msgstr "PNM फाइल मध्ये प्रारंभिक बाइट चुकीचा आहे"
-
-#: gdk-pixbuf/io-pnm.c:312
-msgid "PNM file is not in a recognized PNM subformat"
-msgstr "PNM फाइल ही  योग्य PNM उपरचनेत  नाही"
-
-#: gdk-pixbuf/io-pnm.c:337
-msgid "PNM file has an image width of 0"
-msgstr "PNM फाइलमधील प्रतिमेची रुंदी शून्य आहे "
-
-#: gdk-pixbuf/io-pnm.c:358
-msgid "PNM file has an image height of 0"
-msgstr "PNM फाइल मधल्या प्रतिमेची उंची शून्य आहे"
-
-#: gdk-pixbuf/io-pnm.c:381
-msgid "Maximum color value in PNM file is 0"
-msgstr "PNM फाइल मध्ये  रंगाची  कमाल संख्या 0 आहे "
-
-#: gdk-pixbuf/io-pnm.c:389
-msgid "Maximum color value in PNM file is too large"
-msgstr "PNM फाइल मध्ये  रंगाची  कमाल संख्या बरीच मोठी आहे"
-
-#: gdk-pixbuf/io-pnm.c:429 gdk-pixbuf/io-pnm.c:459 gdk-pixbuf/io-pnm.c:504
-msgid "Raw PNM image type is invalid"
-msgstr " PNM प्रतिमेचा प्रकार अवैध आहे "
-
-#: gdk-pixbuf/io-pnm.c:654
-msgid "PNM image loader does not support this PNM subformat"
-msgstr "PNM नामक ह्या चित्रासाठी PNM उरने च्या फाइलचा वापर करू शकत नाही"
-
-#: gdk-pixbuf/io-pnm.c:741 gdk-pixbuf/io-pnm.c:968
-msgid "Raw PNM formats require exactly one whitespace before sample data"
-msgstr " PNM कच्या फाइल मधील शब्दांमध्ये योग्य रिक्त जागा असाव्यात"
-
-#: gdk-pixbuf/io-pnm.c:768
-msgid "Cannot allocate memory for loading PNM image"
-msgstr "PNM प्रतिमा भारित करण्यासाठी स्मृती राखता येत नाही"
-
-#: gdk-pixbuf/io-pnm.c:818
-msgid "Insufficient memory to load PNM context struct"
-msgstr "PNM संरचनेसाठी पुरेशी जागा नाही"
-
-#: gdk-pixbuf/io-pnm.c:869
-msgid "Unexpected end of PNM image data"
-msgstr "PNM प्रतिमेतील माहीतीचा अनपेक्षित शेवट झाला"
-
-#: gdk-pixbuf/io-pnm.c:997
-msgid "Insufficient memory to load PNM file"
-msgstr "PNM फाइल सुरू करण्याकरीता पुरेशी जागा नाही"
-
-#: gdk-pixbuf/io-pnm.c:1081
-msgid "The PNM/PBM/PGM/PPM image format family"
-msgstr "PNM/PBM/PGM/PPM प्रतिमा स्वरूप परिवार"
-
-#: gdk-pixbuf/io-qtif.c:128
-msgid "Input file descriptor is NULL."
-msgstr "इंपुट फाइल डिस्क्रीप्टर NULL आहे."
-
-#: gdk-pixbuf/io-qtif.c:143
-msgid "Failed to read QTIF header"
-msgstr "QTIF हेड्डर वाचण्यास अपयशी"
-
-#: gdk-pixbuf/io-qtif.c:152 gdk-pixbuf/io-qtif.c:182 gdk-pixbuf/io-qtif.c:446
-#, c-format
-msgid "QTIF atom size too large (%d bytes)"
-msgstr "QTIF ऍटम आकार खूप मोठे आहे (%d बाईट्स्)"
-
-#: gdk-pixbuf/io-qtif.c:172
-#, c-format
-msgid "Failed to allocate %d bytes for file read buffer"
-msgstr "फाइल रीड बफरकरीता %d बाईट्स्चे वाटप करण्यास अपयशी"
-
-#: gdk-pixbuf/io-qtif.c:196
-#, c-format
-msgid "File error when reading QTIF atom: %s"
-msgstr "QTIF atom वाचतेवेळी फाइल त्रुटी: %s"
-
-#: gdk-pixbuf/io-qtif.c:233
-#, c-format
-msgid "Failed to skip the next %d bytes with seek()."
-msgstr "पुढचे %d बाईट्स् seek() सह वगळण्यास अपयशी."
-
-#: gdk-pixbuf/io-qtif.c:257
-msgid "Failed to allocate QTIF context structure."
-msgstr "QTIF कंटेक्स्ट स्ट्रक्चरचे वाटप करण्यास अपयशी."
-
-#: gdk-pixbuf/io-qtif.c:317
-msgid "Failed to create GdkPixbufLoader object."
-msgstr "GdkPixbufLoader ऑब्जेक्ट निर्माण करण्यास अपयशी."
-
-#: gdk-pixbuf/io-qtif.c:421
-msgid "Failed to find an image data atom."
-msgstr "प्रतिमा डाटा ऍटम शोधण्यास अपयशी."
-
-#: gdk-pixbuf/io-qtif.c:602
-msgid "The QTIF image format"
-msgstr "QTIF प्रतिमा रूपण"
-
-#: gdk-pixbuf/io-ras.c:126
-msgid "RAS image has bogus header data"
-msgstr "RAS प्रतिमेतील शिर्षकपट्टीतील माहीती खोटी आहे"
-
-#: gdk-pixbuf/io-ras.c:148
-msgid "RAS image has unknown type"
-msgstr " RAS प्रतिमा अपरिचीत आहे"
-
-#: gdk-pixbuf/io-ras.c:156
-msgid "unsupported RAS image variation"
-msgstr "RAS  प्रतिमेमध्ये असणारा बदल विना आधार आहे"
-
-#: gdk-pixbuf/io-ras.c:171 gdk-pixbuf/io-ras.c:200
-msgid "Not enough memory to load RAS image"
-msgstr "RAS प्रतिमा सुरू करण्याकरीता पुरेशी जागा देता येत नाही"
-
-#: gdk-pixbuf/io-ras.c:545
-msgid "The Sun raster image format"
-msgstr "Sun रास्टर प्रतिमा स्वरूप"
-
-#: gdk-pixbuf/io-tga.c:154
-msgid "Cannot allocate memory for IOBuffer struct"
-msgstr "IOBuffer struct साठी स्मृती राखू शकत नाही"
-
-#: gdk-pixbuf/io-tga.c:173
-msgid "Cannot allocate memory for IOBuffer data"
-msgstr "IOBuffer डेटा साठी स्मृती राखू शकत नाही"
-
-#: gdk-pixbuf/io-tga.c:184
-msgid "Cannot realloc IOBuffer data"
-msgstr "IOBuffer डेटासाठी स्मृती पुन्हा राखता येत नाही"
-
-#: gdk-pixbuf/io-tga.c:214
-msgid "Cannot allocate temporary IOBuffer data"
-msgstr "तात्पुरत्या IO Buffer डेटासाठी स्मृती राखता येत नाही"
-
-#: gdk-pixbuf/io-tga.c:347
-msgid "Cannot allocate new pixbuf"
-msgstr "नविन  Pixbuf साठी स्मृती राखता येत नाही"
-
-#: gdk-pixbuf/io-tga.c:686
-msgid "Image is corrupted or truncated"
-msgstr "प्रतिमा दोषीत किंवा ट्रंकेटेड आहे"
-
-#: gdk-pixbuf/io-tga.c:693
-msgid "Cannot allocate colormap structure"
-msgstr "colormap structure साठी स्मृती राखता येत नाही"
-
-#: gdk-pixbuf/io-tga.c:700
-msgid "Cannot allocate colormap entries"
-msgstr "colormap प्रविष्टांसाठी स्मृती राखता येत नाही"
-
-#: gdk-pixbuf/io-tga.c:722
-msgid "Unexpected bitdepth for colormap entries"
-msgstr "उपलब्द रंगांच्या प्रारंभी अनपेक्षित खोलीच्या अक्षरमालीका दिसते"
-
-#: gdk-pixbuf/io-tga.c:740
-msgid "Cannot allocate TGA header memory"
-msgstr "TGA मथळा स्मृती राखता येत नाही"
-
-#: gdk-pixbuf/io-tga.c:773
-msgid "TGA image has invalid dimensions"
-msgstr "TGA प्रतिमेमध्ये अवैध रूपे आहेत "
-
-#: gdk-pixbuf/io-tga.c:779 gdk-pixbuf/io-tga.c:788 gdk-pixbuf/io-tga.c:798
-#: gdk-pixbuf/io-tga.c:808 gdk-pixbuf/io-tga.c:815
-msgid "TGA image type not supported"
-msgstr "TGA प्रकारच्या प्रतिमे ला आधार नाही"
-
-#: gdk-pixbuf/io-tga.c:862
-msgid "Cannot allocate memory for TGA context struct"
-msgstr "TGA संदर्भ struct साठी स्मृती राखू शकत नाही"
-
-#: gdk-pixbuf/io-tga.c:927
-msgid "Excess data in file"
-msgstr "फाइलमधील अतिरीक्त माहिती"
-
-#: gdk-pixbuf/io-tga.c:1008
-msgid "The Targa image format"
-msgstr "Targa प्रतिमा स्वरूप"
-
-#: gdk-pixbuf/io-tiff.c:165
-msgid "Could not get image width (bad TIFF file)"
-msgstr "प्रतिमेची रुंदी आढळली नाही (TIFF फाइल प्रदुषित आहे)"
-
-#: gdk-pixbuf/io-tiff.c:172
-msgid "Could not get image height (bad TIFF file)"
-msgstr " प्रतिमेची ऊंची  आढळली नाही(TIFF फाइल प्रदुषित आहे)"
-
-#: gdk-pixbuf/io-tiff.c:180
-msgid "Width or height of TIFF image is zero"
-msgstr "TIFF प्रतिमेची रुंदी किंवा ऊंची शून्य आहे "
-
-#: gdk-pixbuf/io-tiff.c:189 gdk-pixbuf/io-tiff.c:198
-msgid "Dimensions of TIFF image too large"
-msgstr "TIFF प्रतिमेची रुपे बरीच मोठी आहेत"
-
-#: gdk-pixbuf/io-tiff.c:222 gdk-pixbuf/io-tiff.c:234 gdk-pixbuf/io-tiff.c:561
-msgid "Insufficient memory to open TIFF file"
-msgstr "TIFF फाइल उघडण्यासाठी जागा अपुरी आहे"
-
-#: gdk-pixbuf/io-tiff.c:295
-msgid "Failed to load RGB data from TIFF file"
-msgstr "TIFF फाइल मधून  RGB माहीती सुरू करण्यात असफल"
-
-#: gdk-pixbuf/io-tiff.c:351
-msgid "Failed to open TIFF image"
-msgstr "TIFF प्रतिमा उघडण्यात असफल"
-
-#: gdk-pixbuf/io-tiff.c:363 gdk-pixbuf/io-tiff.c:778
-msgid "TIFFClose operation failed"
-msgstr "TIFFClose ही क्रिया असफल"
-
-#: gdk-pixbuf/io-tiff.c:493 gdk-pixbuf/io-tiff.c:506
-msgid "Failed to load TIFF image"
-msgstr "TIFF प्रतिमा सुरु करण्यात असफल"
-
-#: gdk-pixbuf/io-tiff.c:692
-msgid "Failed to save TIFF image"
-msgstr "TIFF प्रतिमा सुरक्षित करण्यात असफल"
-
-#: gdk-pixbuf/io-tiff.c:727
-msgid "TIFF compression doesn't refer to a valid codec."
-msgstr "TIFF संकोचन वैध कोडेककरीता संदर्भ पुरवत नाही."
-
-#: gdk-pixbuf/io-tiff.c:767
-msgid "Failed to write TIFF data"
-msgstr "TIFF डेटा लिहीण्यास असफल"
-
-#: gdk-pixbuf/io-tiff.c:814
-msgid "Couldn't write to TIFF file"
-msgstr "TIFF फाइलवर लिहीता आले नाही"
-
-#: gdk-pixbuf/io-tiff.c:869
-msgid "The TIFF image format"
-msgstr "TIFF प्रतिमा स्वरूप"
-
-#: gdk-pixbuf/io-wbmp.c:246
-msgid "Image has zero width"
-msgstr "प्रतिमेची रुंदी शून्य आहे"
-
-#: gdk-pixbuf/io-wbmp.c:264
-msgid "Image has zero height"
-msgstr "प्रतिमेची ऊंची शून्य आहे"
-
-#: gdk-pixbuf/io-wbmp.c:275
-msgid "Not enough memory to load image"
-msgstr "प्रतिमा सुरु करण्यासाठी पुरेशी जागा नाही"
-
-#: gdk-pixbuf/io-wbmp.c:334
-msgid "Couldn't save the rest"
-msgstr "उर्वरीत (माहीती) साठवता येऊ शकली नाही "
-
-#: gdk-pixbuf/io-wbmp.c:375
-msgid "The WBMP image format"
-msgstr "WBMP प्रतिमा स्वरूप"
-
-#: gdk-pixbuf/io-xbm.c:295
-msgid "Invalid XBM file"
-msgstr "अवैध XBM फाइल"
-
-#: gdk-pixbuf/io-xbm.c:305
-msgid "Insufficient memory to load XBM image file"
-msgstr "XBM प्रतिमेची फाइल सुरू करण्यासाठी पुरेशी जागा नाही"
-
-#: gdk-pixbuf/io-xbm.c:453
-msgid "Failed to write to temporary file when loading XBM image"
-msgstr "XBM प्रतिमा फाइल सुरु करताना तात्पुरत्या फाइलमध्ये लेखन करतेवेळी असफल"
-
-#: gdk-pixbuf/io-xbm.c:492
-msgid "The XBM image format"
-msgstr "XBM प्रतिमा स्वरूप"
-
-#: gdk-pixbuf/io-xpm.c:468
-msgid "No XPM header found"
-msgstr "XPM मथळा सापडला नाही"
-
-#: gdk-pixbuf/io-xpm.c:477
-msgid "Invalid XPM header"
-msgstr "अवैध XPM मथळा"
-
-#: gdk-pixbuf/io-xpm.c:485
-msgid "XPM file has image width <= 0"
-msgstr "XPM प्रतिमा फाइलची रुंदी <= 0 आहे"
-
-#: gdk-pixbuf/io-xpm.c:493
-msgid "XPM file has image height <= 0"
-msgstr "XPM प्रतिमा फाइलची ऊंची  <= 0 आहे"
-
-#: gdk-pixbuf/io-xpm.c:501
-msgid "XPM has invalid number of chars per pixel"
-msgstr "XPM फाइलमध्ये प्रति ओळीतील अक्षर संख्या अवैध आहे "
-
-#: gdk-pixbuf/io-xpm.c:510
-msgid "XPM file has invalid number of colors"
-msgstr "XPM फाइल मध्ये रंगांची संख्या अवैध आहे"
-
-#: gdk-pixbuf/io-xpm.c:522 gdk-pixbuf/io-xpm.c:531 gdk-pixbuf/io-xpm.c:583
-msgid "Cannot allocate memory for loading XPM image"
-msgstr "XPM प्रतिमा भारित करण्यासाठी स्मृती राखू शकत नाही"
-
-#: gdk-pixbuf/io-xpm.c:545
-msgid "Cannot read XPM colormap"
-msgstr "XPM colormap वाचता येत नाही"
-
-#: gdk-pixbuf/io-xpm.c:777
-msgid "Failed to write to temporary file when loading XPM image"
-msgstr "XPM प्रतिमा सुरु करताना तात्पुरत्या फाइल मध्ये लेखन करण्यास असफल"
-
-#: gdk-pixbuf/io-xpm.c:816
-msgid "The XPM image format"
-msgstr "XPM प्रतिमा स्वरूप"
-
-#: gdk-pixbuf/io-gdip-emf.c:59
-msgid "The EMF image format"
-msgstr "EMF प्रतिमा स्वरूप"
-
-#: gdk-pixbuf/io-gdip-utils.c:232
-#, c-format
-msgid "Could not allocate memory: %s"
-msgstr "स्मृती वाटप करू शकत नाही: %s"
-
-#: gdk-pixbuf/io-gdip-utils.c:257 gdk-pixbuf/io-gdip-utils.c:371
-#: gdk-pixbuf/io-gdip-utils.c:411
-#, c-format
-msgid "Could not create stream: %s"
-msgstr "स्ट्रीम बनवू शकत नाही: %s"
-
-#: gdk-pixbuf/io-gdip-utils.c:271
-#, c-format
-msgid "Could not seek stream: %s"
-msgstr "माहिती ते स्ट्रीम रूपांतर अपयशी: %s"
-
-#: gdk-pixbuf/io-gdip-utils.c:283
-#, c-format
-msgid "Could not read from stream: %s"
-msgstr "स्ट्रीम पासून वाचण्यास अपयशी: %s"
-
-#: gdk-pixbuf/io-gdip-utils.c:694 gdk-pixbuf/io-gdip-utils.c:825
-msgid "Couldn't load bitmap"
-msgstr "bitmap दाखल करू शकले नाही"
-
-#: gdk-pixbuf/io-gdip-utils.c:847
-msgid "Couldn't load metafile"
-msgstr "मेटाफाइल दाखल करू शकले नाही"
-
-#: gdk-pixbuf/io-gdip-utils.c:1006
-msgid "Unsupported image format for GDI+"
-msgstr "GDI+ करीता असमर्थीत प्रतिमा प्रकार"
-
-#: gdk-pixbuf/io-gdip-utils.c:1013
-msgid "Couldn't save"
-msgstr "संचयीत करू शकले नाही"
-
-#: gdk-pixbuf/io-gdip-wmf.c:58
-msgid "The WMF image format"
-msgstr "WMF प्रतिमा स्वरूपन"
 
 #. Description of --sync in --help output
 #: gdk/win32/gdkmain-win32.c:55
@@ -1502,8 +607,9 @@ msgid "_Saturation:"
 msgstr "संर्पुक्तता(_S):"
 
 #: gtk/gtkcolorsel.c:393
-msgid "\"Deepness\" of the color."
-msgstr "रंगाचा \"गडदपणा\"."
+#, fuzzy
+msgid "Intensity of the color."
+msgstr "रंगाची पारदर्शकता."
 
 #: gtk/gtkcolorsel.c:394
 msgid "_Value:"
@@ -1670,11 +776,11 @@ msgstr "उजवा(_R):"
 msgid "Paper Margins"
 msgstr "कागद समास"
 
-#: gtk/gtkentry.c:8612 gtk/gtktextview.c:8002
+#: gtk/gtkentry.c:8612 gtk/gtktextview.c:8012
 msgid "Input _Methods"
 msgstr "इनपुट पद्धती (_M)"
 
-#: gtk/gtkentry.c:8626 gtk/gtktextview.c:8016
+#: gtk/gtkentry.c:8626 gtk/gtktextview.c:8026
 msgid "_Insert Unicode Control Character"
 msgstr "युनिकोड नियंत्रण अक्षर घाला(_I)"
 
@@ -2115,12 +1221,12 @@ msgid "System (%s)"
 msgstr "प्रणाली (%s)"
 
 #. Open Link
-#: gtk/gtklabel.c:6076
+#: gtk/gtklabel.c:6072
 msgid "_Open Link"
 msgstr "दुवा उघडा (_O)"
 
 #. Copy Link Address
-#: gtk/gtklabel.c:6088
+#: gtk/gtklabel.c:6084
 msgid "Copy _Link Address"
 msgstr "दुवा पत्त्याचे प्रत बनवा (_L)"
 
@@ -2133,27 +1239,27 @@ msgid "Invalid URI"
 msgstr "अवैध URI"
 
 #. Description of --gtk-module=MODULES in --help output
-#: gtk/gtkmain.c:447
+#: gtk/gtkmain.c:432
 msgid "Load additional GTK+ modules"
 msgstr "अतिरिक्त GTK+ विभाग भारित करा"
 
 #. Placeholder in --gtk-module=MODULES in --help output
-#: gtk/gtkmain.c:448
+#: gtk/gtkmain.c:433
 msgid "MODULES"
 msgstr "MODULES"
 
 #. Description of --g-fatal-warnings in --help output
-#: gtk/gtkmain.c:450
+#: gtk/gtkmain.c:435
 msgid "Make all warnings fatal"
 msgstr "सर्व सुचनांस गंभीर करा"
 
 #. Description of --gtk-debug=FLAGS in --help output
-#: gtk/gtkmain.c:453
+#: gtk/gtkmain.c:438
 msgid "GTK+ debugging flags to set"
 msgstr "निर्धारित करायचा GTK+ त्रुटीनिर्वारण ध्वज"
 
 #. Description of --gtk-no-debug=FLAGS in --help output
-#: gtk/gtkmain.c:456
+#: gtk/gtkmain.c:441
 msgid "GTK+ debugging flags to unset"
 msgstr "अनिर्धारित करायचा GTK+ त्रुटीनिर्वारण ध्वज"
 
@@ -2162,20 +1268,20 @@ msgstr "अनिर्धारित करायचा GTK+ त्रुट�
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
 #.
-#: gtk/gtkmain.c:708
+#: gtk/gtkmain.c:704
 msgid "default:LTR"
 msgstr "default:LTR"
 
-#: gtk/gtkmain.c:773
+#: gtk/gtkmain.c:769
 #, c-format
 msgid "Cannot open display: %s"
 msgstr "दृश्य उघडू शकत नाही: %s"
 
-#: gtk/gtkmain.c:810
+#: gtk/gtkmain.c:806
 msgid "GTK+ Options"
 msgstr "GTK+ पर्याय"
 
-#: gtk/gtkmain.c:810
+#: gtk/gtkmain.c:806
 msgid "Show GTK+ Options"
 msgstr "GTK+ पर्याय दाखवा"
 
@@ -2260,7 +1366,7 @@ msgstr "Z Shell"
 msgid "Cannot end process with pid %d: %s"
 msgstr "कार्यला pid %d सह समाप्त करणे अशक्य: %s"
 
-#: gtk/gtknotebook.c:4621 gtk/gtknotebook.c:7050
+#: gtk/gtknotebook.c:4631 gtk/gtknotebook.c:7060
 #, c-format
 msgid "Page %u"
 msgstr "पान %u"
@@ -2350,87 +1456,81 @@ msgstr "फोल्डरमध्ये सुरक्षित करा (_S
 msgid "%s job #%d"
 msgstr "%s कार्य #%d"
 
-#: gtk/gtkprintoperation.c:1687
+#: gtk/gtkprintoperation.c:1695
 msgctxt "print operation status"
 msgid "Initial state"
 msgstr "प्रारंभिक स्तर"
 
-#: gtk/gtkprintoperation.c:1688
+#: gtk/gtkprintoperation.c:1696
 msgctxt "print operation status"
 msgid "Preparing to print"
 msgstr "छपाई करीता तयार होत आहे"
 
-#: gtk/gtkprintoperation.c:1689
+#: gtk/gtkprintoperation.c:1697
 msgctxt "print operation status"
 msgid "Generating data"
 msgstr "डेटा निर्माण करत आहे"
 
-#: gtk/gtkprintoperation.c:1690
+#: gtk/gtkprintoperation.c:1698
 msgctxt "print operation status"
 msgid "Sending data"
 msgstr "डेटा पाठवत आहे"
 
-#: gtk/gtkprintoperation.c:1691
+#: gtk/gtkprintoperation.c:1699
 msgctxt "print operation status"
 msgid "Waiting"
 msgstr "प्रतिक्षेत आहे"
 
-#: gtk/gtkprintoperation.c:1692
+#: gtk/gtkprintoperation.c:1700
 msgctxt "print operation status"
 msgid "Blocking on issue"
 msgstr "अडचण आढळल्यास ब्लॉक करते"
 
-#: gtk/gtkprintoperation.c:1693
+#: gtk/gtkprintoperation.c:1701
 msgctxt "print operation status"
 msgid "Printing"
 msgstr "छपाई करत आहे"
 
-#: gtk/gtkprintoperation.c:1694
+#: gtk/gtkprintoperation.c:1702
 msgctxt "print operation status"
 msgid "Finished"
 msgstr "पूर्ण झाले"
 
-#: gtk/gtkprintoperation.c:1695
+#: gtk/gtkprintoperation.c:1703
 msgctxt "print operation status"
 msgid "Finished with error"
 msgstr "त्रुटीसह पूर्ण झाले"
 
-#: gtk/gtkprintoperation.c:2254
+#: gtk/gtkprintoperation.c:2270
 #, c-format
 msgid "Preparing %d"
 msgstr "%d तयार करत आहे"
 
-#: gtk/gtkprintoperation.c:2256 gtk/gtkprintoperation.c:2875
+#: gtk/gtkprintoperation.c:2272 gtk/gtkprintoperation.c:2902
 #, c-format
 msgid "Preparing"
 msgstr "तयार करत आहे"
 
-#: gtk/gtkprintoperation.c:2259
+#: gtk/gtkprintoperation.c:2275
 #, c-format
 msgid "Printing %d"
 msgstr "%d छापत आहे"
 
-#: gtk/gtkprintoperation.c:2905
+#: gtk/gtkprintoperation.c:2932
 #, c-format
 msgid "Error creating print preview"
 msgstr "छपाई पूर्वदृश्य बनवितेवेळी त्रुटी"
 
-#: gtk/gtkprintoperation.c:2908
+#: gtk/gtkprintoperation.c:2935
 #, c-format
 msgid "The most probable reason is that a temporary file could not be created."
 msgstr "सर्वात संभाव्य कारण असे की तात्पूर्ती फाइल बनविले जाऊ शकत नाही."
 
-#: gtk/gtkprintoperation-unix.c:297 gtk/gtkprintoperation-unix.c:314
-#, c-format
+#: gtk/gtkprintoperation-unix.c:297
 msgid "Error launching preview"
 msgstr "पुर्वावलोकन प्रक्षेपित करण्यात चूक"
 
-#: gtk/gtkprintoperation-unix.c:358
-#, c-format
-msgid "Error printing"
-msgstr "छापण्यात चूक"
-
-#: gtk/gtkprintoperation-unix.c:494 gtk/gtkprintoperation-win32.c:1447
+#: gtk/gtkprintoperation-unix.c:470 gtk/gtkprintoperation-win32.c:1447
 msgid "Application"
 msgstr "अनुप्रयोग"
 
@@ -2444,7 +1544,7 @@ msgstr "कागद संपले"
 
 #. Translators: this is a printer status.
 #: gtk/gtkprintoperation-win32.c:616
-#: modules/printbackends/cups/gtkprintbackendcups.c:1999
+#: modules/printbackends/cups/gtkprintbackendcups.c:1998
 msgid "Paused"
 msgstr "थांबलेले"
 
@@ -2571,42 +1671,42 @@ msgstr "सामान्य"
 #. * multiple pages on a sheet when printing
 #.
 #: gtk/gtkprintunixdialog.c:3010
-#: modules/printbackends/cups/gtkprintbackendcups.c:3509
+#: modules/printbackends/cups/gtkprintbackendcups.c:3508
 msgid "Left to right, top to bottom"
 msgstr "डावीकडून उजवीकडे, शिर्ष ते तळ"
 
 #: gtk/gtkprintunixdialog.c:3010
-#: modules/printbackends/cups/gtkprintbackendcups.c:3509
+#: modules/printbackends/cups/gtkprintbackendcups.c:3508
 msgid "Left to right, bottom to top"
 msgstr "डावीकडून उजवीकडे, तळ ते शिर्ष"
 
 #: gtk/gtkprintunixdialog.c:3011
-#: modules/printbackends/cups/gtkprintbackendcups.c:3510
+#: modules/printbackends/cups/gtkprintbackendcups.c:3509
 msgid "Right to left, top to bottom"
 msgstr "उजवीकडून डावीकडे, शिर्ष ते तळ"
 
 #: gtk/gtkprintunixdialog.c:3011
-#: modules/printbackends/cups/gtkprintbackendcups.c:3510
+#: modules/printbackends/cups/gtkprintbackendcups.c:3509
 msgid "Right to left, bottom to top"
 msgstr "उजवीकडून डावीकडे, तळ ते शिर्ष"
 
 #: gtk/gtkprintunixdialog.c:3012
-#: modules/printbackends/cups/gtkprintbackendcups.c:3511
+#: modules/printbackends/cups/gtkprintbackendcups.c:3510
 msgid "Top to bottom, left to right"
 msgstr "शिर्ष ते तळ, डावीकडून उजवीकडे"
 
 #: gtk/gtkprintunixdialog.c:3012
-#: modules/printbackends/cups/gtkprintbackendcups.c:3511
+#: modules/printbackends/cups/gtkprintbackendcups.c:3510
 msgid "Top to bottom, right to left"
 msgstr "शिर्ष ते तळ, उजवीकडून डावीकडे"
 
 #: gtk/gtkprintunixdialog.c:3013
-#: modules/printbackends/cups/gtkprintbackendcups.c:3512
+#: modules/printbackends/cups/gtkprintbackendcups.c:3511
 msgid "Bottom to top, left to right"
 msgstr "तळ ते शिर्ष, डावीकडून उजवीकडे"
 
 #: gtk/gtkprintunixdialog.c:3013
-#: modules/printbackends/cups/gtkprintbackendcups.c:3512
+#: modules/printbackends/cups/gtkprintbackendcups.c:3511
 msgid "Bottom to top, right to left"
 msgstr "तळ ते शिर्ष, उजवीकडून डावीकडे"
 
@@ -2614,7 +1714,7 @@ msgstr "तळ ते शिर्ष, उजवीकडून डावीक�
 #. * dialog that controls in what order multiple pages are arranged
 #.
 #: gtk/gtkprintunixdialog.c:3017 gtk/gtkprintunixdialog.c:3030
-#: modules/printbackends/cups/gtkprintbackendcups.c:3544
+#: modules/printbackends/cups/gtkprintbackendcups.c:3543
 msgid "Page Ordering"
 msgstr "पानाची क्रमवारी"
 
@@ -4770,121 +3870,116 @@ msgstr "छपाईयंत्र '%s' वर्तमान क्षणी �
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:1687
 #, c-format
-msgid "Printer '%s' may not be connected."
-msgstr "छपाईयंत्र '%s' जुळलेले नसावे."
-
-#: modules/printbackends/cups/gtkprintbackendcups.c:1688
-#, c-format
 msgid "There is a problem on printer '%s'."
 msgstr "छपाईयंत्र '%s' वरील अडचण."
 
 #. Translators: this is a printer status.
-#: modules/printbackends/cups/gtkprintbackendcups.c:1996
+#: modules/printbackends/cups/gtkprintbackendcups.c:1995
 msgid "Paused ; Rejecting Jobs"
 msgstr "स्तब्ध ; कार्य नकारत आहे"
 
 #. Translators: this is a printer status.
-#: modules/printbackends/cups/gtkprintbackendcups.c:2002
+#: modules/printbackends/cups/gtkprintbackendcups.c:2001
 msgid "Rejecting Jobs"
 msgstr "कार्य नकारत आहे"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2778
+#: modules/printbackends/cups/gtkprintbackendcups.c:2777
 msgid "Two Sided"
 msgstr "पाठपोट"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2779
+#: modules/printbackends/cups/gtkprintbackendcups.c:2778
 msgid "Paper Type"
 msgstr "कागद प्रकार"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2780
+#: modules/printbackends/cups/gtkprintbackendcups.c:2779
 msgid "Paper Source"
 msgstr "कागद स्त्रोत"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2781
+#: modules/printbackends/cups/gtkprintbackendcups.c:2780
 msgid "Output Tray"
 msgstr "आऊटपुट ट्रे"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2782
+#: modules/printbackends/cups/gtkprintbackendcups.c:2781
 msgid "Resolution"
 msgstr "रेजोल्यूशन"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2783
+#: modules/printbackends/cups/gtkprintbackendcups.c:2782
 msgid "GhostScript pre-filtering"
 msgstr "GhostScript पूर्व-चाळणी"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2792
+#: modules/printbackends/cups/gtkprintbackendcups.c:2791
 msgid "One Sided"
 msgstr "एका बाजूचे"
 
 #. Translators: this is an option of "Two Sided"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2794
+#: modules/printbackends/cups/gtkprintbackendcups.c:2793
 msgid "Long Edge (Standard)"
 msgstr "लांब स्वरूप (मानक)"
 
 #. Translators: this is an option of "Two Sided"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2796
+#: modules/printbackends/cups/gtkprintbackendcups.c:2795
 msgid "Short Edge (Flip)"
 msgstr "लहान स्वरूप (पलटवा)"
 
 #. Translators: this is an option of "Paper Source"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2798
-#: modules/printbackends/cups/gtkprintbackendcups.c:2800
-#: modules/printbackends/cups/gtkprintbackendcups.c:2808
+#: modules/printbackends/cups/gtkprintbackendcups.c:2797
+#: modules/printbackends/cups/gtkprintbackendcups.c:2799
+#: modules/printbackends/cups/gtkprintbackendcups.c:2807
 msgid "Auto Select"
 msgstr "स्वयं निवडणे"
 
 #. Translators: this is an option of "Paper Source"
 #. Translators: this is an option of "Resolution"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2802
-#: modules/printbackends/cups/gtkprintbackendcups.c:2804
-#: modules/printbackends/cups/gtkprintbackendcups.c:2806
-#: modules/printbackends/cups/gtkprintbackendcups.c:2810
-#: modules/printbackends/cups/gtkprintbackendcups.c:3296
+#: modules/printbackends/cups/gtkprintbackendcups.c:2801
+#: modules/printbackends/cups/gtkprintbackendcups.c:2803
+#: modules/printbackends/cups/gtkprintbackendcups.c:2805
+#: modules/printbackends/cups/gtkprintbackendcups.c:2809
+#: modules/printbackends/cups/gtkprintbackendcups.c:3295
 msgid "Printer Default"
 msgstr "मुलभूत छपाईयंत्र"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2812
+#: modules/printbackends/cups/gtkprintbackendcups.c:2811
 msgid "Embed GhostScript fonts only"
 msgstr "फक्त GhostScript फॉन्टस् अंतर्भूत करा"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2814
+#: modules/printbackends/cups/gtkprintbackendcups.c:2813
 msgid "Convert to PS level 1"
 msgstr "PS स्तर 1 नुरूप रूपांतरीत करा"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2816
+#: modules/printbackends/cups/gtkprintbackendcups.c:2815
 msgid "Convert to PS level 2"
 msgstr "PS स्तर 2 नुरूप रूपांतरीत करा"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2818
+#: modules/printbackends/cups/gtkprintbackendcups.c:2817
 msgid "No pre-filtering"
 msgstr "पूर्व-चाळणी आढळली नाही"
 
 #. Translators: "Miscellaneous" is the label for a button, that opens
 #. up an extra panel of settings in a print dialog.
-#: modules/printbackends/cups/gtkprintbackendcups.c:2827
+#: modules/printbackends/cups/gtkprintbackendcups.c:2826
 msgid "Miscellaneous"
 msgstr "मिश्र"
 
 #. Translators: These strings name the possible values of the
 #. * job priority option in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3504
+#: modules/printbackends/cups/gtkprintbackendcups.c:3503
 msgid "Urgent"
 msgstr "तातडीने"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3504
+#: modules/printbackends/cups/gtkprintbackendcups.c:3503
 msgid "High"
 msgstr "उंच"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3504
+#: modules/printbackends/cups/gtkprintbackendcups.c:3503
 msgid "Medium"
 msgstr "मध्यम"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3504
+#: modules/printbackends/cups/gtkprintbackendcups.c:3503
 msgid "Low"
 msgstr "खाली"
 
@@ -4892,66 +3987,66 @@ msgstr "खाली"
 #. Translators, this string is used to label the pages-per-sheet option
 #. * in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3528
+#: modules/printbackends/cups/gtkprintbackendcups.c:3527
 msgid "Pages per Sheet"
 msgstr "प्रत्येक शीट करीता पान"
 
 #. Translators, this string is used to label the job priority option
 #. * in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3565
+#: modules/printbackends/cups/gtkprintbackendcups.c:3564
 msgid "Job Priority"
 msgstr "कार्य प्राधान्यता"
 
 #. Translators, this string is used to label the billing info entry
 #. * in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3576
+#: modules/printbackends/cups/gtkprintbackendcups.c:3575
 msgid "Billing Info"
 msgstr "बिलिंग माहिती"
 
 #. Translators, these strings are names for various 'standard' cover
 #. * pages that the printing system may support.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3591
+#: modules/printbackends/cups/gtkprintbackendcups.c:3590
 msgid "None"
 msgstr "काहीच नाही"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3591
+#: modules/printbackends/cups/gtkprintbackendcups.c:3590
 msgid "Classified"
 msgstr "वर्गीकृत"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3591
+#: modules/printbackends/cups/gtkprintbackendcups.c:3590
 msgid "Confidential"
 msgstr "गुप्त"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3591
+#: modules/printbackends/cups/gtkprintbackendcups.c:3590
 msgid "Secret"
 msgstr "गुपित"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3591
+#: modules/printbackends/cups/gtkprintbackendcups.c:3590
 msgid "Standard"
 msgstr "मानक"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3591
+#: modules/printbackends/cups/gtkprintbackendcups.c:3590
 msgid "Top Secret"
 msgstr "उच्च गुपित"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3591
+#: modules/printbackends/cups/gtkprintbackendcups.c:3590
 msgid "Unclassified"
 msgstr "अवर्गिकृत"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the front cover page.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3626
+#: modules/printbackends/cups/gtkprintbackendcups.c:3625
 msgid "Before"
 msgstr "पूर्वी"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the back cover page.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3641
+#: modules/printbackends/cups/gtkprintbackendcups.c:3640
 msgid "After"
 msgstr "नंतर"
 
@@ -4959,14 +4054,14 @@ msgstr "नंतर"
 #. * a print job is printed. Possible values are 'now', a specified time,
 #. * or 'on hold'
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3661
+#: modules/printbackends/cups/gtkprintbackendcups.c:3660
 msgid "Print at"
 msgstr "याक्षणी छपाई करा"
 
 #. Translators: this is the name of the option that allows the user
 #. * to specify a time when a print job will be printed.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3672
+#: modules/printbackends/cups/gtkprintbackendcups.c:3671
 msgid "Print at time"
 msgstr "याक्षणी छपाई करा"
 
@@ -4974,7 +4069,7 @@ msgstr "याक्षणी छपाई करा"
 #. * size. The two placeholders are replaced with the width and height
 #. * in points. E.g: "Custom 230.4x142.9"
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3707
+#: modules/printbackends/cups/gtkprintbackendcups.c:3706
 #, c-format
 msgid "Custom %sx%s"
 msgstr "इच्छिक %sx%s"
@@ -5065,6 +4160,673 @@ msgstr "चाचणी छपाईयंत्रकरीता छपाई"
 #, c-format
 msgid "Could not get information for file '%s': %s"
 msgstr "'%s' फाइलची माहिती मिळवता आली नाही: %s"
+
+#: tests/testfilechooser.c:222
+#, c-format
+msgid "Failed to open file '%s': %s"
+msgstr "'%1s' फाइल उघडण्यात असफल: %2s"
+
+#: tests/testfilechooser.c:267
+#, c-format
+msgid ""
+"Failed to load image '%s': reason not known, probably a corrupt image file"
+msgstr ""
+"प्रतिमा '%s' ला सुरु करण्यात असफल: कारण माहीत नाही , बहुदा ही एक दुषित प्रतिमा फाइल "
+"असावी "
+
+#~ msgid "Image file '%s' contains no data"
+#~ msgstr "प्रतिमा फाइल '%s' मध्ये कोणतीही माहीती नाही "
+
+#~ msgid ""
+#~ "Failed to load animation '%s': reason not known, probably a corrupt "
+#~ "animation file"
+#~ msgstr ""
+#~ "प्रतिमा '%s' ला सुरु करण्यात असफल: कारण माहीत नाही, बहुदा ही एक दुषित प्रतिमा "
+#~ "फाइल असावी "
+
+#~ msgid "Unable to load image-loading module: %s: %s"
+#~ msgstr "प्रतिमा सुरु करण्याची पध्दत %1s: सुरु करण्यास असमर्थ: %2s"
+
+#~ msgid ""
+#~ "Image-loading module %s does not export the proper interface; perhaps "
+#~ "it's from a different GTK version?"
+#~ msgstr ""
+#~ "प्रतिमा सुरु करण्यासाठी %s द्वारा योग्य संवाद साधता येत नाही; बहुदा एका भिन्न जीटीके "
+#~ "मजकुरापासून ही प्रतिमा घेतली असावी?"
+
+#~ msgid "Image type '%s' is not supported"
+#~ msgstr "'%s' प्रतिमेला आधार नाही"
+
+#~ msgid "Couldn't recognize the image file format for file '%s'"
+#~ msgstr "फाइल '%s' कोणत्या प्रकारची फाइल आहे ते उमगले नाही"
+
+#~ msgid "Unrecognized image file format"
+#~ msgstr "अपरिचित असणारी प्रतिमा फाइल"
+
+#~ msgid "Failed to load image '%s': %s"
+#~ msgstr "'%1s' प्रतिमा उघडण्यास असमर्थ: %2s"
+
+#~ msgid "Error writing to image file: %s"
+#~ msgstr "प्रतिमा फाइलवर लिहिण्यात चूक: %s"
+
+#~ msgid ""
+#~ "This build of gdk-pixbuf does not support saving the image format: %s"
+#~ msgstr "प्रतिमेची रचना रक्षित करण्यासाठी या भागातgdk-pixbf चे सहकार्य नाही : %s"
+
+#~ msgid "Insufficient memory to save image to callback"
+#~ msgstr "कॉलबॅकसाठी प्रतिमा सुरक्षित करण्यासाठी पुरेशी स्मृती नाही"
+
+#~ msgid "Failed to open temporary file"
+#~ msgstr "तात्कालिक फाइल उघडण्यात असफल"
+
+#~ msgid "Failed to read from temporary file"
+#~ msgstr "तात्कालिक फाइलमधून वाचण्यास असफल"
+
+#~ msgid "Failed to open '%s' for writing: %s"
+#~ msgstr "लिहण्यासाठी '%1$s' ही फाइल उघडण्यास अपयशी: %2$s"
+
+#~ msgid ""
+#~ "Failed to close '%s' while writing image, all data may not have been "
+#~ "saved: %s"
+#~ msgstr ""
+#~ "लेखन करताना '%s' ला बन्द करता आले नाही,  बहुदा सर्व माहीती रक्षित झाली नसेल:%s"
+
+#~ msgid "Insufficient memory to save image into a buffer"
+#~ msgstr "प्रतिमा बफरमध्ये सुरक्षित करण्यासाठी अपुरी स्मृती"
+
+#~ msgid "Error writing to image stream"
+#~ msgstr "प्रतिमा स्ट्रीम करीता लिहीतेवेळी त्रुटी आढळली"
+
+#~ msgid ""
+#~ "Internal error: Image loader module '%s' failed to complete an operation, "
+#~ "but didn't give a reason for the failure"
+#~ msgstr ""
+#~ "अंतर्गत चूक: प्रतिमा लोडर माड्यूल '%s' संक्रिया पूर्ण करू शकला नाही, परंतू याचे कारण "
+#~ "दिलेले नाही"
+
+#~ msgid "Incremental loading of image type '%s' is not supported"
+#~ msgstr "प्रतिमा प्रकार '%s' चे वाढीव लोडिंग करण्यासाठी कोणतीही मदत नाही"
+
+#~ msgid "Image header corrupt"
+#~ msgstr "प्रतिमेची शिर्षक पट्टी भ्रष्ट आहे "
+
+#~ msgid "Image format unknown"
+#~ msgstr "प्रतिमेची रचना अपरिचीत आहे"
+
+#~ msgid "Image pixel data corrupt"
+#~ msgstr "प्रतिमेमधील चित्रकणविषयक माहिती दुषित आहे "
+
+#, fuzzy
+#~ msgid "failed to allocate image buffer of %u byte"
+#~ msgid_plural "failed to allocate image buffer of %u bytes"
+#~ msgstr[0] "फाइल रीड बफरकरीता %d बाईट्स्चे वाटप करण्यास अपयशी"
+#~ msgstr[1] "फाइल रीड बफरकरीता %d बाईट्स्चे वाटप करण्यास अपयशी"
+
+#~ msgid "Unexpected icon chunk in animation"
+#~ msgstr "एनिमेशनमध्ये अनपेक्षित चिन्ह चंक"
+
+#~ msgid "Unsupported animation type"
+#~ msgstr "असमर्थनीय एनिमेशन प्रकार"
+
+#~ msgid "Invalid header in animation"
+#~ msgstr "एनिमेशनमधील मथळा अयोग्य आहे"
+
+#~ msgid "Not enough memory to load animation"
+#~ msgstr "एनिमेशन भारीत करण्यासाठी पुरेशी स्मृती नाही"
+
+#~ msgid "Malformed chunk in animation"
+#~ msgstr "एनिमेशनमध्ये बिघडलेला चंक"
+
+#~ msgid "The ANI image format"
+#~ msgstr "ANI प्रतिमा स्वरूप"
+
+#~ msgid "BMP image has bogus header data"
+#~ msgstr "BMP प्रतिमेमध्ये असणाऱ्या शिर्षकपट्टी विषयीची माहीती खोटी आहे"
+
+#~ msgid "Not enough memory to load bitmap image"
+#~ msgstr "प्रतिमा उघडण्यासाठी पुरेशी जागा नाही"
+
+#~ msgid "BMP image has unsupported header size"
+#~ msgstr ""
+#~ "BMP प्रतीमेमध्ये असणाऱ्या शिर्षकपट्टी व्यतीरिक्त अन्य शिर्षकपट्या बनवता वाचता येणार "
+#~ "नाहीत"
+
+#~ msgid "Topdown BMP images cannot be compressed"
+#~ msgstr "टॉपडाउन BMP प्रतिमा संकुचित नाही करता येत"
+
+#~ msgid "Premature end-of-file encountered"
+#~ msgstr "फाइल अपूर्ण अवस्थेत बंद झाल्याचे नजरेस आले हे"
+
+#~ msgid "Couldn't allocate memory for saving BMP file"
+#~ msgstr "BMP फाइल सुरक्षित करण्यासाठी स्मृती राखू शकता आली नाही"
+
+#~ msgid "Couldn't write to BMP file"
+#~ msgstr "BMP फाइलमध्ये लिहिता आले नाही"
+
+#~ msgid "The BMP image format"
+#~ msgstr "BMP फाइल स्वरूप"
+
+#~ msgid "Failure reading GIF: %s"
+#~ msgstr "GIF %s मधील मजकूर वाचता येत नाहीः"
+
+#~ msgid "GIF file was missing some data (perhaps it was truncated somehow?)"
+#~ msgstr ""
+#~ "GIF फाइल मधील काही माहीती हरवली आहे (बहुदा ती माहीती अन्यत्र साठलेली असेल)"
+
+#~ msgid "Internal error in the GIF loader (%s)"
+#~ msgstr "GIF प्रतिमेमध्ये (%s) अंतर्गत त्रुटी आहेत"
+
+#~ msgid "Stack overflow"
+#~ msgstr "माहीती साठवण क्षमतेपेक्षा अधिक आहे"
+
+#~ msgid "GIF image loader cannot understand this image."
+#~ msgstr "GIF प्रतिमा भारक ही प्रतिमा समजू शकत नाही."
+
+#~ msgid "Bad code encountered"
+#~ msgstr "सदोष सुत्रे मिळाली"
+
+#~ msgid "Circular table entry in GIF file"
+#~ msgstr "GIF फाइल मध्ये वर्तुळाकार तक्त्याची नोंद आहे"
+
+#~ msgid "Not enough memory to load GIF file"
+#~ msgstr "GIF फाइलसाठी पुरेशी स्मरणशक्ती उपलब्ध नाही"
+
+#~ msgid "Not enough memory to composite a frame in GIF file"
+#~ msgstr "GIF फाइलमध्ये चौकट बसवण्यासाठी पुरेशी स्मृती नाही"
+
+#~ msgid "GIF image is corrupt (incorrect LZW compression)"
+#~ msgstr "GIF प्रतिमा खराब आहे  (चुकीचे  LZW संक्षेप )"
+
+#~ msgid "File does not appear to be a GIF file"
+#~ msgstr "ही फाइल GIF फाइल वाटत नाही "
+
+#~ msgid "Version %s of the GIF file format is not supported"
+#~ msgstr "GIF फाइल मधील %s भागाला समर्थन नाही"
+
+#~ msgid ""
+#~ "GIF image has no global colormap, and a frame inside it has no local "
+#~ "colormap."
+#~ msgstr ""
+#~ "GIF प्रतिमेमध्ये व्यापक रंगसंगती नाही आणि चित्रामधील चौकटीत स्थानिकरंगसंगती उपलब्ध "
+#~ "नाहीत."
+
+#~ msgid "GIF image was truncated or incomplete."
+#~ msgstr "GIF प्रतिमा अपूर्ण किंवा सदोष होते."
+
+#~ msgid "The GIF image format"
+#~ msgstr "GIF प्रतिमा स्वरूप"
+
+#~ msgid "Invalid header in icon"
+#~ msgstr "अक्षरमालिकेतील शिर्षकपट्टी अयोग्य आहे"
+
+#~ msgid "Not enough memory to load icon"
+#~ msgstr "चिन्ह भारित करण्यासाठी पुरेशी स्मृती नाही"
+
+#~ msgid "Icon has zero width"
+#~ msgstr "अक्षरमालिकेची रुंदी शुन्य आहे "
+
+#~ msgid "Icon has zero height"
+#~ msgstr "अक्षरमालिकेची उंची शुन्य आहे"
+
+#~ msgid "Compressed icons are not supported"
+#~ msgstr ""
+#~ "संक्षेपित अक्षरमालिकेतील अक्षरांना मदत नसल्यामुळे त्या मालिकेचा वापर करता येनार नाही"
+
+#~ msgid "Unsupported icon type"
+#~ msgstr "या प्रकारच्या अक्षरमालिकेचा वापर केला जाऊ शकत नाही"
+
+#~ msgid "Not enough memory to load ICO file"
+#~ msgstr "ICO फाइल सुरू करण्यासाठी पुरेशी स्मरणशक्ती उपलब्ध नाही"
+
+#~ msgid "Image too large to be saved as ICO"
+#~ msgstr "ICO प्रमाणे सुरक्षित करण्यासाठी प्रतिमा खूप मोठी आहे"
+
+#~ msgid "Cursor hotspot outside image"
+#~ msgstr "कर्सर हॉटस्पॉट प्रतिमे बाहेर"
+
+#~ msgid "Unsupported depth for ICO file: %d"
+#~ msgstr "ICO फाइलसाठी असमर्थनीय खोली: %d"
+
+#~ msgid "The ICO image format"
+#~ msgstr "ICO प्रतिमा स्वरूप"
+
+#~ msgid "Error reading ICNS image: %s"
+#~ msgstr "ICNS प्रतिमा वाचतेवेळी त्रुटी आढळली: %s"
+
+#~ msgid "Could not decode ICNS file"
+#~ msgstr "ICNS फाइल डीकोड करण्यास अपयशी"
+
+#~ msgid "The ICNS image format"
+#~ msgstr "ICNS प्रतिमा स्वरूपन"
+
+#~ msgid "Couldn't allocate memory for stream"
+#~ msgstr "स्ट्रीम करीता स्मृती वाटप करू शकले नाही"
+
+#~ msgid "Couldn't decode image"
+#~ msgstr "प्रतिमा डीकोड करू शकले नाही"
+
+#~ msgid "Transformed JPEG2000 has zero width or height"
+#~ msgstr "रूपांतरीत JPEG2000 ची रूंदी किंवा ऊंची शून्य आहे"
+
+#~ msgid "Image type currently not supported"
+#~ msgstr "प्रतिमा स्वरूपन वर्तमानक्षणी समर्थीत नाही"
+
+#~ msgid "Couldn't allocate memory for color profile"
+#~ msgstr "रंग प्रोफाइल करीता स्मृती वाटप करण्यास अपयशी"
+
+#~ msgid "Insufficient memory to open JPEG 2000 file"
+#~ msgstr "JPEG 2000 फाइल उघडण्यास अपुरे स्मृती आढळली"
+
+#~ msgid "Couldn't allocate memory to buffer image data"
+#~ msgstr "बफर प्रतिमा माहिती करीता स्मृती वाटप करण्यास अपयशी"
+
+#~ msgid "The JPEG 2000 image format"
+#~ msgstr "JPEG 2000 प्रतिमा स्वरूपन"
+
+#~ msgid "Error interpreting JPEG image file (%s)"
+#~ msgstr "JPEG फाइल (%s) मधील चित्रणाचा अर्थ/आशय कळण्यात चुक आढळते"
+
+#~ msgid ""
+#~ "Insufficient memory to load image, try exiting some applications to free "
+#~ "memory"
+#~ msgstr ""
+#~ "प्रतिमा सुरू करण्यासाठी पुरेशी स्मरणशक्ती नाही, त्यातील काही भाग काढून स्मरणशक्ती "
+#~ "वाढवावी"
+
+#~ msgid "Unsupported JPEG color space (%s)"
+#~ msgstr "असमर्थनीय JPEG रंग अंतराळ (%s)"
+
+#~ msgid "Couldn't allocate memory for loading JPEG file"
+#~ msgstr "JPEG मधील फाइल सुरु करण्यासाठी आवश्यक ती स्मरणशक्ती देता येत नाही"
+
+#~ msgid "Transformed JPEG has zero width or height."
+#~ msgstr "रूपांतरीत JPEG मधील ऊंची किंवा रुंदी शून्य आहे."
+
+#~ msgid ""
+#~ "JPEG quality must be a value between 0 and 100; value '%s' could not be "
+#~ "parsed."
+#~ msgstr ""
+#~ "JPEG ची  गुणवत्ता ० ते 1०0 दरम्यान असायला हवी; %s ची गुणवत्ता मोजली जाऊ शकत "
+#~ "नाही."
+
+#~ msgid ""
+#~ "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
+#~ msgstr "JPEG मधील गुणवत्ता किंमत  ० ते 1०0 दरम्यान असायला हवी; '%d' वैध नाही."
+
+#~ msgid "The JPEG image format"
+#~ msgstr "JPEG प्रतिमा स्वरूप"
+
+#~ msgid "Couldn't allocate memory for header"
+#~ msgstr "मथळ्यासाठी स्मृती राखू शकता आली नाही"
+
+#~ msgid "Couldn't allocate memory for context buffer"
+#~ msgstr "संदर्भ बफरसाठी स्मृती राखता आली नाही"
+
+#~ msgid "Image has invalid width and/or height"
+#~ msgstr "प्रतिमेची रूंदी आणि/किंवा उंची अवैध आहे"
+
+#~ msgid "Image has unsupported bpp"
+#~ msgstr "प्रतिमेत असमर्थनीय bpp आहेत"
+
+#~ msgid "Image has unsupported number of %d-bit planes"
+#~ msgstr "प्रतिमेत %d-bit  प्रतलांची असमर्थनीय संख्या आहे"
+
+#~ msgid "Couldn't create new pixbuf"
+#~ msgstr "नविन Pixbuf निर्माण करता येत नाही"
+
+#~ msgid "Couldn't allocate memory for line data"
+#~ msgstr "लाइन डेटासाठी स्मृती राखता आली नाही"
+
+#~ msgid "Couldn't allocate memory for paletted data"
+#~ msgstr "पॅलेटेड डेटासाठी स्मृती राखता आली नाही"
+
+#~ msgid "Didn't get all lines of PCX image"
+#~ msgstr "PCX प्रतिमेच्या सर्व ओळी मिळाल्या नाहीत"
+
+#~ msgid "No palette found at end of PCX data"
+#~ msgstr "PCX डेटाच्या शेवटी पॅलेट डेटा सापडला नाही"
+
+#~ msgid "The PCX image format"
+#~ msgstr "PCX प्रतिमा स्वरूप"
+
+#~ msgid "Bits per channel of PNG image is invalid."
+#~ msgstr "PNG चित्रामधील प्रती ओळीतील कणसमुहांची(बिट्स) संख्या अवैध आहे."
+
+#~ msgid "Transformed PNG has zero width or height."
+#~ msgstr "परिवर्तित PNG मधील ऊंची  किंवा रुंदी शुन्य आहे."
+
+#~ msgid "Bits per channel of transformed PNG is not 8."
+#~ msgstr ""
+#~ "परिवर्तित PNG चित्रामधील प्रती ओळीतील कणसमुहांची(बिट्स) 8 ही संख्या अवैध  आहे."
+
+#~ msgid "Transformed PNG not RGB or RGBA."
+#~ msgstr "परिवर्तित PNG, हे प्रतिमा RGB किंवा RGBA प्रतिमा नाही."
+
+#~ msgid "Transformed PNG has unsupported number of channels, must be 3 or 4."
+#~ msgstr ""
+#~ "परिवर्तित PNG प्रतिमेमधील ओळींमधे समर्थन नसनार्या ओळी आहेत, त्या 3 किंवा 4 असाव्यात."
+
+#~ msgid "Fatal error in PNG image file: %s"
+#~ msgstr "PNG प्रतिमा %s फाइल मध्ये  घातक त्रुटी आहेः"
+
+#~ msgid "Insufficient memory to load PNG file"
+#~ msgstr "PNG फाइल सुरु करण्यासाठी पुरेशी स्मरणशक्ती नाही"
+
+#~ msgid ""
+#~ "Insufficient memory to store a %ld by %ld image; try exiting some "
+#~ "applications to reduce memory usage"
+#~ msgstr ""
+#~ "%ld x %ld आकाराचे प्रतिमा साठविण्यासाठी पुरेशी स्मरणशक्ती नाही; नको असणाऱ्या "
+#~ "बाबीकाढून उपलब्ध स्मरणशक्तीचा साठा वाढवा"
+
+#~ msgid "Fatal error reading PNG image file"
+#~ msgstr "PNG प्रतिमेची फाइल वाचताना घातक चुक झाली आहे"
+
+#~ msgid "Fatal error reading PNG image file: %s"
+#~ msgstr "PNG प्रतिमा फाइल वाचतेवेळी त्रुटी आढळली: %s"
+
+#~ msgid ""
+#~ "Keys for PNG text chunks must have at least 1 and at most 79 characters."
+#~ msgstr "PNG पाठ चंकसाठी कळा किमान 1 आणि कमाल 7९ अक्षरी असाव्यात."
+
+#~ msgid "Keys for PNG text chunks must be ASCII characters."
+#~ msgstr "PNG पाठ चंकसाठी कळा ASCII अक्षरांच्याच असाव्यात."
+
+#~ msgid "Color profile has invalid length %d."
+#~ msgstr "रंग प्रोफाइलची अवैध लांबी %d."
+
+#~ msgid ""
+#~ "PNG compression level must be a value between 0 and 9; value '%s' could "
+#~ "not be parsed."
+#~ msgstr ""
+#~ "PNG संकुचन स्तराचे मुल्य 0 ते 9 च्या दरम्यानच असायला हवे; मुल्य '%s' विश्लेषित केले जाऊ "
+#~ "शकत नाही."
+
+#~ msgid ""
+#~ "PNG compression level must be a value between 0 and 9; value '%d' is not "
+#~ "allowed."
+#~ msgstr ""
+#~ "PNG संकुचन स्तराचे मुल्य 0 ते 9 च्या दरम्यानच असायला हवे; मुल्य '%d' अनुमत केलेलेनाही."
+
+#~ msgid ""
+#~ "Value for PNG text chunk %s cannot be converted to ISO-8859-1 encoding."
+#~ msgstr "PNG पाठ चंक %s चे मुल्य ISO-8859-1 एनकोडिंगमध्ये परिवर्तीत केले जाऊ शकत नाही."
+
+#~ msgid "The PNG image format"
+#~ msgstr "PNM प्रतिमा स्वरूप"
+
+#~ msgid "PNM loader expected to find an integer, but didn't"
+#~ msgstr "PNM लोडर ला एक पूर्णांक संख्या पाहीजे, जी आढळली नाही"
+
+#~ msgid "PNM file has an incorrect initial byte"
+#~ msgstr "PNM फाइल मध्ये प्रारंभिक बाइट चुकीचा आहे"
+
+#~ msgid "PNM file is not in a recognized PNM subformat"
+#~ msgstr "PNM फाइल ही  योग्य PNM उपरचनेत  नाही"
+
+#~ msgid "PNM file has an image width of 0"
+#~ msgstr "PNM फाइलमधील प्रतिमेची रुंदी शून्य आहे "
+
+#~ msgid "PNM file has an image height of 0"
+#~ msgstr "PNM फाइल मधल्या प्रतिमेची उंची शून्य आहे"
+
+#~ msgid "Maximum color value in PNM file is 0"
+#~ msgstr "PNM फाइल मध्ये  रंगाची  कमाल संख्या 0 आहे "
+
+#~ msgid "Maximum color value in PNM file is too large"
+#~ msgstr "PNM फाइल मध्ये  रंगाची  कमाल संख्या बरीच मोठी आहे"
+
+#~ msgid "Raw PNM image type is invalid"
+#~ msgstr " PNM प्रतिमेचा प्रकार अवैध आहे "
+
+#~ msgid "PNM image loader does not support this PNM subformat"
+#~ msgstr "PNM नामक ह्या चित्रासाठी PNM उरने च्या फाइलचा वापर करू शकत नाही"
+
+#~ msgid "Raw PNM formats require exactly one whitespace before sample data"
+#~ msgstr " PNM कच्या फाइल मधील शब्दांमध्ये योग्य रिक्त जागा असाव्यात"
+
+#~ msgid "Cannot allocate memory for loading PNM image"
+#~ msgstr "PNM प्रतिमा भारित करण्यासाठी स्मृती राखता येत नाही"
+
+#~ msgid "Insufficient memory to load PNM context struct"
+#~ msgstr "PNM संरचनेसाठी पुरेशी जागा नाही"
+
+#~ msgid "Unexpected end of PNM image data"
+#~ msgstr "PNM प्रतिमेतील माहीतीचा अनपेक्षित शेवट झाला"
+
+#~ msgid "Insufficient memory to load PNM file"
+#~ msgstr "PNM फाइल सुरू करण्याकरीता पुरेशी जागा नाही"
+
+#~ msgid "The PNM/PBM/PGM/PPM image format family"
+#~ msgstr "PNM/PBM/PGM/PPM प्रतिमा स्वरूप परिवार"
+
+#~ msgid "Input file descriptor is NULL."
+#~ msgstr "इंपुट फाइल डिस्क्रीप्टर NULL आहे."
+
+#~ msgid "Failed to read QTIF header"
+#~ msgstr "QTIF हेड्डर वाचण्यास अपयशी"
+
+#~ msgid "QTIF atom size too large (%d bytes)"
+#~ msgstr "QTIF ऍटम आकार खूप मोठे आहे (%d बाईट्स्)"
+
+#~ msgid "Failed to allocate %d bytes for file read buffer"
+#~ msgstr "फाइल रीड बफरकरीता %d बाईट्स्चे वाटप करण्यास अपयशी"
+
+#~ msgid "File error when reading QTIF atom: %s"
+#~ msgstr "QTIF atom वाचतेवेळी फाइल त्रुटी: %s"
+
+#~ msgid "Failed to skip the next %d bytes with seek()."
+#~ msgstr "पुढचे %d बाईट्स् seek() सह वगळण्यास अपयशी."
+
+#~ msgid "Failed to allocate QTIF context structure."
+#~ msgstr "QTIF कंटेक्स्ट स्ट्रक्चरचे वाटप करण्यास अपयशी."
+
+#~ msgid "Failed to create GdkPixbufLoader object."
+#~ msgstr "GdkPixbufLoader ऑब्जेक्ट निर्माण करण्यास अपयशी."
+
+#~ msgid "Failed to find an image data atom."
+#~ msgstr "प्रतिमा डाटा ऍटम शोधण्यास अपयशी."
+
+#~ msgid "The QTIF image format"
+#~ msgstr "QTIF प्रतिमा रूपण"
+
+#~ msgid "RAS image has bogus header data"
+#~ msgstr "RAS प्रतिमेतील शिर्षकपट्टीतील माहीती खोटी आहे"
+
+#~ msgid "RAS image has unknown type"
+#~ msgstr " RAS प्रतिमा अपरिचीत आहे"
+
+#~ msgid "unsupported RAS image variation"
+#~ msgstr "RAS  प्रतिमेमध्ये असणारा बदल विना आधार आहे"
+
+#~ msgid "Not enough memory to load RAS image"
+#~ msgstr "RAS प्रतिमा सुरू करण्याकरीता पुरेशी जागा देता येत नाही"
+
+#~ msgid "The Sun raster image format"
+#~ msgstr "Sun रास्टर प्रतिमा स्वरूप"
+
+#~ msgid "Cannot allocate memory for IOBuffer struct"
+#~ msgstr "IOBuffer struct साठी स्मृती राखू शकत नाही"
+
+#~ msgid "Cannot allocate memory for IOBuffer data"
+#~ msgstr "IOBuffer डेटा साठी स्मृती राखू शकत नाही"
+
+#~ msgid "Cannot realloc IOBuffer data"
+#~ msgstr "IOBuffer डेटासाठी स्मृती पुन्हा राखता येत नाही"
+
+#~ msgid "Cannot allocate temporary IOBuffer data"
+#~ msgstr "तात्पुरत्या IO Buffer डेटासाठी स्मृती राखता येत नाही"
+
+#~ msgid "Cannot allocate new pixbuf"
+#~ msgstr "नविन  Pixbuf साठी स्मृती राखता येत नाही"
+
+#~ msgid "Image is corrupted or truncated"
+#~ msgstr "प्रतिमा दोषीत किंवा ट्रंकेटेड आहे"
+
+#~ msgid "Cannot allocate colormap structure"
+#~ msgstr "colormap structure साठी स्मृती राखता येत नाही"
+
+#~ msgid "Cannot allocate colormap entries"
+#~ msgstr "colormap प्रविष्टांसाठी स्मृती राखता येत नाही"
+
+#~ msgid "Unexpected bitdepth for colormap entries"
+#~ msgstr "उपलब्द रंगांच्या प्रारंभी अनपेक्षित खोलीच्या अक्षरमालीका दिसते"
+
+#~ msgid "Cannot allocate TGA header memory"
+#~ msgstr "TGA मथळा स्मृती राखता येत नाही"
+
+#~ msgid "TGA image has invalid dimensions"
+#~ msgstr "TGA प्रतिमेमध्ये अवैध रूपे आहेत "
+
+#~ msgid "TGA image type not supported"
+#~ msgstr "TGA प्रकारच्या प्रतिमे ला आधार नाही"
+
+#~ msgid "Cannot allocate memory for TGA context struct"
+#~ msgstr "TGA संदर्भ struct साठी स्मृती राखू शकत नाही"
+
+#~ msgid "Excess data in file"
+#~ msgstr "फाइलमधील अतिरीक्त माहिती"
+
+#~ msgid "The Targa image format"
+#~ msgstr "Targa प्रतिमा स्वरूप"
+
+#~ msgid "Could not get image width (bad TIFF file)"
+#~ msgstr "प्रतिमेची रुंदी आढळली नाही (TIFF फाइल प्रदुषित आहे)"
+
+#~ msgid "Could not get image height (bad TIFF file)"
+#~ msgstr " प्रतिमेची ऊंची  आढळली नाही(TIFF फाइल प्रदुषित आहे)"
+
+#~ msgid "Width or height of TIFF image is zero"
+#~ msgstr "TIFF प्रतिमेची रुंदी किंवा ऊंची शून्य आहे "
+
+#~ msgid "Dimensions of TIFF image too large"
+#~ msgstr "TIFF प्रतिमेची रुपे बरीच मोठी आहेत"
+
+#~ msgid "Insufficient memory to open TIFF file"
+#~ msgstr "TIFF फाइल उघडण्यासाठी जागा अपुरी आहे"
+
+#~ msgid "Failed to load RGB data from TIFF file"
+#~ msgstr "TIFF फाइल मधून  RGB माहीती सुरू करण्यात असफल"
+
+#~ msgid "Failed to open TIFF image"
+#~ msgstr "TIFF प्रतिमा उघडण्यात असफल"
+
+#~ msgid "TIFFClose operation failed"
+#~ msgstr "TIFFClose ही क्रिया असफल"
+
+#~ msgid "Failed to load TIFF image"
+#~ msgstr "TIFF प्रतिमा सुरु करण्यात असफल"
+
+#~ msgid "Failed to save TIFF image"
+#~ msgstr "TIFF प्रतिमा सुरक्षित करण्यात असफल"
+
+#~ msgid "TIFF compression doesn't refer to a valid codec."
+#~ msgstr "TIFF संकोचन वैध कोडेककरीता संदर्भ पुरवत नाही."
+
+#~ msgid "Failed to write TIFF data"
+#~ msgstr "TIFF डेटा लिहीण्यास असफल"
+
+#~ msgid "Couldn't write to TIFF file"
+#~ msgstr "TIFF फाइलवर लिहीता आले नाही"
+
+#~ msgid "The TIFF image format"
+#~ msgstr "TIFF प्रतिमा स्वरूप"
+
+#~ msgid "Image has zero width"
+#~ msgstr "प्रतिमेची रुंदी शून्य आहे"
+
+#~ msgid "Image has zero height"
+#~ msgstr "प्रतिमेची ऊंची शून्य आहे"
+
+#~ msgid "Not enough memory to load image"
+#~ msgstr "प्रतिमा सुरु करण्यासाठी पुरेशी जागा नाही"
+
+#~ msgid "Couldn't save the rest"
+#~ msgstr "उर्वरीत (माहीती) साठवता येऊ शकली नाही "
+
+#~ msgid "The WBMP image format"
+#~ msgstr "WBMP प्रतिमा स्वरूप"
+
+#~ msgid "Invalid XBM file"
+#~ msgstr "अवैध XBM फाइल"
+
+#~ msgid "Insufficient memory to load XBM image file"
+#~ msgstr "XBM प्रतिमेची फाइल सुरू करण्यासाठी पुरेशी जागा नाही"
+
+#~ msgid "Failed to write to temporary file when loading XBM image"
+#~ msgstr "XBM प्रतिमा फाइल सुरु करताना तात्पुरत्या फाइलमध्ये लेखन करतेवेळी असफल"
+
+#~ msgid "The XBM image format"
+#~ msgstr "XBM प्रतिमा स्वरूप"
+
+#~ msgid "No XPM header found"
+#~ msgstr "XPM मथळा सापडला नाही"
+
+#~ msgid "Invalid XPM header"
+#~ msgstr "अवैध XPM मथळा"
+
+#~ msgid "XPM file has image width <= 0"
+#~ msgstr "XPM प्रतिमा फाइलची रुंदी <= 0 आहे"
+
+#~ msgid "XPM file has image height <= 0"
+#~ msgstr "XPM प्रतिमा फाइलची ऊंची  <= 0 आहे"
+
+#~ msgid "XPM has invalid number of chars per pixel"
+#~ msgstr "XPM फाइलमध्ये प्रति ओळीतील अक्षर संख्या अवैध आहे "
+
+#~ msgid "XPM file has invalid number of colors"
+#~ msgstr "XPM फाइल मध्ये रंगांची संख्या अवैध आहे"
+
+#~ msgid "Cannot allocate memory for loading XPM image"
+#~ msgstr "XPM प्रतिमा भारित करण्यासाठी स्मृती राखू शकत नाही"
+
+#~ msgid "Cannot read XPM colormap"
+#~ msgstr "XPM colormap वाचता येत नाही"
+
+#~ msgid "Failed to write to temporary file when loading XPM image"
+#~ msgstr "XPM प्रतिमा सुरु करताना तात्पुरत्या फाइल मध्ये लेखन करण्यास असफल"
+
+#~ msgid "The XPM image format"
+#~ msgstr "XPM प्रतिमा स्वरूप"
+
+#~ msgid "The EMF image format"
+#~ msgstr "EMF प्रतिमा स्वरूप"
+
+#~ msgid "Could not allocate memory: %s"
+#~ msgstr "स्मृती वाटप करू शकत नाही: %s"
+
+#~ msgid "Could not create stream: %s"
+#~ msgstr "स्ट्रीम बनवू शकत नाही: %s"
+
+#~ msgid "Could not seek stream: %s"
+#~ msgstr "माहिती ते स्ट्रीम रूपांतर अपयशी: %s"
+
+#~ msgid "Could not read from stream: %s"
+#~ msgstr "स्ट्रीम पासून वाचण्यास अपयशी: %s"
+
+#~ msgid "Couldn't load bitmap"
+#~ msgstr "bitmap दाखल करू शकले नाही"
+
+#~ msgid "Couldn't load metafile"
+#~ msgstr "मेटाफाइल दाखल करू शकले नाही"
+
+#~ msgid "Unsupported image format for GDI+"
+#~ msgstr "GDI+ करीता असमर्थीत प्रतिमा प्रकार"
+
+#~ msgid "Couldn't save"
+#~ msgstr "संचयीत करू शकले नाही"
+
+#~ msgid "The WMF image format"
+#~ msgstr "WMF प्रतिमा स्वरूपन"
+
+#~ msgid "\"Deepness\" of the color."
+#~ msgstr "रंगाचा \"गडदपणा\"."
+
+#~ msgid "Error printing"
+#~ msgstr "छापण्यात चूक"
+
+#~ msgid "Printer '%s' may not be connected."
+#~ msgstr "छपाईयंत्र '%s' जुळलेले नसावे."
 
 #~ msgid "Folders"
 #~ msgstr "फोल्डरस्"

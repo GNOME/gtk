@@ -26,6 +26,19 @@
 
 G_BEGIN_DECLS
 
+/* NSInteger only exists in Leopard and newer.  This check has to be
+ * done after inclusion of the system headers.  If NSInteger has not
+ * been defined, we know for sure that we are on 32-bit.
+ */
+#ifndef NSINTEGER_DEFINED
+typedef int NSInteger;
+typedef unsigned int NSUInteger;
+#endif
+
+#ifndef CGFLOAT_DEFINED
+typedef float CGFloat;
+#endif
+
 NSWindow *gdk_quartz_window_get_nswindow                        (GdkWindow      *window);
 NSView   *gdk_quartz_window_get_nsview                          (GdkWindow      *window);
 NSImage  *gdk_quartz_pixbuf_to_ns_image_libgtk_only             (GdkPixbuf      *pixbuf);

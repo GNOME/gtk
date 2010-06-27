@@ -243,6 +243,24 @@ gdk_image_get_bits_per_pixel (GdkImage *image)
   return image->bits_per_pixel;
 }
 
+/**
+ * gdk_image_get_pixels:
+ * @image: a #GdkImage
+ *
+ * Returns a pointer to the pixel data of the image.
+ *
+ * Returns: the pixel data of the image
+ *
+ * Since: 2.22
+ */
+gpointer
+gdk_image_get_pixels (GdkImage *image)
+{
+  g_return_val_if_fail (GDK_IS_IMAGE (image), NULL);
+
+  return image->mem;
+}
+
 /* We have N_REGION GDK_SCRATCH_IMAGE_WIDTH x GDK_SCRATCH_IMAGE_HEIGHT regions divided
  * up between n_images different images. possible_n_images gives
  * various divisors of N_REGIONS. The reason for allowing this

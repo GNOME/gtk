@@ -9,10 +9,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gtk+ 2.15.3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-05-25 20:10-0400\n"
+"POT-Creation-Date: 2010-06-26 23:16-0400\n"
 "PO-Revision-Date: 2010-03-22 23:18+0930\n"
 "Last-Translator: Clytie Siddall <clytie@riverland.net.au>\n"
 "Language-Team: Vietnamese <vi-VN@googlegroups.com>\n"
+"Language: vi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -78,7 +79,7 @@ msgstr "Những cờ gỡ lỗi Gdk cần đặt"
 #. Placeholder in --gdk-no-debug=FLAGS in --help output
 #. Placeholder in --gtk-debug=FLAGS in --help output
 #. Placeholder in --gtk-no-debug=FLAGS in --help output
-#: gdk/gdk.c:165 gdk/gdk.c:168 gtk/gtkmain.c:454 gtk/gtkmain.c:457
+#: gdk/gdk.c:165 gdk/gdk.c:168 gtk/gtkmain.c:439 gtk/gtkmain.c:442
 msgid "FLAGS"
 msgstr "CỜ"
 
@@ -271,907 +272,6 @@ msgstr "KP_Delete"
 msgctxt "keyboard label"
 msgid "Delete"
 msgstr "Del"
-
-#: gdk-pixbuf/gdk-pixbuf-animation.c:133 gdk-pixbuf/gdk-pixbuf-io.c:982
-#: gdk-pixbuf/gdk-pixbuf-io.c:1242 tests/testfilechooser.c:222
-#, c-format
-msgid "Failed to open file '%s': %s"
-msgstr "Lỗi mở tập tin « %s »': %s"
-
-#: gdk-pixbuf/gdk-pixbuf-animation.c:146 gdk-pixbuf/gdk-pixbuf-io.c:994
-#, c-format
-msgid "Image file '%s' contains no data"
-msgstr "Tập tin ảnh « %s » không chứa dữ liệu nào"
-
-#: gdk-pixbuf/gdk-pixbuf-animation.c:188 gdk-pixbuf/gdk-pixbuf-io.c:1030
-#: gdk-pixbuf/gdk-pixbuf-io.c:1294 tests/testfilechooser.c:267
-#, c-format
-msgid ""
-"Failed to load image '%s': reason not known, probably a corrupt image file"
-msgstr "Lỗi tải tập tin ảnh « %s »: không biết sao, có lẽ tập tin ảnh bị hỏng"
-
-#: gdk-pixbuf/gdk-pixbuf-animation.c:221
-#, c-format
-msgid ""
-"Failed to load animation '%s': reason not known, probably a corrupt "
-"animation file"
-msgstr ""
-"Lỗi tải tập tin hoạt cảnh « %s »: không biết sao, có lẽ tập tin hoạt cảnh bị "
-"hỏng"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:715
-#, c-format
-msgid "Unable to load image-loading module: %s: %s"
-msgstr "Không thể tải mô-đun tải ảnh: %s: %s"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:730
-#, c-format
-msgid ""
-"Image-loading module %s does not export the proper interface; perhaps it's "
-"from a different GTK version?"
-msgstr ""
-"Mô-đun tải ảnh %s không xuất ra một giao diện thích hợp; có lẽ do từ một "
-"phiên bản khác của GTK?"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:739 gdk-pixbuf/gdk-pixbuf-io.c:790
-#, c-format
-msgid "Image type '%s' is not supported"
-msgstr "Không hỗ trợ kiểu ảnh « %s »"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:863
-#, c-format
-msgid "Couldn't recognize the image file format for file '%s'"
-msgstr "Không thể nhận ra dạng thức tập tin ảnh cho tập tin « %s »"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:871
-msgid "Unrecognized image file format"
-msgstr "Không nhận ra dạng thức tập tin ảnh"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:1039
-#, c-format
-msgid "Failed to load image '%s': %s"
-msgstr "Lỗi tải tập tin ảnh « %s »: %s"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:1673 gdk-pixbuf/io-gdip-utils.c:961
-#, c-format
-msgid "Error writing to image file: %s"
-msgstr "Gặp lỗi khi ghi vào tập tin ảnh: %s"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:1718 gdk-pixbuf/gdk-pixbuf-io.c:1848
-#, c-format
-msgid "This build of gdk-pixbuf does not support saving the image format: %s"
-msgstr "Bản xây dụng gdk-pixbuf này không hỗ trợ lưu dạng thức ảnh: %s"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:1752
-msgid "Insufficient memory to save image to callback"
-msgstr "Không đủ bộ nhớ để lưu tập tin ảnh vào khả năng gọi lại"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:1765
-msgid "Failed to open temporary file"
-msgstr "Lỗi mở tập tin tạm"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:1791
-msgid "Failed to read from temporary file"
-msgstr "Lỗi đọc từ tập tin tạm"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:2044
-#, c-format
-msgid "Failed to open '%s' for writing: %s"
-msgstr "Lỗi mở tập tin « %s » để ghi: %s"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:2070
-#, c-format
-msgid ""
-"Failed to close '%s' while writing image, all data may not have been saved: %"
-"s"
-msgstr "Lỗi đóng « %s » khi đang ghi ảnh, mọi dữ liệu có lẽ không được lưu: %s"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:2290 gdk-pixbuf/gdk-pixbuf-io.c:2341
-msgid "Insufficient memory to save image into a buffer"
-msgstr "Không đủ bộ nhớ để lưu ảnh vào bộ đệm"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:2387
-msgid "Error writing to image stream"
-msgstr "Gặp lỗi khi ghi vào luồng ảnh"
-
-#: gdk-pixbuf/gdk-pixbuf-loader.c:334
-#, c-format
-msgid ""
-"Internal error: Image loader module '%s' failed to complete an operation, "
-"but didn't give a reason for the failure"
-msgstr ""
-"Lỗi nội bộ : mô-đun tải ảnh « %s » đã không kết thúc thao tác, cũng không "
-"diễn tả sao"
-
-#: gdk-pixbuf/gdk-pixbuf-loader.c:376
-#, c-format
-msgid "Incremental loading of image type '%s' is not supported"
-msgstr "Không hỗ trợ tải từ từ kiểu ảnh « %s »"
-
-#: gdk-pixbuf/gdk-pixdata.c:147
-msgid "Image header corrupt"
-msgstr "Phần đầu của ảnh bị hỏng"
-
-#: gdk-pixbuf/gdk-pixdata.c:152
-msgid "Image format unknown"
-msgstr "Không biết dạng thức ảnh"
-
-#: gdk-pixbuf/gdk-pixdata.c:157 gdk-pixbuf/gdk-pixdata.c:488
-msgid "Image pixel data corrupt"
-msgstr "Dữ liệu điểm ảnh của ảnh bị hỏng"
-
-#: gdk-pixbuf/gdk-pixdata.c:432
-#, fuzzy, c-format
-msgid "failed to allocate image buffer of %u byte"
-msgid_plural "failed to allocate image buffer of %u bytes"
-msgstr[0] "Lỗi cấp phát %d byte cho vùng đệm đọc tập tin"
-
-#: gdk-pixbuf/io-ani.c:244
-msgid "Unexpected icon chunk in animation"
-msgstr "Gặp đoạn biểu tượng bất thường trong hoạt cảnh"
-
-#: gdk-pixbuf/io-ani.c:337
-msgid "Unsupported animation type"
-msgstr "Không hỗ trợ kiểu hoạt cảnh"
-
-#: gdk-pixbuf/io-ani.c:348 gdk-pixbuf/io-ani.c:406 gdk-pixbuf/io-ani.c:432
-#: gdk-pixbuf/io-ani.c:455 gdk-pixbuf/io-ani.c:482 gdk-pixbuf/io-ani.c:569
-msgid "Invalid header in animation"
-msgstr "Phần đầu không hợp lệ trong hoạt cảnh"
-
-#: gdk-pixbuf/io-ani.c:358 gdk-pixbuf/io-ani.c:380 gdk-pixbuf/io-ani.c:464
-#: gdk-pixbuf/io-ani.c:491 gdk-pixbuf/io-ani.c:542 gdk-pixbuf/io-ani.c:614
-msgid "Not enough memory to load animation"
-msgstr "Không đủ bộ nhớ để tải hoạt cảnh"
-
-#: gdk-pixbuf/io-ani.c:398 gdk-pixbuf/io-ani.c:424 gdk-pixbuf/io-ani.c:443
-msgid "Malformed chunk in animation"
-msgstr "Đoạn dạng sai trong hoạt cảnh"
-
-#: gdk-pixbuf/io-ani.c:711
-msgid "The ANI image format"
-msgstr "Dạng thức ảnh ANI"
-
-#: gdk-pixbuf/io-bmp.c:230 gdk-pixbuf/io-bmp.c:267 gdk-pixbuf/io-bmp.c:338
-#: gdk-pixbuf/io-bmp.c:370 gdk-pixbuf/io-bmp.c:393 gdk-pixbuf/io-bmp.c:496
-msgid "BMP image has bogus header data"
-msgstr "Ảnh BMP có dữ liệu phần đầu giả"
-
-#: gdk-pixbuf/io-bmp.c:241 gdk-pixbuf/io-bmp.c:433
-msgid "Not enough memory to load bitmap image"
-msgstr "Không đủ bộ nhớ để tải ảnh mảng"
-
-#: gdk-pixbuf/io-bmp.c:319
-msgid "BMP image has unsupported header size"
-msgstr "Ảnh BMP có kích thước phần đầu không được hỗ trợ"
-
-#: gdk-pixbuf/io-bmp.c:357
-msgid "Topdown BMP images cannot be compressed"
-msgstr "Không thể nén ảnh BMP kiểu đầu xuống"
-
-#: gdk-pixbuf/io-bmp.c:717 gdk-pixbuf/io-pnm.c:709
-msgid "Premature end-of-file encountered"
-msgstr "Gặp kết thúc tập tin quá sớm"
-
-#: gdk-pixbuf/io-bmp.c:1329
-msgid "Couldn't allocate memory for saving BMP file"
-msgstr "Không thể cấp phát bộ nhớ để lưu tập tin BMP"
-
-#: gdk-pixbuf/io-bmp.c:1370
-msgid "Couldn't write to BMP file"
-msgstr "Không thể ghi vào tập tin BMP"
-
-#: gdk-pixbuf/io-bmp.c:1423 gdk-pixbuf/io-gdip-bmp.c:82
-msgid "The BMP image format"
-msgstr "Dạng thức ảnh BMP"
-
-#: gdk-pixbuf/io-gif.c:222
-#, c-format
-msgid "Failure reading GIF: %s"
-msgstr "Lỗi đọc tập tin dạng GIF: %s"
-
-#: gdk-pixbuf/io-gif.c:496 gdk-pixbuf/io-gif.c:1481 gdk-pixbuf/io-gif.c:1642
-msgid "GIF file was missing some data (perhaps it was truncated somehow?)"
-msgstr ""
-"Tập tin GIF thiếu một vài dữ liệu (có lẽ tập tin đã bị cắt bớt bằng cách "
-"nào?)"
-
-#: gdk-pixbuf/io-gif.c:505
-#, c-format
-msgid "Internal error in the GIF loader (%s)"
-msgstr "Lỗi nội bộ trong bộ tải tập tin dạng GIF (%s)"
-
-#: gdk-pixbuf/io-gif.c:579
-msgid "Stack overflow"
-msgstr "Tràn đống"
-
-#: gdk-pixbuf/io-gif.c:639
-msgid "GIF image loader cannot understand this image."
-msgstr "Bộ tải tập tin GIF không thể hiểu ảnh này."
-
-#: gdk-pixbuf/io-gif.c:668
-msgid "Bad code encountered"
-msgstr "Phát hiện mã sai"
-
-#: gdk-pixbuf/io-gif.c:678
-msgid "Circular table entry in GIF file"
-msgstr "Mục nhập bảng kiểu tròn trong tập tin GIF"
-
-#: gdk-pixbuf/io-gif.c:866 gdk-pixbuf/io-gif.c:1468 gdk-pixbuf/io-gif.c:1515
-#: gdk-pixbuf/io-gif.c:1630
-msgid "Not enough memory to load GIF file"
-msgstr "Không đủ bộ nhớ để tải tập tin dạng GIF"
-
-#: gdk-pixbuf/io-gif.c:960
-msgid "Not enough memory to composite a frame in GIF file"
-msgstr "Không đủ bộ nhớ để tạo một khung trong tập tin dạng GIF"
-
-#: gdk-pixbuf/io-gif.c:1132
-msgid "GIF image is corrupt (incorrect LZW compression)"
-msgstr "Tập tin GIF bị hỏng (dữ liệu nén LZW sai)"
-
-#: gdk-pixbuf/io-gif.c:1182
-msgid "File does not appear to be a GIF file"
-msgstr "Tập tin này có vẻ không phải là tập tin dạng GIF"
-
-#: gdk-pixbuf/io-gif.c:1194
-#, c-format
-msgid "Version %s of the GIF file format is not supported"
-msgstr "Không hỗ trợ phiên bản %s của dạng thức tập tin GIF"
-
-#: gdk-pixbuf/io-gif.c:1303
-msgid ""
-"GIF image has no global colormap, and a frame inside it has no local "
-"colormap."
-msgstr ""
-"Ảnh GIF không có bảng màu toàn cục, và có một khung bên trong không có bảng "
-"màu cục bộ."
-
-#: gdk-pixbuf/io-gif.c:1537
-msgid "GIF image was truncated or incomplete."
-msgstr "Ảnh GIF bị cắt bớt hoặc không hoàn chỉnh."
-
-#: gdk-pixbuf/io-gif.c:1693 gdk-pixbuf/io-gdip-gif.c:80
-msgid "The GIF image format"
-msgstr "Dạng thức ảnh GIF"
-
-#: gdk-pixbuf/io-ico.c:211 gdk-pixbuf/io-ico.c:225 gdk-pixbuf/io-ico.c:277
-#: gdk-pixbuf/io-ico.c:290 gdk-pixbuf/io-ico.c:359
-msgid "Invalid header in icon"
-msgstr "Phần đầu không hợp lệ trong biểu tượng"
-
-#: gdk-pixbuf/io-ico.c:240 gdk-pixbuf/io-ico.c:300 gdk-pixbuf/io-ico.c:369
-#: gdk-pixbuf/io-ico.c:432 gdk-pixbuf/io-ico.c:462
-msgid "Not enough memory to load icon"
-msgstr "Không đủ bộ nhớ để tải biểu tượng"
-
-#: gdk-pixbuf/io-ico.c:322
-msgid "Icon has zero width"
-msgstr "Biểu tượng có bề rộng bằng không"
-
-#: gdk-pixbuf/io-ico.c:332
-msgid "Icon has zero height"
-msgstr "Biểu tượng có bề cao bằng không"
-
-#: gdk-pixbuf/io-ico.c:384
-msgid "Compressed icons are not supported"
-msgstr "Không hỗ trợ biểu tượng đã nén"
-
-#: gdk-pixbuf/io-ico.c:417
-msgid "Unsupported icon type"
-msgstr "Không hỗ trợ kiểu biểu tượng này"
-
-#: gdk-pixbuf/io-ico.c:511
-msgid "Not enough memory to load ICO file"
-msgstr "Không đủ bộ nhớ để tải tập tin ICO"
-
-#: gdk-pixbuf/io-ico.c:976
-msgid "Image too large to be saved as ICO"
-msgstr "Ảnh quá lớn để lưu dạng ICO"
-
-#: gdk-pixbuf/io-ico.c:987
-msgid "Cursor hotspot outside image"
-msgstr "Điểm nóng con trỏ nằm ngoài ảnh"
-
-#: gdk-pixbuf/io-ico.c:1010
-#, c-format
-msgid "Unsupported depth for ICO file: %d"
-msgstr "Hỗ trợ độ sâu này cho tập tin ICO: %d"
-
-#: gdk-pixbuf/io-ico.c:1245 gdk-pixbuf/io-gdip-ico.c:59
-msgid "The ICO image format"
-msgstr "Dạng thức ảnh ICO"
-
-#: gdk-pixbuf/io-icns.c:347
-#, c-format
-msgid "Error reading ICNS image: %s"
-msgstr "Lỗi đọc ảnh ICNS: %s"
-
-#: gdk-pixbuf/io-icns.c:364
-msgid "Could not decode ICNS file"
-msgstr "Không thể giải mã tập tin ICNS"
-
-#: gdk-pixbuf/io-icns.c:397
-msgid "The ICNS image format"
-msgstr "Dạng thức ảnh ICNS"
-
-#: gdk-pixbuf/io-jasper.c:75
-msgid "Couldn't allocate memory for stream"
-msgstr "Không thể cấp phát bộ nhớ cho luồng"
-
-#: gdk-pixbuf/io-jasper.c:105
-msgid "Couldn't decode image"
-msgstr "Không thể giải mã ảnh"
-
-#: gdk-pixbuf/io-jasper.c:123
-msgid "Transformed JPEG2000 has zero width or height"
-msgstr "Ảnh JPEG2000 đã được chuyển đổi có chiều rộng/cao bằng không"
-
-#: gdk-pixbuf/io-jasper.c:137
-msgid "Image type currently not supported"
-msgstr "Loại ảnh hiện thời không hỗ trợ"
-
-#: gdk-pixbuf/io-jasper.c:149 gdk-pixbuf/io-jasper.c:157
-msgid "Couldn't allocate memory for color profile"
-msgstr "Không thể cấp phát bộ nhớ cho hồ sơ màu"
-
-#: gdk-pixbuf/io-jasper.c:183
-msgid "Insufficient memory to open JPEG 2000 file"
-msgstr "Không đủ bộ nhớ để mở tập tin JPEG 2000"
-
-#: gdk-pixbuf/io-jasper.c:262
-msgid "Couldn't allocate memory to buffer image data"
-msgstr "Không thể cấp phát bộ nhớ cho dữ liệu ảnh"
-
-#: gdk-pixbuf/io-jasper.c:306
-msgid "The JPEG 2000 image format"
-msgstr "Dạng thức ảnh JPEG 2000"
-
-#: gdk-pixbuf/io-jpeg.c:117
-#, c-format
-msgid "Error interpreting JPEG image file (%s)"
-msgstr "Gặp lỗi khi thông dịch tập tin ảnh JPEG (%s)"
-
-#: gdk-pixbuf/io-jpeg.c:528
-msgid ""
-"Insufficient memory to load image, try exiting some applications to free "
-"memory"
-msgstr ""
-"Không đủ bộ nhớ để tải ảnh, hãy thử thoát một vài ứng dụng để giải phóng bộ "
-"nhớ"
-
-#: gdk-pixbuf/io-jpeg.c:569 gdk-pixbuf/io-jpeg.c:775
-#, c-format
-msgid "Unsupported JPEG color space (%s)"
-msgstr "Không hỗ trợ vùng màu JPEG (%s)"
-
-#: gdk-pixbuf/io-jpeg.c:674 gdk-pixbuf/io-jpeg.c:944 gdk-pixbuf/io-jpeg.c:1177
-#: gdk-pixbuf/io-jpeg.c:1186
-msgid "Couldn't allocate memory for loading JPEG file"
-msgstr "Không thể cấp phát bộ nhớ để tải tập tin JPEG"
-
-#: gdk-pixbuf/io-jpeg.c:919
-msgid "Transformed JPEG has zero width or height."
-msgstr "Ảnh JPEG đã được chuyển đổi có chiều rộng/cao bằng không."
-
-#: gdk-pixbuf/io-jpeg.c:1133 gdk-pixbuf/io-gdip-jpeg.c:53
-#, c-format
-msgid ""
-"JPEG quality must be a value between 0 and 100; value '%s' could not be "
-"parsed."
-msgstr ""
-"Hệ số chất lượng của JPEG phải nằm trong khoảng 0 và 100; không thể phân "
-"tách giá trị « %s »."
-
-#: gdk-pixbuf/io-jpeg.c:1148 gdk-pixbuf/io-gdip-jpeg.c:68
-#, c-format
-msgid ""
-"JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
-msgstr ""
-"Hệ số chất lượng của JPEG phải nằm trong khoảng 0 và 100; không chấp nhận "
-"giá trị « %d »."
-
-#: gdk-pixbuf/io-jpeg.c:1310 gdk-pixbuf/io-gdip-jpeg.c:136
-msgid "The JPEG image format"
-msgstr "Dạng thức ảnh JPEG"
-
-#: gdk-pixbuf/io-pcx.c:187
-msgid "Couldn't allocate memory for header"
-msgstr "Không thể cấp phát bộ nhớ cho phần đầu"
-
-#: gdk-pixbuf/io-pcx.c:202 gdk-pixbuf/io-pcx.c:560
-msgid "Couldn't allocate memory for context buffer"
-msgstr "Không thể cấp phát bộ nhớ cho bộ đệm ngữ cảnh"
-
-#: gdk-pixbuf/io-pcx.c:601
-msgid "Image has invalid width and/or height"
-msgstr "Ảnh có độ cao/rộng không hợp lệ"
-
-#: gdk-pixbuf/io-pcx.c:613 gdk-pixbuf/io-pcx.c:674
-msgid "Image has unsupported bpp"
-msgstr "Không hỗ trợ bpp trong ảnh này"
-
-#: gdk-pixbuf/io-pcx.c:618 gdk-pixbuf/io-pcx.c:626
-#, c-format
-msgid "Image has unsupported number of %d-bit planes"
-msgstr "Không hỗ trợ số mặt phẳng %d-bit trong ảnh này"
-
-#: gdk-pixbuf/io-pcx.c:642
-msgid "Couldn't create new pixbuf"
-msgstr "Không thể tạo bộ đệm điểm ảnh mới"
-
-#: gdk-pixbuf/io-pcx.c:650
-msgid "Couldn't allocate memory for line data"
-msgstr "Không thể cấp phát bộ nhớ cho dữ liệu dòng"
-
-#: gdk-pixbuf/io-pcx.c:657
-msgid "Couldn't allocate memory for paletted data"
-msgstr "Không thể cấp phát bộ nhớ cho dữ liệu trong bảng chọn"
-
-#: gdk-pixbuf/io-pcx.c:704
-msgid "Didn't get all lines of PCX image"
-msgstr "Chưa lấy mọi dòng của ảnh dạng PCX"
-
-#: gdk-pixbuf/io-pcx.c:711
-msgid "No palette found at end of PCX data"
-msgstr "Không tìm thấy bảng chọn ở cuối dữ liệu PCX"
-
-#: gdk-pixbuf/io-pcx.c:756
-msgid "The PCX image format"
-msgstr "Dạng thức ảnh PCX"
-
-#: gdk-pixbuf/io-png.c:55
-msgid "Bits per channel of PNG image is invalid."
-msgstr "Số bit trên một kênh của ảnh PNG không là hợp lệ."
-
-#: gdk-pixbuf/io-png.c:136 gdk-pixbuf/io-png.c:642
-msgid "Transformed PNG has zero width or height."
-msgstr "Ảnh PNG đã được chuyển đổi có chiều rộng/cao bằng không."
-
-#: gdk-pixbuf/io-png.c:144
-msgid "Bits per channel of transformed PNG is not 8."
-msgstr "Số bit trên một kênh của ảnh PNG được chuyển đổi không bằng 8."
-
-#: gdk-pixbuf/io-png.c:153
-msgid "Transformed PNG not RGB or RGBA."
-msgstr "Ảnh PNG được chuyển đổi không phải là RGB cũng như RGBA."
-
-#: gdk-pixbuf/io-png.c:162
-msgid "Transformed PNG has unsupported number of channels, must be 3 or 4."
-msgstr ""
-"Ảnh PNG được chuyển đổi có số kênh không được hỗ trợ (phải bằng 3 hoặc 4)."
-
-#: gdk-pixbuf/io-png.c:183
-#, c-format
-msgid "Fatal error in PNG image file: %s"
-msgstr "Lỗi nghiêm trọng trong tập tin ảnh PNG: %s"
-
-#: gdk-pixbuf/io-png.c:316
-msgid "Insufficient memory to load PNG file"
-msgstr "Không đủ bộ nhớ để tải tập tin PNG"
-
-#: gdk-pixbuf/io-png.c:657
-#, c-format
-msgid ""
-"Insufficient memory to store a %ld by %ld image; try exiting some "
-"applications to reduce memory usage"
-msgstr ""
-"Không đủ bộ nhớ để lưu một ảnh có kích thước %ld vào %ld; hãy thử thoát một "
-"vài ứng dụng để giảm số lượng bộ nhớ được dùng"
-
-#: gdk-pixbuf/io-png.c:720
-msgid "Fatal error reading PNG image file"
-msgstr "Lỗi nghiêm trong khi đọc tập tin ảnh PNG"
-
-#: gdk-pixbuf/io-png.c:769
-#, c-format
-msgid "Fatal error reading PNG image file: %s"
-msgstr "Lỗi nghiêm trọng khi đọc tập tin ảnh PNG: %s"
-
-#: gdk-pixbuf/io-png.c:863
-msgid ""
-"Keys for PNG text chunks must have at least 1 and at most 79 characters."
-msgstr "Các khóa cho các đoạn PNG text phải có độ dài từ 1 đến 79 ký tự."
-
-#: gdk-pixbuf/io-png.c:872
-msgid "Keys for PNG text chunks must be ASCII characters."
-msgstr "Các khóa cho các đoạn PNG text phải là ký tự ASCII."
-
-#: gdk-pixbuf/io-png.c:886 gdk-pixbuf/io-tiff.c:738
-#, c-format
-msgid "Color profile has invalid length %d."
-msgstr "Hồ sơ màu sắc có chiều dài sai %d."
-
-#: gdk-pixbuf/io-png.c:899 gdk-pixbuf/io-gdip-png.c:56
-#, c-format
-msgid ""
-"PNG compression level must be a value between 0 and 9; value '%s' could not "
-"be parsed."
-msgstr ""
-"Mức nén PNG phải là giá trị nằm trong khoảng 0 và 9; không thể phân tách giá "
-"trị « %s »."
-
-#: gdk-pixbuf/io-png.c:912 gdk-pixbuf/io-gdip-png.c:68
-#, c-format
-msgid ""
-"PNG compression level must be a value between 0 and 9; value '%d' is not "
-"allowed."
-msgstr ""
-"Mức nén PNG phải là giá trị nằm trong khoảng 0 và 9; không cho phép giá trị « "
-"%d »."
-
-#: gdk-pixbuf/io-png.c:951
-#, c-format
-msgid "Value for PNG text chunk %s cannot be converted to ISO-8859-1 encoding."
-msgstr ""
-"Không thể chuyển đổi giá trị của đoạn chữ PNG %s sang bộ ký tự ISO-8859-1."
-
-#: gdk-pixbuf/io-png.c:1112 gdk-pixbuf/io-gdip-png.c:133
-msgid "The PNG image format"
-msgstr "Dạng thức ảnh PNG"
-
-#: gdk-pixbuf/io-pnm.c:250
-msgid "PNM loader expected to find an integer, but didn't"
-msgstr "Bộ tải ảnh PNM ngờ tìm một số nguyên, nhưng không tìm thấy"
-
-#: gdk-pixbuf/io-pnm.c:282
-msgid "PNM file has an incorrect initial byte"
-msgstr "Tập tin PNM có byte khởi đầu không đúng"
-
-#: gdk-pixbuf/io-pnm.c:312
-msgid "PNM file is not in a recognized PNM subformat"
-msgstr "Tập tin PNM không phải là dạng thức con PNM được công nhận"
-
-#: gdk-pixbuf/io-pnm.c:337
-msgid "PNM file has an image width of 0"
-msgstr "Tập tin PNM chứa ảnh có chiều rộng bằng không"
-
-#: gdk-pixbuf/io-pnm.c:358
-msgid "PNM file has an image height of 0"
-msgstr "Tập tin PNM chứa ảnh có chiều cao bằng không"
-
-#: gdk-pixbuf/io-pnm.c:381
-msgid "Maximum color value in PNM file is 0"
-msgstr "Giá trị màu tối đa trong tập tin PNM bằng không"
-
-#: gdk-pixbuf/io-pnm.c:389
-msgid "Maximum color value in PNM file is too large"
-msgstr "Giá trị màu tối đa trong tập tin PNM quá lớn"
-
-#: gdk-pixbuf/io-pnm.c:429 gdk-pixbuf/io-pnm.c:459 gdk-pixbuf/io-pnm.c:504
-msgid "Raw PNM image type is invalid"
-msgstr "Kiểu ảnh PNM thô không hợp lệ"
-
-#: gdk-pixbuf/io-pnm.c:654
-msgid "PNM image loader does not support this PNM subformat"
-msgstr "Bộ tải ảnh PNM không hỗ trợ dạng thức con này của PNM"
-
-#: gdk-pixbuf/io-pnm.c:741 gdk-pixbuf/io-pnm.c:968
-msgid "Raw PNM formats require exactly one whitespace before sample data"
-msgstr ""
-"Dạng thức ảnh PNM thô cần một và chỉ một khoảng trắng trước dữ liệu mẫu"
-
-#: gdk-pixbuf/io-pnm.c:768
-msgid "Cannot allocate memory for loading PNM image"
-msgstr "Không thể cấp phát bộ nhớ để tải ảnh PNM"
-
-#: gdk-pixbuf/io-pnm.c:818
-msgid "Insufficient memory to load PNM context struct"
-msgstr "Không đủ bộ nhớ để tải cấu trúc ngữ cảnh PNM"
-
-#: gdk-pixbuf/io-pnm.c:869
-msgid "Unexpected end of PNM image data"
-msgstr "Gặp kết thúc bất ngờ trong dữ liệu ảnh PNM"
-
-#: gdk-pixbuf/io-pnm.c:997
-msgid "Insufficient memory to load PNM file"
-msgstr "Không đủ bộ nhớ để tải tập tin PNM"
-
-#: gdk-pixbuf/io-pnm.c:1081
-msgid "The PNM/PBM/PGM/PPM image format family"
-msgstr "Họ dạng thức ảnh PNM/PBM/PGM/PPM"
-
-#: gdk-pixbuf/io-qtif.c:128
-msgid "Input file descriptor is NULL."
-msgstr "Tập tin đầu vào có bộ mô tả VÔ GIÁ TRỊ."
-
-#: gdk-pixbuf/io-qtif.c:143
-msgid "Failed to read QTIF header"
-msgstr "Lỗi đọc phần đầu QTIF"
-
-#: gdk-pixbuf/io-qtif.c:152 gdk-pixbuf/io-qtif.c:182 gdk-pixbuf/io-qtif.c:446
-#, c-format
-msgid "QTIF atom size too large (%d bytes)"
-msgstr "Atom QTIF có kích cỡ quá lớn (%d byte)"
-
-#: gdk-pixbuf/io-qtif.c:172
-#, c-format
-msgid "Failed to allocate %d bytes for file read buffer"
-msgstr "Lỗi cấp phát %d byte cho vùng đệm đọc tập tin"
-
-#: gdk-pixbuf/io-qtif.c:196
-#, c-format
-msgid "File error when reading QTIF atom: %s"
-msgstr "Gặp lỗi tập tin khi đọc atom QTIF: %s"
-
-#: gdk-pixbuf/io-qtif.c:233
-#, c-format
-msgid "Failed to skip the next %d bytes with seek()."
-msgstr "Không nhảy được qua %d byte kế tiếp dùng seek()."
-
-#: gdk-pixbuf/io-qtif.c:257
-msgid "Failed to allocate QTIF context structure."
-msgstr "Không cấp phát được cấu trúc ngữ cảnh QTIF."
-
-#: gdk-pixbuf/io-qtif.c:317
-msgid "Failed to create GdkPixbufLoader object."
-msgstr "Không tạo được đối tượng kiểu GdkPixbufLoader (nạp vùng đệm điểm ảnh)."
-
-#: gdk-pixbuf/io-qtif.c:421
-msgid "Failed to find an image data atom."
-msgstr "Không tìm thấy được một atom kiểu dữ liệu ảnh."
-
-#: gdk-pixbuf/io-qtif.c:602
-msgid "The QTIF image format"
-msgstr "Định dạng ảnh QTIF"
-
-#: gdk-pixbuf/io-ras.c:126
-msgid "RAS image has bogus header data"
-msgstr "Ảnh RAS có dữ liệu phần đầu giả"
-
-#: gdk-pixbuf/io-ras.c:148
-msgid "RAS image has unknown type"
-msgstr "Không biết kiểu dạng thức ảnh RAS"
-
-#: gdk-pixbuf/io-ras.c:156
-msgid "unsupported RAS image variation"
-msgstr "Không hỗ trợ biến dạng ảnh RAS"
-
-#: gdk-pixbuf/io-ras.c:171 gdk-pixbuf/io-ras.c:200
-msgid "Not enough memory to load RAS image"
-msgstr "Không đủ bộ nhớ để tải ảnh RAS"
-
-#: gdk-pixbuf/io-ras.c:545
-msgid "The Sun raster image format"
-msgstr "Dạng thức ảnh raster Sun"
-
-#: gdk-pixbuf/io-tga.c:154
-msgid "Cannot allocate memory for IOBuffer struct"
-msgstr "Không thể cấp phát bộ nhớ cho cấu trúc bộ đệm nhập/xuất (IOBuffer)"
-
-#: gdk-pixbuf/io-tga.c:173
-msgid "Cannot allocate memory for IOBuffer data"
-msgstr "Không thể cấp phát bộ nhớ cho dữ liệu bộ đệm nhập/xuất (IOBuffer)"
-
-#: gdk-pixbuf/io-tga.c:184
-msgid "Cannot realloc IOBuffer data"
-msgstr "Không thể tái cấp phát bộ nhớ cho dữ liệu bộ đệm nhập/xuất (IOBuffer)"
-
-#: gdk-pixbuf/io-tga.c:214
-msgid "Cannot allocate temporary IOBuffer data"
-msgstr "Không thể cấp phát dữ liệu IOBuffer tạm thời"
-
-#: gdk-pixbuf/io-tga.c:347
-msgid "Cannot allocate new pixbuf"
-msgstr "Không thể cấp phát bộ đệm điểm ảnh mới"
-
-#: gdk-pixbuf/io-tga.c:686
-msgid "Image is corrupted or truncated"
-msgstr "Ảnh bị cắt bớt hoặc bị hỏng"
-
-#: gdk-pixbuf/io-tga.c:693
-msgid "Cannot allocate colormap structure"
-msgstr "Không thể cấp phát cấu trúc bản đồ màu sắc"
-
-#: gdk-pixbuf/io-tga.c:700
-msgid "Cannot allocate colormap entries"
-msgstr "Không thể cấp phát các mục của bản đồ màu sắc"
-
-#: gdk-pixbuf/io-tga.c:722
-msgid "Unexpected bitdepth for colormap entries"
-msgstr "Các mục bản đồ màu sắc có độ sâu bit bất ngờ"
-
-#: gdk-pixbuf/io-tga.c:740
-msgid "Cannot allocate TGA header memory"
-msgstr "Không thể cấp phát bộ nhớ cho phần đầu TGA"
-
-#: gdk-pixbuf/io-tga.c:773
-msgid "TGA image has invalid dimensions"
-msgstr "Ảnh TGA có kích thước không hợp lệ"
-
-#: gdk-pixbuf/io-tga.c:779 gdk-pixbuf/io-tga.c:788 gdk-pixbuf/io-tga.c:798
-#: gdk-pixbuf/io-tga.c:808 gdk-pixbuf/io-tga.c:815
-msgid "TGA image type not supported"
-msgstr "Không hỗ trợ kiểu ảnh TGA"
-
-#: gdk-pixbuf/io-tga.c:862
-msgid "Cannot allocate memory for TGA context struct"
-msgstr "Không thể cấp phát bộ nhớ cho cấu trúc ngữ cảnh TGA"
-
-#: gdk-pixbuf/io-tga.c:927
-msgid "Excess data in file"
-msgstr "Dữ liệu thừa trong tập tin"
-
-#: gdk-pixbuf/io-tga.c:1008
-msgid "The Targa image format"
-msgstr "Dạng thức ảnh Targa/TGA"
-
-#: gdk-pixbuf/io-tiff.c:165
-msgid "Could not get image width (bad TIFF file)"
-msgstr "Không thể lấy chiều rộng ảnh (tập tin TIFF sai)"
-
-#: gdk-pixbuf/io-tiff.c:172
-msgid "Could not get image height (bad TIFF file)"
-msgstr "Không thể lấy chiều cao ảnh (tập tin TIFF sai)"
-
-#: gdk-pixbuf/io-tiff.c:180
-msgid "Width or height of TIFF image is zero"
-msgstr "Chiều rộng hoặc chiều cao của ảnh TIFF bằng không"
-
-#: gdk-pixbuf/io-tiff.c:189 gdk-pixbuf/io-tiff.c:198
-msgid "Dimensions of TIFF image too large"
-msgstr "Kích thước ảnh TIFF quá lớn"
-
-#: gdk-pixbuf/io-tiff.c:222 gdk-pixbuf/io-tiff.c:234 gdk-pixbuf/io-tiff.c:561
-msgid "Insufficient memory to open TIFF file"
-msgstr "Không đủ bộ nhớ để mở tập tin TIFF"
-
-#: gdk-pixbuf/io-tiff.c:295
-msgid "Failed to load RGB data from TIFF file"
-msgstr "Lỗi tải dữ liệu RGB từ tập tin TIFF"
-
-#: gdk-pixbuf/io-tiff.c:351
-msgid "Failed to open TIFF image"
-msgstr "Lỗi mở ảnh TIFF"
-
-#: gdk-pixbuf/io-tiff.c:363 gdk-pixbuf/io-tiff.c:778
-msgid "TIFFClose operation failed"
-msgstr "Thao tác TIFFClose"
-
-#: gdk-pixbuf/io-tiff.c:493 gdk-pixbuf/io-tiff.c:506
-msgid "Failed to load TIFF image"
-msgstr "Lỗi tải ảnh TIFF"
-
-#: gdk-pixbuf/io-tiff.c:692
-msgid "Failed to save TIFF image"
-msgstr "Lỗi mở ảnh TIFF"
-
-#: gdk-pixbuf/io-tiff.c:727
-msgid "TIFF compression doesn't refer to a valid codec."
-msgstr "Nén YIGG không trỏ đến bộ nén hợp lệ."
-
-#: gdk-pixbuf/io-tiff.c:767
-msgid "Failed to write TIFF data"
-msgstr "Lỗi ghi dữ liệu TIFF"
-
-#: gdk-pixbuf/io-tiff.c:814
-msgid "Couldn't write to TIFF file"
-msgstr "Không thể ghi vào tập tin TIFF"
-
-#: gdk-pixbuf/io-tiff.c:869
-msgid "The TIFF image format"
-msgstr "Dạng thức ảnh TIFF"
-
-#: gdk-pixbuf/io-wbmp.c:246
-msgid "Image has zero width"
-msgstr "Ảnh có chiều rộng bằng không"
-
-#: gdk-pixbuf/io-wbmp.c:264
-msgid "Image has zero height"
-msgstr "Ảnh có chiều cao bằng không"
-
-#: gdk-pixbuf/io-wbmp.c:275
-msgid "Not enough memory to load image"
-msgstr "Không đủ bộ nhớ để tải ảnh"
-
-#: gdk-pixbuf/io-wbmp.c:334
-msgid "Couldn't save the rest"
-msgstr "Không thể lưu phần còn lại"
-
-#: gdk-pixbuf/io-wbmp.c:375
-msgid "The WBMP image format"
-msgstr "Dạng thức ảnh WBMP"
-
-#: gdk-pixbuf/io-xbm.c:295
-msgid "Invalid XBM file"
-msgstr "Tập tin XBM không hợp lệ"
-
-#: gdk-pixbuf/io-xbm.c:305
-msgid "Insufficient memory to load XBM image file"
-msgstr "Không đủ bộ nhớ để tải tập tin ảnh XBM"
-
-#: gdk-pixbuf/io-xbm.c:453
-msgid "Failed to write to temporary file when loading XBM image"
-msgstr "Lỗi ghi vào tập tin tạm khi tải ảnh XBM"
-
-#: gdk-pixbuf/io-xbm.c:492
-msgid "The XBM image format"
-msgstr "Dạng thức ảnh XBM"
-
-#: gdk-pixbuf/io-xpm.c:468
-msgid "No XPM header found"
-msgstr "Không tìm thấy phần đầu XPM"
-
-#: gdk-pixbuf/io-xpm.c:477
-msgid "Invalid XPM header"
-msgstr "Phần đầu XBM không hợp lệ"
-
-#: gdk-pixbuf/io-xpm.c:485
-msgid "XPM file has image width <= 0"
-msgstr "Tập tin XPM có chiều rộng ≤ 0"
-
-#: gdk-pixbuf/io-xpm.c:493
-msgid "XPM file has image height <= 0"
-msgstr "Tập tin XPM có chiều cao ≤ 0"
-
-#: gdk-pixbuf/io-xpm.c:501
-msgid "XPM has invalid number of chars per pixel"
-msgstr "Số ký tự trên một điểm ảnh trong XPM không hợp lệ"
-
-#: gdk-pixbuf/io-xpm.c:510
-msgid "XPM file has invalid number of colors"
-msgstr "Số lượng màu trong tập tin XPM không hợp lệ"
-
-#: gdk-pixbuf/io-xpm.c:522 gdk-pixbuf/io-xpm.c:531 gdk-pixbuf/io-xpm.c:583
-msgid "Cannot allocate memory for loading XPM image"
-msgstr "Không thể cấp phát bộ nhớ để tải ảnh XPM"
-
-#: gdk-pixbuf/io-xpm.c:545
-msgid "Cannot read XPM colormap"
-msgstr "Không thể đọc bảng màu XPM"
-
-#: gdk-pixbuf/io-xpm.c:777
-msgid "Failed to write to temporary file when loading XPM image"
-msgstr "Lỗi ghi vào tập tin tạm khi tải ảnh XPM"
-
-#: gdk-pixbuf/io-xpm.c:816
-msgid "The XPM image format"
-msgstr "Định dạng ảnh XPM"
-
-#: gdk-pixbuf/io-gdip-emf.c:59
-msgid "The EMF image format"
-msgstr "Định dạng ảnh EMF"
-
-#: gdk-pixbuf/io-gdip-utils.c:232
-#, c-format
-msgid "Could not allocate memory: %s"
-msgstr "Không thể cấp phát bộ nhớ : %s"
-
-#: gdk-pixbuf/io-gdip-utils.c:257 gdk-pixbuf/io-gdip-utils.c:371
-#: gdk-pixbuf/io-gdip-utils.c:411
-#, c-format
-msgid "Could not create stream: %s"
-msgstr "Không thể tạo luồng: %s"
-
-#: gdk-pixbuf/io-gdip-utils.c:271
-#, c-format
-msgid "Could not seek stream: %s"
-msgstr "Không thể tìm nơi trong luồng: %s"
-
-#: gdk-pixbuf/io-gdip-utils.c:283
-#, c-format
-msgid "Could not read from stream: %s"
-msgstr "Không thể đọc từ luồng: %s"
-
-#: gdk-pixbuf/io-gdip-utils.c:694 gdk-pixbuf/io-gdip-utils.c:825
-msgid "Couldn't load bitmap"
-msgstr "Không thể nạp ảnh mảng"
-
-#: gdk-pixbuf/io-gdip-utils.c:847
-msgid "Couldn't load metafile"
-msgstr "Không thể nạp siêu tập tin"
-
-#: gdk-pixbuf/io-gdip-utils.c:1006
-msgid "Unsupported image format for GDI+"
-msgstr "Định dạng ảnh không được hỗ trợ đối với GDI+"
-
-#: gdk-pixbuf/io-gdip-utils.c:1013
-msgid "Couldn't save"
-msgstr "Không thể lưu"
-
-#: gdk-pixbuf/io-gdip-wmf.c:58
-msgid "The WMF image format"
-msgstr "Định dạng ảnh WMF"
 
 #. Description of --sync in --help output
 #: gdk/win32/gdkmain-win32.c:55
@@ -1508,8 +608,9 @@ msgid "_Saturation:"
 msgstr "Độ _bão hòa:"
 
 #: gtk/gtkcolorsel.c:393
-msgid "\"Deepness\" of the color."
-msgstr "« Độ sâu » của màu."
+#, fuzzy
+msgid "Intensity of the color."
+msgstr "Độ trong suốt của màu."
 
 #: gtk/gtkcolorsel.c:394
 msgid "_Value:"
@@ -1680,11 +781,11 @@ msgstr "_Phải:"
 msgid "Paper Margins"
 msgstr "Lề giấy"
 
-#: gtk/gtkentry.c:8612 gtk/gtktextview.c:8002
+#: gtk/gtkentry.c:8612 gtk/gtktextview.c:8012
 msgid "Input _Methods"
 msgstr "_Phương pháp nhập"
 
-#: gtk/gtkentry.c:8626 gtk/gtktextview.c:8016
+#: gtk/gtkentry.c:8626 gtk/gtktextview.c:8026
 msgid "_Insert Unicode Control Character"
 msgstr "Chèn ký tự đ_iều khiển Unicode"
 
@@ -2126,12 +1227,12 @@ msgid "System (%s)"
 msgstr "Hệ thống (%s)"
 
 #. Open Link
-#: gtk/gtklabel.c:6076
+#: gtk/gtklabel.c:6072
 msgid "_Open Link"
 msgstr "_Mở liên kết"
 
 #. Copy Link Address
-#: gtk/gtklabel.c:6088
+#: gtk/gtklabel.c:6084
 msgid "Copy _Link Address"
 msgstr "Chép địa chỉ _liên kết"
 
@@ -2144,27 +1245,27 @@ msgid "Invalid URI"
 msgstr "URI không hợp lệ"
 
 #. Description of --gtk-module=MODULES in --help output
-#: gtk/gtkmain.c:447
+#: gtk/gtkmain.c:432
 msgid "Load additional GTK+ modules"
 msgstr "Tải mô-đun GTK+ thêm"
 
 #. Placeholder in --gtk-module=MODULES in --help output
-#: gtk/gtkmain.c:448
+#: gtk/gtkmain.c:433
 msgid "MODULES"
 msgstr "MÔ-ĐUN"
 
 #. Description of --g-fatal-warnings in --help output
-#: gtk/gtkmain.c:450
+#: gtk/gtkmain.c:435
 msgid "Make all warnings fatal"
 msgstr "Đặt mọi cảnh báo là nghiêm trọng"
 
 #. Description of --gtk-debug=FLAGS in --help output
-#: gtk/gtkmain.c:453
+#: gtk/gtkmain.c:438
 msgid "GTK+ debugging flags to set"
 msgstr "Các cờ gỡ lỗi GTK+ cần đặt"
 
 #. Description of --gtk-no-debug=FLAGS in --help output
-#: gtk/gtkmain.c:456
+#: gtk/gtkmain.c:441
 msgid "GTK+ debugging flags to unset"
 msgstr "Các cờ gỡ lỗi GTK+ cần bỏ đặt"
 
@@ -2173,20 +1274,20 @@ msgstr "Các cờ gỡ lỗi GTK+ cần bỏ đặt"
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
 #.
-#: gtk/gtkmain.c:708
+#: gtk/gtkmain.c:704
 msgid "default:LTR"
 msgstr "default:LTR"
 
-#: gtk/gtkmain.c:773
+#: gtk/gtkmain.c:769
 #, c-format
 msgid "Cannot open display: %s"
 msgstr "Không thể mở display: %s"
 
-#: gtk/gtkmain.c:810
+#: gtk/gtkmain.c:806
 msgid "GTK+ Options"
 msgstr "Tùy chọn GTK+"
 
-#: gtk/gtkmain.c:810
+#: gtk/gtkmain.c:806
 msgid "Show GTK+ Options"
 msgstr "Hiện tùy chọn GTK+"
 
@@ -2272,7 +1373,7 @@ msgstr "Z Shell"
 msgid "Cannot end process with pid %d: %s"
 msgstr "Không thể chấm dứt tiến trình có pid %d: %s"
 
-#: gtk/gtknotebook.c:4621 gtk/gtknotebook.c:7050
+#: gtk/gtknotebook.c:4631 gtk/gtknotebook.c:7060
 #, c-format
 msgid "Page %u"
 msgstr "Trang %u"
@@ -2362,87 +1463,81 @@ msgstr "Lưu trong thư _mục:"
 msgid "%s job #%d"
 msgstr "%s yêu cầu #%d"
 
-#: gtk/gtkprintoperation.c:1687
+#: gtk/gtkprintoperation.c:1695
 msgctxt "print operation status"
 msgid "Initial state"
 msgstr "Tình trạng đầu tiên"
 
-#: gtk/gtkprintoperation.c:1688
+#: gtk/gtkprintoperation.c:1696
 msgctxt "print operation status"
 msgid "Preparing to print"
 msgstr "Đang chuẩn bị in"
 
-#: gtk/gtkprintoperation.c:1689
+#: gtk/gtkprintoperation.c:1697
 msgctxt "print operation status"
 msgid "Generating data"
 msgstr "Đang tạo ra dữ liệu"
 
-#: gtk/gtkprintoperation.c:1690
+#: gtk/gtkprintoperation.c:1698
 msgctxt "print operation status"
 msgid "Sending data"
 msgstr "Đang gửi dữ liệu"
 
-#: gtk/gtkprintoperation.c:1691
+#: gtk/gtkprintoperation.c:1699
 msgctxt "print operation status"
 msgid "Waiting"
 msgstr "Đang đợi"
 
-#: gtk/gtkprintoperation.c:1692
+#: gtk/gtkprintoperation.c:1700
 msgctxt "print operation status"
 msgid "Blocking on issue"
 msgstr "Đầu ra bị chặn"
 
-#: gtk/gtkprintoperation.c:1693
+#: gtk/gtkprintoperation.c:1701
 msgctxt "print operation status"
 msgid "Printing"
 msgstr "Đang in"
 
-#: gtk/gtkprintoperation.c:1694
+#: gtk/gtkprintoperation.c:1702
 msgctxt "print operation status"
 msgid "Finished"
 msgstr "Hoàn tất"
 
-#: gtk/gtkprintoperation.c:1695
+#: gtk/gtkprintoperation.c:1703
 msgctxt "print operation status"
 msgid "Finished with error"
 msgstr "Kết thúc với lỗi"
 
-#: gtk/gtkprintoperation.c:2254
+#: gtk/gtkprintoperation.c:2270
 #, c-format
 msgid "Preparing %d"
 msgstr "Đang chuẩn bị %d..."
 
-#: gtk/gtkprintoperation.c:2256 gtk/gtkprintoperation.c:2875
+#: gtk/gtkprintoperation.c:2272 gtk/gtkprintoperation.c:2902
 #, c-format
 msgid "Preparing"
 msgstr "Đang chuẩn bị..."
 
-#: gtk/gtkprintoperation.c:2259
+#: gtk/gtkprintoperation.c:2275
 #, c-format
 msgid "Printing %d"
 msgstr "Đang in %d..."
 
-#: gtk/gtkprintoperation.c:2905
+#: gtk/gtkprintoperation.c:2932
 #, c-format
 msgid "Error creating print preview"
 msgstr "Lỗi tạo xem thử bản in"
 
-#: gtk/gtkprintoperation.c:2908
+#: gtk/gtkprintoperation.c:2935
 #, c-format
 msgid "The most probable reason is that a temporary file could not be created."
 msgstr "Lý do thường là không thể tạo tập tin tạm."
 
-#: gtk/gtkprintoperation-unix.c:297 gtk/gtkprintoperation-unix.c:314
-#, c-format
+#: gtk/gtkprintoperation-unix.c:297
 msgid "Error launching preview"
 msgstr "Gặp lỗi khi khởi chạy ô xem thử"
 
-#: gtk/gtkprintoperation-unix.c:358
-#, c-format
-msgid "Error printing"
-msgstr "Lỗi in"
-
-#: gtk/gtkprintoperation-unix.c:494 gtk/gtkprintoperation-win32.c:1447
+#: gtk/gtkprintoperation-unix.c:470 gtk/gtkprintoperation-win32.c:1447
 msgid "Application"
 msgstr "Ứng dụng"
 
@@ -2456,7 +1551,7 @@ msgstr "Hết giấy"
 
 #. Translators: this is a printer status.
 #: gtk/gtkprintoperation-win32.c:616
-#: modules/printbackends/cups/gtkprintbackendcups.c:1999
+#: modules/printbackends/cups/gtkprintbackendcups.c:1998
 msgid "Paused"
 msgstr "Bị tạm ngừng"
 
@@ -2583,42 +1678,42 @@ msgstr "Chung"
 #. * multiple pages on a sheet when printing
 #.
 #: gtk/gtkprintunixdialog.c:3010
-#: modules/printbackends/cups/gtkprintbackendcups.c:3509
+#: modules/printbackends/cups/gtkprintbackendcups.c:3508
 msgid "Left to right, top to bottom"
 msgstr "Trái sang phải, trên xuống dưới"
 
 #: gtk/gtkprintunixdialog.c:3010
-#: modules/printbackends/cups/gtkprintbackendcups.c:3509
+#: modules/printbackends/cups/gtkprintbackendcups.c:3508
 msgid "Left to right, bottom to top"
 msgstr "Trái sang phải, dưới lên trên"
 
 #: gtk/gtkprintunixdialog.c:3011
-#: modules/printbackends/cups/gtkprintbackendcups.c:3510
+#: modules/printbackends/cups/gtkprintbackendcups.c:3509
 msgid "Right to left, top to bottom"
 msgstr "Phải sang trái, trên xuống dưới"
 
 #: gtk/gtkprintunixdialog.c:3011
-#: modules/printbackends/cups/gtkprintbackendcups.c:3510
+#: modules/printbackends/cups/gtkprintbackendcups.c:3509
 msgid "Right to left, bottom to top"
 msgstr "Phải sang trái, dưới lên trên"
 
 #: gtk/gtkprintunixdialog.c:3012
-#: modules/printbackends/cups/gtkprintbackendcups.c:3511
+#: modules/printbackends/cups/gtkprintbackendcups.c:3510
 msgid "Top to bottom, left to right"
 msgstr "Trên xuống dưới, trái sang phải"
 
 #: gtk/gtkprintunixdialog.c:3012
-#: modules/printbackends/cups/gtkprintbackendcups.c:3511
+#: modules/printbackends/cups/gtkprintbackendcups.c:3510
 msgid "Top to bottom, right to left"
 msgstr "Trên xuống dưới, phải sang trái"
 
 #: gtk/gtkprintunixdialog.c:3013
-#: modules/printbackends/cups/gtkprintbackendcups.c:3512
+#: modules/printbackends/cups/gtkprintbackendcups.c:3511
 msgid "Bottom to top, left to right"
 msgstr "Dưới lên trên, trái sang phải"
 
 #: gtk/gtkprintunixdialog.c:3013
-#: modules/printbackends/cups/gtkprintbackendcups.c:3512
+#: modules/printbackends/cups/gtkprintbackendcups.c:3511
 msgid "Bottom to top, right to left"
 msgstr "Dưới lên trên, phải sang trái"
 
@@ -2626,7 +1721,7 @@ msgstr "Dưới lên trên, phải sang trái"
 #. * dialog that controls in what order multiple pages are arranged
 #.
 #: gtk/gtkprintunixdialog.c:3017 gtk/gtkprintunixdialog.c:3030
-#: modules/printbackends/cups/gtkprintbackendcups.c:3544
+#: modules/printbackends/cups/gtkprintbackendcups.c:3543
 msgid "Page Ordering"
 msgstr "Thứ tự trang"
 
@@ -3518,7 +2613,8 @@ msgstr "« %s » không phải là tên thuộc tính hợp lệ"
 msgid ""
 "\"%s\" could not be converted to a value of type \"%s\" for attribute \"%s\""
 msgstr ""
-"« %s » không thể được chuyển đổi sang giá trị kiểu « %s » cho thuộc tính « %s »"
+"« %s » không thể được chuyển đổi sang giá trị kiểu « %s » cho thuộc tính « "
+"%s »"
 
 #: gtk/gtktextbufferserialize.c:1202
 #, c-format
@@ -3606,8 +2702,8 @@ msgstr "ZW_NJ Bộ không nối kết có độ dài bằng không"
 #, c-format
 msgid "Unable to locate theme engine in module_path: \"%s\","
 msgstr ""
-"Không thể định vị cơ chế sắc thái tại « module_path » (đường dẫn mô-đun): « %s "
-"»,"
+"Không thể định vị cơ chế sắc thái tại « module_path » (đường dẫn mô-đun): « "
+"%s »,"
 
 #: gtk/gtkuimanager.c:1505
 #, c-format
@@ -4794,121 +3890,116 @@ msgstr "Máy in « %s » hiện thời ngoại tuyến."
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:1687
 #, c-format
-msgid "Printer '%s' may not be connected."
-msgstr "Có lẽ máy in « %s » không có kết nối."
-
-#: modules/printbackends/cups/gtkprintbackendcups.c:1688
-#, c-format
 msgid "There is a problem on printer '%s'."
 msgstr "Gặp vấn đề trên máy in « %s »."
 
 #. Translators: this is a printer status.
-#: modules/printbackends/cups/gtkprintbackendcups.c:1996
+#: modules/printbackends/cups/gtkprintbackendcups.c:1995
 msgid "Paused ; Rejecting Jobs"
 msgstr "Tạm dừng; Từ chối nhận yêu cầu in"
 
 #. Translators: this is a printer status.
-#: modules/printbackends/cups/gtkprintbackendcups.c:2002
+#: modules/printbackends/cups/gtkprintbackendcups.c:2001
 msgid "Rejecting Jobs"
 msgstr "Từ chối nhận yêu cầu in"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2778
+#: modules/printbackends/cups/gtkprintbackendcups.c:2777
 msgid "Two Sided"
 msgstr "Mặt đôi"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2779
+#: modules/printbackends/cups/gtkprintbackendcups.c:2778
 msgid "Paper Type"
 msgstr "Kiểu giấy"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2780
+#: modules/printbackends/cups/gtkprintbackendcups.c:2779
 msgid "Paper Source"
 msgstr "Nguồn giấy"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2781
+#: modules/printbackends/cups/gtkprintbackendcups.c:2780
 msgid "Output Tray"
 msgstr "Khay xuất"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2782
+#: modules/printbackends/cups/gtkprintbackendcups.c:2781
 msgid "Resolution"
 msgstr "Độ phân giải"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2783
+#: modules/printbackends/cups/gtkprintbackendcups.c:2782
 msgid "GhostScript pre-filtering"
 msgstr "Tiền lọc GhostScript"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2792
+#: modules/printbackends/cups/gtkprintbackendcups.c:2791
 msgid "One Sided"
 msgstr "Mặt đơn"
 
 #. Translators: this is an option of "Two Sided"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2794
+#: modules/printbackends/cups/gtkprintbackendcups.c:2793
 msgid "Long Edge (Standard)"
 msgstr "Cạnh dài (Chuẩn)"
 
 #. Translators: this is an option of "Two Sided"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2796
+#: modules/printbackends/cups/gtkprintbackendcups.c:2795
 msgid "Short Edge (Flip)"
 msgstr "Cạnh ngắn (Lật)"
 
 #. Translators: this is an option of "Paper Source"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2798
-#: modules/printbackends/cups/gtkprintbackendcups.c:2800
-#: modules/printbackends/cups/gtkprintbackendcups.c:2808
+#: modules/printbackends/cups/gtkprintbackendcups.c:2797
+#: modules/printbackends/cups/gtkprintbackendcups.c:2799
+#: modules/printbackends/cups/gtkprintbackendcups.c:2807
 msgid "Auto Select"
 msgstr "Chọn tự động"
 
 #. Translators: this is an option of "Paper Source"
 #. Translators: this is an option of "Resolution"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2802
-#: modules/printbackends/cups/gtkprintbackendcups.c:2804
-#: modules/printbackends/cups/gtkprintbackendcups.c:2806
-#: modules/printbackends/cups/gtkprintbackendcups.c:2810
-#: modules/printbackends/cups/gtkprintbackendcups.c:3296
+#: modules/printbackends/cups/gtkprintbackendcups.c:2801
+#: modules/printbackends/cups/gtkprintbackendcups.c:2803
+#: modules/printbackends/cups/gtkprintbackendcups.c:2805
+#: modules/printbackends/cups/gtkprintbackendcups.c:2809
+#: modules/printbackends/cups/gtkprintbackendcups.c:3295
 msgid "Printer Default"
 msgstr "Mặc định máy in"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2812
+#: modules/printbackends/cups/gtkprintbackendcups.c:2811
 msgid "Embed GhostScript fonts only"
 msgstr "Nhúng chỉ phông chữ GhostScript"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2814
+#: modules/printbackends/cups/gtkprintbackendcups.c:2813
 msgid "Convert to PS level 1"
 msgstr "Chuyển đổi sang PS cấp 1"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2816
+#: modules/printbackends/cups/gtkprintbackendcups.c:2815
 msgid "Convert to PS level 2"
 msgstr "Chuyển đổi sang PS cấp 2"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2818
+#: modules/printbackends/cups/gtkprintbackendcups.c:2817
 msgid "No pre-filtering"
 msgstr "Không tiền lọc"
 
 #. Translators: "Miscellaneous" is the label for a button, that opens
 #. up an extra panel of settings in a print dialog.
-#: modules/printbackends/cups/gtkprintbackendcups.c:2827
+#: modules/printbackends/cups/gtkprintbackendcups.c:2826
 msgid "Miscellaneous"
 msgstr "Linh tinh"
 
 #. Translators: These strings name the possible values of the
 #. * job priority option in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3504
+#: modules/printbackends/cups/gtkprintbackendcups.c:3503
 msgid "Urgent"
 msgstr "Khẩn"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3504
+#: modules/printbackends/cups/gtkprintbackendcups.c:3503
 msgid "High"
 msgstr "Cao"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3504
+#: modules/printbackends/cups/gtkprintbackendcups.c:3503
 msgid "Medium"
 msgstr "Vừa"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3504
+#: modules/printbackends/cups/gtkprintbackendcups.c:3503
 msgid "Low"
 msgstr "Thấp"
 
@@ -4916,66 +4007,66 @@ msgstr "Thấp"
 #. Translators, this string is used to label the pages-per-sheet option
 #. * in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3528
+#: modules/printbackends/cups/gtkprintbackendcups.c:3527
 msgid "Pages per Sheet"
 msgstr "Trang mỗi tờ giấy"
 
 #. Translators, this string is used to label the job priority option
 #. * in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3565
+#: modules/printbackends/cups/gtkprintbackendcups.c:3564
 msgid "Job Priority"
 msgstr "Ưu tiên"
 
 #. Translators, this string is used to label the billing info entry
 #. * in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3576
+#: modules/printbackends/cups/gtkprintbackendcups.c:3575
 msgid "Billing Info"
 msgstr "Thông tin lập hóa đơn"
 
 #. Translators, these strings are names for various 'standard' cover
 #. * pages that the printing system may support.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3591
+#: modules/printbackends/cups/gtkprintbackendcups.c:3590
 msgid "None"
 msgstr "Không có"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3591
+#: modules/printbackends/cups/gtkprintbackendcups.c:3590
 msgid "Classified"
 msgstr "Xem riêng"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3591
+#: modules/printbackends/cups/gtkprintbackendcups.c:3590
 msgid "Confidential"
 msgstr "Mật"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3591
+#: modules/printbackends/cups/gtkprintbackendcups.c:3590
 msgid "Secret"
 msgstr "Rất mật"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3591
+#: modules/printbackends/cups/gtkprintbackendcups.c:3590
 msgid "Standard"
 msgstr "Chuẩn"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3591
+#: modules/printbackends/cups/gtkprintbackendcups.c:3590
 msgid "Top Secret"
 msgstr "Tối mật"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3591
+#: modules/printbackends/cups/gtkprintbackendcups.c:3590
 msgid "Unclassified"
 msgstr "Xem chung"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the front cover page.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3626
+#: modules/printbackends/cups/gtkprintbackendcups.c:3625
 msgid "Before"
 msgstr "Trước"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the back cover page.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3641
+#: modules/printbackends/cups/gtkprintbackendcups.c:3640
 msgid "After"
 msgstr "Sau"
 
@@ -4983,14 +4074,14 @@ msgstr "Sau"
 #. * a print job is printed. Possible values are 'now', a specified time,
 #. * or 'on hold'
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3661
+#: modules/printbackends/cups/gtkprintbackendcups.c:3660
 msgid "Print at"
 msgstr "In lúc"
 
 #. Translators: this is the name of the option that allows the user
 #. * to specify a time when a print job will be printed.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3672
+#: modules/printbackends/cups/gtkprintbackendcups.c:3671
 msgid "Print at time"
 msgstr "In tại thời điểm"
 
@@ -4998,7 +4089,7 @@ msgstr "In tại thời điểm"
 #. * size. The two placeholders are replaced with the width and height
 #. * in points. E.g: "Custom 230.4x142.9"
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3707
+#: modules/printbackends/cups/gtkprintbackendcups.c:3706
 #, c-format
 msgid "Custom %sx%s"
 msgstr "Tự chọn  %sx%s"
@@ -5092,6 +4183,674 @@ msgstr "In vào máy in thử ra"
 msgid "Could not get information for file '%s': %s"
 msgstr "Không thể lấy thông tin cho tập tin « %s »: %s"
 
+#: tests/testfilechooser.c:222
+#, c-format
+msgid "Failed to open file '%s': %s"
+msgstr "Lỗi mở tập tin « %s »': %s"
+
+#: tests/testfilechooser.c:267
+#, c-format
+msgid ""
+"Failed to load image '%s': reason not known, probably a corrupt image file"
+msgstr "Lỗi tải tập tin ảnh « %s »: không biết sao, có lẽ tập tin ảnh bị hỏng"
+
+#~ msgid "Image file '%s' contains no data"
+#~ msgstr "Tập tin ảnh « %s » không chứa dữ liệu nào"
+
+#~ msgid ""
+#~ "Failed to load animation '%s': reason not known, probably a corrupt "
+#~ "animation file"
+#~ msgstr ""
+#~ "Lỗi tải tập tin hoạt cảnh « %s »: không biết sao, có lẽ tập tin hoạt cảnh "
+#~ "bị hỏng"
+
+#~ msgid "Unable to load image-loading module: %s: %s"
+#~ msgstr "Không thể tải mô-đun tải ảnh: %s: %s"
+
+#~ msgid ""
+#~ "Image-loading module %s does not export the proper interface; perhaps "
+#~ "it's from a different GTK version?"
+#~ msgstr ""
+#~ "Mô-đun tải ảnh %s không xuất ra một giao diện thích hợp; có lẽ do từ một "
+#~ "phiên bản khác của GTK?"
+
+#~ msgid "Image type '%s' is not supported"
+#~ msgstr "Không hỗ trợ kiểu ảnh « %s »"
+
+#~ msgid "Couldn't recognize the image file format for file '%s'"
+#~ msgstr "Không thể nhận ra dạng thức tập tin ảnh cho tập tin « %s »"
+
+#~ msgid "Unrecognized image file format"
+#~ msgstr "Không nhận ra dạng thức tập tin ảnh"
+
+#~ msgid "Failed to load image '%s': %s"
+#~ msgstr "Lỗi tải tập tin ảnh « %s »: %s"
+
+#~ msgid "Error writing to image file: %s"
+#~ msgstr "Gặp lỗi khi ghi vào tập tin ảnh: %s"
+
+#~ msgid ""
+#~ "This build of gdk-pixbuf does not support saving the image format: %s"
+#~ msgstr "Bản xây dụng gdk-pixbuf này không hỗ trợ lưu dạng thức ảnh: %s"
+
+#~ msgid "Insufficient memory to save image to callback"
+#~ msgstr "Không đủ bộ nhớ để lưu tập tin ảnh vào khả năng gọi lại"
+
+#~ msgid "Failed to open temporary file"
+#~ msgstr "Lỗi mở tập tin tạm"
+
+#~ msgid "Failed to read from temporary file"
+#~ msgstr "Lỗi đọc từ tập tin tạm"
+
+#~ msgid "Failed to open '%s' for writing: %s"
+#~ msgstr "Lỗi mở tập tin « %s » để ghi: %s"
+
+#~ msgid ""
+#~ "Failed to close '%s' while writing image, all data may not have been "
+#~ "saved: %s"
+#~ msgstr ""
+#~ "Lỗi đóng « %s » khi đang ghi ảnh, mọi dữ liệu có lẽ không được lưu: %s"
+
+#~ msgid "Insufficient memory to save image into a buffer"
+#~ msgstr "Không đủ bộ nhớ để lưu ảnh vào bộ đệm"
+
+#~ msgid "Error writing to image stream"
+#~ msgstr "Gặp lỗi khi ghi vào luồng ảnh"
+
+#~ msgid ""
+#~ "Internal error: Image loader module '%s' failed to complete an operation, "
+#~ "but didn't give a reason for the failure"
+#~ msgstr ""
+#~ "Lỗi nội bộ : mô-đun tải ảnh « %s » đã không kết thúc thao tác, cũng không "
+#~ "diễn tả sao"
+
+#~ msgid "Incremental loading of image type '%s' is not supported"
+#~ msgstr "Không hỗ trợ tải từ từ kiểu ảnh « %s »"
+
+#~ msgid "Image header corrupt"
+#~ msgstr "Phần đầu của ảnh bị hỏng"
+
+#~ msgid "Image format unknown"
+#~ msgstr "Không biết dạng thức ảnh"
+
+#~ msgid "Image pixel data corrupt"
+#~ msgstr "Dữ liệu điểm ảnh của ảnh bị hỏng"
+
+#, fuzzy
+#~ msgid "failed to allocate image buffer of %u byte"
+#~ msgid_plural "failed to allocate image buffer of %u bytes"
+#~ msgstr[0] "Lỗi cấp phát %d byte cho vùng đệm đọc tập tin"
+
+#~ msgid "Unexpected icon chunk in animation"
+#~ msgstr "Gặp đoạn biểu tượng bất thường trong hoạt cảnh"
+
+#~ msgid "Unsupported animation type"
+#~ msgstr "Không hỗ trợ kiểu hoạt cảnh"
+
+#~ msgid "Invalid header in animation"
+#~ msgstr "Phần đầu không hợp lệ trong hoạt cảnh"
+
+#~ msgid "Not enough memory to load animation"
+#~ msgstr "Không đủ bộ nhớ để tải hoạt cảnh"
+
+#~ msgid "Malformed chunk in animation"
+#~ msgstr "Đoạn dạng sai trong hoạt cảnh"
+
+#~ msgid "The ANI image format"
+#~ msgstr "Dạng thức ảnh ANI"
+
+#~ msgid "BMP image has bogus header data"
+#~ msgstr "Ảnh BMP có dữ liệu phần đầu giả"
+
+#~ msgid "Not enough memory to load bitmap image"
+#~ msgstr "Không đủ bộ nhớ để tải ảnh mảng"
+
+#~ msgid "BMP image has unsupported header size"
+#~ msgstr "Ảnh BMP có kích thước phần đầu không được hỗ trợ"
+
+#~ msgid "Topdown BMP images cannot be compressed"
+#~ msgstr "Không thể nén ảnh BMP kiểu đầu xuống"
+
+#~ msgid "Premature end-of-file encountered"
+#~ msgstr "Gặp kết thúc tập tin quá sớm"
+
+#~ msgid "Couldn't allocate memory for saving BMP file"
+#~ msgstr "Không thể cấp phát bộ nhớ để lưu tập tin BMP"
+
+#~ msgid "Couldn't write to BMP file"
+#~ msgstr "Không thể ghi vào tập tin BMP"
+
+#~ msgid "The BMP image format"
+#~ msgstr "Dạng thức ảnh BMP"
+
+#~ msgid "Failure reading GIF: %s"
+#~ msgstr "Lỗi đọc tập tin dạng GIF: %s"
+
+#~ msgid "GIF file was missing some data (perhaps it was truncated somehow?)"
+#~ msgstr ""
+#~ "Tập tin GIF thiếu một vài dữ liệu (có lẽ tập tin đã bị cắt bớt bằng cách "
+#~ "nào?)"
+
+#~ msgid "Internal error in the GIF loader (%s)"
+#~ msgstr "Lỗi nội bộ trong bộ tải tập tin dạng GIF (%s)"
+
+#~ msgid "Stack overflow"
+#~ msgstr "Tràn đống"
+
+#~ msgid "GIF image loader cannot understand this image."
+#~ msgstr "Bộ tải tập tin GIF không thể hiểu ảnh này."
+
+#~ msgid "Bad code encountered"
+#~ msgstr "Phát hiện mã sai"
+
+#~ msgid "Circular table entry in GIF file"
+#~ msgstr "Mục nhập bảng kiểu tròn trong tập tin GIF"
+
+#~ msgid "Not enough memory to load GIF file"
+#~ msgstr "Không đủ bộ nhớ để tải tập tin dạng GIF"
+
+#~ msgid "Not enough memory to composite a frame in GIF file"
+#~ msgstr "Không đủ bộ nhớ để tạo một khung trong tập tin dạng GIF"
+
+#~ msgid "GIF image is corrupt (incorrect LZW compression)"
+#~ msgstr "Tập tin GIF bị hỏng (dữ liệu nén LZW sai)"
+
+#~ msgid "File does not appear to be a GIF file"
+#~ msgstr "Tập tin này có vẻ không phải là tập tin dạng GIF"
+
+#~ msgid "Version %s of the GIF file format is not supported"
+#~ msgstr "Không hỗ trợ phiên bản %s của dạng thức tập tin GIF"
+
+#~ msgid ""
+#~ "GIF image has no global colormap, and a frame inside it has no local "
+#~ "colormap."
+#~ msgstr ""
+#~ "Ảnh GIF không có bảng màu toàn cục, và có một khung bên trong không có "
+#~ "bảng màu cục bộ."
+
+#~ msgid "GIF image was truncated or incomplete."
+#~ msgstr "Ảnh GIF bị cắt bớt hoặc không hoàn chỉnh."
+
+#~ msgid "The GIF image format"
+#~ msgstr "Dạng thức ảnh GIF"
+
+#~ msgid "Invalid header in icon"
+#~ msgstr "Phần đầu không hợp lệ trong biểu tượng"
+
+#~ msgid "Not enough memory to load icon"
+#~ msgstr "Không đủ bộ nhớ để tải biểu tượng"
+
+#~ msgid "Icon has zero width"
+#~ msgstr "Biểu tượng có bề rộng bằng không"
+
+#~ msgid "Icon has zero height"
+#~ msgstr "Biểu tượng có bề cao bằng không"
+
+#~ msgid "Compressed icons are not supported"
+#~ msgstr "Không hỗ trợ biểu tượng đã nén"
+
+#~ msgid "Unsupported icon type"
+#~ msgstr "Không hỗ trợ kiểu biểu tượng này"
+
+#~ msgid "Not enough memory to load ICO file"
+#~ msgstr "Không đủ bộ nhớ để tải tập tin ICO"
+
+#~ msgid "Image too large to be saved as ICO"
+#~ msgstr "Ảnh quá lớn để lưu dạng ICO"
+
+#~ msgid "Cursor hotspot outside image"
+#~ msgstr "Điểm nóng con trỏ nằm ngoài ảnh"
+
+#~ msgid "Unsupported depth for ICO file: %d"
+#~ msgstr "Hỗ trợ độ sâu này cho tập tin ICO: %d"
+
+#~ msgid "The ICO image format"
+#~ msgstr "Dạng thức ảnh ICO"
+
+#~ msgid "Error reading ICNS image: %s"
+#~ msgstr "Lỗi đọc ảnh ICNS: %s"
+
+#~ msgid "Could not decode ICNS file"
+#~ msgstr "Không thể giải mã tập tin ICNS"
+
+#~ msgid "The ICNS image format"
+#~ msgstr "Dạng thức ảnh ICNS"
+
+#~ msgid "Couldn't allocate memory for stream"
+#~ msgstr "Không thể cấp phát bộ nhớ cho luồng"
+
+#~ msgid "Couldn't decode image"
+#~ msgstr "Không thể giải mã ảnh"
+
+#~ msgid "Transformed JPEG2000 has zero width or height"
+#~ msgstr "Ảnh JPEG2000 đã được chuyển đổi có chiều rộng/cao bằng không"
+
+#~ msgid "Image type currently not supported"
+#~ msgstr "Loại ảnh hiện thời không hỗ trợ"
+
+#~ msgid "Couldn't allocate memory for color profile"
+#~ msgstr "Không thể cấp phát bộ nhớ cho hồ sơ màu"
+
+#~ msgid "Insufficient memory to open JPEG 2000 file"
+#~ msgstr "Không đủ bộ nhớ để mở tập tin JPEG 2000"
+
+#~ msgid "Couldn't allocate memory to buffer image data"
+#~ msgstr "Không thể cấp phát bộ nhớ cho dữ liệu ảnh"
+
+#~ msgid "The JPEG 2000 image format"
+#~ msgstr "Dạng thức ảnh JPEG 2000"
+
+#~ msgid "Error interpreting JPEG image file (%s)"
+#~ msgstr "Gặp lỗi khi thông dịch tập tin ảnh JPEG (%s)"
+
+#~ msgid ""
+#~ "Insufficient memory to load image, try exiting some applications to free "
+#~ "memory"
+#~ msgstr ""
+#~ "Không đủ bộ nhớ để tải ảnh, hãy thử thoát một vài ứng dụng để giải phóng "
+#~ "bộ nhớ"
+
+#~ msgid "Unsupported JPEG color space (%s)"
+#~ msgstr "Không hỗ trợ vùng màu JPEG (%s)"
+
+#~ msgid "Couldn't allocate memory for loading JPEG file"
+#~ msgstr "Không thể cấp phát bộ nhớ để tải tập tin JPEG"
+
+#~ msgid "Transformed JPEG has zero width or height."
+#~ msgstr "Ảnh JPEG đã được chuyển đổi có chiều rộng/cao bằng không."
+
+#~ msgid ""
+#~ "JPEG quality must be a value between 0 and 100; value '%s' could not be "
+#~ "parsed."
+#~ msgstr ""
+#~ "Hệ số chất lượng của JPEG phải nằm trong khoảng 0 và 100; không thể phân "
+#~ "tách giá trị « %s »."
+
+#~ msgid ""
+#~ "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
+#~ msgstr ""
+#~ "Hệ số chất lượng của JPEG phải nằm trong khoảng 0 và 100; không chấp nhận "
+#~ "giá trị « %d »."
+
+#~ msgid "The JPEG image format"
+#~ msgstr "Dạng thức ảnh JPEG"
+
+#~ msgid "Couldn't allocate memory for header"
+#~ msgstr "Không thể cấp phát bộ nhớ cho phần đầu"
+
+#~ msgid "Couldn't allocate memory for context buffer"
+#~ msgstr "Không thể cấp phát bộ nhớ cho bộ đệm ngữ cảnh"
+
+#~ msgid "Image has invalid width and/or height"
+#~ msgstr "Ảnh có độ cao/rộng không hợp lệ"
+
+#~ msgid "Image has unsupported bpp"
+#~ msgstr "Không hỗ trợ bpp trong ảnh này"
+
+#~ msgid "Image has unsupported number of %d-bit planes"
+#~ msgstr "Không hỗ trợ số mặt phẳng %d-bit trong ảnh này"
+
+#~ msgid "Couldn't create new pixbuf"
+#~ msgstr "Không thể tạo bộ đệm điểm ảnh mới"
+
+#~ msgid "Couldn't allocate memory for line data"
+#~ msgstr "Không thể cấp phát bộ nhớ cho dữ liệu dòng"
+
+#~ msgid "Couldn't allocate memory for paletted data"
+#~ msgstr "Không thể cấp phát bộ nhớ cho dữ liệu trong bảng chọn"
+
+#~ msgid "Didn't get all lines of PCX image"
+#~ msgstr "Chưa lấy mọi dòng của ảnh dạng PCX"
+
+#~ msgid "No palette found at end of PCX data"
+#~ msgstr "Không tìm thấy bảng chọn ở cuối dữ liệu PCX"
+
+#~ msgid "The PCX image format"
+#~ msgstr "Dạng thức ảnh PCX"
+
+#~ msgid "Bits per channel of PNG image is invalid."
+#~ msgstr "Số bit trên một kênh của ảnh PNG không là hợp lệ."
+
+#~ msgid "Transformed PNG has zero width or height."
+#~ msgstr "Ảnh PNG đã được chuyển đổi có chiều rộng/cao bằng không."
+
+#~ msgid "Bits per channel of transformed PNG is not 8."
+#~ msgstr "Số bit trên một kênh của ảnh PNG được chuyển đổi không bằng 8."
+
+#~ msgid "Transformed PNG not RGB or RGBA."
+#~ msgstr "Ảnh PNG được chuyển đổi không phải là RGB cũng như RGBA."
+
+#~ msgid "Transformed PNG has unsupported number of channels, must be 3 or 4."
+#~ msgstr ""
+#~ "Ảnh PNG được chuyển đổi có số kênh không được hỗ trợ (phải bằng 3 hoặc 4)."
+
+#~ msgid "Fatal error in PNG image file: %s"
+#~ msgstr "Lỗi nghiêm trọng trong tập tin ảnh PNG: %s"
+
+#~ msgid "Insufficient memory to load PNG file"
+#~ msgstr "Không đủ bộ nhớ để tải tập tin PNG"
+
+#~ msgid ""
+#~ "Insufficient memory to store a %ld by %ld image; try exiting some "
+#~ "applications to reduce memory usage"
+#~ msgstr ""
+#~ "Không đủ bộ nhớ để lưu một ảnh có kích thước %ld vào %ld; hãy thử thoát "
+#~ "một vài ứng dụng để giảm số lượng bộ nhớ được dùng"
+
+#~ msgid "Fatal error reading PNG image file"
+#~ msgstr "Lỗi nghiêm trong khi đọc tập tin ảnh PNG"
+
+#~ msgid "Fatal error reading PNG image file: %s"
+#~ msgstr "Lỗi nghiêm trọng khi đọc tập tin ảnh PNG: %s"
+
+#~ msgid ""
+#~ "Keys for PNG text chunks must have at least 1 and at most 79 characters."
+#~ msgstr "Các khóa cho các đoạn PNG text phải có độ dài từ 1 đến 79 ký tự."
+
+#~ msgid "Keys for PNG text chunks must be ASCII characters."
+#~ msgstr "Các khóa cho các đoạn PNG text phải là ký tự ASCII."
+
+#~ msgid "Color profile has invalid length %d."
+#~ msgstr "Hồ sơ màu sắc có chiều dài sai %d."
+
+#~ msgid ""
+#~ "PNG compression level must be a value between 0 and 9; value '%s' could "
+#~ "not be parsed."
+#~ msgstr ""
+#~ "Mức nén PNG phải là giá trị nằm trong khoảng 0 và 9; không thể phân tách "
+#~ "giá trị « %s »."
+
+#~ msgid ""
+#~ "PNG compression level must be a value between 0 and 9; value '%d' is not "
+#~ "allowed."
+#~ msgstr ""
+#~ "Mức nén PNG phải là giá trị nằm trong khoảng 0 và 9; không cho phép giá "
+#~ "trị « %d »."
+
+#~ msgid ""
+#~ "Value for PNG text chunk %s cannot be converted to ISO-8859-1 encoding."
+#~ msgstr ""
+#~ "Không thể chuyển đổi giá trị của đoạn chữ PNG %s sang bộ ký tự ISO-8859-1."
+
+#~ msgid "The PNG image format"
+#~ msgstr "Dạng thức ảnh PNG"
+
+#~ msgid "PNM loader expected to find an integer, but didn't"
+#~ msgstr "Bộ tải ảnh PNM ngờ tìm một số nguyên, nhưng không tìm thấy"
+
+#~ msgid "PNM file has an incorrect initial byte"
+#~ msgstr "Tập tin PNM có byte khởi đầu không đúng"
+
+#~ msgid "PNM file is not in a recognized PNM subformat"
+#~ msgstr "Tập tin PNM không phải là dạng thức con PNM được công nhận"
+
+#~ msgid "PNM file has an image width of 0"
+#~ msgstr "Tập tin PNM chứa ảnh có chiều rộng bằng không"
+
+#~ msgid "PNM file has an image height of 0"
+#~ msgstr "Tập tin PNM chứa ảnh có chiều cao bằng không"
+
+#~ msgid "Maximum color value in PNM file is 0"
+#~ msgstr "Giá trị màu tối đa trong tập tin PNM bằng không"
+
+#~ msgid "Maximum color value in PNM file is too large"
+#~ msgstr "Giá trị màu tối đa trong tập tin PNM quá lớn"
+
+#~ msgid "Raw PNM image type is invalid"
+#~ msgstr "Kiểu ảnh PNM thô không hợp lệ"
+
+#~ msgid "PNM image loader does not support this PNM subformat"
+#~ msgstr "Bộ tải ảnh PNM không hỗ trợ dạng thức con này của PNM"
+
+#~ msgid "Raw PNM formats require exactly one whitespace before sample data"
+#~ msgstr ""
+#~ "Dạng thức ảnh PNM thô cần một và chỉ một khoảng trắng trước dữ liệu mẫu"
+
+#~ msgid "Cannot allocate memory for loading PNM image"
+#~ msgstr "Không thể cấp phát bộ nhớ để tải ảnh PNM"
+
+#~ msgid "Insufficient memory to load PNM context struct"
+#~ msgstr "Không đủ bộ nhớ để tải cấu trúc ngữ cảnh PNM"
+
+#~ msgid "Unexpected end of PNM image data"
+#~ msgstr "Gặp kết thúc bất ngờ trong dữ liệu ảnh PNM"
+
+#~ msgid "Insufficient memory to load PNM file"
+#~ msgstr "Không đủ bộ nhớ để tải tập tin PNM"
+
+#~ msgid "The PNM/PBM/PGM/PPM image format family"
+#~ msgstr "Họ dạng thức ảnh PNM/PBM/PGM/PPM"
+
+#~ msgid "Input file descriptor is NULL."
+#~ msgstr "Tập tin đầu vào có bộ mô tả VÔ GIÁ TRỊ."
+
+#~ msgid "Failed to read QTIF header"
+#~ msgstr "Lỗi đọc phần đầu QTIF"
+
+#~ msgid "QTIF atom size too large (%d bytes)"
+#~ msgstr "Atom QTIF có kích cỡ quá lớn (%d byte)"
+
+#~ msgid "Failed to allocate %d bytes for file read buffer"
+#~ msgstr "Lỗi cấp phát %d byte cho vùng đệm đọc tập tin"
+
+#~ msgid "File error when reading QTIF atom: %s"
+#~ msgstr "Gặp lỗi tập tin khi đọc atom QTIF: %s"
+
+#~ msgid "Failed to skip the next %d bytes with seek()."
+#~ msgstr "Không nhảy được qua %d byte kế tiếp dùng seek()."
+
+#~ msgid "Failed to allocate QTIF context structure."
+#~ msgstr "Không cấp phát được cấu trúc ngữ cảnh QTIF."
+
+#~ msgid "Failed to create GdkPixbufLoader object."
+#~ msgstr ""
+#~ "Không tạo được đối tượng kiểu GdkPixbufLoader (nạp vùng đệm điểm ảnh)."
+
+#~ msgid "Failed to find an image data atom."
+#~ msgstr "Không tìm thấy được một atom kiểu dữ liệu ảnh."
+
+#~ msgid "The QTIF image format"
+#~ msgstr "Định dạng ảnh QTIF"
+
+#~ msgid "RAS image has bogus header data"
+#~ msgstr "Ảnh RAS có dữ liệu phần đầu giả"
+
+#~ msgid "RAS image has unknown type"
+#~ msgstr "Không biết kiểu dạng thức ảnh RAS"
+
+#~ msgid "unsupported RAS image variation"
+#~ msgstr "Không hỗ trợ biến dạng ảnh RAS"
+
+#~ msgid "Not enough memory to load RAS image"
+#~ msgstr "Không đủ bộ nhớ để tải ảnh RAS"
+
+#~ msgid "The Sun raster image format"
+#~ msgstr "Dạng thức ảnh raster Sun"
+
+#~ msgid "Cannot allocate memory for IOBuffer struct"
+#~ msgstr "Không thể cấp phát bộ nhớ cho cấu trúc bộ đệm nhập/xuất (IOBuffer)"
+
+#~ msgid "Cannot allocate memory for IOBuffer data"
+#~ msgstr "Không thể cấp phát bộ nhớ cho dữ liệu bộ đệm nhập/xuất (IOBuffer)"
+
+#~ msgid "Cannot realloc IOBuffer data"
+#~ msgstr ""
+#~ "Không thể tái cấp phát bộ nhớ cho dữ liệu bộ đệm nhập/xuất (IOBuffer)"
+
+#~ msgid "Cannot allocate temporary IOBuffer data"
+#~ msgstr "Không thể cấp phát dữ liệu IOBuffer tạm thời"
+
+#~ msgid "Cannot allocate new pixbuf"
+#~ msgstr "Không thể cấp phát bộ đệm điểm ảnh mới"
+
+#~ msgid "Image is corrupted or truncated"
+#~ msgstr "Ảnh bị cắt bớt hoặc bị hỏng"
+
+#~ msgid "Cannot allocate colormap structure"
+#~ msgstr "Không thể cấp phát cấu trúc bản đồ màu sắc"
+
+#~ msgid "Cannot allocate colormap entries"
+#~ msgstr "Không thể cấp phát các mục của bản đồ màu sắc"
+
+#~ msgid "Unexpected bitdepth for colormap entries"
+#~ msgstr "Các mục bản đồ màu sắc có độ sâu bit bất ngờ"
+
+#~ msgid "Cannot allocate TGA header memory"
+#~ msgstr "Không thể cấp phát bộ nhớ cho phần đầu TGA"
+
+#~ msgid "TGA image has invalid dimensions"
+#~ msgstr "Ảnh TGA có kích thước không hợp lệ"
+
+#~ msgid "TGA image type not supported"
+#~ msgstr "Không hỗ trợ kiểu ảnh TGA"
+
+#~ msgid "Cannot allocate memory for TGA context struct"
+#~ msgstr "Không thể cấp phát bộ nhớ cho cấu trúc ngữ cảnh TGA"
+
+#~ msgid "Excess data in file"
+#~ msgstr "Dữ liệu thừa trong tập tin"
+
+#~ msgid "The Targa image format"
+#~ msgstr "Dạng thức ảnh Targa/TGA"
+
+#~ msgid "Could not get image width (bad TIFF file)"
+#~ msgstr "Không thể lấy chiều rộng ảnh (tập tin TIFF sai)"
+
+#~ msgid "Could not get image height (bad TIFF file)"
+#~ msgstr "Không thể lấy chiều cao ảnh (tập tin TIFF sai)"
+
+#~ msgid "Width or height of TIFF image is zero"
+#~ msgstr "Chiều rộng hoặc chiều cao của ảnh TIFF bằng không"
+
+#~ msgid "Dimensions of TIFF image too large"
+#~ msgstr "Kích thước ảnh TIFF quá lớn"
+
+#~ msgid "Insufficient memory to open TIFF file"
+#~ msgstr "Không đủ bộ nhớ để mở tập tin TIFF"
+
+#~ msgid "Failed to load RGB data from TIFF file"
+#~ msgstr "Lỗi tải dữ liệu RGB từ tập tin TIFF"
+
+#~ msgid "Failed to open TIFF image"
+#~ msgstr "Lỗi mở ảnh TIFF"
+
+#~ msgid "TIFFClose operation failed"
+#~ msgstr "Thao tác TIFFClose"
+
+#~ msgid "Failed to load TIFF image"
+#~ msgstr "Lỗi tải ảnh TIFF"
+
+#~ msgid "Failed to save TIFF image"
+#~ msgstr "Lỗi mở ảnh TIFF"
+
+#~ msgid "TIFF compression doesn't refer to a valid codec."
+#~ msgstr "Nén YIGG không trỏ đến bộ nén hợp lệ."
+
+#~ msgid "Failed to write TIFF data"
+#~ msgstr "Lỗi ghi dữ liệu TIFF"
+
+#~ msgid "Couldn't write to TIFF file"
+#~ msgstr "Không thể ghi vào tập tin TIFF"
+
+#~ msgid "The TIFF image format"
+#~ msgstr "Dạng thức ảnh TIFF"
+
+#~ msgid "Image has zero width"
+#~ msgstr "Ảnh có chiều rộng bằng không"
+
+#~ msgid "Image has zero height"
+#~ msgstr "Ảnh có chiều cao bằng không"
+
+#~ msgid "Not enough memory to load image"
+#~ msgstr "Không đủ bộ nhớ để tải ảnh"
+
+#~ msgid "Couldn't save the rest"
+#~ msgstr "Không thể lưu phần còn lại"
+
+#~ msgid "The WBMP image format"
+#~ msgstr "Dạng thức ảnh WBMP"
+
+#~ msgid "Invalid XBM file"
+#~ msgstr "Tập tin XBM không hợp lệ"
+
+#~ msgid "Insufficient memory to load XBM image file"
+#~ msgstr "Không đủ bộ nhớ để tải tập tin ảnh XBM"
+
+#~ msgid "Failed to write to temporary file when loading XBM image"
+#~ msgstr "Lỗi ghi vào tập tin tạm khi tải ảnh XBM"
+
+#~ msgid "The XBM image format"
+#~ msgstr "Dạng thức ảnh XBM"
+
+#~ msgid "No XPM header found"
+#~ msgstr "Không tìm thấy phần đầu XPM"
+
+#~ msgid "Invalid XPM header"
+#~ msgstr "Phần đầu XBM không hợp lệ"
+
+#~ msgid "XPM file has image width <= 0"
+#~ msgstr "Tập tin XPM có chiều rộng ≤ 0"
+
+#~ msgid "XPM file has image height <= 0"
+#~ msgstr "Tập tin XPM có chiều cao ≤ 0"
+
+#~ msgid "XPM has invalid number of chars per pixel"
+#~ msgstr "Số ký tự trên một điểm ảnh trong XPM không hợp lệ"
+
+#~ msgid "XPM file has invalid number of colors"
+#~ msgstr "Số lượng màu trong tập tin XPM không hợp lệ"
+
+#~ msgid "Cannot allocate memory for loading XPM image"
+#~ msgstr "Không thể cấp phát bộ nhớ để tải ảnh XPM"
+
+#~ msgid "Cannot read XPM colormap"
+#~ msgstr "Không thể đọc bảng màu XPM"
+
+#~ msgid "Failed to write to temporary file when loading XPM image"
+#~ msgstr "Lỗi ghi vào tập tin tạm khi tải ảnh XPM"
+
+#~ msgid "The XPM image format"
+#~ msgstr "Định dạng ảnh XPM"
+
+#~ msgid "The EMF image format"
+#~ msgstr "Định dạng ảnh EMF"
+
+#~ msgid "Could not allocate memory: %s"
+#~ msgstr "Không thể cấp phát bộ nhớ : %s"
+
+#~ msgid "Could not create stream: %s"
+#~ msgstr "Không thể tạo luồng: %s"
+
+#~ msgid "Could not seek stream: %s"
+#~ msgstr "Không thể tìm nơi trong luồng: %s"
+
+#~ msgid "Could not read from stream: %s"
+#~ msgstr "Không thể đọc từ luồng: %s"
+
+#~ msgid "Couldn't load bitmap"
+#~ msgstr "Không thể nạp ảnh mảng"
+
+#~ msgid "Couldn't load metafile"
+#~ msgstr "Không thể nạp siêu tập tin"
+
+#~ msgid "Unsupported image format for GDI+"
+#~ msgstr "Định dạng ảnh không được hỗ trợ đối với GDI+"
+
+#~ msgid "Couldn't save"
+#~ msgstr "Không thể lưu"
+
+#~ msgid "The WMF image format"
+#~ msgstr "Định dạng ảnh WMF"
+
+#~ msgid "\"Deepness\" of the color."
+#~ msgstr "« Độ sâu » của màu."
+
+#~ msgid "Error printing"
+#~ msgstr "Lỗi in"
+
+#~ msgid "Printer '%s' may not be connected."
+#~ msgstr "Có lẽ máy in « %s » không có kết nối."
+
 #~ msgid "Folders"
 #~ msgstr "Thư mục"
 
@@ -5174,8 +4933,9 @@ msgstr "Không thể lấy thông tin cho tập tin « %s »: %s"
 #~ "The filename \"%s\" couldn't be converted to UTF-8. (try setting the "
 #~ "environment variable G_FILENAME_ENCODING): %s"
 #~ msgstr ""
-#~ "Tên tập tin « %s » không thể được chuyển đổi sang dạng thức UTF-8 (hãy thử "
-#~ "đặt biến môi trường « G_BROKEN_FILENAMES » [G tên tập tin bị hỏng]): %s"
+#~ "Tên tập tin « %s » không thể được chuyển đổi sang dạng thức UTF-8 (hãy "
+#~ "thử đặt biến môi trường « G_BROKEN_FILENAMES » [G tên tập tin bị hỏng]): "
+#~ "%s"
 
 #~ msgid "Invalid UTF-8"
 #~ msgstr "UTF-8 không hợp lệ"

@@ -9,10 +9,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.master.ml\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-05-25 20:10-0400\n"
+"POT-Creation-Date: 2010-06-26 23:16-0400\n"
 "PO-Revision-Date: 2009-09-01 08:52+0530\n"
 "Last-Translator: \n"
 "Language-Team:  <en@li.org>\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -78,7 +79,7 @@ msgstr "ക്രമീകരിക്കാനുള്ള Gdk ഡീബഗ്�
 #. Placeholder in --gdk-no-debug=FLAGS in --help output
 #. Placeholder in --gtk-debug=FLAGS in --help output
 #. Placeholder in --gtk-no-debug=FLAGS in --help output
-#: gdk/gdk.c:165 gdk/gdk.c:168 gtk/gtkmain.c:454 gtk/gtkmain.c:457
+#: gdk/gdk.c:165 gdk/gdk.c:168 gtk/gtkmain.c:439 gtk/gtkmain.c:442
 msgid "FLAGS"
 msgstr "FLAGS"
 
@@ -271,907 +272,6 @@ msgstr "KP_Delete"
 msgctxt "keyboard label"
 msgid "Delete"
 msgstr "Delete"
-
-#: gdk-pixbuf/gdk-pixbuf-animation.c:133 gdk-pixbuf/gdk-pixbuf-io.c:982
-#: gdk-pixbuf/gdk-pixbuf-io.c:1242 tests/testfilechooser.c:222
-#, c-format
-msgid "Failed to open file '%s': %s"
-msgstr "'%s' എന്ന ഫയല്‍ തുറക്കുന്നില്‍ പരാജയം: %s"
-
-#: gdk-pixbuf/gdk-pixbuf-animation.c:146 gdk-pixbuf/gdk-pixbuf-io.c:994
-#, c-format
-msgid "Image file '%s' contains no data"
-msgstr "'%s' എന്ന ഇമേജ് ഫയലില്‍ ഡേറ്റാ ലഭ്യമല്ല"
-
-#: gdk-pixbuf/gdk-pixbuf-animation.c:188 gdk-pixbuf/gdk-pixbuf-io.c:1030
-#: gdk-pixbuf/gdk-pixbuf-io.c:1294 tests/testfilechooser.c:267
-#, c-format
-msgid ""
-"Failed to load image '%s': reason not known, probably a corrupt image file"
-msgstr "'%s' എന്ന ഇമേജ് ലഭ്യമാക്കുന്നതില്‍ പരാജയം: ഒരു പക്ഷേ തകരാറുള്ള ഇമേജ് ഫയല്‍ആവാം കാരണം "
-
-#: gdk-pixbuf/gdk-pixbuf-animation.c:221
-#, c-format
-msgid ""
-"Failed to load animation '%s': reason not known, probably a corrupt "
-"animation file"
-msgstr ""
-"'%s' എന്ന ആനിമേഷന്‍ ലഭ്യമാക്കുന്നതില്‍ പരാജയം: ഒരു പക്ഷേ തകരാറുള്ള ആനിമേഷന്‍ ഫയല്‍ ആവാം കാരണം "
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:715
-#, c-format
-msgid "Unable to load image-loading module: %s: %s"
-msgstr "ഇമേജ് ലഭ്യമാക്കുന്ന ഘടകം ലഭ്യമാക്കുവാന്‍ സാധ്യമായില്ല: %s: %s"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:730
-#, c-format
-msgid ""
-"Image-loading module %s does not export the proper interface; perhaps it's "
-"from a different GTK version?"
-msgstr ""
-"ഇമേജ് ലഭ്യമാക്കുന്ന ഘടകമായ %s ശരിയായ സംയോജക ഘടകം എക്സ്പോറ്‍ട്ട് ചെയ്യുന്നില്ല; മറ്റൊരു GTK "
-"ലക്കത്തില്‍ നിന്നുമാവാം?"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:739 gdk-pixbuf/gdk-pixbuf-io.c:790
-#, c-format
-msgid "Image type '%s' is not supported"
-msgstr "'%s' തരത്തിലുള്ള ഇമേജിന് പിന്തുണ ലഭ്യമല്ല"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:863
-#, c-format
-msgid "Couldn't recognize the image file format for file '%s'"
-msgstr "'%s' ഫയലിനുള്ള ഇമേജിന്റെ ഫയലിന്റെ രീതി തിരിച്ചറിയുവാന്‍ സാധ്യമായില്ല"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:871
-msgid "Unrecognized image file format"
-msgstr "ഇമേജ് ഫയലിന്റെ അപരിചിതമായ രീതി"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:1039
-#, c-format
-msgid "Failed to load image '%s': %s"
-msgstr "'%s' എന്ന ഇമേജ് ലഭ്യമാക്കുവാന്‍ സാധ്യമായില്ല: %s"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:1673 gdk-pixbuf/io-gdip-utils.c:961
-#, c-format
-msgid "Error writing to image file: %s"
-msgstr "ഇമേജ് ഫയലിലേക്ക് സൂക്ഷിക്കുന്നതില്‍ പരാജയം: %s"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:1718 gdk-pixbuf/gdk-pixbuf-io.c:1848
-#, c-format
-msgid "This build of gdk-pixbuf does not support saving the image format: %s"
-msgstr "ഇമേജിന്റെ രീതി സൂക്ഷിക്കുന്നതിനുള്ള പിന്തുണ gdk-pixbuf -ന്റെ ഈ ബിള്‍ഡില്‍ ലഭ്യമല്ല: %s"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:1752
-msgid "Insufficient memory to save image to callback"
-msgstr "കോള്‍ബാക്കിലേക്ക് ഇമേജ് സൂക്ഷിക്കുന്നതിന് ആവശ്യമായ മെമ്മറി ലഭ്യമല്ല"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:1765
-msgid "Failed to open temporary file"
-msgstr "താല്‍ക്കാലിക ഫയല്‍ തുറക്കുന്നതില്‍ പരാജയം"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:1791
-msgid "Failed to read from temporary file"
-msgstr "താല്‍ക്കാലിക ഫയലില്‍ നിന്നും വായിക്കുന്നതില്‍ പരാജയം"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:2044
-#, c-format
-msgid "Failed to open '%s' for writing: %s"
-msgstr "'%s'-ലേക്ക് സൂക്കഷിക്കുവാന്‍ സാധ്യമല്ല: %s"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:2070
-#, c-format
-msgid ""
-"Failed to close '%s' while writing image, all data may not have been saved: %"
-"s"
-msgstr ""
-"ഇമേജ് സൂക്ഷിക്കുമ്പോള്‍ '%s' അടയ്ക്കുന്നതില്‍ പരാജയം, ഡേറ്റാ പൂറ്‍ണ്ണമായി സൂക്ഷിക്കുവാന്‍ സാധ്യമായി "
-"കാണില്ല: %s"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:2290 gdk-pixbuf/gdk-pixbuf-io.c:2341
-msgid "Insufficient memory to save image into a buffer"
-msgstr "ബഫറിലേക്ക് ഇമേജ് സൂക്ഷിക്കുന്നതിനാവശ്യമായ മെമ്മറി ലഭ്യമല്ല"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:2387
-msgid "Error writing to image stream"
-msgstr "ഇമേജ് സ്റ്റ്രീമിലേക്കു്‌ സൂക്ഷിക്കുന്നതില്‍ പരാജയം"
-
-#: gdk-pixbuf/gdk-pixbuf-loader.c:334
-#, c-format
-msgid ""
-"Internal error: Image loader module '%s' failed to complete an operation, "
-"but didn't give a reason for the failure"
-msgstr ""
-"ആന്തരിക പിശക്: ഇമേജ് ലഭ്യമാക്കുന്ന ഘടകമായ '%s' ഒരു പ്രക്രിയ പൂര്‍ണ്ണമാക്കുന്നതില്‍ പരാജയപ്പെട്ടു, "
-"കാരണമെന്തെന്ന് വ്യക്തമല്ല"
-
-#: gdk-pixbuf/gdk-pixbuf-loader.c:376
-#, c-format
-msgid "Incremental loading of image type '%s' is not supported"
-msgstr "'%s' തരത്തിലുള്ള ഇമേജിന്റെ വര്‍ദ്ധിച്ചുള്ള ലഭ്യമാക്കല്‍ പിന്തുണയ്ക്കുന്നില്ല"
-
-#: gdk-pixbuf/gdk-pixdata.c:147
-msgid "Image header corrupt"
-msgstr "ഇമേജ് ഹെഡറിന് തകരാറു സംഭവിച്ചു"
-
-#: gdk-pixbuf/gdk-pixdata.c:152
-msgid "Image format unknown"
-msgstr "ഇമേജ് ഏത് രീതിയിലുള്ളതെന്ന് അവ്യക്തം"
-
-#: gdk-pixbuf/gdk-pixdata.c:157 gdk-pixbuf/gdk-pixdata.c:488
-msgid "Image pixel data corrupt"
-msgstr "ഇമേജ് പിക്സല്‍ ഡേറ്റായില്‍ തകരാറ്"
-
-#: gdk-pixbuf/gdk-pixdata.c:432
-#, c-format
-msgid "failed to allocate image buffer of %u byte"
-msgid_plural "failed to allocate image buffer of %u bytes"
-msgstr[0] ""
-msgstr[1] ""
-
-#: gdk-pixbuf/io-ani.c:244
-msgid "Unexpected icon chunk in animation"
-msgstr "ചലനചിത്രത്തില്‍ അപ്രതീക്ഷിതമായ പ്രതീരൂപം"
-
-#: gdk-pixbuf/io-ani.c:337
-msgid "Unsupported animation type"
-msgstr "പിന്തുണ ലഭ്യമല്ലാത്ത ആനിമേഷന്‍ രീതി"
-
-#: gdk-pixbuf/io-ani.c:348 gdk-pixbuf/io-ani.c:406 gdk-pixbuf/io-ani.c:432
-#: gdk-pixbuf/io-ani.c:455 gdk-pixbuf/io-ani.c:482 gdk-pixbuf/io-ani.c:569
-msgid "Invalid header in animation"
-msgstr "ആനിമേഷനില്‍ തെറ്റായ ഹെഡറ്‍"
-
-#: gdk-pixbuf/io-ani.c:358 gdk-pixbuf/io-ani.c:380 gdk-pixbuf/io-ani.c:464
-#: gdk-pixbuf/io-ani.c:491 gdk-pixbuf/io-ani.c:542 gdk-pixbuf/io-ani.c:614
-msgid "Not enough memory to load animation"
-msgstr "ആനിമേഷന്‍ ലഭ്യമാക്കുന്നതിന് ആവശ്യമുള്ള മെമ്മറി ലഭ്യമല്ല"
-
-#: gdk-pixbuf/io-ani.c:398 gdk-pixbuf/io-ani.c:424 gdk-pixbuf/io-ani.c:443
-msgid "Malformed chunk in animation"
-msgstr "ചലനചിത്രത്തില്‍ പിശക്"
-
-#: gdk-pixbuf/io-ani.c:711
-msgid "The ANI image format"
-msgstr "ANI ഇമേജ് രീതി"
-
-#: gdk-pixbuf/io-bmp.c:230 gdk-pixbuf/io-bmp.c:267 gdk-pixbuf/io-bmp.c:338
-#: gdk-pixbuf/io-bmp.c:370 gdk-pixbuf/io-bmp.c:393 gdk-pixbuf/io-bmp.c:496
-msgid "BMP image has bogus header data"
-msgstr "BMP ഇമേജില്‍ തെറ്റായ ഹെജറ്‍ ഡേറ്റാ"
-
-#: gdk-pixbuf/io-bmp.c:241 gdk-pixbuf/io-bmp.c:433
-msgid "Not enough memory to load bitmap image"
-msgstr "ബിറ്റ്മാപ്പ് ഇമേജ് ലഭ്യമാക്കുന്നതിന് ആവശ്യമായ മെമ്മറി ലഭ്യമല്ല"
-
-#: gdk-pixbuf/io-bmp.c:319
-msgid "BMP image has unsupported header size"
-msgstr "പിന്തുണ ലഭ്യമല്ലാത്ത BMP ഇമേജ് ഹെഡറിന്റെ വലിപ്പം"
-
-#: gdk-pixbuf/io-bmp.c:357
-msgid "Topdown BMP images cannot be compressed"
-msgstr "ടോപ്പ് ഡൌണ്‍ BMP ഇമേജുകള്‍ കംപ്രസ്സ് ചെയ്യുവാന്‍ സാധ്യമല്ല"
-
-#: gdk-pixbuf/io-bmp.c:717 gdk-pixbuf/io-pnm.c:709
-msgid "Premature end-of-file encountered"
-msgstr "അസാധുവായ end-of-file ലഭ്യമായി"
-
-#: gdk-pixbuf/io-bmp.c:1329
-msgid "Couldn't allocate memory for saving BMP file"
-msgstr "BMP ഫയല്‍ സൂക്ഷിക്കുന്നതിനുള്ള മെമ്മറി അനുവദിക്കുവാന്‍ സാധ്യമായില്ല"
-
-#: gdk-pixbuf/io-bmp.c:1370
-msgid "Couldn't write to BMP file"
-msgstr "BMP ഫയലിലേക്ക് സൂക്ഷിക്കുവാന്‍ സാധ്യമായില്ല"
-
-#: gdk-pixbuf/io-bmp.c:1423 gdk-pixbuf/io-gdip-bmp.c:82
-msgid "The BMP image format"
-msgstr "BMP ഇമേജ് രീതി"
-
-#: gdk-pixbuf/io-gif.c:222
-#, c-format
-msgid "Failure reading GIF: %s"
-msgstr "GIF ലഭ്യമാക്കുന്നതില്‍ പിശക്: %s"
-
-#: gdk-pixbuf/io-gif.c:496 gdk-pixbuf/io-gif.c:1481 gdk-pixbuf/io-gif.c:1642
-msgid "GIF file was missing some data (perhaps it was truncated somehow?)"
-msgstr "GIF ഫയലില്‍ പൂറ്‍ണ്ണ ഡേറ്റാ ലഭ്യമല്ല "
-
-#: gdk-pixbuf/io-gif.c:505
-#, c-format
-msgid "Internal error in the GIF loader (%s)"
-msgstr "GIF ലോഡറില്‍ (%s) ആന്തരിക പിശക്"
-
-#: gdk-pixbuf/io-gif.c:579
-msgid "Stack overflow"
-msgstr "സ്റ്റാക്ക് ഓവറ്‍ഫ്ളോ"
-
-#: gdk-pixbuf/io-gif.c:639
-msgid "GIF image loader cannot understand this image."
-msgstr "GIF ഇമേജ് ലോഡറിന് ഈ ഇമേജ് തിരിച്ചറിയുവാന്‍ സാധ്യമായില്ല."
-
-#: gdk-pixbuf/io-gif.c:668
-msgid "Bad code encountered"
-msgstr "തെറ്റായ കോഡ് ലഭിച്ചു"
-
-#: gdk-pixbuf/io-gif.c:678
-msgid "Circular table entry in GIF file"
-msgstr "GIF ഫയലില്‍ സിറ്‍ക്കുലാറ്‍ ടേബിള്‍ എന്‍ട്രി"
-
-#: gdk-pixbuf/io-gif.c:866 gdk-pixbuf/io-gif.c:1468 gdk-pixbuf/io-gif.c:1515
-#: gdk-pixbuf/io-gif.c:1630
-msgid "Not enough memory to load GIF file"
-msgstr "GIF ഫയല്‍ ലഭ്യമാക്കുന്നതിന് ആവശ്യമുള്ള മെമ്മറി ലഭ്യമല്ല"
-
-#: gdk-pixbuf/io-gif.c:960
-msgid "Not enough memory to composite a frame in GIF file"
-msgstr "GIF ഫയലില്‍ ഒരു ഫ്റെയിം തയ്യാറാക്കുന്നതിന് ആവശ്യമായ മെമ്മറി ലഭ്യമല്ല"
-
-#: gdk-pixbuf/io-gif.c:1132
-msgid "GIF image is corrupt (incorrect LZW compression)"
-msgstr "GIF ഇമേജില്‍ തകരാറ് (തെറ്റായ LZW കംപ്രഷന്‍)"
-
-#: gdk-pixbuf/io-gif.c:1182
-msgid "File does not appear to be a GIF file"
-msgstr "ഫയല്‍ ഒരു GIF ഫയല്‍ അല്ല"
-
-#: gdk-pixbuf/io-gif.c:1194
-#, c-format
-msgid "Version %s of the GIF file format is not supported"
-msgstr "GIF ഫയലിന്റെ %s ലക്കത്തിനുള്ള പിന്തുണ ലഭ്യമല്ല"
-
-#: gdk-pixbuf/io-gif.c:1303
-msgid ""
-"GIF image has no global colormap, and a frame inside it has no local "
-"colormap."
-msgstr ""
-"GIF ഇമേജില്‍ ഗ്ളോബല്‍ കളറ്‍മാപ്പ് ലഭ്യമല്ല, അതിലുള്ള ഒരു ഫ്റെയിമില്‍ ലോക്കല്‍ കളറ്‍മാപ്പും ലഭ്യമല്ല."
-
-#: gdk-pixbuf/io-gif.c:1537
-msgid "GIF image was truncated or incomplete."
-msgstr "GIF ഇമേജ് പൂറ്‍ണ്ണമല്ല."
-
-#: gdk-pixbuf/io-gif.c:1693 gdk-pixbuf/io-gdip-gif.c:80
-msgid "The GIF image format"
-msgstr "GIF ഇമേജ് രീതി"
-
-#: gdk-pixbuf/io-ico.c:211 gdk-pixbuf/io-ico.c:225 gdk-pixbuf/io-ico.c:277
-#: gdk-pixbuf/io-ico.c:290 gdk-pixbuf/io-ico.c:359
-msgid "Invalid header in icon"
-msgstr "ചിഹ്നത്തില്‍ തെറ്റായ ഹേഡറ്‍"
-
-#: gdk-pixbuf/io-ico.c:240 gdk-pixbuf/io-ico.c:300 gdk-pixbuf/io-ico.c:369
-#: gdk-pixbuf/io-ico.c:432 gdk-pixbuf/io-ico.c:462
-msgid "Not enough memory to load icon"
-msgstr "ചിഹ്നം ലഭ്യമാക്കുന്നതിന് ആവശ്യമുള്ള മെമ്മറി ലഭ്യമല്ല"
-
-#: gdk-pixbuf/io-ico.c:322
-msgid "Icon has zero width"
-msgstr "ചിഹ്നത്തിന്റെ വീതി പൂജ്യം"
-
-#: gdk-pixbuf/io-ico.c:332
-msgid "Icon has zero height"
-msgstr "ചിഹ്നത്തിന്റെ ഉയരം പൂജ്യം"
-
-#: gdk-pixbuf/io-ico.c:384
-msgid "Compressed icons are not supported"
-msgstr "കംപ്രസ്സ് ചെയ്ത ചിഹ്നങ്ങള്‍ക്ക് പിന്തുണ ലഭ്യമല്ല"
-
-#: gdk-pixbuf/io-ico.c:417
-msgid "Unsupported icon type"
-msgstr "ചിഹ്നത്തിന്റെ രീതിയ്ക്കുള്ള പിന്തുണ ലഭ്യമല്ല"
-
-#: gdk-pixbuf/io-ico.c:511
-msgid "Not enough memory to load ICO file"
-msgstr "ICO ഫയല്‍ ലഭ്യമാക്കുന്നതിന് ആവശ്യമുള്ള മെമ്മറി ലഭ്യമല്ല"
-
-#: gdk-pixbuf/io-ico.c:976
-msgid "Image too large to be saved as ICO"
-msgstr "ICO ആയി സൂക്ഷിക്കുവാന്‍ സാധ്യമല്ല; ഇമേജ് വളരെ വലുതാണ്"
-
-#: gdk-pixbuf/io-ico.c:987
-msgid "Cursor hotspot outside image"
-msgstr "കര്‍സര്‍ ഹോട്ട്സ്പോട്ട് പുറമേയുള്ള ഇമേജ്"
-
-#: gdk-pixbuf/io-ico.c:1010
-#, c-format
-msgid "Unsupported depth for ICO file: %d"
-msgstr "ICO ഫയലിനു് പിന്തുണ ലഭ്യമല്ലാത്ത വ്യാപ്തി: %d"
-
-#: gdk-pixbuf/io-ico.c:1245 gdk-pixbuf/io-gdip-ico.c:59
-msgid "The ICO image format"
-msgstr "ICO ഇമേജ് രീതി"
-
-#: gdk-pixbuf/io-icns.c:347
-#, c-format
-msgid "Error reading ICNS image: %s"
-msgstr "ICNS ഇമേജ് തുറക്കുന്നതില്‍ പിശക്: %s"
-
-#: gdk-pixbuf/io-icns.c:364
-msgid "Could not decode ICNS file"
-msgstr "ICNS ഫയല്‍ ഡീക്കോഡ് ചെയ്യുവാന്‍ കഴിഞ്ഞില്ല"
-
-#: gdk-pixbuf/io-icns.c:397
-msgid "The ICNS image format"
-msgstr "ICNS ചിത്ര ഫോര്‍മാറ്റ്"
-
-#: gdk-pixbuf/io-jasper.c:75
-msgid "Couldn't allocate memory for stream"
-msgstr "സ്റ്റ്രീമിനുള്ള മെമ്മറി അനുവദിക്കുവാന്‍ സാധ്യമായില്ല"
-
-#: gdk-pixbuf/io-jasper.c:105
-msgid "Couldn't decode image"
-msgstr "ചിത്രം ഡീക്കോഡ് ചെയ്യുവാന്‍ സാധ്യമായില്ല"
-
-#: gdk-pixbuf/io-jasper.c:123
-msgid "Transformed JPEG2000 has zero width or height"
-msgstr "മാറ്റം വരുത്തിയ JPEG-യുടെ വീതിയോ ഉയരമോ പൂജ്യം."
-
-#: gdk-pixbuf/io-jasper.c:137
-msgid "Image type currently not supported"
-msgstr " ഇമേജ് തരത്തിനുള്ള പിന്തുണ ലഭ്യമല്ല"
-
-#: gdk-pixbuf/io-jasper.c:149 gdk-pixbuf/io-jasper.c:157
-msgid "Couldn't allocate memory for color profile"
-msgstr "നിറം പ്രൊഫൈലിനുള്ള മെമ്മറി അനുവദിക്കുവാന്‍ സാധ്യമായില്ല"
-
-#: gdk-pixbuf/io-jasper.c:183
-msgid "Insufficient memory to open JPEG 2000 file"
-msgstr "JPEG 2000 ഫയല്‍ തുറക്കുന്നതിന് ആവശ്യമായ മെമ്മറി ലഭ്യമല്ല"
-
-#: gdk-pixbuf/io-jasper.c:262
-msgid "Couldn't allocate memory to buffer image data"
-msgstr "ചിത്രം  ഡേറ്റായ്ക്ക് ആവശ്യമുള്ള മെമ്മറി അനുവദിക്കുവാന്‍ സാധ്യമായില്ല"
-
-#: gdk-pixbuf/io-jasper.c:306
-msgid "The JPEG 2000 image format"
-msgstr "JPEG 2000 ഇമേജ് രീതി"
-
-#: gdk-pixbuf/io-jpeg.c:117
-#, c-format
-msgid "Error interpreting JPEG image file (%s)"
-msgstr "JPEG ഇമേജ് ഫയല്‍ (%s) തിരിച്ചറിയുന്നതില്‍ പിശക്"
-
-#: gdk-pixbuf/io-jpeg.c:528
-msgid ""
-"Insufficient memory to load image, try exiting some applications to free "
-"memory"
-msgstr ""
-"ഇമേജ് തുറക്കുന്നതിനുള്ള മെമ്മറി ലഭ്യമല്ല, ഫ്രീ മെമ്മറിയ്ക്കായി ചില പ്രയോഗങ്ങളില്‍ നിന്നും പുറത്ത് "
-"കടക്കുക"
-
-#: gdk-pixbuf/io-jpeg.c:569 gdk-pixbuf/io-jpeg.c:775
-#, c-format
-msgid "Unsupported JPEG color space (%s)"
-msgstr "പിന്തുണ ഇല്ലാത്ത JPEG കളര്‍ സ്പെയിസ് (%s)"
-
-#: gdk-pixbuf/io-jpeg.c:674 gdk-pixbuf/io-jpeg.c:944 gdk-pixbuf/io-jpeg.c:1177
-#: gdk-pixbuf/io-jpeg.c:1186
-msgid "Couldn't allocate memory for loading JPEG file"
-msgstr "JPEG ഫയല്‍ ലഭ്യമാക്കുന്നതിനുള്ള മെമ്മറി അനുവദിക്കുവാന്‍ സാധ്യമായില്ല"
-
-#: gdk-pixbuf/io-jpeg.c:919
-msgid "Transformed JPEG has zero width or height."
-msgstr "മാറ്റം വരുത്തിയ JPEG-യുടെ വീതിയും ഉയരവും പൂജ്യം."
-
-#: gdk-pixbuf/io-jpeg.c:1133 gdk-pixbuf/io-gdip-jpeg.c:53
-#, c-format
-msgid ""
-"JPEG quality must be a value between 0 and 100; value '%s' could not be "
-"parsed."
-msgstr ""
-"JPEG തനിമ 0-ത്തിനും 100-നും മദ്ധ്യത്തിലുള്ള മൂല്ല്യമായിരിക്കണം; '%s' എന്ന മൂല്ല്യം പാഴ്സ് "
-"ചെയ്യുവാന്‍ സാധ്യമായില്ല."
-
-#: gdk-pixbuf/io-jpeg.c:1148 gdk-pixbuf/io-gdip-jpeg.c:68
-#, c-format
-msgid ""
-"JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
-msgstr "JPEG തനിമ 0-ത്തിനും 100-നും മദ്ധ്യത്തിലുള്ള മൂല്ല്യമായിരിക്കണം; %d അനുവദനീയമല്ല."
-
-#: gdk-pixbuf/io-jpeg.c:1310 gdk-pixbuf/io-gdip-jpeg.c:136
-msgid "The JPEG image format"
-msgstr "JPEG ഇമേജ് രീതി"
-
-#: gdk-pixbuf/io-pcx.c:187
-msgid "Couldn't allocate memory for header"
-msgstr "ഹെഡറിനുള്ള മെമ്മറി അനുവദിക്കുവാന്‍ സാധ്യമായില്ല"
-
-#: gdk-pixbuf/io-pcx.c:202 gdk-pixbuf/io-pcx.c:560
-msgid "Couldn't allocate memory for context buffer"
-msgstr "കോണ്‍ടെക്സ്റ്റിനുള്ള മെമ്മറി അനുവദിക്കുവാന്‍ സാധ്യമായില്ല"
-
-#: gdk-pixbuf/io-pcx.c:601
-msgid "Image has invalid width and/or height"
-msgstr "ഇമേജിന്റെ വീതി അല്ലെങ്കില്‍ ഉയരം തെറ്റാണ്"
-
-#: gdk-pixbuf/io-pcx.c:613 gdk-pixbuf/io-pcx.c:674
-msgid "Image has unsupported bpp"
-msgstr "ഇമേജിന്റെ bpp-യ്ക്ക് പിന്തുണ ലഭ്യമല്ല"
-
-#: gdk-pixbuf/io-pcx.c:618 gdk-pixbuf/io-pcx.c:626
-#, c-format
-msgid "Image has unsupported number of %d-bit planes"
-msgstr "ഇമേജിന് പിന്തുണ ലഭ്യമല്ലാത്ത %d-ബിറ്റ് പ്ളെയിനുകള്‍"
-
-#: gdk-pixbuf/io-pcx.c:642
-msgid "Couldn't create new pixbuf"
-msgstr "പുതിയ pixbuf ഉണ്ടാക്കുവാന്‍ സാധ്യമായില്ല"
-
-#: gdk-pixbuf/io-pcx.c:650
-msgid "Couldn't allocate memory for line data"
-msgstr "ലൈന്‍ ഡേറ്റയ്ക്കുള്ള മെമ്മറി ലഭ്യമാക്കുവാന്‍ സാധ്യമായില്ല"
-
-#: gdk-pixbuf/io-pcx.c:657
-msgid "Couldn't allocate memory for paletted data"
-msgstr "പാലറ്റഡ് ഡേറ്റയ്ക്കുള്ള മെമ്മറി ലഭ്യമാക്കുവാന്‍ സാധ്യമായില്ല"
-
-#: gdk-pixbuf/io-pcx.c:704
-msgid "Didn't get all lines of PCX image"
-msgstr "PCX ഇമേജിന്റെ വരികളെല്ലാം ലഭ്യമായില്ല"
-
-#: gdk-pixbuf/io-pcx.c:711
-msgid "No palette found at end of PCX data"
-msgstr "PCX ഡേറ്റായുടെ അവസാനം പാലറ്റ് ലഭ്യമായില്ല"
-
-#: gdk-pixbuf/io-pcx.c:756
-msgid "The PCX image format"
-msgstr "PCX ഇമേജ് രീതി"
-
-#: gdk-pixbuf/io-png.c:55
-msgid "Bits per channel of PNG image is invalid."
-msgstr "PNG ഇമേജിന്റെ ഒരോ ചാനലിലും ഉള്ള ബിറ്റുകള്‍ തെറ്റാണ്."
-
-#: gdk-pixbuf/io-png.c:136 gdk-pixbuf/io-png.c:642
-msgid "Transformed PNG has zero width or height."
-msgstr "മാറ്റം വരുത്തിയ PNG-യുടെ വീതിയും ഉയരവും പൂജ്യമാണ്."
-
-#: gdk-pixbuf/io-png.c:144
-msgid "Bits per channel of transformed PNG is not 8."
-msgstr "മാറ്റം വരുത്തിയ PNG-യുടെ ഓരോ ചാനലിലും ഉള്ള ബിറ്റുകളുടെ എണ്ണം 8 അല്ല."
-
-#: gdk-pixbuf/io-png.c:153
-msgid "Transformed PNG not RGB or RGBA."
-msgstr "മാറ്റം വരുത്തിയ PNG, RGB അല്ലെങ്കില്‍ RGBA അല്ല."
-
-#: gdk-pixbuf/io-png.c:162
-msgid "Transformed PNG has unsupported number of channels, must be 3 or 4."
-msgstr ""
-"മാറ്റം വരുത്തിയ PNG-ല്‍ പിന്തുണ ലഭ്യമല്ലാത്ത ചാനലുകള്‍ ഉണ്ട്, 3 അല്ലെങ്കില്‍ 4 എണ്ണം ആവശ്യമുണ്ട്."
-
-#: gdk-pixbuf/io-png.c:183
-#, c-format
-msgid "Fatal error in PNG image file: %s"
-msgstr "PNG ഇമേജ് ഫയലില്‍ സാരമായ പിശക്: %s"
-
-#: gdk-pixbuf/io-png.c:316
-msgid "Insufficient memory to load PNG file"
-msgstr "PNG ഫയല്‍ തുറക്കുന്നതിന് ആവശ്യമുള്ള മെമ്മറി ലഭ്യമല്ല"
-
-#: gdk-pixbuf/io-png.c:657
-#, c-format
-msgid ""
-"Insufficient memory to store a %ld by %ld image; try exiting some "
-"applications to reduce memory usage"
-msgstr ""
-"%ld ഇമേജ് ഉപയോഗിച്ച് ഒരു %ld സൂക്ഷിക്കുന്നതിനുള്ള മെമ്മറി ലഭ്യമല്ല; ചില പ്രയോഗങ്ങള്‍ നിറ്‍ത്തി "
-"മെമ്മറിയുടെ ഉപയോഗം കുറയ്ക്കുക"
-
-#: gdk-pixbuf/io-png.c:720
-msgid "Fatal error reading PNG image file"
-msgstr "PNG ഇമേജ് ഫയല്‍ തുറക്കുന്നതില്‍ സാരമായ പിശക്"
-
-#: gdk-pixbuf/io-png.c:769
-#, c-format
-msgid "Fatal error reading PNG image file: %s"
-msgstr "PNG ഇമേജ് ഫയല്‍ തുറക്കുന്നതില്‍ സാരമായ പിശക്: %s"
-
-#: gdk-pixbuf/io-png.c:863
-msgid ""
-"Keys for PNG text chunks must have at least 1 and at most 79 characters."
-msgstr "PNG ടെക്സ്റ്റുകളുടെ കീകളില്‍ കുറഞ്ഞത് 1 അക്ഷരം ഉണ്ടായിരിക്കണം, 79-ല്‍ കൂടുതല്‍ പാടില്ല."
-
-#: gdk-pixbuf/io-png.c:872
-msgid "Keys for PNG text chunks must be ASCII characters."
-msgstr "PNG ടെക്സ്റ്റുകളുടെ കീകള്‍ ASCII അക്ഷരങ്ങളായിരിക്കണം"
-
-#: gdk-pixbuf/io-png.c:886 gdk-pixbuf/io-tiff.c:738
-#, c-format
-msgid "Color profile has invalid length %d."
-msgstr ""
-
-#: gdk-pixbuf/io-png.c:899 gdk-pixbuf/io-gdip-png.c:56
-#, c-format
-msgid ""
-"PNG compression level must be a value between 0 and 9; value '%s' could not "
-"be parsed."
-msgstr ""
-"PNG കംപ്രഷന്‍ ലവല്‍ 0-ത്തിനും 9-നും മദ്ധ്യത്തിലുള്ള മൂല്ല്യമായിരിക്കണം; '%s' എന്ന മൂല്ല്യം പാഴ്സ് "
-"ചെയ്യുവാന്‍ സാധ്യമായില്ല."
-
-#: gdk-pixbuf/io-png.c:912 gdk-pixbuf/io-gdip-png.c:68
-#, c-format
-msgid ""
-"PNG compression level must be a value between 0 and 9; value '%d' is not "
-"allowed."
-msgstr "PNG കംപ്രഷന്‍ ലവല്‍ 0-ത്തിനും 9-നും മദ്ധ്യത്തിലുള്ള മൂല്ല്യമായിരിക്കണം; '%d' അനുവദനീയമല്ല"
-
-#: gdk-pixbuf/io-png.c:951
-#, c-format
-msgid "Value for PNG text chunk %s cannot be converted to ISO-8859-1 encoding."
-msgstr ""
-"PNG ടെക്സ്റ്റ് ചങ്ക് %s-നുള്ള മൂല്ല്യം ISO-8859-1 എന്‍കോഡിങിലേക്കു് വേര്‍തിരിക്കുവാന്‍ സാധ്യല്ല."
-
-#: gdk-pixbuf/io-png.c:1112 gdk-pixbuf/io-gdip-png.c:133
-msgid "The PNG image format"
-msgstr "PNG ഇമേജ് രീതി"
-
-#: gdk-pixbuf/io-pnm.c:250
-msgid "PNM loader expected to find an integer, but didn't"
-msgstr "PNM ലോഡറിന് ഒരു ഇന്റിജറ്‍ ലഭിക്കും എന്ന് പ്രതീക്ഷിച്ചു, പക്ഷേ ലഭ്യമായില്ല"
-
-#: gdk-pixbuf/io-pnm.c:282
-msgid "PNM file has an incorrect initial byte"
-msgstr "PNM ഫയലില്‍ ആരംഭത്തില്‍ തെറ്റായ ബൈറ്റ്"
-
-#: gdk-pixbuf/io-pnm.c:312
-msgid "PNM file is not in a recognized PNM subformat"
-msgstr "PNM ഫയലിന്റെ PNM സബ്ഫോറ്‍മാറ്റ് അപരിചിതമാണ്"
-
-#: gdk-pixbuf/io-pnm.c:337
-msgid "PNM file has an image width of 0"
-msgstr "PNM ഫയലിനുള്ള ഇമേജിന്റെ വീതി 0 ആണ്"
-
-#: gdk-pixbuf/io-pnm.c:358
-msgid "PNM file has an image height of 0"
-msgstr "PNM ഫയലിനുള്ള ഇമേജിന്റെ ഉയരം 0 ആണ്"
-
-#: gdk-pixbuf/io-pnm.c:381
-msgid "Maximum color value in PNM file is 0"
-msgstr "PNM ഫയലിന്റെ ഏറ്റവും കൂടിയ കളറ്‍ മൂല്ല്യം 0 ആണ്."
-
-#: gdk-pixbuf/io-pnm.c:389
-msgid "Maximum color value in PNM file is too large"
-msgstr "PNM ഫയലിന്റെ ഏറ്റവും കൂടിയ കളറ്‍ മൂല്ല്യം വളരെ വലുതാണ്"
-
-#: gdk-pixbuf/io-pnm.c:429 gdk-pixbuf/io-pnm.c:459 gdk-pixbuf/io-pnm.c:504
-msgid "Raw PNM image type is invalid"
-msgstr "റോ PNM ഇമേജ് തരം തെറ്റാണ്"
-
-#: gdk-pixbuf/io-pnm.c:654
-msgid "PNM image loader does not support this PNM subformat"
-msgstr "PNM ഇമേജ് ലോഡറ്‍ PNM സബ്ഫോറ്‍മാറ്റ് പിന്തുണയ്ക്കുന്നില്ല"
-
-#: gdk-pixbuf/io-pnm.c:741 gdk-pixbuf/io-pnm.c:968
-msgid "Raw PNM formats require exactly one whitespace before sample data"
-msgstr "റോ PNM രീതിയിലുള്ളവയ്ക്കു് മാതൃക ഡേറ്റായ്ക്കു് മുമ്പ് ഒരൊറ്റ് വൈറ്റ്സ്പെയിസ് ആവശ്യമുണ്ടു്"
-
-#: gdk-pixbuf/io-pnm.c:768
-msgid "Cannot allocate memory for loading PNM image"
-msgstr "PNM ഇമേജ് ലഭ്യമാക്കുന്നതിനുള്ള മെമ്മറി അനുവദിക്കുവാന്‍ സാധ്യമായില്ല"
-
-#: gdk-pixbuf/io-pnm.c:818
-msgid "Insufficient memory to load PNM context struct"
-msgstr "PNM context struct ലഭ്യമാക്കുന്നതിന് ആവശ്യമുള്ള മെമ്മറി"
-
-#: gdk-pixbuf/io-pnm.c:869
-msgid "Unexpected end of PNM image data"
-msgstr "PNM ഇമേഡ് ഡേറ്റാ അപ്രതീക്ഷിതമായി അവസാനിച്ചിരിക്കുന്നു"
-
-#: gdk-pixbuf/io-pnm.c:997
-msgid "Insufficient memory to load PNM file"
-msgstr "PNM ഫയല്‍ ലഭ്യമാക്കുന്നതിന് ആവശ്യമുള്ള മെമ്മറിയില്ല"
-
-#: gdk-pixbuf/io-pnm.c:1081
-msgid "The PNM/PBM/PGM/PPM image format family"
-msgstr "PNM/PBM/PGM/PPM ഇമേജ് രീതി"
-
-#: gdk-pixbuf/io-qtif.c:128
-msgid "Input file descriptor is NULL."
-msgstr ""
-
-#: gdk-pixbuf/io-qtif.c:143
-#, fuzzy
-msgid "Failed to read QTIF header"
-msgstr "ഹെഡറ്‍ എഴുതുന്നതില്‍ പരാജയം\n"
-
-#: gdk-pixbuf/io-qtif.c:152 gdk-pixbuf/io-qtif.c:182 gdk-pixbuf/io-qtif.c:446
-#, c-format
-msgid "QTIF atom size too large (%d bytes)"
-msgstr ""
-
-#: gdk-pixbuf/io-qtif.c:172
-#, c-format
-msgid "Failed to allocate %d bytes for file read buffer"
-msgstr ""
-
-#: gdk-pixbuf/io-qtif.c:196
-#, fuzzy, c-format
-msgid "File error when reading QTIF atom: %s"
-msgstr "GIF ലഭ്യമാക്കുന്നതില്‍ പിശക്: %s"
-
-#: gdk-pixbuf/io-qtif.c:233
-#, c-format
-msgid "Failed to skip the next %d bytes with seek()."
-msgstr ""
-
-#: gdk-pixbuf/io-qtif.c:257
-#, fuzzy
-msgid "Failed to allocate QTIF context structure."
-msgstr "TGA context struct-നുള്ള മെമ്മറി അനുവദിക്കുവാന്‍ സാധ്യമായില്ല"
-
-#: gdk-pixbuf/io-qtif.c:317
-#, fuzzy
-msgid "Failed to create GdkPixbufLoader object."
-msgstr "index അറ എഴുതുന്നതില്‍ പരാ‍ജയം\n"
-
-#: gdk-pixbuf/io-qtif.c:421
-#, fuzzy
-msgid "Failed to find an image data atom."
-msgstr "TIFF ഇമേജ് തുറക്കുവാന്‍ സാധ്യമല്ല"
-
-#: gdk-pixbuf/io-qtif.c:602
-#, fuzzy
-msgid "The QTIF image format"
-msgstr "TIFF ഇമേഡ് രീതി"
-
-#: gdk-pixbuf/io-ras.c:126
-msgid "RAS image has bogus header data"
-msgstr "RAS ഇമേജില്‍ തെറ്റായ ഹെഡറ്‍ ഡേറ്റാ"
-
-#: gdk-pixbuf/io-ras.c:148
-msgid "RAS image has unknown type"
-msgstr "RAS ഇമേജില്‍ അപരിചിമായ തരത്തിലുള്ളത്"
-
-#: gdk-pixbuf/io-ras.c:156
-msgid "unsupported RAS image variation"
-msgstr "പിന്തുണ ലഭ്യമല്ലാത്ത RAS ഇമേജ് മാറ്റം"
-
-#: gdk-pixbuf/io-ras.c:171 gdk-pixbuf/io-ras.c:200
-msgid "Not enough memory to load RAS image"
-msgstr "RAS ഇമേജ് ലഭ്യമാക്കുന്നതിന് ആവശ്യമുള്ള മെമ്മറിയില്ല"
-
-#: gdk-pixbuf/io-ras.c:545
-msgid "The Sun raster image format"
-msgstr "Sun raster ഇമേജ് രീതി"
-
-#: gdk-pixbuf/io-tga.c:154
-msgid "Cannot allocate memory for IOBuffer struct"
-msgstr "IOBuffer struct-ന് ആവശ്യമുള്ള മെമ്മറി അനുവദിക്കുവാന്‍ സാധ്യമായില്ല"
-
-#: gdk-pixbuf/io-tga.c:173
-msgid "Cannot allocate memory for IOBuffer data"
-msgstr "IOBuffer ഡേറ്റായ്ക്ക് ആവശ്യമുള്ള മെമ്മറി അനുവദിക്കുവാന്‍ സാധ്യമായില്ല"
-
-#: gdk-pixbuf/io-tga.c:184
-msgid "Cannot realloc IOBuffer data"
-msgstr "IOBuffer data realloc ചെയ്യുവാന്‍ സാധ്യമായില്ല"
-
-#: gdk-pixbuf/io-tga.c:214
-msgid "Cannot allocate temporary IOBuffer data"
-msgstr "താല്‍ക്കാലികമായ IOBuffer ഡേറ്റാ  അനുവദിക്കുവാന്‍ സാധ്യമായില്ല"
-
-#: gdk-pixbuf/io-tga.c:347
-msgid "Cannot allocate new pixbuf"
-msgstr "പുതിയ pixbuf അനുവദിക്കുവാന്‍ സാധ്യമായില്ല"
-
-#: gdk-pixbuf/io-tga.c:686
-#, fuzzy
-msgid "Image is corrupted or truncated"
-msgstr "GIF ഇമേജ് പൂറ്‍ണ്ണമല്ല."
-
-#: gdk-pixbuf/io-tga.c:693
-msgid "Cannot allocate colormap structure"
-msgstr "കളറ്‍മാപ്പ് രൂപം അനുവദിക്കുവാന്‍ സാധ്യമായില്ല"
-
-#: gdk-pixbuf/io-tga.c:700
-msgid "Cannot allocate colormap entries"
-msgstr "കളറ്‍മാപ്പ് എന്‍ട്രികള്‍ അനുവദിക്കുവാന്‍ സാധ്യമായില്ല"
-
-#: gdk-pixbuf/io-tga.c:722
-msgid "Unexpected bitdepth for colormap entries"
-msgstr "colormap എന്‍ട്രികള്‍ക്ക് അപ്രതീക്ഷിതമായ bitdepth"
-
-#: gdk-pixbuf/io-tga.c:740
-msgid "Cannot allocate TGA header memory"
-msgstr "TGA ഹെഡറ്‍ മെമ്മറി അനുവദിക്കുവാന്‍ സാധ്യമായില്ല"
-
-#: gdk-pixbuf/io-tga.c:773
-msgid "TGA image has invalid dimensions"
-msgstr "TGA ഇമേജില്‍ തെറ്റായ അളവുകള്‍"
-
-#: gdk-pixbuf/io-tga.c:779 gdk-pixbuf/io-tga.c:788 gdk-pixbuf/io-tga.c:798
-#: gdk-pixbuf/io-tga.c:808 gdk-pixbuf/io-tga.c:815
-msgid "TGA image type not supported"
-msgstr "TGA തരത്തിലുള്ള ഇമേജിന് പിന്തുണ ലഭ്യമല്ല"
-
-#: gdk-pixbuf/io-tga.c:862
-msgid "Cannot allocate memory for TGA context struct"
-msgstr "TGA context struct-നുള്ള മെമ്മറി അനുവദിക്കുവാന്‍ സാധ്യമായില്ല"
-
-#: gdk-pixbuf/io-tga.c:927
-msgid "Excess data in file"
-msgstr "ഫയലില്‍ കൂടുതല്‍ ഡേറ്റാ"
-
-#: gdk-pixbuf/io-tga.c:1008
-msgid "The Targa image format"
-msgstr "Targa ഇമേജ് രീതി"
-
-#: gdk-pixbuf/io-tiff.c:165
-msgid "Could not get image width (bad TIFF file)"
-msgstr "ഇമേജിന്റെ വീതി ലഭ്യമാക്കുവാന്‍ സാധ്യമായില്ല (തെറ്റായ TIFF ഫയല്‍)"
-
-#: gdk-pixbuf/io-tiff.c:172
-msgid "Could not get image height (bad TIFF file)"
-msgstr "ഇമേജിന്റെ ഉയരം ലഭ്യമാക്കുവാന്‍ സാധ്യമായില്ല (തെറ്റായ TIFF ഫയല്‍)"
-
-#: gdk-pixbuf/io-tiff.c:180
-msgid "Width or height of TIFF image is zero"
-msgstr "TIFF ഇമേജിന്റെ വീതി അല്ലെങ്കില്‍ ഉയരം പൂജ്യമാണ്"
-
-#: gdk-pixbuf/io-tiff.c:189 gdk-pixbuf/io-tiff.c:198
-msgid "Dimensions of TIFF image too large"
-msgstr "TIFF ഇമേജിന്റെ അളവുകള്‍ വളരെ കൂടുതലാണ്"
-
-#: gdk-pixbuf/io-tiff.c:222 gdk-pixbuf/io-tiff.c:234 gdk-pixbuf/io-tiff.c:561
-msgid "Insufficient memory to open TIFF file"
-msgstr "TIFF ഫയല്‍ തുറക്കുന്നതിന് ആവശ്യമായ മെമ്മറി ലഭ്യമല്ല"
-
-#: gdk-pixbuf/io-tiff.c:295
-msgid "Failed to load RGB data from TIFF file"
-msgstr "TIFF ഫയലില്‍ നിന്നും RGB ഡേറ്റാ ലഭ്യമാക്കുന്നതില്‍ പരാജയം"
-
-#: gdk-pixbuf/io-tiff.c:351
-msgid "Failed to open TIFF image"
-msgstr "TIFF ഇമേജ് തുറക്കുവാന്‍ സാധ്യമല്ല"
-
-#: gdk-pixbuf/io-tiff.c:363 gdk-pixbuf/io-tiff.c:778
-msgid "TIFFClose operation failed"
-msgstr "TIFFClose പ്രക്രിയ പരാജയപ്പെട്ടു"
-
-#: gdk-pixbuf/io-tiff.c:493 gdk-pixbuf/io-tiff.c:506
-msgid "Failed to load TIFF image"
-msgstr "TIFF ഇമേജ് ലഭ്യമാക്കുന്നതില്‍ പരാജയം"
-
-#: gdk-pixbuf/io-tiff.c:692
-msgid "Failed to save TIFF image"
-msgstr "TIFF ഇമേജ് സൂക്ഷിക്കുന്നതില്‍ പരാജയം"
-
-#: gdk-pixbuf/io-tiff.c:727
-msgid "TIFF compression doesn't refer to a valid codec."
-msgstr ""
-
-#: gdk-pixbuf/io-tiff.c:767
-msgid "Failed to write TIFF data"
-msgstr "TIFF ഇമേജ് എഴുതുന്നതില്‍ പരാജയം"
-
-#: gdk-pixbuf/io-tiff.c:814
-msgid "Couldn't write to TIFF file"
-msgstr "TIFF ഫയലിലേക്ക് എഴുതുവാന്‍ സാധ്യമായില്ല"
-
-#: gdk-pixbuf/io-tiff.c:869
-msgid "The TIFF image format"
-msgstr "TIFF ഇമേഡ് രീതി"
-
-#: gdk-pixbuf/io-wbmp.c:246
-msgid "Image has zero width"
-msgstr "ഇമേജിന്റെ വീതി പൂജ്യമാണ്"
-
-#: gdk-pixbuf/io-wbmp.c:264
-msgid "Image has zero height"
-msgstr "ഇമേജിന്റെ ഉയരം പൂജ്യമാണ്"
-
-#: gdk-pixbuf/io-wbmp.c:275
-msgid "Not enough memory to load image"
-msgstr "ഇമേജ് ലഭ്യമാക്കുന്നതിന് ആവശ്യമുള്ള മെമ്മറിയില്ല"
-
-#: gdk-pixbuf/io-wbmp.c:334
-msgid "Couldn't save the rest"
-msgstr "ബാക്കിയുള്ളവ സൂക്ഷിക്കുവാന്‍ സാധ്യമായില്ല"
-
-#: gdk-pixbuf/io-wbmp.c:375
-msgid "The WBMP image format"
-msgstr "WBMP ഇമേജ് രീതി"
-
-#: gdk-pixbuf/io-xbm.c:295
-msgid "Invalid XBM file"
-msgstr "തെറ്റായ XBM ഫയല്‍"
-
-#: gdk-pixbuf/io-xbm.c:305
-msgid "Insufficient memory to load XBM image file"
-msgstr "XBM ഇമേജ് ഫയല്‍ ലഭ്യമാക്കുന്നതിന് ആവശ്യമുള്ള മെമ്മറിയില്ല"
-
-#: gdk-pixbuf/io-xbm.c:453
-msgid "Failed to write to temporary file when loading XBM image"
-msgstr "XBM ഇമേജ് ലഭ്യമാക്കുമ്പോള്‍ താല്‍ക്കാലിക ഫയലിലേക്ക് എഴുതുന്നതില്‍ പരാജയം"
-
-#: gdk-pixbuf/io-xbm.c:492
-msgid "The XBM image format"
-msgstr "XBM ഇമേജ് രീതി"
-
-#: gdk-pixbuf/io-xpm.c:468
-msgid "No XPM header found"
-msgstr "XPM ഹെഡറ്‍ ലഭ്യമല്ല"
-
-#: gdk-pixbuf/io-xpm.c:477
-msgid "Invalid XPM header"
-msgstr "തെറ്റായ XPM ഹെഡറ്‍"
-
-#: gdk-pixbuf/io-xpm.c:485
-msgid "XPM file has image width <= 0"
-msgstr "XPM ഫയലിന്റെ ഇമേജ് വീതി <= 0"
-
-#: gdk-pixbuf/io-xpm.c:493
-msgid "XPM file has image height <= 0"
-msgstr "XPM ഫയലിന്റെ ഇമേജ് ഉയരം <= 0"
-
-#: gdk-pixbuf/io-xpm.c:501
-msgid "XPM has invalid number of chars per pixel"
-msgstr "XPM-ലുള്ള ഓരോ പിക്സലുകളിലേയും അക്ഷരങ്ങളുടെ എണ്ണം തെറ്റാണ്"
-
-#: gdk-pixbuf/io-xpm.c:510
-msgid "XPM file has invalid number of colors"
-msgstr "XPM ഫയലിലുള്ള നിറങ്ങളുടെ എണ്ണം തെറ്റാണ്"
-
-#: gdk-pixbuf/io-xpm.c:522 gdk-pixbuf/io-xpm.c:531 gdk-pixbuf/io-xpm.c:583
-msgid "Cannot allocate memory for loading XPM image"
-msgstr "XPM ഇമേജ് ലഭ്യമാക്കുന്നതിന് ആവശ്യമുള്ള മെമ്മറി അനുവദിക്കുവാന്‍ സാധ്യമല്ല"
-
-#: gdk-pixbuf/io-xpm.c:545
-msgid "Cannot read XPM colormap"
-msgstr "XPM കളറ്‍മാപ്പ് വായിക്കുവാന്‍ സാധ്യമല്ല"
-
-#: gdk-pixbuf/io-xpm.c:777
-msgid "Failed to write to temporary file when loading XPM image"
-msgstr "XPM ഇമേജ് ലഭ്യമാക്കുമ്പോള്‍ താല്‍ക്കാലിക ഫയലിലേക്ക് എഴുതുന്നതില്‍ പരാജയം"
-
-#: gdk-pixbuf/io-xpm.c:816
-msgid "The XPM image format"
-msgstr "XPM ഇമേജ് രീതി"
-
-#: gdk-pixbuf/io-gdip-emf.c:59
-msgid "The EMF image format"
-msgstr "EMF ഇമേജ് രീതി"
-
-#: gdk-pixbuf/io-gdip-utils.c:232
-#, c-format
-msgid "Could not allocate memory: %s"
-msgstr "മെമ്മറി അനുവദിക്കുവാന്‍ സാധ്യമായില്ല :%s"
-
-#: gdk-pixbuf/io-gdip-utils.c:257 gdk-pixbuf/io-gdip-utils.c:371
-#: gdk-pixbuf/io-gdip-utils.c:411
-#, c-format
-msgid "Could not create stream: %s"
-msgstr "സ്റ്റ്രീം ഉണ്ടാക്കാന്‍ കഴിഞ്ഞില്ല : %s"
-
-#: gdk-pixbuf/io-gdip-utils.c:271
-#, c-format
-msgid "Could not seek stream: %s"
-msgstr "സ്റ്റ്രീം കണ്ടുപിടിക്കാന്‍/തിരയാന്‍ കഴിഞ്ഞില്ല : %s"
-
-#: gdk-pixbuf/io-gdip-utils.c:283
-#, c-format
-msgid "Could not read from stream: %s"
-msgstr "സ്റ്റ്രീം വായിക്കാന്‍ കഴിഞ്ഞില്ല : %s"
-
-#: gdk-pixbuf/io-gdip-utils.c:694 gdk-pixbuf/io-gdip-utils.c:825
-msgid "Couldn't load bitmap"
-msgstr "ബിറ്റ്മാപ് തുരക്കാന്‍ കഴിഞ്ഞില്ല"
-
-#: gdk-pixbuf/io-gdip-utils.c:847
-msgid "Couldn't load metafile"
-msgstr "മെറ്റാഫയല്‍ തുരക്കാന്‍ കഴിഞ്ഞില്ല"
-
-#: gdk-pixbuf/io-gdip-utils.c:1006
-msgid "Unsupported image format for GDI+"
-msgstr "പിന്തുണ ലഭ്യമല്ലാത്ത ചിത്ര രീതി,  GDI+ -ഇനുള്ളതു്‌"
-
-#: gdk-pixbuf/io-gdip-utils.c:1013
-msgid "Couldn't save"
-msgstr "സൂക്ഷിക്കുവാന്‍ സാധ്യമായില്ല"
-
-#: gdk-pixbuf/io-gdip-wmf.c:58
-msgid "The WMF image format"
-msgstr "WMF ഇമേജ് രീതി"
 
 #. Description of --sync in --help output
 #: gdk/win32/gdkmain-win32.c:55
@@ -1509,8 +609,9 @@ msgid "_Saturation:"
 msgstr "_സാച്ചുറേഷന്‍:"
 
 #: gtk/gtkcolorsel.c:393
-msgid "\"Deepness\" of the color."
-msgstr "നിറത്തിന്റെ \"ആഴം\" "
+#, fuzzy
+msgid "Intensity of the color."
+msgstr "നിറത്തിന്റെ ട്രാന്‍സ്പെറന്‍സി"
 
 #: gtk/gtkcolorsel.c:394
 msgid "_Value:"
@@ -1681,11 +782,11 @@ msgstr "_വലത്ത്:"
 msgid "Paper Margins"
 msgstr "പേപ്പറിനുള്ള മാര്‍ജിനുകള്‍"
 
-#: gtk/gtkentry.c:8612 gtk/gtktextview.c:8002
+#: gtk/gtkentry.c:8612 gtk/gtktextview.c:8012
 msgid "Input _Methods"
 msgstr "ഇന്‍പുട്ട് _രീതികള്‍"
 
-#: gtk/gtkentry.c:8626 gtk/gtktextview.c:8016
+#: gtk/gtkentry.c:8626 gtk/gtktextview.c:8026
 msgid "_Insert Unicode Control Character"
 msgstr "_Insert Unicode Control Character"
 
@@ -2128,12 +1229,12 @@ msgid "System (%s)"
 msgstr "സിസ്റ്റം (%s)"
 
 #. Open Link
-#: gtk/gtklabel.c:6076
+#: gtk/gtklabel.c:6072
 msgid "_Open Link"
 msgstr "കണ്ണി _തുറക്കുക "
 
 #. Copy Link Address
-#: gtk/gtklabel.c:6088
+#: gtk/gtklabel.c:6084
 msgid "Copy _Link Address"
 msgstr "_കണ്ണിയുടെ വിലാസം പകര്‍ത്തുക"
 
@@ -2146,27 +1247,27 @@ msgid "Invalid URI"
 msgstr "തെറ്റായ URI"
 
 #. Description of --gtk-module=MODULES in --help output
-#: gtk/gtkmain.c:447
+#: gtk/gtkmain.c:432
 msgid "Load additional GTK+ modules"
 msgstr "കൂടുതല്‍ GTK+ ഘടകങ്ങള്‍ ലഭ്യമാക്കുക"
 
 #. Placeholder in --gtk-module=MODULES in --help output
-#: gtk/gtkmain.c:448
+#: gtk/gtkmain.c:433
 msgid "MODULES"
 msgstr "MODULES"
 
 #. Description of --g-fatal-warnings in --help output
-#: gtk/gtkmain.c:450
+#: gtk/gtkmain.c:435
 msgid "Make all warnings fatal"
 msgstr "എല്ലാ മുന്നറിയിപ്പുകളും പ്രധാനമാക്കുക"
 
 #. Description of --gtk-debug=FLAGS in --help output
-#: gtk/gtkmain.c:453
+#: gtk/gtkmain.c:438
 msgid "GTK+ debugging flags to set"
 msgstr "ക്രമീകരിക്കാനുള്ള GTK+ ഡീബഗ്ഗിങ് ഫ്ളാഗുകള്‍"
 
 #. Description of --gtk-no-debug=FLAGS in --help output
-#: gtk/gtkmain.c:456
+#: gtk/gtkmain.c:441
 msgid "GTK+ debugging flags to unset"
 msgstr "നിറ്‍ജ്ജീവമാക്കുവാനുള്ള GTK+ ഡീബഗ്ഗിങ് ഫ്ളാഗുകള്‍ "
 
@@ -2175,20 +1276,20 @@ msgstr "നിറ്‍ജ്ജീവമാക്കുവാനുള്ള GT
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
 #.
-#: gtk/gtkmain.c:708
+#: gtk/gtkmain.c:704
 msgid "default:LTR"
 msgstr "default:LTR"
 
-#: gtk/gtkmain.c:773
+#: gtk/gtkmain.c:769
 #, c-format
 msgid "Cannot open display: %s"
 msgstr "ഡിസ്പ്ലെ തുറക്കുവാന്‍ സാധ്യമല്ല: %s"
 
-#: gtk/gtkmain.c:810
+#: gtk/gtkmain.c:806
 msgid "GTK+ Options"
 msgstr "GTK+ ഉപാധികള്‍"
 
-#: gtk/gtkmain.c:810
+#: gtk/gtkmain.c:806
 msgid "Show GTK+ Options"
 msgstr "GTK+ ഉപാധികള്‍ കാണിക്കുക"
 
@@ -2273,7 +1374,7 @@ msgstr "Z ഷെല്‍"
 msgid "Cannot end process with pid %d: %s"
 msgstr "pid %d-ല്‍ പ്രക്രിയ അവസാനിപ്പിക്കുവാന്‍ സാധ്യമല്ല: %s"
 
-#: gtk/gtknotebook.c:4621 gtk/gtknotebook.c:7050
+#: gtk/gtknotebook.c:4631 gtk/gtknotebook.c:7060
 #, c-format
 msgid "Page %u"
 msgstr "താള്‍ %u"
@@ -2363,87 +1464,81 @@ msgstr "അറയില്‍ _സൂക്ഷിക്കുക:"
 msgid "%s job #%d"
 msgstr "%s ജോലി #%d"
 
-#: gtk/gtkprintoperation.c:1687
+#: gtk/gtkprintoperation.c:1695
 msgctxt "print operation status"
 msgid "Initial state"
 msgstr "ആരംഭത്തിലുള്ള അവസ്ഥ"
 
-#: gtk/gtkprintoperation.c:1688
+#: gtk/gtkprintoperation.c:1696
 msgctxt "print operation status"
 msgid "Preparing to print"
 msgstr "പ്രിന്റ് ചെയ്യുന്നതിനായി തയ്യാറാക്കുന്നു"
 
-#: gtk/gtkprintoperation.c:1689
+#: gtk/gtkprintoperation.c:1697
 msgctxt "print operation status"
 msgid "Generating data"
 msgstr "ഡേറ്റാ ലഭ്യമാക്കുന്നു"
 
-#: gtk/gtkprintoperation.c:1690
+#: gtk/gtkprintoperation.c:1698
 msgctxt "print operation status"
 msgid "Sending data"
 msgstr "ഡേറ്റാ അയയ്ക്കുന്നു"
 
-#: gtk/gtkprintoperation.c:1691
+#: gtk/gtkprintoperation.c:1699
 msgctxt "print operation status"
 msgid "Waiting"
 msgstr "കാത്തിരിക്കുന്നു"
 
-#: gtk/gtkprintoperation.c:1692
+#: gtk/gtkprintoperation.c:1700
 msgctxt "print operation status"
 msgid "Blocking on issue"
 msgstr "ബ്ലോക്ക് ചെയ്യുന്നു"
 
-#: gtk/gtkprintoperation.c:1693
+#: gtk/gtkprintoperation.c:1701
 msgctxt "print operation status"
 msgid "Printing"
 msgstr "പ്രിന്റ് ചെയ്യുന്നു"
 
-#: gtk/gtkprintoperation.c:1694
+#: gtk/gtkprintoperation.c:1702
 msgctxt "print operation status"
 msgid "Finished"
 msgstr "പൂര്‍ത്തിയാക്കിയിരിക്കുന്നു"
 
-#: gtk/gtkprintoperation.c:1695
+#: gtk/gtkprintoperation.c:1703
 msgctxt "print operation status"
 msgid "Finished with error"
 msgstr "പിശകോടെ പൂര്‍ത്തിയാക്കിയിരിക്കുന്നു"
 
-#: gtk/gtkprintoperation.c:2254
+#: gtk/gtkprintoperation.c:2270
 #, c-format
 msgid "Preparing %d"
 msgstr "%d തയ്യാറാക്കുന്നു"
 
-#: gtk/gtkprintoperation.c:2256 gtk/gtkprintoperation.c:2875
+#: gtk/gtkprintoperation.c:2272 gtk/gtkprintoperation.c:2902
 #, c-format
 msgid "Preparing"
 msgstr "തയ്യാറാക്കുന്നു"
 
-#: gtk/gtkprintoperation.c:2259
+#: gtk/gtkprintoperation.c:2275
 #, c-format
 msgid "Printing %d"
 msgstr "%d പ്രിന്റ് ചെയ്യുന്നു"
 
-#: gtk/gtkprintoperation.c:2905
+#: gtk/gtkprintoperation.c:2932
 #, c-format
 msgid "Error creating print preview"
 msgstr "പ്രിന്റ് ചെയ്യുന്നതിനു് മുമ്പ് സ്ക്രീനില്‍ കാണുന്നതില്‍ പിശക്"
 
-#: gtk/gtkprintoperation.c:2908
+#: gtk/gtkprintoperation.c:2935
 #, c-format
 msgid "The most probable reason is that a temporary file could not be created."
 msgstr "ഇതിനുള്ള കാരണം മിക്കവാറും താല്‍ക്കാലിക ഫയല്‍ ഉണ്ടാക്കപ്പെട്ടില്ല എന്നതാവും."
 
-#: gtk/gtkprintoperation-unix.c:297 gtk/gtkprintoperation-unix.c:314
-#, c-format
+#: gtk/gtkprintoperation-unix.c:297
 msgid "Error launching preview"
 msgstr "തിരനോട്ടം ലഭ്യമാക്കുന്നതില്‍ പിശക്"
 
-#: gtk/gtkprintoperation-unix.c:358
-#, c-format
-msgid "Error printing"
-msgstr "പ്രിന്റ് ചെയ്യുന്നതില്‍ പിശക്"
-
-#: gtk/gtkprintoperation-unix.c:494 gtk/gtkprintoperation-win32.c:1447
+#: gtk/gtkprintoperation-unix.c:470 gtk/gtkprintoperation-win32.c:1447
 msgid "Application"
 msgstr "പ്രയോഗം"
 
@@ -2457,7 +1552,7 @@ msgstr "പേപ്പറ്‍ തീറ്‍ന്നിരിക്കു�
 
 #. Translators: this is a printer status.
 #: gtk/gtkprintoperation-win32.c:616
-#: modules/printbackends/cups/gtkprintbackendcups.c:1999
+#: modules/printbackends/cups/gtkprintbackendcups.c:1998
 msgid "Paused"
 msgstr "തല്‍ക്കാലികമായി നിറ്‍ത്തിയിരിക്കുന്നു"
 
@@ -2585,42 +1680,42 @@ msgstr "സാധാരണ"
 #. * multiple pages on a sheet when printing
 #.
 #: gtk/gtkprintunixdialog.c:3010
-#: modules/printbackends/cups/gtkprintbackendcups.c:3509
+#: modules/printbackends/cups/gtkprintbackendcups.c:3508
 msgid "Left to right, top to bottom"
 msgstr "ഇടതില്‍ നിന്നും വലത്തേയ്ക്ക്, മുകളില്‍ നിന്നും താഴേയ്ക്ക്"
 
 #: gtk/gtkprintunixdialog.c:3010
-#: modules/printbackends/cups/gtkprintbackendcups.c:3509
+#: modules/printbackends/cups/gtkprintbackendcups.c:3508
 msgid "Left to right, bottom to top"
 msgstr "ഇടതില്‍ നിന്നും വലത്തേയ്ക്ക്, താഴെ നിന്നും മുകളിലേക്ക്, "
 
 #: gtk/gtkprintunixdialog.c:3011
-#: modules/printbackends/cups/gtkprintbackendcups.c:3510
+#: modules/printbackends/cups/gtkprintbackendcups.c:3509
 msgid "Right to left, top to bottom"
 msgstr "വലതു്‌ നിന്നും ഇടത്തേയ്ക്ക്, മുകളില്‍ നിന്നും താഴേയ്ക്ക്"
 
 #: gtk/gtkprintunixdialog.c:3011
-#: modules/printbackends/cups/gtkprintbackendcups.c:3510
+#: modules/printbackends/cups/gtkprintbackendcups.c:3509
 msgid "Right to left, bottom to top"
 msgstr ", താഴെ നിന്നും മുകളിലേക്ക്"
 
 #: gtk/gtkprintunixdialog.c:3012
-#: modules/printbackends/cups/gtkprintbackendcups.c:3511
+#: modules/printbackends/cups/gtkprintbackendcups.c:3510
 msgid "Top to bottom, left to right"
 msgstr "മുകളില്‍ നിന്നും താഴേയ്ക്ക്, ഇടതില്‍ നിന്നും വലത്തേയ്ക്ക്"
 
 #: gtk/gtkprintunixdialog.c:3012
-#: modules/printbackends/cups/gtkprintbackendcups.c:3511
+#: modules/printbackends/cups/gtkprintbackendcups.c:3510
 msgid "Top to bottom, right to left"
 msgstr "മുകളില്‍ നിന്നും താഴേയ്ക്ക്, വലതു്‌ നിന്നും ഇടത്തേയ്ക്ക്"
 
 #: gtk/gtkprintunixdialog.c:3013
-#: modules/printbackends/cups/gtkprintbackendcups.c:3512
+#: modules/printbackends/cups/gtkprintbackendcups.c:3511
 msgid "Bottom to top, left to right"
 msgstr "താഴെ നിന്നും മുകളിലേക്ക്, "
 
 #: gtk/gtkprintunixdialog.c:3013
-#: modules/printbackends/cups/gtkprintbackendcups.c:3512
+#: modules/printbackends/cups/gtkprintbackendcups.c:3511
 msgid "Bottom to top, right to left"
 msgstr "താഴെ നിന്നും മുകളിലേക്ക്, വലതു്‌ നിന്നും ഇടത്തേയ്ക്ക്"
 
@@ -2628,7 +1723,7 @@ msgstr "താഴെ നിന്നും മുകളിലേക്ക്, �
 #. * dialog that controls in what order multiple pages are arranged
 #.
 #: gtk/gtkprintunixdialog.c:3017 gtk/gtkprintunixdialog.c:3030
-#: modules/printbackends/cups/gtkprintbackendcups.c:3544
+#: modules/printbackends/cups/gtkprintbackendcups.c:3543
 msgid "Page Ordering"
 msgstr "പേജിന്റെ ക്രമം"
 
@@ -4790,121 +3885,116 @@ msgstr "പ്രിന്ററ്‍  '%s' ഇപ്പോള്‍ ഓഫ്-
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:1687
 #, c-format
-msgid "Printer '%s' may not be connected."
-msgstr "പ്രിന്റര്‍  '%s' കണക്ര്റ് ചെയ്തിട്ടില്ലായിരിക്കാം"
-
-#: modules/printbackends/cups/gtkprintbackendcups.c:1688
-#, c-format
 msgid "There is a problem on printer '%s'."
 msgstr "പ്രിന്റര്‍  '%s'-ഇല്‍ ഒരു പ്രശ്നമുണ്ട്"
 
 #. Translators: this is a printer status.
-#: modules/printbackends/cups/gtkprintbackendcups.c:1996
+#: modules/printbackends/cups/gtkprintbackendcups.c:1995
 msgid "Paused ; Rejecting Jobs"
 msgstr "താല്‍കാല്‍കമായി നിര്‍ത്തി ; ജോലികള്‍ റിജെക്ര്റ് ചെയ്യുന്നു"
 
 #. Translators: this is a printer status.
-#: modules/printbackends/cups/gtkprintbackendcups.c:2002
+#: modules/printbackends/cups/gtkprintbackendcups.c:2001
 msgid "Rejecting Jobs"
 msgstr "ജോലികള്‍ റിജെക്ര്റ് ചെയ്യുന്നു"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2778
+#: modules/printbackends/cups/gtkprintbackendcups.c:2777
 msgid "Two Sided"
 msgstr "ഇരുവശവുമുള്ള"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2779
+#: modules/printbackends/cups/gtkprintbackendcups.c:2778
 msgid "Paper Type"
 msgstr "ഏത് തരം പേപ്പറ്‍"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2780
+#: modules/printbackends/cups/gtkprintbackendcups.c:2779
 msgid "Paper Source"
 msgstr "പേപ്പറിന്റെ ഉറവിടം"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2781
+#: modules/printbackends/cups/gtkprintbackendcups.c:2780
 msgid "Output Tray"
 msgstr "ഔട്ട്പുട്ട് ട്രേ"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2782
+#: modules/printbackends/cups/gtkprintbackendcups.c:2781
 msgid "Resolution"
 msgstr "റിസല്യൂഷന്‍"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2783
+#: modules/printbackends/cups/gtkprintbackendcups.c:2782
 msgid "GhostScript pre-filtering"
 msgstr "GhostScript പ്രീ-ഫില്‍‌റ്ററിങ്"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2792
+#: modules/printbackends/cups/gtkprintbackendcups.c:2791
 msgid "One Sided"
 msgstr "ഒരു വശം മാത്രം"
 
 #. Translators: this is an option of "Two Sided"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2794
+#: modules/printbackends/cups/gtkprintbackendcups.c:2793
 msgid "Long Edge (Standard)"
 msgstr "ലോങ് എഡ്ജ് (സാധാരണ)"
 
 #. Translators: this is an option of "Two Sided"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2796
+#: modules/printbackends/cups/gtkprintbackendcups.c:2795
 msgid "Short Edge (Flip)"
 msgstr "ഷോര്‍ട്ട് എഡ്ജ് (ഫ്ലിപ്പ്)"
 
 #. Translators: this is an option of "Paper Source"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2798
-#: modules/printbackends/cups/gtkprintbackendcups.c:2800
-#: modules/printbackends/cups/gtkprintbackendcups.c:2808
+#: modules/printbackends/cups/gtkprintbackendcups.c:2797
+#: modules/printbackends/cups/gtkprintbackendcups.c:2799
+#: modules/printbackends/cups/gtkprintbackendcups.c:2807
 msgid "Auto Select"
 msgstr "സ്വയം തെരഞ്ഞെടുക്കുക"
 
 #. Translators: this is an option of "Paper Source"
 #. Translators: this is an option of "Resolution"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2802
-#: modules/printbackends/cups/gtkprintbackendcups.c:2804
-#: modules/printbackends/cups/gtkprintbackendcups.c:2806
-#: modules/printbackends/cups/gtkprintbackendcups.c:2810
-#: modules/printbackends/cups/gtkprintbackendcups.c:3296
+#: modules/printbackends/cups/gtkprintbackendcups.c:2801
+#: modules/printbackends/cups/gtkprintbackendcups.c:2803
+#: modules/printbackends/cups/gtkprintbackendcups.c:2805
+#: modules/printbackends/cups/gtkprintbackendcups.c:2809
+#: modules/printbackends/cups/gtkprintbackendcups.c:3295
 msgid "Printer Default"
 msgstr "സ്വതവേസുള്ള പ്രിന്ററ്‍"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2812
+#: modules/printbackends/cups/gtkprintbackendcups.c:2811
 msgid "Embed GhostScript fonts only"
 msgstr "GhostScript അക്ഷരസഞ്ചയങ്ങള്‍ മാത്രം എംബഡ് ചെയ്യുക"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2814
+#: modules/printbackends/cups/gtkprintbackendcups.c:2813
 msgid "Convert to PS level 1"
 msgstr "പിഎസ് ലവല്‍ 1-ലേക്കു് വേര്‍തിരിക്കുക"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2816
+#: modules/printbackends/cups/gtkprintbackendcups.c:2815
 msgid "Convert to PS level 2"
 msgstr "പിഎസ് ലവല്‍ 2-ലേക്കു് വേര്‍തിരിക്കുക"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2818
+#: modules/printbackends/cups/gtkprintbackendcups.c:2817
 msgid "No pre-filtering"
 msgstr "പ്രീ-ഫില്‍‌റ്ററിങ് ലഭ്യമല്ല"
 
 #. Translators: "Miscellaneous" is the label for a button, that opens
 #. up an extra panel of settings in a print dialog.
-#: modules/printbackends/cups/gtkprintbackendcups.c:2827
+#: modules/printbackends/cups/gtkprintbackendcups.c:2826
 msgid "Miscellaneous"
 msgstr "മറ്റുള്ളവ"
 
 #. Translators: These strings name the possible values of the
 #. * job priority option in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3504
+#: modules/printbackends/cups/gtkprintbackendcups.c:3503
 msgid "Urgent"
 msgstr "അത്യാവശ്യമായ"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3504
+#: modules/printbackends/cups/gtkprintbackendcups.c:3503
 msgid "High"
 msgstr "കൂടിയ"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3504
+#: modules/printbackends/cups/gtkprintbackendcups.c:3503
 msgid "Medium"
 msgstr "ഇടത്തരം"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3504
+#: modules/printbackends/cups/gtkprintbackendcups.c:3503
 msgid "Low"
 msgstr "കുറഞ്ഞ"
 
@@ -4912,66 +4002,66 @@ msgstr "കുറഞ്ഞ"
 #. Translators, this string is used to label the pages-per-sheet option
 #. * in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3528
+#: modules/printbackends/cups/gtkprintbackendcups.c:3527
 msgid "Pages per Sheet"
 msgstr "ഒരു ഷീറ്റില്‍ എത്ര താള്‍"
 
 #. Translators, this string is used to label the job priority option
 #. * in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3565
+#: modules/printbackends/cups/gtkprintbackendcups.c:3564
 msgid "Job Priority"
 msgstr "ജോലി മുന്‍ഗണന"
 
 #. Translators, this string is used to label the billing info entry
 #. * in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3576
+#: modules/printbackends/cups/gtkprintbackendcups.c:3575
 msgid "Billing Info"
 msgstr "ബില്ലിങ് വിവരം"
 
 #. Translators, these strings are names for various 'standard' cover
 #. * pages that the printing system may support.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3591
+#: modules/printbackends/cups/gtkprintbackendcups.c:3590
 msgid "None"
 msgstr "ഒന്നുമില്ല"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3591
+#: modules/printbackends/cups/gtkprintbackendcups.c:3590
 msgid "Classified"
 msgstr "വേറ്‍തിരിച്ച"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3591
+#: modules/printbackends/cups/gtkprintbackendcups.c:3590
 msgid "Confidential"
 msgstr "വളരെ രഹസ്യമായ"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3591
+#: modules/printbackends/cups/gtkprintbackendcups.c:3590
 msgid "Secret"
 msgstr "രഹസ്യം"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3591
+#: modules/printbackends/cups/gtkprintbackendcups.c:3590
 msgid "Standard"
 msgstr "നിലവാരമുള്ള"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3591
+#: modules/printbackends/cups/gtkprintbackendcups.c:3590
 msgid "Top Secret"
 msgstr "പരമ രഹസ്യം"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3591
+#: modules/printbackends/cups/gtkprintbackendcups.c:3590
 msgid "Unclassified"
 msgstr "വേറ്‍തിരിച്ചിട്ടില്ലാത്ത"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the front cover page.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3626
+#: modules/printbackends/cups/gtkprintbackendcups.c:3625
 msgid "Before"
 msgstr "മുമ്പ്"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the back cover page.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3641
+#: modules/printbackends/cups/gtkprintbackendcups.c:3640
 msgid "After"
 msgstr "ശേഷം"
 
@@ -4979,14 +4069,14 @@ msgstr "ശേഷം"
 #. * a print job is printed. Possible values are 'now', a specified time,
 #. * or 'on hold'
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3661
+#: modules/printbackends/cups/gtkprintbackendcups.c:3660
 msgid "Print at"
 msgstr "പ്രിന്റ് ചെയ്യുക ഈ സമയത്ത്"
 
 #. Translators: this is the name of the option that allows the user
 #. * to specify a time when a print job will be printed.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3672
+#: modules/printbackends/cups/gtkprintbackendcups.c:3671
 msgid "Print at time"
 msgstr "പ്രിന്റ് ചെയ്യുക ഈ സമയത്ത്"
 
@@ -4994,7 +4084,7 @@ msgstr "പ്രിന്റ് ചെയ്യുക ഈ സമയത്ത്
 #. * size. The two placeholders are replaced with the width and height
 #. * in points. E.g: "Custom 230.4x142.9"
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3707
+#: modules/printbackends/cups/gtkprintbackendcups.c:3706
 #, c-format
 msgid "Custom %sx%s"
 msgstr "കസ്റ്റം %sx%s"
@@ -5085,6 +4175,651 @@ msgstr "ടെസ്റ്റ് പ്രിന്ററിലേക്ക് �
 #, c-format
 msgid "Could not get information for file '%s': %s"
 msgstr "'%s' എന്ന ഫയലിന് ആവശ്യമുള്ള വിവരം ലഭ്യമായില്ല: %s"
+
+#: tests/testfilechooser.c:222
+#, c-format
+msgid "Failed to open file '%s': %s"
+msgstr "'%s' എന്ന ഫയല്‍ തുറക്കുന്നില്‍ പരാജയം: %s"
+
+#: tests/testfilechooser.c:267
+#, c-format
+msgid ""
+"Failed to load image '%s': reason not known, probably a corrupt image file"
+msgstr "'%s' എന്ന ഇമേജ് ലഭ്യമാക്കുന്നതില്‍ പരാജയം: ഒരു പക്ഷേ തകരാറുള്ള ഇമേജ് ഫയല്‍ആവാം കാരണം "
+
+#~ msgid "Image file '%s' contains no data"
+#~ msgstr "'%s' എന്ന ഇമേജ് ഫയലില്‍ ഡേറ്റാ ലഭ്യമല്ല"
+
+#~ msgid ""
+#~ "Failed to load animation '%s': reason not known, probably a corrupt "
+#~ "animation file"
+#~ msgstr ""
+#~ "'%s' എന്ന ആനിമേഷന്‍ ലഭ്യമാക്കുന്നതില്‍ പരാജയം: ഒരു പക്ഷേ തകരാറുള്ള ആനിമേഷന്‍ ഫയല്‍ ആവാം "
+#~ "കാരണം "
+
+#~ msgid "Unable to load image-loading module: %s: %s"
+#~ msgstr "ഇമേജ് ലഭ്യമാക്കുന്ന ഘടകം ലഭ്യമാക്കുവാന്‍ സാധ്യമായില്ല: %s: %s"
+
+#~ msgid ""
+#~ "Image-loading module %s does not export the proper interface; perhaps "
+#~ "it's from a different GTK version?"
+#~ msgstr ""
+#~ "ഇമേജ് ലഭ്യമാക്കുന്ന ഘടകമായ %s ശരിയായ സംയോജക ഘടകം എക്സ്പോറ്‍ട്ട് ചെയ്യുന്നില്ല; മറ്റൊരു GTK "
+#~ "ലക്കത്തില്‍ നിന്നുമാവാം?"
+
+#~ msgid "Image type '%s' is not supported"
+#~ msgstr "'%s' തരത്തിലുള്ള ഇമേജിന് പിന്തുണ ലഭ്യമല്ല"
+
+#~ msgid "Couldn't recognize the image file format for file '%s'"
+#~ msgstr "'%s' ഫയലിനുള്ള ഇമേജിന്റെ ഫയലിന്റെ രീതി തിരിച്ചറിയുവാന്‍ സാധ്യമായില്ല"
+
+#~ msgid "Unrecognized image file format"
+#~ msgstr "ഇമേജ് ഫയലിന്റെ അപരിചിതമായ രീതി"
+
+#~ msgid "Failed to load image '%s': %s"
+#~ msgstr "'%s' എന്ന ഇമേജ് ലഭ്യമാക്കുവാന്‍ സാധ്യമായില്ല: %s"
+
+#~ msgid "Error writing to image file: %s"
+#~ msgstr "ഇമേജ് ഫയലിലേക്ക് സൂക്ഷിക്കുന്നതില്‍ പരാജയം: %s"
+
+#~ msgid ""
+#~ "This build of gdk-pixbuf does not support saving the image format: %s"
+#~ msgstr ""
+#~ "ഇമേജിന്റെ രീതി സൂക്ഷിക്കുന്നതിനുള്ള പിന്തുണ gdk-pixbuf -ന്റെ ഈ ബിള്‍ഡില്‍ ലഭ്യമല്ല: %s"
+
+#~ msgid "Insufficient memory to save image to callback"
+#~ msgstr "കോള്‍ബാക്കിലേക്ക് ഇമേജ് സൂക്ഷിക്കുന്നതിന് ആവശ്യമായ മെമ്മറി ലഭ്യമല്ല"
+
+#~ msgid "Failed to open temporary file"
+#~ msgstr "താല്‍ക്കാലിക ഫയല്‍ തുറക്കുന്നതില്‍ പരാജയം"
+
+#~ msgid "Failed to read from temporary file"
+#~ msgstr "താല്‍ക്കാലിക ഫയലില്‍ നിന്നും വായിക്കുന്നതില്‍ പരാജയം"
+
+#~ msgid "Failed to open '%s' for writing: %s"
+#~ msgstr "'%s'-ലേക്ക് സൂക്കഷിക്കുവാന്‍ സാധ്യമല്ല: %s"
+
+#~ msgid ""
+#~ "Failed to close '%s' while writing image, all data may not have been "
+#~ "saved: %s"
+#~ msgstr ""
+#~ "ഇമേജ് സൂക്ഷിക്കുമ്പോള്‍ '%s' അടയ്ക്കുന്നതില്‍ പരാജയം, ഡേറ്റാ പൂറ്‍ണ്ണമായി സൂക്ഷിക്കുവാന്‍ സാധ്യമായി "
+#~ "കാണില്ല: %s"
+
+#~ msgid "Insufficient memory to save image into a buffer"
+#~ msgstr "ബഫറിലേക്ക് ഇമേജ് സൂക്ഷിക്കുന്നതിനാവശ്യമായ മെമ്മറി ലഭ്യമല്ല"
+
+#~ msgid "Error writing to image stream"
+#~ msgstr "ഇമേജ് സ്റ്റ്രീമിലേക്കു്‌ സൂക്ഷിക്കുന്നതില്‍ പരാജയം"
+
+#~ msgid ""
+#~ "Internal error: Image loader module '%s' failed to complete an operation, "
+#~ "but didn't give a reason for the failure"
+#~ msgstr ""
+#~ "ആന്തരിക പിശക്: ഇമേജ് ലഭ്യമാക്കുന്ന ഘടകമായ '%s' ഒരു പ്രക്രിയ പൂര്‍ണ്ണമാക്കുന്നതില്‍ "
+#~ "പരാജയപ്പെട്ടു, കാരണമെന്തെന്ന് വ്യക്തമല്ല"
+
+#~ msgid "Incremental loading of image type '%s' is not supported"
+#~ msgstr "'%s' തരത്തിലുള്ള ഇമേജിന്റെ വര്‍ദ്ധിച്ചുള്ള ലഭ്യമാക്കല്‍ പിന്തുണയ്ക്കുന്നില്ല"
+
+#~ msgid "Image header corrupt"
+#~ msgstr "ഇമേജ് ഹെഡറിന് തകരാറു സംഭവിച്ചു"
+
+#~ msgid "Image format unknown"
+#~ msgstr "ഇമേജ് ഏത് രീതിയിലുള്ളതെന്ന് അവ്യക്തം"
+
+#~ msgid "Image pixel data corrupt"
+#~ msgstr "ഇമേജ് പിക്സല്‍ ഡേറ്റായില്‍ തകരാറ്"
+
+#~ msgid "Unexpected icon chunk in animation"
+#~ msgstr "ചലനചിത്രത്തില്‍ അപ്രതീക്ഷിതമായ പ്രതീരൂപം"
+
+#~ msgid "Unsupported animation type"
+#~ msgstr "പിന്തുണ ലഭ്യമല്ലാത്ത ആനിമേഷന്‍ രീതി"
+
+#~ msgid "Invalid header in animation"
+#~ msgstr "ആനിമേഷനില്‍ തെറ്റായ ഹെഡറ്‍"
+
+#~ msgid "Not enough memory to load animation"
+#~ msgstr "ആനിമേഷന്‍ ലഭ്യമാക്കുന്നതിന് ആവശ്യമുള്ള മെമ്മറി ലഭ്യമല്ല"
+
+#~ msgid "Malformed chunk in animation"
+#~ msgstr "ചലനചിത്രത്തില്‍ പിശക്"
+
+#~ msgid "The ANI image format"
+#~ msgstr "ANI ഇമേജ് രീതി"
+
+#~ msgid "BMP image has bogus header data"
+#~ msgstr "BMP ഇമേജില്‍ തെറ്റായ ഹെജറ്‍ ഡേറ്റാ"
+
+#~ msgid "Not enough memory to load bitmap image"
+#~ msgstr "ബിറ്റ്മാപ്പ് ഇമേജ് ലഭ്യമാക്കുന്നതിന് ആവശ്യമായ മെമ്മറി ലഭ്യമല്ല"
+
+#~ msgid "BMP image has unsupported header size"
+#~ msgstr "പിന്തുണ ലഭ്യമല്ലാത്ത BMP ഇമേജ് ഹെഡറിന്റെ വലിപ്പം"
+
+#~ msgid "Topdown BMP images cannot be compressed"
+#~ msgstr "ടോപ്പ് ഡൌണ്‍ BMP ഇമേജുകള്‍ കംപ്രസ്സ് ചെയ്യുവാന്‍ സാധ്യമല്ല"
+
+#~ msgid "Premature end-of-file encountered"
+#~ msgstr "അസാധുവായ end-of-file ലഭ്യമായി"
+
+#~ msgid "Couldn't allocate memory for saving BMP file"
+#~ msgstr "BMP ഫയല്‍ സൂക്ഷിക്കുന്നതിനുള്ള മെമ്മറി അനുവദിക്കുവാന്‍ സാധ്യമായില്ല"
+
+#~ msgid "Couldn't write to BMP file"
+#~ msgstr "BMP ഫയലിലേക്ക് സൂക്ഷിക്കുവാന്‍ സാധ്യമായില്ല"
+
+#~ msgid "The BMP image format"
+#~ msgstr "BMP ഇമേജ് രീതി"
+
+#~ msgid "Failure reading GIF: %s"
+#~ msgstr "GIF ലഭ്യമാക്കുന്നതില്‍ പിശക്: %s"
+
+#~ msgid "GIF file was missing some data (perhaps it was truncated somehow?)"
+#~ msgstr "GIF ഫയലില്‍ പൂറ്‍ണ്ണ ഡേറ്റാ ലഭ്യമല്ല "
+
+#~ msgid "Internal error in the GIF loader (%s)"
+#~ msgstr "GIF ലോഡറില്‍ (%s) ആന്തരിക പിശക്"
+
+#~ msgid "Stack overflow"
+#~ msgstr "സ്റ്റാക്ക് ഓവറ്‍ഫ്ളോ"
+
+#~ msgid "GIF image loader cannot understand this image."
+#~ msgstr "GIF ഇമേജ് ലോഡറിന് ഈ ഇമേജ് തിരിച്ചറിയുവാന്‍ സാധ്യമായില്ല."
+
+#~ msgid "Bad code encountered"
+#~ msgstr "തെറ്റായ കോഡ് ലഭിച്ചു"
+
+#~ msgid "Circular table entry in GIF file"
+#~ msgstr "GIF ഫയലില്‍ സിറ്‍ക്കുലാറ്‍ ടേബിള്‍ എന്‍ട്രി"
+
+#~ msgid "Not enough memory to load GIF file"
+#~ msgstr "GIF ഫയല്‍ ലഭ്യമാക്കുന്നതിന് ആവശ്യമുള്ള മെമ്മറി ലഭ്യമല്ല"
+
+#~ msgid "Not enough memory to composite a frame in GIF file"
+#~ msgstr "GIF ഫയലില്‍ ഒരു ഫ്റെയിം തയ്യാറാക്കുന്നതിന് ആവശ്യമായ മെമ്മറി ലഭ്യമല്ല"
+
+#~ msgid "GIF image is corrupt (incorrect LZW compression)"
+#~ msgstr "GIF ഇമേജില്‍ തകരാറ് (തെറ്റായ LZW കംപ്രഷന്‍)"
+
+#~ msgid "File does not appear to be a GIF file"
+#~ msgstr "ഫയല്‍ ഒരു GIF ഫയല്‍ അല്ല"
+
+#~ msgid "Version %s of the GIF file format is not supported"
+#~ msgstr "GIF ഫയലിന്റെ %s ലക്കത്തിനുള്ള പിന്തുണ ലഭ്യമല്ല"
+
+#~ msgid ""
+#~ "GIF image has no global colormap, and a frame inside it has no local "
+#~ "colormap."
+#~ msgstr ""
+#~ "GIF ഇമേജില്‍ ഗ്ളോബല്‍ കളറ്‍മാപ്പ് ലഭ്യമല്ല, അതിലുള്ള ഒരു ഫ്റെയിമില്‍ ലോക്കല്‍ കളറ്‍മാപ്പും ലഭ്യമല്ല."
+
+#~ msgid "GIF image was truncated or incomplete."
+#~ msgstr "GIF ഇമേജ് പൂറ്‍ണ്ണമല്ല."
+
+#~ msgid "The GIF image format"
+#~ msgstr "GIF ഇമേജ് രീതി"
+
+#~ msgid "Invalid header in icon"
+#~ msgstr "ചിഹ്നത്തില്‍ തെറ്റായ ഹേഡറ്‍"
+
+#~ msgid "Not enough memory to load icon"
+#~ msgstr "ചിഹ്നം ലഭ്യമാക്കുന്നതിന് ആവശ്യമുള്ള മെമ്മറി ലഭ്യമല്ല"
+
+#~ msgid "Icon has zero width"
+#~ msgstr "ചിഹ്നത്തിന്റെ വീതി പൂജ്യം"
+
+#~ msgid "Icon has zero height"
+#~ msgstr "ചിഹ്നത്തിന്റെ ഉയരം പൂജ്യം"
+
+#~ msgid "Compressed icons are not supported"
+#~ msgstr "കംപ്രസ്സ് ചെയ്ത ചിഹ്നങ്ങള്‍ക്ക് പിന്തുണ ലഭ്യമല്ല"
+
+#~ msgid "Unsupported icon type"
+#~ msgstr "ചിഹ്നത്തിന്റെ രീതിയ്ക്കുള്ള പിന്തുണ ലഭ്യമല്ല"
+
+#~ msgid "Not enough memory to load ICO file"
+#~ msgstr "ICO ഫയല്‍ ലഭ്യമാക്കുന്നതിന് ആവശ്യമുള്ള മെമ്മറി ലഭ്യമല്ല"
+
+#~ msgid "Image too large to be saved as ICO"
+#~ msgstr "ICO ആയി സൂക്ഷിക്കുവാന്‍ സാധ്യമല്ല; ഇമേജ് വളരെ വലുതാണ്"
+
+#~ msgid "Cursor hotspot outside image"
+#~ msgstr "കര്‍സര്‍ ഹോട്ട്സ്പോട്ട് പുറമേയുള്ള ഇമേജ്"
+
+#~ msgid "Unsupported depth for ICO file: %d"
+#~ msgstr "ICO ഫയലിനു് പിന്തുണ ലഭ്യമല്ലാത്ത വ്യാപ്തി: %d"
+
+#~ msgid "The ICO image format"
+#~ msgstr "ICO ഇമേജ് രീതി"
+
+#~ msgid "Error reading ICNS image: %s"
+#~ msgstr "ICNS ഇമേജ് തുറക്കുന്നതില്‍ പിശക്: %s"
+
+#~ msgid "Could not decode ICNS file"
+#~ msgstr "ICNS ഫയല്‍ ഡീക്കോഡ് ചെയ്യുവാന്‍ കഴിഞ്ഞില്ല"
+
+#~ msgid "The ICNS image format"
+#~ msgstr "ICNS ചിത്ര ഫോര്‍മാറ്റ്"
+
+#~ msgid "Couldn't allocate memory for stream"
+#~ msgstr "സ്റ്റ്രീമിനുള്ള മെമ്മറി അനുവദിക്കുവാന്‍ സാധ്യമായില്ല"
+
+#~ msgid "Couldn't decode image"
+#~ msgstr "ചിത്രം ഡീക്കോഡ് ചെയ്യുവാന്‍ സാധ്യമായില്ല"
+
+#~ msgid "Transformed JPEG2000 has zero width or height"
+#~ msgstr "മാറ്റം വരുത്തിയ JPEG-യുടെ വീതിയോ ഉയരമോ പൂജ്യം."
+
+#~ msgid "Image type currently not supported"
+#~ msgstr " ഇമേജ് തരത്തിനുള്ള പിന്തുണ ലഭ്യമല്ല"
+
+#~ msgid "Couldn't allocate memory for color profile"
+#~ msgstr "നിറം പ്രൊഫൈലിനുള്ള മെമ്മറി അനുവദിക്കുവാന്‍ സാധ്യമായില്ല"
+
+#~ msgid "Insufficient memory to open JPEG 2000 file"
+#~ msgstr "JPEG 2000 ഫയല്‍ തുറക്കുന്നതിന് ആവശ്യമായ മെമ്മറി ലഭ്യമല്ല"
+
+#~ msgid "Couldn't allocate memory to buffer image data"
+#~ msgstr "ചിത്രം  ഡേറ്റായ്ക്ക് ആവശ്യമുള്ള മെമ്മറി അനുവദിക്കുവാന്‍ സാധ്യമായില്ല"
+
+#~ msgid "The JPEG 2000 image format"
+#~ msgstr "JPEG 2000 ഇമേജ് രീതി"
+
+#~ msgid "Error interpreting JPEG image file (%s)"
+#~ msgstr "JPEG ഇമേജ് ഫയല്‍ (%s) തിരിച്ചറിയുന്നതില്‍ പിശക്"
+
+#~ msgid ""
+#~ "Insufficient memory to load image, try exiting some applications to free "
+#~ "memory"
+#~ msgstr ""
+#~ "ഇമേജ് തുറക്കുന്നതിനുള്ള മെമ്മറി ലഭ്യമല്ല, ഫ്രീ മെമ്മറിയ്ക്കായി ചില പ്രയോഗങ്ങളില്‍ നിന്നും "
+#~ "പുറത്ത് കടക്കുക"
+
+#~ msgid "Unsupported JPEG color space (%s)"
+#~ msgstr "പിന്തുണ ഇല്ലാത്ത JPEG കളര്‍ സ്പെയിസ് (%s)"
+
+#~ msgid "Couldn't allocate memory for loading JPEG file"
+#~ msgstr "JPEG ഫയല്‍ ലഭ്യമാക്കുന്നതിനുള്ള മെമ്മറി അനുവദിക്കുവാന്‍ സാധ്യമായില്ല"
+
+#~ msgid "Transformed JPEG has zero width or height."
+#~ msgstr "മാറ്റം വരുത്തിയ JPEG-യുടെ വീതിയും ഉയരവും പൂജ്യം."
+
+#~ msgid ""
+#~ "JPEG quality must be a value between 0 and 100; value '%s' could not be "
+#~ "parsed."
+#~ msgstr ""
+#~ "JPEG തനിമ 0-ത്തിനും 100-നും മദ്ധ്യത്തിലുള്ള മൂല്ല്യമായിരിക്കണം; '%s' എന്ന മൂല്ല്യം പാഴ്സ് "
+#~ "ചെയ്യുവാന്‍ സാധ്യമായില്ല."
+
+#~ msgid ""
+#~ "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
+#~ msgstr "JPEG തനിമ 0-ത്തിനും 100-നും മദ്ധ്യത്തിലുള്ള മൂല്ല്യമായിരിക്കണം; %d അനുവദനീയമല്ല."
+
+#~ msgid "The JPEG image format"
+#~ msgstr "JPEG ഇമേജ് രീതി"
+
+#~ msgid "Couldn't allocate memory for header"
+#~ msgstr "ഹെഡറിനുള്ള മെമ്മറി അനുവദിക്കുവാന്‍ സാധ്യമായില്ല"
+
+#~ msgid "Couldn't allocate memory for context buffer"
+#~ msgstr "കോണ്‍ടെക്സ്റ്റിനുള്ള മെമ്മറി അനുവദിക്കുവാന്‍ സാധ്യമായില്ല"
+
+#~ msgid "Image has invalid width and/or height"
+#~ msgstr "ഇമേജിന്റെ വീതി അല്ലെങ്കില്‍ ഉയരം തെറ്റാണ്"
+
+#~ msgid "Image has unsupported bpp"
+#~ msgstr "ഇമേജിന്റെ bpp-യ്ക്ക് പിന്തുണ ലഭ്യമല്ല"
+
+#~ msgid "Image has unsupported number of %d-bit planes"
+#~ msgstr "ഇമേജിന് പിന്തുണ ലഭ്യമല്ലാത്ത %d-ബിറ്റ് പ്ളെയിനുകള്‍"
+
+#~ msgid "Couldn't create new pixbuf"
+#~ msgstr "പുതിയ pixbuf ഉണ്ടാക്കുവാന്‍ സാധ്യമായില്ല"
+
+#~ msgid "Couldn't allocate memory for line data"
+#~ msgstr "ലൈന്‍ ഡേറ്റയ്ക്കുള്ള മെമ്മറി ലഭ്യമാക്കുവാന്‍ സാധ്യമായില്ല"
+
+#~ msgid "Couldn't allocate memory for paletted data"
+#~ msgstr "പാലറ്റഡ് ഡേറ്റയ്ക്കുള്ള മെമ്മറി ലഭ്യമാക്കുവാന്‍ സാധ്യമായില്ല"
+
+#~ msgid "Didn't get all lines of PCX image"
+#~ msgstr "PCX ഇമേജിന്റെ വരികളെല്ലാം ലഭ്യമായില്ല"
+
+#~ msgid "No palette found at end of PCX data"
+#~ msgstr "PCX ഡേറ്റായുടെ അവസാനം പാലറ്റ് ലഭ്യമായില്ല"
+
+#~ msgid "The PCX image format"
+#~ msgstr "PCX ഇമേജ് രീതി"
+
+#~ msgid "Bits per channel of PNG image is invalid."
+#~ msgstr "PNG ഇമേജിന്റെ ഒരോ ചാനലിലും ഉള്ള ബിറ്റുകള്‍ തെറ്റാണ്."
+
+#~ msgid "Transformed PNG has zero width or height."
+#~ msgstr "മാറ്റം വരുത്തിയ PNG-യുടെ വീതിയും ഉയരവും പൂജ്യമാണ്."
+
+#~ msgid "Bits per channel of transformed PNG is not 8."
+#~ msgstr "മാറ്റം വരുത്തിയ PNG-യുടെ ഓരോ ചാനലിലും ഉള്ള ബിറ്റുകളുടെ എണ്ണം 8 അല്ല."
+
+#~ msgid "Transformed PNG not RGB or RGBA."
+#~ msgstr "മാറ്റം വരുത്തിയ PNG, RGB അല്ലെങ്കില്‍ RGBA അല്ല."
+
+#~ msgid "Transformed PNG has unsupported number of channels, must be 3 or 4."
+#~ msgstr ""
+#~ "മാറ്റം വരുത്തിയ PNG-ല്‍ പിന്തുണ ലഭ്യമല്ലാത്ത ചാനലുകള്‍ ഉണ്ട്, 3 അല്ലെങ്കില്‍ 4 എണ്ണം ആവശ്യമുണ്ട്."
+
+#~ msgid "Fatal error in PNG image file: %s"
+#~ msgstr "PNG ഇമേജ് ഫയലില്‍ സാരമായ പിശക്: %s"
+
+#~ msgid "Insufficient memory to load PNG file"
+#~ msgstr "PNG ഫയല്‍ തുറക്കുന്നതിന് ആവശ്യമുള്ള മെമ്മറി ലഭ്യമല്ല"
+
+#~ msgid ""
+#~ "Insufficient memory to store a %ld by %ld image; try exiting some "
+#~ "applications to reduce memory usage"
+#~ msgstr ""
+#~ "%ld ഇമേജ് ഉപയോഗിച്ച് ഒരു %ld സൂക്ഷിക്കുന്നതിനുള്ള മെമ്മറി ലഭ്യമല്ല; ചില പ്രയോഗങ്ങള്‍ നിറ്‍ത്തി "
+#~ "മെമ്മറിയുടെ ഉപയോഗം കുറയ്ക്കുക"
+
+#~ msgid "Fatal error reading PNG image file"
+#~ msgstr "PNG ഇമേജ് ഫയല്‍ തുറക്കുന്നതില്‍ സാരമായ പിശക്"
+
+#~ msgid "Fatal error reading PNG image file: %s"
+#~ msgstr "PNG ഇമേജ് ഫയല്‍ തുറക്കുന്നതില്‍ സാരമായ പിശക്: %s"
+
+#~ msgid ""
+#~ "Keys for PNG text chunks must have at least 1 and at most 79 characters."
+#~ msgstr "PNG ടെക്സ്റ്റുകളുടെ കീകളില്‍ കുറഞ്ഞത് 1 അക്ഷരം ഉണ്ടായിരിക്കണം, 79-ല്‍ കൂടുതല്‍ പാടില്ല."
+
+#~ msgid "Keys for PNG text chunks must be ASCII characters."
+#~ msgstr "PNG ടെക്സ്റ്റുകളുടെ കീകള്‍ ASCII അക്ഷരങ്ങളായിരിക്കണം"
+
+#~ msgid ""
+#~ "PNG compression level must be a value between 0 and 9; value '%s' could "
+#~ "not be parsed."
+#~ msgstr ""
+#~ "PNG കംപ്രഷന്‍ ലവല്‍ 0-ത്തിനും 9-നും മദ്ധ്യത്തിലുള്ള മൂല്ല്യമായിരിക്കണം; '%s' എന്ന മൂല്ല്യം "
+#~ "പാഴ്സ് ചെയ്യുവാന്‍ സാധ്യമായില്ല."
+
+#~ msgid ""
+#~ "PNG compression level must be a value between 0 and 9; value '%d' is not "
+#~ "allowed."
+#~ msgstr ""
+#~ "PNG കംപ്രഷന്‍ ലവല്‍ 0-ത്തിനും 9-നും മദ്ധ്യത്തിലുള്ള മൂല്ല്യമായിരിക്കണം; '%d' അനുവദനീയമല്ല"
+
+#~ msgid ""
+#~ "Value for PNG text chunk %s cannot be converted to ISO-8859-1 encoding."
+#~ msgstr ""
+#~ "PNG ടെക്സ്റ്റ് ചങ്ക് %s-നുള്ള മൂല്ല്യം ISO-8859-1 എന്‍കോഡിങിലേക്കു് വേര്‍തിരിക്കുവാന്‍ സാധ്യല്ല."
+
+#~ msgid "The PNG image format"
+#~ msgstr "PNG ഇമേജ് രീതി"
+
+#~ msgid "PNM loader expected to find an integer, but didn't"
+#~ msgstr "PNM ലോഡറിന് ഒരു ഇന്റിജറ്‍ ലഭിക്കും എന്ന് പ്രതീക്ഷിച്ചു, പക്ഷേ ലഭ്യമായില്ല"
+
+#~ msgid "PNM file has an incorrect initial byte"
+#~ msgstr "PNM ഫയലില്‍ ആരംഭത്തില്‍ തെറ്റായ ബൈറ്റ്"
+
+#~ msgid "PNM file is not in a recognized PNM subformat"
+#~ msgstr "PNM ഫയലിന്റെ PNM സബ്ഫോറ്‍മാറ്റ് അപരിചിതമാണ്"
+
+#~ msgid "PNM file has an image width of 0"
+#~ msgstr "PNM ഫയലിനുള്ള ഇമേജിന്റെ വീതി 0 ആണ്"
+
+#~ msgid "PNM file has an image height of 0"
+#~ msgstr "PNM ഫയലിനുള്ള ഇമേജിന്റെ ഉയരം 0 ആണ്"
+
+#~ msgid "Maximum color value in PNM file is 0"
+#~ msgstr "PNM ഫയലിന്റെ ഏറ്റവും കൂടിയ കളറ്‍ മൂല്ല്യം 0 ആണ്."
+
+#~ msgid "Maximum color value in PNM file is too large"
+#~ msgstr "PNM ഫയലിന്റെ ഏറ്റവും കൂടിയ കളറ്‍ മൂല്ല്യം വളരെ വലുതാണ്"
+
+#~ msgid "Raw PNM image type is invalid"
+#~ msgstr "റോ PNM ഇമേജ് തരം തെറ്റാണ്"
+
+#~ msgid "PNM image loader does not support this PNM subformat"
+#~ msgstr "PNM ഇമേജ് ലോഡറ്‍ PNM സബ്ഫോറ്‍മാറ്റ് പിന്തുണയ്ക്കുന്നില്ല"
+
+#~ msgid "Raw PNM formats require exactly one whitespace before sample data"
+#~ msgstr "റോ PNM രീതിയിലുള്ളവയ്ക്കു് മാതൃക ഡേറ്റായ്ക്കു് മുമ്പ് ഒരൊറ്റ് വൈറ്റ്സ്പെയിസ് ആവശ്യമുണ്ടു്"
+
+#~ msgid "Cannot allocate memory for loading PNM image"
+#~ msgstr "PNM ഇമേജ് ലഭ്യമാക്കുന്നതിനുള്ള മെമ്മറി അനുവദിക്കുവാന്‍ സാധ്യമായില്ല"
+
+#~ msgid "Insufficient memory to load PNM context struct"
+#~ msgstr "PNM context struct ലഭ്യമാക്കുന്നതിന് ആവശ്യമുള്ള മെമ്മറി"
+
+#~ msgid "Unexpected end of PNM image data"
+#~ msgstr "PNM ഇമേഡ് ഡേറ്റാ അപ്രതീക്ഷിതമായി അവസാനിച്ചിരിക്കുന്നു"
+
+#~ msgid "Insufficient memory to load PNM file"
+#~ msgstr "PNM ഫയല്‍ ലഭ്യമാക്കുന്നതിന് ആവശ്യമുള്ള മെമ്മറിയില്ല"
+
+#~ msgid "The PNM/PBM/PGM/PPM image format family"
+#~ msgstr "PNM/PBM/PGM/PPM ഇമേജ് രീതി"
+
+#, fuzzy
+#~ msgid "Failed to read QTIF header"
+#~ msgstr "ഹെഡറ്‍ എഴുതുന്നതില്‍ പരാജയം\n"
+
+#, fuzzy
+#~ msgid "File error when reading QTIF atom: %s"
+#~ msgstr "GIF ലഭ്യമാക്കുന്നതില്‍ പിശക്: %s"
+
+#, fuzzy
+#~ msgid "Failed to allocate QTIF context structure."
+#~ msgstr "TGA context struct-നുള്ള മെമ്മറി അനുവദിക്കുവാന്‍ സാധ്യമായില്ല"
+
+#, fuzzy
+#~ msgid "Failed to create GdkPixbufLoader object."
+#~ msgstr "index അറ എഴുതുന്നതില്‍ പരാ‍ജയം\n"
+
+#, fuzzy
+#~ msgid "Failed to find an image data atom."
+#~ msgstr "TIFF ഇമേജ് തുറക്കുവാന്‍ സാധ്യമല്ല"
+
+#, fuzzy
+#~ msgid "The QTIF image format"
+#~ msgstr "TIFF ഇമേഡ് രീതി"
+
+#~ msgid "RAS image has bogus header data"
+#~ msgstr "RAS ഇമേജില്‍ തെറ്റായ ഹെഡറ്‍ ഡേറ്റാ"
+
+#~ msgid "RAS image has unknown type"
+#~ msgstr "RAS ഇമേജില്‍ അപരിചിമായ തരത്തിലുള്ളത്"
+
+#~ msgid "unsupported RAS image variation"
+#~ msgstr "പിന്തുണ ലഭ്യമല്ലാത്ത RAS ഇമേജ് മാറ്റം"
+
+#~ msgid "Not enough memory to load RAS image"
+#~ msgstr "RAS ഇമേജ് ലഭ്യമാക്കുന്നതിന് ആവശ്യമുള്ള മെമ്മറിയില്ല"
+
+#~ msgid "The Sun raster image format"
+#~ msgstr "Sun raster ഇമേജ് രീതി"
+
+#~ msgid "Cannot allocate memory for IOBuffer struct"
+#~ msgstr "IOBuffer struct-ന് ആവശ്യമുള്ള മെമ്മറി അനുവദിക്കുവാന്‍ സാധ്യമായില്ല"
+
+#~ msgid "Cannot allocate memory for IOBuffer data"
+#~ msgstr "IOBuffer ഡേറ്റായ്ക്ക് ആവശ്യമുള്ള മെമ്മറി അനുവദിക്കുവാന്‍ സാധ്യമായില്ല"
+
+#~ msgid "Cannot realloc IOBuffer data"
+#~ msgstr "IOBuffer data realloc ചെയ്യുവാന്‍ സാധ്യമായില്ല"
+
+#~ msgid "Cannot allocate temporary IOBuffer data"
+#~ msgstr "താല്‍ക്കാലികമായ IOBuffer ഡേറ്റാ  അനുവദിക്കുവാന്‍ സാധ്യമായില്ല"
+
+#~ msgid "Cannot allocate new pixbuf"
+#~ msgstr "പുതിയ pixbuf അനുവദിക്കുവാന്‍ സാധ്യമായില്ല"
+
+#, fuzzy
+#~ msgid "Image is corrupted or truncated"
+#~ msgstr "GIF ഇമേജ് പൂറ്‍ണ്ണമല്ല."
+
+#~ msgid "Cannot allocate colormap structure"
+#~ msgstr "കളറ്‍മാപ്പ് രൂപം അനുവദിക്കുവാന്‍ സാധ്യമായില്ല"
+
+#~ msgid "Cannot allocate colormap entries"
+#~ msgstr "കളറ്‍മാപ്പ് എന്‍ട്രികള്‍ അനുവദിക്കുവാന്‍ സാധ്യമായില്ല"
+
+#~ msgid "Unexpected bitdepth for colormap entries"
+#~ msgstr "colormap എന്‍ട്രികള്‍ക്ക് അപ്രതീക്ഷിതമായ bitdepth"
+
+#~ msgid "Cannot allocate TGA header memory"
+#~ msgstr "TGA ഹെഡറ്‍ മെമ്മറി അനുവദിക്കുവാന്‍ സാധ്യമായില്ല"
+
+#~ msgid "TGA image has invalid dimensions"
+#~ msgstr "TGA ഇമേജില്‍ തെറ്റായ അളവുകള്‍"
+
+#~ msgid "TGA image type not supported"
+#~ msgstr "TGA തരത്തിലുള്ള ഇമേജിന് പിന്തുണ ലഭ്യമല്ല"
+
+#~ msgid "Cannot allocate memory for TGA context struct"
+#~ msgstr "TGA context struct-നുള്ള മെമ്മറി അനുവദിക്കുവാന്‍ സാധ്യമായില്ല"
+
+#~ msgid "Excess data in file"
+#~ msgstr "ഫയലില്‍ കൂടുതല്‍ ഡേറ്റാ"
+
+#~ msgid "The Targa image format"
+#~ msgstr "Targa ഇമേജ് രീതി"
+
+#~ msgid "Could not get image width (bad TIFF file)"
+#~ msgstr "ഇമേജിന്റെ വീതി ലഭ്യമാക്കുവാന്‍ സാധ്യമായില്ല (തെറ്റായ TIFF ഫയല്‍)"
+
+#~ msgid "Could not get image height (bad TIFF file)"
+#~ msgstr "ഇമേജിന്റെ ഉയരം ലഭ്യമാക്കുവാന്‍ സാധ്യമായില്ല (തെറ്റായ TIFF ഫയല്‍)"
+
+#~ msgid "Width or height of TIFF image is zero"
+#~ msgstr "TIFF ഇമേജിന്റെ വീതി അല്ലെങ്കില്‍ ഉയരം പൂജ്യമാണ്"
+
+#~ msgid "Dimensions of TIFF image too large"
+#~ msgstr "TIFF ഇമേജിന്റെ അളവുകള്‍ വളരെ കൂടുതലാണ്"
+
+#~ msgid "Insufficient memory to open TIFF file"
+#~ msgstr "TIFF ഫയല്‍ തുറക്കുന്നതിന് ആവശ്യമായ മെമ്മറി ലഭ്യമല്ല"
+
+#~ msgid "Failed to load RGB data from TIFF file"
+#~ msgstr "TIFF ഫയലില്‍ നിന്നും RGB ഡേറ്റാ ലഭ്യമാക്കുന്നതില്‍ പരാജയം"
+
+#~ msgid "Failed to open TIFF image"
+#~ msgstr "TIFF ഇമേജ് തുറക്കുവാന്‍ സാധ്യമല്ല"
+
+#~ msgid "TIFFClose operation failed"
+#~ msgstr "TIFFClose പ്രക്രിയ പരാജയപ്പെട്ടു"
+
+#~ msgid "Failed to load TIFF image"
+#~ msgstr "TIFF ഇമേജ് ലഭ്യമാക്കുന്നതില്‍ പരാജയം"
+
+#~ msgid "Failed to save TIFF image"
+#~ msgstr "TIFF ഇമേജ് സൂക്ഷിക്കുന്നതില്‍ പരാജയം"
+
+#~ msgid "Failed to write TIFF data"
+#~ msgstr "TIFF ഇമേജ് എഴുതുന്നതില്‍ പരാജയം"
+
+#~ msgid "Couldn't write to TIFF file"
+#~ msgstr "TIFF ഫയലിലേക്ക് എഴുതുവാന്‍ സാധ്യമായില്ല"
+
+#~ msgid "The TIFF image format"
+#~ msgstr "TIFF ഇമേഡ് രീതി"
+
+#~ msgid "Image has zero width"
+#~ msgstr "ഇമേജിന്റെ വീതി പൂജ്യമാണ്"
+
+#~ msgid "Image has zero height"
+#~ msgstr "ഇമേജിന്റെ ഉയരം പൂജ്യമാണ്"
+
+#~ msgid "Not enough memory to load image"
+#~ msgstr "ഇമേജ് ലഭ്യമാക്കുന്നതിന് ആവശ്യമുള്ള മെമ്മറിയില്ല"
+
+#~ msgid "Couldn't save the rest"
+#~ msgstr "ബാക്കിയുള്ളവ സൂക്ഷിക്കുവാന്‍ സാധ്യമായില്ല"
+
+#~ msgid "The WBMP image format"
+#~ msgstr "WBMP ഇമേജ് രീതി"
+
+#~ msgid "Invalid XBM file"
+#~ msgstr "തെറ്റായ XBM ഫയല്‍"
+
+#~ msgid "Insufficient memory to load XBM image file"
+#~ msgstr "XBM ഇമേജ് ഫയല്‍ ലഭ്യമാക്കുന്നതിന് ആവശ്യമുള്ള മെമ്മറിയില്ല"
+
+#~ msgid "Failed to write to temporary file when loading XBM image"
+#~ msgstr "XBM ഇമേജ് ലഭ്യമാക്കുമ്പോള്‍ താല്‍ക്കാലിക ഫയലിലേക്ക് എഴുതുന്നതില്‍ പരാജയം"
+
+#~ msgid "The XBM image format"
+#~ msgstr "XBM ഇമേജ് രീതി"
+
+#~ msgid "No XPM header found"
+#~ msgstr "XPM ഹെഡറ്‍ ലഭ്യമല്ല"
+
+#~ msgid "Invalid XPM header"
+#~ msgstr "തെറ്റായ XPM ഹെഡറ്‍"
+
+#~ msgid "XPM file has image width <= 0"
+#~ msgstr "XPM ഫയലിന്റെ ഇമേജ് വീതി <= 0"
+
+#~ msgid "XPM file has image height <= 0"
+#~ msgstr "XPM ഫയലിന്റെ ഇമേജ് ഉയരം <= 0"
+
+#~ msgid "XPM has invalid number of chars per pixel"
+#~ msgstr "XPM-ലുള്ള ഓരോ പിക്സലുകളിലേയും അക്ഷരങ്ങളുടെ എണ്ണം തെറ്റാണ്"
+
+#~ msgid "XPM file has invalid number of colors"
+#~ msgstr "XPM ഫയലിലുള്ള നിറങ്ങളുടെ എണ്ണം തെറ്റാണ്"
+
+#~ msgid "Cannot allocate memory for loading XPM image"
+#~ msgstr "XPM ഇമേജ് ലഭ്യമാക്കുന്നതിന് ആവശ്യമുള്ള മെമ്മറി അനുവദിക്കുവാന്‍ സാധ്യമല്ല"
+
+#~ msgid "Cannot read XPM colormap"
+#~ msgstr "XPM കളറ്‍മാപ്പ് വായിക്കുവാന്‍ സാധ്യമല്ല"
+
+#~ msgid "Failed to write to temporary file when loading XPM image"
+#~ msgstr "XPM ഇമേജ് ലഭ്യമാക്കുമ്പോള്‍ താല്‍ക്കാലിക ഫയലിലേക്ക് എഴുതുന്നതില്‍ പരാജയം"
+
+#~ msgid "The XPM image format"
+#~ msgstr "XPM ഇമേജ് രീതി"
+
+#~ msgid "The EMF image format"
+#~ msgstr "EMF ഇമേജ് രീതി"
+
+#~ msgid "Could not allocate memory: %s"
+#~ msgstr "മെമ്മറി അനുവദിക്കുവാന്‍ സാധ്യമായില്ല :%s"
+
+#~ msgid "Could not create stream: %s"
+#~ msgstr "സ്റ്റ്രീം ഉണ്ടാക്കാന്‍ കഴിഞ്ഞില്ല : %s"
+
+#~ msgid "Could not seek stream: %s"
+#~ msgstr "സ്റ്റ്രീം കണ്ടുപിടിക്കാന്‍/തിരയാന്‍ കഴിഞ്ഞില്ല : %s"
+
+#~ msgid "Could not read from stream: %s"
+#~ msgstr "സ്റ്റ്രീം വായിക്കാന്‍ കഴിഞ്ഞില്ല : %s"
+
+#~ msgid "Couldn't load bitmap"
+#~ msgstr "ബിറ്റ്മാപ് തുരക്കാന്‍ കഴിഞ്ഞില്ല"
+
+#~ msgid "Couldn't load metafile"
+#~ msgstr "മെറ്റാഫയല്‍ തുരക്കാന്‍ കഴിഞ്ഞില്ല"
+
+#~ msgid "Unsupported image format for GDI+"
+#~ msgstr "പിന്തുണ ലഭ്യമല്ലാത്ത ചിത്ര രീതി,  GDI+ -ഇനുള്ളതു്‌"
+
+#~ msgid "Couldn't save"
+#~ msgstr "സൂക്ഷിക്കുവാന്‍ സാധ്യമായില്ല"
+
+#~ msgid "The WMF image format"
+#~ msgstr "WMF ഇമേജ് രീതി"
+
+#~ msgid "\"Deepness\" of the color."
+#~ msgstr "നിറത്തിന്റെ \"ആഴം\" "
+
+#~ msgid "Error printing"
+#~ msgstr "പ്രിന്റ് ചെയ്യുന്നതില്‍ പിശക്"
+
+#~ msgid "Printer '%s' may not be connected."
+#~ msgstr "പ്രിന്റര്‍  '%s' കണക്ര്റ് ചെയ്തിട്ടില്ലായിരിക്കാം"
 
 #~ msgid "Folders"
 #~ msgstr "അറകള്‍"

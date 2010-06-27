@@ -5,10 +5,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-05-25 20:10-0400\n"
+"POT-Creation-Date: 2010-06-26 23:16-0400\n"
 "PO-Revision-Date: 2003-05-28 17:57+0000\n"
 "Last-Translator: Mathieu van Woerkom <mathieu.brabants.org>\n"
 "Language-Team: Limburgish <li.org>\n"
+"Language: li\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -73,7 +74,7 @@ msgstr ""
 #. Placeholder in --gdk-no-debug=FLAGS in --help output
 #. Placeholder in --gtk-debug=FLAGS in --help output
 #. Placeholder in --gtk-no-debug=FLAGS in --help output
-#: gdk/gdk.c:165 gdk/gdk.c:168 gtk/gtkmain.c:454 gtk/gtkmain.c:457
+#: gdk/gdk.c:165 gdk/gdk.c:168 gtk/gtkmain.c:439 gtk/gtkmain.c:442
 msgid "FLAGS"
 msgstr ""
 
@@ -286,981 +287,6 @@ msgstr "_Ewegdoon"
 msgctxt "keyboard label"
 msgid "Delete"
 msgstr "_Ewegdoon"
-
-#: gdk-pixbuf/gdk-pixbuf-animation.c:133 gdk-pixbuf/gdk-pixbuf-io.c:982
-#: gdk-pixbuf/gdk-pixbuf-io.c:1242 tests/testfilechooser.c:222
-#, c-format
-msgid "Failed to open file '%s': %s"
-msgstr "Äöpene van besjtandj '%s' mislök: %s"
-
-#: gdk-pixbuf/gdk-pixbuf-animation.c:146 gdk-pixbuf/gdk-pixbuf-io.c:994
-#, c-format
-msgid "Image file '%s' contains no data"
-msgstr "Aafbiljing '%s' haet gei data"
-
-#: gdk-pixbuf/gdk-pixbuf-animation.c:188 gdk-pixbuf/gdk-pixbuf-io.c:1030
-#: gdk-pixbuf/gdk-pixbuf-io.c:1294 tests/testfilechooser.c:267
-#, c-format
-msgid ""
-"Failed to load image '%s': reason not known, probably a corrupt image file"
-msgstr ""
-"Laje van aafbiljing '%s' mislök: oerzaak ónbekènd, dènkelik ein "
-"versjangeleerde aafbiljing"
-
-#: gdk-pixbuf/gdk-pixbuf-animation.c:221
-#, c-format
-msgid ""
-"Failed to load animation '%s': reason not known, probably a corrupt "
-"animation file"
-msgstr ""
-"Laje van animasie '%s' mislök: oerzaak ónbekènd, dènkelik ein "
-"versjangeleerde animasie"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:715
-#, c-format
-msgid "Unable to load image-loading module: %s: %s"
-msgstr "Laje van module in module_path: %s mislök: %s"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:730
-#, c-format
-msgid ""
-"Image-loading module %s does not export the proper interface; perhaps it's "
-"from a different GTK version?"
-msgstr ""
-"Aafbiljingslajer %s geuf de verkierde interface door ; mesjiens is 't de "
-"lajer van ein anger GTK+ verzie?"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:739 gdk-pixbuf/gdk-pixbuf-io.c:790
-#, c-format
-msgid "Image type '%s' is not supported"
-msgstr "Aafbiljingstiep '%s' weurt neet gesjtiep"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:863
-#, c-format
-msgid "Couldn't recognize the image file format for file '%s'"
-msgstr "Aafbiljingstiep van besjtandj '%s' neet herkènd"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:871
-msgid "Unrecognized image file format"
-msgstr "Ónbekènd aafbiljingstiep"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:1039
-#, c-format
-msgid "Failed to load image '%s': %s"
-msgstr "Laje van aafbiljing '%s' mislök: %s"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:1673 gdk-pixbuf/io-gdip-utils.c:961
-#, fuzzy, c-format
-msgid "Error writing to image file: %s"
-msgstr "Faeler bie 't interpretere van JPEG-aafbiljing (%s)"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:1718 gdk-pixbuf/gdk-pixbuf-io.c:1848
-#, c-format
-msgid "This build of gdk-pixbuf does not support saving the image format: %s"
-msgstr ""
-"Dees verzie van gdk-pixbuf haet gein sjtiep veur 't opsjlaon van 't "
-"besjtandjsformaat: %s"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:1752
-#, fuzzy
-msgid "Insufficient memory to save image to callback"
-msgstr "Neet genóg ónthaud óm XBM-aafbiljing te laje"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:1765
-#, fuzzy
-msgid "Failed to open temporary file"
-msgstr "Kós TIFF-aafbiljing neet äöpene"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:1791
-#, fuzzy
-msgid "Failed to read from temporary file"
-msgstr ""
-"Neet mäögelik om nao tiedelik besjtandj te sjrieve bie 't laje van XBM-"
-"aafbiljing"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:2044
-#, c-format
-msgid "Failed to open '%s' for writing: %s"
-msgstr "Äöpene van '%s' veur te sjrieve is mislök: %s"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:2070
-#, c-format
-msgid ""
-"Failed to close '%s' while writing image, all data may not have been saved: %"
-"s"
-msgstr ""
-"Sjloete van '%s' tiedes 't sjrieve is mislök; 't kèn zeen det data verlaore "
-"is gegange: %s"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:2290 gdk-pixbuf/gdk-pixbuf-io.c:2341
-#, fuzzy
-msgid "Insufficient memory to save image into a buffer"
-msgstr "Neet genóg ónthaud óm XBM-aafbiljing te laje"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:2387
-#, fuzzy
-msgid "Error writing to image stream"
-msgstr "Faeler bie 't interpretere van JPEG-aafbiljing (%s)"
-
-#: gdk-pixbuf/gdk-pixbuf-loader.c:334
-#, fuzzy, c-format
-msgid ""
-"Internal error: Image loader module '%s' failed to complete an operation, "
-"but didn't give a reason for the failure"
-msgstr ""
-"Interne faeler: aafbiljingslajer '%s' sjtarte neet mit 't laje van ein "
-"aafbiljing, mer goof gein oerzaak"
-
-#: gdk-pixbuf/gdk-pixbuf-loader.c:376
-#, c-format
-msgid "Incremental loading of image type '%s' is not supported"
-msgstr "Inkrementeel laje van aafbiljingstiep '%s' weurt neet gesjtiep"
-
-#: gdk-pixbuf/gdk-pixdata.c:147
-msgid "Image header corrupt"
-msgstr "Aafbiljingsheader versjangeleerd"
-
-#: gdk-pixbuf/gdk-pixdata.c:152
-msgid "Image format unknown"
-msgstr "Besjtandjsformaat van aafbiljing is ónbekènd"
-
-#: gdk-pixbuf/gdk-pixdata.c:157 gdk-pixbuf/gdk-pixdata.c:488
-msgid "Image pixel data corrupt"
-msgstr "Aafbiljings-pixeldata korrup"
-
-#: gdk-pixbuf/gdk-pixdata.c:432
-#, fuzzy, c-format
-msgid "failed to allocate image buffer of %u byte"
-msgid_plural "failed to allocate image buffer of %u bytes"
-msgstr[0] "Neet mäögelik aafbiljingsbuffer van %u bytes te allokere"
-msgstr[1] "Neet mäögelik aafbiljingsbuffer van %u bytes te allokere"
-
-#: gdk-pixbuf/io-ani.c:244
-msgid "Unexpected icon chunk in animation"
-msgstr "Ónverwach piktogram-brökske in animasie"
-
-#: gdk-pixbuf/io-ani.c:337
-msgid "Unsupported animation type"
-msgstr "Neet gesjtiep animasietiep"
-
-#: gdk-pixbuf/io-ani.c:348 gdk-pixbuf/io-ani.c:406 gdk-pixbuf/io-ani.c:432
-#: gdk-pixbuf/io-ani.c:455 gdk-pixbuf/io-ani.c:482 gdk-pixbuf/io-ani.c:569
-msgid "Invalid header in animation"
-msgstr "Óngeljige header in animasie"
-
-#: gdk-pixbuf/io-ani.c:358 gdk-pixbuf/io-ani.c:380 gdk-pixbuf/io-ani.c:464
-#: gdk-pixbuf/io-ani.c:491 gdk-pixbuf/io-ani.c:542 gdk-pixbuf/io-ani.c:614
-msgid "Not enough memory to load animation"
-msgstr "Neet genóg ónthaud veur animasie te laje"
-
-#: gdk-pixbuf/io-ani.c:398 gdk-pixbuf/io-ani.c:424 gdk-pixbuf/io-ani.c:443
-msgid "Malformed chunk in animation"
-msgstr "Kröppel brökske in animasie"
-
-#: gdk-pixbuf/io-ani.c:711
-msgid "The ANI image format"
-msgstr "'t ANI-besjtandjsformaat"
-
-#: gdk-pixbuf/io-bmp.c:230 gdk-pixbuf/io-bmp.c:267 gdk-pixbuf/io-bmp.c:338
-#: gdk-pixbuf/io-bmp.c:370 gdk-pixbuf/io-bmp.c:393 gdk-pixbuf/io-bmp.c:496
-msgid "BMP image has bogus header data"
-msgstr "BMP-aafbiljing haet ónzinnige headerdata"
-
-#: gdk-pixbuf/io-bmp.c:241 gdk-pixbuf/io-bmp.c:433
-msgid "Not enough memory to load bitmap image"
-msgstr "Neet genóg ónthaud veur 't laje van de bitmap-aafbiljing"
-
-#: gdk-pixbuf/io-bmp.c:319
-msgid "BMP image has unsupported header size"
-msgstr "BMP-aafbiljing haet ein neet-gestiepde headergruutde"
-
-#: gdk-pixbuf/io-bmp.c:357
-msgid "Topdown BMP images cannot be compressed"
-msgstr ""
-
-#: gdk-pixbuf/io-bmp.c:717 gdk-pixbuf/io-pnm.c:709
-msgid "Premature end-of-file encountered"
-msgstr "Veurtiedig besjtandjsènj gevónje"
-
-#: gdk-pixbuf/io-bmp.c:1329
-#, fuzzy
-msgid "Couldn't allocate memory for saving BMP file"
-msgstr "Allokasie van ónthaud veur JPEG-besjtandj is mislök"
-
-#: gdk-pixbuf/io-bmp.c:1370
-#, fuzzy
-msgid "Couldn't write to BMP file"
-msgstr "Kós besjtandjsnaam neet konvertere"
-
-#: gdk-pixbuf/io-bmp.c:1423 gdk-pixbuf/io-gdip-bmp.c:82
-msgid "The BMP image format"
-msgstr "'t BMP-besjtandjsformaat"
-
-#: gdk-pixbuf/io-gif.c:222
-#, c-format
-msgid "Failure reading GIF: %s"
-msgstr "Laeze van GIF mislök: %s"
-
-#: gdk-pixbuf/io-gif.c:496 gdk-pixbuf/io-gif.c:1481 gdk-pixbuf/io-gif.c:1642
-msgid "GIF file was missing some data (perhaps it was truncated somehow?)"
-msgstr "GIF-besjtandj mankeerde data (mesjiens waor 't aafgebraoke?)"
-
-#: gdk-pixbuf/io-gif.c:505
-#, c-format
-msgid "Internal error in the GIF loader (%s)"
-msgstr "Interne faeler in de GIF-lajer (%s)"
-
-#: gdk-pixbuf/io-gif.c:579
-msgid "Stack overflow"
-msgstr "Stack overflow"
-
-#: gdk-pixbuf/io-gif.c:639
-#, fuzzy
-msgid "GIF image loader cannot understand this image."
-msgstr "GIF-lajer begriep dees aafbiljing neet."
-
-#: gdk-pixbuf/io-gif.c:668
-msgid "Bad code encountered"
-msgstr "Verkierde kood óntdèk"
-
-#: gdk-pixbuf/io-gif.c:678
-msgid "Circular table entry in GIF file"
-msgstr "Circulaer tabelveldj in GIF-besjtandj"
-
-#: gdk-pixbuf/io-gif.c:866 gdk-pixbuf/io-gif.c:1468 gdk-pixbuf/io-gif.c:1515
-#: gdk-pixbuf/io-gif.c:1630
-msgid "Not enough memory to load GIF file"
-msgstr "Neet genóg ónthaud veur GIF-besjtandj te laje"
-
-#: gdk-pixbuf/io-gif.c:960
-#, fuzzy
-msgid "Not enough memory to composite a frame in GIF file"
-msgstr "Neet genóg ónthaud veur GIF-besjtandj te laje"
-
-#: gdk-pixbuf/io-gif.c:1132
-msgid "GIF image is corrupt (incorrect LZW compression)"
-msgstr "GIF-besjtandj is versjangeleerd (verkierde LZW-kompressie)"
-
-#: gdk-pixbuf/io-gif.c:1182
-msgid "File does not appear to be a GIF file"
-msgstr "Besjtandj lik neet op ein GIF-besjtandj"
-
-#: gdk-pixbuf/io-gif.c:1194
-#, c-format
-msgid "Version %s of the GIF file format is not supported"
-msgstr "Verzie %s van 't GIF-tiep weurt neet gesjtiep"
-
-#: gdk-pixbuf/io-gif.c:1303
-msgid ""
-"GIF image has no global colormap, and a frame inside it has no local "
-"colormap."
-msgstr ""
-"GIF-besjtandj haet gein globaal kleurepalet, en ein aafbiljing dao-in haet "
-"gein lokaal kleurepalet"
-
-#: gdk-pixbuf/io-gif.c:1537
-msgid "GIF image was truncated or incomplete."
-msgstr "GIF-besjtandj is aafgebraoke of ónvolsjtendig"
-
-#: gdk-pixbuf/io-gif.c:1693 gdk-pixbuf/io-gdip-gif.c:80
-msgid "The GIF image format"
-msgstr "'t GIF-besjtandjsformaat"
-
-#: gdk-pixbuf/io-ico.c:211 gdk-pixbuf/io-ico.c:225 gdk-pixbuf/io-ico.c:277
-#: gdk-pixbuf/io-ico.c:290 gdk-pixbuf/io-ico.c:359
-msgid "Invalid header in icon"
-msgstr "Óngeljige header in piktogram"
-
-#: gdk-pixbuf/io-ico.c:240 gdk-pixbuf/io-ico.c:300 gdk-pixbuf/io-ico.c:369
-#: gdk-pixbuf/io-ico.c:432 gdk-pixbuf/io-ico.c:462
-msgid "Not enough memory to load icon"
-msgstr "Neet genóg ónthaud veur piktogram te laje"
-
-#: gdk-pixbuf/io-ico.c:322
-msgid "Icon has zero width"
-msgstr "Piktogram haet breide nöl"
-
-#: gdk-pixbuf/io-ico.c:332
-msgid "Icon has zero height"
-msgstr "Piktogram haet huugde nöl"
-
-#: gdk-pixbuf/io-ico.c:384
-msgid "Compressed icons are not supported"
-msgstr "Gekomprimeerde piktogramme waere neet gesjtiep"
-
-#: gdk-pixbuf/io-ico.c:417
-msgid "Unsupported icon type"
-msgstr "Neet gesjtiep piktogramtiep"
-
-#: gdk-pixbuf/io-ico.c:511
-msgid "Not enough memory to load ICO file"
-msgstr "Neet genóg ónthaud veur ICO-besjtandj te laje"
-
-#: gdk-pixbuf/io-ico.c:976
-msgid "Image too large to be saved as ICO"
-msgstr ""
-
-#: gdk-pixbuf/io-ico.c:987
-msgid "Cursor hotspot outside image"
-msgstr ""
-
-#: gdk-pixbuf/io-ico.c:1010
-#, c-format
-msgid "Unsupported depth for ICO file: %d"
-msgstr ""
-
-#: gdk-pixbuf/io-ico.c:1245 gdk-pixbuf/io-gdip-ico.c:59
-msgid "The ICO image format"
-msgstr "'t ICO-besjtandjsformaat"
-
-#: gdk-pixbuf/io-icns.c:347
-#, fuzzy, c-format
-msgid "Error reading ICNS image: %s"
-msgstr "Fatale faeler bie 't laeze van PNG aafbiljing: %s"
-
-#: gdk-pixbuf/io-icns.c:364
-#, fuzzy
-msgid "Could not decode ICNS file"
-msgstr ""
-"Faeler bie 't make van map \"%s\": %s\n"
-"%s"
-
-#: gdk-pixbuf/io-icns.c:397
-#, fuzzy
-msgid "The ICNS image format"
-msgstr "'t ICO-besjtandjsformaat"
-
-#: gdk-pixbuf/io-jasper.c:75
-#, fuzzy
-msgid "Couldn't allocate memory for stream"
-msgstr "Allokasie van ónthaud veur TGA-header is mislök"
-
-#: gdk-pixbuf/io-jasper.c:105
-#, fuzzy
-msgid "Couldn't decode image"
-msgstr "Kós besjtandjsnaam neet konvertere"
-
-#: gdk-pixbuf/io-jasper.c:123
-#, fuzzy
-msgid "Transformed JPEG2000 has zero width or height"
-msgstr "Getransformeerde PNG haet nöl breide of huugde."
-
-#: gdk-pixbuf/io-jasper.c:137
-#, fuzzy
-msgid "Image type currently not supported"
-msgstr "Aafbiljingstiep '%s' weurt neet gesjtiep"
-
-#: gdk-pixbuf/io-jasper.c:149 gdk-pixbuf/io-jasper.c:157
-#, fuzzy
-msgid "Couldn't allocate memory for color profile"
-msgstr "Allokasie van ónthaud veur JPEG-besjtandj is mislök"
-
-#: gdk-pixbuf/io-jasper.c:183
-#, fuzzy
-msgid "Insufficient memory to open JPEG 2000 file"
-msgstr "Neet genóg ónthaud veur TIFF-besjtandj te äöpene"
-
-#: gdk-pixbuf/io-jasper.c:262
-#, fuzzy
-msgid "Couldn't allocate memory to buffer image data"
-msgstr "Allokasie van ónthaud veur IOBUFFER gegaeves neet gelök"
-
-#: gdk-pixbuf/io-jasper.c:306
-#, fuzzy
-msgid "The JPEG 2000 image format"
-msgstr "'t JPEG-besjtandjsformaat"
-
-#: gdk-pixbuf/io-jpeg.c:117
-#, c-format
-msgid "Error interpreting JPEG image file (%s)"
-msgstr "Faeler bie 't interpretere van JPEG-aafbiljing (%s)"
-
-#: gdk-pixbuf/io-jpeg.c:528
-msgid ""
-"Insufficient memory to load image, try exiting some applications to free "
-"memory"
-msgstr ""
-"Neet genóg ónthaud veur aafbiljing te laje, probeer get programme aaf te "
-"sjloete veur ónthaud vrie te make"
-
-#: gdk-pixbuf/io-jpeg.c:569 gdk-pixbuf/io-jpeg.c:775
-#, c-format
-msgid "Unsupported JPEG color space (%s)"
-msgstr "Neet gesjtiep JPEG kleurruumde (%s)"
-
-#: gdk-pixbuf/io-jpeg.c:674 gdk-pixbuf/io-jpeg.c:944 gdk-pixbuf/io-jpeg.c:1177
-#: gdk-pixbuf/io-jpeg.c:1186
-msgid "Couldn't allocate memory for loading JPEG file"
-msgstr "Allokasie van ónthaud veur JPEG-besjtandj is mislök"
-
-#: gdk-pixbuf/io-jpeg.c:919
-#, fuzzy
-msgid "Transformed JPEG has zero width or height."
-msgstr "Getransformeerde PNG haet nöl breide of huugde."
-
-#: gdk-pixbuf/io-jpeg.c:1133 gdk-pixbuf/io-gdip-jpeg.c:53
-#, c-format
-msgid ""
-"JPEG quality must be a value between 0 and 100; value '%s' could not be "
-"parsed."
-msgstr ""
-"JPEG-kwaliteit moot ein waerd tösje 0 en 100 zeen: waerd '%s' kèn neet "
-"verwirk waere."
-
-#: gdk-pixbuf/io-jpeg.c:1148 gdk-pixbuf/io-gdip-jpeg.c:68
-#, c-format
-msgid ""
-"JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
-msgstr ""
-"JPEG-kwaliteit moot tösje 0 en 100 likge; waerd '%d' is neet toegesjtange."
-
-#: gdk-pixbuf/io-jpeg.c:1310 gdk-pixbuf/io-gdip-jpeg.c:136
-msgid "The JPEG image format"
-msgstr "'t JPEG-besjtandjsformaat"
-
-#: gdk-pixbuf/io-pcx.c:187
-#, fuzzy
-msgid "Couldn't allocate memory for header"
-msgstr "Allokasie van ónthaud veur TGA-header is mislök"
-
-#: gdk-pixbuf/io-pcx.c:202 gdk-pixbuf/io-pcx.c:560
-#, fuzzy
-msgid "Couldn't allocate memory for context buffer"
-msgstr "Allokasie van ónthaud veur TGA-conteks struct mislök"
-
-#: gdk-pixbuf/io-pcx.c:601
-#, fuzzy
-msgid "Image has invalid width and/or height"
-msgstr "Aafbiljing haet huugde nöl"
-
-#: gdk-pixbuf/io-pcx.c:613 gdk-pixbuf/io-pcx.c:674
-#, fuzzy
-msgid "Image has unsupported bpp"
-msgstr "BMP-aafbiljing haet ein neet-gestiepde headergruutde"
-
-#: gdk-pixbuf/io-pcx.c:618 gdk-pixbuf/io-pcx.c:626
-#, fuzzy, c-format
-msgid "Image has unsupported number of %d-bit planes"
-msgstr "BMP-aafbiljing haet ein neet-gestiepde headergruutde"
-
-#: gdk-pixbuf/io-pcx.c:642
-#, fuzzy
-msgid "Couldn't create new pixbuf"
-msgstr "Kèn nuuj pixbuf neet allokere"
-
-#: gdk-pixbuf/io-pcx.c:650
-#, fuzzy
-msgid "Couldn't allocate memory for line data"
-msgstr "Allokasie van ónthaud veur IOBUFFER gegaeves neet gelök"
-
-#: gdk-pixbuf/io-pcx.c:657
-#, fuzzy
-msgid "Couldn't allocate memory for paletted data"
-msgstr "Allokasie van ónthaud veur IOBUFFER gegaeves neet gelök"
-
-#: gdk-pixbuf/io-pcx.c:704
-msgid "Didn't get all lines of PCX image"
-msgstr ""
-
-#: gdk-pixbuf/io-pcx.c:711
-msgid "No palette found at end of PCX data"
-msgstr ""
-
-#: gdk-pixbuf/io-pcx.c:756
-#, fuzzy
-msgid "The PCX image format"
-msgstr "'t BMP-besjtandjsformaat"
-
-#: gdk-pixbuf/io-png.c:55
-msgid "Bits per channel of PNG image is invalid."
-msgstr "Bits per kenaal van PNG-aafbiljing is óngeljig."
-
-#: gdk-pixbuf/io-png.c:136 gdk-pixbuf/io-png.c:642
-msgid "Transformed PNG has zero width or height."
-msgstr "Getransformeerde PNG haet nöl breide of huugde."
-
-#: gdk-pixbuf/io-png.c:144
-msgid "Bits per channel of transformed PNG is not 8."
-msgstr "Bits per kenaal van getransformeerde PNG is neet geliek aan 8."
-
-#: gdk-pixbuf/io-png.c:153
-msgid "Transformed PNG not RGB or RGBA."
-msgstr "Getransformeerde PNG is gein RGB of RGBA."
-
-#: gdk-pixbuf/io-png.c:162
-msgid "Transformed PNG has unsupported number of channels, must be 3 or 4."
-msgstr ""
-"Getransformeerde PNG haet ein deil neet gesjtiepde kenale, moot geliek zeen "
-"aan 3 of 4."
-
-#: gdk-pixbuf/io-png.c:183
-#, c-format
-msgid "Fatal error in PNG image file: %s"
-msgstr "Fatale faeler in PNG-aafbiljing: %s"
-
-#: gdk-pixbuf/io-png.c:316
-msgid "Insufficient memory to load PNG file"
-msgstr "Neet genóg ónthaud veur PNG-besjtandj te laje"
-
-#: gdk-pixbuf/io-png.c:657
-#, c-format
-msgid ""
-"Insufficient memory to store a %ld by %ld image; try exiting some "
-"applications to reduce memory usage"
-msgstr ""
-"Neet genóg ónthaud veur ein aafbiljing van %ld bie %ld op te sjlaon; probeer "
-"get programme aaf te sjloete veur ónthaud vrie te make"
-
-#: gdk-pixbuf/io-png.c:720
-msgid "Fatal error reading PNG image file"
-msgstr "Fatale faeler bie 't laeze van PNG aafbiljing"
-
-#: gdk-pixbuf/io-png.c:769
-#, c-format
-msgid "Fatal error reading PNG image file: %s"
-msgstr "Fatale faeler bie 't laeze van PNG aafbiljing: %s"
-
-#: gdk-pixbuf/io-png.c:863
-msgid ""
-"Keys for PNG text chunks must have at least 1 and at most 79 characters."
-msgstr ""
-"Sjleutels veur PNG teksblök mote minimaal 1, en maksimaal 79 teikes höbbe"
-
-#: gdk-pixbuf/io-png.c:872
-msgid "Keys for PNG text chunks must be ASCII characters."
-msgstr "Sjleutels veur PNG tektblök mote oet ASCII teikes besjtaon"
-
-#: gdk-pixbuf/io-png.c:886 gdk-pixbuf/io-tiff.c:738
-#, c-format
-msgid "Color profile has invalid length %d."
-msgstr ""
-
-#: gdk-pixbuf/io-png.c:899 gdk-pixbuf/io-gdip-png.c:56
-#, fuzzy, c-format
-msgid ""
-"PNG compression level must be a value between 0 and 9; value '%s' could not "
-"be parsed."
-msgstr ""
-"JPEG-kwaliteit moot ein waerd tösje 0 en 100 zeen: waerd '%s' kèn neet "
-"verwirk waere."
-
-#: gdk-pixbuf/io-png.c:912 gdk-pixbuf/io-gdip-png.c:68
-#, fuzzy, c-format
-msgid ""
-"PNG compression level must be a value between 0 and 9; value '%d' is not "
-"allowed."
-msgstr ""
-"JPEG-kwaliteit moot tösje 0 en 100 likge; waerd '%d' is neet toegesjtange."
-
-#: gdk-pixbuf/io-png.c:951
-#, fuzzy, c-format
-msgid "Value for PNG text chunk %s cannot be converted to ISO-8859-1 encoding."
-msgstr ""
-"Waerd veur PNG teksblok %s kèn neet gekonverteerd waere nao ISO-8859-1 "
-"kodering"
-
-#: gdk-pixbuf/io-png.c:1112 gdk-pixbuf/io-gdip-png.c:133
-msgid "The PNG image format"
-msgstr "'t PNG-besjtandjsformaat"
-
-#: gdk-pixbuf/io-pnm.c:250
-msgid "PNM loader expected to find an integer, but didn't"
-msgstr "PNM-lajer verwachde ein integer te vènje, mer deeg daet neet"
-
-#: gdk-pixbuf/io-pnm.c:282
-msgid "PNM file has an incorrect initial byte"
-msgstr "PNM besjtandj haet ein verkierde ierste byte"
-
-#: gdk-pixbuf/io-pnm.c:312
-msgid "PNM file is not in a recognized PNM subformat"
-msgstr "PNM is neet in ein herkènbaar PNM subformaat"
-
-#: gdk-pixbuf/io-pnm.c:337
-msgid "PNM file has an image width of 0"
-msgstr "PNM besjtandj haet breide 0"
-
-#: gdk-pixbuf/io-pnm.c:358
-msgid "PNM file has an image height of 0"
-msgstr "PNM besjtandj haet huugde 0"
-
-#: gdk-pixbuf/io-pnm.c:381
-msgid "Maximum color value in PNM file is 0"
-msgstr "Maksimale kleurwaerd in PNM besjtandj is 0"
-
-#: gdk-pixbuf/io-pnm.c:389
-msgid "Maximum color value in PNM file is too large"
-msgstr "Maksimale kleurwaerd in PNM besjtandj is te groet"
-
-#: gdk-pixbuf/io-pnm.c:429 gdk-pixbuf/io-pnm.c:459 gdk-pixbuf/io-pnm.c:504
-msgid "Raw PNM image type is invalid"
-msgstr "Raw PNM-aafbiljingstiep is óngeljig"
-
-#: gdk-pixbuf/io-pnm.c:654
-msgid "PNM image loader does not support this PNM subformat"
-msgstr "PNM-lajer sjtiep dit PNM-subtiep neet"
-
-#: gdk-pixbuf/io-pnm.c:741 gdk-pixbuf/io-pnm.c:968
-msgid "Raw PNM formats require exactly one whitespace before sample data"
-msgstr ""
-"Raw PNM-formate mote zjus ein sjpasie höbbe veur d'n aanvang van de data"
-
-#: gdk-pixbuf/io-pnm.c:768
-#, fuzzy
-msgid "Cannot allocate memory for loading PNM image"
-msgstr "Allokasie van ónthaud veur laje van PNM besjtandj mislök"
-
-#: gdk-pixbuf/io-pnm.c:818
-msgid "Insufficient memory to load PNM context struct"
-msgstr "Neet genóg ónthaud veur 't laeze van PNM context struct"
-
-#: gdk-pixbuf/io-pnm.c:869
-msgid "Unexpected end of PNM image data"
-msgstr "Ónverwach ènj van PNM aafbiljingsgegaeves"
-
-#: gdk-pixbuf/io-pnm.c:997
-msgid "Insufficient memory to load PNM file"
-msgstr "Neet genóg ónthaud veur PNM-besjtandj te laje"
-
-#: gdk-pixbuf/io-pnm.c:1081
-msgid "The PNM/PBM/PGM/PPM image format family"
-msgstr "De PNM/PBM/PGM/PPM-besjtandjsformaatfemielie"
-
-#: gdk-pixbuf/io-qtif.c:128
-msgid "Input file descriptor is NULL."
-msgstr ""
-
-#: gdk-pixbuf/io-qtif.c:143
-#, fuzzy
-msgid "Failed to read QTIF header"
-msgstr "Kós TIFF-aafbiljing neet äöpene"
-
-#: gdk-pixbuf/io-qtif.c:152 gdk-pixbuf/io-qtif.c:182 gdk-pixbuf/io-qtif.c:446
-#, c-format
-msgid "QTIF atom size too large (%d bytes)"
-msgstr ""
-
-#: gdk-pixbuf/io-qtif.c:172
-#, fuzzy, c-format
-msgid "Failed to allocate %d bytes for file read buffer"
-msgstr "Neet mäögelik aafbiljingsbuffer van %u bytes te allokere"
-
-#: gdk-pixbuf/io-qtif.c:196
-#, fuzzy, c-format
-msgid "File error when reading QTIF atom: %s"
-msgstr "Laeze van GIF mislök: %s"
-
-#: gdk-pixbuf/io-qtif.c:233
-#, c-format
-msgid "Failed to skip the next %d bytes with seek()."
-msgstr ""
-
-#: gdk-pixbuf/io-qtif.c:257
-#, fuzzy
-msgid "Failed to allocate QTIF context structure."
-msgstr "Allokasie van ónthaud veur TGA-conteks struct mislök"
-
-#: gdk-pixbuf/io-qtif.c:317
-#, fuzzy
-msgid "Failed to create GdkPixbufLoader object."
-msgstr ""
-"Neet mäögelik om nao tiedelik besjtandj te sjrieve bie 't laje van XBM-"
-"aafbiljing"
-
-#: gdk-pixbuf/io-qtif.c:421
-#, fuzzy
-msgid "Failed to find an image data atom."
-msgstr "Kós TIFF-aafbiljing neet äöpene"
-
-#: gdk-pixbuf/io-qtif.c:602
-#, fuzzy
-msgid "The QTIF image format"
-msgstr "'t TIFF-besjtandjsformaat"
-
-#: gdk-pixbuf/io-ras.c:126
-msgid "RAS image has bogus header data"
-msgstr "RAS-aafbiljing haet ónzinnige headerdata"
-
-#: gdk-pixbuf/io-ras.c:148
-msgid "RAS image has unknown type"
-msgstr "RAS-aafbiljing is van ónbekènd tiep"
-
-#: gdk-pixbuf/io-ras.c:156
-msgid "unsupported RAS image variation"
-msgstr "Neet gesjtiepde RAS-aafbiljingsvarrejasie"
-
-#: gdk-pixbuf/io-ras.c:171 gdk-pixbuf/io-ras.c:200
-msgid "Not enough memory to load RAS image"
-msgstr "Neet genóg ónthaud veur 't laje van de RAS-aafbiljing"
-
-#: gdk-pixbuf/io-ras.c:545
-msgid "The Sun raster image format"
-msgstr "'t Sun raster-besjtandjsformaat"
-
-#: gdk-pixbuf/io-tga.c:154
-#, fuzzy
-msgid "Cannot allocate memory for IOBuffer struct"
-msgstr "Allokasie van ónthaud veur IOBuffer struct neet gelök"
-
-#: gdk-pixbuf/io-tga.c:173
-#, fuzzy
-msgid "Cannot allocate memory for IOBuffer data"
-msgstr "Allokasie van ónthaud veur IOBUFFER gegaeves neet gelök"
-
-#: gdk-pixbuf/io-tga.c:184
-#, fuzzy
-msgid "Cannot realloc IOBuffer data"
-msgstr "Kèn IOBuffer gegaeves neet obbenuuts allokere"
-
-#: gdk-pixbuf/io-tga.c:214
-#, fuzzy
-msgid "Cannot allocate temporary IOBuffer data"
-msgstr "Kèn tiedelike IOBuffer gegaeves neet allokere"
-
-#: gdk-pixbuf/io-tga.c:347
-#, fuzzy
-msgid "Cannot allocate new pixbuf"
-msgstr "Kèn nuuj pixbuf neet allokere"
-
-#: gdk-pixbuf/io-tga.c:686
-#, fuzzy
-msgid "Image is corrupted or truncated"
-msgstr "GIF-besjtandj is aafgebraoke of ónvolsjtendig"
-
-#: gdk-pixbuf/io-tga.c:693
-#, fuzzy
-msgid "Cannot allocate colormap structure"
-msgstr "Kèn struktuur van kleurekaart neet allokere"
-
-#: gdk-pixbuf/io-tga.c:700
-#, fuzzy
-msgid "Cannot allocate colormap entries"
-msgstr "Kèn eingange van kleurekaart neet allokere"
-
-#: gdk-pixbuf/io-tga.c:722
-msgid "Unexpected bitdepth for colormap entries"
-msgstr "Ónverwachde bitdeepde veur eingange van kleurekaart"
-
-#: gdk-pixbuf/io-tga.c:740
-#, fuzzy
-msgid "Cannot allocate TGA header memory"
-msgstr "Kèn ónthaud veur TGA-kop neet allokere"
-
-#: gdk-pixbuf/io-tga.c:773
-msgid "TGA image has invalid dimensions"
-msgstr "TGA aafbiljing haet óngeljige aafmaetinge"
-
-#: gdk-pixbuf/io-tga.c:779 gdk-pixbuf/io-tga.c:788 gdk-pixbuf/io-tga.c:798
-#: gdk-pixbuf/io-tga.c:808 gdk-pixbuf/io-tga.c:815
-msgid "TGA image type not supported"
-msgstr "TGA besjtandjstiep weurt neet gesjtiep"
-
-#: gdk-pixbuf/io-tga.c:862
-#, fuzzy
-msgid "Cannot allocate memory for TGA context struct"
-msgstr "Allokasie van ónthaud veur TGA-conteks struct mislök"
-
-#: gdk-pixbuf/io-tga.c:927
-msgid "Excess data in file"
-msgstr "Euverbaojige data in besjtandj"
-
-#: gdk-pixbuf/io-tga.c:1008
-msgid "The Targa image format"
-msgstr "'t Targa-besjtandjsformaat"
-
-#: gdk-pixbuf/io-tiff.c:165
-msgid "Could not get image width (bad TIFF file)"
-msgstr "Kós aafbiljingsbreide neet vènje (verkierd TIFF besjtandj)"
-
-#: gdk-pixbuf/io-tiff.c:172
-msgid "Could not get image height (bad TIFF file)"
-msgstr "Kós aafbiljingshuugde neet vènje (verkierd TIFF besjtandj)"
-
-#: gdk-pixbuf/io-tiff.c:180
-msgid "Width or height of TIFF image is zero"
-msgstr "Huugde of breide van TIFF-aafbiljing is nöl"
-
-#: gdk-pixbuf/io-tiff.c:189 gdk-pixbuf/io-tiff.c:198
-msgid "Dimensions of TIFF image too large"
-msgstr "Aafmaetinge van TIFF-aafbiljing te groet"
-
-#: gdk-pixbuf/io-tiff.c:222 gdk-pixbuf/io-tiff.c:234 gdk-pixbuf/io-tiff.c:561
-msgid "Insufficient memory to open TIFF file"
-msgstr "Neet genóg ónthaud veur TIFF-besjtandj te äöpene"
-
-#: gdk-pixbuf/io-tiff.c:295
-msgid "Failed to load RGB data from TIFF file"
-msgstr "Kós RGB-gegaeves neet inlaeze oet TIFF besjtandj"
-
-#: gdk-pixbuf/io-tiff.c:351
-msgid "Failed to open TIFF image"
-msgstr "Kós TIFF-aafbiljing neet äöpene"
-
-#: gdk-pixbuf/io-tiff.c:363 gdk-pixbuf/io-tiff.c:778
-msgid "TIFFClose operation failed"
-msgstr "TIFFClose bewirking mislök"
-
-#: gdk-pixbuf/io-tiff.c:493 gdk-pixbuf/io-tiff.c:506
-msgid "Failed to load TIFF image"
-msgstr "Neet mäögelik óm TIFF-aafbiljing te laje"
-
-#: gdk-pixbuf/io-tiff.c:692
-#, fuzzy
-msgid "Failed to save TIFF image"
-msgstr "Kós TIFF-aafbiljing neet äöpene"
-
-#: gdk-pixbuf/io-tiff.c:727
-msgid "TIFF compression doesn't refer to a valid codec."
-msgstr ""
-
-#: gdk-pixbuf/io-tiff.c:767
-#, fuzzy
-msgid "Failed to write TIFF data"
-msgstr "Kós TIFF-aafbiljing neet äöpene"
-
-#: gdk-pixbuf/io-tiff.c:814
-#, fuzzy
-msgid "Couldn't write to TIFF file"
-msgstr "Kós besjtandjsnaam neet konvertere"
-
-#: gdk-pixbuf/io-tiff.c:869
-msgid "The TIFF image format"
-msgstr "'t TIFF-besjtandjsformaat"
-
-#: gdk-pixbuf/io-wbmp.c:246
-msgid "Image has zero width"
-msgstr "Aafbiljing haet breide nöl"
-
-#: gdk-pixbuf/io-wbmp.c:264
-msgid "Image has zero height"
-msgstr "Aafbiljing haet huugde nöl"
-
-#: gdk-pixbuf/io-wbmp.c:275
-msgid "Not enough memory to load image"
-msgstr "Neet genóg ónthaud veur 't laje van de aafbiljing"
-
-#: gdk-pixbuf/io-wbmp.c:334
-msgid "Couldn't save the rest"
-msgstr "Kós de res neet opsjlaon"
-
-#: gdk-pixbuf/io-wbmp.c:375
-msgid "The WBMP image format"
-msgstr "'t WBMP-besjtandjsformaat"
-
-#: gdk-pixbuf/io-xbm.c:295
-msgid "Invalid XBM file"
-msgstr "Óngeljig XBM-besjtandj"
-
-#: gdk-pixbuf/io-xbm.c:305
-msgid "Insufficient memory to load XBM image file"
-msgstr "Neet genóg ónthaud óm XBM-aafbiljing te laje"
-
-#: gdk-pixbuf/io-xbm.c:453
-msgid "Failed to write to temporary file when loading XBM image"
-msgstr ""
-"Neet mäögelik om nao tiedelik besjtandj te sjrieve bie 't laje van XBM-"
-"aafbiljing"
-
-#: gdk-pixbuf/io-xbm.c:492
-msgid "The XBM image format"
-msgstr "'t XBM-besjtandjsformaat"
-
-#: gdk-pixbuf/io-xpm.c:468
-msgid "No XPM header found"
-msgstr "Gein XPM-header gevónje"
-
-#: gdk-pixbuf/io-xpm.c:477
-#, fuzzy
-msgid "Invalid XPM header"
-msgstr "Óngeljig XBM-besjtandj"
-
-#: gdk-pixbuf/io-xpm.c:485
-msgid "XPM file has image width <= 0"
-msgstr "XPM-besjtandj haet aafbiljingsbreide <= 0"
-
-#: gdk-pixbuf/io-xpm.c:493
-msgid "XPM file has image height <= 0"
-msgstr "XPM-besjtandj haet aafbiljingshuugde <= 0"
-
-#: gdk-pixbuf/io-xpm.c:501
-msgid "XPM has invalid number of chars per pixel"
-msgstr "XPM haet ein deil óngeljige teikes per pixel"
-
-#: gdk-pixbuf/io-xpm.c:510
-msgid "XPM file has invalid number of colors"
-msgstr "XPM-besjtandj haet ein deil óngeljige kleure"
-
-#: gdk-pixbuf/io-xpm.c:522 gdk-pixbuf/io-xpm.c:531 gdk-pixbuf/io-xpm.c:583
-#, fuzzy
-msgid "Cannot allocate memory for loading XPM image"
-msgstr "Kèn ónthaud veur 't laje van XPM-aafbiljing neet allokere"
-
-#: gdk-pixbuf/io-xpm.c:545
-#, fuzzy
-msgid "Cannot read XPM colormap"
-msgstr "Kèn XPM-kleurekaart neet laeze"
-
-#: gdk-pixbuf/io-xpm.c:777
-msgid "Failed to write to temporary file when loading XPM image"
-msgstr ""
-"Neet mäögelik óm nao tiedelik besjtandj te sjrieve bie 't laje van XPM-"
-"aafbiljing"
-
-#: gdk-pixbuf/io-xpm.c:816
-msgid "The XPM image format"
-msgstr "'t XPM-besjtandjsformaat"
-
-#: gdk-pixbuf/io-gdip-emf.c:59
-#, fuzzy
-msgid "The EMF image format"
-msgstr "'t BMP-besjtandjsformaat"
-
-#: gdk-pixbuf/io-gdip-utils.c:232
-#, fuzzy, c-format
-msgid "Could not allocate memory: %s"
-msgstr "Allokasie van ónthaud veur TGA-header is mislök"
-
-#: gdk-pixbuf/io-gdip-utils.c:257 gdk-pixbuf/io-gdip-utils.c:371
-#: gdk-pixbuf/io-gdip-utils.c:411
-#, fuzzy, c-format
-msgid "Could not create stream: %s"
-msgstr "Faeler bie 't make van map \"%s\": %s\n"
-
-#: gdk-pixbuf/io-gdip-utils.c:271
-#, fuzzy, c-format
-msgid "Could not seek stream: %s"
-msgstr ""
-"Faeler bie 't make van map \"%s\": %s\n"
-"%s"
-
-#: gdk-pixbuf/io-gdip-utils.c:283
-#, fuzzy, c-format
-msgid "Could not read from stream: %s"
-msgstr "Faeler bie 't make van map \"%s\": %s\n"
-
-#: gdk-pixbuf/io-gdip-utils.c:694 gdk-pixbuf/io-gdip-utils.c:825
-#, fuzzy
-msgid "Couldn't load bitmap"
-msgstr "Kós besjtandjsnaam neet konvertere"
-
-#: gdk-pixbuf/io-gdip-utils.c:847
-#, fuzzy
-msgid "Couldn't load metafile"
-msgstr "Kós besjtandjsnaam neet konvertere"
-
-#: gdk-pixbuf/io-gdip-utils.c:1006
-#, fuzzy
-msgid "Unsupported image format for GDI+"
-msgstr "Neet gesjtiepde RAS-aafbiljingsvarrejasie"
-
-#: gdk-pixbuf/io-gdip-utils.c:1013
-#, fuzzy
-msgid "Couldn't save"
-msgstr "Kós de res neet opsjlaon"
-
-#: gdk-pixbuf/io-gdip-wmf.c:58
-#, fuzzy
-msgid "The WMF image format"
-msgstr "'t WBMP-besjtandjsformaat"
 
 #. Description of --sync in --help output
 #: gdk/win32/gdkmain-win32.c:55
@@ -1611,8 +637,9 @@ msgid "_Saturation:"
 msgstr "_Verzaediging:"
 
 #: gtk/gtkcolorsel.c:393
-msgid "\"Deepness\" of the color."
-msgstr "\"Deepde\" van de kleur."
+#, fuzzy
+msgid "Intensity of the color."
+msgstr "Transparansie van de noe geselekteerde kleur."
 
 #: gtk/gtkcolorsel.c:394
 msgid "_Value:"
@@ -1796,11 +823,11 @@ msgstr "_Tint:"
 msgid "Paper Margins"
 msgstr ""
 
-#: gtk/gtkentry.c:8612 gtk/gtktextview.c:8002
+#: gtk/gtkentry.c:8612 gtk/gtktextview.c:8012
 msgid "Input _Methods"
 msgstr "inveur_metood"
 
-#: gtk/gtkentry.c:8626 gtk/gtktextview.c:8016
+#: gtk/gtkentry.c:8626 gtk/gtktextview.c:8026
 #, fuzzy
 msgid "_Insert Unicode Control Character"
 msgstr "Unicode kentrolteike _Inveuge "
@@ -2268,13 +1295,13 @@ msgid "System (%s)"
 msgstr ""
 
 #. Open Link
-#: gtk/gtklabel.c:6076
+#: gtk/gtklabel.c:6072
 #, fuzzy
 msgid "_Open Link"
 msgstr "Ä_öpene"
 
 #. Copy Link Address
-#: gtk/gtklabel.c:6088
+#: gtk/gtklabel.c:6084
 msgid "Copy _Link Address"
 msgstr ""
 
@@ -2289,27 +1316,27 @@ msgid "Invalid URI"
 msgstr "óngeljige Utf-8"
 
 #. Description of --gtk-module=MODULES in --help output
-#: gtk/gtkmain.c:447
+#: gtk/gtkmain.c:432
 msgid "Load additional GTK+ modules"
 msgstr ""
 
 #. Placeholder in --gtk-module=MODULES in --help output
-#: gtk/gtkmain.c:448
+#: gtk/gtkmain.c:433
 msgid "MODULES"
 msgstr ""
 
 #. Description of --g-fatal-warnings in --help output
-#: gtk/gtkmain.c:450
+#: gtk/gtkmain.c:435
 msgid "Make all warnings fatal"
 msgstr ""
 
 #. Description of --gtk-debug=FLAGS in --help output
-#: gtk/gtkmain.c:453
+#: gtk/gtkmain.c:438
 msgid "GTK+ debugging flags to set"
 msgstr ""
 
 #. Description of --gtk-no-debug=FLAGS in --help output
-#: gtk/gtkmain.c:456
+#: gtk/gtkmain.c:441
 msgid "GTK+ debugging flags to unset"
 msgstr ""
 
@@ -2318,20 +1345,20 @@ msgstr ""
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
 #.
-#: gtk/gtkmain.c:708
+#: gtk/gtkmain.c:704
 msgid "default:LTR"
 msgstr "default:LTR"
 
-#: gtk/gtkmain.c:773
+#: gtk/gtkmain.c:769
 #, c-format
 msgid "Cannot open display: %s"
 msgstr ""
 
-#: gtk/gtkmain.c:810
+#: gtk/gtkmain.c:806
 msgid "GTK+ Options"
 msgstr ""
 
-#: gtk/gtkmain.c:810
+#: gtk/gtkmain.c:806
 msgid "Show GTK+ Options"
 msgstr ""
 
@@ -2421,7 +1448,7 @@ msgstr ""
 msgid "Cannot end process with pid %d: %s"
 msgstr ""
 
-#: gtk/gtknotebook.c:4621 gtk/gtknotebook.c:7050
+#: gtk/gtknotebook.c:4631 gtk/gtknotebook.c:7060
 #, c-format
 msgid "Page %u"
 msgstr "Pagina %u"
@@ -2513,91 +1540,85 @@ msgstr "Nuuj map"
 msgid "%s job #%d"
 msgstr ""
 
-#: gtk/gtkprintoperation.c:1687
+#: gtk/gtkprintoperation.c:1695
 msgctxt "print operation status"
 msgid "Initial state"
 msgstr ""
 
-#: gtk/gtkprintoperation.c:1688
+#: gtk/gtkprintoperation.c:1696
 #, fuzzy
 msgctxt "print operation status"
 msgid "Preparing to print"
 msgstr "Waarsjoewing"
 
-#: gtk/gtkprintoperation.c:1689
+#: gtk/gtkprintoperation.c:1697
 msgctxt "print operation status"
 msgid "Generating data"
 msgstr ""
 
-#: gtk/gtkprintoperation.c:1690
+#: gtk/gtkprintoperation.c:1698
 msgctxt "print operation status"
 msgid "Sending data"
 msgstr ""
 
-#: gtk/gtkprintoperation.c:1691
+#: gtk/gtkprintoperation.c:1699
 #, fuzzy
 msgctxt "print operation status"
 msgid "Waiting"
 msgstr "Waarsjoewing"
 
-#: gtk/gtkprintoperation.c:1692
+#: gtk/gtkprintoperation.c:1700
 msgctxt "print operation status"
 msgid "Blocking on issue"
 msgstr ""
 
-#: gtk/gtkprintoperation.c:1693
+#: gtk/gtkprintoperation.c:1701
 #, fuzzy
 msgctxt "print operation status"
 msgid "Printing"
 msgstr "Aaf_drökke"
 
-#: gtk/gtkprintoperation.c:1694
+#: gtk/gtkprintoperation.c:1702
 #, fuzzy
 msgctxt "print operation status"
 msgid "Finished"
 msgstr "_Zeuke"
 
-#: gtk/gtkprintoperation.c:1695
+#: gtk/gtkprintoperation.c:1703
 msgctxt "print operation status"
 msgid "Finished with error"
 msgstr ""
 
-#: gtk/gtkprintoperation.c:2254
+#: gtk/gtkprintoperation.c:2270
 #, c-format
 msgid "Preparing %d"
 msgstr ""
 
-#: gtk/gtkprintoperation.c:2256 gtk/gtkprintoperation.c:2875
+#: gtk/gtkprintoperation.c:2272 gtk/gtkprintoperation.c:2902
 #, fuzzy, c-format
 msgid "Preparing"
 msgstr "Waarsjoewing"
 
-#: gtk/gtkprintoperation.c:2259
+#: gtk/gtkprintoperation.c:2275
 #, fuzzy, c-format
 msgid "Printing %d"
 msgstr "Aaf_drökke"
 
-#: gtk/gtkprintoperation.c:2905
+#: gtk/gtkprintoperation.c:2932
 #, c-format
 msgid "Error creating print preview"
 msgstr ""
 
-#: gtk/gtkprintoperation.c:2908
+#: gtk/gtkprintoperation.c:2935
 #, c-format
 msgid "The most probable reason is that a temporary file could not be created."
 msgstr ""
 
-#: gtk/gtkprintoperation-unix.c:297 gtk/gtkprintoperation-unix.c:314
-#, c-format
+#: gtk/gtkprintoperation-unix.c:297
 msgid "Error launching preview"
 msgstr ""
 
-#: gtk/gtkprintoperation-unix.c:358
-#, c-format
-msgid "Error printing"
-msgstr ""
-
-#: gtk/gtkprintoperation-unix.c:494 gtk/gtkprintoperation-win32.c:1447
+#: gtk/gtkprintoperation-unix.c:470 gtk/gtkprintoperation-win32.c:1447
 #, fuzzy
 msgid "Application"
 msgstr "_Selektie: "
@@ -2612,7 +1633,7 @@ msgstr ""
 
 #. Translators: this is a printer status.
 #: gtk/gtkprintoperation-win32.c:616
-#: modules/printbackends/cups/gtkprintbackendcups.c:1999
+#: modules/printbackends/cups/gtkprintbackendcups.c:1998
 #, fuzzy
 msgid "Paused"
 msgstr "_Plakke"
@@ -2751,42 +1772,42 @@ msgstr ""
 #. * multiple pages on a sheet when printing
 #.
 #: gtk/gtkprintunixdialog.c:3010
-#: modules/printbackends/cups/gtkprintbackendcups.c:3509
+#: modules/printbackends/cups/gtkprintbackendcups.c:3508
 msgid "Left to right, top to bottom"
 msgstr ""
 
 #: gtk/gtkprintunixdialog.c:3010
-#: modules/printbackends/cups/gtkprintbackendcups.c:3509
+#: modules/printbackends/cups/gtkprintbackendcups.c:3508
 msgid "Left to right, bottom to top"
 msgstr ""
 
 #: gtk/gtkprintunixdialog.c:3011
-#: modules/printbackends/cups/gtkprintbackendcups.c:3510
+#: modules/printbackends/cups/gtkprintbackendcups.c:3509
 msgid "Right to left, top to bottom"
 msgstr ""
 
 #: gtk/gtkprintunixdialog.c:3011
-#: modules/printbackends/cups/gtkprintbackendcups.c:3510
+#: modules/printbackends/cups/gtkprintbackendcups.c:3509
 msgid "Right to left, bottom to top"
 msgstr ""
 
 #: gtk/gtkprintunixdialog.c:3012
-#: modules/printbackends/cups/gtkprintbackendcups.c:3511
+#: modules/printbackends/cups/gtkprintbackendcups.c:3510
 msgid "Top to bottom, left to right"
 msgstr ""
 
 #: gtk/gtkprintunixdialog.c:3012
-#: modules/printbackends/cups/gtkprintbackendcups.c:3511
+#: modules/printbackends/cups/gtkprintbackendcups.c:3510
 msgid "Top to bottom, right to left"
 msgstr ""
 
 #: gtk/gtkprintunixdialog.c:3013
-#: modules/printbackends/cups/gtkprintbackendcups.c:3512
+#: modules/printbackends/cups/gtkprintbackendcups.c:3511
 msgid "Bottom to top, left to right"
 msgstr ""
 
 #: gtk/gtkprintunixdialog.c:3013
-#: modules/printbackends/cups/gtkprintbackendcups.c:3512
+#: modules/printbackends/cups/gtkprintbackendcups.c:3511
 msgid "Bottom to top, right to left"
 msgstr ""
 
@@ -2794,7 +1815,7 @@ msgstr ""
 #. * dialog that controls in what order multiple pages are arranged
 #.
 #: gtk/gtkprintunixdialog.c:3017 gtk/gtkprintunixdialog.c:3030
-#: modules/printbackends/cups/gtkprintbackendcups.c:3544
+#: modules/printbackends/cups/gtkprintbackendcups.c:3543
 #, fuzzy
 msgid "Page Ordering"
 msgstr "Waarsjoewing"
@@ -5070,125 +4091,120 @@ msgstr ""
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:1687
 #, c-format
-msgid "Printer '%s' may not be connected."
-msgstr ""
-
-#: modules/printbackends/cups/gtkprintbackendcups.c:1688
-#, c-format
 msgid "There is a problem on printer '%s'."
 msgstr ""
 
 #. Translators: this is a printer status.
-#: modules/printbackends/cups/gtkprintbackendcups.c:1996
+#: modules/printbackends/cups/gtkprintbackendcups.c:1995
 msgid "Paused ; Rejecting Jobs"
 msgstr ""
 
 #. Translators: this is a printer status.
-#: modules/printbackends/cups/gtkprintbackendcups.c:2002
+#: modules/printbackends/cups/gtkprintbackendcups.c:2001
 msgid "Rejecting Jobs"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2778
+#: modules/printbackends/cups/gtkprintbackendcups.c:2777
 msgid "Two Sided"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2779
+#: modules/printbackends/cups/gtkprintbackendcups.c:2778
 msgid "Paper Type"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2780
+#: modules/printbackends/cups/gtkprintbackendcups.c:2779
 msgid "Paper Source"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2781
+#: modules/printbackends/cups/gtkprintbackendcups.c:2780
 msgid "Output Tray"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2782
+#: modules/printbackends/cups/gtkprintbackendcups.c:2781
 #, fuzzy
 msgid "Resolution"
 msgstr "Vraog"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2783
+#: modules/printbackends/cups/gtkprintbackendcups.c:2782
 msgid "GhostScript pre-filtering"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2792
+#: modules/printbackends/cups/gtkprintbackendcups.c:2791
 msgid "One Sided"
 msgstr ""
 
 #. Translators: this is an option of "Two Sided"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2794
+#: modules/printbackends/cups/gtkprintbackendcups.c:2793
 msgid "Long Edge (Standard)"
 msgstr ""
 
 #. Translators: this is an option of "Two Sided"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2796
+#: modules/printbackends/cups/gtkprintbackendcups.c:2795
 msgid "Short Edge (Flip)"
 msgstr ""
 
 #. Translators: this is an option of "Paper Source"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2798
-#: modules/printbackends/cups/gtkprintbackendcups.c:2800
-#: modules/printbackends/cups/gtkprintbackendcups.c:2808
+#: modules/printbackends/cups/gtkprintbackendcups.c:2797
+#: modules/printbackends/cups/gtkprintbackendcups.c:2799
+#: modules/printbackends/cups/gtkprintbackendcups.c:2807
 #, fuzzy
 msgid "Auto Select"
 msgstr "Booksjtaaftiepseleksie"
 
 #. Translators: this is an option of "Paper Source"
 #. Translators: this is an option of "Resolution"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2802
-#: modules/printbackends/cups/gtkprintbackendcups.c:2804
-#: modules/printbackends/cups/gtkprintbackendcups.c:2806
-#: modules/printbackends/cups/gtkprintbackendcups.c:2810
-#: modules/printbackends/cups/gtkprintbackendcups.c:3296
+#: modules/printbackends/cups/gtkprintbackendcups.c:2801
+#: modules/printbackends/cups/gtkprintbackendcups.c:2803
+#: modules/printbackends/cups/gtkprintbackendcups.c:2805
+#: modules/printbackends/cups/gtkprintbackendcups.c:2809
+#: modules/printbackends/cups/gtkprintbackendcups.c:3295
 #, fuzzy
 msgid "Printer Default"
 msgstr "Sjtanderd"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2812
+#: modules/printbackends/cups/gtkprintbackendcups.c:2811
 msgid "Embed GhostScript fonts only"
 msgstr ""
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2814
+#: modules/printbackends/cups/gtkprintbackendcups.c:2813
 msgid "Convert to PS level 1"
 msgstr ""
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2816
+#: modules/printbackends/cups/gtkprintbackendcups.c:2815
 msgid "Convert to PS level 2"
 msgstr ""
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2818
+#: modules/printbackends/cups/gtkprintbackendcups.c:2817
 #, fuzzy
 msgid "No pre-filtering"
 msgstr "Gein XPM-header gevónje"
 
 #. Translators: "Miscellaneous" is the label for a button, that opens
 #. up an extra panel of settings in a print dialog.
-#: modules/printbackends/cups/gtkprintbackendcups.c:2827
+#: modules/printbackends/cups/gtkprintbackendcups.c:2826
 msgid "Miscellaneous"
 msgstr ""
 
 #. Translators: These strings name the possible values of the
 #. * job priority option in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3504
+#: modules/printbackends/cups/gtkprintbackendcups.c:3503
 msgid "Urgent"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3504
+#: modules/printbackends/cups/gtkprintbackendcups.c:3503
 msgid "High"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3504
+#: modules/printbackends/cups/gtkprintbackendcups.c:3503
 msgid "Medium"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3504
+#: modules/printbackends/cups/gtkprintbackendcups.c:3503
 msgid "Low"
 msgstr ""
 
@@ -5196,7 +4212,7 @@ msgstr ""
 #. Translators, this string is used to label the pages-per-sheet option
 #. * in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3528
+#: modules/printbackends/cups/gtkprintbackendcups.c:3527
 #, fuzzy
 msgid "Pages per Sheet"
 msgstr "Aafbiljing haet huugde nöl"
@@ -5204,61 +4220,61 @@ msgstr "Aafbiljing haet huugde nöl"
 #. Translators, this string is used to label the job priority option
 #. * in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3565
+#: modules/printbackends/cups/gtkprintbackendcups.c:3564
 msgid "Job Priority"
 msgstr ""
 
 #. Translators, this string is used to label the billing info entry
 #. * in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3576
+#: modules/printbackends/cups/gtkprintbackendcups.c:3575
 msgid "Billing Info"
 msgstr ""
 
 #. Translators, these strings are names for various 'standard' cover
 #. * pages that the printing system may support.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3591
+#: modules/printbackends/cups/gtkprintbackendcups.c:3590
 #, fuzzy
 msgid "None"
 msgstr "gein"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3591
+#: modules/printbackends/cups/gtkprintbackendcups.c:3590
 msgid "Classified"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3591
+#: modules/printbackends/cups/gtkprintbackendcups.c:3590
 msgid "Confidential"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3591
+#: modules/printbackends/cups/gtkprintbackendcups.c:3590
 #, fuzzy
 msgid "Secret"
 msgstr "Sjirm"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3591
+#: modules/printbackends/cups/gtkprintbackendcups.c:3590
 msgid "Standard"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3591
+#: modules/printbackends/cups/gtkprintbackendcups.c:3590
 msgid "Top Secret"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3591
+#: modules/printbackends/cups/gtkprintbackendcups.c:3590
 msgid "Unclassified"
 msgstr ""
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the front cover page.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3626
+#: modules/printbackends/cups/gtkprintbackendcups.c:3625
 msgid "Before"
 msgstr ""
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the back cover page.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3641
+#: modules/printbackends/cups/gtkprintbackendcups.c:3640
 msgid "After"
 msgstr ""
 
@@ -5266,7 +4282,7 @@ msgstr ""
 #. * a print job is printed. Possible values are 'now', a specified time,
 #. * or 'on hold'
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3661
+#: modules/printbackends/cups/gtkprintbackendcups.c:3660
 #, fuzzy
 msgid "Print at"
 msgstr "Aaf_drökke"
@@ -5274,7 +4290,7 @@ msgstr "Aaf_drökke"
 #. Translators: this is the name of the option that allows the user
 #. * to specify a time when a print job will be printed.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3672
+#: modules/printbackends/cups/gtkprintbackendcups.c:3671
 #, fuzzy
 msgid "Print at time"
 msgstr "Aaf_drökke"
@@ -5283,7 +4299,7 @@ msgstr "Aaf_drökke"
 #. * size. The two placeholders are replaced with the width and height
 #. * in points. E.g: "Custom 230.4x142.9"
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3707
+#: modules/printbackends/cups/gtkprintbackendcups.c:3706
 #, c-format
 msgid "Custom %sx%s"
 msgstr ""
@@ -5383,6 +4399,719 @@ msgstr "Aaf_drökke"
 #, fuzzy, c-format
 msgid "Could not get information for file '%s': %s"
 msgstr "Aafbiljingstiep van besjtandj '%s' neet herkènd"
+
+#: tests/testfilechooser.c:222
+#, c-format
+msgid "Failed to open file '%s': %s"
+msgstr "Äöpene van besjtandj '%s' mislök: %s"
+
+#: tests/testfilechooser.c:267
+#, c-format
+msgid ""
+"Failed to load image '%s': reason not known, probably a corrupt image file"
+msgstr ""
+"Laje van aafbiljing '%s' mislök: oerzaak ónbekènd, dènkelik ein "
+"versjangeleerde aafbiljing"
+
+#~ msgid "Image file '%s' contains no data"
+#~ msgstr "Aafbiljing '%s' haet gei data"
+
+#~ msgid ""
+#~ "Failed to load animation '%s': reason not known, probably a corrupt "
+#~ "animation file"
+#~ msgstr ""
+#~ "Laje van animasie '%s' mislök: oerzaak ónbekènd, dènkelik ein "
+#~ "versjangeleerde animasie"
+
+#~ msgid "Unable to load image-loading module: %s: %s"
+#~ msgstr "Laje van module in module_path: %s mislök: %s"
+
+#~ msgid ""
+#~ "Image-loading module %s does not export the proper interface; perhaps "
+#~ "it's from a different GTK version?"
+#~ msgstr ""
+#~ "Aafbiljingslajer %s geuf de verkierde interface door ; mesjiens is 't de "
+#~ "lajer van ein anger GTK+ verzie?"
+
+#~ msgid "Image type '%s' is not supported"
+#~ msgstr "Aafbiljingstiep '%s' weurt neet gesjtiep"
+
+#~ msgid "Couldn't recognize the image file format for file '%s'"
+#~ msgstr "Aafbiljingstiep van besjtandj '%s' neet herkènd"
+
+#~ msgid "Unrecognized image file format"
+#~ msgstr "Ónbekènd aafbiljingstiep"
+
+#~ msgid "Failed to load image '%s': %s"
+#~ msgstr "Laje van aafbiljing '%s' mislök: %s"
+
+#, fuzzy
+#~ msgid "Error writing to image file: %s"
+#~ msgstr "Faeler bie 't interpretere van JPEG-aafbiljing (%s)"
+
+#~ msgid ""
+#~ "This build of gdk-pixbuf does not support saving the image format: %s"
+#~ msgstr ""
+#~ "Dees verzie van gdk-pixbuf haet gein sjtiep veur 't opsjlaon van 't "
+#~ "besjtandjsformaat: %s"
+
+#, fuzzy
+#~ msgid "Insufficient memory to save image to callback"
+#~ msgstr "Neet genóg ónthaud óm XBM-aafbiljing te laje"
+
+#, fuzzy
+#~ msgid "Failed to open temporary file"
+#~ msgstr "Kós TIFF-aafbiljing neet äöpene"
+
+#, fuzzy
+#~ msgid "Failed to read from temporary file"
+#~ msgstr ""
+#~ "Neet mäögelik om nao tiedelik besjtandj te sjrieve bie 't laje van XBM-"
+#~ "aafbiljing"
+
+#~ msgid "Failed to open '%s' for writing: %s"
+#~ msgstr "Äöpene van '%s' veur te sjrieve is mislök: %s"
+
+#~ msgid ""
+#~ "Failed to close '%s' while writing image, all data may not have been "
+#~ "saved: %s"
+#~ msgstr ""
+#~ "Sjloete van '%s' tiedes 't sjrieve is mislök; 't kèn zeen det data "
+#~ "verlaore is gegange: %s"
+
+#, fuzzy
+#~ msgid "Insufficient memory to save image into a buffer"
+#~ msgstr "Neet genóg ónthaud óm XBM-aafbiljing te laje"
+
+#, fuzzy
+#~ msgid "Error writing to image stream"
+#~ msgstr "Faeler bie 't interpretere van JPEG-aafbiljing (%s)"
+
+#, fuzzy
+#~ msgid ""
+#~ "Internal error: Image loader module '%s' failed to complete an operation, "
+#~ "but didn't give a reason for the failure"
+#~ msgstr ""
+#~ "Interne faeler: aafbiljingslajer '%s' sjtarte neet mit 't laje van ein "
+#~ "aafbiljing, mer goof gein oerzaak"
+
+#~ msgid "Incremental loading of image type '%s' is not supported"
+#~ msgstr "Inkrementeel laje van aafbiljingstiep '%s' weurt neet gesjtiep"
+
+#~ msgid "Image header corrupt"
+#~ msgstr "Aafbiljingsheader versjangeleerd"
+
+#~ msgid "Image format unknown"
+#~ msgstr "Besjtandjsformaat van aafbiljing is ónbekènd"
+
+#~ msgid "Image pixel data corrupt"
+#~ msgstr "Aafbiljings-pixeldata korrup"
+
+#, fuzzy
+#~ msgid "failed to allocate image buffer of %u byte"
+#~ msgid_plural "failed to allocate image buffer of %u bytes"
+#~ msgstr[0] "Neet mäögelik aafbiljingsbuffer van %u bytes te allokere"
+#~ msgstr[1] "Neet mäögelik aafbiljingsbuffer van %u bytes te allokere"
+
+#~ msgid "Unexpected icon chunk in animation"
+#~ msgstr "Ónverwach piktogram-brökske in animasie"
+
+#~ msgid "Unsupported animation type"
+#~ msgstr "Neet gesjtiep animasietiep"
+
+#~ msgid "Invalid header in animation"
+#~ msgstr "Óngeljige header in animasie"
+
+#~ msgid "Not enough memory to load animation"
+#~ msgstr "Neet genóg ónthaud veur animasie te laje"
+
+#~ msgid "Malformed chunk in animation"
+#~ msgstr "Kröppel brökske in animasie"
+
+#~ msgid "The ANI image format"
+#~ msgstr "'t ANI-besjtandjsformaat"
+
+#~ msgid "BMP image has bogus header data"
+#~ msgstr "BMP-aafbiljing haet ónzinnige headerdata"
+
+#~ msgid "Not enough memory to load bitmap image"
+#~ msgstr "Neet genóg ónthaud veur 't laje van de bitmap-aafbiljing"
+
+#~ msgid "BMP image has unsupported header size"
+#~ msgstr "BMP-aafbiljing haet ein neet-gestiepde headergruutde"
+
+#~ msgid "Premature end-of-file encountered"
+#~ msgstr "Veurtiedig besjtandjsènj gevónje"
+
+#, fuzzy
+#~ msgid "Couldn't allocate memory for saving BMP file"
+#~ msgstr "Allokasie van ónthaud veur JPEG-besjtandj is mislök"
+
+#, fuzzy
+#~ msgid "Couldn't write to BMP file"
+#~ msgstr "Kós besjtandjsnaam neet konvertere"
+
+#~ msgid "The BMP image format"
+#~ msgstr "'t BMP-besjtandjsformaat"
+
+#~ msgid "Failure reading GIF: %s"
+#~ msgstr "Laeze van GIF mislök: %s"
+
+#~ msgid "GIF file was missing some data (perhaps it was truncated somehow?)"
+#~ msgstr "GIF-besjtandj mankeerde data (mesjiens waor 't aafgebraoke?)"
+
+#~ msgid "Internal error in the GIF loader (%s)"
+#~ msgstr "Interne faeler in de GIF-lajer (%s)"
+
+#~ msgid "Stack overflow"
+#~ msgstr "Stack overflow"
+
+#, fuzzy
+#~ msgid "GIF image loader cannot understand this image."
+#~ msgstr "GIF-lajer begriep dees aafbiljing neet."
+
+#~ msgid "Bad code encountered"
+#~ msgstr "Verkierde kood óntdèk"
+
+#~ msgid "Circular table entry in GIF file"
+#~ msgstr "Circulaer tabelveldj in GIF-besjtandj"
+
+#~ msgid "Not enough memory to load GIF file"
+#~ msgstr "Neet genóg ónthaud veur GIF-besjtandj te laje"
+
+#, fuzzy
+#~ msgid "Not enough memory to composite a frame in GIF file"
+#~ msgstr "Neet genóg ónthaud veur GIF-besjtandj te laje"
+
+#~ msgid "GIF image is corrupt (incorrect LZW compression)"
+#~ msgstr "GIF-besjtandj is versjangeleerd (verkierde LZW-kompressie)"
+
+#~ msgid "File does not appear to be a GIF file"
+#~ msgstr "Besjtandj lik neet op ein GIF-besjtandj"
+
+#~ msgid "Version %s of the GIF file format is not supported"
+#~ msgstr "Verzie %s van 't GIF-tiep weurt neet gesjtiep"
+
+#~ msgid ""
+#~ "GIF image has no global colormap, and a frame inside it has no local "
+#~ "colormap."
+#~ msgstr ""
+#~ "GIF-besjtandj haet gein globaal kleurepalet, en ein aafbiljing dao-in "
+#~ "haet gein lokaal kleurepalet"
+
+#~ msgid "GIF image was truncated or incomplete."
+#~ msgstr "GIF-besjtandj is aafgebraoke of ónvolsjtendig"
+
+#~ msgid "The GIF image format"
+#~ msgstr "'t GIF-besjtandjsformaat"
+
+#~ msgid "Invalid header in icon"
+#~ msgstr "Óngeljige header in piktogram"
+
+#~ msgid "Not enough memory to load icon"
+#~ msgstr "Neet genóg ónthaud veur piktogram te laje"
+
+#~ msgid "Icon has zero width"
+#~ msgstr "Piktogram haet breide nöl"
+
+#~ msgid "Icon has zero height"
+#~ msgstr "Piktogram haet huugde nöl"
+
+#~ msgid "Compressed icons are not supported"
+#~ msgstr "Gekomprimeerde piktogramme waere neet gesjtiep"
+
+#~ msgid "Unsupported icon type"
+#~ msgstr "Neet gesjtiep piktogramtiep"
+
+#~ msgid "Not enough memory to load ICO file"
+#~ msgstr "Neet genóg ónthaud veur ICO-besjtandj te laje"
+
+#~ msgid "The ICO image format"
+#~ msgstr "'t ICO-besjtandjsformaat"
+
+#, fuzzy
+#~ msgid "Error reading ICNS image: %s"
+#~ msgstr "Fatale faeler bie 't laeze van PNG aafbiljing: %s"
+
+#, fuzzy
+#~ msgid "Could not decode ICNS file"
+#~ msgstr ""
+#~ "Faeler bie 't make van map \"%s\": %s\n"
+#~ "%s"
+
+#, fuzzy
+#~ msgid "The ICNS image format"
+#~ msgstr "'t ICO-besjtandjsformaat"
+
+#, fuzzy
+#~ msgid "Couldn't allocate memory for stream"
+#~ msgstr "Allokasie van ónthaud veur TGA-header is mislök"
+
+#, fuzzy
+#~ msgid "Couldn't decode image"
+#~ msgstr "Kós besjtandjsnaam neet konvertere"
+
+#, fuzzy
+#~ msgid "Transformed JPEG2000 has zero width or height"
+#~ msgstr "Getransformeerde PNG haet nöl breide of huugde."
+
+#, fuzzy
+#~ msgid "Image type currently not supported"
+#~ msgstr "Aafbiljingstiep '%s' weurt neet gesjtiep"
+
+#, fuzzy
+#~ msgid "Couldn't allocate memory for color profile"
+#~ msgstr "Allokasie van ónthaud veur JPEG-besjtandj is mislök"
+
+#, fuzzy
+#~ msgid "Insufficient memory to open JPEG 2000 file"
+#~ msgstr "Neet genóg ónthaud veur TIFF-besjtandj te äöpene"
+
+#, fuzzy
+#~ msgid "Couldn't allocate memory to buffer image data"
+#~ msgstr "Allokasie van ónthaud veur IOBUFFER gegaeves neet gelök"
+
+#, fuzzy
+#~ msgid "The JPEG 2000 image format"
+#~ msgstr "'t JPEG-besjtandjsformaat"
+
+#~ msgid "Error interpreting JPEG image file (%s)"
+#~ msgstr "Faeler bie 't interpretere van JPEG-aafbiljing (%s)"
+
+#~ msgid ""
+#~ "Insufficient memory to load image, try exiting some applications to free "
+#~ "memory"
+#~ msgstr ""
+#~ "Neet genóg ónthaud veur aafbiljing te laje, probeer get programme aaf te "
+#~ "sjloete veur ónthaud vrie te make"
+
+#~ msgid "Unsupported JPEG color space (%s)"
+#~ msgstr "Neet gesjtiep JPEG kleurruumde (%s)"
+
+#~ msgid "Couldn't allocate memory for loading JPEG file"
+#~ msgstr "Allokasie van ónthaud veur JPEG-besjtandj is mislök"
+
+#, fuzzy
+#~ msgid "Transformed JPEG has zero width or height."
+#~ msgstr "Getransformeerde PNG haet nöl breide of huugde."
+
+#~ msgid ""
+#~ "JPEG quality must be a value between 0 and 100; value '%s' could not be "
+#~ "parsed."
+#~ msgstr ""
+#~ "JPEG-kwaliteit moot ein waerd tösje 0 en 100 zeen: waerd '%s' kèn neet "
+#~ "verwirk waere."
+
+#~ msgid ""
+#~ "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
+#~ msgstr ""
+#~ "JPEG-kwaliteit moot tösje 0 en 100 likge; waerd '%d' is neet toegesjtange."
+
+#~ msgid "The JPEG image format"
+#~ msgstr "'t JPEG-besjtandjsformaat"
+
+#, fuzzy
+#~ msgid "Couldn't allocate memory for header"
+#~ msgstr "Allokasie van ónthaud veur TGA-header is mislök"
+
+#, fuzzy
+#~ msgid "Couldn't allocate memory for context buffer"
+#~ msgstr "Allokasie van ónthaud veur TGA-conteks struct mislök"
+
+#, fuzzy
+#~ msgid "Image has invalid width and/or height"
+#~ msgstr "Aafbiljing haet huugde nöl"
+
+#, fuzzy
+#~ msgid "Image has unsupported bpp"
+#~ msgstr "BMP-aafbiljing haet ein neet-gestiepde headergruutde"
+
+#, fuzzy
+#~ msgid "Image has unsupported number of %d-bit planes"
+#~ msgstr "BMP-aafbiljing haet ein neet-gestiepde headergruutde"
+
+#, fuzzy
+#~ msgid "Couldn't create new pixbuf"
+#~ msgstr "Kèn nuuj pixbuf neet allokere"
+
+#, fuzzy
+#~ msgid "Couldn't allocate memory for line data"
+#~ msgstr "Allokasie van ónthaud veur IOBUFFER gegaeves neet gelök"
+
+#, fuzzy
+#~ msgid "Couldn't allocate memory for paletted data"
+#~ msgstr "Allokasie van ónthaud veur IOBUFFER gegaeves neet gelök"
+
+#, fuzzy
+#~ msgid "The PCX image format"
+#~ msgstr "'t BMP-besjtandjsformaat"
+
+#~ msgid "Bits per channel of PNG image is invalid."
+#~ msgstr "Bits per kenaal van PNG-aafbiljing is óngeljig."
+
+#~ msgid "Transformed PNG has zero width or height."
+#~ msgstr "Getransformeerde PNG haet nöl breide of huugde."
+
+#~ msgid "Bits per channel of transformed PNG is not 8."
+#~ msgstr "Bits per kenaal van getransformeerde PNG is neet geliek aan 8."
+
+#~ msgid "Transformed PNG not RGB or RGBA."
+#~ msgstr "Getransformeerde PNG is gein RGB of RGBA."
+
+#~ msgid "Transformed PNG has unsupported number of channels, must be 3 or 4."
+#~ msgstr ""
+#~ "Getransformeerde PNG haet ein deil neet gesjtiepde kenale, moot geliek "
+#~ "zeen aan 3 of 4."
+
+#~ msgid "Fatal error in PNG image file: %s"
+#~ msgstr "Fatale faeler in PNG-aafbiljing: %s"
+
+#~ msgid "Insufficient memory to load PNG file"
+#~ msgstr "Neet genóg ónthaud veur PNG-besjtandj te laje"
+
+#~ msgid ""
+#~ "Insufficient memory to store a %ld by %ld image; try exiting some "
+#~ "applications to reduce memory usage"
+#~ msgstr ""
+#~ "Neet genóg ónthaud veur ein aafbiljing van %ld bie %ld op te sjlaon; "
+#~ "probeer get programme aaf te sjloete veur ónthaud vrie te make"
+
+#~ msgid "Fatal error reading PNG image file"
+#~ msgstr "Fatale faeler bie 't laeze van PNG aafbiljing"
+
+#~ msgid "Fatal error reading PNG image file: %s"
+#~ msgstr "Fatale faeler bie 't laeze van PNG aafbiljing: %s"
+
+#~ msgid ""
+#~ "Keys for PNG text chunks must have at least 1 and at most 79 characters."
+#~ msgstr ""
+#~ "Sjleutels veur PNG teksblök mote minimaal 1, en maksimaal 79 teikes höbbe"
+
+#~ msgid "Keys for PNG text chunks must be ASCII characters."
+#~ msgstr "Sjleutels veur PNG tektblök mote oet ASCII teikes besjtaon"
+
+#, fuzzy
+#~ msgid ""
+#~ "PNG compression level must be a value between 0 and 9; value '%s' could "
+#~ "not be parsed."
+#~ msgstr ""
+#~ "JPEG-kwaliteit moot ein waerd tösje 0 en 100 zeen: waerd '%s' kèn neet "
+#~ "verwirk waere."
+
+#, fuzzy
+#~ msgid ""
+#~ "PNG compression level must be a value between 0 and 9; value '%d' is not "
+#~ "allowed."
+#~ msgstr ""
+#~ "JPEG-kwaliteit moot tösje 0 en 100 likge; waerd '%d' is neet toegesjtange."
+
+#, fuzzy
+#~ msgid ""
+#~ "Value for PNG text chunk %s cannot be converted to ISO-8859-1 encoding."
+#~ msgstr ""
+#~ "Waerd veur PNG teksblok %s kèn neet gekonverteerd waere nao ISO-8859-1 "
+#~ "kodering"
+
+#~ msgid "The PNG image format"
+#~ msgstr "'t PNG-besjtandjsformaat"
+
+#~ msgid "PNM loader expected to find an integer, but didn't"
+#~ msgstr "PNM-lajer verwachde ein integer te vènje, mer deeg daet neet"
+
+#~ msgid "PNM file has an incorrect initial byte"
+#~ msgstr "PNM besjtandj haet ein verkierde ierste byte"
+
+#~ msgid "PNM file is not in a recognized PNM subformat"
+#~ msgstr "PNM is neet in ein herkènbaar PNM subformaat"
+
+#~ msgid "PNM file has an image width of 0"
+#~ msgstr "PNM besjtandj haet breide 0"
+
+#~ msgid "PNM file has an image height of 0"
+#~ msgstr "PNM besjtandj haet huugde 0"
+
+#~ msgid "Maximum color value in PNM file is 0"
+#~ msgstr "Maksimale kleurwaerd in PNM besjtandj is 0"
+
+#~ msgid "Maximum color value in PNM file is too large"
+#~ msgstr "Maksimale kleurwaerd in PNM besjtandj is te groet"
+
+#~ msgid "Raw PNM image type is invalid"
+#~ msgstr "Raw PNM-aafbiljingstiep is óngeljig"
+
+#~ msgid "PNM image loader does not support this PNM subformat"
+#~ msgstr "PNM-lajer sjtiep dit PNM-subtiep neet"
+
+#~ msgid "Raw PNM formats require exactly one whitespace before sample data"
+#~ msgstr ""
+#~ "Raw PNM-formate mote zjus ein sjpasie höbbe veur d'n aanvang van de data"
+
+#, fuzzy
+#~ msgid "Cannot allocate memory for loading PNM image"
+#~ msgstr "Allokasie van ónthaud veur laje van PNM besjtandj mislök"
+
+#~ msgid "Insufficient memory to load PNM context struct"
+#~ msgstr "Neet genóg ónthaud veur 't laeze van PNM context struct"
+
+#~ msgid "Unexpected end of PNM image data"
+#~ msgstr "Ónverwach ènj van PNM aafbiljingsgegaeves"
+
+#~ msgid "Insufficient memory to load PNM file"
+#~ msgstr "Neet genóg ónthaud veur PNM-besjtandj te laje"
+
+#~ msgid "The PNM/PBM/PGM/PPM image format family"
+#~ msgstr "De PNM/PBM/PGM/PPM-besjtandjsformaatfemielie"
+
+#, fuzzy
+#~ msgid "Failed to read QTIF header"
+#~ msgstr "Kós TIFF-aafbiljing neet äöpene"
+
+#, fuzzy
+#~ msgid "Failed to allocate %d bytes for file read buffer"
+#~ msgstr "Neet mäögelik aafbiljingsbuffer van %u bytes te allokere"
+
+#, fuzzy
+#~ msgid "File error when reading QTIF atom: %s"
+#~ msgstr "Laeze van GIF mislök: %s"
+
+#, fuzzy
+#~ msgid "Failed to allocate QTIF context structure."
+#~ msgstr "Allokasie van ónthaud veur TGA-conteks struct mislök"
+
+#, fuzzy
+#~ msgid "Failed to create GdkPixbufLoader object."
+#~ msgstr ""
+#~ "Neet mäögelik om nao tiedelik besjtandj te sjrieve bie 't laje van XBM-"
+#~ "aafbiljing"
+
+#, fuzzy
+#~ msgid "Failed to find an image data atom."
+#~ msgstr "Kós TIFF-aafbiljing neet äöpene"
+
+#, fuzzy
+#~ msgid "The QTIF image format"
+#~ msgstr "'t TIFF-besjtandjsformaat"
+
+#~ msgid "RAS image has bogus header data"
+#~ msgstr "RAS-aafbiljing haet ónzinnige headerdata"
+
+#~ msgid "RAS image has unknown type"
+#~ msgstr "RAS-aafbiljing is van ónbekènd tiep"
+
+#~ msgid "unsupported RAS image variation"
+#~ msgstr "Neet gesjtiepde RAS-aafbiljingsvarrejasie"
+
+#~ msgid "Not enough memory to load RAS image"
+#~ msgstr "Neet genóg ónthaud veur 't laje van de RAS-aafbiljing"
+
+#~ msgid "The Sun raster image format"
+#~ msgstr "'t Sun raster-besjtandjsformaat"
+
+#, fuzzy
+#~ msgid "Cannot allocate memory for IOBuffer struct"
+#~ msgstr "Allokasie van ónthaud veur IOBuffer struct neet gelök"
+
+#, fuzzy
+#~ msgid "Cannot allocate memory for IOBuffer data"
+#~ msgstr "Allokasie van ónthaud veur IOBUFFER gegaeves neet gelök"
+
+#, fuzzy
+#~ msgid "Cannot realloc IOBuffer data"
+#~ msgstr "Kèn IOBuffer gegaeves neet obbenuuts allokere"
+
+#, fuzzy
+#~ msgid "Cannot allocate temporary IOBuffer data"
+#~ msgstr "Kèn tiedelike IOBuffer gegaeves neet allokere"
+
+#, fuzzy
+#~ msgid "Cannot allocate new pixbuf"
+#~ msgstr "Kèn nuuj pixbuf neet allokere"
+
+#, fuzzy
+#~ msgid "Image is corrupted or truncated"
+#~ msgstr "GIF-besjtandj is aafgebraoke of ónvolsjtendig"
+
+#, fuzzy
+#~ msgid "Cannot allocate colormap structure"
+#~ msgstr "Kèn struktuur van kleurekaart neet allokere"
+
+#, fuzzy
+#~ msgid "Cannot allocate colormap entries"
+#~ msgstr "Kèn eingange van kleurekaart neet allokere"
+
+#~ msgid "Unexpected bitdepth for colormap entries"
+#~ msgstr "Ónverwachde bitdeepde veur eingange van kleurekaart"
+
+#, fuzzy
+#~ msgid "Cannot allocate TGA header memory"
+#~ msgstr "Kèn ónthaud veur TGA-kop neet allokere"
+
+#~ msgid "TGA image has invalid dimensions"
+#~ msgstr "TGA aafbiljing haet óngeljige aafmaetinge"
+
+#~ msgid "TGA image type not supported"
+#~ msgstr "TGA besjtandjstiep weurt neet gesjtiep"
+
+#, fuzzy
+#~ msgid "Cannot allocate memory for TGA context struct"
+#~ msgstr "Allokasie van ónthaud veur TGA-conteks struct mislök"
+
+#~ msgid "Excess data in file"
+#~ msgstr "Euverbaojige data in besjtandj"
+
+#~ msgid "The Targa image format"
+#~ msgstr "'t Targa-besjtandjsformaat"
+
+#~ msgid "Could not get image width (bad TIFF file)"
+#~ msgstr "Kós aafbiljingsbreide neet vènje (verkierd TIFF besjtandj)"
+
+#~ msgid "Could not get image height (bad TIFF file)"
+#~ msgstr "Kós aafbiljingshuugde neet vènje (verkierd TIFF besjtandj)"
+
+#~ msgid "Width or height of TIFF image is zero"
+#~ msgstr "Huugde of breide van TIFF-aafbiljing is nöl"
+
+#~ msgid "Dimensions of TIFF image too large"
+#~ msgstr "Aafmaetinge van TIFF-aafbiljing te groet"
+
+#~ msgid "Insufficient memory to open TIFF file"
+#~ msgstr "Neet genóg ónthaud veur TIFF-besjtandj te äöpene"
+
+#~ msgid "Failed to load RGB data from TIFF file"
+#~ msgstr "Kós RGB-gegaeves neet inlaeze oet TIFF besjtandj"
+
+#~ msgid "Failed to open TIFF image"
+#~ msgstr "Kós TIFF-aafbiljing neet äöpene"
+
+#~ msgid "TIFFClose operation failed"
+#~ msgstr "TIFFClose bewirking mislök"
+
+#~ msgid "Failed to load TIFF image"
+#~ msgstr "Neet mäögelik óm TIFF-aafbiljing te laje"
+
+#, fuzzy
+#~ msgid "Failed to save TIFF image"
+#~ msgstr "Kós TIFF-aafbiljing neet äöpene"
+
+#, fuzzy
+#~ msgid "Failed to write TIFF data"
+#~ msgstr "Kós TIFF-aafbiljing neet äöpene"
+
+#, fuzzy
+#~ msgid "Couldn't write to TIFF file"
+#~ msgstr "Kós besjtandjsnaam neet konvertere"
+
+#~ msgid "The TIFF image format"
+#~ msgstr "'t TIFF-besjtandjsformaat"
+
+#~ msgid "Image has zero width"
+#~ msgstr "Aafbiljing haet breide nöl"
+
+#~ msgid "Image has zero height"
+#~ msgstr "Aafbiljing haet huugde nöl"
+
+#~ msgid "Not enough memory to load image"
+#~ msgstr "Neet genóg ónthaud veur 't laje van de aafbiljing"
+
+#~ msgid "Couldn't save the rest"
+#~ msgstr "Kós de res neet opsjlaon"
+
+#~ msgid "The WBMP image format"
+#~ msgstr "'t WBMP-besjtandjsformaat"
+
+#~ msgid "Invalid XBM file"
+#~ msgstr "Óngeljig XBM-besjtandj"
+
+#~ msgid "Insufficient memory to load XBM image file"
+#~ msgstr "Neet genóg ónthaud óm XBM-aafbiljing te laje"
+
+#~ msgid "Failed to write to temporary file when loading XBM image"
+#~ msgstr ""
+#~ "Neet mäögelik om nao tiedelik besjtandj te sjrieve bie 't laje van XBM-"
+#~ "aafbiljing"
+
+#~ msgid "The XBM image format"
+#~ msgstr "'t XBM-besjtandjsformaat"
+
+#~ msgid "No XPM header found"
+#~ msgstr "Gein XPM-header gevónje"
+
+#, fuzzy
+#~ msgid "Invalid XPM header"
+#~ msgstr "Óngeljig XBM-besjtandj"
+
+#~ msgid "XPM file has image width <= 0"
+#~ msgstr "XPM-besjtandj haet aafbiljingsbreide <= 0"
+
+#~ msgid "XPM file has image height <= 0"
+#~ msgstr "XPM-besjtandj haet aafbiljingshuugde <= 0"
+
+#~ msgid "XPM has invalid number of chars per pixel"
+#~ msgstr "XPM haet ein deil óngeljige teikes per pixel"
+
+#~ msgid "XPM file has invalid number of colors"
+#~ msgstr "XPM-besjtandj haet ein deil óngeljige kleure"
+
+#, fuzzy
+#~ msgid "Cannot allocate memory for loading XPM image"
+#~ msgstr "Kèn ónthaud veur 't laje van XPM-aafbiljing neet allokere"
+
+#, fuzzy
+#~ msgid "Cannot read XPM colormap"
+#~ msgstr "Kèn XPM-kleurekaart neet laeze"
+
+#~ msgid "Failed to write to temporary file when loading XPM image"
+#~ msgstr ""
+#~ "Neet mäögelik óm nao tiedelik besjtandj te sjrieve bie 't laje van XPM-"
+#~ "aafbiljing"
+
+#~ msgid "The XPM image format"
+#~ msgstr "'t XPM-besjtandjsformaat"
+
+#, fuzzy
+#~ msgid "The EMF image format"
+#~ msgstr "'t BMP-besjtandjsformaat"
+
+#, fuzzy
+#~ msgid "Could not allocate memory: %s"
+#~ msgstr "Allokasie van ónthaud veur TGA-header is mislök"
+
+#, fuzzy
+#~ msgid "Could not create stream: %s"
+#~ msgstr "Faeler bie 't make van map \"%s\": %s\n"
+
+#, fuzzy
+#~ msgid "Could not seek stream: %s"
+#~ msgstr ""
+#~ "Faeler bie 't make van map \"%s\": %s\n"
+#~ "%s"
+
+#, fuzzy
+#~ msgid "Could not read from stream: %s"
+#~ msgstr "Faeler bie 't make van map \"%s\": %s\n"
+
+#, fuzzy
+#~ msgid "Couldn't load bitmap"
+#~ msgstr "Kós besjtandjsnaam neet konvertere"
+
+#, fuzzy
+#~ msgid "Couldn't load metafile"
+#~ msgstr "Kós besjtandjsnaam neet konvertere"
+
+#, fuzzy
+#~ msgid "Unsupported image format for GDI+"
+#~ msgstr "Neet gesjtiepde RAS-aafbiljingsvarrejasie"
+
+#, fuzzy
+#~ msgid "Couldn't save"
+#~ msgstr "Kós de res neet opsjlaon"
+
+#, fuzzy
+#~ msgid "The WMF image format"
+#~ msgstr "'t WBMP-besjtandjsformaat"
+
+#~ msgid "\"Deepness\" of the color."
+#~ msgstr "\"Deepde\" van de kleur."
 
 #~ msgid "Folders"
 #~ msgstr "Mappe"

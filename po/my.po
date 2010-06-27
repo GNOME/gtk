@@ -6,10 +6,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-05-25 20:10-0400\n"
+"POT-Creation-Date: 2010-06-26 23:16-0400\n"
 "PO-Revision-Date: 2010-01-19 16:30+0200\n"
 "Last-Translator: Russell Kyaw <rkyaw@yahoo.com>\n"
 "Language-Team: Burmese <my@li.org>\n"
+"Language: my\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8-bit\n"
@@ -74,7 +75,7 @@ msgstr "Gdk ချမှတ်ရန် ပြဿနာရှင်းတဲ့ 
 #. Placeholder in --gdk-no-debug=FLAGS in --help output
 #. Placeholder in --gtk-debug=FLAGS in --help output
 #. Placeholder in --gtk-no-debug=FLAGS in --help output
-#: gdk/gdk.c:165 gdk/gdk.c:168 gtk/gtkmain.c:454 gtk/gtkmain.c:457
+#: gdk/gdk.c:165 gdk/gdk.c:168 gtk/gtkmain.c:439 gtk/gtkmain.c:442
 msgid "FLAGS"
 msgstr "အလံများ"
 
@@ -267,915 +268,6 @@ msgstr "KP_ပယ်ဖျက်ပါ"
 msgctxt "keyboard label"
 msgid "Delete"
 msgstr "ပယ်ဖျက်ပါ"
-
-#: gdk-pixbuf/gdk-pixbuf-animation.c:133 gdk-pixbuf/gdk-pixbuf-io.c:982
-#: gdk-pixbuf/gdk-pixbuf-io.c:1242 tests/testfilechooser.c:222
-#, c-format
-msgid "Failed to open file '%s': %s"
-msgstr "ဖွင့်ဖို့ မအောင်မြင်တဲ့ ဖိုင် '%s': %s"
-
-#: gdk-pixbuf/gdk-pixbuf-animation.c:146 gdk-pixbuf/gdk-pixbuf-io.c:994
-#, c-format
-msgid "Image file '%s' contains no data"
-msgstr "ရုပ်ပုံဖိုင် '%s' မှာ အချက်အလက်ကြမ်း မရှိဘူး"
-
-#: gdk-pixbuf/gdk-pixbuf-animation.c:188 gdk-pixbuf/gdk-pixbuf-io.c:1030
-#: gdk-pixbuf/gdk-pixbuf-io.c:1294 tests/testfilechooser.c:267
-#, c-format
-msgid ""
-"Failed to load image '%s': reason not known, probably a corrupt image file"
-msgstr "ရုပ်ပုံ %s': ဖွင့်လို့ မရတဲ့ အကြောင်းရင်းကို မသိရဘူး၊ ပျက်စီးတဲ့ ဖိုင်တခု ဖြစ်နိုင်တယ်"
-
-#: gdk-pixbuf/gdk-pixbuf-animation.c:221
-#, c-format
-msgid ""
-"Failed to load animation '%s': reason not known, probably a corrupt "
-"animation file"
-msgstr ""
-"သက်၀င်လှုပ်ရှားတဲ့ '%s': ဖွင့်လို့ မရတဲ့ အကြောင်းရင်းကို မသိရဘူး၊ ပျက်စီးတဲ့ "
-"သက်၀င်လှုပ်ရှားမှု ဖိုင်တခု ဖြစ်နိုင်တယ်"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:715
-#, c-format
-msgid "Unable to load image-loading module: %s: %s"
-msgstr "ရုပ်ပုံ-ဖွင့်တဲ့ အစိတ်အပိုင်းကို မဖွင့်နိုင်ဘူး - %s: %s"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:730
-#, c-format
-msgid ""
-"Image-loading module %s does not export the proper interface; perhaps it's "
-"from a different GTK version?"
-msgstr ""
-"ရုပ်ပုံ-ဖွင့်ပေးတဲ့ အစိတ်အပိုင်း %s က သင့်တော်တဲ့ ကြားခံမြင်ကွင်းကို မတင်ပို့​ဘူး၊ ခြားနားတဲ့ GTK "
-"မူအဆင့်​ တခုကြောင့် ဖြစ်နိုင်တယ်။"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:739 gdk-pixbuf/gdk-pixbuf-io.c:790
-#, c-format
-msgid "Image type '%s' is not supported"
-msgstr "ရုပ်ပုံ အမျိုးအစား '%s' ကို လက်မခံဘူး"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:863
-#, c-format
-msgid "Couldn't recognize the image file format for file '%s'"
-msgstr "'%s' ဖိုင်ရဲ့ ရုပ်ပုံဖိုင် အမျိုးအစားကို နားမလည်ဘူး"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:871
-msgid "Unrecognized image file format"
-msgstr "နားမလည်ဘူးတဲ့ ရုပ်ပုံဖိုင် အမျိုးအစား"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:1039
-#, c-format
-msgid "Failed to load image '%s': %s"
-msgstr "ဖွင့်ဖို့ မအောင်မြင်တဲ့ ရုပ်ပုံ '%s': %s"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:1673 gdk-pixbuf/io-gdip-utils.c:961
-#, c-format
-msgid "Error writing to image file: %s"
-msgstr "ရေးသားချက် ချို့ယွင်းတဲ့ ရုပ်ပုံဖိုင် - %s"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:1718 gdk-pixbuf/gdk-pixbuf-io.c:1848
-#, c-format
-msgid "This build of gdk-pixbuf does not support saving the image format: %s"
-msgstr "gdk-pixbuf တည်ဆောက်မှုက လက်မခံတဲ့ ရုပ်ပုံ အမျိုးအစား သိမ်းဆည်းမှု - %s"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:1752
-msgid "Insufficient memory to save image to callback"
-msgstr "တန်ပြန်ခေါ်ဆိုရန် ရုပ်ပုံကို သိမ်းဆည်းဖို့ မှတ်ဉာဏ် မလုံလောက်ဘူး"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:1765
-msgid "Failed to open temporary file"
-msgstr "ယာယီဖိုင်ကို ဖွင့်ဖို့ မအောင်မြင်ဘူး"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:1791
-msgid "Failed to read from temporary file"
-msgstr "ယာယီဖိုင်ထဲကို ဖတ်ဖို့ မအောင်မြင်ဘူး"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:2044
-#, c-format
-msgid "Failed to open '%s' for writing: %s"
-msgstr "'%s' ကို ဖွင့်ပြီး ရေးသားဖို့ မအောင်မြင်တဲ့ အရာ - %s"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:2070
-#, c-format
-msgid ""
-"Failed to close '%s' while writing image, all data may not have been saved: %"
-"s"
-msgstr ""
-"ရုပ်ပုံကို ရေးကူးစဉ် '%s' ကို ပိတ်ဖို့ မအောင်မြင်ဘူး၊ အချက်အလက်ကြမ်း အားလုံးကို မသိမ်းဆည်းတာ "
-"ဖြစ်နိုင်တယ် - %s"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:2290 gdk-pixbuf/gdk-pixbuf-io.c:2341
-msgid "Insufficient memory to save image into a buffer"
-msgstr "ရုပ်ပုံကို ကြားခံတခုအတွင်း သိမ်းဆည်းဖို့ မှတ်ဉာဏ် မလုံလောက်ဘူး"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:2387
-msgid "Error writing to image stream"
-msgstr "ရုပ်ပုံ စီးကြောင်းမှာ ရေးသားချက် ချို့ယွင်းမှု"
-
-#: gdk-pixbuf/gdk-pixbuf-loader.c:334
-#, c-format
-msgid ""
-"Internal error: Image loader module '%s' failed to complete an operation, "
-"but didn't give a reason for the failure"
-msgstr ""
-"အတွင်းပိုင်း ချို့ယွင်းမှု၊ ရုပ်ပုံဖွင့်ကိရိယာ အစိတ်အပိုင်း '%s' က လုပ်ငန်းတခု ပြီးစီးဖို့ "
-"မအောင်မြင်ဘူး၊ ဒါပေမဲ့ မှားယွင်းမှုအတွက် အကြောင်းပြချက် တခု မပေးဘူး။"
-
-#: gdk-pixbuf/gdk-pixbuf-loader.c:376
-#, c-format
-msgid "Incremental loading of image type '%s' is not supported"
-msgstr "ရုပ်ပုံ အမျိုးအစား '%s' ဖွင့်လာတဲ့ နှစ်တိုးကို လက်မခံဘူး"
-
-#: gdk-pixbuf/gdk-pixdata.c:147
-msgid "Image header corrupt"
-msgstr "ရုပ်ပုံ ခေါင်းစီး ပျက်နေတယ်။"
-
-#: gdk-pixbuf/gdk-pixdata.c:152
-msgid "Image format unknown"
-msgstr "အမည်မသိ ရုပ်ပုံ အမျိုးအစား"
-
-#: gdk-pixbuf/gdk-pixdata.c:157 gdk-pixbuf/gdk-pixdata.c:488
-msgid "Image pixel data corrupt"
-msgstr "ရုပ်ပုံ ပစ်ဆယ် အချက်အလက်ကြမ်း ပျက်သွားတယ်"
-
-#: gdk-pixbuf/gdk-pixdata.c:432
-#, c-format
-msgid "failed to allocate image buffer of %u byte"
-msgid_plural "failed to allocate image buffer of %u bytes"
-msgstr[0] ""
-msgstr[1] ""
-
-#: gdk-pixbuf/io-ani.c:244
-msgid "Unexpected icon chunk in animation"
-msgstr "သက်၀င်လှုပ်ရှားနေတဲ့ မမျှော်လင့်တဲ့ ပုံသ​င်္ကေတ အတုံး"
-
-#: gdk-pixbuf/io-ani.c:337
-msgid "Unsupported animation type"
-msgstr "လက်ခံမထားတဲ့ သက်၀င်လှုပ်ရှားမှု အမျိုးအစား"
-
-#: gdk-pixbuf/io-ani.c:348 gdk-pixbuf/io-ani.c:406 gdk-pixbuf/io-ani.c:432
-#: gdk-pixbuf/io-ani.c:455 gdk-pixbuf/io-ani.c:482 gdk-pixbuf/io-ani.c:569
-msgid "Invalid header in animation"
-msgstr "သက်၀င်လှုပ်ရှားနေတဲ့ မမှန်တဲ့ ခေါင်းစီး"
-
-#: gdk-pixbuf/io-ani.c:358 gdk-pixbuf/io-ani.c:380 gdk-pixbuf/io-ani.c:464
-#: gdk-pixbuf/io-ani.c:491 gdk-pixbuf/io-ani.c:542 gdk-pixbuf/io-ani.c:614
-msgid "Not enough memory to load animation"
-msgstr "သက်၀င်လှုပ်ရှားမှုကို ဖွင့်ဖို့ မှတ်ဉာဏ် မလုံးလောက်ဘူး"
-
-#: gdk-pixbuf/io-ani.c:398 gdk-pixbuf/io-ani.c:424 gdk-pixbuf/io-ani.c:443
-msgid "Malformed chunk in animation"
-msgstr "သက်၀င်လှုပ်ရှားနေတဲ့ ပုံမှန်မဟုတ်တဲ့ အတုံး"
-
-#: gdk-pixbuf/io-ani.c:711
-msgid "The ANI image format"
-msgstr "ANI ရုပ်ပုံ အမျိုးအစား"
-
-#: gdk-pixbuf/io-bmp.c:230 gdk-pixbuf/io-bmp.c:267 gdk-pixbuf/io-bmp.c:338
-#: gdk-pixbuf/io-bmp.c:370 gdk-pixbuf/io-bmp.c:393 gdk-pixbuf/io-bmp.c:496
-msgid "BMP image has bogus header data"
-msgstr "BMP ရုပ်ပုံမှာ ခေါင်းစီး အချက်အလက်ကြမ်း အတု ရှိတယ်"
-
-#: gdk-pixbuf/io-bmp.c:241 gdk-pixbuf/io-bmp.c:433
-msgid "Not enough memory to load bitmap image"
-msgstr "bitmap ရုပ်ပုံကို ဖွင့်ဖို့ မှတ်ဉာဏ် မလုံလောက်ဘူး"
-
-#: gdk-pixbuf/io-bmp.c:319
-msgid "BMP image has unsupported header size"
-msgstr "BMP ရုပ်ပုံမှာ လက်ခံမထားတဲ့ ခေါင်းစီး အရွယ် ရှိတယ်"
-
-#: gdk-pixbuf/io-bmp.c:357
-msgid "Topdown BMP images cannot be compressed"
-msgstr "အထက်အောက် BMP ရုပ်ပုံများကို မဖိသိပ်နိုင်ဘူး"
-
-#: gdk-pixbuf/io-bmp.c:717 gdk-pixbuf/io-pnm.c:709
-msgid "Premature end-of-file encountered"
-msgstr "အချိန်မတန် ​ပျက်စီးမှု ဖြစ်နေတယ်"
-
-#: gdk-pixbuf/io-bmp.c:1329
-msgid "Couldn't allocate memory for saving BMP file"
-msgstr "BMP ဖိုင်ကို သိမ်းဆည်းဖို့ မှတ်ဉာဏ် ခွဲဝေလို့ မရနိုင်ဘူး"
-
-#: gdk-pixbuf/io-bmp.c:1370
-msgid "Couldn't write to BMP file"
-msgstr "BMP ဖိုင်ထဲ မရေးနိုင်ဘူး"
-
-#: gdk-pixbuf/io-bmp.c:1423 gdk-pixbuf/io-gdip-bmp.c:82
-msgid "The BMP image format"
-msgstr "BMP ရုပ်ပုံ အမျိုးအစား"
-
-#: gdk-pixbuf/io-gif.c:222
-#, c-format
-msgid "Failure reading GIF: %s"
-msgstr "GIF ဖတ်ရှုခြင်း ချုံ့ယွင်းချက် - %s"
-
-#: gdk-pixbuf/io-gif.c:496 gdk-pixbuf/io-gif.c:1481 gdk-pixbuf/io-gif.c:1642
-msgid "GIF file was missing some data (perhaps it was truncated somehow?)"
-msgstr ""
-"GIF ဖိုင်မှာ အချို့ အချက်အလက်ကြမ်း ပျောက်နေခဲ့တယ် (၄င်းဟာ တနည်းနည်းနဲ့ တိဖြတ်တာ "
-"ဖြစ်နိုင်တယ်)"
-
-#: gdk-pixbuf/io-gif.c:505
-#, c-format
-msgid "Internal error in the GIF loader (%s)"
-msgstr "အတွင်းပိုင်း ချို့ယွင်းတဲ့ GIF ဖွင့်ကိရိယာ (%s)"
-
-#: gdk-pixbuf/io-gif.c:579
-msgid "Stack overflow"
-msgstr "ဆင့်စီချက် လျှံသွားတယ်"
-
-#: gdk-pixbuf/io-gif.c:639
-msgid "GIF image loader cannot understand this image."
-msgstr "GIF ရုပ်ပုံ ဖွင့်ကိရိယာက ဒီရုပ်ပုံကို နားမလည်ဘူး။"
-
-#: gdk-pixbuf/io-gif.c:668
-msgid "Bad code encountered"
-msgstr "ကုဒ် အမှား ကြုံနေတယ်"
-
-#: gdk-pixbuf/io-gif.c:678
-msgid "Circular table entry in GIF file"
-msgstr "GIF ဖိုင်နဲ့ စက်ဝိုင်းပုံ ဇယား ရေးသွင်းချက်"
-
-#: gdk-pixbuf/io-gif.c:866 gdk-pixbuf/io-gif.c:1468 gdk-pixbuf/io-gif.c:1515
-#: gdk-pixbuf/io-gif.c:1630
-msgid "Not enough memory to load GIF file"
-msgstr "GIF ဖိုင်ကို ဖွင့်ဖို့ မှတ်ဉာဏ် မလုံလောက်ဘူး"
-
-#: gdk-pixbuf/io-gif.c:960
-msgid "Not enough memory to composite a frame in GIF file"
-msgstr "ဘောင်တခုကို GIF ဖိုင်နဲ့ ပေါင်းစပ်ဖို့ မှတ်ဉာဏ် မလုံလောက်ဘူး"
-
-#: gdk-pixbuf/io-gif.c:1132
-msgid "GIF image is corrupt (incorrect LZW compression)"
-msgstr "GIF ရုပ်ပုံ ပျက်နေတယ် (LZW ဖိသိပ်မှု မမှန်ဘူး)"
-
-#: gdk-pixbuf/io-gif.c:1182
-msgid "File does not appear to be a GIF file"
-msgstr "GIF ဖိုင်တခု ဖြစ်ပုံ မပေါ်ဘူး"
-
-#: gdk-pixbuf/io-gif.c:1194
-#, c-format
-msgid "Version %s of the GIF file format is not supported"
-msgstr "GIF ဖိုင် အမျိုးအစားရဲ့ %s မူအဆင့်ကို မထောက်ပံ့ဘူး"
-
-#: gdk-pixbuf/io-gif.c:1303
-msgid ""
-"GIF image has no global colormap, and a frame inside it has no local "
-"colormap."
-msgstr ""
-"GIF ရုပ်ပုံမှာ အများဆိုင် အရောင်ဇယား တခု မရှိဘူး၊ နောက်ပြီး အဲဒီ အထဲက ဘောင်တခုမှာ "
-"အများဆိုင် အရောင် ဇယား မရှိဘူး။"
-
-#: gdk-pixbuf/io-gif.c:1537
-msgid "GIF image was truncated or incomplete."
-msgstr "GIF ရုပ်ပုံဟာ တိဖြတ်ထားတယ် (သို့) မပြည့်စုံဘူး။"
-
-#: gdk-pixbuf/io-gif.c:1693 gdk-pixbuf/io-gdip-gif.c:80
-msgid "The GIF image format"
-msgstr "GIF ရုပ်ပုံ အမျိုးအစား"
-
-#: gdk-pixbuf/io-ico.c:211 gdk-pixbuf/io-ico.c:225 gdk-pixbuf/io-ico.c:277
-#: gdk-pixbuf/io-ico.c:290 gdk-pixbuf/io-ico.c:359
-msgid "Invalid header in icon"
-msgstr "ပုံသင်္ကေတထဲမှ မမှန်တဲ့ ခေါင်းစီး"
-
-#: gdk-pixbuf/io-ico.c:240 gdk-pixbuf/io-ico.c:300 gdk-pixbuf/io-ico.c:369
-#: gdk-pixbuf/io-ico.c:432 gdk-pixbuf/io-ico.c:462
-msgid "Not enough memory to load icon"
-msgstr "ပုံသင်္ကေတ ဖွင့်ဖို့ လုံလောက်တဲ့ မှတ်ဉာဏ် မရှိဘူး"
-
-#: gdk-pixbuf/io-ico.c:322
-msgid "Icon has zero width"
-msgstr "ပုံသင်္ကေတမှာ သုည အကျယ် ရှိတယ်"
-
-#: gdk-pixbuf/io-ico.c:332
-msgid "Icon has zero height"
-msgstr "ုံသင်္ကေတမှာ သုည အမြင့် ရှိတယ်"
-
-#: gdk-pixbuf/io-ico.c:384
-msgid "Compressed icons are not supported"
-msgstr "ဖိသိပ်ထားတဲ့ ပုံသင်္ကေတများကို ထောက်ပံ့မထားဘူး"
-
-#: gdk-pixbuf/io-ico.c:417
-msgid "Unsupported icon type"
-msgstr "ထောက်ပံ့မထားတဲ့ ပုံသင်္ကေတ အမျိုးအစား"
-
-#: gdk-pixbuf/io-ico.c:511
-msgid "Not enough memory to load ICO file"
-msgstr "ICO ဖိုင်ကို ဖွင့်ဖို့ မှတ်ဉာဏ် မလုံလောက်ဘူး"
-
-#: gdk-pixbuf/io-ico.c:976
-msgid "Image too large to be saved as ICO"
-msgstr "ICO လို သိမ်းဆည်းထားဖို့ ရုပ်ပုံ အရမ်းကြီးတယ်"
-
-#: gdk-pixbuf/io-ico.c:987
-msgid "Cursor hotspot outside image"
-msgstr "ရုပ်ပုံပြင်ပမှ Cursor အချက်အချာနေရာ"
-
-#: gdk-pixbuf/io-ico.c:1010
-#, c-format
-msgid "Unsupported depth for ICO file: %d"
-msgstr "ICO ဖိုင်အတွက် မထောက်ပံ့တဲ့ ICO ဖိုင် - %d"
-
-#: gdk-pixbuf/io-ico.c:1245 gdk-pixbuf/io-gdip-ico.c:59
-msgid "The ICO image format"
-msgstr "ICO ရုပ်ပုံ အမျိးအစား"
-
-#: gdk-pixbuf/io-icns.c:347
-#, c-format
-msgid "Error reading ICNS image: %s"
-msgstr "ချို့ယွင်းတဲ့ ICNS ရုပ်ပုံ ဖတ်ရူခြင်း - %s"
-
-#: gdk-pixbuf/io-icns.c:364
-msgid "Could not decode ICNS file"
-msgstr "ICNS ဖိုင်ကို စာဝှက်ဖေါ်လို့ မဖေါ်နိုင်ဘူး"
-
-#: gdk-pixbuf/io-icns.c:397
-msgid "The ICNS image format"
-msgstr "ICNS ရုပ်ပုံ အမျိုးအစား"
-
-#: gdk-pixbuf/io-jasper.c:75
-msgid "Couldn't allocate memory for stream"
-msgstr "စီးကြောင်းအတွက် မှတ်ဉာဏ်ကို ခွဲဝေမပေးနိုင်ဘူး"
-
-#: gdk-pixbuf/io-jasper.c:105
-msgid "Couldn't decode image"
-msgstr "ရုပ်ပုံကို စာဝှက် မဖေါ်နိုင်ဘူး"
-
-#: gdk-pixbuf/io-jasper.c:123
-msgid "Transformed JPEG2000 has zero width or height"
-msgstr "အသွင်ပြောင်းထားတဲ့ JPEG2000 မှာ သုည အကျယ် (သို့) အမြင့် ရှိတယ်"
-
-#: gdk-pixbuf/io-jasper.c:137
-msgid "Image type currently not supported"
-msgstr "လတ်တလော ထောက်ပံ့မထားတဲ့ ရုပ်ပုံ အမျိုးအစား"
-
-#: gdk-pixbuf/io-jasper.c:149 gdk-pixbuf/io-jasper.c:157
-msgid "Couldn't allocate memory for color profile"
-msgstr "အရောင် မှတ်တမ်းအတွက် မှတ်ဉာဏ် မခွဲဝေနိုင်ဘူး"
-
-#: gdk-pixbuf/io-jasper.c:183
-msgid "Insufficient memory to open JPEG 2000 file"
-msgstr "JPEG ၂၀၀၀ ဖိုင်ကို ဖွင့်ဖို့ မှတ်ဉာဏ် မလုံလောက်ဘူး"
-
-#: gdk-pixbuf/io-jasper.c:262
-msgid "Couldn't allocate memory to buffer image data"
-msgstr "ကြားခံ ရုပ်ပုံ အချက်အလက်ကြမ်းအတွက် မှတ်ဉာဏ်ကို မခွဲဝေနိုင်ဘူး"
-
-#: gdk-pixbuf/io-jasper.c:306
-msgid "The JPEG 2000 image format"
-msgstr "JPEG ၂၀၀၀ ရုပ်ပုံ အမျိုးအစား"
-
-#: gdk-pixbuf/io-jpeg.c:117
-#, c-format
-msgid "Error interpreting JPEG image file (%s)"
-msgstr "ဘာသာပြန်မှု ချို့ယွင်းတဲ့ JPEG ရုပ်ပုံ ဖိုင် (%s)"
-
-#: gdk-pixbuf/io-jpeg.c:528
-msgid ""
-"Insufficient memory to load image, try exiting some applications to free "
-"memory"
-msgstr ""
-"ရုပ်ပုံကို ဖွင့်ဖို့ မှတ်ဉာဏ် မလုံလောက်ဘူး၊ မှတ်ဉာဏ်ကို ရှင်းလင်းဖို့ ရှိနေတဲ့ အချို့ လုပ်ငန်းသုံး "
-"ကိရိယာများကို စမ်းကြည့်ပါ"
-
-#: gdk-pixbuf/io-jpeg.c:569 gdk-pixbuf/io-jpeg.c:775
-#, c-format
-msgid "Unsupported JPEG color space (%s)"
-msgstr "ထောက်ပံ့မထားတဲ့ JPEG အရောင် နေရာလပ် (%s)"
-
-#: gdk-pixbuf/io-jpeg.c:674 gdk-pixbuf/io-jpeg.c:944 gdk-pixbuf/io-jpeg.c:1177
-#: gdk-pixbuf/io-jpeg.c:1186
-msgid "Couldn't allocate memory for loading JPEG file"
-msgstr "JPEG ဖိုင်ကို ဖွင့်ဖို့ မှတ်ဉာဏ် မခွဲဝေနိုင်ဘူး"
-
-#: gdk-pixbuf/io-jpeg.c:919
-msgid "Transformed JPEG has zero width or height."
-msgstr "အသွင်ပြောင်းထားတဲ့ JPEG မှာ သုည အကျယ်နဲ့ အမြင့် ရှိတယ်။"
-
-#: gdk-pixbuf/io-jpeg.c:1133 gdk-pixbuf/io-gdip-jpeg.c:53
-#, c-format
-msgid ""
-"JPEG quality must be a value between 0 and 100; value '%s' could not be "
-"parsed."
-msgstr ""
-"JPEG ရဲ့ အရည်အသွေးဟာ တန်ဖိုး ၁ နဲ့ ၁၀၀ အကြားမှ တခု ဖြစ်ရမယ်၊ '%s' တန်ဖိုးကို "
-"မခွဲခြမ်းနိုင်ဘူး။"
-
-#: gdk-pixbuf/io-jpeg.c:1148 gdk-pixbuf/io-gdip-jpeg.c:68
-#, c-format
-msgid ""
-"JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
-msgstr ""
-"JPEG ရဲ့ အရည်အသွေးဟာ တန်ဖိုး ၁ နဲ့ ၁၀၀ အကြားမှ တခု ဖြစ်ရမယ်၊ '%d' တန်ဖိုးကို ခွင့်မပြုဘူး။"
-
-#: gdk-pixbuf/io-jpeg.c:1310 gdk-pixbuf/io-gdip-jpeg.c:136
-msgid "The JPEG image format"
-msgstr "JPEG ရုပ်ပုံ အမျိုးအစား"
-
-#: gdk-pixbuf/io-pcx.c:187
-msgid "Couldn't allocate memory for header"
-msgstr "ခေါင်းစီးအတွက် မှတ်ဉာဏ် မခွဲဝေနိုင်ဘူး"
-
-#: gdk-pixbuf/io-pcx.c:202 gdk-pixbuf/io-pcx.c:560
-msgid "Couldn't allocate memory for context buffer"
-msgstr "စကားစပ် ကြားခံ အတွက် မှတ်ဉာဏ် မခွဲဝေနိုင်ဘူး"
-
-#: gdk-pixbuf/io-pcx.c:601
-msgid "Image has invalid width and/or height"
-msgstr "ရုပ်ပုံမှာ မမှန်တဲ့ အကျယ်နဲ့/(သို့)အမြင့်"
-
-#: gdk-pixbuf/io-pcx.c:613 gdk-pixbuf/io-pcx.c:674
-msgid "Image has unsupported bpp"
-msgstr "ရုပ်ပုံမှာ ထောက်ပံ့မထားတဲ့ bpp ရှိတယ်"
-
-#: gdk-pixbuf/io-pcx.c:618 gdk-pixbuf/io-pcx.c:626
-#, c-format
-msgid "Image has unsupported number of %d-bit planes"
-msgstr "ရုပ်ပုံမှာ ထောက်ပံ့မထားတဲ့ %d-bit ပြင်ညီများ အရေအတွက် ရှိတယ်"
-
-#: gdk-pixbuf/io-pcx.c:642
-msgid "Couldn't create new pixbuf"
-msgstr "pixbuf အသစ်ကို မဖန်တီးနိုင်ဘူး"
-
-#: gdk-pixbuf/io-pcx.c:650
-msgid "Couldn't allocate memory for line data"
-msgstr "လိုင်း အချက်အလက်ကြမ်း အတွက် မှတ်ဉာဏ် မခွဲဝေနိုင်ဘူး"
-
-#: gdk-pixbuf/io-pcx.c:657
-msgid "Couldn't allocate memory for paletted data"
-msgstr "အရောင်စပ် ဆေးခွက် အချက်အလက်ကြမ်း အတွက် မှတ်ဉာဏ် မခွဲဝေနိုင်ဘူး"
-
-#: gdk-pixbuf/io-pcx.c:704
-msgid "Didn't get all lines of PCX image"
-msgstr "PCX ရုပ်ပုံရဲ့ လိုင်းများ အားလုံးကို မယူရဘူး။"
-
-#: gdk-pixbuf/io-pcx.c:711
-msgid "No palette found at end of PCX data"
-msgstr "PCX အချက်အလက်ကြမ်းရဲ့ အဆုံးမှာ အရောင်စပ် ဆေးခွက် မတွေ့ရဘူး"
-
-#: gdk-pixbuf/io-pcx.c:756
-msgid "The PCX image format"
-msgstr "PCX ရုပ်ပုံ အမျိုးအစား"
-
-#: gdk-pixbuf/io-png.c:55
-msgid "Bits per channel of PNG image is invalid."
-msgstr "PNG ရုပ်ပုံရဲ့ လိုင်းတခုစီမှ အတိုင်းအတာများဟာ မမှန်ဘူး။"
-
-#: gdk-pixbuf/io-png.c:136 gdk-pixbuf/io-png.c:642
-msgid "Transformed PNG has zero width or height."
-msgstr "အသွင်ပြောင်းထားတဲ့ PNG မှာ သုည အကျယ် (သို့) အမြင့် ရှိတယ်။"
-
-#: gdk-pixbuf/io-png.c:144
-msgid "Bits per channel of transformed PNG is not 8."
-msgstr "အသွင်ပြောင်းထားတဲ့ PNGရဲ့ လိုင်းတခုစီမှ အတိုင်းအတာများဟာ မမှန်ဘူး။"
-
-#: gdk-pixbuf/io-png.c:153
-msgid "Transformed PNG not RGB or RGBA."
-msgstr "အသွင်ပြောင်းထားတဲ့ PNG မှာ RGB (သို့) RGBA မရှိဘူး။"
-
-#: gdk-pixbuf/io-png.c:162
-msgid "Transformed PNG has unsupported number of channels, must be 3 or 4."
-msgstr "အသွင်ပြောင်းထားတဲ့ PNG မှာ ထောက်ပံ့မထားတဲ့ လိုင်းတွေ ရှိတယ်၊ ၃ (သို့) ၄ ဖြစ်ရမယ်။"
-
-#: gdk-pixbuf/io-png.c:183
-#, c-format
-msgid "Fatal error in PNG image file: %s"
-msgstr "ဆိုးရွားတဲ့ ချို့ယွင်းဖြစ်နေတဲ့ PNG ရုပ်ပုံ ဖိုင် - %s"
-
-#: gdk-pixbuf/io-png.c:316
-msgid "Insufficient memory to load PNG file"
-msgstr "PNG ဖိုင်ကို ဖွင့်ဖို့ မှတ်ဉာဏ် မရှိဘူး"
-
-#: gdk-pixbuf/io-png.c:657
-#, c-format
-msgid ""
-"Insufficient memory to store a %ld by %ld image; try exiting some "
-"applications to reduce memory usage"
-msgstr ""
-"%ld ရုပ်ပုံနဲ့ %ld တခု သိုထားဖို့ လုံလောက်တဲ့ မှတ်ဉာဏ် မရှိဘူး၊ မှတ်ဉာဏ် သုံးစွဲမှုကို လျှော့ချဖို့ "
-"ရှိနေတဲ့ အချို့ လုပ်ငန်းသုံးကိရိယာများကို စမ်းကြည့်ပါ"
-
-#: gdk-pixbuf/io-png.c:720
-msgid "Fatal error reading PNG image file"
-msgstr "ဆိုးရွားတဲ့ ဖတ်ရှုမှု ချို့ယွင်းဖြစ်နေတဲ့ PNG ရုပ်ပုံ ဖိုင်"
-
-#: gdk-pixbuf/io-png.c:769
-#, c-format
-msgid "Fatal error reading PNG image file: %s"
-msgstr "ဆိုးရွားတဲ့ ဖတ်ရှုမှု ချို့ယွင်းဖြစ်နေတဲ့ PNG ရုပ်ပုံ ဖိုင် - %s"
-
-#: gdk-pixbuf/io-png.c:863
-msgid ""
-"Keys for PNG text chunks must have at least 1 and at most 79 characters."
-msgstr ""
-"PNG စာသား အတုံးများရဲ့ သော့ချက်များမှာ အနည်းဆုံး အက္ခရာများ ၁ နဲ့ ၁၀၀ အကြား ရှိရမယ်။"
-
-#: gdk-pixbuf/io-png.c:872
-msgid "Keys for PNG text chunks must be ASCII characters."
-msgstr "PNG စာသား အတုံးများဟာ ASCII အက္ခရာများ ဖြစ်ရမယ်။"
-
-#: gdk-pixbuf/io-png.c:886 gdk-pixbuf/io-tiff.c:738
-#, c-format
-msgid "Color profile has invalid length %d."
-msgstr ""
-
-#: gdk-pixbuf/io-png.c:899 gdk-pixbuf/io-gdip-png.c:56
-#, c-format
-msgid ""
-"PNG compression level must be a value between 0 and 9; value '%s' could not "
-"be parsed."
-msgstr ""
-"PNG ဖိသိပ်မှု အဆင့်ဟာ တန်ဖိုး ၀ နဲ့ ၉ တန်ဖိုးကြားမှ တခု ဖြစ်ရမယ်၊ '%s' တန်ဖိုးကို ခွဲခြမ်းလို့ "
-"မရနိုင်ဘူး။"
-
-#: gdk-pixbuf/io-png.c:912 gdk-pixbuf/io-gdip-png.c:68
-#, c-format
-msgid ""
-"PNG compression level must be a value between 0 and 9; value '%d' is not "
-"allowed."
-msgstr ""
-"PNG ဖိသိပ်မှု အဆင့်ဟာ တန်ဖိုး ၀ နဲ့ ၉ တန်ဖိုးကြားမှ တခု ဖြစ်ရမယ်၊ '%d' တန်ဖိုးကို ခွင့်မပြုဘူး။"
-
-#: gdk-pixbuf/io-png.c:951
-#, c-format
-msgid "Value for PNG text chunk %s cannot be converted to ISO-8859-1 encoding."
-msgstr ""
-"PNG စာသား အတုံး %s တန်ဖိုးကို ISO-8859-1 စာဝှက်ရေးသားခြင်း အဖြစ် အသွင်ပြောင်းလို့ "
-"မရနိုင်ဘူး။"
-
-#: gdk-pixbuf/io-png.c:1112 gdk-pixbuf/io-gdip-png.c:133
-msgid "The PNG image format"
-msgstr "PNG ရုပ်ပုံ အမျိုးအစား"
-
-#: gdk-pixbuf/io-pnm.c:250
-msgid "PNM loader expected to find an integer, but didn't"
-msgstr "PNM ပွင့်ကိရိယာက ကိန်းပြည့်တခုကို တွေ့ဖို့ မျှော်လင့်ထားတယ်၊ ဒါပေမဲ့ မတွေ့ခဲ့ဘူး။"
-
-#: gdk-pixbuf/io-pnm.c:282
-msgid "PNM file has an incorrect initial byte"
-msgstr "PNM မှာ မမှန်တဲ့ ဘိုက်အစပိုင်း တခု ရှိတယ်"
-
-#: gdk-pixbuf/io-pnm.c:312
-msgid "PNM file is not in a recognized PNM subformat"
-msgstr "PNM ဖိုင်ဟာ အသိအမှတ်ပြုထားတဲ့ PNM ပုံစံခွဲတခုထဲမှာ မရှိဘူး"
-
-#: gdk-pixbuf/io-pnm.c:337
-msgid "PNM file has an image width of 0"
-msgstr "PNM ဖိုင်မှာ 0 ရဲ့ ရုပ်ပုံ အကျယ် တခု ရှိတယ်"
-
-#: gdk-pixbuf/io-pnm.c:358
-msgid "PNM file has an image height of 0"
-msgstr "PNM ဖိုင်မှာ 0 ရဲ့ ရုပ်ပုံ အမြင့် တခု ရှိတယ်"
-
-#: gdk-pixbuf/io-pnm.c:381
-msgid "Maximum color value in PNM file is 0"
-msgstr "PNM ဖိုင်ထဲက အများဆုံး အရောင် တန်ဖိုးဟာ 0 ဖြစ်တယ်"
-
-#: gdk-pixbuf/io-pnm.c:389
-msgid "Maximum color value in PNM file is too large"
-msgstr "PNM ဖိုင်ထဲက အများဆုံး အရောင်တန်ဖိုးဟာ အလွန်ကြီးတယ်"
-
-#: gdk-pixbuf/io-pnm.c:429 gdk-pixbuf/io-pnm.c:459 gdk-pixbuf/io-pnm.c:504
-msgid "Raw PNM image type is invalid"
-msgstr "PNM အကြမ်း ရုပ်ပုံ အမျိုးအစားဟာ မမှန်ဘူး"
-
-#: gdk-pixbuf/io-pnm.c:654
-msgid "PNM image loader does not support this PNM subformat"
-msgstr "PNM ရုပ်ပုံဖွင့်ကိရိယာက ဒီ PNM ပုံစံခွဲကို ထောက်ပံ့မထားဘူး"
-
-#: gdk-pixbuf/io-pnm.c:741 gdk-pixbuf/io-pnm.c:968
-msgid "Raw PNM formats require exactly one whitespace before sample data"
-msgstr ""
-"PNM အကြမ်း အမျိုးအစားများက နမူနာ အချက်အလက်ကြမ်း မတိုင်ခင် အတိအကျ နေရာလပ် တခု လိုအပ်တယ်"
-
-#: gdk-pixbuf/io-pnm.c:768
-msgid "Cannot allocate memory for loading PNM image"
-msgstr "PNM ရုပ်ပုံ ဖွင့်ဖို့ မှတ်ဉာဏ် မခွဲဝေနိုင်ဘူး"
-
-#: gdk-pixbuf/io-pnm.c:818
-msgid "Insufficient memory to load PNM context struct"
-msgstr "PNM အကြောင်းအချက် တည်ဆောက်ပုံကို ဖွင့်ဖို့ လုံလောက်တဲ့ မှတ်ဉာဏ် မရှိဘူး"
-
-#: gdk-pixbuf/io-pnm.c:869
-msgid "Unexpected end of PNM image data"
-msgstr "မမျှော်လင့်တဲ့ PNM ရုပ်ပုံ အချက်အလက်ကြမ်း အဆုံး"
-
-#: gdk-pixbuf/io-pnm.c:997
-msgid "Insufficient memory to load PNM file"
-msgstr "PNM ဖိုင်ကို ဖွင့်ဖို့ လုံလေက်တဲ့ မှတ်ဉာဏ် မရှိဘူး"
-
-#: gdk-pixbuf/io-pnm.c:1081
-msgid "The PNM/PBM/PGM/PPM image format family"
-msgstr "PNM/PBM/PGM/PPM ရုပ်ပုံ အမျိုးအစား အုပ်စု"
-
-#: gdk-pixbuf/io-qtif.c:128
-msgid "Input file descriptor is NULL."
-msgstr ""
-
-#: gdk-pixbuf/io-qtif.c:143
-#, fuzzy
-msgid "Failed to read QTIF header"
-msgstr "ခေါင်းစီးကို ရေးဖို့ မအောင်မြင်ဘူး\n"
-
-#: gdk-pixbuf/io-qtif.c:152 gdk-pixbuf/io-qtif.c:182 gdk-pixbuf/io-qtif.c:446
-#, c-format
-msgid "QTIF atom size too large (%d bytes)"
-msgstr ""
-
-#: gdk-pixbuf/io-qtif.c:172
-#, c-format
-msgid "Failed to allocate %d bytes for file read buffer"
-msgstr ""
-
-#: gdk-pixbuf/io-qtif.c:196
-#, fuzzy, c-format
-msgid "File error when reading QTIF atom: %s"
-msgstr "GIF ဖတ်ရှုခြင်း ချုံ့ယွင်းချက် - %s"
-
-#: gdk-pixbuf/io-qtif.c:233
-#, c-format
-msgid "Failed to skip the next %d bytes with seek()."
-msgstr ""
-
-#: gdk-pixbuf/io-qtif.c:257
-#, fuzzy
-msgid "Failed to allocate QTIF context structure."
-msgstr "TGA အကြောင်းအချက် တည်ဆောက်မှု အတွက် မှတ်ဉာဏ်ကို မခွဲဝေနိုင်ဘူး"
-
-#: gdk-pixbuf/io-qtif.c:317
-#, fuzzy
-msgid "Failed to create GdkPixbufLoader object."
-msgstr "ဖိုင်တွဲ အညွှန်းကို ရေးဖို့ မအောင်မြင်ဘူး\n"
-
-#: gdk-pixbuf/io-qtif.c:421
-#, fuzzy
-msgid "Failed to find an image data atom."
-msgstr "TIFF ဖိုင်ကို ဖွင့်ဖို့ မအောင်မြင်ဘူး"
-
-#: gdk-pixbuf/io-qtif.c:602
-#, fuzzy
-msgid "The QTIF image format"
-msgstr "TIFF ရုပ်ပုံ အမျိုးအစား"
-
-#: gdk-pixbuf/io-ras.c:126
-msgid "RAS image has bogus header data"
-msgstr "RAS ရုပ်ပုံမှာ ခေါင်းစီး အ​ချက်အလက်ကြမ်း အတု ရှိတယ်"
-
-#: gdk-pixbuf/io-ras.c:148
-msgid "RAS image has unknown type"
-msgstr "RAS ရုပ်ပုံမှာ အမည်မသိတဲ့ အမျိုးအစား ရှိတယ်"
-
-#: gdk-pixbuf/io-ras.c:156
-msgid "unsupported RAS image variation"
-msgstr "ထောက်ပံ့ထားတဲ့ RAS ရုပ်ပုံ ကွာခြားမှု"
-
-#: gdk-pixbuf/io-ras.c:171 gdk-pixbuf/io-ras.c:200
-msgid "Not enough memory to load RAS image"
-msgstr "RAS ရုပ်ပုံကို ဖွင့်ဖို့ မှတ်ဉာဏ် မလုံလောက်ဘူး"
-
-#: gdk-pixbuf/io-ras.c:545
-msgid "The Sun raster image format"
-msgstr "Sun ရာစတာ ရုပ်ပုံ အမျိုးအစား"
-
-#: gdk-pixbuf/io-tga.c:154
-msgid "Cannot allocate memory for IOBuffer struct"
-msgstr "အ၀င်အထွက်ကြားခံ တည်ဆောက်ပုံအတွက် မှတ်ဉာဏ် မခွဲဝေနိုင်ဘူး"
-
-#: gdk-pixbuf/io-tga.c:173
-msgid "Cannot allocate memory for IOBuffer data"
-msgstr "အ၀င်အထွက်ကြားခံ အချက်အလက်ကြမ်း အတွက် မှတ်ဉာဏ် မခွဲဝေနိုင်ဘူး"
-
-#: gdk-pixbuf/io-tga.c:184
-msgid "Cannot realloc IOBuffer data"
-msgstr "အ၀င်အထွက်ကြားခံ အချက်အလက်ကြမ်းကို realloc မလုပ်နိုင်ဘူး"
-
-#: gdk-pixbuf/io-tga.c:214
-msgid "Cannot allocate temporary IOBuffer data"
-msgstr "အ၀င်အထွက်ကြားခံ အချက်အလက်ကြမ်းကို မခွဲဝေနိုင်ဘူး"
-
-#: gdk-pixbuf/io-tga.c:347
-msgid "Cannot allocate new pixbuf"
-msgstr "pixbuf အသစ်ကို မခွဲဝေနိုင်ဘူး"
-
-#: gdk-pixbuf/io-tga.c:686
-#, fuzzy
-msgid "Image is corrupted or truncated"
-msgstr "GIF ရုပ်ပုံဟာ တိဖြတ်ထားတယ် (သို့) မပြည့်စုံဘူး။"
-
-#: gdk-pixbuf/io-tga.c:693
-msgid "Cannot allocate colormap structure"
-msgstr "အရောင်ဇယား တည်ဆောက်ပုံကို မခွဲဝေနိုင်ဘူး"
-
-#: gdk-pixbuf/io-tga.c:700
-msgid "Cannot allocate colormap entries"
-msgstr "အရောင်ဇယား ရေးသွင်းချက်များကို မခွဲဝေနိုင်ဘူး"
-
-#: gdk-pixbuf/io-tga.c:722
-msgid "Unexpected bitdepth for colormap entries"
-msgstr "အရောင်ဇယား ရေးသွင်းချက်များ အတွက် မမျှော်လင့်တဲ့ bitdepth"
-
-#: gdk-pixbuf/io-tga.c:740
-msgid "Cannot allocate TGA header memory"
-msgstr "TGA ခေါင်းစီး မှတ်ဉာဏ်ကို မခွဲဝေနိုင်ဘူး"
-
-#: gdk-pixbuf/io-tga.c:773
-msgid "TGA image has invalid dimensions"
-msgstr "TGA ရုပ်ပုံမှာ မမှန်တဲ့ အတိုင်းအတာများ ရှိတယ်"
-
-#: gdk-pixbuf/io-tga.c:779 gdk-pixbuf/io-tga.c:788 gdk-pixbuf/io-tga.c:798
-#: gdk-pixbuf/io-tga.c:808 gdk-pixbuf/io-tga.c:815
-msgid "TGA image type not supported"
-msgstr "TGA ရုပ်ပုံ အမျိုးအစားကို ထောက်ခံ မထားဘူး"
-
-#: gdk-pixbuf/io-tga.c:862
-msgid "Cannot allocate memory for TGA context struct"
-msgstr "TGA အကြောင်းအချက် တည်ဆောက်မှု အတွက် မှတ်ဉာဏ်ကို မခွဲဝေနိုင်ဘူး"
-
-#: gdk-pixbuf/io-tga.c:927
-msgid "Excess data in file"
-msgstr "ဖိုင်မှ ပိုသွားတဲ့ အချက်အလက်ကြမ်း"
-
-#: gdk-pixbuf/io-tga.c:1008
-msgid "The Targa image format"
-msgstr "တာဂါ ရုပ်ပုံ အမျိုးအစား"
-
-#: gdk-pixbuf/io-tiff.c:165
-msgid "Could not get image width (bad TIFF file)"
-msgstr "ရုပ်ပုံရဲ့ အကျယ်ကို မရနိုင်ဘူး (မကောင်းတဲ့ TIFF ဖိုင်)"
-
-#: gdk-pixbuf/io-tiff.c:172
-msgid "Could not get image height (bad TIFF file)"
-msgstr "ရုပ်ပုံရဲ့ အမြင့်ကို မရနိုင်ဘူး (မကောင်းတဲ့ TIFF ဖိုင်)"
-
-#: gdk-pixbuf/io-tiff.c:180
-msgid "Width or height of TIFF image is zero"
-msgstr "TIFF ရုပ်ပုံရဲ့ အကျယ်နဲ့ အမြင့် သုညဖြစ်တယ်"
-
-#: gdk-pixbuf/io-tiff.c:189 gdk-pixbuf/io-tiff.c:198
-msgid "Dimensions of TIFF image too large"
-msgstr "TIFF ရုပ်ပုံရဲ့ အတိုင်းအတာ အရမ်း ကြီးတယ်"
-
-#: gdk-pixbuf/io-tiff.c:222 gdk-pixbuf/io-tiff.c:234 gdk-pixbuf/io-tiff.c:561
-msgid "Insufficient memory to open TIFF file"
-msgstr "TIFF ဖိုင် ဖွင့်ဖို့ မှတ်ဉာဏ် မလုံလောက်ဘူး"
-
-#: gdk-pixbuf/io-tiff.c:295
-msgid "Failed to load RGB data from TIFF file"
-msgstr "TIFF ဖိုင်မှ RGB အ​ချက်အလက်ကြမ်းကို ဖွင့်ဖို့ မအောင်မြင်ဘူး"
-
-#: gdk-pixbuf/io-tiff.c:351
-msgid "Failed to open TIFF image"
-msgstr "TIFF ဖိုင်ကို ဖွင့်ဖို့ မအောင်မြင်ဘူး"
-
-#: gdk-pixbuf/io-tiff.c:363 gdk-pixbuf/io-tiff.c:778
-msgid "TIFFClose operation failed"
-msgstr "TIFFအပိတ် လုပ်ဆောင်ချက် မအောင်မြင်ဘူး"
-
-#: gdk-pixbuf/io-tiff.c:493 gdk-pixbuf/io-tiff.c:506
-msgid "Failed to load TIFF image"
-msgstr "TIFF ရုပ်ပုံ ဖွင့်ဖို့ မအောင်မြင်ဘူး"
-
-#: gdk-pixbuf/io-tiff.c:692
-msgid "Failed to save TIFF image"
-msgstr "TIFF ရုပ်ပုံ သိမ်းဆည်းဖို့ မအောင်မြင်ဘူး"
-
-#: gdk-pixbuf/io-tiff.c:727
-msgid "TIFF compression doesn't refer to a valid codec."
-msgstr ""
-
-#: gdk-pixbuf/io-tiff.c:767
-msgid "Failed to write TIFF data"
-msgstr "TIFF အချက်အလက်ကြမ်း ရေးဖို့ မအောင်မြင်ဘူး"
-
-#: gdk-pixbuf/io-tiff.c:814
-msgid "Couldn't write to TIFF file"
-msgstr "TIFF ဖိုင် မရေးသားနိုင်ဘူး"
-
-#: gdk-pixbuf/io-tiff.c:869
-msgid "The TIFF image format"
-msgstr "TIFF ရုပ်ပုံ အမျိုးအစား"
-
-#: gdk-pixbuf/io-wbmp.c:246
-msgid "Image has zero width"
-msgstr "ရုပ်ပုံမှာ သုည အကျယ် ရှိတယ်"
-
-#: gdk-pixbuf/io-wbmp.c:264
-msgid "Image has zero height"
-msgstr "ရုပ်ပုံမှာ သုည အမြင့် ရှိတယ်"
-
-#: gdk-pixbuf/io-wbmp.c:275
-msgid "Not enough memory to load image"
-msgstr "ရုပ်ပုံကို ဖွင့်ဖို့ မှတ်ဉာဏ် မလုံလောက်ဘူး"
-
-#: gdk-pixbuf/io-wbmp.c:334
-msgid "Couldn't save the rest"
-msgstr "ကျန်တာကို မသိမ်းဆည်းနိုင်ဘူး"
-
-#: gdk-pixbuf/io-wbmp.c:375
-msgid "The WBMP image format"
-msgstr "WBMP ရုပ်ပုံ အမျိုးအစား"
-
-#: gdk-pixbuf/io-xbm.c:295
-msgid "Invalid XBM file"
-msgstr "မမှန်တဲ့ XBM ဖိုင်"
-
-#: gdk-pixbuf/io-xbm.c:305
-msgid "Insufficient memory to load XBM image file"
-msgstr "XBM ရုပ်ပုံဖိုင်ကို ဖွင့်ဖို့ မှတ်ဉာဏ် မလုံလောက်ဘူး"
-
-#: gdk-pixbuf/io-xbm.c:453
-msgid "Failed to write to temporary file when loading XBM image"
-msgstr "XBM ရုပ်ပုံကို ဖွင့်နေစဉ် ယာယီဖိုင်ထဲ ရေးသားဖို့ မအောင်မြင်ဘူး"
-
-#: gdk-pixbuf/io-xbm.c:492
-msgid "The XBM image format"
-msgstr "XBM ရုပ်ပုံ အမျိုးအစား"
-
-#: gdk-pixbuf/io-xpm.c:468
-msgid "No XPM header found"
-msgstr "XPM ခေါင်းစီး မတွေ့ရဘူး"
-
-#: gdk-pixbuf/io-xpm.c:477
-msgid "Invalid XPM header"
-msgstr "မမှန်တဲ့ XPM ခေါင်းစီး"
-
-#: gdk-pixbuf/io-xpm.c:485
-msgid "XPM file has image width <= 0"
-msgstr "XPM ဖိုင်ရဲ့ ရုပ်ပုံ အကျယ် <= 0 "
-
-#: gdk-pixbuf/io-xpm.c:493
-msgid "XPM file has image height <= 0"
-msgstr "XPM ဖိုင်ရဲ့ ရုပ်ပုံ အမြင့် <= 0 "
-
-#: gdk-pixbuf/io-xpm.c:501
-msgid "XPM has invalid number of chars per pixel"
-msgstr "XPM မှာ အက္ခရာများရဲ့ မမှတ်တဲ့ အစက် အရေအတွက် ရှိတယ်"
-
-#: gdk-pixbuf/io-xpm.c:510
-msgid "XPM file has invalid number of colors"
-msgstr "XPM ဖိုင်မှာ မမှန်တဲ့ အရောင်များရဲ့ အရေအတွက် ရှိတယ်"
-
-#: gdk-pixbuf/io-xpm.c:522 gdk-pixbuf/io-xpm.c:531 gdk-pixbuf/io-xpm.c:583
-msgid "Cannot allocate memory for loading XPM image"
-msgstr "XPM ရုပ်ပုံ ဖွင့်ဖို့ မှတ်ဉာဏ် မခွဲဝေနိုင်ဘူး"
-
-#: gdk-pixbuf/io-xpm.c:545
-msgid "Cannot read XPM colormap"
-msgstr "XPM အရောင်ဇယားကို မဖတ်နိုင်ဘူး"
-
-#: gdk-pixbuf/io-xpm.c:777
-msgid "Failed to write to temporary file when loading XPM image"
-msgstr "XPM ရုပ်ပုံကို ဖွင့်နေစဉ် ယာယီဖိုင်ထဲ ရေးသားဖို့ မအောင်မြင်ဘူး"
-
-#: gdk-pixbuf/io-xpm.c:816
-msgid "The XPM image format"
-msgstr "XPM ရုပ်ပုံ အမျိုးအစား"
-
-#: gdk-pixbuf/io-gdip-emf.c:59
-msgid "The EMF image format"
-msgstr "EMF ရုပ်ပုံ အမျိုးအစား"
-
-#: gdk-pixbuf/io-gdip-utils.c:232
-#, c-format
-msgid "Could not allocate memory: %s"
-msgstr "မှတ်ဉာဏ်ကို မခွဲဝေနိုင်ဘူး - %s"
-
-#: gdk-pixbuf/io-gdip-utils.c:257 gdk-pixbuf/io-gdip-utils.c:371
-#: gdk-pixbuf/io-gdip-utils.c:411
-#, c-format
-msgid "Could not create stream: %s"
-msgstr "စီးကြောင်းကို မဖန်တီးနိုင်ဘူး - %s"
-
-#: gdk-pixbuf/io-gdip-utils.c:271
-#, c-format
-msgid "Could not seek stream: %s"
-msgstr "စီးကြောင်းကို မရှာဖွေနိုင်ဘူး - %s"
-
-#: gdk-pixbuf/io-gdip-utils.c:283
-#, c-format
-msgid "Could not read from stream: %s"
-msgstr "စီးကြောင်းထဲမှာ မဖတ်နိုင်ဘူး - %s"
-
-#: gdk-pixbuf/io-gdip-utils.c:694 gdk-pixbuf/io-gdip-utils.c:825
-msgid "Couldn't load bitmap"
-msgstr "ဘစ်မက်ကို မဖွင့်နိုင်ဘူး"
-
-#: gdk-pixbuf/io-gdip-utils.c:847
-msgid "Couldn't load metafile"
-msgstr "metaဖိုင်ကို မဖွင့်နိုင်ဘူး"
-
-#: gdk-pixbuf/io-gdip-utils.c:1006
-msgid "Unsupported image format for GDI+"
-msgstr "GDI+ အတွက် ထောက်ပံ့မထားတဲ့ ရုပ်ပုံ အမျိုးအစား"
-
-#: gdk-pixbuf/io-gdip-utils.c:1013
-msgid "Couldn't save"
-msgstr "မသိမ်းဆည်းနိုင်ဘူး"
-
-#: gdk-pixbuf/io-gdip-wmf.c:58
-msgid "The WMF image format"
-msgstr "WMF ရုပ်ပုံ အမျိုးအစား"
 
 #. Description of --sync in --help output
 #: gdk/win32/gdkmain-win32.c:55
@@ -1489,16 +581,15 @@ msgid ""
 "Select the color you want from the outer ring. Select the darkness or "
 "lightness of that color using the inner triangle."
 msgstr ""
-"အပြင်စည်းမှ သင်လိုချင်တဲ့ အရောင်ကို ရွေးပါ။ အတွင်း တြိဂံကို သုံးပြီး အဲဒီ အရောင်ရဲ့ အလင်း "
-"အမှောင်ကို ရွေးပါ။"
+"အပြင်စည်းမှ သင်လိုချင်တဲ့ အရောင်ကို ရွေးပါ။ အတွင်း တြိဂံကို သုံးပြီး အဲဒီ အရောင်ရဲ့ အလင်း အမှောင်ကို ရွေးပါ။"
 
 #: gtk/gtkcolorsel.c:380
 msgid ""
 "Click the eyedropper, then click a color anywhere on your screen to select "
 "that color."
 msgstr ""
-"မျက်စည်းခတ်ကိရိယာကို နှိုပ်ပါ၊ နောက် အဲဒီ အရောင်ကို ရွေးဖို့ သင့် မျက်နှာပြင်ပေါ် ​"
-"တနေရာရာမှာ အရောင်တခုကို နှိုပ်ပါ"
+"မျက်စည်းခတ်ကိရိယာကို နှိုပ်ပါ၊ နောက် အဲဒီ အရောင်ကို ရွေးဖို့ သင့် မျက်နှာပြင်ပေါ် ​တနေရာရာမှာ အရောင်တခုကို "
+"နှိုပ်ပါ"
 
 #: gtk/gtkcolorsel.c:389
 msgid "_Hue:"
@@ -1513,8 +604,9 @@ msgid "_Saturation:"
 msgstr "ပျော်၀င်မှု -"
 
 #: gtk/gtkcolorsel.c:393
-msgid "\"Deepness\" of the color."
-msgstr "အရောင်ရဲ့ \"နက်နဲမှု\"။"
+#, fuzzy
+msgid "Intensity of the color."
+msgstr "အရောင်ရဲ့ ဖေါက်ထွင်းနိုင်မှု။"
 
 #: gtk/gtkcolorsel.c:394
 msgid "_Value:"
@@ -1565,8 +657,8 @@ msgid ""
 "You can enter an HTML-style hexadecimal color value, or simply a color name "
 "such as 'orange' in this entry."
 msgstr ""
-"HTML-စတိုင် hexadecimal ​အရောင် တန်ဖိုးတခု၊ (သို့) ဒီရေးသွင်းချက်ထဲမှာ ရိုးရိုး "
-"'လိမ္မော်ရောင်' လို အရောင် အမည်တခုကို သင် ရေးထည့်နိုင်တယ"
+"HTML-စတိုင် hexadecimal ​အရောင် တန်ဖိုးတခု၊ (သို့) ဒီရေးသွင်းချက်ထဲမှာ ရိုးရိုး 'လိမ္မော်ရောင်' လို "
+"အရောင် အမည်တခုကို သင် ရေးထည့်နိုင်တယ"
 
 #: gtk/gtkcolorsel.c:472
 msgid "_Palette:"
@@ -1582,17 +674,17 @@ msgid ""
 "now. You can drag this color to a palette entry, or select this color as "
 "current by dragging it to the other color swatch alongside."
 msgstr ""
-"အခု သင်ရွေးချယ်နေတဲ့ အရောင်နဲ့ နှိုင်းယှဉ်တဲ့ အနေနဲ့၊ အရင်-ရွေးချယ်တဲ့ အရောင်။ ဒီအရောင်ကို "
-"အရောင်စပ် ဆေးခွက် ရေးသွင်းချက် တခုထဲ သင် ဒရွတ်ဆွဲနိုင်တယ်၊ (သို့) ဒီအရောင်ကို "
-"လက်ရှိအတိုင်း အခြား အရောင် နမူနာ တလျှောက် ဒရွတ်ဆွဲသွားရင်း ရွေးချယ်ပါ။"
+"အခု သင်ရွေးချယ်နေတဲ့ အရောင်နဲ့ နှိုင်းယှဉ်တဲ့ အနေနဲ့၊ အရင်-ရွေးချယ်တဲ့ အရောင်။ ဒီအရောင်ကို အရောင်စပ် ဆေးခွက် "
+"ရေးသွင်းချက် တခုထဲ သင် ဒရွတ်ဆွဲနိုင်တယ်၊ (သို့) ဒီအရောင်ကို လက်ရှိအတိုင်း အခြား အရောင် နမူနာ တလျှောက် "
+"ဒရွတ်ဆွဲသွားရင်း ရွေးချယ်ပါ။"
 
 #: gtk/gtkcolorsel.c:963
 msgid ""
 "The color you've chosen. You can drag this color to a palette entry to save "
 "it for use in the future."
 msgstr ""
-"အရောင်ကို သင်ရွေးထားပြီ။ ဒီအရောင်ကို အရောင်စပ်​ ဆေးခွက် ရေးသွင်းချက် တခုဆီ "
-"ဒရွတ်ဆွဲသွားပြီ နောက်မှာ သုံးဖို့ ၄င်းကို သိမ်းဆည်းပါ။"
+"အရောင်ကို သင်ရွေးထားပြီ။ ဒီအရောင်ကို အရောင်စပ်​ ဆေးခွက် ရေးသွင်းချက် တခုဆီ ဒရွတ်ဆွဲသွားပြီ နောက်မှာ သုံးဖို့ "
+"၄င်းကို သိမ်းဆည်းပါ။"
 
 #: gtk/gtkcolorsel.c:968
 msgid ""
@@ -1613,9 +705,8 @@ msgid ""
 "Click this palette entry to make it the current color. To change this entry, "
 "drag a color swatch here or right-click it and select \"Save color here.\""
 msgstr ""
-"ဒီအရောင်စပ် ဆေးခွက် ရေးသွင်းချက်ကို လက်ရှိ အရောင် သတ်မှတ်ဖို့ နှိုပ်ပါ။ "
-"ဒီရေးသွင်းချက်ကို ပြင်ဆင်ဖို့၊ ဒီမှာ အရောင်နမူနာတခုကို ဒရွတ်ဆွဲပါ (သို့) ၄င်းကို ညာဖက် "
-"နှိုပ်ပြီး \"အရောင်ကို ဒီမှာ သိမ်းဆည်းပါ။  ကို​ ရွေးပါ။"
+"ဒီအရောင်စပ် ဆေးခွက် ရေးသွင်းချက်ကို လက်ရှိ အရောင် သတ်မှတ်ဖို့ နှိုပ်ပါ။ ဒီရေးသွင်းချက်ကို ပြင်ဆင်ဖို့၊ ဒီမှာ "
+"အရောင်နမူနာတခုကို ဒရွတ်ဆွဲပါ (သို့) ၄င်းကို ညာဖက် နှိုပ်ပြီး \"အရောင်ကို ဒီမှာ သိမ်းဆည်းပါ။  ကို​ ရွေးပါ။"
 
 #: gtk/gtkcolorseldialog.c:170
 msgid "Color Selection"
@@ -1685,11 +776,11 @@ msgstr "ညာဖက် -"
 msgid "Paper Margins"
 msgstr "စာရွတ် ဘေးမျဉ်းများ"
 
-#: gtk/gtkentry.c:8612 gtk/gtktextview.c:8002
+#: gtk/gtkentry.c:8612 gtk/gtktextview.c:8012
 msgid "Input _Methods"
 msgstr "ရေးသွင်းချက် နည်းလမ်းများ"
 
-#: gtk/gtkentry.c:8626 gtk/gtktextview.c:8016
+#: gtk/gtkentry.c:8626 gtk/gtktextview.c:8026
 msgid "_Insert Unicode Control Character"
 msgstr "ယူနီကုဒ် အထိန်း အက္ခရာကို ထည့်သွင်းပါ"
 
@@ -1738,8 +829,8 @@ msgid ""
 "The folder could not be created, as a file with the same name already "
 "exists.  Try using a different name for the folder, or rename the file first."
 msgstr ""
-"အမည်တူ အခြား ဖိုင်တခု ရှိနေတဲ့ အတွက်၊ ဖိုင်တွဲကို မဖန်တီးနိုင်ဘူး။ ဖိုင်တွဲအတွက် အ​ခြား အမည်တခုကို "
-"သုံးစွဲကြည့်ပါ၊ (သို့) ဖိုင်ကို ပထမ ဦးဆုံး အမည်ပြောင်းပါ။"
+"အမည်တူ အခြား ဖိုင်တခု ရှိနေတဲ့ အတွက်၊ ဖိုင်တွဲကို မဖန်တီးနိုင်ဘူး။ ဖိုင်တွဲအတွက် အ​ခြား အမည်တခုကို သုံးစွဲကြည့်ပါ၊ (သို့) "
+"ဖိုင်ကို ပထမ ဦးဆုံး အမည်ပြောင်းပါ။"
 
 #: gtk/gtkfilechooserdefault.c:1022
 msgid "Invalid file name"
@@ -1937,8 +1028,7 @@ msgstr "ဖိုင်တခု အမည် \"%s\" ရှိနေပြီ။
 #, c-format
 msgid ""
 "The file already exists in \"%s\".  Replacing it will overwrite its contents."
-msgstr ""
-"ဖိုင် \"%s\" ထဲမှာ ရှိနေပြီ။ ၄င်းကို အစားထိုးရင် ၄င်းရဲ့ အကြောင်းအရာများကို ပယ်ဖျက်လိမ့်မယ်။"
+msgstr "ဖိုင် \"%s\" ထဲမှာ ရှိနေပြီ။ ၄င်းကို အစားထိုးရင် ၄င်းရဲ့ အကြောင်းအရာများကို ပယ်ဖျက်လိမ့်မယ်။"
 
 #: gtk/gtkfilechooserdefault.c:8170 gtk/gtkprintunixdialog.c:491
 msgid "_Replace"
@@ -1952,9 +1042,7 @@ msgstr "ရှာဖွေရေး လုပ်ငန်းစဉ်ကို �
 msgid ""
 "The program was not able to create a connection to the indexer daemon.  "
 "Please make sure it is running."
-msgstr ""
-"ဒီပရိုဂရမ်က အညွှန်း​ ဒေမွန်းဆီ ချိတ်ဆက်မှု တခု မဖန်တီးနိုင်ဘူး။ ၄င်းကို လည်ပတ်နေဖို့ "
-"သေချာစေပါ။"
+msgstr "ဒီပရိုဂရမ်က အညွှန်း​ ဒေမွန်းဆီ ချိတ်ဆက်မှု တခု မဖန်တီးနိုင်ဘူး။ ၄င်းကို လည်ပတ်နေဖို့ သေချာစေပါ။"
 
 #: gtk/gtkfilechooserdefault.c:8837
 msgid "Could not send the search request"
@@ -2132,12 +1220,12 @@ msgid "System (%s)"
 msgstr "နည်းစနစ် (%s)"
 
 #. Open Link
-#: gtk/gtklabel.c:6076
+#: gtk/gtklabel.c:6072
 msgid "_Open Link"
 msgstr "အချိတ်အဆက် ဖွင့်ပါ"
 
 #. Copy Link Address
-#: gtk/gtklabel.c:6088
+#: gtk/gtklabel.c:6084
 msgid "Copy _Link Address"
 msgstr "အချိတ်အဆက် လိပ်စာကို ကူးယူပါ"
 
@@ -2150,27 +1238,27 @@ msgid "Invalid URI"
 msgstr "မမှန်တဲ့ ကွန်ရက်တည်နေရာ"
 
 #. Description of --gtk-module=MODULES in --help output
-#: gtk/gtkmain.c:447
+#: gtk/gtkmain.c:432
 msgid "Load additional GTK+ modules"
 msgstr "အပို GTK+ အစိတ်အပိုင်းများကို ဖွင့်ပါ"
 
 #. Placeholder in --gtk-module=MODULES in --help output
-#: gtk/gtkmain.c:448
+#: gtk/gtkmain.c:433
 msgid "MODULES"
 msgstr "အစိတ်အပိုင်းများ"
 
 #. Description of --g-fatal-warnings in --help output
-#: gtk/gtkmain.c:450
+#: gtk/gtkmain.c:435
 msgid "Make all warnings fatal"
 msgstr "သတိပေးချက် အားလုံးကို ​ဆိုးရွားစေပါ"
 
 #. Description of --gtk-debug=FLAGS in --help output
-#: gtk/gtkmain.c:453
+#: gtk/gtkmain.c:438
 msgid "GTK+ debugging flags to set"
 msgstr "GTK+ ပြဿနာရှင်းချက် အလံများကို ချမှတ်ရန်"
 
 #. Description of --gtk-no-debug=FLAGS in --help output
-#: gtk/gtkmain.c:456
+#: gtk/gtkmain.c:441
 msgid "GTK+ debugging flags to unset"
 msgstr "GTK+ ပြဿနာရှင်းချက် အလံများကို မချမှတ်ရန်"
 
@@ -2179,20 +1267,20 @@ msgstr "GTK+ ပြဿနာရှင်းချက် အလံများက
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
 #.
-#: gtk/gtkmain.c:708
+#: gtk/gtkmain.c:704
 msgid "default:LTR"
 msgstr "default:LTR"
 
-#: gtk/gtkmain.c:773
+#: gtk/gtkmain.c:769
 #, c-format
 msgid "Cannot open display: %s"
 msgstr "ဖေါ်ပြချက်ကို မဖွင့်နိုင်ဘူး - %s"
 
-#: gtk/gtkmain.c:810
+#: gtk/gtkmain.c:806
 msgid "GTK+ Options"
 msgstr "GTK+ ရွေးစရာများ"
 
-#: gtk/gtkmain.c:810
+#: gtk/gtkmain.c:806
 msgid "Show GTK+ Options"
 msgstr "GTK+ ရွေးစရာများကို ဖေါ်ပြပါ"
 
@@ -2278,7 +1366,7 @@ msgstr "Z Shell"
 msgid "Cannot end process with pid %d: %s"
 msgstr ""
 
-#: gtk/gtknotebook.c:4621 gtk/gtknotebook.c:7050
+#: gtk/gtknotebook.c:4631 gtk/gtknotebook.c:7060
 #, c-format
 msgid "Page %u"
 msgstr "စာမျက်နှာ %u"
@@ -2371,87 +1459,81 @@ msgstr "ဖိုင်တွဲထဲ သိမ်းဆည်းပါ -"
 msgid "%s job #%d"
 msgstr "%s အလုပ် #%d"
 
-#: gtk/gtkprintoperation.c:1687
+#: gtk/gtkprintoperation.c:1695
 msgctxt "print operation status"
 msgid "Initial state"
 msgstr "အလျင် အနေအထား"
 
-#: gtk/gtkprintoperation.c:1688
+#: gtk/gtkprintoperation.c:1696
 msgctxt "print operation status"
 msgid "Preparing to print"
 msgstr "ပုံနှိုပ်ဖို့ ပြင်ဆင်နေတယ်"
 
-#: gtk/gtkprintoperation.c:1689
+#: gtk/gtkprintoperation.c:1697
 msgctxt "print operation status"
 msgid "Generating data"
 msgstr "အချက်အလက်ကြမ်းကို ထုတ်လုပ်နေတယ်"
 
-#: gtk/gtkprintoperation.c:1690
+#: gtk/gtkprintoperation.c:1698
 msgctxt "print operation status"
 msgid "Sending data"
 msgstr "အချက်အလက်ကြမ်းကို ပေးပို့နေတယ်"
 
-#: gtk/gtkprintoperation.c:1691
+#: gtk/gtkprintoperation.c:1699
 msgctxt "print operation status"
 msgid "Waiting"
 msgstr "စောင့်ဆိုင်းနေတယ်"
 
-#: gtk/gtkprintoperation.c:1692
+#: gtk/gtkprintoperation.c:1700
 msgctxt "print operation status"
 msgid "Blocking on issue"
 msgstr "အမှုကိစ္စမှာ ပိတ်ဆို့နေတယ်"
 
-#: gtk/gtkprintoperation.c:1693
+#: gtk/gtkprintoperation.c:1701
 msgctxt "print operation status"
 msgid "Printing"
 msgstr "ပုံနှိုပ်နေတယ်"
 
-#: gtk/gtkprintoperation.c:1694
+#: gtk/gtkprintoperation.c:1702
 msgctxt "print operation status"
 msgid "Finished"
 msgstr "ပြီးသွားပြီ"
 
-#: gtk/gtkprintoperation.c:1695
+#: gtk/gtkprintoperation.c:1703
 msgctxt "print operation status"
 msgid "Finished with error"
 msgstr "ချို့ယွင်းမှုနဲ့ ပြီးစီးသွားတယ်"
 
-#: gtk/gtkprintoperation.c:2254
+#: gtk/gtkprintoperation.c:2270
 #, c-format
 msgid "Preparing %d"
 msgstr "ပြင်ဆင်နေတယ် %d"
 
-#: gtk/gtkprintoperation.c:2256 gtk/gtkprintoperation.c:2875
+#: gtk/gtkprintoperation.c:2272 gtk/gtkprintoperation.c:2902
 #, c-format
 msgid "Preparing"
 msgstr "ပြင်ဆင်နေတယ်"
 
-#: gtk/gtkprintoperation.c:2259
+#: gtk/gtkprintoperation.c:2275
 #, c-format
 msgid "Printing %d"
 msgstr "ပုံနှိုပ်နေတယ် %d"
 
-#: gtk/gtkprintoperation.c:2905
+#: gtk/gtkprintoperation.c:2932
 #, c-format
 msgid "Error creating print preview"
 msgstr "ချို့ယွင်းတဲ့ ပုံနှိုပ်ရန် အစမ်းမြင်ကွင်း ဖန်တီးခြင်း"
 
-#: gtk/gtkprintoperation.c:2908
+#: gtk/gtkprintoperation.c:2935
 #, c-format
 msgid "The most probable reason is that a temporary file could not be created."
 msgstr "အဖြစ်နိုင်ချေဆုံး အကြောင်းရင်းမှာ ယာယီဖိုင်တခုကို မဖန်တီးနိုင်ခြင်း ဖြစ်တယ်။"
 
-#: gtk/gtkprintoperation-unix.c:297 gtk/gtkprintoperation-unix.c:314
-#, c-format
+#: gtk/gtkprintoperation-unix.c:297
 msgid "Error launching preview"
 msgstr "ချို့ယွင်းတဲ့ အစမ်းမြင်ကွင်း ဖွင့်လှစ်ခြင်း"
 
-#: gtk/gtkprintoperation-unix.c:358
-#, c-format
-msgid "Error printing"
-msgstr "ချို့ယွင်းတဲ့ ပုံနှိုပ်ခြင်း"
-
-#: gtk/gtkprintoperation-unix.c:494 gtk/gtkprintoperation-win32.c:1447
+#: gtk/gtkprintoperation-unix.c:470 gtk/gtkprintoperation-win32.c:1447
 msgid "Application"
 msgstr "လုပ်ငန်းသုံး ကိရိယာ"
 
@@ -2465,7 +1547,7 @@ msgstr "စာရွက် ကုန်သွားပြီ"
 
 #. Translators: this is a printer status.
 #: gtk/gtkprintoperation-win32.c:616
-#: modules/printbackends/cups/gtkprintbackendcups.c:1999
+#: modules/printbackends/cups/gtkprintbackendcups.c:1998
 msgid "Paused"
 msgstr "ခေတ္တရပ်နားတယ်"
 
@@ -2592,42 +1674,42 @@ msgstr "အထွေထွေ"
 #. * multiple pages on a sheet when printing
 #.
 #: gtk/gtkprintunixdialog.c:3010
-#: modules/printbackends/cups/gtkprintbackendcups.c:3509
+#: modules/printbackends/cups/gtkprintbackendcups.c:3508
 msgid "Left to right, top to bottom"
 msgstr "ဘယ်မှ ညာ၊ ထိပ်မှ အောက်ခြေ"
 
 #: gtk/gtkprintunixdialog.c:3010
-#: modules/printbackends/cups/gtkprintbackendcups.c:3509
+#: modules/printbackends/cups/gtkprintbackendcups.c:3508
 msgid "Left to right, bottom to top"
 msgstr "ဘယ်မှ ညာ၊ အောက်ခြေမှ ထိပ်"
 
 #: gtk/gtkprintunixdialog.c:3011
-#: modules/printbackends/cups/gtkprintbackendcups.c:3510
+#: modules/printbackends/cups/gtkprintbackendcups.c:3509
 msgid "Right to left, top to bottom"
 msgstr "ညာမှ ဘယ်၊ ထိပ်မှ အောက်ခြေ"
 
 #: gtk/gtkprintunixdialog.c:3011
-#: modules/printbackends/cups/gtkprintbackendcups.c:3510
+#: modules/printbackends/cups/gtkprintbackendcups.c:3509
 msgid "Right to left, bottom to top"
 msgstr "ညာမှ ဘယ်၊ အောက်ခြေမှ ထိပ်"
 
 #: gtk/gtkprintunixdialog.c:3012
-#: modules/printbackends/cups/gtkprintbackendcups.c:3511
+#: modules/printbackends/cups/gtkprintbackendcups.c:3510
 msgid "Top to bottom, left to right"
 msgstr "ထိပ်မှ အောက်ခြေ၊ ဘယ်မှ ညာ"
 
 #: gtk/gtkprintunixdialog.c:3012
-#: modules/printbackends/cups/gtkprintbackendcups.c:3511
+#: modules/printbackends/cups/gtkprintbackendcups.c:3510
 msgid "Top to bottom, right to left"
 msgstr "ထိပ်မှ အောက်ခြေ၊ ညာမှ ဘယ်"
 
 #: gtk/gtkprintunixdialog.c:3013
-#: modules/printbackends/cups/gtkprintbackendcups.c:3512
+#: modules/printbackends/cups/gtkprintbackendcups.c:3511
 msgid "Bottom to top, left to right"
 msgstr "ောက်ခြေမှ ထိပ်၊ ဘယ်မှ ညာ"
 
 #: gtk/gtkprintunixdialog.c:3013
-#: modules/printbackends/cups/gtkprintbackendcups.c:3512
+#: modules/printbackends/cups/gtkprintbackendcups.c:3511
 msgid "Bottom to top, right to left"
 msgstr "ောက်ခြေမှ ထိပ်၊ ညာမှ ဘယ်"
 
@@ -2635,7 +1717,7 @@ msgstr "ောက်ခြေမှ ထိပ်၊ ညာမှ ဘယ်"
 #. * dialog that controls in what order multiple pages are arranged
 #.
 #: gtk/gtkprintunixdialog.c:3017 gtk/gtkprintunixdialog.c:3030
-#: modules/printbackends/cups/gtkprintbackendcups.c:3544
+#: modules/printbackends/cups/gtkprintbackendcups.c:3543
 msgid "Page Ordering"
 msgstr "စာမျက်နှာ အစဉ်လိုက်"
 
@@ -3526,8 +2608,7 @@ msgstr "\"%s\" ဟာ မှန်တဲ့ ​အရည်အသွေး အ�
 msgid ""
 "\"%s\" could not be converted to a value of type \"%s\" for attribute \"%s\""
 msgstr ""
-"\"%s\" ကို \"%s\" အ​ရည်အသွေး အတွက် \"%s\" အမျိုးအစား တန်ဖိုး တခု အဖြစ် "
-"အသွင်မပြောင်းနိုင်ဘူး"
+"\"%s\" ကို \"%s\" အ​ရည်အသွေး အတွက် \"%s\" အမျိုးအစား တန်ဖိုး တခု အဖြစ် အသွင်မပြောင်းနိုင်ဘူး"
 
 #: gtk/gtktextbufferserialize.c:1202
 #, fuzzy, c-format
@@ -3566,8 +2647,7 @@ msgstr "အခန်းဆက် အချက်အလက်ကြမ်းဟ�
 msgid ""
 "Serialized data is malformed. First section isn't GTKTEXTBUFFERCONTENTS-0001"
 msgstr ""
-"အခန်းဆက် အချက်အလက်ကြမ်းဟာ ပုံပျက်နေတယ်။ ပထမ အပိုင်းမှာ GTKTEXTBUFFERCONTENTS-"
-"0001 မရှိဘူး"
+"အခန်းဆက် အချက်အလက်ကြမ်းဟာ ပုံပျက်နေတယ်။ ပထမ အပိုင်းမှာ GTKTEXTBUFFERCONTENTS-0001 မရှိဘူး"
 
 #: gtk/gtktextutil.c:61
 msgid "LRM _Left-to-right mark"
@@ -4499,8 +3579,7 @@ msgstr "ROC 8k"
 #: gtk/updateiconcache.c:492 gtk/updateiconcache.c:552
 #, c-format
 msgid "different idatas found for symlinked '%s' and '%s'\n"
-msgstr ""
-"ချိတ်ဆက်အမှတ် '%s' နဲ့ '%s' အတွက် ကွဲပြားတဲ့ အိုင်အချက်အလက်ကြမ်များကို တွေ့ရှိတယ်\n"
+msgstr "ချိတ်ဆက်အမှတ် '%s' နဲ့ '%s' အတွက် ကွဲပြားတဲ့ အိုင်အချက်အလက်ကြမ်များကို တွေ့ရှိတယ်\n"
 
 #: gtk/updateiconcache.c:1374
 #, c-format
@@ -4603,8 +3682,7 @@ msgid ""
 "If you really want to create an icon cache here, use --ignore-theme-index.\n"
 msgstr ""
 "'%s' ထဲမှာ အခင်းအကျင်း အညွှန်းဖိုင် မရှိဘူး။\n"
-"ဒီမှာ ပုံသင်္ကေတ ယာယီသိမ်းဆည်းခန်းက တခုကို သင်တကယ် ဖန်တီးလိုရင်၊ --ignore-theme-index ကို "
-"သုံးစွဲပါ။\n"
+"ဒီမှာ ပုံသင်္ကေတ ယာယီသိမ်းဆည်းခန်းက တခုကို သင်တကယ် ဖန်တီးလိုရင်၊ --ignore-theme-index ကို သုံးစွဲပါ။\n"
 
 #. ID
 #: modules/input/imam-et.c:454
@@ -4802,121 +3880,116 @@ msgstr "ပုံနှိုပ်စက် '%s' ဟာ လောလောဆ�
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:1687
 #, c-format
-msgid "Printer '%s' may not be connected."
-msgstr "ပုံနှိုပ်စက် '%s' ကို ချိတ်ဆက်မထားနိုင်ဘူး။"
-
-#: modules/printbackends/cups/gtkprintbackendcups.c:1688
-#, c-format
 msgid "There is a problem on printer '%s'."
 msgstr "ပုံနှိုပ်စက် '%s' ပေါ်မှာ ပြဿနာ တရပ် ရှိနေတယ်။"
 
 #. Translators: this is a printer status.
-#: modules/printbackends/cups/gtkprintbackendcups.c:1996
+#: modules/printbackends/cups/gtkprintbackendcups.c:1995
 msgid "Paused ; Rejecting Jobs"
 msgstr "ခေတ္တရပ်နားထားတယ်၊ လုပ်ငန်းများကို ပယ်ချနေတယ်"
 
 #. Translators: this is a printer status.
-#: modules/printbackends/cups/gtkprintbackendcups.c:2002
+#: modules/printbackends/cups/gtkprintbackendcups.c:2001
 msgid "Rejecting Jobs"
 msgstr "လုပ်ငန်းများကို ငြင်းပယ်နေတယ်"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2778
+#: modules/printbackends/cups/gtkprintbackendcups.c:2777
 msgid "Two Sided"
 msgstr "အနား နှစ်ဖက်"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2779
+#: modules/printbackends/cups/gtkprintbackendcups.c:2778
 msgid "Paper Type"
 msgstr "စာရွတ် အမျိုးအစား"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2780
+#: modules/printbackends/cups/gtkprintbackendcups.c:2779
 msgid "Paper Source"
 msgstr "စာရွတ် အရင်းအမြစ်"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2781
+#: modules/printbackends/cups/gtkprintbackendcups.c:2780
 msgid "Output Tray"
 msgstr "ရလဒ် လင်ဗန်း"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2782
+#: modules/printbackends/cups/gtkprintbackendcups.c:2781
 msgid "Resolution"
 msgstr "ရှင်းလင်းပြတ်သားမှု"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2783
+#: modules/printbackends/cups/gtkprintbackendcups.c:2782
 msgid "GhostScript pre-filtering"
 msgstr "သရဲစခရစ် ကြို-စစ်ထုတ်ခြင်း"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2792
+#: modules/printbackends/cups/gtkprintbackendcups.c:2791
 msgid "One Sided"
 msgstr "အနားတဖက်"
 
 #. Translators: this is an option of "Two Sided"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2794
+#: modules/printbackends/cups/gtkprintbackendcups.c:2793
 msgid "Long Edge (Standard)"
 msgstr "ရှည်​လျားတဲ့ အစွန် (စံညွှန်း)"
 
 #. Translators: this is an option of "Two Sided"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2796
+#: modules/printbackends/cups/gtkprintbackendcups.c:2795
 msgid "Short Edge (Flip)"
 msgstr "တိုတောင်းတဲ့ အစွန် (အဖွင့်)"
 
 #. Translators: this is an option of "Paper Source"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2798
-#: modules/printbackends/cups/gtkprintbackendcups.c:2800
-#: modules/printbackends/cups/gtkprintbackendcups.c:2808
+#: modules/printbackends/cups/gtkprintbackendcups.c:2797
+#: modules/printbackends/cups/gtkprintbackendcups.c:2799
+#: modules/printbackends/cups/gtkprintbackendcups.c:2807
 msgid "Auto Select"
 msgstr "အလိုအလျှောက် ရွေးချယ်မှု"
 
 #. Translators: this is an option of "Paper Source"
 #. Translators: this is an option of "Resolution"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2802
-#: modules/printbackends/cups/gtkprintbackendcups.c:2804
-#: modules/printbackends/cups/gtkprintbackendcups.c:2806
-#: modules/printbackends/cups/gtkprintbackendcups.c:2810
-#: modules/printbackends/cups/gtkprintbackendcups.c:3296
+#: modules/printbackends/cups/gtkprintbackendcups.c:2801
+#: modules/printbackends/cups/gtkprintbackendcups.c:2803
+#: modules/printbackends/cups/gtkprintbackendcups.c:2805
+#: modules/printbackends/cups/gtkprintbackendcups.c:2809
+#: modules/printbackends/cups/gtkprintbackendcups.c:3295
 msgid "Printer Default"
 msgstr "ပုံနှိုပ်စက် စံထားချက်"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2812
+#: modules/printbackends/cups/gtkprintbackendcups.c:2811
 msgid "Embed GhostScript fonts only"
 msgstr "ထည့်မြှပ်ထားတဲ့ သရဲစခရစ် ဖောင့်များသာ"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2814
+#: modules/printbackends/cups/gtkprintbackendcups.c:2813
 msgid "Convert to PS level 1"
 msgstr "PS အဆင့် ၁ အဖြစ် အသွင်ပြောင်းပါ"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2816
+#: modules/printbackends/cups/gtkprintbackendcups.c:2815
 msgid "Convert to PS level 2"
 msgstr "PS အဆင့် ၂ အဖြစ် အသွင်ပြောင်းပါ"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2818
+#: modules/printbackends/cups/gtkprintbackendcups.c:2817
 msgid "No pre-filtering"
 msgstr "ကြို-စစ်ထုတ်ခြင်း မရှိ"
 
 #. Translators: "Miscellaneous" is the label for a button, that opens
 #. up an extra panel of settings in a print dialog.
-#: modules/printbackends/cups/gtkprintbackendcups.c:2827
+#: modules/printbackends/cups/gtkprintbackendcups.c:2826
 msgid "Miscellaneous"
 msgstr "သောင်းပြောင်းထွေလာ"
 
 #. Translators: These strings name the possible values of the
 #. * job priority option in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3504
+#: modules/printbackends/cups/gtkprintbackendcups.c:3503
 msgid "Urgent"
 msgstr "​အရေးပေါ်"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3504
+#: modules/printbackends/cups/gtkprintbackendcups.c:3503
 msgid "High"
 msgstr "အမြင့်​"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3504
+#: modules/printbackends/cups/gtkprintbackendcups.c:3503
 msgid "Medium"
 msgstr "အလယ်အလတ်"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3504
+#: modules/printbackends/cups/gtkprintbackendcups.c:3503
 msgid "Low"
 msgstr "အနိမ့်"
 
@@ -4924,66 +3997,66 @@ msgstr "အနိမ့်"
 #. Translators, this string is used to label the pages-per-sheet option
 #. * in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3528
+#: modules/printbackends/cups/gtkprintbackendcups.c:3527
 msgid "Pages per Sheet"
 msgstr "အချပ်အလိုက် စာမျက်နှာများ"
 
 #. Translators, this string is used to label the job priority option
 #. * in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3565
+#: modules/printbackends/cups/gtkprintbackendcups.c:3564
 msgid "Job Priority"
 msgstr "အလုပ် ဦး​စားပေးချက်"
 
 #. Translators, this string is used to label the billing info entry
 #. * in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3576
+#: modules/printbackends/cups/gtkprintbackendcups.c:3575
 msgid "Billing Info"
 msgstr "ငွေတောင်းလွှာ အချက်အလက်"
 
 #. Translators, these strings are names for various 'standard' cover
 #. * pages that the printing system may support.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3591
+#: modules/printbackends/cups/gtkprintbackendcups.c:3590
 msgid "None"
 msgstr "ဘာမျှမရှိ"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3591
+#: modules/printbackends/cups/gtkprintbackendcups.c:3590
 msgid "Classified"
 msgstr "မျိုးတူခွဲထားချက်"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3591
+#: modules/printbackends/cups/gtkprintbackendcups.c:3590
 msgid "Confidential"
 msgstr "အတွင်းရေးကိစ္စ"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3591
+#: modules/printbackends/cups/gtkprintbackendcups.c:3590
 msgid "Secret"
 msgstr "လျှို့ဝှက်ချက်"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3591
+#: modules/printbackends/cups/gtkprintbackendcups.c:3590
 msgid "Standard"
 msgstr "စံညွှန်း"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3591
+#: modules/printbackends/cups/gtkprintbackendcups.c:3590
 msgid "Top Secret"
 msgstr "ထိပ်တန်း လျှို့ဝှက်ချက်"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3591
+#: modules/printbackends/cups/gtkprintbackendcups.c:3590
 msgid "Unclassified"
 msgstr "မျိုးတူခွဲမထားသော"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the front cover page.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3626
+#: modules/printbackends/cups/gtkprintbackendcups.c:3625
 msgid "Before"
 msgstr "အလျင်"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the back cover page.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3641
+#: modules/printbackends/cups/gtkprintbackendcups.c:3640
 msgid "After"
 msgstr "ပြီးနောက်"
 
@@ -4991,14 +4064,14 @@ msgstr "ပြီးနောက်"
 #. * a print job is printed. Possible values are 'now', a specified time,
 #. * or 'on hold'
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3661
+#: modules/printbackends/cups/gtkprintbackendcups.c:3660
 msgid "Print at"
 msgstr "ပုံနှိုပ်တဲ့ နေရာ"
 
 #. Translators: this is the name of the option that allows the user
 #. * to specify a time when a print job will be printed.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3672
+#: modules/printbackends/cups/gtkprintbackendcups.c:3671
 msgid "Print at time"
 msgstr "အချိန်နဲ့ ပုံနှိုပ်တယ်"
 
@@ -5006,7 +4079,7 @@ msgstr "အချိန်နဲ့ ပုံနှိုပ်တယ်"
 #. * size. The two placeholders are replaced with the width and height
 #. * in points. E.g: "Custom 230.4x142.9"
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3707
+#: modules/printbackends/cups/gtkprintbackendcups.c:3706
 #, c-format
 msgid "Custom %sx%s"
 msgstr "စိတ်ကြိုက် ဖန်တီးချက် %sx%s"
@@ -5102,6 +4175,648 @@ msgstr "ပုံနှိုပ်စက်ကို စမ်းဖို့ �
 msgid "Could not get information for file '%s': %s"
 msgstr "'%s': %s ဖိုင်အတွက် အချက်အလက် မရနိုင်ဘူး"
 
+#: tests/testfilechooser.c:222
+#, c-format
+msgid "Failed to open file '%s': %s"
+msgstr "ဖွင့်ဖို့ မအောင်မြင်တဲ့ ဖိုင် '%s': %s"
+
+#: tests/testfilechooser.c:267
+#, c-format
+msgid ""
+"Failed to load image '%s': reason not known, probably a corrupt image file"
+msgstr "ရုပ်ပုံ %s': ဖွင့်လို့ မရတဲ့ အကြောင်းရင်းကို မသိရဘူး၊ ပျက်စီးတဲ့ ဖိုင်တခု ဖြစ်နိုင်တယ်"
+
+#~ msgid "Image file '%s' contains no data"
+#~ msgstr "ရုပ်ပုံဖိုင် '%s' မှာ အချက်အလက်ကြမ်း မရှိဘူး"
+
+#~ msgid ""
+#~ "Failed to load animation '%s': reason not known, probably a corrupt "
+#~ "animation file"
+#~ msgstr ""
+#~ "သက်၀င်လှုပ်ရှားတဲ့ '%s': ဖွင့်လို့ မရတဲ့ အကြောင်းရင်းကို မသိရဘူး၊ ပျက်စီးတဲ့ သက်၀င်လှုပ်ရှားမှု ဖိုင်တခု ဖြစ်နိုင်တယ်"
+
+#~ msgid "Unable to load image-loading module: %s: %s"
+#~ msgstr "ရုပ်ပုံ-ဖွင့်တဲ့ အစိတ်အပိုင်းကို မဖွင့်နိုင်ဘူး - %s: %s"
+
+#~ msgid ""
+#~ "Image-loading module %s does not export the proper interface; perhaps "
+#~ "it's from a different GTK version?"
+#~ msgstr ""
+#~ "ရုပ်ပုံ-ဖွင့်ပေးတဲ့ အစိတ်အပိုင်း %s က သင့်တော်တဲ့ ကြားခံမြင်ကွင်းကို မတင်ပို့​ဘူး၊ ခြားနားတဲ့ GTK မူအဆင့်​ "
+#~ "တခုကြောင့် ဖြစ်နိုင်တယ်။"
+
+#~ msgid "Image type '%s' is not supported"
+#~ msgstr "ရုပ်ပုံ အမျိုးအစား '%s' ကို လက်မခံဘူး"
+
+#~ msgid "Couldn't recognize the image file format for file '%s'"
+#~ msgstr "'%s' ဖိုင်ရဲ့ ရုပ်ပုံဖိုင် အမျိုးအစားကို နားမလည်ဘူး"
+
+#~ msgid "Unrecognized image file format"
+#~ msgstr "နားမလည်ဘူးတဲ့ ရုပ်ပုံဖိုင် အမျိုးအစား"
+
+#~ msgid "Failed to load image '%s': %s"
+#~ msgstr "ဖွင့်ဖို့ မအောင်မြင်တဲ့ ရုပ်ပုံ '%s': %s"
+
+#~ msgid "Error writing to image file: %s"
+#~ msgstr "ရေးသားချက် ချို့ယွင်းတဲ့ ရုပ်ပုံဖိုင် - %s"
+
+#~ msgid ""
+#~ "This build of gdk-pixbuf does not support saving the image format: %s"
+#~ msgstr "gdk-pixbuf တည်ဆောက်မှုက လက်မခံတဲ့ ရုပ်ပုံ အမျိုးအစား သိမ်းဆည်းမှု - %s"
+
+#~ msgid "Insufficient memory to save image to callback"
+#~ msgstr "တန်ပြန်ခေါ်ဆိုရန် ရုပ်ပုံကို သိမ်းဆည်းဖို့ မှတ်ဉာဏ် မလုံလောက်ဘူး"
+
+#~ msgid "Failed to open temporary file"
+#~ msgstr "ယာယီဖိုင်ကို ဖွင့်ဖို့ မအောင်မြင်ဘူး"
+
+#~ msgid "Failed to read from temporary file"
+#~ msgstr "ယာယီဖိုင်ထဲကို ဖတ်ဖို့ မအောင်မြင်ဘူး"
+
+#~ msgid "Failed to open '%s' for writing: %s"
+#~ msgstr "'%s' ကို ဖွင့်ပြီး ရေးသားဖို့ မအောင်မြင်တဲ့ အရာ - %s"
+
+#~ msgid ""
+#~ "Failed to close '%s' while writing image, all data may not have been "
+#~ "saved: %s"
+#~ msgstr ""
+#~ "ရုပ်ပုံကို ရေးကူးစဉ် '%s' ကို ပိတ်ဖို့ မအောင်မြင်ဘူး၊ အချက်အလက်ကြမ်း အားလုံးကို မသိမ်းဆည်းတာ ဖြစ်နိုင်တယ် "
+#~ "- %s"
+
+#~ msgid "Insufficient memory to save image into a buffer"
+#~ msgstr "ရုပ်ပုံကို ကြားခံတခုအတွင်း သိမ်းဆည်းဖို့ မှတ်ဉာဏ် မလုံလောက်ဘူး"
+
+#~ msgid "Error writing to image stream"
+#~ msgstr "ရုပ်ပုံ စီးကြောင်းမှာ ရေးသားချက် ချို့ယွင်းမှု"
+
+#~ msgid ""
+#~ "Internal error: Image loader module '%s' failed to complete an operation, "
+#~ "but didn't give a reason for the failure"
+#~ msgstr ""
+#~ "အတွင်းပိုင်း ချို့ယွင်းမှု၊ ရုပ်ပုံဖွင့်ကိရိယာ အစိတ်အပိုင်း '%s' က လုပ်ငန်းတခု ပြီးစီးဖို့ မအောင်မြင်ဘူး၊ ဒါပေမဲ့ "
+#~ "မှားယွင်းမှုအတွက် အကြောင်းပြချက် တခု မပေးဘူး။"
+
+#~ msgid "Incremental loading of image type '%s' is not supported"
+#~ msgstr "ရုပ်ပုံ အမျိုးအစား '%s' ဖွင့်လာတဲ့ နှစ်တိုးကို လက်မခံဘူး"
+
+#~ msgid "Image header corrupt"
+#~ msgstr "ရုပ်ပုံ ခေါင်းစီး ပျက်နေတယ်။"
+
+#~ msgid "Image format unknown"
+#~ msgstr "အမည်မသိ ရုပ်ပုံ အမျိုးအစား"
+
+#~ msgid "Image pixel data corrupt"
+#~ msgstr "ရုပ်ပုံ ပစ်ဆယ် အချက်အလက်ကြမ်း ပျက်သွားတယ်"
+
+#~ msgid "Unexpected icon chunk in animation"
+#~ msgstr "သက်၀င်လှုပ်ရှားနေတဲ့ မမျှော်လင့်တဲ့ ပုံသ​င်္ကေတ အတုံး"
+
+#~ msgid "Unsupported animation type"
+#~ msgstr "လက်ခံမထားတဲ့ သက်၀င်လှုပ်ရှားမှု အမျိုးအစား"
+
+#~ msgid "Invalid header in animation"
+#~ msgstr "သက်၀င်လှုပ်ရှားနေတဲ့ မမှန်တဲ့ ခေါင်းစီး"
+
+#~ msgid "Not enough memory to load animation"
+#~ msgstr "သက်၀င်လှုပ်ရှားမှုကို ဖွင့်ဖို့ မှတ်ဉာဏ် မလုံးလောက်ဘူး"
+
+#~ msgid "Malformed chunk in animation"
+#~ msgstr "သက်၀င်လှုပ်ရှားနေတဲ့ ပုံမှန်မဟုတ်တဲ့ အတုံး"
+
+#~ msgid "The ANI image format"
+#~ msgstr "ANI ရုပ်ပုံ အမျိုးအစား"
+
+#~ msgid "BMP image has bogus header data"
+#~ msgstr "BMP ရုပ်ပုံမှာ ခေါင်းစီး အချက်အလက်ကြမ်း အတု ရှိတယ်"
+
+#~ msgid "Not enough memory to load bitmap image"
+#~ msgstr "bitmap ရုပ်ပုံကို ဖွင့်ဖို့ မှတ်ဉာဏ် မလုံလောက်ဘူး"
+
+#~ msgid "BMP image has unsupported header size"
+#~ msgstr "BMP ရုပ်ပုံမှာ လက်ခံမထားတဲ့ ခေါင်းစီး အရွယ် ရှိတယ်"
+
+#~ msgid "Topdown BMP images cannot be compressed"
+#~ msgstr "အထက်အောက် BMP ရုပ်ပုံများကို မဖိသိပ်နိုင်ဘူး"
+
+#~ msgid "Premature end-of-file encountered"
+#~ msgstr "အချိန်မတန် ​ပျက်စီးမှု ဖြစ်နေတယ်"
+
+#~ msgid "Couldn't allocate memory for saving BMP file"
+#~ msgstr "BMP ဖိုင်ကို သိမ်းဆည်းဖို့ မှတ်ဉာဏ် ခွဲဝေလို့ မရနိုင်ဘူး"
+
+#~ msgid "Couldn't write to BMP file"
+#~ msgstr "BMP ဖိုင်ထဲ မရေးနိုင်ဘူး"
+
+#~ msgid "The BMP image format"
+#~ msgstr "BMP ရုပ်ပုံ အမျိုးအစား"
+
+#~ msgid "Failure reading GIF: %s"
+#~ msgstr "GIF ဖတ်ရှုခြင်း ချုံ့ယွင်းချက် - %s"
+
+#~ msgid "GIF file was missing some data (perhaps it was truncated somehow?)"
+#~ msgstr "GIF ဖိုင်မှာ အချို့ အချက်အလက်ကြမ်း ပျောက်နေခဲ့တယ် (၄င်းဟာ တနည်းနည်းနဲ့ တိဖြတ်တာ ဖြစ်နိုင်တယ်)"
+
+#~ msgid "Internal error in the GIF loader (%s)"
+#~ msgstr "အတွင်းပိုင်း ချို့ယွင်းတဲ့ GIF ဖွင့်ကိရိယာ (%s)"
+
+#~ msgid "Stack overflow"
+#~ msgstr "ဆင့်စီချက် လျှံသွားတယ်"
+
+#~ msgid "GIF image loader cannot understand this image."
+#~ msgstr "GIF ရုပ်ပုံ ဖွင့်ကိရိယာက ဒီရုပ်ပုံကို နားမလည်ဘူး။"
+
+#~ msgid "Bad code encountered"
+#~ msgstr "ကုဒ် အမှား ကြုံနေတယ်"
+
+#~ msgid "Circular table entry in GIF file"
+#~ msgstr "GIF ဖိုင်နဲ့ စက်ဝိုင်းပုံ ဇယား ရေးသွင်းချက်"
+
+#~ msgid "Not enough memory to load GIF file"
+#~ msgstr "GIF ဖိုင်ကို ဖွင့်ဖို့ မှတ်ဉာဏ် မလုံလောက်ဘူး"
+
+#~ msgid "Not enough memory to composite a frame in GIF file"
+#~ msgstr "ဘောင်တခုကို GIF ဖိုင်နဲ့ ပေါင်းစပ်ဖို့ မှတ်ဉာဏ် မလုံလောက်ဘူး"
+
+#~ msgid "GIF image is corrupt (incorrect LZW compression)"
+#~ msgstr "GIF ရုပ်ပုံ ပျက်နေတယ် (LZW ဖိသိပ်မှု မမှန်ဘူး)"
+
+#~ msgid "File does not appear to be a GIF file"
+#~ msgstr "GIF ဖိုင်တခု ဖြစ်ပုံ မပေါ်ဘူး"
+
+#~ msgid "Version %s of the GIF file format is not supported"
+#~ msgstr "GIF ဖိုင် အမျိုးအစားရဲ့ %s မူအဆင့်ကို မထောက်ပံ့ဘူး"
+
+#~ msgid ""
+#~ "GIF image has no global colormap, and a frame inside it has no local "
+#~ "colormap."
+#~ msgstr ""
+#~ "GIF ရုပ်ပုံမှာ အများဆိုင် အရောင်ဇယား တခု မရှိဘူး၊ နောက်ပြီး အဲဒီ အထဲက ဘောင်တခုမှာ အများဆိုင် "
+#~ "အရောင် ဇယား မရှိဘူး။"
+
+#~ msgid "GIF image was truncated or incomplete."
+#~ msgstr "GIF ရုပ်ပုံဟာ တိဖြတ်ထားတယ် (သို့) မပြည့်စုံဘူး။"
+
+#~ msgid "The GIF image format"
+#~ msgstr "GIF ရုပ်ပုံ အမျိုးအစား"
+
+#~ msgid "Invalid header in icon"
+#~ msgstr "ပုံသင်္ကေတထဲမှ မမှန်တဲ့ ခေါင်းစီး"
+
+#~ msgid "Not enough memory to load icon"
+#~ msgstr "ပုံသင်္ကေတ ဖွင့်ဖို့ လုံလောက်တဲ့ မှတ်ဉာဏ် မရှိဘူး"
+
+#~ msgid "Icon has zero width"
+#~ msgstr "ပုံသင်္ကေတမှာ သုည အကျယ် ရှိတယ်"
+
+#~ msgid "Icon has zero height"
+#~ msgstr "ုံသင်္ကေတမှာ သုည အမြင့် ရှိတယ်"
+
+#~ msgid "Compressed icons are not supported"
+#~ msgstr "ဖိသိပ်ထားတဲ့ ပုံသင်္ကေတများကို ထောက်ပံ့မထားဘူး"
+
+#~ msgid "Unsupported icon type"
+#~ msgstr "ထောက်ပံ့မထားတဲ့ ပုံသင်္ကေတ အမျိုးအစား"
+
+#~ msgid "Not enough memory to load ICO file"
+#~ msgstr "ICO ဖိုင်ကို ဖွင့်ဖို့ မှတ်ဉာဏ် မလုံလောက်ဘူး"
+
+#~ msgid "Image too large to be saved as ICO"
+#~ msgstr "ICO လို သိမ်းဆည်းထားဖို့ ရုပ်ပုံ အရမ်းကြီးတယ်"
+
+#~ msgid "Cursor hotspot outside image"
+#~ msgstr "ရုပ်ပုံပြင်ပမှ Cursor အချက်အချာနေရာ"
+
+#~ msgid "Unsupported depth for ICO file: %d"
+#~ msgstr "ICO ဖိုင်အတွက် မထောက်ပံ့တဲ့ ICO ဖိုင် - %d"
+
+#~ msgid "The ICO image format"
+#~ msgstr "ICO ရုပ်ပုံ အမျိးအစား"
+
+#~ msgid "Error reading ICNS image: %s"
+#~ msgstr "ချို့ယွင်းတဲ့ ICNS ရုပ်ပုံ ဖတ်ရူခြင်း - %s"
+
+#~ msgid "Could not decode ICNS file"
+#~ msgstr "ICNS ဖိုင်ကို စာဝှက်ဖေါ်လို့ မဖေါ်နိုင်ဘူး"
+
+#~ msgid "The ICNS image format"
+#~ msgstr "ICNS ရုပ်ပုံ အမျိုးအစား"
+
+#~ msgid "Couldn't allocate memory for stream"
+#~ msgstr "စီးကြောင်းအတွက် မှတ်ဉာဏ်ကို ခွဲဝေမပေးနိုင်ဘူး"
+
+#~ msgid "Couldn't decode image"
+#~ msgstr "ရုပ်ပုံကို စာဝှက် မဖေါ်နိုင်ဘူး"
+
+#~ msgid "Transformed JPEG2000 has zero width or height"
+#~ msgstr "အသွင်ပြောင်းထားတဲ့ JPEG2000 မှာ သုည အကျယ် (သို့) အမြင့် ရှိတယ်"
+
+#~ msgid "Image type currently not supported"
+#~ msgstr "လတ်တလော ထောက်ပံ့မထားတဲ့ ရုပ်ပုံ အမျိုးအစား"
+
+#~ msgid "Couldn't allocate memory for color profile"
+#~ msgstr "အရောင် မှတ်တမ်းအတွက် မှတ်ဉာဏ် မခွဲဝေနိုင်ဘူး"
+
+#~ msgid "Insufficient memory to open JPEG 2000 file"
+#~ msgstr "JPEG ၂၀၀၀ ဖိုင်ကို ဖွင့်ဖို့ မှတ်ဉာဏ် မလုံလောက်ဘူး"
+
+#~ msgid "Couldn't allocate memory to buffer image data"
+#~ msgstr "ကြားခံ ရုပ်ပုံ အချက်အလက်ကြမ်းအတွက် မှတ်ဉာဏ်ကို မခွဲဝေနိုင်ဘူး"
+
+#~ msgid "The JPEG 2000 image format"
+#~ msgstr "JPEG ၂၀၀၀ ရုပ်ပုံ အမျိုးအစား"
+
+#~ msgid "Error interpreting JPEG image file (%s)"
+#~ msgstr "ဘာသာပြန်မှု ချို့ယွင်းတဲ့ JPEG ရုပ်ပုံ ဖိုင် (%s)"
+
+#~ msgid ""
+#~ "Insufficient memory to load image, try exiting some applications to free "
+#~ "memory"
+#~ msgstr ""
+#~ "ရုပ်ပုံကို ဖွင့်ဖို့ မှတ်ဉာဏ် မလုံလောက်ဘူး၊ မှတ်ဉာဏ်ကို ရှင်းလင်းဖို့ ရှိနေတဲ့ အချို့ လုပ်ငန်းသုံး ကိရိယာများကို "
+#~ "စမ်းကြည့်ပါ"
+
+#~ msgid "Unsupported JPEG color space (%s)"
+#~ msgstr "ထောက်ပံ့မထားတဲ့ JPEG အရောင် နေရာလပ် (%s)"
+
+#~ msgid "Couldn't allocate memory for loading JPEG file"
+#~ msgstr "JPEG ဖိုင်ကို ဖွင့်ဖို့ မှတ်ဉာဏ် မခွဲဝေနိုင်ဘူး"
+
+#~ msgid "Transformed JPEG has zero width or height."
+#~ msgstr "အသွင်ပြောင်းထားတဲ့ JPEG မှာ သုည အကျယ်နဲ့ အမြင့် ရှိတယ်။"
+
+#~ msgid ""
+#~ "JPEG quality must be a value between 0 and 100; value '%s' could not be "
+#~ "parsed."
+#~ msgstr ""
+#~ "JPEG ရဲ့ အရည်အသွေးဟာ တန်ဖိုး ၁ နဲ့ ၁၀၀ အကြားမှ တခု ဖြစ်ရမယ်၊ '%s' တန်ဖိုးကို မခွဲခြမ်းနိုင်ဘူး။"
+
+#~ msgid ""
+#~ "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
+#~ msgstr "JPEG ရဲ့ အရည်အသွေးဟာ တန်ဖိုး ၁ နဲ့ ၁၀၀ အကြားမှ တခု ဖြစ်ရမယ်၊ '%d' တန်ဖိုးကို ခွင့်မပြုဘူး။"
+
+#~ msgid "The JPEG image format"
+#~ msgstr "JPEG ရုပ်ပုံ အမျိုးအစား"
+
+#~ msgid "Couldn't allocate memory for header"
+#~ msgstr "ခေါင်းစီးအတွက် မှတ်ဉာဏ် မခွဲဝေနိုင်ဘူး"
+
+#~ msgid "Couldn't allocate memory for context buffer"
+#~ msgstr "စကားစပ် ကြားခံ အတွက် မှတ်ဉာဏ် မခွဲဝေနိုင်ဘူး"
+
+#~ msgid "Image has invalid width and/or height"
+#~ msgstr "ရုပ်ပုံမှာ မမှန်တဲ့ အကျယ်နဲ့/(သို့)အမြင့်"
+
+#~ msgid "Image has unsupported bpp"
+#~ msgstr "ရုပ်ပုံမှာ ထောက်ပံ့မထားတဲ့ bpp ရှိတယ်"
+
+#~ msgid "Image has unsupported number of %d-bit planes"
+#~ msgstr "ရုပ်ပုံမှာ ထောက်ပံ့မထားတဲ့ %d-bit ပြင်ညီများ အရေအတွက် ရှိတယ်"
+
+#~ msgid "Couldn't create new pixbuf"
+#~ msgstr "pixbuf အသစ်ကို မဖန်တီးနိုင်ဘူး"
+
+#~ msgid "Couldn't allocate memory for line data"
+#~ msgstr "လိုင်း အချက်အလက်ကြမ်း အတွက် မှတ်ဉာဏ် မခွဲဝေနိုင်ဘူး"
+
+#~ msgid "Couldn't allocate memory for paletted data"
+#~ msgstr "အရောင်စပ် ဆေးခွက် အချက်အလက်ကြမ်း အတွက် မှတ်ဉာဏ် မခွဲဝေနိုင်ဘူး"
+
+#~ msgid "Didn't get all lines of PCX image"
+#~ msgstr "PCX ရုပ်ပုံရဲ့ လိုင်းများ အားလုံးကို မယူရဘူး။"
+
+#~ msgid "No palette found at end of PCX data"
+#~ msgstr "PCX အချက်အလက်ကြမ်းရဲ့ အဆုံးမှာ အရောင်စပ် ဆေးခွက် မတွေ့ရဘူး"
+
+#~ msgid "The PCX image format"
+#~ msgstr "PCX ရုပ်ပုံ အမျိုးအစား"
+
+#~ msgid "Bits per channel of PNG image is invalid."
+#~ msgstr "PNG ရုပ်ပုံရဲ့ လိုင်းတခုစီမှ အတိုင်းအတာများဟာ မမှန်ဘူး။"
+
+#~ msgid "Transformed PNG has zero width or height."
+#~ msgstr "အသွင်ပြောင်းထားတဲ့ PNG မှာ သုည အကျယ် (သို့) အမြင့် ရှိတယ်။"
+
+#~ msgid "Bits per channel of transformed PNG is not 8."
+#~ msgstr "အသွင်ပြောင်းထားတဲ့ PNGရဲ့ လိုင်းတခုစီမှ အတိုင်းအတာများဟာ မမှန်ဘူး။"
+
+#~ msgid "Transformed PNG not RGB or RGBA."
+#~ msgstr "အသွင်ပြောင်းထားတဲ့ PNG မှာ RGB (သို့) RGBA မရှိဘူး။"
+
+#~ msgid "Transformed PNG has unsupported number of channels, must be 3 or 4."
+#~ msgstr "အသွင်ပြောင်းထားတဲ့ PNG မှာ ထောက်ပံ့မထားတဲ့ လိုင်းတွေ ရှိတယ်၊ ၃ (သို့) ၄ ဖြစ်ရမယ်။"
+
+#~ msgid "Fatal error in PNG image file: %s"
+#~ msgstr "ဆိုးရွားတဲ့ ချို့ယွင်းဖြစ်နေတဲ့ PNG ရုပ်ပုံ ဖိုင် - %s"
+
+#~ msgid "Insufficient memory to load PNG file"
+#~ msgstr "PNG ဖိုင်ကို ဖွင့်ဖို့ မှတ်ဉာဏ် မရှိဘူး"
+
+#~ msgid ""
+#~ "Insufficient memory to store a %ld by %ld image; try exiting some "
+#~ "applications to reduce memory usage"
+#~ msgstr ""
+#~ "%ld ရုပ်ပုံနဲ့ %ld တခု သိုထားဖို့ လုံလောက်တဲ့ မှတ်ဉာဏ် မရှိဘူး၊ မှတ်ဉာဏ် သုံးစွဲမှုကို လျှော့ချဖို့ ရှိနေတဲ့ အချို့ "
+#~ "လုပ်ငန်းသုံးကိရိယာများကို စမ်းကြည့်ပါ"
+
+#~ msgid "Fatal error reading PNG image file"
+#~ msgstr "ဆိုးရွားတဲ့ ဖတ်ရှုမှု ချို့ယွင်းဖြစ်နေတဲ့ PNG ရုပ်ပုံ ဖိုင်"
+
+#~ msgid "Fatal error reading PNG image file: %s"
+#~ msgstr "ဆိုးရွားတဲ့ ဖတ်ရှုမှု ချို့ယွင်းဖြစ်နေတဲ့ PNG ရုပ်ပုံ ဖိုင် - %s"
+
+#~ msgid ""
+#~ "Keys for PNG text chunks must have at least 1 and at most 79 characters."
+#~ msgstr ""
+#~ "PNG စာသား အတုံးများရဲ့ သော့ချက်များမှာ အနည်းဆုံး အက္ခရာများ ၁ နဲ့ ၁၀၀ အကြား ရှိရမယ်။"
+
+#~ msgid "Keys for PNG text chunks must be ASCII characters."
+#~ msgstr "PNG စာသား အတုံးများဟာ ASCII အက္ခရာများ ဖြစ်ရမယ်။"
+
+#~ msgid ""
+#~ "PNG compression level must be a value between 0 and 9; value '%s' could "
+#~ "not be parsed."
+#~ msgstr ""
+#~ "PNG ဖိသိပ်မှု အဆင့်ဟာ တန်ဖိုး ၀ နဲ့ ၉ တန်ဖိုးကြားမှ တခု ဖြစ်ရမယ်၊ '%s' တန်ဖိုးကို ခွဲခြမ်းလို့ မရနိုင်ဘူး။"
+
+#~ msgid ""
+#~ "PNG compression level must be a value between 0 and 9; value '%d' is not "
+#~ "allowed."
+#~ msgstr "PNG ဖိသိပ်မှု အဆင့်ဟာ တန်ဖိုး ၀ နဲ့ ၉ တန်ဖိုးကြားမှ တခု ဖြစ်ရမယ်၊ '%d' တန်ဖိုးကို ခွင့်မပြုဘူး။"
+
+#~ msgid ""
+#~ "Value for PNG text chunk %s cannot be converted to ISO-8859-1 encoding."
+#~ msgstr ""
+#~ "PNG စာသား အတုံး %s တန်ဖိုးကို ISO-8859-1 စာဝှက်ရေးသားခြင်း အဖြစ် အသွင်ပြောင်းလို့ မရနိုင်ဘူး။"
+
+#~ msgid "The PNG image format"
+#~ msgstr "PNG ရုပ်ပုံ အမျိုးအစား"
+
+#~ msgid "PNM loader expected to find an integer, but didn't"
+#~ msgstr "PNM ပွင့်ကိရိယာက ကိန်းပြည့်တခုကို တွေ့ဖို့ မျှော်လင့်ထားတယ်၊ ဒါပေမဲ့ မတွေ့ခဲ့ဘူး။"
+
+#~ msgid "PNM file has an incorrect initial byte"
+#~ msgstr "PNM မှာ မမှန်တဲ့ ဘိုက်အစပိုင်း တခု ရှိတယ်"
+
+#~ msgid "PNM file is not in a recognized PNM subformat"
+#~ msgstr "PNM ဖိုင်ဟာ အသိအမှတ်ပြုထားတဲ့ PNM ပုံစံခွဲတခုထဲမှာ မရှိဘူး"
+
+#~ msgid "PNM file has an image width of 0"
+#~ msgstr "PNM ဖိုင်မှာ 0 ရဲ့ ရုပ်ပုံ အကျယ် တခု ရှိတယ်"
+
+#~ msgid "PNM file has an image height of 0"
+#~ msgstr "PNM ဖိုင်မှာ 0 ရဲ့ ရုပ်ပုံ အမြင့် တခု ရှိတယ်"
+
+#~ msgid "Maximum color value in PNM file is 0"
+#~ msgstr "PNM ဖိုင်ထဲက အများဆုံး အရောင် တန်ဖိုးဟာ 0 ဖြစ်တယ်"
+
+#~ msgid "Maximum color value in PNM file is too large"
+#~ msgstr "PNM ဖိုင်ထဲက အများဆုံး အရောင်တန်ဖိုးဟာ အလွန်ကြီးတယ်"
+
+#~ msgid "Raw PNM image type is invalid"
+#~ msgstr "PNM အကြမ်း ရုပ်ပုံ အမျိုးအစားဟာ မမှန်ဘူး"
+
+#~ msgid "PNM image loader does not support this PNM subformat"
+#~ msgstr "PNM ရုပ်ပုံဖွင့်ကိရိယာက ဒီ PNM ပုံစံခွဲကို ထောက်ပံ့မထားဘူး"
+
+#~ msgid "Raw PNM formats require exactly one whitespace before sample data"
+#~ msgstr ""
+#~ "PNM အကြမ်း အမျိုးအစားများက နမူနာ အချက်အလက်ကြမ်း မတိုင်ခင် အတိအကျ နေရာလပ် တခု လိုအပ်တယ်"
+
+#~ msgid "Cannot allocate memory for loading PNM image"
+#~ msgstr "PNM ရုပ်ပုံ ဖွင့်ဖို့ မှတ်ဉာဏ် မခွဲဝေနိုင်ဘူး"
+
+#~ msgid "Insufficient memory to load PNM context struct"
+#~ msgstr "PNM အကြောင်းအချက် တည်ဆောက်ပုံကို ဖွင့်ဖို့ လုံလောက်တဲ့ မှတ်ဉာဏ် မရှိဘူး"
+
+#~ msgid "Unexpected end of PNM image data"
+#~ msgstr "မမျှော်လင့်တဲ့ PNM ရုပ်ပုံ အချက်အလက်ကြမ်း အဆုံး"
+
+#~ msgid "Insufficient memory to load PNM file"
+#~ msgstr "PNM ဖိုင်ကို ဖွင့်ဖို့ လုံလေက်တဲ့ မှတ်ဉာဏ် မရှိဘူး"
+
+#~ msgid "The PNM/PBM/PGM/PPM image format family"
+#~ msgstr "PNM/PBM/PGM/PPM ရုပ်ပုံ အမျိုးအစား အုပ်စု"
+
+#, fuzzy
+#~ msgid "Failed to read QTIF header"
+#~ msgstr "ခေါင်းစီးကို ရေးဖို့ မအောင်မြင်ဘူး\n"
+
+#, fuzzy
+#~ msgid "File error when reading QTIF atom: %s"
+#~ msgstr "GIF ဖတ်ရှုခြင်း ချုံ့ယွင်းချက် - %s"
+
+#, fuzzy
+#~ msgid "Failed to allocate QTIF context structure."
+#~ msgstr "TGA အကြောင်းအချက် တည်ဆောက်မှု အတွက် မှတ်ဉာဏ်ကို မခွဲဝေနိုင်ဘူး"
+
+#, fuzzy
+#~ msgid "Failed to create GdkPixbufLoader object."
+#~ msgstr "ဖိုင်တွဲ အညွှန်းကို ရေးဖို့ မအောင်မြင်ဘူး\n"
+
+#, fuzzy
+#~ msgid "Failed to find an image data atom."
+#~ msgstr "TIFF ဖိုင်ကို ဖွင့်ဖို့ မအောင်မြင်ဘူး"
+
+#, fuzzy
+#~ msgid "The QTIF image format"
+#~ msgstr "TIFF ရုပ်ပုံ အမျိုးအစား"
+
+#~ msgid "RAS image has bogus header data"
+#~ msgstr "RAS ရုပ်ပုံမှာ ခေါင်းစီး အ​ချက်အလက်ကြမ်း အတု ရှိတယ်"
+
+#~ msgid "RAS image has unknown type"
+#~ msgstr "RAS ရုပ်ပုံမှာ အမည်မသိတဲ့ အမျိုးအစား ရှိတယ်"
+
+#~ msgid "unsupported RAS image variation"
+#~ msgstr "ထောက်ပံ့ထားတဲ့ RAS ရုပ်ပုံ ကွာခြားမှု"
+
+#~ msgid "Not enough memory to load RAS image"
+#~ msgstr "RAS ရုပ်ပုံကို ဖွင့်ဖို့ မှတ်ဉာဏ် မလုံလောက်ဘူး"
+
+#~ msgid "The Sun raster image format"
+#~ msgstr "Sun ရာစတာ ရုပ်ပုံ အမျိုးအစား"
+
+#~ msgid "Cannot allocate memory for IOBuffer struct"
+#~ msgstr "အ၀င်အထွက်ကြားခံ တည်ဆောက်ပုံအတွက် မှတ်ဉာဏ် မခွဲဝေနိုင်ဘူး"
+
+#~ msgid "Cannot allocate memory for IOBuffer data"
+#~ msgstr "အ၀င်အထွက်ကြားခံ အချက်အလက်ကြမ်း အတွက် မှတ်ဉာဏ် မခွဲဝေနိုင်ဘူး"
+
+#~ msgid "Cannot realloc IOBuffer data"
+#~ msgstr "အ၀င်အထွက်ကြားခံ အချက်အလက်ကြမ်းကို realloc မလုပ်နိုင်ဘူး"
+
+#~ msgid "Cannot allocate temporary IOBuffer data"
+#~ msgstr "အ၀င်အထွက်ကြားခံ အချက်အလက်ကြမ်းကို မခွဲဝေနိုင်ဘူး"
+
+#~ msgid "Cannot allocate new pixbuf"
+#~ msgstr "pixbuf အသစ်ကို မခွဲဝေနိုင်ဘူး"
+
+#, fuzzy
+#~ msgid "Image is corrupted or truncated"
+#~ msgstr "GIF ရုပ်ပုံဟာ တိဖြတ်ထားတယ် (သို့) မပြည့်စုံဘူး။"
+
+#~ msgid "Cannot allocate colormap structure"
+#~ msgstr "အရောင်ဇယား တည်ဆောက်ပုံကို မခွဲဝေနိုင်ဘူး"
+
+#~ msgid "Cannot allocate colormap entries"
+#~ msgstr "အရောင်ဇယား ရေးသွင်းချက်များကို မခွဲဝေနိုင်ဘူး"
+
+#~ msgid "Unexpected bitdepth for colormap entries"
+#~ msgstr "အရောင်ဇယား ရေးသွင်းချက်များ အတွက် မမျှော်လင့်တဲ့ bitdepth"
+
+#~ msgid "Cannot allocate TGA header memory"
+#~ msgstr "TGA ခေါင်းစီး မှတ်ဉာဏ်ကို မခွဲဝေနိုင်ဘူး"
+
+#~ msgid "TGA image has invalid dimensions"
+#~ msgstr "TGA ရုပ်ပုံမှာ မမှန်တဲ့ အတိုင်းအတာများ ရှိတယ်"
+
+#~ msgid "TGA image type not supported"
+#~ msgstr "TGA ရုပ်ပုံ အမျိုးအစားကို ထောက်ခံ မထားဘူး"
+
+#~ msgid "Cannot allocate memory for TGA context struct"
+#~ msgstr "TGA အကြောင်းအချက် တည်ဆောက်မှု အတွက် မှတ်ဉာဏ်ကို မခွဲဝေနိုင်ဘူး"
+
+#~ msgid "Excess data in file"
+#~ msgstr "ဖိုင်မှ ပိုသွားတဲ့ အချက်အလက်ကြမ်း"
+
+#~ msgid "The Targa image format"
+#~ msgstr "တာဂါ ရုပ်ပုံ အမျိုးအစား"
+
+#~ msgid "Could not get image width (bad TIFF file)"
+#~ msgstr "ရုပ်ပုံရဲ့ အကျယ်ကို မရနိုင်ဘူး (မကောင်းတဲ့ TIFF ဖိုင်)"
+
+#~ msgid "Could not get image height (bad TIFF file)"
+#~ msgstr "ရုပ်ပုံရဲ့ အမြင့်ကို မရနိုင်ဘူး (မကောင်းတဲ့ TIFF ဖိုင်)"
+
+#~ msgid "Width or height of TIFF image is zero"
+#~ msgstr "TIFF ရုပ်ပုံရဲ့ အကျယ်နဲ့ အမြင့် သုညဖြစ်တယ်"
+
+#~ msgid "Dimensions of TIFF image too large"
+#~ msgstr "TIFF ရုပ်ပုံရဲ့ အတိုင်းအတာ အရမ်း ကြီးတယ်"
+
+#~ msgid "Insufficient memory to open TIFF file"
+#~ msgstr "TIFF ဖိုင် ဖွင့်ဖို့ မှတ်ဉာဏ် မလုံလောက်ဘူး"
+
+#~ msgid "Failed to load RGB data from TIFF file"
+#~ msgstr "TIFF ဖိုင်မှ RGB အ​ချက်အလက်ကြမ်းကို ဖွင့်ဖို့ မအောင်မြင်ဘူး"
+
+#~ msgid "Failed to open TIFF image"
+#~ msgstr "TIFF ဖိုင်ကို ဖွင့်ဖို့ မအောင်မြင်ဘူး"
+
+#~ msgid "TIFFClose operation failed"
+#~ msgstr "TIFFအပိတ် လုပ်ဆောင်ချက် မအောင်မြင်ဘူး"
+
+#~ msgid "Failed to load TIFF image"
+#~ msgstr "TIFF ရုပ်ပုံ ဖွင့်ဖို့ မအောင်မြင်ဘူး"
+
+#~ msgid "Failed to save TIFF image"
+#~ msgstr "TIFF ရုပ်ပုံ သိမ်းဆည်းဖို့ မအောင်မြင်ဘူး"
+
+#~ msgid "Failed to write TIFF data"
+#~ msgstr "TIFF အချက်အလက်ကြမ်း ရေးဖို့ မအောင်မြင်ဘူး"
+
+#~ msgid "Couldn't write to TIFF file"
+#~ msgstr "TIFF ဖိုင် မရေးသားနိုင်ဘူး"
+
+#~ msgid "The TIFF image format"
+#~ msgstr "TIFF ရုပ်ပုံ အမျိုးအစား"
+
+#~ msgid "Image has zero width"
+#~ msgstr "ရုပ်ပုံမှာ သုည အကျယ် ရှိတယ်"
+
+#~ msgid "Image has zero height"
+#~ msgstr "ရုပ်ပုံမှာ သုည အမြင့် ရှိတယ်"
+
+#~ msgid "Not enough memory to load image"
+#~ msgstr "ရုပ်ပုံကို ဖွင့်ဖို့ မှတ်ဉာဏ် မလုံလောက်ဘူး"
+
+#~ msgid "Couldn't save the rest"
+#~ msgstr "ကျန်တာကို မသိမ်းဆည်းနိုင်ဘူး"
+
+#~ msgid "The WBMP image format"
+#~ msgstr "WBMP ရုပ်ပုံ အမျိုးအစား"
+
+#~ msgid "Invalid XBM file"
+#~ msgstr "မမှန်တဲ့ XBM ဖိုင်"
+
+#~ msgid "Insufficient memory to load XBM image file"
+#~ msgstr "XBM ရုပ်ပုံဖိုင်ကို ဖွင့်ဖို့ မှတ်ဉာဏ် မလုံလောက်ဘူး"
+
+#~ msgid "Failed to write to temporary file when loading XBM image"
+#~ msgstr "XBM ရုပ်ပုံကို ဖွင့်နေစဉ် ယာယီဖိုင်ထဲ ရေးသားဖို့ မအောင်မြင်ဘူး"
+
+#~ msgid "The XBM image format"
+#~ msgstr "XBM ရုပ်ပုံ အမျိုးအစား"
+
+#~ msgid "No XPM header found"
+#~ msgstr "XPM ခေါင်းစီး မတွေ့ရဘူး"
+
+#~ msgid "Invalid XPM header"
+#~ msgstr "မမှန်တဲ့ XPM ခေါင်းစီး"
+
+#~ msgid "XPM file has image width <= 0"
+#~ msgstr "XPM ဖိုင်ရဲ့ ရုပ်ပုံ အကျယ် <= 0 "
+
+#~ msgid "XPM file has image height <= 0"
+#~ msgstr "XPM ဖိုင်ရဲ့ ရုပ်ပုံ အမြင့် <= 0 "
+
+#~ msgid "XPM has invalid number of chars per pixel"
+#~ msgstr "XPM မှာ အက္ခရာများရဲ့ မမှတ်တဲ့ အစက် အရေအတွက် ရှိတယ်"
+
+#~ msgid "XPM file has invalid number of colors"
+#~ msgstr "XPM ဖိုင်မှာ မမှန်တဲ့ အရောင်များရဲ့ အရေအတွက် ရှိတယ်"
+
+#~ msgid "Cannot allocate memory for loading XPM image"
+#~ msgstr "XPM ရုပ်ပုံ ဖွင့်ဖို့ မှတ်ဉာဏ် မခွဲဝေနိုင်ဘူး"
+
+#~ msgid "Cannot read XPM colormap"
+#~ msgstr "XPM အရောင်ဇယားကို မဖတ်နိုင်ဘူး"
+
+#~ msgid "Failed to write to temporary file when loading XPM image"
+#~ msgstr "XPM ရုပ်ပုံကို ဖွင့်နေစဉ် ယာယီဖိုင်ထဲ ရေးသားဖို့ မအောင်မြင်ဘူး"
+
+#~ msgid "The XPM image format"
+#~ msgstr "XPM ရုပ်ပုံ အမျိုးအစား"
+
+#~ msgid "The EMF image format"
+#~ msgstr "EMF ရုပ်ပုံ အမျိုးအစား"
+
+#~ msgid "Could not allocate memory: %s"
+#~ msgstr "မှတ်ဉာဏ်ကို မခွဲဝေနိုင်ဘူး - %s"
+
+#~ msgid "Could not create stream: %s"
+#~ msgstr "စီးကြောင်းကို မဖန်တီးနိုင်ဘူး - %s"
+
+#~ msgid "Could not seek stream: %s"
+#~ msgstr "စီးကြောင်းကို မရှာဖွေနိုင်ဘူး - %s"
+
+#~ msgid "Could not read from stream: %s"
+#~ msgstr "စီးကြောင်းထဲမှာ မဖတ်နိုင်ဘူး - %s"
+
+#~ msgid "Couldn't load bitmap"
+#~ msgstr "ဘစ်မက်ကို မဖွင့်နိုင်ဘူး"
+
+#~ msgid "Couldn't load metafile"
+#~ msgstr "metaဖိုင်ကို မဖွင့်နိုင်ဘူး"
+
+#~ msgid "Unsupported image format for GDI+"
+#~ msgstr "GDI+ အတွက် ထောက်ပံ့မထားတဲ့ ရုပ်ပုံ အမျိုးအစား"
+
+#~ msgid "Couldn't save"
+#~ msgstr "မသိမ်းဆည်းနိုင်ဘူး"
+
+#~ msgid "The WMF image format"
+#~ msgstr "WMF ရုပ်ပုံ အမျိုးအစား"
+
+#~ msgid "\"Deepness\" of the color."
+#~ msgstr "အရောင်ရဲ့ \"နက်နဲမှု\"။"
+
+#~ msgid "Error printing"
+#~ msgstr "ချို့ယွင်းတဲ့ ပုံနှိုပ်ခြင်း"
+
+#~ msgid "Printer '%s' may not be connected."
+#~ msgstr "ပုံနှိုပ်စက် '%s' ကို ချိတ်ဆက်မထားနိုင်ဘူး။"
+
 #~ msgid "Folders"
 #~ msgstr "ဖိုင်တွဲများ"
 
@@ -5182,9 +4897,8 @@ msgstr "'%s': %s ဖိုင်အတွက် အချက်အလက် မ�
 #~ "The filename \"%s\" couldn't be converted to UTF-8. (try setting the "
 #~ "environment variable G_FILENAME_ENCODING): %s"
 #~ msgstr ""
-#~ "\"%s\" ဖိုင်အမည်ကို UTF-8 အဖြစ် အသွင်မပြောင်းနိုင်ဘူး။ (try setting the "
-#~ "environment variable ပတ်၀န်းကျင် ကိန်းရှင် G_FILENAME_ENCODING ) ကို "
-#~ "တပ်ဆင်ကြည့်ပါ - %s"
+#~ "\"%s\" ဖိုင်အမည်ကို UTF-8 အဖြစ် အသွင်မပြောင်းနိုင်ဘူး။ (try setting the environment "
+#~ "variable ပတ်၀န်းကျင် ကိန်းရှင် G_FILENAME_ENCODING ) ကို တပ်ဆင်ကြည့်ပါ - %s"
 
 #~ msgid "Invalid UTF-8"
 #~ msgstr "မမှန်တဲ့ UTF-8"

@@ -7905,7 +7905,7 @@ gtk_window_has_group (GtkWindow *window)
 }
 
 /**
- * gtk_window_group_get_current_current_grab:
+ * gtk_window_group_get_current_grab:
  * @window_group: a #GtkWindowGroup
  *
  * Gets the current grab widget of the given group,

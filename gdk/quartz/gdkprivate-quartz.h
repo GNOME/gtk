@@ -27,6 +27,7 @@
 #include <gdk/gdkprivate.h>
 #include <gdk/quartz/gdkpixmap-quartz.h>
 #include <gdk/quartz/gdkwindow-quartz.h>
+#include <gdk/quartz/gdkquartz.h>
 
 #include <gdk/gdk.h>
 
@@ -129,12 +130,8 @@ void   _gdk_quartz_gc_update_cg_context (GdkGC                      *gc,
 					 GdkQuartzContextValuesMask  mask);
 
 /* Colormap */
-void _gdk_quartz_colormap_get_rgba_from_pixel (GdkColormap *colormap,
-					       guint32      pixel,
-					       CGFloat     *red,
-					       CGFloat     *green,
-					       CGFloat     *blue,
-					       CGFloat     *alpha);
+CGColorRef _gdk_quartz_colormap_get_cgcolor_from_pixel (GdkDrawable *drawable,
+                                                        guint32      pixel);
 
 /* Window */
 gboolean    _gdk_quartz_window_is_ancestor          (GdkWindow *ancestor,

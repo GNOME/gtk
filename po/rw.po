@@ -12,10 +12,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-05-25 20:10-0400\n"
+"POT-Creation-Date: 2010-06-26 23:16-0400\n"
 "PO-Revision-Date: 2004-11-16 14:57-0700\n"
 "Last-Translator: Steve Murphy <murf@e-tools.com>\n"
 "Language-Team: Kinyarwanda <translation-team-rw@lists.sourceforge.net>\n"
+"Language: rw\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -87,7 +88,7 @@ msgstr "Amabendera Kuri Gushyiraho"
 #. Placeholder in --gdk-no-debug=FLAGS in --help output
 #. Placeholder in --gtk-debug=FLAGS in --help output
 #. Placeholder in --gtk-no-debug=FLAGS in --help output
-#: gdk/gdk.c:165 gdk/gdk.c:168 gtk/gtkmain.c:454 gtk/gtkmain.c:457
+#: gdk/gdk.c:165 gdk/gdk.c:168 gtk/gtkmain.c:439 gtk/gtkmain.c:442
 #, fuzzy
 msgid "FLAGS"
 msgstr "Amabendera"
@@ -316,1038 +317,6 @@ msgstr "Gusiba"
 msgctxt "keyboard label"
 msgid "Delete"
 msgstr "Gusiba"
-
-#: gdk-pixbuf/gdk-pixbuf-animation.c:133 gdk-pixbuf/gdk-pixbuf-io.c:982
-#: gdk-pixbuf/gdk-pixbuf-io.c:1242 tests/testfilechooser.c:222
-#, fuzzy, c-format
-msgid "Failed to open file '%s': %s"
-msgstr "Kuri Gufungura IDOSIYE"
-
-#: gdk-pixbuf/gdk-pixbuf-animation.c:146 gdk-pixbuf/gdk-pixbuf-io.c:994
-#, fuzzy, c-format
-msgid "Image file '%s' contains no data"
-msgstr "IDOSIYE Kirimo Oya Ibyatanzwe"
-
-#: gdk-pixbuf/gdk-pixbuf-animation.c:188 gdk-pixbuf/gdk-pixbuf-io.c:1030
-#: gdk-pixbuf/gdk-pixbuf-io.c:1294 tests/testfilechooser.c:267
-#, fuzzy, c-format
-msgid ""
-"Failed to load image '%s': reason not known, probably a corrupt image file"
-msgstr "Kuri Ibirimo Ishusho OYA a Ishusho IDOSIYE"
-
-#: gdk-pixbuf/gdk-pixbuf-animation.c:221
-#, fuzzy, c-format
-msgid ""
-"Failed to load animation '%s': reason not known, probably a corrupt "
-"animation file"
-msgstr "Kuri Ibirimo Iyega OYA a Iyega IDOSIYE"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:715
-#, fuzzy, c-format
-msgid "Unable to load image-loading module: %s: %s"
-msgstr "Kuri Ibirimo Ishusho Itangira... Modire"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:730
-#, fuzzy, c-format
-msgid ""
-"Image-loading module %s does not export the proper interface; perhaps it's "
-"from a different GTK version?"
-msgstr "Itangira... Modire OYA Kohereza NYACYO Bivuye a Verisiyo"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:739 gdk-pixbuf/gdk-pixbuf-io.c:790
-#, fuzzy, c-format
-msgid "Image type '%s' is not supported"
-msgstr "Ubwoko ni OYA"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:863
-#, fuzzy, c-format
-msgid "Couldn't recognize the image file format for file '%s'"
-msgstr "Ishusho IDOSIYE Imiterere kugirango IDOSIYE"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:871
-#, fuzzy
-msgid "Unrecognized image file format"
-msgstr "Ishusho IDOSIYE Imiterere"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:1039
-#, fuzzy, c-format
-msgid "Failed to load image '%s': %s"
-msgstr "Kuri Ibirimo Ishusho"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:1673 gdk-pixbuf/io-gdip-utils.c:961
-#, fuzzy, c-format
-msgid "Error writing to image file: %s"
-msgstr "Kuri Ishusho IDOSIYE"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:1718 gdk-pixbuf/gdk-pixbuf-io.c:1848
-#, fuzzy, c-format
-msgid "This build of gdk-pixbuf does not support saving the image format: %s"
-msgstr "Bya OYA Gushigikira Mu kubika Ishusho Imiterere"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:1752
-#, fuzzy
-msgid "Insufficient memory to save image to callback"
-msgstr "Ububiko Kuri Kubika Ishusho Kuri"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:1765
-#, fuzzy
-msgid "Failed to open temporary file"
-msgstr "Kuri Gufungura By'igihe gito IDOSIYE"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:1791
-#, fuzzy
-msgid "Failed to read from temporary file"
-msgstr "Kuri Gusoma Bivuye By'igihe gito IDOSIYE"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:2044
-#, fuzzy, c-format
-msgid "Failed to open '%s' for writing: %s"
-msgstr "Kuri Gufungura kugirango"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:2070
-#, fuzzy, c-format
-msgid ""
-"Failed to close '%s' while writing image, all data may not have been saved: %"
-"s"
-msgstr "Kuri Gufunga Ishusho Byose Ibyatanzwe Gicurasi OYA"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:2290 gdk-pixbuf/gdk-pixbuf-io.c:2341
-#, fuzzy
-msgid "Insufficient memory to save image into a buffer"
-msgstr "Ububiko Kuri Kubika Ishusho a"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:2387
-#, fuzzy
-msgid "Error writing to image stream"
-msgstr "Kuri Ishusho IDOSIYE"
-
-#: gdk-pixbuf/gdk-pixbuf-loader.c:334
-#, fuzzy, c-format
-msgid ""
-"Internal error: Image loader module '%s' failed to complete an operation, "
-"but didn't give a reason for the failure"
-msgstr "Ikosa Modire Byanze Kuri Itangira... Ishusho a kugirango"
-
-#: gdk-pixbuf/gdk-pixbuf-loader.c:376
-#, fuzzy, c-format
-msgid "Incremental loading of image type '%s' is not supported"
-msgstr "Itangira... Bya Ishusho Ubwoko ni OYA"
-
-#: gdk-pixbuf/gdk-pixdata.c:147
-#, fuzzy
-msgid "Image header corrupt"
-msgstr "Umutwempangano"
-
-#: gdk-pixbuf/gdk-pixdata.c:152
-#, fuzzy
-msgid "Image format unknown"
-msgstr "Imiterere Kitazwi"
-
-#: gdk-pixbuf/gdk-pixdata.c:157 gdk-pixbuf/gdk-pixdata.c:488
-#, fuzzy
-msgid "Image pixel data corrupt"
-msgstr "Ibyatanzwe"
-
-#: gdk-pixbuf/gdk-pixdata.c:432
-#, fuzzy, c-format
-msgid "failed to allocate image buffer of %u byte"
-msgid_plural "failed to allocate image buffer of %u bytes"
-msgstr[0] "Byanze Kuri Ishusho Bya Bayite"
-
-#: gdk-pixbuf/io-ani.c:244
-#, fuzzy
-msgid "Unexpected icon chunk in animation"
-msgstr "Agashushondanga in Iyega"
-
-#: gdk-pixbuf/io-ani.c:337
-#, fuzzy
-msgid "Unsupported animation type"
-msgstr "Iyega Ubwoko"
-
-#: gdk-pixbuf/io-ani.c:348 gdk-pixbuf/io-ani.c:406 gdk-pixbuf/io-ani.c:432
-#: gdk-pixbuf/io-ani.c:455 gdk-pixbuf/io-ani.c:482 gdk-pixbuf/io-ani.c:569
-#, fuzzy
-msgid "Invalid header in animation"
-msgstr "Umutwempangano in Iyega"
-
-#: gdk-pixbuf/io-ani.c:358 gdk-pixbuf/io-ani.c:380 gdk-pixbuf/io-ani.c:464
-#: gdk-pixbuf/io-ani.c:491 gdk-pixbuf/io-ani.c:542 gdk-pixbuf/io-ani.c:614
-#, fuzzy
-msgid "Not enough memory to load animation"
-msgstr "Ububiko Kuri Ibirimo Iyega"
-
-#: gdk-pixbuf/io-ani.c:398 gdk-pixbuf/io-ani.c:424 gdk-pixbuf/io-ani.c:443
-#, fuzzy
-msgid "Malformed chunk in animation"
-msgstr "in Iyega"
-
-#: gdk-pixbuf/io-ani.c:711
-#, fuzzy
-msgid "The ANI image format"
-msgstr "Ishusho Imiterere"
-
-#: gdk-pixbuf/io-bmp.c:230 gdk-pixbuf/io-bmp.c:267 gdk-pixbuf/io-bmp.c:338
-#: gdk-pixbuf/io-bmp.c:370 gdk-pixbuf/io-bmp.c:393 gdk-pixbuf/io-bmp.c:496
-#, fuzzy
-msgid "BMP image has bogus header data"
-msgstr "Ishusho Umutwempangano Ibyatanzwe"
-
-#: gdk-pixbuf/io-bmp.c:241 gdk-pixbuf/io-bmp.c:433
-#, fuzzy
-msgid "Not enough memory to load bitmap image"
-msgstr "Ububiko Kuri Ibirimo Bitimapu Ishusho"
-
-#: gdk-pixbuf/io-bmp.c:319
-#, fuzzy
-msgid "BMP image has unsupported header size"
-msgstr "Ishusho Umutwempangano Ingano"
-
-#: gdk-pixbuf/io-bmp.c:357
-#, fuzzy
-msgid "Topdown BMP images cannot be compressed"
-msgstr "Ishusho Byegeranijwe"
-
-#: gdk-pixbuf/io-bmp.c:717 gdk-pixbuf/io-pnm.c:709
-#, fuzzy
-msgid "Premature end-of-file encountered"
-msgstr "Impera Bya IDOSIYE"
-
-#: gdk-pixbuf/io-bmp.c:1329
-#, fuzzy
-msgid "Couldn't allocate memory for saving BMP file"
-msgstr "Ububiko kugirango Mu kubika IDOSIYE"
-
-#: gdk-pixbuf/io-bmp.c:1370
-#, fuzzy
-msgid "Couldn't write to BMP file"
-msgstr "Kuri IDOSIYE"
-
-#: gdk-pixbuf/io-bmp.c:1423 gdk-pixbuf/io-gdip-bmp.c:82
-#, fuzzy
-msgid "The BMP image format"
-msgstr "Ishusho Imiterere"
-
-#: gdk-pixbuf/io-gif.c:222
-#, c-format
-msgid "Failure reading GIF: %s"
-msgstr ""
-
-#: gdk-pixbuf/io-gif.c:496 gdk-pixbuf/io-gif.c:1481 gdk-pixbuf/io-gif.c:1642
-#, fuzzy
-msgid "GIF file was missing some data (perhaps it was truncated somehow?)"
-msgstr "IDOSIYE Ibuze Ibyatanzwe"
-
-#: gdk-pixbuf/io-gif.c:505
-#, fuzzy, c-format
-msgid "Internal error in the GIF loader (%s)"
-msgstr "Ikosa in"
-
-#: gdk-pixbuf/io-gif.c:579
-#, fuzzy
-msgid "Stack overflow"
-msgstr "Byarenze urugero"
-
-#: gdk-pixbuf/io-gif.c:639
-#, fuzzy
-msgid "GIF image loader cannot understand this image."
-msgstr "Ishusho iyi Ishusho"
-
-#: gdk-pixbuf/io-gif.c:668
-#, fuzzy
-msgid "Bad code encountered"
-msgstr "ITEGEKONGENGA"
-
-#: gdk-pixbuf/io-gif.c:678
-#, fuzzy
-msgid "Circular table entry in GIF file"
-msgstr "imbonerahamwe# Icyinjijwe in IDOSIYE"
-
-#: gdk-pixbuf/io-gif.c:866 gdk-pixbuf/io-gif.c:1468 gdk-pixbuf/io-gif.c:1515
-#: gdk-pixbuf/io-gif.c:1630
-#, fuzzy
-msgid "Not enough memory to load GIF file"
-msgstr "Ububiko Kuri Ibirimo IDOSIYE"
-
-#: gdk-pixbuf/io-gif.c:960
-#, fuzzy
-msgid "Not enough memory to composite a frame in GIF file"
-msgstr "Ububiko Kuri a Ikadiri in IDOSIYE"
-
-#: gdk-pixbuf/io-gif.c:1132
-#, fuzzy
-msgid "GIF image is corrupt (incorrect LZW compression)"
-msgstr "Ishusho ni igabanyangano"
-
-#: gdk-pixbuf/io-gif.c:1182
-#, fuzzy
-msgid "File does not appear to be a GIF file"
-msgstr "Idosiye OYA Kugaragara Kuri a IDOSIYE"
-
-#: gdk-pixbuf/io-gif.c:1194
-#, fuzzy, c-format
-msgid "Version %s of the GIF file format is not supported"
-msgstr "Bya IDOSIYE Imiterere ni OYA"
-
-#: gdk-pixbuf/io-gif.c:1303
-#, fuzzy
-msgid ""
-"GIF image has no global colormap, and a frame inside it has no local "
-"colormap."
-msgstr "Ishusho Oya Na a Ikadiri Mo Imbere Oya"
-
-#: gdk-pixbuf/io-gif.c:1537
-#, fuzzy
-msgid "GIF image was truncated or incomplete."
-msgstr "Ishusho Cyangwa"
-
-#: gdk-pixbuf/io-gif.c:1693 gdk-pixbuf/io-gdip-gif.c:80
-#, fuzzy
-msgid "The GIF image format"
-msgstr "Ishusho Imiterere"
-
-#: gdk-pixbuf/io-ico.c:211 gdk-pixbuf/io-ico.c:225 gdk-pixbuf/io-ico.c:277
-#: gdk-pixbuf/io-ico.c:290 gdk-pixbuf/io-ico.c:359
-#, fuzzy
-msgid "Invalid header in icon"
-msgstr "Umutwempangano in Agashushondanga"
-
-#: gdk-pixbuf/io-ico.c:240 gdk-pixbuf/io-ico.c:300 gdk-pixbuf/io-ico.c:369
-#: gdk-pixbuf/io-ico.c:432 gdk-pixbuf/io-ico.c:462
-#, fuzzy
-msgid "Not enough memory to load icon"
-msgstr "Ububiko Kuri Ibirimo Agashushondanga"
-
-#: gdk-pixbuf/io-ico.c:322
-#, fuzzy
-msgid "Icon has zero width"
-msgstr "Zeru Ubugari"
-
-#: gdk-pixbuf/io-ico.c:332
-#, fuzzy
-msgid "Icon has zero height"
-msgstr "Zeru Ubuhagarike"
-
-#: gdk-pixbuf/io-ico.c:384
-#, fuzzy
-msgid "Compressed icons are not supported"
-msgstr "Udushushondanga OYA"
-
-#: gdk-pixbuf/io-ico.c:417
-#, fuzzy
-msgid "Unsupported icon type"
-msgstr "Agashushondanga Ubwoko"
-
-#: gdk-pixbuf/io-ico.c:511
-#, fuzzy
-msgid "Not enough memory to load ICO file"
-msgstr "Ububiko Kuri Ibirimo IDOSIYE"
-
-#: gdk-pixbuf/io-ico.c:976
-#, fuzzy
-msgid "Image too large to be saved as ICO"
-msgstr "Binini Kuri Nka"
-
-#: gdk-pixbuf/io-ico.c:987
-#, fuzzy
-msgid "Cursor hotspot outside image"
-msgstr "Hanze Ishusho"
-
-#: gdk-pixbuf/io-ico.c:1010
-#, fuzzy, c-format
-msgid "Unsupported depth for ICO file: %d"
-msgstr "Ubujyakuzimu kugirango IDOSIYE"
-
-#: gdk-pixbuf/io-ico.c:1245 gdk-pixbuf/io-gdip-ico.c:59
-#, fuzzy
-msgid "The ICO image format"
-msgstr "Ishusho Imiterere"
-
-#: gdk-pixbuf/io-icns.c:347
-#, fuzzy, c-format
-msgid "Error reading ICNS image: %s"
-msgstr "Ikosa Ishusho IDOSIYE"
-
-#: gdk-pixbuf/io-icns.c:364
-#, fuzzy
-msgid "Could not decode ICNS file"
-msgstr "gutoranya ibara"
-
-#: gdk-pixbuf/io-icns.c:397
-#, fuzzy
-msgid "The ICNS image format"
-msgstr "Ishusho Imiterere"
-
-#: gdk-pixbuf/io-jasper.c:75
-#, fuzzy
-msgid "Couldn't allocate memory for stream"
-msgstr "Ububiko kugirango Umutwempangano"
-
-#: gdk-pixbuf/io-jasper.c:105
-#, fuzzy
-msgid "Couldn't decode image"
-msgstr "GUHINDURA Izina ry'idosiye:"
-
-#: gdk-pixbuf/io-jasper.c:123
-#, fuzzy
-msgid "Transformed JPEG2000 has zero width or height"
-msgstr "Zeru Ubugari Cyangwa Ubuhagarike"
-
-#: gdk-pixbuf/io-jasper.c:137
-#, fuzzy
-msgid "Image type currently not supported"
-msgstr "Ubwoko ni OYA"
-
-#: gdk-pixbuf/io-jasper.c:149 gdk-pixbuf/io-jasper.c:157
-#, fuzzy
-msgid "Couldn't allocate memory for color profile"
-msgstr "Ububiko kugirango Itangira... IDOSIYE"
-
-#: gdk-pixbuf/io-jasper.c:183
-#, fuzzy
-msgid "Insufficient memory to open JPEG 2000 file"
-msgstr "Ububiko Kuri Gufungura IDOSIYE"
-
-#: gdk-pixbuf/io-jasper.c:262
-#, fuzzy
-msgid "Couldn't allocate memory to buffer image data"
-msgstr "Ububiko kugirango Umurongo Ibyatanzwe"
-
-#: gdk-pixbuf/io-jasper.c:306
-#, fuzzy
-msgid "The JPEG 2000 image format"
-msgstr "Ishusho Imiterere"
-
-#: gdk-pixbuf/io-jpeg.c:117
-#, fuzzy, c-format
-msgid "Error interpreting JPEG image file (%s)"
-msgstr "Ishusho IDOSIYE"
-
-#: gdk-pixbuf/io-jpeg.c:528
-#, fuzzy
-msgid ""
-"Insufficient memory to load image, try exiting some applications to free "
-"memory"
-msgstr "Ububiko Kuri Ibirimo Ishusho Porogaramu Kuri Kigenga Ububiko"
-
-#: gdk-pixbuf/io-jpeg.c:569 gdk-pixbuf/io-jpeg.c:775
-#, fuzzy, c-format
-msgid "Unsupported JPEG color space (%s)"
-msgstr "Ibara Umwanya"
-
-#: gdk-pixbuf/io-jpeg.c:674 gdk-pixbuf/io-jpeg.c:944 gdk-pixbuf/io-jpeg.c:1177
-#: gdk-pixbuf/io-jpeg.c:1186
-#, fuzzy
-msgid "Couldn't allocate memory for loading JPEG file"
-msgstr "Ububiko kugirango Itangira... IDOSIYE"
-
-#: gdk-pixbuf/io-jpeg.c:919
-#, fuzzy
-msgid "Transformed JPEG has zero width or height."
-msgstr "Zeru Ubugari Cyangwa Ubuhagarike"
-
-#: gdk-pixbuf/io-jpeg.c:1133 gdk-pixbuf/io-gdip-jpeg.c:53
-#, fuzzy, c-format
-msgid ""
-"JPEG quality must be a value between 0 and 100; value '%s' could not be "
-"parsed."
-msgstr "Ubwiza a Agaciro hagati 0 Na 100 Agaciro OYA"
-
-#: gdk-pixbuf/io-jpeg.c:1148 gdk-pixbuf/io-gdip-jpeg.c:68
-#, fuzzy, c-format
-msgid ""
-"JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
-msgstr "Ubwiza a Agaciro hagati 0 Na 100 Agaciro ni OYA"
-
-#: gdk-pixbuf/io-jpeg.c:1310 gdk-pixbuf/io-gdip-jpeg.c:136
-#, fuzzy
-msgid "The JPEG image format"
-msgstr "Ishusho Imiterere"
-
-#: gdk-pixbuf/io-pcx.c:187
-#, fuzzy
-msgid "Couldn't allocate memory for header"
-msgstr "Ububiko kugirango Umutwempangano"
-
-#: gdk-pixbuf/io-pcx.c:202 gdk-pixbuf/io-pcx.c:560
-#, fuzzy
-msgid "Couldn't allocate memory for context buffer"
-msgstr "Ububiko kugirango Imvugiro"
-
-#: gdk-pixbuf/io-pcx.c:601
-#, fuzzy
-msgid "Image has invalid width and/or height"
-msgstr "Sibyo Ubugari Na Cyangwa Ubuhagarike"
-
-#: gdk-pixbuf/io-pcx.c:613 gdk-pixbuf/io-pcx.c:674
-msgid "Image has unsupported bpp"
-msgstr ""
-
-#: gdk-pixbuf/io-pcx.c:618 gdk-pixbuf/io-pcx.c:626
-#, fuzzy, c-format
-msgid "Image has unsupported number of %d-bit planes"
-msgstr "Umubare Bya"
-
-#: gdk-pixbuf/io-pcx.c:642
-#, fuzzy
-msgid "Couldn't create new pixbuf"
-msgstr "Kurema Gishya"
-
-#: gdk-pixbuf/io-pcx.c:650
-#, fuzzy
-msgid "Couldn't allocate memory for line data"
-msgstr "Ububiko kugirango Umurongo Ibyatanzwe"
-
-#: gdk-pixbuf/io-pcx.c:657
-#, fuzzy
-msgid "Couldn't allocate memory for paletted data"
-msgstr "Ububiko kugirango Ibyatanzwe"
-
-#: gdk-pixbuf/io-pcx.c:704
-#, fuzzy
-msgid "Didn't get all lines of PCX image"
-msgstr "Kubona Byose Imirongo Bya Ishusho"
-
-#: gdk-pixbuf/io-pcx.c:711
-#, fuzzy
-msgid "No palette found at end of PCX data"
-msgstr "Urwunge rw'ibara: Byabonetse ku Impera Bya Ibyatanzwe"
-
-#: gdk-pixbuf/io-pcx.c:756
-#, fuzzy
-msgid "The PCX image format"
-msgstr "Ishusho Imiterere"
-
-#: gdk-pixbuf/io-png.c:55
-#, fuzzy
-msgid "Bits per channel of PNG image is invalid."
-msgstr "Bya Ishusho ni Sibyo"
-
-#: gdk-pixbuf/io-png.c:136 gdk-pixbuf/io-png.c:642
-#, fuzzy
-msgid "Transformed PNG has zero width or height."
-msgstr "Zeru Ubugari Cyangwa Ubuhagarike"
-
-#: gdk-pixbuf/io-png.c:144
-#, fuzzy
-msgid "Bits per channel of transformed PNG is not 8."
-msgstr "Bya ni OYA 8"
-
-#: gdk-pixbuf/io-png.c:153
-#, fuzzy
-msgid "Transformed PNG not RGB or RGBA."
-msgstr "OYA Cyangwa"
-
-#: gdk-pixbuf/io-png.c:162
-#, fuzzy
-msgid "Transformed PNG has unsupported number of channels, must be 3 or 4."
-msgstr "Umubare Bya 3. Cyangwa 4."
-
-#: gdk-pixbuf/io-png.c:183
-#, fuzzy, c-format
-msgid "Fatal error in PNG image file: %s"
-msgstr "Ikosa in Ishusho IDOSIYE"
-
-#: gdk-pixbuf/io-png.c:316
-#, fuzzy
-msgid "Insufficient memory to load PNG file"
-msgstr "Ububiko Kuri Ibirimo IDOSIYE"
-
-#: gdk-pixbuf/io-png.c:657
-#, fuzzy, c-format
-msgid ""
-"Insufficient memory to store a %ld by %ld image; try exiting some "
-"applications to reduce memory usage"
-msgstr "Ububiko Kuri a ku Ishusho Porogaramu Kuri Ububiko Ikoresha:"
-
-#: gdk-pixbuf/io-png.c:720
-#, fuzzy
-msgid "Fatal error reading PNG image file"
-msgstr "Ikosa Ishusho IDOSIYE"
-
-#: gdk-pixbuf/io-png.c:769
-#, fuzzy, c-format
-msgid "Fatal error reading PNG image file: %s"
-msgstr "Ikosa Ishusho IDOSIYE"
-
-#: gdk-pixbuf/io-png.c:863
-#, fuzzy
-msgid ""
-"Keys for PNG text chunks must have at least 1 and at most 79 characters."
-msgstr "kugirango Umwandiko ku 1. Na ku Inyuguti"
-
-#: gdk-pixbuf/io-png.c:872
-#, fuzzy
-msgid "Keys for PNG text chunks must be ASCII characters."
-msgstr "kugirango Umwandiko Inyuguti"
-
-#: gdk-pixbuf/io-png.c:886 gdk-pixbuf/io-tiff.c:738
-#, c-format
-msgid "Color profile has invalid length %d."
-msgstr ""
-
-#: gdk-pixbuf/io-png.c:899 gdk-pixbuf/io-gdip-png.c:56
-#, fuzzy, c-format
-msgid ""
-"PNG compression level must be a value between 0 and 9; value '%s' could not "
-"be parsed."
-msgstr "Ubwiza a Agaciro hagati 0 Na 100 Agaciro OYA"
-
-#: gdk-pixbuf/io-png.c:912 gdk-pixbuf/io-gdip-png.c:68
-#, fuzzy, c-format
-msgid ""
-"PNG compression level must be a value between 0 and 9; value '%d' is not "
-"allowed."
-msgstr "Ubwiza a Agaciro hagati 0 Na 100 Agaciro ni OYA"
-
-#: gdk-pixbuf/io-png.c:951
-#, fuzzy, c-format
-msgid "Value for PNG text chunk %s cannot be converted to ISO-8859-1 encoding."
-msgstr "kugirango Umwandiko Kuri 1. Imisobekere:"
-
-#: gdk-pixbuf/io-png.c:1112 gdk-pixbuf/io-gdip-png.c:133
-#, fuzzy
-msgid "The PNG image format"
-msgstr "Ishusho Imiterere"
-
-#: gdk-pixbuf/io-pnm.c:250
-#, fuzzy
-msgid "PNM loader expected to find an integer, but didn't"
-msgstr "Ikitezwe: Kuri Gushaka Umubare wuzuye"
-
-#: gdk-pixbuf/io-pnm.c:282
-#, fuzzy
-msgid "PNM file has an incorrect initial byte"
-msgstr "IDOSIYE Bayite"
-
-#: gdk-pixbuf/io-pnm.c:312
-#, fuzzy
-msgid "PNM file is not in a recognized PNM subformat"
-msgstr "IDOSIYE ni OYA in a"
-
-#: gdk-pixbuf/io-pnm.c:337
-#, fuzzy
-msgid "PNM file has an image width of 0"
-msgstr "IDOSIYE Ishusho Ubugari Bya 0"
-
-#: gdk-pixbuf/io-pnm.c:358
-#, fuzzy
-msgid "PNM file has an image height of 0"
-msgstr "IDOSIYE Ishusho Ubuhagarike Bya 0"
-
-#: gdk-pixbuf/io-pnm.c:381
-#, fuzzy
-msgid "Maximum color value in PNM file is 0"
-msgstr "Ibara Agaciro in IDOSIYE ni 0"
-
-#: gdk-pixbuf/io-pnm.c:389
-#, fuzzy
-msgid "Maximum color value in PNM file is too large"
-msgstr "Ibara Agaciro in IDOSIYE ni Binini"
-
-#: gdk-pixbuf/io-pnm.c:429 gdk-pixbuf/io-pnm.c:459 gdk-pixbuf/io-pnm.c:504
-#, fuzzy
-msgid "Raw PNM image type is invalid"
-msgstr "Ishusho Ubwoko ni Sibyo"
-
-#: gdk-pixbuf/io-pnm.c:654
-#, fuzzy
-msgid "PNM image loader does not support this PNM subformat"
-msgstr "Ishusho OYA Gushigikira iyi"
-
-#: gdk-pixbuf/io-pnm.c:741 gdk-pixbuf/io-pnm.c:968
-#, fuzzy
-msgid "Raw PNM formats require exactly one whitespace before sample data"
-msgstr "Imiterere Mbere Urugero Ibyatanzwe"
-
-#: gdk-pixbuf/io-pnm.c:768
-#, fuzzy
-msgid "Cannot allocate memory for loading PNM image"
-msgstr "Ububiko kugirango Itangira... Ishusho"
-
-#: gdk-pixbuf/io-pnm.c:818
-#, fuzzy
-msgid "Insufficient memory to load PNM context struct"
-msgstr "Ububiko Kuri Ibirimo Imvugiro"
-
-#: gdk-pixbuf/io-pnm.c:869
-#, fuzzy
-msgid "Unexpected end of PNM image data"
-msgstr "Impera Bya Ishusho Ibyatanzwe"
-
-#: gdk-pixbuf/io-pnm.c:997
-#, fuzzy
-msgid "Insufficient memory to load PNM file"
-msgstr "Ububiko Kuri Ibirimo IDOSIYE"
-
-#: gdk-pixbuf/io-pnm.c:1081
-#, fuzzy
-msgid "The PNM/PBM/PGM/PPM image format family"
-msgstr "Ishusho Imiterere"
-
-#: gdk-pixbuf/io-qtif.c:128
-msgid "Input file descriptor is NULL."
-msgstr ""
-
-#: gdk-pixbuf/io-qtif.c:143
-#, fuzzy
-msgid "Failed to read QTIF header"
-msgstr "Kuri Gufungura Ishusho"
-
-#: gdk-pixbuf/io-qtif.c:152 gdk-pixbuf/io-qtif.c:182 gdk-pixbuf/io-qtif.c:446
-#, c-format
-msgid "QTIF atom size too large (%d bytes)"
-msgstr ""
-
-#: gdk-pixbuf/io-qtif.c:172
-#, fuzzy, c-format
-msgid "Failed to allocate %d bytes for file read buffer"
-msgstr "Byanze Kuri Ishusho Bya Bayite"
-
-#: gdk-pixbuf/io-qtif.c:196
-#, fuzzy, c-format
-msgid "File error when reading QTIF atom: %s"
-msgstr "Ikosa Ishusho IDOSIYE"
-
-#: gdk-pixbuf/io-qtif.c:233
-#, c-format
-msgid "Failed to skip the next %d bytes with seek()."
-msgstr ""
-
-#: gdk-pixbuf/io-qtif.c:257
-#, fuzzy
-msgid "Failed to allocate QTIF context structure."
-msgstr "Ububiko kugirango Imvugiro"
-
-#: gdk-pixbuf/io-qtif.c:317
-#, fuzzy
-msgid "Failed to create GdkPixbufLoader object."
-msgstr "Kuri Gusoma Bivuye By'igihe gito IDOSIYE"
-
-#: gdk-pixbuf/io-qtif.c:421
-#, fuzzy
-msgid "Failed to find an image data atom."
-msgstr "Kuri Gufungura Ishusho"
-
-#: gdk-pixbuf/io-qtif.c:602
-#, fuzzy
-msgid "The QTIF image format"
-msgstr "Ishusho Imiterere"
-
-#: gdk-pixbuf/io-ras.c:126
-#, fuzzy
-msgid "RAS image has bogus header data"
-msgstr "Ishusho Umutwempangano Ibyatanzwe"
-
-#: gdk-pixbuf/io-ras.c:148
-#, fuzzy
-msgid "RAS image has unknown type"
-msgstr "Ishusho Kitazwi Ubwoko"
-
-#: gdk-pixbuf/io-ras.c:156
-#, fuzzy
-msgid "unsupported RAS image variation"
-msgstr "Ishusho"
-
-#: gdk-pixbuf/io-ras.c:171 gdk-pixbuf/io-ras.c:200
-#, fuzzy
-msgid "Not enough memory to load RAS image"
-msgstr "Ububiko Kuri Ibirimo Ishusho"
-
-#: gdk-pixbuf/io-ras.c:545
-#, fuzzy
-msgid "The Sun raster image format"
-msgstr "AGAPANDE Ishusho Imiterere"
-
-#: gdk-pixbuf/io-tga.c:154
-#, fuzzy
-msgid "Cannot allocate memory for IOBuffer struct"
-msgstr "Ububiko kugirango"
-
-#: gdk-pixbuf/io-tga.c:173
-#, fuzzy
-msgid "Cannot allocate memory for IOBuffer data"
-msgstr "Ububiko kugirango Ibyatanzwe"
-
-#: gdk-pixbuf/io-tga.c:184
-#, fuzzy
-msgid "Cannot realloc IOBuffer data"
-msgstr "Ibyatanzwe"
-
-#: gdk-pixbuf/io-tga.c:214
-#, fuzzy
-msgid "Cannot allocate temporary IOBuffer data"
-msgstr "By'igihe gito Ibyatanzwe"
-
-#: gdk-pixbuf/io-tga.c:347
-#, fuzzy
-msgid "Cannot allocate new pixbuf"
-msgstr "Gishya"
-
-#: gdk-pixbuf/io-tga.c:686
-#, fuzzy
-msgid "Image is corrupted or truncated"
-msgstr "Ishusho Cyangwa"
-
-#: gdk-pixbuf/io-tga.c:693
-#, fuzzy
-msgid "Cannot allocate colormap structure"
-msgstr "Imiterere"
-
-#: gdk-pixbuf/io-tga.c:700
-#, fuzzy
-msgid "Cannot allocate colormap entries"
-msgstr "Ibyinjijwe"
-
-#: gdk-pixbuf/io-tga.c:722
-#, fuzzy
-msgid "Unexpected bitdepth for colormap entries"
-msgstr "kugirango Ibyinjijwe"
-
-#: gdk-pixbuf/io-tga.c:740
-#, fuzzy
-msgid "Cannot allocate TGA header memory"
-msgstr "Umutwempangano Ububiko"
-
-#: gdk-pixbuf/io-tga.c:773
-#, fuzzy
-msgid "TGA image has invalid dimensions"
-msgstr "Ishusho Sibyo Ingero"
-
-#: gdk-pixbuf/io-tga.c:779 gdk-pixbuf/io-tga.c:788 gdk-pixbuf/io-tga.c:798
-#: gdk-pixbuf/io-tga.c:808 gdk-pixbuf/io-tga.c:815
-#, fuzzy
-msgid "TGA image type not supported"
-msgstr "Ishusho Ubwoko OYA"
-
-#: gdk-pixbuf/io-tga.c:862
-#, fuzzy
-msgid "Cannot allocate memory for TGA context struct"
-msgstr "Ububiko kugirango Imvugiro"
-
-#: gdk-pixbuf/io-tga.c:927
-#, fuzzy
-msgid "Excess data in file"
-msgstr "Ibyatanzwe in IDOSIYE"
-
-#: gdk-pixbuf/io-tga.c:1008
-#, fuzzy
-msgid "The Targa image format"
-msgstr "Ishusho Imiterere"
-
-#: gdk-pixbuf/io-tiff.c:165
-#, fuzzy
-msgid "Could not get image width (bad TIFF file)"
-msgstr "OYA Kubona Ishusho Ubugari IDOSIYE"
-
-#: gdk-pixbuf/io-tiff.c:172
-#, fuzzy
-msgid "Could not get image height (bad TIFF file)"
-msgstr "OYA Kubona Ishusho Ubuhagarike IDOSIYE"
-
-#: gdk-pixbuf/io-tiff.c:180
-#, fuzzy
-msgid "Width or height of TIFF image is zero"
-msgstr "Cyangwa Ubuhagarike Bya Ishusho ni Zeru"
-
-#: gdk-pixbuf/io-tiff.c:189 gdk-pixbuf/io-tiff.c:198
-#, fuzzy
-msgid "Dimensions of TIFF image too large"
-msgstr "Bya Ishusho Binini"
-
-#: gdk-pixbuf/io-tiff.c:222 gdk-pixbuf/io-tiff.c:234 gdk-pixbuf/io-tiff.c:561
-#, fuzzy
-msgid "Insufficient memory to open TIFF file"
-msgstr "Ububiko Kuri Gufungura IDOSIYE"
-
-#: gdk-pixbuf/io-tiff.c:295
-#, fuzzy
-msgid "Failed to load RGB data from TIFF file"
-msgstr "Kuri Ibirimo Ibyatanzwe Bivuye IDOSIYE"
-
-#: gdk-pixbuf/io-tiff.c:351
-#, fuzzy
-msgid "Failed to open TIFF image"
-msgstr "Kuri Gufungura Ishusho"
-
-#: gdk-pixbuf/io-tiff.c:363 gdk-pixbuf/io-tiff.c:778
-#, fuzzy
-msgid "TIFFClose operation failed"
-msgstr "Byanze"
-
-#: gdk-pixbuf/io-tiff.c:493 gdk-pixbuf/io-tiff.c:506
-#, fuzzy
-msgid "Failed to load TIFF image"
-msgstr "Kuri Ibirimo Ishusho"
-
-#: gdk-pixbuf/io-tiff.c:692
-#, fuzzy
-msgid "Failed to save TIFF image"
-msgstr "Kuri Gufungura Ishusho"
-
-#: gdk-pixbuf/io-tiff.c:727
-msgid "TIFF compression doesn't refer to a valid codec."
-msgstr ""
-
-#: gdk-pixbuf/io-tiff.c:767
-#, fuzzy
-msgid "Failed to write TIFF data"
-msgstr "Kuri Gufungura Ishusho"
-
-#: gdk-pixbuf/io-tiff.c:814
-#, fuzzy
-msgid "Couldn't write to TIFF file"
-msgstr "Kuri IDOSIYE"
-
-#: gdk-pixbuf/io-tiff.c:869
-#, fuzzy
-msgid "The TIFF image format"
-msgstr "Ishusho Imiterere"
-
-#: gdk-pixbuf/io-wbmp.c:246
-#, fuzzy
-msgid "Image has zero width"
-msgstr "Zeru Ubugari"
-
-#: gdk-pixbuf/io-wbmp.c:264
-#, fuzzy
-msgid "Image has zero height"
-msgstr "Zeru Ubuhagarike"
-
-#: gdk-pixbuf/io-wbmp.c:275
-#, fuzzy
-msgid "Not enough memory to load image"
-msgstr "Ububiko Kuri Ibirimo Ishusho"
-
-#: gdk-pixbuf/io-wbmp.c:334
-#, fuzzy
-msgid "Couldn't save the rest"
-msgstr "Kubika"
-
-#: gdk-pixbuf/io-wbmp.c:375
-#, fuzzy
-msgid "The WBMP image format"
-msgstr "Ishusho Imiterere"
-
-#: gdk-pixbuf/io-xbm.c:295
-#, fuzzy
-msgid "Invalid XBM file"
-msgstr "IDOSIYE"
-
-#: gdk-pixbuf/io-xbm.c:305
-#, fuzzy
-msgid "Insufficient memory to load XBM image file"
-msgstr "Ububiko Kuri Ibirimo Ishusho IDOSIYE"
-
-#: gdk-pixbuf/io-xbm.c:453
-#, fuzzy
-msgid "Failed to write to temporary file when loading XBM image"
-msgstr "Kuri Kuri By'igihe gito IDOSIYE Ryari: Itangira... Ishusho"
-
-#: gdk-pixbuf/io-xbm.c:492
-#, fuzzy
-msgid "The XBM image format"
-msgstr "Ishusho Imiterere"
-
-#: gdk-pixbuf/io-xpm.c:468
-#, fuzzy
-msgid "No XPM header found"
-msgstr "Umutwempangano Byabonetse"
-
-#: gdk-pixbuf/io-xpm.c:477
-#, fuzzy
-msgid "Invalid XPM header"
-msgstr "Umutwempangano"
-
-#: gdk-pixbuf/io-xpm.c:485
-#, fuzzy
-msgid "XPM file has image width <= 0"
-msgstr "IDOSIYE Ishusho Ubugari 0"
-
-#: gdk-pixbuf/io-xpm.c:493
-#, fuzzy
-msgid "XPM file has image height <= 0"
-msgstr "IDOSIYE Ishusho Ubuhagarike 0"
-
-#: gdk-pixbuf/io-xpm.c:501
-#, fuzzy
-msgid "XPM has invalid number of chars per pixel"
-msgstr "Sibyo Umubare Bya"
-
-#: gdk-pixbuf/io-xpm.c:510
-#, fuzzy
-msgid "XPM file has invalid number of colors"
-msgstr "IDOSIYE Sibyo Umubare Bya Amabara"
-
-#: gdk-pixbuf/io-xpm.c:522 gdk-pixbuf/io-xpm.c:531 gdk-pixbuf/io-xpm.c:583
-#, fuzzy
-msgid "Cannot allocate memory for loading XPM image"
-msgstr "Ububiko kugirango Itangira... Ishusho"
-
-#: gdk-pixbuf/io-xpm.c:545
-#, fuzzy
-msgid "Cannot read XPM colormap"
-msgstr "Gusoma"
-
-#: gdk-pixbuf/io-xpm.c:777
-#, fuzzy
-msgid "Failed to write to temporary file when loading XPM image"
-msgstr "Kuri Kuri By'igihe gito IDOSIYE Ryari: Itangira... Ishusho"
-
-#: gdk-pixbuf/io-xpm.c:816
-#, fuzzy
-msgid "The XPM image format"
-msgstr "Ishusho Imiterere"
-
-#: gdk-pixbuf/io-gdip-emf.c:59
-#, fuzzy
-msgid "The EMF image format"
-msgstr "Ishusho Imiterere"
-
-#: gdk-pixbuf/io-gdip-utils.c:232
-#, fuzzy, c-format
-msgid "Could not allocate memory: %s"
-msgstr "Ububiko kugirango Umutwempangano"
-
-#: gdk-pixbuf/io-gdip-utils.c:257 gdk-pixbuf/io-gdip-utils.c:371
-#: gdk-pixbuf/io-gdip-utils.c:411
-#, fuzzy, c-format
-msgid "Could not create stream: %s"
-msgstr "bushyinguro"
-
-#: gdk-pixbuf/io-gdip-utils.c:271
-#, fuzzy, c-format
-msgid "Could not seek stream: %s"
-msgstr "gutoranya ibara"
-
-#: gdk-pixbuf/io-gdip-utils.c:283
-#, fuzzy, c-format
-msgid "Could not read from stream: %s"
-msgstr "bushyinguro"
-
-#: gdk-pixbuf/io-gdip-utils.c:694 gdk-pixbuf/io-gdip-utils.c:825
-#, fuzzy
-msgid "Couldn't load bitmap"
-msgstr "GUHINDURA Izina ry'idosiye:"
-
-#: gdk-pixbuf/io-gdip-utils.c:847
-#, fuzzy
-msgid "Couldn't load metafile"
-msgstr "GUHINDURA Izina ry'idosiye:"
-
-#: gdk-pixbuf/io-gdip-utils.c:1006
-#, fuzzy
-msgid "Unsupported image format for GDI+"
-msgstr "Ishusho"
-
-#: gdk-pixbuf/io-gdip-utils.c:1013
-#, fuzzy
-msgid "Couldn't save"
-msgstr "Kubika"
-
-#: gdk-pixbuf/io-gdip-wmf.c:58
-#, fuzzy
-msgid "The WMF image format"
-msgstr "Ishusho Imiterere"
 
 #. Description of --sync in --help output
 #: gdk/win32/gdkmain-win32.c:55
@@ -1719,8 +688,8 @@ msgstr "Ubwuzurane"
 
 #: gtk/gtkcolorsel.c:393
 #, fuzzy
-msgid "\"Deepness\" of the color."
-msgstr "\"Bya Ibara"
+msgid "Intensity of the color."
+msgstr "Bya Ibara"
 
 #: gtk/gtkcolorsel.c:394
 #, fuzzy
@@ -1920,11 +889,11 @@ msgstr "Ibara"
 msgid "Paper Margins"
 msgstr ""
 
-#: gtk/gtkentry.c:8612 gtk/gtktextview.c:8002
+#: gtk/gtkentry.c:8612 gtk/gtktextview.c:8012
 msgid "Input _Methods"
 msgstr ""
 
-#: gtk/gtkentry.c:8626 gtk/gtktextview.c:8016
+#: gtk/gtkentry.c:8626 gtk/gtktextview.c:8026
 msgid "_Insert Unicode Control Character"
 msgstr ""
 
@@ -2421,13 +1390,13 @@ msgstr "%s(%s)"
 # #-#-#-#-#  sfx2.pot (Gnome 2.12)  #-#-#-#-#
 # sfx2/source\dialog\versdlg.src:DLG_VERSIONS.PB_OPEN.text
 #. Open Link
-#: gtk/gtklabel.c:6076
+#: gtk/gtklabel.c:6072
 #, fuzzy
 msgid "_Open Link"
 msgstr "Gufungura"
 
 #. Copy Link Address
-#: gtk/gtklabel.c:6088
+#: gtk/gtklabel.c:6084
 msgid "Copy _Link Address"
 msgstr ""
 
@@ -2443,30 +1412,30 @@ msgid "Invalid URI"
 msgstr "8"
 
 #. Description of --gtk-module=MODULES in --help output
-#: gtk/gtkmain.c:447
+#: gtk/gtkmain.c:432
 #, fuzzy
 msgid "Load additional GTK+ modules"
 msgstr "Modire"
 
 #. Placeholder in --gtk-module=MODULES in --help output
-#: gtk/gtkmain.c:448
+#: gtk/gtkmain.c:433
 msgid "MODULES"
 msgstr "Modire"
 
 #. Description of --g-fatal-warnings in --help output
-#: gtk/gtkmain.c:450
+#: gtk/gtkmain.c:435
 #, fuzzy
 msgid "Make all warnings fatal"
 msgstr "Byose Iburira"
 
 #. Description of --gtk-debug=FLAGS in --help output
-#: gtk/gtkmain.c:453
+#: gtk/gtkmain.c:438
 #, fuzzy
 msgid "GTK+ debugging flags to set"
 msgstr "Amabendera Kuri Gushyiraho"
 
 #. Description of --gtk-no-debug=FLAGS in --help output
-#: gtk/gtkmain.c:456
+#: gtk/gtkmain.c:441
 #, fuzzy
 msgid "GTK+ debugging flags to unset"
 msgstr "Amabendera Kuri"
@@ -2476,20 +1445,20 @@ msgstr "Amabendera Kuri"
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
 #.
-#: gtk/gtkmain.c:708
+#: gtk/gtkmain.c:704
 msgid "default:LTR"
 msgstr "default:LTR"
 
-#: gtk/gtkmain.c:773
+#: gtk/gtkmain.c:769
 #, c-format
 msgid "Cannot open display: %s"
 msgstr ""
 
-#: gtk/gtkmain.c:810
+#: gtk/gtkmain.c:806
 msgid "GTK+ Options"
 msgstr ""
 
-#: gtk/gtkmain.c:810
+#: gtk/gtkmain.c:806
 msgid "Show GTK+ Options"
 msgstr ""
 
@@ -2588,7 +1557,7 @@ msgstr ""
 # sc/source\ui\src\menue.src:RID_OBJECTMENU_CELLS.SID_FORMATPAGE.text
 # #-#-#-#-#  sc.pot (Gnome 2.12)  #-#-#-#-#
 # sc/source\ui\src\menue.src:RID_OBJECTMENU_EDIT.SID_FORMATPAGE.text
-#: gtk/gtknotebook.c:4621 gtk/gtknotebook.c:7050
+#: gtk/gtknotebook.c:4631 gtk/gtknotebook.c:7060
 #, fuzzy, c-format
 msgid "Page %u"
 msgstr "Ipaji..."
@@ -2692,97 +1661,91 @@ msgstr "Kubika in Ububiko"
 msgid "%s job #%d"
 msgstr ""
 
-#: gtk/gtkprintoperation.c:1687
+#: gtk/gtkprintoperation.c:1695
 msgctxt "print operation status"
 msgid "Initial state"
 msgstr ""
 
-#: gtk/gtkprintoperation.c:1688
+#: gtk/gtkprintoperation.c:1696
 #, fuzzy
 msgctxt "print operation status"
 msgid "Preparing to print"
 msgstr "Iburira"
 
-#: gtk/gtkprintoperation.c:1689
+#: gtk/gtkprintoperation.c:1697
 msgctxt "print operation status"
 msgid "Generating data"
 msgstr ""
 
-#: gtk/gtkprintoperation.c:1690
+#: gtk/gtkprintoperation.c:1698
 msgctxt "print operation status"
 msgid "Sending data"
 msgstr ""
 
-#: gtk/gtkprintoperation.c:1691
+#: gtk/gtkprintoperation.c:1699
 #, fuzzy
 msgctxt "print operation status"
 msgid "Waiting"
 msgstr "Iburira"
 
-#: gtk/gtkprintoperation.c:1692
+#: gtk/gtkprintoperation.c:1700
 msgctxt "print operation status"
 msgid "Blocking on issue"
 msgstr ""
 
 # #-#-#-#-#  dbaccess.pot (Gnome 2.12)  #-#-#-#-#
 # #-#-#-#-#  dbaccess.pot (Gnome 2.12)  #-#-#-#-#
-#: gtk/gtkprintoperation.c:1693
+#: gtk/gtkprintoperation.c:1701
 #, fuzzy
 msgctxt "print operation status"
 msgid "Printing"
 msgstr "Gucapa"
 
 # offmgr/source\offapp\dialog\hyprlink.src:RID_SVXDLG_HYPERLINK.BTN_INET_SEARCH.text
-#: gtk/gtkprintoperation.c:1694
+#: gtk/gtkprintoperation.c:1702
 #, fuzzy
 msgctxt "print operation status"
 msgid "Finished"
 msgstr "Gushaka"
 
-#: gtk/gtkprintoperation.c:1695
+#: gtk/gtkprintoperation.c:1703
 msgctxt "print operation status"
 msgid "Finished with error"
 msgstr ""
 
-#: gtk/gtkprintoperation.c:2254
+#: gtk/gtkprintoperation.c:2270
 #, c-format
 msgid "Preparing %d"
 msgstr ""
 
-#: gtk/gtkprintoperation.c:2256 gtk/gtkprintoperation.c:2875
+#: gtk/gtkprintoperation.c:2272 gtk/gtkprintoperation.c:2902
 #, fuzzy, c-format
 msgid "Preparing"
 msgstr "Iburira"
 
 # #-#-#-#-#  dbaccess.pot (Gnome 2.12)  #-#-#-#-#
 # #-#-#-#-#  dbaccess.pot (Gnome 2.12)  #-#-#-#-#
-#: gtk/gtkprintoperation.c:2259
+#: gtk/gtkprintoperation.c:2275
 #, fuzzy, c-format
 msgid "Printing %d"
 msgstr "Gucapa"
 
-#: gtk/gtkprintoperation.c:2905
+#: gtk/gtkprintoperation.c:2932
 #, c-format
 msgid "Error creating print preview"
 msgstr ""
 
-#: gtk/gtkprintoperation.c:2908
+#: gtk/gtkprintoperation.c:2935
 #, c-format
 msgid "The most probable reason is that a temporary file could not be created."
 msgstr ""
 
-#: gtk/gtkprintoperation-unix.c:297 gtk/gtkprintoperation-unix.c:314
-#, c-format
+#: gtk/gtkprintoperation-unix.c:297
 msgid "Error launching preview"
 msgstr ""
 
-#: gtk/gtkprintoperation-unix.c:358
-#, c-format
-msgid "Error printing"
-msgstr ""
-
 # padmin/source\padialog.src:RID_PADIALOG.RID_PA_TXT_LOCATION.text
-#: gtk/gtkprintoperation-unix.c:494 gtk/gtkprintoperation-win32.c:1447
+#: gtk/gtkprintoperation-unix.c:470 gtk/gtkprintoperation-win32.c:1447
 #, fuzzy
 msgid "Application"
 msgstr "Intaho:"
@@ -2798,7 +1761,7 @@ msgstr ""
 # dbaccess/source/ui/inc/toolbox.hrc:MID_SBA_QRY_PASTE.text
 #. Translators: this is a printer status.
 #: gtk/gtkprintoperation-win32.c:616
-#: modules/printbackends/cups/gtkprintbackendcups.c:1999
+#: modules/printbackends/cups/gtkprintbackendcups.c:1998
 #, fuzzy
 msgid "Paused"
 msgstr "Komeka"
@@ -2940,42 +1903,42 @@ msgstr ""
 #. * multiple pages on a sheet when printing
 #.
 #: gtk/gtkprintunixdialog.c:3010
-#: modules/printbackends/cups/gtkprintbackendcups.c:3509
+#: modules/printbackends/cups/gtkprintbackendcups.c:3508
 msgid "Left to right, top to bottom"
 msgstr ""
 
 #: gtk/gtkprintunixdialog.c:3010
-#: modules/printbackends/cups/gtkprintbackendcups.c:3509
+#: modules/printbackends/cups/gtkprintbackendcups.c:3508
 msgid "Left to right, bottom to top"
 msgstr ""
 
 #: gtk/gtkprintunixdialog.c:3011
-#: modules/printbackends/cups/gtkprintbackendcups.c:3510
+#: modules/printbackends/cups/gtkprintbackendcups.c:3509
 msgid "Right to left, top to bottom"
 msgstr ""
 
 #: gtk/gtkprintunixdialog.c:3011
-#: modules/printbackends/cups/gtkprintbackendcups.c:3510
+#: modules/printbackends/cups/gtkprintbackendcups.c:3509
 msgid "Right to left, bottom to top"
 msgstr ""
 
 #: gtk/gtkprintunixdialog.c:3012
-#: modules/printbackends/cups/gtkprintbackendcups.c:3511
+#: modules/printbackends/cups/gtkprintbackendcups.c:3510
 msgid "Top to bottom, left to right"
 msgstr ""
 
 #: gtk/gtkprintunixdialog.c:3012
-#: modules/printbackends/cups/gtkprintbackendcups.c:3511
+#: modules/printbackends/cups/gtkprintbackendcups.c:3510
 msgid "Top to bottom, right to left"
 msgstr ""
 
 #: gtk/gtkprintunixdialog.c:3013
-#: modules/printbackends/cups/gtkprintbackendcups.c:3512
+#: modules/printbackends/cups/gtkprintbackendcups.c:3511
 msgid "Bottom to top, left to right"
 msgstr ""
 
 #: gtk/gtkprintunixdialog.c:3013
-#: modules/printbackends/cups/gtkprintbackendcups.c:3512
+#: modules/printbackends/cups/gtkprintbackendcups.c:3511
 msgid "Bottom to top, right to left"
 msgstr ""
 
@@ -2983,7 +1946,7 @@ msgstr ""
 #. * dialog that controls in what order multiple pages are arranged
 #.
 #: gtk/gtkprintunixdialog.c:3017 gtk/gtkprintunixdialog.c:3030
-#: modules/printbackends/cups/gtkprintbackendcups.c:3544
+#: modules/printbackends/cups/gtkprintbackendcups.c:3543
 #, fuzzy
 msgid "Page Ordering"
 msgstr "Iburira"
@@ -5431,124 +4394,119 @@ msgstr ""
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:1687
 #, c-format
-msgid "Printer '%s' may not be connected."
-msgstr ""
-
-#: modules/printbackends/cups/gtkprintbackendcups.c:1688
-#, c-format
 msgid "There is a problem on printer '%s'."
 msgstr ""
 
 #. Translators: this is a printer status.
-#: modules/printbackends/cups/gtkprintbackendcups.c:1996
+#: modules/printbackends/cups/gtkprintbackendcups.c:1995
 msgid "Paused ; Rejecting Jobs"
 msgstr ""
 
 #. Translators: this is a printer status.
-#: modules/printbackends/cups/gtkprintbackendcups.c:2002
+#: modules/printbackends/cups/gtkprintbackendcups.c:2001
 msgid "Rejecting Jobs"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2778
+#: modules/printbackends/cups/gtkprintbackendcups.c:2777
 msgid "Two Sided"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2779
+#: modules/printbackends/cups/gtkprintbackendcups.c:2778
 msgid "Paper Type"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2780
+#: modules/printbackends/cups/gtkprintbackendcups.c:2779
 msgid "Paper Source"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2781
+#: modules/printbackends/cups/gtkprintbackendcups.c:2780
 msgid "Output Tray"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2782
+#: modules/printbackends/cups/gtkprintbackendcups.c:2781
 msgid "Resolution"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2783
+#: modules/printbackends/cups/gtkprintbackendcups.c:2782
 msgid "GhostScript pre-filtering"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2792
+#: modules/printbackends/cups/gtkprintbackendcups.c:2791
 msgid "One Sided"
 msgstr ""
 
 #. Translators: this is an option of "Two Sided"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2794
+#: modules/printbackends/cups/gtkprintbackendcups.c:2793
 msgid "Long Edge (Standard)"
 msgstr ""
 
 #. Translators: this is an option of "Two Sided"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2796
+#: modules/printbackends/cups/gtkprintbackendcups.c:2795
 msgid "Short Edge (Flip)"
 msgstr ""
 
 #. Translators: this is an option of "Paper Source"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2798
-#: modules/printbackends/cups/gtkprintbackendcups.c:2800
-#: modules/printbackends/cups/gtkprintbackendcups.c:2808
+#: modules/printbackends/cups/gtkprintbackendcups.c:2797
+#: modules/printbackends/cups/gtkprintbackendcups.c:2799
+#: modules/printbackends/cups/gtkprintbackendcups.c:2807
 #, fuzzy
 msgid "Auto Select"
 msgstr "gutoranya ibara"
 
 #. Translators: this is an option of "Paper Source"
 #. Translators: this is an option of "Resolution"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2802
-#: modules/printbackends/cups/gtkprintbackendcups.c:2804
-#: modules/printbackends/cups/gtkprintbackendcups.c:2806
-#: modules/printbackends/cups/gtkprintbackendcups.c:2810
-#: modules/printbackends/cups/gtkprintbackendcups.c:3296
+#: modules/printbackends/cups/gtkprintbackendcups.c:2801
+#: modules/printbackends/cups/gtkprintbackendcups.c:2803
+#: modules/printbackends/cups/gtkprintbackendcups.c:2805
+#: modules/printbackends/cups/gtkprintbackendcups.c:2809
+#: modules/printbackends/cups/gtkprintbackendcups.c:3295
 #, fuzzy
 msgid "Printer Default"
 msgstr "Mburabuzi"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2812
+#: modules/printbackends/cups/gtkprintbackendcups.c:2811
 msgid "Embed GhostScript fonts only"
 msgstr ""
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2814
+#: modules/printbackends/cups/gtkprintbackendcups.c:2813
 msgid "Convert to PS level 1"
 msgstr ""
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2816
+#: modules/printbackends/cups/gtkprintbackendcups.c:2815
 msgid "Convert to PS level 2"
 msgstr ""
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2818
+#: modules/printbackends/cups/gtkprintbackendcups.c:2817
 #, fuzzy
 msgid "No pre-filtering"
 msgstr "Umutwempangano Byabonetse"
 
 #. Translators: "Miscellaneous" is the label for a button, that opens
 #. up an extra panel of settings in a print dialog.
-#: modules/printbackends/cups/gtkprintbackendcups.c:2827
+#: modules/printbackends/cups/gtkprintbackendcups.c:2826
 msgid "Miscellaneous"
 msgstr ""
 
 #. Translators: These strings name the possible values of the
 #. * job priority option in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3504
+#: modules/printbackends/cups/gtkprintbackendcups.c:3503
 msgid "Urgent"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3504
+#: modules/printbackends/cups/gtkprintbackendcups.c:3503
 msgid "High"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3504
+#: modules/printbackends/cups/gtkprintbackendcups.c:3503
 msgid "Medium"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3504
+#: modules/printbackends/cups/gtkprintbackendcups.c:3503
 msgid "Low"
 msgstr ""
 
@@ -5556,7 +4514,7 @@ msgstr ""
 #. Translators, this string is used to label the pages-per-sheet option
 #. * in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3528
+#: modules/printbackends/cups/gtkprintbackendcups.c:3527
 #, fuzzy
 msgid "Pages per Sheet"
 msgstr "Zeru Ubuhagarike"
@@ -5564,61 +4522,61 @@ msgstr "Zeru Ubuhagarike"
 #. Translators, this string is used to label the job priority option
 #. * in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3565
+#: modules/printbackends/cups/gtkprintbackendcups.c:3564
 msgid "Job Priority"
 msgstr ""
 
 #. Translators, this string is used to label the billing info entry
 #. * in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3576
+#: modules/printbackends/cups/gtkprintbackendcups.c:3575
 msgid "Billing Info"
 msgstr ""
 
 #. Translators, these strings are names for various 'standard' cover
 #. * pages that the printing system may support.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3591
+#: modules/printbackends/cups/gtkprintbackendcups.c:3590
 #, fuzzy
 msgid "None"
 msgstr "(ntacyo)"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3591
+#: modules/printbackends/cups/gtkprintbackendcups.c:3590
 msgid "Classified"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3591
+#: modules/printbackends/cups/gtkprintbackendcups.c:3590
 msgid "Confidential"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3591
+#: modules/printbackends/cups/gtkprintbackendcups.c:3590
 #, fuzzy
 msgid "Secret"
 msgstr "Ikirahuri"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3591
+#: modules/printbackends/cups/gtkprintbackendcups.c:3590
 msgid "Standard"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3591
+#: modules/printbackends/cups/gtkprintbackendcups.c:3590
 msgid "Top Secret"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3591
+#: modules/printbackends/cups/gtkprintbackendcups.c:3590
 msgid "Unclassified"
 msgstr ""
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the front cover page.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3626
+#: modules/printbackends/cups/gtkprintbackendcups.c:3625
 msgid "Before"
 msgstr ""
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the back cover page.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3641
+#: modules/printbackends/cups/gtkprintbackendcups.c:3640
 msgid "After"
 msgstr ""
 
@@ -5628,7 +4586,7 @@ msgstr ""
 #. * a print job is printed. Possible values are 'now', a specified time,
 #. * or 'on hold'
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3661
+#: modules/printbackends/cups/gtkprintbackendcups.c:3660
 #, fuzzy
 msgid "Print at"
 msgstr "Gucapa"
@@ -5638,7 +4596,7 @@ msgstr "Gucapa"
 #. Translators: this is the name of the option that allows the user
 #. * to specify a time when a print job will be printed.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3672
+#: modules/printbackends/cups/gtkprintbackendcups.c:3671
 #, fuzzy
 msgid "Print at time"
 msgstr "Gucapa"
@@ -5647,7 +4605,7 @@ msgstr "Gucapa"
 #. * size. The two placeholders are replaced with the width and height
 #. * in points. E.g: "Custom 230.4x142.9"
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3707
+#: modules/printbackends/cups/gtkprintbackendcups.c:3706
 #, c-format
 msgid "Custom %sx%s"
 msgstr ""
@@ -5754,6 +4712,810 @@ msgstr "Gucapa"
 #, fuzzy, c-format
 msgid "Could not get information for file '%s': %s"
 msgstr "OYA Kubona Ibisobanuro kugirango IDOSIYE"
+
+#: tests/testfilechooser.c:222
+#, fuzzy, c-format
+msgid "Failed to open file '%s': %s"
+msgstr "Kuri Gufungura IDOSIYE"
+
+#: tests/testfilechooser.c:267
+#, fuzzy, c-format
+msgid ""
+"Failed to load image '%s': reason not known, probably a corrupt image file"
+msgstr "Kuri Ibirimo Ishusho OYA a Ishusho IDOSIYE"
+
+#, fuzzy
+#~ msgid "Image file '%s' contains no data"
+#~ msgstr "IDOSIYE Kirimo Oya Ibyatanzwe"
+
+#, fuzzy
+#~ msgid ""
+#~ "Failed to load animation '%s': reason not known, probably a corrupt "
+#~ "animation file"
+#~ msgstr "Kuri Ibirimo Iyega OYA a Iyega IDOSIYE"
+
+#, fuzzy
+#~ msgid "Unable to load image-loading module: %s: %s"
+#~ msgstr "Kuri Ibirimo Ishusho Itangira... Modire"
+
+#, fuzzy
+#~ msgid ""
+#~ "Image-loading module %s does not export the proper interface; perhaps "
+#~ "it's from a different GTK version?"
+#~ msgstr "Itangira... Modire OYA Kohereza NYACYO Bivuye a Verisiyo"
+
+#, fuzzy
+#~ msgid "Image type '%s' is not supported"
+#~ msgstr "Ubwoko ni OYA"
+
+#, fuzzy
+#~ msgid "Couldn't recognize the image file format for file '%s'"
+#~ msgstr "Ishusho IDOSIYE Imiterere kugirango IDOSIYE"
+
+#, fuzzy
+#~ msgid "Unrecognized image file format"
+#~ msgstr "Ishusho IDOSIYE Imiterere"
+
+#, fuzzy
+#~ msgid "Failed to load image '%s': %s"
+#~ msgstr "Kuri Ibirimo Ishusho"
+
+#, fuzzy
+#~ msgid "Error writing to image file: %s"
+#~ msgstr "Kuri Ishusho IDOSIYE"
+
+#, fuzzy
+#~ msgid ""
+#~ "This build of gdk-pixbuf does not support saving the image format: %s"
+#~ msgstr "Bya OYA Gushigikira Mu kubika Ishusho Imiterere"
+
+#, fuzzy
+#~ msgid "Insufficient memory to save image to callback"
+#~ msgstr "Ububiko Kuri Kubika Ishusho Kuri"
+
+#, fuzzy
+#~ msgid "Failed to open temporary file"
+#~ msgstr "Kuri Gufungura By'igihe gito IDOSIYE"
+
+#, fuzzy
+#~ msgid "Failed to read from temporary file"
+#~ msgstr "Kuri Gusoma Bivuye By'igihe gito IDOSIYE"
+
+#, fuzzy
+#~ msgid "Failed to open '%s' for writing: %s"
+#~ msgstr "Kuri Gufungura kugirango"
+
+#, fuzzy
+#~ msgid ""
+#~ "Failed to close '%s' while writing image, all data may not have been "
+#~ "saved: %s"
+#~ msgstr "Kuri Gufunga Ishusho Byose Ibyatanzwe Gicurasi OYA"
+
+#, fuzzy
+#~ msgid "Insufficient memory to save image into a buffer"
+#~ msgstr "Ububiko Kuri Kubika Ishusho a"
+
+#, fuzzy
+#~ msgid "Error writing to image stream"
+#~ msgstr "Kuri Ishusho IDOSIYE"
+
+#, fuzzy
+#~ msgid ""
+#~ "Internal error: Image loader module '%s' failed to complete an operation, "
+#~ "but didn't give a reason for the failure"
+#~ msgstr "Ikosa Modire Byanze Kuri Itangira... Ishusho a kugirango"
+
+#, fuzzy
+#~ msgid "Incremental loading of image type '%s' is not supported"
+#~ msgstr "Itangira... Bya Ishusho Ubwoko ni OYA"
+
+#, fuzzy
+#~ msgid "Image header corrupt"
+#~ msgstr "Umutwempangano"
+
+#, fuzzy
+#~ msgid "Image format unknown"
+#~ msgstr "Imiterere Kitazwi"
+
+#, fuzzy
+#~ msgid "Image pixel data corrupt"
+#~ msgstr "Ibyatanzwe"
+
+#, fuzzy
+#~ msgid "failed to allocate image buffer of %u byte"
+#~ msgid_plural "failed to allocate image buffer of %u bytes"
+#~ msgstr[0] "Byanze Kuri Ishusho Bya Bayite"
+
+#, fuzzy
+#~ msgid "Unexpected icon chunk in animation"
+#~ msgstr "Agashushondanga in Iyega"
+
+#, fuzzy
+#~ msgid "Unsupported animation type"
+#~ msgstr "Iyega Ubwoko"
+
+#, fuzzy
+#~ msgid "Invalid header in animation"
+#~ msgstr "Umutwempangano in Iyega"
+
+#, fuzzy
+#~ msgid "Not enough memory to load animation"
+#~ msgstr "Ububiko Kuri Ibirimo Iyega"
+
+#, fuzzy
+#~ msgid "Malformed chunk in animation"
+#~ msgstr "in Iyega"
+
+#, fuzzy
+#~ msgid "The ANI image format"
+#~ msgstr "Ishusho Imiterere"
+
+#, fuzzy
+#~ msgid "BMP image has bogus header data"
+#~ msgstr "Ishusho Umutwempangano Ibyatanzwe"
+
+#, fuzzy
+#~ msgid "Not enough memory to load bitmap image"
+#~ msgstr "Ububiko Kuri Ibirimo Bitimapu Ishusho"
+
+#, fuzzy
+#~ msgid "BMP image has unsupported header size"
+#~ msgstr "Ishusho Umutwempangano Ingano"
+
+#, fuzzy
+#~ msgid "Topdown BMP images cannot be compressed"
+#~ msgstr "Ishusho Byegeranijwe"
+
+#, fuzzy
+#~ msgid "Premature end-of-file encountered"
+#~ msgstr "Impera Bya IDOSIYE"
+
+#, fuzzy
+#~ msgid "Couldn't allocate memory for saving BMP file"
+#~ msgstr "Ububiko kugirango Mu kubika IDOSIYE"
+
+#, fuzzy
+#~ msgid "Couldn't write to BMP file"
+#~ msgstr "Kuri IDOSIYE"
+
+#, fuzzy
+#~ msgid "The BMP image format"
+#~ msgstr "Ishusho Imiterere"
+
+#, fuzzy
+#~ msgid "GIF file was missing some data (perhaps it was truncated somehow?)"
+#~ msgstr "IDOSIYE Ibuze Ibyatanzwe"
+
+#, fuzzy
+#~ msgid "Internal error in the GIF loader (%s)"
+#~ msgstr "Ikosa in"
+
+#, fuzzy
+#~ msgid "Stack overflow"
+#~ msgstr "Byarenze urugero"
+
+#, fuzzy
+#~ msgid "GIF image loader cannot understand this image."
+#~ msgstr "Ishusho iyi Ishusho"
+
+#, fuzzy
+#~ msgid "Bad code encountered"
+#~ msgstr "ITEGEKONGENGA"
+
+#, fuzzy
+#~ msgid "Circular table entry in GIF file"
+#~ msgstr "imbonerahamwe# Icyinjijwe in IDOSIYE"
+
+#, fuzzy
+#~ msgid "Not enough memory to load GIF file"
+#~ msgstr "Ububiko Kuri Ibirimo IDOSIYE"
+
+#, fuzzy
+#~ msgid "Not enough memory to composite a frame in GIF file"
+#~ msgstr "Ububiko Kuri a Ikadiri in IDOSIYE"
+
+#, fuzzy
+#~ msgid "GIF image is corrupt (incorrect LZW compression)"
+#~ msgstr "Ishusho ni igabanyangano"
+
+#, fuzzy
+#~ msgid "File does not appear to be a GIF file"
+#~ msgstr "Idosiye OYA Kugaragara Kuri a IDOSIYE"
+
+#, fuzzy
+#~ msgid "Version %s of the GIF file format is not supported"
+#~ msgstr "Bya IDOSIYE Imiterere ni OYA"
+
+#, fuzzy
+#~ msgid ""
+#~ "GIF image has no global colormap, and a frame inside it has no local "
+#~ "colormap."
+#~ msgstr "Ishusho Oya Na a Ikadiri Mo Imbere Oya"
+
+#, fuzzy
+#~ msgid "GIF image was truncated or incomplete."
+#~ msgstr "Ishusho Cyangwa"
+
+#, fuzzy
+#~ msgid "The GIF image format"
+#~ msgstr "Ishusho Imiterere"
+
+#, fuzzy
+#~ msgid "Invalid header in icon"
+#~ msgstr "Umutwempangano in Agashushondanga"
+
+#, fuzzy
+#~ msgid "Not enough memory to load icon"
+#~ msgstr "Ububiko Kuri Ibirimo Agashushondanga"
+
+#, fuzzy
+#~ msgid "Icon has zero width"
+#~ msgstr "Zeru Ubugari"
+
+#, fuzzy
+#~ msgid "Icon has zero height"
+#~ msgstr "Zeru Ubuhagarike"
+
+#, fuzzy
+#~ msgid "Compressed icons are not supported"
+#~ msgstr "Udushushondanga OYA"
+
+#, fuzzy
+#~ msgid "Unsupported icon type"
+#~ msgstr "Agashushondanga Ubwoko"
+
+#, fuzzy
+#~ msgid "Not enough memory to load ICO file"
+#~ msgstr "Ububiko Kuri Ibirimo IDOSIYE"
+
+#, fuzzy
+#~ msgid "Image too large to be saved as ICO"
+#~ msgstr "Binini Kuri Nka"
+
+#, fuzzy
+#~ msgid "Cursor hotspot outside image"
+#~ msgstr "Hanze Ishusho"
+
+#, fuzzy
+#~ msgid "Unsupported depth for ICO file: %d"
+#~ msgstr "Ubujyakuzimu kugirango IDOSIYE"
+
+#, fuzzy
+#~ msgid "The ICO image format"
+#~ msgstr "Ishusho Imiterere"
+
+#, fuzzy
+#~ msgid "Error reading ICNS image: %s"
+#~ msgstr "Ikosa Ishusho IDOSIYE"
+
+#, fuzzy
+#~ msgid "Could not decode ICNS file"
+#~ msgstr "gutoranya ibara"
+
+#, fuzzy
+#~ msgid "The ICNS image format"
+#~ msgstr "Ishusho Imiterere"
+
+#, fuzzy
+#~ msgid "Couldn't allocate memory for stream"
+#~ msgstr "Ububiko kugirango Umutwempangano"
+
+#, fuzzy
+#~ msgid "Couldn't decode image"
+#~ msgstr "GUHINDURA Izina ry'idosiye:"
+
+#, fuzzy
+#~ msgid "Transformed JPEG2000 has zero width or height"
+#~ msgstr "Zeru Ubugari Cyangwa Ubuhagarike"
+
+#, fuzzy
+#~ msgid "Image type currently not supported"
+#~ msgstr "Ubwoko ni OYA"
+
+#, fuzzy
+#~ msgid "Couldn't allocate memory for color profile"
+#~ msgstr "Ububiko kugirango Itangira... IDOSIYE"
+
+#, fuzzy
+#~ msgid "Insufficient memory to open JPEG 2000 file"
+#~ msgstr "Ububiko Kuri Gufungura IDOSIYE"
+
+#, fuzzy
+#~ msgid "Couldn't allocate memory to buffer image data"
+#~ msgstr "Ububiko kugirango Umurongo Ibyatanzwe"
+
+#, fuzzy
+#~ msgid "The JPEG 2000 image format"
+#~ msgstr "Ishusho Imiterere"
+
+#, fuzzy
+#~ msgid "Error interpreting JPEG image file (%s)"
+#~ msgstr "Ishusho IDOSIYE"
+
+#, fuzzy
+#~ msgid ""
+#~ "Insufficient memory to load image, try exiting some applications to free "
+#~ "memory"
+#~ msgstr "Ububiko Kuri Ibirimo Ishusho Porogaramu Kuri Kigenga Ububiko"
+
+#, fuzzy
+#~ msgid "Unsupported JPEG color space (%s)"
+#~ msgstr "Ibara Umwanya"
+
+#, fuzzy
+#~ msgid "Couldn't allocate memory for loading JPEG file"
+#~ msgstr "Ububiko kugirango Itangira... IDOSIYE"
+
+#, fuzzy
+#~ msgid "Transformed JPEG has zero width or height."
+#~ msgstr "Zeru Ubugari Cyangwa Ubuhagarike"
+
+#, fuzzy
+#~ msgid ""
+#~ "JPEG quality must be a value between 0 and 100; value '%s' could not be "
+#~ "parsed."
+#~ msgstr "Ubwiza a Agaciro hagati 0 Na 100 Agaciro OYA"
+
+#, fuzzy
+#~ msgid ""
+#~ "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
+#~ msgstr "Ubwiza a Agaciro hagati 0 Na 100 Agaciro ni OYA"
+
+#, fuzzy
+#~ msgid "The JPEG image format"
+#~ msgstr "Ishusho Imiterere"
+
+#, fuzzy
+#~ msgid "Couldn't allocate memory for header"
+#~ msgstr "Ububiko kugirango Umutwempangano"
+
+#, fuzzy
+#~ msgid "Couldn't allocate memory for context buffer"
+#~ msgstr "Ububiko kugirango Imvugiro"
+
+#, fuzzy
+#~ msgid "Image has invalid width and/or height"
+#~ msgstr "Sibyo Ubugari Na Cyangwa Ubuhagarike"
+
+#, fuzzy
+#~ msgid "Image has unsupported number of %d-bit planes"
+#~ msgstr "Umubare Bya"
+
+#, fuzzy
+#~ msgid "Couldn't create new pixbuf"
+#~ msgstr "Kurema Gishya"
+
+#, fuzzy
+#~ msgid "Couldn't allocate memory for line data"
+#~ msgstr "Ububiko kugirango Umurongo Ibyatanzwe"
+
+#, fuzzy
+#~ msgid "Couldn't allocate memory for paletted data"
+#~ msgstr "Ububiko kugirango Ibyatanzwe"
+
+#, fuzzy
+#~ msgid "Didn't get all lines of PCX image"
+#~ msgstr "Kubona Byose Imirongo Bya Ishusho"
+
+#, fuzzy
+#~ msgid "No palette found at end of PCX data"
+#~ msgstr "Urwunge rw'ibara: Byabonetse ku Impera Bya Ibyatanzwe"
+
+#, fuzzy
+#~ msgid "The PCX image format"
+#~ msgstr "Ishusho Imiterere"
+
+#, fuzzy
+#~ msgid "Bits per channel of PNG image is invalid."
+#~ msgstr "Bya Ishusho ni Sibyo"
+
+#, fuzzy
+#~ msgid "Transformed PNG has zero width or height."
+#~ msgstr "Zeru Ubugari Cyangwa Ubuhagarike"
+
+#, fuzzy
+#~ msgid "Bits per channel of transformed PNG is not 8."
+#~ msgstr "Bya ni OYA 8"
+
+#, fuzzy
+#~ msgid "Transformed PNG not RGB or RGBA."
+#~ msgstr "OYA Cyangwa"
+
+#, fuzzy
+#~ msgid "Transformed PNG has unsupported number of channels, must be 3 or 4."
+#~ msgstr "Umubare Bya 3. Cyangwa 4."
+
+#, fuzzy
+#~ msgid "Fatal error in PNG image file: %s"
+#~ msgstr "Ikosa in Ishusho IDOSIYE"
+
+#, fuzzy
+#~ msgid "Insufficient memory to load PNG file"
+#~ msgstr "Ububiko Kuri Ibirimo IDOSIYE"
+
+#, fuzzy
+#~ msgid ""
+#~ "Insufficient memory to store a %ld by %ld image; try exiting some "
+#~ "applications to reduce memory usage"
+#~ msgstr "Ububiko Kuri a ku Ishusho Porogaramu Kuri Ububiko Ikoresha:"
+
+#, fuzzy
+#~ msgid "Fatal error reading PNG image file"
+#~ msgstr "Ikosa Ishusho IDOSIYE"
+
+#, fuzzy
+#~ msgid "Fatal error reading PNG image file: %s"
+#~ msgstr "Ikosa Ishusho IDOSIYE"
+
+#, fuzzy
+#~ msgid ""
+#~ "Keys for PNG text chunks must have at least 1 and at most 79 characters."
+#~ msgstr "kugirango Umwandiko ku 1. Na ku Inyuguti"
+
+#, fuzzy
+#~ msgid "Keys for PNG text chunks must be ASCII characters."
+#~ msgstr "kugirango Umwandiko Inyuguti"
+
+#, fuzzy
+#~ msgid ""
+#~ "PNG compression level must be a value between 0 and 9; value '%s' could "
+#~ "not be parsed."
+#~ msgstr "Ubwiza a Agaciro hagati 0 Na 100 Agaciro OYA"
+
+#, fuzzy
+#~ msgid ""
+#~ "PNG compression level must be a value between 0 and 9; value '%d' is not "
+#~ "allowed."
+#~ msgstr "Ubwiza a Agaciro hagati 0 Na 100 Agaciro ni OYA"
+
+#, fuzzy
+#~ msgid ""
+#~ "Value for PNG text chunk %s cannot be converted to ISO-8859-1 encoding."
+#~ msgstr "kugirango Umwandiko Kuri 1. Imisobekere:"
+
+#, fuzzy
+#~ msgid "The PNG image format"
+#~ msgstr "Ishusho Imiterere"
+
+#, fuzzy
+#~ msgid "PNM loader expected to find an integer, but didn't"
+#~ msgstr "Ikitezwe: Kuri Gushaka Umubare wuzuye"
+
+#, fuzzy
+#~ msgid "PNM file has an incorrect initial byte"
+#~ msgstr "IDOSIYE Bayite"
+
+#, fuzzy
+#~ msgid "PNM file is not in a recognized PNM subformat"
+#~ msgstr "IDOSIYE ni OYA in a"
+
+#, fuzzy
+#~ msgid "PNM file has an image width of 0"
+#~ msgstr "IDOSIYE Ishusho Ubugari Bya 0"
+
+#, fuzzy
+#~ msgid "PNM file has an image height of 0"
+#~ msgstr "IDOSIYE Ishusho Ubuhagarike Bya 0"
+
+#, fuzzy
+#~ msgid "Maximum color value in PNM file is 0"
+#~ msgstr "Ibara Agaciro in IDOSIYE ni 0"
+
+#, fuzzy
+#~ msgid "Maximum color value in PNM file is too large"
+#~ msgstr "Ibara Agaciro in IDOSIYE ni Binini"
+
+#, fuzzy
+#~ msgid "Raw PNM image type is invalid"
+#~ msgstr "Ishusho Ubwoko ni Sibyo"
+
+#, fuzzy
+#~ msgid "PNM image loader does not support this PNM subformat"
+#~ msgstr "Ishusho OYA Gushigikira iyi"
+
+#, fuzzy
+#~ msgid "Raw PNM formats require exactly one whitespace before sample data"
+#~ msgstr "Imiterere Mbere Urugero Ibyatanzwe"
+
+#, fuzzy
+#~ msgid "Cannot allocate memory for loading PNM image"
+#~ msgstr "Ububiko kugirango Itangira... Ishusho"
+
+#, fuzzy
+#~ msgid "Insufficient memory to load PNM context struct"
+#~ msgstr "Ububiko Kuri Ibirimo Imvugiro"
+
+#, fuzzy
+#~ msgid "Unexpected end of PNM image data"
+#~ msgstr "Impera Bya Ishusho Ibyatanzwe"
+
+#, fuzzy
+#~ msgid "Insufficient memory to load PNM file"
+#~ msgstr "Ububiko Kuri Ibirimo IDOSIYE"
+
+#, fuzzy
+#~ msgid "The PNM/PBM/PGM/PPM image format family"
+#~ msgstr "Ishusho Imiterere"
+
+#, fuzzy
+#~ msgid "Failed to read QTIF header"
+#~ msgstr "Kuri Gufungura Ishusho"
+
+#, fuzzy
+#~ msgid "Failed to allocate %d bytes for file read buffer"
+#~ msgstr "Byanze Kuri Ishusho Bya Bayite"
+
+#, fuzzy
+#~ msgid "File error when reading QTIF atom: %s"
+#~ msgstr "Ikosa Ishusho IDOSIYE"
+
+#, fuzzy
+#~ msgid "Failed to allocate QTIF context structure."
+#~ msgstr "Ububiko kugirango Imvugiro"
+
+#, fuzzy
+#~ msgid "Failed to create GdkPixbufLoader object."
+#~ msgstr "Kuri Gusoma Bivuye By'igihe gito IDOSIYE"
+
+#, fuzzy
+#~ msgid "Failed to find an image data atom."
+#~ msgstr "Kuri Gufungura Ishusho"
+
+#, fuzzy
+#~ msgid "The QTIF image format"
+#~ msgstr "Ishusho Imiterere"
+
+#, fuzzy
+#~ msgid "RAS image has bogus header data"
+#~ msgstr "Ishusho Umutwempangano Ibyatanzwe"
+
+#, fuzzy
+#~ msgid "RAS image has unknown type"
+#~ msgstr "Ishusho Kitazwi Ubwoko"
+
+#, fuzzy
+#~ msgid "unsupported RAS image variation"
+#~ msgstr "Ishusho"
+
+#, fuzzy
+#~ msgid "Not enough memory to load RAS image"
+#~ msgstr "Ububiko Kuri Ibirimo Ishusho"
+
+#, fuzzy
+#~ msgid "The Sun raster image format"
+#~ msgstr "AGAPANDE Ishusho Imiterere"
+
+#, fuzzy
+#~ msgid "Cannot allocate memory for IOBuffer struct"
+#~ msgstr "Ububiko kugirango"
+
+#, fuzzy
+#~ msgid "Cannot allocate memory for IOBuffer data"
+#~ msgstr "Ububiko kugirango Ibyatanzwe"
+
+#, fuzzy
+#~ msgid "Cannot realloc IOBuffer data"
+#~ msgstr "Ibyatanzwe"
+
+#, fuzzy
+#~ msgid "Cannot allocate temporary IOBuffer data"
+#~ msgstr "By'igihe gito Ibyatanzwe"
+
+#, fuzzy
+#~ msgid "Cannot allocate new pixbuf"
+#~ msgstr "Gishya"
+
+#, fuzzy
+#~ msgid "Image is corrupted or truncated"
+#~ msgstr "Ishusho Cyangwa"
+
+#, fuzzy
+#~ msgid "Cannot allocate colormap structure"
+#~ msgstr "Imiterere"
+
+#, fuzzy
+#~ msgid "Cannot allocate colormap entries"
+#~ msgstr "Ibyinjijwe"
+
+#, fuzzy
+#~ msgid "Unexpected bitdepth for colormap entries"
+#~ msgstr "kugirango Ibyinjijwe"
+
+#, fuzzy
+#~ msgid "Cannot allocate TGA header memory"
+#~ msgstr "Umutwempangano Ububiko"
+
+#, fuzzy
+#~ msgid "TGA image has invalid dimensions"
+#~ msgstr "Ishusho Sibyo Ingero"
+
+#, fuzzy
+#~ msgid "TGA image type not supported"
+#~ msgstr "Ishusho Ubwoko OYA"
+
+#, fuzzy
+#~ msgid "Cannot allocate memory for TGA context struct"
+#~ msgstr "Ububiko kugirango Imvugiro"
+
+#, fuzzy
+#~ msgid "Excess data in file"
+#~ msgstr "Ibyatanzwe in IDOSIYE"
+
+#, fuzzy
+#~ msgid "The Targa image format"
+#~ msgstr "Ishusho Imiterere"
+
+#, fuzzy
+#~ msgid "Could not get image width (bad TIFF file)"
+#~ msgstr "OYA Kubona Ishusho Ubugari IDOSIYE"
+
+#, fuzzy
+#~ msgid "Could not get image height (bad TIFF file)"
+#~ msgstr "OYA Kubona Ishusho Ubuhagarike IDOSIYE"
+
+#, fuzzy
+#~ msgid "Width or height of TIFF image is zero"
+#~ msgstr "Cyangwa Ubuhagarike Bya Ishusho ni Zeru"
+
+#, fuzzy
+#~ msgid "Dimensions of TIFF image too large"
+#~ msgstr "Bya Ishusho Binini"
+
+#, fuzzy
+#~ msgid "Insufficient memory to open TIFF file"
+#~ msgstr "Ububiko Kuri Gufungura IDOSIYE"
+
+#, fuzzy
+#~ msgid "Failed to load RGB data from TIFF file"
+#~ msgstr "Kuri Ibirimo Ibyatanzwe Bivuye IDOSIYE"
+
+#, fuzzy
+#~ msgid "Failed to open TIFF image"
+#~ msgstr "Kuri Gufungura Ishusho"
+
+#, fuzzy
+#~ msgid "TIFFClose operation failed"
+#~ msgstr "Byanze"
+
+#, fuzzy
+#~ msgid "Failed to load TIFF image"
+#~ msgstr "Kuri Ibirimo Ishusho"
+
+#, fuzzy
+#~ msgid "Failed to save TIFF image"
+#~ msgstr "Kuri Gufungura Ishusho"
+
+#, fuzzy
+#~ msgid "Failed to write TIFF data"
+#~ msgstr "Kuri Gufungura Ishusho"
+
+#, fuzzy
+#~ msgid "Couldn't write to TIFF file"
+#~ msgstr "Kuri IDOSIYE"
+
+#, fuzzy
+#~ msgid "The TIFF image format"
+#~ msgstr "Ishusho Imiterere"
+
+#, fuzzy
+#~ msgid "Image has zero width"
+#~ msgstr "Zeru Ubugari"
+
+#, fuzzy
+#~ msgid "Image has zero height"
+#~ msgstr "Zeru Ubuhagarike"
+
+#, fuzzy
+#~ msgid "Not enough memory to load image"
+#~ msgstr "Ububiko Kuri Ibirimo Ishusho"
+
+#, fuzzy
+#~ msgid "Couldn't save the rest"
+#~ msgstr "Kubika"
+
+#, fuzzy
+#~ msgid "The WBMP image format"
+#~ msgstr "Ishusho Imiterere"
+
+#, fuzzy
+#~ msgid "Invalid XBM file"
+#~ msgstr "IDOSIYE"
+
+#, fuzzy
+#~ msgid "Insufficient memory to load XBM image file"
+#~ msgstr "Ububiko Kuri Ibirimo Ishusho IDOSIYE"
+
+#, fuzzy
+#~ msgid "Failed to write to temporary file when loading XBM image"
+#~ msgstr "Kuri Kuri By'igihe gito IDOSIYE Ryari: Itangira... Ishusho"
+
+#, fuzzy
+#~ msgid "The XBM image format"
+#~ msgstr "Ishusho Imiterere"
+
+#, fuzzy
+#~ msgid "No XPM header found"
+#~ msgstr "Umutwempangano Byabonetse"
+
+#, fuzzy
+#~ msgid "Invalid XPM header"
+#~ msgstr "Umutwempangano"
+
+#, fuzzy
+#~ msgid "XPM file has image width <= 0"
+#~ msgstr "IDOSIYE Ishusho Ubugari 0"
+
+#, fuzzy
+#~ msgid "XPM file has image height <= 0"
+#~ msgstr "IDOSIYE Ishusho Ubuhagarike 0"
+
+#, fuzzy
+#~ msgid "XPM has invalid number of chars per pixel"
+#~ msgstr "Sibyo Umubare Bya"
+
+#, fuzzy
+#~ msgid "XPM file has invalid number of colors"
+#~ msgstr "IDOSIYE Sibyo Umubare Bya Amabara"
+
+#, fuzzy
+#~ msgid "Cannot allocate memory for loading XPM image"
+#~ msgstr "Ububiko kugirango Itangira... Ishusho"
+
+#, fuzzy
+#~ msgid "Cannot read XPM colormap"
+#~ msgstr "Gusoma"
+
+#, fuzzy
+#~ msgid "Failed to write to temporary file when loading XPM image"
+#~ msgstr "Kuri Kuri By'igihe gito IDOSIYE Ryari: Itangira... Ishusho"
+
+#, fuzzy
+#~ msgid "The XPM image format"
+#~ msgstr "Ishusho Imiterere"
+
+#, fuzzy
+#~ msgid "The EMF image format"
+#~ msgstr "Ishusho Imiterere"
+
+#, fuzzy
+#~ msgid "Could not allocate memory: %s"
+#~ msgstr "Ububiko kugirango Umutwempangano"
+
+#, fuzzy
+#~ msgid "Could not create stream: %s"
+#~ msgstr "bushyinguro"
+
+#, fuzzy
+#~ msgid "Could not seek stream: %s"
+#~ msgstr "gutoranya ibara"
+
+#, fuzzy
+#~ msgid "Could not read from stream: %s"
+#~ msgstr "bushyinguro"
+
+#, fuzzy
+#~ msgid "Couldn't load bitmap"
+#~ msgstr "GUHINDURA Izina ry'idosiye:"
+
+#, fuzzy
+#~ msgid "Couldn't load metafile"
+#~ msgstr "GUHINDURA Izina ry'idosiye:"
+
+#, fuzzy
+#~ msgid "Unsupported image format for GDI+"
+#~ msgstr "Ishusho"
+
+#, fuzzy
+#~ msgid "Couldn't save"
+#~ msgstr "Kubika"
+
+#, fuzzy
+#~ msgid "The WMF image format"
+#~ msgstr "Ishusho Imiterere"
+
+#, fuzzy
+#~ msgid "\"Deepness\" of the color."
+#~ msgstr "\"Bya Ibara"
 
 # scp/source\office\dir.lng:STR_DIR_DATEIEN.text
 #, fuzzy

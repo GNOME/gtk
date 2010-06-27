@@ -28,10 +28,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.8.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-05-25 20:10-0400\n"
+"POT-Creation-Date: 2010-06-26 23:16-0400\n"
 "PO-Revision-Date: 2010-04-02 18:26+0200\n"
 "Last-Translator: David Planella <david.planella@gmail.com>\n"
 "Language-Team: Catalan <tradgnome@softcatala.org>\n"
+"Language: ca\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -96,7 +97,7 @@ msgstr "Senyaladors de depuració del Gdk a habilitar"
 #. Placeholder in --gdk-no-debug=FLAGS in --help output
 #. Placeholder in --gtk-debug=FLAGS in --help output
 #. Placeholder in --gtk-no-debug=FLAGS in --help output
-#: gdk/gdk.c:165 gdk/gdk.c:168 gtk/gtkmain.c:454 gtk/gtkmain.c:457
+#: gdk/gdk.c:165 gdk/gdk.c:168 gtk/gtkmain.c:439 gtk/gtkmain.c:442
 msgid "FLAGS"
 msgstr "SENYALADORS"
 
@@ -294,919 +295,6 @@ msgctxt "keyboard label"
 msgid "Delete"
 msgstr "Supr"
 
-#: gdk-pixbuf/gdk-pixbuf-animation.c:133 gdk-pixbuf/gdk-pixbuf-io.c:982
-#: gdk-pixbuf/gdk-pixbuf-io.c:1242 tests/testfilechooser.c:222
-#, c-format
-msgid "Failed to open file '%s': %s"
-msgstr "No s'ha pogut obrir el fitxer «%s»: %s"
-
-#: gdk-pixbuf/gdk-pixbuf-animation.c:146 gdk-pixbuf/gdk-pixbuf-io.c:994
-#, c-format
-msgid "Image file '%s' contains no data"
-msgstr "El fitxer gràfic «%s» no conté dades"
-
-#: gdk-pixbuf/gdk-pixbuf-animation.c:188 gdk-pixbuf/gdk-pixbuf-io.c:1030
-#: gdk-pixbuf/gdk-pixbuf-io.c:1294 tests/testfilechooser.c:267
-#, c-format
-msgid ""
-"Failed to load image '%s': reason not known, probably a corrupt image file"
-msgstr ""
-"No es pot carregar la imatge «%s»: se'n desconeix el motiu; probablement es "
-"tracta d'un fitxer d'imatge malmès"
-
-#: gdk-pixbuf/gdk-pixbuf-animation.c:221
-#, c-format
-msgid ""
-"Failed to load animation '%s': reason not known, probably a corrupt "
-"animation file"
-msgstr ""
-"No es pot carregar l'animació «%s»: se'n desconeix el motiu; probablement es "
-"tracta d'un fitxer d'animació malmès"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:715
-#, c-format
-msgid "Unable to load image-loading module: %s: %s"
-msgstr "No és possible carregar el mòdul per a la càrrega d'imatges: %s: %s"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:730
-#, c-format
-msgid ""
-"Image-loading module %s does not export the proper interface; perhaps it's "
-"from a different GTK version?"
-msgstr ""
-"El mòdul %s per carregar imatges no exporta la interfície adequada; potser "
-"és d'una versió GTK diferent"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:739 gdk-pixbuf/gdk-pixbuf-io.c:790
-#, c-format
-msgid "Image type '%s' is not supported"
-msgstr "El tipus d'imatge «%s» no està implementat"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:863
-#, c-format
-msgid "Couldn't recognize the image file format for file '%s'"
-msgstr "No s'ha pogut reconèixer el format gràfic del fitxer «%s»"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:871
-msgid "Unrecognized image file format"
-msgstr "No es coneix el format del fitxer gràfic"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:1039
-#, c-format
-msgid "Failed to load image '%s': %s"
-msgstr "No s'ha pogut carregar la imatge «%s»: %s"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:1673 gdk-pixbuf/io-gdip-utils.c:961
-#, c-format
-msgid "Error writing to image file: %s"
-msgstr "S'ha produït un error en escriure al fitxer d'imatge: %s"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:1718 gdk-pixbuf/gdk-pixbuf-io.c:1848
-#, c-format
-msgid "This build of gdk-pixbuf does not support saving the image format: %s"
-msgstr "Aquest muntatge de gdk-pixbuf no permet desar el format d'imatge: %s"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:1752
-msgid "Insufficient memory to save image to callback"
-msgstr "No hi ha memòria suficient per desar la imatge a la crida de retorn"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:1765
-msgid "Failed to open temporary file"
-msgstr "No s'ha pogut obrir el fitxer temporal"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:1791
-msgid "Failed to read from temporary file"
-msgstr "No s'ha pogut llegir el fitxer temporal"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:2044
-#, c-format
-msgid "Failed to open '%s' for writing: %s"
-msgstr "No s'ha pogut obrir «%s» per a l'escriptura: %s"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:2070
-#, c-format
-msgid ""
-"Failed to close '%s' while writing image, all data may not have been saved: %"
-"s"
-msgstr ""
-"No s'ha pogut desar «%s» en escriure la imatge, és probable que no s'hagin "
-"desat totes les dades: %s"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:2290 gdk-pixbuf/gdk-pixbuf-io.c:2341
-msgid "Insufficient memory to save image into a buffer"
-msgstr ""
-"No hi ha memòria suficient per desar la imatge en una memòria intermèdia"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:2387
-msgid "Error writing to image stream"
-msgstr "S'ha produït un error en escriure al flux d'imatge"
-
-#: gdk-pixbuf/gdk-pixbuf-loader.c:334
-#, c-format
-msgid ""
-"Internal error: Image loader module '%s' failed to complete an operation, "
-"but didn't give a reason for the failure"
-msgstr ""
-"Error intern: El carregador d'imatge «%s» no ha pogut acabar una operació, "
-"però no ha donat cap raó per a la fallada"
-
-#: gdk-pixbuf/gdk-pixbuf-loader.c:376
-#, c-format
-msgid "Incremental loading of image type '%s' is not supported"
-msgstr "No està implementada la càrrega incremental del tipus d'imatge «%s»"
-
-#: gdk-pixbuf/gdk-pixdata.c:147
-msgid "Image header corrupt"
-msgstr "La capçalera de la imatge està malmesa"
-
-#: gdk-pixbuf/gdk-pixdata.c:152
-msgid "Image format unknown"
-msgstr "El format de la imatge és desconegut"
-
-#: gdk-pixbuf/gdk-pixdata.c:157 gdk-pixbuf/gdk-pixdata.c:488
-msgid "Image pixel data corrupt"
-msgstr "Les dades de píxels de la imatge estan malmeses"
-
-#: gdk-pixbuf/gdk-pixdata.c:432
-#, c-format
-msgid "failed to allocate image buffer of %u byte"
-msgid_plural "failed to allocate image buffer of %u bytes"
-msgstr[0] "no s'ha pogut assignar una memòria intermèdia d'imatge de %u byte"
-msgstr[1] "no s'ha pogut assignar una memòria intermèdia d'imatge de %u bytes"
-
-#: gdk-pixbuf/io-ani.c:244
-msgid "Unexpected icon chunk in animation"
-msgstr "Bloc d'icona inesperat en l'animació"
-
-#: gdk-pixbuf/io-ani.c:337
-msgid "Unsupported animation type"
-msgstr "Tipus d'animació no implementada"
-
-#: gdk-pixbuf/io-ani.c:348 gdk-pixbuf/io-ani.c:406 gdk-pixbuf/io-ani.c:432
-#: gdk-pixbuf/io-ani.c:455 gdk-pixbuf/io-ani.c:482 gdk-pixbuf/io-ani.c:569
-msgid "Invalid header in animation"
-msgstr "La capçalera de l'animació no és vàlida"
-
-#: gdk-pixbuf/io-ani.c:358 gdk-pixbuf/io-ani.c:380 gdk-pixbuf/io-ani.c:464
-#: gdk-pixbuf/io-ani.c:491 gdk-pixbuf/io-ani.c:542 gdk-pixbuf/io-ani.c:614
-msgid "Not enough memory to load animation"
-msgstr "No hi ha memòria suficient per carregar l'animació"
-
-#: gdk-pixbuf/io-ani.c:398 gdk-pixbuf/io-ani.c:424 gdk-pixbuf/io-ani.c:443
-msgid "Malformed chunk in animation"
-msgstr "Bloc erroni en l'animació"
-
-#: gdk-pixbuf/io-ani.c:711
-msgid "The ANI image format"
-msgstr "El format d'imatge ANI"
-
-#: gdk-pixbuf/io-bmp.c:230 gdk-pixbuf/io-bmp.c:267 gdk-pixbuf/io-bmp.c:338
-#: gdk-pixbuf/io-bmp.c:370 gdk-pixbuf/io-bmp.c:393 gdk-pixbuf/io-bmp.c:496
-msgid "BMP image has bogus header data"
-msgstr "La imatge BMP conté dades de capçalera errònies"
-
-#: gdk-pixbuf/io-bmp.c:241 gdk-pixbuf/io-bmp.c:433
-msgid "Not enough memory to load bitmap image"
-msgstr "No hi ha memòria suficient per carregar la imatge de mapa de bits"
-
-#: gdk-pixbuf/io-bmp.c:319
-msgid "BMP image has unsupported header size"
-msgstr "La imatge BMP té una mida de capçalera no suportada"
-
-# Topdown és un BMP amb la primera "scanline" al principi del fitxer. jm
-#: gdk-pixbuf/io-bmp.c:357
-msgid "Topdown BMP images cannot be compressed"
-msgstr "No es poden comprimir les imatges BMP «topdown»"
-
-#: gdk-pixbuf/io-bmp.c:717 gdk-pixbuf/io-pnm.c:709
-msgid "Premature end-of-file encountered"
-msgstr "S'ha trobat un final de fitxer abans d'hora"
-
-#: gdk-pixbuf/io-bmp.c:1329
-msgid "Couldn't allocate memory for saving BMP file"
-msgstr "No s'ha pogut obtenir memòria per desar el fitxer BMP"
-
-#: gdk-pixbuf/io-bmp.c:1370
-msgid "Couldn't write to BMP file"
-msgstr "No s'ha pogut escriure al fitxer BMP"
-
-#: gdk-pixbuf/io-bmp.c:1423 gdk-pixbuf/io-gdip-bmp.c:82
-msgid "The BMP image format"
-msgstr "El format d'imatge BMP"
-
-#: gdk-pixbuf/io-gif.c:222
-#, c-format
-msgid "Failure reading GIF: %s"
-msgstr "No s'ha pogut llegir el GIF: %s"
-
-#: gdk-pixbuf/io-gif.c:496 gdk-pixbuf/io-gif.c:1481 gdk-pixbuf/io-gif.c:1642
-msgid "GIF file was missing some data (perhaps it was truncated somehow?)"
-msgstr ""
-"Al fitxer GIF li falten algunes dades (potser s'han truncat d'alguna manera)"
-
-#: gdk-pixbuf/io-gif.c:505
-#, c-format
-msgid "Internal error in the GIF loader (%s)"
-msgstr "Error intern en el carregador de GIF (%s)"
-
-#: gdk-pixbuf/io-gif.c:579
-msgid "Stack overflow"
-msgstr "Sobreeiximent de la pila"
-
-#: gdk-pixbuf/io-gif.c:639
-msgid "GIF image loader cannot understand this image."
-msgstr "El carregador d'imatges GIF no entén aquesta imatge."
-
-#: gdk-pixbuf/io-gif.c:668
-msgid "Bad code encountered"
-msgstr "S'ha trobat un codi incorrecte"
-
-#: gdk-pixbuf/io-gif.c:678
-msgid "Circular table entry in GIF file"
-msgstr "Entrada de taula circular al fitxer GIF"
-
-#: gdk-pixbuf/io-gif.c:866 gdk-pixbuf/io-gif.c:1468 gdk-pixbuf/io-gif.c:1515
-#: gdk-pixbuf/io-gif.c:1630
-msgid "Not enough memory to load GIF file"
-msgstr "No hi ha memòria suficient per carregar el fitxer GIF"
-
-#: gdk-pixbuf/io-gif.c:960
-msgid "Not enough memory to composite a frame in GIF file"
-msgstr "No hi ha memòria suficient per compondre un marc al fitxer GIF"
-
-#: gdk-pixbuf/io-gif.c:1132
-msgid "GIF image is corrupt (incorrect LZW compression)"
-msgstr "La imatge GIF és corrupta (la compressió LZW és incorrecte)"
-
-#: gdk-pixbuf/io-gif.c:1182
-msgid "File does not appear to be a GIF file"
-msgstr "El fitxer no sembla ser un fitxer GIF"
-
-#: gdk-pixbuf/io-gif.c:1194
-#, c-format
-msgid "Version %s of the GIF file format is not supported"
-msgstr "No s'ha implementat la versió %s del format del fitxer GIF"
-
-#: gdk-pixbuf/io-gif.c:1303
-msgid ""
-"GIF image has no global colormap, and a frame inside it has no local "
-"colormap."
-msgstr ""
-"La imatge GIF no té mapa de color global, i un marc de dins no té mapa de "
-"color local."
-
-#: gdk-pixbuf/io-gif.c:1537
-msgid "GIF image was truncated or incomplete."
-msgstr "Imatge GIF truncada o incompleta."
-
-#: gdk-pixbuf/io-gif.c:1693 gdk-pixbuf/io-gdip-gif.c:80
-msgid "The GIF image format"
-msgstr "El format d'imatge GIF"
-
-#: gdk-pixbuf/io-ico.c:211 gdk-pixbuf/io-ico.c:225 gdk-pixbuf/io-ico.c:277
-#: gdk-pixbuf/io-ico.c:290 gdk-pixbuf/io-ico.c:359
-msgid "Invalid header in icon"
-msgstr "La capçalera de la icona no és vàlida"
-
-#: gdk-pixbuf/io-ico.c:240 gdk-pixbuf/io-ico.c:300 gdk-pixbuf/io-ico.c:369
-#: gdk-pixbuf/io-ico.c:432 gdk-pixbuf/io-ico.c:462
-msgid "Not enough memory to load icon"
-msgstr "No hi ha memòria suficient per carregar la icona"
-
-#: gdk-pixbuf/io-ico.c:322
-msgid "Icon has zero width"
-msgstr "L'amplada de la icona és zero"
-
-#: gdk-pixbuf/io-ico.c:332
-msgid "Icon has zero height"
-msgstr "L'alçada de la icona és zero"
-
-#: gdk-pixbuf/io-ico.c:384
-msgid "Compressed icons are not supported"
-msgstr "Les icones comprimides no estan implementades"
-
-#: gdk-pixbuf/io-ico.c:417
-msgid "Unsupported icon type"
-msgstr "Tipus d'icona no implementada"
-
-#: gdk-pixbuf/io-ico.c:511
-msgid "Not enough memory to load ICO file"
-msgstr "No hi ha memòria suficient per carregar el fitxer ICO"
-
-#: gdk-pixbuf/io-ico.c:976
-msgid "Image too large to be saved as ICO"
-msgstr "La imatge és massa gran per desar-la com a ICO"
-
-#: gdk-pixbuf/io-ico.c:987
-msgid "Cursor hotspot outside image"
-msgstr "Lloc calent del cursor fora de la imatge"
-
-#: gdk-pixbuf/io-ico.c:1010
-#, c-format
-msgid "Unsupported depth for ICO file: %d"
-msgstr "No se suporta la profunditat per al fitxer ICO: %d"
-
-#: gdk-pixbuf/io-ico.c:1245 gdk-pixbuf/io-gdip-ico.c:59
-msgid "The ICO image format"
-msgstr "El format d'imatge ICO"
-
-#: gdk-pixbuf/io-icns.c:347
-#, c-format
-msgid "Error reading ICNS image: %s"
-msgstr "S'ha produït un error en llegir la imatge ICNS: %s"
-
-#: gdk-pixbuf/io-icns.c:364
-msgid "Could not decode ICNS file"
-msgstr "No s'ha pogut descodificar el fitxer ICNS"
-
-#: gdk-pixbuf/io-icns.c:397
-msgid "The ICNS image format"
-msgstr "El format d'imatge ICNS"
-
-#: gdk-pixbuf/io-jasper.c:75
-msgid "Couldn't allocate memory for stream"
-msgstr "No s'ha pogut assignar memòria per al flux"
-
-#: gdk-pixbuf/io-jasper.c:105
-msgid "Couldn't decode image"
-msgstr "No s'ha pogut descodificar la imatge"
-
-#: gdk-pixbuf/io-jasper.c:123
-msgid "Transformed JPEG2000 has zero width or height"
-msgstr "El JPEG 2000 transformat té amplada o alçada zero"
-
-#: gdk-pixbuf/io-jasper.c:137
-msgid "Image type currently not supported"
-msgstr "El tipus d'imatge no està implementat actualment"
-
-#: gdk-pixbuf/io-jasper.c:149 gdk-pixbuf/io-jasper.c:157
-msgid "Couldn't allocate memory for color profile"
-msgstr "No s'ha pogut assignar memòria per al perfil de color"
-
-#: gdk-pixbuf/io-jasper.c:183
-msgid "Insufficient memory to open JPEG 2000 file"
-msgstr "No hi ha memòria suficient per obrir el fitxer JPEG 2000"
-
-#: gdk-pixbuf/io-jasper.c:262
-msgid "Couldn't allocate memory to buffer image data"
-msgstr ""
-"No s'ha pogut assignar memòria per ubicar les dades d'imatge a la memòria "
-"intermèdia"
-
-#: gdk-pixbuf/io-jasper.c:306
-msgid "The JPEG 2000 image format"
-msgstr "El format d'imatge JPEG 2000"
-
-#: gdk-pixbuf/io-jpeg.c:117
-#, c-format
-msgid "Error interpreting JPEG image file (%s)"
-msgstr "S'ha produït un error en interpretar el fitxer gràfic JPEG (%s)"
-
-#: gdk-pixbuf/io-jpeg.c:528
-msgid ""
-"Insufficient memory to load image, try exiting some applications to free "
-"memory"
-msgstr ""
-"La memòria per carregar la imatge és insuficient, proveu de sortir d'algunes "
-"aplicacions per alliberar memòria"
-
-#: gdk-pixbuf/io-jpeg.c:569 gdk-pixbuf/io-jpeg.c:775
-#, c-format
-msgid "Unsupported JPEG color space (%s)"
-msgstr "Espai de color JPEG no implementat (%s)"
-
-#: gdk-pixbuf/io-jpeg.c:674 gdk-pixbuf/io-jpeg.c:944 gdk-pixbuf/io-jpeg.c:1177
-#: gdk-pixbuf/io-jpeg.c:1186
-msgid "Couldn't allocate memory for loading JPEG file"
-msgstr "No es pot obtenir memòria per carregar el fitxer JPEG"
-
-#: gdk-pixbuf/io-jpeg.c:919
-msgid "Transformed JPEG has zero width or height."
-msgstr "El JPEG transformat té amplada o alçada zero."
-
-#: gdk-pixbuf/io-jpeg.c:1133 gdk-pixbuf/io-gdip-jpeg.c:53
-#, c-format
-msgid ""
-"JPEG quality must be a value between 0 and 100; value '%s' could not be "
-"parsed."
-msgstr ""
-"La qualitat de JPEG ha de ser un valor entre 0 i 100; el valor «%s» no es pot "
-"analitzar."
-
-#: gdk-pixbuf/io-jpeg.c:1148 gdk-pixbuf/io-gdip-jpeg.c:68
-#, c-format
-msgid ""
-"JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
-msgstr ""
-"La qualitat JPEG ha de ser un valor entre 0 i 100; el valor «%d» no és permès."
-
-#: gdk-pixbuf/io-jpeg.c:1310 gdk-pixbuf/io-gdip-jpeg.c:136
-msgid "The JPEG image format"
-msgstr "El format d'imatge JPEG"
-
-#: gdk-pixbuf/io-pcx.c:187
-msgid "Couldn't allocate memory for header"
-msgstr "No es pot obtenir memòria per a la capçalera"
-
-#: gdk-pixbuf/io-pcx.c:202 gdk-pixbuf/io-pcx.c:560
-msgid "Couldn't allocate memory for context buffer"
-msgstr "No s'ha pogut assignar memòria per al context de la memòria intermèdia"
-
-#: gdk-pixbuf/io-pcx.c:601
-msgid "Image has invalid width and/or height"
-msgstr "La imatge té una amplada i/o alçada no vàlida"
-
-#: gdk-pixbuf/io-pcx.c:613 gdk-pixbuf/io-pcx.c:674
-msgid "Image has unsupported bpp"
-msgstr "La imatge té uns bpp no suportats"
-
-#: gdk-pixbuf/io-pcx.c:618 gdk-pixbuf/io-pcx.c:626
-#, c-format
-msgid "Image has unsupported number of %d-bit planes"
-msgstr "La imatge té un nombre de plànols de %d bits no compatible"
-
-#: gdk-pixbuf/io-pcx.c:642
-msgid "Couldn't create new pixbuf"
-msgstr "No s'ha pogut crear una memòria intermèdia de píxels nova"
-
-#: gdk-pixbuf/io-pcx.c:650
-msgid "Couldn't allocate memory for line data"
-msgstr "No s'ha pogut assignar memòria per a les dades de la línia"
-
-#: gdk-pixbuf/io-pcx.c:657
-msgid "Couldn't allocate memory for paletted data"
-msgstr "No s'ha pogut assignar memòria per a les dades de la paleta"
-
-#: gdk-pixbuf/io-pcx.c:704
-msgid "Didn't get all lines of PCX image"
-msgstr "No s'han obtingut totes les línies de la imatge PCX"
-
-#: gdk-pixbuf/io-pcx.c:711
-msgid "No palette found at end of PCX data"
-msgstr "No s'ha trobat cap paleta al final de les dades PCX"
-
-#: gdk-pixbuf/io-pcx.c:756
-msgid "The PCX image format"
-msgstr "El format d'imatge PCX"
-
-#: gdk-pixbuf/io-png.c:55
-msgid "Bits per channel of PNG image is invalid."
-msgstr "Els bits per canal de la imatge PNG no són vàlids."
-
-#: gdk-pixbuf/io-png.c:136 gdk-pixbuf/io-png.c:642
-msgid "Transformed PNG has zero width or height."
-msgstr "El PNG transformat té amplada o alçada zero."
-
-#: gdk-pixbuf/io-png.c:144
-msgid "Bits per channel of transformed PNG is not 8."
-msgstr "Els bits per canal del PNG transformat no són 8."
-
-#: gdk-pixbuf/io-png.c:153
-msgid "Transformed PNG not RGB or RGBA."
-msgstr "El PNG transformat no és RGB o RGBA."
-
-#: gdk-pixbuf/io-png.c:162
-msgid "Transformed PNG has unsupported number of channels, must be 3 or 4."
-msgstr ""
-"El PNG transformat té un nombre no implementat de canals, ha de ser 3 o 4."
-
-#: gdk-pixbuf/io-png.c:183
-#, c-format
-msgid "Fatal error in PNG image file: %s"
-msgstr "Error fatal al fitxer d'imatge PNG: %s"
-
-#: gdk-pixbuf/io-png.c:316
-msgid "Insufficient memory to load PNG file"
-msgstr "No hi ha memòria suficient per carregar el fitxer PNG"
-
-#: gdk-pixbuf/io-png.c:657
-#, c-format
-msgid ""
-"Insufficient memory to store a %ld by %ld image; try exiting some "
-"applications to reduce memory usage"
-msgstr ""
-"Memòria insuficient per emmagatzemar una imatge de %ld per %ld; proveu de "
-"sortir d'algunes aplicacions per reduir l'ús de memòria"
-
-#: gdk-pixbuf/io-png.c:720
-msgid "Fatal error reading PNG image file"
-msgstr "Error fatal en llegir el fitxer gràfic PNG"
-
-#: gdk-pixbuf/io-png.c:769
-#, c-format
-msgid "Fatal error reading PNG image file: %s"
-msgstr "Error fatal en llegir el fitxer gràfic PNG: %s"
-
-#: gdk-pixbuf/io-png.c:863
-msgid ""
-"Keys for PNG text chunks must have at least 1 and at most 79 characters."
-msgstr ""
-"Les claus per als blocs text de PNG han de tenir entre 1 i 79 caràcters."
-
-#: gdk-pixbuf/io-png.c:872
-msgid "Keys for PNG text chunks must be ASCII characters."
-msgstr "Les claus per als blocs text de PNG han de ser caràcters ASCII."
-
-#: gdk-pixbuf/io-png.c:886 gdk-pixbuf/io-tiff.c:738
-#, c-format
-msgid "Color profile has invalid length %d."
-msgstr "El perfil de color té una llargada no vàlida (%d)."
-
-#: gdk-pixbuf/io-png.c:899 gdk-pixbuf/io-gdip-png.c:56
-#, c-format
-msgid ""
-"PNG compression level must be a value between 0 and 9; value '%s' could not "
-"be parsed."
-msgstr ""
-"El nivell de compressió de PNG ha de ser un valor entre 0 i 9; el valor «%s» "
-"no es pot analitzar."
-
-#: gdk-pixbuf/io-png.c:912 gdk-pixbuf/io-gdip-png.c:68
-#, c-format
-msgid ""
-"PNG compression level must be a value between 0 and 9; value '%d' is not "
-"allowed."
-msgstr ""
-"El nivell de compressió de PNG ha de ser un valor entre 0 i 9; el valor «%d» "
-"no és permès."
-
-#: gdk-pixbuf/io-png.c:951
-#, c-format
-msgid "Value for PNG text chunk %s cannot be converted to ISO-8859-1 encoding."
-msgstr ""
-"El valor per al fragment de text PNG %s no es pot convertir a la codificació "
-"ISO-8859-1."
-
-#: gdk-pixbuf/io-png.c:1112 gdk-pixbuf/io-gdip-png.c:133
-msgid "The PNG image format"
-msgstr "El format d'imatge PNG"
-
-#: gdk-pixbuf/io-pnm.c:250
-msgid "PNM loader expected to find an integer, but didn't"
-msgstr "El carregador PNM esperava trobar un enter, però no l'ha trobat"
-
-#: gdk-pixbuf/io-pnm.c:282
-msgid "PNM file has an incorrect initial byte"
-msgstr "El fitxer PNM té un byte inicial incorrecte"
-
-#: gdk-pixbuf/io-pnm.c:312
-msgid "PNM file is not in a recognized PNM subformat"
-msgstr "El fitxer PNM no és en un subformat reconegut"
-
-#: gdk-pixbuf/io-pnm.c:337
-msgid "PNM file has an image width of 0"
-msgstr "El fitxer PNM té una amplada d'imatge de 0"
-
-#: gdk-pixbuf/io-pnm.c:358
-msgid "PNM file has an image height of 0"
-msgstr "El fitxer PNM té una alçada d'imatge zero"
-
-#: gdk-pixbuf/io-pnm.c:381
-msgid "Maximum color value in PNM file is 0"
-msgstr "El valor màxim de color al fitxer PNM és zero"
-
-#: gdk-pixbuf/io-pnm.c:389
-msgid "Maximum color value in PNM file is too large"
-msgstr "El valor màxim de color al fitxer PNM és massa alt"
-
-#: gdk-pixbuf/io-pnm.c:429 gdk-pixbuf/io-pnm.c:459 gdk-pixbuf/io-pnm.c:504
-msgid "Raw PNM image type is invalid"
-msgstr "El tipus d'imatge PNM en brut no és vàlid"
-
-#: gdk-pixbuf/io-pnm.c:654
-msgid "PNM image loader does not support this PNM subformat"
-msgstr "El carregador d'imatges PNM no permet aquest subformat PNM"
-
-#: gdk-pixbuf/io-pnm.c:741 gdk-pixbuf/io-pnm.c:968
-msgid "Raw PNM formats require exactly one whitespace before sample data"
-msgstr ""
-"Els formats PNM en brut requereixen exactament un espai en blanc abans de "
-"les dades de mostra"
-
-#: gdk-pixbuf/io-pnm.c:768
-msgid "Cannot allocate memory for loading PNM image"
-msgstr "No es pot obtenir memòria per carregar la imatge PNM"
-
-#: gdk-pixbuf/io-pnm.c:818
-msgid "Insufficient memory to load PNM context struct"
-msgstr "No hi ha memòria suficient per carregar l'estructura de context PNM"
-
-#: gdk-pixbuf/io-pnm.c:869
-msgid "Unexpected end of PNM image data"
-msgstr "Final inesperat de les dades de la imatge PNM"
-
-#: gdk-pixbuf/io-pnm.c:997
-msgid "Insufficient memory to load PNM file"
-msgstr "No hi ha memòria suficient per carregar el fitxer PNM"
-
-#: gdk-pixbuf/io-pnm.c:1081
-msgid "The PNM/PBM/PGM/PPM image format family"
-msgstr "La família de format d'imatge PNM/PBM/PGM/PPM"
-
-#: gdk-pixbuf/io-qtif.c:128
-msgid "Input file descriptor is NULL."
-msgstr "El descriptor del fitxer d'entrada és NULL."
-
-#: gdk-pixbuf/io-qtif.c:143
-msgid "Failed to read QTIF header"
-msgstr "Ha fallat la lectura de la capçalera QTIF"
-
-#: gdk-pixbuf/io-qtif.c:152 gdk-pixbuf/io-qtif.c:182 gdk-pixbuf/io-qtif.c:446
-#, c-format
-msgid "QTIF atom size too large (%d bytes)"
-msgstr "La mida de l'àtom QTIF és massa gran (%d bytes)"
-
-#: gdk-pixbuf/io-qtif.c:172
-#, c-format
-msgid "Failed to allocate %d bytes for file read buffer"
-msgstr ""
-"No s'han pogut assignar %d bytes per a la memòria intermèdia del fitxer de "
-"lectura"
-
-#: gdk-pixbuf/io-qtif.c:196
-#, c-format
-msgid "File error when reading QTIF atom: %s"
-msgstr "S'ha produït un error de fitxer en llegir l'àtom QTIF: %s"
-
-#: gdk-pixbuf/io-qtif.c:233
-#, c-format
-msgid "Failed to skip the next %d bytes with seek()."
-msgstr "No s'han pogut ometre els següents %d bytes amb la crida seek()."
-
-#: gdk-pixbuf/io-qtif.c:257
-msgid "Failed to allocate QTIF context structure."
-msgstr "No s'ha pogut obtenir memòria per al context de l'estructura QTIF."
-
-#: gdk-pixbuf/io-qtif.c:317
-msgid "Failed to create GdkPixbufLoader object."
-msgstr "No s'ha pogut crear l'objecte GdkPixbufLoader."
-
-#: gdk-pixbuf/io-qtif.c:421
-msgid "Failed to find an image data atom."
-msgstr "No s'ha trobat un àtom de dades d'imatge."
-
-#: gdk-pixbuf/io-qtif.c:602
-msgid "The QTIF image format"
-msgstr "El format d'imatge QTIF"
-
-#: gdk-pixbuf/io-ras.c:126
-msgid "RAS image has bogus header data"
-msgstr "La imatge RAS té dades de capçalera erronis"
-
-#: gdk-pixbuf/io-ras.c:148
-msgid "RAS image has unknown type"
-msgstr "La imatge RAS és de tipus desconegut"
-
-#: gdk-pixbuf/io-ras.c:156
-msgid "unsupported RAS image variation"
-msgstr "Variació d'imatge RAS no implementada"
-
-#: gdk-pixbuf/io-ras.c:171 gdk-pixbuf/io-ras.c:200
-msgid "Not enough memory to load RAS image"
-msgstr "No hi ha memòria suficient per carregar la imatge RAS"
-
-#: gdk-pixbuf/io-ras.c:545
-msgid "The Sun raster image format"
-msgstr "El format d'imatge Sun raster"
-
-#: gdk-pixbuf/io-tga.c:154
-msgid "Cannot allocate memory for IOBuffer struct"
-msgstr "No es pot obtenir memòria per a l'estructura IOBuffer"
-
-#: gdk-pixbuf/io-tga.c:173
-msgid "Cannot allocate memory for IOBuffer data"
-msgstr "No es pot obtenir memòria per les dades de l'IOBuffer"
-
-#: gdk-pixbuf/io-tga.c:184
-msgid "Cannot realloc IOBuffer data"
-msgstr "No es pot reallotjar memòria per les dades de l'IOBuffer"
-
-#: gdk-pixbuf/io-tga.c:214
-msgid "Cannot allocate temporary IOBuffer data"
-msgstr "No es poden assignar les dades temporals de l'IOBuffer"
-
-#: gdk-pixbuf/io-tga.c:347
-msgid "Cannot allocate new pixbuf"
-msgstr "No es pot allotjar un nou pixbuf"
-
-#: gdk-pixbuf/io-tga.c:686
-msgid "Image is corrupted or truncated"
-msgstr "La imatge està malmesa o truncada"
-
-#: gdk-pixbuf/io-tga.c:693
-msgid "Cannot allocate colormap structure"
-msgstr "No es pot assignar l'estructura del mapa de colors"
-
-#: gdk-pixbuf/io-tga.c:700
-msgid "Cannot allocate colormap entries"
-msgstr "No es poden assignar les entrades del mapa de colors"
-
-#: gdk-pixbuf/io-tga.c:722
-msgid "Unexpected bitdepth for colormap entries"
-msgstr "Profunditat de bit inesperada per a les entrades del mapa de color"
-
-#: gdk-pixbuf/io-tga.c:740
-msgid "Cannot allocate TGA header memory"
-msgstr "No es pot obtenir memòria per les capçaleres TGA"
-
-#: gdk-pixbuf/io-tga.c:773
-msgid "TGA image has invalid dimensions"
-msgstr "La imatge TGA té unes dimensions no vàlides"
-
-#: gdk-pixbuf/io-tga.c:779 gdk-pixbuf/io-tga.c:788 gdk-pixbuf/io-tga.c:798
-#: gdk-pixbuf/io-tga.c:808 gdk-pixbuf/io-tga.c:815
-msgid "TGA image type not supported"
-msgstr "El tipus d'imatge TGA no està permès"
-
-#: gdk-pixbuf/io-tga.c:862
-msgid "Cannot allocate memory for TGA context struct"
-msgstr "No es pot obtenir memòria per al context de l'estructura TGA"
-
-#: gdk-pixbuf/io-tga.c:927
-msgid "Excess data in file"
-msgstr "Excés de dades al fitxer"
-
-#: gdk-pixbuf/io-tga.c:1008
-msgid "The Targa image format"
-msgstr "El format d'imatge Targa"
-
-#: gdk-pixbuf/io-tiff.c:165
-msgid "Could not get image width (bad TIFF file)"
-msgstr "No es pot obtenir l'amplada de la imatge (fitxer TIFF incorrecte)"
-
-#: gdk-pixbuf/io-tiff.c:172
-msgid "Could not get image height (bad TIFF file)"
-msgstr "No es pot obtenir l'alçada de la imatge (fitxer TIFF incorrecte)"
-
-#: gdk-pixbuf/io-tiff.c:180
-msgid "Width or height of TIFF image is zero"
-msgstr "L'amplada o l'alçada de la imatge TIFF és zero"
-
-#: gdk-pixbuf/io-tiff.c:189 gdk-pixbuf/io-tiff.c:198
-msgid "Dimensions of TIFF image too large"
-msgstr "Les dimensions de la imatge TIFF són massa grans"
-
-#: gdk-pixbuf/io-tiff.c:222 gdk-pixbuf/io-tiff.c:234 gdk-pixbuf/io-tiff.c:561
-msgid "Insufficient memory to open TIFF file"
-msgstr "No hi ha memòria suficient per obrir el fitxer TIFF"
-
-#: gdk-pixbuf/io-tiff.c:295
-msgid "Failed to load RGB data from TIFF file"
-msgstr "No s'han pogut carregar les dades RGB des del fitxer TIFF"
-
-#: gdk-pixbuf/io-tiff.c:351
-msgid "Failed to open TIFF image"
-msgstr "No s'ha pogut obrir la imatge TIFF"
-
-#: gdk-pixbuf/io-tiff.c:363 gdk-pixbuf/io-tiff.c:778
-msgid "TIFFClose operation failed"
-msgstr "L'operació TIFFClose ha fallat"
-
-#: gdk-pixbuf/io-tiff.c:493 gdk-pixbuf/io-tiff.c:506
-msgid "Failed to load TIFF image"
-msgstr "No s'ha pogut carregar la imatge TIFF"
-
-#: gdk-pixbuf/io-tiff.c:692
-msgid "Failed to save TIFF image"
-msgstr "No s'ha pogut desar la imatge TIFF"
-
-#: gdk-pixbuf/io-tiff.c:727
-msgid "TIFF compression doesn't refer to a valid codec."
-msgstr "La compressió TIFF no es refereix a un còdec vàlid."
-
-#: gdk-pixbuf/io-tiff.c:767
-msgid "Failed to write TIFF data"
-msgstr "No s'han pogut escriure dades TIFF"
-
-#: gdk-pixbuf/io-tiff.c:814
-msgid "Couldn't write to TIFF file"
-msgstr "No s'ha pogut escriure al fitxer TIFF"
-
-#: gdk-pixbuf/io-tiff.c:869
-msgid "The TIFF image format"
-msgstr "El format d'imatge TIFF"
-
-#: gdk-pixbuf/io-wbmp.c:246
-msgid "Image has zero width"
-msgstr "La imatge té una amplada zero"
-
-#: gdk-pixbuf/io-wbmp.c:264
-msgid "Image has zero height"
-msgstr "La imatge té una alçada zero"
-
-#: gdk-pixbuf/io-wbmp.c:275
-msgid "Not enough memory to load image"
-msgstr "No hi ha memòria suficient per carregar la imatge"
-
-#: gdk-pixbuf/io-wbmp.c:334
-msgid "Couldn't save the rest"
-msgstr "No s'ha pogut desar la resta"
-
-#: gdk-pixbuf/io-wbmp.c:375
-msgid "The WBMP image format"
-msgstr "El format d'imatge WBMP"
-
-#: gdk-pixbuf/io-xbm.c:295
-msgid "Invalid XBM file"
-msgstr "El fitxer XBM no és vàlid"
-
-#: gdk-pixbuf/io-xbm.c:305
-msgid "Insufficient memory to load XBM image file"
-msgstr "No hi ha memòria suficient per carregar el fitxer gràfic XBM"
-
-#: gdk-pixbuf/io-xbm.c:453
-msgid "Failed to write to temporary file when loading XBM image"
-msgstr "No s'ha pogut escriure al fitxer temporal en carregar la imatge XBM"
-
-#: gdk-pixbuf/io-xbm.c:492
-msgid "The XBM image format"
-msgstr "El format d'imatge XBM"
-
-#: gdk-pixbuf/io-xpm.c:468
-msgid "No XPM header found"
-msgstr "No s'ha trobat la capçalera XPM"
-
-#: gdk-pixbuf/io-xpm.c:477
-msgid "Invalid XPM header"
-msgstr "La capçalera XPM no és vàlida"
-
-#: gdk-pixbuf/io-xpm.c:485
-msgid "XPM file has image width <= 0"
-msgstr "El fitxer XPM té una amplada d'imatge menor o igual que 0"
-
-#: gdk-pixbuf/io-xpm.c:493
-msgid "XPM file has image height <= 0"
-msgstr "El fitxer XPM té una alçada d'imatge menor o igual que 0"
-
-#: gdk-pixbuf/io-xpm.c:501
-msgid "XPM has invalid number of chars per pixel"
-msgstr "XPM té un nombre de caràcters per píxel no vàlid"
-
-#: gdk-pixbuf/io-xpm.c:510
-msgid "XPM file has invalid number of colors"
-msgstr "El fitxer XPM té un nombre de colors no vàlid"
-
-#: gdk-pixbuf/io-xpm.c:522 gdk-pixbuf/io-xpm.c:531 gdk-pixbuf/io-xpm.c:583
-msgid "Cannot allocate memory for loading XPM image"
-msgstr "No es pot obtenir memòria per carregar la imatge XPM"
-
-#: gdk-pixbuf/io-xpm.c:545
-msgid "Cannot read XPM colormap"
-msgstr "No es pot llegir el mapa de color d'XPM"
-
-#: gdk-pixbuf/io-xpm.c:777
-msgid "Failed to write to temporary file when loading XPM image"
-msgstr "No s'ha pogut escriure al fitxer temporal en carregar la imatge XPM"
-
-#: gdk-pixbuf/io-xpm.c:816
-msgid "The XPM image format"
-msgstr "El format d'imatge XPM"
-
-#: gdk-pixbuf/io-gdip-emf.c:59
-msgid "The EMF image format"
-msgstr "El format d'imatge EMF"
-
-#: gdk-pixbuf/io-gdip-utils.c:232
-#, c-format
-msgid "Could not allocate memory: %s"
-msgstr "No s'ha pogut assignar memòria: %s"
-
-#: gdk-pixbuf/io-gdip-utils.c:257 gdk-pixbuf/io-gdip-utils.c:371
-#: gdk-pixbuf/io-gdip-utils.c:411
-#, c-format
-msgid "Could not create stream: %s"
-msgstr "No s'ha pogut crear el flux: %s"
-
-#: gdk-pixbuf/io-gdip-utils.c:271
-#, c-format
-msgid "Could not seek stream: %s"
-msgstr "No s'ha pogut cercar en el flux: %s"
-
-#: gdk-pixbuf/io-gdip-utils.c:283
-#, c-format
-msgid "Could not read from stream: %s"
-msgstr "No s'ha pogut llegir el flux: %s"
-
-#: gdk-pixbuf/io-gdip-utils.c:694 gdk-pixbuf/io-gdip-utils.c:825
-msgid "Couldn't load bitmap"
-msgstr "No s'ha pogut carregar el mapa de bits"
-
-#: gdk-pixbuf/io-gdip-utils.c:847
-msgid "Couldn't load metafile"
-msgstr "No s'ha pogut carregar el metafitxer"
-
-#: gdk-pixbuf/io-gdip-utils.c:1006
-msgid "Unsupported image format for GDI+"
-msgstr "El GDI+ no funciona amb aquest format d'imatge"
-
-#: gdk-pixbuf/io-gdip-utils.c:1013
-msgid "Couldn't save"
-msgstr "No s'ha pogut desar"
-
-#: gdk-pixbuf/io-gdip-wmf.c:58
-msgid "The WMF image format"
-msgstr "El format d'imatge WMF"
-
 #. Description of --sync in --help output
 #: gdk/win32/gdkmain-win32.c:55
 msgid "Don't batch GDI requests"
@@ -1385,8 +473,8 @@ msgstr "Funció de tipus no vàlida a la línia %d: «%s»"
 #, c-format
 msgid "Duplicate object id '%s' on line %d (previously on line %d)"
 msgstr ""
-"Identificador d'objecte duplicat «%s» a la línia %d (anteriorment a la línia %"
-"d)"
+"Identificador d'objecte duplicat «%s» a la línia %d (anteriorment a la línia "
+"%d)"
 
 #: gtk/gtkbuilderparser.c:859
 #, c-format
@@ -1545,8 +633,9 @@ msgid "_Saturation:"
 msgstr "_Saturació:"
 
 #: gtk/gtkcolorsel.c:393
-msgid "\"Deepness\" of the color."
-msgstr "«Profunditat» del color."
+#, fuzzy
+msgid "Intensity of the color."
+msgstr "Transparència del color."
 
 #: gtk/gtkcolorsel.c:394
 msgid "_Value:"
@@ -1722,11 +811,11 @@ msgstr "_Dret:"
 msgid "Paper Margins"
 msgstr "Marges del paper"
 
-#: gtk/gtkentry.c:8612 gtk/gtktextview.c:8002
+#: gtk/gtkentry.c:8612 gtk/gtktextview.c:8012
 msgid "Input _Methods"
 msgstr "_Mètodes d'entrada"
 
-#: gtk/gtkentry.c:8626 gtk/gtktextview.c:8016
+#: gtk/gtkentry.c:8626 gtk/gtktextview.c:8026
 msgid "_Insert Unicode Control Character"
 msgstr "_Insereix caràcters de control Unicode"
 
@@ -2169,12 +1258,12 @@ msgid "System (%s)"
 msgstr "Sistema (%s)"
 
 #. Open Link
-#: gtk/gtklabel.c:6076
+#: gtk/gtklabel.c:6072
 msgid "_Open Link"
 msgstr "Obre l'_enllaç"
 
 #. Copy Link Address
-#: gtk/gtklabel.c:6088
+#: gtk/gtklabel.c:6084
 msgid "Copy _Link Address"
 msgstr "Copia l'adreça de l'en_llaç"
 
@@ -2187,27 +1276,27 @@ msgid "Invalid URI"
 msgstr "URI no vàlid"
 
 #. Description of --gtk-module=MODULES in --help output
-#: gtk/gtkmain.c:447
+#: gtk/gtkmain.c:432
 msgid "Load additional GTK+ modules"
 msgstr "Carrega mòduls del GTK+ addicionals"
 
 #. Placeholder in --gtk-module=MODULES in --help output
-#: gtk/gtkmain.c:448
+#: gtk/gtkmain.c:433
 msgid "MODULES"
 msgstr "MÒDULS"
 
 #. Description of --g-fatal-warnings in --help output
-#: gtk/gtkmain.c:450
+#: gtk/gtkmain.c:435
 msgid "Make all warnings fatal"
 msgstr "Considera tots els avisos com a greus"
 
 #. Description of --gtk-debug=FLAGS in --help output
-#: gtk/gtkmain.c:453
+#: gtk/gtkmain.c:438
 msgid "GTK+ debugging flags to set"
 msgstr "Senyaladors de depuració de GTK+ a habilitar"
 
 #. Description of --gtk-no-debug=FLAGS in --help output
-#: gtk/gtkmain.c:456
+#: gtk/gtkmain.c:441
 msgid "GTK+ debugging flags to unset"
 msgstr "Senyaladors de depuració de GTK+ a inhabilitar"
 
@@ -2218,20 +1307,20 @@ msgstr "Senyaladors de depuració de GTK+ a inhabilitar"
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
 #.
-#: gtk/gtkmain.c:708
+#: gtk/gtkmain.c:704
 msgid "default:LTR"
 msgstr "default:LTR"
 
-#: gtk/gtkmain.c:773
+#: gtk/gtkmain.c:769
 #, c-format
 msgid "Cannot open display: %s"
 msgstr "No es pot obrir la pantalla: %s"
 
-#: gtk/gtkmain.c:810
+#: gtk/gtkmain.c:806
 msgid "GTK+ Options"
 msgstr "Opcions del GTK+"
 
-#: gtk/gtkmain.c:810
+#: gtk/gtkmain.c:806
 msgid "Show GTK+ Options"
 msgstr "Mostra les opcions del GTK+"
 
@@ -2317,7 +1406,7 @@ msgstr "Intèrpret d'ordres «Z»"
 msgid "Cannot end process with pid %d: %s"
 msgstr "No es pot finalitzar el procés amb el PID %d: %s"
 
-#: gtk/gtknotebook.c:4621 gtk/gtknotebook.c:7050
+#: gtk/gtknotebook.c:4631 gtk/gtknotebook.c:7060
 #, c-format
 msgid "Page %u"
 msgstr "Pàgina %u"
@@ -2409,88 +1498,82 @@ msgstr "De_sa a la carpeta:"
 msgid "%s job #%d"
 msgstr "%s treball #%d"
 
-#: gtk/gtkprintoperation.c:1687
+#: gtk/gtkprintoperation.c:1695
 msgctxt "print operation status"
 msgid "Initial state"
 msgstr "Estat inicial"
 
-#: gtk/gtkprintoperation.c:1688
+#: gtk/gtkprintoperation.c:1696
 msgctxt "print operation status"
 msgid "Preparing to print"
 msgstr "S'està preparant per imprimir"
 
-#: gtk/gtkprintoperation.c:1689
+#: gtk/gtkprintoperation.c:1697
 msgctxt "print operation status"
 msgid "Generating data"
 msgstr "S'estan generant les dades"
 
-#: gtk/gtkprintoperation.c:1690
+#: gtk/gtkprintoperation.c:1698
 msgctxt "print operation status"
 msgid "Sending data"
 msgstr "S'estan enviant les dades"
 
-#: gtk/gtkprintoperation.c:1691
+#: gtk/gtkprintoperation.c:1699
 msgctxt "print operation status"
 msgid "Waiting"
 msgstr "S'està esperant"
 
-#: gtk/gtkprintoperation.c:1692
+#: gtk/gtkprintoperation.c:1700
 msgctxt "print operation status"
 msgid "Blocking on issue"
 msgstr "Bloquejat degut a un problema"
 
-#: gtk/gtkprintoperation.c:1693
+#: gtk/gtkprintoperation.c:1701
 msgctxt "print operation status"
 msgid "Printing"
 msgstr "S'està imprimint"
 
-#: gtk/gtkprintoperation.c:1694
+#: gtk/gtkprintoperation.c:1702
 msgctxt "print operation status"
 msgid "Finished"
 msgstr "S'ha finalitzat"
 
-#: gtk/gtkprintoperation.c:1695
+#: gtk/gtkprintoperation.c:1703
 msgctxt "print operation status"
 msgid "Finished with error"
 msgstr "S'ha finalitzat amb error"
 
-#: gtk/gtkprintoperation.c:2254
+#: gtk/gtkprintoperation.c:2270
 #, c-format
 msgid "Preparing %d"
 msgstr "S'està preparant %d"
 
-#: gtk/gtkprintoperation.c:2256 gtk/gtkprintoperation.c:2875
+#: gtk/gtkprintoperation.c:2272 gtk/gtkprintoperation.c:2902
 #, c-format
 msgid "Preparing"
 msgstr "S'està preparant"
 
-#: gtk/gtkprintoperation.c:2259
+#: gtk/gtkprintoperation.c:2275
 #, c-format
 msgid "Printing %d"
 msgstr "S'està imprimint %d"
 
-#: gtk/gtkprintoperation.c:2905
+#: gtk/gtkprintoperation.c:2932
 #, c-format
 msgid "Error creating print preview"
 msgstr "S'ha produït un error en crear la previsualització d'impressió"
 
-#: gtk/gtkprintoperation.c:2908
+#: gtk/gtkprintoperation.c:2935
 #, c-format
 msgid "The most probable reason is that a temporary file could not be created."
 msgstr ""
 "El motiu més probable és perquè no s'ha pogut crear un fitxer temporal."
 
-#: gtk/gtkprintoperation-unix.c:297 gtk/gtkprintoperation-unix.c:314
-#, c-format
+#: gtk/gtkprintoperation-unix.c:297
 msgid "Error launching preview"
 msgstr "S'ha produït un error en llançar la previsualització"
 
-#: gtk/gtkprintoperation-unix.c:358
-#, c-format
-msgid "Error printing"
-msgstr "S'ha produït un error en imprimir"
-
-#: gtk/gtkprintoperation-unix.c:494 gtk/gtkprintoperation-win32.c:1447
+#: gtk/gtkprintoperation-unix.c:470 gtk/gtkprintoperation-win32.c:1447
 msgid "Application"
 msgstr "Aplicació"
 
@@ -2505,7 +1588,7 @@ msgstr "No hi ha paper"
 
 #. Translators: this is a printer status.
 #: gtk/gtkprintoperation-win32.c:616
-#: modules/printbackends/cups/gtkprintbackendcups.c:1999
+#: modules/printbackends/cups/gtkprintbackendcups.c:1998
 msgid "Paused"
 msgstr "En pausa"
 
@@ -2632,42 +1715,42 @@ msgstr "General"
 #. * multiple pages on a sheet when printing
 #.
 #: gtk/gtkprintunixdialog.c:3010
-#: modules/printbackends/cups/gtkprintbackendcups.c:3509
+#: modules/printbackends/cups/gtkprintbackendcups.c:3508
 msgid "Left to right, top to bottom"
 msgstr "D'esquerra a dreta, de dalt a baix"
 
 #: gtk/gtkprintunixdialog.c:3010
-#: modules/printbackends/cups/gtkprintbackendcups.c:3509
+#: modules/printbackends/cups/gtkprintbackendcups.c:3508
 msgid "Left to right, bottom to top"
 msgstr "D'esquerra a dreta, de baix a dalt"
 
 #: gtk/gtkprintunixdialog.c:3011
-#: modules/printbackends/cups/gtkprintbackendcups.c:3510
+#: modules/printbackends/cups/gtkprintbackendcups.c:3509
 msgid "Right to left, top to bottom"
 msgstr "De dreta a esquerra, de dalt a baix"
 
 #: gtk/gtkprintunixdialog.c:3011
-#: modules/printbackends/cups/gtkprintbackendcups.c:3510
+#: modules/printbackends/cups/gtkprintbackendcups.c:3509
 msgid "Right to left, bottom to top"
 msgstr "De dreta a esquerra, de baix a dalt"
 
 #: gtk/gtkprintunixdialog.c:3012
-#: modules/printbackends/cups/gtkprintbackendcups.c:3511
+#: modules/printbackends/cups/gtkprintbackendcups.c:3510
 msgid "Top to bottom, left to right"
 msgstr "De dalt a baix, d'esquerra a dreta"
 
 #: gtk/gtkprintunixdialog.c:3012
-#: modules/printbackends/cups/gtkprintbackendcups.c:3511
+#: modules/printbackends/cups/gtkprintbackendcups.c:3510
 msgid "Top to bottom, right to left"
 msgstr "De dalt a baix, de dreta a esquerra"
 
 #: gtk/gtkprintunixdialog.c:3013
-#: modules/printbackends/cups/gtkprintbackendcups.c:3512
+#: modules/printbackends/cups/gtkprintbackendcups.c:3511
 msgid "Bottom to top, left to right"
 msgstr "De baix a dalt, d'esquerra a dreta"
 
 #: gtk/gtkprintunixdialog.c:3013
-#: modules/printbackends/cups/gtkprintbackendcups.c:3512
+#: modules/printbackends/cups/gtkprintbackendcups.c:3511
 msgid "Bottom to top, right to left"
 msgstr "De baix a dalt, de dreta a esquerra"
 
@@ -2675,7 +1758,7 @@ msgstr "De baix a dalt, de dreta a esquerra"
 #. * dialog that controls in what order multiple pages are arranged
 #.
 #: gtk/gtkprintunixdialog.c:3017 gtk/gtkprintunixdialog.c:3030
-#: modules/printbackends/cups/gtkprintbackendcups.c:3544
+#: modules/printbackends/cups/gtkprintbackendcups.c:3543
 msgid "Page Ordering"
 msgstr "Ordenació de les pàgines"
 
@@ -4822,7 +3905,8 @@ msgstr ""
 #, c-format
 msgid "Printer '%s' is out of at least one marker supply."
 msgstr ""
-"No li queda tinta a almenys un dels contenidors de color a la impressora «%s»."
+"No li queda tinta a almenys un dels contenidors de color a la impressora "
+"«%s»."
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:1682
 #, c-format
@@ -4851,121 +3935,116 @@ msgstr "La impressora «%s» actualment no està en línia."
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:1687
 #, c-format
-msgid "Printer '%s' may not be connected."
-msgstr "Pot ser que la impressora «%s» no estigui connectada."
-
-#: modules/printbackends/cups/gtkprintbackendcups.c:1688
-#, c-format
 msgid "There is a problem on printer '%s'."
 msgstr "Hi ha un problema a la impressora «%s»."
 
 #. Translators: this is a printer status.
-#: modules/printbackends/cups/gtkprintbackendcups.c:1996
+#: modules/printbackends/cups/gtkprintbackendcups.c:1995
 msgid "Paused ; Rejecting Jobs"
 msgstr "En pausa; refusa les tasques"
 
 #. Translators: this is a printer status.
-#: modules/printbackends/cups/gtkprintbackendcups.c:2002
+#: modules/printbackends/cups/gtkprintbackendcups.c:2001
 msgid "Rejecting Jobs"
 msgstr "Refusa les tasques"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2778
+#: modules/printbackends/cups/gtkprintbackendcups.c:2777
 msgid "Two Sided"
 msgstr "Doble cara"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2779
+#: modules/printbackends/cups/gtkprintbackendcups.c:2778
 msgid "Paper Type"
 msgstr "Tipus de paper"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2780
+#: modules/printbackends/cups/gtkprintbackendcups.c:2779
 msgid "Paper Source"
 msgstr "Font del paper"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2781
+#: modules/printbackends/cups/gtkprintbackendcups.c:2780
 msgid "Output Tray"
 msgstr "Safata de sortida"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2782
+#: modules/printbackends/cups/gtkprintbackendcups.c:2781
 msgid "Resolution"
 msgstr "Resolució"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2783
+#: modules/printbackends/cups/gtkprintbackendcups.c:2782
 msgid "GhostScript pre-filtering"
 msgstr "Filtrat previ del GhostScript"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2792
+#: modules/printbackends/cups/gtkprintbackendcups.c:2791
 msgid "One Sided"
 msgstr "Una cara"
 
 #. Translators: this is an option of "Two Sided"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2794
+#: modules/printbackends/cups/gtkprintbackendcups.c:2793
 msgid "Long Edge (Standard)"
 msgstr "Cantó llarg (estàndard)"
 
 #. Translators: this is an option of "Two Sided"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2796
+#: modules/printbackends/cups/gtkprintbackendcups.c:2795
 msgid "Short Edge (Flip)"
 msgstr "Cantó curt (capgirat)"
 
 #. Translators: this is an option of "Paper Source"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2798
-#: modules/printbackends/cups/gtkprintbackendcups.c:2800
-#: modules/printbackends/cups/gtkprintbackendcups.c:2808
+#: modules/printbackends/cups/gtkprintbackendcups.c:2797
+#: modules/printbackends/cups/gtkprintbackendcups.c:2799
+#: modules/printbackends/cups/gtkprintbackendcups.c:2807
 msgid "Auto Select"
 msgstr "Selecció automàtica"
 
 #. Translators: this is an option of "Paper Source"
 #. Translators: this is an option of "Resolution"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2802
-#: modules/printbackends/cups/gtkprintbackendcups.c:2804
-#: modules/printbackends/cups/gtkprintbackendcups.c:2806
-#: modules/printbackends/cups/gtkprintbackendcups.c:2810
-#: modules/printbackends/cups/gtkprintbackendcups.c:3296
+#: modules/printbackends/cups/gtkprintbackendcups.c:2801
+#: modules/printbackends/cups/gtkprintbackendcups.c:2803
+#: modules/printbackends/cups/gtkprintbackendcups.c:2805
+#: modules/printbackends/cups/gtkprintbackendcups.c:2809
+#: modules/printbackends/cups/gtkprintbackendcups.c:3295
 msgid "Printer Default"
 msgstr "Predeterminat de la impressora"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2812
+#: modules/printbackends/cups/gtkprintbackendcups.c:2811
 msgid "Embed GhostScript fonts only"
 msgstr "Incrusta només els tipus de lletra GhostScript"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2814
+#: modules/printbackends/cups/gtkprintbackendcups.c:2813
 msgid "Convert to PS level 1"
 msgstr "Converteix a PS, nivell 1"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2816
+#: modules/printbackends/cups/gtkprintbackendcups.c:2815
 msgid "Convert to PS level 2"
 msgstr "Converteix a PS, nivell 2"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2818
+#: modules/printbackends/cups/gtkprintbackendcups.c:2817
 msgid "No pre-filtering"
 msgstr "Sense filtratge previ"
 
 #. Translators: "Miscellaneous" is the label for a button, that opens
 #. up an extra panel of settings in a print dialog.
-#: modules/printbackends/cups/gtkprintbackendcups.c:2827
+#: modules/printbackends/cups/gtkprintbackendcups.c:2826
 msgid "Miscellaneous"
 msgstr "Miscel·lània"
 
 #. Translators: These strings name the possible values of the
 #. * job priority option in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3504
+#: modules/printbackends/cups/gtkprintbackendcups.c:3503
 msgid "Urgent"
 msgstr "Urgent"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3504
+#: modules/printbackends/cups/gtkprintbackendcups.c:3503
 msgid "High"
 msgstr "Alta"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3504
+#: modules/printbackends/cups/gtkprintbackendcups.c:3503
 msgid "Medium"
 msgstr "Mitjana"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3504
+#: modules/printbackends/cups/gtkprintbackendcups.c:3503
 msgid "Low"
 msgstr "Baixa"
 
@@ -4973,52 +4052,52 @@ msgstr "Baixa"
 #. Translators, this string is used to label the pages-per-sheet option
 #. * in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3528
+#: modules/printbackends/cups/gtkprintbackendcups.c:3527
 msgid "Pages per Sheet"
 msgstr "Pàgines per full"
 
 #. Translators, this string is used to label the job priority option
 #. * in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3565
+#: modules/printbackends/cups/gtkprintbackendcups.c:3564
 msgid "Job Priority"
 msgstr "Prioritat de la tasca"
 
 #. Translators, this string is used to label the billing info entry
 #. * in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3576
+#: modules/printbackends/cups/gtkprintbackendcups.c:3575
 msgid "Billing Info"
 msgstr "Informació de facturació"
 
 #. Translators, these strings are names for various 'standard' cover
 #. * pages that the printing system may support.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3591
+#: modules/printbackends/cups/gtkprintbackendcups.c:3590
 msgid "None"
 msgstr "Cap"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3591
+#: modules/printbackends/cups/gtkprintbackendcups.c:3590
 msgid "Classified"
 msgstr "Classificat"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3591
+#: modules/printbackends/cups/gtkprintbackendcups.c:3590
 msgid "Confidential"
 msgstr "Confidencial"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3591
+#: modules/printbackends/cups/gtkprintbackendcups.c:3590
 msgid "Secret"
 msgstr "Secret"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3591
+#: modules/printbackends/cups/gtkprintbackendcups.c:3590
 msgid "Standard"
 msgstr "Estàndard"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3591
+#: modules/printbackends/cups/gtkprintbackendcups.c:3590
 msgid "Top Secret"
 msgstr "Alt secret"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3591
+#: modules/printbackends/cups/gtkprintbackendcups.c:3590
 msgid "Unclassified"
 msgstr "Desclassificat"
 
@@ -5026,7 +4105,7 @@ msgstr "Desclassificat"
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the front cover page.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3626
+#: modules/printbackends/cups/gtkprintbackendcups.c:3625
 msgid "Before"
 msgstr "Abans"
 
@@ -5034,7 +4113,7 @@ msgstr "Abans"
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the back cover page.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3641
+#: modules/printbackends/cups/gtkprintbackendcups.c:3640
 msgid "After"
 msgstr "Després"
 
@@ -5042,7 +4121,7 @@ msgstr "Després"
 #. * a print job is printed. Possible values are 'now', a specified time,
 #. * or 'on hold'
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3661
+#: modules/printbackends/cups/gtkprintbackendcups.c:3660
 msgid "Print at"
 msgstr "Imprimeix"
 
@@ -5050,7 +4129,7 @@ msgstr "Imprimeix"
 #. Translators: this is the name of the option that allows the user
 #. * to specify a time when a print job will be printed.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3672
+#: modules/printbackends/cups/gtkprintbackendcups.c:3671
 msgid "Print at time"
 msgstr "Imprimeix a una hora o data determinada"
 
@@ -5058,7 +4137,7 @@ msgstr "Imprimeix a una hora o data determinada"
 #. * size. The two placeholders are replaced with the width and height
 #. * in points. E.g: "Custom 230.4x142.9"
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3707
+#: modules/printbackends/cups/gtkprintbackendcups.c:3706
 #, c-format
 msgid "Custom %sx%s"
 msgstr "Personalitzat %sx%s"
@@ -5151,6 +4230,688 @@ msgstr "Imprimiu per provar la impressora"
 #, c-format
 msgid "Could not get information for file '%s': %s"
 msgstr "No s'ha pogut obtenir informació per al fitxer «%s»: %s"
+
+#: tests/testfilechooser.c:222
+#, c-format
+msgid "Failed to open file '%s': %s"
+msgstr "No s'ha pogut obrir el fitxer «%s»: %s"
+
+#: tests/testfilechooser.c:267
+#, c-format
+msgid ""
+"Failed to load image '%s': reason not known, probably a corrupt image file"
+msgstr ""
+"No es pot carregar la imatge «%s»: se'n desconeix el motiu; probablement es "
+"tracta d'un fitxer d'imatge malmès"
+
+#~ msgid "Image file '%s' contains no data"
+#~ msgstr "El fitxer gràfic «%s» no conté dades"
+
+#~ msgid ""
+#~ "Failed to load animation '%s': reason not known, probably a corrupt "
+#~ "animation file"
+#~ msgstr ""
+#~ "No es pot carregar l'animació «%s»: se'n desconeix el motiu; probablement "
+#~ "es tracta d'un fitxer d'animació malmès"
+
+#~ msgid "Unable to load image-loading module: %s: %s"
+#~ msgstr "No és possible carregar el mòdul per a la càrrega d'imatges: %s: %s"
+
+#~ msgid ""
+#~ "Image-loading module %s does not export the proper interface; perhaps "
+#~ "it's from a different GTK version?"
+#~ msgstr ""
+#~ "El mòdul %s per carregar imatges no exporta la interfície adequada; "
+#~ "potser és d'una versió GTK diferent"
+
+#~ msgid "Image type '%s' is not supported"
+#~ msgstr "El tipus d'imatge «%s» no està implementat"
+
+#~ msgid "Couldn't recognize the image file format for file '%s'"
+#~ msgstr "No s'ha pogut reconèixer el format gràfic del fitxer «%s»"
+
+#~ msgid "Unrecognized image file format"
+#~ msgstr "No es coneix el format del fitxer gràfic"
+
+#~ msgid "Failed to load image '%s': %s"
+#~ msgstr "No s'ha pogut carregar la imatge «%s»: %s"
+
+#~ msgid "Error writing to image file: %s"
+#~ msgstr "S'ha produït un error en escriure al fitxer d'imatge: %s"
+
+#~ msgid ""
+#~ "This build of gdk-pixbuf does not support saving the image format: %s"
+#~ msgstr ""
+#~ "Aquest muntatge de gdk-pixbuf no permet desar el format d'imatge: %s"
+
+#~ msgid "Insufficient memory to save image to callback"
+#~ msgstr "No hi ha memòria suficient per desar la imatge a la crida de retorn"
+
+#~ msgid "Failed to open temporary file"
+#~ msgstr "No s'ha pogut obrir el fitxer temporal"
+
+#~ msgid "Failed to read from temporary file"
+#~ msgstr "No s'ha pogut llegir el fitxer temporal"
+
+#~ msgid "Failed to open '%s' for writing: %s"
+#~ msgstr "No s'ha pogut obrir «%s» per a l'escriptura: %s"
+
+#~ msgid ""
+#~ "Failed to close '%s' while writing image, all data may not have been "
+#~ "saved: %s"
+#~ msgstr ""
+#~ "No s'ha pogut desar «%s» en escriure la imatge, és probable que no "
+#~ "s'hagin desat totes les dades: %s"
+
+#~ msgid "Insufficient memory to save image into a buffer"
+#~ msgstr ""
+#~ "No hi ha memòria suficient per desar la imatge en una memòria intermèdia"
+
+#~ msgid "Error writing to image stream"
+#~ msgstr "S'ha produït un error en escriure al flux d'imatge"
+
+#~ msgid ""
+#~ "Internal error: Image loader module '%s' failed to complete an operation, "
+#~ "but didn't give a reason for the failure"
+#~ msgstr ""
+#~ "Error intern: El carregador d'imatge «%s» no ha pogut acabar una "
+#~ "operació, però no ha donat cap raó per a la fallada"
+
+#~ msgid "Incremental loading of image type '%s' is not supported"
+#~ msgstr "No està implementada la càrrega incremental del tipus d'imatge «%s»"
+
+#~ msgid "Image header corrupt"
+#~ msgstr "La capçalera de la imatge està malmesa"
+
+#~ msgid "Image format unknown"
+#~ msgstr "El format de la imatge és desconegut"
+
+#~ msgid "Image pixel data corrupt"
+#~ msgstr "Les dades de píxels de la imatge estan malmeses"
+
+#~ msgid "failed to allocate image buffer of %u byte"
+#~ msgid_plural "failed to allocate image buffer of %u bytes"
+#~ msgstr[0] ""
+#~ "no s'ha pogut assignar una memòria intermèdia d'imatge de %u byte"
+#~ msgstr[1] ""
+#~ "no s'ha pogut assignar una memòria intermèdia d'imatge de %u bytes"
+
+#~ msgid "Unexpected icon chunk in animation"
+#~ msgstr "Bloc d'icona inesperat en l'animació"
+
+#~ msgid "Unsupported animation type"
+#~ msgstr "Tipus d'animació no implementada"
+
+#~ msgid "Invalid header in animation"
+#~ msgstr "La capçalera de l'animació no és vàlida"
+
+#~ msgid "Not enough memory to load animation"
+#~ msgstr "No hi ha memòria suficient per carregar l'animació"
+
+#~ msgid "Malformed chunk in animation"
+#~ msgstr "Bloc erroni en l'animació"
+
+#~ msgid "The ANI image format"
+#~ msgstr "El format d'imatge ANI"
+
+#~ msgid "BMP image has bogus header data"
+#~ msgstr "La imatge BMP conté dades de capçalera errònies"
+
+#~ msgid "Not enough memory to load bitmap image"
+#~ msgstr "No hi ha memòria suficient per carregar la imatge de mapa de bits"
+
+#~ msgid "BMP image has unsupported header size"
+#~ msgstr "La imatge BMP té una mida de capçalera no suportada"
+
+# Topdown és un BMP amb la primera "scanline" al principi del fitxer. jm
+#~ msgid "Topdown BMP images cannot be compressed"
+#~ msgstr "No es poden comprimir les imatges BMP «topdown»"
+
+#~ msgid "Premature end-of-file encountered"
+#~ msgstr "S'ha trobat un final de fitxer abans d'hora"
+
+#~ msgid "Couldn't allocate memory for saving BMP file"
+#~ msgstr "No s'ha pogut obtenir memòria per desar el fitxer BMP"
+
+#~ msgid "Couldn't write to BMP file"
+#~ msgstr "No s'ha pogut escriure al fitxer BMP"
+
+#~ msgid "The BMP image format"
+#~ msgstr "El format d'imatge BMP"
+
+#~ msgid "Failure reading GIF: %s"
+#~ msgstr "No s'ha pogut llegir el GIF: %s"
+
+#~ msgid "GIF file was missing some data (perhaps it was truncated somehow?)"
+#~ msgstr ""
+#~ "Al fitxer GIF li falten algunes dades (potser s'han truncat d'alguna "
+#~ "manera)"
+
+#~ msgid "Internal error in the GIF loader (%s)"
+#~ msgstr "Error intern en el carregador de GIF (%s)"
+
+#~ msgid "Stack overflow"
+#~ msgstr "Sobreeiximent de la pila"
+
+#~ msgid "GIF image loader cannot understand this image."
+#~ msgstr "El carregador d'imatges GIF no entén aquesta imatge."
+
+#~ msgid "Bad code encountered"
+#~ msgstr "S'ha trobat un codi incorrecte"
+
+#~ msgid "Circular table entry in GIF file"
+#~ msgstr "Entrada de taula circular al fitxer GIF"
+
+#~ msgid "Not enough memory to load GIF file"
+#~ msgstr "No hi ha memòria suficient per carregar el fitxer GIF"
+
+#~ msgid "Not enough memory to composite a frame in GIF file"
+#~ msgstr "No hi ha memòria suficient per compondre un marc al fitxer GIF"
+
+#~ msgid "GIF image is corrupt (incorrect LZW compression)"
+#~ msgstr "La imatge GIF és corrupta (la compressió LZW és incorrecte)"
+
+#~ msgid "File does not appear to be a GIF file"
+#~ msgstr "El fitxer no sembla ser un fitxer GIF"
+
+#~ msgid "Version %s of the GIF file format is not supported"
+#~ msgstr "No s'ha implementat la versió %s del format del fitxer GIF"
+
+#~ msgid ""
+#~ "GIF image has no global colormap, and a frame inside it has no local "
+#~ "colormap."
+#~ msgstr ""
+#~ "La imatge GIF no té mapa de color global, i un marc de dins no té mapa de "
+#~ "color local."
+
+#~ msgid "GIF image was truncated or incomplete."
+#~ msgstr "Imatge GIF truncada o incompleta."
+
+#~ msgid "The GIF image format"
+#~ msgstr "El format d'imatge GIF"
+
+#~ msgid "Invalid header in icon"
+#~ msgstr "La capçalera de la icona no és vàlida"
+
+#~ msgid "Not enough memory to load icon"
+#~ msgstr "No hi ha memòria suficient per carregar la icona"
+
+#~ msgid "Icon has zero width"
+#~ msgstr "L'amplada de la icona és zero"
+
+#~ msgid "Icon has zero height"
+#~ msgstr "L'alçada de la icona és zero"
+
+#~ msgid "Compressed icons are not supported"
+#~ msgstr "Les icones comprimides no estan implementades"
+
+#~ msgid "Unsupported icon type"
+#~ msgstr "Tipus d'icona no implementada"
+
+#~ msgid "Not enough memory to load ICO file"
+#~ msgstr "No hi ha memòria suficient per carregar el fitxer ICO"
+
+#~ msgid "Image too large to be saved as ICO"
+#~ msgstr "La imatge és massa gran per desar-la com a ICO"
+
+#~ msgid "Cursor hotspot outside image"
+#~ msgstr "Lloc calent del cursor fora de la imatge"
+
+#~ msgid "Unsupported depth for ICO file: %d"
+#~ msgstr "No se suporta la profunditat per al fitxer ICO: %d"
+
+#~ msgid "The ICO image format"
+#~ msgstr "El format d'imatge ICO"
+
+#~ msgid "Error reading ICNS image: %s"
+#~ msgstr "S'ha produït un error en llegir la imatge ICNS: %s"
+
+#~ msgid "Could not decode ICNS file"
+#~ msgstr "No s'ha pogut descodificar el fitxer ICNS"
+
+#~ msgid "The ICNS image format"
+#~ msgstr "El format d'imatge ICNS"
+
+#~ msgid "Couldn't allocate memory for stream"
+#~ msgstr "No s'ha pogut assignar memòria per al flux"
+
+#~ msgid "Couldn't decode image"
+#~ msgstr "No s'ha pogut descodificar la imatge"
+
+#~ msgid "Transformed JPEG2000 has zero width or height"
+#~ msgstr "El JPEG 2000 transformat té amplada o alçada zero"
+
+#~ msgid "Image type currently not supported"
+#~ msgstr "El tipus d'imatge no està implementat actualment"
+
+#~ msgid "Couldn't allocate memory for color profile"
+#~ msgstr "No s'ha pogut assignar memòria per al perfil de color"
+
+#~ msgid "Insufficient memory to open JPEG 2000 file"
+#~ msgstr "No hi ha memòria suficient per obrir el fitxer JPEG 2000"
+
+#~ msgid "Couldn't allocate memory to buffer image data"
+#~ msgstr ""
+#~ "No s'ha pogut assignar memòria per ubicar les dades d'imatge a la memòria "
+#~ "intermèdia"
+
+#~ msgid "The JPEG 2000 image format"
+#~ msgstr "El format d'imatge JPEG 2000"
+
+#~ msgid "Error interpreting JPEG image file (%s)"
+#~ msgstr "S'ha produït un error en interpretar el fitxer gràfic JPEG (%s)"
+
+#~ msgid ""
+#~ "Insufficient memory to load image, try exiting some applications to free "
+#~ "memory"
+#~ msgstr ""
+#~ "La memòria per carregar la imatge és insuficient, proveu de sortir "
+#~ "d'algunes aplicacions per alliberar memòria"
+
+#~ msgid "Unsupported JPEG color space (%s)"
+#~ msgstr "Espai de color JPEG no implementat (%s)"
+
+#~ msgid "Couldn't allocate memory for loading JPEG file"
+#~ msgstr "No es pot obtenir memòria per carregar el fitxer JPEG"
+
+#~ msgid "Transformed JPEG has zero width or height."
+#~ msgstr "El JPEG transformat té amplada o alçada zero."
+
+#~ msgid ""
+#~ "JPEG quality must be a value between 0 and 100; value '%s' could not be "
+#~ "parsed."
+#~ msgstr ""
+#~ "La qualitat de JPEG ha de ser un valor entre 0 i 100; el valor «%s» no es "
+#~ "pot analitzar."
+
+#~ msgid ""
+#~ "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
+#~ msgstr ""
+#~ "La qualitat JPEG ha de ser un valor entre 0 i 100; el valor «%d» no és "
+#~ "permès."
+
+#~ msgid "The JPEG image format"
+#~ msgstr "El format d'imatge JPEG"
+
+#~ msgid "Couldn't allocate memory for header"
+#~ msgstr "No es pot obtenir memòria per a la capçalera"
+
+#~ msgid "Couldn't allocate memory for context buffer"
+#~ msgstr ""
+#~ "No s'ha pogut assignar memòria per al context de la memòria intermèdia"
+
+#~ msgid "Image has invalid width and/or height"
+#~ msgstr "La imatge té una amplada i/o alçada no vàlida"
+
+#~ msgid "Image has unsupported bpp"
+#~ msgstr "La imatge té uns bpp no suportats"
+
+#~ msgid "Image has unsupported number of %d-bit planes"
+#~ msgstr "La imatge té un nombre de plànols de %d bits no compatible"
+
+#~ msgid "Couldn't create new pixbuf"
+#~ msgstr "No s'ha pogut crear una memòria intermèdia de píxels nova"
+
+#~ msgid "Couldn't allocate memory for line data"
+#~ msgstr "No s'ha pogut assignar memòria per a les dades de la línia"
+
+#~ msgid "Couldn't allocate memory for paletted data"
+#~ msgstr "No s'ha pogut assignar memòria per a les dades de la paleta"
+
+#~ msgid "Didn't get all lines of PCX image"
+#~ msgstr "No s'han obtingut totes les línies de la imatge PCX"
+
+#~ msgid "No palette found at end of PCX data"
+#~ msgstr "No s'ha trobat cap paleta al final de les dades PCX"
+
+#~ msgid "The PCX image format"
+#~ msgstr "El format d'imatge PCX"
+
+#~ msgid "Bits per channel of PNG image is invalid."
+#~ msgstr "Els bits per canal de la imatge PNG no són vàlids."
+
+#~ msgid "Transformed PNG has zero width or height."
+#~ msgstr "El PNG transformat té amplada o alçada zero."
+
+#~ msgid "Bits per channel of transformed PNG is not 8."
+#~ msgstr "Els bits per canal del PNG transformat no són 8."
+
+#~ msgid "Transformed PNG not RGB or RGBA."
+#~ msgstr "El PNG transformat no és RGB o RGBA."
+
+#~ msgid "Transformed PNG has unsupported number of channels, must be 3 or 4."
+#~ msgstr ""
+#~ "El PNG transformat té un nombre no implementat de canals, ha de ser 3 o 4."
+
+#~ msgid "Fatal error in PNG image file: %s"
+#~ msgstr "Error fatal al fitxer d'imatge PNG: %s"
+
+#~ msgid "Insufficient memory to load PNG file"
+#~ msgstr "No hi ha memòria suficient per carregar el fitxer PNG"
+
+#~ msgid ""
+#~ "Insufficient memory to store a %ld by %ld image; try exiting some "
+#~ "applications to reduce memory usage"
+#~ msgstr ""
+#~ "Memòria insuficient per emmagatzemar una imatge de %ld per %ld; proveu de "
+#~ "sortir d'algunes aplicacions per reduir l'ús de memòria"
+
+#~ msgid "Fatal error reading PNG image file"
+#~ msgstr "Error fatal en llegir el fitxer gràfic PNG"
+
+#~ msgid "Fatal error reading PNG image file: %s"
+#~ msgstr "Error fatal en llegir el fitxer gràfic PNG: %s"
+
+#~ msgid ""
+#~ "Keys for PNG text chunks must have at least 1 and at most 79 characters."
+#~ msgstr ""
+#~ "Les claus per als blocs text de PNG han de tenir entre 1 i 79 caràcters."
+
+#~ msgid "Keys for PNG text chunks must be ASCII characters."
+#~ msgstr "Les claus per als blocs text de PNG han de ser caràcters ASCII."
+
+#~ msgid "Color profile has invalid length %d."
+#~ msgstr "El perfil de color té una llargada no vàlida (%d)."
+
+#~ msgid ""
+#~ "PNG compression level must be a value between 0 and 9; value '%s' could "
+#~ "not be parsed."
+#~ msgstr ""
+#~ "El nivell de compressió de PNG ha de ser un valor entre 0 i 9; el valor "
+#~ "«%s» no es pot analitzar."
+
+#~ msgid ""
+#~ "PNG compression level must be a value between 0 and 9; value '%d' is not "
+#~ "allowed."
+#~ msgstr ""
+#~ "El nivell de compressió de PNG ha de ser un valor entre 0 i 9; el valor "
+#~ "«%d» no és permès."
+
+#~ msgid ""
+#~ "Value for PNG text chunk %s cannot be converted to ISO-8859-1 encoding."
+#~ msgstr ""
+#~ "El valor per al fragment de text PNG %s no es pot convertir a la "
+#~ "codificació ISO-8859-1."
+
+#~ msgid "The PNG image format"
+#~ msgstr "El format d'imatge PNG"
+
+#~ msgid "PNM loader expected to find an integer, but didn't"
+#~ msgstr "El carregador PNM esperava trobar un enter, però no l'ha trobat"
+
+#~ msgid "PNM file has an incorrect initial byte"
+#~ msgstr "El fitxer PNM té un byte inicial incorrecte"
+
+#~ msgid "PNM file is not in a recognized PNM subformat"
+#~ msgstr "El fitxer PNM no és en un subformat reconegut"
+
+#~ msgid "PNM file has an image width of 0"
+#~ msgstr "El fitxer PNM té una amplada d'imatge de 0"
+
+#~ msgid "PNM file has an image height of 0"
+#~ msgstr "El fitxer PNM té una alçada d'imatge zero"
+
+#~ msgid "Maximum color value in PNM file is 0"
+#~ msgstr "El valor màxim de color al fitxer PNM és zero"
+
+#~ msgid "Maximum color value in PNM file is too large"
+#~ msgstr "El valor màxim de color al fitxer PNM és massa alt"
+
+#~ msgid "Raw PNM image type is invalid"
+#~ msgstr "El tipus d'imatge PNM en brut no és vàlid"
+
+#~ msgid "PNM image loader does not support this PNM subformat"
+#~ msgstr "El carregador d'imatges PNM no permet aquest subformat PNM"
+
+#~ msgid "Raw PNM formats require exactly one whitespace before sample data"
+#~ msgstr ""
+#~ "Els formats PNM en brut requereixen exactament un espai en blanc abans de "
+#~ "les dades de mostra"
+
+#~ msgid "Cannot allocate memory for loading PNM image"
+#~ msgstr "No es pot obtenir memòria per carregar la imatge PNM"
+
+#~ msgid "Insufficient memory to load PNM context struct"
+#~ msgstr "No hi ha memòria suficient per carregar l'estructura de context PNM"
+
+#~ msgid "Unexpected end of PNM image data"
+#~ msgstr "Final inesperat de les dades de la imatge PNM"
+
+#~ msgid "Insufficient memory to load PNM file"
+#~ msgstr "No hi ha memòria suficient per carregar el fitxer PNM"
+
+#~ msgid "The PNM/PBM/PGM/PPM image format family"
+#~ msgstr "La família de format d'imatge PNM/PBM/PGM/PPM"
+
+#~ msgid "Input file descriptor is NULL."
+#~ msgstr "El descriptor del fitxer d'entrada és NULL."
+
+#~ msgid "Failed to read QTIF header"
+#~ msgstr "Ha fallat la lectura de la capçalera QTIF"
+
+#~ msgid "QTIF atom size too large (%d bytes)"
+#~ msgstr "La mida de l'àtom QTIF és massa gran (%d bytes)"
+
+#~ msgid "Failed to allocate %d bytes for file read buffer"
+#~ msgstr ""
+#~ "No s'han pogut assignar %d bytes per a la memòria intermèdia del fitxer "
+#~ "de lectura"
+
+#~ msgid "File error when reading QTIF atom: %s"
+#~ msgstr "S'ha produït un error de fitxer en llegir l'àtom QTIF: %s"
+
+#~ msgid "Failed to skip the next %d bytes with seek()."
+#~ msgstr "No s'han pogut ometre els següents %d bytes amb la crida seek()."
+
+#~ msgid "Failed to allocate QTIF context structure."
+#~ msgstr "No s'ha pogut obtenir memòria per al context de l'estructura QTIF."
+
+#~ msgid "Failed to create GdkPixbufLoader object."
+#~ msgstr "No s'ha pogut crear l'objecte GdkPixbufLoader."
+
+#~ msgid "Failed to find an image data atom."
+#~ msgstr "No s'ha trobat un àtom de dades d'imatge."
+
+#~ msgid "The QTIF image format"
+#~ msgstr "El format d'imatge QTIF"
+
+#~ msgid "RAS image has bogus header data"
+#~ msgstr "La imatge RAS té dades de capçalera erronis"
+
+#~ msgid "RAS image has unknown type"
+#~ msgstr "La imatge RAS és de tipus desconegut"
+
+#~ msgid "unsupported RAS image variation"
+#~ msgstr "Variació d'imatge RAS no implementada"
+
+#~ msgid "Not enough memory to load RAS image"
+#~ msgstr "No hi ha memòria suficient per carregar la imatge RAS"
+
+#~ msgid "The Sun raster image format"
+#~ msgstr "El format d'imatge Sun raster"
+
+#~ msgid "Cannot allocate memory for IOBuffer struct"
+#~ msgstr "No es pot obtenir memòria per a l'estructura IOBuffer"
+
+#~ msgid "Cannot allocate memory for IOBuffer data"
+#~ msgstr "No es pot obtenir memòria per les dades de l'IOBuffer"
+
+#~ msgid "Cannot realloc IOBuffer data"
+#~ msgstr "No es pot reallotjar memòria per les dades de l'IOBuffer"
+
+#~ msgid "Cannot allocate temporary IOBuffer data"
+#~ msgstr "No es poden assignar les dades temporals de l'IOBuffer"
+
+#~ msgid "Cannot allocate new pixbuf"
+#~ msgstr "No es pot allotjar un nou pixbuf"
+
+#~ msgid "Image is corrupted or truncated"
+#~ msgstr "La imatge està malmesa o truncada"
+
+#~ msgid "Cannot allocate colormap structure"
+#~ msgstr "No es pot assignar l'estructura del mapa de colors"
+
+#~ msgid "Cannot allocate colormap entries"
+#~ msgstr "No es poden assignar les entrades del mapa de colors"
+
+#~ msgid "Unexpected bitdepth for colormap entries"
+#~ msgstr "Profunditat de bit inesperada per a les entrades del mapa de color"
+
+#~ msgid "Cannot allocate TGA header memory"
+#~ msgstr "No es pot obtenir memòria per les capçaleres TGA"
+
+#~ msgid "TGA image has invalid dimensions"
+#~ msgstr "La imatge TGA té unes dimensions no vàlides"
+
+#~ msgid "TGA image type not supported"
+#~ msgstr "El tipus d'imatge TGA no està permès"
+
+#~ msgid "Cannot allocate memory for TGA context struct"
+#~ msgstr "No es pot obtenir memòria per al context de l'estructura TGA"
+
+#~ msgid "Excess data in file"
+#~ msgstr "Excés de dades al fitxer"
+
+#~ msgid "The Targa image format"
+#~ msgstr "El format d'imatge Targa"
+
+#~ msgid "Could not get image width (bad TIFF file)"
+#~ msgstr "No es pot obtenir l'amplada de la imatge (fitxer TIFF incorrecte)"
+
+#~ msgid "Could not get image height (bad TIFF file)"
+#~ msgstr "No es pot obtenir l'alçada de la imatge (fitxer TIFF incorrecte)"
+
+#~ msgid "Width or height of TIFF image is zero"
+#~ msgstr "L'amplada o l'alçada de la imatge TIFF és zero"
+
+#~ msgid "Dimensions of TIFF image too large"
+#~ msgstr "Les dimensions de la imatge TIFF són massa grans"
+
+#~ msgid "Insufficient memory to open TIFF file"
+#~ msgstr "No hi ha memòria suficient per obrir el fitxer TIFF"
+
+#~ msgid "Failed to load RGB data from TIFF file"
+#~ msgstr "No s'han pogut carregar les dades RGB des del fitxer TIFF"
+
+#~ msgid "Failed to open TIFF image"
+#~ msgstr "No s'ha pogut obrir la imatge TIFF"
+
+#~ msgid "TIFFClose operation failed"
+#~ msgstr "L'operació TIFFClose ha fallat"
+
+#~ msgid "Failed to load TIFF image"
+#~ msgstr "No s'ha pogut carregar la imatge TIFF"
+
+#~ msgid "Failed to save TIFF image"
+#~ msgstr "No s'ha pogut desar la imatge TIFF"
+
+#~ msgid "TIFF compression doesn't refer to a valid codec."
+#~ msgstr "La compressió TIFF no es refereix a un còdec vàlid."
+
+#~ msgid "Failed to write TIFF data"
+#~ msgstr "No s'han pogut escriure dades TIFF"
+
+#~ msgid "Couldn't write to TIFF file"
+#~ msgstr "No s'ha pogut escriure al fitxer TIFF"
+
+#~ msgid "The TIFF image format"
+#~ msgstr "El format d'imatge TIFF"
+
+#~ msgid "Image has zero width"
+#~ msgstr "La imatge té una amplada zero"
+
+#~ msgid "Image has zero height"
+#~ msgstr "La imatge té una alçada zero"
+
+#~ msgid "Not enough memory to load image"
+#~ msgstr "No hi ha memòria suficient per carregar la imatge"
+
+#~ msgid "Couldn't save the rest"
+#~ msgstr "No s'ha pogut desar la resta"
+
+#~ msgid "The WBMP image format"
+#~ msgstr "El format d'imatge WBMP"
+
+#~ msgid "Invalid XBM file"
+#~ msgstr "El fitxer XBM no és vàlid"
+
+#~ msgid "Insufficient memory to load XBM image file"
+#~ msgstr "No hi ha memòria suficient per carregar el fitxer gràfic XBM"
+
+#~ msgid "Failed to write to temporary file when loading XBM image"
+#~ msgstr "No s'ha pogut escriure al fitxer temporal en carregar la imatge XBM"
+
+#~ msgid "The XBM image format"
+#~ msgstr "El format d'imatge XBM"
+
+#~ msgid "No XPM header found"
+#~ msgstr "No s'ha trobat la capçalera XPM"
+
+#~ msgid "Invalid XPM header"
+#~ msgstr "La capçalera XPM no és vàlida"
+
+#~ msgid "XPM file has image width <= 0"
+#~ msgstr "El fitxer XPM té una amplada d'imatge menor o igual que 0"
+
+#~ msgid "XPM file has image height <= 0"
+#~ msgstr "El fitxer XPM té una alçada d'imatge menor o igual que 0"
+
+#~ msgid "XPM has invalid number of chars per pixel"
+#~ msgstr "XPM té un nombre de caràcters per píxel no vàlid"
+
+#~ msgid "XPM file has invalid number of colors"
+#~ msgstr "El fitxer XPM té un nombre de colors no vàlid"
+
+#~ msgid "Cannot allocate memory for loading XPM image"
+#~ msgstr "No es pot obtenir memòria per carregar la imatge XPM"
+
+#~ msgid "Cannot read XPM colormap"
+#~ msgstr "No es pot llegir el mapa de color d'XPM"
+
+#~ msgid "Failed to write to temporary file when loading XPM image"
+#~ msgstr "No s'ha pogut escriure al fitxer temporal en carregar la imatge XPM"
+
+#~ msgid "The XPM image format"
+#~ msgstr "El format d'imatge XPM"
+
+#~ msgid "The EMF image format"
+#~ msgstr "El format d'imatge EMF"
+
+#~ msgid "Could not allocate memory: %s"
+#~ msgstr "No s'ha pogut assignar memòria: %s"
+
+#~ msgid "Could not create stream: %s"
+#~ msgstr "No s'ha pogut crear el flux: %s"
+
+#~ msgid "Could not seek stream: %s"
+#~ msgstr "No s'ha pogut cercar en el flux: %s"
+
+#~ msgid "Could not read from stream: %s"
+#~ msgstr "No s'ha pogut llegir el flux: %s"
+
+#~ msgid "Couldn't load bitmap"
+#~ msgstr "No s'ha pogut carregar el mapa de bits"
+
+#~ msgid "Couldn't load metafile"
+#~ msgstr "No s'ha pogut carregar el metafitxer"
+
+#~ msgid "Unsupported image format for GDI+"
+#~ msgstr "El GDI+ no funciona amb aquest format d'imatge"
+
+#~ msgid "Couldn't save"
+#~ msgstr "No s'ha pogut desar"
+
+#~ msgid "The WMF image format"
+#~ msgstr "El format d'imatge WMF"
+
+#~ msgid "\"Deepness\" of the color."
+#~ msgstr "«Profunditat» del color."
+
+#~ msgid "Error printing"
+#~ msgstr "S'ha produït un error en imprimir"
+
+#~ msgid "Printer '%s' may not be connected."
+#~ msgstr "Pot ser que la impressora «%s» no estigui connectada."
 
 #~ msgid "Folders"
 #~ msgstr "Carpetes"
@@ -6034,7 +5795,8 @@ msgstr "No s'ha pogut obtenir informació per al fitxer «%s»: %s"
 
 #~ msgid ""
 #~ "Line %d, column %d: expected \"%s\" or \"%s\", but found \"%s\" instead"
-#~ msgstr "Línia %d, columna %d: s'esperava «%s» o bé «%s», però s'ha trobat «%s»"
+#~ msgstr ""
+#~ "Línia %d, columna %d: s'esperava «%s» o bé «%s», però s'ha trobat «%s»"
 
 #~ msgid "Error creating directory '%s': %s"
 #~ msgstr "S'ha produït un error en crear el directori «%s»: %s"

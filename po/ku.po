@@ -7,14 +7,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ku\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-05-25 20:10-0400\n"
+"POT-Creation-Date: 2010-06-26 23:16-0400\n"
 "PO-Revision-Date: 2009-02-24 01:08+0200\n"
 "Last-Translator: Erdal Ronahi <erdal dot ronahi at gmail dot com>\n"
 "Language-Team: http;//pckurd.net\n"
+"Language: None\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: None\n"
 "Plural-Forms: nplurals=2; plural= n != 1\n"
 "X-Generator: Virtaal 0.3.0\n"
 
@@ -78,7 +78,7 @@ msgstr "Nîşanên Gdk bo çespandinê"
 #. Placeholder in --gdk-no-debug=FLAGS in --help output
 #. Placeholder in --gtk-debug=FLAGS in --help output
 #. Placeholder in --gtk-no-debug=FLAGS in --help output
-#: gdk/gdk.c:165 gdk/gdk.c:168 gtk/gtkmain.c:454 gtk/gtkmain.c:457
+#: gdk/gdk.c:165 gdk/gdk.c:168 gtk/gtkmain.c:439 gtk/gtkmain.c:442
 msgid "FLAGS"
 msgstr "Al"
 
@@ -284,916 +284,6 @@ msgstr "_Rake"
 msgctxt "keyboard label"
 msgid "Delete"
 msgstr "Jêbirin"
-
-#: gdk-pixbuf/gdk-pixbuf-animation.c:133 gdk-pixbuf/gdk-pixbuf-io.c:982
-#: gdk-pixbuf/gdk-pixbuf-io.c:1242 tests/testfilechooser.c:222
-#, c-format
-msgid "Failed to open file '%s': %s"
-msgstr "Vekirina pelê '%s' biserneket: %s"
-
-#: gdk-pixbuf/gdk-pixbuf-animation.c:146 gdk-pixbuf/gdk-pixbuf-io.c:994
-#, c-format
-msgid "Image file '%s' contains no data"
-msgstr "Di pelê wêne '%s' de qet agahî nîn e"
-
-#: gdk-pixbuf/gdk-pixbuf-animation.c:188 gdk-pixbuf/gdk-pixbuf-io.c:1030
-#: gdk-pixbuf/gdk-pixbuf-io.c:1294 tests/testfilechooser.c:267
-#, c-format
-msgid ""
-"Failed to load image '%s': reason not known, probably a corrupt image file"
-msgstr ""
-"Wêneyê '%s' nehate barkirin: sedem nayê zanîn, dibe pelê wêne xerabe be"
-
-#: gdk-pixbuf/gdk-pixbuf-animation.c:221
-#, c-format
-msgid ""
-"Failed to load animation '%s': reason not known, probably a corrupt "
-"animation file"
-msgstr ""
-"Zindîkirina '%s' nehate barkirin: sedem nayê zanîn, dibe pelê zindîkirinê "
-"xerabe be"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:715
-#, c-format
-msgid "Unable to load image-loading module: %s: %s"
-msgstr "Modula barkirina wêne nehate dîtin: %s: %s"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:730
-#, c-format
-msgid ""
-"Image-loading module %s does not export the proper interface; perhaps it's "
-"from a different GTK version?"
-msgstr ""
-"Modula barkirina wêne %s ji navrûyê rastî re nehatiye şandin. Gelo dibe ew "
-"guhertoyeke cuda ya GTK'ê be?"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:739 gdk-pixbuf/gdk-pixbuf-io.c:790
-#, c-format
-msgid "Image type '%s' is not supported"
-msgstr "Cureyê wêne %s' destekê nade"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:863
-#, c-format
-msgid "Couldn't recognize the image file format for file '%s'"
-msgstr "Nikare formata pelê wêne nasbike ji bo pelê '%s'"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:871
-msgid "Unrecognized image file format"
-msgstr "Formata pelê wêne nenaskirî ye"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:1039
-#, c-format
-msgid "Failed to load image '%s': %s"
-msgstr "Barkirina wêneya '%s' biserneket: %s"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:1673 gdk-pixbuf/io-gdip-utils.c:961
-#, c-format
-msgid "Error writing to image file: %s"
-msgstr "Çewtiya nivisandinê ya pelê wêne : %s"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:1718 gdk-pixbuf/gdk-pixbuf-io.c:1848
-#, c-format
-msgid "This build of gdk-pixbuf does not support saving the image format: %s"
-msgstr "Ev avakirina gdk-pixbuf destekê nade tomarkirina formata wêne: %s"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:1752
-msgid "Insufficient memory to save image to callback"
-msgstr "Ji bo paş de vegerandinê dema wêne dihate tomarkirin bîr têrê nake"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:1765
-msgid "Failed to open temporary file"
-msgstr "Vekirina pelê demîn serneket"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:1791
-msgid "Failed to read from temporary file"
-msgstr "Xwendina ji pelê demî biserneket"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:2044
-#, c-format
-msgid "Failed to open '%s' for writing: %s"
-msgstr "Vekirina '%s' ji bo nivîsandinê bi ser neket: %s"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:2070
-#, c-format
-msgid ""
-"Failed to close '%s' while writing image, all data may not have been saved: %"
-"s"
-msgstr ""
-"Çewtiya girtinê'%s' di dema nivisandina wêne de, dibe ku hemû dane nehatibin "
-"tomar kirin: %s"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:2290 gdk-pixbuf/gdk-pixbuf-io.c:2341
-msgid "Insufficient memory to save image into a buffer"
-msgstr "Bîr têr nake ku wêne di Bîra navbênkar de were tomarkirin"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:2387
-#, fuzzy
-msgid "Error writing to image stream"
-msgstr "Çewtiya nivisandinê ya pelê wêne : %s"
-
-#: gdk-pixbuf/gdk-pixbuf-loader.c:334
-#, c-format
-msgid ""
-"Internal error: Image loader module '%s' failed to complete an operation, "
-"but didn't give a reason for the failure"
-msgstr ""
-"Çewtiyek hundirî: Modula barkirina wêneyan '%s' di temamkirina operasiyonekê "
-"de biserneket, sedemê biserneketinê ne hate destnîşankirin"
-
-#: gdk-pixbuf/gdk-pixbuf-loader.c:376
-#, c-format
-msgid "Incremental loading of image type '%s' is not supported"
-msgstr "Daxistina zêdeyî ya cureyê wêne  '%s' destekê nade"
-
-#: gdk-pixbuf/gdk-pixdata.c:147
-msgid "Image header corrupt"
-msgstr "Sernavê wêne xerabe ye"
-
-#: gdk-pixbuf/gdk-pixdata.c:152
-msgid "Image format unknown"
-msgstr "Fomata wêne nenase"
-
-#: gdk-pixbuf/gdk-pixdata.c:157 gdk-pixbuf/gdk-pixdata.c:488
-msgid "Image pixel data corrupt"
-msgstr "Daneya pixel na xebite"
-
-#: gdk-pixbuf/gdk-pixdata.c:432
-#, c-format
-msgid "failed to allocate image buffer of %u byte"
-msgid_plural "failed to allocate image buffer of %u bytes"
-msgstr[0] ""
-"Veqetandina bîra navbênkar bo wêneyê bi meznahiya %u byte bi ser neket"
-msgstr[1] ""
-"Veqetandina bîra navbênkar bo wêneyê bi meznahiya %u byte bi ser neket"
-
-#: gdk-pixbuf/io-ani.c:244
-msgid "Unexpected icon chunk in animation"
-msgstr "Perçeyek ikona ne bitexmîn di wêneyên bi liv de"
-
-#: gdk-pixbuf/io-ani.c:337
-msgid "Unsupported animation type"
-msgstr "cureyê wêneyên bi liv yên ku nayên destekirin"
-
-#: gdk-pixbuf/io-ani.c:348 gdk-pixbuf/io-ani.c:406 gdk-pixbuf/io-ani.c:432
-#: gdk-pixbuf/io-ani.c:455 gdk-pixbuf/io-ani.c:482 gdk-pixbuf/io-ani.c:569
-msgid "Invalid header in animation"
-msgstr "Di hundirê sêwirandinê de sernavê nederbasdar"
-
-#: gdk-pixbuf/io-ani.c:358 gdk-pixbuf/io-ani.c:380 gdk-pixbuf/io-ani.c:464
-#: gdk-pixbuf/io-ani.c:491 gdk-pixbuf/io-ani.c:542 gdk-pixbuf/io-ani.c:614
-msgid "Not enough memory to load animation"
-msgstr "Bîr têra barkirina wêneyên bi liv nake"
-
-#: gdk-pixbuf/io-ani.c:398 gdk-pixbuf/io-ani.c:424 gdk-pixbuf/io-ani.c:443
-msgid "Malformed chunk in animation"
-msgstr "Perçeyek beloq di wêneyên bi liv de"
-
-#: gdk-pixbuf/io-ani.c:711
-msgid "The ANI image format"
-msgstr "Amadekariya ANI bo wêne"
-
-#: gdk-pixbuf/io-bmp.c:230 gdk-pixbuf/io-bmp.c:267 gdk-pixbuf/io-bmp.c:338
-#: gdk-pixbuf/io-bmp.c:370 gdk-pixbuf/io-bmp.c:393 gdk-pixbuf/io-bmp.c:496
-msgid "BMP image has bogus header data"
-msgstr "Sernavê wêneyê BMP daneyên şaş dihundirîne"
-
-#: gdk-pixbuf/io-bmp.c:241 gdk-pixbuf/io-bmp.c:433
-msgid "Not enough memory to load bitmap image"
-msgstr "Bîr têra tomarkirina wêneyê bitmap nake"
-
-#: gdk-pixbuf/io-bmp.c:319
-msgid "BMP image has unsupported header size"
-msgstr "Wêneyê BMP ne li gor mezinahiya serike"
-
-#: gdk-pixbuf/io-bmp.c:357
-msgid "Topdown BMP images cannot be compressed"
-msgstr "Ji jor ber bi jêr wêneyên BMP tayê tengkirin"
-
-#: gdk-pixbuf/io-bmp.c:717 gdk-pixbuf/io-pnm.c:709
-msgid "Premature end-of-file encountered"
-msgstr "Pêrgî dawiya dosyeyê ya zû hat"
-
-#: gdk-pixbuf/io-bmp.c:1329
-msgid "Couldn't allocate memory for saving BMP file"
-msgstr "Nikarî ku bîreke ji bo barkirina pelê BMP veqetîne"
-
-#: gdk-pixbuf/io-bmp.c:1370
-msgid "Couldn't write to BMP file"
-msgstr "Nikarî ku di pelê BMP de binvîse"
-
-#: gdk-pixbuf/io-bmp.c:1423 gdk-pixbuf/io-gdip-bmp.c:82
-msgid "The BMP image format"
-msgstr "Formata wêneya BMP"
-
-#: gdk-pixbuf/io-gif.c:222
-#, c-format
-msgid "Failure reading GIF: %s"
-msgstr "Çewtî di dema xwendina GIF: %s de"
-
-#: gdk-pixbuf/io-gif.c:496 gdk-pixbuf/io-gif.c:1481 gdk-pixbuf/io-gif.c:1642
-msgid "GIF file was missing some data (perhaps it was truncated somehow?)"
-msgstr "Pelê GIF hin dane winda kirin (dibe ku hatiye qudkirin?)"
-
-#: gdk-pixbuf/io-gif.c:505
-#, c-format
-msgid "Internal error in the GIF loader (%s)"
-msgstr "Çewtiyek hundirîn di barkerê GIF (%s) de"
-
-#: gdk-pixbuf/io-gif.c:579
-msgid "Stack overflow"
-msgstr "Lod pir zêdeye"
-
-#: gdk-pixbuf/io-gif.c:639
-msgid "GIF image loader cannot understand this image."
-msgstr "Barkerê wêneyê GIF nikare vî wêneyî fam bike."
-
-#: gdk-pixbuf/io-gif.c:668
-msgid "Bad code encountered"
-msgstr "Şifreyek ne durust hate dîtin"
-
-#: gdk-pixbuf/io-gif.c:678
-msgid "Circular table entry in GIF file"
-msgstr "Malika gilover di pelê GIF de"
-
-#: gdk-pixbuf/io-gif.c:866 gdk-pixbuf/io-gif.c:1468 gdk-pixbuf/io-gif.c:1515
-#: gdk-pixbuf/io-gif.c:1630
-msgid "Not enough memory to load GIF file"
-msgstr "Bîr têra barkirina pelê GIF nake"
-
-#: gdk-pixbuf/io-gif.c:960
-msgid "Not enough memory to composite a frame in GIF file"
-msgstr "Bîr têra barkirina frame bo dosya GIF nake"
-
-#: gdk-pixbuf/io-gif.c:1132
-msgid "GIF image is corrupt (incorrect LZW compression)"
-msgstr "Wêneyê GIF xerabe ye (şidandina LZW ne duriste)"
-
-#: gdk-pixbuf/io-gif.c:1182
-msgid "File does not appear to be a GIF file"
-msgstr "Xuyaye ku dosya ne GIF e"
-
-#: gdk-pixbuf/io-gif.c:1194
-#, c-format
-msgid "Version %s of the GIF file format is not supported"
-msgstr "Guhertoya %s dosya GIF nayê destekirin"
-
-#: gdk-pixbuf/io-gif.c:1303
-msgid ""
-"GIF image has no global colormap, and a frame inside it has no local "
-"colormap."
-msgstr ""
-"Nexşeya reng a wêneyê GIF tuneye û nexşeya rengan a herêmî jî di çarçoveya "
-"hidurê wê de tuneye."
-
-#: gdk-pixbuf/io-gif.c:1537
-msgid "GIF image was truncated or incomplete."
-msgstr "Wêneyê GIF kême an perçekiriye."
-
-#: gdk-pixbuf/io-gif.c:1693 gdk-pixbuf/io-gdip-gif.c:80
-msgid "The GIF image format"
-msgstr "Formata wêneya GIF"
-
-#: gdk-pixbuf/io-ico.c:211 gdk-pixbuf/io-ico.c:225 gdk-pixbuf/io-ico.c:277
-#: gdk-pixbuf/io-ico.c:290 gdk-pixbuf/io-ico.c:359
-msgid "Invalid header in icon"
-msgstr "Sernivîsek çewt di ikonê de"
-
-#: gdk-pixbuf/io-ico.c:240 gdk-pixbuf/io-ico.c:300 gdk-pixbuf/io-ico.c:369
-#: gdk-pixbuf/io-ico.c:432 gdk-pixbuf/io-ico.c:462
-msgid "Not enough memory to load icon"
-msgstr "Bîr têra barkirina ikonê nake"
-
-#: gdk-pixbuf/io-ico.c:322
-msgid "Icon has zero width"
-msgstr "Firehiya ikonê sifire"
-
-#: gdk-pixbuf/io-ico.c:332
-msgid "Icon has zero height"
-msgstr "Bilidiya İkonê sifire"
-
-#: gdk-pixbuf/io-ico.c:384
-msgid "Compressed icons are not supported"
-msgstr "Îkonê şidandî nayên destekirin"
-
-#: gdk-pixbuf/io-ico.c:417
-msgid "Unsupported icon type"
-msgstr "Cureyek îkonê nayê destekirin"
-
-#: gdk-pixbuf/io-ico.c:511
-msgid "Not enough memory to load ICO file"
-msgstr "Bîr têra barkirina dosya ICO nake"
-
-#: gdk-pixbuf/io-ico.c:976
-msgid "Image too large to be saved as ICO"
-msgstr "Wêne gelekî mezine ji bo tomarkirina wek ICO"
-
-#: gdk-pixbuf/io-ico.c:987
-msgid "Cursor hotspot outside image"
-msgstr "Nîşankera nîşanekê derveyî wêne ye"
-
-#: gdk-pixbuf/io-ico.c:1010
-#, c-format
-msgid "Unsupported depth for ICO file: %d"
-msgstr "Firehiya dosya ICO nayê destekirin: %d"
-
-#: gdk-pixbuf/io-ico.c:1245 gdk-pixbuf/io-gdip-ico.c:59
-msgid "The ICO image format"
-msgstr "Formata wêneya ICO"
-
-#: gdk-pixbuf/io-icns.c:347
-#, c-format
-msgid "Error reading ICNS image: %s"
-msgstr "Çewtiyek di dema xwendina wêneya ICNS: %s"
-
-#: gdk-pixbuf/io-icns.c:364
-msgid "Could not decode ICNS file"
-msgstr "Dekodkirina pelê ICNS biserneket"
-
-#: gdk-pixbuf/io-icns.c:397
-msgid "The ICNS image format"
-msgstr "Formata wêneya ICNS"
-
-#: gdk-pixbuf/io-jasper.c:75
-msgid "Couldn't allocate memory for stream"
-msgstr "Ji bo stream bîr nehate veqetandin"
-
-#: gdk-pixbuf/io-jasper.c:105
-msgid "Couldn't decode image"
-msgstr "Wêne nehate dekodkirin"
-
-#: gdk-pixbuf/io-jasper.c:123
-msgid "Transformed JPEG2000 has zero width or height"
-msgstr "Bilindahî an firehiya JPEG2000 a guherî sifir e"
-
-#: gdk-pixbuf/io-jasper.c:137
-msgid "Image type currently not supported"
-msgstr "Heta niha piştgirya cureyê wêneyê tune"
-
-#: gdk-pixbuf/io-jasper.c:149 gdk-pixbuf/io-jasper.c:157
-msgid "Couldn't allocate memory for color profile"
-msgstr "Nikarî bîrekê bo barkirina profîla rengan veqetîne"
-
-#: gdk-pixbuf/io-jasper.c:183
-msgid "Insufficient memory to open JPEG 2000 file"
-msgstr "Bîr têra vekirina pelê JPEG2000 nake"
-
-#: gdk-pixbuf/io-jasper.c:262
-msgid "Couldn't allocate memory to buffer image data"
-msgstr "Nikarî bîrê ji pêştomarkirina daneyên wêneyê re veqetîne"
-
-#: gdk-pixbuf/io-jasper.c:306
-msgid "The JPEG 2000 image format"
-msgstr "Formata wêneya JPEG2000"
-
-#: gdk-pixbuf/io-jpeg.c:117
-#, c-format
-msgid "Error interpreting JPEG image file (%s)"
-msgstr "Çewtiya wergera dosya wêneyê JPEG (%s)"
-
-#: gdk-pixbuf/io-jpeg.c:528
-msgid ""
-"Insufficient memory to load image, try exiting some applications to free "
-"memory"
-msgstr "Bîr têra tomarkirinê nake, hin gavan jêbibin da cih di bîrê de çêbibe"
-
-#: gdk-pixbuf/io-jpeg.c:569 gdk-pixbuf/io-jpeg.c:775
-#, c-format
-msgid "Unsupported JPEG color space (%s)"
-msgstr "Asoya rengên JPEG (%s)nayê destekirin"
-
-#: gdk-pixbuf/io-jpeg.c:674 gdk-pixbuf/io-jpeg.c:944 gdk-pixbuf/io-jpeg.c:1177
-#: gdk-pixbuf/io-jpeg.c:1186
-msgid "Couldn't allocate memory for loading JPEG file"
-msgstr "Nikare bîrekê bo barkirina dosya JPEG veqetîne"
-
-#: gdk-pixbuf/io-jpeg.c:919
-msgid "Transformed JPEG has zero width or height."
-msgstr "Bilindahî an firehiya JPEG a guherî sifir e."
-
-#: gdk-pixbuf/io-jpeg.c:1133 gdk-pixbuf/io-gdip-jpeg.c:53
-#, c-format
-msgid ""
-"JPEG quality must be a value between 0 and 100; value '%s' could not be "
-"parsed."
-msgstr ""
-"Pêwiste ku nirxê JPEG di navbera 0 û 100 de be; nirxa %s' nayê şîrovekirin."
-
-#: gdk-pixbuf/io-jpeg.c:1148 gdk-pixbuf/io-gdip-jpeg.c:68
-#, c-format
-msgid ""
-"JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
-msgstr ""
-"Pêwiste ku nirxê kalîteya JPEG  di navbera 0 û 100 de be; nirxa  '%d' ne "
-"gengaz e."
-
-#: gdk-pixbuf/io-jpeg.c:1310 gdk-pixbuf/io-gdip-jpeg.c:136
-msgid "The JPEG image format"
-msgstr "Formata wêneya JPEG"
-
-#: gdk-pixbuf/io-pcx.c:187
-msgid "Couldn't allocate memory for header"
-msgstr "Ji bo sernavê bîr nehate veqetandin"
-
-#: gdk-pixbuf/io-pcx.c:202 gdk-pixbuf/io-pcx.c:560
-msgid "Couldn't allocate memory for context buffer"
-msgstr "Bîrek ji bîra navbênkar re nayê veqetandin"
-
-#: gdk-pixbuf/io-pcx.c:601
-msgid "Image has invalid width and/or height"
-msgstr "Bilidî an jî firehiya wêne ne raste"
-
-#: gdk-pixbuf/io-pcx.c:613 gdk-pixbuf/io-pcx.c:674
-msgid "Image has unsupported bpp"
-msgstr "Wêne bpp destek nake"
-
-#: gdk-pixbuf/io-pcx.c:618 gdk-pixbuf/io-pcx.c:626
-#, c-format
-msgid "Image has unsupported number of %d-bit planes"
-msgstr "Gelek astên ne destekirî yên wêne hene %d-bit planes"
-
-#: gdk-pixbuf/io-pcx.c:642
-msgid "Couldn't create new pixbuf"
-msgstr "Nikare pixbufeke nû avabike"
-
-#: gdk-pixbuf/io-pcx.c:650
-msgid "Couldn't allocate memory for line data"
-msgstr "Nikare bîrê ji rêza daneyê re veqetîne"
-
-#: gdk-pixbuf/io-pcx.c:657
-msgid "Couldn't allocate memory for paletted data"
-msgstr "Nikare bîrê ji daneyên rêzkirî re veqetîne"
-
-#: gdk-pixbuf/io-pcx.c:704
-msgid "Didn't get all lines of PCX image"
-msgstr "Hemû rêzikên wêneyê PCX ne girtin"
-
-#: gdk-pixbuf/io-pcx.c:711
-msgid "No palette found at end of PCX data"
-msgstr "Di dawiya daneyên pcx de tabloya rengan nîne"
-
-#: gdk-pixbuf/io-pcx.c:756
-msgid "The PCX image format"
-msgstr "Amadekariya formata PCX"
-
-#: gdk-pixbuf/io-png.c:55
-msgid "Bits per channel of PNG image is invalid."
-msgstr "Hejmara bitan di her qenalên wêneyê PNG de çewt e."
-
-#: gdk-pixbuf/io-png.c:136 gdk-pixbuf/io-png.c:642
-msgid "Transformed PNG has zero width or height."
-msgstr "Nirxê wêneyê PNG ê sarkirî sifire."
-
-#: gdk-pixbuf/io-png.c:144
-msgid "Bits per channel of transformed PNG is not 8."
-msgstr "Bitên her qenalekî yên wêneyê guheztî yê PNG nake 8."
-
-#: gdk-pixbuf/io-png.c:153
-msgid "Transformed PNG not RGB or RGBA."
-msgstr "Wêneyê PNG ne RGB an jî RGBA ye."
-
-#: gdk-pixbuf/io-png.c:162
-msgid "Transformed PNG has unsupported number of channels, must be 3 or 4."
-msgstr "Qenalên wêneyê PNG yê guhestî ne destnîşankirîne pêwiste ku 3 an 4 be."
-
-#: gdk-pixbuf/io-png.c:183
-#, c-format
-msgid "Fatal error in PNG image file: %s"
-msgstr "Çewtiyek mezin di dosya wêneyê PNG de: %s"
-
-#: gdk-pixbuf/io-png.c:316
-msgid "Insufficient memory to load PNG file"
-msgstr "Bîr têra barkirina dosya PNG nake"
-
-#: gdk-pixbuf/io-png.c:657
-#, c-format
-msgid ""
-"Insufficient memory to store a %ld by %ld image; try exiting some "
-"applications to reduce memory usage"
-msgstr ""
-"Bîr têra bicihkirina  %ld nake ji alî wêneyên %ld, hewl bide ku tu hinek "
-"sepanan bavêjî da ku cih vale bibe"
-
-#: gdk-pixbuf/io-png.c:720
-msgid "Fatal error reading PNG image file"
-msgstr "Çewtiyek mezin di dosya wêneyê PNG de"
-
-#: gdk-pixbuf/io-png.c:769
-#, c-format
-msgid "Fatal error reading PNG image file: %s"
-msgstr "Çewtiyek mezin di dema xwendina dosya wêneyê PNG de: %s"
-
-#: gdk-pixbuf/io-png.c:863
-msgid ""
-"Keys for PNG text chunks must have at least 1 and at most 79 characters."
-msgstr ""
-"Mifteyên lodên tekstê yê PNG herî kêm divê 1 karakter û herî zêde jî divê 79 "
-"karakter be."
-
-#: gdk-pixbuf/io-png.c:872
-msgid "Keys for PNG text chunks must be ASCII characters."
-msgstr "Pêwiste ku şifreyên PNG yê nivîskî  ASCII be."
-
-#: gdk-pixbuf/io-png.c:886 gdk-pixbuf/io-tiff.c:738
-#, c-format
-msgid "Color profile has invalid length %d."
-msgstr ""
-
-#: gdk-pixbuf/io-png.c:899 gdk-pixbuf/io-gdip-png.c:56
-#, c-format
-msgid ""
-"PNG compression level must be a value between 0 and 9; value '%s' could not "
-"be parsed."
-msgstr ""
-"Pêwiste ku nirxa JPEG di navbera 0 û 100 de be '%s' lewra nirx nehate şîrove "
-"kirin."
-
-#: gdk-pixbuf/io-png.c:912 gdk-pixbuf/io-gdip-png.c:68
-#, c-format
-msgid ""
-"PNG compression level must be a value between 0 and 9; value '%d' is not "
-"allowed."
-msgstr ""
-"Pêwiste ku nirxa JPEG di navbera 0 û 100 de be , nirxa %d' nayê destekirin."
-
-#: gdk-pixbuf/io-png.c:951
-#, c-format
-msgid "Value for PNG text chunk %s cannot be converted to ISO-8859-1 encoding."
-msgstr "Nirxa perçeyê PNG yên niviskî %s snayên sembolkirin bo ISO-8859-1."
-
-#: gdk-pixbuf/io-png.c:1112 gdk-pixbuf/io-gdip-png.c:133
-msgid "The PNG image format"
-msgstr "Formata wêneya PNG"
-
-#: gdk-pixbuf/io-pnm.c:250
-msgid "PNM loader expected to find an integer, but didn't"
-msgstr "Lêkerê PNM pêrgî hejmarake rast nebû"
-
-#: gdk-pixbuf/io-pnm.c:282
-msgid "PNM file has an incorrect initial byte"
-msgstr "Byteke destpêkî ya ne rast bo dosya PNM"
-
-#: gdk-pixbuf/io-pnm.c:312
-msgid "PNM file is not in a recognized PNM subformat"
-msgstr "Dosya PNM ne di amadekariyek şaxikî de ye, dikare were xuyakirin"
-
-#: gdk-pixbuf/io-pnm.c:337
-msgid "PNM file has an image width of 0"
-msgstr "Firehûna wêneyê di hundirê pelê PNM de 0"
-
-#: gdk-pixbuf/io-pnm.c:358
-msgid "PNM file has an image height of 0"
-msgstr "Dirêjahiya wêneyê di hundirê pelê PNM de 0"
-
-#: gdk-pixbuf/io-pnm.c:381
-msgid "Maximum color value in PNM file is 0"
-msgstr "Asta herî bilind a nirxa reng di pelê PNM de 0"
-
-#: gdk-pixbuf/io-pnm.c:389
-msgid "Maximum color value in PNM file is too large"
-msgstr "Asta herî bilind a nirxa reng di dosya PNM de"
-
-#: gdk-pixbuf/io-pnm.c:429 gdk-pixbuf/io-pnm.c:459 gdk-pixbuf/io-pnm.c:504
-msgid "Raw PNM image type is invalid"
-msgstr "Cureyê wêneyê PNM yê bingeh ne derbasdar e"
-
-#: gdk-pixbuf/io-pnm.c:654
-msgid "PNM image loader does not support this PNM subformat"
-msgstr "Barkera wêneyan a PNM vê jêrecureyê destek nake"
-
-#: gdk-pixbuf/io-pnm.c:741 gdk-pixbuf/io-pnm.c:968
-msgid "Raw PNM formats require exactly one whitespace before sample data"
-msgstr "Pêwistiya amadekirina PNM bi valehiyekê heye beriya daxuyaniya daneyê"
-
-#: gdk-pixbuf/io-pnm.c:768
-msgid "Cannot allocate memory for loading PNM image"
-msgstr "Ji wêneyê PNM were barkirin bîr nayê veqetandin"
-
-#: gdk-pixbuf/io-pnm.c:818
-msgid "Insufficient memory to load PNM context struct"
-msgstr "Ji bo barkirina avahiya naveroka PNM bîr têrê nake"
-
-#: gdk-pixbuf/io-pnm.c:869
-msgid "Unexpected end of PNM image data"
-msgstr "Dawiya daneyan a wêneyên PNM encama kes ne li bendê"
-
-#: gdk-pixbuf/io-pnm.c:997
-msgid "Insufficient memory to load PNM file"
-msgstr "Ji bo barkirina dosyaya PNM bîr têrê nake"
-
-#: gdk-pixbuf/io-pnm.c:1081
-msgid "The PNM/PBM/PGM/PPM image format family"
-msgstr "Malbata şêwazên wêneyên PNM/PBM/PGM/PPM"
-
-#: gdk-pixbuf/io-qtif.c:128
-msgid "Input file descriptor is NULL."
-msgstr ""
-
-#: gdk-pixbuf/io-qtif.c:143
-#, fuzzy
-msgid "Failed to read QTIF header"
-msgstr "Di sernivîsê de têkçûn\n"
-
-#: gdk-pixbuf/io-qtif.c:152 gdk-pixbuf/io-qtif.c:182 gdk-pixbuf/io-qtif.c:446
-#, c-format
-msgid "QTIF atom size too large (%d bytes)"
-msgstr ""
-
-#: gdk-pixbuf/io-qtif.c:172
-#, fuzzy, c-format
-msgid "Failed to allocate %d bytes for file read buffer"
-msgstr "Veqetandina bîra navbênkar bo wêneyê bi meznahiya %u byte bi ser neket"
-
-#: gdk-pixbuf/io-qtif.c:196
-#, fuzzy, c-format
-msgid "File error when reading QTIF atom: %s"
-msgstr "Çewtî di dema xwendina GIF: %s de"
-
-#: gdk-pixbuf/io-qtif.c:233
-#, c-format
-msgid "Failed to skip the next %d bytes with seek()."
-msgstr ""
-
-#: gdk-pixbuf/io-qtif.c:257
-#, fuzzy
-msgid "Failed to allocate QTIF context structure."
-msgstr "Nikare bîrekê ji TGA re veqetîne"
-
-#: gdk-pixbuf/io-qtif.c:317
-#, fuzzy
-msgid "Failed to create GdkPixbufLoader object."
-msgstr "Nivisîna pêrista peldankê biserneket\n"
-
-#: gdk-pixbuf/io-qtif.c:421
-#, fuzzy
-msgid "Failed to find an image data atom."
-msgstr "Vekirina wêneya TIFF biserneket"
-
-#: gdk-pixbuf/io-qtif.c:602
-#, fuzzy
-msgid "The QTIF image format"
-msgstr "Formata wêneya TIFF"
-
-#: gdk-pixbuf/io-ras.c:126
-msgid "RAS image has bogus header data"
-msgstr "Daneyên çewt ê wêneyê Ras"
-
-#: gdk-pixbuf/io-ras.c:148
-msgid "RAS image has unknown type"
-msgstr "Wêneyê RAS xwedî cureyeke nenase"
-
-#: gdk-pixbuf/io-ras.c:156
-msgid "unsupported RAS image variation"
-msgstr "Bihêkirina wêneyê RAS ne destekiriye"
-
-#: gdk-pixbuf/io-ras.c:171 gdk-pixbuf/io-ras.c:200
-msgid "Not enough memory to load RAS image"
-msgstr "Bîr têra barkirina wêneyê RAS nake"
-
-#: gdk-pixbuf/io-ras.c:545
-msgid "The Sun raster image format"
-msgstr "Amadekirinên wêne yên Sun raster"
-
-#: gdk-pixbuf/io-tga.c:154
-msgid "Cannot allocate memory for IOBuffer struct"
-msgstr "Ji bo binyada IOBufferê di bîrê de cih nayê veqetandin"
-
-#: gdk-pixbuf/io-tga.c:173
-msgid "Cannot allocate memory for IOBuffer data"
-msgstr "Ji bo daneya IOBufferê di bîrê de cih nayê veqetandin"
-
-#: gdk-pixbuf/io-tga.c:184
-msgid "Cannot realloc IOBuffer data"
-msgstr "Ji bo daneya IOBufferê di bîrê de dîsa cih nayê veqetandin"
-
-#: gdk-pixbuf/io-tga.c:214
-msgid "Cannot allocate temporary IOBuffer data"
-msgstr "Ji bo daneya derbasdar ya IOBuffer di bîrê de cih nayê veqetandin"
-
-#: gdk-pixbuf/io-tga.c:347
-msgid "Cannot allocate new pixbuf"
-msgstr "Ji bo pixbufa nû bîr nayê veqetandin"
-
-#: gdk-pixbuf/io-tga.c:686
-#, fuzzy
-msgid "Image is corrupted or truncated"
-msgstr "Wêneyê GIF kême an perçekiriye."
-
-#: gdk-pixbuf/io-tga.c:693
-msgid "Cannot allocate colormap structure"
-msgstr "Nikare bingehekê ji nexşeya rengan re veqetîne"
-
-#: gdk-pixbuf/io-tga.c:700
-msgid "Cannot allocate colormap entries"
-msgstr "Malik ji bo nexşiya rengan nikarin werin veqetandin"
-
-#: gdk-pixbuf/io-tga.c:722
-msgid "Unexpected bitdepth for colormap entries"
-msgstr "Kûrahiyek ne di hesêb de ya malikên nexşeya rengan"
-
-#: gdk-pixbuf/io-tga.c:740
-msgid "Cannot allocate TGA header memory"
-msgstr "Nikare bîrekê ji serikê TGA re veqetîne"
-
-#: gdk-pixbuf/io-tga.c:773
-msgid "TGA image has invalid dimensions"
-msgstr "pîvanên wêneyê TGA ne rastin"
-
-#: gdk-pixbuf/io-tga.c:779 gdk-pixbuf/io-tga.c:788 gdk-pixbuf/io-tga.c:798
-#: gdk-pixbuf/io-tga.c:808 gdk-pixbuf/io-tga.c:815
-msgid "TGA image type not supported"
-msgstr "Cureyê wêneyê TGA ne destekirî ye"
-
-#: gdk-pixbuf/io-tga.c:862
-msgid "Cannot allocate memory for TGA context struct"
-msgstr "Nikare bîrekê ji TGA re veqetîne"
-
-#: gdk-pixbuf/io-tga.c:927
-msgid "Excess data in file"
-msgstr "Daneyên zêde di dosya de hene"
-
-#: gdk-pixbuf/io-tga.c:1008
-msgid "The Targa image format"
-msgstr "Formata wêneya Targa"
-
-#: gdk-pixbuf/io-tiff.c:165
-msgid "Could not get image width (bad TIFF file)"
-msgstr "Firehiya wêne nayê pejirandin (dosya TIFF ya ne baş )"
-
-#: gdk-pixbuf/io-tiff.c:172
-msgid "Could not get image height (bad TIFF file)"
-msgstr "Bilidahiya wêne napejirîne (dosya TIFF ya ne baş )"
-
-#: gdk-pixbuf/io-tiff.c:180
-msgid "Width or height of TIFF image is zero"
-msgstr "Firehî an bilindahiya wêneyê TIFF sifire"
-
-#: gdk-pixbuf/io-tiff.c:189 gdk-pixbuf/io-tiff.c:198
-msgid "Dimensions of TIFF image too large"
-msgstr "pîvanên wêneyê TIFF gelekî mezinin"
-
-#: gdk-pixbuf/io-tiff.c:222 gdk-pixbuf/io-tiff.c:234 gdk-pixbuf/io-tiff.c:561
-msgid "Insufficient memory to open TIFF file"
-msgstr "Bîr têra vekirina dosya TIFF nake"
-
-#: gdk-pixbuf/io-tiff.c:295
-msgid "Failed to load RGB data from TIFF file"
-msgstr "Barkirina dane ya RGB ye ji dosya TIFF biserneket"
-
-#: gdk-pixbuf/io-tiff.c:351
-msgid "Failed to open TIFF image"
-msgstr "Vekirina wêneya TIFF biserneket"
-
-#: gdk-pixbuf/io-tiff.c:363 gdk-pixbuf/io-tiff.c:778
-msgid "TIFFClose operation failed"
-msgstr "Girtina TIFF biserneket"
-
-#: gdk-pixbuf/io-tiff.c:493 gdk-pixbuf/io-tiff.c:506
-msgid "Failed to load TIFF image"
-msgstr "Barkirina wêneya TIFF biserneket"
-
-#: gdk-pixbuf/io-tiff.c:692
-msgid "Failed to save TIFF image"
-msgstr "Tomarkirina wêneya TIFF biserneket"
-
-#: gdk-pixbuf/io-tiff.c:727
-msgid "TIFF compression doesn't refer to a valid codec."
-msgstr ""
-
-#: gdk-pixbuf/io-tiff.c:767
-msgid "Failed to write TIFF data"
-msgstr "Nivîsandina daneyên TIFF biserneket"
-
-#: gdk-pixbuf/io-tiff.c:814
-msgid "Couldn't write to TIFF file"
-msgstr "Nikarî ku di dosya TIFF de binvîse"
-
-#: gdk-pixbuf/io-tiff.c:869
-msgid "The TIFF image format"
-msgstr "Formata wêneya TIFF"
-
-#: gdk-pixbuf/io-wbmp.c:246
-msgid "Image has zero width"
-msgstr "Firehiya wêne sifire"
-
-#: gdk-pixbuf/io-wbmp.c:264
-msgid "Image has zero height"
-msgstr "bilidahiya wêne sifire"
-
-#: gdk-pixbuf/io-wbmp.c:275
-msgid "Not enough memory to load image"
-msgstr "Bîr têra barkirina wêne nake"
-
-#: gdk-pixbuf/io-wbmp.c:334
-msgid "Couldn't save the rest"
-msgstr "Nikare yê mayî tomar bike"
-
-#: gdk-pixbuf/io-wbmp.c:375
-msgid "The WBMP image format"
-msgstr "Formata wêneya WMBP"
-
-#: gdk-pixbuf/io-xbm.c:295
-msgid "Invalid XBM file"
-msgstr "Pelê XBM ya nederbasdar"
-
-#: gdk-pixbuf/io-xbm.c:305
-msgid "Insufficient memory to load XBM image file"
-msgstr "Bîr têra vekirina dosya wêneyê XBM nake"
-
-#: gdk-pixbuf/io-xbm.c:453
-msgid "Failed to write to temporary file when loading XBM image"
-msgstr "Dema wêneya XBM hatiye barkirin nivîsandina pelê demî serneket"
-
-#: gdk-pixbuf/io-xbm.c:492
-msgid "The XBM image format"
-msgstr "Şêwaza wêneyê XBM"
-
-#: gdk-pixbuf/io-xpm.c:468
-msgid "No XPM header found"
-msgstr "serikê XPM nîne"
-
-#: gdk-pixbuf/io-xpm.c:477
-msgid "Invalid XPM header"
-msgstr "Serikê XPM çewte"
-
-#: gdk-pixbuf/io-xpm.c:485
-msgid "XPM file has image width <= 0"
-msgstr "Firehiya wêne di dosya XPM <= 0 ye"
-
-#: gdk-pixbuf/io-xpm.c:493
-msgid "XPM file has image height <= 0"
-msgstr "Bilindahiya wêneyê dosya XPM <= 0"
-
-#: gdk-pixbuf/io-xpm.c:501
-msgid "XPM has invalid number of chars per pixel"
-msgstr "Dosya XPM xwedî hejmarek ne rast a sembolane"
-
-#: gdk-pixbuf/io-xpm.c:510
-msgid "XPM file has invalid number of colors"
-msgstr "Dosya XPM xwedî hejmarek ne rast a rengane"
-
-#: gdk-pixbuf/io-xpm.c:522 gdk-pixbuf/io-xpm.c:531 gdk-pixbuf/io-xpm.c:583
-msgid "Cannot allocate memory for loading XPM image"
-msgstr "Nikare bîrekê ji bo barkirina wêneyê XPM veqetîne"
-
-#: gdk-pixbuf/io-xpm.c:545
-msgid "Cannot read XPM colormap"
-msgstr "Nikare nexşeya rengan XPM bixwîne"
-
-#: gdk-pixbuf/io-xpm.c:777
-msgid "Failed to write to temporary file when loading XPM image"
-msgstr "Di dema barkirina wêneyê XPM de Nivîsîna di pelê demî de biserneket"
-
-#: gdk-pixbuf/io-xpm.c:816
-msgid "The XPM image format"
-msgstr "Formata wêneya XPM"
-
-#: gdk-pixbuf/io-gdip-emf.c:59
-msgid "The EMF image format"
-msgstr "Formata wêneya EMF"
-
-#: gdk-pixbuf/io-gdip-utils.c:232
-#, fuzzy, c-format
-msgid "Could not allocate memory: %s"
-msgstr "Ji bo stream bîr nehate veqetandin"
-
-#: gdk-pixbuf/io-gdip-utils.c:257 gdk-pixbuf/io-gdip-utils.c:371
-#: gdk-pixbuf/io-gdip-utils.c:411
-#, fuzzy, c-format
-msgid "Could not create stream: %s"
-msgstr "Nikare ji nû nav li pelê %s bike ji bo %s: %s\n"
-
-#: gdk-pixbuf/io-gdip-utils.c:271
-#, fuzzy, c-format
-msgid "Could not seek stream: %s"
-msgstr "Rakirina hêmanê biserneket"
-
-#: gdk-pixbuf/io-gdip-utils.c:283
-#, fuzzy, c-format
-msgid "Could not read from stream: %s"
-msgstr "Nikare ji nû nav li pelê %s bike ji bo %s: %s\n"
-
-#: gdk-pixbuf/io-gdip-utils.c:694 gdk-pixbuf/io-gdip-utils.c:825
-#, fuzzy
-msgid "Couldn't load bitmap"
-msgstr "Wêne nehate dekodkirin"
-
-#: gdk-pixbuf/io-gdip-utils.c:847
-#, fuzzy
-msgid "Couldn't load metafile"
-msgstr "Wêne nehate dekodkirin"
-
-#: gdk-pixbuf/io-gdip-utils.c:1006
-#, fuzzy
-msgid "Unsupported image format for GDI+"
-msgstr "Bihêkirina wêneyê RAS ne destekiriye"
-
-#: gdk-pixbuf/io-gdip-utils.c:1013
-msgid "Couldn't save"
-msgstr "Nikarî tomar bike"
-
-#: gdk-pixbuf/io-gdip-wmf.c:58
-msgid "The WMF image format"
-msgstr "Formata wêneya WMF"
 
 #. Description of --sync in --help output
 #: gdk/win32/gdkmain-win32.c:55
@@ -1534,8 +624,9 @@ msgid "_Saturation:"
 msgstr "_Têrkirin:"
 
 #: gtk/gtkcolorsel.c:393
-msgid "\"Deepness\" of the color."
-msgstr "\"Kûrbûn\" a rengan."
+#, fuzzy
+msgid "Intensity of the color."
+msgstr "Zelaliya rengî."
 
 #: gtk/gtkcolorsel.c:394
 msgid "_Value:"
@@ -1705,11 +796,11 @@ msgstr "_Rast:"
 msgid "Paper Margins"
 msgstr "Valehiyên rûpel"
 
-#: gtk/gtkentry.c:8612 gtk/gtktextview.c:8002
+#: gtk/gtkentry.c:8612 gtk/gtktextview.c:8012
 msgid "Input _Methods"
 msgstr "Riyên_Têketinê"
 
-#: gtk/gtkentry.c:8626 gtk/gtktextview.c:8016
+#: gtk/gtkentry.c:8626 gtk/gtktextview.c:8026
 msgid "_Insert Unicode Control Character"
 msgstr "_Şifreya kontrola sembolê derbas bike"
 
@@ -2158,13 +1249,13 @@ msgid "System (%s)"
 msgstr "Pergal (%s)"
 
 #. Open Link
-#: gtk/gtklabel.c:6076
+#: gtk/gtklabel.c:6072
 #, fuzzy
 msgid "_Open Link"
 msgstr "_Vekirin"
 
 #. Copy Link Address
-#: gtk/gtklabel.c:6088
+#: gtk/gtklabel.c:6084
 msgid "Copy _Link Address"
 msgstr ""
 
@@ -2177,27 +1268,27 @@ msgid "Invalid URI"
 msgstr "URI nederbasdar e"
 
 #. Description of --gtk-module=MODULES in --help output
-#: gtk/gtkmain.c:447
+#: gtk/gtkmain.c:432
 msgid "Load additional GTK+ modules"
 msgstr "Modulên GTK+ yên pêvek bar bike"
 
 #. Placeholder in --gtk-module=MODULES in --help output
-#: gtk/gtkmain.c:448
+#: gtk/gtkmain.c:433
 msgid "MODULES"
 msgstr "MODUL"
 
 #. Description of --g-fatal-warnings in --help output
-#: gtk/gtkmain.c:450
+#: gtk/gtkmain.c:435
 msgid "Make all warnings fatal"
 msgstr "Hemû hişyariyan xedar bike"
 
 #. Description of --gtk-debug=FLAGS in --help output
-#: gtk/gtkmain.c:453
+#: gtk/gtkmain.c:438
 msgid "GTK+ debugging flags to set"
 msgstr "Nîşenekên neqandina çewtiyên GTK+ yên wê werine tayînkirin"
 
 #. Description of --gtk-no-debug=FLAGS in --help output
-#: gtk/gtkmain.c:456
+#: gtk/gtkmain.c:441
 msgid "GTK+ debugging flags to unset"
 msgstr "Nîşenekên neqandina çewtiyên GTK+ yên wê werine rakirin"
 
@@ -2206,20 +1297,20 @@ msgstr "Nîşenekên neqandina çewtiyên GTK+ yên wê werine rakirin"
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
 #.
-#: gtk/gtkmain.c:708
+#: gtk/gtkmain.c:704
 msgid "default:LTR"
 msgstr "default:LTR"
 
-#: gtk/gtkmain.c:773
+#: gtk/gtkmain.c:769
 #, c-format
 msgid "Cannot open display: %s"
 msgstr ""
 
-#: gtk/gtkmain.c:810
+#: gtk/gtkmain.c:806
 msgid "GTK+ Options"
 msgstr "Vebijarkên GTK+"
 
-#: gtk/gtkmain.c:810
+#: gtk/gtkmain.c:806
 msgid "Show GTK+ Options"
 msgstr "Vebijarkên GTK+ Nîşan Bide"
 
@@ -2309,7 +1400,7 @@ msgstr ""
 msgid "Cannot end process with pid %d: %s"
 msgstr ""
 
-#: gtk/gtknotebook.c:4621 gtk/gtknotebook.c:7050
+#: gtk/gtknotebook.c:4631 gtk/gtknotebook.c:7060
 #, c-format
 msgid "Page %u"
 msgstr "Rûpela %u"
@@ -2404,91 +1495,85 @@ msgstr "Di _peldankê de tomar bike:"
 msgid "%s job #%d"
 msgstr "Xebata %s a #%d"
 
-#: gtk/gtkprintoperation.c:1687
+#: gtk/gtkprintoperation.c:1695
 msgctxt "print operation status"
 msgid "Initial state"
 msgstr ""
 
-#: gtk/gtkprintoperation.c:1688
+#: gtk/gtkprintoperation.c:1696
 #, fuzzy
 msgctxt "print operation status"
 msgid "Preparing to print"
 msgstr "%d tê amadekirin"
 
-#: gtk/gtkprintoperation.c:1689
+#: gtk/gtkprintoperation.c:1697
 msgctxt "print operation status"
 msgid "Generating data"
 msgstr ""
 
-#: gtk/gtkprintoperation.c:1690
+#: gtk/gtkprintoperation.c:1698
 msgctxt "print operation status"
 msgid "Sending data"
 msgstr ""
 
-#: gtk/gtkprintoperation.c:1691
+#: gtk/gtkprintoperation.c:1699
 #, fuzzy
 msgctxt "print operation status"
 msgid "Waiting"
 msgstr "Li bendê"
 
-#: gtk/gtkprintoperation.c:1692
+#: gtk/gtkprintoperation.c:1700
 msgctxt "print operation status"
 msgid "Blocking on issue"
 msgstr ""
 
-#: gtk/gtkprintoperation.c:1693
+#: gtk/gtkprintoperation.c:1701
 msgctxt "print operation status"
 msgid "Printing"
 msgstr "Tê çapkirin"
 
-#: gtk/gtkprintoperation.c:1694
+#: gtk/gtkprintoperation.c:1702
 #, fuzzy
 msgctxt "print operation status"
 msgid "Finished"
 msgstr "Bidawîkirin"
 
-#: gtk/gtkprintoperation.c:1695
+#: gtk/gtkprintoperation.c:1703
 #, fuzzy
 msgctxt "print operation status"
 msgid "Finished with error"
 msgstr "Qediya lê çewtiyek derket"
 
-#: gtk/gtkprintoperation.c:2254
+#: gtk/gtkprintoperation.c:2270
 #, c-format
 msgid "Preparing %d"
 msgstr "%d tê amadekirin"
 
-#: gtk/gtkprintoperation.c:2256 gtk/gtkprintoperation.c:2875
+#: gtk/gtkprintoperation.c:2272 gtk/gtkprintoperation.c:2902
 #, c-format
 msgid "Preparing"
 msgstr "Tê amadekirin"
 
-#: gtk/gtkprintoperation.c:2259
+#: gtk/gtkprintoperation.c:2275
 #, c-format
 msgid "Printing %d"
 msgstr "%d tê çapkirin"
 
-#: gtk/gtkprintoperation.c:2905
+#: gtk/gtkprintoperation.c:2932
 #, fuzzy, c-format
 msgid "Error creating print preview"
 msgstr "Çewtî di dema destpêkirinê"
 
-#: gtk/gtkprintoperation.c:2908
+#: gtk/gtkprintoperation.c:2935
 #, c-format
 msgid "The most probable reason is that a temporary file could not be created."
 msgstr ""
 
-#: gtk/gtkprintoperation-unix.c:297 gtk/gtkprintoperation-unix.c:314
-#, c-format
+#: gtk/gtkprintoperation-unix.c:297
 msgid "Error launching preview"
 msgstr "Çewtî di dema destpêkirinê"
 
-#: gtk/gtkprintoperation-unix.c:358
-#, c-format
-msgid "Error printing"
-msgstr "Çewtiya çapkirinê"
-
-#: gtk/gtkprintoperation-unix.c:494 gtk/gtkprintoperation-win32.c:1447
+#: gtk/gtkprintoperation-unix.c:470 gtk/gtkprintoperation-win32.c:1447
 msgid "Application"
 msgstr "Sepan"
 
@@ -2502,7 +1587,7 @@ msgstr "Li derveyî rûpel"
 
 #. Translators: this is a printer status.
 #: gtk/gtkprintoperation-win32.c:616
-#: modules/printbackends/cups/gtkprintbackendcups.c:1999
+#: modules/printbackends/cups/gtkprintbackendcups.c:1998
 msgid "Paused"
 msgstr "Hatiye rawestandin"
 
@@ -2633,42 +1718,42 @@ msgstr "Giştî"
 #. * multiple pages on a sheet when printing
 #.
 #: gtk/gtkprintunixdialog.c:3010
-#: modules/printbackends/cups/gtkprintbackendcups.c:3509
+#: modules/printbackends/cups/gtkprintbackendcups.c:3508
 msgid "Left to right, top to bottom"
 msgstr ""
 
 #: gtk/gtkprintunixdialog.c:3010
-#: modules/printbackends/cups/gtkprintbackendcups.c:3509
+#: modules/printbackends/cups/gtkprintbackendcups.c:3508
 msgid "Left to right, bottom to top"
 msgstr ""
 
 #: gtk/gtkprintunixdialog.c:3011
-#: modules/printbackends/cups/gtkprintbackendcups.c:3510
+#: modules/printbackends/cups/gtkprintbackendcups.c:3509
 msgid "Right to left, top to bottom"
 msgstr ""
 
 #: gtk/gtkprintunixdialog.c:3011
-#: modules/printbackends/cups/gtkprintbackendcups.c:3510
+#: modules/printbackends/cups/gtkprintbackendcups.c:3509
 msgid "Right to left, bottom to top"
 msgstr ""
 
 #: gtk/gtkprintunixdialog.c:3012
-#: modules/printbackends/cups/gtkprintbackendcups.c:3511
+#: modules/printbackends/cups/gtkprintbackendcups.c:3510
 msgid "Top to bottom, left to right"
 msgstr ""
 
 #: gtk/gtkprintunixdialog.c:3012
-#: modules/printbackends/cups/gtkprintbackendcups.c:3511
+#: modules/printbackends/cups/gtkprintbackendcups.c:3510
 msgid "Top to bottom, right to left"
 msgstr ""
 
 #: gtk/gtkprintunixdialog.c:3013
-#: modules/printbackends/cups/gtkprintbackendcups.c:3512
+#: modules/printbackends/cups/gtkprintbackendcups.c:3511
 msgid "Bottom to top, left to right"
 msgstr ""
 
 #: gtk/gtkprintunixdialog.c:3013
-#: modules/printbackends/cups/gtkprintbackendcups.c:3512
+#: modules/printbackends/cups/gtkprintbackendcups.c:3511
 msgid "Bottom to top, right to left"
 msgstr ""
 
@@ -2676,7 +1761,7 @@ msgstr ""
 #. * dialog that controls in what order multiple pages are arranged
 #.
 #: gtk/gtkprintunixdialog.c:3017 gtk/gtkprintunixdialog.c:3030
-#: modules/printbackends/cups/gtkprintbackendcups.c:3544
+#: modules/printbackends/cups/gtkprintbackendcups.c:3543
 #, fuzzy
 msgid "Page Ordering"
 msgstr "Tê amadekirin"
@@ -3668,8 +2753,8 @@ msgstr "Etîketa \"%s\" xwedî destûreke ne derbasbare \"%s\""
 #, c-format
 msgid "Outermost element in text must be <text_view_markup> not <%s>"
 msgstr ""
-"Hêmana herî derve ya di nivîsê de ye divê <text_view_markup> be, divê ne <%"
-"s> be"
+"Hêmana herî derve ya di nivîsê de ye divê <text_view_markup> be, divê ne <"
+"%s> be"
 
 #: gtk/gtktextbufferserialize.c:1358 gtk/gtktextbufferserialize.c:1374
 #, c-format
@@ -4978,123 +4063,118 @@ msgstr "Çaper ne girêdayî ye"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:1687
 #, c-format
-msgid "Printer '%s' may not be connected."
-msgstr ""
-
-#: modules/printbackends/cups/gtkprintbackendcups.c:1688
-#, c-format
 msgid "There is a problem on printer '%s'."
 msgstr ""
 
 #. Translators: this is a printer status.
-#: modules/printbackends/cups/gtkprintbackendcups.c:1996
+#: modules/printbackends/cups/gtkprintbackendcups.c:1995
 msgid "Paused ; Rejecting Jobs"
 msgstr ""
 
 #. Translators: this is a printer status.
-#: modules/printbackends/cups/gtkprintbackendcups.c:2002
+#: modules/printbackends/cups/gtkprintbackendcups.c:2001
 msgid "Rejecting Jobs"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2778
+#: modules/printbackends/cups/gtkprintbackendcups.c:2777
 msgid "Two Sided"
 msgstr "Du alî"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2779
+#: modules/printbackends/cups/gtkprintbackendcups.c:2778
 msgid "Paper Type"
 msgstr "Cureyê rûpel"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2780
+#: modules/printbackends/cups/gtkprintbackendcups.c:2779
 msgid "Paper Source"
 msgstr "Çavkaniya rûpel"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2781
+#: modules/printbackends/cups/gtkprintbackendcups.c:2780
 msgid "Output Tray"
 msgstr "Tepsiya derketanê"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2782
+#: modules/printbackends/cups/gtkprintbackendcups.c:2781
 #, fuzzy
 msgid "Resolution"
 msgstr "Pirs"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2783
+#: modules/printbackends/cups/gtkprintbackendcups.c:2782
 msgid "GhostScript pre-filtering"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2792
+#: modules/printbackends/cups/gtkprintbackendcups.c:2791
 msgid "One Sided"
 msgstr "Yek alî"
 
 #. Translators: this is an option of "Two Sided"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2794
+#: modules/printbackends/cups/gtkprintbackendcups.c:2793
 msgid "Long Edge (Standard)"
 msgstr ""
 
 #. Translators: this is an option of "Two Sided"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2796
+#: modules/printbackends/cups/gtkprintbackendcups.c:2795
 msgid "Short Edge (Flip)"
 msgstr ""
 
 #. Translators: this is an option of "Paper Source"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2798
-#: modules/printbackends/cups/gtkprintbackendcups.c:2800
-#: modules/printbackends/cups/gtkprintbackendcups.c:2808
+#: modules/printbackends/cups/gtkprintbackendcups.c:2797
+#: modules/printbackends/cups/gtkprintbackendcups.c:2799
+#: modules/printbackends/cups/gtkprintbackendcups.c:2807
 msgid "Auto Select"
 msgstr "Hilbijartina bixweber"
 
 #. Translators: this is an option of "Paper Source"
 #. Translators: this is an option of "Resolution"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2802
-#: modules/printbackends/cups/gtkprintbackendcups.c:2804
-#: modules/printbackends/cups/gtkprintbackendcups.c:2806
-#: modules/printbackends/cups/gtkprintbackendcups.c:2810
-#: modules/printbackends/cups/gtkprintbackendcups.c:3296
+#: modules/printbackends/cups/gtkprintbackendcups.c:2801
+#: modules/printbackends/cups/gtkprintbackendcups.c:2803
+#: modules/printbackends/cups/gtkprintbackendcups.c:2805
+#: modules/printbackends/cups/gtkprintbackendcups.c:2809
+#: modules/printbackends/cups/gtkprintbackendcups.c:3295
 msgid "Printer Default"
 msgstr "Standarda Çapgerê"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2812
+#: modules/printbackends/cups/gtkprintbackendcups.c:2811
 msgid "Embed GhostScript fonts only"
 msgstr ""
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2814
+#: modules/printbackends/cups/gtkprintbackendcups.c:2813
 msgid "Convert to PS level 1"
 msgstr ""
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2816
+#: modules/printbackends/cups/gtkprintbackendcups.c:2815
 msgid "Convert to PS level 2"
 msgstr ""
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2818
+#: modules/printbackends/cups/gtkprintbackendcups.c:2817
 #, fuzzy
 msgid "No pre-filtering"
 msgstr "Hêman nehatine dîtin"
 
 #. Translators: "Miscellaneous" is the label for a button, that opens
 #. up an extra panel of settings in a print dialog.
-#: modules/printbackends/cups/gtkprintbackendcups.c:2827
+#: modules/printbackends/cups/gtkprintbackendcups.c:2826
 msgid "Miscellaneous"
 msgstr ""
 
 #. Translators: These strings name the possible values of the
 #. * job priority option in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3504
+#: modules/printbackends/cups/gtkprintbackendcups.c:3503
 msgid "Urgent"
 msgstr "Bilez"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3504
+#: modules/printbackends/cups/gtkprintbackendcups.c:3503
 msgid "High"
 msgstr "Bilind"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3504
+#: modules/printbackends/cups/gtkprintbackendcups.c:3503
 msgid "Medium"
 msgstr "Orte"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3504
+#: modules/printbackends/cups/gtkprintbackendcups.c:3503
 msgid "Low"
 msgstr "Nizim"
 
@@ -5102,7 +4182,7 @@ msgstr "Nizim"
 #. Translators, this string is used to label the pages-per-sheet option
 #. * in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3528
+#: modules/printbackends/cups/gtkprintbackendcups.c:3527
 #, fuzzy
 msgid "Pages per Sheet"
 msgstr "Serê Kaxiz Rûpelek"
@@ -5110,7 +4190,7 @@ msgstr "Serê Kaxiz Rûpelek"
 #. Translators, this string is used to label the job priority option
 #. * in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3565
+#: modules/printbackends/cups/gtkprintbackendcups.c:3564
 #, fuzzy
 msgid "Job Priority"
 msgstr "Pê_şikî:"
@@ -5118,7 +4198,7 @@ msgstr "Pê_şikî:"
 #. Translators, this string is used to label the billing info entry
 #. * in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3576
+#: modules/printbackends/cups/gtkprintbackendcups.c:3575
 #, fuzzy
 msgid "Billing Info"
 msgstr "_Agahiyên fatorê:"
@@ -5126,38 +4206,38 @@ msgstr "_Agahiyên fatorê:"
 #. Translators, these strings are names for various 'standard' cover
 #. * pages that the printing system may support.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3591
+#: modules/printbackends/cups/gtkprintbackendcups.c:3590
 msgid "None"
 msgstr "Ne yek jî"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3591
+#: modules/printbackends/cups/gtkprintbackendcups.c:3590
 msgid "Classified"
 msgstr "Taybet"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3591
+#: modules/printbackends/cups/gtkprintbackendcups.c:3590
 msgid "Confidential"
 msgstr "Veşartî"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3591
+#: modules/printbackends/cups/gtkprintbackendcups.c:3590
 msgid "Secret"
 msgstr "Veşartî"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3591
+#: modules/printbackends/cups/gtkprintbackendcups.c:3590
 msgid "Standard"
 msgstr "Standart"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3591
+#: modules/printbackends/cups/gtkprintbackendcups.c:3590
 msgid "Top Secret"
 msgstr "Gelekî Veşartî"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3591
+#: modules/printbackends/cups/gtkprintbackendcups.c:3590
 msgid "Unclassified"
 msgstr "Ji rêzê"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the front cover page.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3626
+#: modules/printbackends/cups/gtkprintbackendcups.c:3625
 #, fuzzy
 msgid "Before"
 msgstr "_Berê:"
@@ -5165,7 +4245,7 @@ msgstr "_Berê:"
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the back cover page.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3641
+#: modules/printbackends/cups/gtkprintbackendcups.c:3640
 #, fuzzy
 msgid "After"
 msgstr "_Piştî:"
@@ -5174,7 +4254,7 @@ msgstr "_Piştî:"
 #. * a print job is printed. Possible values are 'now', a specified time,
 #. * or 'on hold'
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3661
+#: modules/printbackends/cups/gtkprintbackendcups.c:3660
 #, fuzzy
 msgid "Print at"
 msgstr "Çap"
@@ -5182,7 +4262,7 @@ msgstr "Çap"
 #. Translators: this is the name of the option that allows the user
 #. * to specify a time when a print job will be printed.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3672
+#: modules/printbackends/cups/gtkprintbackendcups.c:3671
 #, fuzzy
 msgid "Print at time"
 msgstr "Li ser pelê (file) çap bike"
@@ -5191,7 +4271,7 @@ msgstr "Li ser pelê (file) çap bike"
 #. * size. The two placeholders are replaced with the width and height
 #. * in points. E.g: "Custom 230.4x142.9"
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3707
+#: modules/printbackends/cups/gtkprintbackendcups.c:3706
 #, fuzzy, c-format
 msgid "Custom %sx%s"
 msgstr "Taybet %.2fx%.2f"
@@ -5286,6 +4366,673 @@ msgstr "Bi çapera test çap bike"
 #, c-format
 msgid "Could not get information for file '%s': %s"
 msgstr "Nikarî agahiya pelê '%s' bistîne: %s"
+
+#: tests/testfilechooser.c:222
+#, c-format
+msgid "Failed to open file '%s': %s"
+msgstr "Vekirina pelê '%s' biserneket: %s"
+
+#: tests/testfilechooser.c:267
+#, c-format
+msgid ""
+"Failed to load image '%s': reason not known, probably a corrupt image file"
+msgstr ""
+"Wêneyê '%s' nehate barkirin: sedem nayê zanîn, dibe pelê wêne xerabe be"
+
+#~ msgid "Image file '%s' contains no data"
+#~ msgstr "Di pelê wêne '%s' de qet agahî nîn e"
+
+#~ msgid ""
+#~ "Failed to load animation '%s': reason not known, probably a corrupt "
+#~ "animation file"
+#~ msgstr ""
+#~ "Zindîkirina '%s' nehate barkirin: sedem nayê zanîn, dibe pelê zindîkirinê "
+#~ "xerabe be"
+
+#~ msgid "Unable to load image-loading module: %s: %s"
+#~ msgstr "Modula barkirina wêne nehate dîtin: %s: %s"
+
+#~ msgid ""
+#~ "Image-loading module %s does not export the proper interface; perhaps "
+#~ "it's from a different GTK version?"
+#~ msgstr ""
+#~ "Modula barkirina wêne %s ji navrûyê rastî re nehatiye şandin. Gelo dibe "
+#~ "ew guhertoyeke cuda ya GTK'ê be?"
+
+#~ msgid "Image type '%s' is not supported"
+#~ msgstr "Cureyê wêne %s' destekê nade"
+
+#~ msgid "Couldn't recognize the image file format for file '%s'"
+#~ msgstr "Nikare formata pelê wêne nasbike ji bo pelê '%s'"
+
+#~ msgid "Unrecognized image file format"
+#~ msgstr "Formata pelê wêne nenaskirî ye"
+
+#~ msgid "Failed to load image '%s': %s"
+#~ msgstr "Barkirina wêneya '%s' biserneket: %s"
+
+#~ msgid "Error writing to image file: %s"
+#~ msgstr "Çewtiya nivisandinê ya pelê wêne : %s"
+
+#~ msgid ""
+#~ "This build of gdk-pixbuf does not support saving the image format: %s"
+#~ msgstr "Ev avakirina gdk-pixbuf destekê nade tomarkirina formata wêne: %s"
+
+#~ msgid "Insufficient memory to save image to callback"
+#~ msgstr "Ji bo paş de vegerandinê dema wêne dihate tomarkirin bîr têrê nake"
+
+#~ msgid "Failed to open temporary file"
+#~ msgstr "Vekirina pelê demîn serneket"
+
+#~ msgid "Failed to read from temporary file"
+#~ msgstr "Xwendina ji pelê demî biserneket"
+
+#~ msgid "Failed to open '%s' for writing: %s"
+#~ msgstr "Vekirina '%s' ji bo nivîsandinê bi ser neket: %s"
+
+#~ msgid ""
+#~ "Failed to close '%s' while writing image, all data may not have been "
+#~ "saved: %s"
+#~ msgstr ""
+#~ "Çewtiya girtinê'%s' di dema nivisandina wêne de, dibe ku hemû dane "
+#~ "nehatibin tomar kirin: %s"
+
+#~ msgid "Insufficient memory to save image into a buffer"
+#~ msgstr "Bîr têr nake ku wêne di Bîra navbênkar de were tomarkirin"
+
+#, fuzzy
+#~ msgid "Error writing to image stream"
+#~ msgstr "Çewtiya nivisandinê ya pelê wêne : %s"
+
+#~ msgid ""
+#~ "Internal error: Image loader module '%s' failed to complete an operation, "
+#~ "but didn't give a reason for the failure"
+#~ msgstr ""
+#~ "Çewtiyek hundirî: Modula barkirina wêneyan '%s' di temamkirina "
+#~ "operasiyonekê de biserneket, sedemê biserneketinê ne hate destnîşankirin"
+
+#~ msgid "Incremental loading of image type '%s' is not supported"
+#~ msgstr "Daxistina zêdeyî ya cureyê wêne  '%s' destekê nade"
+
+#~ msgid "Image header corrupt"
+#~ msgstr "Sernavê wêne xerabe ye"
+
+#~ msgid "Image format unknown"
+#~ msgstr "Fomata wêne nenase"
+
+#~ msgid "Image pixel data corrupt"
+#~ msgstr "Daneya pixel na xebite"
+
+#~ msgid "failed to allocate image buffer of %u byte"
+#~ msgid_plural "failed to allocate image buffer of %u bytes"
+#~ msgstr[0] ""
+#~ "Veqetandina bîra navbênkar bo wêneyê bi meznahiya %u byte bi ser neket"
+#~ msgstr[1] ""
+#~ "Veqetandina bîra navbênkar bo wêneyê bi meznahiya %u byte bi ser neket"
+
+#~ msgid "Unexpected icon chunk in animation"
+#~ msgstr "Perçeyek ikona ne bitexmîn di wêneyên bi liv de"
+
+#~ msgid "Unsupported animation type"
+#~ msgstr "cureyê wêneyên bi liv yên ku nayên destekirin"
+
+#~ msgid "Invalid header in animation"
+#~ msgstr "Di hundirê sêwirandinê de sernavê nederbasdar"
+
+#~ msgid "Not enough memory to load animation"
+#~ msgstr "Bîr têra barkirina wêneyên bi liv nake"
+
+#~ msgid "Malformed chunk in animation"
+#~ msgstr "Perçeyek beloq di wêneyên bi liv de"
+
+#~ msgid "The ANI image format"
+#~ msgstr "Amadekariya ANI bo wêne"
+
+#~ msgid "BMP image has bogus header data"
+#~ msgstr "Sernavê wêneyê BMP daneyên şaş dihundirîne"
+
+#~ msgid "Not enough memory to load bitmap image"
+#~ msgstr "Bîr têra tomarkirina wêneyê bitmap nake"
+
+#~ msgid "BMP image has unsupported header size"
+#~ msgstr "Wêneyê BMP ne li gor mezinahiya serike"
+
+#~ msgid "Topdown BMP images cannot be compressed"
+#~ msgstr "Ji jor ber bi jêr wêneyên BMP tayê tengkirin"
+
+#~ msgid "Premature end-of-file encountered"
+#~ msgstr "Pêrgî dawiya dosyeyê ya zû hat"
+
+#~ msgid "Couldn't allocate memory for saving BMP file"
+#~ msgstr "Nikarî ku bîreke ji bo barkirina pelê BMP veqetîne"
+
+#~ msgid "Couldn't write to BMP file"
+#~ msgstr "Nikarî ku di pelê BMP de binvîse"
+
+#~ msgid "The BMP image format"
+#~ msgstr "Formata wêneya BMP"
+
+#~ msgid "Failure reading GIF: %s"
+#~ msgstr "Çewtî di dema xwendina GIF: %s de"
+
+#~ msgid "GIF file was missing some data (perhaps it was truncated somehow?)"
+#~ msgstr "Pelê GIF hin dane winda kirin (dibe ku hatiye qudkirin?)"
+
+#~ msgid "Internal error in the GIF loader (%s)"
+#~ msgstr "Çewtiyek hundirîn di barkerê GIF (%s) de"
+
+#~ msgid "Stack overflow"
+#~ msgstr "Lod pir zêdeye"
+
+#~ msgid "GIF image loader cannot understand this image."
+#~ msgstr "Barkerê wêneyê GIF nikare vî wêneyî fam bike."
+
+#~ msgid "Bad code encountered"
+#~ msgstr "Şifreyek ne durust hate dîtin"
+
+#~ msgid "Circular table entry in GIF file"
+#~ msgstr "Malika gilover di pelê GIF de"
+
+#~ msgid "Not enough memory to load GIF file"
+#~ msgstr "Bîr têra barkirina pelê GIF nake"
+
+#~ msgid "Not enough memory to composite a frame in GIF file"
+#~ msgstr "Bîr têra barkirina frame bo dosya GIF nake"
+
+#~ msgid "GIF image is corrupt (incorrect LZW compression)"
+#~ msgstr "Wêneyê GIF xerabe ye (şidandina LZW ne duriste)"
+
+#~ msgid "File does not appear to be a GIF file"
+#~ msgstr "Xuyaye ku dosya ne GIF e"
+
+#~ msgid "Version %s of the GIF file format is not supported"
+#~ msgstr "Guhertoya %s dosya GIF nayê destekirin"
+
+#~ msgid ""
+#~ "GIF image has no global colormap, and a frame inside it has no local "
+#~ "colormap."
+#~ msgstr ""
+#~ "Nexşeya reng a wêneyê GIF tuneye û nexşeya rengan a herêmî jî di "
+#~ "çarçoveya hidurê wê de tuneye."
+
+#~ msgid "GIF image was truncated or incomplete."
+#~ msgstr "Wêneyê GIF kême an perçekiriye."
+
+#~ msgid "The GIF image format"
+#~ msgstr "Formata wêneya GIF"
+
+#~ msgid "Invalid header in icon"
+#~ msgstr "Sernivîsek çewt di ikonê de"
+
+#~ msgid "Not enough memory to load icon"
+#~ msgstr "Bîr têra barkirina ikonê nake"
+
+#~ msgid "Icon has zero width"
+#~ msgstr "Firehiya ikonê sifire"
+
+#~ msgid "Icon has zero height"
+#~ msgstr "Bilidiya İkonê sifire"
+
+#~ msgid "Compressed icons are not supported"
+#~ msgstr "Îkonê şidandî nayên destekirin"
+
+#~ msgid "Unsupported icon type"
+#~ msgstr "Cureyek îkonê nayê destekirin"
+
+#~ msgid "Not enough memory to load ICO file"
+#~ msgstr "Bîr têra barkirina dosya ICO nake"
+
+#~ msgid "Image too large to be saved as ICO"
+#~ msgstr "Wêne gelekî mezine ji bo tomarkirina wek ICO"
+
+#~ msgid "Cursor hotspot outside image"
+#~ msgstr "Nîşankera nîşanekê derveyî wêne ye"
+
+#~ msgid "Unsupported depth for ICO file: %d"
+#~ msgstr "Firehiya dosya ICO nayê destekirin: %d"
+
+#~ msgid "The ICO image format"
+#~ msgstr "Formata wêneya ICO"
+
+#~ msgid "Error reading ICNS image: %s"
+#~ msgstr "Çewtiyek di dema xwendina wêneya ICNS: %s"
+
+#~ msgid "Could not decode ICNS file"
+#~ msgstr "Dekodkirina pelê ICNS biserneket"
+
+#~ msgid "The ICNS image format"
+#~ msgstr "Formata wêneya ICNS"
+
+#~ msgid "Couldn't allocate memory for stream"
+#~ msgstr "Ji bo stream bîr nehate veqetandin"
+
+#~ msgid "Couldn't decode image"
+#~ msgstr "Wêne nehate dekodkirin"
+
+#~ msgid "Transformed JPEG2000 has zero width or height"
+#~ msgstr "Bilindahî an firehiya JPEG2000 a guherî sifir e"
+
+#~ msgid "Image type currently not supported"
+#~ msgstr "Heta niha piştgirya cureyê wêneyê tune"
+
+#~ msgid "Couldn't allocate memory for color profile"
+#~ msgstr "Nikarî bîrekê bo barkirina profîla rengan veqetîne"
+
+#~ msgid "Insufficient memory to open JPEG 2000 file"
+#~ msgstr "Bîr têra vekirina pelê JPEG2000 nake"
+
+#~ msgid "Couldn't allocate memory to buffer image data"
+#~ msgstr "Nikarî bîrê ji pêştomarkirina daneyên wêneyê re veqetîne"
+
+#~ msgid "The JPEG 2000 image format"
+#~ msgstr "Formata wêneya JPEG2000"
+
+#~ msgid "Error interpreting JPEG image file (%s)"
+#~ msgstr "Çewtiya wergera dosya wêneyê JPEG (%s)"
+
+#~ msgid ""
+#~ "Insufficient memory to load image, try exiting some applications to free "
+#~ "memory"
+#~ msgstr ""
+#~ "Bîr têra tomarkirinê nake, hin gavan jêbibin da cih di bîrê de çêbibe"
+
+#~ msgid "Unsupported JPEG color space (%s)"
+#~ msgstr "Asoya rengên JPEG (%s)nayê destekirin"
+
+#~ msgid "Couldn't allocate memory for loading JPEG file"
+#~ msgstr "Nikare bîrekê bo barkirina dosya JPEG veqetîne"
+
+#~ msgid "Transformed JPEG has zero width or height."
+#~ msgstr "Bilindahî an firehiya JPEG a guherî sifir e."
+
+#~ msgid ""
+#~ "JPEG quality must be a value between 0 and 100; value '%s' could not be "
+#~ "parsed."
+#~ msgstr ""
+#~ "Pêwiste ku nirxê JPEG di navbera 0 û 100 de be; nirxa %s' nayê "
+#~ "şîrovekirin."
+
+#~ msgid ""
+#~ "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
+#~ msgstr ""
+#~ "Pêwiste ku nirxê kalîteya JPEG  di navbera 0 û 100 de be; nirxa  '%d' ne "
+#~ "gengaz e."
+
+#~ msgid "The JPEG image format"
+#~ msgstr "Formata wêneya JPEG"
+
+#~ msgid "Couldn't allocate memory for header"
+#~ msgstr "Ji bo sernavê bîr nehate veqetandin"
+
+#~ msgid "Couldn't allocate memory for context buffer"
+#~ msgstr "Bîrek ji bîra navbênkar re nayê veqetandin"
+
+#~ msgid "Image has invalid width and/or height"
+#~ msgstr "Bilidî an jî firehiya wêne ne raste"
+
+#~ msgid "Image has unsupported bpp"
+#~ msgstr "Wêne bpp destek nake"
+
+#~ msgid "Image has unsupported number of %d-bit planes"
+#~ msgstr "Gelek astên ne destekirî yên wêne hene %d-bit planes"
+
+#~ msgid "Couldn't create new pixbuf"
+#~ msgstr "Nikare pixbufeke nû avabike"
+
+#~ msgid "Couldn't allocate memory for line data"
+#~ msgstr "Nikare bîrê ji rêza daneyê re veqetîne"
+
+#~ msgid "Couldn't allocate memory for paletted data"
+#~ msgstr "Nikare bîrê ji daneyên rêzkirî re veqetîne"
+
+#~ msgid "Didn't get all lines of PCX image"
+#~ msgstr "Hemû rêzikên wêneyê PCX ne girtin"
+
+#~ msgid "No palette found at end of PCX data"
+#~ msgstr "Di dawiya daneyên pcx de tabloya rengan nîne"
+
+#~ msgid "The PCX image format"
+#~ msgstr "Amadekariya formata PCX"
+
+#~ msgid "Bits per channel of PNG image is invalid."
+#~ msgstr "Hejmara bitan di her qenalên wêneyê PNG de çewt e."
+
+#~ msgid "Transformed PNG has zero width or height."
+#~ msgstr "Nirxê wêneyê PNG ê sarkirî sifire."
+
+#~ msgid "Bits per channel of transformed PNG is not 8."
+#~ msgstr "Bitên her qenalekî yên wêneyê guheztî yê PNG nake 8."
+
+#~ msgid "Transformed PNG not RGB or RGBA."
+#~ msgstr "Wêneyê PNG ne RGB an jî RGBA ye."
+
+#~ msgid "Transformed PNG has unsupported number of channels, must be 3 or 4."
+#~ msgstr ""
+#~ "Qenalên wêneyê PNG yê guhestî ne destnîşankirîne pêwiste ku 3 an 4 be."
+
+#~ msgid "Fatal error in PNG image file: %s"
+#~ msgstr "Çewtiyek mezin di dosya wêneyê PNG de: %s"
+
+#~ msgid "Insufficient memory to load PNG file"
+#~ msgstr "Bîr têra barkirina dosya PNG nake"
+
+#~ msgid ""
+#~ "Insufficient memory to store a %ld by %ld image; try exiting some "
+#~ "applications to reduce memory usage"
+#~ msgstr ""
+#~ "Bîr têra bicihkirina  %ld nake ji alî wêneyên %ld, hewl bide ku tu hinek "
+#~ "sepanan bavêjî da ku cih vale bibe"
+
+#~ msgid "Fatal error reading PNG image file"
+#~ msgstr "Çewtiyek mezin di dosya wêneyê PNG de"
+
+#~ msgid "Fatal error reading PNG image file: %s"
+#~ msgstr "Çewtiyek mezin di dema xwendina dosya wêneyê PNG de: %s"
+
+#~ msgid ""
+#~ "Keys for PNG text chunks must have at least 1 and at most 79 characters."
+#~ msgstr ""
+#~ "Mifteyên lodên tekstê yê PNG herî kêm divê 1 karakter û herî zêde jî divê "
+#~ "79 karakter be."
+
+#~ msgid "Keys for PNG text chunks must be ASCII characters."
+#~ msgstr "Pêwiste ku şifreyên PNG yê nivîskî  ASCII be."
+
+#~ msgid ""
+#~ "PNG compression level must be a value between 0 and 9; value '%s' could "
+#~ "not be parsed."
+#~ msgstr ""
+#~ "Pêwiste ku nirxa JPEG di navbera 0 û 100 de be '%s' lewra nirx nehate "
+#~ "şîrove kirin."
+
+#~ msgid ""
+#~ "PNG compression level must be a value between 0 and 9; value '%d' is not "
+#~ "allowed."
+#~ msgstr ""
+#~ "Pêwiste ku nirxa JPEG di navbera 0 û 100 de be , nirxa %d' nayê "
+#~ "destekirin."
+
+#~ msgid ""
+#~ "Value for PNG text chunk %s cannot be converted to ISO-8859-1 encoding."
+#~ msgstr "Nirxa perçeyê PNG yên niviskî %s snayên sembolkirin bo ISO-8859-1."
+
+#~ msgid "The PNG image format"
+#~ msgstr "Formata wêneya PNG"
+
+#~ msgid "PNM loader expected to find an integer, but didn't"
+#~ msgstr "Lêkerê PNM pêrgî hejmarake rast nebû"
+
+#~ msgid "PNM file has an incorrect initial byte"
+#~ msgstr "Byteke destpêkî ya ne rast bo dosya PNM"
+
+#~ msgid "PNM file is not in a recognized PNM subformat"
+#~ msgstr "Dosya PNM ne di amadekariyek şaxikî de ye, dikare were xuyakirin"
+
+#~ msgid "PNM file has an image width of 0"
+#~ msgstr "Firehûna wêneyê di hundirê pelê PNM de 0"
+
+#~ msgid "PNM file has an image height of 0"
+#~ msgstr "Dirêjahiya wêneyê di hundirê pelê PNM de 0"
+
+#~ msgid "Maximum color value in PNM file is 0"
+#~ msgstr "Asta herî bilind a nirxa reng di pelê PNM de 0"
+
+#~ msgid "Maximum color value in PNM file is too large"
+#~ msgstr "Asta herî bilind a nirxa reng di dosya PNM de"
+
+#~ msgid "Raw PNM image type is invalid"
+#~ msgstr "Cureyê wêneyê PNM yê bingeh ne derbasdar e"
+
+#~ msgid "PNM image loader does not support this PNM subformat"
+#~ msgstr "Barkera wêneyan a PNM vê jêrecureyê destek nake"
+
+#~ msgid "Raw PNM formats require exactly one whitespace before sample data"
+#~ msgstr ""
+#~ "Pêwistiya amadekirina PNM bi valehiyekê heye beriya daxuyaniya daneyê"
+
+#~ msgid "Cannot allocate memory for loading PNM image"
+#~ msgstr "Ji wêneyê PNM were barkirin bîr nayê veqetandin"
+
+#~ msgid "Insufficient memory to load PNM context struct"
+#~ msgstr "Ji bo barkirina avahiya naveroka PNM bîr têrê nake"
+
+#~ msgid "Unexpected end of PNM image data"
+#~ msgstr "Dawiya daneyan a wêneyên PNM encama kes ne li bendê"
+
+#~ msgid "Insufficient memory to load PNM file"
+#~ msgstr "Ji bo barkirina dosyaya PNM bîr têrê nake"
+
+#~ msgid "The PNM/PBM/PGM/PPM image format family"
+#~ msgstr "Malbata şêwazên wêneyên PNM/PBM/PGM/PPM"
+
+#, fuzzy
+#~ msgid "Failed to read QTIF header"
+#~ msgstr "Di sernivîsê de têkçûn\n"
+
+#, fuzzy
+#~ msgid "Failed to allocate %d bytes for file read buffer"
+#~ msgstr ""
+#~ "Veqetandina bîra navbênkar bo wêneyê bi meznahiya %u byte bi ser neket"
+
+#, fuzzy
+#~ msgid "File error when reading QTIF atom: %s"
+#~ msgstr "Çewtî di dema xwendina GIF: %s de"
+
+#, fuzzy
+#~ msgid "Failed to allocate QTIF context structure."
+#~ msgstr "Nikare bîrekê ji TGA re veqetîne"
+
+#, fuzzy
+#~ msgid "Failed to create GdkPixbufLoader object."
+#~ msgstr "Nivisîna pêrista peldankê biserneket\n"
+
+#, fuzzy
+#~ msgid "Failed to find an image data atom."
+#~ msgstr "Vekirina wêneya TIFF biserneket"
+
+#, fuzzy
+#~ msgid "The QTIF image format"
+#~ msgstr "Formata wêneya TIFF"
+
+#~ msgid "RAS image has bogus header data"
+#~ msgstr "Daneyên çewt ê wêneyê Ras"
+
+#~ msgid "RAS image has unknown type"
+#~ msgstr "Wêneyê RAS xwedî cureyeke nenase"
+
+#~ msgid "unsupported RAS image variation"
+#~ msgstr "Bihêkirina wêneyê RAS ne destekiriye"
+
+#~ msgid "Not enough memory to load RAS image"
+#~ msgstr "Bîr têra barkirina wêneyê RAS nake"
+
+#~ msgid "The Sun raster image format"
+#~ msgstr "Amadekirinên wêne yên Sun raster"
+
+#~ msgid "Cannot allocate memory for IOBuffer struct"
+#~ msgstr "Ji bo binyada IOBufferê di bîrê de cih nayê veqetandin"
+
+#~ msgid "Cannot allocate memory for IOBuffer data"
+#~ msgstr "Ji bo daneya IOBufferê di bîrê de cih nayê veqetandin"
+
+#~ msgid "Cannot realloc IOBuffer data"
+#~ msgstr "Ji bo daneya IOBufferê di bîrê de dîsa cih nayê veqetandin"
+
+#~ msgid "Cannot allocate temporary IOBuffer data"
+#~ msgstr "Ji bo daneya derbasdar ya IOBuffer di bîrê de cih nayê veqetandin"
+
+#~ msgid "Cannot allocate new pixbuf"
+#~ msgstr "Ji bo pixbufa nû bîr nayê veqetandin"
+
+#, fuzzy
+#~ msgid "Image is corrupted or truncated"
+#~ msgstr "Wêneyê GIF kême an perçekiriye."
+
+#~ msgid "Cannot allocate colormap structure"
+#~ msgstr "Nikare bingehekê ji nexşeya rengan re veqetîne"
+
+#~ msgid "Cannot allocate colormap entries"
+#~ msgstr "Malik ji bo nexşiya rengan nikarin werin veqetandin"
+
+#~ msgid "Unexpected bitdepth for colormap entries"
+#~ msgstr "Kûrahiyek ne di hesêb de ya malikên nexşeya rengan"
+
+#~ msgid "Cannot allocate TGA header memory"
+#~ msgstr "Nikare bîrekê ji serikê TGA re veqetîne"
+
+#~ msgid "TGA image has invalid dimensions"
+#~ msgstr "pîvanên wêneyê TGA ne rastin"
+
+#~ msgid "TGA image type not supported"
+#~ msgstr "Cureyê wêneyê TGA ne destekirî ye"
+
+#~ msgid "Cannot allocate memory for TGA context struct"
+#~ msgstr "Nikare bîrekê ji TGA re veqetîne"
+
+#~ msgid "Excess data in file"
+#~ msgstr "Daneyên zêde di dosya de hene"
+
+#~ msgid "The Targa image format"
+#~ msgstr "Formata wêneya Targa"
+
+#~ msgid "Could not get image width (bad TIFF file)"
+#~ msgstr "Firehiya wêne nayê pejirandin (dosya TIFF ya ne baş )"
+
+#~ msgid "Could not get image height (bad TIFF file)"
+#~ msgstr "Bilidahiya wêne napejirîne (dosya TIFF ya ne baş )"
+
+#~ msgid "Width or height of TIFF image is zero"
+#~ msgstr "Firehî an bilindahiya wêneyê TIFF sifire"
+
+#~ msgid "Dimensions of TIFF image too large"
+#~ msgstr "pîvanên wêneyê TIFF gelekî mezinin"
+
+#~ msgid "Insufficient memory to open TIFF file"
+#~ msgstr "Bîr têra vekirina dosya TIFF nake"
+
+#~ msgid "Failed to load RGB data from TIFF file"
+#~ msgstr "Barkirina dane ya RGB ye ji dosya TIFF biserneket"
+
+#~ msgid "Failed to open TIFF image"
+#~ msgstr "Vekirina wêneya TIFF biserneket"
+
+#~ msgid "TIFFClose operation failed"
+#~ msgstr "Girtina TIFF biserneket"
+
+#~ msgid "Failed to load TIFF image"
+#~ msgstr "Barkirina wêneya TIFF biserneket"
+
+#~ msgid "Failed to save TIFF image"
+#~ msgstr "Tomarkirina wêneya TIFF biserneket"
+
+#~ msgid "Failed to write TIFF data"
+#~ msgstr "Nivîsandina daneyên TIFF biserneket"
+
+#~ msgid "Couldn't write to TIFF file"
+#~ msgstr "Nikarî ku di dosya TIFF de binvîse"
+
+#~ msgid "The TIFF image format"
+#~ msgstr "Formata wêneya TIFF"
+
+#~ msgid "Image has zero width"
+#~ msgstr "Firehiya wêne sifire"
+
+#~ msgid "Image has zero height"
+#~ msgstr "bilidahiya wêne sifire"
+
+#~ msgid "Not enough memory to load image"
+#~ msgstr "Bîr têra barkirina wêne nake"
+
+#~ msgid "Couldn't save the rest"
+#~ msgstr "Nikare yê mayî tomar bike"
+
+#~ msgid "The WBMP image format"
+#~ msgstr "Formata wêneya WMBP"
+
+#~ msgid "Invalid XBM file"
+#~ msgstr "Pelê XBM ya nederbasdar"
+
+#~ msgid "Insufficient memory to load XBM image file"
+#~ msgstr "Bîr têra vekirina dosya wêneyê XBM nake"
+
+#~ msgid "Failed to write to temporary file when loading XBM image"
+#~ msgstr "Dema wêneya XBM hatiye barkirin nivîsandina pelê demî serneket"
+
+#~ msgid "The XBM image format"
+#~ msgstr "Şêwaza wêneyê XBM"
+
+#~ msgid "No XPM header found"
+#~ msgstr "serikê XPM nîne"
+
+#~ msgid "Invalid XPM header"
+#~ msgstr "Serikê XPM çewte"
+
+#~ msgid "XPM file has image width <= 0"
+#~ msgstr "Firehiya wêne di dosya XPM <= 0 ye"
+
+#~ msgid "XPM file has image height <= 0"
+#~ msgstr "Bilindahiya wêneyê dosya XPM <= 0"
+
+#~ msgid "XPM has invalid number of chars per pixel"
+#~ msgstr "Dosya XPM xwedî hejmarek ne rast a sembolane"
+
+#~ msgid "XPM file has invalid number of colors"
+#~ msgstr "Dosya XPM xwedî hejmarek ne rast a rengane"
+
+#~ msgid "Cannot allocate memory for loading XPM image"
+#~ msgstr "Nikare bîrekê ji bo barkirina wêneyê XPM veqetîne"
+
+#~ msgid "Cannot read XPM colormap"
+#~ msgstr "Nikare nexşeya rengan XPM bixwîne"
+
+#~ msgid "Failed to write to temporary file when loading XPM image"
+#~ msgstr "Di dema barkirina wêneyê XPM de Nivîsîna di pelê demî de biserneket"
+
+#~ msgid "The XPM image format"
+#~ msgstr "Formata wêneya XPM"
+
+#~ msgid "The EMF image format"
+#~ msgstr "Formata wêneya EMF"
+
+#, fuzzy
+#~ msgid "Could not allocate memory: %s"
+#~ msgstr "Ji bo stream bîr nehate veqetandin"
+
+#, fuzzy
+#~ msgid "Could not create stream: %s"
+#~ msgstr "Nikare ji nû nav li pelê %s bike ji bo %s: %s\n"
+
+#, fuzzy
+#~ msgid "Could not seek stream: %s"
+#~ msgstr "Rakirina hêmanê biserneket"
+
+#, fuzzy
+#~ msgid "Could not read from stream: %s"
+#~ msgstr "Nikare ji nû nav li pelê %s bike ji bo %s: %s\n"
+
+#, fuzzy
+#~ msgid "Couldn't load bitmap"
+#~ msgstr "Wêne nehate dekodkirin"
+
+#, fuzzy
+#~ msgid "Couldn't load metafile"
+#~ msgstr "Wêne nehate dekodkirin"
+
+#, fuzzy
+#~ msgid "Unsupported image format for GDI+"
+#~ msgstr "Bihêkirina wêneyê RAS ne destekiriye"
+
+#~ msgid "Couldn't save"
+#~ msgstr "Nikarî tomar bike"
+
+#~ msgid "The WMF image format"
+#~ msgstr "Formata wêneya WMF"
+
+#~ msgid "\"Deepness\" of the color."
+#~ msgstr "\"Kûrbûn\" a rengan."
+
+#~ msgid "Error printing"
+#~ msgstr "Çewtiya çapkirinê"
 
 #~ msgid "Folders"
 #~ msgstr "Peldank"

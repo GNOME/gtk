@@ -8,10 +8,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-05-25 20:10-0400\n"
+"POT-Creation-Date: 2010-06-26 23:16-0400\n"
 "PO-Revision-Date: 2009-02-13 12:58+0100\n"
 "Last-Translator: Laurent Dhima <laurenti@alblinux.net>\n"
 "Language-Team: albanian <gnome-albanian-perkthyesit@lists.sourceforge.net>\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -83,7 +84,7 @@ msgstr "Flag e debug të Gdk për tu caktuar"
 #. Placeholder in --gdk-no-debug=FLAGS in --help output
 #. Placeholder in --gtk-debug=FLAGS in --help output
 #. Placeholder in --gtk-no-debug=FLAGS in --help output
-#: gdk/gdk.c:165 gdk/gdk.c:168 gtk/gtkmain.c:454 gtk/gtkmain.c:457
+#: gdk/gdk.c:165 gdk/gdk.c:168 gtk/gtkmain.c:439 gtk/gtkmain.c:442
 msgid "FLAGS"
 msgstr "FLAGS"
 
@@ -278,930 +279,6 @@ msgstr "PN_Fshi"
 msgctxt "keyboard label"
 msgid "Delete"
 msgstr "Fshi"
-
-#: gdk-pixbuf/gdk-pixbuf-animation.c:133 gdk-pixbuf/gdk-pixbuf-io.c:982
-#: gdk-pixbuf/gdk-pixbuf-io.c:1242 tests/testfilechooser.c:222
-#, c-format
-msgid "Failed to open file '%s': %s"
-msgstr "E pamundur hapja e file '%s': %s"
-
-#: gdk-pixbuf/gdk-pixbuf-animation.c:146 gdk-pixbuf/gdk-pixbuf-io.c:994
-#, c-format
-msgid "Image file '%s' contains no data"
-msgstr "File '%s' nuk përmban të dhëna"
-
-# (pofilter) puncspacing: checks for bad spacing after punctuation
-#: gdk-pixbuf/gdk-pixbuf-animation.c:188 gdk-pixbuf/gdk-pixbuf-io.c:1030
-#: gdk-pixbuf/gdk-pixbuf-io.c:1294 tests/testfilechooser.c:267
-#, c-format
-msgid ""
-"Failed to load image '%s': reason not known, probably a corrupt image file"
-msgstr ""
-"Hapja e figurës '%s' dështoi: shkaku nuk njihet, ndoshta file është i dëmtuar"
-
-#: gdk-pixbuf/gdk-pixbuf-animation.c:221
-#, c-format
-msgid ""
-"Failed to load animation '%s': reason not known, probably a corrupt "
-"animation file"
-msgstr ""
-"Dështova në ngarkimin e animacionit '%s': arsye e panjohur, ka mundësi që "
-"file të jetë i dëmtuar"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:715
-#, c-format
-msgid "Unable to load image-loading module: %s: %s"
-msgstr "I pamundur ngarkimi i modulit ngarkues të figurave: %s: %s"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:730
-#, c-format
-msgid ""
-"Image-loading module %s does not export the proper interface; perhaps it's "
-"from a different GTK version?"
-msgstr ""
-"Moduli i ngarkimit të figurave %s nuk eksporton interfaqen e duhur; mbase "
-"është për një version tjetër të GTK?"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:739 gdk-pixbuf/gdk-pixbuf-io.c:790
-#, c-format
-msgid "Image type '%s' is not supported"
-msgstr "Figurat e llojit '%s' nuk suportohen"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:863
-#, c-format
-msgid "Couldn't recognize the image file format for file '%s'"
-msgstr "Nuk munda të njoh formatin e figurës për file '%s'"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:871
-msgid "Unrecognized image file format"
-msgstr "Format i panjohur figure"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:1039
-#, c-format
-msgid "Failed to load image '%s': %s"
-msgstr "I pamundur ngarkimi i figurës '%s': %s"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:1673 gdk-pixbuf/io-gdip-utils.c:961
-#, c-format
-msgid "Error writing to image file: %s"
-msgstr "Gabim gjatë shkrimit tek file i figurës: %s"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:1718 gdk-pixbuf/gdk-pixbuf-io.c:1848
-#, c-format
-msgid "This build of gdk-pixbuf does not support saving the image format: %s"
-msgstr ""
-"Ky variant i gdk-pixbuf nuk suporton ruajtjen e figurës në formatin: %s"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:1752
-msgid "Insufficient memory to save image to callback"
-msgstr "Kujtesë e pamjaftueshme për të ruajtur figurën që duhet rithirrur"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:1765
-msgid "Failed to open temporary file"
-msgstr "Dështova në hapjen e file të përkohshëm"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:1791
-msgid "Failed to read from temporary file"
-msgstr "I pamundur leximi i file të përkohshëm"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:2044
-#, c-format
-msgid "Failed to open '%s' for writing: %s"
-msgstr "E pamundur hapja e '%s' për të shkruar: %s"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:2070
-#, c-format
-msgid ""
-"Failed to close '%s' while writing image, all data may not have been saved: %"
-"s"
-msgstr ""
-"E pamundur mbyllja e '%s' gjatë shkrimit të figurës, ka mundësi që asnjë nga "
-"të dhënat të jetë ruajtur: %s"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:2290 gdk-pixbuf/gdk-pixbuf-io.c:2341
-msgid "Insufficient memory to save image into a buffer"
-msgstr "Kujtesë e pamjaftueshme për të ruajtur figurën në një buffer"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:2387
-msgid "Error writing to image stream"
-msgstr "Gabim gjatë shkrimit tek stream i figurës"
-
-#: gdk-pixbuf/gdk-pixbuf-loader.c:334
-#, c-format
-msgid ""
-"Internal error: Image loader module '%s' failed to complete an operation, "
-"but didn't give a reason for the failure"
-msgstr ""
-"Gabim i brendshëm: Moduli ngarkues i figurave '%s' dështoi në plotësimin e "
-"një operacioni, por nuk dha ndonjë arsye për dështimin"
-
-#: gdk-pixbuf/gdk-pixbuf-loader.c:376
-#, c-format
-msgid "Incremental loading of image type '%s' is not supported"
-msgstr "Ngarkimi inkremental i figurave të llojit '%s' nuk suportohet"
-
-#: gdk-pixbuf/gdk-pixdata.c:147
-msgid "Image header corrupt"
-msgstr "Të dhënat filluese të figurës janë të dëmtuara"
-
-#: gdk-pixbuf/gdk-pixdata.c:152
-msgid "Image format unknown"
-msgstr "Format i panjohur figure"
-
-#: gdk-pixbuf/gdk-pixdata.c:157 gdk-pixbuf/gdk-pixdata.c:488
-msgid "Image pixel data corrupt"
-msgstr "Të dhëna pixel të dëmtuara për figurën"
-
-#: gdk-pixbuf/gdk-pixdata.c:432
-#, c-format
-msgid "failed to allocate image buffer of %u byte"
-msgid_plural "failed to allocate image buffer of %u bytes"
-msgstr[0] "i pamundur sigurimi i buffer të figurës prej %u byte"
-msgstr[1] "i pamundur sigurimi i buffer të figurës prej %u bytes"
-
-#: gdk-pixbuf/io-ani.c:244
-msgid "Unexpected icon chunk in animation"
-msgstr "Pjesë ikone e paparashikuar në animim"
-
-#: gdk-pixbuf/io-ani.c:337
-msgid "Unsupported animation type"
-msgstr "Lloj i pasuportuar animacioni"
-
-#: gdk-pixbuf/io-ani.c:348 gdk-pixbuf/io-ani.c:406 gdk-pixbuf/io-ani.c:432
-#: gdk-pixbuf/io-ani.c:455 gdk-pixbuf/io-ani.c:482 gdk-pixbuf/io-ani.c:569
-msgid "Invalid header in animation"
-msgstr "Fillim i pavlefshëm në animacion"
-
-#: gdk-pixbuf/io-ani.c:358 gdk-pixbuf/io-ani.c:380 gdk-pixbuf/io-ani.c:464
-#: gdk-pixbuf/io-ani.c:491 gdk-pixbuf/io-ani.c:542 gdk-pixbuf/io-ani.c:614
-msgid "Not enough memory to load animation"
-msgstr "Kujtesë e pamjaftueshme për të ngarkuar animacionin"
-
-#: gdk-pixbuf/io-ani.c:398 gdk-pixbuf/io-ani.c:424 gdk-pixbuf/io-ani.c:443
-msgid "Malformed chunk in animation"
-msgstr "Pjesë e keqformuar në animacion"
-
-#: gdk-pixbuf/io-ani.c:711
-msgid "The ANI image format"
-msgstr "Formati i figurave ANI"
-
-#: gdk-pixbuf/io-bmp.c:230 gdk-pixbuf/io-bmp.c:267 gdk-pixbuf/io-bmp.c:338
-#: gdk-pixbuf/io-bmp.c:370 gdk-pixbuf/io-bmp.c:393 gdk-pixbuf/io-bmp.c:496
-msgid "BMP image has bogus header data"
-msgstr "Header i figurës BMP ka të dhëna të gabuara"
-
-#: gdk-pixbuf/io-bmp.c:241 gdk-pixbuf/io-bmp.c:433
-msgid "Not enough memory to load bitmap image"
-msgstr "Kujtesë e pamjaftueshme për të ngarkuar figurën bitmap"
-
-#: gdk-pixbuf/io-bmp.c:319
-msgid "BMP image has unsupported header size"
-msgstr "Figura BMP ka një header me madhësi të pasuportuar"
-
-#: gdk-pixbuf/io-bmp.c:357
-msgid "Topdown BMP images cannot be compressed"
-msgstr "Figurat Topdown BMP nuk mund të kompresohen"
-
-#: gdk-pixbuf/io-bmp.c:717 gdk-pixbuf/io-pnm.c:709
-msgid "Premature end-of-file encountered"
-msgstr "Ndesha në eof të parakohshëm"
-
-#: gdk-pixbuf/io-bmp.c:1329
-msgid "Couldn't allocate memory for saving BMP file"
-msgstr "E pamundur përgatitja e kujtesës për të ruajtur file BMP"
-
-#: gdk-pixbuf/io-bmp.c:1370
-msgid "Couldn't write to BMP file"
-msgstr "I pamundur shkrimi tek file BMP"
-
-#: gdk-pixbuf/io-bmp.c:1423 gdk-pixbuf/io-gdip-bmp.c:82
-msgid "The BMP image format"
-msgstr "Formati i figurës BMP"
-
-#: gdk-pixbuf/io-gif.c:222
-#, c-format
-msgid "Failure reading GIF: %s"
-msgstr "Gabim gjatë leximit të GIF: %s"
-
-#: gdk-pixbuf/io-gif.c:496 gdk-pixbuf/io-gif.c:1481 gdk-pixbuf/io-gif.c:1642
-msgid "GIF file was missing some data (perhaps it was truncated somehow?)"
-msgstr "File GIF i mungojnë të dhëna (mbase në një farë mënyre i janë hequr?)"
-
-#: gdk-pixbuf/io-gif.c:505
-#, c-format
-msgid "Internal error in the GIF loader (%s)"
-msgstr "Gabim i brendshëm në ngarkuesin GIF (%s)"
-
-#: gdk-pixbuf/io-gif.c:579
-msgid "Stack overflow"
-msgstr "Stack overflow"
-
-#: gdk-pixbuf/io-gif.c:639
-msgid "GIF image loader cannot understand this image."
-msgstr "Ngarkuesi i imazheve GIF nuk arrin të interpretojë këtë figurë."
-
-#: gdk-pixbuf/io-gif.c:668
-msgid "Bad code encountered"
-msgstr "Ndesha në kod të gabuar"
-
-#: gdk-pixbuf/io-gif.c:678
-msgid "Circular table entry in GIF file"
-msgstr "Element i përsëritur tabele në file GIF"
-
-#: gdk-pixbuf/io-gif.c:866 gdk-pixbuf/io-gif.c:1468 gdk-pixbuf/io-gif.c:1515
-#: gdk-pixbuf/io-gif.c:1630
-msgid "Not enough memory to load GIF file"
-msgstr "Kujtesë e pamjaftueshme për të ngarkuar file GIF"
-
-#: gdk-pixbuf/io-gif.c:960
-msgid "Not enough memory to composite a frame in GIF file"
-msgstr "Kujtesë e pamjaftueshme për të krijuar një fragment tek file GIF"
-
-#: gdk-pixbuf/io-gif.c:1132
-msgid "GIF image is corrupt (incorrect LZW compression)"
-msgstr "Figurë GIF e dëmtuar (gabime në kompresimin LZW)"
-
-#: gdk-pixbuf/io-gif.c:1182
-msgid "File does not appear to be a GIF file"
-msgstr "File nuk duket të jetë i formatit GIF"
-
-#: gdk-pixbuf/io-gif.c:1194
-#, c-format
-msgid "Version %s of the GIF file format is not supported"
-msgstr "Versioni %s i formatit GIF nuk suportohet"
-
-#: gdk-pixbuf/io-gif.c:1303
-msgid ""
-"GIF image has no global colormap, and a frame inside it has no local "
-"colormap."
-msgstr ""
-"Figura GIF nuk ka një hartë ngjyrash globale dhe, në një fotogramë të "
-"brendshme, mungon harta e ngjyrave lokale."
-
-#: gdk-pixbuf/io-gif.c:1537
-msgid "GIF image was truncated or incomplete."
-msgstr "Figurë GIF e ndëprerë ose jo e plotë."
-
-#: gdk-pixbuf/io-gif.c:1693 gdk-pixbuf/io-gdip-gif.c:80
-msgid "The GIF image format"
-msgstr "Formati GIF"
-
-#: gdk-pixbuf/io-ico.c:211 gdk-pixbuf/io-ico.c:225 gdk-pixbuf/io-ico.c:277
-#: gdk-pixbuf/io-ico.c:290 gdk-pixbuf/io-ico.c:359
-msgid "Invalid header in icon"
-msgstr "Header ikone i pavlefshëm"
-
-#: gdk-pixbuf/io-ico.c:240 gdk-pixbuf/io-ico.c:300 gdk-pixbuf/io-ico.c:369
-#: gdk-pixbuf/io-ico.c:432 gdk-pixbuf/io-ico.c:462
-msgid "Not enough memory to load icon"
-msgstr "Kujtesë e pamjaftueshme për të ngarkuar ikonën"
-
-#: gdk-pixbuf/io-ico.c:322
-msgid "Icon has zero width"
-msgstr "Ikona ka gjerësi zero"
-
-#: gdk-pixbuf/io-ico.c:332
-msgid "Icon has zero height"
-msgstr "Ikona ka lartësi zero"
-
-#: gdk-pixbuf/io-ico.c:384
-msgid "Compressed icons are not supported"
-msgstr "Ikonat e kompresuara nuk suportohen"
-
-#: gdk-pixbuf/io-ico.c:417
-msgid "Unsupported icon type"
-msgstr "Lloj ikone i pasuportuar"
-
-#: gdk-pixbuf/io-ico.c:511
-msgid "Not enough memory to load ICO file"
-msgstr "Kujtesë e pamjaftueshme për të ngarkuar file ICO"
-
-#: gdk-pixbuf/io-ico.c:976
-msgid "Image too large to be saved as ICO"
-msgstr "Figurë tepër e madhe për t'u ruajtur si ICO"
-
-#: gdk-pixbuf/io-ico.c:987
-msgid "Cursor hotspot outside image"
-msgstr "Hotspot i kursorit jashtë figurës"
-
-#: gdk-pixbuf/io-ico.c:1010
-#, c-format
-msgid "Unsupported depth for ICO file: %d"
-msgstr "Intensitet i pasuportuar për file ICO: %d"
-
-#: gdk-pixbuf/io-ico.c:1245 gdk-pixbuf/io-gdip-ico.c:59
-msgid "The ICO image format"
-msgstr "Formati i figurës ICO"
-
-#: gdk-pixbuf/io-icns.c:347
-#, c-format
-msgid "Error reading ICNS image: %s"
-msgstr "Gabim gjatë leximit të figurës ICNS: %s"
-
-#: gdk-pixbuf/io-icns.c:364
-msgid "Could not decode ICNS file"
-msgstr "I pamundur dekodifikimi i file ICNS"
-
-#: gdk-pixbuf/io-icns.c:397
-msgid "The ICNS image format"
-msgstr "Formati ICNS i figurave"
-
-#: gdk-pixbuf/io-jasper.c:75
-msgid "Couldn't allocate memory for stream"
-msgstr "I pamundur sigurimi i memorjes për stream"
-
-#: gdk-pixbuf/io-jasper.c:105
-msgid "Couldn't decode image"
-msgstr "I pamundur dekodifikimi i figurës"
-
-#: gdk-pixbuf/io-jasper.c:123
-msgid "Transformed JPEG2000 has zero width or height"
-msgstr "JPEG2000 e transformuar ka gjerësi apo lartësi zero"
-
-#: gdk-pixbuf/io-jasper.c:137
-msgid "Image type currently not supported"
-msgstr "Figurat e këtij lloji nuk suportohen"
-
-#: gdk-pixbuf/io-jasper.c:149 gdk-pixbuf/io-jasper.c:157
-msgid "Couldn't allocate memory for color profile"
-msgstr "I pamundur sigurimi i memorjes për profilin e ngjyrës"
-
-#: gdk-pixbuf/io-jasper.c:183
-msgid "Insufficient memory to open JPEG 2000 file"
-msgstr "Memorje e pamjaftueshme për hapjen e file JPEG 2000"
-
-#: gdk-pixbuf/io-jasper.c:262
-msgid "Couldn't allocate memory to buffer image data"
-msgstr "I pamundur sigurimi i memorjes për të magazinuar të dhënat e figurës"
-
-#: gdk-pixbuf/io-jasper.c:306
-msgid "The JPEG 2000 image format"
-msgstr "Formati JPEG 2000 i figurave"
-
-#: gdk-pixbuf/io-jpeg.c:117
-#, c-format
-msgid "Error interpreting JPEG image file (%s)"
-msgstr "Gabim gjatë interpretimit të file JPEG (%s)"
-
-#: gdk-pixbuf/io-jpeg.c:528
-msgid ""
-"Insufficient memory to load image, try exiting some applications to free "
-"memory"
-msgstr ""
-"Kujtesë e pamjaftueshme për të ngarkuar figurën, provoni të mbyllni disa "
-"programe që të lironi pak kujtesë"
-
-#: gdk-pixbuf/io-jpeg.c:569 gdk-pixbuf/io-jpeg.c:775
-#, c-format
-msgid "Unsupported JPEG color space (%s)"
-msgstr "Ngjyrë hapësire JPEG (%s) e pasuportuar"
-
-#: gdk-pixbuf/io-jpeg.c:674 gdk-pixbuf/io-jpeg.c:944 gdk-pixbuf/io-jpeg.c:1177
-#: gdk-pixbuf/io-jpeg.c:1186
-msgid "Couldn't allocate memory for loading JPEG file"
-msgstr "E pamundur përgatitja e kujtesës për të ngarkuar file JPEG"
-
-#: gdk-pixbuf/io-jpeg.c:919
-msgid "Transformed JPEG has zero width or height."
-msgstr "JPEG e transformuar gjerësi apo lartësi zero."
-
-#: gdk-pixbuf/io-jpeg.c:1133 gdk-pixbuf/io-gdip-jpeg.c:53
-#, c-format
-msgid ""
-"JPEG quality must be a value between 0 and 100; value '%s' could not be "
-"parsed."
-msgstr ""
-"Cilësia JPEG duhet të jetë një vlerë midis 0 dhe 100; vlera '%s' nuk mund të "
-"analizohet."
-
-#: gdk-pixbuf/io-jpeg.c:1148 gdk-pixbuf/io-gdip-jpeg.c:68
-#, c-format
-msgid ""
-"JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
-msgstr ""
-"Cilësia JPEG duhet të jetë një vlerë midis 0 dhe 100; vlera '%d' nuk lejohet."
-
-#: gdk-pixbuf/io-jpeg.c:1310 gdk-pixbuf/io-gdip-jpeg.c:136
-msgid "The JPEG image format"
-msgstr "Formati JPEG"
-
-#: gdk-pixbuf/io-pcx.c:187
-msgid "Couldn't allocate memory for header"
-msgstr "Nuk munda të siguroj kujtesë për header"
-
-#: gdk-pixbuf/io-pcx.c:202 gdk-pixbuf/io-pcx.c:560
-msgid "Couldn't allocate memory for context buffer"
-msgstr "Nuk mund të siguroj kujtesë për përmbajtjen e buffer"
-
-#: gdk-pixbuf/io-pcx.c:601
-msgid "Image has invalid width and/or height"
-msgstr "Figura ka gjerësi dhe/ose lartësi të pavlefshme"
-
-# (pofilter) endwhitespace: checks whether whitespace at the end of the strings matches
-#: gdk-pixbuf/io-pcx.c:613 gdk-pixbuf/io-pcx.c:674
-msgid "Image has unsupported bpp"
-msgstr "Figura ka bpp të pasuportuar "
-
-#: gdk-pixbuf/io-pcx.c:618 gdk-pixbuf/io-pcx.c:626
-#, c-format
-msgid "Image has unsupported number of %d-bit planes"
-msgstr "Figura ka numër të pasuportuar planesh prej %d-bit"
-
-# (pofilter) doublequoting: checks whether doublequoting is consistent between the two strings
-#: gdk-pixbuf/io-pcx.c:642
-msgid "Couldn't create new pixbuf"
-msgstr "I pamundur krijimi i \"pixbuf\" të ri"
-
-#: gdk-pixbuf/io-pcx.c:650
-msgid "Couldn't allocate memory for line data"
-msgstr "S'mund të siguroj kujtesë për të dhënat e vijës"
-
-#: gdk-pixbuf/io-pcx.c:657
-msgid "Couldn't allocate memory for paletted data"
-msgstr "S'mund të siguroj kujtesë për të dhënat e palet-uara"
-
-#: gdk-pixbuf/io-pcx.c:704
-msgid "Didn't get all lines of PCX image"
-msgstr "Nuk mora të gjitha vijat e figurës PCX"
-
-#: gdk-pixbuf/io-pcx.c:711
-msgid "No palette found at end of PCX data"
-msgstr "Nuk u gjet paletë tek fundi i të dhënave PCX"
-
-#: gdk-pixbuf/io-pcx.c:756
-msgid "The PCX image format"
-msgstr "Formati i figurës PCX"
-
-#: gdk-pixbuf/io-png.c:55
-msgid "Bits per channel of PNG image is invalid."
-msgstr "Numri i bit për kanal i figurës PNG është i pavlefshëm."
-
-#: gdk-pixbuf/io-png.c:136 gdk-pixbuf/io-png.c:642
-msgid "Transformed PNG has zero width or height."
-msgstr "Figura e transformuar në PNG ka gjerësi apo lartësi zero."
-
-#: gdk-pixbuf/io-png.c:144
-msgid "Bits per channel of transformed PNG is not 8."
-msgstr ""
-"Numri i bit-eve për kanal të figurës së transformuar në PNG nuk është 8."
-
-#: gdk-pixbuf/io-png.c:153
-msgid "Transformed PNG not RGB or RGBA."
-msgstr "Figura e transformuar në PNG nuk përdor RGB apo RGBA."
-
-#: gdk-pixbuf/io-png.c:162
-msgid "Transformed PNG has unsupported number of channels, must be 3 or 4."
-msgstr ""
-"Figurë e transformuar në PNG me numër të pasuportuar kanalesh, duhet të jetë "
-"3 ose 4."
-
-#: gdk-pixbuf/io-png.c:183
-#, c-format
-msgid "Fatal error in PNG image file: %s"
-msgstr "Gabim fatal në file PNG: %s"
-
-#: gdk-pixbuf/io-png.c:316
-msgid "Insufficient memory to load PNG file"
-msgstr "Kujtesë e pamjaftueshme për të ngarkuar file PNG"
-
-#: gdk-pixbuf/io-png.c:657
-#, c-format
-msgid ""
-"Insufficient memory to store a %ld by %ld image; try exiting some "
-"applications to reduce memory usage"
-msgstr ""
-"Kujtesë e pamjaftueshme për të ruajtur një figurë %ld × %ld; provoni "
-"mbylljen e disa programeve për të zvogëluar përdorimin e kujtesës"
-
-#: gdk-pixbuf/io-png.c:720
-msgid "Fatal error reading PNG image file"
-msgstr "Gabim fatal gjatë leximit të file PNG"
-
-#: gdk-pixbuf/io-png.c:769
-#, c-format
-msgid "Fatal error reading PNG image file: %s"
-msgstr "Gabim fatal gjatë leximit të file PNG: %s"
-
-#: gdk-pixbuf/io-png.c:863
-msgid ""
-"Keys for PNG text chunks must have at least 1 and at most 79 characters."
-msgstr ""
-"Kyçet për segmentet e tekstit PNG duhet të kenë të paktën 1 dhe në maksimum "
-"79 simbole."
-
-#: gdk-pixbuf/io-png.c:872
-msgid "Keys for PNG text chunks must be ASCII characters."
-msgstr "Kyçet për segmentet e tekstit PNG duhet të jenë simbole ASCII."
-
-#: gdk-pixbuf/io-png.c:886 gdk-pixbuf/io-tiff.c:738
-#, c-format
-msgid "Color profile has invalid length %d."
-msgstr ""
-
-#: gdk-pixbuf/io-png.c:899 gdk-pixbuf/io-gdip-png.c:56
-#, c-format
-msgid ""
-"PNG compression level must be a value between 0 and 9; value '%s' could not "
-"be parsed."
-msgstr ""
-"Niveli i ngjeshjes PNG duhet të jetë një vlerë midis 0 dhe 9; vlera '%s' nuk "
-"mund të analizohet."
-
-#: gdk-pixbuf/io-png.c:912 gdk-pixbuf/io-gdip-png.c:68
-#, c-format
-msgid ""
-"PNG compression level must be a value between 0 and 9; value '%d' is not "
-"allowed."
-msgstr ""
-"Niveli i ngjeshjes PNG duhet të jetë një vlerë midis 0 dhe 9; vlera '%d' nuk "
-"lejohet."
-
-#: gdk-pixbuf/io-png.c:951
-#, c-format
-msgid "Value for PNG text chunk %s cannot be converted to ISO-8859-1 encoding."
-msgstr ""
-"Vlera për segmentin %s të tekstit PNG nuk mund të konvertohet në familjen "
-"ISO-8859-1."
-
-#: gdk-pixbuf/io-png.c:1112 gdk-pixbuf/io-gdip-png.c:133
-msgid "The PNG image format"
-msgstr "Formati PNG"
-
-#: gdk-pixbuf/io-pnm.c:250
-msgid "PNM loader expected to find an integer, but didn't"
-msgstr "Numri i plotë i pritur nga moduli ngarkues PNM nuk u gjet"
-
-#: gdk-pixbuf/io-pnm.c:282
-msgid "PNM file has an incorrect initial byte"
-msgstr "File PNM me byte fillestar të pasaktë"
-
-#: gdk-pixbuf/io-pnm.c:312
-msgid "PNM file is not in a recognized PNM subformat"
-msgstr "File PNM nuk është një nënformat PNM i njohur"
-
-#: gdk-pixbuf/io-pnm.c:337
-msgid "PNM file has an image width of 0"
-msgstr "File PNM me gjerësi baraz me 0"
-
-#: gdk-pixbuf/io-pnm.c:358
-msgid "PNM file has an image height of 0"
-msgstr "File PNM me lartësi baraz me 0"
-
-#: gdk-pixbuf/io-pnm.c:381
-msgid "Maximum color value in PNM file is 0"
-msgstr "Vlera më e madhe e ngjyrës në file PNM është 0"
-
-#: gdk-pixbuf/io-pnm.c:389
-msgid "Maximum color value in PNM file is too large"
-msgstr "Vlera më e madhe e ngjyrës në file PNM është tepër e madhe"
-
-# (pofilter) endwhitespace: checks whether whitespace at the end of the strings matches
-#: gdk-pixbuf/io-pnm.c:429 gdk-pixbuf/io-pnm.c:459 gdk-pixbuf/io-pnm.c:504
-msgid "Raw PNM image type is invalid"
-msgstr "Lloji i papërpunuar i figurës PNM është i pasaktë "
-
-# (pofilter) endwhitespace: checks whether whitespace at the end of the strings matches
-#: gdk-pixbuf/io-pnm.c:654
-msgid "PNM image loader does not support this PNM subformat"
-msgstr "Ngarkuesi i pamjeve PNM nuk suporton këtë nënformat PNM "
-
-#: gdk-pixbuf/io-pnm.c:741 gdk-pixbuf/io-pnm.c:968
-msgid "Raw PNM formats require exactly one whitespace before sample data"
-msgstr ""
-"Formatet PNM të papërpunuar kanë nevojë për tamam një hapësirë bosh para të "
-"dhënava"
-
-#: gdk-pixbuf/io-pnm.c:768
-msgid "Cannot allocate memory for loading PNM image"
-msgstr "I pamundur sigurimi i kujtesës për ngarkimin e figurës PNM"
-
-#: gdk-pixbuf/io-pnm.c:818
-msgid "Insufficient memory to load PNM context struct"
-msgstr "Kujtesë e pamjaftueshme për ngarkimin e strukturës kontekstuale PNM"
-
-#: gdk-pixbuf/io-pnm.c:869
-msgid "Unexpected end of PNM image data"
-msgstr "Fund i papritur i të dhënave të figurës PNM"
-
-#: gdk-pixbuf/io-pnm.c:997
-msgid "Insufficient memory to load PNM file"
-msgstr "Kujtesë e pamjaftueshme për ngarkimin e file PNM"
-
-#: gdk-pixbuf/io-pnm.c:1081
-msgid "The PNM/PBM/PGM/PPM image format family"
-msgstr "Familja e figurave të formateve PNM/PBM/PGM/PPM"
-
-#: gdk-pixbuf/io-qtif.c:128
-msgid "Input file descriptor is NULL."
-msgstr ""
-
-#: gdk-pixbuf/io-qtif.c:143
-#, fuzzy
-msgid "Failed to read QTIF header"
-msgstr "Shkrimi i kreut dështoi\n"
-
-#: gdk-pixbuf/io-qtif.c:152 gdk-pixbuf/io-qtif.c:182 gdk-pixbuf/io-qtif.c:446
-#, c-format
-msgid "QTIF atom size too large (%d bytes)"
-msgstr ""
-
-#: gdk-pixbuf/io-qtif.c:172
-#, fuzzy, c-format
-msgid "Failed to allocate %d bytes for file read buffer"
-msgstr "i pamundur sigurimi i buffer të figurës prej %u byte"
-
-#: gdk-pixbuf/io-qtif.c:196
-#, fuzzy, c-format
-msgid "File error when reading QTIF atom: %s"
-msgstr "Gabim gjatë leximit të GIF: %s"
-
-#: gdk-pixbuf/io-qtif.c:233
-#, c-format
-msgid "Failed to skip the next %d bytes with seek()."
-msgstr ""
-
-#: gdk-pixbuf/io-qtif.c:257
-#, fuzzy
-msgid "Failed to allocate QTIF context structure."
-msgstr "I pamundur sigurimi i kujtesës për strukturën kontekste TGA"
-
-#: gdk-pixbuf/io-qtif.c:317
-#, fuzzy
-msgid "Failed to create GdkPixbufLoader object."
-msgstr "Shkrimi i treguesit të kartelës dështoi\n"
-
-#: gdk-pixbuf/io-qtif.c:421
-#, fuzzy
-msgid "Failed to find an image data atom."
-msgstr "E pamundur hapja e figurës TIFF"
-
-#: gdk-pixbuf/io-qtif.c:602
-#, fuzzy
-msgid "The QTIF image format"
-msgstr "Formati i figurës TIFF"
-
-#: gdk-pixbuf/io-ras.c:126
-msgid "RAS image has bogus header data"
-msgstr "Figura RAS ka titull të gabuar të dhënash"
-
-#: gdk-pixbuf/io-ras.c:148
-msgid "RAS image has unknown type"
-msgstr "Figura RAS është e një lloji të panjohur"
-
-# (pofilter) startcaps: checks that the message starts with the correct capitalisation
-#: gdk-pixbuf/io-ras.c:156
-msgid "unsupported RAS image variation"
-msgstr "Variant figure RAS i pasuportuar"
-
-#: gdk-pixbuf/io-ras.c:171 gdk-pixbuf/io-ras.c:200
-msgid "Not enough memory to load RAS image"
-msgstr "Kujtesë e pamjaftueshme për të ngarkuar figurën RAS"
-
-#: gdk-pixbuf/io-ras.c:545
-msgid "The Sun raster image format"
-msgstr "Formati Sun raster"
-
-#: gdk-pixbuf/io-tga.c:154
-msgid "Cannot allocate memory for IOBuffer struct"
-msgstr "I pamundur sigurimi i kujtesës për strukturën IOBuffer"
-
-#: gdk-pixbuf/io-tga.c:173
-msgid "Cannot allocate memory for IOBuffer data"
-msgstr "I pamundur sigurimi i kujtesës për të dhënat IOBuffer"
-
-#: gdk-pixbuf/io-tga.c:184
-msgid "Cannot realloc IOBuffer data"
-msgstr "I pamundur risigurimi i të dhënave IOBuffer"
-
-#: gdk-pixbuf/io-tga.c:214
-msgid "Cannot allocate temporary IOBuffer data"
-msgstr "I pamundur sigurimi i të dhënave të përkohshme IOBuffer"
-
-#: gdk-pixbuf/io-tga.c:347
-msgid "Cannot allocate new pixbuf"
-msgstr "E pamundur vendosja e pixbuf të ri"
-
-#: gdk-pixbuf/io-tga.c:686
-#, fuzzy
-msgid "Image is corrupted or truncated"
-msgstr "Figurë GIF e ndëprerë ose jo e plotë."
-
-#: gdk-pixbuf/io-tga.c:693
-msgid "Cannot allocate colormap structure"
-msgstr "E pamundur vendosja e strukturës së hartës së ngjyrave"
-
-#: gdk-pixbuf/io-tga.c:700
-msgid "Cannot allocate colormap entries"
-msgstr "E pamundur vendosja e elementëve të hartës së ngjyrave"
-
-#: gdk-pixbuf/io-tga.c:722
-msgid "Unexpected bitdepth for colormap entries"
-msgstr "Intensitet i papritur për zërat e hartës së ngjyrave"
-
-#: gdk-pixbuf/io-tga.c:740
-msgid "Cannot allocate TGA header memory"
-msgstr "I pamundur sigurimi i kujtesës për header TGA"
-
-#: gdk-pixbuf/io-tga.c:773
-msgid "TGA image has invalid dimensions"
-msgstr "Figura TGA ka përmasa të pavlefshme"
-
-#: gdk-pixbuf/io-tga.c:779 gdk-pixbuf/io-tga.c:788 gdk-pixbuf/io-tga.c:798
-#: gdk-pixbuf/io-tga.c:808 gdk-pixbuf/io-tga.c:815
-msgid "TGA image type not supported"
-msgstr "Lloj figure TGA e pasuportuar"
-
-#: gdk-pixbuf/io-tga.c:862
-msgid "Cannot allocate memory for TGA context struct"
-msgstr "I pamundur sigurimi i kujtesës për strukturën kontekste TGA"
-
-#: gdk-pixbuf/io-tga.c:927
-msgid "Excess data in file"
-msgstr "Tepri të dhënash në file"
-
-#: gdk-pixbuf/io-tga.c:1008
-msgid "The Targa image format"
-msgstr "Formati Targa"
-
-#: gdk-pixbuf/io-tiff.c:165
-msgid "Could not get image width (bad TIFF file)"
-msgstr "I pamundur përcaktimi i gjerësisë së figurës (file TIFF i keqformuar)"
-
-#: gdk-pixbuf/io-tiff.c:172
-msgid "Could not get image height (bad TIFF file)"
-msgstr "I pamundur përcaktimi i lartësisë së figurës (file TIFF i keqformuar)"
-
-#: gdk-pixbuf/io-tiff.c:180
-msgid "Width or height of TIFF image is zero"
-msgstr "Gjerësia ose lartësia e figurës TIFF është zero"
-
-#: gdk-pixbuf/io-tiff.c:189 gdk-pixbuf/io-tiff.c:198
-msgid "Dimensions of TIFF image too large"
-msgstr "Përmasat e figurës TIFF janë tepër të mëdha"
-
-#: gdk-pixbuf/io-tiff.c:222 gdk-pixbuf/io-tiff.c:234 gdk-pixbuf/io-tiff.c:561
-msgid "Insufficient memory to open TIFF file"
-msgstr "Kujtesë e pamjaftueshme për hapjen e file TIFF"
-
-#: gdk-pixbuf/io-tiff.c:295
-msgid "Failed to load RGB data from TIFF file"
-msgstr "Dështova në ngarkimin e të dhënave RGB nga file TIFF"
-
-#: gdk-pixbuf/io-tiff.c:351
-msgid "Failed to open TIFF image"
-msgstr "E pamundur hapja e figurës TIFF"
-
-#: gdk-pixbuf/io-tiff.c:363 gdk-pixbuf/io-tiff.c:778
-msgid "TIFFClose operation failed"
-msgstr "Operacioni TIFFClose dështoi"
-
-#: gdk-pixbuf/io-tiff.c:493 gdk-pixbuf/io-tiff.c:506
-msgid "Failed to load TIFF image"
-msgstr "I pamundur ngarkimi i figurës TIFF"
-
-#: gdk-pixbuf/io-tiff.c:692
-msgid "Failed to save TIFF image"
-msgstr "Ruajtja e figurës TIFF dështoi"
-
-#: gdk-pixbuf/io-tiff.c:727
-msgid "TIFF compression doesn't refer to a valid codec."
-msgstr ""
-
-#: gdk-pixbuf/io-tiff.c:767
-msgid "Failed to write TIFF data"
-msgstr "Shkrimi i të dhënave TIFF dështoi"
-
-#: gdk-pixbuf/io-tiff.c:814
-msgid "Couldn't write to TIFF file"
-msgstr "I pamundur shkrimi tek file TIFF"
-
-#: gdk-pixbuf/io-tiff.c:869
-msgid "The TIFF image format"
-msgstr "Formati i figurës TIFF"
-
-#: gdk-pixbuf/io-wbmp.c:246
-msgid "Image has zero width"
-msgstr "Figura ka gjerësi zero"
-
-#: gdk-pixbuf/io-wbmp.c:264
-msgid "Image has zero height"
-msgstr "Figura ka lartësi zero"
-
-#: gdk-pixbuf/io-wbmp.c:275
-msgid "Not enough memory to load image"
-msgstr "Kujtesë e pamjaftueshme për ngarkimin e figurës"
-
-#: gdk-pixbuf/io-wbmp.c:334
-msgid "Couldn't save the rest"
-msgstr "E pamundur ruajtja e pjesës së mbetur"
-
-#: gdk-pixbuf/io-wbmp.c:375
-msgid "The WBMP image format"
-msgstr "Formati i figurës WBMP"
-
-#: gdk-pixbuf/io-xbm.c:295
-msgid "Invalid XBM file"
-msgstr "File XBM i pasaktë"
-
-#: gdk-pixbuf/io-xbm.c:305
-msgid "Insufficient memory to load XBM image file"
-msgstr "Kujtesë e pamjaftueshme për ngarkimin e file XBM"
-
-#: gdk-pixbuf/io-xbm.c:453
-msgid "Failed to write to temporary file when loading XBM image"
-msgstr ""
-"Dështova në shkrimin e file të përkohshëm gjatë ngarkimit të figurës XBM"
-
-#: gdk-pixbuf/io-xbm.c:492
-msgid "The XBM image format"
-msgstr "Formati XBM"
-
-#: gdk-pixbuf/io-xpm.c:468
-msgid "No XPM header found"
-msgstr "Mungon header XPM"
-
-#: gdk-pixbuf/io-xpm.c:477
-msgid "Invalid XPM header"
-msgstr "Header XPM i pavlefshëm"
-
-#: gdk-pixbuf/io-xpm.c:485
-msgid "XPM file has image width <= 0"
-msgstr "File XPM e ka gjerësinë e figurës <= 0"
-
-#: gdk-pixbuf/io-xpm.c:493
-msgid "XPM file has image height <= 0"
-msgstr "File XPM e ka lartësinë e figurës <= 0"
-
-#: gdk-pixbuf/io-xpm.c:501
-msgid "XPM has invalid number of chars per pixel"
-msgstr "XPM ka numër të pavlefshëm simbolesh për pixel"
-
-#: gdk-pixbuf/io-xpm.c:510
-msgid "XPM file has invalid number of colors"
-msgstr "File XPM ka numër të pavlefshëm ngjyrash"
-
-#: gdk-pixbuf/io-xpm.c:522 gdk-pixbuf/io-xpm.c:531 gdk-pixbuf/io-xpm.c:583
-msgid "Cannot allocate memory for loading XPM image"
-msgstr "I pamundur sigurimi i kujtesës për ngarkimin e figurës XPM"
-
-#: gdk-pixbuf/io-xpm.c:545
-msgid "Cannot read XPM colormap"
-msgstr "I pamundur leximi i hartës së ngjyrave XPM"
-
-#: gdk-pixbuf/io-xpm.c:777
-msgid "Failed to write to temporary file when loading XPM image"
-msgstr ""
-"Dështova në shkrimin e file të përkohshëm gjatë ngarkimit të figurës XPM"
-
-#: gdk-pixbuf/io-xpm.c:816
-msgid "The XPM image format"
-msgstr "Formati i figurës XPM"
-
-#: gdk-pixbuf/io-gdip-emf.c:59
-msgid "The EMF image format"
-msgstr "Formati EMF"
-
-#: gdk-pixbuf/io-gdip-utils.c:232
-#, c-format
-msgid "Could not allocate memory: %s"
-msgstr "I pamundur sigurimi i memorjes: %s"
-
-#: gdk-pixbuf/io-gdip-utils.c:257 gdk-pixbuf/io-gdip-utils.c:371
-#: gdk-pixbuf/io-gdip-utils.c:411
-#, c-format
-msgid "Could not create stream: %s"
-msgstr "I pamundur krijimi i fluksit: %s"
-
-#: gdk-pixbuf/io-gdip-utils.c:271
-#, c-format
-msgid "Could not seek stream: %s"
-msgstr "I pamundur kërkimi i fluksit: %s"
-
-#: gdk-pixbuf/io-gdip-utils.c:283
-#, c-format
-msgid "Could not read from stream: %s"
-msgstr "I pamundur leximi nga fluksi: %s"
-
-#: gdk-pixbuf/io-gdip-utils.c:694 gdk-pixbuf/io-gdip-utils.c:825
-msgid "Couldn't load bitmap"
-msgstr "I pamundur ngarkimi i bitmap"
-
-#: gdk-pixbuf/io-gdip-utils.c:847
-msgid "Couldn't load metafile"
-msgstr "I pamundur ngarkimi i metafile"
-
-# (pofilter) startcaps: checks that the message starts with the correct capitalisation
-#: gdk-pixbuf/io-gdip-utils.c:1006
-msgid "Unsupported image format for GDI+"
-msgstr "Format figure i pasuportuar për GDI+"
-
-#: gdk-pixbuf/io-gdip-utils.c:1013
-msgid "Couldn't save"
-msgstr "E pamundur ruajtja"
-
-#: gdk-pixbuf/io-gdip-wmf.c:58
-msgid "The WMF image format"
-msgstr "Formati WMF"
 
 #. Description of --sync in --help output
 #: gdk/win32/gdkmain-win32.c:55
@@ -1543,8 +620,9 @@ msgid "_Saturation:"
 msgstr "_Ngopja:"
 
 #: gtk/gtkcolorsel.c:393
-msgid "\"Deepness\" of the color."
-msgstr "\"Thellësia\" e ngjyrës."
+#, fuzzy
+msgid "Intensity of the color."
+msgstr "Tejdukshmëria e ngjyrës."
 
 #: gtk/gtkcolorsel.c:394
 msgid "_Value:"
@@ -1718,11 +796,11 @@ msgstr "_Djathtas:"
 msgid "Paper Margins"
 msgstr "Kufijtë e letrës"
 
-#: gtk/gtkentry.c:8612 gtk/gtktextview.c:8002
+#: gtk/gtkentry.c:8612 gtk/gtktextview.c:8012
 msgid "Input _Methods"
 msgstr "_Metodat e input"
 
-#: gtk/gtkentry.c:8626 gtk/gtktextview.c:8016
+#: gtk/gtkentry.c:8626 gtk/gtktextview.c:8026
 msgid "_Insert Unicode Control Character"
 msgstr "_Shto simbol kontrolli unicode"
 
@@ -2169,13 +1247,13 @@ msgid "System (%s)"
 msgstr "Sistemi (%s)"
 
 #. Open Link
-#: gtk/gtklabel.c:6076
+#: gtk/gtklabel.c:6072
 #, fuzzy
 msgid "_Open Link"
 msgstr "_Hap"
 
 #. Copy Link Address
-#: gtk/gtklabel.c:6088
+#: gtk/gtklabel.c:6084
 msgid "Copy _Link Address"
 msgstr ""
 
@@ -2189,28 +1267,28 @@ msgid "Invalid URI"
 msgstr "URI e pavlefshme"
 
 #. Description of --gtk-module=MODULES in --help output
-#: gtk/gtkmain.c:447
+#: gtk/gtkmain.c:432
 msgid "Load additional GTK+ modules"
 msgstr "Ngarko modulë shtesë GTK+"
 
 # (pofilter) acronyms: acronyms should not be translated: MODULES
 #. Placeholder in --gtk-module=MODULES in --help output
-#: gtk/gtkmain.c:448
+#: gtk/gtkmain.c:433
 msgid "MODULES"
 msgstr "MODULËT"
 
 #. Description of --g-fatal-warnings in --help output
-#: gtk/gtkmain.c:450
+#: gtk/gtkmain.c:435
 msgid "Make all warnings fatal"
 msgstr "Bëj që të gjithë paralajmërimet të jenë fatale"
 
 #. Description of --gtk-debug=FLAGS in --help output
-#: gtk/gtkmain.c:453
+#: gtk/gtkmain.c:438
 msgid "GTK+ debugging flags to set"
 msgstr "Flag e debug të GTK+ për tu caktuar"
 
 #. Description of --gtk-no-debug=FLAGS in --help output
-#: gtk/gtkmain.c:456
+#: gtk/gtkmain.c:441
 msgid "GTK+ debugging flags to unset"
 msgstr "Flag e debug të GTK+ për tu hequr"
 
@@ -2219,20 +1297,20 @@ msgstr "Flag e debug të GTK+ për tu hequr"
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
 #.
-#: gtk/gtkmain.c:708
+#: gtk/gtkmain.c:704
 msgid "default:LTR"
 msgstr "default:LTR"
 
-#: gtk/gtkmain.c:773
+#: gtk/gtkmain.c:769
 #, c-format
 msgid "Cannot open display: %s"
 msgstr "E pamundur hapja e display: %s"
 
-#: gtk/gtkmain.c:810
+#: gtk/gtkmain.c:806
 msgid "GTK+ Options"
 msgstr "Opcionet e GTK+"
 
-#: gtk/gtkmain.c:810
+#: gtk/gtkmain.c:806
 msgid "Show GTK+ Options"
 msgstr "Shfaq opcionet GTK+"
 
@@ -2318,7 +1396,7 @@ msgstr ""
 msgid "Cannot end process with pid %d: %s"
 msgstr ""
 
-#: gtk/gtknotebook.c:4621 gtk/gtknotebook.c:7050
+#: gtk/gtknotebook.c:4631 gtk/gtknotebook.c:7060
 #, c-format
 msgid "Page %u"
 msgstr "Faqja %u"
@@ -2414,89 +1492,83 @@ msgstr "_Ruaj tek kartela:"
 msgid "%s job #%d"
 msgstr "%s puna #%d"
 
-#: gtk/gtkprintoperation.c:1687
+#: gtk/gtkprintoperation.c:1695
 msgctxt "print operation status"
 msgid "Initial state"
 msgstr "Gjëndja fillestare"
 
-#: gtk/gtkprintoperation.c:1688
+#: gtk/gtkprintoperation.c:1696
 msgctxt "print operation status"
 msgid "Preparing to print"
 msgstr "Përgatitje për printim"
 
-#: gtk/gtkprintoperation.c:1689
+#: gtk/gtkprintoperation.c:1697
 msgctxt "print operation status"
 msgid "Generating data"
 msgstr "Gjenerimi i të dhënave"
 
-#: gtk/gtkprintoperation.c:1690
+#: gtk/gtkprintoperation.c:1698
 msgctxt "print operation status"
 msgid "Sending data"
 msgstr "Dërgimi i të dhënave"
 
-#: gtk/gtkprintoperation.c:1691
+#: gtk/gtkprintoperation.c:1699
 msgctxt "print operation status"
 msgid "Waiting"
 msgstr "Në pritje"
 
-#: gtk/gtkprintoperation.c:1692
+#: gtk/gtkprintoperation.c:1700
 msgctxt "print operation status"
 msgid "Blocking on issue"
 msgstr "Bllokuar për shkak të një problemi"
 
-#: gtk/gtkprintoperation.c:1693
+#: gtk/gtkprintoperation.c:1701
 msgctxt "print operation status"
 msgid "Printing"
 msgstr "Duke printuar"
 
-#: gtk/gtkprintoperation.c:1694
+#: gtk/gtkprintoperation.c:1702
 msgctxt "print operation status"
 msgid "Finished"
 msgstr "Përfundoi"
 
 # (pofilter) startcaps: checks that the message starts with the correct capitalisation
-#: gtk/gtkprintoperation.c:1695
+#: gtk/gtkprintoperation.c:1703
 msgctxt "print operation status"
 msgid "Finished with error"
 msgstr "Përfundoi me gabim"
 
-#: gtk/gtkprintoperation.c:2254
+#: gtk/gtkprintoperation.c:2270
 #, c-format
 msgid "Preparing %d"
 msgstr "Përgatitja e %d"
 
-#: gtk/gtkprintoperation.c:2256 gtk/gtkprintoperation.c:2875
+#: gtk/gtkprintoperation.c:2272 gtk/gtkprintoperation.c:2902
 #, c-format
 msgid "Preparing"
 msgstr "Duke përgatitur"
 
-#: gtk/gtkprintoperation.c:2259
+#: gtk/gtkprintoperation.c:2275
 #, c-format
 msgid "Printing %d"
 msgstr "Printimi i %d"
 
-#: gtk/gtkprintoperation.c:2905
+#: gtk/gtkprintoperation.c:2932
 #, c-format
 msgid "Error creating print preview"
 msgstr "Gabim gjatë krijimit të pamjes së parë së printimit"
 
-#: gtk/gtkprintoperation.c:2908
+#: gtk/gtkprintoperation.c:2935
 #, c-format
 msgid "The most probable reason is that a temporary file could not be created."
 msgstr ""
 "Shkaku më i mundshëm është pamundësia e krijimit të një file të përkohëshëm."
 
-#: gtk/gtkprintoperation-unix.c:297 gtk/gtkprintoperation-unix.c:314
-#, c-format
+#: gtk/gtkprintoperation-unix.c:297
 msgid "Error launching preview"
 msgstr "Gabim gjatë hapjes së pamjes së parë"
 
-#: gtk/gtkprintoperation-unix.c:358
-#, c-format
-msgid "Error printing"
-msgstr "Gabim në printim"
-
-#: gtk/gtkprintoperation-unix.c:494 gtk/gtkprintoperation-win32.c:1447
+#: gtk/gtkprintoperation-unix.c:470 gtk/gtkprintoperation-win32.c:1447
 msgid "Application"
 msgstr "Aplikativi"
 
@@ -2510,7 +1582,7 @@ msgstr "Letrat kanë mbaruar"
 
 #. Translators: this is a printer status.
 #: gtk/gtkprintoperation-win32.c:616
-#: modules/printbackends/cups/gtkprintbackendcups.c:1999
+#: modules/printbackends/cups/gtkprintbackendcups.c:1998
 msgid "Paused"
 msgstr "Në pauzë"
 
@@ -2640,42 +1712,42 @@ msgstr "Të përgjithshme"
 #. * multiple pages on a sheet when printing
 #.
 #: gtk/gtkprintunixdialog.c:3010
-#: modules/printbackends/cups/gtkprintbackendcups.c:3509
+#: modules/printbackends/cups/gtkprintbackendcups.c:3508
 msgid "Left to right, top to bottom"
 msgstr "Nga e majta në të djathtë, nga sipër poshtë"
 
 #: gtk/gtkprintunixdialog.c:3010
-#: modules/printbackends/cups/gtkprintbackendcups.c:3509
+#: modules/printbackends/cups/gtkprintbackendcups.c:3508
 msgid "Left to right, bottom to top"
 msgstr "Nga e majta në të djathtë, nga poshtë lart"
 
 #: gtk/gtkprintunixdialog.c:3011
-#: modules/printbackends/cups/gtkprintbackendcups.c:3510
+#: modules/printbackends/cups/gtkprintbackendcups.c:3509
 msgid "Right to left, top to bottom"
 msgstr "Nga e djathta në të majtë, nga sipër poshtë"
 
 #: gtk/gtkprintunixdialog.c:3011
-#: modules/printbackends/cups/gtkprintbackendcups.c:3510
+#: modules/printbackends/cups/gtkprintbackendcups.c:3509
 msgid "Right to left, bottom to top"
 msgstr "Nga e djathta në të majtë, nga poshtë lart"
 
 #: gtk/gtkprintunixdialog.c:3012
-#: modules/printbackends/cups/gtkprintbackendcups.c:3511
+#: modules/printbackends/cups/gtkprintbackendcups.c:3510
 msgid "Top to bottom, left to right"
 msgstr "Nga sipër poshtë, nga e majta në të djathtë"
 
 #: gtk/gtkprintunixdialog.c:3012
-#: modules/printbackends/cups/gtkprintbackendcups.c:3511
+#: modules/printbackends/cups/gtkprintbackendcups.c:3510
 msgid "Top to bottom, right to left"
 msgstr "Nga sipër poshtë, nga e djathta në të majtë"
 
 #: gtk/gtkprintunixdialog.c:3013
-#: modules/printbackends/cups/gtkprintbackendcups.c:3512
+#: modules/printbackends/cups/gtkprintbackendcups.c:3511
 msgid "Bottom to top, left to right"
 msgstr "Nga poshtë sipër, nga e majta në të djathtë"
 
 #: gtk/gtkprintunixdialog.c:3013
-#: modules/printbackends/cups/gtkprintbackendcups.c:3512
+#: modules/printbackends/cups/gtkprintbackendcups.c:3511
 msgid "Bottom to top, right to left"
 msgstr "Nga poshtë sipër, nga e djathta në të majtë"
 
@@ -2683,7 +1755,7 @@ msgstr "Nga poshtë sipër, nga e djathta në të majtë"
 #. * dialog that controls in what order multiple pages are arranged
 #.
 #: gtk/gtkprintunixdialog.c:3017 gtk/gtkprintunixdialog.c:3030
-#: modules/printbackends/cups/gtkprintbackendcups.c:3544
+#: modules/printbackends/cups/gtkprintbackendcups.c:3543
 msgid "Page Ordering"
 msgstr "Renditja e faqeve"
 
@@ -4926,121 +3998,116 @@ msgstr "Printeri '%s' është aktualisht jashtë linje."
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:1687
 #, c-format
-msgid "Printer '%s' may not be connected."
-msgstr "Printeri '%s' mund të jetë i palidhur."
-
-#: modules/printbackends/cups/gtkprintbackendcups.c:1688
-#, c-format
 msgid "There is a problem on printer '%s'."
 msgstr "Ka një problem me printerin '%s'."
 
 #. Translators: this is a printer status.
-#: modules/printbackends/cups/gtkprintbackendcups.c:1996
+#: modules/printbackends/cups/gtkprintbackendcups.c:1995
 msgid "Paused ; Rejecting Jobs"
 msgstr "Pezulluar ; Duke refuzuar punët"
 
 #. Translators: this is a printer status.
-#: modules/printbackends/cups/gtkprintbackendcups.c:2002
+#: modules/printbackends/cups/gtkprintbackendcups.c:2001
 msgid "Rejecting Jobs"
 msgstr "Duke refuzuar punët"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2778
+#: modules/printbackends/cups/gtkprintbackendcups.c:2777
 msgid "Two Sided"
 msgstr "Para-mbrapa"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2779
+#: modules/printbackends/cups/gtkprintbackendcups.c:2778
 msgid "Paper Type"
 msgstr "Lloji i letrës"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2780
+#: modules/printbackends/cups/gtkprintbackendcups.c:2779
 msgid "Paper Source"
 msgstr "Burimi i letrës"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2781
+#: modules/printbackends/cups/gtkprintbackendcups.c:2780
 msgid "Output Tray"
 msgstr "Sirtari i daljes"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2782
+#: modules/printbackends/cups/gtkprintbackendcups.c:2781
 msgid "Resolution"
 msgstr "Cilësia"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2783
+#: modules/printbackends/cups/gtkprintbackendcups.c:2782
 msgid "GhostScript pre-filtering"
 msgstr "Para-filtrim GhostScript"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2792
+#: modules/printbackends/cups/gtkprintbackendcups.c:2791
 msgid "One Sided"
 msgstr "Faqe njëshe"
 
 #. Translators: this is an option of "Two Sided"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2794
+#: modules/printbackends/cups/gtkprintbackendcups.c:2793
 msgid "Long Edge (Standard)"
 msgstr "Ana e gjatë (standart)"
 
 #. Translators: this is an option of "Two Sided"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2796
+#: modules/printbackends/cups/gtkprintbackendcups.c:2795
 msgid "Short Edge (Flip)"
 msgstr "Ana e shkurtër (Flip)"
 
 #. Translators: this is an option of "Paper Source"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2798
-#: modules/printbackends/cups/gtkprintbackendcups.c:2800
-#: modules/printbackends/cups/gtkprintbackendcups.c:2808
+#: modules/printbackends/cups/gtkprintbackendcups.c:2797
+#: modules/printbackends/cups/gtkprintbackendcups.c:2799
+#: modules/printbackends/cups/gtkprintbackendcups.c:2807
 msgid "Auto Select"
 msgstr "Zgjedhje automatike"
 
 #. Translators: this is an option of "Paper Source"
 #. Translators: this is an option of "Resolution"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2802
-#: modules/printbackends/cups/gtkprintbackendcups.c:2804
-#: modules/printbackends/cups/gtkprintbackendcups.c:2806
-#: modules/printbackends/cups/gtkprintbackendcups.c:2810
-#: modules/printbackends/cups/gtkprintbackendcups.c:3296
+#: modules/printbackends/cups/gtkprintbackendcups.c:2801
+#: modules/printbackends/cups/gtkprintbackendcups.c:2803
+#: modules/printbackends/cups/gtkprintbackendcups.c:2805
+#: modules/printbackends/cups/gtkprintbackendcups.c:2809
+#: modules/printbackends/cups/gtkprintbackendcups.c:3295
 msgid "Printer Default"
 msgstr "Rregullimet e prezgjedhura të printuesit"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2812
+#: modules/printbackends/cups/gtkprintbackendcups.c:2811
 msgid "Embed GhostScript fonts only"
 msgstr "Vetëm gërmat e GhostScript"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2814
+#: modules/printbackends/cups/gtkprintbackendcups.c:2813
 msgid "Convert to PS level 1"
 msgstr "Konverto në PS niveli 1"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2816
+#: modules/printbackends/cups/gtkprintbackendcups.c:2815
 msgid "Convert to PS level 2"
 msgstr "Konverto në PS niveli 2"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2818
+#: modules/printbackends/cups/gtkprintbackendcups.c:2817
 msgid "No pre-filtering"
 msgstr "Asnjë para-filtrim"
 
 #. Translators: "Miscellaneous" is the label for a button, that opens
 #. up an extra panel of settings in a print dialog.
-#: modules/printbackends/cups/gtkprintbackendcups.c:2827
+#: modules/printbackends/cups/gtkprintbackendcups.c:2826
 msgid "Miscellaneous"
 msgstr "Të ndryshme"
 
 #. Translators: These strings name the possible values of the
 #. * job priority option in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3504
+#: modules/printbackends/cups/gtkprintbackendcups.c:3503
 msgid "Urgent"
 msgstr "Urgjente"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3504
+#: modules/printbackends/cups/gtkprintbackendcups.c:3503
 msgid "High"
 msgstr "E lartë"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3504
+#: modules/printbackends/cups/gtkprintbackendcups.c:3503
 msgid "Medium"
 msgstr "Mesatare"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3504
+#: modules/printbackends/cups/gtkprintbackendcups.c:3503
 msgid "Low"
 msgstr "E ulët"
 
@@ -5048,66 +4115,66 @@ msgstr "E ulët"
 #. Translators, this string is used to label the pages-per-sheet option
 #. * in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3528
+#: modules/printbackends/cups/gtkprintbackendcups.c:3527
 msgid "Pages per Sheet"
 msgstr "Faqe për fletë"
 
 #. Translators, this string is used to label the job priority option
 #. * in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3565
+#: modules/printbackends/cups/gtkprintbackendcups.c:3564
 msgid "Job Priority"
 msgstr "Prioriteti i punës"
 
 #. Translators, this string is used to label the billing info entry
 #. * in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3576
+#: modules/printbackends/cups/gtkprintbackendcups.c:3575
 msgid "Billing Info"
 msgstr "Informacione mbi faturimin"
 
 #. Translators, these strings are names for various 'standard' cover
 #. * pages that the printing system may support.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3591
+#: modules/printbackends/cups/gtkprintbackendcups.c:3590
 msgid "None"
 msgstr "Asnjë"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3591
+#: modules/printbackends/cups/gtkprintbackendcups.c:3590
 msgid "Classified"
 msgstr "Klasifikimi"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3591
+#: modules/printbackends/cups/gtkprintbackendcups.c:3590
 msgid "Confidential"
 msgstr "Në konfidencë"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3591
+#: modules/printbackends/cups/gtkprintbackendcups.c:3590
 msgid "Secret"
 msgstr "Sekrete"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3591
+#: modules/printbackends/cups/gtkprintbackendcups.c:3590
 msgid "Standard"
 msgstr "Standart"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3591
+#: modules/printbackends/cups/gtkprintbackendcups.c:3590
 msgid "Top Secret"
 msgstr "Top sekret"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3591
+#: modules/printbackends/cups/gtkprintbackendcups.c:3590
 msgid "Unclassified"
 msgstr "Pa klasifikim"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the front cover page.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3626
+#: modules/printbackends/cups/gtkprintbackendcups.c:3625
 msgid "Before"
 msgstr "Para"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the back cover page.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3641
+#: modules/printbackends/cups/gtkprintbackendcups.c:3640
 msgid "After"
 msgstr "Mbas"
 
@@ -5115,14 +4182,14 @@ msgstr "Mbas"
 #. * a print job is printed. Possible values are 'now', a specified time,
 #. * or 'on hold'
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3661
+#: modules/printbackends/cups/gtkprintbackendcups.c:3660
 msgid "Print at"
 msgstr "Printo në"
 
 #. Translators: this is the name of the option that allows the user
 #. * to specify a time when a print job will be printed.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3672
+#: modules/printbackends/cups/gtkprintbackendcups.c:3671
 msgid "Print at time"
 msgstr "Printo në orën"
 
@@ -5133,7 +4200,7 @@ msgstr "Printo në orën"
 #. * size. The two placeholders are replaced with the width and height
 #. * in points. E.g: "Custom 230.4x142.9"
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3707
+#: modules/printbackends/cups/gtkprintbackendcups.c:3706
 #, c-format
 msgid "Custom %sx%s"
 msgstr "E personalizuar %sx%s"
@@ -5228,6 +4295,685 @@ msgstr "Printo në Test Printer"
 #, c-format
 msgid "Could not get information for file '%s': %s"
 msgstr "E pamundur marrja e informacioneve për file '%s': %s"
+
+#: tests/testfilechooser.c:222
+#, c-format
+msgid "Failed to open file '%s': %s"
+msgstr "E pamundur hapja e file '%s': %s"
+
+# (pofilter) puncspacing: checks for bad spacing after punctuation
+#: tests/testfilechooser.c:267
+#, c-format
+msgid ""
+"Failed to load image '%s': reason not known, probably a corrupt image file"
+msgstr ""
+"Hapja e figurës '%s' dështoi: shkaku nuk njihet, ndoshta file është i dëmtuar"
+
+#~ msgid "Image file '%s' contains no data"
+#~ msgstr "File '%s' nuk përmban të dhëna"
+
+#~ msgid ""
+#~ "Failed to load animation '%s': reason not known, probably a corrupt "
+#~ "animation file"
+#~ msgstr ""
+#~ "Dështova në ngarkimin e animacionit '%s': arsye e panjohur, ka mundësi që "
+#~ "file të jetë i dëmtuar"
+
+#~ msgid "Unable to load image-loading module: %s: %s"
+#~ msgstr "I pamundur ngarkimi i modulit ngarkues të figurave: %s: %s"
+
+#~ msgid ""
+#~ "Image-loading module %s does not export the proper interface; perhaps "
+#~ "it's from a different GTK version?"
+#~ msgstr ""
+#~ "Moduli i ngarkimit të figurave %s nuk eksporton interfaqen e duhur; mbase "
+#~ "është për një version tjetër të GTK?"
+
+#~ msgid "Image type '%s' is not supported"
+#~ msgstr "Figurat e llojit '%s' nuk suportohen"
+
+#~ msgid "Couldn't recognize the image file format for file '%s'"
+#~ msgstr "Nuk munda të njoh formatin e figurës për file '%s'"
+
+#~ msgid "Unrecognized image file format"
+#~ msgstr "Format i panjohur figure"
+
+#~ msgid "Failed to load image '%s': %s"
+#~ msgstr "I pamundur ngarkimi i figurës '%s': %s"
+
+#~ msgid "Error writing to image file: %s"
+#~ msgstr "Gabim gjatë shkrimit tek file i figurës: %s"
+
+#~ msgid ""
+#~ "This build of gdk-pixbuf does not support saving the image format: %s"
+#~ msgstr ""
+#~ "Ky variant i gdk-pixbuf nuk suporton ruajtjen e figurës në formatin: %s"
+
+#~ msgid "Insufficient memory to save image to callback"
+#~ msgstr "Kujtesë e pamjaftueshme për të ruajtur figurën që duhet rithirrur"
+
+#~ msgid "Failed to open temporary file"
+#~ msgstr "Dështova në hapjen e file të përkohshëm"
+
+#~ msgid "Failed to read from temporary file"
+#~ msgstr "I pamundur leximi i file të përkohshëm"
+
+#~ msgid "Failed to open '%s' for writing: %s"
+#~ msgstr "E pamundur hapja e '%s' për të shkruar: %s"
+
+#~ msgid ""
+#~ "Failed to close '%s' while writing image, all data may not have been "
+#~ "saved: %s"
+#~ msgstr ""
+#~ "E pamundur mbyllja e '%s' gjatë shkrimit të figurës, ka mundësi që asnjë "
+#~ "nga të dhënat të jetë ruajtur: %s"
+
+#~ msgid "Insufficient memory to save image into a buffer"
+#~ msgstr "Kujtesë e pamjaftueshme për të ruajtur figurën në një buffer"
+
+#~ msgid "Error writing to image stream"
+#~ msgstr "Gabim gjatë shkrimit tek stream i figurës"
+
+#~ msgid ""
+#~ "Internal error: Image loader module '%s' failed to complete an operation, "
+#~ "but didn't give a reason for the failure"
+#~ msgstr ""
+#~ "Gabim i brendshëm: Moduli ngarkues i figurave '%s' dështoi në plotësimin "
+#~ "e një operacioni, por nuk dha ndonjë arsye për dështimin"
+
+#~ msgid "Incremental loading of image type '%s' is not supported"
+#~ msgstr "Ngarkimi inkremental i figurave të llojit '%s' nuk suportohet"
+
+#~ msgid "Image header corrupt"
+#~ msgstr "Të dhënat filluese të figurës janë të dëmtuara"
+
+#~ msgid "Image format unknown"
+#~ msgstr "Format i panjohur figure"
+
+#~ msgid "Image pixel data corrupt"
+#~ msgstr "Të dhëna pixel të dëmtuara për figurën"
+
+#~ msgid "failed to allocate image buffer of %u byte"
+#~ msgid_plural "failed to allocate image buffer of %u bytes"
+#~ msgstr[0] "i pamundur sigurimi i buffer të figurës prej %u byte"
+#~ msgstr[1] "i pamundur sigurimi i buffer të figurës prej %u bytes"
+
+#~ msgid "Unexpected icon chunk in animation"
+#~ msgstr "Pjesë ikone e paparashikuar në animim"
+
+#~ msgid "Unsupported animation type"
+#~ msgstr "Lloj i pasuportuar animacioni"
+
+#~ msgid "Invalid header in animation"
+#~ msgstr "Fillim i pavlefshëm në animacion"
+
+#~ msgid "Not enough memory to load animation"
+#~ msgstr "Kujtesë e pamjaftueshme për të ngarkuar animacionin"
+
+#~ msgid "Malformed chunk in animation"
+#~ msgstr "Pjesë e keqformuar në animacion"
+
+#~ msgid "The ANI image format"
+#~ msgstr "Formati i figurave ANI"
+
+#~ msgid "BMP image has bogus header data"
+#~ msgstr "Header i figurës BMP ka të dhëna të gabuara"
+
+#~ msgid "Not enough memory to load bitmap image"
+#~ msgstr "Kujtesë e pamjaftueshme për të ngarkuar figurën bitmap"
+
+#~ msgid "BMP image has unsupported header size"
+#~ msgstr "Figura BMP ka një header me madhësi të pasuportuar"
+
+#~ msgid "Topdown BMP images cannot be compressed"
+#~ msgstr "Figurat Topdown BMP nuk mund të kompresohen"
+
+#~ msgid "Premature end-of-file encountered"
+#~ msgstr "Ndesha në eof të parakohshëm"
+
+#~ msgid "Couldn't allocate memory for saving BMP file"
+#~ msgstr "E pamundur përgatitja e kujtesës për të ruajtur file BMP"
+
+#~ msgid "Couldn't write to BMP file"
+#~ msgstr "I pamundur shkrimi tek file BMP"
+
+#~ msgid "The BMP image format"
+#~ msgstr "Formati i figurës BMP"
+
+#~ msgid "Failure reading GIF: %s"
+#~ msgstr "Gabim gjatë leximit të GIF: %s"
+
+#~ msgid "GIF file was missing some data (perhaps it was truncated somehow?)"
+#~ msgstr ""
+#~ "File GIF i mungojnë të dhëna (mbase në një farë mënyre i janë hequr?)"
+
+#~ msgid "Internal error in the GIF loader (%s)"
+#~ msgstr "Gabim i brendshëm në ngarkuesin GIF (%s)"
+
+#~ msgid "Stack overflow"
+#~ msgstr "Stack overflow"
+
+#~ msgid "GIF image loader cannot understand this image."
+#~ msgstr "Ngarkuesi i imazheve GIF nuk arrin të interpretojë këtë figurë."
+
+#~ msgid "Bad code encountered"
+#~ msgstr "Ndesha në kod të gabuar"
+
+#~ msgid "Circular table entry in GIF file"
+#~ msgstr "Element i përsëritur tabele në file GIF"
+
+#~ msgid "Not enough memory to load GIF file"
+#~ msgstr "Kujtesë e pamjaftueshme për të ngarkuar file GIF"
+
+#~ msgid "Not enough memory to composite a frame in GIF file"
+#~ msgstr "Kujtesë e pamjaftueshme për të krijuar një fragment tek file GIF"
+
+#~ msgid "GIF image is corrupt (incorrect LZW compression)"
+#~ msgstr "Figurë GIF e dëmtuar (gabime në kompresimin LZW)"
+
+#~ msgid "File does not appear to be a GIF file"
+#~ msgstr "File nuk duket të jetë i formatit GIF"
+
+#~ msgid "Version %s of the GIF file format is not supported"
+#~ msgstr "Versioni %s i formatit GIF nuk suportohet"
+
+#~ msgid ""
+#~ "GIF image has no global colormap, and a frame inside it has no local "
+#~ "colormap."
+#~ msgstr ""
+#~ "Figura GIF nuk ka një hartë ngjyrash globale dhe, në një fotogramë të "
+#~ "brendshme, mungon harta e ngjyrave lokale."
+
+#~ msgid "GIF image was truncated or incomplete."
+#~ msgstr "Figurë GIF e ndëprerë ose jo e plotë."
+
+#~ msgid "The GIF image format"
+#~ msgstr "Formati GIF"
+
+#~ msgid "Invalid header in icon"
+#~ msgstr "Header ikone i pavlefshëm"
+
+#~ msgid "Not enough memory to load icon"
+#~ msgstr "Kujtesë e pamjaftueshme për të ngarkuar ikonën"
+
+#~ msgid "Icon has zero width"
+#~ msgstr "Ikona ka gjerësi zero"
+
+#~ msgid "Icon has zero height"
+#~ msgstr "Ikona ka lartësi zero"
+
+#~ msgid "Compressed icons are not supported"
+#~ msgstr "Ikonat e kompresuara nuk suportohen"
+
+#~ msgid "Unsupported icon type"
+#~ msgstr "Lloj ikone i pasuportuar"
+
+#~ msgid "Not enough memory to load ICO file"
+#~ msgstr "Kujtesë e pamjaftueshme për të ngarkuar file ICO"
+
+#~ msgid "Image too large to be saved as ICO"
+#~ msgstr "Figurë tepër e madhe për t'u ruajtur si ICO"
+
+#~ msgid "Cursor hotspot outside image"
+#~ msgstr "Hotspot i kursorit jashtë figurës"
+
+#~ msgid "Unsupported depth for ICO file: %d"
+#~ msgstr "Intensitet i pasuportuar për file ICO: %d"
+
+#~ msgid "The ICO image format"
+#~ msgstr "Formati i figurës ICO"
+
+#~ msgid "Error reading ICNS image: %s"
+#~ msgstr "Gabim gjatë leximit të figurës ICNS: %s"
+
+#~ msgid "Could not decode ICNS file"
+#~ msgstr "I pamundur dekodifikimi i file ICNS"
+
+#~ msgid "The ICNS image format"
+#~ msgstr "Formati ICNS i figurave"
+
+#~ msgid "Couldn't allocate memory for stream"
+#~ msgstr "I pamundur sigurimi i memorjes për stream"
+
+#~ msgid "Couldn't decode image"
+#~ msgstr "I pamundur dekodifikimi i figurës"
+
+#~ msgid "Transformed JPEG2000 has zero width or height"
+#~ msgstr "JPEG2000 e transformuar ka gjerësi apo lartësi zero"
+
+#~ msgid "Image type currently not supported"
+#~ msgstr "Figurat e këtij lloji nuk suportohen"
+
+#~ msgid "Couldn't allocate memory for color profile"
+#~ msgstr "I pamundur sigurimi i memorjes për profilin e ngjyrës"
+
+#~ msgid "Insufficient memory to open JPEG 2000 file"
+#~ msgstr "Memorje e pamjaftueshme për hapjen e file JPEG 2000"
+
+#~ msgid "Couldn't allocate memory to buffer image data"
+#~ msgstr ""
+#~ "I pamundur sigurimi i memorjes për të magazinuar të dhënat e figurës"
+
+#~ msgid "The JPEG 2000 image format"
+#~ msgstr "Formati JPEG 2000 i figurave"
+
+#~ msgid "Error interpreting JPEG image file (%s)"
+#~ msgstr "Gabim gjatë interpretimit të file JPEG (%s)"
+
+#~ msgid ""
+#~ "Insufficient memory to load image, try exiting some applications to free "
+#~ "memory"
+#~ msgstr ""
+#~ "Kujtesë e pamjaftueshme për të ngarkuar figurën, provoni të mbyllni disa "
+#~ "programe që të lironi pak kujtesë"
+
+#~ msgid "Unsupported JPEG color space (%s)"
+#~ msgstr "Ngjyrë hapësire JPEG (%s) e pasuportuar"
+
+#~ msgid "Couldn't allocate memory for loading JPEG file"
+#~ msgstr "E pamundur përgatitja e kujtesës për të ngarkuar file JPEG"
+
+#~ msgid "Transformed JPEG has zero width or height."
+#~ msgstr "JPEG e transformuar gjerësi apo lartësi zero."
+
+#~ msgid ""
+#~ "JPEG quality must be a value between 0 and 100; value '%s' could not be "
+#~ "parsed."
+#~ msgstr ""
+#~ "Cilësia JPEG duhet të jetë një vlerë midis 0 dhe 100; vlera '%s' nuk mund "
+#~ "të analizohet."
+
+#~ msgid ""
+#~ "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
+#~ msgstr ""
+#~ "Cilësia JPEG duhet të jetë një vlerë midis 0 dhe 100; vlera '%d' nuk "
+#~ "lejohet."
+
+#~ msgid "The JPEG image format"
+#~ msgstr "Formati JPEG"
+
+#~ msgid "Couldn't allocate memory for header"
+#~ msgstr "Nuk munda të siguroj kujtesë për header"
+
+#~ msgid "Couldn't allocate memory for context buffer"
+#~ msgstr "Nuk mund të siguroj kujtesë për përmbajtjen e buffer"
+
+#~ msgid "Image has invalid width and/or height"
+#~ msgstr "Figura ka gjerësi dhe/ose lartësi të pavlefshme"
+
+# (pofilter) endwhitespace: checks whether whitespace at the end of the strings matches
+#~ msgid "Image has unsupported bpp"
+#~ msgstr "Figura ka bpp të pasuportuar "
+
+#~ msgid "Image has unsupported number of %d-bit planes"
+#~ msgstr "Figura ka numër të pasuportuar planesh prej %d-bit"
+
+# (pofilter) doublequoting: checks whether doublequoting is consistent between the two strings
+#~ msgid "Couldn't create new pixbuf"
+#~ msgstr "I pamundur krijimi i \"pixbuf\" të ri"
+
+#~ msgid "Couldn't allocate memory for line data"
+#~ msgstr "S'mund të siguroj kujtesë për të dhënat e vijës"
+
+#~ msgid "Couldn't allocate memory for paletted data"
+#~ msgstr "S'mund të siguroj kujtesë për të dhënat e palet-uara"
+
+#~ msgid "Didn't get all lines of PCX image"
+#~ msgstr "Nuk mora të gjitha vijat e figurës PCX"
+
+#~ msgid "No palette found at end of PCX data"
+#~ msgstr "Nuk u gjet paletë tek fundi i të dhënave PCX"
+
+#~ msgid "The PCX image format"
+#~ msgstr "Formati i figurës PCX"
+
+#~ msgid "Bits per channel of PNG image is invalid."
+#~ msgstr "Numri i bit për kanal i figurës PNG është i pavlefshëm."
+
+#~ msgid "Transformed PNG has zero width or height."
+#~ msgstr "Figura e transformuar në PNG ka gjerësi apo lartësi zero."
+
+#~ msgid "Bits per channel of transformed PNG is not 8."
+#~ msgstr ""
+#~ "Numri i bit-eve për kanal të figurës së transformuar në PNG nuk është 8."
+
+#~ msgid "Transformed PNG not RGB or RGBA."
+#~ msgstr "Figura e transformuar në PNG nuk përdor RGB apo RGBA."
+
+#~ msgid "Transformed PNG has unsupported number of channels, must be 3 or 4."
+#~ msgstr ""
+#~ "Figurë e transformuar në PNG me numër të pasuportuar kanalesh, duhet të "
+#~ "jetë 3 ose 4."
+
+#~ msgid "Fatal error in PNG image file: %s"
+#~ msgstr "Gabim fatal në file PNG: %s"
+
+#~ msgid "Insufficient memory to load PNG file"
+#~ msgstr "Kujtesë e pamjaftueshme për të ngarkuar file PNG"
+
+#~ msgid ""
+#~ "Insufficient memory to store a %ld by %ld image; try exiting some "
+#~ "applications to reduce memory usage"
+#~ msgstr ""
+#~ "Kujtesë e pamjaftueshme për të ruajtur një figurë %ld × %ld; provoni "
+#~ "mbylljen e disa programeve për të zvogëluar përdorimin e kujtesës"
+
+#~ msgid "Fatal error reading PNG image file"
+#~ msgstr "Gabim fatal gjatë leximit të file PNG"
+
+#~ msgid "Fatal error reading PNG image file: %s"
+#~ msgstr "Gabim fatal gjatë leximit të file PNG: %s"
+
+#~ msgid ""
+#~ "Keys for PNG text chunks must have at least 1 and at most 79 characters."
+#~ msgstr ""
+#~ "Kyçet për segmentet e tekstit PNG duhet të kenë të paktën 1 dhe në "
+#~ "maksimum 79 simbole."
+
+#~ msgid "Keys for PNG text chunks must be ASCII characters."
+#~ msgstr "Kyçet për segmentet e tekstit PNG duhet të jenë simbole ASCII."
+
+#~ msgid ""
+#~ "PNG compression level must be a value between 0 and 9; value '%s' could "
+#~ "not be parsed."
+#~ msgstr ""
+#~ "Niveli i ngjeshjes PNG duhet të jetë një vlerë midis 0 dhe 9; vlera '%s' "
+#~ "nuk mund të analizohet."
+
+#~ msgid ""
+#~ "PNG compression level must be a value between 0 and 9; value '%d' is not "
+#~ "allowed."
+#~ msgstr ""
+#~ "Niveli i ngjeshjes PNG duhet të jetë një vlerë midis 0 dhe 9; vlera '%d' "
+#~ "nuk lejohet."
+
+#~ msgid ""
+#~ "Value for PNG text chunk %s cannot be converted to ISO-8859-1 encoding."
+#~ msgstr ""
+#~ "Vlera për segmentin %s të tekstit PNG nuk mund të konvertohet në familjen "
+#~ "ISO-8859-1."
+
+#~ msgid "The PNG image format"
+#~ msgstr "Formati PNG"
+
+#~ msgid "PNM loader expected to find an integer, but didn't"
+#~ msgstr "Numri i plotë i pritur nga moduli ngarkues PNM nuk u gjet"
+
+#~ msgid "PNM file has an incorrect initial byte"
+#~ msgstr "File PNM me byte fillestar të pasaktë"
+
+#~ msgid "PNM file is not in a recognized PNM subformat"
+#~ msgstr "File PNM nuk është një nënformat PNM i njohur"
+
+#~ msgid "PNM file has an image width of 0"
+#~ msgstr "File PNM me gjerësi baraz me 0"
+
+#~ msgid "PNM file has an image height of 0"
+#~ msgstr "File PNM me lartësi baraz me 0"
+
+#~ msgid "Maximum color value in PNM file is 0"
+#~ msgstr "Vlera më e madhe e ngjyrës në file PNM është 0"
+
+#~ msgid "Maximum color value in PNM file is too large"
+#~ msgstr "Vlera më e madhe e ngjyrës në file PNM është tepër e madhe"
+
+# (pofilter) endwhitespace: checks whether whitespace at the end of the strings matches
+#~ msgid "Raw PNM image type is invalid"
+#~ msgstr "Lloji i papërpunuar i figurës PNM është i pasaktë "
+
+# (pofilter) endwhitespace: checks whether whitespace at the end of the strings matches
+#~ msgid "PNM image loader does not support this PNM subformat"
+#~ msgstr "Ngarkuesi i pamjeve PNM nuk suporton këtë nënformat PNM "
+
+#~ msgid "Raw PNM formats require exactly one whitespace before sample data"
+#~ msgstr ""
+#~ "Formatet PNM të papërpunuar kanë nevojë për tamam një hapësirë bosh para "
+#~ "të dhënava"
+
+#~ msgid "Cannot allocate memory for loading PNM image"
+#~ msgstr "I pamundur sigurimi i kujtesës për ngarkimin e figurës PNM"
+
+#~ msgid "Insufficient memory to load PNM context struct"
+#~ msgstr "Kujtesë e pamjaftueshme për ngarkimin e strukturës kontekstuale PNM"
+
+#~ msgid "Unexpected end of PNM image data"
+#~ msgstr "Fund i papritur i të dhënave të figurës PNM"
+
+#~ msgid "Insufficient memory to load PNM file"
+#~ msgstr "Kujtesë e pamjaftueshme për ngarkimin e file PNM"
+
+#~ msgid "The PNM/PBM/PGM/PPM image format family"
+#~ msgstr "Familja e figurave të formateve PNM/PBM/PGM/PPM"
+
+#, fuzzy
+#~ msgid "Failed to read QTIF header"
+#~ msgstr "Shkrimi i kreut dështoi\n"
+
+#, fuzzy
+#~ msgid "Failed to allocate %d bytes for file read buffer"
+#~ msgstr "i pamundur sigurimi i buffer të figurës prej %u byte"
+
+#, fuzzy
+#~ msgid "File error when reading QTIF atom: %s"
+#~ msgstr "Gabim gjatë leximit të GIF: %s"
+
+#, fuzzy
+#~ msgid "Failed to allocate QTIF context structure."
+#~ msgstr "I pamundur sigurimi i kujtesës për strukturën kontekste TGA"
+
+#, fuzzy
+#~ msgid "Failed to create GdkPixbufLoader object."
+#~ msgstr "Shkrimi i treguesit të kartelës dështoi\n"
+
+#, fuzzy
+#~ msgid "Failed to find an image data atom."
+#~ msgstr "E pamundur hapja e figurës TIFF"
+
+#, fuzzy
+#~ msgid "The QTIF image format"
+#~ msgstr "Formati i figurës TIFF"
+
+#~ msgid "RAS image has bogus header data"
+#~ msgstr "Figura RAS ka titull të gabuar të dhënash"
+
+#~ msgid "RAS image has unknown type"
+#~ msgstr "Figura RAS është e një lloji të panjohur"
+
+# (pofilter) startcaps: checks that the message starts with the correct capitalisation
+#~ msgid "unsupported RAS image variation"
+#~ msgstr "Variant figure RAS i pasuportuar"
+
+#~ msgid "Not enough memory to load RAS image"
+#~ msgstr "Kujtesë e pamjaftueshme për të ngarkuar figurën RAS"
+
+#~ msgid "The Sun raster image format"
+#~ msgstr "Formati Sun raster"
+
+#~ msgid "Cannot allocate memory for IOBuffer struct"
+#~ msgstr "I pamundur sigurimi i kujtesës për strukturën IOBuffer"
+
+#~ msgid "Cannot allocate memory for IOBuffer data"
+#~ msgstr "I pamundur sigurimi i kujtesës për të dhënat IOBuffer"
+
+#~ msgid "Cannot realloc IOBuffer data"
+#~ msgstr "I pamundur risigurimi i të dhënave IOBuffer"
+
+#~ msgid "Cannot allocate temporary IOBuffer data"
+#~ msgstr "I pamundur sigurimi i të dhënave të përkohshme IOBuffer"
+
+#~ msgid "Cannot allocate new pixbuf"
+#~ msgstr "E pamundur vendosja e pixbuf të ri"
+
+#, fuzzy
+#~ msgid "Image is corrupted or truncated"
+#~ msgstr "Figurë GIF e ndëprerë ose jo e plotë."
+
+#~ msgid "Cannot allocate colormap structure"
+#~ msgstr "E pamundur vendosja e strukturës së hartës së ngjyrave"
+
+#~ msgid "Cannot allocate colormap entries"
+#~ msgstr "E pamundur vendosja e elementëve të hartës së ngjyrave"
+
+#~ msgid "Unexpected bitdepth for colormap entries"
+#~ msgstr "Intensitet i papritur për zërat e hartës së ngjyrave"
+
+#~ msgid "Cannot allocate TGA header memory"
+#~ msgstr "I pamundur sigurimi i kujtesës për header TGA"
+
+#~ msgid "TGA image has invalid dimensions"
+#~ msgstr "Figura TGA ka përmasa të pavlefshme"
+
+#~ msgid "TGA image type not supported"
+#~ msgstr "Lloj figure TGA e pasuportuar"
+
+#~ msgid "Cannot allocate memory for TGA context struct"
+#~ msgstr "I pamundur sigurimi i kujtesës për strukturën kontekste TGA"
+
+#~ msgid "Excess data in file"
+#~ msgstr "Tepri të dhënash në file"
+
+#~ msgid "The Targa image format"
+#~ msgstr "Formati Targa"
+
+#~ msgid "Could not get image width (bad TIFF file)"
+#~ msgstr ""
+#~ "I pamundur përcaktimi i gjerësisë së figurës (file TIFF i keqformuar)"
+
+#~ msgid "Could not get image height (bad TIFF file)"
+#~ msgstr ""
+#~ "I pamundur përcaktimi i lartësisë së figurës (file TIFF i keqformuar)"
+
+#~ msgid "Width or height of TIFF image is zero"
+#~ msgstr "Gjerësia ose lartësia e figurës TIFF është zero"
+
+#~ msgid "Dimensions of TIFF image too large"
+#~ msgstr "Përmasat e figurës TIFF janë tepër të mëdha"
+
+#~ msgid "Insufficient memory to open TIFF file"
+#~ msgstr "Kujtesë e pamjaftueshme për hapjen e file TIFF"
+
+#~ msgid "Failed to load RGB data from TIFF file"
+#~ msgstr "Dështova në ngarkimin e të dhënave RGB nga file TIFF"
+
+#~ msgid "Failed to open TIFF image"
+#~ msgstr "E pamundur hapja e figurës TIFF"
+
+#~ msgid "TIFFClose operation failed"
+#~ msgstr "Operacioni TIFFClose dështoi"
+
+#~ msgid "Failed to load TIFF image"
+#~ msgstr "I pamundur ngarkimi i figurës TIFF"
+
+#~ msgid "Failed to save TIFF image"
+#~ msgstr "Ruajtja e figurës TIFF dështoi"
+
+#~ msgid "Failed to write TIFF data"
+#~ msgstr "Shkrimi i të dhënave TIFF dështoi"
+
+#~ msgid "Couldn't write to TIFF file"
+#~ msgstr "I pamundur shkrimi tek file TIFF"
+
+#~ msgid "The TIFF image format"
+#~ msgstr "Formati i figurës TIFF"
+
+#~ msgid "Image has zero width"
+#~ msgstr "Figura ka gjerësi zero"
+
+#~ msgid "Image has zero height"
+#~ msgstr "Figura ka lartësi zero"
+
+#~ msgid "Not enough memory to load image"
+#~ msgstr "Kujtesë e pamjaftueshme për ngarkimin e figurës"
+
+#~ msgid "Couldn't save the rest"
+#~ msgstr "E pamundur ruajtja e pjesës së mbetur"
+
+#~ msgid "The WBMP image format"
+#~ msgstr "Formati i figurës WBMP"
+
+#~ msgid "Invalid XBM file"
+#~ msgstr "File XBM i pasaktë"
+
+#~ msgid "Insufficient memory to load XBM image file"
+#~ msgstr "Kujtesë e pamjaftueshme për ngarkimin e file XBM"
+
+#~ msgid "Failed to write to temporary file when loading XBM image"
+#~ msgstr ""
+#~ "Dështova në shkrimin e file të përkohshëm gjatë ngarkimit të figurës XBM"
+
+#~ msgid "The XBM image format"
+#~ msgstr "Formati XBM"
+
+#~ msgid "No XPM header found"
+#~ msgstr "Mungon header XPM"
+
+#~ msgid "Invalid XPM header"
+#~ msgstr "Header XPM i pavlefshëm"
+
+#~ msgid "XPM file has image width <= 0"
+#~ msgstr "File XPM e ka gjerësinë e figurës <= 0"
+
+#~ msgid "XPM file has image height <= 0"
+#~ msgstr "File XPM e ka lartësinë e figurës <= 0"
+
+#~ msgid "XPM has invalid number of chars per pixel"
+#~ msgstr "XPM ka numër të pavlefshëm simbolesh për pixel"
+
+#~ msgid "XPM file has invalid number of colors"
+#~ msgstr "File XPM ka numër të pavlefshëm ngjyrash"
+
+#~ msgid "Cannot allocate memory for loading XPM image"
+#~ msgstr "I pamundur sigurimi i kujtesës për ngarkimin e figurës XPM"
+
+#~ msgid "Cannot read XPM colormap"
+#~ msgstr "I pamundur leximi i hartës së ngjyrave XPM"
+
+#~ msgid "Failed to write to temporary file when loading XPM image"
+#~ msgstr ""
+#~ "Dështova në shkrimin e file të përkohshëm gjatë ngarkimit të figurës XPM"
+
+#~ msgid "The XPM image format"
+#~ msgstr "Formati i figurës XPM"
+
+#~ msgid "The EMF image format"
+#~ msgstr "Formati EMF"
+
+#~ msgid "Could not allocate memory: %s"
+#~ msgstr "I pamundur sigurimi i memorjes: %s"
+
+#~ msgid "Could not create stream: %s"
+#~ msgstr "I pamundur krijimi i fluksit: %s"
+
+#~ msgid "Could not seek stream: %s"
+#~ msgstr "I pamundur kërkimi i fluksit: %s"
+
+#~ msgid "Could not read from stream: %s"
+#~ msgstr "I pamundur leximi nga fluksi: %s"
+
+#~ msgid "Couldn't load bitmap"
+#~ msgstr "I pamundur ngarkimi i bitmap"
+
+#~ msgid "Couldn't load metafile"
+#~ msgstr "I pamundur ngarkimi i metafile"
+
+# (pofilter) startcaps: checks that the message starts with the correct capitalisation
+#~ msgid "Unsupported image format for GDI+"
+#~ msgstr "Format figure i pasuportuar për GDI+"
+
+#~ msgid "Couldn't save"
+#~ msgstr "E pamundur ruajtja"
+
+#~ msgid "The WMF image format"
+#~ msgstr "Formati WMF"
+
+#~ msgid "\"Deepness\" of the color."
+#~ msgstr "\"Thellësia\" e ngjyrës."
+
+#~ msgid "Error printing"
+#~ msgstr "Gabim në printim"
+
+#~ msgid "Printer '%s' may not be connected."
+#~ msgstr "Printeri '%s' mund të jetë i palidhur."
 
 #~ msgid "Folders"
 #~ msgstr "Kartelat"

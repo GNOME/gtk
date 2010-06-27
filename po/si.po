@@ -7,10 +7,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: si\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-05-25 20:10-0400\n"
+"POT-Creation-Date: 2010-06-26 23:16-0400\n"
 "PO-Revision-Date: 2007-12-28 13:32+0530\n"
 "Last-Translator: Danishka Navin <danishka@gmail.com>\n"
 "Language-Team: Sinhala <en@li.org>\n"
+"Language: si\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -76,7 +77,7 @@ msgstr "Gdk දෝෂහරණ සංකේතය සැකසීමට"
 #. Placeholder in --gdk-no-debug=FLAGS in --help output
 #. Placeholder in --gtk-debug=FLAGS in --help output
 #. Placeholder in --gtk-no-debug=FLAGS in --help output
-#: gdk/gdk.c:165 gdk/gdk.c:168 gtk/gtkmain.c:454 gtk/gtkmain.c:457
+#: gdk/gdk.c:165 gdk/gdk.c:168 gtk/gtkmain.c:439 gtk/gtkmain.c:442
 msgid "FLAGS"
 msgstr "FLAGS"
 
@@ -287,913 +288,6 @@ msgstr "මකන්න (_D)"
 msgctxt "keyboard label"
 msgid "Delete"
 msgstr "මකන්න (_D)"
-
-#: gdk-pixbuf/gdk-pixbuf-animation.c:133 gdk-pixbuf/gdk-pixbuf-io.c:982
-#: gdk-pixbuf/gdk-pixbuf-io.c:1242 tests/testfilechooser.c:222
-#, c-format
-msgid "Failed to open file '%s': %s"
-msgstr "'%s' ගොනුව විවෘත කිරීම අපහසුවිය: %s"
-
-#: gdk-pixbuf/gdk-pixbuf-animation.c:146 gdk-pixbuf/gdk-pixbuf-io.c:994
-#, c-format
-msgid "Image file '%s' contains no data"
-msgstr "%s පිළිඹිබු ගොනුව තුළ දත්ත නැත"
-
-#: gdk-pixbuf/gdk-pixbuf-animation.c:188 gdk-pixbuf/gdk-pixbuf-io.c:1030
-#: gdk-pixbuf/gdk-pixbuf-io.c:1294 tests/testfilechooser.c:267
-#, c-format
-msgid ""
-"Failed to load image '%s': reason not known, probably a corrupt image file"
-msgstr "'%s'පිළිඹිබුව පූරණය දෝෂසහිතයි: හේතුව නොදන්නා අතර සමහරවිට දූෂිත පිළිඹිබු ගොනුවක් විය හැක"
-
-#: gdk-pixbuf/gdk-pixbuf-animation.c:221
-#, c-format
-msgid ""
-"Failed to load animation '%s': reason not known, probably a corrupt "
-"animation file"
-msgstr ""
-"'%s සජීවීකරණය පූරණය දෝෂසහිතයි: හේතුව නොදන්නා අතර සමහරවිට දූෂිත සජීවීකරණ ගොනුවක් විය හැක"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:715
-#, c-format
-msgid "Unable to load image-loading module: %s: %s"
-msgstr "පිළිඹිබු පූරණ අංගය පූරණය කළ නොහැක: %s: %s"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:730
-#, c-format
-msgid ""
-"Image-loading module %s does not export the proper interface; perhaps it's "
-"from a different GTK version?"
-msgstr "%s පිළිඹිබු පූරණ අංගය නියමිත අතුරු මුහුණත; සමහරවිට එය වෙනස් GTK වෙළුමකින් වියහැක?"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:739 gdk-pixbuf/gdk-pixbuf-io.c:790
-#, c-format
-msgid "Image type '%s' is not supported"
-msgstr "'%s' පිළිඹිබු වර්‍ගය සහාය නොදක්වයි"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:863
-#, c-format
-msgid "Couldn't recognize the image file format for file '%s'"
-msgstr "'%s' ගොනුව සඳහා පිළිඹිබු සංයුතිය හදුනාගත නොහැක"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:871
-msgid "Unrecognized image file format"
-msgstr "හදුනා නොගත් පිළිඹිබු සංයුතියක්"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:1039
-#, c-format
-msgid "Failed to load image '%s': %s"
-msgstr "'%s' පිළිඹිබුවට පූරණය දෝෂ සහිතයි: %s"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:1673 gdk-pixbuf/io-gdip-utils.c:961
-#, c-format
-msgid "Error writing to image file: %s"
-msgstr "පිළිඹිබුවට ලිවීම දෝෂ සහිතයි : %s"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:1718 gdk-pixbuf/gdk-pixbuf-io.c:1848
-#, c-format
-msgid "This build of gdk-pixbuf does not support saving the image format: %s"
-msgstr "gdk-pixbuf ගොඩ නැගීම පිළිඹිබු සංයුතිය සුරකීමට සහාය නොදක්වයි: %s"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:1752
-msgid "Insufficient memory to save image to callback"
-msgstr "callback වෙත පිළිඹිබුව සුරකීමට ප්‍රමාණවත් මතකයක් නැත"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:1765
-msgid "Failed to open temporary file"
-msgstr "තාවකාලික ගොනුව විවෘත කිරීම අසමත්විය"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:1791
-msgid "Failed to read from temporary file"
-msgstr "තාවකාලික ගොනුවකිවීම අසමත්විය"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:2044
-#, c-format
-msgid "Failed to open '%s' for writing: %s"
-msgstr "ලිවීම සඳහා '%s' විවෘත කිරීම අසමත්විය: %s"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:2070
-#, c-format
-msgid ""
-"Failed to close '%s' while writing image, all data may not have been saved: %"
-"s"
-msgstr "පිළිඹිබුව ලිවීම අතරතුරේදිා '%s'වසා දැමීමරීම අසමත්, සියළුම දත්ත සුරක්‍ෂි නොවුනි: %sවිය"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:2290 gdk-pixbuf/gdk-pixbuf-io.c:2341
-msgid "Insufficient memory to save image into a buffer"
-msgstr "ස්වාරක්‍ෂක භාරයක් තුළට සුරකීමට ප්‍රමාණවත් මතකයක් නොමැත"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:2387
-#, fuzzy
-msgid "Error writing to image stream"
-msgstr "පිළිඹිබුවට ලිවීම දෝෂ සහිතයි : %s"
-
-#: gdk-pixbuf/gdk-pixbuf-loader.c:334
-#, c-format
-msgid ""
-"Internal error: Image loader module '%s' failed to complete an operation, "
-"but didn't give a reason for the failure"
-msgstr ""
-"අභ්‍යන්තර දෝෂයක්: Image loader module '%s' failed to complete an operation, but "
-"didn't give a reason for the failure"
-
-#: gdk-pixbuf/gdk-pixbuf-loader.c:376
-#, c-format
-msgid "Incremental loading of image type '%s' is not supported"
-msgstr "'%s' පිළිඹිබු වර්‍ගයේ වර්‍ධක පූරණය සහාය නොදක්වයි"
-
-#: gdk-pixbuf/gdk-pixdata.c:147
-msgid "Image header corrupt"
-msgstr "පිළිඹිබු ශිර්ෂකය විනාශ විය"
-
-#: gdk-pixbuf/gdk-pixdata.c:152
-msgid "Image format unknown"
-msgstr "පිළිඹිබු සංයුතිය නොදනි"
-
-#: gdk-pixbuf/gdk-pixdata.c:157 gdk-pixbuf/gdk-pixdata.c:488
-msgid "Image pixel data corrupt"
-msgstr "පිළිඹිබු පික්සල දත්ත විනාශ විය"
-
-#: gdk-pixbuf/gdk-pixdata.c:432
-#, c-format
-msgid "failed to allocate image buffer of %u byte"
-msgid_plural "failed to allocate image buffer of %u bytes"
-msgstr[0] "බයිට %u ක පිළිඹිබු බෆරය වෙන් කළ නොහැකි විය"
-msgstr[1] "බයිට %u ක පිළිඹිබු බෆරය වෙන් කළ නොහැකි විය"
-
-#: gdk-pixbuf/io-ani.c:244
-msgid "Unexpected icon chunk in animation"
-msgstr "සජීවීකරණය තුළ බලාපොරොත්තු නොවු සංකේත විශාල ප්‍රමාණයක් ඇත"
-
-#: gdk-pixbuf/io-ani.c:337
-msgid "Unsupported animation type"
-msgstr "සහාය නොදක්වන සජීවීකරණ වර්‍ගයක්"
-
-#: gdk-pixbuf/io-ani.c:348 gdk-pixbuf/io-ani.c:406 gdk-pixbuf/io-ani.c:432
-#: gdk-pixbuf/io-ani.c:455 gdk-pixbuf/io-ani.c:482 gdk-pixbuf/io-ani.c:569
-msgid "Invalid header in animation"
-msgstr "සජීවීකරණය තුළ සාවද්‍ය ශිර්ෂකයක්"
-
-#: gdk-pixbuf/io-ani.c:358 gdk-pixbuf/io-ani.c:380 gdk-pixbuf/io-ani.c:464
-#: gdk-pixbuf/io-ani.c:491 gdk-pixbuf/io-ani.c:542 gdk-pixbuf/io-ani.c:614
-msgid "Not enough memory to load animation"
-msgstr "සජීවීකරණය පූරණයට ප්‍රමාණවත් මතකයක් නැත"
-
-#: gdk-pixbuf/io-ani.c:398 gdk-pixbuf/io-ani.c:424 gdk-pixbuf/io-ani.c:443
-msgid "Malformed chunk in animation"
-msgstr "සජීවීකරණය තුළ විකෘත විශාල ප්‍රමාණයක් ඇත"
-
-#: gdk-pixbuf/io-ani.c:711
-msgid "The ANI image format"
-msgstr "ANI පිළිඹිබු සංයුතිය"
-
-#: gdk-pixbuf/io-bmp.c:230 gdk-pixbuf/io-bmp.c:267 gdk-pixbuf/io-bmp.c:338
-#: gdk-pixbuf/io-bmp.c:370 gdk-pixbuf/io-bmp.c:393 gdk-pixbuf/io-bmp.c:496
-msgid "BMP image has bogus header data"
-msgstr "BMP පිළිඹිබු සතුව ව්‍යාජ ශිර්ෂක දත්ත ඇත"
-
-#: gdk-pixbuf/io-bmp.c:241 gdk-pixbuf/io-bmp.c:433
-msgid "Not enough memory to load bitmap image"
-msgstr "bitmap පිළිඹිබුව පූරණයට ප්‍රමාණවත් මතකයක් නැත"
-
-#: gdk-pixbuf/io-bmp.c:319
-msgid "BMP image has unsupported header size"
-msgstr "BMP පිළිඹිබුවේ ශීර්ෂකයේ ප්‍රමාණය සහාය නොදක්වයි"
-
-#: gdk-pixbuf/io-bmp.c:357
-msgid "Topdown BMP images cannot be compressed"
-msgstr ""
-
-#: gdk-pixbuf/io-bmp.c:717 gdk-pixbuf/io-pnm.c:709
-msgid "Premature end-of-file encountered"
-msgstr ""
-
-#: gdk-pixbuf/io-bmp.c:1329
-msgid "Couldn't allocate memory for saving BMP file"
-msgstr "BMP පිළිඹිබුව සුරකීමට මතකය වෙන් කළ නොහැකි විය"
-
-#: gdk-pixbuf/io-bmp.c:1370
-msgid "Couldn't write to BMP file"
-msgstr "BMP ගොනුවට ලිවිය නොහැකි විය"
-
-#: gdk-pixbuf/io-bmp.c:1423 gdk-pixbuf/io-gdip-bmp.c:82
-msgid "The BMP image format"
-msgstr "BMP පිළිඹිබු සංයුතිය"
-
-#: gdk-pixbuf/io-gif.c:222
-#, c-format
-msgid "Failure reading GIF: %s"
-msgstr "GIF කියවීම අසමත් විය: %s"
-
-#: gdk-pixbuf/io-gif.c:496 gdk-pixbuf/io-gif.c:1481 gdk-pixbuf/io-gif.c:1642
-msgid "GIF file was missing some data (perhaps it was truncated somehow?)"
-msgstr "GIF ගොනුවේ සමහර දත්ත නැතිවි ඇත (සමහර විට එය කිසියම් අයුරකින් ලුප්ත වි ඇත)"
-
-#: gdk-pixbuf/io-gif.c:505
-#, c-format
-msgid "Internal error in the GIF loader (%s)"
-msgstr "GIF පූරකයේ අභ්‍යන්තර දෝෂයකි (%s)"
-
-#: gdk-pixbuf/io-gif.c:579
-msgid "Stack overflow"
-msgstr "ස්ටැකය පිරී ඇත"
-
-#: gdk-pixbuf/io-gif.c:639
-msgid "GIF image loader cannot understand this image."
-msgstr "පිළිඹිබු තේරුම්ගැනීම GIF පිළිඹිබු පූරකයට අපහසුයි."
-
-#: gdk-pixbuf/io-gif.c:668
-msgid "Bad code encountered"
-msgstr "සාවද්‍ය කේතයක් හදුනා ගන්නා ලදි"
-
-#: gdk-pixbuf/io-gif.c:678
-msgid "Circular table entry in GIF file"
-msgstr "GIF ගොනුවේ චක්‍රීය වගු ඇතුළත් කිරීම"
-
-#: gdk-pixbuf/io-gif.c:866 gdk-pixbuf/io-gif.c:1468 gdk-pixbuf/io-gif.c:1515
-#: gdk-pixbuf/io-gif.c:1630
-msgid "Not enough memory to load GIF file"
-msgstr "GIF ගොනුව පූරණයට ප්‍රමාණවත් මතකයක් නැත"
-
-#: gdk-pixbuf/io-gif.c:960
-msgid "Not enough memory to composite a frame in GIF file"
-msgstr "GIF ගොනුව තුළ සමිශ්‍රිත රාමුවක් සැකසීමට ප්‍රමාණවත් මතකයක් නැත"
-
-#: gdk-pixbuf/io-gif.c:1132
-msgid "GIF image is corrupt (incorrect LZW compression)"
-msgstr "GIF පිළිඹිබුව විනාශ වි ඇත (සාවද්‍ය LZW සම්පීඩනයක්)"
-
-#: gdk-pixbuf/io-gif.c:1182
-#, fuzzy
-msgid "File does not appear to be a GIF file"
-msgstr "GIF ලෙස දිස්වන්නේ නැත"
-
-#: gdk-pixbuf/io-gif.c:1194
-#, c-format
-msgid "Version %s of the GIF file format is not supported"
-msgstr "GIF ගොනු සංයුතියෙ %s වන වෙළුම සහාය නොදක්වයි"
-
-#: gdk-pixbuf/io-gif.c:1303
-msgid ""
-"GIF image has no global colormap, and a frame inside it has no local "
-"colormap."
-msgstr "GIF පිළිඹිබුව සතුව ගොලීය වර්‍ණසිතියමක් නැති අතරෙය තුළවු රාමුවේ ප්‍රාදේශිය වර්‍ණසිතියමක්ද නැත."
-
-#: gdk-pixbuf/io-gif.c:1537
-msgid "GIF image was truncated or incomplete."
-msgstr "GIF පිළිඹිබු ලුප්ත වි හෝ අසම්පුර්ණව ඇත."
-
-#: gdk-pixbuf/io-gif.c:1693 gdk-pixbuf/io-gdip-gif.c:80
-msgid "The GIF image format"
-msgstr "GIF පිළිඹිබු සංයුතිය"
-
-#: gdk-pixbuf/io-ico.c:211 gdk-pixbuf/io-ico.c:225 gdk-pixbuf/io-ico.c:277
-#: gdk-pixbuf/io-ico.c:290 gdk-pixbuf/io-ico.c:359
-msgid "Invalid header in icon"
-msgstr "සාවද්‍ය ශීර්ෂක සංකේතයක්"
-
-#: gdk-pixbuf/io-ico.c:240 gdk-pixbuf/io-ico.c:300 gdk-pixbuf/io-ico.c:369
-#: gdk-pixbuf/io-ico.c:432 gdk-pixbuf/io-ico.c:462
-msgid "Not enough memory to load icon"
-msgstr "සංකේතය පූරණයට ප්‍රමාණවත් මතකයක් නැත"
-
-#: gdk-pixbuf/io-ico.c:322
-msgid "Icon has zero width"
-msgstr "සංකේතය සතුව ශුන්‍ය පළලක් ඇත"
-
-#: gdk-pixbuf/io-ico.c:332
-msgid "Icon has zero height"
-msgstr "සංකේතය සතුව ශුන්‍ය උසක් ඇත"
-
-#: gdk-pixbuf/io-ico.c:384
-msgid "Compressed icons are not supported"
-msgstr "සම්පීඩීත සංකේත සහාය නොදක්වයි"
-
-#: gdk-pixbuf/io-ico.c:417
-msgid "Unsupported icon type"
-msgstr "සහාය නොදක්වන සංකේත වර්‍ගයක්"
-
-#: gdk-pixbuf/io-ico.c:511
-msgid "Not enough memory to load ICO file"
-msgstr "ICO ගොනුව පූරණයට ප්‍රමාණවත් මතකයක් නැත"
-
-#: gdk-pixbuf/io-ico.c:976
-msgid "Image too large to be saved as ICO"
-msgstr "ICO ලෙස පිළිඹිබුව සුරකීමට විශල වැඩියි"
-
-#: gdk-pixbuf/io-ico.c:987
-msgid "Cursor hotspot outside image"
-msgstr ""
-
-#: gdk-pixbuf/io-ico.c:1010
-#, c-format
-msgid "Unsupported depth for ICO file: %d"
-msgstr "ICO ගොනුව සඳහා සහාය නොදක්වන ගැබුරක්: %d"
-
-#: gdk-pixbuf/io-ico.c:1245 gdk-pixbuf/io-gdip-ico.c:59
-msgid "The ICO image format"
-msgstr "ICO පිළිඹිබු සංයුතිය"
-
-#: gdk-pixbuf/io-icns.c:347
-#, fuzzy, c-format
-msgid "Error reading ICNS image: %s"
-msgstr "PNG පිළිඹිබු ගොනුව තුළ තීරනාත්මක දෝෂයක් ඇත: %s"
-
-#: gdk-pixbuf/io-icns.c:364
-#, fuzzy
-msgid "Could not decode ICNS file"
-msgstr "ගොනුව තෝරාගත නොහැක"
-
-#: gdk-pixbuf/io-icns.c:397
-#, fuzzy
-msgid "The ICNS image format"
-msgstr "ICO පිළිඹිබු සංයුතිය"
-
-#: gdk-pixbuf/io-jasper.c:75
-#, fuzzy
-msgid "Couldn't allocate memory for stream"
-msgstr "ශීර්ෂකය සඳහා මතකය වෙන් කළ නොහැකි විය"
-
-#: gdk-pixbuf/io-jasper.c:105
-#, fuzzy
-msgid "Couldn't decode image"
-msgstr "ගොනු නාමය පරිවර්තනය කළ නොහැකි විය"
-
-#: gdk-pixbuf/io-jasper.c:123
-#, fuzzy
-msgid "Transformed JPEG2000 has zero width or height"
-msgstr "පරිණාමිත JPEG ගොනුවේ උස හෝ පළල ශුන්‍ය වේ."
-
-#: gdk-pixbuf/io-jasper.c:137
-#, fuzzy
-msgid "Image type currently not supported"
-msgstr "'%s' පිළිඹිබු වර්‍ගය සහාය නොදක්වයි"
-
-#: gdk-pixbuf/io-jasper.c:149 gdk-pixbuf/io-jasper.c:157
-#, fuzzy
-msgid "Couldn't allocate memory for color profile"
-msgstr "JPEG ගොනුව පූරණයට මතකය වෙන් කළ නොහැක"
-
-#: gdk-pixbuf/io-jasper.c:183
-#, fuzzy
-msgid "Insufficient memory to open JPEG 2000 file"
-msgstr "TIFF ගොනුව විවෘත කිරීමට මතකය ප්‍රමාණවත් නැත"
-
-#: gdk-pixbuf/io-jasper.c:262
-#, fuzzy
-msgid "Couldn't allocate memory to buffer image data"
-msgstr "රේඛිය දත්ත සඳහා මතකය වෙන් කළ නොහැකි විය"
-
-#: gdk-pixbuf/io-jasper.c:306
-#, fuzzy
-msgid "The JPEG 2000 image format"
-msgstr "JPEG පිළිඹිබු සංයුතිය"
-
-#: gdk-pixbuf/io-jpeg.c:117
-#, c-format
-msgid "Error interpreting JPEG image file (%s)"
-msgstr "JPEG පිළිඹිබු ගොනුව (%s) ව්‍යාඛ්‍යායනය දෝෂ සහිතයි"
-
-#: gdk-pixbuf/io-jpeg.c:528
-msgid ""
-"Insufficient memory to load image, try exiting some applications to free "
-"memory"
-msgstr ""
-"පිළිඹිබුව පූරණයට ප්‍රමාණවත් මතකයක් නැති බැවින් යෙදුම් කිහිපයක් නවතා ප්‍රමාණවත් මතකයක් ලබා ගැනීමට "
-"උත්සාහ කරන්න"
-
-#: gdk-pixbuf/io-jpeg.c:569 gdk-pixbuf/io-jpeg.c:775
-#, c-format
-msgid "Unsupported JPEG color space (%s)"
-msgstr "සහාය නොදක්වන JPEG වර්‍ණ අවකාශයක් (%s)"
-
-#: gdk-pixbuf/io-jpeg.c:674 gdk-pixbuf/io-jpeg.c:944 gdk-pixbuf/io-jpeg.c:1177
-#: gdk-pixbuf/io-jpeg.c:1186
-msgid "Couldn't allocate memory for loading JPEG file"
-msgstr "JPEG ගොනුව පූරණයට මතකය වෙන් කළ නොහැක"
-
-#: gdk-pixbuf/io-jpeg.c:919
-msgid "Transformed JPEG has zero width or height."
-msgstr "පරිණාමිත JPEG ගොනුවේ උස හෝ පළල ශුන්‍ය වේ."
-
-#: gdk-pixbuf/io-jpeg.c:1133 gdk-pixbuf/io-gdip-jpeg.c:53
-#, c-format
-msgid ""
-"JPEG quality must be a value between 0 and 100; value '%s' could not be "
-"parsed."
-msgstr "JPEG ප්‍රමිතිය 0 සහ 100 අගයන් අතර තිබිය යුතුමයි; '%s' අගය යොමු කළ නොහැක."
-
-#: gdk-pixbuf/io-jpeg.c:1148 gdk-pixbuf/io-gdip-jpeg.c:68
-#, c-format
-msgid ""
-"JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
-msgstr "JPEG ප්‍රමිතිය 0 සහ 100 අගයන් අතර තිබිය යුතුමයි; '%d' අගය අනුමත කළ නොහැක."
-
-#: gdk-pixbuf/io-jpeg.c:1310 gdk-pixbuf/io-gdip-jpeg.c:136
-msgid "The JPEG image format"
-msgstr "JPEG පිළිඹිබු සංයුතිය"
-
-#: gdk-pixbuf/io-pcx.c:187
-msgid "Couldn't allocate memory for header"
-msgstr "ශීර්ෂකය සඳහා මතකය වෙන් කළ නොහැකි විය"
-
-#: gdk-pixbuf/io-pcx.c:202 gdk-pixbuf/io-pcx.c:560
-msgid "Couldn't allocate memory for context buffer"
-msgstr "සන්ධර්භ ස්වාරක්‍ෂක භාරය සඳහා මතකය වෙන් කළ නොහැකි විය"
-
-#: gdk-pixbuf/io-pcx.c:601
-msgid "Image has invalid width and/or height"
-msgstr "පිළිඹිබුව සතුව සාවද්‍ය උසක් සහ/හෝ පළලක් ඇත"
-
-#: gdk-pixbuf/io-pcx.c:613 gdk-pixbuf/io-pcx.c:674
-msgid "Image has unsupported bpp"
-msgstr "සහාය නොදක්වන bpp පිළිඹිබුව සතුව ඇත"
-
-#: gdk-pixbuf/io-pcx.c:618 gdk-pixbuf/io-pcx.c:626
-#, c-format
-msgid "Image has unsupported number of %d-bit planes"
-msgstr "සහාය නොදක්වන  %d-බිට් පුවරු කිහිපයක් පිළිඹිබුව සතුව ඇත"
-
-#: gdk-pixbuf/io-pcx.c:642
-msgid "Couldn't create new pixbuf"
-msgstr "නව pixbuf නිර්මාණය කළ නොහැක"
-
-#: gdk-pixbuf/io-pcx.c:650
-msgid "Couldn't allocate memory for line data"
-msgstr "රේඛිය දත්ත සඳහා මතකය වෙන් කළ නොහැකි විය"
-
-#: gdk-pixbuf/io-pcx.c:657
-msgid "Couldn't allocate memory for paletted data"
-msgstr "වර්ණාවලි දත්ත සඳහා සඳහා මතකය වෙන් කළ නොහැකි විය"
-
-#: gdk-pixbuf/io-pcx.c:704
-msgid "Didn't get all lines of PCX image"
-msgstr "PCX පිළිඹිබුවේ සියළුම පේළි ලබාගත නොහැකි විය"
-
-#: gdk-pixbuf/io-pcx.c:711
-msgid "No palette found at end of PCX data"
-msgstr "PCX දත්ත අවසානයේ වර්ණාවලිය හමුවූයෙ නැත"
-
-#: gdk-pixbuf/io-pcx.c:756
-msgid "The PCX image format"
-msgstr "PCX පිළිඹිබු සංයුතිය"
-
-#: gdk-pixbuf/io-png.c:55
-msgid "Bits per channel of PNG image is invalid."
-msgstr "PNG පිළිඹිබුවේ නාලීකාවක් සඳහා බිට් ප්‍රමාණය සාවද්‍යවේ"
-
-#: gdk-pixbuf/io-png.c:136 gdk-pixbuf/io-png.c:642
-msgid "Transformed PNG has zero width or height."
-msgstr "පරිණාමිත PNG හි උස හෝ පළල ශුන්‍ය වේ"
-
-#: gdk-pixbuf/io-png.c:144
-msgid "Bits per channel of transformed PNG is not 8."
-msgstr "පරිණාමිත PNG හි නාලීකාවක් සඳහා බිට් ප්‍රමාණය 8ක් නොවේ"
-
-#: gdk-pixbuf/io-png.c:153
-msgid "Transformed PNG not RGB or RGBA."
-msgstr "පරිණාමිත PNG RGB හෝ RGBA. නොවේ."
-
-#: gdk-pixbuf/io-png.c:162
-msgid "Transformed PNG has unsupported number of channels, must be 3 or 4."
-msgstr "පරිණාමිත PNG හි සහාය නොදක්වන නාලීකාවකා ප්‍රමාණයක් ඇත එය 3 හෝ 4 විය යුතුම වේ."
-
-#: gdk-pixbuf/io-png.c:183
-#, c-format
-msgid "Fatal error in PNG image file: %s"
-msgstr "PNG පිළිඹිබු ගොනුව තුළ තීරනාත්මක දෝෂයක් ඇත: %s"
-
-#: gdk-pixbuf/io-png.c:316
-msgid "Insufficient memory to load PNG file"
-msgstr "PNG ගොනුව පූරණයට මතකය ප්‍රමාණවත් නැත"
-
-#: gdk-pixbuf/io-png.c:657
-#, c-format
-msgid ""
-"Insufficient memory to store a %ld by %ld image; try exiting some "
-"applications to reduce memory usage"
-msgstr ""
-
-#: gdk-pixbuf/io-png.c:720
-msgid "Fatal error reading PNG image file"
-msgstr "PNG පිළිඹිබු ගොනුව තුළ තීරනාත්මක දෝෂයක් ඇත"
-
-#: gdk-pixbuf/io-png.c:769
-#, c-format
-msgid "Fatal error reading PNG image file: %s"
-msgstr "PNG පිළිඹිබු ගොනුව තුළ තීරනාත්මක දෝෂයක් ඇත: %s"
-
-#: gdk-pixbuf/io-png.c:863
-msgid ""
-"Keys for PNG text chunks must have at least 1 and at most 79 characters."
-msgstr ""
-
-#: gdk-pixbuf/io-png.c:872
-msgid "Keys for PNG text chunks must be ASCII characters."
-msgstr ""
-
-#: gdk-pixbuf/io-png.c:886 gdk-pixbuf/io-tiff.c:738
-#, c-format
-msgid "Color profile has invalid length %d."
-msgstr ""
-
-#: gdk-pixbuf/io-png.c:899 gdk-pixbuf/io-gdip-png.c:56
-#, c-format
-msgid ""
-"PNG compression level must be a value between 0 and 9; value '%s' could not "
-"be parsed."
-msgstr ""
-"PNG සම්පීඩන මට්තම අනිවාර්යෙන්ම 0 සහ 9 අගයන් තුළ පිහිටිය යුතු වේ; '%s' අඟය විස්තර කළ නොහැකිවිය."
-
-#: gdk-pixbuf/io-png.c:912 gdk-pixbuf/io-gdip-png.c:68
-#, c-format
-msgid ""
-"PNG compression level must be a value between 0 and 9; value '%d' is not "
-"allowed."
-msgstr "PNG සම්පීඩන මට්තම අනිවාර්යෙන්ම 0 සහ 9 අගයන් තුළ පිහිටිය යුතු වේ; '%d' අඟය අනුමත නැත."
-
-#: gdk-pixbuf/io-png.c:951
-#, c-format
-msgid "Value for PNG text chunk %s cannot be converted to ISO-8859-1 encoding."
-msgstr ""
-
-#: gdk-pixbuf/io-png.c:1112 gdk-pixbuf/io-gdip-png.c:133
-msgid "The PNG image format"
-msgstr "PNG පිළිඹිබු සංයුතිය"
-
-#: gdk-pixbuf/io-pnm.c:250
-msgid "PNM loader expected to find an integer, but didn't"
-msgstr ""
-
-#: gdk-pixbuf/io-pnm.c:282
-msgid "PNM file has an incorrect initial byte"
-msgstr "PNM ගොනුව තුළ සාවද්‍ය ආරම්භක බයිටයක් ඇත"
-
-#: gdk-pixbuf/io-pnm.c:312
-msgid "PNM file is not in a recognized PNM subformat"
-msgstr "PNM ගොනුව හදුනාගත් PNM උපසංයුතියක් නොවේ"
-
-#: gdk-pixbuf/io-pnm.c:337
-msgid "PNM file has an image width of 0"
-msgstr "PNM ගොනුවෙහි පිළිඹිබු පළල ශුන්‍ය වේ"
-
-#: gdk-pixbuf/io-pnm.c:358
-msgid "PNM file has an image height of 0"
-msgstr "PNM ගොනුවෙහි පිළිඹිබු උස ශුන්‍ය වේ"
-
-#: gdk-pixbuf/io-pnm.c:381
-msgid "Maximum color value in PNM file is 0"
-msgstr "PNM ගොනුවෙහි උපරිම වර්‍ණ අගය ශුන්‍යක් වේ"
-
-#: gdk-pixbuf/io-pnm.c:389
-msgid "Maximum color value in PNM file is too large"
-msgstr "PNM ගොනුවෙහි උපරිම වර්‍ණ අගය ඉතා විශාල වේ"
-
-#: gdk-pixbuf/io-pnm.c:429 gdk-pixbuf/io-pnm.c:459 gdk-pixbuf/io-pnm.c:504
-msgid "Raw PNM image type is invalid"
-msgstr "සකස් නොකළ PNM පිළිඹිබු වර්‍ගය සාවද්‍ය වේ"
-
-#: gdk-pixbuf/io-pnm.c:654
-msgid "PNM image loader does not support this PNM subformat"
-msgstr "PNM පිළිඹිබු පූරකය මෙම PNM උපසංයුතියට සහාය නොදක්වයි"
-
-#: gdk-pixbuf/io-pnm.c:741 gdk-pixbuf/io-pnm.c:968
-msgid "Raw PNM formats require exactly one whitespace before sample data"
-msgstr ""
-
-#: gdk-pixbuf/io-pnm.c:768
-msgid "Cannot allocate memory for loading PNM image"
-msgstr "PNM පිළිඹිබුව පූරණයට මතකය වෙන් කළ නොහැකි විය"
-
-#: gdk-pixbuf/io-pnm.c:818
-msgid "Insufficient memory to load PNM context struct"
-msgstr "PNM සන්ධර්භ ව්‍යුහය පූරණයට මතකය ප්‍රමාණවත් නැත"
-
-#: gdk-pixbuf/io-pnm.c:869
-msgid "Unexpected end of PNM image data"
-msgstr "PNM පිළිඹිබු ගොනුවේ බලාපොරොත්තු නොවු"
-
-#: gdk-pixbuf/io-pnm.c:997
-msgid "Insufficient memory to load PNM file"
-msgstr "PNM පිළිඹිබුව පූරණයට මතකය ප්‍රමාණවත් නැත"
-
-#: gdk-pixbuf/io-pnm.c:1081
-msgid "The PNM/PBM/PGM/PPM image format family"
-msgstr "PNM/PBM/PGM/PPM පිළිඹිබුව සංයුති කුළ"
-
-#: gdk-pixbuf/io-qtif.c:128
-msgid "Input file descriptor is NULL."
-msgstr ""
-
-#: gdk-pixbuf/io-qtif.c:143
-#, fuzzy
-msgid "Failed to read QTIF header"
-msgstr "ශීර්ෂකය වෙත ලිවීම අසමත් විය\n"
-
-#: gdk-pixbuf/io-qtif.c:152 gdk-pixbuf/io-qtif.c:182 gdk-pixbuf/io-qtif.c:446
-#, c-format
-msgid "QTIF atom size too large (%d bytes)"
-msgstr ""
-
-#: gdk-pixbuf/io-qtif.c:172
-#, fuzzy, c-format
-msgid "Failed to allocate %d bytes for file read buffer"
-msgstr "බයිට %u ක පිළිඹිබු බෆරය වෙන් කළ නොහැකි විය"
-
-#: gdk-pixbuf/io-qtif.c:196
-#, fuzzy, c-format
-msgid "File error when reading QTIF atom: %s"
-msgstr "GIF කියවීම අසමත් විය: %s"
-
-#: gdk-pixbuf/io-qtif.c:233
-#, c-format
-msgid "Failed to skip the next %d bytes with seek()."
-msgstr ""
-
-#: gdk-pixbuf/io-qtif.c:257
-#, fuzzy
-msgid "Failed to allocate QTIF context structure."
-msgstr "PNM සන්ධර්භ ව්‍යුහය සඳහා මතකය ප්‍රමාණවත් නැත"
-
-#: gdk-pixbuf/io-qtif.c:317
-#, fuzzy
-msgid "Failed to create GdkPixbufLoader object."
-msgstr "බහලුම් පටුන වෙත ලිවීම අසමත් විය\n"
-
-#: gdk-pixbuf/io-qtif.c:421
-#, fuzzy
-msgid "Failed to find an image data atom."
-msgstr "TIFF පිළිඹිබුව විවෘත කිරීම අසමත් විය"
-
-#: gdk-pixbuf/io-qtif.c:602
-#, fuzzy
-msgid "The QTIF image format"
-msgstr "TIFF පිළිඹිබුවවේ සංයුතිය"
-
-#: gdk-pixbuf/io-ras.c:126
-msgid "RAS image has bogus header data"
-msgstr "RAS පිළිඹිබු සතුව ව්‍යාජ ශිර්ෂක දත්ත ඇත"
-
-#: gdk-pixbuf/io-ras.c:148
-msgid "RAS image has unknown type"
-msgstr "RAS පිළිඹිබු සතුව නොදන්නා වර්‍ගයක් නැත"
-
-#: gdk-pixbuf/io-ras.c:156
-msgid "unsupported RAS image variation"
-msgstr "සහාය නොදක්වන RAS පිළිඹිබු විචලනය"
-
-#: gdk-pixbuf/io-ras.c:171 gdk-pixbuf/io-ras.c:200
-msgid "Not enough memory to load RAS image"
-msgstr "RAS පූරණය පූරණයට ප්‍රමාණවත් මතකයක් නැත"
-
-#: gdk-pixbuf/io-ras.c:545
-msgid "The Sun raster image format"
-msgstr ""
-
-#: gdk-pixbuf/io-tga.c:154
-msgid "Cannot allocate memory for IOBuffer struct"
-msgstr "IOBuffer ව්‍යුහය සඳහා මතකය වෙනකර තැබිය නොහැක"
-
-#: gdk-pixbuf/io-tga.c:173
-msgid "Cannot allocate memory for IOBuffer data"
-msgstr "IOBuffer දත්ත සඳහා මතකය වෙනකර තැබිය නොහැක"
-
-#: gdk-pixbuf/io-tga.c:184
-msgid "Cannot realloc IOBuffer data"
-msgstr "IOBuffer දත්ත නැත වෙනකර තැබිය නොහැක"
-
-#: gdk-pixbuf/io-tga.c:214
-msgid "Cannot allocate temporary IOBuffer data"
-msgstr "තානකාලීක IOBuffer දත්ත වෙනකර තැබිය නොහැක"
-
-#: gdk-pixbuf/io-tga.c:347
-msgid "Cannot allocate new pixbuf"
-msgstr "නව pixbuf වෙනකර තැබිය නොහැක"
-
-#: gdk-pixbuf/io-tga.c:686
-#, fuzzy
-msgid "Image is corrupted or truncated"
-msgstr "GIF පිළිඹිබු ලුප්ත වි හෝ අසම්පුර්ණව ඇත."
-
-#: gdk-pixbuf/io-tga.c:693
-msgid "Cannot allocate colormap structure"
-msgstr "වර්‍ණසිතියම් ආකෘතිය යෙදවිය නොහැක"
-
-#: gdk-pixbuf/io-tga.c:700
-msgid "Cannot allocate colormap entries"
-msgstr "වර්‍ණසිතියම් ඇතුලත් කිරීම් යෙදවිය නොහැක"
-
-#: gdk-pixbuf/io-tga.c:722
-msgid "Unexpected bitdepth for colormap entries"
-msgstr "වර්‍ණසිතියම් ඇතුලත් කිරීම් සඳහා බලාපොරොත්තු නොවු bitdepth අඟයක්"
-
-#: gdk-pixbuf/io-tga.c:740
-msgid "Cannot allocate TGA header memory"
-msgstr "TAG ශීර්ෂක මතකය වෙනකර තැබිය නොහැක"
-
-#: gdk-pixbuf/io-tga.c:773
-msgid "TGA image has invalid dimensions"
-msgstr "TAG පිළිඹිබු සතුව සාවද්‍ය මාන ඇත"
-
-#: gdk-pixbuf/io-tga.c:779 gdk-pixbuf/io-tga.c:788 gdk-pixbuf/io-tga.c:798
-#: gdk-pixbuf/io-tga.c:808 gdk-pixbuf/io-tga.c:815
-msgid "TGA image type not supported"
-msgstr "TAG පිළිඹිබු වර්‍ගය සහාය නොදක්වයි"
-
-#: gdk-pixbuf/io-tga.c:862
-msgid "Cannot allocate memory for TGA context struct"
-msgstr "PNM සන්ධර්භ ව්‍යුහය සඳහා මතකය ප්‍රමාණවත් නැත"
-
-#: gdk-pixbuf/io-tga.c:927
-msgid "Excess data in file"
-msgstr "ගොනුව තුළ දත්ත අතිරික්තයක් ඇත"
-
-#: gdk-pixbuf/io-tga.c:1008
-msgid "The Targa image format"
-msgstr "Targa පිළිඹිබු සංයුතිය"
-
-#: gdk-pixbuf/io-tiff.c:165
-msgid "Could not get image width (bad TIFF file)"
-msgstr "පිළිඹිබු පළල ලබාගත නොහැකි විය (අයෝග්‍ය TIFF ගොනුව)"
-
-#: gdk-pixbuf/io-tiff.c:172
-msgid "Could not get image height (bad TIFF file)"
-msgstr "පිළිඹිබු උස ලබාගත නොහැකි විය (අයෝග්‍ය TIFF ගොනුව)"
-
-#: gdk-pixbuf/io-tiff.c:180
-msgid "Width or height of TIFF image is zero"
-msgstr "TIFF පිළිඹිබුවේ උස හෝ පළල ශුන්‍යවේ"
-
-#: gdk-pixbuf/io-tiff.c:189 gdk-pixbuf/io-tiff.c:198
-msgid "Dimensions of TIFF image too large"
-msgstr "TIFF පිළිඹිබුවේ මාන ඉතා විශාල වේ"
-
-#: gdk-pixbuf/io-tiff.c:222 gdk-pixbuf/io-tiff.c:234 gdk-pixbuf/io-tiff.c:561
-msgid "Insufficient memory to open TIFF file"
-msgstr "TIFF ගොනුව විවෘත කිරීමට මතකය ප්‍රමාණවත් නැත"
-
-#: gdk-pixbuf/io-tiff.c:295
-msgid "Failed to load RGB data from TIFF file"
-msgstr "TIFF ගොනුවෙන් RGB දත්ත පූරණය අසමත් විය"
-
-#: gdk-pixbuf/io-tiff.c:351
-msgid "Failed to open TIFF image"
-msgstr "TIFF පිළිඹිබුව විවෘත කිරීම අසමත් විය"
-
-#: gdk-pixbuf/io-tiff.c:363 gdk-pixbuf/io-tiff.c:778
-msgid "TIFFClose operation failed"
-msgstr "TIFFClose මෙහෙයුම අසමත් විය"
-
-#: gdk-pixbuf/io-tiff.c:493 gdk-pixbuf/io-tiff.c:506
-msgid "Failed to load TIFF image"
-msgstr "TIFF පිළිඹිබුව පූරණය අසමත් විය"
-
-#: gdk-pixbuf/io-tiff.c:692
-msgid "Failed to save TIFF image"
-msgstr "TIFF පිළිඹිබුව සුරකීම අසමත් විය"
-
-#: gdk-pixbuf/io-tiff.c:727
-msgid "TIFF compression doesn't refer to a valid codec."
-msgstr ""
-
-#: gdk-pixbuf/io-tiff.c:767
-msgid "Failed to write TIFF data"
-msgstr "TIFF වෙත දත්ත ලිවීම අසමත් විය"
-
-#: gdk-pixbuf/io-tiff.c:814
-msgid "Couldn't write to TIFF file"
-msgstr "TIFF ගොනුවට වෙත ලිවීමට නොහැකි විය"
-
-#: gdk-pixbuf/io-tiff.c:869
-msgid "The TIFF image format"
-msgstr "TIFF පිළිඹිබුවවේ සංයුතිය"
-
-#: gdk-pixbuf/io-wbmp.c:246
-msgid "Image has zero width"
-msgstr "පිළිඹිබුව සතුව ශුන්‍ය පළලක් ඇත"
-
-#: gdk-pixbuf/io-wbmp.c:264
-msgid "Image has zero height"
-msgstr "පිළිඹිබුව සතුව ශුන්‍ය උසක් ඇත"
-
-#: gdk-pixbuf/io-wbmp.c:275
-msgid "Not enough memory to load image"
-msgstr "පිළිඹිබුව පූරණයට ප්‍රමාණවත් මතකයක් නැත"
-
-#: gdk-pixbuf/io-wbmp.c:334
-msgid "Couldn't save the rest"
-msgstr "ඉතිරිය සුරකීය නොහැක"
-
-#: gdk-pixbuf/io-wbmp.c:375
-msgid "The WBMP image format"
-msgstr "WBMP ශීර්ෂකය සංයුතිය"
-
-#: gdk-pixbuf/io-xbm.c:295
-msgid "Invalid XBM file"
-msgstr "සාවද්‍ය XBM ගොනුව"
-
-#: gdk-pixbuf/io-xbm.c:305
-msgid "Insufficient memory to load XBM image file"
-msgstr "XBM පිළිඹිබු ගොනුව පූරණයට මතකය ප්‍රමාණවත් නැත"
-
-#: gdk-pixbuf/io-xbm.c:453
-msgid "Failed to write to temporary file when loading XBM image"
-msgstr "XBM පිළිඹිබු ගොනුව පූරණයේදි තාවකාලීක ගොනුවට ලිවීම අසමත් විය"
-
-#: gdk-pixbuf/io-xbm.c:492
-msgid "The XBM image format"
-msgstr "XPM ශීර්ෂකය සංයුතිය"
-
-#: gdk-pixbuf/io-xpm.c:468
-msgid "No XPM header found"
-msgstr "XPM ශීර්ෂකය හමුවුයේ නැත"
-
-#: gdk-pixbuf/io-xpm.c:477
-msgid "Invalid XPM header"
-msgstr "සාවද්‍ය XPM ශීර්ෂකය"
-
-#: gdk-pixbuf/io-xpm.c:485
-msgid "XPM file has image width <= 0"
-msgstr "XPM ගොනුවේ පිළිඹිබු පළල <= 0"
-
-#: gdk-pixbuf/io-xpm.c:493
-msgid "XPM file has image height <= 0"
-msgstr "XPM ගොනුවේ පිළිඹිබු උස <= 0"
-
-#: gdk-pixbuf/io-xpm.c:501
-msgid "XPM has invalid number of chars per pixel"
-msgstr ""
-
-#: gdk-pixbuf/io-xpm.c:510
-msgid "XPM file has invalid number of colors"
-msgstr "XPM ගොනුච සාවද්‍ය වර්‍ණ සංඛ්‍යවකින් යුතුවේ"
-
-#: gdk-pixbuf/io-xpm.c:522 gdk-pixbuf/io-xpm.c:531 gdk-pixbuf/io-xpm.c:583
-msgid "Cannot allocate memory for loading XPM image"
-msgstr "XPM පිළිඹිබුව පූරණයට මතකය වෙන් කළ නොහැකි විය"
-
-#: gdk-pixbuf/io-xpm.c:545
-msgid "Cannot read XPM colormap"
-msgstr "XPM වර්‍ණසිතියම කියවිය නොහැක"
-
-#: gdk-pixbuf/io-xpm.c:777
-msgid "Failed to write to temporary file when loading XPM image"
-msgstr "XPM පිළිඹිබු ගොනුව පූරණයේදි තාවකාලීක ගොනුවට ලිවීම අසමත් විය"
-
-#: gdk-pixbuf/io-xpm.c:816
-msgid "The XPM image format"
-msgstr "XPM පිළිඹිබු සංයුතිය"
-
-#: gdk-pixbuf/io-gdip-emf.c:59
-#, fuzzy
-msgid "The EMF image format"
-msgstr "BMP පිළිඹිබු සංයුතිය"
-
-#: gdk-pixbuf/io-gdip-utils.c:232
-#, fuzzy, c-format
-msgid "Could not allocate memory: %s"
-msgstr "ශීර්ෂකය සඳහා මතකය වෙන් කළ නොහැකි විය"
-
-#: gdk-pixbuf/io-gdip-utils.c:257 gdk-pixbuf/io-gdip-utils.c:371
-#: gdk-pixbuf/io-gdip-utils.c:411
-#, fuzzy, c-format
-msgid "Could not create stream: %s"
-msgstr "%s හි නම %s ලෙස වෙනස් කළ නොහැක: %s\n"
-
-#: gdk-pixbuf/io-gdip-utils.c:271
-#, fuzzy, c-format
-msgid "Could not seek stream: %s"
-msgstr "අයිතමය ඉවත් කළ නොහැකි විය"
-
-#: gdk-pixbuf/io-gdip-utils.c:283
-#, fuzzy, c-format
-msgid "Could not read from stream: %s"
-msgstr "%s හි නම %s ලෙස වෙනස් කළ නොහැක: %s\n"
-
-#: gdk-pixbuf/io-gdip-utils.c:694 gdk-pixbuf/io-gdip-utils.c:825
-#, fuzzy
-msgid "Couldn't load bitmap"
-msgstr "ගොනු නාමය පරිවර්තනය කළ නොහැකි විය"
-
-#: gdk-pixbuf/io-gdip-utils.c:847
-#, fuzzy
-msgid "Couldn't load metafile"
-msgstr "ගොනු නාමය පරිවර්තනය කළ නොහැකි විය"
-
-#: gdk-pixbuf/io-gdip-utils.c:1006
-#, fuzzy
-msgid "Unsupported image format for GDI+"
-msgstr "සහාය නොදක්වන RAS පිළිඹිබු විචලනය"
-
-#: gdk-pixbuf/io-gdip-utils.c:1013
-#, fuzzy
-msgid "Couldn't save"
-msgstr "ඉතිරිය සුරකීය නොහැක"
-
-#: gdk-pixbuf/io-gdip-wmf.c:58
-#, fuzzy
-msgid "The WMF image format"
-msgstr "WBMP ශීර්ෂකය සංයුතිය"
 
 #. Description of --sync in --help output
 #: gdk/win32/gdkmain-win32.c:55
@@ -1535,8 +629,9 @@ msgid "_Saturation:"
 msgstr "සංතෘප්ත බව (_S):"
 
 #: gtk/gtkcolorsel.c:393
-msgid "\"Deepness\" of the color."
-msgstr "වර්‍ණයේ \"තද බව\"."
+#, fuzzy
+msgid "Intensity of the color."
+msgstr "වර්‍ණයේ විනිවිද භාවය"
 
 #: gtk/gtkcolorsel.c:394
 msgid "_Value:"
@@ -1699,11 +794,11 @@ msgstr "දකුණ (_R):"
 msgid "Paper Margins"
 msgstr "කොලයේ මායිම"
 
-#: gtk/gtkentry.c:8612 gtk/gtktextview.c:8002
+#: gtk/gtkentry.c:8612 gtk/gtktextview.c:8012
 msgid "Input _Methods"
 msgstr "ප්‍රධාන ක්‍රම (_M)"
 
-#: gtk/gtkentry.c:8626 gtk/gtktextview.c:8016
+#: gtk/gtkentry.c:8626 gtk/gtktextview.c:8026
 msgid "_Insert Unicode Control Character"
 msgstr "යුනිකේත පාලන අක්‍ෂර ඇතුලත් කතන්න (_I)"
 
@@ -2152,13 +1247,13 @@ msgid "System (%s)"
 msgstr "%s (%s)"
 
 #. Open Link
-#: gtk/gtklabel.c:6076
+#: gtk/gtklabel.c:6072
 #, fuzzy
 msgid "_Open Link"
 msgstr "විවෘත කරන්න (_O)"
 
 #. Copy Link Address
-#: gtk/gtklabel.c:6088
+#: gtk/gtklabel.c:6084
 msgid "Copy _Link Address"
 msgstr ""
 
@@ -2171,27 +1266,27 @@ msgid "Invalid URI"
 msgstr "සාවද්‍ය URI"
 
 #. Description of --gtk-module=MODULES in --help output
-#: gtk/gtkmain.c:447
+#: gtk/gtkmain.c:432
 msgid "Load additional GTK+ modules"
 msgstr "අමතර GTK+ අංග පූරණය කරන්න"
 
 #. Placeholder in --gtk-module=MODULES in --help output
-#: gtk/gtkmain.c:448
+#: gtk/gtkmain.c:433
 msgid "MODULES"
 msgstr "MODULES"
 
 #. Description of --g-fatal-warnings in --help output
-#: gtk/gtkmain.c:450
+#: gtk/gtkmain.c:435
 msgid "Make all warnings fatal"
 msgstr ""
 
 #. Description of --gtk-debug=FLAGS in --help output
-#: gtk/gtkmain.c:453
+#: gtk/gtkmain.c:438
 msgid "GTK+ debugging flags to set"
 msgstr ""
 
 #. Description of --gtk-no-debug=FLAGS in --help output
-#: gtk/gtkmain.c:456
+#: gtk/gtkmain.c:441
 msgid "GTK+ debugging flags to unset"
 msgstr ""
 
@@ -2200,20 +1295,20 @@ msgstr ""
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
 #.
-#: gtk/gtkmain.c:708
+#: gtk/gtkmain.c:704
 msgid "default:LTR"
 msgstr "default:LTR"
 
-#: gtk/gtkmain.c:773
+#: gtk/gtkmain.c:769
 #, c-format
 msgid "Cannot open display: %s"
 msgstr ""
 
-#: gtk/gtkmain.c:810
+#: gtk/gtkmain.c:806
 msgid "GTK+ Options"
 msgstr "GTK+ විකල්ප"
 
-#: gtk/gtkmain.c:810
+#: gtk/gtkmain.c:806
 msgid "Show GTK+ Options"
 msgstr "GTK+ විකල්ප දර්ශනය කරන්න"
 
@@ -2304,7 +1399,7 @@ msgstr ""
 msgid "Cannot end process with pid %d: %s"
 msgstr ""
 
-#: gtk/gtknotebook.c:4621 gtk/gtknotebook.c:7050
+#: gtk/gtknotebook.c:4631 gtk/gtknotebook.c:7060
 #, c-format
 msgid "Page %u"
 msgstr "%u වන පිටුව "
@@ -2399,92 +1494,86 @@ msgstr "බහලුම තුළ සුරකින්න (_S):"
 msgid "%s job #%d"
 msgstr "%s කාර්‍යය #%d"
 
-#: gtk/gtkprintoperation.c:1687
+#: gtk/gtkprintoperation.c:1695
 msgctxt "print operation status"
 msgid "Initial state"
 msgstr ""
 
-#: gtk/gtkprintoperation.c:1688
+#: gtk/gtkprintoperation.c:1696
 #, fuzzy
 msgctxt "print operation status"
 msgid "Preparing to print"
 msgstr "%d සූදානම් කරමින්"
 
-#: gtk/gtkprintoperation.c:1689
+#: gtk/gtkprintoperation.c:1697
 msgctxt "print operation status"
 msgid "Generating data"
 msgstr ""
 
-#: gtk/gtkprintoperation.c:1690
+#: gtk/gtkprintoperation.c:1698
 msgctxt "print operation status"
 msgid "Sending data"
 msgstr ""
 
-#: gtk/gtkprintoperation.c:1691
+#: gtk/gtkprintoperation.c:1699
 #, fuzzy
 msgctxt "print operation status"
 msgid "Waiting"
 msgstr "අවවාදය"
 
-#: gtk/gtkprintoperation.c:1692
+#: gtk/gtkprintoperation.c:1700
 msgctxt "print operation status"
 msgid "Blocking on issue"
 msgstr ""
 
-#: gtk/gtkprintoperation.c:1693
+#: gtk/gtkprintoperation.c:1701
 #, fuzzy
 msgctxt "print operation status"
 msgid "Printing"
 msgstr "%d මුද්‍රණය වෙමින්"
 
-#: gtk/gtkprintoperation.c:1694
+#: gtk/gtkprintoperation.c:1702
 #, fuzzy
 msgctxt "print operation status"
 msgid "Finished"
 msgstr "සම්පූර්ණ කරමින්"
 
-#: gtk/gtkprintoperation.c:1695
+#: gtk/gtkprintoperation.c:1703
 #, fuzzy
 msgctxt "print operation status"
 msgid "Finished with error"
 msgstr "දෝෂ සහිතව අවසන් කළා"
 
-#: gtk/gtkprintoperation.c:2254
+#: gtk/gtkprintoperation.c:2270
 #, c-format
 msgid "Preparing %d"
 msgstr "%d සූදානම් කරමින්"
 
-#: gtk/gtkprintoperation.c:2256 gtk/gtkprintoperation.c:2875
+#: gtk/gtkprintoperation.c:2272 gtk/gtkprintoperation.c:2902
 #, c-format
 msgid "Preparing"
 msgstr "සූදානම් කරමින්"
 
-#: gtk/gtkprintoperation.c:2259
+#: gtk/gtkprintoperation.c:2275
 #, c-format
 msgid "Printing %d"
 msgstr "%d මුද්‍රණය වෙමින්"
 
-#: gtk/gtkprintoperation.c:2905
+#: gtk/gtkprintoperation.c:2932
 #, fuzzy, c-format
 msgid "Error creating print preview"
 msgstr "පෙර දැක්ම ඇරබුම දෝෂ සහිතයි"
 
-#: gtk/gtkprintoperation.c:2908
+#: gtk/gtkprintoperation.c:2935
 #, c-format
 msgid "The most probable reason is that a temporary file could not be created."
 msgstr ""
 
-#: gtk/gtkprintoperation-unix.c:297 gtk/gtkprintoperation-unix.c:314
-#, c-format
+#: gtk/gtkprintoperation-unix.c:297
 msgid "Error launching preview"
 msgstr "පෙර දැක්ම ඇරබුම දෝෂ සහිතයි"
 
-#: gtk/gtkprintoperation-unix.c:358
-#, c-format
-msgid "Error printing"
-msgstr "මුද්‍රණය දෝෂ සහිතයි"
-
-#: gtk/gtkprintoperation-unix.c:494 gtk/gtkprintoperation-win32.c:1447
+#: gtk/gtkprintoperation-unix.c:470 gtk/gtkprintoperation-win32.c:1447
 msgid "Application"
 msgstr "යෙදුම"
 
@@ -2498,7 +1587,7 @@ msgstr "කොල නැත"
 
 #. Translators: this is a printer status.
 #: gtk/gtkprintoperation-win32.c:616
-#: modules/printbackends/cups/gtkprintbackendcups.c:1999
+#: modules/printbackends/cups/gtkprintbackendcups.c:1998
 msgid "Paused"
 msgstr "නවතා ඇත"
 
@@ -2632,42 +1721,42 @@ msgstr "සාමාන්‍ය"
 #. * multiple pages on a sheet when printing
 #.
 #: gtk/gtkprintunixdialog.c:3010
-#: modules/printbackends/cups/gtkprintbackendcups.c:3509
+#: modules/printbackends/cups/gtkprintbackendcups.c:3508
 msgid "Left to right, top to bottom"
 msgstr ""
 
 #: gtk/gtkprintunixdialog.c:3010
-#: modules/printbackends/cups/gtkprintbackendcups.c:3509
+#: modules/printbackends/cups/gtkprintbackendcups.c:3508
 msgid "Left to right, bottom to top"
 msgstr ""
 
 #: gtk/gtkprintunixdialog.c:3011
-#: modules/printbackends/cups/gtkprintbackendcups.c:3510
+#: modules/printbackends/cups/gtkprintbackendcups.c:3509
 msgid "Right to left, top to bottom"
 msgstr ""
 
 #: gtk/gtkprintunixdialog.c:3011
-#: modules/printbackends/cups/gtkprintbackendcups.c:3510
+#: modules/printbackends/cups/gtkprintbackendcups.c:3509
 msgid "Right to left, bottom to top"
 msgstr ""
 
 #: gtk/gtkprintunixdialog.c:3012
-#: modules/printbackends/cups/gtkprintbackendcups.c:3511
+#: modules/printbackends/cups/gtkprintbackendcups.c:3510
 msgid "Top to bottom, left to right"
 msgstr ""
 
 #: gtk/gtkprintunixdialog.c:3012
-#: modules/printbackends/cups/gtkprintbackendcups.c:3511
+#: modules/printbackends/cups/gtkprintbackendcups.c:3510
 msgid "Top to bottom, right to left"
 msgstr ""
 
 #: gtk/gtkprintunixdialog.c:3013
-#: modules/printbackends/cups/gtkprintbackendcups.c:3512
+#: modules/printbackends/cups/gtkprintbackendcups.c:3511
 msgid "Bottom to top, left to right"
 msgstr ""
 
 #: gtk/gtkprintunixdialog.c:3013
-#: modules/printbackends/cups/gtkprintbackendcups.c:3512
+#: modules/printbackends/cups/gtkprintbackendcups.c:3511
 msgid "Bottom to top, right to left"
 msgstr ""
 
@@ -2675,7 +1764,7 @@ msgstr ""
 #. * dialog that controls in what order multiple pages are arranged
 #.
 #: gtk/gtkprintunixdialog.c:3017 gtk/gtkprintunixdialog.c:3030
-#: modules/printbackends/cups/gtkprintbackendcups.c:3544
+#: modules/printbackends/cups/gtkprintbackendcups.c:3543
 #, fuzzy
 msgid "Page Ordering"
 msgstr "සූදානම් කරමින්"
@@ -4985,123 +4074,118 @@ msgstr "මුද්‍රණ යන්ත්‍රය අක්‍රීයව 
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:1687
 #, c-format
-msgid "Printer '%s' may not be connected."
-msgstr ""
-
-#: modules/printbackends/cups/gtkprintbackendcups.c:1688
-#, c-format
 msgid "There is a problem on printer '%s'."
 msgstr ""
 
 #. Translators: this is a printer status.
-#: modules/printbackends/cups/gtkprintbackendcups.c:1996
+#: modules/printbackends/cups/gtkprintbackendcups.c:1995
 msgid "Paused ; Rejecting Jobs"
 msgstr ""
 
 #. Translators: this is a printer status.
-#: modules/printbackends/cups/gtkprintbackendcups.c:2002
+#: modules/printbackends/cups/gtkprintbackendcups.c:2001
 msgid "Rejecting Jobs"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2778
+#: modules/printbackends/cups/gtkprintbackendcups.c:2777
 msgid "Two Sided"
 msgstr "දෙපැත්ත"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2779
+#: modules/printbackends/cups/gtkprintbackendcups.c:2778
 msgid "Paper Type"
 msgstr "කොළ වර්‍ගය"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2780
+#: modules/printbackends/cups/gtkprintbackendcups.c:2779
 msgid "Paper Source"
 msgstr "කොළ මූලාශය"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2781
+#: modules/printbackends/cups/gtkprintbackendcups.c:2780
 msgid "Output Tray"
 msgstr "ප්‍රථිධාන තැටිය"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2782
+#: modules/printbackends/cups/gtkprintbackendcups.c:2781
 #, fuzzy
 msgid "Resolution"
 msgstr "ප්‍රශ්නය"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2783
+#: modules/printbackends/cups/gtkprintbackendcups.c:2782
 msgid "GhostScript pre-filtering"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2792
+#: modules/printbackends/cups/gtkprintbackendcups.c:2791
 msgid "One Sided"
 msgstr "තනි පැත්ත"
 
 #. Translators: this is an option of "Two Sided"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2794
+#: modules/printbackends/cups/gtkprintbackendcups.c:2793
 msgid "Long Edge (Standard)"
 msgstr ""
 
 #. Translators: this is an option of "Two Sided"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2796
+#: modules/printbackends/cups/gtkprintbackendcups.c:2795
 msgid "Short Edge (Flip)"
 msgstr ""
 
 #. Translators: this is an option of "Paper Source"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2798
-#: modules/printbackends/cups/gtkprintbackendcups.c:2800
-#: modules/printbackends/cups/gtkprintbackendcups.c:2808
+#: modules/printbackends/cups/gtkprintbackendcups.c:2797
+#: modules/printbackends/cups/gtkprintbackendcups.c:2799
+#: modules/printbackends/cups/gtkprintbackendcups.c:2807
 msgid "Auto Select"
 msgstr "ස්වයන්ක්‍රීය තේරීම"
 
 #. Translators: this is an option of "Paper Source"
 #. Translators: this is an option of "Resolution"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2802
-#: modules/printbackends/cups/gtkprintbackendcups.c:2804
-#: modules/printbackends/cups/gtkprintbackendcups.c:2806
-#: modules/printbackends/cups/gtkprintbackendcups.c:2810
-#: modules/printbackends/cups/gtkprintbackendcups.c:3296
+#: modules/printbackends/cups/gtkprintbackendcups.c:2801
+#: modules/printbackends/cups/gtkprintbackendcups.c:2803
+#: modules/printbackends/cups/gtkprintbackendcups.c:2805
+#: modules/printbackends/cups/gtkprintbackendcups.c:2809
+#: modules/printbackends/cups/gtkprintbackendcups.c:3295
 msgid "Printer Default"
 msgstr "මුද්‍රණ යන්ත්‍රයේ ප්‍රකෘතිය"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2812
+#: modules/printbackends/cups/gtkprintbackendcups.c:2811
 msgid "Embed GhostScript fonts only"
 msgstr ""
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2814
+#: modules/printbackends/cups/gtkprintbackendcups.c:2813
 msgid "Convert to PS level 1"
 msgstr ""
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2816
+#: modules/printbackends/cups/gtkprintbackendcups.c:2815
 msgid "Convert to PS level 2"
 msgstr ""
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2818
+#: modules/printbackends/cups/gtkprintbackendcups.c:2817
 #, fuzzy
 msgid "No pre-filtering"
 msgstr "අයිතම හමුවුයේ නැත"
 
 #. Translators: "Miscellaneous" is the label for a button, that opens
 #. up an extra panel of settings in a print dialog.
-#: modules/printbackends/cups/gtkprintbackendcups.c:2827
+#: modules/printbackends/cups/gtkprintbackendcups.c:2826
 msgid "Miscellaneous"
 msgstr ""
 
 #. Translators: These strings name the possible values of the
 #. * job priority option in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3504
+#: modules/printbackends/cups/gtkprintbackendcups.c:3503
 msgid "Urgent"
 msgstr "හදිසි"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3504
+#: modules/printbackends/cups/gtkprintbackendcups.c:3503
 msgid "High"
 msgstr "වැඩි"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3504
+#: modules/printbackends/cups/gtkprintbackendcups.c:3503
 msgid "Medium"
 msgstr "මධ්‍යම"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3504
+#: modules/printbackends/cups/gtkprintbackendcups.c:3503
 msgid "Low"
 msgstr "අවම"
 
@@ -5109,7 +4193,7 @@ msgstr "අවම"
 #. Translators, this string is used to label the pages-per-sheet option
 #. * in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3528
+#: modules/printbackends/cups/gtkprintbackendcups.c:3527
 #, fuzzy
 msgid "Pages per Sheet"
 msgstr "එක් කොළයකට පිටු ගණන"
@@ -5117,7 +4201,7 @@ msgstr "එක් කොළයකට පිටු ගණන"
 #. Translators, this string is used to label the job priority option
 #. * in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3565
+#: modules/printbackends/cups/gtkprintbackendcups.c:3564
 #, fuzzy
 msgid "Job Priority"
 msgstr "ප්‍රමුකතාවය (_o):"
@@ -5125,7 +4209,7 @@ msgstr "ප්‍රමුකතාවය (_o):"
 #. Translators, this string is used to label the billing info entry
 #. * in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3576
+#: modules/printbackends/cups/gtkprintbackendcups.c:3575
 #, fuzzy
 msgid "Billing Info"
 msgstr "බිලේ තොරතුරු (_B):"
@@ -5133,38 +4217,38 @@ msgstr "බිලේ තොරතුරු (_B):"
 #. Translators, these strings are names for various 'standard' cover
 #. * pages that the printing system may support.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3591
+#: modules/printbackends/cups/gtkprintbackendcups.c:3590
 msgid "None"
 msgstr "කිසිවක් නැත"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3591
+#: modules/printbackends/cups/gtkprintbackendcups.c:3590
 msgid "Classified"
 msgstr "වර්ගිකරණය කළ"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3591
+#: modules/printbackends/cups/gtkprintbackendcups.c:3590
 msgid "Confidential"
 msgstr "රහස්‍යත"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3591
+#: modules/printbackends/cups/gtkprintbackendcups.c:3590
 msgid "Secret"
 msgstr "රහසිගත"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3591
+#: modules/printbackends/cups/gtkprintbackendcups.c:3590
 msgid "Standard"
 msgstr "සම්මත"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3591
+#: modules/printbackends/cups/gtkprintbackendcups.c:3590
 msgid "Top Secret"
 msgstr "අතිශ්‍යය රහසිගත"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3591
+#: modules/printbackends/cups/gtkprintbackendcups.c:3590
 msgid "Unclassified"
 msgstr "වර්ගිකරණය නොකළ"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the front cover page.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3626
+#: modules/printbackends/cups/gtkprintbackendcups.c:3625
 #, fuzzy
 msgid "Before"
 msgstr "පෙර (_f):"
@@ -5172,7 +4256,7 @@ msgstr "පෙර (_f):"
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the back cover page.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3641
+#: modules/printbackends/cups/gtkprintbackendcups.c:3640
 #, fuzzy
 msgid "After"
 msgstr "පසු (_A):"
@@ -5181,7 +4265,7 @@ msgstr "පසු (_A):"
 #. * a print job is printed. Possible values are 'now', a specified time,
 #. * or 'on hold'
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3661
+#: modules/printbackends/cups/gtkprintbackendcups.c:3660
 #, fuzzy
 msgid "Print at"
 msgstr "මුද්‍රණය"
@@ -5189,7 +4273,7 @@ msgstr "මුද්‍රණය"
 #. Translators: this is the name of the option that allows the user
 #. * to specify a time when a print job will be printed.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3672
+#: modules/printbackends/cups/gtkprintbackendcups.c:3671
 #, fuzzy
 msgid "Print at time"
 msgstr "ගොනුවට මුද්‍රණය කරන්න"
@@ -5198,7 +4282,7 @@ msgstr "ගොනුවට මුද්‍රණය කරන්න"
 #. * size. The two placeholders are replaced with the width and height
 #. * in points. E.g: "Custom 230.4x142.9"
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3707
+#: modules/printbackends/cups/gtkprintbackendcups.c:3706
 #, fuzzy, c-format
 msgid "Custom %sx%s"
 msgstr "රිසිකළ ප්‍රමාණය"
@@ -5293,6 +4377,631 @@ msgstr "පරීක්‍ෂණ මුද්‍රණ යන්ත්‍රය�
 #, c-format
 msgid "Could not get information for file '%s': %s"
 msgstr "'%s' ගොනුව සඳහා තොරතුරු ලබා ගැනීමට හොහැකි විය: %s"
+
+#: tests/testfilechooser.c:222
+#, c-format
+msgid "Failed to open file '%s': %s"
+msgstr "'%s' ගොනුව විවෘත කිරීම අපහසුවිය: %s"
+
+#: tests/testfilechooser.c:267
+#, c-format
+msgid ""
+"Failed to load image '%s': reason not known, probably a corrupt image file"
+msgstr "'%s'පිළිඹිබුව පූරණය දෝෂසහිතයි: හේතුව නොදන්නා අතර සමහරවිට දූෂිත පිළිඹිබු ගොනුවක් විය හැක"
+
+#~ msgid "Image file '%s' contains no data"
+#~ msgstr "%s පිළිඹිබු ගොනුව තුළ දත්ත නැත"
+
+#~ msgid ""
+#~ "Failed to load animation '%s': reason not known, probably a corrupt "
+#~ "animation file"
+#~ msgstr ""
+#~ "'%s සජීවීකරණය පූරණය දෝෂසහිතයි: හේතුව නොදන්නා අතර සමහරවිට දූෂිත සජීවීකරණ ගොනුවක් විය හැක"
+
+#~ msgid "Unable to load image-loading module: %s: %s"
+#~ msgstr "පිළිඹිබු පූරණ අංගය පූරණය කළ නොහැක: %s: %s"
+
+#~ msgid ""
+#~ "Image-loading module %s does not export the proper interface; perhaps "
+#~ "it's from a different GTK version?"
+#~ msgstr "%s පිළිඹිබු පූරණ අංගය නියමිත අතුරු මුහුණත; සමහරවිට එය වෙනස් GTK වෙළුමකින් වියහැක?"
+
+#~ msgid "Image type '%s' is not supported"
+#~ msgstr "'%s' පිළිඹිබු වර්‍ගය සහාය නොදක්වයි"
+
+#~ msgid "Couldn't recognize the image file format for file '%s'"
+#~ msgstr "'%s' ගොනුව සඳහා පිළිඹිබු සංයුතිය හදුනාගත නොහැක"
+
+#~ msgid "Unrecognized image file format"
+#~ msgstr "හදුනා නොගත් පිළිඹිබු සංයුතියක්"
+
+#~ msgid "Failed to load image '%s': %s"
+#~ msgstr "'%s' පිළිඹිබුවට පූරණය දෝෂ සහිතයි: %s"
+
+#~ msgid "Error writing to image file: %s"
+#~ msgstr "පිළිඹිබුවට ලිවීම දෝෂ සහිතයි : %s"
+
+#~ msgid ""
+#~ "This build of gdk-pixbuf does not support saving the image format: %s"
+#~ msgstr "gdk-pixbuf ගොඩ නැගීම පිළිඹිබු සංයුතිය සුරකීමට සහාය නොදක්වයි: %s"
+
+#~ msgid "Insufficient memory to save image to callback"
+#~ msgstr "callback වෙත පිළිඹිබුව සුරකීමට ප්‍රමාණවත් මතකයක් නැත"
+
+#~ msgid "Failed to open temporary file"
+#~ msgstr "තාවකාලික ගොනුව විවෘත කිරීම අසමත්විය"
+
+#~ msgid "Failed to read from temporary file"
+#~ msgstr "තාවකාලික ගොනුවකිවීම අසමත්විය"
+
+#~ msgid "Failed to open '%s' for writing: %s"
+#~ msgstr "ලිවීම සඳහා '%s' විවෘත කිරීම අසමත්විය: %s"
+
+#~ msgid ""
+#~ "Failed to close '%s' while writing image, all data may not have been "
+#~ "saved: %s"
+#~ msgstr "පිළිඹිබුව ලිවීම අතරතුරේදිා '%s'වසා දැමීමරීම අසමත්, සියළුම දත්ත සුරක්‍ෂි නොවුනි: %sවිය"
+
+#~ msgid "Insufficient memory to save image into a buffer"
+#~ msgstr "ස්වාරක්‍ෂක භාරයක් තුළට සුරකීමට ප්‍රමාණවත් මතකයක් නොමැත"
+
+#, fuzzy
+#~ msgid "Error writing to image stream"
+#~ msgstr "පිළිඹිබුවට ලිවීම දෝෂ සහිතයි : %s"
+
+#~ msgid ""
+#~ "Internal error: Image loader module '%s' failed to complete an operation, "
+#~ "but didn't give a reason for the failure"
+#~ msgstr ""
+#~ "අභ්‍යන්තර දෝෂයක්: Image loader module '%s' failed to complete an operation, "
+#~ "but didn't give a reason for the failure"
+
+#~ msgid "Incremental loading of image type '%s' is not supported"
+#~ msgstr "'%s' පිළිඹිබු වර්‍ගයේ වර්‍ධක පූරණය සහාය නොදක්වයි"
+
+#~ msgid "Image header corrupt"
+#~ msgstr "පිළිඹිබු ශිර්ෂකය විනාශ විය"
+
+#~ msgid "Image format unknown"
+#~ msgstr "පිළිඹිබු සංයුතිය නොදනි"
+
+#~ msgid "Image pixel data corrupt"
+#~ msgstr "පිළිඹිබු පික්සල දත්ත විනාශ විය"
+
+#~ msgid "failed to allocate image buffer of %u byte"
+#~ msgid_plural "failed to allocate image buffer of %u bytes"
+#~ msgstr[0] "බයිට %u ක පිළිඹිබු බෆරය වෙන් කළ නොහැකි විය"
+#~ msgstr[1] "බයිට %u ක පිළිඹිබු බෆරය වෙන් කළ නොහැකි විය"
+
+#~ msgid "Unexpected icon chunk in animation"
+#~ msgstr "සජීවීකරණය තුළ බලාපොරොත්තු නොවු සංකේත විශාල ප්‍රමාණයක් ඇත"
+
+#~ msgid "Unsupported animation type"
+#~ msgstr "සහාය නොදක්වන සජීවීකරණ වර්‍ගයක්"
+
+#~ msgid "Invalid header in animation"
+#~ msgstr "සජීවීකරණය තුළ සාවද්‍ය ශිර්ෂකයක්"
+
+#~ msgid "Not enough memory to load animation"
+#~ msgstr "සජීවීකරණය පූරණයට ප්‍රමාණවත් මතකයක් නැත"
+
+#~ msgid "Malformed chunk in animation"
+#~ msgstr "සජීවීකරණය තුළ විකෘත විශාල ප්‍රමාණයක් ඇත"
+
+#~ msgid "The ANI image format"
+#~ msgstr "ANI පිළිඹිබු සංයුතිය"
+
+#~ msgid "BMP image has bogus header data"
+#~ msgstr "BMP පිළිඹිබු සතුව ව්‍යාජ ශිර්ෂක දත්ත ඇත"
+
+#~ msgid "Not enough memory to load bitmap image"
+#~ msgstr "bitmap පිළිඹිබුව පූරණයට ප්‍රමාණවත් මතකයක් නැත"
+
+#~ msgid "BMP image has unsupported header size"
+#~ msgstr "BMP පිළිඹිබුවේ ශීර්ෂකයේ ප්‍රමාණය සහාය නොදක්වයි"
+
+#~ msgid "Couldn't allocate memory for saving BMP file"
+#~ msgstr "BMP පිළිඹිබුව සුරකීමට මතකය වෙන් කළ නොහැකි විය"
+
+#~ msgid "Couldn't write to BMP file"
+#~ msgstr "BMP ගොනුවට ලිවිය නොහැකි විය"
+
+#~ msgid "The BMP image format"
+#~ msgstr "BMP පිළිඹිබු සංයුතිය"
+
+#~ msgid "Failure reading GIF: %s"
+#~ msgstr "GIF කියවීම අසමත් විය: %s"
+
+#~ msgid "GIF file was missing some data (perhaps it was truncated somehow?)"
+#~ msgstr "GIF ගොනුවේ සමහර දත්ත නැතිවි ඇත (සමහර විට එය කිසියම් අයුරකින් ලුප්ත වි ඇත)"
+
+#~ msgid "Internal error in the GIF loader (%s)"
+#~ msgstr "GIF පූරකයේ අභ්‍යන්තර දෝෂයකි (%s)"
+
+#~ msgid "Stack overflow"
+#~ msgstr "ස්ටැකය පිරී ඇත"
+
+#~ msgid "GIF image loader cannot understand this image."
+#~ msgstr "පිළිඹිබු තේරුම්ගැනීම GIF පිළිඹිබු පූරකයට අපහසුයි."
+
+#~ msgid "Bad code encountered"
+#~ msgstr "සාවද්‍ය කේතයක් හදුනා ගන්නා ලදි"
+
+#~ msgid "Circular table entry in GIF file"
+#~ msgstr "GIF ගොනුවේ චක්‍රීය වගු ඇතුළත් කිරීම"
+
+#~ msgid "Not enough memory to load GIF file"
+#~ msgstr "GIF ගොනුව පූරණයට ප්‍රමාණවත් මතකයක් නැත"
+
+#~ msgid "Not enough memory to composite a frame in GIF file"
+#~ msgstr "GIF ගොනුව තුළ සමිශ්‍රිත රාමුවක් සැකසීමට ප්‍රමාණවත් මතකයක් නැත"
+
+#~ msgid "GIF image is corrupt (incorrect LZW compression)"
+#~ msgstr "GIF පිළිඹිබුව විනාශ වි ඇත (සාවද්‍ය LZW සම්පීඩනයක්)"
+
+#, fuzzy
+#~ msgid "File does not appear to be a GIF file"
+#~ msgstr "GIF ලෙස දිස්වන්නේ නැත"
+
+#~ msgid "Version %s of the GIF file format is not supported"
+#~ msgstr "GIF ගොනු සංයුතියෙ %s වන වෙළුම සහාය නොදක්වයි"
+
+#~ msgid ""
+#~ "GIF image has no global colormap, and a frame inside it has no local "
+#~ "colormap."
+#~ msgstr ""
+#~ "GIF පිළිඹිබුව සතුව ගොලීය වර්‍ණසිතියමක් නැති අතරෙය තුළවු රාමුවේ ප්‍රාදේශිය වර්‍ණසිතියමක්ද නැත."
+
+#~ msgid "GIF image was truncated or incomplete."
+#~ msgstr "GIF පිළිඹිබු ලුප්ත වි හෝ අසම්පුර්ණව ඇත."
+
+#~ msgid "The GIF image format"
+#~ msgstr "GIF පිළිඹිබු සංයුතිය"
+
+#~ msgid "Invalid header in icon"
+#~ msgstr "සාවද්‍ය ශීර්ෂක සංකේතයක්"
+
+#~ msgid "Not enough memory to load icon"
+#~ msgstr "සංකේතය පූරණයට ප්‍රමාණවත් මතකයක් නැත"
+
+#~ msgid "Icon has zero width"
+#~ msgstr "සංකේතය සතුව ශුන්‍ය පළලක් ඇත"
+
+#~ msgid "Icon has zero height"
+#~ msgstr "සංකේතය සතුව ශුන්‍ය උසක් ඇත"
+
+#~ msgid "Compressed icons are not supported"
+#~ msgstr "සම්පීඩීත සංකේත සහාය නොදක්වයි"
+
+#~ msgid "Unsupported icon type"
+#~ msgstr "සහාය නොදක්වන සංකේත වර්‍ගයක්"
+
+#~ msgid "Not enough memory to load ICO file"
+#~ msgstr "ICO ගොනුව පූරණයට ප්‍රමාණවත් මතකයක් නැත"
+
+#~ msgid "Image too large to be saved as ICO"
+#~ msgstr "ICO ලෙස පිළිඹිබුව සුරකීමට විශල වැඩියි"
+
+#~ msgid "Unsupported depth for ICO file: %d"
+#~ msgstr "ICO ගොනුව සඳහා සහාය නොදක්වන ගැබුරක්: %d"
+
+#~ msgid "The ICO image format"
+#~ msgstr "ICO පිළිඹිබු සංයුතිය"
+
+#, fuzzy
+#~ msgid "Error reading ICNS image: %s"
+#~ msgstr "PNG පිළිඹිබු ගොනුව තුළ තීරනාත්මක දෝෂයක් ඇත: %s"
+
+#, fuzzy
+#~ msgid "Could not decode ICNS file"
+#~ msgstr "ගොනුව තෝරාගත නොහැක"
+
+#, fuzzy
+#~ msgid "The ICNS image format"
+#~ msgstr "ICO පිළිඹිබු සංයුතිය"
+
+#, fuzzy
+#~ msgid "Couldn't allocate memory for stream"
+#~ msgstr "ශීර්ෂකය සඳහා මතකය වෙන් කළ නොහැකි විය"
+
+#, fuzzy
+#~ msgid "Couldn't decode image"
+#~ msgstr "ගොනු නාමය පරිවර්තනය කළ නොහැකි විය"
+
+#, fuzzy
+#~ msgid "Transformed JPEG2000 has zero width or height"
+#~ msgstr "පරිණාමිත JPEG ගොනුවේ උස හෝ පළල ශුන්‍ය වේ."
+
+#, fuzzy
+#~ msgid "Image type currently not supported"
+#~ msgstr "'%s' පිළිඹිබු වර්‍ගය සහාය නොදක්වයි"
+
+#, fuzzy
+#~ msgid "Couldn't allocate memory for color profile"
+#~ msgstr "JPEG ගොනුව පූරණයට මතකය වෙන් කළ නොහැක"
+
+#, fuzzy
+#~ msgid "Insufficient memory to open JPEG 2000 file"
+#~ msgstr "TIFF ගොනුව විවෘත කිරීමට මතකය ප්‍රමාණවත් නැත"
+
+#, fuzzy
+#~ msgid "Couldn't allocate memory to buffer image data"
+#~ msgstr "රේඛිය දත්ත සඳහා මතකය වෙන් කළ නොහැකි විය"
+
+#, fuzzy
+#~ msgid "The JPEG 2000 image format"
+#~ msgstr "JPEG පිළිඹිබු සංයුතිය"
+
+#~ msgid "Error interpreting JPEG image file (%s)"
+#~ msgstr "JPEG පිළිඹිබු ගොනුව (%s) ව්‍යාඛ්‍යායනය දෝෂ සහිතයි"
+
+#~ msgid ""
+#~ "Insufficient memory to load image, try exiting some applications to free "
+#~ "memory"
+#~ msgstr ""
+#~ "පිළිඹිබුව පූරණයට ප්‍රමාණවත් මතකයක් නැති බැවින් යෙදුම් කිහිපයක් නවතා ප්‍රමාණවත් මතකයක් ලබා "
+#~ "ගැනීමට උත්සාහ කරන්න"
+
+#~ msgid "Unsupported JPEG color space (%s)"
+#~ msgstr "සහාය නොදක්වන JPEG වර්‍ණ අවකාශයක් (%s)"
+
+#~ msgid "Couldn't allocate memory for loading JPEG file"
+#~ msgstr "JPEG ගොනුව පූරණයට මතකය වෙන් කළ නොහැක"
+
+#~ msgid "Transformed JPEG has zero width or height."
+#~ msgstr "පරිණාමිත JPEG ගොනුවේ උස හෝ පළල ශුන්‍ය වේ."
+
+#~ msgid ""
+#~ "JPEG quality must be a value between 0 and 100; value '%s' could not be "
+#~ "parsed."
+#~ msgstr "JPEG ප්‍රමිතිය 0 සහ 100 අගයන් අතර තිබිය යුතුමයි; '%s' අගය යොමු කළ නොහැක."
+
+#~ msgid ""
+#~ "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
+#~ msgstr "JPEG ප්‍රමිතිය 0 සහ 100 අගයන් අතර තිබිය යුතුමයි; '%d' අගය අනුමත කළ නොහැක."
+
+#~ msgid "The JPEG image format"
+#~ msgstr "JPEG පිළිඹිබු සංයුතිය"
+
+#~ msgid "Couldn't allocate memory for header"
+#~ msgstr "ශීර්ෂකය සඳහා මතකය වෙන් කළ නොහැකි විය"
+
+#~ msgid "Couldn't allocate memory for context buffer"
+#~ msgstr "සන්ධර්භ ස්වාරක්‍ෂක භාරය සඳහා මතකය වෙන් කළ නොහැකි විය"
+
+#~ msgid "Image has invalid width and/or height"
+#~ msgstr "පිළිඹිබුව සතුව සාවද්‍ය උසක් සහ/හෝ පළලක් ඇත"
+
+#~ msgid "Image has unsupported bpp"
+#~ msgstr "සහාය නොදක්වන bpp පිළිඹිබුව සතුව ඇත"
+
+#~ msgid "Image has unsupported number of %d-bit planes"
+#~ msgstr "සහාය නොදක්වන  %d-බිට් පුවරු කිහිපයක් පිළිඹිබුව සතුව ඇත"
+
+#~ msgid "Couldn't create new pixbuf"
+#~ msgstr "නව pixbuf නිර්මාණය කළ නොහැක"
+
+#~ msgid "Couldn't allocate memory for line data"
+#~ msgstr "රේඛිය දත්ත සඳහා මතකය වෙන් කළ නොහැකි විය"
+
+#~ msgid "Couldn't allocate memory for paletted data"
+#~ msgstr "වර්ණාවලි දත්ත සඳහා සඳහා මතකය වෙන් කළ නොහැකි විය"
+
+#~ msgid "Didn't get all lines of PCX image"
+#~ msgstr "PCX පිළිඹිබුවේ සියළුම පේළි ලබාගත නොහැකි විය"
+
+#~ msgid "No palette found at end of PCX data"
+#~ msgstr "PCX දත්ත අවසානයේ වර්ණාවලිය හමුවූයෙ නැත"
+
+#~ msgid "The PCX image format"
+#~ msgstr "PCX පිළිඹිබු සංයුතිය"
+
+#~ msgid "Bits per channel of PNG image is invalid."
+#~ msgstr "PNG පිළිඹිබුවේ නාලීකාවක් සඳහා බිට් ප්‍රමාණය සාවද්‍යවේ"
+
+#~ msgid "Transformed PNG has zero width or height."
+#~ msgstr "පරිණාමිත PNG හි උස හෝ පළල ශුන්‍ය වේ"
+
+#~ msgid "Bits per channel of transformed PNG is not 8."
+#~ msgstr "පරිණාමිත PNG හි නාලීකාවක් සඳහා බිට් ප්‍රමාණය 8ක් නොවේ"
+
+#~ msgid "Transformed PNG not RGB or RGBA."
+#~ msgstr "පරිණාමිත PNG RGB හෝ RGBA. නොවේ."
+
+#~ msgid "Transformed PNG has unsupported number of channels, must be 3 or 4."
+#~ msgstr "පරිණාමිත PNG හි සහාය නොදක්වන නාලීකාවකා ප්‍රමාණයක් ඇත එය 3 හෝ 4 විය යුතුම වේ."
+
+#~ msgid "Fatal error in PNG image file: %s"
+#~ msgstr "PNG පිළිඹිබු ගොනුව තුළ තීරනාත්මක දෝෂයක් ඇත: %s"
+
+#~ msgid "Insufficient memory to load PNG file"
+#~ msgstr "PNG ගොනුව පූරණයට මතකය ප්‍රමාණවත් නැත"
+
+#~ msgid "Fatal error reading PNG image file"
+#~ msgstr "PNG පිළිඹිබු ගොනුව තුළ තීරනාත්මක දෝෂයක් ඇත"
+
+#~ msgid "Fatal error reading PNG image file: %s"
+#~ msgstr "PNG පිළිඹිබු ගොනුව තුළ තීරනාත්මක දෝෂයක් ඇත: %s"
+
+#~ msgid ""
+#~ "PNG compression level must be a value between 0 and 9; value '%s' could "
+#~ "not be parsed."
+#~ msgstr ""
+#~ "PNG සම්පීඩන මට්තම අනිවාර්යෙන්ම 0 සහ 9 අගයන් තුළ පිහිටිය යුතු වේ; '%s' අඟය විස්තර කළ "
+#~ "නොහැකිවිය."
+
+#~ msgid ""
+#~ "PNG compression level must be a value between 0 and 9; value '%d' is not "
+#~ "allowed."
+#~ msgstr ""
+#~ "PNG සම්පීඩන මට්තම අනිවාර්යෙන්ම 0 සහ 9 අගයන් තුළ පිහිටිය යුතු වේ; '%d' අඟය අනුමත නැත."
+
+#~ msgid "The PNG image format"
+#~ msgstr "PNG පිළිඹිබු සංයුතිය"
+
+#~ msgid "PNM file has an incorrect initial byte"
+#~ msgstr "PNM ගොනුව තුළ සාවද්‍ය ආරම්භක බයිටයක් ඇත"
+
+#~ msgid "PNM file is not in a recognized PNM subformat"
+#~ msgstr "PNM ගොනුව හදුනාගත් PNM උපසංයුතියක් නොවේ"
+
+#~ msgid "PNM file has an image width of 0"
+#~ msgstr "PNM ගොනුවෙහි පිළිඹිබු පළල ශුන්‍ය වේ"
+
+#~ msgid "PNM file has an image height of 0"
+#~ msgstr "PNM ගොනුවෙහි පිළිඹිබු උස ශුන්‍ය වේ"
+
+#~ msgid "Maximum color value in PNM file is 0"
+#~ msgstr "PNM ගොනුවෙහි උපරිම වර්‍ණ අගය ශුන්‍යක් වේ"
+
+#~ msgid "Maximum color value in PNM file is too large"
+#~ msgstr "PNM ගොනුවෙහි උපරිම වර්‍ණ අගය ඉතා විශාල වේ"
+
+#~ msgid "Raw PNM image type is invalid"
+#~ msgstr "සකස් නොකළ PNM පිළිඹිබු වර්‍ගය සාවද්‍ය වේ"
+
+#~ msgid "PNM image loader does not support this PNM subformat"
+#~ msgstr "PNM පිළිඹිබු පූරකය මෙම PNM උපසංයුතියට සහාය නොදක්වයි"
+
+#~ msgid "Cannot allocate memory for loading PNM image"
+#~ msgstr "PNM පිළිඹිබුව පූරණයට මතකය වෙන් කළ නොහැකි විය"
+
+#~ msgid "Insufficient memory to load PNM context struct"
+#~ msgstr "PNM සන්ධර්භ ව්‍යුහය පූරණයට මතකය ප්‍රමාණවත් නැත"
+
+#~ msgid "Unexpected end of PNM image data"
+#~ msgstr "PNM පිළිඹිබු ගොනුවේ බලාපොරොත්තු නොවු"
+
+#~ msgid "Insufficient memory to load PNM file"
+#~ msgstr "PNM පිළිඹිබුව පූරණයට මතකය ප්‍රමාණවත් නැත"
+
+#~ msgid "The PNM/PBM/PGM/PPM image format family"
+#~ msgstr "PNM/PBM/PGM/PPM පිළිඹිබුව සංයුති කුළ"
+
+#, fuzzy
+#~ msgid "Failed to read QTIF header"
+#~ msgstr "ශීර්ෂකය වෙත ලිවීම අසමත් විය\n"
+
+#, fuzzy
+#~ msgid "Failed to allocate %d bytes for file read buffer"
+#~ msgstr "බයිට %u ක පිළිඹිබු බෆරය වෙන් කළ නොහැකි විය"
+
+#, fuzzy
+#~ msgid "File error when reading QTIF atom: %s"
+#~ msgstr "GIF කියවීම අසමත් විය: %s"
+
+#, fuzzy
+#~ msgid "Failed to allocate QTIF context structure."
+#~ msgstr "PNM සන්ධර්භ ව්‍යුහය සඳහා මතකය ප්‍රමාණවත් නැත"
+
+#, fuzzy
+#~ msgid "Failed to create GdkPixbufLoader object."
+#~ msgstr "බහලුම් පටුන වෙත ලිවීම අසමත් විය\n"
+
+#, fuzzy
+#~ msgid "Failed to find an image data atom."
+#~ msgstr "TIFF පිළිඹිබුව විවෘත කිරීම අසමත් විය"
+
+#, fuzzy
+#~ msgid "The QTIF image format"
+#~ msgstr "TIFF පිළිඹිබුවවේ සංයුතිය"
+
+#~ msgid "RAS image has bogus header data"
+#~ msgstr "RAS පිළිඹිබු සතුව ව්‍යාජ ශිර්ෂක දත්ත ඇත"
+
+#~ msgid "RAS image has unknown type"
+#~ msgstr "RAS පිළිඹිබු සතුව නොදන්නා වර්‍ගයක් නැත"
+
+#~ msgid "unsupported RAS image variation"
+#~ msgstr "සහාය නොදක්වන RAS පිළිඹිබු විචලනය"
+
+#~ msgid "Not enough memory to load RAS image"
+#~ msgstr "RAS පූරණය පූරණයට ප්‍රමාණවත් මතකයක් නැත"
+
+#~ msgid "Cannot allocate memory for IOBuffer struct"
+#~ msgstr "IOBuffer ව්‍යුහය සඳහා මතකය වෙනකර තැබිය නොහැක"
+
+#~ msgid "Cannot allocate memory for IOBuffer data"
+#~ msgstr "IOBuffer දත්ත සඳහා මතකය වෙනකර තැබිය නොහැක"
+
+#~ msgid "Cannot realloc IOBuffer data"
+#~ msgstr "IOBuffer දත්ත නැත වෙනකර තැබිය නොහැක"
+
+#~ msgid "Cannot allocate temporary IOBuffer data"
+#~ msgstr "තානකාලීක IOBuffer දත්ත වෙනකර තැබිය නොහැක"
+
+#~ msgid "Cannot allocate new pixbuf"
+#~ msgstr "නව pixbuf වෙනකර තැබිය නොහැක"
+
+#, fuzzy
+#~ msgid "Image is corrupted or truncated"
+#~ msgstr "GIF පිළිඹිබු ලුප්ත වි හෝ අසම්පුර්ණව ඇත."
+
+#~ msgid "Cannot allocate colormap structure"
+#~ msgstr "වර්‍ණසිතියම් ආකෘතිය යෙදවිය නොහැක"
+
+#~ msgid "Cannot allocate colormap entries"
+#~ msgstr "වර්‍ණසිතියම් ඇතුලත් කිරීම් යෙදවිය නොහැක"
+
+#~ msgid "Unexpected bitdepth for colormap entries"
+#~ msgstr "වර්‍ණසිතියම් ඇතුලත් කිරීම් සඳහා බලාපොරොත්තු නොවු bitdepth අඟයක්"
+
+#~ msgid "Cannot allocate TGA header memory"
+#~ msgstr "TAG ශීර්ෂක මතකය වෙනකර තැබිය නොහැක"
+
+#~ msgid "TGA image has invalid dimensions"
+#~ msgstr "TAG පිළිඹිබු සතුව සාවද්‍ය මාන ඇත"
+
+#~ msgid "TGA image type not supported"
+#~ msgstr "TAG පිළිඹිබු වර්‍ගය සහාය නොදක්වයි"
+
+#~ msgid "Cannot allocate memory for TGA context struct"
+#~ msgstr "PNM සන්ධර්භ ව්‍යුහය සඳහා මතකය ප්‍රමාණවත් නැත"
+
+#~ msgid "Excess data in file"
+#~ msgstr "ගොනුව තුළ දත්ත අතිරික්තයක් ඇත"
+
+#~ msgid "The Targa image format"
+#~ msgstr "Targa පිළිඹිබු සංයුතිය"
+
+#~ msgid "Could not get image width (bad TIFF file)"
+#~ msgstr "පිළිඹිබු පළල ලබාගත නොහැකි විය (අයෝග්‍ය TIFF ගොනුව)"
+
+#~ msgid "Could not get image height (bad TIFF file)"
+#~ msgstr "පිළිඹිබු උස ලබාගත නොහැකි විය (අයෝග්‍ය TIFF ගොනුව)"
+
+#~ msgid "Width or height of TIFF image is zero"
+#~ msgstr "TIFF පිළිඹිබුවේ උස හෝ පළල ශුන්‍යවේ"
+
+#~ msgid "Dimensions of TIFF image too large"
+#~ msgstr "TIFF පිළිඹිබුවේ මාන ඉතා විශාල වේ"
+
+#~ msgid "Insufficient memory to open TIFF file"
+#~ msgstr "TIFF ගොනුව විවෘත කිරීමට මතකය ප්‍රමාණවත් නැත"
+
+#~ msgid "Failed to load RGB data from TIFF file"
+#~ msgstr "TIFF ගොනුවෙන් RGB දත්ත පූරණය අසමත් විය"
+
+#~ msgid "Failed to open TIFF image"
+#~ msgstr "TIFF පිළිඹිබුව විවෘත කිරීම අසමත් විය"
+
+#~ msgid "TIFFClose operation failed"
+#~ msgstr "TIFFClose මෙහෙයුම අසමත් විය"
+
+#~ msgid "Failed to load TIFF image"
+#~ msgstr "TIFF පිළිඹිබුව පූරණය අසමත් විය"
+
+#~ msgid "Failed to save TIFF image"
+#~ msgstr "TIFF පිළිඹිබුව සුරකීම අසමත් විය"
+
+#~ msgid "Failed to write TIFF data"
+#~ msgstr "TIFF වෙත දත්ත ලිවීම අසමත් විය"
+
+#~ msgid "Couldn't write to TIFF file"
+#~ msgstr "TIFF ගොනුවට වෙත ලිවීමට නොහැකි විය"
+
+#~ msgid "The TIFF image format"
+#~ msgstr "TIFF පිළිඹිබුවවේ සංයුතිය"
+
+#~ msgid "Image has zero width"
+#~ msgstr "පිළිඹිබුව සතුව ශුන්‍ය පළලක් ඇත"
+
+#~ msgid "Image has zero height"
+#~ msgstr "පිළිඹිබුව සතුව ශුන්‍ය උසක් ඇත"
+
+#~ msgid "Not enough memory to load image"
+#~ msgstr "පිළිඹිබුව පූරණයට ප්‍රමාණවත් මතකයක් නැත"
+
+#~ msgid "Couldn't save the rest"
+#~ msgstr "ඉතිරිය සුරකීය නොහැක"
+
+#~ msgid "The WBMP image format"
+#~ msgstr "WBMP ශීර්ෂකය සංයුතිය"
+
+#~ msgid "Invalid XBM file"
+#~ msgstr "සාවද්‍ය XBM ගොනුව"
+
+#~ msgid "Insufficient memory to load XBM image file"
+#~ msgstr "XBM පිළිඹිබු ගොනුව පූරණයට මතකය ප්‍රමාණවත් නැත"
+
+#~ msgid "Failed to write to temporary file when loading XBM image"
+#~ msgstr "XBM පිළිඹිබු ගොනුව පූරණයේදි තාවකාලීක ගොනුවට ලිවීම අසමත් විය"
+
+#~ msgid "The XBM image format"
+#~ msgstr "XPM ශීර්ෂකය සංයුතිය"
+
+#~ msgid "No XPM header found"
+#~ msgstr "XPM ශීර්ෂකය හමුවුයේ නැත"
+
+#~ msgid "Invalid XPM header"
+#~ msgstr "සාවද්‍ය XPM ශීර්ෂකය"
+
+#~ msgid "XPM file has image width <= 0"
+#~ msgstr "XPM ගොනුවේ පිළිඹිබු පළල <= 0"
+
+#~ msgid "XPM file has image height <= 0"
+#~ msgstr "XPM ගොනුවේ පිළිඹිබු උස <= 0"
+
+#~ msgid "XPM file has invalid number of colors"
+#~ msgstr "XPM ගොනුච සාවද්‍ය වර්‍ණ සංඛ්‍යවකින් යුතුවේ"
+
+#~ msgid "Cannot allocate memory for loading XPM image"
+#~ msgstr "XPM පිළිඹිබුව පූරණයට මතකය වෙන් කළ නොහැකි විය"
+
+#~ msgid "Cannot read XPM colormap"
+#~ msgstr "XPM වර්‍ණසිතියම කියවිය නොහැක"
+
+#~ msgid "Failed to write to temporary file when loading XPM image"
+#~ msgstr "XPM පිළිඹිබු ගොනුව පූරණයේදි තාවකාලීක ගොනුවට ලිවීම අසමත් විය"
+
+#~ msgid "The XPM image format"
+#~ msgstr "XPM පිළිඹිබු සංයුතිය"
+
+#, fuzzy
+#~ msgid "The EMF image format"
+#~ msgstr "BMP පිළිඹිබු සංයුතිය"
+
+#, fuzzy
+#~ msgid "Could not allocate memory: %s"
+#~ msgstr "ශීර්ෂකය සඳහා මතකය වෙන් කළ නොහැකි විය"
+
+#, fuzzy
+#~ msgid "Could not create stream: %s"
+#~ msgstr "%s හි නම %s ලෙස වෙනස් කළ නොහැක: %s\n"
+
+#, fuzzy
+#~ msgid "Could not seek stream: %s"
+#~ msgstr "අයිතමය ඉවත් කළ නොහැකි විය"
+
+#, fuzzy
+#~ msgid "Could not read from stream: %s"
+#~ msgstr "%s හි නම %s ලෙස වෙනස් කළ නොහැක: %s\n"
+
+#, fuzzy
+#~ msgid "Couldn't load bitmap"
+#~ msgstr "ගොනු නාමය පරිවර්තනය කළ නොහැකි විය"
+
+#, fuzzy
+#~ msgid "Couldn't load metafile"
+#~ msgstr "ගොනු නාමය පරිවර්තනය කළ නොහැකි විය"
+
+#, fuzzy
+#~ msgid "Unsupported image format for GDI+"
+#~ msgstr "සහාය නොදක්වන RAS පිළිඹිබු විචලනය"
+
+#, fuzzy
+#~ msgid "Couldn't save"
+#~ msgstr "ඉතිරිය සුරකීය නොහැක"
+
+#, fuzzy
+#~ msgid "The WMF image format"
+#~ msgstr "WBMP ශීර්ෂකය සංයුතිය"
+
+#~ msgid "\"Deepness\" of the color."
+#~ msgstr "වර්‍ණයේ \"තද බව\"."
+
+#~ msgid "Error printing"
+#~ msgstr "මුද්‍රණය දෝෂ සහිතයි"
 
 #~ msgid "Folders"
 #~ msgstr "බහලුම්"

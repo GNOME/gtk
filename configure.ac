@@ -12,7 +12,7 @@ AC_PREREQ([2.62])
 
 m4_define([gtk_major_version], [2])
 m4_define([gtk_minor_version], [90])
-m4_define([gtk_micro_version], [4])
+m4_define([gtk_micro_version], [5])
 m4_define([gtk_interface_age], [0])
 m4_define([gtk_binary_age],
           [m4_eval(100 * gtk_minor_version + gtk_micro_version)])
@@ -1300,7 +1300,7 @@ LDFLAGS="$saved_ldflags"
 if test "x$gdktarget" = "xx11"; then
   GDK_PACKAGES="$PANGO_PACKAGES gio-unix-2.0 $X_PACKAGES gdk-pixbuf-2.0 cairo-$cairo_backend"
 else
-  GDK_PACKAGES="$PANGO_PACKAGES $X_PACKAGES gdk-pixbuf-2.0 cairo-$cairo_backend"
+  GDK_PACKAGES="$PANGO_PACKAGES gio-2.0 gdk-pixbuf-2.0 cairo-$cairo_backend"
 fi
 
 GDK_DEP_LIBS="$GDK_EXTRA_LIBS `$PKG_CONFIG --libs $GDK_PACKAGES`"
