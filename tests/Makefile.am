@@ -92,7 +92,7 @@ noinst_PROGRAMS =  $(TEST_PROGS)	\
 	testexpander			\
 	testvolumebutton
 
-if OS_UNIX
+if USE_X11
 noinst_PROGRAMS += testapplication
 endif
 
