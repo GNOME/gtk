@@ -21,6 +21,7 @@
 #include "config.h"
 
 #include "gtkquartz.h"
+#include <gdk/quartz/gdkquartz.h>
 #include "gtkalias.h"
 
 NSImage *
