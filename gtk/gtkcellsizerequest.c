@@ -91,13 +91,26 @@ gtk_cell_size_request_get_width (GtkCellSizeRequest *cell,
 				 gint               *natural_size)
 {
   GtkCellSizeRequestIface *iface;
+  gint width;
 
   g_return_if_fail (GTK_IS_CELL_SIZE_REQUEST (cell));
   g_return_if_fail (GTK_IS_WIDGET (widget));
   g_return_if_fail (NULL != minimum_size || NULL != natural_size);
 
-  iface = GTK_CELL_SIZE_REQUEST_GET_IFACE (cell);
-  iface->get_width (cell, widget, minimum_size, natural_size);
+  gtk_cell_renderer_get_fixed_size (GTK_CELL_RENDERER (cell), &width, NULL);
+
+  if (width < 0)
+    {
+      iface = GTK_CELL_SIZE_REQUEST_GET_IFACE (cell);
+      iface->get_width (cell, widget, minimum_size, natural_size);
+    }
+  else
+    {
+      if (minimum_size)
+	*minimum_size = width;
+      if (natural_size)
+	*natural_size = width;
+    }
 
 #if DEBUG_CELL_SIZE_REQUEST
   g_message ("%s returning minimum width: %d and natural width: %d",
@@ -126,13 +139,26 @@ gtk_cell_size_request_get_height (GtkCellSizeRequest *cell,
 				  gint               *natural_size)
 {
   GtkCellSizeRequestIface *iface;
+  gint height;
 
   g_return_if_fail (GTK_IS_CELL_SIZE_REQUEST (cell));
   g_return_if_fail (GTK_IS_WIDGET (widget));
   g_return_if_fail (NULL != minimum_size || NULL != natural_size);
 
-  iface = GTK_CELL_SIZE_REQUEST_GET_IFACE (cell);
-  iface->get_height (cell, widget, minimum_size, natural_size);
+  gtk_cell_renderer_get_fixed_size (GTK_CELL_RENDERER (cell), NULL, &height);
+
+  if (height < 0)
+    {
+      iface = GTK_CELL_SIZE_REQUEST_GET_IFACE (cell);
+      iface->get_height (cell, widget, minimum_size, natural_size);
+    }
+  else
+    {
+      if (minimum_size)
+	*minimum_size = height;
+      if (natural_size)
+	*natural_size = height;
+    }
 
 #if DEBUG_CELL_SIZE_REQUEST
   g_message ("%s returning minimum height: %d and natural height: %d",
@@ -164,13 +190,26 @@ gtk_cell_size_request_get_width_for_height (GtkCellSizeRequest *cell,
 					    gint               *natural_width)
 {
   GtkCellSizeRequestIface *iface;
+  gint width;
 
   g_return_if_fail (GTK_IS_CELL_SIZE_REQUEST (cell));
   g_return_if_fail (GTK_IS_WIDGET (widget));
   g_return_if_fail (NULL != minimum_width || NULL != natural_width);
 
-  iface = GTK_CELL_SIZE_REQUEST_GET_IFACE (cell);
-  iface->get_width_for_height (cell, widget, height, minimum_width, natural_width);
+  gtk_cell_renderer_get_fixed_size (GTK_CELL_RENDERER (cell), &width, NULL);
+
+  if (width < 0)
+    {
+      iface = GTK_CELL_SIZE_REQUEST_GET_IFACE (cell);
+      iface->get_width_for_height (cell, widget, height, minimum_width, natural_width);
+    }
+  else
+    {
+      if (minimum_width)
+	*minimum_width = width;
+      if (natural_width)
+	*natural_width = width;
+    }
 
 #if DEBUG_CELL_SIZE_REQUEST
   g_message ("%s width for height: %d is minimum %d and natural: %d",
@@ -201,13 +240,26 @@ gtk_cell_size_request_get_height_for_width (GtkCellSizeRequest *cell,
 					    gint               *natural_height)
 {
   GtkCellSizeRequestIface *iface;
+  gint height;
 
   g_return_if_fail (GTK_IS_CELL_SIZE_REQUEST (cell));
   g_return_if_fail (GTK_IS_WIDGET (widget));
   g_return_if_fail (NULL != minimum_height || NULL != natural_height);
 
-  iface = GTK_CELL_SIZE_REQUEST_GET_IFACE (cell);
-  iface->get_height_for_width (cell, widget, width, minimum_height, natural_height);
+  gtk_cell_renderer_get_fixed_size (GTK_CELL_RENDERER (cell), NULL, &height);
+
+  if (height < 0)
+    {
+      iface = GTK_CELL_SIZE_REQUEST_GET_IFACE (cell);
+      iface->get_height_for_width (cell, widget, width, minimum_height, natural_height);
+    }
+  else
+    {
+      if (minimum_height)
+	*minimum_height = height;
+      if (natural_height)
+	*natural_height = height;
+    }
 
 #if DEBUG_CELL_SIZE_REQUEST
   g_message ("%s height for width: %d is minimum %d and natural: %d",
