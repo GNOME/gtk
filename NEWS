@@ -1,3 +1,34 @@
+Overview of Changes from GTK+ 2.21.2 to 2.21.3
+==============================================
+
+* gdk-pixbuf has been moved into a separate module
+
+* gtk_init warns if it detects GTK2.x and GTK3 being used
+ in the same process
+
+* Misc new API:
+ gtk_accessible_set_widget
+ gtk_message_dialog_get_message_area
+ gtk_font_selection_dialog_get_font_selection
+ gtk_window_group_get_current_grab
+ gtk_table_get_size
+ gtk_button_get_event_window
+ gdk_device_manager_get_client_pointer
+ gdk_image_get_pixels
+
+* Bugs fixed:
+ 522756 gnome-appearance-properties crashed with SIGSEGV...
+ 615666 GTK_OBJECT_FLAGS() should be deprecated
+ 621136 GtkCalendar: Some functions always return TRUE
+ 621250 Missing accessors for GtkRange has_stepper_X
+ 621414 Can't select file on file browser popup after...
+ 621683 gtk_menu_attach_to_widget() should emit...
+ 621775 Space symbol missed in Resources chapter
+ 622011 Don't handle "connecting-to-device" state reason
+ 622371 Need gtk_accessible_set_widget
+ 622581 GtkButton has no accessor for event_window
+
+
 Overview of Changes from GTK+ 2.21.1 to 2.21.2
 ==============================================
 
