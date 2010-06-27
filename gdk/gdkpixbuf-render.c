@@ -50,11 +50,14 @@
  **/
 void
 gdk_pixbuf_render_threshold_alpha (GdkPixbuf *pixbuf,
-				   GdkBitmap *bitmap,
-				   int src_x,  int src_y,
-				   int dest_x, int dest_y,
-				   int width,  int height,
-				   int alpha_threshold)
+                                   GdkBitmap *bitmap,
+                                   int        src_x,
+                                   int        src_y,
+                                   int        dest_x,
+                                   int        dest_y,
+                                   int        width,
+                                   int        height,
+                                   int        alpha_threshold)
 {
   GdkGC *gc;
   GdkColor color;
@@ -63,10 +66,10 @@ gdk_pixbuf_render_threshold_alpha (GdkPixbuf *pixbuf,
   int start, start_status;
   int status;
 
-  g_return_val_if_fail (gdk_pixbuf_get_colorspace (pixbuf) == GDK_COLORSPACE_RGB, NULL);
-  g_return_val_if_fail (gdk_pixbuf_get_n_channels (pixbuf) == 3 ||
-                        gdk_pixbuf_get_n_channels (pixbuf) == 4, NULL);
-  g_return_val_if_fail (gdk_pixbuf_get_bits_per_sample (pixbuf) == 8, NULL);
+  g_return_if_fail (gdk_pixbuf_get_colorspace (pixbuf) == GDK_COLORSPACE_RGB);
+  g_return_if_fail (gdk_pixbuf_get_n_channels (pixbuf) == 3 ||
+                        gdk_pixbuf_get_n_channels (pixbuf) == 4);
+  g_return_if_fail (gdk_pixbuf_get_bits_per_sample (pixbuf) == 8);
 
   if (width == -1) 
     width = gdk_pixbuf_get_width (pixbuf);
