@@ -10,10 +10,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-05-25 20:10-0400\n"
+"POT-Creation-Date: 2010-06-26 23:16-0400\n"
 "PO-Revision-Date: 2010-03-02 00:28+0100\n"
 "Last-Translator: Gabor Kelemen <kelemeng at gnome dot hu>\n"
 "Language-Team: Hungarian <gnome at fsf dot hu>\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -79,7 +80,7 @@ msgstr "Beállítandó Gdk debug jelzőbitek"
 #. Placeholder in --gdk-no-debug=FLAGS in --help output
 #. Placeholder in --gtk-debug=FLAGS in --help output
 #. Placeholder in --gtk-no-debug=FLAGS in --help output
-#: gdk/gdk.c:165 gdk/gdk.c:168 gtk/gtkmain.c:454 gtk/gtkmain.c:457
+#: gdk/gdk.c:165 gdk/gdk.c:168 gtk/gtkmain.c:439 gtk/gtkmain.c:442
 msgid "FLAGS"
 msgstr "JELZŐK"
 
@@ -273,915 +274,6 @@ msgctxt "keyboard label"
 msgid "Delete"
 msgstr "Delete"
 
-#: gdk-pixbuf/gdk-pixbuf-animation.c:133 gdk-pixbuf/gdk-pixbuf-io.c:982
-#: gdk-pixbuf/gdk-pixbuf-io.c:1242 tests/testfilechooser.c:222
-#, c-format
-msgid "Failed to open file '%s': %s"
-msgstr "Nem sikerült megnyitni a(z) „%s” fájlt: %s"
-
-#: gdk-pixbuf/gdk-pixbuf-animation.c:146 gdk-pixbuf/gdk-pixbuf-io.c:994
-#, c-format
-msgid "Image file '%s' contains no data"
-msgstr "A(z) „%s” képfájl nem tartalmaz adatokat"
-
-#: gdk-pixbuf/gdk-pixbuf-animation.c:188 gdk-pixbuf/gdk-pixbuf-io.c:1030
-#: gdk-pixbuf/gdk-pixbuf-io.c:1294 tests/testfilechooser.c:267
-#, c-format
-msgid ""
-"Failed to load image '%s': reason not known, probably a corrupt image file"
-msgstr ""
-"Nem sikerült betölteni a(z) „%s” képet: ok ismeretlen, valószínűleg sérült a "
-"képfájl"
-
-#: gdk-pixbuf/gdk-pixbuf-animation.c:221
-#, c-format
-msgid ""
-"Failed to load animation '%s': reason not known, probably a corrupt "
-"animation file"
-msgstr ""
-"Nem sikerült betölteni a(z) „%s” animációt: ok ismeretlen, valószínűleg "
-"sérült az animációfájl"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:715
-#, c-format
-msgid "Unable to load image-loading module: %s: %s"
-msgstr "Nem lehet betölteni a képbetöltő modult: %s: %s"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:730
-#, c-format
-msgid ""
-"Image-loading module %s does not export the proper interface; perhaps it's "
-"from a different GTK version?"
-msgstr ""
-"A(z) %s képbetöltő-modul nem exportálja a megfelelő felületet, talán egy "
-"másik GTK verzióból van?"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:739 gdk-pixbuf/gdk-pixbuf-io.c:790
-#, c-format
-msgid "Image type '%s' is not supported"
-msgstr "A(z) „%s” képtípus nem támogatott"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:863
-#, c-format
-msgid "Couldn't recognize the image file format for file '%s'"
-msgstr "Nem lehet azonosítani a(z) „%s” képfájl formátumát"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:871
-msgid "Unrecognized image file format"
-msgstr "Azonosíthatatlan képfájl formátum"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:1039
-#, c-format
-msgid "Failed to load image '%s': %s"
-msgstr "Nem sikerült betölteni a(z) „%s” képet: %s"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:1673 gdk-pixbuf/io-gdip-utils.c:961
-#, c-format
-msgid "Error writing to image file: %s"
-msgstr "Hiba képfájlba íráskor: %s"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:1718 gdk-pixbuf/gdk-pixbuf-io.c:1848
-#, c-format
-msgid "This build of gdk-pixbuf does not support saving the image format: %s"
-msgstr ""
-"A gdk-pixbuf ezen változatába nincs befordítva a(z) %s képformátumba való "
-"mentés támogatása"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:1752
-msgid "Insufficient memory to save image to callback"
-msgstr "Nincs elég memória a kép visszahíváshoz mentéséhez"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:1765
-msgid "Failed to open temporary file"
-msgstr "Nem sikerült megnyitni az átmeneti fájlt"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:1791
-msgid "Failed to read from temporary file"
-msgstr "Nem sikerült olvasni az átmeneti fájlból"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:2044
-#, c-format
-msgid "Failed to open '%s' for writing: %s"
-msgstr "„%s” megnyitása írásra sikertelen: %s"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:2070
-#, c-format
-msgid ""
-"Failed to close '%s' while writing image, all data may not have been saved: %"
-"s"
-msgstr ""
-"A(z) „%s” nem zárható le a kép írása közben, lehet, hogy nem sikerült minden "
-"adatot elmenteni: %s"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:2290 gdk-pixbuf/gdk-pixbuf-io.c:2341
-msgid "Insufficient memory to save image into a buffer"
-msgstr "Nincs elég memória a kép pufferbe mentéséhez"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:2387
-msgid "Error writing to image stream"
-msgstr "Hiba képfolyamba íráskor"
-
-#: gdk-pixbuf/gdk-pixbuf-loader.c:334
-#, c-format
-msgid ""
-"Internal error: Image loader module '%s' failed to complete an operation, "
-"but didn't give a reason for the failure"
-msgstr ""
-"Belső hiba: A(z) %s képbetöltő modul nem tudott befejezni egy műveletet, de "
-"nem adta meg a hiba okát"
-
-#: gdk-pixbuf/gdk-pixbuf-loader.c:376
-#, c-format
-msgid "Incremental loading of image type '%s' is not supported"
-msgstr "A(z) %s típusú képek növekményes betöltése nem támogatott"
-
-#: gdk-pixbuf/gdk-pixdata.c:147
-msgid "Image header corrupt"
-msgstr "Hibás képfejléc"
-
-#: gdk-pixbuf/gdk-pixdata.c:152
-msgid "Image format unknown"
-msgstr "Ismeretlen képformátum"
-
-#: gdk-pixbuf/gdk-pixdata.c:157 gdk-pixbuf/gdk-pixdata.c:488
-msgid "Image pixel data corrupt"
-msgstr "A kép képpontadata sérült"
-
-#: gdk-pixbuf/gdk-pixdata.c:432
-#, c-format
-msgid "failed to allocate image buffer of %u byte"
-msgid_plural "failed to allocate image buffer of %u bytes"
-msgstr[0] "nem sikerült %u bájtos képpuffert lefoglalni"
-msgstr[1] "nem sikerült %u bájtos képpuffert lefoglalni"
-
-#: gdk-pixbuf/io-ani.c:244
-msgid "Unexpected icon chunk in animation"
-msgstr "Váratlan ikondarab az animációban"
-
-#: gdk-pixbuf/io-ani.c:337
-msgid "Unsupported animation type"
-msgstr "Nem támogatott animációtípus"
-
-#: gdk-pixbuf/io-ani.c:348 gdk-pixbuf/io-ani.c:406 gdk-pixbuf/io-ani.c:432
-#: gdk-pixbuf/io-ani.c:455 gdk-pixbuf/io-ani.c:482 gdk-pixbuf/io-ani.c:569
-msgid "Invalid header in animation"
-msgstr "Érvénytelen fejléc az animációban"
-
-#: gdk-pixbuf/io-ani.c:358 gdk-pixbuf/io-ani.c:380 gdk-pixbuf/io-ani.c:464
-#: gdk-pixbuf/io-ani.c:491 gdk-pixbuf/io-ani.c:542 gdk-pixbuf/io-ani.c:614
-msgid "Not enough memory to load animation"
-msgstr "Nincs elég memória az animáció betöltéséhez"
-
-#: gdk-pixbuf/io-ani.c:398 gdk-pixbuf/io-ani.c:424 gdk-pixbuf/io-ani.c:443
-msgid "Malformed chunk in animation"
-msgstr "Hibás részlet az animációban"
-
-#: gdk-pixbuf/io-ani.c:711
-msgid "The ANI image format"
-msgstr "ANI képformátum"
-
-#: gdk-pixbuf/io-bmp.c:230 gdk-pixbuf/io-bmp.c:267 gdk-pixbuf/io-bmp.c:338
-#: gdk-pixbuf/io-bmp.c:370 gdk-pixbuf/io-bmp.c:393 gdk-pixbuf/io-bmp.c:496
-msgid "BMP image has bogus header data"
-msgstr "A BMP-kép fejlécadata hibás"
-
-#: gdk-pixbuf/io-bmp.c:241 gdk-pixbuf/io-bmp.c:433
-msgid "Not enough memory to load bitmap image"
-msgstr "Nincs elég memória a kép betöltéséhez"
-
-#: gdk-pixbuf/io-bmp.c:319
-msgid "BMP image has unsupported header size"
-msgstr "A BMP-kép fejlécmérete nem támogatott"
-
-#: gdk-pixbuf/io-bmp.c:357
-msgid "Topdown BMP images cannot be compressed"
-msgstr "A fentről-lefelé BMP képek nem tömöríthetőek"
-
-#: gdk-pixbuf/io-bmp.c:717 gdk-pixbuf/io-pnm.c:709
-msgid "Premature end-of-file encountered"
-msgstr "A fájl végét túl korán értem el"
-
-#: gdk-pixbuf/io-bmp.c:1329
-msgid "Couldn't allocate memory for saving BMP file"
-msgstr "Nem lehet memóriát foglalni a BMP fájl mentéséhez"
-
-#: gdk-pixbuf/io-bmp.c:1370
-msgid "Couldn't write to BMP file"
-msgstr "Nem sikerült írni a BMP fájlba"
-
-#: gdk-pixbuf/io-bmp.c:1423 gdk-pixbuf/io-gdip-bmp.c:82
-msgid "The BMP image format"
-msgstr "BMP képformátum"
-
-#: gdk-pixbuf/io-gif.c:222
-#, c-format
-msgid "Failure reading GIF: %s"
-msgstr "Hiba a GIF olvasásánál: %s"
-
-#: gdk-pixbuf/io-gif.c:496 gdk-pixbuf/io-gif.c:1481 gdk-pixbuf/io-gif.c:1642
-msgid "GIF file was missing some data (perhaps it was truncated somehow?)"
-msgstr "A GIF fájl egyes adatai hiányoznak (lehet, hogy csonkolódott a fájl?)"
-
-#: gdk-pixbuf/io-gif.c:505
-#, c-format
-msgid "Internal error in the GIF loader (%s)"
-msgstr "Belső hiba a GIF betöltőben (%s)"
-
-#: gdk-pixbuf/io-gif.c:579
-msgid "Stack overflow"
-msgstr "Veremtúlcsordulás"
-
-#: gdk-pixbuf/io-gif.c:639
-msgid "GIF image loader cannot understand this image."
-msgstr "A GIF-képbetöltő nem tudja értelmezni ezt a képet."
-
-#: gdk-pixbuf/io-gif.c:668
-msgid "Bad code encountered"
-msgstr "Hibás kód érkezett"
-
-#: gdk-pixbuf/io-gif.c:678
-msgid "Circular table entry in GIF file"
-msgstr "Körkörös táblázat bejegyzés a GIF fájlban"
-
-#: gdk-pixbuf/io-gif.c:866 gdk-pixbuf/io-gif.c:1468 gdk-pixbuf/io-gif.c:1515
-#: gdk-pixbuf/io-gif.c:1630
-msgid "Not enough memory to load GIF file"
-msgstr "Nincs elég memória a GIF-fájl betöltéséhez"
-
-#: gdk-pixbuf/io-gif.c:960
-msgid "Not enough memory to composite a frame in GIF file"
-msgstr "Nincs elég memória a keretnek a GIF-fájlban való kiegészítéséhez"
-
-#: gdk-pixbuf/io-gif.c:1132
-msgid "GIF image is corrupt (incorrect LZW compression)"
-msgstr "A GIF-kép hibás (helytelen LZW-tömörítés)"
-
-#: gdk-pixbuf/io-gif.c:1182
-msgid "File does not appear to be a GIF file"
-msgstr "A fájl nem tűnik GIF formátumúnak"
-
-#: gdk-pixbuf/io-gif.c:1194
-#, c-format
-msgid "Version %s of the GIF file format is not supported"
-msgstr "A %s verziójú GIF formátum nincs támogatva"
-
-#: gdk-pixbuf/io-gif.c:1303
-msgid ""
-"GIF image has no global colormap, and a frame inside it has no local "
-"colormap."
-msgstr ""
-"A GIF képnek nincs globális színtérképe, és a benne lévő keretnek sincs "
-"lokális színtérképe."
-
-#: gdk-pixbuf/io-gif.c:1537
-msgid "GIF image was truncated or incomplete."
-msgstr "A GIF-kép csonkolódott vagy nem teljes."
-
-#: gdk-pixbuf/io-gif.c:1693 gdk-pixbuf/io-gdip-gif.c:80
-msgid "The GIF image format"
-msgstr "GIF képformátum"
-
-#: gdk-pixbuf/io-ico.c:211 gdk-pixbuf/io-ico.c:225 gdk-pixbuf/io-ico.c:277
-#: gdk-pixbuf/io-ico.c:290 gdk-pixbuf/io-ico.c:359
-msgid "Invalid header in icon"
-msgstr "Érvénytelen fejléc az ikonban"
-
-#: gdk-pixbuf/io-ico.c:240 gdk-pixbuf/io-ico.c:300 gdk-pixbuf/io-ico.c:369
-#: gdk-pixbuf/io-ico.c:432 gdk-pixbuf/io-ico.c:462
-msgid "Not enough memory to load icon"
-msgstr "Nincs elég memória az ikon betöltéséhez"
-
-#: gdk-pixbuf/io-ico.c:322
-msgid "Icon has zero width"
-msgstr "Az ikon szélessége nulla"
-
-#: gdk-pixbuf/io-ico.c:332
-msgid "Icon has zero height"
-msgstr "Az ikon magassága nulla"
-
-#: gdk-pixbuf/io-ico.c:384
-msgid "Compressed icons are not supported"
-msgstr "Tömörített ikonok nincsenek támogatva"
-
-#: gdk-pixbuf/io-ico.c:417
-msgid "Unsupported icon type"
-msgstr "Nem támogatott ikontípus"
-
-#: gdk-pixbuf/io-ico.c:511
-msgid "Not enough memory to load ICO file"
-msgstr "Nincs elég memória az ICO-fájl betöltéséhez"
-
-#: gdk-pixbuf/io-ico.c:976
-msgid "Image too large to be saved as ICO"
-msgstr "A kép túl nagy ICO formátumba mentéshez"
-
-#: gdk-pixbuf/io-ico.c:987
-msgid "Cursor hotspot outside image"
-msgstr "A kurzor aktív pontja a képen kívül helyezkedik el"
-
-#: gdk-pixbuf/io-ico.c:1010
-#, c-format
-msgid "Unsupported depth for ICO file: %d"
-msgstr "Nem támogatott mélység ICO-fájlnál: %d"
-
-#: gdk-pixbuf/io-ico.c:1245 gdk-pixbuf/io-gdip-ico.c:59
-msgid "The ICO image format"
-msgstr "ICO képformátum"
-
-#: gdk-pixbuf/io-icns.c:347
-#, c-format
-msgid "Error reading ICNS image: %s"
-msgstr "Hiba az ICNS képfájl olvasásakor: %s"
-
-#: gdk-pixbuf/io-icns.c:364
-msgid "Could not decode ICNS file"
-msgstr "Nem sikerült visszafejteni az ICNS fájlt"
-
-#: gdk-pixbuf/io-icns.c:397
-msgid "The ICNS image format"
-msgstr "ICNS képformátum"
-
-#: gdk-pixbuf/io-jasper.c:75
-msgid "Couldn't allocate memory for stream"
-msgstr "Nem sikerült memóriát kiosztani az adatfolyamhoz"
-
-#: gdk-pixbuf/io-jasper.c:105
-msgid "Couldn't decode image"
-msgstr "Nem sikerült visszafejteni a képet"
-
-#: gdk-pixbuf/io-jasper.c:123
-msgid "Transformed JPEG2000 has zero width or height"
-msgstr "Az átalakított JPEG2000 szélessége vagy magassága nulla"
-
-#: gdk-pixbuf/io-jasper.c:137
-msgid "Image type currently not supported"
-msgstr "A képtípus nem támogatott"
-
-#: gdk-pixbuf/io-jasper.c:149 gdk-pixbuf/io-jasper.c:157
-msgid "Couldn't allocate memory for color profile"
-msgstr "Nem lehet memóriát foglalni a színprofilhoz"
-
-#: gdk-pixbuf/io-jasper.c:183
-msgid "Insufficient memory to open JPEG 2000 file"
-msgstr "Nincs elég memória a JPEG 2000 fájl megnyitásához"
-
-#: gdk-pixbuf/io-jasper.c:262
-msgid "Couldn't allocate memory to buffer image data"
-msgstr "Nem lehet memóriát foglalni a képadatok számára"
-
-#: gdk-pixbuf/io-jasper.c:306
-msgid "The JPEG 2000 image format"
-msgstr "JPEG 2000 képformátum"
-
-#: gdk-pixbuf/io-jpeg.c:117
-#, c-format
-msgid "Error interpreting JPEG image file (%s)"
-msgstr "Hiba a JPEG képfájl értelmezésekor (%s)"
-
-#: gdk-pixbuf/io-jpeg.c:528
-msgid ""
-"Insufficient memory to load image, try exiting some applications to free "
-"memory"
-msgstr ""
-"Nincs elég memória a kép betöltéséhez, memória felszabadításához próbáljon "
-"meg kilépni néhány alkalmazásból"
-
-#: gdk-pixbuf/io-jpeg.c:569 gdk-pixbuf/io-jpeg.c:775
-#, c-format
-msgid "Unsupported JPEG color space (%s)"
-msgstr "Nem támogatott JPEG-színtér (%s)"
-
-#: gdk-pixbuf/io-jpeg.c:674 gdk-pixbuf/io-jpeg.c:944 gdk-pixbuf/io-jpeg.c:1177
-#: gdk-pixbuf/io-jpeg.c:1186
-msgid "Couldn't allocate memory for loading JPEG file"
-msgstr "Nem lehet memóriát kiosztani a JPEG fájl betöltéséhez"
-
-#: gdk-pixbuf/io-jpeg.c:919
-msgid "Transformed JPEG has zero width or height."
-msgstr "Az átalakított JPEG szélessége vagy magassága nulla."
-
-#: gdk-pixbuf/io-jpeg.c:1133 gdk-pixbuf/io-gdip-jpeg.c:53
-#, c-format
-msgid ""
-"JPEG quality must be a value between 0 and 100; value '%s' could not be "
-"parsed."
-msgstr ""
-"A JPEG-minőség értékének 0 és 100 között kell lennie, a(z) „%s” értéket nem "
-"lehet feldolgozni."
-
-#: gdk-pixbuf/io-jpeg.c:1148 gdk-pixbuf/io-gdip-jpeg.c:68
-#, c-format
-msgid ""
-"JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
-msgstr ""
-"A JPEG-minőség értékének 0 és 100 között kell lennie, a(z) „%d” érték nem "
-"megengedett."
-
-#: gdk-pixbuf/io-jpeg.c:1310 gdk-pixbuf/io-gdip-jpeg.c:136
-msgid "The JPEG image format"
-msgstr "JPEG képformátum"
-
-#: gdk-pixbuf/io-pcx.c:187
-msgid "Couldn't allocate memory for header"
-msgstr "Nem lehet memóriát kiosztani a fejléchez"
-
-#: gdk-pixbuf/io-pcx.c:202 gdk-pixbuf/io-pcx.c:560
-msgid "Couldn't allocate memory for context buffer"
-msgstr "Nem lehet memóriát foglalni a kontextus-puffer számára"
-
-#: gdk-pixbuf/io-pcx.c:601
-msgid "Image has invalid width and/or height"
-msgstr "A kép szélessége és/vagy magassága érvénytelen"
-
-#: gdk-pixbuf/io-pcx.c:613 gdk-pixbuf/io-pcx.c:674
-msgid "Image has unsupported bpp"
-msgstr "A kép képpontonkénti bitjeinek száma nem támogatott"
-
-#: gdk-pixbuf/io-pcx.c:618 gdk-pixbuf/io-pcx.c:626
-#, c-format
-msgid "Image has unsupported number of %d-bit planes"
-msgstr "Nem támogatott számú %d bites színsík van a képben"
-
-#: gdk-pixbuf/io-pcx.c:642
-msgid "Couldn't create new pixbuf"
-msgstr "Nem lehet létrehozni új képpuffert"
-
-#: gdk-pixbuf/io-pcx.c:650
-msgid "Couldn't allocate memory for line data"
-msgstr "Nem lehet memóriát foglalni a vonaladatok számára"
-
-#: gdk-pixbuf/io-pcx.c:657
-msgid "Couldn't allocate memory for paletted data"
-msgstr "Nem lehet memóriát foglalni a palettaadatok számára"
-
-#: gdk-pixbuf/io-pcx.c:704
-msgid "Didn't get all lines of PCX image"
-msgstr "Nem található a PCX-kép minden sora"
-
-#: gdk-pixbuf/io-pcx.c:711
-msgid "No palette found at end of PCX data"
-msgstr "Nem található paletta a PCX-adat végén"
-
-#: gdk-pixbuf/io-pcx.c:756
-msgid "The PCX image format"
-msgstr "PCX képformátum"
-
-#: gdk-pixbuf/io-png.c:55
-msgid "Bits per channel of PNG image is invalid."
-msgstr "A PNG-kép csatornánkénti bitjeinek száma érvénytelen."
-
-#: gdk-pixbuf/io-png.c:136 gdk-pixbuf/io-png.c:642
-msgid "Transformed PNG has zero width or height."
-msgstr "Az átalakított PNG szélessége vagy magassága nulla."
-
-#: gdk-pixbuf/io-png.c:144
-msgid "Bits per channel of transformed PNG is not 8."
-msgstr "Az átalakított PNG csatornánkénti bitjeinek száma nem 8."
-
-#: gdk-pixbuf/io-png.c:153
-msgid "Transformed PNG not RGB or RGBA."
-msgstr "Az átalakított PNG nem RGB vagy RGBA módú."
-
-#: gdk-pixbuf/io-png.c:162
-msgid "Transformed PNG has unsupported number of channels, must be 3 or 4."
-msgstr ""
-"Az átalakított PNG csatornánkénti bitjeinek száma nem támogatott, 3-nak vagy "
-"4-nek kell lennie."
-
-#: gdk-pixbuf/io-png.c:183
-#, c-format
-msgid "Fatal error in PNG image file: %s"
-msgstr "Végzetes hiba a PNG képfájlban: %s"
-
-#: gdk-pixbuf/io-png.c:316
-msgid "Insufficient memory to load PNG file"
-msgstr "Nincs elég memória a PNG fájl betöltéséhez"
-
-#: gdk-pixbuf/io-png.c:657
-#, c-format
-msgid ""
-"Insufficient memory to store a %ld by %ld image; try exiting some "
-"applications to reduce memory usage"
-msgstr ""
-"Nincs elég memória egy %ld x %ld méretű kép betöltéséhez, próbáljon meg "
-"kilépni néhány alkalmazásból a memóriahasználat csökkentéséhez"
-
-#: gdk-pixbuf/io-png.c:720
-msgid "Fatal error reading PNG image file"
-msgstr "Végzetes hiba a PNG képfájl olvasásakor"
-
-#: gdk-pixbuf/io-png.c:769
-#, c-format
-msgid "Fatal error reading PNG image file: %s"
-msgstr "Végzetes hiba a PNG képfájl olvasásakor: %s"
-
-#: gdk-pixbuf/io-png.c:863
-msgid ""
-"Keys for PNG text chunks must have at least 1 and at most 79 characters."
-msgstr ""
-"A PNG szöveges darabok kulcsainak legalább 1 és legfeljebb 79 karakterből "
-"kell állniuk."
-
-#: gdk-pixbuf/io-png.c:872
-msgid "Keys for PNG text chunks must be ASCII characters."
-msgstr "A PNG szöveges darabok kulcsainak ASCII karaktereknek kell lenniük."
-
-#: gdk-pixbuf/io-png.c:886 gdk-pixbuf/io-tiff.c:738
-#, c-format
-msgid "Color profile has invalid length %d."
-msgstr "A színprofil hossza (%d) érvénytelen."
-
-#: gdk-pixbuf/io-png.c:899 gdk-pixbuf/io-gdip-png.c:56
-#, c-format
-msgid ""
-"PNG compression level must be a value between 0 and 9; value '%s' could not "
-"be parsed."
-msgstr ""
-"A PNG-tömörítés értékének 0 és 9 között kell lennie, a(z) „%s” értéket nem "
-"lehet feldolgozni."
-
-#: gdk-pixbuf/io-png.c:912 gdk-pixbuf/io-gdip-png.c:68
-#, c-format
-msgid ""
-"PNG compression level must be a value between 0 and 9; value '%d' is not "
-"allowed."
-msgstr ""
-"A PNG-tömörítés értékének 0 és 9 között kell lennie, a(z) „%d” érték nem "
-"engedélyezett."
-
-#: gdk-pixbuf/io-png.c:951
-#, c-format
-msgid "Value for PNG text chunk %s cannot be converted to ISO-8859-1 encoding."
-msgstr "%s PNG szöveges darab értéke nem konvertálható ISO-8859-1 kódolásúra."
-
-#: gdk-pixbuf/io-png.c:1112 gdk-pixbuf/io-gdip-png.c:133
-msgid "The PNG image format"
-msgstr "PNG képformátum"
-
-#: gdk-pixbuf/io-pnm.c:250
-msgid "PNM loader expected to find an integer, but didn't"
-msgstr "A PNM-betöltő egy egészet várt, de nem talált"
-
-#: gdk-pixbuf/io-pnm.c:282
-msgid "PNM file has an incorrect initial byte"
-msgstr "A PNM-fájl kezdő bájtja helytelen"
-
-#: gdk-pixbuf/io-pnm.c:312
-msgid "PNM file is not in a recognized PNM subformat"
-msgstr "A PNM-fájl nincs felismert PNM-alformátumban"
-
-#: gdk-pixbuf/io-pnm.c:337
-msgid "PNM file has an image width of 0"
-msgstr "A PNM-fájl képszélessége 0"
-
-#: gdk-pixbuf/io-pnm.c:358
-msgid "PNM file has an image height of 0"
-msgstr "A PNM-fájl képmagassága 0"
-
-#: gdk-pixbuf/io-pnm.c:381
-msgid "Maximum color value in PNM file is 0"
-msgstr "A PNM-fájlban a maximális színérték 0"
-
-#: gdk-pixbuf/io-pnm.c:389
-msgid "Maximum color value in PNM file is too large"
-msgstr "A PNM-fájlban a maximális színérték túl nagy"
-
-#: gdk-pixbuf/io-pnm.c:429 gdk-pixbuf/io-pnm.c:459 gdk-pixbuf/io-pnm.c:504
-msgid "Raw PNM image type is invalid"
-msgstr "A nyers PNM-képtípus érvénytelen"
-
-#: gdk-pixbuf/io-pnm.c:654
-msgid "PNM image loader does not support this PNM subformat"
-msgstr "A PNM-képbetöltő nem támogatja ezt a PNM-alformátumot"
-
-#: gdk-pixbuf/io-pnm.c:741 gdk-pixbuf/io-pnm.c:968
-msgid "Raw PNM formats require exactly one whitespace before sample data"
-msgstr ""
-"A nyers PNM-formátumok pontosan egy üreshely-karaktert igényelnek a "
-"mintaadatok előtt"
-
-#: gdk-pixbuf/io-pnm.c:768
-msgid "Cannot allocate memory for loading PNM image"
-msgstr "Nem lehet memóriát kiosztani a PNM-kép betöltéséhez"
-
-#: gdk-pixbuf/io-pnm.c:818
-msgid "Insufficient memory to load PNM context struct"
-msgstr "Nincs elég memória a PNM kontextusstruktúrának"
-
-#: gdk-pixbuf/io-pnm.c:869
-msgid "Unexpected end of PNM image data"
-msgstr "A PNM-képadatnak váratlanul vége"
-
-#: gdk-pixbuf/io-pnm.c:997
-msgid "Insufficient memory to load PNM file"
-msgstr "Nincs elég memória a PNM fájl betöltéséhez"
-
-#: gdk-pixbuf/io-pnm.c:1081
-msgid "The PNM/PBM/PGM/PPM image format family"
-msgstr "A PNM/PBM/PGM/PPM képformátum család"
-
-#: gdk-pixbuf/io-qtif.c:128
-msgid "Input file descriptor is NULL."
-msgstr "A bemeneti fájl leírója NULL."
-
-#: gdk-pixbuf/io-qtif.c:143
-msgid "Failed to read QTIF header"
-msgstr "A QTIF fejléc olvasása meghiúsult"
-
-#: gdk-pixbuf/io-qtif.c:152 gdk-pixbuf/io-qtif.c:182 gdk-pixbuf/io-qtif.c:446
-#, c-format
-msgid "QTIF atom size too large (%d bytes)"
-msgstr "A QTIF atomméret túl nagy (%d bájt)"
-
-#: gdk-pixbuf/io-qtif.c:172
-#, c-format
-msgid "Failed to allocate %d bytes for file read buffer"
-msgstr "Nem sikerült %d bájt fájlolvasási puffert lefoglalni"
-
-#: gdk-pixbuf/io-qtif.c:196
-#, c-format
-msgid "File error when reading QTIF atom: %s"
-msgstr "Fájlhiba a QTIF atom olvasásakor: %s"
-
-#: gdk-pixbuf/io-qtif.c:233
-#, c-format
-msgid "Failed to skip the next %d bytes with seek()."
-msgstr "A következő %d bájt átugrása a seek() hívással meghiúsult."
-
-#: gdk-pixbuf/io-qtif.c:257
-msgid "Failed to allocate QTIF context structure."
-msgstr "Nem sikerült lefoglalni a QTIF kontextusstruktúrát."
-
-#: gdk-pixbuf/io-qtif.c:317
-msgid "Failed to create GdkPixbufLoader object."
-msgstr "A GdkPixbufLoader objektum létrehozása meghiúsult."
-
-#: gdk-pixbuf/io-qtif.c:421
-msgid "Failed to find an image data atom."
-msgstr "Nem található képadat atom."
-
-#: gdk-pixbuf/io-qtif.c:602
-msgid "The QTIF image format"
-msgstr "A QTIF képformátum"
-
-#: gdk-pixbuf/io-ras.c:126
-msgid "RAS image has bogus header data"
-msgstr "A RAS-kép fejlécadata hibás"
-
-#: gdk-pixbuf/io-ras.c:148
-msgid "RAS image has unknown type"
-msgstr "A RAS-kép típusa ismeretlen"
-
-#: gdk-pixbuf/io-ras.c:156
-msgid "unsupported RAS image variation"
-msgstr "nem támogatott RAS-képváltozat"
-
-#: gdk-pixbuf/io-ras.c:171 gdk-pixbuf/io-ras.c:200
-msgid "Not enough memory to load RAS image"
-msgstr "Nincs elég memória a RAS-kép betöltéséhez"
-
-#: gdk-pixbuf/io-ras.c:545
-msgid "The Sun raster image format"
-msgstr "Sun raster képformátum"
-
-#: gdk-pixbuf/io-tga.c:154
-msgid "Cannot allocate memory for IOBuffer struct"
-msgstr "Nem lehet memóriát kiosztani az IOBuffer-struktúrához"
-
-#: gdk-pixbuf/io-tga.c:173
-msgid "Cannot allocate memory for IOBuffer data"
-msgstr "Nem lehet memóriát kiosztani az IOBuffer-adathoz"
-
-#: gdk-pixbuf/io-tga.c:184
-msgid "Cannot realloc IOBuffer data"
-msgstr "Nem lehet újra kiosztani az IOBuffer-adatot"
-
-#: gdk-pixbuf/io-tga.c:214
-msgid "Cannot allocate temporary IOBuffer data"
-msgstr "Nem lehet kiosztani az átmeneti IOBuffer-adatot"
-
-#: gdk-pixbuf/io-tga.c:347
-msgid "Cannot allocate new pixbuf"
-msgstr "Nem lehet lefoglalni új képpuffert"
-
-#: gdk-pixbuf/io-tga.c:686
-msgid "Image is corrupted or truncated"
-msgstr "A kép sérült vagy csonkolódott"
-
-#: gdk-pixbuf/io-tga.c:693
-msgid "Cannot allocate colormap structure"
-msgstr "Nem lehet kiosztani színtérkép struktúrát"
-
-#: gdk-pixbuf/io-tga.c:700
-msgid "Cannot allocate colormap entries"
-msgstr "Nem lehet kiosztani színtérkép bejegyzéseket"
-
-#: gdk-pixbuf/io-tga.c:722
-msgid "Unexpected bitdepth for colormap entries"
-msgstr "Váratlan bitmélység a színtérkép-bejegyzésekhez"
-
-#: gdk-pixbuf/io-tga.c:740
-msgid "Cannot allocate TGA header memory"
-msgstr "Nem lehet kiosztani TGA-fejlécmemóriát"
-
-#: gdk-pixbuf/io-tga.c:773
-msgid "TGA image has invalid dimensions"
-msgstr "A TGA-kép mérete érvénytelen"
-
-#: gdk-pixbuf/io-tga.c:779 gdk-pixbuf/io-tga.c:788 gdk-pixbuf/io-tga.c:798
-#: gdk-pixbuf/io-tga.c:808 gdk-pixbuf/io-tga.c:815
-msgid "TGA image type not supported"
-msgstr "A TGA képformátum nem támogatott"
-
-#: gdk-pixbuf/io-tga.c:862
-msgid "Cannot allocate memory for TGA context struct"
-msgstr "Nem lehet memóriát lefoglalni a TGA kontextusstruktúrának"
-
-#: gdk-pixbuf/io-tga.c:927
-msgid "Excess data in file"
-msgstr "Többletadat a fájlban"
-
-#: gdk-pixbuf/io-tga.c:1008
-msgid "The Targa image format"
-msgstr "Targa képformátum"
-
-#: gdk-pixbuf/io-tiff.c:165
-msgid "Could not get image width (bad TIFF file)"
-msgstr "Nem lehet megszerezni a kép szélességét (hibás TIFF fájl)"
-
-#: gdk-pixbuf/io-tiff.c:172
-msgid "Could not get image height (bad TIFF file)"
-msgstr "Nem lehet megszerezni a kép magasságát (hibás TIFF fájl)"
-
-#: gdk-pixbuf/io-tiff.c:180
-msgid "Width or height of TIFF image is zero"
-msgstr "A TIFF-kép szélessége vagy magassága nulla"
-
-#: gdk-pixbuf/io-tiff.c:189 gdk-pixbuf/io-tiff.c:198
-msgid "Dimensions of TIFF image too large"
-msgstr "A TGA-kép mérete túl nagy"
-
-#: gdk-pixbuf/io-tiff.c:222 gdk-pixbuf/io-tiff.c:234 gdk-pixbuf/io-tiff.c:561
-msgid "Insufficient memory to open TIFF file"
-msgstr "Nincs elég memória a TIFF fájl megnyitásához"
-
-#: gdk-pixbuf/io-tiff.c:295
-msgid "Failed to load RGB data from TIFF file"
-msgstr "RGB-adat betöltése a TIFF-fájlból sikertelen"
-
-#: gdk-pixbuf/io-tiff.c:351
-msgid "Failed to open TIFF image"
-msgstr "Nem sikerült megnyitni a TIFF képet"
-
-#: gdk-pixbuf/io-tiff.c:363 gdk-pixbuf/io-tiff.c:778
-msgid "TIFFClose operation failed"
-msgstr "A TIFFClose művelet sikertelen"
-
-#: gdk-pixbuf/io-tiff.c:493 gdk-pixbuf/io-tiff.c:506
-msgid "Failed to load TIFF image"
-msgstr "Nem sikerült betölteni a TIFF képet"
-
-#: gdk-pixbuf/io-tiff.c:692
-msgid "Failed to save TIFF image"
-msgstr "Nem sikerült menteni a TIFF képet"
-
-#: gdk-pixbuf/io-tiff.c:727
-msgid "TIFF compression doesn't refer to a valid codec."
-msgstr "A TIFF tömörítés nem érvényes kodekre hivatkozik."
-
-#: gdk-pixbuf/io-tiff.c:767
-msgid "Failed to write TIFF data"
-msgstr "Nem sikerült kiírni a TIFF adatokat"
-
-#: gdk-pixbuf/io-tiff.c:814
-msgid "Couldn't write to TIFF file"
-msgstr "Nem sikerült írni a TIFF fájlba"
-
-#: gdk-pixbuf/io-tiff.c:869
-msgid "The TIFF image format"
-msgstr "TIFF képformátum"
-
-#: gdk-pixbuf/io-wbmp.c:246
-msgid "Image has zero width"
-msgstr "A kép szélessége nulla"
-
-#: gdk-pixbuf/io-wbmp.c:264
-msgid "Image has zero height"
-msgstr "A kép magassága nulla"
-
-#: gdk-pixbuf/io-wbmp.c:275
-msgid "Not enough memory to load image"
-msgstr "Nincs elég memória a kép betöltéséhez"
-
-#: gdk-pixbuf/io-wbmp.c:334
-msgid "Couldn't save the rest"
-msgstr "Nem lehet menteni a többit"
-
-#: gdk-pixbuf/io-wbmp.c:375
-msgid "The WBMP image format"
-msgstr "WBMP képformátum"
-
-#: gdk-pixbuf/io-xbm.c:295
-msgid "Invalid XBM file"
-msgstr "Érvénytelen XBM-fájl"
-
-#: gdk-pixbuf/io-xbm.c:305
-msgid "Insufficient memory to load XBM image file"
-msgstr "Nincs elég memória az XBM képfájl betöltéséhez"
-
-#: gdk-pixbuf/io-xbm.c:453
-msgid "Failed to write to temporary file when loading XBM image"
-msgstr "Átmeneti fájlba írás az XBM-kép betöltésekor sikertelen"
-
-#: gdk-pixbuf/io-xbm.c:492
-msgid "The XBM image format"
-msgstr "XBM képformátum"
-
-#: gdk-pixbuf/io-xpm.c:468
-msgid "No XPM header found"
-msgstr "Nem található az XPM-fejléc"
-
-#: gdk-pixbuf/io-xpm.c:477
-msgid "Invalid XPM header"
-msgstr "Érvénytelen XPM-fejléc"
-
-#: gdk-pixbuf/io-xpm.c:485
-msgid "XPM file has image width <= 0"
-msgstr "Az XPM-fájl képszélessége <= 0"
-
-#: gdk-pixbuf/io-xpm.c:493
-msgid "XPM file has image height <= 0"
-msgstr "Az XPM-fájl képmagassága <= 0"
-
-#: gdk-pixbuf/io-xpm.c:501
-msgid "XPM has invalid number of chars per pixel"
-msgstr "Az XPM-fájl képpontonkénti karaktereinek száma érvénytelen"
-
-#: gdk-pixbuf/io-xpm.c:510
-msgid "XPM file has invalid number of colors"
-msgstr "Az XPM-fájl színeinek száma érvénytelen"
-
-#: gdk-pixbuf/io-xpm.c:522 gdk-pixbuf/io-xpm.c:531 gdk-pixbuf/io-xpm.c:583
-msgid "Cannot allocate memory for loading XPM image"
-msgstr "Nem lehet memóriát kiosztani az XPM-kép betöltéséhez"
-
-#: gdk-pixbuf/io-xpm.c:545
-msgid "Cannot read XPM colormap"
-msgstr "Nem lehet olvasni az XPM-színtérképet"
-
-#: gdk-pixbuf/io-xpm.c:777
-msgid "Failed to write to temporary file when loading XPM image"
-msgstr "Átmeneti fájlba írás az XPM-kép betöltésekor sikertelen"
-
-#: gdk-pixbuf/io-xpm.c:816
-msgid "The XPM image format"
-msgstr "XPM képformátum"
-
-#: gdk-pixbuf/io-gdip-emf.c:59
-msgid "The EMF image format"
-msgstr "EMF képformátum"
-
-#: gdk-pixbuf/io-gdip-utils.c:232
-#, c-format
-msgid "Could not allocate memory: %s"
-msgstr "Nem lehet memóriát foglalni: %s"
-
-#: gdk-pixbuf/io-gdip-utils.c:257 gdk-pixbuf/io-gdip-utils.c:371
-#: gdk-pixbuf/io-gdip-utils.c:411
-#, c-format
-msgid "Could not create stream: %s"
-msgstr "Nem hozható létre adatfolyam: %s"
-
-#: gdk-pixbuf/io-gdip-utils.c:271
-#, c-format
-msgid "Could not seek stream: %s"
-msgstr "Nem lehet pozicionálni az adatfolyamban: %s"
-
-#: gdk-pixbuf/io-gdip-utils.c:283
-#, c-format
-msgid "Could not read from stream: %s"
-msgstr "Nem lehet olvasni az adatfolyamból: %s"
-
-#: gdk-pixbuf/io-gdip-utils.c:694 gdk-pixbuf/io-gdip-utils.c:825
-msgid "Couldn't load bitmap"
-msgstr "Nem lehet betölteni a bitképet"
-
-#: gdk-pixbuf/io-gdip-utils.c:847
-msgid "Couldn't load metafile"
-msgstr "Nem lehet betölteni a metafájlt"
-
-#: gdk-pixbuf/io-gdip-utils.c:1006
-msgid "Unsupported image format for GDI+"
-msgstr "Nem támogatott képformátum a GDI+-hoz"
-
-#: gdk-pixbuf/io-gdip-utils.c:1013
-msgid "Couldn't save"
-msgstr "Nem lehet menteni"
-
-#: gdk-pixbuf/io-gdip-wmf.c:58
-msgid "The WMF image format"
-msgstr "WMF képformátum"
-
 #. Description of --sync in --help output
 #: gdk/win32/gdkmain-win32.c:55
 msgid "Don't batch GDI requests"
@@ -1360,8 +452,8 @@ msgstr "Érvénytelen típusfüggvény a(z) %d. sorban: „%s”"
 #, c-format
 msgid "Duplicate object id '%s' on line %d (previously on line %d)"
 msgstr ""
-"Többször szereplő objektumazonosító („%s”) a(z) %d. sorban (korábban a(z) %"
-"d. sorban)"
+"Többször szereplő objektumazonosító („%s”) a(z) %d. sorban (korábban a(z) "
+"%d. sorban)"
 
 #: gtk/gtkbuilderparser.c:859
 #, c-format
@@ -1521,8 +613,9 @@ msgid "_Saturation:"
 msgstr "Telített_ség:"
 
 #: gtk/gtkcolorsel.c:393
-msgid "\"Deepness\" of the color."
-msgstr "A szín telítettsége."
+#, fuzzy
+msgid "Intensity of the color."
+msgstr "A szín átlátszósága."
 
 #: gtk/gtkcolorsel.c:394
 msgid "_Value:"
@@ -1696,11 +789,11 @@ msgstr "J_obb:"
 msgid "Paper Margins"
 msgstr "Papírmargók"
 
-#: gtk/gtkentry.c:8612 gtk/gtktextview.c:8002
+#: gtk/gtkentry.c:8612 gtk/gtktextview.c:8012
 msgid "Input _Methods"
 msgstr "Beviteli mó_dok"
 
-#: gtk/gtkentry.c:8626 gtk/gtktextview.c:8016
+#: gtk/gtkentry.c:8626 gtk/gtktextview.c:8026
 msgid "_Insert Unicode Control Character"
 msgstr "_Unicode vezérlőkarakter beszúrása"
 
@@ -2142,12 +1235,12 @@ msgid "System (%s)"
 msgstr "Rendszer (%s)"
 
 #. Open Link
-#: gtk/gtklabel.c:6076
+#: gtk/gtklabel.c:6072
 msgid "_Open Link"
 msgstr "Hi_vatkozás megnyitása"
 
 #. Copy Link Address
-#: gtk/gtklabel.c:6088
+#: gtk/gtklabel.c:6084
 msgid "Copy _Link Address"
 msgstr "_Hivatkozás címének másolása"
 
@@ -2160,27 +1253,27 @@ msgid "Invalid URI"
 msgstr "Érvénytelen URI"
 
 #. Description of --gtk-module=MODULES in --help output
-#: gtk/gtkmain.c:447
+#: gtk/gtkmain.c:432
 msgid "Load additional GTK+ modules"
 msgstr "További GTK+ modulok betöltése"
 
 #. Placeholder in --gtk-module=MODULES in --help output
-#: gtk/gtkmain.c:448
+#: gtk/gtkmain.c:433
 msgid "MODULES"
 msgstr "MODULOK"
 
 #. Description of --g-fatal-warnings in --help output
-#: gtk/gtkmain.c:450
+#: gtk/gtkmain.c:435
 msgid "Make all warnings fatal"
 msgstr "Minden figyelmeztetés végzetes legyen"
 
 #. Description of --gtk-debug=FLAGS in --help output
-#: gtk/gtkmain.c:453
+#: gtk/gtkmain.c:438
 msgid "GTK+ debugging flags to set"
 msgstr "Beállítandó Gtk+ debug jelzőbitek"
 
 #. Description of --gtk-no-debug=FLAGS in --help output
-#: gtk/gtkmain.c:456
+#: gtk/gtkmain.c:441
 msgid "GTK+ debugging flags to unset"
 msgstr "Kikapcsolandó Gtk+ jelzőbitek"
 
@@ -2189,20 +1282,20 @@ msgstr "Kikapcsolandó Gtk+ jelzőbitek"
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
 #.
-#: gtk/gtkmain.c:708
+#: gtk/gtkmain.c:704
 msgid "default:LTR"
 msgstr "default:LTR"
 
-#: gtk/gtkmain.c:773
+#: gtk/gtkmain.c:769
 #, c-format
 msgid "Cannot open display: %s"
 msgstr "Nem nyitható meg a megjelenítő: %s"
 
-#: gtk/gtkmain.c:810
+#: gtk/gtkmain.c:806
 msgid "GTK+ Options"
 msgstr "GTK+ beállításai"
 
-#: gtk/gtkmain.c:810
+#: gtk/gtkmain.c:806
 msgid "Show GTK+ Options"
 msgstr "GTK+ beállítások megjelenítése"
 
@@ -2288,7 +1381,7 @@ msgstr "Z Shell"
 msgid "Cannot end process with pid %d: %s"
 msgstr "Nem fejeztethető be a(z) %d azonosítójú folyamat: %s"
 
-#: gtk/gtknotebook.c:4621 gtk/gtknotebook.c:7050
+#: gtk/gtknotebook.c:4631 gtk/gtknotebook.c:7060
 #, c-format
 msgid "Page %u"
 msgstr "%u. oldal"
@@ -2378,88 +1471,82 @@ msgstr "Mentés _mappába:"
 msgid "%s job #%d"
 msgstr "%s %d. feladata"
 
-#: gtk/gtkprintoperation.c:1687
+#: gtk/gtkprintoperation.c:1695
 msgctxt "print operation status"
 msgid "Initial state"
 msgstr "Kezdeti állapot"
 
-#: gtk/gtkprintoperation.c:1688
+#: gtk/gtkprintoperation.c:1696
 msgctxt "print operation status"
 msgid "Preparing to print"
 msgstr "Nyomtatás előkészítése"
 
-#: gtk/gtkprintoperation.c:1689
+#: gtk/gtkprintoperation.c:1697
 msgctxt "print operation status"
 msgid "Generating data"
 msgstr "Adatok előállítása"
 
-#: gtk/gtkprintoperation.c:1690
+#: gtk/gtkprintoperation.c:1698
 msgctxt "print operation status"
 msgid "Sending data"
 msgstr "Adatok küldése"
 
-#: gtk/gtkprintoperation.c:1691
+#: gtk/gtkprintoperation.c:1699
 msgctxt "print operation status"
 msgid "Waiting"
 msgstr "Várakozás"
 
 # fixme: jó ez így?
-#: gtk/gtkprintoperation.c:1692
+#: gtk/gtkprintoperation.c:1700
 msgctxt "print operation status"
 msgid "Blocking on issue"
 msgstr "Blokkolás probléma miatt"
 
-#: gtk/gtkprintoperation.c:1693
+#: gtk/gtkprintoperation.c:1701
 msgctxt "print operation status"
 msgid "Printing"
 msgstr "Nyomtatás"
 
-#: gtk/gtkprintoperation.c:1694
+#: gtk/gtkprintoperation.c:1702
 msgctxt "print operation status"
 msgid "Finished"
 msgstr "Befejeződött"
 
-#: gtk/gtkprintoperation.c:1695
+#: gtk/gtkprintoperation.c:1703
 msgctxt "print operation status"
 msgid "Finished with error"
 msgstr "Hibával fejeződött be"
 
-#: gtk/gtkprintoperation.c:2254
+#: gtk/gtkprintoperation.c:2270
 #, c-format
 msgid "Preparing %d"
 msgstr "%d előkészítése"
 
-#: gtk/gtkprintoperation.c:2256 gtk/gtkprintoperation.c:2875
+#: gtk/gtkprintoperation.c:2272 gtk/gtkprintoperation.c:2902
 #, c-format
 msgid "Preparing"
 msgstr "Előkészítés"
 
-#: gtk/gtkprintoperation.c:2259
+#: gtk/gtkprintoperation.c:2275
 #, c-format
 msgid "Printing %d"
 msgstr "%d nyomtatása"
 
-#: gtk/gtkprintoperation.c:2905
+#: gtk/gtkprintoperation.c:2932
 #, c-format
 msgid "Error creating print preview"
 msgstr "Hiba a nyomtatási előnézet létrehozásakor"
 
-#: gtk/gtkprintoperation.c:2908
+#: gtk/gtkprintoperation.c:2935
 #, c-format
 msgid "The most probable reason is that a temporary file could not be created."
 msgstr "A legvalószínűbb ok, hogy egy ideiglenes fájl nem hozható létre."
 
-#: gtk/gtkprintoperation-unix.c:297 gtk/gtkprintoperation-unix.c:314
-#, c-format
+#: gtk/gtkprintoperation-unix.c:297
 msgid "Error launching preview"
 msgstr "Hiba az előnézet indításakor"
 
-#: gtk/gtkprintoperation-unix.c:358
-#, c-format
-msgid "Error printing"
-msgstr "Nyomtatási hiba"
-
-#: gtk/gtkprintoperation-unix.c:494 gtk/gtkprintoperation-win32.c:1447
+#: gtk/gtkprintoperation-unix.c:470 gtk/gtkprintoperation-win32.c:1447
 msgid "Application"
 msgstr "Alkalmazás"
 
@@ -2473,7 +1560,7 @@ msgstr "Kifogyott a papír"
 
 #. Translators: this is a printer status.
 #: gtk/gtkprintoperation-win32.c:616
-#: modules/printbackends/cups/gtkprintbackendcups.c:1999
+#: modules/printbackends/cups/gtkprintbackendcups.c:1998
 msgid "Paused"
 msgstr "Szüneteltetve"
 
@@ -2600,42 +1687,42 @@ msgstr "Általános"
 #. * multiple pages on a sheet when printing
 #.
 #: gtk/gtkprintunixdialog.c:3010
-#: modules/printbackends/cups/gtkprintbackendcups.c:3509
+#: modules/printbackends/cups/gtkprintbackendcups.c:3508
 msgid "Left to right, top to bottom"
 msgstr "Balról jobbra, fentről le"
 
 #: gtk/gtkprintunixdialog.c:3010
-#: modules/printbackends/cups/gtkprintbackendcups.c:3509
+#: modules/printbackends/cups/gtkprintbackendcups.c:3508
 msgid "Left to right, bottom to top"
 msgstr "Balról jobbra, lentről fel"
 
 #: gtk/gtkprintunixdialog.c:3011
-#: modules/printbackends/cups/gtkprintbackendcups.c:3510
+#: modules/printbackends/cups/gtkprintbackendcups.c:3509
 msgid "Right to left, top to bottom"
 msgstr "Jobbról balra, fentről le"
 
 #: gtk/gtkprintunixdialog.c:3011
-#: modules/printbackends/cups/gtkprintbackendcups.c:3510
+#: modules/printbackends/cups/gtkprintbackendcups.c:3509
 msgid "Right to left, bottom to top"
 msgstr "Jobbról balra, lentről fel"
 
 #: gtk/gtkprintunixdialog.c:3012
-#: modules/printbackends/cups/gtkprintbackendcups.c:3511
+#: modules/printbackends/cups/gtkprintbackendcups.c:3510
 msgid "Top to bottom, left to right"
 msgstr "Fentről le, balról jobbra"
 
 #: gtk/gtkprintunixdialog.c:3012
-#: modules/printbackends/cups/gtkprintbackendcups.c:3511
+#: modules/printbackends/cups/gtkprintbackendcups.c:3510
 msgid "Top to bottom, right to left"
 msgstr "Fentről le, jobbról balra"
 
 #: gtk/gtkprintunixdialog.c:3013
-#: modules/printbackends/cups/gtkprintbackendcups.c:3512
+#: modules/printbackends/cups/gtkprintbackendcups.c:3511
 msgid "Bottom to top, left to right"
 msgstr "Lentről fel, balról jobbra"
 
 #: gtk/gtkprintunixdialog.c:3013
-#: modules/printbackends/cups/gtkprintbackendcups.c:3512
+#: modules/printbackends/cups/gtkprintbackendcups.c:3511
 msgid "Bottom to top, right to left"
 msgstr "Lentről fel, jobbról balra"
 
@@ -2643,7 +1730,7 @@ msgstr "Lentről fel, jobbról balra"
 #. * dialog that controls in what order multiple pages are arranged
 #.
 #: gtk/gtkprintunixdialog.c:3017 gtk/gtkprintunixdialog.c:3030
-#: modules/printbackends/cups/gtkprintbackendcups.c:3544
+#: modules/printbackends/cups/gtkprintbackendcups.c:3543
 msgid "Page Ordering"
 msgstr "Oldalsorrend"
 
@@ -4812,121 +3899,116 @@ msgstr "A nyomtató („%s”) nem érhető el."
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:1687
 #, c-format
-msgid "Printer '%s' may not be connected."
-msgstr "Lehet, hogy a nyomtató („%s”) nincs csatlakoztatva."
-
-#: modules/printbackends/cups/gtkprintbackendcups.c:1688
-#, c-format
 msgid "There is a problem on printer '%s'."
 msgstr "A nyomtató („%s”) problémát észlelt."
 
 #. Translators: this is a printer status.
-#: modules/printbackends/cups/gtkprintbackendcups.c:1996
+#: modules/printbackends/cups/gtkprintbackendcups.c:1995
 msgid "Paused ; Rejecting Jobs"
 msgstr "Szüneteltetve; feladatok visszautasítása"
 
 #. Translators: this is a printer status.
-#: modules/printbackends/cups/gtkprintbackendcups.c:2002
+#: modules/printbackends/cups/gtkprintbackendcups.c:2001
 msgid "Rejecting Jobs"
 msgstr "Feladatok visszautasítása"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2778
+#: modules/printbackends/cups/gtkprintbackendcups.c:2777
 msgid "Two Sided"
 msgstr "Kétoldalas"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2779
+#: modules/printbackends/cups/gtkprintbackendcups.c:2778
 msgid "Paper Type"
 msgstr "Papírtípus"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2780
+#: modules/printbackends/cups/gtkprintbackendcups.c:2779
 msgid "Paper Source"
 msgstr "Papírforrás"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2781
+#: modules/printbackends/cups/gtkprintbackendcups.c:2780
 msgid "Output Tray"
 msgstr "Kimeneti tálca"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2782
+#: modules/printbackends/cups/gtkprintbackendcups.c:2781
 msgid "Resolution"
 msgstr "Felbontás"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2783
+#: modules/printbackends/cups/gtkprintbackendcups.c:2782
 msgid "GhostScript pre-filtering"
 msgstr "GhostScript előszűrés"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2792
+#: modules/printbackends/cups/gtkprintbackendcups.c:2791
 msgid "One Sided"
 msgstr "Egyoldalas"
 
 #. Translators: this is an option of "Two Sided"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2794
+#: modules/printbackends/cups/gtkprintbackendcups.c:2793
 msgid "Long Edge (Standard)"
 msgstr "Hosszú él (szabványos)"
 
 #. Translators: this is an option of "Two Sided"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2796
+#: modules/printbackends/cups/gtkprintbackendcups.c:2795
 msgid "Short Edge (Flip)"
 msgstr "Rövid él (fordított)"
 
 #. Translators: this is an option of "Paper Source"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2798
-#: modules/printbackends/cups/gtkprintbackendcups.c:2800
-#: modules/printbackends/cups/gtkprintbackendcups.c:2808
+#: modules/printbackends/cups/gtkprintbackendcups.c:2797
+#: modules/printbackends/cups/gtkprintbackendcups.c:2799
+#: modules/printbackends/cups/gtkprintbackendcups.c:2807
 msgid "Auto Select"
 msgstr "Automatikus kiválasztás"
 
 #. Translators: this is an option of "Paper Source"
 #. Translators: this is an option of "Resolution"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2802
-#: modules/printbackends/cups/gtkprintbackendcups.c:2804
-#: modules/printbackends/cups/gtkprintbackendcups.c:2806
-#: modules/printbackends/cups/gtkprintbackendcups.c:2810
-#: modules/printbackends/cups/gtkprintbackendcups.c:3296
+#: modules/printbackends/cups/gtkprintbackendcups.c:2801
+#: modules/printbackends/cups/gtkprintbackendcups.c:2803
+#: modules/printbackends/cups/gtkprintbackendcups.c:2805
+#: modules/printbackends/cups/gtkprintbackendcups.c:2809
+#: modules/printbackends/cups/gtkprintbackendcups.c:3295
 msgid "Printer Default"
 msgstr "Nyomtató alapértelmezése"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2812
+#: modules/printbackends/cups/gtkprintbackendcups.c:2811
 msgid "Embed GhostScript fonts only"
 msgstr "Csak GhostScript betűkészletek beágyazása"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2814
+#: modules/printbackends/cups/gtkprintbackendcups.c:2813
 msgid "Convert to PS level 1"
 msgstr "Átalakítás 1. PS szintre"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2816
+#: modules/printbackends/cups/gtkprintbackendcups.c:2815
 msgid "Convert to PS level 2"
 msgstr "Átalakítás 2. PS szintre"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2818
+#: modules/printbackends/cups/gtkprintbackendcups.c:2817
 msgid "No pre-filtering"
 msgstr "Nincs előszűrés"
 
 #. Translators: "Miscellaneous" is the label for a button, that opens
 #. up an extra panel of settings in a print dialog.
-#: modules/printbackends/cups/gtkprintbackendcups.c:2827
+#: modules/printbackends/cups/gtkprintbackendcups.c:2826
 msgid "Miscellaneous"
 msgstr "Egyebek"
 
 #. Translators: These strings name the possible values of the
 #. * job priority option in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3504
+#: modules/printbackends/cups/gtkprintbackendcups.c:3503
 msgid "Urgent"
 msgstr "Sürgős"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3504
+#: modules/printbackends/cups/gtkprintbackendcups.c:3503
 msgid "High"
 msgstr "Magas"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3504
+#: modules/printbackends/cups/gtkprintbackendcups.c:3503
 msgid "Medium"
 msgstr "Közepes"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3504
+#: modules/printbackends/cups/gtkprintbackendcups.c:3503
 msgid "Low"
 msgstr "Alacsony"
 
@@ -4934,66 +4016,66 @@ msgstr "Alacsony"
 #. Translators, this string is used to label the pages-per-sheet option
 #. * in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3528
+#: modules/printbackends/cups/gtkprintbackendcups.c:3527
 msgid "Pages per Sheet"
 msgstr "Oldalak laponként"
 
 #. Translators, this string is used to label the job priority option
 #. * in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3565
+#: modules/printbackends/cups/gtkprintbackendcups.c:3564
 msgid "Job Priority"
 msgstr "Feladatprioritás"
 
 #. Translators, this string is used to label the billing info entry
 #. * in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3576
+#: modules/printbackends/cups/gtkprintbackendcups.c:3575
 msgid "Billing Info"
 msgstr "Fizetési információk"
 
 #. Translators, these strings are names for various 'standard' cover
 #. * pages that the printing system may support.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3591
+#: modules/printbackends/cups/gtkprintbackendcups.c:3590
 msgid "None"
 msgstr "Nincs"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3591
+#: modules/printbackends/cups/gtkprintbackendcups.c:3590
 msgid "Classified"
 msgstr "Nem nyilvános"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3591
+#: modules/printbackends/cups/gtkprintbackendcups.c:3590
 msgid "Confidential"
 msgstr "Bizalmas"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3591
+#: modules/printbackends/cups/gtkprintbackendcups.c:3590
 msgid "Secret"
 msgstr "Titkos"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3591
+#: modules/printbackends/cups/gtkprintbackendcups.c:3590
 msgid "Standard"
 msgstr "Szabványos"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3591
+#: modules/printbackends/cups/gtkprintbackendcups.c:3590
 msgid "Top Secret"
 msgstr "Szigorúan titkos"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3591
+#: modules/printbackends/cups/gtkprintbackendcups.c:3590
 msgid "Unclassified"
 msgstr "Nyilvános"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the front cover page.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3626
+#: modules/printbackends/cups/gtkprintbackendcups.c:3625
 msgid "Before"
 msgstr "Előtte"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the back cover page.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3641
+#: modules/printbackends/cups/gtkprintbackendcups.c:3640
 msgid "After"
 msgstr "Mögötte"
 
@@ -5001,14 +4083,14 @@ msgstr "Mögötte"
 #. * a print job is printed. Possible values are 'now', a specified time,
 #. * or 'on hold'
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3661
+#: modules/printbackends/cups/gtkprintbackendcups.c:3660
 msgid "Print at"
 msgstr "Nyomtatás ekkor:"
 
 #. Translators: this is the name of the option that allows the user
 #. * to specify a time when a print job will be printed.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3672
+#: modules/printbackends/cups/gtkprintbackendcups.c:3671
 msgid "Print at time"
 msgstr "Nyomtatás adott időben"
 
@@ -5016,7 +4098,7 @@ msgstr "Nyomtatás adott időben"
 #. * size. The two placeholders are replaced with the width and height
 #. * in points. E.g: "Custom 230.4x142.9"
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3707
+#: modules/printbackends/cups/gtkprintbackendcups.c:3706
 #, c-format
 msgid "Custom %sx%s"
 msgstr "Egyéni %sx%s"
@@ -5107,6 +4189,680 @@ msgstr "Nyomtatás tesztnyomtatóra"
 #, c-format
 msgid "Could not get information for file '%s': %s"
 msgstr "Nem lehet információt szerezni a(z) „%s” fájlról: %s"
+
+#: tests/testfilechooser.c:222
+#, c-format
+msgid "Failed to open file '%s': %s"
+msgstr "Nem sikerült megnyitni a(z) „%s” fájlt: %s"
+
+#: tests/testfilechooser.c:267
+#, c-format
+msgid ""
+"Failed to load image '%s': reason not known, probably a corrupt image file"
+msgstr ""
+"Nem sikerült betölteni a(z) „%s” képet: ok ismeretlen, valószínűleg sérült a "
+"képfájl"
+
+#~ msgid "Image file '%s' contains no data"
+#~ msgstr "A(z) „%s” képfájl nem tartalmaz adatokat"
+
+#~ msgid ""
+#~ "Failed to load animation '%s': reason not known, probably a corrupt "
+#~ "animation file"
+#~ msgstr ""
+#~ "Nem sikerült betölteni a(z) „%s” animációt: ok ismeretlen, valószínűleg "
+#~ "sérült az animációfájl"
+
+#~ msgid "Unable to load image-loading module: %s: %s"
+#~ msgstr "Nem lehet betölteni a képbetöltő modult: %s: %s"
+
+#~ msgid ""
+#~ "Image-loading module %s does not export the proper interface; perhaps "
+#~ "it's from a different GTK version?"
+#~ msgstr ""
+#~ "A(z) %s képbetöltő-modul nem exportálja a megfelelő felületet, talán egy "
+#~ "másik GTK verzióból van?"
+
+#~ msgid "Image type '%s' is not supported"
+#~ msgstr "A(z) „%s” képtípus nem támogatott"
+
+#~ msgid "Couldn't recognize the image file format for file '%s'"
+#~ msgstr "Nem lehet azonosítani a(z) „%s” képfájl formátumát"
+
+#~ msgid "Unrecognized image file format"
+#~ msgstr "Azonosíthatatlan képfájl formátum"
+
+#~ msgid "Failed to load image '%s': %s"
+#~ msgstr "Nem sikerült betölteni a(z) „%s” képet: %s"
+
+#~ msgid "Error writing to image file: %s"
+#~ msgstr "Hiba képfájlba íráskor: %s"
+
+#~ msgid ""
+#~ "This build of gdk-pixbuf does not support saving the image format: %s"
+#~ msgstr ""
+#~ "A gdk-pixbuf ezen változatába nincs befordítva a(z) %s képformátumba való "
+#~ "mentés támogatása"
+
+#~ msgid "Insufficient memory to save image to callback"
+#~ msgstr "Nincs elég memória a kép visszahíváshoz mentéséhez"
+
+#~ msgid "Failed to open temporary file"
+#~ msgstr "Nem sikerült megnyitni az átmeneti fájlt"
+
+#~ msgid "Failed to read from temporary file"
+#~ msgstr "Nem sikerült olvasni az átmeneti fájlból"
+
+#~ msgid "Failed to open '%s' for writing: %s"
+#~ msgstr "„%s” megnyitása írásra sikertelen: %s"
+
+#~ msgid ""
+#~ "Failed to close '%s' while writing image, all data may not have been "
+#~ "saved: %s"
+#~ msgstr ""
+#~ "A(z) „%s” nem zárható le a kép írása közben, lehet, hogy nem sikerült "
+#~ "minden adatot elmenteni: %s"
+
+#~ msgid "Insufficient memory to save image into a buffer"
+#~ msgstr "Nincs elég memória a kép pufferbe mentéséhez"
+
+#~ msgid "Error writing to image stream"
+#~ msgstr "Hiba képfolyamba íráskor"
+
+#~ msgid ""
+#~ "Internal error: Image loader module '%s' failed to complete an operation, "
+#~ "but didn't give a reason for the failure"
+#~ msgstr ""
+#~ "Belső hiba: A(z) %s képbetöltő modul nem tudott befejezni egy műveletet, "
+#~ "de nem adta meg a hiba okát"
+
+#~ msgid "Incremental loading of image type '%s' is not supported"
+#~ msgstr "A(z) %s típusú képek növekményes betöltése nem támogatott"
+
+#~ msgid "Image header corrupt"
+#~ msgstr "Hibás képfejléc"
+
+#~ msgid "Image format unknown"
+#~ msgstr "Ismeretlen képformátum"
+
+#~ msgid "Image pixel data corrupt"
+#~ msgstr "A kép képpontadata sérült"
+
+#~ msgid "failed to allocate image buffer of %u byte"
+#~ msgid_plural "failed to allocate image buffer of %u bytes"
+#~ msgstr[0] "nem sikerült %u bájtos képpuffert lefoglalni"
+#~ msgstr[1] "nem sikerült %u bájtos képpuffert lefoglalni"
+
+#~ msgid "Unexpected icon chunk in animation"
+#~ msgstr "Váratlan ikondarab az animációban"
+
+#~ msgid "Unsupported animation type"
+#~ msgstr "Nem támogatott animációtípus"
+
+#~ msgid "Invalid header in animation"
+#~ msgstr "Érvénytelen fejléc az animációban"
+
+#~ msgid "Not enough memory to load animation"
+#~ msgstr "Nincs elég memória az animáció betöltéséhez"
+
+#~ msgid "Malformed chunk in animation"
+#~ msgstr "Hibás részlet az animációban"
+
+#~ msgid "The ANI image format"
+#~ msgstr "ANI képformátum"
+
+#~ msgid "BMP image has bogus header data"
+#~ msgstr "A BMP-kép fejlécadata hibás"
+
+#~ msgid "Not enough memory to load bitmap image"
+#~ msgstr "Nincs elég memória a kép betöltéséhez"
+
+#~ msgid "BMP image has unsupported header size"
+#~ msgstr "A BMP-kép fejlécmérete nem támogatott"
+
+#~ msgid "Topdown BMP images cannot be compressed"
+#~ msgstr "A fentről-lefelé BMP képek nem tömöríthetőek"
+
+#~ msgid "Premature end-of-file encountered"
+#~ msgstr "A fájl végét túl korán értem el"
+
+#~ msgid "Couldn't allocate memory for saving BMP file"
+#~ msgstr "Nem lehet memóriát foglalni a BMP fájl mentéséhez"
+
+#~ msgid "Couldn't write to BMP file"
+#~ msgstr "Nem sikerült írni a BMP fájlba"
+
+#~ msgid "The BMP image format"
+#~ msgstr "BMP képformátum"
+
+#~ msgid "Failure reading GIF: %s"
+#~ msgstr "Hiba a GIF olvasásánál: %s"
+
+#~ msgid "GIF file was missing some data (perhaps it was truncated somehow?)"
+#~ msgstr ""
+#~ "A GIF fájl egyes adatai hiányoznak (lehet, hogy csonkolódott a fájl?)"
+
+#~ msgid "Internal error in the GIF loader (%s)"
+#~ msgstr "Belső hiba a GIF betöltőben (%s)"
+
+#~ msgid "Stack overflow"
+#~ msgstr "Veremtúlcsordulás"
+
+#~ msgid "GIF image loader cannot understand this image."
+#~ msgstr "A GIF-képbetöltő nem tudja értelmezni ezt a képet."
+
+#~ msgid "Bad code encountered"
+#~ msgstr "Hibás kód érkezett"
+
+#~ msgid "Circular table entry in GIF file"
+#~ msgstr "Körkörös táblázat bejegyzés a GIF fájlban"
+
+#~ msgid "Not enough memory to load GIF file"
+#~ msgstr "Nincs elég memória a GIF-fájl betöltéséhez"
+
+#~ msgid "Not enough memory to composite a frame in GIF file"
+#~ msgstr "Nincs elég memória a keretnek a GIF-fájlban való kiegészítéséhez"
+
+#~ msgid "GIF image is corrupt (incorrect LZW compression)"
+#~ msgstr "A GIF-kép hibás (helytelen LZW-tömörítés)"
+
+#~ msgid "File does not appear to be a GIF file"
+#~ msgstr "A fájl nem tűnik GIF formátumúnak"
+
+#~ msgid "Version %s of the GIF file format is not supported"
+#~ msgstr "A %s verziójú GIF formátum nincs támogatva"
+
+#~ msgid ""
+#~ "GIF image has no global colormap, and a frame inside it has no local "
+#~ "colormap."
+#~ msgstr ""
+#~ "A GIF képnek nincs globális színtérképe, és a benne lévő keretnek sincs "
+#~ "lokális színtérképe."
+
+#~ msgid "GIF image was truncated or incomplete."
+#~ msgstr "A GIF-kép csonkolódott vagy nem teljes."
+
+#~ msgid "The GIF image format"
+#~ msgstr "GIF képformátum"
+
+#~ msgid "Invalid header in icon"
+#~ msgstr "Érvénytelen fejléc az ikonban"
+
+#~ msgid "Not enough memory to load icon"
+#~ msgstr "Nincs elég memória az ikon betöltéséhez"
+
+#~ msgid "Icon has zero width"
+#~ msgstr "Az ikon szélessége nulla"
+
+#~ msgid "Icon has zero height"
+#~ msgstr "Az ikon magassága nulla"
+
+#~ msgid "Compressed icons are not supported"
+#~ msgstr "Tömörített ikonok nincsenek támogatva"
+
+#~ msgid "Unsupported icon type"
+#~ msgstr "Nem támogatott ikontípus"
+
+#~ msgid "Not enough memory to load ICO file"
+#~ msgstr "Nincs elég memória az ICO-fájl betöltéséhez"
+
+#~ msgid "Image too large to be saved as ICO"
+#~ msgstr "A kép túl nagy ICO formátumba mentéshez"
+
+#~ msgid "Cursor hotspot outside image"
+#~ msgstr "A kurzor aktív pontja a képen kívül helyezkedik el"
+
+#~ msgid "Unsupported depth for ICO file: %d"
+#~ msgstr "Nem támogatott mélység ICO-fájlnál: %d"
+
+#~ msgid "The ICO image format"
+#~ msgstr "ICO képformátum"
+
+#~ msgid "Error reading ICNS image: %s"
+#~ msgstr "Hiba az ICNS képfájl olvasásakor: %s"
+
+#~ msgid "Could not decode ICNS file"
+#~ msgstr "Nem sikerült visszafejteni az ICNS fájlt"
+
+#~ msgid "The ICNS image format"
+#~ msgstr "ICNS képformátum"
+
+#~ msgid "Couldn't allocate memory for stream"
+#~ msgstr "Nem sikerült memóriát kiosztani az adatfolyamhoz"
+
+#~ msgid "Couldn't decode image"
+#~ msgstr "Nem sikerült visszafejteni a képet"
+
+#~ msgid "Transformed JPEG2000 has zero width or height"
+#~ msgstr "Az átalakított JPEG2000 szélessége vagy magassága nulla"
+
+#~ msgid "Image type currently not supported"
+#~ msgstr "A képtípus nem támogatott"
+
+#~ msgid "Couldn't allocate memory for color profile"
+#~ msgstr "Nem lehet memóriát foglalni a színprofilhoz"
+
+#~ msgid "Insufficient memory to open JPEG 2000 file"
+#~ msgstr "Nincs elég memória a JPEG 2000 fájl megnyitásához"
+
+#~ msgid "Couldn't allocate memory to buffer image data"
+#~ msgstr "Nem lehet memóriát foglalni a képadatok számára"
+
+#~ msgid "The JPEG 2000 image format"
+#~ msgstr "JPEG 2000 képformátum"
+
+#~ msgid "Error interpreting JPEG image file (%s)"
+#~ msgstr "Hiba a JPEG képfájl értelmezésekor (%s)"
+
+#~ msgid ""
+#~ "Insufficient memory to load image, try exiting some applications to free "
+#~ "memory"
+#~ msgstr ""
+#~ "Nincs elég memória a kép betöltéséhez, memória felszabadításához "
+#~ "próbáljon meg kilépni néhány alkalmazásból"
+
+#~ msgid "Unsupported JPEG color space (%s)"
+#~ msgstr "Nem támogatott JPEG-színtér (%s)"
+
+#~ msgid "Couldn't allocate memory for loading JPEG file"
+#~ msgstr "Nem lehet memóriát kiosztani a JPEG fájl betöltéséhez"
+
+#~ msgid "Transformed JPEG has zero width or height."
+#~ msgstr "Az átalakított JPEG szélessége vagy magassága nulla."
+
+#~ msgid ""
+#~ "JPEG quality must be a value between 0 and 100; value '%s' could not be "
+#~ "parsed."
+#~ msgstr ""
+#~ "A JPEG-minőség értékének 0 és 100 között kell lennie, a(z) „%s” értéket "
+#~ "nem lehet feldolgozni."
+
+#~ msgid ""
+#~ "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
+#~ msgstr ""
+#~ "A JPEG-minőség értékének 0 és 100 között kell lennie, a(z) „%d” érték nem "
+#~ "megengedett."
+
+#~ msgid "The JPEG image format"
+#~ msgstr "JPEG képformátum"
+
+#~ msgid "Couldn't allocate memory for header"
+#~ msgstr "Nem lehet memóriát kiosztani a fejléchez"
+
+#~ msgid "Couldn't allocate memory for context buffer"
+#~ msgstr "Nem lehet memóriát foglalni a kontextus-puffer számára"
+
+#~ msgid "Image has invalid width and/or height"
+#~ msgstr "A kép szélessége és/vagy magassága érvénytelen"
+
+#~ msgid "Image has unsupported bpp"
+#~ msgstr "A kép képpontonkénti bitjeinek száma nem támogatott"
+
+#~ msgid "Image has unsupported number of %d-bit planes"
+#~ msgstr "Nem támogatott számú %d bites színsík van a képben"
+
+#~ msgid "Couldn't create new pixbuf"
+#~ msgstr "Nem lehet létrehozni új képpuffert"
+
+#~ msgid "Couldn't allocate memory for line data"
+#~ msgstr "Nem lehet memóriát foglalni a vonaladatok számára"
+
+#~ msgid "Couldn't allocate memory for paletted data"
+#~ msgstr "Nem lehet memóriát foglalni a palettaadatok számára"
+
+#~ msgid "Didn't get all lines of PCX image"
+#~ msgstr "Nem található a PCX-kép minden sora"
+
+#~ msgid "No palette found at end of PCX data"
+#~ msgstr "Nem található paletta a PCX-adat végén"
+
+#~ msgid "The PCX image format"
+#~ msgstr "PCX képformátum"
+
+#~ msgid "Bits per channel of PNG image is invalid."
+#~ msgstr "A PNG-kép csatornánkénti bitjeinek száma érvénytelen."
+
+#~ msgid "Transformed PNG has zero width or height."
+#~ msgstr "Az átalakított PNG szélessége vagy magassága nulla."
+
+#~ msgid "Bits per channel of transformed PNG is not 8."
+#~ msgstr "Az átalakított PNG csatornánkénti bitjeinek száma nem 8."
+
+#~ msgid "Transformed PNG not RGB or RGBA."
+#~ msgstr "Az átalakított PNG nem RGB vagy RGBA módú."
+
+#~ msgid "Transformed PNG has unsupported number of channels, must be 3 or 4."
+#~ msgstr ""
+#~ "Az átalakított PNG csatornánkénti bitjeinek száma nem támogatott, 3-nak "
+#~ "vagy 4-nek kell lennie."
+
+#~ msgid "Fatal error in PNG image file: %s"
+#~ msgstr "Végzetes hiba a PNG képfájlban: %s"
+
+#~ msgid "Insufficient memory to load PNG file"
+#~ msgstr "Nincs elég memória a PNG fájl betöltéséhez"
+
+#~ msgid ""
+#~ "Insufficient memory to store a %ld by %ld image; try exiting some "
+#~ "applications to reduce memory usage"
+#~ msgstr ""
+#~ "Nincs elég memória egy %ld x %ld méretű kép betöltéséhez, próbáljon meg "
+#~ "kilépni néhány alkalmazásból a memóriahasználat csökkentéséhez"
+
+#~ msgid "Fatal error reading PNG image file"
+#~ msgstr "Végzetes hiba a PNG képfájl olvasásakor"
+
+#~ msgid "Fatal error reading PNG image file: %s"
+#~ msgstr "Végzetes hiba a PNG képfájl olvasásakor: %s"
+
+#~ msgid ""
+#~ "Keys for PNG text chunks must have at least 1 and at most 79 characters."
+#~ msgstr ""
+#~ "A PNG szöveges darabok kulcsainak legalább 1 és legfeljebb 79 karakterből "
+#~ "kell állniuk."
+
+#~ msgid "Keys for PNG text chunks must be ASCII characters."
+#~ msgstr "A PNG szöveges darabok kulcsainak ASCII karaktereknek kell lenniük."
+
+#~ msgid "Color profile has invalid length %d."
+#~ msgstr "A színprofil hossza (%d) érvénytelen."
+
+#~ msgid ""
+#~ "PNG compression level must be a value between 0 and 9; value '%s' could "
+#~ "not be parsed."
+#~ msgstr ""
+#~ "A PNG-tömörítés értékének 0 és 9 között kell lennie, a(z) „%s” értéket "
+#~ "nem lehet feldolgozni."
+
+#~ msgid ""
+#~ "PNG compression level must be a value between 0 and 9; value '%d' is not "
+#~ "allowed."
+#~ msgstr ""
+#~ "A PNG-tömörítés értékének 0 és 9 között kell lennie, a(z) „%d” érték nem "
+#~ "engedélyezett."
+
+#~ msgid ""
+#~ "Value for PNG text chunk %s cannot be converted to ISO-8859-1 encoding."
+#~ msgstr ""
+#~ "%s PNG szöveges darab értéke nem konvertálható ISO-8859-1 kódolásúra."
+
+#~ msgid "The PNG image format"
+#~ msgstr "PNG képformátum"
+
+#~ msgid "PNM loader expected to find an integer, but didn't"
+#~ msgstr "A PNM-betöltő egy egészet várt, de nem talált"
+
+#~ msgid "PNM file has an incorrect initial byte"
+#~ msgstr "A PNM-fájl kezdő bájtja helytelen"
+
+#~ msgid "PNM file is not in a recognized PNM subformat"
+#~ msgstr "A PNM-fájl nincs felismert PNM-alformátumban"
+
+#~ msgid "PNM file has an image width of 0"
+#~ msgstr "A PNM-fájl képszélessége 0"
+
+#~ msgid "PNM file has an image height of 0"
+#~ msgstr "A PNM-fájl képmagassága 0"
+
+#~ msgid "Maximum color value in PNM file is 0"
+#~ msgstr "A PNM-fájlban a maximális színérték 0"
+
+#~ msgid "Maximum color value in PNM file is too large"
+#~ msgstr "A PNM-fájlban a maximális színérték túl nagy"
+
+#~ msgid "Raw PNM image type is invalid"
+#~ msgstr "A nyers PNM-képtípus érvénytelen"
+
+#~ msgid "PNM image loader does not support this PNM subformat"
+#~ msgstr "A PNM-képbetöltő nem támogatja ezt a PNM-alformátumot"
+
+#~ msgid "Raw PNM formats require exactly one whitespace before sample data"
+#~ msgstr ""
+#~ "A nyers PNM-formátumok pontosan egy üreshely-karaktert igényelnek a "
+#~ "mintaadatok előtt"
+
+#~ msgid "Cannot allocate memory for loading PNM image"
+#~ msgstr "Nem lehet memóriát kiosztani a PNM-kép betöltéséhez"
+
+#~ msgid "Insufficient memory to load PNM context struct"
+#~ msgstr "Nincs elég memória a PNM kontextusstruktúrának"
+
+#~ msgid "Unexpected end of PNM image data"
+#~ msgstr "A PNM-képadatnak váratlanul vége"
+
+#~ msgid "Insufficient memory to load PNM file"
+#~ msgstr "Nincs elég memória a PNM fájl betöltéséhez"
+
+#~ msgid "The PNM/PBM/PGM/PPM image format family"
+#~ msgstr "A PNM/PBM/PGM/PPM képformátum család"
+
+#~ msgid "Input file descriptor is NULL."
+#~ msgstr "A bemeneti fájl leírója NULL."
+
+#~ msgid "Failed to read QTIF header"
+#~ msgstr "A QTIF fejléc olvasása meghiúsult"
+
+#~ msgid "QTIF atom size too large (%d bytes)"
+#~ msgstr "A QTIF atomméret túl nagy (%d bájt)"
+
+#~ msgid "Failed to allocate %d bytes for file read buffer"
+#~ msgstr "Nem sikerült %d bájt fájlolvasási puffert lefoglalni"
+
+#~ msgid "File error when reading QTIF atom: %s"
+#~ msgstr "Fájlhiba a QTIF atom olvasásakor: %s"
+
+#~ msgid "Failed to skip the next %d bytes with seek()."
+#~ msgstr "A következő %d bájt átugrása a seek() hívással meghiúsult."
+
+#~ msgid "Failed to allocate QTIF context structure."
+#~ msgstr "Nem sikerült lefoglalni a QTIF kontextusstruktúrát."
+
+#~ msgid "Failed to create GdkPixbufLoader object."
+#~ msgstr "A GdkPixbufLoader objektum létrehozása meghiúsult."
+
+#~ msgid "Failed to find an image data atom."
+#~ msgstr "Nem található képadat atom."
+
+#~ msgid "The QTIF image format"
+#~ msgstr "A QTIF képformátum"
+
+#~ msgid "RAS image has bogus header data"
+#~ msgstr "A RAS-kép fejlécadata hibás"
+
+#~ msgid "RAS image has unknown type"
+#~ msgstr "A RAS-kép típusa ismeretlen"
+
+#~ msgid "unsupported RAS image variation"
+#~ msgstr "nem támogatott RAS-képváltozat"
+
+#~ msgid "Not enough memory to load RAS image"
+#~ msgstr "Nincs elég memória a RAS-kép betöltéséhez"
+
+#~ msgid "The Sun raster image format"
+#~ msgstr "Sun raster képformátum"
+
+#~ msgid "Cannot allocate memory for IOBuffer struct"
+#~ msgstr "Nem lehet memóriát kiosztani az IOBuffer-struktúrához"
+
+#~ msgid "Cannot allocate memory for IOBuffer data"
+#~ msgstr "Nem lehet memóriát kiosztani az IOBuffer-adathoz"
+
+#~ msgid "Cannot realloc IOBuffer data"
+#~ msgstr "Nem lehet újra kiosztani az IOBuffer-adatot"
+
+#~ msgid "Cannot allocate temporary IOBuffer data"
+#~ msgstr "Nem lehet kiosztani az átmeneti IOBuffer-adatot"
+
+#~ msgid "Cannot allocate new pixbuf"
+#~ msgstr "Nem lehet lefoglalni új képpuffert"
+
+#~ msgid "Image is corrupted or truncated"
+#~ msgstr "A kép sérült vagy csonkolódott"
+
+#~ msgid "Cannot allocate colormap structure"
+#~ msgstr "Nem lehet kiosztani színtérkép struktúrát"
+
+#~ msgid "Cannot allocate colormap entries"
+#~ msgstr "Nem lehet kiosztani színtérkép bejegyzéseket"
+
+#~ msgid "Unexpected bitdepth for colormap entries"
+#~ msgstr "Váratlan bitmélység a színtérkép-bejegyzésekhez"
+
+#~ msgid "Cannot allocate TGA header memory"
+#~ msgstr "Nem lehet kiosztani TGA-fejlécmemóriát"
+
+#~ msgid "TGA image has invalid dimensions"
+#~ msgstr "A TGA-kép mérete érvénytelen"
+
+#~ msgid "TGA image type not supported"
+#~ msgstr "A TGA képformátum nem támogatott"
+
+#~ msgid "Cannot allocate memory for TGA context struct"
+#~ msgstr "Nem lehet memóriát lefoglalni a TGA kontextusstruktúrának"
+
+#~ msgid "Excess data in file"
+#~ msgstr "Többletadat a fájlban"
+
+#~ msgid "The Targa image format"
+#~ msgstr "Targa képformátum"
+
+#~ msgid "Could not get image width (bad TIFF file)"
+#~ msgstr "Nem lehet megszerezni a kép szélességét (hibás TIFF fájl)"
+
+#~ msgid "Could not get image height (bad TIFF file)"
+#~ msgstr "Nem lehet megszerezni a kép magasságát (hibás TIFF fájl)"
+
+#~ msgid "Width or height of TIFF image is zero"
+#~ msgstr "A TIFF-kép szélessége vagy magassága nulla"
+
+#~ msgid "Dimensions of TIFF image too large"
+#~ msgstr "A TGA-kép mérete túl nagy"
+
+#~ msgid "Insufficient memory to open TIFF file"
+#~ msgstr "Nincs elég memória a TIFF fájl megnyitásához"
+
+#~ msgid "Failed to load RGB data from TIFF file"
+#~ msgstr "RGB-adat betöltése a TIFF-fájlból sikertelen"
+
+#~ msgid "Failed to open TIFF image"
+#~ msgstr "Nem sikerült megnyitni a TIFF képet"
+
+#~ msgid "TIFFClose operation failed"
+#~ msgstr "A TIFFClose művelet sikertelen"
+
+#~ msgid "Failed to load TIFF image"
+#~ msgstr "Nem sikerült betölteni a TIFF képet"
+
+#~ msgid "Failed to save TIFF image"
+#~ msgstr "Nem sikerült menteni a TIFF képet"
+
+#~ msgid "TIFF compression doesn't refer to a valid codec."
+#~ msgstr "A TIFF tömörítés nem érvényes kodekre hivatkozik."
+
+#~ msgid "Failed to write TIFF data"
+#~ msgstr "Nem sikerült kiírni a TIFF adatokat"
+
+#~ msgid "Couldn't write to TIFF file"
+#~ msgstr "Nem sikerült írni a TIFF fájlba"
+
+#~ msgid "The TIFF image format"
+#~ msgstr "TIFF képformátum"
+
+#~ msgid "Image has zero width"
+#~ msgstr "A kép szélessége nulla"
+
+#~ msgid "Image has zero height"
+#~ msgstr "A kép magassága nulla"
+
+#~ msgid "Not enough memory to load image"
+#~ msgstr "Nincs elég memória a kép betöltéséhez"
+
+#~ msgid "Couldn't save the rest"
+#~ msgstr "Nem lehet menteni a többit"
+
+#~ msgid "The WBMP image format"
+#~ msgstr "WBMP képformátum"
+
+#~ msgid "Invalid XBM file"
+#~ msgstr "Érvénytelen XBM-fájl"
+
+#~ msgid "Insufficient memory to load XBM image file"
+#~ msgstr "Nincs elég memória az XBM képfájl betöltéséhez"
+
+#~ msgid "Failed to write to temporary file when loading XBM image"
+#~ msgstr "Átmeneti fájlba írás az XBM-kép betöltésekor sikertelen"
+
+#~ msgid "The XBM image format"
+#~ msgstr "XBM képformátum"
+
+#~ msgid "No XPM header found"
+#~ msgstr "Nem található az XPM-fejléc"
+
+#~ msgid "Invalid XPM header"
+#~ msgstr "Érvénytelen XPM-fejléc"
+
+#~ msgid "XPM file has image width <= 0"
+#~ msgstr "Az XPM-fájl képszélessége <= 0"
+
+#~ msgid "XPM file has image height <= 0"
+#~ msgstr "Az XPM-fájl képmagassága <= 0"
+
+#~ msgid "XPM has invalid number of chars per pixel"
+#~ msgstr "Az XPM-fájl képpontonkénti karaktereinek száma érvénytelen"
+
+#~ msgid "XPM file has invalid number of colors"
+#~ msgstr "Az XPM-fájl színeinek száma érvénytelen"
+
+#~ msgid "Cannot allocate memory for loading XPM image"
+#~ msgstr "Nem lehet memóriát kiosztani az XPM-kép betöltéséhez"
+
+#~ msgid "Cannot read XPM colormap"
+#~ msgstr "Nem lehet olvasni az XPM-színtérképet"
+
+#~ msgid "Failed to write to temporary file when loading XPM image"
+#~ msgstr "Átmeneti fájlba írás az XPM-kép betöltésekor sikertelen"
+
+#~ msgid "The XPM image format"
+#~ msgstr "XPM képformátum"
+
+#~ msgid "The EMF image format"
+#~ msgstr "EMF képformátum"
+
+#~ msgid "Could not allocate memory: %s"
+#~ msgstr "Nem lehet memóriát foglalni: %s"
+
+#~ msgid "Could not create stream: %s"
+#~ msgstr "Nem hozható létre adatfolyam: %s"
+
+#~ msgid "Could not seek stream: %s"
+#~ msgstr "Nem lehet pozicionálni az adatfolyamban: %s"
+
+#~ msgid "Could not read from stream: %s"
+#~ msgstr "Nem lehet olvasni az adatfolyamból: %s"
+
+#~ msgid "Couldn't load bitmap"
+#~ msgstr "Nem lehet betölteni a bitképet"
+
+#~ msgid "Couldn't load metafile"
+#~ msgstr "Nem lehet betölteni a metafájlt"
+
+#~ msgid "Unsupported image format for GDI+"
+#~ msgstr "Nem támogatott képformátum a GDI+-hoz"
+
+#~ msgid "Couldn't save"
+#~ msgstr "Nem lehet menteni"
+
+#~ msgid "The WMF image format"
+#~ msgstr "WMF képformátum"
+
+#~ msgid "\"Deepness\" of the color."
+#~ msgstr "A szín telítettsége."
+
+#~ msgid "Error printing"
+#~ msgstr "Nyomtatási hiba"
+
+#~ msgid "Printer '%s' may not be connected."
+#~ msgstr "Lehet, hogy a nyomtató („%s”) nincs csatlakoztatva."
 
 #~ msgid "Folders"
 #~ msgstr "Mappák"

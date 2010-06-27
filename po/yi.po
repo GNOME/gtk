@@ -6,10 +6,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-05-25 20:10-0400\n"
+"POT-Creation-Date: 2010-06-26 23:16-0400\n"
 "PO-Revision-Date: 2003-02-11\n"
 "Last-Translator: Raphael Finkel <raphael@cs.uky.edu>\n"
 "Language-Team: None <>\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -74,7 +75,7 @@ msgstr ""
 #. Placeholder in --gdk-no-debug=FLAGS in --help output
 #. Placeholder in --gtk-debug=FLAGS in --help output
 #. Placeholder in --gtk-no-debug=FLAGS in --help output
-#: gdk/gdk.c:165 gdk/gdk.c:168 gtk/gtkmain.c:454 gtk/gtkmain.c:457
+#: gdk/gdk.c:165 gdk/gdk.c:168 gtk/gtkmain.c:439 gtk/gtkmain.c:442
 msgid "FLAGS"
 msgstr ""
 
@@ -287,970 +288,6 @@ msgstr "מעק אָפּ"
 msgctxt "keyboard label"
 msgid "Delete"
 msgstr "מעק אָפּ"
-
-#: gdk-pixbuf/gdk-pixbuf-animation.c:133 gdk-pixbuf/gdk-pixbuf-io.c:982
-#: gdk-pixbuf/gdk-pixbuf-io.c:1242 tests/testfilechooser.c:222
-#, c-format
-msgid "Failed to open file '%s': %s"
-msgstr "ניט געקענט עפֿענען טעקע '%s': %s"
-
-#: gdk-pixbuf/gdk-pixbuf-animation.c:146 gdk-pixbuf/gdk-pixbuf-io.c:994
-#, c-format
-msgid "Image file '%s' contains no data"
-msgstr "בילדטעקע '%s' האָט קײן דאַטן ניט"
-
-#: gdk-pixbuf/gdk-pixbuf-animation.c:188 gdk-pixbuf/gdk-pixbuf-io.c:1030
-#: gdk-pixbuf/gdk-pixbuf-io.c:1294 tests/testfilechooser.c:267
-#, c-format
-msgid ""
-"Failed to load image '%s': reason not known, probably a corrupt image file"
-msgstr ""
-"ניט געקענט אַרײַנצושטעלן בילד '%s' צוליב אומבאַקאַנטע סיבות, מסתּמא אַ קאָרומפּירטע "
-"בילדטעקע"
-
-#: gdk-pixbuf/gdk-pixbuf-animation.c:221
-#, c-format
-msgid ""
-"Failed to load animation '%s': reason not known, probably a corrupt "
-"animation file"
-msgstr ""
-"ניט געקענט אַרײַנצושטעלן אַנימאַציע '%s' צוליב אומבאַקאַנטע סיבות, מסתּמא אַ "
-"קאָרומפּירטע אַנימאַציע טעקע"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:715
-#, c-format
-msgid "Unable to load image-loading module: %s: %s"
-msgstr "ניט געקענט אַרײַנצושטעלן בילד־אַרײַנשטעל מאָדול: %s: %s"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:730
-#, c-format
-msgid ""
-"Image-loading module %s does not export the proper interface; perhaps it's "
-"from a different GTK version?"
-msgstr ""
-"בילד־אַרײַנשטעל מאָדול %s עקספּאָרטירט ניט דעם פּאַסיקן צובינד; אפֿשר פֿון אַ צװײטע "
-"GTK װערסיע?"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:739 gdk-pixbuf/gdk-pixbuf-io.c:790
-#, c-format
-msgid "Image type '%s' is not supported"
-msgstr "בילד־סאָרט '%s' ניט געשטיצט"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:863
-#, c-format
-msgid "Couldn't recognize the image file format for file '%s'"
-msgstr "ניט געקענט דערקענען בילד־טעקע פֿאָרמאַטירונג אין טעקע '%s'"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:871
-msgid "Unrecognized image file format"
-msgstr "ניט דערקענט בילד־טעקע פֿאָרמאַטירונג"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:1039
-#, c-format
-msgid "Failed to load image '%s': %s"
-msgstr "ניט געקענט אַרײַנשטעלן בילד '%s': %s"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:1673 gdk-pixbuf/io-gdip-utils.c:961
-#, fuzzy, c-format
-msgid "Error writing to image file: %s"
-msgstr "טעות אין באַשײדן JPEG בילדטעקע (%s)"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:1718 gdk-pixbuf/gdk-pixbuf-io.c:1848
-#, c-format
-msgid "This build of gdk-pixbuf does not support saving the image format: %s"
-msgstr ""
-"דער געבױ פֿון gdk-pixbuf שטיצט ניט אונטער אױפֿהיט פֿון בילד פֿאָרמאַטירונג: %s"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:1752
-#, fuzzy
-msgid "Insufficient memory to save image to callback"
-msgstr "ניט גענוג זכּרון אַרײַנשטעלן XBM בילדטעקע"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:1765
-#, fuzzy
-msgid "Failed to open temporary file"
-msgstr "דורכפֿאַל אין עפֿענען TIFF בילד"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:1791
-#, fuzzy
-msgid "Failed to read from temporary file"
-msgstr "דורכפֿאַל אין שרײַבן צײַטװײַליקע טעקע בשעת אַרײַנשטעלן XBM בילד"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:2044
-#, c-format
-msgid "Failed to open '%s' for writing: %s"
-msgstr "ניט געקענט עפֿענען '%s' צו שרײַבן: %s"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:2070
-#, c-format
-msgid ""
-"Failed to close '%s' while writing image, all data may not have been saved: %"
-"s"
-msgstr ""
-"ניט געקענט פֿאַרמאַכן '%s' בשעת שרײַבן די בילד; קען זײַן אַז ניט אױפֿגעהיט אַלע "
-"דאַטן: %s"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:2290 gdk-pixbuf/gdk-pixbuf-io.c:2341
-#, fuzzy
-msgid "Insufficient memory to save image into a buffer"
-msgstr "ניט גענוג זכּרון אַרײַנשטעלן XBM בילדטעקע"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:2387
-#, fuzzy
-msgid "Error writing to image stream"
-msgstr "טעות אין באַשײדן JPEG בילדטעקע (%s)"
-
-#: gdk-pixbuf/gdk-pixbuf-loader.c:334
-#, fuzzy, c-format
-msgid ""
-"Internal error: Image loader module '%s' failed to complete an operation, "
-"but didn't give a reason for the failure"
-msgstr ""
-"אינערלעכע טעות: בילד אַרײַנשטעל מאָדול '%s' האָט ניט אָנגעהױבן אַרײַנשטעלן אַ בילד, "
-"אָבער זי האָט ניט געגעבן קײן סיבה דערצו"
-
-#: gdk-pixbuf/gdk-pixbuf-loader.c:376
-#, c-format
-msgid "Incremental loading of image type '%s' is not supported"
-msgstr "צוגעבלעך אַרײַנשטעל פֿון בילד־סאָרט '%s' ניט געשטיצט"
-
-#: gdk-pixbuf/gdk-pixdata.c:147
-msgid "Image header corrupt"
-msgstr "קאָרומפּירטער בילדקאָפּ"
-
-#: gdk-pixbuf/gdk-pixdata.c:152
-msgid "Image format unknown"
-msgstr "ניט־באַקאַנטע בילד־פֿאָרעם"
-
-#: gdk-pixbuf/gdk-pixdata.c:157 gdk-pixbuf/gdk-pixdata.c:488
-msgid "Image pixel data corrupt"
-msgstr "פֿאַלשע בילדצעל דאַטן"
-
-#: gdk-pixbuf/gdk-pixdata.c:432
-#, fuzzy, c-format
-msgid "failed to allocate image buffer of %u byte"
-msgid_plural "failed to allocate image buffer of %u bytes"
-msgstr[0] "ניט גענוג זכּרון צו פֿאַרטײלן בילד באַהאַלט־אָרט פֿון %u אַכטעלעך"
-msgstr[1] "ניט גענוג זכּרון צו פֿאַרטײלן בילד באַהאַלט־אָרט פֿון %u אַכטעלעך"
-
-#: gdk-pixbuf/io-ani.c:244
-msgid "Unexpected icon chunk in animation"
-msgstr "אומדערװאַרטע בילדל־שטיק אין אַנימאַציע"
-
-#: gdk-pixbuf/io-ani.c:337
-msgid "Unsupported animation type"
-msgstr "אַנימאַציע־סאָרט ניט געשטיצט"
-
-#: gdk-pixbuf/io-ani.c:348 gdk-pixbuf/io-ani.c:406 gdk-pixbuf/io-ani.c:432
-#: gdk-pixbuf/io-ani.c:455 gdk-pixbuf/io-ani.c:482 gdk-pixbuf/io-ani.c:569
-msgid "Invalid header in animation"
-msgstr "אומלעקסיק קאָפּצעטל אין אַנימאַציע"
-
-#: gdk-pixbuf/io-ani.c:358 gdk-pixbuf/io-ani.c:380 gdk-pixbuf/io-ani.c:464
-#: gdk-pixbuf/io-ani.c:491 gdk-pixbuf/io-ani.c:542 gdk-pixbuf/io-ani.c:614
-msgid "Not enough memory to load animation"
-msgstr "ניט גענוג זכּרון אַרײַנצושטעלן אַנימאַציע"
-
-#: gdk-pixbuf/io-ani.c:398 gdk-pixbuf/io-ani.c:424 gdk-pixbuf/io-ani.c:443
-msgid "Malformed chunk in animation"
-msgstr "אומלעקסיק שטיק אין אַנימאַציע"
-
-#: gdk-pixbuf/io-ani.c:711
-msgid "The ANI image format"
-msgstr "ANI בילד־פֿאָרעם"
-
-#: gdk-pixbuf/io-bmp.c:230 gdk-pixbuf/io-bmp.c:267 gdk-pixbuf/io-bmp.c:338
-#: gdk-pixbuf/io-bmp.c:370 gdk-pixbuf/io-bmp.c:393 gdk-pixbuf/io-bmp.c:496
-msgid "BMP image has bogus header data"
-msgstr "BMP בילד האָט פֿאַלשע קאָפּצעטל דאַטן"
-
-#: gdk-pixbuf/io-bmp.c:241 gdk-pixbuf/io-bmp.c:433
-msgid "Not enough memory to load bitmap image"
-msgstr "ניט גענוג זכּרון אַרײַנצושטעלן ביטמאַפּע בילד"
-
-#: gdk-pixbuf/io-bmp.c:319
-msgid "BMP image has unsupported header size"
-msgstr "BMP בילד האָט אַ ניט־געשטיצטע קאָפּצעטל גרײס"
-
-#: gdk-pixbuf/io-bmp.c:357
-msgid "Topdown BMP images cannot be compressed"
-msgstr ""
-
-#: gdk-pixbuf/io-bmp.c:717 gdk-pixbuf/io-pnm.c:709
-msgid "Premature end-of-file encountered"
-msgstr "צו־פֿריִיִקער טעקע־סוף"
-
-#: gdk-pixbuf/io-bmp.c:1329
-#, fuzzy
-msgid "Couldn't allocate memory for saving BMP file"
-msgstr "ניט געקענט געפֿינען זכּרון אַרײַנצושטעלן JPEG טעקע"
-
-#: gdk-pixbuf/io-bmp.c:1370
-#, fuzzy
-msgid "Couldn't write to BMP file"
-msgstr "ניט געקענט איבערמאַכן טעקע־נאָמען"
-
-#: gdk-pixbuf/io-bmp.c:1423 gdk-pixbuf/io-gdip-bmp.c:82
-msgid "The BMP image format"
-msgstr "BMP בילד־פֿאָרעם"
-
-#: gdk-pixbuf/io-gif.c:222
-#, c-format
-msgid "Failure reading GIF: %s"
-msgstr "דורכפֿאַל אין לײענען GIF: %s"
-
-#: gdk-pixbuf/io-gif.c:496 gdk-pixbuf/io-gif.c:1481 gdk-pixbuf/io-gif.c:1642
-msgid "GIF file was missing some data (perhaps it was truncated somehow?)"
-msgstr "אין GIF טעקע פֿעלן דאַטן (אפֿשר איז די טעקע פֿאַרקירצט?)"
-
-#: gdk-pixbuf/io-gif.c:505
-#, c-format
-msgid "Internal error in the GIF loader (%s)"
-msgstr "אינערלעכע טעות אין GIF אַרײַנשטעל (%s)"
-
-#: gdk-pixbuf/io-gif.c:579
-msgid "Stack overflow"
-msgstr "הײפֿטל אָפּפֿלוס"
-
-#: gdk-pixbuf/io-gif.c:639
-#, fuzzy
-msgid "GIF image loader cannot understand this image."
-msgstr "GIF בילד־אַרײַנשטעל פֿאַרשטײט ניט דאָס בילד"
-
-#: gdk-pixbuf/io-gif.c:668
-msgid "Bad code encountered"
-msgstr "געפֿונען אומלעקסיקע פּראָגראַמװאַרג"
-
-#: gdk-pixbuf/io-gif.c:678
-msgid "Circular table entry in GIF file"
-msgstr "צעפּלאָשעטע טאַבעלע פּאָזיציע אין GIF טעקע"
-
-#: gdk-pixbuf/io-gif.c:866 gdk-pixbuf/io-gif.c:1468 gdk-pixbuf/io-gif.c:1515
-#: gdk-pixbuf/io-gif.c:1630
-msgid "Not enough memory to load GIF file"
-msgstr "ניט גענוג זכּרון אַרײַנצושטעלן GIF טעקע"
-
-#: gdk-pixbuf/io-gif.c:960
-#, fuzzy
-msgid "Not enough memory to composite a frame in GIF file"
-msgstr "ניט גענוג זכּרון אַרײַנצושטעלן GIF טעקע"
-
-#: gdk-pixbuf/io-gif.c:1132
-msgid "GIF image is corrupt (incorrect LZW compression)"
-msgstr "קאָרומפּירטע GIF בילד (אומלעקסיקער LZW אײַנקלענערונג)"
-
-#: gdk-pixbuf/io-gif.c:1182
-msgid "File does not appear to be a GIF file"
-msgstr "טעקע זעט ניט אױס װי קײן GIF טעקע"
-
-#: gdk-pixbuf/io-gif.c:1194
-#, c-format
-msgid "Version %s of the GIF file format is not supported"
-msgstr "װערסיע %s פֿון GIF טעקע פֿאָרמאַטירונג ניט געשטיצט"
-
-#: gdk-pixbuf/io-gif.c:1303
-msgid ""
-"GIF image has no global colormap, and a frame inside it has no local "
-"colormap."
-msgstr ""
-"דאָס GIF בילד האָט ניט קײן גלאָבאַלע פֿאַרבמאַפּע, און אַ ראָם אין אים האָט ניט קײן "
-"לאָקאַלע פֿאַרבמאַפּע"
-
-#: gdk-pixbuf/io-gif.c:1537
-msgid "GIF image was truncated or incomplete."
-msgstr "דאָס GIF בילד איז אָדער פֿאַרקירצט אָדער האַלב"
-
-#: gdk-pixbuf/io-gif.c:1693 gdk-pixbuf/io-gdip-gif.c:80
-msgid "The GIF image format"
-msgstr "GIF בילד־פֿאָרעם"
-
-#: gdk-pixbuf/io-ico.c:211 gdk-pixbuf/io-ico.c:225 gdk-pixbuf/io-ico.c:277
-#: gdk-pixbuf/io-ico.c:290 gdk-pixbuf/io-ico.c:359
-msgid "Invalid header in icon"
-msgstr "אומלעקסיק קאָפּצעטל אין בילדל"
-
-#: gdk-pixbuf/io-ico.c:240 gdk-pixbuf/io-ico.c:300 gdk-pixbuf/io-ico.c:369
-#: gdk-pixbuf/io-ico.c:432 gdk-pixbuf/io-ico.c:462
-msgid "Not enough memory to load icon"
-msgstr "ניט גענוג זכּרון אַרײַנצושטעלן בילדל"
-
-#: gdk-pixbuf/io-ico.c:322
-msgid "Icon has zero width"
-msgstr "בילדל האָט אַ נוליקע ברײט"
-
-#: gdk-pixbuf/io-ico.c:332
-msgid "Icon has zero height"
-msgstr "בילדל האָט אַ נוליקע הײך"
-
-#: gdk-pixbuf/io-ico.c:384
-msgid "Compressed icons are not supported"
-msgstr "אײַנגעקלענערטע בילדלעך זײַנען ניט געשטיצט"
-
-#: gdk-pixbuf/io-ico.c:417
-msgid "Unsupported icon type"
-msgstr "בילדל סאָרט ניט געשטיצט"
-
-#: gdk-pixbuf/io-ico.c:511
-msgid "Not enough memory to load ICO file"
-msgstr "ניט גענוג זכּרון אַרײַנצושטעלן ICO טעקע"
-
-#: gdk-pixbuf/io-ico.c:976
-msgid "Image too large to be saved as ICO"
-msgstr ""
-
-#: gdk-pixbuf/io-ico.c:987
-msgid "Cursor hotspot outside image"
-msgstr ""
-
-#: gdk-pixbuf/io-ico.c:1010
-#, c-format
-msgid "Unsupported depth for ICO file: %d"
-msgstr ""
-
-#: gdk-pixbuf/io-ico.c:1245 gdk-pixbuf/io-gdip-ico.c:59
-msgid "The ICO image format"
-msgstr "ICO בילד־פֿאָרעם"
-
-#: gdk-pixbuf/io-icns.c:347
-#, fuzzy, c-format
-msgid "Error reading ICNS image: %s"
-msgstr "טױטפֿאַל אין לײענען PNG בילדטעקע: %s"
-
-#: gdk-pixbuf/io-icns.c:364
-#, fuzzy
-msgid "Could not decode ICNS file"
-msgstr ""
-"דורכפֿאַל אין שאַפֿן פּאַפּקע %s: %s\n"
-"%s"
-
-#: gdk-pixbuf/io-icns.c:397
-#, fuzzy
-msgid "The ICNS image format"
-msgstr "ICO בילד־פֿאָרעם"
-
-#: gdk-pixbuf/io-jasper.c:75
-#, fuzzy
-msgid "Couldn't allocate memory for stream"
-msgstr "ניט גענוג זכּרון פֿאַר TGA קאָפּצעטל"
-
-#: gdk-pixbuf/io-jasper.c:105
-#, fuzzy
-msgid "Couldn't decode image"
-msgstr "ניט געקענט איבערמאַכן טעקע־נאָמען"
-
-#: gdk-pixbuf/io-jasper.c:123
-#, fuzzy
-msgid "Transformed JPEG2000 has zero width or height"
-msgstr "טראַנספֿאָרמירטע PNG האָט נוליקע ברײט אָדער הײך"
-
-#: gdk-pixbuf/io-jasper.c:137
-#, fuzzy
-msgid "Image type currently not supported"
-msgstr "בילד־סאָרט '%s' ניט געשטיצט"
-
-#: gdk-pixbuf/io-jasper.c:149 gdk-pixbuf/io-jasper.c:157
-#, fuzzy
-msgid "Couldn't allocate memory for color profile"
-msgstr "ניט געקענט געפֿינען זכּרון אַרײַנצושטעלן JPEG טעקע"
-
-#: gdk-pixbuf/io-jasper.c:183
-#, fuzzy
-msgid "Insufficient memory to open JPEG 2000 file"
-msgstr "ניט גענוג זכּרון עפֿענען TIFF טעקע"
-
-#: gdk-pixbuf/io-jasper.c:262
-#, fuzzy
-msgid "Couldn't allocate memory to buffer image data"
-msgstr "ניט גענוג זכּרון פֿאַר IOBuffer דאַטן"
-
-#: gdk-pixbuf/io-jasper.c:306
-#, fuzzy
-msgid "The JPEG 2000 image format"
-msgstr "JPEG בילד־פֿאָרעם"
-
-#: gdk-pixbuf/io-jpeg.c:117
-#, c-format
-msgid "Error interpreting JPEG image file (%s)"
-msgstr "טעות אין באַשײדן JPEG בילדטעקע (%s)"
-
-#: gdk-pixbuf/io-jpeg.c:528
-msgid ""
-"Insufficient memory to load image, try exiting some applications to free "
-"memory"
-msgstr ""
-"ניט גענוג זכּרון אַרײַנצושטעלן בילד; פּרוּװ ענדיקן אַנדערע פּראָגראַמען צו דערלײזן "
-"זכּרון"
-
-#: gdk-pixbuf/io-jpeg.c:569 gdk-pixbuf/io-jpeg.c:775
-#, c-format
-msgid "Unsupported JPEG color space (%s)"
-msgstr "ניט געשטיצטע JPEG פֿאַרב־שטח (%s)"
-
-#: gdk-pixbuf/io-jpeg.c:674 gdk-pixbuf/io-jpeg.c:944 gdk-pixbuf/io-jpeg.c:1177
-#: gdk-pixbuf/io-jpeg.c:1186
-msgid "Couldn't allocate memory for loading JPEG file"
-msgstr "ניט געקענט געפֿינען זכּרון אַרײַנצושטעלן JPEG טעקע"
-
-#: gdk-pixbuf/io-jpeg.c:919
-#, fuzzy
-msgid "Transformed JPEG has zero width or height."
-msgstr "טראַנספֿאָרמירטע PNG האָט נוליקע ברײט אָדער הײך"
-
-#: gdk-pixbuf/io-jpeg.c:1133 gdk-pixbuf/io-gdip-jpeg.c:53
-#, c-format
-msgid ""
-"JPEG quality must be a value between 0 and 100; value '%s' could not be "
-"parsed."
-msgstr ""
-"די JPEG קװאַליטעט מוז האָבן אַ באַטרעף צװישן 0 און 100; דער באַטרעף '%s' איז "
-"אומלעקסיק"
-
-#: gdk-pixbuf/io-jpeg.c:1148 gdk-pixbuf/io-gdip-jpeg.c:68
-#, c-format
-msgid ""
-"JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
-msgstr ""
-"די JPEG קװאַליטעט מוז האָבן אַ באַטרעף צװישן 0 און 100; דער באַטרעף '%d' איז "
-"אומלעקסיק"
-
-#: gdk-pixbuf/io-jpeg.c:1310 gdk-pixbuf/io-gdip-jpeg.c:136
-msgid "The JPEG image format"
-msgstr "JPEG בילד־פֿאָרעם"
-
-#: gdk-pixbuf/io-pcx.c:187
-#, fuzzy
-msgid "Couldn't allocate memory for header"
-msgstr "ניט גענוג זכּרון פֿאַר TGA קאָפּצעטל"
-
-#: gdk-pixbuf/io-pcx.c:202 gdk-pixbuf/io-pcx.c:560
-#, fuzzy
-msgid "Couldn't allocate memory for context buffer"
-msgstr "ניט גענוג זכּרון פֿאַר TGA קאָנטעקסט־סטרוקטור"
-
-#: gdk-pixbuf/io-pcx.c:601
-#, fuzzy
-msgid "Image has invalid width and/or height"
-msgstr "בילד האָט אַ נוליקע הײך"
-
-#: gdk-pixbuf/io-pcx.c:613 gdk-pixbuf/io-pcx.c:674
-#, fuzzy
-msgid "Image has unsupported bpp"
-msgstr "BMP בילד האָט אַ ניט־געשטיצטע קאָפּצעטל גרײס"
-
-#: gdk-pixbuf/io-pcx.c:618 gdk-pixbuf/io-pcx.c:626
-#, fuzzy, c-format
-msgid "Image has unsupported number of %d-bit planes"
-msgstr "BMP בילד האָט אַ ניט־געשטיצטע קאָפּצעטל גרײס"
-
-#: gdk-pixbuf/io-pcx.c:642
-#, fuzzy
-msgid "Couldn't create new pixbuf"
-msgstr "ניט גענוג זכּרון פֿאַר נײַעם pixbuf"
-
-#: gdk-pixbuf/io-pcx.c:650
-#, fuzzy
-msgid "Couldn't allocate memory for line data"
-msgstr "ניט גענוג זכּרון פֿאַר IOBuffer דאַטן"
-
-#: gdk-pixbuf/io-pcx.c:657
-#, fuzzy
-msgid "Couldn't allocate memory for paletted data"
-msgstr "ניט גענוג זכּרון פֿאַר IOBuffer דאַטן"
-
-#: gdk-pixbuf/io-pcx.c:704
-msgid "Didn't get all lines of PCX image"
-msgstr ""
-
-#: gdk-pixbuf/io-pcx.c:711
-msgid "No palette found at end of PCX data"
-msgstr ""
-
-#: gdk-pixbuf/io-pcx.c:756
-#, fuzzy
-msgid "The PCX image format"
-msgstr "BMP בילד־פֿאָרעם"
-
-#: gdk-pixbuf/io-png.c:55
-msgid "Bits per channel of PNG image is invalid."
-msgstr "באַטרעף פֿון ביטן אין קאַנאַל פֿון PNG בילד איז אומלעקסיק"
-
-#: gdk-pixbuf/io-png.c:136 gdk-pixbuf/io-png.c:642
-msgid "Transformed PNG has zero width or height."
-msgstr "טראַנספֿאָרמירטע PNG האָט נוליקע ברײט אָדער הײך"
-
-#: gdk-pixbuf/io-png.c:144
-msgid "Bits per channel of transformed PNG is not 8."
-msgstr "ביטן אין קאַנאַל פֿון טראַנספֿאָרמירטע PNG איז ניט 8"
-
-#: gdk-pixbuf/io-png.c:153
-msgid "Transformed PNG not RGB or RGBA."
-msgstr "טראַנספֿאָרמירטע PNG איז ניט RGB און ניט RGBA"
-
-#: gdk-pixbuf/io-png.c:162
-msgid "Transformed PNG has unsupported number of channels, must be 3 or 4."
-msgstr "טראַנספֿאָרמירטע PNG האָט אַ ניט־געשטיצטן צאָל קאַנאַלן; מוז זײַן 3 אָדער 4"
-
-#: gdk-pixbuf/io-png.c:183
-#, c-format
-msgid "Fatal error in PNG image file: %s"
-msgstr "טױטפֿאַל אין PNG בילדטעקע: %s"
-
-#: gdk-pixbuf/io-png.c:316
-msgid "Insufficient memory to load PNG file"
-msgstr "ניט גענוג זכּרון אַרײַנצושטעלן PNG טעקע"
-
-#: gdk-pixbuf/io-png.c:657
-#, c-format
-msgid ""
-"Insufficient memory to store a %ld by %ld image; try exiting some "
-"applications to reduce memory usage"
-msgstr ""
-"ניט גענוג זכּרון פֿאַרהאַלטן אַ בילד מיט גרײס %ld מיט %ld; פּרוּװ ענדיקן עטלעכע "
-"פּראָגראַמען צו פֿאַרקלענערן דעם מאַנגל אין זכּרון"
-
-#: gdk-pixbuf/io-png.c:720
-msgid "Fatal error reading PNG image file"
-msgstr "טױטפֿאַל אין לײענען PNG בילדטעקע"
-
-#: gdk-pixbuf/io-png.c:769
-#, c-format
-msgid "Fatal error reading PNG image file: %s"
-msgstr "טױטפֿאַל אין לײענען PNG בילדטעקע: %s"
-
-#: gdk-pixbuf/io-png.c:863
-msgid ""
-"Keys for PNG text chunks must have at least 1 and at most 79 characters."
-msgstr "שליסלעך פֿאַר PNG טעקסט שטיקער מוזן האָבן צװישן 1 און 79 שריפֿטצײכנס"
-
-#: gdk-pixbuf/io-png.c:872
-msgid "Keys for PNG text chunks must be ASCII characters."
-msgstr "שליסלעך פֿאַר PNG טעקסט שטיקער מוזן זײַן ASCII שריפֿטצײכנס"
-
-#: gdk-pixbuf/io-png.c:886 gdk-pixbuf/io-tiff.c:738
-#, c-format
-msgid "Color profile has invalid length %d."
-msgstr ""
-
-#: gdk-pixbuf/io-png.c:899 gdk-pixbuf/io-gdip-png.c:56
-#, fuzzy, c-format
-msgid ""
-"PNG compression level must be a value between 0 and 9; value '%s' could not "
-"be parsed."
-msgstr ""
-"די JPEG קװאַליטעט מוז האָבן אַ באַטרעף צװישן 0 און 100; דער באַטרעף '%s' איז "
-"אומלעקסיק"
-
-#: gdk-pixbuf/io-png.c:912 gdk-pixbuf/io-gdip-png.c:68
-#, fuzzy, c-format
-msgid ""
-"PNG compression level must be a value between 0 and 9; value '%d' is not "
-"allowed."
-msgstr ""
-"די JPEG קװאַליטעט מוז האָבן אַ באַטרעף צװישן 0 און 100; דער באַטרעף '%d' איז "
-"אומלעקסיק"
-
-#: gdk-pixbuf/io-png.c:951
-#, fuzzy, c-format
-msgid "Value for PNG text chunk %s cannot be converted to ISO-8859-1 encoding."
-msgstr ""
-"באַטרעף פֿאַר PNG טעקסטשטיק %s לאָזט זיך ניט איבערמאַכן אין ISO-8859-1 קאָדירונג"
-
-#: gdk-pixbuf/io-png.c:1112 gdk-pixbuf/io-gdip-png.c:133
-msgid "The PNG image format"
-msgstr "די PNG בילד־פֿאָרמאַטירונג"
-
-#: gdk-pixbuf/io-pnm.c:250
-msgid "PNM loader expected to find an integer, but didn't"
-msgstr "PNM אַרײַנשטעל האָט דערװאַרט אַ גאַנצער נומער, אָבער ניט געפֿונען"
-
-#: gdk-pixbuf/io-pnm.c:282
-msgid "PNM file has an incorrect initial byte"
-msgstr "PNM טעקע האָט אַ פֿאַלש ערשט אַכטעלע"
-
-#: gdk-pixbuf/io-pnm.c:312
-msgid "PNM file is not in a recognized PNM subformat"
-msgstr "PNM טעקע האָט ניט קײן באַקאַנטע PNM אונטער־פֿאָרמאַטירונג"
-
-#: gdk-pixbuf/io-pnm.c:337
-msgid "PNM file has an image width of 0"
-msgstr "PNM טעקע האָט אַ נוליקע בילד־ברײט"
-
-#: gdk-pixbuf/io-pnm.c:358
-msgid "PNM file has an image height of 0"
-msgstr "PNM טעקע האָט אַ נוליקע בילד־הײך"
-
-#: gdk-pixbuf/io-pnm.c:381
-msgid "Maximum color value in PNM file is 0"
-msgstr "PNM טעקע האָט אַ נוליקן העכסטן פֿאַרב־באַטרעף"
-
-#: gdk-pixbuf/io-pnm.c:389
-msgid "Maximum color value in PNM file is too large"
-msgstr "PNM טעקע האָט אַ צו־גרױסן העכסטן פֿאַרב־באַטרעף"
-
-#: gdk-pixbuf/io-pnm.c:429 gdk-pixbuf/io-pnm.c:459 gdk-pixbuf/io-pnm.c:504
-msgid "Raw PNM image type is invalid"
-msgstr "רױער PNM בילד־סאָרט איז אומלעקסיק"
-
-#: gdk-pixbuf/io-pnm.c:654
-msgid "PNM image loader does not support this PNM subformat"
-msgstr "PNM בילד אַרײַנשטעל שטיצט ניט אונטער דעם PNM אונטער־פֿאָרמאַטירונג"
-
-#: gdk-pixbuf/io-pnm.c:741 gdk-pixbuf/io-pnm.c:968
-msgid "Raw PNM formats require exactly one whitespace before sample data"
-msgstr ""
-"רױע PNM פֿאָרמאַטירונגען פֿאָדערן פּינקטלעך אײן לײדיקע פּאָזיציע פֿאַר מוסטער־דאַטן"
-
-#: gdk-pixbuf/io-pnm.c:768
-#, fuzzy
-msgid "Cannot allocate memory for loading PNM image"
-msgstr "ניט גענוג זכּרון אַרײַנצושטעלן PNM בילד"
-
-#: gdk-pixbuf/io-pnm.c:818
-msgid "Insufficient memory to load PNM context struct"
-msgstr "ניט גענוג זכּרון אַרײַנצושטעלן PNM קאָנטעקסט־סטרוקטור"
-
-#: gdk-pixbuf/io-pnm.c:869
-msgid "Unexpected end of PNM image data"
-msgstr "ניט דערװאַרטער סוף פֿון PNM בילד דאַטן"
-
-#: gdk-pixbuf/io-pnm.c:997
-msgid "Insufficient memory to load PNM file"
-msgstr "ניט גענוג זכּרון אַרײַנצושטעלן PNM טעקע"
-
-#: gdk-pixbuf/io-pnm.c:1081
-msgid "The PNM/PBM/PGM/PPM image format family"
-msgstr "PNM/PBM/PGM/PPM בילד־פֿאָרעם משפּחה"
-
-#: gdk-pixbuf/io-qtif.c:128
-msgid "Input file descriptor is NULL."
-msgstr ""
-
-#: gdk-pixbuf/io-qtif.c:143
-#, fuzzy
-msgid "Failed to read QTIF header"
-msgstr "דורכפֿאַל אין עפֿענען TIFF בילד"
-
-#: gdk-pixbuf/io-qtif.c:152 gdk-pixbuf/io-qtif.c:182 gdk-pixbuf/io-qtif.c:446
-#, c-format
-msgid "QTIF atom size too large (%d bytes)"
-msgstr ""
-
-#: gdk-pixbuf/io-qtif.c:172
-#, fuzzy, c-format
-msgid "Failed to allocate %d bytes for file read buffer"
-msgstr "ניט גענוג זכּרון צו פֿאַרטײלן בילד באַהאַלט־אָרט פֿון %u אַכטעלעך"
-
-#: gdk-pixbuf/io-qtif.c:196
-#, fuzzy, c-format
-msgid "File error when reading QTIF atom: %s"
-msgstr "דורכפֿאַל אין לײענען GIF: %s"
-
-#: gdk-pixbuf/io-qtif.c:233
-#, c-format
-msgid "Failed to skip the next %d bytes with seek()."
-msgstr ""
-
-#: gdk-pixbuf/io-qtif.c:257
-#, fuzzy
-msgid "Failed to allocate QTIF context structure."
-msgstr "ניט גענוג זכּרון פֿאַר TGA קאָנטעקסט־סטרוקטור"
-
-#: gdk-pixbuf/io-qtif.c:317
-#, fuzzy
-msgid "Failed to create GdkPixbufLoader object."
-msgstr "דורכפֿאַל אין שרײַבן צײַטװײַליקע טעקע בשעת אַרײַנשטעלן XBM בילד"
-
-#: gdk-pixbuf/io-qtif.c:421
-#, fuzzy
-msgid "Failed to find an image data atom."
-msgstr "דורכפֿאַל אין עפֿענען TIFF בילד"
-
-#: gdk-pixbuf/io-qtif.c:602
-#, fuzzy
-msgid "The QTIF image format"
-msgstr "TIFF בילד־פֿאָרעם"
-
-#: gdk-pixbuf/io-ras.c:126
-msgid "RAS image has bogus header data"
-msgstr "RAS בילד האָט פֿאַלשע קאָפּצעטל דאַטן"
-
-#: gdk-pixbuf/io-ras.c:148
-msgid "RAS image has unknown type"
-msgstr "RAS בילד האָט אַן אומבאַקאַנטן סאָרט"
-
-#: gdk-pixbuf/io-ras.c:156
-msgid "unsupported RAS image variation"
-msgstr "ניט געשטיצטע RAS־בילד װאַריִאַציע"
-
-#: gdk-pixbuf/io-ras.c:171 gdk-pixbuf/io-ras.c:200
-msgid "Not enough memory to load RAS image"
-msgstr "ניט גענוג זכּרון אַרײַנשטעלן RAS־בילד"
-
-#: gdk-pixbuf/io-ras.c:545
-msgid "The Sun raster image format"
-msgstr "Sun ראַסטער בילד־פֿאָרעם"
-
-#: gdk-pixbuf/io-tga.c:154
-#, fuzzy
-msgid "Cannot allocate memory for IOBuffer struct"
-msgstr "ניט גענוג זכּרון פֿאַר IOBuffer סטרוקטור"
-
-#: gdk-pixbuf/io-tga.c:173
-#, fuzzy
-msgid "Cannot allocate memory for IOBuffer data"
-msgstr "ניט גענוג זכּרון פֿאַר IOBuffer דאַטן"
-
-#: gdk-pixbuf/io-tga.c:184
-#, fuzzy
-msgid "Cannot realloc IOBuffer data"
-msgstr "ניט געקענט װידער צוטײלן IOBuffer דאַטן"
-
-#: gdk-pixbuf/io-tga.c:214
-#, fuzzy
-msgid "Cannot allocate temporary IOBuffer data"
-msgstr "ניט געקענט פֿאַרטײלן צײַטװײַליקע IOBuffer דאַטן"
-
-#: gdk-pixbuf/io-tga.c:347
-#, fuzzy
-msgid "Cannot allocate new pixbuf"
-msgstr "ניט גענוג זכּרון פֿאַר נײַעם pixbuf"
-
-#: gdk-pixbuf/io-tga.c:686
-#, fuzzy
-msgid "Image is corrupted or truncated"
-msgstr "דאָס GIF בילד איז אָדער פֿאַרקירצט אָדער האַלב"
-
-#: gdk-pixbuf/io-tga.c:693
-#, fuzzy
-msgid "Cannot allocate colormap structure"
-msgstr "ניט גענוג זכּרון פֿאַר פֿאַרבמאַפּע סטרוקטור"
-
-#: gdk-pixbuf/io-tga.c:700
-#, fuzzy
-msgid "Cannot allocate colormap entries"
-msgstr "ניט גענוג פֿאַרבמאַפּע ערטער"
-
-#: gdk-pixbuf/io-tga.c:722
-msgid "Unexpected bitdepth for colormap entries"
-msgstr "אומדערװאַרטע ביט־טיפֿקײט פֿאַר פֿאַרבמאַפּע ערטער"
-
-#: gdk-pixbuf/io-tga.c:740
-#, fuzzy
-msgid "Cannot allocate TGA header memory"
-msgstr "ניט גענוג זכּרון פֿאַר TGA קאָפּצעטל"
-
-#: gdk-pixbuf/io-tga.c:773
-msgid "TGA image has invalid dimensions"
-msgstr "TGA בילד האָט אומלעקסיקע דימענסיעס"
-
-#: gdk-pixbuf/io-tga.c:779 gdk-pixbuf/io-tga.c:788 gdk-pixbuf/io-tga.c:798
-#: gdk-pixbuf/io-tga.c:808 gdk-pixbuf/io-tga.c:815
-msgid "TGA image type not supported"
-msgstr "TGA בילד סאָרט ניט געשטיצט"
-
-#: gdk-pixbuf/io-tga.c:862
-#, fuzzy
-msgid "Cannot allocate memory for TGA context struct"
-msgstr "ניט גענוג זכּרון פֿאַר TGA קאָנטעקסט־סטרוקטור"
-
-#: gdk-pixbuf/io-tga.c:927
-msgid "Excess data in file"
-msgstr "איבעריקע דאַטן אין טעקע"
-
-#: gdk-pixbuf/io-tga.c:1008
-msgid "The Targa image format"
-msgstr "Targa בילד־פֿאָרעם"
-
-#: gdk-pixbuf/io-tiff.c:165
-msgid "Could not get image width (bad TIFF file)"
-msgstr "ניט געקענט דערטאַפּן בילד־ברײט (אומלעקסיקע TIFF טעקע"
-
-#: gdk-pixbuf/io-tiff.c:172
-msgid "Could not get image height (bad TIFF file)"
-msgstr "ניט געקענט דערטאַפּן בילד־הײך (אומלעקסיקע TIFF טעקע)"
-
-#: gdk-pixbuf/io-tiff.c:180
-msgid "Width or height of TIFF image is zero"
-msgstr "נוליקע ברײט אָדער הײך פֿון TIFF בילד"
-
-#: gdk-pixbuf/io-tiff.c:189 gdk-pixbuf/io-tiff.c:198
-msgid "Dimensions of TIFF image too large"
-msgstr "דימענסיעס פֿון TIFF בילד זײַנען צו גרױס"
-
-#: gdk-pixbuf/io-tiff.c:222 gdk-pixbuf/io-tiff.c:234 gdk-pixbuf/io-tiff.c:561
-msgid "Insufficient memory to open TIFF file"
-msgstr "ניט גענוג זכּרון עפֿענען TIFF טעקע"
-
-#: gdk-pixbuf/io-tiff.c:295
-msgid "Failed to load RGB data from TIFF file"
-msgstr "דורכפֿאַל אין אַרײַנשטעלן RGB דאַטן פֿון TIFF טעקע"
-
-#: gdk-pixbuf/io-tiff.c:351
-msgid "Failed to open TIFF image"
-msgstr "דורכפֿאַל אין עפֿענען TIFF בילד"
-
-#: gdk-pixbuf/io-tiff.c:363 gdk-pixbuf/io-tiff.c:778
-msgid "TIFFClose operation failed"
-msgstr "דורכפֿאַל אין פֿאַרמאַכן TIFF"
-
-#: gdk-pixbuf/io-tiff.c:493 gdk-pixbuf/io-tiff.c:506
-msgid "Failed to load TIFF image"
-msgstr "דורכפֿאַל אין אַרײַנשטעלן TIFF בילד"
-
-#: gdk-pixbuf/io-tiff.c:692
-#, fuzzy
-msgid "Failed to save TIFF image"
-msgstr "דורכפֿאַל אין עפֿענען TIFF בילד"
-
-#: gdk-pixbuf/io-tiff.c:727
-msgid "TIFF compression doesn't refer to a valid codec."
-msgstr ""
-
-#: gdk-pixbuf/io-tiff.c:767
-#, fuzzy
-msgid "Failed to write TIFF data"
-msgstr "דורכפֿאַל אין עפֿענען TIFF בילד"
-
-#: gdk-pixbuf/io-tiff.c:814
-#, fuzzy
-msgid "Couldn't write to TIFF file"
-msgstr "ניט געקענט איבערמאַכן טעקע־נאָמען"
-
-#: gdk-pixbuf/io-tiff.c:869
-msgid "The TIFF image format"
-msgstr "TIFF בילד־פֿאָרעם"
-
-#: gdk-pixbuf/io-wbmp.c:246
-msgid "Image has zero width"
-msgstr "בילד האָט אַ נוליקע ברײט"
-
-#: gdk-pixbuf/io-wbmp.c:264
-msgid "Image has zero height"
-msgstr "בילד האָט אַ נוליקע הײך"
-
-#: gdk-pixbuf/io-wbmp.c:275
-msgid "Not enough memory to load image"
-msgstr "ניט גענוג זכּרון אַרײַנשטעלן בילד"
-
-#: gdk-pixbuf/io-wbmp.c:334
-msgid "Couldn't save the rest"
-msgstr "ניט געקענט אױפֿהיטן דאָס רעשטל"
-
-#: gdk-pixbuf/io-wbmp.c:375
-msgid "The WBMP image format"
-msgstr "WBMP בילד־פֿאָרעם"
-
-#: gdk-pixbuf/io-xbm.c:295
-msgid "Invalid XBM file"
-msgstr "אומלעקסיקע XBM טעקע"
-
-#: gdk-pixbuf/io-xbm.c:305
-msgid "Insufficient memory to load XBM image file"
-msgstr "ניט גענוג זכּרון אַרײַנשטעלן XBM בילדטעקע"
-
-#: gdk-pixbuf/io-xbm.c:453
-msgid "Failed to write to temporary file when loading XBM image"
-msgstr "דורכפֿאַל אין שרײַבן צײַטװײַליקע טעקע בשעת אַרײַנשטעלן XBM בילד"
-
-#: gdk-pixbuf/io-xbm.c:492
-msgid "The XBM image format"
-msgstr "XBM בילד־פֿאָרעם"
-
-#: gdk-pixbuf/io-xpm.c:468
-msgid "No XPM header found"
-msgstr "ניט געפֿונען קײן XPM קאָפּצעטל"
-
-#: gdk-pixbuf/io-xpm.c:477
-#, fuzzy
-msgid "Invalid XPM header"
-msgstr "אומלעקסיקע XBM טעקע"
-
-#: gdk-pixbuf/io-xpm.c:485
-msgid "XPM file has image width <= 0"
-msgstr "XPM טעקע האָט בילד ברײט <= 0"
-
-#: gdk-pixbuf/io-xpm.c:493
-msgid "XPM file has image height <= 0"
-msgstr "XPM טעקע האָט בילד הײך <= 0"
-
-#: gdk-pixbuf/io-xpm.c:501
-msgid "XPM has invalid number of chars per pixel"
-msgstr "XPM האָט אַן אומלעקסיקן צאָל שריפֿטצײכנס אין אַ בילדצעל"
-
-#: gdk-pixbuf/io-xpm.c:510
-msgid "XPM file has invalid number of colors"
-msgstr "XPM טעקע האָט אַן אומלעקסיקן צאָל פֿאַרבן"
-
-#: gdk-pixbuf/io-xpm.c:522 gdk-pixbuf/io-xpm.c:531 gdk-pixbuf/io-xpm.c:583
-#, fuzzy
-msgid "Cannot allocate memory for loading XPM image"
-msgstr "ניט גענוג זכּרון אַרײַנשטעלן XPM בילד"
-
-#: gdk-pixbuf/io-xpm.c:545
-#, fuzzy
-msgid "Cannot read XPM colormap"
-msgstr "ניט געקענט לײענען XPM פֿאַרבמאַפּע"
-
-#: gdk-pixbuf/io-xpm.c:777
-msgid "Failed to write to temporary file when loading XPM image"
-msgstr "דורכפֿאַל אין שרײַבן צײַטװײַליקע טעקע בשעת אַרײַנשטעלן XPM בילד"
-
-#: gdk-pixbuf/io-xpm.c:816
-msgid "The XPM image format"
-msgstr "די XPM בילד פֿאָרמאַטירונג"
-
-#: gdk-pixbuf/io-gdip-emf.c:59
-#, fuzzy
-msgid "The EMF image format"
-msgstr "BMP בילד־פֿאָרעם"
-
-#: gdk-pixbuf/io-gdip-utils.c:232
-#, fuzzy, c-format
-msgid "Could not allocate memory: %s"
-msgstr "ניט גענוג זכּרון פֿאַר TGA קאָפּצעטל"
-
-#: gdk-pixbuf/io-gdip-utils.c:257 gdk-pixbuf/io-gdip-utils.c:371
-#: gdk-pixbuf/io-gdip-utils.c:411
-#, fuzzy, c-format
-msgid "Could not create stream: %s"
-msgstr "דורכפֿאַל אין שאַפֿן פּאַפּקע %s: %s\n"
-
-#: gdk-pixbuf/io-gdip-utils.c:271
-#, fuzzy, c-format
-msgid "Could not seek stream: %s"
-msgstr ""
-"דורכפֿאַל אין שאַפֿן פּאַפּקע %s: %s\n"
-"%s"
-
-#: gdk-pixbuf/io-gdip-utils.c:283
-#, fuzzy, c-format
-msgid "Could not read from stream: %s"
-msgstr "דורכפֿאַל אין שאַפֿן פּאַפּקע %s: %s\n"
-
-#: gdk-pixbuf/io-gdip-utils.c:694 gdk-pixbuf/io-gdip-utils.c:825
-#, fuzzy
-msgid "Couldn't load bitmap"
-msgstr "ניט געקענט איבערמאַכן טעקע־נאָמען"
-
-#: gdk-pixbuf/io-gdip-utils.c:847
-#, fuzzy
-msgid "Couldn't load metafile"
-msgstr "ניט געקענט איבערמאַכן טעקע־נאָמען"
-
-#: gdk-pixbuf/io-gdip-utils.c:1006
-#, fuzzy
-msgid "Unsupported image format for GDI+"
-msgstr "ניט געשטיצטע RAS־בילד װאַריִאַציע"
-
-#: gdk-pixbuf/io-gdip-utils.c:1013
-#, fuzzy
-msgid "Couldn't save"
-msgstr "ניט געקענט אױפֿהיטן דאָס רעשטל"
-
-#: gdk-pixbuf/io-gdip-wmf.c:58
-#, fuzzy
-msgid "The WMF image format"
-msgstr "WBMP בילד־פֿאָרעם"
 
 #. Description of --sync in --help output
 #: gdk/win32/gdkmain-win32.c:55
@@ -1600,8 +637,9 @@ msgid "_Saturation:"
 msgstr "דורכװײק"
 
 #: gtk/gtkcolorsel.c:393
-msgid "\"Deepness\" of the color."
-msgstr "\"טיפֿקײט\" פֿון דער פֿאַרב"
+#, fuzzy
+msgid "Intensity of the color."
+msgstr "דורקזעיִקײט פֿון איצט־אױסגעקליבענער פֿאַרב"
 
 #: gtk/gtkcolorsel.c:394
 msgid "_Value:"
@@ -1785,11 +823,11 @@ msgstr "שאַטירונג"
 msgid "Paper Margins"
 msgstr ""
 
-#: gtk/gtkentry.c:8612 gtk/gtktextview.c:8002
+#: gtk/gtkentry.c:8612 gtk/gtktextview.c:8012
 msgid "Input _Methods"
 msgstr "אַרײַנשרײַב־מיטלען"
 
-#: gtk/gtkentry.c:8626 gtk/gtktextview.c:8016
+#: gtk/gtkentry.c:8626 gtk/gtktextview.c:8026
 #, fuzzy
 msgid "_Insert Unicode Control Character"
 msgstr "לײג אַרײַן אוניקאָד קאָנטראָל־שריפֿטצײכן"
@@ -2257,13 +1295,13 @@ msgid "System (%s)"
 msgstr ""
 
 #. Open Link
-#: gtk/gtklabel.c:6076
+#: gtk/gtklabel.c:6072
 #, fuzzy
 msgid "_Open Link"
 msgstr "עפֿן"
 
 #. Copy Link Address
-#: gtk/gtklabel.c:6088
+#: gtk/gtklabel.c:6084
 msgid "Copy _Link Address"
 msgstr ""
 
@@ -2278,27 +1316,27 @@ msgid "Invalid URI"
 msgstr "אומלעקסיקע UTF-8 קאָדירונג"
 
 #. Description of --gtk-module=MODULES in --help output
-#: gtk/gtkmain.c:447
+#: gtk/gtkmain.c:432
 msgid "Load additional GTK+ modules"
 msgstr ""
 
 #. Placeholder in --gtk-module=MODULES in --help output
-#: gtk/gtkmain.c:448
+#: gtk/gtkmain.c:433
 msgid "MODULES"
 msgstr ""
 
 #. Description of --g-fatal-warnings in --help output
-#: gtk/gtkmain.c:450
+#: gtk/gtkmain.c:435
 msgid "Make all warnings fatal"
 msgstr ""
 
 #. Description of --gtk-debug=FLAGS in --help output
-#: gtk/gtkmain.c:453
+#: gtk/gtkmain.c:438
 msgid "GTK+ debugging flags to set"
 msgstr ""
 
 #. Description of --gtk-no-debug=FLAGS in --help output
-#: gtk/gtkmain.c:456
+#: gtk/gtkmain.c:441
 msgid "GTK+ debugging flags to unset"
 msgstr ""
 
@@ -2307,20 +1345,20 @@ msgstr ""
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
 #.
-#: gtk/gtkmain.c:708
+#: gtk/gtkmain.c:704
 msgid "default:LTR"
 msgstr "default:RTL"
 
-#: gtk/gtkmain.c:773
+#: gtk/gtkmain.c:769
 #, c-format
 msgid "Cannot open display: %s"
 msgstr ""
 
-#: gtk/gtkmain.c:810
+#: gtk/gtkmain.c:806
 msgid "GTK+ Options"
 msgstr ""
 
-#: gtk/gtkmain.c:810
+#: gtk/gtkmain.c:806
 msgid "Show GTK+ Options"
 msgstr ""
 
@@ -2410,7 +1448,7 @@ msgstr ""
 msgid "Cannot end process with pid %d: %s"
 msgstr ""
 
-#: gtk/gtknotebook.c:4621 gtk/gtknotebook.c:7050
+#: gtk/gtknotebook.c:4631 gtk/gtknotebook.c:7060
 #, c-format
 msgid "Page %u"
 msgstr "זײַט %u"
@@ -2502,91 +1540,85 @@ msgstr "נײַע פּאַפּקע"
 msgid "%s job #%d"
 msgstr ""
 
-#: gtk/gtkprintoperation.c:1687
+#: gtk/gtkprintoperation.c:1695
 msgctxt "print operation status"
 msgid "Initial state"
 msgstr ""
 
-#: gtk/gtkprintoperation.c:1688
+#: gtk/gtkprintoperation.c:1696
 #, fuzzy
 msgctxt "print operation status"
 msgid "Preparing to print"
 msgstr "װאָרענונג"
 
-#: gtk/gtkprintoperation.c:1689
+#: gtk/gtkprintoperation.c:1697
 msgctxt "print operation status"
 msgid "Generating data"
 msgstr ""
 
-#: gtk/gtkprintoperation.c:1690
+#: gtk/gtkprintoperation.c:1698
 msgctxt "print operation status"
 msgid "Sending data"
 msgstr ""
 
-#: gtk/gtkprintoperation.c:1691
+#: gtk/gtkprintoperation.c:1699
 #, fuzzy
 msgctxt "print operation status"
 msgid "Waiting"
 msgstr "װאָרענונג"
 
-#: gtk/gtkprintoperation.c:1692
+#: gtk/gtkprintoperation.c:1700
 msgctxt "print operation status"
 msgid "Blocking on issue"
 msgstr ""
 
-#: gtk/gtkprintoperation.c:1693
+#: gtk/gtkprintoperation.c:1701
 #, fuzzy
 msgctxt "print operation status"
 msgid "Printing"
 msgstr "דרוק"
 
-#: gtk/gtkprintoperation.c:1694
+#: gtk/gtkprintoperation.c:1702
 #, fuzzy
 msgctxt "print operation status"
 msgid "Finished"
 msgstr "געפֿין"
 
-#: gtk/gtkprintoperation.c:1695
+#: gtk/gtkprintoperation.c:1703
 msgctxt "print operation status"
 msgid "Finished with error"
 msgstr ""
 
-#: gtk/gtkprintoperation.c:2254
+#: gtk/gtkprintoperation.c:2270
 #, c-format
 msgid "Preparing %d"
 msgstr ""
 
-#: gtk/gtkprintoperation.c:2256 gtk/gtkprintoperation.c:2875
+#: gtk/gtkprintoperation.c:2272 gtk/gtkprintoperation.c:2902
 #, fuzzy, c-format
 msgid "Preparing"
 msgstr "װאָרענונג"
 
-#: gtk/gtkprintoperation.c:2259
+#: gtk/gtkprintoperation.c:2275
 #, fuzzy, c-format
 msgid "Printing %d"
 msgstr "דרוק"
 
-#: gtk/gtkprintoperation.c:2905
+#: gtk/gtkprintoperation.c:2932
 #, c-format
 msgid "Error creating print preview"
 msgstr ""
 
-#: gtk/gtkprintoperation.c:2908
+#: gtk/gtkprintoperation.c:2935
 #, c-format
 msgid "The most probable reason is that a temporary file could not be created."
 msgstr ""
 
-#: gtk/gtkprintoperation-unix.c:297 gtk/gtkprintoperation-unix.c:314
-#, c-format
+#: gtk/gtkprintoperation-unix.c:297
 msgid "Error launching preview"
 msgstr ""
 
-#: gtk/gtkprintoperation-unix.c:358
-#, c-format
-msgid "Error printing"
-msgstr ""
-
-#: gtk/gtkprintoperation-unix.c:494 gtk/gtkprintoperation-win32.c:1447
+#: gtk/gtkprintoperation-unix.c:470 gtk/gtkprintoperation-win32.c:1447
 #, fuzzy
 msgid "Application"
 msgstr "סעלעקציע: "
@@ -2601,7 +1633,7 @@ msgstr ""
 
 #. Translators: this is a printer status.
 #: gtk/gtkprintoperation-win32.c:616
-#: modules/printbackends/cups/gtkprintbackendcups.c:1999
+#: modules/printbackends/cups/gtkprintbackendcups.c:1998
 #, fuzzy
 msgid "Paused"
 msgstr "קלעפּ"
@@ -2738,42 +1770,42 @@ msgstr ""
 #. * multiple pages on a sheet when printing
 #.
 #: gtk/gtkprintunixdialog.c:3010
-#: modules/printbackends/cups/gtkprintbackendcups.c:3509
+#: modules/printbackends/cups/gtkprintbackendcups.c:3508
 msgid "Left to right, top to bottom"
 msgstr ""
 
 #: gtk/gtkprintunixdialog.c:3010
-#: modules/printbackends/cups/gtkprintbackendcups.c:3509
+#: modules/printbackends/cups/gtkprintbackendcups.c:3508
 msgid "Left to right, bottom to top"
 msgstr ""
 
 #: gtk/gtkprintunixdialog.c:3011
-#: modules/printbackends/cups/gtkprintbackendcups.c:3510
+#: modules/printbackends/cups/gtkprintbackendcups.c:3509
 msgid "Right to left, top to bottom"
 msgstr ""
 
 #: gtk/gtkprintunixdialog.c:3011
-#: modules/printbackends/cups/gtkprintbackendcups.c:3510
+#: modules/printbackends/cups/gtkprintbackendcups.c:3509
 msgid "Right to left, bottom to top"
 msgstr ""
 
 #: gtk/gtkprintunixdialog.c:3012
-#: modules/printbackends/cups/gtkprintbackendcups.c:3511
+#: modules/printbackends/cups/gtkprintbackendcups.c:3510
 msgid "Top to bottom, left to right"
 msgstr ""
 
 #: gtk/gtkprintunixdialog.c:3012
-#: modules/printbackends/cups/gtkprintbackendcups.c:3511
+#: modules/printbackends/cups/gtkprintbackendcups.c:3510
 msgid "Top to bottom, right to left"
 msgstr ""
 
 #: gtk/gtkprintunixdialog.c:3013
-#: modules/printbackends/cups/gtkprintbackendcups.c:3512
+#: modules/printbackends/cups/gtkprintbackendcups.c:3511
 msgid "Bottom to top, left to right"
 msgstr ""
 
 #: gtk/gtkprintunixdialog.c:3013
-#: modules/printbackends/cups/gtkprintbackendcups.c:3512
+#: modules/printbackends/cups/gtkprintbackendcups.c:3511
 msgid "Bottom to top, right to left"
 msgstr ""
 
@@ -2781,7 +1813,7 @@ msgstr ""
 #. * dialog that controls in what order multiple pages are arranged
 #.
 #: gtk/gtkprintunixdialog.c:3017 gtk/gtkprintunixdialog.c:3030
-#: modules/printbackends/cups/gtkprintbackendcups.c:3544
+#: modules/printbackends/cups/gtkprintbackendcups.c:3543
 #, fuzzy
 msgid "Page Ordering"
 msgstr "װאָרענונג"
@@ -5054,125 +4086,120 @@ msgstr ""
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:1687
 #, c-format
-msgid "Printer '%s' may not be connected."
-msgstr ""
-
-#: modules/printbackends/cups/gtkprintbackendcups.c:1688
-#, c-format
 msgid "There is a problem on printer '%s'."
 msgstr ""
 
 #. Translators: this is a printer status.
-#: modules/printbackends/cups/gtkprintbackendcups.c:1996
+#: modules/printbackends/cups/gtkprintbackendcups.c:1995
 msgid "Paused ; Rejecting Jobs"
 msgstr ""
 
 #. Translators: this is a printer status.
-#: modules/printbackends/cups/gtkprintbackendcups.c:2002
+#: modules/printbackends/cups/gtkprintbackendcups.c:2001
 msgid "Rejecting Jobs"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2778
+#: modules/printbackends/cups/gtkprintbackendcups.c:2777
 msgid "Two Sided"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2779
+#: modules/printbackends/cups/gtkprintbackendcups.c:2778
 msgid "Paper Type"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2780
+#: modules/printbackends/cups/gtkprintbackendcups.c:2779
 msgid "Paper Source"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2781
+#: modules/printbackends/cups/gtkprintbackendcups.c:2780
 msgid "Output Tray"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2782
+#: modules/printbackends/cups/gtkprintbackendcups.c:2781
 #, fuzzy
 msgid "Resolution"
 msgstr "פֿראַגע"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2783
+#: modules/printbackends/cups/gtkprintbackendcups.c:2782
 msgid "GhostScript pre-filtering"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2792
+#: modules/printbackends/cups/gtkprintbackendcups.c:2791
 msgid "One Sided"
 msgstr ""
 
 #. Translators: this is an option of "Two Sided"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2794
+#: modules/printbackends/cups/gtkprintbackendcups.c:2793
 msgid "Long Edge (Standard)"
 msgstr ""
 
 #. Translators: this is an option of "Two Sided"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2796
+#: modules/printbackends/cups/gtkprintbackendcups.c:2795
 msgid "Short Edge (Flip)"
 msgstr ""
 
 #. Translators: this is an option of "Paper Source"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2798
-#: modules/printbackends/cups/gtkprintbackendcups.c:2800
-#: modules/printbackends/cups/gtkprintbackendcups.c:2808
+#: modules/printbackends/cups/gtkprintbackendcups.c:2797
+#: modules/printbackends/cups/gtkprintbackendcups.c:2799
+#: modules/printbackends/cups/gtkprintbackendcups.c:2807
 #, fuzzy
 msgid "Auto Select"
 msgstr "שריפֿט סעלעקציע"
 
 #. Translators: this is an option of "Paper Source"
 #. Translators: this is an option of "Resolution"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2802
-#: modules/printbackends/cups/gtkprintbackendcups.c:2804
-#: modules/printbackends/cups/gtkprintbackendcups.c:2806
-#: modules/printbackends/cups/gtkprintbackendcups.c:2810
-#: modules/printbackends/cups/gtkprintbackendcups.c:3296
+#: modules/printbackends/cups/gtkprintbackendcups.c:2801
+#: modules/printbackends/cups/gtkprintbackendcups.c:2803
+#: modules/printbackends/cups/gtkprintbackendcups.c:2805
+#: modules/printbackends/cups/gtkprintbackendcups.c:2809
+#: modules/printbackends/cups/gtkprintbackendcups.c:3295
 #, fuzzy
 msgid "Printer Default"
 msgstr "געװײנטלעכע ברײט"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2812
+#: modules/printbackends/cups/gtkprintbackendcups.c:2811
 msgid "Embed GhostScript fonts only"
 msgstr ""
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2814
+#: modules/printbackends/cups/gtkprintbackendcups.c:2813
 msgid "Convert to PS level 1"
 msgstr ""
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2816
+#: modules/printbackends/cups/gtkprintbackendcups.c:2815
 msgid "Convert to PS level 2"
 msgstr ""
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2818
+#: modules/printbackends/cups/gtkprintbackendcups.c:2817
 #, fuzzy
 msgid "No pre-filtering"
 msgstr "ניט געפֿונען קײן XPM קאָפּצעטל"
 
 #. Translators: "Miscellaneous" is the label for a button, that opens
 #. up an extra panel of settings in a print dialog.
-#: modules/printbackends/cups/gtkprintbackendcups.c:2827
+#: modules/printbackends/cups/gtkprintbackendcups.c:2826
 msgid "Miscellaneous"
 msgstr ""
 
 #. Translators: These strings name the possible values of the
 #. * job priority option in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3504
+#: modules/printbackends/cups/gtkprintbackendcups.c:3503
 msgid "Urgent"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3504
+#: modules/printbackends/cups/gtkprintbackendcups.c:3503
 msgid "High"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3504
+#: modules/printbackends/cups/gtkprintbackendcups.c:3503
 msgid "Medium"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3504
+#: modules/printbackends/cups/gtkprintbackendcups.c:3503
 msgid "Low"
 msgstr ""
 
@@ -5180,7 +4207,7 @@ msgstr ""
 #. Translators, this string is used to label the pages-per-sheet option
 #. * in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3528
+#: modules/printbackends/cups/gtkprintbackendcups.c:3527
 #, fuzzy
 msgid "Pages per Sheet"
 msgstr "בילד האָט אַ נוליקע הײך"
@@ -5188,61 +4215,61 @@ msgstr "בילד האָט אַ נוליקע הײך"
 #. Translators, this string is used to label the job priority option
 #. * in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3565
+#: modules/printbackends/cups/gtkprintbackendcups.c:3564
 msgid "Job Priority"
 msgstr ""
 
 #. Translators, this string is used to label the billing info entry
 #. * in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3576
+#: modules/printbackends/cups/gtkprintbackendcups.c:3575
 msgid "Billing Info"
 msgstr ""
 
 #. Translators, these strings are names for various 'standard' cover
 #. * pages that the printing system may support.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3591
+#: modules/printbackends/cups/gtkprintbackendcups.c:3590
 #, fuzzy
 msgid "None"
 msgstr "קײנע"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3591
+#: modules/printbackends/cups/gtkprintbackendcups.c:3590
 msgid "Classified"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3591
+#: modules/printbackends/cups/gtkprintbackendcups.c:3590
 msgid "Confidential"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3591
+#: modules/printbackends/cups/gtkprintbackendcups.c:3590
 #, fuzzy
 msgid "Secret"
 msgstr "עקראַן"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3591
+#: modules/printbackends/cups/gtkprintbackendcups.c:3590
 msgid "Standard"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3591
+#: modules/printbackends/cups/gtkprintbackendcups.c:3590
 msgid "Top Secret"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3591
+#: modules/printbackends/cups/gtkprintbackendcups.c:3590
 msgid "Unclassified"
 msgstr ""
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the front cover page.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3626
+#: modules/printbackends/cups/gtkprintbackendcups.c:3625
 msgid "Before"
 msgstr ""
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the back cover page.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3641
+#: modules/printbackends/cups/gtkprintbackendcups.c:3640
 msgid "After"
 msgstr ""
 
@@ -5250,7 +4277,7 @@ msgstr ""
 #. * a print job is printed. Possible values are 'now', a specified time,
 #. * or 'on hold'
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3661
+#: modules/printbackends/cups/gtkprintbackendcups.c:3660
 #, fuzzy
 msgid "Print at"
 msgstr "דרוק"
@@ -5258,7 +4285,7 @@ msgstr "דרוק"
 #. Translators: this is the name of the option that allows the user
 #. * to specify a time when a print job will be printed.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3672
+#: modules/printbackends/cups/gtkprintbackendcups.c:3671
 #, fuzzy
 msgid "Print at time"
 msgstr "דרוק"
@@ -5267,7 +4294,7 @@ msgstr "דרוק"
 #. * size. The two placeholders are replaced with the width and height
 #. * in points. E.g: "Custom 230.4x142.9"
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3707
+#: modules/printbackends/cups/gtkprintbackendcups.c:3706
 #, c-format
 msgid "Custom %sx%s"
 msgstr ""
@@ -5367,6 +4394,708 @@ msgstr "דרוק"
 #, fuzzy, c-format
 msgid "Could not get information for file '%s': %s"
 msgstr "ניט געקענט דערקענען בילד־טעקע פֿאָרמאַטירונג אין טעקע '%s'"
+
+#: tests/testfilechooser.c:222
+#, c-format
+msgid "Failed to open file '%s': %s"
+msgstr "ניט געקענט עפֿענען טעקע '%s': %s"
+
+#: tests/testfilechooser.c:267
+#, c-format
+msgid ""
+"Failed to load image '%s': reason not known, probably a corrupt image file"
+msgstr ""
+"ניט געקענט אַרײַנצושטעלן בילד '%s' צוליב אומבאַקאַנטע סיבות, מסתּמא אַ קאָרומפּירטע "
+"בילדטעקע"
+
+#~ msgid "Image file '%s' contains no data"
+#~ msgstr "בילדטעקע '%s' האָט קײן דאַטן ניט"
+
+#~ msgid ""
+#~ "Failed to load animation '%s': reason not known, probably a corrupt "
+#~ "animation file"
+#~ msgstr ""
+#~ "ניט געקענט אַרײַנצושטעלן אַנימאַציע '%s' צוליב אומבאַקאַנטע סיבות, מסתּמא אַ "
+#~ "קאָרומפּירטע אַנימאַציע טעקע"
+
+#~ msgid "Unable to load image-loading module: %s: %s"
+#~ msgstr "ניט געקענט אַרײַנצושטעלן בילד־אַרײַנשטעל מאָדול: %s: %s"
+
+#~ msgid ""
+#~ "Image-loading module %s does not export the proper interface; perhaps "
+#~ "it's from a different GTK version?"
+#~ msgstr ""
+#~ "בילד־אַרײַנשטעל מאָדול %s עקספּאָרטירט ניט דעם פּאַסיקן צובינד; אפֿשר פֿון אַ צװײטע "
+#~ "GTK װערסיע?"
+
+#~ msgid "Image type '%s' is not supported"
+#~ msgstr "בילד־סאָרט '%s' ניט געשטיצט"
+
+#~ msgid "Couldn't recognize the image file format for file '%s'"
+#~ msgstr "ניט געקענט דערקענען בילד־טעקע פֿאָרמאַטירונג אין טעקע '%s'"
+
+#~ msgid "Unrecognized image file format"
+#~ msgstr "ניט דערקענט בילד־טעקע פֿאָרמאַטירונג"
+
+#~ msgid "Failed to load image '%s': %s"
+#~ msgstr "ניט געקענט אַרײַנשטעלן בילד '%s': %s"
+
+#, fuzzy
+#~ msgid "Error writing to image file: %s"
+#~ msgstr "טעות אין באַשײדן JPEG בילדטעקע (%s)"
+
+#~ msgid ""
+#~ "This build of gdk-pixbuf does not support saving the image format: %s"
+#~ msgstr ""
+#~ "דער געבױ פֿון gdk-pixbuf שטיצט ניט אונטער אױפֿהיט פֿון בילד פֿאָרמאַטירונג: %s"
+
+#, fuzzy
+#~ msgid "Insufficient memory to save image to callback"
+#~ msgstr "ניט גענוג זכּרון אַרײַנשטעלן XBM בילדטעקע"
+
+#, fuzzy
+#~ msgid "Failed to open temporary file"
+#~ msgstr "דורכפֿאַל אין עפֿענען TIFF בילד"
+
+#, fuzzy
+#~ msgid "Failed to read from temporary file"
+#~ msgstr "דורכפֿאַל אין שרײַבן צײַטװײַליקע טעקע בשעת אַרײַנשטעלן XBM בילד"
+
+#~ msgid "Failed to open '%s' for writing: %s"
+#~ msgstr "ניט געקענט עפֿענען '%s' צו שרײַבן: %s"
+
+#~ msgid ""
+#~ "Failed to close '%s' while writing image, all data may not have been "
+#~ "saved: %s"
+#~ msgstr ""
+#~ "ניט געקענט פֿאַרמאַכן '%s' בשעת שרײַבן די בילד; קען זײַן אַז ניט אױפֿגעהיט אַלע "
+#~ "דאַטן: %s"
+
+#, fuzzy
+#~ msgid "Insufficient memory to save image into a buffer"
+#~ msgstr "ניט גענוג זכּרון אַרײַנשטעלן XBM בילדטעקע"
+
+#, fuzzy
+#~ msgid "Error writing to image stream"
+#~ msgstr "טעות אין באַשײדן JPEG בילדטעקע (%s)"
+
+#, fuzzy
+#~ msgid ""
+#~ "Internal error: Image loader module '%s' failed to complete an operation, "
+#~ "but didn't give a reason for the failure"
+#~ msgstr ""
+#~ "אינערלעכע טעות: בילד אַרײַנשטעל מאָדול '%s' האָט ניט אָנגעהױבן אַרײַנשטעלן אַ "
+#~ "בילד, אָבער זי האָט ניט געגעבן קײן סיבה דערצו"
+
+#~ msgid "Incremental loading of image type '%s' is not supported"
+#~ msgstr "צוגעבלעך אַרײַנשטעל פֿון בילד־סאָרט '%s' ניט געשטיצט"
+
+#~ msgid "Image header corrupt"
+#~ msgstr "קאָרומפּירטער בילדקאָפּ"
+
+#~ msgid "Image format unknown"
+#~ msgstr "ניט־באַקאַנטע בילד־פֿאָרעם"
+
+#~ msgid "Image pixel data corrupt"
+#~ msgstr "פֿאַלשע בילדצעל דאַטן"
+
+#, fuzzy
+#~ msgid "failed to allocate image buffer of %u byte"
+#~ msgid_plural "failed to allocate image buffer of %u bytes"
+#~ msgstr[0] "ניט גענוג זכּרון צו פֿאַרטײלן בילד באַהאַלט־אָרט פֿון %u אַכטעלעך"
+#~ msgstr[1] "ניט גענוג זכּרון צו פֿאַרטײלן בילד באַהאַלט־אָרט פֿון %u אַכטעלעך"
+
+#~ msgid "Unexpected icon chunk in animation"
+#~ msgstr "אומדערװאַרטע בילדל־שטיק אין אַנימאַציע"
+
+#~ msgid "Unsupported animation type"
+#~ msgstr "אַנימאַציע־סאָרט ניט געשטיצט"
+
+#~ msgid "Invalid header in animation"
+#~ msgstr "אומלעקסיק קאָפּצעטל אין אַנימאַציע"
+
+#~ msgid "Not enough memory to load animation"
+#~ msgstr "ניט גענוג זכּרון אַרײַנצושטעלן אַנימאַציע"
+
+#~ msgid "Malformed chunk in animation"
+#~ msgstr "אומלעקסיק שטיק אין אַנימאַציע"
+
+#~ msgid "The ANI image format"
+#~ msgstr "ANI בילד־פֿאָרעם"
+
+#~ msgid "BMP image has bogus header data"
+#~ msgstr "BMP בילד האָט פֿאַלשע קאָפּצעטל דאַטן"
+
+#~ msgid "Not enough memory to load bitmap image"
+#~ msgstr "ניט גענוג זכּרון אַרײַנצושטעלן ביטמאַפּע בילד"
+
+#~ msgid "BMP image has unsupported header size"
+#~ msgstr "BMP בילד האָט אַ ניט־געשטיצטע קאָפּצעטל גרײס"
+
+#~ msgid "Premature end-of-file encountered"
+#~ msgstr "צו־פֿריִיִקער טעקע־סוף"
+
+#, fuzzy
+#~ msgid "Couldn't allocate memory for saving BMP file"
+#~ msgstr "ניט געקענט געפֿינען זכּרון אַרײַנצושטעלן JPEG טעקע"
+
+#, fuzzy
+#~ msgid "Couldn't write to BMP file"
+#~ msgstr "ניט געקענט איבערמאַכן טעקע־נאָמען"
+
+#~ msgid "The BMP image format"
+#~ msgstr "BMP בילד־פֿאָרעם"
+
+#~ msgid "Failure reading GIF: %s"
+#~ msgstr "דורכפֿאַל אין לײענען GIF: %s"
+
+#~ msgid "GIF file was missing some data (perhaps it was truncated somehow?)"
+#~ msgstr "אין GIF טעקע פֿעלן דאַטן (אפֿשר איז די טעקע פֿאַרקירצט?)"
+
+#~ msgid "Internal error in the GIF loader (%s)"
+#~ msgstr "אינערלעכע טעות אין GIF אַרײַנשטעל (%s)"
+
+#~ msgid "Stack overflow"
+#~ msgstr "הײפֿטל אָפּפֿלוס"
+
+#, fuzzy
+#~ msgid "GIF image loader cannot understand this image."
+#~ msgstr "GIF בילד־אַרײַנשטעל פֿאַרשטײט ניט דאָס בילד"
+
+#~ msgid "Bad code encountered"
+#~ msgstr "געפֿונען אומלעקסיקע פּראָגראַמװאַרג"
+
+#~ msgid "Circular table entry in GIF file"
+#~ msgstr "צעפּלאָשעטע טאַבעלע פּאָזיציע אין GIF טעקע"
+
+#~ msgid "Not enough memory to load GIF file"
+#~ msgstr "ניט גענוג זכּרון אַרײַנצושטעלן GIF טעקע"
+
+#, fuzzy
+#~ msgid "Not enough memory to composite a frame in GIF file"
+#~ msgstr "ניט גענוג זכּרון אַרײַנצושטעלן GIF טעקע"
+
+#~ msgid "GIF image is corrupt (incorrect LZW compression)"
+#~ msgstr "קאָרומפּירטע GIF בילד (אומלעקסיקער LZW אײַנקלענערונג)"
+
+#~ msgid "File does not appear to be a GIF file"
+#~ msgstr "טעקע זעט ניט אױס װי קײן GIF טעקע"
+
+#~ msgid "Version %s of the GIF file format is not supported"
+#~ msgstr "װערסיע %s פֿון GIF טעקע פֿאָרמאַטירונג ניט געשטיצט"
+
+#~ msgid ""
+#~ "GIF image has no global colormap, and a frame inside it has no local "
+#~ "colormap."
+#~ msgstr ""
+#~ "דאָס GIF בילד האָט ניט קײן גלאָבאַלע פֿאַרבמאַפּע, און אַ ראָם אין אים האָט ניט קײן "
+#~ "לאָקאַלע פֿאַרבמאַפּע"
+
+#~ msgid "GIF image was truncated or incomplete."
+#~ msgstr "דאָס GIF בילד איז אָדער פֿאַרקירצט אָדער האַלב"
+
+#~ msgid "The GIF image format"
+#~ msgstr "GIF בילד־פֿאָרעם"
+
+#~ msgid "Invalid header in icon"
+#~ msgstr "אומלעקסיק קאָפּצעטל אין בילדל"
+
+#~ msgid "Not enough memory to load icon"
+#~ msgstr "ניט גענוג זכּרון אַרײַנצושטעלן בילדל"
+
+#~ msgid "Icon has zero width"
+#~ msgstr "בילדל האָט אַ נוליקע ברײט"
+
+#~ msgid "Icon has zero height"
+#~ msgstr "בילדל האָט אַ נוליקע הײך"
+
+#~ msgid "Compressed icons are not supported"
+#~ msgstr "אײַנגעקלענערטע בילדלעך זײַנען ניט געשטיצט"
+
+#~ msgid "Unsupported icon type"
+#~ msgstr "בילדל סאָרט ניט געשטיצט"
+
+#~ msgid "Not enough memory to load ICO file"
+#~ msgstr "ניט גענוג זכּרון אַרײַנצושטעלן ICO טעקע"
+
+#~ msgid "The ICO image format"
+#~ msgstr "ICO בילד־פֿאָרעם"
+
+#, fuzzy
+#~ msgid "Error reading ICNS image: %s"
+#~ msgstr "טױטפֿאַל אין לײענען PNG בילדטעקע: %s"
+
+#, fuzzy
+#~ msgid "Could not decode ICNS file"
+#~ msgstr ""
+#~ "דורכפֿאַל אין שאַפֿן פּאַפּקע %s: %s\n"
+#~ "%s"
+
+#, fuzzy
+#~ msgid "The ICNS image format"
+#~ msgstr "ICO בילד־פֿאָרעם"
+
+#, fuzzy
+#~ msgid "Couldn't allocate memory for stream"
+#~ msgstr "ניט גענוג זכּרון פֿאַר TGA קאָפּצעטל"
+
+#, fuzzy
+#~ msgid "Couldn't decode image"
+#~ msgstr "ניט געקענט איבערמאַכן טעקע־נאָמען"
+
+#, fuzzy
+#~ msgid "Transformed JPEG2000 has zero width or height"
+#~ msgstr "טראַנספֿאָרמירטע PNG האָט נוליקע ברײט אָדער הײך"
+
+#, fuzzy
+#~ msgid "Image type currently not supported"
+#~ msgstr "בילד־סאָרט '%s' ניט געשטיצט"
+
+#, fuzzy
+#~ msgid "Couldn't allocate memory for color profile"
+#~ msgstr "ניט געקענט געפֿינען זכּרון אַרײַנצושטעלן JPEG טעקע"
+
+#, fuzzy
+#~ msgid "Insufficient memory to open JPEG 2000 file"
+#~ msgstr "ניט גענוג זכּרון עפֿענען TIFF טעקע"
+
+#, fuzzy
+#~ msgid "Couldn't allocate memory to buffer image data"
+#~ msgstr "ניט גענוג זכּרון פֿאַר IOBuffer דאַטן"
+
+#, fuzzy
+#~ msgid "The JPEG 2000 image format"
+#~ msgstr "JPEG בילד־פֿאָרעם"
+
+#~ msgid "Error interpreting JPEG image file (%s)"
+#~ msgstr "טעות אין באַשײדן JPEG בילדטעקע (%s)"
+
+#~ msgid ""
+#~ "Insufficient memory to load image, try exiting some applications to free "
+#~ "memory"
+#~ msgstr ""
+#~ "ניט גענוג זכּרון אַרײַנצושטעלן בילד; פּרוּװ ענדיקן אַנדערע פּראָגראַמען צו דערלײזן "
+#~ "זכּרון"
+
+#~ msgid "Unsupported JPEG color space (%s)"
+#~ msgstr "ניט געשטיצטע JPEG פֿאַרב־שטח (%s)"
+
+#~ msgid "Couldn't allocate memory for loading JPEG file"
+#~ msgstr "ניט געקענט געפֿינען זכּרון אַרײַנצושטעלן JPEG טעקע"
+
+#, fuzzy
+#~ msgid "Transformed JPEG has zero width or height."
+#~ msgstr "טראַנספֿאָרמירטע PNG האָט נוליקע ברײט אָדער הײך"
+
+#~ msgid ""
+#~ "JPEG quality must be a value between 0 and 100; value '%s' could not be "
+#~ "parsed."
+#~ msgstr ""
+#~ "די JPEG קװאַליטעט מוז האָבן אַ באַטרעף צװישן 0 און 100; דער באַטרעף '%s' איז "
+#~ "אומלעקסיק"
+
+#~ msgid ""
+#~ "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
+#~ msgstr ""
+#~ "די JPEG קװאַליטעט מוז האָבן אַ באַטרעף צװישן 0 און 100; דער באַטרעף '%d' איז "
+#~ "אומלעקסיק"
+
+#~ msgid "The JPEG image format"
+#~ msgstr "JPEG בילד־פֿאָרעם"
+
+#, fuzzy
+#~ msgid "Couldn't allocate memory for header"
+#~ msgstr "ניט גענוג זכּרון פֿאַר TGA קאָפּצעטל"
+
+#, fuzzy
+#~ msgid "Couldn't allocate memory for context buffer"
+#~ msgstr "ניט גענוג זכּרון פֿאַר TGA קאָנטעקסט־סטרוקטור"
+
+#, fuzzy
+#~ msgid "Image has invalid width and/or height"
+#~ msgstr "בילד האָט אַ נוליקע הײך"
+
+#, fuzzy
+#~ msgid "Image has unsupported bpp"
+#~ msgstr "BMP בילד האָט אַ ניט־געשטיצטע קאָפּצעטל גרײס"
+
+#, fuzzy
+#~ msgid "Image has unsupported number of %d-bit planes"
+#~ msgstr "BMP בילד האָט אַ ניט־געשטיצטע קאָפּצעטל גרײס"
+
+#, fuzzy
+#~ msgid "Couldn't create new pixbuf"
+#~ msgstr "ניט גענוג זכּרון פֿאַר נײַעם pixbuf"
+
+#, fuzzy
+#~ msgid "Couldn't allocate memory for line data"
+#~ msgstr "ניט גענוג זכּרון פֿאַר IOBuffer דאַטן"
+
+#, fuzzy
+#~ msgid "Couldn't allocate memory for paletted data"
+#~ msgstr "ניט גענוג זכּרון פֿאַר IOBuffer דאַטן"
+
+#, fuzzy
+#~ msgid "The PCX image format"
+#~ msgstr "BMP בילד־פֿאָרעם"
+
+#~ msgid "Bits per channel of PNG image is invalid."
+#~ msgstr "באַטרעף פֿון ביטן אין קאַנאַל פֿון PNG בילד איז אומלעקסיק"
+
+#~ msgid "Transformed PNG has zero width or height."
+#~ msgstr "טראַנספֿאָרמירטע PNG האָט נוליקע ברײט אָדער הײך"
+
+#~ msgid "Bits per channel of transformed PNG is not 8."
+#~ msgstr "ביטן אין קאַנאַל פֿון טראַנספֿאָרמירטע PNG איז ניט 8"
+
+#~ msgid "Transformed PNG not RGB or RGBA."
+#~ msgstr "טראַנספֿאָרמירטע PNG איז ניט RGB און ניט RGBA"
+
+#~ msgid "Transformed PNG has unsupported number of channels, must be 3 or 4."
+#~ msgstr "טראַנספֿאָרמירטע PNG האָט אַ ניט־געשטיצטן צאָל קאַנאַלן; מוז זײַן 3 אָדער 4"
+
+#~ msgid "Fatal error in PNG image file: %s"
+#~ msgstr "טױטפֿאַל אין PNG בילדטעקע: %s"
+
+#~ msgid "Insufficient memory to load PNG file"
+#~ msgstr "ניט גענוג זכּרון אַרײַנצושטעלן PNG טעקע"
+
+#~ msgid ""
+#~ "Insufficient memory to store a %ld by %ld image; try exiting some "
+#~ "applications to reduce memory usage"
+#~ msgstr ""
+#~ "ניט גענוג זכּרון פֿאַרהאַלטן אַ בילד מיט גרײס %ld מיט %ld; פּרוּװ ענדיקן עטלעכע "
+#~ "פּראָגראַמען צו פֿאַרקלענערן דעם מאַנגל אין זכּרון"
+
+#~ msgid "Fatal error reading PNG image file"
+#~ msgstr "טױטפֿאַל אין לײענען PNG בילדטעקע"
+
+#~ msgid "Fatal error reading PNG image file: %s"
+#~ msgstr "טױטפֿאַל אין לײענען PNG בילדטעקע: %s"
+
+#~ msgid ""
+#~ "Keys for PNG text chunks must have at least 1 and at most 79 characters."
+#~ msgstr "שליסלעך פֿאַר PNG טעקסט שטיקער מוזן האָבן צװישן 1 און 79 שריפֿטצײכנס"
+
+#~ msgid "Keys for PNG text chunks must be ASCII characters."
+#~ msgstr "שליסלעך פֿאַר PNG טעקסט שטיקער מוזן זײַן ASCII שריפֿטצײכנס"
+
+#, fuzzy
+#~ msgid ""
+#~ "PNG compression level must be a value between 0 and 9; value '%s' could "
+#~ "not be parsed."
+#~ msgstr ""
+#~ "די JPEG קװאַליטעט מוז האָבן אַ באַטרעף צװישן 0 און 100; דער באַטרעף '%s' איז "
+#~ "אומלעקסיק"
+
+#, fuzzy
+#~ msgid ""
+#~ "PNG compression level must be a value between 0 and 9; value '%d' is not "
+#~ "allowed."
+#~ msgstr ""
+#~ "די JPEG קװאַליטעט מוז האָבן אַ באַטרעף צװישן 0 און 100; דער באַטרעף '%d' איז "
+#~ "אומלעקסיק"
+
+#, fuzzy
+#~ msgid ""
+#~ "Value for PNG text chunk %s cannot be converted to ISO-8859-1 encoding."
+#~ msgstr ""
+#~ "באַטרעף פֿאַר PNG טעקסטשטיק %s לאָזט זיך ניט איבערמאַכן אין ISO-8859-1 קאָדירונג"
+
+#~ msgid "The PNG image format"
+#~ msgstr "די PNG בילד־פֿאָרמאַטירונג"
+
+#~ msgid "PNM loader expected to find an integer, but didn't"
+#~ msgstr "PNM אַרײַנשטעל האָט דערװאַרט אַ גאַנצער נומער, אָבער ניט געפֿונען"
+
+#~ msgid "PNM file has an incorrect initial byte"
+#~ msgstr "PNM טעקע האָט אַ פֿאַלש ערשט אַכטעלע"
+
+#~ msgid "PNM file is not in a recognized PNM subformat"
+#~ msgstr "PNM טעקע האָט ניט קײן באַקאַנטע PNM אונטער־פֿאָרמאַטירונג"
+
+#~ msgid "PNM file has an image width of 0"
+#~ msgstr "PNM טעקע האָט אַ נוליקע בילד־ברײט"
+
+#~ msgid "PNM file has an image height of 0"
+#~ msgstr "PNM טעקע האָט אַ נוליקע בילד־הײך"
+
+#~ msgid "Maximum color value in PNM file is 0"
+#~ msgstr "PNM טעקע האָט אַ נוליקן העכסטן פֿאַרב־באַטרעף"
+
+#~ msgid "Maximum color value in PNM file is too large"
+#~ msgstr "PNM טעקע האָט אַ צו־גרױסן העכסטן פֿאַרב־באַטרעף"
+
+#~ msgid "Raw PNM image type is invalid"
+#~ msgstr "רױער PNM בילד־סאָרט איז אומלעקסיק"
+
+#~ msgid "PNM image loader does not support this PNM subformat"
+#~ msgstr "PNM בילד אַרײַנשטעל שטיצט ניט אונטער דעם PNM אונטער־פֿאָרמאַטירונג"
+
+#~ msgid "Raw PNM formats require exactly one whitespace before sample data"
+#~ msgstr ""
+#~ "רױע PNM פֿאָרמאַטירונגען פֿאָדערן פּינקטלעך אײן לײדיקע פּאָזיציע פֿאַר מוסטער־דאַטן"
+
+#, fuzzy
+#~ msgid "Cannot allocate memory for loading PNM image"
+#~ msgstr "ניט גענוג זכּרון אַרײַנצושטעלן PNM בילד"
+
+#~ msgid "Insufficient memory to load PNM context struct"
+#~ msgstr "ניט גענוג זכּרון אַרײַנצושטעלן PNM קאָנטעקסט־סטרוקטור"
+
+#~ msgid "Unexpected end of PNM image data"
+#~ msgstr "ניט דערװאַרטער סוף פֿון PNM בילד דאַטן"
+
+#~ msgid "Insufficient memory to load PNM file"
+#~ msgstr "ניט גענוג זכּרון אַרײַנצושטעלן PNM טעקע"
+
+#~ msgid "The PNM/PBM/PGM/PPM image format family"
+#~ msgstr "PNM/PBM/PGM/PPM בילד־פֿאָרעם משפּחה"
+
+#, fuzzy
+#~ msgid "Failed to read QTIF header"
+#~ msgstr "דורכפֿאַל אין עפֿענען TIFF בילד"
+
+#, fuzzy
+#~ msgid "Failed to allocate %d bytes for file read buffer"
+#~ msgstr "ניט גענוג זכּרון צו פֿאַרטײלן בילד באַהאַלט־אָרט פֿון %u אַכטעלעך"
+
+#, fuzzy
+#~ msgid "File error when reading QTIF atom: %s"
+#~ msgstr "דורכפֿאַל אין לײענען GIF: %s"
+
+#, fuzzy
+#~ msgid "Failed to allocate QTIF context structure."
+#~ msgstr "ניט גענוג זכּרון פֿאַר TGA קאָנטעקסט־סטרוקטור"
+
+#, fuzzy
+#~ msgid "Failed to create GdkPixbufLoader object."
+#~ msgstr "דורכפֿאַל אין שרײַבן צײַטװײַליקע טעקע בשעת אַרײַנשטעלן XBM בילד"
+
+#, fuzzy
+#~ msgid "Failed to find an image data atom."
+#~ msgstr "דורכפֿאַל אין עפֿענען TIFF בילד"
+
+#, fuzzy
+#~ msgid "The QTIF image format"
+#~ msgstr "TIFF בילד־פֿאָרעם"
+
+#~ msgid "RAS image has bogus header data"
+#~ msgstr "RAS בילד האָט פֿאַלשע קאָפּצעטל דאַטן"
+
+#~ msgid "RAS image has unknown type"
+#~ msgstr "RAS בילד האָט אַן אומבאַקאַנטן סאָרט"
+
+#~ msgid "unsupported RAS image variation"
+#~ msgstr "ניט געשטיצטע RAS־בילד װאַריִאַציע"
+
+#~ msgid "Not enough memory to load RAS image"
+#~ msgstr "ניט גענוג זכּרון אַרײַנשטעלן RAS־בילד"
+
+#~ msgid "The Sun raster image format"
+#~ msgstr "Sun ראַסטער בילד־פֿאָרעם"
+
+#, fuzzy
+#~ msgid "Cannot allocate memory for IOBuffer struct"
+#~ msgstr "ניט גענוג זכּרון פֿאַר IOBuffer סטרוקטור"
+
+#, fuzzy
+#~ msgid "Cannot allocate memory for IOBuffer data"
+#~ msgstr "ניט גענוג זכּרון פֿאַר IOBuffer דאַטן"
+
+#, fuzzy
+#~ msgid "Cannot realloc IOBuffer data"
+#~ msgstr "ניט געקענט װידער צוטײלן IOBuffer דאַטן"
+
+#, fuzzy
+#~ msgid "Cannot allocate temporary IOBuffer data"
+#~ msgstr "ניט געקענט פֿאַרטײלן צײַטװײַליקע IOBuffer דאַטן"
+
+#, fuzzy
+#~ msgid "Cannot allocate new pixbuf"
+#~ msgstr "ניט גענוג זכּרון פֿאַר נײַעם pixbuf"
+
+#, fuzzy
+#~ msgid "Image is corrupted or truncated"
+#~ msgstr "דאָס GIF בילד איז אָדער פֿאַרקירצט אָדער האַלב"
+
+#, fuzzy
+#~ msgid "Cannot allocate colormap structure"
+#~ msgstr "ניט גענוג זכּרון פֿאַר פֿאַרבמאַפּע סטרוקטור"
+
+#, fuzzy
+#~ msgid "Cannot allocate colormap entries"
+#~ msgstr "ניט גענוג פֿאַרבמאַפּע ערטער"
+
+#~ msgid "Unexpected bitdepth for colormap entries"
+#~ msgstr "אומדערװאַרטע ביט־טיפֿקײט פֿאַר פֿאַרבמאַפּע ערטער"
+
+#, fuzzy
+#~ msgid "Cannot allocate TGA header memory"
+#~ msgstr "ניט גענוג זכּרון פֿאַר TGA קאָפּצעטל"
+
+#~ msgid "TGA image has invalid dimensions"
+#~ msgstr "TGA בילד האָט אומלעקסיקע דימענסיעס"
+
+#~ msgid "TGA image type not supported"
+#~ msgstr "TGA בילד סאָרט ניט געשטיצט"
+
+#, fuzzy
+#~ msgid "Cannot allocate memory for TGA context struct"
+#~ msgstr "ניט גענוג זכּרון פֿאַר TGA קאָנטעקסט־סטרוקטור"
+
+#~ msgid "Excess data in file"
+#~ msgstr "איבעריקע דאַטן אין טעקע"
+
+#~ msgid "The Targa image format"
+#~ msgstr "Targa בילד־פֿאָרעם"
+
+#~ msgid "Could not get image width (bad TIFF file)"
+#~ msgstr "ניט געקענט דערטאַפּן בילד־ברײט (אומלעקסיקע TIFF טעקע"
+
+#~ msgid "Could not get image height (bad TIFF file)"
+#~ msgstr "ניט געקענט דערטאַפּן בילד־הײך (אומלעקסיקע TIFF טעקע)"
+
+#~ msgid "Width or height of TIFF image is zero"
+#~ msgstr "נוליקע ברײט אָדער הײך פֿון TIFF בילד"
+
+#~ msgid "Dimensions of TIFF image too large"
+#~ msgstr "דימענסיעס פֿון TIFF בילד זײַנען צו גרױס"
+
+#~ msgid "Insufficient memory to open TIFF file"
+#~ msgstr "ניט גענוג זכּרון עפֿענען TIFF טעקע"
+
+#~ msgid "Failed to load RGB data from TIFF file"
+#~ msgstr "דורכפֿאַל אין אַרײַנשטעלן RGB דאַטן פֿון TIFF טעקע"
+
+#~ msgid "Failed to open TIFF image"
+#~ msgstr "דורכפֿאַל אין עפֿענען TIFF בילד"
+
+#~ msgid "TIFFClose operation failed"
+#~ msgstr "דורכפֿאַל אין פֿאַרמאַכן TIFF"
+
+#~ msgid "Failed to load TIFF image"
+#~ msgstr "דורכפֿאַל אין אַרײַנשטעלן TIFF בילד"
+
+#, fuzzy
+#~ msgid "Failed to save TIFF image"
+#~ msgstr "דורכפֿאַל אין עפֿענען TIFF בילד"
+
+#, fuzzy
+#~ msgid "Failed to write TIFF data"
+#~ msgstr "דורכפֿאַל אין עפֿענען TIFF בילד"
+
+#, fuzzy
+#~ msgid "Couldn't write to TIFF file"
+#~ msgstr "ניט געקענט איבערמאַכן טעקע־נאָמען"
+
+#~ msgid "The TIFF image format"
+#~ msgstr "TIFF בילד־פֿאָרעם"
+
+#~ msgid "Image has zero width"
+#~ msgstr "בילד האָט אַ נוליקע ברײט"
+
+#~ msgid "Image has zero height"
+#~ msgstr "בילד האָט אַ נוליקע הײך"
+
+#~ msgid "Not enough memory to load image"
+#~ msgstr "ניט גענוג זכּרון אַרײַנשטעלן בילד"
+
+#~ msgid "Couldn't save the rest"
+#~ msgstr "ניט געקענט אױפֿהיטן דאָס רעשטל"
+
+#~ msgid "The WBMP image format"
+#~ msgstr "WBMP בילד־פֿאָרעם"
+
+#~ msgid "Invalid XBM file"
+#~ msgstr "אומלעקסיקע XBM טעקע"
+
+#~ msgid "Insufficient memory to load XBM image file"
+#~ msgstr "ניט גענוג זכּרון אַרײַנשטעלן XBM בילדטעקע"
+
+#~ msgid "Failed to write to temporary file when loading XBM image"
+#~ msgstr "דורכפֿאַל אין שרײַבן צײַטװײַליקע טעקע בשעת אַרײַנשטעלן XBM בילד"
+
+#~ msgid "The XBM image format"
+#~ msgstr "XBM בילד־פֿאָרעם"
+
+#~ msgid "No XPM header found"
+#~ msgstr "ניט געפֿונען קײן XPM קאָפּצעטל"
+
+#, fuzzy
+#~ msgid "Invalid XPM header"
+#~ msgstr "אומלעקסיקע XBM טעקע"
+
+#~ msgid "XPM file has image width <= 0"
+#~ msgstr "XPM טעקע האָט בילד ברײט <= 0"
+
+#~ msgid "XPM file has image height <= 0"
+#~ msgstr "XPM טעקע האָט בילד הײך <= 0"
+
+#~ msgid "XPM has invalid number of chars per pixel"
+#~ msgstr "XPM האָט אַן אומלעקסיקן צאָל שריפֿטצײכנס אין אַ בילדצעל"
+
+#~ msgid "XPM file has invalid number of colors"
+#~ msgstr "XPM טעקע האָט אַן אומלעקסיקן צאָל פֿאַרבן"
+
+#, fuzzy
+#~ msgid "Cannot allocate memory for loading XPM image"
+#~ msgstr "ניט גענוג זכּרון אַרײַנשטעלן XPM בילד"
+
+#, fuzzy
+#~ msgid "Cannot read XPM colormap"
+#~ msgstr "ניט געקענט לײענען XPM פֿאַרבמאַפּע"
+
+#~ msgid "Failed to write to temporary file when loading XPM image"
+#~ msgstr "דורכפֿאַל אין שרײַבן צײַטװײַליקע טעקע בשעת אַרײַנשטעלן XPM בילד"
+
+#~ msgid "The XPM image format"
+#~ msgstr "די XPM בילד פֿאָרמאַטירונג"
+
+#, fuzzy
+#~ msgid "The EMF image format"
+#~ msgstr "BMP בילד־פֿאָרעם"
+
+#, fuzzy
+#~ msgid "Could not allocate memory: %s"
+#~ msgstr "ניט גענוג זכּרון פֿאַר TGA קאָפּצעטל"
+
+#, fuzzy
+#~ msgid "Could not create stream: %s"
+#~ msgstr "דורכפֿאַל אין שאַפֿן פּאַפּקע %s: %s\n"
+
+#, fuzzy
+#~ msgid "Could not seek stream: %s"
+#~ msgstr ""
+#~ "דורכפֿאַל אין שאַפֿן פּאַפּקע %s: %s\n"
+#~ "%s"
+
+#, fuzzy
+#~ msgid "Could not read from stream: %s"
+#~ msgstr "דורכפֿאַל אין שאַפֿן פּאַפּקע %s: %s\n"
+
+#, fuzzy
+#~ msgid "Couldn't load bitmap"
+#~ msgstr "ניט געקענט איבערמאַכן טעקע־נאָמען"
+
+#, fuzzy
+#~ msgid "Couldn't load metafile"
+#~ msgstr "ניט געקענט איבערמאַכן טעקע־נאָמען"
+
+#, fuzzy
+#~ msgid "Unsupported image format for GDI+"
+#~ msgstr "ניט געשטיצטע RAS־בילד װאַריִאַציע"
+
+#, fuzzy
+#~ msgid "Couldn't save"
+#~ msgstr "ניט געקענט אױפֿהיטן דאָס רעשטל"
+
+#, fuzzy
+#~ msgid "The WMF image format"
+#~ msgstr "WBMP בילד־פֿאָרעם"
+
+#~ msgid "\"Deepness\" of the color."
+#~ msgstr "\"טיפֿקײט\" פֿון דער פֿאַרב"
 
 #~ msgid "Folders"
 #~ msgstr "פּאַפּקעס"

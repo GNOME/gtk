@@ -18,10 +18,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-05-25 20:10-0400\n"
+"POT-Creation-Date: 2010-06-26 23:16-0400\n"
 "PO-Revision-Date: 2010-03-06 15:21+0100\n"
 "Last-Translator: Claude Paroz <claude@2xlibre.net>\n"
 "Language-Team: GNOME French Team <gnomefr@traduc.org>\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -86,7 +87,7 @@ msgstr "Drapeaux de débogage Gdk à définir"
 #. Placeholder in --gdk-no-debug=FLAGS in --help output
 #. Placeholder in --gtk-debug=FLAGS in --help output
 #. Placeholder in --gtk-no-debug=FLAGS in --help output
-#: gdk/gdk.c:165 gdk/gdk.c:168 gtk/gtkmain.c:454 gtk/gtkmain.c:457
+#: gdk/gdk.c:165 gdk/gdk.c:168 gtk/gtkmain.c:439 gtk/gtkmain.c:442
 msgid "FLAGS"
 msgstr "DRAPEAUX"
 
@@ -280,929 +281,6 @@ msgctxt "keyboard label"
 msgid "Delete"
 msgstr "Suppr"
 
-#: gdk-pixbuf/gdk-pixbuf-animation.c:133 gdk-pixbuf/gdk-pixbuf-io.c:982
-#: gdk-pixbuf/gdk-pixbuf-io.c:1242 tests/testfilechooser.c:222
-#, c-format
-msgid "Failed to open file '%s': %s"
-msgstr "Impossible d'ouvrir le fichier « %s » : %s"
-
-#: gdk-pixbuf/gdk-pixbuf-animation.c:146 gdk-pixbuf/gdk-pixbuf-io.c:994
-#, c-format
-msgid "Image file '%s' contains no data"
-msgstr "Le fichier image « %s » ne contient pas de données"
-
-#: gdk-pixbuf/gdk-pixbuf-animation.c:188 gdk-pixbuf/gdk-pixbuf-io.c:1030
-#: gdk-pixbuf/gdk-pixbuf-io.c:1294 tests/testfilechooser.c:267
-#, c-format
-msgid ""
-"Failed to load image '%s': reason not known, probably a corrupt image file"
-msgstr ""
-"Impossible de charger l'image « %s » : raison inconnue, probablement un "
-"fichier d'image corrompu"
-
-#: gdk-pixbuf/gdk-pixbuf-animation.c:221
-#, c-format
-msgid ""
-"Failed to load animation '%s': reason not known, probably a corrupt "
-"animation file"
-msgstr ""
-"Impossible de charger l'animation « %s » : raison inconnue, probablement un "
-"fichier d'animation corrompu"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:715
-#, c-format
-msgid "Unable to load image-loading module: %s: %s"
-msgstr "Impossible de charger le module de chargement d'images : %s : %s"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:730
-#, c-format
-msgid ""
-"Image-loading module %s does not export the proper interface; perhaps it's "
-"from a different GTK version?"
-msgstr ""
-"Le module de chargement d'images %s n'exporte pas la bonne interface ; peut-"
-"être provient-il d'une version différente de GTK ?"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:739 gdk-pixbuf/gdk-pixbuf-io.c:790
-#, c-format
-msgid "Image type '%s' is not supported"
-msgstr "Le type d'images « %s » n'est pas pris en charge"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:863
-#, c-format
-msgid "Couldn't recognize the image file format for file '%s'"
-msgstr "Impossible de reconnaître le format d'image du fichier « %s »"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:871
-msgid "Unrecognized image file format"
-msgstr "Format d'image non reconnu"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:1039
-#, c-format
-msgid "Failed to load image '%s': %s"
-msgstr "Impossible de charger l'image « %s » : %s"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:1673 gdk-pixbuf/io-gdip-utils.c:961
-#, c-format
-msgid "Error writing to image file: %s"
-msgstr "Erreur lors de l'écriture du fichier d'image : %s"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:1718 gdk-pixbuf/gdk-pixbuf-io.c:1848
-#, c-format
-msgid "This build of gdk-pixbuf does not support saving the image format: %s"
-msgstr ""
-"Cette version de gdk-pixbuf ne prend pas en charge l'enregistrement au "
-"format d'image : %s"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:1752
-msgid "Insufficient memory to save image to callback"
-msgstr ""
-"Mémoire insuffisante pour enregistrer l'image dans la fonction de rappel"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:1765
-msgid "Failed to open temporary file"
-msgstr "Impossible d'ouvrir le fichier temporaire"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:1791
-msgid "Failed to read from temporary file"
-msgstr "Impossible de lire le fichier temporaire"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:2044
-#, c-format
-msgid "Failed to open '%s' for writing: %s"
-msgstr "Impossible d'ouvrir « %s » en écriture : %s"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:2070
-#, c-format
-msgid ""
-"Failed to close '%s' while writing image, all data may not have been saved: %"
-"s"
-msgstr ""
-"Impossible de fermer l'image « %s » lors de l'écriture, toutes les données "
-"n'ont peut-être pas été enregistrées : %s"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:2290 gdk-pixbuf/gdk-pixbuf-io.c:2341
-msgid "Insufficient memory to save image into a buffer"
-msgstr "Mémoire insuffisante pour enregistrer l'image dans un tampon"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:2387
-msgid "Error writing to image stream"
-msgstr "Erreur lors de l'écriture vers le flux image"
-
-#: gdk-pixbuf/gdk-pixbuf-loader.c:334
-#, c-format
-msgid ""
-"Internal error: Image loader module '%s' failed to complete an operation, "
-"but didn't give a reason for the failure"
-msgstr ""
-"Erreur interne : le module de chargement d'images « %s » n'est pas parvenu à "
-"terminer une opération, mais il n'a pas donné la raison de son échec"
-
-#: gdk-pixbuf/gdk-pixbuf-loader.c:376
-#, c-format
-msgid "Incremental loading of image type '%s' is not supported"
-msgstr ""
-"Le chargement progressif d'images de type « %s » n'est pas pris en charge"
-
-#: gdk-pixbuf/gdk-pixdata.c:147
-msgid "Image header corrupt"
-msgstr "En-tête d'image corrompu"
-
-#: gdk-pixbuf/gdk-pixdata.c:152
-msgid "Image format unknown"
-msgstr "Format d'image inconnu"
-
-#: gdk-pixbuf/gdk-pixdata.c:157 gdk-pixbuf/gdk-pixdata.c:488
-msgid "Image pixel data corrupt"
-msgstr "Données des pixels de l'image corrompues"
-
-#: gdk-pixbuf/gdk-pixdata.c:432
-#, fuzzy, c-format
-msgid "failed to allocate image buffer of %u byte"
-msgid_plural "failed to allocate image buffer of %u bytes"
-msgstr[0] ""
-"Échec d'allocation de %d octets pour le tampon de lecture du fichier"
-msgstr[1] ""
-"Échec d'allocation de %d octets pour le tampon de lecture du fichier"
-
-#: gdk-pixbuf/io-ani.c:244
-msgid "Unexpected icon chunk in animation"
-msgstr "Fragment d'icône non attendu dans l'animation"
-
-#: gdk-pixbuf/io-ani.c:337
-msgid "Unsupported animation type"
-msgstr "Type d'animation non pris en charge"
-
-#: gdk-pixbuf/io-ani.c:348 gdk-pixbuf/io-ani.c:406 gdk-pixbuf/io-ani.c:432
-#: gdk-pixbuf/io-ani.c:455 gdk-pixbuf/io-ani.c:482 gdk-pixbuf/io-ani.c:569
-msgid "Invalid header in animation"
-msgstr "En-tête non valide dans l'animation"
-
-#: gdk-pixbuf/io-ani.c:358 gdk-pixbuf/io-ani.c:380 gdk-pixbuf/io-ani.c:464
-#: gdk-pixbuf/io-ani.c:491 gdk-pixbuf/io-ani.c:542 gdk-pixbuf/io-ani.c:614
-msgid "Not enough memory to load animation"
-msgstr "Mémoire insuffisante pour charger l'animation"
-
-#: gdk-pixbuf/io-ani.c:398 gdk-pixbuf/io-ani.c:424 gdk-pixbuf/io-ani.c:443
-msgid "Malformed chunk in animation"
-msgstr "Fragment malformé dans l'animation"
-
-#: gdk-pixbuf/io-ani.c:711
-msgid "The ANI image format"
-msgstr "Le format d'image ANI"
-
-#: gdk-pixbuf/io-bmp.c:230 gdk-pixbuf/io-bmp.c:267 gdk-pixbuf/io-bmp.c:338
-#: gdk-pixbuf/io-bmp.c:370 gdk-pixbuf/io-bmp.c:393 gdk-pixbuf/io-bmp.c:496
-msgid "BMP image has bogus header data"
-msgstr "L'image BMP a un en-tête erroné"
-
-#: gdk-pixbuf/io-bmp.c:241 gdk-pixbuf/io-bmp.c:433
-msgid "Not enough memory to load bitmap image"
-msgstr "Mémoire insuffisante pour charger l'image bitmap"
-
-#: gdk-pixbuf/io-bmp.c:319
-msgid "BMP image has unsupported header size"
-msgstr "L'image BMP a une taille d'en-tête non prise en charge"
-
-#: gdk-pixbuf/io-bmp.c:357
-msgid "Topdown BMP images cannot be compressed"
-msgstr "Les images BMP Topdown ne peuvent être compressées"
-
-#: gdk-pixbuf/io-bmp.c:717 gdk-pixbuf/io-pnm.c:709
-msgid "Premature end-of-file encountered"
-msgstr "Fin de fichier rencontrée prématurément"
-
-#: gdk-pixbuf/io-bmp.c:1329
-msgid "Couldn't allocate memory for saving BMP file"
-msgstr ""
-"Impossible d'allouer de la mémoire pour l'enregistrement du fichier BMP"
-
-#: gdk-pixbuf/io-bmp.c:1370
-msgid "Couldn't write to BMP file"
-msgstr "Impossible d'écrire le fichier BMP"
-
-#: gdk-pixbuf/io-bmp.c:1423 gdk-pixbuf/io-gdip-bmp.c:82
-msgid "The BMP image format"
-msgstr "Le format d'image BMP"
-
-#: gdk-pixbuf/io-gif.c:222
-#, c-format
-msgid "Failure reading GIF: %s"
-msgstr "La lecture du fichier GIF a échoué : %s"
-
-#: gdk-pixbuf/io-gif.c:496 gdk-pixbuf/io-gif.c:1481 gdk-pixbuf/io-gif.c:1642
-msgid "GIF file was missing some data (perhaps it was truncated somehow?)"
-msgstr ""
-"Il manque au fichier GIF quelques données (peut-être a-t-il été tronqué ?)"
-
-#: gdk-pixbuf/io-gif.c:505
-#, c-format
-msgid "Internal error in the GIF loader (%s)"
-msgstr "Erreur interne dans le chargeur GIF (%s)"
-
-#: gdk-pixbuf/io-gif.c:579
-msgid "Stack overflow"
-msgstr "Débordement de la pile"
-
-#: gdk-pixbuf/io-gif.c:639
-msgid "GIF image loader cannot understand this image."
-msgstr "Le chargeur d'image GIF ne peut pas comprendre cette image."
-
-#: gdk-pixbuf/io-gif.c:668
-msgid "Bad code encountered"
-msgstr "Code non valide rencontré"
-
-#: gdk-pixbuf/io-gif.c:678
-msgid "Circular table entry in GIF file"
-msgstr "Entrée de table circulaire dans le fichier GIF"
-
-#: gdk-pixbuf/io-gif.c:866 gdk-pixbuf/io-gif.c:1468 gdk-pixbuf/io-gif.c:1515
-#: gdk-pixbuf/io-gif.c:1630
-msgid "Not enough memory to load GIF file"
-msgstr "Mémoire insuffisante pour charger le fichier GIF"
-
-#: gdk-pixbuf/io-gif.c:960
-msgid "Not enough memory to composite a frame in GIF file"
-msgstr "Mémoire insuffisante pour composer un cadre dans le fichier GIF"
-
-#: gdk-pixbuf/io-gif.c:1132
-msgid "GIF image is corrupt (incorrect LZW compression)"
-msgstr "L'image GIF est corrompue (compression LZW incorrecte)"
-
-#: gdk-pixbuf/io-gif.c:1182
-msgid "File does not appear to be a GIF file"
-msgstr "Le fichier ne semble pas être au format GIF"
-
-#: gdk-pixbuf/io-gif.c:1194
-#, c-format
-msgid "Version %s of the GIF file format is not supported"
-msgstr "La version %s de ce format de fichier GIF n'est pas prise en charge."
-
-#: gdk-pixbuf/io-gif.c:1303
-msgid ""
-"GIF image has no global colormap, and a frame inside it has no local "
-"colormap."
-msgstr ""
-"L'image GIF n'a pas de palette de couleurs globale, et une trame interne n'a "
-"pas de palette de couleurs locale."
-
-#: gdk-pixbuf/io-gif.c:1537
-msgid "GIF image was truncated or incomplete."
-msgstr "L'image GIF est tronquée ou incomplète."
-
-#: gdk-pixbuf/io-gif.c:1693 gdk-pixbuf/io-gdip-gif.c:80
-msgid "The GIF image format"
-msgstr "Le format d'image GIF"
-
-#: gdk-pixbuf/io-ico.c:211 gdk-pixbuf/io-ico.c:225 gdk-pixbuf/io-ico.c:277
-#: gdk-pixbuf/io-ico.c:290 gdk-pixbuf/io-ico.c:359
-msgid "Invalid header in icon"
-msgstr "En-tête non valide pour l'icône"
-
-#: gdk-pixbuf/io-ico.c:240 gdk-pixbuf/io-ico.c:300 gdk-pixbuf/io-ico.c:369
-#: gdk-pixbuf/io-ico.c:432 gdk-pixbuf/io-ico.c:462
-msgid "Not enough memory to load icon"
-msgstr "Mémoire insuffisante pour charger l'icône"
-
-#: gdk-pixbuf/io-ico.c:322
-msgid "Icon has zero width"
-msgstr "L'icône a une largeur nulle"
-
-#: gdk-pixbuf/io-ico.c:332
-msgid "Icon has zero height"
-msgstr "L'icône a une hauteur nulle"
-
-#: gdk-pixbuf/io-ico.c:384
-msgid "Compressed icons are not supported"
-msgstr "Les icônes compressées ne sont pas prises en charge"
-
-#: gdk-pixbuf/io-ico.c:417
-msgid "Unsupported icon type"
-msgstr "Type d'icône non pris en charge"
-
-#: gdk-pixbuf/io-ico.c:511
-msgid "Not enough memory to load ICO file"
-msgstr "Mémoire insuffisante pour charger le fichier ICO"
-
-#: gdk-pixbuf/io-ico.c:976
-msgid "Image too large to be saved as ICO"
-msgstr "Image trop grande pour être enregistrée en tant qu'ICO"
-
-#: gdk-pixbuf/io-ico.c:987
-msgid "Cursor hotspot outside image"
-msgstr "Point chaud du curseur en dehors de l'image"
-
-#: gdk-pixbuf/io-ico.c:1010
-#, c-format
-msgid "Unsupported depth for ICO file: %d"
-msgstr "Profondeur de couleur non prise en charge pour le fichier ICO : %d"
-
-#: gdk-pixbuf/io-ico.c:1245 gdk-pixbuf/io-gdip-ico.c:59
-msgid "The ICO image format"
-msgstr "Le format d'image ICO"
-
-#: gdk-pixbuf/io-icns.c:347
-#, c-format
-msgid "Error reading ICNS image: %s"
-msgstr "Erreur de lecture de l'image ICNS : %s"
-
-#: gdk-pixbuf/io-icns.c:364
-msgid "Could not decode ICNS file"
-msgstr "Impossible de décoder l'image ICNS"
-
-#: gdk-pixbuf/io-icns.c:397
-msgid "The ICNS image format"
-msgstr "Le format d'image ICNS"
-
-#: gdk-pixbuf/io-jasper.c:75
-msgid "Couldn't allocate memory for stream"
-msgstr "Impossible d'allouer de la mémoire pour le flux"
-
-#: gdk-pixbuf/io-jasper.c:105
-msgid "Couldn't decode image"
-msgstr "Impossible de décoder l'image"
-
-#: gdk-pixbuf/io-jasper.c:123
-msgid "Transformed JPEG2000 has zero width or height"
-msgstr "Le JPEG2000 transformé a une largeur ou une hauteur nulle"
-
-#: gdk-pixbuf/io-jasper.c:137
-msgid "Image type currently not supported"
-msgstr "Ce type d'image n'est actuellement pas pris en charge"
-
-#: gdk-pixbuf/io-jasper.c:149 gdk-pixbuf/io-jasper.c:157
-msgid "Couldn't allocate memory for color profile"
-msgstr "Impossible d'allouer de la mémoire pour le profil de couleurs"
-
-#: gdk-pixbuf/io-jasper.c:183
-msgid "Insufficient memory to open JPEG 2000 file"
-msgstr "Mémoire insuffisante pour ouvrir le fichier JPEG 2000"
-
-#: gdk-pixbuf/io-jasper.c:262
-msgid "Couldn't allocate memory to buffer image data"
-msgstr "Impossible d'allouer de la mémoire pour le tampon de données d'image"
-
-#: gdk-pixbuf/io-jasper.c:306
-msgid "The JPEG 2000 image format"
-msgstr "Le format d'image JPEG 2000"
-
-#: gdk-pixbuf/io-jpeg.c:117
-#, c-format
-msgid "Error interpreting JPEG image file (%s)"
-msgstr "Erreur d'interprétation du fichier d'image JPEG (%s)"
-
-#: gdk-pixbuf/io-jpeg.c:528
-msgid ""
-"Insufficient memory to load image, try exiting some applications to free "
-"memory"
-msgstr ""
-"Mémoire insuffisante pour charger l'image, essayez de quitter quelques "
-"applications pour libérer de la mémoire"
-
-#: gdk-pixbuf/io-jpeg.c:569 gdk-pixbuf/io-jpeg.c:775
-#, c-format
-msgid "Unsupported JPEG color space (%s)"
-msgstr "Espace de couleur JPEG non pris en charge (%s)"
-
-#: gdk-pixbuf/io-jpeg.c:674 gdk-pixbuf/io-jpeg.c:944 gdk-pixbuf/io-jpeg.c:1177
-#: gdk-pixbuf/io-jpeg.c:1186
-msgid "Couldn't allocate memory for loading JPEG file"
-msgstr "Impossible d'allouer de la mémoire pour le chargement du fichier JPEG"
-
-#: gdk-pixbuf/io-jpeg.c:919
-msgid "Transformed JPEG has zero width or height."
-msgstr "Le PNG transformé a une largeur ou une hauteur nulle."
-
-#: gdk-pixbuf/io-jpeg.c:1133 gdk-pixbuf/io-gdip-jpeg.c:53
-#, c-format
-msgid ""
-"JPEG quality must be a value between 0 and 100; value '%s' could not be "
-"parsed."
-msgstr ""
-"La qualité JPEG doit être une valeur entre 0 et 100 ; la valeur « %s » n'est "
-"pas interprétable."
-
-#: gdk-pixbuf/io-jpeg.c:1148 gdk-pixbuf/io-gdip-jpeg.c:68
-#, c-format
-msgid ""
-"JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
-msgstr ""
-"La qualité JPEG doit être une valeur entre 0 et 100 ; la valeur « %d » n'est "
-"pas autorisée."
-
-#: gdk-pixbuf/io-jpeg.c:1310 gdk-pixbuf/io-gdip-jpeg.c:136
-msgid "The JPEG image format"
-msgstr "Le format d'image JPEG"
-
-#: gdk-pixbuf/io-pcx.c:187
-msgid "Couldn't allocate memory for header"
-msgstr "Impossible d'allouer de la mémoire pour l'en-tête"
-
-#: gdk-pixbuf/io-pcx.c:202 gdk-pixbuf/io-pcx.c:560
-msgid "Couldn't allocate memory for context buffer"
-msgstr "Impossible d'allouer de la mémoire pour le tampon du contexte"
-
-#: gdk-pixbuf/io-pcx.c:601
-msgid "Image has invalid width and/or height"
-msgstr "L'image a une largeur ou une hauteur non valide"
-
-#: gdk-pixbuf/io-pcx.c:613 gdk-pixbuf/io-pcx.c:674
-msgid "Image has unsupported bpp"
-msgstr "L'image a une profondeur de couleurs non prise en charge"
-
-#: gdk-pixbuf/io-pcx.c:618 gdk-pixbuf/io-pcx.c:626
-#, c-format
-msgid "Image has unsupported number of %d-bit planes"
-msgstr "L'image a un nombre de plans de %d-bit non pris en charge"
-
-#: gdk-pixbuf/io-pcx.c:642
-msgid "Couldn't create new pixbuf"
-msgstr "Impossible de créer un nouveau pixbuf"
-
-#: gdk-pixbuf/io-pcx.c:650
-msgid "Couldn't allocate memory for line data"
-msgstr "Impossible d'allouer de la mémoire pour les données de lignes"
-
-#: gdk-pixbuf/io-pcx.c:657
-msgid "Couldn't allocate memory for paletted data"
-msgstr "Impossible d'allouer de la mémoire pour les données de palettes"
-
-#: gdk-pixbuf/io-pcx.c:704
-msgid "Didn't get all lines of PCX image"
-msgstr "Impossible d'obtenir toutes les lignes de l'image PCX"
-
-#: gdk-pixbuf/io-pcx.c:711
-msgid "No palette found at end of PCX data"
-msgstr "Aucune palette trouvée à la fin des données PCX"
-
-#: gdk-pixbuf/io-pcx.c:756
-msgid "The PCX image format"
-msgstr "Le format d'image PCX"
-
-#: gdk-pixbuf/io-png.c:55
-msgid "Bits per channel of PNG image is invalid."
-msgstr "Le nombre de bits par canal de l'image PNG n'est pas valide."
-
-#: gdk-pixbuf/io-png.c:136 gdk-pixbuf/io-png.c:642
-msgid "Transformed PNG has zero width or height."
-msgstr "Le PNG transformé a une largeur ou une hauteur nulle."
-
-#: gdk-pixbuf/io-png.c:144
-msgid "Bits per channel of transformed PNG is not 8."
-msgstr "Le nombre de bits du PNG transformé n'est pas 8."
-
-#: gdk-pixbuf/io-png.c:153
-msgid "Transformed PNG not RGB or RGBA."
-msgstr "Le PNG transformé n'est ni RGB, ni RGBA."
-
-#: gdk-pixbuf/io-png.c:162
-msgid "Transformed PNG has unsupported number of channels, must be 3 or 4."
-msgstr ""
-"Le PNG transformé a un nombre de canaux non pris en charge, il devrait être "
-"de 3 ou de 4."
-
-#: gdk-pixbuf/io-png.c:183
-#, c-format
-msgid "Fatal error in PNG image file: %s"
-msgstr "Erreur fatale dans le fichier d'image PNG : %s"
-
-#: gdk-pixbuf/io-png.c:316
-msgid "Insufficient memory to load PNG file"
-msgstr "Mémoire insuffisante pour charger le fichier PNG"
-
-#: gdk-pixbuf/io-png.c:657
-#, c-format
-msgid ""
-"Insufficient memory to store a %ld by %ld image; try exiting some "
-"applications to reduce memory usage"
-msgstr ""
-"Mémoire insuffisante pour stocker une image de %ld sur %ld ; essayez de "
-"quitter quelques applications pour réduire la mémoire occupée"
-
-#: gdk-pixbuf/io-png.c:720
-msgid "Fatal error reading PNG image file"
-msgstr "Erreur fatale lors de la lecture d'une image PNG"
-
-#: gdk-pixbuf/io-png.c:769
-#, c-format
-msgid "Fatal error reading PNG image file: %s"
-msgstr "Erreur fatale lors de la lecture du fichier d'image PNG : %s"
-
-#: gdk-pixbuf/io-png.c:863
-msgid ""
-"Keys for PNG text chunks must have at least 1 and at most 79 characters."
-msgstr ""
-"Les clés pour les fragments texte PNG doivent contenir entre 1 et 79 "
-"caractères."
-
-#: gdk-pixbuf/io-png.c:872
-msgid "Keys for PNG text chunks must be ASCII characters."
-msgstr ""
-"Les clés pour les fragments texte PNG doivent être des caractères ASCII."
-
-#: gdk-pixbuf/io-png.c:886 gdk-pixbuf/io-tiff.c:738
-#, c-format
-msgid "Color profile has invalid length %d."
-msgstr "La longueur %d du profil de couleur n'est pas valable."
-
-#: gdk-pixbuf/io-png.c:899 gdk-pixbuf/io-gdip-png.c:56
-#, c-format
-msgid ""
-"PNG compression level must be a value between 0 and 9; value '%s' could not "
-"be parsed."
-msgstr ""
-"Le niveau de compression PNG doit être une valeur entre 0 et 9 ; la valeur « %"
-"s » n'est pas interprétable."
-
-#: gdk-pixbuf/io-png.c:912 gdk-pixbuf/io-gdip-png.c:68
-#, c-format
-msgid ""
-"PNG compression level must be a value between 0 and 9; value '%d' is not "
-"allowed."
-msgstr ""
-"La niveau de compression PNG doit être une valeur entre 0 et 9 ; la valeur « %"
-"d » n'est pas autorisée."
-
-#: gdk-pixbuf/io-png.c:951
-#, c-format
-msgid "Value for PNG text chunk %s cannot be converted to ISO-8859-1 encoding."
-msgstr ""
-"La valeur pour le fragment texte PNG %s ne peut pas être convertie dans le "
-"codage ISO-8859-1."
-
-#: gdk-pixbuf/io-png.c:1112 gdk-pixbuf/io-gdip-png.c:133
-msgid "The PNG image format"
-msgstr "Le format d'image PNG"
-
-#: gdk-pixbuf/io-pnm.c:250
-msgid "PNM loader expected to find an integer, but didn't"
-msgstr ""
-"Le chargeur PNM s'attendait à recevoir un entier, mais ce n'était pas le cas"
-
-#: gdk-pixbuf/io-pnm.c:282
-msgid "PNM file has an incorrect initial byte"
-msgstr "Le fichier PNM a un octet initial incorrect"
-
-#: gdk-pixbuf/io-pnm.c:312
-msgid "PNM file is not in a recognized PNM subformat"
-msgstr "Le fichier PNM n'est pas un sous-format PNM reconnu"
-
-#: gdk-pixbuf/io-pnm.c:337
-msgid "PNM file has an image width of 0"
-msgstr "Le fichier PNM a une largeur d'image de 0"
-
-#: gdk-pixbuf/io-pnm.c:358
-msgid "PNM file has an image height of 0"
-msgstr "Le fichier PNM a une hauteur d'image de 0"
-
-#: gdk-pixbuf/io-pnm.c:381
-msgid "Maximum color value in PNM file is 0"
-msgstr "La valeur maximale de couleur dans le fichier PNM est 0"
-
-#: gdk-pixbuf/io-pnm.c:389
-msgid "Maximum color value in PNM file is too large"
-msgstr "La valeur maximale de couleur dans le fichier PNM est trop grande"
-
-#: gdk-pixbuf/io-pnm.c:429 gdk-pixbuf/io-pnm.c:459 gdk-pixbuf/io-pnm.c:504
-msgid "Raw PNM image type is invalid"
-msgstr "Le type d'image PNM brut n'est pas valide"
-
-#: gdk-pixbuf/io-pnm.c:654
-msgid "PNM image loader does not support this PNM subformat"
-msgstr "Le chargeur d'image PNM ne prend pas en charge ce sous-format PNM"
-
-#: gdk-pixbuf/io-pnm.c:741 gdk-pixbuf/io-pnm.c:968
-msgid "Raw PNM formats require exactly one whitespace before sample data"
-msgstr ""
-"Les formats PNM bruts nécessitent exactement un espace avant les données"
-
-#: gdk-pixbuf/io-pnm.c:768
-msgid "Cannot allocate memory for loading PNM image"
-msgstr "Impossible d'allouer de la mémoire pour charger l'image PNM"
-
-#: gdk-pixbuf/io-pnm.c:818
-msgid "Insufficient memory to load PNM context struct"
-msgstr "Mémoire insuffisante pour charger la structure de contexte PNM"
-
-#: gdk-pixbuf/io-pnm.c:869
-msgid "Unexpected end of PNM image data"
-msgstr "Fin inattendue des données de l'image PNM"
-
-#: gdk-pixbuf/io-pnm.c:997
-msgid "Insufficient memory to load PNM file"
-msgstr "Mémoire insuffisante pour charger le fichier PNM"
-
-#: gdk-pixbuf/io-pnm.c:1081
-msgid "The PNM/PBM/PGM/PPM image format family"
-msgstr "La famille de format d'image PNM/PBM/PGM/PPM"
-
-#: gdk-pixbuf/io-qtif.c:128
-msgid "Input file descriptor is NULL."
-msgstr "Le descripteur du fichier d'entrée est NULL."
-
-#: gdk-pixbuf/io-qtif.c:143
-msgid "Failed to read QTIF header"
-msgstr "Impossible de lire l'en-tête QTIF"
-
-#: gdk-pixbuf/io-qtif.c:152 gdk-pixbuf/io-qtif.c:182 gdk-pixbuf/io-qtif.c:446
-#, c-format
-msgid "QTIF atom size too large (%d bytes)"
-msgstr "Taille d'atome QTIF trop grande (%d octets)"
-
-#: gdk-pixbuf/io-qtif.c:172
-#, c-format
-msgid "Failed to allocate %d bytes for file read buffer"
-msgstr "Échec d'allocation de %d octets pour le tampon de lecture du fichier"
-
-#: gdk-pixbuf/io-qtif.c:196
-#, c-format
-msgid "File error when reading QTIF atom: %s"
-msgstr "Erreur de fichier lors de la lecture de l'atome QTIF : %s"
-
-#: gdk-pixbuf/io-qtif.c:233
-#, c-format
-msgid "Failed to skip the next %d bytes with seek()."
-msgstr "Les %d octets suivants n'ont pas pu être sautés avec seek()."
-
-#: gdk-pixbuf/io-qtif.c:257
-msgid "Failed to allocate QTIF context structure."
-msgstr "Échec de création de la structure de contexte QTIF."
-
-#: gdk-pixbuf/io-qtif.c:317
-msgid "Failed to create GdkPixbufLoader object."
-msgstr "Impossible de créer un objet GdkPixbufLoader."
-
-#: gdk-pixbuf/io-qtif.c:421
-msgid "Failed to find an image data atom."
-msgstr "Impossible de trouver un atome de données images."
-
-#: gdk-pixbuf/io-qtif.c:602
-msgid "The QTIF image format"
-msgstr "Le format d'image QTIF"
-
-#: gdk-pixbuf/io-ras.c:126
-msgid "RAS image has bogus header data"
-msgstr "L'image RAS a un en-tête erroné"
-
-#: gdk-pixbuf/io-ras.c:148
-msgid "RAS image has unknown type"
-msgstr "L'image RAS a un type inconnu"
-
-#: gdk-pixbuf/io-ras.c:156
-msgid "unsupported RAS image variation"
-msgstr "Variante d'image RAS non prise en charge"
-
-#: gdk-pixbuf/io-ras.c:171 gdk-pixbuf/io-ras.c:200
-msgid "Not enough memory to load RAS image"
-msgstr "Mémoire insuffisante pour charger l'image RAS"
-
-#: gdk-pixbuf/io-ras.c:545
-msgid "The Sun raster image format"
-msgstr "Le format d'image Sun raster"
-
-#: gdk-pixbuf/io-tga.c:154
-msgid "Cannot allocate memory for IOBuffer struct"
-msgstr "Impossible d'allouer de la mémoire pour la structure IOBuffer"
-
-#: gdk-pixbuf/io-tga.c:173
-msgid "Cannot allocate memory for IOBuffer data"
-msgstr "Impossible d'allouer de la mémoire pour les données IOBuffer"
-
-#: gdk-pixbuf/io-tga.c:184
-msgid "Cannot realloc IOBuffer data"
-msgstr "Impossible de réallouer les données IOBuffer"
-
-#: gdk-pixbuf/io-tga.c:214
-msgid "Cannot allocate temporary IOBuffer data"
-msgstr "Impossible d'allouer les données IOBuffer temporaires"
-
-#: gdk-pixbuf/io-tga.c:347
-msgid "Cannot allocate new pixbuf"
-msgstr "Impossible d'allouer un nouveau pixbuf"
-
-#: gdk-pixbuf/io-tga.c:686
-msgid "Image is corrupted or truncated"
-msgstr "L'image est tronquée ou endommagée"
-
-#: gdk-pixbuf/io-tga.c:693
-msgid "Cannot allocate colormap structure"
-msgstr "Impossible d'allouer de structure de palette de couleurs"
-
-#: gdk-pixbuf/io-tga.c:700
-msgid "Cannot allocate colormap entries"
-msgstr "Impossible d'allouer des entrées de palette de couleurs"
-
-#: gdk-pixbuf/io-tga.c:722
-msgid "Unexpected bitdepth for colormap entries"
-msgstr ""
-"Profondeur de couleur inattendue pour les entrées de la palette de couleurs"
-
-#: gdk-pixbuf/io-tga.c:740
-msgid "Cannot allocate TGA header memory"
-msgstr "Impossible d'allouer la mémoire pour l'en-tête TGA"
-
-#: gdk-pixbuf/io-tga.c:773
-msgid "TGA image has invalid dimensions"
-msgstr "Les dimensions de l'image TGA ne sont pas valides"
-
-#: gdk-pixbuf/io-tga.c:779 gdk-pixbuf/io-tga.c:788 gdk-pixbuf/io-tga.c:798
-#: gdk-pixbuf/io-tga.c:808 gdk-pixbuf/io-tga.c:815
-msgid "TGA image type not supported"
-msgstr "Type d'image TGA non pris en charge"
-
-#: gdk-pixbuf/io-tga.c:862
-msgid "Cannot allocate memory for TGA context struct"
-msgstr "Impossible d'allouer de la mémoire pour la structure de contexte TGA"
-
-#: gdk-pixbuf/io-tga.c:927
-msgid "Excess data in file"
-msgstr "Trop de données dans le fichier"
-
-#: gdk-pixbuf/io-tga.c:1008
-msgid "The Targa image format"
-msgstr "Le format d'image Targa"
-
-#: gdk-pixbuf/io-tiff.c:165
-msgid "Could not get image width (bad TIFF file)"
-msgstr "Impossible d'obtenir la largeur de l'image (fichier TIFF corrompu)"
-
-#: gdk-pixbuf/io-tiff.c:172
-msgid "Could not get image height (bad TIFF file)"
-msgstr "Impossible d'obtenir la hauteur de l'image (fichier TIFF corrompu)"
-
-#: gdk-pixbuf/io-tiff.c:180
-msgid "Width or height of TIFF image is zero"
-msgstr "La largeur ou la hauteur de l'image TIFF est nulle"
-
-#: gdk-pixbuf/io-tiff.c:189 gdk-pixbuf/io-tiff.c:198
-msgid "Dimensions of TIFF image too large"
-msgstr "Dimensions de l'image TIFF trop grandes"
-
-#: gdk-pixbuf/io-tiff.c:222 gdk-pixbuf/io-tiff.c:234 gdk-pixbuf/io-tiff.c:561
-msgid "Insufficient memory to open TIFF file"
-msgstr "Mémoire insuffisante pour ouvrir le fichier TIFF"
-
-#: gdk-pixbuf/io-tiff.c:295
-msgid "Failed to load RGB data from TIFF file"
-msgstr "Impossible de lire les données RGB du fichier TIFF"
-
-#: gdk-pixbuf/io-tiff.c:351
-msgid "Failed to open TIFF image"
-msgstr "Impossible d'ouvrir l'image TIFF"
-
-#: gdk-pixbuf/io-tiff.c:363 gdk-pixbuf/io-tiff.c:778
-msgid "TIFFClose operation failed"
-msgstr "L'opération TIFFClose a échoué"
-
-#: gdk-pixbuf/io-tiff.c:493 gdk-pixbuf/io-tiff.c:506
-msgid "Failed to load TIFF image"
-msgstr "Impossible de charger l'image TIFF"
-
-#: gdk-pixbuf/io-tiff.c:692
-msgid "Failed to save TIFF image"
-msgstr "Impossible d'enregistrer l'image TIFF"
-
-#: gdk-pixbuf/io-tiff.c:727
-msgid "TIFF compression doesn't refer to a valid codec."
-msgstr "La compression TIFF ne se réfère pas à un codec valable."
-
-#: gdk-pixbuf/io-tiff.c:767
-msgid "Failed to write TIFF data"
-msgstr "Impossible d'enregistrer les données TIFF"
-
-#: gdk-pixbuf/io-tiff.c:814
-msgid "Couldn't write to TIFF file"
-msgstr "Impossible d'écrire le fichier TIFF"
-
-#: gdk-pixbuf/io-tiff.c:869
-msgid "The TIFF image format"
-msgstr "Le format d'image TIFF"
-
-#: gdk-pixbuf/io-wbmp.c:246
-msgid "Image has zero width"
-msgstr "L'image a une largeur nulle"
-
-#: gdk-pixbuf/io-wbmp.c:264
-msgid "Image has zero height"
-msgstr "L'image a une hauteur nulle"
-
-#: gdk-pixbuf/io-wbmp.c:275
-msgid "Not enough memory to load image"
-msgstr "Mémoire insuffisante pour charger l'image"
-
-#: gdk-pixbuf/io-wbmp.c:334
-msgid "Couldn't save the rest"
-msgstr "Impossible d'enregistrer le reste"
-
-#: gdk-pixbuf/io-wbmp.c:375
-msgid "The WBMP image format"
-msgstr "Le format d'image WBMP"
-
-#: gdk-pixbuf/io-xbm.c:295
-msgid "Invalid XBM file"
-msgstr "Fichier XBM non valide"
-
-#: gdk-pixbuf/io-xbm.c:305
-msgid "Insufficient memory to load XBM image file"
-msgstr "Mémoire insuffisante pour charger l'image XBM"
-
-#: gdk-pixbuf/io-xbm.c:453
-msgid "Failed to write to temporary file when loading XBM image"
-msgstr ""
-"L'écriture dans un fichier temporaire lors du chargement de l'image XBM a "
-"échoué"
-
-#: gdk-pixbuf/io-xbm.c:492
-msgid "The XBM image format"
-msgstr "Le format d'image XBM"
-
-#: gdk-pixbuf/io-xpm.c:468
-msgid "No XPM header found"
-msgstr "Aucun en-tête XPM n'a été trouvé"
-
-#: gdk-pixbuf/io-xpm.c:477
-msgid "Invalid XPM header"
-msgstr "Fichier XPM non valide"
-
-#: gdk-pixbuf/io-xpm.c:485
-msgid "XPM file has image width <= 0"
-msgstr "Le fichier XPM a une taille d'image négative ou nulle"
-
-#: gdk-pixbuf/io-xpm.c:493
-msgid "XPM file has image height <= 0"
-msgstr "Le fichier XPM a une hauteur négative ou nulle"
-
-#: gdk-pixbuf/io-xpm.c:501
-msgid "XPM has invalid number of chars per pixel"
-msgstr "Le nombre de caractères par pixel du fichier XPM n'est pas valide"
-
-#: gdk-pixbuf/io-xpm.c:510
-msgid "XPM file has invalid number of colors"
-msgstr "Le fichier XPM n'a pas un nombre de couleurs valide"
-
-#: gdk-pixbuf/io-xpm.c:522 gdk-pixbuf/io-xpm.c:531 gdk-pixbuf/io-xpm.c:583
-msgid "Cannot allocate memory for loading XPM image"
-msgstr "Impossible d'allouer de la mémoire pour charger l'image XPM"
-
-#: gdk-pixbuf/io-xpm.c:545
-msgid "Cannot read XPM colormap"
-msgstr "Impossible de lire la palette de couleurs XPM"
-
-#: gdk-pixbuf/io-xpm.c:777
-msgid "Failed to write to temporary file when loading XPM image"
-msgstr ""
-"L'écriture dans un fichier temporaire lors du chargement d'une image XPM a "
-"échoué"
-
-#: gdk-pixbuf/io-xpm.c:816
-msgid "The XPM image format"
-msgstr "Le format d'image XPM"
-
-#: gdk-pixbuf/io-gdip-emf.c:59
-msgid "The EMF image format"
-msgstr "Le format d'image EMF"
-
-#: gdk-pixbuf/io-gdip-utils.c:232
-#, c-format
-msgid "Could not allocate memory: %s"
-msgstr "Impossible d'allouer de la mémoire : %s"
-
-#: gdk-pixbuf/io-gdip-utils.c:257 gdk-pixbuf/io-gdip-utils.c:371
-#: gdk-pixbuf/io-gdip-utils.c:411
-#, c-format
-msgid "Could not create stream: %s"
-msgstr "Impossible de créer le flux : %s"
-
-#: gdk-pixbuf/io-gdip-utils.c:271
-#, c-format
-msgid "Could not seek stream: %s"
-msgstr "Impossible de se positionner dans le flux : %s"
-
-#: gdk-pixbuf/io-gdip-utils.c:283
-#, c-format
-msgid "Could not read from stream: %s"
-msgstr "Impossible de lire dans le flux : %s"
-
-#: gdk-pixbuf/io-gdip-utils.c:694 gdk-pixbuf/io-gdip-utils.c:825
-msgid "Couldn't load bitmap"
-msgstr "Impossible de charger l'image"
-
-#: gdk-pixbuf/io-gdip-utils.c:847
-msgid "Couldn't load metafile"
-msgstr "Impossible de charger le métafichier"
-
-#: gdk-pixbuf/io-gdip-utils.c:1006
-msgid "Unsupported image format for GDI+"
-msgstr "Le format d'image n'est pas pris en charge par GDI+"
-
-#: gdk-pixbuf/io-gdip-utils.c:1013
-msgid "Couldn't save"
-msgstr "Impossible d'enregistrer"
-
-#: gdk-pixbuf/io-gdip-wmf.c:58
-msgid "The WMF image format"
-msgstr "Le format d'image WMF"
-
 #. Description of --sync in --help output
 #: gdk/win32/gdkmain-win32.c:55
 msgid "Don't batch GDI requests"
@@ -1381,7 +459,8 @@ msgstr "Fonction de type non valide à la ligne %d : « %s »"
 #, c-format
 msgid "Duplicate object id '%s' on line %d (previously on line %d)"
 msgstr ""
-"Identifiant d'objet « %s » dupliqué à la ligne %d (précédemment à la ligne %d)"
+"Identifiant d'objet « %s » dupliqué à la ligne %d (précédemment à la ligne "
+"%d)"
 
 #: gtk/gtkbuilderparser.c:859
 #, c-format
@@ -1540,8 +619,9 @@ msgid "_Saturation:"
 msgstr "_Saturation :"
 
 #: gtk/gtkcolorsel.c:393
-msgid "\"Deepness\" of the color."
-msgstr "« Profondeur » de la couleur."
+#, fuzzy
+msgid "Intensity of the color."
+msgstr "Transparence de la couleur."
 
 #: gtk/gtkcolorsel.c:394
 msgid "_Value:"
@@ -1716,11 +796,11 @@ msgstr "_Droite :"
 msgid "Paper Margins"
 msgstr "Marges du papier"
 
-#: gtk/gtkentry.c:8612 gtk/gtktextview.c:8002
+#: gtk/gtkentry.c:8612 gtk/gtktextview.c:8012
 msgid "Input _Methods"
 msgstr "_Méthodes de saisie"
 
-#: gtk/gtkentry.c:8626 gtk/gtktextview.c:8016
+#: gtk/gtkentry.c:8626 gtk/gtktextview.c:8026
 msgid "_Insert Unicode Control Character"
 msgstr "_Insérer un caractère de contrôle Unicode"
 
@@ -2163,12 +1243,12 @@ msgid "System (%s)"
 msgstr "Système (%s)"
 
 #. Open Link
-#: gtk/gtklabel.c:6076
+#: gtk/gtklabel.c:6072
 msgid "_Open Link"
 msgstr "_Ouvrir le lien"
 
 #. Copy Link Address
-#: gtk/gtklabel.c:6088
+#: gtk/gtklabel.c:6084
 msgid "Copy _Link Address"
 msgstr "Copier l'_adresse du lien"
 
@@ -2181,27 +1261,27 @@ msgid "Invalid URI"
 msgstr "URI non valide"
 
 #. Description of --gtk-module=MODULES in --help output
-#: gtk/gtkmain.c:447
+#: gtk/gtkmain.c:432
 msgid "Load additional GTK+ modules"
 msgstr "Charge des modules GTK+ additionnels"
 
 #. Placeholder in --gtk-module=MODULES in --help output
-#: gtk/gtkmain.c:448
+#: gtk/gtkmain.c:433
 msgid "MODULES"
 msgstr "MODULES"
 
 #. Description of --g-fatal-warnings in --help output
-#: gtk/gtkmain.c:450
+#: gtk/gtkmain.c:435
 msgid "Make all warnings fatal"
 msgstr "Rend tous les avertissements fatals"
 
 #. Description of --gtk-debug=FLAGS in --help output
-#: gtk/gtkmain.c:453
+#: gtk/gtkmain.c:438
 msgid "GTK+ debugging flags to set"
 msgstr "Drapeaux de débogage GTK+ à définir"
 
 #. Description of --gtk-no-debug=FLAGS in --help output
-#: gtk/gtkmain.c:456
+#: gtk/gtkmain.c:441
 msgid "GTK+ debugging flags to unset"
 msgstr "Drapeaux de débogage GTK+ à ne pas définir"
 
@@ -2210,20 +1290,20 @@ msgstr "Drapeaux de débogage GTK+ à ne pas définir"
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
 #.
-#: gtk/gtkmain.c:708
+#: gtk/gtkmain.c:704
 msgid "default:LTR"
 msgstr "default:LTR"
 
-#: gtk/gtkmain.c:773
+#: gtk/gtkmain.c:769
 #, c-format
 msgid "Cannot open display: %s"
 msgstr "Impossible d'ouvrir l'affichage : %s"
 
-#: gtk/gtkmain.c:810
+#: gtk/gtkmain.c:806
 msgid "GTK+ Options"
 msgstr "Options GTK+"
 
-#: gtk/gtkmain.c:810
+#: gtk/gtkmain.c:806
 msgid "Show GTK+ Options"
 msgstr "Affiche les options GTK+"
 
@@ -2310,7 +1390,7 @@ msgstr "Shell Z"
 msgid "Cannot end process with pid %d: %s"
 msgstr "Impossible de terminer le processus ayant le pid %d : %s"
 
-#: gtk/gtknotebook.c:4621 gtk/gtknotebook.c:7050
+#: gtk/gtknotebook.c:4631 gtk/gtknotebook.c:7060
 #, c-format
 msgid "Page %u"
 msgstr "Page %u"
@@ -2400,88 +1480,82 @@ msgstr "Enregistrer dans le _dossier :"
 msgid "%s job #%d"
 msgstr "%s, tâche n°%d"
 
-#: gtk/gtkprintoperation.c:1687
+#: gtk/gtkprintoperation.c:1695
 msgctxt "print operation status"
 msgid "Initial state"
 msgstr "État initial"
 
-#: gtk/gtkprintoperation.c:1688
+#: gtk/gtkprintoperation.c:1696
 msgctxt "print operation status"
 msgid "Preparing to print"
 msgstr "Préparation de l'impression"
 
-#: gtk/gtkprintoperation.c:1689
+#: gtk/gtkprintoperation.c:1697
 msgctxt "print operation status"
 msgid "Generating data"
 msgstr "Production des données"
 
-#: gtk/gtkprintoperation.c:1690
+#: gtk/gtkprintoperation.c:1698
 msgctxt "print operation status"
 msgid "Sending data"
 msgstr "Envoi des données"
 
-#: gtk/gtkprintoperation.c:1691
+#: gtk/gtkprintoperation.c:1699
 msgctxt "print operation status"
 msgid "Waiting"
 msgstr "En attente"
 
-#: gtk/gtkprintoperation.c:1692
+#: gtk/gtkprintoperation.c:1700
 msgctxt "print operation status"
 msgid "Blocking on issue"
 msgstr "Interruption à cause d'un problème"
 
-#: gtk/gtkprintoperation.c:1693
+#: gtk/gtkprintoperation.c:1701
 msgctxt "print operation status"
 msgid "Printing"
 msgstr "Impression"
 
-#: gtk/gtkprintoperation.c:1694
+#: gtk/gtkprintoperation.c:1702
 msgctxt "print operation status"
 msgid "Finished"
 msgstr "Terminé"
 
-#: gtk/gtkprintoperation.c:1695
+#: gtk/gtkprintoperation.c:1703
 msgctxt "print operation status"
 msgid "Finished with error"
 msgstr "Terminé avec une erreur"
 
-#: gtk/gtkprintoperation.c:2254
+#: gtk/gtkprintoperation.c:2270
 #, c-format
 msgid "Preparing %d"
 msgstr "Préparation de %d"
 
-#: gtk/gtkprintoperation.c:2256 gtk/gtkprintoperation.c:2875
+#: gtk/gtkprintoperation.c:2272 gtk/gtkprintoperation.c:2902
 #, c-format
 msgid "Preparing"
 msgstr "Préparation"
 
-#: gtk/gtkprintoperation.c:2259
+#: gtk/gtkprintoperation.c:2275
 #, c-format
 msgid "Printing %d"
 msgstr "Impression de %d"
 
-#: gtk/gtkprintoperation.c:2905
+#: gtk/gtkprintoperation.c:2932
 #, c-format
 msgid "Error creating print preview"
 msgstr "Erreur lors de la création de l'aperçu"
 
-#: gtk/gtkprintoperation.c:2908
+#: gtk/gtkprintoperation.c:2935
 #, c-format
 msgid "The most probable reason is that a temporary file could not be created."
 msgstr ""
 "La raison la plus probable est qu'un fichier temporaire n'a pas pu être créé."
 
-#: gtk/gtkprintoperation-unix.c:297 gtk/gtkprintoperation-unix.c:314
-#, c-format
+#: gtk/gtkprintoperation-unix.c:297
 msgid "Error launching preview"
 msgstr "Impossible de lancer l'aperçu"
 
-#: gtk/gtkprintoperation-unix.c:358
-#, c-format
-msgid "Error printing"
-msgstr "Erreur lors de l'impression"
-
-#: gtk/gtkprintoperation-unix.c:494 gtk/gtkprintoperation-win32.c:1447
+#: gtk/gtkprintoperation-unix.c:470 gtk/gtkprintoperation-win32.c:1447
 msgid "Application"
 msgstr "Application"
 
@@ -2495,7 +1569,7 @@ msgstr "Absence de papier"
 
 #. Translators: this is a printer status.
 #: gtk/gtkprintoperation-win32.c:616
-#: modules/printbackends/cups/gtkprintbackendcups.c:1999
+#: modules/printbackends/cups/gtkprintbackendcups.c:1998
 msgid "Paused"
 msgstr "En pause"
 
@@ -2623,42 +1697,42 @@ msgstr "Général"
 #. * multiple pages on a sheet when printing
 #.
 #: gtk/gtkprintunixdialog.c:3010
-#: modules/printbackends/cups/gtkprintbackendcups.c:3509
+#: modules/printbackends/cups/gtkprintbackendcups.c:3508
 msgid "Left to right, top to bottom"
 msgstr "De gauche à droite, du haut vers le bas"
 
 #: gtk/gtkprintunixdialog.c:3010
-#: modules/printbackends/cups/gtkprintbackendcups.c:3509
+#: modules/printbackends/cups/gtkprintbackendcups.c:3508
 msgid "Left to right, bottom to top"
 msgstr "De gauche à droite, du bas vers le haut"
 
 #: gtk/gtkprintunixdialog.c:3011
-#: modules/printbackends/cups/gtkprintbackendcups.c:3510
+#: modules/printbackends/cups/gtkprintbackendcups.c:3509
 msgid "Right to left, top to bottom"
 msgstr "De droite à gauche, du haut vers le bas"
 
 #: gtk/gtkprintunixdialog.c:3011
-#: modules/printbackends/cups/gtkprintbackendcups.c:3510
+#: modules/printbackends/cups/gtkprintbackendcups.c:3509
 msgid "Right to left, bottom to top"
 msgstr "De droite à gauche, du bas vers le haut"
 
 #: gtk/gtkprintunixdialog.c:3012
-#: modules/printbackends/cups/gtkprintbackendcups.c:3511
+#: modules/printbackends/cups/gtkprintbackendcups.c:3510
 msgid "Top to bottom, left to right"
 msgstr "Du haut vers le bas, de gauche à droite"
 
 #: gtk/gtkprintunixdialog.c:3012
-#: modules/printbackends/cups/gtkprintbackendcups.c:3511
+#: modules/printbackends/cups/gtkprintbackendcups.c:3510
 msgid "Top to bottom, right to left"
 msgstr "Du haut vers le bas, de droite à gauche"
 
 #: gtk/gtkprintunixdialog.c:3013
-#: modules/printbackends/cups/gtkprintbackendcups.c:3512
+#: modules/printbackends/cups/gtkprintbackendcups.c:3511
 msgid "Bottom to top, left to right"
 msgstr "Du bas vers le haut, de gauche à droite"
 
 #: gtk/gtkprintunixdialog.c:3013
-#: modules/printbackends/cups/gtkprintbackendcups.c:3512
+#: modules/printbackends/cups/gtkprintbackendcups.c:3511
 msgid "Bottom to top, right to left"
 msgstr "Du bas vers le haut, de droite à gauche"
 
@@ -2666,7 +1740,7 @@ msgstr "Du bas vers le haut, de droite à gauche"
 #. * dialog that controls in what order multiple pages are arranged
 #.
 #: gtk/gtkprintunixdialog.c:3017 gtk/gtkprintunixdialog.c:3030
-#: modules/printbackends/cups/gtkprintbackendcups.c:3544
+#: modules/printbackends/cups/gtkprintbackendcups.c:3543
 msgid "Page Ordering"
 msgstr "Ordre des pages"
 
@@ -3522,7 +2596,8 @@ msgstr "L'attribut « %s » est répété deux fois dans le même élément <%
 #: gtk/gtktextbufferserialize.c:961 gtk/gtktextbufferserialize.c:986
 #, c-format
 msgid "Attribute \"%s\" is invalid on <%s> element in this context"
-msgstr "L'attribut « %s » n'est pas valide dans l'élément <%s> dans ce contexte"
+msgstr ""
+"L'attribut « %s » n'est pas valide dans l'élément <%s> dans ce contexte"
 
 #: gtk/gtktextbufferserialize.c:1022
 #, c-format
@@ -3562,8 +2637,8 @@ msgstr "« %s » n'est pas un nom d'attribut valide"
 msgid ""
 "\"%s\" could not be converted to a value of type \"%s\" for attribute \"%s\""
 msgstr ""
-"« %s » ne peut pas être converti en une valeur de type « %s » pour l'attribut "
-"« %s »"
+"« %s » ne peut pas être converti en une valeur de type « %s » pour "
+"l'attribut « %s »"
 
 #: gtk/gtktextbufferserialize.c:1202
 #, c-format
@@ -4718,8 +3793,8 @@ msgstr "Authentification nécessaire pour obtenir un fichier de %s"
 #, c-format
 msgid "Authentication is required to print document '%s' on printer %s"
 msgstr ""
-"Authentification nécessaire pour imprimer le document « %s » sur l'imprimante "
-"%s"
+"Authentification nécessaire pour imprimer le document « %s » sur "
+"l'imprimante %s"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:856
 #, c-format
@@ -4845,121 +3920,116 @@ msgstr "L'imprimante « %s » est actuellement déconnectée."
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:1687
 #, c-format
-msgid "Printer '%s' may not be connected."
-msgstr "L'imprimante « %s » ne semble pas être connectée."
-
-#: modules/printbackends/cups/gtkprintbackendcups.c:1688
-#, c-format
 msgid "There is a problem on printer '%s'."
 msgstr "Il y a un problème avec l'imprimante « %s »."
 
 #. Translators: this is a printer status.
-#: modules/printbackends/cups/gtkprintbackendcups.c:1996
+#: modules/printbackends/cups/gtkprintbackendcups.c:1995
 msgid "Paused ; Rejecting Jobs"
 msgstr "En pause ; les tâches sont rejetées"
 
 #. Translators: this is a printer status.
-#: modules/printbackends/cups/gtkprintbackendcups.c:2002
+#: modules/printbackends/cups/gtkprintbackendcups.c:2001
 msgid "Rejecting Jobs"
 msgstr "Tâches non acceptées"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2778
+#: modules/printbackends/cups/gtkprintbackendcups.c:2777
 msgid "Two Sided"
 msgstr "Recto verso"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2779
+#: modules/printbackends/cups/gtkprintbackendcups.c:2778
 msgid "Paper Type"
 msgstr "Type de papier"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2780
+#: modules/printbackends/cups/gtkprintbackendcups.c:2779
 msgid "Paper Source"
 msgstr "Source du papier"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2781
+#: modules/printbackends/cups/gtkprintbackendcups.c:2780
 msgid "Output Tray"
 msgstr "Bac de sortie"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2782
+#: modules/printbackends/cups/gtkprintbackendcups.c:2781
 msgid "Resolution"
 msgstr "Résolution"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2783
+#: modules/printbackends/cups/gtkprintbackendcups.c:2782
 msgid "GhostScript pre-filtering"
 msgstr "Pré-filtrage GhostScript"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2792
+#: modules/printbackends/cups/gtkprintbackendcups.c:2791
 msgid "One Sided"
 msgstr "Recto"
 
 #. Translators: this is an option of "Two Sided"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2794
+#: modules/printbackends/cups/gtkprintbackendcups.c:2793
 msgid "Long Edge (Standard)"
 msgstr "Bord long (standard)"
 
 #. Translators: this is an option of "Two Sided"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2796
+#: modules/printbackends/cups/gtkprintbackendcups.c:2795
 msgid "Short Edge (Flip)"
 msgstr "Bord court (retourné)"
 
 #. Translators: this is an option of "Paper Source"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2798
-#: modules/printbackends/cups/gtkprintbackendcups.c:2800
-#: modules/printbackends/cups/gtkprintbackendcups.c:2808
+#: modules/printbackends/cups/gtkprintbackendcups.c:2797
+#: modules/printbackends/cups/gtkprintbackendcups.c:2799
+#: modules/printbackends/cups/gtkprintbackendcups.c:2807
 msgid "Auto Select"
 msgstr "Sélection automatique"
 
 #. Translators: this is an option of "Paper Source"
 #. Translators: this is an option of "Resolution"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2802
-#: modules/printbackends/cups/gtkprintbackendcups.c:2804
-#: modules/printbackends/cups/gtkprintbackendcups.c:2806
-#: modules/printbackends/cups/gtkprintbackendcups.c:2810
-#: modules/printbackends/cups/gtkprintbackendcups.c:3296
+#: modules/printbackends/cups/gtkprintbackendcups.c:2801
+#: modules/printbackends/cups/gtkprintbackendcups.c:2803
+#: modules/printbackends/cups/gtkprintbackendcups.c:2805
+#: modules/printbackends/cups/gtkprintbackendcups.c:2809
+#: modules/printbackends/cups/gtkprintbackendcups.c:3295
 msgid "Printer Default"
 msgstr "Selon l'imprimante"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2812
+#: modules/printbackends/cups/gtkprintbackendcups.c:2811
 msgid "Embed GhostScript fonts only"
 msgstr "Inclure uniquement les polices GhostScript"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2814
+#: modules/printbackends/cups/gtkprintbackendcups.c:2813
 msgid "Convert to PS level 1"
 msgstr "Convertir en PS niveau 1"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2816
+#: modules/printbackends/cups/gtkprintbackendcups.c:2815
 msgid "Convert to PS level 2"
 msgstr "Convertir en PS niveau 2"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2818
+#: modules/printbackends/cups/gtkprintbackendcups.c:2817
 msgid "No pre-filtering"
 msgstr "Pas de pré-filtrage"
 
 #. Translators: "Miscellaneous" is the label for a button, that opens
 #. up an extra panel of settings in a print dialog.
-#: modules/printbackends/cups/gtkprintbackendcups.c:2827
+#: modules/printbackends/cups/gtkprintbackendcups.c:2826
 msgid "Miscellaneous"
 msgstr "Divers"
 
 #. Translators: These strings name the possible values of the
 #. * job priority option in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3504
+#: modules/printbackends/cups/gtkprintbackendcups.c:3503
 msgid "Urgent"
 msgstr "Urgent"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3504
+#: modules/printbackends/cups/gtkprintbackendcups.c:3503
 msgid "High"
 msgstr "Haute"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3504
+#: modules/printbackends/cups/gtkprintbackendcups.c:3503
 msgid "Medium"
 msgstr "Moyenne"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3504
+#: modules/printbackends/cups/gtkprintbackendcups.c:3503
 msgid "Low"
 msgstr "Basse"
 
@@ -4967,66 +4037,66 @@ msgstr "Basse"
 #. Translators, this string is used to label the pages-per-sheet option
 #. * in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3528
+#: modules/printbackends/cups/gtkprintbackendcups.c:3527
 msgid "Pages per Sheet"
 msgstr "Pages par feuille"
 
 #. Translators, this string is used to label the job priority option
 #. * in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3565
+#: modules/printbackends/cups/gtkprintbackendcups.c:3564
 msgid "Job Priority"
 msgstr "Priorité de la tâche"
 
 #. Translators, this string is used to label the billing info entry
 #. * in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3576
+#: modules/printbackends/cups/gtkprintbackendcups.c:3575
 msgid "Billing Info"
 msgstr "Informations de facturation"
 
 #. Translators, these strings are names for various 'standard' cover
 #. * pages that the printing system may support.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3591
+#: modules/printbackends/cups/gtkprintbackendcups.c:3590
 msgid "None"
 msgstr "Aucune"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3591
+#: modules/printbackends/cups/gtkprintbackendcups.c:3590
 msgid "Classified"
 msgstr "Classifié"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3591
+#: modules/printbackends/cups/gtkprintbackendcups.c:3590
 msgid "Confidential"
 msgstr "Confidentiel"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3591
+#: modules/printbackends/cups/gtkprintbackendcups.c:3590
 msgid "Secret"
 msgstr "Secret"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3591
+#: modules/printbackends/cups/gtkprintbackendcups.c:3590
 msgid "Standard"
 msgstr "Standard"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3591
+#: modules/printbackends/cups/gtkprintbackendcups.c:3590
 msgid "Top Secret"
 msgstr "Top secret"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3591
+#: modules/printbackends/cups/gtkprintbackendcups.c:3590
 msgid "Unclassified"
 msgstr "Non classifié"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the front cover page.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3626
+#: modules/printbackends/cups/gtkprintbackendcups.c:3625
 msgid "Before"
 msgstr "Avant"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the back cover page.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3641
+#: modules/printbackends/cups/gtkprintbackendcups.c:3640
 msgid "After"
 msgstr "Après"
 
@@ -5034,14 +4104,14 @@ msgstr "Après"
 #. * a print job is printed. Possible values are 'now', a specified time,
 #. * or 'on hold'
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3661
+#: modules/printbackends/cups/gtkprintbackendcups.c:3660
 msgid "Print at"
 msgstr "Imprimer à"
 
 #. Translators: this is the name of the option that allows the user
 #. * to specify a time when a print job will be printed.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3672
+#: modules/printbackends/cups/gtkprintbackendcups.c:3671
 msgid "Print at time"
 msgstr "Imprimer à l'heure"
 
@@ -5049,7 +4119,7 @@ msgstr "Imprimer à l'heure"
 #. * size. The two placeholders are replaced with the width and height
 #. * in points. E.g: "Custom 230.4x142.9"
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3707
+#: modules/printbackends/cups/gtkprintbackendcups.c:3706
 #, c-format
 msgid "Custom %sx%s"
 msgstr "Personnalisé %sx%s"
@@ -5141,6 +4211,701 @@ msgstr "Imprimer vers une imprimante test"
 msgid "Could not get information for file '%s': %s"
 msgstr "Impossible d'obtenir les informations du fichier « %s » : %s"
 
+#: tests/testfilechooser.c:222
+#, c-format
+msgid "Failed to open file '%s': %s"
+msgstr "Impossible d'ouvrir le fichier « %s » : %s"
+
+#: tests/testfilechooser.c:267
+#, c-format
+msgid ""
+"Failed to load image '%s': reason not known, probably a corrupt image file"
+msgstr ""
+"Impossible de charger l'image « %s » : raison inconnue, probablement un "
+"fichier d'image corrompu"
+
+#~ msgid "Image file '%s' contains no data"
+#~ msgstr "Le fichier image « %s » ne contient pas de données"
+
+#~ msgid ""
+#~ "Failed to load animation '%s': reason not known, probably a corrupt "
+#~ "animation file"
+#~ msgstr ""
+#~ "Impossible de charger l'animation « %s » : raison inconnue, probablement "
+#~ "un fichier d'animation corrompu"
+
+#~ msgid "Unable to load image-loading module: %s: %s"
+#~ msgstr "Impossible de charger le module de chargement d'images : %s : %s"
+
+#~ msgid ""
+#~ "Image-loading module %s does not export the proper interface; perhaps "
+#~ "it's from a different GTK version?"
+#~ msgstr ""
+#~ "Le module de chargement d'images %s n'exporte pas la bonne interface ; "
+#~ "peut-être provient-il d'une version différente de GTK ?"
+
+#~ msgid "Image type '%s' is not supported"
+#~ msgstr "Le type d'images « %s » n'est pas pris en charge"
+
+#~ msgid "Couldn't recognize the image file format for file '%s'"
+#~ msgstr "Impossible de reconnaître le format d'image du fichier « %s »"
+
+#~ msgid "Unrecognized image file format"
+#~ msgstr "Format d'image non reconnu"
+
+#~ msgid "Failed to load image '%s': %s"
+#~ msgstr "Impossible de charger l'image « %s » : %s"
+
+#~ msgid "Error writing to image file: %s"
+#~ msgstr "Erreur lors de l'écriture du fichier d'image : %s"
+
+#~ msgid ""
+#~ "This build of gdk-pixbuf does not support saving the image format: %s"
+#~ msgstr ""
+#~ "Cette version de gdk-pixbuf ne prend pas en charge l'enregistrement au "
+#~ "format d'image : %s"
+
+#~ msgid "Insufficient memory to save image to callback"
+#~ msgstr ""
+#~ "Mémoire insuffisante pour enregistrer l'image dans la fonction de rappel"
+
+#~ msgid "Failed to open temporary file"
+#~ msgstr "Impossible d'ouvrir le fichier temporaire"
+
+#~ msgid "Failed to read from temporary file"
+#~ msgstr "Impossible de lire le fichier temporaire"
+
+#~ msgid "Failed to open '%s' for writing: %s"
+#~ msgstr "Impossible d'ouvrir « %s » en écriture : %s"
+
+#~ msgid ""
+#~ "Failed to close '%s' while writing image, all data may not have been "
+#~ "saved: %s"
+#~ msgstr ""
+#~ "Impossible de fermer l'image « %s » lors de l'écriture, toutes les "
+#~ "données n'ont peut-être pas été enregistrées : %s"
+
+#~ msgid "Insufficient memory to save image into a buffer"
+#~ msgstr "Mémoire insuffisante pour enregistrer l'image dans un tampon"
+
+#~ msgid "Error writing to image stream"
+#~ msgstr "Erreur lors de l'écriture vers le flux image"
+
+#~ msgid ""
+#~ "Internal error: Image loader module '%s' failed to complete an operation, "
+#~ "but didn't give a reason for the failure"
+#~ msgstr ""
+#~ "Erreur interne : le module de chargement d'images « %s » n'est pas "
+#~ "parvenu à terminer une opération, mais il n'a pas donné la raison de son "
+#~ "échec"
+
+#~ msgid "Incremental loading of image type '%s' is not supported"
+#~ msgstr ""
+#~ "Le chargement progressif d'images de type « %s » n'est pas pris en charge"
+
+#~ msgid "Image header corrupt"
+#~ msgstr "En-tête d'image corrompu"
+
+#~ msgid "Image format unknown"
+#~ msgstr "Format d'image inconnu"
+
+#~ msgid "Image pixel data corrupt"
+#~ msgstr "Données des pixels de l'image corrompues"
+
+#, fuzzy
+#~ msgid "failed to allocate image buffer of %u byte"
+#~ msgid_plural "failed to allocate image buffer of %u bytes"
+#~ msgstr[0] ""
+#~ "Échec d'allocation de %d octets pour le tampon de lecture du fichier"
+#~ msgstr[1] ""
+#~ "Échec d'allocation de %d octets pour le tampon de lecture du fichier"
+
+#~ msgid "Unexpected icon chunk in animation"
+#~ msgstr "Fragment d'icône non attendu dans l'animation"
+
+#~ msgid "Unsupported animation type"
+#~ msgstr "Type d'animation non pris en charge"
+
+#~ msgid "Invalid header in animation"
+#~ msgstr "En-tête non valide dans l'animation"
+
+#~ msgid "Not enough memory to load animation"
+#~ msgstr "Mémoire insuffisante pour charger l'animation"
+
+#~ msgid "Malformed chunk in animation"
+#~ msgstr "Fragment malformé dans l'animation"
+
+#~ msgid "The ANI image format"
+#~ msgstr "Le format d'image ANI"
+
+#~ msgid "BMP image has bogus header data"
+#~ msgstr "L'image BMP a un en-tête erroné"
+
+#~ msgid "Not enough memory to load bitmap image"
+#~ msgstr "Mémoire insuffisante pour charger l'image bitmap"
+
+#~ msgid "BMP image has unsupported header size"
+#~ msgstr "L'image BMP a une taille d'en-tête non prise en charge"
+
+#~ msgid "Topdown BMP images cannot be compressed"
+#~ msgstr "Les images BMP Topdown ne peuvent être compressées"
+
+#~ msgid "Premature end-of-file encountered"
+#~ msgstr "Fin de fichier rencontrée prématurément"
+
+#~ msgid "Couldn't allocate memory for saving BMP file"
+#~ msgstr ""
+#~ "Impossible d'allouer de la mémoire pour l'enregistrement du fichier BMP"
+
+#~ msgid "Couldn't write to BMP file"
+#~ msgstr "Impossible d'écrire le fichier BMP"
+
+#~ msgid "The BMP image format"
+#~ msgstr "Le format d'image BMP"
+
+#~ msgid "Failure reading GIF: %s"
+#~ msgstr "La lecture du fichier GIF a échoué : %s"
+
+#~ msgid "GIF file was missing some data (perhaps it was truncated somehow?)"
+#~ msgstr ""
+#~ "Il manque au fichier GIF quelques données (peut-être a-t-il été tronqué ?)"
+
+#~ msgid "Internal error in the GIF loader (%s)"
+#~ msgstr "Erreur interne dans le chargeur GIF (%s)"
+
+#~ msgid "Stack overflow"
+#~ msgstr "Débordement de la pile"
+
+#~ msgid "GIF image loader cannot understand this image."
+#~ msgstr "Le chargeur d'image GIF ne peut pas comprendre cette image."
+
+#~ msgid "Bad code encountered"
+#~ msgstr "Code non valide rencontré"
+
+#~ msgid "Circular table entry in GIF file"
+#~ msgstr "Entrée de table circulaire dans le fichier GIF"
+
+#~ msgid "Not enough memory to load GIF file"
+#~ msgstr "Mémoire insuffisante pour charger le fichier GIF"
+
+#~ msgid "Not enough memory to composite a frame in GIF file"
+#~ msgstr "Mémoire insuffisante pour composer un cadre dans le fichier GIF"
+
+#~ msgid "GIF image is corrupt (incorrect LZW compression)"
+#~ msgstr "L'image GIF est corrompue (compression LZW incorrecte)"
+
+#~ msgid "File does not appear to be a GIF file"
+#~ msgstr "Le fichier ne semble pas être au format GIF"
+
+#~ msgid "Version %s of the GIF file format is not supported"
+#~ msgstr ""
+#~ "La version %s de ce format de fichier GIF n'est pas prise en charge."
+
+#~ msgid ""
+#~ "GIF image has no global colormap, and a frame inside it has no local "
+#~ "colormap."
+#~ msgstr ""
+#~ "L'image GIF n'a pas de palette de couleurs globale, et une trame interne "
+#~ "n'a pas de palette de couleurs locale."
+
+#~ msgid "GIF image was truncated or incomplete."
+#~ msgstr "L'image GIF est tronquée ou incomplète."
+
+#~ msgid "The GIF image format"
+#~ msgstr "Le format d'image GIF"
+
+#~ msgid "Invalid header in icon"
+#~ msgstr "En-tête non valide pour l'icône"
+
+#~ msgid "Not enough memory to load icon"
+#~ msgstr "Mémoire insuffisante pour charger l'icône"
+
+#~ msgid "Icon has zero width"
+#~ msgstr "L'icône a une largeur nulle"
+
+#~ msgid "Icon has zero height"
+#~ msgstr "L'icône a une hauteur nulle"
+
+#~ msgid "Compressed icons are not supported"
+#~ msgstr "Les icônes compressées ne sont pas prises en charge"
+
+#~ msgid "Unsupported icon type"
+#~ msgstr "Type d'icône non pris en charge"
+
+#~ msgid "Not enough memory to load ICO file"
+#~ msgstr "Mémoire insuffisante pour charger le fichier ICO"
+
+#~ msgid "Image too large to be saved as ICO"
+#~ msgstr "Image trop grande pour être enregistrée en tant qu'ICO"
+
+#~ msgid "Cursor hotspot outside image"
+#~ msgstr "Point chaud du curseur en dehors de l'image"
+
+#~ msgid "Unsupported depth for ICO file: %d"
+#~ msgstr "Profondeur de couleur non prise en charge pour le fichier ICO : %d"
+
+#~ msgid "The ICO image format"
+#~ msgstr "Le format d'image ICO"
+
+#~ msgid "Error reading ICNS image: %s"
+#~ msgstr "Erreur de lecture de l'image ICNS : %s"
+
+#~ msgid "Could not decode ICNS file"
+#~ msgstr "Impossible de décoder l'image ICNS"
+
+#~ msgid "The ICNS image format"
+#~ msgstr "Le format d'image ICNS"
+
+#~ msgid "Couldn't allocate memory for stream"
+#~ msgstr "Impossible d'allouer de la mémoire pour le flux"
+
+#~ msgid "Couldn't decode image"
+#~ msgstr "Impossible de décoder l'image"
+
+#~ msgid "Transformed JPEG2000 has zero width or height"
+#~ msgstr "Le JPEG2000 transformé a une largeur ou une hauteur nulle"
+
+#~ msgid "Image type currently not supported"
+#~ msgstr "Ce type d'image n'est actuellement pas pris en charge"
+
+#~ msgid "Couldn't allocate memory for color profile"
+#~ msgstr "Impossible d'allouer de la mémoire pour le profil de couleurs"
+
+#~ msgid "Insufficient memory to open JPEG 2000 file"
+#~ msgstr "Mémoire insuffisante pour ouvrir le fichier JPEG 2000"
+
+#~ msgid "Couldn't allocate memory to buffer image data"
+#~ msgstr ""
+#~ "Impossible d'allouer de la mémoire pour le tampon de données d'image"
+
+#~ msgid "The JPEG 2000 image format"
+#~ msgstr "Le format d'image JPEG 2000"
+
+#~ msgid "Error interpreting JPEG image file (%s)"
+#~ msgstr "Erreur d'interprétation du fichier d'image JPEG (%s)"
+
+#~ msgid ""
+#~ "Insufficient memory to load image, try exiting some applications to free "
+#~ "memory"
+#~ msgstr ""
+#~ "Mémoire insuffisante pour charger l'image, essayez de quitter quelques "
+#~ "applications pour libérer de la mémoire"
+
+#~ msgid "Unsupported JPEG color space (%s)"
+#~ msgstr "Espace de couleur JPEG non pris en charge (%s)"
+
+#~ msgid "Couldn't allocate memory for loading JPEG file"
+#~ msgstr ""
+#~ "Impossible d'allouer de la mémoire pour le chargement du fichier JPEG"
+
+#~ msgid "Transformed JPEG has zero width or height."
+#~ msgstr "Le PNG transformé a une largeur ou une hauteur nulle."
+
+#~ msgid ""
+#~ "JPEG quality must be a value between 0 and 100; value '%s' could not be "
+#~ "parsed."
+#~ msgstr ""
+#~ "La qualité JPEG doit être une valeur entre 0 et 100 ; la valeur « %s » "
+#~ "n'est pas interprétable."
+
+#~ msgid ""
+#~ "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
+#~ msgstr ""
+#~ "La qualité JPEG doit être une valeur entre 0 et 100 ; la valeur « %d » "
+#~ "n'est pas autorisée."
+
+#~ msgid "The JPEG image format"
+#~ msgstr "Le format d'image JPEG"
+
+#~ msgid "Couldn't allocate memory for header"
+#~ msgstr "Impossible d'allouer de la mémoire pour l'en-tête"
+
+#~ msgid "Couldn't allocate memory for context buffer"
+#~ msgstr "Impossible d'allouer de la mémoire pour le tampon du contexte"
+
+#~ msgid "Image has invalid width and/or height"
+#~ msgstr "L'image a une largeur ou une hauteur non valide"
+
+#~ msgid "Image has unsupported bpp"
+#~ msgstr "L'image a une profondeur de couleurs non prise en charge"
+
+#~ msgid "Image has unsupported number of %d-bit planes"
+#~ msgstr "L'image a un nombre de plans de %d-bit non pris en charge"
+
+#~ msgid "Couldn't create new pixbuf"
+#~ msgstr "Impossible de créer un nouveau pixbuf"
+
+#~ msgid "Couldn't allocate memory for line data"
+#~ msgstr "Impossible d'allouer de la mémoire pour les données de lignes"
+
+#~ msgid "Couldn't allocate memory for paletted data"
+#~ msgstr "Impossible d'allouer de la mémoire pour les données de palettes"
+
+#~ msgid "Didn't get all lines of PCX image"
+#~ msgstr "Impossible d'obtenir toutes les lignes de l'image PCX"
+
+#~ msgid "No palette found at end of PCX data"
+#~ msgstr "Aucune palette trouvée à la fin des données PCX"
+
+#~ msgid "The PCX image format"
+#~ msgstr "Le format d'image PCX"
+
+#~ msgid "Bits per channel of PNG image is invalid."
+#~ msgstr "Le nombre de bits par canal de l'image PNG n'est pas valide."
+
+#~ msgid "Transformed PNG has zero width or height."
+#~ msgstr "Le PNG transformé a une largeur ou une hauteur nulle."
+
+#~ msgid "Bits per channel of transformed PNG is not 8."
+#~ msgstr "Le nombre de bits du PNG transformé n'est pas 8."
+
+#~ msgid "Transformed PNG not RGB or RGBA."
+#~ msgstr "Le PNG transformé n'est ni RGB, ni RGBA."
+
+#~ msgid "Transformed PNG has unsupported number of channels, must be 3 or 4."
+#~ msgstr ""
+#~ "Le PNG transformé a un nombre de canaux non pris en charge, il devrait "
+#~ "être de 3 ou de 4."
+
+#~ msgid "Fatal error in PNG image file: %s"
+#~ msgstr "Erreur fatale dans le fichier d'image PNG : %s"
+
+#~ msgid "Insufficient memory to load PNG file"
+#~ msgstr "Mémoire insuffisante pour charger le fichier PNG"
+
+#~ msgid ""
+#~ "Insufficient memory to store a %ld by %ld image; try exiting some "
+#~ "applications to reduce memory usage"
+#~ msgstr ""
+#~ "Mémoire insuffisante pour stocker une image de %ld sur %ld ; essayez de "
+#~ "quitter quelques applications pour réduire la mémoire occupée"
+
+#~ msgid "Fatal error reading PNG image file"
+#~ msgstr "Erreur fatale lors de la lecture d'une image PNG"
+
+#~ msgid "Fatal error reading PNG image file: %s"
+#~ msgstr "Erreur fatale lors de la lecture du fichier d'image PNG : %s"
+
+#~ msgid ""
+#~ "Keys for PNG text chunks must have at least 1 and at most 79 characters."
+#~ msgstr ""
+#~ "Les clés pour les fragments texte PNG doivent contenir entre 1 et 79 "
+#~ "caractères."
+
+#~ msgid "Keys for PNG text chunks must be ASCII characters."
+#~ msgstr ""
+#~ "Les clés pour les fragments texte PNG doivent être des caractères ASCII."
+
+#~ msgid "Color profile has invalid length %d."
+#~ msgstr "La longueur %d du profil de couleur n'est pas valable."
+
+#~ msgid ""
+#~ "PNG compression level must be a value between 0 and 9; value '%s' could "
+#~ "not be parsed."
+#~ msgstr ""
+#~ "Le niveau de compression PNG doit être une valeur entre 0 et 9 ; la "
+#~ "valeur « %s » n'est pas interprétable."
+
+#~ msgid ""
+#~ "PNG compression level must be a value between 0 and 9; value '%d' is not "
+#~ "allowed."
+#~ msgstr ""
+#~ "La niveau de compression PNG doit être une valeur entre 0 et 9 ; la "
+#~ "valeur « %d » n'est pas autorisée."
+
+#~ msgid ""
+#~ "Value for PNG text chunk %s cannot be converted to ISO-8859-1 encoding."
+#~ msgstr ""
+#~ "La valeur pour le fragment texte PNG %s ne peut pas être convertie dans "
+#~ "le codage ISO-8859-1."
+
+#~ msgid "The PNG image format"
+#~ msgstr "Le format d'image PNG"
+
+#~ msgid "PNM loader expected to find an integer, but didn't"
+#~ msgstr ""
+#~ "Le chargeur PNM s'attendait à recevoir un entier, mais ce n'était pas le "
+#~ "cas"
+
+#~ msgid "PNM file has an incorrect initial byte"
+#~ msgstr "Le fichier PNM a un octet initial incorrect"
+
+#~ msgid "PNM file is not in a recognized PNM subformat"
+#~ msgstr "Le fichier PNM n'est pas un sous-format PNM reconnu"
+
+#~ msgid "PNM file has an image width of 0"
+#~ msgstr "Le fichier PNM a une largeur d'image de 0"
+
+#~ msgid "PNM file has an image height of 0"
+#~ msgstr "Le fichier PNM a une hauteur d'image de 0"
+
+#~ msgid "Maximum color value in PNM file is 0"
+#~ msgstr "La valeur maximale de couleur dans le fichier PNM est 0"
+
+#~ msgid "Maximum color value in PNM file is too large"
+#~ msgstr "La valeur maximale de couleur dans le fichier PNM est trop grande"
+
+#~ msgid "Raw PNM image type is invalid"
+#~ msgstr "Le type d'image PNM brut n'est pas valide"
+
+#~ msgid "PNM image loader does not support this PNM subformat"
+#~ msgstr "Le chargeur d'image PNM ne prend pas en charge ce sous-format PNM"
+
+#~ msgid "Raw PNM formats require exactly one whitespace before sample data"
+#~ msgstr ""
+#~ "Les formats PNM bruts nécessitent exactement un espace avant les données"
+
+#~ msgid "Cannot allocate memory for loading PNM image"
+#~ msgstr "Impossible d'allouer de la mémoire pour charger l'image PNM"
+
+#~ msgid "Insufficient memory to load PNM context struct"
+#~ msgstr "Mémoire insuffisante pour charger la structure de contexte PNM"
+
+#~ msgid "Unexpected end of PNM image data"
+#~ msgstr "Fin inattendue des données de l'image PNM"
+
+#~ msgid "Insufficient memory to load PNM file"
+#~ msgstr "Mémoire insuffisante pour charger le fichier PNM"
+
+#~ msgid "The PNM/PBM/PGM/PPM image format family"
+#~ msgstr "La famille de format d'image PNM/PBM/PGM/PPM"
+
+#~ msgid "Input file descriptor is NULL."
+#~ msgstr "Le descripteur du fichier d'entrée est NULL."
+
+#~ msgid "Failed to read QTIF header"
+#~ msgstr "Impossible de lire l'en-tête QTIF"
+
+#~ msgid "QTIF atom size too large (%d bytes)"
+#~ msgstr "Taille d'atome QTIF trop grande (%d octets)"
+
+#~ msgid "Failed to allocate %d bytes for file read buffer"
+#~ msgstr ""
+#~ "Échec d'allocation de %d octets pour le tampon de lecture du fichier"
+
+#~ msgid "File error when reading QTIF atom: %s"
+#~ msgstr "Erreur de fichier lors de la lecture de l'atome QTIF : %s"
+
+#~ msgid "Failed to skip the next %d bytes with seek()."
+#~ msgstr "Les %d octets suivants n'ont pas pu être sautés avec seek()."
+
+#~ msgid "Failed to allocate QTIF context structure."
+#~ msgstr "Échec de création de la structure de contexte QTIF."
+
+#~ msgid "Failed to create GdkPixbufLoader object."
+#~ msgstr "Impossible de créer un objet GdkPixbufLoader."
+
+#~ msgid "Failed to find an image data atom."
+#~ msgstr "Impossible de trouver un atome de données images."
+
+#~ msgid "The QTIF image format"
+#~ msgstr "Le format d'image QTIF"
+
+#~ msgid "RAS image has bogus header data"
+#~ msgstr "L'image RAS a un en-tête erroné"
+
+#~ msgid "RAS image has unknown type"
+#~ msgstr "L'image RAS a un type inconnu"
+
+#~ msgid "unsupported RAS image variation"
+#~ msgstr "Variante d'image RAS non prise en charge"
+
+#~ msgid "Not enough memory to load RAS image"
+#~ msgstr "Mémoire insuffisante pour charger l'image RAS"
+
+#~ msgid "The Sun raster image format"
+#~ msgstr "Le format d'image Sun raster"
+
+#~ msgid "Cannot allocate memory for IOBuffer struct"
+#~ msgstr "Impossible d'allouer de la mémoire pour la structure IOBuffer"
+
+#~ msgid "Cannot allocate memory for IOBuffer data"
+#~ msgstr "Impossible d'allouer de la mémoire pour les données IOBuffer"
+
+#~ msgid "Cannot realloc IOBuffer data"
+#~ msgstr "Impossible de réallouer les données IOBuffer"
+
+#~ msgid "Cannot allocate temporary IOBuffer data"
+#~ msgstr "Impossible d'allouer les données IOBuffer temporaires"
+
+#~ msgid "Cannot allocate new pixbuf"
+#~ msgstr "Impossible d'allouer un nouveau pixbuf"
+
+#~ msgid "Image is corrupted or truncated"
+#~ msgstr "L'image est tronquée ou endommagée"
+
+#~ msgid "Cannot allocate colormap structure"
+#~ msgstr "Impossible d'allouer de structure de palette de couleurs"
+
+#~ msgid "Cannot allocate colormap entries"
+#~ msgstr "Impossible d'allouer des entrées de palette de couleurs"
+
+#~ msgid "Unexpected bitdepth for colormap entries"
+#~ msgstr ""
+#~ "Profondeur de couleur inattendue pour les entrées de la palette de "
+#~ "couleurs"
+
+#~ msgid "Cannot allocate TGA header memory"
+#~ msgstr "Impossible d'allouer la mémoire pour l'en-tête TGA"
+
+#~ msgid "TGA image has invalid dimensions"
+#~ msgstr "Les dimensions de l'image TGA ne sont pas valides"
+
+#~ msgid "TGA image type not supported"
+#~ msgstr "Type d'image TGA non pris en charge"
+
+#~ msgid "Cannot allocate memory for TGA context struct"
+#~ msgstr ""
+#~ "Impossible d'allouer de la mémoire pour la structure de contexte TGA"
+
+#~ msgid "Excess data in file"
+#~ msgstr "Trop de données dans le fichier"
+
+#~ msgid "The Targa image format"
+#~ msgstr "Le format d'image Targa"
+
+#~ msgid "Could not get image width (bad TIFF file)"
+#~ msgstr "Impossible d'obtenir la largeur de l'image (fichier TIFF corrompu)"
+
+#~ msgid "Could not get image height (bad TIFF file)"
+#~ msgstr "Impossible d'obtenir la hauteur de l'image (fichier TIFF corrompu)"
+
+#~ msgid "Width or height of TIFF image is zero"
+#~ msgstr "La largeur ou la hauteur de l'image TIFF est nulle"
+
+#~ msgid "Dimensions of TIFF image too large"
+#~ msgstr "Dimensions de l'image TIFF trop grandes"
+
+#~ msgid "Insufficient memory to open TIFF file"
+#~ msgstr "Mémoire insuffisante pour ouvrir le fichier TIFF"
+
+#~ msgid "Failed to load RGB data from TIFF file"
+#~ msgstr "Impossible de lire les données RGB du fichier TIFF"
+
+#~ msgid "Failed to open TIFF image"
+#~ msgstr "Impossible d'ouvrir l'image TIFF"
+
+#~ msgid "TIFFClose operation failed"
+#~ msgstr "L'opération TIFFClose a échoué"
+
+#~ msgid "Failed to load TIFF image"
+#~ msgstr "Impossible de charger l'image TIFF"
+
+#~ msgid "Failed to save TIFF image"
+#~ msgstr "Impossible d'enregistrer l'image TIFF"
+
+#~ msgid "TIFF compression doesn't refer to a valid codec."
+#~ msgstr "La compression TIFF ne se réfère pas à un codec valable."
+
+#~ msgid "Failed to write TIFF data"
+#~ msgstr "Impossible d'enregistrer les données TIFF"
+
+#~ msgid "Couldn't write to TIFF file"
+#~ msgstr "Impossible d'écrire le fichier TIFF"
+
+#~ msgid "The TIFF image format"
+#~ msgstr "Le format d'image TIFF"
+
+#~ msgid "Image has zero width"
+#~ msgstr "L'image a une largeur nulle"
+
+#~ msgid "Image has zero height"
+#~ msgstr "L'image a une hauteur nulle"
+
+#~ msgid "Not enough memory to load image"
+#~ msgstr "Mémoire insuffisante pour charger l'image"
+
+#~ msgid "Couldn't save the rest"
+#~ msgstr "Impossible d'enregistrer le reste"
+
+#~ msgid "The WBMP image format"
+#~ msgstr "Le format d'image WBMP"
+
+#~ msgid "Invalid XBM file"
+#~ msgstr "Fichier XBM non valide"
+
+#~ msgid "Insufficient memory to load XBM image file"
+#~ msgstr "Mémoire insuffisante pour charger l'image XBM"
+
+#~ msgid "Failed to write to temporary file when loading XBM image"
+#~ msgstr ""
+#~ "L'écriture dans un fichier temporaire lors du chargement de l'image XBM a "
+#~ "échoué"
+
+#~ msgid "The XBM image format"
+#~ msgstr "Le format d'image XBM"
+
+#~ msgid "No XPM header found"
+#~ msgstr "Aucun en-tête XPM n'a été trouvé"
+
+#~ msgid "Invalid XPM header"
+#~ msgstr "Fichier XPM non valide"
+
+#~ msgid "XPM file has image width <= 0"
+#~ msgstr "Le fichier XPM a une taille d'image négative ou nulle"
+
+#~ msgid "XPM file has image height <= 0"
+#~ msgstr "Le fichier XPM a une hauteur négative ou nulle"
+
+#~ msgid "XPM has invalid number of chars per pixel"
+#~ msgstr "Le nombre de caractères par pixel du fichier XPM n'est pas valide"
+
+#~ msgid "XPM file has invalid number of colors"
+#~ msgstr "Le fichier XPM n'a pas un nombre de couleurs valide"
+
+#~ msgid "Cannot allocate memory for loading XPM image"
+#~ msgstr "Impossible d'allouer de la mémoire pour charger l'image XPM"
+
+#~ msgid "Cannot read XPM colormap"
+#~ msgstr "Impossible de lire la palette de couleurs XPM"
+
+#~ msgid "Failed to write to temporary file when loading XPM image"
+#~ msgstr ""
+#~ "L'écriture dans un fichier temporaire lors du chargement d'une image XPM "
+#~ "a échoué"
+
+#~ msgid "The XPM image format"
+#~ msgstr "Le format d'image XPM"
+
+#~ msgid "The EMF image format"
+#~ msgstr "Le format d'image EMF"
+
+#~ msgid "Could not allocate memory: %s"
+#~ msgstr "Impossible d'allouer de la mémoire : %s"
+
+#~ msgid "Could not create stream: %s"
+#~ msgstr "Impossible de créer le flux : %s"
+
+#~ msgid "Could not seek stream: %s"
+#~ msgstr "Impossible de se positionner dans le flux : %s"
+
+#~ msgid "Could not read from stream: %s"
+#~ msgstr "Impossible de lire dans le flux : %s"
+
+#~ msgid "Couldn't load bitmap"
+#~ msgstr "Impossible de charger l'image"
+
+#~ msgid "Couldn't load metafile"
+#~ msgstr "Impossible de charger le métafichier"
+
+#~ msgid "Unsupported image format for GDI+"
+#~ msgstr "Le format d'image n'est pas pris en charge par GDI+"
+
+#~ msgid "Couldn't save"
+#~ msgstr "Impossible d'enregistrer"
+
+#~ msgid "The WMF image format"
+#~ msgstr "Le format d'image WMF"
+
+#~ msgid "\"Deepness\" of the color."
+#~ msgstr "« Profondeur » de la couleur."
+
+#~ msgid "Error printing"
+#~ msgstr "Erreur lors de l'impression"
+
+#~ msgid "Printer '%s' may not be connected."
+#~ msgstr "L'imprimante « %s » ne semble pas être connectée."
+
 #~ msgid "Folders"
 #~ msgstr "Dossiers"
 
@@ -5158,8 +4923,8 @@ msgstr "Impossible d'obtenir les informations du fichier « %s » : %s"
 #~ "available to this program.\n"
 #~ "Are you sure that you want to select it?"
 #~ msgstr ""
-#~ "Le fichier « %s » est stocké sur une autre machine (appelée %s) et peut ne "
-#~ "pas être utilisable par ce programme.\n"
+#~ "Le fichier « %s » est stocké sur une autre machine (appelée %s) et peut "
+#~ "ne pas être utilisable par ce programme.\n"
 #~ "Voulez-vous vraiment le sélectionner ?"
 
 #~ msgid "_New Folder"
@@ -5174,8 +4939,8 @@ msgstr "Impossible d'obtenir les informations du fichier « %s » : %s"
 #~ msgid ""
 #~ "The folder name \"%s\" contains symbols that are not allowed in filenames"
 #~ msgstr ""
-#~ "Le nom du dossier « %s » contient des symboles non autorisés dans des noms "
-#~ "de fichiers."
+#~ "Le nom du dossier « %s » contient des symboles non autorisés dans des "
+#~ "noms de fichiers."
 
 #~ msgid "New Folder"
 #~ msgstr "Nouveau dossier"

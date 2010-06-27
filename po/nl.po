@@ -26,10 +26,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-05-25 20:10-0400\n"
+"POT-Creation-Date: 2010-06-26 23:16-0400\n"
 "PO-Revision-Date: 2010-05-03 23:35+0200\n"
 "Last-Translator: Wouter Bolsterlee <wbolster@gnome.org>\n"
 "Language-Team: Dutch <vertaling@vrijschrift.org>\n"
+"Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -94,7 +95,7 @@ msgstr "In te stellen Gdk debug-vlaggen"
 #. Placeholder in --gdk-no-debug=FLAGS in --help output
 #. Placeholder in --gtk-debug=FLAGS in --help output
 #. Placeholder in --gtk-no-debug=FLAGS in --help output
-#: gdk/gdk.c:165 gdk/gdk.c:168 gtk/gtkmain.c:454 gtk/gtkmain.c:457
+#: gdk/gdk.c:165 gdk/gdk.c:168 gtk/gtkmain.c:439 gtk/gtkmain.c:442
 msgid "FLAGS"
 msgstr "VLAGGEN"
 
@@ -295,950 +296,6 @@ msgstr "NUM_Delete"
 msgctxt "keyboard label"
 msgid "Delete"
 msgstr "Delete"
-
-#: gdk-pixbuf/gdk-pixbuf-animation.c:133 gdk-pixbuf/gdk-pixbuf-io.c:982
-#: gdk-pixbuf/gdk-pixbuf-io.c:1242 tests/testfilechooser.c:222
-#, c-format
-msgid "Failed to open file '%s': %s"
-msgstr "Openen van bestand ‘%s’ mislukt: %s"
-
-#: gdk-pixbuf/gdk-pixbuf-animation.c:146 gdk-pixbuf/gdk-pixbuf-io.c:994
-#, c-format
-msgid "Image file '%s' contains no data"
-msgstr "Afbeelding ‘%s’ bevat geen data"
-
-#: gdk-pixbuf/gdk-pixbuf-animation.c:188 gdk-pixbuf/gdk-pixbuf-io.c:1030
-#: gdk-pixbuf/gdk-pixbuf-io.c:1294 tests/testfilechooser.c:267
-#, c-format
-msgid ""
-"Failed to load image '%s': reason not known, probably a corrupt image file"
-msgstr ""
-"Laden van afbeelding ‘%s’ mislukt: reden onbekend, waarschijnlijk een "
-"beschadigde afbeelding"
-
-#: gdk-pixbuf/gdk-pixbuf-animation.c:221
-#, c-format
-msgid ""
-"Failed to load animation '%s': reason not known, probably a corrupt "
-"animation file"
-msgstr ""
-"Laden van animatie ‘%s’ mislukt: reden onbekend, waarschijnlijk een "
-"beschadigde animatie"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:715
-#, c-format
-msgid "Unable to load image-loading module: %s: %s"
-msgstr "Laden van afbeeldingslader %s mislukt: %s"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:730
-#, c-format
-msgid ""
-"Image-loading module %s does not export the proper interface; perhaps it's "
-"from a different GTK version?"
-msgstr ""
-"Afbeeldingslader %s geeft de verkeerde interface door; misschien is het de "
-"lader van een andere GTK-versie?"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:739 gdk-pixbuf/gdk-pixbuf-io.c:790
-#, c-format
-msgid "Image type '%s' is not supported"
-msgstr "Afbeeldingstype ‘%s’ wordt niet ondersteund"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:863
-#, c-format
-msgid "Couldn't recognize the image file format for file '%s'"
-msgstr "Afbeeldingstype van bestand ‘%s’ werd niet herkend"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:871
-msgid "Unrecognized image file format"
-msgstr "Onbekend afbeeldingstype"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:1039
-#, c-format
-msgid "Failed to load image '%s': %s"
-msgstr "Laden van afbeelding ‘%s’ mislukt: %s"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:1673 gdk-pixbuf/io-gdip-utils.c:961
-#, c-format
-msgid "Error writing to image file: %s"
-msgstr "Fout bij het schrijven naar afbeelding: %s"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:1718 gdk-pixbuf/gdk-pixbuf-io.c:1848
-#, c-format
-msgid "This build of gdk-pixbuf does not support saving the image format: %s"
-msgstr ""
-"Deze versie van gdk-pixbuf heeft geen ondersteuning voor het opslaan van het "
-"bestandsformaat: %s"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:1752
-msgid "Insufficient memory to save image to callback"
-msgstr "Onvoldoende geheugen om de afbeelding op te slaan naar de callback"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:1765
-msgid "Failed to open temporary file"
-msgstr "Openen van tijdelijk bestand is mislukt"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:1791
-msgid "Failed to read from temporary file"
-msgstr "Lezen van tijdelijk bestand is mislukt"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:2044
-#, c-format
-msgid "Failed to open '%s' for writing: %s"
-msgstr "Openen van ‘%s’ voor schrijven is mislukt: %s"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:2070
-#, c-format
-msgid ""
-"Failed to close '%s' while writing image, all data may not have been saved: %"
-"s"
-msgstr ""
-"Sluiten van ‘%s’ tijdens het schrijven is mislukt; er kan data verloren zijn "
-"gegaan: %s"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:2290 gdk-pixbuf/gdk-pixbuf-io.c:2341
-msgid "Insufficient memory to save image into a buffer"
-msgstr "Onvoldoende geheugen om afbeelding in een buffer op te slaan"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:2387
-msgid "Error writing to image stream"
-msgstr "Fout bij het schrijven naar afbeeldingstroom"
-
-#: gdk-pixbuf/gdk-pixbuf-loader.c:334
-#, c-format
-msgid ""
-"Internal error: Image loader module '%s' failed to complete an operation, "
-"but didn't give a reason for the failure"
-msgstr ""
-"Interne fout: afbeeldingslader ‘%s’ heeft een bewerking niet voltooid, maar "
-"gaf daar geen reden voor"
-
-# incrementeel is geen nederlands woord.
-# Hier wordt ws bedoeld:
-# Het gedeeltelijk laden en dan al gedeeltelijk weergaven van een afbeelding
-# geleidelijk laden/deelsgewijs laden
-#: gdk-pixbuf/gdk-pixbuf-loader.c:376
-#, c-format
-msgid "Incremental loading of image type '%s' is not supported"
-msgstr "Deelsgewijs laden van afbeeldingstype ‘%s’ wordt niet ondersteund"
-
-#: gdk-pixbuf/gdk-pixdata.c:147
-msgid "Image header corrupt"
-msgstr "Afbeeldingsheader beschadigd"
-
-# afbeeldingstype
-#: gdk-pixbuf/gdk-pixdata.c:152
-msgid "Image format unknown"
-msgstr "Het bestandsformaat van de afbeelding is onbekend"
-
-# pixelgegevens/pixeldata
-#: gdk-pixbuf/gdk-pixdata.c:157 gdk-pixbuf/gdk-pixdata.c:488
-msgid "Image pixel data corrupt"
-msgstr "Beeldpuntdata van de afbeelding is beschadigd"
-
-# meervoud in nl van byte is byte
-# reserveren van %u byte geheugenruimte voor de afbeelding is mislukt
-# Niet mogelijk om afbeeldingsbuffer van %u byte te alloceren
-#: gdk-pixbuf/gdk-pixdata.c:432
-#, c-format
-msgid "failed to allocate image buffer of %u byte"
-msgid_plural "failed to allocate image buffer of %u bytes"
-msgstr[0] "reserveren van %u byte geheugenruimte voor de afbeelding is mislukt"
-msgstr[1] "reserveren van %u byte geheugenruimte voor de afbeelding is mislukt"
-
-#: gdk-pixbuf/io-ani.c:244
-msgid "Unexpected icon chunk in animation"
-msgstr "Onverwacht pictogrambrokje in animatie"
-
-#: gdk-pixbuf/io-ani.c:337
-msgid "Unsupported animation type"
-msgstr "Niet ondersteund animatietype"
-
-#: gdk-pixbuf/io-ani.c:348 gdk-pixbuf/io-ani.c:406 gdk-pixbuf/io-ani.c:432
-#: gdk-pixbuf/io-ani.c:455 gdk-pixbuf/io-ani.c:482 gdk-pixbuf/io-ani.c:569
-msgid "Invalid header in animation"
-msgstr "Ongeldige header in animatie"
-
-#: gdk-pixbuf/io-ani.c:358 gdk-pixbuf/io-ani.c:380 gdk-pixbuf/io-ani.c:464
-#: gdk-pixbuf/io-ani.c:491 gdk-pixbuf/io-ani.c:542 gdk-pixbuf/io-ani.c:614
-msgid "Not enough memory to load animation"
-msgstr "Onvoldoende geheugen om animatie te laden"
-
-#: gdk-pixbuf/io-ani.c:398 gdk-pixbuf/io-ani.c:424 gdk-pixbuf/io-ani.c:443
-msgid "Malformed chunk in animation"
-msgstr "Misvormd brokje in animatie"
-
-#: gdk-pixbuf/io-ani.c:711
-msgid "The ANI image format"
-msgstr "Het ANI-bestandsformaat"
-
-#: gdk-pixbuf/io-bmp.c:230 gdk-pixbuf/io-bmp.c:267 gdk-pixbuf/io-bmp.c:338
-#: gdk-pixbuf/io-bmp.c:370 gdk-pixbuf/io-bmp.c:393 gdk-pixbuf/io-bmp.c:496
-msgid "BMP image has bogus header data"
-msgstr "BMP-afbeelding bevat onzinnige data in de header"
-
-#: gdk-pixbuf/io-bmp.c:241 gdk-pixbuf/io-bmp.c:433
-msgid "Not enough memory to load bitmap image"
-msgstr "Onvoldoende geheugen voor het laden van de bitmap-afbeelding"
-
-#: gdk-pixbuf/io-bmp.c:319
-msgid "BMP image has unsupported header size"
-msgstr "BMP-afbeelding heeft een niet-ondersteunde headergrootte"
-
-#: gdk-pixbuf/io-bmp.c:357
-msgid "Topdown BMP images cannot be compressed"
-msgstr "Topdown BMP-afbeeldingen kunnen niet worden gecomprimeerd"
-
-# tegengekomen/ontdekt/gevonden
-#: gdk-pixbuf/io-bmp.c:717 gdk-pixbuf/io-pnm.c:709
-msgid "Premature end-of-file encountered"
-msgstr "Voortijdig bestandseinde ontdekt"
-
-#: gdk-pixbuf/io-bmp.c:1329
-msgid "Couldn't allocate memory for saving BMP file"
-msgstr "Kon geen geheugenruimte reserveren voor opslaan van BMP-bestand"
-
-#: gdk-pixbuf/io-bmp.c:1370
-msgid "Couldn't write to BMP file"
-msgstr "Kon niet naar BMP-bestand schrijven"
-
-#: gdk-pixbuf/io-bmp.c:1423 gdk-pixbuf/io-gdip-bmp.c:82
-msgid "The BMP image format"
-msgstr "Het BMP-bestandsformaat"
-
-#: gdk-pixbuf/io-gif.c:222
-#, c-format
-msgid "Failure reading GIF: %s"
-msgstr "Lezen van GIF mislukt: %s"
-
-#: gdk-pixbuf/io-gif.c:496 gdk-pixbuf/io-gif.c:1481 gdk-pixbuf/io-gif.c:1642
-msgid "GIF file was missing some data (perhaps it was truncated somehow?)"
-msgstr "Er ontbrak data in het GIF-bestand (misschien was het afgebroken?)"
-
-#: gdk-pixbuf/io-gif.c:505
-#, c-format
-msgid "Internal error in the GIF loader (%s)"
-msgstr "Interne fout in de GIF-lader (%s)"
-
-# overlopende stapel
-# maar dit is toch een melding waar newbies niets mee kunnen.
-# Ze zouden deze melding eigenlijk niet mogen zien.
-# Om degene die wel weten wat ze ermee kunnen doen niet op een dwaalspoor
-# te zetten: Niet vertaald
-#: gdk-pixbuf/io-gif.c:579
-msgid "Stack overflow"
-msgstr "Stack overflow"
-
-#: gdk-pixbuf/io-gif.c:639
-msgid "GIF image loader cannot understand this image."
-msgstr "GIF-lader begrijpt deze afbeelding niet."
-
-# onjuiste code
-#: gdk-pixbuf/io-gif.c:668
-msgid "Bad code encountered"
-msgstr "Foutieve code ontdekt"
-
-#: gdk-pixbuf/io-gif.c:678
-msgid "Circular table entry in GIF file"
-msgstr "Circulair tabelveld in GIF-bestand"
-
-#: gdk-pixbuf/io-gif.c:866 gdk-pixbuf/io-gif.c:1468 gdk-pixbuf/io-gif.c:1515
-#: gdk-pixbuf/io-gif.c:1630
-msgid "Not enough memory to load GIF file"
-msgstr "Onvoldoende geheugen om GIF-bestand te laden"
-
-# composite a frame?
-#: gdk-pixbuf/io-gif.c:960
-msgid "Not enough memory to composite a frame in GIF file"
-msgstr "Onvoldoende geheugen om een frame samen te stellen in GIF-bestand"
-
-#: gdk-pixbuf/io-gif.c:1132
-msgid "GIF image is corrupt (incorrect LZW compression)"
-msgstr "GIF-bestand is beschadigd (incorrecte LZW-compressie)"
-
-#: gdk-pixbuf/io-gif.c:1182
-msgid "File does not appear to be a GIF file"
-msgstr "Bestand lijkt geen GIF-bestand te zijn"
-
-#: gdk-pixbuf/io-gif.c:1194
-#, c-format
-msgid "Version %s of the GIF file format is not supported"
-msgstr "Versie %s van het GIF-bestandsformaat wordt niet ondersteund"
-
-#: gdk-pixbuf/io-gif.c:1303
-msgid ""
-"GIF image has no global colormap, and a frame inside it has no local "
-"colormap."
-msgstr ""
-"GIF-bestand heeft geen algemeen kleurenpalet, en een kader daarbinnen heeft "
-"geen lokaal kleurenpalet"
-
-#: gdk-pixbuf/io-gif.c:1537
-msgid "GIF image was truncated or incomplete."
-msgstr "GIF-bestand is afgebroken of onvolledig"
-
-#: gdk-pixbuf/io-gif.c:1693 gdk-pixbuf/io-gdip-gif.c:80
-msgid "The GIF image format"
-msgstr "Het GIF-bestandsformaat"
-
-#: gdk-pixbuf/io-ico.c:211 gdk-pixbuf/io-ico.c:225 gdk-pixbuf/io-ico.c:277
-#: gdk-pixbuf/io-ico.c:290 gdk-pixbuf/io-ico.c:359
-msgid "Invalid header in icon"
-msgstr "Ongeldige header in pictogram"
-
-#: gdk-pixbuf/io-ico.c:240 gdk-pixbuf/io-ico.c:300 gdk-pixbuf/io-ico.c:369
-#: gdk-pixbuf/io-ico.c:432 gdk-pixbuf/io-ico.c:462
-msgid "Not enough memory to load icon"
-msgstr "Onvoldoende geheugen om pictogram te laden"
-
-#: gdk-pixbuf/io-ico.c:322
-msgid "Icon has zero width"
-msgstr "Pictogram heeft breedte nul"
-
-#: gdk-pixbuf/io-ico.c:332
-msgid "Icon has zero height"
-msgstr "Pictogram heeft hoogte nul"
-
-#: gdk-pixbuf/io-ico.c:384
-msgid "Compressed icons are not supported"
-msgstr "Gecomprimeerde pictogrammen worden niet ondersteund"
-
-#: gdk-pixbuf/io-ico.c:417
-msgid "Unsupported icon type"
-msgstr "Niet ondersteund pictogramtype"
-
-#: gdk-pixbuf/io-ico.c:511
-msgid "Not enough memory to load ICO file"
-msgstr "Onvoldoende geheugen om ICO-bestand te laden"
-
-#: gdk-pixbuf/io-ico.c:976
-msgid "Image too large to be saved as ICO"
-msgstr "Afbeelding te groot om als ICO-bestand te worden opgeslagen"
-
-#: gdk-pixbuf/io-ico.c:987
-msgid "Cursor hotspot outside image"
-msgstr "Cursor hotspot valt buiten de afbeelding"
-
-#: gdk-pixbuf/io-ico.c:1010
-#, c-format
-msgid "Unsupported depth for ICO file: %d"
-msgstr "Niet ondersteunde diepte voor ICO-bestand: %d"
-
-#: gdk-pixbuf/io-ico.c:1245 gdk-pixbuf/io-gdip-ico.c:59
-msgid "The ICO image format"
-msgstr "Het ICO-bestandsformaat"
-
-#: gdk-pixbuf/io-icns.c:347
-#, c-format
-msgid "Error reading ICNS image: %s"
-msgstr "Fout bij het lezen van ICNS-afbeelding: %s"
-
-#: gdk-pixbuf/io-icns.c:364
-msgid "Could not decode ICNS file"
-msgstr "Kon ICNS-bestand niet decoderen"
-
-#: gdk-pixbuf/io-icns.c:397
-msgid "The ICNS image format"
-msgstr "Het ICNS-bestandsformaat"
-
-#: gdk-pixbuf/io-jasper.c:75
-msgid "Couldn't allocate memory for stream"
-msgstr "Kon geen geheugenruimte reserveren voor de stroom"
-
-#: gdk-pixbuf/io-jasper.c:105
-msgid "Couldn't decode image"
-msgstr "Kon afbeelding niet decoderen"
-
-#: gdk-pixbuf/io-jasper.c:123
-msgid "Transformed JPEG2000 has zero width or height"
-msgstr "Getransformeerde JPEG2000 heeft nul breedte of hoogte."
-
-# 'currently' is eigenlijk overbodige info.
-#: gdk-pixbuf/io-jasper.c:137
-msgid "Image type currently not supported"
-msgstr "Afbeeldingstype wordt nog niet ondersteund"
-
-#: gdk-pixbuf/io-jasper.c:149 gdk-pixbuf/io-jasper.c:157
-msgid "Couldn't allocate memory for color profile"
-msgstr "Kon geen geheugenruimte reserveren voor het kleurenprofiel"
-
-#: gdk-pixbuf/io-jasper.c:183
-msgid "Insufficient memory to open JPEG 2000 file"
-msgstr "Onvoldoende geheugen om JPEG 2000-bestand te openen"
-
-#: gdk-pixbuf/io-jasper.c:262
-msgid "Couldn't allocate memory to buffer image data"
-msgstr "Kon geen geheugenruimte reserveren voor het bufferen van de afbeelding"
-
-#: gdk-pixbuf/io-jasper.c:306
-msgid "The JPEG 2000 image format"
-msgstr "Het JPEG 2000-bestandsformaat"
-
-#: gdk-pixbuf/io-jpeg.c:117
-#, c-format
-msgid "Error interpreting JPEG image file (%s)"
-msgstr "Fout bij het interpreteren van JPEG-afbeelding (%s)"
-
-#: gdk-pixbuf/io-jpeg.c:528
-msgid ""
-"Insufficient memory to load image, try exiting some applications to free "
-"memory"
-msgstr ""
-"Onvoldoende geheugen om afbeelding te laten, probeer enkele programma's af "
-"te sluiten om geheugen vrij te maken"
-
-#: gdk-pixbuf/io-jpeg.c:569 gdk-pixbuf/io-jpeg.c:775
-#, c-format
-msgid "Unsupported JPEG color space (%s)"
-msgstr "Niet ondersteunde JPEG kleurruimte (%s)"
-
-#: gdk-pixbuf/io-jpeg.c:674 gdk-pixbuf/io-jpeg.c:944 gdk-pixbuf/io-jpeg.c:1177
-#: gdk-pixbuf/io-jpeg.c:1186
-msgid "Couldn't allocate memory for loading JPEG file"
-msgstr "Kon geen geheugenruimte reserveren voor laden van JPEG-bestand"
-
-#: gdk-pixbuf/io-jpeg.c:919
-msgid "Transformed JPEG has zero width or height."
-msgstr "Getransformeerde JPEG heeft nul breedte of hoogte."
-
-#: gdk-pixbuf/io-jpeg.c:1133 gdk-pixbuf/io-gdip-jpeg.c:53
-#, c-format
-msgid ""
-"JPEG quality must be a value between 0 and 100; value '%s' could not be "
-"parsed."
-msgstr ""
-"JPEG-kwaliteit moet een waarde tussen 0 en 100 zijn: waarde ‘%s’ kan niet "
-"verwerkt worden."
-
-#: gdk-pixbuf/io-jpeg.c:1148 gdk-pixbuf/io-gdip-jpeg.c:68
-#, c-format
-msgid ""
-"JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
-msgstr ""
-"JPEG-kwaliteit moet tussen 0 en 100 liggen; waarde '%d' is niet toegestaan."
-
-#: gdk-pixbuf/io-jpeg.c:1310 gdk-pixbuf/io-gdip-jpeg.c:136
-msgid "The JPEG image format"
-msgstr "Het JPEG-bestandsformaat"
-
-#: gdk-pixbuf/io-pcx.c:187
-msgid "Couldn't allocate memory for header"
-msgstr "Kon geen geheugenruimte reserveren voor de header"
-
-#: gdk-pixbuf/io-pcx.c:202 gdk-pixbuf/io-pcx.c:560
-msgid "Couldn't allocate memory for context buffer"
-msgstr "Kon geen geheugenruimte reserveren voor de context-buffer"
-
-#: gdk-pixbuf/io-pcx.c:601
-msgid "Image has invalid width and/or height"
-msgstr "Afbeelding heeft ongeldige breedte en/of hoogte"
-
-#: gdk-pixbuf/io-pcx.c:613 gdk-pixbuf/io-pcx.c:674
-msgid "Image has unsupported bpp"
-msgstr "Afbeelding heeft een niet ondersteund bpp"
-
-#: gdk-pixbuf/io-pcx.c:618 gdk-pixbuf/io-pcx.c:626
-#, c-format
-msgid "Image has unsupported number of %d-bit planes"
-msgstr "Afbeelding heeft een niet ondersteund aantal '%d-bit planes'"
-
-#: gdk-pixbuf/io-pcx.c:642
-msgid "Couldn't create new pixbuf"
-msgstr "Kon geen nieuwe pixbuf aanmaken"
-
-#: gdk-pixbuf/io-pcx.c:650
-msgid "Couldn't allocate memory for line data"
-msgstr "Kon geen geheugenruimte reserveren voor lijn-data"
-
-#: gdk-pixbuf/io-pcx.c:657
-msgid "Couldn't allocate memory for paletted data"
-msgstr "Kon geen geheugenruimte reserveren voor 'paletted data'"
-
-#: gdk-pixbuf/io-pcx.c:704
-msgid "Didn't get all lines of PCX image"
-msgstr "Niet alle lijnen van PCX-afbeelding verkregen"
-
-#: gdk-pixbuf/io-pcx.c:711
-msgid "No palette found at end of PCX data"
-msgstr "Geen palet gevonden aan het einde van PCX-data"
-
-#: gdk-pixbuf/io-pcx.c:756
-msgid "The PCX image format"
-msgstr "Het PCX-bestandsformaat"
-
-#: gdk-pixbuf/io-png.c:55
-msgid "Bits per channel of PNG image is invalid."
-msgstr "Bits per kanaal van PNG-afbeelding is ongeldig."
-
-#: gdk-pixbuf/io-png.c:136 gdk-pixbuf/io-png.c:642
-msgid "Transformed PNG has zero width or height."
-msgstr "Getransformeerde PNG heeft nul breedte of hoogte."
-
-#: gdk-pixbuf/io-png.c:144
-msgid "Bits per channel of transformed PNG is not 8."
-msgstr "Bits per kanaal van getransformeerde PNG is niet gelijk aan 8."
-
-#: gdk-pixbuf/io-png.c:153
-msgid "Transformed PNG not RGB or RGBA."
-msgstr "Getransformeerde PNG is geen RGB of RGBA."
-
-#: gdk-pixbuf/io-png.c:162
-msgid "Transformed PNG has unsupported number of channels, must be 3 or 4."
-msgstr ""
-"Getransformeerde PNG heeft niet ondersteund aantal kanalen, moet gelijk zijn "
-"aan 3 of 4."
-
-#: gdk-pixbuf/io-png.c:183
-#, c-format
-msgid "Fatal error in PNG image file: %s"
-msgstr "Fatale fout in PNG-afbeelding: %s"
-
-#: gdk-pixbuf/io-png.c:316
-msgid "Insufficient memory to load PNG file"
-msgstr "Onvoldoende geheugen om PNG-bestand te laden"
-
-#: gdk-pixbuf/io-png.c:657
-#, c-format
-msgid ""
-"Insufficient memory to store a %ld by %ld image; try exiting some "
-"applications to reduce memory usage"
-msgstr ""
-"Onvoldoende geheugen om een afbeelding van %ld bij %ld op te slaan; probeer "
-"enkele toepassingen af te sluiten om geheugen vrij te maken"
-
-#: gdk-pixbuf/io-png.c:720
-msgid "Fatal error reading PNG image file"
-msgstr "Fatale fout bij het lezen van PNG-afbeelding"
-
-#: gdk-pixbuf/io-png.c:769
-#, c-format
-msgid "Fatal error reading PNG image file: %s"
-msgstr "Fatale fout bij het lezen van PNG-afbeelding: %s"
-
-#: gdk-pixbuf/io-png.c:863
-msgid ""
-"Keys for PNG text chunks must have at least 1 and at most 79 characters."
-msgstr ""
-"Sleutels voor PNG-tekstblokken moeten minimaal 1, en maximaal 79 tekens "
-"bevatten"
-
-#: gdk-pixbuf/io-png.c:872
-msgid "Keys for PNG text chunks must be ASCII characters."
-msgstr "Sleutels voor PNG-tekstblokken moeten uit ASCII tekens bestaan"
-
-#: gdk-pixbuf/io-png.c:886 gdk-pixbuf/io-tiff.c:738
-#, c-format
-msgid "Color profile has invalid length %d."
-msgstr "Kleurprofiel heeft ongeldige lengte %d."
-
-# moet tussen 0 en 9 liggen
-#: gdk-pixbuf/io-png.c:899 gdk-pixbuf/io-gdip-png.c:56
-#, c-format
-msgid ""
-"PNG compression level must be a value between 0 and 9; value '%s' could not "
-"be parsed."
-msgstr ""
-"PNG-compressie moet een waarde tussen 0 en 9 zijn: waarde ‘%s’ kan niet "
-"verwerkt worden."
-
-# moet tussen 0 en 9 liggen
-#: gdk-pixbuf/io-png.c:912 gdk-pixbuf/io-gdip-png.c:68
-#, c-format
-msgid ""
-"PNG compression level must be a value between 0 and 9; value '%d' is not "
-"allowed."
-msgstr ""
-"PNG-compressie moet een waarde tussen 0 en 9 zijn; waarde '%d' is niet "
-"toegestaan."
-
-#: gdk-pixbuf/io-png.c:951
-#, c-format
-msgid "Value for PNG text chunk %s cannot be converted to ISO-8859-1 encoding."
-msgstr ""
-"Waarde voor PNG-tekstblok %s kan niet naar tekenset ISO-8859-1 worden "
-"omgezet."
-
-#: gdk-pixbuf/io-png.c:1112 gdk-pixbuf/io-gdip-png.c:133
-msgid "The PNG image format"
-msgstr "Het PNG-bestandsformaat"
-
-#: gdk-pixbuf/io-pnm.c:250
-msgid "PNM loader expected to find an integer, but didn't"
-msgstr "PNM-lader verwachte een integer te vinden, maar deed dat niet"
-
-#: gdk-pixbuf/io-pnm.c:282
-msgid "PNM file has an incorrect initial byte"
-msgstr "PNM-bestand heeft een onjuist eerste byte"
-
-#: gdk-pixbuf/io-pnm.c:312
-msgid "PNM file is not in a recognized PNM subformat"
-msgstr "PNM staat niet in een herkenbaar PNM-subformaat"
-
-#: gdk-pixbuf/io-pnm.c:337
-msgid "PNM file has an image width of 0"
-msgstr "PNM-bestand heeft een breedte 0"
-
-#: gdk-pixbuf/io-pnm.c:358
-msgid "PNM file has an image height of 0"
-msgstr "PNM-bestand heeft een hoogte 0"
-
-#: gdk-pixbuf/io-pnm.c:381
-msgid "Maximum color value in PNM file is 0"
-msgstr "Maximale kleurwaarde in PNM-bestand is 0"
-
-#: gdk-pixbuf/io-pnm.c:389
-msgid "Maximum color value in PNM file is too large"
-msgstr "Maximale kleurwaarde in PNM-bestand is te groot"
-
-#: gdk-pixbuf/io-pnm.c:429 gdk-pixbuf/io-pnm.c:459 gdk-pixbuf/io-pnm.c:504
-msgid "Raw PNM image type is invalid"
-msgstr "Raw PNM-afbeeldingstype is ongeldig"
-
-#: gdk-pixbuf/io-pnm.c:654
-msgid "PNM image loader does not support this PNM subformat"
-msgstr "PNM-lader ondersteunt dit PNM-subtype niet"
-
-#: gdk-pixbuf/io-pnm.c:741 gdk-pixbuf/io-pnm.c:968
-msgid "Raw PNM formats require exactly one whitespace before sample data"
-msgstr ""
-"Raw PNM-formaten moeten precies één spatie hebben voor het begin van de data"
-
-#: gdk-pixbuf/io-pnm.c:768
-msgid "Cannot allocate memory for loading PNM image"
-msgstr "Kon geen geheugenruimte reserveren voor laden van PNM-bestand"
-
-#: gdk-pixbuf/io-pnm.c:818
-msgid "Insufficient memory to load PNM context struct"
-msgstr "Onvoldoende geheugen om PNM-context struct te laden"
-
-#: gdk-pixbuf/io-pnm.c:869
-msgid "Unexpected end of PNM image data"
-msgstr "Onverwacht einde van PNM-afbeeldingsgegevens"
-
-#: gdk-pixbuf/io-pnm.c:997
-msgid "Insufficient memory to load PNM file"
-msgstr "Onvoldoende geheugen om PNM-bestand te laden"
-
-#: gdk-pixbuf/io-pnm.c:1081
-msgid "The PNM/PBM/PGM/PPM image format family"
-msgstr "De PNM/PBM/PGM/PPM-bestandsformaatfamilie"
-
-#: gdk-pixbuf/io-qtif.c:128
-msgid "Input file descriptor is NULL."
-msgstr "Invoer bestandsbeschrijving is NULL."
-
-# header/header-data
-#: gdk-pixbuf/io-qtif.c:143
-msgid "Failed to read QTIF header"
-msgstr "Kon QTIF-header niet lezen"
-
-#: gdk-pixbuf/io-qtif.c:152 gdk-pixbuf/io-qtif.c:182 gdk-pixbuf/io-qtif.c:446
-#, c-format
-msgid "QTIF atom size too large (%d bytes)"
-msgstr "QTIF atomaire grootte te groot (%d byte)"
-
-# meervoud in nl van byte is byte
-# reserveren van %u byte geheugenruimte voor de afbeelding is mislukt
-# Niet mogelijk om afbeeldingsbuffer van %u byte te alloceren
-#: gdk-pixbuf/io-qtif.c:172
-#, c-format
-msgid "Failed to allocate %d bytes for file read buffer"
-msgstr "Reserveren van %d byte geheugenruimte voor de leesbuffer"
-
-#: gdk-pixbuf/io-qtif.c:196
-#, c-format
-msgid "File error when reading QTIF atom: %s"
-msgstr "Bestandsfout bij lezen van QTIF-atoom: %s"
-
-#: gdk-pixbuf/io-qtif.c:233
-#, c-format
-msgid "Failed to skip the next %d bytes with seek()."
-msgstr "Kon de volgende %d byte niet overslaan binnen de seek()."
-
-#: gdk-pixbuf/io-qtif.c:257
-msgid "Failed to allocate QTIF context structure."
-msgstr "Kon geen geheugen reserveren voor QTIF-contextstructuur"
-
-#: gdk-pixbuf/io-qtif.c:317
-msgid "Failed to create GdkPixbufLoader object."
-msgstr "Kon GdkPixbufLoader-object niet aanmaken."
-
-#: gdk-pixbuf/io-qtif.c:421
-msgid "Failed to find an image data atom."
-msgstr "Kon geen afbeeldingsdata-atoom vinden."
-
-#: gdk-pixbuf/io-qtif.c:602
-msgid "The QTIF image format"
-msgstr "Het QTIF-bestandsformaat"
-
-#: gdk-pixbuf/io-ras.c:126
-msgid "RAS image has bogus header data"
-msgstr "RAS-afbeelding bevat onzinnige data in de header"
-
-#: gdk-pixbuf/io-ras.c:148
-msgid "RAS image has unknown type"
-msgstr "RAS-afbeelding is van onbekend type"
-
-#: gdk-pixbuf/io-ras.c:156
-msgid "unsupported RAS image variation"
-msgstr "Niet ondersteunde RAS-afbeeldingsvariatie"
-
-#: gdk-pixbuf/io-ras.c:171 gdk-pixbuf/io-ras.c:200
-msgid "Not enough memory to load RAS image"
-msgstr "Onvoldoende geheugen voor het laden van de RAS-afbeelding"
-
-#: gdk-pixbuf/io-ras.c:545
-msgid "The Sun raster image format"
-msgstr "Het Sun raster-bestandsformaat"
-
-# Reserveren van geheugenruimte voor IOBuffer struct niet gelukt
-# kan geen geheugenruimte reserveren voor ....
-#: gdk-pixbuf/io-tga.c:154
-msgid "Cannot allocate memory for IOBuffer struct"
-msgstr "Kan geen geheugenruimte reserveren voor IOBuffer struct"
-
-#: gdk-pixbuf/io-tga.c:173
-msgid "Cannot allocate memory for IOBuffer data"
-msgstr "Kan geen geheugenruimte reserveren voor IOBUFFER gegevens"
-
-# kan niet opnieuw geheugenruimte reserveren
-#: gdk-pixbuf/io-tga.c:184
-msgid "Cannot realloc IOBuffer data"
-msgstr "Kan geheugenruimte voor IOBuffer-gegevens niet opnieuw reserveren"
-
-#: gdk-pixbuf/io-tga.c:214
-msgid "Cannot allocate temporary IOBuffer data"
-msgstr "Kan geen geheugenruimte reserveren voor tijdelijke IOBuffer-gegevens "
-
-#: gdk-pixbuf/io-tga.c:347
-msgid "Cannot allocate new pixbuf"
-msgstr "Kan geen geheugenruimte reserveren voor nieuwe pixbuf"
-
-#: gdk-pixbuf/io-tga.c:686
-msgid "Image is corrupted or truncated"
-msgstr "Afbeelding is beschadigd of onvolledig"
-
-#: gdk-pixbuf/io-tga.c:693
-msgid "Cannot allocate colormap structure"
-msgstr "Kan geen geheugenruimte reserveren voor kleurenkaartstructuur"
-
-#: gdk-pixbuf/io-tga.c:700
-msgid "Cannot allocate colormap entries"
-msgstr "Kan geen geheugen reserveren voor kleurenkaart-items "
-
-#: gdk-pixbuf/io-tga.c:722
-msgid "Unexpected bitdepth for colormap entries"
-msgstr "Onverwachte bitdiepte voor ingangen van kleurenkaart"
-
-#: gdk-pixbuf/io-tga.c:740
-msgid "Cannot allocate TGA header memory"
-msgstr "Kan geen geheugenruimte reserveren voor TGA-header"
-
-#: gdk-pixbuf/io-tga.c:773
-msgid "TGA image has invalid dimensions"
-msgstr "TGA-afbeelding heeft ongeldige afmetingen"
-
-#: gdk-pixbuf/io-tga.c:779 gdk-pixbuf/io-tga.c:788 gdk-pixbuf/io-tga.c:798
-#: gdk-pixbuf/io-tga.c:808 gdk-pixbuf/io-tga.c:815
-msgid "TGA image type not supported"
-msgstr "Bestandstype TGA wordt niet ondersteund"
-
-#: gdk-pixbuf/io-tga.c:862
-msgid "Cannot allocate memory for TGA context struct"
-msgstr "Kan geen geheugen reserveren voor TGA-context struct"
-
-# te veel data in bestand
-#: gdk-pixbuf/io-tga.c:927
-msgid "Excess data in file"
-msgstr "Overbodige data in bestand"
-
-#: gdk-pixbuf/io-tga.c:1008
-msgid "The Targa image format"
-msgstr "Het Targa-bestandsformaat"
-
-#: gdk-pixbuf/io-tiff.c:165
-msgid "Could not get image width (bad TIFF file)"
-msgstr "Kon afbeeldingsbreedte niet vinden (foutief TIFF-bestand)"
-
-#: gdk-pixbuf/io-tiff.c:172
-msgid "Could not get image height (bad TIFF file)"
-msgstr "Kon afbeeldingshoogte niet vinden (foutief TIFF-bestand)"
-
-#: gdk-pixbuf/io-tiff.c:180
-msgid "Width or height of TIFF image is zero"
-msgstr "Hoogte of breedte van TIFF-afbeelding is nul"
-
-#: gdk-pixbuf/io-tiff.c:189 gdk-pixbuf/io-tiff.c:198
-msgid "Dimensions of TIFF image too large"
-msgstr "Afmetingen van TIFF-afbeelding te groot"
-
-#: gdk-pixbuf/io-tiff.c:222 gdk-pixbuf/io-tiff.c:234 gdk-pixbuf/io-tiff.c:561
-msgid "Insufficient memory to open TIFF file"
-msgstr "Onvoldoende geheugen om TIFF-bestand te openen"
-
-#: gdk-pixbuf/io-tiff.c:295
-msgid "Failed to load RGB data from TIFF file"
-msgstr "Kon RGB-gegevens niet inlezen uit TIFF-bestand"
-
-#: gdk-pixbuf/io-tiff.c:351
-msgid "Failed to open TIFF image"
-msgstr "Kon TIFF-afbeelding niet openen"
-
-#: gdk-pixbuf/io-tiff.c:363 gdk-pixbuf/io-tiff.c:778
-msgid "TIFFClose operation failed"
-msgstr "Bewerking: TIFFClose is mislukt"
-
-#: gdk-pixbuf/io-tiff.c:493 gdk-pixbuf/io-tiff.c:506
-msgid "Failed to load TIFF image"
-msgstr "Kon TIFF-afbeelding niet laden"
-
-#: gdk-pixbuf/io-tiff.c:692
-msgid "Failed to save TIFF image"
-msgstr "Kon TIFF-afbeelding niet opslaan"
-
-#: gdk-pixbuf/io-tiff.c:727
-msgid "TIFF compression doesn't refer to a valid codec."
-msgstr "TIFF-compressie refereert niet naar een geldige codec."
-
-#: gdk-pixbuf/io-tiff.c:767
-msgid "Failed to write TIFF data"
-msgstr "Kon TIFF-data niet schrijven"
-
-#: gdk-pixbuf/io-tiff.c:814
-msgid "Couldn't write to TIFF file"
-msgstr "Kon niet naar TIFF-bestand schrijven"
-
-#: gdk-pixbuf/io-tiff.c:869
-msgid "The TIFF image format"
-msgstr "Het TIFF-bestandsformaat"
-
-#: gdk-pixbuf/io-wbmp.c:246
-msgid "Image has zero width"
-msgstr "Afbeelding heeft breedte nul"
-
-#: gdk-pixbuf/io-wbmp.c:264
-msgid "Image has zero height"
-msgstr "Afbeelding heeft hoogte nul"
-
-#: gdk-pixbuf/io-wbmp.c:275
-msgid "Not enough memory to load image"
-msgstr "Onvoldoende geheugen voor het laden van de afbeelding"
-
-#: gdk-pixbuf/io-wbmp.c:334
-msgid "Couldn't save the rest"
-msgstr "Kon de rest niet opslaan"
-
-#: gdk-pixbuf/io-wbmp.c:375
-msgid "The WBMP image format"
-msgstr "Het WBMP-bestandsformaat"
-
-#: gdk-pixbuf/io-xbm.c:295
-msgid "Invalid XBM file"
-msgstr "Ongeldig XBM-bestand"
-
-#: gdk-pixbuf/io-xbm.c:305
-msgid "Insufficient memory to load XBM image file"
-msgstr "Onvoldoende geheugen om XBM-afbeelding te laden"
-
-#: gdk-pixbuf/io-xbm.c:453
-msgid "Failed to write to temporary file when loading XBM image"
-msgstr ""
-"Niet mogelijk om naar tijdelijk bestand te schrijven bij het laden van XBM-"
-"afbeelding"
-
-#: gdk-pixbuf/io-xbm.c:492
-msgid "The XBM image format"
-msgstr "Het XBM-bestandsformaat"
-
-#: gdk-pixbuf/io-xpm.c:468
-msgid "No XPM header found"
-msgstr "Geen XPM-header gevonden"
-
-#: gdk-pixbuf/io-xpm.c:477
-msgid "Invalid XPM header"
-msgstr "Ongeldig XPM-header"
-
-# afbeelding ipv bestand gebruikt.
-#: gdk-pixbuf/io-xpm.c:485
-msgid "XPM file has image width <= 0"
-msgstr "XPM-afbeelding heeft breedte <= 0"
-
-#: gdk-pixbuf/io-xpm.c:493
-msgid "XPM file has image height <= 0"
-msgstr "XPM-afbeelding heeft hoogte <= 0"
-
-#: gdk-pixbuf/io-xpm.c:501
-msgid "XPM has invalid number of chars per pixel"
-msgstr "XPM heeft ongeldig aantal tekens per beeldpunt"
-
-#: gdk-pixbuf/io-xpm.c:510
-msgid "XPM file has invalid number of colors"
-msgstr "XPM-bestand heeft ongeldig aantal kleuren"
-
-#: gdk-pixbuf/io-xpm.c:522 gdk-pixbuf/io-xpm.c:531 gdk-pixbuf/io-xpm.c:583
-msgid "Cannot allocate memory for loading XPM image"
-msgstr "Kan geen geheugenruimte reserveren voor het laden van XPM-afbeelding"
-
-#: gdk-pixbuf/io-xpm.c:545
-msgid "Cannot read XPM colormap"
-msgstr "Kan XPM-kleurenkaart niet lezen"
-
-#: gdk-pixbuf/io-xpm.c:777
-msgid "Failed to write to temporary file when loading XPM image"
-msgstr ""
-"Niet mogelijk om naar tijdelijk bestand te schrijven bij het laden van XPM-"
-"afbeelding"
-
-#: gdk-pixbuf/io-xpm.c:816
-msgid "The XPM image format"
-msgstr "Het XPM-bestandsformaat"
-
-#: gdk-pixbuf/io-gdip-emf.c:59
-msgid "The EMF image format"
-msgstr "Het EMF-bestandsformaat"
-
-#: gdk-pixbuf/io-gdip-utils.c:232
-#, c-format
-msgid "Could not allocate memory: %s"
-msgstr "Kon geen geheugenruimte reserveren: %s"
-
-#: gdk-pixbuf/io-gdip-utils.c:257 gdk-pixbuf/io-gdip-utils.c:371
-#: gdk-pixbuf/io-gdip-utils.c:411
-#, c-format
-msgid "Could not create stream: %s"
-msgstr " Kon stroom niet aanmaken: %s"
-
-#: gdk-pixbuf/io-gdip-utils.c:271
-#, c-format
-msgid "Could not seek stream: %s"
-msgstr "Kon stroom niet doorzoeken: %s"
-
-#: gdk-pixbuf/io-gdip-utils.c:283
-#, c-format
-msgid "Could not read from stream: %s"
-msgstr "Kon niet van stroom lezen: %s"
-
-#: gdk-pixbuf/io-gdip-utils.c:694 gdk-pixbuf/io-gdip-utils.c:825
-msgid "Couldn't load bitmap"
-msgstr "Kon bitmap niet laden"
-
-#: gdk-pixbuf/io-gdip-utils.c:847
-msgid "Couldn't load metafile"
-msgstr "Kon metabestand niet laden"
-
-# bestandsformaat/afbeeldingsformat/bestandsindeling
-#: gdk-pixbuf/io-gdip-utils.c:1006
-msgid "Unsupported image format for GDI+"
-msgstr "Niet ondersteund afbeeldingsformaat voor GDI+"
-
-# telegramstijl...
-#: gdk-pixbuf/io-gdip-utils.c:1013
-msgid "Couldn't save"
-msgstr "Kon niet opslaan"
-
-#: gdk-pixbuf/io-gdip-wmf.c:58
-msgid "The WMF image format"
-msgstr "Het WMF-bestandsformaat"
 
 #. Description of --sync in --help output
 #: gdk/win32/gdkmain-win32.c:55
@@ -1583,9 +640,11 @@ msgstr "Positie op het kleurenwiel."
 msgid "_Saturation:"
 msgstr "_Verzadiging:"
 
+# doorzichtigheid/transparantie
 #: gtk/gtkcolorsel.c:393
-msgid "\"Deepness\" of the color."
-msgstr "‘Diepte’ van de kleur."
+#, fuzzy
+msgid "Intensity of the color."
+msgstr "Transparantie van de kleur."
 
 #: gtk/gtkcolorsel.c:394
 msgid "_Value:"
@@ -1763,11 +822,11 @@ msgstr "_Rechts:"
 msgid "Paper Margins"
 msgstr "Papiermarges"
 
-#: gtk/gtkentry.c:8612 gtk/gtktextview.c:8002
+#: gtk/gtkentry.c:8612 gtk/gtktextview.c:8012
 msgid "Input _Methods"
 msgstr "Invoer_methoden"
 
-#: gtk/gtkentry.c:8626 gtk/gtktextview.c:8016
+#: gtk/gtkentry.c:8626 gtk/gtktextview.c:8026
 msgid "_Insert Unicode Control Character"
 msgstr "_Unicode controleteken invoegen "
 
@@ -2248,12 +1307,12 @@ msgid "System (%s)"
 msgstr "Systeem (%s)"
 
 #. Open Link
-#: gtk/gtklabel.c:6076
+#: gtk/gtklabel.c:6072
 msgid "_Open Link"
 msgstr "Verwijzing _openen"
 
 #. Copy Link Address
-#: gtk/gtklabel.c:6088
+#: gtk/gtklabel.c:6084
 msgid "Copy _Link Address"
 msgstr "Verwijzingsadres _kopiëren"
 
@@ -2266,27 +1325,27 @@ msgid "Invalid URI"
 msgstr "Ongeldige URI"
 
 #. Description of --gtk-module=MODULES in --help output
-#: gtk/gtkmain.c:447
+#: gtk/gtkmain.c:432
 msgid "Load additional GTK+ modules"
 msgstr "Extra GTK+ modules laden"
 
 #. Placeholder in --gtk-module=MODULES in --help output
-#: gtk/gtkmain.c:448
+#: gtk/gtkmain.c:433
 msgid "MODULES"
 msgstr "MODULES"
 
 #. Description of --g-fatal-warnings in --help output
-#: gtk/gtkmain.c:450
+#: gtk/gtkmain.c:435
 msgid "Make all warnings fatal"
 msgstr "Alle waarschuwing fataal laten zijn"
 
 #. Description of --gtk-debug=FLAGS in --help output
-#: gtk/gtkmain.c:453
+#: gtk/gtkmain.c:438
 msgid "GTK+ debugging flags to set"
 msgstr "In te stellen GTK+ debug-vlaggen"
 
 #. Description of --gtk-no-debug=FLAGS in --help output
-#: gtk/gtkmain.c:456
+#: gtk/gtkmain.c:441
 msgid "GTK+ debugging flags to unset"
 msgstr "Uit te zetten GTK+ debug-vlaggen"
 
@@ -2295,20 +1354,20 @@ msgstr "Uit te zetten GTK+ debug-vlaggen"
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
 #.
-#: gtk/gtkmain.c:708
+#: gtk/gtkmain.c:704
 msgid "default:LTR"
 msgstr "default:LTR"
 
-#: gtk/gtkmain.c:773
+#: gtk/gtkmain.c:769
 #, c-format
 msgid "Cannot open display: %s"
 msgstr "Kan display ‘%s’ niet opnenen"
 
-#: gtk/gtkmain.c:810
+#: gtk/gtkmain.c:806
 msgid "GTK+ Options"
 msgstr "GTK+-opties"
 
-#: gtk/gtkmain.c:810
+#: gtk/gtkmain.c:806
 msgid "Show GTK+ Options"
 msgstr "GTK+-options tonen"
 
@@ -2396,7 +1455,7 @@ msgstr "Z-shell"
 msgid "Cannot end process with pid %d: %s"
 msgstr "Kan het proces met pid %d niet beëindigen: %s"
 
-#: gtk/gtknotebook.c:4621 gtk/gtknotebook.c:7050
+#: gtk/gtknotebook.c:4631 gtk/gtknotebook.c:7060
 #, c-format
 msgid "Page %u"
 msgstr "Pagina %u"
@@ -2505,91 +1564,85 @@ msgstr "_Opslaan in map:"
 msgid "%s job #%d"
 msgstr "%s printopdracht #%d"
 
-#: gtk/gtkprintoperation.c:1687
+#: gtk/gtkprintoperation.c:1695
 msgctxt "print operation status"
 msgid "Initial state"
 msgstr "Beginstatus"
 
-#: gtk/gtkprintoperation.c:1688
+#: gtk/gtkprintoperation.c:1696
 msgctxt "print operation status"
 msgid "Preparing to print"
 msgstr "Voorbereiden voor afdrukken"
 
-#: gtk/gtkprintoperation.c:1689
+#: gtk/gtkprintoperation.c:1697
 msgctxt "print operation status"
 msgid "Generating data"
 msgstr "Gegevens genereren"
 
-#: gtk/gtkprintoperation.c:1690
+#: gtk/gtkprintoperation.c:1698
 msgctxt "print operation status"
 msgid "Sending data"
 msgstr "Gegevens verzenden"
 
-#: gtk/gtkprintoperation.c:1691
+#: gtk/gtkprintoperation.c:1699
 msgctxt "print operation status"
 msgid "Waiting"
 msgstr "Wachten"
 
 # niet letterlijk, maar wel duidelijk en kort
-#: gtk/gtkprintoperation.c:1692
+#: gtk/gtkprintoperation.c:1700
 msgctxt "print operation status"
 msgid "Blocking on issue"
 msgstr "Blokkering"
 
 # Bezig met afdrukken/aan het afdrukken/afdrukken
-#: gtk/gtkprintoperation.c:1693
+#: gtk/gtkprintoperation.c:1701
 msgctxt "print operation status"
 msgid "Printing"
 msgstr "Afdrukken"
 
-#: gtk/gtkprintoperation.c:1694
+#: gtk/gtkprintoperation.c:1702
 msgctxt "print operation status"
 msgid "Finished"
 msgstr "Voltooid"
 
-#: gtk/gtkprintoperation.c:1695
+#: gtk/gtkprintoperation.c:1703
 msgctxt "print operation status"
 msgid "Finished with error"
 msgstr "Voltooid met fout"
 
-#: gtk/gtkprintoperation.c:2254
+#: gtk/gtkprintoperation.c:2270
 #, c-format
 msgid "Preparing %d"
 msgstr "Voorbereiden van %d"
 
-#: gtk/gtkprintoperation.c:2256 gtk/gtkprintoperation.c:2875
+#: gtk/gtkprintoperation.c:2272 gtk/gtkprintoperation.c:2902
 #, c-format
 msgid "Preparing"
 msgstr "Voorbereiden"
 
-#: gtk/gtkprintoperation.c:2259
+#: gtk/gtkprintoperation.c:2275
 #, c-format
 msgid "Printing %d"
 msgstr "Afdrukken van %d"
 
-#: gtk/gtkprintoperation.c:2905
+#: gtk/gtkprintoperation.c:2932
 #, c-format
 msgid "Error creating print preview"
 msgstr "Fout bij maken van het afdrukvoorbeeld"
 
-#: gtk/gtkprintoperation.c:2908
+#: gtk/gtkprintoperation.c:2935
 #, c-format
 msgid "The most probable reason is that a temporary file could not be created."
 msgstr ""
 "Het meest waarschijnlijk is dat een tijdelijk bestand niet aangemaakt kon "
 "worden."
 
-#: gtk/gtkprintoperation-unix.c:297 gtk/gtkprintoperation-unix.c:314
-#, c-format
+#: gtk/gtkprintoperation-unix.c:297
 msgid "Error launching preview"
 msgstr "Fout bij maken van het voorbeeld"
 
-#: gtk/gtkprintoperation-unix.c:358
-#, c-format
-msgid "Error printing"
-msgstr "Fout bij afdrukken"
-
-#: gtk/gtkprintoperation-unix.c:494 gtk/gtkprintoperation-win32.c:1447
+#: gtk/gtkprintoperation-unix.c:470 gtk/gtkprintoperation-win32.c:1447
 msgid "Application"
 msgstr "Toepassing"
 
@@ -2603,7 +1656,7 @@ msgstr "Papier is op"
 
 #. Translators: this is a printer status.
 #: gtk/gtkprintoperation-win32.c:616
-#: modules/printbackends/cups/gtkprintbackendcups.c:1999
+#: modules/printbackends/cups/gtkprintbackendcups.c:1998
 msgid "Paused"
 msgstr "Gepauzeerd"
 
@@ -2741,42 +1794,42 @@ msgstr "Algemeen"
 #. * multiple pages on a sheet when printing
 #.
 #: gtk/gtkprintunixdialog.c:3010
-#: modules/printbackends/cups/gtkprintbackendcups.c:3509
+#: modules/printbackends/cups/gtkprintbackendcups.c:3508
 msgid "Left to right, top to bottom"
 msgstr "Van links naar rechts, van boven naar onder"
 
 #: gtk/gtkprintunixdialog.c:3010
-#: modules/printbackends/cups/gtkprintbackendcups.c:3509
+#: modules/printbackends/cups/gtkprintbackendcups.c:3508
 msgid "Left to right, bottom to top"
 msgstr "Van links naar rechts, van onder naar boven"
 
 #: gtk/gtkprintunixdialog.c:3011
-#: modules/printbackends/cups/gtkprintbackendcups.c:3510
+#: modules/printbackends/cups/gtkprintbackendcups.c:3509
 msgid "Right to left, top to bottom"
 msgstr "Van rechts naar links, van boven naar onder"
 
 #: gtk/gtkprintunixdialog.c:3011
-#: modules/printbackends/cups/gtkprintbackendcups.c:3510
+#: modules/printbackends/cups/gtkprintbackendcups.c:3509
 msgid "Right to left, bottom to top"
 msgstr "Van rechts naar links, van onder naar boven"
 
 #: gtk/gtkprintunixdialog.c:3012
-#: modules/printbackends/cups/gtkprintbackendcups.c:3511
+#: modules/printbackends/cups/gtkprintbackendcups.c:3510
 msgid "Top to bottom, left to right"
 msgstr "Van boven naar onder, van links naar rechts"
 
 #: gtk/gtkprintunixdialog.c:3012
-#: modules/printbackends/cups/gtkprintbackendcups.c:3511
+#: modules/printbackends/cups/gtkprintbackendcups.c:3510
 msgid "Top to bottom, right to left"
 msgstr "Van boven naar onder, van rechts naar links"
 
 #: gtk/gtkprintunixdialog.c:3013
-#: modules/printbackends/cups/gtkprintbackendcups.c:3512
+#: modules/printbackends/cups/gtkprintbackendcups.c:3511
 msgid "Bottom to top, left to right"
 msgstr "Van onder naar boven, van links naar rechts"
 
 #: gtk/gtkprintunixdialog.c:3013
-#: modules/printbackends/cups/gtkprintbackendcups.c:3512
+#: modules/printbackends/cups/gtkprintbackendcups.c:3511
 msgid "Bottom to top, right to left"
 msgstr "Van onder naar boven, van rechts naar links"
 
@@ -2784,7 +1837,7 @@ msgstr "Van onder naar boven, van rechts naar links"
 #. * dialog that controls in what order multiple pages are arranged
 #.
 #: gtk/gtkprintunixdialog.c:3017 gtk/gtkprintunixdialog.c:3030
-#: modules/printbackends/cups/gtkprintbackendcups.c:3544
+#: modules/printbackends/cups/gtkprintbackendcups.c:3543
 msgid "Page Ordering"
 msgstr "Paginavolgorde"
 
@@ -3721,8 +2774,8 @@ msgstr "‘%s’ is geen geldige attribuutnaam"
 msgid ""
 "\"%s\" could not be converted to a value of type \"%s\" for attribute \"%s\""
 msgstr ""
-"‘%s’ kon niet worden omgezet naar een waarde van type ‘%s’ voor attribuut ‘%"
-"s’"
+"‘%s’ kon niet worden omgezet naar een waarde van type ‘%s’ voor attribuut "
+"‘%s’"
 
 #: gtk/gtktextbufferserialize.c:1202
 #, c-format
@@ -5015,127 +4068,122 @@ msgstr "Printer ‘%s’ is momenteel offline."
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:1687
 #, c-format
-msgid "Printer '%s' may not be connected."
-msgstr "Printer ‘%s’ is mogelijk niet verbonden."
-
-#: modules/printbackends/cups/gtkprintbackendcups.c:1688
-#, c-format
 msgid "There is a problem on printer '%s'."
 msgstr "Er is een probleem met printer ‘%s’."
 
 # weigeren/afwijzen/afstoten/niet accepteren
 #. Translators: this is a printer status.
-#: modules/printbackends/cups/gtkprintbackendcups.c:1996
+#: modules/printbackends/cups/gtkprintbackendcups.c:1995
 msgid "Paused ; Rejecting Jobs"
 msgstr "Gepauzeerd ; taken weigeren"
 
 #. Translators: this is a printer status.
-#: modules/printbackends/cups/gtkprintbackendcups.c:2002
+#: modules/printbackends/cups/gtkprintbackendcups.c:2001
 msgid "Rejecting Jobs"
 msgstr "Taken weigeren"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2778
+#: modules/printbackends/cups/gtkprintbackendcups.c:2777
 msgid "Two Sided"
 msgstr "Tweezijdig"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2779
+#: modules/printbackends/cups/gtkprintbackendcups.c:2778
 msgid "Paper Type"
 msgstr "Papiersoort"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2780
+#: modules/printbackends/cups/gtkprintbackendcups.c:2779
 msgid "Paper Source"
 msgstr "Papierbron"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2781
+#: modules/printbackends/cups/gtkprintbackendcups.c:2780
 msgid "Output Tray"
 msgstr "Uitvoerlade"
 
 # een van de opties is: Default Printer (andere is automatisch kiezen?)
 # Misschien: Keuze/Oplossing/besluit
-#: modules/printbackends/cups/gtkprintbackendcups.c:2782
+#: modules/printbackends/cups/gtkprintbackendcups.c:2781
 msgid "Resolution"
 msgstr "Keuze"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2783
+#: modules/printbackends/cups/gtkprintbackendcups.c:2782
 msgid "GhostScript pre-filtering"
 msgstr "GhostScript voor-filteren"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2792
+#: modules/printbackends/cups/gtkprintbackendcups.c:2791
 msgid "One Sided"
 msgstr "Eenzijdig"
 
 #. Translators: this is an option of "Two Sided"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2794
+#: modules/printbackends/cups/gtkprintbackendcups.c:2793
 msgid "Long Edge (Standard)"
 msgstr "Lange kant (standaard)"
 
 #. Translators: this is an option of "Two Sided"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2796
+#: modules/printbackends/cups/gtkprintbackendcups.c:2795
 msgid "Short Edge (Flip)"
 msgstr "Korte kant (omdraaien)"
 
 #. Translators: this is an option of "Paper Source"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2798
-#: modules/printbackends/cups/gtkprintbackendcups.c:2800
-#: modules/printbackends/cups/gtkprintbackendcups.c:2808
+#: modules/printbackends/cups/gtkprintbackendcups.c:2797
+#: modules/printbackends/cups/gtkprintbackendcups.c:2799
+#: modules/printbackends/cups/gtkprintbackendcups.c:2807
 msgid "Auto Select"
 msgstr "Automatisch selecteren"
 
 #. Translators: this is an option of "Paper Source"
 #. Translators: this is an option of "Resolution"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2802
-#: modules/printbackends/cups/gtkprintbackendcups.c:2804
-#: modules/printbackends/cups/gtkprintbackendcups.c:2806
-#: modules/printbackends/cups/gtkprintbackendcups.c:2810
-#: modules/printbackends/cups/gtkprintbackendcups.c:3296
+#: modules/printbackends/cups/gtkprintbackendcups.c:2801
+#: modules/printbackends/cups/gtkprintbackendcups.c:2803
+#: modules/printbackends/cups/gtkprintbackendcups.c:2805
+#: modules/printbackends/cups/gtkprintbackendcups.c:2809
+#: modules/printbackends/cups/gtkprintbackendcups.c:3295
 msgid "Printer Default"
 msgstr "Standaard printer"
 
 # inbakken/meevoeren/embedden
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2812
+#: modules/printbackends/cups/gtkprintbackendcups.c:2811
 msgid "Embed GhostScript fonts only"
 msgstr "Alleen GhostScript fonts meevoeren"
 
 # niveau 1/level 1
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2814
+#: modules/printbackends/cups/gtkprintbackendcups.c:2813
 msgid "Convert to PS level 1"
 msgstr "Omzetten naar PS level 1"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2816
+#: modules/printbackends/cups/gtkprintbackendcups.c:2815
 msgid "Convert to PS level 2"
 msgstr "Omzetten naar PS level 2"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2818
+#: modules/printbackends/cups/gtkprintbackendcups.c:2817
 msgid "No pre-filtering"
 msgstr "Niet voor-filteren"
 
 #. Translators: "Miscellaneous" is the label for a button, that opens
 #. up an extra panel of settings in a print dialog.
-#: modules/printbackends/cups/gtkprintbackendcups.c:2827
+#: modules/printbackends/cups/gtkprintbackendcups.c:2826
 msgid "Miscellaneous"
 msgstr "Overig"
 
 #. Translators: These strings name the possible values of the
 #. * job priority option in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3504
+#: modules/printbackends/cups/gtkprintbackendcups.c:3503
 msgid "Urgent"
 msgstr "Urgent"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3504
+#: modules/printbackends/cups/gtkprintbackendcups.c:3503
 msgid "High"
 msgstr "Hoog"
 
 # gemiddeld/medium
-#: modules/printbackends/cups/gtkprintbackendcups.c:3504
+#: modules/printbackends/cups/gtkprintbackendcups.c:3503
 msgid "Medium"
 msgstr "Medium"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3504
+#: modules/printbackends/cups/gtkprintbackendcups.c:3503
 msgid "Low"
 msgstr "Laag"
 
@@ -5143,14 +4191,14 @@ msgstr "Laag"
 #. Translators, this string is used to label the pages-per-sheet option
 #. * in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3528
+#: modules/printbackends/cups/gtkprintbackendcups.c:3527
 msgid "Pages per Sheet"
 msgstr "Pagina's per bladzijde"
 
 #. Translators, this string is used to label the job priority option
 #. * in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3565
+#: modules/printbackends/cups/gtkprintbackendcups.c:3564
 msgid "Job Priority"
 msgstr "Taak pri_oriteit"
 
@@ -5158,55 +4206,55 @@ msgstr "Taak pri_oriteit"
 #. Translators, this string is used to label the billing info entry
 #. * in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3576
+#: modules/printbackends/cups/gtkprintbackendcups.c:3575
 msgid "Billing Info"
 msgstr "Facturering"
 
 #. Translators, these strings are names for various 'standard' cover
 #. * pages that the printing system may support.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3591
+#: modules/printbackends/cups/gtkprintbackendcups.c:3590
 msgid "None"
 msgstr "Geen"
 
 # Gevoelige informatie
 # Classified-Confidential-Secret-Top Secret
-#: modules/printbackends/cups/gtkprintbackendcups.c:3591
+#: modules/printbackends/cups/gtkprintbackendcups.c:3590
 msgid "Classified"
 msgstr "Gevoelig"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3591
+#: modules/printbackends/cups/gtkprintbackendcups.c:3590
 msgid "Confidential"
 msgstr "Vertrouwelijk"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3591
+#: modules/printbackends/cups/gtkprintbackendcups.c:3590
 msgid "Secret"
 msgstr "Geheim"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3591
+#: modules/printbackends/cups/gtkprintbackendcups.c:3590
 msgid "Standard"
 msgstr "Standaard"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3591
+#: modules/printbackends/cups/gtkprintbackendcups.c:3590
 msgid "Top Secret"
 msgstr "Topgeheim"
 
 # niet geheim/niet gevoelig/niet vertrouwelijk/openbaar
-#: modules/printbackends/cups/gtkprintbackendcups.c:3591
+#: modules/printbackends/cups/gtkprintbackendcups.c:3590
 msgid "Unclassified"
 msgstr "Openbaar"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the front cover page.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3626
+#: modules/printbackends/cups/gtkprintbackendcups.c:3625
 msgid "Before"
 msgstr "Voor"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the back cover page.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3641
+#: modules/printbackends/cups/gtkprintbackendcups.c:3640
 msgid "After"
 msgstr "Na"
 
@@ -5215,14 +4263,14 @@ msgstr "Na"
 #. * a print job is printed. Possible values are 'now', a specified time,
 #. * or 'on hold'
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3661
+#: modules/printbackends/cups/gtkprintbackendcups.c:3660
 msgid "Print at"
 msgstr "Wanneer afdrukken"
 
 #. Translators: this is the name of the option that allows the user
 #. * to specify a time when a print job will be printed.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3672
+#: modules/printbackends/cups/gtkprintbackendcups.c:3671
 msgid "Print at time"
 msgstr "Afdrukken om"
 
@@ -5230,7 +4278,7 @@ msgstr "Afdrukken om"
 #. * size. The two placeholders are replaced with the width and height
 #. * in points. E.g: "Custom 230.4x142.9"
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3707
+#: modules/printbackends/cups/gtkprintbackendcups.c:3706
 #, c-format
 msgid "Custom %sx%s"
 msgstr "Aangepast %sx%s"
@@ -5321,6 +4369,720 @@ msgstr "Afdrukken om printer te testen"
 #, c-format
 msgid "Could not get information for file '%s': %s"
 msgstr "Kon geen informatie verkrijgen over bestand ‘%s’: %s"
+
+#: tests/testfilechooser.c:222
+#, c-format
+msgid "Failed to open file '%s': %s"
+msgstr "Openen van bestand ‘%s’ mislukt: %s"
+
+#: tests/testfilechooser.c:267
+#, c-format
+msgid ""
+"Failed to load image '%s': reason not known, probably a corrupt image file"
+msgstr ""
+"Laden van afbeelding ‘%s’ mislukt: reden onbekend, waarschijnlijk een "
+"beschadigde afbeelding"
+
+#~ msgid "Image file '%s' contains no data"
+#~ msgstr "Afbeelding ‘%s’ bevat geen data"
+
+#~ msgid ""
+#~ "Failed to load animation '%s': reason not known, probably a corrupt "
+#~ "animation file"
+#~ msgstr ""
+#~ "Laden van animatie ‘%s’ mislukt: reden onbekend, waarschijnlijk een "
+#~ "beschadigde animatie"
+
+#~ msgid "Unable to load image-loading module: %s: %s"
+#~ msgstr "Laden van afbeeldingslader %s mislukt: %s"
+
+#~ msgid ""
+#~ "Image-loading module %s does not export the proper interface; perhaps "
+#~ "it's from a different GTK version?"
+#~ msgstr ""
+#~ "Afbeeldingslader %s geeft de verkeerde interface door; misschien is het "
+#~ "de lader van een andere GTK-versie?"
+
+#~ msgid "Image type '%s' is not supported"
+#~ msgstr "Afbeeldingstype ‘%s’ wordt niet ondersteund"
+
+#~ msgid "Couldn't recognize the image file format for file '%s'"
+#~ msgstr "Afbeeldingstype van bestand ‘%s’ werd niet herkend"
+
+#~ msgid "Unrecognized image file format"
+#~ msgstr "Onbekend afbeeldingstype"
+
+#~ msgid "Failed to load image '%s': %s"
+#~ msgstr "Laden van afbeelding ‘%s’ mislukt: %s"
+
+#~ msgid "Error writing to image file: %s"
+#~ msgstr "Fout bij het schrijven naar afbeelding: %s"
+
+#~ msgid ""
+#~ "This build of gdk-pixbuf does not support saving the image format: %s"
+#~ msgstr ""
+#~ "Deze versie van gdk-pixbuf heeft geen ondersteuning voor het opslaan van "
+#~ "het bestandsformaat: %s"
+
+#~ msgid "Insufficient memory to save image to callback"
+#~ msgstr "Onvoldoende geheugen om de afbeelding op te slaan naar de callback"
+
+#~ msgid "Failed to open temporary file"
+#~ msgstr "Openen van tijdelijk bestand is mislukt"
+
+#~ msgid "Failed to read from temporary file"
+#~ msgstr "Lezen van tijdelijk bestand is mislukt"
+
+#~ msgid "Failed to open '%s' for writing: %s"
+#~ msgstr "Openen van ‘%s’ voor schrijven is mislukt: %s"
+
+#~ msgid ""
+#~ "Failed to close '%s' while writing image, all data may not have been "
+#~ "saved: %s"
+#~ msgstr ""
+#~ "Sluiten van ‘%s’ tijdens het schrijven is mislukt; er kan data verloren "
+#~ "zijn gegaan: %s"
+
+#~ msgid "Insufficient memory to save image into a buffer"
+#~ msgstr "Onvoldoende geheugen om afbeelding in een buffer op te slaan"
+
+#~ msgid "Error writing to image stream"
+#~ msgstr "Fout bij het schrijven naar afbeeldingstroom"
+
+#~ msgid ""
+#~ "Internal error: Image loader module '%s' failed to complete an operation, "
+#~ "but didn't give a reason for the failure"
+#~ msgstr ""
+#~ "Interne fout: afbeeldingslader ‘%s’ heeft een bewerking niet voltooid, "
+#~ "maar gaf daar geen reden voor"
+
+# incrementeel is geen nederlands woord.
+# Hier wordt ws bedoeld:
+# Het gedeeltelijk laden en dan al gedeeltelijk weergaven van een afbeelding
+# geleidelijk laden/deelsgewijs laden
+#~ msgid "Incremental loading of image type '%s' is not supported"
+#~ msgstr "Deelsgewijs laden van afbeeldingstype ‘%s’ wordt niet ondersteund"
+
+#~ msgid "Image header corrupt"
+#~ msgstr "Afbeeldingsheader beschadigd"
+
+# afbeeldingstype
+#~ msgid "Image format unknown"
+#~ msgstr "Het bestandsformaat van de afbeelding is onbekend"
+
+# pixelgegevens/pixeldata
+#~ msgid "Image pixel data corrupt"
+#~ msgstr "Beeldpuntdata van de afbeelding is beschadigd"
+
+# meervoud in nl van byte is byte
+# reserveren van %u byte geheugenruimte voor de afbeelding is mislukt
+# Niet mogelijk om afbeeldingsbuffer van %u byte te alloceren
+#~ msgid "failed to allocate image buffer of %u byte"
+#~ msgid_plural "failed to allocate image buffer of %u bytes"
+#~ msgstr[0] ""
+#~ "reserveren van %u byte geheugenruimte voor de afbeelding is mislukt"
+#~ msgstr[1] ""
+#~ "reserveren van %u byte geheugenruimte voor de afbeelding is mislukt"
+
+#~ msgid "Unexpected icon chunk in animation"
+#~ msgstr "Onverwacht pictogrambrokje in animatie"
+
+#~ msgid "Unsupported animation type"
+#~ msgstr "Niet ondersteund animatietype"
+
+#~ msgid "Invalid header in animation"
+#~ msgstr "Ongeldige header in animatie"
+
+#~ msgid "Not enough memory to load animation"
+#~ msgstr "Onvoldoende geheugen om animatie te laden"
+
+#~ msgid "Malformed chunk in animation"
+#~ msgstr "Misvormd brokje in animatie"
+
+#~ msgid "The ANI image format"
+#~ msgstr "Het ANI-bestandsformaat"
+
+#~ msgid "BMP image has bogus header data"
+#~ msgstr "BMP-afbeelding bevat onzinnige data in de header"
+
+#~ msgid "Not enough memory to load bitmap image"
+#~ msgstr "Onvoldoende geheugen voor het laden van de bitmap-afbeelding"
+
+#~ msgid "BMP image has unsupported header size"
+#~ msgstr "BMP-afbeelding heeft een niet-ondersteunde headergrootte"
+
+#~ msgid "Topdown BMP images cannot be compressed"
+#~ msgstr "Topdown BMP-afbeeldingen kunnen niet worden gecomprimeerd"
+
+# tegengekomen/ontdekt/gevonden
+#~ msgid "Premature end-of-file encountered"
+#~ msgstr "Voortijdig bestandseinde ontdekt"
+
+#~ msgid "Couldn't allocate memory for saving BMP file"
+#~ msgstr "Kon geen geheugenruimte reserveren voor opslaan van BMP-bestand"
+
+#~ msgid "Couldn't write to BMP file"
+#~ msgstr "Kon niet naar BMP-bestand schrijven"
+
+#~ msgid "The BMP image format"
+#~ msgstr "Het BMP-bestandsformaat"
+
+#~ msgid "Failure reading GIF: %s"
+#~ msgstr "Lezen van GIF mislukt: %s"
+
+#~ msgid "GIF file was missing some data (perhaps it was truncated somehow?)"
+#~ msgstr "Er ontbrak data in het GIF-bestand (misschien was het afgebroken?)"
+
+#~ msgid "Internal error in the GIF loader (%s)"
+#~ msgstr "Interne fout in de GIF-lader (%s)"
+
+# overlopende stapel
+# maar dit is toch een melding waar newbies niets mee kunnen.
+# Ze zouden deze melding eigenlijk niet mogen zien.
+# Om degene die wel weten wat ze ermee kunnen doen niet op een dwaalspoor
+# te zetten: Niet vertaald
+#~ msgid "Stack overflow"
+#~ msgstr "Stack overflow"
+
+#~ msgid "GIF image loader cannot understand this image."
+#~ msgstr "GIF-lader begrijpt deze afbeelding niet."
+
+# onjuiste code
+#~ msgid "Bad code encountered"
+#~ msgstr "Foutieve code ontdekt"
+
+#~ msgid "Circular table entry in GIF file"
+#~ msgstr "Circulair tabelveld in GIF-bestand"
+
+#~ msgid "Not enough memory to load GIF file"
+#~ msgstr "Onvoldoende geheugen om GIF-bestand te laden"
+
+# composite a frame?
+#~ msgid "Not enough memory to composite a frame in GIF file"
+#~ msgstr "Onvoldoende geheugen om een frame samen te stellen in GIF-bestand"
+
+#~ msgid "GIF image is corrupt (incorrect LZW compression)"
+#~ msgstr "GIF-bestand is beschadigd (incorrecte LZW-compressie)"
+
+#~ msgid "File does not appear to be a GIF file"
+#~ msgstr "Bestand lijkt geen GIF-bestand te zijn"
+
+#~ msgid "Version %s of the GIF file format is not supported"
+#~ msgstr "Versie %s van het GIF-bestandsformaat wordt niet ondersteund"
+
+#~ msgid ""
+#~ "GIF image has no global colormap, and a frame inside it has no local "
+#~ "colormap."
+#~ msgstr ""
+#~ "GIF-bestand heeft geen algemeen kleurenpalet, en een kader daarbinnen "
+#~ "heeft geen lokaal kleurenpalet"
+
+#~ msgid "GIF image was truncated or incomplete."
+#~ msgstr "GIF-bestand is afgebroken of onvolledig"
+
+#~ msgid "The GIF image format"
+#~ msgstr "Het GIF-bestandsformaat"
+
+#~ msgid "Invalid header in icon"
+#~ msgstr "Ongeldige header in pictogram"
+
+#~ msgid "Not enough memory to load icon"
+#~ msgstr "Onvoldoende geheugen om pictogram te laden"
+
+#~ msgid "Icon has zero width"
+#~ msgstr "Pictogram heeft breedte nul"
+
+#~ msgid "Icon has zero height"
+#~ msgstr "Pictogram heeft hoogte nul"
+
+#~ msgid "Compressed icons are not supported"
+#~ msgstr "Gecomprimeerde pictogrammen worden niet ondersteund"
+
+#~ msgid "Unsupported icon type"
+#~ msgstr "Niet ondersteund pictogramtype"
+
+#~ msgid "Not enough memory to load ICO file"
+#~ msgstr "Onvoldoende geheugen om ICO-bestand te laden"
+
+#~ msgid "Image too large to be saved as ICO"
+#~ msgstr "Afbeelding te groot om als ICO-bestand te worden opgeslagen"
+
+#~ msgid "Cursor hotspot outside image"
+#~ msgstr "Cursor hotspot valt buiten de afbeelding"
+
+#~ msgid "Unsupported depth for ICO file: %d"
+#~ msgstr "Niet ondersteunde diepte voor ICO-bestand: %d"
+
+#~ msgid "The ICO image format"
+#~ msgstr "Het ICO-bestandsformaat"
+
+#~ msgid "Error reading ICNS image: %s"
+#~ msgstr "Fout bij het lezen van ICNS-afbeelding: %s"
+
+#~ msgid "Could not decode ICNS file"
+#~ msgstr "Kon ICNS-bestand niet decoderen"
+
+#~ msgid "The ICNS image format"
+#~ msgstr "Het ICNS-bestandsformaat"
+
+#~ msgid "Couldn't allocate memory for stream"
+#~ msgstr "Kon geen geheugenruimte reserveren voor de stroom"
+
+#~ msgid "Couldn't decode image"
+#~ msgstr "Kon afbeelding niet decoderen"
+
+#~ msgid "Transformed JPEG2000 has zero width or height"
+#~ msgstr "Getransformeerde JPEG2000 heeft nul breedte of hoogte."
+
+# 'currently' is eigenlijk overbodige info.
+#~ msgid "Image type currently not supported"
+#~ msgstr "Afbeeldingstype wordt nog niet ondersteund"
+
+#~ msgid "Couldn't allocate memory for color profile"
+#~ msgstr "Kon geen geheugenruimte reserveren voor het kleurenprofiel"
+
+#~ msgid "Insufficient memory to open JPEG 2000 file"
+#~ msgstr "Onvoldoende geheugen om JPEG 2000-bestand te openen"
+
+#~ msgid "Couldn't allocate memory to buffer image data"
+#~ msgstr ""
+#~ "Kon geen geheugenruimte reserveren voor het bufferen van de afbeelding"
+
+#~ msgid "The JPEG 2000 image format"
+#~ msgstr "Het JPEG 2000-bestandsformaat"
+
+#~ msgid "Error interpreting JPEG image file (%s)"
+#~ msgstr "Fout bij het interpreteren van JPEG-afbeelding (%s)"
+
+#~ msgid ""
+#~ "Insufficient memory to load image, try exiting some applications to free "
+#~ "memory"
+#~ msgstr ""
+#~ "Onvoldoende geheugen om afbeelding te laten, probeer enkele programma's "
+#~ "af te sluiten om geheugen vrij te maken"
+
+#~ msgid "Unsupported JPEG color space (%s)"
+#~ msgstr "Niet ondersteunde JPEG kleurruimte (%s)"
+
+#~ msgid "Couldn't allocate memory for loading JPEG file"
+#~ msgstr "Kon geen geheugenruimte reserveren voor laden van JPEG-bestand"
+
+#~ msgid "Transformed JPEG has zero width or height."
+#~ msgstr "Getransformeerde JPEG heeft nul breedte of hoogte."
+
+#~ msgid ""
+#~ "JPEG quality must be a value between 0 and 100; value '%s' could not be "
+#~ "parsed."
+#~ msgstr ""
+#~ "JPEG-kwaliteit moet een waarde tussen 0 en 100 zijn: waarde ‘%s’ kan niet "
+#~ "verwerkt worden."
+
+#~ msgid ""
+#~ "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
+#~ msgstr ""
+#~ "JPEG-kwaliteit moet tussen 0 en 100 liggen; waarde '%d' is niet "
+#~ "toegestaan."
+
+#~ msgid "The JPEG image format"
+#~ msgstr "Het JPEG-bestandsformaat"
+
+#~ msgid "Couldn't allocate memory for header"
+#~ msgstr "Kon geen geheugenruimte reserveren voor de header"
+
+#~ msgid "Couldn't allocate memory for context buffer"
+#~ msgstr "Kon geen geheugenruimte reserveren voor de context-buffer"
+
+#~ msgid "Image has invalid width and/or height"
+#~ msgstr "Afbeelding heeft ongeldige breedte en/of hoogte"
+
+#~ msgid "Image has unsupported bpp"
+#~ msgstr "Afbeelding heeft een niet ondersteund bpp"
+
+#~ msgid "Image has unsupported number of %d-bit planes"
+#~ msgstr "Afbeelding heeft een niet ondersteund aantal '%d-bit planes'"
+
+#~ msgid "Couldn't create new pixbuf"
+#~ msgstr "Kon geen nieuwe pixbuf aanmaken"
+
+#~ msgid "Couldn't allocate memory for line data"
+#~ msgstr "Kon geen geheugenruimte reserveren voor lijn-data"
+
+#~ msgid "Couldn't allocate memory for paletted data"
+#~ msgstr "Kon geen geheugenruimte reserveren voor 'paletted data'"
+
+#~ msgid "Didn't get all lines of PCX image"
+#~ msgstr "Niet alle lijnen van PCX-afbeelding verkregen"
+
+#~ msgid "No palette found at end of PCX data"
+#~ msgstr "Geen palet gevonden aan het einde van PCX-data"
+
+#~ msgid "The PCX image format"
+#~ msgstr "Het PCX-bestandsformaat"
+
+#~ msgid "Bits per channel of PNG image is invalid."
+#~ msgstr "Bits per kanaal van PNG-afbeelding is ongeldig."
+
+#~ msgid "Transformed PNG has zero width or height."
+#~ msgstr "Getransformeerde PNG heeft nul breedte of hoogte."
+
+#~ msgid "Bits per channel of transformed PNG is not 8."
+#~ msgstr "Bits per kanaal van getransformeerde PNG is niet gelijk aan 8."
+
+#~ msgid "Transformed PNG not RGB or RGBA."
+#~ msgstr "Getransformeerde PNG is geen RGB of RGBA."
+
+#~ msgid "Transformed PNG has unsupported number of channels, must be 3 or 4."
+#~ msgstr ""
+#~ "Getransformeerde PNG heeft niet ondersteund aantal kanalen, moet gelijk "
+#~ "zijn aan 3 of 4."
+
+#~ msgid "Fatal error in PNG image file: %s"
+#~ msgstr "Fatale fout in PNG-afbeelding: %s"
+
+#~ msgid "Insufficient memory to load PNG file"
+#~ msgstr "Onvoldoende geheugen om PNG-bestand te laden"
+
+#~ msgid ""
+#~ "Insufficient memory to store a %ld by %ld image; try exiting some "
+#~ "applications to reduce memory usage"
+#~ msgstr ""
+#~ "Onvoldoende geheugen om een afbeelding van %ld bij %ld op te slaan; "
+#~ "probeer enkele toepassingen af te sluiten om geheugen vrij te maken"
+
+#~ msgid "Fatal error reading PNG image file"
+#~ msgstr "Fatale fout bij het lezen van PNG-afbeelding"
+
+#~ msgid "Fatal error reading PNG image file: %s"
+#~ msgstr "Fatale fout bij het lezen van PNG-afbeelding: %s"
+
+#~ msgid ""
+#~ "Keys for PNG text chunks must have at least 1 and at most 79 characters."
+#~ msgstr ""
+#~ "Sleutels voor PNG-tekstblokken moeten minimaal 1, en maximaal 79 tekens "
+#~ "bevatten"
+
+#~ msgid "Keys for PNG text chunks must be ASCII characters."
+#~ msgstr "Sleutels voor PNG-tekstblokken moeten uit ASCII tekens bestaan"
+
+#~ msgid "Color profile has invalid length %d."
+#~ msgstr "Kleurprofiel heeft ongeldige lengte %d."
+
+# moet tussen 0 en 9 liggen
+#~ msgid ""
+#~ "PNG compression level must be a value between 0 and 9; value '%s' could "
+#~ "not be parsed."
+#~ msgstr ""
+#~ "PNG-compressie moet een waarde tussen 0 en 9 zijn: waarde ‘%s’ kan niet "
+#~ "verwerkt worden."
+
+# moet tussen 0 en 9 liggen
+#~ msgid ""
+#~ "PNG compression level must be a value between 0 and 9; value '%d' is not "
+#~ "allowed."
+#~ msgstr ""
+#~ "PNG-compressie moet een waarde tussen 0 en 9 zijn; waarde '%d' is niet "
+#~ "toegestaan."
+
+#~ msgid ""
+#~ "Value for PNG text chunk %s cannot be converted to ISO-8859-1 encoding."
+#~ msgstr ""
+#~ "Waarde voor PNG-tekstblok %s kan niet naar tekenset ISO-8859-1 worden "
+#~ "omgezet."
+
+#~ msgid "The PNG image format"
+#~ msgstr "Het PNG-bestandsformaat"
+
+#~ msgid "PNM loader expected to find an integer, but didn't"
+#~ msgstr "PNM-lader verwachte een integer te vinden, maar deed dat niet"
+
+#~ msgid "PNM file has an incorrect initial byte"
+#~ msgstr "PNM-bestand heeft een onjuist eerste byte"
+
+#~ msgid "PNM file is not in a recognized PNM subformat"
+#~ msgstr "PNM staat niet in een herkenbaar PNM-subformaat"
+
+#~ msgid "PNM file has an image width of 0"
+#~ msgstr "PNM-bestand heeft een breedte 0"
+
+#~ msgid "PNM file has an image height of 0"
+#~ msgstr "PNM-bestand heeft een hoogte 0"
+
+#~ msgid "Maximum color value in PNM file is 0"
+#~ msgstr "Maximale kleurwaarde in PNM-bestand is 0"
+
+#~ msgid "Maximum color value in PNM file is too large"
+#~ msgstr "Maximale kleurwaarde in PNM-bestand is te groot"
+
+#~ msgid "Raw PNM image type is invalid"
+#~ msgstr "Raw PNM-afbeeldingstype is ongeldig"
+
+#~ msgid "PNM image loader does not support this PNM subformat"
+#~ msgstr "PNM-lader ondersteunt dit PNM-subtype niet"
+
+#~ msgid "Raw PNM formats require exactly one whitespace before sample data"
+#~ msgstr ""
+#~ "Raw PNM-formaten moeten precies één spatie hebben voor het begin van de "
+#~ "data"
+
+#~ msgid "Cannot allocate memory for loading PNM image"
+#~ msgstr "Kon geen geheugenruimte reserveren voor laden van PNM-bestand"
+
+#~ msgid "Insufficient memory to load PNM context struct"
+#~ msgstr "Onvoldoende geheugen om PNM-context struct te laden"
+
+#~ msgid "Unexpected end of PNM image data"
+#~ msgstr "Onverwacht einde van PNM-afbeeldingsgegevens"
+
+#~ msgid "Insufficient memory to load PNM file"
+#~ msgstr "Onvoldoende geheugen om PNM-bestand te laden"
+
+#~ msgid "The PNM/PBM/PGM/PPM image format family"
+#~ msgstr "De PNM/PBM/PGM/PPM-bestandsformaatfamilie"
+
+#~ msgid "Input file descriptor is NULL."
+#~ msgstr "Invoer bestandsbeschrijving is NULL."
+
+# header/header-data
+#~ msgid "Failed to read QTIF header"
+#~ msgstr "Kon QTIF-header niet lezen"
+
+#~ msgid "QTIF atom size too large (%d bytes)"
+#~ msgstr "QTIF atomaire grootte te groot (%d byte)"
+
+# meervoud in nl van byte is byte
+# reserveren van %u byte geheugenruimte voor de afbeelding is mislukt
+# Niet mogelijk om afbeeldingsbuffer van %u byte te alloceren
+#~ msgid "Failed to allocate %d bytes for file read buffer"
+#~ msgstr "Reserveren van %d byte geheugenruimte voor de leesbuffer"
+
+#~ msgid "File error when reading QTIF atom: %s"
+#~ msgstr "Bestandsfout bij lezen van QTIF-atoom: %s"
+
+#~ msgid "Failed to skip the next %d bytes with seek()."
+#~ msgstr "Kon de volgende %d byte niet overslaan binnen de seek()."
+
+#~ msgid "Failed to allocate QTIF context structure."
+#~ msgstr "Kon geen geheugen reserveren voor QTIF-contextstructuur"
+
+#~ msgid "Failed to create GdkPixbufLoader object."
+#~ msgstr "Kon GdkPixbufLoader-object niet aanmaken."
+
+#~ msgid "Failed to find an image data atom."
+#~ msgstr "Kon geen afbeeldingsdata-atoom vinden."
+
+#~ msgid "The QTIF image format"
+#~ msgstr "Het QTIF-bestandsformaat"
+
+#~ msgid "RAS image has bogus header data"
+#~ msgstr "RAS-afbeelding bevat onzinnige data in de header"
+
+#~ msgid "RAS image has unknown type"
+#~ msgstr "RAS-afbeelding is van onbekend type"
+
+#~ msgid "unsupported RAS image variation"
+#~ msgstr "Niet ondersteunde RAS-afbeeldingsvariatie"
+
+#~ msgid "Not enough memory to load RAS image"
+#~ msgstr "Onvoldoende geheugen voor het laden van de RAS-afbeelding"
+
+#~ msgid "The Sun raster image format"
+#~ msgstr "Het Sun raster-bestandsformaat"
+
+# Reserveren van geheugenruimte voor IOBuffer struct niet gelukt
+# kan geen geheugenruimte reserveren voor ....
+#~ msgid "Cannot allocate memory for IOBuffer struct"
+#~ msgstr "Kan geen geheugenruimte reserveren voor IOBuffer struct"
+
+#~ msgid "Cannot allocate memory for IOBuffer data"
+#~ msgstr "Kan geen geheugenruimte reserveren voor IOBUFFER gegevens"
+
+# kan niet opnieuw geheugenruimte reserveren
+#~ msgid "Cannot realloc IOBuffer data"
+#~ msgstr "Kan geheugenruimte voor IOBuffer-gegevens niet opnieuw reserveren"
+
+#~ msgid "Cannot allocate temporary IOBuffer data"
+#~ msgstr ""
+#~ "Kan geen geheugenruimte reserveren voor tijdelijke IOBuffer-gegevens "
+
+#~ msgid "Cannot allocate new pixbuf"
+#~ msgstr "Kan geen geheugenruimte reserveren voor nieuwe pixbuf"
+
+#~ msgid "Image is corrupted or truncated"
+#~ msgstr "Afbeelding is beschadigd of onvolledig"
+
+#~ msgid "Cannot allocate colormap structure"
+#~ msgstr "Kan geen geheugenruimte reserveren voor kleurenkaartstructuur"
+
+#~ msgid "Cannot allocate colormap entries"
+#~ msgstr "Kan geen geheugen reserveren voor kleurenkaart-items "
+
+#~ msgid "Unexpected bitdepth for colormap entries"
+#~ msgstr "Onverwachte bitdiepte voor ingangen van kleurenkaart"
+
+#~ msgid "Cannot allocate TGA header memory"
+#~ msgstr "Kan geen geheugenruimte reserveren voor TGA-header"
+
+#~ msgid "TGA image has invalid dimensions"
+#~ msgstr "TGA-afbeelding heeft ongeldige afmetingen"
+
+#~ msgid "TGA image type not supported"
+#~ msgstr "Bestandstype TGA wordt niet ondersteund"
+
+#~ msgid "Cannot allocate memory for TGA context struct"
+#~ msgstr "Kan geen geheugen reserveren voor TGA-context struct"
+
+# te veel data in bestand
+#~ msgid "Excess data in file"
+#~ msgstr "Overbodige data in bestand"
+
+#~ msgid "The Targa image format"
+#~ msgstr "Het Targa-bestandsformaat"
+
+#~ msgid "Could not get image width (bad TIFF file)"
+#~ msgstr "Kon afbeeldingsbreedte niet vinden (foutief TIFF-bestand)"
+
+#~ msgid "Could not get image height (bad TIFF file)"
+#~ msgstr "Kon afbeeldingshoogte niet vinden (foutief TIFF-bestand)"
+
+#~ msgid "Width or height of TIFF image is zero"
+#~ msgstr "Hoogte of breedte van TIFF-afbeelding is nul"
+
+#~ msgid "Dimensions of TIFF image too large"
+#~ msgstr "Afmetingen van TIFF-afbeelding te groot"
+
+#~ msgid "Insufficient memory to open TIFF file"
+#~ msgstr "Onvoldoende geheugen om TIFF-bestand te openen"
+
+#~ msgid "Failed to load RGB data from TIFF file"
+#~ msgstr "Kon RGB-gegevens niet inlezen uit TIFF-bestand"
+
+#~ msgid "Failed to open TIFF image"
+#~ msgstr "Kon TIFF-afbeelding niet openen"
+
+#~ msgid "TIFFClose operation failed"
+#~ msgstr "Bewerking: TIFFClose is mislukt"
+
+#~ msgid "Failed to load TIFF image"
+#~ msgstr "Kon TIFF-afbeelding niet laden"
+
+#~ msgid "Failed to save TIFF image"
+#~ msgstr "Kon TIFF-afbeelding niet opslaan"
+
+#~ msgid "TIFF compression doesn't refer to a valid codec."
+#~ msgstr "TIFF-compressie refereert niet naar een geldige codec."
+
+#~ msgid "Failed to write TIFF data"
+#~ msgstr "Kon TIFF-data niet schrijven"
+
+#~ msgid "Couldn't write to TIFF file"
+#~ msgstr "Kon niet naar TIFF-bestand schrijven"
+
+#~ msgid "The TIFF image format"
+#~ msgstr "Het TIFF-bestandsformaat"
+
+#~ msgid "Image has zero width"
+#~ msgstr "Afbeelding heeft breedte nul"
+
+#~ msgid "Image has zero height"
+#~ msgstr "Afbeelding heeft hoogte nul"
+
+#~ msgid "Not enough memory to load image"
+#~ msgstr "Onvoldoende geheugen voor het laden van de afbeelding"
+
+#~ msgid "Couldn't save the rest"
+#~ msgstr "Kon de rest niet opslaan"
+
+#~ msgid "The WBMP image format"
+#~ msgstr "Het WBMP-bestandsformaat"
+
+#~ msgid "Invalid XBM file"
+#~ msgstr "Ongeldig XBM-bestand"
+
+#~ msgid "Insufficient memory to load XBM image file"
+#~ msgstr "Onvoldoende geheugen om XBM-afbeelding te laden"
+
+#~ msgid "Failed to write to temporary file when loading XBM image"
+#~ msgstr ""
+#~ "Niet mogelijk om naar tijdelijk bestand te schrijven bij het laden van "
+#~ "XBM-afbeelding"
+
+#~ msgid "The XBM image format"
+#~ msgstr "Het XBM-bestandsformaat"
+
+#~ msgid "No XPM header found"
+#~ msgstr "Geen XPM-header gevonden"
+
+#~ msgid "Invalid XPM header"
+#~ msgstr "Ongeldig XPM-header"
+
+# afbeelding ipv bestand gebruikt.
+#~ msgid "XPM file has image width <= 0"
+#~ msgstr "XPM-afbeelding heeft breedte <= 0"
+
+#~ msgid "XPM file has image height <= 0"
+#~ msgstr "XPM-afbeelding heeft hoogte <= 0"
+
+#~ msgid "XPM has invalid number of chars per pixel"
+#~ msgstr "XPM heeft ongeldig aantal tekens per beeldpunt"
+
+#~ msgid "XPM file has invalid number of colors"
+#~ msgstr "XPM-bestand heeft ongeldig aantal kleuren"
+
+#~ msgid "Cannot allocate memory for loading XPM image"
+#~ msgstr ""
+#~ "Kan geen geheugenruimte reserveren voor het laden van XPM-afbeelding"
+
+#~ msgid "Cannot read XPM colormap"
+#~ msgstr "Kan XPM-kleurenkaart niet lezen"
+
+#~ msgid "Failed to write to temporary file when loading XPM image"
+#~ msgstr ""
+#~ "Niet mogelijk om naar tijdelijk bestand te schrijven bij het laden van "
+#~ "XPM-afbeelding"
+
+#~ msgid "The XPM image format"
+#~ msgstr "Het XPM-bestandsformaat"
+
+#~ msgid "The EMF image format"
+#~ msgstr "Het EMF-bestandsformaat"
+
+#~ msgid "Could not allocate memory: %s"
+#~ msgstr "Kon geen geheugenruimte reserveren: %s"
+
+#~ msgid "Could not create stream: %s"
+#~ msgstr " Kon stroom niet aanmaken: %s"
+
+#~ msgid "Could not seek stream: %s"
+#~ msgstr "Kon stroom niet doorzoeken: %s"
+
+#~ msgid "Could not read from stream: %s"
+#~ msgstr "Kon niet van stroom lezen: %s"
+
+#~ msgid "Couldn't load bitmap"
+#~ msgstr "Kon bitmap niet laden"
+
+#~ msgid "Couldn't load metafile"
+#~ msgstr "Kon metabestand niet laden"
+
+# bestandsformaat/afbeeldingsformat/bestandsindeling
+#~ msgid "Unsupported image format for GDI+"
+#~ msgstr "Niet ondersteund afbeeldingsformaat voor GDI+"
+
+# telegramstijl...
+#~ msgid "Couldn't save"
+#~ msgstr "Kon niet opslaan"
+
+#~ msgid "The WMF image format"
+#~ msgstr "Het WMF-bestandsformaat"
+
+#~ msgid "\"Deepness\" of the color."
+#~ msgstr "‘Diepte’ van de kleur."
+
+#~ msgid "Error printing"
+#~ msgstr "Fout bij afdrukken"
+
+#~ msgid "Printer '%s' may not be connected."
+#~ msgstr "Printer ‘%s’ is mogelijk niet verbonden."
 
 #~ msgid "Folders"
 #~ msgstr "Mappen"

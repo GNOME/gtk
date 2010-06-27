@@ -12,10 +12,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: or\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-05-25 20:10-0400\n"
+"POT-Creation-Date: 2010-06-26 23:16-0400\n"
 "PO-Revision-Date: 2010-02-17 21:22+0530\n"
 "Last-Translator: Manoj Kumar Giri <mgiri@redhat.com>\n"
 "Language-Team: Oriya <oriya-it@googlegroups.com>\n"
+"Language: or\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -95,7 +96,7 @@ msgstr "ବିନ୍ଯାସ ପାଇଁ Gdkର ତୃଟିମୁକ୍ତି
 #. Placeholder in --gdk-no-debug=FLAGS in --help output
 #. Placeholder in --gtk-debug=FLAGS in --help output
 #. Placeholder in --gtk-no-debug=FLAGS in --help output
-#: gdk/gdk.c:165 gdk/gdk.c:168 gtk/gtkmain.c:454 gtk/gtkmain.c:457
+#: gdk/gdk.c:165 gdk/gdk.c:168 gtk/gtkmain.c:439 gtk/gtkmain.c:442
 msgid "FLAGS"
 msgstr "ସୂଚକ"
 
@@ -288,901 +289,6 @@ msgstr "KP_Delete"
 msgctxt "keyboard label"
 msgid "Delete"
 msgstr "ଅପସାରଣ କରନ୍ତୁ"
-
-#: gdk-pixbuf/gdk-pixbuf-animation.c:133 gdk-pixbuf/gdk-pixbuf-io.c:982
-#: gdk-pixbuf/gdk-pixbuf-io.c:1242 tests/testfilechooser.c:222
-#, c-format
-msgid "Failed to open file '%s': %s"
-msgstr "'%s' ଫାଇଲକୁ ଖୋଲିବାରେ ଅସଫଳ: %s"
-
-#: gdk-pixbuf/gdk-pixbuf-animation.c:146 gdk-pixbuf/gdk-pixbuf-io.c:994
-#, c-format
-msgid "Image file '%s' contains no data"
-msgstr "'%s' ଚିତ୍ର ଫାଇଲରେ କୌଣସି ତଥ୍ଯ ନାହିଁ"
-
-#: gdk-pixbuf/gdk-pixbuf-animation.c:188 gdk-pixbuf/gdk-pixbuf-io.c:1030
-#: gdk-pixbuf/gdk-pixbuf-io.c:1294 tests/testfilechooser.c:267
-#, c-format
-msgid ""
-"Failed to load image '%s': reason not known, probably a corrupt image file"
-msgstr ""
-"'%s' ଚିତ୍ର ଫାଇଲ ଧାରଣ କରିବାରେ ଅସଫଳ: କାରଣ ଜଣା ନାହିଁ, ସମ୍ଭବତଃ ଏହା ଗୋଟିଏ ତୃଟିଯୁକ୍ତ ଚିତ୍ର ଫାଇଲ "
-"ଅଟେ"
-
-#: gdk-pixbuf/gdk-pixbuf-animation.c:221
-#, c-format
-msgid ""
-"Failed to load animation '%s': reason not known, probably a corrupt "
-"animation file"
-msgstr ""
-"'%s' ଜୀବନାୟନ ଫାଇଲ ଧାରଣ କରିବାରେ ଅସଫଳ: କାରଣ ଜଣା ନାହିଁ, ସମ୍ଭବତଃ ଏହା ଗୋଟିଏ ତୃଟିଯୁକ୍ତ "
-"ଜୀବନାୟନ ଫାଇଲ ଅଟେ"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:715
-#, c-format
-msgid "Unable to load image-loading module: %s: %s"
-msgstr "ଚିତ୍ର-ଧାରଣ ଏକକାଂଶ ଧାରଣ କରିବାରେ ଅସଫଳ: %s: %s"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:730
-#, c-format
-msgid ""
-"Image-loading module %s does not export the proper interface; perhaps it's "
-"from a different GTK version?"
-msgstr ""
-"%s ଚିତ୍ର-ଧାରଣ ଏକକାଂଶ ଠିକ ଅନ୍ତରାପୃଷ୍ଠ ରପ୍ତାନି କରେ ନାହିଁ; ବୋଧହୁଏ ଏହା ଗୋଟିଏ ଅଲଗା ଜି.ଟି.କେ. "
-"ସଂସ୍କରଣରୁ ପ୍ରାପ୍ତ?"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:739 gdk-pixbuf/gdk-pixbuf-io.c:790
-#, c-format
-msgid "Image type '%s' is not supported"
-msgstr "'%s' ଚିତ୍ର ପ୍ରକାର ଅସହାୟକ"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:863
-#, c-format
-msgid "Couldn't recognize the image file format for file '%s'"
-msgstr "'%s' ଚିତ୍ର ଫାଇଲ ଶୈଳୀ ଚିହ୍ନିପାରିଲା ନାହିଁ"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:871
-msgid "Unrecognized image file format"
-msgstr "ଅଚିହ୍ନିତ ଚିତ୍ର ଫାଇଲ ଶୈଳୀ"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:1039
-#, c-format
-msgid "Failed to load image '%s': %s"
-msgstr "'%s' ଚିତ୍ର ଧାରଣ କରିବାରେ ଅସଫଳ: %s"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:1673 gdk-pixbuf/io-gdip-utils.c:961
-#, c-format
-msgid "Error writing to image file: %s"
-msgstr "ଚିତ୍ର ଫାଇଲକୁ ଲେଖିବାରେ ତୃଟି: %s"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:1718 gdk-pixbuf/gdk-pixbuf-io.c:1848
-#, c-format
-msgid "This build of gdk-pixbuf does not support saving the image format: %s"
-msgstr "ଜି.ଡି.କେ.-ପିକ୍ସବଫର ଏହି ସଂସ୍କରଣ ଚିତ୍ର ଶୈଳୀ ସଂରକ୍ଷଣକୁ ସମର୍ଥନ କରୁନାହିଁ:%s"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:1752
-msgid "Insufficient memory to save image to callback"
-msgstr "ଚିତ୍ରକୁ କଲବ୍ଯାକରେ ସଂରକ୍ଷିତ କରିବା ପାଇଁ ଯଥେଷ୍ଟ ସ୍ମୃତି ନାହିଁ"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:1765
-msgid "Failed to open temporary file"
-msgstr "ଅସ୍ଥାୟୀ ଫାଇଲ ଖୋଲିବାରେ ଅସଫଳ"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:1791
-msgid "Failed to read from temporary file"
-msgstr "ଅସ୍ଥାୟୀ ଫାଇଲରୁ ପଢ଼ିବାରେ ଅସଫଳ"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:2044
-#, c-format
-msgid "Failed to open '%s' for writing: %s"
-msgstr "'%s'କୁ ଲେଖିବା ପ୍ରତି ଖୋଲିବାରେ ଅସଫଳ: %s"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:2070
-#, c-format
-msgid ""
-"Failed to close '%s' while writing image, all data may not have been saved: %"
-"s"
-msgstr ""
-"ଚିତ୍ର ଲେଖିବା ସମୟରେ '%s'କୁ ବନ୍ଦ କରିବାରେ ଅସଫଳ, ସମ୍ପୂର୍ଣ ତଥ୍ଯ ସଂରକ୍ଷିତ ନ ହୋଇଥାଇପାରେ: %s"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:2290 gdk-pixbuf/gdk-pixbuf-io.c:2341
-msgid "Insufficient memory to save image into a buffer"
-msgstr "ଚିତ୍ରକୁ ବଫରରେ ସଂରକ୍ଷିତ କରିବା ପାଇଁ ଯଥେଷ୍ଟ ସ୍ମୃତି ନାହିଁ"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:2387
-msgid "Error writing to image stream"
-msgstr "ଚିତ୍ର ଧାରାକୁ ଲେଖିବାରେ ତୃଟି"
-
-#: gdk-pixbuf/gdk-pixbuf-loader.c:334
-#, c-format
-msgid ""
-"Internal error: Image loader module '%s' failed to complete an operation, "
-"but didn't give a reason for the failure"
-msgstr ""
-"ଆଭ୍ଯନ୍ତରୀଣ ତୃଟି: '%s' ଚିତ୍ର ଧାରକ ଏକକାଂଶ ଏହି ପ୍ରକ୍ରିୟାକୁ ସମ୍ପନ୍ନ କରିବାରେ ଅସଫଳ ହେଲା, କିନ୍ତୁ "
-"ଅସଫଳତା ପାଇଁ କୌଣସି କାରଣ ପ୍ରଦାନ କଲା ନାହିଁ"
-
-#: gdk-pixbuf/gdk-pixbuf-loader.c:376
-#, c-format
-msgid "Incremental loading of image type '%s' is not supported"
-msgstr "'%s' ଚିତ୍ର ପ୍ରକାରର କ୍ରମବର୍ଦ୍ଧୀ ଧାରଣ ଅସହାୟକ"
-
-#: gdk-pixbuf/gdk-pixdata.c:147
-msgid "Image header corrupt"
-msgstr "ଚିତ୍ର ଶୀର୍ଷକ ତୃଟିଯୁକ୍ତ"
-
-#: gdk-pixbuf/gdk-pixdata.c:152
-msgid "Image format unknown"
-msgstr "ଚିତ୍ର ଶୈଳୀ ଅଜଣା"
-
-#: gdk-pixbuf/gdk-pixdata.c:157 gdk-pixbuf/gdk-pixdata.c:488
-msgid "Image pixel data corrupt"
-msgstr "ଚିତ୍ର ପିକ୍ସେଲ ତଥ୍ଯ ତୃଟିଯୁକ୍ତ"
-
-#: gdk-pixbuf/gdk-pixdata.c:432
-#, c-format
-msgid "failed to allocate image buffer of %u byte"
-msgid_plural "failed to allocate image buffer of %u bytes"
-msgstr[0] ""
-msgstr[1] ""
-
-#: gdk-pixbuf/io-ani.c:244
-msgid "Unexpected icon chunk in animation"
-msgstr "ଜୀବନୟାନରେ ଅପ୍ରତ୍ଯାଶିତ ଚିତ୍ରସଙ୍କେତ ଖଣ୍ଡ"
-
-#: gdk-pixbuf/io-ani.c:337
-msgid "Unsupported animation type"
-msgstr "ଅସହାୟକ ଜୀବନୟାନ ପ୍ରକାର"
-
-#: gdk-pixbuf/io-ani.c:348 gdk-pixbuf/io-ani.c:406 gdk-pixbuf/io-ani.c:432
-#: gdk-pixbuf/io-ani.c:455 gdk-pixbuf/io-ani.c:482 gdk-pixbuf/io-ani.c:569
-msgid "Invalid header in animation"
-msgstr "ଜୀବନୟାନରେ ଅବୈଧ ଶୀର୍ଷକ"
-
-#: gdk-pixbuf/io-ani.c:358 gdk-pixbuf/io-ani.c:380 gdk-pixbuf/io-ani.c:464
-#: gdk-pixbuf/io-ani.c:491 gdk-pixbuf/io-ani.c:542 gdk-pixbuf/io-ani.c:614
-msgid "Not enough memory to load animation"
-msgstr "ଜୀବନୟାନ ଧାରଣ କରିବା ପାଇଂ ଯଥେଷ୍ଟ ସ୍ମୃତି ନାହିଁ"
-
-#: gdk-pixbuf/io-ani.c:398 gdk-pixbuf/io-ani.c:424 gdk-pixbuf/io-ani.c:443
-msgid "Malformed chunk in animation"
-msgstr "ଜୀବନୟାନରେ ବିକୃତ ଖଣ୍ଡ"
-
-#: gdk-pixbuf/io-ani.c:711
-msgid "The ANI image format"
-msgstr "ANI ଚିତ୍ର ଶୈଳୀ"
-
-#: gdk-pixbuf/io-bmp.c:230 gdk-pixbuf/io-bmp.c:267 gdk-pixbuf/io-bmp.c:338
-#: gdk-pixbuf/io-bmp.c:370 gdk-pixbuf/io-bmp.c:393 gdk-pixbuf/io-bmp.c:496
-msgid "BMP image has bogus header data"
-msgstr "BMP ଚିତ୍ରର ଶୀର୍ଷକରେ ନକଲି ତଥ୍ଯ ଅଛି"
-
-#: gdk-pixbuf/io-bmp.c:241 gdk-pixbuf/io-bmp.c:433
-msgid "Not enough memory to load bitmap image"
-msgstr "ବିଟମ୍ଯାପ ଚିତ୍ର ଧାରଣ କରିବା ପାଇଂ ଯଥେଷ୍ଟ ସ୍ମୃତି ନାହିଁ"
-
-#: gdk-pixbuf/io-bmp.c:319
-msgid "BMP image has unsupported header size"
-msgstr "BMP ଚିତ୍ରର ଶୀର୍ଷକ ଆକାର ଅସହାୟକ"
-
-#: gdk-pixbuf/io-bmp.c:357
-msgid "Topdown BMP images cannot be compressed"
-msgstr "ଉପରୁ ତଳ BMP ଚିତ୍ରକୁ ସଂକୁଚିତ କରାଯାଇପାରିବ ନାହିଁ"
-
-#: gdk-pixbuf/io-bmp.c:717 gdk-pixbuf/io-pnm.c:709
-msgid "Premature end-of-file encountered"
-msgstr "ଫାଇଲର ଅପ୍ରତ୍ଯାଶିତ ଶେଷ"
-
-#: gdk-pixbuf/io-bmp.c:1329
-msgid "Couldn't allocate memory for saving BMP file"
-msgstr "BMP ଫାଇଲ ସଂରକ୍ଷଣ ପାଇଁ ସ୍ମୃତି ଯୋଗାଇ ହେଲା ନାହିଁ"
-
-#: gdk-pixbuf/io-bmp.c:1370
-msgid "Couldn't write to BMP file"
-msgstr "BMP ଫାଇଲକୁ ଲେଖିହେଲା ନାହିଁ"
-
-#: gdk-pixbuf/io-bmp.c:1423 gdk-pixbuf/io-gdip-bmp.c:82
-msgid "The BMP image format"
-msgstr "BMP ଚିତ୍ର ଶୈଳୀ"
-
-#: gdk-pixbuf/io-gif.c:222
-#, c-format
-msgid "Failure reading GIF: %s"
-msgstr "GIF ପଢ଼ିବାରେ ତୃଟି: %s"
-
-#: gdk-pixbuf/io-gif.c:496 gdk-pixbuf/io-gif.c:1481 gdk-pixbuf/io-gif.c:1642
-msgid "GIF file was missing some data (perhaps it was truncated somehow?)"
-msgstr "GIF ଫାଇଲରେ କିଛି ତଥ୍ଯ ନ ଥିଲା (ବୋଧହୁଏ ଏହା କିପରି ଶେଷରୁ କଟିଯାଇଛି?)"
-
-#: gdk-pixbuf/io-gif.c:505
-#, c-format
-msgid "Internal error in the GIF loader (%s)"
-msgstr "GIF ଧାରକରେ ଆଭ୍ଯନ୍ତରୀଣ ତୃଟି (%s)"
-
-#: gdk-pixbuf/io-gif.c:579
-msgid "Stack overflow"
-msgstr "ଥାକ ସୀମା ଟପିଗଲା"
-
-#: gdk-pixbuf/io-gif.c:639
-msgid "GIF image loader cannot understand this image."
-msgstr "GIF ଚିତ୍ର ଧାରକ ଏହି ଚିତ୍ରକୁ ବୁଝିପାରିଲା ନାହିଁ."
-
-#: gdk-pixbuf/io-gif.c:668
-msgid "Bad code encountered"
-msgstr "ଖରାପ ସଙ୍କେତ ମିଳିଲା"
-
-#: gdk-pixbuf/io-gif.c:678
-msgid "Circular table entry in GIF file"
-msgstr "GIF ଫାଇଲରେ ବୃତ୍ତାକାର ସାରଣୀ ଭରଣ"
-
-#: gdk-pixbuf/io-gif.c:866 gdk-pixbuf/io-gif.c:1468 gdk-pixbuf/io-gif.c:1515
-#: gdk-pixbuf/io-gif.c:1630
-msgid "Not enough memory to load GIF file"
-msgstr "GIF ଫାଇଲ ଧାରଣ କରିବା ପାଇଁ ଯଥେଷ୍ଟ ସ୍ମୃତି ନାହିଁ"
-
-#: gdk-pixbuf/io-gif.c:960
-msgid "Not enough memory to composite a frame in GIF file"
-msgstr "GIF ଫାଇଲରେ ବନ୍ଧେଇ ମିଶ୍ରିତ କରିବା ପାଇଁ ଯଥେଷ୍ଟ ସ୍ମୃତି ନାହିଁ"
-
-#: gdk-pixbuf/io-gif.c:1132
-msgid "GIF image is corrupt (incorrect LZW compression)"
-msgstr "GIF ଚିତ୍ର ତୃଟିଯୁକ୍ତ (ଭୂଲ ଏଲ.ଜେଡ.ଡବ୍ଲୁ. ସଙ୍କୋଚନ)"
-
-#: gdk-pixbuf/io-gif.c:1182
-msgid "File does not appear to be a GIF file"
-msgstr "ଫାଇଲଟି GIF ଫାଇଲ ଭଳି ଜଣା ପଡ଼ୁ ନାହିଁ"
-
-#: gdk-pixbuf/io-gif.c:1194
-#, c-format
-msgid "Version %s of the GIF file format is not supported"
-msgstr "GIF ଫାଇଲ ଶୈଳୀର %s ସଂସ୍କରଣ ଅସହାୟକ"
-
-#: gdk-pixbuf/io-gif.c:1303
-msgid ""
-"GIF image has no global colormap, and a frame inside it has no local "
-"colormap."
-msgstr "GIF ଚିତ୍ରର ସାମଗ୍ରିକ ରଙ୍ଗନକ୍ସା ନାହିଁ, ଓ ତାହା ଭିତରେ ସ୍ଥିତ ଫ୍ରେମର ସ୍ଥାନୀୟ ରଙ୍ଗନକ୍ସା ନାହିଁ."
-
-#: gdk-pixbuf/io-gif.c:1537
-msgid "GIF image was truncated or incomplete."
-msgstr "GIF ଚିତ୍ର ଶେଷରୁ କଟିଯାଇଛି ବା ଅସମ୍ପୂର୍ଣ୍ଣ ଅଛି."
-
-#: gdk-pixbuf/io-gif.c:1693 gdk-pixbuf/io-gdip-gif.c:80
-msgid "The GIF image format"
-msgstr "GIF ଚିତ୍ର ଶୈଳୀ"
-
-#: gdk-pixbuf/io-ico.c:211 gdk-pixbuf/io-ico.c:225 gdk-pixbuf/io-ico.c:277
-#: gdk-pixbuf/io-ico.c:290 gdk-pixbuf/io-ico.c:359
-msgid "Invalid header in icon"
-msgstr "ଚିତ୍ରସଙ୍କେତରେ ଅବୈଧ ଶୀର୍ଷକ"
-
-#: gdk-pixbuf/io-ico.c:240 gdk-pixbuf/io-ico.c:300 gdk-pixbuf/io-ico.c:369
-#: gdk-pixbuf/io-ico.c:432 gdk-pixbuf/io-ico.c:462
-msgid "Not enough memory to load icon"
-msgstr "ଚିତ୍ରସଙ୍କେତ ଧାରଣ କରିବା ପାଇଁ ଯଥେଷ୍ଟ ସ୍ମୃତି ନାହିଁ"
-
-#: gdk-pixbuf/io-ico.c:322
-msgid "Icon has zero width"
-msgstr "ଚିତ୍ରସଙ୍କେତର ଓସାର ଶୂନ୍ଯ"
-
-#: gdk-pixbuf/io-ico.c:332
-msgid "Icon has zero height"
-msgstr "ଚିତ୍ରସଙ୍କେତର ଉଚ୍ଚତା ଶୂନ୍ଯ"
-
-#: gdk-pixbuf/io-ico.c:384
-msgid "Compressed icons are not supported"
-msgstr "ସଂକୁଚିତ ଚିତ୍ରସଙ୍କେତ ଅସହାୟକ"
-
-#: gdk-pixbuf/io-ico.c:417
-msgid "Unsupported icon type"
-msgstr "ଅସହାୟକ ଚିତ୍ରସଙ୍କେତ ପ୍ରକାର"
-
-#: gdk-pixbuf/io-ico.c:511
-msgid "Not enough memory to load ICO file"
-msgstr "ICO ଫାଇଲ ଧାରଣ କରିବା ପାଇଁ ଯଥେଷ୍ଟ ସ୍ମୃତି ନାହିଁ"
-
-#: gdk-pixbuf/io-ico.c:976
-msgid "Image too large to be saved as ICO"
-msgstr "ICO ଭାବରେ ସଂରକ୍ଷିତ କରିବା ପାଇଁ ଚିତ୍ରଟି ଅତି ବଡ଼"
-
-#: gdk-pixbuf/io-ico.c:987
-msgid "Cursor hotspot outside image"
-msgstr "ଦର୍ଶିକା କର୍ମଚଞ୍ଚଳ ବିନ୍ଦୁ ଚିତ୍ର ବାହାରେ"
-
-#: gdk-pixbuf/io-ico.c:1010
-#, c-format
-msgid "Unsupported depth for ICO file: %d"
-msgstr "ICO ଫାଇଲ ପାଇଁ ଅସହାୟକ ପ୍ରଗାଢ଼ତା: %d"
-
-#: gdk-pixbuf/io-ico.c:1245 gdk-pixbuf/io-gdip-ico.c:59
-msgid "The ICO image format"
-msgstr "ICO ଚିତ୍ର ଶୈଳୀ"
-
-#: gdk-pixbuf/io-icns.c:347
-#, c-format
-msgid "Error reading ICNS image: %s"
-msgstr "ICNS ପ୍ରତିଛବି ପଢ଼ିବାରେ ତୃଟି: %s"
-
-#: gdk-pixbuf/io-icns.c:364
-msgid "Could not decode ICNS file"
-msgstr "ICNS ଫାଇଲକୁ ଅବସଂକେତ କରିପାରିଲାନାହିଁ"
-
-#: gdk-pixbuf/io-icns.c:397
-msgid "The ICNS image format"
-msgstr "ICNS ଚିତ୍ର ଶୈଳୀ"
-
-#: gdk-pixbuf/io-jasper.c:75
-msgid "Couldn't allocate memory for stream"
-msgstr "ଧାରା ପାଇଁ ସ୍ମୃତି ସ୍ଥାନ ଯୋଗାଇ ହେଲା ନାହିଁ"
-
-#: gdk-pixbuf/io-jasper.c:105
-msgid "Couldn't decode image"
-msgstr "ପ୍ରତିଛବିକୁ ଅବସଂକେତ କରିପାରିଲାନାହିଁ"
-
-#: gdk-pixbuf/io-jasper.c:123
-msgid "Transformed JPEG2000 has zero width or height"
-msgstr "ପରିବର୍ତ୍ତିତ JPEG2000ର ଓସାର ବା ଉଚ୍ଚତା ଶୂନ୍ଯ ଅଟେ"
-
-#: gdk-pixbuf/io-jasper.c:137
-msgid "Image type currently not supported"
-msgstr "ପ୍ରତିଛବି ପ୍ରକାର ବର୍ତ୍ତମାନ ସମର୍ଥିତ ନୁହଁ"
-
-#: gdk-pixbuf/io-jasper.c:149 gdk-pixbuf/io-jasper.c:157
-msgid "Couldn't allocate memory for color profile"
-msgstr "ରଙ୍ଗ ରୂପରେଖ ପାଇଁ ସ୍ମୃତି ସ୍ଥାନ ଯୋଗାଇ ପାରିଲା ନାହିଁ"
-
-#: gdk-pixbuf/io-jasper.c:183
-msgid "Insufficient memory to open JPEG 2000 file"
-msgstr "JPEG 2000 ଫାଇଲ ଖୋଲିବା ପାଇଁ ଯଥେଷ୍ଟ ସ୍ମୃତି ନାହିଁ"
-
-#: gdk-pixbuf/io-jasper.c:262
-msgid "Couldn't allocate memory to buffer image data"
-msgstr "ବଫର ପ୍ରତିଛବି ତଥ୍ଯ ପାଇଁ ସ୍ମୃତି ଯୋଗାଇ ହେଲା ନାହିଁ"
-
-#: gdk-pixbuf/io-jasper.c:306
-msgid "The JPEG 2000 image format"
-msgstr "JPEG 2000 ଚିତ୍ର ଶୈଳୀ"
-
-#: gdk-pixbuf/io-jpeg.c:117
-#, c-format
-msgid "Error interpreting JPEG image file (%s)"
-msgstr "JPEG ଚିତ୍ର ଫାଇଲ ବ୍ଯାଖ୍ଯା କରିବାରେ ତୃଟି (%s)"
-
-#: gdk-pixbuf/io-jpeg.c:528
-msgid ""
-"Insufficient memory to load image, try exiting some applications to free "
-"memory"
-msgstr ""
-"ଚିତ୍ର ଧାରଣ କରିବା ପାଇଁ ଯଥେଷ୍ଟ ସ୍ମୃତି ନାହିଁ, ସ୍ମୃତି ମୁକ୍ତି ପାଇଁ କିଛି ପ୍ରୟୋଗ ବନ୍ଦ କରିବାକୁ ଚେଷ୍ଟା କରନ୍ତୁ"
-
-#: gdk-pixbuf/io-jpeg.c:569 gdk-pixbuf/io-jpeg.c:775
-#, c-format
-msgid "Unsupported JPEG color space (%s)"
-msgstr "ଅସହାୟକ JPEG ରଙ୍ଗ କ୍ଷେତ୍ର (%s)"
-
-#: gdk-pixbuf/io-jpeg.c:674 gdk-pixbuf/io-jpeg.c:944 gdk-pixbuf/io-jpeg.c:1177
-#: gdk-pixbuf/io-jpeg.c:1186
-msgid "Couldn't allocate memory for loading JPEG file"
-msgstr "JPEG ଫାଇଲ ଧାରଣ କରିବା ପାଇଁ ସ୍ମୃତି ଯୋଗାଇ ହେଲା ନାହିଁ"
-
-#: gdk-pixbuf/io-jpeg.c:919
-msgid "Transformed JPEG has zero width or height."
-msgstr "ପରିବର୍ତ୍ତିତ JPEG ର ଓସାର ବା ଉଚ୍ଚତା ଶୂନ୍ଯ."
-
-#: gdk-pixbuf/io-jpeg.c:1133 gdk-pixbuf/io-gdip-jpeg.c:53
-#, c-format
-msgid ""
-"JPEG quality must be a value between 0 and 100; value '%s' could not be "
-"parsed."
-msgstr "JPEG ଗୁଣବତ୍ତାର ମୂଲ୍ଯ ୦ ଓ ୧୦୦ ଭିତରେ ଥିବା ଉଚିତ; '%s' ମୂଲ୍ଯ ବିଶ୍ଲେଷିତ କରିହେଲା ନାହିଁ."
-
-#: gdk-pixbuf/io-jpeg.c:1148 gdk-pixbuf/io-gdip-jpeg.c:68
-#, c-format
-msgid ""
-"JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
-msgstr "JPEG ଗୁଣବତ୍ତାର ମୂଲ୍ଯ ୦ ଓ ୧୦୦ ଭିତରେ ଥିବା ଉଚିତ; '%d' ମୂଲ୍ଯର ଅନୁମତି ନାହିଁ."
-
-#: gdk-pixbuf/io-jpeg.c:1310 gdk-pixbuf/io-gdip-jpeg.c:136
-msgid "The JPEG image format"
-msgstr "JPEG ଚିତ୍ର ଶୈଳୀ"
-
-#: gdk-pixbuf/io-pcx.c:187
-msgid "Couldn't allocate memory for header"
-msgstr "ଶୀର୍ଷକ ପାଇଁ ସ୍ମୃତି ଯୋଗାଇ ହେଲା ନାହିଁ"
-
-#: gdk-pixbuf/io-pcx.c:202 gdk-pixbuf/io-pcx.c:560
-msgid "Couldn't allocate memory for context buffer"
-msgstr "ପ୍ରସଙ୍ଗ ବଫର ପାଇଁ ସ୍ମୃତି ଯୋଗାଇ ହେଲା ନାହିଁ"
-
-#: gdk-pixbuf/io-pcx.c:601
-msgid "Image has invalid width and/or height"
-msgstr "ଚିତ୍ରର ଓସାର ବା/ଓ ଉଚ୍ଚତା ଅବୈଧ"
-
-#: gdk-pixbuf/io-pcx.c:613 gdk-pixbuf/io-pcx.c:674
-msgid "Image has unsupported bpp"
-msgstr "ଚିତ୍ରର bpp ଅସହାୟକ"
-
-#: gdk-pixbuf/io-pcx.c:618 gdk-pixbuf/io-pcx.c:626
-#, c-format
-msgid "Image has unsupported number of %d-bit planes"
-msgstr "ଚିତ୍ରର %d-ବିଟ ସମତଳ କ୍ଷେତ୍ରର ସଂଖ୍ଯା ଅସହାୟକ"
-
-#: gdk-pixbuf/io-pcx.c:642
-msgid "Couldn't create new pixbuf"
-msgstr "ନୂତନ ପିକ୍ସବଫ ସୃଷ୍ଟି କରିହେଲା ନାହିଁ"
-
-#: gdk-pixbuf/io-pcx.c:650
-msgid "Couldn't allocate memory for line data"
-msgstr "ଧାଡ଼ି ତଥ୍ଯ ପାଇଁ ସ୍ମୃତି ଯୋଗାଇ ହେଲା ନାହିଁ"
-
-#: gdk-pixbuf/io-pcx.c:657
-msgid "Couldn't allocate memory for paletted data"
-msgstr "ଆଳି ତଥ୍ଯ ପାଇଁ ସ୍ମୃତି ଯୋଗାଇ ହେଲା ନାହିଁ"
-
-#: gdk-pixbuf/io-pcx.c:704
-msgid "Didn't get all lines of PCX image"
-msgstr "PCX ଚିତ୍ରର ସବୁ ଧାଡ଼ି ମିଳିଲା ନାହିଁ"
-
-#: gdk-pixbuf/io-pcx.c:711
-msgid "No palette found at end of PCX data"
-msgstr "PCX ତଥ୍ଯର ଶେଷରେ କୌଣସି ଆଳି ମିଳିଲା ନାହିଁ"
-
-#: gdk-pixbuf/io-pcx.c:756
-msgid "The PCX image format"
-msgstr "PCX ଚିତ୍ର ଶୈଳୀ"
-
-#: gdk-pixbuf/io-png.c:55
-msgid "Bits per channel of PNG image is invalid."
-msgstr "PNG ଚିତ୍ରର ବିଟ ପ୍ରତି ଚ୍ଯାନେଲର ମୂଲ୍ଯ ଅବୈଧ"
-
-#: gdk-pixbuf/io-png.c:136 gdk-pixbuf/io-png.c:642
-msgid "Transformed PNG has zero width or height."
-msgstr "ପରିବର୍ତ୍ତିତ PNG ର ଓସାର ବା ଉଚ୍ଚତା ଶୂନ୍ଯ"
-
-#: gdk-pixbuf/io-png.c:144
-msgid "Bits per channel of transformed PNG is not 8."
-msgstr "ପରିବର୍ତ୍ତିତ PNG ର ବିଟ ପ୍ରତି ଚ୍ଯାନେଲର ମୂଲ୍ଯ ୮ ନୁହେଁ"
-
-#: gdk-pixbuf/io-png.c:153
-msgid "Transformed PNG not RGB or RGBA."
-msgstr "ପରିବର୍ତ୍ତିତ PNG, RGB କିମ୍ବା RGBA ନୁହେଁ।"
-
-#: gdk-pixbuf/io-png.c:162
-msgid "Transformed PNG has unsupported number of channels, must be 3 or 4."
-msgstr "ପରିବର୍ତ୍ତିତ PNG ର ଚ୍ଯାନେଲର ସଂଖ୍ଯା ଅସହାୟକ, ୩ ବା ୪ ହେବା ଆବଶ୍ଯକ."
-
-#: gdk-pixbuf/io-png.c:183
-#, c-format
-msgid "Fatal error in PNG image file: %s"
-msgstr "PNG ଚିତ୍ର ଫାଇଲରେ ମାରାତ୍ମକ ତୃଟି: %s"
-
-#: gdk-pixbuf/io-png.c:316
-msgid "Insufficient memory to load PNG file"
-msgstr "PNG ଫାଇଲ ଧାରଣ କରିବା ପାଇଁ ଯଥେଷ୍ଟ ସ୍ମୃତି ନାହିଁ"
-
-#: gdk-pixbuf/io-png.c:657
-#, c-format
-msgid ""
-"Insufficient memory to store a %ld by %ld image; try exiting some "
-"applications to reduce memory usage"
-msgstr ""
-"%ld ରୁ %ld ଚିତ୍ର ସଞ୍ଚିତ କରିବା ପାଇଁ ଯଥେଷ୍ଟ ସ୍ମୃତି ନାହିଁ; ସ୍ମୃତି ମୁକ୍ତି ପାଇଁ କିଛି ପ୍ରୟୋଗ ବନ୍ଦ କରିବାକୁ "
-"ଚେଷ୍ଟା କରନ୍ତୁ"
-
-#: gdk-pixbuf/io-png.c:720
-msgid "Fatal error reading PNG image file"
-msgstr "PNG ଫାଇଲ  ପଢ଼ିବାରେ ମାରାତ୍ମକ ତୃଟି"
-
-#: gdk-pixbuf/io-png.c:769
-#, c-format
-msgid "Fatal error reading PNG image file: %s"
-msgstr "PNG ଫାଇଲ ପଢ଼ିବାରେ ମାରାତ୍ମକ ତୃଟି: %s"
-
-#: gdk-pixbuf/io-png.c:863
-msgid ""
-"Keys for PNG text chunks must have at least 1 and at most 79 characters."
-msgstr "PNG ପାଠ୍ଯ ଖଣ୍ଡର ଚାବି ୧ ଓ ୭୯ ଅକ୍ଷର ଭିତରେ ହୋଇଥିବା ଆବଶ୍ଯକ."
-
-#: gdk-pixbuf/io-png.c:872
-msgid "Keys for PNG text chunks must be ASCII characters."
-msgstr "PNG ପାଠ୍ଯ ଖଣ୍ଡର ଚାବି ଆସ୍କି ଅକ୍ଷରରୁ ହୋଇଥିବା ଆବଶ୍ଯକ."
-
-#: gdk-pixbuf/io-png.c:886 gdk-pixbuf/io-tiff.c:738
-#, c-format
-msgid "Color profile has invalid length %d."
-msgstr ""
-
-#: gdk-pixbuf/io-png.c:899 gdk-pixbuf/io-gdip-png.c:56
-#, c-format
-msgid ""
-"PNG compression level must be a value between 0 and 9; value '%s' could not "
-"be parsed."
-msgstr "PNG ସଂକୋଚନ ସ୍ତରର ମୂଲ୍ଯ 0  ଓ 9 ଭିତରେ ଥିବା ଉଚିତ; '%s' ମୂଲ୍ଯ ବିଶ୍ଲେଷିତ କରିହେଲା ନାହିଁ."
-
-#: gdk-pixbuf/io-png.c:912 gdk-pixbuf/io-gdip-png.c:68
-#, c-format
-msgid ""
-"PNG compression level must be a value between 0 and 9; value '%d' is not "
-"allowed."
-msgstr "PNG ସଂକୋଚନ ସ୍ତରର ମୂଲ୍ଯ 0  ଓ 9 ଭିତରେ ଥିବା ଉଚିତ; '%d' ମୂଲ୍ଯର ଅନୁମତି ନାହିଁ."
-
-#: gdk-pixbuf/io-png.c:951
-#, c-format
-msgid "Value for PNG text chunk %s cannot be converted to ISO-8859-1 encoding."
-msgstr "%s PNG ପାଠ୍ଯ ଖଣ୍ଡର ମୂଲ୍ଯକୁ ଆଇ.ଏସ.ଓ.-୮୮୫୯-୧ ସଙ୍କେତକୁ ରୂପାନ୍ତରିତ କରିହେଲା ନାହିଁ."
-
-#: gdk-pixbuf/io-png.c:1112 gdk-pixbuf/io-gdip-png.c:133
-msgid "The PNG image format"
-msgstr "PNG ଚିତ୍ର ଶୈଳୀ"
-
-#: gdk-pixbuf/io-pnm.c:250
-msgid "PNM loader expected to find an integer, but didn't"
-msgstr "PNM ଧାରକ ଗୋଟିଏ ପୂର୍ଣ୍ଣ ସଂଖ୍ଯାର ପ୍ରତ୍ଯାଶା କରିଥିଲା, କିନ୍ତୁ ଏହା ମିଳିଲା ନାହିଁ"
-
-#: gdk-pixbuf/io-pnm.c:282
-msgid "PNM file has an incorrect initial byte"
-msgstr "PNM ଫାଇଲର ପ୍ରାରମ୍ଭିକ ବାଇଟ ଭୂଲ"
-
-#: gdk-pixbuf/io-pnm.c:312
-msgid "PNM file is not in a recognized PNM subformat"
-msgstr "PNM ଫାଇଲ ଚିହ୍ନିତ PNM ଉପ-ଶୈଳୀରେ ନାହିଁ"
-
-#: gdk-pixbuf/io-pnm.c:337
-msgid "PNM file has an image width of 0"
-msgstr "PNM ଫାଇଲର ଚିତ୍ର ଓସାର ଶୂନ୍ଯ"
-
-#: gdk-pixbuf/io-pnm.c:358
-msgid "PNM file has an image height of 0"
-msgstr "PNM ଫାଇଲର ଚିତ୍ର ଉଚ୍ଚତା ଶୂନ୍ଯ"
-
-#: gdk-pixbuf/io-pnm.c:381
-msgid "Maximum color value in PNM file is 0"
-msgstr "PNM ଫାଇଲରେ ସର୍ବାଧିକ ରଙ୍ଗ ମୂଲ୍ଯ ଶୂନ୍ଯ"
-
-#: gdk-pixbuf/io-pnm.c:389
-msgid "Maximum color value in PNM file is too large"
-msgstr "PNM ଫାଇଲରେ ସର୍ବାଧିକ ରଙ୍ଗ ମୂଲ୍ଯ ଅତି ବଡ଼"
-
-#: gdk-pixbuf/io-pnm.c:429 gdk-pixbuf/io-pnm.c:459 gdk-pixbuf/io-pnm.c:504
-msgid "Raw PNM image type is invalid"
-msgstr "ଅସଂସାଧିତ PNM ଚିତ୍ର ପ୍ରକାରଟି ଅବୈଧ"
-
-#: gdk-pixbuf/io-pnm.c:654
-msgid "PNM image loader does not support this PNM subformat"
-msgstr "PNM ଚିତ୍ର ଧାରକରେ ଏହି PNM ଉପ-ଶୈଳୀ ଅସହାୟକ"
-
-#: gdk-pixbuf/io-pnm.c:741 gdk-pixbuf/io-pnm.c:968
-msgid "Raw PNM formats require exactly one whitespace before sample data"
-msgstr "ଅସଂସାଧିତ PNM ଶୈଳୀଗୁଡ଼ିକରେ ନମୁନା ତଥ୍ଯ ପୂର୍ବରୁ ଠିକ ଗୋଟିଏ ଖାଲି ସ୍ଥାନ ଥିବା ଆବଶ୍ଯକ"
-
-#: gdk-pixbuf/io-pnm.c:768
-msgid "Cannot allocate memory for loading PNM image"
-msgstr "PNM ଚିତ୍ର ଧାରଣ କରିବା ପାଇଁ ସ୍ମୃତି ଯୋଗାଇ ହେଲା ନାହିଁ"
-
-#: gdk-pixbuf/io-pnm.c:818
-msgid "Insufficient memory to load PNM context struct"
-msgstr "PNM ପ୍ରସଙ୍ଗ ଷ୍ଟ୍ରକ୍ଟ ଧାରଣ କରିବା ପାଇଁ ଯଥେଷ୍ଟ ସ୍ମୃତି ନାହିଁ"
-
-#: gdk-pixbuf/io-pnm.c:869
-msgid "Unexpected end of PNM image data"
-msgstr "PNM ଚିତ୍ର ତଥ୍ଯର ଅପ୍ରତ୍ଯାଶିତ ଶେଷ"
-
-#: gdk-pixbuf/io-pnm.c:997
-msgid "Insufficient memory to load PNM file"
-msgstr "PNM ଫାଇଲ ଧାରଣ କରିବା ପାଇଁ ଯଥେଷ୍ଟ ସ୍ମୃତି ନାହିଁ"
-
-#: gdk-pixbuf/io-pnm.c:1081
-msgid "The PNM/PBM/PGM/PPM image format family"
-msgstr "PNM/PBM/PGM/PPM ଚିତ୍ର ଶୈଳୀ ଶ୍ରେଣୀ"
-
-#: gdk-pixbuf/io-qtif.c:128
-msgid "Input file descriptor is NULL."
-msgstr ""
-
-#: gdk-pixbuf/io-qtif.c:143
-#, fuzzy
-msgid "Failed to read QTIF header"
-msgstr "ଶୀର୍ଷକକୁ ଲେଖିବାରେ ବିଫଳ\n"
-
-#: gdk-pixbuf/io-qtif.c:152 gdk-pixbuf/io-qtif.c:182 gdk-pixbuf/io-qtif.c:446
-#, c-format
-msgid "QTIF atom size too large (%d bytes)"
-msgstr ""
-
-#: gdk-pixbuf/io-qtif.c:172
-#, c-format
-msgid "Failed to allocate %d bytes for file read buffer"
-msgstr ""
-
-#: gdk-pixbuf/io-qtif.c:196
-#, fuzzy, c-format
-msgid "File error when reading QTIF atom: %s"
-msgstr "GIF ପଢ଼ିବାରେ ତୃଟି: %s"
-
-#: gdk-pixbuf/io-qtif.c:233
-#, c-format
-msgid "Failed to skip the next %d bytes with seek()."
-msgstr ""
-
-#: gdk-pixbuf/io-qtif.c:257
-#, fuzzy
-msgid "Failed to allocate QTIF context structure."
-msgstr "TGA ପ୍ରସଙ୍ଗ ଷ୍ଟ୍ରକ୍ଟ ପାଇଁ ସ୍ମୃତି ଯୋଗାଇ ହେଲା ନାହିଁ"
-
-#: gdk-pixbuf/io-qtif.c:317
-#, fuzzy
-msgid "Failed to create GdkPixbufLoader object."
-msgstr "ଫୋଲଡର ଅନୁକ୍ରମଣିକାକୁ ଲେଖିବାରେ ବିଫଳ\n"
-
-#: gdk-pixbuf/io-qtif.c:421
-#, fuzzy
-msgid "Failed to find an image data atom."
-msgstr "TIFF ଫାଇଲ ଖୋଲିବାରେ ଅସଫଳ"
-
-#: gdk-pixbuf/io-qtif.c:602
-#, fuzzy
-msgid "The QTIF image format"
-msgstr "TIFF ଚିତ୍ର ଶୈଳୀ"
-
-#: gdk-pixbuf/io-ras.c:126
-msgid "RAS image has bogus header data"
-msgstr "ଆର.ଏ.ଏସ. ଚିତ୍ରର ଶୀର୍ଷକରେ ନକଲି ତଥ୍ଯ ଅଛି"
-
-#: gdk-pixbuf/io-ras.c:148
-msgid "RAS image has unknown type"
-msgstr "RAS ଚିତ୍ରର ପ୍ରକାର ଅଜଣା"
-
-#: gdk-pixbuf/io-ras.c:156
-msgid "unsupported RAS image variation"
-msgstr "RAS ଚିତ୍ରର ଭିନ୍ନ ପ୍ରକାର ଅସହାୟକ"
-
-#: gdk-pixbuf/io-ras.c:171 gdk-pixbuf/io-ras.c:200
-msgid "Not enough memory to load RAS image"
-msgstr "RAS ଚିତ୍ର ଧାରଣ କରିବା ପାଇଁ ଯଥେଷ୍ଟ ସ୍ମୃତି ନାହିଁ"
-
-#: gdk-pixbuf/io-ras.c:545
-msgid "The Sun raster image format"
-msgstr "Sun ରୈଖିକ ଚିତ୍ର ଶୈଳୀ"
-
-#: gdk-pixbuf/io-tga.c:154
-msgid "Cannot allocate memory for IOBuffer struct"
-msgstr "ଆଇ.ଓ. ବଫର ଷ୍ଟ୍ରକ୍ଟ ପାଇଁ ସ୍ମୃତି ଯୋଗାଇ ହେଲା ନାହିଁ"
-
-#: gdk-pixbuf/io-tga.c:173
-msgid "Cannot allocate memory for IOBuffer data"
-msgstr "ଆଇ.ଓ. ବଫର ତଥ୍ଯ ପାଇଁ ସ୍ମୃତି ଯୋଗାଇ ହେଲା ନାହିଁ"
-
-#: gdk-pixbuf/io-tga.c:184
-msgid "Cannot realloc IOBuffer data"
-msgstr "ଆଇ.ଓ. ବଫର ତଥ୍ଯ ପାଇଁ ସ୍ମୃତି ପୁଣି ଯୋଗାଇ ହେଲା ନାହିଁ"
-
-#: gdk-pixbuf/io-tga.c:214
-msgid "Cannot allocate temporary IOBuffer data"
-msgstr "ଅସ୍ଥାୟୀ ଆଇ.ଓ. ବଫର ତଥ୍ଯ ପାଇଁ ସ୍ମୃତି ଯୋଗାଇ ହେଲା ନାହିଁ"
-
-#: gdk-pixbuf/io-tga.c:347
-msgid "Cannot allocate new pixbuf"
-msgstr "ନୂତନ ପିକ୍ସବଫ ପାଇଁ ସ୍ମୃତି ଯୋଗାଇ ହେଲା ନାହିଁ"
-
-#: gdk-pixbuf/io-tga.c:686
-#, fuzzy
-msgid "Image is corrupted or truncated"
-msgstr "GIF ଚିତ୍ର ଶେଷରୁ କଟିଯାଇଛି ବା ଅସମ୍ପୂର୍ଣ୍ଣ ଅଛି."
-
-#: gdk-pixbuf/io-tga.c:693
-msgid "Cannot allocate colormap structure"
-msgstr "ରଙ୍ଗନକ୍ସା ଷ୍ଟ୍ରକ୍ଟ ପାଇଁ ସ୍ମୃତି ଯୋଗାଇ ହେଲା ନାହିଁ"
-
-#: gdk-pixbuf/io-tga.c:700
-msgid "Cannot allocate colormap entries"
-msgstr "ରଙ୍ଗନକ୍ସା ଭରଣଗୁଡ଼ିକ ପାଇଁ ସ୍ମୃତି ଯୋଗାଇ ହେଲା ନାହିଁ"
-
-#: gdk-pixbuf/io-tga.c:722
-msgid "Unexpected bitdepth for colormap entries"
-msgstr "ରଙ୍ଗନକ୍ସା ଭରଣଗୁଡ଼ିକର ବିଟ ପ୍ରଗାଢ଼ତା ଅପ୍ରତ୍ଯାଶିତ"
-
-#: gdk-pixbuf/io-tga.c:740
-msgid "Cannot allocate TGA header memory"
-msgstr "TGA ଶୀର୍ଷକ ସ୍ମୃତି ଯୋଗାଇ ହେଲା ନାହିଁ"
-
-#: gdk-pixbuf/io-tga.c:773
-msgid "TGA image has invalid dimensions"
-msgstr "TGA ଚିତ୍ରର ପରିସର ଅବୈଧ"
-
-#: gdk-pixbuf/io-tga.c:779 gdk-pixbuf/io-tga.c:788 gdk-pixbuf/io-tga.c:798
-#: gdk-pixbuf/io-tga.c:808 gdk-pixbuf/io-tga.c:815
-msgid "TGA image type not supported"
-msgstr "TGA ଚିତ୍ର ପ୍ରକାର ଅସହାୟକ"
-
-#: gdk-pixbuf/io-tga.c:862
-msgid "Cannot allocate memory for TGA context struct"
-msgstr "TGA ପ୍ରସଙ୍ଗ ଷ୍ଟ୍ରକ୍ଟ ପାଇଁ ସ୍ମୃତି ଯୋଗାଇ ହେଲା ନାହିଁ"
-
-#: gdk-pixbuf/io-tga.c:927
-msgid "Excess data in file"
-msgstr "ଫାଇଲରେ ଅତ୍ଯାଧିକ ତଥ୍ଯ"
-
-#: gdk-pixbuf/io-tga.c:1008
-msgid "The Targa image format"
-msgstr "Targa ଚିତ୍ର ଶୈଳୀ"
-
-#: gdk-pixbuf/io-tiff.c:165
-msgid "Could not get image width (bad TIFF file)"
-msgstr "ଚିତ୍ର ଓସାର ମିଳିଲା ନାହିଁ (ଖରାପ TIFF ଫାଇଲ)"
-
-#: gdk-pixbuf/io-tiff.c:172
-msgid "Could not get image height (bad TIFF file)"
-msgstr "ଚିତ୍ର ଉଚ୍ଚତା ମିଳିଲା ନାହିଁ (ଖରାପ TIFF ଫାଇଲ)"
-
-#: gdk-pixbuf/io-tiff.c:180
-msgid "Width or height of TIFF image is zero"
-msgstr "TIFF ଚିତ୍ରର ଓସାର ବା ଉଚ୍ଚତା ଶୂନ୍ଯ"
-
-#: gdk-pixbuf/io-tiff.c:189 gdk-pixbuf/io-tiff.c:198
-msgid "Dimensions of TIFF image too large"
-msgstr "TIFF ଚିତ୍ରର ପରିସର ଅତି ବଡ଼"
-
-#: gdk-pixbuf/io-tiff.c:222 gdk-pixbuf/io-tiff.c:234 gdk-pixbuf/io-tiff.c:561
-msgid "Insufficient memory to open TIFF file"
-msgstr "TIFF ଫାଇଲ ଖୋଲିବା ପାଇଁ ଯଥେଷ୍ଟ ସ୍ମୃତି ନାହିଁ"
-
-#: gdk-pixbuf/io-tiff.c:295
-msgid "Failed to load RGB data from TIFF file"
-msgstr "TIFF ଫାଇଲରୁ ଆର.ଜି.ବି. ତଥ୍ଯ ଧାରଣ କରିବାରେ ଅସଫଳ"
-
-#: gdk-pixbuf/io-tiff.c:351
-msgid "Failed to open TIFF image"
-msgstr "TIFF ଫାଇଲ ଖୋଲିବାରେ ଅସଫଳ"
-
-#: gdk-pixbuf/io-tiff.c:363 gdk-pixbuf/io-tiff.c:778
-msgid "TIFFClose operation failed"
-msgstr "TIFFବନ୍ଦ ଚାଳନା ଅସଫଳ"
-
-#: gdk-pixbuf/io-tiff.c:493 gdk-pixbuf/io-tiff.c:506
-msgid "Failed to load TIFF image"
-msgstr "TIFF ଚିତ୍ର ଧାରଣ କରିବାରେ ଅସଫଳ"
-
-#: gdk-pixbuf/io-tiff.c:692
-msgid "Failed to save TIFF image"
-msgstr "TIFF ଚିତ୍ରକୁ ସଂରକ୍ଷଣ କରିବାରେ ଅସଫଳ"
-
-#: gdk-pixbuf/io-tiff.c:727
-msgid "TIFF compression doesn't refer to a valid codec."
-msgstr ""
-
-#: gdk-pixbuf/io-tiff.c:767
-msgid "Failed to write TIFF data"
-msgstr "TIFF ତଥ୍ଯକୁ ଲେଖିବାରେ ଅସଫଳ"
-
-#: gdk-pixbuf/io-tiff.c:814
-msgid "Couldn't write to TIFF file"
-msgstr "TIFF ଫାଇଲରେ ଲେଖିପାରିଲା ନାହିଁ"
-
-#: gdk-pixbuf/io-tiff.c:869
-msgid "The TIFF image format"
-msgstr "TIFF ଚିତ୍ର ଶୈଳୀ"
-
-#: gdk-pixbuf/io-wbmp.c:246
-msgid "Image has zero width"
-msgstr "ଚିତ୍ରର ଓସାର ଶୂନ୍ଯ"
-
-#: gdk-pixbuf/io-wbmp.c:264
-msgid "Image has zero height"
-msgstr "ଚିତ୍ରର ଉଚ୍ଚତା ଶୂନ୍ଯ"
-
-#: gdk-pixbuf/io-wbmp.c:275
-msgid "Not enough memory to load image"
-msgstr "ଚିତ୍ର ଧାରଣ କରିବା ପାଇଁ ଯଥେଷ୍ଟ ସ୍ମୃତି ନାହିଁ"
-
-#: gdk-pixbuf/io-wbmp.c:334
-msgid "Couldn't save the rest"
-msgstr "ବାକି ସଞ୍ଚିତ କରିହେଲା ନାହିଁ"
-
-#: gdk-pixbuf/io-wbmp.c:375
-msgid "The WBMP image format"
-msgstr "WBMP ଚିତ୍ର ଶୈଳୀ"
-
-#: gdk-pixbuf/io-xbm.c:295
-msgid "Invalid XBM file"
-msgstr "ଅବୈଧ XBM ଫାଇଲ"
-
-#: gdk-pixbuf/io-xbm.c:305
-msgid "Insufficient memory to load XBM image file"
-msgstr "XBM ଚିତ୍ର ଫାଇଲ ଧାରଣ କରିବା ପାଇଁ ଯଥେଷ୍ଟ ସ୍ମୃତି ନାହିଁ"
-
-#: gdk-pixbuf/io-xbm.c:453
-msgid "Failed to write to temporary file when loading XBM image"
-msgstr "XBM ଚିତ୍ର ଧାରଣ କରିବା ସମୟରେ ଅସ୍ଥାୟୀ ଫାଇଲକୁ ଲେଖିବାରେ ଅସଫଳ"
-
-#: gdk-pixbuf/io-xbm.c:492
-msgid "The XBM image format"
-msgstr "XBM ଚିତ୍ର ଶୈଳୀ"
-
-#: gdk-pixbuf/io-xpm.c:468
-msgid "No XPM header found"
-msgstr "XPM ଶୀର୍ଷକ ମିଳିଲା ନାହିଁ"
-
-#: gdk-pixbuf/io-xpm.c:477
-msgid "Invalid XPM header"
-msgstr "ଅବୈଧ XPM ଶୀର୍ଷକ"
-
-#: gdk-pixbuf/io-xpm.c:485
-msgid "XPM file has image width <= 0"
-msgstr "XPM ଫାଇଲର ଚିତ୍ରର ଓସାର <= ୦"
-
-#: gdk-pixbuf/io-xpm.c:493
-msgid "XPM file has image height <= 0"
-msgstr "XPM ଫାଇଲର ଚିତ୍ରର ଉଚ୍ଚତା <= ୦"
-
-#: gdk-pixbuf/io-xpm.c:501
-msgid "XPM has invalid number of chars per pixel"
-msgstr "XPM ଫାଇଲର ଅକ୍ଷର ପ୍ରତି ପିକ୍ସେଲର ସଂଖ୍ଯା ଅବୈଧ"
-
-#: gdk-pixbuf/io-xpm.c:510
-msgid "XPM file has invalid number of colors"
-msgstr "XPM ଫାଇଲର ରଙ୍ଗର ସଂଖ୍ଯା ଅବୈଧ"
-
-#: gdk-pixbuf/io-xpm.c:522 gdk-pixbuf/io-xpm.c:531 gdk-pixbuf/io-xpm.c:583
-msgid "Cannot allocate memory for loading XPM image"
-msgstr "XPM ଚିତ୍ର ଧାରଣ କରିବା ପାଇଁ ସ୍ମୃତି ଯୋଗାଇ ହେଲା ନାହିଁ"
-
-#: gdk-pixbuf/io-xpm.c:545
-msgid "Cannot read XPM colormap"
-msgstr "XPM ରଙ୍ଗନକ୍ସା ପଢ଼ିହେଲା ନାହିଁ"
-
-#: gdk-pixbuf/io-xpm.c:777
-msgid "Failed to write to temporary file when loading XPM image"
-msgstr "XPM ଚିତ୍ର ଧାରଣ କରିବା ସମୟରେ ଅସ୍ଥାୟୀ ଫାଇଲକୁ ଲେଖିବାରେ ଅସଫଳ"
-
-#: gdk-pixbuf/io-xpm.c:816
-msgid "The XPM image format"
-msgstr "XPM ଚିତ୍ର ଶୈଳୀ"
-
-#: gdk-pixbuf/io-gdip-emf.c:59
-msgid "The EMF image format"
-msgstr "EMF ଚିତ୍ର ଶୈଳୀ"
-
-#: gdk-pixbuf/io-gdip-utils.c:232
-#, c-format
-msgid "Could not allocate memory: %s"
-msgstr "ସ୍ମୃତି ସ୍ଥାନ ଯୋଗାଇ ହେଲା ନାହିଁ: %s"
-
-#: gdk-pixbuf/io-gdip-utils.c:257 gdk-pixbuf/io-gdip-utils.c:371
-#: gdk-pixbuf/io-gdip-utils.c:411
-#, c-format
-msgid "Could not create stream: %s"
-msgstr "ଧାରା ସୃଷ୍ଟି କରିପାରିଲା ନାହିଁ: %s"
-
-#: gdk-pixbuf/io-gdip-utils.c:271
-#, c-format
-msgid "Could not seek stream: %s"
-msgstr "ଧାରାକୁ ଅନୁସନ୍ଧାନ କରିହେଲା ନାହିଁ: %s"
-
-#: gdk-pixbuf/io-gdip-utils.c:283
-#, c-format
-msgid "Could not read from stream: %s"
-msgstr "ଧାରାରୁ ପଢ଼ି ପାରିଲା ନାହିଁ: %s"
-
-#: gdk-pixbuf/io-gdip-utils.c:694 gdk-pixbuf/io-gdip-utils.c:825
-msgid "Couldn't load bitmap"
-msgstr "bitmapକୁ ଧାରଣ କରିହେଲା ନାହିଁ"
-
-#: gdk-pixbuf/io-gdip-utils.c:847
-msgid "Couldn't load metafile"
-msgstr "metafileକୁ ଧାରଣ କରିହେଲା ନାହିଁ"
-
-#: gdk-pixbuf/io-gdip-utils.c:1006
-msgid "Unsupported image format for GDI+"
-msgstr "GDI+ ପାଇଁ ଅସମର୍ଥିତ ଚିତ୍ରଶୈଳୀ"
-
-#: gdk-pixbuf/io-gdip-utils.c:1013
-msgid "Couldn't save"
-msgstr "ସଂରକ୍ଷଣ କରିପାରିଲା ନାହିଁ"
-
-#: gdk-pixbuf/io-gdip-wmf.c:58
-msgid "The WMF image format"
-msgstr "WMF ଚିତ୍ର ଶୈଳୀ"
 
 #. Description of --sync in --help output
 #: gdk/win32/gdkmain-win32.c:55
@@ -1517,8 +623,9 @@ msgid "_Saturation:"
 msgstr "ରଙ୍ଗର ପ୍ରଗାଢ଼ତା (_S):"
 
 #: gtk/gtkcolorsel.c:393
-msgid "\"Deepness\" of the color."
-msgstr "ରଙ୍ଗର \"ପ୍ରଗାଢ଼ତା\"।"
+#, fuzzy
+msgid "Intensity of the color."
+msgstr "ରଙ୍ଗର ସ୍ବଚ୍ଛତା।"
 
 #: gtk/gtkcolorsel.c:394
 msgid "_Value:"
@@ -1688,11 +795,11 @@ msgstr "ଡାହାଣ (_R):"
 msgid "Paper Margins"
 msgstr "କାଗଜ ମାର୍ଜିନ"
 
-#: gtk/gtkentry.c:8612 gtk/gtktextview.c:8002
+#: gtk/gtkentry.c:8612 gtk/gtktextview.c:8012
 msgid "Input _Methods"
 msgstr "ନିବେଶ ପ୍ରଣାଳୀ (_M)"
 
-#: gtk/gtkentry.c:8626 gtk/gtktextview.c:8016
+#: gtk/gtkentry.c:8626 gtk/gtktextview.c:8026
 msgid "_Insert Unicode Control Character"
 msgstr "ୟୁନିକୋଡ ନିୟନ୍ତ୍ରଣ ଅକ୍ଷର ଭର୍ତ୍ତି କରନ୍ତୁ (_I)"
 
@@ -2133,12 +1240,12 @@ msgid "System (%s)"
 msgstr "ତନ୍ତ୍ର (%s)"
 
 #. Open Link
-#: gtk/gtklabel.c:6076
+#: gtk/gtklabel.c:6072
 msgid "_Open Link"
 msgstr "ସଂଯୋଗ ଖୋଲନ୍ତୁ (_O)"
 
 #. Copy Link Address
-#: gtk/gtklabel.c:6088
+#: gtk/gtklabel.c:6084
 msgid "Copy _Link Address"
 msgstr "ସଂଯୋଗ ଠିକଣାକୁ ନକଲ କରନ୍ତୁ (_L)"
 
@@ -2151,27 +1258,27 @@ msgid "Invalid URI"
 msgstr "ଅବୈଧ URI"
 
 #. Description of --gtk-module=MODULES in --help output
-#: gtk/gtkmain.c:447
+#: gtk/gtkmain.c:432
 msgid "Load additional GTK+ modules"
 msgstr "ଅତିରିକ୍ତ GTK+ ଏକକାଂଶଗୁଡ଼ିକୁ ଧାରଣ କରନ୍ତୁ"
 
 #. Placeholder in --gtk-module=MODULES in --help output
-#: gtk/gtkmain.c:448
+#: gtk/gtkmain.c:433
 msgid "MODULES"
 msgstr "ଏକକାଂଶଗୁଡ଼ିକ"
 
 #. Description of --g-fatal-warnings in --help output
-#: gtk/gtkmain.c:450
+#: gtk/gtkmain.c:435
 msgid "Make all warnings fatal"
 msgstr "ସମସ୍ତ ଚେତାବନୀକୁ ମାରାତ୍ମକ କରନ୍ତୁ"
 
 #. Description of --gtk-debug=FLAGS in --help output
-#: gtk/gtkmain.c:453
+#: gtk/gtkmain.c:438
 msgid "GTK+ debugging flags to set"
 msgstr "ବିନ୍ଯାସ ପାଇଁ GTK+ ତୃଟିମୁକ୍ତକରଣ ସୂଚକ"
 
 #. Description of --gtk-no-debug=FLAGS in --help output
-#: gtk/gtkmain.c:456
+#: gtk/gtkmain.c:441
 msgid "GTK+ debugging flags to unset"
 msgstr "ଅବିନ୍ଯାସ ପାଇଁ ଜି.ଟି.କେ.+ ତୃଟିମୁକ୍ତିକରଣ ସୂଚକ"
 
@@ -2180,20 +1287,20 @@ msgstr "ଅବିନ୍ଯାସ ପାଇଁ ଜି.ଟି.କେ.+ ତୃଟ�
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
 #.
-#: gtk/gtkmain.c:708
+#: gtk/gtkmain.c:704
 msgid "default:LTR"
 msgstr "default:LTR"
 
-#: gtk/gtkmain.c:773
+#: gtk/gtkmain.c:769
 #, c-format
 msgid "Cannot open display: %s"
 msgstr "ପ୍ରଦର୍ଶନକୁ ଖୋଲିପାରିବେ ନାହିଁ: %s"
 
-#: gtk/gtkmain.c:810
+#: gtk/gtkmain.c:806
 msgid "GTK+ Options"
 msgstr "ଜି.ଟି.କେ.+ ପସନ୍ଦ"
 
-#: gtk/gtkmain.c:810
+#: gtk/gtkmain.c:806
 msgid "Show GTK+ Options"
 msgstr "ଜି.ଟି.କେ.+ ପସନ୍ଦ ଦେଖାନ୍ତୁ"
 
@@ -2278,7 +1385,7 @@ msgstr "Z ସେଲ"
 msgid "Cannot end process with pid %d: %s"
 msgstr "pid %d ସହିତ ପଦ୍ଧତିକୁ ସମାପ୍ତ କରିପାରିବେ ନାହିଁ: %s"
 
-#: gtk/gtknotebook.c:4621 gtk/gtknotebook.c:7050
+#: gtk/gtknotebook.c:4631 gtk/gtknotebook.c:7060
 #, c-format
 msgid "Page %u"
 msgstr "ପୃଷ୍ଠା %u"
@@ -2368,87 +1475,81 @@ msgstr "ଫୋଲ୍ଡରରେ ସଂରକ୍ଷିତ କରନ୍ତୁ (_S
 msgid "%s job #%d"
 msgstr "%s କାର୍ଯ୍ୟ #%d"
 
-#: gtk/gtkprintoperation.c:1687
+#: gtk/gtkprintoperation.c:1695
 msgctxt "print operation status"
 msgid "Initial state"
 msgstr "ପ୍ରାଥମିକ ଅବସ୍ଥା"
 
-#: gtk/gtkprintoperation.c:1688
+#: gtk/gtkprintoperation.c:1696
 msgctxt "print operation status"
 msgid "Preparing to print"
 msgstr "ମୁଦ୍ରଣ କରିବାକୁ ପ୍ରସ୍ତୁତ କରୁଅଛି"
 
-#: gtk/gtkprintoperation.c:1689
+#: gtk/gtkprintoperation.c:1697
 msgctxt "print operation status"
 msgid "Generating data"
 msgstr "ତଥ୍ୟ ନିର୍ମାଣ କରୁଅଛି"
 
-#: gtk/gtkprintoperation.c:1690
+#: gtk/gtkprintoperation.c:1698
 msgctxt "print operation status"
 msgid "Sending data"
 msgstr "ତଥ୍ୟ ପଠାଉଅଛି"
 
-#: gtk/gtkprintoperation.c:1691
+#: gtk/gtkprintoperation.c:1699
 msgctxt "print operation status"
 msgid "Waiting"
 msgstr "ଚେତାବନୀ"
 
-#: gtk/gtkprintoperation.c:1692
+#: gtk/gtkprintoperation.c:1700
 msgctxt "print operation status"
 msgid "Blocking on issue"
 msgstr "ସମସ୍ୟା ହେତୁ ଅଟକାଉଛି"
 
-#: gtk/gtkprintoperation.c:1693
+#: gtk/gtkprintoperation.c:1701
 msgctxt "print operation status"
 msgid "Printing"
 msgstr "ମୁଦ୍ରଣ କରୁଅଛି"
 
-#: gtk/gtkprintoperation.c:1694
+#: gtk/gtkprintoperation.c:1702
 msgctxt "print operation status"
 msgid "Finished"
 msgstr "ସମ୍ପନ୍ନ କରୁଅଛି"
 
-#: gtk/gtkprintoperation.c:1695
+#: gtk/gtkprintoperation.c:1703
 msgctxt "print operation status"
 msgid "Finished with error"
 msgstr "ତୃଟି ସହିତ ସମାପ୍ତ"
 
-#: gtk/gtkprintoperation.c:2254
+#: gtk/gtkprintoperation.c:2270
 #, c-format
 msgid "Preparing %d"
 msgstr "%dକୁ ପ୍ରସ୍ତୁତ କରୁଅଛି"
 
-#: gtk/gtkprintoperation.c:2256 gtk/gtkprintoperation.c:2875
+#: gtk/gtkprintoperation.c:2272 gtk/gtkprintoperation.c:2902
 #, c-format
 msgid "Preparing"
 msgstr "ପ୍ରସ୍ତୁତ କରୁଅଛି"
 
-#: gtk/gtkprintoperation.c:2259
+#: gtk/gtkprintoperation.c:2275
 #, c-format
 msgid "Printing %d"
 msgstr "%dକୁ ମୁଦ୍ରଣ କରୁଅଛି"
 
-#: gtk/gtkprintoperation.c:2905
+#: gtk/gtkprintoperation.c:2932
 #, c-format
 msgid "Error creating print preview"
 msgstr "ମୁଦ୍ରଣ ପ୍ରାକଦର୍ଶନକୁ ନିର୍ମାଣ କରିବା ସମୟରେ ତୃଟି"
 
-#: gtk/gtkprintoperation.c:2908
+#: gtk/gtkprintoperation.c:2935
 #, c-format
 msgid "The most probable reason is that a temporary file could not be created."
 msgstr "ଗୋଟିଏ ଅତି ସମ୍ଭାବ୍ୟ କାରଣ ହେଲା ଅସ୍ଥାୟୀ ଫାଇଲ ନିର୍ମାଣ କରିହେବ ନାହିଁ."
 
-#: gtk/gtkprintoperation-unix.c:297 gtk/gtkprintoperation-unix.c:314
-#, c-format
+#: gtk/gtkprintoperation-unix.c:297
 msgid "Error launching preview"
 msgstr "ପ୍ରାକଦର୍ଶନକୁ ଚଲାଇବା ସମୟରେ ତୃଟି"
 
-#: gtk/gtkprintoperation-unix.c:358
-#, c-format
-msgid "Error printing"
-msgstr "ମୂଦ୍ରଣ କରିବା ସମୟରେ ତୃଟି"
-
-#: gtk/gtkprintoperation-unix.c:494 gtk/gtkprintoperation-win32.c:1447
+#: gtk/gtkprintoperation-unix.c:470 gtk/gtkprintoperation-win32.c:1447
 msgid "Application"
 msgstr "ପ୍ରୟୋଗ"
 
@@ -2462,7 +1563,7 @@ msgstr "କାଗଜ ବାହାରେ"
 
 #. Translators: this is a printer status.
 #: gtk/gtkprintoperation-win32.c:616
-#: modules/printbackends/cups/gtkprintbackendcups.c:1999
+#: modules/printbackends/cups/gtkprintbackendcups.c:1998
 msgid "Paused"
 msgstr "ସାମୟିକ ବିରାମ ନେଉଛି"
 
@@ -2589,42 +1690,42 @@ msgstr "ସାମାନ୍ଯ"
 #. * multiple pages on a sheet when printing
 #.
 #: gtk/gtkprintunixdialog.c:3010
-#: modules/printbackends/cups/gtkprintbackendcups.c:3509
+#: modules/printbackends/cups/gtkprintbackendcups.c:3508
 msgid "Left to right, top to bottom"
 msgstr "ବାମରୁ ଡାହାଣ, ଉପରୁ ତଳ"
 
 #: gtk/gtkprintunixdialog.c:3010
-#: modules/printbackends/cups/gtkprintbackendcups.c:3509
+#: modules/printbackends/cups/gtkprintbackendcups.c:3508
 msgid "Left to right, bottom to top"
 msgstr "ବାମରୁ ଡାହାଣ, ତଳୁ ଉପର"
 
 #: gtk/gtkprintunixdialog.c:3011
-#: modules/printbackends/cups/gtkprintbackendcups.c:3510
+#: modules/printbackends/cups/gtkprintbackendcups.c:3509
 msgid "Right to left, top to bottom"
 msgstr "ଡାହାଣରୁ ବାମ, ଉପରୁ ତଳ"
 
 #: gtk/gtkprintunixdialog.c:3011
-#: modules/printbackends/cups/gtkprintbackendcups.c:3510
+#: modules/printbackends/cups/gtkprintbackendcups.c:3509
 msgid "Right to left, bottom to top"
 msgstr "ଡାହାଣରୁ ବାମ, ତଳୁ ଉପର"
 
 #: gtk/gtkprintunixdialog.c:3012
-#: modules/printbackends/cups/gtkprintbackendcups.c:3511
+#: modules/printbackends/cups/gtkprintbackendcups.c:3510
 msgid "Top to bottom, left to right"
 msgstr "ଉପରୁ ତଳ, ବାମରୁ ଡାହାଣ"
 
 #: gtk/gtkprintunixdialog.c:3012
-#: modules/printbackends/cups/gtkprintbackendcups.c:3511
+#: modules/printbackends/cups/gtkprintbackendcups.c:3510
 msgid "Top to bottom, right to left"
 msgstr "ଉପରୁ ତଳ, ଡାହାଣରୁ ବାମ"
 
 #: gtk/gtkprintunixdialog.c:3013
-#: modules/printbackends/cups/gtkprintbackendcups.c:3512
+#: modules/printbackends/cups/gtkprintbackendcups.c:3511
 msgid "Bottom to top, left to right"
 msgstr "ତଳୁ ଉପର, ବାମରୁ ଡାହାଣ"
 
 #: gtk/gtkprintunixdialog.c:3013
-#: modules/printbackends/cups/gtkprintbackendcups.c:3512
+#: modules/printbackends/cups/gtkprintbackendcups.c:3511
 msgid "Bottom to top, right to left"
 msgstr "ତଳୁ ଉପର, ଡାହାଣରୁ ବାମ"
 
@@ -2632,7 +1733,7 @@ msgstr "ତଳୁ ଉପର, ଡାହାଣରୁ ବାମ"
 #. * dialog that controls in what order multiple pages are arranged
 #.
 #: gtk/gtkprintunixdialog.c:3017 gtk/gtkprintunixdialog.c:3030
-#: modules/printbackends/cups/gtkprintbackendcups.c:3544
+#: modules/printbackends/cups/gtkprintbackendcups.c:3543
 msgid "Page Ordering"
 msgstr "ପୃଷ୍ଠାକୁ କ୍ରମରେ ସଜାଡିବା"
 
@@ -4790,121 +3891,116 @@ msgstr "ମୂଦ୍ରଣୀ '%s' ବର୍ତ୍ତମାନ ଅଫ-ଲାଇ�
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:1687
 #, c-format
-msgid "Printer '%s' may not be connected."
-msgstr "ମୂଦ୍ରଣୀ '%s' ସଂଯୁକ୍ତ ଥାଇନପାରେ."
-
-#: modules/printbackends/cups/gtkprintbackendcups.c:1688
-#, c-format
 msgid "There is a problem on printer '%s'."
 msgstr "ମୂଦ୍ରଣୀ '%s'ରେ ଗୋଟିଏ ସମସ୍ୟା ଅଛି."
 
 #. Translators: this is a printer status.
-#: modules/printbackends/cups/gtkprintbackendcups.c:1996
+#: modules/printbackends/cups/gtkprintbackendcups.c:1995
 msgid "Paused ; Rejecting Jobs"
 msgstr "ବିରତି ; କାର୍ଯ୍ୟକୁ ଅସ୍ୱୀକାର କରୁଅଛି"
 
 #. Translators: this is a printer status.
-#: modules/printbackends/cups/gtkprintbackendcups.c:2002
+#: modules/printbackends/cups/gtkprintbackendcups.c:2001
 msgid "Rejecting Jobs"
 msgstr "କାର୍ଯ୍ୟକୁ ଅସ୍ୱୀକାର କରୁଅଛି"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2778
+#: modules/printbackends/cups/gtkprintbackendcups.c:2777
 msgid "Two Sided"
 msgstr "ଉଭୟ ପାର୍ଶ୍ବ"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2779
+#: modules/printbackends/cups/gtkprintbackendcups.c:2778
 msgid "Paper Type"
 msgstr "କାଗଜର ପ୍ରକାର"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2780
+#: modules/printbackends/cups/gtkprintbackendcups.c:2779
 msgid "Paper Source"
 msgstr "କାଗଜ ଉତ୍ସ"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2781
+#: modules/printbackends/cups/gtkprintbackendcups.c:2780
 msgid "Output Tray"
 msgstr "ନିର୍ଗମ ଟ୍ରେ"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2782
+#: modules/printbackends/cups/gtkprintbackendcups.c:2781
 msgid "Resolution"
 msgstr "ବିଭେଦ"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2783
+#: modules/printbackends/cups/gtkprintbackendcups.c:2782
 msgid "GhostScript pre-filtering"
 msgstr "GhostScript ପ୍ରାକ-ଛଣା"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2792
+#: modules/printbackends/cups/gtkprintbackendcups.c:2791
 msgid "One Sided"
 msgstr "ଗୋଟିଏ ପାଖ"
 
 #. Translators: this is an option of "Two Sided"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2794
+#: modules/printbackends/cups/gtkprintbackendcups.c:2793
 msgid "Long Edge (Standard)"
 msgstr "ବୃହତ ଧାର (ମାନକ)"
 
 #. Translators: this is an option of "Two Sided"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2796
+#: modules/printbackends/cups/gtkprintbackendcups.c:2795
 msgid "Short Edge (Flip)"
 msgstr "ସଂକ୍ଷିପ୍ତ ଧାର (ଫ୍ଲିପ)"
 
 #. Translators: this is an option of "Paper Source"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2798
-#: modules/printbackends/cups/gtkprintbackendcups.c:2800
-#: modules/printbackends/cups/gtkprintbackendcups.c:2808
+#: modules/printbackends/cups/gtkprintbackendcups.c:2797
+#: modules/printbackends/cups/gtkprintbackendcups.c:2799
+#: modules/printbackends/cups/gtkprintbackendcups.c:2807
 msgid "Auto Select"
 msgstr "ସ୍ବତଃ ଚୟନ"
 
 #. Translators: this is an option of "Paper Source"
 #. Translators: this is an option of "Resolution"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2802
-#: modules/printbackends/cups/gtkprintbackendcups.c:2804
-#: modules/printbackends/cups/gtkprintbackendcups.c:2806
-#: modules/printbackends/cups/gtkprintbackendcups.c:2810
-#: modules/printbackends/cups/gtkprintbackendcups.c:3296
+#: modules/printbackends/cups/gtkprintbackendcups.c:2801
+#: modules/printbackends/cups/gtkprintbackendcups.c:2803
+#: modules/printbackends/cups/gtkprintbackendcups.c:2805
+#: modules/printbackends/cups/gtkprintbackendcups.c:2809
+#: modules/printbackends/cups/gtkprintbackendcups.c:3295
 msgid "Printer Default"
 msgstr "ପୂର୍ବନିର୍ଦ୍ଧାରିତ ମୂଦ୍ରଣୀ"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2812
+#: modules/printbackends/cups/gtkprintbackendcups.c:2811
 msgid "Embed GhostScript fonts only"
 msgstr "କୋବଳ GhostScript ଅକ୍ଷରରୂପଗୁଡ଼ିକୁ ଯୋଗକରନ୍ତୁ"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2814
+#: modules/printbackends/cups/gtkprintbackendcups.c:2813
 msgid "Convert to PS level 1"
 msgstr "PS ସ୍ତର 1କୁ ରୂପାନ୍ତରିତ କରନ୍ତୁ"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2816
+#: modules/printbackends/cups/gtkprintbackendcups.c:2815
 msgid "Convert to PS level 2"
 msgstr "PS ସ୍ତର 2କୁ ରୂପାନ୍ତରିତ କରନ୍ତୁ"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2818
+#: modules/printbackends/cups/gtkprintbackendcups.c:2817
 msgid "No pre-filtering"
 msgstr "କୌଣସି ପ୍ରାକ-ମୁଦ୍ରଣୀ ନାହିଁ"
 
 #. Translators: "Miscellaneous" is the label for a button, that opens
 #. up an extra panel of settings in a print dialog.
-#: modules/printbackends/cups/gtkprintbackendcups.c:2827
+#: modules/printbackends/cups/gtkprintbackendcups.c:2826
 msgid "Miscellaneous"
 msgstr "ବିବିଧ"
 
 #. Translators: These strings name the possible values of the
 #. * job priority option in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3504
+#: modules/printbackends/cups/gtkprintbackendcups.c:3503
 msgid "Urgent"
 msgstr "ଜରୁରୀ"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3504
+#: modules/printbackends/cups/gtkprintbackendcups.c:3503
 msgid "High"
 msgstr "ଉଚ୍ଚ"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3504
+#: modules/printbackends/cups/gtkprintbackendcups.c:3503
 msgid "Medium"
 msgstr "ମଧ୍ଯମ"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3504
+#: modules/printbackends/cups/gtkprintbackendcups.c:3503
 msgid "Low"
 msgstr "ନିମ୍ନ"
 
@@ -4912,66 +4008,66 @@ msgstr "ନିମ୍ନ"
 #. Translators, this string is used to label the pages-per-sheet option
 #. * in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3528
+#: modules/printbackends/cups/gtkprintbackendcups.c:3527
 msgid "Pages per Sheet"
 msgstr "ପ୍ରତି ସୀଟରେ ଥିବା ପୃଷ୍ଠାସଂଖ୍ୟା"
 
 #. Translators, this string is used to label the job priority option
 #. * in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3565
+#: modules/printbackends/cups/gtkprintbackendcups.c:3564
 msgid "Job Priority"
 msgstr "କାର୍ଯ୍ୟ ଅଗ୍ରାଧିକାର"
 
 #. Translators, this string is used to label the billing info entry
 #. * in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3576
+#: modules/printbackends/cups/gtkprintbackendcups.c:3575
 msgid "Billing Info"
 msgstr "ବିଲି ସମ୍ବନ୍ଧୀୟ ସୂଚନା"
 
 #. Translators, these strings are names for various 'standard' cover
 #. * pages that the printing system may support.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3591
+#: modules/printbackends/cups/gtkprintbackendcups.c:3590
 msgid "None"
 msgstr "(କିଛି ନୁହେଁ)"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3591
+#: modules/printbackends/cups/gtkprintbackendcups.c:3590
 msgid "Classified"
 msgstr "ବର୍ଗୀକୃତ"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3591
+#: modules/printbackends/cups/gtkprintbackendcups.c:3590
 msgid "Confidential"
 msgstr "ଗୋପନୀୟ"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3591
+#: modules/printbackends/cups/gtkprintbackendcups.c:3590
 msgid "Secret"
 msgstr "ଗୁପ୍ତ"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3591
+#: modules/printbackends/cups/gtkprintbackendcups.c:3590
 msgid "Standard"
 msgstr "ମାନକ"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3591
+#: modules/printbackends/cups/gtkprintbackendcups.c:3590
 msgid "Top Secret"
 msgstr "ଅତ୍ଯନ୍ତ ଗୋପନୀୟ"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3591
+#: modules/printbackends/cups/gtkprintbackendcups.c:3590
 msgid "Unclassified"
 msgstr "ଅବର୍ଗୀକୃତ"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the front cover page.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3626
+#: modules/printbackends/cups/gtkprintbackendcups.c:3625
 msgid "Before"
 msgstr "ଏହା ପୂର୍ବରୁ"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the back cover page.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3641
+#: modules/printbackends/cups/gtkprintbackendcups.c:3640
 msgid "After"
 msgstr "ଏହା ପରେ"
 
@@ -4979,14 +4075,14 @@ msgstr "ଏହା ପରେ"
 #. * a print job is printed. Possible values are 'now', a specified time,
 #. * or 'on hold'
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3661
+#: modules/printbackends/cups/gtkprintbackendcups.c:3660
 msgid "Print at"
 msgstr "ଠାରେ ମୁଦ୍ରଣ କରନ୍ତୁ"
 
 #. Translators: this is the name of the option that allows the user
 #. * to specify a time when a print job will be printed.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3672
+#: modules/printbackends/cups/gtkprintbackendcups.c:3671
 msgid "Print at time"
 msgstr "ସମୟରେ ମୁଦ୍ରଣ କରନ୍ତୁ"
 
@@ -4994,7 +4090,7 @@ msgstr "ସମୟରେ ମୁଦ୍ରଣ କରନ୍ତୁ"
 #. * size. The two placeholders are replaced with the width and height
 #. * in points. E.g: "Custom 230.4x142.9"
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3707
+#: modules/printbackends/cups/gtkprintbackendcups.c:3706
 #, c-format
 msgid "Custom %sx%s"
 msgstr "%sx%s କୁ ଇଚ୍ଛାରୂପଣ କରନ୍ତୁ"
@@ -5085,6 +4181,644 @@ msgstr "ପରୀକ୍ଷା ମୁଦ୍ରଣୀରେ ମୁଦ୍ରଣ କ
 #, c-format
 msgid "Could not get information for file '%s': %s"
 msgstr "'%s' ଫାଇଲ ପାଇଁ ସୂଚନା ଆଣିହେଲା ନାହିଁ: %s"
+
+#: tests/testfilechooser.c:222
+#, c-format
+msgid "Failed to open file '%s': %s"
+msgstr "'%s' ଫାଇଲକୁ ଖୋଲିବାରେ ଅସଫଳ: %s"
+
+#: tests/testfilechooser.c:267
+#, c-format
+msgid ""
+"Failed to load image '%s': reason not known, probably a corrupt image file"
+msgstr ""
+"'%s' ଚିତ୍ର ଫାଇଲ ଧାରଣ କରିବାରେ ଅସଫଳ: କାରଣ ଜଣା ନାହିଁ, ସମ୍ଭବତଃ ଏହା ଗୋଟିଏ ତୃଟିଯୁକ୍ତ ଚିତ୍ର ଫାଇଲ "
+"ଅଟେ"
+
+#~ msgid "Image file '%s' contains no data"
+#~ msgstr "'%s' ଚିତ୍ର ଫାଇଲରେ କୌଣସି ତଥ୍ଯ ନାହିଁ"
+
+#~ msgid ""
+#~ "Failed to load animation '%s': reason not known, probably a corrupt "
+#~ "animation file"
+#~ msgstr ""
+#~ "'%s' ଜୀବନାୟନ ଫାଇଲ ଧାରଣ କରିବାରେ ଅସଫଳ: କାରଣ ଜଣା ନାହିଁ, ସମ୍ଭବତଃ ଏହା ଗୋଟିଏ ତୃଟିଯୁକ୍ତ "
+#~ "ଜୀବନାୟନ ଫାଇଲ ଅଟେ"
+
+#~ msgid "Unable to load image-loading module: %s: %s"
+#~ msgstr "ଚିତ୍ର-ଧାରଣ ଏକକାଂଶ ଧାରଣ କରିବାରେ ଅସଫଳ: %s: %s"
+
+#~ msgid ""
+#~ "Image-loading module %s does not export the proper interface; perhaps "
+#~ "it's from a different GTK version?"
+#~ msgstr ""
+#~ "%s ଚିତ୍ର-ଧାରଣ ଏକକାଂଶ ଠିକ ଅନ୍ତରାପୃଷ୍ଠ ରପ୍ତାନି କରେ ନାହିଁ; ବୋଧହୁଏ ଏହା ଗୋଟିଏ ଅଲଗା ଜି.ଟି.କେ. "
+#~ "ସଂସ୍କରଣରୁ ପ୍ରାପ୍ତ?"
+
+#~ msgid "Image type '%s' is not supported"
+#~ msgstr "'%s' ଚିତ୍ର ପ୍ରକାର ଅସହାୟକ"
+
+#~ msgid "Couldn't recognize the image file format for file '%s'"
+#~ msgstr "'%s' ଚିତ୍ର ଫାଇଲ ଶୈଳୀ ଚିହ୍ନିପାରିଲା ନାହିଁ"
+
+#~ msgid "Unrecognized image file format"
+#~ msgstr "ଅଚିହ୍ନିତ ଚିତ୍ର ଫାଇଲ ଶୈଳୀ"
+
+#~ msgid "Failed to load image '%s': %s"
+#~ msgstr "'%s' ଚିତ୍ର ଧାରଣ କରିବାରେ ଅସଫଳ: %s"
+
+#~ msgid "Error writing to image file: %s"
+#~ msgstr "ଚିତ୍ର ଫାଇଲକୁ ଲେଖିବାରେ ତୃଟି: %s"
+
+#~ msgid ""
+#~ "This build of gdk-pixbuf does not support saving the image format: %s"
+#~ msgstr "ଜି.ଡି.କେ.-ପିକ୍ସବଫର ଏହି ସଂସ୍କରଣ ଚିତ୍ର ଶୈଳୀ ସଂରକ୍ଷଣକୁ ସମର୍ଥନ କରୁନାହିଁ:%s"
+
+#~ msgid "Insufficient memory to save image to callback"
+#~ msgstr "ଚିତ୍ରକୁ କଲବ୍ଯାକରେ ସଂରକ୍ଷିତ କରିବା ପାଇଁ ଯଥେଷ୍ଟ ସ୍ମୃତି ନାହିଁ"
+
+#~ msgid "Failed to open temporary file"
+#~ msgstr "ଅସ୍ଥାୟୀ ଫାଇଲ ଖୋଲିବାରେ ଅସଫଳ"
+
+#~ msgid "Failed to read from temporary file"
+#~ msgstr "ଅସ୍ଥାୟୀ ଫାଇଲରୁ ପଢ଼ିବାରେ ଅସଫଳ"
+
+#~ msgid "Failed to open '%s' for writing: %s"
+#~ msgstr "'%s'କୁ ଲେଖିବା ପ୍ରତି ଖୋଲିବାରେ ଅସଫଳ: %s"
+
+#~ msgid ""
+#~ "Failed to close '%s' while writing image, all data may not have been "
+#~ "saved: %s"
+#~ msgstr ""
+#~ "ଚିତ୍ର ଲେଖିବା ସମୟରେ '%s'କୁ ବନ୍ଦ କରିବାରେ ଅସଫଳ, ସମ୍ପୂର୍ଣ ତଥ୍ଯ ସଂରକ୍ଷିତ ନ ହୋଇଥାଇପାରେ: %s"
+
+#~ msgid "Insufficient memory to save image into a buffer"
+#~ msgstr "ଚିତ୍ରକୁ ବଫରରେ ସଂରକ୍ଷିତ କରିବା ପାଇଁ ଯଥେଷ୍ଟ ସ୍ମୃତି ନାହିଁ"
+
+#~ msgid "Error writing to image stream"
+#~ msgstr "ଚିତ୍ର ଧାରାକୁ ଲେଖିବାରେ ତୃଟି"
+
+#~ msgid ""
+#~ "Internal error: Image loader module '%s' failed to complete an operation, "
+#~ "but didn't give a reason for the failure"
+#~ msgstr ""
+#~ "ଆଭ୍ଯନ୍ତରୀଣ ତୃଟି: '%s' ଚିତ୍ର ଧାରକ ଏକକାଂଶ ଏହି ପ୍ରକ୍ରିୟାକୁ ସମ୍ପନ୍ନ କରିବାରେ ଅସଫଳ ହେଲା, କିନ୍ତୁ "
+#~ "ଅସଫଳତା ପାଇଁ କୌଣସି କାରଣ ପ୍ରଦାନ କଲା ନାହିଁ"
+
+#~ msgid "Incremental loading of image type '%s' is not supported"
+#~ msgstr "'%s' ଚିତ୍ର ପ୍ରକାରର କ୍ରମବର୍ଦ୍ଧୀ ଧାରଣ ଅସହାୟକ"
+
+#~ msgid "Image header corrupt"
+#~ msgstr "ଚିତ୍ର ଶୀର୍ଷକ ତୃଟିଯୁକ୍ତ"
+
+#~ msgid "Image format unknown"
+#~ msgstr "ଚିତ୍ର ଶୈଳୀ ଅଜଣା"
+
+#~ msgid "Image pixel data corrupt"
+#~ msgstr "ଚିତ୍ର ପିକ୍ସେଲ ତଥ୍ଯ ତୃଟିଯୁକ୍ତ"
+
+#~ msgid "Unexpected icon chunk in animation"
+#~ msgstr "ଜୀବନୟାନରେ ଅପ୍ରତ୍ଯାଶିତ ଚିତ୍ରସଙ୍କେତ ଖଣ୍ଡ"
+
+#~ msgid "Unsupported animation type"
+#~ msgstr "ଅସହାୟକ ଜୀବନୟାନ ପ୍ରକାର"
+
+#~ msgid "Invalid header in animation"
+#~ msgstr "ଜୀବନୟାନରେ ଅବୈଧ ଶୀର୍ଷକ"
+
+#~ msgid "Not enough memory to load animation"
+#~ msgstr "ଜୀବନୟାନ ଧାରଣ କରିବା ପାଇଂ ଯଥେଷ୍ଟ ସ୍ମୃତି ନାହିଁ"
+
+#~ msgid "Malformed chunk in animation"
+#~ msgstr "ଜୀବନୟାନରେ ବିକୃତ ଖଣ୍ଡ"
+
+#~ msgid "The ANI image format"
+#~ msgstr "ANI ଚିତ୍ର ଶୈଳୀ"
+
+#~ msgid "BMP image has bogus header data"
+#~ msgstr "BMP ଚିତ୍ରର ଶୀର୍ଷକରେ ନକଲି ତଥ୍ଯ ଅଛି"
+
+#~ msgid "Not enough memory to load bitmap image"
+#~ msgstr "ବିଟମ୍ଯାପ ଚିତ୍ର ଧାରଣ କରିବା ପାଇଂ ଯଥେଷ୍ଟ ସ୍ମୃତି ନାହିଁ"
+
+#~ msgid "BMP image has unsupported header size"
+#~ msgstr "BMP ଚିତ୍ରର ଶୀର୍ଷକ ଆକାର ଅସହାୟକ"
+
+#~ msgid "Topdown BMP images cannot be compressed"
+#~ msgstr "ଉପରୁ ତଳ BMP ଚିତ୍ରକୁ ସଂକୁଚିତ କରାଯାଇପାରିବ ନାହିଁ"
+
+#~ msgid "Premature end-of-file encountered"
+#~ msgstr "ଫାଇଲର ଅପ୍ରତ୍ଯାଶିତ ଶେଷ"
+
+#~ msgid "Couldn't allocate memory for saving BMP file"
+#~ msgstr "BMP ଫାଇଲ ସଂରକ୍ଷଣ ପାଇଁ ସ୍ମୃତି ଯୋଗାଇ ହେଲା ନାହିଁ"
+
+#~ msgid "Couldn't write to BMP file"
+#~ msgstr "BMP ଫାଇଲକୁ ଲେଖିହେଲା ନାହିଁ"
+
+#~ msgid "The BMP image format"
+#~ msgstr "BMP ଚିତ୍ର ଶୈଳୀ"
+
+#~ msgid "Failure reading GIF: %s"
+#~ msgstr "GIF ପଢ଼ିବାରେ ତୃଟି: %s"
+
+#~ msgid "GIF file was missing some data (perhaps it was truncated somehow?)"
+#~ msgstr "GIF ଫାଇଲରେ କିଛି ତଥ୍ଯ ନ ଥିଲା (ବୋଧହୁଏ ଏହା କିପରି ଶେଷରୁ କଟିଯାଇଛି?)"
+
+#~ msgid "Internal error in the GIF loader (%s)"
+#~ msgstr "GIF ଧାରକରେ ଆଭ୍ଯନ୍ତରୀଣ ତୃଟି (%s)"
+
+#~ msgid "Stack overflow"
+#~ msgstr "ଥାକ ସୀମା ଟପିଗଲା"
+
+#~ msgid "GIF image loader cannot understand this image."
+#~ msgstr "GIF ଚିତ୍ର ଧାରକ ଏହି ଚିତ୍ରକୁ ବୁଝିପାରିଲା ନାହିଁ."
+
+#~ msgid "Bad code encountered"
+#~ msgstr "ଖରାପ ସଙ୍କେତ ମିଳିଲା"
+
+#~ msgid "Circular table entry in GIF file"
+#~ msgstr "GIF ଫାଇଲରେ ବୃତ୍ତାକାର ସାରଣୀ ଭରଣ"
+
+#~ msgid "Not enough memory to load GIF file"
+#~ msgstr "GIF ଫାଇଲ ଧାରଣ କରିବା ପାଇଁ ଯଥେଷ୍ଟ ସ୍ମୃତି ନାହିଁ"
+
+#~ msgid "Not enough memory to composite a frame in GIF file"
+#~ msgstr "GIF ଫାଇଲରେ ବନ୍ଧେଇ ମିଶ୍ରିତ କରିବା ପାଇଁ ଯଥେଷ୍ଟ ସ୍ମୃତି ନାହିଁ"
+
+#~ msgid "GIF image is corrupt (incorrect LZW compression)"
+#~ msgstr "GIF ଚିତ୍ର ତୃଟିଯୁକ୍ତ (ଭୂଲ ଏଲ.ଜେଡ.ଡବ୍ଲୁ. ସଙ୍କୋଚନ)"
+
+#~ msgid "File does not appear to be a GIF file"
+#~ msgstr "ଫାଇଲଟି GIF ଫାଇଲ ଭଳି ଜଣା ପଡ଼ୁ ନାହିଁ"
+
+#~ msgid "Version %s of the GIF file format is not supported"
+#~ msgstr "GIF ଫାଇଲ ଶୈଳୀର %s ସଂସ୍କରଣ ଅସହାୟକ"
+
+#~ msgid ""
+#~ "GIF image has no global colormap, and a frame inside it has no local "
+#~ "colormap."
+#~ msgstr ""
+#~ "GIF ଚିତ୍ରର ସାମଗ୍ରିକ ରଙ୍ଗନକ୍ସା ନାହିଁ, ଓ ତାହା ଭିତରେ ସ୍ଥିତ ଫ୍ରେମର ସ୍ଥାନୀୟ ରଙ୍ଗନକ୍ସା ନାହିଁ."
+
+#~ msgid "GIF image was truncated or incomplete."
+#~ msgstr "GIF ଚିତ୍ର ଶେଷରୁ କଟିଯାଇଛି ବା ଅସମ୍ପୂର୍ଣ୍ଣ ଅଛି."
+
+#~ msgid "The GIF image format"
+#~ msgstr "GIF ଚିତ୍ର ଶୈଳୀ"
+
+#~ msgid "Invalid header in icon"
+#~ msgstr "ଚିତ୍ରସଙ୍କେତରେ ଅବୈଧ ଶୀର୍ଷକ"
+
+#~ msgid "Not enough memory to load icon"
+#~ msgstr "ଚିତ୍ରସଙ୍କେତ ଧାରଣ କରିବା ପାଇଁ ଯଥେଷ୍ଟ ସ୍ମୃତି ନାହିଁ"
+
+#~ msgid "Icon has zero width"
+#~ msgstr "ଚିତ୍ରସଙ୍କେତର ଓସାର ଶୂନ୍ଯ"
+
+#~ msgid "Icon has zero height"
+#~ msgstr "ଚିତ୍ରସଙ୍କେତର ଉଚ୍ଚତା ଶୂନ୍ଯ"
+
+#~ msgid "Compressed icons are not supported"
+#~ msgstr "ସଂକୁଚିତ ଚିତ୍ରସଙ୍କେତ ଅସହାୟକ"
+
+#~ msgid "Unsupported icon type"
+#~ msgstr "ଅସହାୟକ ଚିତ୍ରସଙ୍କେତ ପ୍ରକାର"
+
+#~ msgid "Not enough memory to load ICO file"
+#~ msgstr "ICO ଫାଇଲ ଧାରଣ କରିବା ପାଇଁ ଯଥେଷ୍ଟ ସ୍ମୃତି ନାହିଁ"
+
+#~ msgid "Image too large to be saved as ICO"
+#~ msgstr "ICO ଭାବରେ ସଂରକ୍ଷିତ କରିବା ପାଇଁ ଚିତ୍ରଟି ଅତି ବଡ଼"
+
+#~ msgid "Cursor hotspot outside image"
+#~ msgstr "ଦର୍ଶିକା କର୍ମଚଞ୍ଚଳ ବିନ୍ଦୁ ଚିତ୍ର ବାହାରେ"
+
+#~ msgid "Unsupported depth for ICO file: %d"
+#~ msgstr "ICO ଫାଇଲ ପାଇଁ ଅସହାୟକ ପ୍ରଗାଢ଼ତା: %d"
+
+#~ msgid "The ICO image format"
+#~ msgstr "ICO ଚିତ୍ର ଶୈଳୀ"
+
+#~ msgid "Error reading ICNS image: %s"
+#~ msgstr "ICNS ପ୍ରତିଛବି ପଢ଼ିବାରେ ତୃଟି: %s"
+
+#~ msgid "Could not decode ICNS file"
+#~ msgstr "ICNS ଫାଇଲକୁ ଅବସଂକେତ କରିପାରିଲାନାହିଁ"
+
+#~ msgid "The ICNS image format"
+#~ msgstr "ICNS ଚିତ୍ର ଶୈଳୀ"
+
+#~ msgid "Couldn't allocate memory for stream"
+#~ msgstr "ଧାରା ପାଇଁ ସ୍ମୃତି ସ୍ଥାନ ଯୋଗାଇ ହେଲା ନାହିଁ"
+
+#~ msgid "Couldn't decode image"
+#~ msgstr "ପ୍ରତିଛବିକୁ ଅବସଂକେତ କରିପାରିଲାନାହିଁ"
+
+#~ msgid "Transformed JPEG2000 has zero width or height"
+#~ msgstr "ପରିବର୍ତ୍ତିତ JPEG2000ର ଓସାର ବା ଉଚ୍ଚତା ଶୂନ୍ଯ ଅଟେ"
+
+#~ msgid "Image type currently not supported"
+#~ msgstr "ପ୍ରତିଛବି ପ୍ରକାର ବର୍ତ୍ତମାନ ସମର୍ଥିତ ନୁହଁ"
+
+#~ msgid "Couldn't allocate memory for color profile"
+#~ msgstr "ରଙ୍ଗ ରୂପରେଖ ପାଇଁ ସ୍ମୃତି ସ୍ଥାନ ଯୋଗାଇ ପାରିଲା ନାହିଁ"
+
+#~ msgid "Insufficient memory to open JPEG 2000 file"
+#~ msgstr "JPEG 2000 ଫାଇଲ ଖୋଲିବା ପାଇଁ ଯଥେଷ୍ଟ ସ୍ମୃତି ନାହିଁ"
+
+#~ msgid "Couldn't allocate memory to buffer image data"
+#~ msgstr "ବଫର ପ୍ରତିଛବି ତଥ୍ଯ ପାଇଁ ସ୍ମୃତି ଯୋଗାଇ ହେଲା ନାହିଁ"
+
+#~ msgid "The JPEG 2000 image format"
+#~ msgstr "JPEG 2000 ଚିତ୍ର ଶୈଳୀ"
+
+#~ msgid "Error interpreting JPEG image file (%s)"
+#~ msgstr "JPEG ଚିତ୍ର ଫାଇଲ ବ୍ଯାଖ୍ଯା କରିବାରେ ତୃଟି (%s)"
+
+#~ msgid ""
+#~ "Insufficient memory to load image, try exiting some applications to free "
+#~ "memory"
+#~ msgstr ""
+#~ "ଚିତ୍ର ଧାରଣ କରିବା ପାଇଁ ଯଥେଷ୍ଟ ସ୍ମୃତି ନାହିଁ, ସ୍ମୃତି ମୁକ୍ତି ପାଇଁ କିଛି ପ୍ରୟୋଗ ବନ୍ଦ କରିବାକୁ ଚେଷ୍ଟା କରନ୍ତୁ"
+
+#~ msgid "Unsupported JPEG color space (%s)"
+#~ msgstr "ଅସହାୟକ JPEG ରଙ୍ଗ କ୍ଷେତ୍ର (%s)"
+
+#~ msgid "Couldn't allocate memory for loading JPEG file"
+#~ msgstr "JPEG ଫାଇଲ ଧାରଣ କରିବା ପାଇଁ ସ୍ମୃତି ଯୋଗାଇ ହେଲା ନାହିଁ"
+
+#~ msgid "Transformed JPEG has zero width or height."
+#~ msgstr "ପରିବର୍ତ୍ତିତ JPEG ର ଓସାର ବା ଉଚ୍ଚତା ଶୂନ୍ଯ."
+
+#~ msgid ""
+#~ "JPEG quality must be a value between 0 and 100; value '%s' could not be "
+#~ "parsed."
+#~ msgstr "JPEG ଗୁଣବତ୍ତାର ମୂଲ୍ଯ ୦ ଓ ୧୦୦ ଭିତରେ ଥିବା ଉଚିତ; '%s' ମୂଲ୍ଯ ବିଶ୍ଲେଷିତ କରିହେଲା ନାହିଁ."
+
+#~ msgid ""
+#~ "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
+#~ msgstr "JPEG ଗୁଣବତ୍ତାର ମୂଲ୍ଯ ୦ ଓ ୧୦୦ ଭିତରେ ଥିବା ଉଚିତ; '%d' ମୂଲ୍ଯର ଅନୁମତି ନାହିଁ."
+
+#~ msgid "The JPEG image format"
+#~ msgstr "JPEG ଚିତ୍ର ଶୈଳୀ"
+
+#~ msgid "Couldn't allocate memory for header"
+#~ msgstr "ଶୀର୍ଷକ ପାଇଁ ସ୍ମୃତି ଯୋଗାଇ ହେଲା ନାହିଁ"
+
+#~ msgid "Couldn't allocate memory for context buffer"
+#~ msgstr "ପ୍ରସଙ୍ଗ ବଫର ପାଇଁ ସ୍ମୃତି ଯୋଗାଇ ହେଲା ନାହିଁ"
+
+#~ msgid "Image has invalid width and/or height"
+#~ msgstr "ଚିତ୍ରର ଓସାର ବା/ଓ ଉଚ୍ଚତା ଅବୈଧ"
+
+#~ msgid "Image has unsupported bpp"
+#~ msgstr "ଚିତ୍ରର bpp ଅସହାୟକ"
+
+#~ msgid "Image has unsupported number of %d-bit planes"
+#~ msgstr "ଚିତ୍ରର %d-ବିଟ ସମତଳ କ୍ଷେତ୍ରର ସଂଖ୍ଯା ଅସହାୟକ"
+
+#~ msgid "Couldn't create new pixbuf"
+#~ msgstr "ନୂତନ ପିକ୍ସବଫ ସୃଷ୍ଟି କରିହେଲା ନାହିଁ"
+
+#~ msgid "Couldn't allocate memory for line data"
+#~ msgstr "ଧାଡ଼ି ତଥ୍ଯ ପାଇଁ ସ୍ମୃତି ଯୋଗାଇ ହେଲା ନାହିଁ"
+
+#~ msgid "Couldn't allocate memory for paletted data"
+#~ msgstr "ଆଳି ତଥ୍ଯ ପାଇଁ ସ୍ମୃତି ଯୋଗାଇ ହେଲା ନାହିଁ"
+
+#~ msgid "Didn't get all lines of PCX image"
+#~ msgstr "PCX ଚିତ୍ରର ସବୁ ଧାଡ଼ି ମିଳିଲା ନାହିଁ"
+
+#~ msgid "No palette found at end of PCX data"
+#~ msgstr "PCX ତଥ୍ଯର ଶେଷରେ କୌଣସି ଆଳି ମିଳିଲା ନାହିଁ"
+
+#~ msgid "The PCX image format"
+#~ msgstr "PCX ଚିତ୍ର ଶୈଳୀ"
+
+#~ msgid "Bits per channel of PNG image is invalid."
+#~ msgstr "PNG ଚିତ୍ରର ବିଟ ପ୍ରତି ଚ୍ଯାନେଲର ମୂଲ୍ଯ ଅବୈଧ"
+
+#~ msgid "Transformed PNG has zero width or height."
+#~ msgstr "ପରିବର୍ତ୍ତିତ PNG ର ଓସାର ବା ଉଚ୍ଚତା ଶୂନ୍ଯ"
+
+#~ msgid "Bits per channel of transformed PNG is not 8."
+#~ msgstr "ପରିବର୍ତ୍ତିତ PNG ର ବିଟ ପ୍ରତି ଚ୍ଯାନେଲର ମୂଲ୍ଯ ୮ ନୁହେଁ"
+
+#~ msgid "Transformed PNG not RGB or RGBA."
+#~ msgstr "ପରିବର୍ତ୍ତିତ PNG, RGB କିମ୍ବା RGBA ନୁହେଁ।"
+
+#~ msgid "Transformed PNG has unsupported number of channels, must be 3 or 4."
+#~ msgstr "ପରିବର୍ତ୍ତିତ PNG ର ଚ୍ଯାନେଲର ସଂଖ୍ଯା ଅସହାୟକ, ୩ ବା ୪ ହେବା ଆବଶ୍ଯକ."
+
+#~ msgid "Fatal error in PNG image file: %s"
+#~ msgstr "PNG ଚିତ୍ର ଫାଇଲରେ ମାରାତ୍ମକ ତୃଟି: %s"
+
+#~ msgid "Insufficient memory to load PNG file"
+#~ msgstr "PNG ଫାଇଲ ଧାରଣ କରିବା ପାଇଁ ଯଥେଷ୍ଟ ସ୍ମୃତି ନାହିଁ"
+
+#~ msgid ""
+#~ "Insufficient memory to store a %ld by %ld image; try exiting some "
+#~ "applications to reduce memory usage"
+#~ msgstr ""
+#~ "%ld ରୁ %ld ଚିତ୍ର ସଞ୍ଚିତ କରିବା ପାଇଁ ଯଥେଷ୍ଟ ସ୍ମୃତି ନାହିଁ; ସ୍ମୃତି ମୁକ୍ତି ପାଇଁ କିଛି ପ୍ରୟୋଗ ବନ୍ଦ କରିବାକୁ "
+#~ "ଚେଷ୍ଟା କରନ୍ତୁ"
+
+#~ msgid "Fatal error reading PNG image file"
+#~ msgstr "PNG ଫାଇଲ  ପଢ଼ିବାରେ ମାରାତ୍ମକ ତୃଟି"
+
+#~ msgid "Fatal error reading PNG image file: %s"
+#~ msgstr "PNG ଫାଇଲ ପଢ଼ିବାରେ ମାରାତ୍ମକ ତୃଟି: %s"
+
+#~ msgid ""
+#~ "Keys for PNG text chunks must have at least 1 and at most 79 characters."
+#~ msgstr "PNG ପାଠ୍ଯ ଖଣ୍ଡର ଚାବି ୧ ଓ ୭୯ ଅକ୍ଷର ଭିତରେ ହୋଇଥିବା ଆବଶ୍ଯକ."
+
+#~ msgid "Keys for PNG text chunks must be ASCII characters."
+#~ msgstr "PNG ପାଠ୍ଯ ଖଣ୍ଡର ଚାବି ଆସ୍କି ଅକ୍ଷରରୁ ହୋଇଥିବା ଆବଶ୍ଯକ."
+
+#~ msgid ""
+#~ "PNG compression level must be a value between 0 and 9; value '%s' could "
+#~ "not be parsed."
+#~ msgstr ""
+#~ "PNG ସଂକୋଚନ ସ୍ତରର ମୂଲ୍ଯ 0  ଓ 9 ଭିତରେ ଥିବା ଉଚିତ; '%s' ମୂଲ୍ଯ ବିଶ୍ଲେଷିତ କରିହେଲା ନାହିଁ."
+
+#~ msgid ""
+#~ "PNG compression level must be a value between 0 and 9; value '%d' is not "
+#~ "allowed."
+#~ msgstr "PNG ସଂକୋଚନ ସ୍ତରର ମୂଲ୍ଯ 0  ଓ 9 ଭିତରେ ଥିବା ଉଚିତ; '%d' ମୂଲ୍ଯର ଅନୁମତି ନାହିଁ."
+
+#~ msgid ""
+#~ "Value for PNG text chunk %s cannot be converted to ISO-8859-1 encoding."
+#~ msgstr "%s PNG ପାଠ୍ଯ ଖଣ୍ଡର ମୂଲ୍ଯକୁ ଆଇ.ଏସ.ଓ.-୮୮୫୯-୧ ସଙ୍କେତକୁ ରୂପାନ୍ତରିତ କରିହେଲା ନାହିଁ."
+
+#~ msgid "The PNG image format"
+#~ msgstr "PNG ଚିତ୍ର ଶୈଳୀ"
+
+#~ msgid "PNM loader expected to find an integer, but didn't"
+#~ msgstr "PNM ଧାରକ ଗୋଟିଏ ପୂର୍ଣ୍ଣ ସଂଖ୍ଯାର ପ୍ରତ୍ଯାଶା କରିଥିଲା, କିନ୍ତୁ ଏହା ମିଳିଲା ନାହିଁ"
+
+#~ msgid "PNM file has an incorrect initial byte"
+#~ msgstr "PNM ଫାଇଲର ପ୍ରାରମ୍ଭିକ ବାଇଟ ଭୂଲ"
+
+#~ msgid "PNM file is not in a recognized PNM subformat"
+#~ msgstr "PNM ଫାଇଲ ଚିହ୍ନିତ PNM ଉପ-ଶୈଳୀରେ ନାହିଁ"
+
+#~ msgid "PNM file has an image width of 0"
+#~ msgstr "PNM ଫାଇଲର ଚିତ୍ର ଓସାର ଶୂନ୍ଯ"
+
+#~ msgid "PNM file has an image height of 0"
+#~ msgstr "PNM ଫାଇଲର ଚିତ୍ର ଉଚ୍ଚତା ଶୂନ୍ଯ"
+
+#~ msgid "Maximum color value in PNM file is 0"
+#~ msgstr "PNM ଫାଇଲରେ ସର୍ବାଧିକ ରଙ୍ଗ ମୂଲ୍ଯ ଶୂନ୍ଯ"
+
+#~ msgid "Maximum color value in PNM file is too large"
+#~ msgstr "PNM ଫାଇଲରେ ସର୍ବାଧିକ ରଙ୍ଗ ମୂଲ୍ଯ ଅତି ବଡ଼"
+
+#~ msgid "Raw PNM image type is invalid"
+#~ msgstr "ଅସଂସାଧିତ PNM ଚିତ୍ର ପ୍ରକାରଟି ଅବୈଧ"
+
+#~ msgid "PNM image loader does not support this PNM subformat"
+#~ msgstr "PNM ଚିତ୍ର ଧାରକରେ ଏହି PNM ଉପ-ଶୈଳୀ ଅସହାୟକ"
+
+#~ msgid "Raw PNM formats require exactly one whitespace before sample data"
+#~ msgstr "ଅସଂସାଧିତ PNM ଶୈଳୀଗୁଡ଼ିକରେ ନମୁନା ତଥ୍ଯ ପୂର୍ବରୁ ଠିକ ଗୋଟିଏ ଖାଲି ସ୍ଥାନ ଥିବା ଆବଶ୍ଯକ"
+
+#~ msgid "Cannot allocate memory for loading PNM image"
+#~ msgstr "PNM ଚିତ୍ର ଧାରଣ କରିବା ପାଇଁ ସ୍ମୃତି ଯୋଗାଇ ହେଲା ନାହିଁ"
+
+#~ msgid "Insufficient memory to load PNM context struct"
+#~ msgstr "PNM ପ୍ରସଙ୍ଗ ଷ୍ଟ୍ରକ୍ଟ ଧାରଣ କରିବା ପାଇଁ ଯଥେଷ୍ଟ ସ୍ମୃତି ନାହିଁ"
+
+#~ msgid "Unexpected end of PNM image data"
+#~ msgstr "PNM ଚିତ୍ର ତଥ୍ଯର ଅପ୍ରତ୍ଯାଶିତ ଶେଷ"
+
+#~ msgid "Insufficient memory to load PNM file"
+#~ msgstr "PNM ଫାଇଲ ଧାରଣ କରିବା ପାଇଁ ଯଥେଷ୍ଟ ସ୍ମୃତି ନାହିଁ"
+
+#~ msgid "The PNM/PBM/PGM/PPM image format family"
+#~ msgstr "PNM/PBM/PGM/PPM ଚିତ୍ର ଶୈଳୀ ଶ୍ରେଣୀ"
+
+#, fuzzy
+#~ msgid "Failed to read QTIF header"
+#~ msgstr "ଶୀର୍ଷକକୁ ଲେଖିବାରେ ବିଫଳ\n"
+
+#, fuzzy
+#~ msgid "File error when reading QTIF atom: %s"
+#~ msgstr "GIF ପଢ଼ିବାରେ ତୃଟି: %s"
+
+#, fuzzy
+#~ msgid "Failed to allocate QTIF context structure."
+#~ msgstr "TGA ପ୍ରସଙ୍ଗ ଷ୍ଟ୍ରକ୍ଟ ପାଇଁ ସ୍ମୃତି ଯୋଗାଇ ହେଲା ନାହିଁ"
+
+#, fuzzy
+#~ msgid "Failed to create GdkPixbufLoader object."
+#~ msgstr "ଫୋଲଡର ଅନୁକ୍ରମଣିକାକୁ ଲେଖିବାରେ ବିଫଳ\n"
+
+#, fuzzy
+#~ msgid "Failed to find an image data atom."
+#~ msgstr "TIFF ଫାଇଲ ଖୋଲିବାରେ ଅସଫଳ"
+
+#, fuzzy
+#~ msgid "The QTIF image format"
+#~ msgstr "TIFF ଚିତ୍ର ଶୈଳୀ"
+
+#~ msgid "RAS image has bogus header data"
+#~ msgstr "ଆର.ଏ.ଏସ. ଚିତ୍ରର ଶୀର୍ଷକରେ ନକଲି ତଥ୍ଯ ଅଛି"
+
+#~ msgid "RAS image has unknown type"
+#~ msgstr "RAS ଚିତ୍ରର ପ୍ରକାର ଅଜଣା"
+
+#~ msgid "unsupported RAS image variation"
+#~ msgstr "RAS ଚିତ୍ରର ଭିନ୍ନ ପ୍ରକାର ଅସହାୟକ"
+
+#~ msgid "Not enough memory to load RAS image"
+#~ msgstr "RAS ଚିତ୍ର ଧାରଣ କରିବା ପାଇଁ ଯଥେଷ୍ଟ ସ୍ମୃତି ନାହିଁ"
+
+#~ msgid "The Sun raster image format"
+#~ msgstr "Sun ରୈଖିକ ଚିତ୍ର ଶୈଳୀ"
+
+#~ msgid "Cannot allocate memory for IOBuffer struct"
+#~ msgstr "ଆଇ.ଓ. ବଫର ଷ୍ଟ୍ରକ୍ଟ ପାଇଁ ସ୍ମୃତି ଯୋଗାଇ ହେଲା ନାହିଁ"
+
+#~ msgid "Cannot allocate memory for IOBuffer data"
+#~ msgstr "ଆଇ.ଓ. ବଫର ତଥ୍ଯ ପାଇଁ ସ୍ମୃତି ଯୋଗାଇ ହେଲା ନାହିଁ"
+
+#~ msgid "Cannot realloc IOBuffer data"
+#~ msgstr "ଆଇ.ଓ. ବଫର ତଥ୍ଯ ପାଇଁ ସ୍ମୃତି ପୁଣି ଯୋଗାଇ ହେଲା ନାହିଁ"
+
+#~ msgid "Cannot allocate temporary IOBuffer data"
+#~ msgstr "ଅସ୍ଥାୟୀ ଆଇ.ଓ. ବଫର ତଥ୍ଯ ପାଇଁ ସ୍ମୃତି ଯୋଗାଇ ହେଲା ନାହିଁ"
+
+#~ msgid "Cannot allocate new pixbuf"
+#~ msgstr "ନୂତନ ପିକ୍ସବଫ ପାଇଁ ସ୍ମୃତି ଯୋଗାଇ ହେଲା ନାହିଁ"
+
+#, fuzzy
+#~ msgid "Image is corrupted or truncated"
+#~ msgstr "GIF ଚିତ୍ର ଶେଷରୁ କଟିଯାଇଛି ବା ଅସମ୍ପୂର୍ଣ୍ଣ ଅଛି."
+
+#~ msgid "Cannot allocate colormap structure"
+#~ msgstr "ରଙ୍ଗନକ୍ସା ଷ୍ଟ୍ରକ୍ଟ ପାଇଁ ସ୍ମୃତି ଯୋଗାଇ ହେଲା ନାହିଁ"
+
+#~ msgid "Cannot allocate colormap entries"
+#~ msgstr "ରଙ୍ଗନକ୍ସା ଭରଣଗୁଡ଼ିକ ପାଇଁ ସ୍ମୃତି ଯୋଗାଇ ହେଲା ନାହିଁ"
+
+#~ msgid "Unexpected bitdepth for colormap entries"
+#~ msgstr "ରଙ୍ଗନକ୍ସା ଭରଣଗୁଡ଼ିକର ବିଟ ପ୍ରଗାଢ଼ତା ଅପ୍ରତ୍ଯାଶିତ"
+
+#~ msgid "Cannot allocate TGA header memory"
+#~ msgstr "TGA ଶୀର୍ଷକ ସ୍ମୃତି ଯୋଗାଇ ହେଲା ନାହିଁ"
+
+#~ msgid "TGA image has invalid dimensions"
+#~ msgstr "TGA ଚିତ୍ରର ପରିସର ଅବୈଧ"
+
+#~ msgid "TGA image type not supported"
+#~ msgstr "TGA ଚିତ୍ର ପ୍ରକାର ଅସହାୟକ"
+
+#~ msgid "Cannot allocate memory for TGA context struct"
+#~ msgstr "TGA ପ୍ରସଙ୍ଗ ଷ୍ଟ୍ରକ୍ଟ ପାଇଁ ସ୍ମୃତି ଯୋଗାଇ ହେଲା ନାହିଁ"
+
+#~ msgid "Excess data in file"
+#~ msgstr "ଫାଇଲରେ ଅତ୍ଯାଧିକ ତଥ୍ଯ"
+
+#~ msgid "The Targa image format"
+#~ msgstr "Targa ଚିତ୍ର ଶୈଳୀ"
+
+#~ msgid "Could not get image width (bad TIFF file)"
+#~ msgstr "ଚିତ୍ର ଓସାର ମିଳିଲା ନାହିଁ (ଖରାପ TIFF ଫାଇଲ)"
+
+#~ msgid "Could not get image height (bad TIFF file)"
+#~ msgstr "ଚିତ୍ର ଉଚ୍ଚତା ମିଳିଲା ନାହିଁ (ଖରାପ TIFF ଫାଇଲ)"
+
+#~ msgid "Width or height of TIFF image is zero"
+#~ msgstr "TIFF ଚିତ୍ରର ଓସାର ବା ଉଚ୍ଚତା ଶୂନ୍ଯ"
+
+#~ msgid "Dimensions of TIFF image too large"
+#~ msgstr "TIFF ଚିତ୍ରର ପରିସର ଅତି ବଡ଼"
+
+#~ msgid "Insufficient memory to open TIFF file"
+#~ msgstr "TIFF ଫାଇଲ ଖୋଲିବା ପାଇଁ ଯଥେଷ୍ଟ ସ୍ମୃତି ନାହିଁ"
+
+#~ msgid "Failed to load RGB data from TIFF file"
+#~ msgstr "TIFF ଫାଇଲରୁ ଆର.ଜି.ବି. ତଥ୍ଯ ଧାରଣ କରିବାରେ ଅସଫଳ"
+
+#~ msgid "Failed to open TIFF image"
+#~ msgstr "TIFF ଫାଇଲ ଖୋଲିବାରେ ଅସଫଳ"
+
+#~ msgid "TIFFClose operation failed"
+#~ msgstr "TIFFବନ୍ଦ ଚାଳନା ଅସଫଳ"
+
+#~ msgid "Failed to load TIFF image"
+#~ msgstr "TIFF ଚିତ୍ର ଧାରଣ କରିବାରେ ଅସଫଳ"
+
+#~ msgid "Failed to save TIFF image"
+#~ msgstr "TIFF ଚିତ୍ରକୁ ସଂରକ୍ଷଣ କରିବାରେ ଅସଫଳ"
+
+#~ msgid "Failed to write TIFF data"
+#~ msgstr "TIFF ତଥ୍ଯକୁ ଲେଖିବାରେ ଅସଫଳ"
+
+#~ msgid "Couldn't write to TIFF file"
+#~ msgstr "TIFF ଫାଇଲରେ ଲେଖିପାରିଲା ନାହିଁ"
+
+#~ msgid "The TIFF image format"
+#~ msgstr "TIFF ଚିତ୍ର ଶୈଳୀ"
+
+#~ msgid "Image has zero width"
+#~ msgstr "ଚିତ୍ରର ଓସାର ଶୂନ୍ଯ"
+
+#~ msgid "Image has zero height"
+#~ msgstr "ଚିତ୍ରର ଉଚ୍ଚତା ଶୂନ୍ଯ"
+
+#~ msgid "Not enough memory to load image"
+#~ msgstr "ଚିତ୍ର ଧାରଣ କରିବା ପାଇଁ ଯଥେଷ୍ଟ ସ୍ମୃତି ନାହିଁ"
+
+#~ msgid "Couldn't save the rest"
+#~ msgstr "ବାକି ସଞ୍ଚିତ କରିହେଲା ନାହିଁ"
+
+#~ msgid "The WBMP image format"
+#~ msgstr "WBMP ଚିତ୍ର ଶୈଳୀ"
+
+#~ msgid "Invalid XBM file"
+#~ msgstr "ଅବୈଧ XBM ଫାଇଲ"
+
+#~ msgid "Insufficient memory to load XBM image file"
+#~ msgstr "XBM ଚିତ୍ର ଫାଇଲ ଧାରଣ କରିବା ପାଇଁ ଯଥେଷ୍ଟ ସ୍ମୃତି ନାହିଁ"
+
+#~ msgid "Failed to write to temporary file when loading XBM image"
+#~ msgstr "XBM ଚିତ୍ର ଧାରଣ କରିବା ସମୟରେ ଅସ୍ଥାୟୀ ଫାଇଲକୁ ଲେଖିବାରେ ଅସଫଳ"
+
+#~ msgid "The XBM image format"
+#~ msgstr "XBM ଚିତ୍ର ଶୈଳୀ"
+
+#~ msgid "No XPM header found"
+#~ msgstr "XPM ଶୀର୍ଷକ ମିଳିଲା ନାହିଁ"
+
+#~ msgid "Invalid XPM header"
+#~ msgstr "ଅବୈଧ XPM ଶୀର୍ଷକ"
+
+#~ msgid "XPM file has image width <= 0"
+#~ msgstr "XPM ଫାଇଲର ଚିତ୍ରର ଓସାର <= ୦"
+
+#~ msgid "XPM file has image height <= 0"
+#~ msgstr "XPM ଫାଇଲର ଚିତ୍ରର ଉଚ୍ଚତା <= ୦"
+
+#~ msgid "XPM has invalid number of chars per pixel"
+#~ msgstr "XPM ଫାଇଲର ଅକ୍ଷର ପ୍ରତି ପିକ୍ସେଲର ସଂଖ୍ଯା ଅବୈଧ"
+
+#~ msgid "XPM file has invalid number of colors"
+#~ msgstr "XPM ଫାଇଲର ରଙ୍ଗର ସଂଖ୍ଯା ଅବୈଧ"
+
+#~ msgid "Cannot allocate memory for loading XPM image"
+#~ msgstr "XPM ଚିତ୍ର ଧାରଣ କରିବା ପାଇଁ ସ୍ମୃତି ଯୋଗାଇ ହେଲା ନାହିଁ"
+
+#~ msgid "Cannot read XPM colormap"
+#~ msgstr "XPM ରଙ୍ଗନକ୍ସା ପଢ଼ିହେଲା ନାହିଁ"
+
+#~ msgid "Failed to write to temporary file when loading XPM image"
+#~ msgstr "XPM ଚିତ୍ର ଧାରଣ କରିବା ସମୟରେ ଅସ୍ଥାୟୀ ଫାଇଲକୁ ଲେଖିବାରେ ଅସଫଳ"
+
+#~ msgid "The XPM image format"
+#~ msgstr "XPM ଚିତ୍ର ଶୈଳୀ"
+
+#~ msgid "The EMF image format"
+#~ msgstr "EMF ଚିତ୍ର ଶୈଳୀ"
+
+#~ msgid "Could not allocate memory: %s"
+#~ msgstr "ସ୍ମୃତି ସ୍ଥାନ ଯୋଗାଇ ହେଲା ନାହିଁ: %s"
+
+#~ msgid "Could not create stream: %s"
+#~ msgstr "ଧାରା ସୃଷ୍ଟି କରିପାରିଲା ନାହିଁ: %s"
+
+#~ msgid "Could not seek stream: %s"
+#~ msgstr "ଧାରାକୁ ଅନୁସନ୍ଧାନ କରିହେଲା ନାହିଁ: %s"
+
+#~ msgid "Could not read from stream: %s"
+#~ msgstr "ଧାରାରୁ ପଢ଼ି ପାରିଲା ନାହିଁ: %s"
+
+#~ msgid "Couldn't load bitmap"
+#~ msgstr "bitmapକୁ ଧାରଣ କରିହେଲା ନାହିଁ"
+
+#~ msgid "Couldn't load metafile"
+#~ msgstr "metafileକୁ ଧାରଣ କରିହେଲା ନାହିଁ"
+
+#~ msgid "Unsupported image format for GDI+"
+#~ msgstr "GDI+ ପାଇଁ ଅସମର୍ଥିତ ଚିତ୍ରଶୈଳୀ"
+
+#~ msgid "Couldn't save"
+#~ msgstr "ସଂରକ୍ଷଣ କରିପାରିଲା ନାହିଁ"
+
+#~ msgid "The WMF image format"
+#~ msgstr "WMF ଚିତ୍ର ଶୈଳୀ"
+
+#~ msgid "\"Deepness\" of the color."
+#~ msgstr "ରଙ୍ଗର \"ପ୍ରଗାଢ଼ତା\"।"
+
+#~ msgid "Error printing"
+#~ msgstr "ମୂଦ୍ରଣ କରିବା ସମୟରେ ତୃଟି"
+
+#~ msgid "Printer '%s' may not be connected."
+#~ msgstr "ମୂଦ୍ରଣୀ '%s' ସଂଯୁକ୍ତ ଥାଇନପାରେ."
 
 #~ msgid "Folders"
 #~ msgstr "ଫୋଲ୍ଡରଗୁଡ଼ିକ"

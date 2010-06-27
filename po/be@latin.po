@@ -7,16 +7,17 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-menus\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-05-25 20:10-0400\n"
+"POT-Creation-Date: 2010-06-26 23:16-0400\n"
 "PO-Revision-Date: 2009-02-14 03:17+0200\n"
 "Last-Translator: Alaksandar Navicki <zolak@lacinka.org>\n"
 "Language-Team: Belarusian Latin <i18n@mova.org>\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Poedit-Language: Belarsian Latin\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%"
-"10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 
 #: gdk/gdk.c:103
 #, c-format
@@ -77,7 +78,7 @@ msgstr "Ściažki adsočki Gdk"
 #. Placeholder in --gdk-no-debug=FLAGS in --help output
 #. Placeholder in --gtk-debug=FLAGS in --help output
 #. Placeholder in --gtk-no-debug=FLAGS in --help output
-#: gdk/gdk.c:165 gdk/gdk.c:168 gtk/gtkmain.c:454 gtk/gtkmain.c:457
+#: gdk/gdk.c:165 gdk/gdk.c:168 gtk/gtkmain.c:439 gtk/gtkmain.c:442
 msgid "FLAGS"
 msgstr "ŚCIAŽKI"
 
@@ -270,920 +271,6 @@ msgstr "KP Delete"
 msgctxt "keyboard label"
 msgid "Delete"
 msgstr "Delete"
-
-#: gdk-pixbuf/gdk-pixbuf-animation.c:133 gdk-pixbuf/gdk-pixbuf-io.c:982
-#: gdk-pixbuf/gdk-pixbuf-io.c:1242 tests/testfilechooser.c:222
-#, c-format
-msgid "Failed to open file '%s': %s"
-msgstr "Niemahčyma adčynić fajł '%s': %s"
-
-#: gdk-pixbuf/gdk-pixbuf-animation.c:146 gdk-pixbuf/gdk-pixbuf-io.c:994
-#, c-format
-msgid "Image file '%s' contains no data"
-msgstr "Fajł vyjavy '%s' biaź źviestak"
-
-#: gdk-pixbuf/gdk-pixbuf-animation.c:188 gdk-pixbuf/gdk-pixbuf-io.c:1030
-#: gdk-pixbuf/gdk-pixbuf-io.c:1294 tests/testfilechooser.c:267
-#, c-format
-msgid ""
-"Failed to load image '%s': reason not known, probably a corrupt image file"
-msgstr ""
-"Niemahčyma adčytać vyjavu \"%s\": pryčyna nieviadomaja; fajł vyjavy "
-"vierahodna paškodžany"
-
-#: gdk-pixbuf/gdk-pixbuf-animation.c:221
-#, c-format
-msgid ""
-"Failed to load animation '%s': reason not known, probably a corrupt "
-"animation file"
-msgstr ""
-"Niemahčyma adčytać animacyju '%s': pryčyna nieviadomaja; fajł z animacyjaj "
-"vierahodna paškodžany"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:715
-#, c-format
-msgid "Unable to load image-loading module: %s: %s"
-msgstr "Niemahčyma zahruzić modul vyśviatleńnia vyjavaŭ: %s: %s"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:730
-#, c-format
-msgid ""
-"Image-loading module %s does not export the proper interface; perhaps it's "
-"from a different GTK version?"
-msgstr ""
-"Modul %s dziela vyśviatleńnia vyjavaŭ nie ekspartuje adpaviednaha "
-"interfejsu; moža jon pachodzić ź inšaj versii GTK+?"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:739 gdk-pixbuf/gdk-pixbuf-io.c:790
-#, c-format
-msgid "Image type '%s' is not supported"
-msgstr "Vyjavy typu '%s' nie absłuhoŭvajucca"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:863
-#, c-format
-msgid "Couldn't recognize the image file format for file '%s'"
-msgstr "Niemahčyma raspaznać farmat vyjavy ŭ faje '%s'"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:871
-msgid "Unrecognized image file format"
-msgstr "Nieraspaznany farmat fajłu vyjavy"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:1039
-#, c-format
-msgid "Failed to load image '%s': %s"
-msgstr "Niemahčyma adčytać vyjavy '%s': %s"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:1673 gdk-pixbuf/io-gdip-utils.c:961
-#, c-format
-msgid "Error writing to image file: %s"
-msgstr "Pamyłka pry zapisie ŭ fajł vyjavy: %s"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:1718 gdk-pixbuf/gdk-pixbuf-io.c:1848
-#, c-format
-msgid "This build of gdk-pixbuf does not support saving the image format: %s"
-msgstr "Hetaja kopija gdk-pixbuf nie dazvalaje zapisvać vyjavu ŭ farmacie: %s"
-
-# Pravieryć u kiryličnych
-#: gdk-pixbuf/gdk-pixbuf-io.c:1752
-msgid "Insufficient memory to save image to callback"
-msgstr "Nie staje pamiaci kab zapisać vyjavu dla adčytańnia"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:1765
-msgid "Failed to open temporary file"
-msgstr "Niemahčyma adčynić časovy fajł"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:1791
-msgid "Failed to read from temporary file"
-msgstr "Niemahčyma adčytać časovy fajł"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:2044
-#, c-format
-msgid "Failed to open '%s' for writing: %s"
-msgstr "Niemahčyma adčynić '%s' dla zapisu: %s"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:2070
-#, c-format
-msgid ""
-"Failed to close '%s' while writing image, all data may not have been saved: %"
-"s"
-msgstr ""
-"Niemahčyma začynić fajł '%s' paśla zapisańnia ŭ im vyjavy. Častka źviestak "
-"mahła nie zapisacca: %s"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:2290 gdk-pixbuf/gdk-pixbuf-io.c:2341
-msgid "Insufficient memory to save image into a buffer"
-msgstr "Nie staje pamiaci dziela zapisu vyjavy ŭ bufery"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:2387
-msgid "Error writing to image stream"
-msgstr "Pamyłka zapisu ŭ płyń vyjavy"
-
-#: gdk-pixbuf/gdk-pixbuf-loader.c:334
-#, c-format
-msgid ""
-"Internal error: Image loader module '%s' failed to complete an operation, "
-"but didn't give a reason for the failure"
-msgstr ""
-"Unutranaja pamyłka: Modul '%s' jaki adčytvaje vyjavy nia skončyŭ aperacyi, "
-"ale pryčyny hetaha nie paviedamiŭ"
-
-#: gdk-pixbuf/gdk-pixbuf-loader.c:376
-#, c-format
-msgid "Incremental loading of image type '%s' is not supported"
-msgstr ""
-"Funkcyja pryrostavaha adčytvańnia vyjavaŭ typu \"%s\" nie absłuhoŭvajecca"
-
-#: gdk-pixbuf/gdk-pixdata.c:147
-msgid "Image header corrupt"
-msgstr "Paškodžany zahałovak vyjavy"
-
-#: gdk-pixbuf/gdk-pixdata.c:152
-msgid "Image format unknown"
-msgstr "Nieviadomy farmat vyjavy"
-
-#: gdk-pixbuf/gdk-pixdata.c:157 gdk-pixbuf/gdk-pixdata.c:488
-msgid "Image pixel data corrupt"
-msgstr "Paškodžanyja źviestki ab pikselach vyjavy"
-
-#: gdk-pixbuf/gdk-pixdata.c:432
-#, c-format
-msgid "failed to allocate image buffer of %u byte"
-msgid_plural "failed to allocate image buffer of %u bytes"
-msgstr[0] "Nie staje pamiaci dziela buferu vyjavy pamieram %u bajtu"
-msgstr[1] "Nie staje pamiaci dziela buferu vyjavy pamieram %u bajtaŭ"
-msgstr[2] "Nie staje pamiaci dziela buferu vyjavy pamieram %u bajtaŭ"
-
-#: gdk-pixbuf/io-ani.c:244
-msgid "Unexpected icon chunk in animation"
-msgstr "Nie padtrymvany frahment ikony ŭ animacyi"
-
-#: gdk-pixbuf/io-ani.c:337
-msgid "Unsupported animation type"
-msgstr "Niepadtrymvany typ animacyi"
-
-#: gdk-pixbuf/io-ani.c:348 gdk-pixbuf/io-ani.c:406 gdk-pixbuf/io-ani.c:432
-#: gdk-pixbuf/io-ani.c:455 gdk-pixbuf/io-ani.c:482 gdk-pixbuf/io-ani.c:569
-msgid "Invalid header in animation"
-msgstr "Niapravilny zahałovak animacyi"
-
-#: gdk-pixbuf/io-ani.c:358 gdk-pixbuf/io-ani.c:380 gdk-pixbuf/io-ani.c:464
-#: gdk-pixbuf/io-ani.c:491 gdk-pixbuf/io-ani.c:542 gdk-pixbuf/io-ani.c:614
-msgid "Not enough memory to load animation"
-msgstr "Nie staje pamiaci dziela zahruzki animacyi"
-
-#: gdk-pixbuf/io-ani.c:398 gdk-pixbuf/io-ani.c:424 gdk-pixbuf/io-ani.c:443
-msgid "Malformed chunk in animation"
-msgstr "Paškodžany frahment animacyi"
-
-#: gdk-pixbuf/io-ani.c:711
-msgid "The ANI image format"
-msgstr "Farmat vyjavy ANI"
-
-#: gdk-pixbuf/io-bmp.c:230 gdk-pixbuf/io-bmp.c:267 gdk-pixbuf/io-bmp.c:338
-#: gdk-pixbuf/io-bmp.c:370 gdk-pixbuf/io-bmp.c:393 gdk-pixbuf/io-bmp.c:496
-msgid "BMP image has bogus header data"
-msgstr "Pamyłkovy zahałovak vyjavy BMP"
-
-#: gdk-pixbuf/io-bmp.c:241 gdk-pixbuf/io-bmp.c:433
-msgid "Not enough memory to load bitmap image"
-msgstr "Nie staje pamiaci dziela adčytańnia bitmapy z fajłu"
-
-#: gdk-pixbuf/io-bmp.c:319
-msgid "BMP image has unsupported header size"
-msgstr "Vyjava BMP maje ŭ sabie zahałovak nieabsłuhoŭvanaha pamieru"
-
-#: gdk-pixbuf/io-bmp.c:357
-msgid "Topdown BMP images cannot be compressed"
-msgstr "Vyjavy typu top-down BMP nia mohuć być skampresavanyja"
-
-#: gdk-pixbuf/io-bmp.c:717 gdk-pixbuf/io-pnm.c:709
-msgid "Premature end-of-file encountered"
-msgstr "Zaŭčasna zdaryŭsia kaniec fajłu"
-
-#: gdk-pixbuf/io-bmp.c:1329
-msgid "Couldn't allocate memory for saving BMP file"
-msgstr "Niemahčyma prymierkavać pamiać dziela zapisu fajłu BMP"
-
-#: gdk-pixbuf/io-bmp.c:1370
-msgid "Couldn't write to BMP file"
-msgstr "Niemahčyma zapisać u fajł BMP"
-
-#: gdk-pixbuf/io-bmp.c:1423 gdk-pixbuf/io-gdip-bmp.c:82
-msgid "The BMP image format"
-msgstr "Farmat vyjavy BMP"
-
-#: gdk-pixbuf/io-gif.c:222
-#, c-format
-msgid "Failure reading GIF: %s"
-msgstr "Pamyłka pry adčytańni vyjavy GIF: %s"
-
-#: gdk-pixbuf/io-gif.c:496 gdk-pixbuf/io-gif.c:1481 gdk-pixbuf/io-gif.c:1642
-msgid "GIF file was missing some data (perhaps it was truncated somehow?)"
-msgstr "Fajł GIF nia maje niekatorych źviestak (moža jaho padrezali?)"
-
-#: gdk-pixbuf/io-gif.c:505
-#, c-format
-msgid "Internal error in the GIF loader (%s)"
-msgstr "Unutranaja pamyłka ŭ moduli čytańnia vyjavy GIF (%s)"
-
-#: gdk-pixbuf/io-gif.c:579
-msgid "Stack overflow"
-msgstr "Pierapaŭnieńnie stosu"
-
-#: gdk-pixbuf/io-gif.c:639
-msgid "GIF image loader cannot understand this image."
-msgstr "Hetaja vyjava GIF niezrazumiełaja dla modulu zahruzki vyjavy GIF."
-
-#: gdk-pixbuf/io-gif.c:668
-msgid "Bad code encountered"
-msgstr "Sustrety pamyłkovy kod"
-
-#: gdk-pixbuf/io-gif.c:678
-msgid "Circular table entry in GIF file"
-msgstr "Zapiatleńnie pazycyi tablicy ŭ fajle GIF"
-
-#: gdk-pixbuf/io-gif.c:866 gdk-pixbuf/io-gif.c:1468 gdk-pixbuf/io-gif.c:1515
-#: gdk-pixbuf/io-gif.c:1630
-msgid "Not enough memory to load GIF file"
-msgstr "Nie staje pamiaci dziela zahruzki fajłu GIF"
-
-#: gdk-pixbuf/io-gif.c:960
-msgid "Not enough memory to composite a frame in GIF file"
-msgstr "Nie staje pamiaci dziela stvareńnia kadru ŭ fajle GIF"
-
-#: gdk-pixbuf/io-gif.c:1132
-msgid "GIF image is corrupt (incorrect LZW compression)"
-msgstr "Vyjava GIF paškodžanaja (niapravilnaja kampresija LZW)"
-
-#: gdk-pixbuf/io-gif.c:1182
-msgid "File does not appear to be a GIF file"
-msgstr "Fajł vierahodna nie ŭ farmacie GIF"
-
-#: gdk-pixbuf/io-gif.c:1194
-#, c-format
-msgid "Version %s of the GIF file format is not supported"
-msgstr "Farmat GIF u versii %s nie absłuhoŭvajecca"
-
-#: gdk-pixbuf/io-gif.c:1303
-msgid ""
-"GIF image has no global colormap, and a frame inside it has no local "
-"colormap."
-msgstr ""
-"Vyjava GIF nia maje hlabalnaj palitry koleraŭ, a kadr unutry nia maje "
-"lakalnaj palitry."
-
-#: gdk-pixbuf/io-gif.c:1537
-msgid "GIF image was truncated or incomplete."
-msgstr "Fajł GIF byŭ abrezany albo jon niapoŭny."
-
-#: gdk-pixbuf/io-gif.c:1693 gdk-pixbuf/io-gdip-gif.c:80
-msgid "The GIF image format"
-msgstr "Farmat vyjavy GIF"
-
-#: gdk-pixbuf/io-ico.c:211 gdk-pixbuf/io-ico.c:225 gdk-pixbuf/io-ico.c:277
-#: gdk-pixbuf/io-ico.c:290 gdk-pixbuf/io-ico.c:359
-msgid "Invalid header in icon"
-msgstr "Niapravilny zahałovak ikony"
-
-#: gdk-pixbuf/io-ico.c:240 gdk-pixbuf/io-ico.c:300 gdk-pixbuf/io-ico.c:369
-#: gdk-pixbuf/io-ico.c:432 gdk-pixbuf/io-ico.c:462
-msgid "Not enough memory to load icon"
-msgstr "Nie staje pamiaci dziela zahruzki ikony"
-
-#: gdk-pixbuf/io-ico.c:322
-msgid "Icon has zero width"
-msgstr "Šyrynia ikony nulavaja"
-
-#: gdk-pixbuf/io-ico.c:332
-msgid "Icon has zero height"
-msgstr "Vyšynia ikony nulavaja"
-
-#: gdk-pixbuf/io-ico.c:384
-msgid "Compressed icons are not supported"
-msgstr "Skampresavanyja ikony nie absłuhoŭvajucca"
-
-#: gdk-pixbuf/io-ico.c:417
-msgid "Unsupported icon type"
-msgstr "Typ ikony nie padtrymvajecca"
-
-#: gdk-pixbuf/io-ico.c:511
-msgid "Not enough memory to load ICO file"
-msgstr "Nie staje pamiaci dziela zahruzki fajłu ICO"
-
-#: gdk-pixbuf/io-ico.c:976
-msgid "Image too large to be saved as ICO"
-msgstr "Vyjava zavialikaja kab zapisać jaje jak ICO"
-
-#: gdk-pixbuf/io-ico.c:987
-msgid "Cursor hotspot outside image"
-msgstr "Haračy punkt pa-za vyjavaj"
-
-#: gdk-pixbuf/io-ico.c:1010
-#, c-format
-msgid "Unsupported depth for ICO file: %d"
-msgstr "Hłybinia dla fajłu ICO: %d nie padtrymvajecca"
-
-#: gdk-pixbuf/io-ico.c:1245 gdk-pixbuf/io-gdip-ico.c:59
-msgid "The ICO image format"
-msgstr "Farmat vyjavy ICO"
-
-#: gdk-pixbuf/io-icns.c:347
-#, c-format
-msgid "Error reading ICNS image: %s"
-msgstr "Pamyłka pry čytańni vyjavy ICNS: %s"
-
-#: gdk-pixbuf/io-icns.c:364
-msgid "Could not decode ICNS file"
-msgstr "Niemahčyma raskadavać fajł ICNS"
-
-#: gdk-pixbuf/io-icns.c:397
-msgid "The ICNS image format"
-msgstr "Farmat vyjavy ICNS"
-
-#: gdk-pixbuf/io-jasper.c:75
-msgid "Couldn't allocate memory for stream"
-msgstr "Nie ŭdałosia prymierkavać pamiać dla płyni"
-
-#: gdk-pixbuf/io-jasper.c:105
-msgid "Couldn't decode image"
-msgstr "Nie ŭdałosia raskadavać vyjavu"
-
-#: gdk-pixbuf/io-jasper.c:123
-msgid "Transformed JPEG2000 has zero width or height"
-msgstr "Transfarmavanaja vyjava JPEG2000 maje nulavuju šyryniu albo vyšyniu"
-
-#: gdk-pixbuf/io-jasper.c:137
-msgid "Image type currently not supported"
-msgstr "Vyjavy hetaha typu nie absłuhoŭvajucca"
-
-#: gdk-pixbuf/io-jasper.c:149 gdk-pixbuf/io-jasper.c:157
-msgid "Couldn't allocate memory for color profile"
-msgstr "Nie ŭdałosia prymierkavać pamiać dziela profilu koleraŭ"
-
-#: gdk-pixbuf/io-jasper.c:183
-msgid "Insufficient memory to open JPEG 2000 file"
-msgstr "Nie staje pamiaci dziela adčynieńnia fajłu JPEG 2000"
-
-#: gdk-pixbuf/io-jasper.c:262
-msgid "Couldn't allocate memory to buffer image data"
-msgstr "Nie ŭdałosia prymierkavać pamiać dla źviestak vyjavy ŭ bufery"
-
-#: gdk-pixbuf/io-jasper.c:306
-msgid "The JPEG 2000 image format"
-msgstr "Farmat vyjavy JPEG 2000"
-
-#: gdk-pixbuf/io-jpeg.c:117
-#, c-format
-msgid "Error interpreting JPEG image file (%s)"
-msgstr "Pamyłka pry interpretacyi fajłu z vyjavaj JPEG (%s)"
-
-#: gdk-pixbuf/io-jpeg.c:528
-msgid ""
-"Insufficient memory to load image, try exiting some applications to free "
-"memory"
-msgstr ""
-"Nie staje pamiaci dziela zahruzki fajłu, pasprabuj začynić peŭnyja afajłacyi "
-"kab vyzvalić pamiać"
-
-#: gdk-pixbuf/io-jpeg.c:569 gdk-pixbuf/io-jpeg.c:775
-#, c-format
-msgid "Unsupported JPEG color space (%s)"
-msgstr "Prastora koleraŭ u fajle JPEG (%s) nie absłuhoŭvajecca"
-
-#: gdk-pixbuf/io-jpeg.c:674 gdk-pixbuf/io-jpeg.c:944 gdk-pixbuf/io-jpeg.c:1177
-#: gdk-pixbuf/io-jpeg.c:1186
-msgid "Couldn't allocate memory for loading JPEG file"
-msgstr "Nie staje pamiaci dziela zahruzki fajłu JPEG"
-
-#: gdk-pixbuf/io-jpeg.c:919
-msgid "Transformed JPEG has zero width or height."
-msgstr "Transfarmavanaja vyjava JPEG maje nulavuju šyryniu albo vyšyniu."
-
-#: gdk-pixbuf/io-jpeg.c:1133 gdk-pixbuf/io-gdip-jpeg.c:53
-#, c-format
-msgid ""
-"JPEG quality must be a value between 0 and 100; value '%s' could not be "
-"parsed."
-msgstr ""
-"Jakaść vyjavy JPEG musić być vartaściu ad 0 da 100; vartaść '%s' "
-"niapravilnaja."
-
-#: gdk-pixbuf/io-jpeg.c:1148 gdk-pixbuf/io-gdip-jpeg.c:68
-#, c-format
-msgid ""
-"JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
-msgstr ""
-"Jakaść vyjavy JPEG musić być vartaściu ad 0 da 100; vartaść '%d' "
-"niedazvolenaja."
-
-#: gdk-pixbuf/io-jpeg.c:1310 gdk-pixbuf/io-gdip-jpeg.c:136
-msgid "The JPEG image format"
-msgstr "Farmat vyjavy JPEG"
-
-#: gdk-pixbuf/io-pcx.c:187
-msgid "Couldn't allocate memory for header"
-msgstr "Niemahčyma prymierkavać pamiać dla zahałoŭka"
-
-#: gdk-pixbuf/io-pcx.c:202 gdk-pixbuf/io-pcx.c:560
-msgid "Couldn't allocate memory for context buffer"
-msgstr "Niemahčyma prymierkavać pamiać dla kantekstnaha bufera"
-
-#: gdk-pixbuf/io-pcx.c:601
-msgid "Image has invalid width and/or height"
-msgstr "Vyjava maje niapravilnuju šyryniu i/albo vyšyniu"
-
-#: gdk-pixbuf/io-pcx.c:613 gdk-pixbuf/io-pcx.c:674
-msgid "Image has unsupported bpp"
-msgstr "Vyjava maje ŭ sabie vartaść bpp, a jana nie absłuhoŭvajecca"
-
-#: gdk-pixbuf/io-pcx.c:618 gdk-pixbuf/io-pcx.c:626
-#, c-format
-msgid "Image has unsupported number of %d-bit planes"
-msgstr "Vyjava maje ŭ sabie nie absłuhoŭvanuju kolkaść %d-bitnych płoskaściaŭ"
-
-#: gdk-pixbuf/io-pcx.c:642
-msgid "Couldn't create new pixbuf"
-msgstr "Niemahčyma stvaryć novy bufer piksmapy"
-
-#: gdk-pixbuf/io-pcx.c:650
-msgid "Couldn't allocate memory for line data"
-msgstr "Niemahčyma prymierkavać pamiać dla źviestak radka"
-
-#: gdk-pixbuf/io-pcx.c:657
-msgid "Couldn't allocate memory for paletted data"
-msgstr "Niemahčyma prymierkavać pamiać dla źviestak palitry"
-
-#: gdk-pixbuf/io-pcx.c:704
-msgid "Didn't get all lines of PCX image"
-msgstr "Nia ŭsie radki vyjavy PCX atrymanyja"
-
-#: gdk-pixbuf/io-pcx.c:711
-msgid "No palette found at end of PCX data"
-msgstr "Nia znojdzienaja palitra na kancy źviestak PCX"
-
-#: gdk-pixbuf/io-pcx.c:756
-msgid "The PCX image format"
-msgstr "Farmat vyjavy PCX"
-
-#: gdk-pixbuf/io-png.c:55
-msgid "Bits per channel of PNG image is invalid."
-msgstr "Kolkaść bitaŭ na kanał vyjavy PNG niapravilnaja."
-
-#: gdk-pixbuf/io-png.c:136 gdk-pixbuf/io-png.c:642
-msgid "Transformed PNG has zero width or height."
-msgstr "Transfarmavany PNG maje nulavuju šyryniu albo vyšyniu."
-
-#: gdk-pixbuf/io-png.c:144
-msgid "Bits per channel of transformed PNG is not 8."
-msgstr "Kolkaść bitaŭ na kanał transfarmavanaha PNG nie raŭnajecca 8."
-
-#: gdk-pixbuf/io-png.c:153
-msgid "Transformed PNG not RGB or RGBA."
-msgstr "Transfarmavany PNG nie źjaŭlajecca RGB ani RGBA."
-
-#: gdk-pixbuf/io-png.c:162
-msgid "Transformed PNG has unsupported number of channels, must be 3 or 4."
-msgstr ""
-"Transfarmavany PNG maje ŭ sabie nie absłuhoŭvanuju kolkaść kanałaŭ, pavinna "
-"być 3 albo 4."
-
-#: gdk-pixbuf/io-png.c:183
-#, c-format
-msgid "Fatal error in PNG image file: %s"
-msgstr "Surjoznaja pamyłka ŭ fajle z vyjavaj PNG: %s"
-
-#: gdk-pixbuf/io-png.c:316
-msgid "Insufficient memory to load PNG file"
-msgstr "Nie staje pamiaci dziela zahruzki fajłu PNG"
-
-#: gdk-pixbuf/io-png.c:657
-#, c-format
-msgid ""
-"Insufficient memory to store a %ld by %ld image; try exiting some "
-"applications to reduce memory usage"
-msgstr ""
-"Nie staje pamiaci dziela zachoŭvańnia vyjavy pamierami %ld na %ld punktaŭ; "
-"pasprabuj źmienšyć zapatrabavańnie na pamiać začyniajučy niekatoryja prahramy"
-
-#: gdk-pixbuf/io-png.c:720
-msgid "Fatal error reading PNG image file"
-msgstr "Surjoznaja pamyłka pry adčytańni fajłu z vyjavaj PNG"
-
-#: gdk-pixbuf/io-png.c:769
-#, c-format
-msgid "Fatal error reading PNG image file: %s"
-msgstr "Surjoznaja pamyłka pry čytańni fajłu z vyjavaj PNG: %s"
-
-#: gdk-pixbuf/io-png.c:863
-msgid ""
-"Keys for PNG text chunks must have at least 1 and at most 79 characters."
-msgstr "Klučy tekstavych elementaŭ PNG musiać mieć daŭžyniu ad 1 da 79 znakaŭ."
-
-#: gdk-pixbuf/io-png.c:872
-msgid "Keys for PNG text chunks must be ASCII characters."
-msgstr "Klučy tekstavych elementaŭ PNG musiać być znakami ASCII."
-
-#: gdk-pixbuf/io-png.c:886 gdk-pixbuf/io-tiff.c:738
-#, c-format
-msgid "Color profile has invalid length %d."
-msgstr ""
-
-#: gdk-pixbuf/io-png.c:899 gdk-pixbuf/io-gdip-png.c:56
-#, c-format
-msgid ""
-"PNG compression level must be a value between 0 and 9; value '%s' could not "
-"be parsed."
-msgstr ""
-"Uzrovień kampresii vyjavy PNG musić być vartaściu ad 0 da 9; vartaść \"%s\" "
-"nia moža być apracavanaja."
-
-#: gdk-pixbuf/io-png.c:912 gdk-pixbuf/io-gdip-png.c:68
-#, c-format
-msgid ""
-"PNG compression level must be a value between 0 and 9; value '%d' is not "
-"allowed."
-msgstr ""
-"Uzrovień kampresii vyjavy PNG musić być vartaściu ad 0 da 9; vartaść \"%d\" "
-"niedapuščalnaja."
-
-#: gdk-pixbuf/io-png.c:951
-#, c-format
-msgid "Value for PNG text chunk %s cannot be converted to ISO-8859-1 encoding."
-msgstr ""
-"Vartaść tekstavaha elementu PNG %s nia moža być pierakanvertavanaja na "
-"kadavańnie ISO-8859-1."
-
-#: gdk-pixbuf/io-png.c:1112 gdk-pixbuf/io-gdip-png.c:133
-msgid "The PNG image format"
-msgstr "Farmat vyjavy PNG"
-
-#: gdk-pixbuf/io-pnm.c:250
-msgid "PNM loader expected to find an integer, but didn't"
-msgstr "Modl absłuhoŭvańnia PNM čakaŭ cełaj vartaści, a atrymaŭ inšuju"
-
-#: gdk-pixbuf/io-pnm.c:282
-msgid "PNM file has an incorrect initial byte"
-msgstr "Fajł PNM maje ŭ sabie niapravilny pačatkovy bajt"
-
-#: gdk-pixbuf/io-pnm.c:312
-msgid "PNM file is not in a recognized PNM subformat"
-msgstr "Fajł PNM nia maje ŭ sabie raspaznanaha padfarmatu PNM"
-
-#: gdk-pixbuf/io-pnm.c:337
-msgid "PNM file has an image width of 0"
-msgstr "Fajł PNM maje ŭ sabie vyjavu šyrynioj 0"
-
-#: gdk-pixbuf/io-pnm.c:358
-msgid "PNM file has an image height of 0"
-msgstr "Fajł PNM maje ŭ sabie vyjavu vyšynioj 0"
-
-#: gdk-pixbuf/io-pnm.c:381
-msgid "Maximum color value in PNM file is 0"
-msgstr "Maksymalnaja vartaść koleru ŭ fajle PNM składaje 0"
-
-#: gdk-pixbuf/io-pnm.c:389
-msgid "Maximum color value in PNM file is too large"
-msgstr "Maksymalnaja vartaść koleru ŭ fajle PNM zavialikaja"
-
-#: gdk-pixbuf/io-pnm.c:429 gdk-pixbuf/io-pnm.c:459 gdk-pixbuf/io-pnm.c:504
-msgid "Raw PNM image type is invalid"
-msgstr "Typ suviraj vyjavy PNM niapravilny"
-
-#: gdk-pixbuf/io-pnm.c:654
-msgid "PNM image loader does not support this PNM subformat"
-msgstr "Modul čytańnia vyjavaŭ PNM nie absłuhoŭvaje hetaha padfarmatu PNM"
-
-#: gdk-pixbuf/io-pnm.c:741 gdk-pixbuf/io-pnm.c:968
-msgid "Raw PNM formats require exactly one whitespace before sample data"
-msgstr "Suvory farmat PNM vymahaje dakładna adnaho prabiełu pierad źviestkami"
-
-#: gdk-pixbuf/io-pnm.c:768
-msgid "Cannot allocate memory for loading PNM image"
-msgstr "Niemahčyma prymierkavać pamiać na na zahruzku fajłu PNM"
-
-#: gdk-pixbuf/io-pnm.c:818
-msgid "Insufficient memory to load PNM context struct"
-msgstr "Nie staje pamiaci dziela zahruzki struktury kantekstu PNM"
-
-#: gdk-pixbuf/io-pnm.c:869
-msgid "Unexpected end of PNM image data"
-msgstr "Niečakany kaniec źviestak vyjavy PNM"
-
-#: gdk-pixbuf/io-pnm.c:997
-msgid "Insufficient memory to load PNM file"
-msgstr "Nie staje pamiaci dziela zahruzki fajłu PNM"
-
-#: gdk-pixbuf/io-pnm.c:1081
-msgid "The PNM/PBM/PGM/PPM image format family"
-msgstr "Siamja hrafičnych farmataŭ PNM/PBM/PGM/PPM"
-
-#: gdk-pixbuf/io-qtif.c:128
-msgid "Input file descriptor is NULL."
-msgstr ""
-
-#: gdk-pixbuf/io-qtif.c:143
-#, fuzzy
-msgid "Failed to read QTIF header"
-msgstr "Niemahčyma zapisać zahałovak\n"
-
-#: gdk-pixbuf/io-qtif.c:152 gdk-pixbuf/io-qtif.c:182 gdk-pixbuf/io-qtif.c:446
-#, c-format
-msgid "QTIF atom size too large (%d bytes)"
-msgstr ""
-
-#: gdk-pixbuf/io-qtif.c:172
-#, fuzzy, c-format
-msgid "Failed to allocate %d bytes for file read buffer"
-msgstr "Nie staje pamiaci dziela buferu vyjavy pamieram %u bajtu"
-
-#: gdk-pixbuf/io-qtif.c:196
-#, fuzzy, c-format
-msgid "File error when reading QTIF atom: %s"
-msgstr "Pamyłka pry adčytańni vyjavy GIF: %s"
-
-#: gdk-pixbuf/io-qtif.c:233
-#, c-format
-msgid "Failed to skip the next %d bytes with seek()."
-msgstr ""
-
-#: gdk-pixbuf/io-qtif.c:257
-#, fuzzy
-msgid "Failed to allocate QTIF context structure."
-msgstr "Niemahčyma prymierkavać pamiać na strukturu kantekstu TGA"
-
-#: gdk-pixbuf/io-qtif.c:317
-#, fuzzy
-msgid "Failed to create GdkPixbufLoader object."
-msgstr "Niemahčyma zapisać indeks katalohu\n"
-
-#: gdk-pixbuf/io-qtif.c:421
-#, fuzzy
-msgid "Failed to find an image data atom."
-msgstr "Niemahčyma adčynić vyjavu TIFF"
-
-#: gdk-pixbuf/io-qtif.c:602
-#, fuzzy
-msgid "The QTIF image format"
-msgstr "Farmat vyjavy TIFF"
-
-#: gdk-pixbuf/io-ras.c:126
-msgid "RAS image has bogus header data"
-msgstr "Pamyłkovy zahałovak vyjavy RAS"
-
-#: gdk-pixbuf/io-ras.c:148
-msgid "RAS image has unknown type"
-msgstr "Nieviadomy farmat vyjavy RAS"
-
-#: gdk-pixbuf/io-ras.c:156
-msgid "unsupported RAS image variation"
-msgstr "typ vyjavy RAS nie absłuhoŭvajecca"
-
-#: gdk-pixbuf/io-ras.c:171 gdk-pixbuf/io-ras.c:200
-msgid "Not enough memory to load RAS image"
-msgstr "Nie staje pamiaci dziela zahruzki vyjavy RAS"
-
-#: gdk-pixbuf/io-ras.c:545
-msgid "The Sun raster image format"
-msgstr "Rastravy hrafičny farmat firmy SUN"
-
-#: gdk-pixbuf/io-tga.c:154
-msgid "Cannot allocate memory for IOBuffer struct"
-msgstr "Niemahčyma prymierkavać pamiać na strukturu IOBuffer"
-
-#: gdk-pixbuf/io-tga.c:173
-msgid "Cannot allocate memory for IOBuffer data"
-msgstr "Niemahčyma prymierkavać pamiać na źviestki IOBuffer"
-
-#: gdk-pixbuf/io-tga.c:184
-msgid "Cannot realloc IOBuffer data"
-msgstr "Niemahčyma znoŭ prymierkavać źviestki IOBuffer"
-
-#: gdk-pixbuf/io-tga.c:214
-msgid "Cannot allocate temporary IOBuffer data"
-msgstr "Niemahčyma prymierkavać časovyja źviestki IOBuffer"
-
-#: gdk-pixbuf/io-tga.c:347
-msgid "Cannot allocate new pixbuf"
-msgstr "Niemahčyma prymierkavać novy abjekt pixbuf"
-
-#: gdk-pixbuf/io-tga.c:686
-#, fuzzy
-msgid "Image is corrupted or truncated"
-msgstr "Fajł GIF byŭ abrezany albo jon niapoŭny."
-
-#: gdk-pixbuf/io-tga.c:693
-msgid "Cannot allocate colormap structure"
-msgstr "Niemahčyma prymierkavać strukturu palitry koleraŭ"
-
-#: gdk-pixbuf/io-tga.c:700
-msgid "Cannot allocate colormap entries"
-msgstr "Niemahčyma prymierkavać elementy palitry koleraŭ"
-
-#: gdk-pixbuf/io-tga.c:722
-msgid "Unexpected bitdepth for colormap entries"
-msgstr "Niečakanaja vartaść hłybini elementaŭ palitry koleraŭ"
-
-#: gdk-pixbuf/io-tga.c:740
-msgid "Cannot allocate TGA header memory"
-msgstr "Niemahčyma prymierkavać pamiać na zahałovak vyjavy TGA"
-
-#: gdk-pixbuf/io-tga.c:773
-msgid "TGA image has invalid dimensions"
-msgstr "Vyjava TGA maje nieadpaviednyja pamiery"
-
-#: gdk-pixbuf/io-tga.c:779 gdk-pixbuf/io-tga.c:788 gdk-pixbuf/io-tga.c:798
-#: gdk-pixbuf/io-tga.c:808 gdk-pixbuf/io-tga.c:815
-msgid "TGA image type not supported"
-msgstr "Typ vyjavy TGA nie absłuhoŭvajecca"
-
-#: gdk-pixbuf/io-tga.c:862
-msgid "Cannot allocate memory for TGA context struct"
-msgstr "Niemahčyma prymierkavać pamiać na strukturu kantekstu TGA"
-
-#: gdk-pixbuf/io-tga.c:927
-msgid "Excess data in file"
-msgstr "U fajle isnujuć zališnija źviestki"
-
-#: gdk-pixbuf/io-tga.c:1008
-msgid "The Targa image format"
-msgstr "Farmat vyjavy Targa"
-
-#: gdk-pixbuf/io-tiff.c:165
-msgid "Could not get image width (bad TIFF file)"
-msgstr "Niemahčyma atrymać šyryniu vyjavy (niapravilny fajł TIFF)"
-
-#: gdk-pixbuf/io-tiff.c:172
-msgid "Could not get image height (bad TIFF file)"
-msgstr "Niemahčyma atrymać vyšyniu vyjavy (niapravilny fajł TIFF)"
-
-#: gdk-pixbuf/io-tiff.c:180
-msgid "Width or height of TIFF image is zero"
-msgstr "Šyrynia albo vyšynia vyjavy TIFF roŭnaja nulu"
-
-#: gdk-pixbuf/io-tiff.c:189 gdk-pixbuf/io-tiff.c:198
-msgid "Dimensions of TIFF image too large"
-msgstr "Zavialikija pamiery vyjavy TIFF"
-
-#: gdk-pixbuf/io-tiff.c:222 gdk-pixbuf/io-tiff.c:234 gdk-pixbuf/io-tiff.c:561
-msgid "Insufficient memory to open TIFF file"
-msgstr "Nie staje pamiaci dziela zahruzki fajłu TIFF"
-
-#: gdk-pixbuf/io-tiff.c:295
-msgid "Failed to load RGB data from TIFF file"
-msgstr "Niemahčyma zahruzić źviestki RGB z fajłu TIFF"
-
-#: gdk-pixbuf/io-tiff.c:351
-msgid "Failed to open TIFF image"
-msgstr "Niemahčyma adčynić vyjavu TIFF"
-
-#: gdk-pixbuf/io-tiff.c:363 gdk-pixbuf/io-tiff.c:778
-msgid "TIFFClose operation failed"
-msgstr "Aperacyja TIFFClose nie ŭdałasia"
-
-#: gdk-pixbuf/io-tiff.c:493 gdk-pixbuf/io-tiff.c:506
-msgid "Failed to load TIFF image"
-msgstr "Niemahčyma zahruzić vyjavu TIFF"
-
-#: gdk-pixbuf/io-tiff.c:692
-msgid "Failed to save TIFF image"
-msgstr "Niemahčyma zapisać vyjavu TIFF"
-
-#: gdk-pixbuf/io-tiff.c:727
-msgid "TIFF compression doesn't refer to a valid codec."
-msgstr ""
-
-#: gdk-pixbuf/io-tiff.c:767
-msgid "Failed to write TIFF data"
-msgstr "Niemahčyma zapisać źviestki TIFF"
-
-#: gdk-pixbuf/io-tiff.c:814
-msgid "Couldn't write to TIFF file"
-msgstr "Niemahčyma zapisać u fajł TIFF"
-
-#: gdk-pixbuf/io-tiff.c:869
-msgid "The TIFF image format"
-msgstr "Farmat vyjavy TIFF"
-
-#: gdk-pixbuf/io-wbmp.c:246
-msgid "Image has zero width"
-msgstr "Šyrynia vyjavy nulavaja"
-
-#: gdk-pixbuf/io-wbmp.c:264
-msgid "Image has zero height"
-msgstr "Vyšynia vyjavy nulavaja"
-
-#: gdk-pixbuf/io-wbmp.c:275
-msgid "Not enough memory to load image"
-msgstr "Nie staje pamiaci dziela zahruzki vyjavy"
-
-#: gdk-pixbuf/io-wbmp.c:334
-msgid "Couldn't save the rest"
-msgstr "Niemahčyma zapisać astatniaje"
-
-#: gdk-pixbuf/io-wbmp.c:375
-msgid "The WBMP image format"
-msgstr "Farmat vyjavy WBMP"
-
-#: gdk-pixbuf/io-xbm.c:295
-msgid "Invalid XBM file"
-msgstr "Niapravilny fajł XBM"
-
-#: gdk-pixbuf/io-xbm.c:305
-msgid "Insufficient memory to load XBM image file"
-msgstr "Nie staje pamiaci dziela zahruzki fajłu XBM"
-
-#: gdk-pixbuf/io-xbm.c:453
-msgid "Failed to write to temporary file when loading XBM image"
-msgstr "Pry zahruzcy fajłu XBM nie ŭdałosia zapisać časovy fajł"
-
-#: gdk-pixbuf/io-xbm.c:492
-msgid "The XBM image format"
-msgstr "Farmat vyjavy XBM"
-
-#: gdk-pixbuf/io-xpm.c:468
-msgid "No XPM header found"
-msgstr "Nia znojdzieny zahałovak XPM"
-
-#: gdk-pixbuf/io-xpm.c:477
-msgid "Invalid XPM header"
-msgstr "Niapravilny zahałovak XPM"
-
-#: gdk-pixbuf/io-xpm.c:485
-msgid "XPM file has image width <= 0"
-msgstr "Fajł XPM maje ŭ sabie vyjavu šyrynioj <= 0"
-
-#: gdk-pixbuf/io-xpm.c:493
-msgid "XPM file has image height <= 0"
-msgstr "Fajł XPM maje ŭ sabie vyjavu vyšynioj <= 0"
-
-#: gdk-pixbuf/io-xpm.c:501
-msgid "XPM has invalid number of chars per pixel"
-msgstr "Fajł XPM maje ŭ sabie niapravilnuju kolkaść znakaŭ na piksel"
-
-#: gdk-pixbuf/io-xpm.c:510
-msgid "XPM file has invalid number of colors"
-msgstr "Fajł XPM maje ŭ sabie niapravilnuju kolkaść koleraŭ"
-
-#: gdk-pixbuf/io-xpm.c:522 gdk-pixbuf/io-xpm.c:531 gdk-pixbuf/io-xpm.c:583
-msgid "Cannot allocate memory for loading XPM image"
-msgstr "Niemahčyma prymierkavać pamiać dziela zahruzki fajłu XPM"
-
-#: gdk-pixbuf/io-xpm.c:545
-msgid "Cannot read XPM colormap"
-msgstr "Niemahčyma adčytać palitru koleraŭ XPM"
-
-#: gdk-pixbuf/io-xpm.c:777
-msgid "Failed to write to temporary file when loading XPM image"
-msgstr "Pry zahruzcy fajłu XPM nie ŭdaŭsia zapis časovaha fajłu"
-
-#: gdk-pixbuf/io-xpm.c:816
-msgid "The XPM image format"
-msgstr "Farmat vyjavy XPM"
-
-#: gdk-pixbuf/io-gdip-emf.c:59
-msgid "The EMF image format"
-msgstr "Farmat vyjavy EMF"
-
-#: gdk-pixbuf/io-gdip-utils.c:232
-#, c-format
-msgid "Could not allocate memory: %s"
-msgstr "Nie ŭdałosia prymierkavać pamiać: %s"
-
-#: gdk-pixbuf/io-gdip-utils.c:257 gdk-pixbuf/io-gdip-utils.c:371
-#: gdk-pixbuf/io-gdip-utils.c:411
-#, c-format
-msgid "Could not create stream: %s"
-msgstr "Nie ŭdałosia stvaryć płyń: %s"
-
-#: gdk-pixbuf/io-gdip-utils.c:271
-#, c-format
-msgid "Could not seek stream: %s"
-msgstr "Nie ŭdałosia pieraskočyć u płyni: %s"
-
-#: gdk-pixbuf/io-gdip-utils.c:283
-#, c-format
-msgid "Could not read from stream: %s"
-msgstr "Nie ŭdałosia pračytać z płyni: %s"
-
-#: gdk-pixbuf/io-gdip-utils.c:694 gdk-pixbuf/io-gdip-utils.c:825
-msgid "Couldn't load bitmap"
-msgstr "Nie ŭdałosia zahruzić bitavuju mapu"
-
-#: gdk-pixbuf/io-gdip-utils.c:847
-msgid "Couldn't load metafile"
-msgstr "Nie ŭdałosia zahruzić metafajł"
-
-#: gdk-pixbuf/io-gdip-utils.c:1006
-msgid "Unsupported image format for GDI+"
-msgstr "Typ vyjavy, jaki nie absłuhoŭvajecca dla GDI+"
-
-#: gdk-pixbuf/io-gdip-utils.c:1013
-msgid "Couldn't save"
-msgstr "Nie ŭdałosia zapisać"
-
-#: gdk-pixbuf/io-gdip-wmf.c:58
-msgid "The WMF image format"
-msgstr "Farmat vyjavy WMF"
 
 #. Description of --sync in --help output
 #: gdk/win32/gdkmain-win32.c:55
@@ -1524,8 +611,9 @@ msgid "_Saturation:"
 msgstr "Na_syčanaść:"
 
 #: gtk/gtkcolorsel.c:393
-msgid "\"Deepness\" of the color."
-msgstr "\"Hłybinia\" koleru."
+#, fuzzy
+msgid "Intensity of the color."
+msgstr "Prazrystaść koleru."
 
 #: gtk/gtkcolorsel.c:394
 msgid "_Value:"
@@ -1696,11 +784,11 @@ msgstr "_Pravaje:"
 msgid "Paper Margins"
 msgstr "Paboččy arkuša"
 
-#: gtk/gtkentry.c:8612 gtk/gtktextview.c:8002
+#: gtk/gtkentry.c:8612 gtk/gtktextview.c:8012
 msgid "Input _Methods"
 msgstr "_Metady ŭvodu"
 
-#: gtk/gtkentry.c:8626 gtk/gtktextview.c:8016
+#: gtk/gtkentry.c:8626 gtk/gtktextview.c:8026
 msgid "_Insert Unicode Control Character"
 msgstr "_Ustaŭ kantrolny znak Unikodu"
 
@@ -2145,13 +1233,13 @@ msgid "System (%s)"
 msgstr "Systema (%s)"
 
 #. Open Link
-#: gtk/gtklabel.c:6076
+#: gtk/gtklabel.c:6072
 #, fuzzy
 msgid "_Open Link"
 msgstr "_Adčyni"
 
 #. Copy Link Address
-#: gtk/gtklabel.c:6088
+#: gtk/gtklabel.c:6084
 msgid "Copy _Link Address"
 msgstr ""
 
@@ -2164,27 +1252,27 @@ msgid "Invalid URI"
 msgstr "Niapravilny URI"
 
 #. Description of --gtk-module=MODULES in --help output
-#: gtk/gtkmain.c:447
+#: gtk/gtkmain.c:432
 msgid "Load additional GTK+ modules"
 msgstr "Zahružaje dadatkovyja moduli GTK+"
 
 #. Placeholder in --gtk-module=MODULES in --help output
-#: gtk/gtkmain.c:448
+#: gtk/gtkmain.c:433
 msgid "MODULES"
 msgstr "MODULI"
 
 #. Description of --g-fatal-warnings in --help output
-#: gtk/gtkmain.c:450
+#: gtk/gtkmain.c:435
 msgid "Make all warnings fatal"
 msgstr "Uspryjmańnie aściarohaŭ jak pamyłak"
 
 #. Description of --gtk-debug=FLAGS in --help output
-#: gtk/gtkmain.c:453
+#: gtk/gtkmain.c:438
 msgid "GTK+ debugging flags to set"
 msgstr "Ustalavanyja ściažki adsočki GTK+"
 
 #. Description of --gtk-no-debug=FLAGS in --help output
-#: gtk/gtkmain.c:456
+#: gtk/gtkmain.c:441
 msgid "GTK+ debugging flags to unset"
 msgstr "Vyčyščanyja ściažki adsočki GTK+"
 
@@ -2193,20 +1281,20 @@ msgstr "Vyčyščanyja ściažki adsočki GTK+"
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
 #.
-#: gtk/gtkmain.c:708
+#: gtk/gtkmain.c:704
 msgid "default:LTR"
 msgstr "default:LTR"
 
-#: gtk/gtkmain.c:773
+#: gtk/gtkmain.c:769
 #, c-format
 msgid "Cannot open display: %s"
 msgstr "Nie ŭdałosia adčynić ekran: %s"
 
-#: gtk/gtkmain.c:810
+#: gtk/gtkmain.c:806
 msgid "GTK+ Options"
 msgstr "Opcyi GTK+"
 
-#: gtk/gtkmain.c:810
+#: gtk/gtkmain.c:806
 msgid "Show GTK+ Options"
 msgstr "Pakazvaje opcyi GTK+"
 
@@ -2292,7 +1380,7 @@ msgstr ""
 msgid "Cannot end process with pid %d: %s"
 msgstr ""
 
-#: gtk/gtknotebook.c:4621 gtk/gtknotebook.c:7050
+#: gtk/gtknotebook.c:4631 gtk/gtknotebook.c:7060
 #, c-format
 msgid "Page %u"
 msgstr "Staronka %u"
@@ -2387,87 +1475,81 @@ msgstr "_Zapis w foldery:"
 msgid "%s job #%d"
 msgstr "%s, zadańnie #%d"
 
-#: gtk/gtkprintoperation.c:1687
+#: gtk/gtkprintoperation.c:1695
 msgctxt "print operation status"
 msgid "Initial state"
 msgstr "Pačatkovy stan"
 
-#: gtk/gtkprintoperation.c:1688
+#: gtk/gtkprintoperation.c:1696
 msgctxt "print operation status"
 msgid "Preparing to print"
 msgstr "Padrychtoŭka da druku"
 
-#: gtk/gtkprintoperation.c:1689
+#: gtk/gtkprintoperation.c:1697
 msgctxt "print operation status"
 msgid "Generating data"
 msgstr "Vytvareńnie źviestak"
 
-#: gtk/gtkprintoperation.c:1690
+#: gtk/gtkprintoperation.c:1698
 msgctxt "print operation status"
 msgid "Sending data"
 msgstr "Vysyłańnie źviestak"
 
-#: gtk/gtkprintoperation.c:1691
+#: gtk/gtkprintoperation.c:1699
 msgctxt "print operation status"
 msgid "Waiting"
 msgstr "Čakańnie"
 
-#: gtk/gtkprintoperation.c:1692
+#: gtk/gtkprintoperation.c:1700
 msgctxt "print operation status"
 msgid "Blocking on issue"
 msgstr "Blakavańnie"
 
-#: gtk/gtkprintoperation.c:1693
+#: gtk/gtkprintoperation.c:1701
 msgctxt "print operation status"
 msgid "Printing"
 msgstr "Druk"
 
-#: gtk/gtkprintoperation.c:1694
+#: gtk/gtkprintoperation.c:1702
 msgctxt "print operation status"
 msgid "Finished"
 msgstr "Skončyłasia"
 
-#: gtk/gtkprintoperation.c:1695
+#: gtk/gtkprintoperation.c:1703
 msgctxt "print operation status"
 msgid "Finished with error"
 msgstr "Skončyłasia z pamyłkaj"
 
-#: gtk/gtkprintoperation.c:2254
+#: gtk/gtkprintoperation.c:2270
 #, c-format
 msgid "Preparing %d"
 msgstr "Padrychtoŭka %d"
 
-#: gtk/gtkprintoperation.c:2256 gtk/gtkprintoperation.c:2875
+#: gtk/gtkprintoperation.c:2272 gtk/gtkprintoperation.c:2902
 #, c-format
 msgid "Preparing"
 msgstr "Padrychtoŭka"
 
-#: gtk/gtkprintoperation.c:2259
+#: gtk/gtkprintoperation.c:2275
 #, c-format
 msgid "Printing %d"
 msgstr "Drukavańnie %d"
 
-#: gtk/gtkprintoperation.c:2905
+#: gtk/gtkprintoperation.c:2932
 #, c-format
 msgid "Error creating print preview"
 msgstr "Pamyłka stvareńnia pieradahladu vydruku"
 
-#: gtk/gtkprintoperation.c:2908
+#: gtk/gtkprintoperation.c:2935
 #, c-format
 msgid "The most probable reason is that a temporary file could not be created."
 msgstr "Chutčej za ŭsio, ty nia možaš stvaryć časovy fajł."
 
-#: gtk/gtkprintoperation-unix.c:297 gtk/gtkprintoperation-unix.c:314
-#, c-format
+#: gtk/gtkprintoperation-unix.c:297
 msgid "Error launching preview"
 msgstr "Pamyłka ŭklučeńnia pieradahladu"
 
-#: gtk/gtkprintoperation-unix.c:358
-#, c-format
-msgid "Error printing"
-msgstr "Pamyłka padčas druku"
-
-#: gtk/gtkprintoperation-unix.c:494 gtk/gtkprintoperation-win32.c:1447
+#: gtk/gtkprintoperation-unix.c:470 gtk/gtkprintoperation-win32.c:1447
 msgid "Application"
 msgstr "Aplikacyja"
 
@@ -2481,7 +1563,7 @@ msgstr "Niama papiery"
 
 #. Translators: this is a printer status.
 #: gtk/gtkprintoperation-win32.c:616
-#: modules/printbackends/cups/gtkprintbackendcups.c:1999
+#: modules/printbackends/cups/gtkprintbackendcups.c:1998
 msgid "Paused"
 msgstr "Paŭza"
 
@@ -2610,42 +1692,42 @@ msgstr "Ahulnaje"
 #. * multiple pages on a sheet when printing
 #.
 #: gtk/gtkprintunixdialog.c:3010
-#: modules/printbackends/cups/gtkprintbackendcups.c:3509
+#: modules/printbackends/cups/gtkprintbackendcups.c:3508
 msgid "Left to right, top to bottom"
 msgstr "Źleva ŭprava, źvierchu ŭniz"
 
 #: gtk/gtkprintunixdialog.c:3010
-#: modules/printbackends/cups/gtkprintbackendcups.c:3509
+#: modules/printbackends/cups/gtkprintbackendcups.c:3508
 msgid "Left to right, bottom to top"
 msgstr "Źleva ŭprava, źnizu ŭvierch"
 
 #: gtk/gtkprintunixdialog.c:3011
-#: modules/printbackends/cups/gtkprintbackendcups.c:3510
+#: modules/printbackends/cups/gtkprintbackendcups.c:3509
 msgid "Right to left, top to bottom"
 msgstr "Sprava ŭleva, źvierchu ŭniz"
 
 #: gtk/gtkprintunixdialog.c:3011
-#: modules/printbackends/cups/gtkprintbackendcups.c:3510
+#: modules/printbackends/cups/gtkprintbackendcups.c:3509
 msgid "Right to left, bottom to top"
 msgstr "Sprava ŭleva, źnizu ŭvierch"
 
 #: gtk/gtkprintunixdialog.c:3012
-#: modules/printbackends/cups/gtkprintbackendcups.c:3511
+#: modules/printbackends/cups/gtkprintbackendcups.c:3510
 msgid "Top to bottom, left to right"
 msgstr "Źvierchu ŭniz, źleva ŭprava"
 
 #: gtk/gtkprintunixdialog.c:3012
-#: modules/printbackends/cups/gtkprintbackendcups.c:3511
+#: modules/printbackends/cups/gtkprintbackendcups.c:3510
 msgid "Top to bottom, right to left"
 msgstr "Źvierchu ŭniz, sprava ŭleva"
 
 #: gtk/gtkprintunixdialog.c:3013
-#: modules/printbackends/cups/gtkprintbackendcups.c:3512
+#: modules/printbackends/cups/gtkprintbackendcups.c:3511
 msgid "Bottom to top, left to right"
 msgstr "Źnizu ŭvierch, źleva ŭprava"
 
 #: gtk/gtkprintunixdialog.c:3013
-#: modules/printbackends/cups/gtkprintbackendcups.c:3512
+#: modules/printbackends/cups/gtkprintbackendcups.c:3511
 msgid "Bottom to top, right to left"
 msgstr "Źnizu ŭvierch, sprava ŭleva"
 
@@ -2653,7 +1735,7 @@ msgstr "Źnizu ŭvierch, sprava ŭleva"
 #. * dialog that controls in what order multiple pages are arranged
 #.
 #: gtk/gtkprintunixdialog.c:3017 gtk/gtkprintunixdialog.c:3030
-#: modules/printbackends/cups/gtkprintbackendcups.c:3544
+#: modules/printbackends/cups/gtkprintbackendcups.c:3543
 msgid "Page Ordering"
 msgstr "Paradkavańnie staronak"
 
@@ -4826,121 +3908,116 @@ msgstr "Drukarka \"%s\" adłučanaja ad sietki."
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:1687
 #, c-format
-msgid "Printer '%s' may not be connected."
-msgstr "Mahćyma, drukarka \"%s\" nie spałučanaja."
-
-#: modules/printbackends/cups/gtkprintbackendcups.c:1688
-#, c-format
 msgid "There is a problem on printer '%s'."
 msgstr "Z drukarkaju \"%s\" uźnikła prablema."
 
 #. Translators: this is a printer status.
-#: modules/printbackends/cups/gtkprintbackendcups.c:1996
+#: modules/printbackends/cups/gtkprintbackendcups.c:1995
 msgid "Paused ; Rejecting Jobs"
 msgstr "Prypyniena. Admaŭlaje zadańni"
 
 #. Translators: this is a printer status.
-#: modules/printbackends/cups/gtkprintbackendcups.c:2002
+#: modules/printbackends/cups/gtkprintbackendcups.c:2001
 msgid "Rejecting Jobs"
 msgstr "Admaŭlaje zadańni"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2778
+#: modules/printbackends/cups/gtkprintbackendcups.c:2777
 msgid "Two Sided"
 msgstr "Dvuchbakova"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2779
+#: modules/printbackends/cups/gtkprintbackendcups.c:2778
 msgid "Paper Type"
 msgstr "Typ papiery"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2780
+#: modules/printbackends/cups/gtkprintbackendcups.c:2779
 msgid "Paper Source"
 msgstr "Krynica papiery"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2781
+#: modules/printbackends/cups/gtkprintbackendcups.c:2780
 msgid "Output Tray"
 msgstr "Padnos vydačy"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2782
+#: modules/printbackends/cups/gtkprintbackendcups.c:2781
 msgid "Resolution"
 msgstr "Razroźnieńnie"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2783
+#: modules/printbackends/cups/gtkprintbackendcups.c:2782
 msgid "GhostScript pre-filtering"
 msgstr "Papiaredniaje filtravańnie GhostScript"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2792
+#: modules/printbackends/cups/gtkprintbackendcups.c:2791
 msgid "One Sided"
 msgstr "Adnabakova"
 
 #. Translators: this is an option of "Two Sided"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2794
+#: modules/printbackends/cups/gtkprintbackendcups.c:2793
 msgid "Long Edge (Standard)"
 msgstr "Šyroki bierah (zvyčajna)"
 
 #. Translators: this is an option of "Two Sided"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2796
+#: modules/printbackends/cups/gtkprintbackendcups.c:2795
 msgid "Short Edge (Flip)"
 msgstr "Vuzki bierah (hartańnie)"
 
 #. Translators: this is an option of "Paper Source"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2798
-#: modules/printbackends/cups/gtkprintbackendcups.c:2800
-#: modules/printbackends/cups/gtkprintbackendcups.c:2808
+#: modules/printbackends/cups/gtkprintbackendcups.c:2797
+#: modules/printbackends/cups/gtkprintbackendcups.c:2799
+#: modules/printbackends/cups/gtkprintbackendcups.c:2807
 msgid "Auto Select"
 msgstr "Aŭtamatyčny vybar"
 
 #. Translators: this is an option of "Paper Source"
 #. Translators: this is an option of "Resolution"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2802
-#: modules/printbackends/cups/gtkprintbackendcups.c:2804
-#: modules/printbackends/cups/gtkprintbackendcups.c:2806
-#: modules/printbackends/cups/gtkprintbackendcups.c:2810
-#: modules/printbackends/cups/gtkprintbackendcups.c:3296
+#: modules/printbackends/cups/gtkprintbackendcups.c:2801
+#: modules/printbackends/cups/gtkprintbackendcups.c:2803
+#: modules/printbackends/cups/gtkprintbackendcups.c:2805
+#: modules/printbackends/cups/gtkprintbackendcups.c:2809
+#: modules/printbackends/cups/gtkprintbackendcups.c:3295
 msgid "Printer Default"
 msgstr "Zmoŭčanyja drukarki"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2812
+#: modules/printbackends/cups/gtkprintbackendcups.c:2811
 msgid "Embed GhostScript fonts only"
 msgstr "Unutry tolki šryfty GhostScript"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2814
+#: modules/printbackends/cups/gtkprintbackendcups.c:2813
 msgid "Convert to PS level 1"
 msgstr "Skanvertuj u PS uzroŭniu 1"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2816
+#: modules/printbackends/cups/gtkprintbackendcups.c:2815
 msgid "Convert to PS level 2"
 msgstr "Skanvertuj u PS uzroŭniu 2"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2818
+#: modules/printbackends/cups/gtkprintbackendcups.c:2817
 msgid "No pre-filtering"
 msgstr "Nijakaha papiaredniaha filtravańnia"
 
 #. Translators: "Miscellaneous" is the label for a button, that opens
 #. up an extra panel of settings in a print dialog.
-#: modules/printbackends/cups/gtkprintbackendcups.c:2827
+#: modules/printbackends/cups/gtkprintbackendcups.c:2826
 msgid "Miscellaneous"
 msgstr "Roznaje"
 
 #. Translators: These strings name the possible values of the
 #. * job priority option in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3504
+#: modules/printbackends/cups/gtkprintbackendcups.c:3503
 msgid "Urgent"
 msgstr "Važnaje"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3504
+#: modules/printbackends/cups/gtkprintbackendcups.c:3503
 msgid "High"
 msgstr "Vysoki"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3504
+#: modules/printbackends/cups/gtkprintbackendcups.c:3503
 msgid "Medium"
 msgstr "Siaredni"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3504
+#: modules/printbackends/cups/gtkprintbackendcups.c:3503
 msgid "Low"
 msgstr "Nizki"
 
@@ -4948,66 +4025,66 @@ msgstr "Nizki"
 #. Translators, this string is used to label the pages-per-sheet option
 #. * in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3528
+#: modules/printbackends/cups/gtkprintbackendcups.c:3527
 msgid "Pages per Sheet"
 msgstr "Staronak na arkušy"
 
 #. Translators, this string is used to label the job priority option
 #. * in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3565
+#: modules/printbackends/cups/gtkprintbackendcups.c:3564
 msgid "Job Priority"
 msgstr "Pryjarytet zadańnia"
 
 #. Translators, this string is used to label the billing info entry
 #. * in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3576
+#: modules/printbackends/cups/gtkprintbackendcups.c:3575
 msgid "Billing Info"
 msgstr "Infarmacyja ab apłatach"
 
 #. Translators, these strings are names for various 'standard' cover
 #. * pages that the printing system may support.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3591
+#: modules/printbackends/cups/gtkprintbackendcups.c:3590
 msgid "None"
 msgstr "Niama"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3591
+#: modules/printbackends/cups/gtkprintbackendcups.c:3590
 msgid "Classified"
 msgstr "Sklasyfikavana"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3591
+#: modules/printbackends/cups/gtkprintbackendcups.c:3590
 msgid "Confidential"
 msgstr "Kanfidencyjnaje"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3591
+#: modules/printbackends/cups/gtkprintbackendcups.c:3590
 msgid "Secret"
 msgstr "Sakretnaje"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3591
+#: modules/printbackends/cups/gtkprintbackendcups.c:3590
 msgid "Standard"
 msgstr "Standartnaje"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3591
+#: modules/printbackends/cups/gtkprintbackendcups.c:3590
 msgid "Top Secret"
 msgstr "Zusim sakretna"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3591
+#: modules/printbackends/cups/gtkprintbackendcups.c:3590
 msgid "Unclassified"
 msgstr "Niesklasyfikavanaje"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the front cover page.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3626
+#: modules/printbackends/cups/gtkprintbackendcups.c:3625
 msgid "Before"
 msgstr "Pierad"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the back cover page.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3641
+#: modules/printbackends/cups/gtkprintbackendcups.c:3640
 msgid "After"
 msgstr "Paśla"
 
@@ -5015,14 +4092,14 @@ msgstr "Paśla"
 #. * a print job is printed. Possible values are 'now', a specified time,
 #. * or 'on hold'
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3661
+#: modules/printbackends/cups/gtkprintbackendcups.c:3660
 msgid "Print at"
 msgstr "Vydrukuj u peŭny čas"
 
 #. Translators: this is the name of the option that allows the user
 #. * to specify a time when a print job will be printed.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3672
+#: modules/printbackends/cups/gtkprintbackendcups.c:3671
 msgid "Print at time"
 msgstr "Vydrukuj u peŭny čas"
 
@@ -5030,7 +4107,7 @@ msgstr "Vydrukuj u peŭny čas"
 #. * size. The two placeholders are replaced with the width and height
 #. * in points. E.g: "Custom 230.4x142.9"
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3707
+#: modules/printbackends/cups/gtkprintbackendcups.c:3706
 #, c-format
 msgid "Custom %sx%s"
 msgstr "Ułasny %sx%s"
@@ -5125,6 +4202,675 @@ msgstr "Vydruk na testavaj drukarcy"
 #, c-format
 msgid "Could not get information for file '%s': %s"
 msgstr "Niemahčyma atrymać infarmacyju dla fajłu '%s': %s"
+
+#: tests/testfilechooser.c:222
+#, c-format
+msgid "Failed to open file '%s': %s"
+msgstr "Niemahčyma adčynić fajł '%s': %s"
+
+#: tests/testfilechooser.c:267
+#, c-format
+msgid ""
+"Failed to load image '%s': reason not known, probably a corrupt image file"
+msgstr ""
+"Niemahčyma adčytać vyjavu \"%s\": pryčyna nieviadomaja; fajł vyjavy "
+"vierahodna paškodžany"
+
+#~ msgid "Image file '%s' contains no data"
+#~ msgstr "Fajł vyjavy '%s' biaź źviestak"
+
+#~ msgid ""
+#~ "Failed to load animation '%s': reason not known, probably a corrupt "
+#~ "animation file"
+#~ msgstr ""
+#~ "Niemahčyma adčytać animacyju '%s': pryčyna nieviadomaja; fajł z "
+#~ "animacyjaj vierahodna paškodžany"
+
+#~ msgid "Unable to load image-loading module: %s: %s"
+#~ msgstr "Niemahčyma zahruzić modul vyśviatleńnia vyjavaŭ: %s: %s"
+
+#~ msgid ""
+#~ "Image-loading module %s does not export the proper interface; perhaps "
+#~ "it's from a different GTK version?"
+#~ msgstr ""
+#~ "Modul %s dziela vyśviatleńnia vyjavaŭ nie ekspartuje adpaviednaha "
+#~ "interfejsu; moža jon pachodzić ź inšaj versii GTK+?"
+
+#~ msgid "Image type '%s' is not supported"
+#~ msgstr "Vyjavy typu '%s' nie absłuhoŭvajucca"
+
+#~ msgid "Couldn't recognize the image file format for file '%s'"
+#~ msgstr "Niemahčyma raspaznać farmat vyjavy ŭ faje '%s'"
+
+#~ msgid "Unrecognized image file format"
+#~ msgstr "Nieraspaznany farmat fajłu vyjavy"
+
+#~ msgid "Failed to load image '%s': %s"
+#~ msgstr "Niemahčyma adčytać vyjavy '%s': %s"
+
+#~ msgid "Error writing to image file: %s"
+#~ msgstr "Pamyłka pry zapisie ŭ fajł vyjavy: %s"
+
+#~ msgid ""
+#~ "This build of gdk-pixbuf does not support saving the image format: %s"
+#~ msgstr ""
+#~ "Hetaja kopija gdk-pixbuf nie dazvalaje zapisvać vyjavu ŭ farmacie: %s"
+
+# Pravieryć u kiryličnych
+#~ msgid "Insufficient memory to save image to callback"
+#~ msgstr "Nie staje pamiaci kab zapisać vyjavu dla adčytańnia"
+
+#~ msgid "Failed to open temporary file"
+#~ msgstr "Niemahčyma adčynić časovy fajł"
+
+#~ msgid "Failed to read from temporary file"
+#~ msgstr "Niemahčyma adčytać časovy fajł"
+
+#~ msgid "Failed to open '%s' for writing: %s"
+#~ msgstr "Niemahčyma adčynić '%s' dla zapisu: %s"
+
+#~ msgid ""
+#~ "Failed to close '%s' while writing image, all data may not have been "
+#~ "saved: %s"
+#~ msgstr ""
+#~ "Niemahčyma začynić fajł '%s' paśla zapisańnia ŭ im vyjavy. Častka "
+#~ "źviestak mahła nie zapisacca: %s"
+
+#~ msgid "Insufficient memory to save image into a buffer"
+#~ msgstr "Nie staje pamiaci dziela zapisu vyjavy ŭ bufery"
+
+#~ msgid "Error writing to image stream"
+#~ msgstr "Pamyłka zapisu ŭ płyń vyjavy"
+
+#~ msgid ""
+#~ "Internal error: Image loader module '%s' failed to complete an operation, "
+#~ "but didn't give a reason for the failure"
+#~ msgstr ""
+#~ "Unutranaja pamyłka: Modul '%s' jaki adčytvaje vyjavy nia skončyŭ "
+#~ "aperacyi, ale pryčyny hetaha nie paviedamiŭ"
+
+#~ msgid "Incremental loading of image type '%s' is not supported"
+#~ msgstr ""
+#~ "Funkcyja pryrostavaha adčytvańnia vyjavaŭ typu \"%s\" nie absłuhoŭvajecca"
+
+#~ msgid "Image header corrupt"
+#~ msgstr "Paškodžany zahałovak vyjavy"
+
+#~ msgid "Image format unknown"
+#~ msgstr "Nieviadomy farmat vyjavy"
+
+#~ msgid "Image pixel data corrupt"
+#~ msgstr "Paškodžanyja źviestki ab pikselach vyjavy"
+
+#~ msgid "failed to allocate image buffer of %u byte"
+#~ msgid_plural "failed to allocate image buffer of %u bytes"
+#~ msgstr[0] "Nie staje pamiaci dziela buferu vyjavy pamieram %u bajtu"
+#~ msgstr[1] "Nie staje pamiaci dziela buferu vyjavy pamieram %u bajtaŭ"
+#~ msgstr[2] "Nie staje pamiaci dziela buferu vyjavy pamieram %u bajtaŭ"
+
+#~ msgid "Unexpected icon chunk in animation"
+#~ msgstr "Nie padtrymvany frahment ikony ŭ animacyi"
+
+#~ msgid "Unsupported animation type"
+#~ msgstr "Niepadtrymvany typ animacyi"
+
+#~ msgid "Invalid header in animation"
+#~ msgstr "Niapravilny zahałovak animacyi"
+
+#~ msgid "Not enough memory to load animation"
+#~ msgstr "Nie staje pamiaci dziela zahruzki animacyi"
+
+#~ msgid "Malformed chunk in animation"
+#~ msgstr "Paškodžany frahment animacyi"
+
+#~ msgid "The ANI image format"
+#~ msgstr "Farmat vyjavy ANI"
+
+#~ msgid "BMP image has bogus header data"
+#~ msgstr "Pamyłkovy zahałovak vyjavy BMP"
+
+#~ msgid "Not enough memory to load bitmap image"
+#~ msgstr "Nie staje pamiaci dziela adčytańnia bitmapy z fajłu"
+
+#~ msgid "BMP image has unsupported header size"
+#~ msgstr "Vyjava BMP maje ŭ sabie zahałovak nieabsłuhoŭvanaha pamieru"
+
+#~ msgid "Topdown BMP images cannot be compressed"
+#~ msgstr "Vyjavy typu top-down BMP nia mohuć być skampresavanyja"
+
+#~ msgid "Premature end-of-file encountered"
+#~ msgstr "Zaŭčasna zdaryŭsia kaniec fajłu"
+
+#~ msgid "Couldn't allocate memory for saving BMP file"
+#~ msgstr "Niemahčyma prymierkavać pamiać dziela zapisu fajłu BMP"
+
+#~ msgid "Couldn't write to BMP file"
+#~ msgstr "Niemahčyma zapisać u fajł BMP"
+
+#~ msgid "The BMP image format"
+#~ msgstr "Farmat vyjavy BMP"
+
+#~ msgid "Failure reading GIF: %s"
+#~ msgstr "Pamyłka pry adčytańni vyjavy GIF: %s"
+
+#~ msgid "GIF file was missing some data (perhaps it was truncated somehow?)"
+#~ msgstr "Fajł GIF nia maje niekatorych źviestak (moža jaho padrezali?)"
+
+#~ msgid "Internal error in the GIF loader (%s)"
+#~ msgstr "Unutranaja pamyłka ŭ moduli čytańnia vyjavy GIF (%s)"
+
+#~ msgid "Stack overflow"
+#~ msgstr "Pierapaŭnieńnie stosu"
+
+#~ msgid "GIF image loader cannot understand this image."
+#~ msgstr "Hetaja vyjava GIF niezrazumiełaja dla modulu zahruzki vyjavy GIF."
+
+#~ msgid "Bad code encountered"
+#~ msgstr "Sustrety pamyłkovy kod"
+
+#~ msgid "Circular table entry in GIF file"
+#~ msgstr "Zapiatleńnie pazycyi tablicy ŭ fajle GIF"
+
+#~ msgid "Not enough memory to load GIF file"
+#~ msgstr "Nie staje pamiaci dziela zahruzki fajłu GIF"
+
+#~ msgid "Not enough memory to composite a frame in GIF file"
+#~ msgstr "Nie staje pamiaci dziela stvareńnia kadru ŭ fajle GIF"
+
+#~ msgid "GIF image is corrupt (incorrect LZW compression)"
+#~ msgstr "Vyjava GIF paškodžanaja (niapravilnaja kampresija LZW)"
+
+#~ msgid "File does not appear to be a GIF file"
+#~ msgstr "Fajł vierahodna nie ŭ farmacie GIF"
+
+#~ msgid "Version %s of the GIF file format is not supported"
+#~ msgstr "Farmat GIF u versii %s nie absłuhoŭvajecca"
+
+#~ msgid ""
+#~ "GIF image has no global colormap, and a frame inside it has no local "
+#~ "colormap."
+#~ msgstr ""
+#~ "Vyjava GIF nia maje hlabalnaj palitry koleraŭ, a kadr unutry nia maje "
+#~ "lakalnaj palitry."
+
+#~ msgid "GIF image was truncated or incomplete."
+#~ msgstr "Fajł GIF byŭ abrezany albo jon niapoŭny."
+
+#~ msgid "The GIF image format"
+#~ msgstr "Farmat vyjavy GIF"
+
+#~ msgid "Invalid header in icon"
+#~ msgstr "Niapravilny zahałovak ikony"
+
+#~ msgid "Not enough memory to load icon"
+#~ msgstr "Nie staje pamiaci dziela zahruzki ikony"
+
+#~ msgid "Icon has zero width"
+#~ msgstr "Šyrynia ikony nulavaja"
+
+#~ msgid "Icon has zero height"
+#~ msgstr "Vyšynia ikony nulavaja"
+
+#~ msgid "Compressed icons are not supported"
+#~ msgstr "Skampresavanyja ikony nie absłuhoŭvajucca"
+
+#~ msgid "Unsupported icon type"
+#~ msgstr "Typ ikony nie padtrymvajecca"
+
+#~ msgid "Not enough memory to load ICO file"
+#~ msgstr "Nie staje pamiaci dziela zahruzki fajłu ICO"
+
+#~ msgid "Image too large to be saved as ICO"
+#~ msgstr "Vyjava zavialikaja kab zapisać jaje jak ICO"
+
+#~ msgid "Cursor hotspot outside image"
+#~ msgstr "Haračy punkt pa-za vyjavaj"
+
+#~ msgid "Unsupported depth for ICO file: %d"
+#~ msgstr "Hłybinia dla fajłu ICO: %d nie padtrymvajecca"
+
+#~ msgid "The ICO image format"
+#~ msgstr "Farmat vyjavy ICO"
+
+#~ msgid "Error reading ICNS image: %s"
+#~ msgstr "Pamyłka pry čytańni vyjavy ICNS: %s"
+
+#~ msgid "Could not decode ICNS file"
+#~ msgstr "Niemahčyma raskadavać fajł ICNS"
+
+#~ msgid "The ICNS image format"
+#~ msgstr "Farmat vyjavy ICNS"
+
+#~ msgid "Couldn't allocate memory for stream"
+#~ msgstr "Nie ŭdałosia prymierkavać pamiać dla płyni"
+
+#~ msgid "Couldn't decode image"
+#~ msgstr "Nie ŭdałosia raskadavać vyjavu"
+
+#~ msgid "Transformed JPEG2000 has zero width or height"
+#~ msgstr "Transfarmavanaja vyjava JPEG2000 maje nulavuju šyryniu albo vyšyniu"
+
+#~ msgid "Image type currently not supported"
+#~ msgstr "Vyjavy hetaha typu nie absłuhoŭvajucca"
+
+#~ msgid "Couldn't allocate memory for color profile"
+#~ msgstr "Nie ŭdałosia prymierkavać pamiać dziela profilu koleraŭ"
+
+#~ msgid "Insufficient memory to open JPEG 2000 file"
+#~ msgstr "Nie staje pamiaci dziela adčynieńnia fajłu JPEG 2000"
+
+#~ msgid "Couldn't allocate memory to buffer image data"
+#~ msgstr "Nie ŭdałosia prymierkavać pamiać dla źviestak vyjavy ŭ bufery"
+
+#~ msgid "The JPEG 2000 image format"
+#~ msgstr "Farmat vyjavy JPEG 2000"
+
+#~ msgid "Error interpreting JPEG image file (%s)"
+#~ msgstr "Pamyłka pry interpretacyi fajłu z vyjavaj JPEG (%s)"
+
+#~ msgid ""
+#~ "Insufficient memory to load image, try exiting some applications to free "
+#~ "memory"
+#~ msgstr ""
+#~ "Nie staje pamiaci dziela zahruzki fajłu, pasprabuj začynić peŭnyja "
+#~ "afajłacyi kab vyzvalić pamiać"
+
+#~ msgid "Unsupported JPEG color space (%s)"
+#~ msgstr "Prastora koleraŭ u fajle JPEG (%s) nie absłuhoŭvajecca"
+
+#~ msgid "Couldn't allocate memory for loading JPEG file"
+#~ msgstr "Nie staje pamiaci dziela zahruzki fajłu JPEG"
+
+#~ msgid "Transformed JPEG has zero width or height."
+#~ msgstr "Transfarmavanaja vyjava JPEG maje nulavuju šyryniu albo vyšyniu."
+
+#~ msgid ""
+#~ "JPEG quality must be a value between 0 and 100; value '%s' could not be "
+#~ "parsed."
+#~ msgstr ""
+#~ "Jakaść vyjavy JPEG musić być vartaściu ad 0 da 100; vartaść '%s' "
+#~ "niapravilnaja."
+
+#~ msgid ""
+#~ "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
+#~ msgstr ""
+#~ "Jakaść vyjavy JPEG musić być vartaściu ad 0 da 100; vartaść '%d' "
+#~ "niedazvolenaja."
+
+#~ msgid "The JPEG image format"
+#~ msgstr "Farmat vyjavy JPEG"
+
+#~ msgid "Couldn't allocate memory for header"
+#~ msgstr "Niemahčyma prymierkavać pamiać dla zahałoŭka"
+
+#~ msgid "Couldn't allocate memory for context buffer"
+#~ msgstr "Niemahčyma prymierkavać pamiać dla kantekstnaha bufera"
+
+#~ msgid "Image has invalid width and/or height"
+#~ msgstr "Vyjava maje niapravilnuju šyryniu i/albo vyšyniu"
+
+#~ msgid "Image has unsupported bpp"
+#~ msgstr "Vyjava maje ŭ sabie vartaść bpp, a jana nie absłuhoŭvajecca"
+
+#~ msgid "Image has unsupported number of %d-bit planes"
+#~ msgstr ""
+#~ "Vyjava maje ŭ sabie nie absłuhoŭvanuju kolkaść %d-bitnych płoskaściaŭ"
+
+#~ msgid "Couldn't create new pixbuf"
+#~ msgstr "Niemahčyma stvaryć novy bufer piksmapy"
+
+#~ msgid "Couldn't allocate memory for line data"
+#~ msgstr "Niemahčyma prymierkavać pamiać dla źviestak radka"
+
+#~ msgid "Couldn't allocate memory for paletted data"
+#~ msgstr "Niemahčyma prymierkavać pamiać dla źviestak palitry"
+
+#~ msgid "Didn't get all lines of PCX image"
+#~ msgstr "Nia ŭsie radki vyjavy PCX atrymanyja"
+
+#~ msgid "No palette found at end of PCX data"
+#~ msgstr "Nia znojdzienaja palitra na kancy źviestak PCX"
+
+#~ msgid "The PCX image format"
+#~ msgstr "Farmat vyjavy PCX"
+
+#~ msgid "Bits per channel of PNG image is invalid."
+#~ msgstr "Kolkaść bitaŭ na kanał vyjavy PNG niapravilnaja."
+
+#~ msgid "Transformed PNG has zero width or height."
+#~ msgstr "Transfarmavany PNG maje nulavuju šyryniu albo vyšyniu."
+
+#~ msgid "Bits per channel of transformed PNG is not 8."
+#~ msgstr "Kolkaść bitaŭ na kanał transfarmavanaha PNG nie raŭnajecca 8."
+
+#~ msgid "Transformed PNG not RGB or RGBA."
+#~ msgstr "Transfarmavany PNG nie źjaŭlajecca RGB ani RGBA."
+
+#~ msgid "Transformed PNG has unsupported number of channels, must be 3 or 4."
+#~ msgstr ""
+#~ "Transfarmavany PNG maje ŭ sabie nie absłuhoŭvanuju kolkaść kanałaŭ, "
+#~ "pavinna być 3 albo 4."
+
+#~ msgid "Fatal error in PNG image file: %s"
+#~ msgstr "Surjoznaja pamyłka ŭ fajle z vyjavaj PNG: %s"
+
+#~ msgid "Insufficient memory to load PNG file"
+#~ msgstr "Nie staje pamiaci dziela zahruzki fajłu PNG"
+
+#~ msgid ""
+#~ "Insufficient memory to store a %ld by %ld image; try exiting some "
+#~ "applications to reduce memory usage"
+#~ msgstr ""
+#~ "Nie staje pamiaci dziela zachoŭvańnia vyjavy pamierami %ld na %ld "
+#~ "punktaŭ; pasprabuj źmienšyć zapatrabavańnie na pamiać začyniajučy "
+#~ "niekatoryja prahramy"
+
+#~ msgid "Fatal error reading PNG image file"
+#~ msgstr "Surjoznaja pamyłka pry adčytańni fajłu z vyjavaj PNG"
+
+#~ msgid "Fatal error reading PNG image file: %s"
+#~ msgstr "Surjoznaja pamyłka pry čytańni fajłu z vyjavaj PNG: %s"
+
+#~ msgid ""
+#~ "Keys for PNG text chunks must have at least 1 and at most 79 characters."
+#~ msgstr ""
+#~ "Klučy tekstavych elementaŭ PNG musiać mieć daŭžyniu ad 1 da 79 znakaŭ."
+
+#~ msgid "Keys for PNG text chunks must be ASCII characters."
+#~ msgstr "Klučy tekstavych elementaŭ PNG musiać być znakami ASCII."
+
+#~ msgid ""
+#~ "PNG compression level must be a value between 0 and 9; value '%s' could "
+#~ "not be parsed."
+#~ msgstr ""
+#~ "Uzrovień kampresii vyjavy PNG musić być vartaściu ad 0 da 9; vartaść \"%s"
+#~ "\" nia moža być apracavanaja."
+
+#~ msgid ""
+#~ "PNG compression level must be a value between 0 and 9; value '%d' is not "
+#~ "allowed."
+#~ msgstr ""
+#~ "Uzrovień kampresii vyjavy PNG musić być vartaściu ad 0 da 9; vartaść \"%d"
+#~ "\" niedapuščalnaja."
+
+#~ msgid ""
+#~ "Value for PNG text chunk %s cannot be converted to ISO-8859-1 encoding."
+#~ msgstr ""
+#~ "Vartaść tekstavaha elementu PNG %s nia moža być pierakanvertavanaja na "
+#~ "kadavańnie ISO-8859-1."
+
+#~ msgid "The PNG image format"
+#~ msgstr "Farmat vyjavy PNG"
+
+#~ msgid "PNM loader expected to find an integer, but didn't"
+#~ msgstr "Modl absłuhoŭvańnia PNM čakaŭ cełaj vartaści, a atrymaŭ inšuju"
+
+#~ msgid "PNM file has an incorrect initial byte"
+#~ msgstr "Fajł PNM maje ŭ sabie niapravilny pačatkovy bajt"
+
+#~ msgid "PNM file is not in a recognized PNM subformat"
+#~ msgstr "Fajł PNM nia maje ŭ sabie raspaznanaha padfarmatu PNM"
+
+#~ msgid "PNM file has an image width of 0"
+#~ msgstr "Fajł PNM maje ŭ sabie vyjavu šyrynioj 0"
+
+#~ msgid "PNM file has an image height of 0"
+#~ msgstr "Fajł PNM maje ŭ sabie vyjavu vyšynioj 0"
+
+#~ msgid "Maximum color value in PNM file is 0"
+#~ msgstr "Maksymalnaja vartaść koleru ŭ fajle PNM składaje 0"
+
+#~ msgid "Maximum color value in PNM file is too large"
+#~ msgstr "Maksymalnaja vartaść koleru ŭ fajle PNM zavialikaja"
+
+#~ msgid "Raw PNM image type is invalid"
+#~ msgstr "Typ suviraj vyjavy PNM niapravilny"
+
+#~ msgid "PNM image loader does not support this PNM subformat"
+#~ msgstr "Modul čytańnia vyjavaŭ PNM nie absłuhoŭvaje hetaha padfarmatu PNM"
+
+#~ msgid "Raw PNM formats require exactly one whitespace before sample data"
+#~ msgstr ""
+#~ "Suvory farmat PNM vymahaje dakładna adnaho prabiełu pierad źviestkami"
+
+#~ msgid "Cannot allocate memory for loading PNM image"
+#~ msgstr "Niemahčyma prymierkavać pamiać na na zahruzku fajłu PNM"
+
+#~ msgid "Insufficient memory to load PNM context struct"
+#~ msgstr "Nie staje pamiaci dziela zahruzki struktury kantekstu PNM"
+
+#~ msgid "Unexpected end of PNM image data"
+#~ msgstr "Niečakany kaniec źviestak vyjavy PNM"
+
+#~ msgid "Insufficient memory to load PNM file"
+#~ msgstr "Nie staje pamiaci dziela zahruzki fajłu PNM"
+
+#~ msgid "The PNM/PBM/PGM/PPM image format family"
+#~ msgstr "Siamja hrafičnych farmataŭ PNM/PBM/PGM/PPM"
+
+#, fuzzy
+#~ msgid "Failed to read QTIF header"
+#~ msgstr "Niemahčyma zapisać zahałovak\n"
+
+#, fuzzy
+#~ msgid "Failed to allocate %d bytes for file read buffer"
+#~ msgstr "Nie staje pamiaci dziela buferu vyjavy pamieram %u bajtu"
+
+#, fuzzy
+#~ msgid "File error when reading QTIF atom: %s"
+#~ msgstr "Pamyłka pry adčytańni vyjavy GIF: %s"
+
+#, fuzzy
+#~ msgid "Failed to allocate QTIF context structure."
+#~ msgstr "Niemahčyma prymierkavać pamiać na strukturu kantekstu TGA"
+
+#, fuzzy
+#~ msgid "Failed to create GdkPixbufLoader object."
+#~ msgstr "Niemahčyma zapisać indeks katalohu\n"
+
+#, fuzzy
+#~ msgid "Failed to find an image data atom."
+#~ msgstr "Niemahčyma adčynić vyjavu TIFF"
+
+#, fuzzy
+#~ msgid "The QTIF image format"
+#~ msgstr "Farmat vyjavy TIFF"
+
+#~ msgid "RAS image has bogus header data"
+#~ msgstr "Pamyłkovy zahałovak vyjavy RAS"
+
+#~ msgid "RAS image has unknown type"
+#~ msgstr "Nieviadomy farmat vyjavy RAS"
+
+#~ msgid "unsupported RAS image variation"
+#~ msgstr "typ vyjavy RAS nie absłuhoŭvajecca"
+
+#~ msgid "Not enough memory to load RAS image"
+#~ msgstr "Nie staje pamiaci dziela zahruzki vyjavy RAS"
+
+#~ msgid "The Sun raster image format"
+#~ msgstr "Rastravy hrafičny farmat firmy SUN"
+
+#~ msgid "Cannot allocate memory for IOBuffer struct"
+#~ msgstr "Niemahčyma prymierkavać pamiać na strukturu IOBuffer"
+
+#~ msgid "Cannot allocate memory for IOBuffer data"
+#~ msgstr "Niemahčyma prymierkavać pamiać na źviestki IOBuffer"
+
+#~ msgid "Cannot realloc IOBuffer data"
+#~ msgstr "Niemahčyma znoŭ prymierkavać źviestki IOBuffer"
+
+#~ msgid "Cannot allocate temporary IOBuffer data"
+#~ msgstr "Niemahčyma prymierkavać časovyja źviestki IOBuffer"
+
+#~ msgid "Cannot allocate new pixbuf"
+#~ msgstr "Niemahčyma prymierkavać novy abjekt pixbuf"
+
+#, fuzzy
+#~ msgid "Image is corrupted or truncated"
+#~ msgstr "Fajł GIF byŭ abrezany albo jon niapoŭny."
+
+#~ msgid "Cannot allocate colormap structure"
+#~ msgstr "Niemahčyma prymierkavać strukturu palitry koleraŭ"
+
+#~ msgid "Cannot allocate colormap entries"
+#~ msgstr "Niemahčyma prymierkavać elementy palitry koleraŭ"
+
+#~ msgid "Unexpected bitdepth for colormap entries"
+#~ msgstr "Niečakanaja vartaść hłybini elementaŭ palitry koleraŭ"
+
+#~ msgid "Cannot allocate TGA header memory"
+#~ msgstr "Niemahčyma prymierkavać pamiać na zahałovak vyjavy TGA"
+
+#~ msgid "TGA image has invalid dimensions"
+#~ msgstr "Vyjava TGA maje nieadpaviednyja pamiery"
+
+#~ msgid "TGA image type not supported"
+#~ msgstr "Typ vyjavy TGA nie absłuhoŭvajecca"
+
+#~ msgid "Cannot allocate memory for TGA context struct"
+#~ msgstr "Niemahčyma prymierkavać pamiać na strukturu kantekstu TGA"
+
+#~ msgid "Excess data in file"
+#~ msgstr "U fajle isnujuć zališnija źviestki"
+
+#~ msgid "The Targa image format"
+#~ msgstr "Farmat vyjavy Targa"
+
+#~ msgid "Could not get image width (bad TIFF file)"
+#~ msgstr "Niemahčyma atrymać šyryniu vyjavy (niapravilny fajł TIFF)"
+
+#~ msgid "Could not get image height (bad TIFF file)"
+#~ msgstr "Niemahčyma atrymać vyšyniu vyjavy (niapravilny fajł TIFF)"
+
+#~ msgid "Width or height of TIFF image is zero"
+#~ msgstr "Šyrynia albo vyšynia vyjavy TIFF roŭnaja nulu"
+
+#~ msgid "Dimensions of TIFF image too large"
+#~ msgstr "Zavialikija pamiery vyjavy TIFF"
+
+#~ msgid "Insufficient memory to open TIFF file"
+#~ msgstr "Nie staje pamiaci dziela zahruzki fajłu TIFF"
+
+#~ msgid "Failed to load RGB data from TIFF file"
+#~ msgstr "Niemahčyma zahruzić źviestki RGB z fajłu TIFF"
+
+#~ msgid "Failed to open TIFF image"
+#~ msgstr "Niemahčyma adčynić vyjavu TIFF"
+
+#~ msgid "TIFFClose operation failed"
+#~ msgstr "Aperacyja TIFFClose nie ŭdałasia"
+
+#~ msgid "Failed to load TIFF image"
+#~ msgstr "Niemahčyma zahruzić vyjavu TIFF"
+
+#~ msgid "Failed to save TIFF image"
+#~ msgstr "Niemahčyma zapisać vyjavu TIFF"
+
+#~ msgid "Failed to write TIFF data"
+#~ msgstr "Niemahčyma zapisać źviestki TIFF"
+
+#~ msgid "Couldn't write to TIFF file"
+#~ msgstr "Niemahčyma zapisać u fajł TIFF"
+
+#~ msgid "The TIFF image format"
+#~ msgstr "Farmat vyjavy TIFF"
+
+#~ msgid "Image has zero width"
+#~ msgstr "Šyrynia vyjavy nulavaja"
+
+#~ msgid "Image has zero height"
+#~ msgstr "Vyšynia vyjavy nulavaja"
+
+#~ msgid "Not enough memory to load image"
+#~ msgstr "Nie staje pamiaci dziela zahruzki vyjavy"
+
+#~ msgid "Couldn't save the rest"
+#~ msgstr "Niemahčyma zapisać astatniaje"
+
+#~ msgid "The WBMP image format"
+#~ msgstr "Farmat vyjavy WBMP"
+
+#~ msgid "Invalid XBM file"
+#~ msgstr "Niapravilny fajł XBM"
+
+#~ msgid "Insufficient memory to load XBM image file"
+#~ msgstr "Nie staje pamiaci dziela zahruzki fajłu XBM"
+
+#~ msgid "Failed to write to temporary file when loading XBM image"
+#~ msgstr "Pry zahruzcy fajłu XBM nie ŭdałosia zapisać časovy fajł"
+
+#~ msgid "The XBM image format"
+#~ msgstr "Farmat vyjavy XBM"
+
+#~ msgid "No XPM header found"
+#~ msgstr "Nia znojdzieny zahałovak XPM"
+
+#~ msgid "Invalid XPM header"
+#~ msgstr "Niapravilny zahałovak XPM"
+
+#~ msgid "XPM file has image width <= 0"
+#~ msgstr "Fajł XPM maje ŭ sabie vyjavu šyrynioj <= 0"
+
+#~ msgid "XPM file has image height <= 0"
+#~ msgstr "Fajł XPM maje ŭ sabie vyjavu vyšynioj <= 0"
+
+#~ msgid "XPM has invalid number of chars per pixel"
+#~ msgstr "Fajł XPM maje ŭ sabie niapravilnuju kolkaść znakaŭ na piksel"
+
+#~ msgid "XPM file has invalid number of colors"
+#~ msgstr "Fajł XPM maje ŭ sabie niapravilnuju kolkaść koleraŭ"
+
+#~ msgid "Cannot allocate memory for loading XPM image"
+#~ msgstr "Niemahčyma prymierkavać pamiać dziela zahruzki fajłu XPM"
+
+#~ msgid "Cannot read XPM colormap"
+#~ msgstr "Niemahčyma adčytać palitru koleraŭ XPM"
+
+#~ msgid "Failed to write to temporary file when loading XPM image"
+#~ msgstr "Pry zahruzcy fajłu XPM nie ŭdaŭsia zapis časovaha fajłu"
+
+#~ msgid "The XPM image format"
+#~ msgstr "Farmat vyjavy XPM"
+
+#~ msgid "The EMF image format"
+#~ msgstr "Farmat vyjavy EMF"
+
+#~ msgid "Could not allocate memory: %s"
+#~ msgstr "Nie ŭdałosia prymierkavać pamiać: %s"
+
+#~ msgid "Could not create stream: %s"
+#~ msgstr "Nie ŭdałosia stvaryć płyń: %s"
+
+#~ msgid "Could not seek stream: %s"
+#~ msgstr "Nie ŭdałosia pieraskočyć u płyni: %s"
+
+#~ msgid "Could not read from stream: %s"
+#~ msgstr "Nie ŭdałosia pračytać z płyni: %s"
+
+#~ msgid "Couldn't load bitmap"
+#~ msgstr "Nie ŭdałosia zahruzić bitavuju mapu"
+
+#~ msgid "Couldn't load metafile"
+#~ msgstr "Nie ŭdałosia zahruzić metafajł"
+
+#~ msgid "Unsupported image format for GDI+"
+#~ msgstr "Typ vyjavy, jaki nie absłuhoŭvajecca dla GDI+"
+
+#~ msgid "Couldn't save"
+#~ msgstr "Nie ŭdałosia zapisać"
+
+#~ msgid "The WMF image format"
+#~ msgstr "Farmat vyjavy WMF"
+
+#~ msgid "\"Deepness\" of the color."
+#~ msgstr "\"Hłybinia\" koleru."
+
+#~ msgid "Error printing"
+#~ msgstr "Pamyłka padčas druku"
+
+#~ msgid "Printer '%s' may not be connected."
+#~ msgstr "Mahćyma, drukarka \"%s\" nie spałučanaja."
 
 #~ msgid "Folders"
 #~ msgstr "Katalohi"

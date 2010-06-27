@@ -14,10 +14,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-05-25 20:10-0400\n"
+"POT-Creation-Date: 2010-06-26 23:16-0400\n"
 "PO-Revision-Date: 2009-11-26 23:10+0900\n"
 "Last-Translator: Masato Hashimoto <cabezon.hashimoto@gmail.com>\n"
 "Language-Team: Japanese <gnome-translation@gnome.gr.jp>\n"
+"Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -84,7 +85,7 @@ msgstr "有効にする GDK のデバッグ・フラグを指定する"
 #. Placeholder in --gdk-no-debug=FLAGS in --help output
 #. Placeholder in --gtk-debug=FLAGS in --help output
 #. Placeholder in --gtk-no-debug=FLAGS in --help output
-#: gdk/gdk.c:165 gdk/gdk.c:168 gtk/gtkmain.c:454 gtk/gtkmain.c:457
+#: gdk/gdk.c:165 gdk/gdk.c:168 gtk/gtkmain.c:439 gtk/gtkmain.c:442
 msgid "FLAGS"
 msgstr "FLAGS"
 
@@ -277,915 +278,6 @@ msgstr "KP_Delete"
 msgctxt "keyboard label"
 msgid "Delete"
 msgstr "Delete"
-
-#: gdk-pixbuf/gdk-pixbuf-animation.c:133 gdk-pixbuf/gdk-pixbuf-io.c:982
-#: gdk-pixbuf/gdk-pixbuf-io.c:1242 tests/testfilechooser.c:222
-#, c-format
-msgid "Failed to open file '%s': %s"
-msgstr "ファイル '%s' のオープンに失敗しました: %s"
-
-#: gdk-pixbuf/gdk-pixbuf-animation.c:146 gdk-pixbuf/gdk-pixbuf-io.c:994
-#, c-format
-msgid "Image file '%s' contains no data"
-msgstr "画像ファイル '%s' にはデータがありません"
-
-#: gdk-pixbuf/gdk-pixbuf-animation.c:188 gdk-pixbuf/gdk-pixbuf-io.c:1030
-#: gdk-pixbuf/gdk-pixbuf-io.c:1294 tests/testfilechooser.c:267
-#, c-format
-msgid ""
-"Failed to load image '%s': reason not known, probably a corrupt image file"
-msgstr ""
-"画像 '%s' の読み込みに失敗しました: 理由は不明ですが、おそらく画像ファイルが"
-"壊れていると思われます"
-
-#: gdk-pixbuf/gdk-pixbuf-animation.c:221
-#, c-format
-msgid ""
-"Failed to load animation '%s': reason not known, probably a corrupt "
-"animation file"
-msgstr ""
-"アニメーション '%s' の読み込みに失敗しました: 理由は不明ですが、おそらくアニ"
-"メーションファイルが壊れていると思われます"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:715
-#, c-format
-msgid "Unable to load image-loading module: %s: %s"
-msgstr "画像ロード・モジュールを読み込めません: %s: %s"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:730
-#, c-format
-msgid ""
-"Image-loading module %s does not export the proper interface; perhaps it's "
-"from a different GTK version?"
-msgstr ""
-"画像ロード・モジュール %s は正しいインターフェースをエキスポートしていませ"
-"ん。GTK+ の別のバージョンのモジュールかも？"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:739 gdk-pixbuf/gdk-pixbuf-io.c:790
-#, c-format
-msgid "Image type '%s' is not supported"
-msgstr "画像の種類 '%s' はサポートされていません"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:863
-#, c-format
-msgid "Couldn't recognize the image file format for file '%s'"
-msgstr "ファイル '%s' の画像ファイルの形式を認識できませんでした"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:871
-msgid "Unrecognized image file format"
-msgstr "認識できない画像ファイルの形式"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:1039
-#, c-format
-msgid "Failed to load image '%s': %s"
-msgstr "画像 '%s' の読み込みに失敗しました: %s"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:1673 gdk-pixbuf/io-gdip-utils.c:961
-#, c-format
-msgid "Error writing to image file: %s"
-msgstr "画像ファイルの書き込みでエラー: %s"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:1718 gdk-pixbuf/gdk-pixbuf-io.c:1848
-#, c-format
-msgid "This build of gdk-pixbuf does not support saving the image format: %s"
-msgstr ""
-"お使いの gdk-pixbuf は画像ファイルの形式 %s の保存をサポートしていません"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:1752
-msgid "Insufficient memory to save image to callback"
-msgstr "画像をコールバックへ保存するために必要なメモリが足りません"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:1765
-msgid "Failed to open temporary file"
-msgstr "作業用ファイルのオープンに失敗しました"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:1791
-msgid "Failed to read from temporary file"
-msgstr "作業用ファイルからの読み込みに失敗しました"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:2044
-#, c-format
-msgid "Failed to open '%s' for writing: %s"
-msgstr "書き込みモードで '%s' のオープンに失敗しました: %s"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:2070
-#, c-format
-msgid ""
-"Failed to close '%s' while writing image, all data may not have been saved: %"
-"s"
-msgstr ""
-"画像を書き込む際に '%s' を閉じることができなかったため、全てのデータが保存さ"
-"れていないかもしれません: %s"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:2290 gdk-pixbuf/gdk-pixbuf-io.c:2341
-msgid "Insufficient memory to save image into a buffer"
-msgstr "画像をバッファへ保存するために必要なメモリが足りません"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:2387
-msgid "Error writing to image stream"
-msgstr "画像ストリームへ書き込む際にエラー"
-
-#: gdk-pixbuf/gdk-pixbuf-loader.c:334
-#, c-format
-msgid ""
-"Internal error: Image loader module '%s' failed to complete an operation, "
-"but didn't give a reason for the failure"
-msgstr ""
-"内部エラー: 画像ロード・モジュール '%s' の処理に失敗しましたが、その原因を取"
-"得できませんでした"
-
-#: gdk-pixbuf/gdk-pixbuf-loader.c:376
-#, c-format
-msgid "Incremental loading of image type '%s' is not supported"
-msgstr "画像の種類 '%s' のインクリメンタル・ロードはサポートされていません"
-
-#: gdk-pixbuf/gdk-pixdata.c:147
-msgid "Image header corrupt"
-msgstr "画像ヘッダが壊れています"
-
-#: gdk-pixbuf/gdk-pixdata.c:152
-msgid "Image format unknown"
-msgstr "画像形式が不明です"
-
-#: gdk-pixbuf/gdk-pixdata.c:157 gdk-pixbuf/gdk-pixdata.c:488
-msgid "Image pixel data corrupt"
-msgstr "画像のピクセルデータが壊れています"
-
-#: gdk-pixbuf/gdk-pixdata.c:432
-#, c-format
-msgid "failed to allocate image buffer of %u byte"
-msgid_plural "failed to allocate image buffer of %u bytes"
-msgstr[0] "%uバイトの画像バッファの確保に失敗しました"
-
-#: gdk-pixbuf/io-ani.c:244
-msgid "Unexpected icon chunk in animation"
-msgstr "アニメーションに予期しないアイコン・チャンクがあります"
-
-#: gdk-pixbuf/io-ani.c:337
-msgid "Unsupported animation type"
-msgstr "サポートされていないアニメーションの種類です"
-
-#: gdk-pixbuf/io-ani.c:348 gdk-pixbuf/io-ani.c:406 gdk-pixbuf/io-ani.c:432
-#: gdk-pixbuf/io-ani.c:455 gdk-pixbuf/io-ani.c:482 gdk-pixbuf/io-ani.c:569
-msgid "Invalid header in animation"
-msgstr "アニメーションのヘッダがおかしいです"
-
-#: gdk-pixbuf/io-ani.c:358 gdk-pixbuf/io-ani.c:380 gdk-pixbuf/io-ani.c:464
-#: gdk-pixbuf/io-ani.c:491 gdk-pixbuf/io-ani.c:542 gdk-pixbuf/io-ani.c:614
-msgid "Not enough memory to load animation"
-msgstr "アニメーションを読み込むためのメモリが足りません"
-
-#: gdk-pixbuf/io-ani.c:398 gdk-pixbuf/io-ani.c:424 gdk-pixbuf/io-ani.c:443
-msgid "Malformed chunk in animation"
-msgstr "アニメーションに異常なチャンクがあります"
-
-#: gdk-pixbuf/io-ani.c:711
-msgid "The ANI image format"
-msgstr "ANI 画像形式"
-
-#: gdk-pixbuf/io-bmp.c:230 gdk-pixbuf/io-bmp.c:267 gdk-pixbuf/io-bmp.c:338
-#: gdk-pixbuf/io-bmp.c:370 gdk-pixbuf/io-bmp.c:393 gdk-pixbuf/io-bmp.c:496
-msgid "BMP image has bogus header data"
-msgstr "BMP 画像のヘッダのデータがおかしいです"
-
-#: gdk-pixbuf/io-bmp.c:241 gdk-pixbuf/io-bmp.c:433
-msgid "Not enough memory to load bitmap image"
-msgstr "BMP 画像を読み込むために必要なメモリが足りません"
-
-#: gdk-pixbuf/io-bmp.c:319
-msgid "BMP image has unsupported header size"
-msgstr "サポートしていない BMP 画像のヘッダ・サイズです"
-
-#: gdk-pixbuf/io-bmp.c:357
-msgid "Topdown BMP images cannot be compressed"
-msgstr "全体を覆う BMP 画像は圧縮できません"
-
-#: gdk-pixbuf/io-bmp.c:717 gdk-pixbuf/io-pnm.c:709
-msgid "Premature end-of-file encountered"
-msgstr "ファイルの終わりが早すぎます"
-
-#: gdk-pixbuf/io-bmp.c:1329
-msgid "Couldn't allocate memory for saving BMP file"
-msgstr "BMP 画像を読み込むためのメモリを確保できませんでした"
-
-#: gdk-pixbuf/io-bmp.c:1370
-msgid "Couldn't write to BMP file"
-msgstr "BMP ファイル名に書き込めませんでした"
-
-#: gdk-pixbuf/io-bmp.c:1423 gdk-pixbuf/io-gdip-bmp.c:82
-msgid "The BMP image format"
-msgstr "BMP 画像形式"
-
-#: gdk-pixbuf/io-gif.c:222
-#, c-format
-msgid "Failure reading GIF: %s"
-msgstr "GIF 画像の読み込みに失敗: %s"
-
-#: gdk-pixbuf/io-gif.c:496 gdk-pixbuf/io-gif.c:1481 gdk-pixbuf/io-gif.c:1642
-msgid "GIF file was missing some data (perhaps it was truncated somehow?)"
-msgstr ""
-"GIF ファイルに何か足りないデータがあります (理由は不明ですが切りつめられたか"
-"も？)"
-
-#: gdk-pixbuf/io-gif.c:505
-#, c-format
-msgid "Internal error in the GIF loader (%s)"
-msgstr "GIF ローダの内部エラー (%s)"
-
-#: gdk-pixbuf/io-gif.c:579
-msgid "Stack overflow"
-msgstr "スタックあふれ"
-
-#: gdk-pixbuf/io-gif.c:639
-msgid "GIF image loader cannot understand this image."
-msgstr "(GIF 画像ローダ) この画像を理解できません"
-
-#: gdk-pixbuf/io-gif.c:668
-msgid "Bad code encountered"
-msgstr "おかしなコードに出会いました"
-
-#: gdk-pixbuf/io-gif.c:678
-msgid "Circular table entry in GIF file"
-msgstr "GIF ファイルのテーブル・エントリが循環しています"
-
-#: gdk-pixbuf/io-gif.c:866 gdk-pixbuf/io-gif.c:1468 gdk-pixbuf/io-gif.c:1515
-#: gdk-pixbuf/io-gif.c:1630
-msgid "Not enough memory to load GIF file"
-msgstr "GIF 画像を読み込むために必要なメモリが足りません"
-
-#: gdk-pixbuf/io-gif.c:960
-msgid "Not enough memory to composite a frame in GIF file"
-msgstr "GIF 画像でフレームを結合するために必要なメモリが足りません"
-
-#: gdk-pixbuf/io-gif.c:1132
-msgid "GIF image is corrupt (incorrect LZW compression)"
-msgstr "GIF 画像が壊れています (おかしな LZW 圧縮です)"
-
-#: gdk-pixbuf/io-gif.c:1182
-msgid "File does not appear to be a GIF file"
-msgstr "ファイルは GIF ファイルではないようです"
-
-#: gdk-pixbuf/io-gif.c:1194
-#, c-format
-msgid "Version %s of the GIF file format is not supported"
-msgstr "バージョン %s の GIF ファイル形式はサポートしていません"
-
-#: gdk-pixbuf/io-gif.c:1303
-msgid ""
-"GIF image has no global colormap, and a frame inside it has no local "
-"colormap."
-msgstr ""
-"GIF 画像にグローバルなカラーマップがありません。そしてフレームにローカルなカ"
-"ラーマップがありません"
-
-#: gdk-pixbuf/io-gif.c:1537
-msgid "GIF image was truncated or incomplete."
-msgstr "GIF 画像は切りつめられたか、不完全になっています"
-
-#: gdk-pixbuf/io-gif.c:1693 gdk-pixbuf/io-gdip-gif.c:80
-msgid "The GIF image format"
-msgstr "GIF 画像形式"
-
-#: gdk-pixbuf/io-ico.c:211 gdk-pixbuf/io-ico.c:225 gdk-pixbuf/io-ico.c:277
-#: gdk-pixbuf/io-ico.c:290 gdk-pixbuf/io-ico.c:359
-msgid "Invalid header in icon"
-msgstr "アイコンのヘッダがおかしいです"
-
-#: gdk-pixbuf/io-ico.c:240 gdk-pixbuf/io-ico.c:300 gdk-pixbuf/io-ico.c:369
-#: gdk-pixbuf/io-ico.c:432 gdk-pixbuf/io-ico.c:462
-msgid "Not enough memory to load icon"
-msgstr "アイコンを読み込むために必要なメモリが足りません"
-
-#: gdk-pixbuf/io-ico.c:322
-msgid "Icon has zero width"
-msgstr "アイコンの幅が 0 です"
-
-#: gdk-pixbuf/io-ico.c:332
-msgid "Icon has zero height"
-msgstr "アイコンの高さが 0 です"
-
-#: gdk-pixbuf/io-ico.c:384
-msgid "Compressed icons are not supported"
-msgstr "圧縮アイコンはサポートされていません"
-
-#: gdk-pixbuf/io-ico.c:417
-msgid "Unsupported icon type"
-msgstr "サポートしていない種類のアイコンです"
-
-#: gdk-pixbuf/io-ico.c:511
-msgid "Not enough memory to load ICO file"
-msgstr "アイコン・ファイルを読み込むために必要なメモリが足りません"
-
-#: gdk-pixbuf/io-ico.c:976
-msgid "Image too large to be saved as ICO"
-msgstr "アイコンとして保存するには画像が大きすぎます"
-
-#: gdk-pixbuf/io-ico.c:987
-msgid "Cursor hotspot outside image"
-msgstr "カーソルのホットスポットより外側の画像です"
-
-#: gdk-pixbuf/io-ico.c:1010
-#, c-format
-msgid "Unsupported depth for ICO file: %d"
-msgstr "アイコン・ファイルとしてサポートされない色深度です: %d"
-
-#: gdk-pixbuf/io-ico.c:1245 gdk-pixbuf/io-gdip-ico.c:59
-msgid "The ICO image format"
-msgstr "ICO 画像形式"
-
-#: gdk-pixbuf/io-icns.c:347
-#, c-format
-msgid "Error reading ICNS image: %s"
-msgstr "ICNS 画像を読み込む際にエラー: %s"
-
-#: gdk-pixbuf/io-icns.c:364
-msgid "Could not decode ICNS file"
-msgstr "ICNS ファイルをデコードできませんでした"
-
-#: gdk-pixbuf/io-icns.c:397
-msgid "The ICNS image format"
-msgstr "ICNS 画像形式"
-
-#: gdk-pixbuf/io-jasper.c:75
-msgid "Couldn't allocate memory for stream"
-msgstr "ストリームのメモリを確保できませんでした"
-
-#: gdk-pixbuf/io-jasper.c:105
-msgid "Couldn't decode image"
-msgstr "画像をデコードできませんでした"
-
-#: gdk-pixbuf/io-jasper.c:123
-msgid "Transformed JPEG2000 has zero width or height"
-msgstr "変換した JPEG2000 の幅または高さが 0 です"
-
-#: gdk-pixbuf/io-jasper.c:137
-msgid "Image type currently not supported"
-msgstr "画像の種類はサポートされていません"
-
-#: gdk-pixbuf/io-jasper.c:149 gdk-pixbuf/io-jasper.c:157
-msgid "Couldn't allocate memory for color profile"
-msgstr "色のプロファイルで使用するメモリを確保できませんでした"
-
-#: gdk-pixbuf/io-jasper.c:183
-msgid "Insufficient memory to open JPEG 2000 file"
-msgstr "JPEG 2000 のファイルをオープンするために必要なメモリが足りません"
-
-#: gdk-pixbuf/io-jasper.c:262
-msgid "Couldn't allocate memory to buffer image data"
-msgstr "画像データを格納するためのメモリを確保できませんでした"
-
-#: gdk-pixbuf/io-jasper.c:306
-msgid "The JPEG 2000 image format"
-msgstr "JPEG 2000 画像形式"
-
-#: gdk-pixbuf/io-jpeg.c:117
-#, c-format
-msgid "Error interpreting JPEG image file (%s)"
-msgstr "JPEG 画像ファイル (%s) の解釈でエラー"
-
-#: gdk-pixbuf/io-jpeg.c:528
-msgid ""
-"Insufficient memory to load image, try exiting some applications to free "
-"memory"
-msgstr ""
-"画像の読み込みに必要なメモリがありません。アプリケーションをいくつか終了して"
-"メモリを解放して下さい"
-
-#: gdk-pixbuf/io-jpeg.c:569 gdk-pixbuf/io-jpeg.c:775
-#, c-format
-msgid "Unsupported JPEG color space (%s)"
-msgstr "サポートしていない JPEG のカラー・スペースです (%s)"
-
-#: gdk-pixbuf/io-jpeg.c:674 gdk-pixbuf/io-jpeg.c:944 gdk-pixbuf/io-jpeg.c:1177
-#: gdk-pixbuf/io-jpeg.c:1186
-msgid "Couldn't allocate memory for loading JPEG file"
-msgstr "JPEG 画像を読み込むためのメモリを確保できませんでした"
-
-#: gdk-pixbuf/io-jpeg.c:919
-msgid "Transformed JPEG has zero width or height."
-msgstr "変換した JPEG の幅または高さが 0 です"
-
-#: gdk-pixbuf/io-jpeg.c:1133 gdk-pixbuf/io-gdip-jpeg.c:53
-#, c-format
-msgid ""
-"JPEG quality must be a value between 0 and 100; value '%s' could not be "
-"parsed."
-msgstr ""
-"JPEG の \"クオリティ\" は 0〜100 の値にして下さい。値 '%s' を解析できませんで"
-"した"
-
-#: gdk-pixbuf/io-jpeg.c:1148 gdk-pixbuf/io-gdip-jpeg.c:68
-#, c-format
-msgid ""
-"JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
-msgstr ""
-"JPEG の \"クオリティ\" は 0〜100 の値にして下さい。値 '%d' は確保されません"
-
-#: gdk-pixbuf/io-jpeg.c:1310 gdk-pixbuf/io-gdip-jpeg.c:136
-msgid "The JPEG image format"
-msgstr "JPEG 画像形式"
-
-#: gdk-pixbuf/io-pcx.c:187
-msgid "Couldn't allocate memory for header"
-msgstr "ヘッダのメモリを確保できませんでした"
-
-#: gdk-pixbuf/io-pcx.c:202 gdk-pixbuf/io-pcx.c:560
-msgid "Couldn't allocate memory for context buffer"
-msgstr "コンテキスト・バッファ用のメモリを確保できませんでした"
-
-#: gdk-pixbuf/io-pcx.c:601
-msgid "Image has invalid width and/or height"
-msgstr "画像の幅と/または高さが無効です"
-
-#: gdk-pixbuf/io-pcx.c:613 gdk-pixbuf/io-pcx.c:674
-msgid "Image has unsupported bpp"
-msgstr "サポートしていない bpp を保持しています"
-
-#: gdk-pixbuf/io-pcx.c:618 gdk-pixbuf/io-pcx.c:626
-#, c-format
-msgid "Image has unsupported number of %d-bit planes"
-msgstr "サポートしていない数の %d ビット・プレーンを保持しています"
-
-#: gdk-pixbuf/io-pcx.c:642
-msgid "Couldn't create new pixbuf"
-msgstr "新しい pixbuf を生成できませんでした"
-
-#: gdk-pixbuf/io-pcx.c:650
-msgid "Couldn't allocate memory for line data"
-msgstr "行のデータ用のメモリを確保できませんでした"
-
-#: gdk-pixbuf/io-pcx.c:657
-msgid "Couldn't allocate memory for paletted data"
-msgstr "パレット・データ用のメモリを確保できませんでした"
-
-#: gdk-pixbuf/io-pcx.c:704
-msgid "Didn't get all lines of PCX image"
-msgstr "PCX 画像の全ての行を取得できません"
-
-#: gdk-pixbuf/io-pcx.c:711
-msgid "No palette found at end of PCX data"
-msgstr "PCX データ末尾のパレットが見つかりません"
-
-#: gdk-pixbuf/io-pcx.c:756
-msgid "The PCX image format"
-msgstr "PCX 画像形式"
-
-#: gdk-pixbuf/io-png.c:55
-msgid "Bits per channel of PNG image is invalid."
-msgstr "PNG 画像のチャンネル毎のビット数がおかしいです"
-
-#: gdk-pixbuf/io-png.c:136 gdk-pixbuf/io-png.c:642
-msgid "Transformed PNG has zero width or height."
-msgstr "変換した PNG の幅または高さが 0 です"
-
-#: gdk-pixbuf/io-png.c:144
-msgid "Bits per channel of transformed PNG is not 8."
-msgstr "変換した PNG のチャンネル毎のビット数が 8 ではありません"
-
-#: gdk-pixbuf/io-png.c:153
-msgid "Transformed PNG not RGB or RGBA."
-msgstr "変換した PNG は RGB でも RGBA でもありません"
-
-#: gdk-pixbuf/io-png.c:162
-msgid "Transformed PNG has unsupported number of channels, must be 3 or 4."
-msgstr ""
-"変換した PNG のチャンネル数がサポートされているものではありません。3 または "
-"4 にして下さい"
-
-#: gdk-pixbuf/io-png.c:183
-#, c-format
-msgid "Fatal error in PNG image file: %s"
-msgstr "PNG 画像ファイルに致命的なエラー: %s"
-
-#: gdk-pixbuf/io-png.c:316
-msgid "Insufficient memory to load PNG file"
-msgstr "PNG 画像を読み込むために必要なメモリが足りません"
-
-#: gdk-pixbuf/io-png.c:657
-#, c-format
-msgid ""
-"Insufficient memory to store a %ld by %ld image; try exiting some "
-"applications to reduce memory usage"
-msgstr ""
-"%ldx%ld の画像を保存するために必要なメモリが足りません。アプリケーションをい"
-"くつか終了してメモリの使用量を減らして下さい"
-
-#: gdk-pixbuf/io-png.c:720
-msgid "Fatal error reading PNG image file"
-msgstr "PNG 画像ファイルの読み込みで致命的なエラー"
-
-#: gdk-pixbuf/io-png.c:769
-#, c-format
-msgid "Fatal error reading PNG image file: %s"
-msgstr "PNG 画像ファイルの読み込みで致命的なエラー: %s"
-
-#: gdk-pixbuf/io-png.c:863
-msgid ""
-"Keys for PNG text chunks must have at least 1 and at most 79 characters."
-msgstr "PNG のテキスト・チャンクのキーは 1〜79 文字にして下さい"
-
-#: gdk-pixbuf/io-png.c:872
-msgid "Keys for PNG text chunks must be ASCII characters."
-msgstr "PNG のテキスト・チャンクのキーは ASCII 文字にして下さい"
-
-#: gdk-pixbuf/io-png.c:886 gdk-pixbuf/io-tiff.c:738
-#, c-format
-msgid "Color profile has invalid length %d."
-msgstr ""
-
-#: gdk-pixbuf/io-png.c:899 gdk-pixbuf/io-gdip-png.c:56
-#, c-format
-msgid ""
-"PNG compression level must be a value between 0 and 9; value '%s' could not "
-"be parsed."
-msgstr ""
-"PNG の圧縮レベルは 0〜9 の値にして下さい。値 '%s' を解析できませんでした"
-
-#: gdk-pixbuf/io-png.c:912 gdk-pixbuf/io-gdip-png.c:68
-#, c-format
-msgid ""
-"PNG compression level must be a value between 0 and 9; value '%d' is not "
-"allowed."
-msgstr "PNG の圧縮レベルは 0〜9 の値にして下さい。値 '%d' は確保されません"
-
-#: gdk-pixbuf/io-png.c:951
-#, c-format
-msgid "Value for PNG text chunk %s cannot be converted to ISO-8859-1 encoding."
-msgstr ""
-"PNG のテキスト・チャンク %s の値を ISO-8859-1 エンコーディングに変換できませ"
-"ん"
-
-#: gdk-pixbuf/io-png.c:1112 gdk-pixbuf/io-gdip-png.c:133
-msgid "The PNG image format"
-msgstr "PNG 画像形式"
-
-#: gdk-pixbuf/io-pnm.c:250
-msgid "PNM loader expected to find an integer, but didn't"
-msgstr "PNM ローダは整数を期待していたのですが、整数ではありませんでした"
-
-#: gdk-pixbuf/io-pnm.c:282
-msgid "PNM file has an incorrect initial byte"
-msgstr "PNM ファイルの最初のバイトが正しくありません"
-
-#: gdk-pixbuf/io-pnm.c:312
-msgid "PNM file is not in a recognized PNM subformat"
-msgstr "PNM ファイルが認識可能な PNM サブ形式ではありません"
-
-#: gdk-pixbuf/io-pnm.c:337
-msgid "PNM file has an image width of 0"
-msgstr "PNM ファイルの画像の幅が 0 です"
-
-#: gdk-pixbuf/io-pnm.c:358
-msgid "PNM file has an image height of 0"
-msgstr "PNM ファイルの画像の高さが 0 です"
-
-#: gdk-pixbuf/io-pnm.c:381
-msgid "Maximum color value in PNM file is 0"
-msgstr "PNM ファイルの色の最大値が 0 です"
-
-#: gdk-pixbuf/io-pnm.c:389
-msgid "Maximum color value in PNM file is too large"
-msgstr "PNM ファイルの色の最大値が大きすぎます"
-
-#: gdk-pixbuf/io-pnm.c:429 gdk-pixbuf/io-pnm.c:459 gdk-pixbuf/io-pnm.c:504
-msgid "Raw PNM image type is invalid"
-msgstr "ロー PNM 画像の形式がおかしいです"
-
-#: gdk-pixbuf/io-pnm.c:654
-msgid "PNM image loader does not support this PNM subformat"
-msgstr "PNM 画像ローダはこの PNM サブ形式をサポートしていません"
-
-#: gdk-pixbuf/io-pnm.c:741 gdk-pixbuf/io-pnm.c:968
-msgid "Raw PNM formats require exactly one whitespace before sample data"
-msgstr "ロー PNM 形式ではサンプルデータの前に空白文字が 1 つだけ必要です"
-
-#: gdk-pixbuf/io-pnm.c:768
-msgid "Cannot allocate memory for loading PNM image"
-msgstr "PNM 画像を読み込むためのメモリを確保できません"
-
-#: gdk-pixbuf/io-pnm.c:818
-msgid "Insufficient memory to load PNM context struct"
-msgstr "PNM コンテキスト構造を読み込むために必要なメモリが足りません"
-
-#: gdk-pixbuf/io-pnm.c:869
-msgid "Unexpected end of PNM image data"
-msgstr "PNM 画像データが予期せずに終わっています"
-
-#: gdk-pixbuf/io-pnm.c:997
-msgid "Insufficient memory to load PNM file"
-msgstr "PNM ファイルを読み込むために必要なメモリが足りません"
-
-#: gdk-pixbuf/io-pnm.c:1081
-msgid "The PNM/PBM/PGM/PPM image format family"
-msgstr "PNM/PBM/PGM/PPM 画像形式ファミリ"
-
-#: gdk-pixbuf/io-qtif.c:128
-msgid "Input file descriptor is NULL."
-msgstr ""
-
-#: gdk-pixbuf/io-qtif.c:143
-#, fuzzy
-msgid "Failed to read QTIF header"
-msgstr "ヘッダの書き込みに失敗しました\n"
-
-#: gdk-pixbuf/io-qtif.c:152 gdk-pixbuf/io-qtif.c:182 gdk-pixbuf/io-qtif.c:446
-#, c-format
-msgid "QTIF atom size too large (%d bytes)"
-msgstr ""
-
-#: gdk-pixbuf/io-qtif.c:172
-#, fuzzy, c-format
-msgid "Failed to allocate %d bytes for file read buffer"
-msgstr "%uバイトの画像バッファの確保に失敗しました"
-
-#: gdk-pixbuf/io-qtif.c:196
-#, fuzzy, c-format
-msgid "File error when reading QTIF atom: %s"
-msgstr "GIF 画像の読み込みに失敗: %s"
-
-#: gdk-pixbuf/io-qtif.c:233
-#, c-format
-msgid "Failed to skip the next %d bytes with seek()."
-msgstr ""
-
-#: gdk-pixbuf/io-qtif.c:257
-#, fuzzy
-msgid "Failed to allocate QTIF context structure."
-msgstr "TGA コンテキスト構造体用のメモリを確保できません"
-
-#: gdk-pixbuf/io-qtif.c:317
-#, fuzzy
-msgid "Failed to create GdkPixbufLoader object."
-msgstr "フォルダ・インデックスの書き込みに失敗しました\n"
-
-#: gdk-pixbuf/io-qtif.c:421
-#, fuzzy
-msgid "Failed to find an image data atom."
-msgstr "TIFF 画像のオープンに失敗しました"
-
-#: gdk-pixbuf/io-qtif.c:602
-#, fuzzy
-msgid "The QTIF image format"
-msgstr "TIFF 画像形式"
-
-#: gdk-pixbuf/io-ras.c:126
-msgid "RAS image has bogus header data"
-msgstr "RAS 画像のヘッダのデータがおかしいです"
-
-#: gdk-pixbuf/io-ras.c:148
-msgid "RAS image has unknown type"
-msgstr "不明な種類の RAS 画像です"
-
-#: gdk-pixbuf/io-ras.c:156
-msgid "unsupported RAS image variation"
-msgstr "サポートしていない RAS 画像の一種です"
-
-#: gdk-pixbuf/io-ras.c:171 gdk-pixbuf/io-ras.c:200
-msgid "Not enough memory to load RAS image"
-msgstr "RAS 画像を読み込むために必要なメモリが足りません"
-
-#: gdk-pixbuf/io-ras.c:545
-msgid "The Sun raster image format"
-msgstr "Sun ラスタ画像形式"
-
-#: gdk-pixbuf/io-tga.c:154
-msgid "Cannot allocate memory for IOBuffer struct"
-msgstr "IOBuffer 構造体のメモリを確保できません"
-
-#: gdk-pixbuf/io-tga.c:173
-msgid "Cannot allocate memory for IOBuffer data"
-msgstr "IOBuffer データのメモリを確保できません"
-
-#: gdk-pixbuf/io-tga.c:184
-msgid "Cannot realloc IOBuffer data"
-msgstr "IOBuffer データのメモリを再確保できません"
-
-#: gdk-pixbuf/io-tga.c:214
-msgid "Cannot allocate temporary IOBuffer data"
-msgstr "一時的な IOBuffer データのメモリを確保できません"
-
-#: gdk-pixbuf/io-tga.c:347
-msgid "Cannot allocate new pixbuf"
-msgstr "新しい pixbuf を確保できません"
-
-#: gdk-pixbuf/io-tga.c:686
-#, fuzzy
-msgid "Image is corrupted or truncated"
-msgstr "GIF 画像は切りつめられたか、不完全になっています"
-
-#: gdk-pixbuf/io-tga.c:693
-msgid "Cannot allocate colormap structure"
-msgstr "カラーマップ構造体を確保できません"
-
-#: gdk-pixbuf/io-tga.c:700
-msgid "Cannot allocate colormap entries"
-msgstr "カラーマップのエントリを確保できません"
-
-#: gdk-pixbuf/io-tga.c:722
-msgid "Unexpected bitdepth for colormap entries"
-msgstr "カラーマップのエントリの bitdepth が予期しないものです"
-
-#: gdk-pixbuf/io-tga.c:740
-msgid "Cannot allocate TGA header memory"
-msgstr "TGA ヘッダのメモリを確保できません"
-
-#: gdk-pixbuf/io-tga.c:773
-msgid "TGA image has invalid dimensions"
-msgstr "TGA 画像の次元がおかしいです"
-
-#: gdk-pixbuf/io-tga.c:779 gdk-pixbuf/io-tga.c:788 gdk-pixbuf/io-tga.c:798
-#: gdk-pixbuf/io-tga.c:808 gdk-pixbuf/io-tga.c:815
-msgid "TGA image type not supported"
-msgstr "TGA 画像はサポートしていません"
-
-#: gdk-pixbuf/io-tga.c:862
-msgid "Cannot allocate memory for TGA context struct"
-msgstr "TGA コンテキスト構造体用のメモリを確保できません"
-
-#: gdk-pixbuf/io-tga.c:927
-msgid "Excess data in file"
-msgstr "ファイルのデータが多すぎます"
-
-#: gdk-pixbuf/io-tga.c:1008
-msgid "The Targa image format"
-msgstr "Targa 画像形式"
-
-#: gdk-pixbuf/io-tiff.c:165
-msgid "Could not get image width (bad TIFF file)"
-msgstr "画像の幅を取得できません (おかしな TIFF ファイル)"
-
-#: gdk-pixbuf/io-tiff.c:172
-msgid "Could not get image height (bad TIFF file)"
-msgstr "画像の高さを取得できません (おかしな TIFF ファイル)"
-
-#: gdk-pixbuf/io-tiff.c:180
-msgid "Width or height of TIFF image is zero"
-msgstr "TIFF 画像の幅か高さが 0 です"
-
-#: gdk-pixbuf/io-tiff.c:189 gdk-pixbuf/io-tiff.c:198
-msgid "Dimensions of TIFF image too large"
-msgstr "TIFF 画像の次元が大きすぎます"
-
-#: gdk-pixbuf/io-tiff.c:222 gdk-pixbuf/io-tiff.c:234 gdk-pixbuf/io-tiff.c:561
-msgid "Insufficient memory to open TIFF file"
-msgstr "TIFF ファイルをオープンするために必要なメモリが足りません"
-
-#: gdk-pixbuf/io-tiff.c:295
-msgid "Failed to load RGB data from TIFF file"
-msgstr "TIFF ファイルから RGB データの読み込むに失敗しました"
-
-#: gdk-pixbuf/io-tiff.c:351
-msgid "Failed to open TIFF image"
-msgstr "TIFF 画像のオープンに失敗しました"
-
-#: gdk-pixbuf/io-tiff.c:363 gdk-pixbuf/io-tiff.c:778
-msgid "TIFFClose operation failed"
-msgstr "TIFFClose 操作に失敗しました"
-
-#: gdk-pixbuf/io-tiff.c:493 gdk-pixbuf/io-tiff.c:506
-msgid "Failed to load TIFF image"
-msgstr "TIFF 画像を読み込むのに失敗しました"
-
-#: gdk-pixbuf/io-tiff.c:692
-msgid "Failed to save TIFF image"
-msgstr "TIFF 画像の保存に失敗しました"
-
-#: gdk-pixbuf/io-tiff.c:727
-msgid "TIFF compression doesn't refer to a valid codec."
-msgstr ""
-
-#: gdk-pixbuf/io-tiff.c:767
-msgid "Failed to write TIFF data"
-msgstr "TIFF データの書き込みに失敗しました"
-
-#: gdk-pixbuf/io-tiff.c:814
-msgid "Couldn't write to TIFF file"
-msgstr "TIFF ファイルに書き込めませんでした"
-
-#: gdk-pixbuf/io-tiff.c:869
-msgid "The TIFF image format"
-msgstr "TIFF 画像形式"
-
-#: gdk-pixbuf/io-wbmp.c:246
-msgid "Image has zero width"
-msgstr "画像の幅が 0 です"
-
-#: gdk-pixbuf/io-wbmp.c:264
-msgid "Image has zero height"
-msgstr "画像の高さが 0 です"
-
-#: gdk-pixbuf/io-wbmp.c:275
-msgid "Not enough memory to load image"
-msgstr "画像を読み込むために必要なメモリが足りません"
-
-#: gdk-pixbuf/io-wbmp.c:334
-msgid "Couldn't save the rest"
-msgstr "残りのデータを保存できませんでした"
-
-#: gdk-pixbuf/io-wbmp.c:375
-msgid "The WBMP image format"
-msgstr "WBMP 画像形式"
-
-#: gdk-pixbuf/io-xbm.c:295
-msgid "Invalid XBM file"
-msgstr "おかしな XBM 形式です"
-
-#: gdk-pixbuf/io-xbm.c:305
-msgid "Insufficient memory to load XBM image file"
-msgstr "XBM 画像を読み込むために必要なメモリが足りません"
-
-#: gdk-pixbuf/io-xbm.c:453
-msgid "Failed to write to temporary file when loading XBM image"
-msgstr "XBM 画像を読み込む際に一時ファイルへの書き込みに失敗しました"
-
-#: gdk-pixbuf/io-xbm.c:492
-msgid "The XBM image format"
-msgstr "XBM 画像形式"
-
-#: gdk-pixbuf/io-xpm.c:468
-msgid "No XPM header found"
-msgstr "XPM ヘッダが見つかりませんでした"
-
-#: gdk-pixbuf/io-xpm.c:477
-msgid "Invalid XPM header"
-msgstr "おかしな XPM ヘッダです"
-
-#: gdk-pixbuf/io-xpm.c:485
-msgid "XPM file has image width <= 0"
-msgstr "XPM ファイルの画像の幅が 0 以下です"
-
-#: gdk-pixbuf/io-xpm.c:493
-msgid "XPM file has image height <= 0"
-msgstr "XPM ファイルの画像の高さが 0 以下です"
-
-#: gdk-pixbuf/io-xpm.c:501
-msgid "XPM has invalid number of chars per pixel"
-msgstr "XPM のピクセル当たりの文字数がおかしいです"
-
-#: gdk-pixbuf/io-xpm.c:510
-msgid "XPM file has invalid number of colors"
-msgstr "XPM ファイルの色の数がおかしいです"
-
-#: gdk-pixbuf/io-xpm.c:522 gdk-pixbuf/io-xpm.c:531 gdk-pixbuf/io-xpm.c:583
-msgid "Cannot allocate memory for loading XPM image"
-msgstr "XPM 画像を読み込むためのメモリを確保できません"
-
-#: gdk-pixbuf/io-xpm.c:545
-msgid "Cannot read XPM colormap"
-msgstr "XPM のカラーマップを読み込めません"
-
-#: gdk-pixbuf/io-xpm.c:777
-msgid "Failed to write to temporary file when loading XPM image"
-msgstr "XPM 画像を読み込む際に一時ファイルへの書き込みに失敗しました"
-
-#: gdk-pixbuf/io-xpm.c:816
-msgid "The XPM image format"
-msgstr "XPM 画像形式"
-
-#: gdk-pixbuf/io-gdip-emf.c:59
-msgid "The EMF image format"
-msgstr "EMF 画像形式"
-
-#: gdk-pixbuf/io-gdip-utils.c:232
-#, c-format
-msgid "Could not allocate memory: %s"
-msgstr "メモリを確保できませんでした: %s"
-
-#: gdk-pixbuf/io-gdip-utils.c:257 gdk-pixbuf/io-gdip-utils.c:371
-#: gdk-pixbuf/io-gdip-utils.c:411
-#, c-format
-msgid "Could not create stream: %s"
-msgstr "ストリームを生成できませんでした: %s"
-
-#: gdk-pixbuf/io-gdip-utils.c:271
-#, c-format
-msgid "Could not seek stream: %s"
-msgstr "ストリームの中を検索できませんでした: %s"
-
-#: gdk-pixbuf/io-gdip-utils.c:283
-#, c-format
-msgid "Could not read from stream: %s"
-msgstr "ストリームから読み込めませんでした: %s"
-
-#: gdk-pixbuf/io-gdip-utils.c:694 gdk-pixbuf/io-gdip-utils.c:825
-msgid "Couldn't load bitmap"
-msgstr "BMP 画像を読み込めませんでした"
-
-#: gdk-pixbuf/io-gdip-utils.c:847
-msgid "Couldn't load metafile"
-msgstr "メタ・ファイルを読み込めませんでした"
-
-#: gdk-pixbuf/io-gdip-utils.c:1006
-msgid "Unsupported image format for GDI+"
-msgstr "GDI+ ではサポートしていない画像です"
-
-#: gdk-pixbuf/io-gdip-utils.c:1013
-msgid "Couldn't save"
-msgstr "保存できませんでした"
-
-#: gdk-pixbuf/io-gdip-wmf.c:58
-msgid "The WMF image format"
-msgstr "WMF 画像形式"
 
 #. Description of --sync in --help output
 #: gdk/win32/gdkmain-win32.c:55
@@ -1521,8 +613,9 @@ msgid "_Saturation:"
 msgstr "彩度(_S):"
 
 #: gtk/gtkcolorsel.c:393
-msgid "\"Deepness\" of the color."
-msgstr "色の \"深さ\" です"
+#, fuzzy
+msgid "Intensity of the color."
+msgstr "色の透明度です"
 
 #: gtk/gtkcolorsel.c:394
 msgid "_Value:"
@@ -1693,11 +786,11 @@ msgstr "右側(_R):"
 msgid "Paper Margins"
 msgstr "用紙のマージン"
 
-#: gtk/gtkentry.c:8612 gtk/gtktextview.c:8002
+#: gtk/gtkentry.c:8612 gtk/gtktextview.c:8012
 msgid "Input _Methods"
 msgstr "入力メソッド(_M)"
 
-#: gtk/gtkentry.c:8626 gtk/gtktextview.c:8016
+#: gtk/gtkentry.c:8626 gtk/gtktextview.c:8026
 msgid "_Insert Unicode Control Character"
 msgstr "Unicode 制御文字の挿入(_I)"
 
@@ -2139,12 +1232,12 @@ msgid "System (%s)"
 msgstr "システム (%s)"
 
 #. Open Link
-#: gtk/gtklabel.c:6076
+#: gtk/gtklabel.c:6072
 msgid "_Open Link"
 msgstr "リンクを開く(_O)"
 
 #. Copy Link Address
-#: gtk/gtklabel.c:6088
+#: gtk/gtklabel.c:6084
 msgid "Copy _Link Address"
 msgstr "リンクのアドレスをコピー(_L)"
 
@@ -2157,27 +1250,27 @@ msgid "Invalid URI"
 msgstr "URI が間違っています"
 
 #. Description of --gtk-module=MODULES in --help output
-#: gtk/gtkmain.c:447
+#: gtk/gtkmain.c:432
 msgid "Load additional GTK+ modules"
 msgstr "追加で読み込む GTK+ モジュールを指定する"
 
 #. Placeholder in --gtk-module=MODULES in --help output
-#: gtk/gtkmain.c:448
+#: gtk/gtkmain.c:433
 msgid "MODULES"
 msgstr "MODULES"
 
 #. Description of --g-fatal-warnings in --help output
-#: gtk/gtkmain.c:450
+#: gtk/gtkmain.c:435
 msgid "Make all warnings fatal"
 msgstr "警告を全て致命的と見なす"
 
 #. Description of --gtk-debug=FLAGS in --help output
-#: gtk/gtkmain.c:453
+#: gtk/gtkmain.c:438
 msgid "GTK+ debugging flags to set"
 msgstr "有効にする GTK+ のデバッグ・フラグを指定する"
 
 #. Description of --gtk-no-debug=FLAGS in --help output
-#: gtk/gtkmain.c:456
+#: gtk/gtkmain.c:441
 msgid "GTK+ debugging flags to unset"
 msgstr "無効にする GTK+ のデバッグ・フラグを指定する"
 
@@ -2186,20 +1279,20 @@ msgstr "無効にする GTK+ のデバッグ・フラグを指定する"
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
 #.
-#: gtk/gtkmain.c:708
+#: gtk/gtkmain.c:704
 msgid "default:LTR"
 msgstr "default:LTR"
 
-#: gtk/gtkmain.c:773
+#: gtk/gtkmain.c:769
 #, c-format
 msgid "Cannot open display: %s"
 msgstr "ディスプレイをオープンできません: %s"
 
-#: gtk/gtkmain.c:810
+#: gtk/gtkmain.c:806
 msgid "GTK+ Options"
 msgstr "GTK+ のオプション"
 
-#: gtk/gtkmain.c:810
+#: gtk/gtkmain.c:806
 msgid "Show GTK+ Options"
 msgstr "GTK+ のオプションを表示する"
 
@@ -2284,7 +1377,7 @@ msgstr "zsh"
 msgid "Cannot end process with pid %d: %s"
 msgstr "pid %d のプロセスを終了できません: %s"
 
-#: gtk/gtknotebook.c:4621 gtk/gtknotebook.c:7050
+#: gtk/gtknotebook.c:4631 gtk/gtknotebook.c:7060
 #, c-format
 msgid "Page %u"
 msgstr "%u ページ"
@@ -2374,87 +1467,81 @@ msgstr "フォルダの中に保存(_S):"
 msgid "%s job #%d"
 msgstr "%s (印刷ジョブの番号 #%d)"
 
-#: gtk/gtkprintoperation.c:1687
+#: gtk/gtkprintoperation.c:1695
 msgctxt "print operation status"
 msgid "Initial state"
 msgstr "初期状態"
 
-#: gtk/gtkprintoperation.c:1688
+#: gtk/gtkprintoperation.c:1696
 msgctxt "print operation status"
 msgid "Preparing to print"
 msgstr "プリンタの準備中"
 
-#: gtk/gtkprintoperation.c:1689
+#: gtk/gtkprintoperation.c:1697
 msgctxt "print operation status"
 msgid "Generating data"
 msgstr "データの生成中"
 
-#: gtk/gtkprintoperation.c:1690
+#: gtk/gtkprintoperation.c:1698
 msgctxt "print operation status"
 msgid "Sending data"
 msgstr "データの送信中"
 
-#: gtk/gtkprintoperation.c:1691
+#: gtk/gtkprintoperation.c:1699
 msgctxt "print operation status"
 msgid "Waiting"
 msgstr "待機中"
 
-#: gtk/gtkprintoperation.c:1692
+#: gtk/gtkprintoperation.c:1700
 msgctxt "print operation status"
 msgid "Blocking on issue"
 msgstr "障害の発生中"
 
-#: gtk/gtkprintoperation.c:1693
+#: gtk/gtkprintoperation.c:1701
 msgctxt "print operation status"
 msgid "Printing"
 msgstr "印刷中"
 
-#: gtk/gtkprintoperation.c:1694
+#: gtk/gtkprintoperation.c:1702
 msgctxt "print operation status"
 msgid "Finished"
 msgstr "完了"
 
-#: gtk/gtkprintoperation.c:1695
+#: gtk/gtkprintoperation.c:1703
 msgctxt "print operation status"
 msgid "Finished with error"
 msgstr "完了 (エラー有り)"
 
-#: gtk/gtkprintoperation.c:2254
+#: gtk/gtkprintoperation.c:2270
 #, c-format
 msgid "Preparing %d"
 msgstr "%d の準備中です"
 
-#: gtk/gtkprintoperation.c:2256 gtk/gtkprintoperation.c:2875
+#: gtk/gtkprintoperation.c:2272 gtk/gtkprintoperation.c:2902
 #, c-format
 msgid "Preparing"
 msgstr "準備中"
 
-#: gtk/gtkprintoperation.c:2259
+#: gtk/gtkprintoperation.c:2275
 #, c-format
 msgid "Printing %d"
 msgstr "%d の印刷中です"
 
-#: gtk/gtkprintoperation.c:2905
+#: gtk/gtkprintoperation.c:2932
 #, c-format
 msgid "Error creating print preview"
 msgstr "プレビューを生成する際にエラー"
 
-#: gtk/gtkprintoperation.c:2908
+#: gtk/gtkprintoperation.c:2935
 #, c-format
 msgid "The most probable reason is that a temporary file could not be created."
 msgstr "作業用のファイルを生成できないことが一番考えられそうな原因です。"
 
-#: gtk/gtkprintoperation-unix.c:297 gtk/gtkprintoperation-unix.c:314
-#, c-format
+#: gtk/gtkprintoperation-unix.c:297
 msgid "Error launching preview"
 msgstr "プレビューを起動する際にエラー"
 
-#: gtk/gtkprintoperation-unix.c:358
-#, c-format
-msgid "Error printing"
-msgstr "印刷エラー"
-
-#: gtk/gtkprintoperation-unix.c:494 gtk/gtkprintoperation-win32.c:1447
+#: gtk/gtkprintoperation-unix.c:470 gtk/gtkprintoperation-win32.c:1447
 msgid "Application"
 msgstr "アプリケーション"
 
@@ -2468,7 +1555,7 @@ msgstr "用紙の範囲外"
 
 #. Translators: this is a printer status.
 #: gtk/gtkprintoperation-win32.c:616
-#: modules/printbackends/cups/gtkprintbackendcups.c:1999
+#: modules/printbackends/cups/gtkprintbackendcups.c:1998
 msgid "Paused"
 msgstr "一時停止"
 
@@ -2595,42 +1682,42 @@ msgstr "全般"
 #. * multiple pages on a sheet when printing
 #.
 #: gtk/gtkprintunixdialog.c:3010
-#: modules/printbackends/cups/gtkprintbackendcups.c:3509
+#: modules/printbackends/cups/gtkprintbackendcups.c:3508
 msgid "Left to right, top to bottom"
 msgstr "左から右へ、上から下へ"
 
 #: gtk/gtkprintunixdialog.c:3010
-#: modules/printbackends/cups/gtkprintbackendcups.c:3509
+#: modules/printbackends/cups/gtkprintbackendcups.c:3508
 msgid "Left to right, bottom to top"
 msgstr "左から右へ、下から上へ"
 
 #: gtk/gtkprintunixdialog.c:3011
-#: modules/printbackends/cups/gtkprintbackendcups.c:3510
+#: modules/printbackends/cups/gtkprintbackendcups.c:3509
 msgid "Right to left, top to bottom"
 msgstr "右から左へ、上から下へ"
 
 #: gtk/gtkprintunixdialog.c:3011
-#: modules/printbackends/cups/gtkprintbackendcups.c:3510
+#: modules/printbackends/cups/gtkprintbackendcups.c:3509
 msgid "Right to left, bottom to top"
 msgstr "右から左へ、下から上へ"
 
 #: gtk/gtkprintunixdialog.c:3012
-#: modules/printbackends/cups/gtkprintbackendcups.c:3511
+#: modules/printbackends/cups/gtkprintbackendcups.c:3510
 msgid "Top to bottom, left to right"
 msgstr "上から下へ、左から右へ"
 
 #: gtk/gtkprintunixdialog.c:3012
-#: modules/printbackends/cups/gtkprintbackendcups.c:3511
+#: modules/printbackends/cups/gtkprintbackendcups.c:3510
 msgid "Top to bottom, right to left"
 msgstr "上から下へ、右から左へ"
 
 #: gtk/gtkprintunixdialog.c:3013
-#: modules/printbackends/cups/gtkprintbackendcups.c:3512
+#: modules/printbackends/cups/gtkprintbackendcups.c:3511
 msgid "Bottom to top, left to right"
 msgstr "下から上へ、左から右へ"
 
 #: gtk/gtkprintunixdialog.c:3013
-#: modules/printbackends/cups/gtkprintbackendcups.c:3512
+#: modules/printbackends/cups/gtkprintbackendcups.c:3511
 msgid "Bottom to top, right to left"
 msgstr "下から上へ、右から左へ"
 
@@ -2638,7 +1725,7 @@ msgstr "下から上へ、右から左へ"
 #. * dialog that controls in what order multiple pages are arranged
 #.
 #: gtk/gtkprintunixdialog.c:3017 gtk/gtkprintunixdialog.c:3030
-#: modules/printbackends/cups/gtkprintbackendcups.c:3544
+#: modules/printbackends/cups/gtkprintbackendcups.c:3543
 msgid "Page Ordering"
 msgstr "ページの順番"
 
@@ -4806,121 +3893,116 @@ msgstr "プリンタ '%s' は現在オフラインです。"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:1687
 #, c-format
-msgid "Printer '%s' may not be connected."
-msgstr "プリンタ '%s' が接続されていないようです。"
-
-#: modules/printbackends/cups/gtkprintbackendcups.c:1688
-#, c-format
 msgid "There is a problem on printer '%s'."
 msgstr "プリンタ '%s' で問題が発生しました。"
 
 #. Translators: this is a printer status.
-#: modules/printbackends/cups/gtkprintbackendcups.c:1996
+#: modules/printbackends/cups/gtkprintbackendcups.c:1995
 msgid "Paused ; Rejecting Jobs"
 msgstr "一時停止中 (印刷ジョブを破棄しています)"
 
 #. Translators: this is a printer status.
-#: modules/printbackends/cups/gtkprintbackendcups.c:2002
+#: modules/printbackends/cups/gtkprintbackendcups.c:2001
 msgid "Rejecting Jobs"
 msgstr "印刷ジョブを破棄しています"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2778
+#: modules/printbackends/cups/gtkprintbackendcups.c:2777
 msgid "Two Sided"
 msgstr "両面印刷"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2779
+#: modules/printbackends/cups/gtkprintbackendcups.c:2778
 msgid "Paper Type"
 msgstr "用紙の種類"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2780
+#: modules/printbackends/cups/gtkprintbackendcups.c:2779
 msgid "Paper Source"
 msgstr "用紙のソース"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2781
+#: modules/printbackends/cups/gtkprintbackendcups.c:2780
 msgid "Output Tray"
 msgstr "出力トレイ"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2782
+#: modules/printbackends/cups/gtkprintbackendcups.c:2781
 msgid "Resolution"
 msgstr "解像度"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2783
+#: modules/printbackends/cups/gtkprintbackendcups.c:2782
 msgid "GhostScript pre-filtering"
 msgstr "GhostScript のフィルタリング (前処理)"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2792
+#: modules/printbackends/cups/gtkprintbackendcups.c:2791
 msgid "One Sided"
 msgstr "片面印刷"
 
 #. Translators: this is an option of "Two Sided"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2794
+#: modules/printbackends/cups/gtkprintbackendcups.c:2793
 msgid "Long Edge (Standard)"
 msgstr "長辺 (標準)"
 
 #. Translators: this is an option of "Two Sided"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2796
+#: modules/printbackends/cups/gtkprintbackendcups.c:2795
 msgid "Short Edge (Flip)"
 msgstr "短辺 (折り返し)"
 
 #. Translators: this is an option of "Paper Source"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2798
-#: modules/printbackends/cups/gtkprintbackendcups.c:2800
-#: modules/printbackends/cups/gtkprintbackendcups.c:2808
+#: modules/printbackends/cups/gtkprintbackendcups.c:2797
+#: modules/printbackends/cups/gtkprintbackendcups.c:2799
+#: modules/printbackends/cups/gtkprintbackendcups.c:2807
 msgid "Auto Select"
 msgstr "自動選択"
 
 #. Translators: this is an option of "Paper Source"
 #. Translators: this is an option of "Resolution"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2802
-#: modules/printbackends/cups/gtkprintbackendcups.c:2804
-#: modules/printbackends/cups/gtkprintbackendcups.c:2806
-#: modules/printbackends/cups/gtkprintbackendcups.c:2810
-#: modules/printbackends/cups/gtkprintbackendcups.c:3296
+#: modules/printbackends/cups/gtkprintbackendcups.c:2801
+#: modules/printbackends/cups/gtkprintbackendcups.c:2803
+#: modules/printbackends/cups/gtkprintbackendcups.c:2805
+#: modules/printbackends/cups/gtkprintbackendcups.c:2809
+#: modules/printbackends/cups/gtkprintbackendcups.c:3295
 msgid "Printer Default"
 msgstr "プリンタのデフォルト"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2812
+#: modules/printbackends/cups/gtkprintbackendcups.c:2811
 msgid "Embed GhostScript fonts only"
 msgstr "埋め込みの GhostScript のフォントだけ"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2814
+#: modules/printbackends/cups/gtkprintbackendcups.c:2813
 msgid "Convert to PS level 1"
 msgstr "PS のレベル１に変換する"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2816
+#: modules/printbackends/cups/gtkprintbackendcups.c:2815
 msgid "Convert to PS level 2"
 msgstr "PS のレベル２に変換する"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2818
+#: modules/printbackends/cups/gtkprintbackendcups.c:2817
 msgid "No pre-filtering"
 msgstr "フィルタリング (前処理) はありません"
 
 #. Translators: "Miscellaneous" is the label for a button, that opens
 #. up an extra panel of settings in a print dialog.
-#: modules/printbackends/cups/gtkprintbackendcups.c:2827
+#: modules/printbackends/cups/gtkprintbackendcups.c:2826
 msgid "Miscellaneous"
 msgstr "その他"
 
 #. Translators: These strings name the possible values of the
 #. * job priority option in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3504
+#: modules/printbackends/cups/gtkprintbackendcups.c:3503
 msgid "Urgent"
 msgstr "緊急"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3504
+#: modules/printbackends/cups/gtkprintbackendcups.c:3503
 msgid "High"
 msgstr "高い"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3504
+#: modules/printbackends/cups/gtkprintbackendcups.c:3503
 msgid "Medium"
 msgstr "普通"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3504
+#: modules/printbackends/cups/gtkprintbackendcups.c:3503
 msgid "Low"
 msgstr "低い"
 
@@ -4928,66 +4010,66 @@ msgstr "低い"
 #. Translators, this string is used to label the pages-per-sheet option
 #. * in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3528
+#: modules/printbackends/cups/gtkprintbackendcups.c:3527
 msgid "Pages per Sheet"
 msgstr "ページ数/用紙"
 
 #. Translators, this string is used to label the job priority option
 #. * in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3565
+#: modules/printbackends/cups/gtkprintbackendcups.c:3564
 msgid "Job Priority"
 msgstr "印刷ジョブの優先順位"
 
 #. Translators, this string is used to label the billing info entry
 #. * in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3576
+#: modules/printbackends/cups/gtkprintbackendcups.c:3575
 msgid "Billing Info"
 msgstr "サマリ情報"
 
 #. Translators, these strings are names for various 'standard' cover
 #. * pages that the printing system may support.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3591
+#: modules/printbackends/cups/gtkprintbackendcups.c:3590
 msgid "None"
 msgstr "なし"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3591
+#: modules/printbackends/cups/gtkprintbackendcups.c:3590
 msgid "Classified"
 msgstr "機密"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3591
+#: modules/printbackends/cups/gtkprintbackendcups.c:3590
 msgid "Confidential"
 msgstr "極秘"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3591
+#: modules/printbackends/cups/gtkprintbackendcups.c:3590
 msgid "Secret"
 msgstr "秘密"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3591
+#: modules/printbackends/cups/gtkprintbackendcups.c:3590
 msgid "Standard"
 msgstr "標準"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3591
+#: modules/printbackends/cups/gtkprintbackendcups.c:3590
 msgid "Top Secret"
 msgstr "トップ・シークレット"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3591
+#: modules/printbackends/cups/gtkprintbackendcups.c:3590
 msgid "Unclassified"
 msgstr "機密ではない"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the front cover page.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3626
+#: modules/printbackends/cups/gtkprintbackendcups.c:3625
 msgid "Before"
 msgstr "前"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the back cover page.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3641
+#: modules/printbackends/cups/gtkprintbackendcups.c:3640
 msgid "After"
 msgstr "後"
 
@@ -4995,14 +4077,14 @@ msgstr "後"
 #. * a print job is printed. Possible values are 'now', a specified time,
 #. * or 'on hold'
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3661
+#: modules/printbackends/cups/gtkprintbackendcups.c:3660
 msgid "Print at"
 msgstr "印刷先"
 
 #. Translators: this is the name of the option that allows the user
 #. * to specify a time when a print job will be printed.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3672
+#: modules/printbackends/cups/gtkprintbackendcups.c:3671
 msgid "Print at time"
 msgstr "一度に印刷する"
 
@@ -5010,7 +4092,7 @@ msgstr "一度に印刷する"
 #. * size. The two placeholders are replaced with the width and height
 #. * in points. E.g: "Custom 230.4x142.9"
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3707
+#: modules/printbackends/cups/gtkprintbackendcups.c:3706
 #, c-format
 msgid "Custom %sx%s"
 msgstr "カスタム %sx%s"
@@ -5101,6 +4183,666 @@ msgstr "テスト用プリンタに印刷する"
 #, c-format
 msgid "Could not get information for file '%s': %s"
 msgstr "'%s' というファイルの情報を取得できませんでした: %s"
+
+#: tests/testfilechooser.c:222
+#, c-format
+msgid "Failed to open file '%s': %s"
+msgstr "ファイル '%s' のオープンに失敗しました: %s"
+
+#: tests/testfilechooser.c:267
+#, c-format
+msgid ""
+"Failed to load image '%s': reason not known, probably a corrupt image file"
+msgstr ""
+"画像 '%s' の読み込みに失敗しました: 理由は不明ですが、おそらく画像ファイルが"
+"壊れていると思われます"
+
+#~ msgid "Image file '%s' contains no data"
+#~ msgstr "画像ファイル '%s' にはデータがありません"
+
+#~ msgid ""
+#~ "Failed to load animation '%s': reason not known, probably a corrupt "
+#~ "animation file"
+#~ msgstr ""
+#~ "アニメーション '%s' の読み込みに失敗しました: 理由は不明ですが、おそらくア"
+#~ "ニメーションファイルが壊れていると思われます"
+
+#~ msgid "Unable to load image-loading module: %s: %s"
+#~ msgstr "画像ロード・モジュールを読み込めません: %s: %s"
+
+#~ msgid ""
+#~ "Image-loading module %s does not export the proper interface; perhaps "
+#~ "it's from a different GTK version?"
+#~ msgstr ""
+#~ "画像ロード・モジュール %s は正しいインターフェースをエキスポートしていませ"
+#~ "ん。GTK+ の別のバージョンのモジュールかも？"
+
+#~ msgid "Image type '%s' is not supported"
+#~ msgstr "画像の種類 '%s' はサポートされていません"
+
+#~ msgid "Couldn't recognize the image file format for file '%s'"
+#~ msgstr "ファイル '%s' の画像ファイルの形式を認識できませんでした"
+
+#~ msgid "Unrecognized image file format"
+#~ msgstr "認識できない画像ファイルの形式"
+
+#~ msgid "Failed to load image '%s': %s"
+#~ msgstr "画像 '%s' の読み込みに失敗しました: %s"
+
+#~ msgid "Error writing to image file: %s"
+#~ msgstr "画像ファイルの書き込みでエラー: %s"
+
+#~ msgid ""
+#~ "This build of gdk-pixbuf does not support saving the image format: %s"
+#~ msgstr ""
+#~ "お使いの gdk-pixbuf は画像ファイルの形式 %s の保存をサポートしていません"
+
+#~ msgid "Insufficient memory to save image to callback"
+#~ msgstr "画像をコールバックへ保存するために必要なメモリが足りません"
+
+#~ msgid "Failed to open temporary file"
+#~ msgstr "作業用ファイルのオープンに失敗しました"
+
+#~ msgid "Failed to read from temporary file"
+#~ msgstr "作業用ファイルからの読み込みに失敗しました"
+
+#~ msgid "Failed to open '%s' for writing: %s"
+#~ msgstr "書き込みモードで '%s' のオープンに失敗しました: %s"
+
+#~ msgid ""
+#~ "Failed to close '%s' while writing image, all data may not have been "
+#~ "saved: %s"
+#~ msgstr ""
+#~ "画像を書き込む際に '%s' を閉じることができなかったため、全てのデータが保存"
+#~ "されていないかもしれません: %s"
+
+#~ msgid "Insufficient memory to save image into a buffer"
+#~ msgstr "画像をバッファへ保存するために必要なメモリが足りません"
+
+#~ msgid "Error writing to image stream"
+#~ msgstr "画像ストリームへ書き込む際にエラー"
+
+#~ msgid ""
+#~ "Internal error: Image loader module '%s' failed to complete an operation, "
+#~ "but didn't give a reason for the failure"
+#~ msgstr ""
+#~ "内部エラー: 画像ロード・モジュール '%s' の処理に失敗しましたが、その原因を"
+#~ "取得できませんでした"
+
+#~ msgid "Incremental loading of image type '%s' is not supported"
+#~ msgstr "画像の種類 '%s' のインクリメンタル・ロードはサポートされていません"
+
+#~ msgid "Image header corrupt"
+#~ msgstr "画像ヘッダが壊れています"
+
+#~ msgid "Image format unknown"
+#~ msgstr "画像形式が不明です"
+
+#~ msgid "Image pixel data corrupt"
+#~ msgstr "画像のピクセルデータが壊れています"
+
+#~ msgid "failed to allocate image buffer of %u byte"
+#~ msgid_plural "failed to allocate image buffer of %u bytes"
+#~ msgstr[0] "%uバイトの画像バッファの確保に失敗しました"
+
+#~ msgid "Unexpected icon chunk in animation"
+#~ msgstr "アニメーションに予期しないアイコン・チャンクがあります"
+
+#~ msgid "Unsupported animation type"
+#~ msgstr "サポートされていないアニメーションの種類です"
+
+#~ msgid "Invalid header in animation"
+#~ msgstr "アニメーションのヘッダがおかしいです"
+
+#~ msgid "Not enough memory to load animation"
+#~ msgstr "アニメーションを読み込むためのメモリが足りません"
+
+#~ msgid "Malformed chunk in animation"
+#~ msgstr "アニメーションに異常なチャンクがあります"
+
+#~ msgid "The ANI image format"
+#~ msgstr "ANI 画像形式"
+
+#~ msgid "BMP image has bogus header data"
+#~ msgstr "BMP 画像のヘッダのデータがおかしいです"
+
+#~ msgid "Not enough memory to load bitmap image"
+#~ msgstr "BMP 画像を読み込むために必要なメモリが足りません"
+
+#~ msgid "BMP image has unsupported header size"
+#~ msgstr "サポートしていない BMP 画像のヘッダ・サイズです"
+
+#~ msgid "Topdown BMP images cannot be compressed"
+#~ msgstr "全体を覆う BMP 画像は圧縮できません"
+
+#~ msgid "Premature end-of-file encountered"
+#~ msgstr "ファイルの終わりが早すぎます"
+
+#~ msgid "Couldn't allocate memory for saving BMP file"
+#~ msgstr "BMP 画像を読み込むためのメモリを確保できませんでした"
+
+#~ msgid "Couldn't write to BMP file"
+#~ msgstr "BMP ファイル名に書き込めませんでした"
+
+#~ msgid "The BMP image format"
+#~ msgstr "BMP 画像形式"
+
+#~ msgid "Failure reading GIF: %s"
+#~ msgstr "GIF 画像の読み込みに失敗: %s"
+
+#~ msgid "GIF file was missing some data (perhaps it was truncated somehow?)"
+#~ msgstr ""
+#~ "GIF ファイルに何か足りないデータがあります (理由は不明ですが切りつめられた"
+#~ "かも？)"
+
+#~ msgid "Internal error in the GIF loader (%s)"
+#~ msgstr "GIF ローダの内部エラー (%s)"
+
+#~ msgid "Stack overflow"
+#~ msgstr "スタックあふれ"
+
+#~ msgid "GIF image loader cannot understand this image."
+#~ msgstr "(GIF 画像ローダ) この画像を理解できません"
+
+#~ msgid "Bad code encountered"
+#~ msgstr "おかしなコードに出会いました"
+
+#~ msgid "Circular table entry in GIF file"
+#~ msgstr "GIF ファイルのテーブル・エントリが循環しています"
+
+#~ msgid "Not enough memory to load GIF file"
+#~ msgstr "GIF 画像を読み込むために必要なメモリが足りません"
+
+#~ msgid "Not enough memory to composite a frame in GIF file"
+#~ msgstr "GIF 画像でフレームを結合するために必要なメモリが足りません"
+
+#~ msgid "GIF image is corrupt (incorrect LZW compression)"
+#~ msgstr "GIF 画像が壊れています (おかしな LZW 圧縮です)"
+
+#~ msgid "File does not appear to be a GIF file"
+#~ msgstr "ファイルは GIF ファイルではないようです"
+
+#~ msgid "Version %s of the GIF file format is not supported"
+#~ msgstr "バージョン %s の GIF ファイル形式はサポートしていません"
+
+#~ msgid ""
+#~ "GIF image has no global colormap, and a frame inside it has no local "
+#~ "colormap."
+#~ msgstr ""
+#~ "GIF 画像にグローバルなカラーマップがありません。そしてフレームにローカルな"
+#~ "カラーマップがありません"
+
+#~ msgid "GIF image was truncated or incomplete."
+#~ msgstr "GIF 画像は切りつめられたか、不完全になっています"
+
+#~ msgid "The GIF image format"
+#~ msgstr "GIF 画像形式"
+
+#~ msgid "Invalid header in icon"
+#~ msgstr "アイコンのヘッダがおかしいです"
+
+#~ msgid "Not enough memory to load icon"
+#~ msgstr "アイコンを読み込むために必要なメモリが足りません"
+
+#~ msgid "Icon has zero width"
+#~ msgstr "アイコンの幅が 0 です"
+
+#~ msgid "Icon has zero height"
+#~ msgstr "アイコンの高さが 0 です"
+
+#~ msgid "Compressed icons are not supported"
+#~ msgstr "圧縮アイコンはサポートされていません"
+
+#~ msgid "Unsupported icon type"
+#~ msgstr "サポートしていない種類のアイコンです"
+
+#~ msgid "Not enough memory to load ICO file"
+#~ msgstr "アイコン・ファイルを読み込むために必要なメモリが足りません"
+
+#~ msgid "Image too large to be saved as ICO"
+#~ msgstr "アイコンとして保存するには画像が大きすぎます"
+
+#~ msgid "Cursor hotspot outside image"
+#~ msgstr "カーソルのホットスポットより外側の画像です"
+
+#~ msgid "Unsupported depth for ICO file: %d"
+#~ msgstr "アイコン・ファイルとしてサポートされない色深度です: %d"
+
+#~ msgid "The ICO image format"
+#~ msgstr "ICO 画像形式"
+
+#~ msgid "Error reading ICNS image: %s"
+#~ msgstr "ICNS 画像を読み込む際にエラー: %s"
+
+#~ msgid "Could not decode ICNS file"
+#~ msgstr "ICNS ファイルをデコードできませんでした"
+
+#~ msgid "The ICNS image format"
+#~ msgstr "ICNS 画像形式"
+
+#~ msgid "Couldn't allocate memory for stream"
+#~ msgstr "ストリームのメモリを確保できませんでした"
+
+#~ msgid "Couldn't decode image"
+#~ msgstr "画像をデコードできませんでした"
+
+#~ msgid "Transformed JPEG2000 has zero width or height"
+#~ msgstr "変換した JPEG2000 の幅または高さが 0 です"
+
+#~ msgid "Image type currently not supported"
+#~ msgstr "画像の種類はサポートされていません"
+
+#~ msgid "Couldn't allocate memory for color profile"
+#~ msgstr "色のプロファイルで使用するメモリを確保できませんでした"
+
+#~ msgid "Insufficient memory to open JPEG 2000 file"
+#~ msgstr "JPEG 2000 のファイルをオープンするために必要なメモリが足りません"
+
+#~ msgid "Couldn't allocate memory to buffer image data"
+#~ msgstr "画像データを格納するためのメモリを確保できませんでした"
+
+#~ msgid "The JPEG 2000 image format"
+#~ msgstr "JPEG 2000 画像形式"
+
+#~ msgid "Error interpreting JPEG image file (%s)"
+#~ msgstr "JPEG 画像ファイル (%s) の解釈でエラー"
+
+#~ msgid ""
+#~ "Insufficient memory to load image, try exiting some applications to free "
+#~ "memory"
+#~ msgstr ""
+#~ "画像の読み込みに必要なメモリがありません。アプリケーションをいくつか終了し"
+#~ "てメモリを解放して下さい"
+
+#~ msgid "Unsupported JPEG color space (%s)"
+#~ msgstr "サポートしていない JPEG のカラー・スペースです (%s)"
+
+#~ msgid "Couldn't allocate memory for loading JPEG file"
+#~ msgstr "JPEG 画像を読み込むためのメモリを確保できませんでした"
+
+#~ msgid "Transformed JPEG has zero width or height."
+#~ msgstr "変換した JPEG の幅または高さが 0 です"
+
+#~ msgid ""
+#~ "JPEG quality must be a value between 0 and 100; value '%s' could not be "
+#~ "parsed."
+#~ msgstr ""
+#~ "JPEG の \"クオリティ\" は 0〜100 の値にして下さい。値 '%s' を解析できませ"
+#~ "んでした"
+
+#~ msgid ""
+#~ "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
+#~ msgstr ""
+#~ "JPEG の \"クオリティ\" は 0〜100 の値にして下さい。値 '%d' は確保されませ"
+#~ "ん"
+
+#~ msgid "The JPEG image format"
+#~ msgstr "JPEG 画像形式"
+
+#~ msgid "Couldn't allocate memory for header"
+#~ msgstr "ヘッダのメモリを確保できませんでした"
+
+#~ msgid "Couldn't allocate memory for context buffer"
+#~ msgstr "コンテキスト・バッファ用のメモリを確保できませんでした"
+
+#~ msgid "Image has invalid width and/or height"
+#~ msgstr "画像の幅と/または高さが無効です"
+
+#~ msgid "Image has unsupported bpp"
+#~ msgstr "サポートしていない bpp を保持しています"
+
+#~ msgid "Image has unsupported number of %d-bit planes"
+#~ msgstr "サポートしていない数の %d ビット・プレーンを保持しています"
+
+#~ msgid "Couldn't create new pixbuf"
+#~ msgstr "新しい pixbuf を生成できませんでした"
+
+#~ msgid "Couldn't allocate memory for line data"
+#~ msgstr "行のデータ用のメモリを確保できませんでした"
+
+#~ msgid "Couldn't allocate memory for paletted data"
+#~ msgstr "パレット・データ用のメモリを確保できませんでした"
+
+#~ msgid "Didn't get all lines of PCX image"
+#~ msgstr "PCX 画像の全ての行を取得できません"
+
+#~ msgid "No palette found at end of PCX data"
+#~ msgstr "PCX データ末尾のパレットが見つかりません"
+
+#~ msgid "The PCX image format"
+#~ msgstr "PCX 画像形式"
+
+#~ msgid "Bits per channel of PNG image is invalid."
+#~ msgstr "PNG 画像のチャンネル毎のビット数がおかしいです"
+
+#~ msgid "Transformed PNG has zero width or height."
+#~ msgstr "変換した PNG の幅または高さが 0 です"
+
+#~ msgid "Bits per channel of transformed PNG is not 8."
+#~ msgstr "変換した PNG のチャンネル毎のビット数が 8 ではありません"
+
+#~ msgid "Transformed PNG not RGB or RGBA."
+#~ msgstr "変換した PNG は RGB でも RGBA でもありません"
+
+#~ msgid "Transformed PNG has unsupported number of channels, must be 3 or 4."
+#~ msgstr ""
+#~ "変換した PNG のチャンネル数がサポートされているものではありません。3 また"
+#~ "は 4 にして下さい"
+
+#~ msgid "Fatal error in PNG image file: %s"
+#~ msgstr "PNG 画像ファイルに致命的なエラー: %s"
+
+#~ msgid "Insufficient memory to load PNG file"
+#~ msgstr "PNG 画像を読み込むために必要なメモリが足りません"
+
+#~ msgid ""
+#~ "Insufficient memory to store a %ld by %ld image; try exiting some "
+#~ "applications to reduce memory usage"
+#~ msgstr ""
+#~ "%ldx%ld の画像を保存するために必要なメモリが足りません。アプリケーションを"
+#~ "いくつか終了してメモリの使用量を減らして下さい"
+
+#~ msgid "Fatal error reading PNG image file"
+#~ msgstr "PNG 画像ファイルの読み込みで致命的なエラー"
+
+#~ msgid "Fatal error reading PNG image file: %s"
+#~ msgstr "PNG 画像ファイルの読み込みで致命的なエラー: %s"
+
+#~ msgid ""
+#~ "Keys for PNG text chunks must have at least 1 and at most 79 characters."
+#~ msgstr "PNG のテキスト・チャンクのキーは 1〜79 文字にして下さい"
+
+#~ msgid "Keys for PNG text chunks must be ASCII characters."
+#~ msgstr "PNG のテキスト・チャンクのキーは ASCII 文字にして下さい"
+
+#~ msgid ""
+#~ "PNG compression level must be a value between 0 and 9; value '%s' could "
+#~ "not be parsed."
+#~ msgstr ""
+#~ "PNG の圧縮レベルは 0〜9 の値にして下さい。値 '%s' を解析できませんでした"
+
+#~ msgid ""
+#~ "PNG compression level must be a value between 0 and 9; value '%d' is not "
+#~ "allowed."
+#~ msgstr "PNG の圧縮レベルは 0〜9 の値にして下さい。値 '%d' は確保されません"
+
+#~ msgid ""
+#~ "Value for PNG text chunk %s cannot be converted to ISO-8859-1 encoding."
+#~ msgstr ""
+#~ "PNG のテキスト・チャンク %s の値を ISO-8859-1 エンコーディングに変換できま"
+#~ "せん"
+
+#~ msgid "The PNG image format"
+#~ msgstr "PNG 画像形式"
+
+#~ msgid "PNM loader expected to find an integer, but didn't"
+#~ msgstr "PNM ローダは整数を期待していたのですが、整数ではありませんでした"
+
+#~ msgid "PNM file has an incorrect initial byte"
+#~ msgstr "PNM ファイルの最初のバイトが正しくありません"
+
+#~ msgid "PNM file is not in a recognized PNM subformat"
+#~ msgstr "PNM ファイルが認識可能な PNM サブ形式ではありません"
+
+#~ msgid "PNM file has an image width of 0"
+#~ msgstr "PNM ファイルの画像の幅が 0 です"
+
+#~ msgid "PNM file has an image height of 0"
+#~ msgstr "PNM ファイルの画像の高さが 0 です"
+
+#~ msgid "Maximum color value in PNM file is 0"
+#~ msgstr "PNM ファイルの色の最大値が 0 です"
+
+#~ msgid "Maximum color value in PNM file is too large"
+#~ msgstr "PNM ファイルの色の最大値が大きすぎます"
+
+#~ msgid "Raw PNM image type is invalid"
+#~ msgstr "ロー PNM 画像の形式がおかしいです"
+
+#~ msgid "PNM image loader does not support this PNM subformat"
+#~ msgstr "PNM 画像ローダはこの PNM サブ形式をサポートしていません"
+
+#~ msgid "Raw PNM formats require exactly one whitespace before sample data"
+#~ msgstr "ロー PNM 形式ではサンプルデータの前に空白文字が 1 つだけ必要です"
+
+#~ msgid "Cannot allocate memory for loading PNM image"
+#~ msgstr "PNM 画像を読み込むためのメモリを確保できません"
+
+#~ msgid "Insufficient memory to load PNM context struct"
+#~ msgstr "PNM コンテキスト構造を読み込むために必要なメモリが足りません"
+
+#~ msgid "Unexpected end of PNM image data"
+#~ msgstr "PNM 画像データが予期せずに終わっています"
+
+#~ msgid "Insufficient memory to load PNM file"
+#~ msgstr "PNM ファイルを読み込むために必要なメモリが足りません"
+
+#~ msgid "The PNM/PBM/PGM/PPM image format family"
+#~ msgstr "PNM/PBM/PGM/PPM 画像形式ファミリ"
+
+#, fuzzy
+#~ msgid "Failed to read QTIF header"
+#~ msgstr "ヘッダの書き込みに失敗しました\n"
+
+#, fuzzy
+#~ msgid "Failed to allocate %d bytes for file read buffer"
+#~ msgstr "%uバイトの画像バッファの確保に失敗しました"
+
+#, fuzzy
+#~ msgid "File error when reading QTIF atom: %s"
+#~ msgstr "GIF 画像の読み込みに失敗: %s"
+
+#, fuzzy
+#~ msgid "Failed to allocate QTIF context structure."
+#~ msgstr "TGA コンテキスト構造体用のメモリを確保できません"
+
+#, fuzzy
+#~ msgid "Failed to create GdkPixbufLoader object."
+#~ msgstr "フォルダ・インデックスの書き込みに失敗しました\n"
+
+#, fuzzy
+#~ msgid "Failed to find an image data atom."
+#~ msgstr "TIFF 画像のオープンに失敗しました"
+
+#, fuzzy
+#~ msgid "The QTIF image format"
+#~ msgstr "TIFF 画像形式"
+
+#~ msgid "RAS image has bogus header data"
+#~ msgstr "RAS 画像のヘッダのデータがおかしいです"
+
+#~ msgid "RAS image has unknown type"
+#~ msgstr "不明な種類の RAS 画像です"
+
+#~ msgid "unsupported RAS image variation"
+#~ msgstr "サポートしていない RAS 画像の一種です"
+
+#~ msgid "Not enough memory to load RAS image"
+#~ msgstr "RAS 画像を読み込むために必要なメモリが足りません"
+
+#~ msgid "The Sun raster image format"
+#~ msgstr "Sun ラスタ画像形式"
+
+#~ msgid "Cannot allocate memory for IOBuffer struct"
+#~ msgstr "IOBuffer 構造体のメモリを確保できません"
+
+#~ msgid "Cannot allocate memory for IOBuffer data"
+#~ msgstr "IOBuffer データのメモリを確保できません"
+
+#~ msgid "Cannot realloc IOBuffer data"
+#~ msgstr "IOBuffer データのメモリを再確保できません"
+
+#~ msgid "Cannot allocate temporary IOBuffer data"
+#~ msgstr "一時的な IOBuffer データのメモリを確保できません"
+
+#~ msgid "Cannot allocate new pixbuf"
+#~ msgstr "新しい pixbuf を確保できません"
+
+#, fuzzy
+#~ msgid "Image is corrupted or truncated"
+#~ msgstr "GIF 画像は切りつめられたか、不完全になっています"
+
+#~ msgid "Cannot allocate colormap structure"
+#~ msgstr "カラーマップ構造体を確保できません"
+
+#~ msgid "Cannot allocate colormap entries"
+#~ msgstr "カラーマップのエントリを確保できません"
+
+#~ msgid "Unexpected bitdepth for colormap entries"
+#~ msgstr "カラーマップのエントリの bitdepth が予期しないものです"
+
+#~ msgid "Cannot allocate TGA header memory"
+#~ msgstr "TGA ヘッダのメモリを確保できません"
+
+#~ msgid "TGA image has invalid dimensions"
+#~ msgstr "TGA 画像の次元がおかしいです"
+
+#~ msgid "TGA image type not supported"
+#~ msgstr "TGA 画像はサポートしていません"
+
+#~ msgid "Cannot allocate memory for TGA context struct"
+#~ msgstr "TGA コンテキスト構造体用のメモリを確保できません"
+
+#~ msgid "Excess data in file"
+#~ msgstr "ファイルのデータが多すぎます"
+
+#~ msgid "The Targa image format"
+#~ msgstr "Targa 画像形式"
+
+#~ msgid "Could not get image width (bad TIFF file)"
+#~ msgstr "画像の幅を取得できません (おかしな TIFF ファイル)"
+
+#~ msgid "Could not get image height (bad TIFF file)"
+#~ msgstr "画像の高さを取得できません (おかしな TIFF ファイル)"
+
+#~ msgid "Width or height of TIFF image is zero"
+#~ msgstr "TIFF 画像の幅か高さが 0 です"
+
+#~ msgid "Dimensions of TIFF image too large"
+#~ msgstr "TIFF 画像の次元が大きすぎます"
+
+#~ msgid "Insufficient memory to open TIFF file"
+#~ msgstr "TIFF ファイルをオープンするために必要なメモリが足りません"
+
+#~ msgid "Failed to load RGB data from TIFF file"
+#~ msgstr "TIFF ファイルから RGB データの読み込むに失敗しました"
+
+#~ msgid "Failed to open TIFF image"
+#~ msgstr "TIFF 画像のオープンに失敗しました"
+
+#~ msgid "TIFFClose operation failed"
+#~ msgstr "TIFFClose 操作に失敗しました"
+
+#~ msgid "Failed to load TIFF image"
+#~ msgstr "TIFF 画像を読み込むのに失敗しました"
+
+#~ msgid "Failed to save TIFF image"
+#~ msgstr "TIFF 画像の保存に失敗しました"
+
+#~ msgid "Failed to write TIFF data"
+#~ msgstr "TIFF データの書き込みに失敗しました"
+
+#~ msgid "Couldn't write to TIFF file"
+#~ msgstr "TIFF ファイルに書き込めませんでした"
+
+#~ msgid "The TIFF image format"
+#~ msgstr "TIFF 画像形式"
+
+#~ msgid "Image has zero width"
+#~ msgstr "画像の幅が 0 です"
+
+#~ msgid "Image has zero height"
+#~ msgstr "画像の高さが 0 です"
+
+#~ msgid "Not enough memory to load image"
+#~ msgstr "画像を読み込むために必要なメモリが足りません"
+
+#~ msgid "Couldn't save the rest"
+#~ msgstr "残りのデータを保存できませんでした"
+
+#~ msgid "The WBMP image format"
+#~ msgstr "WBMP 画像形式"
+
+#~ msgid "Invalid XBM file"
+#~ msgstr "おかしな XBM 形式です"
+
+#~ msgid "Insufficient memory to load XBM image file"
+#~ msgstr "XBM 画像を読み込むために必要なメモリが足りません"
+
+#~ msgid "Failed to write to temporary file when loading XBM image"
+#~ msgstr "XBM 画像を読み込む際に一時ファイルへの書き込みに失敗しました"
+
+#~ msgid "The XBM image format"
+#~ msgstr "XBM 画像形式"
+
+#~ msgid "No XPM header found"
+#~ msgstr "XPM ヘッダが見つかりませんでした"
+
+#~ msgid "Invalid XPM header"
+#~ msgstr "おかしな XPM ヘッダです"
+
+#~ msgid "XPM file has image width <= 0"
+#~ msgstr "XPM ファイルの画像の幅が 0 以下です"
+
+#~ msgid "XPM file has image height <= 0"
+#~ msgstr "XPM ファイルの画像の高さが 0 以下です"
+
+#~ msgid "XPM has invalid number of chars per pixel"
+#~ msgstr "XPM のピクセル当たりの文字数がおかしいです"
+
+#~ msgid "XPM file has invalid number of colors"
+#~ msgstr "XPM ファイルの色の数がおかしいです"
+
+#~ msgid "Cannot allocate memory for loading XPM image"
+#~ msgstr "XPM 画像を読み込むためのメモリを確保できません"
+
+#~ msgid "Cannot read XPM colormap"
+#~ msgstr "XPM のカラーマップを読み込めません"
+
+#~ msgid "Failed to write to temporary file when loading XPM image"
+#~ msgstr "XPM 画像を読み込む際に一時ファイルへの書き込みに失敗しました"
+
+#~ msgid "The XPM image format"
+#~ msgstr "XPM 画像形式"
+
+#~ msgid "The EMF image format"
+#~ msgstr "EMF 画像形式"
+
+#~ msgid "Could not allocate memory: %s"
+#~ msgstr "メモリを確保できませんでした: %s"
+
+#~ msgid "Could not create stream: %s"
+#~ msgstr "ストリームを生成できませんでした: %s"
+
+#~ msgid "Could not seek stream: %s"
+#~ msgstr "ストリームの中を検索できませんでした: %s"
+
+#~ msgid "Could not read from stream: %s"
+#~ msgstr "ストリームから読み込めませんでした: %s"
+
+#~ msgid "Couldn't load bitmap"
+#~ msgstr "BMP 画像を読み込めませんでした"
+
+#~ msgid "Couldn't load metafile"
+#~ msgstr "メタ・ファイルを読み込めませんでした"
+
+#~ msgid "Unsupported image format for GDI+"
+#~ msgstr "GDI+ ではサポートしていない画像です"
+
+#~ msgid "Couldn't save"
+#~ msgstr "保存できませんでした"
+
+#~ msgid "The WMF image format"
+#~ msgstr "WMF 画像形式"
+
+#~ msgid "\"Deepness\" of the color."
+#~ msgstr "色の \"深さ\" です"
+
+#~ msgid "Error printing"
+#~ msgstr "印刷エラー"
+
+#~ msgid "Printer '%s' may not be connected."
+#~ msgstr "プリンタ '%s' が接続されていないようです。"
 
 #~ msgid "Folders"
 #~ msgstr "フォルダ"

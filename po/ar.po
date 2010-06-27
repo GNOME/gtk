@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-06-26 21:11+0300\n"
+"POT-Creation-Date: 2010-06-26 23:16-0400\n"
 "PO-Revision-Date: 2010-06-26 21:38+0300\n"
 "Last-Translator: Khaled Hosny <khaledhosny@eglug.org>\n"
 "Language-Team: Arabic <doc@arabeyes.org>\n"
@@ -1334,6 +1334,7 @@ msgid "Unknown Application (pid %d)"
 msgstr "تطبيق مجهول (معرف العملية %d)"
 
 #: gtk/gtkmountoperation.c:1064
+#, c-format
 msgid "Unable to end process"
 msgstr "تعذّر إنهاء العملية"
 
@@ -1372,7 +1373,7 @@ msgstr "صدفة زِد"
 msgid "Cannot end process with pid %d: %s"
 msgstr "تعذّر قتل العملية ذات المعرف %d: %s"
 
-#: gtk/gtknotebook.c:4621 gtk/gtknotebook.c:7050
+#: gtk/gtknotebook.c:4631 gtk/gtknotebook.c:7060
 #, c-format
 msgid "Page %u"
 msgstr "صفحة %Iu"
@@ -1512,6 +1513,7 @@ msgid "Preparing %d"
 msgstr "يحضّر %Id"
 
 #: gtk/gtkprintoperation.c:2272 gtk/gtkprintoperation.c:2902
+#, c-format
 msgid "Preparing"
 msgstr "يحضّر"
 
@@ -1521,10 +1523,12 @@ msgid "Printing %d"
 msgstr "يطبع %Id"
 
 #: gtk/gtkprintoperation.c:2932
+#, c-format
 msgid "Error creating print preview"
 msgstr "حدث خطأ أثناء إنشاء معاينة الطباعة"
 
 #: gtk/gtkprintoperation.c:2935
+#, c-format
 msgid "The most probable reason is that a temporary file could not be created."
 msgstr "السبب الأكثر احتمالاً هو عدم القدرة على إنشاء ملف مؤقت."
 

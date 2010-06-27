@@ -14,10 +14,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-05-25 20:10-0400\n"
+"POT-Creation-Date: 2010-06-26 23:16-0400\n"
 "PO-Revision-Date: 2009-09-12 13:05+0800\n"
 "Last-Translator: Hinker <hinkerliu@gmail.com>\n"
 "Language-Team: i18n-zh <i18n-zh@googlegroups.com>\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -82,7 +83,7 @@ msgstr "要设置的 Gdk 调试标志"
 #. Placeholder in --gdk-no-debug=FLAGS in --help output
 #. Placeholder in --gtk-debug=FLAGS in --help output
 #. Placeholder in --gtk-no-debug=FLAGS in --help output
-#: gdk/gdk.c:165 gdk/gdk.c:168 gtk/gtkmain.c:454 gtk/gtkmain.c:457
+#: gdk/gdk.c:165 gdk/gdk.c:168 gtk/gtkmain.c:439 gtk/gtkmain.c:442
 msgid "FLAGS"
 msgstr "标志"
 
@@ -275,889 +276,6 @@ msgstr "KP_Delete"
 msgctxt "keyboard label"
 msgid "Delete"
 msgstr "Delete"
-
-#: gdk-pixbuf/gdk-pixbuf-animation.c:133 gdk-pixbuf/gdk-pixbuf-io.c:982
-#: gdk-pixbuf/gdk-pixbuf-io.c:1242 tests/testfilechooser.c:222
-#, c-format
-msgid "Failed to open file '%s': %s"
-msgstr "打开文件“%s”失败：%s"
-
-#: gdk-pixbuf/gdk-pixbuf-animation.c:146 gdk-pixbuf/gdk-pixbuf-io.c:994
-#, c-format
-msgid "Image file '%s' contains no data"
-msgstr "图像文件“%s”没有内容"
-
-#: gdk-pixbuf/gdk-pixbuf-animation.c:188 gdk-pixbuf/gdk-pixbuf-io.c:1030
-#: gdk-pixbuf/gdk-pixbuf-io.c:1294 tests/testfilechooser.c:267
-#, c-format
-msgid ""
-"Failed to load image '%s': reason not known, probably a corrupt image file"
-msgstr "载入图像“%s”失败：原因未知，可能是图像文件已损坏"
-
-#: gdk-pixbuf/gdk-pixbuf-animation.c:221
-#, c-format
-msgid ""
-"Failed to load animation '%s': reason not known, probably a corrupt "
-"animation file"
-msgstr "载入动画“%s”失败：原因未知，可能是动画文件已损坏"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:715
-#, c-format
-msgid "Unable to load image-loading module: %s: %s"
-msgstr "加载用来载入图像的模块失败：%s：%s"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:730
-#, c-format
-msgid ""
-"Image-loading module %s does not export the proper interface; perhaps it's "
-"from a different GTK version?"
-msgstr "图像载入模块 %s 没有导出正确的接口；它是否属于另一个 GTK 版本？"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:739 gdk-pixbuf/gdk-pixbuf-io.c:790
-#, c-format
-msgid "Image type '%s' is not supported"
-msgstr "不支持图像类型“%s”"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:863
-#, c-format
-msgid "Couldn't recognize the image file format for file '%s'"
-msgstr "识别文件“%s”的图像文件格式失败"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:871
-msgid "Unrecognized image file format"
-msgstr "无法识别的图像文件格式"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:1039
-#, c-format
-msgid "Failed to load image '%s': %s"
-msgstr "载入图像“%s”失败：%s"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:1673 gdk-pixbuf/io-gdip-utils.c:961
-#, c-format
-msgid "Error writing to image file: %s"
-msgstr "写入图像文件时出错：%s"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:1718 gdk-pixbuf/gdk-pixbuf-io.c:1848
-#, c-format
-msgid "This build of gdk-pixbuf does not support saving the image format: %s"
-msgstr "此 gdk-pixbuf 不支持要保存的图像格式：%s"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:1752
-msgid "Insufficient memory to save image to callback"
-msgstr "内存不足以保存回调的图像"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:1765
-msgid "Failed to open temporary file"
-msgstr "打开临时文件失败"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:1791
-msgid "Failed to read from temporary file"
-msgstr "从临时文件读取失败"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:2044
-#, c-format
-msgid "Failed to open '%s' for writing: %s"
-msgstr "打开“%s”进行写入失败：%s"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:2070
-#, c-format
-msgid ""
-"Failed to close '%s' while writing image, all data may not have been saved: %"
-"s"
-msgstr "写入图像时无法关闭“%s”，可能没有保存数据：%s"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:2290 gdk-pixbuf/gdk-pixbuf-io.c:2341
-msgid "Insufficient memory to save image into a buffer"
-msgstr "内存不足以将图像保存至缓冲区"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:2387
-msgid "Error writing to image stream"
-msgstr "写入图像流时出错"
-
-#: gdk-pixbuf/gdk-pixbuf-loader.c:334
-#, c-format
-msgid ""
-"Internal error: Image loader module '%s' failed to complete an operation, "
-"but didn't give a reason for the failure"
-msgstr "内部错误：图像载入模块“%s”完成某操作失败，但没有给出任何原因"
-
-#: gdk-pixbuf/gdk-pixbuf-loader.c:376
-#, c-format
-msgid "Incremental loading of image type '%s' is not supported"
-msgstr "图像类型“%s”不支持渐进式载入"
-
-#: gdk-pixbuf/gdk-pixdata.c:147
-msgid "Image header corrupt"
-msgstr "图像头损坏"
-
-#: gdk-pixbuf/gdk-pixdata.c:152
-msgid "Image format unknown"
-msgstr "图像格式未知"
-
-#: gdk-pixbuf/gdk-pixdata.c:157 gdk-pixbuf/gdk-pixdata.c:488
-msgid "Image pixel data corrupt"
-msgstr "图像像素数据损坏"
-
-#: gdk-pixbuf/gdk-pixdata.c:432
-#, c-format
-msgid "failed to allocate image buffer of %u byte"
-msgid_plural "failed to allocate image buffer of %u bytes"
-msgstr[0] "分配 %u 字节的图像缓冲区失败"
-
-#: gdk-pixbuf/io-ani.c:244
-msgid "Unexpected icon chunk in animation"
-msgstr "动画中有未预期的图标块"
-
-#: gdk-pixbuf/io-ani.c:337
-msgid "Unsupported animation type"
-msgstr "不支持的动画类型"
-
-#: gdk-pixbuf/io-ani.c:348 gdk-pixbuf/io-ani.c:406 gdk-pixbuf/io-ani.c:432
-#: gdk-pixbuf/io-ani.c:455 gdk-pixbuf/io-ani.c:482 gdk-pixbuf/io-ani.c:569
-msgid "Invalid header in animation"
-msgstr "动画头无效"
-
-#: gdk-pixbuf/io-ani.c:358 gdk-pixbuf/io-ani.c:380 gdk-pixbuf/io-ani.c:464
-#: gdk-pixbuf/io-ani.c:491 gdk-pixbuf/io-ani.c:542 gdk-pixbuf/io-ani.c:614
-msgid "Not enough memory to load animation"
-msgstr "内存不足以载入动画"
-
-#: gdk-pixbuf/io-ani.c:398 gdk-pixbuf/io-ani.c:424 gdk-pixbuf/io-ani.c:443
-msgid "Malformed chunk in animation"
-msgstr "动画中的块格式错误"
-
-#: gdk-pixbuf/io-ani.c:711
-msgid "The ANI image format"
-msgstr "ANI 图像格式"
-
-#: gdk-pixbuf/io-bmp.c:230 gdk-pixbuf/io-bmp.c:267 gdk-pixbuf/io-bmp.c:338
-#: gdk-pixbuf/io-bmp.c:370 gdk-pixbuf/io-bmp.c:393 gdk-pixbuf/io-bmp.c:496
-msgid "BMP image has bogus header data"
-msgstr "BMP 图像有伪造的头数据"
-
-#: gdk-pixbuf/io-bmp.c:241 gdk-pixbuf/io-bmp.c:433
-msgid "Not enough memory to load bitmap image"
-msgstr "内存不足以载入位图图像"
-
-#: gdk-pixbuf/io-bmp.c:319
-msgid "BMP image has unsupported header size"
-msgstr "不支持的 BMP 图像头大小"
-
-#: gdk-pixbuf/io-bmp.c:357
-msgid "Topdown BMP images cannot be compressed"
-msgstr "无法压缩自上而下的 BMP 图像"
-
-#: gdk-pixbuf/io-bmp.c:717 gdk-pixbuf/io-pnm.c:709
-msgid "Premature end-of-file encountered"
-msgstr "文件过早结束"
-
-#: gdk-pixbuf/io-bmp.c:1329
-msgid "Couldn't allocate memory for saving BMP file"
-msgstr "无法分配内存来保存 BMP 文件"
-
-#: gdk-pixbuf/io-bmp.c:1370
-msgid "Couldn't write to BMP file"
-msgstr "无法写入 BMP 文件"
-
-#: gdk-pixbuf/io-bmp.c:1423 gdk-pixbuf/io-gdip-bmp.c:82
-msgid "The BMP image format"
-msgstr "BMP 图像格式"
-
-#: gdk-pixbuf/io-gif.c:222
-#, c-format
-msgid "Failure reading GIF: %s"
-msgstr "读入 GIF 失败：%s"
-
-#: gdk-pixbuf/io-gif.c:496 gdk-pixbuf/io-gif.c:1481 gdk-pixbuf/io-gif.c:1642
-msgid "GIF file was missing some data (perhaps it was truncated somehow?)"
-msgstr "GIF 文件缺少了某些数据(可能文件被截短了？)"
-
-#: gdk-pixbuf/io-gif.c:505
-#, c-format
-msgid "Internal error in the GIF loader (%s)"
-msgstr "GIF 文件载入模块产生内部程序错误(%s)"
-
-#: gdk-pixbuf/io-gif.c:579
-msgid "Stack overflow"
-msgstr "栈溢出"
-
-#: gdk-pixbuf/io-gif.c:639
-msgid "GIF image loader cannot understand this image."
-msgstr "GIF 文件载入模块无法分析此图像。"
-
-#: gdk-pixbuf/io-gif.c:668
-msgid "Bad code encountered"
-msgstr "遇到了错误的代码"
-
-#: gdk-pixbuf/io-gif.c:678
-msgid "Circular table entry in GIF file"
-msgstr "GIF 文件中的表项循环"
-
-#: gdk-pixbuf/io-gif.c:866 gdk-pixbuf/io-gif.c:1468 gdk-pixbuf/io-gif.c:1515
-#: gdk-pixbuf/io-gif.c:1630
-msgid "Not enough memory to load GIF file"
-msgstr "内存不足以载入 GIF 文件"
-
-#: gdk-pixbuf/io-gif.c:960
-msgid "Not enough memory to composite a frame in GIF file"
-msgstr "内存不足以构建 GIF 文件中的一帧"
-
-#: gdk-pixbuf/io-gif.c:1132
-msgid "GIF image is corrupt (incorrect LZW compression)"
-msgstr "GIF 图像已损坏(不正确的 LZW 压缩数据)"
-
-#: gdk-pixbuf/io-gif.c:1182
-msgid "File does not appear to be a GIF file"
-msgstr "文件好像不是 GIF 文件"
-
-#: gdk-pixbuf/io-gif.c:1194
-#, c-format
-msgid "Version %s of the GIF file format is not supported"
-msgstr "不支持 %s 版本的 GIF 文件格式"
-
-#: gdk-pixbuf/io-gif.c:1303
-msgid ""
-"GIF image has no global colormap, and a frame inside it has no local "
-"colormap."
-msgstr "GIF 图像没有全局色彩表，它其中的一帧也没有局部色彩表。"
-
-#: gdk-pixbuf/io-gif.c:1537
-msgid "GIF image was truncated or incomplete."
-msgstr "GIF 文件被截断或是不完整。"
-
-#: gdk-pixbuf/io-gif.c:1693 gdk-pixbuf/io-gdip-gif.c:80
-msgid "The GIF image format"
-msgstr "GIF 图像格式"
-
-#: gdk-pixbuf/io-ico.c:211 gdk-pixbuf/io-ico.c:225 gdk-pixbuf/io-ico.c:277
-#: gdk-pixbuf/io-ico.c:290 gdk-pixbuf/io-ico.c:359
-msgid "Invalid header in icon"
-msgstr "图标头无效"
-
-#: gdk-pixbuf/io-ico.c:240 gdk-pixbuf/io-ico.c:300 gdk-pixbuf/io-ico.c:369
-#: gdk-pixbuf/io-ico.c:432 gdk-pixbuf/io-ico.c:462
-msgid "Not enough memory to load icon"
-msgstr "内存不足以载入图标"
-
-#: gdk-pixbuf/io-ico.c:322
-msgid "Icon has zero width"
-msgstr "图标宽度为零"
-
-#: gdk-pixbuf/io-ico.c:332
-msgid "Icon has zero height"
-msgstr "图标高度为零"
-
-#: gdk-pixbuf/io-ico.c:384
-msgid "Compressed icons are not supported"
-msgstr "不支持压缩图标"
-
-#: gdk-pixbuf/io-ico.c:417
-msgid "Unsupported icon type"
-msgstr "不支持的图标类型"
-
-#: gdk-pixbuf/io-ico.c:511
-msgid "Not enough memory to load ICO file"
-msgstr "内存不足以载入 ICO 文件"
-
-#: gdk-pixbuf/io-ico.c:976
-msgid "Image too large to be saved as ICO"
-msgstr "图像太大，无法另存为 ICO"
-
-#: gdk-pixbuf/io-ico.c:987
-msgid "Cursor hotspot outside image"
-msgstr "光标热点位于图像外"
-
-#: gdk-pixbuf/io-ico.c:1010
-#, c-format
-msgid "Unsupported depth for ICO file: %d"
-msgstr "不支持的 ICO 文件深度：%d"
-
-#: gdk-pixbuf/io-ico.c:1245 gdk-pixbuf/io-gdip-ico.c:59
-msgid "The ICO image format"
-msgstr "ICO 图像格式"
-
-#: gdk-pixbuf/io-icns.c:347
-#, c-format
-msgid "Error reading ICNS image: %s"
-msgstr "读入 ICNS 图像文件时发生错误：%s"
-
-#: gdk-pixbuf/io-icns.c:364
-msgid "Could not decode ICNS file"
-msgstr "无法解码 ICNS 文件"
-
-#: gdk-pixbuf/io-icns.c:397
-msgid "The ICNS image format"
-msgstr "ICNS 图像格式"
-
-#: gdk-pixbuf/io-jasper.c:75
-msgid "Couldn't allocate memory for stream"
-msgstr "无法为流分配内存"
-
-#: gdk-pixbuf/io-jasper.c:105
-msgid "Couldn't decode image"
-msgstr "无法解码图像"
-
-#: gdk-pixbuf/io-jasper.c:123
-msgid "Transformed JPEG2000 has zero width or height"
-msgstr "已转换的 JPEG2000 的宽度或高度为零"
-
-#: gdk-pixbuf/io-jasper.c:137
-msgid "Image type currently not supported"
-msgstr "目前不支持该图像类型"
-
-#: gdk-pixbuf/io-jasper.c:149 gdk-pixbuf/io-jasper.c:157
-msgid "Couldn't allocate memory for color profile"
-msgstr "无法为色彩配置分配内存"
-
-#: gdk-pixbuf/io-jasper.c:183
-msgid "Insufficient memory to open JPEG 2000 file"
-msgstr "内存不足以打开 JPEG 2000 文件"
-
-#: gdk-pixbuf/io-jasper.c:262
-msgid "Couldn't allocate memory to buffer image data"
-msgstr "无法为缓冲图像数据分配内存"
-
-#: gdk-pixbuf/io-jasper.c:306
-msgid "The JPEG 2000 image format"
-msgstr "JPEG 2000 图像格式"
-
-#: gdk-pixbuf/io-jpeg.c:117
-#, c-format
-msgid "Error interpreting JPEG image file (%s)"
-msgstr "分析 JPEG 图像文件时出错(%s)"
-
-#: gdk-pixbuf/io-jpeg.c:528
-msgid ""
-"Insufficient memory to load image, try exiting some applications to free "
-"memory"
-msgstr "内存不足以载入图像，试试关闭其它应用程序来释放内存"
-
-#: gdk-pixbuf/io-jpeg.c:569 gdk-pixbuf/io-jpeg.c:775
-#, c-format
-msgid "Unsupported JPEG color space (%s)"
-msgstr "不支持的 JPEG 色彩空间(%s)"
-
-#: gdk-pixbuf/io-jpeg.c:674 gdk-pixbuf/io-jpeg.c:944 gdk-pixbuf/io-jpeg.c:1177
-#: gdk-pixbuf/io-jpeg.c:1186
-msgid "Couldn't allocate memory for loading JPEG file"
-msgstr "无法分配内存来载入 JPEG 文件"
-
-#: gdk-pixbuf/io-jpeg.c:919
-msgid "Transformed JPEG has zero width or height."
-msgstr "变形 JPEG 宽度或高度为零。"
-
-#: gdk-pixbuf/io-jpeg.c:1133 gdk-pixbuf/io-gdip-jpeg.c:53
-#, c-format
-msgid ""
-"JPEG quality must be a value between 0 and 100; value '%s' could not be "
-"parsed."
-msgstr "JPEG 质量一定要在 0 至 100 之间；无法解析数值“%s”。"
-
-#: gdk-pixbuf/io-jpeg.c:1148 gdk-pixbuf/io-gdip-jpeg.c:68
-#, c-format
-msgid ""
-"JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
-msgstr "JPEG 质量一定要在 0 至 100 之间；不允许使用数值“%d”。"
-
-#: gdk-pixbuf/io-jpeg.c:1310 gdk-pixbuf/io-gdip-jpeg.c:136
-msgid "The JPEG image format"
-msgstr "JPEG 图像格式"
-
-#: gdk-pixbuf/io-pcx.c:187
-msgid "Couldn't allocate memory for header"
-msgstr "无法为头分配内存"
-
-#: gdk-pixbuf/io-pcx.c:202 gdk-pixbuf/io-pcx.c:560
-msgid "Couldn't allocate memory for context buffer"
-msgstr "无法为上下文缓冲区分配内存"
-
-#: gdk-pixbuf/io-pcx.c:601
-msgid "Image has invalid width and/or height"
-msgstr "图像的宽度和/或高度无效"
-
-#: gdk-pixbuf/io-pcx.c:613 gdk-pixbuf/io-pcx.c:674
-msgid "Image has unsupported bpp"
-msgstr "图像有不支持的 bpp"
-
-#: gdk-pixbuf/io-pcx.c:618 gdk-pixbuf/io-pcx.c:626
-#, c-format
-msgid "Image has unsupported number of %d-bit planes"
-msgstr "图像有不支持的 %d 位色盘"
-
-#: gdk-pixbuf/io-pcx.c:642
-msgid "Couldn't create new pixbuf"
-msgstr "无法创建新像素缓冲"
-
-#: gdk-pixbuf/io-pcx.c:650
-msgid "Couldn't allocate memory for line data"
-msgstr "无法为线形数据分配内存"
-
-#: gdk-pixbuf/io-pcx.c:657
-msgid "Couldn't allocate memory for paletted data"
-msgstr "无法为调色板数据分配内存"
-
-#: gdk-pixbuf/io-pcx.c:704
-msgid "Didn't get all lines of PCX image"
-msgstr "未获得 PCX 图像的全部线形"
-
-#: gdk-pixbuf/io-pcx.c:711
-msgid "No palette found at end of PCX data"
-msgstr "在 PCX 数据结尾未发现调色板"
-
-#: gdk-pixbuf/io-pcx.c:756
-msgid "The PCX image format"
-msgstr "PCX 图像格式"
-
-#: gdk-pixbuf/io-png.c:55
-msgid "Bits per channel of PNG image is invalid."
-msgstr "PNG 图像的每通道位数无效。"
-
-#: gdk-pixbuf/io-png.c:136 gdk-pixbuf/io-png.c:642
-msgid "Transformed PNG has zero width or height."
-msgstr "变形 PNG 宽度或高度为零。"
-
-#: gdk-pixbuf/io-png.c:144
-msgid "Bits per channel of transformed PNG is not 8."
-msgstr "变形 PNG 每通道位数不是 8。"
-
-#: gdk-pixbuf/io-png.c:153
-msgid "Transformed PNG not RGB or RGBA."
-msgstr "变形 PNG 不是 RGB 或 RGBA。"
-
-#: gdk-pixbuf/io-png.c:162
-msgid "Transformed PNG has unsupported number of channels, must be 3 or 4."
-msgstr "变形 PNG 含有不支持的通道数，必须是 3 或 4。"
-
-#: gdk-pixbuf/io-png.c:183
-#, c-format
-msgid "Fatal error in PNG image file: %s"
-msgstr "PNG 图像文件里有严重错误：%s"
-
-#: gdk-pixbuf/io-png.c:316
-msgid "Insufficient memory to load PNG file"
-msgstr "内存不足以载入 PNG 文件"
-
-#: gdk-pixbuf/io-png.c:657
-#, c-format
-msgid ""
-"Insufficient memory to store a %ld by %ld image; try exiting some "
-"applications to reduce memory usage"
-msgstr ""
-"内存不足以载入大小为 %ld x %ld 的图像；试试关闭其它应用程序以减少内存使用量"
-
-#: gdk-pixbuf/io-png.c:720
-msgid "Fatal error reading PNG image file"
-msgstr "读入 PNG 图像文件时发生严重错误"
-
-#: gdk-pixbuf/io-png.c:769
-#, c-format
-msgid "Fatal error reading PNG image file: %s"
-msgstr "读入 PNG 图像文件时发生严重错误：%s"
-
-#: gdk-pixbuf/io-png.c:863
-msgid ""
-"Keys for PNG text chunks must have at least 1 and at most 79 characters."
-msgstr "PNG 文本块的关键字必须至少有 1 个字符，最多有 79 个字符。"
-
-#: gdk-pixbuf/io-png.c:872
-msgid "Keys for PNG text chunks must be ASCII characters."
-msgstr "PNG 文本块的关键字必须是 ASCII 字符。"
-
-#: gdk-pixbuf/io-png.c:886 gdk-pixbuf/io-tiff.c:738
-#, c-format
-msgid "Color profile has invalid length %d."
-msgstr ""
-
-#: gdk-pixbuf/io-png.c:899 gdk-pixbuf/io-gdip-png.c:56
-#, c-format
-msgid ""
-"PNG compression level must be a value between 0 and 9; value '%s' could not "
-"be parsed."
-msgstr "PNG 压缩级别一定要在 0 至 9 之间；无法解析数值“%s”。"
-
-#: gdk-pixbuf/io-png.c:912 gdk-pixbuf/io-gdip-png.c:68
-#, c-format
-msgid ""
-"PNG compression level must be a value between 0 and 9; value '%d' is not "
-"allowed."
-msgstr "PNG 压缩级别一定要在 0 至 9 之间；不允许使用数值“%d”。"
-
-#: gdk-pixbuf/io-png.c:951
-#, c-format
-msgid "Value for PNG text chunk %s cannot be converted to ISO-8859-1 encoding."
-msgstr "PNG 文本块 %s 的值无法转换为 ISO-8859-1 编码。"
-
-#: gdk-pixbuf/io-png.c:1112 gdk-pixbuf/io-gdip-png.c:133
-msgid "The PNG image format"
-msgstr "PNG 图像格式"
-
-#: gdk-pixbuf/io-pnm.c:250
-msgid "PNM loader expected to find an integer, but didn't"
-msgstr "PNM 载入模块找不到要找的整数"
-
-#: gdk-pixbuf/io-pnm.c:282
-msgid "PNM file has an incorrect initial byte"
-msgstr "PNM 文件的第一个字节不正确"
-
-#: gdk-pixbuf/io-pnm.c:312
-msgid "PNM file is not in a recognized PNM subformat"
-msgstr "PNG 文件不是以可识别的 PNM 副格式存储的"
-
-#: gdk-pixbuf/io-pnm.c:337
-msgid "PNM file has an image width of 0"
-msgstr "PNM 文件的图像宽度为 0"
-
-#: gdk-pixbuf/io-pnm.c:358
-msgid "PNM file has an image height of 0"
-msgstr "PNM 文件的图像高度为 0"
-
-#: gdk-pixbuf/io-pnm.c:381
-msgid "Maximum color value in PNM file is 0"
-msgstr "PNM 文件中最大可用颜色数为 0"
-
-#: gdk-pixbuf/io-pnm.c:389
-msgid "Maximum color value in PNM file is too large"
-msgstr "PNM 文件中最大可用颜色数过大"
-
-#: gdk-pixbuf/io-pnm.c:429 gdk-pixbuf/io-pnm.c:459 gdk-pixbuf/io-pnm.c:504
-msgid "Raw PNM image type is invalid"
-msgstr "原始 PNM 图像类型无效"
-
-#: gdk-pixbuf/io-pnm.c:654
-msgid "PNM image loader does not support this PNM subformat"
-msgstr "PNM 载入程序不支持这种 PNM 副格式"
-
-#: gdk-pixbuf/io-pnm.c:741 gdk-pixbuf/io-pnm.c:968
-msgid "Raw PNM formats require exactly one whitespace before sample data"
-msgstr "原始 PNM 格式在样本数据前精确需要一个空格"
-
-#: gdk-pixbuf/io-pnm.c:768
-msgid "Cannot allocate memory for loading PNM image"
-msgstr "无法分配内存来载入 PNM 图像"
-
-#: gdk-pixbuf/io-pnm.c:818
-msgid "Insufficient memory to load PNM context struct"
-msgstr "内存不足以载入 PNM 的上下文结构"
-
-#: gdk-pixbuf/io-pnm.c:869
-msgid "Unexpected end of PNM image data"
-msgstr "PNM 图像数据过早结束"
-
-#: gdk-pixbuf/io-pnm.c:997
-msgid "Insufficient memory to load PNM file"
-msgstr "内存不足以载入 PNM 文件"
-
-#: gdk-pixbuf/io-pnm.c:1081
-msgid "The PNM/PBM/PGM/PPM image format family"
-msgstr "PNM/PBM/PGM/PPM 图像格式族"
-
-#: gdk-pixbuf/io-qtif.c:128
-msgid "Input file descriptor is NULL."
-msgstr ""
-
-#: gdk-pixbuf/io-qtif.c:143
-#, fuzzy
-msgid "Failed to read QTIF header"
-msgstr "写入头失败\n"
-
-#: gdk-pixbuf/io-qtif.c:152 gdk-pixbuf/io-qtif.c:182 gdk-pixbuf/io-qtif.c:446
-#, c-format
-msgid "QTIF atom size too large (%d bytes)"
-msgstr ""
-
-#: gdk-pixbuf/io-qtif.c:172
-#, fuzzy, c-format
-msgid "Failed to allocate %d bytes for file read buffer"
-msgstr "分配 %u 字节的图像缓冲区失败"
-
-#: gdk-pixbuf/io-qtif.c:196
-#, fuzzy, c-format
-msgid "File error when reading QTIF atom: %s"
-msgstr "读入 GIF 失败：%s"
-
-#: gdk-pixbuf/io-qtif.c:233
-#, c-format
-msgid "Failed to skip the next %d bytes with seek()."
-msgstr ""
-
-#: gdk-pixbuf/io-qtif.c:257
-#, fuzzy
-msgid "Failed to allocate QTIF context structure."
-msgstr "无法为 TGA 上下文结构分配内存"
-
-#: gdk-pixbuf/io-qtif.c:317
-#, fuzzy
-msgid "Failed to create GdkPixbufLoader object."
-msgstr "写入目录索引失败\n"
-
-#: gdk-pixbuf/io-qtif.c:421
-#, fuzzy
-msgid "Failed to find an image data atom."
-msgstr "打开 TIFF 图像失败"
-
-#: gdk-pixbuf/io-qtif.c:602
-#, fuzzy
-msgid "The QTIF image format"
-msgstr "TIFF 图像格式"
-
-#: gdk-pixbuf/io-ras.c:126
-msgid "RAS image has bogus header data"
-msgstr "RAS 图像有伪造的头数据"
-
-#: gdk-pixbuf/io-ras.c:148
-msgid "RAS image has unknown type"
-msgstr "RAS 图像类型未知"
-
-#: gdk-pixbuf/io-ras.c:156
-msgid "unsupported RAS image variation"
-msgstr "不支持的 RAS 图像变种"
-
-#: gdk-pixbuf/io-ras.c:171 gdk-pixbuf/io-ras.c:200
-msgid "Not enough memory to load RAS image"
-msgstr "内存不足以载入 RAS 图像"
-
-#: gdk-pixbuf/io-ras.c:545
-msgid "The Sun raster image format"
-msgstr "Sun 光栅图像格式"
-
-#: gdk-pixbuf/io-tga.c:154
-msgid "Cannot allocate memory for IOBuffer struct"
-msgstr "无法为 IOBuffer 结构分配内存"
-
-#: gdk-pixbuf/io-tga.c:173
-msgid "Cannot allocate memory for IOBuffer data"
-msgstr "无法为 IOBuffer 数据分配内存"
-
-#: gdk-pixbuf/io-tga.c:184
-msgid "Cannot realloc IOBuffer data"
-msgstr "无法重新分配 IOBuffer 数据"
-
-#: gdk-pixbuf/io-tga.c:214
-msgid "Cannot allocate temporary IOBuffer data"
-msgstr "无法为临时 IOBuffer 数据分配内存"
-
-#: gdk-pixbuf/io-tga.c:347
-msgid "Cannot allocate new pixbuf"
-msgstr "无法分配新像素缓冲"
-
-#: gdk-pixbuf/io-tga.c:686
-#, fuzzy
-msgid "Image is corrupted or truncated"
-msgstr "GIF 文件被截断或是不完整。"
-
-#: gdk-pixbuf/io-tga.c:693
-msgid "Cannot allocate colormap structure"
-msgstr "无法分配色彩表结构"
-
-#: gdk-pixbuf/io-tga.c:700
-msgid "Cannot allocate colormap entries"
-msgstr "无法分配色彩表项"
-
-#: gdk-pixbuf/io-tga.c:722
-msgid "Unexpected bitdepth for colormap entries"
-msgstr "未预期的色彩表项位深"
-
-#: gdk-pixbuf/io-tga.c:740
-msgid "Cannot allocate TGA header memory"
-msgstr "无法分配 TGA 头内存"
-
-#: gdk-pixbuf/io-tga.c:773
-msgid "TGA image has invalid dimensions"
-msgstr "TGA 图像尺寸无效"
-
-#: gdk-pixbuf/io-tga.c:779 gdk-pixbuf/io-tga.c:788 gdk-pixbuf/io-tga.c:798
-#: gdk-pixbuf/io-tga.c:808 gdk-pixbuf/io-tga.c:815
-msgid "TGA image type not supported"
-msgstr "不支持 TGA 图像类型"
-
-#: gdk-pixbuf/io-tga.c:862
-msgid "Cannot allocate memory for TGA context struct"
-msgstr "无法为 TGA 上下文结构分配内存"
-
-#: gdk-pixbuf/io-tga.c:927
-msgid "Excess data in file"
-msgstr "文件中的数据超额"
-
-#: gdk-pixbuf/io-tga.c:1008
-msgid "The Targa image format"
-msgstr "Targa 图像格式"
-
-#: gdk-pixbuf/io-tiff.c:165
-msgid "Could not get image width (bad TIFF file)"
-msgstr "无法取得图像宽度(TIFF 文件损坏)"
-
-#: gdk-pixbuf/io-tiff.c:172
-msgid "Could not get image height (bad TIFF file)"
-msgstr "无法取得图像高度(TIFF 文件损坏)"
-
-#: gdk-pixbuf/io-tiff.c:180
-msgid "Width or height of TIFF image is zero"
-msgstr "TIFF 图像的宽度或高度为零"
-
-#: gdk-pixbuf/io-tiff.c:189 gdk-pixbuf/io-tiff.c:198
-msgid "Dimensions of TIFF image too large"
-msgstr "TIFF 图像的尺寸太大"
-
-#: gdk-pixbuf/io-tiff.c:222 gdk-pixbuf/io-tiff.c:234 gdk-pixbuf/io-tiff.c:561
-msgid "Insufficient memory to open TIFF file"
-msgstr "内存不足以打开 TIFF 文件"
-
-#: gdk-pixbuf/io-tiff.c:295
-msgid "Failed to load RGB data from TIFF file"
-msgstr "载入 TIFF 文件里的 RGB 数据失败"
-
-#: gdk-pixbuf/io-tiff.c:351
-msgid "Failed to open TIFF image"
-msgstr "打开 TIFF 图像失败"
-
-#: gdk-pixbuf/io-tiff.c:363 gdk-pixbuf/io-tiff.c:778
-msgid "TIFFClose operation failed"
-msgstr "TIFFClose 操作失败"
-
-#: gdk-pixbuf/io-tiff.c:493 gdk-pixbuf/io-tiff.c:506
-msgid "Failed to load TIFF image"
-msgstr "载入 TIFF 图像失败"
-
-#: gdk-pixbuf/io-tiff.c:692
-msgid "Failed to save TIFF image"
-msgstr "保存 TIFF 图像失败"
-
-#: gdk-pixbuf/io-tiff.c:727
-msgid "TIFF compression doesn't refer to a valid codec."
-msgstr ""
-
-#: gdk-pixbuf/io-tiff.c:767
-msgid "Failed to write TIFF data"
-msgstr "写入 TIFF 图像失败"
-
-#: gdk-pixbuf/io-tiff.c:814
-msgid "Couldn't write to TIFF file"
-msgstr "无法写入 TIFF 文件"
-
-#: gdk-pixbuf/io-tiff.c:869
-msgid "The TIFF image format"
-msgstr "TIFF 图像格式"
-
-#: gdk-pixbuf/io-wbmp.c:246
-msgid "Image has zero width"
-msgstr "图像宽度为零"
-
-#: gdk-pixbuf/io-wbmp.c:264
-msgid "Image has zero height"
-msgstr "图像高度为零"
-
-#: gdk-pixbuf/io-wbmp.c:275
-msgid "Not enough memory to load image"
-msgstr "内存不足以载入图像"
-
-#: gdk-pixbuf/io-wbmp.c:334
-msgid "Couldn't save the rest"
-msgstr "无法保存剩余部分"
-
-#: gdk-pixbuf/io-wbmp.c:375
-msgid "The WBMP image format"
-msgstr "WBMP 图像格式"
-
-#: gdk-pixbuf/io-xbm.c:295
-msgid "Invalid XBM file"
-msgstr "XBM 文件无效"
-
-#: gdk-pixbuf/io-xbm.c:305
-msgid "Insufficient memory to load XBM image file"
-msgstr "内存不足以载入 XBM 图像文件"
-
-#: gdk-pixbuf/io-xbm.c:453
-msgid "Failed to write to temporary file when loading XBM image"
-msgstr "载入 XBM 图像时无法写入临时文件"
-
-#: gdk-pixbuf/io-xbm.c:492
-msgid "The XBM image format"
-msgstr "XBM 图像格式"
-
-#: gdk-pixbuf/io-xpm.c:468
-msgid "No XPM header found"
-msgstr "找不到 XPM 头"
-
-#: gdk-pixbuf/io-xpm.c:477
-msgid "Invalid XPM header"
-msgstr "无效的 XBM 头"
-
-#: gdk-pixbuf/io-xpm.c:485
-msgid "XPM file has image width <= 0"
-msgstr "XPM 文件图像宽度 <= 0"
-
-#: gdk-pixbuf/io-xpm.c:493
-msgid "XPM file has image height <= 0"
-msgstr "XPM 文件图像高度 <= 0"
-
-#: gdk-pixbuf/io-xpm.c:501
-msgid "XPM has invalid number of chars per pixel"
-msgstr "XPM 每个像素占用的字节数目无效"
-
-#: gdk-pixbuf/io-xpm.c:510
-msgid "XPM file has invalid number of colors"
-msgstr "XPM 文件图像颜色数目不正确"
-
-#: gdk-pixbuf/io-xpm.c:522 gdk-pixbuf/io-xpm.c:531 gdk-pixbuf/io-xpm.c:583
-msgid "Cannot allocate memory for loading XPM image"
-msgstr "无法分配内存来载入 XPM 图像"
-
-#: gdk-pixbuf/io-xpm.c:545
-msgid "Cannot read XPM colormap"
-msgstr "无法读入 XPM 色彩表"
-
-#: gdk-pixbuf/io-xpm.c:777
-msgid "Failed to write to temporary file when loading XPM image"
-msgstr "载入 XPM 图像时写入临时文件失败"
-
-#: gdk-pixbuf/io-xpm.c:816
-msgid "The XPM image format"
-msgstr "XPM 图像格式"
-
-#: gdk-pixbuf/io-gdip-emf.c:59
-msgid "The EMF image format"
-msgstr "EMF 图像格式"
-
-#: gdk-pixbuf/io-gdip-utils.c:232
-#, c-format
-msgid "Could not allocate memory: %s"
-msgstr "无法分配内存：%s"
-
-#: gdk-pixbuf/io-gdip-utils.c:257 gdk-pixbuf/io-gdip-utils.c:371
-#: gdk-pixbuf/io-gdip-utils.c:411
-#, c-format
-msgid "Could not create stream: %s"
-msgstr "无法创建流：%s"
-
-#: gdk-pixbuf/io-gdip-utils.c:271
-#, c-format
-msgid "Could not seek stream: %s"
-msgstr "无法搜索流：%s"
-
-#: gdk-pixbuf/io-gdip-utils.c:283
-#, c-format
-msgid "Could not read from stream: %s"
-msgstr "无法从流中读取：%s"
-
-#: gdk-pixbuf/io-gdip-utils.c:694 gdk-pixbuf/io-gdip-utils.c:825
-msgid "Couldn't load bitmap"
-msgstr "无法装入位图"
-
-#: gdk-pixbuf/io-gdip-utils.c:847
-msgid "Couldn't load metafile"
-msgstr "无法装入元文件"
-
-#: gdk-pixbuf/io-gdip-utils.c:1006
-msgid "Unsupported image format for GDI+"
-msgstr "不支持的 GDI+ 图像格式"
-
-#: gdk-pixbuf/io-gdip-utils.c:1013
-msgid "Couldn't save"
-msgstr "无法保存"
-
-#: gdk-pixbuf/io-gdip-wmf.c:58
-msgid "The WMF image format"
-msgstr "WMF 图像格式"
 
 #. Description of --sync in --help output
 #: gdk/win32/gdkmain-win32.c:55
@@ -1490,8 +608,9 @@ msgid "_Saturation:"
 msgstr "饱和度(_S)："
 
 #: gtk/gtkcolorsel.c:393
-msgid "\"Deepness\" of the color."
-msgstr "颜色的“深度”。"
+#, fuzzy
+msgid "Intensity of the color."
+msgstr "颜色的透明度。"
 
 #: gtk/gtkcolorsel.c:394
 msgid "_Value:"
@@ -1657,11 +776,11 @@ msgstr "右(_R)："
 msgid "Paper Margins"
 msgstr "纸张边距"
 
-#: gtk/gtkentry.c:8612 gtk/gtktextview.c:8002
+#: gtk/gtkentry.c:8612 gtk/gtktextview.c:8012
 msgid "Input _Methods"
 msgstr "输入法(_M)"
 
-#: gtk/gtkentry.c:8626 gtk/gtktextview.c:8016
+#: gtk/gtkentry.c:8626 gtk/gtktextview.c:8026
 msgid "_Insert Unicode Control Character"
 msgstr "插入 Unicode 控制字符(_I)"
 
@@ -2100,12 +1219,12 @@ msgid "System (%s)"
 msgstr "系统(%s)"
 
 #. Open Link
-#: gtk/gtklabel.c:6076
+#: gtk/gtklabel.c:6072
 msgid "_Open Link"
 msgstr "打开链接(_O)"
 
 #. Copy Link Address
-#: gtk/gtklabel.c:6088
+#: gtk/gtklabel.c:6084
 msgid "Copy _Link Address"
 msgstr "复制链接地址(_L)"
 
@@ -2118,27 +1237,27 @@ msgid "Invalid URI"
 msgstr "无效的 URI"
 
 #. Description of --gtk-module=MODULES in --help output
-#: gtk/gtkmain.c:447
+#: gtk/gtkmain.c:432
 msgid "Load additional GTK+ modules"
 msgstr "装入额外的 GTK+ 模块"
 
 #. Placeholder in --gtk-module=MODULES in --help output
-#: gtk/gtkmain.c:448
+#: gtk/gtkmain.c:433
 msgid "MODULES"
 msgstr "模块"
 
 #. Description of --g-fatal-warnings in --help output
-#: gtk/gtkmain.c:450
+#: gtk/gtkmain.c:435
 msgid "Make all warnings fatal"
 msgstr "将警告变为严重"
 
 #. Description of --gtk-debug=FLAGS in --help output
-#: gtk/gtkmain.c:453
+#: gtk/gtkmain.c:438
 msgid "GTK+ debugging flags to set"
 msgstr "要设置的 GTK+ 调试标志"
 
 #. Description of --gtk-no-debug=FLAGS in --help output
-#: gtk/gtkmain.c:456
+#: gtk/gtkmain.c:441
 msgid "GTK+ debugging flags to unset"
 msgstr "要取消的 GTK+ 调试标志"
 
@@ -2147,20 +1266,20 @@ msgstr "要取消的 GTK+ 调试标志"
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
 #.
-#: gtk/gtkmain.c:708
+#: gtk/gtkmain.c:704
 msgid "default:LTR"
 msgstr "default:LTR"
 
-#: gtk/gtkmain.c:773
+#: gtk/gtkmain.c:769
 #, c-format
 msgid "Cannot open display: %s"
 msgstr "无法打开显示：%s"
 
-#: gtk/gtkmain.c:810
+#: gtk/gtkmain.c:806
 msgid "GTK+ Options"
 msgstr "GTK+ 选项"
 
-#: gtk/gtkmain.c:810
+#: gtk/gtkmain.c:806
 msgid "Show GTK+ Options"
 msgstr "显示 GTK+ 选项"
 
@@ -2246,7 +1365,7 @@ msgstr "Z Shell (zsh)"
 msgid "Cannot end process with pid %d: %s"
 msgstr "无法结束 PID %d 的进程：%s"
 
-#: gtk/gtknotebook.c:4621 gtk/gtknotebook.c:7050
+#: gtk/gtknotebook.c:4631 gtk/gtknotebook.c:7060
 #, c-format
 msgid "Page %u"
 msgstr "第 %u 页"
@@ -2336,88 +1455,82 @@ msgstr "保存于文件夹(_S)："
 msgid "%s job #%d"
 msgstr "%s 的打印作业 #%d"
 
-#: gtk/gtkprintoperation.c:1687
+#: gtk/gtkprintoperation.c:1695
 msgctxt "print operation status"
 msgid "Initial state"
 msgstr "初始状态"
 
-#: gtk/gtkprintoperation.c:1688
+#: gtk/gtkprintoperation.c:1696
 msgctxt "print operation status"
 msgid "Preparing to print"
 msgstr "准备打印"
 
-#: gtk/gtkprintoperation.c:1689
+#: gtk/gtkprintoperation.c:1697
 msgctxt "print operation status"
 msgid "Generating data"
 msgstr "生成数据"
 
-#: gtk/gtkprintoperation.c:1690
+#: gtk/gtkprintoperation.c:1698
 msgctxt "print operation status"
 msgid "Sending data"
 msgstr "发送数据"
 
-#: gtk/gtkprintoperation.c:1691
+#: gtk/gtkprintoperation.c:1699
 msgctxt "print operation status"
 msgid "Waiting"
 msgstr "等候"
 
-#: gtk/gtkprintoperation.c:1692
+#: gtk/gtkprintoperation.c:1700
 #, fuzzy
 msgctxt "print operation status"
 msgid "Blocking on issue"
 msgstr "塞纸"
 
-#: gtk/gtkprintoperation.c:1693
+#: gtk/gtkprintoperation.c:1701
 msgctxt "print operation status"
 msgid "Printing"
 msgstr "打印"
 
-#: gtk/gtkprintoperation.c:1694
+#: gtk/gtkprintoperation.c:1702
 msgctxt "print operation status"
 msgid "Finished"
 msgstr "完成"
 
-#: gtk/gtkprintoperation.c:1695
+#: gtk/gtkprintoperation.c:1703
 msgctxt "print operation status"
 msgid "Finished with error"
 msgstr "有错误完成"
 
-#: gtk/gtkprintoperation.c:2254
+#: gtk/gtkprintoperation.c:2270
 #, c-format
 msgid "Preparing %d"
 msgstr "正在准备 %d"
 
-#: gtk/gtkprintoperation.c:2256 gtk/gtkprintoperation.c:2875
+#: gtk/gtkprintoperation.c:2272 gtk/gtkprintoperation.c:2902
 #, c-format
 msgid "Preparing"
 msgstr "正在准备"
 
-#: gtk/gtkprintoperation.c:2259
+#: gtk/gtkprintoperation.c:2275
 #, c-format
 msgid "Printing %d"
 msgstr "正在打印 %d"
 
-#: gtk/gtkprintoperation.c:2905
+#: gtk/gtkprintoperation.c:2932
 #, c-format
 msgid "Error creating print preview"
 msgstr "创建打印预览时出错"
 
-#: gtk/gtkprintoperation.c:2908
+#: gtk/gtkprintoperation.c:2935
 #, c-format
 msgid "The most probable reason is that a temporary file could not be created."
 msgstr "最可能的原因是无法创建临时文件。"
 
-#: gtk/gtkprintoperation-unix.c:297 gtk/gtkprintoperation-unix.c:314
-#, c-format
+#: gtk/gtkprintoperation-unix.c:297
 msgid "Error launching preview"
 msgstr "调用预览出错"
 
-#: gtk/gtkprintoperation-unix.c:358
-#, c-format
-msgid "Error printing"
-msgstr "打印出错"
-
-#: gtk/gtkprintoperation-unix.c:494 gtk/gtkprintoperation-win32.c:1447
+#: gtk/gtkprintoperation-unix.c:470 gtk/gtkprintoperation-win32.c:1447
 msgid "Application"
 msgstr "应用程序"
 
@@ -2431,7 +1544,7 @@ msgstr "缺纸"
 
 #. Translators: this is a printer status.
 #: gtk/gtkprintoperation-win32.c:616
-#: modules/printbackends/cups/gtkprintbackendcups.c:1999
+#: modules/printbackends/cups/gtkprintbackendcups.c:1998
 msgid "Paused"
 msgstr "已暂停"
 
@@ -2559,42 +1672,42 @@ msgstr "常规"
 #. * multiple pages on a sheet when printing
 #.
 #: gtk/gtkprintunixdialog.c:3010
-#: modules/printbackends/cups/gtkprintbackendcups.c:3509
+#: modules/printbackends/cups/gtkprintbackendcups.c:3508
 msgid "Left to right, top to bottom"
 msgstr "从左到右，从上到下"
 
 #: gtk/gtkprintunixdialog.c:3010
-#: modules/printbackends/cups/gtkprintbackendcups.c:3509
+#: modules/printbackends/cups/gtkprintbackendcups.c:3508
 msgid "Left to right, bottom to top"
 msgstr "从左到右，从下到上"
 
 #: gtk/gtkprintunixdialog.c:3011
-#: modules/printbackends/cups/gtkprintbackendcups.c:3510
+#: modules/printbackends/cups/gtkprintbackendcups.c:3509
 msgid "Right to left, top to bottom"
 msgstr "从右到左，从上到下"
 
 #: gtk/gtkprintunixdialog.c:3011
-#: modules/printbackends/cups/gtkprintbackendcups.c:3510
+#: modules/printbackends/cups/gtkprintbackendcups.c:3509
 msgid "Right to left, bottom to top"
 msgstr "从右到左，从下到上"
 
 #: gtk/gtkprintunixdialog.c:3012
-#: modules/printbackends/cups/gtkprintbackendcups.c:3511
+#: modules/printbackends/cups/gtkprintbackendcups.c:3510
 msgid "Top to bottom, left to right"
 msgstr "从上到下，从左到右"
 
 #: gtk/gtkprintunixdialog.c:3012
-#: modules/printbackends/cups/gtkprintbackendcups.c:3511
+#: modules/printbackends/cups/gtkprintbackendcups.c:3510
 msgid "Top to bottom, right to left"
 msgstr "从上到下，从右到左"
 
 #: gtk/gtkprintunixdialog.c:3013
-#: modules/printbackends/cups/gtkprintbackendcups.c:3512
+#: modules/printbackends/cups/gtkprintbackendcups.c:3511
 msgid "Bottom to top, left to right"
 msgstr "从下到上，从左到右"
 
 #: gtk/gtkprintunixdialog.c:3013
-#: modules/printbackends/cups/gtkprintbackendcups.c:3512
+#: modules/printbackends/cups/gtkprintbackendcups.c:3511
 msgid "Bottom to top, right to left"
 msgstr "从下到上，从右到左"
 
@@ -2602,7 +1715,7 @@ msgstr "从下到上，从右到左"
 #. * dialog that controls in what order multiple pages are arranged
 #.
 #: gtk/gtkprintunixdialog.c:3017 gtk/gtkprintunixdialog.c:3030
-#: modules/printbackends/cups/gtkprintbackendcups.c:3544
+#: modules/printbackends/cups/gtkprintbackendcups.c:3543
 msgid "Page Ordering"
 msgstr "页面顺序"
 
@@ -4762,121 +3875,116 @@ msgstr "打印机“%s”目前脱机。"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:1687
 #, c-format
-msgid "Printer '%s' may not be connected."
-msgstr "打印机“%s”可能无法连接。"
-
-#: modules/printbackends/cups/gtkprintbackendcups.c:1688
-#, c-format
 msgid "There is a problem on printer '%s'."
 msgstr "打印机“%s”可能有问题。"
 
 #. Translators: this is a printer status.
-#: modules/printbackends/cups/gtkprintbackendcups.c:1996
+#: modules/printbackends/cups/gtkprintbackendcups.c:1995
 msgid "Paused ; Rejecting Jobs"
 msgstr "暂停；拒绝任务"
 
 #. Translators: this is a printer status.
-#: modules/printbackends/cups/gtkprintbackendcups.c:2002
+#: modules/printbackends/cups/gtkprintbackendcups.c:2001
 msgid "Rejecting Jobs"
 msgstr "拒绝任务"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2778
+#: modules/printbackends/cups/gtkprintbackendcups.c:2777
 msgid "Two Sided"
 msgstr "双面"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2779
+#: modules/printbackends/cups/gtkprintbackendcups.c:2778
 msgid "Paper Type"
 msgstr "纸张类型"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2780
+#: modules/printbackends/cups/gtkprintbackendcups.c:2779
 msgid "Paper Source"
 msgstr "纸张来源"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2781
+#: modules/printbackends/cups/gtkprintbackendcups.c:2780
 msgid "Output Tray"
 msgstr "出纸器"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2782
+#: modules/printbackends/cups/gtkprintbackendcups.c:2781
 msgid "Resolution"
 msgstr "解决方案"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2783
+#: modules/printbackends/cups/gtkprintbackendcups.c:2782
 msgid "GhostScript pre-filtering"
 msgstr "GhostScript 预过滤"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2792
+#: modules/printbackends/cups/gtkprintbackendcups.c:2791
 msgid "One Sided"
 msgstr "单面"
 
 #. Translators: this is an option of "Two Sided"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2794
+#: modules/printbackends/cups/gtkprintbackendcups.c:2793
 msgid "Long Edge (Standard)"
 msgstr "长边(标准)"
 
 #. Translators: this is an option of "Two Sided"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2796
+#: modules/printbackends/cups/gtkprintbackendcups.c:2795
 msgid "Short Edge (Flip)"
 msgstr "短边(翻转)"
 
 #. Translators: this is an option of "Paper Source"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2798
-#: modules/printbackends/cups/gtkprintbackendcups.c:2800
-#: modules/printbackends/cups/gtkprintbackendcups.c:2808
+#: modules/printbackends/cups/gtkprintbackendcups.c:2797
+#: modules/printbackends/cups/gtkprintbackendcups.c:2799
+#: modules/printbackends/cups/gtkprintbackendcups.c:2807
 msgid "Auto Select"
 msgstr "自动选择"
 
 #. Translators: this is an option of "Paper Source"
 #. Translators: this is an option of "Resolution"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2802
-#: modules/printbackends/cups/gtkprintbackendcups.c:2804
-#: modules/printbackends/cups/gtkprintbackendcups.c:2806
-#: modules/printbackends/cups/gtkprintbackendcups.c:2810
-#: modules/printbackends/cups/gtkprintbackendcups.c:3296
+#: modules/printbackends/cups/gtkprintbackendcups.c:2801
+#: modules/printbackends/cups/gtkprintbackendcups.c:2803
+#: modules/printbackends/cups/gtkprintbackendcups.c:2805
+#: modules/printbackends/cups/gtkprintbackendcups.c:2809
+#: modules/printbackends/cups/gtkprintbackendcups.c:3295
 msgid "Printer Default"
 msgstr "打印机默认"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2812
+#: modules/printbackends/cups/gtkprintbackendcups.c:2811
 msgid "Embed GhostScript fonts only"
 msgstr "只嵌入 GhostScript 字体"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2814
+#: modules/printbackends/cups/gtkprintbackendcups.c:2813
 msgid "Convert to PS level 1"
 msgstr "转换到 PS 1级"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2816
+#: modules/printbackends/cups/gtkprintbackendcups.c:2815
 msgid "Convert to PS level 2"
 msgstr "转换到 PS 2级"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2818
+#: modules/printbackends/cups/gtkprintbackendcups.c:2817
 msgid "No pre-filtering"
 msgstr "无预过滤"
 
 #. Translators: "Miscellaneous" is the label for a button, that opens
 #. up an extra panel of settings in a print dialog.
-#: modules/printbackends/cups/gtkprintbackendcups.c:2827
+#: modules/printbackends/cups/gtkprintbackendcups.c:2826
 msgid "Miscellaneous"
 msgstr "杂项"
 
 #. Translators: These strings name the possible values of the
 #. * job priority option in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3504
+#: modules/printbackends/cups/gtkprintbackendcups.c:3503
 msgid "Urgent"
 msgstr "紧急"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3504
+#: modules/printbackends/cups/gtkprintbackendcups.c:3503
 msgid "High"
 msgstr "高"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3504
+#: modules/printbackends/cups/gtkprintbackendcups.c:3503
 msgid "Medium"
 msgstr "中"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3504
+#: modules/printbackends/cups/gtkprintbackendcups.c:3503
 msgid "Low"
 msgstr "低"
 
@@ -4884,66 +3992,66 @@ msgstr "低"
 #. Translators, this string is used to label the pages-per-sheet option
 #. * in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3528
+#: modules/printbackends/cups/gtkprintbackendcups.c:3527
 msgid "Pages per Sheet"
 msgstr "每张页数"
 
 #. Translators, this string is used to label the job priority option
 #. * in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3565
+#: modules/printbackends/cups/gtkprintbackendcups.c:3564
 msgid "Job Priority"
 msgstr "任务优先级"
 
 #. Translators, this string is used to label the billing info entry
 #. * in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3576
+#: modules/printbackends/cups/gtkprintbackendcups.c:3575
 msgid "Billing Info"
 msgstr "计费信息"
 
 #. Translators, these strings are names for various 'standard' cover
 #. * pages that the printing system may support.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3591
+#: modules/printbackends/cups/gtkprintbackendcups.c:3590
 msgid "None"
 msgstr "无"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3591
+#: modules/printbackends/cups/gtkprintbackendcups.c:3590
 msgid "Classified"
 msgstr "已分类"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3591
+#: modules/printbackends/cups/gtkprintbackendcups.c:3590
 msgid "Confidential"
 msgstr "机密"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3591
+#: modules/printbackends/cups/gtkprintbackendcups.c:3590
 msgid "Secret"
 msgstr "秘密"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3591
+#: modules/printbackends/cups/gtkprintbackendcups.c:3590
 msgid "Standard"
 msgstr "标准"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3591
+#: modules/printbackends/cups/gtkprintbackendcups.c:3590
 msgid "Top Secret"
 msgstr "绝密"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3591
+#: modules/printbackends/cups/gtkprintbackendcups.c:3590
 msgid "Unclassified"
 msgstr "未分类"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the front cover page.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3626
+#: modules/printbackends/cups/gtkprintbackendcups.c:3625
 msgid "Before"
 msgstr "封面"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the back cover page.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3641
+#: modules/printbackends/cups/gtkprintbackendcups.c:3640
 msgid "After"
 msgstr "封底"
 
@@ -4951,14 +4059,14 @@ msgstr "封底"
 #. * a print job is printed. Possible values are 'now', a specified time,
 #. * or 'on hold'
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3661
+#: modules/printbackends/cups/gtkprintbackendcups.c:3660
 msgid "Print at"
 msgstr "打印于"
 
 #. Translators: this is the name of the option that allows the user
 #. * to specify a time when a print job will be printed.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3672
+#: modules/printbackends/cups/gtkprintbackendcups.c:3671
 msgid "Print at time"
 msgstr "在指定时间打印"
 
@@ -4966,7 +4074,7 @@ msgstr "在指定时间打印"
 #. * size. The two placeholders are replaced with the width and height
 #. * in points. E.g: "Custom 230.4x142.9"
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3707
+#: modules/printbackends/cups/gtkprintbackendcups.c:3706
 #, c-format
 msgid "Custom %sx%s"
 msgstr "自定义 %sx%s"
@@ -5057,6 +4165,640 @@ msgstr "打印到测试打印机"
 #, c-format
 msgid "Could not get information for file '%s': %s"
 msgstr "无法获得文件“%s”的信息：%s"
+
+#: tests/testfilechooser.c:222
+#, c-format
+msgid "Failed to open file '%s': %s"
+msgstr "打开文件“%s”失败：%s"
+
+#: tests/testfilechooser.c:267
+#, c-format
+msgid ""
+"Failed to load image '%s': reason not known, probably a corrupt image file"
+msgstr "载入图像“%s”失败：原因未知，可能是图像文件已损坏"
+
+#~ msgid "Image file '%s' contains no data"
+#~ msgstr "图像文件“%s”没有内容"
+
+#~ msgid ""
+#~ "Failed to load animation '%s': reason not known, probably a corrupt "
+#~ "animation file"
+#~ msgstr "载入动画“%s”失败：原因未知，可能是动画文件已损坏"
+
+#~ msgid "Unable to load image-loading module: %s: %s"
+#~ msgstr "加载用来载入图像的模块失败：%s：%s"
+
+#~ msgid ""
+#~ "Image-loading module %s does not export the proper interface; perhaps "
+#~ "it's from a different GTK version?"
+#~ msgstr "图像载入模块 %s 没有导出正确的接口；它是否属于另一个 GTK 版本？"
+
+#~ msgid "Image type '%s' is not supported"
+#~ msgstr "不支持图像类型“%s”"
+
+#~ msgid "Couldn't recognize the image file format for file '%s'"
+#~ msgstr "识别文件“%s”的图像文件格式失败"
+
+#~ msgid "Unrecognized image file format"
+#~ msgstr "无法识别的图像文件格式"
+
+#~ msgid "Failed to load image '%s': %s"
+#~ msgstr "载入图像“%s”失败：%s"
+
+#~ msgid "Error writing to image file: %s"
+#~ msgstr "写入图像文件时出错：%s"
+
+#~ msgid ""
+#~ "This build of gdk-pixbuf does not support saving the image format: %s"
+#~ msgstr "此 gdk-pixbuf 不支持要保存的图像格式：%s"
+
+#~ msgid "Insufficient memory to save image to callback"
+#~ msgstr "内存不足以保存回调的图像"
+
+#~ msgid "Failed to open temporary file"
+#~ msgstr "打开临时文件失败"
+
+#~ msgid "Failed to read from temporary file"
+#~ msgstr "从临时文件读取失败"
+
+#~ msgid "Failed to open '%s' for writing: %s"
+#~ msgstr "打开“%s”进行写入失败：%s"
+
+#~ msgid ""
+#~ "Failed to close '%s' while writing image, all data may not have been "
+#~ "saved: %s"
+#~ msgstr "写入图像时无法关闭“%s”，可能没有保存数据：%s"
+
+#~ msgid "Insufficient memory to save image into a buffer"
+#~ msgstr "内存不足以将图像保存至缓冲区"
+
+#~ msgid "Error writing to image stream"
+#~ msgstr "写入图像流时出错"
+
+#~ msgid ""
+#~ "Internal error: Image loader module '%s' failed to complete an operation, "
+#~ "but didn't give a reason for the failure"
+#~ msgstr "内部错误：图像载入模块“%s”完成某操作失败，但没有给出任何原因"
+
+#~ msgid "Incremental loading of image type '%s' is not supported"
+#~ msgstr "图像类型“%s”不支持渐进式载入"
+
+#~ msgid "Image header corrupt"
+#~ msgstr "图像头损坏"
+
+#~ msgid "Image format unknown"
+#~ msgstr "图像格式未知"
+
+#~ msgid "Image pixel data corrupt"
+#~ msgstr "图像像素数据损坏"
+
+#~ msgid "failed to allocate image buffer of %u byte"
+#~ msgid_plural "failed to allocate image buffer of %u bytes"
+#~ msgstr[0] "分配 %u 字节的图像缓冲区失败"
+
+#~ msgid "Unexpected icon chunk in animation"
+#~ msgstr "动画中有未预期的图标块"
+
+#~ msgid "Unsupported animation type"
+#~ msgstr "不支持的动画类型"
+
+#~ msgid "Invalid header in animation"
+#~ msgstr "动画头无效"
+
+#~ msgid "Not enough memory to load animation"
+#~ msgstr "内存不足以载入动画"
+
+#~ msgid "Malformed chunk in animation"
+#~ msgstr "动画中的块格式错误"
+
+#~ msgid "The ANI image format"
+#~ msgstr "ANI 图像格式"
+
+#~ msgid "BMP image has bogus header data"
+#~ msgstr "BMP 图像有伪造的头数据"
+
+#~ msgid "Not enough memory to load bitmap image"
+#~ msgstr "内存不足以载入位图图像"
+
+#~ msgid "BMP image has unsupported header size"
+#~ msgstr "不支持的 BMP 图像头大小"
+
+#~ msgid "Topdown BMP images cannot be compressed"
+#~ msgstr "无法压缩自上而下的 BMP 图像"
+
+#~ msgid "Premature end-of-file encountered"
+#~ msgstr "文件过早结束"
+
+#~ msgid "Couldn't allocate memory for saving BMP file"
+#~ msgstr "无法分配内存来保存 BMP 文件"
+
+#~ msgid "Couldn't write to BMP file"
+#~ msgstr "无法写入 BMP 文件"
+
+#~ msgid "The BMP image format"
+#~ msgstr "BMP 图像格式"
+
+#~ msgid "Failure reading GIF: %s"
+#~ msgstr "读入 GIF 失败：%s"
+
+#~ msgid "GIF file was missing some data (perhaps it was truncated somehow?)"
+#~ msgstr "GIF 文件缺少了某些数据(可能文件被截短了？)"
+
+#~ msgid "Internal error in the GIF loader (%s)"
+#~ msgstr "GIF 文件载入模块产生内部程序错误(%s)"
+
+#~ msgid "Stack overflow"
+#~ msgstr "栈溢出"
+
+#~ msgid "GIF image loader cannot understand this image."
+#~ msgstr "GIF 文件载入模块无法分析此图像。"
+
+#~ msgid "Bad code encountered"
+#~ msgstr "遇到了错误的代码"
+
+#~ msgid "Circular table entry in GIF file"
+#~ msgstr "GIF 文件中的表项循环"
+
+#~ msgid "Not enough memory to load GIF file"
+#~ msgstr "内存不足以载入 GIF 文件"
+
+#~ msgid "Not enough memory to composite a frame in GIF file"
+#~ msgstr "内存不足以构建 GIF 文件中的一帧"
+
+#~ msgid "GIF image is corrupt (incorrect LZW compression)"
+#~ msgstr "GIF 图像已损坏(不正确的 LZW 压缩数据)"
+
+#~ msgid "File does not appear to be a GIF file"
+#~ msgstr "文件好像不是 GIF 文件"
+
+#~ msgid "Version %s of the GIF file format is not supported"
+#~ msgstr "不支持 %s 版本的 GIF 文件格式"
+
+#~ msgid ""
+#~ "GIF image has no global colormap, and a frame inside it has no local "
+#~ "colormap."
+#~ msgstr "GIF 图像没有全局色彩表，它其中的一帧也没有局部色彩表。"
+
+#~ msgid "GIF image was truncated or incomplete."
+#~ msgstr "GIF 文件被截断或是不完整。"
+
+#~ msgid "The GIF image format"
+#~ msgstr "GIF 图像格式"
+
+#~ msgid "Invalid header in icon"
+#~ msgstr "图标头无效"
+
+#~ msgid "Not enough memory to load icon"
+#~ msgstr "内存不足以载入图标"
+
+#~ msgid "Icon has zero width"
+#~ msgstr "图标宽度为零"
+
+#~ msgid "Icon has zero height"
+#~ msgstr "图标高度为零"
+
+#~ msgid "Compressed icons are not supported"
+#~ msgstr "不支持压缩图标"
+
+#~ msgid "Unsupported icon type"
+#~ msgstr "不支持的图标类型"
+
+#~ msgid "Not enough memory to load ICO file"
+#~ msgstr "内存不足以载入 ICO 文件"
+
+#~ msgid "Image too large to be saved as ICO"
+#~ msgstr "图像太大，无法另存为 ICO"
+
+#~ msgid "Cursor hotspot outside image"
+#~ msgstr "光标热点位于图像外"
+
+#~ msgid "Unsupported depth for ICO file: %d"
+#~ msgstr "不支持的 ICO 文件深度：%d"
+
+#~ msgid "The ICO image format"
+#~ msgstr "ICO 图像格式"
+
+#~ msgid "Error reading ICNS image: %s"
+#~ msgstr "读入 ICNS 图像文件时发生错误：%s"
+
+#~ msgid "Could not decode ICNS file"
+#~ msgstr "无法解码 ICNS 文件"
+
+#~ msgid "The ICNS image format"
+#~ msgstr "ICNS 图像格式"
+
+#~ msgid "Couldn't allocate memory for stream"
+#~ msgstr "无法为流分配内存"
+
+#~ msgid "Couldn't decode image"
+#~ msgstr "无法解码图像"
+
+#~ msgid "Transformed JPEG2000 has zero width or height"
+#~ msgstr "已转换的 JPEG2000 的宽度或高度为零"
+
+#~ msgid "Image type currently not supported"
+#~ msgstr "目前不支持该图像类型"
+
+#~ msgid "Couldn't allocate memory for color profile"
+#~ msgstr "无法为色彩配置分配内存"
+
+#~ msgid "Insufficient memory to open JPEG 2000 file"
+#~ msgstr "内存不足以打开 JPEG 2000 文件"
+
+#~ msgid "Couldn't allocate memory to buffer image data"
+#~ msgstr "无法为缓冲图像数据分配内存"
+
+#~ msgid "The JPEG 2000 image format"
+#~ msgstr "JPEG 2000 图像格式"
+
+#~ msgid "Error interpreting JPEG image file (%s)"
+#~ msgstr "分析 JPEG 图像文件时出错(%s)"
+
+#~ msgid ""
+#~ "Insufficient memory to load image, try exiting some applications to free "
+#~ "memory"
+#~ msgstr "内存不足以载入图像，试试关闭其它应用程序来释放内存"
+
+#~ msgid "Unsupported JPEG color space (%s)"
+#~ msgstr "不支持的 JPEG 色彩空间(%s)"
+
+#~ msgid "Couldn't allocate memory for loading JPEG file"
+#~ msgstr "无法分配内存来载入 JPEG 文件"
+
+#~ msgid "Transformed JPEG has zero width or height."
+#~ msgstr "变形 JPEG 宽度或高度为零。"
+
+#~ msgid ""
+#~ "JPEG quality must be a value between 0 and 100; value '%s' could not be "
+#~ "parsed."
+#~ msgstr "JPEG 质量一定要在 0 至 100 之间；无法解析数值“%s”。"
+
+#~ msgid ""
+#~ "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
+#~ msgstr "JPEG 质量一定要在 0 至 100 之间；不允许使用数值“%d”。"
+
+#~ msgid "The JPEG image format"
+#~ msgstr "JPEG 图像格式"
+
+#~ msgid "Couldn't allocate memory for header"
+#~ msgstr "无法为头分配内存"
+
+#~ msgid "Couldn't allocate memory for context buffer"
+#~ msgstr "无法为上下文缓冲区分配内存"
+
+#~ msgid "Image has invalid width and/or height"
+#~ msgstr "图像的宽度和/或高度无效"
+
+#~ msgid "Image has unsupported bpp"
+#~ msgstr "图像有不支持的 bpp"
+
+#~ msgid "Image has unsupported number of %d-bit planes"
+#~ msgstr "图像有不支持的 %d 位色盘"
+
+#~ msgid "Couldn't create new pixbuf"
+#~ msgstr "无法创建新像素缓冲"
+
+#~ msgid "Couldn't allocate memory for line data"
+#~ msgstr "无法为线形数据分配内存"
+
+#~ msgid "Couldn't allocate memory for paletted data"
+#~ msgstr "无法为调色板数据分配内存"
+
+#~ msgid "Didn't get all lines of PCX image"
+#~ msgstr "未获得 PCX 图像的全部线形"
+
+#~ msgid "No palette found at end of PCX data"
+#~ msgstr "在 PCX 数据结尾未发现调色板"
+
+#~ msgid "The PCX image format"
+#~ msgstr "PCX 图像格式"
+
+#~ msgid "Bits per channel of PNG image is invalid."
+#~ msgstr "PNG 图像的每通道位数无效。"
+
+#~ msgid "Transformed PNG has zero width or height."
+#~ msgstr "变形 PNG 宽度或高度为零。"
+
+#~ msgid "Bits per channel of transformed PNG is not 8."
+#~ msgstr "变形 PNG 每通道位数不是 8。"
+
+#~ msgid "Transformed PNG not RGB or RGBA."
+#~ msgstr "变形 PNG 不是 RGB 或 RGBA。"
+
+#~ msgid "Transformed PNG has unsupported number of channels, must be 3 or 4."
+#~ msgstr "变形 PNG 含有不支持的通道数，必须是 3 或 4。"
+
+#~ msgid "Fatal error in PNG image file: %s"
+#~ msgstr "PNG 图像文件里有严重错误：%s"
+
+#~ msgid "Insufficient memory to load PNG file"
+#~ msgstr "内存不足以载入 PNG 文件"
+
+#~ msgid ""
+#~ "Insufficient memory to store a %ld by %ld image; try exiting some "
+#~ "applications to reduce memory usage"
+#~ msgstr ""
+#~ "内存不足以载入大小为 %ld x %ld 的图像；试试关闭其它应用程序以减少内存使用"
+#~ "量"
+
+#~ msgid "Fatal error reading PNG image file"
+#~ msgstr "读入 PNG 图像文件时发生严重错误"
+
+#~ msgid "Fatal error reading PNG image file: %s"
+#~ msgstr "读入 PNG 图像文件时发生严重错误：%s"
+
+#~ msgid ""
+#~ "Keys for PNG text chunks must have at least 1 and at most 79 characters."
+#~ msgstr "PNG 文本块的关键字必须至少有 1 个字符，最多有 79 个字符。"
+
+#~ msgid "Keys for PNG text chunks must be ASCII characters."
+#~ msgstr "PNG 文本块的关键字必须是 ASCII 字符。"
+
+#~ msgid ""
+#~ "PNG compression level must be a value between 0 and 9; value '%s' could "
+#~ "not be parsed."
+#~ msgstr "PNG 压缩级别一定要在 0 至 9 之间；无法解析数值“%s”。"
+
+#~ msgid ""
+#~ "PNG compression level must be a value between 0 and 9; value '%d' is not "
+#~ "allowed."
+#~ msgstr "PNG 压缩级别一定要在 0 至 9 之间；不允许使用数值“%d”。"
+
+#~ msgid ""
+#~ "Value for PNG text chunk %s cannot be converted to ISO-8859-1 encoding."
+#~ msgstr "PNG 文本块 %s 的值无法转换为 ISO-8859-1 编码。"
+
+#~ msgid "The PNG image format"
+#~ msgstr "PNG 图像格式"
+
+#~ msgid "PNM loader expected to find an integer, but didn't"
+#~ msgstr "PNM 载入模块找不到要找的整数"
+
+#~ msgid "PNM file has an incorrect initial byte"
+#~ msgstr "PNM 文件的第一个字节不正确"
+
+#~ msgid "PNM file is not in a recognized PNM subformat"
+#~ msgstr "PNG 文件不是以可识别的 PNM 副格式存储的"
+
+#~ msgid "PNM file has an image width of 0"
+#~ msgstr "PNM 文件的图像宽度为 0"
+
+#~ msgid "PNM file has an image height of 0"
+#~ msgstr "PNM 文件的图像高度为 0"
+
+#~ msgid "Maximum color value in PNM file is 0"
+#~ msgstr "PNM 文件中最大可用颜色数为 0"
+
+#~ msgid "Maximum color value in PNM file is too large"
+#~ msgstr "PNM 文件中最大可用颜色数过大"
+
+#~ msgid "Raw PNM image type is invalid"
+#~ msgstr "原始 PNM 图像类型无效"
+
+#~ msgid "PNM image loader does not support this PNM subformat"
+#~ msgstr "PNM 载入程序不支持这种 PNM 副格式"
+
+#~ msgid "Raw PNM formats require exactly one whitespace before sample data"
+#~ msgstr "原始 PNM 格式在样本数据前精确需要一个空格"
+
+#~ msgid "Cannot allocate memory for loading PNM image"
+#~ msgstr "无法分配内存来载入 PNM 图像"
+
+#~ msgid "Insufficient memory to load PNM context struct"
+#~ msgstr "内存不足以载入 PNM 的上下文结构"
+
+#~ msgid "Unexpected end of PNM image data"
+#~ msgstr "PNM 图像数据过早结束"
+
+#~ msgid "Insufficient memory to load PNM file"
+#~ msgstr "内存不足以载入 PNM 文件"
+
+#~ msgid "The PNM/PBM/PGM/PPM image format family"
+#~ msgstr "PNM/PBM/PGM/PPM 图像格式族"
+
+#, fuzzy
+#~ msgid "Failed to read QTIF header"
+#~ msgstr "写入头失败\n"
+
+#, fuzzy
+#~ msgid "Failed to allocate %d bytes for file read buffer"
+#~ msgstr "分配 %u 字节的图像缓冲区失败"
+
+#, fuzzy
+#~ msgid "File error when reading QTIF atom: %s"
+#~ msgstr "读入 GIF 失败：%s"
+
+#, fuzzy
+#~ msgid "Failed to allocate QTIF context structure."
+#~ msgstr "无法为 TGA 上下文结构分配内存"
+
+#, fuzzy
+#~ msgid "Failed to create GdkPixbufLoader object."
+#~ msgstr "写入目录索引失败\n"
+
+#, fuzzy
+#~ msgid "Failed to find an image data atom."
+#~ msgstr "打开 TIFF 图像失败"
+
+#, fuzzy
+#~ msgid "The QTIF image format"
+#~ msgstr "TIFF 图像格式"
+
+#~ msgid "RAS image has bogus header data"
+#~ msgstr "RAS 图像有伪造的头数据"
+
+#~ msgid "RAS image has unknown type"
+#~ msgstr "RAS 图像类型未知"
+
+#~ msgid "unsupported RAS image variation"
+#~ msgstr "不支持的 RAS 图像变种"
+
+#~ msgid "Not enough memory to load RAS image"
+#~ msgstr "内存不足以载入 RAS 图像"
+
+#~ msgid "The Sun raster image format"
+#~ msgstr "Sun 光栅图像格式"
+
+#~ msgid "Cannot allocate memory for IOBuffer struct"
+#~ msgstr "无法为 IOBuffer 结构分配内存"
+
+#~ msgid "Cannot allocate memory for IOBuffer data"
+#~ msgstr "无法为 IOBuffer 数据分配内存"
+
+#~ msgid "Cannot realloc IOBuffer data"
+#~ msgstr "无法重新分配 IOBuffer 数据"
+
+#~ msgid "Cannot allocate temporary IOBuffer data"
+#~ msgstr "无法为临时 IOBuffer 数据分配内存"
+
+#~ msgid "Cannot allocate new pixbuf"
+#~ msgstr "无法分配新像素缓冲"
+
+#, fuzzy
+#~ msgid "Image is corrupted or truncated"
+#~ msgstr "GIF 文件被截断或是不完整。"
+
+#~ msgid "Cannot allocate colormap structure"
+#~ msgstr "无法分配色彩表结构"
+
+#~ msgid "Cannot allocate colormap entries"
+#~ msgstr "无法分配色彩表项"
+
+#~ msgid "Unexpected bitdepth for colormap entries"
+#~ msgstr "未预期的色彩表项位深"
+
+#~ msgid "Cannot allocate TGA header memory"
+#~ msgstr "无法分配 TGA 头内存"
+
+#~ msgid "TGA image has invalid dimensions"
+#~ msgstr "TGA 图像尺寸无效"
+
+#~ msgid "TGA image type not supported"
+#~ msgstr "不支持 TGA 图像类型"
+
+#~ msgid "Cannot allocate memory for TGA context struct"
+#~ msgstr "无法为 TGA 上下文结构分配内存"
+
+#~ msgid "Excess data in file"
+#~ msgstr "文件中的数据超额"
+
+#~ msgid "The Targa image format"
+#~ msgstr "Targa 图像格式"
+
+#~ msgid "Could not get image width (bad TIFF file)"
+#~ msgstr "无法取得图像宽度(TIFF 文件损坏)"
+
+#~ msgid "Could not get image height (bad TIFF file)"
+#~ msgstr "无法取得图像高度(TIFF 文件损坏)"
+
+#~ msgid "Width or height of TIFF image is zero"
+#~ msgstr "TIFF 图像的宽度或高度为零"
+
+#~ msgid "Dimensions of TIFF image too large"
+#~ msgstr "TIFF 图像的尺寸太大"
+
+#~ msgid "Insufficient memory to open TIFF file"
+#~ msgstr "内存不足以打开 TIFF 文件"
+
+#~ msgid "Failed to load RGB data from TIFF file"
+#~ msgstr "载入 TIFF 文件里的 RGB 数据失败"
+
+#~ msgid "Failed to open TIFF image"
+#~ msgstr "打开 TIFF 图像失败"
+
+#~ msgid "TIFFClose operation failed"
+#~ msgstr "TIFFClose 操作失败"
+
+#~ msgid "Failed to load TIFF image"
+#~ msgstr "载入 TIFF 图像失败"
+
+#~ msgid "Failed to save TIFF image"
+#~ msgstr "保存 TIFF 图像失败"
+
+#~ msgid "Failed to write TIFF data"
+#~ msgstr "写入 TIFF 图像失败"
+
+#~ msgid "Couldn't write to TIFF file"
+#~ msgstr "无法写入 TIFF 文件"
+
+#~ msgid "The TIFF image format"
+#~ msgstr "TIFF 图像格式"
+
+#~ msgid "Image has zero width"
+#~ msgstr "图像宽度为零"
+
+#~ msgid "Image has zero height"
+#~ msgstr "图像高度为零"
+
+#~ msgid "Not enough memory to load image"
+#~ msgstr "内存不足以载入图像"
+
+#~ msgid "Couldn't save the rest"
+#~ msgstr "无法保存剩余部分"
+
+#~ msgid "The WBMP image format"
+#~ msgstr "WBMP 图像格式"
+
+#~ msgid "Invalid XBM file"
+#~ msgstr "XBM 文件无效"
+
+#~ msgid "Insufficient memory to load XBM image file"
+#~ msgstr "内存不足以载入 XBM 图像文件"
+
+#~ msgid "Failed to write to temporary file when loading XBM image"
+#~ msgstr "载入 XBM 图像时无法写入临时文件"
+
+#~ msgid "The XBM image format"
+#~ msgstr "XBM 图像格式"
+
+#~ msgid "No XPM header found"
+#~ msgstr "找不到 XPM 头"
+
+#~ msgid "Invalid XPM header"
+#~ msgstr "无效的 XBM 头"
+
+#~ msgid "XPM file has image width <= 0"
+#~ msgstr "XPM 文件图像宽度 <= 0"
+
+#~ msgid "XPM file has image height <= 0"
+#~ msgstr "XPM 文件图像高度 <= 0"
+
+#~ msgid "XPM has invalid number of chars per pixel"
+#~ msgstr "XPM 每个像素占用的字节数目无效"
+
+#~ msgid "XPM file has invalid number of colors"
+#~ msgstr "XPM 文件图像颜色数目不正确"
+
+#~ msgid "Cannot allocate memory for loading XPM image"
+#~ msgstr "无法分配内存来载入 XPM 图像"
+
+#~ msgid "Cannot read XPM colormap"
+#~ msgstr "无法读入 XPM 色彩表"
+
+#~ msgid "Failed to write to temporary file when loading XPM image"
+#~ msgstr "载入 XPM 图像时写入临时文件失败"
+
+#~ msgid "The XPM image format"
+#~ msgstr "XPM 图像格式"
+
+#~ msgid "The EMF image format"
+#~ msgstr "EMF 图像格式"
+
+#~ msgid "Could not allocate memory: %s"
+#~ msgstr "无法分配内存：%s"
+
+#~ msgid "Could not create stream: %s"
+#~ msgstr "无法创建流：%s"
+
+#~ msgid "Could not seek stream: %s"
+#~ msgstr "无法搜索流：%s"
+
+#~ msgid "Could not read from stream: %s"
+#~ msgstr "无法从流中读取：%s"
+
+#~ msgid "Couldn't load bitmap"
+#~ msgstr "无法装入位图"
+
+#~ msgid "Couldn't load metafile"
+#~ msgstr "无法装入元文件"
+
+#~ msgid "Unsupported image format for GDI+"
+#~ msgstr "不支持的 GDI+ 图像格式"
+
+#~ msgid "Couldn't save"
+#~ msgstr "无法保存"
+
+#~ msgid "The WMF image format"
+#~ msgstr "WMF 图像格式"
+
+#~ msgid "\"Deepness\" of the color."
+#~ msgstr "颜色的“深度”。"
+
+#~ msgid "Error printing"
+#~ msgstr "打印出错"
+
+#~ msgid "Printer '%s' may not be connected."
+#~ msgstr "打印机“%s”可能无法连接。"
 
 #~ msgid "Folders"
 #~ msgstr "文件夹"

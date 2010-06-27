@@ -11,10 +11,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk20 1.3.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-05-25 20:10-0400\n"
+"POT-Creation-Date: 2010-06-26 23:16-0400\n"
 "PO-Revision-Date: 2006-09-23 16:18+0200\n"
 "Last-Translator: Pablo Saratxaga <pablo@walon.org>\n"
 "Language-Team: Walloon <linux-wa@walon.org>\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -80,7 +81,7 @@ msgstr "Drapeas di disbugaedje Gdk a mete"
 #. Placeholder in --gdk-no-debug=FLAGS in --help output
 #. Placeholder in --gtk-debug=FLAGS in --help output
 #. Placeholder in --gtk-no-debug=FLAGS in --help output
-#: gdk/gdk.c:165 gdk/gdk.c:168 gtk/gtkmain.c:454 gtk/gtkmain.c:457
+#: gdk/gdk.c:165 gdk/gdk.c:168 gtk/gtkmain.c:439 gtk/gtkmain.c:442
 msgid "FLAGS"
 msgstr "DRAPEAS"
 
@@ -289,938 +290,6 @@ msgstr "_Disfacer"
 msgctxt "keyboard label"
 msgid "Delete"
 msgstr "_Disfacer"
-
-#: gdk-pixbuf/gdk-pixbuf-animation.c:133 gdk-pixbuf/gdk-pixbuf-io.c:982
-#: gdk-pixbuf/gdk-pixbuf-io.c:1242 tests/testfilechooser.c:222
-#, c-format
-msgid "Failed to open file '%s': %s"
-msgstr "Dji n' a savou drovi li fitchî «%s»: %s"
-
-#: gdk-pixbuf/gdk-pixbuf-animation.c:146 gdk-pixbuf/gdk-pixbuf-io.c:994
-#, c-format
-msgid "Image file '%s' contains no data"
-msgstr "Li fitchî imådje «%s» n' a nole dinêye dvins."
-
-#: gdk-pixbuf/gdk-pixbuf-animation.c:188 gdk-pixbuf/gdk-pixbuf-io.c:1030
-#: gdk-pixbuf/gdk-pixbuf-io.c:1294 tests/testfilechooser.c:267
-#, c-format
-msgid ""
-"Failed to load image '%s': reason not known, probably a corrupt image file"
-msgstr ""
-"Dji n' a savou tcherdjî l' imådje «%s»: li råjhon n' est nén cnoxhowe, motoit "
-"bén on cron fitchî"
-
-#: gdk-pixbuf/gdk-pixbuf-animation.c:221
-#, c-format
-msgid ""
-"Failed to load animation '%s': reason not known, probably a corrupt "
-"animation file"
-msgstr ""
-"Dji n' a savou tcherdjî l' animåcion «%s»: li råjhon n' est nén cnoxhowe, "
-"motoit bén on cron fitchî"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:715
-#, c-format
-msgid "Unable to load image-loading module: %s: %s"
-msgstr "Dji n' sai tcherdjî li module po tcherdjî les imådjes: %s: %s"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:730
-#, c-format
-msgid ""
-"Image-loading module %s does not export the proper interface; perhaps it's "
-"from a different GTK version?"
-msgstr ""
-"Li module di tcherdjaedje d' imådjes %s n' ebague nén li boune eterface; "
-"motoit k' il est po ene diferinne modêye di GTK?"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:739 gdk-pixbuf/gdk-pixbuf-io.c:790
-#, c-format
-msgid "Image type '%s' is not supported"
-msgstr "Li sôre d' imådje %s n' est nén sopoirté"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:863
-#, c-format
-msgid "Couldn't recognize the image file format for file '%s'"
-msgstr "Dji n' a savou ricnoxhe li cogne di fitchî imådje pol fitchî «%s»"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:871
-msgid "Unrecognized image file format"
-msgstr "Cogne di fitchî imådje nén cnoxhowe"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:1039
-#, c-format
-msgid "Failed to load image '%s': %s"
-msgstr "Dji n' a savou tcherdjî l' imådje «%s»: %s"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:1673 gdk-pixbuf/io-gdip-utils.c:961
-#, c-format
-msgid "Error writing to image file: %s"
-msgstr "Åk n' a nén stî come dji scrijheut e fitchî imådje: %s"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:1718 gdk-pixbuf/gdk-pixbuf-io.c:1848
-#, c-format
-msgid "This build of gdk-pixbuf does not support saving the image format: %s"
-msgstr ""
-"Cisse modêye ci di gdk-pixbuf come elle a stî copilêye èn sopoite nén li "
-"schapaedje d' imådjes del sôre: %s"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:1752
-msgid "Insufficient memory to save image to callback"
-msgstr ""
-"Nén del memwere assez po schaper l' imådje viè on el fonccion di rhoucaedje"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:1765
-msgid "Failed to open temporary file"
-msgstr "Dji n' a savou drovi l' fitchî timporaire"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:1791
-msgid "Failed to read from temporary file"
-msgstr "Dji n' a savou lére do fitchî timporaire"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:2044
-#, c-format
-msgid "Failed to open '%s' for writing: %s"
-msgstr "Dji n' a savou drovi l' fitchî «%s» po-z î scrire: %s"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:2070
-#, c-format
-msgid ""
-"Failed to close '%s' while writing image, all data may not have been saved: %"
-"s"
-msgstr ""
-"Dji n' a savou clôre li fitchî «%s» tot scrijhant l' imådje, i s' pout "
-"k' totes les dnêyes èn soeyexhe nén schapêyes: %s"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:2290 gdk-pixbuf/gdk-pixbuf-io.c:2341
-msgid "Insufficient memory to save image into a buffer"
-msgstr "Nén del memwere assez po schaper l' imådje dins on tampon"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:2387
-#, fuzzy
-msgid "Error writing to image stream"
-msgstr "Åk n' a nén stî come dji scrijheut e fitchî imådje: %s"
-
-#: gdk-pixbuf/gdk-pixbuf-loader.c:334
-#, c-format
-msgid ""
-"Internal error: Image loader module '%s' failed to complete an operation, "
-"but didn't give a reason for the failure"
-msgstr ""
-"Divintrinne aroke: li module di tcherdjaedje d' imådjes «%s» n' a nén savou "
-"completer ene operåcion, mins i n' dina nén l' råjhon k' i fjha berwete"
-
-#: gdk-pixbuf/gdk-pixbuf-loader.c:376
-#, c-format
-msgid "Incremental loading of image type '%s' is not supported"
-msgstr "Li tcherdjaedje incremintå n' est nén sopoirté pol sôre d' imådje «%s»"
-
-#: gdk-pixbuf/gdk-pixdata.c:147
-msgid "Image header corrupt"
-msgstr "Li tiestire di l' imådje est crombe"
-
-#: gdk-pixbuf/gdk-pixdata.c:152
-msgid "Image format unknown"
-msgstr "Cogne d' imådje nén cnoxhowe"
-
-#: gdk-pixbuf/gdk-pixdata.c:157 gdk-pixbuf/gdk-pixdata.c:488
-msgid "Image pixel data corrupt"
-msgstr "Les dnêyes di picsels di l' imådje sont crombes"
-
-#: gdk-pixbuf/gdk-pixdata.c:432
-#, c-format
-msgid "failed to allocate image buffer of %u byte"
-msgid_plural "failed to allocate image buffer of %u bytes"
-msgstr[0] "dji n' a savou alouwer on tampon di %u octet po l' imådje"
-msgstr[1] "dji n' a savou alouwer on tampon di %u octets po l' imådje"
-
-#: gdk-pixbuf/io-ani.c:244
-msgid "Unexpected icon chunk in animation"
-msgstr "Boket d' imådjete nén ratindou dins l' animåcion"
-
-#: gdk-pixbuf/io-ani.c:337
-msgid "Unsupported animation type"
-msgstr "Sôre d' animåcion nén sopoirtêye"
-
-#: gdk-pixbuf/io-ani.c:348 gdk-pixbuf/io-ani.c:406 gdk-pixbuf/io-ani.c:432
-#: gdk-pixbuf/io-ani.c:455 gdk-pixbuf/io-ani.c:482 gdk-pixbuf/io-ani.c:569
-msgid "Invalid header in animation"
-msgstr "Tiestire nén valide e l' animåcion"
-
-#: gdk-pixbuf/io-ani.c:358 gdk-pixbuf/io-ani.c:380 gdk-pixbuf/io-ani.c:464
-#: gdk-pixbuf/io-ani.c:491 gdk-pixbuf/io-ani.c:542 gdk-pixbuf/io-ani.c:614
-msgid "Not enough memory to load animation"
-msgstr "Nén del memwere assez po tcherdjî l' animåcion"
-
-#: gdk-pixbuf/io-ani.c:398 gdk-pixbuf/io-ani.c:424 gdk-pixbuf/io-ani.c:443
-msgid "Malformed chunk in animation"
-msgstr "Cron boket e l' animåcion"
-
-#: gdk-pixbuf/io-ani.c:711
-msgid "The ANI image format"
-msgstr "Li sôre d' imådje ANI"
-
-#: gdk-pixbuf/io-bmp.c:230 gdk-pixbuf/io-bmp.c:267 gdk-pixbuf/io-bmp.c:338
-#: gdk-pixbuf/io-bmp.c:370 gdk-pixbuf/io-bmp.c:393 gdk-pixbuf/io-bmp.c:496
-msgid "BMP image has bogus header data"
-msgstr "L' imådje BMP a des crombès dnêyes el tiestire"
-
-#: gdk-pixbuf/io-bmp.c:241 gdk-pixbuf/io-bmp.c:433
-msgid "Not enough memory to load bitmap image"
-msgstr "Nén del memwere assez po tcherdjî l' imådje bitmap"
-
-#: gdk-pixbuf/io-bmp.c:319
-msgid "BMP image has unsupported header size"
-msgstr "L' imådje BMP a-st ene grandeu nén sopoirtêye pol tiestire"
-
-#: gdk-pixbuf/io-bmp.c:357
-msgid "Topdown BMP images cannot be compressed"
-msgstr "Les imådjes BMP «Topdown» èn polèt nén esse sitrindowes"
-
-#: gdk-pixbuf/io-bmp.c:717 gdk-pixbuf/io-pnm.c:709
-msgid "Premature end-of-file encountered"
-msgstr ""
-
-#: gdk-pixbuf/io-bmp.c:1329
-msgid "Couldn't allocate memory for saving BMP file"
-msgstr "Dji n' a savou alouwer del memwere assez po schaper l' fitchî BMP"
-
-#: gdk-pixbuf/io-bmp.c:1370
-msgid "Couldn't write to BMP file"
-msgstr "Dji n' a savou scrire dins l' fitchî BMP"
-
-#: gdk-pixbuf/io-bmp.c:1423 gdk-pixbuf/io-gdip-bmp.c:82
-msgid "The BMP image format"
-msgstr "Li sôre d' imådje BMP"
-
-#: gdk-pixbuf/io-gif.c:222
-#, c-format
-msgid "Failure reading GIF: %s"
-msgstr "Li lijhaedje di l' imådje GIF a fwait berwete: %s"
-
-#: gdk-pixbuf/io-gif.c:496 gdk-pixbuf/io-gif.c:1481 gdk-pixbuf/io-gif.c:1642
-msgid "GIF file was missing some data (perhaps it was truncated somehow?)"
-msgstr ""
-"I manke des dnêyes å fitchî GIF (motoit k' il a stî côpé dvant l' fén?)"
-
-#: gdk-pixbuf/io-gif.c:505
-#, c-format
-msgid "Internal error in the GIF loader (%s)"
-msgstr "Divintrinne aroke el tcherdjeu GIF (%s)"
-
-#: gdk-pixbuf/io-gif.c:579
-msgid "Stack overflow"
-msgstr "Disboirdaedje del pile"
-
-#: gdk-pixbuf/io-gif.c:639
-msgid "GIF image loader cannot understand this image."
-msgstr "Li tcherdjeu d' imådjes GIF èn sait nén comprinde ciste imådje ci."
-
-#: gdk-pixbuf/io-gif.c:668
-msgid "Bad code encountered"
-msgstr "On måva côde a stî trové"
-
-#: gdk-pixbuf/io-gif.c:678
-msgid "Circular table entry in GIF file"
-msgstr "Betchfesseye intrêye ezès tåvleas do fitchî GIF"
-
-#: gdk-pixbuf/io-gif.c:866 gdk-pixbuf/io-gif.c:1468 gdk-pixbuf/io-gif.c:1515
-#: gdk-pixbuf/io-gif.c:1630
-msgid "Not enough memory to load GIF file"
-msgstr "Nén del memwere assez po tcherdjî l' imådje GIF"
-
-#: gdk-pixbuf/io-gif.c:960
-msgid "Not enough memory to composite a frame in GIF file"
-msgstr "Nén del memwere assez po compôzer on cåde en on fitchî GIF"
-
-#: gdk-pixbuf/io-gif.c:1132
-msgid "GIF image is corrupt (incorrect LZW compression)"
-msgstr "L' imådje GIF est crombe (sitrindaedje LZW nén corek)"
-
-#: gdk-pixbuf/io-gif.c:1182
-msgid "File does not appear to be a GIF file"
-msgstr "Li fitchî n' rishonne nén on fitchî GIF"
-
-#: gdk-pixbuf/io-gif.c:1194
-#, c-format
-msgid "Version %s of the GIF file format is not supported"
-msgstr "Li modêye %s del sôre di fitchîs GIF n' est nén sopoirtêye"
-
-#: gdk-pixbuf/io-gif.c:1303
-msgid ""
-"GIF image has no global colormap, and a frame inside it has no local "
-"colormap."
-msgstr ""
-"L' imådje GIF n' a nou mapaedje di coleurs (colormap) globå, eyet on cåde å "
-"dvins d' l' imådje n' a pont d' mapaedje locå nerén."
-
-#: gdk-pixbuf/io-gif.c:1537
-msgid "GIF image was truncated or incomplete."
-msgstr "L' imådje GIF a stî côpêye divant l' fén ou n' est nén complete."
-
-#: gdk-pixbuf/io-gif.c:1693 gdk-pixbuf/io-gdip-gif.c:80
-msgid "The GIF image format"
-msgstr "Li sôre d' imådje GIF"
-
-#: gdk-pixbuf/io-ico.c:211 gdk-pixbuf/io-ico.c:225 gdk-pixbuf/io-ico.c:277
-#: gdk-pixbuf/io-ico.c:290 gdk-pixbuf/io-ico.c:359
-msgid "Invalid header in icon"
-msgstr "Tiestire nén valide e l' imådjete"
-
-#: gdk-pixbuf/io-ico.c:240 gdk-pixbuf/io-ico.c:300 gdk-pixbuf/io-ico.c:369
-#: gdk-pixbuf/io-ico.c:432 gdk-pixbuf/io-ico.c:462
-msgid "Not enough memory to load icon"
-msgstr "Nén del memwere assez po tcherdjî l' imådjete"
-
-#: gdk-pixbuf/io-ico.c:322
-msgid "Icon has zero width"
-msgstr "L' imådjete a ene lårdjeur di zero"
-
-#: gdk-pixbuf/io-ico.c:332
-msgid "Icon has zero height"
-msgstr "L' imådjete a ene hôteur di zero"
-
-#: gdk-pixbuf/io-ico.c:384
-msgid "Compressed icons are not supported"
-msgstr "Les strindowès imådjetes èn sont nén sopoirtêyes"
-
-#: gdk-pixbuf/io-ico.c:417
-msgid "Unsupported icon type"
-msgstr "Sôre d'  imådjete nén sopoirtêye"
-
-#: gdk-pixbuf/io-ico.c:511
-msgid "Not enough memory to load ICO file"
-msgstr "Nén del memwere assez po tcherdjî l' fitchî ICO"
-
-#: gdk-pixbuf/io-ico.c:976
-msgid "Image too large to be saved as ICO"
-msgstr "Imådje trop grande po-z esse schapêye dizo l' cogne ICO"
-
-#: gdk-pixbuf/io-ico.c:987
-msgid "Cursor hotspot outside image"
-msgstr "Pont tchôd do cursoe å dfoû d' l' imådje"
-
-#: gdk-pixbuf/io-ico.c:1010
-#, c-format
-msgid "Unsupported depth for ICO file: %d"
-msgstr "Parfondeu d' coleurs nén sopoirtêye pol fitchî ICO: %d"
-
-#: gdk-pixbuf/io-ico.c:1245 gdk-pixbuf/io-gdip-ico.c:59
-msgid "The ICO image format"
-msgstr "Li sôre d' imådje ICO"
-
-#: gdk-pixbuf/io-icns.c:347
-#, fuzzy, c-format
-msgid "Error reading ICNS image: %s"
-msgstr "Aroke moirt tot lijhant l' fitchî d' imådje PNG: %s"
-
-#: gdk-pixbuf/io-icns.c:364
-#, fuzzy
-msgid "Could not decode ICNS file"
-msgstr "Dji n' sai tchoezi l' fitchî"
-
-#: gdk-pixbuf/io-icns.c:397
-#, fuzzy
-msgid "The ICNS image format"
-msgstr "Li sôre d' imådje ICO"
-
-#: gdk-pixbuf/io-jasper.c:75
-#, fuzzy
-msgid "Couldn't allocate memory for stream"
-msgstr "Dji n' a savou alouwer del memwere pol tiestire"
-
-#: gdk-pixbuf/io-jasper.c:105
-#, fuzzy
-msgid "Couldn't decode image"
-msgstr "Dji n' a savou cvierser l' no do fitchî"
-
-#: gdk-pixbuf/io-jasper.c:123
-msgid "Transformed JPEG2000 has zero width or height"
-msgstr ""
-
-#: gdk-pixbuf/io-jasper.c:137
-#, fuzzy
-msgid "Image type currently not supported"
-msgstr "Li sôre d' imådje %s n' est nén sopoirté"
-
-#: gdk-pixbuf/io-jasper.c:149 gdk-pixbuf/io-jasper.c:157
-#, fuzzy
-msgid "Couldn't allocate memory for color profile"
-msgstr "Dji n' a savou alouwer del memwere assez po tcherdjî l' fitchî JPEG"
-
-#: gdk-pixbuf/io-jasper.c:183
-#, fuzzy
-msgid "Insufficient memory to open JPEG 2000 file"
-msgstr "Nén del memwere assez po drovi l' imådje TIFF"
-
-#: gdk-pixbuf/io-jasper.c:262
-#, fuzzy
-msgid "Couldn't allocate memory to buffer image data"
-msgstr "Dji n' a savou alouwer del memwere po les dnêyes des royes"
-
-#: gdk-pixbuf/io-jasper.c:306
-#, fuzzy
-msgid "The JPEG 2000 image format"
-msgstr "Li sôre d' imådje JPEG"
-
-#: gdk-pixbuf/io-jpeg.c:117
-#, c-format
-msgid "Error interpreting JPEG image file (%s)"
-msgstr "Åk n' a nén stî tot-z eterpretant l' fitchî imådje JPEG (%s)"
-
-#: gdk-pixbuf/io-jpeg.c:528
-msgid ""
-"Insufficient memory to load image, try exiting some applications to free "
-"memory"
-msgstr ""
-"I n' a nén del memwere assez po tcherdjî l' imådje, sayîz d' clôre sacwants "
-"programes po liberer del memwere"
-
-#: gdk-pixbuf/io-jpeg.c:569 gdk-pixbuf/io-jpeg.c:775
-#, c-format
-msgid "Unsupported JPEG color space (%s)"
-msgstr "Espåce di coleurs JPEG nén sopoirté (%s)"
-
-#: gdk-pixbuf/io-jpeg.c:674 gdk-pixbuf/io-jpeg.c:944 gdk-pixbuf/io-jpeg.c:1177
-#: gdk-pixbuf/io-jpeg.c:1186
-msgid "Couldn't allocate memory for loading JPEG file"
-msgstr "Dji n' a savou alouwer del memwere assez po tcherdjî l' fitchî JPEG"
-
-#: gdk-pixbuf/io-jpeg.c:919
-msgid "Transformed JPEG has zero width or height."
-msgstr ""
-
-#: gdk-pixbuf/io-jpeg.c:1133 gdk-pixbuf/io-gdip-jpeg.c:53
-#, c-format
-msgid ""
-"JPEG quality must be a value between 0 and 100; value '%s' could not be "
-"parsed."
-msgstr ""
-"Li cwålité JPEG doet esse ene valixhance inte 0 eyet 100; li valixhance «%s» "
-"èn pout nén esse léjhowe."
-
-#: gdk-pixbuf/io-jpeg.c:1148 gdk-pixbuf/io-gdip-jpeg.c:68
-#, c-format
-msgid ""
-"JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
-msgstr ""
-"Li cwålité JPEG doet esse ene valixhance inte 0 eyet 100; li valixhance «%d» "
-"n' est nén permetowe."
-
-#: gdk-pixbuf/io-jpeg.c:1310 gdk-pixbuf/io-gdip-jpeg.c:136
-msgid "The JPEG image format"
-msgstr "Li sôre d' imådje JPEG"
-
-#: gdk-pixbuf/io-pcx.c:187
-msgid "Couldn't allocate memory for header"
-msgstr "Dji n' a savou alouwer del memwere pol tiestire"
-
-#: gdk-pixbuf/io-pcx.c:202 gdk-pixbuf/io-pcx.c:560
-msgid "Couldn't allocate memory for context buffer"
-msgstr "Dji n' a savou alouwer del memwere pol tampon di contecse"
-
-#: gdk-pixbuf/io-pcx.c:601
-msgid "Image has invalid width and/or height"
-msgstr "L' imådje a-st ene lårdjeur ou ene hôteur nén valides."
-
-#: gdk-pixbuf/io-pcx.c:613 gdk-pixbuf/io-pcx.c:674
-msgid "Image has unsupported bpp"
-msgstr "L' imådje a-st ene parfondeu di coleurs nén sopoirtêye"
-
-#: gdk-pixbuf/io-pcx.c:618 gdk-pixbuf/io-pcx.c:626
-#, c-format
-msgid "Image has unsupported number of %d-bit planes"
-msgstr "L' imådje a-st on nombe di plans di %d-bits nén sopoirté"
-
-#: gdk-pixbuf/io-pcx.c:642
-msgid "Couldn't create new pixbuf"
-msgstr "Dji n' sai ahiver on novea pixbuf"
-
-#: gdk-pixbuf/io-pcx.c:650
-msgid "Couldn't allocate memory for line data"
-msgstr "Dji n' a savou alouwer del memwere po les dnêyes des royes"
-
-#: gdk-pixbuf/io-pcx.c:657
-msgid "Couldn't allocate memory for paletted data"
-msgstr "Dji n' a nén savou alouwer del memwere po les dnêyes des paletes"
-
-#: gdk-pixbuf/io-pcx.c:704
-msgid "Didn't get all lines of PCX image"
-msgstr "Dji n' a nén yeu totes les royes di l' imådje PCX"
-
-#: gdk-pixbuf/io-pcx.c:711
-msgid "No palette found at end of PCX data"
-msgstr "Nole palete di trovêye al fén des dnêyes PCX"
-
-#: gdk-pixbuf/io-pcx.c:756
-msgid "The PCX image format"
-msgstr "Li sôre d' imådje PCX"
-
-#: gdk-pixbuf/io-png.c:55
-msgid "Bits per channel of PNG image is invalid."
-msgstr "Li nombe di bits pa canå d' l' imådje PNG n' est nén valide"
-
-#: gdk-pixbuf/io-png.c:136 gdk-pixbuf/io-png.c:642
-msgid "Transformed PNG has zero width or height."
-msgstr ""
-
-#: gdk-pixbuf/io-png.c:144
-msgid "Bits per channel of transformed PNG is not 8."
-msgstr ""
-
-#: gdk-pixbuf/io-png.c:153
-msgid "Transformed PNG not RGB or RGBA."
-msgstr ""
-
-#: gdk-pixbuf/io-png.c:162
-msgid "Transformed PNG has unsupported number of channels, must be 3 or 4."
-msgstr ""
-
-#: gdk-pixbuf/io-png.c:183
-#, c-format
-msgid "Fatal error in PNG image file: %s"
-msgstr "Aroke moirt el fitchî imådje PNG: %s"
-
-#: gdk-pixbuf/io-png.c:316
-msgid "Insufficient memory to load PNG file"
-msgstr "Nén del memwere assez po tcherdjî l' imådje PNG"
-
-#: gdk-pixbuf/io-png.c:657
-#, c-format
-msgid ""
-"Insufficient memory to store a %ld by %ld image; try exiting some "
-"applications to reduce memory usage"
-msgstr ""
-"I n' a nén del memwere assez po wårder ene imådje di %ld x %ld; sayîz "
-"d' clôre sacwants programes po raptiti l' eployaedje di memwere"
-
-#: gdk-pixbuf/io-png.c:720
-msgid "Fatal error reading PNG image file"
-msgstr "Aroke moirt tot lijhant l' fitchî d' imådje PNG"
-
-#: gdk-pixbuf/io-png.c:769
-#, c-format
-msgid "Fatal error reading PNG image file: %s"
-msgstr "Aroke moirt tot lijhant l' fitchî d' imådje PNG: %s"
-
-#: gdk-pixbuf/io-png.c:863
-msgid ""
-"Keys for PNG text chunks must have at least 1 and at most 79 characters."
-msgstr ""
-
-#: gdk-pixbuf/io-png.c:872
-msgid "Keys for PNG text chunks must be ASCII characters."
-msgstr ""
-
-#: gdk-pixbuf/io-png.c:886 gdk-pixbuf/io-tiff.c:738
-#, c-format
-msgid "Color profile has invalid length %d."
-msgstr ""
-
-#: gdk-pixbuf/io-png.c:899 gdk-pixbuf/io-gdip-png.c:56
-#, c-format
-msgid ""
-"PNG compression level must be a value between 0 and 9; value '%s' could not "
-"be parsed."
-msgstr ""
-"Li livea di strindaedje PNG doet esse ene valixhance inte 0 eyet 9; li "
-"valixhance «%s» èn pout nén esse léjhowe."
-
-#: gdk-pixbuf/io-png.c:912 gdk-pixbuf/io-gdip-png.c:68
-#, c-format
-msgid ""
-"PNG compression level must be a value between 0 and 9; value '%d' is not "
-"allowed."
-msgstr ""
-"Li livea di strindaedje PNG doet esse ene valixhance inte 0 eyet 9; li "
-"valixhance «%d» n' est nén permetowe."
-
-#: gdk-pixbuf/io-png.c:951
-#, c-format
-msgid "Value for PNG text chunk %s cannot be converted to ISO-8859-1 encoding."
-msgstr ""
-
-#: gdk-pixbuf/io-png.c:1112 gdk-pixbuf/io-gdip-png.c:133
-msgid "The PNG image format"
-msgstr "Li sôre d' imådje PNG"
-
-#: gdk-pixbuf/io-pnm.c:250
-msgid "PNM loader expected to find an integer, but didn't"
-msgstr "Li tcherdjeu di PNM ratindeut èn etir, mins n' a nén yeu"
-
-#: gdk-pixbuf/io-pnm.c:282
-msgid "PNM file has an incorrect initial byte"
-msgstr "Li fitchî PNM a-st èn octet di cmince nén corek"
-
-#: gdk-pixbuf/io-pnm.c:312
-msgid "PNM file is not in a recognized PNM subformat"
-msgstr ""
-
-#: gdk-pixbuf/io-pnm.c:337
-msgid "PNM file has an image width of 0"
-msgstr "Li fitchî PNM a-st ene lårdjeur d' imådje di 0"
-
-#: gdk-pixbuf/io-pnm.c:358
-msgid "PNM file has an image height of 0"
-msgstr "Li fitchî PNM a-st ene hôteur d' imådje di 0"
-
-#: gdk-pixbuf/io-pnm.c:381
-msgid "Maximum color value in PNM file is 0"
-msgstr "Li valixhance pol macsimom di coleurs el fitchî PNM est 0"
-
-#: gdk-pixbuf/io-pnm.c:389
-msgid "Maximum color value in PNM file is too large"
-msgstr ""
-"Li valixhance pol macsimom di coleurs el fitchî PNM est pår trop grande"
-
-#: gdk-pixbuf/io-pnm.c:429 gdk-pixbuf/io-pnm.c:459 gdk-pixbuf/io-pnm.c:504
-msgid "Raw PNM image type is invalid"
-msgstr ""
-
-#: gdk-pixbuf/io-pnm.c:654
-msgid "PNM image loader does not support this PNM subformat"
-msgstr ""
-
-#: gdk-pixbuf/io-pnm.c:741 gdk-pixbuf/io-pnm.c:968
-msgid "Raw PNM formats require exactly one whitespace before sample data"
-msgstr ""
-
-#: gdk-pixbuf/io-pnm.c:768
-msgid "Cannot allocate memory for loading PNM image"
-msgstr "Dji n' pou alouwer del memwere po tcherdjî l' imådje PNM"
-
-#: gdk-pixbuf/io-pnm.c:818
-msgid "Insufficient memory to load PNM context struct"
-msgstr ""
-"Nén del memwere assez po tcherdjî li structeure di contecse di l' imådje PNM"
-
-#: gdk-pixbuf/io-pnm.c:869
-msgid "Unexpected end of PNM image data"
-msgstr ""
-
-#: gdk-pixbuf/io-pnm.c:997
-msgid "Insufficient memory to load PNM file"
-msgstr "Nén del memwere assez po tcherdjî l' imådje PNM"
-
-#: gdk-pixbuf/io-pnm.c:1081
-msgid "The PNM/PBM/PGM/PPM image format family"
-msgstr "Famile del sôre d' imådjes PNM/PBM/PGM/PPM"
-
-#: gdk-pixbuf/io-qtif.c:128
-msgid "Input file descriptor is NULL."
-msgstr ""
-
-#: gdk-pixbuf/io-qtif.c:143
-#, fuzzy
-msgid "Failed to read QTIF header"
-msgstr "Li scrijhaedje del tiestire a fwait berwete\n"
-
-#: gdk-pixbuf/io-qtif.c:152 gdk-pixbuf/io-qtif.c:182 gdk-pixbuf/io-qtif.c:446
-#, c-format
-msgid "QTIF atom size too large (%d bytes)"
-msgstr ""
-
-#: gdk-pixbuf/io-qtif.c:172
-#, fuzzy, c-format
-msgid "Failed to allocate %d bytes for file read buffer"
-msgstr "dji n' a savou alouwer on tampon di %u octet po l' imådje"
-
-#: gdk-pixbuf/io-qtif.c:196
-#, fuzzy, c-format
-msgid "File error when reading QTIF atom: %s"
-msgstr "Li lijhaedje di l' imådje GIF a fwait berwete: %s"
-
-#: gdk-pixbuf/io-qtif.c:233
-#, c-format
-msgid "Failed to skip the next %d bytes with seek()."
-msgstr ""
-
-#: gdk-pixbuf/io-qtif.c:257
-#, fuzzy
-msgid "Failed to allocate QTIF context structure."
-msgstr "Dji n' a savou alouwer del memwere pol sitructeure di contecse TGA"
-
-#: gdk-pixbuf/io-qtif.c:317
-#, fuzzy
-msgid "Failed to create GdkPixbufLoader object."
-msgstr "Li scrijhaedje di l' indecse do ridant a fwait berwete\n"
-
-#: gdk-pixbuf/io-qtif.c:421
-#, fuzzy
-msgid "Failed to find an image data atom."
-msgstr "Dji n' a savou drovi l' imådje TIFF"
-
-#: gdk-pixbuf/io-qtif.c:602
-#, fuzzy
-msgid "The QTIF image format"
-msgstr "Li sôre d' imådje TIFF"
-
-#: gdk-pixbuf/io-ras.c:126
-msgid "RAS image has bogus header data"
-msgstr ""
-
-#: gdk-pixbuf/io-ras.c:148
-msgid "RAS image has unknown type"
-msgstr ""
-
-#: gdk-pixbuf/io-ras.c:156
-msgid "unsupported RAS image variation"
-msgstr ""
-
-#: gdk-pixbuf/io-ras.c:171 gdk-pixbuf/io-ras.c:200
-msgid "Not enough memory to load RAS image"
-msgstr "Nén del memwere assez po tcherdjî l' imådje RAS"
-
-#: gdk-pixbuf/io-ras.c:545
-msgid "The Sun raster image format"
-msgstr ""
-
-#: gdk-pixbuf/io-tga.c:154
-msgid "Cannot allocate memory for IOBuffer struct"
-msgstr "Dji n' a savou alouwer del memwere pol sitructeure do tampon IOBuffer"
-
-#: gdk-pixbuf/io-tga.c:173
-msgid "Cannot allocate memory for IOBuffer data"
-msgstr "Dji n' a savou alouwer del memwere pol tampon di dnêyes IOBuffer"
-
-#: gdk-pixbuf/io-tga.c:184
-msgid "Cannot realloc IOBuffer data"
-msgstr ""
-
-#: gdk-pixbuf/io-tga.c:214
-msgid "Cannot allocate temporary IOBuffer data"
-msgstr ""
-"Dji n' a savou alouwer del memwere pol tampon di dnêyes timporaire IOBuffer"
-
-#: gdk-pixbuf/io-tga.c:347
-msgid "Cannot allocate new pixbuf"
-msgstr ""
-
-#: gdk-pixbuf/io-tga.c:686
-#, fuzzy
-msgid "Image is corrupted or truncated"
-msgstr "L' imådje GIF a stî côpêye divant l' fén ou n' est nén complete."
-
-#: gdk-pixbuf/io-tga.c:693
-msgid "Cannot allocate colormap structure"
-msgstr ""
-
-#: gdk-pixbuf/io-tga.c:700
-msgid "Cannot allocate colormap entries"
-msgstr ""
-
-#: gdk-pixbuf/io-tga.c:722
-msgid "Unexpected bitdepth for colormap entries"
-msgstr ""
-
-#: gdk-pixbuf/io-tga.c:740
-msgid "Cannot allocate TGA header memory"
-msgstr ""
-
-#: gdk-pixbuf/io-tga.c:773
-msgid "TGA image has invalid dimensions"
-msgstr ""
-
-#: gdk-pixbuf/io-tga.c:779 gdk-pixbuf/io-tga.c:788 gdk-pixbuf/io-tga.c:798
-#: gdk-pixbuf/io-tga.c:808 gdk-pixbuf/io-tga.c:815
-msgid "TGA image type not supported"
-msgstr "Li sôre d' imådje TGA n' est nén sopoirtêye"
-
-#: gdk-pixbuf/io-tga.c:862
-msgid "Cannot allocate memory for TGA context struct"
-msgstr "Dji n' a savou alouwer del memwere pol sitructeure di contecse TGA"
-
-#: gdk-pixbuf/io-tga.c:927
-msgid "Excess data in file"
-msgstr ""
-
-#: gdk-pixbuf/io-tga.c:1008
-msgid "The Targa image format"
-msgstr "Li sôre d' imådje Targa"
-
-#: gdk-pixbuf/io-tiff.c:165
-msgid "Could not get image width (bad TIFF file)"
-msgstr "Dji n' a nén savou aveur li lårdjeur di l' imådje (måva fitchî TIFF)"
-
-#: gdk-pixbuf/io-tiff.c:172
-msgid "Could not get image height (bad TIFF file)"
-msgstr "Dji n' a nén savou aveur li hôteur di l' imådje (måva fitchî TIFF)"
-
-#: gdk-pixbuf/io-tiff.c:180
-msgid "Width or height of TIFF image is zero"
-msgstr "Li lårdjeur ou l' hôteur di l' imådje TIFF est d' zero"
-
-#: gdk-pixbuf/io-tiff.c:189 gdk-pixbuf/io-tiff.c:198
-msgid "Dimensions of TIFF image too large"
-msgstr ""
-
-#: gdk-pixbuf/io-tiff.c:222 gdk-pixbuf/io-tiff.c:234 gdk-pixbuf/io-tiff.c:561
-msgid "Insufficient memory to open TIFF file"
-msgstr "Nén del memwere assez po drovi l' imådje TIFF"
-
-#: gdk-pixbuf/io-tiff.c:295
-msgid "Failed to load RGB data from TIFF file"
-msgstr ""
-
-#: gdk-pixbuf/io-tiff.c:351
-msgid "Failed to open TIFF image"
-msgstr "Dji n' a savou drovi l' imådje TIFF"
-
-#: gdk-pixbuf/io-tiff.c:363 gdk-pixbuf/io-tiff.c:778
-msgid "TIFFClose operation failed"
-msgstr ""
-
-#: gdk-pixbuf/io-tiff.c:493 gdk-pixbuf/io-tiff.c:506
-msgid "Failed to load TIFF image"
-msgstr "Dji n' a savou tcherdjî l' imådje TIFF"
-
-#: gdk-pixbuf/io-tiff.c:692
-msgid "Failed to save TIFF image"
-msgstr "Dji n' a savou schaper l' imådje TIFF"
-
-#: gdk-pixbuf/io-tiff.c:727
-msgid "TIFF compression doesn't refer to a valid codec."
-msgstr ""
-
-#: gdk-pixbuf/io-tiff.c:767
-msgid "Failed to write TIFF data"
-msgstr "Dji n' a savou scrire l' imådje TIFF"
-
-#: gdk-pixbuf/io-tiff.c:814
-msgid "Couldn't write to TIFF file"
-msgstr "Dji n' a savou scrire dins l' fitchî TIFF"
-
-#: gdk-pixbuf/io-tiff.c:869
-msgid "The TIFF image format"
-msgstr "Li sôre d' imådje TIFF"
-
-#: gdk-pixbuf/io-wbmp.c:246
-msgid "Image has zero width"
-msgstr "L' imådje a ene lårdjeur di zero"
-
-#: gdk-pixbuf/io-wbmp.c:264
-msgid "Image has zero height"
-msgstr "L' imådje a-st ene hôteur di zero"
-
-#: gdk-pixbuf/io-wbmp.c:275
-msgid "Not enough memory to load image"
-msgstr "Nén del memwere assez po tcherdjî l' imådje"
-
-#: gdk-pixbuf/io-wbmp.c:334
-msgid "Couldn't save the rest"
-msgstr "Dji n' a savou schaper l' restant"
-
-#: gdk-pixbuf/io-wbmp.c:375
-msgid "The WBMP image format"
-msgstr "Li sôre d' imådje WBMP"
-
-#: gdk-pixbuf/io-xbm.c:295
-msgid "Invalid XBM file"
-msgstr "Fitchî XBM nén valide"
-
-#: gdk-pixbuf/io-xbm.c:305
-msgid "Insufficient memory to load XBM image file"
-msgstr "Nén del memwere assez po tcherdjî l' imådje XBM"
-
-#: gdk-pixbuf/io-xbm.c:453
-msgid "Failed to write to temporary file when loading XBM image"
-msgstr ""
-"Dji n' a savou scrire dins l' fitchî timporaire tot tcherdjant l' imådje XBM"
-
-#: gdk-pixbuf/io-xbm.c:492
-msgid "The XBM image format"
-msgstr "Li sôre d' imådje XBM"
-
-#: gdk-pixbuf/io-xpm.c:468
-msgid "No XPM header found"
-msgstr "Nole tiestire XPM di trovêye"
-
-#: gdk-pixbuf/io-xpm.c:477
-msgid "Invalid XPM header"
-msgstr "Tiestire XPM nén valide"
-
-#: gdk-pixbuf/io-xpm.c:485
-msgid "XPM file has image width <= 0"
-msgstr "Li fitchî XPM a-st ene lårdjeur d' imådje <= 0"
-
-#: gdk-pixbuf/io-xpm.c:493
-msgid "XPM file has image height <= 0"
-msgstr "Li fitchî XPM a-st ene hôteur d' imådje <= 0"
-
-#: gdk-pixbuf/io-xpm.c:501
-msgid "XPM has invalid number of chars per pixel"
-msgstr "Li fitchî XPM a-st on nombe nén valide di caracteres pa picsel"
-
-#: gdk-pixbuf/io-xpm.c:510
-msgid "XPM file has invalid number of colors"
-msgstr "Li fitchî XPM a-st on nombe nén valide di coleurs"
-
-#: gdk-pixbuf/io-xpm.c:522 gdk-pixbuf/io-xpm.c:531 gdk-pixbuf/io-xpm.c:583
-msgid "Cannot allocate memory for loading XPM image"
-msgstr "Dji n' pou alouwer del memwere po tcherdjî l' imådje XPM"
-
-#: gdk-pixbuf/io-xpm.c:545
-msgid "Cannot read XPM colormap"
-msgstr "Dji n' sai lére li mape di coleurs XPM"
-
-#: gdk-pixbuf/io-xpm.c:777
-msgid "Failed to write to temporary file when loading XPM image"
-msgstr ""
-"Dji n' a savou scrire dins l' fitchî timporaire tot tcherdjant l' imådje XPM"
-
-#: gdk-pixbuf/io-xpm.c:816
-msgid "The XPM image format"
-msgstr "Li sôre d' imådje XPM"
-
-#: gdk-pixbuf/io-gdip-emf.c:59
-#, fuzzy
-msgid "The EMF image format"
-msgstr "Li sôre d' imådje BMP"
-
-#: gdk-pixbuf/io-gdip-utils.c:232
-#, fuzzy, c-format
-msgid "Could not allocate memory: %s"
-msgstr "Dji n' a savou alouwer del memwere pol tiestire"
-
-#: gdk-pixbuf/io-gdip-utils.c:257 gdk-pixbuf/io-gdip-utils.c:371
-#: gdk-pixbuf/io-gdip-utils.c:411
-#, fuzzy, c-format
-msgid "Could not create stream: %s"
-msgstr "Dji n' a nén savou ahiver l' ridant: %s"
-
-#: gdk-pixbuf/io-gdip-utils.c:271
-#, fuzzy, c-format
-msgid "Could not seek stream: %s"
-msgstr "Dji n' a nén savou oister l' cayet"
-
-#: gdk-pixbuf/io-gdip-utils.c:283
-#, fuzzy, c-format
-msgid "Could not read from stream: %s"
-msgstr "Dji n' a nén savou rlomer %s viè %s: %s.\n"
-
-#: gdk-pixbuf/io-gdip-utils.c:694 gdk-pixbuf/io-gdip-utils.c:825
-#, fuzzy
-msgid "Couldn't load bitmap"
-msgstr "Dji n' a savou cvierser l' no do fitchî"
-
-#: gdk-pixbuf/io-gdip-utils.c:847
-#, fuzzy
-msgid "Couldn't load metafile"
-msgstr "Dji n' a savou cvierser l' no do fitchî"
-
-#: gdk-pixbuf/io-gdip-utils.c:1006
-#, fuzzy
-msgid "Unsupported image format for GDI+"
-msgstr "Sôre d' animåcion nén sopoirtêye"
-
-#: gdk-pixbuf/io-gdip-utils.c:1013
-#, fuzzy
-msgid "Couldn't save"
-msgstr "Dji n' a savou schaper l' restant"
-
-#: gdk-pixbuf/io-gdip-wmf.c:58
-#, fuzzy
-msgid "The WMF image format"
-msgstr "Li sôre d' imådje WBMP"
 
 #. Description of --sync in --help output
 #: gdk/win32/gdkmain-win32.c:55
@@ -1562,8 +631,9 @@ msgid "_Saturation:"
 msgstr "_Saturaedje:"
 
 #: gtk/gtkcolorsel.c:393
-msgid "\"Deepness\" of the color."
-msgstr "«Parfondeu» del coleur."
+#, fuzzy
+msgid "Intensity of the color."
+msgstr "Livea di «voeyaedje houte» del coleur."
 
 #: gtk/gtkcolorsel.c:394
 msgid "_Value:"
@@ -1726,11 +796,11 @@ msgstr "_Droete:"
 msgid "Paper Margins"
 msgstr "Mådjes do papî"
 
-#: gtk/gtkentry.c:8612 gtk/gtktextview.c:8002
+#: gtk/gtkentry.c:8612 gtk/gtktextview.c:8012
 msgid "Input _Methods"
 msgstr "_Metôdes d' intrêye"
 
-#: gtk/gtkentry.c:8626 gtk/gtktextview.c:8016
+#: gtk/gtkentry.c:8626 gtk/gtktextview.c:8026
 msgid "_Insert Unicode Control Character"
 msgstr "_Sititchî caractere di contrôle unicôde"
 
@@ -2178,13 +1248,13 @@ msgid "System (%s)"
 msgstr "%s (%s)"
 
 #. Open Link
-#: gtk/gtklabel.c:6076
+#: gtk/gtklabel.c:6072
 #, fuzzy
 msgid "_Open Link"
 msgstr "_Drovi"
 
 #. Copy Link Address
-#: gtk/gtklabel.c:6088
+#: gtk/gtklabel.c:6084
 msgid "Copy _Link Address"
 msgstr ""
 
@@ -2197,27 +1267,27 @@ msgid "Invalid URI"
 msgstr "Hårdêye (URI) nén valide"
 
 #. Description of --gtk-module=MODULES in --help output
-#: gtk/gtkmain.c:447
+#: gtk/gtkmain.c:432
 msgid "Load additional GTK+ modules"
 msgstr ""
 
 #. Placeholder in --gtk-module=MODULES in --help output
-#: gtk/gtkmain.c:448
+#: gtk/gtkmain.c:433
 msgid "MODULES"
 msgstr ""
 
 #. Description of --g-fatal-warnings in --help output
-#: gtk/gtkmain.c:450
+#: gtk/gtkmain.c:435
 msgid "Make all warnings fatal"
 msgstr "Tos les adviertixhmints dvèt esse fatås"
 
 #. Description of --gtk-debug=FLAGS in --help output
-#: gtk/gtkmain.c:453
+#: gtk/gtkmain.c:438
 msgid "GTK+ debugging flags to set"
 msgstr ""
 
 #. Description of --gtk-no-debug=FLAGS in --help output
-#: gtk/gtkmain.c:456
+#: gtk/gtkmain.c:441
 msgid "GTK+ debugging flags to unset"
 msgstr ""
 
@@ -2226,20 +1296,20 @@ msgstr ""
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
 #.
-#: gtk/gtkmain.c:708
+#: gtk/gtkmain.c:704
 msgid "default:LTR"
 msgstr "default:LTR"
 
-#: gtk/gtkmain.c:773
+#: gtk/gtkmain.c:769
 #, c-format
 msgid "Cannot open display: %s"
 msgstr ""
 
-#: gtk/gtkmain.c:810
+#: gtk/gtkmain.c:806
 msgid "GTK+ Options"
 msgstr ""
 
-#: gtk/gtkmain.c:810
+#: gtk/gtkmain.c:806
 msgid "Show GTK+ Options"
 msgstr ""
 
@@ -2330,7 +1400,7 @@ msgstr ""
 msgid "Cannot end process with pid %d: %s"
 msgstr ""
 
-#: gtk/gtknotebook.c:4621 gtk/gtknotebook.c:7050
+#: gtk/gtknotebook.c:4631 gtk/gtknotebook.c:7060
 #, c-format
 msgid "Page %u"
 msgstr "Pådje %u"
@@ -2418,92 +1488,86 @@ msgstr "Schaper e _ridant:"
 msgid "%s job #%d"
 msgstr ""
 
-#: gtk/gtkprintoperation.c:1687
+#: gtk/gtkprintoperation.c:1695
 msgctxt "print operation status"
 msgid "Initial state"
 msgstr ""
 
-#: gtk/gtkprintoperation.c:1688
+#: gtk/gtkprintoperation.c:1696
 #, fuzzy
 msgctxt "print operation status"
 msgid "Preparing to print"
 msgstr "Dji prepare %d"
 
-#: gtk/gtkprintoperation.c:1689
+#: gtk/gtkprintoperation.c:1697
 msgctxt "print operation status"
 msgid "Generating data"
 msgstr ""
 
-#: gtk/gtkprintoperation.c:1690
+#: gtk/gtkprintoperation.c:1698
 msgctxt "print operation status"
 msgid "Sending data"
 msgstr ""
 
-#: gtk/gtkprintoperation.c:1691
+#: gtk/gtkprintoperation.c:1699
 #, fuzzy
 msgctxt "print operation status"
 msgid "Waiting"
 msgstr "Adviertixhmint"
 
-#: gtk/gtkprintoperation.c:1692
+#: gtk/gtkprintoperation.c:1700
 msgctxt "print operation status"
 msgid "Blocking on issue"
 msgstr ""
 
-#: gtk/gtkprintoperation.c:1693
+#: gtk/gtkprintoperation.c:1701
 #, fuzzy
 msgctxt "print operation status"
 msgid "Printing"
 msgstr "Imprimant %d"
 
-#: gtk/gtkprintoperation.c:1694
+#: gtk/gtkprintoperation.c:1702
 #, fuzzy
 msgctxt "print operation status"
 msgid "Finished"
 msgstr "_Trover"
 
-#: gtk/gtkprintoperation.c:1695
+#: gtk/gtkprintoperation.c:1703
 #, fuzzy
 msgctxt "print operation status"
 msgid "Finished with error"
 msgstr "Fini avou ene aroke"
 
-#: gtk/gtkprintoperation.c:2254
+#: gtk/gtkprintoperation.c:2270
 #, c-format
 msgid "Preparing %d"
 msgstr "Dji prepare %d"
 
-#: gtk/gtkprintoperation.c:2256 gtk/gtkprintoperation.c:2875
+#: gtk/gtkprintoperation.c:2272 gtk/gtkprintoperation.c:2902
 #, c-format
 msgid "Preparing"
 msgstr "Dji prepare"
 
-#: gtk/gtkprintoperation.c:2259
+#: gtk/gtkprintoperation.c:2275
 #, c-format
 msgid "Printing %d"
 msgstr "Imprimant %d"
 
-#: gtk/gtkprintoperation.c:2905
+#: gtk/gtkprintoperation.c:2932
 #, fuzzy, c-format
 msgid "Error creating print preview"
 msgstr "Åk n' a nén stî tot-z enondant l' prévoeyaedje"
 
-#: gtk/gtkprintoperation.c:2908
+#: gtk/gtkprintoperation.c:2935
 #, c-format
 msgid "The most probable reason is that a temporary file could not be created."
 msgstr ""
 
-#: gtk/gtkprintoperation-unix.c:297 gtk/gtkprintoperation-unix.c:314
-#, c-format
+#: gtk/gtkprintoperation-unix.c:297
 msgid "Error launching preview"
 msgstr "Åk n' a nén stî tot-z enondant l' prévoeyaedje"
 
-#: gtk/gtkprintoperation-unix.c:358
-#, c-format
-msgid "Error printing"
-msgstr "Åk n' a nén stî tot-z imprimant"
-
-#: gtk/gtkprintoperation-unix.c:494 gtk/gtkprintoperation-win32.c:1447
+#: gtk/gtkprintoperation-unix.c:470 gtk/gtkprintoperation-win32.c:1447
 msgid "Application"
 msgstr "Programe"
 
@@ -2517,7 +1581,7 @@ msgstr "Foû d' papî"
 
 #. Translators: this is a printer status.
 #: gtk/gtkprintoperation-win32.c:616
-#: modules/printbackends/cups/gtkprintbackendcups.c:1999
+#: modules/printbackends/cups/gtkprintbackendcups.c:1998
 msgid "Paused"
 msgstr "Djoké"
 
@@ -2649,42 +1713,42 @@ msgstr "Djenerå"
 #. * multiple pages on a sheet when printing
 #.
 #: gtk/gtkprintunixdialog.c:3010
-#: modules/printbackends/cups/gtkprintbackendcups.c:3509
+#: modules/printbackends/cups/gtkprintbackendcups.c:3508
 msgid "Left to right, top to bottom"
 msgstr ""
 
 #: gtk/gtkprintunixdialog.c:3010
-#: modules/printbackends/cups/gtkprintbackendcups.c:3509
+#: modules/printbackends/cups/gtkprintbackendcups.c:3508
 msgid "Left to right, bottom to top"
 msgstr ""
 
 #: gtk/gtkprintunixdialog.c:3011
-#: modules/printbackends/cups/gtkprintbackendcups.c:3510
+#: modules/printbackends/cups/gtkprintbackendcups.c:3509
 msgid "Right to left, top to bottom"
 msgstr ""
 
 #: gtk/gtkprintunixdialog.c:3011
-#: modules/printbackends/cups/gtkprintbackendcups.c:3510
+#: modules/printbackends/cups/gtkprintbackendcups.c:3509
 msgid "Right to left, bottom to top"
 msgstr ""
 
 #: gtk/gtkprintunixdialog.c:3012
-#: modules/printbackends/cups/gtkprintbackendcups.c:3511
+#: modules/printbackends/cups/gtkprintbackendcups.c:3510
 msgid "Top to bottom, left to right"
 msgstr ""
 
 #: gtk/gtkprintunixdialog.c:3012
-#: modules/printbackends/cups/gtkprintbackendcups.c:3511
+#: modules/printbackends/cups/gtkprintbackendcups.c:3510
 msgid "Top to bottom, right to left"
 msgstr ""
 
 #: gtk/gtkprintunixdialog.c:3013
-#: modules/printbackends/cups/gtkprintbackendcups.c:3512
+#: modules/printbackends/cups/gtkprintbackendcups.c:3511
 msgid "Bottom to top, left to right"
 msgstr ""
 
 #: gtk/gtkprintunixdialog.c:3013
-#: modules/printbackends/cups/gtkprintbackendcups.c:3512
+#: modules/printbackends/cups/gtkprintbackendcups.c:3511
 msgid "Bottom to top, right to left"
 msgstr ""
 
@@ -2692,7 +1756,7 @@ msgstr ""
 #. * dialog that controls in what order multiple pages are arranged
 #.
 #: gtk/gtkprintunixdialog.c:3017 gtk/gtkprintunixdialog.c:3030
-#: modules/printbackends/cups/gtkprintbackendcups.c:3544
+#: modules/printbackends/cups/gtkprintbackendcups.c:3543
 #, fuzzy
 msgid "Page Ordering"
 msgstr "Dji prepare"
@@ -5001,123 +4065,118 @@ msgstr "Sicrirece distindowe"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:1687
 #, c-format
-msgid "Printer '%s' may not be connected."
-msgstr ""
-
-#: modules/printbackends/cups/gtkprintbackendcups.c:1688
-#, c-format
 msgid "There is a problem on printer '%s'."
 msgstr ""
 
 #. Translators: this is a printer status.
-#: modules/printbackends/cups/gtkprintbackendcups.c:1996
+#: modules/printbackends/cups/gtkprintbackendcups.c:1995
 msgid "Paused ; Rejecting Jobs"
 msgstr ""
 
 #. Translators: this is a printer status.
-#: modules/printbackends/cups/gtkprintbackendcups.c:2002
+#: modules/printbackends/cups/gtkprintbackendcups.c:2001
 msgid "Rejecting Jobs"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2778
+#: modules/printbackends/cups/gtkprintbackendcups.c:2777
 msgid "Two Sided"
 msgstr "So les deus costés"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2779
+#: modules/printbackends/cups/gtkprintbackendcups.c:2778
 msgid "Paper Type"
 msgstr "Sôre do papî"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2780
+#: modules/printbackends/cups/gtkprintbackendcups.c:2779
 msgid "Paper Source"
 msgstr "Sourdant do papî"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2781
+#: modules/printbackends/cups/gtkprintbackendcups.c:2780
 msgid "Output Tray"
 msgstr "Ridant d' rexhowe do papî"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2782
+#: modules/printbackends/cups/gtkprintbackendcups.c:2781
 #, fuzzy
 msgid "Resolution"
 msgstr "Kesse"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2783
+#: modules/printbackends/cups/gtkprintbackendcups.c:2782
 msgid "GhostScript pre-filtering"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2792
+#: modules/printbackends/cups/gtkprintbackendcups.c:2791
 msgid "One Sided"
 msgstr "So on seu costé"
 
 #. Translators: this is an option of "Two Sided"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2794
+#: modules/printbackends/cups/gtkprintbackendcups.c:2793
 msgid "Long Edge (Standard)"
 msgstr ""
 
 #. Translators: this is an option of "Two Sided"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2796
+#: modules/printbackends/cups/gtkprintbackendcups.c:2795
 msgid "Short Edge (Flip)"
 msgstr ""
 
 #. Translators: this is an option of "Paper Source"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2798
-#: modules/printbackends/cups/gtkprintbackendcups.c:2800
-#: modules/printbackends/cups/gtkprintbackendcups.c:2808
+#: modules/printbackends/cups/gtkprintbackendcups.c:2797
+#: modules/printbackends/cups/gtkprintbackendcups.c:2799
+#: modules/printbackends/cups/gtkprintbackendcups.c:2807
 msgid "Auto Select"
 msgstr "Tchoezi otomaticmint"
 
 #. Translators: this is an option of "Paper Source"
 #. Translators: this is an option of "Resolution"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2802
-#: modules/printbackends/cups/gtkprintbackendcups.c:2804
-#: modules/printbackends/cups/gtkprintbackendcups.c:2806
-#: modules/printbackends/cups/gtkprintbackendcups.c:2810
-#: modules/printbackends/cups/gtkprintbackendcups.c:3296
+#: modules/printbackends/cups/gtkprintbackendcups.c:2801
+#: modules/printbackends/cups/gtkprintbackendcups.c:2803
+#: modules/printbackends/cups/gtkprintbackendcups.c:2805
+#: modules/printbackends/cups/gtkprintbackendcups.c:2809
+#: modules/printbackends/cups/gtkprintbackendcups.c:3295
 msgid "Printer Default"
 msgstr "Prémetowe valixhance del sicrirece"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2812
+#: modules/printbackends/cups/gtkprintbackendcups.c:2811
 msgid "Embed GhostScript fonts only"
 msgstr ""
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2814
+#: modules/printbackends/cups/gtkprintbackendcups.c:2813
 msgid "Convert to PS level 1"
 msgstr ""
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2816
+#: modules/printbackends/cups/gtkprintbackendcups.c:2815
 msgid "Convert to PS level 2"
 msgstr ""
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2818
+#: modules/printbackends/cups/gtkprintbackendcups.c:2817
 #, fuzzy
 msgid "No pre-filtering"
 msgstr "Nou cayet d' trové"
 
 #. Translators: "Miscellaneous" is the label for a button, that opens
 #. up an extra panel of settings in a print dialog.
-#: modules/printbackends/cups/gtkprintbackendcups.c:2827
+#: modules/printbackends/cups/gtkprintbackendcups.c:2826
 msgid "Miscellaneous"
 msgstr ""
 
 #. Translators: These strings name the possible values of the
 #. * job priority option in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3504
+#: modules/printbackends/cups/gtkprintbackendcups.c:3503
 msgid "Urgent"
 msgstr "Urdjint"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3504
+#: modules/printbackends/cups/gtkprintbackendcups.c:3503
 msgid "High"
 msgstr "Hôte"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3504
+#: modules/printbackends/cups/gtkprintbackendcups.c:3503
 msgid "Medium"
 msgstr "Moyene"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3504
+#: modules/printbackends/cups/gtkprintbackendcups.c:3503
 msgid "Low"
 msgstr "Basse"
 
@@ -5125,7 +4184,7 @@ msgstr "Basse"
 #. Translators, this string is used to label the pages-per-sheet option
 #. * in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3528
+#: modules/printbackends/cups/gtkprintbackendcups.c:3527
 #, fuzzy
 msgid "Pages per Sheet"
 msgstr "Pådjes pa foye"
@@ -5133,7 +4192,7 @@ msgstr "Pådjes pa foye"
 #. Translators, this string is used to label the job priority option
 #. * in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3565
+#: modules/printbackends/cups/gtkprintbackendcups.c:3564
 #, fuzzy
 msgid "Job Priority"
 msgstr "Pr_umiristé:"
@@ -5141,45 +4200,45 @@ msgstr "Pr_umiristé:"
 #. Translators, this string is used to label the billing info entry
 #. * in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3576
+#: modules/printbackends/cups/gtkprintbackendcups.c:3575
 msgid "Billing Info"
 msgstr ""
 
 #. Translators, these strings are names for various 'standard' cover
 #. * pages that the printing system may support.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3591
+#: modules/printbackends/cups/gtkprintbackendcups.c:3590
 msgid "None"
 msgstr "Nole"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3591
+#: modules/printbackends/cups/gtkprintbackendcups.c:3590
 msgid "Classified"
 msgstr "Classifyî"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3591
+#: modules/printbackends/cups/gtkprintbackendcups.c:3590
 msgid "Confidential"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3591
+#: modules/printbackends/cups/gtkprintbackendcups.c:3590
 msgid "Secret"
 msgstr "Sicret"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3591
+#: modules/printbackends/cups/gtkprintbackendcups.c:3590
 msgid "Standard"
 msgstr "Tipike"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3591
+#: modules/printbackends/cups/gtkprintbackendcups.c:3590
 msgid "Top Secret"
 msgstr "Foû scret"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3591
+#: modules/printbackends/cups/gtkprintbackendcups.c:3590
 msgid "Unclassified"
 msgstr "Nén classifyî"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the front cover page.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3626
+#: modules/printbackends/cups/gtkprintbackendcups.c:3625
 #, fuzzy
 msgid "Before"
 msgstr "Di_vant:"
@@ -5187,7 +4246,7 @@ msgstr "Di_vant:"
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the back cover page.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3641
+#: modules/printbackends/cups/gtkprintbackendcups.c:3640
 #, fuzzy
 msgid "After"
 msgstr "_Après:"
@@ -5196,7 +4255,7 @@ msgstr "_Après:"
 #. * a print job is printed. Possible values are 'now', a specified time,
 #. * or 'on hold'
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3661
+#: modules/printbackends/cups/gtkprintbackendcups.c:3660
 #, fuzzy
 msgid "Print at"
 msgstr "Imprimer"
@@ -5204,7 +4263,7 @@ msgstr "Imprimer"
 #. Translators: this is the name of the option that allows the user
 #. * to specify a time when a print job will be printed.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3672
+#: modules/printbackends/cups/gtkprintbackendcups.c:3671
 #, fuzzy
 msgid "Print at time"
 msgstr "Imprimer en on fitchî"
@@ -5213,7 +4272,7 @@ msgstr "Imprimer en on fitchî"
 #. * size. The two placeholders are replaced with the width and height
 #. * in points. E.g: "Custom 230.4x142.9"
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3707
+#: modules/printbackends/cups/gtkprintbackendcups.c:3706
 #, fuzzy, c-format
 msgid "Custom %sx%s"
 msgstr "Grandeu a vosse môde"
@@ -5309,6 +4368,607 @@ msgstr "Imprimer en on fitchî"
 #, c-format
 msgid "Could not get information for file '%s': %s"
 msgstr "Dji n' a nén savou aveur des informåcions pol fitchî «%s»: %s"
+
+#: tests/testfilechooser.c:222
+#, c-format
+msgid "Failed to open file '%s': %s"
+msgstr "Dji n' a savou drovi li fitchî «%s»: %s"
+
+#: tests/testfilechooser.c:267
+#, c-format
+msgid ""
+"Failed to load image '%s': reason not known, probably a corrupt image file"
+msgstr ""
+"Dji n' a savou tcherdjî l' imådje «%s»: li råjhon n' est nén cnoxhowe, "
+"motoit bén on cron fitchî"
+
+#~ msgid "Image file '%s' contains no data"
+#~ msgstr "Li fitchî imådje «%s» n' a nole dinêye dvins."
+
+#~ msgid ""
+#~ "Failed to load animation '%s': reason not known, probably a corrupt "
+#~ "animation file"
+#~ msgstr ""
+#~ "Dji n' a savou tcherdjî l' animåcion «%s»: li råjhon n' est nén cnoxhowe, "
+#~ "motoit bén on cron fitchî"
+
+#~ msgid "Unable to load image-loading module: %s: %s"
+#~ msgstr "Dji n' sai tcherdjî li module po tcherdjî les imådjes: %s: %s"
+
+#~ msgid ""
+#~ "Image-loading module %s does not export the proper interface; perhaps "
+#~ "it's from a different GTK version?"
+#~ msgstr ""
+#~ "Li module di tcherdjaedje d' imådjes %s n' ebague nén li boune eterface; "
+#~ "motoit k' il est po ene diferinne modêye di GTK?"
+
+#~ msgid "Image type '%s' is not supported"
+#~ msgstr "Li sôre d' imådje %s n' est nén sopoirté"
+
+#~ msgid "Couldn't recognize the image file format for file '%s'"
+#~ msgstr "Dji n' a savou ricnoxhe li cogne di fitchî imådje pol fitchî «%s»"
+
+#~ msgid "Unrecognized image file format"
+#~ msgstr "Cogne di fitchî imådje nén cnoxhowe"
+
+#~ msgid "Failed to load image '%s': %s"
+#~ msgstr "Dji n' a savou tcherdjî l' imådje «%s»: %s"
+
+#~ msgid "Error writing to image file: %s"
+#~ msgstr "Åk n' a nén stî come dji scrijheut e fitchî imådje: %s"
+
+#~ msgid ""
+#~ "This build of gdk-pixbuf does not support saving the image format: %s"
+#~ msgstr ""
+#~ "Cisse modêye ci di gdk-pixbuf come elle a stî copilêye èn sopoite nén li "
+#~ "schapaedje d' imådjes del sôre: %s"
+
+#~ msgid "Insufficient memory to save image to callback"
+#~ msgstr ""
+#~ "Nén del memwere assez po schaper l' imådje viè on el fonccion di "
+#~ "rhoucaedje"
+
+#~ msgid "Failed to open temporary file"
+#~ msgstr "Dji n' a savou drovi l' fitchî timporaire"
+
+#~ msgid "Failed to read from temporary file"
+#~ msgstr "Dji n' a savou lére do fitchî timporaire"
+
+#~ msgid "Failed to open '%s' for writing: %s"
+#~ msgstr "Dji n' a savou drovi l' fitchî «%s» po-z î scrire: %s"
+
+#~ msgid ""
+#~ "Failed to close '%s' while writing image, all data may not have been "
+#~ "saved: %s"
+#~ msgstr ""
+#~ "Dji n' a savou clôre li fitchî «%s» tot scrijhant l' imådje, i s' pout "
+#~ "k' totes les dnêyes èn soeyexhe nén schapêyes: %s"
+
+#~ msgid "Insufficient memory to save image into a buffer"
+#~ msgstr "Nén del memwere assez po schaper l' imådje dins on tampon"
+
+#, fuzzy
+#~ msgid "Error writing to image stream"
+#~ msgstr "Åk n' a nén stî come dji scrijheut e fitchî imådje: %s"
+
+#~ msgid ""
+#~ "Internal error: Image loader module '%s' failed to complete an operation, "
+#~ "but didn't give a reason for the failure"
+#~ msgstr ""
+#~ "Divintrinne aroke: li module di tcherdjaedje d' imådjes «%s» n' a nén "
+#~ "savou completer ene operåcion, mins i n' dina nén l' råjhon k' i fjha "
+#~ "berwete"
+
+#~ msgid "Incremental loading of image type '%s' is not supported"
+#~ msgstr ""
+#~ "Li tcherdjaedje incremintå n' est nén sopoirté pol sôre d' imådje «%s»"
+
+#~ msgid "Image header corrupt"
+#~ msgstr "Li tiestire di l' imådje est crombe"
+
+#~ msgid "Image format unknown"
+#~ msgstr "Cogne d' imådje nén cnoxhowe"
+
+#~ msgid "Image pixel data corrupt"
+#~ msgstr "Les dnêyes di picsels di l' imådje sont crombes"
+
+#~ msgid "failed to allocate image buffer of %u byte"
+#~ msgid_plural "failed to allocate image buffer of %u bytes"
+#~ msgstr[0] "dji n' a savou alouwer on tampon di %u octet po l' imådje"
+#~ msgstr[1] "dji n' a savou alouwer on tampon di %u octets po l' imådje"
+
+#~ msgid "Unexpected icon chunk in animation"
+#~ msgstr "Boket d' imådjete nén ratindou dins l' animåcion"
+
+#~ msgid "Unsupported animation type"
+#~ msgstr "Sôre d' animåcion nén sopoirtêye"
+
+#~ msgid "Invalid header in animation"
+#~ msgstr "Tiestire nén valide e l' animåcion"
+
+#~ msgid "Not enough memory to load animation"
+#~ msgstr "Nén del memwere assez po tcherdjî l' animåcion"
+
+#~ msgid "Malformed chunk in animation"
+#~ msgstr "Cron boket e l' animåcion"
+
+#~ msgid "The ANI image format"
+#~ msgstr "Li sôre d' imådje ANI"
+
+#~ msgid "BMP image has bogus header data"
+#~ msgstr "L' imådje BMP a des crombès dnêyes el tiestire"
+
+#~ msgid "Not enough memory to load bitmap image"
+#~ msgstr "Nén del memwere assez po tcherdjî l' imådje bitmap"
+
+#~ msgid "BMP image has unsupported header size"
+#~ msgstr "L' imådje BMP a-st ene grandeu nén sopoirtêye pol tiestire"
+
+#~ msgid "Topdown BMP images cannot be compressed"
+#~ msgstr "Les imådjes BMP «Topdown» èn polèt nén esse sitrindowes"
+
+#~ msgid "Couldn't allocate memory for saving BMP file"
+#~ msgstr "Dji n' a savou alouwer del memwere assez po schaper l' fitchî BMP"
+
+#~ msgid "Couldn't write to BMP file"
+#~ msgstr "Dji n' a savou scrire dins l' fitchî BMP"
+
+#~ msgid "The BMP image format"
+#~ msgstr "Li sôre d' imådje BMP"
+
+#~ msgid "Failure reading GIF: %s"
+#~ msgstr "Li lijhaedje di l' imådje GIF a fwait berwete: %s"
+
+#~ msgid "GIF file was missing some data (perhaps it was truncated somehow?)"
+#~ msgstr ""
+#~ "I manke des dnêyes å fitchî GIF (motoit k' il a stî côpé dvant l' fén?)"
+
+#~ msgid "Internal error in the GIF loader (%s)"
+#~ msgstr "Divintrinne aroke el tcherdjeu GIF (%s)"
+
+#~ msgid "Stack overflow"
+#~ msgstr "Disboirdaedje del pile"
+
+#~ msgid "GIF image loader cannot understand this image."
+#~ msgstr "Li tcherdjeu d' imådjes GIF èn sait nén comprinde ciste imådje ci."
+
+#~ msgid "Bad code encountered"
+#~ msgstr "On måva côde a stî trové"
+
+#~ msgid "Circular table entry in GIF file"
+#~ msgstr "Betchfesseye intrêye ezès tåvleas do fitchî GIF"
+
+#~ msgid "Not enough memory to load GIF file"
+#~ msgstr "Nén del memwere assez po tcherdjî l' imådje GIF"
+
+#~ msgid "Not enough memory to composite a frame in GIF file"
+#~ msgstr "Nén del memwere assez po compôzer on cåde en on fitchî GIF"
+
+#~ msgid "GIF image is corrupt (incorrect LZW compression)"
+#~ msgstr "L' imådje GIF est crombe (sitrindaedje LZW nén corek)"
+
+#~ msgid "File does not appear to be a GIF file"
+#~ msgstr "Li fitchî n' rishonne nén on fitchî GIF"
+
+#~ msgid "Version %s of the GIF file format is not supported"
+#~ msgstr "Li modêye %s del sôre di fitchîs GIF n' est nén sopoirtêye"
+
+#~ msgid ""
+#~ "GIF image has no global colormap, and a frame inside it has no local "
+#~ "colormap."
+#~ msgstr ""
+#~ "L' imådje GIF n' a nou mapaedje di coleurs (colormap) globå, eyet on cåde "
+#~ "å dvins d' l' imådje n' a pont d' mapaedje locå nerén."
+
+#~ msgid "GIF image was truncated or incomplete."
+#~ msgstr "L' imådje GIF a stî côpêye divant l' fén ou n' est nén complete."
+
+#~ msgid "The GIF image format"
+#~ msgstr "Li sôre d' imådje GIF"
+
+#~ msgid "Invalid header in icon"
+#~ msgstr "Tiestire nén valide e l' imådjete"
+
+#~ msgid "Not enough memory to load icon"
+#~ msgstr "Nén del memwere assez po tcherdjî l' imådjete"
+
+#~ msgid "Icon has zero width"
+#~ msgstr "L' imådjete a ene lårdjeur di zero"
+
+#~ msgid "Icon has zero height"
+#~ msgstr "L' imådjete a ene hôteur di zero"
+
+#~ msgid "Compressed icons are not supported"
+#~ msgstr "Les strindowès imådjetes èn sont nén sopoirtêyes"
+
+#~ msgid "Unsupported icon type"
+#~ msgstr "Sôre d'  imådjete nén sopoirtêye"
+
+#~ msgid "Not enough memory to load ICO file"
+#~ msgstr "Nén del memwere assez po tcherdjî l' fitchî ICO"
+
+#~ msgid "Image too large to be saved as ICO"
+#~ msgstr "Imådje trop grande po-z esse schapêye dizo l' cogne ICO"
+
+#~ msgid "Cursor hotspot outside image"
+#~ msgstr "Pont tchôd do cursoe å dfoû d' l' imådje"
+
+#~ msgid "Unsupported depth for ICO file: %d"
+#~ msgstr "Parfondeu d' coleurs nén sopoirtêye pol fitchî ICO: %d"
+
+#~ msgid "The ICO image format"
+#~ msgstr "Li sôre d' imådje ICO"
+
+#, fuzzy
+#~ msgid "Error reading ICNS image: %s"
+#~ msgstr "Aroke moirt tot lijhant l' fitchî d' imådje PNG: %s"
+
+#, fuzzy
+#~ msgid "Could not decode ICNS file"
+#~ msgstr "Dji n' sai tchoezi l' fitchî"
+
+#, fuzzy
+#~ msgid "The ICNS image format"
+#~ msgstr "Li sôre d' imådje ICO"
+
+#, fuzzy
+#~ msgid "Couldn't allocate memory for stream"
+#~ msgstr "Dji n' a savou alouwer del memwere pol tiestire"
+
+#, fuzzy
+#~ msgid "Couldn't decode image"
+#~ msgstr "Dji n' a savou cvierser l' no do fitchî"
+
+#, fuzzy
+#~ msgid "Image type currently not supported"
+#~ msgstr "Li sôre d' imådje %s n' est nén sopoirté"
+
+#, fuzzy
+#~ msgid "Couldn't allocate memory for color profile"
+#~ msgstr "Dji n' a savou alouwer del memwere assez po tcherdjî l' fitchî JPEG"
+
+#, fuzzy
+#~ msgid "Insufficient memory to open JPEG 2000 file"
+#~ msgstr "Nén del memwere assez po drovi l' imådje TIFF"
+
+#, fuzzy
+#~ msgid "Couldn't allocate memory to buffer image data"
+#~ msgstr "Dji n' a savou alouwer del memwere po les dnêyes des royes"
+
+#, fuzzy
+#~ msgid "The JPEG 2000 image format"
+#~ msgstr "Li sôre d' imådje JPEG"
+
+#~ msgid "Error interpreting JPEG image file (%s)"
+#~ msgstr "Åk n' a nén stî tot-z eterpretant l' fitchî imådje JPEG (%s)"
+
+#~ msgid ""
+#~ "Insufficient memory to load image, try exiting some applications to free "
+#~ "memory"
+#~ msgstr ""
+#~ "I n' a nén del memwere assez po tcherdjî l' imådje, sayîz d' clôre "
+#~ "sacwants programes po liberer del memwere"
+
+#~ msgid "Unsupported JPEG color space (%s)"
+#~ msgstr "Espåce di coleurs JPEG nén sopoirté (%s)"
+
+#~ msgid "Couldn't allocate memory for loading JPEG file"
+#~ msgstr "Dji n' a savou alouwer del memwere assez po tcherdjî l' fitchî JPEG"
+
+#~ msgid ""
+#~ "JPEG quality must be a value between 0 and 100; value '%s' could not be "
+#~ "parsed."
+#~ msgstr ""
+#~ "Li cwålité JPEG doet esse ene valixhance inte 0 eyet 100; li valixhance "
+#~ "«%s» èn pout nén esse léjhowe."
+
+#~ msgid ""
+#~ "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
+#~ msgstr ""
+#~ "Li cwålité JPEG doet esse ene valixhance inte 0 eyet 100; li valixhance "
+#~ "«%d» n' est nén permetowe."
+
+#~ msgid "The JPEG image format"
+#~ msgstr "Li sôre d' imådje JPEG"
+
+#~ msgid "Couldn't allocate memory for header"
+#~ msgstr "Dji n' a savou alouwer del memwere pol tiestire"
+
+#~ msgid "Couldn't allocate memory for context buffer"
+#~ msgstr "Dji n' a savou alouwer del memwere pol tampon di contecse"
+
+#~ msgid "Image has invalid width and/or height"
+#~ msgstr "L' imådje a-st ene lårdjeur ou ene hôteur nén valides."
+
+#~ msgid "Image has unsupported bpp"
+#~ msgstr "L' imådje a-st ene parfondeu di coleurs nén sopoirtêye"
+
+#~ msgid "Image has unsupported number of %d-bit planes"
+#~ msgstr "L' imådje a-st on nombe di plans di %d-bits nén sopoirté"
+
+#~ msgid "Couldn't create new pixbuf"
+#~ msgstr "Dji n' sai ahiver on novea pixbuf"
+
+#~ msgid "Couldn't allocate memory for line data"
+#~ msgstr "Dji n' a savou alouwer del memwere po les dnêyes des royes"
+
+#~ msgid "Couldn't allocate memory for paletted data"
+#~ msgstr "Dji n' a nén savou alouwer del memwere po les dnêyes des paletes"
+
+#~ msgid "Didn't get all lines of PCX image"
+#~ msgstr "Dji n' a nén yeu totes les royes di l' imådje PCX"
+
+#~ msgid "No palette found at end of PCX data"
+#~ msgstr "Nole palete di trovêye al fén des dnêyes PCX"
+
+#~ msgid "The PCX image format"
+#~ msgstr "Li sôre d' imådje PCX"
+
+#~ msgid "Bits per channel of PNG image is invalid."
+#~ msgstr "Li nombe di bits pa canå d' l' imådje PNG n' est nén valide"
+
+#~ msgid "Fatal error in PNG image file: %s"
+#~ msgstr "Aroke moirt el fitchî imådje PNG: %s"
+
+#~ msgid "Insufficient memory to load PNG file"
+#~ msgstr "Nén del memwere assez po tcherdjî l' imådje PNG"
+
+#~ msgid ""
+#~ "Insufficient memory to store a %ld by %ld image; try exiting some "
+#~ "applications to reduce memory usage"
+#~ msgstr ""
+#~ "I n' a nén del memwere assez po wårder ene imådje di %ld x %ld; sayîz "
+#~ "d' clôre sacwants programes po raptiti l' eployaedje di memwere"
+
+#~ msgid "Fatal error reading PNG image file"
+#~ msgstr "Aroke moirt tot lijhant l' fitchî d' imådje PNG"
+
+#~ msgid "Fatal error reading PNG image file: %s"
+#~ msgstr "Aroke moirt tot lijhant l' fitchî d' imådje PNG: %s"
+
+#~ msgid ""
+#~ "PNG compression level must be a value between 0 and 9; value '%s' could "
+#~ "not be parsed."
+#~ msgstr ""
+#~ "Li livea di strindaedje PNG doet esse ene valixhance inte 0 eyet 9; li "
+#~ "valixhance «%s» èn pout nén esse léjhowe."
+
+#~ msgid ""
+#~ "PNG compression level must be a value between 0 and 9; value '%d' is not "
+#~ "allowed."
+#~ msgstr ""
+#~ "Li livea di strindaedje PNG doet esse ene valixhance inte 0 eyet 9; li "
+#~ "valixhance «%d» n' est nén permetowe."
+
+#~ msgid "The PNG image format"
+#~ msgstr "Li sôre d' imådje PNG"
+
+#~ msgid "PNM loader expected to find an integer, but didn't"
+#~ msgstr "Li tcherdjeu di PNM ratindeut èn etir, mins n' a nén yeu"
+
+#~ msgid "PNM file has an incorrect initial byte"
+#~ msgstr "Li fitchî PNM a-st èn octet di cmince nén corek"
+
+#~ msgid "PNM file has an image width of 0"
+#~ msgstr "Li fitchî PNM a-st ene lårdjeur d' imådje di 0"
+
+#~ msgid "PNM file has an image height of 0"
+#~ msgstr "Li fitchî PNM a-st ene hôteur d' imådje di 0"
+
+#~ msgid "Maximum color value in PNM file is 0"
+#~ msgstr "Li valixhance pol macsimom di coleurs el fitchî PNM est 0"
+
+#~ msgid "Maximum color value in PNM file is too large"
+#~ msgstr ""
+#~ "Li valixhance pol macsimom di coleurs el fitchî PNM est pår trop grande"
+
+#~ msgid "Cannot allocate memory for loading PNM image"
+#~ msgstr "Dji n' pou alouwer del memwere po tcherdjî l' imådje PNM"
+
+#~ msgid "Insufficient memory to load PNM context struct"
+#~ msgstr ""
+#~ "Nén del memwere assez po tcherdjî li structeure di contecse di l' imådje "
+#~ "PNM"
+
+#~ msgid "Insufficient memory to load PNM file"
+#~ msgstr "Nén del memwere assez po tcherdjî l' imådje PNM"
+
+#~ msgid "The PNM/PBM/PGM/PPM image format family"
+#~ msgstr "Famile del sôre d' imådjes PNM/PBM/PGM/PPM"
+
+#, fuzzy
+#~ msgid "Failed to read QTIF header"
+#~ msgstr "Li scrijhaedje del tiestire a fwait berwete\n"
+
+#, fuzzy
+#~ msgid "Failed to allocate %d bytes for file read buffer"
+#~ msgstr "dji n' a savou alouwer on tampon di %u octet po l' imådje"
+
+#, fuzzy
+#~ msgid "File error when reading QTIF atom: %s"
+#~ msgstr "Li lijhaedje di l' imådje GIF a fwait berwete: %s"
+
+#, fuzzy
+#~ msgid "Failed to allocate QTIF context structure."
+#~ msgstr "Dji n' a savou alouwer del memwere pol sitructeure di contecse TGA"
+
+#, fuzzy
+#~ msgid "Failed to create GdkPixbufLoader object."
+#~ msgstr "Li scrijhaedje di l' indecse do ridant a fwait berwete\n"
+
+#, fuzzy
+#~ msgid "Failed to find an image data atom."
+#~ msgstr "Dji n' a savou drovi l' imådje TIFF"
+
+#, fuzzy
+#~ msgid "The QTIF image format"
+#~ msgstr "Li sôre d' imådje TIFF"
+
+#~ msgid "Not enough memory to load RAS image"
+#~ msgstr "Nén del memwere assez po tcherdjî l' imådje RAS"
+
+#~ msgid "Cannot allocate memory for IOBuffer struct"
+#~ msgstr ""
+#~ "Dji n' a savou alouwer del memwere pol sitructeure do tampon IOBuffer"
+
+#~ msgid "Cannot allocate memory for IOBuffer data"
+#~ msgstr "Dji n' a savou alouwer del memwere pol tampon di dnêyes IOBuffer"
+
+#~ msgid "Cannot allocate temporary IOBuffer data"
+#~ msgstr ""
+#~ "Dji n' a savou alouwer del memwere pol tampon di dnêyes timporaire "
+#~ "IOBuffer"
+
+#, fuzzy
+#~ msgid "Image is corrupted or truncated"
+#~ msgstr "L' imådje GIF a stî côpêye divant l' fén ou n' est nén complete."
+
+#~ msgid "TGA image type not supported"
+#~ msgstr "Li sôre d' imådje TGA n' est nén sopoirtêye"
+
+#~ msgid "Cannot allocate memory for TGA context struct"
+#~ msgstr "Dji n' a savou alouwer del memwere pol sitructeure di contecse TGA"
+
+#~ msgid "The Targa image format"
+#~ msgstr "Li sôre d' imådje Targa"
+
+#~ msgid "Could not get image width (bad TIFF file)"
+#~ msgstr ""
+#~ "Dji n' a nén savou aveur li lårdjeur di l' imådje (måva fitchî TIFF)"
+
+#~ msgid "Could not get image height (bad TIFF file)"
+#~ msgstr "Dji n' a nén savou aveur li hôteur di l' imådje (måva fitchî TIFF)"
+
+#~ msgid "Width or height of TIFF image is zero"
+#~ msgstr "Li lårdjeur ou l' hôteur di l' imådje TIFF est d' zero"
+
+#~ msgid "Insufficient memory to open TIFF file"
+#~ msgstr "Nén del memwere assez po drovi l' imådje TIFF"
+
+#~ msgid "Failed to open TIFF image"
+#~ msgstr "Dji n' a savou drovi l' imådje TIFF"
+
+#~ msgid "Failed to load TIFF image"
+#~ msgstr "Dji n' a savou tcherdjî l' imådje TIFF"
+
+#~ msgid "Failed to save TIFF image"
+#~ msgstr "Dji n' a savou schaper l' imådje TIFF"
+
+#~ msgid "Failed to write TIFF data"
+#~ msgstr "Dji n' a savou scrire l' imådje TIFF"
+
+#~ msgid "Couldn't write to TIFF file"
+#~ msgstr "Dji n' a savou scrire dins l' fitchî TIFF"
+
+#~ msgid "The TIFF image format"
+#~ msgstr "Li sôre d' imådje TIFF"
+
+#~ msgid "Image has zero width"
+#~ msgstr "L' imådje a ene lårdjeur di zero"
+
+#~ msgid "Image has zero height"
+#~ msgstr "L' imådje a-st ene hôteur di zero"
+
+#~ msgid "Not enough memory to load image"
+#~ msgstr "Nén del memwere assez po tcherdjî l' imådje"
+
+#~ msgid "Couldn't save the rest"
+#~ msgstr "Dji n' a savou schaper l' restant"
+
+#~ msgid "The WBMP image format"
+#~ msgstr "Li sôre d' imådje WBMP"
+
+#~ msgid "Invalid XBM file"
+#~ msgstr "Fitchî XBM nén valide"
+
+#~ msgid "Insufficient memory to load XBM image file"
+#~ msgstr "Nén del memwere assez po tcherdjî l' imådje XBM"
+
+#~ msgid "Failed to write to temporary file when loading XBM image"
+#~ msgstr ""
+#~ "Dji n' a savou scrire dins l' fitchî timporaire tot tcherdjant l' imådje "
+#~ "XBM"
+
+#~ msgid "The XBM image format"
+#~ msgstr "Li sôre d' imådje XBM"
+
+#~ msgid "No XPM header found"
+#~ msgstr "Nole tiestire XPM di trovêye"
+
+#~ msgid "Invalid XPM header"
+#~ msgstr "Tiestire XPM nén valide"
+
+#~ msgid "XPM file has image width <= 0"
+#~ msgstr "Li fitchî XPM a-st ene lårdjeur d' imådje <= 0"
+
+#~ msgid "XPM file has image height <= 0"
+#~ msgstr "Li fitchî XPM a-st ene hôteur d' imådje <= 0"
+
+#~ msgid "XPM has invalid number of chars per pixel"
+#~ msgstr "Li fitchî XPM a-st on nombe nén valide di caracteres pa picsel"
+
+#~ msgid "XPM file has invalid number of colors"
+#~ msgstr "Li fitchî XPM a-st on nombe nén valide di coleurs"
+
+#~ msgid "Cannot allocate memory for loading XPM image"
+#~ msgstr "Dji n' pou alouwer del memwere po tcherdjî l' imådje XPM"
+
+#~ msgid "Cannot read XPM colormap"
+#~ msgstr "Dji n' sai lére li mape di coleurs XPM"
+
+#~ msgid "Failed to write to temporary file when loading XPM image"
+#~ msgstr ""
+#~ "Dji n' a savou scrire dins l' fitchî timporaire tot tcherdjant l' imådje "
+#~ "XPM"
+
+#~ msgid "The XPM image format"
+#~ msgstr "Li sôre d' imådje XPM"
+
+#, fuzzy
+#~ msgid "The EMF image format"
+#~ msgstr "Li sôre d' imådje BMP"
+
+#, fuzzy
+#~ msgid "Could not allocate memory: %s"
+#~ msgstr "Dji n' a savou alouwer del memwere pol tiestire"
+
+#, fuzzy
+#~ msgid "Could not create stream: %s"
+#~ msgstr "Dji n' a nén savou ahiver l' ridant: %s"
+
+#, fuzzy
+#~ msgid "Could not seek stream: %s"
+#~ msgstr "Dji n' a nén savou oister l' cayet"
+
+#, fuzzy
+#~ msgid "Could not read from stream: %s"
+#~ msgstr "Dji n' a nén savou rlomer %s viè %s: %s.\n"
+
+#, fuzzy
+#~ msgid "Couldn't load bitmap"
+#~ msgstr "Dji n' a savou cvierser l' no do fitchî"
+
+#, fuzzy
+#~ msgid "Couldn't load metafile"
+#~ msgstr "Dji n' a savou cvierser l' no do fitchî"
+
+#, fuzzy
+#~ msgid "Unsupported image format for GDI+"
+#~ msgstr "Sôre d' animåcion nén sopoirtêye"
+
+#, fuzzy
+#~ msgid "Couldn't save"
+#~ msgstr "Dji n' a savou schaper l' restant"
+
+#, fuzzy
+#~ msgid "The WMF image format"
+#~ msgstr "Li sôre d' imådje WBMP"
+
+#~ msgid "\"Deepness\" of the color."
+#~ msgstr "«Parfondeu» del coleur."
+
+#~ msgid "Error printing"
+#~ msgstr "Åk n' a nén stî tot-z imprimant"
 
 #~ msgid "Folders"
 #~ msgstr "Ridants"
@@ -5898,7 +5558,8 @@ msgstr "Dji n' a nén savou aveur des informåcions pol fitchî «%s»: %s"
 #~ "Dji n' sai radjouter ene rimåke po «%s» ca c' est on tchmin nén valide."
 
 #~ msgid "Could not select file '%s' because it is an invalid path name."
-#~ msgstr "Dji n' sai tchoezi l' fitchî «%s» paski c' est on tchmin nén valide."
+#~ msgstr ""
+#~ "Dji n' sai tchoezi l' fitchî «%s» paski c' est on tchmin nén valide."
 
 #~ msgid "%d byte"
 #~ msgid_plural "%d bytes"
@@ -5957,14 +5618,14 @@ msgstr "Dji n' a nén savou aveur des informåcions pol fitchî «%s»: %s"
 #~ "Line %d, column %d: expected \"%s\" at the toplevel, but found \"%s\" "
 #~ "instead"
 #~ msgstr ""
-#~ "Roye %d, colone %d: dji ratindeut «%s» al miercopete, mins dj' a trové «%s» "
-#~ "el plaece"
+#~ "Roye %d, colone %d: dji ratindeut «%s» al miercopete, mins dj' a trové "
+#~ "«%s» el plaece"
 
 #~ msgid ""
 #~ "Line %d, column %d: expected \"%s\" or \"%s\", but found \"%s\" instead"
 #~ msgstr ""
-#~ "Roye %d, colone %d: dji ratindeut «%s» ou co «%s», mins dj' a trové «%s» el "
-#~ "plaece"
+#~ "Roye %d, colone %d: dji ratindeut «%s» ou co «%s», mins dj' a trové «%s» "
+#~ "el plaece"
 
 #~ msgid "Thai (Broken)"
 #~ msgstr "Taylandès (skepyî)"
