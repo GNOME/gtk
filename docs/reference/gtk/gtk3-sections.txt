@@ -153,6 +153,7 @@ gtk_accel_label_get_type
 GtkAccessible
 gtk_accessible_connect_widget_destroyed
 gtk_accessible_get_widget
+gtk_accessible_set_widget
 
 <SUBSECTION Standard>
 GTK_ACCESSIBLE
@@ -1412,6 +1413,7 @@ gtk_font_selection_dialog_get_preview_text
 gtk_font_selection_dialog_set_preview_text
 gtk_font_selection_dialog_get_cancel_button
 gtk_font_selection_dialog_get_ok_button
+gtk_font_selection_dialog_get_font_selection
 
 <SUBSECTION Standard>
 GTK_FONT_SELECTION_DIALOG
@@ -2133,6 +2135,7 @@ gtk_message_dialog_set_image
 gtk_message_dialog_get_image
 gtk_message_dialog_format_secondary_text
 gtk_message_dialog_format_secondary_markup
+gtk_message_dialog_get_message_area
 <SUBSECTION Standard>
 GTK_MESSAGE_DIALOG
 GTK_IS_MESSAGE_DIALOG
@@ -6295,26 +6298,27 @@ gtk_orientable_get_type
 </SECTION>
 
 <SECTION>
-<FILE>gtkextendedlayout</FILE>
-<TITLE>GtkExtendedLayout</TITLE>
-GtkExtendedLayout
-GtkExtendedLayoutIface
-gtk_extended_layout_get_desired_height
-gtk_extended_layout_get_desired_size
-gtk_extended_layout_get_desired_width
-gtk_extended_layout_get_height_for_width
-gtk_extended_layout_get_width_for_height
-gtk_extended_layout_is_height_for_width
+<FILE>gtksizerequest</FILE>
+<TITLE>GtkSizeRequest</TITLE>
+GtkSizeRequest
+GtkSizeRequestIface
+GtkSizeRequestMode
+gtk_size_request_get_height
+gtk_size_request_get_width
+gtk_size_request_get_height_for_width
+gtk_size_request_get_width_for_height
+gtk_size_request_get_request_mode
+gtk_size_request_get_size
 
 <SUBSECTION Standard>
-GTK_EXTENDED_LAYOUT
-GTK_EXTENDED_LAYOUT_CLASS
-GTK_EXTENDED_LAYOUT_GET_IFACE
-GTK_IS_EXTENDED_LAYOUT
-GTK_TYPE_EXTENDED_LAYOUT
+GTK_SIZE_REQUEST
+GTK_SIZE_REQUEST_CLASS
+GTK_SIZE_REQUEST_GET_IFACE
+GTK_IS_SIZE_REQUEST
+GTK_TYPE_SIZE_REQUEST
 
 <SUBSECTION Private>
-gtk_extended_layout_get_type
+gtk_size_request_get_type
 </SECTION>
 
 <SECTION>
@@ -6328,6 +6332,7 @@ gtk_application_quit
 gtk_application_set_action_group
 gtk_application_get_window
 gtk_application_add_window
+gtk_application_create_window
 
 <SUBSECTION Standard>
 GtkApplicationClass
