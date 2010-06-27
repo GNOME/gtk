@@ -22,6 +22,7 @@
 
 #include <glib-object.h>
 #include "gtkwidgetpath.h"
+#include "gtkiconfactory.h"
 #include "gtkstyleset.h"
 #include "gtkenums.h"
 
@@ -51,6 +52,9 @@ struct GtkStyleProviderIface
                                    GtkWidgetPath    *path,
                                    const gchar      *property_name,
                                    GValue           *value);
+
+  GtkIconFactory * (* get_icon_factory) (GtkStyleProvider *provider,
+					 GtkWidgetPath    *path);
 };
 
 GType gtk_style_provider_get_type (void) G_GNUC_CONST;
@@ -62,6 +66,9 @@ gboolean gtk_style_provider_get_style_property (GtkStyleProvider *provider,
                                                 GtkWidgetPath    *path,
                                                 const gchar      *property_name,
                                                 GValue           *value);
+
+GtkIconFactory * gtk_style_provider_get_icon_factory (GtkStyleProvider *provider,
+						      GtkWidgetPath    *path);
 
 G_END_DECLS
 

@@ -83,6 +83,22 @@ gtk_style_provider_get_style_property (GtkStyleProvider *provider,
   return iface->get_style_property (provider, widget_path, property_name, value);
 }
 
+GtkIconFactory *
+gtk_style_provider_get_icon_factory (GtkStyleProvider *provider,
+				     GtkWidgetPath    *path)
+{
+  GtkStyleProviderIface *iface;
+
+  g_return_val_if_fail (GTK_IS_STYLE_PROVIDER (provider), NULL);
+  g_return_val_if_fail (path != NULL, NULL);
+
+  iface = GTK_STYLE_PROVIDER_GET_IFACE (provider);
+
+  if (!iface->get_icon_factory)
+    return NULL;
+
+  return iface->get_icon_factory (provider, path);
+}
 
 #define __GTK_STYLE_PROVIDER_C__
 #include "gtkaliasdef.c"
