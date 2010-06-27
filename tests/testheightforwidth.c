@@ -764,7 +764,7 @@ TestInterface interfaces[] = {
     "  <requires lib=\"gtk+\" version=\"2.20\"/>"
     "  <!-- interface-naming-policy project-wide -->"
     "  <object class=\"GtkWindow\" id=\"window\">"
-    "    <property name=\"default_width\">500</property>"
+    "    <property name=\"default_width\">650</property>"
     "    <child>"
     "      <object class=\"GtkHPaned\" id=\"hpaned1\">"
     "        <property name=\"visible\">True</property>"
