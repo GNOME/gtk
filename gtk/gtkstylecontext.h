@@ -99,6 +99,10 @@ void gtk_style_context_get_style_property (GtkStyleContext *context,
                                            const gchar     *property_name,
                                            GValue          *value);
 
+GtkIconSet * gtk_style_context_lookup_icon_set (GtkStyleContext *context,
+						const gchar     *stock_id);
+
+
 /* Semi-private API */
 const GValue * _gtk_style_context_peek_style_property (GtkStyleContext *context,
                                                        GType            widget_type,

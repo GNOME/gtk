@@ -59,6 +59,8 @@ struct GtkStyleContextPrivate
   GList *providers;
   GList *providers_last;
 
+  GSList *icon_factories;
+
   GtkStyleSet *store;
   GtkWidgetPath *widget_path;
 
@@ -154,6 +156,9 @@ gtk_style_context_finalize (GObject *object)
 
   clear_property_cache (GTK_STYLE_CONTEXT (object));
 
+  g_slist_foreach (priv->icon_factories, (GFunc) g_object_unref, NULL);
+  g_slist_free (priv->icon_factories);
+
   G_OBJECT_CLASS (gtk_style_context_parent_class)->finalize (object);
 }
 
@@ -189,6 +194,32 @@ rebuild_properties (GtkStyleContext *context)
   gtk_style_set_get (priv->store, GTK_STATE_NORMAL,
                      "engine", &priv->theming_engine,
                      NULL);
+}
+
+static void
+rebuild_icon_factories (GtkStyleContext *context)
+{
+  GtkStyleContextPrivate *priv;
+  GList *providers;
+
+  priv = GTK_STYLE_CONTEXT_GET_PRIVATE (context);
+
+  g_slist_foreach (priv->icon_factories, (GFunc) g_object_unref, NULL);
+  g_slist_free (priv->icon_factories);
+  priv->icon_factories = NULL;
+
+  for (providers = priv->providers_last; providers; providers = providers->prev)
+    {
+      GtkIconFactory *factory;
+      GtkStyleProviderData *data;
+
+      data = providers->data;
+      factory = gtk_style_provider_get_icon_factory (data->provider,
+						     priv->widget_path);
+
+      if (factory)
+	priv->icon_factories = g_slist_prepend (priv->icon_factories, factory);
+    }
 }
 
 void
@@ -251,6 +282,7 @@ gtk_style_context_add_provider (GtkStyleContext  *context,
     {
       rebuild_properties (context);
       clear_property_cache (context);
+      rebuild_icon_factories (context);
     }
 }
 
@@ -296,6 +328,7 @@ gtk_style_context_remove_provider (GtkStyleContext  *context,
         {
           rebuild_properties (context);
           clear_property_cache (context);
+	  rebuild_icon_factories (context);
         }
     }
 }
@@ -425,6 +458,7 @@ gtk_style_context_set_path (GtkStyleContext *context,
       priv->widget_path = gtk_widget_path_copy (path);
       rebuild_properties (context);
       clear_property_cache (context);
+      rebuild_icon_factories (context);
     }
 }
 
@@ -797,6 +831,33 @@ gtk_style_context_get_style_property (GtkStyleContext *context,
                pspec->name,
                G_VALUE_TYPE_NAME (peek_value),
                G_VALUE_TYPE_NAME (value));
+}
+
+GtkIconSet *
+gtk_style_context_lookup_icon_set (GtkStyleContext *context,
+				   const gchar     *stock_id)
+{
+  GtkStyleContextPrivate *priv;
+  GSList *list;
+
+  g_return_val_if_fail (GTK_IS_STYLE_CONTEXT (context), NULL);
+  g_return_val_if_fail (stock_id != NULL, NULL);
+
+  priv = GTK_STYLE_CONTEXT_GET_PRIVATE (context);
+
+  for (list = priv->icon_factories; list; list = list->next)
+    {
+      GtkIconFactory *factory;
+      GtkIconSet *icon_set;
+
+      factory = list->data;
+      icon_set = gtk_icon_factory_lookup (factory, stock_id);
+
+      if (icon_set)
+	return icon_set;
+    }
+
+  return gtk_icon_factory_lookup_default (stock_id);
 }
 
 /* Paint methods */
