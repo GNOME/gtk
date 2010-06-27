@@ -167,8 +167,9 @@ CGColorRef
 _gdk_quartz_colormap_get_cgcolor_from_pixel (GdkDrawable *drawable,
                                              guint32      pixel)
 {
-  CGFloat r, g, b, a;
+  CGFloat components[4] = { 0.0f, };
   CGColorRef color;
+  CGColorSpaceRef colorspace;
   const GdkVisual *visual;
   GdkColormap *colormap;
 
@@ -182,25 +183,30 @@ _gdk_quartz_colormap_get_cgcolor_from_pixel (GdkDrawable *drawable,
     {
       case GDK_VISUAL_STATIC_GRAY:
       case GDK_VISUAL_GRAYSCALE:
-        g = (pixel & 0xff) / 255.0f;
+        components[0] = (pixel & 0xff) / 255.0f;
 
         if (visual->depth == 1)
-          g = g == 0.0f ? 0.0f : 1.0f;
+          components[0] = components[0] == 0.0f ? 0.0f : 1.0f;
+        components[1] = 1.0f;
 
-        color = CGColorCreateGenericGray (g, 1.0f);
+        colorspace = CGColorSpaceCreateWithName (kCGColorSpaceGenericGray);
+        color = CGColorCreate (colorspace, components);
+        CGColorSpaceRelease (colorspace);
         break;
 
       default:
-        r = (pixel >> 16 & 0xff) / 255.0;
-        g = (pixel >> 8  & 0xff) / 255.0;
-        b = (pixel       & 0xff) / 255.0;
+        components[0] = (pixel >> 16 & 0xff) / 255.0;
+        components[1] = (pixel >> 8  & 0xff) / 255.0;
+        components[2] = (pixel       & 0xff) / 255.0;
 
         if (visual->depth == 32)
-          a = (pixel >> 24 & 0xff) / 255.0;
+          components[3] = (pixel >> 24 & 0xff) / 255.0;
         else
-          a = 1.0;
+          components[3] = 1.0;
 
-        color = CGColorCreateGenericRGB (r, g, b, a);
+        colorspace = CGColorSpaceCreateWithName (kCGColorSpaceGenericRGB);
+        color = CGColorCreate (colorspace, components);
+        CGColorSpaceRelease (colorspace);
         break;
     }
 
