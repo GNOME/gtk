@@ -8338,7 +8338,7 @@ gdk_window_get_cursor (GdkWindow *window)
 /**
  * gdk_window_set_cursor:
  * @window: a #GdkWindow
- * @cursor: a cursor
+ * @cursor: (allow-none): a cursor
  *
  * Sets the default mouse pointer for a #GdkWindow. Use gdk_cursor_new_for_display()
  * or gdk_cursor_new_from_pixmap() to create the cursor. To make the cursor
