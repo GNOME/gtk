@@ -464,6 +464,7 @@ void		  _gtk_tree_view_column_cell_draw_focus  (GtkTreeViewColumn  *tree_column,
 							  const GdkRectangle *expose_area,
 							  guint               flags);
 void		  _gtk_tree_view_column_cell_set_dirty	 (GtkTreeViewColumn  *tree_column,
+							  gboolean            recalculate_width,
 							  gboolean            install_handler);
 void              _gtk_tree_view_column_get_neighbor_sizes (GtkTreeViewColumn *column,
 							    GtkCellRenderer   *cell,

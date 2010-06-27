@@ -731,7 +731,7 @@ gtk_tree_view_column_cell_layout_add_attribute (GtkCellLayout   *cell_layout,
   info->attributes = g_slist_prepend (info->attributes, g_strdup (attribute));
 
   if (tree_column->tree_view)
-    _gtk_tree_view_column_cell_set_dirty (tree_column, TRUE);
+    _gtk_tree_view_column_cell_set_dirty (tree_column, TRUE, TRUE);
 }
 
 static void
@@ -763,7 +763,7 @@ gtk_tree_view_column_cell_layout_set_cell_data_func (GtkCellLayout         *cell
   info->destroy = destroy;
 
   if (column->tree_view)
-    _gtk_tree_view_column_cell_set_dirty (column, TRUE);
+    _gtk_tree_view_column_cell_set_dirty (column, TRUE, TRUE);
 }
 
 static void
@@ -826,7 +826,7 @@ gtk_tree_view_column_clear_attributes_by_info (GtkTreeViewColumn *tree_column,
   info->attributes = NULL;
 
   if (tree_column->tree_view)
-    _gtk_tree_view_column_cell_set_dirty (tree_column, TRUE);
+    _gtk_tree_view_column_cell_set_dirty (tree_column, TRUE, TRUE);
 }
 
 /* Helper functions
@@ -1735,7 +1735,7 @@ gtk_tree_view_column_set_spacing (GtkTreeViewColumn *tree_column,
 
   tree_column->spacing = spacing;
   if (tree_column->tree_view)
-    _gtk_tree_view_column_cell_set_dirty (tree_column, TRUE);
+    _gtk_tree_view_column_cell_set_dirty (tree_column, TRUE, TRUE);
 }
 
 /**
@@ -1777,7 +1777,7 @@ gtk_tree_view_column_set_visible (GtkTreeViewColumn *tree_column,
   tree_column->visible = visible;
 
   if (tree_column->visible)
-    _gtk_tree_view_column_cell_set_dirty (tree_column, TRUE);
+    _gtk_tree_view_column_cell_set_dirty (tree_column, TRUE, TRUE);
 
   gtk_tree_view_column_update_button (tree_column);
   g_object_notify (G_OBJECT (tree_column), "visible");
@@ -3483,6 +3483,7 @@ gtk_tree_view_column_focus_cell (GtkTreeViewColumn *tree_column,
 
 void
 _gtk_tree_view_column_cell_set_dirty (GtkTreeViewColumn *tree_column,
+				      gboolean           recalculate_width,
 				      gboolean           install_handler)
 {
   GList *list;
@@ -3490,16 +3491,20 @@ _gtk_tree_view_column_cell_set_dirty (GtkTreeViewColumn *tree_column,
 
   priv = GTK_TREE_VIEW_COLUMN_GET_PRIVATE (tree_column);
 
-  for (list = tree_column->cell_list; list; list = list->next)
-    {
-      GtkTreeViewColumnCellInfo *info = (GtkTreeViewColumnCellInfo *) list->data;
-
-      info->requested_width = 0;
-      info->natural_width = 0;
-    }
   tree_column->dirty = TRUE;
-  tree_column->requested_width = -1;
-  priv->natural_width = -1;
+
+  if (recalculate_width)
+    {
+      for (list = tree_column->cell_list; list; list = list->next)
+	{
+	  GtkTreeViewColumnCellInfo *info = (GtkTreeViewColumnCellInfo *) list->data;
+	  
+	  info->requested_width = 0;
+	  info->natural_width = 0;
+	}
+      tree_column->requested_width = -1;
+      priv->natural_width = -1;
+    }
 
   if (tree_column->tree_view &&
       gtk_widget_get_realized (tree_column->tree_view))
@@ -3511,6 +3516,7 @@ _gtk_tree_view_column_cell_set_dirty (GtkTreeViewColumn *tree_column,
       gtk_widget_queue_resize (tree_column->tree_view);
     }
 }
+
 
 void
 _gtk_tree_view_column_start_editing (GtkTreeViewColumn *tree_column,
@@ -3644,7 +3650,7 @@ gtk_tree_view_column_queue_resize (GtkTreeViewColumn *tree_column)
   g_return_if_fail (GTK_IS_TREE_VIEW_COLUMN (tree_column));
 
   if (tree_column->tree_view)
-    _gtk_tree_view_column_cell_set_dirty (tree_column, TRUE);
+    _gtk_tree_view_column_cell_set_dirty (tree_column, TRUE, TRUE);
 }
 
 /**
