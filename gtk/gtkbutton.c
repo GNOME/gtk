@@ -2322,5 +2322,24 @@ gtk_button_get_image_position (GtkButton *button)
 }
 
 
+/**
+ * gtk_button_get_event_window:
+ * @button: a #GtkButton
+ *
+ * Returns the button's event window if it is realized, %NULL otherwise.
+ * This function should be rarely needed.
+ *
+ * Return value: (transfer none): @button's event window.
+ *
+ * Since: 2.22
+ */
+GdkWindow*
+gtk_button_get_event_window (GtkButton *button)
+{
+  g_return_val_if_fail (GTK_IS_BUTTON (button), NULL);
+
+  return button->event_window;
+}
+
 #define __GTK_BUTTON_C__
 #include "gtkaliasdef.c"  
