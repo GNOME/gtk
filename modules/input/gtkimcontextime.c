@@ -790,7 +790,7 @@ gtk_im_context_ime_set_preedit_font (GtkIMContext *context)
   gunichar wc;
   PangoContext *pango_context;
   PangoFont *font;
-  LOGFONT *logfont;
+  LOGFONTW *logfont;
 
   g_return_if_fail (GTK_IS_IM_CONTEXT_IME (context));
 
@@ -878,9 +878,9 @@ gtk_im_context_ime_set_preedit_font (GtkIMContext *context)
   if (!font)
     goto ERROR_OUT;
 
-  logfont = pango_win32_font_logfont (font);
+  logfont = pango_win32_font_logfontw (font);
   if (logfont)
-    ImmSetCompositionFont (himc, logfont);
+    ImmSetCompositionFontW (himc, logfont);
 
   g_object_unref (font);
 
