@@ -25,19 +25,6 @@
 #import <gdk/quartz/GdkQuartzView.h>
 #import <gdk/quartz/GdkQuartzWindow.h>
 
-/* NSInteger only exists in Leopard and newer.  This check has to be
- * done after inclusion of the system headers.  If NSInteger has not
- * been defined, we know for sure that we are on 32-bit.
- */
-#ifndef NSINTEGER_DEFINED
-typedef int NSInteger;
-typedef unsigned int NSUInteger;
-#endif
-
-#ifndef CGFLOAT_DEFINED
-typedef float CGFloat;
-#endif
-
 G_BEGIN_DECLS
 
 /* Window implementation for Quartz
