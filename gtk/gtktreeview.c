@@ -2370,7 +2370,7 @@ gtk_tree_view_size_allocate_columns (GtkWidget *widget,
   tree_view->priv->width = width;
   if (width_changed)
     *width_changed = TRUE;
-
+  
   if (column_changed)
     gtk_widget_queue_draw (GTK_WIDGET (tree_view));
 }
@@ -2527,32 +2527,32 @@ gtk_tree_view_size_allocate (GtkWidget     *widget,
 	  else
 	    gtk_widget_queue_draw (widget);
 	}
+    }
 
-      /* XXX For some reason (allocation->width == old_width && width_changed == TRUE) !!! */
-      if (allocation->width != old_width &&
-	  !tree_view->priv->fixed_height_mode)
+  /* Need to do this when the real allocated width changes
+   * and upon the first allocation */
+  if (allocation->width != old_width &&
+      !tree_view->priv->fixed_height_mode)
+    {
+      /* Have the tree recalculate height-for-width of all rows when the width changes
+       */
+      _gtk_rbtree_mark_invalid (tree_view->priv->tree);
+      for (tmp_list = tree_view->priv->columns; tmp_list; tmp_list = tmp_list->next)
 	{
-
-	  /* Have the tree recalculate height-for-width of all rows when the width changes
-	   *
-	   * XXX We have to do this when columns resize too  
-	   */
-	  _gtk_rbtree_mark_invalid (tree_view->priv->tree);
-	  for (tmp_list = tree_view->priv->columns; tmp_list; tmp_list = tmp_list->next)
-	    {
-	      GtkTreeViewColumn *column;
-	      
-	      column = tmp_list->data;
-	      if (! column->visible)
-	  	continue;
-	      
-	      if (column->column_type == GTK_TREE_VIEW_COLUMN_AUTOSIZE ||
-		  column->column_type == GTK_TREE_VIEW_COLUMN_GROW_ONLY)
-		_gtk_tree_view_column_cell_set_dirty (column, TRUE);
-	    }
-
-	  gtk_widget_queue_resize (GTK_WIDGET (tree_view));
+	  GtkTreeViewColumn *column;
+	  
+	  column = tmp_list->data;
+	  if (! column->visible)
+	    continue;
+	  
+	  if (column->column_type == GTK_TREE_VIEW_COLUMN_AUTOSIZE ||
+	      column->column_type == GTK_TREE_VIEW_COLUMN_GROW_ONLY)
+	    _gtk_tree_view_column_cell_set_dirty (column, FALSE, FALSE);
 	}
+      
+      install_presize_handler (tree_view);
+      
+      gtk_widget_queue_resize (GTK_WIDGET (tree_view));
     }
 }
 
@@ -5848,7 +5848,6 @@ validate_row (GtkTreeView *tree_view,
 	  else
 	    gtk_tree_view_column_get_height_for_width (column, column->requested_width, 
 						       &column_height, NULL);
-
 	  
 	  column_height += vertical_separator;
 	  height = MAX (height, column_height);
@@ -6673,7 +6672,7 @@ _gtk_tree_view_column_autosize (GtkTreeView *tree_view,
   g_return_if_fail (GTK_IS_TREE_VIEW (tree_view));
   g_return_if_fail (GTK_IS_TREE_VIEW_COLUMN (column));
 
-  _gtk_tree_view_column_cell_set_dirty (column, FALSE);
+  _gtk_tree_view_column_cell_set_dirty (column, TRUE, FALSE);
 
   do_presize_handler (tree_view);
   while (validate_rows (tree_view));
@@ -8131,7 +8130,7 @@ gtk_tree_view_style_set (GtkWidget *widget,
   for (list = tree_view->priv->columns; list; list = list->next)
     {
       column = list->data;
-      _gtk_tree_view_column_cell_set_dirty (column, TRUE);
+      _gtk_tree_view_column_cell_set_dirty (column, TRUE, TRUE);
     }
 
   tree_view->priv->fixed_height = -1;
@@ -8414,7 +8413,7 @@ gtk_tree_view_row_changed (GtkTreeModel *model,
 
           if (column->column_type == GTK_TREE_VIEW_COLUMN_AUTOSIZE)
             {
-              _gtk_tree_view_column_cell_set_dirty (column, TRUE);
+              _gtk_tree_view_column_cell_set_dirty (column, TRUE, TRUE);
             }
         }
     }
@@ -8599,8 +8598,7 @@ gtk_tree_view_row_has_child_toggled (GtkTreeModel *model,
 	  for (list = tree_view->priv->columns; list; list = list->next)
 	    if (GTK_TREE_VIEW_COLUMN (list->data)->visible)
 	      {
-		GTK_TREE_VIEW_COLUMN (list->data)->dirty = TRUE;
-		_gtk_tree_view_column_cell_set_dirty (GTK_TREE_VIEW_COLUMN (list->data), TRUE);
+		_gtk_tree_view_column_cell_set_dirty (GTK_TREE_VIEW_COLUMN (list->data), TRUE, TRUE);
 		break;
 	      }
 	}
@@ -8667,7 +8665,7 @@ gtk_tree_view_row_deleted (GtkTreeModel *model,
   for (list = tree_view->priv->columns; list; list = list->next)
     if (((GtkTreeViewColumn *)list->data)->visible &&
 	((GtkTreeViewColumn *)list->data)->column_type == GTK_TREE_VIEW_COLUMN_AUTOSIZE)
-      _gtk_tree_view_column_cell_set_dirty ((GtkTreeViewColumn *)list->data, TRUE);
+      _gtk_tree_view_column_cell_set_dirty ((GtkTreeViewColumn *)list->data, TRUE, TRUE);
 
   /* Ensure we don't have a dangling pointer to a dead node */
   ensure_unprelighted (tree_view);
@@ -11134,7 +11132,7 @@ gtk_tree_view_columns_autosize (GtkTreeView *tree_view)
       column = list->data;
       if (column->column_type == GTK_TREE_VIEW_COLUMN_AUTOSIZE)
 	continue;
-      _gtk_tree_view_column_cell_set_dirty (column, TRUE);
+      _gtk_tree_view_column_cell_set_dirty (column, TRUE, TRUE);
       dirty = TRUE;
     }
 
@@ -11317,7 +11315,7 @@ gtk_tree_view_remove_column (GtkTreeView       *tree_view,
 
 	  tmp_column = GTK_TREE_VIEW_COLUMN (list->data);
 	  if (tmp_column->visible)
-	    _gtk_tree_view_column_cell_set_dirty (tmp_column, TRUE);
+	    _gtk_tree_view_column_cell_set_dirty (tmp_column, TRUE, TRUE);
 	}
 
       if (tree_view->priv->n_columns == 0 &&
@@ -11387,7 +11385,7 @@ gtk_tree_view_insert_column (GtkTreeView       *tree_view,
 	{
 	  column = GTK_TREE_VIEW_COLUMN (list->data);
 	  if (column->visible)
-	    _gtk_tree_view_column_cell_set_dirty (column, TRUE);
+	    _gtk_tree_view_column_cell_set_dirty (column, TRUE, TRUE);
 	}
       gtk_widget_queue_resize (GTK_WIDGET (tree_view));
     }
@@ -12319,7 +12317,7 @@ gtk_tree_view_real_collapse_row (GtkTreeView *tree_view,
       if (column->visible == FALSE)
 	continue;
       if (gtk_tree_view_column_get_sizing (column) == GTK_TREE_VIEW_COLUMN_AUTOSIZE)
-	_gtk_tree_view_column_cell_set_dirty (column, TRUE);
+	_gtk_tree_view_column_cell_set_dirty (column, TRUE, TRUE);
     }
 
   if (tree_view->priv->destroy_count_func)
@@ -15834,11 +15832,6 @@ gtk_tree_view_get_width (GtkSizeRequest *widget,
 			 gint           *minimum_size,
 			 gint           *natural_size)
 {
-
-
-
-
-
   gtk_tree_view_get_size (widget, GTK_ORIENTATION_HORIZONTAL, minimum_size, natural_size);
 }
 
