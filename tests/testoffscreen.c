@@ -24,11 +24,14 @@ layout_expose_handler (GtkWidget      *widget,
                        GdkEventExpose *event)
 {
   GtkLayout *layout = GTK_LAYOUT (widget);
+  GdkWindow *bin_window;
 
   gint i,j;
   gint imin, imax, jmin, jmax;
 
-  if (event->window != layout->bin_window)
+  bin_window = gtk_layout_get_bin_window (layout);
+
+  if (event->window != bin_window)
     return FALSE;
 
   imin = (event->area.x) / 10;
@@ -40,7 +43,7 @@ layout_expose_handler (GtkWidget      *widget,
   for (i = imin; i < imax; i++)
     for (j = jmin; j < jmax; j++)
       if ((i + j) % 2)
-	gdk_draw_rectangle (layout->bin_window,
+	gdk_draw_rectangle (bin_window,
                             widget->style->black_gc,
                             TRUE,
                             10 * i, 10 * j,
@@ -66,7 +69,9 @@ static guint layout_timeout;
 static void
 create_layout (GtkWidget *vbox)
 {
-  GtkWidget *layout;
+  GtkAdjustment *hadjustment, *vadjustment;
+  GtkLayout *layout;
+  GtkWidget *layout_widget;
   GtkWidget *scrolledwindow;
   GtkWidget *button;
   gchar buf[16];
@@ -80,21 +85,26 @@ create_layout (GtkWidget *vbox)
 
   gtk_box_pack_start (GTK_BOX (vbox), scrolledwindow, TRUE, TRUE, 0);
 
-  layout = gtk_layout_new (NULL, NULL);
-  gtk_container_add (GTK_CONTAINER (scrolledwindow), layout);
+  layout_widget = gtk_layout_new (NULL, NULL);
+  layout = GTK_LAYOUT (layout_widget);
+  gtk_container_add (GTK_CONTAINER (scrolledwindow), layout_widget);
 
   /* We set step sizes here since GtkLayout does not set
    * them itself.
    */
-  GTK_LAYOUT (layout)->hadjustment->step_increment = 10.0;
-  GTK_LAYOUT (layout)->vadjustment->step_increment = 10.0;
+  hadjustment = gtk_layout_get_hadjustment (layout);
+  vadjustment = gtk_layout_get_vadjustment (layout);
+  gtk_adjustment_set_step_increment (hadjustment, 10.0);
+  gtk_adjustment_set_step_increment (vadjustment, 10.0);
+  gtk_layout_set_hadjustment (layout, hadjustment);
+  gtk_layout_set_vadjustment (layout, vadjustment);
 
-  gtk_widget_set_events (layout, GDK_EXPOSURE_MASK);
+  gtk_widget_set_events (layout_widget, GDK_EXPOSURE_MASK);
   g_signal_connect (layout, "expose_event",
 		    G_CALLBACK (layout_expose_handler),
                     NULL);
 
-  gtk_layout_set_size (GTK_LAYOUT (layout), 1600, 128000);
+  gtk_layout_set_size (layout, 1600, 128000);
 
   for (i = 0 ; i < 16 ; i++)
     for (j = 0 ; j < 16 ; j++)
@@ -106,8 +116,7 @@ create_layout (GtkWidget *vbox)
 	else
 	  button = gtk_label_new (buf);
 
-	gtk_layout_put (GTK_LAYOUT (layout), button,
-			j * 100, i * 100);
+	gtk_layout_put (layout, button,	j * 100, i * 100);
       }
 
   for (i = 16; i < 1280; i++)
@@ -119,8 +128,7 @@ create_layout (GtkWidget *vbox)
       else
 	button = gtk_label_new (buf);
 
-      gtk_layout_put (GTK_LAYOUT (layout), button,
-		      0, i * 100);
+      gtk_layout_put (layout, button, 0, i * 100);
     }
 
   layout_timeout = g_timeout_add (1000, scroll_layout, layout);
