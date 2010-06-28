@@ -51,29 +51,15 @@ G_BEGIN_DECLS
 
 
 typedef struct _GtkLayout        GtkLayout;
+typedef struct _GtkLayoutPriv    GtkLayoutPriv;
 typedef struct _GtkLayoutClass   GtkLayoutClass;
 
 struct _GtkLayout
 {
-  GtkContainer GSEAL (container);
+  GtkContainer container;
 
-  GList *GSEAL (children);
-
-  guint GSEAL (width);
-  guint GSEAL (height);
-
-  GtkAdjustment *GSEAL (hadjustment);
-  GtkAdjustment *GSEAL (vadjustment);
-
-  /*< public >*/
-  GdkWindow *GSEAL (bin_window);
-
-  /*< private >*/
-  GdkVisibilityState GSEAL (visibility);
-  gint GSEAL (scroll_x);
-  gint GSEAL (scroll_y);
-
-  guint GSEAL (freeze_count);
+  /* <private> */
+  GtkLayoutPriv *priv;
 };
 
 struct _GtkLayoutClass
