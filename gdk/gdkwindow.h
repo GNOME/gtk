@@ -716,6 +716,7 @@ GdkWindow*    gdk_window_lookup_for_display (GdkDisplay      *display,
 
 /* GdkWindow */
 
+gboolean      gdk_window_has_native         (GdkWindow       *window);
 void              gdk_window_set_type_hint (GdkWindow        *window,
                                             GdkWindowTypeHint hint);
 GdkWindowTypeHint gdk_window_get_type_hint (GdkWindow        *window);
