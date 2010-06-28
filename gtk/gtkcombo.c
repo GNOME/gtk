@@ -29,6 +29,8 @@
  */
 
 #undef GTK_DISABLE_DEPRECATED
+/* For GCompletion */
+#undef G_DISABLE_DEPRECATED
 
 #include "config.h"
 #include <string.h>
