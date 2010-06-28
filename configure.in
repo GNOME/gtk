@@ -751,6 +751,7 @@ AC_MSG_RESULT($gtk_uxtheme_h)
 AC_CHECK_HEADERS(crt_externs.h)
 AC_CHECK_FUNCS(_NSGetEnviron)
 
+AC_MSG_CHECKING(whether to build dynamic modules)
 
 AC_ARG_ENABLE(modules,
               [AC_HELP_STRING([--disable-modules],
@@ -773,7 +774,7 @@ else
     dnl (in a rather ugly way even)
     if $dynworks; then
         module_libtool_config="${CONFIG_SHELL-/bin/sh} ./libtool --config"
-        module_deplibs_check=`$pixbuf_libtool_config | \
+        module_deplibs_check=`$module_libtool_config | \
             grep '^[[a-z_]]*check[[a-z_]]*_method=[['\''"]]' | \
             sed 's/.*[['\''"]]\(.*\)[['\''"]]$/\1/'`
         if test "x$module_deplibs_check" = "xnone" || \
