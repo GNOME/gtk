@@ -127,21 +127,21 @@ void _gdk_window_process_expose    (GdkWindow     *window,
                                     GdkRectangle  *area);
 
 gboolean _gdk_x11_window_queue_antiexpose  (GdkWindow *window,
-					    GdkRegion *area);
+					    cairo_region_t *area);
 void     _gdk_x11_window_queue_translation (GdkWindow *window,
 					    GdkGC     *gc,
-					    GdkRegion *area,
+					    cairo_region_t *area,
 					    gint       dx,
 					    gint       dy);
 
 void     _gdk_selection_window_destroyed   (GdkWindow            *window);
 gboolean _gdk_selection_filter_clear_event (XSelectionClearEvent *event);
 
-GdkRegion* _xwindow_get_shape              (Display *xdisplay,
+cairo_region_t* _xwindow_get_shape              (Display *xdisplay,
                                             Window window,
                                             gint shape_type);
 
-void     _gdk_region_get_xrectangles       (const GdkRegion      *region,
+void     _gdk_region_get_xrectangles       (const cairo_region_t      *region,
                                             gint                  x_offset,
                                             gint                  y_offset,
                                             XRectangle          **rects,

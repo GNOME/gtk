@@ -75,7 +75,7 @@ struct _GdkWindowImplIface
                                          gint             x,
                                          gint             y);
   void         (* clear_region)         (GdkWindow       *window,
-					 GdkRegion       *region,
+					 cairo_region_t       *region,
 					 gboolean         send_expose);
 
   void         (* set_device_cursor)    (GdkWindow       *window,
@@ -103,11 +103,11 @@ struct _GdkWindowImplIface
                                          GdkModifierType *mask);
 
   void         (* shape_combine_region) (GdkWindow       *window,
-                                         const GdkRegion *shape_region,
+                                         const cairo_region_t *shape_region,
                                          gint             offset_x,
                                          gint             offset_y);
   void         (* input_shape_combine_region) (GdkWindow       *window,
-					       const GdkRegion *shape_region,
+					       const cairo_region_t *shape_region,
 					       gint             offset_x,
 					       gint             offset_y);
 
@@ -121,10 +121,10 @@ struct _GdkWindowImplIface
    * for destroying the region later.
    */
   gboolean     (* queue_antiexpose)     (GdkWindow       *window,
-					 GdkRegion       *update_area);
+					 cairo_region_t       *update_area);
   void         (* queue_translation)    (GdkWindow       *window,
 					 GdkGC           *gc,
-					 GdkRegion       *area,
+					 cairo_region_t       *area,
 					 gint            dx,
 					 gint            dy);
 
@@ -164,7 +164,7 @@ struct _GdkWindowRedirect
   gint width;
   gint height;
 
-  GdkRegion *damage;
+  cairo_region_t *damage;
   guint damage_idle;
 };
 

@@ -48,7 +48,7 @@ static GdkDrawable* gdk_drawable_real_get_composite_drawable (GdkDrawable  *draw
 							      gint          height,
 							      gint         *composite_x_offset,
 							      gint         *composite_y_offset);
-static GdkRegion *  gdk_drawable_real_get_visible_region     (GdkDrawable  *drawable);
+static cairo_region_t *  gdk_drawable_real_get_visible_region     (GdkDrawable  *drawable);
 static void         gdk_drawable_real_draw_pixbuf            (GdkDrawable  *drawable,
 							      GdkGC        *gc,
 							      GdkPixbuf    *pixbuf,
@@ -1059,10 +1059,10 @@ gdk_drawable_real_get_composite_drawable (GdkDrawable *drawable,
  * but no area outside of this region will be affected by drawing
  * primitives.
  * 
- * Returns: a #GdkRegion. This must be freed with cairo_region_destroy()
+ * Returns: a #cairo_region_t. This must be freed with cairo_region_destroy()
  *          when you are done.
  **/
-GdkRegion *
+cairo_region_t *
 gdk_drawable_get_clip_region (GdkDrawable *drawable)
 {
   g_return_val_if_fail (GDK_IS_DRAWABLE (drawable), NULL);
@@ -1079,10 +1079,10 @@ gdk_drawable_get_clip_region (GdkDrawable *drawable)
  * obscured by other windows, but no area outside of this region
  * is visible.
  * 
- * Returns: a #GdkRegion. This must be freed with cairo_region_destroy()
+ * Returns: a #cairo_region_t. This must be freed with cairo_region_destroy()
  *          when you are done.
  **/
-GdkRegion *
+cairo_region_t *
 gdk_drawable_get_visible_region (GdkDrawable *drawable)
 {
   g_return_val_if_fail (GDK_IS_DRAWABLE (drawable), NULL);
@@ -1090,7 +1090,7 @@ gdk_drawable_get_visible_region (GdkDrawable *drawable)
   return GDK_DRAWABLE_GET_CLASS (drawable)->get_visible_region (drawable);
 }
 
-static GdkRegion *
+static cairo_region_t *
 gdk_drawable_real_get_visible_region (GdkDrawable *drawable)
 {
   GdkRectangle rect;
@@ -1371,8 +1371,8 @@ gdk_drawable_real_draw_pixbuf (GdkDrawable  *drawable,
 {
   GdkPixbuf *composited = NULL;
   gint dwidth, dheight;
-  GdkRegion *clip;
-  GdkRegion *drect;
+  cairo_region_t *clip;
+  cairo_region_t *drect;
   GdkRectangle tmp_rect;
   GdkDrawable  *real_drawable;
 

@@ -42,7 +42,6 @@
 
 #include "gdkgc.h"
 #include "gdkpixmap.h"
-#include "gdkregion-generic.h"
 
 #include "gdkalias.h"
 
@@ -313,7 +312,7 @@ gc_unset_clip_mask (GdkGC *gc)
 
 void
 _gdk_windowing_gc_set_clip_region (GdkGC           *gc,
-                                   const GdkRegion *region,
+                                   const cairo_region_t *region,
                                    gboolean         reset_origin)
 {
   GdkGCDirectFB *data;

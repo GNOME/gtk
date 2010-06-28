@@ -261,7 +261,7 @@ add_damage (GdkOffscreenWindow *offscreen,
 	    gboolean is_line)
 {
   GdkRectangle rect;
-  GdkRegion *damage;
+  cairo_region_t *damage;
 
   rect.x = x;
   rect.y = y;
@@ -1039,7 +1039,7 @@ gdk_offscreen_window_set_back_pixmap (GdkWindow *window,
 
 static void
 gdk_offscreen_window_shape_combine_region (GdkWindow       *window,
-					   const GdkRegion *shape_region,
+					   const cairo_region_t *shape_region,
 					   gint             offset_x,
 					   gint             offset_y)
 {
@@ -1047,7 +1047,7 @@ gdk_offscreen_window_shape_combine_region (GdkWindow       *window,
 
 static void
 gdk_offscreen_window_input_shape_combine_region (GdkWindow       *window,
-						 const GdkRegion *shape_region,
+						 const cairo_region_t *shape_region,
 						 gint             offset_x,
 						 gint             offset_y)
 {
@@ -1089,7 +1089,7 @@ gdk_offscreen_window_get_geometry (GdkWindow *window,
 
 static gboolean
 gdk_offscreen_window_queue_antiexpose (GdkWindow *window,
-				       GdkRegion *area)
+				       cairo_region_t *area)
 {
   return FALSE;
 }
@@ -1097,7 +1097,7 @@ gdk_offscreen_window_queue_antiexpose (GdkWindow *window,
 static void
 gdk_offscreen_window_queue_translation (GdkWindow *window,
 					GdkGC     *gc,
-					GdkRegion *area,
+					cairo_region_t *area,
 					gint       dx,
 					gint       dy)
 {

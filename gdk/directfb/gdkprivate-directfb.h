@@ -38,7 +38,6 @@
 #include "gdkinternals.h"
 #include "gdkcursor.h"
 #include "gdkdisplay-directfb.h"
-#include "gdkregion-generic.h"
 #include <cairo.h>
 
 #include <string.h>
@@ -72,14 +71,14 @@ struct _GdkDrawableImplDirectFB
 
   gboolean                buffered;
 
-  GdkRegion               paint_region;
+  cairo_region_t               paint_region;
   gint                    paint_depth;
   gint                    width;
   gint                    height;
   gint                    abs_x;
   gint                    abs_y;
 
-  GdkRegion               clip_region;
+  cairo_region_t               clip_region;
 
   GdkColormap            *colormap;
 
@@ -179,7 +178,7 @@ void        _gdk_directfb_window_scroll         (GdkWindow       *window,
                                                  gint             dx,
                                                  gint             dy);
 void        _gdk_directfb_window_move_region    (GdkWindow       *window,
-                                                 const GdkRegion *region,
+                                                 const cairo_region_t *region,
                                                  gint             dx,
                                                  gint             dy);
 
@@ -213,7 +212,7 @@ typedef struct
 {
   GdkGC             parent_instance;
 
-  GdkRegion         clip_region;
+  cairo_region_t         clip_region;
 
   GdkGCValuesMask   values_mask;
   GdkGCValues       values;
@@ -335,14 +334,14 @@ void gdk_fb_window_set_child_handler (GdkWindow              *window,
 void gdk_directfb_clip_region (GdkDrawable  *drawable,
                                GdkGC        *gc,
                                GdkRectangle *draw_rect,
-                               GdkRegion    *ret_clip);
+                               cairo_region_t    *ret_clip);
 
 
 /* Utilities for avoiding mallocs */
 
 static inline void
-temp_region_init_copy( GdkRegion       *region, 
-                       const GdkRegion *source)
+temp_region_init_copy( cairo_region_t       *region, 
+                       const cairo_region_t *source)
 {
   if (region != source) /*  don't want to copy to itself */
     {  
@@ -351,19 +350,19 @@ temp_region_init_copy( GdkRegion       *region,
           if (region->rects && region->rects != &region->extents)
             g_free( region->rects );
 
-          region->rects = g_new (GdkRegionBox, source->numRects);
+          region->rects = g_new (cairo_region_tBox, source->numRects);
           region->size  = source->numRects;
         }
 
       region->numRects = source->numRects;
       region->extents  = source->extents;
 
-      memcpy( region->rects, source->rects, source->numRects * sizeof (GdkRegionBox) );
+      memcpy( region->rects, source->rects, source->numRects * sizeof (cairo_region_tBox) );
     }
 }
 
 static inline void
-temp_region_init_rectangle( GdkRegion          *region,
+temp_region_init_rectangle( cairo_region_t          *region,
                             const GdkRectangle *rect )
 {
      region->numRects = 1;
@@ -376,7 +375,7 @@ temp_region_init_rectangle( GdkRegion          *region,
 }
 
 static inline void
-temp_region_init_rectangle_vals( GdkRegion *region,
+temp_region_init_rectangle_vals( cairo_region_t *region,
                                  int        x,
                                  int        y,
                                  int        w,
@@ -392,7 +391,7 @@ temp_region_init_rectangle_vals( GdkRegion *region,
 }
 
 static inline void
-temp_region_reset( GdkRegion *region )
+temp_region_reset( cairo_region_t *region )
 {
      if (region->size > 32 && region->rects && region->rects != &region->extents) {
           g_free( region->rects );
@@ -405,7 +404,7 @@ temp_region_reset( GdkRegion *region )
 }
 
 static inline void
-temp_region_deinit( GdkRegion *region )
+temp_region_deinit( cairo_region_t *region )
 {
      if (region->rects && region->rects != &region->extents) {
           g_free( region->rects );

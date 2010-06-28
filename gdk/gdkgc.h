@@ -252,7 +252,7 @@ void   gdk_gc_set_clip_mask	  (GdkGC	    *gc,
 void   gdk_gc_set_clip_rectangle  (GdkGC	    *gc,
 				   const GdkRectangle *rectangle);
 void   gdk_gc_set_clip_region	  (GdkGC	    *gc,
-				   const GdkRegion  *region);
+				   const cairo_region_t  *region);
 void   gdk_gc_set_subwindow	  (GdkGC	    *gc,
 				   GdkSubwindowMode  mode);
 void   gdk_gc_set_exposures	  (GdkGC	    *gc,

@@ -40,8 +40,6 @@
 
 #include "config.h"
 #include "gdk.h"		/* For gdk_rectangle_intersect */
-#include "gdkregion.h"
-#include "gdkregion-generic.h"
 #include "gdkinternals.h"
 #include "gdkprivate-win32.h"
 
@@ -236,15 +234,15 @@ _gdk_win32_window_tmp_reset_bg (GdkWindow *window)
 */
 
 #if 0
-static GdkRegion *
+static cairo_region_t *
 gdk_window_clip_changed (GdkWindow    *window,
 			 GdkRectangle *old_clip,
 			 GdkRectangle *new_clip)
 {
   GdkWindowImplWin32 *impl;
   GdkWindowObject *obj;
-  GdkRegion *old_clip_region;
-  GdkRegion *new_clip_region;
+  cairo_region_t *old_clip_region;
+  cairo_region_t *new_clip_region;
   
   if (((GdkWindowObject *)window)->input_only)
     return NULL;
@@ -280,7 +278,7 @@ gdk_window_clip_changed (GdkWindow    *window,
 #if 0
 static void
 gdk_window_post_scroll (GdkWindow    *window,
-			GdkRegion    *new_clip_region)
+			cairo_region_t    *new_clip_region)
 {
   GDK_NOTE (EVENTS,
 	    g_print ("gdk_window_clip_changed: invalidating region: %s\n",

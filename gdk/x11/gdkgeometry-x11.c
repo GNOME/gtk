@@ -21,7 +21,6 @@
 #include "gdk.h"		/* For gdk_rectangle_intersect */
 #include "gdkprivate-x11.h"
 #include "gdkx.h"
-#include "gdkregion.h"
 #include "gdkinternals.h"
 #include "gdkscreen-x11.h"
 #include "gdkdisplay-x11.h"
@@ -43,12 +42,12 @@ struct _GdkWindowQueueItem
   GdkWindowQueueType type;
   union {
     struct {
-      GdkRegion *area;
+      cairo_region_t *area;
       gint dx;
       gint dy;
     } translate;
     struct {
-      GdkRegion *area;
+      cairo_region_t *area;
     } antiexpose;
   } u;
 };
@@ -229,7 +228,7 @@ gdk_window_queue (GdkWindow          *window,
 void
 _gdk_x11_window_queue_translation (GdkWindow *window,
 				   GdkGC     *gc,
-				   GdkRegion *area,
+				   cairo_region_t *area,
 				   gint       dx,
 				   gint       dy)
 {
@@ -249,7 +248,7 @@ _gdk_x11_window_queue_translation (GdkWindow *window,
 
 gboolean
 _gdk_x11_window_queue_antiexpose (GdkWindow *window,
-				  GdkRegion *area)
+				  cairo_region_t *area)
 {
   GdkWindowQueueItem *item = g_new (GdkWindowQueueItem, 1);
   item->type = GDK_WINDOW_QUEUE_ANTIEXPOSE;
@@ -265,7 +264,7 @@ _gdk_window_process_expose (GdkWindow    *window,
 			    gulong        serial,
 			    GdkRectangle *area)
 {
-  GdkRegion *invalidate_region = cairo_region_create_rectangle (area);
+  cairo_region_t *invalidate_region = cairo_region_create_rectangle (area);
   GdkDisplayX11 *display_x11 = GDK_DISPLAY_X11 (GDK_WINDOW_DISPLAY (window));
 
   if (display_x11->translate_queue)
@@ -286,7 +285,7 @@ _gdk_window_process_expose (GdkWindow    *window,
 		    {
 		      if (item->u.translate.area)
 			{
-			  GdkRegion *intersection;
+			  cairo_region_t *intersection;
 
 			  intersection = cairo_region_copy (invalidate_region);
 			  cairo_region_intersect (intersection, item->u.translate.area);

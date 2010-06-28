@@ -3132,7 +3132,7 @@ gdk_window_get_type_hint (GdkWindow *window)
 
 static void
 gdk_win32_window_shape_combine_region (GdkWindow       *window,
-				       const GdkRegion *shape_region,
+				       const cairo_region_t *shape_region,
 				       gint             offset_x,
 				       gint             offset_y)
 {
@@ -3224,10 +3224,10 @@ gdk_window_set_opacity (GdkWindow *window,
     }
 }
 
-GdkRegion *
+cairo_region_t *
 _gdk_windowing_get_shape_for_mask (GdkBitmap *mask)
 {
-  GdkRegion *region;
+  cairo_region_t *region;
   HRGN hrgn = _gdk_win32_bitmap_to_hrgn (mask);
 
   region = _gdk_win32_hrgn_to_region (hrgn);
@@ -3241,7 +3241,7 @@ _gdk_windowing_window_set_composited (GdkWindow *window, gboolean composited)
 {
 }
 
-GdkRegion *
+cairo_region_t *
 _gdk_windowing_window_get_shape (GdkWindow *window)
 {
   HRGN hrgn = CreateRectRgn (0, 0, 0, 0);
@@ -3249,7 +3249,7 @@ _gdk_windowing_window_get_shape (GdkWindow *window)
 
   if (type == SIMPLEREGION || type == COMPLEXREGION)
     {
-      GdkRegion *region = _gdk_win32_hrgn_to_region (hrgn);
+      cairo_region_t *region = _gdk_win32_hrgn_to_region (hrgn);
 
       DeleteObject (hrgn);
       return region;
@@ -3258,7 +3258,7 @@ _gdk_windowing_window_get_shape (GdkWindow *window)
   return NULL;
 }
 
-GdkRegion *
+cairo_region_t *
 _gdk_windowing_window_get_input_shape (GdkWindow *window)
 {
   /* CHECK: are these really supposed to be the same? */
@@ -3267,7 +3267,7 @@ _gdk_windowing_window_get_input_shape (GdkWindow *window)
 
 static gboolean
 _gdk_win32_window_queue_antiexpose (GdkWindow *window,
-				    GdkRegion *area)
+				    cairo_region_t *area)
 {
   HRGN hrgn = _gdk_win32_gdkregion_to_hrgn (area, 0, 0);
 
@@ -3295,7 +3295,7 @@ _gdk_win32_window_queue_antiexpose (GdkWindow *window,
 static void
 _gdk_win32_window_queue_translation (GdkWindow *window,
 				     GdkGC     *gc,
-				     GdkRegion *area,
+				     cairo_region_t *area,
 				     gint       dx,
 				     gint       dy)
 {
@@ -3322,7 +3322,7 @@ _gdk_win32_window_queue_translation (GdkWindow *window,
 
 static void
 gdk_win32_input_shape_combine_region (GdkWindow *window,
-				      const GdkRegion *shape_region,
+				      const cairo_region_t *shape_region,
 				      gint offset_x,
 				      gint offset_y)
 {
@@ -3334,7 +3334,7 @@ gdk_win32_input_shape_combine_region (GdkWindow *window,
 
 void
 _gdk_windowing_window_process_updates_recurse (GdkWindow *window,
-					       GdkRegion *region)
+					       cairo_region_t *region)
 {
   _gdk_window_process_updates_recurse (window, region);
 }

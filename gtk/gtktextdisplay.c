@@ -414,7 +414,7 @@ text_renderer_end (GtkTextRenderer *text_renderer)
 }
 
 
-static GdkRegion *
+static cairo_region_t *
 get_selected_clip (GtkTextRenderer    *text_renderer,
                    PangoLayout        *layout,
                    PangoLayoutLine    *line,
@@ -426,8 +426,8 @@ get_selected_clip (GtkTextRenderer    *text_renderer,
 {
   gint *ranges;
   gint n_ranges, i;
-  GdkRegion *clip_region = cairo_region_create ();
-  GdkRegion *tmp_region;
+  cairo_region_t *clip_region = cairo_region_create ();
+  cairo_region_t *tmp_region;
 
   pango_layout_line_get_x_ranges (line, start_index, end_index, &ranges, &n_ranges);
 
@@ -578,7 +578,7 @@ render_para (GtkTextRenderer    *text_renderer,
 	       (selection_start_index == byte_offset + line->length && pango_layout_iter_at_last_line (iter))) &&
 	      selection_end_index > byte_offset)
             {
-              GdkRegion *clip_region = get_selected_clip (text_renderer, layout, line,
+              cairo_region_t *clip_region = get_selected_clip (text_renderer, layout, line,
                                                           x + line_display->x_offset,
                                                           selection_y,
                                                           selection_height,

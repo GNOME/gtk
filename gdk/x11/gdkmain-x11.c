@@ -517,7 +517,7 @@ _gdk_send_xevent (GdkDisplay *display,
 }
 
 void
-_gdk_region_get_xrectangles (const GdkRegion *region,
+_gdk_region_get_xrectangles (const cairo_region_t *region,
                              gint             x_offset,
                              gint             y_offset,
                              XRectangle     **rects,

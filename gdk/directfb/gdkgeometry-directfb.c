@@ -53,7 +53,7 @@ _gdk_directfb_window_get_offsets (GdkWindow *window,
 
 gboolean
 _gdk_windowing_window_queue_antiexpose (GdkWindow *window,
-                                        GdkRegion *area)
+                                        cairo_region_t *area)
 {
   return FALSE;
 }
@@ -75,7 +75,7 @@ _gdk_directfb_window_scroll (GdkWindow *window,
 {
   GdkWindowObject         *private;
   GdkDrawableImplDirectFB *impl;
-  GdkRegion               *invalidate_region = NULL;
+  cairo_region_t               *invalidate_region = NULL;
   GList                   *list;
 
   g_return_if_fail (GDK_IS_WINDOW (window));
@@ -104,7 +104,7 @@ _gdk_directfb_window_scroll (GdkWindow *window,
           (!private->update_area ||
            !cairo_region_contains_rectangle (private->update_area, &rect)))
         {
-          GdkRegion *region;
+          cairo_region_t *region;
 
           region = cairo_region_create_rectangle (&rect);
           cairo_region_subtract (invalidate_region, region);
@@ -148,7 +148,7 @@ _gdk_directfb_window_scroll (GdkWindow *window,
 /**
  * gdk_window_move_region:
  * @window: a #GdkWindow
- * @region: The #GdkRegion to move
+ * @region: The #cairo_region_t to move
  * @dx: Amount to move in the X direction
  * @dy: Amount to move in the Y direction
  * 
@@ -162,17 +162,17 @@ _gdk_directfb_window_scroll (GdkWindow *window,
  **/
 void
 _gdk_directfb_window_move_region (GdkWindow       *window,
-                                  const GdkRegion *region,
+                                  const cairo_region_t *region,
                                   gint             dx,
                                   gint             dy)
 {
   GdkWindowObject         *private;
   GdkDrawableImplDirectFB *impl;
-  GdkRegion *window_clip;
-  GdkRegion *src_region;
-  GdkRegion *brought_in;
-  GdkRegion *dest_region;
-  GdkRegion *moving_invalid_region;
+  cairo_region_t *window_clip;
+  cairo_region_t *src_region;
+  cairo_region_t *brought_in;
+  cairo_region_t *dest_region;
+  cairo_region_t *moving_invalid_region;
   GdkRectangle dest_extents;
   
   g_return_if_fail (GDK_IS_WINDOW (window));

@@ -19,8 +19,6 @@
  */
 
 #import "GdkQuartzView.h"
-#include "gdkregion.h"
-#include "gdkregion-generic.h"
 #include "gdkwindow-quartz.h"
 #include "gdkprivate-quartz.h"
 #include "gdkquartz.h"

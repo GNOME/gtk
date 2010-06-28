@@ -158,7 +158,7 @@ void       _gdk_quartz_window_debug_highlight       (GdkWindow *window,
                                                      gint       number);
 
 void       _gdk_quartz_window_set_needs_display_in_region (GdkWindow    *window,
-                                                           GdkRegion    *region);
+                                                           cairo_region_t    *region);
 
 void       _gdk_quartz_window_update_position           (GdkWindow    *window);
 
@@ -203,10 +203,10 @@ void        _gdk_quartz_window_scroll      (GdkWindow       *window,
                                             gint             dy);
 void        _gdk_quartz_window_queue_translation (GdkWindow *window,
 						  GdkGC     *gc,
-                                                  GdkRegion *area,
+                                                  cairo_region_t *area,
                                                   gint       dx,
                                                   gint       dy);
 gboolean    _gdk_quartz_window_queue_antiexpose  (GdkWindow *window,
-                                                  GdkRegion *area);
+                                                  cairo_region_t *area);
 
 #endif /* __GDK_PRIVATE_QUARTZ_H__ */

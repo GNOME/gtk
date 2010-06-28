@@ -46,7 +46,6 @@
 #include "gdkasync.h"
 #include "gdkdisplay-x11.h"
 #include "gdkprivate-x11.h"
-#include "gdkregion.h"
 #include "gdkinternals.h"
 #include "MwmUtil.h"
 #include "gdkwindow-x11.h"
@@ -1684,7 +1683,7 @@ gdk_window_x11_reparent (GdkWindow *window,
 
 static void
 gdk_window_x11_clear_region (GdkWindow *window,
-			     GdkRegion *region,
+			     cairo_region_t *region,
 			     gboolean   send_expose)
 {
   cairo_rectangle_int_t rect;
@@ -3396,7 +3395,7 @@ gdk_window_add_colormap_windows (GdkWindow *window)
 
 static inline void
 do_shape_combine_region (GdkWindow       *window,
-			 const GdkRegion *shape_region,
+			 const cairo_region_t *shape_region,
 			 gint             offset_x,
 			 gint             offset_y,
 			 gint             shape)
@@ -3467,7 +3466,7 @@ do_shape_combine_region (GdkWindow       *window,
 
 static void
 gdk_window_x11_shape_combine_region (GdkWindow       *window,
-                                     const GdkRegion *shape_region,
+                                     const cairo_region_t *shape_region,
                                      gint             offset_x,
                                      gint             offset_y)
 {
@@ -3476,7 +3475,7 @@ gdk_window_x11_shape_combine_region (GdkWindow       *window,
 
 static void 
 gdk_window_x11_input_shape_combine_region (GdkWindow       *window,
-					   const GdkRegion *shape_region,
+					   const cairo_region_t *shape_region,
 					   gint             offset_x,
 					   gint             offset_y)
 {
@@ -4555,12 +4554,12 @@ gdk_window_set_functions (GdkWindow    *window,
   gdk_window_set_mwm_hints (window, &hints);
 }
 
-GdkRegion *
+cairo_region_t *
 _xwindow_get_shape (Display *xdisplay,
 		    Window window,
 		    gint shape_type)
 {
-  GdkRegion *shape;
+  cairo_region_t *shape;
   GdkRectangle *rl;
   XRectangle *xrl;
   gint rn, ord, i;
@@ -4601,12 +4600,12 @@ _xwindow_get_shape (Display *xdisplay,
 }
 
 
-GdkRegion *
+cairo_region_t *
 _gdk_windowing_get_shape_for_mask (GdkBitmap *mask)
 {
   GdkDisplay *display;
   Window window;
-  GdkRegion *region;
+  cairo_region_t *region;
 
   display = gdk_drawable_get_display (GDK_DRAWABLE (mask));
 
@@ -4629,7 +4628,7 @@ _gdk_windowing_get_shape_for_mask (GdkBitmap *mask)
   return region;
 }
 
-GdkRegion *
+cairo_region_t *
 _gdk_windowing_window_get_shape (GdkWindow *window)
 {
   if (!GDK_WINDOW_DESTROYED (window) &&
@@ -4640,7 +4639,7 @@ _gdk_windowing_window_get_shape (GdkWindow *window)
   return NULL;
 }
 
-GdkRegion *
+cairo_region_t *
 _gdk_windowing_window_get_input_shape (GdkWindow *window)
 {
 #if defined(ShapeInput)
@@ -5523,7 +5522,7 @@ _gdk_windowing_window_set_composited (GdkWindow *window,
 
 void
 _gdk_windowing_window_process_updates_recurse (GdkWindow *window,
-                                               GdkRegion *region)
+                                               cairo_region_t *region)
 {
   _gdk_window_process_updates_recurse (window, region);
 }

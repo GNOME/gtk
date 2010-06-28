@@ -3998,7 +3998,7 @@ gtk_label_expose (GtkWidget      *widget,
           (info->selection_anchor != info->selection_end))
         {
           gint range[2];
-          GdkRegion *clip;
+          cairo_region_t *clip;
 	  GtkStateType state;
 
           range[0] = info->selection_anchor;
@@ -4043,7 +4043,7 @@ gtk_label_expose (GtkWidget      *widget,
           GtkLabelLink *focus_link;
           GtkLabelLink *active_link;
           gint range[2];
-          GdkRegion *clip;
+          cairo_region_t *clip;
           GdkRectangle rect;
           GdkColor *text_color;
           GdkColor *base_color;

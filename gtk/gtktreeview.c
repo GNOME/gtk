@@ -4027,7 +4027,7 @@ gtk_tree_view_update_rubber_band (GtkTreeView *tree_view)
   GdkRectangle old_area;
   GdkRectangle new_area;
   GdkRectangle common;
-  GdkRegion *invalid_region;
+  cairo_region_t *invalid_region;
 
   old_area.x = MIN (tree_view->priv->press_start_x, tree_view->priv->rubber_band_x);
   old_area.y = MIN (tree_view->priv->press_start_y, tree_view->priv->rubber_band_y) - tree_view->priv->dy;
@@ -4050,7 +4050,7 @@ gtk_tree_view_update_rubber_band (GtkTreeView *tree_view)
   gdk_rectangle_intersect (&old_area, &new_area, &common);
   if (common.width > 2 && common.height > 2)
     {
-      GdkRegion *common_region;
+      cairo_region_t *common_region;
 
       /* make sure the border is invalidated */
       common.x += 1;

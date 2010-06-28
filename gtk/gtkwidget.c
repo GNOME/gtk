@@ -313,7 +313,7 @@ static AtkObject*	gtk_widget_real_get_accessible		(GtkWidget	  *widget);
 static void		gtk_widget_accessible_interface_init	(AtkImplementorIface *iface);
 static AtkObject*	gtk_widget_ref_accessible		(AtkImplementor *implementor);
 static void             gtk_widget_invalidate_widget_windows    (GtkWidget        *widget,
-								 GdkRegion        *region);
+								 cairo_region_t        *region);
 static GdkScreen *      gtk_widget_get_screen_unchecked         (GtkWidget        *widget);
 static void		gtk_widget_queue_shallow_draw		(GtkWidget        *widget);
 static gboolean         gtk_widget_real_can_activate_accel      (GtkWidget *widget,
@@ -3903,7 +3903,7 @@ invalidate_predicate (GdkWindow *window,
  */
 static void
 gtk_widget_invalidate_widget_windows (GtkWidget *widget,
-				      GdkRegion *region)
+				      cairo_region_t *region)
 {
   if (!gtk_widget_get_realized (widget))
     return;
@@ -3931,7 +3931,7 @@ static void
 gtk_widget_queue_shallow_draw (GtkWidget *widget)
 {
   GdkRectangle rect;
-  GdkRegion *region;
+  cairo_region_t *region;
   
   if (!gtk_widget_get_realized (widget))
     return;
@@ -4042,7 +4042,7 @@ gtk_widget_size_allocate (GtkWidget	*widget,
 	{
 	  /* Invalidate union(old_allaction,widget->allocation) in widget->window
 	   */
-	  GdkRegion *invalidate = cairo_region_create_rectangle (&widget->allocation);
+	  cairo_region_t *invalidate = cairo_region_create_rectangle (&widget->allocation);
 	  cairo_region_union_rectangle (invalidate, &old_allocation);
 
 	  gdk_window_invalidate_region (widget->window, invalidate, FALSE);
@@ -4055,7 +4055,7 @@ gtk_widget_size_allocate (GtkWidget	*widget,
 	    {
 	      /* Invalidate union(old_allaction,widget->allocation) in widget->window and descendents owned by widget
 	       */
-	      GdkRegion *invalidate = cairo_region_create_rectangle (&widget->allocation);
+	      cairo_region_t *invalidate = cairo_region_create_rectangle (&widget->allocation);
 	      cairo_region_union_rectangle (invalidate, &old_allocation);
 
 	      gtk_widget_invalidate_widget_windows (widget, invalidate);
@@ -4067,7 +4067,7 @@ gtk_widget_size_allocate (GtkWidget	*widget,
   if ((size_changed || position_changed) && widget->parent &&
       gtk_widget_get_realized (widget->parent) && GTK_CONTAINER (widget->parent)->reallocate_redraws)
     {
-      GdkRegion *invalidate = cairo_region_create_rectangle (&widget->parent->allocation);
+      cairo_region_t *invalidate = cairo_region_create_rectangle (&widget->parent->allocation);
       gtk_widget_invalidate_widget_windows (widget->parent, invalidate);
       cairo_region_destroy (invalidate);
     }
@@ -5177,7 +5177,7 @@ gtk_widget_intersect (GtkWidget	         *widget,
 /**
  * gtk_widget_region_intersect:
  * @widget: a #GtkWidget
- * @region: a #GdkRegion, in the same coordinate system as 
+ * @region: a #cairo_region_t, in the same coordinate system as 
  *          @widget->allocation. That is, relative to @widget->window
  *          for %NO_WINDOW widgets; relative to the parent window
  *          of @widget->window for widgets with their own window.
@@ -5191,12 +5191,12 @@ gtk_widget_intersect (GtkWidget	         *widget,
  * the intersection. The result may be empty, use cairo_region_is_empty() to
  * check.
  **/
-GdkRegion *
+cairo_region_t *
 gtk_widget_region_intersect (GtkWidget       *widget,
-			     const GdkRegion *region)
+			     const cairo_region_t *region)
 {
   GdkRectangle rect;
-  GdkRegion *dest;
+  cairo_region_t *dest;
   
   g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
   g_return_val_if_fail (region != NULL, NULL);

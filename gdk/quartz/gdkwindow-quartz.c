@@ -225,13 +225,13 @@ gdk_window_impl_quartz_init (GdkWindowImplQuartz *impl)
 static void
 gdk_window_impl_quartz_begin_paint_region (GdkPaintable    *paintable,
                                            GdkWindow       *window,
-					   const GdkRegion *region)
+					   const cairo_region_t *region)
 {
   GdkWindowImplQuartz *impl = GDK_WINDOW_IMPL_QUARTZ (paintable);
   GdkWindowObject *private = (GdkWindowObject*)window;
   int n_rects;
   GdkPixmap *bg_pixmap;
-  GdkRegion *clipped_and_offset_region;
+  cairo_region_t *clipped_and_offset_region;
   gboolean free_clipped_and_offset_region = TRUE;
 
   bg_pixmap = private->bg_pixmap;
@@ -363,7 +363,7 @@ gdk_window_impl_quartz_end_paint (GdkPaintable *paintable)
 
 void
 _gdk_quartz_window_set_needs_display_in_region (GdkWindow    *window,
-                                                GdkRegion    *region)
+                                                cairo_region_t    *region)
 {
   GdkWindowObject *private;
   GdkWindowImplQuartz *impl;
@@ -389,7 +389,7 @@ _gdk_quartz_window_set_needs_display_in_region (GdkWindow    *window,
 
 void
 _gdk_windowing_window_process_updates_recurse (GdkWindow *window,
-                                               GdkRegion *region)
+                                               cairo_region_t *region)
 {
   /* Make sure to only flush each toplevel at most once if we're called
    * from process_all_updates.
@@ -1322,8 +1322,8 @@ move_resize_window_internal (GdkWindow *window,
   GdkRectangle old_visible;
   GdkRectangle new_visible;
   GdkRectangle scroll_rect;
-  GdkRegion *old_region;
-  GdkRegion *expose_region;
+  cairo_region_t *old_region;
+  cairo_region_t *expose_region;
   NSSize delta;
 
   if (GDK_WINDOW_DESTROYED (window))
@@ -2273,7 +2273,7 @@ gdk_window_set_transient_for (GdkWindow *window,
 
 static void
 gdk_window_quartz_shape_combine_region (GdkWindow       *window,
-                                        const GdkRegion *shape,
+                                        const cairo_region_t *shape,
                                         gint             x,
                                         gint             y)
 {
@@ -2282,7 +2282,7 @@ gdk_window_quartz_shape_combine_region (GdkWindow       *window,
 
 static void
 gdk_window_quartz_input_shape_combine_region (GdkWindow       *window,
-                                              const GdkRegion *shape_region,
+                                              const cairo_region_t *shape_region,
                                               gint             offset_x,
                                               gint             offset_y)
 {
@@ -2717,7 +2717,7 @@ gdk_window_set_functions (GdkWindow    *window,
 
 gboolean
 _gdk_windowing_window_queue_antiexpose (GdkWindow  *window,
-					GdkRegion  *area)
+					cairo_region_t  *area)
 {
   return FALSE;
 }
@@ -3057,21 +3057,21 @@ _gdk_windowing_window_set_composited (GdkWindow *window, gboolean composited)
 {
 }
 
-GdkRegion *
+cairo_region_t *
 _gdk_windowing_get_shape_for_mask (GdkBitmap *mask)
 {
   /* FIXME: implement */
   return NULL;
 }
 
-GdkRegion *
+cairo_region_t *
 _gdk_windowing_window_get_shape (GdkWindow *window)
 {
   /* FIXME: implement */
   return NULL;
 }
 
-GdkRegion *
+cairo_region_t *
 _gdk_windowing_window_get_input_shape (GdkWindow *window)
 {
   /* FIXME: implement */

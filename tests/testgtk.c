@@ -441,7 +441,7 @@ static gboolean
 window_expose_event (GtkWidget *widget,
                      GdkEventExpose *event)
 {
-  GdkRegion *region;
+  cairo_region_t *region;
   GtkWidget *child;
   cairo_t *cr;
 
@@ -7732,7 +7732,7 @@ create_shapes (GtkWidget *widget)
 
   if (!with_region)
     {
-      GdkRegion *region;
+      cairo_region_t *region;
       gint x, y;
       
       with_region = shape_create_icon (screen, "3DRings.xpm",

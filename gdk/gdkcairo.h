@@ -48,7 +48,7 @@ void     gdk_cairo_set_source_pixmap (cairo_t            *cr,
 void     gdk_cairo_rectangle         (cairo_t            *cr,
                                       const GdkRectangle *rectangle);
 void     gdk_cairo_region            (cairo_t            *cr,
-                                      const GdkRegion    *region);
+                                      const cairo_region_t    *region);
 
 G_END_DECLS
 

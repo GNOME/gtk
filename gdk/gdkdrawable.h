@@ -140,8 +140,8 @@ struct _GdkDrawableClass
                               gint          width,
                               gint          height);
 
-  GdkRegion*   (*get_clip_region)    (GdkDrawable  *drawable);
-  GdkRegion*   (*get_visible_region) (GdkDrawable  *drawable);
+  cairo_region_t*   (*get_clip_region)    (GdkDrawable  *drawable);
+  cairo_region_t*   (*get_visible_region) (GdkDrawable  *drawable);
 
   GdkDrawable* (*get_composite_drawable) (GdkDrawable *drawable,
                                           gint         x,
@@ -372,8 +372,8 @@ GdkImage *gdk_drawable_copy_to_image (GdkDrawable  *drawable,
 				      gint          width,
 				      gint          height);
 
-GdkRegion *gdk_drawable_get_clip_region    (GdkDrawable *drawable);
-GdkRegion *gdk_drawable_get_visible_region (GdkDrawable *drawable);
+cairo_region_t *gdk_drawable_get_clip_region    (GdkDrawable *drawable);
+cairo_region_t *gdk_drawable_get_visible_region (GdkDrawable *drawable);
 
 G_END_DECLS
 

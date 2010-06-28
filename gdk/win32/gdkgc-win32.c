@@ -34,7 +34,6 @@
 
 #include "gdkgc.h"
 #include "gdkpixmap.h"
-#include "gdkregion-generic.h"
 #include "gdkprivate-win32.h"
 
 static void gdk_win32_gc_get_values (GdkGC           *gc,
@@ -545,7 +544,7 @@ gdk_win32_gc_set_dashes (GdkGC *gc,
 
 void
 _gdk_windowing_gc_set_clip_region (GdkGC           *gc,
-                                   const GdkRegion *region,
+                                   const cairo_region_t *region,
 				   gboolean         reset_origin)
 {
   GdkGCWin32 *win32_gc = GDK_GC_WIN32 (gc);
@@ -1056,14 +1055,14 @@ _gdk_win32_bitmap_to_hrgn (GdkPixmap *pixmap)
 }
 
 HRGN
-_gdk_win32_gdkregion_to_hrgn (const GdkRegion *region,
+_gdk_win32_gdkregion_to_hrgn (const cairo_region_t *region,
 			      gint             x_origin,
 			      gint             y_origin)
 {
   HRGN hrgn;
   RGNDATA *rgndata;
   RECT *rect;
-  GdkRegionBox *boxes = region->rects;
+  cairo_region_tBox *boxes = region->rects;
   guint nbytes =
     sizeof (RGNDATAHEADER) + (sizeof (RECT) * region->numRects);
   int i;

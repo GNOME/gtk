@@ -346,7 +346,7 @@ gdk_x11_drawable_update_picture_clip (GdkDrawable *drawable,
   GdkDrawableImplX11 *impl = GDK_DRAWABLE_IMPL_X11 (drawable);
   Display *xdisplay = GDK_SCREEN_XDISPLAY (impl->screen);
   Picture picture = gdk_x11_drawable_get_picture (drawable);
-  GdkRegion *clip_region = gc ? _gdk_gc_get_clip_region (gc) : NULL;
+  cairo_region_t *clip_region = gc ? _gdk_gc_get_clip_region (gc) : NULL;
 
   if (clip_region)
     {

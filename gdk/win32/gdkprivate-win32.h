@@ -217,7 +217,7 @@ void _gdk_win32_window_scroll (GdkWindow *window,
 			       gint       dx,
 			       gint       dy);
 void _gdk_win32_window_move_region (GdkWindow       *window,
-				    const GdkRegion *region,
+				    const cairo_region_t *region,
 				    gint             dx,
 				    gint             dy);
 void _gdk_win32_windowing_window_get_offsets (GdkWindow *window,
@@ -267,11 +267,11 @@ COLORREF  _gdk_win32_colormap_color     (GdkColormap *colormap,
 
 HRGN	  _gdk_win32_bitmap_to_hrgn     (GdkPixmap   *bitmap);
 
-HRGN	  _gdk_win32_gdkregion_to_hrgn  (const GdkRegion *region,
+HRGN	  _gdk_win32_gdkregion_to_hrgn  (const cairo_region_t *region,
 					 gint             x_origin,
 					 gint             y_origin);
 
-GdkRegion *_gdk_win32_hrgn_to_region    (HRGN hrgn);
+cairo_region_t *_gdk_win32_hrgn_to_region    (HRGN hrgn);
 
 void	_gdk_win32_adjust_client_rect   (GdkWindow *window,
 					 RECT      *RECT);
@@ -321,7 +321,7 @@ gchar *_gdk_win32_data_to_string       (const guchar*data,
 gchar *_gdk_win32_rect_to_string       (const RECT  *rect);
 
 gchar *_gdk_win32_gdkrectangle_to_string (const GdkRectangle *rect);
-gchar *_gdk_win32_gdkregion_to_string    (const GdkRegion    *box);
+gchar *_gdk_win32_gdkregion_to_string    (const cairo_region_t    *box);
 
 void   _gdk_win32_print_event            (const GdkEvent     *event);
 

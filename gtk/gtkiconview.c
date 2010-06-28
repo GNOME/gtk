@@ -2319,7 +2319,7 @@ gtk_icon_view_update_rubberband (gpointer data)
   GdkRectangle old_area;
   GdkRectangle new_area;
   GdkRectangle common;
-  GdkRegion *invalid_region;
+  cairo_region_t *invalid_region;
   
   icon_view = GTK_ICON_VIEW (data);
 
@@ -2350,7 +2350,7 @@ gtk_icon_view_update_rubberband (gpointer data)
   gdk_rectangle_intersect (&old_area, &new_area, &common);
   if (common.width > 2 && common.height > 2)
     {
-      GdkRegion *common_region;
+      cairo_region_t *common_region;
 
       /* make sure the border is invalidated */
       common.x += 1;

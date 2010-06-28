@@ -524,7 +524,7 @@ struct _GdkWindowObject
   
   GSList *GSEAL (paint_stack);
   
-  GdkRegion *GSEAL (update_area);
+  cairo_region_t *GSEAL (update_area);
   guint GSEAL (update_freeze_count);
   
   guint8 GSEAL (window_type);
@@ -630,7 +630,7 @@ void          gdk_window_scroll                (GdkWindow     *window,
                                                 gint           dx,
                                                 gint           dy);
 void	      gdk_window_move_region           (GdkWindow       *window,
-						const GdkRegion *region,
+						const cairo_region_t *region,
 						gint             dx,
 						gint             dy);
 gboolean      gdk_window_ensure_native        (GdkWindow       *window);
@@ -646,7 +646,7 @@ void gdk_window_shape_combine_mask  (GdkWindow	      *window,
                                      gint	       x,
                                      gint	       y);
 void gdk_window_shape_combine_region (GdkWindow	      *window,
-                                      const GdkRegion *shape_region,
+                                      const cairo_region_t *shape_region,
                                       gint	       offset_x,
                                       gint	       offset_y);
 
@@ -677,7 +677,7 @@ void gdk_window_input_shape_combine_mask   (GdkWindow       *window,
 					    gint             x,
 					    gint             y);
 void gdk_window_input_shape_combine_region (GdkWindow       *window,
-                                            const GdkRegion *shape_region,
+                                            const cairo_region_t *shape_region,
                                             gint             offset_x,
                                             gint             offset_y);
 void gdk_window_set_child_input_shapes     (GdkWindow       *window);
@@ -739,7 +739,7 @@ void          gdk_set_sm_client_id          (const gchar        *sm_client_id);
 void	      gdk_window_begin_paint_rect   (GdkWindow          *window,
 					     const GdkRectangle *rectangle);
 void	      gdk_window_begin_paint_region (GdkWindow          *window,
-					     const GdkRegion    *region);
+					     const cairo_region_t    *region);
 void	      gdk_window_end_paint          (GdkWindow          *window);
 void	      gdk_window_flush             (GdkWindow          *window);
 
@@ -892,13 +892,13 @@ void       gdk_window_invalidate_rect           (GdkWindow          *window,
 					         const GdkRectangle *rect,
 					         gboolean            invalidate_children);
 void       gdk_window_invalidate_region         (GdkWindow          *window,
-					         const GdkRegion    *region,
+					         const cairo_region_t    *region,
 					         gboolean            invalidate_children);
 void       gdk_window_invalidate_maybe_recurse  (GdkWindow          *window,
-						 const GdkRegion    *region,
+						 const cairo_region_t    *region,
 						 gboolean (*child_func) (GdkWindow *, gpointer),
 						 gpointer   user_data);
-GdkRegion *gdk_window_get_update_area     (GdkWindow    *window);
+cairo_region_t *gdk_window_get_update_area     (GdkWindow    *window);
 
 void       gdk_window_freeze_updates      (GdkWindow    *window);
 void       gdk_window_thaw_updates        (GdkWindow    *window);

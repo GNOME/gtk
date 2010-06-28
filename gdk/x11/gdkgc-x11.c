@@ -154,7 +154,7 @@ _gdk_x11_gc_flush (GdkGC *gc)
 
   if (private->dirty_mask & GDK_GC_DIRTY_CLIP)
     {
-      GdkRegion *clip_region = _gdk_gc_get_clip_region (gc);
+      cairo_region_t *clip_region = _gdk_gc_get_clip_region (gc);
       
       if (!clip_region)
 	XSetClipOrigin (xdisplay, xgc,
@@ -600,7 +600,7 @@ gdk_x11_gc_values_to_xvalues (GdkGCValues    *values,
 
 void
 _gdk_windowing_gc_set_clip_region (GdkGC           *gc,
-				   const GdkRegion *region,
+				   const cairo_region_t *region,
 				   gboolean reset_origin)
 {
   GdkGCX11 *x11_gc = GDK_GC_X11 (gc);

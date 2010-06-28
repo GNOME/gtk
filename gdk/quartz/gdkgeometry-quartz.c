@@ -25,7 +25,7 @@
 void
 _gdk_quartz_window_queue_translation (GdkWindow *window,
 				      GdkGC     *gc,
-                                      GdkRegion *area,
+                                      cairo_region_t *area,
                                       gint       dx,
                                       gint       dy)
 {
@@ -33,7 +33,7 @@ _gdk_quartz_window_queue_translation (GdkWindow *window,
   GdkWindowImplQuartz *impl = (GdkWindowImplQuartz *)private->impl;
 
   int i, n_rects;
-  GdkRegion *intersection;
+  cairo_region_t *intersection;
   GdkRectangle rect;
 
   /* We will intersect the known region that needs display with the given
@@ -54,7 +54,7 @@ _gdk_quartz_window_queue_translation (GdkWindow *window,
 
 gboolean
 _gdk_quartz_window_queue_antiexpose (GdkWindow *window,
-                                     GdkRegion *area)
+                                     cairo_region_t *area)
 {
   return FALSE;
 }

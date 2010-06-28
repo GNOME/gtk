@@ -66,7 +66,7 @@ typedef void (* GdkSpanFunc) (GdkSpan *span,
 
 GdkRegion    * gdk_region_new             (void);
 #endif
-GdkRegion    * gdk_region_polygon         (const GdkPoint     *points,
+cairo_region_t * gdk_region_polygon       (const GdkPoint     *points,
                                            gint                n_points,
                                            GdkFillRule         fill_rule);
 #ifndef GDK_DISABLE_DEPRECATED
@@ -84,8 +84,8 @@ gboolean       gdk_region_empty           (const GdkRegion    *region);
 gboolean       gdk_region_equal           (const GdkRegion    *region1,
                                            const GdkRegion    *region2);
 #endif
-gboolean       gdk_region_rect_equal      (const GdkRegion    *region,
-                                           const GdkRectangle *rectangle);
+gboolean       gdk_region_rect_equal      (const cairo_region_t *region,
+                                           const GdkRectangle   *rectangle);
 #ifndef GDK_DISABLE_DEPRECATED
 gboolean       gdk_region_point_in        (const GdkRegion    *region,
                                            int                 x,

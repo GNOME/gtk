@@ -1475,12 +1475,12 @@ handle_configure_event (MSG       *msg,
     }
 }
 
-GdkRegion *
+cairo_region_t *
 _gdk_win32_hrgn_to_region (HRGN hrgn)
 {
   RGNDATA *rgndata;
   RECT *rects;
-  GdkRegion *result;
+  cairo_region_t *result;
   gint nbytes;
   guint i;
 
@@ -1538,7 +1538,7 @@ handle_wm_paint (MSG        *msg,
   HRGN hrgn = CreateRectRgn (0, 0, 0, 0);
   HDC hdc;
   PAINTSTRUCT paintstruct;
-  GdkRegion *update_region;
+  cairo_region_t *update_region;
 
   if (GetUpdateRgn (msg->hwnd, hrgn, FALSE) == ERROR)
     {

@@ -132,7 +132,7 @@ gdk_cairo_rectangle (cairo_t            *cr,
 /**
  * gdk_cairo_region:
  * @cr: a #cairo_t
- * @region: a #GdkRegion
+ * @region: a #cairo_region_t
  * 
  * Adds the given region to the current path of @cr.
  *
@@ -140,7 +140,7 @@ gdk_cairo_rectangle (cairo_t            *cr,
  **/
 void
 gdk_cairo_region (cairo_t         *cr,
-		  const GdkRegion *region)
+		  const cairo_region_t *region)
 {
   cairo_rectangle_int_t box;
   gint n_boxes, i;

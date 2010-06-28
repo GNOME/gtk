@@ -40,8 +40,6 @@
 #include "gdkprivate-directfb.h"
 #include "gdkdisplay-directfb.h"
 
-#include "gdkregion-generic.h"
-
 #include "gdkinternals.h"
 #include "gdkalias.h"
 #include "cairo.h"
@@ -57,7 +55,7 @@ D_DEBUG_DOMAIN( GDKDFB_Paintable, "GDKDFB/Paintable", "GDK DirectFB Paintable" )
 D_DEBUG_DOMAIN( GDKDFB_Window,    "GDKDFB/Window",    "GDK DirectFB Window" );
 
 
-static GdkRegion * gdk_window_impl_directfb_get_visible_region (GdkDrawable *drawable);
+static cairo_region_t * gdk_window_impl_directfb_get_visible_region (GdkDrawable *drawable);
 static void        gdk_window_impl_directfb_set_colormap       (GdkDrawable *drawable,
                                                                 GdkColormap *colormap);
 static void gdk_window_impl_directfb_init       (GdkWindowImplDirectFB      *window);
@@ -209,7 +207,7 @@ gdk_window_impl_directfb_finalize (GObject *object)
     G_OBJECT_CLASS (parent_class)->finalize (object);
 }
 
-static GdkRegion*
+static cairo_region_t*
 gdk_window_impl_directfb_get_visible_region (GdkDrawable *drawable)
 {
   GdkDrawableImplDirectFB *priv = GDK_DRAWABLE_IMPL_DIRECTFB (drawable);
@@ -1942,7 +1940,7 @@ gdk_directfb_window_set_events (GdkWindow    *window,
 
 static void
 gdk_directfb_window_shape_combine_region (GdkWindow       *window,
-                                          const GdkRegion *shape_region,
+                                          const cairo_region_t *shape_region,
                                           gint             offset_x,
                                           gint             offset_y)
 {
@@ -1950,7 +1948,7 @@ gdk_directfb_window_shape_combine_region (GdkWindow       *window,
 
 void
 gdk_directfb_window_input_shape_combine_region (GdkWindow       *window,
-                                                const GdkRegion *shape_region,
+                                                const cairo_region_t *shape_region,
                                                 gint             offset_x,
                                                 gint             offset_y)
 {
@@ -1959,7 +1957,7 @@ gdk_directfb_window_input_shape_combine_region (GdkWindow       *window,
 static void
 gdk_directfb_window_queue_translation (GdkWindow *window,
 				       GdkGC     *gc,
-                                       GdkRegion *region,
+                                       cairo_region_t *region,
                                        gint       dx,
                                        gint       dy)
 {
@@ -2622,7 +2620,7 @@ gdk_window_set_urgency_hint (GdkWindow *window,
 static void
 gdk_window_impl_directfb_begin_paint_region (GdkPaintable    *paintable,
                                              GdkWindow       *window,
-                                             const GdkRegion *region)
+                                             const cairo_region_t *region)
 {
   GdkDrawableImplDirectFB *impl;
   GdkWindowImplDirectFB   *wimpl;
@@ -2679,7 +2677,7 @@ gdk_window_impl_directfb_begin_paint_region (GdkPaintable    *paintable,
 
   for (i = 0; i < region->numRects; i++)
     {
-      GdkRegionBox *box = &region->rects[i];
+      cairo_region_tBox *box = &region->rects[i];
 
       D_DEBUG_AT( GDKDFB_Window, "  -> [%2d] %4d,%4d-%4dx%4d\n", i, GDKDFB_RECTANGLE_VALS_FROM_BOX( box ) );
 
@@ -2766,13 +2764,13 @@ gdk_window_impl_directfb_end_paint (GdkPaintable *paintable)
     D_DEBUG_AT( GDKDFB_Window, "  -> depth is still %d\n", impl->paint_depth );
 }
 
-GdkRegion *
+cairo_region_t *
 _gdk_windowing_get_shape_for_mask (GdkBitmap *mask)
 {
   return NULL;
 }
 
-GdkRegion *
+cairo_region_t *
 _gdk_windowing_window_get_shape (GdkWindow *window)
 {
   return NULL;
@@ -2784,7 +2782,7 @@ _gdk_windowing_window_get_next_serial (GdkDisplay *display)
   return 0;
 }
 
-GdkRegion *
+cairo_region_t *
 _gdk_windowing_window_get_input_shape (GdkWindow *window)
 {
   return NULL;
@@ -2802,7 +2800,7 @@ _gdk_windowing_after_process_all_updates (void)
 
 void
 _gdk_windowing_window_process_updates_recurse (GdkWindow *window,
-                                               GdkRegion *region)
+                                               cairo_region_t *region)
 {
   _gdk_window_process_updates_recurse (window, region);
 }
@@ -2861,7 +2859,7 @@ gdk_directfb_window_get_root_coords (GdkWindow *window,
 
 static gboolean
 gdk_directfb_window_queue_antiexpose (GdkWindow *window,
-                                      GdkRegion *area)
+                                      cairo_region_t *area)
 {
   return FALSE;
 }

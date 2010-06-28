@@ -41,13 +41,13 @@ typedef struct _GdkGCPrivate GdkGCPrivate;
 
 struct _GdkGCPrivate
 {
-  GdkRegion *clip_region;
+  cairo_region_t *clip_region;
 
   guint32 region_tag_applied;
   int region_tag_offset_x;
   int region_tag_offset_y;
 
-  GdkRegion *old_clip_region;
+  cairo_region_t *old_clip_region;
   GdkPixmap *old_clip_mask;
 
   GdkBitmap *stipple;
@@ -538,7 +538,7 @@ gdk_gc_set_clip_mask (GdkGC	*gc,
 /* Takes ownership of passed in region */
 static void
 _gdk_gc_set_clip_region_real (GdkGC     *gc,
-			      GdkRegion *region,
+			      cairo_region_t *region,
 			      gboolean reset_origin)
 {
   GdkGCPrivate *priv = GDK_GC_GET_PRIVATE (gc);
@@ -560,7 +560,7 @@ _gdk_gc_set_clip_region_real (GdkGC     *gc,
 /* Doesn't copy region, allows not to reset origin */
 void
 _gdk_gc_set_clip_region_internal (GdkGC     *gc,
-				  GdkRegion *region,
+				  cairo_region_t *region,
 				  gboolean reset_origin)
 {
   _gdk_gc_remove_drawable_clip (gc);
@@ -571,7 +571,7 @@ _gdk_gc_set_clip_region_internal (GdkGC     *gc,
 void
 _gdk_gc_add_drawable_clip (GdkGC     *gc,
 			   guint32    region_tag,
-			   GdkRegion *region,
+			   cairo_region_t *region,
 			   int        offset_x,
 			   int        offset_y)
 {
@@ -634,7 +634,7 @@ _gdk_gc_add_drawable_clip (GdkGC     *gc,
       else if (overlap == CAIRO_REGION_OVERLAP_OUT)
 	{
 	  /* No intersection, set empty clip region */
-	  GdkRegion *empty = cairo_region_create ();
+	  cairo_region_t *empty = cairo_region_create ();
 
 	  cairo_region_destroy (region);
 	  priv->old_clip_mask = g_object_ref (priv->clip_mask);
@@ -704,7 +704,7 @@ void
 gdk_gc_set_clip_rectangle (GdkGC              *gc,
 			   const GdkRectangle *rectangle)
 {
-  GdkRegion *region;
+  cairo_region_t *region;
   
   g_return_if_fail (GDK_IS_GC (gc));
 
@@ -721,7 +721,7 @@ gdk_gc_set_clip_rectangle (GdkGC              *gc,
 /**
  * gdk_gc_set_clip_region:
  * @gc: a #GdkGC.
- * @region: the #GdkRegion. 
+ * @region: the #cairo_region_t. 
  * 
  * Sets the clip mask for a graphics context from a region structure.
  * The clip mask is interpreted relative to the clip origin. (See
@@ -729,9 +729,9 @@ gdk_gc_set_clip_rectangle (GdkGC              *gc,
  **/
 void
 gdk_gc_set_clip_region (GdkGC           *gc,
-			const GdkRegion *region)
+			const cairo_region_t *region)
 {
-  GdkRegion *copy;
+  cairo_region_t *copy;
 
   g_return_if_fail (GDK_IS_GC (gc));
 
@@ -755,7 +755,7 @@ gdk_gc_set_clip_region (GdkGC           *gc,
  *   (if a clip mask is set, the return will be %NULL)
  *   This value is owned by the GC and must not be freed.
  **/
-GdkRegion *
+cairo_region_t *
 _gdk_gc_get_clip_region (GdkGC *gc)
 {
   g_return_val_if_fail (GDK_IS_GC (gc), NULL);

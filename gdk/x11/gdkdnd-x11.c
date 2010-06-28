@@ -59,7 +59,7 @@ typedef struct {
   gboolean mapped;
   gboolean shape_selected;
   gboolean shape_valid;
-  GdkRegion *shape;
+  cairo_region_t *shape;
 } GdkCacheChild;
 
 typedef struct {
@@ -630,7 +630,7 @@ is_pointer_within_shape (GdkDisplay    *display,
   if (!child->shape_valid)
     {
       GdkDisplayX11 *display_x11 = GDK_DISPLAY_X11 (display);
-      GdkRegion *input_shape;
+      cairo_region_t *input_shape;
 
       child->shape = _xwindow_get_shape (display_x11->xdisplay,
                                          child->xid, ShapeBounding);
