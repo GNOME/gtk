@@ -4595,7 +4595,7 @@ _xwindow_get_shape (Display *xdisplay,
     }
   XFree (xrl);
   
-  shape = _gdk_region_new_from_yxbanded_rects (rl, rn);
+  shape = cairo_region_create_rectangles (rl, rn);
   g_free (rl);
   
   return shape;
