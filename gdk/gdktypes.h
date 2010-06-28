@@ -36,6 +36,7 @@
 #include <glib.h>
 #include <pango/pango.h>
 #include <glib-object.h>
+#include <cairo.h>
 
 #ifdef G_OS_WIN32
 #  ifdef GDK_COMPILATION
@@ -73,7 +74,7 @@ G_BEGIN_DECLS
 /* Type definitions for the basic structures.
  */
 typedef struct _GdkPoint	      GdkPoint;
-typedef struct _GdkRectangle	      GdkRectangle;
+typedef cairo_rectangle_int_t	      GdkRectangle;
 typedef struct _GdkSegment	      GdkSegment;
 typedef struct _GdkSpan	              GdkSpan;
 
@@ -104,7 +105,7 @@ typedef struct _GdkColormap	      GdkColormap;
 typedef struct _GdkCursor	      GdkCursor;
 typedef struct _GdkGC                 GdkGC;
 typedef struct _GdkImage              GdkImage;
-typedef struct _GdkRegion             GdkRegion;
+typedef cairo_region_t                GdkRegion;
 typedef struct _GdkVisual             GdkVisual;
 
 typedef struct _GdkDrawable           GdkDrawable;
