@@ -30,8 +30,29 @@
 #include "gtkbuildable.h"
 #include "gtkbuilderprivate.h"
 
-#define GTK_LIST_STORE_IS_SORTED(list) (((GtkListStore*)(list))->sort_column_id != GTK_TREE_SORTABLE_UNSORTED_SORT_COLUMN_ID)
-#define VALID_ITER(iter, list_store) ((iter)!= NULL && (iter)->user_data != NULL && list_store->stamp == (iter)->stamp && !g_sequence_iter_is_end ((iter)->user_data) && g_sequence_iter_get_sequence ((iter)->user_data) == list_store->seq)
+
+struct _GtkListStorePriv
+{
+  GtkSortType order;
+  GtkTreeIterCompareFunc default_sort_func;
+
+  GDestroyNotify default_sort_destroy;
+  GList *sort_list;
+  GType *column_headers;
+
+  gint stamp;
+  gint n_columns;
+  gint sort_column_id;
+  gint length;
+
+  guint columns_dirty : 1;
+
+  gpointer default_sort_data;
+  gpointer seq;         /* head of the list */
+};
+
+#define GTK_LIST_STORE_IS_SORTED(list) (((GtkListStore*)(list))->priv->sort_column_id != GTK_TREE_SORTABLE_UNSORTED_SORT_COLUMN_ID)
+#define VALID_ITER(iter, list_store) ((iter)!= NULL && (iter)->user_data != NULL && list_store->priv->stamp == (iter)->stamp && !g_sequence_iter_is_end ((iter)->user_data) && g_sequence_iter_get_sequence ((iter)->user_data) == list_store->priv->seq)
 
 static void         gtk_list_store_tree_model_init (GtkTreeModelIface *iface);
 static void         gtk_list_store_drag_source_init(GtkTreeDragSourceIface *iface);
@@ -152,6 +173,8 @@ gtk_list_store_class_init (GtkListStoreClass *class)
   object_class = (GObjectClass*) class;
 
   object_class->finalize = gtk_list_store_finalize;
+
+  g_type_class_add_private (class, sizeof (GtkListStorePriv));
 }
 
 static void
@@ -206,12 +229,19 @@ gtk_list_store_buildable_init (GtkBuildableIface *iface)
 static void
 gtk_list_store_init (GtkListStore *list_store)
 {
-  list_store->seq = g_sequence_new (NULL);
-  list_store->sort_list = NULL;
-  list_store->stamp = g_random_int ();
-  list_store->sort_column_id = GTK_TREE_SORTABLE_UNSORTED_SORT_COLUMN_ID;
-  list_store->columns_dirty = FALSE;
-  list_store->length = 0;
+  GtkListStorePriv *priv;
+
+  list_store->priv = G_TYPE_INSTANCE_GET_PRIVATE (list_store,
+                                                  GTK_TYPE_LIST_STORE,
+                                                  GtkListStorePriv);
+  priv = list_store->priv;
+
+  priv->seq = g_sequence_new (NULL);
+  priv->sort_list = NULL;
+  priv->stamp = g_random_int ();
+  priv->sort_column_id = GTK_TREE_SORTABLE_UNSORTED_SORT_COLUMN_ID;
+  priv->columns_dirty = FALSE;
+  priv->length = 0;
 }
 
 /**
@@ -315,10 +345,14 @@ gtk_list_store_set_column_types (GtkListStore *list_store,
 				 gint          n_columns,
 				 GType        *types)
 {
+  GtkListStorePriv *priv;
   gint i;
 
   g_return_if_fail (GTK_IS_LIST_STORE (list_store));
-  g_return_if_fail (list_store->columns_dirty == 0);
+
+  priv = list_store->priv;
+
+  g_return_if_fail (priv->columns_dirty == 0);
 
   gtk_list_store_set_n_columns (list_store, n_columns);
   for (i = 0; i < n_columns; i++)
@@ -336,19 +370,20 @@ static void
 gtk_list_store_set_n_columns (GtkListStore *list_store,
 			      gint          n_columns)
 {
+  GtkListStorePriv *priv = list_store->priv;
   int i;
 
-  if (list_store->n_columns == n_columns)
+  if (priv->n_columns == n_columns)
     return;
 
-  list_store->column_headers = g_renew (GType, list_store->column_headers, n_columns);
-  for (i = list_store->n_columns; i < n_columns; i++)
-    list_store->column_headers[i] = G_TYPE_INVALID;
-  list_store->n_columns = n_columns;
+  priv->column_headers = g_renew (GType, priv->column_headers, n_columns);
+  for (i = priv->n_columns; i < n_columns; i++)
+    priv->column_headers[i] = G_TYPE_INVALID;
+  priv->n_columns = n_columns;
 
-  if (list_store->sort_list)
-    _gtk_tree_data_list_header_free (list_store->sort_list);
-  list_store->sort_list = _gtk_tree_data_list_header_new (n_columns, list_store->column_headers);
+  if (priv->sort_list)
+    _gtk_tree_data_list_header_free (priv->sort_list);
+  priv->sort_list = _gtk_tree_data_list_header_new (n_columns, priv->column_headers);
 }
 
 static void
@@ -356,35 +391,38 @@ gtk_list_store_set_column_type (GtkListStore *list_store,
 				gint          column,
 				GType         type)
 {
+  GtkListStorePriv *priv = list_store->priv;
+
   if (!_gtk_tree_data_list_check_type (type))
     {
       g_warning ("%s: Invalid type %s\n", G_STRLOC, g_type_name (type));
       return;
     }
 
-  list_store->column_headers[column] = type;
+  priv->column_headers[column] = type;
 }
 
 static void
 gtk_list_store_finalize (GObject *object)
 {
   GtkListStore *list_store = GTK_LIST_STORE (object);
+  GtkListStorePriv *priv = list_store->priv;
 
-  g_sequence_foreach (list_store->seq,
-		      (GFunc) _gtk_tree_data_list_free, list_store->column_headers);
+  g_sequence_foreach (priv->seq,
+		      (GFunc) _gtk_tree_data_list_free, priv->column_headers);
 
-  g_sequence_free (list_store->seq);
+  g_sequence_free (priv->seq);
 
-  _gtk_tree_data_list_header_free (list_store->sort_list);
-  g_free (list_store->column_headers);
-  
-  if (list_store->default_sort_destroy)
+  _gtk_tree_data_list_header_free (priv->sort_list);
+  g_free (priv->column_headers);
+
+  if (priv->default_sort_destroy)
     {
-      GDestroyNotify d = list_store->default_sort_destroy;
+      GDestroyNotify d = priv->default_sort_destroy;
 
-      list_store->default_sort_destroy = NULL;
-      d (list_store->default_sort_data);
-      list_store->default_sort_data = NULL;
+      priv->default_sort_destroy = NULL;
+      d (priv->default_sort_data);
+      priv->default_sort_data = NULL;
     }
 
   G_OBJECT_CLASS (gtk_list_store_parent_class)->finalize (object);
@@ -400,25 +438,26 @@ gtk_list_store_get_flags (GtkTreeModel *tree_model)
 static gint
 gtk_list_store_get_n_columns (GtkTreeModel *tree_model)
 {
-  GtkListStore *list_store = (GtkListStore *) tree_model;
+  GtkListStore *list_store = GTK_LIST_STORE (tree_model);
+  GtkListStorePriv *priv = list_store->priv;
 
-  list_store->columns_dirty = TRUE;
+  priv->columns_dirty = TRUE;
 
-  return list_store->n_columns;
+  return priv->n_columns;
 }
 
 static GType
 gtk_list_store_get_column_type (GtkTreeModel *tree_model,
 				gint          index)
 {
-  GtkListStore *list_store = (GtkListStore *) tree_model;
+  GtkListStore *list_store = GTK_LIST_STORE (tree_model);
+  GtkListStorePriv *priv = list_store->priv;
 
-  g_return_val_if_fail (index < GTK_LIST_STORE (tree_model)->n_columns, 
-			G_TYPE_INVALID);
+  g_return_val_if_fail (index < priv->n_columns, G_TYPE_INVALID);
 
-  list_store->columns_dirty = TRUE;
+  priv->columns_dirty = TRUE;
 
-  return list_store->column_headers[index];
+  return priv->column_headers[index];
 }
 
 static gboolean
@@ -426,20 +465,21 @@ gtk_list_store_get_iter (GtkTreeModel *tree_model,
 			 GtkTreeIter  *iter,
 			 GtkTreePath  *path)
 {
-  GtkListStore *list_store = (GtkListStore *) tree_model;
+  GtkListStore *list_store = GTK_LIST_STORE (tree_model);
+  GtkListStorePriv *priv = list_store->priv;
   GSequence *seq;
   gint i;
 
-  list_store->columns_dirty = TRUE;
+  priv->columns_dirty = TRUE;
 
-  seq = list_store->seq;
-  
+  seq = priv->seq;
+
   i = gtk_tree_path_get_indices (path)[0];
 
   if (i >= g_sequence_get_length (seq))
     return FALSE;
 
-  iter->stamp = list_store->stamp;
+  iter->stamp = priv->stamp;
   iter->user_data = g_sequence_get_iter_at_pos (seq, i);
 
   return TRUE;
@@ -449,9 +489,11 @@ static GtkTreePath *
 gtk_list_store_get_path (GtkTreeModel *tree_model,
 			 GtkTreeIter  *iter)
 {
+  GtkListStore *list_store = GTK_LIST_STORE (tree_model);
+  GtkListStorePriv *priv = list_store->priv;
   GtkTreePath *path;
 
-  g_return_val_if_fail (iter->stamp == GTK_LIST_STORE (tree_model)->stamp, NULL);
+  g_return_val_if_fail (iter->stamp == priv->stamp, NULL);
 
   if (g_sequence_iter_is_end (iter->user_data))
     return NULL;
@@ -468,11 +510,12 @@ gtk_list_store_get_value (GtkTreeModel *tree_model,
 			  gint          column,
 			  GValue       *value)
 {
-  GtkListStore *list_store = (GtkListStore *) tree_model;
+  GtkListStore *list_store = GTK_LIST_STORE (tree_model);
+  GtkListStorePriv *priv = list_store->priv;
   GtkTreeDataList *list;
   gint tmp_column = column;
 
-  g_return_if_fail (column < list_store->n_columns);
+  g_return_if_fail (column < priv->n_columns);
   g_return_if_fail (VALID_ITER (iter, list_store));
 		    
   list = g_sequence_get (iter->user_data);
@@ -481,10 +524,10 @@ gtk_list_store_get_value (GtkTreeModel *tree_model,
     list = list->next;
 
   if (list == NULL)
-    g_value_init (value, list_store->column_headers[column]);
+    g_value_init (value, priv->column_headers[column]);
   else
     _gtk_tree_data_list_node_to_value (list,
-				       list_store->column_headers[column],
+				       priv->column_headers[column],
 				       value);
 }
 
@@ -492,9 +535,11 @@ static gboolean
 gtk_list_store_iter_next (GtkTreeModel  *tree_model,
 			  GtkTreeIter   *iter)
 {
+  GtkListStore *list_store = GTK_LIST_STORE (tree_model);
+  GtkListStorePriv *priv = list_store->priv;
   gboolean retval;
 
-  g_return_val_if_fail (GTK_LIST_STORE (tree_model)->stamp == iter->stamp, FALSE);
+  g_return_val_if_fail (priv->stamp == iter->stamp, FALSE);
   iter->user_data = g_sequence_iter_next (iter->user_data);
 
   retval = g_sequence_iter_is_end (iter->user_data);
@@ -510,7 +555,8 @@ gtk_list_store_iter_children (GtkTreeModel *tree_model,
 			      GtkTreeIter  *parent)
 {
   GtkListStore *list_store = (GtkListStore *) tree_model;
-  
+  GtkListStorePriv *priv = list_store->priv;
+
   /* this is a list, nodes have no children */
   if (parent)
     {
@@ -518,10 +564,10 @@ gtk_list_store_iter_children (GtkTreeModel *tree_model,
       return FALSE;
     }
 
-  if (g_sequence_get_length (list_store->seq) > 0)
+  if (g_sequence_get_length (priv->seq) > 0)
     {
-      iter->stamp = list_store->stamp;
-      iter->user_data = g_sequence_get_begin_iter (list_store->seq);
+      iter->stamp = priv->stamp;
+      iter->user_data = g_sequence_get_begin_iter (priv->seq);
       return TRUE;
     }
   else
@@ -542,12 +588,13 @@ static gint
 gtk_list_store_iter_n_children (GtkTreeModel *tree_model,
 				GtkTreeIter  *iter)
 {
-  GtkListStore *list_store = (GtkListStore *) tree_model;
+  GtkListStore *list_store = GTK_LIST_STORE (tree_model);
+  GtkListStorePriv *priv = list_store->priv;
 
   if (iter == NULL)
-    return g_sequence_get_length (list_store->seq);
+    return g_sequence_get_length (priv->seq);
 
-  g_return_val_if_fail (list_store->stamp == iter->stamp, -1);
+  g_return_val_if_fail (priv->stamp == iter->stamp, -1);
 
   return 0;
 }
@@ -558,7 +605,8 @@ gtk_list_store_iter_nth_child (GtkTreeModel *tree_model,
 			       GtkTreeIter  *parent,
 			       gint          n)
 {
-  GtkListStore *list_store = (GtkListStore *) tree_model;
+  GtkListStore *list_store = GTK_LIST_STORE (tree_model);
+  GtkListStorePriv *priv = list_store->priv;
   GSequenceIter *child;
 
   iter->stamp = 0;
@@ -566,12 +614,12 @@ gtk_list_store_iter_nth_child (GtkTreeModel *tree_model,
   if (parent)
     return FALSE;
 
-  child = g_sequence_get_iter_at_pos (list_store->seq, n);
+  child = g_sequence_get_iter_at_pos (priv->seq, n);
 
   if (g_sequence_iter_is_end (child))
     return FALSE;
 
-  iter->stamp = list_store->stamp;
+  iter->stamp = priv->stamp;
   iter->user_data = child;
 
   return TRUE;
@@ -593,6 +641,7 @@ gtk_list_store_real_set_value (GtkListStore *list_store,
 			       GValue       *value,
 			       gboolean      sort)
 {
+  GtkListStorePriv *priv = list_store->priv;
   GtkTreeDataList *list;
   GtkTreeDataList *prev;
   gint old_column = column;
@@ -600,15 +649,15 @@ gtk_list_store_real_set_value (GtkListStore *list_store,
   gboolean converted = FALSE;
   gboolean retval = FALSE;
 
-  if (! g_type_is_a (G_VALUE_TYPE (value), list_store->column_headers[column]))
+  if (! g_type_is_a (G_VALUE_TYPE (value), priv->column_headers[column]))
     {
-      if (! (g_value_type_compatible (G_VALUE_TYPE (value), list_store->column_headers[column]) &&
-	     g_value_type_compatible (list_store->column_headers[column], G_VALUE_TYPE (value))))
+      if (! (g_value_type_compatible (G_VALUE_TYPE (value), priv->column_headers[column]) &&
+	     g_value_type_compatible (priv->column_headers[column], G_VALUE_TYPE (value))))
 	{
 	  g_warning ("%s: Unable to convert from %s to %s\n",
 		     G_STRLOC,
 		     g_type_name (G_VALUE_TYPE (value)),
-		     g_type_name (list_store->column_headers[column]));
+		     g_type_name (priv->column_headers[column]));
 	  return retval;
 	}
       if (!g_value_transform (value, &real_value))
@@ -616,7 +665,7 @@ gtk_list_store_real_set_value (GtkListStore *list_store,
 	  g_warning ("%s: Unable to make conversion from %s to %s\n",
 		     G_STRLOC,
 		     g_type_name (G_VALUE_TYPE (value)),
-		     g_type_name (list_store->column_headers[column]));
+		     g_type_name (priv->column_headers[column]));
 	  g_value_unset (&real_value);
 	  return retval;
 	}
@@ -700,10 +749,13 @@ gtk_list_store_set_value (GtkListStore *list_store,
 			  gint          column,
 			  GValue       *value)
 {
+  GtkListStorePriv *priv = list_store->priv;
+
   g_return_if_fail (GTK_IS_LIST_STORE (list_store));
   g_return_if_fail (VALID_ITER (iter, list_store));
-  g_return_if_fail (column >= 0 && column < list_store->n_columns);
   g_return_if_fail (G_IS_VALUE (value));
+  priv = list_store->priv;
+  g_return_if_fail (column >= 0 && column < priv->n_columns);
 
   if (gtk_list_store_real_set_value (list_store, iter, column, value, TRUE))
     {
@@ -718,22 +770,23 @@ gtk_list_store_set_value (GtkListStore *list_store,
 static GtkTreeIterCompareFunc
 gtk_list_store_get_compare_func (GtkListStore *list_store)
 {
+  GtkListStorePriv *priv = list_store->priv;
   GtkTreeIterCompareFunc func = NULL;
 
   if (GTK_LIST_STORE_IS_SORTED (list_store))
     {
-      if (list_store->sort_column_id != -1)
+      if (priv->sort_column_id != -1)
 	{
 	  GtkTreeDataSortHeader *header;
-	  header = _gtk_tree_data_list_get_header (list_store->sort_list,
-						   list_store->sort_column_id);
+	  header = _gtk_tree_data_list_get_header (priv->sort_list,
+						   priv->sort_column_id);
 	  g_return_val_if_fail (header != NULL, NULL);
 	  g_return_val_if_fail (header->func != NULL, NULL);
 	  func = header->func;
 	}
       else
 	{
-	  func = list_store->default_sort_func;
+	  func = priv->default_sort_func;
 	}
     }
 
@@ -749,6 +802,7 @@ gtk_list_store_set_vector_internal (GtkListStore *list_store,
 				    GValue       *values,
 				    gint          n_values)
 {
+  GtkListStorePriv *priv = list_store->priv;
   gint i;
   GtkTreeIterCompareFunc func = NULL;
 
@@ -765,7 +819,7 @@ gtk_list_store_set_vector_internal (GtkListStore *list_store,
 					       FALSE) || *emit_signal;
 
       if (func == _gtk_tree_data_list_compare_func &&
-	  columns[i] == list_store->sort_column_id)
+	  columns[i] == priv->sort_column_id)
 	*maybe_need_sort = TRUE;
     }
 }
@@ -777,6 +831,7 @@ gtk_list_store_set_valist_internal (GtkListStore *list_store,
 				    gboolean     *maybe_need_sort,
 				    va_list	  var_args)
 {
+  GtkListStorePriv *priv = list_store->priv;
   gint column;
   GtkTreeIterCompareFunc func = NULL;
 
@@ -791,12 +846,12 @@ gtk_list_store_set_valist_internal (GtkListStore *list_store,
       GValue value = { 0, };
       gchar *error = NULL;
 
-      if (column < 0 || column >= list_store->n_columns)
+      if (column < 0 || column >= priv->n_columns)
 	{
 	  g_warning ("%s: Invalid column number %d added to iter (remember to end your list of columns with a -1)", G_STRLOC, column);
 	  break;
 	}
-      g_value_init (&value, list_store->column_headers[column]);
+      g_value_init (&value, priv->column_headers[column]);
 
       G_VALUE_COLLECT (&value, var_args, 0, &error);
       if (error)
@@ -818,7 +873,7 @@ gtk_list_store_set_valist_internal (GtkListStore *list_store,
 						    FALSE) || *emit_signal;
       
       if (func == _gtk_tree_data_list_compare_func &&
-	  column == list_store->sort_column_id)
+	  column == priv->sort_column_id)
 	*maybe_need_sort = TRUE;
 
       g_value_unset (&value);
@@ -850,11 +905,14 @@ gtk_list_store_set_valuesv (GtkListStore *list_store,
 			    GValue       *values,
 			    gint          n_values)
 {
+  GtkListStorePriv *priv;
   gboolean emit_signal = FALSE;
   gboolean maybe_need_sort = FALSE;
 
   g_return_if_fail (GTK_IS_LIST_STORE (list_store));
   g_return_if_fail (VALID_ITER (iter, list_store));
+
+  priv = list_store->priv;
 
   gtk_list_store_set_vector_internal (list_store, iter,
 				      &emit_signal,
@@ -862,7 +920,7 @@ gtk_list_store_set_valuesv (GtkListStore *list_store,
 				      columns, values, n_values);
 
   if (maybe_need_sort && GTK_LIST_STORE_IS_SORTED (list_store))
-    gtk_list_store_sort_iter_changed (list_store, iter, list_store->sort_column_id);
+    gtk_list_store_sort_iter_changed (list_store, iter, priv->sort_column_id);
 
   if (emit_signal)
     {
@@ -889,11 +947,14 @@ gtk_list_store_set_valist (GtkListStore *list_store,
                            GtkTreeIter  *iter,
                            va_list	 var_args)
 {
+  GtkListStorePriv *priv;
   gboolean emit_signal = FALSE;
   gboolean maybe_need_sort = FALSE;
 
   g_return_if_fail (GTK_IS_LIST_STORE (list_store));
   g_return_if_fail (VALID_ITER (iter, list_store));
+
+  priv = list_store->priv;
 
   gtk_list_store_set_valist_internal (list_store, iter, 
 				      &emit_signal, 
@@ -901,7 +962,7 @@ gtk_list_store_set_valist (GtkListStore *list_store,
 				      var_args);
 
   if (maybe_need_sort && GTK_LIST_STORE_IS_SORTED (list_store))
-    gtk_list_store_sort_iter_changed (list_store, iter, list_store->sort_column_id);
+    gtk_list_store_sort_iter_changed (list_store, iter, priv->sort_column_id);
 
   if (emit_signal)
     {
@@ -954,21 +1015,24 @@ gboolean
 gtk_list_store_remove (GtkListStore *list_store,
 		       GtkTreeIter  *iter)
 {
+  GtkListStorePriv *priv;
   GtkTreePath *path;
   GSequenceIter *ptr, *next;
 
   g_return_val_if_fail (GTK_IS_LIST_STORE (list_store), FALSE);
   g_return_val_if_fail (VALID_ITER (iter, list_store), FALSE);
 
+  priv = list_store->priv;
+
   path = gtk_list_store_get_path (GTK_TREE_MODEL (list_store), iter);
 
   ptr = iter->user_data;
   next = g_sequence_iter_next (ptr);
   
-  _gtk_tree_data_list_free (g_sequence_get (ptr), list_store->column_headers);
+  _gtk_tree_data_list_free (g_sequence_get (ptr), priv->column_headers);
   g_sequence_remove (iter->user_data);
 
-  list_store->length--;
+  priv->length--;
   
   gtk_tree_model_row_deleted (GTK_TREE_MODEL (list_store), path);
   gtk_tree_path_free (path);
@@ -980,7 +1044,7 @@ gtk_list_store_remove (GtkListStore *list_store,
     }
   else
     {
-      iter->stamp = list_store->stamp;
+      iter->stamp = priv->stamp;
       iter->user_data = next;
       return TRUE;
     }
@@ -1004,6 +1068,7 @@ gtk_list_store_insert (GtkListStore *list_store,
 		       GtkTreeIter  *iter,
 		       gint          position)
 {
+  GtkListStorePriv *priv;
   GtkTreePath *path;
   GSequence *seq;
   GSequenceIter *ptr;
@@ -1013,9 +1078,11 @@ gtk_list_store_insert (GtkListStore *list_store,
   g_return_if_fail (iter != NULL);
   g_return_if_fail (position >= 0);
 
-  list_store->columns_dirty = TRUE;
+  priv = list_store->priv;
 
-  seq = list_store->seq;
+  priv->columns_dirty = TRUE;
+
+  seq = priv->seq;
 
   length = g_sequence_get_length (seq);
   if (position > length)
@@ -1024,12 +1091,12 @@ gtk_list_store_insert (GtkListStore *list_store,
   ptr = g_sequence_get_iter_at_pos (seq, position);
   ptr = g_sequence_insert_before (ptr, NULL);
 
-  iter->stamp = list_store->stamp;
+  iter->stamp = priv->stamp;
   iter->user_data = ptr;
 
   g_assert (VALID_ITER (iter, list_store));
 
-  list_store->length++;
+  priv->length++;
   
   path = gtk_tree_path_new ();
   gtk_tree_path_append_index (path, position);
@@ -1054,15 +1121,19 @@ gtk_list_store_insert_before (GtkListStore *list_store,
 			      GtkTreeIter  *iter,
 			      GtkTreeIter  *sibling)
 {
+  GtkListStorePriv *priv;
   GSequenceIter *after;
   
   g_return_if_fail (GTK_IS_LIST_STORE (list_store));
   g_return_if_fail (iter != NULL);
+
+  priv = list_store->priv;
+
   if (sibling)
     g_return_if_fail (VALID_ITER (sibling, list_store));
 
   if (!sibling)
-    after = g_sequence_get_end_iter (list_store->seq);
+    after = g_sequence_get_end_iter (priv->seq);
   else
     after = sibling->user_data;
 
@@ -1086,15 +1157,19 @@ gtk_list_store_insert_after (GtkListStore *list_store,
 			     GtkTreeIter  *iter,
 			     GtkTreeIter  *sibling)
 {
+  GtkListStorePriv *priv;
   GSequenceIter *after;
 
   g_return_if_fail (GTK_IS_LIST_STORE (list_store));
   g_return_if_fail (iter != NULL);
+
+  priv = list_store->priv;
+
   if (sibling)
     g_return_if_fail (VALID_ITER (sibling, list_store));
 
   if (!sibling)
-    after = g_sequence_get_begin_iter (list_store->seq);
+    after = g_sequence_get_begin_iter (priv->seq);
   else
     after = g_sequence_iter_next (sibling->user_data);
 
@@ -1135,20 +1210,26 @@ void
 gtk_list_store_append (GtkListStore *list_store,
 		       GtkTreeIter  *iter)
 {
+  GtkListStorePriv *priv;
+
   g_return_if_fail (GTK_IS_LIST_STORE (list_store));
   g_return_if_fail (iter != NULL);
 
-  gtk_list_store_insert (list_store, iter, g_sequence_get_length (list_store->seq));
+  priv = list_store->priv;
+
+  gtk_list_store_insert (list_store, iter, g_sequence_get_length (priv->seq));
 }
 
 static void
 gtk_list_store_increment_stamp (GtkListStore *list_store)
 {
+  GtkListStorePriv *priv = list_store->priv;
+
   do
     {
-      list_store->stamp++;
+      priv->stamp++;
     }
-  while (list_store->stamp == 0);
+  while (priv->stamp == 0);
 }
 
 /**
@@ -1161,13 +1242,17 @@ gtk_list_store_increment_stamp (GtkListStore *list_store)
 void
 gtk_list_store_clear (GtkListStore *list_store)
 {
+  GtkListStorePriv *priv;
   GtkTreeIter iter;
+
   g_return_if_fail (GTK_IS_LIST_STORE (list_store));
 
-  while (g_sequence_get_length (list_store->seq) > 0)
+  priv = list_store->priv;
+
+  while (g_sequence_get_length (priv->seq) > 0)
     {
-      iter.stamp = list_store->stamp;
-      iter.user_data = g_sequence_get_begin_iter (list_store->seq);
+      iter.stamp = priv->stamp;
+      iter.user_data = g_sequence_get_begin_iter (priv->seq);
       gtk_list_store_remove (list_store, &iter);
     }
 
@@ -1192,13 +1277,17 @@ gboolean
 gtk_list_store_iter_is_valid (GtkListStore *list_store,
                               GtkTreeIter  *iter)
 {
+  GtkListStorePriv *priv;
+
   g_return_val_if_fail (GTK_IS_LIST_STORE (list_store), FALSE);
   g_return_val_if_fail (iter != NULL, FALSE);
+
+  priv = list_store->priv;
 
   if (!VALID_ITER (iter, list_store))
     return FALSE;
 
-  if (g_sequence_iter_get_sequence (iter->user_data) != list_store->seq)
+  if (g_sequence_iter_get_sequence (iter->user_data) != priv->seq)
     return FALSE;
 
   return TRUE;
@@ -1256,14 +1345,12 @@ gtk_list_store_drag_data_received (GtkTreeDragDest   *drag_dest,
                                    GtkTreePath       *dest,
                                    GtkSelectionData  *selection_data)
 {
-  GtkTreeModel *tree_model;
-  GtkListStore *list_store;
+  GtkTreeModel *tree_model = GTK_TREE_MODEL (drag_dest);
+  GtkListStore *list_store = GTK_LIST_STORE (tree_model);
+  GtkListStorePriv *priv = list_store->priv;
   GtkTreeModel *src_model = NULL;
   GtkTreePath *src_path = NULL;
   gboolean retval = FALSE;
-
-  tree_model = GTK_TREE_MODEL (drag_dest);
-  list_store = GTK_LIST_STORE (drag_dest);
 
   if (gtk_tree_get_row_drag_data (selection_data,
 				  &src_model,
@@ -1323,7 +1410,7 @@ gtk_list_store_drag_data_received (GtkTreeDragDest   *drag_dest,
           while (dl)
             {
               copy_iter = _gtk_tree_data_list_node_copy (dl,
-                                                         list_store->column_headers[col]);
+                                                         priv->column_headers[col]);
 
               if (copy_head == NULL)
                 copy_head = copy_iter;
@@ -1337,7 +1424,7 @@ gtk_list_store_drag_data_received (GtkTreeDragDest   *drag_dest,
               ++col;
             }
 
-	  dest_iter.stamp = list_store->stamp;
+	  dest_iter.stamp = priv->stamp;
           g_sequence_set (dest_iter.user_data, copy_head);
 
 	  path = gtk_list_store_get_path (tree_model, &dest_iter);
@@ -1389,7 +1476,7 @@ gtk_list_store_row_drop_possible (GtkTreeDragDest  *drag_dest,
 
   indices = gtk_tree_path_get_indices (dest_path);
 
-  if (indices[0] <= g_sequence_get_length (GTK_LIST_STORE (drag_dest)->seq))
+  if (indices[0] <= g_sequence_get_length (GTK_LIST_STORE (drag_dest)->priv->seq))
     retval = TRUE;
 
  out:
@@ -1434,6 +1521,7 @@ void
 gtk_list_store_reorder (GtkListStore *store,
 			gint         *new_order)
 {
+  GtkListStorePriv *priv;
   gint i;
   GtkTreePath *path;
   GHashTable *new_positions;
@@ -1444,13 +1532,15 @@ gtk_list_store_reorder (GtkListStore *store,
   g_return_if_fail (!GTK_LIST_STORE_IS_SORTED (store));
   g_return_if_fail (new_order != NULL);
 
-  order = g_new (gint, g_sequence_get_length (store->seq));
-  for (i = 0; i < g_sequence_get_length (store->seq); i++)
+  priv = store->priv;
+
+  order = g_new (gint, g_sequence_get_length (priv->seq));
+  for (i = 0; i < g_sequence_get_length (priv->seq); i++)
     order[new_order[i]] = i;
   
   new_positions = g_hash_table_new (g_direct_hash, g_direct_equal);
 
-  ptr = g_sequence_get_begin_iter (store->seq);
+  ptr = g_sequence_get_begin_iter (priv->seq);
   i = 0;
   while (!g_sequence_iter_is_end (ptr))
     {
@@ -1460,7 +1550,7 @@ gtk_list_store_reorder (GtkListStore *store,
     }
   g_free (order);
   
-  g_sequence_sort_iter (store->seq, gtk_list_store_reorder_func, new_positions);
+  g_sequence_sort_iter (priv->seq, gtk_list_store_reorder_func, new_positions);
 
   g_hash_table_destroy (new_positions);
   
@@ -1526,6 +1616,7 @@ gtk_list_store_swap (GtkListStore *store,
 		     GtkTreeIter  *a,
 		     GtkTreeIter  *b)
 {
+  GtkListStorePriv *priv;
   GHashTable *old_positions;
   gint *order;
   GtkTreePath *path;
@@ -1535,14 +1626,16 @@ gtk_list_store_swap (GtkListStore *store,
   g_return_if_fail (VALID_ITER (a, store));
   g_return_if_fail (VALID_ITER (b, store));
 
+  priv = store->priv;
+
   if (a->user_data == b->user_data)
     return;
 
-  old_positions = save_positions (store->seq);
+  old_positions = save_positions (priv->seq);
   
   g_sequence_swap (a->user_data, b->user_data);
 
-  order = generate_order (store->seq, old_positions);
+  order = generate_order (priv->seq, old_positions);
   path = gtk_tree_path_new ();
   
   gtk_tree_model_rows_reordered (GTK_TREE_MODEL (store),
@@ -1557,16 +1650,17 @@ gtk_list_store_move_to (GtkListStore *store,
 			GtkTreeIter  *iter,
 			gint	      new_pos)
 {
+  GtkListStorePriv *priv = store->priv;
   GHashTable *old_positions;
   GtkTreePath *path;
   gint *order;
-  
-  old_positions = save_positions (store->seq);
-  
-  g_sequence_move (iter->user_data, g_sequence_get_iter_at_pos (store->seq, new_pos));
 
-  order = generate_order (store->seq, old_positions);
-  
+  old_positions = save_positions (priv->seq);
+
+  g_sequence_move (iter->user_data, g_sequence_get_iter_at_pos (priv->seq, new_pos));
+
+  order = generate_order (priv->seq, old_positions);
+
   path = gtk_tree_path_new ();
   gtk_tree_model_rows_reordered (GTK_TREE_MODEL (store),
 				 path, NULL, order);
@@ -1647,18 +1741,19 @@ gtk_list_store_compare_func (GSequenceIter *a,
 			     gpointer      user_data)
 {
   GtkListStore *list_store = user_data;
+  GtkListStorePriv *priv = list_store->priv;
   GtkTreeIter iter_a;
   GtkTreeIter iter_b;
   gint retval;
   GtkTreeIterCompareFunc func;
   gpointer data;
 
-  if (list_store->sort_column_id != -1)
+  if (priv->sort_column_id != -1)
     {
       GtkTreeDataSortHeader *header;
 
-      header = _gtk_tree_data_list_get_header (list_store->sort_list,
-					       list_store->sort_column_id);
+      header = _gtk_tree_data_list_get_header (priv->sort_list,
+					       priv->sort_column_id);
       g_return_val_if_fail (header != NULL, 0);
       g_return_val_if_fail (header->func != NULL, 0);
 
@@ -1667,14 +1762,14 @@ gtk_list_store_compare_func (GSequenceIter *a,
     }
   else
     {
-      g_return_val_if_fail (list_store->default_sort_func != NULL, 0);
-      func = list_store->default_sort_func;
-      data = list_store->default_sort_data;
+      g_return_val_if_fail (priv->default_sort_func != NULL, 0);
+      func = priv->default_sort_func;
+      data = priv->default_sort_data;
     }
 
-  iter_a.stamp = list_store->stamp;
+  iter_a.stamp = priv->stamp;
   iter_a.user_data = (gpointer)a;
-  iter_b.stamp = list_store->stamp;
+  iter_b.stamp = priv->stamp;
   iter_b.user_data = (gpointer)b;
 
   g_assert (VALID_ITER (&iter_a, list_store));
@@ -1682,7 +1777,7 @@ gtk_list_store_compare_func (GSequenceIter *a,
   
   retval = (* func) (GTK_TREE_MODEL (list_store), &iter_a, &iter_b, data);
 
-  if (list_store->order == GTK_SORT_DESCENDING)
+  if (priv->order == GTK_SORT_DESCENDING)
     {
       if (retval > 0)
 	retval = -1;
@@ -1696,20 +1791,21 @@ gtk_list_store_compare_func (GSequenceIter *a,
 static void
 gtk_list_store_sort (GtkListStore *list_store)
 {
+  GtkListStorePriv *priv = list_store->priv;
   gint *new_order;
   GtkTreePath *path;
   GHashTable *old_positions;
 
   if (!GTK_LIST_STORE_IS_SORTED (list_store) ||
-      g_sequence_get_length (list_store->seq) <= 1)
+      g_sequence_get_length (priv->seq) <= 1)
     return;
 
-  old_positions = save_positions (list_store->seq);
+  old_positions = save_positions (priv->seq);
 
-  g_sequence_sort_iter (list_store->seq, gtk_list_store_compare_func, list_store);
+  g_sequence_sort_iter (priv->seq, gtk_list_store_compare_func, list_store);
 
   /* Let the world know about our new order */
-  new_order = generate_order (list_store->seq, old_positions);
+  new_order = generate_order (priv->seq, old_positions);
 
   path = gtk_tree_path_new ();
   gtk_tree_model_rows_reordered (GTK_TREE_MODEL (list_store),
@@ -1747,6 +1843,7 @@ gtk_list_store_sort_iter_changed (GtkListStore *list_store,
 				  gint          column)
 
 {
+  GtkListStorePriv *priv = list_store->priv;
   GtkTreePath *path;
 
   path = gtk_list_store_get_path (GTK_TREE_MODEL (list_store), iter);
@@ -1758,11 +1855,11 @@ gtk_list_store_sort_iter_changed (GtkListStore *list_store,
       GHashTable *old_positions;
       gint *order;
 
-      old_positions = save_positions (list_store->seq);
+      old_positions = save_positions (priv->seq);
       g_sequence_sort_changed_iter (iter->user_data,
 				    gtk_list_store_compare_func,
 				    list_store);
-      order = generate_order (list_store->seq, old_positions);
+      order = generate_order (priv->seq, old_positions);
       path = gtk_tree_path_new ();
       gtk_tree_model_rows_reordered (GTK_TREE_MODEL (list_store),
                                      path, NULL, order);
@@ -1776,15 +1873,16 @@ gtk_list_store_get_sort_column_id (GtkTreeSortable  *sortable,
 				   gint             *sort_column_id,
 				   GtkSortType      *order)
 {
-  GtkListStore *list_store = (GtkListStore *) sortable;
+  GtkListStore *list_store = GTK_LIST_STORE (sortable);
+  GtkListStorePriv *priv = list_store->priv;
 
   if (sort_column_id)
-    * sort_column_id = list_store->sort_column_id;
+    * sort_column_id = priv->sort_column_id;
   if (order)
-    * order = list_store->order;
+    * order = priv->order;
 
-  if (list_store->sort_column_id == GTK_TREE_SORTABLE_DEFAULT_SORT_COLUMN_ID ||
-      list_store->sort_column_id == GTK_TREE_SORTABLE_UNSORTED_SORT_COLUMN_ID)
+  if (priv->sort_column_id == GTK_TREE_SORTABLE_DEFAULT_SORT_COLUMN_ID ||
+      priv->sort_column_id == GTK_TREE_SORTABLE_UNSORTED_SORT_COLUMN_ID)
     return FALSE;
 
   return TRUE;
@@ -1795,10 +1893,11 @@ gtk_list_store_set_sort_column_id (GtkTreeSortable  *sortable,
 				   gint              sort_column_id,
 				   GtkSortType       order)
 {
-  GtkListStore *list_store = (GtkListStore *) sortable;
+  GtkListStore *list_store = GTK_LIST_STORE (sortable);
+  GtkListStorePriv *priv = list_store->priv;
 
-  if ((list_store->sort_column_id == sort_column_id) &&
-      (list_store->order == order))
+  if ((priv->sort_column_id == sort_column_id) &&
+      (priv->order == order))
     return;
 
   if (sort_column_id != GTK_TREE_SORTABLE_UNSORTED_SORT_COLUMN_ID)
@@ -1807,7 +1906,7 @@ gtk_list_store_set_sort_column_id (GtkTreeSortable  *sortable,
 	{
 	  GtkTreeDataSortHeader *header = NULL;
 
-	  header = _gtk_tree_data_list_get_header (list_store->sort_list, 
+	  header = _gtk_tree_data_list_get_header (priv->sort_list, 
 						   sort_column_id);
 
 	  /* We want to make sure that we have a function */
@@ -1816,13 +1915,13 @@ gtk_list_store_set_sort_column_id (GtkTreeSortable  *sortable,
 	}
       else
 	{
-	  g_return_if_fail (list_store->default_sort_func != NULL);
+	  g_return_if_fail (priv->default_sort_func != NULL);
 	}
     }
 
 
-  list_store->sort_column_id = sort_column_id;
-  list_store->order = order;
+  priv->sort_column_id = sort_column_id;
+  priv->order = order;
 
   gtk_tree_sortable_sort_column_changed (sortable);
 
@@ -1836,13 +1935,14 @@ gtk_list_store_set_sort_func (GtkTreeSortable        *sortable,
 			      gpointer                data,
 			      GDestroyNotify          destroy)
 {
-  GtkListStore *list_store = (GtkListStore *) sortable;
+  GtkListStore *list_store = GTK_LIST_STORE (sortable);
+  GtkListStorePriv *priv = list_store->priv;
 
-  list_store->sort_list = _gtk_tree_data_list_set_header (list_store->sort_list, 
+  priv->sort_list = _gtk_tree_data_list_set_header (priv->sort_list, 
 							  sort_column_id, 
 							  func, data, destroy);
 
-  if (list_store->sort_column_id == sort_column_id)
+  if (priv->sort_column_id == sort_column_id)
     gtk_list_store_sort (list_store);
 }
 
@@ -1852,30 +1952,32 @@ gtk_list_store_set_default_sort_func (GtkTreeSortable        *sortable,
 				      gpointer                data,
 				      GDestroyNotify          destroy)
 {
-  GtkListStore *list_store = (GtkListStore *) sortable;
+  GtkListStore *list_store = GTK_LIST_STORE (sortable);
+  GtkListStorePriv *priv = list_store->priv;
 
-  if (list_store->default_sort_destroy)
+  if (priv->default_sort_destroy)
     {
-      GDestroyNotify d = list_store->default_sort_destroy;
+      GDestroyNotify d = priv->default_sort_destroy;
 
-      list_store->default_sort_destroy = NULL;
-      d (list_store->default_sort_data);
+      priv->default_sort_destroy = NULL;
+      d (priv->default_sort_data);
     }
 
-  list_store->default_sort_func = func;
-  list_store->default_sort_data = data;
-  list_store->default_sort_destroy = destroy;
+  priv->default_sort_func = func;
+  priv->default_sort_data = data;
+  priv->default_sort_destroy = destroy;
 
-  if (list_store->sort_column_id == GTK_TREE_SORTABLE_DEFAULT_SORT_COLUMN_ID)
+  if (priv->sort_column_id == GTK_TREE_SORTABLE_DEFAULT_SORT_COLUMN_ID)
     gtk_list_store_sort (list_store);
 }
 
 static gboolean
 gtk_list_store_has_default_sort_func (GtkTreeSortable *sortable)
 {
-  GtkListStore *list_store = (GtkListStore *) sortable;
+  GtkListStore *list_store = GTK_LIST_STORE (sortable);
+  GtkListStorePriv *priv = list_store->priv;
 
-  return (list_store->default_sort_func != NULL);
+  return (priv->default_sort_func != NULL);
 }
 
 
@@ -1913,6 +2015,7 @@ gtk_list_store_insert_with_values (GtkListStore *list_store,
 				   gint          position,
 				   ...)
 {
+  GtkListStorePriv *priv;
   GtkTreePath *path;
   GSequence *seq;
   GSequenceIter *ptr;
@@ -1925,12 +2028,14 @@ gtk_list_store_insert_with_values (GtkListStore *list_store,
   /* FIXME: refactor to reduce overlap with gtk_list_store_set() */
   g_return_if_fail (GTK_IS_LIST_STORE (list_store));
 
+  priv = list_store->priv;
+
   if (!iter)
     iter = &tmp_iter;
 
-  list_store->columns_dirty = TRUE;
+  priv->columns_dirty = TRUE;
 
-  seq = list_store->seq;
+  seq = priv->seq;
 
   length = g_sequence_get_length (seq);
   if (position > length)
@@ -1939,12 +2044,12 @@ gtk_list_store_insert_with_values (GtkListStore *list_store,
   ptr = g_sequence_get_iter_at_pos (seq, position);
   ptr = g_sequence_insert_before (ptr, NULL);
 
-  iter->stamp = list_store->stamp;
+  iter->stamp = priv->stamp;
   iter->user_data = ptr;
 
   g_assert (VALID_ITER (iter, list_store));
 
-  list_store->length++;  
+  priv->length++;
 
   va_start (var_args, position);
   gtk_list_store_set_valist_internal (list_store, iter, 
@@ -1989,6 +2094,7 @@ gtk_list_store_insert_with_valuesv (GtkListStore *list_store,
 				    GValue       *values,
 				    gint          n_values)
 {
+  GtkListStorePriv *priv;
   GtkTreePath *path;
   GSequence *seq;
   GSequenceIter *ptr;
@@ -2002,12 +2108,14 @@ gtk_list_store_insert_with_valuesv (GtkListStore *list_store,
    */
   g_return_if_fail (GTK_IS_LIST_STORE (list_store));
 
+  priv = list_store->priv;
+
   if (!iter)
     iter = &tmp_iter;
 
-  list_store->columns_dirty = TRUE;
+  priv->columns_dirty = TRUE;
 
-  seq = list_store->seq;
+  seq = priv->seq;
 
   length = g_sequence_get_length (seq);
   if (position > length)
@@ -2016,12 +2124,12 @@ gtk_list_store_insert_with_valuesv (GtkListStore *list_store,
   ptr = g_sequence_get_iter_at_pos (seq, position);
   ptr = g_sequence_insert_before (ptr, NULL);
 
-  iter->stamp = list_store->stamp;
+  iter->stamp = priv->stamp;
   iter->user_data = ptr;
 
   g_assert (VALID_ITER (iter, list_store));
 
-  list_store->length++;  
+  priv->length++;  
 
   gtk_list_store_set_vector_internal (list_store, iter,
 				      &changed, &maybe_need_sort,
@@ -2331,7 +2439,7 @@ gtk_list_store_buildable_custom_tag_start (GtkBuildable  *buildable,
       parser_data->values = g_new0 (GValue, n_columns);
       parser_data->colids = g_new0 (gint, n_columns);
       parser_data->columns = g_new0 (ColInfo*, n_columns);
-      parser_data->column_types = GTK_LIST_STORE (buildable)->column_headers;
+      parser_data->column_types = GTK_LIST_STORE (buildable)->priv->column_headers;
       parser_data->n_columns = n_columns;
       parser_data->last_row = 0;
       parser_data->error_quark = g_quark_from_static_string ("GtkListStore");

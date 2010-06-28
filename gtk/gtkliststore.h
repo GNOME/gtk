@@ -40,6 +40,7 @@ G_BEGIN_DECLS
 #define GTK_LIST_STORE_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_LIST_STORE, GtkListStoreClass))
 
 typedef struct _GtkListStore       GtkListStore;
+typedef struct _GtkListStorePriv   GtkListStorePriv;
 typedef struct _GtkListStoreClass  GtkListStoreClass;
 
 struct _GtkListStore
@@ -47,19 +48,7 @@ struct _GtkListStore
   GObject parent;
 
   /*< private >*/
-  gint GSEAL (stamp);
-  gpointer GSEAL (seq);		/* head of the list */
-  gpointer GSEAL (_gtk_reserved1);
-  GList *GSEAL (sort_list);
-  gint GSEAL (n_columns);
-  gint GSEAL (sort_column_id);
-  GtkSortType GSEAL (order);
-  GType *GSEAL (column_headers);
-  gint GSEAL (length);
-  GtkTreeIterCompareFunc GSEAL (default_sort_func);
-  gpointer GSEAL (default_sort_data);
-  GDestroyNotify GSEAL (default_sort_destroy);
-  guint GSEAL (columns_dirty) : 1;
+  GtkListStorePriv *priv;
 };
 
 struct _GtkListStoreClass
