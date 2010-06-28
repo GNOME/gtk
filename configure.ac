@@ -740,6 +740,8 @@ AC_MSG_RESULT($gtk_uxtheme_h)
 AC_CHECK_HEADERS(crt_externs.h)
 AC_CHECK_FUNCS(_NSGetEnviron)
 
+AC_MSG_CHECKING(whether to build dynamic modules)
+
 AC_ARG_ENABLE(modules,
               [AC_HELP_STRING([--disable-modules],
                               [disable dynamic module loading])])
