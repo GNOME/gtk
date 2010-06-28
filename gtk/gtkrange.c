@@ -1665,13 +1665,13 @@ gtk_range_get_stepper_detail (GtkRange *range,
               break;
             case STEPPER_B:
               if (range->has_stepper_a)
-                position = "_middle";
+                position = "_start_inner";
               else
                 position = "_start";
               break;
             case STEPPER_C:
               if (range->has_stepper_d)
-                position = "_middle";
+                position = "_end_inner";
               else
                 position = "_end";
               break;
