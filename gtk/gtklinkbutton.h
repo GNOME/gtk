@@ -52,7 +52,7 @@ struct _GtkLinkButton
 {
   GtkButton parent_instance;
 
-  GtkLinkButtonPrivate *GSEAL (priv);
+  GtkLinkButtonPrivate *priv;
 };
 
 struct _GtkLinkButtonClass
