@@ -49,7 +49,6 @@
 #include <gdk/gdkpixbuf.h>
 #include <gdk/gdkpixmap.h>
 #include <gdk/gdkproperty.h>
-#include <gdk/gdkregion.h>
 #include <gdk/gdkrgb.h>
 #include <gdk/gdkscreen.h>
 #include <gdk/gdkselection.h>

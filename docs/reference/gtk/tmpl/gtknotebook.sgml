@@ -487,17 +487,6 @@ The #GtkNotebookPage is an opaque implementation detail of #GtkNotebook.
 @Returns: 
 
 
-<!-- ##### FUNCTION gtk_notebook_query_tab_label_packing ##### -->
-<para>
-</para>
-
-@notebook: 
-@child: 
-@expand: 
-@fill: 
-@pack_type: 
-
-
 <!-- ##### FUNCTION gtk_notebook_set_menu_label ##### -->
 <para>
 </para>
@@ -523,17 +512,6 @@ The #GtkNotebookPage is an opaque implementation detail of #GtkNotebook.
 @notebook: 
 @child: 
 @tab_label: 
-
-
-<!-- ##### FUNCTION gtk_notebook_set_tab_label_packing ##### -->
-<para>
-</para>
-
-@notebook: 
-@child: 
-@expand: 
-@fill: 
-@pack_type: 
 
 
 <!-- ##### FUNCTION gtk_notebook_set_tab_label_text ##### -->

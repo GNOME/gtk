@@ -88,9 +88,7 @@ gdk_OBJECTS = \
 	gdkpixbuf-drawable.obj \
 	gdkpixbuf-render.obj \
 	gdkpixmap.obj \
-	gdkpolyreg-generic.obj \
 	gdkrectangle.obj \
-	gdkregion-generic.obj \
 	gdkrgb.obj \
 	gdkscreen.obj \
 	gdkselection.obj \
@@ -113,7 +111,6 @@ gdk_public_h_sources = \
 	gdkpixbuf.h	\
 	gdkpixmap.h	\
 	gdkproperty.h	\
-	gdkregion.h	\
 	gdkrgb.h	\
 	gdkselection.h	\
 	gdktypes.h	\

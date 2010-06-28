@@ -28,7 +28,6 @@ IGNORE_HFILES=			\
 	gdkinternals.h		\
 	gdkprivate.h		\
 	gdkpoly-generic.h	\
-	gdkregion-generic.h	\
 	keyname-table.h		\
 	win32 			\
 	directfb		\

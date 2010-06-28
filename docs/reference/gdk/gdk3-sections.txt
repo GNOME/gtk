@@ -870,43 +870,6 @@ GdkRectangle
 gdk_rectangle_intersect
 gdk_rectangle_union
 
-<SUBSECTION>
-GdkRegion
-gdk_region_new
-gdk_region_polygon
-GdkFillRule
-gdk_region_copy
-gdk_region_rectangle
-gdk_region_destroy
-
-<SUBSECTION>
-gdk_region_get_clipbox
-gdk_region_get_rectangles
-gdk_region_empty
-gdk_region_equal
-gdk_region_rect_equal
-gdk_region_point_in
-gdk_region_rect_in
-GdkOverlapType
-
-<SUBSECTION>
-gdk_region_offset
-gdk_region_shrink
-gdk_region_union_with_rect
-gdk_region_intersect
-gdk_region_union
-gdk_region_subtract
-gdk_region_xor
-
-<SUBSECTION>
-GdkSpan
-GdkSpanFunc
-gdk_region_spans_intersect_foreach
-
-<SUBSECTION Standard>
-GDK_TYPE_OVERLAP_TYPE
-GDK_TYPE_RECTANGLE
-
 <SUBSECTION Private>
 gdk_rectangle_get_type
 </SECTION>

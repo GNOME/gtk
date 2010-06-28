@@ -258,7 +258,6 @@ gdk_extension_mode_get_type G_GNUC_CONST
 gdk_event_mask_get_type G_GNUC_CONST
 gdk_event_type_get_type G_GNUC_CONST
 gdk_fill_get_type G_GNUC_CONST
-gdk_fill_rule_get_type G_GNUC_CONST
 gdk_filter_return_get_type G_GNUC_CONST
 gdk_function_get_type G_GNUC_CONST
 gdk_grab_ownership_get_type G_GNUC_CONST
@@ -268,7 +267,6 @@ gdk_join_style_get_type G_GNUC_CONST
 gdk_line_style_get_type G_GNUC_CONST
 gdk_modifier_type_get_type G_GNUC_CONST
 gdk_notify_type_get_type G_GNUC_CONST
-gdk_overlap_type_get_type G_GNUC_CONST
 gdk_owner_change_get_type G_GNUC_CONST
 gdk_property_state_get_type G_GNUC_CONST
 gdk_prop_mode_get_type G_GNUC_CONST
@@ -972,40 +970,6 @@ gdk_pixmap_foreign_new_for_display
 gdk_pixmap_foreign_new_for_screen
 gdk_pixmap_lookup
 gdk_pixmap_lookup_for_display
-#endif
-#endif
-
-#if IN_HEADER(__GDK_REGION_H__)
-#if IN_FILE(__GDK_REGION_GENERIC_C__)
-#ifndef GDK_DISABLE_DEPRECATED
-gdk_region_copy
-gdk_region_destroy
-gdk_region_empty
-gdk_region_equal
-gdk_region_rect_equal
-gdk_region_get_clipbox
-gdk_region_get_rectangles
-gdk_region_intersect
-gdk_region_new
-gdk_region_offset
-gdk_region_point_in
-gdk_region_rectangle
-gdk_region_rect_in
-gdk_region_shrink
-gdk_region_spans_intersect_foreach
-gdk_region_subtract
-gdk_region_union
-gdk_region_union_with_rect
-gdk_region_xor
-#endif
-#endif
-#endif
-
-#if IN_HEADER(__GDK_REGION_H__)
-#if IN_FILE(__GDK_POLYREG_GENERIC_C__)
-#ifndef GDK_DISABLE_DEPRECATED
-gdk_region_polygon
-#endif
 #endif
 #endif
 

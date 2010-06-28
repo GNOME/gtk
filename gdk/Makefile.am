@@ -92,7 +92,6 @@ gdk_public_h_sources =				\
 	gdkpixmap.h				\
 	gdkprivate.h				\
 	gdkproperty.h				\
-	gdkregion.h				\
 	gdkrgb.h				\
 	gdkscreen.h				\
 	gdkselection.h				\
@@ -112,8 +111,7 @@ gdk_private_headers =				\
 	gdkinternals.h				\
 	gdkdeviceprivate.h			\
 	gdkintl.h				\
-	gdkpoly-generic.h			\
-	gdkregion-generic.h
+	gdkpoly-generic.h
 
 gdk_c_sources =                 \
 	$(medialib_sources)     \
@@ -139,9 +137,7 @@ gdk_c_sources =                 \
 	gdkpixbuf-drawable.c	\
 	gdkpixbuf-render.c	\
 	gdkpixmap.c		\
-	gdkpolyreg-generic.c	\
 	gdkrectangle.c		\
-	gdkregion-generic.c	\
 	gdkrgb.c		\
 	gdkscreen.c		\
 	gdkselection.c		\

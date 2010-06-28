@@ -105,9 +105,6 @@ typedef struct _GdkColormap	      GdkColormap;
 typedef struct _GdkCursor	      GdkCursor;
 typedef struct _GdkGC                 GdkGC;
 typedef struct _GdkImage              GdkImage;
-#ifndef GDK_DISABLE_DEPRECATED
-typedef cairo_region_t                GdkRegion;
-#endif
 typedef struct _GdkVisual             GdkVisual;
 
 typedef struct _GdkDrawable           GdkDrawable;
@@ -273,16 +270,6 @@ struct _GdkPoint
   gint x;
   gint y;
 };
-
-#ifndef GDK_DISABLE_DEPRECATED
-struct _GdkRectangle
-{
-  gint x;
-  gint y;
-  gint width;
-  gint height;
-};
-#endif
 
 struct _GdkSegment
 {
