@@ -211,7 +211,7 @@ x11_introspection_files = \
         x11/*.c \
         x11/gdkx.h
 
-GdkX11-3.0.gir: $(gdktargetlib) Makefile
+GdkX11-3.0.gir: $(gdktargetlib) Gdk-3.0.gir Makefile
 GdkX11_3_0_gir_SCANNERFLAGS = --strip-prefix=gdk_x11
 GdkX11_3_0_gir_INCLUDES = Gio-2.0 Gdk-3.0 GdkPixbuf-2.0 Pango-1.0 xlib-2.0
 GdkX11_3_0_gir_LIBS = $(gdktargetlib)
