@@ -330,7 +330,7 @@ set_indicator_size (GtkTreeViewColumn *column,
   GtkTreePath *path;
 
   path = gtk_tree_model_get_path (model, iter);
-  size = gtk_tree_path_get_indices (path, NULL)[0]  * 2 + 10;
+  size = gtk_tree_path_get_indices (path)[0]  * 2 + 10;
   gtk_tree_path_free (path);
 
   g_object_set (cell, "indicator_size", size, NULL);

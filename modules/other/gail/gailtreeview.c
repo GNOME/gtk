@@ -3257,7 +3257,7 @@ get_row_from_tree_path (GtkTreeView *tree_view,
   tree_model = gtk_tree_view_get_model (tree_view);
 
   if (gtk_tree_model_get_flags (tree_model) & GTK_TREE_MODEL_LIST_ONLY)
-    row = gtk_tree_path_get_indices (path, NULL)[0];
+    row = gtk_tree_path_get_indices (path)[0];
   else
     {
       root_tree = gtk_tree_path_new_first ();
@@ -4360,7 +4360,7 @@ get_index (GtkTreeView       *tree_view,
   if (path)
     {
       depth = gtk_tree_path_get_depth (path);
-      indices = gtk_tree_path_get_indices (path, NULL);
+      indices = gtk_tree_path_get_indices (path);
     }
 
   if (depth > 1)

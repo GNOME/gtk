@@ -516,7 +516,7 @@ gtk_file_system_model_get_iter (GtkTreeModel *tree_model,
   return gtk_file_system_model_iter_nth_child (tree_model, 
                                                iter,
                                                NULL, 
-                                               gtk_tree_path_get_indices (path, NULL)[0]);
+                                               gtk_tree_path_get_indices (path)[0]);
 }
 
 static GtkTreePath *

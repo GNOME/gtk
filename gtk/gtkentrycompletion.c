@@ -920,7 +920,7 @@ gtk_entry_completion_action_button_press (GtkWidget      *widget,
                                      &path, NULL, NULL, NULL))
     {
       g_signal_emit (completion, entry_completion_signals[ACTION_ACTIVATED],
-                     0, gtk_tree_path_get_indices (path, NULL)[0]);
+                     0, gtk_tree_path_get_indices (path)[0]);
       gtk_tree_path_free (path);
 
       _gtk_entry_completion_popdown (completion);

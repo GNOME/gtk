@@ -256,7 +256,7 @@ get_pos_from_path (GtkTreeView   *tree_view,
 	int row_start;
 
 	row_start = get_row_start_for_index (tree_view,
-					     gtk_tree_path_get_indices (path, NULL)[0]);
+					     gtk_tree_path_get_indices (path)[0]);
 
 	if (row_start + row_height < vadj->page_size)
 		return POS_TOP;
@@ -406,7 +406,7 @@ test_position (GtkTreeView *tree_view,
 					   path, NULL, &rect);
 
 	row_start = get_row_start_for_index (GTK_TREE_VIEW (tree_view),
-					     gtk_tree_path_get_indices (path, NULL)[0]);
+					     gtk_tree_path_get_indices (path)[0]);
 
 	/* Ugh */
 	pos = get_pos_from_path (GTK_TREE_VIEW (tree_view),

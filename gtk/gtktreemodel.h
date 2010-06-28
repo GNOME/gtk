@@ -133,8 +133,10 @@ void         gtk_tree_path_append_index     (GtkTreePath       *path,
 void         gtk_tree_path_prepend_index    (GtkTreePath       *path,
 					     gint               index_);
 gint         gtk_tree_path_get_depth        (GtkTreePath       *path);
-gint        *gtk_tree_path_get_indices      (GtkTreePath       *path,
-					     gint              *depth);
+gint        *gtk_tree_path_get_indices      (GtkTreePath       *path);
+
+gint        *gtk_tree_path_get_indices_with_depth (GtkTreePath *path,
+						   gint        *depth);
 
 void         gtk_tree_path_free             (GtkTreePath       *path);
 GtkTreePath *gtk_tree_path_copy             (const GtkTreePath *path);

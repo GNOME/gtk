@@ -608,19 +608,36 @@ gtk_tree_path_get_depth (GtkTreePath *path)
 /**
  * gtk_tree_path_get_indices:
  * @path: A #GtkTreePath.
- * @depth: (allow-none): Number of elements returned in the integer array
+ *
+ * Returns the current indices of @path.  This is an array of integers, each
+ * representing a node in a tree.  This value should not be freed.
+ *
+ * Return value: The current indices, or %NULL.
+ **/
+gint *
+gtk_tree_path_get_indices (GtkTreePath *path)
+{
+  g_return_val_if_fail (path != NULL, NULL);
+
+  return path->indices;
+}
+
+/**
+ * gtk_tree_path_get_indices_with_depth:
+ * @path: A #GtkTreePath.
+ * @depth: Number of elements returned in the integer array
  *
  * Returns the current indices of @path.
  * This is an array of integers, each representing a node in a tree.
  * It also returns the number of elements in the array.
  * The array should not be freed.
  *
- * Return value: (transfer none) (array length=depth): The current indices, or %NULL.
+ * Return value: (array length=depth): The current indices, or %NULL.
  *
  * Since: 3.0
  **/
 gint *
-gtk_tree_path_get_indices (GtkTreePath *path, gint *depth)
+gtk_tree_path_get_indices_with_depth (GtkTreePath *path, gint *depth)
 {
   g_return_val_if_fail (path != NULL, NULL);
 
@@ -1837,7 +1854,7 @@ gtk_tree_row_ref_reordered (RowRefList  *refs,
 	  if (ref_depth > depth)
 	    {
 	      gint i;
-	      gint *indices = gtk_tree_path_get_indices (reference->path, NULL);
+	      gint *indices = gtk_tree_path_get_indices (reference->path);
 
 	      for (i = 0; i < length; i++)
 		{

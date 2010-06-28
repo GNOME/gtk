@@ -481,7 +481,7 @@ gtk_tree_store_get_iter (GtkTreeModel *tree_model,
 
   tree_store->columns_dirty = TRUE;
 
-  indices = gtk_tree_path_get_indices (path, NULL);
+  indices = gtk_tree_path_get_indices (path);
   depth = gtk_tree_path_get_depth (path);
 
   g_return_val_if_fail (depth > 0, FALSE);
@@ -2467,7 +2467,7 @@ gtk_tree_store_move (GtkTreeStore *tree_store,
     {
       b = G_NODE (position->user_data);
 
-      if (gtk_tree_path_get_indices (pos_path, NULL)[gtk_tree_path_get_depth (pos_path) - 1] > 0)
+      if (gtk_tree_path_get_indices (pos_path)[gtk_tree_path_get_depth (pos_path) - 1] > 0)
         {
           gtk_tree_path_prev (pos_path);
           if (gtk_tree_store_get_iter (GTK_TREE_MODEL (tree_store), 
@@ -2611,7 +2611,7 @@ gtk_tree_store_move (GtkTreeStore *tree_store,
 
   /* emit signal */
   if (position)
-    new_pos = gtk_tree_path_get_indices (pos_path, NULL)[gtk_tree_path_get_depth (pos_path)-1];
+    new_pos = gtk_tree_path_get_indices (pos_path)[gtk_tree_path_get_depth (pos_path)-1];
   else if (before)
     {
       if (depth)

@@ -435,7 +435,7 @@ gtk_list_store_get_iter (GtkTreeModel *tree_model,
 
   seq = list_store->seq;
   
-  i = gtk_tree_path_get_indices (path, NULL)[0];
+  i = gtk_tree_path_get_indices (path)[0];
 
   if (i >= g_sequence_get_length (seq))
     return FALSE;
@@ -1388,7 +1388,7 @@ gtk_list_store_row_drop_possible (GtkTreeDragDest  *drag_dest,
 
   /* can drop before any existing node, or before one past any existing. */
 
-  indices = gtk_tree_path_get_indices (dest_path, NULL);
+  indices = gtk_tree_path_get_indices (dest_path);
 
   if (indices[0] <= g_sequence_get_length (GTK_LIST_STORE (drag_dest)->seq))
     retval = TRUE;

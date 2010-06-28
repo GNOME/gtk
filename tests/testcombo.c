@@ -973,7 +973,7 @@ set_sensitive (GtkCellLayout   *cell_layout,
   gboolean sensitive;
 
   path = gtk_tree_model_get_path (tree_model, iter);
-  indices = gtk_tree_path_get_indices (path, NULL);
+  indices = gtk_tree_path_get_indices (path);
   sensitive = indices[0] != 1;
   gtk_tree_path_free (path);
 
@@ -989,7 +989,7 @@ is_separator (GtkTreeModel *model,
   gboolean result;
 
   path = gtk_tree_model_get_path (model, iter);
-  result = gtk_tree_path_get_indices (path, NULL)[0] == 4;
+  result = gtk_tree_path_get_indices (path)[0] == 4;
   gtk_tree_path_free (path);
 
   return result;

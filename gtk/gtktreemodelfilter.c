@@ -722,7 +722,7 @@ gtk_tree_model_filter_add_root (GtkTreePath *src,
   retval = gtk_tree_path_copy (root);
 
   for (i = 0; i < gtk_tree_path_get_depth (src); i++)
-    gtk_tree_path_append_index (retval, gtk_tree_path_get_indices (src, NULL)[i]);
+    gtk_tree_path_append_index (retval, gtk_tree_path_get_indices (src)[i]);
 
   return retval;
 }
@@ -740,10 +740,10 @@ gtk_tree_model_filter_remove_root (GtkTreePath *src,
     return NULL;
 
   depth = gtk_tree_path_get_depth (src);
-  indices = gtk_tree_path_get_indices (src, NULL);
+  indices = gtk_tree_path_get_indices (src);
 
   for (i = 0; i < gtk_tree_path_get_depth (root); i++)
-    if (indices[i] != gtk_tree_path_get_indices (root, NULL)[i])
+    if (indices[i] != gtk_tree_path_get_indices (root)[i])
       return NULL;
 
   retval = gtk_tree_path_new ();
@@ -1458,7 +1458,7 @@ gtk_tree_model_filter_row_inserted (GtkTreeModel *c_model,
           gboolean common_prefix = TRUE;
 
           level = gtk_tree_path_get_depth (c_path) - 1;
-          v_indices = gtk_tree_path_get_indices (filter->priv->virtual_root, NULL);
+          v_indices = gtk_tree_path_get_indices (filter->priv->virtual_root);
           c_indices = gtk_tree_path_get_indices (c_path);
 
           for (i = 0; i < level; i++)
@@ -1516,7 +1516,7 @@ gtk_tree_model_filter_row_inserted (GtkTreeModel *c_model,
             goto done;
 
           elt = bsearch_elt_with_offset (level->array,
-                                         gtk_tree_path_get_indices (real_path, NULL)[i],
+                                         gtk_tree_path_get_indices (real_path)[i],
                                          &j);
 
           if (!elt)
@@ -1556,7 +1556,7 @@ gtk_tree_model_filter_row_inserted (GtkTreeModel *c_model,
     goto done;
 
   /* let's try to insert the value */
-  offset = gtk_tree_path_get_indices (real_path, NULL)[gtk_tree_path_get_depth (real_path) - 1];
+  offset = gtk_tree_path_get_indices (real_path)[gtk_tree_path_get_depth (real_path) - 1];
 
   /* update the offsets, yes if we didn't insert the node above, there will
    * be a gap here. This will be filled with the node (via fetch_child) when
@@ -1807,7 +1807,7 @@ gtk_tree_model_filter_row_deleted (GtkTreeModel *c_model,
           gboolean common_prefix = TRUE;
 
           level = gtk_tree_path_get_depth (c_path) - 1;
-          v_indices = gtk_tree_path_get_indices (filter->priv->virtual_root, NULL);
+          v_indices = gtk_tree_path_get_indices (filter->priv->virtual_root);
           c_indices = gtk_tree_path_get_indices (c_path);
 
           for (i = 0; i < level; i++)
@@ -1868,7 +1868,7 @@ gtk_tree_model_filter_row_deleted (GtkTreeModel *c_model,
                 }
 
               elt = bsearch_elt_with_offset (level->array,
-                                             gtk_tree_path_get_indices (real_path, NULL)[i],
+                                             gtk_tree_path_get_indices (real_path)[i],
                                              &j);
 
               if (!elt || !elt->children)
@@ -1883,7 +1883,7 @@ gtk_tree_model_filter_row_deleted (GtkTreeModel *c_model,
             }
         }
 
-      offset = gtk_tree_path_get_indices (real_path, NULL)[gtk_tree_path_get_depth (real_path) - 1];
+      offset = gtk_tree_path_get_indices (real_path)[gtk_tree_path_get_depth (real_path) - 1];
       gtk_tree_path_free (real_path);
 
       if (!level)
@@ -2026,13 +2026,13 @@ gtk_tree_model_filter_rows_reordered (GtkTreeModel *c_model,
 
           /* reorder root level of path */
           for (i = 0; i < length; i++)
-            if (new_order[i] == gtk_tree_path_get_indices (filter->priv->virtual_root, NULL)[0])
+            if (new_order[i] == gtk_tree_path_get_indices (filter->priv->virtual_root)[0])
               new_pos = i;
 
           if (new_pos < 0)
             return;
 
-          gtk_tree_path_get_indices (filter->priv->virtual_root, NULL)[0] = new_pos;
+          gtk_tree_path_get_indices (filter->priv->virtual_root)[0] = new_pos;
           return;
         }
 
@@ -2062,13 +2062,13 @@ gtk_tree_model_filter_rows_reordered (GtkTreeModel *c_model,
           length = gtk_tree_model_iter_n_children (c_model, &real_c_iter);
 
           for (i = 0; i < length; i++)
-            if (new_order[i] == gtk_tree_path_get_indices (filter->priv->virtual_root, NULL)[level])
+            if (new_order[i] == gtk_tree_path_get_indices (filter->priv->virtual_root)[level])
               new_pos = i;
 
           if (new_pos < 0)
             return;
 
-          gtk_tree_path_get_indices (filter->priv->virtual_root, NULL)[level] = new_pos;
+          gtk_tree_path_get_indices (filter->priv->virtual_root)[level] = new_pos;
           return;
         }
 
@@ -2164,7 +2164,7 @@ gtk_tree_model_filter_rows_reordered (GtkTreeModel *c_model,
     }
 
   /* emit rows_reordered */
-  if (!gtk_tree_path_get_indices (path, NULL))
+  if (!gtk_tree_path_get_indices (path))
     gtk_tree_model_rows_reordered (GTK_TREE_MODEL (data), path, NULL,
                                    tmp_array);
   else
@@ -2258,7 +2258,7 @@ gtk_tree_model_filter_get_iter_full (GtkTreeModel *model,
   g_return_val_if_fail (GTK_IS_TREE_MODEL_FILTER (model), FALSE);
   g_return_val_if_fail (filter->priv->child_model != NULL, FALSE);
 
-  indices = gtk_tree_path_get_indices (path, NULL);
+  indices = gtk_tree_path_get_indices (path);
 
   if (filter->priv->root == NULL)
     gtk_tree_model_filter_build_level (filter, NULL, -1, FALSE);
@@ -2315,7 +2315,7 @@ gtk_tree_model_filter_get_iter (GtkTreeModel *model,
   g_return_val_if_fail (GTK_IS_TREE_MODEL_FILTER (model), FALSE);
   g_return_val_if_fail (filter->priv->child_model != NULL, FALSE);
 
-  indices = gtk_tree_path_get_indices (path, NULL);
+  indices = gtk_tree_path_get_indices (path);
 
   if (filter->priv->root == NULL)
     gtk_tree_model_filter_build_level (filter, NULL, -1, FALSE);
@@ -3287,7 +3287,7 @@ gtk_real_tree_model_filter_convert_child_path_to_path (GtkTreeModelFilter *filte
     return NULL;
 
   retval = gtk_tree_path_new ();
-  child_indices = gtk_tree_path_get_indices (real_path, NULL);
+  child_indices = gtk_tree_path_get_indices (real_path);
 
   if (filter->priv->root == NULL && build_levels)
     gtk_tree_model_filter_build_level (filter, NULL, -1, FALSE);
@@ -3426,7 +3426,7 @@ gtk_tree_model_filter_convert_path_to_child_path (GtkTreeModelFilter *filter,
 
   /* convert path */
   retval = gtk_tree_path_new ();
-  filter_indices = gtk_tree_path_get_indices (filter_path, NULL);
+  filter_indices = gtk_tree_path_get_indices (filter_path);
   if (!filter->priv->root)
     gtk_tree_model_filter_build_level (filter, NULL, -1, FALSE);
   level = FILTER_LEVEL (filter->priv->root);

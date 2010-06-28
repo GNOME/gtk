@@ -69,7 +69,7 @@ visible_func (GtkTreeModel *model,
 
   path = gtk_tree_model_get_path (model, iter);
 
-  if (gtk_tree_path_get_indices (path, NULL)[0] < 4)
+  if (gtk_tree_path_get_indices (path)[0] < 4)
     visible = first;
   else
     visible = !first;

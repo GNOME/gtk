@@ -7575,7 +7575,7 @@ gtk_tree_view_drag_data_received (GtkWidget        *widget,
                    time);
 
   if (gtk_tree_path_get_depth (dest_row) == 1
-      && gtk_tree_path_get_indices (dest_row, NULL)[0] == 0)
+      && gtk_tree_path_get_indices (dest_row)[0] == 0)
     {
       /* special special case drag to "0", scroll to first item */
       if (!tree_view->priv->scroll_to_path)
@@ -8392,7 +8392,7 @@ gtk_tree_view_row_inserted (GtkTreeModel *model,
   /* Update all row-references */
   gtk_tree_row_reference_inserted (G_OBJECT (data), path);
   depth = gtk_tree_path_get_depth (path);
-  indices = gtk_tree_path_get_indices (path, NULL);
+  indices = gtk_tree_path_get_indices (path);
 
   /* First, find the parent tree */
   while (i < depth - 1)
@@ -9025,7 +9025,7 @@ _gtk_tree_view_find_node (GtkTreeView  *tree_view,
 {
   GtkRBNode *tmpnode = NULL;
   GtkRBTree *tmptree = tree_view->priv->tree;
-  gint *indices = gtk_tree_path_get_indices (path, NULL);
+  gint *indices = gtk_tree_path_get_indices (path);
   gint depth = gtk_tree_path_get_depth (path);
   gint i = 0;
 
@@ -11989,7 +11989,7 @@ gtk_tree_view_collapse_all (GtkTreeView *tree_view)
 
   path = gtk_tree_path_new ();
   gtk_tree_path_down (path);
-  indices = gtk_tree_path_get_indices (path, NULL);
+  indices = gtk_tree_path_get_indices (path);
 
   tree = tree_view->priv->tree;
   node = tree->root;
@@ -12029,7 +12029,7 @@ gtk_tree_view_expand_to_path (GtkTreeView *tree_view,
   g_return_if_fail (path != NULL);
 
   depth = gtk_tree_path_get_depth (path);
-  indices = gtk_tree_path_get_indices (path, NULL);
+  indices = gtk_tree_path_get_indices (path);
 
   tmp = gtk_tree_path_new ();
   g_return_if_fail (tmp != NULL);
@@ -13484,7 +13484,7 @@ gtk_tree_view_set_drag_dest_row (GtkTreeView            *tree_view,
 
   if (pos == GTK_TREE_VIEW_DROP_BEFORE && path
       && gtk_tree_path_get_depth (path) == 1
-      && gtk_tree_path_get_indices (path, NULL)[0] == 0)
+      && gtk_tree_path_get_indices (path)[0] == 0)
     {
       gint n_children;
 
