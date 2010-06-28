@@ -4015,7 +4015,7 @@ gtk_label_expose (GtkWidget      *widget,
                                                    x, y,
                                                    range,
                                                    1);
-	  gdk_region_intersect (clip, event->region);
+	  cairo_region_intersect (clip, event->region);
 
          /* FIXME should use gtk_paint, but it can't use a clip
            * region
@@ -4036,7 +4036,7 @@ gtk_label_expose (GtkWidget      *widget,
                                        &widget->style->base[state]);
 
           gdk_gc_set_clip_region (widget->style->black_gc, NULL);
-          gdk_region_destroy (clip);
+          cairo_region_destroy (clip);
         }
       else if (info)
         {
@@ -4086,7 +4086,7 @@ gtk_label_expose (GtkWidget      *widget,
               gdk_color_free (visited_link_color);
 
               gdk_gc_set_clip_region (widget->style->black_gc, NULL);
-              gdk_region_destroy (clip);
+              cairo_region_destroy (clip);
             }
 
           if (focus_link && gtk_widget_has_focus (widget))
@@ -4098,13 +4098,13 @@ gtk_label_expose (GtkWidget      *widget,
                                                        x, y,
                                                        range,
                                                        1);
-              gdk_region_get_clipbox (clip, &rect);
+              cairo_region_get_extents (clip, &rect);
 
               gtk_paint_focus (widget->style, widget->window, gtk_widget_get_state (widget),
                                &event->area, widget, "label",
                                rect.x, rect.y, rect.width, rect.height);
 
-              gdk_region_destroy (clip);
+              cairo_region_destroy (clip);
             }
         }
     }

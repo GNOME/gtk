@@ -47,15 +47,12 @@ Defines the x and y coordinates of a point.
 @x: the x coordinate of the point.
 @y: the y coordinate of the point.
 
-<!-- ##### STRUCT GdkRectangle ##### -->
+<!-- ##### TYPEDEF GdkRectangle ##### -->
 <para>
-Defines the position and size of a rectangle.
+Defines the position and size of a rectangle. It is identical to 
+#cairo_rectangle_int_t.
 </para>
 
-@x: the x coordinate of the left edge of the rectangle.
-@y: the y coordinate of the top of the rectangle.
-@width: the width of the rectangle.
-@height: the height of the rectangle.
 
 <!-- ##### FUNCTION gdk_rectangle_intersect ##### -->
 <para>

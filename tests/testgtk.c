@@ -457,8 +457,8 @@ window_expose_event (GtkWidget *widget,
                                child->allocation.y);
 
   /* draw no more than our expose event intersects our child */
-  region = gdk_region_rectangle (&child->allocation);
-  gdk_region_intersect (region, event->region);
+  region = cairo_region_create_rectangle (&child->allocation);
+  cairo_region_intersect (region, event->region);
   gdk_cairo_region (cr, region);
   cairo_clip (cr);
 
@@ -7747,7 +7747,7 @@ create_shapes (GtkWidget *widget)
       /* reset shape from mask to a region */
       x = 0;
       y = 0;
-      region = gdk_region_new ();
+      region = cairo_region_create ();
 
       while (x < 460)
         {
@@ -7759,7 +7759,7 @@ create_shapes (GtkWidget *widget)
               rect.width = 10;
               rect.height = 10;
 
-              gdk_region_union_with_rect (region, &rect);
+              cairo_region_union_rectangle (region, &rect);
               
               y += 20;
             }

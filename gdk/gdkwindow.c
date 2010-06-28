@@ -688,10 +688,10 @@ gdk_window_finalize (GObject *object)
     }
 
   if (obj->shape)
-    gdk_region_destroy (obj->shape);
+    cairo_region_destroy (obj->shape);
 
   if (obj->input_shape)
-    gdk_region_destroy (obj->input_shape);
+    cairo_region_destroy (obj->input_shape);
 
   if (obj->cursor)
     gdk_cursor_unref (obj->cursor);
@@ -813,7 +813,7 @@ remove_child_area (GdkWindowObject *private,
 
       /* If region is empty already, no need to do
 	 anything potentially costly */
-      if (gdk_region_empty (region))
+      if (cairo_region_is_empty (region))
 	break;
 
       if (!GDK_WINDOW_IS_MAPPED (child) || child->input_only || child->composited)
@@ -830,45 +830,45 @@ remove_child_area (GdkWindowObject *private,
       r.height = child->height;
 
       /* Bail early if child totally outside region */
-      if (gdk_region_rect_in (region, &r) == GDK_OVERLAP_RECTANGLE_OUT)
+      if (cairo_region_contains_rectangle (region, &r) == CAIRO_REGION_OVERLAP_OUT)
 	continue;
 
-      child_region = gdk_region_rectangle (&r);
+      child_region = cairo_region_create_rectangle (&r);
 
       if (child->shape)
 	{
 	  /* Adjust shape region to parent window coords */
-	  gdk_region_offset (child->shape, child->x, child->y);
-	  gdk_region_intersect (child_region, child->shape);
-	  gdk_region_offset (child->shape, -child->x, -child->y);
+	  cairo_region_translate (child->shape, child->x, child->y);
+	  cairo_region_intersect (child_region, child->shape);
+	  cairo_region_translate (child->shape, -child->x, -child->y);
 	}
       else if (private->window_type == GDK_WINDOW_FOREIGN)
 	{
 	  shape = _gdk_windowing_window_get_shape ((GdkWindow *)child);
 	  if (shape)
 	    {
-	      gdk_region_intersect (child_region, shape);
-	      gdk_region_destroy (shape);
+	      cairo_region_intersect (child_region, shape);
+	      cairo_region_destroy (shape);
 	    }
 	}
 
       if (for_input)
 	{
 	  if (child->input_shape)
-	    gdk_region_intersect (child_region, child->input_shape);
+	    cairo_region_intersect (child_region, child->input_shape);
 	  else if (private->window_type == GDK_WINDOW_FOREIGN)
 	    {
 	      shape = _gdk_windowing_window_get_input_shape ((GdkWindow *)child);
 	      if (shape)
 		{
-		  gdk_region_intersect (child_region, shape);
-		  gdk_region_destroy (shape);
+		  cairo_region_intersect (child_region, shape);
+		  cairo_region_destroy (shape);
 		}
 	    }
 	}
 
-      gdk_region_subtract (region, child_region);
-      gdk_region_destroy (child_region);
+      cairo_region_subtract (region, child_region);
+      cairo_region_destroy (child_region);
 
     }
 }
@@ -967,6 +967,23 @@ apply_shape (GdkWindowObject *private,
   private->applied_shape = region != NULL;
 }
 
+static gboolean
+region_rect_equal (const cairo_region_t *region,
+                   const GdkRectangle *rect)
+{
+    GdkRectangle extents;
+
+    if (cairo_region_num_rectangles (region) != 1)
+        return FALSE;
+
+    cairo_region_get_extents (region, &extents);
+
+    return extents.x == rect->x &&
+        extents.y == rect->y &&
+        extents.width == rect->width &&
+        extents.height == rect->height;
+}
+
 static void
 apply_clip_as_shape (GdkWindowObject *private)
 {
@@ -980,7 +997,7 @@ apply_clip_as_shape (GdkWindowObject *private)
      from the actual clip region implied by the size
      of the window. This is to avoid unneccessarily
      adding meaningless shapes to all native subwindows */
-  if (!gdk_region_rect_equal (private->clip_region, &r))
+  if (!region_rect_equal (private->clip_region, &r))
     apply_shape (private, private->clip_region);
   else
     apply_shape (private, NULL);
@@ -1035,11 +1052,11 @@ recompute_visible_regions_internal (GdkWindowObject *private,
 	  r.y = private->y;
 	  r.width = private->width;
 	  r.height = private->height;
-	  new_clip = gdk_region_rectangle (&r);
+	  new_clip = cairo_region_create_rectangle (&r);
 
 	  if (!gdk_window_is_toplevel (private))
 	    {
-	      gdk_region_intersect (new_clip, private->parent->clip_region);
+	      cairo_region_intersect (new_clip, private->parent->clip_region);
 
 	      /* Remove all overlapping children from parent.
 	       * Unless we're all native, because then we don't need to take
@@ -1052,33 +1069,33 @@ recompute_visible_regions_internal (GdkWindowObject *private,
 	    }
 
 	  /* Convert from parent coords to window coords */
-	  gdk_region_offset (new_clip, -private->x, -private->y);
+	  cairo_region_translate (new_clip, -private->x, -private->y);
 
 	  if (private->shape)
-	    gdk_region_intersect (new_clip, private->shape);
+	    cairo_region_intersect (new_clip, private->shape);
 	}
       else
-	new_clip = gdk_region_new ();
+	new_clip = cairo_region_create ();
 
       if (private->clip_region == NULL ||
-	  !gdk_region_equal (private->clip_region, new_clip))
+	  !cairo_region_equal (private->clip_region, new_clip))
 	clip_region_changed = TRUE;
 
       if (private->clip_region)
-	gdk_region_destroy (private->clip_region);
+	cairo_region_destroy (private->clip_region);
       private->clip_region = new_clip;
 
       old_clip_region_with_children = private->clip_region_with_children;
-      private->clip_region_with_children = gdk_region_copy (private->clip_region);
+      private->clip_region_with_children = cairo_region_copy (private->clip_region);
       if (private->window_type != GDK_WINDOW_ROOT)
 	remove_child_area (private, NULL, FALSE, private->clip_region_with_children);
 
       if (clip_region_changed ||
-	  !gdk_region_equal (private->clip_region_with_children, old_clip_region_with_children))
+	  !cairo_region_equal (private->clip_region_with_children, old_clip_region_with_children))
 	  private->clip_tag = new_region_tag ();
 
       if (old_clip_region_with_children)
-	gdk_region_destroy (old_clip_region_with_children);
+	cairo_region_destroy (old_clip_region_with_children);
     }
 
   if (clip_region_changed)
@@ -1086,13 +1103,13 @@ recompute_visible_regions_internal (GdkWindowObject *private,
       GdkVisibilityState visibility;
       gboolean fully_visible;
 
-      if (gdk_region_empty (private->clip_region))
+      if (cairo_region_is_empty (private->clip_region))
 	visibility = GDK_VISIBILITY_FULLY_OBSCURED;
       else
         {
           if (private->shape)
             {
-	      fully_visible = gdk_region_equal (private->clip_region,
+	      fully_visible = cairo_region_equal (private->clip_region,
 	                                        private->shape);
             }
           else
@@ -1101,7 +1118,7 @@ recompute_visible_regions_internal (GdkWindowObject *private,
 	      r.y = 0;
 	      r.width = private->width;
 	      r.height = private->height;
-	      fully_visible = gdk_region_rect_equal (private->clip_region, &r);
+	      fully_visible = region_rect_equal (private->clip_region, &r);
 	    }
 
 	  if (fully_visible)
@@ -2227,13 +2244,13 @@ _gdk_window_destroy_hierarchy (GdkWindow *window,
 
 	  if (private->clip_region)
 	    {
-	      gdk_region_destroy (private->clip_region);
+	      cairo_region_destroy (private->clip_region);
 	      private->clip_region = NULL;
 	    }
 
 	  if (private->clip_region_with_children)
 	    {
-	      gdk_region_destroy (private->clip_region_with_children);
+	      cairo_region_destroy (private->clip_region_with_children);
 	      private->clip_region_with_children = NULL;
 	    }
 
@@ -2825,7 +2842,7 @@ gdk_window_begin_implicit_paint (GdkWindow *window, GdkRectangle *rect)
     return FALSE;
 
   paint = g_new (GdkWindowPaint, 1);
-  paint->region = gdk_region_new (); /* Empty */
+  paint->region = cairo_region_create (); /* Empty */
   paint->x_offset = rect->x;
   paint->y_offset = rect->y;
   paint->uses_implicit = FALSE;
@@ -2859,7 +2876,7 @@ gdk_window_flush_implicit_paint (GdkWindow *window)
 
   paint = impl_window->implicit_paint;
   paint->flushed = TRUE;
-  region = gdk_region_copy (private->clip_region_with_children);
+  region = cairo_region_copy (private->clip_region_with_children);
 
   /* Don't flush active double buffers, as that may show partially done
    * rendering */
@@ -2867,16 +2884,16 @@ gdk_window_flush_implicit_paint (GdkWindow *window)
     {
       GdkWindowPaint *tmp_paint = list->data;
 
-      gdk_region_subtract (region, tmp_paint->region);
+      cairo_region_subtract (region, tmp_paint->region);
     }
 
-  gdk_region_offset (region, private->abs_x, private->abs_y);
-  gdk_region_intersect (region, paint->region);
+  cairo_region_translate (region, private->abs_x, private->abs_y);
+  cairo_region_intersect (region, paint->region);
 
-  if (!GDK_WINDOW_DESTROYED (window) && !gdk_region_empty (region))
+  if (!GDK_WINDOW_DESTROYED (window) && !cairo_region_is_empty (region))
     {
       /* Remove flushed region from the implicit paint */
-      gdk_region_subtract (paint->region, region);
+      cairo_region_subtract (paint->region, region);
 
       /* Some regions are valid, push these to window now */
       tmp_gc = _gdk_drawable_get_scratch_gc ((GdkDrawable *)window, FALSE);
@@ -2887,7 +2904,7 @@ gdk_window_flush_implicit_paint (GdkWindow *window)
       gdk_gc_set_clip_region (tmp_gc, NULL);
     }
   else
-    gdk_region_destroy (region);
+    cairo_region_destroy (region);
 }
 
 /* Ends an implicit paint, paired with gdk_window_begin_implicit_paint returning TRUE */
@@ -2906,7 +2923,7 @@ gdk_window_end_implicit_paint (GdkWindow *window)
 
   private->implicit_paint = NULL;
 
-  if (!GDK_WINDOW_DESTROYED (window) && !gdk_region_empty (paint->region))
+  if (!GDK_WINDOW_DESTROYED (window) && !cairo_region_is_empty (paint->region))
     {
       /* Some regions are valid, push these to window now */
       tmp_gc = _gdk_drawable_get_scratch_gc ((GdkDrawable *)window, FALSE);
@@ -2917,7 +2934,7 @@ gdk_window_end_implicit_paint (GdkWindow *window)
       gdk_gc_set_clip_region (tmp_gc, NULL);
     }
   else
-    gdk_region_destroy (paint->region);
+    cairo_region_destroy (paint->region);
 
   g_object_unref (paint->pixmap);
   g_free (paint);
@@ -2941,9 +2958,9 @@ gdk_window_begin_paint_rect (GdkWindow          *window,
 
   g_return_if_fail (GDK_IS_WINDOW (window));
 
-  region = gdk_region_rectangle (rectangle);
+  region = cairo_region_create_rectangle (rectangle);
   gdk_window_begin_paint_region (window, region);
-  gdk_region_destroy (region);
+  cairo_region_destroy (region);
 }
 
 /**
@@ -3021,22 +3038,22 @@ gdk_window_begin_paint_region (GdkWindow       *window,
   implicit_paint = impl_window->implicit_paint;
 
   paint = g_new (GdkWindowPaint, 1);
-  paint->region = gdk_region_copy (region);
+  paint->region = cairo_region_copy (region);
   paint->region_tag = new_region_tag ();
 
-  gdk_region_intersect (paint->region, private->clip_region_with_children);
-  gdk_region_get_clipbox (paint->region, &clip_box);
+  cairo_region_intersect (paint->region, private->clip_region_with_children);
+  cairo_region_get_extents (paint->region, &clip_box);
 
   /* Convert to impl coords */
-  gdk_region_offset (paint->region, private->abs_x, private->abs_y);
+  cairo_region_translate (paint->region, private->abs_x, private->abs_y);
 
   /* Mark the region as valid on the implicit paint */
 
   if (implicit_paint)
-    gdk_region_union (implicit_paint->region, paint->region);
+    cairo_region_union (implicit_paint->region, paint->region);
 
   /* Convert back to normal coords */
-  gdk_region_offset (paint->region, -private->abs_x, -private->abs_y);
+  cairo_region_translate (paint->region, -private->abs_x, -private->abs_y);
 
   if (implicit_paint)
     {
@@ -3069,12 +3086,12 @@ gdk_window_begin_paint_region (GdkWindow       *window,
     {
       GdkWindowPaint *tmp_paint = list->data;
 
-      gdk_region_subtract (tmp_paint->region, paint->region);
+      cairo_region_subtract (tmp_paint->region, paint->region);
     }
 
   private->paint_stack = g_slist_prepend (private->paint_stack, paint);
 
-  if (!gdk_region_empty (paint->region))
+  if (!cairo_region_is_empty (paint->region))
     {
       gdk_window_clear_backing_region (window,
 				       paint->region);
@@ -3113,9 +3130,9 @@ setup_redirect_clip (GdkWindow      *window,
   dest_rect.y = -y_offset;
   dest_rect.width = private->redirect->width;
   dest_rect.height = private->redirect->height;
-  tmpreg = gdk_region_rectangle (&dest_rect);
-  gdk_region_intersect (visible_region, tmpreg);
-  gdk_region_destroy (tmpreg);
+  tmpreg = cairo_region_create_rectangle (&dest_rect);
+  cairo_region_intersect (visible_region, tmpreg);
+  cairo_region_destroy (tmpreg);
 
   /* Compensate for the dest pos */
   x_offset += private->redirect->dest_x;
@@ -3126,7 +3143,7 @@ setup_redirect_clip (GdkWindow      *window,
   /* offset clip and tiles from window coords to pixmaps coords */
   gdk_gc_offset (gc, -x_offset, -y_offset);
 
-  gdk_region_destroy (visible_region);
+  cairo_region_destroy (visible_region);
 
   *x_offset_out = x_offset;
   *y_offset_out = y_offset;
@@ -3182,7 +3199,7 @@ gdk_window_end_paint (GdkWindow *window)
   private->paint_stack = g_slist_delete_link (private->paint_stack,
 					      private->paint_stack);
 
-  gdk_region_get_clipbox (paint->region, &clip_box);
+  cairo_region_get_extents (paint->region, &clip_box);
 
   tmp_gc = _gdk_drawable_get_scratch_gc (window, FALSE);
 
@@ -3193,8 +3210,8 @@ gdk_window_end_paint (GdkWindow *window)
     {
       gdk_window_flush_outstanding_moves (window);
 
-      full_clip = gdk_region_copy (private->clip_region_with_children);
-      gdk_region_intersect (full_clip, paint->region);
+      full_clip = cairo_region_copy (private->clip_region_with_children);
+      cairo_region_intersect (full_clip, paint->region);
       _gdk_gc_set_clip_region_internal (tmp_gc, full_clip, TRUE); /* Takes ownership of full_clip */
       gdk_gc_set_clip_origin (tmp_gc, - x_offset, - y_offset);
       gdk_draw_drawable (private->impl, tmp_gc, paint->pixmap,
@@ -3223,7 +3240,7 @@ gdk_window_end_paint (GdkWindow *window)
 
   cairo_surface_destroy (paint->surface);
   g_object_unref (paint->pixmap);
-  gdk_region_destroy (paint->region);
+  cairo_region_destroy (paint->region);
   g_free (paint);
 
   /* find a composited window in our hierarchy to signal its
@@ -3272,7 +3289,7 @@ gdk_window_free_paint_stack (GdkWindow *window)
 	  if (tmp_list == private->paint_stack)
 	    g_object_unref (paint->pixmap);
 
-	  gdk_region_destroy (paint->region);
+	  cairo_region_destroy (paint->region);
 	  g_free (paint);
 
 	  tmp_list = tmp_list->next;
@@ -3308,12 +3325,12 @@ do_move_region_bits_on_impl (GdkWindowObject *impl_window,
     }
   tmp_gc = _gdk_drawable_get_subwindow_scratch_gc ((GdkWindow *)private);
 
-  gdk_region_get_clipbox (dest_region, &copy_rect);
+  cairo_region_get_extents (dest_region, &copy_rect);
   gdk_gc_set_clip_region (tmp_gc, dest_region);
 
   /* The region area is moved and we queue translations for all expose events
      to the source area that were sent prior to the copy */
-  gdk_region_offset (dest_region, -dx, -dy); /* Move to source region */
+  cairo_region_translate (dest_region, -dx, -dy); /* Move to source region */
   impl_iface = GDK_WINDOW_IMPL_GET_IFACE (private->impl);
 
   impl_iface->queue_translation ((GdkWindow *)impl_window,
@@ -3336,7 +3353,7 @@ gdk_window_region_move_new (GdkRegion *region,
   GdkWindowRegionMove *move;
 
   move = g_slice_new (GdkWindowRegionMove);
-  move->dest_region  = gdk_region_copy (region);
+  move->dest_region  = cairo_region_copy (region);
   move->dx = dx;
   move->dy = dy;
 
@@ -3346,7 +3363,7 @@ gdk_window_region_move_new (GdkRegion *region,
 static void
 gdk_window_region_move_free (GdkWindowRegionMove *move)
 {
-  gdk_region_destroy (move->dest_region);
+  cairo_region_destroy (move->dest_region);
   g_slice_free (GdkWindowRegionMove, move);
 }
 
@@ -3362,7 +3379,7 @@ append_move_region (GdkWindowObject *impl_window,
   gboolean added_move;
   GList *l, *prev;
 
-  if (gdk_region_empty (new_dest_region))
+  if (cairo_region_is_empty (new_dest_region))
     return;
 
   /* In principle this could just append the move to the list of outstanding
@@ -3378,9 +3395,9 @@ append_move_region (GdkWindowObject *impl_window,
      move is in the source of the new move, or if the destination of the new
      move overlaps the destination of the old move. We simplify this by
      just comparing the total regions (src + dest) */
-  new_total_region = gdk_region_copy (new_dest_region);
-  gdk_region_offset (new_total_region, -dx, -dy);
-  gdk_region_union (new_total_region, new_dest_region);
+  new_total_region = cairo_region_copy (new_dest_region);
+  cairo_region_translate (new_total_region, -dx, -dy);
+  cairo_region_union (new_total_region, new_dest_region);
 
   added_move = FALSE;
   for (l = g_list_last (impl_window->outstanding_moves); l != NULL; l = prev)
@@ -3388,28 +3405,28 @@ append_move_region (GdkWindowObject *impl_window,
       prev = l->prev;
       old_move = l->data;
 
-      old_total_region = gdk_region_copy (old_move->dest_region);
-      gdk_region_offset (old_total_region, -old_move->dx, -old_move->dy);
-      gdk_region_union (old_total_region, old_move->dest_region);
+      old_total_region = cairo_region_copy (old_move->dest_region);
+      cairo_region_translate (old_total_region, -old_move->dx, -old_move->dy);
+      cairo_region_union (old_total_region, old_move->dest_region);
 
-      gdk_region_intersect (old_total_region, new_total_region);
+      cairo_region_intersect (old_total_region, new_total_region);
       /* If these regions intersect then its not safe to push the
 	 new region before the old one */
-      if (!gdk_region_empty (old_total_region))
+      if (!cairo_region_is_empty (old_total_region))
 	{
 	  /* The area where the new moves source overlaps the old ones
 	     destination */
-	  source_overlaps_destination = gdk_region_copy (new_dest_region);
-	  gdk_region_offset (source_overlaps_destination, -dx, -dy);
-	  gdk_region_intersect (source_overlaps_destination, old_move->dest_region);
-	  gdk_region_offset (source_overlaps_destination, dx, dy);
+	  source_overlaps_destination = cairo_region_copy (new_dest_region);
+	  cairo_region_translate (source_overlaps_destination, -dx, -dy);
+	  cairo_region_intersect (source_overlaps_destination, old_move->dest_region);
+	  cairo_region_translate (source_overlaps_destination, dx, dy);
 
 	  /* We can do all sort of optimizations here, but to do things safely it becomes
 	     quite complicated. However, a very common case is that you copy something first,
 	     then copy all that or a subset of it to a new location (i.e. if you scroll twice
 	     in the same direction). We'd like to detect this case and optimize it to one
 	     copy. */
-	  if (gdk_region_equal (source_overlaps_destination, new_dest_region))
+	  if (cairo_region_equal (source_overlaps_destination, new_dest_region))
 	    {
 	      /* This means we might be able to replace the old move and the new one
 		 with the new one read from the old ones source, and a second copy of
@@ -3418,13 +3435,13 @@ append_move_region (GdkWindowObject *impl_window,
 		 by the destination of the new one */
 
 	      /* the new destination of old move if split is ok: */
-	      non_overwritten = gdk_region_copy (old_move->dest_region);
-	      gdk_region_subtract (non_overwritten, new_dest_region);
+	      non_overwritten = cairo_region_copy (old_move->dest_region);
+	      cairo_region_subtract (non_overwritten, new_dest_region);
 	      /* move to source region */
-	      gdk_region_offset (non_overwritten, -old_move->dx, -old_move->dy);
+	      cairo_region_translate (non_overwritten, -old_move->dx, -old_move->dy);
 
-	      gdk_region_intersect (non_overwritten, new_dest_region);
-	      if (gdk_region_empty (non_overwritten))
+	      cairo_region_intersect (non_overwritten, new_dest_region);
+	      if (cairo_region_is_empty (non_overwritten))
 		{
 		  added_move = TRUE;
 		  move = gdk_window_region_move_new (new_dest_region,
@@ -3434,19 +3451,19 @@ append_move_region (GdkWindowObject *impl_window,
 		  impl_window->outstanding_moves =
 		    g_list_insert_before (impl_window->outstanding_moves,
 					  l, move);
-		  gdk_region_subtract (old_move->dest_region, new_dest_region);
+		  cairo_region_subtract (old_move->dest_region, new_dest_region);
 		}
-	      gdk_region_destroy (non_overwritten);
+	      cairo_region_destroy (non_overwritten);
 	    }
 
-	  gdk_region_destroy (source_overlaps_destination);
-	  gdk_region_destroy (old_total_region);
+	  cairo_region_destroy (source_overlaps_destination);
+	  cairo_region_destroy (old_total_region);
 	  break;
 	}
-      gdk_region_destroy (old_total_region);
+      cairo_region_destroy (old_total_region);
     }
 
-  gdk_region_destroy (new_total_region);
+  cairo_region_destroy (new_total_region);
 
   if (!added_move)
     {
@@ -3471,9 +3488,9 @@ move_region_on_impl (GdkWindowObject *impl_window,
 		     int dx, int dy)
 {
   if ((dx == 0 && dy == 0) ||
-      gdk_region_empty (region))
+      cairo_region_is_empty (region))
     {
-      gdk_region_destroy (region);
+      cairo_region_destroy (region);
       return;
     }
 
@@ -3484,25 +3501,25 @@ move_region_on_impl (GdkWindowObject *impl_window,
     {
       GdkRegion *update_area;
 
-      update_area = gdk_region_copy (region);
+      update_area = cairo_region_copy (region);
 
       /* Convert from target to source */
-      gdk_region_offset (update_area, -dx, -dy);
-      gdk_region_intersect (update_area, impl_window->update_area);
+      cairo_region_translate (update_area, -dx, -dy);
+      cairo_region_intersect (update_area, impl_window->update_area);
       /* We only copy the area, so keep the old update area invalid.
 	 It would be safe to remove it too, as code that uses
 	 move_region_on_impl generally also invalidate the source
 	 area. However, it would just use waste cycles. */
 
       /* Convert back */
-      gdk_region_offset (update_area, dx, dy);
-      gdk_region_union (impl_window->update_area, update_area);
+      cairo_region_translate (update_area, dx, dy);
+      cairo_region_union (impl_window->update_area, update_area);
 
       /* This area of the destination is now invalid,
 	 so no need to copy to it.  */
-      gdk_region_subtract (region, update_area);
+      cairo_region_subtract (region, update_area);
 
-      gdk_region_destroy (update_area);
+      cairo_region_destroy (update_area);
     }
 
   /* If we're currently exposing this window, don't copy to this
@@ -3513,12 +3530,12 @@ move_region_on_impl (GdkWindowObject *impl_window,
       GdkWindowPaint *implicit_paint = impl_window->implicit_paint;
       GdkRegion *exposing;
 
-      exposing = gdk_region_copy (implicit_paint->region);
-      gdk_region_intersect (exposing, region);
-      gdk_region_subtract (region, exposing);
+      exposing = cairo_region_copy (implicit_paint->region);
+      cairo_region_intersect (exposing, region);
+      cairo_region_subtract (region, exposing);
 
       impl_window_add_update_area (impl_window, exposing);
-      gdk_region_destroy (exposing);
+      cairo_region_destroy (exposing);
     }
 
   if (impl_window->outstanding_surfaces == 0) /* Enable flicker free handling of moves. */
@@ -3527,7 +3544,7 @@ move_region_on_impl (GdkWindowObject *impl_window,
     do_move_region_bits_on_impl (impl_window,
 				 region, dx, dy);
 
-  gdk_region_destroy (region);
+  cairo_region_destroy (region);
 }
 
 /* Flushes all outstanding changes to the window, call this
@@ -4073,18 +4090,18 @@ gdk_window_get_composite_drawable (GdkDrawable *drawable,
   for (list = private->paint_stack; list != NULL; list = list->next)
     {
       GdkWindowPaint *paint = list->data;
-      GdkOverlapType overlap;
+      cairo_region_overlap_t overlap;
 
-      overlap = gdk_region_rect_in (paint->region, &rect);
+      overlap = cairo_region_contains_rectangle (paint->region, &rect);
 
-      if (overlap == GDK_OVERLAP_RECTANGLE_IN)
+      if (overlap == CAIRO_REGION_OVERLAP_IN)
 	{
 	  *composite_x_offset = paint->x_offset;
 	  *composite_y_offset = paint->y_offset;
 
 	  return g_object_ref (paint->pixmap);
 	}
-      else if (overlap == GDK_OVERLAP_RECTANGLE_PART)
+      else if (overlap == CAIRO_REGION_OVERLAP_PART)
 	{
 	  overlap_buffer = TRUE;
 	  break;
@@ -4095,20 +4112,20 @@ gdk_window_get_composite_drawable (GdkDrawable *drawable,
   implicit_paint = impl_window->implicit_paint;
   if (implicit_paint)
     {
-      GdkOverlapType overlap;
+      cairo_region_overlap_t overlap;
 
       rect.x += private->abs_x;
       rect.y += private->abs_y;
 
-      overlap = gdk_region_rect_in (implicit_paint->region, &rect);
-      if (overlap == GDK_OVERLAP_RECTANGLE_IN)
+      overlap = cairo_region_contains_rectangle (implicit_paint->region, &rect);
+      if (overlap == CAIRO_REGION_OVERLAP_IN)
 	{
 	  *composite_x_offset = -private->abs_x + implicit_paint->x_offset;
 	  *composite_y_offset = -private->abs_y + implicit_paint->y_offset;
 
 	  return g_object_ref (implicit_paint->pixmap);
 	}
-      else if (overlap == GDK_OVERLAP_RECTANGLE_PART)
+      else if (overlap == CAIRO_REGION_OVERLAP_PART)
 	overlap_buffer = TRUE;
     }
 
@@ -4175,24 +4192,24 @@ gdk_window_get_clip_region (GdkDrawable *drawable)
   GdkWindowObject *private = (GdkWindowObject *)drawable;
   GdkRegion *result;
 
-  result = gdk_region_copy (private->clip_region);
+  result = cairo_region_copy (private->clip_region);
 
   if (private->paint_stack)
     {
-      GdkRegion *paint_region = gdk_region_new ();
+      GdkRegion *paint_region = cairo_region_create ();
       GSList *tmp_list = private->paint_stack;
 
       while (tmp_list)
 	{
 	  GdkWindowPaint *paint = tmp_list->data;
 
-	  gdk_region_union (paint_region, paint->region);
+	  cairo_region_union (paint_region, paint->region);
 
 	  tmp_list = tmp_list->next;
 	}
 
-      gdk_region_intersect (result, paint_region);
-      gdk_region_destroy (paint_region);
+      cairo_region_intersect (result, paint_region);
+      cairo_region_destroy (paint_region);
     }
 
   return result;
@@ -4203,7 +4220,7 @@ gdk_window_get_visible_region (GdkDrawable *drawable)
 {
   GdkWindowObject *private = (GdkWindowObject*) drawable;
 
-  return gdk_region_copy (private->clip_region);
+  return cairo_region_copy (private->clip_region);
 }
 
 static void
@@ -4249,23 +4266,23 @@ gdk_window_draw_drawable (GdkDrawable *drawable,
 	  r.y = ydest;
 	  r.width = width;
 	  r.height = height;
-	  exposure_region = gdk_region_rectangle (&r);
+	  exposure_region = cairo_region_create_rectangle (&r);
 
 	  if (_gdk_gc_get_subwindow (gc) == GDK_CLIP_BY_CHILDREN)
 	    clip = private->clip_region_with_children;
 	  else
 	    clip = private->clip_region;
-	  gdk_region_intersect (exposure_region, clip);
+	  cairo_region_intersect (exposure_region, clip);
 
 	  _gdk_gc_remove_drawable_clip (gc);
 	  clip = _gdk_gc_get_clip_region (gc);
 	  if (clip)
 	    {
-	      gdk_region_offset (exposure_region,
+	      cairo_region_translate (exposure_region,
 				 old_clip_x,
 				 old_clip_y);
-	      gdk_region_intersect (exposure_region, clip);
-	      gdk_region_offset (exposure_region,
+	      cairo_region_intersect (exposure_region, clip);
+	      cairo_region_translate (exposure_region,
 				 -old_clip_x,
 				 -old_clip_y);
 	    }
@@ -4277,18 +4294,18 @@ gdk_window_draw_drawable (GdkDrawable *drawable,
 	   * Note that xsrc/ysrc has been corrected for abs_x/y offsets already,
 	   * which need to be undone */
 	  clip = gdk_drawable_get_visible_region (original_src);
-	  gdk_region_offset (clip,
+	  cairo_region_translate (clip,
 			     xdest - (xsrc - GDK_WINDOW_OBJECT (original_src)->abs_x),
 			     ydest - (ysrc - GDK_WINDOW_OBJECT (original_src)->abs_y));
-	  gdk_region_subtract (exposure_region, clip);
-	  gdk_region_destroy (clip);
+	  cairo_region_subtract (exposure_region, clip);
+	  cairo_region_destroy (clip);
 
 	  gdk_window_invalidate_region_full (GDK_WINDOW (private),
 					      exposure_region,
 					      _gdk_gc_get_subwindow (gc) == GDK_INCLUDE_INFERIORS,
 					      CLEAR_BG_ALL);
 
-	  gdk_region_destroy (exposure_region);
+	  cairo_region_destroy (exposure_region);
 	}
     }
 
@@ -4573,9 +4590,9 @@ gdk_window_clear_backing_region (GdkWindow *window,
   method.gc = NULL;
   setup_backing_rect_method (&method, window, paint, 0, 0);
 
-  clip = gdk_region_copy (paint->region);
-  gdk_region_intersect (clip, region);
-  gdk_region_get_clipbox (clip, &clipbox);
+  clip = cairo_region_copy (paint->region);
+  cairo_region_intersect (clip, region);
+  cairo_region_get_extents (clip, &clipbox);
 
 
   if (method.cr)
@@ -4607,7 +4624,7 @@ gdk_window_clear_backing_region (GdkWindow *window,
 #endif
     }
 
-  gdk_region_destroy (clip);
+  cairo_region_destroy (clip);
 
 #if 0
   g_timer_destroy (timer);
@@ -4633,7 +4650,7 @@ gdk_window_clear_backing_region_redirect (GdkWindow *window,
 							GDK_WINDOW (redirect->redirected),
 							TRUE,
 							&x_offset, &y_offset);
-  gdk_region_intersect (clip_region, region);
+  cairo_region_intersect (clip_region, region);
 
   /* offset is from redirected window origin to window origin, convert to
      the offset from the redirected pixmap origin to the window origin */
@@ -4641,7 +4658,7 @@ gdk_window_clear_backing_region_redirect (GdkWindow *window,
   y_offset += redirect->dest_y - redirect->src_y;
 
   /* Convert region to pixmap coords */
-  gdk_region_offset (clip_region, x_offset, y_offset);
+  cairo_region_translate (clip_region, x_offset, y_offset);
 
   paint.x_offset = 0;
   paint.y_offset = 0;
@@ -4665,7 +4682,7 @@ gdk_window_clear_backing_region_redirect (GdkWindow *window,
     {
       g_assert (method.gc != NULL);
 
-      gdk_region_get_clipbox (clip_region, &clipbox);
+      cairo_region_get_extents (clip_region, &clipbox);
       gdk_gc_set_clip_region (method.gc, clip_region);
       gdk_draw_rectangle (redirect->pixmap, method.gc, TRUE,
 			  clipbox.x, clipbox.y,
@@ -4674,7 +4691,7 @@ gdk_window_clear_backing_region_redirect (GdkWindow *window,
 
     }
 
-  gdk_region_destroy (clip_region);
+  cairo_region_destroy (clip_region);
   cairo_surface_destroy (paint.surface);
 }
 
@@ -4700,9 +4717,9 @@ gdk_window_clear_backing_region_direct (GdkWindow *window,
   method.gc = NULL;
   setup_backing_rect_method (&method, window, &paint, 0, 0);
 
-  clip = gdk_region_copy (private->clip_region_with_children);
-  gdk_region_intersect (clip, region);
-  gdk_region_get_clipbox (clip, &clipbox);
+  clip = cairo_region_copy (private->clip_region_with_children);
+  cairo_region_intersect (clip, region);
+  cairo_region_get_extents (clip, &clipbox);
 
   if (method.cr)
     {
@@ -4725,7 +4742,7 @@ gdk_window_clear_backing_region_direct (GdkWindow *window,
 
     }
 
-  gdk_region_destroy (clip);
+  cairo_region_destroy (clip);
   cairo_surface_destroy (paint.surface);
 }
 
@@ -4791,8 +4808,8 @@ gdk_window_clear_region_internal (GdkWindow *window,
       if (impl_iface->clear_region && clears_as_native (private))
 	{
 	  GdkRegion *copy;
-	  copy = gdk_region_copy (region);
-	  gdk_region_intersect (copy,
+	  copy = cairo_region_copy (region);
+	  cairo_region_intersect (copy,
 				private->clip_region_with_children);
 
 
@@ -4801,7 +4818,7 @@ gdk_window_clear_region_internal (GdkWindow *window,
 	  gdk_window_flush (window);
 	  impl_iface->clear_region (window, copy, send_expose);
 
-	  gdk_region_destroy (copy);
+	  cairo_region_destroy (copy);
 	}
       else
 	{
@@ -4838,11 +4855,11 @@ gdk_window_clear_area_internal (GdkWindow *window,
   rect.width = width;
   rect.height = height;
 
-  region = gdk_region_rectangle (&rect);
+  region = cairo_region_create_rectangle (&rect);
   gdk_window_clear_region_internal (window,
 				    region,
 				    send_expose);
-  gdk_region_destroy (region);
+  cairo_region_destroy (region);
 
 }
 
@@ -5372,7 +5389,7 @@ _gdk_window_process_updates_recurse (GdkWindow *window,
   GdkRectangle r;
   GList *l, *children;
 
-  if (gdk_region_empty (expose_region))
+  if (cairo_region_is_empty (expose_region))
     return;
 
   /* Make this reentrancy safe for expose handlers freeing windows */
@@ -5397,35 +5414,35 @@ _gdk_window_process_updates_recurse (GdkWindow *window,
       r.width = child->width;
       r.height = child->height;
 
-      child_region = gdk_region_rectangle (&r);
+      child_region = cairo_region_create_rectangle (&r);
       if (child->shape)
 	{
 	  /* Adjust shape region to parent window coords */
-	  gdk_region_offset (child->shape, child->x, child->y);
-	  gdk_region_intersect (child_region, child->shape);
-	  gdk_region_offset (child->shape, -child->x, -child->y);
+	  cairo_region_translate (child->shape, child->x, child->y);
+	  cairo_region_intersect (child_region, child->shape);
+	  cairo_region_translate (child->shape, -child->x, -child->y);
 	}
 
       if (child->impl == private->impl)
 	{
 	  /* Client side child, expose */
-	  gdk_region_intersect (child_region, expose_region);
-	  gdk_region_subtract (expose_region, child_region);
-	  gdk_region_offset (child_region, -child->x, -child->y);
+	  cairo_region_intersect (child_region, expose_region);
+	  cairo_region_subtract (expose_region, child_region);
+	  cairo_region_translate (child_region, -child->x, -child->y);
 	  _gdk_window_process_updates_recurse ((GdkWindow *)child, child_region);
 	}
       else
 	{
 	  /* Native child, just remove area from expose region */
-	  gdk_region_subtract (expose_region, child_region);
+	  cairo_region_subtract (expose_region, child_region);
 	}
-      gdk_region_destroy (child_region);
+      cairo_region_destroy (child_region);
     }
 
   g_list_foreach (children, (GFunc)g_object_unref, NULL);
   g_list_free (children);
 
-  if (!gdk_region_empty (expose_region) &&
+  if (!cairo_region_is_empty (expose_region) &&
       !private->destroyed)
     {
       if (private->event_mask & GDK_EXPOSURE_MASK)
@@ -5437,7 +5454,7 @@ _gdk_window_process_updates_recurse (GdkWindow *window,
 	  event.expose.send_event = FALSE;
 	  event.expose.count = 0;
 	  event.expose.region = expose_region;
-	  gdk_region_get_clipbox (expose_region, &event.expose.area);
+	  cairo_region_get_extents (expose_region, &event.expose.area);
 
 	  (*_gdk_event_func) (&event, _gdk_event_data);
 
@@ -5497,7 +5514,7 @@ gdk_window_process_updates_internal (GdkWindow *window)
 	  gboolean end_implicit;
 
 	  /* Clip to part visible in toplevel */
-	  gdk_region_intersect (update_area, private->clip_region);
+	  cairo_region_intersect (update_area, private->clip_region);
 
 	  if (debug_updates)
 	    {
@@ -5518,7 +5535,7 @@ gdk_window_process_updates_internal (GdkWindow *window)
 	      GdkRegion *remove;
 	      GList *l, *prev;
 
-	      remove = gdk_region_copy (update_area);
+	      remove = cairo_region_copy (update_area);
 	      /* We iterate backwards, starting from the state that would be
 		 if we had applied all the moves. */
 	      for (l = g_list_last (private->outstanding_moves); l != NULL; l = prev)
@@ -5527,24 +5544,24 @@ gdk_window_process_updates_internal (GdkWindow *window)
 		  move = l->data;
 
 		  /* Don't need this area */
-		  gdk_region_subtract (move->dest_region, remove);
+		  cairo_region_subtract (move->dest_region, remove);
 
 		  /* However if any of the destination we do need has a source
 		     in the updated region we do need that as a destination for
 		     the earlier moves */
-		  gdk_region_offset (move->dest_region, -move->dx, -move->dy);
-		  gdk_region_subtract (remove, move->dest_region);
+		  cairo_region_translate (move->dest_region, -move->dx, -move->dy);
+		  cairo_region_subtract (remove, move->dest_region);
 
-		  if (gdk_region_empty (move->dest_region))
+		  if (cairo_region_is_empty (move->dest_region))
 		    {
 		      gdk_window_region_move_free (move);
 		      private->outstanding_moves =
 			g_list_delete_link (private->outstanding_moves, l);
 		    }
 		  else /* move back */
-		    gdk_region_offset (move->dest_region, move->dx, move->dy);
+		    cairo_region_translate (move->dest_region, move->dx, move->dy);
 		}
-	      gdk_region_destroy (remove);
+	      cairo_region_destroy (remove);
 	    }
 
 	  /* By now we a set of window moves that should be applied, and then
@@ -5583,9 +5600,9 @@ gdk_window_process_updates_internal (GdkWindow *window)
 	   * avoid doing the unnecessary repaint any outstanding expose events.
 	   */
 
-	  gdk_region_get_clipbox (update_area, &clip_box);
+	  cairo_region_get_extents (update_area, &clip_box);
 	  end_implicit = gdk_window_begin_implicit_paint (window, &clip_box);
-	  expose_region = gdk_region_copy (update_area);
+	  expose_region = cairo_region_copy (update_area);
 	  if (!end_implicit)
 	    {
 	      /* Rendering is not double buffered by gdk, do outstanding
@@ -5621,10 +5638,10 @@ gdk_window_process_updates_internal (GdkWindow *window)
 
 	      gdk_window_end_implicit_paint (window);
 	    }
-	  gdk_region_destroy (expose_region);
+	  cairo_region_destroy (expose_region);
 	}
       if (!save_region)
-	gdk_region_destroy (update_area);
+	cairo_region_destroy (update_area);
     }
 
   if (private->outstanding_moves)
@@ -5826,9 +5843,9 @@ gdk_window_invalidate_rect_full (GdkWindow          *window,
       rect = &window_rect;
     }
 
-  region = gdk_region_rectangle (rect);
+  region = cairo_region_create_rectangle (rect);
   gdk_window_invalidate_region_full (window, region, invalidate_children, clear_bg);
-  gdk_region_destroy (region);
+  cairo_region_destroy (region);
 }
 
 /**
@@ -5863,7 +5880,7 @@ draw_ugly_color (GdkWindow       *window,
   gdk_gc_set_rgb_fg_color (ugly_gc, &ugly_color);
   gdk_gc_set_clip_region (ugly_gc, region);
 
-  gdk_region_get_clipbox (region, &clipbox);
+  cairo_region_get_extents (region, &clipbox);
 
   gdk_draw_rectangle (window,
 		      ugly_gc,
@@ -5879,11 +5896,11 @@ impl_window_add_update_area (GdkWindowObject *impl_window,
 			     GdkRegion *region)
 {
   if (impl_window->update_area)
-    gdk_region_union (impl_window->update_area, region);
+    cairo_region_union (impl_window->update_area, region);
   else
     {
       gdk_window_add_update_window ((GdkWindow *)impl_window);
-      impl_window->update_area = gdk_region_copy (region);
+      impl_window->update_area = cairo_region_copy (region);
       gdk_window_schedule_update ((GdkWindow *)impl_window);
     }
 }
@@ -5918,12 +5935,12 @@ gdk_window_invalidate_maybe_recurse_full (GdkWindow       *window,
 
   if (private->input_only ||
       !private->viewable ||
-      gdk_region_empty (region) ||
+      cairo_region_is_empty (region) ||
       private->window_type == GDK_WINDOW_ROOT)
     return;
 
   visible_region = gdk_drawable_get_visible_region (window);
-  gdk_region_intersect (visible_region, region);
+  cairo_region_intersect (visible_region, region);
 
   tmp_list = private->children;
   while (tmp_list)
@@ -5939,29 +5956,29 @@ gdk_window_invalidate_maybe_recurse_full (GdkWindow       *window,
 	  child_rect.y = child->y;
 	  child_rect.width = child->width;
 	  child_rect.height = child->height;
-	  child_region = gdk_region_rectangle (&child_rect);
+	  child_region = cairo_region_create_rectangle (&child_rect);
 
 	  /* remove child area from the invalid area of the parent */
 	  if (GDK_WINDOW_IS_MAPPED (child) && !child->shaped &&
 	      !child->composited &&
 	      !gdk_window_is_offscreen (child))
-	    gdk_region_subtract (visible_region, child_region);
+	    cairo_region_subtract (visible_region, child_region);
 
 	  if (child_func && (*child_func) ((GdkWindow *)child, user_data))
 	    {
-	      GdkRegion *tmp = gdk_region_copy (region);
+	      GdkRegion *tmp = cairo_region_copy (region);
 
-	      gdk_region_offset (tmp, - child_rect.x, - child_rect.y);
-	      gdk_region_offset (child_region, - child_rect.x, - child_rect.y);
-	      gdk_region_intersect (child_region, tmp);
+	      cairo_region_translate (tmp, - child_rect.x, - child_rect.y);
+	      cairo_region_translate (child_region, - child_rect.x, - child_rect.y);
+	      cairo_region_intersect (child_region, tmp);
 
 	      gdk_window_invalidate_maybe_recurse_full ((GdkWindow *)child,
 							child_region, clear_bg, child_func, user_data);
 
-	      gdk_region_destroy (tmp);
+	      cairo_region_destroy (tmp);
 	    }
 
-	  gdk_region_destroy (child_region);
+	  cairo_region_destroy (child_region);
 	}
 
       tmp_list = tmp_list->next;
@@ -5969,7 +5986,7 @@ gdk_window_invalidate_maybe_recurse_full (GdkWindow       *window,
 
   impl_window = gdk_window_get_impl_window (private);
 
-  if (!gdk_region_empty (visible_region)  ||
+  if (!cairo_region_is_empty (visible_region)  ||
       /* Even if we're not exposing anything, make sure we process
 	 idles for windows with outstanding moves */
       (impl_window->outstanding_moves != NULL &&
@@ -5979,7 +5996,7 @@ gdk_window_invalidate_maybe_recurse_full (GdkWindow       *window,
 	draw_ugly_color (window, region);
 
       /* Convert to impl coords */
-      gdk_region_offset (visible_region, private->abs_x, private->abs_y);
+      cairo_region_translate (visible_region, private->abs_x, private->abs_y);
 
       /* Only invalidate area if app requested expose events or if
 	 we need to clear the area (by request or to emulate background
@@ -5993,7 +6010,7 @@ gdk_window_invalidate_maybe_recurse_full (GdkWindow       *window,
 	impl_window_add_update_area (impl_window, visible_region);
     }
 
-  gdk_region_destroy (visible_region);
+  cairo_region_destroy (visible_region);
 }
 
 /**
@@ -6128,17 +6145,17 @@ _gdk_window_invalidate_for_expose (GdkWindow       *window,
       move = l->data;
 
       /* covert to move source region */
-      move_region = gdk_region_copy (move->dest_region);
-      gdk_region_offset (move_region, -move->dx, -move->dy);
+      move_region = cairo_region_copy (move->dest_region);
+      cairo_region_translate (move_region, -move->dx, -move->dy);
 
       /* Move area of region that intersects with move source
 	 by dx, dy of the move*/
-      gdk_region_intersect (move_region, region);
-      gdk_region_subtract (region, move_region);
-      gdk_region_offset (move_region, move->dx, move->dy);
-      gdk_region_union (region, move_region);
+      cairo_region_intersect (move_region, region);
+      cairo_region_subtract (region, move_region);
+      cairo_region_translate (move_region, move->dx, move->dy);
+      cairo_region_union (region, move_region);
 
-      gdk_region_destroy (move_region);
+      cairo_region_destroy (move_region);
     }
 
   gdk_window_invalidate_maybe_recurse_full (window, region, CLEAR_BG_WINCLEARED,
@@ -6156,7 +6173,7 @@ _gdk_window_invalidate_for_expose (GdkWindow       *window,
  * no longer have an invalid/dirty region; the update area is removed
  * from @window and handed to you. If a window has no update area,
  * gdk_window_get_update_area() returns %NULL. You are responsible for
- * calling gdk_region_destroy() on the returned region if it's non-%NULL.
+ * calling cairo_region_destroy() on the returned region if it's non-%NULL.
  *
  * Return value: the update area for @window
  **/
@@ -6173,31 +6190,31 @@ gdk_window_get_update_area (GdkWindow *window)
 
   if (impl_window->update_area)
     {
-      tmp_region = gdk_region_copy (private->clip_region_with_children);
+      tmp_region = cairo_region_copy (private->clip_region_with_children);
       /* Convert to impl coords */
-      gdk_region_offset (tmp_region, private->abs_x, private->abs_y);
-      gdk_region_intersect (tmp_region, impl_window->update_area);
+      cairo_region_translate (tmp_region, private->abs_x, private->abs_y);
+      cairo_region_intersect (tmp_region, impl_window->update_area);
 
-      if (gdk_region_empty (tmp_region))
+      if (cairo_region_is_empty (tmp_region))
 	{
-	  gdk_region_destroy (tmp_region);
+	  cairo_region_destroy (tmp_region);
 	  return NULL;
 	}
       else
 	{
-	  gdk_region_subtract (impl_window->update_area, tmp_region);
+	  cairo_region_subtract (impl_window->update_area, tmp_region);
 
-	  if (gdk_region_empty (impl_window->update_area) &&
+	  if (cairo_region_is_empty (impl_window->update_area) &&
 	      impl_window->outstanding_moves == NULL)
 	    {
-	      gdk_region_destroy (impl_window->update_area);
+	      cairo_region_destroy (impl_window->update_area);
 	      impl_window->update_area = NULL;
 
 	      gdk_window_remove_update_window ((GdkWindow *)impl_window);
 	    }
 
 	  /* Convert from impl coords */
-	  gdk_region_offset (tmp_region, -private->abs_x, -private->abs_y);
+	  cairo_region_translate (tmp_region, -private->abs_x, -private->abs_y);
 	  return tmp_region;
 
 	}
@@ -6224,7 +6241,7 @@ _gdk_window_clear_update_area (GdkWindow *window)
     {
       gdk_window_remove_update_window (window);
 
-      gdk_region_destroy (private->update_area);
+      cairo_region_destroy (private->update_area);
       private->update_area = NULL;
     }
 }
@@ -6916,7 +6933,7 @@ gdk_window_raise (GdkWindow *window)
   old_region = NULL;
   if (gdk_window_is_viewable (window) &&
       !private->input_only)
-    old_region = gdk_region_copy (private->clip_region);
+    old_region = cairo_region_copy (private->clip_region);
 
   /* Keep children in (reverse) stacking order */
   gdk_window_raise_internal (window);
@@ -6925,13 +6942,13 @@ gdk_window_raise (GdkWindow *window)
 
   if (old_region)
     {
-      new_region = gdk_region_copy (private->clip_region);
+      new_region = cairo_region_copy (private->clip_region);
 
-      gdk_region_subtract (new_region, old_region);
+      cairo_region_subtract (new_region, old_region);
       gdk_window_invalidate_region_full (window, new_region, TRUE, CLEAR_BG_ALL);
 
-      gdk_region_destroy (old_region);
-      gdk_region_destroy (new_region);
+      cairo_region_destroy (old_region);
+      cairo_region_destroy (new_region);
     }
 }
 
@@ -7546,7 +7563,7 @@ gdk_window_move_resize_toplevel (GdkWindow *window,
       !private->input_only)
     {
       expose = TRUE;
-      old_region = gdk_region_copy (private->clip_region);
+      old_region = cairo_region_copy (private->clip_region);
     }
 
   impl_iface = GDK_WINDOW_IMPL_GET_IFACE (private->impl);
@@ -7564,17 +7581,17 @@ gdk_window_move_resize_toplevel (GdkWindow *window,
 
   if (expose)
     {
-      new_region = gdk_region_copy (private->clip_region);
+      new_region = cairo_region_copy (private->clip_region);
 
       /* This is the newly exposed area (due to any resize),
        * X will expose it, but lets do that without the
        * roundtrip
        */
-      gdk_region_subtract (new_region, old_region);
+      cairo_region_subtract (new_region, old_region);
       gdk_window_invalidate_region_full (window, new_region, TRUE, CLEAR_BG_WINCLEARED);
 
-      gdk_region_destroy (old_region);
-      gdk_region_destroy (new_region);
+      cairo_region_destroy (old_region);
+      cairo_region_destroy (new_region);
     }
 
   _gdk_synthesize_crossing_events_for_geometry_change (window);
@@ -7624,16 +7641,16 @@ collect_native_child_region_helper (GdkWindowObject *window,
 
       if (child->impl != impl)
 	{
-	  tmp = gdk_region_copy (child->clip_region);
-	  gdk_region_offset (tmp,
+	  tmp = cairo_region_copy (child->clip_region);
+	  cairo_region_translate (tmp,
 			     x_offset + child->x,
 			     y_offset + child->y);
 	  if (*region == NULL)
 	    *region = tmp;
 	  else
 	    {
-	      gdk_region_union (*region, tmp);
-	      gdk_region_destroy (tmp);
+	      cairo_region_union (*region, tmp);
+	      cairo_region_destroy (tmp);
 	    }
 	}
       else
@@ -7652,7 +7669,7 @@ collect_native_child_region (GdkWindowObject *window,
   GdkRegion *region;
 
   if (include_this && gdk_window_has_impl (window) && window->viewable)
-    return gdk_region_copy (window->clip_region);
+    return cairo_region_copy (window->clip_region);
 
   region = NULL;
 
@@ -7717,15 +7734,15 @@ gdk_window_move_resize_internal (GdkWindow *window,
     {
       expose = TRUE;
 
-      old_region = gdk_region_copy (private->clip_region);
+      old_region = cairo_region_copy (private->clip_region);
       /* Adjust region to parent window coords */
-      gdk_region_offset (old_region, private->x, private->y);
+      cairo_region_translate (old_region, private->x, private->y);
 
       old_native_child_region = collect_native_child_region (private, TRUE);
       if (old_native_child_region)
 	{
 	  /* Adjust region to parent window coords */
-	  gdk_region_offset (old_native_child_region, private->x, private->y);
+	  cairo_region_translate (old_native_child_region, private->x, private->y);
 
 	  /* Any native window move will immediately copy stuff to the destination, which may overwrite a
 	   * source or destination for a delayed GdkWindowRegionMove. So, we need
@@ -7766,7 +7783,7 @@ gdk_window_move_resize_internal (GdkWindow *window,
     {
       new_native_child_region = collect_native_child_region (private, TRUE);
       /* Adjust region to parent window coords */
-      gdk_region_offset (new_native_child_region, private->x, private->y);
+      cairo_region_translate (new_native_child_region, private->x, private->y);
     }
 
   if (gdk_window_has_impl (private))
@@ -7785,9 +7802,9 @@ gdk_window_move_resize_internal (GdkWindow *window,
 
   if (expose)
     {
-      new_region = gdk_region_copy (private->clip_region);
+      new_region = cairo_region_copy (private->clip_region);
       /* Adjust region to parent window coords */
-      gdk_region_offset (new_region, private->x, private->y);
+      cairo_region_translate (new_region, private->x, private->y);
 
       /* copy_area:
        * Part of the data at the new location can be copied from the
@@ -7799,37 +7816,37 @@ gdk_window_move_resize_internal (GdkWindow *window,
        * Everything in the old and new regions that is not copied must be
        * invalidated (including children) as this is newly exposed
        */
-      copy_area = gdk_region_copy (new_region);
+      copy_area = cairo_region_copy (new_region);
 
-      gdk_region_union (new_region, old_region);
+      cairo_region_union (new_region, old_region);
 
       if (old_native_child_region)
 	{
 	  /* Don't copy from inside native children, as this is copied by
 	   * the native window move.
 	   */
-	  gdk_region_subtract (old_region, old_native_child_region);
+	  cairo_region_subtract (old_region, old_native_child_region);
 	}
-      gdk_region_offset (old_region, dx, dy);
+      cairo_region_translate (old_region, dx, dy);
 
-      gdk_region_intersect (copy_area, old_region);
+      cairo_region_intersect (copy_area, old_region);
 
       if (new_native_child_region)
 	{
 	  /* Don't copy any bits that would cause a read from the moved
 	     native windows, as we can't read that data */
-	  gdk_region_offset (new_native_child_region, dx, dy);
-	  gdk_region_subtract (copy_area, new_native_child_region);
-	  gdk_region_offset (new_native_child_region, -dx, -dy);
+	  cairo_region_translate (new_native_child_region, dx, dy);
+	  cairo_region_subtract (copy_area, new_native_child_region);
+	  cairo_region_translate (new_native_child_region, -dx, -dy);
 	}
 
-      gdk_region_subtract (new_region, copy_area);
+      cairo_region_subtract (new_region, copy_area);
 
       /* Convert old region to impl coords */
-      gdk_region_offset (old_region, -dx + private->abs_x - private->x, -dy + private->abs_y - private->y);
+      cairo_region_translate (old_region, -dx + private->abs_x - private->x, -dy + private->abs_y - private->y);
 
       /* convert from parent coords to impl */
-      gdk_region_offset (copy_area, private->abs_x - private->x, private->abs_y - private->y);
+      cairo_region_translate (copy_area, private->abs_x - private->x, private->abs_y - private->y);
 
       move_region_on_impl (impl_window, copy_area, dx, dy); /* takes ownership of copy_area */
 
@@ -7841,20 +7858,20 @@ gdk_window_move_resize_internal (GdkWindow *window,
       if (old_native_child_region)
 	{
 	  /* No need to expose the region that the native window move copies */
-	  gdk_region_offset (old_native_child_region, dx, dy);
-	  gdk_region_intersect (old_native_child_region, new_native_child_region);
-	  gdk_region_subtract (new_region, old_native_child_region);
+	  cairo_region_translate (old_native_child_region, dx, dy);
+	  cairo_region_intersect (old_native_child_region, new_native_child_region);
+	  cairo_region_subtract (new_region, old_native_child_region);
 	}
       gdk_window_invalidate_region_full (GDK_WINDOW (private->parent), new_region, TRUE, CLEAR_BG_ALL);
 
-      gdk_region_destroy (old_region);
-      gdk_region_destroy (new_region);
+      cairo_region_destroy (old_region);
+      cairo_region_destroy (new_region);
     }
 
   if (old_native_child_region)
     {
-      gdk_region_destroy (old_native_child_region);
-      gdk_region_destroy (new_native_child_region);
+      cairo_region_destroy (old_native_child_region);
+      cairo_region_destroy (new_native_child_region);
     }
 
   _gdk_synthesize_crossing_events_for_geometry_change (window);
@@ -8013,27 +8030,27 @@ gdk_window_scroll (GdkWindow *window,
   impl_window = gdk_window_get_impl_window (private);
 
   /* Calculate the area that can be gotten by copying the old area */
-  copy_area = gdk_region_copy (private->clip_region);
+  copy_area = cairo_region_copy (private->clip_region);
   if (old_native_child_region)
     {
       /* Don't copy from inside native children, as this is copied by
        * the native window move.
        */
-      gdk_region_subtract (copy_area, old_native_child_region);
+      cairo_region_subtract (copy_area, old_native_child_region);
 
       /* Don't copy any bits that would cause a read from the moved
 	 native windows, as we can't read that data */
-      gdk_region_subtract (copy_area, new_native_child_region);
+      cairo_region_subtract (copy_area, new_native_child_region);
     }
-  gdk_region_offset (copy_area, dx, dy);
-  gdk_region_intersect (copy_area, private->clip_region);
+  cairo_region_translate (copy_area, dx, dy);
+  cairo_region_intersect (copy_area, private->clip_region);
 
   /* And the rest need to be invalidated */
-  noncopy_area = gdk_region_copy (private->clip_region);
-  gdk_region_subtract (noncopy_area, copy_area);
+  noncopy_area = cairo_region_copy (private->clip_region);
+  cairo_region_subtract (noncopy_area, copy_area);
 
   /* convert from window coords to impl */
-  gdk_region_offset (copy_area, private->abs_x, private->abs_y);
+  cairo_region_translate (copy_area, private->abs_x, private->abs_y);
 
   move_region_on_impl (impl_window, copy_area, dx, dy); /* takes ownership of copy_area */
 
@@ -8041,18 +8058,18 @@ gdk_window_scroll (GdkWindow *window,
   if (old_native_child_region)
     {
       /* No need to expose the region that the native window move copies */
-      gdk_region_offset (old_native_child_region, dx, dy);
-      gdk_region_intersect (old_native_child_region, new_native_child_region);
-      gdk_region_subtract (noncopy_area, old_native_child_region);
+      cairo_region_translate (old_native_child_region, dx, dy);
+      cairo_region_intersect (old_native_child_region, new_native_child_region);
+      cairo_region_subtract (noncopy_area, old_native_child_region);
     }
   gdk_window_invalidate_region_full (window, noncopy_area, TRUE, CLEAR_BG_ALL);
 
-  gdk_region_destroy (noncopy_area);
+  cairo_region_destroy (noncopy_area);
 
   if (old_native_child_region)
     {
-      gdk_region_destroy (old_native_child_region);
-      gdk_region_destroy (new_native_child_region);
+      cairo_region_destroy (old_native_child_region);
+      cairo_region_destroy (new_native_child_region);
     }
 
   _gdk_synthesize_crossing_events_for_geometry_change (window);
@@ -8096,26 +8113,26 @@ gdk_window_move_region (GdkWindow       *window,
   impl_window = gdk_window_get_impl_window (private);
 
   /* compute source regions */
-  copy_area = gdk_region_copy (region);
-  gdk_region_intersect (copy_area, private->clip_region_with_children);
+  copy_area = cairo_region_copy (region);
+  cairo_region_intersect (copy_area, private->clip_region_with_children);
 
   /* compute destination regions */
-  gdk_region_offset (copy_area, dx, dy);
-  gdk_region_intersect (copy_area, private->clip_region_with_children);
+  cairo_region_translate (copy_area, dx, dy);
+  cairo_region_intersect (copy_area, private->clip_region_with_children);
 
   /* Invalidate parts of the region (source and dest) not covered
      by the copy */
-  nocopy_area = gdk_region_copy (region);
-  gdk_region_offset (nocopy_area, dx, dy);
-  gdk_region_union (nocopy_area, region);
-  gdk_region_subtract (nocopy_area, copy_area);
+  nocopy_area = cairo_region_copy (region);
+  cairo_region_translate (nocopy_area, dx, dy);
+  cairo_region_union (nocopy_area, region);
+  cairo_region_subtract (nocopy_area, copy_area);
 
   /* convert from window coords to impl */
-  gdk_region_offset (copy_area, private->abs_x, private->abs_y);
+  cairo_region_translate (copy_area, private->abs_x, private->abs_y);
   move_region_on_impl (impl_window, copy_area, dx, dy); /* Takes ownership of copy_area */
 
   gdk_window_invalidate_region_full (window, nocopy_area, FALSE, CLEAR_BG_ALL);
-  gdk_region_destroy (nocopy_area);
+  cairo_region_destroy (nocopy_area);
 }
 
 /**
@@ -8846,7 +8863,7 @@ gdk_window_shape_combine_mask (GdkWindow *window,
 				   x, y);
 
   if (region)
-    gdk_region_destroy (region);
+    cairo_region_destroy (region);
 }
 
 /**
@@ -8891,16 +8908,16 @@ gdk_window_shape_combine_region (GdkWindow       *window,
   private->shaped = (shape_region != NULL);
 
   if (private->shape)
-    gdk_region_destroy (private->shape);
+    cairo_region_destroy (private->shape);
 
   old_region = NULL;
   if (GDK_WINDOW_IS_MAPPED (window))
-    old_region = gdk_region_copy (private->clip_region);
+    old_region = cairo_region_copy (private->clip_region);
 
   if (shape_region)
     {
-      private->shape = gdk_region_copy (shape_region);
-      gdk_region_offset (private->shape, offset_x, offset_y);
+      private->shape = cairo_region_copy (shape_region);
+      cairo_region_translate (private->shape, offset_x, offset_y);
     }
   else
     private->shape = NULL;
@@ -8913,32 +8930,32 @@ gdk_window_shape_combine_region (GdkWindow       *window,
 
   if (old_region)
     {
-      new_region = gdk_region_copy (private->clip_region);
+      new_region = cairo_region_copy (private->clip_region);
 
       /* New area in the window, needs invalidation */
-      diff = gdk_region_copy (new_region);
-      gdk_region_subtract (diff, old_region);
+      diff = cairo_region_copy (new_region);
+      cairo_region_subtract (diff, old_region);
 
       gdk_window_invalidate_region_full (window, diff, TRUE, CLEAR_BG_ALL);
 
-      gdk_region_destroy (diff);
+      cairo_region_destroy (diff);
 
       if (!gdk_window_is_toplevel (private))
 	{
 	  /* New area in the non-root parent window, needs invalidation */
-	  diff = gdk_region_copy (old_region);
-	  gdk_region_subtract (diff, new_region);
+	  diff = cairo_region_copy (old_region);
+	  cairo_region_subtract (diff, new_region);
 
 	  /* Adjust region to parent window coords */
-	  gdk_region_offset (diff, private->x, private->y);
+	  cairo_region_translate (diff, private->x, private->y);
 
 	  gdk_window_invalidate_region_full (GDK_WINDOW (private->parent), diff, TRUE, CLEAR_BG_ALL);
 
-	  gdk_region_destroy (diff);
+	  cairo_region_destroy (diff);
 	}
 
-      gdk_region_destroy (new_region);
-      gdk_region_destroy (old_region);
+      cairo_region_destroy (new_region);
+      cairo_region_destroy (old_region);
     }
 }
 
@@ -8957,11 +8974,11 @@ do_child_shapes (GdkWindow *window,
   r.width = private->width;
   r.height = private->height;
 
-  region = gdk_region_rectangle (&r);
+  region = cairo_region_create_rectangle (&r);
   remove_child_area (private, NULL, FALSE, region);
 
   if (merge && private->shape)
-    gdk_region_subtract (region, private->shape);
+    cairo_region_subtract (region, private->shape);
 
   gdk_window_shape_combine_region (window, region, 0, 0);
 }
@@ -9053,7 +9070,7 @@ gdk_window_input_shape_combine_mask (GdkWindow *window,
 					 x, y);
 
   if (region != NULL)
-    gdk_region_destroy (region);
+    cairo_region_destroy (region);
 }
 
 /**
@@ -9099,12 +9116,12 @@ gdk_window_input_shape_combine_region (GdkWindow       *window,
     return;
 
   if (private->input_shape)
-    gdk_region_destroy (private->input_shape);
+    cairo_region_destroy (private->input_shape);
 
   if (shape_region)
     {
-      private->input_shape = gdk_region_copy (shape_region);
-      gdk_region_offset (private->input_shape, offset_x, offset_y);
+      private->input_shape = cairo_region_copy (shape_region);
+      cairo_region_translate (private->input_shape, offset_x, offset_y);
     }
   else
     private->input_shape = NULL;
@@ -9134,13 +9151,13 @@ do_child_input_shapes (GdkWindow *window,
   r.width = private->width;
   r.height = private->height;
 
-  region = gdk_region_rectangle (&r);
+  region = cairo_region_create_rectangle (&r);
   remove_child_area (private, NULL, TRUE, region);
 
   if (merge && private->shape)
-    gdk_region_subtract (region, private->shape);
+    cairo_region_subtract (region, private->shape);
   if (merge && private->input_shape)
-    gdk_region_subtract (region, private->input_shape);
+    cairo_region_subtract (region, private->input_shape);
 
   gdk_window_input_shape_combine_region (window, region, 0, 0);
 }
@@ -9596,12 +9613,12 @@ _gdk_window_calculate_full_clip_region (GdkWindow *window,
     *base_y_offset = 0;
 
   if (!private->viewable || private->input_only)
-    return gdk_region_new ();
+    return cairo_region_create ();
 
   window_get_size_rectangle (window, &visible_rect);
 
   /* real_clip_region is in window coordinates */
-  real_clip_region = gdk_region_rectangle (&visible_rect);
+  real_clip_region = cairo_region_create_rectangle (&visible_rect);
 
   x_offset = y_offset = 0;
 
@@ -9648,16 +9665,16 @@ _gdk_window_calculate_full_clip_region (GdkWindow *window,
 	  visible_rect.y += child_private->y - y_offset;
 
 	  /* This shortcut is really necessary for performance when there are a lot of windows */
-	  gdk_region_get_clipbox (real_clip_region, &real_clip_rect);
+	  cairo_region_get_extents (real_clip_region, &real_clip_rect);
 	  if (visible_rect.x >= real_clip_rect.x + real_clip_rect.width ||
 	      visible_rect.x + visible_rect.width <= real_clip_rect.x ||
 	      visible_rect.y >= real_clip_rect.y + real_clip_rect.height ||
 	      visible_rect.y + visible_rect.height <= real_clip_rect.y)
 	    continue;
 
-	  tmpreg = gdk_region_rectangle (&visible_rect);
-	  gdk_region_subtract (real_clip_region, tmpreg);
-	  gdk_region_destroy (tmpreg);
+	  tmpreg = cairo_region_create_rectangle (&visible_rect);
+	  cairo_region_subtract (real_clip_region, tmpreg);
+	  cairo_region_destroy (tmpreg);
 	}
 
       /* Clip to the parent */
@@ -9666,9 +9683,9 @@ _gdk_window_calculate_full_clip_region (GdkWindow *window,
       visible_rect.x += - x_offset;
       visible_rect.y += - y_offset;
 
-      tmpreg = gdk_region_rectangle (&visible_rect);
-      gdk_region_intersect (real_clip_region, tmpreg);
-      gdk_region_destroy (tmpreg);
+      tmpreg = cairo_region_create_rectangle (&visible_rect);
+      cairo_region_intersect (real_clip_region, tmpreg);
+      cairo_region_destroy (tmpreg);
     }
 
   if (base_x_offset)
@@ -9689,7 +9706,7 @@ _gdk_window_add_damage (GdkWindow *toplevel,
   event.expose.window = toplevel;
   event.expose.send_event = FALSE;
   event.expose.region = damaged_region;
-  gdk_region_get_clipbox (event.expose.region, &event.expose.area);
+  cairo_region_get_extents (event.expose.region, &event.expose.area);
   display = gdk_drawable_get_display (event.expose.window);
   _gdk_event_queue_append (display, gdk_event_copy (&event));
 }
@@ -9800,10 +9817,10 @@ point_in_window (GdkWindowObject *window,
     x >= 0 && x < window->width &&
     y >= 0 && y < window->height &&
     (window->shape == NULL ||
-     gdk_region_point_in (window->shape,
+     cairo_region_contains_point (window->shape,
 			  x, y)) &&
     (window->input_shape == NULL ||
-     gdk_region_point_in (window->input_shape,
+     cairo_region_contains_point (window->input_shape,
 			  x, y));
 }
 
@@ -11389,8 +11406,8 @@ gdk_window_print (GdkWindowObject *window,
   g_print (" abs[%d,%d]",
 	   window->abs_x, window->abs_y);
 
-  gdk_region_get_clipbox (window->clip_region, &r);
-  if (gdk_region_empty (window->clip_region))
+  cairo_region_get_extents (window->clip_region, &r);
+  if (cairo_region_is_empty (window->clip_region))
     g_print (" clipbox[empty]");
   else
     g_print (" clipbox[%d,%d %dx%d]", r.x, r.y, r.width, r.height);
