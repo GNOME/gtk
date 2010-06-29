@@ -94,6 +94,7 @@ struct _GdkCursorPrivate
 struct _GdkDragContextPrivate
 {
   id <NSDraggingInfo> dragging_info;
+  GdkDevice *device;
 };
 
 extern GdkDisplay *_gdk_display;
