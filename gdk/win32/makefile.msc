@@ -38,7 +38,6 @@ gdk_win32_OBJECTS = \
 	gdkdisplay-win32.obj \
 	gdkdrawable-win32.obj \
 	gdkevents-win32.obj \
-	gdkfont-win32.obj \
 	gdkgc-win32.obj \
 	gdkgeometry-win32.obj \
 	gdkglobals-win32.obj \

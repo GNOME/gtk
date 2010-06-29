@@ -62,6 +62,15 @@ Limit the effect of grabs
 @Returns: 
 
 
+<!-- ##### FUNCTION gtk_window_group_get_current_grab ##### -->
+<para>
+
+</para>
+
+@window_group: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gtk_window_group_get_current_device_grab ##### -->
 <para>
 

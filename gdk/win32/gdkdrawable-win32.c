@@ -35,7 +35,6 @@
 #include <cairo-win32.h>
 
 #include "gdkscreen.h" /* gdk_screen_get_default() */
-#include "gdkregion-generic.h"
 #include "gdkprivate-win32.h"
 
 #define ROP3_D 0x00AA0029
@@ -486,7 +485,7 @@ generic_draw (GdkDrawable    *drawable,
 	      GdkGC          *gc,
 	      GdkGCValuesMask mask,
 	      void (*function) (GdkGCWin32 *, HDC, gint, gint, va_list),
-	      const GdkRegion *region,
+	      const cairo_region_t *region,
 	      ...)
 {
   GdkDrawableImplWin32 *impl = GDK_DRAWABLE_IMPL_WIN32 (drawable);
@@ -573,10 +572,6 @@ generic_draw (GdkDrawable    *drawable,
 					gcvalues.join_style);
 	  drawing_mask |= LINE_ATTRIBUTES;
 	}
-
-      /* Ditto, if the drawing function draws text, set up for that. */
-      if (mask & GDK_GC_FONT)
-	drawing_mask |= GDK_GC_FONT;
 
       mask_hdc = gdk_win32_hdc_get (mask_pixmap, mask_gc, drawing_mask);
       (*function) (GDK_GC_WIN32 (mask_gc), mask_hdc,
@@ -713,7 +708,7 @@ generic_draw (GdkDrawable    *drawable,
   va_end (args);
 }
 
-static GdkRegion *
+static cairo_region_t *
 widen_bounds (GdkRectangle *bounds,
 	      gint          pen_width)
 {
@@ -725,7 +720,7 @@ widen_bounds (GdkRectangle *bounds,
   bounds->width += 2 * pen_width;
   bounds->height += 2 * pen_width;
 
-  return gdk_region_rectangle (bounds);
+  return cairo_region_create_rectangle (bounds);
 }
 
 static void
@@ -784,7 +779,7 @@ gdk_win32_draw_rectangle (GdkDrawable *drawable,
 			  gint         height)
 {
   GdkRectangle bounds;
-  GdkRegion *region;
+  cairo_region_t *region;
 
   GDK_NOTE (DRAW, g_print ("gdk_win32_draw_rectangle: %s (%p) %s%dx%d@%+d%+d\n",
 			   _gdk_win32_drawable_description (drawable),
@@ -803,7 +798,7 @@ gdk_win32_draw_rectangle (GdkDrawable *drawable,
 		(filled ? 0 : LINE_ATTRIBUTES),
 		draw_rectangle, region, filled, x, y, width, height);
 
-  gdk_region_destroy (region);
+  cairo_region_destroy (region);
 }
 
 static void
@@ -882,7 +877,7 @@ gdk_win32_draw_arc (GdkDrawable *drawable,
 		    gint         angle2)
 {
   GdkRectangle bounds;
-  GdkRegion *region;
+  cairo_region_t *region;
 
   GDK_NOTE (DRAW, g_print ("gdk_win32_draw_arc: %s  %d,%d,%d,%d  %d %d\n",
 			   _gdk_win32_drawable_description (drawable),
@@ -901,7 +896,7 @@ gdk_win32_draw_arc (GdkDrawable *drawable,
 		GDK_GC_FOREGROUND | (filled ? 0 : LINE_ATTRIBUTES),
 		draw_arc, region, filled, x, y, width, height, angle1, angle2);
 
-  gdk_region_destroy (region);
+  cairo_region_destroy (region);
 }
 
 static void
@@ -947,7 +942,7 @@ gdk_win32_draw_polygon (GdkDrawable *drawable,
 			gint         npoints)
 {
   GdkRectangle bounds;
-  GdkRegion *region;
+  cairo_region_t *region;
   POINT *pts;
   int i;
 
@@ -985,7 +980,7 @@ gdk_win32_draw_polygon (GdkDrawable *drawable,
 		GDK_GC_FOREGROUND | (filled ? 0 : LINE_ATTRIBUTES),
 		draw_polygon, region, filled, pts, npoints);
 
-  gdk_region_destroy (region);
+  cairo_region_destroy (region);
   g_free (pts);
 }
 
@@ -1123,7 +1118,7 @@ gdk_win32_draw_segments (GdkDrawable *drawable,
 			 gint         nsegs)
 {
   GdkRectangle bounds;
-  GdkRegion *region;
+  cairo_region_t *region;
   gint i;
 
   GDK_NOTE (DRAW, g_print ("gdk_win32_draw_segments: %s %d segs\n",
@@ -1156,7 +1151,7 @@ gdk_win32_draw_segments (GdkDrawable *drawable,
   generic_draw (drawable, gc, GDK_GC_FOREGROUND | LINE_ATTRIBUTES,
 		draw_segments, region, segs, nsegs);
 
-  gdk_region_destroy (region);
+  cairo_region_destroy (region);
 }
 
 static void
@@ -1220,7 +1215,7 @@ gdk_win32_draw_lines (GdkDrawable *drawable,
 		      gint         npoints)
 {
   GdkRectangle bounds;
-  GdkRegion *region;
+  cairo_region_t *region;
   POINT *pts;
   int i;
 
@@ -1258,7 +1253,7 @@ gdk_win32_draw_lines (GdkDrawable *drawable,
 			      LINE_ATTRIBUTES,
 		draw_lines, region, pts, npoints);
 
-  gdk_region_destroy (region);
+  cairo_region_destroy (region);
   g_free (pts);
 }
 

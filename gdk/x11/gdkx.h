@@ -187,28 +187,6 @@ void        gdk_x11_register_standard_event_type (GdkDisplay *display,
 						  gint        event_base,
 						  gint        n_events);
 
-#if !defined(GDK_DISABLE_DEPRECATED) || defined(GDK_COMPILATION)
-
-gpointer             gdk_x11_font_get_xfont    (GdkFont *font);
-#define GDK_FONT_XFONT(font)          (gdk_x11_font_get_xfont (font))
-
-#define gdk_font_lookup_for_display(display, xid) ((GdkFont*) gdk_xid_table_lookup_for_display (display, ((xid)|XID_FONT_BIT)))
-
-#endif /* !GDK_DISABLE_DEPRECATED || GDK_COMPILATION */
-
-#ifndef GDK_DISABLE_DEPRECATED
-
-Display *            gdk_x11_font_get_xdisplay (GdkFont *font);
-G_CONST_RETURN char *gdk_x11_font_get_name     (GdkFont *font);
-
-#define GDK_FONT_XDISPLAY(font)       (gdk_x11_font_get_xdisplay (font))
-
-#ifndef GDK_MULTIHEAD_SAFE
-
-#define gdk_font_lookup(xid)	   ((GdkFont*) gdk_xid_table_lookup (xid))
-
-#endif /* GDK_MULTIHEAD_SAFE */
-#endif /* GDK_DISABLE_DEPRECATED */
 
 G_END_DECLS
 

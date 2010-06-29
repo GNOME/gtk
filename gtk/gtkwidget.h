@@ -624,8 +624,8 @@ void	   gtk_widget_reparent		  (GtkWidget	       *widget,
 gboolean   gtk_widget_intersect		  (GtkWidget	       *widget,
 					   const GdkRectangle  *area,
 					   GdkRectangle	       *intersection);
-GdkRegion *gtk_widget_region_intersect	  (GtkWidget	       *widget,
-					   const GdkRegion     *region);
+cairo_region_t *gtk_widget_region_intersect	  (GtkWidget	       *widget,
+					   const cairo_region_t     *region);
 
 void	gtk_widget_freeze_child_notify	  (GtkWidget	       *widget);
 void	gtk_widget_child_notify		  (GtkWidget	       *widget,

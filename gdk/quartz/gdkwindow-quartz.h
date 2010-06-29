@@ -50,7 +50,7 @@ struct _GdkWindowImplQuartz
 
   GdkWindowTypeHint type_hint;
 
-  GdkRegion *paint_clip_region;
+  cairo_region_t *paint_clip_region;
   gint begin_paint_count;
   gint in_paint_rect_count;
 
@@ -59,7 +59,7 @@ struct _GdkWindowImplQuartz
   /* Sorted by z-order */
   GList *sorted_children;
 
-  GdkRegion *needs_display_region;
+  cairo_region_t *needs_display_region;
 };
  
 struct _GdkWindowImplQuartzClass 

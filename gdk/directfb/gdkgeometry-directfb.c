@@ -53,7 +53,7 @@ _gdk_directfb_window_get_offsets (GdkWindow *window,
 
 gboolean
 _gdk_windowing_window_queue_antiexpose (GdkWindow *window,
-                                        GdkRegion *area)
+                                        cairo_region_t *area)
 {
   return FALSE;
 }
@@ -75,7 +75,7 @@ _gdk_directfb_window_scroll (GdkWindow *window,
 {
   GdkWindowObject         *private;
   GdkDrawableImplDirectFB *impl;
-  GdkRegion               *invalidate_region = NULL;
+  cairo_region_t               *invalidate_region = NULL;
   GList                   *list;
 
   g_return_if_fail (GDK_IS_WINDOW (window));
@@ -91,24 +91,24 @@ _gdk_directfb_window_scroll (GdkWindow *window,
 
   /* Move the current invalid region */
   if (private->update_area)
-    gdk_region_offset (private->update_area, dx, dy);
+    cairo_region_translate (private->update_area, dx, dy);
 
   if (GDK_WINDOW_IS_MAPPED (window))
     {
       GdkRectangle  clip_rect = {  0,  0, impl->width, impl->height };
       GdkRectangle  rect      = { dx, dy, impl->width, impl->height };
 
-      invalidate_region = gdk_region_rectangle (&clip_rect);
+      invalidate_region = cairo_region_create_rectangle (&clip_rect);
 
       if (gdk_rectangle_intersect (&rect, &clip_rect, &rect) &&
           (!private->update_area ||
-           !gdk_region_rect_in (private->update_area, &rect)))
+           !cairo_region_contains_rectangle (private->update_area, &rect)))
         {
-          GdkRegion *region;
+          cairo_region_t *region;
 
-          region = gdk_region_rectangle (&rect);
-          gdk_region_subtract (invalidate_region, region);
-          gdk_region_destroy (region);
+          region = cairo_region_create_rectangle (&rect);
+          cairo_region_subtract (invalidate_region, region);
+          cairo_region_destroy (region);
 
           if (impl->surface)
             {
@@ -141,14 +141,14 @@ _gdk_directfb_window_scroll (GdkWindow *window,
   if (invalidate_region)
     {
       gdk_window_invalidate_region (window, invalidate_region, TRUE);
-      gdk_region_destroy (invalidate_region);
+      cairo_region_destroy (invalidate_region);
     }
 }
 
 /**
  * gdk_window_move_region:
  * @window: a #GdkWindow
- * @region: The #GdkRegion to move
+ * @region: The #cairo_region_t to move
  * @dx: Amount to move in the X direction
  * @dy: Amount to move in the Y direction
  * 
@@ -162,17 +162,17 @@ _gdk_directfb_window_scroll (GdkWindow *window,
  **/
 void
 _gdk_directfb_window_move_region (GdkWindow       *window,
-                                  const GdkRegion *region,
+                                  const cairo_region_t *region,
                                   gint             dx,
                                   gint             dy)
 {
   GdkWindowObject         *private;
   GdkDrawableImplDirectFB *impl;
-  GdkRegion *window_clip;
-  GdkRegion *src_region;
-  GdkRegion *brought_in;
-  GdkRegion *dest_region;
-  GdkRegion *moving_invalid_region;
+  cairo_region_t *window_clip;
+  cairo_region_t *src_region;
+  cairo_region_t *brought_in;
+  cairo_region_t *dest_region;
+  cairo_region_t *moving_invalid_region;
   GdkRectangle dest_extents;
   
   g_return_if_fail (GDK_IS_WINDOW (window));
@@ -188,31 +188,31 @@ _gdk_directfb_window_move_region (GdkWindow       *window,
     return;
 
   GdkRectangle  clip_rect = {  0,  0, impl->width, impl->height };
-  window_clip = gdk_region_rectangle (&clip_rect);
+  window_clip = cairo_region_create_rectangle (&clip_rect);
 
   /* compute source regions */
-  src_region = gdk_region_copy (region);
-  brought_in = gdk_region_copy (region);
-  gdk_region_intersect (src_region, window_clip);
+  src_region = cairo_region_copy (region);
+  brought_in = cairo_region_copy (region);
+  cairo_region_intersect (src_region, window_clip);
 
-  gdk_region_subtract (brought_in, src_region);
-  gdk_region_offset (brought_in, dx, dy);
+  cairo_region_subtract (brought_in, src_region);
+  cairo_region_translate (brought_in, dx, dy);
 
   /* compute destination regions */
-  dest_region = gdk_region_copy (src_region);
-  gdk_region_offset (dest_region, dx, dy);
-  gdk_region_intersect (dest_region, window_clip);
-  gdk_region_get_clipbox (dest_region, &dest_extents);
+  dest_region = cairo_region_copy (src_region);
+  cairo_region_translate (dest_region, dx, dy);
+  cairo_region_intersect (dest_region, window_clip);
+  cairo_region_get_extents (dest_region, &dest_extents);
 
-  gdk_region_destroy (window_clip);
+  cairo_region_destroy (window_clip);
 
   /* calculating moving part of current invalid area */
   moving_invalid_region = NULL;
   if (private->update_area)
     {
-      moving_invalid_region = gdk_region_copy (private->update_area);
-      gdk_region_intersect (moving_invalid_region, src_region);
-      gdk_region_offset (moving_invalid_region, dx, dy);
+      moving_invalid_region = cairo_region_copy (private->update_area);
+      cairo_region_intersect (moving_invalid_region, src_region);
+      cairo_region_translate (moving_invalid_region, dx, dy);
     }
   
   /* invalidate all of the src region */
@@ -220,18 +220,18 @@ _gdk_directfb_window_move_region (GdkWindow       *window,
 
   /* un-invalidate destination region */
   if (private->update_area)
-    gdk_region_subtract (private->update_area, dest_region);
+    cairo_region_subtract (private->update_area, dest_region);
   
   /* invalidate moving parts of existing update area */
   if (moving_invalid_region)
     {
       gdk_window_invalidate_region (window, moving_invalid_region, FALSE);
-      gdk_region_destroy (moving_invalid_region);
+      cairo_region_destroy (moving_invalid_region);
     }
 
   /* invalidate area brought in from off-screen */
   gdk_window_invalidate_region (window, brought_in, FALSE);
-  gdk_region_destroy (brought_in);
+  cairo_region_destroy (brought_in);
 
   /* Actually do the moving */
 	if (impl->surface)
@@ -250,8 +250,8 @@ _gdk_directfb_window_move_region (GdkWindow       *window,
               impl->surface->SetClip (impl->surface, NULL);
               impl->surface->Flip(impl->surface,&destination,0);
 	}
-  gdk_region_destroy (src_region);
-  gdk_region_destroy (dest_region);
+  cairo_region_destroy (src_region);
+  cairo_region_destroy (dest_region);
 }
 
 #define __GDK_GEOMETRY_X11_C__

@@ -45,7 +45,7 @@ static gboolean
 window_expose_event (GtkWidget      *widget,
 		     GdkEventExpose *event)
 {
-  GdkRegion *region;
+  cairo_region_t *region;
   GtkWidget *child;
   cairo_t *cr;
 
@@ -61,10 +61,11 @@ window_expose_event (GtkWidget      *widget,
 			       child->allocation.y);
 
   /* draw no more than our expose event intersects our child */
-  region = gdk_region_rectangle (&child->allocation);
-  gdk_region_intersect (region, event->region);
+  region = cairo_region_create_rectangle (&child->allocation);
+  cairo_region_intersect (region, region, event->region);
   gdk_cairo_region (cr, region);
   cairo_clip (cr);
+  cairo_region_destroy (region);
 
   /* composite, with a 50% opacity */
   cairo_set_operator (cr, CAIRO_OPERATOR_OVER);

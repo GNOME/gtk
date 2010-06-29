@@ -1249,7 +1249,7 @@ synthesize_expose_events (GdkWindow *window)
 	  event->expose.area.y = r.top;
 	  event->expose.area.width = r.right - r.left;
 	  event->expose.area.height = r.bottom - r.top;
-	  event->expose.region = gdk_region_rectangle (&(event->expose.area));
+	  event->expose.region = cairo_region_create_rectangle (&(event->expose.area));
 	  event->expose.count = 0;
   
 	  append_event (event);
@@ -1475,12 +1475,12 @@ handle_configure_event (MSG       *msg,
     }
 }
 
-GdkRegion *
+cairo_region_t *
 _gdk_win32_hrgn_to_region (HRGN hrgn)
 {
   RGNDATA *rgndata;
   RECT *rects;
-  GdkRegion *result;
+  cairo_region_t *result;
   gint nbytes;
   guint i;
 
@@ -1499,7 +1499,7 @@ _gdk_win32_hrgn_to_region (HRGN hrgn)
       return NULL;
     }
 
-  result = gdk_region_new ();
+  result = cairo_region_create ();
   rects = (RECT *) rgndata->Buffer;
   for (i = 0; i < rgndata->rdh.nCount; i++)
     {
@@ -1510,7 +1510,7 @@ _gdk_win32_hrgn_to_region (HRGN hrgn)
       r.width = rects[i].right - r.x;
       r.height = rects[i].bottom - r.y;
 
-      gdk_region_union_with_rect (result, &r);
+      cairo_region_union_rectangle (result, &r);
     }
 
   g_free (rgndata);
@@ -1538,7 +1538,7 @@ handle_wm_paint (MSG        *msg,
   HRGN hrgn = CreateRectRgn (0, 0, 0, 0);
   HDC hdc;
   PAINTSTRUCT paintstruct;
-  GdkRegion *update_region;
+  cairo_region_t *update_region;
 
   if (GetUpdateRgn (msg->hwnd, hrgn, FALSE) == ERROR)
     {
@@ -1598,9 +1598,9 @@ handle_wm_paint (MSG        *msg,
     }
 
   update_region = _gdk_win32_hrgn_to_region (hrgn);
-  if (!gdk_region_empty (update_region))
+  if (!cairo_region_is_empty (update_region))
     _gdk_window_invalidate_for_expose (window, update_region);
-  gdk_region_destroy (update_region);
+  cairo_region_destroy (update_region);
 
   DeleteObject (hrgn);
 }

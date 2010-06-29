@@ -44,7 +44,6 @@
 #include "gdkinternals.h"
 
 
-#include "gdkregion-generic.h"
 #include "gdkalias.h"
 
 #include "cairo-directfb.h"
@@ -226,7 +225,7 @@ void
 gdk_directfb_clip_region (GdkDrawable  *drawable,
                           GdkGC        *gc,
                           GdkRectangle *draw_rect,
-                          GdkRegion    *ret_clip)
+                          cairo_region_t    *ret_clip)
 {
   GdkDrawableImplDirectFB *private;
   GdkRectangle             rect;
@@ -258,13 +257,13 @@ gdk_directfb_clip_region (GdkDrawable  *drawable,
                    GDKDFB_RECTANGLE_VALS_FROM_BOX( &private->paint_region.extents ),
                    private->paint_region.numRects );
 
-    gdk_region_intersect (ret_clip, &private->paint_region);
+    cairo_region_intersect (ret_clip, &private->paint_region);
   }
 
   if (gc)
     {
       GdkGCDirectFB *gc_private = GDK_GC_DIRECTFB (gc);
-      GdkRegion     *region     = &gc_private->clip_region;
+      cairo_region_t     *region     = &gc_private->clip_region;
 
       if (region->numRects)
         {
@@ -273,13 +272,13 @@ gdk_directfb_clip_region (GdkDrawable  *drawable,
 
           if (gc->clip_x_origin || gc->clip_y_origin)
             {
-              gdk_region_offset (ret_clip, -gc->clip_x_origin, -gc->clip_y_origin);
-              gdk_region_intersect (ret_clip, region);
-              gdk_region_offset (ret_clip, gc->clip_x_origin, gc->clip_y_origin);
+              cairo_region_translate (ret_clip, -gc->clip_x_origin, -gc->clip_y_origin);
+              cairo_region_intersect (ret_clip, region);
+              cairo_region_translate (ret_clip, gc->clip_x_origin, gc->clip_y_origin);
             }
           else
             {
-              gdk_region_intersect (ret_clip, region);
+              cairo_region_intersect (ret_clip, region);
             }
         }
 
@@ -299,7 +298,7 @@ gdk_directfb_clip_region (GdkDrawable  *drawable,
       !GDK_WINDOW_OBJECT (private->wrapper)->input_only)
     {
       GList     *cur;
-      GdkRegion  temp;
+      cairo_region_t  temp;
 
       temp.numRects = 1;
       temp.rects = &temp.extents;
@@ -327,7 +326,7 @@ gdk_directfb_clip_region (GdkDrawable  *drawable,
           D_DEBUG_AT( GDKDFB_DrawClip, "  -> clipping child    [ %4d,%4d - %4dx%4d ]  (%ld boxes)\n",
                       GDKDFB_RECTANGLE_VALS_FROM_BOX( &temp.extents ), temp.numRects );
 
-          gdk_region_subtract (ret_clip, &temp);
+          cairo_region_subtract (ret_clip, &temp);
         }
     }
 
@@ -428,7 +427,7 @@ gdk_directfb_draw_rectangle (GdkDrawable *drawable,
                              gint         height)
 {
   GdkDrawableImplDirectFB *impl;
-  GdkRegion                clip;
+  cairo_region_t                clip;
   GdkGCDirectFB           *gc_private = NULL;
   IDirectFBSurface        *surface    = NULL;
   gint  i;
@@ -543,7 +542,7 @@ gdk_directfb_draw_rectangle (GdkDrawable *drawable,
 
           for (i = 0; i < clip.numRects; i++)
             {
-              GdkRegionBox *box = &clip.rects[i];
+              cairo_region_tBox *box = &clip.rects[i];
 
               rects[i].x = box->x1;
               rects[i].y = box->y1;
@@ -606,7 +605,7 @@ gdk_directfb_draw_polygon (GdkDrawable *drawable,
                                  points[0].y == points[npoints-1].y))
           {
             GdkDrawableImplDirectFB *impl;
-            GdkRegion                clip;
+            cairo_region_t                clip;
             gint                     i;
 
             impl = GDK_DRAWABLE_IMPL_DIRECTFB (drawable);
@@ -671,7 +670,7 @@ gdk_directfb_draw_drawable (GdkDrawable *drawable,
 {
   GdkDrawableImplDirectFB *impl;
   GdkDrawableImplDirectFB *src_impl;
-  GdkRegion                clip;
+  cairo_region_t                clip;
   GdkRectangle             dest_rect = { xdest,
                                          ydest,
                 xdest + width ,
@@ -721,7 +720,7 @@ gdk_directfb_draw_points (GdkDrawable *drawable,
                           gint         npoints)
 {
   GdkDrawableImplDirectFB *impl;
-  GdkRegion                clip;
+  cairo_region_t                clip;
 
   DFBRegion region = { points->x, points->y, points->x, points->y };
 
@@ -739,7 +738,7 @@ gdk_directfb_draw_points (GdkDrawable *drawable,
 
   while (npoints > 0)
     {
-      if (gdk_region_point_in (&clip, points->x, points->y))
+      if (cairo_region_contains_point (&clip, points->x, points->y))
         {
           impl->surface->FillRectangle (impl->surface,
                                         points->x, points->y, 1, 1);
@@ -769,7 +768,7 @@ gdk_directfb_draw_segments (GdkDrawable *drawable,
                             gint         nsegs)
 {
   GdkDrawableImplDirectFB *impl;
-  GdkRegion                clip;
+  cairo_region_t                clip;
   gint                     i;
 
 //  DFBRegion region = { segs->x1, segs->y1, segs->x2, segs->y2 };
@@ -847,7 +846,7 @@ gdk_directfb_draw_lines (GdkDrawable *drawable,
                          gint         npoints)
 {
   GdkDrawableImplDirectFB *impl;
-  GdkRegion                clip;
+  cairo_region_t                clip;
   gint                     i;
 
   DFBRegion lines[npoints > 1 ? npoints - 1 : 1];
@@ -920,7 +919,7 @@ gdk_directfb_draw_image (GdkDrawable *drawable,
 {
   GdkDrawableImplDirectFB *impl;
   GdkImageDirectFB        *image_private;
-  GdkRegion                clip;
+  cairo_region_t                clip;
   GdkRectangle             dest_rect = { xdest, ydest, width, height };
 
   gint pitch = 0;
@@ -940,7 +939,7 @@ gdk_directfb_draw_image (GdkDrawable *drawable,
 
   gdk_directfb_clip_region (drawable, gc, &dest_rect, &clip);
 
-  if (!gdk_region_empty (&clip))
+  if (!cairo_region_is_empty (&clip))
     {
       DFBRectangle  src_rect = { xsrc, ysrc, width, height };
 
@@ -1156,8 +1155,8 @@ gdk_directfb_draw_pixbuf (GdkDrawable  *drawable,
 {
   GdkPixbuf *composited = NULL;
 #if 0
-  GdkRegion *clip;
-  GdkRegion *drect;
+  cairo_region_t *clip;
+  cairo_region_t *drect;
   GdkRectangle tmp_rect;
 #endif
   GdkDrawableImplDirectFB *impl = GDK_DRAWABLE_IMPL_DIRECTFB (drawable);
@@ -1218,15 +1217,15 @@ gdk_directfb_draw_pixbuf (GdkDrawable  *drawable,
   tmp_rect.width = width;
   tmp_rect.height = height;
 
-  drect = gdk_region_rectangle (&tmp_rect);
+  drect = cairo_region_create_rectangle (&tmp_rect);
   clip = gdk_drawable_get_clip_region (drawable);
 
-  gdk_region_intersect (drect, clip);
+  cairo_region_intersect (drect, clip);
 
-  gdk_region_get_clipbox (drect, &tmp_rect);
+  cairo_region_get_extents (drect, &tmp_rect);
   
-  gdk_region_destroy (drect);
-  gdk_region_destroy (clip);
+  cairo_region_destroy (drect);
+  cairo_region_destroy (clip);
 
   if (tmp_rect.width == 0 ||
       tmp_rect.height == 0)

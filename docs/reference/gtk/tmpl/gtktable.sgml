@@ -151,6 +151,16 @@ If you need to change a table's size <emphasis>after</emphasis> it has been crea
 @columns: The new number of columns.
 
 
+<!-- ##### FUNCTION gtk_table_get_size ##### -->
+<para>
+
+</para>
+
+@table: 
+@rows: 
+@columns: 
+
+
 <!-- ##### FUNCTION gtk_table_attach ##### -->
 <para>
 Adds a widget to a table. The number of 'cells' that a widget will occupy is

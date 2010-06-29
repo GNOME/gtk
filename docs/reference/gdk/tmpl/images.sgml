@@ -195,6 +195,15 @@ and if that fails then %GDK_IMAGE_NORMAL will be used.
 @Returns: 
 
 
+<!-- ##### FUNCTION gdk_image_get_pixels ##### -->
+<para>
+
+</para>
+
+@image: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gdk_image_put_pixel ##### -->
 <para>
 Sets a pixel in a #GdkImage to a given pixel value.

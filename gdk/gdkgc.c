@@ -41,13 +41,13 @@ typedef struct _GdkGCPrivate GdkGCPrivate;
 
 struct _GdkGCPrivate
 {
-  GdkRegion *clip_region;
+  cairo_region_t *clip_region;
 
   guint32 region_tag_applied;
   int region_tag_offset_x;
   int region_tag_offset_y;
 
-  GdkRegion *old_clip_region;
+  cairo_region_t *old_clip_region;
   GdkPixmap *old_clip_mask;
 
   GdkBitmap *stipple;
@@ -205,9 +205,9 @@ gdk_gc_finalize (GObject *object)
   GdkGCPrivate *priv = GDK_GC_GET_PRIVATE (gc);
 
   if (priv->clip_region)
-    gdk_region_destroy (priv->clip_region);
+    cairo_region_destroy (priv->clip_region);
   if (priv->old_clip_region)
-    gdk_region_destroy (priv->old_clip_region);
+    cairo_region_destroy (priv->old_clip_region);
   if (priv->clip_mask)
     g_object_unref (priv->clip_mask);
   if (priv->old_clip_mask)
@@ -293,7 +293,7 @@ gdk_gc_set_values (GdkGC           *gc,
       
       if (priv->clip_region)
 	{
-	  gdk_region_destroy (priv->clip_region);
+	  cairo_region_destroy (priv->clip_region);
 	  priv->clip_region = NULL;
 	}
     }
@@ -538,7 +538,7 @@ gdk_gc_set_clip_mask (GdkGC	*gc,
 /* Takes ownership of passed in region */
 static void
 _gdk_gc_set_clip_region_real (GdkGC     *gc,
-			      GdkRegion *region,
+			      cairo_region_t *region,
 			      gboolean reset_origin)
 {
   GdkGCPrivate *priv = GDK_GC_GET_PRIVATE (gc);
@@ -550,7 +550,7 @@ _gdk_gc_set_clip_region_real (GdkGC     *gc,
     }
   
   if (priv->clip_region)
-    gdk_region_destroy (priv->clip_region);
+    cairo_region_destroy (priv->clip_region);
 
   priv->clip_region = region;
 
@@ -560,7 +560,7 @@ _gdk_gc_set_clip_region_real (GdkGC     *gc,
 /* Doesn't copy region, allows not to reset origin */
 void
 _gdk_gc_set_clip_region_internal (GdkGC     *gc,
-				  GdkRegion *region,
+				  cairo_region_t *region,
 				  gboolean reset_origin)
 {
   _gdk_gc_remove_drawable_clip (gc);
@@ -571,7 +571,7 @@ _gdk_gc_set_clip_region_internal (GdkGC     *gc,
 void
 _gdk_gc_add_drawable_clip (GdkGC     *gc,
 			   guint32    region_tag,
-			   GdkRegion *region,
+			   cairo_region_t *region,
 			   int        offset_x,
 			   int        offset_y)
 {
@@ -585,9 +585,9 @@ _gdk_gc_add_drawable_clip (GdkGC     *gc,
   if (priv->region_tag_applied)
     _gdk_gc_remove_drawable_clip (gc);
 
-  region = gdk_region_copy (region);
+  region = cairo_region_copy (region);
   if (offset_x != 0 || offset_y != 0)
-    gdk_region_offset (region, offset_x, offset_y);
+    cairo_region_translate (region, offset_x, offset_y);
 
   if (priv->clip_mask)
     {
@@ -596,7 +596,7 @@ _gdk_gc_add_drawable_clip (GdkGC     *gc,
       GdkGC *tmp_gc;
       GdkColor black = {0, 0, 0, 0};
       GdkRectangle r;
-      GdkOverlapType overlap;
+      cairo_region_overlap_t overlap;
 
       gdk_drawable_get_size (priv->clip_mask, &w, &h);
 
@@ -609,8 +609,8 @@ _gdk_gc_add_drawable_clip (GdkGC     *gc,
        * the region, so we try to avoid allocating bitmaps that are just fully
        * set or completely unset.
        */
-      overlap = gdk_region_rect_in (region, &r);
-      if (overlap == GDK_OVERLAP_RECTANGLE_PART)
+      overlap = cairo_region_contains_rectangle (region, &r);
+      if (overlap == CAIRO_REGION_OVERLAP_PART)
 	{
 	   /* The region and the mask intersect, create a new clip mask that
 	      includes both areas */
@@ -631,12 +631,12 @@ _gdk_gc_add_drawable_clip (GdkGC     *gc,
 	  gdk_gc_set_clip_mask (gc, new_mask);
 	  g_object_unref (new_mask);
 	}
-      else if (overlap == GDK_OVERLAP_RECTANGLE_OUT)
+      else if (overlap == CAIRO_REGION_OVERLAP_OUT)
 	{
 	  /* No intersection, set empty clip region */
-	  GdkRegion *empty = gdk_region_new ();
+	  cairo_region_t *empty = cairo_region_create ();
 
-	  gdk_region_destroy (region);
+	  cairo_region_destroy (region);
 	  priv->old_clip_mask = g_object_ref (priv->clip_mask);
 	  priv->clip_region = empty;
 	  _gdk_windowing_gc_set_clip_region (gc, empty, FALSE);
@@ -644,7 +644,7 @@ _gdk_gc_add_drawable_clip (GdkGC     *gc,
       else
 	{
 	  /* Completely inside region, don't set unnecessary clip */
-	  gdk_region_destroy (region);
+	  cairo_region_destroy (region);
 	  return;
 	}
     }
@@ -653,7 +653,7 @@ _gdk_gc_add_drawable_clip (GdkGC     *gc,
       priv->old_clip_region = priv->clip_region;
       priv->clip_region = region;
       if (priv->old_clip_region)
-	gdk_region_intersect (region, priv->old_clip_region);
+	cairo_region_intersect (region, priv->old_clip_region);
 
       _gdk_windowing_gc_set_clip_region (gc, priv->clip_region, FALSE);
     }
@@ -704,14 +704,14 @@ void
 gdk_gc_set_clip_rectangle (GdkGC              *gc,
 			   const GdkRectangle *rectangle)
 {
-  GdkRegion *region;
+  cairo_region_t *region;
   
   g_return_if_fail (GDK_IS_GC (gc));
 
   _gdk_gc_remove_drawable_clip (gc);
   
   if (rectangle)
-    region = gdk_region_rectangle (rectangle);
+    region = cairo_region_create_rectangle (rectangle);
   else
     region = NULL;
 
@@ -721,7 +721,7 @@ gdk_gc_set_clip_rectangle (GdkGC              *gc,
 /**
  * gdk_gc_set_clip_region:
  * @gc: a #GdkGC.
- * @region: the #GdkRegion. 
+ * @region: the #cairo_region_t. 
  * 
  * Sets the clip mask for a graphics context from a region structure.
  * The clip mask is interpreted relative to the clip origin. (See
@@ -729,16 +729,16 @@ gdk_gc_set_clip_rectangle (GdkGC              *gc,
  **/
 void
 gdk_gc_set_clip_region (GdkGC           *gc,
-			const GdkRegion *region)
+			const cairo_region_t *region)
 {
-  GdkRegion *copy;
+  cairo_region_t *copy;
 
   g_return_if_fail (GDK_IS_GC (gc));
 
   _gdk_gc_remove_drawable_clip (gc);
   
   if (region)
-    copy = gdk_region_copy (region);
+    copy = cairo_region_copy (region);
   else
     copy = NULL;
 
@@ -755,7 +755,7 @@ gdk_gc_set_clip_region (GdkGC           *gc,
  *   (if a clip mask is set, the return will be %NULL)
  *   This value is owned by the GC and must not be freed.
  **/
-GdkRegion *
+cairo_region_t *
 _gdk_gc_get_clip_region (GdkGC *gc)
 {
   g_return_val_if_fail (GDK_IS_GC (gc), NULL);
@@ -1063,20 +1063,20 @@ gdk_gc_copy (GdkGC *dst_gc,
   dst_gc->colormap = src_gc->colormap;
 
   if (dst_priv->clip_region)
-    gdk_region_destroy (dst_priv->clip_region);
+    cairo_region_destroy (dst_priv->clip_region);
 
   if (src_priv->clip_region)
-    dst_priv->clip_region = gdk_region_copy (src_priv->clip_region);
+    dst_priv->clip_region = cairo_region_copy (src_priv->clip_region);
   else
     dst_priv->clip_region = NULL;
 
   dst_priv->region_tag_applied = src_priv->region_tag_applied;
   
   if (dst_priv->old_clip_region)
-    gdk_region_destroy (dst_priv->old_clip_region);
+    cairo_region_destroy (dst_priv->old_clip_region);
 
   if (src_priv->old_clip_region)
-    dst_priv->old_clip_region = gdk_region_copy (src_priv->old_clip_region);
+    dst_priv->old_clip_region = cairo_region_copy (src_priv->old_clip_region);
   else
     dst_priv->old_clip_region = NULL;
 

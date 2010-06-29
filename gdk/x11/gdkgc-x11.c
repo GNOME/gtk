@@ -28,7 +28,6 @@
 
 #include "gdkgc.h"
 #include "gdkprivate-x11.h"
-#include "gdkregion-generic.h"
 #include "gdkx.h"
 #include "gdkalias.h"
 
@@ -155,7 +154,7 @@ _gdk_x11_gc_flush (GdkGC *gc)
 
   if (private->dirty_mask & GDK_GC_DIRTY_CLIP)
     {
-      GdkRegion *clip_region = _gdk_gc_get_clip_region (gc);
+      cairo_region_t *clip_region = _gdk_gc_get_clip_region (gc);
       
       if (!clip_region)
 	XSetClipOrigin (xdisplay, xgc,
@@ -206,8 +205,6 @@ gdk_x11_gc_get_values (GdkGC       *gc,
     {
       values->foreground.pixel = xvalues.foreground;
       values->background.pixel = xvalues.background;
-      values->font = gdk_font_lookup_for_display (GDK_GC_DISPLAY (gc),
-						  xvalues.font);
 
       switch (xvalues.function)
 	{
@@ -408,11 +405,6 @@ gdk_x11_gc_values_to_xvalues (GdkGCValues    *values,
       xvalues->background = values->background.pixel;
       *xvalues_mask |= GCBackground;
     }
-  if ((mask & GDK_GC_FONT) && (values->font->type == GDK_FONT_FONT))
-    {
-      xvalues->font = ((XFontStruct *) (GDK_FONT_XFONT (values->font)))->fid;
-      *xvalues_mask |= GCFont;
-    }
   if (mask & GDK_GC_FUNCTION)
     {
       switch (values->function)
@@ -608,7 +600,7 @@ gdk_x11_gc_values_to_xvalues (GdkGCValues    *values,
 
 void
 _gdk_windowing_gc_set_clip_region (GdkGC           *gc,
-				   const GdkRegion *region,
+				   const cairo_region_t *region,
 				   gboolean reset_origin)
 {
   GdkGCX11 *x11_gc = GDK_GC_X11 (gc);

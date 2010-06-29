@@ -205,7 +205,6 @@ calendar.
 @calendar: 
 @month: 
 @year: 
-@Returns: 
 
 
 <!-- ##### FUNCTION gtk_calendar_select_day ##### -->
@@ -222,7 +221,6 @@ calendar.
 
 @calendar: 
 @day: 
-@Returns: 
 
 
 <!-- ##### FUNCTION gtk_calendar_unmark_day ##### -->
@@ -231,7 +229,6 @@ calendar.
 
 @calendar: 
 @day: 
-@Returns: 
 
 
 <!-- ##### FUNCTION gtk_calendar_clear_marks ##### -->

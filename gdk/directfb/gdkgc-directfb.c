@@ -41,9 +41,7 @@
 #include "gdkprivate-directfb.h"
 
 #include "gdkgc.h"
-#include "gdkfont.h"
 #include "gdkpixmap.h"
-#include "gdkregion-generic.h"
 
 #include "gdkalias.h"
 
@@ -171,17 +169,6 @@ gdk_directfb_gc_set_values (GdkGC           *gc,
     {
       private->values.background = values->background;
       private->values_mask |= GDK_GC_BACKGROUND;
-    }
-
-  if (values_mask & GDK_GC_FONT)
-    {
-      GdkFont *oldf = private->values.font;
-
-      private->values.font = gdk_font_ref (values->font);
-      private->values_mask |= GDK_GC_FONT;
-
-      if (oldf)
-        gdk_font_unref (oldf);
     }
 
   if (values_mask & GDK_GC_FUNCTION)
@@ -325,7 +312,7 @@ gc_unset_clip_mask (GdkGC *gc)
 
 void
 _gdk_windowing_gc_set_clip_region (GdkGC           *gc,
-                                   const GdkRegion *region,
+                                   const cairo_region_t *region,
                                    gboolean         reset_origin)
 {
   GdkGCDirectFB *data;
@@ -366,8 +353,6 @@ _gdk_windowing_gc_copy (GdkGC *dst_gc,
 
   temp_region_reset(&dst_private->clip_region);
 
-  if (dst_private->values_mask & GDK_GC_FONT)
-    gdk_font_unref (dst_private->values.font);
   if (dst_private->values_mask & GDK_GC_TILE)
     g_object_unref (dst_private->values.tile);
   if (dst_private->values_mask & GDK_GC_STIPPLE)
@@ -376,8 +361,6 @@ _gdk_windowing_gc_copy (GdkGC *dst_gc,
     g_object_unref (dst_private->values.clip_mask);
 
   *dst_gc = *src_gc;
-  if (dst_private->values_mask & GDK_GC_FONT)
-    gdk_font_ref (dst_private->values.font);
   if (dst_private->values_mask & GDK_GC_TILE)
     g_object_ref (dst_private->values.tile);
   if (dst_private->values_mask & GDK_GC_STIPPLE)

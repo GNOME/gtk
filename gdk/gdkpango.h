@@ -116,12 +116,12 @@ PangoContext *gdk_pango_context_get            (void);
  * draw with the region as clip, only the given ranges are drawn.
  */
 
-GdkRegion    *gdk_pango_layout_line_get_clip_region (PangoLayoutLine *line,
+cairo_region_t    *gdk_pango_layout_line_get_clip_region (PangoLayoutLine *line,
                                                      gint             x_origin,
                                                      gint             y_origin,
                                                      const gint      *index_ranges,
                                                      gint             n_ranges);
-GdkRegion    *gdk_pango_layout_get_clip_region      (PangoLayout     *layout,
+cairo_region_t    *gdk_pango_layout_get_clip_region      (PangoLayout     *layout,
                                                      gint             x_origin,
                                                      gint             y_origin,
                                                      const gint      *index_ranges,

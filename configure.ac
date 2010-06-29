@@ -34,7 +34,7 @@ m4_define([gtk_binary_version], [3.0.0])
 m4_define([glib_required_version], [2.25.9])
 m4_define([pango_required_version], [1.20])
 m4_define([atk_required_version], [1.29.2])
-m4_define([cairo_required_version], [1.6])
+m4_define([cairo_required_version], [1.9.10])
 m4_define([gdk_pixbuf_required_version], [2.21.0])
 
 
@@ -740,6 +740,8 @@ AC_MSG_RESULT($gtk_uxtheme_h)
 AC_CHECK_HEADERS(crt_externs.h)
 AC_CHECK_FUNCS(_NSGetEnviron)
 
+AC_MSG_CHECKING(whether to build dynamic modules)
+
 AC_ARG_ENABLE(modules,
               [AC_HELP_STRING([--disable-modules],
                               [disable dynamic module loading])])
@@ -1310,7 +1312,7 @@ GDK_DEP_CFLAGS="`$PKG_CONFIG --cflags  gthread-2.0 $GDK_PACKAGES` $GDK_EXTRA_CFL
 # into the pkg-config files
 #
 if test $enable_explicit_deps != yes ; then
-  GDK_PACKAGES="$PANGO_PACKAGES"
+  GDK_PACKAGES="$PANGO_PACKAGES gdk-pixbuf-2.0"
   GDK_EXTRA_LIBS=
 fi
 

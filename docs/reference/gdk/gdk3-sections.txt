@@ -74,7 +74,6 @@ gdk_extension_mode_get_type
 gdk_fill_get_type
 gdk_fill_rule_get_type
 gdk_filter_return_get_type
-gdk_font_type_get_type
 gdk_function_get_type
 gdk_gc_values_mask_get_type
 gdk_grab_ownership_get_type
@@ -392,31 +391,6 @@ GDK_TYPE_COLOR
 GdkColormapClass
 gdk_colormap_get_type
 gdk_color_get_type
-</SECTION>
-
-<SECTION>
-<TITLE>Fonts</TITLE>
-<FILE>fonts</FILE>
-GdkFont
-GdkFontType
-gdk_font_load
-gdk_font_load_for_display
-gdk_fontset_load
-gdk_fontset_load_for_display
-gdk_font_from_description
-gdk_font_from_description_for_display
-gdk_font_get_display
-gdk_font_ref
-gdk_font_unref
-gdk_font_id
-gdk_font_equal
-
-<SUBSECTION Standard>
-GDK_TYPE_FONT
-GDK_TYPE_FONT_TYPE
-
-<SUBSECTION Private>
-gdk_font_get_type
 </SECTION>
 
 <SECTION>
@@ -896,43 +870,6 @@ GdkRectangle
 gdk_rectangle_intersect
 gdk_rectangle_union
 
-<SUBSECTION>
-GdkRegion
-gdk_region_new
-gdk_region_polygon
-GdkFillRule
-gdk_region_copy
-gdk_region_rectangle
-gdk_region_destroy
-
-<SUBSECTION>
-gdk_region_get_clipbox
-gdk_region_get_rectangles
-gdk_region_empty
-gdk_region_equal
-gdk_region_rect_equal
-gdk_region_point_in
-gdk_region_rect_in
-GdkOverlapType
-
-<SUBSECTION>
-gdk_region_offset
-gdk_region_shrink
-gdk_region_union_with_rect
-gdk_region_intersect
-gdk_region_union
-gdk_region_subtract
-gdk_region_xor
-
-<SUBSECTION>
-GdkSpan
-GdkSpanFunc
-gdk_region_spans_intersect_foreach
-
-<SUBSECTION Standard>
-GDK_TYPE_OVERLAP_TYPE
-GDK_TYPE_RECTANGLE
-
 <SUBSECTION Private>
 gdk_rectangle_get_type
 </SECTION>
@@ -1286,8 +1223,6 @@ GDK_SCREEN_XDISPLAY
 GDK_SCREEN_XNUMBER
 GDK_SCREEN_XSCREEN
 GDK_VISUAL_XVISUAL
-GDK_FONT_XDISPLAY
-GDK_FONT_XFONT
 GDK_CURSOR_XCURSOR
 GDK_CURSOR_XDISPLAY
 GDK_GC_XGC
@@ -1305,8 +1240,6 @@ gdk_window_lookup
 gdk_window_lookup_for_display
 gdk_pixmap_lookup
 gdk_pixmap_lookup_for_display
-gdk_font_lookup
-gdk_font_lookup_for_display
 gdk_x11_lookup_xdisplay
 gdk_x11_get_server_time
 gdk_net_wm_supports
@@ -1331,9 +1264,6 @@ gdk_x11_display_set_cursor_theme
 gdk_x11_register_standard_event_type
 gdk_x11_drawable_get_xdisplay
 gdk_x11_drawable_get_xid
-gdk_x11_font_get_name
-gdk_x11_font_get_xdisplay
-gdk_x11_font_get_xfont
 gdk_x11_gc_get_xdisplay
 gdk_x11_gc_get_xgc
 gdk_x11_get_default_root_xwindow

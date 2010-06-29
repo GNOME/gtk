@@ -36,11 +36,6 @@ static gboolean  gdk_xid_equal (XID *a,
 				XID *b);
 
 
-/* The 3 high bits of XIDs are unused. We use one to mark fonts, 
- * since we must be able to skip fonts when iterating over all XIDs.
- */
-#define XID_FONT_BIT (1<<31)
-
 void
 _gdk_xid_table_insert (GdkDisplay *display,
 		       XID	  *xid,
@@ -85,7 +80,7 @@ _gdk_xid_table_remove (GdkDisplay *display,
  * Returns the GDK object associated with the given X id.
  *
  * Return value: the associated Gdk object, which may be a #GdkPixmap,
- *     a #GdkWindow or a #GdkFont or %NULL if no object is associated
+ *     a #GdkWindow or %NULL if no object is associated
  *     with the X id.
  *
  * Since: 2.2
@@ -116,7 +111,7 @@ gdk_xid_table_lookup_for_display (GdkDisplay  *display,
  * display.
  *
  * Return value: the associated Gdk object, which may be a #GdkPixmap,
- *     a #GdkWindow or a #GdkFont or %NULL if no object is associated
+ *     a #GdkWindow or %NULL if no object is associated
  *     with the X id.
  */
 gpointer
@@ -135,7 +130,7 @@ static gboolean
 gdk_xid_equal (XID *a,
 	       XID *b)
 {
-  return ((*a & ~XID_FONT_BIT) == (*b & ~XID_FONT_BIT));
+  return (*a == *b);
 }
 
 #define __GDK_XID_C__

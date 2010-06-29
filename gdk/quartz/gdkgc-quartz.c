@@ -36,8 +36,6 @@ gdk_quartz_gc_get_values (GdkGC       *gc,
   values->foreground.pixel = _gdk_gc_get_fg_pixel (gc);
   values->background.pixel = _gdk_gc_get_bg_pixel (gc);
 
-  values->font = private->font;
-
   values->function = private->function;
 
   values->fill = _gdk_gc_get_fill (gc);
@@ -129,11 +127,6 @@ gdk_quartz_gc_set_values (GdkGC           *gc,
 			  GdkGCValuesMask  mask)
 {
   GdkGCQuartz *private = GDK_GC_QUARTZ (gc);
-
-  if (mask & GDK_GC_FONT)
-    {
-      /* FIXME: implement font */
-    }
 
   if (mask & GDK_GC_FUNCTION)
     private->function = values->function;
@@ -271,7 +264,7 @@ _gdk_quartz_gc_new (GdkDrawable      *drawable,
 
 void
 _gdk_windowing_gc_set_clip_region (GdkGC           *gc,
-				   const GdkRegion *region,
+				   const cairo_region_t *region,
 				   gboolean         reset_origin)
 {
   GdkGCQuartz *private = GDK_GC_QUARTZ (gc);
@@ -301,12 +294,6 @@ _gdk_windowing_gc_copy (GdkGC *dst_gc,
 {
   GdkGCQuartz *dst_quartz_gc = GDK_GC_QUARTZ (dst_gc);
   GdkGCQuartz *src_quartz_gc = GDK_GC_QUARTZ (src_gc);
-
-  if (dst_quartz_gc->font)
-    gdk_font_unref (dst_quartz_gc->font);
-  dst_quartz_gc->font = src_quartz_gc->font;
-  if (dst_quartz_gc->font)
-    gdk_font_ref (dst_quartz_gc->font);
 
   dst_quartz_gc->function = src_quartz_gc->function;
   dst_quartz_gc->subwindow_mode = src_quartz_gc->subwindow_mode;
@@ -450,11 +437,11 @@ _gdk_quartz_gc_update_cg_context (GdkGC                      *gc,
     {
       CGRect rect;
       CGRect *cg_rects;
-      GdkRectangle *rects;
+      cairo_region_t *region;
       gint n_rects, i;
 
-      gdk_region_get_rectangles (_gdk_gc_get_clip_region (gc),
-				 &rects, &n_rects);
+      region = _gdk_gc_get_clip_region (gc);
+      n_rects = cairo_region_num_rectangles (region);
 
       if (n_rects == 1)
 	cg_rects = &rect;
@@ -463,15 +450,16 @@ _gdk_quartz_gc_update_cg_context (GdkGC                      *gc,
 
       for (i = 0; i < n_rects; i++)
 	{
-	  cg_rects[i].origin.x = rects[i].x + gc->clip_x_origin;
-	  cg_rects[i].origin.y = rects[i].y + gc->clip_y_origin;
-	  cg_rects[i].size.width = rects[i].width;
-	  cg_rects[i].size.height = rects[i].height;
+          cairo_rectangle_int_t cairo_rect;
+          cairo_region_get_rectangle (region, i, &cairo_rect);
+	  cg_rects[i].origin.x = cairo_rect.x + gc->clip_x_origin;
+	  cg_rects[i].origin.y = cairo_rect.y + gc->clip_y_origin;
+	  cg_rects[i].size.width = cairo_rect.width;
+	  cg_rects[i].size.height = cairo_rect.height;
 	}
 
       CGContextClipToRects (context, cg_rects, n_rects);
 
-      g_free (rects);
       if (cg_rects != &rect)
 	g_free (cg_rects);
     }

@@ -387,3 +387,12 @@ Returns the current relief style of the given #GtkButton.
 @Returns: 
 
 
+<!-- ##### FUNCTION gtk_button_get_event_window ##### -->
+<para>
+
+</para>
+
+@button: 
+@Returns: 
+
+

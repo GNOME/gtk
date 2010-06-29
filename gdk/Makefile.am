@@ -82,7 +82,6 @@ gdk_public_h_sources =				\
 	gdkdnd.h				\
 	gdkdrawable.h				\
 	gdkevents.h				\
-	gdkfont.h				\
 	gdkgc.h					\
 	gdkimage.h				\
 	gdkinput.h				\
@@ -93,7 +92,6 @@ gdk_public_h_sources =				\
 	gdkpixmap.h				\
 	gdkprivate.h				\
 	gdkproperty.h				\
-	gdkregion.h				\
 	gdkrgb.h				\
 	gdkscreen.h				\
 	gdkselection.h				\
@@ -113,8 +111,7 @@ gdk_private_headers =				\
 	gdkinternals.h				\
 	gdkdeviceprivate.h			\
 	gdkintl.h				\
-	gdkpoly-generic.h			\
-	gdkregion-generic.h
+	gdkpoly-generic.h
 
 gdk_c_sources =                 \
 	$(medialib_sources)     \
@@ -130,7 +127,6 @@ gdk_c_sources =                 \
 	gdkdnd.c		\
 	gdkdraw.c		\
 	gdkevents.c     	\
-	gdkfont.c		\
 	gdkgc.c			\
 	gdkglobals.c		\
 	gdkimage.c		\
@@ -141,9 +137,7 @@ gdk_c_sources =                 \
 	gdkpixbuf-drawable.c	\
 	gdkpixbuf-render.c	\
 	gdkpixmap.c		\
-	gdkpolyreg-generic.c	\
 	gdkrectangle.c		\
-	gdkregion-generic.c	\
 	gdkrgb.c		\
 	gdkscreen.c		\
 	gdkselection.c		\
@@ -211,7 +205,7 @@ x11_introspection_files = \
         x11/*.c \
         x11/gdkx.h
 
-GdkX11-3.0.gir: $(gdktargetlib) Makefile
+GdkX11-3.0.gir: $(gdktargetlib) Gdk-3.0.gir Makefile
 GdkX11_3_0_gir_SCANNERFLAGS = --strip-prefix=gdk_x11
 GdkX11_3_0_gir_INCLUDES = Gio-2.0 Gdk-3.0 GdkPixbuf-2.0 Pango-1.0 xlib-2.0
 GdkX11_3_0_gir_LIBS = $(gdktargetlib)

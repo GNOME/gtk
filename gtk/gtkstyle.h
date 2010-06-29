@@ -117,7 +117,6 @@ struct _GtkStyle
 
   gint depth;
   GdkColormap *colormap;
-  GdkFont *private_font;
   PangoFontDescription *private_font_desc; /* Font description for style->private_font or %NULL */
 
   /* the RcStyle from which this style was created */

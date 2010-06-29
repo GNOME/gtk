@@ -89,6 +89,11 @@ and should be accessed using the functions below.
 
 </para>
 
+<!-- ##### ARG GtkProgressBar:show-text ##### -->
+<para>
+
+</para>
+
 <!-- ##### ARG GtkProgressBar:text ##### -->
 <para>
 
@@ -141,15 +146,6 @@ Creates a new #GtkProgressBar.
 @pbar: 
 
 
-<!-- ##### FUNCTION gtk_progress_bar_set_text ##### -->
-<para>
-
-</para>
-
-@pbar: 
-@text: 
-
-
 <!-- ##### FUNCTION gtk_progress_bar_set_fraction ##### -->
 <para>
 
@@ -159,31 +155,13 @@ Creates a new #GtkProgressBar.
 @fraction: 
 
 
-<!-- ##### FUNCTION gtk_progress_bar_set_pulse_step ##### -->
+<!-- ##### FUNCTION gtk_progress_bar_get_fraction ##### -->
 <para>
 
 </para>
 
 @pbar: 
-@fraction: 
-
-
-<!-- ##### FUNCTION gtk_progress_bar_set_orientation ##### -->
-<para>
-
-</para>
-
-@pbar: 
-@orientation: 
-
-
-<!-- ##### FUNCTION gtk_progress_bar_set_ellipsize ##### -->
-<para>
-
-</para>
-
-@pbar: 
-@mode: 
+@Returns: 
 
 
 <!-- ##### ENUM GtkProgressBarOrientation ##### -->
@@ -197,31 +175,13 @@ directions for the visible progress bar.
 @GTK_PROGRESS_BOTTOM_TO_TOP: A vertical progress bar growing from bottom to top.
 @GTK_PROGRESS_TOP_TO_BOTTOM: A vertical progress bar growing from top to bottom.
 
-<!-- ##### FUNCTION gtk_progress_bar_get_text ##### -->
+<!-- ##### FUNCTION gtk_progress_bar_set_orientation ##### -->
 <para>
 
 </para>
 
 @pbar: 
-@Returns: 
-
-
-<!-- ##### FUNCTION gtk_progress_bar_get_fraction ##### -->
-<para>
-
-</para>
-
-@pbar: 
-@Returns: 
-
-
-<!-- ##### FUNCTION gtk_progress_bar_get_pulse_step ##### -->
-<para>
-
-</para>
-
-@pbar: 
-@Returns: 
+@orientation: 
 
 
 <!-- ##### FUNCTION gtk_progress_bar_get_orientation ##### -->
@@ -233,6 +193,51 @@ directions for the visible progress bar.
 @Returns: 
 
 
+<!-- ##### FUNCTION gtk_progress_bar_set_show_text ##### -->
+<para>
+
+</para>
+
+@pbar: 
+@show_text: 
+
+
+<!-- ##### FUNCTION gtk_progress_bar_get_show_text ##### -->
+<para>
+
+</para>
+
+@pbar: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_progress_bar_set_text ##### -->
+<para>
+
+</para>
+
+@pbar: 
+@text: 
+
+
+<!-- ##### FUNCTION gtk_progress_bar_get_text ##### -->
+<para>
+
+</para>
+
+@pbar: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_progress_bar_set_ellipsize ##### -->
+<para>
+
+</para>
+
+@pbar: 
+@mode: 
+
+
 <!-- ##### FUNCTION gtk_progress_bar_get_ellipsize ##### -->
 <para>
 
@@ -242,11 +247,21 @@ directions for the visible progress bar.
 @Returns: 
 
 
-<!-- ##### ENUM GtkProgressBarStyle ##### -->
+<!-- ##### FUNCTION gtk_progress_bar_set_pulse_step ##### -->
 <para>
-An enumeration representing the styles for drawing the progress bar.
+
 </para>
 
-@GTK_PROGRESS_CONTINUOUS: The progress bar grows in a smooth, continuous manner.
-@GTK_PROGRESS_DISCRETE: The progress bar grows in discrete, visible blocks.
+@pbar: 
+@fraction: 
+
+
+<!-- ##### FUNCTION gtk_progress_bar_get_pulse_step ##### -->
+<para>
+
+</para>
+
+@pbar: 
+@Returns: 
+
 

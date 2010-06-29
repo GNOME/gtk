@@ -19,8 +19,6 @@
  */
 
 #import "GdkQuartzView.h"
-#include "gdkregion.h"
-#include "gdkregion-generic.h"
 #include "gdkwindow-quartz.h"
 #include "gdkprivate-quartz.h"
 #include "gdkquartz.h"
@@ -75,7 +73,7 @@
   const NSRect *drawn_rects;
   NSInteger count;
   int i;
-  GdkRegion *region;
+  cairo_region_t *region;
 
   if (GDK_WINDOW_DESTROYED (gdk_window))
     return;
@@ -89,12 +87,12 @@
   /* Clear our own bookkeeping of regions that need display */
   if (impl->needs_display_region)
     {
-      gdk_region_destroy (impl->needs_display_region);
+      cairo_region_destroy (impl->needs_display_region);
       impl->needs_display_region = NULL;
     }
 
   [self getRectsBeingDrawn:&drawn_rects count:&count];
-  region = gdk_region_new ();
+  region = cairo_region_create ();
   
   for (i = 0; i < count; i++)
     {
@@ -102,15 +100,15 @@
       gdk_rect.y = drawn_rects[i].origin.y;
       gdk_rect.width = drawn_rects[i].size.width;
       gdk_rect.height = drawn_rects[i].size.height;
-      
-      gdk_region_union_with_rect (region, &gdk_rect);
+
+      cairo_region_union_rectangle (region, &gdk_rect);
     }
 
   impl->in_paint_rect_count++;
   _gdk_window_process_updates_recurse (gdk_window, region);
   impl->in_paint_rect_count--;
 
-  gdk_region_destroy (region);
+  cairo_region_destroy (region);
 
   if (needsInvalidateShadow)
     {

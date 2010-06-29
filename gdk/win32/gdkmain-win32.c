@@ -34,7 +34,6 @@
 #include <io.h>
 
 #include "gdk.h"
-#include "gdkregion-generic.h"
 #include "gdkkeysyms.h"
 #include "gdkinternals.h"
 #include "gdkintl.h"
@@ -1159,7 +1158,7 @@ _gdk_win32_gdkrectangle_to_string (const GdkRectangle *rect)
 }
 
 gchar *
-_gdk_win32_gdkregion_to_string (const GdkRegion *rgn)
+_gdk_win32_gdkregion_to_string (const cairo_region_t *rgn)
 {
   return static_printf ("%dx%d@%+d%+d",
 			(rgn->extents.x2 - rgn->extents.x1),

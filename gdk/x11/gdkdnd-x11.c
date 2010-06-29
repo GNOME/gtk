@@ -59,7 +59,7 @@ typedef struct {
   gboolean mapped;
   gboolean shape_selected;
   gboolean shape_valid;
-  GdkRegion *shape;
+  cairo_region_t *shape;
 } GdkCacheChild;
 
 typedef struct {
@@ -338,7 +338,7 @@ free_cache_child (GdkCacheChild *child,
                   GdkDisplay    *display)
 {
   if (child->shape)
-    gdk_region_destroy (child->shape);
+    cairo_region_destroy (child->shape);
 
   if (child->shape_selected && display)
     {
@@ -397,7 +397,7 @@ gdk_window_cache_shape_filter (GdkXEvent *xev,
           child->shape_valid = FALSE;
           if (child->shape)
             {
-              gdk_region_destroy (child->shape);
+              cairo_region_destroy (child->shape);
               child->shape = NULL;
             }
         }
@@ -630,7 +630,7 @@ is_pointer_within_shape (GdkDisplay    *display,
   if (!child->shape_valid)
     {
       GdkDisplayX11 *display_x11 = GDK_DISPLAY_X11 (display);
-      GdkRegion *input_shape;
+      cairo_region_t *input_shape;
 
       child->shape = _xwindow_get_shape (display_x11->xdisplay,
                                          child->xid, ShapeBounding);
@@ -639,8 +639,8 @@ is_pointer_within_shape (GdkDisplay    *display,
                                         child->xid, ShapeInput);
       if (child->shape && input_shape)
         {
-          gdk_region_intersect (child->shape, input_shape);
-          gdk_region_destroy (input_shape);
+          cairo_region_intersect (child->shape, input_shape);
+          cairo_region_destroy (input_shape);
         }
       else if (input_shape)
         {
@@ -652,7 +652,7 @@ is_pointer_within_shape (GdkDisplay    *display,
     }
 
   return child->shape == NULL ||
-         gdk_region_point_in (child->shape, x_pos, y_pos);
+         cairo_region_contains_point (child->shape, x_pos, y_pos);
 }
 
 static Window

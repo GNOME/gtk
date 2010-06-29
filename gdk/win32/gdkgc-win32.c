@@ -33,9 +33,7 @@
 #include <string.h>
 
 #include "gdkgc.h"
-#include "gdkfont.h"
 #include "gdkpixmap.h"
-#include "gdkregion-generic.h"
 #include "gdkprivate-win32.h"
 
 static void gdk_win32_gc_get_values (GdkGC           *gc,
@@ -103,10 +101,7 @@ gdk_gc_win32_finalize (GObject *object)
   
   if (win32_gc->hcliprgn != NULL)
     DeleteObject (win32_gc->hcliprgn);
-  
-  if (win32_gc->values_mask & GDK_GC_FONT)
-    gdk_font_unref (win32_gc->font);
-  
+
   g_free (win32_gc->pen_dashes);
   
   G_OBJECT_CLASS (parent_class)->finalize (object);
@@ -223,27 +218,6 @@ gdk_win32_gc_values_to_win32values (GdkGCValues    *values,
       GDK_NOTE (GC, (g_print ("%sbg=%.06x", s,
 			      _gdk_gc_get_bg_pixel (&win32_gc->parent_instance)),
 		     s = ","));
-    }
-
-  if ((mask & GDK_GC_FONT) && (values->font->type == GDK_FONT_FONT
-			       || values->font->type == GDK_FONT_FONTSET))
-    {
-      if (win32_gc->font != NULL)
-	gdk_font_unref (win32_gc->font);
-      win32_gc->font = values->font;
-      if (win32_gc->font != NULL)
-	{
-	  gdk_font_ref (win32_gc->font);
-	  win32_gc->values_mask |= GDK_GC_FONT;
-	  GDK_NOTE (GC, (g_print ("%sfont=%p", s, win32_gc->font),
-			 s = ","));
-	}
-      else
-	{
-	  win32_gc->values_mask &= ~GDK_GC_FONT;
-	  GDK_NOTE (GC, (g_print ("%sfont=NULL", s),
-			 s = ","));
-	}
     }
 
   if (mask & GDK_GC_FUNCTION)
@@ -440,7 +414,6 @@ _gdk_win32_gc_new (GdkDrawable	  *drawable,
 
   win32_gc->hcliprgn = NULL;
 
-  win32_gc->font = NULL;
   win32_gc->rop2 = R2_COPYPEN;
   win32_gc->subwindow_mode = GDK_CLIP_BY_CHILDREN;
   win32_gc->graphics_exposures = TRUE;
@@ -477,7 +450,6 @@ gdk_win32_gc_get_values (GdkGC       *gc,
 
   values->foreground.pixel = _gdk_gc_get_fg_pixel (gc);
   values->background.pixel = _gdk_gc_get_bg_pixel (gc);
-  values->font = win32_gc->font;
 
   switch (win32_gc->rop2)
     {
@@ -572,7 +544,7 @@ gdk_win32_gc_set_dashes (GdkGC *gc,
 
 void
 _gdk_windowing_gc_set_clip_region (GdkGC           *gc,
-                                   const GdkRegion *region,
+                                   const cairo_region_t *region,
 				   gboolean         reset_origin)
 {
   GdkGCWin32 *win32_gc = GDK_GC_WIN32 (gc);
@@ -617,9 +589,6 @@ _gdk_windowing_gc_copy (GdkGC *dst_gc,
   if (dst_win32_gc->hcliprgn != NULL)
     DeleteObject (dst_win32_gc->hcliprgn);
 
-  if (dst_win32_gc->font != NULL)
-    gdk_font_unref (dst_win32_gc->font);
-
   g_free (dst_win32_gc->pen_dashes);
   
   dst_win32_gc->hcliprgn = src_win32_gc->hcliprgn;
@@ -633,9 +602,6 @@ _gdk_windowing_gc_copy (GdkGC *dst_gc,
     }
 
   dst_win32_gc->values_mask = src_win32_gc->values_mask; 
-  dst_win32_gc->font = src_win32_gc->font;
-  if (dst_win32_gc->font != NULL)
-    gdk_font_ref (dst_win32_gc->font);
 
   dst_win32_gc->rop2 = src_win32_gc->rop2;
 
@@ -777,11 +743,6 @@ get_impl_drawable (GdkDrawable *drawable)
  * width and stule is created and selected into the HDC. Note that the
  * dash properties are not completely implemented.
  *
- * If the %GDK_GC_FONT flag is set, the background mix mode is set to
- * %TRANSPARENT. and the text alignment is set to
- * %TA_BASELINE|%TA_LEFT. Note that no font gets selected into the HDC
- * by this function.
- *
  * Some things are done regardless of @mask: If the function in @gc is
  * any other than %GDK_COPY, the raster operation of the HDC is
  * set. If @gc has a clip mask, the clip region of the HDC is set.
@@ -879,15 +840,6 @@ gdk_win32_hdc_get (GdkDrawable    *drawable,
 	}
     }
 
-  if (ok && (usage & GDK_GC_FONT))
-    {
-      if (SetBkMode (win32_gc->hdc, TRANSPARENT) == 0)
-	WIN32_GDI_FAILED ("SetBkMode"), ok = FALSE;
-  
-      if (ok && SetTextAlign (win32_gc->hdc, TA_BASELINE|TA_LEFT|TA_NOUPDATECP) == GDI_ERROR)
-	WIN32_GDI_FAILED ("SetTextAlign"), ok = FALSE;
-    }
-  
   if (ok && win32_gc->rop2 != R2_COPYPEN)
     if (SetROP2 (win32_gc->hdc, win32_gc->rop2) == 0)
       WIN32_GDI_FAILED ("SetROP2"), ok = FALSE;
@@ -1103,14 +1055,14 @@ _gdk_win32_bitmap_to_hrgn (GdkPixmap *pixmap)
 }
 
 HRGN
-_gdk_win32_gdkregion_to_hrgn (const GdkRegion *region,
+_gdk_win32_gdkregion_to_hrgn (const cairo_region_t *region,
 			      gint             x_origin,
 			      gint             y_origin)
 {
   HRGN hrgn;
   RGNDATA *rgndata;
   RECT *rect;
-  GdkRegionBox *boxes = region->rects;
+  cairo_region_tBox *boxes = region->rects;
   guint nbytes =
     sizeof (RGNDATAHEADER) + (sizeof (RECT) * region->numRects);
   int i;

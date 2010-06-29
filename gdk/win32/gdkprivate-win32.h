@@ -120,7 +120,6 @@ GdkScreen *GDK_WINDOW_SCREEN(GObject *win);
 typedef struct _GdkColormapPrivateWin32 GdkColormapPrivateWin32;
 typedef struct _GdkCursorPrivate        GdkCursorPrivate;
 typedef struct _GdkWin32SingleFont      GdkWin32SingleFont;
-typedef struct _GdkFontPrivateWin32     GdkFontPrivateWin32;
 typedef struct _GdkGCWin32		GdkGCWin32;
 typedef struct _GdkGCWin32Class		GdkGCWin32Class;
 
@@ -137,17 +136,6 @@ struct _GdkWin32SingleFont
   UINT codepage;
   FONTSIGNATURE fs;
 };
-
-#ifndef GDK_DISABLE_DEPRECATED
-
-struct _GdkFontPrivateWin32
-{
-  GdkFontPrivate base;
-  GSList *fonts;		/* List of GdkWin32SingleFonts */
-  GSList *names;
-};
-
-#endif /* GDK_DISABLE_DEPRECATED */
 
 struct _GdkVisualClass
 {
@@ -188,7 +176,6 @@ struct _GdkGCWin32
 
   GdkGCValuesMask values_mask;
 
-  GdkFont *font;
   gint rop2;
   GdkSubwindowMode subwindow_mode;
   gint graphics_exposures;
@@ -230,7 +217,7 @@ void _gdk_win32_window_scroll (GdkWindow *window,
 			       gint       dx,
 			       gint       dy);
 void _gdk_win32_window_move_region (GdkWindow       *window,
-				    const GdkRegion *region,
+				    const cairo_region_t *region,
 				    gint             dx,
 				    gint             dy);
 void _gdk_win32_windowing_window_get_offsets (GdkWindow *window,
@@ -280,11 +267,11 @@ COLORREF  _gdk_win32_colormap_color     (GdkColormap *colormap,
 
 HRGN	  _gdk_win32_bitmap_to_hrgn     (GdkPixmap   *bitmap);
 
-HRGN	  _gdk_win32_gdkregion_to_hrgn  (const GdkRegion *region,
+HRGN	  _gdk_win32_gdkregion_to_hrgn  (const cairo_region_t *region,
 					 gint             x_origin,
 					 gint             y_origin);
 
-GdkRegion *_gdk_win32_hrgn_to_region    (HRGN hrgn);
+cairo_region_t *_gdk_win32_hrgn_to_region    (HRGN hrgn);
 
 void	_gdk_win32_adjust_client_rect   (GdkWindow *window,
 					 RECT      *RECT);
@@ -292,15 +279,6 @@ void	_gdk_win32_adjust_client_rect   (GdkWindow *window,
 void    _gdk_selection_property_delete (GdkWindow *);
 
 void    _gdk_dropfiles_store (gchar *data);
-
-void    _gdk_wchar_text_handle    (GdkFont       *font,
-				   const wchar_t *wcstr,
-				   int            wclen,
-				   void         (*handler)(GdkWin32SingleFont *,
-							   const wchar_t *,
-							   int,
-							   void *),
-				   void          *arg);
 
 void       _gdk_push_modal_window   (GdkWindow *window);
 void       _gdk_remove_modal_window (GdkWindow *window);
@@ -343,7 +321,7 @@ gchar *_gdk_win32_data_to_string       (const guchar*data,
 gchar *_gdk_win32_rect_to_string       (const RECT  *rect);
 
 gchar *_gdk_win32_gdkrectangle_to_string (const GdkRectangle *rect);
-gchar *_gdk_win32_gdkregion_to_string    (const GdkRegion    *box);
+gchar *_gdk_win32_gdkregion_to_string    (const cairo_region_t    *box);
 
 void   _gdk_win32_print_event            (const GdkEvent     *event);
 

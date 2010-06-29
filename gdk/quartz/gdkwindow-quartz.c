@@ -112,28 +112,28 @@ gdk_window_impl_quartz_get_context (GdkDrawable *drawable,
     {
       CGRect rect;
       CGRect *cg_rects;
-      GdkRectangle *rects;
       gint n_rects, i;
 
-      gdk_region_get_rectangles (window_impl->paint_clip_region,
-                                 &rects, &n_rects);
+      n_rects = cairo_region_num_rectangles (window_impl->paint_clip_region);
 
       if (n_rects == 1)
-        cg_rects = &rect;
+	cg_rects = &rect;
       else
-        cg_rects = g_new (CGRect, n_rects);
+	cg_rects = g_new (CGRect, n_rects);
 
       for (i = 0; i < n_rects; i++)
-        {
-          cg_rects[i].origin.x = rects[i].x;
-          cg_rects[i].origin.y = rects[i].y;
-          cg_rects[i].size.width = rects[i].width;
-          cg_rects[i].size.height = rects[i].height;
-        }
+	{
+          cairo_rectangle_int_t cairo_rect;
+          cairo_region_get_rectangle (window_impl->paint_clip_region,
+                                      i, &cairo_rect);
+	  cg_rects[i].origin.x = cairo_rect.x;
+	  cg_rects[i].origin.y = cairo_rect.y;
+	  cg_rects[i].size.width = cairo_rect.width;
+	  cg_rects[i].size.height = cairo_rect.height;
+	}
 
-      CGContextClipToRects (cg_context, cg_rects, n_rects);
+      CGContextClipToRects (context, cg_rects, n_rects);
 
-      g_free (rects);
       if (cg_rects != &rect)
         g_free (cg_rects);
     }
@@ -195,7 +195,7 @@ gdk_window_impl_quartz_finalize (GObject *object)
   check_grab_destroy (GDK_DRAWABLE_IMPL_QUARTZ (object)->wrapper);
 
   if (impl->paint_clip_region)
-    gdk_region_destroy (impl->paint_clip_region);
+    cairo_region_destroy (impl->paint_clip_region);
 
   if (impl->transient_for)
     g_object_unref (impl->transient_for);
@@ -225,23 +225,22 @@ gdk_window_impl_quartz_init (GdkWindowImplQuartz *impl)
 static void
 gdk_window_impl_quartz_begin_paint_region (GdkPaintable    *paintable,
                                            GdkWindow       *window,
-					   const GdkRegion *region)
+					   const cairo_region_t *region)
 {
   GdkWindowImplQuartz *impl = GDK_WINDOW_IMPL_QUARTZ (paintable);
   GdkWindowObject *private = (GdkWindowObject*)window;
   int n_rects;
-  GdkRectangle *rects = NULL;
   GdkPixmap *bg_pixmap;
-  GdkRegion *clipped_and_offset_region;
+  cairo_region_t *clipped_and_offset_region;
   gboolean free_clipped_and_offset_region = TRUE;
 
   bg_pixmap = private->bg_pixmap;
 
-  clipped_and_offset_region = gdk_region_copy (region);
+  clipped_and_offset_region = cairo_region_copy (region);
 
-  gdk_region_intersect (clipped_and_offset_region,
+  cairo_region_intersect (clipped_and_offset_region,
                         private->clip_region_with_children);
-  gdk_region_offset (clipped_and_offset_region,
+  cairo_region_translate (clipped_and_offset_region,
                      private->abs_x, private->abs_y);
 
   if (impl->begin_paint_count == 0)
@@ -250,14 +249,14 @@ gdk_window_impl_quartz_begin_paint_region (GdkPaintable    *paintable,
       free_clipped_and_offset_region = FALSE;
     }
   else
-    gdk_region_union (impl->paint_clip_region, clipped_and_offset_region);
+    cairo_region_union (impl->paint_clip_region, clipped_and_offset_region);
 
   impl->begin_paint_count++;
 
   if (bg_pixmap == GDK_NO_BG)
     goto done;
 
-  gdk_region_get_rectangles (clipped_and_offset_region, &rects, &n_rects);
+  n_rects = cairo_region_num_rectangles (clipped_and_offset_region);
 
   if (n_rects == 0)
     goto done;
@@ -276,9 +275,11 @@ gdk_window_impl_quartz_begin_paint_region (GdkPaintable    *paintable,
  
       for (i = 0; i < n_rects; i++)
         {
+          cairo_rectangle_int_t rect;
+          cairo_region_get_rectangle (clipped_and_offset_region, i, &rect);
           CGContextFillRect (cg_context,
-                             CGRectMake (rects[i].x, rects[i].y,
-                                         rects[i].width, rects[i].height));
+                             CGRectMake (rect.x, rect.y,
+                                         rect.width, rect.height));
         }
 
       gdk_quartz_drawable_release_context (GDK_DRAWABLE (impl), cg_context);
@@ -288,6 +289,7 @@ gdk_window_impl_quartz_begin_paint_region (GdkPaintable    *paintable,
       int x, y;
       int x_offset, y_offset;
       int width, height;
+      cairo_int_rectangle_t rect;
       GdkGC *gc;
 
       x_offset = y_offset = 0;
@@ -320,14 +322,15 @@ gdk_window_impl_quartz_begin_paint_region (GdkPaintable    *paintable,
       gdk_drawable_get_size (GDK_DRAWABLE (bg_pixmap), &width, &height);
 
       x = -x_offset;
-      while (x < (rects[0].x + rects[0].width))
+      cairo_region_get_rectangle (clipped_and_offset_region, 0, &rect);
+      while (x < (rect.x + rect.width))
         {
-          if (x + width >= rects[0].x)
+          if (x + width >= rect.x)
 	    {
               y = -y_offset;
-              while (y < (rects[0].y + rects[0].height))
+              while (y < (rect.y + rect.height))
                 {
-                  if (y + height >= rects[0].y)
+                  if (y + height >= rect.y)
                     gdk_draw_drawable (GDK_DRAWABLE (impl), gc, bg_pixmap, 0, 0, x, y, width, height);
 		  
                   y += height;
@@ -341,8 +344,7 @@ gdk_window_impl_quartz_begin_paint_region (GdkPaintable    *paintable,
 
  done:
   if (free_clipped_and_offset_region)
-    gdk_region_destroy (clipped_and_offset_region);
-  g_free (rects);
+    cairo_region_destroy (clipped_and_offset_region);
 }
 
 static void
@@ -354,38 +356,41 @@ gdk_window_impl_quartz_end_paint (GdkPaintable *paintable)
 
   if (impl->begin_paint_count == 0)
     {
-      gdk_region_destroy (impl->paint_clip_region);
+      cairo_region_destroy (impl->paint_clip_region);
       impl->paint_clip_region = NULL;
     }
 }
 
 void
-_gdk_quartz_window_set_needs_display_in_rect (GdkWindow    *window,
-                                              GdkRectangle *rect)
+_gdk_quartz_window_set_needs_display_in_region (GdkWindow    *window,
+                                                cairo_region_t    *region)
 {
   GdkWindowObject *private;
   GdkWindowImplQuartz *impl;
+  int i, n_rects;
 
   private = GDK_WINDOW_OBJECT (window);
   impl = GDK_WINDOW_IMPL_QUARTZ (private->impl);
 
   if (!impl->needs_display_region)
-    impl->needs_display_region = gdk_region_new ();
+    impl->needs_display_region = cairo_region_create ();
 
-  gdk_region_union_with_rect (impl->needs_display_region, rect);
+  cairo_region_union (impl->needs_display_region, region);
 
-  [impl->view setNeedsDisplayInRect:NSMakeRect (rect->x, rect->y,
-                                                rect->width, rect->height)];
-
+  n_rects = cairo_region_num_rectangles (region);
+  for (i = 0; i < n_rects; i++)
+    {
+      cairo_rectangle_int_t rect;
+      cairo_region_get_rectangle (region, i, &rect);
+      [impl->view setNeedsDisplayInRect:NSMakeRect (rect.x, rect.y,
+                                                    rect.width, rect.height)];
+    }
 }
 
 void
 _gdk_windowing_window_process_updates_recurse (GdkWindow *window,
-                                               GdkRegion *region)
+                                               cairo_region_t *region)
 {
-  int i, n_rects;
-  GdkRectangle *rects;
-
   /* Make sure to only flush each toplevel at most once if we're called
    * from process_all_updates.
    */
@@ -416,12 +421,7 @@ _gdk_windowing_window_process_updates_recurse (GdkWindow *window,
         }
     }
 
-  gdk_region_get_rectangles (region, &rects, &n_rects);
-
-  for (i = 0; i < n_rects; i++)
-    _gdk_quartz_window_set_needs_display_in_rect (window, &rects[i]);
-
-  g_free (rects);
+  _gdk_quartz_window_set_needs_display_in_region (window, region);
 
   /* NOTE: I'm not sure if we should displayIfNeeded here. It slows down a
    * lot (since it triggers the beam syncing) and things seem to work
@@ -1322,8 +1322,8 @@ move_resize_window_internal (GdkWindow *window,
   GdkRectangle old_visible;
   GdkRectangle new_visible;
   GdkRectangle scroll_rect;
-  GdkRegion *old_region;
-  GdkRegion *expose_region;
+  cairo_region_t *old_region;
+  cairo_region_t *expose_region;
   NSSize delta;
 
   if (GDK_WINDOW_DESTROYED (window))
@@ -1410,9 +1410,9 @@ move_resize_window_internal (GdkWindow *window,
           new_visible.width = old_visible.width;   /* parent has not changed size */
           new_visible.height = old_visible.height; /* parent has not changed size */
 
-          expose_region = gdk_region_rectangle (&new_visible);
-          old_region = gdk_region_rectangle (&old_visible);
-          gdk_region_subtract (expose_region, old_region);
+          expose_region = cairo_region_create_rectangle (&new_visible);
+          old_region = cairo_region_create_rectangle (&old_visible);
+          cairo_region_subtract (expose_region, old_region);
 
           /* Determine what (if any) part of the previously visible
            * part of the window can be copied without a redraw
@@ -1422,12 +1422,8 @@ move_resize_window_internal (GdkWindow *window,
           scroll_rect.y -= delta.height;
           gdk_rectangle_intersect (&scroll_rect, &old_visible, &scroll_rect);
 
-          if (!gdk_region_empty (expose_region))
+          if (!cairo_region_is_empty (expose_region))
             {
-              GdkRectangle* rects;
-              gint n_rects;
-              gint n;
-
               if (scroll_rect.width != 0 && scroll_rect.height != 0)
                 {
                   [impl->view scrollRect:NSMakeRect (scroll_rect.x,
@@ -1439,12 +1435,7 @@ move_resize_window_internal (GdkWindow *window,
 
               [impl->view setFrame:nsrect];
 
-              gdk_region_get_rectangles (expose_region, &rects, &n_rects);
-
-              for (n = 0; n < n_rects; ++n)
-                _gdk_quartz_window_set_needs_display_in_rect (window, &rects[n]);
-
-              g_free (rects);
+              _gdk_quartz_window_set_needs_display_in_region (window, expose_region);
             }
           else
             {
@@ -1452,8 +1443,8 @@ move_resize_window_internal (GdkWindow *window,
               [impl->view setNeedsDisplay:YES];
             }
 
-          gdk_region_destroy (expose_region);
-          gdk_region_destroy (old_region);
+          cairo_region_destroy (expose_region);
+          cairo_region_destroy (old_region);
         }
     }
 
@@ -2282,7 +2273,7 @@ gdk_window_set_transient_for (GdkWindow *window,
 
 static void
 gdk_window_quartz_shape_combine_region (GdkWindow       *window,
-                                        const GdkRegion *shape,
+                                        const cairo_region_t *shape,
                                         gint             x,
                                         gint             y)
 {
@@ -2291,7 +2282,7 @@ gdk_window_quartz_shape_combine_region (GdkWindow       *window,
 
 static void
 gdk_window_quartz_input_shape_combine_region (GdkWindow       *window,
-                                              const GdkRegion *shape_region,
+                                              const cairo_region_t *shape_region,
                                               gint             offset_x,
                                               gint             offset_y)
 {
@@ -2726,7 +2717,7 @@ gdk_window_set_functions (GdkWindow    *window,
 
 gboolean
 _gdk_windowing_window_queue_antiexpose (GdkWindow  *window,
-					GdkRegion  *area)
+					cairo_region_t  *area)
 {
   return FALSE;
 }
@@ -3066,21 +3057,21 @@ _gdk_windowing_window_set_composited (GdkWindow *window, gboolean composited)
 {
 }
 
-GdkRegion *
+cairo_region_t *
 _gdk_windowing_get_shape_for_mask (GdkBitmap *mask)
 {
   /* FIXME: implement */
   return NULL;
 }
 
-GdkRegion *
+cairo_region_t *
 _gdk_windowing_window_get_shape (GdkWindow *window)
 {
   /* FIXME: implement */
   return NULL;
 }
 
-GdkRegion *
+cairo_region_t *
 _gdk_windowing_window_get_input_shape (GdkWindow *window)
 {
   /* FIXME: implement */
