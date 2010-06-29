@@ -101,6 +101,14 @@ struct _GtkTreeViewPrivate
   gint width;
   gint height;
 
+  /* Track parent scrolled window size to 
+   * avoid feed back loops with scrollbar allocations
+   * and h4w cell renderers in the layout.
+   */
+  gint prev_parent_width;
+  gint prev_parent_height;
+  gint consecutive_allocations;
+
   /* Adjustments */
   GtkAdjustment *hadjustment;
   GtkAdjustment *vadjustment;
@@ -300,6 +308,11 @@ struct _GtkTreeViewPrivate
 
   /* Whether our key press handler is to avoid sending an unhandled binding to the search entry */
   guint search_entry_avoid_unhandled_binding : 1;
+
+  /* Mark dirty state for resizes that originate from changes in
+   * the full rendered content size, from resizes that originate
+   * from */
+  guint content_size_dirty : 1;
 };
 
 struct _GtkTreeViewColumnPrivate

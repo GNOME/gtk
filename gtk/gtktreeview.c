@@ -45,6 +45,7 @@
 #include "gtkframe.h"
 #include "gtktreemodelsort.h"
 #include "gtktooltip.h"
+#include "gtkscrolledwindow.h"
 #include "gtkprivate.h"
 #include "gtkalias.h"
 
@@ -299,7 +300,8 @@ static gboolean do_validate_rows         (GtkTreeView *tree_view,
 					  gboolean     size_request);
 static gboolean validate_rows            (GtkTreeView *tree_view);
 static gboolean presize_handler_callback (gpointer     data);
-static void     install_presize_handler  (GtkTreeView *tree_view);
+static void     install_presize_handler  (GtkTreeView *tree_view,
+					  gboolean     content_dirty);
 static void     install_scroll_sync_handler (GtkTreeView *tree_view);
 static void     gtk_tree_view_set_top_row   (GtkTreeView *tree_view,
 					     GtkTreePath *path,
@@ -1877,7 +1879,7 @@ gtk_tree_view_realize (GtkWidget *widget)
   gtk_tree_view_set_grid_lines (tree_view, tree_view->priv->grid_lines);
   gtk_tree_view_set_enable_tree_lines (tree_view, tree_view->priv->tree_lines_enabled);
 
-  install_presize_handler (tree_view); 
+  install_presize_handler (tree_view, TRUE); 
 }
 
 static void
@@ -2384,6 +2386,7 @@ gtk_tree_view_size_allocate (GtkWidget     *widget,
   GList *tmp_list;
   gboolean width_changed = FALSE;
   gint old_width = widget->allocation.width;
+  gboolean scroll_window_feedback = FALSE;
 
   if (allocation->width != widget->allocation.width)
     width_changed = TRUE;
@@ -2407,11 +2410,49 @@ gtk_tree_view_size_allocate (GtkWidget     *widget,
       gtk_widget_size_allocate (child->widget, &allocation);
     }
 
+  /* If we get various width allocations while our content did not change
+   * and the parent is a scrolled window and it's own allocation has not
+   * changed:
+   *
+   * Stop setting the adjustments until
+   *  a.) Treeview content size changes
+   *  b.) Parent's allocation changes
+   */
+  if (GTK_IS_SCROLLED_WINDOW (gtk_widget_get_parent (widget)))
+    {
+      GtkWidget *swindow = gtk_widget_get_parent (widget);
+      GtkAllocation salloc;
+      
+      gtk_widget_get_allocation (swindow, &salloc);
+      
+      if (!tree_view->priv->content_size_dirty &&
+	  tree_view->priv->prev_parent_width == salloc.width &&
+	  tree_view->priv->prev_parent_height == salloc.height)
+	{
+	  /* Feedback detected */
+	  if (tree_view->priv->consecutive_allocations >= 3)
+	    scroll_window_feedback = TRUE;
+	  else
+	    tree_view->priv->consecutive_allocations++;
+	}
+      else
+	tree_view->priv->consecutive_allocations = 0;
+      
+      tree_view->priv->content_size_dirty = FALSE;
+      tree_view->priv->prev_parent_width  = salloc.width;
+      tree_view->priv->prev_parent_height = salloc.height;
+    }
+  else
+    tree_view->priv->consecutive_allocations = 0;
+  
+
   /* We size-allocate the columns first because the width of the
    * tree view (used in updating the adjustments below) might change.
    */
   gtk_tree_view_size_allocate_columns (widget, &width_changed);
 
+  if (!scroll_window_feedback)
+    {
   tree_view->priv->hadjustment->page_size = allocation->width;
   tree_view->priv->hadjustment->page_increment = allocation->width * 0.9;
   tree_view->priv->hadjustment->step_increment = allocation->width * 0.1;
@@ -2453,6 +2494,7 @@ gtk_tree_view_size_allocate (GtkWidget     *widget,
   tree_view->priv->vadjustment->upper = MAX (tree_view->priv->vadjustment->page_size, tree_view->priv->height);
 
   gtk_adjustment_changed (tree_view->priv->vadjustment);
+    }
 
   /* now the adjustments and window sizes are in sync, we can sync toprow/dy again */
   if (tree_view->priv->height <= tree_view->priv->vadjustment->page_size)
@@ -2550,7 +2592,7 @@ gtk_tree_view_size_allocate (GtkWidget     *widget,
 	    _gtk_tree_view_column_cell_set_dirty (column, FALSE, FALSE);
 	}
       
-      install_presize_handler (tree_view);
+      install_presize_handler (tree_view, FALSE);
       
       gtk_widget_queue_resize (GTK_WIDGET (tree_view));
     }
@@ -6494,8 +6536,12 @@ presize_handler_callback (gpointer data)
 }
 
 static void
-install_presize_handler (GtkTreeView *tree_view)
+install_presize_handler (GtkTreeView *tree_view,
+			 gboolean     content_dirty)
 {
+  if (content_dirty)
+    tree_view->priv->content_size_dirty = TRUE;
+
   if (! gtk_widget_get_realized (GTK_WIDGET (tree_view)))
     return;
 
@@ -6655,7 +6701,7 @@ _gtk_tree_view_install_mark_rows_col_dirty (GtkTreeView *tree_view)
 {
   tree_view->priv->mark_rows_col_dirty = TRUE;
 
-  install_presize_handler (tree_view);
+  install_presize_handler (tree_view, FALSE);
 }
 
 /*
@@ -7800,7 +7846,7 @@ gtk_tree_view_set_fixed_height_mode (GtkTreeView *tree_view,
       tree_view->priv->fixed_height = -1;
 
       /* force a revalidation */
-      install_presize_handler (tree_view);
+      install_presize_handler (tree_view, TRUE);
     }
   else 
     {
@@ -7822,6 +7868,8 @@ gtk_tree_view_set_fixed_height_mode (GtkTreeView *tree_view,
       
       if (tree_view->priv->tree)
 	initialize_fixed_height_mode (tree_view);
+
+      tree_view->priv->content_size_dirty = TRUE;
     }
 
   g_object_notify (G_OBJECT (tree_view), "fixed-height-mode");
@@ -8421,9 +8469,12 @@ gtk_tree_view_row_changed (GtkTreeModel *model,
  done:
   if (!tree_view->priv->fixed_height_mode &&
       gtk_widget_get_realized (GTK_WIDGET (tree_view)))
-    install_presize_handler (tree_view);
+    install_presize_handler (tree_view, TRUE);
+
   if (free_path)
     gtk_tree_path_free (path);
+
+  tree_view->priv->content_size_dirty = TRUE;
 }
 
 static void
@@ -8536,9 +8587,11 @@ gtk_tree_view_row_inserted (GtkTreeModel *model,
 	gtk_widget_queue_resize_no_redraw (GTK_WIDGET (tree_view));
     }
   else
-    install_presize_handler (tree_view);
+    install_presize_handler (tree_view, TRUE);
   if (free_path)
     gtk_tree_path_free (path);
+
+  tree_view->priv->content_size_dirty = TRUE;
 }
 
 static void
@@ -10924,7 +10977,7 @@ gtk_tree_view_set_model (GtkTreeView  *tree_view,
       gtk_tree_path_free (path);
 
       /*  FIXME: do I need to do this? gtk_tree_view_create_buttons (tree_view); */
-      install_presize_handler (tree_view);
+      install_presize_handler (tree_view, TRUE);
     }
 
   g_object_notify (G_OBJECT (tree_view), "model");
@@ -10934,6 +10987,8 @@ gtk_tree_view_set_model (GtkTreeView  *tree_view,
 
   if (gtk_widget_get_realized (GTK_WIDGET (tree_view)))
     gtk_widget_queue_resize (GTK_WIDGET (tree_view));
+
+  tree_view->priv->content_size_dirty = TRUE;
 }
 
 /**
@@ -11793,7 +11848,7 @@ gtk_tree_view_scroll_to_cell (GtkTreeView       *tree_view,
       tree_view->priv->scroll_to_row_align = row_align;
       tree_view->priv->scroll_to_col_align = col_align;
 
-      install_presize_handler (tree_view);
+      install_presize_handler (tree_view, FALSE);
     }
   else
     {
@@ -12206,7 +12261,7 @@ gtk_tree_view_real_expand_row (GtkTreeView *tree_view,
   if (animate)
     add_expand_collapse_timeout (tree_view, tree, node, TRUE);
 
-  install_presize_handler (tree_view);
+  install_presize_handler (tree_view, TRUE);
 
   g_signal_emit (tree_view, tree_view_signals[ROW_EXPANDED], 0, &iter, path);
   if (open_all && node->children)
