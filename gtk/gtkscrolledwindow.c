@@ -1716,10 +1716,12 @@ _gtk_scrolled_window_get_scrollbar_spacing (GtkScrolledWindow *scrolled_window)
     }
 }
 
+static GtkSizeRequestIface *parent_size_request_iface;
 
 static void
 gtk_scrolled_window_size_request_init (GtkSizeRequestIface *iface)
 {
+  parent_size_request_iface   = g_type_interface_peek_parent (iface);
   iface->get_width            = gtk_scrolled_window_get_width;
   iface->get_height           = gtk_scrolled_window_get_height;
   iface->get_height_for_width = gtk_scrolled_window_get_height_for_width;
@@ -1905,7 +1907,15 @@ gtk_scrolled_window_get_height_for_width (GtkSizeRequest *widget,
 					  gint           *minimum_height,
 					  gint           *natural_height)
 { 
-  gtk_size_request_get_height (widget, minimum_height, natural_height);
+  GtkScrolledWindow *scrolled_window = GTK_SCROLLED_WINDOW (widget);
+
+  /* In the unlikely case that both scrollbars are disabled; forward the child's
+   * height-for-width request via the GtkBin generic method */
+  if (scrolled_window->hscrollbar_policy == GTK_POLICY_NEVER &&
+      scrolled_window->vscrollbar_policy == GTK_POLICY_NEVER)
+    parent_size_request_iface->get_height_for_width (widget, width, minimum_height, natural_height);
+  else
+    gtk_size_request_get_height (widget, minimum_height, natural_height);
 }
 
 static void
@@ -1913,8 +1923,16 @@ gtk_scrolled_window_get_width_for_height (GtkSizeRequest *widget,
 					  gint       height,
 					  gint      *minimum_width,
 					  gint      *natural_width)
-{
-  gtk_size_request_get_width (widget, minimum_width, natural_width);
+{ 
+  GtkScrolledWindow *scrolled_window = GTK_SCROLLED_WINDOW (widget);
+
+  /* In the unlikely case that both scrollbars are disabled; forward the child's
+   * width-for-height request via the GtkBin generic method */
+  if (scrolled_window->hscrollbar_policy == GTK_POLICY_NEVER &&
+      scrolled_window->vscrollbar_policy == GTK_POLICY_NEVER)
+    parent_size_request_iface->get_width_for_height (widget, height, minimum_width, natural_width);
+  else
+    gtk_size_request_get_width (widget, minimum_width, natural_width);
 }
 
 #define __GTK_SCROLLED_WINDOW_C__
