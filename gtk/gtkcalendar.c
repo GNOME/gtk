@@ -3678,14 +3678,20 @@ gtk_calendar_set_display_options (GtkCalendar	       *calendar,
  * @year: the year the month is in.
  *
  * Shifts the calendar to a different month.
+ *
+ * Note that this function always returns %TRUE, and you should
+ * ignore the return value. In GTK+ 3, this function will not
+ * return a value.
+ *
+ * Returns: %TRUE, always
  **/
-void
+gboolean
 gtk_calendar_select_month (GtkCalendar *calendar,
 			   guint	month,
 			   guint	year)
 {
-  g_return_if_fail (GTK_IS_CALENDAR (calendar));
-  g_return_if_fail (month <= 11);
+  g_return_val_if_fail (GTK_IS_CALENDAR (calendar), FALSE);
+  g_return_val_if_fail (month <= 11, FALSE);
 
   calendar->month = month;
   calendar->year  = year;
@@ -3701,6 +3707,8 @@ gtk_calendar_select_month (GtkCalendar *calendar,
   g_signal_emit (calendar,
 		 gtk_calendar_signals[MONTH_CHANGED_SIGNAL],
 		 0);
+
+  return TRUE;
 }
 
 /**
@@ -3773,12 +3781,18 @@ gtk_calendar_clear_marks (GtkCalendar *calendar)
  * @day: the day number to mark between 1 and 31.
  *
  * Places a visual marker on a particular day.
+ *
+ * Note that this function always returns %TRUE, and you should
+ * ignore the return value. In GTK+ 3, this function will not
+ * return a value.
+ *
+ * Returns: %TRUE, always
  */
-void
+gboolean
 gtk_calendar_mark_day (GtkCalendar *calendar,
 		       guint	    day)
 {
-  g_return_if_fail (GTK_IS_CALENDAR (calendar));
+  g_return_val_if_fail (GTK_IS_CALENDAR (calendar), FALSE);
 
   if (day >= 1 && day <= 31 && !calendar->marked_date[day-1])
     {
@@ -3786,6 +3800,8 @@ gtk_calendar_mark_day (GtkCalendar *calendar,
       calendar->num_marked_dates++;
       calendar_invalidate_day_num (calendar, day);
     }
+
+  return TRUE;
 }
 
 /**
@@ -3794,12 +3810,18 @@ gtk_calendar_mark_day (GtkCalendar *calendar,
  * @day: the day number to unmark between 1 and 31.
  *
  * Removes the visual marker from a particular day.
+ *
+ * Note that this function always returns %TRUE, and you should
+ * ignore the return value. In GTK+ 3, this function will not
+ * return a value.
+ *
+ * Returns: %TRUE, always
  */
-void
+gboolean
 gtk_calendar_unmark_day (GtkCalendar *calendar,
 			 guint	      day)
 {
-  g_return_if_fail (GTK_IS_CALENDAR (calendar));
+  g_return_val_if_fail (GTK_IS_CALENDAR (calendar), FALSE);
 
   if (day >= 1 && day <= 31 && calendar->marked_date[day-1])
     {
@@ -3807,6 +3829,8 @@ gtk_calendar_unmark_day (GtkCalendar *calendar,
       calendar->num_marked_dates--;
       calendar_invalidate_day_num (calendar, day);
     }
+
+  return TRUE;
 }
 
 /**
