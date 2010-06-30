@@ -154,6 +154,9 @@ gdk_drag_begin (GdkWindow     *window,
   /* Create fake context */
   _gdk_quartz_drag_source_context = gdk_drag_context_new ();
   _gdk_quartz_drag_source_context->is_source = TRUE;
+
+  gdk_drag_context_set_device (_gdk_quartz_drag_source_context,
+                               gdk_display_get_core_pointer (gdk_display_get_default ()));
   
   return _gdk_quartz_drag_source_context;
 }
