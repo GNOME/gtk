@@ -1,3 +1,15 @@
+Overview of Changes from GTK+ 2.21.3 to 2.21.4
+==============================================
+
+* Revert a change in GtkCalendar that broke the pygtk build
+
+* Fix the building of input methods as modules
+
+* Include gdk-pixbuf-2.0 in the .pc file requires
+
+* Various OS X fixes
+
+
 Overview of Changes from GTK+ 2.21.2 to 2.21.3
 ==============================================
 
