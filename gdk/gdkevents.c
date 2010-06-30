@@ -510,8 +510,8 @@ gdk_event_copy (const GdkEvent *event)
  * 
  * Frees a #GdkEvent, freeing or decrementing any resources associated with it.
  * Note that this function should only be called with events returned from
- * functions such as gdk_event_peek(), gdk_event_get(),
- * gdk_event_get_graphics_expose(), gdk_event_copy() and gdk_event_new().
+ * functions such as gdk_event_peek(), gdk_event_get(), gdk_event_copy()
+ * and gdk_event_new().
  **/
 void
 gdk_event_free (GdkEvent *event)
