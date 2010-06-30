@@ -454,7 +454,8 @@ update_context_from_dragging_info (id <NSDraggingInfo> sender)
 
 - (NSDragOperation)draggingEntered:(id <NSDraggingInfo>)sender
 {
-  GdkEvent event;
+  GdkEvent *event;
+  GdkWindow *window;
 
   if (current_context)
     g_object_unref (current_context);
@@ -462,13 +463,22 @@ update_context_from_dragging_info (id <NSDraggingInfo> sender)
   current_context = gdk_drag_context_new ();
   update_context_from_dragging_info (sender);
 
-  event.dnd.type = GDK_DRAG_ENTER;
-  event.dnd.window = g_object_ref ([[self contentView] gdkWindow]);
-  event.dnd.send_event = FALSE;
-  event.dnd.context = current_context;
-  event.dnd.time = GDK_CURRENT_TIME;
+  window = [[self contentView] gdkWindow];
 
-  (*_gdk_event_func) (&event, _gdk_event_data);
+  gdk_drag_context_set_device (current_context,
+                               gdk_display_get_core_pointer (gdk_display_get_default ()));
+
+  event = gdk_event_new (GDK_DRAG_ENTER);
+  event->dnd.window = g_object_ref (window);
+  event->dnd.send_event = FALSE;
+  event->dnd.context = g_object_ref (current_context);
+  event->dnd.time = GDK_CURRENT_TIME;
+
+  gdk_event_set_device (event, gdk_drag_context_get_device (current_context));
+
+  (*_gdk_event_func) (event, _gdk_event_data);
+
+  gdk_event_free (event);
 
   return NSDragOperationNone;
 }
@@ -486,15 +496,19 @@ update_context_from_dragging_info (id <NSDraggingInfo> sender)
 
 - (void)draggingExited:(id <NSDraggingInfo>)sender
 {
-  GdkEvent event;
+  GdkEvent *event;
   
-  event.dnd.type = GDK_DRAG_LEAVE;
-  event.dnd.window = g_object_ref ([[self contentView] gdkWindow]);
-  event.dnd.send_event = FALSE;
-  event.dnd.context = current_context;
-  event.dnd.time = GDK_CURRENT_TIME;
+  event = gdk_event_new (GDK_DRAG_LEAVE);
+  event->dnd.window = g_object_ref ([[self contentView] gdkWindow]);
+  event->dnd.send_event = FALSE;
+  event->dnd.context = g_object_ref (current_context);
+  event->dnd.time = GDK_CURRENT_TIME;
 
-  (*_gdk_event_func) (&event, _gdk_event_data);
+  gdk_event_set_device (event, gdk_drag_context_get_device (current_context));
+
+  (*_gdk_event_func) (event, _gdk_event_data);
+
+  gdk_event_free (event);
   
   g_object_unref (current_context);
   current_context = NULL;
@@ -504,23 +518,25 @@ update_context_from_dragging_info (id <NSDraggingInfo> sender)
 {
   NSPoint point = [sender draggingLocation];
   NSPoint screen_point = [self convertBaseToScreen:point];
-  GdkEvent event;
+  GdkEvent *event;
   int gx, gy;
 
   update_context_from_dragging_info (sender);
   _gdk_quartz_window_nspoint_to_gdk_xy (screen_point, &gx, &gy);
 
-  event.dnd.type = GDK_DRAG_MOTION;
-  event.dnd.window = g_object_ref ([[self contentView] gdkWindow]);
-  event.dnd.send_event = FALSE;
-  event.dnd.context = current_context;
-  event.dnd.time = GDK_CURRENT_TIME;
-  event.dnd.x_root = gx;
-  event.dnd.y_root = gy;
+  event = gdk_event_new (GDK_DRAG_MOTION);
+  event->dnd.window = g_object_ref ([[self contentView] gdkWindow]);
+  event->dnd.send_event = FALSE;
+  event->dnd.context = g_object_ref (current_context);
+  event->dnd.time = GDK_CURRENT_TIME;
+  event->dnd.x_root = gx;
+  event->dnd.y_root = gy;
 
-  (*_gdk_event_func) (&event, _gdk_event_data);
+  gdk_event_set_device (event, gdk_drag_context_get_device (current_context));
 
-  g_object_unref (event.dnd.window);
+  (*_gdk_event_func) (event, _gdk_event_data);
+
+  gdk_event_free (event);
 
   return drag_action_to_drag_operation (current_context->action);
 }
@@ -529,23 +545,25 @@ update_context_from_dragging_info (id <NSDraggingInfo> sender)
 {
   NSPoint point = [sender draggingLocation];
   NSPoint screen_point = [self convertBaseToScreen:point];
-  GdkEvent event;
+  GdkEvent *event;
   int gy, gx;
 
   update_context_from_dragging_info (sender);
   _gdk_quartz_window_nspoint_to_gdk_xy (screen_point, &gx, &gy);
 
-  event.dnd.type = GDK_DROP_START;
-  event.dnd.window = g_object_ref ([[self contentView] gdkWindow]);
-  event.dnd.send_event = FALSE;
-  event.dnd.context = current_context;
-  event.dnd.time = GDK_CURRENT_TIME;
-  event.dnd.x_root = gx;
-  event.dnd.y_root = gy;
+  event = gdk_event_new (GDK_DROP_START);
+  event->dnd.window = g_object_ref ([[self contentView] gdkWindow]);
+  event->dnd.send_event = FALSE;
+  event->dnd.context = g_object_ref (current_context);
+  event->dnd.time = GDK_CURRENT_TIME;
+  event->dnd.x_root = gx;
+  event->dnd.y_root = gy;
 
-  (*_gdk_event_func) (&event, _gdk_event_data);
+  gdk_event_set_device (event, gdk_drag_context_get_device (current_context));
 
-  g_object_unref (event.dnd.window);
+  (*_gdk_event_func) (event, _gdk_event_data);
+
+  gdk_event_free (event);
 
   g_object_unref (current_context);
   current_context = NULL;
@@ -560,18 +578,21 @@ update_context_from_dragging_info (id <NSDraggingInfo> sender)
 
 - (void)draggedImage:(NSImage *)anImage endedAt:(NSPoint)aPoint operation:(NSDragOperation)operation
 {
-  GdkEvent event;
+  GdkEvent *event;
 
   g_assert (_gdk_quartz_drag_source_context != NULL);
 
-  event.dnd.type = GDK_DROP_FINISHED;
-  event.dnd.window = g_object_ref ([[self contentView] gdkWindow]);
-  event.dnd.send_event = FALSE;
-  event.dnd.context = _gdk_quartz_drag_source_context;
+  event = gdk_event_new (GDK_DROP_FINISHED);
+  event->dnd.window = g_object_ref ([[self contentView] gdkWindow]);
+  event->dnd.send_event = FALSE;
+  event->dnd.context = g_object_ref (_gdk_quartz_drag_source_context);
 
-  (*_gdk_event_func) (&event, _gdk_event_data);
+  gdk_event_set_device (event,
+                        gdk_drag_context_get_device (_gdk_quartz_drag_source_context));
 
-  g_object_unref (event.dnd.window);
+  (*_gdk_event_func) (event, _gdk_event_data);
+
+  gdk_event_free (event);
 
   g_object_unref (_gdk_quartz_drag_source_context);
   _gdk_quartz_drag_source_context = NULL;

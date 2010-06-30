@@ -132,7 +132,7 @@ gdk_window_impl_quartz_get_context (GdkDrawable *drawable,
 	  cg_rects[i].size.height = cairo_rect.height;
 	}
 
-      CGContextClipToRects (context, cg_rects, n_rects);
+      CGContextClipToRects (cg_context, cg_rects, n_rects);
 
       if (cg_rects != &rect)
         g_free (cg_rects);
@@ -289,7 +289,7 @@ gdk_window_impl_quartz_begin_paint_region (GdkPaintable    *paintable,
       int x, y;
       int x_offset, y_offset;
       int width, height;
-      cairo_int_rectangle_t rect;
+      cairo_rectangle_int_t rect;
       GdkGC *gc;
 
       x_offset = y_offset = 0;

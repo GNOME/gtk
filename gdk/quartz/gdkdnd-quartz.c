@@ -87,6 +87,56 @@ gdk_drag_context_new (void)
   return (GdkDragContext *)g_object_new (gdk_drag_context_get_type (), NULL);
 }
 
+/**
+ * gdk_drag_context_set_device:
+ * @context: a #GdkDragContext
+ * @device: a #GdkDevice
+ *
+ * Associates a #GdkDevice to @context, so all Drag and Drop events
+ * for @context are emitted as if they came from this device.
+ **/
+void
+gdk_drag_context_set_device (GdkDragContext *context,
+                             GdkDevice      *device)
+{
+  GdkDragContextPrivate *private;
+
+  g_return_if_fail (GDK_IS_DRAG_CONTEXT (context));
+  g_return_if_fail (GDK_IS_DEVICE (device));
+
+  private = GDK_DRAG_CONTEXT_PRIVATE (context);
+
+  if (private->device)
+    {
+      g_object_unref (private->device);
+      private->device = NULL;
+    }
+
+  if (device)
+    private->device = g_object_ref (device);
+}
+
+/**
+ * gdk_drag_context_get_device:
+ * @context: a #GdkDragContext
+ *
+ * Returns the #GdkDevice associated to the drag context.
+ *
+ * Returns: The #GdkDevice associated to @context.
+ **/
+GdkDevice *
+gdk_drag_context_get_device (GdkDragContext *context)
+{
+  GdkDragContextPrivate *private;
+
+  g_return_val_if_fail (GDK_IS_DRAG_CONTEXT (context), NULL);
+
+  private = GDK_DRAG_CONTEXT_PRIVATE (context);
+
+  return private->device;
+}
+
+
 GdkDragContext *_gdk_quartz_drag_source_context = NULL;
 
 GdkDragContext *
@@ -104,6 +154,9 @@ gdk_drag_begin (GdkWindow     *window,
   /* Create fake context */
   _gdk_quartz_drag_source_context = gdk_drag_context_new ();
   _gdk_quartz_drag_source_context->is_source = TRUE;
+
+  gdk_drag_context_set_device (_gdk_quartz_drag_source_context,
+                               gdk_display_get_core_pointer (gdk_display_get_default ()));
   
   return _gdk_quartz_drag_source_context;
 }
