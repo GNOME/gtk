@@ -458,6 +458,9 @@ PtsToRegion (int         numFullPtBlocks,
  * number of points.
  *
  * Returns: a new #GdkRegion based on the given polygon
+ *
+ * Deprecated: 2.22: There is no replacement. For working with paths, please
+ *             use Cairo.
  */
 GdkRegion *
 gdk_region_polygon (const GdkPoint *points,
