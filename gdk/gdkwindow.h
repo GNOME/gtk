@@ -480,6 +480,7 @@ GdkWindow*    gdk_window_lookup_for_display (GdkDisplay      *display,
 
 /* GdkWindow */
 
+gboolean      gdk_window_has_native      (GdkWindow       *window);
 #ifndef GDK_DISABLE_DEPRECATED
 void	      gdk_window_set_hints	 (GdkWindow	  *window,
 					  gint		   x,

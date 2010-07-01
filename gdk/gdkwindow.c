@@ -2262,6 +2262,29 @@ from_embedder (GdkWindowObject *window,
 }
 
 /**
+ * gdk_window_has_native:
+ * @window: a #GdkWindow
+ *
+ * Checks whether the window has a native window or not. Note that
+ * you can use gdk_window_ensure_native() if a native window is needed.
+ *
+ * Returns: %TRUE if the %window has a native window, %FALSE otherwise.
+ *
+ * Since: 2.22
+ */
+gboolean
+gdk_window_has_native (GdkWindow *window)
+{
+  GdkWindowObject *w;
+
+  g_return_val_if_fail (GDK_IS_WINDOW (window), FALSE);
+
+  w = GDK_WINDOW_OBJECT (window);
+
+  return w->parent == NULL || w->parent->impl != w->impl;
+}
+
+/**
  * gdk_window_get_position:
  * @window: a #GdkWindow
  * @x: X coordinate of window
