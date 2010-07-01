@@ -86,6 +86,7 @@ struct _GdkKeymapX11
   guint sun_keypad      : 1;
   guint have_direction  : 1;
   guint caps_lock_state : 1;
+  guint num_lock_state : 1;
   guint current_serial;
 
 #ifdef HAVE_XKB
@@ -275,6 +276,9 @@ get_xkb (GdkKeymapX11 *keymap_x11)
     }
 
   keymap_x11->current_serial = display_x11->keymap_serial;
+
+  if (keymap_x11->num_lock_mask == 0)
+    keymap_x11->num_lock_mask = XkbKeysymToModifiers (KEYMAP_XDISPLAY (GDK_KEYMAP (keymap_x11)), XK_Num_Lock);
 
   return keymap_x11->xkb_desc;
 }
@@ -687,12 +691,16 @@ update_lock_state (GdkKeymapX11 *keymap_x11,
                    gint          locked_mods)
 {
   gboolean caps_lock_state;
-  
+  gboolean num_lock_state;
+
   caps_lock_state = keymap_x11->caps_lock_state;
+  num_lock_state = keymap_x11->num_lock_state;
 
   keymap_x11->caps_lock_state = (locked_mods & GDK_LOCK_MASK) != 0;
-  
-  return caps_lock_state != keymap_x11->caps_lock_state;
+  keymap_x11->num_lock_state = (locked_mods & keymap_x11->num_lock_mask) != 0;
+
+  return (caps_lock_state != keymap_x11->caps_lock_state)
+    || (num_lock_state != keymap_x11->num_lock_state);
 }
 
 /* keep this in sync with the XkbSelectEventDetails() call 
@@ -713,7 +721,7 @@ _gdk_keymap_state_changed (GdkDisplay *display,
 	g_signal_emit_by_name (keymap_x11, "direction-changed");      
 
       if (update_lock_state (keymap_x11, xkb_event->state.locked_mods))
-	g_signal_emit_by_name (keymap_x11, "state-changed");      
+        g_signal_emit_by_name (keymap_x11, "state-changed");
     }
 }
 
@@ -831,6 +839,27 @@ gdk_keymap_get_caps_lock_state (GdkKeymap *keymap)
   return keymap_x11->caps_lock_state;
 }
 
+/**
+ * gdk_keymap_get_num_lock_state:
+ * @keymap: a #GdkKeymap
+ *
+ * Returns whether the Num Lock modifer is locked.
+ *
+ * Returns: %TRUE if Num Lock is on
+ *
+ * Since: 3.0
+ */
+gboolean
+gdk_keymap_get_num_lock_state (GdkKeymap *keymap)
+{
+  GdkKeymapX11 *keymap_x11;
+
+  keymap = GET_EFFECTIVE_KEYMAP (keymap);
+
+  keymap_x11 = GDK_KEYMAP_X11 (keymap);
+
+  return keymap_x11->num_lock_state;
+}
 
 /**
  * gdk_keymap_get_entries_for_keyval:

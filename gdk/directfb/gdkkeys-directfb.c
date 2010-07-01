@@ -1759,6 +1759,24 @@ gdk_keymap_get_caps_lock_state (GdkKeymap *keymap)
 }
 
 /**
+ * gdk_keymap_get_num_lock_state:
+ * @keymap: a #GdkKeymap
+ *
+ * Returns whether the Num Lock modifer is locked.
+ *
+ * Returns: %TRUE if Num Lock is on
+ *
+ * Since: 3.0
+ */
+gboolean
+gdk_keymap_get_num_lock_state (GdkKeymap *keymap)
+{
+  /* FIXME: Can we implement this? */
+
+  return FALSE;
+}
+
+/**
  * gdk_keymap_get_entries_for_keycode:
  * @keymap: a #GdkKeymap or %NULL to use the default keymap
  * @hardware_keycode: a keycode
