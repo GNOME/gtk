@@ -573,38 +573,6 @@ gtk_window_class_init (GtkWindowClass *klass)
 							NULL,
 							GTK_PARAM_WRITABLE));
 
-  /**
-   * GtkWindow:allow-shrink:
-   *
-   * If %TRUE, the window has no mimimum size. Setting this to %TRUE is
-   * 99&percnt; of the time a bad idea.
-   *
-   * Deprecated: 2.22: Use GtkWindow:resizable property instead.
-   */
-  g_object_class_install_property (gobject_class,
-                                   PROP_ALLOW_SHRINK,
-                                   g_param_spec_boolean ("allow-shrink",
-							 P_("Allow Shrink"),
-							 /* xgettext:no-c-format */
-							 P_("If TRUE, the window has no mimimum size. Setting this to TRUE is 99% of the time a bad idea"),
-							 FALSE,
-							 GTK_PARAM_READWRITE | G_PARAM_DEPRECATED));
-
-  /**
-   * GtkWindow:allow-grow:
-   *
-   * If %TRUE, users can expand the window beyond its minimum size.
-   *
-   * Deprecated: 2.22: Use GtkWindow:resizable property instead.
-   */
-  g_object_class_install_property (gobject_class,
-                                   PROP_ALLOW_GROW,
-                                   g_param_spec_boolean ("allow-grow",
-							 P_("Allow Grow"),
-							 P_("If TRUE, users can expand the window beyond its minimum size"),
-							 TRUE,
-							 GTK_PARAM_READWRITE | G_PARAM_DEPRECATED));
-
   g_object_class_install_property (gobject_class,
                                    PROP_RESIZABLE,
                                    g_param_spec_boolean ("resizable",
@@ -985,8 +953,7 @@ gtk_window_init (GtkWindow *window)
   window->focus_widget = NULL;
   window->default_widget = NULL;
   window->configure_request_count = 0;
-  window->allow_shrink = FALSE;
-  window->allow_grow = TRUE;
+  window->resizable = TRUE;
   window->configure_notify_received = FALSE;
   window->position = GTK_WIN_POS_NONE;
   window->need_default_size = TRUE;
@@ -1053,19 +1020,9 @@ gtk_window_set_property (GObject      *object,
     case PROP_STARTUP_ID:
       gtk_window_set_startup_id (window, g_value_get_string (value));
       break; 
-    case PROP_ALLOW_SHRINK:
-      window->allow_shrink = g_value_get_boolean (value);
-      gtk_widget_queue_resize (GTK_WIDGET (window));
-      break;
-    case PROP_ALLOW_GROW:
-      window->allow_grow = g_value_get_boolean (value);
-      gtk_widget_queue_resize (GTK_WIDGET (window));
-      g_object_notify (G_OBJECT (window), "resizable");
-      break;
     case PROP_RESIZABLE:
-      window->allow_grow = g_value_get_boolean (value);
+      window->resizable = g_value_get_boolean (value);
       gtk_widget_queue_resize (GTK_WIDGET (window));
-      g_object_notify (G_OBJECT (window), "allow-grow");
       break;
     case PROP_MODAL:
       gtk_window_set_modal (window, g_value_get_boolean (value));
@@ -1168,14 +1125,8 @@ gtk_window_get_property (GObject      *object,
     case PROP_TITLE:
       g_value_set_string (value, window->title);
       break;
-    case PROP_ALLOW_SHRINK:
-      g_value_set_boolean (value, window->allow_shrink);
-      break;
-    case PROP_ALLOW_GROW:
-      g_value_set_boolean (value, window->allow_grow);
-      break;
     case PROP_RESIZABLE:
-      g_value_set_boolean (value, window->allow_grow);
+      g_value_set_boolean (value, window->resizable);
       break;
     case PROP_MODAL:
       g_value_set_boolean (value, window->modal);
@@ -1775,24 +1726,6 @@ gtk_window_get_default_widget (GtkWindow *window)
   g_return_val_if_fail (GTK_IS_WINDOW (window), NULL);
 
   return window->default_widget;
-}
-
-static void
-gtk_window_set_policy_internal (GtkWindow *window,
-                                gboolean   allow_shrink,
-                                gboolean   allow_grow,
-                                gboolean   auto_shrink)
-{
-  window->allow_shrink = (allow_shrink != FALSE);
-  window->allow_grow = (allow_grow != FALSE);
-
-  g_object_freeze_notify (G_OBJECT (window));
-  g_object_notify (G_OBJECT (window), "allow-shrink");
-  g_object_notify (G_OBJECT (window), "allow-grow");
-  g_object_notify (G_OBJECT (window), "resizable");
-  g_object_thaw_notify (G_OBJECT (window));
-
-  gtk_widget_queue_resize_no_redraw (GTK_WIDGET (window));
 }
 
 static gboolean
@@ -6701,7 +6634,7 @@ gtk_window_compute_hints (GtkWindow   *window,
       else
 	new_geometry->min_height += extra_height;
     }
-  else if (!window->allow_shrink)
+  else
     {
       *new_flags |= GDK_HINT_MIN_SIZE;
       
@@ -6721,7 +6654,7 @@ gtk_window_compute_hints (GtkWindow   *window,
       else
 	new_geometry->max_height += extra_height;
     }
-  else if (!window->allow_grow)
+  else if (!window->resizable)
     {
       *new_flags |= GDK_HINT_MAX_SIZE;
       
@@ -7364,7 +7297,11 @@ gtk_window_set_resizable (GtkWindow *window,
 {
   g_return_if_fail (GTK_IS_WINDOW (window));
 
-  gtk_window_set_policy_internal (window, FALSE, resizable, FALSE);
+  window->resizable = (resizable != FALSE);
+
+  g_object_notify (G_OBJECT (window), "resizable");
+
+  gtk_widget_queue_resize_no_redraw (GTK_WIDGET (window));
 }
 
 /**
@@ -7384,7 +7321,7 @@ gtk_window_get_resizable (GtkWindow *window)
    * mean by "resizable" (and will be a reliable indicator if
    * set_policy() hasn't been called)
    */
-  return window->allow_grow;
+  return window->resizable;
 }
 
 /**
