@@ -1667,7 +1667,7 @@ gtk_icon_view_expose (GtkWidget *widget,
       
       while (n_rectangles--)
         {
-          cairo_region_get_rectangle (expose->region, n_rectangles--, &rectangle);
+          cairo_region_get_rectangle (expose->region, n_rectangles, &rectangle);
 	  gtk_icon_view_paint_rubberband (icon_view, cr, &rectangle);
         }
     }
