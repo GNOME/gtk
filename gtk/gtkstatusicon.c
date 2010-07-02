@@ -1659,6 +1659,7 @@ gtk_status_icon_size_allocate (GtkStatusIcon *status_icon,
   GtkStatusIconPrivate *priv = status_icon->priv;
   GtkOrientation orientation;
   gint size;
+  gint xpad, ypad;
 
   orientation = _gtk_tray_icon_get_orientation (GTK_TRAY_ICON (priv->tray_icon));
 
@@ -1667,8 +1668,10 @@ gtk_status_icon_size_allocate (GtkStatusIcon *status_icon,
   else
     size = allocation->width;
 
-  priv->image_width = allocation->width - GTK_MISC (priv->image)->xpad * 2;
-  priv->image_height = allocation->height - GTK_MISC (priv->image)->ypad * 2;
+  gtk_misc_get_padding (GTK_MISC (priv->image), &xpad, &ypad);
+
+  priv->image_width = allocation->width - xpad * 2;
+  priv->image_height = allocation->height - ypad * 2;
 
   if (priv->size != size)
     {

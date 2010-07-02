@@ -176,6 +176,7 @@ static void
 gtk_arrow_init (GtkArrow *arrow)
 {
   GtkArrowPriv *priv;
+  gint xpad, ypad;
 
   arrow->priv = G_TYPE_INSTANCE_GET_PRIVATE (arrow,
                                              GTK_TYPE_ARROW,
@@ -184,8 +185,9 @@ gtk_arrow_init (GtkArrow *arrow)
 
   gtk_widget_set_has_window (GTK_WIDGET (arrow), FALSE);
 
-  GTK_WIDGET (arrow)->requisition.width = MIN_ARROW_SIZE + GTK_MISC (arrow)->xpad * 2;
-  GTK_WIDGET (arrow)->requisition.height = MIN_ARROW_SIZE + GTK_MISC (arrow)->ypad * 2;
+  gtk_misc_get_padding (GTK_MISC (arrow), &xpad, &ypad);
+  GTK_WIDGET (arrow)->requisition.width = MIN_ARROW_SIZE + xpad * 2;
+  GTK_WIDGET (arrow)->requisition.height = MIN_ARROW_SIZE + ypad * 2;
 
   priv->arrow_type = GTK_ARROW_RIGHT;
   priv->shadow_type = GTK_SHADOW_OUT;
@@ -276,32 +278,34 @@ gtk_arrow_expose (GtkWidget      *widget,
       gint width, height;
       gint x, y;
       gint extent;
-      gfloat xalign;
+      gint xpad, ypad;
+      gfloat xalign, yalign;
       GtkArrowType effective_arrow_type;
       gfloat arrow_scaling;
 
       gtk_widget_style_get (widget, "arrow-scaling", &arrow_scaling, NULL);
 
-      width = widget->allocation.width - misc->xpad * 2;
-      height = widget->allocation.height - misc->ypad * 2;
+      gtk_misc_get_padding (misc, &xpad, &ypad);
+      gtk_misc_get_alignment (misc, &xalign, &yalign);
+
+      width = widget->allocation.width - xpad * 2;
+      height = widget->allocation.height - ypad * 2;
       extent = MIN (width, height) * arrow_scaling;
       effective_arrow_type = priv->arrow_type;
 
-      if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_LTR)
-	xalign = misc->xalign;
-      else
-	{
-	  xalign = 1.0 - misc->xalign;
+      if (gtk_widget_get_direction (widget) != GTK_TEXT_DIR_LTR)
+        {
+	  xalign = 1.0 - xalign;
 	  if (priv->arrow_type == GTK_ARROW_LEFT)
 	    effective_arrow_type = GTK_ARROW_RIGHT;
 	  else if (priv->arrow_type == GTK_ARROW_RIGHT)
 	    effective_arrow_type = GTK_ARROW_LEFT;
 	}
 
-      x = floor (widget->allocation.x + misc->xpad
+      x = floor (widget->allocation.x + xpad
 		 + ((widget->allocation.width - extent) * xalign));
-      y = floor (widget->allocation.y + misc->ypad
-		 + ((widget->allocation.height - extent) * misc->yalign));
+      y = floor (widget->allocation.y + ypad
+		 + ((widget->allocation.height - extent) * yalign));
 
       shadow_type = priv->shadow_type;
 

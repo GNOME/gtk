@@ -3252,10 +3252,13 @@ gtk_label_ensure_layout (GtkLabel *label, gboolean guess_wrap_width)
 	  else if (guess_wrap_width == FALSE &&
 		   widget->allocation.width > 1 && widget->allocation.height > 1)
  	    {
+              gint xpad, ypad;
+              gtk_misc_get_padding (GTK_MISC (label), &xpad, &ypad);
+
 	      if (angle == 90 || angle == 270)
-		width = widget->allocation.height - label->misc.ypad * 2;
+		width = widget->allocation.height - ypad * 2;
 	      else
-		width = widget->allocation.width  - label->misc.xpad * 2;
+		width = widget->allocation.width  - xpad * 2;
 
 	      pango_layout_set_wrap (priv->layout, priv->wrap_mode);
 	      pango_layout_set_width (priv->layout, MAX (width, 1) * PANGO_SCALE);
@@ -3417,6 +3420,7 @@ gtk_label_get_size (GtkSizeRequest *widget,
   PangoRectangle required_rect;
   PangoRectangle natural_rect;
   gdouble        angle;
+  gint           xpad, ypad;
 
   /* "width-chars" Hard-coded minimum width:
    *    - minimum size should be MAX (width-chars, strlen ("..."));
@@ -3485,6 +3489,8 @@ gtk_label_get_size (GtkSizeRequest *widget,
   natural_rect.width  = PANGO_PIXELS_CEIL (natural_rect.width);
   natural_rect.height = PANGO_PIXELS_CEIL (natural_rect.height);
 
+  gtk_misc_get_padding (GTK_MISC (label), &xpad, &ypad);
+
   if (orientation == GTK_ORIENTATION_HORIZONTAL)
     {
       /* Note, we cant use get_size_for_allocation() when rotating
@@ -3509,8 +3515,8 @@ gtk_label_get_size (GtkSizeRequest *widget,
           *natural_size = natural_rect.width;
         }
 
-      *minimum_size += label->misc.xpad * 2;
-      *natural_size += label->misc.xpad * 2;
+      *minimum_size += xpad * 2;
+      *natural_size += xpad * 2;
     }
   else /* GTK_ORIENTATION_VERTICAL */
     {
@@ -3537,8 +3543,8 @@ gtk_label_get_size (GtkSizeRequest *widget,
           *natural_size = natural_rect.height;
         }
 
-      *minimum_size += label->misc.ypad * 2;
-      *natural_size += label->misc.ypad * 2;
+      *minimum_size += ypad * 2;
+      *natural_size += ypad * 2;
     }
 
   /* Restore real allocated size of layout; sometimes size-requests
@@ -3581,18 +3587,22 @@ gtk_label_get_width_for_height (GtkSizeRequest *widget,
 
   if (priv->wrap && (angle == 90 || angle == 270))
     {
+      gint xpad, ypad;
+
+      gtk_misc_get_padding (GTK_MISC (label), &xpad, &ypad);
+
       if (priv->wrap)
         gtk_label_clear_layout (label);
 
       get_size_for_allocation (label, GTK_ORIENTATION_VERTICAL,
-                               MAX (1, height - (label->misc.ypad * 2)),
+                               MAX (1, height - (ypad * 2)),
                                minimum_width, natural_width);
 
       if (minimum_width)
-        *minimum_width += label->misc.xpad * 2;
+        *minimum_width += xpad * 2;
 
       if (natural_width)
-        *natural_width += label->misc.xpad * 2;
+        *natural_width += xpad * 2;
     }
   else
     GTK_SIZE_REQUEST_GET_IFACE (widget)->get_width (widget, minimum_width, natural_width);
@@ -3610,18 +3620,22 @@ gtk_label_get_height_for_width (GtkSizeRequest *widget,
 
   if (priv->wrap && (angle == 0 || angle == 180 || angle == 360))
     {
+      gint xpad, ypad;
+
+      gtk_misc_get_padding (GTK_MISC (label), &xpad, &ypad);
+
       if (priv->wrap)
         gtk_label_clear_layout (label);
 
       get_size_for_allocation (label, GTK_ORIENTATION_HORIZONTAL,
-                               MAX (1, width - label->misc.xpad * 2),
+                               MAX (1, width - xpad * 2),
                                minimum_height, natural_height);
 
       if (minimum_height)
-        *minimum_height += label->misc.ypad * 2;
+        *minimum_height += ypad * 2;
 
       if (natural_height)
-        *natural_height += label->misc.ypad * 2;
+        *natural_height += ypad * 2;
     }
   else
     GTK_SIZE_REQUEST_GET_IFACE (widget)->get_height (widget, minimum_height, natural_height);
@@ -3650,10 +3664,13 @@ gtk_label_size_allocate (GtkWidget     *widget,
         {
           PangoRectangle logical;
           PangoRectangle bounds;
+          gint xpad, ypad;
+
+          gtk_misc_get_padding (GTK_MISC (label), &xpad, &ypad);
 
           bounds.x = bounds.y = 0;
-          bounds.width = allocation->width - label->misc.xpad * 2;
-          bounds.height = allocation->height - label->misc.ypad * 2;
+          bounds.width = allocation->width - xpad * 2;
+          bounds.height = allocation->height - ypad * 2;
 
           pango_layout_set_width (priv->layout, -1);
           pango_layout_get_pixel_extents (priv->layout, NULL, &logical);
@@ -3814,9 +3831,10 @@ get_layout_location (GtkLabel  *label,
   GtkMisc *misc;
   GtkWidget *widget;
   GtkLabelPriv *priv;
-  gfloat xalign;
   gint req_width, x, y;
   gint req_height;
+  gint xpad, ypad;
+  gfloat xalign, yalign;
   PangoRectangle logical;
   gdouble angle;
 
@@ -3825,10 +3843,11 @@ get_layout_location (GtkLabel  *label,
   priv   = label->priv;
   angle  = gtk_label_get_angle (label);
 
-  if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_LTR)
-    xalign = misc->xalign;
-  else
-    xalign = 1.0 - misc->xalign;
+  gtk_misc_get_alignment (misc, &xalign, &yalign);
+  gtk_misc_get_padding (misc, &xpad, &ypad);
+
+  if (gtk_widget_get_direction (widget) != GTK_TEXT_DIR_LTR)
+    xalign = 1.0 - xalign;
 
   pango_layout_get_extents (priv->layout, NULL, &logical);
 
@@ -3856,16 +3875,16 @@ get_layout_location (GtkLabel  *label,
   req_width  = logical.width;
   req_height = logical.height;
 
-  req_width  += 2 * misc->xpad;
-  req_height += 2 * misc->ypad;
+  req_width  += 2 * xpad;
+  req_height += 2 * ypad;
 
-  x = floor (widget->allocation.x + (gint)misc->xpad +
-	      xalign * (widget->allocation.width - req_width));
+  x = floor (widget->allocation.x + xpad +
+	     xalign * (widget->allocation.width - req_width));
 
   if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_LTR)
-    x = MAX (x, widget->allocation.x + misc->xpad);
+    x = MAX (x, widget->allocation.x + xpad);
   else
-    x = MIN (x, widget->allocation.x + widget->allocation.width - misc->xpad);
+    x = MIN (x, widget->allocation.x + widget->allocation.width - xpad);
 
 
 
@@ -3884,12 +3903,15 @@ get_layout_location (GtkLabel  *label,
    *   middle".  You want to read the first line, at least, to get some context.
    */
   if (pango_layout_get_line_count (priv->layout) == 1)
-    y = floor (widget->allocation.y + (gint)misc->ypad 
-	       + (widget->allocation.height - req_height) * misc->yalign);
+    {
+      y = floor (widget->allocation.y + ypad
+                 + (widget->allocation.height - req_height) * yalign);
+    }
   else
-    y = floor (widget->allocation.y + (gint)misc->ypad 
-	       + MAX (((widget->allocation.height - req_height) * misc->yalign),
-		      0));
+    {
+      y = floor (widget->allocation.y + ypad
+                 + MAX ((widget->allocation.height - req_height) * yalign, 0));
+    }
 
   if (xp)
     *xp = x;

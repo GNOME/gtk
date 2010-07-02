@@ -1933,8 +1933,9 @@ gtk_image_expose (GtkWidget      *widget,
     {
       GtkMisc *misc;
       GdkRectangle area, image_bound;
-      gfloat xalign;
       gint x, y, mask_x, mask_y;
+      gint xpad, ypad;
+      gfloat xalign, yalign;
       GdkBitmap *mask;
       GdkPixbuf *pixbuf;
       GtkStateType state;
@@ -1954,15 +1955,16 @@ gtk_image_expose (GtkWidget      *widget,
       if (!gdk_rectangle_intersect (&area, &widget->allocation, &area))
 	return FALSE;
 
-      if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_LTR)
-	xalign = misc->xalign;
-      else
-	xalign = 1.0 - misc->xalign;
+      gtk_misc_get_alignment (misc, &xalign, &yalign);
+      gtk_misc_get_padding (misc, &xpad, &ypad);
 
-      x = floor (widget->allocation.x + misc->xpad
+      if (gtk_widget_get_direction (widget) != GTK_TEXT_DIR_LTR)
+	xalign = 1.0 - xalign;
+
+      x = floor (widget->allocation.x + xpad
 		 + ((widget->allocation.width - widget->requisition.width) * xalign));
-      y = floor (widget->allocation.y + misc->ypad 
-		 + ((widget->allocation.height - widget->requisition.height) * misc->yalign));
+      y = floor (widget->allocation.y + ypad
+		 + ((widget->allocation.height - widget->requisition.height) * yalign));
       mask_x = x;
       mask_y = y;
       
@@ -2447,8 +2449,12 @@ gtk_image_calc_size (GtkImage *image)
 
   if (pixbuf)
     {
-      widget->requisition.width = gdk_pixbuf_get_width (pixbuf) + GTK_MISC (image)->xpad * 2;
-      widget->requisition.height = gdk_pixbuf_get_height (pixbuf) + GTK_MISC (image)->ypad * 2;
+      gint xpad, ypad;
+
+      gtk_misc_get_padding (GTK_MISC (image), &xpad, &ypad);
+
+      widget->requisition.width = gdk_pixbuf_get_width (pixbuf) + xpad * 2;
+      widget->requisition.height = gdk_pixbuf_get_height (pixbuf) + ypad * 2;
 
       g_object_unref (pixbuf);
     }
@@ -2502,9 +2508,12 @@ gtk_image_update_size (GtkImage *image,
                        gint      image_height)
 {
   GtkWidget *widget = GTK_WIDGET (image);
+  gint xpad, ypad;
 
-  widget->requisition.width = image_width + GTK_MISC (image)->xpad * 2;
-  widget->requisition.height = image_height + GTK_MISC (image)->ypad * 2;
+  gtk_misc_get_padding (GTK_MISC (image), &xpad, &ypad);
+
+  widget->requisition.width = image_width + xpad * 2;
+  widget->requisition.height = image_height + ypad * 2;
 
   if (gtk_widget_get_visible (widget))
     gtk_widget_queue_resize (widget);
