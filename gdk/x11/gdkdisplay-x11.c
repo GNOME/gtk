@@ -1630,7 +1630,7 @@ device_ungrab_callback (GdkDisplay *display,
 {
   GdkDevice *device = data;
 
-  _gdk_display_device_grab_update (display, device, serial);
+  _gdk_display_device_grab_update (display, device, NULL, serial);
 }
 
 

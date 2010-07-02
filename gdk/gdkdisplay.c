@@ -1250,6 +1250,7 @@ _gdk_display_add_device_grab (GdkDisplay       *display,
 static void
 synthesize_crossing_events (GdkDisplay      *display,
                             GdkDevice       *device,
+                            GdkDevice       *source_device,
 			    GdkWindow       *src_window,
 			    GdkWindow       *dest_window,
 			    GdkCrossingMode  crossing_mode,
@@ -1285,7 +1286,7 @@ synthesize_crossing_events (GdkDisplay      *display,
       _gdk_synthesize_crossing_events (display,
 				       src_window,
 				       dest_window,
-                                       device,
+                                       device, source_device,
 				       crossing_mode,
 				       x, y, state,
 				       time,
@@ -1299,7 +1300,7 @@ synthesize_crossing_events (GdkDisplay      *display,
       _gdk_synthesize_crossing_events (display,
                                        src_window,
                                        NULL,
-                                       device,
+                                       device, source_device,
                                        crossing_mode,
                                        x, y, state,
                                        time,
@@ -1314,7 +1315,7 @@ synthesize_crossing_events (GdkDisplay      *display,
       _gdk_synthesize_crossing_events (display,
 				       src_window,
 				       NULL,
-                                       device,
+                                       device, source_device,
 				       crossing_mode,
 				       x, y, state,
 				       time,
@@ -1325,7 +1326,7 @@ synthesize_crossing_events (GdkDisplay      *display,
       _gdk_synthesize_crossing_events (display,
 				       NULL,
 				       dest_window,
-                                       device,
+                                       device, source_device,
 				       crossing_mode,
 				       x, y, state,
 				       time,
@@ -1362,6 +1363,7 @@ get_current_toplevel (GdkDisplay      *display,
 static void
 switch_to_pointer_grab (GdkDisplay        *display,
                         GdkDevice         *device,
+                        GdkDevice         *source_device,
 			GdkDeviceGrabInfo *grab,
 			GdkDeviceGrabInfo *last_grab,
 			guint32            time,
@@ -1397,7 +1399,7 @@ switch_to_pointer_grab (GdkDisplay        *display,
 	    src_window = info->window_under_pointer;
 
 	  if (src_window != grab->window)
-            synthesize_crossing_events (display, device,
+            synthesize_crossing_events (display, device, source_device,
                                         src_window, grab->window,
                                         GDK_CROSSING_GRAB, time, serial);
 
@@ -1448,7 +1450,7 @@ switch_to_pointer_grab (GdkDisplay        *display,
 	    }
 
 	  if (pointer_window != last_grab->window)
-            synthesize_crossing_events (display, device,
+            synthesize_crossing_events (display, device, source_device,
                                         last_grab->window, pointer_window,
                                         GDK_CROSSING_UNGRAB, time, serial);
 
@@ -1463,6 +1465,7 @@ switch_to_pointer_grab (GdkDisplay        *display,
 void
 _gdk_display_device_grab_update (GdkDisplay *display,
                                  GdkDevice  *device,
+                                 GdkDevice  *source_device,
                                  gulong      current_serial)
 {
   GdkDeviceGrabInfo *current_grab, *next_grab;
@@ -1487,7 +1490,7 @@ _gdk_display_device_grab_update (GdkDisplay *display,
 	  if (!current_grab->activated)
             {
               if (device->source != GDK_SOURCE_KEYBOARD)
-                switch_to_pointer_grab (display, device, current_grab, NULL, time, current_serial);
+                switch_to_pointer_grab (display, device, source_device, current_grab, NULL, time, current_serial);
             }
 
 	  break;
@@ -1515,7 +1518,7 @@ _gdk_display_device_grab_update (GdkDisplay *display,
       g_hash_table_insert (display->device_grabs, device, grabs);
 
       if (device->source != GDK_SOURCE_KEYBOARD)
-        switch_to_pointer_grab (display, device,
+        switch_to_pointer_grab (display, device, source_device,
                                 next_grab, current_grab,
                                 time, current_serial);
 
