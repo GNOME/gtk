@@ -46,17 +46,15 @@ G_BEGIN_DECLS
 
 
 typedef struct _GtkMisc	      GtkMisc;
+typedef struct _GtkMiscPriv   GtkMiscPriv;
 typedef struct _GtkMiscClass  GtkMiscClass;
 
 struct _GtkMisc
 {
   GtkWidget widget;
 
-  gfloat GSEAL (xalign);
-  gfloat GSEAL (yalign);
-
-  guint16 GSEAL (xpad);
-  guint16 GSEAL (ypad);
+  /* <private> */
+  GtkMiscPriv *priv;
 };
 
 struct _GtkMiscClass

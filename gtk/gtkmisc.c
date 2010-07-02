@@ -31,6 +31,15 @@
 #include "gtkprivate.h"
 
 
+struct _GtkMiscPriv
+{
+  gfloat        xalign;
+  gfloat        yalign;
+
+  guint16       xpad;
+  guint16       ypad;
+};
+
 enum {
   PROP_0,
   PROP_XALIGN,
@@ -105,15 +114,24 @@ gtk_misc_class_init (GtkMiscClass *class)
 						     G_MAXINT,
 						     0,
 						     GTK_PARAM_READWRITE));
+
+  g_type_class_add_private (class, sizeof (GtkMiscPriv));
 }
 
 static void
 gtk_misc_init (GtkMisc *misc)
 {
-  misc->xalign = 0.5;
-  misc->yalign = 0.5;
-  misc->xpad = 0;
-  misc->ypad = 0;
+  GtkMiscPriv *priv;
+
+  misc->priv = G_TYPE_INSTANCE_GET_PRIVATE (misc,
+                                            GTK_TYPE_MISC,
+                                            GtkMiscPriv);
+  priv = misc->priv;
+
+  priv->xalign = 0.5;
+  priv->yalign = 0.5;
+  priv->xpad = 0;
+  priv->ypad = 0;
 }
 
 static void
@@ -122,23 +140,22 @@ gtk_misc_set_property (GObject      *object,
 		       const GValue *value,
 		       GParamSpec   *pspec)
 {
-  GtkMisc *misc;
-
-  misc = GTK_MISC (object);
+  GtkMisc *misc = GTK_MISC (object);
+  GtkMiscPriv *priv = misc->priv;
 
   switch (prop_id)
     {
     case PROP_XALIGN:
-      gtk_misc_set_alignment (misc, g_value_get_float (value), misc->yalign);
+      gtk_misc_set_alignment (misc, g_value_get_float (value), priv->yalign);
       break;
     case PROP_YALIGN:
-      gtk_misc_set_alignment (misc, misc->xalign, g_value_get_float (value));
+      gtk_misc_set_alignment (misc, priv->xalign, g_value_get_float (value));
       break;
     case PROP_XPAD:
-      gtk_misc_set_padding (misc, g_value_get_int (value), misc->ypad);
+      gtk_misc_set_padding (misc, g_value_get_int (value), priv->ypad);
       break;
     case PROP_YPAD:
-      gtk_misc_set_padding (misc, misc->xpad, g_value_get_int (value));
+      gtk_misc_set_padding (misc, priv->xpad, g_value_get_int (value));
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -152,23 +169,22 @@ gtk_misc_get_property (GObject      *object,
 		       GValue       *value,
 		       GParamSpec   *pspec)
 {
-  GtkMisc *misc;
-
-  misc = GTK_MISC (object);
+  GtkMisc *misc = GTK_MISC (object);
+  GtkMiscPriv *priv = misc->priv;
 
   switch (prop_id)
     {
     case PROP_XALIGN:
-      g_value_set_float (value, misc->xalign);
+      g_value_set_float (value, priv->xalign);
       break;
     case PROP_YALIGN:
-      g_value_set_float (value, misc->yalign);
+      g_value_set_float (value, priv->yalign);
       break;
     case PROP_XPAD:
-      g_value_set_int (value, misc->xpad);
+      g_value_set_int (value, priv->xpad);
       break;
     case PROP_YPAD:
-      g_value_set_int (value, misc->ypad);
+      g_value_set_int (value, priv->ypad);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -181,9 +197,12 @@ gtk_misc_set_alignment (GtkMisc *misc,
 			gfloat   xalign,
 			gfloat   yalign)
 {
+  GtkMiscPriv *priv;
   GtkWidget *widget;
 
   g_return_if_fail (GTK_IS_MISC (misc));
+
+  priv = misc->priv;
 
   if (xalign < 0.0)
     xalign = 0.0;
@@ -195,17 +214,17 @@ gtk_misc_set_alignment (GtkMisc *misc,
   else if (yalign > 1.0)
     yalign = 1.0;
 
-  if ((xalign != misc->xalign) || (yalign != misc->yalign))
+  if ((xalign != priv->xalign) || (yalign != priv->yalign))
     {
       g_object_freeze_notify (G_OBJECT (misc));
-      if (xalign != misc->xalign)
+      if (xalign != priv->xalign)
 	g_object_notify (G_OBJECT (misc), "xalign");
 
-      if (yalign != misc->yalign)
+      if (yalign != priv->yalign)
 	g_object_notify (G_OBJECT (misc), "yalign");
 
-      misc->xalign = xalign;
-      misc->yalign = yalign;
+      priv->xalign = xalign;
+      priv->yalign = yalign;
       
       /* clear the area that was allocated before the change
        */
@@ -231,12 +250,16 @@ gtk_misc_get_alignment (GtkMisc *misc,
 		        gfloat  *xalign,
 			gfloat  *yalign)
 {
+  GtkMiscPriv *priv;
+
   g_return_if_fail (GTK_IS_MISC (misc));
 
+  priv = misc->priv;
+
   if (xalign)
-    *xalign = misc->xalign;
+    *xalign = priv->xalign;
   if (yalign)
-    *yalign = misc->yalign;
+    *yalign = priv->yalign;
 }
 
 void
@@ -244,34 +267,37 @@ gtk_misc_set_padding (GtkMisc *misc,
 		      gint     xpad,
 		      gint     ypad)
 {
+  GtkMiscPriv *priv;
   GtkRequisition *requisition;
-  
+
   g_return_if_fail (GTK_IS_MISC (misc));
-  
+
+  priv = misc->priv;
+
   if (xpad < 0)
     xpad = 0;
   if (ypad < 0)
     ypad = 0;
-  
-  if ((xpad != misc->xpad) || (ypad != misc->ypad))
+
+  if ((xpad != priv->xpad) || (ypad != priv->ypad))
     {
       g_object_freeze_notify (G_OBJECT (misc));
-      if (xpad != misc->xpad)
+      if (xpad != priv->xpad)
 	g_object_notify (G_OBJECT (misc), "xpad");
 
-      if (ypad != misc->ypad)
+      if (ypad != priv->ypad)
 	g_object_notify (G_OBJECT (misc), "ypad");
 
       requisition = &(GTK_WIDGET (misc)->requisition);
-      requisition->width -= misc->xpad * 2;
-      requisition->height -= misc->ypad * 2;
-      
-      misc->xpad = xpad;
-      misc->ypad = ypad;
-      
-      requisition->width += misc->xpad * 2;
-      requisition->height += misc->ypad * 2;
-      
+      requisition->width -= priv->xpad * 2;
+      requisition->height -= priv->ypad * 2;
+
+      priv->xpad = xpad;
+      priv->ypad = ypad;
+
+      requisition->width += priv->xpad * 2;
+      requisition->height += priv->ypad * 2;
+
       if (gtk_widget_is_drawable (GTK_WIDGET (misc)))
 	gtk_widget_queue_resize (GTK_WIDGET (misc));
 
@@ -293,12 +319,16 @@ gtk_misc_get_padding (GtkMisc *misc,
 		      gint    *xpad,
 		      gint    *ypad)
 {
+  GtkMiscPriv *priv;
+
   g_return_if_fail (GTK_IS_MISC (misc));
 
+  priv = misc->priv;
+
   if (xpad)
-    *xpad = misc->xpad;
+    *xpad = priv->xpad;
   if (ypad)
-    *ypad = misc->ypad;
+    *ypad = priv->ypad;
 }
 
 static void
