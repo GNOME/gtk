@@ -172,8 +172,8 @@ gail_notebook_page_new (GtkNotebook *notebook,
   GailNotebookPage *page;
   GtkWidget *child;
   GtkWidget *label;
-  GList *list;
-  
+  GtkWidget *widget_page;
+
   g_return_val_if_fail (GTK_IS_NOTEBOOK (notebook), NULL);
 
   child = gtk_notebook_get_nth_page (notebook, pagenum);
@@ -188,8 +188,8 @@ gail_notebook_page_new (GtkNotebook *notebook,
   page->notebook = notebook;
   g_object_add_weak_pointer (G_OBJECT (page->notebook), (gpointer *)&page->notebook);
   page->index = pagenum;
-  list = g_list_nth (notebook->children, pagenum);
-  page->page = list->data;
+  widget_page = gtk_notebook_get_nth_page (notebook, pagenum);
+  page->page = widget_page;
   page->textutil = NULL;
   
   atk_object = ATK_OBJECT (page);

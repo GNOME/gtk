@@ -132,13 +132,7 @@ gail_get_accessible_for_widget (GtkWidget *widget,
       gint page_num = -1;
 
       notebook = GTK_NOTEBOOK (widget);
-      /*
-       * Report the currently focused tab rather than the currently selected tab
-       */
-      if (notebook->focus_tab)
-        {
-          page_num = g_list_index (notebook->children, notebook->focus_tab->data);
-        }
+      page_num = gtk_notebook_get_current_page (notebook);
       if (page_num != -1)
         {
           obj = gtk_widget_get_accessible (widget);
@@ -488,7 +482,6 @@ gail_switch_page_watcher (GSignalInvocationHint *ihint,
 {
   GObject *object;
   GtkWidget *widget;
-  GtkNotebook *notebook;
 
   object = g_value_get_object (param_values + 0);
   g_return_val_if_fail (GTK_IS_WIDGET(object), FALSE);
@@ -498,8 +491,7 @@ gail_switch_page_watcher (GSignalInvocationHint *ihint,
   if (!GTK_IS_NOTEBOOK (widget))
     return TRUE;
 
-  notebook = GTK_NOTEBOOK (widget);
-  if (!notebook->focus_tab)
+  if (gtk_notebook_get_current_page (GTK_NOTEBOOK (widget)) == -1)
     return TRUE;
 
   gail_focus_notify_when_idle (widget);

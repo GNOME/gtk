@@ -6789,7 +6789,7 @@ static void
 rotate_notebook (GtkButton   *button,
 		 GtkNotebook *notebook)
 {
-  gtk_notebook_set_tab_pos (notebook, (notebook->tab_pos + 1) % 4);
+  gtk_notebook_set_tab_pos (notebook, (gtk_notebook_get_tab_pos (notebook) + 1) % 4);
 }
 
 static void
@@ -6844,14 +6844,14 @@ notebook_type_changed (GtkWidget *optionmenu,
       gtk_notebook_set_show_tabs (notebook, TRUE);
       gtk_notebook_set_show_border (notebook, TRUE);
       gtk_notebook_set_scrollable (notebook, TRUE);
-      if (g_list_length (notebook->children) == 5)
+      if (gtk_notebook_get_n_pages (notebook) == 5)
 	create_pages (notebook, 6, 15);
-      
+
       return;
       break;
     }
-  
-  if (g_list_length (notebook->children) == 15)
+
+  if (gtk_notebook_get_n_pages (notebook) == 15)
     for (i = 0; i < 10; i++)
       gtk_notebook_remove_page (notebook, 5);
 }
