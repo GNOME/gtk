@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.HEAD.he\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-06-28 12:49+0300\n"
-"PO-Revision-Date: 2010-06-28 13:42+0200\n"
+"POT-Creation-Date: 2010-07-03 01:58+0300\n"
+"PO-Revision-Date: 2010-07-03 02:00+0200\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: Hebrew <he@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -218,7 +218,7 @@ msgstr "שמאל"
 #: ../gdk/keyname-table.h:3965
 msgctxt "keyboard label"
 msgid "KP_Up"
-msgstr "מ_עלה"
+msgstr "מעלה"
 
 #: ../gdk/keyname-table.h:3966
 msgctxt "keyboard label"
@@ -263,7 +263,7 @@ msgstr "התחלה"
 #: ../gdk/keyname-table.h:3974
 msgctxt "keyboard label"
 msgid "KP_Insert"
-msgstr "הכנסה"
+msgstr "הוספה"
 
 #: ../gdk/keyname-table.h:3975
 msgctxt "keyboard label"
@@ -276,37 +276,37 @@ msgid "Delete"
 msgstr "מחיקה"
 
 #. Description of --sync in --help output
-#: ../gdk/win32/gdkmain-win32.c:55
+#: ../gdk/win32/gdkmain-win32.c:54
 msgid "Don't batch GDI requests"
 msgstr "Don't batch GDI requests"
 
 #. Description of --no-wintab in --help output
-#: ../gdk/win32/gdkmain-win32.c:57
+#: ../gdk/win32/gdkmain-win32.c:56
 msgid "Don't use the Wintab API for tablet support"
 msgstr "Don't use the Wintab API for tablet support"
 
 #. Description of --ignore-wintab in --help output
-#: ../gdk/win32/gdkmain-win32.c:59
+#: ../gdk/win32/gdkmain-win32.c:58
 msgid "Same as --no-wintab"
 msgstr "Same as --no-wintab"
 
 #. Description of --use-wintab in --help output
-#: ../gdk/win32/gdkmain-win32.c:61
+#: ../gdk/win32/gdkmain-win32.c:60
 msgid "Do use the Wintab API [default]"
 msgstr "Do use the Wintab API [default]"
 
 #. Description of --max-colors=COLORS in --help output
-#: ../gdk/win32/gdkmain-win32.c:63
+#: ../gdk/win32/gdkmain-win32.c:62
 msgid "Size of the palette in 8 bit mode"
 msgstr "Size of the palette in 8 bit mode"
 
 #. Placeholder in --max-colors=COLORS in --help output
-#: ../gdk/win32/gdkmain-win32.c:64
+#: ../gdk/win32/gdkmain-win32.c:63
 msgid "COLORS"
 msgstr "COLORS"
 
 #. Description of --sync in --help output
-#: ../gdk/x11/gdkmain-x11.c:95
+#: ../gdk/x11/gdkmain-x11.c:94
 msgid "Make X calls synchronous"
 msgstr "Make X calls synchronous"
 
@@ -785,7 +785,15 @@ msgstr "_שיטות קלט"
 msgid "_Insert Unicode Control Character"
 msgstr "_הזנת תו בקרה יוניקוד"
 
-#: ../gtk/gtkentry.c:10020
+#: ../gtk/gtkentry.c:10021
+msgid "Caps Lock and Num Lock are on"
+msgstr "ה־Caps Lock וה־Num Lock פעילים"
+
+#: ../gtk/gtkentry.c:10023
+msgid "Num Lock is on"
+msgstr "ה־Num Lock פעיל"
+
+#: ../gtk/gtkentry.c:10025
 msgid "Caps Lock is on"
 msgstr "ה־Caps Lock פעיל"
 
@@ -1151,24 +1159,24 @@ msgstr "גופן"
 msgid "abcdefghijk ABCDEFGHIJK"
 msgstr "abcdef ABCDEF אבגדהו"
 
-#: ../gtk/gtkfontsel.c:343
+#: ../gtk/gtkfontsel.c:331
 msgid "_Family:"
 msgstr "_משפחה:"
 
-#: ../gtk/gtkfontsel.c:349
+#: ../gtk/gtkfontsel.c:337
 msgid "_Style:"
 msgstr "_סגנון:"
 
-#: ../gtk/gtkfontsel.c:355
+#: ../gtk/gtkfontsel.c:343
 msgid "Si_ze:"
 msgstr "_גודל:"
 
 #. create the text entry widget
-#: ../gtk/gtkfontsel.c:532
+#: ../gtk/gtkfontsel.c:520
 msgid "_Preview:"
 msgstr "_תצוגה מקדימה:"
 
-#: ../gtk/gtkfontsel.c:1631
+#: ../gtk/gtkfontsel.c:1599
 msgid "Font Selection"
 msgstr "בחירת גופן"
 
