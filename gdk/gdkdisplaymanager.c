@@ -248,8 +248,9 @@ gdk_display_manager_set_default_display (GdkDisplayManager *display_manager,
  *
  * List all currently open displays.
  * 
- * Return value: a newly allocated #GSList of #GdkDisplay objects.
- *  Free this list with g_slist_free() when you are done with it.
+ * Return value: (transfer container) (element-type GdkDisplay): a newly allocated
+ * #GSList of #GdkDisplay objects. Free this list with g_slist_free() when you
+ * are done with it.
  *
  * Since: 2.2
  **/
