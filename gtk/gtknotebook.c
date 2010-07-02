@@ -982,7 +982,7 @@ gtk_notebook_class_init (GtkNotebookClass *class)
    * a notebook where the tab will be attached. It is also 
    * responsible for moving/resizing the window and adding the 
    * necessary properties to the notebook (e.g. the 
-   * #GtkNotebook:group-id ).
+   * #GtkNotebook:group ).
    *
    * The default handler uses the global window creation hook,
    * if one has been set with gtk_notebook_set_window_creation_hook().
@@ -7737,7 +7737,6 @@ gtk_notebook_set_group (GtkNotebook *notebook,
   if (priv->group != group)
     {
       priv->group = group;
-      g_object_notify (G_OBJECT (notebook), "group-id");
       g_object_notify (G_OBJECT (notebook), "group");
     }
 }
