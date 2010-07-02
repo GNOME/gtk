@@ -20,8 +20,7 @@
 #ifndef __GTK_SYMBOLIC_COLOR_H__
 #define __GTK_SYMBOLIC_COLOR_H__
 
-#include <gdk.h>
-//#include "gtkstyleset.h"
+#include <gdk/gdk.h>
 
 G_BEGIN_DECLS
 
