@@ -32,8 +32,6 @@
 #include "gtkintl.h"
 
 
-#define GTK_MENU_TOOL_BUTTON_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), GTK_TYPE_MENU_TOOL_BUTTON, GtkMenuToolButtonPrivate))
-
 struct _GtkMenuToolButtonPrivate
 {
   GtkWidget *button;
@@ -376,7 +374,9 @@ gtk_menu_tool_button_init (GtkMenuToolButton *button)
   GtkWidget *arrow_button;
   GtkWidget *real_button;
 
-  button->priv = GTK_MENU_TOOL_BUTTON_GET_PRIVATE (button);
+  button->priv = G_TYPE_INSTANCE_GET_PRIVATE (button,
+                                              GTK_TYPE_MENU_TOOL_BUTTON,
+                                              GtkMenuToolButtonPrivate);
 
   gtk_tool_item_set_homogeneous (GTK_TOOL_ITEM (button), FALSE);
 
