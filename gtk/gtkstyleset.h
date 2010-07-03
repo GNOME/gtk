@@ -40,6 +40,7 @@ typedef struct GtkStyleSetClass GtkStyleSetClass;
 struct GtkStyleSet
 {
   GObject parent_object;
+  gpointer priv;
 };
 
 struct GtkStyleSetClass

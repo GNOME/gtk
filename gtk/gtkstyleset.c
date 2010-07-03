@@ -54,8 +54,6 @@ struct GtkStyleSetPrivate
 
 static GArray *properties = NULL;
 
-#define GTK_STYLE_SET_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), GTK_TYPE_STYLE_SET, GtkStyleSetPrivate))
-
 static void gtk_style_set_provider_init (GtkStyleProviderIface *iface);
 static void gtk_style_set_finalize      (GObject      *object);
 
@@ -114,7 +112,10 @@ gtk_style_set_init (GtkStyleSet *set)
 {
   GtkStyleSetPrivate *priv;
 
-  priv = GTK_STYLE_SET_GET_PRIVATE (set);
+  priv = set->priv = G_TYPE_INSTANCE_GET_PRIVATE (set,
+                                                  GTK_TYPE_STYLE_SET,
+                                                  GtkStyleSetPrivate);
+
   priv->properties = g_hash_table_new_full (NULL, NULL, NULL,
                                             (GDestroyNotify) property_data_free);
 }
@@ -123,8 +124,10 @@ static void
 gtk_style_set_finalize (GObject *object)
 {
   GtkStyleSetPrivate *priv;
+  GtkStyleSet *set;
 
-  priv = GTK_STYLE_SET_GET_PRIVATE (object);
+  set = GTK_STYLE_SET (object);
+  priv = set->priv;
   g_hash_table_destroy (priv->properties);
 
   if (priv->color_map)
@@ -275,7 +278,7 @@ gtk_style_set_map_color (GtkStyleSet      *set,
   g_return_if_fail (name != NULL);
   g_return_if_fail (color != NULL);
 
-  priv = GTK_STYLE_SET_GET_PRIVATE (set);
+  priv = set->priv;
 
   if (G_UNLIKELY (!priv->color_map))
     priv->color_map = g_hash_table_new_full (g_str_hash,
@@ -297,7 +300,7 @@ gtk_style_set_lookup_color (GtkStyleSet *set,
   g_return_val_if_fail (GTK_IS_STYLE_SET (set), NULL);
   g_return_val_if_fail (name != NULL, NULL);
 
-  priv = GTK_STYLE_SET_GET_PRIVATE (set);
+  priv = set->priv;
 
   if (!priv->color_map)
     return NULL;
@@ -335,7 +338,7 @@ set_property_internal (GtkStyleSet  *set,
   else
     g_return_if_fail (node->property_type == G_VALUE_TYPE (value));
 
-  priv = GTK_STYLE_SET_GET_PRIVATE (set);
+  priv = set->priv;
   prop = g_hash_table_lookup (priv->properties,
                               GINT_TO_POINTER (node->property_quark));
 
@@ -402,7 +405,7 @@ gtk_style_set_set_valist (GtkStyleSet  *set,
   g_return_if_fail (GTK_IS_STYLE_SET (set));
   g_return_if_fail (state < GTK_STATE_LAST);
 
-  priv = GTK_STYLE_SET_GET_PRIVATE (set);
+  priv = set->priv;
   property_name = va_arg (args, const gchar *);
 
   while (property_name)
@@ -502,7 +505,7 @@ gtk_style_set_get_property (GtkStyleSet  *set,
       return FALSE;
     }
 
-  priv = GTK_STYLE_SET_GET_PRIVATE (set);
+  priv = set->priv;
   prop = g_hash_table_lookup (priv->properties,
                               GINT_TO_POINTER (node->property_quark));
 
@@ -542,7 +545,7 @@ gtk_style_set_get_valist (GtkStyleSet  *set,
   g_return_if_fail (GTK_IS_STYLE_SET (set));
   g_return_if_fail (state < GTK_STATE_LAST);
 
-  priv = GTK_STYLE_SET_GET_PRIVATE (set);
+  priv = set->priv;
   property_name = va_arg (args, const gchar *);
 
   while (property_name)
@@ -638,7 +641,7 @@ gtk_style_set_unset_property (GtkStyleSet  *set,
       return;
     }
 
-  priv = GTK_STYLE_SET_GET_PRIVATE (set);
+  priv = set->priv;
   prop = g_hash_table_lookup (priv->properties,
                               GINT_TO_POINTER (node->property_quark));
 
@@ -655,7 +658,7 @@ gtk_style_set_clear (GtkStyleSet *set)
 
   g_return_if_fail (GTK_IS_STYLE_SET (set));
 
-  priv = GTK_STYLE_SET_GET_PRIVATE (set);
+  priv = set->priv;
   g_hash_table_remove_all (priv->properties);
 }
 
@@ -671,8 +674,8 @@ gtk_style_set_merge (GtkStyleSet       *set,
   g_return_if_fail (GTK_IS_STYLE_SET (set));
   g_return_if_fail (GTK_IS_STYLE_SET (set_to_merge));
 
-  priv = GTK_STYLE_SET_GET_PRIVATE (set);
-  priv_to_merge = GTK_STYLE_SET_GET_PRIVATE (set_to_merge);
+  priv = set->priv;
+  priv_to_merge = set_to_merge->priv;
 
   /* Merge symbolic color map */
   if (priv_to_merge->color_map)
