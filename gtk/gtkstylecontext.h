@@ -39,6 +39,7 @@ typedef struct GtkStyleContextClass GtkStyleContextClass;
 struct GtkStyleContext
 {
   GObject parent_object;
+  gpointer priv;
 };
 
 struct GtkStyleContextClass

@@ -73,8 +73,6 @@ struct GtkStyleContextPrivate
   GtkThemingEngine *theming_engine;
 };
 
-#define GTK_STYLE_CONTEXT_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), GTK_TYPE_STYLE_CONTEXT, GtkStyleContextPrivate))
-
 static void gtk_style_context_finalize (GObject *object);
 
 
@@ -95,7 +93,10 @@ gtk_style_context_init (GtkStyleContext *style_context)
 {
   GtkStyleContextPrivate *priv;
 
-  priv = GTK_STYLE_CONTEXT_GET_PRIVATE (style_context);
+  priv = style_context->priv = G_TYPE_INSTANCE_GET_PRIVATE (style_context,
+                                                            GTK_TYPE_STYLE_CONTEXT,
+                                                            GtkStyleContextPrivate);
+
   priv->store = gtk_style_set_new ();
   priv->theming_engine = (GtkThemingEngine *) gtk_theming_engine_load (NULL);
 }
@@ -125,7 +126,7 @@ clear_property_cache (GtkStyleContext *context)
 {
   GtkStyleContextPrivate *priv;
 
-  priv = GTK_STYLE_CONTEXT_GET_PRIVATE (context);
+  priv = context->priv;
 
   if (priv->property_cache)
     {
@@ -148,8 +149,10 @@ static void
 gtk_style_context_finalize (GObject *object)
 {
   GtkStyleContextPrivate *priv;
+  GtkStyleContext *style_context;
 
-  priv = GTK_STYLE_CONTEXT_GET_PRIVATE (object);
+  style_context = GTK_STYLE_CONTEXT (object);
+  priv = style_context->priv;
 
   g_list_foreach (priv->providers, (GFunc) style_provider_data_free, NULL);
   g_list_free (priv->providers);
@@ -168,7 +171,7 @@ rebuild_properties (GtkStyleContext *context)
   GtkStyleContextPrivate *priv;
   GList *list;
 
-  priv = GTK_STYLE_CONTEXT_GET_PRIVATE (context);
+  priv = context->priv;
   list = priv->providers;
 
   gtk_style_set_clear (priv->store);
@@ -202,7 +205,7 @@ rebuild_icon_factories (GtkStyleContext *context)
   GtkStyleContextPrivate *priv;
   GList *providers;
 
-  priv = GTK_STYLE_CONTEXT_GET_PRIVATE (context);
+  priv = context->priv;
 
   g_slist_foreach (priv->icon_factories, (GFunc) g_object_unref, NULL);
   g_slist_free (priv->icon_factories);
@@ -235,7 +238,7 @@ gtk_style_context_add_provider (GtkStyleContext  *context,
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
   g_return_if_fail (GTK_IS_STYLE_PROVIDER (provider));
 
-  priv = GTK_STYLE_CONTEXT_GET_PRIVATE (context);
+  priv = context->priv;
   new_data = style_provider_data_new (provider, priority);
   list = priv->providers;
 
@@ -297,7 +300,7 @@ gtk_style_context_remove_provider (GtkStyleContext  *context,
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
   g_return_if_fail (GTK_IS_STYLE_PROVIDER (provider));
 
-  priv = GTK_STYLE_CONTEXT_GET_PRIVATE (context);
+  priv = context->priv;
   list = priv->providers;
 
   while (list)
@@ -346,7 +349,7 @@ gtk_style_context_get_property (GtkStyleContext *context,
   g_return_if_fail (state < GTK_STATE_LAST);
   g_return_if_fail (value != NULL);
 
-  priv = GTK_STYLE_CONTEXT_GET_PRIVATE (context);
+  priv = context->priv;
   gtk_style_set_get_property (priv->store, property, state, value);
 }
 
@@ -360,7 +363,7 @@ gtk_style_context_get_valist (GtkStyleContext *context,
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
   g_return_if_fail (state < GTK_STATE_LAST);
 
-  priv = GTK_STYLE_CONTEXT_GET_PRIVATE (context);
+  priv = context->priv;
   gtk_style_set_get_valist (priv->store, state, args);
 }
 
@@ -375,7 +378,7 @@ gtk_style_context_get (GtkStyleContext *context,
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
   g_return_if_fail (state < GTK_STATE_LAST);
 
-  priv = GTK_STYLE_CONTEXT_GET_PRIVATE (context);
+  priv = context->priv;
 
   va_start (args, state);
   gtk_style_set_get_valist (priv->store, state, args);
@@ -390,7 +393,7 @@ gtk_style_context_set_state (GtkStyleContext *context,
 
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
 
-  priv = GTK_STYLE_CONTEXT_GET_PRIVATE (context);
+  priv = context->priv;
   priv->state_flags = flags;
 }
 
@@ -401,7 +404,7 @@ gtk_style_context_get_state (GtkStyleContext *context)
 
   g_return_val_if_fail (GTK_IS_STYLE_CONTEXT (context), 0);
 
-  priv = GTK_STYLE_CONTEXT_GET_PRIVATE (context);
+  priv = context->priv;
   return priv->state_flags;
 }
 
@@ -413,7 +416,7 @@ gtk_style_context_is_state_set (GtkStyleContext *context,
 
   g_return_val_if_fail (GTK_IS_STYLE_CONTEXT (context), FALSE);
 
-  priv = GTK_STYLE_CONTEXT_GET_PRIVATE (context);
+  priv = context->priv;
 
   switch (state)
     {
@@ -445,7 +448,7 @@ gtk_style_context_set_path (GtkStyleContext *context,
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
   g_return_if_fail (path != NULL);
 
-  priv = GTK_STYLE_CONTEXT_GET_PRIVATE (context);
+  priv = context->priv;
 
   if (priv->widget_path)
     {
@@ -467,7 +470,7 @@ gtk_style_context_get_path (GtkStyleContext *context)
 {
   GtkStyleContextPrivate *priv;
 
-  priv = GTK_STYLE_CONTEXT_GET_PRIVATE (context);
+  priv = context->priv;
   return priv->widget_path;
 }
 
@@ -482,7 +485,7 @@ gtk_style_context_set_class (GtkStyleContext *context,
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
   g_return_if_fail (class_name != NULL);
 
-  priv = GTK_STYLE_CONTEXT_GET_PRIVATE (context);
+  priv = context->priv;
   class_quark = g_quark_from_string (class_name);
 
   link = priv->style_classes;
@@ -524,7 +527,7 @@ gtk_style_context_unset_class (GtkStyleContext *context,
   if (!class_quark)
     return;
 
-  priv = GTK_STYLE_CONTEXT_GET_PRIVATE (context);
+  priv = context->priv;
   priv->style_classes = g_list_remove (priv->style_classes,
                                        GUINT_TO_POINTER (class_quark));
 }
@@ -544,7 +547,7 @@ gtk_style_context_has_class (GtkStyleContext *context,
   if (!class_quark)
     return FALSE;
 
-  priv = GTK_STYLE_CONTEXT_GET_PRIVATE (context);
+  priv = context->priv;
 
   if (g_list_find (priv->style_classes,
                    GUINT_TO_POINTER (class_quark)))
@@ -574,7 +577,7 @@ gtk_style_context_list_child_classes (GtkStyleContext *context)
 
   g_return_val_if_fail (GTK_IS_STYLE_CONTEXT (context), NULL);
 
-  priv = GTK_STYLE_CONTEXT_GET_PRIVATE (context);
+  priv = context->priv;
   link = priv->child_style_classes;
 
   while (link)
@@ -605,7 +608,7 @@ gtk_style_context_set_child_class (GtkStyleContext    *context,
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
   g_return_if_fail (class_name != NULL);
 
-  priv = GTK_STYLE_CONTEXT_GET_PRIVATE (context);
+  priv = context->priv;
   class_quark = g_quark_from_string (class_name);
   link = priv->child_style_classes;
 
@@ -654,7 +657,7 @@ gtk_style_context_unset_child_class (GtkStyleContext    *context,
   if (!class_quark)
     return;
 
-  priv = GTK_STYLE_CONTEXT_GET_PRIVATE (context);
+  priv = context->priv;
   child_class.class_quark = class_quark;
 
   link = g_list_find_custom (priv->child_style_classes,
@@ -689,7 +692,7 @@ gtk_style_context_has_child_class (GtkStyleContext    *context,
   if (!class_quark)
     return FALSE;
 
-  priv = GTK_STYLE_CONTEXT_GET_PRIVATE (context);
+  priv = context->priv;
   child_class.class_quark = class_quark;
 
   link = g_list_find_custom (priv->child_style_classes,
@@ -734,7 +737,7 @@ _gtk_style_context_peek_style_property (GtkStyleContext *context,
   GList *list;
   guint i;
 
-  priv = GTK_STYLE_CONTEXT_GET_PRIVATE (context);
+  priv = context->priv;
 
   key.widget_type = widget_type;
   key.pspec = pspec;
@@ -798,7 +801,7 @@ gtk_style_context_get_style_property (GtkStyleContext *context,
   g_return_if_fail (property_name != NULL);
   g_return_if_fail (value != NULL);
 
-  priv = GTK_STYLE_CONTEXT_GET_PRIVATE (context);
+  priv = context->priv;
 
   if (!priv->widget_path)
     return;
@@ -843,7 +846,7 @@ gtk_style_context_lookup_icon_set (GtkStyleContext *context,
   g_return_val_if_fail (GTK_IS_STYLE_CONTEXT (context), NULL);
   g_return_val_if_fail (stock_id != NULL, NULL);
 
-  priv = GTK_STYLE_CONTEXT_GET_PRIVATE (context);
+  priv = context->priv;
 
   for (list = priv->icon_factories; list; list = list->next)
     {
@@ -875,7 +878,7 @@ gtk_render_check (GtkStyleContext *context,
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
   g_return_if_fail (cr != NULL);
 
-  priv = GTK_STYLE_CONTEXT_GET_PRIVATE (context);
+  priv = context->priv;
   engine_class = GTK_THEMING_ENGINE_GET_CLASS (priv->theming_engine);
 
   _gtk_theming_engine_set_context (priv->theming_engine, context);
@@ -897,7 +900,7 @@ gtk_render_option (GtkStyleContext *context,
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
   g_return_if_fail (cr != NULL);
 
-  priv = GTK_STYLE_CONTEXT_GET_PRIVATE (context);
+  priv = context->priv;
   engine_class = GTK_THEMING_ENGINE_GET_CLASS (priv->theming_engine);
 
   _gtk_theming_engine_set_context (priv->theming_engine, context);
@@ -919,7 +922,7 @@ gtk_render_arrow (GtkStyleContext *context,
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
   g_return_if_fail (cr != NULL);
 
-  priv = GTK_STYLE_CONTEXT_GET_PRIVATE (context);
+  priv = context->priv;
   engine_class = GTK_THEMING_ENGINE_GET_CLASS (priv->theming_engine);
 
   _gtk_theming_engine_set_context (priv->theming_engine, context);
@@ -941,7 +944,7 @@ gtk_render_background (GtkStyleContext *context,
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
   g_return_if_fail (cr != NULL);
 
-  priv = GTK_STYLE_CONTEXT_GET_PRIVATE (context);
+  priv = context->priv;
   engine_class = GTK_THEMING_ENGINE_GET_CLASS (priv->theming_engine);
 
   _gtk_theming_engine_set_context (priv->theming_engine, context);
@@ -962,7 +965,7 @@ gtk_render_frame (GtkStyleContext *context,
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
   g_return_if_fail (cr != NULL);
 
-  priv = GTK_STYLE_CONTEXT_GET_PRIVATE (context);
+  priv = context->priv;
   engine_class = GTK_THEMING_ENGINE_GET_CLASS (priv->theming_engine);
 
   _gtk_theming_engine_set_context (priv->theming_engine, context);
@@ -983,7 +986,7 @@ gtk_render_expander (GtkStyleContext *context,
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
   g_return_if_fail (cr != NULL);
 
-  priv = GTK_STYLE_CONTEXT_GET_PRIVATE (context);
+  priv = context->priv;
   engine_class = GTK_THEMING_ENGINE_GET_CLASS (priv->theming_engine);
 
   _gtk_theming_engine_set_context (priv->theming_engine, context);
@@ -1004,7 +1007,7 @@ gtk_render_focus (GtkStyleContext *context,
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
   g_return_if_fail (cr != NULL);
 
-  priv = GTK_STYLE_CONTEXT_GET_PRIVATE (context);
+  priv = context->priv;
   engine_class = GTK_THEMING_ENGINE_GET_CLASS (priv->theming_engine);
 
   _gtk_theming_engine_set_context (priv->theming_engine, context);
@@ -1024,7 +1027,7 @@ gtk_render_layout (GtkStyleContext *context,
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
   g_return_if_fail (cr != NULL);
 
-  priv = GTK_STYLE_CONTEXT_GET_PRIVATE (context);
+  priv = context->priv;
   engine_class = GTK_THEMING_ENGINE_GET_CLASS (priv->theming_engine);
 
   _gtk_theming_engine_set_context (priv->theming_engine, context);
@@ -1045,7 +1048,7 @@ gtk_render_line (GtkStyleContext *context,
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
   g_return_if_fail (cr != NULL);
 
-  priv = GTK_STYLE_CONTEXT_GET_PRIVATE (context);
+  priv = context->priv;
   engine_class = GTK_THEMING_ENGINE_GET_CLASS (priv->theming_engine);
 
   _gtk_theming_engine_set_context (priv->theming_engine, context);
@@ -1067,7 +1070,7 @@ gtk_render_slider (GtkStyleContext *context,
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
   g_return_if_fail (cr != NULL);
 
-  priv = GTK_STYLE_CONTEXT_GET_PRIVATE (context);
+  priv = context->priv;
   engine_class = GTK_THEMING_ENGINE_GET_CLASS (priv->theming_engine);
 
   _gtk_theming_engine_set_context (priv->theming_engine, context);
@@ -1091,7 +1094,7 @@ gtk_render_frame_gap (GtkStyleContext *context,
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
   g_return_if_fail (cr != NULL);
 
-  priv = GTK_STYLE_CONTEXT_GET_PRIVATE (context);
+  priv = context->priv;
   engine_class = GTK_THEMING_ENGINE_GET_CLASS (priv->theming_engine);
 
   _gtk_theming_engine_set_context (priv->theming_engine, context);
@@ -1115,7 +1118,7 @@ gtk_render_extension (GtkStyleContext *context,
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
   g_return_if_fail (cr != NULL);
 
-  priv = GTK_STYLE_CONTEXT_GET_PRIVATE (context);
+  priv = context->priv;
   engine_class = GTK_THEMING_ENGINE_GET_CLASS (priv->theming_engine);
 
   _gtk_theming_engine_set_context (priv->theming_engine, context);
@@ -1137,7 +1140,7 @@ gtk_render_handle (GtkStyleContext *context,
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
   g_return_if_fail (cr != NULL);
 
-  priv = GTK_STYLE_CONTEXT_GET_PRIVATE (context);
+  priv = context->priv;
   engine_class = GTK_THEMING_ENGINE_GET_CLASS (priv->theming_engine);
 
   _gtk_theming_engine_set_context (priv->theming_engine, context);
