@@ -402,6 +402,17 @@ gtk_theming_engine_load (const gchar *name)
   return engine;
 }
 
+GdkScreen *
+gtk_theming_engine_get_screen (GtkThemingEngine *engine)
+{
+  GtkThemingEnginePrivate *priv;
+
+  g_return_val_if_fail (GTK_IS_THEMING_ENGINE (engine), NULL);
+
+  priv = engine->priv;
+  return gtk_style_context_get_screen (priv->context);
+}
+
 /* Paint method implementations */
 static void
 gtk_theming_engine_render_check (GtkThemingEngine *engine,
