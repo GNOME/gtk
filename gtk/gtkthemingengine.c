@@ -1130,6 +1130,138 @@ gtk_theming_engine_render_line (GtkThemingEngine *engine,
   cairo_restore (cr);
 }
 
+typedef struct _ByteRange ByteRange;
+
+struct _ByteRange
+{
+  guint start;
+  guint end;
+};
+
+static ByteRange*
+range_new (guint start,
+           guint end)
+{
+  ByteRange *br = g_new (ByteRange, 1);
+
+  br->start = start;
+  br->end = end;
+
+  return br;
+}
+
+static PangoLayout*
+get_insensitive_layout (PangoLayout *layout)
+{
+  GSList *embossed_ranges = NULL;
+  GSList *shaded_ranges = NULL;
+  PangoLayoutIter *iter;
+  GSList *tmp_list = NULL;
+  PangoLayout *new_layout;
+  PangoAttrList *attrs;
+
+  iter = pango_layout_get_iter (layout);
+
+  do
+    {
+      PangoLayoutRun *run;
+      PangoAttribute *attr;
+      gboolean need_shade = FALSE;
+      ByteRange *br;
+
+      run = pango_layout_iter_get_run_readonly (iter);
+
+      if (run)
+        {
+          tmp_list = run->item->analysis.extra_attrs;
+
+          while (tmp_list != NULL)
+            {
+              attr = tmp_list->data;
+              switch (attr->klass->type)
+                {
+                case PANGO_ATTR_FOREGROUND:
+                case PANGO_ATTR_BACKGROUND:
+                  need_shade = TRUE;
+                  break;
+
+                default:
+                  break;
+                }
+
+              if (need_shade)
+                break;
+
+              tmp_list = g_slist_next (tmp_list);
+            }
+
+          br = range_new (run->item->offset, run->item->offset + run->item->length);
+
+          if (need_shade)
+            shaded_ranges = g_slist_prepend (shaded_ranges, br);
+          else
+            embossed_ranges = g_slist_prepend (embossed_ranges, br);
+        }
+    }
+  while (pango_layout_iter_next_run (iter));
+
+  pango_layout_iter_free (iter);
+
+  new_layout = pango_layout_copy (layout);
+
+  attrs = pango_layout_get_attributes (new_layout);
+
+  if (attrs == NULL)
+    {
+      /* Create attr list if there wasn't one */
+      attrs = pango_attr_list_new ();
+      pango_layout_set_attributes (new_layout, attrs);
+      pango_attr_list_unref (attrs);
+    }
+
+  tmp_list = embossed_ranges;
+  while (tmp_list != NULL)
+    {
+      PangoAttribute *attr;
+      ByteRange *br = tmp_list->data;
+
+      attr = gdk_pango_attr_embossed_new (TRUE);
+
+      attr->start_index = br->start;
+      attr->end_index = br->end;
+
+      pango_attr_list_change (attrs, attr);
+
+      g_free (br);
+
+      tmp_list = g_slist_next (tmp_list);
+    }
+
+  g_slist_free (embossed_ranges);
+
+  tmp_list = shaded_ranges;
+  while (tmp_list != NULL)
+    {
+      PangoAttribute *attr;
+      ByteRange *br = tmp_list->data;
+
+      attr = gdk_pango_attr_shade_new (0.7);
+
+      attr->start_index = br->start;
+      attr->end_index = br->end;
+
+      pango_attr_list_change (attrs, attr);
+
+      g_free (br);
+
+      tmp_list = g_slist_next (tmp_list);
+    }
+
+  g_slist_free (shaded_ranges);
+
+  return new_layout;
+}
+
 static void
 gtk_theming_engine_render_layout (GtkThemingEngine *engine,
                                   cairo_t          *cr,
@@ -1140,9 +1272,12 @@ gtk_theming_engine_render_layout (GtkThemingEngine *engine,
   GdkColor *fg_color;
   GtkStateFlags flags;
   GtkStateType state;
+  GdkScreen *screen;
 
   cairo_save (cr);
   flags = gtk_theming_engine_get_state (engine);
+
+  /* FIXME: Set clipping */
 
   if (flags & GTK_STATE_FLAG_PRELIGHT)
     state = GTK_STATE_PRELIGHT;
@@ -1155,9 +1290,22 @@ gtk_theming_engine_render_layout (GtkThemingEngine *engine,
                           "foreground-color", &fg_color,
                           NULL);
 
-  cairo_move_to (cr, x, y);
-  gdk_cairo_set_source_color (cr, fg_color);
-  pango_cairo_show_layout (cr, layout);
+  screen = gtk_theming_engine_get_screen (engine);
+
+  if (state == GTK_STATE_INSENSITIVE)
+    {
+      PangoLayout *insensitive_layout;
+
+      insensitive_layout = get_insensitive_layout (layout);
+      gdk_pango_show_layout (screen,
+			     cr, x, y,
+			     insensitive_layout,
+			     fg_color, NULL);
+      g_object_unref (insensitive_layout);
+    }
+  else
+    gdk_pango_show_layout (screen, cr, x, y, layout,
+			   fg_color, NULL);
 
   cairo_restore (cr);
 
