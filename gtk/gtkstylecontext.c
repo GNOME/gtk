@@ -33,6 +33,7 @@
 
 typedef struct GtkStyleContextPrivate GtkStyleContextPrivate;
 typedef struct GtkStyleProviderData GtkStyleProviderData;
+typedef struct GtkStyleRegion GtkStyleRegion;
 typedef struct GtkChildClass GtkChildClass;
 typedef struct PropertyValue PropertyValue;
 
@@ -55,6 +56,12 @@ struct PropertyValue
   GValue      value;
 };
 
+struct GtkStyleRegion
+{
+  GArray *style_classes;
+  GArray *child_style_classes;
+};
+
 struct GtkStyleContextPrivate
 {
   GdkScreen *screen;
@@ -70,8 +77,7 @@ struct GtkStyleContextPrivate
   GArray *property_cache;
 
   GtkStateFlags state_flags;
-  GList *style_classes;
-  GList *child_style_classes;
+  GSList *regions;
 
   GtkThemingEngine *theming_engine;
 };
@@ -115,10 +121,47 @@ gtk_style_context_class_init (GtkStyleContextClass *klass)
   g_type_class_add_private (object_class, sizeof (GtkStyleContextPrivate));
 }
 
+static GtkStyleRegion *
+style_region_new (void)
+{
+  GtkStyleRegion *region;
+
+  region = g_slice_new0 (GtkStyleRegion);
+  region->style_classes = g_array_new (FALSE, FALSE, sizeof (GQuark));
+  region->child_style_classes = g_array_new (FALSE, FALSE, sizeof (GtkChildClass));
+
+  return region;
+}
+
+static void
+style_region_free (GtkStyleRegion *region)
+{
+  g_array_free (region->style_classes, TRUE);
+  g_array_free (region->child_style_classes, TRUE);
+  g_slice_free (GtkStyleRegion, region);
+}
+
+static GtkStyleRegion *
+style_region_copy (const GtkStyleRegion *region)
+{
+  GtkStyleRegion *copy;
+
+  copy = style_region_new ();
+  g_array_insert_vals (copy->style_classes, 0,
+                       region->style_classes->data,
+                       region->style_classes->len);
+
+  g_array_insert_vals (copy->child_style_classes, 0,
+                       region->child_style_classes->data,
+                       region->child_style_classes->len);
+  return copy;
+}
+
 static void
 gtk_style_context_init (GtkStyleContext *style_context)
 {
   GtkStyleContextPrivate *priv;
+  GtkStyleRegion *region;
 
   priv = style_context->priv = G_TYPE_INSTANCE_GET_PRIVATE (style_context,
                                                             GTK_TYPE_STYLE_CONTEXT,
@@ -126,6 +169,10 @@ gtk_style_context_init (GtkStyleContext *style_context)
 
   priv->store = gtk_style_set_new ();
   priv->theming_engine = (GtkThemingEngine *) gtk_theming_engine_load (NULL);
+
+  /* Create default region */
+  region = style_region_new ();
+  priv->regions = g_slist_prepend (priv->regions, region);
 }
 
 static GtkStyleProviderData *
@@ -185,6 +232,9 @@ gtk_style_context_finalize (GObject *object)
   g_list_free (priv->providers);
 
   clear_property_cache (GTK_STYLE_CONTEXT (object));
+
+  g_slist_foreach (priv->regions, (GFunc) style_region_free, NULL);
+  g_slist_free (priv->regions);
 
   g_slist_foreach (priv->icon_factories, (GFunc) g_object_unref, NULL);
   g_slist_free (priv->icon_factories);
@@ -549,12 +599,124 @@ gtk_style_context_get_path (GtkStyleContext *context)
 }
 
 void
+gtk_style_context_save (GtkStyleContext *context)
+{
+  GtkStyleContextPrivate *priv;
+  GtkStyleRegion *region;
+
+  g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
+
+  priv = context->priv;
+
+  g_assert (priv->regions != NULL);
+
+  region = style_region_copy (priv->regions->data);
+  priv->regions = g_slist_prepend (priv->regions, region);
+}
+
+void
+gtk_style_context_restore (GtkStyleContext *context)
+{
+  GtkStyleContextPrivate *priv;
+  GtkStyleRegion *region;
+
+  g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
+
+  priv = context->priv;
+
+  if (priv->regions)
+    {
+      region = priv->regions->data;
+      priv->regions = g_slist_remove (priv->regions, region);
+      style_region_free (region);
+    }
+
+  if (!priv->regions)
+    {
+      g_warning ("Unpaired gtk_style_context_restore() call");
+
+      /* Create default region */
+      region = style_region_new ();
+      priv->regions = g_slist_prepend (priv->regions, region);
+    }
+}
+
+static gboolean
+style_class_find (GArray       *array,
+                  GQuark        class_quark,
+                  guint        *position)
+{
+  guint min, max, mid;
+  gboolean found = FALSE;
+
+  min = 0;
+  max = array->len - 1;
+  mid = max - min / 2;
+
+  do
+    {
+      GQuark item;
+
+      mid = min + max / 2;
+      item = g_array_index (array, GQuark, mid);
+
+      if (class_quark == item)
+        found = TRUE;
+      else if (class_quark > item)
+        min = mid + 1;
+      else
+        max = mid - 1;
+    }
+  while (!found && min < max);
+
+  if (position)
+    *position = mid;
+
+  return found;
+}
+
+static gboolean
+child_style_class_find (GArray       *array,
+                        GQuark        class_quark,
+                        guint        *position)
+{
+  guint min, max, mid;
+  gboolean found = FALSE;
+
+  min = 0;
+  max = array->len - 1;
+  mid = max - min / 2;
+
+  do
+    {
+      GtkChildClass *child_class;
+
+      mid = min + max / 2;
+      child_class = &g_array_index (array, GtkChildClass, mid);
+
+      if (child_class->class_quark == class_quark)
+        found = TRUE;
+      else if (child_class->class_quark > class_quark)
+        min = mid + 1;
+      else
+        max = mid - 1;
+    }
+  while (!found && min < max);
+
+  if (position)
+    *position = mid;
+
+  return found;
+}
+
+void
 gtk_style_context_set_class (GtkStyleContext *context,
                              const gchar     *class_name)
 {
   GtkStyleContextPrivate *priv;
+  GtkStyleRegion *region;
   GQuark class_quark;
-  GList *link;
+  guint position;
 
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
   g_return_if_fail (class_name != NULL);
@@ -562,28 +724,11 @@ gtk_style_context_set_class (GtkStyleContext *context,
   priv = context->priv;
   class_quark = g_quark_from_string (class_name);
 
-  link = priv->style_classes;
+  g_assert (priv->regions != NULL);
+  region = priv->regions->data;
 
-  while (link)
-    {
-      GQuark link_quark;
-
-      link_quark = GPOINTER_TO_UINT (link->data);
-
-      if (link_quark == class_quark)
-        return;
-      else if (link_quark > class_quark)
-        {
-          priv->style_classes = g_list_insert_before (priv->style_classes,
-                                                      link, GUINT_TO_POINTER (class_quark));
-          return;
-        }
-
-      link = link->next;
-    }
-
-  priv->style_classes = g_list_append (priv->style_classes,
-                                       GUINT_TO_POINTER (class_quark));
+  if (!style_class_find (region->style_classes, class_quark, &position))
+    g_array_insert_val (region->style_classes, position, class_quark);
 }
 
 void
@@ -591,7 +736,9 @@ gtk_style_context_unset_class (GtkStyleContext *context,
                                const gchar     *class_name)
 {
   GtkStyleContextPrivate *priv;
+  GtkStyleRegion *region;
   GQuark class_quark;
+  guint position;
 
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
   g_return_if_fail (class_name != NULL);
@@ -602,8 +749,12 @@ gtk_style_context_unset_class (GtkStyleContext *context,
     return;
 
   priv = context->priv;
-  priv->style_classes = g_list_remove (priv->style_classes,
-                                       GUINT_TO_POINTER (class_quark));
+
+  g_assert (priv->regions != NULL);
+  region = priv->regions->data;
+
+  if (style_class_find (region->style_classes, class_quark, &position))
+    g_array_remove_index (region->style_classes, position);
 }
 
 gboolean
@@ -611,6 +762,7 @@ gtk_style_context_has_class (GtkStyleContext *context,
                              const gchar     *class_name)
 {
   GtkStyleContextPrivate *priv;
+  GtkStyleRegion *region;
   GQuark class_quark;
 
   g_return_val_if_fail (GTK_IS_STYLE_CONTEXT (context), FALSE);
@@ -623,47 +775,41 @@ gtk_style_context_has_class (GtkStyleContext *context,
 
   priv = context->priv;
 
-  if (g_list_find (priv->style_classes,
-                   GUINT_TO_POINTER (class_quark)))
+  g_assert (priv->regions != NULL);
+  region = priv->regions->data;
+
+  if (style_class_find (region->style_classes, class_quark, NULL))
     return TRUE;
 
   return FALSE;
-}
-
-static gint
-child_style_class_compare (gconstpointer p1,
-                           gconstpointer p2)
-{
-  const GtkChildClass *c1, *c2;
-
-  c1 = p1;
-  c2 = p2;
-
-  return (gint) c1->class_quark - c2->class_quark;
 }
 
 GList *
 gtk_style_context_list_child_classes (GtkStyleContext *context)
 {
   GtkStyleContextPrivate *priv;
+  GtkStyleRegion *region;
   GList *classes = NULL;
-  GList *link;
+  guint i;
 
   g_return_val_if_fail (GTK_IS_STYLE_CONTEXT (context), NULL);
 
   priv = context->priv;
-  link = priv->child_style_classes;
 
-  while (link)
+  g_assert (priv->regions != NULL);
+  region = priv->regions->data;
+
+  for (i = 0; i < region->child_style_classes->len; i++)
     {
-      GtkChildClass *link_class;
-      const gchar *child_class;
+      GtkChildClass *child_class;
+      const gchar *class_name;
 
-      link_class = link->data;
-      link = link->next;
+      child_class = &g_array_index (region->child_style_classes,
+                                    GtkChildClass,
+                                    i);
 
-      child_class = g_quark_to_string (link_class->class_quark);
-      classes = g_list_prepend (classes, (gchar *) child_class);
+      class_name = g_quark_to_string (child_class->class_quark);
+      classes = g_list_prepend (classes, (gchar *) class_name);
     }
 
   return classes;
@@ -675,43 +821,28 @@ gtk_style_context_set_child_class (GtkStyleContext    *context,
                                    GtkChildClassFlags  flags)
 {
   GtkStyleContextPrivate *priv;
-  GtkChildClass *child_class;
+  GtkStyleRegion *region;
   GQuark class_quark;
-  GList *link;
+  guint position;
 
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
   g_return_if_fail (class_name != NULL);
 
   priv = context->priv;
   class_quark = g_quark_from_string (class_name);
-  link = priv->child_style_classes;
 
-  while (link)
+  g_assert (priv->regions != NULL);
+  region = priv->regions->data;
+
+  if (!child_style_class_find (region->child_style_classes, class_quark, &position))
     {
-      GtkChildClass *link_class;
+      GtkChildClass child_class;
 
-      link_class = link->data;
+      child_class.class_quark = class_quark;
+      child_class.flags = flags;
 
-      if (link_class->class_quark == class_quark)
-        {
-          link_class->flags = flags;
-          return;
-        }
-      else if (link_class->class_quark > class_quark)
-        break;
-
-      link = link->next;
+      g_array_insert_val (region->child_style_classes, position, child_class);
     }
-
-  child_class = g_slice_new0 (GtkChildClass);
-  child_class->class_quark = class_quark;
-  child_class->flags = flags;
-
-  if (link)
-    priv->child_style_classes = g_list_insert_before (priv->child_style_classes,
-                                                      link, child_class);
-  else
-    priv->child_style_classes = g_list_append (priv->child_style_classes, child_class);
 }
 
 void
@@ -719,9 +850,9 @@ gtk_style_context_unset_child_class (GtkStyleContext    *context,
                                      const gchar        *class_name)
 {
   GtkStyleContextPrivate *priv;
-  GtkChildClass child_class;
+  GtkStyleRegion *region;
   GQuark class_quark;
-  GList *link;
+  guint position;
 
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
   g_return_if_fail (class_name != NULL);
@@ -732,17 +863,12 @@ gtk_style_context_unset_child_class (GtkStyleContext    *context,
     return;
 
   priv = context->priv;
-  child_class.class_quark = class_quark;
 
-  link = g_list_find_custom (priv->child_style_classes,
-                             &child_class, child_style_class_compare);
+  g_assert (priv->regions != NULL);
+  region = priv->regions->data;
 
-  if (link)
-    {
-      priv->child_style_classes = g_list_remove_link (priv->child_style_classes, link);
-      g_slice_free (GtkChildClass, link->data);
-      g_list_free1 (link);
-    }
+  if (child_style_class_find (region->child_style_classes, class_quark, &position))
+    g_array_remove_index (region->child_style_classes, position);
 }
 
 gboolean
@@ -751,9 +877,9 @@ gtk_style_context_has_child_class (GtkStyleContext    *context,
                                    GtkChildClassFlags *flags_return)
 {
   GtkStyleContextPrivate *priv;
-  GtkChildClass child_class;
+  GtkStyleRegion *region;
   GQuark class_quark;
-  GList *link;
+  guint position;
 
   g_return_val_if_fail (GTK_IS_STYLE_CONTEXT (context), FALSE);
   g_return_val_if_fail (class_name != NULL, FALSE);
@@ -767,21 +893,21 @@ gtk_style_context_has_child_class (GtkStyleContext    *context,
     return FALSE;
 
   priv = context->priv;
-  child_class.class_quark = class_quark;
 
-  link = g_list_find_custom (priv->child_style_classes,
-                             &child_class, child_style_class_compare);
+  g_assert (priv->regions != NULL);
+  region = priv->regions->data;
 
-  if (link)
+  if (child_style_class_find (region->child_style_classes, class_quark, &position))
     {
       if (flags_return)
         {
-          GtkChildClass *found_class;
+          GtkChildClass *child_class;
 
-          found_class = link->data;
-          *flags_return = found_class->flags;
+          child_class = &g_array_index (region->child_style_classes,
+					GtkChildClass, position);
+
+          *flags_return = child_class->flags;
         }
-
       return TRUE;
     }
 

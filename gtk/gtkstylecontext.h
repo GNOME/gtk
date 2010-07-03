@@ -56,6 +56,9 @@ void gtk_style_context_add_provider    (GtkStyleContext  *context,
 void gtk_style_context_remove_provider (GtkStyleContext  *context,
                                         GtkStyleProvider *provider);
 
+void gtk_style_context_save    (GtkStyleContext *context);
+void gtk_style_context_restore (GtkStyleContext *context);
+
 void gtk_style_context_get_property (GtkStyleContext *context,
                                      const gchar     *property,
                                      GtkStateType     state,
