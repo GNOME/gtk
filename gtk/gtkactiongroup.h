@@ -77,6 +77,23 @@ struct _GtkActionGroupClass
   void (*_gtk_reserved4) (void);
 };
 
+/**
+ * GtkActionEntry:
+ * @name: The name of the action.
+ * @stock_id: The stock id for the action, or the name of an icon from the
+ *  icon theme.
+ * @label: The label for the action. This field should typically be marked
+ *  for translation, see gtk_action_group_set_translation_domain(). If
+ *  @label is %NULL, the label of the stock item with id @stock_id is used.
+ * @accelerator: The accelerator for the action, in the format understood by
+ *  gtk_accelerator_parse().
+ * @tooltip: The tooltip for the action. This field should typically be
+ *  marked for translation, see gtk_action_group_set_translation_domain().
+ * @callback: The function to call when the action is activated.
+ *
+ * #GtkActionEntry structs are used with gtk_action_group_add_actions() to
+ * construct actions.
+ */
 struct _GtkActionEntry 
 {
   const gchar     *name;
@@ -87,6 +104,23 @@ struct _GtkActionEntry
   GCallback  callback;
 };
 
+/**
+ * GtkToggleActionEntry:
+ * @name: The name of the action.
+ * @stock_id: The stock id for the action, or the name of an icon from the
+ *  icon theme.
+ * @label: The label for the action. This field should typically be marked
+ *  for translation, see gtk_action_group_set_translation_domain().
+ * @accelerator: The accelerator for the action, in the format understood by
+ *  gtk_accelerator_parse().
+ * @tooltip: The tooltip for the action. This field should typically be
+ *  marked for translation, see gtk_action_group_set_translation_domain().
+ * @callback: The function to call when the action is activated.
+ * @is_active: The initial state of the toggle action.
+ *
+ * #GtkToggleActionEntry structs are used with
+ * gtk_action_group_add_toggle_actions() to construct toggle actions.
+ */
 struct _GtkToggleActionEntry 
 {
   const gchar     *name;
@@ -98,6 +132,23 @@ struct _GtkToggleActionEntry
   gboolean   is_active;
 };
 
+/**
+ * GtkRadioActionEntry:
+ * @name: The name of the action.
+ * @stock_id: The stock id for the action, or the name of an icon from the
+ *  icon theme.
+ * @label: The label for the action. This field should typically be marked
+ *  for translation, see gtk_action_group_set_translation_domain().
+ * @accelerator: The accelerator for the action, in the format understood by
+ *  gtk_accelerator_parse().
+ * @tooltip: The tooltip for the action. This field should typically be
+ *  marked for translation, see gtk_action_group_set_translation_domain().
+ * @value: The value to set on the radio action. See
+ *  gtk_radio_action_get_current_value().
+ *
+ * #GtkRadioActionEntry structs are used with
+ * gtk_action_group_add_radio_actions() to construct groups of radio actions.
+ */
 struct _GtkRadioActionEntry 
 {
   const gchar *name;
