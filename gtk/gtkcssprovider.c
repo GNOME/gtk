@@ -120,8 +120,6 @@ enum ParserSymbol {
   SYMBOL_NTH_CHILD_LAST
 };
 
-#define GTK_CSS_PROVIDER_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), GTK_TYPE_CSS_PROVIDER, GtkCssProviderPrivate))
-
 static void gtk_css_provider_finalize (GObject *object);
 static void gtk_css_style_provider_iface_init (GtkStyleProviderIface *iface);
 
@@ -293,7 +291,10 @@ gtk_css_provider_init (GtkCssProvider *css_provider)
   GtkCssProviderPrivate *priv;
   GScanner *scanner;
 
-  priv = GTK_CSS_PROVIDER_GET_PRIVATE (css_provider);
+  priv = css_provider->priv = G_TYPE_INSTANCE_GET_PRIVATE (css_provider,
+                                                           GTK_TYPE_CSS_PROVIDER,
+                                                           GtkCssProviderPrivate);
+
   priv->selectors_info = g_ptr_array_new_with_free_func ((GDestroyNotify) selector_style_info_free);
 
   scanner = g_scanner_new (NULL);
@@ -489,7 +490,7 @@ css_provider_get_selectors (GtkCssProvider *css_provider,
   GArray *priority_info;
   guint i, j;
 
-  priv = GTK_CSS_PROVIDER_GET_PRIVATE (css_provider);
+  priv = css_provider->priv;
   priority_info = g_array_new (FALSE, FALSE, sizeof (StylePriorityInfo));
 
   for (i = 0; i < priv->selectors_info->len; i++)
@@ -538,7 +539,7 @@ css_provider_dump_symbolic_colors (GtkCssProvider *css_provider,
   GHashTableIter iter;
   gpointer key, value;
 
-  priv = GTK_CSS_PROVIDER_GET_PRIVATE (css_provider);
+  priv = css_provider->priv;
   g_hash_table_iter_init (&iter, priv->symbolic_colors);
 
   while (g_hash_table_iter_next (&iter, &key, &value))
@@ -557,16 +558,18 @@ static GtkStyleSet *
 gtk_css_provider_get_style (GtkStyleProvider *provider,
                             GtkWidgetPath    *path)
 {
+  GtkCssProvider *css_provider;
   GtkCssProviderPrivate *priv;
   GtkStyleSet *set;
   GArray *priority_info;
   guint i;
 
-  priv = GTK_CSS_PROVIDER_GET_PRIVATE (provider);
+  css_provider = GTK_CSS_PROVIDER (provider);
+  priv = css_provider->priv;
   set = gtk_style_set_new ();
 
-  css_provider_dump_symbolic_colors ((GtkCssProvider *) provider, set);
-  priority_info = css_provider_get_selectors (GTK_CSS_PROVIDER (provider), path);
+  css_provider_dump_symbolic_colors (css_provider, set);
+  priority_info = css_provider_get_selectors (css_provider, path);
 
   for (i = 0; i < priority_info->len; i++)
     {
@@ -652,9 +655,11 @@ gtk_css_style_provider_iface_init (GtkStyleProviderIface *iface)
 static void
 gtk_css_provider_finalize (GObject *object)
 {
+  GtkCssProvider *css_provider;
   GtkCssProviderPrivate *priv;
 
-  priv = GTK_CSS_PROVIDER_GET_PRIVATE (object);
+  css_provider = GTK_CSS_PROVIDER (object);
+  priv = css_provider->priv;
 
   g_scanner_destroy (priv->scanner);
   g_free (priv->filename);
@@ -691,7 +696,7 @@ css_provider_apply_scope (GtkCssProvider *css_provider,
 {
   GtkCssProviderPrivate *priv;
 
-  priv = GTK_CSS_PROVIDER_GET_PRIVATE (css_provider);
+  priv = css_provider->priv;
 
   g_scanner_set_scope (priv->scanner, scope);
 
@@ -727,7 +732,7 @@ css_provider_push_scope (GtkCssProvider *css_provider,
 {
   GtkCssProviderPrivate *priv;
 
-  priv = GTK_CSS_PROVIDER_GET_PRIVATE (css_provider);
+  priv = css_provider->priv;
   priv->state = g_slist_prepend (priv->state, GUINT_TO_POINTER (scope));
 
   css_provider_apply_scope (css_provider, scope);
@@ -739,7 +744,7 @@ css_provider_pop_scope (GtkCssProvider *css_provider)
   GtkCssProviderPrivate *priv;
   ParserScope scope = SCOPE_SELECTOR;
 
-  priv = GTK_CSS_PROVIDER_GET_PRIVATE (css_provider);
+  priv = css_provider->priv;
 
   if (!priv->state)
     {
@@ -764,7 +769,7 @@ css_provider_reset_parser (GtkCssProvider *css_provider)
 {
   GtkCssProviderPrivate *priv;
 
-  priv = GTK_CSS_PROVIDER_GET_PRIVATE (css_provider);
+  priv = css_provider->priv;
 
   g_slist_free (priv->state);
   priv->state = NULL;
@@ -790,7 +795,7 @@ css_provider_commit (GtkCssProvider *css_provider)
   GtkCssProviderPrivate *priv;
   GSList *l;
 
-  priv = GTK_CSS_PROVIDER_GET_PRIVATE (css_provider);
+  priv = css_provider->priv;
   l = priv->cur_selectors;
 
   while (l)
@@ -1244,7 +1249,7 @@ parse_rule (GtkCssProvider *css_provider,
   GTokenType expected_token;
   SelectorPath *selector;
 
-  priv = GTK_CSS_PROVIDER_GET_PRIVATE (css_provider);
+  priv = css_provider->priv;
 
   css_provider_push_scope (css_provider, SCOPE_SELECTOR);
 
@@ -1397,7 +1402,7 @@ parse_stylesheet (GtkCssProvider *css_provider)
 {
   GtkCssProviderPrivate *priv;
 
-  priv = GTK_CSS_PROVIDER_GET_PRIVATE (css_provider);
+  priv = css_provider->priv;
   g_scanner_get_next_token (priv->scanner);
 
   while (!g_scanner_eof (priv->scanner))
@@ -1437,7 +1442,7 @@ gtk_css_provider_load_from_data (GtkCssProvider *css_provider,
   g_return_val_if_fail (GTK_IS_CSS_PROVIDER (css_provider), FALSE);
   g_return_val_if_fail (data != NULL, FALSE);
 
-  priv = GTK_CSS_PROVIDER_GET_PRIVATE (css_provider);
+  priv = css_provider->priv;
 
   if (length < 0)
     length = strlen (data);
@@ -1467,7 +1472,7 @@ gtk_css_provider_load_from_file (GtkCssProvider  *css_provider,
   g_return_val_if_fail (GTK_IS_CSS_PROVIDER (css_provider), FALSE);
   g_return_val_if_fail (G_IS_FILE (file), FALSE);
 
-  priv = GTK_CSS_PROVIDER_GET_PRIVATE (css_provider);
+  priv = css_provider->priv;
 
   if (!g_file_load_contents (file, NULL,
                              &data, &length,

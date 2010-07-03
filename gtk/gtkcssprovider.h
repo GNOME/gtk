@@ -37,6 +37,7 @@ typedef struct GtkCssProviderClass GtkCssProviderClass;
 struct GtkCssProvider
 {
   GObject parent_instance;
+  gpointer priv;
 };
 
 struct GtkCssProviderClass
