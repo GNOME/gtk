@@ -103,6 +103,10 @@ void gtk_style_context_get_style_property (GtkStyleContext *context,
 GtkIconSet * gtk_style_context_lookup_icon_set (GtkStyleContext *context,
 						const gchar     *stock_id);
 
+void        gtk_style_context_set_screen (GtkStyleContext *context,
+                                          GdkScreen       *screen);
+GdkScreen * gtk_style_context_get_screen (GtkStyleContext *context);
+
 
 /* Semi-private API */
 const GValue * _gtk_style_context_peek_style_property (GtkStyleContext *context,

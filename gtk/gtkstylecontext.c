@@ -27,6 +27,7 @@
 #include "gtkthemingengine.h"
 #include "gtkintl.h"
 #include "gtkwidget.h"
+#include "gtkprivate.h"
 
 #include "gtkalias.h"
 
@@ -56,6 +57,8 @@ struct PropertyValue
 
 struct GtkStyleContextPrivate
 {
+  GdkScreen *screen;
+
   GList *providers;
   GList *providers_last;
 
@@ -73,7 +76,21 @@ struct GtkStyleContextPrivate
   GtkThemingEngine *theming_engine;
 };
 
+enum {
+  PROP_0,
+  PROP_SCREEN
+};
+
 static void gtk_style_context_finalize (GObject *object);
+
+static void gtk_style_context_impl_set_property (GObject      *object,
+                                                 guint         prop_id,
+                                                 const GValue *value,
+                                                 GParamSpec   *pspec);
+static void gtk_style_context_impl_get_property (GObject      *object,
+                                                 guint         prop_id,
+                                                 GValue       *value,
+                                                 GParamSpec   *pspec);
 
 
 G_DEFINE_TYPE (GtkStyleContext, gtk_style_context, G_TYPE_OBJECT)
@@ -84,6 +101,16 @@ gtk_style_context_class_init (GtkStyleContextClass *klass)
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
   object_class->finalize = gtk_style_context_finalize;
+  object_class->set_property = gtk_style_context_impl_set_property;
+  object_class->get_property = gtk_style_context_impl_get_property;
+
+  g_object_class_install_property (object_class,
+				   PROP_SCREEN,
+				   g_param_spec_object ("screen",
+                                                        P_("Screen"),
+                                                        P_("The associated GdkScreen"),
+                                                        GDK_TYPE_SCREEN,
+                                                        GTK_PARAM_READWRITE));
 
   g_type_class_add_private (object_class, sizeof (GtkStyleContextPrivate));
 }
@@ -163,6 +190,53 @@ gtk_style_context_finalize (GObject *object)
   g_slist_free (priv->icon_factories);
 
   G_OBJECT_CLASS (gtk_style_context_parent_class)->finalize (object);
+}
+
+static void
+gtk_style_context_impl_set_property (GObject      *object,
+                                     guint         prop_id,
+                                     const GValue *value,
+                                     GParamSpec   *pspec)
+{
+  GtkStyleContextPrivate *priv;
+  GtkStyleContext *style_context;
+
+  style_context = GTK_STYLE_CONTEXT (object);
+  priv = style_context->priv;
+
+  switch (prop_id)
+    {
+    case PROP_SCREEN:
+      gtk_style_context_set_screen (style_context,
+                                    g_value_get_object (value));
+      break;
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      break;
+    }
+}
+
+static void
+gtk_style_context_impl_get_property (GObject    *object,
+                                     guint       prop_id,
+                                     GValue     *value,
+                                     GParamSpec *pspec)
+{
+  GtkStyleContextPrivate *priv;
+  GtkStyleContext *style_context;
+
+  style_context = GTK_STYLE_CONTEXT (object);
+  priv = style_context->priv;
+
+  switch (prop_id)
+    {
+    case PROP_SCREEN:
+      g_value_set_object (value, priv->screen);
+      break;
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      break;
+    }
 }
 
 static void
@@ -861,6 +935,31 @@ gtk_style_context_lookup_icon_set (GtkStyleContext *context,
     }
 
   return gtk_icon_factory_lookup_default (stock_id);
+}
+
+void
+gtk_style_context_set_screen (GtkStyleContext *context,
+                              GdkScreen       *screen)
+{
+  GtkStyleContextPrivate *priv;
+
+  g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
+
+  priv = context->priv;
+  priv->screen = screen;
+
+  g_object_notify (G_OBJECT (context), "screen");
+}
+
+GdkScreen *
+gtk_style_context_get_screen (GtkStyleContext *context)
+{
+  GtkStyleContextPrivate *priv;
+
+  g_return_val_if_fail (GTK_IS_STYLE_CONTEXT (context), NULL);
+
+  priv = context->priv;
+  return priv->screen;
 }
 
 /* Paint methods */
