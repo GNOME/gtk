@@ -446,6 +446,28 @@ gtk_application_get_window (GtkApplication *app)
 }
 
 /**
+ * gtk_application_get_windows:
+ * @app: a #GtkApplication
+ *
+ * Retrieves the list of windows previously registered with
+ * gtk_application_create_window() or gtk_application_add_window().
+ *
+ * Return value: (element-type GtkWindow) (transfer none): A pointer
+ * to the list of #GtkWindow<!-- -->s registered by this application,
+ * or %NULL. The returned #GSList is owned by the #GtkApplication
+ * and it should not be modified or freed directly.
+ *
+ * Since: 3.0
+ */
+G_CONST_RETURN GSList *
+gtk_application_get_windows (GtkApplication *app)
+{
+  g_return_val_if_fail (GTK_IS_APPLICATION (app), NULL);
+
+  return app->priv->windows;
+}
+
+/**
  * gtk_application_create_window:
  * @app: a #GtkApplication
  *
