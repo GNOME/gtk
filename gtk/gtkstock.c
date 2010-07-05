@@ -51,7 +51,7 @@ Prebuilt common menu/toolbar items and corresponding icons
  * the user-visible label, keyboard accelerator, and translation domain
  * of the menu or toolbar item; and/or with an icon stored in a
  * #GtkIconFactory. See <link
- * linkend="gtk-Themeable-Stock-Images">GtkIconFactory</link> for
+ * linkend="gtk3-Themeable-Stock-Images">GtkIconFactory</link> for
  * more information on stock icons. The connection between a
  * #GtkStockItem and stock icons is purely conventional (by virtue of
  * using the same stock ID); it's possible to register a stock item but
