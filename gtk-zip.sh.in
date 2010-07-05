@@ -14,15 +14,12 @@ cp -p @abs_srcdir@/COPYING share/doc/gtk+-dev-@GTK_VERSION@
 
 rm $ZIP
 zip $ZIP -@ <<EOF
-etc/gtk-2.0/gdk-pixbuf.loaders
 etc/gtk-2.0/gtkrc
 etc/gtk-2.0/gtk.immodules
 etc/gtk-2.0/im-multipress.conf
-bin/libgdk_pixbuf-@GTK_API_VERSION@-@LT_CURRENT_MINUS_AGE@.dll
 bin/libgdk-win32-@GTK_API_VERSION@-@LT_CURRENT_MINUS_AGE@.dll
 bin/libgtk-win32-@GTK_API_VERSION@-@LT_CURRENT_MINUS_AGE@.dll
 bin/libgailutil-@GAIL_LT_CURRENT_MINUS_AGE@.dll
-bin/gdk-pixbuf-query-loaders.exe
 bin/gtk-query-immodules-2.0.exe
 EOF
 
@@ -42,13 +39,10 @@ rm $DEVZIP
 zip -r -D $DEVZIP -@ <<EOF
 include/gtk-2.0
 include/gail-1.0
-bin/gdk-pixbuf-csource.exe
 bin/gtk-builder-convert
 bin/gtk-demo.exe
 bin/gtk-update-icon-cache.exe
 share/man
-lib/libgdk_pixbuf-@GTK_API_VERSION@.dll.a
-lib/gdk_pixbuf-@GTK_API_VERSION@.lib
 lib/libgdk-win32-@GTK_API_VERSION@.dll.a
 lib/gdk-win32-@GTK_API_VERSION@.lib
 lib/libgtk-win32-@GTK_API_VERSION@.dll.a
