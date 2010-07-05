@@ -70,7 +70,7 @@
  */
 
 
-struct GtkPageSetupUnixDialogPrivate
+struct _GtkPageSetupUnixDialogPrivate
 {
   GtkListStore *printer_list;
   GtkListStore *page_setup_list;
@@ -111,9 +111,6 @@ enum {
 };
 
 G_DEFINE_TYPE (GtkPageSetupUnixDialog, gtk_page_setup_unix_dialog, GTK_TYPE_DIALOG)
-
-#define GTK_PAGE_SETUP_UNIX_DIALOG_GET_PRIVATE(o)  \
-   (G_TYPE_INSTANCE_GET_PRIVATE ((o), GTK_TYPE_PAGE_SETUP_UNIX_DIALOG, GtkPageSetupUnixDialogPrivate))
 
 static void gtk_page_setup_unix_dialog_finalize  (GObject                *object);
 static void populate_dialog                      (GtkPageSetupUnixDialog *dialog);
@@ -168,7 +165,9 @@ gtk_page_setup_unix_dialog_init (GtkPageSetupUnixDialog *dialog)
   GtkTreeIter iter;
   gchar *tmp;
 
-  priv = dialog->priv = GTK_PAGE_SETUP_UNIX_DIALOG_GET_PRIVATE (dialog);
+  priv = dialog->priv = G_TYPE_INSTANCE_GET_PRIVATE (dialog,
+                                                     GTK_TYPE_PAGE_SETUP_UNIX_DIALOG,
+                                                     GtkPageSetupUnixDialogPrivate);
 
   priv->print_backends = NULL;
 
