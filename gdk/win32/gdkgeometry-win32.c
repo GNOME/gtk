@@ -282,7 +282,7 @@ gdk_window_post_scroll (GdkWindow    *window,
 {
   GDK_NOTE (EVENTS,
 	    g_print ("gdk_window_clip_changed: invalidating region: %s\n",
-		     _gdk_win32_gdkregion_to_string (new_clip_region)));
+		     _gdk_win32_cairo_region_to_string (new_clip_region)));
 
   gdk_window_invalidate_region (window, new_clip_region, FALSE);
   g_print ("gdk_window_post_scroll\n");

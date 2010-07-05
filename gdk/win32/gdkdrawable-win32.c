@@ -512,14 +512,14 @@ generic_draw (GdkDrawable    *drawable,
       const GdkGCValuesMask blitting_mask = 0;
       GdkGCValuesMask drawing_mask = GDK_GC_FOREGROUND;
       gint ts_x_origin = 0, ts_y_origin = 0;
+      cairo_rectangle_int_t region_extents;
 
-      gint width = region->extents.x2 - region->extents.x1;
-      gint height = region->extents.y2 - region->extents.y1;
+      cairo_region_get_extents (region, &region_extents);
 
       GdkPixmap *mask_pixmap =
-	gdk_pixmap_new (drawable, width, height, 1);
+	gdk_pixmap_new (drawable, region_extents.width, region_extents.height, 1);
       GdkPixmap *tile_pixmap =
-	gdk_pixmap_new (drawable, width, height, -1);
+	gdk_pixmap_new (drawable, region_extents.width, region_extents.height, -1);
       GdkPixmap *stipple_bitmap = NULL;
       GdkColor fg;
       
@@ -542,13 +542,13 @@ generic_draw (GdkDrawable    *drawable,
       if (gcwin32->values_mask & GDK_GC_TS_Y_ORIGIN)
 	ts_y_origin = gc->ts_y_origin;
 
-      ts_x_origin -= region->extents.x1;
-      ts_y_origin -= region->extents.y1;
+      ts_x_origin -= region_extents.x;
+      ts_y_origin -= region_extents.y;
 
       /* Fill mask bitmap with zeros */
       gdk_gc_set_function (mask_gc, GDK_CLEAR);
       gdk_draw_rectangle (mask_pixmap, mask_gc, TRUE,
-			  0, 0, width, height);
+			  0, 0, region_extents.width, region_extents.height);
 
       /* Paint into mask bitmap, drawing ones */
       gdk_gc_set_function (mask_gc, GDK_COPY);
@@ -575,7 +575,7 @@ generic_draw (GdkDrawable    *drawable,
 
       mask_hdc = gdk_win32_hdc_get (mask_pixmap, mask_gc, drawing_mask);
       (*function) (GDK_GC_WIN32 (mask_gc), mask_hdc,
-		   region->extents.x1, region->extents.y1, args);
+		   region_extents.x, region_extents.y, args);
       gdk_win32_hdc_release (mask_pixmap, mask_gc, drawing_mask);
 
       if (fill_style == GDK_TILED)
@@ -584,21 +584,22 @@ generic_draw (GdkDrawable    *drawable,
 	  draw_tiles (tile_pixmap, tile_gc, SRCCOPY,
 		      _gdk_gc_get_tile (gc),
 		      0, 0, ts_x_origin, ts_y_origin,
-		      width, height);
+		      region_extents.width, region_extents.height);
 	}
       else
 	{
 	  /* Tile with stipple */
 	  GdkGC *stipple_gc;
 
-	  stipple_bitmap = gdk_pixmap_new (NULL, width, height, 1);
+	  stipple_bitmap =
+	    gdk_pixmap_new (NULL, region_extents.width, region_extents.height, 1);
 	  stipple_gc = gdk_gc_new (stipple_bitmap);
 
 	  /* Tile stipple bitmap */
 	  draw_tiles (stipple_bitmap, stipple_gc, SRCCOPY,
 		      _gdk_gc_get_stipple (gc),
 		      0, 0, ts_x_origin, ts_y_origin,
-		      width, height);
+		      region_extents.width, region_extents.height);
 
 	  if (fill_style == GDK_OPAQUE_STIPPLED)
 	    {
@@ -606,7 +607,8 @@ generic_draw (GdkDrawable    *drawable,
 	      fg.pixel = _gdk_gc_get_bg_pixel (gc);
 	      gdk_gc_set_foreground (tile_gc, &fg);
 	      gdk_draw_rectangle (tile_pixmap, tile_gc, TRUE,
-				  0, 0, width, height);
+				  0, 0,
+				  region_extents.width, region_extents.height);
 	    }
 	  g_object_unref (stipple_gc);
 	}
@@ -662,14 +664,18 @@ generic_draw (GdkDrawable    *drawable,
 	   * Reading bottom-up: 11100010 = 0xE2. PSDK docs say this is
 	   * known as DSPDxax, with hex value 0x00E20746.
 	   */
-	  GDI_CALL (BitBlt, (tile_hdc, 0, 0, width, height,
-			     stipple_hdc, 0, 0, ROP3_DSPDxax));
+	  GDI_CALL (BitBlt, (tile_hdc, 0, 0,
+			     region_extents.width, region_extents.height,
+			     stipple_hdc, 0, 0,
+			     ROP3_DSPDxax));
 
 	  if (fill_style == GDK_STIPPLED)
 	    {
 	      /* Punch holes in mask where stipple is zero */
-	      GDI_CALL (BitBlt, (mask_hdc, 0, 0, width, height,
-				 stipple_hdc, 0, 0, SRCAND));
+	      GDI_CALL (BitBlt, (mask_hdc, 0, 0,
+				 region_extents.width, region_extents.height,
+				 stipple_hdc, 0, 0,
+				 SRCAND));
 	    }
 
 	  GDI_CALL (SelectObject, (tile_hdc, old_tile_brush));
@@ -683,8 +689,8 @@ generic_draw (GdkDrawable    *drawable,
        * the areas where mask is one. (It is filled with said pattern.)
        */
 
-      GDI_CALL (MaskBlt, (hdc, region->extents.x1, region->extents.y1,
-			  width, height,
+      GDI_CALL (MaskBlt, (hdc, region_extents.x, region_extents.y,
+			  region_extents.width, region_extents.height,
 			  tile_hdc, 0, 0,
 			  GDK_PIXMAP_HBITMAP (mask_pixmap), 0, 0,
 			  MAKEROP4 (rop2_to_rop3 (gcwin32->rop2), ROP3_D)));
