@@ -4022,8 +4022,8 @@ gtk_text_buffer_copy_clipboard (GtkTextBuffer *buffer,
 /**
  * gtk_text_buffer_get_selection_bounds:
  * @buffer: a #GtkTextBuffer a #GtkTextBuffer
- * @start: iterator to initialize with selection start
- * @end: iterator to initialize with selection end
+ * @start: (out): iterator to initialize with selection start
+ * @end: (out): iterator to initialize with selection end
  *
  * Returns %TRUE if some text is selected; places the bounds
  * of the selection in @start and @end (if the selection has length 0,
