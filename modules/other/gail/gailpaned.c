@@ -144,7 +144,9 @@ gail_paned_get_maximum_value (AtkValue             *obj,
     /* State is defunct */
     return;
 
-  maximum_value = GTK_PANED (widget)->max_position;
+  g_object_get (GTK_PANED (widget),
+                "max-position", &maximum_value,
+                NULL);
   memset (value,  0, sizeof (GValue));
   g_value_init (value, G_TYPE_INT);
   g_value_set_int (value, maximum_value);
@@ -162,7 +164,9 @@ gail_paned_get_minimum_value (AtkValue             *obj,
     /* State is defunct */
     return;
 
-  minimum_value = GTK_PANED (widget)->min_position;
+  g_object_get (GTK_PANED (widget),
+                "min-position", &minimum_value,
+                NULL);
   memset (value,  0, sizeof (GValue));
   g_value_init (value, G_TYPE_INT);
   g_value_set_int (value, minimum_value);
