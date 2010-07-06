@@ -17,6 +17,16 @@
  * Boston, MA 02111-1307, USA.
  */
 
+/**
+ * SECTION:gtkcelleditable
+ * @Short_description: Interface for widgets which can are used for editing
+ *  cells
+ * @Title: GtkCellEditable
+ * @See_also: #GtkEntry, #GtkCellRenderer
+ *
+ * The #GtkCellEditable interface must be implemented for widgets to be usable
+ * when editing the contents of a #GtkTreeView cell.
+ */
 
 #include "config.h"
 #include "gtkcelleditable.h"
@@ -57,7 +67,7 @@ gtk_cell_editable_default_init (GtkCellEditableInterface *iface)
    * #GtkEntry is emitting it when the user presses Enter.
    *
    * gtk_cell_editable_editing_done() is a convenience method
-   * for emitting GtkCellEditable::editing-done.
+   * for emitting #GtkCellEditable::editing-done.
    */
   g_signal_new (I_("editing-done"),
                 GTK_TYPE_CELL_EDITABLE,
@@ -81,7 +91,7 @@ gtk_cell_editable_default_init (GtkCellEditableInterface *iface)
    * before the widget is removed.
    *
    * gtk_cell_editable_remove_widget() is a convenience method
-   * for emitting GtkCellEditable::remove-widget.
+   * for emitting #GtkCellEditable::remove-widget.
    */
   g_signal_new (I_("remove-widget"),
                 GTK_TYPE_CELL_EDITABLE,
