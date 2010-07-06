@@ -3681,7 +3681,7 @@ gtk_window_set_icon_from_file (GtkWindow   *window,
 
 /**
  * gtk_window_set_default_icon_list:
- * @list: a list of #GdkPixbuf
+ * @list: (element-type GdkPixbuf) (transfer container): a list of #GdkPixbuf
  *
  * Sets an icon list to be used as fallback for windows that haven't
  * had gtk_window_set_icon_list() called on them to set up a
