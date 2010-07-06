@@ -29,6 +29,29 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
  */
 
+/**
+ * SECTION:gtkcalendar
+ * @Short_description: Displays a calendar and allows the user to select a date
+ * @Title: GtkCalendar
+ *
+ * #GtkCalendar is a widget that displays a calendar, one month at a time. It
+ * can be created with gtk_calendar_new().
+ *
+ * The month and year currently displayed can be altered with
+ * gtk_calendar_select_month(). The exact day can be selected from the displayed
+ * month using gtk_calendar_select_day().
+ *
+ * To place a visual marker on a particular day, use gtk_calendar_mark_day() and
+ * to remove the marker, gtk_calendar_unmark_day(). Alternative, all marks can
+ * be cleared with gtk_calendar_clear_marks().
+ *
+ * The way in which the calendar itself is displayed can be altered using
+ * gtk_calendar_set_display_options().
+ *
+ * The selected date can be retrieved from a #GtkCalendar using
+ * gtk_calendar_get_date().
+ */
+
 #include "config.h"
 
 #ifdef HAVE_SYS_TIME_H
@@ -579,6 +602,13 @@ gtk_calendar_class_init (GtkCalendarClass *class)
 							 TRUE,
 							 GTK_PARAM_READWRITE));
 
+  /**
+   * GtkCalendar::month-changed:
+   * @calendar: the object which received the signal.
+   *
+   * Emitted when the user clicks a button to change the selected month on a
+   * calendar.
+   */
   gtk_calendar_signals[MONTH_CHANGED_SIGNAL] =
     g_signal_new (I_("month-changed"),
 		  G_OBJECT_CLASS_TYPE (gobject_class),
@@ -587,6 +617,13 @@ gtk_calendar_class_init (GtkCalendarClass *class)
 		  NULL, NULL,
 		  _gtk_marshal_VOID__VOID,
 		  G_TYPE_NONE, 0);
+
+  /**
+   * GtkCalendar::day-selected:
+   * @calendar: the object which received the signal.
+   *
+   * Emitted when the user selects a day.
+   */
   gtk_calendar_signals[DAY_SELECTED_SIGNAL] =
     g_signal_new (I_("day-selected"),
 		  G_OBJECT_CLASS_TYPE (gobject_class),
@@ -595,6 +632,13 @@ gtk_calendar_class_init (GtkCalendarClass *class)
 		  NULL, NULL,
 		  _gtk_marshal_VOID__VOID,
 		  G_TYPE_NONE, 0);
+
+  /**
+   * GtkCalendar::day-selected-double-click:
+   * @calendar: the object which received the signal.
+   *
+   * Emitted when the user double-clicks a day.
+   */
   gtk_calendar_signals[DAY_SELECTED_DOUBLE_CLICK_SIGNAL] =
     g_signal_new (I_("day-selected-double-click"),
 		  G_OBJECT_CLASS_TYPE (gobject_class),
@@ -603,6 +647,13 @@ gtk_calendar_class_init (GtkCalendarClass *class)
 		  NULL, NULL,
 		  _gtk_marshal_VOID__VOID,
 		  G_TYPE_NONE, 0);
+
+  /**
+   * GtkCalendar::prev-month:
+   * @calendar: the object which received the signal.
+   *
+   * Emitted when the user switched to the previous month.
+   */
   gtk_calendar_signals[PREV_MONTH_SIGNAL] =
     g_signal_new (I_("prev-month"),
 		  G_OBJECT_CLASS_TYPE (gobject_class),
@@ -611,6 +662,13 @@ gtk_calendar_class_init (GtkCalendarClass *class)
 		  NULL, NULL,
 		  _gtk_marshal_VOID__VOID,
 		  G_TYPE_NONE, 0);
+
+  /**
+   * GtkCalendar::next-month:
+   * @calendar: the object which received the signal.
+   *
+   * Emitted when the user switched to the next month.
+   */
   gtk_calendar_signals[NEXT_MONTH_SIGNAL] =
     g_signal_new (I_("next-month"),
 		  G_OBJECT_CLASS_TYPE (gobject_class),
@@ -619,6 +677,13 @@ gtk_calendar_class_init (GtkCalendarClass *class)
 		  NULL, NULL,
 		  _gtk_marshal_VOID__VOID,
 		  G_TYPE_NONE, 0);
+
+  /**
+   * GtkCalendar::prev-year:
+   * @calendar: the object which received the signal.
+   *
+   * Emitted when user switched to the previous year.
+   */
   gtk_calendar_signals[PREV_YEAR_SIGNAL] =
     g_signal_new (I_("prev-year"),
 		  G_OBJECT_CLASS_TYPE (gobject_class),
@@ -627,6 +692,13 @@ gtk_calendar_class_init (GtkCalendarClass *class)
 		  NULL, NULL,
 		  _gtk_marshal_VOID__VOID,
 		  G_TYPE_NONE, 0);
+
+  /**
+   * GtkCalendar::next-year:
+   * @calendar: the object which received the signal.
+   *
+   * Emitted when user switched to the next year.
+   */
   gtk_calendar_signals[NEXT_YEAR_SIGNAL] =
     g_signal_new (I_("next-year"),
 		  G_OBJECT_CLASS_TYPE (gobject_class),
