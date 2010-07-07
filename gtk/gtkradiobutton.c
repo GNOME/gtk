@@ -103,6 +103,11 @@
  */
 
 
+struct _GtkRadioButtonPriv
+{
+  GSList *group;
+};
+
 enum {
   PROP_0,
   PROP_GROUP
@@ -188,11 +193,20 @@ gtk_radio_button_class_init (GtkRadioButtonClass *class)
 				       NULL, NULL,
 				       _gtk_marshal_VOID__VOID,
 				       G_TYPE_NONE, 0);
+
+  g_type_class_add_private (class, sizeof (GtkRadioButtonPriv));
 }
 
 static void
 gtk_radio_button_init (GtkRadioButton *radio_button)
 {
+  GtkRadioButtonPriv *priv;
+
+  radio_button->priv = G_TYPE_INSTANCE_GET_PRIVATE (radio_button,
+                                                    GTK_TYPE_RADIO_BUTTON,
+                                                    GtkRadioButtonPriv);
+  priv = radio_button->priv;
+
   gtk_widget_set_has_window (GTK_WIDGET (radio_button), FALSE);
   gtk_widget_set_receives_default (GTK_WIDGET (radio_button), FALSE);
 
@@ -200,7 +214,7 @@ gtk_radio_button_init (GtkRadioButton *radio_button)
 
   GTK_BUTTON (radio_button)->depress_on_activate = FALSE;
 
-  radio_button->group = g_slist_prepend (NULL, radio_button);
+  priv->group = g_slist_prepend (NULL, radio_button);
 
   _gtk_button_set_depressed (GTK_BUTTON (radio_button), TRUE);
   gtk_widget_set_state (GTK_WIDGET (radio_button), GTK_STATE_ACTIVE);
@@ -265,36 +279,39 @@ void
 gtk_radio_button_set_group (GtkRadioButton *radio_button,
 			    GSList         *group)
 {
+  GtkRadioButtonPriv *priv;
   GtkWidget *old_group_singleton = NULL;
   GtkWidget *new_group_singleton = NULL;
-  
+
   g_return_if_fail (GTK_IS_RADIO_BUTTON (radio_button));
   g_return_if_fail (!g_slist_find (group, radio_button));
 
-  if (radio_button->group)
+  priv = radio_button->priv;
+
+  if (priv->group)
     {
       GSList *slist;
 
-      radio_button->group = g_slist_remove (radio_button->group, radio_button);
-      
-      if (radio_button->group && !radio_button->group->next)
-	old_group_singleton = g_object_ref (radio_button->group->data);
-	  
-      for (slist = radio_button->group; slist; slist = slist->next)
+      priv->group = g_slist_remove (priv->group, radio_button);
+
+      if (priv->group && !priv->group->next)
+	old_group_singleton = g_object_ref (priv->group->data);
+
+      for (slist = priv->group; slist; slist = slist->next)
 	{
 	  GtkRadioButton *tmp_button;
 	  
 	  tmp_button = slist->data;
-	  
-	  tmp_button->group = radio_button->group;
+
+	  tmp_button->priv->group = priv->group;
 	}
     }
   
   if (group && !group->next)
     new_group_singleton = g_object_ref (group->data);
-  
-  radio_button->group = g_slist_prepend (group, radio_button);
-  
+
+  priv->group = g_slist_prepend (group, radio_button);
+
   if (group)
     {
       GSList *slist;
@@ -304,8 +321,8 @@ gtk_radio_button_set_group (GtkRadioButton *radio_button,
 	  GtkRadioButton *tmp_button;
 	  
 	  tmp_button = slist->data;
-	  
-	  tmp_button->group = radio_button->group;
+
+	  tmp_button->priv->group = priv->group;
 	}
     }
 
@@ -481,7 +498,7 @@ gtk_radio_button_get_group (GtkRadioButton *radio_button)
 {
   g_return_val_if_fail (GTK_IS_RADIO_BUTTON (radio_button), NULL);
 
-  return radio_button->group;
+  return radio_button->priv->group;
 }
 
 
@@ -489,31 +506,30 @@ static void
 gtk_radio_button_destroy (GtkObject *object)
 {
   GtkWidget *old_group_singleton = NULL;
-  GtkRadioButton *radio_button;
+  GtkRadioButton *radio_button = GTK_RADIO_BUTTON (object);
+  GtkRadioButtonPriv *priv = radio_button->priv;
   GtkRadioButton *tmp_button;
   GSList *tmp_list;
   gboolean was_in_group;
-  
-  radio_button = GTK_RADIO_BUTTON (object);
 
-  was_in_group = radio_button->group && radio_button->group->next;
-  
-  radio_button->group = g_slist_remove (radio_button->group, radio_button);
-  if (radio_button->group && !radio_button->group->next)
-    old_group_singleton = radio_button->group->data;
+  was_in_group = priv->group && priv->group->next;
 
-  tmp_list = radio_button->group;
+  priv->group = g_slist_remove (priv->group, radio_button);
+  if (priv->group && !priv->group->next)
+    old_group_singleton = priv->group->data;
+
+  tmp_list = priv->group;
 
   while (tmp_list)
     {
       tmp_button = tmp_list->data;
       tmp_list = tmp_list->next;
 
-      tmp_button->group = radio_button->group;
+      tmp_button->priv->group = priv->group;
     }
 
   /* this button is no longer in the group */
-  radio_button->group = NULL;
+  priv->group = NULL;
 
   if (old_group_singleton)
     g_signal_emit (old_group_singleton, group_changed_signal, 0);
@@ -572,6 +588,7 @@ gtk_radio_button_focus (GtkWidget         *widget,
 			GtkDirectionType   direction)
 {
   GtkRadioButton *radio_button = GTK_RADIO_BUTTON (widget);
+  GtkRadioButtonPriv *priv = radio_button->priv;
   GSList *tmp_slist;
 
   /* Radio buttons with draw_indicator unset focus "normally", since
@@ -593,12 +610,12 @@ gtk_radio_button_focus (GtkWidget         *widget,
 	{
 	case GTK_DIR_LEFT:
 	case GTK_DIR_RIGHT:
-	  focus_list = g_slist_copy (radio_button->group);
+	  focus_list = g_slist_copy (priv->group);
 	  focus_list = g_slist_sort_with_data (focus_list, left_right_compare, toplevel);
 	  break;
 	case GTK_DIR_UP:
 	case GTK_DIR_DOWN:
-	  focus_list = g_slist_copy (radio_button->group);
+	  focus_list = g_slist_copy (priv->group);
 	  focus_list = g_slist_sort_with_data (focus_list, up_down_compare, toplevel);
 	  break;
 	case GTK_DIR_TAB_FORWARD:
@@ -688,7 +705,7 @@ gtk_radio_button_focus (GtkWidget         *widget,
        *  - there is no currently active radio button.
        */
       
-      tmp_slist = radio_button->group;
+      tmp_slist = priv->group;
       while (tmp_slist)
 	{
 	  if (GTK_TOGGLE_BUTTON (tmp_slist->data)->active)
@@ -707,16 +724,15 @@ gtk_radio_button_focus (GtkWidget         *widget,
 static void
 gtk_radio_button_clicked (GtkButton *button)
 {
-  GtkToggleButton *toggle_button;
-  GtkRadioButton *radio_button;
+  GtkRadioButton *radio_button = GTK_RADIO_BUTTON (button);
+  GtkRadioButtonPriv *priv = radio_button->priv;
+  GtkToggleButton *toggle_button = GTK_TOGGLE_BUTTON (button);
   GtkToggleButton *tmp_button;
   GtkStateType new_state;
   GSList *tmp_list;
   gint toggled;
   gboolean depressed;
 
-  radio_button = GTK_RADIO_BUTTON (button);
-  toggle_button = GTK_TOGGLE_BUTTON (button);
   toggled = FALSE;
 
   g_object_ref (GTK_WIDGET (button));
@@ -724,7 +740,7 @@ gtk_radio_button_clicked (GtkButton *button)
   if (toggle_button->active)
     {
       tmp_button = NULL;
-      tmp_list = radio_button->group;
+      tmp_list = priv->group;
 
       while (tmp_list)
 	{
@@ -752,8 +768,8 @@ gtk_radio_button_clicked (GtkButton *button)
     {
       toggled = TRUE;
       toggle_button->active = !toggle_button->active;
-      
-      tmp_list = radio_button->group;
+
+      tmp_list = priv->group;
       while (tmp_list)
 	{
 	  tmp_button = tmp_list->data;
