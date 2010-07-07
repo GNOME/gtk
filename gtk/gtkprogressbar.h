@@ -44,6 +44,7 @@ G_BEGIN_DECLS
 
 
 typedef struct _GtkProgressBar       GtkProgressBar;
+typedef struct _GtkProgressBarPriv   GtkProgressBarPriv;
 typedef struct _GtkProgressBarClass  GtkProgressBarClass;
 
 typedef enum
@@ -58,24 +59,8 @@ struct _GtkProgressBar
 {
   GtkWidget parent;
 
-  GdkPixmap     *GSEAL (offscreen_pixmap);
-
-  GtkProgressBarOrientation GSEAL (orientation);
-
-  guint GSEAL (blocks);
-  gint  GSEAL (in_block);
-
-  gint  GSEAL (activity_pos);
-  guint GSEAL (activity_step);
-  guint GSEAL (activity_blocks);
-
-  gdouble GSEAL (pulse_fraction);
-
-  guint GSEAL (activity_dir) : 1;
-  guint GSEAL (ellipsize) : 3;
-  guint GSEAL (dirty) : 1;
-  guint GSEAL (activity_mode) : 1;
-  guint GSEAL (show_text) : 1;
+  /* <private> */
+  GtkProgressBarPriv *priv;
 };
 
 struct _GtkProgressBarClass
