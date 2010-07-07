@@ -48,9 +48,6 @@
  */
 
 
-#define GTK_PRINTER_GET_PRIVATE(o)  \
-   (G_TYPE_INSTANCE_GET_PRIVATE ((o), GTK_TYPE_PRINTER, GtkPrinterPrivate))
-
 static void gtk_printer_finalize     (GObject *object);
 
 struct _GtkPrinterPrivate
@@ -245,7 +242,9 @@ gtk_printer_init (GtkPrinter *printer)
 {
   GtkPrinterPrivate *priv;
 
-  priv = printer->priv = GTK_PRINTER_GET_PRIVATE (printer); 
+  priv = printer->priv = G_TYPE_INSTANCE_GET_PRIVATE (printer,
+                                                      GTK_TYPE_PRINTER,
+                                                      GtkPrinterPrivate);
 
   priv->name = NULL;
   priv->location = NULL;
