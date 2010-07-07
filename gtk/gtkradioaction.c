@@ -48,8 +48,6 @@
  */
 
 
-#define GTK_RADIO_ACTION_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), GTK_TYPE_RADIO_ACTION, GtkRadioActionPrivate))
-
 struct _GtkRadioActionPrivate 
 {
   GSList *group;
@@ -183,7 +181,10 @@ gtk_radio_action_class_init (GtkRadioActionClass *klass)
 static void
 gtk_radio_action_init (GtkRadioAction *action)
 {
-  action->private_data = GTK_RADIO_ACTION_GET_PRIVATE (action);
+  action->private_data = G_TYPE_INSTANCE_GET_PRIVATE (action,
+                                                      GTK_TYPE_RADIO_ACTION,
+                                                      GtkRadioActionPrivate);
+
   action->private_data->group = g_slist_prepend (NULL, action);
   action->private_data->value = 0;
 

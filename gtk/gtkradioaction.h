@@ -55,8 +55,7 @@ struct _GtkRadioAction
   GtkToggleAction parent;
 
   /*< private >*/
-
-  GtkRadioActionPrivate *GSEAL (private_data);
+  GtkRadioActionPrivate *private_data;
 };
 
 struct _GtkRadioActionClass
