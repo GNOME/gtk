@@ -47,7 +47,7 @@ struct _GtkRecentAction
   GtkAction parent_instance;
 
   /*< private >*/
-  GtkRecentActionPrivate *GSEAL (priv);
+  GtkRecentActionPrivate *priv;
 };
 
 struct _GtkRecentActionClass
