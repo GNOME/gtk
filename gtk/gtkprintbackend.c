@@ -29,8 +29,6 @@
 #include "gtkprivate.h"
 #include "gtkprintbackend.h"
 
-#define GTK_PRINT_BACKEND_GET_PRIVATE(o)  \
-   (G_TYPE_INSTANCE_GET_PRIVATE ((o), GTK_TYPE_PRINT_BACKEND, GtkPrintBackendPrivate))
 
 static void gtk_print_backend_dispose      (GObject      *object);
 static void gtk_print_backend_set_property (GObject      *object,
@@ -197,9 +195,7 @@ gtk_print_backend_set_property (GObject      *object,
                                 GParamSpec   *pspec)
 {
   GtkPrintBackend *backend = GTK_PRINT_BACKEND (object);
-  GtkPrintBackendPrivate *priv;
-
-  priv = backend->priv = GTK_PRINT_BACKEND_GET_PRIVATE (backend); 
+  GtkPrintBackendPrivate *priv = backend->priv;
 
   switch (prop_id)
     {
@@ -219,9 +215,7 @@ gtk_print_backend_get_property (GObject    *object,
                                 GParamSpec *pspec)
 {
   GtkPrintBackend *backend = GTK_PRINT_BACKEND (object);
-  GtkPrintBackendPrivate *priv;
-
-  priv = backend->priv = GTK_PRINT_BACKEND_GET_PRIVATE (backend); 
+  GtkPrintBackendPrivate *priv = backend->priv;
 
   switch (prop_id)
     {
@@ -454,7 +448,9 @@ gtk_print_backend_init (GtkPrintBackend *backend)
 {
   GtkPrintBackendPrivate *priv;
 
-  priv = backend->priv = GTK_PRINT_BACKEND_GET_PRIVATE (backend); 
+  priv = backend->priv = G_TYPE_INSTANCE_GET_PRIVATE (backend,
+                                                      GTK_TYPE_PRINT_BACKEND,
+                                                      GtkPrintBackendPrivate);
 
   priv->printers = g_hash_table_new_full (g_str_hash, g_str_equal, 
 					  (GDestroyNotify) g_free,
