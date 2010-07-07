@@ -998,7 +998,7 @@ gtk_tree_model_get_column_type (GtkTreeModel *tree_model,
 /**
  * gtk_tree_model_get_iter:
  * @tree_model: A #GtkTreeModel.
- * @iter: The uninitialized #GtkTreeIter.
+ * @iter: (out): The uninitialized #GtkTreeIter.
  * @path: The #GtkTreePath.
  *
  * Sets @iter to a valid iterator pointing to @path.
@@ -1028,7 +1028,7 @@ gtk_tree_model_get_iter (GtkTreeModel *tree_model,
 /**
  * gtk_tree_model_get_iter_from_string:
  * @tree_model: A #GtkTreeModel.
- * @iter: An uninitialized #GtkTreeIter.
+ * @iter: (out): An uninitialized #GtkTreeIter.
  * @path_string: A string representation of a #GtkTreePath.
  *
  * Sets @iter to a valid iterator pointing to @path_string, if it
@@ -1094,7 +1094,7 @@ gtk_tree_model_get_string_from_iter (GtkTreeModel *tree_model,
 /**
  * gtk_tree_model_get_iter_first:
  * @tree_model: A #GtkTreeModel.
- * @iter: The uninitialized #GtkTreeIter.
+ * @iter: (out): The uninitialized #GtkTreeIter.
  * 
  * Initializes @iter with the first iterator in the tree (the one at the path
  * "0") and returns %TRUE.  Returns %FALSE if the tree is empty.
@@ -1175,7 +1175,7 @@ gtk_tree_model_get_value (GtkTreeModel *tree_model,
 /**
  * gtk_tree_model_iter_next:
  * @tree_model: A #GtkTreeModel.
- * @iter: The #GtkTreeIter.
+ * @iter: (inout): The #GtkTreeIter.
  *
  * Sets @iter to point to the node following it at the current level.  If there
  * is no next @iter, %FALSE is returned and @iter is set to be invalid.
@@ -1200,7 +1200,7 @@ gtk_tree_model_iter_next (GtkTreeModel  *tree_model,
 /**
  * gtk_tree_model_iter_children:
  * @tree_model: A #GtkTreeModel.
- * @iter: The new #GtkTreeIter to be set to the child.
+ * @iter: (out): The new #GtkTreeIter to be set to the child.
  * @parent: (allow-none): The #GtkTreeIter, or %NULL
  *
  * Sets @iter to point to the first child of @parent.  If @parent has no
@@ -1281,7 +1281,7 @@ gtk_tree_model_iter_n_children (GtkTreeModel *tree_model,
 /**
  * gtk_tree_model_iter_nth_child:
  * @tree_model: A #GtkTreeModel.
- * @iter: The #GtkTreeIter to set to the nth child.
+ * @iter: (out): The #GtkTreeIter to set to the nth child.
  * @parent: (allow-none): The #GtkTreeIter to get the child from, or %NULL.
  * @n: Then index of the desired child.
  *
@@ -1316,7 +1316,7 @@ gtk_tree_model_iter_nth_child (GtkTreeModel *tree_model,
 /**
  * gtk_tree_model_iter_parent:
  * @tree_model: A #GtkTreeModel
- * @iter: The new #GtkTreeIter to set to the parent.
+ * @iter: (out): The new #GtkTreeIter to set to the parent.
  * @child: The #GtkTreeIter.
  *
  * Sets @iter to be the parent of @child.  If @child is at the toplevel, and

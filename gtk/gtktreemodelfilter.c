@@ -3177,7 +3177,7 @@ gtk_tree_model_filter_set_visible_column (GtkTreeModelFilter *filter,
 /**
  * gtk_tree_model_filter_convert_child_iter_to_iter:
  * @filter: A #GtkTreeModelFilter.
- * @filter_iter: An uninitialized #GtkTreeIter.
+ * @filter_iter: (out): An uninitialized #GtkTreeIter.
  * @child_iter: A valid #GtkTreeIter pointing to a row on the child model.
  *
  * Sets @filter_iter to point to the row in @filter that corresponds to the
@@ -3224,7 +3224,7 @@ gtk_tree_model_filter_convert_child_iter_to_iter (GtkTreeModelFilter *filter,
 /**
  * gtk_tree_model_filter_convert_iter_to_child_iter:
  * @filter: A #GtkTreeModelFilter.
- * @child_iter: An uninitialized #GtkTreeIter.
+ * @child_iter: (out): An uninitialized #GtkTreeIter.
  * @filter_iter: A valid #GtkTreeIter pointing to a row on @filter.
  *
  * Sets @child_iter to point to the row pointed to by @filter_iter.
