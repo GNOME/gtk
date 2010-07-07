@@ -210,27 +210,6 @@ gtk_application_format_activation_data (void)
   return g_variant_builder_end (&builder);
 }
 
-static GVariant *
-variant_from_argv (int    argc,
-		   char **argv)
-{
-  GVariantBuilder builder;
-  int i;
-
-  g_variant_builder_init (&builder, G_VARIANT_TYPE ("aay"));
-
-  for (i = 1; i < argc; i++)
-    {
-      guint8 *argv_bytes;
-
-      argv_bytes = (guint8*) argv[i];
-      g_variant_builder_add_value (&builder,
-				   g_variant_new_byte_array (argv_bytes, -1));
-    }
-  
-  return g_variant_builder_end (&builder);
-}
-
 /**
  * gtk_application_new:
  * @appid: System-dependent application identifier
@@ -255,7 +234,7 @@ gtk_application_new (const gchar   *appid,
 {
   GtkApplication *app;
   gint argc_for_app;
-  gchar **argv_for_app;
+  const gchar **argv_for_app;
   GVariant *argv_variant;
   GError *error = NULL;
 
@@ -267,11 +246,11 @@ gtk_application_new (const gchar   *appid,
     argc_for_app = 0;
 
   if (argv)
-    argv_for_app = *argv;
+    argv_for_app = (const gchar **) *argv;
   else
     argv_for_app = NULL;
 
-  argv_variant = variant_from_argv (argc_for_app, argv_for_app);
+  argv_variant = g_variant_new_bytestring_array (argv_for_app, argc_for_app);
 
   app = g_initable_new (GTK_TYPE_APPLICATION, 
 			NULL,
