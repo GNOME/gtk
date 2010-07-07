@@ -125,7 +125,6 @@ enum {
 #define FALLBACK_ITEM_LIMIT 	10
 #define DEFAULT_LABEL_WIDTH     30
 
-#define GTK_RECENT_CHOOSER_MENU_GET_PRIVATE(obj)	(G_TYPE_INSTANCE_GET_PRIVATE ((obj), GTK_TYPE_RECENT_CHOOSER_MENU, GtkRecentChooserMenuPrivate))
 
 static void     gtk_recent_chooser_menu_finalize    (GObject                   *object);
 static void     gtk_recent_chooser_menu_dispose     (GObject                   *object);
@@ -266,11 +265,13 @@ static void
 gtk_recent_chooser_menu_init (GtkRecentChooserMenu *menu)
 {
   GtkRecentChooserMenuPrivate *priv;
-  
-  priv = GTK_RECENT_CHOOSER_MENU_GET_PRIVATE (menu);
-  
-  menu->priv = priv;
-  
+
+  menu->priv = G_TYPE_INSTANCE_GET_PRIVATE (menu,
+                                            GTK_TYPE_RECENT_CHOOSER_MENU,
+                                            GtkRecentChooserMenuPrivate);
+
+  priv = menu->priv;
+
   priv->show_icons= TRUE;
   priv->show_numbers = FALSE;
   priv->show_tips = FALSE;

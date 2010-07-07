@@ -43,10 +43,10 @@ typedef struct _GtkRecentChooserMenuPrivate	GtkRecentChooserMenuPrivate;
 
 struct _GtkRecentChooserMenu
 {
-  /*< private >*/
   GtkMenu parent_instance;
 
-  GtkRecentChooserMenuPrivate *GSEAL (priv);
+  /* <private> */
+  GtkRecentChooserMenuPrivate *priv;
 };
 
 struct _GtkRecentChooserMenuClass
