@@ -45,10 +45,10 @@ typedef struct _GtkRecentChooserDialogPrivate GtkRecentChooserDialogPrivate;
 
 struct _GtkRecentChooserDialog
 {
-  /*< private >*/
   GtkDialog parent_instance;
 
-  GtkRecentChooserDialogPrivate *GSEAL (priv);
+  /*< private >*/
+  GtkRecentChooserDialogPrivate *priv;
 };
 
 struct _GtkRecentChooserDialogClass
