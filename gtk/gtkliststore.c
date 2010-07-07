@@ -990,7 +990,7 @@ gtk_list_store_remove (GtkListStore *list_store,
 /**
  * gtk_list_store_insert:
  * @list_store: A #GtkListStore
- * @iter: An unset #GtkTreeIter to set to the new row
+ * @iter: (out): An unset #GtkTreeIter to set to the new row
  * @position: position to insert the new row
  *
  * Creates a new row at @position.  @iter will be changed to point to this new
@@ -1041,7 +1041,7 @@ gtk_list_store_insert (GtkListStore *list_store,
 /**
  * gtk_list_store_insert_before:
  * @list_store: A #GtkListStore
- * @iter: An unset #GtkTreeIter to set to the new row
+ * @iter: (out): An unset #GtkTreeIter to set to the new row
  * @sibling: (allow-none): A valid #GtkTreeIter, or %NULL
  *
  * Inserts a new row before @sibling. If @sibling is %NULL, then the row will 
@@ -1073,7 +1073,7 @@ gtk_list_store_insert_before (GtkListStore *list_store,
 /**
  * gtk_list_store_insert_after:
  * @list_store: A #GtkListStore
- * @iter: An unset #GtkTreeIter to set to the new row
+ * @iter: (out): An unset #GtkTreeIter to set to the new row
  * @sibling: (allow-none): A valid #GtkTreeIter, or %NULL
  *
  * Inserts a new row after @sibling. If @sibling is %NULL, then the row will be
@@ -1105,7 +1105,7 @@ gtk_list_store_insert_after (GtkListStore *list_store,
 /**
  * gtk_list_store_prepend:
  * @list_store: A #GtkListStore
- * @iter: An unset #GtkTreeIter to set to the prepend row
+ * @iter: (out): An unset #GtkTreeIter to set to the prepend row
  *
  * Prepends a new row to @list_store. @iter will be changed to point to this new
  * row. The row will be empty after this function is called. To fill in
@@ -1125,7 +1125,7 @@ gtk_list_store_prepend (GtkListStore *list_store,
 /**
  * gtk_list_store_append:
  * @list_store: A #GtkListStore
- * @iter: An unset #GtkTreeIter to set to the appended row
+ * @iter: (out): An unset #GtkTreeIter to set to the appended row
  *
  * Appends a new row to @list_store.  @iter will be changed to point to this new
  * row.  The row will be empty after this function is called.  To fill in
@@ -1883,7 +1883,7 @@ gtk_list_store_has_default_sort_func (GtkTreeSortable *sortable)
 /**
  * gtk_list_store_insert_with_values:
  * @list_store: A #GtkListStore
- * @iter: (allow-none): An unset #GtkTreeIter to set to the new row, or %NULL.
+ * @iter: (out) (allow-none): An unset #GtkTreeIter to set to the new row, or %NULL.
  * @position: position to insert the new row
  * @Varargs: pairs of column number and value, terminated with -1
  *
@@ -1969,7 +1969,7 @@ gtk_list_store_insert_with_values (GtkListStore *list_store,
 /**
  * gtk_list_store_insert_with_valuesv:
  * @list_store: A #GtkListStore
- * @iter: (allow-none): An unset #GtkTreeIter to set to the new row, or %NULL.
+ * @iter: (out) (allow-none): An unset #GtkTreeIter to set to the new row, or %NULL.
  * @position: position to insert the new row
  * @columns: an array of column numbers
  * @values: an array of GValues 

@@ -1157,7 +1157,7 @@ gtk_tree_store_remove (GtkTreeStore *tree_store,
 /**
  * gtk_tree_store_insert:
  * @tree_store: A #GtkTreeStore
- * @iter: An unset #GtkTreeIter to set to the new row
+ * @iter: (out): An unset #GtkTreeIter to set to the new row
  * @parent: (allow-none): A valid #GtkTreeIter, or %NULL
  * @position: position to insert the new row
  *
@@ -1218,7 +1218,7 @@ gtk_tree_store_insert (GtkTreeStore *tree_store,
 /**
  * gtk_tree_store_insert_before:
  * @tree_store: A #GtkTreeStore
- * @iter: An unset #GtkTreeIter to set to the new row
+ * @iter: (out): An unset #GtkTreeIter to set to the new row
  * @parent: (allow-none): A valid #GtkTreeIter, or %NULL
  * @sibling: (allow-none): A valid #GtkTreeIter, or %NULL
  *
@@ -1298,7 +1298,7 @@ gtk_tree_store_insert_before (GtkTreeStore *tree_store,
 /**
  * gtk_tree_store_insert_after:
  * @tree_store: A #GtkTreeStore
- * @iter: An unset #GtkTreeIter to set to the new row
+ * @iter: (out): An unset #GtkTreeIter to set to the new row
  * @parent: (allow-none): A valid #GtkTreeIter, or %NULL
  * @sibling: (allow-none): A valid #GtkTreeIter, or %NULL
  *
@@ -1379,7 +1379,7 @@ gtk_tree_store_insert_after (GtkTreeStore *tree_store,
 /**
  * gtk_tree_store_insert_with_values:
  * @tree_store: A #GtkTreeStore
- * @iter: (allow-none): An unset #GtkTreeIter to set the new row, or %NULL.
+ * @iter: (out) (allow-none): An unset #GtkTreeIter to set the new row, or %NULL.
  * @parent: (allow-none): A valid #GtkTreeIter, or %NULL
  * @position: position to insert the new row
  * @Varargs: pairs of column number and value, terminated with -1
@@ -1470,7 +1470,7 @@ gtk_tree_store_insert_with_values (GtkTreeStore *tree_store,
 /**
  * gtk_tree_store_insert_with_valuesv:
  * @tree_store: A #GtkTreeStore
- * @iter: (allow-none): An unset #GtkTreeIter to set the new row, or %NULL.
+ * @iter: (out) (allow-none): An unset #GtkTreeIter to set the new row, or %NULL.
  * @parent: (allow-none): A valid #GtkTreeIter, or %NULL
  * @position: position to insert the new row
  * @columns: an array of column numbers
@@ -1547,7 +1547,7 @@ gtk_tree_store_insert_with_valuesv (GtkTreeStore *tree_store,
 /**
  * gtk_tree_store_prepend:
  * @tree_store: A #GtkTreeStore
- * @iter: An unset #GtkTreeIter to set to the prepended row
+ * @iter: (out): An unset #GtkTreeIter to set to the prepended row
  * @parent: (allow-none): A valid #GtkTreeIter, or %NULL
  * 
  * Prepends a new row to @tree_store.  If @parent is non-%NULL, then it will prepend
@@ -1605,7 +1605,7 @@ gtk_tree_store_prepend (GtkTreeStore *tree_store,
 /**
  * gtk_tree_store_append:
  * @tree_store: A #GtkTreeStore
- * @iter: An unset #GtkTreeIter to set to the appended row
+ * @iter: (out): An unset #GtkTreeIter to set to the appended row
  * @parent: (allow-none): A valid #GtkTreeIter, or %NULL
  * 
  * Appends a new row to @tree_store.  If @parent is non-%NULL, then it will append the

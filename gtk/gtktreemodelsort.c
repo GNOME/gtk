@@ -2087,7 +2087,7 @@ gtk_tree_model_sort_convert_child_path_to_path (GtkTreeModelSort *tree_model_sor
 /**
  * gtk_tree_model_sort_convert_child_iter_to_iter:
  * @tree_model_sort: A #GtkTreeModelSort
- * @sort_iter: An uninitialized #GtkTreeIter.
+ * @sort_iter: (out): An uninitialized #GtkTreeIter.
  * @child_iter: A valid #GtkTreeIter pointing to a row on the child model
  * 
  * Sets @sort_iter to point to the row in @tree_model_sort that corresponds to
@@ -2194,7 +2194,7 @@ gtk_tree_model_sort_convert_path_to_child_path (GtkTreeModelSort *tree_model_sor
 /**
  * gtk_tree_model_sort_convert_iter_to_child_iter:
  * @tree_model_sort: A #GtkTreeModelSort
- * @child_iter: An uninitialized #GtkTreeIter
+ * @child_iter: (out): An uninitialized #GtkTreeIter
  * @sorted_iter: A valid #GtkTreeIter pointing to a row on @tree_model_sort.
  * 
  * Sets @child_iter to point to the row pointed to by @sorted_iter.
