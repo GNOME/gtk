@@ -84,7 +84,6 @@ struct _GtkRecentInfo
   gint ref_count;
 };
 
-#define GTK_RECENT_MANAGER_GET_PRIVATE(obj)     (G_TYPE_INSTANCE_GET_PRIVATE ((obj), GTK_TYPE_RECENT_MANAGER, GtkRecentManagerPrivate))
 
 struct _GtkRecentManagerPrivate
 {
@@ -276,8 +275,11 @@ gtk_recent_manager_init (GtkRecentManager *manager)
 {
   GtkRecentManagerPrivate *priv;
 
-  manager->priv = priv = GTK_RECENT_MANAGER_GET_PRIVATE (manager);
-  
+  manager->priv = G_TYPE_INSTANCE_GET_PRIVATE (manager,
+                                               GTK_TYPE_RECENT_MANAGER,
+                                               GtkRecentManagerPrivate);
+  priv = manager->priv;
+
   priv->limit = DEFAULT_LIMIT;
   priv->size = 0;
 

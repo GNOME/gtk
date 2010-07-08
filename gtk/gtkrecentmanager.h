@@ -83,10 +83,10 @@ struct _GtkRecentData
 
 struct _GtkRecentManager
 {
-  /*< private >*/
   GObject parent_instance;
 
-  GtkRecentManagerPrivate *GSEAL (priv);
+  /* <private> */
+  GtkRecentManagerPrivate *priv;
 };
 
 struct _GtkRecentManagerClass
