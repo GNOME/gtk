@@ -2760,7 +2760,7 @@ gtk_range_adjustment_value_changed (GtkAdjustment *adjustment,
   
   /* now check whether the layout changed  */
   if (layout_changed (range->layout, &layout) ||
-      (GTK_IS_SCALE (range) && GTK_SCALE (range)->draw_value))
+      (GTK_IS_SCALE (range) && gtk_scale_get_draw_value (GTK_SCALE (range))))
     {
       gtk_widget_queue_draw (GTK_WIDGET (range));
       /* setup a timer to ensure the range isn't lagging too much behind the scroll position */
