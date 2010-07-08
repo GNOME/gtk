@@ -999,7 +999,7 @@ create_volume_button (void)
   button = gtk_volume_button_new ();
   gtk_scale_button_set_value (GTK_SCALE_BUTTON (button), 33);
   /* Hack: get the private dock */
-  widget = GTK_SCALE_BUTTON (button)->plus_button->parent->parent->parent;
+  widget = gtk_scale_button_get_plus_button (GTK_SCALE_BUTTON (button))->parent->parent->parent;
   gtk_widget_show_all (widget);
   return new_widget_info ("volumebutton", widget, ASIS);
 }
