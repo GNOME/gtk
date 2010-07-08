@@ -50,6 +50,7 @@ endif
 # since automake doesn't support conditionalized libsomething_la_LDFLAGS
 # we use the general approach here
 LDADD = \
+	$(GTK_LINK_FLAGS)						\
 	-version-info $(LT_VERSION_INFO)		 		\
 	-export-dynamic 						\
 	-rpath $(libdir) 						\

@@ -129,6 +129,7 @@ deps =
 # since automake doesn't support conditionalized libsomething_la_LDFLAGS
 # we use the general approach here
 libtool_opts =							\
+  $(GTK_LINK_FLAGS)						\
   -version-info $(LT_VERSION_INFO)				\
   -export-dynamic $(no_undefined) $(LIBTOOL_EXPORT_OPTIONS)	\
   -rpath $(libdir) $(libgtk_target_ldflags)
