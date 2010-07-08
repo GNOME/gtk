@@ -632,7 +632,7 @@ gtk_tree_path_get_indices (GtkTreePath *path)
  * It also returns the number of elements in the array.
  * The array should not be freed.
  *
- * Return value: (array length=depth): The current indices, or %NULL.
+ * Return value: (array length=depth) (transfer none): The current indices, or %NULL.
  *
  * Since: 3.0
  **/
