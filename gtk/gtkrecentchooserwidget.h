@@ -44,10 +44,10 @@ typedef struct _GtkRecentChooserWidgetPrivate GtkRecentChooserWidgetPrivate;
 
 struct _GtkRecentChooserWidget
 {
-  /*< private >*/
   GtkVBox parent_instance;
 
-  GtkRecentChooserWidgetPrivate *GSEAL (priv);
+  /* <private> */
+  GtkRecentChooserWidgetPrivate *priv;
 };
 
 struct _GtkRecentChooserWidgetClass
