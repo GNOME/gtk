@@ -41,6 +41,24 @@
 
 #define ROUND(x) ((int) ((x) + 0.5))
 
+struct _GtkRulerPriv
+{
+  GtkOrientation        orientation;
+  GtkRulerMetric       *metric;
+
+  GdkGC                *non_gr_exp_gc;
+  GdkPixmap            *backing_store;
+
+  gint                  slider_size;
+  gint                  xsrc;
+  gint                  ysrc;
+
+  gdouble               lower;          /* The upper limit of the ruler (in points) */
+  gdouble               max_size;       /* The maximum size of the ruler */
+  gdouble               position;       /* The position of the mark on the ruler */
+  gdouble               upper;          /* The lower limit of the ruler */
+};
+
 enum {
   PROP_0,
   PROP_ORIENTATION,
@@ -50,15 +68,6 @@ enum {
   PROP_MAX_SIZE,
   PROP_METRIC
 };
-
-typedef struct _GtkRulerPrivate GtkRulerPrivate;
-
-struct _GtkRulerPrivate
-{
-  GtkOrientation orientation;
-};
-
-#define GTK_RULER_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), GTK_TYPE_RULER, GtkRulerPrivate))
 
 
 static void     gtk_ruler_set_property    (GObject        *object,
@@ -175,28 +184,33 @@ gtk_ruler_class_init (GtkRulerClass *class)
 						      GTK_PIXELS,
 						      GTK_PARAM_READWRITE));  
 
-  g_type_class_add_private (gobject_class, sizeof (GtkRulerPrivate));
+  g_type_class_add_private (gobject_class, sizeof (GtkRulerPriv));
 }
 
 static void
 gtk_ruler_init (GtkRuler *ruler)
 {
   GtkWidget *widget = GTK_WIDGET (ruler);
-  GtkRulerPrivate *private = GTK_RULER_GET_PRIVATE (ruler);
+  GtkRulerPriv *priv;
 
-  private->orientation = GTK_ORIENTATION_HORIZONTAL;
+  ruler->priv = G_TYPE_INSTANCE_GET_PRIVATE (ruler,
+                                             GTK_TYPE_RULER,
+                                             GtkRulerPriv);
+  priv = ruler->priv;
+
+  priv->orientation = GTK_ORIENTATION_HORIZONTAL;
 
   widget->requisition.width  = widget->style->xthickness * 2 + 1;
   widget->requisition.height = widget->style->ythickness * 2 + RULER_WIDTH;
 
-  ruler->backing_store = NULL;
-  ruler->xsrc = 0;
-  ruler->ysrc = 0;
-  ruler->slider_size = 0;
-  ruler->lower = 0;
-  ruler->upper = 0;
-  ruler->position = 0;
-  ruler->max_size = 0;
+  priv->backing_store = NULL;
+  priv->xsrc = 0;
+  priv->ysrc = 0;
+  priv->slider_size = 0;
+  priv->lower = 0;
+  priv->upper = 0;
+  priv->position = 0;
+  priv->max_size = 0;
 
   gtk_ruler_set_metric (ruler, GTK_PIXELS);
 }
@@ -208,29 +222,29 @@ gtk_ruler_set_property (GObject      *object,
 			GParamSpec   *pspec)
 {
   GtkRuler *ruler = GTK_RULER (object);
-  GtkRulerPrivate *private = GTK_RULER_GET_PRIVATE (ruler);
+  GtkRulerPriv *priv = ruler->priv;
 
   switch (prop_id)
     {
     case PROP_ORIENTATION:
-      private->orientation = g_value_get_enum (value);
+      priv->orientation = g_value_get_enum (value);
       gtk_widget_queue_resize (GTK_WIDGET (ruler));
       break;
     case PROP_LOWER:
-      gtk_ruler_set_range (ruler, g_value_get_double (value), ruler->upper,
-			   ruler->position, ruler->max_size);
+      gtk_ruler_set_range (ruler, g_value_get_double (value), priv->upper,
+                           priv->position, priv->max_size);
       break;
     case PROP_UPPER:
-      gtk_ruler_set_range (ruler, ruler->lower, g_value_get_double (value),
-			   ruler->position, ruler->max_size);
+      gtk_ruler_set_range (ruler, priv->lower, g_value_get_double (value),
+                           priv->position, priv->max_size);
       break;
     case PROP_POSITION:
-      gtk_ruler_set_range (ruler, ruler->lower, ruler->upper,
-			   g_value_get_double (value), ruler->max_size);
+      gtk_ruler_set_range (ruler, priv->lower, priv->upper,
+                           g_value_get_double (value), priv->max_size);
       break;
     case PROP_MAX_SIZE:
-      gtk_ruler_set_range (ruler, ruler->lower, ruler->upper,
-			   ruler->position,  g_value_get_double (value));
+      gtk_ruler_set_range (ruler, priv->lower, priv->upper,
+                           priv->position,  g_value_get_double (value));
       break;
     case PROP_METRIC:
       gtk_ruler_set_metric (ruler, g_value_get_enum (value));
@@ -248,24 +262,24 @@ gtk_ruler_get_property (GObject      *object,
 			GParamSpec   *pspec)
 {
   GtkRuler *ruler = GTK_RULER (object);
-  GtkRulerPrivate *private = GTK_RULER_GET_PRIVATE (ruler);
+  GtkRulerPriv *priv = ruler->priv;
 
   switch (prop_id)
     {
     case PROP_ORIENTATION:
-      g_value_set_enum (value, private->orientation);
+      g_value_set_enum (value, priv->orientation);
       break;
     case PROP_LOWER:
-      g_value_set_double (value, ruler->lower);
+      g_value_set_double (value, priv->lower);
       break;
     case PROP_UPPER:
-      g_value_set_double (value, ruler->upper);
+      g_value_set_double (value, priv->upper);
       break;
     case PROP_POSITION:
-      g_value_set_double (value, ruler->position);
+      g_value_set_double (value, priv->position);
       break;
     case PROP_MAX_SIZE:
-      g_value_set_double (value, ruler->max_size);
+      g_value_set_double (value, priv->max_size);
       break;
     case PROP_METRIC:
       g_value_set_enum (value, gtk_ruler_get_metric (ruler));
@@ -298,9 +312,13 @@ void
 gtk_ruler_set_metric (GtkRuler      *ruler,
 		      GtkMetricType  metric)
 {
+  GtkRulerPriv *priv;
+
   g_return_if_fail (GTK_IS_RULER (ruler));
 
-  ruler->metric = (GtkRulerMetric *) &ruler_metrics[metric];
+  priv = ruler->priv;
+
+  priv->metric = (GtkRulerMetric *) &ruler_metrics[metric];
 
   if (gtk_widget_is_drawable (GTK_WIDGET (ruler)))
     gtk_widget_queue_draw (GTK_WIDGET (ruler));
@@ -319,12 +337,15 @@ gtk_ruler_set_metric (GtkRuler      *ruler,
 GtkMetricType
 gtk_ruler_get_metric (GtkRuler *ruler)
 {
+  GtkRulerPriv *priv;
   gint i;
 
   g_return_val_if_fail (GTK_IS_RULER (ruler), 0);
 
+  priv = ruler->priv;
+
   for (i = 0; i < G_N_ELEMENTS (ruler_metrics); i++)
-    if (ruler->metric == &ruler_metrics[i])
+    if (priv->metric == &ruler_metrics[i])
       return i;
 
   g_assert_not_reached ();
@@ -350,27 +371,31 @@ gtk_ruler_set_range (GtkRuler *ruler,
 		     gdouble   position,
 		     gdouble   max_size)
 {
+  GtkRulerPriv *priv;
+
   g_return_if_fail (GTK_IS_RULER (ruler));
 
+  priv = ruler->priv;
+
   g_object_freeze_notify (G_OBJECT (ruler));
-  if (ruler->lower != lower)
+  if (priv->lower != lower)
     {
-      ruler->lower = lower;
+      priv->lower = lower;
       g_object_notify (G_OBJECT (ruler), "lower");
     }
-  if (ruler->upper != upper)
+  if (priv->upper != upper)
     {
-      ruler->upper = upper;
+      priv->upper = upper;
       g_object_notify (G_OBJECT (ruler), "upper");
     }
-  if (ruler->position != position)
+  if (priv->position != position)
     {
-      ruler->position = position;
+      priv->position = position;
       g_object_notify (G_OBJECT (ruler), "position");
     }
-  if (ruler->max_size != max_size)
+  if (priv->max_size != max_size)
     {
-      ruler->max_size = max_size;
+      priv->max_size = max_size;
       g_object_notify (G_OBJECT (ruler), "max-size");
     }
   g_object_thaw_notify (G_OBJECT (ruler));
@@ -398,16 +423,20 @@ gtk_ruler_get_range (GtkRuler *ruler,
 		     gdouble  *position,
 		     gdouble  *max_size)
 {
+  GtkRulerPriv *priv;
+
   g_return_if_fail (GTK_IS_RULER (ruler));
 
+  priv = ruler->priv;
+
   if (lower)
-    *lower = ruler->lower;
+    *lower = priv->lower;
   if (upper)
-    *upper = ruler->upper;
+    *upper = priv->upper;
   if (position)
-    *position = ruler->position;
+    *position = priv->position;
   if (max_size)
-    *max_size = ruler->max_size;
+    *max_size = priv->max_size;
 }
 
 void
@@ -468,17 +497,18 @@ static void
 gtk_ruler_unrealize (GtkWidget *widget)
 {
   GtkRuler *ruler = GTK_RULER (widget);
+  GtkRulerPriv *priv = ruler->priv;
 
-  if (ruler->backing_store)
+  if (priv->backing_store)
     {
-      g_object_unref (ruler->backing_store);
-      ruler->backing_store = NULL;
+      g_object_unref (priv->backing_store);
+      priv->backing_store = NULL;
     }
 
-  if (ruler->non_gr_exp_gc)
+  if (priv->non_gr_exp_gc)
     {
-      g_object_unref (ruler->non_gr_exp_gc);
-      ruler->non_gr_exp_gc = NULL;
+      g_object_unref (priv->non_gr_exp_gc);
+      priv->non_gr_exp_gc = NULL;
     }
 
   GTK_WIDGET_CLASS (gtk_ruler_parent_class)->unrealize (widget);
@@ -488,9 +518,10 @@ static void
 gtk_ruler_size_request (GtkWidget      *widget,
                         GtkRequisition *requisition)
 {
-  GtkRulerPrivate *private = GTK_RULER_GET_PRIVATE (widget);
+  GtkRuler *ruler = GTK_RULER (widget);
+  GtkRulerPriv *priv = ruler->priv;
 
-  if (private->orientation == GTK_ORIENTATION_HORIZONTAL)
+  if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
     {
       requisition->width  = widget->style->xthickness * 2 + 1;
       requisition->height = widget->style->ythickness * 2 + RULER_WIDTH;
@@ -525,7 +556,7 @@ gtk_ruler_motion_notify (GtkWidget      *widget,
                          GdkEventMotion *event)
 {
   GtkRuler *ruler = GTK_RULER (widget);
-  GtkRulerPrivate *private = GTK_RULER_GET_PRIVATE (widget);
+  GtkRulerPriv *priv = ruler->priv;
   gint x;
   gint y;
 
@@ -533,15 +564,15 @@ gtk_ruler_motion_notify (GtkWidget      *widget,
   x = event->x;
   y = event->y;
 
-  if (private->orientation == GTK_ORIENTATION_HORIZONTAL)
-    ruler->position = ruler->lower + ((ruler->upper - ruler->lower) * x) / widget->allocation.width;
+  if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
+    priv->position = priv->lower + ((priv->upper - priv->lower) * x) / widget->allocation.width;
   else
-    ruler->position = ruler->lower + ((ruler->upper - ruler->lower) * y) / widget->allocation.height;
+    priv->position = priv->lower + ((priv->upper - priv->lower) * y) / widget->allocation.height;
 
   g_object_notify (G_OBJECT (ruler), "position");
 
   /*  Make sure the ruler has been allocated already  */
-  if (ruler->backing_store != NULL)
+  if (priv->backing_store != NULL)
     gtk_ruler_draw_pos (ruler);
 
   return FALSE;
@@ -554,12 +585,13 @@ gtk_ruler_expose (GtkWidget      *widget,
   if (gtk_widget_is_drawable (widget))
     {
       GtkRuler *ruler = GTK_RULER (widget);
+      GtkRulerPriv *priv = ruler->priv;
 
       gtk_ruler_draw_ticks (ruler);
       
       gdk_draw_drawable (widget->window,
-			 ruler->non_gr_exp_gc,
-			 ruler->backing_store,
+                         priv->non_gr_exp_gc,
+                         priv->backing_store,
 			 0, 0, 0, 0,
 			 widget->allocation.width,
 			 widget->allocation.height);
@@ -573,34 +605,35 @@ gtk_ruler_expose (GtkWidget      *widget,
 static void
 gtk_ruler_make_pixmap (GtkRuler *ruler)
 {
+  GtkRulerPriv *priv = ruler->priv;
   GtkWidget *widget;
   gint width;
   gint height;
 
   widget = GTK_WIDGET (ruler);
 
-  if (ruler->backing_store)
+  if (priv->backing_store)
     {
-      gdk_drawable_get_size (ruler->backing_store, &width, &height);
+      gdk_drawable_get_size (priv->backing_store, &width, &height);
       if ((width == widget->allocation.width) &&
 	  (height == widget->allocation.height))
 	return;
 
-      g_object_unref (ruler->backing_store);
+      g_object_unref (priv->backing_store);
     }
 
-  ruler->backing_store = gdk_pixmap_new (widget->window,
-					 widget->allocation.width,
-					 widget->allocation.height,
-					 -1);
+  priv->backing_store = gdk_pixmap_new (widget->window,
+                                        widget->allocation.width,
+                                        widget->allocation.height,
+                                        -1);
 
-  ruler->xsrc = 0;
-  ruler->ysrc = 0;
+  priv->xsrc = 0;
+  priv->ysrc = 0;
 
-  if (!ruler->non_gr_exp_gc)
+  if (!priv->non_gr_exp_gc)
     {
-      ruler->non_gr_exp_gc = gdk_gc_new (widget->window);
-      gdk_gc_set_exposures (ruler->non_gr_exp_gc, FALSE);
+      priv->non_gr_exp_gc = gdk_gc_new (widget->window);
+      gdk_gc_set_exposures (priv->non_gr_exp_gc, FALSE);
     }
 }
 
@@ -608,7 +641,7 @@ static void
 gtk_ruler_real_draw_ticks (GtkRuler *ruler)
 {
   GtkWidget *widget = GTK_WIDGET (ruler);
-  GtkRulerPrivate *private = GTK_RULER_GET_PRIVATE (ruler);
+  GtkRulerPriv *priv = ruler->priv;
   cairo_t *cr;
   gint i, j;
   gint width, height;
@@ -641,7 +674,7 @@ gtk_ruler_real_draw_ticks (GtkRuler *ruler)
   digit_height = PANGO_PIXELS (ink_rect.height) + 2;
   digit_offset = ink_rect.y;
 
-  if (private->orientation == GTK_ORIENTATION_HORIZONTAL)
+  if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
     {
       width = widget->allocation.width;
       height = widget->allocation.height - ythickness * 2;
@@ -652,20 +685,20 @@ gtk_ruler_real_draw_ticks (GtkRuler *ruler)
       height = widget->allocation.width - ythickness * 2;
     }
 
-#define DETAILE(private) (private->orientation == GTK_ORIENTATION_HORIZONTAL ? "hruler" : "vruler");
+#define DETAILE(private) (priv->orientation == GTK_ORIENTATION_HORIZONTAL ? "hruler" : "vruler");
 
-  gtk_paint_box (widget->style, ruler->backing_store,
+  gtk_paint_box (widget->style, priv->backing_store,
 		 GTK_STATE_NORMAL, GTK_SHADOW_OUT,
 		 NULL, widget,
-                 private->orientation == GTK_ORIENTATION_HORIZONTAL ?
+                 priv->orientation == GTK_ORIENTATION_HORIZONTAL ?
                  "hruler" : "vruler",
 		 0, 0,
 		 widget->allocation.width, widget->allocation.height);
 
-  cr = gdk_cairo_create (ruler->backing_store);
+  cr = gdk_cairo_create (priv->backing_store);
   gdk_cairo_set_source_color (cr, &widget->style->fg[widget->state]);
 
-  if (private->orientation == GTK_ORIENTATION_HORIZONTAL)
+  if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
     {
       cairo_rectangle (cr,
                        xthickness,
@@ -682,8 +715,8 @@ gtk_ruler_real_draw_ticks (GtkRuler *ruler)
                        widget->allocation.height - 2 * ythickness);
     }
 
-  upper = ruler->upper / ruler->metric->pixels_per_unit;
-  lower = ruler->lower / ruler->metric->pixels_per_unit;
+  upper = priv->upper / priv->metric->pixels_per_unit;
+  lower = priv->lower / priv->metric->pixels_per_unit;
 
   if ((upper - lower) == 0)
     goto out;
@@ -700,15 +733,15 @@ gtk_ruler_real_draw_ticks (GtkRuler *ruler)
    *   of this displayed text. Use this height to find a scale which
    *   leaves sufficient room for drawing the ruler.
    */
-  scale = ceil (ruler->max_size / ruler->metric->pixels_per_unit);
+  scale = ceil (priv->max_size / priv->metric->pixels_per_unit);
   g_snprintf (unit_str, sizeof (unit_str), "%d", scale);
 
-  if (private->orientation == GTK_ORIENTATION_HORIZONTAL)
+  if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
     {
       text_width = strlen (unit_str) * digit_height + 1;
 
       for (scale = 0; scale < MAXIMUM_SCALES; scale++)
-        if (ruler->metric->ruler_scale[scale] * fabs(increment) > 2 * text_width)
+        if (priv->metric->ruler_scale[scale] * fabs(increment) > 2 * text_width)
           break;
     }
   else
@@ -716,7 +749,7 @@ gtk_ruler_real_draw_ticks (GtkRuler *ruler)
       text_height = strlen (unit_str) * digit_height + 1;
 
       for (scale = 0; scale < MAXIMUM_SCALES; scale++)
-        if (ruler->metric->ruler_scale[scale] * fabs(increment) > 2 * text_height)
+        if (priv->metric->ruler_scale[scale] * fabs(increment) > 2 * text_height)
           break;
     }
 
@@ -727,8 +760,8 @@ gtk_ruler_real_draw_ticks (GtkRuler *ruler)
   length = 0;
   for (i = MAXIMUM_SUBDIVIDE - 1; i >= 0; i--)
     {
-      subd_incr = (gdouble) ruler->metric->ruler_scale[scale] /
-	          (gdouble) ruler->metric->subdivide[i];
+      subd_incr = (gdouble) priv->metric->ruler_scale[scale] /
+	          (gdouble) priv->metric->subdivide[i];
       if (subd_incr * fabs(increment) <= MINIMUM_INCR)
 	continue;
 
@@ -754,7 +787,7 @@ gtk_ruler_real_draw_ticks (GtkRuler *ruler)
 	{
 	  pos = ROUND ((cur - lower) * increment);
 
-          if (private->orientation == GTK_ORIENTATION_HORIZONTAL)
+          if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
             {
               cairo_rectangle (cr,
                                pos, height + ythickness - length,
@@ -772,13 +805,13 @@ gtk_ruler_real_draw_ticks (GtkRuler *ruler)
 	    {
 	      g_snprintf (unit_str, sizeof (unit_str), "%d", (int) cur);
 
-              if (private->orientation == GTK_ORIENTATION_HORIZONTAL)
+              if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
                 {
                   pango_layout_set_text (layout, unit_str, -1);
                   pango_layout_get_extents (layout, &logical_rect, NULL);
 
                   gtk_paint_layout (widget->style,
-                                    ruler->backing_store,
+                                    priv->backing_store,
                                     gtk_widget_get_state (widget),
                                     FALSE,
                                     NULL,
@@ -795,7 +828,7 @@ gtk_ruler_real_draw_ticks (GtkRuler *ruler)
                       pango_layout_get_extents (layout, NULL, &logical_rect);
 
                       gtk_paint_layout (widget->style,
-                                        ruler->backing_store,
+                                        priv->backing_store,
                                         gtk_widget_get_state (widget),
                                         FALSE,
                                         NULL,
@@ -821,7 +854,7 @@ static void
 gtk_ruler_real_draw_pos (GtkRuler *ruler)
 {
   GtkWidget *widget = GTK_WIDGET (ruler);
-  GtkRulerPrivate *private = GTK_RULER_GET_PRIVATE (ruler);
+  GtkRulerPriv *priv = ruler->priv;
   gint x, y;
   gint width, height;
   gint bs_width, bs_height;
@@ -836,7 +869,7 @@ gtk_ruler_real_draw_pos (GtkRuler *ruler)
       width = widget->allocation.width;
       height = widget->allocation.height;
 
-      if (private->orientation == GTK_ORIENTATION_HORIZONTAL)
+      if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
         {
           height -= ythickness * 2;
 
@@ -858,34 +891,34 @@ gtk_ruler_real_draw_pos (GtkRuler *ruler)
 	  cairo_t *cr = gdk_cairo_create (widget->window);
 
 	  /*  If a backing store exists, restore the ruler  */
-	  if (ruler->backing_store)
+	  if (priv->backing_store)
 	    gdk_draw_drawable (widget->window,
 			       widget->style->black_gc,
-			       ruler->backing_store,
-			       ruler->xsrc, ruler->ysrc,
-			       ruler->xsrc, ruler->ysrc,
+			       priv->backing_store,
+			       priv->xsrc, priv->ysrc,
+			       priv->xsrc, priv->ysrc,
 			       bs_width, bs_height);
 
-          if (private->orientation == GTK_ORIENTATION_HORIZONTAL)
+          if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
             {
-              increment = (gdouble) width / (ruler->upper - ruler->lower);
+              increment = (gdouble) width / (priv->upper - priv->lower);
 
-              x = ROUND ((ruler->position - ruler->lower) * increment) + (xthickness - bs_width) / 2 - 1;
+              x = ROUND ((priv->position - priv->lower) * increment) + (xthickness - bs_width) / 2 - 1;
               y = (height + bs_height) / 2 + ythickness;
             }
           else
             {
-              increment = (gdouble) height / (ruler->upper - ruler->lower);
+              increment = (gdouble) height / (priv->upper - priv->lower);
 
               x = (width + bs_width) / 2 + xthickness;
-              y = ROUND ((ruler->position - ruler->lower) * increment) + (ythickness - bs_height) / 2 - 1;
+              y = ROUND ((priv->position - priv->lower) * increment) + (ythickness - bs_height) / 2 - 1;
             }
 
 	  gdk_cairo_set_source_color (cr, &widget->style->fg[widget->state]);
 
 	  cairo_move_to (cr, x, y);
 
-          if (private->orientation == GTK_ORIENTATION_HORIZONTAL)
+          if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
             {
               cairo_line_to (cr, x + bs_width / 2.0, y + bs_height);
               cairo_line_to (cr, x + bs_width,       y);
@@ -900,8 +933,8 @@ gtk_ruler_real_draw_pos (GtkRuler *ruler)
 
 	  cairo_destroy (cr);
 
-	  ruler->xsrc = x;
-	  ruler->ysrc = y;
+	  priv->xsrc = x;
+	  priv->ysrc = y;
 	}
     }
 }

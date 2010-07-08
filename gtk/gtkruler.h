@@ -56,6 +56,7 @@ G_BEGIN_DECLS
 
 
 typedef struct _GtkRuler        GtkRuler;
+typedef struct _GtkRulerPriv    GtkRulerPriv;
 typedef struct _GtkRulerClass   GtkRulerClass;
 typedef struct _GtkRulerMetric  GtkRulerMetric;
 
@@ -66,21 +67,8 @@ struct _GtkRuler
 {
   GtkWidget widget;
 
-  GdkPixmap *GSEAL (backing_store);
-  GdkGC *GSEAL (non_gr_exp_gc);		/* unused */
-  GtkRulerMetric *GSEAL (metric);
-  gint GSEAL (xsrc);
-  gint GSEAL (ysrc);
-  gint GSEAL (slider_size);
-
-  /* The upper limit of the ruler (in points) */
-  gdouble GSEAL (lower);
-  /* The lower limit of the ruler */
-  gdouble GSEAL (upper);
-  /* The position of the mark on the ruler */
-  gdouble GSEAL (position);
-  /* The maximum size of the ruler */
-  gdouble GSEAL (max_size);
+  /* <private> */
+  GtkRulerPriv *priv;
 };
 
 struct _GtkRulerClass
