@@ -1671,9 +1671,29 @@ if test x$gdk_working_wctype = xno; then
   gdk_wc="\$gdk_wc
 #define GDK_HAVE_BROKEN_WCTYPE 1"
 fi
-
-
 ])
+
+dnl
+dnl Check for -Bsymbolic-functions linker flag used to avoid
+dnl intra-library PLT jumps, if available.
+dnl
+AC_ARG_ENABLE(Bsymbolic,
+              [AC_HELP_STRING([--disable-Bsymbolic],
+                              [avoid linking with -Bsymbolic])],,
+              [SAVED_LDFLAGS="${LDFLAGS}"
+               AC_MSG_CHECKING([for -Bsymbolic-functions linker flag])
+               LDFLAGS=-Wl,-Bsymbolic-functions
+               AC_TRY_LINK([], [int main (void) { return 0; }],
+                           AC_MSG_RESULT(yes)
+                           enable_Bsymbolic=yes,
+                           AC_MSG_RESULT(no)
+                           enable_Bsymbolic=no)
+               LDFLAGS="${SAVED_LDFLAGS}"])
+
+if test "x${enable_Bsymbolic}" == "xyes"; then
+  GTK_LINK_FLAGS=-Wl,-Bsymbolic-functions
+fi
+AC_SUBST(GTK_LINK_FLAGS)
 
 AC_CONFIG_FILES([
 config.h.win32
