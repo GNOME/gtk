@@ -28,7 +28,6 @@
 #include "gdkkeysyms.h"
 #include "gdkprivate-x11.h"
 #include "gdkx.h"
-#include "gdkalias.h"
 
 #define HAS_FOCUS(toplevel) ((toplevel)->has_focus || (toplevel)->has_pointer_focus)
 
@@ -1168,6 +1167,3 @@ gdk_device_manager_xi2_select_window_events (GdkEventTranslator *translator,
   _gdk_device_manager_xi2_select_events (device_manager, window, &event_mask);
   g_free (event_mask.mask);
 }
-
-#define __GDK_DEVICE_MANAGER_XI2_C__
-#include "gdkaliasdef.c"

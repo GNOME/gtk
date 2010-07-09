@@ -26,9 +26,7 @@
 #include "gdkpixbuf.h"
 #include "gdkscreen.h"
 #include "gdkinternals.h"
-#include "gdkalias.h"
 
-
 
 /**
  * gdk_pixbuf_render_threshold_alpha:
@@ -253,7 +251,3 @@ gdk_pixbuf_render_pixmap_and_mask_for_colormap (GdkPixbuf   *pixbuf,
 	*mask_return = NULL;
     }
 }
-
-#define __GDK_PIXBUF_RENDER_C__
-#include "gdkaliasdef.c"
-

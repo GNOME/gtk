@@ -30,7 +30,7 @@
 #include "gdkinternals.h"
 #include "gdkmarshalers.h"
 #include "gdkscreen.h"
-#include "gdkalias.h"
+
 
 enum {
   OPENED,
@@ -1813,6 +1813,3 @@ gdk_display_get_device_manager (GdkDisplay *display)
 
   return display->device_manager;
 }
-
-#define __GDK_DISPLAY_C__
-#include "gdkaliasdef.c"

@@ -22,7 +22,7 @@
 #include "gdkeventsource.h"
 #include "gdkinternals.h"
 #include "gdkx.h"
-#include "gdkalias.h"
+
 
 static gboolean gdk_event_source_prepare  (GSource     *source,
                                            gint        *timeout);
@@ -427,6 +427,3 @@ gdk_events_pending (void)
 
   return FALSE;
 }
-
-#define __GDK_EVENT_SOURCE_C__
-#include "gdkaliasdef.c"

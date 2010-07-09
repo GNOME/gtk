@@ -37,7 +37,6 @@
 #include "gdkprivate-directfb.h"
 
 #include "gdkinternals.h"
-#include "gdkalias.h"
 
 
 void
@@ -253,6 +252,3 @@ _gdk_directfb_window_move_region (GdkWindow       *window,
   cairo_region_destroy (src_region);
   cairo_region_destroy (dest_region);
 }
-
-#define __GDK_GEOMETRY_X11_C__
-#include "gdkaliasdef.c"

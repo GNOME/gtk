@@ -20,7 +20,7 @@
 #include <gdk/gdktestutils.h>
 #include <gdk/gdkkeysyms.h>
 #include <win32/gdkwin32.h>
-#include "gdkalias.h"
+
 
 void
 gdk_test_render_sync (GdkWindow *window)

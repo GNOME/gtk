@@ -40,7 +40,6 @@
 #include "gdkinternals.h"
 #include "gdkdisplay-x11.h"
 #include "gdkkeysyms.h"
-#include "gdkalias.h"
 
 #ifdef HAVE_XKB
 #include <X11/XKBlib.h>
@@ -1845,7 +1844,3 @@ gdk_keymap_map_virtual_modifiers (GdkKeymap       *keymap,
 
   return retval;
 }
-
-
-#define __GDK_KEYS_X11_C__
-#include "gdkaliasdef.c"

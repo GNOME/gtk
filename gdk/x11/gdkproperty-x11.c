@@ -37,7 +37,7 @@
 #include "gdkdisplay-x11.h"
 #include "gdkscreen-x11.h"
 #include "gdkselection.h"	/* only from predefined atom */
-#include "gdkalias.h"
+
 
 static GPtrArray *virtual_atom_array;
 static GHashTable *virtual_atom_hash;
@@ -757,6 +757,3 @@ gdk_property_delete (GdkWindow *window,
 		   gdk_x11_atom_to_xatom_for_display (GDK_WINDOW_DISPLAY (window),
 						      property));
 }
-
-#define __GDK_PROPERTY_X11_C__
-#include "gdkaliasdef.c"

@@ -26,7 +26,7 @@
 
 #include "config.h"
 #include <gdk/gdk.h>
-#include "gdkalias.h"
+
 
 /**
  * gdk_rectangle_union:
@@ -132,7 +132,3 @@ gdk_rectangle_get_type (void)
 					     (GBoxedFreeFunc)g_free);
   return our_type;
 }
-
-
-#define __GDK_RECTANGLE_C__
-#include "gdkaliasdef.c"

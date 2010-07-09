@@ -50,7 +50,7 @@ in this Software without prior written authorization from The Open Group.
 #include <X11/Xlibint.h>
 #include "gdkasync.h"
 #include "gdkx.h"
-#include "gdkalias.h"
+
 
 typedef struct _ChildInfoChildState ChildInfoChildState;
 typedef struct _ChildInfoState ChildInfoState;
@@ -840,6 +840,3 @@ _gdk_x11_roundtrip_async (GdkDisplay           *display,
   UnlockDisplay(dpy);
   SyncHandle();
 }
-
-#define __GDK_ASYNC_C__
-#include "gdkaliasdef.c"

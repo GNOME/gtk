@@ -45,8 +45,6 @@
 #include "gdkscreen.h"
 #include "gdkwindowimpl.h"
 
-#include "gdkalias.h"
-
 #undef DEBUG_WINDOW_PRINTING
 
 
@@ -11762,7 +11760,3 @@ _gdk_window_get_input_window_for_event (GdkWindow *native_window,
 
   return event_win;
 }
-
-
-#define __GDK_WINDOW_C__
-#include "gdkaliasdef.c"

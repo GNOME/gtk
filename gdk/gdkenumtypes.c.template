@@ -1,7 +1,6 @@
 /*** BEGIN file-header ***/
 #define GDK_ENABLE_BROKEN
 #include "gdk.h"
-#include "gdkalias.h"
 
 /*** END file-header ***/
 
@@ -33,6 +32,5 @@ GType
 /*** END value-tail ***/
 
 /*** BEGIN file-tail ***/
-#define __GDK_ENUM_TYPES_C__
-#include "gdkaliasdef.c"
+ /**/
 /*** END file-tail ***/

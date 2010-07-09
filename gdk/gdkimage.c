@@ -32,7 +32,6 @@
 #include "gdkimage.h"
 #include "gdkprivate.h"
 #include "gdkinternals.h"	/* For scratch_image code */
-#include "gdkalias.h"
 
 /**
  * gdk_image_set_colormap:
@@ -565,6 +564,3 @@ gdk_image_new (GdkImageType  type,
   return _gdk_image_new_for_depth (gdk_visual_get_screen (visual), type,
 				   visual, width, height, -1);
 }
-
-#define __GDK_IMAGE_C__
-#include "gdkaliasdef.c"

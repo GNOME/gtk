@@ -22,7 +22,7 @@
 #include "gdkdeviceprivate.h"
 #include "gdkintl.h"
 #include "gdkinternals.h"
-#include "gdkalias.h"
+
 
 typedef struct _GdkAxisInfo GdkAxisInfo;
 
@@ -1394,6 +1394,3 @@ _gdk_device_translate_axis (GdkDevice *device,
 
   return TRUE;
 }
-
-#define __GDK_DEVICE_C__
-#include "gdkaliasdef.c"

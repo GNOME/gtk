@@ -29,7 +29,6 @@
 #include "gdkgc.h"
 #include "gdkprivate-x11.h"
 #include "gdkx.h"
-#include "gdkalias.h"
 
 #include <string.h>
 
@@ -696,6 +695,3 @@ gdk_x11_gc_get_xgc (GdkGC *gc)
 
   return gc_x11->xgc;
 }
-
-#define __GDK_GC_X11_C__
-#include "gdkaliasdef.c"

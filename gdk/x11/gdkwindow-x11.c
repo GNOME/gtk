@@ -51,7 +51,6 @@
 #include "gdkwindow-x11.h"
 #include "gdkdeviceprivate.h"
 #include "gdkeventsource.h"
-#include "gdkalias.h"
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -5622,6 +5621,3 @@ gdk_x11_get_server_time (GdkWindow *window)
 
   return xevent.xproperty.time;
 }
-
-#define __GDK_WINDOW_X11_C__
-#include "gdkaliasdef.c"

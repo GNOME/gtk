@@ -21,7 +21,7 @@
 #include "gdkdevicemanager.h"
 #include "gdkintl.h"
 #include "gdkinternals.h"
-#include "gdkalias.h"
+
 
 /**
  * SECTION:gdkdevicemanager
@@ -320,7 +320,3 @@ gdk_device_manager_get_client_pointer (GdkDeviceManager *device_manager)
 
   return GDK_DEVICE_MANAGER_GET_CLASS (device_manager)->get_client_pointer (device_manager);
 }
-
-
-#define __GDK_DEVICE_MANAGER_C__
-#include "gdkaliasdef.c"

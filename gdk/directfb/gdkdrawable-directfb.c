@@ -43,9 +43,6 @@
 
 #include "gdkinternals.h"
 
-
-#include "gdkalias.h"
-
 #include "cairo-directfb.h"
 
 
@@ -1634,6 +1631,3 @@ gdk_directfb_ref_cairo_surface (GdkDrawable *drawable)
   g_assert (impl->cairo_surface != NULL);
   return impl->cairo_surface;
 }
-
-#define __GDK_DRAWABLE_X11_C__
-#include "gdkaliasdef.c"

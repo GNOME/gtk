@@ -32,7 +32,6 @@
 #include "gdkdisplay.h"
 #include "gdkdisplay-x11.h"
 #include "gdkx.h"
-#include "gdkalias.h"
 
 #include <X11/Xatom.h>
 
@@ -2091,6 +2090,3 @@ gdk_x11_screen_get_window_manager_name (GdkScreen *screen)
 
   return GDK_SCREEN_X11 (screen)->window_manager_name;
 }
-
-#define __GDK_SCREEN_X11_C__
-#include "gdkaliasdef.c"

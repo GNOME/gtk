@@ -33,7 +33,7 @@
 #include "gdkprivate-x11.h"
 #include "gdkscreen-x11.h"
 #include "gdkinternals.h"
-#include "gdkalias.h"
+
 
 struct _GdkVisualClass
 {
@@ -672,6 +672,3 @@ gdk_visual_get_screen (GdkVisual *visual)
 
   return  ((GdkVisualPrivate*) visual)->screen;
 }
-
-#define __GDK_VISUAL_X11_C__
-#include "gdkaliasdef.c"

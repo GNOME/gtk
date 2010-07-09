@@ -37,7 +37,7 @@
 #include "gdkgc.h"
 #include "gdkcolor.h"
 #include "gdkcursor.h"
-#include "gdkalias.h"
+
 
 /* LIMITATIONS:
  *
@@ -1228,6 +1228,3 @@ gdk_offscreen_window_impl_iface_init (GdkWindowImplIface *iface)
   iface->get_device_state = gdk_offscreen_window_get_device_state;
   iface->destroy = gdk_offscreen_window_destroy;
 }
-
-#define __GDK_OFFSCREEN_WINDOW_C__
-#include "gdkaliasdef.c"

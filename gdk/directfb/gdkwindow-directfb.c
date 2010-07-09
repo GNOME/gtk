@@ -41,7 +41,6 @@
 #include "gdkdisplay-directfb.h"
 
 #include "gdkinternals.h"
-#include "gdkalias.h"
 #include "cairo.h"
 #include <assert.h>
 
@@ -2890,7 +2889,3 @@ gdk_window_impl_iface_init (GdkWindowImplIface *iface)
   iface->queue_translation = gdk_directfb_window_queue_translation;
   iface->destroy = gdk_directfb_window_destroy;
 }
-
-#define __GDK_WINDOW_X11_C__
-#include "gdkaliasdef.c"
-

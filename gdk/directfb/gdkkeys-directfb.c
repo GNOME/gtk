@@ -36,12 +36,11 @@
 #include <stdlib.h>
 #include <string.h>
 
-
 #include "gdkdirectfb.h"
 #include "gdkprivate-directfb.h"
 
 #include "gdkkeysyms.h"
-#include "gdkalias.h"
+
 
 static struct gdk_key *gdk_keys_by_name = NULL;
 
@@ -2031,6 +2030,3 @@ gdk_keymap_map_virtual_modifiers (GdkKeymap       *keymap,
 
   return TRUE;
 }
-
-#define __GDK_KEYS_DIRECTFB_C__
-#include "gdkaliasdef.c"

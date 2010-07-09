@@ -36,8 +36,6 @@
 #include "gdkdirectfb.h"
 #include "gdkprivate-directfb.h"
 
-#include "gdkalias.h"
-
 
 GdkDisplayDFB *_gdk_display = NULL;
 GdkScreen          * _gdk_screen                              = NULL;
@@ -58,5 +56,3 @@ GdkEventMask         _gdk_directfb_keyboard_grab_events       = 0;
 GdkCursor          * _gdk_directfb_pointer_grab_cursor        = NULL;
 
 GdkAtom              _gdk_selection_property                  = 0;
-
-#include "gdkaliasdef.c"

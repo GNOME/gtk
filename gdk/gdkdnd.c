@@ -28,7 +28,7 @@
 #include <gdkdnd.h>
 #include <gdkdrawable.h>
 #include <gdkdisplay.h>
-#include "gdkalias.h"
+
 
 /**
  * SECTION:dnd
@@ -183,6 +183,3 @@ gdk_drag_context_get_source_window (GdkDragContext *context)
 
   return context->source_window;
 }
-
-#define __GDK_DND_C__
-#include "gdkaliasdef.c"

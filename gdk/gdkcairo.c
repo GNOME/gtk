@@ -20,7 +20,7 @@
 #include "gdkcairo.h"
 #include "gdkdrawable.h"
 #include "gdkinternals.h"
-#include "gdkalias.h"
+
 
 /**
  * gdk_cairo_create:
@@ -287,7 +287,3 @@ gdk_cairo_set_source_pixmap (cairo_t   *cr,
   cairo_set_source_surface (cr, surface, pixmap_x, pixmap_y);
   cairo_surface_destroy (surface);
 }
-
-
-#define __GDK_CAIRO_C__
-#include "gdkaliasdef.c"

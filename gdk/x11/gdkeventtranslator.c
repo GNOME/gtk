@@ -20,7 +20,7 @@
 #include "config.h"
 
 #include "gdkeventtranslator.h"
-#include "gdkalias.h"
+
 
 GType
 gdk_event_translator_get_type (void)
@@ -95,6 +95,3 @@ gdk_event_translator_select_window_events (GdkEventTranslator *translator,
   if (iface->select_window_events)
     iface->select_window_events (translator, window, event_mask);
 }
-
-#define __GDK_EVENT_TRANSLATOR_C__
-#include "gdkaliasdef.c"

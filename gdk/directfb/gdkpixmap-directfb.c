@@ -43,7 +43,6 @@
 #include "gdkinternals.h"
 
 #include "gdkpixmap.h"
-#include "gdkalias.h"
 
 
 static void gdk_pixmap_impl_directfb_init       (GdkPixmapImplDirectFB      *pixmap);
@@ -336,6 +335,3 @@ GdkPixmap* gdk_pixmap_lookup_for_display (GdkDisplay *display,GdkNativeWindow an
 {
   return gdk_pixmap_lookup (anid);
 }
-
-#define __GDK_PIXMAP_X11_C__
-#include "gdkaliasdef.c"

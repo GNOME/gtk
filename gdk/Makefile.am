@@ -26,11 +26,9 @@ EXTRA_DIST +=			\
 	makeenums.pl		\
 	makefile.msc		\
 	gdk.symbols		\
-	makegdkalias.pl		\
 	gdkenumtypes.c.template	\
 	gdkenumtypes.h.template	\
-	abicheck.sh		\
-	pltcheck.sh
+	abicheck.sh
 
 INCLUDES =                              \
 	-DG_LOG_DOMAIN=\"Gdk\"		\
@@ -105,9 +103,6 @@ gdk_public_h_sources =				\
 gdk_built_public_sources =			\
 	gdkenumtypes.h
 
-gdk_built_private_headers =			\
-	gdkalias.h
-
 gdk_private_headers =				\
 	gdkinternals.h				\
 	gdkdeviceprivate.h			\
@@ -147,12 +142,10 @@ gdk_c_sources =                 \
 	gdkwindowimpl.c
 
 gdk_built_sources =				\
-	gdkaliasdef.c				\
 	gdkenumtypes.c				\
 	gdkmarshalers.h 			\
 	gdkmarshalers.c				\
-	$(gdk_built_public_sources)		\
-	$(gdk_built_private_headers)
+	$(gdk_built_public_sources)
 
 #
 # setup GDK sources and their dependencies
@@ -256,15 +249,9 @@ endif
 gdk.def: gdk.symbols
 	(echo -e EXPORTS; $(CPP) -P -DALL_FILES -DGDK_WINDOWING_WIN32 -DINCLUDE_VARIABLES - <$(srcdir)/gdk.symbols | sed -e '/^$$/d' -e 's/^/	/' -e 's/G_GNUC_[^ ]*//g') > $(srcdir)/gdk.def
 
-gdkalias.h: gdk.symbols
-	 $(PERL) $(srcdir)/makegdkalias.pl < $(srcdir)/gdk.symbols > gdkalias.h
-
-gdkaliasdef.c: gdk.symbols
-	 $(PERL) $(srcdir)/makegdkalias.pl -def < $(srcdir)/gdk.symbols > gdkaliasdef.c
-
 TESTS_ENVIRONMENT = srcdir="$(srcdir)"
 if OS_LINUX
-TESTS = abicheck.sh pltcheck.sh
+TESTS = abicheck.sh
 endif
 
 
@@ -320,7 +307,7 @@ gdkmarshalers.h: @REBUILD@ gdkmarshalers.list
 	&& mv gdkmarshalers-h.tmp gdkmarshalers.h \
 	|| ( rm -f gdkmarshalers-h.tmp && exit 1)
 gdkmarshalers.c: @REBUILD@ gdkmarshalers.list
-	(echo "#include \"gdkalias.h\""; $(GLIB_GENMARSHAL) --prefix=_gdk_marshal $(srcdir)/gdkmarshalers.list --body) > gdkmarshalers-c.tmp	\
+	$(GLIB_GENMARSHAL) --prefix=_gdk_marshal $(srcdir)/gdkmarshalers.list --body > gdkmarshalers-c.tmp	\
 	&& mv gdkmarshalers-c.tmp gdkmarshalers.c \
 	|| ( rm -f gdkmarshalers-c.tmp && exit 1 )
 
