@@ -16,8 +16,8 @@ msgstr ""
 "Project-Id-Version: gtk+ MASTER\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk"
 "%2b&component=general\n"
-"POT-Creation-Date: 2010-06-27 03:24+0000\n"
-"PO-Revision-Date: 2010-06-28 19:22+0300\n"
+"POT-Creation-Date: 2010-07-02 01:47+0000\n"
+"PO-Revision-Date: 2010-07-09 09:32+0300\n"
 "Last-Translator: Ivar Smolin <okul@linux.ee>\n"
 "Language-Team: Estonian <gnome-et@linux.ee>\n"
 "MIME-Version: 1.0\n"
@@ -657,8 +657,14 @@ msgstr "Sisestus_meetodid"
 msgid "_Insert Unicode Control Character"
 msgstr "L_isa Unicode'i juhtmärk"
 
+msgid "Caps Lock and Num Lock are on"
+msgstr "Caps Lock ja Num Lock on sisse lülitatud"
+
+msgid "Num Lock is on"
+msgstr "Num Lock on sisse lülitatud"
+
 msgid "Caps Lock is on"
-msgstr "Tõstelukk on sisse lülitatud"
+msgstr "Caps Lock on sisse lülitatud"
 
 msgid "Select A File"
 msgstr "Faili valimine"
@@ -3449,82 +3455,17 @@ msgstr ""
 #~ msgid "Malformed chunk in animation"
 #~ msgstr "Animatsioonis on vigaselt vormindatud tükk"
 
-#~ msgid "The ANI image format"
-#~ msgstr "ANI-pildivorming"
-
-#~ msgid "BMP image has bogus header data"
-#~ msgstr "BMP-pildi päises on võltsandmed"
-
 #~ msgid "Not enough memory to load bitmap image"
 #~ msgstr "Rasterpildi laadimiseks pole piisavalt mälu"
-
-#~ msgid "BMP image has unsupported header size"
-#~ msgstr "BMP-pilt omas toetamata suurusega päist"
-
-#~ msgid "Topdown BMP images cannot be compressed"
-#~ msgstr "Ülalt-alla suunaga BMP-pilte pole võimalik pakkida"
 
 #~ msgid "Premature end-of-file encountered"
 #~ msgstr "Faili lõpp tuli enneaegselt"
 
-#~ msgid "Couldn't allocate memory for saving BMP file"
-#~ msgstr "BMP-faili salvestamiseks pole võimalik mälu eraldada"
-
-#~ msgid "Couldn't write to BMP file"
-#~ msgstr "BMP-faili pole võimalik kirjutada"
-
-#~ msgid "The BMP image format"
-#~ msgstr "BMP-pildivorming"
-
-#~ msgid "Failure reading GIF: %s"
-#~ msgstr "Viga GIF-faili lugemisel: %s"
-
-#~ msgid "GIF file was missing some data (perhaps it was truncated somehow?)"
-#~ msgstr ""
-#~ "GIF-failis on mõningad andmed puudu (kas seda on kuidagi tükeldatud?)"
-
-#~ msgid "Internal error in the GIF loader (%s)"
-#~ msgstr "Sisemine viga GIF laadijas (%s)"
-
 #~ msgid "Stack overflow"
 #~ msgstr "Pinu ületäituvus"
 
-#~ msgid "GIF image loader cannot understand this image."
-#~ msgstr "GIF-pildifaili laadija ei saa sellest pildist aru."
-
 #~ msgid "Bad code encountered"
 #~ msgstr "Avastati vigane kood"
-
-#~ msgid "Circular table entry in GIF file"
-#~ msgstr "GIF-failis on ringseosega tabelikirje"
-
-#~ msgid "Not enough memory to load GIF file"
-#~ msgstr "GIF-faili laadimiseks pole piisavalt mälu"
-
-#~ msgid "Not enough memory to composite a frame in GIF file"
-#~ msgstr "GIF-failis liitraami loomiseks pole piisavalt mälu"
-
-#~ msgid "GIF image is corrupt (incorrect LZW compression)"
-#~ msgstr "GIF-pilt on rikutud (mittekorrektne LZW pakkimine)"
-
-#~ msgid "File does not appear to be a GIF file"
-#~ msgstr "Fail ei tundu olevat GIF-fail"
-
-#~ msgid "Version %s of the GIF file format is not supported"
-#~ msgstr "GIF-failivormingu versioon %s pole toetatud"
-
-#~ msgid ""
-#~ "GIF image has no global colormap, and a frame inside it has no local "
-#~ "colormap."
-#~ msgstr ""
-#~ "GIF-pildil puudub üldine värvikaart ja raami sees pole kohalikku "
-#~ "värvikaarti."
-
-#~ msgid "GIF image was truncated or incomplete."
-#~ msgstr "GIF-pilt pole täielik või on seda tükeldatud."
-
-#~ msgid "The GIF image format"
-#~ msgstr "GIF-failivorming"
 
 #~ msgid "Invalid header in icon"
 #~ msgstr "Vigane päis ikoonis"
@@ -3544,29 +3485,8 @@ msgstr ""
 #~ msgid "Unsupported icon type"
 #~ msgstr "Toetamata ikoonitüüp"
 
-#~ msgid "Not enough memory to load ICO file"
-#~ msgstr "ICO-faili laadimiseks pole piisavalt mälu"
-
-#~ msgid "Image too large to be saved as ICO"
-#~ msgstr "Pilt on ICO-vormingus salvestamiseks liiga suur"
-
 #~ msgid "Cursor hotspot outside image"
 #~ msgstr "Kursori tulipunkt jääb pildist välja"
-
-#~ msgid "Unsupported depth for ICO file: %d"
-#~ msgstr "Toetamata värvisügavus %d ICO-faili jaoks"
-
-#~ msgid "The ICO image format"
-#~ msgstr "ICO-pildivorming"
-
-#~ msgid "Error reading ICNS image: %s"
-#~ msgstr "Viga ICNS-pildi lugemisel: %s"
-
-#~ msgid "Could not decode ICNS file"
-#~ msgstr "ICNS-faili pole võimalik dekodeerida"
-
-#~ msgid "The ICNS image format"
-#~ msgstr "ICNS-pildivorming"
 
 #~ msgid "Couldn't allocate memory for stream"
 #~ msgstr "Voo jaoks pole võimalik mälu eraldada"
@@ -3574,26 +3494,14 @@ msgstr ""
 #~ msgid "Couldn't decode image"
 #~ msgstr "Pilti pole võimalik dekodeerida"
 
-#~ msgid "Transformed JPEG2000 has zero width or height"
-#~ msgstr "Transformeeritud JPEG2000 laius või kõrgus on null"
-
 #~ msgid "Image type currently not supported"
 #~ msgstr "Pilditüüp pole hetkel toetatud"
 
 #~ msgid "Couldn't allocate memory for color profile"
 #~ msgstr "Värviprofiilile pole võimalik mälu eraldada"
 
-#~ msgid "Insufficient memory to open JPEG 2000 file"
-#~ msgstr "JPEG 2000 faili avamiseks pole piisavalt mälu"
-
 #~ msgid "Couldn't allocate memory to buffer image data"
 #~ msgstr "Pildi andmete puhverdamiseks pole võimalik mälu eraldada"
-
-#~ msgid "The JPEG 2000 image format"
-#~ msgstr "JPEG 2000 pildivorming"
-
-#~ msgid "Error interpreting JPEG image file (%s)"
-#~ msgstr "Viga JPEG-pildifaili (%s) tõlgendamisel"
 
 #~ msgid ""
 #~ "Insufficient memory to load image, try exiting some applications to free "
@@ -3601,31 +3509,6 @@ msgstr ""
 #~ msgstr ""
 #~ "Pildifaili laadimiseks pole piisavalt mälu. Mälu vabastamiseks võid sa "
 #~ "proovida sulgeda mõned rakendused"
-
-#~ msgid "Unsupported JPEG color space (%s)"
-#~ msgstr "Toetamata JPEG värviruum (%s)"
-
-#~ msgid "Couldn't allocate memory for loading JPEG file"
-#~ msgstr "JPEG-faili laadimiseks pole võimalik mälu eraldada"
-
-#~ msgid "Transformed JPEG has zero width or height."
-#~ msgstr "Transformeeritud JPEG laius või kõrgus on null."
-
-#~ msgid ""
-#~ "JPEG quality must be a value between 0 and 100; value '%s' could not be "
-#~ "parsed."
-#~ msgstr ""
-#~ "JPEG kvaliteedi väärtus peab olema 0 ja 100 vahel; väärtust '%s' pole "
-#~ "võimalik analüüsida."
-
-#~ msgid ""
-#~ "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
-#~ msgstr ""
-#~ "JPEG kvaliteedi väärtus peab olema 0 ja 100 vahel; väärtus '%d' pole "
-#~ "lubatud."
-
-#~ msgid "The JPEG image format"
-#~ msgstr "JPEG-pildivorming"
 
 #~ msgid "Couldn't allocate memory for header"
 #~ msgstr "Päise jaoks pole võimalik mälu eraldada"
@@ -3651,37 +3534,6 @@ msgstr ""
 #~ msgid "Couldn't allocate memory for paletted data"
 #~ msgstr "Paleti andmetele pole võimalik mälu eraldada"
 
-#~ msgid "Didn't get all lines of PCX image"
-#~ msgstr "PCX-pildi jaoks ei saadud kõiki ridu"
-
-#~ msgid "No palette found at end of PCX data"
-#~ msgstr "PCX-andmete lõpust ei leitud paletti"
-
-#~ msgid "The PCX image format"
-#~ msgstr "PCX-pildivorming"
-
-#~ msgid "Bits per channel of PNG image is invalid."
-#~ msgstr "Bittide arv PNG-faili kanalis on vigane."
-
-#~ msgid "Transformed PNG has zero width or height."
-#~ msgstr "Transformeeritud PNG laius või kõrgus on null."
-
-#~ msgid "Bits per channel of transformed PNG is not 8."
-#~ msgstr "Bittide arv transformeeritud PNG kanali kohta pole 8."
-
-#~ msgid "Transformed PNG not RGB or RGBA."
-#~ msgstr "Transformeeritud PNG pole RGB ega RGBA."
-
-#~ msgid "Transformed PNG has unsupported number of channels, must be 3 or 4."
-#~ msgstr ""
-#~ "Transformeeritud PNG omab toetamata arvu kanaleid, peaks olema 3 või 4."
-
-#~ msgid "Fatal error in PNG image file: %s"
-#~ msgstr "Saatuslik viga PNG-pildifailis: %s"
-
-#~ msgid "Insufficient memory to load PNG file"
-#~ msgstr "PNG-faili laadimiseks pole piisavalt mälu"
-
 #~ msgid ""
 #~ "Insufficient memory to store a %ld by %ld image; try exiting some "
 #~ "applications to reduce memory usage"
@@ -3689,136 +3541,23 @@ msgstr ""
 #~ "%ldx%ld suurusega pildi salvestamiseks pole piisavalt mälu. Mälukasutuse "
 #~ "vähendamiseks võid sa proovida mõnede rakenduste sulgemist"
 
-#~ msgid "Fatal error reading PNG image file"
-#~ msgstr "Saatuslik viga PNG-pildifaili lugemisel"
-
-#~ msgid "Fatal error reading PNG image file: %s"
-#~ msgstr "Saatuslik viga PNG-pildifaili lugemisel: %s"
-
-#~ msgid ""
-#~ "Keys for PNG text chunks must have at least 1 and at most 79 characters."
-#~ msgstr ""
-#~ "PNG tekstitükkide võtmed peavad olema vähemalt 1 märgi ja kõige rohkem 79 "
-#~ "märgi pikkused."
-
-#~ msgid "Keys for PNG text chunks must be ASCII characters."
-#~ msgstr "PNG tekstitükkide võtmed peavad olema ASCII-märkidena."
-
 #~ msgid "Color profile has invalid length %d."
 #~ msgstr "Värvusprofiilil on vigane pikkus %d."
-
-#~ msgid ""
-#~ "PNG compression level must be a value between 0 and 9; value '%s' could "
-#~ "not be parsed."
-#~ msgstr ""
-#~ "PNG pakkimistase peab olema 0 ja 9 vahel; väärtust '%s' pole võimalik "
-#~ "analüüsida."
-
-#~ msgid ""
-#~ "PNG compression level must be a value between 0 and 9; value '%d' is not "
-#~ "allowed."
-#~ msgstr ""
-#~ "PNG pakkimistase peab olema 0 ja 9 vahel; väärtus '%d' pole lubatud."
-
-#~ msgid ""
-#~ "Value for PNG text chunk %s cannot be converted to ISO-8859-1 encoding."
-#~ msgstr ""
-#~ "PNG tekstitüki %s väärtust pole võimalik ISO-8859-1 kooditabelile "
-#~ "vastavaks teisendada."
-
-#~ msgid "The PNG image format"
-#~ msgstr "PNG-pildivorming"
-
-#~ msgid "PNM loader expected to find an integer, but didn't"
-#~ msgstr "PNM laadur lootis leida täisarvu, kuid ei leidnud"
-
-#~ msgid "PNM file has an incorrect initial byte"
-#~ msgstr "PNM-failil on ebakorrektne algbait"
-
-#~ msgid "PNM file is not in a recognized PNM subformat"
-#~ msgstr "PNM-fail pole äratuntavas PNM-alamvormingus"
-
-#~ msgid "PNM file has an image width of 0"
-#~ msgstr "PNM-failil on pildi laius 0"
-
-#~ msgid "PNM file has an image height of 0"
-#~ msgstr "PNM-failil on pildi kõrgus 0"
-
-#~ msgid "Maximum color value in PNM file is 0"
-#~ msgstr "Maksimaalne suurim värvi väärtus PNM-failis on 0"
-
-#~ msgid "Maximum color value in PNM file is too large"
-#~ msgstr "Maksimaalne suurim värvi väärtus PNM-failis on liiga suur"
-
-#~ msgid "Raw PNM image type is invalid"
-#~ msgstr "Toore PNM-faili tüüp on vigane"
-
-#~ msgid "PNM image loader does not support this PNM subformat"
-#~ msgstr "PNM-pildivormingu laadija ei toeta seda PNM-alamvormingut"
-
-#~ msgid "Raw PNM formats require exactly one whitespace before sample data"
-#~ msgstr ""
-#~ "Toored PNM-vormingud nõuavad näidisandmete ette vähemalt ühte tühemikku"
-
-#~ msgid "Cannot allocate memory for loading PNM image"
-#~ msgstr "PNM-faili laadimiseks pole võimalik mälu eraldada"
-
-#~ msgid "Insufficient memory to load PNM context struct"
-#~ msgstr "PNM kontekstistruktuuri laadimiseks pole piisavalt mälu"
-
-#~ msgid "Unexpected end of PNM image data"
-#~ msgstr "Ootamatu PNM-pildi andmete lõpp"
-
-#~ msgid "Insufficient memory to load PNM file"
-#~ msgstr "PNM-faili laadimiseks pole piisavalt mälu"
-
-#~ msgid "The PNM/PBM/PGM/PPM image format family"
-#~ msgstr "PNM/PBM/PGM/PPM-pildivormingu perekond"
 
 #~ msgid "Input file descriptor is NULL."
 #~ msgstr "Sisendfaili deskriptor on NULL."
 
-#~ msgid "Failed to read QTIF header"
-#~ msgstr "Tõrge QTIF-päise lugemisel"
-
-#~ msgid "QTIF atom size too large (%d bytes)"
-#~ msgstr "QTIF-aatom on liiga suur (%d baiti)"
-
 #~ msgid "Failed to allocate %d bytes for file read buffer"
 #~ msgstr "Tõrge faililugemispuhvrile %d baidi eraldamisel"
 
-#~ msgid "File error when reading QTIF atom: %s"
-#~ msgstr "QTIF-aatomi lugemisel esines failitõrge: %s"
-
 #~ msgid "Failed to skip the next %d bytes with seek()."
 #~ msgstr "Tõrge seek() abil järgnevast %d baidist ülehüppamisel."
-
-#~ msgid "Failed to allocate QTIF context structure."
-#~ msgstr "QTIF kontekstistruktuuri jaoks pole võimalik ruumi eraldada."
 
 #~ msgid "Failed to create GdkPixbufLoader object."
 #~ msgstr "Tõrge GdkPixbufLoader objekti loomisel."
 
 #~ msgid "Failed to find an image data atom."
 #~ msgstr "Pildi andmeaatomi leidmine nurjus."
-
-#~ msgid "The QTIF image format"
-#~ msgstr "QTIF-pildivorming"
-
-#~ msgid "RAS image has bogus header data"
-#~ msgstr "RAS-pildi päises on võltsandmed"
-
-#~ msgid "RAS image has unknown type"
-#~ msgstr "RAS-pildil on tundmatu tüüp"
-
-#~ msgid "unsupported RAS image variation"
-#~ msgstr "RAS-pildi toetamata variatsioon"
-
-#~ msgid "Not enough memory to load RAS image"
-#~ msgstr "RAS-pildi laadimiseks pole piisavalt mälu"
-
-#~ msgid "The Sun raster image format"
-#~ msgstr "Sun'i rasterpildivorming"
 
 #~ msgid "Cannot allocate memory for IOBuffer struct"
 #~ msgstr "IOBuffer struktuuri jaoks pole võimalik mälu eraldada"
@@ -3847,65 +3586,8 @@ msgstr ""
 #~ msgid "Unexpected bitdepth for colormap entries"
 #~ msgstr "Ootamatu bitisügavus värvikaardi kirjetele"
 
-#~ msgid "Cannot allocate TGA header memory"
-#~ msgstr "TGA päisele pole võimalik mälu eraldada"
-
-#~ msgid "TGA image has invalid dimensions"
-#~ msgstr "TGA-pildil on vigane suurus"
-
-#~ msgid "TGA image type not supported"
-#~ msgstr "TGA-pilditüüp pole toetatud"
-
-#~ msgid "Cannot allocate memory for TGA context struct"
-#~ msgstr "TGA kontekstistruktuuri jaoks pole võimalik mälu eraldada"
-
 #~ msgid "Excess data in file"
 #~ msgstr "Failis on liigsed andmed"
-
-#~ msgid "The Targa image format"
-#~ msgstr "Targa pildivorming"
-
-#~ msgid "Could not get image width (bad TIFF file)"
-#~ msgstr "Pildi laiust pole võimalik tuvastada (vigane TIFF-fail)"
-
-#~ msgid "Could not get image height (bad TIFF file)"
-#~ msgstr "Pildi kõrgust pole võimalik tuvastada (vigane TIFF-fail)"
-
-#~ msgid "Width or height of TIFF image is zero"
-#~ msgstr "TIFF-pildi laius või kõrgus on null"
-
-#~ msgid "Dimensions of TIFF image too large"
-#~ msgstr "TIFF-pildi mõõtmed on liiga suured"
-
-#~ msgid "Insufficient memory to open TIFF file"
-#~ msgstr "TIFF-faili avamiseks pole piisavalt mälu"
-
-#~ msgid "Failed to load RGB data from TIFF file"
-#~ msgstr "TIFF-failist pole võimalik RGB andmeid lugeda "
-
-#~ msgid "Failed to open TIFF image"
-#~ msgstr "Tõrge TIFF-faili avamisel"
-
-#~ msgid "TIFFClose operation failed"
-#~ msgstr "TIFFSulgemisoperatsioon nurjus"
-
-#~ msgid "Failed to load TIFF image"
-#~ msgstr "Tõrge TIFF-faili laadimisel"
-
-#~ msgid "Failed to save TIFF image"
-#~ msgstr "Tõrge TIFF-faili salvestamisel"
-
-#~ msgid "TIFF compression doesn't refer to a valid codec."
-#~ msgstr "TIFF-pakkimine ei viita korrektsele koodekile."
-
-#~ msgid "Failed to write TIFF data"
-#~ msgstr "Tõrge TIFF-andmete kirjutamisel"
-
-#~ msgid "Couldn't write to TIFF file"
-#~ msgstr "TIFF-faili pole võimalik kirjutada"
-
-#~ msgid "The TIFF image format"
-#~ msgstr "TIFF-pildivorming"
 
 #~ msgid "Image has zero width"
 #~ msgstr "Pildi laius on null"
@@ -3918,54 +3600,6 @@ msgstr ""
 
 #~ msgid "Couldn't save the rest"
 #~ msgstr "Ülejäänut pole võimalik salvestada"
-
-#~ msgid "The WBMP image format"
-#~ msgstr "WBMP-pildivorming"
-
-#~ msgid "Invalid XBM file"
-#~ msgstr "Vigane XBM-fail"
-
-#~ msgid "Insufficient memory to load XBM image file"
-#~ msgstr "XBM-pildifaili laadimiseks pole piisavalt mälu"
-
-#~ msgid "Failed to write to temporary file when loading XBM image"
-#~ msgstr "Tõrge XBM-pildi laadimise käigus ajutisse faili kirjutamisel"
-
-#~ msgid "The XBM image format"
-#~ msgstr "XBM-pildivorming"
-
-#~ msgid "No XPM header found"
-#~ msgstr "XPM päist ei leitud"
-
-#~ msgid "Invalid XPM header"
-#~ msgstr "Vigane XPM päis"
-
-#~ msgid "XPM file has image width <= 0"
-#~ msgstr "XPM-failil on pildi laius <= 0 "
-
-#~ msgid "XPM file has image height <= 0"
-#~ msgstr "XPM-failil on pildi kõrgus <= 0 "
-
-#~ msgid "XPM has invalid number of chars per pixel"
-#~ msgstr "XPM sisaldab vigast \"sümboleid piksli kohta\" arvu"
-
-#~ msgid "XPM file has invalid number of colors"
-#~ msgstr "XPM-fail sisaldab vigast värvide arvu"
-
-#~ msgid "Cannot allocate memory for loading XPM image"
-#~ msgstr "XPM-faili laadimiseks pole võimalik mälu eraldada"
-
-#~ msgid "Cannot read XPM colormap"
-#~ msgstr "XPM värvikaarti ei suudeta lugeda"
-
-#~ msgid "Failed to write to temporary file when loading XPM image"
-#~ msgstr "Tõrge ajutise faili kirjutamisel XPM-pildi laadimisel"
-
-#~ msgid "The XPM image format"
-#~ msgstr "XPM-pildivorming"
-
-#~ msgid "The EMF image format"
-#~ msgstr "EMF-pildivorming"
 
 #~ msgid "Could not allocate memory: %s"
 #~ msgstr "Mälu pole võimalik eraldada: %s"
@@ -3985,14 +3619,8 @@ msgstr ""
 #~ msgid "Couldn't load metafile"
 #~ msgstr "Metafaili pole võimalik laadida"
 
-#~ msgid "Unsupported image format for GDI+"
-#~ msgstr "Toetamata pildivorming GDI+ jaoks"
-
 #~ msgid "Couldn't save"
 #~ msgstr "Salvestamine pole võimalik"
-
-#~ msgid "The WMF image format"
-#~ msgstr "WMF-pildivorming"
 
 #~ msgid "\"Deepness\" of the color."
 #~ msgstr "Värvi \"sügavus\"."
