@@ -471,7 +471,8 @@ gtk_entry_completion_init (GtkEntryCompletion *completion)
                                        GTK_SHADOW_NONE);
 
   /* a nasty hack to get the completions treeview to size nicely */
-  gtk_widget_set_size_request (GTK_SCROLLED_WINDOW (priv->scrolled_window)->vscrollbar, -1, 0);
+  gtk_widget_set_size_request (gtk_scrolled_window_get_vscrollbar (GTK_SCROLLED_WINDOW (priv->scrolled_window)),
+                               -1, 0);
 
   /* actions */
   priv->actions = gtk_list_store_new (2, G_TYPE_STRING, G_TYPE_BOOLEAN);

@@ -64,12 +64,13 @@ gail_scrolled_window_real_initialize (AtkObject *obj,
   ATK_OBJECT_CLASS (gail_scrolled_window_parent_class)->initialize (obj, data);
 
   window = GTK_SCROLLED_WINDOW (data);
-  g_signal_connect_data (window->hscrollbar, "notify::visible",
-    (GCallback)gail_scrolled_window_scrollbar_visibility_changed, 
-    obj, NULL, FALSE);
-  g_signal_connect_data (window->vscrollbar, "notify::visible",
-    (GCallback)gail_scrolled_window_scrollbar_visibility_changed, 
-    obj, NULL, FALSE);
+
+  g_signal_connect_data (gtk_scrolled_window_get_hscrollbar (window), "notify::visible",
+                         G_CALLBACK (gail_scrolled_window_scrollbar_visibility_changed),
+                         obj, NULL, FALSE);
+  g_signal_connect_data (gtk_scrolled_window_get_vscrollbar (window), "notify::visible",
+                         G_CALLBACK (gail_scrolled_window_scrollbar_visibility_changed),
+                         obj, NULL, FALSE);
 
   obj->role = ATK_ROLE_SCROLL_PANE;
 }
@@ -110,6 +111,7 @@ gail_scrolled_window_ref_child (AtkObject *obj,
 {
   GtkWidget *widget;
   GtkScrolledWindow *gtk_window;
+  GtkWidget *hscrollbar, *vscrollbar;
   GList *children, *tmp_list;
   gint n_children;
   AtkObject  *accessible = NULL;
@@ -122,6 +124,8 @@ gail_scrolled_window_ref_child (AtkObject *obj,
     return NULL;
 
   gtk_window = GTK_SCROLLED_WINDOW (widget);
+  hscrollbar = gtk_scrolled_window_get_hscrollbar (gtk_window);
+  vscrollbar = gtk_scrolled_window_get_vscrollbar (gtk_window);
 
   children = gtk_container_get_children (GTK_CONTAINER (gtk_window));
   n_children = g_list_length (children);
@@ -129,14 +133,14 @@ gail_scrolled_window_ref_child (AtkObject *obj,
   if (child == n_children)
     {
       if (gtk_window->hscrollbar_visible)
-        accessible = gtk_widget_get_accessible (gtk_window->hscrollbar);
+        accessible = gtk_widget_get_accessible (hscrollbar);
       else if (gtk_window->vscrollbar_visible)
-        accessible = gtk_widget_get_accessible (gtk_window->vscrollbar);
+        accessible = gtk_widget_get_accessible (vscrollbar);
     }
   else if (child == n_children+1 && 
            gtk_window->hscrollbar_visible &&
            gtk_window->vscrollbar_visible)
-    accessible = gtk_widget_get_accessible (gtk_window->vscrollbar);
+    accessible = gtk_widget_get_accessible (vscrollbar);
   else if (child < n_children)
     {
       tmp_list = g_list_nth (children, child);
@@ -164,6 +168,7 @@ gail_scrolled_window_scrollbar_visibility_changed (GObject    *object,
       GList *children;
       AtkObject *child;
       GtkScrolledWindow *gtk_window;
+      GtkWidget *hscrollbar, *vscrollbar;
       GailScrolledWindow *gail_window = GAIL_SCROLLED_WINDOW (user_data);
       gchar *signal_name;
 
@@ -174,19 +179,22 @@ gail_scrolled_window_scrollbar_visibility_changed (GObject    *object,
       index = n_children = g_list_length (children);
       g_list_free (children);
 
-      if ((gpointer) object == (gpointer) (gtk_window->hscrollbar))
+      hscrollbar = gtk_scrolled_window_get_hscrollbar (gtk_window);
+      vscrollbar = gtk_scrolled_window_get_vscrollbar (gtk_window);
+
+      if ((gpointer) object == (gpointer) (hscrollbar))
         {
           if (gtk_window->hscrollbar_visible)
             child_added = TRUE;
 
-          child = gtk_widget_get_accessible (gtk_window->hscrollbar);
+          child = gtk_widget_get_accessible (hscrollbar);
         }
-      else if ((gpointer) object == (gpointer) (gtk_window->vscrollbar))
+      else if ((gpointer) object == (gpointer) (vscrollbar))
         {
           if (gtk_window->vscrollbar_visible)
             child_added = TRUE;
 
-          child = gtk_widget_get_accessible (gtk_window->vscrollbar);
+          child = gtk_widget_get_accessible (vscrollbar);
           if (gtk_window->hscrollbar_visible)
             index = n_children+1;
         }
