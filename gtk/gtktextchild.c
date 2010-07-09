@@ -53,7 +53,6 @@
 #include "gtktextbtree.h"
 #include "gtktextlayout.h"
 #include "gtkintl.h"
-#include "gtkalias.h"
 
 #define CHECK_IN_BUFFER(anchor)                                         \
   G_STMT_START {                                                        \
@@ -510,6 +509,3 @@ gtk_text_anchored_child_set_layout (GtkWidget     *child,
   
   _gtk_anchored_child_set_layout (child, layout);
 }
-
-#define __GTK_TEXT_CHILD_C__
-#include "gtkaliasdef.c"

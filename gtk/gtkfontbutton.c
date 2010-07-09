@@ -40,7 +40,6 @@
 #include "gtkmarshalers.h"
 #include "gtkprivate.h"
 #include "gtkintl.h"
-#include "gtkalias.h"
 
 #include <string.h>
 #include <stdio.h>
@@ -914,6 +913,3 @@ gtk_font_button_update_font_info (GtkFontButton *font_button)
   
   pango_font_description_free (desc);
 } 
-
-#define __GTK_FONT_BUTTON_C__
-#include "gtkaliasdef.c"

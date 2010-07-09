@@ -53,7 +53,6 @@
 #include "gtkicontheme.h"
 #include "gtkimagemenuitem.h"
 #include "gtkmain.h"
-#include "gtkalias.h"
 
 /**
  * SECTION:filesystem
@@ -1525,6 +1524,3 @@ gtk_mount_operation_get_screen (GtkMountOperation *op)
   else
     return gdk_screen_get_default ();
 }
-
-#define __GTK_MOUNT_OPERATION_C__
-#include "gtkaliasdef.c"

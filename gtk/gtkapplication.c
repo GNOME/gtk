@@ -38,8 +38,6 @@
 #include "gtkintl.h"
 #include "gtkprivate.h"
 
-#include "gtkalias.h"
-
 #include <gdk/gdk.h>
 #ifdef GDK_WINDOWING_X11
 #include <gdk/x11/gdkx.h>
@@ -711,6 +709,3 @@ gtk_application_class_init (GtkApplicationClass *klass)
                  
   g_type_class_add_private (gobject_class, sizeof (GtkApplicationPrivate));
 }
-
-#define __GTK_APPLICATION_C__
-#include "gtkaliasdef.c"

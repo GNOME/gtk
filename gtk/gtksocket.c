@@ -39,7 +39,6 @@
 #include "gtkdnd.h"
 #include "gtkintl.h"
 
-#include "gtkalias.h"
 
 /**
  * SECTION:gtksocket
@@ -1046,6 +1045,3 @@ _gtk_socket_advance_toplevel_focus (GtkSocket        *socket,
         return;
     }
 }
-
-#define __GTK_SOCKET_C__
-#include "gtkaliasdef.c"

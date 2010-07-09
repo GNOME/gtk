@@ -266,7 +266,6 @@
 #include "gtktypeutils.h"
 #include "gtkprivate.h"
 #include "gtkintl.h"
-#include "gtkalias.h"
 
 
 static void gtk_activatable_class_init (gpointer g_iface);
@@ -559,6 +558,3 @@ gtk_activatable_get_use_action_appearance  (GtkActivatable *activatable)
 
   return use_appearance;
 }
-
-#define __GTK_ACTIVATABLE_C__
-#include "gtkaliasdef.c"

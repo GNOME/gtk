@@ -42,7 +42,6 @@
 #include "gtksettings.h"
 #include "gtkprivate.h"
 #include "gtkintl.h"
-#include "gtkalias.h"
 
 #define MIN_SPIN_BUTTON_WIDTH 30
 #define MAX_TIMER_CALLS       5
@@ -2296,6 +2295,3 @@ gtk_spin_button_update (GtkSpinButton *spin_button)
   else
     gtk_spin_button_set_value (spin_button, val);
 }
-
-#define __GTK_SPIN_BUTTON_C__
-#include "gtkaliasdef.c"

@@ -26,7 +26,7 @@
 #include "gtktreednd.h"
 #include "gtkbuildable.h"
 #include "gtkintl.h"
-#include "gtkalias.h"
+
 
 #define G_NODE(node) ((GNode *)node)
 #define GTK_TREE_STORE_IS_SORTED(tree) (((GtkTreeStore*)(tree))->sort_column_id != GTK_TREE_SORTABLE_UNSORTED_SORT_COLUMN_ID)
@@ -3328,6 +3328,3 @@ gtk_tree_store_buildable_custom_finished (GtkBuildable *buildable,
   g_slist_free (data->items);
   g_slice_free (GSListSubParserData, data);
 }
-
-#define __GTK_TREE_STORE_C__
-#include "gtkaliasdef.c"

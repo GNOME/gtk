@@ -56,7 +56,7 @@
 #include "gtkbuildable.h"
 #include "gtkbuilderprivate.h"
 #include "gtksizerequest.h"
-#include "gtkalias.h"
+
 
 /**
  * SECTION:gtkwidget
@@ -11618,6 +11618,3 @@ gtk_widget_send_focus_change (GtkWidget *widget,
 
   return res;
 }
-
-#define __GTK_WIDGET_C__
-#include "gtkaliasdef.c"

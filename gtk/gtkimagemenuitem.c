@@ -36,7 +36,7 @@
 #include "gtkwindow.h"
 #include "gtkactivatable.h"
 #include "gtkprivate.h"
-#include "gtkalias.h"
+
 
 static void gtk_image_menu_item_destroy              (GtkObject        *object);
 static void gtk_image_menu_item_size_request         (GtkWidget        *widget,
@@ -1058,6 +1058,3 @@ gtk_image_menu_item_screen_changed (GtkWidget *widget,
 
   show_image_change_notify (GTK_IMAGE_MENU_ITEM (widget));
 }
-
-#define __GTK_IMAGE_MENU_ITEM_C__
-#include "gtkaliasdef.c"

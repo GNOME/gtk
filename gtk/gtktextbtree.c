@@ -64,7 +64,6 @@
 #include "gtktextiterprivate.h"
 #include "gtkdebug.h"
 #include "gtktextmarkprivate.h"
-#include "gtkalias.h"
 
 /*
  * Types
@@ -7289,6 +7288,3 @@ _gtk_text_btree_spew_segment (GtkTextBTree* tree, GtkTextLineSegment * seg)
               seg->body.toggle.info->tag->priority);
     }
 }
-
-#define __GTK_TEXT_BTREE_C__
-#include "gtkaliasdef.c"

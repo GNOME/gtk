@@ -49,7 +49,6 @@
 #include "gtkplug.h"
 #include "gtkbuildable.h"
 #include "gtksizerequest.h"
-#include "gtkalias.h"
 
 #ifdef GDK_WINDOWING_X11
 #include "x11/gdkx.h"
@@ -8810,6 +8809,3 @@ gtk_window_set_default_icon_from_file (const gchar *filename,
 }
 
 #endif
-
-#define __GTK_WINDOW_C__
-#include "gtkaliasdef.c"

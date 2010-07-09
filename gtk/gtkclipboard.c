@@ -29,7 +29,6 @@
 #include "gtkmarshalers.h"
 #include "gtktextbufferrichtext.h"
 #include "gtkintl.h"
-#include "gtkalias.h"
 
 #ifdef GDK_WINDOWING_X11
 #include "x11/gdkx.h"
@@ -2082,6 +2081,3 @@ _gtk_clipboard_store_all (void)
   g_slist_free (displays);
   
 }
-
-#define __GTK_CLIPBOARD_C__
-#include "gtkaliasdef.c"

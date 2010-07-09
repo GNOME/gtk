@@ -24,7 +24,7 @@
 #include "gtkmarshalers.h"
 #include "gtkprivate.h"
 #include "gtktreeprivate.h"
-#include "gtkalias.h"
+
 
 static void gtk_cell_renderer_toggle_get_property  (GObject                    *object,
 						    guint                       param_id,
@@ -522,6 +522,3 @@ gtk_cell_renderer_toggle_set_activatable (GtkCellRendererToggle *toggle,
       g_object_notify (G_OBJECT (toggle), "activatable");
     }
 }
-
-#define __GTK_CELL_RENDERER_TOGGLE_C__
-#include "gtkaliasdef.c"

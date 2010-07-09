@@ -35,7 +35,6 @@
 #include "gtkicontheme.h"
 #include "gtkintl.h"
 #include "gtkprivate.h"
-#include "gtkalias.h"
 
 /**
  * SECTION:gtkimage
@@ -2542,6 +2541,3 @@ gtk_image_set_from_file   (GtkImage    *image,
 }
 
 #endif
-
-#define __GTK_IMAGE_C__
-#include "gtkaliasdef.c"

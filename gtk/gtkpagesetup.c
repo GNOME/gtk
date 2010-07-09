@@ -25,7 +25,6 @@
 #include "gtkprintoperation.h" /* for GtkPrintError */
 #include "gtkintl.h"
 #include "gtktypebuiltins.h"
-#include "gtkalias.h"
 
 #define KEYFILE_GROUP_NAME "Page Setup"
 
@@ -782,6 +781,3 @@ gtk_page_setup_to_key_file (GtkPageSetup *setup,
 			 "Orientation", orientation);
   g_free (orientation);
 }
-
-#define __GTK_PAGE_SETUP_C__
-#include "gtkaliasdef.c"

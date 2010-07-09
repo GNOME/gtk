@@ -33,7 +33,6 @@
 #include "win32/gdkwin32.h"
 
 #include "gtkwin32embed.h"
-#include "gtkalias.h"
 
 #if defined(_MSC_VER) && (WINVER < 0x0500)
 #ifndef GA_PARENT

@@ -30,7 +30,7 @@
 #include "gtkhscrollbar.h"
 #include "gtkorientable.h"
 #include "gtkintl.h"
-#include "gtkalias.h"
+
 
 G_DEFINE_TYPE (GtkHScrollbar, gtk_hscrollbar, GTK_TYPE_SCROLLBAR)
 
@@ -65,6 +65,3 @@ gtk_hscrollbar_new (GtkAdjustment *adjustment)
                        "adjustment", adjustment,
                        NULL);
 }
-
-#define __GTK_HSCROLLBAR_C__
-#include "gtkaliasdef.c"

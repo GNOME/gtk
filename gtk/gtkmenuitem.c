@@ -39,7 +39,6 @@
 #include "gtkbuildable.h"
 #include "gtkactivatable.h"
 #include "gtkintl.h"
-#include "gtkalias.h"
 
 
 typedef struct {
@@ -2203,8 +2202,3 @@ gtk_menu_item_get_use_underline (GtkMenuItem *menu_item)
 
   return FALSE;
 }
-
-
-
-#define __GTK_MENU_ITEM_C__
-#include "gtkaliasdef.c"

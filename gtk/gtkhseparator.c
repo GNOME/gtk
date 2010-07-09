@@ -28,7 +28,7 @@
 
 #include "gtkhseparator.h"
 #include "gtkorientable.h"
-#include "gtkalias.h"
+
 
 G_DEFINE_TYPE (GtkHSeparator, gtk_hseparator, GTK_TYPE_SEPARATOR)
 
@@ -49,6 +49,3 @@ gtk_hseparator_new (void)
 {
   return g_object_new (GTK_TYPE_HSEPARATOR, NULL);
 }
-
-#define __GTK_HSEPARATOR_C__
-#include "gtkaliasdef.c"

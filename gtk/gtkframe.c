@@ -32,7 +32,6 @@
 #include "gtkintl.h"
 #include "gtkbuildable.h"
 #include "gtksizerequest.h"
-#include "gtkalias.h"
 
 #define LABEL_PAD 1
 #define LABEL_SIDE_PAD 2
@@ -801,6 +800,3 @@ gtk_frame_size_request_init (GtkSizeRequestIface *iface)
   iface->get_width = gtk_frame_get_width;
   iface->get_height = gtk_frame_get_height;
 }
-
-#define __GTK_FRAME_C__
-#include "gtkaliasdef.c"

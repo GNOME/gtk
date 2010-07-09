@@ -49,7 +49,6 @@
 #include "gtkarrow.h"
 #include "gtkprivate.h"
 #include "gtkintl.h"
-#include "gtkalias.h"
 
 #define MIN_ARROW_SIZE  15
 
@@ -303,6 +302,3 @@ gtk_arrow_expose (GtkWidget      *widget,
 
   return FALSE;
 }
-
-#define __GTK_ARROW_C__
-#include "gtkaliasdef.c"

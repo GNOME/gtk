@@ -92,7 +92,6 @@
 #include "gtkprivate.h"
 #include "gtkbuildable.h"
 #include "gtkactivatable.h"
-#include "gtkalias.h"
 
 
 #define GTK_ACTION_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), GTK_TYPE_ACTION, GtkActionPrivate))
@@ -1826,6 +1825,3 @@ gtk_action_create_menu (GtkAction *action)
 
   return NULL;
 }
-
-#define __GTK_ACTION_C__
-#include "gtkaliasdef.c"

@@ -40,7 +40,6 @@
 #include "gtklinkbutton.h"
 
 #include "gtkintl.h"
-#include "gtkalias.h"
 
 
 struct _GtkLinkButtonPrivate
@@ -785,7 +784,3 @@ gtk_link_button_get_visited (GtkLinkButton *link_button)
   
   return link_button->priv->visited;
 }
-
-
-#define __GTK_LINK_BUTTON_C__
-#include "gtkaliasdef.c"

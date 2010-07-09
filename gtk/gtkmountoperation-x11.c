@@ -44,9 +44,6 @@
 
 #include "gtkmountoperationprivate.h"
 
-#include "gtkalias.h"
-
-
 /* ---------------------------------------------------------------------------------------------------- */
 /* these functions are based on code from libwnck (LGPLv2) */
 

@@ -23,7 +23,6 @@
 #include "gtkwidget.h"
 #include "gtkintl.h"
 #include "gtkaccessible.h"
-#include "gtkalias.h"
 
 /**
  * SECTION:gtkaccessible
@@ -116,6 +115,3 @@ gtk_accessible_real_connect_widget_destroyed (GtkAccessible *accessible)
                       &accessible->widget);
   }
 }
-
-#define __GTK_ACCESSIBLE_C__
-#include "gtkaliasdef.c"

@@ -47,7 +47,6 @@
 #include "gtkuimanager.h"
 #include "gtkwindow.h"
 #include "gtkprivate.h"
-#include "gtkalias.h"
 
 #undef DEBUG_UI_MANAGER
 
@@ -3076,6 +3075,3 @@ gtk_ui_manager_add_ui_from_file (GtkUIManager *self,
 }
 
 #endif
-
-#define __GTK_UI_MANAGER_C__
-#include "gtkaliasdef.c"

@@ -28,7 +28,6 @@
 #include "gtkradiomenuitem.h"
 #include "gtkintl.h"
 #include "gtkprivate.h" /* To get redefinition of GTK_LOCALE_DIR on Win32 */
-#include "gtkalias.h"
 
 #define NONE_ID "gtk-im-context-none"
 
@@ -709,7 +708,3 @@ gtk_im_multicontext_set_context_id (GtkIMMulticontext *context,
   context->priv->context_id = g_strdup (context_id);
   gtk_im_multicontext_set_slave (context, NULL, FALSE);
 }
-
-
-#define __GTK_IM_MULTICONTEXT_C__
-#include "gtkaliasdef.c"

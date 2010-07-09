@@ -34,8 +34,6 @@
 #include "gtkwindow.h"
 #include "gtkprivate.h"
 #include "gtkintl.h"
-#include "gtkalias.h"
-
 
 /* scrolled window policy and size requisition handling:
  *
@@ -1903,6 +1901,3 @@ gtk_scrolled_window_get_width_for_height (GtkSizeRequest *widget,
 
   GTK_SIZE_REQUEST_GET_IFACE (widget)->get_width (widget, minimum_width, natural_width);
 }
-
-#define __GTK_SCROLLED_WINDOW_C__
-#include "gtkaliasdef.c"

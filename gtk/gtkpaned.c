@@ -35,7 +35,7 @@
 #include "gtkwindow.h"
 #include "gtkprivate.h"
 #include "gtkintl.h"
-#include "gtkalias.h"
+
 
 enum {
   PROP_0,
@@ -2247,6 +2247,3 @@ gtk_paned_get_handle_window (GtkPaned *paned)
 
   return paned->handle;
 }
-
-#define __GTK_PANED_C__
-#include "gtkaliasdef.c"

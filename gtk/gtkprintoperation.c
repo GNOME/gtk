@@ -31,7 +31,6 @@
 #include "gtkintl.h"
 #include "gtkprivate.h"
 #include "gtkmessagedialog.h"
-#include "gtkalias.h"
 
 #define SHOW_PROGRESS_TIME 1200
 
@@ -3308,6 +3307,3 @@ gtk_print_operation_get_n_pages_to_print (GtkPrintOperation *op)
 
   return op->priv->nr_of_pages_to_print;
 }
-
-#define __GTK_PRINT_OPERATION_C__
-#include "gtkaliasdef.c"

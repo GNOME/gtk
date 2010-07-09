@@ -39,7 +39,6 @@
 #include "gtkiconfactory.h"
 #include "gtksettings.h"	/* _gtk_settings_parse_convert() */
 #include "gtkintl.h"
-#include "gtkalias.h"
 #include "gtkspinner.h"
 
 
@@ -6305,6 +6304,3 @@ gtk_draw_insertion_cursor (GtkWidget          *widget,
   if (area)
     gdk_gc_set_clip_rectangle (gc, NULL);
 }
-
-#define __GTK_STYLE_C__
-#include "gtkaliasdef.c"

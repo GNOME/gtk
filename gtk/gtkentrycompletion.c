@@ -35,7 +35,6 @@
 #include "gtkmarshalers.h"
 
 #include "gtkprivate.h"
-#include "gtkalias.h"
 
 #include <string.h>
 
@@ -2006,6 +2005,3 @@ gtk_entry_completion_get_inline_selection (GtkEntryCompletion *completion)
 
   return completion->priv->inline_selection;
 }
-
-#define __GTK_ENTRY_COMPLETION_C__
-#include "gtkaliasdef.c"

@@ -26,7 +26,6 @@
 #include "gtkprivate.h"
 #include "gtkspinbutton.h"
 #include "gtkcellrendererspin.h"
-#include "gtkalias.h"
 
 #define GTK_CELL_RENDERER_SPIN_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), GTK_TYPE_CELL_RENDERER_SPIN, GtkCellRendererSpinPrivate))
 
@@ -350,7 +349,3 @@ gtk_cell_renderer_spin_new (void)
 {
   return g_object_new (GTK_TYPE_CELL_RENDERER_SPIN, NULL);
 }
-
-
-#define __GTK_CELL_RENDERER_SPIN_C__
-#include  "gtkaliasdef.c"

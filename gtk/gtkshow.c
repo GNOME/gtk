@@ -26,9 +26,6 @@
 
 #include "gtkshow.h"
 
-#include "gtkalias.h"
-
-
 /**
  * gtk_show_uri:
  * @screen: (allow-none): screen to show the uri on or %NULL for the default screen
@@ -75,7 +72,3 @@ gtk_show_uri (GdkScreen    *screen,
 
   return ret;
 }
-
-
-#define __GTK_SHOW_C__
-#include "gtkaliasdef.c"

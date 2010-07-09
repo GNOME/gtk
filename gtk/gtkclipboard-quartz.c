@@ -32,7 +32,7 @@
 #include "gtkintl.h"
 #include "gtktextbuffer.h"
 #include "gtkquartz.h"
-#include "gtkalias.h"
+
 
 enum {
   OWNER_CHANGE,
@@ -1011,6 +1011,3 @@ _gtk_clipboard_store_all (void)
 {
   /* FIXME: Implement */
 }
-
-#define __GTK_CLIPBOARD_C__
-#include "gtkaliasdef.c"

@@ -39,7 +39,6 @@
 #include "gtkcustompaperunixdialog.h"
 #include "gtkprintbackend.h"
 #include "gtkprintutils.h"
-#include "gtkalias.h"
 
 #define CUSTOM_PAPER_FILENAME ".gtk-custom-papers"
 
@@ -1181,7 +1180,3 @@ populate_dialog (GtkCustomPaperUnixDialog *dialog)
 
   load_print_backends (dialog);
 }
-
-
-#define __GTK_CUSTOM_PAPER_UNIX_DIALOG_C__
-#include "gtkaliasdef.c"

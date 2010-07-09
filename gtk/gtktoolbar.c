@@ -56,7 +56,7 @@
 #include "gtkvbox.h"
 #include "gtkprivate.h"
 #include "gtkintl.h"
-#include "gtkalias.h"
+
 
 typedef struct _ToolbarContent ToolbarContent;
 
@@ -3678,6 +3678,3 @@ toolbar_rebuild_menu (GtkToolShell *shell)
   
   gtk_widget_queue_resize (GTK_WIDGET (shell));
 }
-
-#define __GTK_TOOLBAR_C__
-#include "gtkaliasdef.c"

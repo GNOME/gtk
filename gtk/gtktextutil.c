@@ -35,7 +35,6 @@
 #include "gtktextbuffer.h"
 #include "gtkmenuitem.h"
 #include "gtkintl.h"
-#include "gtkalias.h"
 
 #define DRAG_ICON_MAX_WIDTH 250
 #define DRAG_ICON_MAX_HEIGHT 250

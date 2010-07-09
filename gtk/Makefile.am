@@ -103,20 +103,9 @@ endif
 gtk.def: gtk.symbols
 	(echo -e EXPORTS; $(CPP) -P -DINCLUDE_VARIABLES -DG_OS_WIN32 -DALL_FILES - <$(srcdir)/gtk.symbols | $(SED) -e '/^$$/d' -e 's/^/	/' -e 's/G_GNUC_[^ ]*//g') > $(srcdir)/gtk.def
 
-gtkalias.h: gtk.symbols
-	  $(PERL) $(srcdir)/makegtkalias.pl < $(srcdir)/gtk.symbols > gtkalias.h
-gtkaliasdef.c: gtk.symbols
-	  $(PERL) $(srcdir)/makegtkalias.pl -def < $(srcdir)/gtk.symbols > gtkaliasdef.c
-
-check-aliases:
-	@$(TESTS_ENVIRONMENT) $(srcdir)/aliasfilescheck.sh
-
-.PHONY: check-aliases
-
 TESTS_ENVIRONMENT = srcdir="$(srcdir)" gtk_all_c_sources="$(gtk_all_c_sources)"
-TESTS = aliasfilescheck.sh
 if OS_LINUX
-TESTS += abicheck.sh pltcheck.sh
+TESTS = abicheck.sh
 endif
 
 libgtkincludedir = $(includedir)/gtk-3.0/gtk
@@ -732,13 +721,11 @@ gtk_built_public_sources =			\
 
 # built headers that don't get installed
 gtk_built_private_headers =			\
-	gtkalias.h				\
 	gtkmarshalers.h				\
 	gtkbuiltincache.h			\
 	gtkimcontextsimpleseqs.h
 
 gtk_built_sources =				\
-	gtkaliasdef.c				\
 	gtktypebuiltins.c			\
 	gtktypefuncs.c				\
 	gtkmarshalers.c				\
@@ -794,7 +781,6 @@ stamp-gtkmarshalers.h: @REBUILD@ gtkmarshalers.list
 	&& echo timestamp > $(@F)	
 gtkmarshalers.c: @REBUILD@ gtkmarshalers.list
 	(echo "#include \"gtkmarshalers.h\""; \
-	 echo "#include \"gtkalias.h\""; \
 	 $(GLIB_GENMARSHAL) --prefix=_gtk_marshal $(srcdir)/gtkmarshalers.list --body) >> xgen-gmlc \
 	&& cp xgen-gmlc gtkmarshalers.c \
 	&& rm -f xgen-gmlc
@@ -1331,10 +1317,7 @@ EXTRA_DIST +=                   \
 	gtkrc.key.mac		\
 	makefile.msc		\
 	makefile.msc.in		\
-	makegtkalias.pl		\
-	aliasfilescheck.sh	\
 	abicheck.sh		\
-	pltcheck.sh		\
 	gtktypebuiltins.c.template      \
 	gtktypebuiltins.h.template
 

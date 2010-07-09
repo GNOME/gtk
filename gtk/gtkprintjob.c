@@ -37,7 +37,6 @@
 #include "gtkprinter.h"
 #include "gtkprinter-private.h"
 #include "gtkprintbackend.h"
-#include "gtkalias.h"
 
 #ifndef O_BINARY
 #define O_BINARY 0
@@ -684,7 +683,3 @@ gtk_print_job_send (GtkPrintJob             *job,
 				  priv->spool_io,
                                   callback, user_data, dnotify);
 }
-
-
-#define __GTK_PRINT_JOB_C__
-#include "gtkaliasdef.c"

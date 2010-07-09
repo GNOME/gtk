@@ -36,8 +36,6 @@
 #include "gtktoggletoolbutton.h"
 #include "gtkintl.h"
 #include "gtkprivate.h"
-#include "gtkalias.h"
-
 
 /**
  * SECTION:gtkradioaction
@@ -594,6 +592,3 @@ gtk_radio_action_set_current_value (GtkRadioAction *action,
     g_warning ("Radio group does not contain an action with value '%d'",
 	       current_value);
 }
-
-#define __GTK_RADIO_ACTION_C__
-#include "gtkaliasdef.c"

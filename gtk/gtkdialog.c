@@ -40,7 +40,6 @@
 #include "gtkbindings.h"
 #include "gtkprivate.h"
 #include "gtkbuildable.h"
-#include "gtkalias.h"
 
 #define GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), GTK_TYPE_DIALOG, GtkDialogPrivate))
 
@@ -1547,6 +1546,3 @@ gtk_dialog_get_content_area (GtkDialog *dialog)
 
   return dialog->vbox;
 }
-
-#define __GTK_DIALOG_C__
-#include "gtkaliasdef.c"

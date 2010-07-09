@@ -34,8 +34,6 @@
 #include "gtkprivate.h"
 #include "gtkplugprivate.h"
 
-#include "gtkalias.h"
-
 /**
  * SECTION:gtkplug
  * @Short_description: Toplevel for embedding into other processes
@@ -1064,6 +1062,3 @@ _gtk_plug_focus_first_last (GtkPlug          *plug,
 
   gtk_widget_child_focus (GTK_WIDGET (plug), direction);
 }
-
-#define __GTK_PLUG_C__
-#include "gtkaliasdef.c"

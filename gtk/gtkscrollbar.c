@@ -30,7 +30,6 @@
 #include "gtkscrollbar.h"
 #include "gtkintl.h"
 #include "gtkprivate.h"
-#include "gtkalias.h"
 
 static void gtk_scrollbar_style_set (GtkWidget *widget,
                                      GtkStyle  *previous);
@@ -148,7 +147,3 @@ gtk_scrollbar_new (GtkOrientation  orientation,
                        "adjustment",  adjustment,
                        NULL);
 }
-
-
-#define __GTK_SCROLLBAR_C__
-#include "gtkaliasdef.c"

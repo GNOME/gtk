@@ -32,7 +32,6 @@
 #include "gtkprogressbar.h"
 #include "gtkprivate.h"
 #include "gtkintl.h"
-#include "gtkalias.h"
 
 #define GTK_CELL_RENDERER_PROGRESS_GET_PRIVATE(object) (G_TYPE_INSTANCE_GET_PRIVATE ((object),                        \
                                                                                      GTK_TYPE_CELL_RENDERER_PROGRESS, \
@@ -673,6 +672,3 @@ gtk_cell_renderer_progress_render (GtkCellRenderer *cell,
       g_object_unref (layout);
     }
 }
-
-#define __GTK_CELL_RENDERER_PROGRESS_C__
-#include "gtkaliasdef.c"

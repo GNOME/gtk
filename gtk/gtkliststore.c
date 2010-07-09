@@ -29,7 +29,6 @@
 #include "gtkintl.h"
 #include "gtkbuildable.h"
 #include "gtkbuilderprivate.h"
-#include "gtkalias.h"
 
 #define GTK_LIST_STORE_IS_SORTED(list) (((GtkListStore*)(list))->sort_column_id != GTK_TREE_SORTABLE_UNSORTED_SORT_COLUMN_ID)
 #define VALID_ITER(iter, list_store) ((iter)!= NULL && (iter)->user_data != NULL && list_store->stamp == (iter)->stamp && !g_sequence_iter_is_end ((iter)->user_data) && g_sequence_iter_get_sequence ((iter)->user_data) == list_store->seq)
@@ -2382,6 +2381,3 @@ gtk_list_store_buildable_custom_tag_end (GtkBuildable *buildable,
   else
     g_warning ("Unknown custom list store tag: %s", tagname);
 }
-
-#define __GTK_LIST_STORE_C__
-#include "gtkaliasdef.c"

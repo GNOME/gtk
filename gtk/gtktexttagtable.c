@@ -29,7 +29,6 @@
 #include "gtkmarshalers.h"
 #include "gtktextbuffer.h" /* just for the lame notify_will_remove_tag hack */
 #include "gtkintl.h"
-#include "gtkalias.h"
 
 #include <stdlib.h>
 
@@ -414,6 +413,3 @@ _gtk_text_tag_table_remove_buffer (GtkTextTagTable *table,
   
   table->buffers = g_slist_remove (table->buffers, buffer);
 }
-
-#define __GTK_TEXT_TAG_TABLE_C__
-#include "gtkaliasdef.c"

@@ -29,8 +29,6 @@
 #include "gtkprinter-private.h"
 #include "gtkprintbackend.h"
 #include "gtkprintjob.h"
-#include "gtkalias.h"
-
 
 /**
  * SECTION:gtkprinter
@@ -1281,7 +1279,3 @@ gtk_print_capabilities_get_type (void)
 
   return etype;
 }
-
-
-#define __GTK_PRINTER_C__
-#include "gtkaliasdef.c"

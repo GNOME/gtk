@@ -40,8 +40,6 @@
 #include "gtkintl.h"
 #include "gtkbuildable.h"
 #include "gtkbuilderprivate.h"
-#include "gtkalias.h"
-
 
 #define	MAX_DIGITS	(64)	/* don't change this,
 				 * a) you don't need to and
@@ -1681,6 +1679,3 @@ gtk_scale_buildable_custom_finished (GtkBuildable *buildable,
       g_slice_free (MarksSubparserData, marks_data);
     }
 }
-
-#define __GTK_SCALE_C__
-#include "gtkaliasdef.c"

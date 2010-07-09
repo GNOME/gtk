@@ -70,8 +70,6 @@
 #include "gtkvbox.h"
 #include "gtkintl.h"
 
-#include "gtkalias.h"
-
 #include <errno.h>
 #include <string.h>
 #include <time.h>

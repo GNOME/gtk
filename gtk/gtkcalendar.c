@@ -78,7 +78,6 @@
 #include "gtktooltip.h"
 #include "gtkprivate.h"
 #include "gdk/gdkkeysyms.h"
-#include "gtkalias.h"
 
 /***************************************************************************/
 /* The following date routines are taken from the lib_date package. 
@@ -4027,6 +4026,3 @@ gtk_calendar_get_detail_height_rows (GtkCalendar *calendar)
   g_return_val_if_fail (GTK_IS_CALENDAR (calendar), 0);
   return GTK_CALENDAR_GET_PRIVATE (calendar)->detail_height_rows;
 }
-
-#define __GTK_CALENDAR_C__
-#include "gtkaliasdef.c"

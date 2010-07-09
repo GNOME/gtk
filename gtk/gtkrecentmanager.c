@@ -39,7 +39,6 @@
 #include "gtktypebuiltins.h"
 #include "gtkprivate.h"
 #include "gtkmarshalers.h"
-#include "gtkalias.h"
 
 /* the file where we store the recently used items */
 #define GTK_RECENTLY_USED_FILE	".recently-used.xbel"
@@ -2324,6 +2323,3 @@ _gtk_recent_manager_sync (void)
       gtk_recent_manager_real_changed (recent_manager_singleton);
     }
 }
-
-#define __GTK_RECENT_MANAGER_C__
-#include "gtkaliasdef.c"

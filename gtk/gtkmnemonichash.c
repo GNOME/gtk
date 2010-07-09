@@ -20,7 +20,6 @@
  */
 
 #include "gtkmnemonichash.h"
-#include "gtkalias.h"
 
 struct _GtkMnemnonicHash
 {

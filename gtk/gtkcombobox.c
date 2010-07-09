@@ -51,7 +51,6 @@
 #include "gtkintl.h"
 
 #include "gtktreeprivate.h"
-#include "gtkalias.h"
 
 /* WELCOME, to THE house of evil code */
 
@@ -6033,6 +6032,3 @@ gtk_combo_box_buildable_custom_tag_end (GtkBuildable *buildable,
     parent_buildable_iface->custom_tag_end (buildable, builder, child, tagname,
 					    data);
 }
-
-#define __GTK_COMBO_BOX_C__
-#include "gtkaliasdef.c"

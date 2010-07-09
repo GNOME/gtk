@@ -38,7 +38,6 @@
 #include "gtkmain.h"
 #include "gtkrc.h"
 #include "gtkintl.h"
-#include "gtkalias.h"
 
 /* Do *not* include "gtkprivate.h" in this file. If you do, the
  * correct_libdir_prefix() and correct_localedir_prefix() functions

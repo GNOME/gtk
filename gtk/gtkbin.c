@@ -41,7 +41,7 @@
 #include "gtkbin.h"
 #include "gtksizerequest.h"
 #include "gtkintl.h"
-#include "gtkalias.h"
+
 
 static void gtk_bin_add         (GtkContainer   *container,
 			         GtkWidget      *widget);
@@ -277,6 +277,3 @@ gtk_bin_get_child (GtkBin *bin)
 
   return bin->child;
 }
-
-#define __GTK_BIN_C__
-#include "gtkaliasdef.c"

@@ -39,8 +39,6 @@
 #include "gtkscrollbar.h"
 #include "gtkprivate.h"
 #include "gtkintl.h"
-#include "gtkalias.h"
-
 
 /**
  * SECTION:gtkrange
@@ -3974,6 +3972,3 @@ _gtk_range_get_stop_positions (GtkRange  *range,
 
   return range->layout->n_marks;
 }
-
-#define __GTK_RANGE_C__
-#include "gtkaliasdef.c"

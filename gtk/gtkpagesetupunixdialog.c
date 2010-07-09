@@ -54,8 +54,6 @@
 #include "gtkprintbackend.h"
 #include "gtkpapersize.h"
 #include "gtkprintutils.h"
-#include "gtkalias.h"
-
 
 /**
  * SECTION:gtkpagesetupunixdialog
@@ -1207,6 +1205,3 @@ gtk_page_setup_unix_dialog_get_print_settings (GtkPageSetupUnixDialog *dialog)
 
   return priv->print_settings;
 }
-
-#define __GTK_PAGE_SETUP_UNIX_DIALOG_C__
-#include "gtkaliasdef.c"

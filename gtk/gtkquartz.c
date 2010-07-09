@@ -22,7 +22,6 @@
 
 #include "gtkquartz.h"
 #include <gdk/quartz/gdkquartz.h>
-#include "gtkalias.h"
 
 NSImage *
 _gtk_quartz_create_image_from_pixbuf (GdkPixbuf *pixbuf)

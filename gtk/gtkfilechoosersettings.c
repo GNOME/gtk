@@ -35,7 +35,6 @@
 #include <glib.h>
 #include <glib/gi18n-lib.h>
 #include "gtkfilechoosersettings.h"
-#include "gtkalias.h"
 
 #define SETTINGS_GROUP		"Filechooser Settings"
 #define LOCATION_MODE_KEY	"LocationMode"

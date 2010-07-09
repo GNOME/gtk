@@ -34,7 +34,7 @@
 #include "gtkwindow.h"
 #include "gtkprivate.h"
 #include "gtkintl.h"
-#include "gtkalias.h"
+
 
 typedef struct _GtkHandleBoxPrivate GtkHandleBoxPrivate;
 
@@ -1436,6 +1436,3 @@ gtk_handle_box_end_drag (GtkHandleBox *hb,
 
   private->grab_device = NULL;
 }
-
-#define __GTK_HANDLE_BOX_C__
-#include "gtkaliasdef.c"

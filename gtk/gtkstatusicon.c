@@ -61,8 +61,6 @@
 
 #include "gdkkeysyms.h"
 
-#include "gtkalias.h"
-
 #define BLINK_TIMEOUT 500
 
 enum
@@ -3060,7 +3058,3 @@ gtk_status_icon_set_name (GtkStatusIcon *status_icon,
 
   g_object_notify (G_OBJECT (status_icon), "name");
 }
-
-
-#define __GTK_STATUS_ICON_C__
-#include "gtkaliasdef.c"

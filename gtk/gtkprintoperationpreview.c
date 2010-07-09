@@ -23,7 +23,6 @@
 #include "gtkprintoperationpreview.h"
 #include "gtkmarshalers.h"
 #include "gtkintl.h"
-#include "gtkalias.h"
 
 
 static void gtk_print_operation_preview_base_init (gpointer g_iface);
@@ -176,7 +175,3 @@ gtk_print_operation_preview_is_selected (GtkPrintOperationPreview *preview,
 
   return GTK_PRINT_OPERATION_PREVIEW_GET_IFACE (preview)->is_selected (preview, page_nr);
 }
-
-
-#define __GTK_PRINT_OPERATION_PREVIEW_C__
-#include "gtkaliasdef.c"

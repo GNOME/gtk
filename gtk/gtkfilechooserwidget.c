@@ -27,7 +27,6 @@
 #include "gtktypebuiltins.h"
 #include "gtkfilechooserembed.h"
 #include "gtkintl.h"
-#include "gtkalias.h"
 
 #define GTK_FILE_CHOOSER_WIDGET_GET_PRIVATE(o)  (GTK_FILE_CHOOSER_WIDGET (o)->priv)
 
@@ -162,6 +161,3 @@ gtk_file_chooser_widget_new (GtkFileChooserAction action)
 		       "action", action,
 		       NULL);
 }
-
-#define __GTK_FILE_CHOOSER_WIDGET_C__
-#include "gtkaliasdef.c"

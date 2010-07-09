@@ -29,7 +29,6 @@
 #include "gtkmenu.h"
 #include "gtktearoffmenuitem.h"
 #include "gtkintl.h"
-#include "gtkalias.h"
 
 #define ARROW_SIZE 10
 #define TEAR_LENGTH 5
@@ -250,6 +249,3 @@ gtk_tearoff_menu_item_parent_set (GtkWidget *widget,
 			tearoff_menu_item);
     }  
 }
-
-#define __GTK_TEAROFF_MENU_ITEM_C__
-#include "gtkaliasdef.c"

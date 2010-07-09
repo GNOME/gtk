@@ -30,8 +30,6 @@
 #include "gtkrecentchooserutils.h"
 #include "gtkrecentchooserprivate.h"
 #include "gtkprivate.h"
-#include "gtkalias.h"
-
 
 /**
  * SECTION:gtkrecentaction
@@ -782,6 +780,3 @@ gtk_recent_action_set_show_numbers (GtkRecentAction *action,
       g_object_unref (action);
     }
 }
-
-#define __GTK_RECENT_ACTION_C__
-#include "gtkaliasdef.c"

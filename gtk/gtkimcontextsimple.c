@@ -28,7 +28,7 @@
 #include "gtksettings.h"
 #include "gtkwidget.h"
 #include "gtkintl.h"
-#include "gtkalias.h"
+
 
 typedef struct _GtkComposeTable GtkComposeTable;
 typedef struct _GtkComposeTableCompact GtkComposeTableCompact;
@@ -1143,6 +1143,3 @@ gtk_im_context_simple_add_table (GtkIMContextSimple *context_simple,
 
   context_simple->tables = g_slist_prepend (context_simple->tables, table);
 }
-
-#define __GTK_IM_CONTEXT_SIMPLE_C__
-#include "gtkaliasdef.c"

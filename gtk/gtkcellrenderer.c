@@ -23,7 +23,7 @@
 #include "gtkmarshalers.h"
 #include "gtkprivate.h"
 #include "gtktreeprivate.h"
-#include "gtkalias.h"
+
 
 static void gtk_cell_renderer_get_property  (GObject              *object,
 					     guint                 param_id,
@@ -967,6 +967,3 @@ gtk_cell_renderer_stop_editing (GtkCellRenderer *cell,
 	g_signal_emit (cell, cell_renderer_signals[EDITING_CANCELED], 0);
     }
 }
-
-#define __GTK_CELL_RENDERER_C__
-#include "gtkaliasdef.c"

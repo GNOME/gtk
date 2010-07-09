@@ -32,7 +32,6 @@
 #include "gtkiconfactory.h"
 #include "gtkintl.h"
 #include <gdk/gdkkeysyms.h>
-#include "gtkalias.h"
 
 /**
  * SECTION:gtkstock
@@ -553,6 +552,3 @@ init_stock_hash (void)
 				    NULL);
     }
 }
-
-#define __GTK_STOCK_C__
-#include "gtkaliasdef.c"

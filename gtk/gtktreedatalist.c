@@ -22,7 +22,6 @@
 
 #include "config.h"
 #include "gtktreedatalist.h"
-#include "gtkalias.h"
 #include <string.h>
 
 /* node allocation

@@ -42,7 +42,6 @@
 #include "gtkwindow.h"
 #include "gtkprivate.h"
 #include "gtkintl.h"
-#include "gtkalias.h"
 
 #define MENU_SHELL_TIMEOUT   500
 
@@ -1860,6 +1859,3 @@ gtk_menu_shell_set_take_focus (GtkMenuShell *menu_shell,
       g_object_notify (G_OBJECT (menu_shell), "take-focus");
     }
 }
-
-#define __GTK_MENU_SHELL_C__
-#include "gtkaliasdef.c"

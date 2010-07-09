@@ -43,8 +43,6 @@
 #include "gtksettings.h"
 #include "gtkprivate.h"
 #include "gtkintl.h"
-#include "gtkalias.h"
-
 
 #define DEFAULT_POPUP_DELAY     225
 #define DEFAULT_POPDOWN_DELAY  1000
@@ -5486,6 +5484,3 @@ gtk_menu_get_reserve_toggle_size (GtkMenu *menu)
 
   return !priv->no_toggle_size;
 }
-
-#define __GTK_MENU_C__
-#include "gtkaliasdef.c"

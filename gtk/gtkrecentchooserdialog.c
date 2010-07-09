@@ -25,7 +25,6 @@
 #include "gtkrecentchooserutils.h"
 #include "gtkrecentmanager.h"
 #include "gtktypebuiltins.h"
-#include "gtkalias.h"
 
 #include <stdarg.h>
 
@@ -395,6 +394,3 @@ gtk_recent_chooser_dialog_new_for_manager (const gchar      *title,
   
   return result;
 }
-
-#define __GTK_RECENT_CHOOSER_DIALOG_C__
-#include "gtkaliasdef.c"

@@ -27,7 +27,6 @@
 #include "gtkmain.h"
 #include "gtkprivate.h"
 #include "gdk/gdkkeysyms.h"
-#include "gtkalias.h"
 
 
 #define GTK_CELL_RENDERER_ACCEL_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), GTK_TYPE_CELL_RENDERER_ACCEL, GtkCellRendererAccelPrivate))
@@ -665,7 +664,3 @@ gtk_cell_renderer_accel_start_editing (GtkCellRenderer      *cell,
   
   return GTK_CELL_EDITABLE (accel->edit_widget);
 }
-
-
-#define __GTK_CELL_RENDERER_ACCEL_C__
-#include "gtkaliasdef.c"

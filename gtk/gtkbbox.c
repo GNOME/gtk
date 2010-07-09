@@ -59,7 +59,7 @@
 #include "gtkorientable.h"
 #include "gtkprivate.h"
 #include "gtkintl.h"
-#include "gtkalias.h"
+
 
 enum {
   PROP_0,
@@ -830,6 +830,3 @@ gtk_button_box_new (GtkOrientation orientation)
                        "orientation", orientation,
                        NULL);
 }
-
-#define __GTK_BUTTON_BOX_C__
-#include "gtkaliasdef.c"

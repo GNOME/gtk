@@ -47,8 +47,6 @@
 #include "gtkprivate.h"
 #include "gtkstock.h"
 #include "gdkkeysyms.h"
-#include "gtkalias.h"
-
 
 /**
  * SECTION:gtkinfobar
@@ -1259,7 +1257,3 @@ gtk_info_bar_get_message_type (GtkInfoBar *info_bar)
 
   return priv->message_type;
 }
-
-
-#define __GTK_INFO_BAR_C__
-#include "gtkaliasdef.c"

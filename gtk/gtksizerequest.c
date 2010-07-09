@@ -97,7 +97,6 @@
 #include "gtksizegroup.h"
 #include "gtkprivate.h"
 #include "gtkintl.h"
-#include "gtkalias.h"
 
 /* With GtkSizeRequest, a widget may be requested
  * its width for 2 or maximum 3 heights in one resize
@@ -534,8 +533,3 @@ gtk_size_request_get_size (GtkSizeRequest    *widget,
 	}
     }
 }
-
-
-
-#define __GTK_SIZE_REQUEST_C__
-#include "gtkaliasdef.c"

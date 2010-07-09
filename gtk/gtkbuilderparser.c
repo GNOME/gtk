@@ -31,7 +31,7 @@
 #include "gtkversion.h"
 #include "gtktypeutils.h"
 #include "gtkintl.h"
-#include "gtkalias.h"
+
 
 static void free_property_info (PropertyInfo *info);
 static void free_object_info (ObjectInfo *info);

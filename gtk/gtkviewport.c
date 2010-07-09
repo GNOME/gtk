@@ -30,7 +30,7 @@
 #include "gtkintl.h"
 #include "gtkmarshalers.h"
 #include "gtkprivate.h"
-#include "gtkalias.h"
+
 
 /**
  * SECTION:gtkviewport
@@ -941,6 +941,3 @@ gtk_viewport_get_height (GtkSizeRequest *widget,
 {
   gtk_viewport_get_size (widget, GTK_ORIENTATION_VERTICAL, minimum_size, natural_size);
 }
-
-#define __GTK_VIEWPORT_C__
-#include "gtkaliasdef.c"

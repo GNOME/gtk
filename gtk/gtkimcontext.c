@@ -23,7 +23,6 @@
 #include "gtkmain.h"		/* For _gtk_boolean_handled_accumulator */
 #include "gtkmarshalers.h"
 #include "gtkintl.h"
-#include "gtkalias.h"
 
 /**
  * SECTION:gtkimcontext
@@ -709,6 +708,3 @@ gtk_im_context_delete_surrounding (GtkIMContext *context,
 
   return result;
 }
-
-#define __GTK_IM_CONTEXT_C__
-#include "gtkaliasdef.c"

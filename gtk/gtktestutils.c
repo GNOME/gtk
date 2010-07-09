@@ -22,7 +22,6 @@
 #include "config.h"
 
 #include <gtk/gtk.h>
-#include "gtkalias.h"
 
 #include <locale.h>
 #include <string.h>
@@ -653,6 +652,3 @@ gtk_test_register_all_types (void)
       *tp = 0;
     }
 }
-
-#define __GTK_TEST_UTILS_C__
-#include "gtkaliasdef.c"

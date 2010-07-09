@@ -37,8 +37,6 @@
 #include "gtkintl.h"
 #include "gtkwindow.h"
 #include "gtkprivate.h"
-#include "gtkalias.h"
-
 
 #define BORDER_SPACING  0
 #define DEFAULT_IPADDING 1
@@ -938,6 +936,3 @@ gtk_menu_bar_set_child_pack_direction (GtkMenuBar       *menubar,
       g_object_notify (G_OBJECT (menubar), "child-pack-direction");
     }
 }
-
-#define __GTK_MENU_BAR_C__
-#include "gtkaliasdef.c"

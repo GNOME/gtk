@@ -31,8 +31,6 @@
 #include "gtkicontheme.h"
 #include "gtkprivate.h"
 
-#include "gtkalias.h"
-
 /* #define DEBUG_MODE */
 #ifdef DEBUG_MODE
 #define DEBUG(x) g_debug (x);

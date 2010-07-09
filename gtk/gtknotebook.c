@@ -46,8 +46,6 @@
 #include "gtkdnd.h"
 #include "gtkbuildable.h"
 
-#include "gtkalias.h"
-
 #define SCROLL_DELAY_FACTOR   5
 #define SCROLL_THRESHOLD      12
 #define DND_THRESHOLD_MULTIPLIER 4
@@ -7713,6 +7711,3 @@ gtk_notebook_set_action_widget (GtkNotebook *notebook,
 
   gtk_widget_queue_resize (GTK_WIDGET (notebook));
 }
-
-#define __GTK_NOTEBOOK_C__
-#include "gtkaliasdef.c"

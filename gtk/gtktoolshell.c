@@ -24,7 +24,7 @@
 #include "gtktoolshell.h"
 #include "gtkwidget.h"
 #include "gtkintl.h"
-#include "gtkalias.h"
+
 
 /**
  * SECTION:gtktoolshell
@@ -247,6 +247,3 @@ gtk_tool_shell_get_text_size_group (GtkToolShell *shell)
 
   return NULL;
 }
-
-#define __GTK_TOOL_SHELL_C__
-#include "gtkaliasdef.c"

@@ -30,8 +30,6 @@
 #include "gtkradiobutton.h"
 #include "gtkprivate.h"
 #include "gtkintl.h"
-#include "gtkalias.h"
-
 
 /**
  * SECTION:gtkradiobutton
@@ -878,6 +876,3 @@ gtk_radio_button_draw_indicator (GtkCheckButton *check_button,
 			x, y, indicator_size, indicator_size);
     }
 }
-
-#define __GTK_RADIO_BUTTON_C__
-#include "gtkaliasdef.c"
