@@ -8477,7 +8477,7 @@ gdk_window_set_device_cursor (GdkWindow *window,
   if (!cursor)
     g_hash_table_remove (private->device_cursor, device);
   else
-    g_hash_table_replace (private->device_cursor, device, cursor);
+    g_hash_table_replace (private->device_cursor, device, gdk_cursor_ref (cursor));
 
   if (!GDK_WINDOW_DESTROYED (window))
     {
