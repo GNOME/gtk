@@ -741,11 +741,20 @@ gtk_spin_button_expose (GtkWidget      *widget,
 	  if (shadow_type != GTK_SHADOW_NONE)
 	    {
 	      gint width, height;
+              gboolean state_hint;
+              GtkStateType state;
+
+              gtk_widget_style_get (widget, "state-hint", &state_hint, NULL);
+              if (state_hint)
+                state = gtk_widget_has_focus (widget) ?
+                  GTK_STATE_ACTIVE : gtk_widget_get_state (widget);
+              else
+                state = GTK_STATE_NORMAL;
 
 	      gdk_drawable_get_size (spin->panel, &width, &height);
 
 	      gtk_paint_box (widget->style, spin->panel,
-			     GTK_STATE_NORMAL, shadow_type,
+			     state, shadow_type,
 			     &event->area, widget, "spinbutton",
 			     0, 0, width, height);
 	    }
