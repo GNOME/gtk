@@ -846,7 +846,7 @@ msgid ""
 "exists.  Try using a different name for the folder, or rename the file first."
 msgstr ""
 "La dosierujo ne povis estis kreita, ĉar dosiero kun sama nomo jam ekzistas. "
-"Provu uzante malsaman nomon por la dosierujo, aŭ renomu antaŭe la dosieron."
+"Provu uzante malsaman nomon por la dosierujo, aŭ alinomu antaŭe la dosieron."
 
 #: ../gtk/gtkfilechooserdefault.c:1022
 msgid "Invalid file name"
@@ -3632,12 +3632,12 @@ msgstr "Ne eblis alinomi %s-n al %s: %s, tiuokaze forigante %s-n.\n"
 #: ../gtk/updateiconcache.c:1535
 #, c-format
 msgid "Could not rename %s to %s: %s\n"
-msgstr "Eraro dum renomado de \"%s\" al \"%s\": %s\n"
+msgstr "Eraro dum alinomado de \"%s\" al \"%s\": %s\n"
 
 #: ../gtk/updateiconcache.c:1545
 #, c-format
 msgid "Could not rename %s back to %s: %s.\n"
-msgstr "Ne povis renomi %s retroe al %s: %s.\n"
+msgstr "Ne povis alionomi %s retroe al %s: %s.\n"
 
 #: ../gtk/updateiconcache.c:1572
 #, c-format
@@ -4850,13 +4850,13 @@ msgstr ""
 #~ "Ĉu vi certas ke vi volas elekti ĝin?"
 
 #~ msgid "_New Folder"
-#~ msgstr "Nova Dosierujo"
+#~ msgstr "_Nova dosierujo"
 
 #~ msgid "De_lete File"
-#~ msgstr "Forigi Dosieron"
+#~ msgstr "_Forigi dosieron"
 
 #~ msgid "_Rename File"
-#~ msgstr "Renomi Dosieron"
+#~ msgstr "_Alinomi dosieron"
 
 #~ msgid ""
 #~ "The folder name \"%s\" contains symbols that are not allowed in filenames"
@@ -4864,13 +4864,13 @@ msgstr ""
 #~ "La dosieruja nomo \"%s\" enhavas simbolojn nepermesatajn en dosiernomoj"
 
 #~ msgid "New Folder"
-#~ msgstr "Nova Dosierujo"
+#~ msgstr "Nova dosierujo"
 
 #~ msgid "_Folder name:"
-#~ msgstr "Dosieruja nomo:"
+#~ msgstr "_Dosierujnomo:"
 
 #~ msgid "C_reate"
-#~ msgstr "Krei"
+#~ msgstr "K_rei"
 
 #~ msgid ""
 #~ "The filename \"%s\" contains symbols that are not allowed in filenames"
@@ -4886,25 +4886,25 @@ msgstr ""
 #~ msgstr "Forigi Dosieron"
 
 #~ msgid "Error renaming file to \"%s\": %s"
-#~ msgstr "Eraro dum renomado de dosiero al \"%s\": %s"
+#~ msgstr "Eraro dum alionomado de dosiero al \"%s\": %s"
 
 #~ msgid "Error renaming file \"%s\": %s"
-#~ msgstr "Eraro dum renomado de dosiero \"%s\": %s"
+#~ msgstr "Eraro dum alionomado de dosiero \"%s\": %s"
 
 #~ msgid "Error renaming file \"%s\" to \"%s\": %s"
-#~ msgstr "Eraro dum renomado de \"%s\" kiel \"%s\": %s"
+#~ msgstr "Eraro dum alionomado de \"%s\" kiel \"%s\": %s"
 
 #~ msgid "Rename File"
-#~ msgstr "Renomi Dosieron"
+#~ msgstr "Alinomi dosieron"
 
 #~ msgid "Rename file \"%s\" to:"
-#~ msgstr "Renomi dosieron \"%s\" kiel:"
+#~ msgstr "Alinomi dosieron \"%s\" kiel:"
 
 #~ msgid "_Rename"
-#~ msgstr "Renomi"
+#~ msgstr "_Alinomi"
 
 #~ msgid "_Selection: "
-#~ msgstr "Elektaĵo: "
+#~ msgstr "_Elektaĵo: "
 
 #~ msgid ""
 #~ "The filename \"%s\" couldn't be converted to UTF-8. (try setting the "
@@ -4926,7 +4926,7 @@ msgstr ""
 #~ msgstr "Gama"
 
 #~ msgid "_Gamma value"
-#~ msgstr "Gama valoro"
+#~ msgstr "_Gama valoro"
 
 #~ msgid "Input"
 #~ msgstr "Enigo"
@@ -4983,7 +4983,7 @@ msgstr ""
 #~ msgstr "(nekonata)"
 
 #~ msgid "Cl_ear"
-#~ msgstr "Vakigi"
+#~ msgstr "_Vakigi"
 
 #~ msgid "--- No Tip ---"
 #~ msgstr "--- Neniu Konsileto ---"
@@ -5521,7 +5521,7 @@ msgstr ""
 #~ msgstr "Defaŭlto"
 
 #~ msgid "_All"
-#~ msgstr "Ĉiuj"
+#~ msgstr "Ĉ_iuj"
 
 #~ msgid "Today"
 #~ msgstr "Hodiaŭ"
@@ -5585,7 +5585,7 @@ msgstr ""
 #~ msgstr "Ne povis konstrui dosiernomon el \"%s\" kaj \"%s\""
 
 #~ msgid "Save in Location"
-#~ msgstr "Konservi en Loko"
+#~ msgstr "Konservi en loko"
 
 #~ msgid ""
 #~ "Error creating folder \"%s\": %s\n"
@@ -5623,7 +5623,7 @@ msgstr ""
 #~ msgstr "vakigi"
 
 #~ msgid "Select All"
-#~ msgstr "Elekti Ĉion"
+#~ msgstr "Elekti ĉion"
 
 #~ msgid "Pixmap path element: \"%s\" must be absolute, %s, line %d"
 #~ msgstr "Bildermapa vojindika elemento: \"%s\" estu absoluta, %s, linio %d"
