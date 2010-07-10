@@ -919,7 +919,7 @@ Gtk_3_0_gir_CFLAGS = \
 		-UGTK_DISABLE_DEPRECATED \
 		-DGTK_TEXT_USE_INTERNAL_UNSUPPORTED_API
 Gtk_3_0_gir_LIBS = $(gtktargetlib)
-Gtk_3_0_gir_FILES = $(addprefix $(srcdir)/, $(introspection_files))
+Gtk_3_0_gir_FILES = $(introspection_files)
 INTROSPECTION_GIRS += Gtk-3.0.gir
 
 girdir = $(datadir)/gir-1.0
