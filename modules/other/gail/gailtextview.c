@@ -216,9 +216,7 @@ setup_buffer (GtkTextView  *view,
 {
   GtkTextBuffer *buffer;
 
-  buffer = view->buffer;
-  if (buffer == NULL)
-    return;
+  buffer = gtk_text_view_get_buffer (view);
 
   if (gail_view->textutil)
     g_object_unref (gail_view->textutil);
@@ -357,7 +355,7 @@ gail_text_view_get_text (AtkText *text,
     return NULL;
 
   view = GTK_TEXT_VIEW (widget);
-  buffer = view->buffer;
+  buffer = gtk_text_view_get_buffer (view);
   gtk_text_buffer_get_iter_at_offset (buffer, &start, start_offset);
   gtk_text_buffer_get_iter_at_offset (buffer, &end, end_offset);
 
@@ -461,7 +459,7 @@ gail_text_view_get_character_count (AtkText *text)
     return 0;
 
   view = GTK_TEXT_VIEW (widget);
-  buffer = view->buffer;
+  buffer = gtk_text_view_get_buffer (view);
   return gtk_text_buffer_get_char_count (buffer);
 }
 
@@ -477,7 +475,7 @@ gail_text_view_get_caret_offset (AtkText *text)
     return 0;
 
   view = GTK_TEXT_VIEW (widget);
-  return get_insert_offset (view->buffer);
+  return get_insert_offset (gtk_text_view_get_buffer (view));
 }
 
 static gboolean
@@ -495,7 +493,7 @@ gail_text_view_set_caret_offset (AtkText *text,
     return FALSE;
 
   view = GTK_TEXT_VIEW (widget);
-  buffer = view->buffer;
+  buffer = gtk_text_view_get_buffer (view);
 
   gtk_text_buffer_get_iter_at_offset (buffer,  &pos_itr, offset);
   gtk_text_buffer_place_cursor (buffer, &pos_itr);
@@ -523,7 +521,7 @@ gail_text_view_get_offset_at_point (AtkText      *text,
     return -1;
 
   view = GTK_TEXT_VIEW (widget);
-  buffer = view->buffer;
+  buffer = gtk_text_view_get_buffer (view);
 
   window = gtk_text_view_get_window (view, GTK_TEXT_WINDOW_WIDGET);
   gdk_window_get_origin (window, &x_widget, &y_widget);
@@ -587,7 +585,7 @@ gail_text_view_get_character_extents (AtkText      *text,
     return;
 
   view = GTK_TEXT_VIEW (widget);
-  buffer = view->buffer;
+  buffer = gtk_text_view_get_buffer (view);
   gtk_text_buffer_get_iter_at_offset (buffer, &iter, offset);
   gtk_text_view_get_iter_location (view, &iter, &rectangle);
 
@@ -627,6 +625,7 @@ gail_text_view_get_run_attributes (AtkText *text,
                                    gint    *end_offset)
 {
   GtkTextView *view;
+  GtkTextBuffer *buffer;
   GtkWidget *widget;
 
   widget = GTK_ACCESSIBLE (text)->widget;
@@ -635,8 +634,9 @@ gail_text_view_get_run_attributes (AtkText *text,
     return NULL;
 
   view = GTK_TEXT_VIEW (widget);
+  buffer = gtk_text_view_get_buffer (view);
 
-  return gail_misc_buffer_get_run_attributes (view->buffer, offset, 
+  return gail_misc_buffer_get_run_attributes (buffer, offset, 
                                               start_offset, end_offset);
 }
 
@@ -771,7 +771,7 @@ gail_text_view_get_n_selections (AtkText *text)
     return -1;
 
   view = GTK_TEXT_VIEW (widget);
-  buffer = view->buffer;
+  buffer = gtk_text_view_get_buffer (view);
 
   gtk_text_buffer_get_selection_bounds (buffer, &start, &end);
   select_start = gtk_text_iter_get_offset (&start);
@@ -806,7 +806,7 @@ gail_text_view_get_selection (AtkText *text,
      return NULL;
 
   view = GTK_TEXT_VIEW (widget);
-  buffer = view->buffer;
+  buffer = gtk_text_view_get_buffer (view);
 
   gtk_text_buffer_get_selection_bounds (buffer, &start, &end);
   *start_pos = gtk_text_iter_get_offset (&start);
@@ -836,7 +836,7 @@ gail_text_view_add_selection (AtkText *text,
     return FALSE;
 
   view = GTK_TEXT_VIEW (widget);
-  buffer = view->buffer;
+  buffer = gtk_text_view_get_buffer (view);
 
   gtk_text_buffer_get_selection_bounds (buffer, &start, &end);
   select_start = gtk_text_iter_get_offset (&start);
@@ -878,7 +878,7 @@ gail_text_view_remove_selection (AtkText *text,
      return FALSE;
 
   view = GTK_TEXT_VIEW (widget);
-  buffer = view->buffer;
+  buffer = gtk_text_view_get_buffer (view);
 
   gtk_text_buffer_get_selection_bounds(buffer, &start, &end);
   select_start = gtk_text_iter_get_offset(&start);
@@ -925,7 +925,7 @@ gail_text_view_set_selection (AtkText *text,
      return FALSE;
 
   view = GTK_TEXT_VIEW (widget);
-  buffer = view->buffer;
+  buffer = gtk_text_view_get_buffer (view);
 
   gtk_text_buffer_get_selection_bounds(buffer, &start, &end);
   select_start = gtk_text_iter_get_offset(&start);
@@ -983,7 +983,7 @@ gail_text_view_set_run_attributes (AtkEditableText *text,
   if (!gtk_text_view_get_editable (view))
     return FALSE;
 
-  buffer = view->buffer;
+  buffer = gtk_text_view_get_buffer (view);
 
   if (attrib_set == NULL)
     return FALSE;
@@ -1194,7 +1194,7 @@ gail_text_view_set_text_contents (AtkEditableText *text,
   view = GTK_TEXT_VIEW (widget);
   if (!gtk_text_view_get_editable (view))
     return;
-  buffer = view->buffer;
+  buffer = gtk_text_view_get_buffer (view);
 
   /* The -1 indicates that the input string must be null-terminated */
   gtk_text_buffer_set_text (buffer, string, -1);
@@ -1219,7 +1219,7 @@ gail_text_view_insert_text (AtkEditableText *text,
   view = GTK_TEXT_VIEW (widget);
   if (!gtk_text_view_get_editable (view))
     return;
-  buffer = view->buffer;
+  buffer = gtk_text_view_get_buffer (view);
 
   gtk_text_buffer_get_iter_at_offset (buffer, &pos_itr, *position);
   gtk_text_buffer_insert (buffer, &pos_itr, string, length);
@@ -1243,7 +1243,7 @@ gail_text_view_copy_text   (AtkEditableText *text,
     return;
 
   view = GTK_TEXT_VIEW (widget);
-  buffer = view->buffer;
+  buffer = gtk_text_view_get_buffer (view);
 
   gtk_text_buffer_get_iter_at_offset (buffer, &start, start_pos);
   gtk_text_buffer_get_iter_at_offset (buffer, &end, end_pos);
@@ -1273,7 +1273,7 @@ gail_text_view_cut_text (AtkEditableText *text,
   view = GTK_TEXT_VIEW (widget);
   if (!gtk_text_view_get_editable (view))
     return;
-  buffer = view->buffer;
+  buffer = gtk_text_view_get_buffer (view);
 
   gtk_text_buffer_get_iter_at_offset (buffer, &start, start_pos);
   gtk_text_buffer_get_iter_at_offset (buffer, &end, end_pos);
@@ -1303,7 +1303,7 @@ gail_text_view_delete_text (AtkEditableText *text,
   view = GTK_TEXT_VIEW (widget);
   if (!gtk_text_view_get_editable (view))
     return;
-  buffer = view->buffer;
+  buffer = gtk_text_view_get_buffer (view);
 
   gtk_text_buffer_get_iter_at_offset (buffer, &start_itr, start_pos);
   gtk_text_buffer_get_iter_at_offset (buffer, &end_itr, end_pos);
@@ -1328,7 +1328,7 @@ gail_text_view_paste_text (AtkEditableText *text,
   view = GTK_TEXT_VIEW (widget);
   if (!gtk_text_view_get_editable (view))
     return;
-  buffer = view->buffer;
+  buffer = gtk_text_view_get_buffer (view);
 
   paste_struct.buffer = buffer;
   paste_struct.position = position;

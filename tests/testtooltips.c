@@ -65,13 +65,14 @@ query_tooltip_text_view_cb (GtkWidget  *widget,
   GtkTextTag *tag = data;
   GtkTextIter iter;
   GtkTextView *text_view = GTK_TEXT_VIEW (widget);
+  GtkTextBuffer *buffer = gtk_text_view_get_buffer (text_view);
 
   if (keyboard_tip)
     {
       gint offset;
 
-      g_object_get (text_view->buffer, "cursor-position", &offset, NULL);
-      gtk_text_buffer_get_iter_at_offset (text_view->buffer, &iter, offset);
+      g_object_get (buffer, "cursor-position", &offset, NULL);
+      gtk_text_buffer_get_iter_at_offset (buffer, &iter, offset);
     }
   else
     {
