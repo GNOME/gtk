@@ -3209,6 +3209,7 @@ draw_icon (GtkWidget            *widget,
   EntryIconInfo *icon_info = priv->icons[icon_pos];
   GdkPixbuf *pixbuf;
   gint x, y, width, height;
+  cairo_t *cr;
 
   if (!icon_info)
     return;
@@ -3266,9 +3267,10 @@ draw_icon (GtkWidget            *widget,
       pixbuf = temp_pixbuf;
     }
 
-  gdk_draw_pixbuf (icon_info->window, widget->style->black_gc, pixbuf,
-                   0, 0, x, y, -1, -1,
-                   GDK_RGB_DITHER_NORMAL, 0, 0);
+  cr = gdk_cairo_create (icon_info->window);
+  gdk_cairo_set_source_pixbuf (cr, pixbuf, x, y);
+  cairo_paint (cr);
+  cairo_destroy (cr);
 
   g_object_unref (pixbuf);
 }
