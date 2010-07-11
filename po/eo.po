@@ -3,18 +3,20 @@
 #
 # Antono VASILJEV <antono.vasiljev@gmail.com>
 # Guillaume SAVATON <llumeao@gmail.com>
+# Kristjan SCHMIDT <kristjan.schmidt@googlemail.com>, 2010.
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+2.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-09-12 21:20-0400\n"
-"PO-Revision-Date: 2007-02-26 02:54+0200\n"
-"Last-Translator: Antono Vasiljev <antono.vasiljev@gmail.com>\n"
-"Language-Team: Eo-tradukado <http://eo-tradukado.tuxfamily.org>\n"
+"PO-Revision-Date: 2010-07-11 10:50+0200\n"
+"Last-Translator: Kristjan SCHMIDT <kristjan.schmidt@googlemail.com>\n"
+"Language-Team: Esperanto <ubuntu-l10n-eo@lists.launchpad.net>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=n != 1\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
 
 #: gdk/directfb/gdkdisplay-directfb.c:55
 msgid "directfb arg"
@@ -1570,7 +1572,7 @@ msgstr "%1$s ĉe %2$s"
 
 #: gtk/gtkfilechooserdefault.c:1906
 msgid "Search"
-msgstr ""
+msgstr "Serĉi"
 
 #: gtk/gtkfilechooserdefault.c:1930
 msgid "Recently Used"
@@ -1754,7 +1756,7 @@ msgstr "Ne povis esti konservita la ceteron"
 #. Label
 #: gtk/gtkfilechooserdefault.c:9364
 msgid "_Search:"
-msgstr ""
+msgstr "_Serĉi:"
 
 #: gtk/gtkfilechooserdefault.c:10317
 #, c-format
@@ -2361,9 +2363,8 @@ msgid "Down Path"
 msgstr ""
 
 #: gtk/gtkpathbar.c:1475
-#, fuzzy
 msgid "File System Root"
-msgstr "Dosiersistemo"
+msgstr "Dosiersistema radiko"
 
 #: gtk/gtkprinteroptionwidget.c:685
 msgid "Not available"
@@ -3367,17 +3368,16 @@ msgid "Empty"
 msgstr "Malplena"
 
 #: gtk/gtkvolumebutton.c:81
-#, fuzzy
 msgid "Volume"
-msgstr "Valoro:"
+msgstr "Laŭteco"
 
 #: gtk/gtkvolumebutton.c:83
 msgid "Volume Down"
-msgstr ""
+msgstr "Pli mallaŭte"
 
 #: gtk/gtkvolumebutton.c:85
 msgid "Volume Up"
-msgstr ""
+msgstr "Pli laŭte"
 
 #: gtk/gtkvolumebutton.c:139
 msgid "Muted"
@@ -4299,9 +4299,9 @@ msgid "Validate existing icon cache"
 msgstr ""
 
 #: gtk/updateiconcache.c:1663
-#, fuzzy, c-format
+#, c-format
 msgid "File not found: %s\n"
-msgstr "Ne povis surmeti de %s"
+msgstr "Dosiero ne trovita: %s\n"
 
 #: gtk/updateiconcache.c:1669
 #, c-format
@@ -4453,9 +4453,9 @@ msgid "Unclassified"
 msgstr "Neklasifikita"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:2504
-#, fuzzy, c-format
+#, c-format
 msgid "Custom %sx%s"
-msgstr "Difinita grando"
+msgstr "Propra %sx%s"
 
 #. default filename used for print-to-file
 #: modules/printbackends/file/gtkprintbackendfile.c:236
@@ -4502,14 +4502,13 @@ msgstr "Komandlinio"
 
 #. default filename used for print-to-test
 #: modules/printbackends/test/gtkprintbackendtest.c:235
-#, fuzzy, c-format
+#, c-format
 msgid "test-output.%s"
-msgstr "eligo.%s"
+msgstr "provo-eligo.%s"
 
 #: modules/printbackends/test/gtkprintbackendtest.c:467
-#, fuzzy
 msgid "Print to Test Printer"
-msgstr "Printu en dosieron"
+msgstr "Presi en prova presilo"
 
 #: tests/testfilechooser.c:205
 #, c-format
