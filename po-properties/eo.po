@@ -3,43 +3,44 @@
 # This file is distributed under the same license as the gtk+ package.
 #
 # Guillaume SAVATON <llumeao@gmail.com>, 2007
+# Kristjan SCHMIDT <kristjan.schmidt@googlemail.com>, 2010.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties 2.10\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-09-12 21:21-0400\n"
-"PO-Revision-Date: 2007-03-11 18:09+0100\n"
-"Last-Translator: Guillaume Savaton <llumeao@gmail.com>\n"
-"Language-Team: Eo-Tradukado <http://eo-tradukado.tuxfamily.org>\n"
+"PO-Revision-Date: 2010-07-11 10:47+0200\n"
+"Last-Translator: Kristjan SCHMIDT <kristjan.schmidt@googlemail.com>\n"
+"Language-Team: Esperanto <ubuntu-l10n-eo@lists.launchpad.net>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=n != 1\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
 
 #: gdk-pixbuf/gdk-pixbuf.c:89
 msgid "Number of Channels"
-msgstr ""
+msgstr "Nombro da kanaloj"
 
 #: gdk-pixbuf/gdk-pixbuf.c:90
 msgid "The number of samples per pixel"
-msgstr ""
+msgstr "La nombro da specimenoj por bildero"
 
 #: gdk-pixbuf/gdk-pixbuf.c:99
 msgid "Colorspace"
-msgstr ""
+msgstr "Kolorspaco"
 
 #: gdk-pixbuf/gdk-pixbuf.c:100
 msgid "The colorspace in which the samples are interpreted"
-msgstr ""
+msgstr "La kolorspaco en kiu la specimenoj estu interpretataj"
 
 #: gdk-pixbuf/gdk-pixbuf.c:108
 msgid "Has Alpha"
-msgstr ""
+msgstr "Havas alfon"
 
 #: gdk-pixbuf/gdk-pixbuf.c:109
 msgid "Whether the pixbuf has an alpha channel"
-msgstr ""
+msgstr "Ĉu la 'pixbuf' havas alfa-kanalon aŭ ne"
 
 #: gdk-pixbuf/gdk-pixbuf.c:122
 msgid "Bits per Sample"
@@ -51,7 +52,7 @@ msgstr ""
 
 #: gdk-pixbuf/gdk-pixbuf.c:132 gtk/gtklayout.c:618 gtk/gtktreeviewcolumn.c:207
 msgid "Width"
-msgstr ""
+msgstr "Larĝo"
 
 #: gdk-pixbuf/gdk-pixbuf.c:133
 msgid "The number of columns of the pixbuf"
@@ -59,7 +60,7 @@ msgstr ""
 
 #: gdk-pixbuf/gdk-pixbuf.c:142 gtk/gtklayout.c:627
 msgid "Height"
-msgstr ""
+msgstr "Alto"
 
 #: gdk-pixbuf/gdk-pixbuf.c:143
 msgid "The number of rows of the pixbuf"
@@ -76,7 +77,7 @@ msgstr ""
 
 #: gdk-pixbuf/gdk-pixbuf.c:169
 msgid "Pixels"
-msgstr ""
+msgstr "Bilderoj"
 
 #: gdk-pixbuf/gdk-pixbuf.c:170
 msgid "A pointer to the pixel data of the pixbuf"
@@ -84,7 +85,7 @@ msgstr ""
 
 #: gdk/gdkdisplaymanager.c:103
 msgid "Default Display"
-msgstr ""
+msgstr "Defaŭlta ekrano"
 
 #: gdk/gdkdisplaymanager.c:104
 msgid "The default display for GDK"
@@ -93,7 +94,7 @@ msgstr ""
 #: gdk/gdkpango.c:490 gtk/gtkinvisible.c:86 gtk/gtkstatusicon.c:231
 #: gtk/gtkwindow.c:600
 msgid "Screen"
-msgstr ""
+msgstr "Ekrano"
 
 #: gdk/gdkpango.c:491
 msgid "the GdkScreen for the renderer"
@@ -101,7 +102,7 @@ msgstr ""
 
 #: gdk/gdkscreen.c:74
 msgid "Font options"
-msgstr ""
+msgstr "Tipar-opcioj"
 
 #: gdk/gdkscreen.c:75
 msgid "The default font options for the screen"
@@ -117,7 +118,7 @@ msgstr ""
 
 #: gtk/gtkaboutdialog.c:197
 msgid "Program name"
-msgstr ""
+msgstr "Programnomo"
 
 #: gtk/gtkaboutdialog.c:198
 msgid ""
@@ -185,7 +186,7 @@ msgstr ""
 
 #: gtk/gtkaboutdialog.c:348
 msgid "Artists"
-msgstr ""
+msgstr "Artistoj"
 
 #: gtk/gtkaboutdialog.c:349
 msgid "List of people who have contributed artwork to the program"
@@ -245,7 +246,7 @@ msgstr ""
 #: gtk/gtkaction.c:202 gtk/gtkactiongroup.c:170 gtk/gtkprinter.c:119
 #: gtk/gtktextmark.c:89
 msgid "Name"
-msgstr ""
+msgstr "Nomo"
 
 #: gtk/gtkaction.c:203
 msgid "A unique name for the action."
