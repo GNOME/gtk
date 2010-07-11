@@ -317,16 +317,13 @@ gtk_text_renderer_draw_shape (PangoRenderer   *renderer,
       if (gdk_rectangle_intersect (&pixbuf_rect, &text_renderer->clip_rect,
 				   &draw_rect))
 	{
-	  gdk_draw_pixbuf (text_renderer->drawable,
-			   fg_gc,
-			   pixbuf,
-			   draw_rect.x - pixbuf_rect.x,
-			   draw_rect.y - pixbuf_rect.y,
-			   draw_rect.x, draw_rect.y,
-			   draw_rect.width,
-			   draw_rect.height,
-			   GDK_RGB_DITHER_NORMAL,
-			   0, 0);
+          cairo_t *cr = gdk_cairo_create (text_renderer->drawable);
+
+          gdk_cairo_set_source_pixbuf (cr, pixbuf, pixbuf_rect.x, pixbuf_rect.y);
+          gdk_cairo_rectangle (cr, &draw_rect);
+          cairo_fill (cr);
+
+          cairo_destroy (cr);
 	}
     }
   else if (GTK_IS_WIDGET (attr->data))
