@@ -9,13 +9,15 @@
 # Yang Zhang <zyangmath@gmail.com>, 2007.
 # Deng Xiyue <manphiz@gmail.com>, 2008,2009.
 # Funda Wang <fundawang@gmail.com>, 2008,2009.
+# Hinker <hinkerliu@gmail.com>, 2009.
+# Aron Xu <aronxu@gnome.org>, 2010.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: gtk+\n"
+"Project-Id-Version: gtk+ master\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-06-26 23:16-0400\n"
-"PO-Revision-Date: 2009-09-12 13:05+0800\n"
+"PO-Revision-Date: 2010-07-12 21:45+0800\n"
 "Last-Translator: Hinker <hinkerliu@gmail.com>\n"
 "Language-Team: i18n-zh <i18n-zh@googlegroups.com>\n"
 "Language: \n"
@@ -608,9 +610,8 @@ msgid "_Saturation:"
 msgstr "饱和度(_S)："
 
 #: gtk/gtkcolorsel.c:393
-#, fuzzy
 msgid "Intensity of the color."
-msgstr "颜色的透明度。"
+msgstr "色彩浓度。"
 
 #: gtk/gtkcolorsel.c:394
 msgid "_Value:"
@@ -691,10 +692,11 @@ msgid ""
 "The previously-selected color, for comparison to the color you're selecting "
 "now."
 msgstr ""
+"您先前选择的颜色，用以与当前选择的颜色作比较。"
 
 #: gtk/gtkcolorsel.c:971
 msgid "The color you've chosen."
-msgstr ""
+msgstr "您选择的颜色。"
 
 #: gtk/gtkcolorsel.c:1384
 msgid "_Save color here"
@@ -983,14 +985,13 @@ msgid "Create in _folder:"
 msgstr "创建于文件夹(_F)："
 
 #: gtk/gtkfilechooserdefault.c:6419
-#, fuzzy, c-format
+#, c-format
 msgid "Could not read the contents of %s"
-msgstr "无法创建流：%s"
+msgstr "无法读取 %s 的内容"
 
 #: gtk/gtkfilechooserdefault.c:6423
-#, fuzzy
 msgid "Could not read the contents of the folder"
-msgstr "无法获得根文件夹"
+msgstr "无法获得该文件夹的内容"
 
 #: gtk/gtkfilechooserdefault.c:6516 gtk/gtkfilechooserdefault.c:6584
 #: gtk/gtkfilechooserdefault.c:6729
@@ -1207,7 +1208,6 @@ msgid "System"
 msgstr "系统"
 
 #: gtk/gtkimmulticontext.c:573
-#, fuzzy
 msgctxt "input method menu"
 msgid "None"
 msgstr "无"
@@ -1344,7 +1344,6 @@ msgid "Terminal Pager"
 msgstr "终端阅读器"
 
 #: gtk/gtkmountoperation-x11.c:866
-#, fuzzy
 msgid "Top Command"
 msgstr "顶部命令"
 
@@ -1438,9 +1437,8 @@ msgid "Not available"
 msgstr "不可用"
 
 #: gtk/gtkprinteroptionwidget.c:795
-#, fuzzy
 msgid "Select a folder"
-msgstr "选择文件"
+msgstr "选择文件夹"
 
 #: gtk/gtkprinteroptionwidget.c:814
 msgid "_Save in folder:"
@@ -1481,7 +1479,6 @@ msgid "Waiting"
 msgstr "等候"
 
 #: gtk/gtkprintoperation.c:1700
-#, fuzzy
 msgctxt "print operation status"
 msgid "Blocking on issue"
 msgstr "塞纸"
@@ -1590,9 +1587,8 @@ msgid "Unspecified error"
 msgstr "未指定错误"
 
 #: gtk/gtkprintunixdialog.c:614
-#, fuzzy
 msgid "Getting printer information failed"
-msgstr "正在获取打印机信息..."
+msgstr "获取打印机信息失败"
 
 #: gtk/gtkprintunixdialog.c:1862
 msgid "Getting printer information..."
@@ -2023,14 +2019,13 @@ msgid "Unable to find an item with URI '%s'"
 msgstr "找不到 URI 为“%s”的一项"
 
 #: gtk/gtkspinner.c:458
-#, fuzzy
 msgctxt "throbbing progress animation widget"
 msgid "Spinner"
-msgstr "Super"
+msgstr "滑块"
 
 #: gtk/gtkspinner.c:459
 msgid "Provides visual indication of progress"
-msgstr ""
+msgstr "为进度提供视觉提示"
 
 #. KEEP IN SYNC with gtkiconfactory.c stock icons, when appropriate
 #: gtk/gtkstock.c:314
@@ -3557,10 +3552,9 @@ msgid "prc8 Envelope"
 msgstr "中国八号信封"
 
 #: gtk/paper_names_offsets.c:166
-#, fuzzy
 msgctxt "paper size"
 msgid "prc9 Envelope"
-msgstr "中国一号信封"
+msgstr "中国九号信封"
 
 #: gtk/paper_names_offsets.c:167
 msgctxt "paper size"
@@ -3795,24 +3789,22 @@ msgid "Authentication is required on %s"
 msgstr "在 %s 需要认证"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:1014
-#, fuzzy
 msgid "Domain:"
-msgstr "域(_D)："
+msgstr "域："
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:1044
-#, fuzzy, c-format
+#, c-format
 msgid "Authentication is required to print document '%s'"
-msgstr "在 %s 打印一个文档需要认证"
+msgstr "打印文档“%s”需要认证"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:1049
-#, fuzzy, c-format
+#, c-format
 msgid "Authentication is required to print this document on printer %s"
-msgstr "打印文档“%s”到打印机 %s 需要认证"
+msgstr "在打印机“%s”打印此文档需要认证"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:1051
-#, fuzzy
 msgid "Authentication is required to print this document"
-msgstr "在 %s 打印一个文档需要认证"
+msgstr "打印文档需要认证"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:1672
 #, c-format
