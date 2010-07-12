@@ -188,7 +188,7 @@ introspection_files = \
 
 Gdk-3.0.gir: $(gdktargetlib) Makefile
 Gdk_3_0_gir_SCANNERFLAGS = --strip-prefix=Gdk
-Gdk_3_0_gir_INCLUDES = Gio-2.0 GdkPixbuf-2.0 Pango-1.0
+Gdk_3_0_gir_INCLUDES = Gio-2.0 GdkPixbuf-2.0 Pango-1.0 cairo-1.0
 Gdk_3_0_gir_LIBS = $(gdktargetlib)
 Gdk_3_0_gir_FILES = $(introspection_files)
 Gdk_3_0_gir_CFLAGS = $(INCLUDES)
