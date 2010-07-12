@@ -421,26 +421,29 @@ gtk_tool_button_construct_contents (GtkToolItem *tool_item)
 	  gtk_widget_show (label);
 	}
 
-      gtk_label_set_ellipsize (GTK_LABEL (label),
-			       gtk_tool_item_get_ellipsize_mode (GTK_TOOL_ITEM (button)));
-      text_orientation = gtk_tool_item_get_text_orientation (GTK_TOOL_ITEM (button));
-      if (text_orientation == GTK_ORIENTATION_HORIZONTAL)
-	{
-          gtk_label_set_angle (GTK_LABEL (label), 0);
-          gtk_misc_set_alignment (GTK_MISC (label),
-                                  gtk_tool_item_get_text_alignment (GTK_TOOL_ITEM (button)),
-                                  0.5);
-        }
-      else
+      if (GTK_IS_LABEL (label))
         {
-          gtk_label_set_ellipsize (GTK_LABEL (label), PANGO_ELLIPSIZE_NONE);
-	  if (gtk_widget_get_direction (GTK_WIDGET (tool_item)) == GTK_TEXT_DIR_RTL)
-	    gtk_label_set_angle (GTK_LABEL (label), -90);
-	  else
-	    gtk_label_set_angle (GTK_LABEL (label), 90);
-          gtk_misc_set_alignment (GTK_MISC (label),
-                                  0.5,
-                                  1 - gtk_tool_item_get_text_alignment (GTK_TOOL_ITEM (button)));
+          gtk_label_set_ellipsize (GTK_LABEL (label),
+			           gtk_tool_item_get_ellipsize_mode (GTK_TOOL_ITEM (button)));
+          text_orientation = gtk_tool_item_get_text_orientation (GTK_TOOL_ITEM (button));
+          if (text_orientation == GTK_ORIENTATION_HORIZONTAL)
+	    {
+              gtk_label_set_angle (GTK_LABEL (label), 0);
+              gtk_misc_set_alignment (GTK_MISC (label),
+                                      gtk_tool_item_get_text_alignment (GTK_TOOL_ITEM (button)),
+                                      0.5);
+            }
+          else
+            {
+              gtk_label_set_ellipsize (GTK_LABEL (label), PANGO_ELLIPSIZE_NONE);
+	      if (gtk_widget_get_direction (GTK_WIDGET (tool_item)) == GTK_TEXT_DIR_RTL)
+	        gtk_label_set_angle (GTK_LABEL (label), -90);
+	      else
+	        gtk_label_set_angle (GTK_LABEL (label), 90);
+              gtk_misc_set_alignment (GTK_MISC (label),
+                                      0.5,
+                                      1 - gtk_tool_item_get_text_alignment (GTK_TOOL_ITEM (button)));
+            }
         }
     }
 
