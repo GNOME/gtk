@@ -963,7 +963,7 @@ check_auth_info (gpointer user_data)
                                             "auth-info",
                                             length,
                                             NULL,
-                                            dispatch->request->auth_info);
+                                            (const char * const *) dispatch->request->auth_info);
 
           g_source_attach ((GSource *) dispatch, NULL);
           g_source_unref ((GSource *) dispatch);
@@ -1248,7 +1248,7 @@ cups_request_execute (GtkPrintBackendCups              *print_backend,
 
   dispatch = (GtkPrintCupsDispatchWatch *) g_source_new (&_cups_dispatch_watch_funcs, 
                                                          sizeof (GtkPrintCupsDispatchWatch));
-  g_source_set_name (dispatch, "GTK+ CUPS backend");
+  g_source_set_name (&dispatch->source, "GTK+ CUPS backend");
 
   GTK_NOTE (PRINTING,
             g_print ("CUPS Backend: %s <source %p> - Executing cups request on server '%s' and resource '%s'\n", G_STRFUNC, dispatch, request->server, request->resource));
