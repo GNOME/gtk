@@ -47,6 +47,8 @@ typedef struct _GtkSpinnerPrivate  GtkSpinnerPrivate;
 struct _GtkSpinner
 {
   GtkDrawingArea parent;
+
+  /* <private> */
   GtkSpinnerPrivate *priv;
 };
 

@@ -53,8 +53,6 @@
  */
 
 
-#define GTK_SPINNER_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), GTK_TYPE_SPINNER, GtkSpinnerPrivate))
-
 G_DEFINE_TYPE (GtkSpinner, gtk_spinner, GTK_TYPE_DRAWING_AREA);
 
 enum {
@@ -204,7 +202,9 @@ gtk_spinner_init (GtkSpinner *spinner)
 {
   GtkSpinnerPrivate *priv;
 
-  priv = GTK_SPINNER_GET_PRIVATE (spinner);
+  priv = G_TYPE_INSTANCE_GET_PRIVATE (spinner,
+                                      GTK_TYPE_SPINNER,
+                                      GtkSpinnerPrivate);
   priv->current = 0;
   priv->timeout = 0;
 
