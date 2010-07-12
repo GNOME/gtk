@@ -169,6 +169,9 @@ void		gtk_spin_button_set_snap_to_ticks  (GtkSpinButton  *spin_button,
 gboolean        gtk_spin_button_get_snap_to_ticks  (GtkSpinButton  *spin_button);
 void            gtk_spin_button_update             (GtkSpinButton  *spin_button);
 
+/* private */
+GdkWindow*      _gtk_spin_button_get_panel         (GtkSpinButton  *spin_button);
+
 G_END_DECLS
 
 #endif /* __GTK_SPIN_BUTTON_H__ */

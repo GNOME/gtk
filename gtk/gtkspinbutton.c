@@ -2428,3 +2428,9 @@ gtk_spin_button_update (GtkSpinButton *spin_button)
   else
     gtk_spin_button_set_value (spin_button, val);
 }
+
+GdkWindow *
+_gtk_spin_button_get_panel (GtkSpinButton *spin_button)
+{
+  return spin_button->priv->panel;
+}

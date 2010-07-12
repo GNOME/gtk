@@ -22,6 +22,7 @@
 #include "config.h"
 
 #include <gtk/gtk.h>
+#include "gtkspinbutton.h"
 
 #include <locale.h>
 #include <string.h>
@@ -189,14 +190,18 @@ gtk_test_spin_button_click (GtkSpinButton  *spinner,
                             guint           button,
                             gboolean        upwards)
 {
+  GdkWindow *panel;
   gboolean b1res = FALSE, b2res = FALSE;
-  if (spinner->panel)
+
+  panel = _gtk_spin_button_get_panel (spinner);
+
+  if (panel)
     {
       gint width, height, pos;
-      gdk_drawable_get_size (spinner->panel, &width, &height);
+      gdk_drawable_get_size (panel, &width, &height);
       pos = upwards ? 0 : height - 1;
-      b1res = gdk_test_simulate_button (spinner->panel, width - 1, pos, button, 0, GDK_BUTTON_PRESS);
-      b2res = gdk_test_simulate_button (spinner->panel, width - 1, pos, button, 0, GDK_BUTTON_RELEASE);
+      b1res = gdk_test_simulate_button (panel, width - 1, pos, button, 0, GDK_BUTTON_PRESS);
+      b2res = gdk_test_simulate_button (panel, width - 1, pos, button, 0, GDK_BUTTON_RELEASE);
     }
   return b1res && b2res;
 }
