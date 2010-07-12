@@ -44,31 +44,16 @@ G_BEGIN_DECLS
 #define GTK_STATUSBAR_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_STATUSBAR, GtkStatusbarClass))
 
 
-/**
- * GtkStatusbar:
- *
- * Contains private data that should be modified with the functions
- * described below.
- */
 typedef struct _GtkStatusbar      GtkStatusbar;
+typedef struct _GtkStatusbarPriv  GtkStatusbarPriv;
 typedef struct _GtkStatusbarClass GtkStatusbarClass;
 
 struct _GtkStatusbar
 {
   GtkHBox parent_widget;
 
-  GtkWidget *GSEAL (frame);
-  GtkWidget *GSEAL (label);
-
-  GSList *GSEAL (messages);
-  GSList *GSEAL (keys);
-
-  guint GSEAL (seq_context_id);
-  guint GSEAL (seq_message_id);
-
-  GdkWindow *GSEAL (grip_window);
-
-  guint GSEAL (has_resize_grip) : 1;
+  /* <private> */
+  GtkStatusbarPriv *priv;
 };
 
 struct _GtkStatusbarClass
