@@ -47,6 +47,11 @@
 
 #define MENU_ID "gtk-separator-tool-item-menu-id"
 
+struct _GtkSeparatorToolItemPrivate
+{
+  guint draw : 1;
+};
+
 enum {
   PROP_0,
   PROP_DRAW
@@ -69,14 +74,6 @@ static void     gtk_separator_tool_item_add               (GtkContainer         
 							   GtkWidget                 *child);
 static gint     get_space_size                            (GtkToolItem               *tool_item);
 
-
-
-#define GTK_SEPARATOR_TOOL_ITEM_GET_PRIVATE(obj)(G_TYPE_INSTANCE_GET_PRIVATE ((obj), GTK_TYPE_SEPARATOR_TOOL_ITEM, GtkSeparatorToolItemPrivate))
-
-struct _GtkSeparatorToolItemPrivate
-{
-  guint draw : 1;
-};
 
 G_DEFINE_TYPE (GtkSeparatorToolItem, gtk_separator_tool_item, GTK_TYPE_TOOL_ITEM)
 
@@ -131,7 +128,9 @@ gtk_separator_tool_item_class_init (GtkSeparatorToolItemClass *class)
 static void
 gtk_separator_tool_item_init (GtkSeparatorToolItem      *separator_item)
 {
-  separator_item->priv = GTK_SEPARATOR_TOOL_ITEM_GET_PRIVATE (separator_item);
+  separator_item->priv = G_TYPE_INSTANCE_GET_PRIVATE (separator_item,
+                                                      GTK_TYPE_SEPARATOR_TOOL_ITEM,
+                                                      GtkSeparatorToolItemPrivate);
   separator_item->priv->draw = TRUE;
 }
 
@@ -216,8 +215,8 @@ gtk_separator_tool_item_expose (GtkWidget      *widget,
 				GdkEventExpose *event)
 {
   GtkToolbar *toolbar = NULL;
-  GtkSeparatorToolItemPrivate *priv =
-      GTK_SEPARATOR_TOOL_ITEM_GET_PRIVATE (widget);
+  GtkSeparatorToolItem *separator = GTK_SEPARATOR_TOOL_ITEM (widget);
+  GtkSeparatorToolItemPrivate *priv = separator->priv;
 
   if (priv->draw)
     {
