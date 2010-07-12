@@ -844,35 +844,19 @@ theme_pixbuf_render (ThemePixbuf  *theme_pb,
 	}
       else
 	{
-	  GdkPixmap *tmp_pixmap;
-	  GdkGC *tmp_gc;
-	  GdkGCValues gc_values;
+          cairo_t *cr = gdk_cairo_create (window);
 
-	  tmp_pixmap = gdk_pixmap_new (window,
-				       pixbuf_width,
-				       pixbuf_height,
-				       -1);
-	  tmp_gc = gdk_gc_new (tmp_pixmap);
-	  gdk_draw_pixbuf (tmp_pixmap, tmp_gc, pixbuf,
-			   0, 0, 
-			   0, 0,
-			   pixbuf_width, pixbuf_height,
-			   GDK_RGB_DITHER_NORMAL,
-			   0, 0);
-	  g_object_unref (tmp_gc);
+          gdk_cairo_set_source_pixbuf (cr, pixbuf, 0, 0);
+          cairo_pattern_set_extend (cairo_get_source (cr), CAIRO_EXTEND_REPEAT);
 
-	  gc_values.fill = GDK_TILED;
-	  gc_values.tile = tmp_pixmap;
-	  tmp_gc = gdk_gc_new_with_values (window,
-					   &gc_values, GDK_GC_FILL | GDK_GC_TILE);
 	  if (clip_rect)
-	    gdk_draw_rectangle (window, tmp_gc, TRUE,
-				clip_rect->x, clip_rect->y, clip_rect->width, clip_rect->height);
+	    gdk_cairo_rectangle (cr, clip_rect);
 	  else
-	    gdk_draw_rectangle (window, tmp_gc, TRUE, x, y, width, height);
+	    cairo_rectangle (cr, x, y, width, height);
 	  
-	  g_object_unref (tmp_gc);
-	  g_object_unref (tmp_pixmap);
+          cairo_fill (cr);
+
+          cairo_destroy (cr);
 	}
     }
 }
