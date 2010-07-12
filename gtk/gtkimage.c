@@ -2194,17 +2194,11 @@ gtk_image_expose (GtkWidget      *widget,
 
               if (pixbuf)
                 {
-                  gdk_draw_pixbuf (widget->window,
-				   widget->style->black_gc,
-				   pixbuf,
-				   image_bound.x - x,
-				   image_bound.y - y,
-				   image_bound.x,
-				   image_bound.y,
-				   image_bound.width,
-				   image_bound.height,
-				   GDK_RGB_DITHER_NORMAL,
-				   0, 0);
+                  cairo_t *cr = gdk_cairo_create (widget->window);
+                  gdk_cairo_set_source_pixbuf (cr, pixbuf, x, y);
+                  gdk_cairo_rectangle (cr, &image_bound);
+                  cairo_fill (cr);
+                  cairo_destroy (cr);
                 }
             }
           else
