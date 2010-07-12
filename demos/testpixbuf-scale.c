@@ -35,6 +35,7 @@ gboolean
 expose_cb (GtkWidget *widget, GdkEventExpose *event, gpointer data)
 {
   GdkPixbuf *dest;
+  cairo_t *cr;
 
   gdk_window_set_back_pixmap (widget->window, NULL, FALSE);
   
@@ -48,11 +49,13 @@ expose_cb (GtkWidget *widget, GdkEventExpose *event, gpointer data)
 			      interp_type, overall_alpha,
 			      event->area.x, event->area.y, 16, 0xaaaaaa, 0x555555);
 
-  gdk_draw_pixbuf (widget->window, widget->style->fg_gc[GTK_STATE_NORMAL], dest,
-		   0, 0, event->area.x, event->area.y,
-		   event->area.width, event->area.height,
-		   GDK_RGB_DITHER_NORMAL, event->area.x, event->area.y);
-  
+  cr = gdk_cairo_create (event->window);
+
+  gdk_cairo_set_source_pixbuf (cr, dest, 0, 0);
+  gdk_cairo_rectangle (cr, &event->area);
+  cairo_fill (cr);
+
+  cairo_destroy (cr);
   g_object_unref (dest);
   
   return TRUE;
