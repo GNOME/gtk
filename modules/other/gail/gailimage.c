@@ -222,14 +222,6 @@ gail_image_get_image_size (AtkImage *image,
       *width = gdk_pixbuf_get_width(pixbuf);
       break;
     }
-    case GTK_IMAGE_IMAGE:
-    {
-      GdkImage *gdk_image;
-      gtk_image_get_image(gtk_image, &gdk_image, NULL);
-      *height = gdk_image->height;
-      *width = gdk_image->width;
-      break;
-    }
     case GTK_IMAGE_STOCK:
     case GTK_IMAGE_ICON_SET:
     case GTK_IMAGE_ICON_NAME:

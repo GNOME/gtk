@@ -136,7 +136,6 @@ struct _GtkImagePriv
   union
   {
     GtkImagePixmapData     pixmap;
-    GtkImageImageData      image;
     GtkImagePixbufData     pixbuf;
     GtkImageStockData      stock;
     GtkImageIconSetData    icon_set;
@@ -189,7 +188,6 @@ enum
   PROP_0,
   PROP_PIXBUF,
   PROP_PIXMAP,
-  PROP_IMAGE,
   PROP_MASK,
   PROP_FILE,
   PROP_STOCK,
@@ -246,18 +244,10 @@ gtk_image_class_init (GtkImageClass *class)
                                                         GTK_PARAM_READWRITE));
 
   g_object_class_install_property (gobject_class,
-                                   PROP_IMAGE,
-                                   g_param_spec_object ("image",
-                                                        P_("Image"),
-                                                        P_("A GdkImage to display"),
-                                                        GDK_TYPE_IMAGE,
-                                                        GTK_PARAM_READWRITE));
-
-  g_object_class_install_property (gobject_class,
                                    PROP_MASK,
                                    g_param_spec_object ("mask",
                                                         P_("Mask"),
-                                                        P_("Mask bitmap to use with GdkImage or GdkPixmap"),
+                                                        P_("Mask bitmap to use with GdkPixmap"),
                                                         GDK_TYPE_PIXMAP,
                                                         GTK_PARAM_READWRITE));
   
@@ -416,20 +406,11 @@ gtk_image_set_property (GObject      *object,
                                  g_value_get_object (value),
                                  priv->mask);
       break;
-    case PROP_IMAGE:
-      gtk_image_set_from_image (image,
-                                g_value_get_object (value),
-                                priv->mask);
-      break;
     case PROP_MASK:
       if (priv->storage_type == GTK_IMAGE_PIXMAP)
         gtk_image_set_from_pixmap (image,
                                    priv->data.pixmap.pixmap,
                                    g_value_get_object (value));
-      else if (priv->storage_type == GTK_IMAGE_IMAGE)
-        gtk_image_set_from_image (image,
-                                  priv->data.image.image,
-                                  g_value_get_object (value));
       else
         {
           GdkBitmap *mask;
@@ -532,13 +513,6 @@ gtk_image_get_property (GObject     *object,
     case PROP_MASK:
       g_value_set_object (value, priv->mask);
       break;
-    case PROP_IMAGE:
-      if (priv->storage_type != GTK_IMAGE_IMAGE)
-        g_value_set_object (value, NULL);
-      else
-        g_value_set_object (value,
-                            priv->data.image.image);
-      break;
     case PROP_FILE:
       g_value_set_string (value, priv->filename);
       break;
@@ -616,32 +590,6 @@ gtk_image_new_from_pixmap (GdkPixmap *pixmap,
   image = g_object_new (GTK_TYPE_IMAGE, NULL);
 
   gtk_image_set_from_pixmap (image, pixmap, mask);
-
-  return GTK_WIDGET (image);
-}
-
-/**
- * gtk_image_new_from_image:
- * @image: (allow-none): a #GdkImage, or %NULL
- * @mask: (allow-none): a #GdkBitmap, or %NULL
- *
- * Creates a #GtkImage widget displaying a @image with a @mask.
- * A #GdkImage is a client-side image buffer in the pixel format of the
- * current display. The #GtkImage does not assume a reference to the
- * image or mask; you still need to unref them if you own references.
- * #GtkImage will add its own reference rather than adopting yours.
- * 
- * Return value: a new #GtkImage
- **/
-GtkWidget*
-gtk_image_new_from_image  (GdkImage  *gdk_image,
-                           GdkBitmap *mask)
-{
-  GtkImage *image;
-
-  image = g_object_new (GTK_TYPE_IMAGE, NULL);
-
-  gtk_image_set_from_image (image, gdk_image, mask);
 
   return GTK_WIDGET (image);
 }
@@ -901,61 +849,6 @@ gtk_image_set_from_pixmap (GtkImage  *image,
     }
 
   g_object_notify (G_OBJECT (image), "pixmap");
-  g_object_notify (G_OBJECT (image), "mask");
-  
-  g_object_thaw_notify (G_OBJECT (image));
-}
-
-/**
- * gtk_image_set_from_image:
- * @image: a #GtkImage
- * @gdk_image: (allow-none): a #GdkImage or %NULL
- * @mask:  (allow-none): a #GdkBitmap or %NULL
- *
- * See gtk_image_new_from_image() for details.
- **/
-void
-gtk_image_set_from_image  (GtkImage  *image,
-                           GdkImage  *gdk_image,
-                           GdkBitmap *mask)
-{
-  GtkImagePriv *priv;
-
-  g_return_if_fail (GTK_IS_IMAGE (image));
-  g_return_if_fail (gdk_image == NULL ||
-                    GDK_IS_IMAGE (gdk_image));
-  g_return_if_fail (mask == NULL ||
-                    GDK_IS_PIXMAP (mask));
-
-  priv = image->priv;
-
-  g_object_freeze_notify (G_OBJECT (image));
-  
-  if (gdk_image)
-    g_object_ref (gdk_image);
-
-  if (mask)
-    g_object_ref (mask);
-
-  gtk_image_clear (image);
-
-  if (gdk_image)
-    {
-      priv->storage_type = GTK_IMAGE_IMAGE;
-
-      priv->data.image.image = gdk_image;
-      priv->mask = mask;
-
-      gtk_image_update_size (image, gdk_image->width, gdk_image->height);
-    }
-  else
-    {
-      /* Clean up the mask if gdk_image was NULL */
-      if (mask)
-        g_object_unref (mask);
-    }
-
-  g_object_notify (G_OBJECT (image), "image");
   g_object_notify (G_OBJECT (image), "mask");
   
   g_object_thaw_notify (G_OBJECT (image));
@@ -1340,41 +1233,6 @@ gtk_image_get_pixmap (GtkImage   *image,
 
   if (pixmap)
     *pixmap = priv->data.pixmap.pixmap;
-
-  if (mask)
-    *mask = priv->mask;
-}
-
-/**
- * gtk_image_get_image:
- * @image: a #GtkImage
- * @gdk_image: (out) (transfer none) (allow-none): return location for
- *     a #GtkImage, or %NULL
- * @mask: (out) (transfer none) (allow-none): return location for a
- *     #GdkBitmap, or %NULL
- * 
- * Gets the #GdkImage and mask being displayed by the #GtkImage.
- * The storage type of the image must be %GTK_IMAGE_EMPTY or
- * %GTK_IMAGE_IMAGE (see gtk_image_get_storage_type()).
- * The caller of this function does not own a reference to the
- * returned image and mask.
- **/
-void
-gtk_image_get_image  (GtkImage   *image,
-                      GdkImage  **gdk_image,
-                      GdkBitmap **mask)
-{
-  GtkImagePriv *priv;
-
-  g_return_if_fail (GTK_IS_IMAGE (image));
-
-  priv = image->priv;
-
-  g_return_if_fail (priv->storage_type == GTK_IMAGE_IMAGE ||
-                    priv->storage_type == GTK_IMAGE_EMPTY);
-
-  if (gdk_image)
-    *gdk_image = priv->data.image.image;
 
   if (mask)
     *mask = priv->mask;
@@ -2001,27 +1859,6 @@ gtk_image_expose (GtkWidget      *widget,
 	  
           break;
 
-        case GTK_IMAGE_IMAGE:
-          mask = priv->mask;
-          image_bound.width = priv->data.image.image->width;
-          image_bound.height = priv->data.image.image->height;
-
-	  if (rectangle_intersect_even (&area, &image_bound) &&
-	      needs_state_transform)
-            {
-              pixbuf = gdk_pixbuf_get_from_image (NULL,
-                                                  priv->data.image.image,
-                                                  gtk_widget_get_colormap (widget),
-						  image_bound.x - x, image_bound.y - y,
-                                                  0, 0,
-                                                  image_bound.width,
-                                                  image_bound.height);
-
-	      x = image_bound.x;
-	      y = image_bound.y;
-            }
-          break;
-
         case GTK_IMAGE_PIXBUF:
           image_bound.width = gdk_pixbuf_get_width (priv->data.pixbuf.pixbuf);
           image_bound.height = gdk_pixbuf_get_height (priv->data.pixbuf.pixbuf);
@@ -2227,15 +2064,6 @@ gtk_image_expose (GtkWidget      *widget,
                   cairo_destroy (cr);
                   break;
               
-                case GTK_IMAGE_IMAGE:
-                  gdk_draw_image (widget->window,
-                                  widget->style->black_gc,
-                                  priv->data.image.image,
-                                  image_bound.x - x, image_bound.y - y,
-                                  image_bound.x, image_bound.y,
-                                  image_bound.width, image_bound.height);
-                  break;
-
                 case GTK_IMAGE_PIXBUF:
                 case GTK_IMAGE_STOCK:
                 case GTK_IMAGE_ICON_SET:
@@ -2289,16 +2117,6 @@ gtk_image_reset (GtkImage *image)
       priv->data.pixmap.pixmap = NULL;
       
       g_object_notify (G_OBJECT (image), "pixmap");
-      
-      break;
-
-    case GTK_IMAGE_IMAGE:
-
-      if (priv->data.image.image)
-        g_object_unref (priv->data.image.image);
-      priv->data.image.image = NULL;
-      
-      g_object_notify (G_OBJECT (image), "image");
       
       break;
 

@@ -1675,7 +1675,6 @@ GtkIconViewPrivate
 GtkImage
 GtkImageType
 gtk_image_get_icon_set
-gtk_image_get_image
 gtk_image_get_pixbuf
 gtk_image_get_pixmap
 gtk_image_get_stock
@@ -1685,7 +1684,6 @@ gtk_image_get_gicon
 gtk_image_get_storage_type
 gtk_image_new_from_file
 gtk_image_new_from_icon_set
-gtk_image_new_from_image
 gtk_image_new_from_pixbuf
 gtk_image_new_from_pixmap
 gtk_image_new_from_stock
@@ -1694,7 +1692,6 @@ gtk_image_new_from_icon_name
 gtk_image_new_from_gicon
 gtk_image_set_from_file
 gtk_image_set_from_icon_set
-gtk_image_set_from_image
 gtk_image_set_from_pixbuf
 gtk_image_set_from_pixmap
 gtk_image_set_from_stock

@@ -1743,7 +1743,6 @@ gtk_image_clear
 gtk_image_get_animation
 gtk_image_get_icon_name
 gtk_image_get_icon_set
-gtk_image_get_image
 gtk_image_get_pixbuf
 gtk_image_get_pixel_size
 gtk_image_get_pixmap
@@ -1761,7 +1760,6 @@ gtk_image_new_from_file_utf8
 #endif
 gtk_image_new_from_icon_name
 gtk_image_new_from_icon_set
-gtk_image_new_from_image
 gtk_image_new_from_pixbuf
 gtk_image_new_from_pixmap
 gtk_image_new_from_stock
@@ -1775,7 +1773,6 @@ gtk_image_set_from_file_utf8
 #endif
 gtk_image_set_from_icon_name
 gtk_image_set_from_icon_set
-gtk_image_set_from_image
 gtk_image_set_from_pixbuf
 gtk_image_set_from_pixmap
 gtk_image_set_from_stock
