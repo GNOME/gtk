@@ -281,6 +281,7 @@ on_alpha_drawing_expose (GtkWidget      *widget,
   int width = widget->allocation.width;
   int height = widget->allocation.height;
   GdkPixbuf *pixbuf;
+  cairo_t *cr;
   guchar *buffer;
   guchar *p;
   int i, j;
@@ -308,11 +309,15 @@ on_alpha_drawing_expose (GtkWidget      *widget,
 
   pixbuf = gdk_pixbuf_new_from_data (buffer, GDK_COLORSPACE_RGB, TRUE,
 				     8, 64, 64, 4 * 64, NULL, NULL);
+  cr = gdk_cairo_create (widget->window);
 
-  gdk_draw_pixbuf (widget->window, widget->style->black_gc, pixbuf,
-		   0, 0, x + width - 18 - 64, y + (height - 64) /2,
-		   64, 64, GDK_RGB_DITHER_NORMAL, 0, 0);
+  gdk_cairo_set_source_pixbuf (cr, pixbuf, 0, 0);
+  cairo_rectangle (cr,
+                   x + width - 18 - 64, y + (height - 64) /2,
+                   64, 64);
+  cairo_fill (cr);
 
+  cairo_destroy (cr);
   g_object_unref (pixbuf);
 
   g_free (buffer);
@@ -3274,14 +3279,17 @@ on_rotated_text_expose (GtkWidget      *widget,
       if (tile_pixbuf)
 	{
 	  GdkPixmap *tile;
+          cairo_t *cr;
 	  
 	  gint width = gdk_pixbuf_get_width (tile_pixbuf);
 	  gint height = gdk_pixbuf_get_height (tile_pixbuf);
 	  
 	  tile = gdk_pixmap_new (widget->window, width, height, -1);
-	  gdk_draw_pixbuf (tile, gc, tile_pixbuf,
-			   0, 0, 0, 0, width, height,
-			   GDK_RGB_DITHER_NORMAL, 0, 0);
+
+          cr = gdk_cairo_create (tile);
+          gdk_cairo_set_source_pixbuf (cr, tile_pixbuf, 0, 0);
+          cairo_paint (cr);
+          cairo_destroy (cr);
 
 	  gdk_gc_set_tile (gc, tile);
 	  gdk_gc_set_fill (gc, GDK_TILED);
