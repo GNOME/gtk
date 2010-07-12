@@ -38,6 +38,7 @@ G_BEGIN_DECLS
 
 
 typedef struct _GtkSizeGroup       GtkSizeGroup;
+typedef struct _GtkSizeGroupPriv   GtkSizeGroupPriv;
 typedef struct _GtkSizeGroupClass  GtkSizeGroupClass;
 
 struct _GtkSizeGroup
@@ -45,15 +46,7 @@ struct _GtkSizeGroup
   GObject parent_instance;
 
   /* <private> */
-  GSList *GSEAL (widgets);
-
-  guint8 GSEAL (mode);
-
-  guint GSEAL (have_width) : 1;
-  guint GSEAL (have_height) : 1;
-  guint GSEAL (ignore_hidden) : 1;
-
-  GtkRequisition GSEAL (requisition);
+  GtkSizeGroupPriv *priv;
 };
 
 struct _GtkSizeGroupClass
