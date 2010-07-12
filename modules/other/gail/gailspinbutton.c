@@ -75,6 +75,7 @@ static void
 gail_spin_button_real_initialize (AtkObject *obj,
                                   gpointer  data)
 {
+  GtkAdjustment *adjustment;
   GailSpinButton *spin_button = GAIL_SPIN_BUTTON (obj);
   GtkSpinButton *gtk_spin_button;
 
@@ -85,10 +86,11 @@ gail_spin_button_real_initialize (AtkObject *obj,
    * If a GtkAdjustment already exists for the spin_button, 
    * create the GailAdjustment
    */
-  if (gtk_spin_button->adjustment)
+  adjustment = gtk_spin_button_get_adjustment (gtk_spin_button);
+  if (adjustment)
     {
-      spin_button->adjustment = gail_adjustment_new (gtk_spin_button->adjustment);
-      g_signal_connect (gtk_spin_button->adjustment,
+      spin_button->adjustment = gail_adjustment_new (adjustment);
+      g_signal_connect (adjustment,
                         "value-changed",
                         G_CALLBACK (gail_spin_button_value_changed),
                         obj);
@@ -208,6 +210,7 @@ gail_spin_button_real_notify_gtk (GObject    *obj,
        * Get rid of the GailAdjustment for the GtkAdjustment
        * which was associated with the spin_button.
        */
+      GtkAdjustment* adjustment;
       GtkSpinButton* gtk_spin_button;
 
       if (spin_button->adjustment)
@@ -220,8 +223,9 @@ gail_spin_button_real_notify_gtk (GObject    *obj,
        * is received
        */
       gtk_spin_button = GTK_SPIN_BUTTON (widget);
-      spin_button->adjustment = gail_adjustment_new (gtk_spin_button->adjustment);
-      g_signal_connect (gtk_spin_button->adjustment,
+      adjustment = gtk_spin_button_get_adjustment (gtk_spin_button);
+      spin_button->adjustment = gail_adjustment_new (adjustment);
+      g_signal_connect (adjustment,
                         "value-changed",
                         G_CALLBACK (gail_spin_button_value_changed),
                         spin_button);

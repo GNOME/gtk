@@ -5055,7 +5055,10 @@ get_value (GtkWidget *widget, gpointer data)
   if (GPOINTER_TO_INT (data) == 1)
     sprintf (buf, "%d", gtk_spin_button_get_value_as_int (spin));
   else
-    sprintf (buf, "%0.*f", spin->digits, gtk_spin_button_get_value (spin));
+    sprintf (buf, "%0.*f",
+             gtk_spin_button_get_digits (spin),
+             gtk_spin_button_get_value (spin));
+
   gtk_label_set_text (label, buf);
 }
 
@@ -5069,7 +5072,8 @@ get_spin_value (GtkWidget *widget, gpointer data)
   spin = GTK_SPIN_BUTTON (widget);
   label = GTK_LABEL (data);
 
-  buffer = g_strdup_printf ("%0.*f", spin->digits,
+  buffer = g_strdup_printf ("%0.*f",
+                            gtk_spin_button_get_digits (spin),
 			    gtk_spin_button_get_value (spin));
   gtk_label_set_text (label, buffer);
 
@@ -5079,11 +5083,13 @@ get_spin_value (GtkWidget *widget, gpointer data)
 static gint
 spin_button_time_output_func (GtkSpinButton *spin_button)
 {
+  GtkAdjustment *adjustment;
   static gchar buf[6];
   gdouble hours;
   gdouble minutes;
 
-  hours = spin_button->adjustment->value / 60.0;
+  adjustment = gtk_spin_button_get_adjustment (spin_button);
+  hours = gtk_adjustment_get_value (adjustment) / 60.0;
   minutes = (fabs(floor (hours) - hours) < 1e-5) ? 0.0 : 30;
   sprintf (buf, "%02.0f:%02.0f", floor (hours), minutes);
   if (strcmp (buf, gtk_entry_get_text (GTK_ENTRY (spin_button))))
@@ -5125,13 +5131,17 @@ spin_button_month_input_func (GtkSpinButton *spin_button,
 static gint
 spin_button_month_output_func (GtkSpinButton *spin_button)
 {
+  GtkAdjustment *adjustment;
+  gdouble value;
   gint i;
   static gchar *month[12] = { "January", "February", "March", "April",
 			      "May", "June", "July", "August", "September",
 			      "October", "November", "December" };
 
+  adjustment = gtk_spin_button_get_adjustment (spin_button);
+  value = gtk_adjustment_get_value (adjustment);
   for (i = 1; i <= 12; i++)
-    if (fabs (spin_button->adjustment->value - (double)i) < 1e-5)
+    if (fabs (value - (double)i) < 1e-5)
       {
 	if (strcmp (month[i-1], gtk_entry_get_text (GTK_ENTRY (spin_button))))
 	  gtk_entry_set_text (GTK_ENTRY (spin_button), month[i-1]);
@@ -5159,10 +5169,12 @@ spin_button_hex_input_func (GtkSpinButton *spin_button,
 static gint
 spin_button_hex_output_func (GtkSpinButton *spin_button)
 {
+  GtkAdjustment *adjustment;
   static gchar buf[7];
   gint val;
 
-  val = (gint) spin_button->adjustment->value;
+  adjustment = gtk_spin_button_get_adjustment (spin_button);
+  val = (gint) gtk_adjustment_get_value (adjustment);
   if (fabs (val) < 1e-5)
     sprintf (buf, "0x00");
   else
