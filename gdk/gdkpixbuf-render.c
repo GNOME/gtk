@@ -169,6 +169,31 @@ gdk_pixbuf_render_pixmap_and_mask (GdkPixbuf  *pixbuf,
 						  alpha_threshold);
 }
 
+static void
+remove_alpha_channel (GdkPixbuf *pixbuf)
+{
+  unsigned int x, y, width, height, stride;
+  unsigned char *data;
+
+  if (!gdk_pixbuf_get_has_alpha (pixbuf))
+    return;
+
+  width = gdk_pixbuf_get_width (pixbuf);
+  height = gdk_pixbuf_get_height (pixbuf);
+  stride = gdk_pixbuf_get_rowstride (pixbuf);
+  data = gdk_pixbuf_get_pixels (pixbuf);
+
+  for (y = 0; y < height; y++)
+    {
+      for (x = 0; x < width; x++)
+        {
+          data[x * 4 + 3] = 0xFF;
+        }
+
+      data += stride;
+    }
+}
+
 /**
  * gdk_pixbuf_render_pixmap_and_mask_for_colormap:
  * @pixbuf: A pixbuf.
@@ -208,33 +233,39 @@ gdk_pixbuf_render_pixmap_and_mask_for_colormap (GdkPixbuf   *pixbuf,
   
   if (pixmap_return)
     {
+      GdkPixbuf *tmp_pixbuf;
+      cairo_t *cr;
+
       *pixmap_return = gdk_pixmap_new (gdk_screen_get_root_window (screen),
 				       gdk_pixbuf_get_width (pixbuf), gdk_pixbuf_get_height (pixbuf),
 				       gdk_colormap_get_visual (colormap)->depth);
 
       gdk_drawable_set_colormap (GDK_DRAWABLE (*pixmap_return), colormap);
 
-      /* If the pixbuf has an alpha channel, using gdk_pixbuf_draw would give
+      /* If the pixbuf has an alpha channel, using gdk_cairo_set_source_pixbuf()
+       * would give
        * random pixel values in the area that are within the mask, but semi-
        * transparent. So we treat the pixbuf like a pixbuf without alpha channel;
        * see bug #487865.
        */
       if (gdk_pixbuf_get_has_alpha (pixbuf))
         {
-          GdkGC *gc = _gdk_drawable_get_scratch_gc (*pixmap_return, FALSE);
-          gdk_draw_rgb_32_image (*pixmap_return, gc,
-                                 0, 0,
-                                 gdk_pixbuf_get_width (pixbuf), gdk_pixbuf_get_height (pixbuf),
-                                 GDK_RGB_DITHER_NORMAL,
-                                 gdk_pixbuf_get_pixels (pixbuf), gdk_pixbuf_get_rowstride (pixbuf));
+          int width, height;
+
+          width = gdk_pixbuf_get_width (pixbuf);
+          height = gdk_pixbuf_get_height (pixbuf);
+          tmp_pixbuf = gdk_pixbuf_copy (pixbuf);
+          remove_alpha_channel (tmp_pixbuf);
         }
       else
-        {
-          cairo_t *cr = gdk_cairo_create (*pixmap_return);
-          gdk_cairo_set_source_pixbuf (cr, pixbuf, 0, 0);
-          cairo_paint (cr);
-          cairo_destroy (cr);
-        }
+        tmp_pixbuf = g_object_ref (pixbuf);
+
+      cr = gdk_cairo_create (*pixmap_return);
+      gdk_cairo_set_source_pixbuf (cr, pixbuf, 0, 0);
+      cairo_paint (cr);
+
+      cairo_destroy (cr);
+      g_object_unref (tmp_pixbuf);
     }
   
   if (mask_return)
