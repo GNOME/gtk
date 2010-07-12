@@ -1,3 +1,16 @@
+Overview of Changes from GTK+ 2.21.4 to 2.21.5
+==============================================
+
+* Deprecations:
+ - Deprecate GdkRegion apis that have no cairo equivalent
+ - GtkWindow::allow-grow and ::allow-shrink properties
+
+* New accessors:
+ - gdk_window_has_native
+
+* Introspection: misc annotation fixes
+
+
 Overview of Changes from GTK+ 2.21.3 to 2.21.4
 ==============================================
 
