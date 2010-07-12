@@ -297,19 +297,6 @@ static void   gdk_window_draw_image     (GdkDrawable     *drawable,
 					 gint             width,
 					 gint             height);
 
-static void gdk_window_draw_pixbuf (GdkDrawable     *drawable,
-				    GdkGC           *gc,
-				    GdkPixbuf       *pixbuf,
-				    gint             src_x,
-				    gint             src_y,
-				    gint             dest_x,
-				    gint             dest_y,
-				    gint             width,
-				    gint             height,
-				    GdkRgbDither     dither,
-				    gint             x_dither,
-				    gint             y_dither);
-
 static void gdk_window_draw_trapezoids (GdkDrawable   *drawable,
 					GdkGC	      *gc,
 					GdkTrapezoid  *trapezoids,
@@ -511,7 +498,6 @@ gdk_window_class_init (GdkWindowObjectClass *klass)
   drawable_class->draw_glyphs = gdk_window_draw_glyphs;
   drawable_class->draw_glyphs_transformed = gdk_window_draw_glyphs_transformed;
   drawable_class->draw_image = gdk_window_draw_image;
-  drawable_class->draw_pixbuf = gdk_window_draw_pixbuf;
   drawable_class->draw_trapezoids = gdk_window_draw_trapezoids;
   drawable_class->get_depth = gdk_window_real_get_depth;
   drawable_class->get_screen = gdk_window_real_get_screen;
@@ -4846,48 +4832,6 @@ gdk_window_draw_image (GdkDrawable *drawable,
   gdk_draw_image (impl, gc, image, xsrc, ysrc,
 		  xdest - x_offset, ydest - y_offset,
 		  width, height);
-  END_DRAW;
-}
-
-static void
-gdk_window_draw_pixbuf (GdkDrawable     *drawable,
-			GdkGC           *gc,
-			GdkPixbuf       *pixbuf,
-			gint             src_x,
-			gint             src_y,
-			gint             dest_x,
-			gint             dest_y,
-			gint             width,
-			gint             height,
-			GdkRgbDither     dither,
-			gint             x_dither,
-			gint             y_dither)
-{
-  GdkWindowObject *private = (GdkWindowObject *)drawable;
-  GdkDrawableClass *klass;
-
-  if (GDK_WINDOW_DESTROYED (drawable))
-    return;
-
-  /* If no gc => no user clipping, but we need clipping
-     for window emulation, so use a scratch gc */
-  if (!gc)
-    gc = _gdk_drawable_get_scratch_gc (drawable, FALSE);
-
-  BEGIN_DRAW;
-
-  klass = GDK_DRAWABLE_GET_CLASS (impl);
-
-  if (private->paint_stack)
-    klass->draw_pixbuf (impl, gc, pixbuf, src_x, src_y,
-			dest_x - x_offset, dest_y - y_offset,
-			width, height,
-			dither, x_dither - x_offset, y_dither - y_offset);
-  else
-    klass->draw_pixbuf (impl, gc, pixbuf, src_x, src_y,
-			dest_x - x_offset, dest_y - y_offset,
-			width, height,
-			dither, x_dither, y_dither);
   END_DRAW;
 }
 

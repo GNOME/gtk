@@ -151,18 +151,6 @@ struct _GdkDrawableClass
                                           gint        *composite_x_offset,
                                           gint        *composite_y_offset);
 
-  void         (*draw_pixbuf) (GdkDrawable *drawable,
-			       GdkGC       *gc,
-			       GdkPixbuf   *pixbuf,
-			       gint         src_x,
-			       gint         src_y,
-			       gint         dest_x,
-			       gint         dest_y,
-			       gint         width,
-			       gint         height,
-			       GdkRgbDither dither,
-			       gint         x_dither,
-			       gint         y_dither);
   GdkImage*    (*_copy_to_image) (GdkDrawable    *drawable,
 				  GdkImage       *image,
 				  gint            src_x,
@@ -300,18 +288,6 @@ void gdk_draw_lines     (GdkDrawable      *drawable,
 			 GdkGC            *gc,
 			 const GdkPoint   *points,
 			 gint              n_points);
-void gdk_draw_pixbuf    (GdkDrawable      *drawable,
-			 GdkGC            *gc,
-			 const GdkPixbuf  *pixbuf,
-			 gint              src_x,
-			 gint              src_y,
-			 gint              dest_x,
-			 gint              dest_y,
-			 gint              width,
-			 gint              height,
-			 GdkRgbDither      dither,
-			 gint              x_dither,
-			 gint              y_dither);
 
 void gdk_draw_glyphs      (GdkDrawable      *drawable,
 			   GdkGC            *gc,

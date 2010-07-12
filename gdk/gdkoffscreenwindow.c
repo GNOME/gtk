@@ -531,41 +531,6 @@ gdk_offscreen_window_draw_image (GdkDrawable *drawable,
   add_damage (offscreen, xdest, ydest, width, height, FALSE);
 }
 
-
-static void
-gdk_offscreen_window_draw_pixbuf (GdkDrawable *drawable,
-				  GdkGC       *gc,
-				  GdkPixbuf   *pixbuf,
-				  gint         src_x,
-				  gint         src_y,
-				  gint         dest_x,
-				  gint         dest_y,
-				  gint         width,
-				  gint         height,
-				  GdkRgbDither dither,
-				  gint         x_dither,
-				  gint         y_dither)
-{
-  GdkOffscreenWindow *offscreen = GDK_OFFSCREEN_WINDOW (drawable);
-  GdkDrawable *real_drawable = get_real_drawable (offscreen);
-
-  gdk_draw_pixbuf (real_drawable,
-		   gc,
-		   pixbuf,
-		   src_x,
-		   src_y,
-		   dest_x,
-		   dest_y,
-		   width,
-		   height,
-		   dither,
-		   x_dither,
-		   y_dither);
-
-  add_damage (offscreen, dest_x, dest_y, width, height, FALSE);
-
-}
-
 void
 _gdk_offscreen_window_new (GdkWindow     *window,
 			   GdkScreen     *screen,
@@ -1199,7 +1164,6 @@ gdk_offscreen_window_class_init (GdkOffscreenWindowClass *klass)
   drawable_class->draw_segments = gdk_offscreen_window_draw_segments;
   drawable_class->draw_lines = gdk_offscreen_window_draw_lines;
   drawable_class->draw_image = gdk_offscreen_window_draw_image;
-  drawable_class->draw_pixbuf = gdk_offscreen_window_draw_pixbuf;
 }
 
 static void

@@ -101,18 +101,6 @@ static void   gdk_pixmap_draw_image     (GdkDrawable     *drawable,
                                          gint             ydest,
                                          gint             width,
                                          gint             height);
-static void   gdk_pixmap_draw_pixbuf    (GdkDrawable     *drawable,
-					 GdkGC           *gc,
-					 GdkPixbuf       *pixbuf,
-					 gint             src_x,
-					 gint             src_y,
-					 gint             dest_x,
-					 gint             dest_y,
-					 gint             width,
-					 gint             height,
-					 GdkRgbDither     dither,
-					 gint             x_dither,
-					 gint             y_dither);
 static void  gdk_pixmap_draw_trapezoids (GdkDrawable     *drawable,
 					 GdkGC	         *gc,
 					 GdkTrapezoid    *trapezoids,
@@ -194,7 +182,6 @@ gdk_pixmap_class_init (GdkPixmapObjectClass *klass)
   drawable_class->draw_glyphs = gdk_pixmap_draw_glyphs;
   drawable_class->draw_glyphs_transformed = gdk_pixmap_draw_glyphs_transformed;
   drawable_class->draw_image = gdk_pixmap_draw_image;
-  drawable_class->draw_pixbuf = gdk_pixmap_draw_pixbuf;
   drawable_class->draw_trapezoids = gdk_pixmap_draw_trapezoids;
   drawable_class->get_depth = gdk_pixmap_real_get_depth;
   drawable_class->get_screen = gdk_pixmap_real_get_screen;
@@ -431,29 +418,6 @@ gdk_pixmap_draw_image (GdkDrawable     *drawable,
 }
 
 static void
-gdk_pixmap_draw_pixbuf (GdkDrawable     *drawable,
-			GdkGC           *gc,
-			GdkPixbuf       *pixbuf,
-			gint             src_x,
-			gint             src_y,
-			gint             dest_x,
-			gint             dest_y,
-			gint             width,
-			gint             height,
-			GdkRgbDither     dither,
-			gint             x_dither,
-			gint             y_dither)
-{
-  GdkPixmapObject *private = (GdkPixmapObject *)drawable;
-
-  if (gc)
-    _gdk_gc_remove_drawable_clip (gc);  
-  gdk_draw_pixbuf (private->impl, gc, pixbuf,
-		   src_x, src_y, dest_x, dest_y, width, height,
-		   dither, x_dither, y_dither);
-}
-
-static void
 gdk_pixmap_draw_trapezoids (GdkDrawable     *drawable,
 			    GdkGC	    *gc,
 			    GdkTrapezoid    *trapezoids,
@@ -579,7 +543,7 @@ gdk_pixmap_colormap_new_from_pixbuf (GdkColormap    *colormap,
 {
   GdkPixmap *pixmap;
   GdkPixbuf *render_pixbuf;
-  GdkGC *tmp_gc;
+  cairo_t *cr;
   GdkScreen *screen = gdk_colormap_get_screen (colormap);
   
   pixmap = gdk_pixmap_new (gdk_screen_get_root_window (screen),
@@ -600,11 +564,10 @@ gdk_pixmap_colormap_new_from_pixbuf (GdkColormap    *colormap,
   else
     render_pixbuf = pixbuf;
 
-  tmp_gc = _gdk_drawable_get_scratch_gc (pixmap, FALSE);
-  gdk_draw_pixbuf (pixmap, tmp_gc, render_pixbuf, 0, 0, 0, 0,
-		   gdk_pixbuf_get_width (render_pixbuf),
-		   gdk_pixbuf_get_height (render_pixbuf),
-		   GDK_RGB_DITHER_NORMAL, 0, 0);
+  cr = gdk_cairo_create (pixmap);
+  gdk_cairo_set_source_pixbuf (cr, render_pixbuf, 0, 0);
+  cairo_paint (cr);
+  cairo_destroy (cr);
 
   if (render_pixbuf != pixbuf)
     g_object_unref (render_pixbuf);

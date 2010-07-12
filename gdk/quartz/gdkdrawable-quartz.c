@@ -507,64 +507,6 @@ gdk_quartz_draw_lines (GdkDrawable *drawable,
 }
 
 static void
-gdk_quartz_draw_pixbuf (GdkDrawable     *drawable,
-			GdkGC           *gc,
-			GdkPixbuf       *pixbuf,
-			gint             src_x,
-			gint             src_y,
-			gint             dest_x,
-			gint             dest_y,
-			gint             width,
-			gint             height,
-			GdkRgbDither     dither,
-			gint             x_dither,
-			gint             y_dither)
-{
-  CGContextRef context = gdk_quartz_drawable_get_context (drawable, FALSE);
-  CGColorSpaceRef colorspace;
-  CGDataProviderRef data_provider;
-  CGImageRef image;
-  void *data;
-  int rowstride, pixbuf_width, pixbuf_height;
-  gboolean has_alpha;
-
-  if (!context)
-    return;
-
-  pixbuf_width = gdk_pixbuf_get_width (pixbuf);
-  pixbuf_height = gdk_pixbuf_get_height (pixbuf);
-  rowstride = gdk_pixbuf_get_rowstride (pixbuf);
-  has_alpha = gdk_pixbuf_get_has_alpha (pixbuf);
-
-  data = gdk_pixbuf_get_pixels (pixbuf);
-
-  colorspace = CGColorSpaceCreateDeviceRGB ();
-  data_provider = CGDataProviderCreateWithData (NULL, data, pixbuf_height * rowstride, NULL);
-
-  image = CGImageCreate (pixbuf_width, pixbuf_height, 8,
-			 has_alpha ? 32 : 24, rowstride, 
-			 colorspace, 
-			 has_alpha ? kCGImageAlphaLast : 0,
-			 data_provider, NULL, FALSE, 
-			 kCGRenderingIntentDefault);
-
-  CGDataProviderRelease (data_provider);
-  CGColorSpaceRelease (colorspace);
-
-  _gdk_quartz_gc_update_cg_context (gc, drawable, context,
-				    GDK_QUARTZ_CONTEXT_STROKE);
-
-  CGContextClipToRect (context, CGRectMake (dest_x, dest_y, width, height));
-  CGContextTranslateCTM (context, dest_x - src_x, dest_y - src_y + pixbuf_height);
-  CGContextScaleCTM (context, 1, -1);
-
-  CGContextDrawImage (context, CGRectMake (0, 0, pixbuf_width, pixbuf_height), image);
-  CGImageRelease (image);
-
-  gdk_quartz_drawable_release_context (drawable, context);
-}
-
-static void
 gdk_quartz_draw_image (GdkDrawable     *drawable,
 		       GdkGC           *gc,
 		       GdkImage        *image,
@@ -640,7 +582,6 @@ gdk_drawable_impl_quartz_class_init (GdkDrawableImplQuartzClass *klass)
   drawable_class->draw_segments = gdk_quartz_draw_segments;
   drawable_class->draw_lines = gdk_quartz_draw_lines;
   drawable_class->draw_image = gdk_quartz_draw_image;
-  drawable_class->draw_pixbuf = gdk_quartz_draw_pixbuf;
 
   drawable_class->ref_cairo_surface = gdk_quartz_ref_cairo_surface;
 

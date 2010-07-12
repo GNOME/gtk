@@ -158,7 +158,7 @@ gdk_pixbuf_render_threshold_alpha (GdkPixbuf *pixbuf,
  * and @mask_return arguments, respectively, and renders a pixbuf and its
  * corresponding thresholded alpha mask to them.  This is merely a convenience
  * function; applications that need to render pixbufs with dither offsets or to
- * given drawables should use gdk_draw_pixbuf() and gdk_pixbuf_render_threshold_alpha().
+ * given drawables should use Cairo and gdk_pixbuf_render_threshold_alpha().
  *
  * The pixmap that is created is created for the colormap returned
  * by gdk_colormap_get_system(). You normally will want to instead use
@@ -219,7 +219,7 @@ remove_alpha_channel (GdkPixbuf *pixbuf)
  * and @mask_return arguments, respectively, and renders a pixbuf and its
  * corresponding tresholded alpha mask to them.  This is merely a convenience
  * function; applications that need to render pixbufs with dither offsets or to
- * given drawables should use gdk_draw_pixbuf(), and gdk_pixbuf_render_threshold_alpha().
+ * given drawables should use Cairo and gdk_pixbuf_render_threshold_alpha().
  *
  * The pixmap that is created uses the #GdkColormap specified by @colormap.
  * This colormap must match the colormap of the window where the pixmap
