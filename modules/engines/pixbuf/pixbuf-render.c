@@ -477,6 +477,9 @@ pixbuf_render (GdkPixbuf    *src,
 
   if (tmp_pixbuf)
     {
+      cairo_t *cr;
+      
+      cr = gdk_cairo_create (window);
       if (mask)
 	{
 	  gdk_pixbuf_render_threshold_alpha (tmp_pixbuf, mask,
@@ -485,13 +488,15 @@ pixbuf_render (GdkPixbuf    *src,
 					     rect.width, rect.height,
 					     128);
 	}
-      
-      gdk_draw_pixbuf (window, NULL, tmp_pixbuf,
-		       x_offset, y_offset,
-		       rect.x, rect.y,
-		       rect.width, rect.height,
-		       GDK_RGB_DITHER_NORMAL,
-		       0, 0);
+
+      gdk_cairo_set_source_pixbuf (cr, 
+                                   tmp_pixbuf,
+                                   -x_offset + rect.x, 
+                                   -y_offset + rect.y);
+      gdk_cairo_rectangle (cr, &rect);
+      cairo_fill (cr);
+
+      cairo_destroy (cr);
       g_object_unref (tmp_pixbuf);
     }
 }
