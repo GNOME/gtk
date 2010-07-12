@@ -154,9 +154,9 @@ gdk_built_sources =				\
 gdkincludedir = $(includedir)/gtk-3.0/gdk
 gdkinclude_HEADERS = $(gdk_public_h_sources) $(gdk_built_public_sources)
 
-common_sources =                \
-	$(gdk_private_headers)      \
-    $(gdk_c_sources)	\
+common_sources = 		\
+	$(gdk_private_headers)	\
+	$(gdk_c_sources)	\
 	gdkenumtypes.c		\
 	gdkmarshalers.c		\
 	gdkmarshalers.h
@@ -180,10 +180,10 @@ libgdk_win32_3_0_la_LDFLAGS = -Wl,win32/rc/gdk-win32-res.o -export-symbols $(src
 
 if HAVE_INTROSPECTION
 
-introspection_files = \
-		$(gdk_public_h_sources) \
-		$(gdk_c_sources) \
-        gdkenumtypes.c \
+introspection_files = 		\
+	$(gdk_public_h_sources)	\
+	$(gdk_c_sources)	\
+        gdkenumtypes.c		\
         gdkenumtypes.h
 
 Gdk-3.0.gir: $(gdktargetlib) Makefile
@@ -195,8 +195,45 @@ Gdk_3_0_gir_CFLAGS = $(INCLUDES)
 INTROSPECTION_GIRS += Gdk-3.0.gir
 
 if USE_X11
-x11_introspection_files = \
-        x11/*.c \
+x11_introspection_files = 		\
+	x11/checksettings.c		\
+	x11/gdkapplaunchcontext-x11.c	\
+	x11/gdkasync.c			\
+	x11/gdkcolor-x11.c		\
+	x11/gdkcursor-x11.c		\
+	x11/gdkdevice-core.c		\
+	x11/gdkdevicemanager-core.c	\
+	x11/gdkdevicemanager-x11.c	\
+	x11/gdkdevicemanager-xi2.c	\
+	x11/gdkdevicemanager-xi.c	\
+	x11/gdkdevice-xi2.c		\
+	x11/gdkdevice-xi.c		\
+	x11/gdkdisplay-x11.c		\
+	x11/gdkdnd-x11.c		\
+	x11/gdkdrawable-x11.c		\
+	x11/gdkeventsource.c		\
+	x11/gdkeventtranslator.c	\
+	x11/gdkgc-x11.c			\
+	x11/gdkgeometry-x11.c		\
+	x11/gdkglobals-x11.c		\
+	x11/gdkimage-x11.c		\
+	x11/gdkim-x11.c			\
+	x11/gdkinput.c			\
+	x11/gdkkeys-x11.c		\
+	x11/gdkmain-x11.c		\
+	x11/gdkpixmap-x11.c		\
+	x11/gdkproperty-x11.c		\
+	x11/gdkscreen-x11.c		\
+	x11/gdkselection-x11.c		\
+	x11/gdksettings.c		\
+	x11/gdkspawn-x11.c		\
+	x11/gdktestutils-x11.c		\
+	x11/gdkvisual-x11.c		\
+	x11/gdkwindow-x11.c		\
+	x11/gdkxftdefaults.c		\
+	x11/gdkxid.c			\
+	x11/xsettings-client.c		\
+	x11/xsettings-common.c		\
         x11/gdkx.h
 
 GdkX11-3.0.gir: $(gdktargetlib) Gdk-3.0.gir Makefile
