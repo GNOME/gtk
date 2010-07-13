@@ -54,7 +54,6 @@ to create or modify a graphics context.
   only sets the pixel value.
 @background: the background color. Note that gdk_gc_get_values()
   only sets the pixel value.
-@font: the default font.
 @function: the bitwise operation used when drawing.
 @fill: the fill style.
 @tile: the tile pixmap.

@@ -89,7 +89,6 @@ gdk_notify_type_get_type
 gdk_overlap_type_get_type
 gdk_property_state_get_type
 gdk_prop_mode_get_type
-gdk_rgb_dither_get_type
 gdk_scroll_direction_get_type
 gdk_setting_action_get_type
 gdk_status_get_type
@@ -311,40 +310,6 @@ GDK_TYPE_IMAGE_TYPE
 <SUBSECTION Private>
 GdkImageClass
 gdk_image_get_type
-</SECTION>
-
-<SECTION>
-<TITLE>GdkRGB</TITLE>
-<FILE>rgb</FILE>
-
-<SUBSECTION>
-gdk_draw_rgb_image
-gdk_draw_rgb_image_dithalign
-gdk_draw_indexed_image
-gdk_draw_gray_image
-gdk_draw_rgb_32_image
-gdk_draw_rgb_32_image_dithalign
-GdkRgbDither
-
-<SUBSECTION>
-gdk_rgb_cmap_new
-gdk_rgb_cmap_free
-GdkRgbCmap
-
-<SUBSECTION>
-gdk_rgb_find_color
-
-<SUBSECTION>
-gdk_rgb_set_install
-gdk_rgb_set_min_colors
-gdk_rgb_get_visual
-gdk_rgb_get_colormap
-gdk_rgb_ditherable
-gdk_rgb_colormap_ditherable
-gdk_rgb_set_verbose
-
-<SUBSECTION Standard>
-GDK_TYPE_RGB_DITHER
 </SECTION>
 
 <SECTION>

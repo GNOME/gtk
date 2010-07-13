@@ -245,7 +245,6 @@ gdk_utf8_to_compound_text_for_display
 
 #if IN_HEADER(__GDK_ENUM_TYPES_H__)
 #if IN_FILE(__GDK_ENUM_TYPES_C__)
-gdk_rgb_dither_get_type G_GNUC_CONST
 gdk_drag_protocol_get_type G_GNUC_CONST
 gdk_input_source_get_type G_GNUC_CONST
 gdk_input_mode_get_type G_GNUC_CONST
@@ -974,27 +973,6 @@ gdk_pixmap_foreign_new_for_display
 gdk_pixmap_foreign_new_for_screen
 gdk_pixmap_lookup
 gdk_pixmap_lookup_for_display
-#endif
-#endif
-
-#if IN_HEADER(__GDK_RGB_H__)
-#if IN_FILE(__GDK_RGB_C__)
-gdk_rgb_cmap_free
-gdk_rgb_cmap_new
-gdk_rgb_colormap_ditherable
-gdk_rgb_ditherable
-gdk_rgb_find_color
-gdk_rgb_get_colormap
-gdk_rgb_get_visual
-gdk_rgb_set_install
-gdk_rgb_set_min_colors
-gdk_rgb_set_verbose
-gdk_draw_gray_image
-gdk_draw_indexed_image
-gdk_draw_rgb_32_image
-gdk_draw_rgb_32_image_dithalign
-gdk_draw_rgb_image
-gdk_draw_rgb_image_dithalign
 #endif
 #endif
 

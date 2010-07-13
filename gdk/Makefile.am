@@ -91,7 +91,6 @@ gdk_public_h_sources =				\
 	gdkpixmap.h				\
 	gdkprivate.h				\
 	gdkproperty.h				\
-	gdkrgb.h				\
 	gdkscreen.h				\
 	gdkselection.h				\
 	gdkspawn.h				\
@@ -134,7 +133,6 @@ gdk_c_sources =                 \
 	gdkpixbuf-render.c	\
 	gdkpixmap.c		\
 	gdkrectangle.c		\
-	gdkrgb.c		\
 	gdkscreen.c		\
 	gdkselection.c		\
 	gdkvisual.c		\

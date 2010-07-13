@@ -87,7 +87,6 @@ gdk_OBJECTS = \
 	gdkpixbuf-render.obj \
 	gdkpixmap.obj \
 	gdkrectangle.obj \
-	gdkrgb.obj \
 	gdkscreen.obj \
 	gdkselection.obj \
 	gdkvisual.obj \
@@ -109,7 +108,6 @@ gdk_public_h_sources = \
 	gdkpixbuf.h	\
 	gdkpixmap.h	\
 	gdkproperty.h	\
-	gdkrgb.h	\
 	gdkselection.h	\
 	gdktypes.h	\
 	gdkvisual.h	\

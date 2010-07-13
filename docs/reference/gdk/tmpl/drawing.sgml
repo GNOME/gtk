@@ -170,25 +170,6 @@ lines.
 @n_points: 
 
 
-<!-- ##### FUNCTION gdk_draw_pixbuf ##### -->
-<para>
-
-</para>
-
-@drawable: 
-@gc: 
-@pixbuf: 
-@src_x: 
-@src_y: 
-@dest_x: 
-@dest_y: 
-@width: 
-@height: 
-@dither: 
-@x_dither: 
-@y_dither: 
-
-
 <!-- ##### FUNCTION gdk_draw_segments ##### -->
 <para>
 </para>

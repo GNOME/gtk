@@ -28,7 +28,6 @@
     <xi:include href="xml/drawing.xml" />
 
     <xi:include href="xml/pixmaps.xml" />
-    <xi:include href="xml/rgb.xml" />
     <xi:include href="xml/images.xml" />
     <xi:include href="xml/pixbufs.xml" />
 
