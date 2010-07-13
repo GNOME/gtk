@@ -317,22 +317,6 @@ void gdk_synthesize_window_state (GdkWindow     *window,
 GdkDeviceManager * _gdk_device_manager_new (GdkDisplay *display);
 
 
-#define GDK_SCRATCH_IMAGE_WIDTH 256
-#define GDK_SCRATCH_IMAGE_HEIGHT 64
-
-GdkImage* _gdk_image_new_for_depth (GdkScreen    *screen,
-				    GdkImageType  type,
-				    GdkVisual    *visual,
-				    gint          width,
-				    gint          height,
-				    gint          depth);
-GdkImage *_gdk_image_get_scratch (GdkScreen *screen,
-				  gint	     width,
-				  gint	     height,
-				  gint	     depth,
-				  gint	    *x,
-				  gint	    *y);
-
 cairo_surface_t *_gdk_drawable_ref_cairo_surface (GdkDrawable *drawable);
 
 GdkDrawable *_gdk_drawable_get_source_drawable (GdkDrawable *drawable);
@@ -691,7 +675,6 @@ void       _gdk_offscreen_window_new                 (GdkWindow     *window,
  * Initialization and exit routines *
  ************************************/
 
-void _gdk_image_exit  (void);
 void _gdk_windowing_exit (void);
 
 G_END_DECLS

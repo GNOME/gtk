@@ -104,7 +104,6 @@ typedef struct _GdkColor	      GdkColor;
 typedef struct _GdkColormap	      GdkColormap;
 typedef struct _GdkCursor	      GdkCursor;
 typedef struct _GdkGC                 GdkGC;
-typedef struct _GdkImage              GdkImage;
 typedef struct _GdkVisual             GdkVisual;
 
 typedef struct _GdkDrawable           GdkDrawable;

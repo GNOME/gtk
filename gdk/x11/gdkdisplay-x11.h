@@ -76,8 +76,6 @@ struct _GdkDisplayX11
   GdkKeymap *keymap;
   guint	    keymap_serial;
 
-  gboolean use_xshm;
-  gboolean have_shm_pixmaps;
   GdkTristate have_render;
   gboolean have_xfixes;
   gint xfixes_event_base;

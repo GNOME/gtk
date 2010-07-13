@@ -42,8 +42,6 @@ Display *gdk_x11_drawable_get_xdisplay    (GdkDrawable *drawable);
 XID      gdk_x11_drawable_get_xid         (GdkDrawable *drawable);
 GdkDrawable *gdk_x11_window_get_drawable_impl (GdkWindow *window);
 GdkDrawable *gdk_x11_pixmap_get_drawable_impl (GdkPixmap *pixmap);
-Display *gdk_x11_image_get_xdisplay       (GdkImage    *image);
-XImage  *gdk_x11_image_get_ximage         (GdkImage    *image);
 Display *gdk_x11_colormap_get_xdisplay    (GdkColormap *colormap);
 Colormap gdk_x11_colormap_get_xcolormap   (GdkColormap *colormap);
 Display *gdk_x11_cursor_get_xdisplay      (GdkCursor   *cursor);
@@ -70,8 +68,6 @@ gint     gdk_x11_get_default_screen       (void);
 #define GDK_COLORMAP_XCOLORMAP(cmap)  (gdk_x11_colormap_get_xcolormap (cmap))
 #define GDK_CURSOR_XDISPLAY(cursor)   (gdk_x11_cursor_get_xdisplay (cursor))
 #define GDK_CURSOR_XCURSOR(cursor)    (gdk_x11_cursor_get_xcursor (cursor))
-#define GDK_IMAGE_XDISPLAY(image)     (gdk_x11_image_get_xdisplay (image))
-#define GDK_IMAGE_XIMAGE(image)       (gdk_x11_image_get_ximage (image))
 
 #ifndef GDK_MULTIHEAD_SAFE
 #define GDK_DISPLAY()                 gdk_display

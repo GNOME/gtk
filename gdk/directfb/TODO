@@ -34,7 +34,6 @@ gdkevents-directfb.c
 gdkgc-directfb.c
 gdkgeometry-directfb.c
 gdkglobals-directfb.c
-gdkimage-directfb.c
 gdkim-directfb.c
 gdkinput-directfb.c
 gdkkeys-directfb.c

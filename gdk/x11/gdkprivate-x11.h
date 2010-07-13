@@ -106,8 +106,6 @@ GdkGC *_gdk_x11_gc_new                  (GdkDrawable     *drawable,
 					 GdkGCValues     *values,
 					 GdkGCValuesMask  values_mask);
 
-Pixmap   _gdk_x11_image_get_shm_pixmap (GdkImage    *image);
-
 /* Routines from gdkgeometry-x11.c */
 void _gdk_window_move_resize_child (GdkWindow     *window,
                                     gint           x,
@@ -175,7 +173,6 @@ void _gdk_events_uninit         (GdkDisplay *display);
 void _gdk_windowing_window_init (GdkScreen *screen);
 void _gdk_visual_init           (GdkScreen *screen);
 void _gdk_dnd_init		(GdkDisplay *display);
-void _gdk_windowing_image_init  (GdkDisplay *display);
 
 PangoRenderer *_gdk_x11_renderer_get (GdkDrawable *drawable,
 				      GdkGC       *gc);

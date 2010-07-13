@@ -44,7 +44,6 @@ libgdk_win32_la_SOURCES = \
 	gdkgeometry-win32.c \
 	gdkglobals-win32.c \
 	gdkim-win32.c \
-	gdkimage-win32.c \
 	gdkinput.c \
 	gdkkeys-win32.c \
 	gdkmain-win32.c \

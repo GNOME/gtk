@@ -39,7 +39,6 @@ extern void _gdk_events_init            (void);
 extern void _gdk_input_init             (void);
 extern void _gdk_dnd_init               (void);
 extern void _gdk_windowing_window_init  (void);
-extern void _gdk_windowing_image_init   (void);
 extern void _gdk_directfb_keyboard_init (void);
 
 static gboolean   gdk_directfb_argb_font           = FALSE;

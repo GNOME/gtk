@@ -1298,8 +1298,7 @@ blit_from_pixmap (gboolean              use_fg_bg,
 		{
 		  /* Destination is also pixmap, get fg and bg from
 		   * its palette. Either use the foreground and
-		   * background pixel values in the GC (only in the
-		   * case of gdk_image_put(), cf. XPutImage()), or 0
+		   * background pixel values in the GC, or 0
 		   * and 1 to index the palette.
 		   */
 		  if (!GDI_CALL (GetDIBColorTable, (hdc, bgix, 1, newtable)) ||

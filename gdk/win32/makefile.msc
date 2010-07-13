@@ -42,7 +42,6 @@ gdk_win32_OBJECTS = \
 	gdkgeometry-win32.obj \
 	gdkglobals-win32.obj \
 	gdkim-win32.obj \
-	gdkimage-win32.obj \
 	gdkinput.obj \
 	gdkinput-win32.obj \
 	gdkkeys-win32.obj \

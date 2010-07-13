@@ -79,7 +79,6 @@ gdk_gc_values_mask_get_type
 gdk_grab_ownership_get_type
 gdk_grab_status_get_type
 gdk_gravity_get_type
-gdk_image_type_get_type
 gdk_input_mode_get_type
 gdk_input_source_get_type
 gdk_join_style_get_type
@@ -273,43 +272,6 @@ GDK_IS_PIXMAP_CLASS
 gdk_pixmap_get_type
 GdkPixmapObject
 GdkPixmapObjectClass
-</SECTION>
-
-<SECTION>
-<TITLE>Images</TITLE>
-<FILE>images</FILE>
-GdkImage
-gdk_image_new
-GdkImageType
-gdk_image_get_colormap
-gdk_image_set_colormap
-gdk_image_get_bits_per_pixel
-gdk_image_get_bytes_per_pixel
-gdk_image_get_bytes_per_line
-gdk_image_get_byte_order
-gdk_image_get_depth
-gdk_image_get_height
-gdk_image_get_image_type
-gdk_image_get_visual
-gdk_image_get_width
-gdk_image_get_pixels
-
-<SUBSECTION>
-gdk_image_put_pixel
-gdk_image_get_pixel
-
-<SUBSECTION Standard>
-GDK_IMAGE
-GDK_TYPE_IMAGE
-GDK_IS_IMAGE
-GDK_IMAGE_CLASS
-GDK_IMAGE_GET_CLASS
-GDK_IS_IMAGE_CLASS
-GDK_TYPE_IMAGE_TYPE
-
-<SUBSECTION Private>
-GdkImageClass
-gdk_image_get_type
 </SECTION>
 
 <SECTION>
@@ -1176,8 +1138,6 @@ GDK_PIXMAP_XID
 GDK_DISPLAY_XDISPLAY
 GDK_DRAWABLE_XDISPLAY
 GDK_DRAWABLE_XID
-GDK_IMAGE_XDISPLAY
-GDK_IMAGE_XIMAGE
 GDK_GC_XDISPLAY
 GDK_COLORMAP_XDISPLAY
 GDK_COLORMAP_XCOLORMAP
@@ -1232,8 +1192,6 @@ gdk_x11_get_default_root_xwindow
 gdk_x11_get_default_screen
 gdk_x11_get_default_xdisplay
 gdk_x11_grab_server
-gdk_x11_image_get_xdisplay
-gdk_x11_image_get_ximage
 gdk_x11_screen_get_screen_number
 gdk_x11_screen_get_xscreen
 gdk_x11_ungrab_server

@@ -97,24 +97,6 @@ Returns the X resource (window or pixmap) belonging to a #GdkDrawable.
 @Returns: the ID of @win's X resource.
 
 
-<!-- ##### MACRO GDK_IMAGE_XDISPLAY ##### -->
-<para>
-Returns the display of a #GdkImage.
-</para>
-
-@image: a #GdkImage.
-@Returns: an Xlib <type>Display*</type>.
-
-
-<!-- ##### MACRO GDK_IMAGE_XIMAGE ##### -->
-<para>
-Returns the X image belonging to a #GdkImage.
-</para>
-
-@image: a #GdkImage.
-@Returns: an <type>XImage*</type>.
-
-
 <!-- ##### MACRO GDK_GC_XDISPLAY ##### -->
 <para>
 Returns the display of a #GdkGC.
@@ -608,24 +590,6 @@ Another name for GDK_DRAWABLE_XID().
 </para>
 
 @void: 
-
-
-<!-- ##### FUNCTION gdk_x11_image_get_xdisplay ##### -->
-<para>
-
-</para>
-
-@image: 
-@Returns: 
-
-
-<!-- ##### FUNCTION gdk_x11_image_get_ximage ##### -->
-<para>
-
-</para>
-
-@image: 
-@Returns: 
 
 
 <!-- ##### FUNCTION gdk_x11_screen_get_screen_number ##### -->

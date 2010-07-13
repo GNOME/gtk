@@ -31,7 +31,6 @@ libgdk_directfb_la_SOURCES =	\
 	gdkgeometry-directfb.c	\
 	gdkglobals-directfb.c	\
 	gdkim-directfb.c	\
-	gdkimage-directfb.c	\
 	gdkinput-directfb.c	\
 	gdkinput-directfb.h	\
 	gdkkeys-directfb.c	\

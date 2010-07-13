@@ -82,7 +82,6 @@ gdk_public_h_sources =				\
 	gdkdrawable.h				\
 	gdkevents.h				\
 	gdkgc.h					\
-	gdkimage.h				\
 	gdkinput.h				\
 	gdkkeys.h				\
 	gdkkeysyms.h				\
@@ -124,7 +123,6 @@ gdk_c_sources =                 \
 	gdkevents.c     	\
 	gdkgc.c			\
 	gdkglobals.c		\
-	gdkimage.c		\
 	gdkkeys.c		\
 	gdkkeyuni.c		\
 	gdkoffscreenwindow.c	\
@@ -214,7 +212,6 @@ x11_introspection_files = 		\
 	x11/gdkgc-x11.c			\
 	x11/gdkgeometry-x11.c		\
 	x11/gdkglobals-x11.c		\
-	x11/gdkimage-x11.c		\
 	x11/gdkim-x11.c			\
 	x11/gdkinput.c			\
 	x11/gdkkeys-x11.c		\

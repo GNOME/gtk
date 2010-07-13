@@ -198,12 +198,6 @@ typedef struct
   DFBSurfacePixelFormat  format;
 } GdkVisualDirectFB;
 
-typedef struct
-{
-  IDirectFBSurface *surface;
-} GdkImageDirectFB;
-
-
 #define GDK_TYPE_GC_DIRECTFB       (_gdk_gc_directfb_get_type ())
 #define GDK_GC_DIRECTFB(object)    (G_TYPE_CHECK_INSTANCE_CAST ((object), GDK_TYPE_GC_DIRECTFB, GdkGCDirectFB))
 #define GDK_IS_GC_DIRECTFB(object) (G_TYPE_CHECK_INSTANCE_TYPE ((object), GDK_TYPE_GC_DIRECTFB))

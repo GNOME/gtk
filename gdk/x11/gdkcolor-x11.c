@@ -1019,9 +1019,7 @@ gdk_colormap_alloc_colors (GdkColormap *colormap,
  * hardware pixel @pixel. @pixel must be a valid pixel in the
  * colormap; it's a programmer error to call this function with a
  * pixel which is not in the colormap. Hardware pixels are normally
- * obtained from gdk_colormap_alloc_colors(), or from a #GdkImage. (A
- * #GdkImage contains image data in hardware format, a #GdkPixbuf
- * contains image data in a canonical 24-bit RGB format.)
+ * obtained from gdk_colormap_alloc_colors().
  *
  * This function is rarely useful; it's used for example to
  * implement the eyedropper feature in #GtkColorSelection.

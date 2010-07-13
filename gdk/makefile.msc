@@ -75,7 +75,6 @@ gdk_OBJECTS = \
 	gdkevents.obj \
 	gdkgc.obj \
 	gdkglobals.obj \
-	gdkimage.obj \
 	gdkwindowimpl.obj \
 	gdkkeynames.obj \
 	gdkkeys.obj \
@@ -101,7 +100,6 @@ gdk_public_h_sources = \
 	gdkevents.h	\
 	gdkgc.h		\
 	gdkkeysyms.h	\
-	gdkimage.h	\
 	gdkinput.h	\
 	gdkkeys.h	\
 	gdkpango.h	\
