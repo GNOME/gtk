@@ -398,7 +398,7 @@ static void gtk_notebook_calc_tabs           (GtkNotebook      *notebook,
 
 /*** GtkNotebook Page Switch Methods ***/
 static void gtk_notebook_real_switch_page    (GtkNotebook      *notebook,
-					      GtkNotebookPage  *page,
+					      GtkNotebookPage  *child,
 					      guint             page_num);
 
 /*** GtkNotebook Page Switch Functions ***/
@@ -6019,12 +6019,14 @@ gtk_notebook_update_tab_states (GtkNotebook *notebook)
  */
 static void
 gtk_notebook_real_switch_page (GtkNotebook     *notebook,
-			       GtkNotebookPage *page,
+			       GtkNotebookPage* child,
 			       guint            page_num)
 {
+  GList *list = gtk_notebook_find_child (notebook, GTK_WIDGET (child), NULL);
+  GtkNotebookPage *page = GTK_NOTEBOOK_PAGE (list);
   gboolean child_has_focus;
 
-  if (notebook->cur_page == page || !gtk_widget_get_visible (page->child))
+  if (notebook->cur_page == page || !gtk_widget_get_visible (GTK_WIDGET (child)))
     return;
 
   /* save the value here, changing visibility changes focus */
@@ -6082,7 +6084,7 @@ gtk_notebook_switch_page (GtkNotebook     *notebook,
   g_signal_emit (notebook,
 		 notebook_signals[SWITCH_PAGE],
 		 0,
-		 page,
+		 page->child,
 		 page_num);
 }
 
