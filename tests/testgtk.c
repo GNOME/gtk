@@ -324,7 +324,7 @@ on_alpha_screen_changed (GtkWidget *widget,
 
   if (!colormap)
     {
-      colormap = gdk_screen_get_rgb_colormap (screen);
+      colormap = gdk_screen_get_default_colormap (screen);
       gtk_label_set_markup (GTK_LABEL (label), "<b>Screen doesn't support alpha</b>");
     }
   else
