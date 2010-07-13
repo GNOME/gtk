@@ -311,32 +311,18 @@ static int
 expose_cb (GtkWidget *drawing_area, GdkEventExpose *evt, gpointer data)
 {
         GdkPixbuf *pixbuf;
+        cairo_t *cr;
          
         pixbuf = (GdkPixbuf *) g_object_get_data (G_OBJECT (drawing_area),
 						  "pixbuf");
-        if (gdk_pixbuf_get_has_alpha (pixbuf)) {
-                gdk_draw_rgb_32_image (drawing_area->window,
-                                       drawing_area->style->black_gc,
-                                       evt->area.x, evt->area.y,
-                                       evt->area.width,
-                                       evt->area.height,
-                                       GDK_RGB_DITHER_MAX,
-                                       gdk_pixbuf_get_pixels (pixbuf) +
-                                       (evt->area.y * gdk_pixbuf_get_rowstride (pixbuf)) +
-                                       (evt->area.x * gdk_pixbuf_get_n_channels (pixbuf)),
-                                       gdk_pixbuf_get_rowstride (pixbuf));
-        } else {
-                gdk_draw_rgb_image (drawing_area->window, 
-                                    drawing_area->style->black_gc, 
-                                    evt->area.x, evt->area.y,
-                                    evt->area.width,
-                                    evt->area.height,  
-                                    GDK_RGB_DITHER_NORMAL,
-                                    gdk_pixbuf_get_pixels (pixbuf) +
-                                    (evt->area.y * gdk_pixbuf_get_rowstride (pixbuf)) +
-                                    (evt->area.x * gdk_pixbuf_get_n_channels (pixbuf)),
-                                    gdk_pixbuf_get_rowstride (pixbuf));
-        }
+
+        cr = gdk_cairo_create (evt->window);
+        gdk_cairo_set_source_pixbuf (cr, pixbuf, 0, 0);
+        gdk_cairo_rectangle (cr, &evt->area);
+        cairo_fill (cr);
+
+        cairo_destroy (cr);
+
         return FALSE;
 }
 
@@ -373,8 +359,6 @@ main (int argc, char **argv)
         GdkPixbuf     *pixbuf;    
    
         gtk_init (&argc, &argv);   
-
-        gtk_widget_set_default_colormap (gdk_rgb_get_colormap ());
 
         root = gdk_get_default_root_window ();
         pixbuf = gdk_pixbuf_get_from_drawable (NULL, root, NULL,
