@@ -507,52 +507,6 @@ gdk_quartz_draw_lines (GdkDrawable *drawable,
 }
 
 static void
-gdk_quartz_draw_image (GdkDrawable     *drawable,
-		       GdkGC           *gc,
-		       GdkImage        *image,
-		       gint             xsrc,
-		       gint             ysrc,
-		       gint             xdest,
-		       gint             ydest,
-		       gint             width,
-		       gint             height)
-{
-  CGContextRef context = gdk_quartz_drawable_get_context (drawable, FALSE);
-  CGColorSpaceRef colorspace;
-  CGDataProviderRef data_provider;
-  CGImageRef cgimage;
-
-  if (!context)
-    return;
-
-  colorspace = CGColorSpaceCreateDeviceRGB ();
-  data_provider = CGDataProviderCreateWithData (NULL, image->mem, image->height * image->bpl, NULL);
-
-  /* FIXME: Make sure that this function draws 32-bit images correctly,
-  * also check endianness wrt kCGImageAlphaNoneSkipFirst */
-  cgimage = CGImageCreate (image->width, image->height, 8,
-			   32, image->bpl,
-			   colorspace,
-			   kCGImageAlphaNoneSkipFirst, 
-			   data_provider, NULL, FALSE, kCGRenderingIntentDefault);
-
-  CGDataProviderRelease (data_provider);
-  CGColorSpaceRelease (colorspace);
-
-  _gdk_quartz_gc_update_cg_context (gc, drawable, context,
-				    GDK_QUARTZ_CONTEXT_STROKE);
-
-  CGContextClipToRect (context, CGRectMake (xdest, ydest, width, height));
-  CGContextTranslateCTM (context, xdest - xsrc, ydest - ysrc + image->height);
-  CGContextScaleCTM (context, 1, -1);
-
-  CGContextDrawImage (context, CGRectMake (0, 0, image->width, image->height), cgimage);
-  CGImageRelease (cgimage);
-
-  gdk_quartz_drawable_release_context (drawable, context);
-}
-
-static void
 gdk_drawable_impl_quartz_finalize (GObject *object)
 {
   GdkDrawableImplQuartz *impl = GDK_DRAWABLE_IMPL_QUARTZ (object);
@@ -581,7 +535,6 @@ gdk_drawable_impl_quartz_class_init (GdkDrawableImplQuartzClass *klass)
   drawable_class->draw_points = gdk_quartz_draw_points;
   drawable_class->draw_segments = gdk_quartz_draw_segments;
   drawable_class->draw_lines = gdk_quartz_draw_lines;
-  drawable_class->draw_image = gdk_quartz_draw_image;
 
   drawable_class->ref_cairo_surface = gdk_quartz_ref_cairo_surface;
 

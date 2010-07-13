@@ -498,47 +498,6 @@ gdk_draw_drawable (GdkDrawable *drawable,
 }
 
 /**
- * gdk_draw_image:
- * @drawable: a #GdkDrawable (a #GdkWindow or a #GdkPixmap).
- * @gc: a #GdkGC.
- * @image: the #GdkImage to draw.
- * @xsrc: the left edge of the source rectangle within @image.
- * @ysrc: the top of the source rectangle within @image.
- * @xdest: the x coordinate of the destination within @drawable.
- * @ydest: the y coordinate of the destination within @drawable.
- * @width: the width of the area to be copied, or -1 to make the area 
- *     extend to the right edge of @image.
- * @height: the height of the area to be copied, or -1 to make the area 
- *     extend to the bottom edge of @image.
- * 
- * Draws a #GdkImage onto a drawable.
- * The depth of the #GdkImage must match the depth of the #GdkDrawable.
- **/
-void
-gdk_draw_image (GdkDrawable *drawable,
-		GdkGC       *gc,
-		GdkImage    *image,
-		gint         xsrc,
-		gint         ysrc,
-		gint         xdest,
-		gint         ydest,
-		gint         width,
-		gint         height)
-{
-  g_return_if_fail (GDK_IS_DRAWABLE (drawable));
-  g_return_if_fail (GDK_IS_IMAGE (image));
-  g_return_if_fail (GDK_IS_GC (gc));
-
-  if (width == -1)
-    width = image->width;
-  if (height == -1)
-    height = image->height;
-
-  GDK_DRAWABLE_GET_CLASS (drawable)->draw_image (drawable, gc, image, xsrc, ysrc,
-                                                 xdest, ydest, width, height);
-}
-
-/**
  * gdk_draw_points:
  * @drawable: a #GdkDrawable (a #GdkWindow or a #GdkPixmap).
  * @gc: a #GdkGC.

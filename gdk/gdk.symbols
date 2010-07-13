@@ -556,7 +556,6 @@ gdk_draw_arc
 gdk_draw_drawable
 gdk_draw_glyphs
 gdk_draw_glyphs_transformed
-gdk_draw_image
 gdk_draw_line
 gdk_draw_lines
 gdk_draw_point

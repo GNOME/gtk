@@ -287,16 +287,6 @@ static void gdk_window_draw_glyphs_transformed (GdkDrawable      *drawable,
 						gint              y,
 						PangoGlyphString *glyphs);
 
-static void   gdk_window_draw_image     (GdkDrawable     *drawable,
-					 GdkGC           *gc,
-					 GdkImage        *image,
-					 gint             xsrc,
-					 gint             ysrc,
-					 gint             xdest,
-					 gint             ydest,
-					 gint             width,
-					 gint             height);
-
 static void gdk_window_draw_trapezoids (GdkDrawable   *drawable,
 					GdkGC	      *gc,
 					GdkTrapezoid  *trapezoids,
@@ -497,7 +487,6 @@ gdk_window_class_init (GdkWindowObjectClass *klass)
   drawable_class->draw_lines = gdk_window_draw_lines;
   drawable_class->draw_glyphs = gdk_window_draw_glyphs;
   drawable_class->draw_glyphs_transformed = gdk_window_draw_glyphs_transformed;
-  drawable_class->draw_image = gdk_window_draw_image;
   drawable_class->draw_trapezoids = gdk_window_draw_trapezoids;
   drawable_class->get_depth = gdk_window_real_get_depth;
   drawable_class->get_screen = gdk_window_real_get_screen;
@@ -4812,27 +4801,6 @@ gdk_window_clear_area_e (GdkWindow *window,
 				  x, y,
 				  width, height,
 				  TRUE);
-}
-
-static void
-gdk_window_draw_image (GdkDrawable *drawable,
-		       GdkGC       *gc,
-		       GdkImage    *image,
-		       gint         xsrc,
-		       gint         ysrc,
-		       gint         xdest,
-		       gint         ydest,
-		       gint         width,
-		       gint         height)
-{
-  if (GDK_WINDOW_DESTROYED (drawable))
-    return;
-
-  BEGIN_DRAW;
-  gdk_draw_image (impl, gc, image, xsrc, ysrc,
-		  xdest - x_offset, ydest - y_offset,
-		  width, height);
-  END_DRAW;
 }
 
 static void

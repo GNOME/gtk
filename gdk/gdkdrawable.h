@@ -111,16 +111,6 @@ struct _GdkDrawableClass
 			  gint              y,
 			  PangoGlyphString *glyphs);
 
-  void (*draw_image)     (GdkDrawable *drawable,
-                          GdkGC	      *gc,
-                          GdkImage    *image,
-                          gint	       xsrc,
-                          gint	       ysrc,
-                          gint	       xdest,
-                          gint	       ydest,
-                          gint	       width,
-                          gint	       height);
-  
   gint (*get_depth)      (GdkDrawable  *drawable);
   void (*get_size)       (GdkDrawable  *drawable,
                           gint         *width,
@@ -260,15 +250,6 @@ void gdk_draw_polygon   (GdkDrawable      *drawable,
 void gdk_draw_drawable  (GdkDrawable      *drawable,
 			 GdkGC            *gc,
 			 GdkDrawable      *src,
-			 gint              xsrc,
-			 gint              ysrc,
-			 gint              xdest,
-			 gint              ydest,
-			 gint              width,
-			 gint              height);
-void gdk_draw_image     (GdkDrawable      *drawable,
-			 GdkGC            *gc,
-			 GdkImage         *image,
 			 gint              xsrc,
 			 gint              ysrc,
 			 gint              xdest,

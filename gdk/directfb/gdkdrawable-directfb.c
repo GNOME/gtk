@@ -890,66 +890,6 @@ gdk_directfb_draw_lines (GdkDrawable *drawable,
   temp_region_deinit( &clip );
 }
 
-static void
-gdk_directfb_draw_image (GdkDrawable *drawable,
-                         GdkGC       *gc,
-                         GdkImage    *image,
-                         gint         xsrc,
-                         gint         ysrc,
-                         gint         xdest,
-                         gint         ydest,
-                         gint         width,
-                         gint         height)
-{
-  GdkDrawableImplDirectFB *impl;
-  GdkImageDirectFB        *image_private;
-  cairo_region_t                clip;
-  GdkRectangle             dest_rect = { xdest, ydest, width, height };
-
-  gint pitch = 0;
-  gint i;
-
-  g_return_if_fail (GDK_IS_DRAWABLE (drawable));
-  g_return_if_fail (image != NULL);
-
-  D_DEBUG_AT( GDKDFB_Drawable, "%s( %p, %p, %p, %4d,%4d -> %4d,%4d - %dx%d )\n", G_STRFUNC,
-              drawable, gc, image, xsrc, ysrc, xdest, ydest, width, height );
-
-  impl = GDK_DRAWABLE_IMPL_DIRECTFB (drawable);
-  image_private = image->windowing_data;
-
-  if (!impl->surface)
-    return;
-
-  gdk_directfb_clip_region (drawable, gc, &dest_rect, &clip);
-
-  if (!cairo_region_is_empty (&clip))
-    {
-      DFBRectangle  src_rect = { xsrc, ysrc, width, height };
-
-      image_private->surface->Unlock (image_private->surface);
-
-      impl->surface->SetBlittingFlags (impl->surface, DSBLIT_NOFX);
-
-      for (i = 0; i < clip.numRects; i++)
-        {
-          DFBRegion reg = { clip.rects[i].x1,     clip.rects[i].y1,
-                            clip.rects[i].x2 , clip.rects[i].y2  };
-
-          impl->surface->SetClip (impl->surface, &reg);
-          impl->surface->Blit (impl->surface,
-                               image_private->surface, &src_rect,
-                               xdest, ydest);
-        }
-
-      image_private->surface->Lock (image_private->surface, DSLF_WRITE,
-                                    &image->mem, &pitch);
-      image->bpl = pitch;
-    }
-
-  temp_region_deinit( &clip );
-}
-
 static inline void
 convert_rgba_pixbuf_to_image (guint32 *src,
                               guint    src_pitch,
@@ -1053,7 +993,6 @@ gdk_drawable_impl_directfb_class_init (GdkDrawableImplDirectFBClass *klass)
   drawable_class->draw_points    = gdk_directfb_draw_points;
   drawable_class->draw_segments  = gdk_directfb_draw_segments;
   drawable_class->draw_lines     = gdk_directfb_draw_lines;
-  drawable_class->draw_image     = gdk_directfb_draw_image;
 
   drawable_class->ref_cairo_surface = gdk_directfb_ref_cairo_surface;
   drawable_class->set_colormap   = gdk_directfb_set_colormap;

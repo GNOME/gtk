@@ -92,15 +92,6 @@ static void gdk_pixmap_draw_glyphs_transformed (GdkDrawable      *drawable,
 						gint              y,
 						PangoGlyphString *glyphs);
 
-static void   gdk_pixmap_draw_image     (GdkDrawable     *drawable,
-                                         GdkGC           *gc,
-                                         GdkImage        *image,
-                                         gint             xsrc,
-                                         gint             ysrc,
-                                         gint             xdest,
-                                         gint             ydest,
-                                         gint             width,
-                                         gint             height);
 static void  gdk_pixmap_draw_trapezoids (GdkDrawable     *drawable,
 					 GdkGC	         *gc,
 					 GdkTrapezoid    *trapezoids,
@@ -181,7 +172,6 @@ gdk_pixmap_class_init (GdkPixmapObjectClass *klass)
   drawable_class->draw_lines = gdk_pixmap_draw_lines;
   drawable_class->draw_glyphs = gdk_pixmap_draw_glyphs;
   drawable_class->draw_glyphs_transformed = gdk_pixmap_draw_glyphs_transformed;
-  drawable_class->draw_image = gdk_pixmap_draw_image;
   drawable_class->draw_trapezoids = gdk_pixmap_draw_trapezoids;
   drawable_class->get_depth = gdk_pixmap_real_get_depth;
   drawable_class->get_screen = gdk_pixmap_real_get_screen;
@@ -397,24 +387,6 @@ gdk_pixmap_draw_glyphs_transformed (GdkDrawable      *drawable,
 
   _gdk_gc_remove_drawable_clip (gc);  
   gdk_draw_glyphs_transformed (private->impl, gc, matrix, font, x, y, glyphs);
-}
-
-static void
-gdk_pixmap_draw_image (GdkDrawable     *drawable,
-                       GdkGC           *gc,
-                       GdkImage        *image,
-                       gint             xsrc,
-                       gint             ysrc,
-                       gint             xdest,
-                       gint             ydest,
-                       gint             width,
-                       gint             height)
-{
-  GdkPixmapObject *private = (GdkPixmapObject *)drawable;
-
-  _gdk_gc_remove_drawable_clip (gc);  
-  gdk_draw_image (private->impl, gc, image, xsrc, ysrc, xdest, ydest,
-                  width, height);
 }
 
 static void

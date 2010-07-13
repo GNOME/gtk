@@ -91,15 +91,6 @@ static void gdk_win32_draw_lines     (GdkDrawable    *drawable,
 				      GdkGC          *gc,
 				      GdkPoint       *points,
 				      gint            npoints);
-static void gdk_win32_draw_image     (GdkDrawable     *drawable,
-				      GdkGC           *gc,
-				      GdkImage        *image,
-				      gint             xsrc,
-				      gint             ysrc,
-				      gint             xdest,
-				      gint             ydest,
-				      gint             width,
-				      gint             height);
 
 static cairo_surface_t *gdk_win32_ref_cairo_surface (GdkDrawable *drawable);
      
@@ -137,7 +128,6 @@ _gdk_drawable_impl_win32_class_init (GdkDrawableImplWin32Class *klass)
   drawable_class->draw_points = gdk_win32_draw_points;
   drawable_class->draw_segments = gdk_win32_draw_segments;
   drawable_class->draw_lines = gdk_win32_draw_lines;
-  drawable_class->draw_image = gdk_win32_draw_image;
   
   drawable_class->ref_cairo_surface = gdk_win32_ref_cairo_surface;
   
@@ -1601,24 +1591,6 @@ _gdk_win32_blit (gboolean              use_fg_bg,
     blit_from_window (hdc, GDK_GC_WIN32 (gc), src_impl, xsrc, ysrc, xdest, ydest, width, height);
 
   gdk_win32_hdc_release (&draw_impl->parent_instance, gc, GDK_GC_FOREGROUND);
-}
-
-static void
-gdk_win32_draw_image (GdkDrawable     *drawable,
-		      GdkGC           *gc,
-		      GdkImage        *image,
-		      gint             xsrc,
-		      gint             ysrc,
-		      gint             xdest,
-		      gint             ydest,
-		      gint             width,
-		      gint             height)
-{
-  g_assert (GDK_IS_DRAWABLE_IMPL_WIN32 (drawable));
-
-  _gdk_win32_blit (TRUE, (GdkDrawableImplWin32 *) drawable,
-		   gc, (GdkPixmap *) image->windowing_data,
-		   xsrc, ysrc, xdest, ydest, width, height);
 }
 
 /**

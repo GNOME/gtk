@@ -392,7 +392,6 @@ gdk_draw_layout_with_colors
 
 <SUBSECTION>
 gdk_draw_drawable
-gdk_draw_image
 gdk_drawable_get_image
 gdk_drawable_copy_to_image
 
