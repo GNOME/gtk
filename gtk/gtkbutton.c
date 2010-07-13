@@ -647,10 +647,17 @@ maybe_set_alignment (GtkButton *button,
   else if (GTK_IS_ALIGNMENT (widget))
     {
       GtkAlignment *alignment = GTK_ALIGNMENT (widget);
+      gfloat xscale, yscale;
+
+      g_object_get (alignment,
+                    "xscale", &xscale,
+                    "yscale", &yscale,
+                    NULL);
 
       if (priv->align_set)
-	gtk_alignment_set (alignment, priv->xalign, priv->yalign, 
-			   alignment->xscale, alignment->yscale);
+        gtk_alignment_set (alignment,
+                           priv->xalign, priv->yalign,
+                           xscale, yscale);
     }
 }
 
