@@ -50,6 +50,7 @@
 #define FRAMES_PER_SECOND     45
 #define MSECS_BETWEEN_UPDATES (1000 / FRAMES_PER_SECOND)
 
+typedef struct _GtkNotebookPage GtkNotebookPage;
 
 typedef enum
 {

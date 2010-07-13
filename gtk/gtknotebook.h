@@ -55,9 +55,6 @@ typedef enum
 typedef struct _GtkNotebook       GtkNotebook;
 typedef struct _GtkNotebookPriv   GtkNotebookPriv;
 typedef struct _GtkNotebookClass  GtkNotebookClass;
-#if !defined (GTK_DISABLE_DEPRECATED) || defined (GTK_COMPILATION)
-typedef struct _GtkNotebookPage   GtkNotebookPage;
-#endif
 
 struct _GtkNotebook
 {
