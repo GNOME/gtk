@@ -31,7 +31,6 @@
 #include "gdkgc.h"
 #include "gdkinternals.h"
 #include "gdkpixmap.h"
-#include "gdkrgb.h"
 #include "gdkprivate.h"
 
 
@@ -1205,7 +1204,8 @@ gdk_gc_set_rgb_fg_color (GdkGC          *gc,
     return;
 
   tmp_color = *color;
-  gdk_rgb_find_color (cmap, &tmp_color);
+  if (!gdk_colormap_alloc_color (cmap, &tmp_color, FALSE, TRUE))
+    return;
   gdk_gc_set_foreground (gc, &tmp_color);
 }
 
@@ -1237,7 +1237,8 @@ gdk_gc_set_rgb_bg_color (GdkGC          *gc,
     return;
 
   tmp_color = *color;
-  gdk_rgb_find_color (cmap, &tmp_color);
+  if (!gdk_colormap_alloc_color (cmap, &tmp_color, FALSE, TRUE))
+    return;
   gdk_gc_set_background (gc, &tmp_color);
 }
 
