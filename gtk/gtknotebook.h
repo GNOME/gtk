@@ -103,11 +103,7 @@ struct _GtkNotebookClass
   GtkContainerClass parent_class;
 
   void (* switch_page)       (GtkNotebook     *notebook,
-#if !defined (GTK_DISABLE_DEPRECATED) || defined (GTK_COMPILATION)
-                              GtkNotebookPage *page,
-#else
-                              gpointer         page,
-#endif
+                              GtkWidget       *page,
 			      guint            page_num);
 
   /* Action signals for keybindings */

@@ -398,7 +398,7 @@ static void gtk_notebook_calc_tabs           (GtkNotebook      *notebook,
 
 /*** GtkNotebook Page Switch Methods ***/
 static void gtk_notebook_real_switch_page    (GtkNotebook      *notebook,
-					      GtkNotebookPage  *child,
+					      GtkWidget        *child,
 					      guint             page_num);
 
 /*** GtkNotebook Page Switch Functions ***/
@@ -810,7 +810,7 @@ gtk_notebook_class_init (GtkNotebookClass *class)
 		  NULL, NULL,
 		  _gtk_marshal_VOID__POINTER_UINT,
 		  G_TYPE_NONE, 2,
-		  G_TYPE_POINTER,
+		  GTK_TYPE_WIDGET,
 		  G_TYPE_UINT);
   notebook_signals[FOCUS_TAB] = 
     g_signal_new (I_("focus-tab"),
@@ -6019,7 +6019,7 @@ gtk_notebook_update_tab_states (GtkNotebook *notebook)
  */
 static void
 gtk_notebook_real_switch_page (GtkNotebook     *notebook,
-			       GtkNotebookPage* child,
+			       GtkWidget*       child,
 			       guint            page_num)
 {
   GList *list = gtk_notebook_find_child (notebook, GTK_WIDGET (child), NULL);
