@@ -36,11 +36,6 @@
 #include "gdkpixbuf.h"
 
 
-static GdkImage*    gdk_drawable_real_get_image (GdkDrawable     *drawable,
-						 gint             x,
-						 gint             y,
-						 gint             width,
-						 gint             height);
 static GdkDrawable* gdk_drawable_real_get_composite_drawable (GdkDrawable  *drawable,
 							      gint          x,
 							      gint          y,
@@ -65,7 +60,6 @@ G_DEFINE_ABSTRACT_TYPE (GdkDrawable, gdk_drawable, G_TYPE_OBJECT)
 static void
 gdk_drawable_class_init (GdkDrawableClass *klass)
 {
-  klass->get_image = gdk_drawable_real_get_image;
   klass->get_composite_drawable = gdk_drawable_real_get_composite_drawable;
   /* Default implementation for clip and visible region is the same */
   klass->get_clip_region = gdk_drawable_real_get_visible_region;
@@ -811,104 +805,6 @@ gdk_drawable_copy_to_image (GdkDrawable *drawable,
     }
   
   return retval;
-}
-
-/**
- * gdk_drawable_get_image:
- * @drawable: a #GdkDrawable
- * @x: x coordinate on @drawable
- * @y: y coordinate on @drawable
- * @width: width of region to get
- * @height: height or region to get
- * 
- * A #GdkImage stores client-side image data (pixels). In contrast,
- * #GdkPixmap and #GdkWindow are server-side
- * objects. gdk_drawable_get_image() obtains the pixels from a
- * server-side drawable as a client-side #GdkImage.  The format of a
- * #GdkImage depends on the #GdkVisual of the current display, which
- * makes manipulating #GdkImage extremely difficult; therefore, in
- * most cases you should use gdk_pixbuf_get_from_drawable() instead of
- * this lower-level function. A #GdkPixbuf contains image data in a
- * canonicalized RGB format, rather than a display-dependent format.
- * Of course, there's a convenience vs. speed tradeoff here, so you'll
- * want to think about what makes sense for your application.
- *
- * @x, @y, @width, and @height define the region of @drawable to
- * obtain as an image.
- *
- * You would usually copy image data to the client side if you intend
- * to examine the values of individual pixels, for example to darken
- * an image or add a red tint. It would be prohibitively slow to
- * make a round-trip request to the windowing system for each pixel,
- * so instead you get all of them at once, modify them, then copy
- * them all back at once.
- *
- * If the X server or other windowing system backend is on the local
- * machine, this function may use shared memory to avoid copying
- * the image data.
- *
- * If the source drawable is a #GdkWindow and partially offscreen
- * or obscured, then the obscured portions of the returned image
- * will contain undefined data.
- * 
- * Return value: a #GdkImage containing the contents of @drawable
- **/
-GdkImage*
-gdk_drawable_get_image (GdkDrawable *drawable,
-                        gint         x,
-                        gint         y,
-                        gint         width,
-                        gint         height)
-{
-  GdkDrawable *composite;
-  gint composite_x_offset = 0;
-  gint composite_y_offset = 0;
-  GdkImage *retval;
-  GdkColormap *cmap;
-  
-  g_return_val_if_fail (GDK_IS_DRAWABLE (drawable), NULL);
-  g_return_val_if_fail (x >= 0, NULL);
-  g_return_val_if_fail (y >= 0, NULL);
-
-  /* FIXME? Note race condition since we get the size then
-   * get the image, and the size may have changed.
-   */
-  
-  if (width < 0 || height < 0)
-    gdk_drawable_get_size (drawable,
-                           width < 0 ? &width : NULL,
-                           height < 0 ? &height : NULL);
-  
-  composite =
-    GDK_DRAWABLE_GET_CLASS (drawable)->get_composite_drawable (drawable,
-                                                               x, y,
-                                                               width, height,
-                                                               &composite_x_offset,
-                                                               &composite_y_offset); 
-  
-  retval = GDK_DRAWABLE_GET_CLASS (composite)->get_image (composite,
-                                                          x - composite_x_offset,
-                                                          y - composite_y_offset,
-                                                          width, height);
-
-  g_object_unref (composite);
-
-  cmap = gdk_drawable_get_colormap (drawable);
-  
-  if (retval && cmap)
-    gdk_image_set_colormap (retval, cmap);
-  
-  return retval;
-}
-
-static GdkImage*
-gdk_drawable_real_get_image (GdkDrawable     *drawable,
-			     gint             x,
-			     gint             y,
-			     gint             width,
-			     gint             height)
-{
-  return gdk_drawable_copy_to_image (drawable, NULL, x, y, 0, 0, width, height);
 }
 
 static GdkDrawable *

@@ -123,12 +123,6 @@ struct _GdkDrawableClass
   GdkVisual*   (*get_visual)	(GdkDrawable  *drawable);
   GdkScreen*   (*get_screen)	(GdkDrawable  *drawable);
 
-  GdkImage*    (*get_image)  (GdkDrawable  *drawable,
-                              gint          x,
-                              gint          y,
-                              gint          width,
-                              gint          height);
-
   cairo_region_t*   (*get_clip_region)    (GdkDrawable  *drawable);
   cairo_region_t*   (*get_visible_region) (GdkDrawable  *drawable);
 
@@ -314,11 +308,6 @@ void gdk_draw_trapezoids         (GdkDrawable        *drawable,
 				  gint                n_trapezoids);
 
 
-GdkImage* gdk_drawable_get_image      (GdkDrawable *drawable,
-                                       gint         x,
-                                       gint         y,
-                                       gint         width,
-                                       gint         height);
 GdkImage *gdk_drawable_copy_to_image (GdkDrawable  *drawable,
 				      GdkImage     *image,
 				      gint          src_x,

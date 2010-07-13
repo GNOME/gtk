@@ -83,3 +83,19 @@ pixbufs, see the #GdkPixbuf API documentation.
 @Returns: 
 
 
+<!-- ##### FUNCTION gdk_pixbuf_get_from_surface ##### -->
+<para>
+
+</para>
+
+@dest: 
+@surface: 
+@src_x: 
+@src_y: 
+@dest_x: 
+@dest_y: 
+@width: 
+@height: 
+@Returns: 
+
+
