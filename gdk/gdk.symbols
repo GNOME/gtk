@@ -941,6 +941,7 @@ gdk_pango_renderer_set_stipple
 #if IN_FILE(__GDK_PIXBUF_DRAWABLE_C__)
 gdk_pixbuf_get_from_drawable
 gdk_pixbuf_get_from_image
+gdk_pixbuf_get_from_surface
 #endif
 #endif
 
