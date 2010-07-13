@@ -1195,10 +1195,6 @@ rgbconvert (GdkImage    *image,
  * (In short, there are several ways this function can fail, and if it fails
  *  it returns %NULL; so check the return value.)
  *
- * This function calls gdk_drawable_get_image() internally and
- * converts the resulting image to a #GdkPixbuf, so the
- * documentation for gdk_drawable_get_image() may also be relevant.
- * 
  * Return value: The same pixbuf as @dest if it was non-%NULL, or a newly-created
  * pixbuf with a reference count of 1 if no destination pixbuf was specified, or %NULL on error
  **/
@@ -1211,9 +1207,8 @@ gdk_pixbuf_get_from_drawable (GdkPixbuf   *dest,
 			      int width,  int height)
 {
   int src_width, src_height;
-  GdkImage *image;
+  cairo_surface_t *surface;
   int depth;
-  int x0, y0;
   
   /* General sanity checks */
 
@@ -1272,43 +1267,14 @@ gdk_pixbuf_get_from_drawable (GdkPixbuf   *dest,
       g_return_val_if_fail (src_x + width <= src_width && src_y + height <= src_height, NULL);
     }
 
-  /* Create the pixbuf if needed */
-  if (!dest)
-    {
-      dest = gdk_pixbuf_new (GDK_COLORSPACE_RGB, FALSE, 8, width, height);
-      if (dest == NULL)
-        return NULL;
-    }
-  
-  if (dest)
-    {
-      g_return_val_if_fail (dest_x >= 0 && dest_y >= 0, NULL);
-      g_return_val_if_fail (dest_x + width <= gdk_pixbuf_get_width (dest), NULL);
-      g_return_val_if_fail (dest_y + height <= gdk_pixbuf_get_height (dest), NULL);
-    }
+  surface = _gdk_drawable_ref_cairo_surface (src);
+  dest = gdk_pixbuf_get_from_surface (dest,
+                                      surface,
+                                      src_x, src_y,
+                                      dest_x, dest_y,
+                                      width, height);
+  cairo_surface_destroy (surface);
 
-  for (y0 = 0; y0 < height; y0 += GDK_SCRATCH_IMAGE_HEIGHT)
-    {
-      gint height1 = MIN (height - y0, GDK_SCRATCH_IMAGE_HEIGHT);
-      for (x0 = 0; x0 < width; x0 += GDK_SCRATCH_IMAGE_WIDTH)
-	{
-	  gint xs0, ys0;
-	  
-	  gint width1 = MIN (width - x0, GDK_SCRATCH_IMAGE_WIDTH);
-	  
-	  image = _gdk_image_get_scratch (gdk_drawable_get_screen (src), 
-					  width1, height1, depth, &xs0, &ys0);
-
-	  gdk_drawable_copy_to_image (src, image,
-				      src_x + x0, src_y + y0,
-				       xs0, ys0, width1, height1);
-
-	  gdk_pixbuf_get_from_image (dest, image, cmap,
-				     xs0, ys0, dest_x + x0, dest_y + y0,
-				     width1, height1);
-	}
-    }
-  
   return dest;
 }
         
