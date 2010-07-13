@@ -1627,7 +1627,7 @@ statusbar_popped (GtkStatusbar  *statusbar,
 		  guint          context_id,
 		  const gchar	*text)
 {
-  if (!statusbar->messages)
+  if (!text)
     statusbar_counter = 1;
 }
 

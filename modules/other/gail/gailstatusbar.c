@@ -629,5 +629,8 @@ gail_statusbar_get_character_at_offset (AtkText *text,
 static GtkWidget*
 get_label_from_statusbar (GtkWidget *statusbar)
 {
-  return GTK_STATUSBAR (statusbar)->label;
+  GtkWidget *message_area;
+
+  message_area = gtk_statusbar_get_message_area (GTK_STATUSBAR (statusbar));
+  return gtk_bin_get_child (GTK_BIN (message_area));
 }
