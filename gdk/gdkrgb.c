@@ -3292,6 +3292,22 @@ gdk_draw_rgb_image_core (GdkRgbInfo     *image_info,
     }
 }
 
+static GdkColormap *
+gdk_screen_get_rgb_colormap (GdkScreen *screen)
+{
+  GdkColormap *cmap;
+  g_return_val_if_fail (GDK_IS_SCREEN (screen), NULL);
+  cmap = g_object_get_data (G_OBJECT (screen), "rgb-colormap"); 
+  if (!cmap)
+    {
+      GdkRgbInfo *image_info = gdk_rgb_create_info (gdk_rgb_choose_visual (screen), NULL);
+      cmap = image_info->cmap;
+      g_object_set_data (G_OBJECT (screen), "rgb-colormap", cmap);
+    }
+
+  return cmap;
+}
+
 static GdkRgbInfo *
 gdk_rgb_get_info_from_drawable (GdkDrawable *drawable)
 {
@@ -3641,58 +3657,6 @@ gdk_rgb_get_colormap (void)
 }
 
 /**
- * gdk_screen_get_rgb_colormap:
- * @screen: a #GdkScreen.
- * 
- * Gets the preferred colormap for rendering image data on @screen.
- * Not a very useful function; historically, GDK could only render RGB
- * image data to one colormap and visual, but in the current version
- * it can render to any colormap and visual. So there's no need to
- * call this function.
- * 
- * Return value: (transfer none): the preferred colormap
- *
- * Since: 2.2
- **/
-GdkColormap *
-gdk_screen_get_rgb_colormap (GdkScreen *screen)
-{
-  GdkColormap *cmap;
-  g_return_val_if_fail (GDK_IS_SCREEN (screen), NULL);
-  cmap = g_object_get_data (G_OBJECT (screen), "rgb-colormap"); 
-  if (!cmap)
-    {
-      GdkRgbInfo *image_info = gdk_rgb_create_info (gdk_rgb_choose_visual (screen), NULL);
-      cmap = image_info->cmap;
-      g_object_set_data (G_OBJECT (screen), "rgb-colormap", cmap);
-    }
-
-  return cmap;
-}
-
-/**
- * gdk_screen_get_rgb_visual:
- * @screen: a #GdkScreen
- * 
- * Gets a "preferred visual" chosen by GdkRGB for rendering image data
- * on @screen. In previous versions of
- * GDK, this was the only visual GdkRGB could use for rendering. In
- * current versions, it's simply the visual GdkRGB would have chosen as 
- * the optimal one in those previous versions. GdkRGB can now render to 
- * drawables with any visual.
- * 
- * Return value: (transfer none): The #GdkVisual chosen by GdkRGB.
- *
- * Since: 2.2
- **/
-GdkVisual *
-gdk_screen_get_rgb_visual (GdkScreen *screen)
-{
-  g_return_val_if_fail (GDK_IS_SCREEN (screen), NULL);
-  return gdk_colormap_get_visual (gdk_screen_get_rgb_colormap (screen));
-}
-
-/**
  * gdk_rgb_get_visual:
  * 
  * Gets a "preferred visual" chosen by GdkRGB for rendering image data
@@ -3707,5 +3671,5 @@ gdk_screen_get_rgb_visual (GdkScreen *screen)
 GdkVisual *
 gdk_rgb_get_visual (void)
 {
-  return gdk_screen_get_rgb_visual (gdk_screen_get_default ());
+  return gdk_colormap_get_visual (gdk_screen_get_rgb_colormap (gdk_screen_get_default ()));
 }

@@ -1017,13 +1017,6 @@ gdk_screen_get_default
 #endif
 
 #if IN_HEADER(__GDK_SCREEN_H__)
-#if IN_FILE(__GDK_RGB_C__)
-gdk_screen_get_rgb_colormap
-gdk_screen_get_rgb_visual
-#endif
-#endif
-
-#if IN_HEADER(__GDK_SCREEN_H__)
 #if IN_FILE(__GDK_VISUAL_X11_C__)
 gdk_screen_get_system_visual
 gdk_screen_list_visuals

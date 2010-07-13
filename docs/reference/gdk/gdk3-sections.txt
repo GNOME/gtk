@@ -202,8 +202,6 @@ gdk_screen_get_default_colormap
 gdk_screen_set_default_colormap
 gdk_screen_get_system_colormap
 gdk_screen_get_system_visual
-gdk_screen_get_rgb_colormap
-gdk_screen_get_rgb_visual
 gdk_screen_get_rgba_colormap
 gdk_screen_get_rgba_visual
 gdk_screen_is_composited
