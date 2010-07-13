@@ -81,16 +81,6 @@ GdkPixbuf *gdk_pixbuf_get_from_surface  (GdkPixbuf       *dest,
 					 int              width,
 					 int              height);
 
-GdkPixbuf *gdk_pixbuf_get_from_image    (GdkPixbuf   *dest,
-                                         GdkImage    *src,
-                                         GdkColormap *cmap,
-                                         int          src_x,
-                                         int          src_y,
-                                         int          dest_x,
-                                         int          dest_y,
-                                         int          width,
-                                         int          height);
-
 G_END_DECLS
 
 #endif /* __GDK_PIXBUF_H__ */
