@@ -71,7 +71,6 @@ static const GDebugKey gdk_debug_keys[] = {
   {"xim",	    GDK_DEBUG_XIM},
   {"nograbs",       GDK_DEBUG_NOGRABS},
   {"colormap",	    GDK_DEBUG_COLORMAP},
-  {"gdkrgb",	    GDK_DEBUG_GDKRGB},
   {"gc",	    GDK_DEBUG_GC},
   {"pixmap",	    GDK_DEBUG_PIXMAP},
   {"image",	    GDK_DEBUG_IMAGE},
@@ -265,9 +264,6 @@ gdk_parse_args (int    *argc,
       g_error_free (error);
     }
   g_option_context_free (option_context);
-
-  if (_gdk_debug_flags && GDK_DEBUG_GDKRGB)
-    gdk_rgb_set_verbose (TRUE);
 
   GDK_NOTE (MISC, g_message ("progname: \"%s\"", g_get_prgname ()));
 }
