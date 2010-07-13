@@ -1201,7 +1201,7 @@ add_option_to_table (GtkPrinterOption *option,
 {
   GtkTable *table;
   GtkWidget *label, *widget;
-  gint row;
+  guint row;
 
   table = GTK_TABLE (user_data);
 
@@ -1211,8 +1211,8 @@ add_option_to_table (GtkPrinterOption *option,
   widget = gtk_printer_option_widget_new (option);
   gtk_widget_show (widget);
 
-  row = table->nrows;
-  gtk_table_resize (table, table->nrows + 1, 2);
+  gtk_table_get_size (table, &row, NULL);
+  gtk_table_resize (table, row + 1, 2);
 
   if (gtk_printer_option_widget_has_external_label (GTK_PRINTER_OPTION_WIDGET (widget)))
     {
@@ -1239,10 +1239,14 @@ setup_page_table (GtkPrinterOptionSet *options,
                   GtkWidget           *table,
                   GtkWidget           *page)
 {
+  guint nrows;
+
   gtk_printer_option_set_foreach_in_group (options, group,
                                            add_option_to_table,
                                            table);
-  if (GTK_TABLE (table)->nrows == 1)
+
+  gtk_table_get_size (GTK_TABLE (table), &nrows, NULL);
+  if (nrows == 1)
     gtk_widget_hide (page);
   else
     gtk_widget_show (page);
@@ -1335,6 +1339,7 @@ update_dialog_from_settings (GtkPrintUnixDialog *dialog)
   gchar *group;
   GtkWidget *table, *frame;
   gboolean has_advanced, has_job;
+  guint nrows;
 
   if (priv->current_printer == NULL)
     {
@@ -1413,7 +1418,9 @@ update_dialog_from_settings (GtkPrintUnixDialog *dialog)
                                                group,
                                                add_option_to_table,
                                                table);
-      if (GTK_TABLE (table)->nrows == 1)
+
+      gtk_table_get_size (GTK_TABLE (table), &nrows, NULL);
+      if (nrows == 1)
         gtk_widget_destroy (table);
       else
         {
