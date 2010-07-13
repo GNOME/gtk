@@ -101,15 +101,6 @@ static void   gdk_pixmap_real_get_size  (GdkDrawable     *drawable,
                                          gint            *width,
                                          gint            *height);
 
-static GdkImage* gdk_pixmap_copy_to_image (GdkDrawable *drawable,
-					   GdkImage    *image,
-					   gint         src_x,
-					   gint         src_y,
-					   gint         dest_x,
-					   gint         dest_y,
-					   gint         width,
-					   gint         height);
-
 static cairo_surface_t *gdk_pixmap_ref_cairo_surface (GdkDrawable *drawable);
 static cairo_surface_t *gdk_pixmap_create_cairo_surface (GdkDrawable *drawable,
 							 int width,
@@ -179,7 +170,6 @@ gdk_pixmap_class_init (GdkPixmapObjectClass *klass)
   drawable_class->set_colormap = gdk_pixmap_real_set_colormap;
   drawable_class->get_colormap = gdk_pixmap_real_get_colormap;
   drawable_class->get_visual = gdk_pixmap_real_get_visual;
-  drawable_class->_copy_to_image = gdk_pixmap_copy_to_image;
   drawable_class->ref_cairo_surface = gdk_pixmap_ref_cairo_surface;
   drawable_class->create_cairo_surface = gdk_pixmap_create_cairo_surface;
 }
@@ -450,24 +440,6 @@ gdk_pixmap_real_get_colormap (GdkDrawable *drawable)
   g_return_val_if_fail (GDK_IS_PIXMAP (drawable), NULL);
   
   return gdk_drawable_get_colormap (((GdkPixmapObject*)drawable)->impl);
-}
-
-static GdkImage*
-gdk_pixmap_copy_to_image (GdkDrawable     *drawable,
-			  GdkImage        *image,
-			  gint             src_x,
-			  gint             src_y,
-			  gint             dest_x,
-			  gint             dest_y,
-			  gint             width,
-			  gint             height)
-{
-  g_return_val_if_fail (GDK_IS_PIXMAP (drawable), NULL);
-  
-  return gdk_drawable_copy_to_image (((GdkPixmapObject*)drawable)->impl,
-				     image,
-				     src_x, src_y, dest_x, dest_y,
-				     width, height);
 }
 
 static cairo_surface_t *

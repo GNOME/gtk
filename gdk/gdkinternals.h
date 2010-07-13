@@ -333,15 +333,6 @@ GdkImage *_gdk_image_get_scratch (GdkScreen *screen,
 				  gint	    *x,
 				  gint	    *y);
 
-GdkImage *_gdk_drawable_copy_to_image (GdkDrawable  *drawable,
-				       GdkImage     *image,
-				       gint          src_x,
-				       gint          src_y,
-				       gint          dest_x,
-				       gint          dest_y,
-				       gint          width,
-				       gint          height);
-
 cairo_surface_t *_gdk_drawable_ref_cairo_surface (GdkDrawable *drawable);
 
 GdkDrawable *_gdk_drawable_get_source_drawable (GdkDrawable *drawable);

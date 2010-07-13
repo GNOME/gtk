@@ -1003,7 +1003,6 @@ gdk_drawable_impl_directfb_class_init (GdkDrawableImplDirectFBClass *klass)
 
   drawable_class->get_size       = gdk_directfb_get_size;
 
-  drawable_class->_copy_to_image = _gdk_directfb_copy_to_image;
         drawable_class->get_screen = gdk_directfb_get_screen;
 
 

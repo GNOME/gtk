@@ -203,39 +203,6 @@ _gdk_image_new_for_depth (GdkScreen    *screen,
   return image;
 }
 
-GdkImage*
-_gdk_win32_copy_to_image (GdkDrawable    *drawable,
-			  GdkImage       *image,
-			  gint            src_x,
-			  gint            src_y,
-			  gint            dest_x,
-			  gint            dest_y,
-			  gint            width,
-			  gint            height)
-{
-  GdkGC *gc;
-  GdkScreen *screen = gdk_drawable_get_screen (drawable);
-  
-  g_return_val_if_fail (GDK_IS_DRAWABLE_IMPL_WIN32 (drawable), NULL);
-  g_return_val_if_fail (image != NULL || (dest_x == 0 && dest_y == 0), NULL);
-
-  GDK_NOTE (IMAGE, g_print ("_gdk_win32_copy_to_image: %p\n",
-			    GDK_DRAWABLE_HANDLE (drawable)));
-
-  if (!image)
-    image = _gdk_image_new_for_depth (screen, GDK_IMAGE_FASTEST, NULL, width, height,
-				      gdk_drawable_get_depth (drawable));
-
-  gc = gdk_gc_new ((GdkDrawable *) image->windowing_data);
-  _gdk_win32_blit
-    (FALSE,
-     GDK_DRAWABLE_IMPL_WIN32 (GDK_PIXMAP_OBJECT (image->windowing_data)->impl),
-     gc, drawable, src_x, src_y, dest_x, dest_y, width, height);
-  g_object_unref (gc);
-
-  return image;
-}
-
 guint32
 gdk_image_get_pixel (GdkImage *image,
 		     gint      x,

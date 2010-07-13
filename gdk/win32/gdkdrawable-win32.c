@@ -137,8 +137,6 @@ _gdk_drawable_impl_win32_class_init (GdkDrawableImplWin32Class *klass)
   drawable_class->get_depth = gdk_win32_get_depth;
   drawable_class->get_screen = gdk_win32_get_screen;
   drawable_class->get_visual = gdk_win32_get_visual;
-
-  drawable_class->_copy_to_image = _gdk_win32_copy_to_image;
 }
 
 static void

@@ -292,15 +292,6 @@ static void gdk_window_draw_trapezoids (GdkDrawable   *drawable,
 					GdkTrapezoid  *trapezoids,
 					gint           n_trapezoids);
 
-static GdkImage* gdk_window_copy_to_image (GdkDrawable *drawable,
-					   GdkImage    *image,
-					   gint         src_x,
-					   gint         src_y,
-					   gint         dest_x,
-					   gint         dest_y,
-					   gint         width,
-					   gint         height);
-
 static cairo_surface_t *gdk_window_ref_cairo_surface (GdkDrawable *drawable);
 static cairo_surface_t *gdk_window_create_cairo_surface (GdkDrawable *drawable,
 							 int width,
@@ -494,7 +485,6 @@ gdk_window_class_init (GdkWindowObjectClass *klass)
   drawable_class->set_colormap = gdk_window_real_set_colormap;
   drawable_class->get_colormap = gdk_window_real_get_colormap;
   drawable_class->get_visual = gdk_window_real_get_visual;
-  drawable_class->_copy_to_image = gdk_window_copy_to_image;
   drawable_class->ref_cairo_surface = gdk_window_ref_cairo_surface;
   drawable_class->create_cairo_surface = gdk_window_create_cairo_surface;
   drawable_class->set_cairo_clip = gdk_window_set_cairo_clip;
@@ -4909,40 +4899,6 @@ gdk_window_real_get_colormap (GdkDrawable *drawable)
     return NULL;
 
   return gdk_drawable_get_colormap (((GdkWindowObject*)drawable)->impl);
-}
-
-static GdkImage*
-gdk_window_copy_to_image (GdkDrawable     *drawable,
-			  GdkImage        *image,
-			  gint             src_x,
-			  gint             src_y,
-			  gint             dest_x,
-			  gint             dest_y,
-			  gint             width,
-			  gint             height)
-{
-  GdkWindowObject *private = (GdkWindowObject *) drawable;
-  gint x_offset, y_offset;
-
-  g_return_val_if_fail (GDK_IS_WINDOW (drawable), NULL);
-
-  if (GDK_WINDOW_DESTROYED (drawable))
-    return NULL;
-
-  /* If we're here, a composite image was not necessary, so
-   * we can ignore the paint stack.
-   */
-
-  /* TODO: Is this right? */
-  x_offset = 0;
-  y_offset = 0;
-
-  return gdk_drawable_copy_to_image (private->impl,
-				     image,
-				     src_x - x_offset,
-				     src_y - y_offset,
-				     dest_x, dest_y,
-				     width, height);
 }
 
 static void

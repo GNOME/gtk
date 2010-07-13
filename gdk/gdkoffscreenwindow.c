@@ -151,26 +151,6 @@ gdk_offscreen_window_create_gc (GdkDrawable     *drawable,
   return gdk_gc_new_with_values (offscreen->pixmap, values, values_mask);
 }
 
-static GdkImage*
-gdk_offscreen_window_copy_to_image (GdkDrawable    *drawable,
-				    GdkImage       *image,
-				    gint            src_x,
-				    gint            src_y,
-				    gint            dest_x,
-				    gint            dest_y,
-				    gint            width,
-				    gint            height)
-{
-  GdkOffscreenWindow *offscreen = GDK_OFFSCREEN_WINDOW (drawable);
-
-  return gdk_drawable_copy_to_image (offscreen->pixmap,
-				     image,
-				     src_x,
-				     src_y,
-				     dest_x, dest_y,
-				     width, height);
-}
-
 static cairo_surface_t *
 gdk_offscreen_window_ref_cairo_surface (GdkDrawable *drawable)
 {
@@ -1119,7 +1099,6 @@ gdk_offscreen_window_class_init (GdkOffscreenWindowClass *klass)
   object_class->finalize = gdk_offscreen_window_finalize;
 
   drawable_class->create_gc = gdk_offscreen_window_create_gc;
-  drawable_class->_copy_to_image = gdk_offscreen_window_copy_to_image;
   drawable_class->ref_cairo_surface = gdk_offscreen_window_ref_cairo_surface;
   drawable_class->set_colormap = gdk_offscreen_window_set_colormap;
   drawable_class->get_colormap = gdk_offscreen_window_get_colormap;

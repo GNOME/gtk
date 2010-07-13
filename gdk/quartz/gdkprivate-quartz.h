@@ -180,16 +180,6 @@ gboolean   _gdk_quartz_event_loop_check_pending (void);
 NSEvent *  _gdk_quartz_event_loop_get_pending   (void);
 void       _gdk_quartz_event_loop_release_event (NSEvent *event);
 
-/* FIXME: image */
-GdkImage *_gdk_quartz_image_copy_to_image (GdkDrawable *drawable,
-					    GdkImage    *image,
-					    gint         src_x,
-					    gint         src_y,
-					    gint         dest_x,
-					    gint         dest_y,
-					    gint         width,
-					    gint         height);
-
 /* Keys */
 GdkEventType _gdk_quartz_keys_event_type  (NSEvent   *event);
 gboolean     _gdk_quartz_keys_is_modifier (guint      keycode);

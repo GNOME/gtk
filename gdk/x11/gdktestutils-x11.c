@@ -37,11 +37,16 @@
 void
 gdk_test_render_sync (GdkWindow *window)
 {
-  static GdkImage *p1image = NULL;
+  Display *display = gdk_x11_drawable_get_xdisplay (window);
+  XImage *ximage;
+
   /* syncronize to X drawing queue, see:
    * http://mail.gnome.org/archives/gtk-devel-list/2006-October/msg00103.html
    */
-  p1image = gdk_drawable_copy_to_image (window, p1image, 0, 0, 0, 0, 1, 1);
+  ximage = XGetImage (display, DefaultRootWindow (display),
+	     	      0, 0, 1, 1, AllPlanes, ZPixmap);
+  if (ximage != NULL)
+    XDestroyImage (ximage);
 }
 
 /**

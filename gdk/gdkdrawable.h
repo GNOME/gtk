@@ -134,15 +134,6 @@ struct _GdkDrawableClass
                                           gint        *composite_x_offset,
                                           gint        *composite_y_offset);
 
-  GdkImage*    (*_copy_to_image) (GdkDrawable    *drawable,
-				  GdkImage       *image,
-				  gint            src_x,
-				  gint            src_y,
-				  gint            dest_x,
-				  gint            dest_y,
-				  gint            width,
-				  gint            height);
-  
   void (*draw_glyphs_transformed) (GdkDrawable      *drawable,
 				   GdkGC	    *gc,
 				   PangoMatrix      *matrix,
@@ -307,15 +298,6 @@ void gdk_draw_trapezoids         (GdkDrawable        *drawable,
 				  const GdkTrapezoid *trapezoids,
 				  gint                n_trapezoids);
 
-
-GdkImage *gdk_drawable_copy_to_image (GdkDrawable  *drawable,
-				      GdkImage     *image,
-				      gint          src_x,
-				      gint          src_y,
-				      gint          dest_x,
-				      gint          dest_y,
-				      gint          width,
-				      gint          height);
 
 cairo_region_t *gdk_drawable_get_clip_region    (GdkDrawable *drawable);
 cairo_region_t *gdk_drawable_get_visible_region (GdkDrawable *drawable);

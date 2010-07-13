@@ -354,19 +354,3 @@ bottom edges.
 @height: 
 
 
-<!-- ##### FUNCTION gdk_drawable_copy_to_image ##### -->
-<para>
-
-</para>
-
-@drawable: 
-@image: 
-@src_x: 
-@src_y: 
-@dest_x: 
-@dest_y: 
-@width: 
-@height: 
-@Returns: 
-
-

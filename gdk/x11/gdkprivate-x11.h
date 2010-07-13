@@ -106,14 +106,6 @@ GdkGC *_gdk_x11_gc_new                  (GdkDrawable     *drawable,
 					 GdkGCValues     *values,
 					 GdkGCValuesMask  values_mask);
 
-GdkImage *_gdk_x11_copy_to_image       (GdkDrawable *drawable,
-					GdkImage    *image,
-					gint         src_x,
-					gint         src_y,
-					gint         dest_x,
-					gint         dest_y,
-					gint         width,
-					gint         height);
 Pixmap   _gdk_x11_image_get_shm_pixmap (GdkImage    *image);
 
 /* Routines from gdkgeometry-x11.c */

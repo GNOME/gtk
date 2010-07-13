@@ -229,15 +229,6 @@ GdkGC *   _gdk_directfb_gc_new      (GdkDrawable     *drawable,
                                      GdkGCValues     *values,
                                      GdkGCValuesMask  values_mask);
 
-GdkImage* _gdk_directfb_copy_to_image (GdkDrawable  *drawable,
-                                       GdkImage     *image,
-                                       gint          src_x,
-                                       gint          src_y,
-                                       gint          dest_x,
-                                       gint          dest_y,
-                                       gint          width,
-                                       gint          height);
-
 void       gdk_directfb_event_windows_add    (GdkWindow *window);
 void       gdk_directfb_event_windows_remove (GdkWindow *window);
 

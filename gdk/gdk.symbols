@@ -540,7 +540,6 @@ gdk_drag_get_protocol
 
 #if IN_HEADER(__GDK_DRAWABLE_H__)
 #if IN_FILE(__GDK_DRAW_C__)
-gdk_drawable_copy_to_image
 gdk_drawable_get_clip_region
 gdk_drawable_get_colormap
 gdk_drawable_get_depth

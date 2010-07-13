@@ -544,8 +544,6 @@ gdk_drawable_impl_quartz_class_init (GdkDrawableImplQuartzClass *klass)
   drawable_class->get_depth = gdk_quartz_get_depth;
   drawable_class->get_screen = gdk_quartz_get_screen;
   drawable_class->get_visual = gdk_quartz_get_visual;
-
-  drawable_class->_copy_to_image = _gdk_quartz_image_copy_to_image;
 }
 
 GType
