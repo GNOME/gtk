@@ -111,8 +111,6 @@ main (int argc, char **argv)
 
 	gtk_init (&argc, &argv);
 
-	gtk_widget_set_default_colormap (gdk_rgb_get_colormap ());
-
 	root = gdk_get_default_root_window ();
 	pixbuf = gdk_pixbuf_get_from_drawable (NULL, root, NULL,
 					       0, 0, 0, 0, 150, 160);
