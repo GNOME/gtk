@@ -2070,7 +2070,7 @@ take_snapshot (GtkWidget *button,
   GdkGC *black_gc;
   GdkColor color = { 0, 30000, 0, 0 };
   GdkRectangle target;
-  GdkImage *shot;
+  GdkPixbuf *shot;
   
   /* Do some begin_paint_rect on some random rects, draw some
    * distinctive stuff into those rects, then take the snapshot.
@@ -2197,12 +2197,13 @@ take_snapshot (GtkWidget *button,
   target.width = width_fraction * 2;
   target.height = height_fraction * 2;  
 
-  shot = gdk_drawable_get_image (gid->src->window,
-                                 target.x, target.y,
-                                 target.width, target.height);
-
-  gtk_image_set_from_image (GTK_IMAGE (gid->snap),
-                            shot, NULL);
+  shot = gdk_pixbuf_get_from_drawable (NULL,
+                                       gid->src->window,
+                                       NULL,
+                                       target.x, target.y,
+                                       0, 0,
+                                       target.width, target.height);
+  gtk_image_set_from_pixbuf (GTK_IMAGE (gid->snap), shot);
 
   g_object_unref (shot);
   
