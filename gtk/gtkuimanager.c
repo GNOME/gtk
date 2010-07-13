@@ -87,7 +87,6 @@ struct _Node {
   guint always_show_image     : 1; /* used for menu items */
 };
 
-#define GTK_UI_MANAGER_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), GTK_TYPE_UI_MANAGER, GtkUIManagerPrivate))
 
 struct _GtkUIManagerPrivate 
 {
@@ -386,7 +385,9 @@ gtk_ui_manager_init (GtkUIManager *self)
   guint merge_id;
   GNode *node;
 
-  self->private_data = GTK_UI_MANAGER_GET_PRIVATE (self);
+  self->private_data = G_TYPE_INSTANCE_GET_PRIVATE (self,
+                                                    GTK_TYPE_UI_MANAGER,
+                                                    GtkUIManagerPrivate);
 
   self->private_data->accel_group = gtk_accel_group_new ();
 
