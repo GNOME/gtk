@@ -997,7 +997,10 @@ tag_exists (GMarkupParseContext *context,
 	    ParseInfo           *info,
 	    GError             **error)
 {
+  GtkTextTagTable *tag_table;
   const gchar *real_name;
+
+  tag_table = gtk_text_buffer_get_tag_table (info->buffer);
 
   if (info->create_tags)
     {
@@ -1010,11 +1013,11 @@ tag_exists (GMarkupParseContext *context,
       real_name = g_hash_table_lookup (info->substitutions, name);
 
       if (real_name)
-	return gtk_text_tag_table_lookup (info->buffer->tag_table, real_name);
+	return gtk_text_tag_table_lookup (tag_table, real_name);
 
       /* Next, try the list of defined tags */
       if (g_hash_table_lookup (info->defined_tags, name) != NULL)
-	return gtk_text_tag_table_lookup (info->buffer->tag_table, name);
+	return gtk_text_tag_table_lookup (tag_table, name);
 
       set_error (error, context,
 		 G_MARKUP_ERROR, G_MARKUP_ERROR_PARSE,
@@ -1034,7 +1037,7 @@ tag_exists (GMarkupParseContext *context,
 	  return NULL;
 	}
 
-      tag = gtk_text_tag_table_lookup (info->buffer->tag_table, name);
+      tag = gtk_text_tag_table_lookup (tag_table, name);
 
       if (tag)
 	return tag;
@@ -1225,6 +1228,7 @@ static gchar *
 get_tag_name (ParseInfo   *info,
 	      const gchar *tag_name)
 {
+  GtkTextTagTable *tag_table;
   gchar *name;
   gint i;
 
@@ -1234,8 +1238,9 @@ get_tag_name (ParseInfo   *info,
     return name;
 
   i = 0;
+  tag_table = gtk_text_buffer_get_tag_table (info->buffer);
 
-  while (gtk_text_tag_table_lookup (info->buffer->tag_table, name) != NULL)
+  while (gtk_text_tag_table_lookup (tag_table, name) != NULL)
     {
       g_free (name);
       name = g_strdup_printf ("%s-%d", tag_name, ++i);
@@ -1454,7 +1459,8 @@ end_element_handler (GMarkupParseContext  *context,
 	  TextTagPrio *prio = list->data;
 
 	  if (info->create_tags)
-	    gtk_text_tag_table_add (info->buffer->tag_table, prio->tag);
+	    gtk_text_tag_table_add (gtk_text_buffer_get_tag_table (info->buffer),
+	                            prio->tag);
 
 	  g_object_unref (prio->tag);
 	  prio->tag = NULL;
