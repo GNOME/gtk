@@ -1637,33 +1637,39 @@ grab_color_at_pointer (GdkScreen *screen,
                        gint       y_root,
                        gpointer   data)
 {
-  GdkImage *image;
-  guint32 pixel;
+  GdkPixbuf *pixbuf;
+  guchar *pixels;
   GtkColorSelection *colorsel = data;
   ColorSelectionPrivate *priv;
   GdkColor color;
-  GdkColormap *colormap = gdk_screen_get_system_colormap (screen);
   GdkWindow *root_window = gdk_screen_get_root_window (screen);
   
   priv = colorsel->private_data;
   
-  image = gdk_drawable_get_image (root_window, x_root, y_root, 1, 1);
-  if (!image)
+  pixbuf = gdk_pixbuf_get_from_drawable (NULL, root_window, NULL,
+                                         x_root, y_root,
+                                         0, 0,
+                                         1, 1);
+  if (!pixbuf)
     {
       gint x, y;
       GdkDisplay *display = gdk_screen_get_display (screen);
       GdkWindow *window = gdk_display_get_window_at_device_position (display, device, &x, &y);
       if (!window)
 	return;
-      image = gdk_drawable_get_image (window, x, y, 1, 1);
-      if (!image)
+      pixbuf = gdk_pixbuf_get_from_drawable (NULL, window, NULL,
+                                             x, y,
+                                             0, 0,
+                                             1, 1);
+      if (!pixbuf)
 	return;
     }
-  pixel = gdk_image_get_pixel (image, 0, 0);
-  g_object_unref (image);
+  pixels = gdk_pixbuf_get_pixels (pixbuf);
+  color.red = pixels[0] * 0x101;
+  color.green = pixels[1] * 0x101;
+  color.blue = pixels[2] * 0x101;
+  g_object_unref (pixbuf);
 
-  gdk_colormap_query_color (colormap, pixel, &color);
-  
   priv->color[COLORSEL_RED] = SCALE (color.red);
   priv->color[COLORSEL_GREEN] = SCALE (color.green);
   priv->color[COLORSEL_BLUE] = SCALE (color.blue);
