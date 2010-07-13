@@ -9433,7 +9433,7 @@ set_page_image (GtkNotebook *notebook, gint page_num, GdkPixbuf *pixbuf)
 }
 
 static void
-page_switch (GtkWidget *widget, GtkNotebookPage *page, gint page_num)
+page_switch (GtkWidget *widget, gpointer *page, gint page_num)
 {
   GtkNotebook *notebook = GTK_NOTEBOOK (widget);
   gint old_page_num = gtk_notebook_get_current_page (notebook);
