@@ -46,17 +46,15 @@ G_BEGIN_DECLS
 
 
 typedef struct _GtkAlignment       GtkAlignment;
+typedef struct _GtkAlignmentPriv   GtkAlignmentPriv;
 typedef struct _GtkAlignmentClass  GtkAlignmentClass;
-typedef struct _GtkAlignmentPrivate GtkAlignmentPrivate;
 
 struct _GtkAlignment
 {
   GtkBin bin;
 
-  gfloat GSEAL (xalign);
-  gfloat GSEAL (yalign);
-  gfloat GSEAL (xscale);
-  gfloat GSEAL (yscale);
+  /* <private> */
+  GtkAlignmentPriv *priv;
 };
 
 struct _GtkAlignmentClass
