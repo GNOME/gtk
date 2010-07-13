@@ -321,11 +321,13 @@ gtk_radio_action_activate (GtkAction *action)
   GtkToggleAction *toggle_action;
   GtkToggleAction *tmp_action;
   GSList *tmp_list;
+  gboolean active;
 
   radio_action = GTK_RADIO_ACTION (action);
   toggle_action = GTK_TOGGLE_ACTION (action);
 
-  if (toggle_action->private_data->active)
+  active = gtk_toggle_action_get_active (toggle_action);
+  if (active)
     {
       tmp_list = radio_action->private_data->group;
 
@@ -334,9 +336,10 @@ gtk_radio_action_activate (GtkAction *action)
 	  tmp_action = tmp_list->data;
 	  tmp_list = tmp_list->next;
 
-	  if (tmp_action->private_data->active && (tmp_action != toggle_action)) 
+	  if (gtk_toggle_action_get_active (tmp_action) &&
+              (tmp_action != toggle_action))
 	    {
-	      toggle_action->private_data->active = !toggle_action->private_data->active;
+              gtk_toggle_action_set_active (toggle_action, !active);
 
 	      break;
 	    }
@@ -345,7 +348,7 @@ gtk_radio_action_activate (GtkAction *action)
     }
   else
     {
-      toggle_action->private_data->active = !toggle_action->private_data->active;
+      gtk_toggle_action_set_active (toggle_action, !active);
       g_object_notify (G_OBJECT (action), "active");
 
       tmp_list = radio_action->private_data->group;
@@ -354,7 +357,8 @@ gtk_radio_action_activate (GtkAction *action)
 	  tmp_action = tmp_list->data;
 	  tmp_list = tmp_list->next;
 
-	  if (tmp_action->private_data->active && (tmp_action != toggle_action))
+          if (gtk_toggle_action_get_active (tmp_action) &&
+              (tmp_action != toggle_action))
 	    {
 	      _gtk_action_emit_activate (GTK_ACTION (tmp_action));
 	      break;
@@ -546,7 +550,7 @@ gtk_radio_action_get_current_value (GtkRadioAction *action)
 	{
 	  GtkToggleAction *toggle_action = slist->data;
 
-	  if (toggle_action->private_data->active)
+	  if (gtk_toggle_action_get_active (toggle_action))
 	    return GTK_RADIO_ACTION (toggle_action)->private_data->value;
 	}
     }
