@@ -238,6 +238,15 @@ Returns: %PANGO_DIRECTION_LTR or %PANGO_DIRECTION_RTL.
 @Returns: 
 
 
+<!-- ##### FUNCTION gdk_keymap_get_num_lock_state ##### -->
+<para>
+
+</para>
+
+@keymap: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gdk_keymap_add_virtual_modifiers ##### -->
 <para>
 
