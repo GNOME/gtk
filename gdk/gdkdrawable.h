@@ -33,7 +33,6 @@
 
 #include <gdk/gdktypes.h>
 #include <gdk/gdkgc.h>
-#include <gdk/gdkrgb.h>
 #include <gdk-pixbuf/gdk-pixbuf.h>
 
 #include <cairo.h>

@@ -25,7 +25,6 @@
 #include "gdkgc.h"
 #include "gdkinternals.h"
 #include "gdkpango.h"
-#include "gdkrgb.h"
 #include "gdkprivate.h"
 #include "gdkscreen.h"
 #include "gdkintl.h"

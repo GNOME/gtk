@@ -33,7 +33,6 @@
 
 #include <cairo.h>
 #include <gdk/gdktypes.h>
-#include <gdk/gdkrgb.h>
 #include <gdk-pixbuf/gdk-pixbuf.h>
 
 G_BEGIN_DECLS
