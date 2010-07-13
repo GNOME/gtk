@@ -53,6 +53,7 @@ typedef enum
 } GtkNotebookTab;
 
 typedef struct _GtkNotebook       GtkNotebook;
+typedef struct _GtkNotebookPriv   GtkNotebookPriv;
 typedef struct _GtkNotebookClass  GtkNotebookClass;
 #if !defined (GTK_DISABLE_DEPRECATED) || defined (GTK_COMPILATION)
 typedef struct _GtkNotebookPage   GtkNotebookPage;
@@ -61,41 +62,9 @@ typedef struct _GtkNotebookPage   GtkNotebookPage;
 struct _GtkNotebook
 {
   GtkContainer container;
-  
-#if !defined (GTK_DISABLE_DEPRECATED) || defined (GTK_COMPILATION)
-  GtkNotebookPage *GSEAL (cur_page);
-#else
-  gpointer GSEAL (cur_page);
-#endif
-  GList *GSEAL (children);
-  GList *GSEAL (first_tab);		/* The first tab visible (for scrolling notebooks) */
-  GList *GSEAL (focus_tab);
-  
-  GtkWidget *GSEAL (menu);
-  GdkWindow *GSEAL (event_window);
-  
-  guint32 GSEAL (timer);
-  
-  guint16 GSEAL (tab_hborder);
-  guint16 GSEAL (tab_vborder);
-  
-  guint GSEAL (show_tabs)          : 1;
-  guint GSEAL (homogeneous)        : 1;
-  guint GSEAL (show_border)        : 1;
-  guint GSEAL (tab_pos)            : 2;
-  guint GSEAL (scrollable)         : 1;
-  guint GSEAL (in_child)           : 3;
-  guint GSEAL (click_child)        : 3;
-  guint GSEAL (button)             : 2;
-  guint GSEAL (need_timer)         : 1;
-  guint GSEAL (child_has_focus)    : 1;
-  guint GSEAL (have_visible_child) : 1;
-  guint GSEAL (focus_out)          : 1;	/* Flag used by ::move-focus-out implementation */
 
-  guint GSEAL (has_before_previous) : 1;
-  guint GSEAL (has_before_next)     : 1;
-  guint GSEAL (has_after_previous)  : 1;
-  guint GSEAL (has_after_next)      : 1;
+  /* <private> */
+  GtkNotebookPriv *priv;
 };
 
 struct _GtkNotebookClass
