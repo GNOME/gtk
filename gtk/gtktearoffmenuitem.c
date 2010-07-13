@@ -34,6 +34,11 @@
 #define TEAR_LENGTH 5
 #define BORDER_SPACING  3
 
+struct _GtkTearoffMenuItemPriv
+{
+  guint torn_off : 1;
+};
+
 static void gtk_tearoff_menu_item_size_request (GtkWidget             *widget,
 				                GtkRequisition        *requisition);
 static gint gtk_tearoff_menu_item_expose     (GtkWidget             *widget,
@@ -64,12 +69,21 @@ gtk_tearoff_menu_item_class_init (GtkTearoffMenuItemClass *klass)
   widget_class->parent_set = gtk_tearoff_menu_item_parent_set;
 
   menu_item_class->activate = gtk_tearoff_menu_item_activate;
+
+  g_type_class_add_private (klass, sizeof (GtkTearoffMenuItemPriv));
 }
 
 static void
 gtk_tearoff_menu_item_init (GtkTearoffMenuItem *tearoff_menu_item)
 {
-  tearoff_menu_item->torn_off = FALSE;
+  GtkTearoffMenuItemPriv *priv;
+
+  tearoff_menu_item->priv = G_TYPE_INSTANCE_GET_PRIVATE (tearoff_menu_item,
+                                                         GTK_TYPE_TEAROFF_MENU_ITEM,
+                                                         GtkTearoffMenuItemPriv);
+  priv = tearoff_menu_item->priv;
+
+  priv->torn_off = FALSE;
 }
 
 static void
@@ -227,8 +241,9 @@ tearoff_state_changed (GtkMenu            *menu,
 		       gpointer            data)
 {
   GtkTearoffMenuItem *tearoff_menu_item = GTK_TEAROFF_MENU_ITEM (data);
+  GtkTearoffMenuItemPriv *priv = tearoff_menu_item->priv;
 
-  tearoff_menu_item->torn_off = gtk_menu_get_tearoff_state (menu);
+  priv->torn_off = gtk_menu_get_tearoff_state (menu);
 }
 
 static void
@@ -236,6 +251,7 @@ gtk_tearoff_menu_item_parent_set (GtkWidget *widget,
 				  GtkWidget *previous)
 {
   GtkTearoffMenuItem *tearoff_menu_item = GTK_TEAROFF_MENU_ITEM (widget);
+  GtkTearoffMenuItemPriv *priv = tearoff_menu_item->priv;
   GtkMenu *menu = GTK_IS_MENU (widget->parent) ? GTK_MENU (widget->parent) : NULL;
 
   if (previous)
@@ -245,7 +261,7 @@ gtk_tearoff_menu_item_parent_set (GtkWidget *widget,
   
   if (menu)
     {
-      tearoff_menu_item->torn_off = gtk_menu_get_tearoff_state (menu);
+      priv->torn_off = gtk_menu_get_tearoff_state (menu);
       g_signal_connect (menu, "notify::tearoff-state", 
 			G_CALLBACK (tearoff_state_changed), 
 			tearoff_menu_item);

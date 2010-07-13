@@ -46,13 +46,15 @@ G_BEGIN_DECLS
 
 
 typedef struct _GtkTearoffMenuItem       GtkTearoffMenuItem;
+typedef struct _GtkTearoffMenuItemPriv   GtkTearoffMenuItemPriv;
 typedef struct _GtkTearoffMenuItemClass  GtkTearoffMenuItemClass;
 
 struct _GtkTearoffMenuItem
 {
   GtkMenuItem menu_item;
 
-  guint GSEAL (torn_off) : 1;
+  /* <private> */
+  GtkTearoffMenuItemPriv *priv;
 };
 
 struct _GtkTearoffMenuItemClass
