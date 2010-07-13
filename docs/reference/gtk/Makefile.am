@@ -78,7 +78,6 @@ IGNORE_HFILES=				\
 	gtktexttypes.h			\
 	gtktextutil.h			\
 	gtkthemes.h			\
-	gtktoggleactionprivate.h	\
 	gtktrayicon.h			\
 	gtktreedatalist.h		\
 	gtktreeprivate.h		\

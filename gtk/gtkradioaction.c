@@ -32,7 +32,6 @@
 
 #include "gtkradioaction.h"
 #include "gtkradiomenuitem.h"
-#include "gtktoggleactionprivate.h"
 #include "gtktoggletoolbutton.h"
 #include "gtkintl.h"
 #include "gtkprivate.h"

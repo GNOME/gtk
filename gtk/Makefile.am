@@ -392,7 +392,6 @@ gtk_private_h_sources =		\
 	gtktexttypes.h		\
 	gtktextutil.h		\
 	gtkthemes.h		\
-	gtktoggleactionprivate.h\
 	gtktoolpaletteprivate.h	\
 	gtktreedatalist.h	\
 	gtktreeprivate.h	\
