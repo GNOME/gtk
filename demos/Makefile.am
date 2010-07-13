@@ -28,32 +28,18 @@ noinst_PROGRAMS = 		\
 	testpixbuf-scale 	\
 	pixbuf-demo
 
-# Need to build test-inline-pixbufs.h for testpixbuf
-noinst_PROGRAMS += testpixbuf
-BUILT_SOURCES = test-inline-pixbufs.h
-
-test-inline-pixbufs.h: apple-red.png gnome-foot.png
-	$(GDK_PIXBUF_CSOURCE) --raw --build-list	\
-	        apple_red  $(srcdir)/apple-red.png	\
-                gnome_foot $(srcdir)/gnome-foot.png	\
-        > test-inline-pixbufs.h				\
-	|| (rm -f test-inline-pixbufs.h && false)
-
-testpixbuf_DEPENDENCIES = $(DEPS)
 testpixbuf_save_DEPENDENCIES = $(DEPS)
 testpixbuf_color_DEPENDENCIES = $(DEPS)
 testpixbuf_scale_DEPENDENCIES = $(DEPS)
 testanimation_DEPENDENCIES = $(DEPS)
 pixbuf_demo_DEPENDENCIES = $(DEPS)
 
-testpixbuf_LDADD = $(LDADDS)
 testpixbuf_save_LDADD = $(LDADDS)
 testpixbuf_color_LDADD = $(LDADDS)
 testpixbuf_scale_LDADD = $(LDADDS)
 testanimation_LDADD = $(LDADDS)
 pixbuf_demo_LDADD = $(LDADDS)
 
-testpixbuf_SOURCES = testpixbuf.c pixbuf-init.c
 testpixbuf_save_SOURCES = testpixbuf-save.c
 testpixbuf_color_SOURCES = testpixbuf-color.c
 testpixbuf_scale_SOURCES = testpixbuf-scale.c pixbuf-init.c
@@ -70,7 +56,5 @@ EXTRA_DIST +=			\
 	gnome-gmush.png		\
 	gnome-gsame.png		\
 	gnu-keys.png
-
-DISTCLEANFILES = test-inline-pixbufs.h
 
 -include $(top_srcdir)/git.mk
