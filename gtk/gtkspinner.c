@@ -326,7 +326,7 @@ gtk_spinner_screen_changed (GtkWidget* widget, GdkScreen* old_screen)
 
   if (!colormap)
     {
-      colormap = gdk_screen_get_rgb_colormap (new_screen);
+      colormap = gdk_screen_get_default_colormap (new_screen);
     }
 
   gtk_widget_set_colormap (widget, colormap);
