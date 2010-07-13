@@ -150,7 +150,7 @@ gdk_pixbuf_render_threshold_alpha (GdkPixbuf *pixbuf,
  * given drawables should use gdk_draw_pixbuf() and gdk_pixbuf_render_threshold_alpha().
  *
  * The pixmap that is created is created for the colormap returned
- * by gdk_rgb_get_colormap(). You normally will want to instead use
+ * by gdk_colormap_get_system(). You normally will want to instead use
  * the actual colormap for a widget, and use
  * gdk_pixbuf_render_pixmap_and_mask_for_colormap().
  *
@@ -164,7 +164,7 @@ gdk_pixbuf_render_pixmap_and_mask (GdkPixbuf  *pixbuf,
 				   int         alpha_threshold)
 {
   gdk_pixbuf_render_pixmap_and_mask_for_colormap (pixbuf,
-						  gdk_rgb_get_colormap (),
+						  gdk_colormap_get_system (),
 						  pixmap_return, mask_return,
 						  alpha_threshold);
 }
