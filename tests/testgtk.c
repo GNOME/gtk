@@ -272,73 +272,6 @@ build_alpha_widgets (void)
   return table;
 }
 
-static gboolean
-on_alpha_drawing_expose (GtkWidget      *widget,
-			 GdkEventExpose *expose)
-{
-  int x = widget->allocation.x;
-  int y = widget->allocation.y;
-  int width = widget->allocation.width;
-  int height = widget->allocation.height;
-  GdkPixbuf *pixbuf;
-  cairo_t *cr;
-  guchar *buffer;
-  guchar *p;
-  int i, j;
-
-  buffer = g_malloc (64 * 64 * 4);
-  
-  gdk_draw_rectangle (widget->window, widget->style->black_gc, FALSE,
-		      x,         y,
-		      width - 1, height - 1);
-
-  p = buffer;
-  for (i = 0; i < 64; i++) {
-    for (j = 0; j < 64; j++) {
-      *(p++) = i * 4 + 3;
-      *(p++) = 0;
-      *(p++) = j + 4 + 3;
-      *(p++) = MIN (255, ((32 - i) * (32 - i) + (32 - j) * (32 - j)) / 8);
-    }
-  }
-  p++;
-
-  gdk_draw_rgb_32_image (widget->window, widget->style->black_gc,
-			 x + 18, y + (height - 64) /2,
-			 64, 64, GDK_RGB_DITHER_NORMAL, buffer, 64 * 4);
-
-  pixbuf = gdk_pixbuf_new_from_data (buffer, GDK_COLORSPACE_RGB, TRUE,
-				     8, 64, 64, 4 * 64, NULL, NULL);
-  cr = gdk_cairo_create (widget->window);
-
-  gdk_cairo_set_source_pixbuf (cr, pixbuf, 0, 0);
-  cairo_rectangle (cr,
-                   x + width - 18 - 64, y + (height - 64) /2,
-                   64, 64);
-  cairo_fill (cr);
-
-  cairo_destroy (cr);
-  g_object_unref (pixbuf);
-
-  g_free (buffer);
-  
-  return FALSE;
-}
-
-static GtkWidget *
-build_alpha_drawing ()
-{
-  GtkWidget *hbox;
-
-  hbox = gtk_hbox_new (FALSE, 0);
-  gtk_widget_set_size_request (hbox, 100, 100);
-
-  g_signal_connect (hbox, "expose-event",
-		    G_CALLBACK (on_alpha_drawing_expose), NULL);
-
-  return hbox;
-}
-
 static void
 on_alpha_screen_changed (GtkWidget *widget,
 			 GdkScreen *old_screen,
@@ -408,7 +341,6 @@ create_alpha_window (GtkWidget *widget)
       g_signal_connect (window, "composited_changed", G_CALLBACK (on_composited_changed), label);
       
       gtk_box_pack_start (GTK_BOX (vbox), build_alpha_widgets (), TRUE, TRUE, 0);
-      gtk_box_pack_start (GTK_BOX (vbox), build_alpha_drawing (), TRUE, TRUE, 0);
 
       g_signal_connect (window, "destroy",
 			G_CALLBACK (gtk_widget_destroyed),
