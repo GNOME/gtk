@@ -46,6 +46,7 @@ G_BEGIN_DECLS
 
 
 typedef struct _GtkTable	GtkTable;
+typedef struct _GtkTablePriv    GtkTablePriv;
 typedef struct _GtkTableClass	GtkTableClass;
 typedef struct _GtkTableChild	GtkTableChild;
 typedef struct _GtkTableRowCol	GtkTableRowCol;
@@ -54,14 +55,8 @@ struct _GtkTable
 {
   GtkContainer container;
 
-  GList *GSEAL (children);
-  GtkTableRowCol *GSEAL (rows);
-  GtkTableRowCol *GSEAL (cols);
-  guint16 GSEAL (nrows);
-  guint16 GSEAL (ncols);
-  guint16 GSEAL (column_spacing);
-  guint16 GSEAL (row_spacing);
-  guint GSEAL (homogeneous) : 1;
+  /* <private> */
+  GtkTablePriv *priv;
 };
 
 struct _GtkTableClass
