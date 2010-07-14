@@ -2152,12 +2152,6 @@ gtk_image_expose (GtkWidget      *widget,
           break;
         }
 
-      if (mask)
-	{
-	  gdk_gc_set_clip_mask (widget->style->black_gc, mask);
-	  gdk_gc_set_clip_origin (widget->style->black_gc, mask_x, mask_y);
-	}
-
       if (rectangle_intersect_even (&area, &image_bound))
         {
           if (pixbuf)
@@ -2203,15 +2197,34 @@ gtk_image_expose (GtkWidget      *widget,
             }
           else
             {
+              cairo_t *cr;
+              cairo_pattern_t *mask_pattern;
+
               switch (priv->storage_type)
                 {
                 case GTK_IMAGE_PIXMAP:
-                  gdk_draw_drawable (widget->window,
-                                     widget->style->black_gc,
-                                     priv->data.pixmap.pixmap,
-                                     image_bound.x - x, image_bound.y - y,
-                                     image_bound.x, image_bound.y,
-                                     image_bound.width, image_bound.height);
+                  cr = gdk_cairo_create (widget->window);
+
+                  if (mask)
+                    {
+                      /* hack to get the mask pattern */
+                      gdk_cairo_set_source_pixmap (cr, mask, mask_x, mask_y);
+                      mask_pattern = cairo_get_source (cr);
+                      cairo_pattern_reference (mask_pattern);
+
+                      gdk_cairo_set_source_pixmap (cr, priv->data.pixmap.pixmap, x, y);
+                      gdk_cairo_rectangle (cr, &image_bound);
+                      cairo_clip (cr);
+                      cairo_mask (cr, mask_pattern);
+                    }
+                  else 
+                    {
+                      gdk_cairo_set_source_pixmap (cr, priv->data.pixmap.pixmap, x, y);
+                      gdk_cairo_rectangle (cr, &image_bound);
+                      cairo_fill (cr);
+                    }
+
+                  cairo_destroy (cr);
                   break;
               
                 case GTK_IMAGE_IMAGE:
@@ -2236,12 +2249,6 @@ gtk_image_expose (GtkWidget      *widget,
             }
         } /* if rectangle intersects */      
 
-      if (mask)
-        {
-          gdk_gc_set_clip_mask (widget->style->black_gc, NULL);
-          gdk_gc_set_clip_origin (widget->style->black_gc, 0, 0);
-        }
-      
       if (pixbuf)
 	g_object_unref (pixbuf);
 
