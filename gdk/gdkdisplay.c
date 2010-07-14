@@ -339,6 +339,22 @@ gdk_display_close (GdkDisplay *display)
 }
 
 /**
+ * gdk_display_is_closed:
+ * @display: a #GdkDisplay
+ *
+ * Returns %TRUE if the display is closed.
+ *
+ * Since: 2.22
+ */
+gboolean
+gdk_display_is_closed  (GdkDisplay  *display)
+{
+  g_return_val_if_fail (GDK_IS_DISPLAY (display), FALSE);
+
+  return display->closed;
+}
+
+/**
  * gdk_display_get_event:
  * @display: a #GdkDisplay
  * 

@@ -415,6 +415,7 @@ gdk_input_set_extension_events
 #if IN_HEADER(__GDK_DISPLAY_H__)
 #if IN_FILE(__GDK_DISPLAY_C__)
 gdk_display_close
+gdk_display_is_closed
 gdk_display_get_event
 gdk_display_get_device_manager
 gdk_display_get_device_state
