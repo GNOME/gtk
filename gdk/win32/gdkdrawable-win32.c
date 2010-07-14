@@ -55,15 +55,6 @@ static void gdk_win32_draw_rectangle (GdkDrawable    *drawable,
 				      gint            y,
 				      gint            width,
 				      gint            height);
-static void gdk_win32_draw_arc       (GdkDrawable    *drawable,
-				      GdkGC          *gc,
-				      gboolean        filled,
-				      gint            x,
-				      gint            y,
-				      gint            width,
-				      gint            height,
-				      gint            angle1,
-				      gint            angle2);
 static void gdk_win32_draw_polygon   (GdkDrawable    *drawable,
 				      GdkGC          *gc,
 				      gboolean        filled,
@@ -122,7 +113,6 @@ _gdk_drawable_impl_win32_class_init (GdkDrawableImplWin32Class *klass)
 
   drawable_class->create_gc = _gdk_win32_gc_new;
   drawable_class->draw_rectangle = gdk_win32_draw_rectangle;
-  drawable_class->draw_arc = gdk_win32_draw_arc;
   drawable_class->draw_polygon = gdk_win32_draw_polygon;
   drawable_class->draw_drawable_with_src = gdk_win32_draw_drawable;
   drawable_class->draw_points = gdk_win32_draw_points;
@@ -778,104 +768,6 @@ gdk_win32_draw_rectangle (GdkDrawable *drawable,
 		GDK_GC_FOREGROUND | GDK_GC_BACKGROUND |
 		(filled ? 0 : LINE_ATTRIBUTES),
 		draw_rectangle, region, filled, x, y, width, height);
-
-  cairo_region_destroy (region);
-}
-
-static void
-draw_arc (GdkGCWin32 *gcwin32,
-	  HDC         hdc,
-	  gint        x_offset,
-	  gint        y_offset,
-	  va_list     args)
-{
-  HGDIOBJ old_pen;
-  gboolean filled;
-  gint x, y;
-  gint width, height;
-  gint angle1, angle2;
-  int nXStartArc, nYStartArc, nXEndArc, nYEndArc;
-
-  filled = va_arg (args, gboolean);
-  x = va_arg (args, gint);
-  y = va_arg (args, gint);
-  width = va_arg (args, gint);
-  height = va_arg (args, gint);
-  angle1 = va_arg (args, gint);
-  angle2 = va_arg (args, gint);
-
-  x -= x_offset;
-  y -= y_offset;
-  
-  if (angle2 >= 360*64)
-    {
-      nXStartArc = nYStartArc = nXEndArc = nYEndArc = 0;
-    }
-  else if (angle2 > 0)
-    {
-      nXStartArc = x + width/2 + width * cos(angle1/64.*2.*G_PI/360.);
-      nYStartArc = y + height/2 + -height * sin(angle1/64.*2.*G_PI/360.);
-      nXEndArc = x + width/2 + width * cos((angle1+angle2)/64.*2.*G_PI/360.);
-      nYEndArc = y + height/2 + -height * sin((angle1+angle2)/64.*2.*G_PI/360.);
-    }
-  else
-    {
-      nXEndArc = x + width/2 + width * cos(angle1/64.*2.*G_PI/360.);
-      nYEndArc = y + height/2 + -height * sin(angle1/64.*2.*G_PI/360.);
-      nXStartArc = x + width/2 + width * cos((angle1+angle2)/64.*2.*G_PI/360.);
-      nYStartArc = y + height/2 + -height * sin((angle1+angle2)/64.*2.*G_PI/360.);
-    }
-  
-  if (filled)
-    {
-      old_pen = SelectObject (hdc, GetStockObject (NULL_PEN));
-      GDK_NOTE (DRAW, g_print ("... Pie(%p,%d,%d,%d,%d,%d,%d,%d,%d)\n",
-			       hdc, x, y, x+width, y+height,
-			       nXStartArc, nYStartArc, nXEndArc, nYEndArc));
-      GDI_CALL (Pie, (hdc, x, y, x+width, y+height,
-		      nXStartArc, nYStartArc, nXEndArc, nYEndArc));
-      GDI_CALL (SelectObject, (hdc, old_pen));
-    }
-  else
-    {
-      GDK_NOTE (DRAW, g_print ("... Arc(%p,%d,%d,%d,%d,%d,%d,%d,%d)\n",
-			       hdc, x, y, x+width, y+height,
-			       nXStartArc, nYStartArc, nXEndArc, nYEndArc));
-      GDI_CALL (Arc, (hdc, x, y, x+width, y+height,
-		      nXStartArc, nYStartArc, nXEndArc, nYEndArc));
-    }
-}
-
-static void
-gdk_win32_draw_arc (GdkDrawable *drawable,
-		    GdkGC       *gc,
-		    gboolean     filled,
-		    gint         x,
-		    gint         y,
-		    gint         width,
-		    gint         height,
-		    gint         angle1,
-		    gint         angle2)
-{
-  GdkRectangle bounds;
-  cairo_region_t *region;
-
-  GDK_NOTE (DRAW, g_print ("gdk_win32_draw_arc: %s  %d,%d,%d,%d  %d %d\n",
-			   _gdk_win32_drawable_description (drawable),
-			   x, y, width, height, angle1, angle2));
-
-  if (width <= 2 || height <= 2 || angle2 == 0)
-    return;
-
-  bounds.x = x;
-  bounds.y = y;
-  bounds.width = width;
-  bounds.height = height;
-  region = widen_bounds (&bounds, GDK_GC_WIN32 (gc)->pen_width);
-
-  generic_draw (drawable, gc,
-		GDK_GC_FOREGROUND | (filled ? 0 : LINE_ATTRIBUTES),
-		draw_arc, region, filled, x, y, width, height, angle1, angle2);
 
   cairo_region_destroy (region);
 }

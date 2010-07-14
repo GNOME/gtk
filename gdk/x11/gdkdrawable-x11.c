@@ -55,15 +55,6 @@ static void gdk_x11_draw_rectangle (GdkDrawable    *drawable,
 				    gint            y,
 				    gint            width,
 				    gint            height);
-static void gdk_x11_draw_arc       (GdkDrawable    *drawable,
-				    GdkGC          *gc,
-				    gboolean        filled,
-				    gint            x,
-				    gint            y,
-				    gint            width,
-				    gint            height,
-				    gint            angle1,
-				    gint            angle2);
 static void gdk_x11_draw_polygon   (GdkDrawable    *drawable,
 				    GdkGC          *gc,
 				    gboolean        filled,
@@ -118,7 +109,6 @@ _gdk_drawable_impl_x11_class_init (GdkDrawableImplX11Class *klass)
   
   drawable_class->create_gc = _gdk_x11_gc_new;
   drawable_class->draw_rectangle = gdk_x11_draw_rectangle;
-  drawable_class->draw_arc = gdk_x11_draw_arc;
   drawable_class->draw_polygon = gdk_x11_draw_polygon;
   drawable_class->draw_drawable_with_src = gdk_x11_draw_drawable;
   drawable_class->draw_points = gdk_x11_draw_points;
@@ -338,30 +328,6 @@ gdk_x11_draw_rectangle (GdkDrawable *drawable,
   else
     XDrawRectangle (GDK_SCREEN_XDISPLAY (impl->screen), impl->xid,
 		    GDK_GC_GET_XGC (gc), x, y, width, height);
-}
-
-static void
-gdk_x11_draw_arc (GdkDrawable *drawable,
-		  GdkGC       *gc,
-		  gboolean     filled,
-		  gint         x,
-		  gint         y,
-		  gint         width,
-		  gint         height,
-		  gint         angle1,
-		  gint         angle2)
-{
-  GdkDrawableImplX11 *impl;
-
-  impl = GDK_DRAWABLE_IMPL_X11 (drawable);
-
-  
-  if (filled)
-    XFillArc (GDK_SCREEN_XDISPLAY (impl->screen), impl->xid,
-	      GDK_GC_GET_XGC (gc), x, y, width, height, angle1, angle2);
-  else
-    XDrawArc (GDK_SCREEN_XDISPLAY (impl->screen), impl->xid,
-	      GDK_GC_GET_XGC (gc), x, y, width, height, angle1, angle2);
 }
 
 static void

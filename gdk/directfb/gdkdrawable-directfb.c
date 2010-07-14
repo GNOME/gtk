@@ -554,20 +554,6 @@ gdk_directfb_draw_rectangle (GdkDrawable *drawable,
 }
 
 static void
-gdk_directfb_draw_arc (GdkDrawable *drawable,
-                       GdkGC       *gc,
-                       gint         filled,
-                       gint         x,
-                       gint         y,
-                       gint         width,
-                       gint         height,
-                       gint         angle1,
-                       gint         angle2)
-{
-  D_UNIMPLEMENTED();
-}
-
-static void
 gdk_directfb_draw_polygon (GdkDrawable *drawable,
                            GdkGC       *gc,
                            gint         filled,
@@ -987,7 +973,6 @@ gdk_drawable_impl_directfb_class_init (GdkDrawableImplDirectFBClass *klass)
 
   drawable_class->create_gc      = _gdk_directfb_gc_new;
   drawable_class->draw_rectangle = gdk_directfb_draw_rectangle;
-  drawable_class->draw_arc       = gdk_directfb_draw_arc;
   drawable_class->draw_polygon   = gdk_directfb_draw_polygon;
   drawable_class->draw_drawable  = gdk_directfb_draw_drawable;
   drawable_class->draw_points    = gdk_directfb_draw_points;

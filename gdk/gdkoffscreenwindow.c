@@ -324,32 +324,6 @@ gdk_offscreen_window_draw_rectangle (GdkDrawable  *drawable,
 }
 
 static void
-gdk_offscreen_window_draw_arc (GdkDrawable  *drawable,
-			       GdkGC	       *gc,
-			       gboolean	filled,
-			       gint		x,
-			       gint		y,
-			       gint		width,
-			       gint		height,
-			       gint		angle1,
-			       gint		angle2)
-{
-  GdkOffscreenWindow *offscreen = GDK_OFFSCREEN_WINDOW (drawable);
-  GdkDrawable *real_drawable = get_real_drawable (offscreen);
-
-  gdk_draw_arc (real_drawable,
-		gc,
-		filled,
-		x,
-		y,
-		width,
-		height,
-		angle1,
-		angle2);
-  add_damage (offscreen, x, y, width, height, !filled);
-}
-
-static void
 gdk_offscreen_window_draw_polygon (GdkDrawable  *drawable,
 				   GdkGC	       *gc,
 				   gboolean	filled,
@@ -1109,7 +1083,6 @@ gdk_offscreen_window_class_init (GdkOffscreenWindowClass *klass)
   drawable_class->get_composite_drawable = gdk_offscreen_window_get_composite_drawable;
 
   drawable_class->draw_rectangle = gdk_offscreen_window_draw_rectangle;
-  drawable_class->draw_arc = gdk_offscreen_window_draw_arc;
   drawable_class->draw_polygon = gdk_offscreen_window_draw_polygon;
   drawable_class->draw_drawable_with_src = gdk_offscreen_window_draw_drawable;
   drawable_class->draw_points = gdk_offscreen_window_draw_points;

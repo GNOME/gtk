@@ -324,55 +324,6 @@ gdk_draw_rectangle (GdkDrawable *drawable,
 }
 
 /**
- * gdk_draw_arc:
- * @drawable: a #GdkDrawable (a #GdkWindow or a #GdkPixmap).
- * @gc: a #GdkGC.
- * @filled: %TRUE if the arc should be filled, producing a 'pie slice'.
- * @x: the x coordinate of the left edge of the bounding rectangle.
- * @y: the y coordinate of the top edge of the bounding rectangle.
- * @width: the width of the bounding rectangle.
- * @height: the height of the bounding rectangle.
- * @angle1: the start angle of the arc, relative to the 3 o'clock position,
- *     counter-clockwise, in 1/64ths of a degree.
- * @angle2: the end angle of the arc, relative to @angle1, in 1/64ths 
- *     of a degree.
- * 
- * Draws an arc or a filled 'pie slice'. The arc is defined by the bounding
- * rectangle of the entire ellipse, and the start and end angles of the part 
- * of the ellipse to be drawn.
- **/
-void
-gdk_draw_arc (GdkDrawable *drawable,
-	      GdkGC       *gc,
-	      gboolean     filled,
-	      gint         x,
-	      gint         y,
-	      gint         width,
-	      gint         height,
-	      gint         angle1,
-	      gint         angle2)
-{  
-  g_return_if_fail (GDK_IS_DRAWABLE (drawable));
-  g_return_if_fail (GDK_IS_GC (gc));
-
-  if (width < 0 || height < 0)
-    {
-      gint real_width;
-      gint real_height;
-      
-      gdk_drawable_get_size (drawable, &real_width, &real_height);
-
-      if (width < 0)
-        width = real_width;
-      if (height < 0)
-        height = real_height;
-    }
-
-  GDK_DRAWABLE_GET_CLASS (drawable)->draw_arc (drawable, gc, filled,
-                                               x, y, width, height, angle1, angle2);
-}
-
-/**
  * gdk_draw_polygon:
  * @drawable: a #GdkDrawable (a #GdkWindow or a #GdkPixmap).
  * @gc: a #GdkGC.

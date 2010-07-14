@@ -55,11 +55,14 @@ that drawing is implicitly clipped to the exposed area.
 gboolean
 expose_event_callback (GtkWidget *widget, GdkEventExpose *event, gpointer data)
 {
-  gdk_draw_arc (widget->window,
-                widget->style->fg_gc[gtk_widget_get_state (widget)],
-                TRUE,
-                0, 0, widget->allocation.width, widget->allocation.height,
-                0, 64 * 360);
+  cairo_t *cr;
+  
+  cr = gdk_cairo_create (event->window);
+
+  cairo_set_source_rgb (cr, 0.0, 0.0, 1.0);
+  cairo_paint (cr);
+
+  cairo_destroy (cr);
  
   return TRUE;
 }

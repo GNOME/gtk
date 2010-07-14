@@ -208,21 +208,6 @@ function.
 @height: 
 
 
-<!-- ##### FUNCTION gdk_draw_arc ##### -->
-<para>
-</para>
-
-@drawable: 
-@gc: 
-@filled: 
-@x: 
-@y: 
-@width: 
-@height: 
-@angle1: 
-@angle2: 
-
-
 <!-- ##### FUNCTION gdk_draw_polygon ##### -->
 <para>
 </para>
