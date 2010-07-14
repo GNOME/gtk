@@ -129,16 +129,6 @@ static void gtk_default_draw_shadow     (GtkStyle        *style,
 					 gint             y,
 					 gint             width,
 					 gint             height);
-static void gtk_default_draw_polygon    (GtkStyle        *style,
-					 GdkWindow       *window,
-					 GtkStateType     state_type,
-					 GtkShadowType    shadow_type,
-					 GdkRectangle    *area,
-					 GtkWidget       *widget,
-					 const gchar     *detail,
-					 GdkPoint        *points,
-					 gint             npoints,
-					 gboolean         fill);
 static void gtk_default_draw_arrow      (GtkStyle        *style,
 					 GdkWindow       *window,
 					 GtkStateType     state_type,
@@ -511,7 +501,6 @@ gtk_style_class_init (GtkStyleClass *klass)
   klass->draw_hline = gtk_default_draw_hline;
   klass->draw_vline = gtk_default_draw_vline;
   klass->draw_shadow = gtk_default_draw_shadow;
-  klass->draw_polygon = gtk_default_draw_polygon;
   klass->draw_arrow = gtk_default_draw_arrow;
   klass->draw_diamond = gtk_default_draw_diamond;
   klass->draw_box = gtk_default_draw_box;
@@ -2324,136 +2313,6 @@ gtk_default_draw_shadow (GtkStyle      *style,
 
 
   cairo_destroy (cr);
-}
-
-static void
-gtk_default_draw_polygon (GtkStyle      *style,
-                          GdkWindow     *window,
-                          GtkStateType   state_type,
-                          GtkShadowType  shadow_type,
-                          GdkRectangle  *area,
-                          GtkWidget     *widget,
-                          const gchar   *detail,
-                          GdkPoint      *points,
-                          gint           npoints,
-                          gboolean       fill)
-{
-  static const gdouble pi_over_4 = G_PI_4;
-  static const gdouble pi_3_over_4 = G_PI_4 * 3;
-  GdkGC *gc1;
-  GdkGC *gc2;
-  GdkGC *gc3;
-  GdkGC *gc4;
-  gdouble angle;
-  gint xadjust;
-  gint yadjust;
-  gint i;
-  
-  switch (shadow_type)
-    {
-    case GTK_SHADOW_IN:
-      gc1 = style->bg_gc[state_type];
-      gc2 = style->dark_gc[state_type];
-      gc3 = style->light_gc[state_type];
-      gc4 = style->black_gc;
-      break;
-    case GTK_SHADOW_ETCHED_IN:
-      gc1 = style->light_gc[state_type];
-      gc2 = style->dark_gc[state_type];
-      gc3 = style->dark_gc[state_type];
-      gc4 = style->light_gc[state_type];
-      break;
-    case GTK_SHADOW_OUT:
-      gc1 = style->dark_gc[state_type];
-      gc2 = style->light_gc[state_type];
-      gc3 = style->black_gc;
-      gc4 = style->bg_gc[state_type];
-      break;
-    case GTK_SHADOW_ETCHED_OUT:
-      gc1 = style->dark_gc[state_type];
-      gc2 = style->light_gc[state_type];
-      gc3 = style->light_gc[state_type];
-      gc4 = style->dark_gc[state_type];
-      break;
-    default:
-      return;
-    }
-  
-  if (area)
-    {
-      gdk_gc_set_clip_rectangle (gc1, area);
-      gdk_gc_set_clip_rectangle (gc2, area);
-      gdk_gc_set_clip_rectangle (gc3, area);
-      gdk_gc_set_clip_rectangle (gc4, area);
-    }
-  
-  if (fill)
-    gdk_draw_polygon (window, style->bg_gc[state_type], TRUE, points, npoints);
-  
-  npoints--;
-  
-  for (i = 0; i < npoints; i++)
-    {
-      if ((points[i].x == points[i+1].x) &&
-          (points[i].y == points[i+1].y))
-        {
-          angle = 0;
-        }
-      else
-        {
-          angle = atan2 (points[i+1].y - points[i].y,
-                         points[i+1].x - points[i].x);
-        }
-      
-      if ((angle > -pi_3_over_4) && (angle < pi_over_4))
-        {
-          if (angle > -pi_over_4)
-            {
-              xadjust = 0;
-              yadjust = 1;
-            }
-          else
-            {
-              xadjust = 1;
-              yadjust = 0;
-            }
-          
-          gdk_draw_line (window, gc1,
-                         points[i].x-xadjust, points[i].y-yadjust,
-                         points[i+1].x-xadjust, points[i+1].y-yadjust);
-          gdk_draw_line (window, gc3,
-                         points[i].x, points[i].y,
-                         points[i+1].x, points[i+1].y);
-        }
-      else
-        {
-          if ((angle < -pi_3_over_4) || (angle > pi_3_over_4))
-            {
-              xadjust = 0;
-              yadjust = 1;
-            }
-          else
-            {
-              xadjust = 1;
-              yadjust = 0;
-            }
-          
-          gdk_draw_line (window, gc4,
-                         points[i].x+xadjust, points[i].y+yadjust,
-                         points[i+1].x+xadjust, points[i+1].y+yadjust);
-          gdk_draw_line (window, gc2,
-                         points[i].x, points[i].y,
-                         points[i+1].x, points[i+1].y);
-        }
-    }
-
-  if (area)
-    {
-      gdk_gc_set_clip_rectangle (gc1, NULL);
-      gdk_gc_set_clip_rectangle (gc2, NULL);
-      gdk_gc_set_clip_rectangle (gc3, NULL);
-      gdk_gc_set_clip_rectangle (gc4, NULL);
-    }
 }
 
 static void
@@ -5117,43 +4976,6 @@ gtk_paint_shadow (GtkStyle           *style,
   GTK_STYLE_GET_CLASS (style)->draw_shadow (style, window, state_type, shadow_type,
                                             (GdkRectangle *) area, widget, detail,
                                             x, y, width, height);
-}
-
-/**
- * gtk_paint_polygon:
- * @style: a #GtkStyle
- * @window: a #GdkWindow
- * @state_type: a state
- * @shadow_type: type of shadow to draw
- * @area: (allow-none): clip rectangle, or %NULL if the
- *        output should not be clipped
- * @widget: (allow-none): the widget
- * @detail: (allow-none): a style detail
- * @points: an array of #GdkPoint<!-- -->s
- * @n_points: length of @points
- * @fill: %TRUE if the polygon should be filled
- *
- * Draws a polygon on @window with the given parameters.
- */ 
-void
-gtk_paint_polygon (GtkStyle           *style,
-                   GdkWindow          *window,
-                   GtkStateType        state_type,
-                   GtkShadowType       shadow_type,
-                   const GdkRectangle *area,
-                   GtkWidget          *widget,
-                   const gchar        *detail,
-                   const GdkPoint     *points,
-                   gint                n_points,
-                   gboolean            fill)
-{
-  g_return_if_fail (GTK_IS_STYLE (style));
-  g_return_if_fail (GTK_STYLE_GET_CLASS (style)->draw_polygon != NULL);
-  g_return_if_fail (style->depth == gdk_drawable_get_depth (window));
-
-  GTK_STYLE_GET_CLASS (style)->draw_polygon (style, window, state_type, shadow_type,
-                                             (GdkRectangle *) area, widget, detail,
-                                             (GdkPoint *) points, n_points, fill);
 }
 
 /**

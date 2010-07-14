@@ -5221,7 +5221,6 @@ gtk_paint_focus
 gtk_paint_handle
 gtk_paint_hline
 gtk_paint_option
-gtk_paint_polygon
 gtk_paint_shadow
 gtk_paint_shadow_gap
 gtk_paint_slider
