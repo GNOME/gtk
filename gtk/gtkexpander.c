@@ -35,7 +35,6 @@
 #include <gdk/gdkkeysyms.h>
 #include "gtkdnd.h"
 
-#define GTK_EXPANDER_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), GTK_TYPE_EXPANDER, GtkExpanderPrivate))
 
 #define DEFAULT_EXPANDER_SIZE 10
 #define DEFAULT_EXPANDER_SPACING 2
@@ -263,7 +262,9 @@ gtk_expander_init (GtkExpander *expander)
 {
   GtkExpanderPrivate *priv;
 
-  expander->priv = priv = GTK_EXPANDER_GET_PRIVATE (expander);
+  expander->priv = priv = G_TYPE_INSTANCE_GET_PRIVATE (expander,
+                                                       GTK_TYPE_EXPANDER,
+                                                       GtkExpanderPrivate);
 
   gtk_widget_set_can_focus (GTK_WIDGET (expander), TRUE);
   gtk_widget_set_has_window (GTK_WIDGET (expander), FALSE);
