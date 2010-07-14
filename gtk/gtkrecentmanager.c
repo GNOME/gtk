@@ -220,6 +220,11 @@ gtk_recent_manager_class_init (GtkRecentManagerClass *klass)
    * gtk_recent_manager_get_items() function.
    *
    * Since: 2.10
+   *
+   * Deprecated: 2.22: Setting this property does not have any effect.
+   *   #GtkRecenManager:limit property is deprecated. The length of
+   *   the list should be managed by the view (implementing
+   *   #GtkRecentChooser), and not by the model (the #GtkRecentManager).
    */
   g_object_class_install_property (gobject_class,
   				   PROP_LIMIT,
@@ -229,7 +234,7 @@ gtk_recent_manager_class_init (GtkRecentManagerClass *klass)
   				   		     -1,
   				   		     G_MAXINT,
   				   		     DEFAULT_LIMIT,
-  				   		     G_PARAM_READWRITE));
+                                                     G_PARAM_READWRITE | G_PARAM_DEPRECATED));
   /**
    * GtkRecentManager:size
    * 
@@ -651,6 +656,10 @@ gtk_recent_manager_get_default (void)
  * items.
  *
  * Since: 2.10
+ *
+ * Deprecated: 2.22: #GtkRecenManager:limit property is deprecated. The
+ *   length of the list should be managed by the view (implementing
+ *   #GtkRecentChooser), and not by the model (the #GtkRecentManager).
  */
 void
 gtk_recent_manager_set_limit (GtkRecentManager *manager,
@@ -674,6 +683,10 @@ gtk_recent_manager_set_limit (GtkRecentManager *manager,
  * Return value: the number of items to return, or -1 for every item.
  *
  * Since: 2.10
+ *
+ * Deprecated: 2.22: #GtkRecenManager:limit property is deprecated. The
+ *   length of the list should be managed by the view (implementing
+ *   #GtkRecentChooser), and not by the model (the #GtkRecentManager).
  */
 gint
 gtk_recent_manager_get_limit (GtkRecentManager *manager)
@@ -1243,16 +1256,10 @@ gtk_recent_manager_get_items (GtkRecentManager *manager)
   if (!priv->recent_items)
     return NULL;
 
-  if (priv->limit == 0)
-    return NULL;
-  
   uris = g_bookmark_file_get_uris (priv->recent_items, &uris_len);
   for (i = 0; i < uris_len; i++)
     {
       GtkRecentInfo *info;
-      
-      if (priv->limit != -1 && i == priv->limit)
-        break;
       
       info = gtk_recent_info_new (uris[i]);
       build_recent_info (priv->recent_items, info);
