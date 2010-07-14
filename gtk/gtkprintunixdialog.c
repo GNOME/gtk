@@ -65,9 +65,6 @@
 #define RULER_RADIUS 2
 
 
-#define GTK_PRINT_UNIX_DIALOG_GET_PRIVATE(o)  \
-   (G_TYPE_INSTANCE_GET_PRIVATE ((o), GTK_TYPE_PRINT_UNIX_DIALOG, GtkPrintUnixDialogPrivate))
-
 static void     gtk_print_unix_dialog_destroy      (GtkPrintUnixDialog *dialog);
 static void     gtk_print_unix_dialog_finalize     (GObject            *object);
 static void     gtk_print_unix_dialog_set_property (GObject            *object,
@@ -527,9 +524,13 @@ error_dialogs (GtkPrintUnixDialog *print_dialog,
 static void
 gtk_print_unix_dialog_init (GtkPrintUnixDialog *dialog)
 {
-  GtkPrintUnixDialogPrivate *priv = dialog->priv;
+  GtkPrintUnixDialogPrivate *priv;
 
-  priv = dialog->priv = GTK_PRINT_UNIX_DIALOG_GET_PRIVATE (dialog);
+  dialog->priv = G_TYPE_INSTANCE_GET_PRIVATE (dialog,
+                                              GTK_TYPE_PRINT_UNIX_DIALOG,
+                                              GtkPrintUnixDialogPrivate);
+  priv = dialog->priv;
+
   priv->print_backends = NULL;
   priv->current_page = -1;
   priv->number_up_layout_n_option = NULL;
