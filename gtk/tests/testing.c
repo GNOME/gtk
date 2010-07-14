@@ -137,16 +137,19 @@ test_xserver_sync (void)
   gtk_widget_show_now (window);
   while (repeat--)
     {
-      gint i, many = 100;
+      gint i, many = 200;
       double nosync_time, sync_time;
+      cairo_t *cr;
+
       while (gtk_events_pending ())
         gtk_main_iteration ();
+      cr = gdk_cairo_create (darea->window);
+      cairo_set_source_rgba (cr, 0, 1, 0, 0.1);
       /* run a number of consecutive drawing requests, just using drawing queue */
       g_timer_start (gtimer);
       for (i = 0; i < many; i++)
         {
-          gdk_draw_line (darea->window, darea->style->black_gc, 0, 0, 320, 200);
-          gdk_draw_line (darea->window, darea->style->black_gc, 320, 0, 0, 200);
+          cairo_paint (cr);
         }
       g_timer_stop (gtimer);
       nosync_time = g_timer_elapsed (gtimer, NULL);
@@ -157,8 +160,7 @@ test_xserver_sync (void)
       /* run a number of consecutive drawing requests with intermediate drawing syncs */
       for (i = 0; i < many; i++)
         {
-          gdk_draw_line (darea->window, darea->style->black_gc, 0, 0, 320, 200);
-          gdk_draw_line (darea->window, darea->style->black_gc, 320, 0, 0, 200);
+          cairo_paint (cr);
           gdk_test_render_sync (darea->window);
         }
       g_timer_stop (gtimer);
