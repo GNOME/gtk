@@ -62,7 +62,8 @@ struct _GtkTreeView
 {
   GtkContainer parent;
 
-  GtkTreeViewPrivate *GSEAL (priv);
+  /* <private> */
+  GtkTreeViewPrivate *priv;
 };
 
 struct _GtkTreeViewClass
