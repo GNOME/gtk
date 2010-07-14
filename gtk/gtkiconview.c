@@ -55,8 +55,6 @@
  * rubberband selection, which is controlled by dragging the pointer.
  */
 
-#undef DEBUG_ICON_VIEW
-
 #define SCROLL_EDGE_SIZE 15
 
 typedef struct _GtkIconViewItem GtkIconViewItem;
@@ -3187,14 +3185,6 @@ gtk_icon_view_paint_item (GtkIconView     *icon_view,
       state = GTK_STATE_NORMAL;
     }
   
-#ifdef DEBUG_ICON_VIEW
-  gdk_draw_rectangle (drawable,
-		      GTK_WIDGET (icon_view)->style->black_gc,
-		      FALSE,
-		      x, y, 
-		      item->width, item->height);
-#endif
-
   if (item->selected)
     {
       gtk_paint_flat_box (GTK_WIDGET (icon_view)->style,
@@ -3217,24 +3207,6 @@ gtk_icon_view_paint_item (GtkIconView     *icon_view,
       
       gtk_icon_view_get_cell_area (icon_view, item, info, &cell_area);
       
-#ifdef DEBUG_ICON_VIEW
-      gdk_draw_rectangle (drawable,
-			  GTK_WIDGET (icon_view)->style->black_gc,
-			  FALSE,
-			  x - item->x + cell_area.x, 
-			  y - item->y + cell_area.y, 
-			  cell_area.width, cell_area.height);
-
-      gtk_icon_view_get_cell_box (icon_view, item, info, &box);
-	  
-      gdk_draw_rectangle (drawable,
-			  GTK_WIDGET (icon_view)->style->black_gc,
-			  FALSE,
-			  x - item->x + box.x, 
-			  y - item->y + box.y, 
-			  box.width, box.height);
-#endif
-
       cell_area.x = x - item->x + cell_area.x;
       cell_area.y = y - item->y + cell_area.y;
 
