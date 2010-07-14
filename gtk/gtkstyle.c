@@ -3297,48 +3297,50 @@ gtk_default_draw_shadow_gap (GtkStyle       *style,
                              gint            gap_x,
                              gint            gap_width)
 {
-  GdkGC *gc1 = NULL;
-  GdkGC *gc2 = NULL;
-  GdkGC *gc3 = NULL;
-  GdkGC *gc4 = NULL;
+  GdkColor *color1 = NULL;
+  GdkColor *color2 = NULL;
+  GdkColor *color3 = NULL;
+  GdkColor *color4 = NULL;
+  cairo_t *cr;
   
   sanitize_size (window, &width, &height);
   
   switch (shadow_type)
     {
     case GTK_SHADOW_NONE:
+    default:
       return;
     case GTK_SHADOW_IN:
-      gc1 = style->dark_gc[state_type];
-      gc2 = style->black_gc;
-      gc3 = style->bg_gc[state_type];
-      gc4 = style->light_gc[state_type];
+      color1 = &style->dark[state_type];
+      color2 = &style->black;
+      color3 = &style->bg[state_type];
+      color4 = &style->light[state_type];
       break;
     case GTK_SHADOW_ETCHED_IN:
-      gc1 = style->dark_gc[state_type];
-      gc2 = style->light_gc[state_type];
-      gc3 = style->dark_gc[state_type];
-      gc4 = style->light_gc[state_type];
+      color1 = &style->dark[state_type];
+      color2 = &style->light[state_type];
+      color3 = &style->dark[state_type];
+      color4 = &style->light[state_type];
       break;
     case GTK_SHADOW_OUT:
-      gc1 = style->light_gc[state_type];
-      gc2 = style->bg_gc[state_type];
-      gc3 = style->dark_gc[state_type];
-      gc4 = style->black_gc;
+      color1 = &style->light[state_type];
+      color2 = &style->bg[state_type];
+      color3 = &style->dark[state_type];
+      color4 = &style->black;
       break;
     case GTK_SHADOW_ETCHED_OUT:
-      gc1 = style->light_gc[state_type];
-      gc2 = style->dark_gc[state_type];
-      gc3 = style->light_gc[state_type];
-      gc4 = style->dark_gc[state_type];
+      color1 = &style->light[state_type];
+      color2 = &style->dark[state_type];
+      color3 = &style->light[state_type];
+      color4 = &style->dark[state_type];
       break;
     }
+
+  cr = gdk_cairo_create (window);
   if (area)
     {
-      gdk_gc_set_clip_rectangle (gc1, area);
-      gdk_gc_set_clip_rectangle (gc2, area);
-      gdk_gc_set_clip_rectangle (gc3, area);
-      gdk_gc_set_clip_rectangle (gc4, area);
+      gdk_cairo_rectangle (cr, area);
+      cairo_clip (cr);
     }
   
   switch (shadow_type)
@@ -3351,147 +3353,141 @@ gtk_default_draw_shadow_gap (GtkStyle       *style,
       switch (gap_side)
         {
         case GTK_POS_TOP:
-          gdk_draw_line (window, gc1,
-                         x, y, x, y + height - 1);
-          gdk_draw_line (window, gc2,
-                         x + 1, y, x + 1, y + height - 2);
+          _cairo_draw_line (cr, color1,
+                            x, y, x, y + height - 1);
+          _cairo_draw_line (cr, color2,
+                            x + 1, y, x + 1, y + height - 2);
           
-          gdk_draw_line (window, gc3,
-                         x + 1, y + height - 2, x + width - 2, y + height - 2);
-          gdk_draw_line (window, gc3,
-                         x + width - 2, y, x + width - 2, y + height - 2);
-          gdk_draw_line (window, gc4,
-                         x, y + height - 1, x + width - 1, y + height - 1);
-          gdk_draw_line (window, gc4,
-                         x + width - 1, y, x + width - 1, y + height - 1);
+          _cairo_draw_line (cr, color3,
+                            x + 1, y + height - 2, x + width - 2, y + height - 2);
+          _cairo_draw_line (cr, color3,
+                            x + width - 2, y, x + width - 2, y + height - 2);
+          _cairo_draw_line (cr, color4,
+                            x, y + height - 1, x + width - 1, y + height - 1);
+          _cairo_draw_line (cr, color4,
+                            x + width - 1, y, x + width - 1, y + height - 1);
           if (gap_x > 0)
             {
-              gdk_draw_line (window, gc1,
-                             x, y, x + gap_x - 1, y);
-              gdk_draw_line (window, gc2,
-                             x + 1, y + 1, x + gap_x - 1, y + 1);
-              gdk_draw_line (window, gc2,
-                             x + gap_x, y, x + gap_x, y);
+              _cairo_draw_line (cr, color1,
+                                x, y, x + gap_x - 1, y);
+              _cairo_draw_line (cr, color2,
+                                x + 1, y + 1, x + gap_x - 1, y + 1);
+              _cairo_draw_line (cr, color2,
+                                x + gap_x, y, x + gap_x, y);
             }
           if ((width - (gap_x + gap_width)) > 0)
             {
-              gdk_draw_line (window, gc1,
-                             x + gap_x + gap_width, y, x + width - 2, y);
-              gdk_draw_line (window, gc2,
-                             x + gap_x + gap_width, y + 1, x + width - 3, y + 1);
-              gdk_draw_line (window, gc2,
-                             x + gap_x + gap_width - 1, y, x + gap_x + gap_width - 1, y);
+              _cairo_draw_line (cr, color1,
+                                x + gap_x + gap_width, y, x + width - 2, y);
+              _cairo_draw_line (cr, color2,
+                                x + gap_x + gap_width, y + 1, x + width - 3, y + 1);
+              _cairo_draw_line (cr, color2,
+                                x + gap_x + gap_width - 1, y, x + gap_x + gap_width - 1, y);
             }
           break;
         case GTK_POS_BOTTOM:
-          gdk_draw_line (window, gc1,
-                         x, y, x + width - 1, y);
-          gdk_draw_line (window, gc1,
-                         x, y, x, y + height - 1);
-          gdk_draw_line (window, gc2,
-                         x + 1, y + 1, x + width - 2, y + 1);
-          gdk_draw_line (window, gc2,
-                         x + 1, y + 1, x + 1, y + height - 1);
+          _cairo_draw_line (cr, color1,
+                            x, y, x + width - 1, y);
+          _cairo_draw_line (cr, color1,
+                            x, y, x, y + height - 1);
+          _cairo_draw_line (cr, color2,
+                            x + 1, y + 1, x + width - 2, y + 1);
+          _cairo_draw_line (cr, color2,
+                            x + 1, y + 1, x + 1, y + height - 1);
           
-          gdk_draw_line (window, gc3,
-                         x + width - 2, y + 1, x + width - 2, y + height - 1);
-          gdk_draw_line (window, gc4,
-                         x + width - 1, y, x + width - 1, y + height - 1);
+          _cairo_draw_line (cr, color3,
+                            x + width - 2, y + 1, x + width - 2, y + height - 1);
+          _cairo_draw_line (cr, color4,
+                            x + width - 1, y, x + width - 1, y + height - 1);
           if (gap_x > 0)
             {
-              gdk_draw_line (window, gc4,
-                             x, y + height - 1, x + gap_x - 1, y + height - 1);
-              gdk_draw_line (window, gc3,
-                             x + 1, y + height - 2, x + gap_x - 1, y + height - 2);
-              gdk_draw_line (window, gc3,
-                             x + gap_x, y + height - 1, x + gap_x, y + height - 1);
+              _cairo_draw_line (cr, color4,
+                                x, y + height - 1, x + gap_x - 1, y + height - 1);
+              _cairo_draw_line (cr, color3,
+                                x + 1, y + height - 2, x + gap_x - 1, y + height - 2);
+              _cairo_draw_line (cr, color3,
+                                x + gap_x, y + height - 1, x + gap_x, y + height - 1);
             }
           if ((width - (gap_x + gap_width)) > 0)
             {
-              gdk_draw_line (window, gc4,
-                             x + gap_x + gap_width, y + height - 1, x + width - 2, y + height - 1);
-              gdk_draw_line (window, gc3,
-                             x + gap_x + gap_width, y + height - 2, x + width - 2, y + height - 2);
-              gdk_draw_line (window, gc3,
-                             x + gap_x + gap_width - 1, y + height - 1, x + gap_x + gap_width - 1, y + height - 1);
+              _cairo_draw_line (cr, color4,
+                                x + gap_x + gap_width, y + height - 1, x + width - 2, y + height - 1);
+              _cairo_draw_line (cr, color3,
+                                x + gap_x + gap_width, y + height - 2, x + width - 2, y + height - 2);
+              _cairo_draw_line (cr, color3,
+                                x + gap_x + gap_width - 1, y + height - 1, x + gap_x + gap_width - 1, y + height - 1);
             }
           break;
         case GTK_POS_LEFT:
-          gdk_draw_line (window, gc1,
-                         x, y, x + width - 1, y);
-          gdk_draw_line (window, gc2,
-                         x, y + 1, x + width - 2, y + 1);
+          _cairo_draw_line (cr, color1,
+                            x, y, x + width - 1, y);
+          _cairo_draw_line (cr, color2,
+                            x, y + 1, x + width - 2, y + 1);
           
-          gdk_draw_line (window, gc3,
-                         x, y + height - 2, x + width - 2, y + height - 2);
-          gdk_draw_line (window, gc3,
-                         x + width - 2, y + 1, x + width - 2, y + height - 2);
-          gdk_draw_line (window, gc4,
-                         x, y + height - 1, x + width - 1, y + height - 1);
-          gdk_draw_line (window, gc4,
-                         x + width - 1, y, x + width - 1, y + height - 1);
+          _cairo_draw_line (cr, color3,
+                            x, y + height - 2, x + width - 2, y + height - 2);
+          _cairo_draw_line (cr, color3,
+                            x + width - 2, y + 1, x + width - 2, y + height - 2);
+          _cairo_draw_line (cr, color4,
+                            x, y + height - 1, x + width - 1, y + height - 1);
+          _cairo_draw_line (cr, color4,
+                            x + width - 1, y, x + width - 1, y + height - 1);
           if (gap_x > 0)
             {
-              gdk_draw_line (window, gc1,
-                             x, y, x, y + gap_x - 1);
-              gdk_draw_line (window, gc2,
-                             x + 1, y + 1, x + 1, y + gap_x - 1);
-              gdk_draw_line (window, gc2,
-                             x, y + gap_x, x, y + gap_x);
+              _cairo_draw_line (cr, color1,
+                                x, y, x, y + gap_x - 1);
+              _cairo_draw_line (cr, color2,
+                                x + 1, y + 1, x + 1, y + gap_x - 1);
+              _cairo_draw_line (cr, color2,
+                                x, y + gap_x, x, y + gap_x);
             }
           if ((width - (gap_x + gap_width)) > 0)
             {
-              gdk_draw_line (window, gc1,
-                             x, y + gap_x + gap_width, x, y + height - 2);
-              gdk_draw_line (window, gc2,
-                             x + 1, y + gap_x + gap_width, x + 1, y + height - 2);
-              gdk_draw_line (window, gc2,
-                             x, y + gap_x + gap_width - 1, x, y + gap_x + gap_width - 1);
+              _cairo_draw_line (cr, color1,
+                                x, y + gap_x + gap_width, x, y + height - 2);
+              _cairo_draw_line (cr, color2,
+                                x + 1, y + gap_x + gap_width, x + 1, y + height - 2);
+              _cairo_draw_line (cr, color2,
+                                x, y + gap_x + gap_width - 1, x, y + gap_x + gap_width - 1);
             }
           break;
         case GTK_POS_RIGHT:
-          gdk_draw_line (window, gc1,
-                         x, y, x + width - 1, y);
-          gdk_draw_line (window, gc1,
-                         x, y, x, y + height - 1);
-          gdk_draw_line (window, gc2,
-                         x + 1, y + 1, x + width - 1, y + 1);
-          gdk_draw_line (window, gc2,
-                         x + 1, y + 1, x + 1, y + height - 2);
+          _cairo_draw_line (cr, color1,
+                            x, y, x + width - 1, y);
+          _cairo_draw_line (cr, color1,
+                            x, y, x, y + height - 1);
+          _cairo_draw_line (cr, color2,
+                            x + 1, y + 1, x + width - 1, y + 1);
+          _cairo_draw_line (cr, color2,
+                            x + 1, y + 1, x + 1, y + height - 2);
           
-          gdk_draw_line (window, gc3,
-                         x + 1, y + height - 2, x + width - 1, y + height - 2);
-          gdk_draw_line (window, gc4,
-                         x, y + height - 1, x + width - 1, y + height - 1);
+          _cairo_draw_line (cr, color3,
+                            x + 1, y + height - 2, x + width - 1, y + height - 2);
+          _cairo_draw_line (cr, color4,
+                            x, y + height - 1, x + width - 1, y + height - 1);
           if (gap_x > 0)
             {
-              gdk_draw_line (window, gc4,
-                             x + width - 1, y, x + width - 1, y + gap_x - 1);
-              gdk_draw_line (window, gc3,
-                             x + width - 2, y + 1, x + width - 2, y + gap_x - 1);
-              gdk_draw_line (window, gc3,
-                             x + width - 1, y + gap_x, x + width - 1, y + gap_x);
+              _cairo_draw_line (cr, color4,
+                                x + width - 1, y, x + width - 1, y + gap_x - 1);
+              _cairo_draw_line (cr, color3,
+                                x + width - 2, y + 1, x + width - 2, y + gap_x - 1);
+              _cairo_draw_line (cr, color3,
+                                x + width - 1, y + gap_x, x + width - 1, y + gap_x);
             }
           if ((width - (gap_x + gap_width)) > 0)
             {
-              gdk_draw_line (window, gc4,
-                             x + width - 1, y + gap_x + gap_width, x + width - 1, y + height - 2);
-              gdk_draw_line (window, gc3,
-                             x + width - 2, y + gap_x + gap_width, x + width - 2, y + height - 2);
-              gdk_draw_line (window, gc3,
-                             x + width - 1, y + gap_x + gap_width - 1, x + width - 1, y + gap_x + gap_width - 1);
+              _cairo_draw_line (cr, color4,
+                                x + width - 1, y + gap_x + gap_width, x + width - 1, y + height - 2);
+              _cairo_draw_line (cr, color3,
+                                x + width - 2, y + gap_x + gap_width, x + width - 2, y + height - 2);
+              _cairo_draw_line (cr, color3,
+                                x + width - 1, y + gap_x + gap_width - 1, x + width - 1, y + gap_x + gap_width - 1);
             }
           break;
         }
     }
 
-  if (area)
-    {
-      gdk_gc_set_clip_rectangle (gc1, NULL);
-      gdk_gc_set_clip_rectangle (gc2, NULL);
-      gdk_gc_set_clip_rectangle (gc3, NULL);
-      gdk_gc_set_clip_rectangle (gc4, NULL);
-    }
+  cairo_destroy (cr);
 }
 
 static void 
