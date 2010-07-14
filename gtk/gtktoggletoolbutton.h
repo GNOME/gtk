@@ -47,7 +47,7 @@ struct _GtkToggleToolButton
   GtkToolButton parent;
 
   /*< private >*/
-  GtkToggleToolButtonPrivate *GSEAL (priv);
+  GtkToggleToolButtonPrivate *priv;
 };
 
 struct _GtkToggleToolButtonClass

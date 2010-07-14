@@ -45,8 +45,6 @@ enum {
 };
 
 
-#define GTK_TOGGLE_TOOL_BUTTON_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), GTK_TYPE_TOGGLE_TOOL_BUTTON, GtkToggleToolButtonPrivate))
-
 struct _GtkToggleToolButtonPrivate
 {
   guint active : 1;
@@ -140,7 +138,9 @@ gtk_toggle_tool_button_init (GtkToggleToolButton *button)
   GtkToolButton *tool_button = GTK_TOOL_BUTTON (button);
   GtkToggleButton *toggle_button = GTK_TOGGLE_BUTTON (_gtk_tool_button_get_button (tool_button));
 
-  button->priv = GTK_TOGGLE_TOOL_BUTTON_GET_PRIVATE (button);
+  button->priv = G_TYPE_INSTANCE_GET_PRIVATE (button,
+                                              GTK_TYPE_TOGGLE_TOOL_BUTTON,
+                                              GtkToggleToolButtonPrivate);
 
   /* If the real button is a radio button, it may have been
    * active at the time it was created.

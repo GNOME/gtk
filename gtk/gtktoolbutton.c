@@ -292,7 +292,7 @@ gtk_tool_button_init (GtkToolButton      *button,
 
   button->priv = G_TYPE_INSTANCE_GET_PRIVATE (button,
                                               GTK_TYPE_TOOL_BUTTON,
-                                              GtkToolButtonPriv);
+                                              GtkToolButtonPrivate);
 
   button->priv->contents_invalid = TRUE;
 
