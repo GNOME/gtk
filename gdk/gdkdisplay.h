@@ -156,7 +156,8 @@ void        gdk_display_beep               (GdkDisplay  *display);
 void        gdk_display_sync               (GdkDisplay  *display);
 void        gdk_display_flush              (GdkDisplay  *display);
 
-void	    gdk_display_close		   (GdkDisplay  *display);
+void	    gdk_display_close		       (GdkDisplay  *display);
+gboolean    gdk_display_is_closed          (GdkDisplay  *display);
 
 GList *     gdk_display_list_devices       (GdkDisplay  *display);
 
