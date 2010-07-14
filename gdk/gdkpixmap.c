@@ -41,11 +41,6 @@ static void   gdk_pixmap_draw_rectangle (GdkDrawable     *drawable,
 					 gint             y,
 					 gint             width,
 					 gint             height);
-static void   gdk_pixmap_draw_polygon   (GdkDrawable     *drawable,
-					 GdkGC           *gc,
-					 gboolean         filled,
-					 GdkPoint        *points,
-					 gint             npoints);
 static void   gdk_pixmap_draw_drawable  (GdkDrawable     *drawable,
 					 GdkGC           *gc,
 					 GdkPixmap       *src,
@@ -127,7 +122,6 @@ gdk_pixmap_class_init (GdkPixmapObjectClass *klass)
 
   drawable_class->create_gc = gdk_pixmap_create_gc;
   drawable_class->draw_rectangle = gdk_pixmap_draw_rectangle;
-  drawable_class->draw_polygon = gdk_pixmap_draw_polygon;
   drawable_class->draw_drawable_with_src = gdk_pixmap_draw_drawable;
   drawable_class->draw_points = gdk_pixmap_draw_points;
   drawable_class->draw_segments = gdk_pixmap_draw_segments;
@@ -224,19 +218,6 @@ gdk_pixmap_draw_rectangle (GdkDrawable *drawable,
   _gdk_gc_remove_drawable_clip (gc);  
   gdk_draw_rectangle (private->impl, gc, filled,
                       x, y, width, height);
-}
-
-static void
-gdk_pixmap_draw_polygon (GdkDrawable *drawable,
-			 GdkGC       *gc,
-			 gboolean     filled,
-			 GdkPoint    *points,
-			 gint         npoints)
-{
-  GdkPixmapObject *private = (GdkPixmapObject *)drawable;
-
-  _gdk_gc_remove_drawable_clip (gc);  
-  gdk_draw_polygon (private->impl, gc, filled, points, npoints);
 }
 
 static void

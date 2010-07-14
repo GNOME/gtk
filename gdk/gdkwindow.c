@@ -236,11 +236,6 @@ static void   gdk_window_draw_rectangle (GdkDrawable     *drawable,
 					 gint             y,
 					 gint             width,
 					 gint             height);
-static void   gdk_window_draw_polygon   (GdkDrawable     *drawable,
-					 GdkGC           *gc,
-					 gboolean         filled,
-					 GdkPoint        *points,
-					 gint             npoints);
 static void   gdk_window_draw_drawable  (GdkDrawable     *drawable,
 					 GdkGC           *gc,
 					 GdkPixmap       *src,
@@ -442,7 +437,6 @@ gdk_window_class_init (GdkWindowObjectClass *klass)
 
   drawable_class->create_gc = gdk_window_create_gc;
   drawable_class->draw_rectangle = gdk_window_draw_rectangle;
-  drawable_class->draw_polygon = gdk_window_draw_polygon;
   drawable_class->draw_drawable_with_src = gdk_window_draw_drawable;
   drawable_class->draw_points = gdk_window_draw_points;
   drawable_class->draw_segments = gdk_window_draw_segments;
@@ -3934,42 +3928,6 @@ gdk_window_draw_rectangle (GdkDrawable *drawable,
   BEGIN_DRAW;
   gdk_draw_rectangle (impl, gc, filled,
 		      x - x_offset, y - y_offset, width, height);
-  END_DRAW;
-}
-
-static void
-gdk_window_draw_polygon (GdkDrawable *drawable,
-			 GdkGC       *gc,
-			 gboolean     filled,
-			 GdkPoint    *points,
-			 gint         npoints)
-{
-  GdkPoint *new_points;
-
-  if (GDK_WINDOW_DESTROYED (drawable))
-    return;
-
-  BEGIN_DRAW;
-
-  if (x_offset != 0 || y_offset != 0)
-    {
-      int i;
-
-      new_points = g_new (GdkPoint, npoints);
-      for (i=0; i<npoints; i++)
-	{
-	  new_points[i].x = points[i].x - x_offset;
-	  new_points[i].y = points[i].y - y_offset;
-	}
-    }
-  else
-    new_points = points;
-
-  gdk_draw_polygon (impl, gc, filled, new_points, npoints);
-
-  if (new_points != points)
-    g_free (new_points);
-
   END_DRAW;
 }
 

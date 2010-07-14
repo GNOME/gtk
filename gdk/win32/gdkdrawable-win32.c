@@ -55,11 +55,6 @@ static void gdk_win32_draw_rectangle (GdkDrawable    *drawable,
 				      gint            y,
 				      gint            width,
 				      gint            height);
-static void gdk_win32_draw_polygon   (GdkDrawable    *drawable,
-				      GdkGC          *gc,
-				      gboolean        filled,
-				      GdkPoint       *points,
-				      gint            npoints);
 static void gdk_win32_draw_drawable  (GdkDrawable    *drawable,
 				      GdkGC          *gc,
 				      GdkPixmap      *src,
@@ -113,7 +108,6 @@ _gdk_drawable_impl_win32_class_init (GdkDrawableImplWin32Class *klass)
 
   drawable_class->create_gc = _gdk_win32_gc_new;
   drawable_class->draw_rectangle = gdk_win32_draw_rectangle;
-  drawable_class->draw_polygon = gdk_win32_draw_polygon;
   drawable_class->draw_drawable_with_src = gdk_win32_draw_drawable;
   drawable_class->draw_points = gdk_win32_draw_points;
   drawable_class->draw_segments = gdk_win32_draw_segments;
@@ -770,91 +764,6 @@ gdk_win32_draw_rectangle (GdkDrawable *drawable,
 		draw_rectangle, region, filled, x, y, width, height);
 
   cairo_region_destroy (region);
-}
-
-static void
-draw_polygon (GdkGCWin32 *gcwin32,
-	      HDC         hdc,
-	      gint        x_offset,
-	      gint        y_offset,
-	      va_list     args)
-{
-  gboolean filled;
-  POINT *pts;
-  HGDIOBJ old_pen_or_brush;
-  gint npoints;
-  gint i;
-
-  filled = va_arg (args, gboolean);
-  pts = va_arg (args, POINT *);
-  npoints = va_arg (args, gint);
-
-  if (x_offset != 0 || y_offset != 0)
-    for (i = 0; i < npoints; i++)
-      {
-	pts[i].x -= x_offset;
-	pts[i].y -= y_offset;
-      }
-
-  if (filled)
-    old_pen_or_brush = SelectObject (hdc, GetStockObject (NULL_PEN));
-  else
-    old_pen_or_brush = SelectObject (hdc, GetStockObject (HOLLOW_BRUSH));
-  if (old_pen_or_brush == NULL)
-    WIN32_GDI_FAILED ("SelectObject");
-  GDI_CALL (Polygon, (hdc, pts, npoints));
-  if (old_pen_or_brush != NULL)
-    GDI_CALL (SelectObject, (hdc, old_pen_or_brush));
-}
-
-static void
-gdk_win32_draw_polygon (GdkDrawable *drawable,
-			GdkGC       *gc,
-			gboolean     filled,
-			GdkPoint    *points,
-			gint         npoints)
-{
-  GdkRectangle bounds;
-  cairo_region_t *region;
-  POINT *pts;
-  int i;
-
-  GDK_NOTE (DRAW, g_print ("gdk_win32_draw_polygon: %s %d points\n",
-			   _gdk_win32_drawable_description (drawable),
-			   npoints));
-
-  if (npoints < 2)
-    return;
-
-  bounds.x = G_MAXINT;
-  bounds.y = G_MAXINT;
-  bounds.width = 0;
-  bounds.height = 0;
-
-  pts = g_new (POINT, npoints);
-
-  for (i = 0; i < npoints; i++)
-    {
-      bounds.x = MIN (bounds.x, points[i].x);
-      bounds.y = MIN (bounds.y, points[i].y);
-      pts[i].x = points[i].x;
-      pts[i].y = points[i].y;
-    }
-
-  for (i = 0; i < npoints; i++)
-    {
-      bounds.width = MAX (bounds.width, points[i].x - bounds.x);
-      bounds.height = MAX (bounds.height, points[i].y - bounds.y);
-    }
-
-  region = widen_bounds (&bounds, GDK_GC_WIN32 (gc)->pen_width);
-
-  generic_draw (drawable, gc,
-		GDK_GC_FOREGROUND | (filled ? 0 : LINE_ATTRIBUTES),
-		draw_polygon, region, filled, pts, npoints);
-
-  cairo_region_destroy (region);
-  g_free (pts);
 }
 
 static void

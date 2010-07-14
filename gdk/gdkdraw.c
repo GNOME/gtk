@@ -324,34 +324,6 @@ gdk_draw_rectangle (GdkDrawable *drawable,
 }
 
 /**
- * gdk_draw_polygon:
- * @drawable: a #GdkDrawable (a #GdkWindow or a #GdkPixmap).
- * @gc: a #GdkGC.
- * @filled: %TRUE if the polygon should be filled. The polygon is closed
- *     automatically, connecting the last point to the first point if 
- *     necessary.
- * @points: an array of #GdkPoint structures specifying the points making 
- *     up the polygon.
- * @n_points: the number of points.
- * 
- * Draws an outlined or filled polygon.
- **/
-void
-gdk_draw_polygon (GdkDrawable    *drawable,
-		  GdkGC          *gc,
-		  gboolean        filled,
-		  const GdkPoint *points,
-		  gint            n_points)
-{
-  g_return_if_fail (GDK_IS_DRAWABLE (drawable));
-  g_return_if_fail (GDK_IS_GC (gc));
-
-  GDK_DRAWABLE_GET_CLASS (drawable)->draw_polygon (drawable, gc, filled,
-                                                   (GdkPoint *) points,
-                                                   n_points);
-}
-
-/**
  * gdk_draw_drawable:
  * @drawable: a #GdkDrawable
  * @gc: a #GdkGC sharing the drawable's visual and colormap

@@ -554,80 +554,6 @@ gdk_directfb_draw_rectangle (GdkDrawable *drawable,
 }
 
 static void
-gdk_directfb_draw_polygon (GdkDrawable *drawable,
-                           GdkGC       *gc,
-                           gint         filled,
-                           GdkPoint    *points,
-                           gint         npoints)
-{
-  g_return_if_fail (GDK_IS_DRAWABLE (drawable));
-
-  D_DEBUG_AT( GDKDFB_Drawable, "%s( %p, %p, %s, %p, %d )\n", G_STRFUNC,
-              drawable, gc, filled ? " filled" : "outline", points, npoints );
-
-  if (npoints < 3)
-    return;
-
-  if (filled)
-    {
-      if (npoints == 3 || (npoints == 4 && 
-                                 points[0].x == points[npoints-1].x &&
-                                 points[0].y == points[npoints-1].y))
-          {
-            GdkDrawableImplDirectFB *impl;
-            cairo_region_t                clip;
-            gint                     i;
-
-            impl = GDK_DRAWABLE_IMPL_DIRECTFB (drawable);
-
-            if (!gdk_directfb_setup_for_drawing (impl, GDK_GC_DIRECTFB (gc)))
-              return;
-
-            gdk_directfb_clip_region (drawable, gc, NULL, &clip);
-
-            for (i = 0; i < clip.numRects; i++)
-              {
-                                DFBRegion reg = { clip.rects[i].x1,     clip.rects[i].y1, 
-                    clip.rects[i].x2 , clip.rects[i].y2  };
-
-                impl->surface->SetClip (impl->surface, &reg);
-                impl->surface->FillTriangle (impl->surface,
-                                             points[0].x, points[0].y,
-                                             points[1].x, points[1].y,
-                                             points[2].x, points[2].y);
-
-              }
-
-            temp_region_deinit( &clip );
-
-            return;
-          }
-                else
-                        g_message ("filled polygons with n > 3 are not yet supported, "
-                     "drawing outlines");
-    }
-
-  if (points[0].x != points[npoints-1].x ||
-      points[0].y != points[npoints-1].y)
-    {
-      GdkPoint *tmp_points;
-
-      tmp_points = g_new (GdkPoint, npoints + 1);
-      memcpy (tmp_points, points, npoints * sizeof (GdkPoint));
-      tmp_points[npoints].x = points[0].x;
-      tmp_points[npoints].y = points[0].y;
-
-      gdk_directfb_draw_lines (drawable, gc, tmp_points, npoints + 1);
-
-      g_free (tmp_points);
-    }
-  else
-    {
-      gdk_directfb_draw_lines (drawable, gc, points, npoints);
-    }
-}
-
-static void
 gdk_directfb_draw_drawable (GdkDrawable *drawable,
                             GdkGC       *gc,
                             GdkDrawable *src,
@@ -973,7 +899,6 @@ gdk_drawable_impl_directfb_class_init (GdkDrawableImplDirectFBClass *klass)
 
   drawable_class->create_gc      = _gdk_directfb_gc_new;
   drawable_class->draw_rectangle = gdk_directfb_draw_rectangle;
-  drawable_class->draw_polygon   = gdk_directfb_draw_polygon;
   drawable_class->draw_drawable  = gdk_directfb_draw_drawable;
   drawable_class->draw_points    = gdk_directfb_draw_points;
   drawable_class->draw_segments  = gdk_directfb_draw_segments;

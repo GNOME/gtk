@@ -55,11 +55,6 @@ static void gdk_x11_draw_rectangle (GdkDrawable    *drawable,
 				    gint            y,
 				    gint            width,
 				    gint            height);
-static void gdk_x11_draw_polygon   (GdkDrawable    *drawable,
-				    GdkGC          *gc,
-				    gboolean        filled,
-				    GdkPoint       *points,
-				    gint            npoints);
 static void gdk_x11_draw_drawable  (GdkDrawable    *drawable,
 				    GdkGC          *gc,
 				    GdkPixmap      *src,
@@ -109,7 +104,6 @@ _gdk_drawable_impl_x11_class_init (GdkDrawableImplX11Class *klass)
   
   drawable_class->create_gc = _gdk_x11_gc_new;
   drawable_class->draw_rectangle = gdk_x11_draw_rectangle;
-  drawable_class->draw_polygon = gdk_x11_draw_polygon;
   drawable_class->draw_drawable_with_src = gdk_x11_draw_drawable;
   drawable_class->draw_points = gdk_x11_draw_points;
   drawable_class->draw_segments = gdk_x11_draw_segments;
@@ -328,50 +322,6 @@ gdk_x11_draw_rectangle (GdkDrawable *drawable,
   else
     XDrawRectangle (GDK_SCREEN_XDISPLAY (impl->screen), impl->xid,
 		    GDK_GC_GET_XGC (gc), x, y, width, height);
-}
-
-static void
-gdk_x11_draw_polygon (GdkDrawable *drawable,
-		      GdkGC       *gc,
-		      gboolean     filled,
-		      GdkPoint    *points,
-		      gint         npoints)
-{
-  XPoint *tmp_points;
-  gint tmp_npoints, i;
-  GdkDrawableImplX11 *impl;
-
-  impl = GDK_DRAWABLE_IMPL_X11 (drawable);
-
-  
-  if (!filled &&
-      (points[0].x != points[npoints-1].x || points[0].y != points[npoints-1].y))
-    {
-      tmp_npoints = npoints + 1;
-      tmp_points = g_new (XPoint, tmp_npoints);
-      tmp_points[npoints].x = points[0].x;
-      tmp_points[npoints].y = points[0].y;
-    }
-  else
-    {
-      tmp_npoints = npoints;
-      tmp_points = g_new (XPoint, tmp_npoints);
-    }
-
-  for (i=0; i<npoints; i++)
-    {
-      tmp_points[i].x = points[i].x;
-      tmp_points[i].y = points[i].y;
-    }
-  
-  if (filled)
-    XFillPolygon (GDK_SCREEN_XDISPLAY (impl->screen), impl->xid,
-		  GDK_GC_GET_XGC (gc), tmp_points, tmp_npoints, Complex, CoordModeOrigin);
-  else
-    XDrawLines (GDK_SCREEN_XDISPLAY (impl->screen), impl->xid,
-		GDK_GC_GET_XGC (gc), tmp_points, tmp_npoints, CoordModeOrigin);
-
-  g_free (tmp_points);
 }
 
 static void

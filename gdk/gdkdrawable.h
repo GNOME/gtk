@@ -67,11 +67,6 @@ struct _GdkDrawableClass
 			  gint		y,
 			  gint		width,
 			  gint		height);
-  void (*draw_polygon)   (GdkDrawable  *drawable,
-			  GdkGC	       *gc,
-			  gboolean	filled,
-			  GdkPoint     *points,
-			  gint		npoints);
   void (*draw_drawable)  (GdkDrawable  *drawable,
 			  GdkGC	       *gc,
 			  GdkDrawable  *src,
@@ -184,11 +179,6 @@ void gdk_draw_rectangle (GdkDrawable      *drawable,
 			 gint              y,
 			 gint              width,
 			 gint              height);
-void gdk_draw_polygon   (GdkDrawable      *drawable,
-			 GdkGC            *gc,
-			 gboolean          filled,
-			 const GdkPoint   *points,
-			 gint              n_points);
 void gdk_draw_drawable  (GdkDrawable      *drawable,
 			 GdkGC            *gc,
 			 GdkDrawable      *src,

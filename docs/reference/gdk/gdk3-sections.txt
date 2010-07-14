@@ -341,7 +341,6 @@ gdk_draw_lines
 gdk_draw_segments
 GdkSegment
 gdk_draw_rectangle
-gdk_draw_polygon
 gdk_draw_layout_line
 gdk_draw_layout_line_with_colors
 gdk_draw_layout

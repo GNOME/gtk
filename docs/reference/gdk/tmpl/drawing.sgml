@@ -208,17 +208,6 @@ function.
 @height: 
 
 
-<!-- ##### FUNCTION gdk_draw_polygon ##### -->
-<para>
-</para>
-
-@drawable: 
-@gc: 
-@filled: 
-@points: 
-@n_points: 
-
-
 <!-- ##### FUNCTION gdk_draw_layout_line ##### -->
 <para>
 

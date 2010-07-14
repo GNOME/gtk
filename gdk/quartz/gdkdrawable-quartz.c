@@ -185,46 +185,6 @@ gdk_quartz_draw_rectangle (GdkDrawable *drawable,
 }
 
 static void
-gdk_quartz_draw_polygon (GdkDrawable *drawable,
-			 GdkGC       *gc,
-			 gboolean     filled,
-			 GdkPoint    *points,
-			 gint         npoints)
-{
-  CGContextRef context = gdk_quartz_drawable_get_context (drawable, FALSE);
-  int i;
-
-  if (!context)
-    return;
-
-  _gdk_quartz_gc_update_cg_context (gc, drawable, context,
-				    filled ?
-				    GDK_QUARTZ_CONTEXT_FILL :
-				    GDK_QUARTZ_CONTEXT_STROKE);
-
-  if (filled)
-    {
-      CGContextMoveToPoint (context, points[0].x, points[0].y);
-      for (i = 1; i < npoints; i++)
-	CGContextAddLineToPoint (context, points[i].x, points[i].y);
-
-      CGContextClosePath (context);
-      CGContextFillPath (context);
-    }
-  else
-    {
-      CGContextMoveToPoint (context, points[0].x + 0.5, points[0].y + 0.5);
-      for (i = 1; i < npoints; i++)
-	CGContextAddLineToPoint (context, points[i].x + 0.5, points[i].y + 0.5);
-
-      CGContextClosePath (context);
-      CGContextStrokePath (context);
-    }
-
-  gdk_quartz_drawable_release_context (drawable, context);
-}
-
-static void
 gdk_quartz_draw_drawable (GdkDrawable *drawable,
 			  GdkGC       *gc,
 			  GdkPixmap   *src,
@@ -455,7 +415,6 @@ gdk_drawable_impl_quartz_class_init (GdkDrawableImplQuartzClass *klass)
 
   drawable_class->create_gc = _gdk_quartz_gc_new;
   drawable_class->draw_rectangle = gdk_quartz_draw_rectangle;
-  drawable_class->draw_polygon = gdk_quartz_draw_polygon;
   drawable_class->draw_drawable_with_src = gdk_quartz_draw_drawable;
   drawable_class->draw_points = gdk_quartz_draw_points;
   drawable_class->draw_segments = gdk_quartz_draw_segments;
