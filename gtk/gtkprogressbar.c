@@ -491,16 +491,16 @@ gtk_progress_bar_expose (GtkWidget      *widget,
 
   if (gtk_widget_is_drawable (widget))
     {
+      cairo_t *cr;
+
       if (priv->dirty)
         gtk_progress_bar_paint (pbar);
 
-      gdk_draw_drawable (widget->window,
-                         widget->style->black_gc,
-                         priv->offscreen_pixmap,
-                         event->area.x, event->area.y,
-                         event->area.x, event->area.y,
-                         event->area.width,
-                         event->area.height);
+      cr = gdk_cairo_create (widget->window);
+      gdk_cairo_set_source_pixmap (cr, priv->offscreen_pixmap, 0, 0);
+      gdk_cairo_rectangle (cr, &event->area);
+      cairo_paint (cr);
+      cairo_destroy (cr);
     }
 
   return FALSE;
