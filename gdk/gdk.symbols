@@ -333,6 +333,7 @@ gdk_colormap_get_screen
 #if IN_HEADER(__GDK_CURSOR_H__)
 #if IN_FILE(__GDK_CURSOR_C__)
 gdk_cursor_get_type G_GNUC_CONST
+gdk_cursor_get_cursor_type
 gdk_cursor_new
 gdk_cursor_ref
 gdk_cursor_unref
