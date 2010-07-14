@@ -165,6 +165,9 @@ gtk_application_default_action (GtkApplication *application,
   GtkApplicationPrivate *priv = application->priv;
   GtkAction *action;
 
+  if (!priv->main_actions)
+    return;
+
   action = gtk_action_group_get_action (priv->main_actions, action_name);
   if (action)
     gtk_action_activate (action);
