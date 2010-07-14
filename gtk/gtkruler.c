@@ -46,7 +46,6 @@ struct _GtkRulerPriv
   GtkOrientation        orientation;
   GtkRulerMetric       *metric;
 
-  GdkGC                *non_gr_exp_gc;
   GdkPixmap            *backing_store;
 
   gint                  slider_size;
@@ -505,12 +504,6 @@ gtk_ruler_unrealize (GtkWidget *widget)
       priv->backing_store = NULL;
     }
 
-  if (priv->non_gr_exp_gc)
-    {
-      g_object_unref (priv->non_gr_exp_gc);
-      priv->non_gr_exp_gc = NULL;
-    }
-
   GTK_WIDGET_CLASS (gtk_ruler_parent_class)->unrealize (widget);
 }
 
@@ -586,15 +579,15 @@ gtk_ruler_expose (GtkWidget      *widget,
     {
       GtkRuler *ruler = GTK_RULER (widget);
       GtkRulerPriv *priv = ruler->priv;
+      cairo_t *cr;
 
       gtk_ruler_draw_ticks (ruler);
       
-      gdk_draw_drawable (widget->window,
-                         priv->non_gr_exp_gc,
-                         priv->backing_store,
-			 0, 0, 0, 0,
-			 widget->allocation.width,
-			 widget->allocation.height);
+      cr = gdk_cairo_create (widget->window);
+      gdk_cairo_set_source_pixmap (cr, priv->backing_store, 0, 0);
+      gdk_cairo_rectangle (cr, &event->area);
+      cairo_fill (cr);
+      cairo_destroy (cr);
       
       gtk_ruler_draw_pos (ruler);
     }
@@ -629,12 +622,6 @@ gtk_ruler_make_pixmap (GtkRuler *ruler)
 
   priv->xsrc = 0;
   priv->ysrc = 0;
-
-  if (!priv->non_gr_exp_gc)
-    {
-      priv->non_gr_exp_gc = gdk_gc_new (widget->window);
-      gdk_gc_set_exposures (priv->non_gr_exp_gc, FALSE);
-    }
 }
 
 static void
@@ -891,13 +878,15 @@ gtk_ruler_real_draw_pos (GtkRuler *ruler)
 	  cairo_t *cr = gdk_cairo_create (widget->window);
 
 	  /*  If a backing store exists, restore the ruler  */
-	  if (priv->backing_store)
-	    gdk_draw_drawable (widget->window,
-			       widget->style->black_gc,
-			       priv->backing_store,
-			       priv->xsrc, priv->ysrc,
-			       priv->xsrc, priv->ysrc,
-			       bs_width, bs_height);
+	  if (priv->backing_store) {
+            cairo_t *cr = gdk_cairo_create (widget->window);
+
+            gdk_cairo_set_source_pixmap (cr, priv->backing_store, 0, 0);
+            cairo_rectangle (cr, priv->xsrc, priv->ysrc, bs_width, bs_height);
+            cairo_fill (cr);
+
+            cairo_destroy (cr);
+          }
 
           if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
             {
