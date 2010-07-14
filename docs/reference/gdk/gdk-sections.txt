@@ -1209,6 +1209,7 @@ gdk_cursor_new_from_name
 gdk_cursor_new_for_display
 gdk_cursor_get_display
 gdk_cursor_get_image
+gdk_cursor_get_cursor_type
 gdk_cursor_ref
 gdk_cursor_unref
 gdk_cursor_destroy

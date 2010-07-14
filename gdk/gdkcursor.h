@@ -157,6 +157,7 @@ void        gdk_cursor_unref             (GdkCursor       *cursor);
 GdkCursor*  gdk_cursor_new_from_name	 (GdkDisplay      *display,
 					  const gchar     *name);
 GdkPixbuf*  gdk_cursor_get_image         (GdkCursor       *cursor);
+GdkCursorType gdk_cursor_get_cursor_type (GdkCursor       *cursor);
 
 #ifndef GDK_DISABLE_DEPRECATED
 #define gdk_cursor_destroy             gdk_cursor_unref
