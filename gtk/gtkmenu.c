@@ -1345,15 +1345,10 @@ gtk_menu_tearoff_bg_copy (GtkMenu *menu)
   if (menu->torn_off)
     {
       GdkPixmap *pixmap;
-      GdkGC *gc;
-      GdkGCValues gc_values;
+      cairo_t *cr;
 
       menu->tearoff_active = FALSE;
       menu->saved_scroll_offset = menu->scroll_offset;
-      
-      gc_values.subwindow_mode = GDK_INCLUDE_INFERIORS;
-      gc = gdk_gc_new_with_values (widget->window,
-				   &gc_values, GDK_GC_SUBWINDOW);
       
       gdk_drawable_get_size (menu->tearoff_window->window, &width, &height);
       
@@ -1362,10 +1357,13 @@ gtk_menu_tearoff_bg_copy (GtkMenu *menu)
 			       height,
 			       -1);
 
-      gdk_draw_drawable (pixmap, gc,
-			 menu->tearoff_window->window,
-			 0, 0, 0, 0, -1, -1);
-      g_object_unref (gc);
+      cr = gdk_cairo_create (pixmap);
+      /* Let's hope that function never notices we're not passing it a pixmap */
+      gdk_cairo_set_source_pixmap (cr,
+                                   menu->tearoff_window->window,
+                                   0, 0);
+      cairo_paint (cr);
+      cairo_destroy (cr);
 
       gtk_widget_set_size_request (menu->tearoff_window,
 				   width,
