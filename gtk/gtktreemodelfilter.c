@@ -76,7 +76,6 @@ struct _FilterLevel
   FilterLevel *parent_level;
 };
 
-#define GTK_TREE_MODEL_FILTER_GET_PRIVATE(obj)  (G_TYPE_INSTANCE_GET_PRIVATE ((obj), GTK_TYPE_TREE_MODEL_FILTER, GtkTreeModelFilterPrivate))
 
 struct _GtkTreeModelFilterPrivate
 {
@@ -296,7 +295,9 @@ G_DEFINE_TYPE_WITH_CODE (GtkTreeModelFilter, gtk_tree_model_filter, G_TYPE_OBJEC
 static void
 gtk_tree_model_filter_init (GtkTreeModelFilter *filter)
 {
-  filter->priv = GTK_TREE_MODEL_FILTER_GET_PRIVATE (filter);
+  filter->priv = G_TYPE_INSTANCE_GET_PRIVATE (filter,
+                                              GTK_TYPE_TREE_MODEL_FILTER,
+                                              GtkTreeModelFilterPrivate);
 
   filter->priv->visible_column = -1;
   filter->priv->zero_ref_count = 0;

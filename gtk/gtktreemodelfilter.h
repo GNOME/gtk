@@ -55,7 +55,7 @@ struct _GtkTreeModelFilter
   GObject parent;
 
   /*< private >*/
-  GtkTreeModelFilterPrivate *GSEAL (priv);
+  GtkTreeModelFilterPrivate *priv;
 };
 
 struct _GtkTreeModelFilterClass
