@@ -1070,6 +1070,7 @@ gdk_device_get_history
 gdk_device_free_history
 GdkTimeCoord
 gdk_device_get_axis
+gdk_device_get_n_axes
 
 <SUBSECTION>
 gdk_input_set_extension_events

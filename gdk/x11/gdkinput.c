@@ -317,6 +317,22 @@ gdk_device_get_axis_use (GdkDevice *device,
   return device->axes[index].use;
 }
 
+/**
+ * gdk_device_get_n_axes:
+ * @device: a #GdkDevice.
+ *
+ * Returns: the number of axes of this device.
+ *
+ * Since: 2.22
+ **/
+gint
+gdk_device_get_n_axes (GdkDevice *device)
+{
+  g_return_val_if_fail (GDK_IS_DEVICE (device), 0);
+
+  return device->num_axes;
+}
+
 void
 gdk_device_set_axis_use (GdkDevice   *device,
 			 guint        index,

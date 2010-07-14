@@ -141,6 +141,7 @@ void                  gdk_device_get_key        (GdkDevice       *device,
                                                  GdkModifierType *modifiers);
 GdkAxisUse            gdk_device_get_axis_use   (GdkDevice       *device,
                                                  guint            index);
+gint                  gdk_device_get_n_axes     (GdkDevice       *device);
 
 /* Functions to configure a device */
 void           gdk_device_set_source    (GdkDevice      *device,
