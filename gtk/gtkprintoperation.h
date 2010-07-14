@@ -79,7 +79,8 @@ struct _GtkPrintOperation
 {
   GObject parent_instance;
 
-  GtkPrintOperationPrivate *GSEAL (priv);
+  /* <private> */
+  GtkPrintOperationPrivate *priv;
 };
 
 struct _GtkPrintOperationClass

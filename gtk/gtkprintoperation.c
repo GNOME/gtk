@@ -34,7 +34,6 @@
 
 #define SHOW_PROGRESS_TIME 1200
 
-#define GTK_PRINT_OPERATION_GET_PRIVATE(obj)(G_TYPE_INSTANCE_GET_PRIVATE ((obj), GTK_TYPE_PRINT_OPERATION, GtkPrintOperationPrivate))
 
 enum 
 {
@@ -155,7 +154,9 @@ gtk_print_operation_init (GtkPrintOperation *operation)
   GtkPrintOperationPrivate *priv;
   const char *appname;
 
-  priv = operation->priv = GTK_PRINT_OPERATION_GET_PRIVATE (operation);
+  priv = operation->priv = G_TYPE_INSTANCE_GET_PRIVATE (operation,
+                                                        GTK_TYPE_PRINT_OPERATION,
+                                                        GtkPrintOperationPrivate);
 
   priv->status = GTK_PRINT_STATUS_INITIAL;
   priv->status_string = g_strdup ("");
