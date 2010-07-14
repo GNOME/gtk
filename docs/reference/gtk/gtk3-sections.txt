@@ -458,7 +458,6 @@ gtk_bin_get_type
 <FILE>gtkbox</FILE>
 <TITLE>GtkBox</TITLE>
 GtkBox
-GtkBoxChild
 gtk_box_new
 gtk_box_pack_start
 gtk_box_pack_end
