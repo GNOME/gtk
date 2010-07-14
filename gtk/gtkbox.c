@@ -829,7 +829,6 @@ gtk_box_pack (GtkBox      *box,
   child_info->expand = expand ? TRUE : FALSE;
   child_info->fill = fill ? TRUE : FALSE;
   child_info->pack = pack_type;
-  child_info->is_secondary = FALSE;
 
   private->children = g_list_append (private->children, child_info);
 

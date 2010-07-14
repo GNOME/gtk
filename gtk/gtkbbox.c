@@ -81,6 +81,8 @@ enum {
   CHILD_PROP_SECONDARY
 };
 
+#define GTK_BOX_SECONDARY_CHILD "gtk-box-secondary-child"
+
 static void gtk_button_box_set_property       (GObject           *object,
 					       guint              prop_id,
 					       const GValue      *value,
@@ -93,6 +95,8 @@ static void gtk_button_box_size_request       (GtkWidget         *widget,
                                                GtkRequisition    *requisition);
 static void gtk_button_box_size_allocate      (GtkWidget         *widget,
                                                GtkAllocation     *allocation);
+static void gtk_button_box_remove             (GtkContainer      *container,
+                                               GtkWidget         *widget);
 static void gtk_button_box_set_child_property (GtkContainer      *container,
 					       GtkWidget         *child,
 					       guint              property_id,
@@ -128,6 +132,7 @@ gtk_button_box_class_init (GtkButtonBoxClass *class)
   widget_class->size_request = gtk_button_box_size_request;
   widget_class->size_allocate = gtk_button_box_size_allocate;
 
+  container_class->remove = gtk_button_box_remove;
   container_class->set_child_property = gtk_button_box_set_child_property;
   container_class->get_child_property = gtk_button_box_get_child_property;
 
@@ -283,6 +288,19 @@ gtk_button_box_get_child_property (GtkContainer *container,
     }
 }
 
+static void
+gtk_button_box_remove (GtkContainer *container,
+                       GtkWidget    *widget)
+{
+  /* clear is_secondary flag in case the widget
+   * is added to another container */
+  gtk_button_box_set_child_secondary (GTK_BUTTON_BOX (container),
+                                      widget,
+                                      FALSE);
+
+  GTK_CONTAINER_CLASS (gtk_button_box_parent_class)->remove (container, widget);
+}
+
 /**
  * gtk_button_box_set_layout:
  * @widget: a #GtkButtonBox
@@ -341,33 +359,10 @@ gboolean
 gtk_button_box_get_child_secondary (GtkButtonBox *widget,
 				    GtkWidget    *child)
 {
-  GtkBoxChild *child_info = NULL;
-  GList *list, *children;
-
   g_return_val_if_fail (GTK_IS_BUTTON_BOX (widget), FALSE);
   g_return_val_if_fail (GTK_IS_WIDGET (child), FALSE);
 
-  list = children = gtk_container_get_children (GTK_CONTAINER (widget));
-
-  while (list)
-    {
-      child_info = list->data;
-      if (child_info->widget == child)
-	break;
-
-      list = list->next;
-    }
-
-  if (list == NULL)
-    {
-      g_list_free (children);
-      return FALSE;
-    }
-  else
-    {
-      g_list_free (children);
-      return child_info->is_secondary;
-    }
+  return (g_object_get_data (G_OBJECT (child), GTK_BOX_SECONDARY_CHILD) != NULL);
 }
 
 /**
@@ -395,27 +390,13 @@ gtk_button_box_set_child_secondary (GtkButtonBox *widget,
 				    GtkWidget    *child,
 				    gboolean      is_secondary)
 {
-  GList *list, *children;
-
   g_return_if_fail (GTK_IS_BUTTON_BOX (widget));
   g_return_if_fail (GTK_IS_WIDGET (child));
   g_return_if_fail (child->parent == GTK_WIDGET (widget));
 
-
-  list = children = gtk_container_get_children (GTK_CONTAINER (widget));
-  while (list)
-    {
-      GtkBoxChild *child_info = list->data;
-      if (child_info->widget == child)
-	{
-	  child_info->is_secondary = is_secondary;
-	  break;
-	}
-
-      list = list->next;
-    }
-  g_list_free (children);
-
+  g_object_set_data (G_OBJECT (child),
+                     GTK_BOX_SECONDARY_CHILD,
+                     is_secondary ? GINT_TO_POINTER (1) : NULL);
   gtk_widget_child_notify (child, "secondary");
 
   if (gtk_widget_get_visible (GTK_WIDGET (widget))
@@ -429,13 +410,12 @@ gtk_button_box_set_child_secondary (GtkButtonBox *widget,
 void
 _gtk_button_box_child_requisition (GtkWidget *widget,
                                    int       *nvis_children,
-				   int       *nvis_secondaries,
+                                   int       *nvis_secondaries,
                                    int       *width,
                                    int       *height)
 {
   GtkButtonBoxPriv *priv;
   GtkButtonBox *bbox;
-  GtkBoxChild *child;
   GList *children, *list;
   gint nchildren;
   gint nsecondaries;
@@ -485,19 +465,24 @@ _gtk_button_box_child_requisition (GtkWidget *widget,
   
   while (children)
     {
+      GtkWidget *child;
+      gboolean is_secondary;
+
       child = children->data;
       children = children->next;
 
-      if (gtk_widget_get_visible (child->widget))
+      is_secondary = gtk_button_box_get_child_secondary (bbox, child);
+
+      if (gtk_widget_get_visible (child))
 	{
 	  nchildren += 1;
-	  gtk_widget_size_request (child->widget, &child_requisition);
+	  gtk_widget_size_request (child, &child_requisition);
 
 	  if (child_requisition.width + ipad_w > needed_width)
 	    needed_width = child_requisition.width + ipad_w;
 	  if (child_requisition.height + ipad_h > needed_height)
 	    needed_height = child_requisition.height + ipad_h;
-	  if (child->is_secondary)
+	  if (is_secondary)
 	    nsecondaries++;
 	}
     }
@@ -614,7 +599,6 @@ gtk_button_box_size_allocate (GtkWidget     *widget,
   GtkButtonBoxPriv *priv;
   GtkBox *base_box;
   GtkButtonBox *box;
-  GtkBoxChild *child;
   GList *children, *list;
   GtkAllocation child_allocation;
   gint nvis_children;
@@ -810,10 +794,15 @@ gtk_button_box_size_allocate (GtkWidget     *widget,
 
   while (children)
     {
+      GtkWidget *child;
+      gboolean is_secondary;
+
       child = children->data;
       children = children->next;
 
-      if (gtk_widget_get_visible (child->widget))
+      is_secondary = gtk_button_box_get_child_secondary (box, child);
+
+      if (gtk_widget_get_visible (child))
         {
           child_allocation.width = child_width;
           child_allocation.height = child_height;
@@ -822,7 +811,7 @@ gtk_button_box_size_allocate (GtkWidget     *widget,
             {
               child_allocation.y = y;
 
-              if (child->is_secondary)
+              if (is_secondary)
                 {
                   child_allocation.x = secondary_x;
                   secondary_x += childspace;
@@ -841,7 +830,7 @@ gtk_button_box_size_allocate (GtkWidget     *widget,
             {
               child_allocation.x = x;
 
-              if (child->is_secondary)
+              if (is_secondary)
                 {
                   child_allocation.y = secondary_y;
                   secondary_y += childspace;
@@ -853,7 +842,7 @@ gtk_button_box_size_allocate (GtkWidget     *widget,
                 }
             }
 
-          gtk_widget_size_allocate (child->widget, &child_allocation);
+          gtk_widget_size_allocate (child, &child_allocation);
         }
     }
 

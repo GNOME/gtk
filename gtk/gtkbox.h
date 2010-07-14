@@ -76,7 +76,6 @@ struct _GtkBoxClass
  *  being used as padding around the widget; set when packed, %TRUE by default.
  * @pack: one of #GtkPackType indicating whether the child is packed with
  *  reference to the start (top/left) or end (bottom/right) of the GtkBox.
- * @is_secondary: %TRUE if the child is secondary
  *
  * The #GtkBoxChild holds a child widget of #GtkBox and describes how the child
  * is to be packed into the #GtkBox. All fields of this #GtkBoxChild should be
@@ -96,7 +95,6 @@ struct _GtkBoxChild
   guint expand : 1;
   guint fill : 1;
   guint pack : 1;
-  guint is_secondary : 1;
 };
 #endif
 
