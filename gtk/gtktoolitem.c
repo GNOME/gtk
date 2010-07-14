@@ -91,7 +91,6 @@ enum {
   PROP_ACTIVATABLE_USE_ACTION_APPEARANCE
 };
 
-#define GTK_TOOL_ITEM_GET_PRIVATE(o)  (G_TYPE_INSTANCE_GET_PRIVATE ((o), GTK_TYPE_TOOL_ITEM, GtkToolItemPrivate))
 
 struct _GtkToolItemPrivate
 {
@@ -276,7 +275,9 @@ gtk_tool_item_init (GtkToolItem *toolitem)
 {
   gtk_widget_set_can_focus (GTK_WIDGET (toolitem), FALSE);
 
-  toolitem->priv = GTK_TOOL_ITEM_GET_PRIVATE (toolitem);
+  toolitem->priv = G_TYPE_INSTANCE_GET_PRIVATE (toolitem,
+                                                GTK_TYPE_TOOL_ITEM,
+                                                GtkToolItemPrivate);
 
   toolitem->priv->visible_horizontal = TRUE;
   toolitem->priv->visible_vertical = TRUE;
