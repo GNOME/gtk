@@ -219,33 +219,6 @@ function.
 @n_points: 
 
 
-<!-- ##### FUNCTION gdk_draw_glyphs ##### -->
-<para>
-
-</para>
-
-@drawable: 
-@gc: 
-@font: 
-@x: 
-@y: 
-@glyphs: 
-
-
-<!-- ##### FUNCTION gdk_draw_glyphs_transformed ##### -->
-<para>
-
-</para>
-
-@drawable: 
-@gc: 
-@matrix: 
-@font: 
-@x: 
-@y: 
-@glyphs: 
-
-
 <!-- ##### FUNCTION gdk_draw_layout_line ##### -->
 <para>
 

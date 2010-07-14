@@ -550,8 +550,6 @@ gdk_drawable_get_visible_region
 gdk_drawable_get_visual
 gdk_drawable_set_colormap
 gdk_draw_drawable
-gdk_draw_glyphs
-gdk_draw_glyphs_transformed
 gdk_draw_line
 gdk_draw_lines
 gdk_draw_point

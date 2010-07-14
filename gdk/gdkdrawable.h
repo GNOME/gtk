@@ -94,13 +94,6 @@ struct _GdkDrawableClass
 			  GdkPoint     *points,
 			  gint          npoints);
 
-  void (*draw_glyphs)    (GdkDrawable      *drawable,
-			  GdkGC	           *gc,
-			  PangoFont        *font,
-			  gint              x,
-			  gint              y,
-			  PangoGlyphString *glyphs);
-
   gint (*get_depth)      (GdkDrawable  *drawable);
   void (*get_size)       (GdkDrawable  *drawable,
                           gint         *width,
@@ -123,14 +116,6 @@ struct _GdkDrawableClass
                                           gint         height,
                                           gint        *composite_x_offset,
                                           gint        *composite_y_offset);
-
-  void (*draw_glyphs_transformed) (GdkDrawable      *drawable,
-				   GdkGC	    *gc,
-				   PangoMatrix      *matrix,
-				   PangoFont        *font,
-				   gint              x,
-				   gint              y,
-				   PangoGlyphString *glyphs);
 
   cairo_surface_t *(*ref_cairo_surface) (GdkDrawable *drawable);
 
@@ -226,12 +211,6 @@ void gdk_draw_lines     (GdkDrawable      *drawable,
 			 const GdkPoint   *points,
 			 gint              n_points);
 
-void gdk_draw_glyphs      (GdkDrawable      *drawable,
-			   GdkGC            *gc,
-			   PangoFont        *font,
-			   gint              x,
-			   gint              y,
-			   PangoGlyphString *glyphs);
 void gdk_draw_layout_line (GdkDrawable      *drawable,
 			   GdkGC            *gc,
 			   gint              x,
@@ -257,14 +236,6 @@ void gdk_draw_layout_with_colors      (GdkDrawable     *drawable,
                                        PangoLayout     *layout,
                                        const GdkColor  *foreground,
                                        const GdkColor  *background);
-
-void gdk_draw_glyphs_transformed (GdkDrawable        *drawable,
-				  GdkGC	             *gc,
-				  const PangoMatrix  *matrix,
-				  PangoFont          *font,
-				  gint                x,
-				  gint                y,
-				  PangoGlyphString   *glyphs);
 
 cairo_region_t *gdk_drawable_get_clip_region    (GdkDrawable *drawable);
 cairo_region_t *gdk_drawable_get_visible_region (GdkDrawable *drawable);

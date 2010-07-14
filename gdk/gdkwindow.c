@@ -264,20 +264,6 @@ static void   gdk_window_draw_lines     (GdkDrawable     *drawable,
 					 GdkPoint        *points,
 					 gint             npoints);
 
-static void gdk_window_draw_glyphs             (GdkDrawable      *drawable,
-						GdkGC            *gc,
-						PangoFont        *font,
-						gint              x,
-						gint              y,
-						PangoGlyphString *glyphs);
-static void gdk_window_draw_glyphs_transformed (GdkDrawable      *drawable,
-						GdkGC            *gc,
-						PangoMatrix      *matrix,
-						PangoFont        *font,
-						gint              x,
-						gint              y,
-						PangoGlyphString *glyphs);
-
 static cairo_surface_t *gdk_window_ref_cairo_surface (GdkDrawable *drawable);
 static cairo_surface_t *gdk_window_create_cairo_surface (GdkDrawable *drawable,
 							 int width,
@@ -461,8 +447,6 @@ gdk_window_class_init (GdkWindowObjectClass *klass)
   drawable_class->draw_points = gdk_window_draw_points;
   drawable_class->draw_segments = gdk_window_draw_segments;
   drawable_class->draw_lines = gdk_window_draw_lines;
-  drawable_class->draw_glyphs = gdk_window_draw_glyphs;
-  drawable_class->draw_glyphs_transformed = gdk_window_draw_glyphs_transformed;
   drawable_class->get_depth = gdk_window_real_get_depth;
   drawable_class->get_screen = gdk_window_real_get_screen;
   drawable_class->get_size = gdk_window_real_get_size;
@@ -4365,69 +4349,6 @@ gdk_window_draw_lines (GdkDrawable *drawable,
 
   if (new_points != points)
     g_free (new_points);
-
-  END_DRAW;
-}
-
-static void
-gdk_window_draw_glyphs (GdkDrawable      *drawable,
-			GdkGC            *gc,
-			PangoFont        *font,
-			gint              x,
-			gint              y,
-			PangoGlyphString *glyphs)
-{
-  if (GDK_WINDOW_DESTROYED (drawable))
-    return;
-
-  BEGIN_DRAW;
-  gdk_draw_glyphs (impl, gc, font,
-		   x - x_offset, y - y_offset, glyphs);
-  END_DRAW;
-}
-
-static void
-gdk_window_draw_glyphs_transformed (GdkDrawable      *drawable,
-				    GdkGC            *gc,
-				    PangoMatrix      *matrix,
-				    PangoFont        *font,
-				    gint              x,
-				    gint              y,
-				    PangoGlyphString *glyphs)
-{
-  PangoMatrix tmp_matrix;
-
-  if (GDK_WINDOW_DESTROYED (drawable))
-    return;
-
-  BEGIN_DRAW;
-
-  if (x_offset != 0 || y_offset != 0)
-    {
-      if (matrix)
-	{
-	  tmp_matrix = *matrix;
-	  tmp_matrix.x0 -= x_offset;
-	  tmp_matrix.y0 -= y_offset;
-	  matrix = &tmp_matrix;
-	}
-      else if (GDK_PANGO_UNITS_OVERFLOWS (x_offset, y_offset))
-	{
-	  PangoMatrix identity = PANGO_MATRIX_INIT;
-
-	  tmp_matrix = identity;
-	  tmp_matrix.x0 -= x_offset;
-	  tmp_matrix.y0 -= y_offset;
-	  matrix = &tmp_matrix;
-	}
-      else
-	{
-	  x -= x_offset * PANGO_SCALE;
-	  y -= y_offset * PANGO_SCALE;
-	}
-    }
-
-  gdk_draw_glyphs_transformed (impl, gc, matrix, font, x, y, glyphs);
 
   END_DRAW;
 }

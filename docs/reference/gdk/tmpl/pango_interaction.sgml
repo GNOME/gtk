@@ -25,11 +25,10 @@ linkend="PANGO-SCALE-CAPS">PANGO_SCALE</link> or the PANGO_PIXELS() macro.)
 </para>
 <para>
 Rendering a Pango layout is done most simply with gdk_draw_layout();
-you can also draw pieces of the layout with gdk_draw_layout() or
-gdk_draw_glyphs(). #GdkPangoRenderer is a subclass of #PangoRenderer
-that is used internally to implement these functions. Using it
-directly or subclassing it can be useful in some cases. See the
-#GdkPangoRenderer documentation for details.
+you can also draw pieces of the layout with gdk_draw_layout().
+#GdkPangoRenderer is a subclass of #PangoRenderer that is used internally
+to implement these functions. Using it directly or subclassing it can be
+useful in some cases. See the #GdkPangoRenderer documentation for details.
 </para>
 <example id="rotated-example">
 <title>Using #GdkPangoRenderer to draw transformed text</title>
