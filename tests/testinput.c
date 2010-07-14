@@ -55,12 +55,13 @@ update_cursor (GtkWidget *widget,  gdouble x, gdouble y)
       if (cursor_present && (cursor_present != state ||
 			     x != cursor_x || y != cursor_y))
 	{
-	  gdk_draw_drawable (widget->window,
-			     widget->style->fg_gc[gtk_widget_get_state (widget)],
-			     pixmap,
-			     cursor_x - 5, cursor_y - 5,
-			     cursor_x - 5, cursor_y - 5,
-			     10, 10);
+          cairo_t *cr = gdk_cairo_create (widget->window);
+
+          gdk_cairo_set_source_pixmap (cr, pixmap, 0, 0);
+          cairo_rectangle (cr, cursor_x - 5, cursor_y - 5, 10, 10);
+          cairo_fill (cr);
+
+          cairo_destroy (cr);
 	}
 
       cursor_present = state;
@@ -82,18 +83,20 @@ update_cursor (GtkWidget *widget,  gdouble x, gdouble y)
 static gint
 configure_event (GtkWidget *widget, GdkEventConfigure *event)
 {
+  cairo_t *cr;
+
   if (pixmap)
     g_object_unref (pixmap);
   pixmap = gdk_pixmap_new(widget->window,
 			  widget->allocation.width,
 			  widget->allocation.height,
 			  -1);
-  gdk_draw_rectangle (pixmap,
-		      widget->style->white_gc,
-		      TRUE,
-		      0, 0,
-		      widget->allocation.width,
-		      widget->allocation.height);
+  cr = gdk_cairo_create (pixmap);
+
+  cairo_set_source_rgb (cr, 1, 1, 1);
+  cairo_paint (cr);
+
+  cairo_destroy (cr);
 
   return TRUE;
 }
@@ -102,12 +105,13 @@ configure_event (GtkWidget *widget, GdkEventConfigure *event)
 static gint
 expose_event (GtkWidget *widget, GdkEventExpose *event)
 {
-  gdk_draw_drawable (widget->window,
-		     widget->style->fg_gc[gtk_widget_get_state (widget)],
-		     pixmap,
-		     event->area.x, event->area.y,
-		     event->area.x, event->area.y,
-		     event->area.width, event->area.height);
+  cairo_t *cr = gdk_cairo_create (widget->window);
+
+  gdk_cairo_set_source_pixmap (cr, pixmap, 0, 0);
+  gdk_cairo_rectangle (cr, &event->area);
+  cairo_fill (cr);
+
+  cairo_destroy (cr);
 
   return FALSE;
 }
