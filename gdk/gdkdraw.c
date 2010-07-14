@@ -637,51 +637,6 @@ gdk_draw_glyphs_transformed (GdkDrawable       *drawable,
 		    x / PANGO_SCALE, y / PANGO_SCALE, glyphs);
 }
 
-/**
- * gdk_draw_trapezoids:
- * @drawable: a #GdkDrawable
- * @gc: a #GdkGC
- * @trapezoids: an array of #GdkTrapezoid structures
- * @n_trapezoids: the number of trapezoids to draw
- * 
- * Draws a set of anti-aliased trapezoids. The trapezoids are
- * combined using saturation addition, then drawn over the background
- * as a set. This is low level functionality used internally to implement
- * rotated underlines and backgrouds when rendering a PangoLayout and is
- * likely not useful for applications.
- *
- * Since: 2.6
- **/
-void
-gdk_draw_trapezoids (GdkDrawable        *drawable,
-		     GdkGC	        *gc,
-		     const GdkTrapezoid *trapezoids,
-		     gint                n_trapezoids)
-{
-  cairo_t *cr;
-  int i;
-
-  g_return_if_fail (GDK_IS_DRAWABLE (drawable));
-  g_return_if_fail (GDK_IS_GC (gc));
-  g_return_if_fail (n_trapezoids == 0 || trapezoids != NULL);
-
-  cr = gdk_cairo_create (drawable);
-  _gdk_gc_update_context (gc, cr, NULL, NULL, TRUE, drawable);
-  
-  for (i = 0; i < n_trapezoids; i++)
-    {
-      cairo_move_to (cr, trapezoids[i].x11, trapezoids[i].y1);
-      cairo_line_to (cr, trapezoids[i].x21, trapezoids[i].y1);
-      cairo_line_to (cr, trapezoids[i].x22, trapezoids[i].y2);
-      cairo_line_to (cr, trapezoids[i].x12, trapezoids[i].y2);
-      cairo_close_path (cr);
-    }
-
-  cairo_fill (cr);
-
-  cairo_destroy (cr);
-}
-
 static GdkDrawable *
 gdk_drawable_real_get_composite_drawable (GdkDrawable *drawable,
                                           gint         x,

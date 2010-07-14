@@ -278,11 +278,6 @@ static void gdk_window_draw_glyphs_transformed (GdkDrawable      *drawable,
 						gint              y,
 						PangoGlyphString *glyphs);
 
-static void gdk_window_draw_trapezoids (GdkDrawable   *drawable,
-					GdkGC	      *gc,
-					GdkTrapezoid  *trapezoids,
-					gint           n_trapezoids);
-
 static cairo_surface_t *gdk_window_ref_cairo_surface (GdkDrawable *drawable);
 static cairo_surface_t *gdk_window_create_cairo_surface (GdkDrawable *drawable,
 							 int width,
@@ -468,7 +463,6 @@ gdk_window_class_init (GdkWindowObjectClass *klass)
   drawable_class->draw_lines = gdk_window_draw_lines;
   drawable_class->draw_glyphs = gdk_window_draw_glyphs;
   drawable_class->draw_glyphs_transformed = gdk_window_draw_glyphs_transformed;
-  drawable_class->draw_trapezoids = gdk_window_draw_trapezoids;
   drawable_class->get_depth = gdk_window_real_get_depth;
   drawable_class->get_screen = gdk_window_real_get_screen;
   drawable_class->get_size = gdk_window_real_get_size;
@@ -4760,44 +4754,6 @@ gdk_window_clear_area_e (GdkWindow *window,
 				  x, y,
 				  width, height,
 				  TRUE);
-}
-
-static void
-gdk_window_draw_trapezoids (GdkDrawable   *drawable,
-			    GdkGC	  *gc,
-			    GdkTrapezoid  *trapezoids,
-			    gint           n_trapezoids)
-{
-  GdkTrapezoid *new_trapezoids = NULL;
-
-  if (GDK_WINDOW_DESTROYED (drawable))
-    return;
-
-  BEGIN_DRAW;
-
-  if (x_offset != 0 || y_offset != 0)
-    {
-      gint i;
-
-      new_trapezoids = g_new (GdkTrapezoid, n_trapezoids);
-      for (i=0; i < n_trapezoids; i++)
-	{
-	  new_trapezoids[i].y1 = trapezoids[i].y1 - y_offset;
-	  new_trapezoids[i].x11 = trapezoids[i].x11 - x_offset;
-	  new_trapezoids[i].x21 = trapezoids[i].x21 - x_offset;
-	  new_trapezoids[i].y2 = trapezoids[i].y2 - y_offset;
-	  new_trapezoids[i].x12 = trapezoids[i].x12 - x_offset;
-	  new_trapezoids[i].x22 = trapezoids[i].x22 - x_offset;
-	}
-
-      trapezoids = new_trapezoids;
-    }
-
-  gdk_draw_trapezoids (impl, gc, trapezoids, n_trapezoids);
-
-  g_free (new_trapezoids);
-
-  END_DRAW;
 }
 
 static void

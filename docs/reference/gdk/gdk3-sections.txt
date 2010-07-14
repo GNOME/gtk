@@ -342,8 +342,6 @@ gdk_draw_segments
 GdkSegment
 gdk_draw_rectangle
 gdk_draw_polygon
-gdk_draw_trapezoids
-GdkTrapezoid
 gdk_draw_glyphs
 gdk_draw_glyphs_transformed
 gdk_draw_layout_line

@@ -40,7 +40,6 @@
 G_BEGIN_DECLS
 
 typedef struct _GdkDrawableClass GdkDrawableClass;
-typedef struct _GdkTrapezoid     GdkTrapezoid;
 
 #define GDK_TYPE_DRAWABLE              (gdk_drawable_get_type ())
 #define GDK_DRAWABLE(object)           (G_TYPE_CHECK_INSTANCE_CAST ((object), GDK_TYPE_DRAWABLE, GdkDrawable))
@@ -132,10 +131,6 @@ struct _GdkDrawableClass
 				   gint              x,
 				   gint              y,
 				   PangoGlyphString *glyphs);
-  void (*draw_trapezoids)         (GdkDrawable      *drawable,
-				   GdkGC	    *gc,
-				   GdkTrapezoid     *trapezoids,
-				   gint              n_trapezoids);
 
   cairo_surface_t *(*ref_cairo_surface) (GdkDrawable *drawable);
 
@@ -168,11 +163,6 @@ struct _GdkDrawableClass
   void         (*_gdk_reserved13) (void);
   void         (*_gdk_reserved14) (void);
   void         (*_gdk_reserved15) (void);
-};
-
-struct _GdkTrapezoid
-{
-  double y1, x11, x21, y2, x12, x22;
 };
 
 GType           gdk_drawable_get_type     (void) G_GNUC_CONST;
@@ -275,11 +265,6 @@ void gdk_draw_glyphs_transformed (GdkDrawable        *drawable,
 				  gint                x,
 				  gint                y,
 				  PangoGlyphString   *glyphs);
-void gdk_draw_trapezoids         (GdkDrawable        *drawable,
-				  GdkGC	             *gc,
-				  const GdkTrapezoid *trapezoids,
-				  gint                n_trapezoids);
-
 
 cairo_region_t *gdk_drawable_get_clip_region    (GdkDrawable *drawable);
 cairo_region_t *gdk_drawable_get_visible_region (GdkDrawable *drawable);

@@ -559,7 +559,6 @@ gdk_draw_points
 gdk_draw_polygon
 gdk_draw_rectangle
 gdk_draw_segments
-gdk_draw_trapezoids
 #endif
 #endif
 
