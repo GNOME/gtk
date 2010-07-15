@@ -13721,6 +13721,7 @@ gtk_tree_view_create_row_drag_icon (GtkTreeView  *tree_view,
   gint bin_window_width;
   gboolean is_separator = FALSE;
   gboolean rtl;
+  cairo_t *cr;
 
   g_return_val_if_fail (GTK_IS_TREE_VIEW (tree_view), NULL);
   g_return_val_if_fail (path != NULL, NULL);
@@ -13765,12 +13766,9 @@ gtk_tree_view_create_row_drag_icon (GtkTreeView  *tree_view,
   expose_area.width = bin_window_width + 2;
   expose_area.height = background_area.height + 2;
 
-  gdk_draw_rectangle (drawable,
-                      widget->style->base_gc [gtk_widget_get_state (widget)],
-                      TRUE,
-                      0, 0,
-                      bin_window_width + 2,
-                      background_area.height + 2);
+  cr = gdk_cairo_create (drawable);
+  gdk_cairo_set_source_color (cr, &widget->style->base [gtk_widget_get_state (widget)]);
+  cairo_paint (cr);
 
   rtl = gtk_widget_get_direction (GTK_WIDGET (tree_view)) == GTK_TEXT_DIR_RTL;
 
@@ -13838,12 +13836,15 @@ gtk_tree_view_create_row_drag_icon (GtkTreeView  *tree_view,
       cell_offset += column->width;
     }
 
-  gdk_draw_rectangle (drawable,
-                      widget->style->black_gc,
-                      FALSE,
-                      0, 0,
-                      bin_window_width + 1,
-                      background_area.height + 1);
+  cairo_set_source_rgb (cr, 0, 0, 0);
+  cairo_rectangle (cr, 
+                   0.5, 0.5, 
+                   bin_window_width + 1,
+                   background_area.height + 1);
+  cairo_set_line_width (cr, 1.0);
+  cairo_stroke (cr);
+
+  cairo_destroy (cr);
 
   return drawable;
 }
