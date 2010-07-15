@@ -593,6 +593,7 @@ gtk_decorated_window_paint (GtkWidget    *widget,
   GtkWindowDecoration *deco = get_decoration (window);
   gint x1, y1, x2, y2;
   GtkStateType border_state;
+  cairo_t *cr;
 
   if (deco->decorated)
     {
@@ -638,6 +639,16 @@ gtk_decorated_window_paint (GtkWidget    *widget,
 		     DECORATION_BORDER_LEFT - 2, DECORATION_BORDER_TOP - 2,
 		     width - (DECORATION_BORDER_LEFT + DECORATION_BORDER_RIGHT) + 3,
 		     height - (DECORATION_BORDER_TOP + DECORATION_BORDER_BOTTOM) + 3);
+      
+      cr = gdk_cairo_create (frame);
+      cairo_set_line_width (cr, 1.0);
+      cairo_set_line_cap (cr, CAIRO_LINE_CAP_SQUARE);
+
+      if (area)
+        {
+          gdk_cairo_rectangle (cr, &area);
+          cairo_clip (cr);
+        }
 
       if (deco->maximizable)
 	{
@@ -648,20 +659,16 @@ gtk_decorated_window_paint (GtkWidget    *widget,
 	  x2 = x1 + DECORATION_BUTTON_SIZE;
 	  y2 = y1 + DECORATION_BUTTON_SIZE;
 
-	  if (area)
-	    gdk_gc_set_clip_rectangle (widget->style->bg_gc[widget->state], area);
+          gdk_cairo_set_source_color (cr, &widget->style->bg[widget->state]);
+          cairo_rectangle (cr, x1, y1, x2 - x1, y2 - y1);
+          cairo_fill (cr);
 
-	  gdk_draw_rectangle (frame, widget->style->bg_gc[widget->state], TRUE,
-			      x1, y1, x2 - x1, y2 - y1);
-
-	  gdk_draw_line (frame, widget->style->black_gc, x1 + 1, y1 + 1, x2 - 2, y1 + 1);
-
-	  gdk_draw_rectangle (frame, widget->style->black_gc, FALSE,
-			      x1 + 1, y1 + 2,
-			      DECORATION_BUTTON_SIZE - 3, DECORATION_BUTTON_SIZE - 4);
-
-	  if (area)
-	    gdk_gc_set_clip_rectangle (widget->style->black_gc, NULL);
+          gdk_cairo_set_source_rgb (cr, 0, 0, 0);
+          cairo_rectangle (cr, x1 + 1, y1 + 1, x2 - x1 - 3, 1);
+          cairo_move_to (cr, x1 + 1.5, y1 + 1.5);
+          cairo_line_to (cr, x2 - 1.5, y1 + 1.5);
+          cairo_rectangle (cr, x1 + 1.5, y1 + 2.5, DECORATION_BUTTON_SIZE - 3, DECORATION_BUTTON_SIZE - 4);
+          cairo_stroke (cr);
 	}
       
       /* Close button: */
@@ -671,26 +678,16 @@ gtk_decorated_window_paint (GtkWidget    *widget,
       x2 = width - DECORATION_BORDER_LEFT;
       y2 = DECORATION_BUTTON_Y_OFFSET + DECORATION_BUTTON_SIZE;
 
-      if (area)
-	gdk_gc_set_clip_rectangle (widget->style->bg_gc[widget->state], area);
+      gdk_cairo_set_source_color (cr, &widget->style->bg[widget->state]);
+      cairo_rectangle (cr, x1, y1, x2 - x1, y2 - y1);
+      cairo_fill (cr);
 
-      gdk_draw_rectangle (frame, widget->style->bg_gc[widget->state], TRUE,
-			  x1, y1, x2 - x1, y2 - y1);
-
-      if (area)
-	gdk_gc_set_clip_rectangle (widget->style->bg_gc[widget->state], NULL);
-      
-      if (area)
-	gdk_gc_set_clip_rectangle (widget->style->black_gc, area);
-
-      gdk_draw_line (frame, widget->style->black_gc, x1, y1, x2-1, y2-1);
-
-      gdk_draw_line (frame, widget->style->black_gc, x1, y2-1, x2-1, y1);
-
-      if (area)
-	gdk_gc_set_clip_rectangle (widget->style->black_gc, NULL);
-      
-      
+      /* draw an X */
+      cairo_move_to (cr, x1 + 0.5, y1 + 0.5);
+      cairo_line_to (cr, x2 - 0.5, y2 - 0.5);
+      cairo_move_to (cr, x1 + 0.5, y2 - 0.5);
+      cairo_line_to (cr, x2 - 0.5, y1 + 0.5);
+      cairo_stroke (cr);
 
       /* Title */
       if (deco->title_layout)
@@ -705,7 +702,8 @@ gtk_decorated_window_paint (GtkWidget    *widget,
 	  if (area)
 	    gdk_gc_set_clip_rectangle (widget->style->fg_gc [border_state], NULL);
 	}
-      
+
+      cairo_destroy (cr);
     }
 }
 
