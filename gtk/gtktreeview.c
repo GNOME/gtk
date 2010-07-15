@@ -3400,6 +3400,7 @@ gtk_tree_view_motion_draw_column_motion_arrow (GtkTreeView *tree_view)
   gint arrow_type = DRAG_COLUMN_WINDOW_STATE_UNSET;
   GdkWindowAttr attributes;
   guint attributes_mask;
+  cairo_t *cr;
 
   if (!reorder ||
       reorder->left_column == tree_view->priv->drag_column ||
@@ -3425,9 +3426,6 @@ gtk_tree_view_motion_draw_column_motion_arrow (GtkTreeView *tree_view)
   /* We want to draw the rectangle over the initial location. */
   if (arrow_type == DRAG_COLUMN_WINDOW_STATE_ORIGINAL)
     {
-      GdkGC *gc;
-      GdkColor col;
-
       if (tree_view->priv->drag_column_window_state != DRAG_COLUMN_WINDOW_STATE_ORIGINAL)
 	{
 	  if (tree_view->priv->drag_highlight_window)
@@ -3451,14 +3449,14 @@ gtk_tree_view_motion_draw_column_motion_arrow (GtkTreeView *tree_view)
 	  gdk_window_set_user_data (tree_view->priv->drag_highlight_window, GTK_WIDGET (tree_view));
 
 	  mask = gdk_pixmap_new (tree_view->priv->drag_highlight_window, width, height, 1);
-	  gc = gdk_gc_new (mask);
-	  col.pixel = 1;
-	  gdk_gc_set_foreground (gc, &col);
-	  gdk_draw_rectangle (mask, gc, TRUE, 0, 0, width, height);
-	  col.pixel = 0;
-	  gdk_gc_set_foreground(gc, &col);
-	  gdk_draw_rectangle (mask, gc, TRUE, 2, 2, width - 4, height - 4);
-	  g_object_unref (gc);
+          cr = gdk_cairo_create (mask);
+
+          cairo_set_operator (cr, CAIRO_OPERATOR_CLEAR);
+          cairo_paint (cr);
+          cairo_set_operator (cr, CAIRO_OPERATOR_SOURCE);
+          cairo_rectangle (cr, 1, 1, width - 2, height - 2);
+          cairo_stroke (cr);
+          cairo_destroy (cr);
 
 	  gdk_window_shape_combine_mask (tree_view->priv->drag_highlight_window,
 					 mask, 0, 0);
@@ -3468,10 +3466,6 @@ gtk_tree_view_motion_draw_column_motion_arrow (GtkTreeView *tree_view)
     }
   else if (arrow_type == DRAG_COLUMN_WINDOW_STATE_ARROW)
     {
-      gint i, j = 1;
-      GdkGC *gc;
-      GdkColor col;
-
       width = tree_view->priv->expander_size;
 
       /* Get x, y, width, height of arrow */
@@ -3514,25 +3508,20 @@ gtk_tree_view_motion_draw_column_motion_arrow (GtkTreeView *tree_view)
 	  gdk_window_set_user_data (tree_view->priv->drag_highlight_window, GTK_WIDGET (tree_view));
 
 	  mask = gdk_pixmap_new (tree_view->priv->drag_highlight_window, width, height, 1);
-	  gc = gdk_gc_new (mask);
-	  col.pixel = 1;
-	  gdk_gc_set_foreground (gc, &col);
-	  gdk_draw_rectangle (mask, gc, TRUE, 0, 0, width, height);
+          cr = gdk_cairo_create (mask);
 
-	  /* Draw the 2 arrows as per above */
-	  col.pixel = 0;
-	  gdk_gc_set_foreground (gc, &col);
-	  for (i = 0; i < width; i ++)
-	    {
-	      if (i == (width/2 - 1))
-		continue;
-	      gdk_draw_line (mask, gc, i, j, i, height - j);
-	      if (i < (width/2 - 1))
-		j++;
-	      else
-		j--;
-	    }
-	  g_object_unref (gc);
+          cairo_set_operator (cr, CAIRO_OPERATOR_CLEAR);
+          cairo_paint (cr);
+          cairo_set_operator (cr, CAIRO_OPERATOR_SOURCE);
+          cairo_move_to (cr, 0, 0);
+          cairo_line_to (cr, width, 0);
+          cairo_line_to (cr, width / 2., width / 2);
+          cairo_move_to (cr, 0, height);
+          cairo_line_to (cr, width, height);
+          cairo_line_to (cr, width / 2., height - width / 2.);
+          cairo_fill (cr);
+
+          cairo_destroy (cr);
 	  gdk_window_shape_combine_mask (tree_view->priv->drag_highlight_window,
 					 mask, 0, 0);
 	  if (mask) g_object_unref (mask);
@@ -3544,10 +3533,6 @@ gtk_tree_view_motion_draw_column_motion_arrow (GtkTreeView *tree_view)
   else if (arrow_type == DRAG_COLUMN_WINDOW_STATE_ARROW_LEFT ||
 	   arrow_type == DRAG_COLUMN_WINDOW_STATE_ARROW_RIGHT)
     {
-      gint i, j = 1;
-      GdkGC *gc;
-      GdkColor col;
-
       width = tree_view->priv->expander_size;
 
       /* Get x, y, width, height of arrow */
@@ -3589,28 +3574,26 @@ gtk_tree_view_motion_draw_column_motion_arrow (GtkTreeView *tree_view)
 	  gdk_window_set_user_data (tree_view->priv->drag_highlight_window, GTK_WIDGET (tree_view));
 
 	  mask = gdk_pixmap_new (tree_view->priv->drag_highlight_window, width, height, 1);
-	  gc = gdk_gc_new (mask);
-	  col.pixel = 1;
-	  gdk_gc_set_foreground (gc, &col);
-	  gdk_draw_rectangle (mask, gc, TRUE, 0, 0, width, height);
+          cr = gdk_cairo_create (mask);
 
-	  /* Draw the 2 arrows as per above */
-	  col.pixel = 0;
-	  gdk_gc_set_foreground (gc, &col);
-	  j = tree_view->priv->expander_size;
-	  for (i = 0; i < width; i ++)
-	    {
-	      gint k;
-	      if (arrow_type == DRAG_COLUMN_WINDOW_STATE_ARROW_LEFT)
-		k = width - i - 1;
-	      else
-		k = i;
-	      gdk_draw_line (mask, gc, k, j, k, height - j);
-	      gdk_draw_line (mask, gc, k, 0, k, tree_view->priv->expander_size - j);
-	      gdk_draw_line (mask, gc, k, height, k, height - tree_view->priv->expander_size + j);
-	      j--;
-	    }
-	  g_object_unref (gc);
+          cairo_set_operator (cr, CAIRO_OPERATOR_CLEAR);
+          cairo_paint (cr);
+          cairo_set_operator (cr, CAIRO_OPERATOR_SOURCE);
+          /* mirror if we're on the left */
+          if (arrow_type == DRAG_COLUMN_WINDOW_STATE_ARROW_LEFT)
+            {
+              cairo_translate (cr, width, 0);
+              cairo_scale (cr, -1, 1);
+            }
+          cairo_move_to (cr, 0, 0);
+          cairo_line_to (cr, width, width);
+          cairo_line_to (cr, 0, tree_view->priv->expander_size);
+          cairo_move_to (cr, 0, height);
+          cairo_line_to (cr, width, height - width);
+          cairo_line_to (cr, 0, height - tree_view->priv->expander_size);
+          cairo_fill (cr);
+
+          cairo_destroy (cr);
 	  gdk_window_shape_combine_mask (tree_view->priv->drag_highlight_window,
 					 mask, 0, 0);
 	  if (mask) g_object_unref (mask);
