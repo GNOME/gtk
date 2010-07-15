@@ -4220,6 +4220,44 @@ draw_empty_focus (GtkTreeView *tree_view, GdkRectangle *clip_area)
 		     1, 1, w, h);
 }
 
+typedef enum {
+  GTK_TREE_VIEW_GRID_LINE,
+  GTK_TREE_VIEW_TREE_LINE,
+  GTK_TREE_VIEW_FOREGROUND_LINE
+} GtkTreeViewLineType;
+
+static void
+gtk_tree_view_draw_line (GtkTreeView         *tree_view,
+                         GdkWindow           *window,
+                         GtkTreeViewLineType  type,
+                         int                  x1,
+                         int                  y1,
+                         int                  x2,
+                         int                  y2)
+{
+  GdkGC *gc;
+
+  switch (type)
+    {
+    case GTK_TREE_VIEW_TREE_LINE:
+      gc = tree_view->priv->tree_line_gc;
+      break;
+    case GTK_TREE_VIEW_GRID_LINE:
+      gc = tree_view->priv->grid_line_gc;
+      break;
+    default:
+      g_assert_not_reached ();
+      /* fall through */
+    case GTK_TREE_VIEW_FOREGROUND_LINE:
+      gc = GTK_WIDGET (tree_view)->style->fg_gc[gtk_widget_get_state (GTK_WIDGET (tree_view))];
+      break;
+    }
+
+  gdk_draw_line (window, gc,
+                 x1, y1,
+                 x2, y2);
+}
+                         
 static void
 gtk_tree_view_draw_grid_lines (GtkTreeView    *tree_view,
 			       GdkEventExpose *event,
@@ -4247,10 +4285,10 @@ gtk_tree_view_draw_grid_lines (GtkTreeView    *tree_view,
 
       current_x += column->width;
 
-      gdk_draw_line (event->window,
-		     tree_view->priv->grid_line_gc,
-		     current_x - 1, 0,
-		     current_x - 1, tree_view->priv->height);
+      gtk_tree_view_draw_line (tree_view, event->window,
+                               GTK_TREE_VIEW_GRID_LINE,
+                               current_x - 1, 0,
+                               current_x - 1, tree_view->priv->height);
     }
 }
 
@@ -4703,18 +4741,18 @@ gtk_tree_view_bin_expose (GtkWidget      *widget,
 	  if (draw_hgrid_lines)
 	    {
 	      if (background_area.y > 0)
-		gdk_draw_line (event->window,
-			       tree_view->priv->grid_line_gc,
-			       background_area.x, background_area.y,
-			       background_area.x + background_area.width,
-			       background_area.y);
+                gtk_tree_view_draw_line (tree_view, event->window,
+                                         GTK_TREE_VIEW_GRID_LINE,
+                                         background_area.x, background_area.y,
+                                         background_area.x + background_area.width,
+			                 background_area.y);
 
 	      if (y_offset + max_height >= event->area.height)
-		gdk_draw_line (event->window,
-			       tree_view->priv->grid_line_gc,
-			       background_area.x, background_area.y + max_height,
-			       background_area.x + background_area.width,
-			       background_area.y + max_height);
+                gtk_tree_view_draw_line (tree_view, event->window,
+                                         GTK_TREE_VIEW_GRID_LINE,
+                                         background_area.x, background_area.y + max_height,
+                                         background_area.x + background_area.width,
+			                 background_area.y + max_height);
 	    }
 
 	  if (gtk_tree_view_is_expander_column (tree_view, column) &&
@@ -4732,21 +4770,21 @@ gtk_tree_view_bin_expose (GtkWidget      *widget,
 	      if ((node->flags & GTK_RBNODE_IS_PARENT) == GTK_RBNODE_IS_PARENT
 		  && depth > 1)
 	        {
-		  gdk_draw_line (event->window,
-				 tree_view->priv->tree_line_gc,
-			         x + tree_view->priv->expander_size * (depth - 1.5) * mult,
-				 y1,
-			         x + tree_view->priv->expander_size * (depth - 1.1) * mult,
-				 y1);
+                  gtk_tree_view_draw_line (tree_view, event->window,
+                                           GTK_TREE_VIEW_TREE_LINE,
+                                           x + tree_view->priv->expander_size * (depth - 1.5) * mult,
+                                           y1,
+                                           x + tree_view->priv->expander_size * (depth - 1.1) * mult,
+                                           y1);
 	        }
 	      else if (depth > 1)
 	        {
-		  gdk_draw_line (event->window,
-				 tree_view->priv->tree_line_gc,
-			         x + tree_view->priv->expander_size * (depth - 1.5) * mult,
-				 y1,
-			         x + tree_view->priv->expander_size * (depth - 0.5) * mult,
-				 y1);
+                  gtk_tree_view_draw_line (tree_view, event->window,
+                                           GTK_TREE_VIEW_TREE_LINE,
+                                           x + tree_view->priv->expander_size * (depth - 1.5) * mult,
+                                           y1,
+                                           x + tree_view->priv->expander_size * (depth - 0.5) * mult,
+                                           y1);
 		}
 
 	      if (depth > 1)
@@ -4756,19 +4794,19 @@ gtk_tree_view_bin_expose (GtkWidget      *widget,
 		  GtkRBTree *tmp_tree;
 
 	          if (!_gtk_rbtree_next (tree, node))
-		    gdk_draw_line (event->window,
-				   tree_view->priv->tree_line_gc,
-				   x + tree_view->priv->expander_size * (depth - 1.5) * mult,
-				   y0,
-				   x + tree_view->priv->expander_size * (depth - 1.5) * mult,
-				   y1);
+                    gtk_tree_view_draw_line (tree_view, event->window,
+                                             GTK_TREE_VIEW_TREE_LINE,
+                                             x + tree_view->priv->expander_size * (depth - 1.5) * mult,
+                                             y0,
+                                             x + tree_view->priv->expander_size * (depth - 1.5) * mult,
+                                             y1);
 		  else
-		    gdk_draw_line (event->window,
-				   tree_view->priv->tree_line_gc,
-				   x + tree_view->priv->expander_size * (depth - 1.5) * mult,
-				   y0,
-				   x + tree_view->priv->expander_size * (depth - 1.5) * mult,
-				   y2);
+                    gtk_tree_view_draw_line (tree_view, event->window,
+                                             GTK_TREE_VIEW_TREE_LINE,
+                                             x + tree_view->priv->expander_size * (depth - 1.5) * mult,
+                                             y0,
+                                             x + tree_view->priv->expander_size * (depth - 1.5) * mult,
+                                             y2);
 
 		  tmp_node = tree->parent_node;
 		  tmp_tree = tree->parent_tree;
@@ -4776,12 +4814,12 @@ gtk_tree_view_bin_expose (GtkWidget      *widget,
 		  for (i = depth - 2; i > 0; i--)
 		    {
 	              if (_gtk_rbtree_next (tmp_tree, tmp_node))
-			gdk_draw_line (event->window,
-				       tree_view->priv->tree_line_gc,
-				       x + tree_view->priv->expander_size * (i - 0.5) * mult,
-				       y0,
-				       x + tree_view->priv->expander_size * (i - 0.5) * mult,
-				       y2);
+                        gtk_tree_view_draw_line (tree_view, event->window,
+                                                 GTK_TREE_VIEW_TREE_LINE,
+                                                 x + tree_view->priv->expander_size * (i - 0.5) * mult,
+                                                 y0,
+                                                 x + tree_view->priv->expander_size * (i - 0.5) * mult,
+                                                 y2);
 
 		      tmp_node = tmp_tree->parent_node;
 		      tmp_tree = tmp_tree->parent_tree;
@@ -4865,12 +4903,12 @@ gtk_tree_view_bin_expose (GtkWidget      *widget,
 
           if (highlight_y >= 0)
             {
-              gdk_draw_line (event->window,
-                             widget->style->fg_gc[gtk_widget_get_state (widget)],
-                             rtl ? highlight_x + expander_cell_width : highlight_x,
-                             highlight_y,
-                             rtl ? 0 : bin_window_width,
-                             highlight_y);
+              gtk_tree_view_draw_line (tree_view, event->window,
+                                       GTK_TREE_VIEW_FOREGROUND_LINE,
+                                       rtl ? highlight_x + expander_cell_width : highlight_x,
+                                       highlight_y,
+                                       rtl ? 0 : bin_window_width,
+                                       highlight_y);
             }
         }
 
