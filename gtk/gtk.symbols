@@ -2921,8 +2921,6 @@ gtk_recent_manager_remove_item
 gtk_recent_manager_lookup_item
 gtk_recent_manager_has_item
 gtk_recent_manager_move_item
-gtk_recent_manager_set_limit
-gtk_recent_manager_get_limit
 gtk_recent_manager_purge_items
 gtk_recent_info_get_type G_GNUC_CONST
 gtk_recent_info_ref

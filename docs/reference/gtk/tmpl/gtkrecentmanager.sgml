@@ -227,24 +227,6 @@ The #GQuark used for #GtkRecentManagerError errors.
 @Returns: 
 
 
-<!-- ##### FUNCTION gtk_recent_manager_get_limit ##### -->
-<para>
-
-</para>
-
-@manager: 
-@Returns: 
-
-
-<!-- ##### FUNCTION gtk_recent_manager_set_limit ##### -->
-<para>
-
-</para>
-
-@manager: 
-@limit: 
-
-
 <!-- ##### FUNCTION gtk_recent_manager_get_items ##### -->
 <para>
 

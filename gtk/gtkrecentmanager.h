@@ -157,9 +157,6 @@ gboolean          gtk_recent_manager_move_item      (GtkRecentManager     *manag
 						     const gchar          *uri,
 						     const gchar          *new_uri,
 						     GError              **error);
-void              gtk_recent_manager_set_limit      (GtkRecentManager     *manager,
-						     gint                  limit);
-gint              gtk_recent_manager_get_limit      (GtkRecentManager     *manager);
 GList *           gtk_recent_manager_get_items      (GtkRecentManager     *manager);
 gint              gtk_recent_manager_purge_items    (GtkRecentManager     *manager,
 						     GError              **error);

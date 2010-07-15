@@ -91,7 +91,6 @@ struct _GtkRecentManagerPrivate
 
   guint is_dirty : 1;
   
-  gint limit;
   gint size;
 
   GBookmarkFile *recent_items;
@@ -213,28 +212,7 @@ gtk_recent_manager_class_init (GtkRecentManagerClass *klass)
 							P_("The full path to the file to be used to store and read the list"),
 							NULL,
 							(G_PARAM_CONSTRUCT_ONLY | G_PARAM_READWRITE)));
-  /**
-   * GtkRecentManager:limit
-   *
-   * The maximum number of items to be returned by the
-   * gtk_recent_manager_get_items() function.
-   *
-   * Since: 2.10
-   *
-   * Deprecated: 2.22: Setting this property does not have any effect.
-   *   #GtkRecenManager:limit property is deprecated. The length of
-   *   the list should be managed by the view (implementing
-   *   #GtkRecentChooser), and not by the model (the #GtkRecentManager).
-   */
-  g_object_class_install_property (gobject_class,
-  				   PROP_LIMIT,
-  				   g_param_spec_int ("limit",
-  				   		     P_("Limit"),
-  				   		     P_("The maximum number of items to be returned by gtk_recent_manager_get_items()"),
-  				   		     -1,
-  				   		     G_MAXINT,
-  				   		     DEFAULT_LIMIT,
-                                                     G_PARAM_READWRITE | G_PARAM_DEPRECATED));
+
   /**
    * GtkRecentManager:size
    * 
@@ -285,9 +263,7 @@ gtk_recent_manager_init (GtkRecentManager *manager)
                                                GtkRecentManagerPrivate);
   priv = manager->priv;
 
-  priv->limit = DEFAULT_LIMIT;
   priv->size = 0;
-
   priv->filename = NULL;
 }
 
@@ -303,9 +279,6 @@ gtk_recent_manager_set_property (GObject               *object,
     {
     case PROP_FILENAME:
       gtk_recent_manager_set_filename (recent_manager, g_value_get_string (value));
-      break;      
-    case PROP_LIMIT:
-      gtk_recent_manager_set_limit (recent_manager, g_value_get_int (value));
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -325,9 +298,6 @@ gtk_recent_manager_get_property (GObject               *object,
     {
     case PROP_FILENAME:
       g_value_set_string (value, recent_manager->priv->filename);
-      break;
-    case PROP_LIMIT:
-      g_value_set_int (value, recent_manager->priv->limit);
       break;
     case PROP_SIZE:
       g_value_set_int (value, recent_manager->priv->size);
@@ -646,58 +616,6 @@ gtk_recent_manager_get_default (void)
   return recent_manager_singleton;
 }
 
-/**
- * gtk_recent_manager_set_limit:
- * @manager: a #GtkRecentManager
- * @limit: the maximum number of items to return, or -1.
- *
- * Sets the maximum number of item that the gtk_recent_manager_get_items()
- * function should return.  If @limit is set to -1, then return all the
- * items.
- *
- * Since: 2.10
- *
- * Deprecated: 2.22: #GtkRecenManager:limit property is deprecated. The
- *   length of the list should be managed by the view (implementing
- *   #GtkRecentChooser), and not by the model (the #GtkRecentManager).
- */
-void
-gtk_recent_manager_set_limit (GtkRecentManager *manager,
-			      gint              limit)
-{
-  GtkRecentManagerPrivate *priv;
-  
-  g_return_if_fail (GTK_IS_RECENT_MANAGER (manager));
-  
-  priv = manager->priv;
-  priv->limit = limit;
-}
-
-/**
- * gtk_recent_manager_get_limit:
- * @manager: a #GtkRecentManager
- *
- * Gets the maximum number of items that the gtk_recent_manager_get_items()
- * function should return.
- *
- * Return value: the number of items to return, or -1 for every item.
- *
- * Since: 2.10
- *
- * Deprecated: 2.22: #GtkRecenManager:limit property is deprecated. The
- *   length of the list should be managed by the view (implementing
- *   #GtkRecentChooser), and not by the model (the #GtkRecentManager).
- */
-gint
-gtk_recent_manager_get_limit (GtkRecentManager *manager)
-{
-  GtkRecentManagerPrivate *priv;
-  
-  g_return_val_if_fail (GTK_IS_RECENT_MANAGER (manager), DEFAULT_LIMIT);
-  
-  priv = manager->priv;
-  return priv->limit;
-}
 
 static void
 gtk_recent_manager_add_item_query_info (GObject      *source_object,
