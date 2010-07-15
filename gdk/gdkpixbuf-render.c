@@ -57,8 +57,7 @@ gdk_pixbuf_render_threshold_alpha (GdkPixbuf *pixbuf,
                                    int        height,
                                    int        alpha_threshold)
 {
-  GdkGC *gc;
-  GdkColor color;
+  cairo_t *cr;
   int x, y;
   guchar *p;
   int start, start_status;
@@ -84,22 +83,31 @@ gdk_pixbuf_render_threshold_alpha (GdkPixbuf *pixbuf,
   if (width == 0 || height == 0)
     return;
 
-  gc = _gdk_drawable_get_scratch_gc (bitmap, FALSE);
+  cr = gdk_cairo_create (bitmap);
+  cairo_rectangle (cr, dest_x, dest_y, width, height);
+  cairo_clip (cr);
 
   if (!gdk_pixbuf_get_has_alpha (pixbuf))
     {
-      color.pixel = (alpha_threshold == 255) ? 0 : 1;
-      gdk_gc_set_foreground (gc, &color);
-      gdk_draw_rectangle (bitmap, gc, TRUE, dest_x, dest_y, width, height);
+      cairo_set_source_rgba (cr, 0, 0, 0, alpha_threshold == 255 ? 0 : 1);
+      cairo_paint (cr);
+      cairo_destroy (cr);
       return;
     }
 
-  color.pixel = 0;
-  gdk_gc_set_foreground (gc, &color);
-  gdk_draw_rectangle (bitmap, gc, TRUE, dest_x, dest_y, width, height);
+  cairo_set_operator (cr, CAIRO_OPERATOR_CLEAR);
+  cairo_paint (cr);
 
-  color.pixel = 1;
-  gdk_gc_set_foreground (gc, &color);
+  cairo_set_operator (cr, CAIRO_OPERATOR_SOURCE);
+  if (alpha_threshold == 128)
+    {
+      gdk_cairo_set_source_pixbuf (cr, pixbuf, src_x - dest_x, src_y - dest_y);
+      cairo_paint (cr);
+      cairo_destroy (cr);
+      return;
+    }
+
+  cairo_set_source_rgb (cr, 0, 0, 0);
 
   for (y = 0; y < height; y++)
     {
@@ -116,9 +124,9 @@ gdk_pixbuf_render_threshold_alpha (GdkPixbuf *pixbuf,
 	  if (status != start_status)
 	    {
 	      if (!start_status)
-		gdk_draw_line (bitmap, gc,
-			       start + dest_x, y + dest_y,
-			       x - 1 + dest_x, y + dest_y);
+                cairo_rectangle (cr, 
+                                 start + dest_x, y + dest_y,
+			         x + dest_x, y + dest_y + 1);
 	      
 	      start = x;
 	      start_status = status;
@@ -128,10 +136,13 @@ gdk_pixbuf_render_threshold_alpha (GdkPixbuf *pixbuf,
 	}
       
       if (!start_status)
-	gdk_draw_line (bitmap, gc,
-		       start + dest_x, y + dest_y,
-		       x - 1 + dest_x, y + dest_y);
+        cairo_rectangle (cr, 
+                         start + dest_x, y + dest_y,
+                         x + dest_x, y + dest_y + 1);
     }
+
+  cairo_fill (cr);
+  cairo_destroy (cr);
 }
 
 /**
