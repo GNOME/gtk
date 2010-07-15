@@ -1525,18 +1525,20 @@ gtk_style_apply_default_background (GtkStyle          *style,
       GDK_IS_PIXMAP (window) ||
       (!set_bg && style->bg_pixmap[state_type] != (GdkPixmap*) GDK_PARENT_RELATIVE))
     {
-      GdkGC *gc = style->bg_gc[state_type];
-      
+      cairo_t *cr = gdk_cairo_create (window);
+
       if (style->bg_pixmap[state_type])
         {
-          gdk_gc_set_fill (gc, GDK_TILED);
-          gdk_gc_set_tile (gc, style->bg_pixmap[state_type]);
+          gdk_cairo_set_source_pixmap (cr, style->bg_pixmap[state_type], 0, 0);
+          cairo_pattern_set_extend (cairo_get_source (cr), CAIRO_EXTEND_REPEAT);
         }
-      
-      gdk_draw_rectangle (window, gc, TRUE, 
-                          new_rect.x, new_rect.y, new_rect.width, new_rect.height);
-      if (style->bg_pixmap[state_type])
-        gdk_gc_set_fill (gc, GDK_SOLID);
+      else
+        gdk_cairo_set_source_color (cr, &style->bg[state_type]);
+
+      gdk_cairo_rectangle (cr, &new_rect);
+      cairo_fill (cr);
+
+      cairo_destroy (cr);
     }
   else
     {
