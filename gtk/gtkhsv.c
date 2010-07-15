@@ -70,9 +70,6 @@ struct _GtkHSVPriv
   /* Window for capturing events */
   GdkWindow *window;
   
-  /* GC for drawing */
-  GdkGC *gc;
-  
   /* Dragging mode */
   DragMode mode;
 
@@ -297,10 +294,6 @@ gtk_hsv_realize (GtkWidget *widget)
   gdk_window_set_user_data (priv->window, hsv);
   
   widget->style = gtk_style_attach (widget->style, widget->window);
-  
-  /* Create GC */
-  
-  priv->gc = gdk_gc_new (parent_window);
 }
 
 /* Unrealize handler for the HSV color selector */
@@ -314,9 +307,6 @@ gtk_hsv_unrealize (GtkWidget *widget)
   gdk_window_destroy (priv->window);
   priv->window = NULL;
   
-  g_object_unref (priv->gc);
-  priv->gc = NULL;
-
   GTK_WIDGET_CLASS (gtk_hsv_parent_class)->unrealize (widget);
 }
 
