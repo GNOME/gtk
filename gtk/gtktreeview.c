@@ -1943,18 +1943,6 @@ gtk_tree_view_unrealize (GtkWidget *widget)
       priv->drag_highlight_window = NULL;
     }
 
-  if (priv->tree_line_gc)
-    {
-      g_object_unref (priv->tree_line_gc);
-      priv->tree_line_gc = NULL;
-    }
-
-  if (priv->grid_line_gc)
-    {
-      g_object_unref (priv->grid_line_gc);
-      priv->grid_line_gc = NULL;
-    }
-
   GTK_WIDGET_CLASS (gtk_tree_view_parent_class)->unrealize (widget);
 }
 
@@ -4235,27 +4223,43 @@ gtk_tree_view_draw_line (GtkTreeView         *tree_view,
                          int                  x2,
                          int                  y2)
 {
-  GdkGC *gc;
+  cairo_t *cr;
+
+  cr = gdk_cairo_create (window);
 
   switch (type)
     {
     case GTK_TREE_VIEW_TREE_LINE:
-      gc = tree_view->priv->tree_line_gc;
+      cairo_set_source_rgb (cr, 0, 0, 0);
+      cairo_set_line_width (cr, tree_view->priv->tree_line_width);
+      if (tree_view->priv->tree_line_dashes[0])
+        cairo_set_dash (cr, 
+                        tree_view->priv->tree_line_dashes,
+                        2, 0.5);
       break;
     case GTK_TREE_VIEW_GRID_LINE:
-      gc = tree_view->priv->grid_line_gc;
+      cairo_set_source_rgb (cr, 0, 0, 0);
+      cairo_set_line_width (cr, tree_view->priv->grid_line_width);
+      if (tree_view->priv->grid_line_dashes[0])
+        cairo_set_dash (cr, 
+                        tree_view->priv->grid_line_dashes,
+                        2, 0.5);
       break;
     default:
       g_assert_not_reached ();
       /* fall through */
     case GTK_TREE_VIEW_FOREGROUND_LINE:
-      gc = GTK_WIDGET (tree_view)->style->fg_gc[gtk_widget_get_state (GTK_WIDGET (tree_view))];
+      cairo_set_line_width (cr, 1.0);
+      gdk_cairo_set_source_color (cr,
+          &GTK_WIDGET (tree_view)->style->fg[gtk_widget_get_state (GTK_WIDGET (tree_view))]);
       break;
     }
 
-  gdk_draw_line (window, gc,
-                 x1, y1,
-                 x2, y2);
+  cairo_move_to (cr, x1 + 0.5, y1 + 0.5);
+  cairo_line_to (cr, x2 + 0.5, y2 + 0.5);
+  cairo_stroke (cr);
+
+  cairo_destroy (cr);
 }
                          
 static void
@@ -15195,32 +15199,34 @@ gtk_tree_view_set_grid_lines (GtkTreeView           *tree_view,
   if (gtk_widget_get_realized (widget))
     {
       if (grid_lines == GTK_TREE_VIEW_GRID_LINES_NONE &&
-	  priv->grid_line_gc)
+	  priv->grid_line_width)
 	{
-	  g_object_unref (priv->grid_line_gc);
-	  priv->grid_line_gc = NULL;
+	  priv->grid_line_width = 0;
 	}
       
       if (grid_lines != GTK_TREE_VIEW_GRID_LINES_NONE && 
-	  !priv->grid_line_gc)
+	  !priv->grid_line_width)
 	{
-	  gint line_width;
 	  gint8 *dash_list;
 
 	  gtk_widget_style_get (widget,
-				"grid-line-width", &line_width,
+				"grid-line-width", &priv->grid_line_width,
 				"grid-line-pattern", (gchar *)&dash_list,
 				NULL);
       
-	  priv->grid_line_gc = gdk_gc_new (widget->window);
-	  gdk_gc_copy (priv->grid_line_gc, widget->style->black_gc);
-	  
-	  gdk_gc_set_line_attributes (priv->grid_line_gc, line_width,
-				      GDK_LINE_ON_OFF_DASH,
-				      GDK_CAP_BUTT, GDK_JOIN_MITER);
-	  gdk_gc_set_dashes (priv->grid_line_gc, 0, dash_list, 2);
-
-	  g_free (dash_list);
+          if (dash_list)
+            {
+              priv->grid_line_dashes[0] = dash_list[0];
+              if (dash_list[0])
+                priv->grid_line_dashes[1] = dash_list[1];
+	      
+              g_free (dash_list);
+            }
+          else
+            {
+              priv->grid_line_dashes[0] = 1;
+              priv->grid_line_dashes[1] = 1;
+            }
 	}      
     }
 
@@ -15282,30 +15288,32 @@ gtk_tree_view_set_enable_tree_lines (GtkTreeView *tree_view,
 
   if (gtk_widget_get_realized (widget))
     {
-      if (!enabled && priv->tree_line_gc)
+      if (!enabled && priv->tree_line_width)
 	{
-	  g_object_unref (priv->tree_line_gc);
-	  priv->tree_line_gc = NULL;
+          priv->tree_line_width = 0;
 	}
       
-      if (enabled && !priv->tree_line_gc)
+      if (enabled && !priv->tree_line_width)
 	{
-	  gint line_width;
 	  gint8 *dash_list;
 	  gtk_widget_style_get (widget,
-				"tree-line-width", &line_width,
+				"tree-line-width", &priv->tree_line_width,
 				"tree-line-pattern", (gchar *)&dash_list,
 				NULL);
 	  
-	  priv->tree_line_gc = gdk_gc_new (widget->window);
-	  gdk_gc_copy (priv->tree_line_gc, widget->style->black_gc);
-	  
-	  gdk_gc_set_line_attributes (priv->tree_line_gc, line_width,
-				      GDK_LINE_ON_OFF_DASH,
-				      GDK_CAP_BUTT, GDK_JOIN_MITER);
-	  gdk_gc_set_dashes (priv->tree_line_gc, 0, dash_list, 2);
-
-	  g_free (dash_list);
+          if (dash_list)
+            {
+              priv->tree_line_dashes[0] = dash_list[0];
+              if (dash_list[0])
+                priv->tree_line_dashes[1] = dash_list[1];
+	      
+              g_free (dash_list);
+            }
+          else
+            {
+              priv->tree_line_dashes[0] = 1;
+              priv->tree_line_dashes[1] = 1;
+            }
 	}
     }
 
