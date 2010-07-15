@@ -479,16 +479,20 @@ pixbuf_render (GdkPixbuf    *src,
     {
       cairo_t *cr;
       
-      cr = gdk_cairo_create (window);
       if (mask)
 	{
-	  gdk_pixbuf_render_threshold_alpha (tmp_pixbuf, mask,
-					     x_offset, y_offset,
-					     rect.x, rect.y,
-					     rect.width, rect.height,
-					     128);
+          cr = gdk_cairo_create (mask);
+
+          gdk_cairo_set_source_pixbuf (cr, tmp_pixbuf,
+                                       -x_offset + rect.x, 
+                                       -y_offset + rect.y);
+          gdk_cairo_rectangle (cr, &rect);
+          cairo_fill (cr);
+
+          cairo_destroy (cr);
 	}
 
+      cr = gdk_cairo_create (window);
       gdk_cairo_set_source_pixbuf (cr, 
                                    tmp_pixbuf,
                                    -x_offset + rect.x, 
