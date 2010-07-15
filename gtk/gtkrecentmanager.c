@@ -18,6 +18,75 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
  */
 
+/**
+ * SECTION:gtkrecentmanager
+ * @Title: GtkRecentManager
+ * @short_description: Managing recently used files
+ * @See_Also: #GBookmarkFile, #GtkSettings, #GtkRecentChooser
+ *
+ * #GtkRecentManager provides a facility for adding, removing and
+ * looking up recently used files. Each recently used file is
+ * identified by its URI, and has meta-data associated to it, like
+ * the names and command lines of the applications that have
+ * registered it, the number of time each application has registered
+ * the same file, the mime type of the file and whether the file
+ * should be displayed only by the applications that have
+ * registered it.
+ *
+ * <note><para>The recently used files list is per user.</para></note>
+ *
+ * The #GtkRecentManager acts like a database of all the recently
+ * used files. You can create new #GtkRecentManager objects, but
+ * it is more efficient to use the default manager created by GTK+.
+ *
+ * Adding a new recently used file is as simple as:
+ *
+ * |[
+ * GtkRecentManager *manager;
+ *
+ * manager = gtk_recent_manager_get_default ();
+ * gtk_recent_manager_add_item (manager, file_uri);
+ * ]|
+ *
+ * The #GtkRecentManager will try to gather all the needed information
+ * from the file itself through GIO.
+ *
+ * Looking up the meta-data associated with a recently used file
+ * given its URI requires calling gtk_recent_manager_lookup_item():
+ *
+ * |[
+ * GtkRecentManager *manager;
+ * GtkRecentInfo *info;
+ * GError *error = NULL;
+ *
+ * manager = gtk_recent_manager_get_default ();
+ * info = gtk_recent_manager_lookup_item (manager, file_uri, &amp;error);
+ * if (error)
+ *   {
+ *     g_warning ("Could not find the file: &percnt;s", error-&gt;message);
+ *     g_error_free (error);
+ *   }
+ * else
+ *  {
+ *    /&ast; Use the info object &ast;/
+ *    gtk_recent_info_unref (info);
+ *  }
+ * ]|
+ *
+ * In order to retrieve the list of recently used files, you can use
+ * gtk_recent_manager_get_items(), which returns a list of #GtkRecentInfo
+ * structures.
+ *
+ * A #GtkRecentManager is the model used to populate the contents of
+ * one, or more #GtkRecentChooser implementations.
+ *
+ * <note><para>The maximum age of the recently used files list is
+ * controllable through the #GtkSettings:gtk-recent-files-max-age
+ * property.</para></note>
+ *
+ * Recently used files are supported since GTK+ 2.10.
+ */
+
 #include "config.h"
 
 #include <sys/types.h>
@@ -59,6 +128,17 @@ typedef struct
   time_t stamp;
 } RecentAppInfo;
 
+/**
+ * GtkRecentInfo:
+ *
+ * <structname>GtkRecentInfo</structname> is an opaque data structure
+ * whose members can only be accessed using the provided API.
+ *
+ * <structname>GtkRecentInfo</structname> constains all the meta-data
+ * associated with an entry in the recently used files list.
+ *
+ * Since: 2.10
+ */
 struct _GtkRecentInfo
 {
   gchar *uri;
@@ -83,7 +163,6 @@ struct _GtkRecentInfo
   
   gint ref_count;
 };
-
 
 struct _GtkRecentManagerPrivate
 {
@@ -235,7 +314,8 @@ gtk_recent_manager_class_init (GtkRecentManagerClass *klass)
    * @recent_manager: the recent manager
    *
    * Emitted when the current recently used resources manager changes its
-   * contents.
+   * contents, either by calling gtk_recent_manager_add_item() or by another
+   * application.
    *
    * Since: 2.10
    */
