@@ -224,9 +224,9 @@ gtk_recent_manager_class_init (GtkRecentManagerClass *klass)
    * Since: 2.10
    *
    * Deprecated: 2.22: Setting this property does not have any effect.
-   *   #GtkRecenManager:limit property is deprecated. The length of
-   *   the list should be managed by the view (implementing
+   *   The length of the list should be managed by the view (implementing
    *   #GtkRecentChooser), and not by the model (the #GtkRecentManager).
+   *   See #GtkRecentChooser:limit.
    */
   g_object_class_install_property (gobject_class,
   				   PROP_LIMIT,
@@ -708,9 +708,9 @@ gtk_recent_manager_set_screen (GtkRecentManager *manager,
  *
  * Since: 2.10
  *
- * Deprecated: 2.22: #GtkRecenManager:limit property is deprecated. The
- *   length of the list should be managed by the view (implementing
- *   #GtkRecentChooser), and not by the model (the #GtkRecentManager).
+ * Deprecated: 2.22: The length of the list should be managed by the
+ *   view (implementing #GtkRecentChooser), and not by the model (the
+ *   #GtkRecentManager). See #GtkRecentChooser:limit.
  */
 void
 gtk_recent_manager_set_limit (GtkRecentManager *manager,
@@ -735,9 +735,9 @@ gtk_recent_manager_set_limit (GtkRecentManager *manager,
  *
  * Since: 2.10
  *
- * Deprecated: 2.22: #GtkRecenManager:limit property is deprecated. The
- *   length of the list should be managed by the view (implementing
- *   #GtkRecentChooser), and not by the model (the #GtkRecentManager).
+ * Deprecated: 2.22: The length of the list should be managed by the
+ *   view (implementing #GtkRecentChooser), and not by the model (the
+ *   #GtkRecentManager). See #GtkRecentChooser:limit.
  */
 gint
 gtk_recent_manager_get_limit (GtkRecentManager *manager)
