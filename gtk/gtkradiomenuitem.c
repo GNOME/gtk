@@ -164,7 +164,7 @@ gtk_radio_menu_item_set_group (GtkRadioMenuItem *radio_menu_item,
     }
   else
     {
-      gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (radio_menu_item), TRUE);
+      _gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (radio_menu_item), TRUE);
       /* gtk_widget_set_state (GTK_WIDGET (radio_menu_item), GTK_STATE_ACTIVE);
        */
     }
@@ -480,13 +480,13 @@ gtk_radio_menu_item_activate (GtkMenuItem *menu_item)
       if (tmp_menu_item)
 	{
 	  toggled = TRUE;
-          gtk_check_menu_item_set_active (check_menu_item, !active);
+          _gtk_check_menu_item_set_active (check_menu_item, !active);
 	}
     }
   else
     {
       toggled = TRUE;
-      gtk_check_menu_item_set_active (check_menu_item, !active);
+      _gtk_check_menu_item_set_active (check_menu_item, !active);
 
       tmp_list = priv->group;
       while (tmp_list)

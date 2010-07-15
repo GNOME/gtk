@@ -586,3 +586,23 @@ gtk_check_menu_item_set_property (GObject      *object,
       break;
     }
 }
+
+
+/* Private */
+
+/*
+ * _gtk_check_menu_item_set_active:
+ * @check_menu_item: a #GtkCheckMenuItem
+ * @is_active: whether the action is active or not
+ *
+ * Sets the #GtkCheckMenuItem:active property directly. This function does
+ * not emit signals or notifications: it is left to the caller to do so.
+ */
+void
+_gtk_check_menu_item_set_active (GtkCheckMenuItem *check_menu_item,
+                                 gboolean          is_active)
+{
+  GtkCheckMenuItemPriv *priv = check_menu_item->priv;
+
+  priv->active = is_active;
+}
