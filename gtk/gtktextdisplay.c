@@ -658,28 +658,26 @@ render_para (GtkTextRenderer    *text_renderer,
 		    (at_last_line && line_display->insert_index == byte_offset + line->length)))
 	    {
 	      GdkRectangle cursor_rect;
-	      GdkGC *cursor_gc;
+              GdkColor cursor_color;
+              cairo_t *cr;
 
 	      /* we draw text using base color on filled cursor rectangle of cursor color
 	       * (normally white on black) */
-	      cursor_gc = _gtk_widget_get_cursor_gc (text_renderer->widget);
+	      _gtk_widget_get_cursor_color (text_renderer->widget, &cursor_color);
 
 	      cursor_rect.x = x + line_display->x_offset + line_display->block_cursor.x;
 	      cursor_rect.y = y + line_display->block_cursor.y + line_display->top_margin;
 	      cursor_rect.width = line_display->block_cursor.width;
 	      cursor_rect.height = line_display->block_cursor.height;
 
-	      gdk_gc_set_clip_rectangle (cursor_gc, &cursor_rect);
+              cr = gdk_cairo_create (text_renderer->drawable);
+              gdk_cairo_rectangle (cr, &cursor_rect);
+              cairo_clip (cr);
 
-              gdk_draw_rectangle (text_renderer->drawable,
-                                  cursor_gc,
-                                  TRUE,
-                                  cursor_rect.x,
-                                  cursor_rect.y,
-                                  cursor_rect.width,
-                                  cursor_rect.height);
+              gdk_cairo_set_source_color (cr, &cursor_color);
+              cairo_paint (cr);
 
-              gdk_gc_set_clip_region (cursor_gc, NULL);
+              cairo_destroy (cr);
 
 	      /* draw text under the cursor if any */
 	      if (!line_display->cursor_at_line_end)
