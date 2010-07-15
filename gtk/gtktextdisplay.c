@@ -254,19 +254,19 @@ gtk_text_renderer_draw_shape (PangoRenderer   *renderer,
 			      int              y)
 {
   GtkTextRenderer *text_renderer = GTK_TEXT_RENDERER (renderer);
-  GdkGC *fg_gc;
+  GdkColor *fg;
 
   if (text_renderer->state == SELECTED)
     {
       if (gtk_widget_has_focus (text_renderer->widget))
-	fg_gc = text_renderer->widget->style->text_gc[GTK_STATE_SELECTED];
+	fg = &text_renderer->widget->style->text[GTK_STATE_SELECTED];
       else
-	fg_gc = text_renderer->widget->style->text_gc[GTK_STATE_SELECTED];
+	fg = &text_renderer->widget->style->text[GTK_STATE_SELECTED];
     }
   else if (text_renderer->state == CURSOR && gtk_widget_has_focus (text_renderer->widget))
-    fg_gc = text_renderer->widget->style->base_gc[GTK_STATE_NORMAL];
+    fg = &text_renderer->widget->style->base[GTK_STATE_NORMAL];
   else
-    fg_gc = text_renderer->widget->style->text_gc[GTK_STATE_NORMAL];
+    fg = &text_renderer->widget->style->text[GTK_STATE_NORMAL];
   
   if (attr->data == NULL)
     {
@@ -283,19 +283,26 @@ gtk_text_renderer_draw_shape (PangoRenderer   *renderer,
       if (gdk_rectangle_intersect (&shape_rect, &text_renderer->clip_rect,
 				   &draw_rect))
 	{
-	  gdk_draw_rectangle (text_renderer->drawable, fg_gc,
-			      FALSE, shape_rect.x, shape_rect.y,
-			      shape_rect.width, shape_rect.height);
-	  
-	  gdk_draw_line (text_renderer->drawable, fg_gc,
-			 shape_rect.x, shape_rect.y,
-			 shape_rect.x + shape_rect.width,
-			 shape_rect.y + shape_rect.height);
-	  
-	  gdk_draw_line (text_renderer->drawable, fg_gc,
-			 shape_rect.x + shape_rect.width, shape_rect.y,
-			 shape_rect.x,
-			 shape_rect.y + shape_rect.height);
+          cairo_t *cr = gdk_cairo_create (text_renderer->drawable);
+
+          cairo_set_line_width (cr, 1.0);
+          gdk_cairo_set_source_color (cr, fg);
+
+          cairo_rectangle (cr,
+                           shape_rect.x + 0.5, shape_rect.y + 0.5,
+			   shape_rect.width - 1, shape_rect.height - 1);
+          cairo_move_to (cr, shape_rect.x + 0.5, shape_rect.y + 0.5);
+          cairo_line_to (cr, 
+			 shape_rect.x + shape_rect.width - 0.5,
+			 shape_rect.y + shape_rect.height - 0.5);
+          cairo_move_to (cr, shape_rect.x + 0.5,
+                         shape_rect.y + shape_rect.height - 0.5);
+          cairo_line_to (cr, shape_rect.x + shape_rect.width - 0.5,
+			 shape_rect.y + 0.5);
+
+          cairo_stroke (cr);
+          
+          cairo_destroy (cr);
 	}
     }
   else if (GDK_IS_PIXBUF (attr->data))
