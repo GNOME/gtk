@@ -51,10 +51,6 @@ static void   gdk_pixmap_draw_drawable  (GdkDrawable     *drawable,
 					 gint             width,
 					 gint             height,
 					 GdkPixmap       *original_src);
-static void   gdk_pixmap_draw_points    (GdkDrawable     *drawable,
-					 GdkGC           *gc,
-					 GdkPoint        *points,
-					 gint             npoints);
 
 static void   gdk_pixmap_real_get_size  (GdkDrawable     *drawable,
                                          gint            *width,
@@ -115,7 +111,6 @@ gdk_pixmap_class_init (GdkPixmapObjectClass *klass)
   drawable_class->create_gc = gdk_pixmap_create_gc;
   drawable_class->draw_rectangle = gdk_pixmap_draw_rectangle;
   drawable_class->draw_drawable_with_src = gdk_pixmap_draw_drawable;
-  drawable_class->draw_points = gdk_pixmap_draw_points;
   drawable_class->get_depth = gdk_pixmap_real_get_depth;
   drawable_class->get_screen = gdk_pixmap_real_get_screen;
   drawable_class->get_size = gdk_pixmap_real_get_size;
@@ -232,18 +227,6 @@ gdk_pixmap_draw_drawable (GdkDrawable *drawable,
 								  xdest, ydest,
 								  width, height,
 								  original_src);
-}
-
-static void
-gdk_pixmap_draw_points (GdkDrawable *drawable,
-			GdkGC       *gc,
-			GdkPoint    *points,
-			gint         npoints)
-{
-  GdkPixmapObject *private = (GdkPixmapObject *)drawable;
-
-  _gdk_gc_remove_drawable_clip (gc);  
-  gdk_draw_points (private->impl, gc, points, npoints);
 }
 
 static void

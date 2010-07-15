@@ -323,43 +323,6 @@ gdk_offscreen_window_draw_rectangle (GdkDrawable  *drawable,
 
 }
 
-static void
-gdk_offscreen_window_draw_points (GdkDrawable  *drawable,
-				  GdkGC	       *gc,
-				  GdkPoint     *points,
-				  gint		npoints)
-{
-  GdkOffscreenWindow *offscreen = GDK_OFFSCREEN_WINDOW (drawable);
-  GdkDrawable *real_drawable = get_real_drawable (offscreen);
-
-  gdk_draw_points (real_drawable,
-		   gc,
-		   points,
-		   npoints);
-
-
-  if (npoints > 0)
-    {
-      int min_x, min_y, max_x, max_y, i;
-
-      min_x = max_x = points[0].x;
-      min_y = max_y = points[0].y;
-
-	for (i = 1; i < npoints; i++)
-	  {
-	    min_x = MIN (min_x, points[i].x);
-	    max_x = MAX (max_x, points[i].x);
-	    min_y = MIN (min_y, points[i].y);
-	    max_y = MAX (max_y, points[i].y);
-	  }
-
-	add_damage (offscreen, min_x, min_y,
-		    max_x - min_x + 1,
-		    max_y - min_y + 1,
-		    FALSE);
-    }
-}
-
 void
 _gdk_offscreen_window_new (GdkWindow     *window,
 			   GdkScreen     *screen,
@@ -986,7 +949,6 @@ gdk_offscreen_window_class_init (GdkOffscreenWindowClass *klass)
 
   drawable_class->draw_rectangle = gdk_offscreen_window_draw_rectangle;
   drawable_class->draw_drawable_with_src = gdk_offscreen_window_draw_drawable;
-  drawable_class->draw_points = gdk_offscreen_window_draw_points;
 }
 
 static void

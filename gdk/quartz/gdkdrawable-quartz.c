@@ -265,32 +265,6 @@ gdk_quartz_draw_drawable (GdkDrawable *drawable,
                src_depth, dest_depth);
 }
 
-static void
-gdk_quartz_draw_points (GdkDrawable *drawable,
-			GdkGC       *gc,
-			GdkPoint    *points,
-			gint         npoints)
-{
-  CGContextRef context = gdk_quartz_drawable_get_context (drawable, FALSE);
-  int i;
-
-  if (!context)
-    return;
-
-  _gdk_quartz_gc_update_cg_context (gc, drawable, context,
-				    GDK_QUARTZ_CONTEXT_STROKE |
-				    GDK_QUARTZ_CONTEXT_FILL);
-
-  /* Just draw 1x1 rectangles */
-  for (i = 0; i < npoints; i++) 
-    {
-      CGRect rect = CGRectMake (points[i].x, points[i].y, 1, 1);
-      CGContextFillRect (context, rect);
-    }
-
-  gdk_quartz_drawable_release_context (drawable, context);
-}
-
 static inline void
 gdk_quartz_fix_cap_not_last_line (GdkGCQuartz *private,
 				  gint         x1,
@@ -342,7 +316,6 @@ gdk_drawable_impl_quartz_class_init (GdkDrawableImplQuartzClass *klass)
   drawable_class->create_gc = _gdk_quartz_gc_new;
   drawable_class->draw_rectangle = gdk_quartz_draw_rectangle;
   drawable_class->draw_drawable_with_src = gdk_quartz_draw_drawable;
-  drawable_class->draw_points = gdk_quartz_draw_points;
 
   drawable_class->ref_cairo_surface = gdk_quartz_ref_cairo_surface;
 

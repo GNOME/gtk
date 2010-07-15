@@ -605,54 +605,6 @@ gdk_directfb_draw_drawable (GdkDrawable *drawable,
   temp_region_deinit( &clip );
 }
 
-static void
-gdk_directfb_draw_points (GdkDrawable *drawable,
-                          GdkGC       *gc,
-                          GdkPoint    *points,
-                          gint         npoints)
-{
-  GdkDrawableImplDirectFB *impl;
-  cairo_region_t                clip;
-
-  DFBRegion region = { points->x, points->y, points->x, points->y };
-
-  D_DEBUG_AT( GDKDFB_Drawable, "%s( %p, %p, %p, %d )\n", G_STRFUNC, drawable, gc, points, npoints );
-
-  if (npoints < 1)
-    return;
-
-  impl = GDK_DRAWABLE_IMPL_DIRECTFB (drawable);
-
-  if (!gdk_directfb_setup_for_drawing (impl, GDK_GC_DIRECTFB (gc)))
-    return;
-
-  gdk_directfb_clip_region (drawable, gc, NULL, &clip);
-
-  while (npoints > 0)
-    {
-      if (cairo_region_contains_point (&clip, points->x, points->y))
-        {
-          impl->surface->FillRectangle (impl->surface,
-                                        points->x, points->y, 1, 1);
-
-          if (points->x < region.x1)
-            region.x1 = points->x;
-          if (points->x > region.x2)
-            region.x2 = points->x;
-
-          if (points->y < region.y1)
-            region.y1 = points->y;
-          if (points->y > region.y2)
-            region.y2 = points->y;
-        }
-
-      npoints--;
-      points++;
-    }
-
-  temp_region_deinit( &clip );
-}
-
 static inline void
 convert_rgba_pixbuf_to_image (guint32 *src,
                               guint    src_pitch,
@@ -751,7 +703,6 @@ gdk_drawable_impl_directfb_class_init (GdkDrawableImplDirectFBClass *klass)
   drawable_class->create_gc      = _gdk_directfb_gc_new;
   drawable_class->draw_rectangle = gdk_directfb_draw_rectangle;
   drawable_class->draw_drawable  = gdk_directfb_draw_drawable;
-  drawable_class->draw_points    = gdk_directfb_draw_points;
 
   drawable_class->ref_cairo_surface = gdk_directfb_ref_cairo_surface;
   drawable_class->set_colormap   = gdk_directfb_set_colormap;

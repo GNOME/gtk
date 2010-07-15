@@ -215,33 +215,6 @@ gdk_drawable_get_colormap (GdkDrawable *drawable)
  */
 
 /**
- * gdk_draw_point:
- * @drawable: a #GdkDrawable (a #GdkWindow or a #GdkPixmap).
- * @gc: a #GdkGC.
- * @x: the x coordinate of the point.
- * @y: the y coordinate of the point.
- * 
- * Draws a point, using the foreground color and other attributes of 
- * the #GdkGC.
- **/
-void
-gdk_draw_point (GdkDrawable *drawable,
-                GdkGC       *gc,
-                gint         x,
-                gint         y)
-{
-  GdkPoint point;
-
-  g_return_if_fail (GDK_IS_DRAWABLE (drawable));
-  g_return_if_fail (GDK_IS_GC (gc));
-
-  point.x = x;
-  point.y = y;
-  
-  GDK_DRAWABLE_GET_CLASS (drawable)->draw_points (drawable, gc, &point, 1);
-}
-
-/**
  * gdk_draw_rectangle:
  * @drawable: a #GdkDrawable (a #GdkWindow or a #GdkPixmap).
  * @gc: a #GdkGC.
@@ -380,34 +353,6 @@ gdk_draw_drawable (GdkDrawable *drawable,
 						      width, height);
 
   g_object_unref (composite);
-}
-
-/**
- * gdk_draw_points:
- * @drawable: a #GdkDrawable (a #GdkWindow or a #GdkPixmap).
- * @gc: a #GdkGC.
- * @points: an array of #GdkPoint structures.
- * @n_points: the number of points to be drawn.
- * 
- * Draws a number of points, using the foreground color and other 
- * attributes of the #GdkGC.
- **/
-void
-gdk_draw_points (GdkDrawable    *drawable,
-		 GdkGC          *gc,
-		 const GdkPoint *points,
-		 gint            n_points)
-{
-  g_return_if_fail (GDK_IS_DRAWABLE (drawable));
-  g_return_if_fail ((points != NULL) && (n_points > 0));
-  g_return_if_fail (GDK_IS_GC (gc));
-  g_return_if_fail (n_points >= 0);
-
-  if (n_points == 0)
-    return;
-
-  GDK_DRAWABLE_GET_CLASS (drawable)->draw_points (drawable, gc,
-                                                  (GdkPoint *) points, n_points);
 }
 
 static GdkDrawable *

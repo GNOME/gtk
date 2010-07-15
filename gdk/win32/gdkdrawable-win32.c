@@ -65,10 +65,6 @@ static void gdk_win32_draw_drawable  (GdkDrawable    *drawable,
 				      gint            width,
 				      gint            height,
 				      GdkDrawable    *original_src);
-static void gdk_win32_draw_points    (GdkDrawable    *drawable,
-				      GdkGC          *gc,
-				      GdkPoint       *points,
-				      gint            npoints);
 
 static cairo_surface_t *gdk_win32_ref_cairo_surface (GdkDrawable *drawable);
      
@@ -101,7 +97,6 @@ _gdk_drawable_impl_win32_class_init (GdkDrawableImplWin32Class *klass)
   drawable_class->create_gc = _gdk_win32_gc_new;
   drawable_class->draw_rectangle = gdk_win32_draw_rectangle;
   drawable_class->draw_drawable_with_src = gdk_win32_draw_drawable;
-  drawable_class->draw_points = gdk_win32_draw_points;
   
   drawable_class->ref_cairo_surface = gdk_win32_ref_cairo_surface;
   
@@ -773,37 +768,6 @@ gdk_win32_draw_drawable (GdkDrawable *drawable,
   _gdk_win32_blit (FALSE, (GdkDrawableImplWin32 *) drawable,
 		   gc, src, xsrc, ysrc,
 		   xdest, ydest, width, height);
-}
-
-static void
-gdk_win32_draw_points (GdkDrawable *drawable,
-		       GdkGC       *gc,
-		       GdkPoint    *points,
-		       gint         npoints)
-{
-  HDC hdc;
-  HGDIOBJ old_pen;
-  int i;
-
-  hdc = gdk_win32_hdc_get (drawable, gc, GDK_GC_FOREGROUND);
-  
-  GDK_NOTE (DRAW, g_print ("gdk_win32_draw_points: %s %d points\n",
-			   _gdk_win32_drawable_description (drawable),
-			   npoints));
-
-  /* The X11 version uses XDrawPoint(), which doesn't use the fill
-   * mode, so don't use generic_draw. But we should use the current
-   * function, so we can't use SetPixel(). Draw single-pixel
-   * rectangles (sigh).
-   */
-
-  old_pen = SelectObject (hdc, GetStockObject (NULL_PEN));
-  for (i = 0; i < npoints; i++)
-    Rectangle (hdc, points[i].x, points[i].y,
-	       points[i].x + 2, points[i].y + 2);
-
-  SelectObject (hdc, old_pen);
-  gdk_win32_hdc_release (drawable, gc, GDK_GC_FOREGROUND);
 }
 
 static void

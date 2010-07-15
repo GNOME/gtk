@@ -65,10 +65,6 @@ static void gdk_x11_draw_drawable  (GdkDrawable    *drawable,
 				    gint            width,
 				    gint            height,
 				    GdkDrawable    *original_src);
-static void gdk_x11_draw_points    (GdkDrawable    *drawable,
-				    GdkGC          *gc,
-				    GdkPoint       *points,
-				    gint            npoints);
 
 static cairo_surface_t *gdk_x11_ref_cairo_surface (GdkDrawable *drawable);
      
@@ -97,7 +93,6 @@ _gdk_drawable_impl_x11_class_init (GdkDrawableImplX11Class *klass)
   drawable_class->create_gc = _gdk_x11_gc_new;
   drawable_class->draw_rectangle = gdk_x11_draw_rectangle;
   drawable_class->draw_drawable_with_src = gdk_x11_draw_drawable;
-  drawable_class->draw_points = gdk_x11_draw_points;
   
   drawable_class->ref_cairo_surface = gdk_x11_ref_cairo_surface;
 
@@ -398,49 +393,6 @@ gdk_x11_draw_drawable (GdkDrawable *drawable,
   else
     g_warning ("Attempt to draw a drawable with depth %d to a drawable with depth %d",
                src_depth, dest_depth);
-}
-
-static void
-gdk_x11_draw_points (GdkDrawable *drawable,
-		     GdkGC       *gc,
-		     GdkPoint    *points,
-		     gint         npoints)
-{
-  GdkDrawableImplX11 *impl;
-
-  impl = GDK_DRAWABLE_IMPL_X11 (drawable);
-
-  
-  /* We special-case npoints == 1, because X will merge multiple
-   * consecutive XDrawPoint requests into a PolyPoint request
-   */
-  if (npoints == 1)
-    {
-      XDrawPoint (GDK_SCREEN_XDISPLAY (impl->screen),
-		  impl->xid,
-		  GDK_GC_GET_XGC (gc),
-		  points[0].x, points[0].y);
-    }
-  else
-    {
-      gint i;
-      XPoint *tmp_points = g_new (XPoint, npoints);
-
-      for (i=0; i<npoints; i++)
-	{
-	  tmp_points[i].x = points[i].x;
-	  tmp_points[i].y = points[i].y;
-	}
-      
-      XDrawPoints (GDK_SCREEN_XDISPLAY (impl->screen),
-		   impl->xid,
-		   GDK_GC_GET_XGC (gc),
-		   tmp_points,
-		   npoints,
-		   CoordModeOrigin);
-
-      g_free (tmp_points);
-    }
 }
 
 static gint

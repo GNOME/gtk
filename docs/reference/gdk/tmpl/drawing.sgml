@@ -127,26 +127,6 @@ or a #GdkWindow.
 @Returns: 
 
 
-<!-- ##### FUNCTION gdk_draw_point ##### -->
-<para>
-</para>
-
-@drawable: 
-@gc: 
-@x: 
-@y: 
-
-
-<!-- ##### FUNCTION gdk_draw_points ##### -->
-<para>
-</para>
-
-@drawable: 
-@gc: 
-@points: 
-@n_points: 
-
-
 <!-- ##### FUNCTION gdk_draw_rectangle ##### -->
 <para>
 </para>
