@@ -131,10 +131,10 @@ typedef struct
 /**
  * GtkRecentInfo:
  *
- * <structname>GtkRecentInfo</structname> is an opaque data structure
+ * #GtkRecentInfo is an opaque data structure
  * whose members can only be accessed using the provided API.
  *
- * <structname>GtkRecentInfo</structname> constains all the meta-data
+ * #GtkRecentInfo constains all the meta-data
  * associated with an entry in the recently used files list.
  *
  * Since: 2.10
