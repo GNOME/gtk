@@ -212,6 +212,7 @@ _gtk_text_util_create_drag_icon (GtkWidget *widget,
   GdkDrawable  *drawable = NULL;
   PangoContext *context;
   PangoLayout  *layout;
+  cairo_t      *cr;
   gint          pixmap_height, pixmap_width;
   gint          layout_width, layout_height;
 
@@ -240,13 +241,10 @@ _gtk_text_util_create_drag_icon (GtkWidget *widget,
                              pixmap_width  + 2,
                              pixmap_height + 2,
                              -1);
+  cr = gdk_cairo_create (drawable);
 
-  gdk_draw_rectangle (drawable,
-                      widget->style->base_gc [gtk_widget_get_state (widget)],
-                      TRUE,
-                      0, 0,
-                      pixmap_width + 1,
-                      pixmap_height + 1);
+  gdk_cairo_set_source_color (cr, &widget->style->base [gtk_widget_get_state (widget)]);
+  cairo_paint (cr);
 
   gdk_draw_layout (drawable,
                    widget->style->text_gc [gtk_widget_get_state (widget)],
@@ -254,13 +252,12 @@ _gtk_text_util_create_drag_icon (GtkWidget *widget,
                    1 + DRAG_ICON_LAYOUT_BORDER,
                    layout);
 
-  gdk_draw_rectangle (drawable,
-                      widget->style->black_gc,
-                      FALSE,
-                      0, 0,
-                      pixmap_width + 1,
-                      pixmap_height + 1);
+  cairo_set_source_rgb (cr, 0, 0, 0);
+  cairo_rectangle (cr, 0.5, 0.5, pixmap_width + 1, pixmap_height + 1);
+  cairo_set_line_width (cr, 1.0);
+  cairo_stroke (cr);
 
+  cairo_destroy (cr);
   g_object_unref (layout);
 
   return drawable;
@@ -294,6 +291,7 @@ _gtk_text_util_create_rich_drag_icon (GtkWidget     *widget,
   GtkTextAttributes *style;
   PangoContext      *ltr_context, *rtl_context;
   GtkTextIter        iter;
+  cairo_t           *cr;
 
    g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
    g_return_val_if_fail (GTK_IS_TEXT_BUFFER (buffer), NULL);
@@ -356,12 +354,10 @@ _gtk_text_util_create_rich_drag_icon (GtkWidget     *widget,
    drawable = gdk_pixmap_new (widget->window,
                               pixmap_width  + 2, pixmap_height + 2, -1);
 
-   gdk_draw_rectangle (drawable,
-                       widget->style->base_gc [gtk_widget_get_state (widget)],
-                       TRUE,
-                       0, 0,
-                       pixmap_width + 1,
-                       pixmap_height + 1);
+   cr = gdk_cairo_create (drawable);
+
+   gdk_cairo_set_source_color (cr, &widget->style->base [gtk_widget_get_state (widget)]);
+   cairo_paint (cr);
 
    gtk_text_layout_draw (layout, widget, drawable,
                          widget->style->text_gc [gtk_widget_get_state (widget)],
@@ -370,13 +366,12 @@ _gtk_text_util_create_rich_drag_icon (GtkWidget     *widget,
                          0, 0,
                          pixmap_width, pixmap_height, NULL);
 
-   gdk_draw_rectangle (drawable,
-                       widget->style->black_gc,
-                       FALSE,
-                       0, 0,
-                       pixmap_width + 1,
-                       pixmap_height + 1);
+   cairo_set_source_rgb (cr, 0, 0, 0);
+   cairo_rectangle (cr, 0.5, 0.5, pixmap_width + 1, pixmap_height + 1);
+   cairo_set_line_width (cr, 1.0);
+   cairo_stroke (cr);
 
+   cairo_destroy (cr);
    g_object_unref (layout);
    g_object_unref (new_buffer);
 
