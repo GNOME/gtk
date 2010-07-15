@@ -117,10 +117,6 @@ do {\
 
 static GdkScreen * gdk_directfb_get_screen (GdkDrawable    *drawable);
 static void gdk_drawable_impl_directfb_class_init (GdkDrawableImplDirectFBClass *klass);
-static void gdk_directfb_draw_lines (GdkDrawable *drawable,
-                                     GdkGC       *gc,
-                                     GdkPoint    *points,
-                                     gint         npoints);
 
 static cairo_surface_t *gdk_directfb_ref_cairo_surface (GdkDrawable *drawable);
 
@@ -657,151 +653,6 @@ gdk_directfb_draw_points (GdkDrawable *drawable,
   temp_region_deinit( &clip );
 }
 
-static void
-gdk_directfb_draw_segments (GdkDrawable *drawable,
-                            GdkGC       *gc,
-                            GdkSegment  *segs,
-                            gint         nsegs)
-{
-  GdkDrawableImplDirectFB *impl;
-  cairo_region_t                clip;
-  gint                     i;
-
-//  DFBRegion region = { segs->x1, segs->y1, segs->x2, segs->y2 };
-
-  D_DEBUG_AT( GDKDFB_Drawable, "%s( %p, %p, %p, %d )\n", G_STRFUNC, drawable, gc, segs, nsegs );
-
-  if (nsegs < 1)
-    return;
-
-  impl = GDK_DRAWABLE_IMPL_DIRECTFB (drawable);
-
-  if (!gdk_directfb_setup_for_drawing (impl, GDK_GC_DIRECTFB (gc)))
-    return;
-
-  gdk_directfb_clip_region (drawable, gc, NULL, &clip);
-
-  for (i = 0; i < clip.numRects; i++)
-    {
-      DFBRegion reg = { clip.rects[i].x1,   clip.rects[i].y1,
-                        clip.rects[i].x2, clip.rects[i].y2 };
-
-      impl->surface->SetClip (impl->surface, &reg);
-
-      impl->surface->DrawLines (impl->surface, (DFBRegion *)segs, nsegs);
-    }
-
-  temp_region_deinit( &clip );
-
-  /* everything below can be omitted if the drawing is buffered */
-/*  if (impl->buffered)
-    return;
-
-  if (region.x1 > region.x2)
-    {
-      region.x1 = segs->x2;
-      region.x2 = segs->x1;
-    }
-  if (region.y1 > region.y2)
-    {
-      region.y1 = segs->y2;
-      region.y2 = segs->y1;
-    }
-
-  while (nsegs > 1)
-    {
-      nsegs--;
-      segs++;
-
-      if (segs->x1 < region.x1)
-        region.x1 = segs->x1;
-      if (segs->x2 < region.x1)
-        region.x1 = segs->x2;
-
-      if (segs->y1 < region.y1)
-        region.y1 = segs->y1;
-      if (segs->y2 < region.y1)
-        region.y1 = segs->y2;
-
-      if (segs->x1 > region.x2)
-        region.x2 = segs->x1;
-      if (segs->x2 > region.x2)
-        region.x2 = segs->x2;
-
-      if (segs->y1 > region.y2)
-        region.y2 = segs->y1;
-      if (segs->y2 > region.y2)
-        region.y2 = segs->y2;
-    }*/
-}
-
-static void
-gdk_directfb_draw_lines (GdkDrawable *drawable,
-                         GdkGC       *gc,
-                         GdkPoint    *points,
-                         gint         npoints)
-{
-  GdkDrawableImplDirectFB *impl;
-  cairo_region_t                clip;
-  gint                     i;
-
-  DFBRegion lines[npoints > 1 ? npoints - 1 : 1];
-
-  DFBRegion region = { points->x, points->y, points->x, points->y };
-
-  D_DEBUG_AT( GDKDFB_Drawable, "%s( %p, %p, %p, %d )\n", G_STRFUNC, drawable, gc, points, npoints );
-
-  if (npoints < 2)
-    return;
-
-  impl = GDK_DRAWABLE_IMPL_DIRECTFB (drawable);
-
-  if (!gdk_directfb_setup_for_drawing (impl, GDK_GC_DIRECTFB (gc)))
-    return;
-
-  /* create an array of DFBRegions so we can use DrawLines */
-
-  lines[0].x1 = points->x;
-  lines[0].y1 = points->y;
-
-  for (i = 0; i < npoints - 2; i++)
-    {
-      points++;
-
-      lines[i].x2 = lines[i+1].x1 = points->x;
-      lines[i].y2 = lines[i+1].y1 = points->y;
-
-      if (points->x < region.x1)
-        region.x1 = points->x;
-
-      if (points->y < region.y1)
-        region.y1 = points->y;
-
-      if (points->x > region.x2)
-        region.x2 = points->x;
-
-      if (points->y > region.y2)
-        region.y2 = points->y;
-    }
-
-  points++;
-  lines[i].x2 = points->x;
-  lines[i].y2 = points->y;
-
-  gdk_directfb_clip_region (drawable, gc, NULL, &clip);
-
-  for (i = 0; i < clip.numRects; i++)
-    {
-      DFBRegion reg = { clip.rects[i].x1,   clip.rects[i].y1,
-                        clip.rects[i].x2, clip.rects[i].y2 };
-
-      impl->surface->SetClip (impl->surface, &reg);
-      impl->surface->DrawLines (impl->surface, lines, npoints - 1);
-    }
-
-  temp_region_deinit( &clip );
-}
-
 static inline void
 convert_rgba_pixbuf_to_image (guint32 *src,
                               guint    src_pitch,
@@ -901,8 +752,6 @@ gdk_drawable_impl_directfb_class_init (GdkDrawableImplDirectFBClass *klass)
   drawable_class->draw_rectangle = gdk_directfb_draw_rectangle;
   drawable_class->draw_drawable  = gdk_directfb_draw_drawable;
   drawable_class->draw_points    = gdk_directfb_draw_points;
-  drawable_class->draw_segments  = gdk_directfb_draw_segments;
-  drawable_class->draw_lines     = gdk_directfb_draw_lines;
 
   drawable_class->ref_cairo_surface = gdk_directfb_ref_cairo_surface;
   drawable_class->set_colormap   = gdk_directfb_set_colormap;

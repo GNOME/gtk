@@ -250,14 +250,6 @@ static void   gdk_window_draw_points    (GdkDrawable     *drawable,
 					 GdkGC           *gc,
 					 GdkPoint        *points,
 					 gint             npoints);
-static void   gdk_window_draw_segments  (GdkDrawable     *drawable,
-					 GdkGC           *gc,
-					 GdkSegment      *segs,
-					 gint             nsegs);
-static void   gdk_window_draw_lines     (GdkDrawable     *drawable,
-					 GdkGC           *gc,
-					 GdkPoint        *points,
-					 gint             npoints);
 
 static cairo_surface_t *gdk_window_ref_cairo_surface (GdkDrawable *drawable);
 static cairo_surface_t *gdk_window_create_cairo_surface (GdkDrawable *drawable,
@@ -439,8 +431,6 @@ gdk_window_class_init (GdkWindowObjectClass *klass)
   drawable_class->draw_rectangle = gdk_window_draw_rectangle;
   drawable_class->draw_drawable_with_src = gdk_window_draw_drawable;
   drawable_class->draw_points = gdk_window_draw_points;
-  drawable_class->draw_segments = gdk_window_draw_segments;
-  drawable_class->draw_lines = gdk_window_draw_lines;
   drawable_class->get_depth = gdk_window_real_get_depth;
   drawable_class->get_screen = gdk_window_real_get_screen;
   drawable_class->get_size = gdk_window_real_get_size;
@@ -4232,78 +4222,6 @@ gdk_window_draw_points (GdkDrawable *drawable,
     new_points = points;
 
   gdk_draw_points (impl, gc, new_points, npoints);
-
-  if (new_points != points)
-    g_free (new_points);
-
-  END_DRAW;
-}
-
-static void
-gdk_window_draw_segments (GdkDrawable *drawable,
-			  GdkGC       *gc,
-			  GdkSegment  *segs,
-			  gint         nsegs)
-{
-  GdkSegment *new_segs;
-
-  if (GDK_WINDOW_DESTROYED (drawable))
-    return;
-
-  BEGIN_DRAW;
-
-  if (x_offset != 0 || y_offset != 0)
-    {
-      gint i;
-
-      new_segs = g_new (GdkSegment, nsegs);
-      for (i=0; i<nsegs; i++)
-	{
-	  new_segs[i].x1 = segs[i].x1 - x_offset;
-	  new_segs[i].y1 = segs[i].y1 - y_offset;
-	  new_segs[i].x2 = segs[i].x2 - x_offset;
-	  new_segs[i].y2 = segs[i].y2 - y_offset;
-	}
-    }
-  else
-    new_segs = segs;
-
-  gdk_draw_segments (impl, gc, new_segs, nsegs);
-
-  if (new_segs != segs)
-    g_free (new_segs);
-
-  END_DRAW;
-}
-
-static void
-gdk_window_draw_lines (GdkDrawable *drawable,
-		       GdkGC       *gc,
-		       GdkPoint    *points,
-		       gint         npoints)
-{
-  GdkPoint *new_points;
-
-  if (GDK_WINDOW_DESTROYED (drawable))
-    return;
-
-  BEGIN_DRAW;
-
-  if (x_offset != 0 || y_offset != 0)
-    {
-      gint i;
-
-      new_points = g_new (GdkPoint, npoints);
-      for (i=0; i<npoints; i++)
-	{
-	  new_points[i].x = points[i].x - x_offset;
-	  new_points[i].y = points[i].y - y_offset;
-	}
-    }
-  else
-    new_points = points;
-
-  gdk_draw_lines (impl, gc, new_points, npoints);
 
   if (new_points != points)
     g_free (new_points);

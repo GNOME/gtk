@@ -75,7 +75,6 @@ G_BEGIN_DECLS
  */
 typedef struct _GdkPoint	      GdkPoint;
 typedef cairo_rectangle_int_t	      GdkRectangle;
-typedef struct _GdkSegment	      GdkSegment;
 typedef struct _GdkSpan	              GdkSpan;
 
 typedef struct _GdkAtom            *GdkAtom;
@@ -268,14 +267,6 @@ struct _GdkPoint
 {
   gint x;
   gint y;
-};
-
-struct _GdkSegment
-{
-  gint x1;
-  gint y1;
-  gint x2;
-  gint y2;
 };
 
 struct _GdkSpan

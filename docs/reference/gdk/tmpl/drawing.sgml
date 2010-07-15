@@ -147,50 +147,6 @@ or a #GdkWindow.
 @n_points: 
 
 
-<!-- ##### FUNCTION gdk_draw_line ##### -->
-<para>
-</para>
-
-@drawable: 
-@gc: 
-@x1_: 
-@y1_: 
-@x2_: 
-@y2_: 
-
-
-<!-- ##### FUNCTION gdk_draw_lines ##### -->
-<para>
-</para>
-
-@drawable: 
-@gc: 
-@points: 
-lines.
-@n_points: 
-
-
-<!-- ##### FUNCTION gdk_draw_segments ##### -->
-<para>
-</para>
-
-@drawable: 
-@gc: 
-@segs: 
-@n_segs: 
-
-
-<!-- ##### STRUCT GdkSegment ##### -->
-<para>
-Specifies the start and end point of a line for use by the gdk_draw_segments()
-function.
-</para>
-
-@x1: the x coordinate of the start point.
-@y1: the y coordinate of the start point.
-@x2: the x coordinate of the end point.
-@y2: the y coordinate of the end point.
-
 <!-- ##### FUNCTION gdk_draw_rectangle ##### -->
 <para>
 </para>

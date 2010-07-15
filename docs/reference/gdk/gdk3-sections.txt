@@ -336,10 +336,6 @@ gdk_drawable_get_visible_region
 <SUBSECTION>
 gdk_draw_point
 gdk_draw_points
-gdk_draw_line
-gdk_draw_lines
-gdk_draw_segments
-GdkSegment
 gdk_draw_rectangle
 gdk_draw_layout_line
 gdk_draw_layout_line_with_colors

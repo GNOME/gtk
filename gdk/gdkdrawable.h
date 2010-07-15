@@ -80,14 +80,6 @@ struct _GdkDrawableClass
 			  GdkGC	       *gc,
 			  GdkPoint     *points,
 			  gint		npoints);
-  void (*draw_segments)	 (GdkDrawable  *drawable,
-			  GdkGC	       *gc,
-			  GdkSegment   *segs,
-			  gint		nsegs);
-  void (*draw_lines)     (GdkDrawable  *drawable,
-			  GdkGC        *gc,
-			  GdkPoint     *points,
-			  gint          npoints);
 
   gint (*get_depth)      (GdkDrawable  *drawable);
   void (*get_size)       (GdkDrawable  *drawable,
@@ -166,12 +158,6 @@ void gdk_draw_point     (GdkDrawable      *drawable,
 			 GdkGC            *gc,
 			 gint              x,
 			 gint              y);
-void gdk_draw_line      (GdkDrawable      *drawable,
-			 GdkGC            *gc,
-			 gint              x1_,
-			 gint              y1_,
-			 gint              x2_,
-			 gint              y2_);
 void gdk_draw_rectangle (GdkDrawable      *drawable,
 			 GdkGC            *gc,
 			 gboolean          filled,
@@ -189,14 +175,6 @@ void gdk_draw_drawable  (GdkDrawable      *drawable,
 			 gint              width,
 			 gint              height);
 void gdk_draw_points    (GdkDrawable      *drawable,
-			 GdkGC            *gc,
-			 const GdkPoint   *points,
-			 gint              n_points);
-void gdk_draw_segments  (GdkDrawable      *drawable,
-			 GdkGC            *gc,
-			 const GdkSegment *segs,
-			 gint              n_segs);
-void gdk_draw_lines     (GdkDrawable      *drawable,
 			 GdkGC            *gc,
 			 const GdkPoint   *points,
 			 gint              n_points);

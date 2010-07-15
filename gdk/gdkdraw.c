@@ -242,38 +242,6 @@ gdk_draw_point (GdkDrawable *drawable,
 }
 
 /**
- * gdk_draw_line:
- * @drawable: a #GdkDrawable (a #GdkWindow or a #GdkPixmap). 
- * @gc: a #GdkGC.
- * @x1_: the x coordinate of the start point.
- * @y1_: the y coordinate of the start point.
- * @x2_: the x coordinate of the end point.
- * @y2_: the y coordinate of the end point.
- * 
- * Draws a line, using the foreground color and other attributes of 
- * the #GdkGC.
- **/
-void
-gdk_draw_line (GdkDrawable *drawable,
-	       GdkGC       *gc,
-	       gint         x1,
-	       gint         y1,
-	       gint         x2,
-	       gint         y2)
-{
-  GdkSegment segment;
-
-  g_return_if_fail (GDK_IS_DRAWABLE (drawable));
-  g_return_if_fail (GDK_IS_GC (gc));
-
-  segment.x1 = x1;
-  segment.y1 = y1;
-  segment.x2 = x2;
-  segment.y2 = y2;
-  GDK_DRAWABLE_GET_CLASS (drawable)->draw_segments (drawable, gc, &segment, 1);
-}
-
-/**
  * gdk_draw_rectangle:
  * @drawable: a #GdkDrawable (a #GdkWindow or a #GdkPixmap).
  * @gc: a #GdkGC.
@@ -440,66 +408,6 @@ gdk_draw_points (GdkDrawable    *drawable,
 
   GDK_DRAWABLE_GET_CLASS (drawable)->draw_points (drawable, gc,
                                                   (GdkPoint *) points, n_points);
-}
-
-/**
- * gdk_draw_segments:
- * @drawable: a #GdkDrawable (a #GdkWindow or a #GdkPixmap).
- * @gc: a #GdkGC.
- * @segs: an array of #GdkSegment structures specifying the start and 
- *   end points of the lines to be drawn.
- * @n_segs: the number of line segments to draw, i.e. the size of the 
- *   @segs array.
- * 
- * Draws a number of unconnected lines.
- **/
-void
-gdk_draw_segments (GdkDrawable      *drawable,
-		   GdkGC            *gc,
-		   const GdkSegment *segs,
-		   gint              n_segs)
-{
-  g_return_if_fail (GDK_IS_DRAWABLE (drawable));
-
-  if (n_segs == 0)
-    return;
-
-  g_return_if_fail (segs != NULL);
-  g_return_if_fail (GDK_IS_GC (gc));
-  g_return_if_fail (n_segs >= 0);
-
-  GDK_DRAWABLE_GET_CLASS (drawable)->draw_segments (drawable, gc,
-                                                    (GdkSegment *) segs, n_segs);
-}
-
-/**
- * gdk_draw_lines:
- * @drawable: a #GdkDrawable (a #GdkWindow or a #GdkPixmap).
- * @gc: a #GdkGC.
- * @points: an array of #GdkPoint structures specifying the endpoints of the
- * @n_points: the size of the @points array.
- * 
- * Draws a series of lines connecting the given points.
- * The way in which joins between lines are draw is determined by the
- * #GdkCapStyle value in the #GdkGC. This can be set with
- * gdk_gc_set_line_attributes().
- **/
-void
-gdk_draw_lines (GdkDrawable    *drawable,
-		GdkGC          *gc,
-		const GdkPoint *points,
-		gint            n_points)
-{
-  g_return_if_fail (GDK_IS_DRAWABLE (drawable));
-  g_return_if_fail (points != NULL);
-  g_return_if_fail (GDK_IS_GC (gc));
-  g_return_if_fail (n_points >= 0);
-
-  if (n_points == 0)
-    return;
-
-  GDK_DRAWABLE_GET_CLASS (drawable)->draw_lines (drawable, gc,
-                                                 (GdkPoint *) points, n_points);
 }
 
 static GdkDrawable *

@@ -69,14 +69,6 @@ static void gdk_x11_draw_points    (GdkDrawable    *drawable,
 				    GdkGC          *gc,
 				    GdkPoint       *points,
 				    gint            npoints);
-static void gdk_x11_draw_segments  (GdkDrawable    *drawable,
-				    GdkGC          *gc,
-				    GdkSegment     *segs,
-				    gint            nsegs);
-static void gdk_x11_draw_lines     (GdkDrawable    *drawable,
-				    GdkGC          *gc,
-				    GdkPoint       *points,
-				    gint            npoints);
 
 static cairo_surface_t *gdk_x11_ref_cairo_surface (GdkDrawable *drawable);
      
@@ -106,8 +98,6 @@ _gdk_drawable_impl_x11_class_init (GdkDrawableImplX11Class *klass)
   drawable_class->draw_rectangle = gdk_x11_draw_rectangle;
   drawable_class->draw_drawable_with_src = gdk_x11_draw_drawable;
   drawable_class->draw_points = gdk_x11_draw_points;
-  drawable_class->draw_segments = gdk_x11_draw_segments;
-  drawable_class->draw_lines = gdk_x11_draw_lines;
   
   drawable_class->ref_cairo_surface = gdk_x11_ref_cairo_surface;
 
@@ -451,76 +441,6 @@ gdk_x11_draw_points (GdkDrawable *drawable,
 
       g_free (tmp_points);
     }
-}
-
-static void
-gdk_x11_draw_segments (GdkDrawable *drawable,
-		       GdkGC       *gc,
-		       GdkSegment  *segs,
-		       gint         nsegs)
-{
-  GdkDrawableImplX11 *impl;
-
-  impl = GDK_DRAWABLE_IMPL_X11 (drawable);
-
-  
-  /* We special-case nsegs == 1, because X will merge multiple
-   * consecutive XDrawLine requests into a PolySegment request
-   */
-  if (nsegs == 1)
-    {
-      XDrawLine (GDK_SCREEN_XDISPLAY (impl->screen), impl->xid,
-		 GDK_GC_GET_XGC (gc), segs[0].x1, segs[0].y1,
-		 segs[0].x2, segs[0].y2);
-    }
-  else
-    {
-      gint i;
-      XSegment *tmp_segs = g_new (XSegment, nsegs);
-
-      for (i=0; i<nsegs; i++)
-	{
-	  tmp_segs[i].x1 = segs[i].x1;
-	  tmp_segs[i].x2 = segs[i].x2;
-	  tmp_segs[i].y1 = segs[i].y1;
-	  tmp_segs[i].y2 = segs[i].y2;
-	}
-      
-      XDrawSegments (GDK_SCREEN_XDISPLAY (impl->screen),
-		     impl->xid,
-		     GDK_GC_GET_XGC (gc),
-		     tmp_segs, nsegs);
-
-      g_free (tmp_segs);
-    }
-}
-
-static void
-gdk_x11_draw_lines (GdkDrawable *drawable,
-		    GdkGC       *gc,
-		    GdkPoint    *points,
-		    gint         npoints)
-{
-  gint i;
-  XPoint *tmp_points = g_new (XPoint, npoints);
-  GdkDrawableImplX11 *impl;
-
-  impl = GDK_DRAWABLE_IMPL_X11 (drawable);
-
-  
-  for (i=0; i<npoints; i++)
-    {
-      tmp_points[i].x = points[i].x;
-      tmp_points[i].y = points[i].y;
-    }
-      
-  XDrawLines (GDK_SCREEN_XDISPLAY (impl->screen),
-	      impl->xid,
-	      GDK_GC_GET_XGC (gc),
-	      tmp_points, npoints,
-	      CoordModeOrigin);
-
-  g_free (tmp_points);
 }
 
 static gint
