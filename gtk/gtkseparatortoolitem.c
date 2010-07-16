@@ -333,12 +333,6 @@ gtk_separator_tool_item_button_event (GtkWidget      *widget,
   return priv->draw;
 }
 
-#define DEFAULT_SPACE_SIZE  12
-#define DEFAULT_SPACE_STYLE GTK_TOOLBAR_SPACE_LINE
-#define SPACE_LINE_DIVISION 10.0
-#define SPACE_LINE_START    2.0
-#define SPACE_LINE_END      8.0
-
 static gboolean
 gtk_separator_tool_item_expose (GtkWidget      *widget,
                                 GdkEventExpose *event)
