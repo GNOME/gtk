@@ -612,23 +612,28 @@ _gdk_gc_add_drawable_clip (GdkGC     *gc,
       overlap = cairo_region_contains_rectangle (region, &r);
       if (overlap == CAIRO_REGION_OVERLAP_PART)
 	{
+          cairo_t *cr;
+
 	   /* The region and the mask intersect, create a new clip mask that
 	      includes both areas */
 	  priv->old_clip_mask = g_object_ref (priv->clip_mask);
 	  new_mask = gdk_pixmap_new (priv->old_clip_mask, w, h, -1);
-	  tmp_gc = _gdk_drawable_get_scratch_gc ((GdkDrawable *)new_mask, FALSE);
 
-	  gdk_gc_set_foreground (tmp_gc, &black);
-	  gdk_draw_rectangle (new_mask, tmp_gc, TRUE, 0, 0, -1, -1);
-	  _gdk_gc_set_clip_region_internal (tmp_gc, region, TRUE); /* Takes ownership of region */
-	  gdk_draw_drawable  (new_mask,
-			      tmp_gc,
-			      priv->old_clip_mask,
-			      0, 0,
-			      0, 0,
-			      -1, -1);
-	  gdk_gc_set_clip_region (tmp_gc, NULL);
+          cr = gdk_cairo_create (new_mask);
+
+          cairo_set_operator (cr, CAIRO_OPERATOR_CLEAR);
+          cairo_paint (cr);
+
+          gdk_cairo_set_source_pixmap (cr, priv->old_clip_mask, 0, 0);
+          gdk_cairo_region (cr, region);
+          cairo_fill (cr);
+
+          cairo_destroy (cr);
+
+	  cairo_region_destroy (region);
+
 	  gdk_gc_set_clip_mask (gc, new_mask);
+
 	  g_object_unref (new_mask);
 	}
       else if (overlap == CAIRO_REGION_OVERLAP_OUT)
