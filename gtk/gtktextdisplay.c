@@ -468,7 +468,8 @@ render_para (GtkTextRenderer    *text_renderer,
   PangoLayoutIter *iter;
   PangoRectangle layout_logical;
   int screen_width;
-  GdkGC *selection_gc, *fg_gc;
+  GdkColor *selection;
+  GdkGC *fg_gc;
   gint state;
   
   gboolean first = TRUE;
@@ -489,7 +490,7 @@ render_para (GtkTextRenderer    *text_renderer,
   else
     state = GTK_STATE_ACTIVE;
 
-  selection_gc = text_renderer->widget->style->base_gc [state];
+  selection = &text_renderer->widget->style->base [state];
   fg_gc = text_renderer->widget->style->text_gc[text_renderer->widget->state];
 
   do
@@ -532,13 +533,13 @@ render_para (GtkTextRenderer    *text_renderer,
       if (selection_start_index < byte_offset &&
           selection_end_index > line->length + byte_offset) /* All selected */
         {
-          gdk_draw_rectangle (text_renderer->drawable,
-                              selection_gc,
-                              TRUE,
-                              x + line_display->left_margin,
-                              selection_y,
-                              screen_width,
-                              selection_height);
+          cairo_t *cr = gdk_cairo_create (text_renderer->drawable);
+          gdk_cairo_set_source_color (cr, selection);
+          cairo_rectangle (cr, 
+                           x + line_display->left_margin, selection_y,
+                           screen_width, selection_height);
+          cairo_fill (cr);
+          cairo_destroy (cr);
 
 	  text_renderer_set_state (text_renderer, SELECTED);
 	  pango_renderer_draw_layout_line (PANGO_RENDERER (text_renderer),
@@ -550,21 +551,15 @@ render_para (GtkTextRenderer    *text_renderer,
         {
           if (line_display->pg_bg_color)
             {
-              GdkGC *bg_gc;
-              
-              bg_gc = gdk_gc_new (text_renderer->drawable);
-              gdk_gc_set_fill (bg_gc, GDK_SOLID);
-              gdk_gc_set_rgb_fg_color (bg_gc, line_display->pg_bg_color);
-            
-              gdk_draw_rectangle (text_renderer->drawable,
-                                  bg_gc,
-                                  TRUE,
-                                  x + line_display->left_margin,
-                                  selection_y,
-                                  screen_width,
-                                  selection_height);
-              
-              g_object_unref (bg_gc);
+              cairo_t *cr = gdk_cairo_create (text_renderer->drawable);
+
+              gdk_cairo_set_source_color (cr, line_display->pg_bg_color);
+              cairo_rectangle (cr, 
+                               x + line_display->left_margin, selection_y,
+                               screen_width, selection_height);
+              cairo_fill (cr);
+
+              cairo_destroy (cr);
             }
         
 	  text_renderer_set_state (text_renderer, NORMAL);
@@ -581,28 +576,34 @@ render_para (GtkTextRenderer    *text_renderer,
 	       (selection_start_index == byte_offset + line->length && pango_layout_iter_at_last_line (iter))) &&
 	      selection_end_index > byte_offset)
             {
+              cairo_t *cr;
               cairo_region_t *clip_region = get_selected_clip (text_renderer, layout, line,
                                                           x + line_display->x_offset,
                                                           selection_y,
                                                           selection_height,
                                                           selection_start_index, selection_end_index);
 
+              cr = gdk_cairo_create (text_renderer->drawable);
+              gdk_cairo_region (cr, clip_region);
+              cairo_clip (cr);
+
+              gdk_cairo_set_source_color (cr, selection);
+              cairo_rectangle (cr,
+                               x + PANGO_PIXELS (line_rect.x),
+                               selection_y,
+                               PANGO_PIXELS (line_rect.width),
+                               selection_height);
+              cairo_fill (cr);
+
+              cairo_destroy (cr);
+
 	      /* When we change the clip on the foreground GC, we have to set
 	       * it on the rendererer again, since the rendererer might have
 	       * copied the GC to change attributes.
 	       */
 	      gdk_pango_renderer_set_gc (GDK_PANGO_RENDERER (text_renderer), NULL);
-              gdk_gc_set_clip_region (selection_gc, clip_region);
               gdk_gc_set_clip_region (fg_gc, clip_region);
 	      gdk_pango_renderer_set_gc (GDK_PANGO_RENDERER (text_renderer), fg_gc);
-
-              gdk_draw_rectangle (text_renderer->drawable,
-                                  selection_gc,
-                                  TRUE,
-                                  x + PANGO_PIXELS (line_rect.x),
-                                  selection_y,
-                                  PANGO_PIXELS (line_rect.width),
-                                  selection_height);
 
 	      text_renderer_set_state (text_renderer, SELECTED);
 	      pango_renderer_draw_layout_line (PANGO_RENDERER (text_renderer),
@@ -611,7 +612,6 @@ render_para (GtkTextRenderer    *text_renderer,
 					       PANGO_SCALE * y + baseline);
 
 	      gdk_pango_renderer_set_gc (GDK_PANGO_RENDERER (text_renderer), NULL);
-              gdk_gc_set_clip_region (selection_gc, NULL);
               gdk_gc_set_clip_region (fg_gc, NULL);
 	      gdk_pango_renderer_set_gc (GDK_PANGO_RENDERER (text_renderer), fg_gc);
 	      
@@ -622,13 +622,16 @@ render_para (GtkTextRenderer    *text_renderer,
                   ((line_display->direction == GTK_TEXT_DIR_LTR && selection_start_index < byte_offset) ||
                    (line_display->direction == GTK_TEXT_DIR_RTL && selection_end_index > byte_offset + line->length)))
                 {
-                  gdk_draw_rectangle (text_renderer->drawable,
-                                      selection_gc,
-                                      TRUE,
-                                      x + line_display->left_margin,
-                                      selection_y,
-                                      PANGO_PIXELS (line_rect.x) - line_display->left_margin,
-                                      selection_height);
+                  cairo_t *cr = gdk_cairo_create (text_renderer->drawable);
+
+                  gdk_cairo_set_source_color (cr, selection);
+                  cairo_rectangle (cr,
+                                   x + line_display->left_margin,
+                                   selection_y,
+                                   PANGO_PIXELS (line_rect.x) - line_display->left_margin,
+                                   selection_height);
+                  cairo_fill (cr);
+                  cairo_destroy (cr);
                 }
 
               if (line_rect.x + line_rect.width <
@@ -636,19 +639,21 @@ render_para (GtkTextRenderer    *text_renderer,
                   ((line_display->direction == GTK_TEXT_DIR_LTR && selection_end_index > byte_offset + line->length) ||
                    (line_display->direction == GTK_TEXT_DIR_RTL && selection_start_index < byte_offset)))
                 {
+                  cairo_t *cr = gdk_cairo_create (text_renderer->drawable);
                   int nonlayout_width;
 
                   nonlayout_width =
                     line_display->left_margin + screen_width -
                     PANGO_PIXELS (line_rect.x) - PANGO_PIXELS (line_rect.width);
 
-                  gdk_draw_rectangle (text_renderer->drawable,
-                                      selection_gc,
-                                      TRUE,
-                                      x + PANGO_PIXELS (line_rect.x) + PANGO_PIXELS (line_rect.width),
-                                      selection_y,
-                                      nonlayout_width,
-                                      selection_height);
+                  gdk_cairo_set_source_color (cr, selection);
+                  cairo_rectangle (cr,
+                                   x + PANGO_PIXELS (line_rect.x) + PANGO_PIXELS (line_rect.width),
+                                   selection_y,
+                                   nonlayout_width,
+                                   selection_height);
+                  cairo_fill (cr);
+                  cairo_destroy (cr);
                 }
             }
 	  else if (line_display->has_block_cursor &&
