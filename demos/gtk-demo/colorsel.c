@@ -22,14 +22,17 @@ expose_event_callback (GtkWidget      *widget,
   if (widget->window)
     {
       GtkStyle *style;
+      cairo_t *cr;
 
       style = gtk_widget_get_style (widget);
 
-      gdk_draw_rectangle (widget->window,
-                          style->bg_gc[GTK_STATE_NORMAL],
-                          TRUE,
-                          event->area.x, event->area.y,
-                          event->area.width, event->area.height);
+      cr = gdk_cairo_create (widget->window);
+
+      gdk_cairo_set_source_color (cr, &style->bg[GTK_STATE_NORMAL]);
+      gdk_cairo_rectangle (cr, &event->area);
+      cairo_fill (cr);
+
+      cairo_destroy (cr);
     }
 
   return TRUE;
