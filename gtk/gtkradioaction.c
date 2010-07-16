@@ -338,7 +338,7 @@ gtk_radio_action_activate (GtkAction *action)
 	  if (gtk_toggle_action_get_active (tmp_action) &&
               (tmp_action != toggle_action))
 	    {
-              gtk_toggle_action_set_active (toggle_action, !active);
+              _gtk_toggle_action_set_active (toggle_action, !active);
 
 	      break;
 	    }
@@ -347,7 +347,7 @@ gtk_radio_action_activate (GtkAction *action)
     }
   else
     {
-      gtk_toggle_action_set_active (toggle_action, !active);
+      _gtk_toggle_action_set_active (toggle_action, !active);
       g_object_notify (G_OBJECT (action), "active");
 
       tmp_list = radio_action->private_data->group;

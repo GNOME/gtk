@@ -364,3 +364,23 @@ create_menu_item (GtkAction *action)
 		       "draw-as-radio", toggle_action->private_data->draw_as_radio,
 		       NULL);
 }
+
+
+/* Private */
+
+/*
+ * _gtk_toggle_action_set_active:
+ * @toggle_action: a #GtkToggleAction
+ * @is_active: whether the action is active or not
+ *
+ * Sets the #GtkToggleAction:active property directly. This function does
+ * not emit signals or notifications: it is left to the caller to do so.
+ */
+void
+_gtk_toggle_action_set_active (GtkToggleAction *toggle_action,
+                               gboolean         is_active)
+{
+  GtkToggleActionPrivate *priv = toggle_action->private_data;
+
+  priv->active = is_active;
+}

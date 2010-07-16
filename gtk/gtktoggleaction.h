@@ -84,6 +84,10 @@ void             gtk_toggle_action_set_draw_as_radio (GtkToggleAction *action,
                                                       gboolean         draw_as_radio);
 gboolean         gtk_toggle_action_get_draw_as_radio (GtkToggleAction *action);
 
+/* private */
+void             _gtk_toggle_action_set_active       (GtkToggleAction *toggle_action,
+                                                      gboolean         is_active);
+
 
 G_END_DECLS
 
