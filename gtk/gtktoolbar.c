@@ -2630,17 +2630,41 @@ static gboolean
 gtk_toolbar_button_press (GtkWidget      *toolbar,
     			  GdkEventButton *event)
 {
+  GtkWidget *window;
+
   if (event->button == 3)
     {
       gboolean return_value;
-      
+
       g_signal_emit (toolbar, toolbar_signals[POPUP_CONTEXT_MENU], 0,
 		     (int)event->x_root, (int)event->y_root, event->button,
 		     &return_value);
-      
+
       return return_value;
     }
-  
+
+  window = gtk_widget_get_toplevel (toolbar);
+
+  if (window)
+    {
+      gboolean window_drag = FALSE;
+
+      gtk_widget_style_get (toolbar,
+                            "window-dragging", &window_drag,
+                            NULL);
+
+      if (window_drag)
+        {
+          gtk_window_begin_move_drag (GTK_WINDOW (window),
+                                      event->button,
+                                      event->x_root,
+                                      event->y_root,
+                                      event->time);
+
+          return TRUE;
+        }
+    }
+
   return FALSE;
 }
 
