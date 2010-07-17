@@ -5783,24 +5783,15 @@ static void
 draw_ugly_color (GdkWindow       *window,
 		 const cairo_region_t *region)
 {
+  cairo_t *cr;
+
+  cr = gdk_cairo_create (window);
   /* Draw ugly color all over the newly-invalid region */
-  GdkColor ugly_color = { 0, 50000, 10000, 10000 };
-  GdkGC *ugly_gc;
-  GdkRectangle clipbox;
+  cairo_set_source_rgb (cr, 50000/65535., 10000/65535., 10000/65535.);
+  gdk_cairo_region (cr, region);
+  cairo_fill (cr);
 
-  ugly_gc = gdk_gc_new (window);
-  gdk_gc_set_rgb_fg_color (ugly_gc, &ugly_color);
-  gdk_gc_set_clip_region (ugly_gc, region);
-
-  cairo_region_get_extents (region, &clipbox);
-
-  gdk_draw_rectangle (window,
-		      ugly_gc,
-		      TRUE,
-		      clipbox.x, clipbox.y,
-		      clipbox.width, clipbox.height);
-
-  g_object_unref (ugly_gc);
+  cairo_destroy (cr);
 }
 
 static void
