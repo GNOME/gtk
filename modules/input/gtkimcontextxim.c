@@ -1772,16 +1772,21 @@ static gboolean
 on_status_window_expose_event (GtkWidget      *widget,
 			       GdkEventExpose *event)
 {
-  gdk_draw_rectangle (widget->window,
-		      widget->style->base_gc [GTK_STATE_NORMAL],
-		      TRUE,
-		      0, 0,
-		      widget->allocation.width, widget->allocation.height);
-  gdk_draw_rectangle (widget->window,
-		      widget->style->text_gc [GTK_STATE_NORMAL],
-		      FALSE,
-		      0, 0,
-		      widget->allocation.width - 1, widget->allocation.height - 1);
+  cairo_t *cr;
+
+  cr = gdk_cairo_create (widget->window);
+
+  gdk_cairo_set_source_color (cr, &widget->style->base[GTK_STATE_NORMAL]);
+  cairo_rectangle (cr,
+                   0, 0,
+                   widget->allocation.width, widget->allocation.height);
+  cairo_fill (cr);
+
+  gdk_cairo_set_source_color (cr, &widget->style->text[GTK_STATE_NORMAL]);
+  cairo_rectangle (cr, 
+                   0, 0,
+                   widget->allocation.width - 1, widget->allocation.height - 1);
+  cairo_fill (cr);
 
   return FALSE;
 }
