@@ -555,18 +555,14 @@ static GdkBitmap *
 make_solid_mask (GdkScreen *screen, gint width, gint height)
 {
   GdkBitmap *bitmap;
-  GdkGC *gc;
-  GdkGCValues gc_values;
+  cairo_t *cr;
   
   bitmap = gdk_pixmap_new (gdk_screen_get_root_window (screen),
 			   width, height, 1);
 
-  gc_values.foreground.pixel = 1;
-  gc = gdk_gc_new_with_values (bitmap, &gc_values, GDK_GC_FOREGROUND);
-  
-  gdk_draw_rectangle (bitmap, gc, TRUE, 0, 0, width, height);
-  
-  g_object_unref (gc);
+  cr = gdk_cairo_create (bitmap);
+  cairo_paint (cr);
+  cairo_destroy (cr);
   
   return bitmap;
 }
