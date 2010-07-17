@@ -148,43 +148,6 @@ gdk_quartz_get_depth (GdkDrawable *drawable)
 }
 
 static void
-gdk_quartz_draw_rectangle (GdkDrawable *drawable,
-			   GdkGC       *gc,
-			   gboolean     filled,
-			   gint         x,
-			   gint         y,
-			   gint         width,
-			   gint         height)
-{
-  CGContextRef context = gdk_quartz_drawable_get_context (drawable, FALSE);
-
-  if (!context)
-    return;
-
-  _gdk_quartz_gc_update_cg_context (gc, 
-				    drawable,
-				    context,
-				    filled ?
-				    GDK_QUARTZ_CONTEXT_FILL : 
-				    GDK_QUARTZ_CONTEXT_STROKE);
-
-  if (filled)
-    {
-      CGRect rect = CGRectMake (x, y, width, height);
-
-      CGContextFillRect (context, rect);
-    }
-  else
-    {
-      CGRect rect = CGRectMake (x + 0.5, y + 0.5, width, height);
-
-      CGContextStrokeRect (context, rect);
-    }
-
-  gdk_quartz_drawable_release_context (drawable, context);
-}
-
-static void
 gdk_quartz_draw_drawable (GdkDrawable *drawable,
 			  GdkGC       *gc,
 			  GdkPixmap   *src,
@@ -314,7 +277,6 @@ gdk_drawable_impl_quartz_class_init (GdkDrawableImplQuartzClass *klass)
   object_class->finalize = gdk_drawable_impl_quartz_finalize;
 
   drawable_class->create_gc = _gdk_quartz_gc_new;
-  drawable_class->draw_rectangle = gdk_quartz_draw_rectangle;
   drawable_class->draw_drawable_with_src = gdk_quartz_draw_drawable;
 
   drawable_class->ref_cairo_surface = gdk_quartz_ref_cairo_surface;

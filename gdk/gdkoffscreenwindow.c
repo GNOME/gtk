@@ -304,25 +304,6 @@ gdk_offscreen_window_draw_drawable (GdkDrawable *drawable,
   add_damage (offscreen, xdest, ydest, width, height, FALSE);
 }
 
-static void
-gdk_offscreen_window_draw_rectangle (GdkDrawable  *drawable,
-				     GdkGC	  *gc,
-				     gboolean	   filled,
-				     gint	   x,
-				     gint	   y,
-				     gint	   width,
-				     gint	   height)
-{
-  GdkOffscreenWindow *offscreen = GDK_OFFSCREEN_WINDOW (drawable);
-  GdkDrawable *real_drawable = get_real_drawable (offscreen);
-
-  gdk_draw_rectangle (real_drawable,
-		      gc, filled, x, y, width, height);
-
-  add_damage (offscreen, x, y, width, height, !filled);
-
-}
-
 void
 _gdk_offscreen_window_new (GdkWindow     *window,
 			   GdkScreen     *screen,
@@ -947,7 +928,6 @@ gdk_offscreen_window_class_init (GdkOffscreenWindowClass *klass)
   drawable_class->get_source_drawable = gdk_offscreen_window_get_source_drawable;
   drawable_class->get_composite_drawable = gdk_offscreen_window_get_composite_drawable;
 
-  drawable_class->draw_rectangle = gdk_offscreen_window_draw_rectangle;
   drawable_class->draw_drawable_with_src = gdk_offscreen_window_draw_drawable;
 }
 

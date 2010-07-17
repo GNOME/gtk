@@ -229,13 +229,6 @@ typedef struct {
 static GdkGC *gdk_window_create_gc      (GdkDrawable     *drawable,
 					 GdkGCValues     *values,
 					 GdkGCValuesMask  mask);
-static void   gdk_window_draw_rectangle (GdkDrawable     *drawable,
-					 GdkGC           *gc,
-					 gboolean         filled,
-					 gint             x,
-					 gint             y,
-					 gint             width,
-					 gint             height);
 static void   gdk_window_draw_drawable  (GdkDrawable     *drawable,
 					 GdkGC           *gc,
 					 GdkPixmap       *src,
@@ -424,7 +417,6 @@ gdk_window_class_init (GdkWindowObjectClass *klass)
   object_class->get_property = gdk_window_get_property;
 
   drawable_class->create_gc = gdk_window_create_gc;
-  drawable_class->draw_rectangle = gdk_window_draw_rectangle;
   drawable_class->draw_drawable_with_src = gdk_window_draw_drawable;
   drawable_class->get_depth = gdk_window_real_get_depth;
   drawable_class->get_screen = gdk_window_real_get_screen;
@@ -3896,24 +3888,6 @@ gdk_window_create_gc (GdkDrawable     *drawable,
 
   return gdk_gc_new_with_values (((GdkWindowObject *) drawable)->impl,
 				 values, mask);
-}
-
-static void
-gdk_window_draw_rectangle (GdkDrawable *drawable,
-			   GdkGC       *gc,
-			   gboolean     filled,
-			   gint         x,
-			   gint         y,
-			   gint         width,
-			   gint         height)
-{
-  if (GDK_WINDOW_DESTROYED (drawable))
-    return;
-
-  BEGIN_DRAW;
-  gdk_draw_rectangle (impl, gc, filled,
-		      x - x_offset, y - y_offset, width, height);
-  END_DRAW;
 }
 
 static GdkDrawable *

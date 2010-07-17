@@ -34,13 +34,6 @@
 static GdkGC *gdk_pixmap_create_gc      (GdkDrawable     *drawable,
                                          GdkGCValues     *values,
                                          GdkGCValuesMask  mask);
-static void   gdk_pixmap_draw_rectangle (GdkDrawable     *drawable,
-					 GdkGC           *gc,
-					 gboolean         filled,
-					 gint             x,
-					 gint             y,
-					 gint             width,
-					 gint             height);
 static void   gdk_pixmap_draw_drawable  (GdkDrawable     *drawable,
 					 GdkGC           *gc,
 					 GdkPixmap       *src,
@@ -109,7 +102,6 @@ gdk_pixmap_class_init (GdkPixmapObjectClass *klass)
   object_class->finalize = gdk_pixmap_finalize;
 
   drawable_class->create_gc = gdk_pixmap_create_gc;
-  drawable_class->draw_rectangle = gdk_pixmap_draw_rectangle;
   drawable_class->draw_drawable_with_src = gdk_pixmap_draw_drawable;
   drawable_class->get_depth = gdk_pixmap_real_get_depth;
   drawable_class->get_screen = gdk_pixmap_real_get_screen;
@@ -187,22 +179,6 @@ gdk_pixmap_create_gc (GdkDrawable     *drawable,
 {
   return gdk_gc_new_with_values (((GdkPixmapObject *) drawable)->impl,
                                  values, mask);
-}
-
-static void
-gdk_pixmap_draw_rectangle (GdkDrawable *drawable,
-			   GdkGC       *gc,
-			   gboolean     filled,
-			   gint         x,
-			   gint         y,
-			   gint         width,
-			   gint         height)
-{
-  GdkPixmapObject *private = (GdkPixmapObject *)drawable;
-
-  _gdk_gc_remove_drawable_clip (gc);  
-  gdk_draw_rectangle (private->impl, gc, filled,
-                      x, y, width, height);
 }
 
 static void

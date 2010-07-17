@@ -215,56 +215,6 @@ gdk_drawable_get_colormap (GdkDrawable *drawable)
  */
 
 /**
- * gdk_draw_rectangle:
- * @drawable: a #GdkDrawable (a #GdkWindow or a #GdkPixmap).
- * @gc: a #GdkGC.
- * @filled: %TRUE if the rectangle should be filled.
- * @x: the x coordinate of the left edge of the rectangle.
- * @y: the y coordinate of the top edge of the rectangle.
- * @width: the width of the rectangle.
- * @height: the height of the rectangle.
- * 
- * Draws a rectangular outline or filled rectangle, using the foreground color
- * and other attributes of the #GdkGC.
- *
- * A rectangle drawn filled is 1 pixel smaller in both dimensions than a 
- * rectangle outlined. Calling 
- * <literal>gdk_draw_rectangle (window, gc, TRUE, 0, 0, 20, 20)</literal> 
- * results in a filled rectangle 20 pixels wide and 20 pixels high. Calling
- * <literal>gdk_draw_rectangle (window, gc, FALSE, 0, 0, 20, 20)</literal> 
- * results in an outlined rectangle with corners at (0, 0), (0, 20), (20, 20),
- * and (20, 0), which makes it 21 pixels wide and 21 pixels high.
- **/
-void
-gdk_draw_rectangle (GdkDrawable *drawable,
-		    GdkGC       *gc,
-		    gboolean     filled,
-		    gint         x,
-		    gint         y,
-		    gint         width,
-		    gint         height)
-{  
-  g_return_if_fail (GDK_IS_DRAWABLE (drawable));
-  g_return_if_fail (GDK_IS_GC (gc));
-
-  if (width < 0 || height < 0)
-    {
-      gint real_width;
-      gint real_height;
-      
-      gdk_drawable_get_size (drawable, &real_width, &real_height);
-
-      if (width < 0)
-        width = real_width;
-      if (height < 0)
-        height = real_height;
-    }
-
-  GDK_DRAWABLE_GET_CLASS (drawable)->draw_rectangle (drawable, gc, filled, x, y,
-                                                     width, height);
-}
-
-/**
  * gdk_draw_drawable:
  * @drawable: a #GdkDrawable
  * @gc: a #GdkGC sharing the drawable's visual and colormap

@@ -48,13 +48,6 @@
 #include "gdkdisplay-x11.h"
 
 
-static void gdk_x11_draw_rectangle (GdkDrawable    *drawable,
-				    GdkGC          *gc,
-				    gboolean        filled,
-				    gint            x,
-				    gint            y,
-				    gint            width,
-				    gint            height);
 static void gdk_x11_draw_drawable  (GdkDrawable    *drawable,
 				    GdkGC          *gc,
 				    GdkPixmap      *src,
@@ -91,7 +84,6 @@ _gdk_drawable_impl_x11_class_init (GdkDrawableImplX11Class *klass)
   object_class->finalize = gdk_drawable_impl_x11_finalize;
   
   drawable_class->create_gc = _gdk_x11_gc_new;
-  drawable_class->draw_rectangle = gdk_x11_draw_rectangle;
   drawable_class->draw_drawable_with_src = gdk_x11_draw_drawable;
   
   drawable_class->ref_cairo_surface = gdk_x11_ref_cairo_surface;
@@ -287,27 +279,6 @@ gdk_x11_set_colormap (GdkDrawable *drawable,
 
 /* Drawing
  */
-
-static void
-gdk_x11_draw_rectangle (GdkDrawable *drawable,
-			GdkGC       *gc,
-			gboolean     filled,
-			gint         x,
-			gint         y,
-			gint         width,
-			gint         height)
-{
-  GdkDrawableImplX11 *impl;
-
-  impl = GDK_DRAWABLE_IMPL_X11 (drawable);
-  
-  if (filled)
-    XFillRectangle (GDK_SCREEN_XDISPLAY (impl->screen), impl->xid,
-		    GDK_GC_GET_XGC (gc), x, y, width, height);
-  else
-    XDrawRectangle (GDK_SCREEN_XDISPLAY (impl->screen), impl->xid,
-		    GDK_GC_GET_XGC (gc), x, y, width, height);
-}
 
 static void
 gdk_x11_draw_drawable (GdkDrawable *drawable,

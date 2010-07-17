@@ -60,13 +60,6 @@ struct _GdkDrawableClass
   GdkGC *(*create_gc)    (GdkDrawable    *drawable,
 		          GdkGCValues    *values,
 		          GdkGCValuesMask mask);
-  void (*draw_rectangle) (GdkDrawable  *drawable,
-			  GdkGC	       *gc,
-			  gboolean	filled,
-			  gint		x,
-			  gint		y,
-			  gint		width,
-			  gint		height);
   void (*draw_drawable)  (GdkDrawable  *drawable,
 			  GdkGC	       *gc,
 			  GdkDrawable  *src,
@@ -150,13 +143,6 @@ GdkDisplay*	gdk_drawable_get_display  (GdkDrawable    *drawable);
 
 /* Drawing
  */
-void gdk_draw_rectangle (GdkDrawable      *drawable,
-			 GdkGC            *gc,
-			 gboolean          filled,
-			 gint              x,
-			 gint              y,
-			 gint              width,
-			 gint              height);
 void gdk_draw_drawable  (GdkDrawable      *drawable,
 			 GdkGC            *gc,
 			 GdkDrawable      *src,
