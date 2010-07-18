@@ -642,16 +642,21 @@ gtk_style_context_restore (GtkStyleContext *context)
 }
 
 static gboolean
-style_class_find (GArray       *array,
-                  GQuark        class_quark,
-                  guint        *position)
+style_class_find (GArray *array,
+                  GQuark  class_quark,
+                  guint  *position)
 {
   guint min, max, mid;
   gboolean found = FALSE;
 
+  if (position)
+    *position = 0;
+
+  if (!array || array->len == 0)
+    return FALSE;
+
   min = 0;
   max = array->len - 1;
-  mid = max - min / 2;
 
   do
     {
@@ -676,16 +681,21 @@ style_class_find (GArray       *array,
 }
 
 static gboolean
-child_style_class_find (GArray       *array,
-                        GQuark        class_quark,
-                        guint        *position)
+child_style_class_find (GArray *array,
+                        GQuark  class_quark,
+                        guint  *position)
 {
   guint min, max, mid;
   gboolean found = FALSE;
 
+  if (position)
+    *position = 0;
+
+  if (!array || array->len == 0)
+    return FALSE;
+
   min = 0;
   max = array->len - 1;
-  mid = max - min / 2;
 
   do
     {
