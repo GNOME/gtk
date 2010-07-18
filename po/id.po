@@ -10,8 +10,8 @@ msgstr ""
 "Project-Id-Version: gtk+ master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk%"
 "2b&component=general\n"
-"POT-Creation-Date: 2010-04-13 05:45+0000\n"
-"PO-Revision-Date: 2010-07-18 11:53+0700\n"
+"POT-Creation-Date: 2010-07-17 08:49+0000\n"
+"PO-Revision-Date: 2010-07-18 11:59+0700\n"
 "Last-Translator: Andika Triwidada <andika@gmail.com>\n"
 "Language-Team: GNOME Indonesian Translation Team <gnome@i15n.org>\n"
 "MIME-Version: 1.0\n"
@@ -21,58 +21,58 @@ msgstr ""
 "X-Poedit-Language: Indonesian\n"
 "X-Poedit-Country: Indonesia\n"
 
-#: ../gdk/gdk.c:103
+#: ../gdk/gdk.c:102
 #, c-format
 msgid "Error parsing option --gdk-debug"
 msgstr "Galat mengurai opsi --gdk-debug"
 
-#: ../gdk/gdk.c:123
+#: ../gdk/gdk.c:122
 #, c-format
 msgid "Error parsing option --gdk-no-debug"
 msgstr "Galat mengurai opsi --gdk-no-debug"
 
 #. Description of --class=CLASS in --help output
-#: ../gdk/gdk.c:151
+#: ../gdk/gdk.c:150
 msgid "Program class as used by the window manager"
 msgstr "Kelas program yang digunakan pengatur jendela program"
 
 #. Placeholder in --class=CLASS in --help output
-#: ../gdk/gdk.c:152
+#: ../gdk/gdk.c:151
 msgid "CLASS"
 msgstr "KELAS"
 
 #. Description of --name=NAME in --help output
-#: ../gdk/gdk.c:154
+#: ../gdk/gdk.c:153
 msgid "Program name as used by the window manager"
 msgstr "Nama program sebagaimana digunakan oleh program pengatur jendela"
 
 #. Placeholder in --name=NAME in --help output
-#: ../gdk/gdk.c:155
+#: ../gdk/gdk.c:154
 msgid "NAME"
 msgstr "NAMA"
 
 #. Description of --display=DISPLAY in --help output
-#: ../gdk/gdk.c:157
+#: ../gdk/gdk.c:156
 msgid "X display to use"
 msgstr "Tampilan X yang digunakan"
 
 #. Placeholder in --display=DISPLAY in --help output
-#: ../gdk/gdk.c:158
+#: ../gdk/gdk.c:157
 msgid "DISPLAY"
 msgstr "TAMPILAN"
 
 #. Description of --screen=SCREEN in --help output
-#: ../gdk/gdk.c:160
+#: ../gdk/gdk.c:159
 msgid "X screen to use"
 msgstr "Layar X yang digunakan"
 
 #. Placeholder in --screen=SCREEN in --help output
-#: ../gdk/gdk.c:161
+#: ../gdk/gdk.c:160
 msgid "SCREEN"
 msgstr "LAYAR"
 
 #. Description of --gdk-debug=FLAGS in --help output
-#: ../gdk/gdk.c:164
+#: ../gdk/gdk.c:163
 msgid "Gdk debugging flags to set"
 msgstr "Bendera debug Gdk yang hendak dipasang"
 
@@ -80,12 +80,12 @@ msgstr "Bendera debug Gdk yang hendak dipasang"
 #. Placeholder in --gdk-no-debug=FLAGS in --help output
 #. Placeholder in --gtk-debug=FLAGS in --help output
 #. Placeholder in --gtk-no-debug=FLAGS in --help output
-#: ../gdk/gdk.c:165 ../gdk/gdk.c:168 ../gtk/gtkmain.c:459 ../gtk/gtkmain.c:462
+#: ../gdk/gdk.c:164 ../gdk/gdk.c:167 ../gtk/gtkmain.c:438 ../gtk/gtkmain.c:441
 msgid "FLAGS"
 msgstr "BENDERA"
 
 #. Description of --gdk-no-debug=FLAGS in --help output
-#: ../gdk/gdk.c:167
+#: ../gdk/gdk.c:166
 msgid "Gdk debugging flags to unset"
 msgstr "Bendera debug Gdk yang hendak dilepas"
 
@@ -274,919 +274,6 @@ msgctxt "keyboard label"
 msgid "Delete"
 msgstr "Hapus"
 
-#: ../gdk-pixbuf/gdk-pixbuf-animation.c:133 ../gdk-pixbuf/gdk-pixbuf-io.c:982
-#: ../gdk-pixbuf/gdk-pixbuf-io.c:1242 ../tests/testfilechooser.c:222
-#, c-format
-msgid "Failed to open file '%s': %s"
-msgstr "Gagal membuka berkas '%s': %s"
-
-#: ../gdk-pixbuf/gdk-pixbuf-animation.c:146 ../gdk-pixbuf/gdk-pixbuf-io.c:994
-#, c-format
-msgid "Image file '%s' contains no data"
-msgstr "Berkas gambar '%s' tak memuat data"
-
-#: ../gdk-pixbuf/gdk-pixbuf-animation.c:188 ../gdk-pixbuf/gdk-pixbuf-io.c:1030
-#: ../gdk-pixbuf/gdk-pixbuf-io.c:1294 ../tests/testfilechooser.c:267
-#, c-format
-msgid ""
-"Failed to load image '%s': reason not known, probably a corrupt image file"
-msgstr ""
-"Gagal memuat citra '%s': alasan tak diketahui, mungkin berkas citra yang "
-"rusak"
-
-#: ../gdk-pixbuf/gdk-pixbuf-animation.c:221
-#, c-format
-msgid ""
-"Failed to load animation '%s': reason not known, probably a corrupt "
-"animation file"
-msgstr ""
-"Gagal memuat animasi '%s': alasan tak diketahui, mungkin berkas animasi yang "
-"rusak"
-
-#: ../gdk-pixbuf/gdk-pixbuf-io.c:715
-#, c-format
-msgid "Unable to load image-loading module: %s: %s"
-msgstr "Tidak bisa jalankan modul pembuka gambar: %s: %s"
-
-#: ../gdk-pixbuf/gdk-pixbuf-io.c:730
-#, c-format
-msgid ""
-"Image-loading module %s does not export the proper interface; perhaps it's "
-"from a different GTK version?"
-msgstr ""
-"Modul pembuka gambar %s tidak bisa ekspor interface yang benar; mungkin "
-"modul berasal dari GTK versi lain?"
-
-#: ../gdk-pixbuf/gdk-pixbuf-io.c:739 ../gdk-pixbuf/gdk-pixbuf-io.c:790
-#, c-format
-msgid "Image type '%s' is not supported"
-msgstr "Tipe gambar '%s' tak didukung"
-
-#: ../gdk-pixbuf/gdk-pixbuf-io.c:863
-#, c-format
-msgid "Couldn't recognize the image file format for file '%s'"
-msgstr "Format berkas gambar pada berkas '%s' tidak dikenali"
-
-#: ../gdk-pixbuf/gdk-pixbuf-io.c:871
-msgid "Unrecognized image file format"
-msgstr "Format berkas gambar tidak dikenali"
-
-#: ../gdk-pixbuf/gdk-pixbuf-io.c:1039
-#, c-format
-msgid "Failed to load image '%s': %s"
-msgstr "Gagal memuat berkas citra '%s': %s"
-
-#: ../gdk-pixbuf/gdk-pixbuf-io.c:1673 ../gdk-pixbuf/io-gdip-utils.c:961
-#, c-format
-msgid "Error writing to image file: %s"
-msgstr "Galat saat menulis ke berkas citra: %s"
-
-#: ../gdk-pixbuf/gdk-pixbuf-io.c:1718 ../gdk-pixbuf/gdk-pixbuf-io.c:1848
-#, c-format
-msgid "This build of gdk-pixbuf does not support saving the image format: %s"
-msgstr ""
-"gdk-pixbuf yang ada sekarang tak mendukung penyimpanan bentuk citra: %s"
-
-#: ../gdk-pixbuf/gdk-pixbuf-io.c:1752
-msgid "Insufficient memory to save image to callback"
-msgstr "Memori yang tersedia tidak mencukupi untuk menyimpan gambar"
-
-#: ../gdk-pixbuf/gdk-pixbuf-io.c:1765
-msgid "Failed to open temporary file"
-msgstr "Gagal membuka berkas sementara"
-
-#: ../gdk-pixbuf/gdk-pixbuf-io.c:1791
-msgid "Failed to read from temporary file"
-msgstr "Gagal membaca dari berkas sementara"
-
-#: ../gdk-pixbuf/gdk-pixbuf-io.c:2044
-#, c-format
-msgid "Failed to open '%s' for writing: %s"
-msgstr "Gagal membuka '%s' untuk menulis: %s"
-
-#: ../gdk-pixbuf/gdk-pixbuf-io.c:2070
-#, c-format
-msgid ""
-"Failed to close '%s' while writing image, all data may not have been saved: %"
-"s"
-msgstr ""
-"Tak bisa menutup '%s' saat menyimpan gambar, mungkin ada data yang tidak "
-"tersimpan: %s"
-
-#: ../gdk-pixbuf/gdk-pixbuf-io.c:2290 ../gdk-pixbuf/gdk-pixbuf-io.c:2341
-msgid "Insufficient memory to save image into a buffer"
-msgstr ""
-"Memori yang tersedia tidak mencukupi untuk menyimpan gambar ke dalam "
-"penyangga"
-
-#: ../gdk-pixbuf/gdk-pixbuf-io.c:2387
-msgid "Error writing to image stream"
-msgstr "Galat menulis citra ke stream"
-
-#: ../gdk-pixbuf/gdk-pixbuf-loader.c:330
-#, c-format
-msgid ""
-"Internal error: Image loader module '%s' failed to complete an operation, "
-"but didn't give a reason for the failure"
-msgstr ""
-"Error intern: Modul pembuka gambar '%s' gagal menyelesaikan suatu operasi, "
-"tapi tidak menyebutkan alasan errornya"
-
-#: ../gdk-pixbuf/gdk-pixbuf-loader.c:372
-#, c-format
-msgid "Incremental loading of image type '%s' is not supported"
-msgstr "Pemuatan bertahap gambar tipe '%s' tak didukung"
-
-#: ../gdk-pixbuf/gdk-pixdata.c:147
-msgid "Image header corrupt"
-msgstr "Kepala berkas gambar rusak"
-
-#: ../gdk-pixbuf/gdk-pixdata.c:152
-msgid "Image format unknown"
-msgstr "Format gambar tidak dikenal"
-
-#: ../gdk-pixbuf/gdk-pixdata.c:157 ../gdk-pixbuf/gdk-pixdata.c:488
-msgid "Image pixel data corrupt"
-msgstr "Data piksel gambar rusak"
-
-#: ../gdk-pixbuf/io-ani.c:244
-msgid "Unexpected icon chunk in animation"
-msgstr "Ada data error pada bagian ikon pada animasi"
-
-#: ../gdk-pixbuf/io-ani.c:337
-msgid "Unsupported animation type"
-msgstr "Tipe animasi tidak bisa dibuka"
-
-#: ../gdk-pixbuf/io-ani.c:348 ../gdk-pixbuf/io-ani.c:406
-#: ../gdk-pixbuf/io-ani.c:432 ../gdk-pixbuf/io-ani.c:455
-#: ../gdk-pixbuf/io-ani.c:482 ../gdk-pixbuf/io-ani.c:569
-msgid "Invalid header in animation"
-msgstr "Header pada animasi tidak benar"
-
-#: ../gdk-pixbuf/io-ani.c:358 ../gdk-pixbuf/io-ani.c:380
-#: ../gdk-pixbuf/io-ani.c:464 ../gdk-pixbuf/io-ani.c:491
-#: ../gdk-pixbuf/io-ani.c:542 ../gdk-pixbuf/io-ani.c:614
-msgid "Not enough memory to load animation"
-msgstr "Tidak cukup memori untuk membuka animasi ini"
-
-#: ../gdk-pixbuf/io-ani.c:398 ../gdk-pixbuf/io-ani.c:424
-#: ../gdk-pixbuf/io-ani.c:443
-msgid "Malformed chunk in animation"
-msgstr "Ada bagian yang rusak pada animasi"
-
-#: ../gdk-pixbuf/io-ani.c:711
-msgid "The ANI image format"
-msgstr "Format gambar ANI"
-
-#: ../gdk-pixbuf/io-bmp.c:230 ../gdk-pixbuf/io-bmp.c:267
-#: ../gdk-pixbuf/io-bmp.c:338 ../gdk-pixbuf/io-bmp.c:370
-#: ../gdk-pixbuf/io-bmp.c:393 ../gdk-pixbuf/io-bmp.c:496
-msgid "BMP image has bogus header data"
-msgstr "Gambar BMP ini memiliki data header yang aneh"
-
-#: ../gdk-pixbuf/io-bmp.c:241 ../gdk-pixbuf/io-bmp.c:433
-msgid "Not enough memory to load bitmap image"
-msgstr "Tidak cukup memori untuk membuka gambar bitmap"
-
-#: ../gdk-pixbuf/io-bmp.c:319
-msgid "BMP image has unsupported header size"
-msgstr "Gambar BMP ini memiliki ukuran header yang tidak dikenal"
-
-#: ../gdk-pixbuf/io-bmp.c:357
-msgid "Topdown BMP images cannot be compressed"
-msgstr "Gambar BMP topdown tidak dapat dikompresi"
-
-#: ../gdk-pixbuf/io-bmp.c:717 ../gdk-pixbuf/io-pnm.c:709
-msgid "Premature end-of-file encountered"
-msgstr "Akhir berkas dijumpai secara mendadak"
-
-#: ../gdk-pixbuf/io-bmp.c:1329
-msgid "Couldn't allocate memory for saving BMP file"
-msgstr "Tidak bisa menyediakan ruang memori saat membuka berkas BMP"
-
-#: ../gdk-pixbuf/io-bmp.c:1370
-msgid "Couldn't write to BMP file"
-msgstr "Berkas BMP tidak dapat ditulis"
-
-#: ../gdk-pixbuf/io-bmp.c:1423 ../gdk-pixbuf/io-gdip-bmp.c:82
-msgid "The BMP image format"
-msgstr "Format gambar BMP"
-
-#: ../gdk-pixbuf/io-gif.c:222
-#, c-format
-msgid "Failure reading GIF: %s"
-msgstr "Ada error saat membaca berkas GIF: %s"
-
-#: ../gdk-pixbuf/io-gif.c:496 ../gdk-pixbuf/io-gif.c:1481
-#: ../gdk-pixbuf/io-gif.c:1642
-msgid "GIF file was missing some data (perhaps it was truncated somehow?)"
-msgstr "Ada data yang hilang pada berkas GIF ini (mungkin rusak?)"
-
-#: ../gdk-pixbuf/io-gif.c:505
-#, c-format
-msgid "Internal error in the GIF loader (%s)"
-msgstr "Error intern pada pembuka berkas GIF (%s)"
-
-#: ../gdk-pixbuf/io-gif.c:579
-msgid "Stack overflow"
-msgstr "Stack meluap"
-
-#: ../gdk-pixbuf/io-gif.c:639
-msgid "GIF image loader cannot understand this image."
-msgstr "Pembuka gambar GIF tidak mengenali isi berkas ini"
-
-#: ../gdk-pixbuf/io-gif.c:668
-msgid "Bad code encountered"
-msgstr "Ada kode yang salah"
-
-#: ../gdk-pixbuf/io-gif.c:678
-msgid "Circular table entry in GIF file"
-msgstr "Ada entri tabel sirkular pada berkas GIF"
-
-#: ../gdk-pixbuf/io-gif.c:866 ../gdk-pixbuf/io-gif.c:1468
-#: ../gdk-pixbuf/io-gif.c:1515 ../gdk-pixbuf/io-gif.c:1630
-msgid "Not enough memory to load GIF file"
-msgstr "Tidak cukup memori untuk membuka berkas GIF"
-
-#: ../gdk-pixbuf/io-gif.c:960
-msgid "Not enough memory to composite a frame in GIF file"
-msgstr "Tidak cukup memori untuk melakukan komposisi bingkai dalam  berkas GIF"
-
-#: ../gdk-pixbuf/io-gif.c:1132
-msgid "GIF image is corrupt (incorrect LZW compression)"
-msgstr "Gambar dalam berkas GIF rusak (kompresi LZWnya salah)"
-
-#: ../gdk-pixbuf/io-gif.c:1182
-msgid "File does not appear to be a GIF file"
-msgstr "Berkas ini bukan berkas GIF"
-
-#: ../gdk-pixbuf/io-gif.c:1194
-#, c-format
-msgid "Version %s of the GIF file format is not supported"
-msgstr "Versi %s berkas GIF ini tidak bisa dibuka"
-
-#: ../gdk-pixbuf/io-gif.c:1303
-msgid ""
-"GIF image has no global colormap, and a frame inside it has no local "
-"colormap."
-msgstr ""
-"Gambar GIF tidak memiliki peta warna global, dan frame di dalamnya tidak "
-"memiliki peta warna lokal."
-
-#: ../gdk-pixbuf/io-gif.c:1537
-msgid "GIF image was truncated or incomplete."
-msgstr "Gambar GIF rusak atau tidak lengkap."
-
-#: ../gdk-pixbuf/io-gif.c:1693 ../gdk-pixbuf/io-gdip-gif.c:80
-msgid "The GIF image format"
-msgstr "Format gambar GIF"
-
-#: ../gdk-pixbuf/io-ico.c:211 ../gdk-pixbuf/io-ico.c:225
-#: ../gdk-pixbuf/io-ico.c:277 ../gdk-pixbuf/io-ico.c:290
-#: ../gdk-pixbuf/io-ico.c:359
-msgid "Invalid header in icon"
-msgstr "Header error pada ikon"
-
-#: ../gdk-pixbuf/io-ico.c:240 ../gdk-pixbuf/io-ico.c:300
-#: ../gdk-pixbuf/io-ico.c:369 ../gdk-pixbuf/io-ico.c:432
-#: ../gdk-pixbuf/io-ico.c:462
-msgid "Not enough memory to load icon"
-msgstr "Tidak cukup memori untuk membuka ikon"
-
-#: ../gdk-pixbuf/io-ico.c:322
-msgid "Icon has zero width"
-msgstr "Ikon memiliki lebar 0"
-
-#: ../gdk-pixbuf/io-ico.c:332
-msgid "Icon has zero height"
-msgstr "Ikon memiliki tinggi 0"
-
-#: ../gdk-pixbuf/io-ico.c:384
-msgid "Compressed icons are not supported"
-msgstr "Ikon terkompresi tidak bisa dibuka"
-
-#: ../gdk-pixbuf/io-ico.c:417
-msgid "Unsupported icon type"
-msgstr "Tipe ikon tidak bisa dibuka"
-
-#: ../gdk-pixbuf/io-ico.c:511
-msgid "Not enough memory to load ICO file"
-msgstr "Tidak cukup memori untuk membuka berkas ICO"
-
-#: ../gdk-pixbuf/io-ico.c:976
-msgid "Image too large to be saved as ICO"
-msgstr "Gambar ini terlalu besar untuk berkas ICO"
-
-#: ../gdk-pixbuf/io-ico.c:987
-msgid "Cursor hotspot outside image"
-msgstr "Kursor hotspot di luar gambar"
-
-#: ../gdk-pixbuf/io-ico.c:1010
-#, c-format
-msgid "Unsupported depth for ICO file: %d"
-msgstr "Kedalaman warna berkas ICO ini tidak didukung: %d"
-
-#: ../gdk-pixbuf/io-ico.c:1245 ../gdk-pixbuf/io-gdip-ico.c:59
-msgid "The ICO image format"
-msgstr "Format gambar ICO"
-
-#: ../gdk-pixbuf/io-icns.c:347
-#, c-format
-msgid "Error reading ICNS image: %s"
-msgstr "Galat saat membaca citra ICNS: %s"
-
-#: ../gdk-pixbuf/io-icns.c:364
-msgid "Could not decode ICNS file"
-msgstr "Tak bisa mengurai kode berkas ICNS"
-
-#: ../gdk-pixbuf/io-icns.c:397
-msgid "The ICNS image format"
-msgstr "Format citra ICNS"
-
-#: ../gdk-pixbuf/io-jasper.c:75
-msgid "Couldn't allocate memory for stream"
-msgstr "Tak dapat mengalokasikan memori untuk stream"
-
-#: ../gdk-pixbuf/io-jasper.c:105
-msgid "Couldn't decode image"
-msgstr "Tak bisa mengurai kode citra"
-
-#: ../gdk-pixbuf/io-jasper.c:123
-msgid "Transformed JPEG2000 has zero width or height"
-msgstr "JPEG2000 yang telah ditransformasi memiliki lebar atau tinggi 0"
-
-#: ../gdk-pixbuf/io-jasper.c:137
-msgid "Image type currently not supported"
-msgstr "Tipe citra kini belum didukung"
-
-#: ../gdk-pixbuf/io-jasper.c:149 ../gdk-pixbuf/io-jasper.c:157
-msgid "Couldn't allocate memory for color profile"
-msgstr "Tak bisa mengalokasikan memori untuk profil warna"
-
-#: ../gdk-pixbuf/io-jasper.c:183
-msgid "Insufficient memory to open JPEG 2000 file"
-msgstr "Tak cukup memori untuk membuka berkas JPEG 2000"
-
-#: ../gdk-pixbuf/io-jasper.c:262
-msgid "Couldn't allocate memory to buffer image data"
-msgstr "Tak bisa mengalokasikan memori untuk menyangga data citra"
-
-#: ../gdk-pixbuf/io-jasper.c:306
-msgid "The JPEG 2000 image format"
-msgstr "Format citra JPEG 2000"
-
-#: ../gdk-pixbuf/io-jpeg.c:117
-#, c-format
-msgid "Error interpreting JPEG image file (%s)"
-msgstr "Galat menginterpretasi berkas citra JPEG (%s)"
-
-#: ../gdk-pixbuf/io-jpeg.c:528
-msgid ""
-"Insufficient memory to load image, try exiting some applications to free "
-"memory"
-msgstr ""
-"Tidak cukup memori untuk membuka gambar, cobalah untuk menutup aplikasi "
-"lainnya untuk mengosongkan memori"
-
-#: ../gdk-pixbuf/io-jpeg.c:569 ../gdk-pixbuf/io-jpeg.c:775
-#, c-format
-msgid "Unsupported JPEG color space (%s)"
-msgstr "Ruang warna JPEG tidak bisa ditampilkan (%s)"
-
-#: ../gdk-pixbuf/io-jpeg.c:674 ../gdk-pixbuf/io-jpeg.c:944
-#: ../gdk-pixbuf/io-jpeg.c:1177 ../gdk-pixbuf/io-jpeg.c:1186
-msgid "Couldn't allocate memory for loading JPEG file"
-msgstr "Tidak bisa menyediakan ruang memori saat membuka berkas JPEG"
-
-#: ../gdk-pixbuf/io-jpeg.c:919
-msgid "Transformed JPEG has zero width or height."
-msgstr "JPEG yang telah ditransformasi memiliki lebar atau tinggi 0"
-
-#: ../gdk-pixbuf/io-jpeg.c:1133 ../gdk-pixbuf/io-gdip-jpeg.c:53
-#, c-format
-msgid ""
-"JPEG quality must be a value between 0 and 100; value '%s' could not be "
-"parsed."
-msgstr ""
-"Kualitas JPEG harus bernilai antara 0 dan 100; nilai '%s' tidak bisa diurai."
-
-#: ../gdk-pixbuf/io-jpeg.c:1148 ../gdk-pixbuf/io-gdip-jpeg.c:68
-#, c-format
-msgid ""
-"JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
-msgstr "Kualitas JPEG harus bernilai antara 0 dan 100; nilai '%d' tidak boleh."
-
-#: ../gdk-pixbuf/io-jpeg.c:1310 ../gdk-pixbuf/io-gdip-jpeg.c:136
-msgid "The JPEG image format"
-msgstr "Format gambar JPEG"
-
-#: ../gdk-pixbuf/io-pcx.c:187
-msgid "Couldn't allocate memory for header"
-msgstr "Tidak dapat mengalokasikan memori untuk header"
-
-#: ../gdk-pixbuf/io-pcx.c:202 ../gdk-pixbuf/io-pcx.c:560
-msgid "Couldn't allocate memory for context buffer"
-msgstr "Tidak dapat mengalokasikan memori untuk buffer konteks"
-
-#: ../gdk-pixbuf/io-pcx.c:601
-msgid "Image has invalid width and/or height"
-msgstr "Gambar memiliki tinggi dan/atau lebar yang salah"
-
-#: ../gdk-pixbuf/io-pcx.c:613 ../gdk-pixbuf/io-pcx.c:674
-msgid "Image has unsupported bpp"
-msgstr "Gambar ini memiliki bpp yang tidak dapat ditampilkan"
-
-#: ../gdk-pixbuf/io-pcx.c:618 ../gdk-pixbuf/io-pcx.c:626
-#, c-format
-msgid "Image has unsupported number of %d-bit planes"
-msgstr "Gambar ini memiliki jumlah bidang %d-bit yang tidak dapat ditampilkan"
-
-#: ../gdk-pixbuf/io-pcx.c:642
-msgid "Couldn't create new pixbuf"
-msgstr "Tidak dapat membuat pixbuf baru"
-
-#: ../gdk-pixbuf/io-pcx.c:650
-msgid "Couldn't allocate memory for line data"
-msgstr "Tidak dapat mengalokasikan memori untuk data baris"
-
-#: ../gdk-pixbuf/io-pcx.c:657
-msgid "Couldn't allocate memory for paletted data"
-msgstr "Tidak dapat mengalokasikan memori untuk data berpalet"
-
-#: ../gdk-pixbuf/io-pcx.c:704
-msgid "Didn't get all lines of PCX image"
-msgstr "Tidak berhasil memperoleh semua baris pada gambar PCX"
-
-#: ../gdk-pixbuf/io-pcx.c:711
-msgid "No palette found at end of PCX data"
-msgstr "TIdak ada palet pada data PCX"
-
-#: ../gdk-pixbuf/io-pcx.c:756
-msgid "The PCX image format"
-msgstr "Format gambar PCX"
-
-#: ../gdk-pixbuf/io-png.c:55
-msgid "Bits per channel of PNG image is invalid."
-msgstr "Nilai bit per channel pada gambar PNG salah."
-
-#: ../gdk-pixbuf/io-png.c:136 ../gdk-pixbuf/io-png.c:642
-msgid "Transformed PNG has zero width or height."
-msgstr "PNG tertransformasi memiliki lebar atau tinggi 0"
-
-#: ../gdk-pixbuf/io-png.c:144
-msgid "Bits per channel of transformed PNG is not 8."
-msgstr "Nilai bit ber channel pada berkas PNG tertransformasi tidak bernilai 8"
-
-#: ../gdk-pixbuf/io-png.c:153
-msgid "Transformed PNG not RGB or RGBA."
-msgstr "PNG tertransformasi bukan dalam mode RGB atau RGBA"
-
-#: ../gdk-pixbuf/io-png.c:162
-msgid "Transformed PNG has unsupported number of channels, must be 3 or 4."
-msgstr ""
-"PNG tertransformasi berisi nilai channel yang salah, seharusnya bernilai 3 "
-"atau 4."
-
-#: ../gdk-pixbuf/io-png.c:183
-#, c-format
-msgid "Fatal error in PNG image file: %s"
-msgstr "Error fatal pada berkas gambar PNG: %s"
-
-# r gdk-pixbuf/io-png.c:301
-#: ../gdk-pixbuf/io-png.c:316
-msgid "Insufficient memory to load PNG file"
-msgstr "Tidak cukup memori untuk meload berkas PNG"
-
-#: ../gdk-pixbuf/io-png.c:657
-#, c-format
-msgid ""
-"Insufficient memory to store a %ld by %ld image; try exiting some "
-"applications to reduce memory usage"
-msgstr ""
-"Memori tidak cukup untuk menyompan gambar %ld x %ld. Coba tutup beberapa "
-"aplikasi untuk mengurangi penggunaan memori"
-
-#: ../gdk-pixbuf/io-png.c:720
-msgid "Fatal error reading PNG image file"
-msgstr "Error fatal saat membaca berkas gambar PNG"
-
-#: ../gdk-pixbuf/io-png.c:769
-#, c-format
-msgid "Fatal error reading PNG image file: %s"
-msgstr "Error fatal saat membaca berkas gambar PNG: %s"
-
-#: ../gdk-pixbuf/io-png.c:863
-msgid ""
-"Keys for PNG text chunks must have at least 1 and at most 79 characters."
-msgstr "Key untuk teks bagian PNG harus berukuran antara 1 dan 79 karakter."
-
-#: ../gdk-pixbuf/io-png.c:872
-msgid "Keys for PNG text chunks must be ASCII characters."
-msgstr "Key untuk teks bagian PNG harus dalam karakter ASCII"
-
-#: ../gdk-pixbuf/io-png.c:886 ../gdk-pixbuf/io-tiff.c:738
-#, c-format
-msgid "Color profile has invalid length %d."
-msgstr "Panjang profil warna %d tak valid."
-
-#: ../gdk-pixbuf/io-png.c:899 ../gdk-pixbuf/io-gdip-png.c:56
-#, c-format
-msgid ""
-"PNG compression level must be a value between 0 and 9; value '%s' could not "
-"be parsed."
-msgstr ""
-"Tingkat kompresi PNG harus bernilai antara 0 dan 9; Nilai '%s' tidak bisa di "
-"baca."
-
-#: ../gdk-pixbuf/io-png.c:912 ../gdk-pixbuf/io-gdip-png.c:68
-#, c-format
-msgid ""
-"PNG compression level must be a value between 0 and 9; value '%d' is not "
-"allowed."
-msgstr ""
-"Tingkat kompresi PNG harus bernilai antara 0 dan 9; Nilai '%d' tidak "
-"diperbolehkan."
-
-#: ../gdk-pixbuf/io-png.c:951
-#, c-format
-msgid "Value for PNG text chunk %s cannot be converted to ISO-8859-1 encoding."
-msgstr ""
-"Nilai teks bagian PNG %s tidak bisa dikonversikan ke gugus karakter ISO-8859-"
-"1."
-
-#: ../gdk-pixbuf/io-png.c:1112 ../gdk-pixbuf/io-gdip-png.c:133
-msgid "The PNG image format"
-msgstr "Format gambar PNG"
-
-#: ../gdk-pixbuf/io-pnm.c:250
-msgid "PNM loader expected to find an integer, but didn't"
-msgstr "Pembuka PNM mengalami kegagalan, harusnya menemukan bilangan bulat"
-
-#: ../gdk-pixbuf/io-pnm.c:282
-msgid "PNM file has an incorrect initial byte"
-msgstr "Berkas PNM berisi byte awal yang salah"
-
-#: ../gdk-pixbuf/io-pnm.c:312
-msgid "PNM file is not in a recognized PNM subformat"
-msgstr "Berkas PNM tidak dikenali"
-
-#: ../gdk-pixbuf/io-pnm.c:337
-msgid "PNM file has an image width of 0"
-msgstr "Berkas PNM memiliki gambar dengan lebar 0"
-
-#: ../gdk-pixbuf/io-pnm.c:358
-msgid "PNM file has an image height of 0"
-msgstr "Berkas PNM memiliki gambar dengan tinggi 0"
-
-#: ../gdk-pixbuf/io-pnm.c:381
-msgid "Maximum color value in PNM file is 0"
-msgstr "Warna maksimum PNM bernilai 0"
-
-#: ../gdk-pixbuf/io-pnm.c:389
-msgid "Maximum color value in PNM file is too large"
-msgstr "Nilai warna maksimum dalam berkas PNM terlalu besar"
-
-#: ../gdk-pixbuf/io-pnm.c:429 ../gdk-pixbuf/io-pnm.c:459
-#: ../gdk-pixbuf/io-pnm.c:504
-msgid "Raw PNM image type is invalid"
-msgstr "Tipe gambar PNM raw tidak bisa dibaca"
-
-#: ../gdk-pixbuf/io-pnm.c:654
-msgid "PNM image loader does not support this PNM subformat"
-msgstr "Pembuka gambar PNM tidak bisa membaca subformat PNM ini"
-
-#: ../gdk-pixbuf/io-pnm.c:741 ../gdk-pixbuf/io-pnm.c:968
-msgid "Raw PNM formats require exactly one whitespace before sample data"
-msgstr "Format PNM raw harus berisi satu whitespace sebelum data gambar"
-
-#: ../gdk-pixbuf/io-pnm.c:768
-msgid "Cannot allocate memory for loading PNM image"
-msgstr "Tidak dapat mengalokasikan memori untuk membuka gambar PNM"
-
-#: ../gdk-pixbuf/io-pnm.c:818
-msgid "Insufficient memory to load PNM context struct"
-msgstr ""
-"Memori yang tersedia tidak mencukupi untuk membuka struktur konteks PNM"
-
-#: ../gdk-pixbuf/io-pnm.c:869
-msgid "Unexpected end of PNM image data"
-msgstr "Akhir data gambar PNM berakhir secara mendadak"
-
-#: ../gdk-pixbuf/io-pnm.c:997
-msgid "Insufficient memory to load PNM file"
-msgstr "Memori yang tersedia tidak mencukupi untuk membuka berkas PNM"
-
-#: ../gdk-pixbuf/io-pnm.c:1081
-msgid "The PNM/PBM/PGM/PPM image format family"
-msgstr "Keluarga format gambar PNM/PBM/PGM/PPM"
-
-#: ../gdk-pixbuf/io-qtif.c:128
-msgid "Input file descriptor is NULL."
-msgstr "Deskriptor berkas masukan adalah NULL."
-
-#: ../gdk-pixbuf/io-qtif.c:143
-msgid "Failed to read QTIF header"
-msgstr "Gagal membaca header QTIF"
-
-#: ../gdk-pixbuf/io-qtif.c:152 ../gdk-pixbuf/io-qtif.c:182
-#: ../gdk-pixbuf/io-qtif.c:446
-#, c-format
-msgid "QTIF atom size too large (%d bytes)"
-msgstr "Ukuran atom QTIF terlalu besar (%d byte)"
-
-#: ../gdk-pixbuf/io-qtif.c:172
-#, c-format
-msgid "Failed to allocate %d bytes for file read buffer"
-msgstr "Gagal mengalokasikan %d byte bagi penyangga baca berkas"
-
-#: ../gdk-pixbuf/io-qtif.c:196
-#, c-format
-msgid "File error when reading QTIF atom: %s"
-msgstr "Galat berkas ketika membaca atom QTIF: %s"
-
-#: ../gdk-pixbuf/io-qtif.c:233
-#, c-format
-msgid "Failed to skip the next %d bytes with seek()."
-msgstr "Gagal melompati %d byte berikutnya dengan seek()."
-
-#: ../gdk-pixbuf/io-qtif.c:257
-msgid "Failed to allocate QTIF context structure."
-msgstr "Gagal mengalokasikan struktur konteks QTIF."
-
-#: ../gdk-pixbuf/io-qtif.c:317
-msgid "Failed to create GdkPixbufLoader object."
-msgstr "Gagal membuat objek GdkPixbufLoader."
-
-#: ../gdk-pixbuf/io-qtif.c:421
-msgid "Failed to find an image data atom."
-msgstr "Gagal menemukan atom data citra."
-
-#: ../gdk-pixbuf/io-qtif.c:602
-msgid "The QTIF image format"
-msgstr "Format gambar QTIF"
-
-#: ../gdk-pixbuf/io-ras.c:126
-msgid "RAS image has bogus header data"
-msgstr "Gambar RAS memiliki data header yang salah"
-
-#: ../gdk-pixbuf/io-ras.c:148
-msgid "RAS image has unknown type"
-msgstr "Gambar RAS memiliki tipe yang tidak dikenali"
-
-#: ../gdk-pixbuf/io-ras.c:156
-msgid "unsupported RAS image variation"
-msgstr "varian gambar RAS yang tidak dapat dibuka"
-
-#: ../gdk-pixbuf/io-ras.c:171 ../gdk-pixbuf/io-ras.c:200
-msgid "Not enough memory to load RAS image"
-msgstr "Memori yang tersedia tidak mencukupi untuk membuka gambar RAS"
-
-#: ../gdk-pixbuf/io-ras.c:545
-msgid "The Sun raster image format"
-msgstr "Format gambar raster Sun"
-
-#: ../gdk-pixbuf/io-tga.c:154
-msgid "Cannot allocate memory for IOBuffer struct"
-msgstr "Tidak dapat mengalokasikan memori untuk struktur IOBuffer"
-
-#: ../gdk-pixbuf/io-tga.c:173
-msgid "Cannot allocate memory for IOBuffer data"
-msgstr "Tidak dapat mengalokasikan memori untuk data IOBuffer"
-
-#: ../gdk-pixbuf/io-tga.c:184
-msgid "Cannot realloc IOBuffer data"
-msgstr "Tidak dapat melakukan realokasi data IOBuffer"
-
-#: ../gdk-pixbuf/io-tga.c:214
-msgid "Cannot allocate temporary IOBuffer data"
-msgstr "Tidak dapat mengalokasikan data sementara IOBuffer"
-
-#: ../gdk-pixbuf/io-tga.c:347
-msgid "Cannot allocate new pixbuf"
-msgstr "Tidak dapat mengalokasikan pixbuf baru"
-
-#: ../gdk-pixbuf/io-tga.c:686
-msgid "Image is corrupted or truncated"
-msgstr "Gambar rusak atau terpotong"
-
-#: ../gdk-pixbuf/io-tga.c:693
-msgid "Cannot allocate colormap structure"
-msgstr "Tidak dapat mengalokasikan struktur peta warna"
-
-#: ../gdk-pixbuf/io-tga.c:700
-msgid "Cannot allocate colormap entries"
-msgstr "Tidak dapat mengalokasikan isi peta warna"
-
-#: ../gdk-pixbuf/io-tga.c:722
-msgid "Unexpected bitdepth for colormap entries"
-msgstr "Kedalaman bit untuk entri peta warna salah"
-
-#: ../gdk-pixbuf/io-tga.c:740
-msgid "Cannot allocate TGA header memory"
-msgstr "Tidak dapat mengalokasikan memori untuk kepala TGA"
-
-#: ../gdk-pixbuf/io-tga.c:773
-msgid "TGA image has invalid dimensions"
-msgstr "Gambar TGA ini memiliki dimensi yang salah"
-
-#: ../gdk-pixbuf/io-tga.c:779 ../gdk-pixbuf/io-tga.c:788
-#: ../gdk-pixbuf/io-tga.c:798 ../gdk-pixbuf/io-tga.c:808
-#: ../gdk-pixbuf/io-tga.c:815
-msgid "TGA image type not supported"
-msgstr "Tipe gambar TGA jenis ini tidak dapat dibuka"
-
-#: ../gdk-pixbuf/io-tga.c:862
-msgid "Cannot allocate memory for TGA context struct"
-msgstr "Tidak dapat mengalokasikan memori untuk struktur konteks TGA"
-
-#: ../gdk-pixbuf/io-tga.c:927
-msgid "Excess data in file"
-msgstr "Data berlebih pada file"
-
-#: ../gdk-pixbuf/io-tga.c:1008
-msgid "The Targa image format"
-msgstr "Format gambar Targa"
-
-#: ../gdk-pixbuf/io-tiff.c:165
-msgid "Could not get image width (bad TIFF file)"
-msgstr "Tidak dapat menentukan lebar gambar (file TIFFnya rusak)"
-
-#: ../gdk-pixbuf/io-tiff.c:172
-msgid "Could not get image height (bad TIFF file)"
-msgstr "Tidak dapat menentukan tinggi gambar (file TIFFnya rusak)"
-
-#: ../gdk-pixbuf/io-tiff.c:180
-msgid "Width or height of TIFF image is zero"
-msgstr "Lebar atau tinggi gambar TIFF ini bernilai nol"
-
-#: ../gdk-pixbuf/io-tiff.c:189 ../gdk-pixbuf/io-tiff.c:198
-msgid "Dimensions of TIFF image too large"
-msgstr "Dimensi gambar TIFF ini terlampau besar"
-
-#: ../gdk-pixbuf/io-tiff.c:222 ../gdk-pixbuf/io-tiff.c:234
-#: ../gdk-pixbuf/io-tiff.c:561
-msgid "Insufficient memory to open TIFF file"
-msgstr "Memori yang tersedia tidak mencukupi untuk membuka berkas TIFF"
-
-#: ../gdk-pixbuf/io-tiff.c:295
-msgid "Failed to load RGB data from TIFF file"
-msgstr "Data RGB gagal dibaca dari berkas TIFF"
-
-#: ../gdk-pixbuf/io-tiff.c:351
-msgid "Failed to open TIFF image"
-msgstr "Gambar TIFF ini tidak dapat dibuka"
-
-#: ../gdk-pixbuf/io-tiff.c:363 ../gdk-pixbuf/io-tiff.c:778
-msgid "TIFFClose operation failed"
-msgstr "Operasi TIFFClose gagal"
-
-#: ../gdk-pixbuf/io-tiff.c:493 ../gdk-pixbuf/io-tiff.c:506
-msgid "Failed to load TIFF image"
-msgstr "Berkas TIFF tidak dapat dibuka"
-
-#: ../gdk-pixbuf/io-tiff.c:692
-msgid "Failed to save TIFF image"
-msgstr "Gambar TIFF ini tidak dapat disimpan"
-
-#: ../gdk-pixbuf/io-tiff.c:727
-msgid "TIFF compression doesn't refer to a valid codec."
-msgstr "Kompresi TIFF tidak mengacu ke suatu codec yang valid."
-
-#: ../gdk-pixbuf/io-tiff.c:767
-msgid "Failed to write TIFF data"
-msgstr "Gambar TIFF ini tidak dapat ditulis"
-
-#: ../gdk-pixbuf/io-tiff.c:814
-msgid "Couldn't write to TIFF file"
-msgstr "Tidak bisa menulis ke berkas TIFF"
-
-#: ../gdk-pixbuf/io-tiff.c:869
-msgid "The TIFF image format"
-msgstr "Format gambar TIFF"
-
-#: ../gdk-pixbuf/io-wbmp.c:246
-msgid "Image has zero width"
-msgstr "Gambar memiliki lebar nol"
-
-#: ../gdk-pixbuf/io-wbmp.c:264
-msgid "Image has zero height"
-msgstr "Gambar memiliki tinggi nol"
-
-#: ../gdk-pixbuf/io-wbmp.c:275
-msgid "Not enough memory to load image"
-msgstr "Memori tidak mencukupi untuk membuka gambar"
-
-#: ../gdk-pixbuf/io-wbmp.c:334
-msgid "Couldn't save the rest"
-msgstr "Saya tidak dapat menyimpan sisa data"
-
-#: ../gdk-pixbuf/io-wbmp.c:375
-msgid "The WBMP image format"
-msgstr "Format gambar WBMP"
-
-#: ../gdk-pixbuf/io-xbm.c:295
-msgid "Invalid XBM file"
-msgstr "Berkas XBM ini tidak dapat dibuka"
-
-#: ../gdk-pixbuf/io-xbm.c:305
-msgid "Insufficient memory to load XBM image file"
-msgstr "Memori yang tersedia tidak mencukupi untuk membuka berkas gambar XBM"
-
-#: ../gdk-pixbuf/io-xbm.c:453
-msgid "Failed to write to temporary file when loading XBM image"
-msgstr ""
-"Saat membuka gambar XBM ini, ada kegagalan saat menulis ke berkas sementara"
-
-#: ../gdk-pixbuf/io-xbm.c:492
-msgid "The XBM image format"
-msgstr "Format gambar XBM"
-
-#: ../gdk-pixbuf/io-xpm.c:468
-msgid "No XPM header found"
-msgstr "Header XPM tidak dijumpai"
-
-#: ../gdk-pixbuf/io-xpm.c:477
-msgid "Invalid XPM header"
-msgstr "Kepala XPM tidak benar"
-
-#: ../gdk-pixbuf/io-xpm.c:485
-msgid "XPM file has image width <= 0"
-msgstr "Berkas XPM ini memiliki lebar gambar <= 0"
-
-#: ../gdk-pixbuf/io-xpm.c:493
-msgid "XPM file has image height <= 0"
-msgstr "Berkas XPM ini memiliki tinggi gambar <= 0"
-
-#: ../gdk-pixbuf/io-xpm.c:501
-msgid "XPM has invalid number of chars per pixel"
-msgstr "Berkas XPM ini memiliki jumlah karakter per pixel yang salah"
-
-#: ../gdk-pixbuf/io-xpm.c:510
-msgid "XPM file has invalid number of colors"
-msgstr "Berkas XPM ini memiliki jumlah warna yang tidak benar"
-
-#: ../gdk-pixbuf/io-xpm.c:522 ../gdk-pixbuf/io-xpm.c:531
-#: ../gdk-pixbuf/io-xpm.c:583
-msgid "Cannot allocate memory for loading XPM image"
-msgstr "Tidak dapat mengalokasikan memori untuk membuka gambar XPM"
-
-#: ../gdk-pixbuf/io-xpm.c:545
-msgid "Cannot read XPM colormap"
-msgstr "Saya tidak dapat membaca peta warna XPM"
-
-#: ../gdk-pixbuf/io-xpm.c:777
-msgid "Failed to write to temporary file when loading XPM image"
-msgstr "Saat membuka gambar XPM ini, ada kegagalan menulis ke berkas sementara"
-
-#: ../gdk-pixbuf/io-xpm.c:816
-msgid "The XPM image format"
-msgstr "Format gambar XPM"
-
-#: ../gdk-pixbuf/io-gdip-emf.c:59
-msgid "The EMF image format"
-msgstr "Format gambar EMF"
-
-#: ../gdk-pixbuf/io-gdip-utils.c:232
-#, c-format
-msgid "Could not allocate memory: %s"
-msgstr "Tidak dapat mengalokasikan memori: %s"
-
-#: ../gdk-pixbuf/io-gdip-utils.c:257 ../gdk-pixbuf/io-gdip-utils.c:371
-#: ../gdk-pixbuf/io-gdip-utils.c:411
-#, c-format
-msgid "Could not create stream: %s"
-msgstr "Tidak bisa membuat stream: %s"
-
-#: ../gdk-pixbuf/io-gdip-utils.c:271
-#, c-format
-msgid "Could not seek stream: %s"
-msgstr "Tidak dapat men-seek stream: %s"
-
-#: ../gdk-pixbuf/io-gdip-utils.c:283
-#, c-format
-msgid "Could not read from stream: %s"
-msgstr "Tidak bisa membaca dari stream: %s"
-
-#: ../gdk-pixbuf/io-gdip-utils.c:694 ../gdk-pixbuf/io-gdip-utils.c:825
-msgid "Couldn't load bitmap"
-msgstr "Tak bisa memuat bitmap"
-
-#: ../gdk-pixbuf/io-gdip-utils.c:847
-msgid "Couldn't load metafile"
-msgstr "Tak bisa memuat berkas meta"
-
-#: ../gdk-pixbuf/io-gdip-utils.c:1006
-msgid "Unsupported image format for GDI+"
-msgstr "Bentuk gambar yang tak didukung bagi GDI+"
-
-#: ../gdk-pixbuf/io-gdip-utils.c:1013
-msgid "Couldn't save"
-msgstr "Tak bisa menyimpan"
-
-#: ../gdk-pixbuf/io-gdip-wmf.c:58
-msgid "The WMF image format"
-msgstr "Format gambar WMF"
-
 #. Description of --sync in --help output
 #: ../gdk/win32/gdkmain-win32.c:54
 msgid "Don't batch GDI requests"
@@ -1222,60 +309,66 @@ msgstr "WARNA"
 msgid "Make X calls synchronous"
 msgstr "Buat panggilan X sinkronus"
 
-#: ../gdk/x11/gdkapplaunchcontext-x11.c:313
+#: ../gdk/x11/gdkapplaunchcontext-x11.c:312
 #, c-format
 msgid "Starting %s"
 msgstr "Memulai %s"
 
-#: ../gdk/x11/gdkapplaunchcontext-x11.c:315
+#: ../gdk/x11/gdkapplaunchcontext-x11.c:314
 #, c-format
 msgid "Opening %s"
 msgstr "Membuka '%s'"
 
-#: ../gtk/gtkaboutdialog.c:242
+#: ../gdk/x11/gdkapplaunchcontext-x11.c:317
+#, c-format
+msgid "Opening %d Item"
+msgid_plural "Opening %d Items"
+msgstr[0] "Membuka %d Butir."
+
+#: ../gtk/gtkaboutdialog.c:240
 msgid "Could not show link"
 msgstr "Tidak dapat menampilkan taut"
 
-#: ../gtk/gtkaboutdialog.c:365 ../gtk/gtkaboutdialog.c:2263
+#: ../gtk/gtkaboutdialog.c:363 ../gtk/gtkaboutdialog.c:2226
 msgid "License"
 msgstr "Lisensi"
 
-#: ../gtk/gtkaboutdialog.c:366
+#: ../gtk/gtkaboutdialog.c:364
 msgid "The license of the program"
 msgstr "Lisensi program"
 
 #. Add the credits button
-#: ../gtk/gtkaboutdialog.c:625
+#: ../gtk/gtkaboutdialog.c:627
 msgid "C_redits"
 msgstr "_Penyusun"
 
 #. Add the license button
-#: ../gtk/gtkaboutdialog.c:639
+#: ../gtk/gtkaboutdialog.c:641
 msgid "_License"
 msgstr "_Lisensi"
 
-#: ../gtk/gtkaboutdialog.c:917
+#: ../gtk/gtkaboutdialog.c:900
 #, c-format
 msgid "About %s"
 msgstr "Tentang %s"
 
-#: ../gtk/gtkaboutdialog.c:2186
+#: ../gtk/gtkaboutdialog.c:2143
 msgid "Credits"
 msgstr "Penyusun"
 
-#: ../gtk/gtkaboutdialog.c:2215
+#: ../gtk/gtkaboutdialog.c:2176
 msgid "Written by"
 msgstr "Ditulis oleh"
 
-#: ../gtk/gtkaboutdialog.c:2218
+#: ../gtk/gtkaboutdialog.c:2179
 msgid "Documented by"
 msgstr "Dokumentasi oleh"
 
-#: ../gtk/gtkaboutdialog.c:2230
+#: ../gtk/gtkaboutdialog.c:2191
 msgid "Translated by"
 msgstr "Alih bahasa oleh"
 
-#: ../gtk/gtkaboutdialog.c:2234
+#: ../gtk/gtkaboutdialog.c:2195
 msgid "Artwork by"
 msgstr "Karya seni oleh"
 
@@ -1284,7 +377,7 @@ msgstr "Karya seni oleh"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: ../gtk/gtkaccellabel.c:146
+#: ../gtk/gtkaccellabel.c:157
 msgctxt "keyboard label"
 msgid "Shift"
 msgstr "Shift"
@@ -1294,7 +387,7 @@ msgstr "Shift"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: ../gtk/gtkaccellabel.c:152
+#: ../gtk/gtkaccellabel.c:163
 msgctxt "keyboard label"
 msgid "Ctrl"
 msgstr "Ctrl"
@@ -1304,7 +397,7 @@ msgstr "Ctrl"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: ../gtk/gtkaccellabel.c:158
+#: ../gtk/gtkaccellabel.c:169
 msgctxt "keyboard label"
 msgid "Alt"
 msgstr "Alt"
@@ -1314,7 +407,7 @@ msgstr "Alt"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: ../gtk/gtkaccellabel.c:743
+#: ../gtk/gtkaccellabel.c:767
 msgctxt "keyboard label"
 msgid "Super"
 msgstr "Super"
@@ -1324,7 +417,7 @@ msgstr "Super"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: ../gtk/gtkaccellabel.c:756
+#: ../gtk/gtkaccellabel.c:780
 msgctxt "keyboard label"
 msgid "Hyper"
 msgstr "Hyper"
@@ -1334,17 +427,17 @@ msgstr "Hyper"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: ../gtk/gtkaccellabel.c:770
+#: ../gtk/gtkaccellabel.c:794
 msgctxt "keyboard label"
 msgid "Meta"
 msgstr "Meta"
 
-#: ../gtk/gtkaccellabel.c:787
+#: ../gtk/gtkaccellabel.c:811
 msgctxt "keyboard label"
 msgid "Space"
 msgstr "Spasi"
 
-#: ../gtk/gtkaccellabel.c:790
+#: ../gtk/gtkaccellabel.c:814
 msgctxt "keyboard label"
 msgid "Backslash"
 msgstr "Backslash"
@@ -1379,7 +472,7 @@ msgstr "Tag tak tertangani: '%s'"
 #. * text direction of RTL and specify "calendar:YM", then the year
 #. * will appear to the right of the month.
 #.
-#: ../gtk/gtkcalendar.c:759
+#: ../gtk/gtkcalendar.c:830
 msgid "calendar:MY"
 msgstr "calendar:MY"
 
@@ -1387,7 +480,7 @@ msgstr "calendar:MY"
 #. * first day of the week to calendar:week_start:1 if you want Monday
 #. * to be the first day of the week, and so on.
 #.
-#: ../gtk/gtkcalendar.c:797
+#: ../gtk/gtkcalendar.c:868
 msgid "calendar:week_start:0"
 msgstr "calendar:week_start:0"
 
@@ -1396,7 +489,7 @@ msgstr "calendar:week_start:0"
 #. *
 #. * If you don't understand this, leave it as "2000"
 #.
-#: ../gtk/gtkcalendar.c:1807
+#: ../gtk/gtkcalendar.c:1878
 msgctxt "year measurement template"
 msgid "2000"
 msgstr "2000"
@@ -1411,7 +504,7 @@ msgstr "2000"
 #. * digits. That needs support from your system and locale definition
 #. * too.
 #.
-#: ../gtk/gtkcalendar.c:1838 ../gtk/gtkcalendar.c:2496
+#: ../gtk/gtkcalendar.c:1909 ../gtk/gtkcalendar.c:2567
 #, c-format
 msgctxt "calendar:day:digits"
 msgid "%d"
@@ -1427,7 +520,7 @@ msgstr "%d"
 #. * digits. That needs support from your system and locale definition
 #. * too.
 #.
-#: ../gtk/gtkcalendar.c:1870 ../gtk/gtkcalendar.c:2359
+#: ../gtk/gtkcalendar.c:1941 ../gtk/gtkcalendar.c:2430
 #, c-format
 msgctxt "calendar:week:digits"
 msgid "%d"
@@ -1443,7 +536,7 @@ msgstr "%d"
 #. *
 #. * "%Y" is appropriate for most locales.
 #.
-#: ../gtk/gtkcalendar.c:2150
+#: ../gtk/gtkcalendar.c:2221
 msgctxt "calendar year format"
 msgid "%Y"
 msgstr "%Y"
@@ -1451,7 +544,7 @@ msgstr "%Y"
 #. This label is displayed in a treeview cell displaying
 #. * a disabled accelerator key combination.
 #.
-#: ../gtk/gtkcellrendereraccel.c:244
+#: ../gtk/gtkcellrendereraccel.c:268
 msgctxt "Accelerator"
 msgid "Disabled"
 msgstr "Dimatikan"
@@ -1460,7 +553,7 @@ msgstr "Dimatikan"
 #. * an accelerator key combination that is not valid according
 #. * to gtk_accelerator_valid().
 #.
-#: ../gtk/gtkcellrendereraccel.c:254
+#: ../gtk/gtkcellrendereraccel.c:278
 msgctxt "Accelerator"
 msgid "Invalid"
 msgstr "Tak valid"
@@ -1469,21 +562,21 @@ msgstr "Tak valid"
 #. * an accelerator when the cell is clicked to change the
 #. * acelerator.
 #.
-#: ../gtk/gtkcellrendereraccel.c:389 ../gtk/gtkcellrendereraccel.c:603
+#: ../gtk/gtkcellrendereraccel.c:414 ../gtk/gtkcellrendereraccel.c:664
 msgid "New accelerator..."
 msgstr "Akselerator baru..."
 
-#: ../gtk/gtkcellrendererprogress.c:361 ../gtk/gtkcellrendererprogress.c:448
+#: ../gtk/gtkcellrendererprogress.c:360 ../gtk/gtkcellrendererprogress.c:450
 #, c-format
 msgctxt "progress bar label"
 msgid "%d %%"
 msgstr "%d %%"
 
-#: ../gtk/gtkcolorbutton.c:188 ../gtk/gtkcolorbutton.c:559
+#: ../gtk/gtkcolorbutton.c:186 ../gtk/gtkcolorbutton.c:559
 msgid "Pick a Color"
 msgstr "Pilih Warna"
 
-#: ../gtk/gtkcolorbutton.c:448
+#: ../gtk/gtkcolorbutton.c:446
 msgid "Received invalid color data\n"
 msgstr "Data warna yang diterima salah\n"
 
@@ -1516,8 +609,8 @@ msgid "_Saturation:"
 msgstr "Kemurnian Warna/_Saturasi:"
 
 #: ../gtk/gtkcolorsel.c:391
-msgid "\"Deepness\" of the color."
-msgstr "\"Kedalaman\" warna."
+msgid "Intensity of the color."
+msgstr "Intensitas warna."
 
 #: ../gtk/gtkcolorsel.c:392
 msgid "_Value:"
@@ -1622,7 +715,7 @@ msgstr ""
 "ambil warna pada kotak warna atau klik kanan dan pilih \"Simpan warna di sini"
 "\""
 
-#: ../gtk/gtkcolorseldialog.c:170
+#: ../gtk/gtkcolorseldialog.c:190
 msgid "Color Selection"
 msgstr "Pemilihan Warna"
 
@@ -1632,113 +725,124 @@ msgstr "Pemilihan Warna"
 #. * Do *not* translate it to "predefinito:mm", if it
 #. * it isn't default:mm or default:inch it will not work
 #.
-#: ../gtk/gtkcustompaperunixdialog.c:118
+#: ../gtk/gtkcustompaperunixdialog.c:116
 msgid "default:mm"
 msgstr "default:mm"
 
 #. And show the custom paper dialog
-#: ../gtk/gtkcustompaperunixdialog.c:373 ../gtk/gtkprintunixdialog.c:3226
+#: ../gtk/gtkcustompaperunixdialog.c:374 ../gtk/gtkprintunixdialog.c:3233
 msgid "Manage Custom Sizes"
 msgstr "Kelola Ukuran Sesuaian"
 
-#: ../gtk/gtkcustompaperunixdialog.c:533 ../gtk/gtkpagesetupunixdialog.c:778
+#: ../gtk/gtkcustompaperunixdialog.c:534 ../gtk/gtkpagesetupunixdialog.c:790
 msgid "inch"
 msgstr "inci"
 
-#: ../gtk/gtkcustompaperunixdialog.c:535 ../gtk/gtkpagesetupunixdialog.c:776
+#: ../gtk/gtkcustompaperunixdialog.c:536 ../gtk/gtkpagesetupunixdialog.c:788
 msgid "mm"
 msgstr "mm"
 
-#: ../gtk/gtkcustompaperunixdialog.c:580
+#: ../gtk/gtkcustompaperunixdialog.c:581
 msgid "Margins from Printer..."
 msgstr "Batas dari Pencetak..."
 
-#: ../gtk/gtkcustompaperunixdialog.c:746
+#: ../gtk/gtkcustompaperunixdialog.c:747
 #, c-format
 msgid "Custom Size %d"
 msgstr "Ukuran sesuaian %d"
 
-#: ../gtk/gtkcustompaperunixdialog.c:1054
+#: ../gtk/gtkcustompaperunixdialog.c:1060
 msgid "_Width:"
 msgstr "_Lebar:"
 
-#: ../gtk/gtkcustompaperunixdialog.c:1066
+#: ../gtk/gtkcustompaperunixdialog.c:1072
 msgid "_Height:"
 msgstr "_Tinggi:"
 
-#: ../gtk/gtkcustompaperunixdialog.c:1078
+#: ../gtk/gtkcustompaperunixdialog.c:1084
 msgid "Paper Size"
 msgstr "Ukuran Kertas"
 
-#: ../gtk/gtkcustompaperunixdialog.c:1087
+#: ../gtk/gtkcustompaperunixdialog.c:1093
 msgid "_Top:"
 msgstr "A_tas:"
 
-#: ../gtk/gtkcustompaperunixdialog.c:1099
+#: ../gtk/gtkcustompaperunixdialog.c:1105
 msgid "_Bottom:"
 msgstr "_Bawah:"
 
-#: ../gtk/gtkcustompaperunixdialog.c:1111
+#: ../gtk/gtkcustompaperunixdialog.c:1117
 msgid "_Left:"
 msgstr "_Kiri:"
 
-#: ../gtk/gtkcustompaperunixdialog.c:1123
+#: ../gtk/gtkcustompaperunixdialog.c:1129
 msgid "_Right:"
 msgstr "_Kanan:"
 
-#: ../gtk/gtkcustompaperunixdialog.c:1164
+#: ../gtk/gtkcustompaperunixdialog.c:1170
 msgid "Paper Margins"
 msgstr "Batas Kertas"
 
-#: ../gtk/gtkentry.c:8698 ../gtk/gtktextview.c:7881
+#: ../gtk/gtkentry.c:8611 ../gtk/gtktextview.c:8258
 msgid "Input _Methods"
 msgstr "_Metode Input"
 
-#: ../gtk/gtkentry.c:8712 ../gtk/gtktextview.c:7895
+#: ../gtk/gtkentry.c:8625 ../gtk/gtktextview.c:8272
 msgid "_Insert Unicode Control Character"
 msgstr "_Isikan karakter kontrol Unicode"
 
-#: ../gtk/gtkentry.c:10091
+#: ../gtk/gtkentry.c:10020
+msgid "Caps Lock and Num Lock are on"
+msgstr "Caps Lock dan Num Lock menyala"
+
+#: ../gtk/gtkentry.c:10022
+msgid "Num Lock is on"
+msgstr "Num Lock menyala"
+
+#: ../gtk/gtkentry.c:10024
 msgid "Caps Lock is on"
 msgstr "Caps Lock menyala"
 
-#: ../gtk/gtkfilechooserbutton.c:64
+#. **************** *
+#. *  Private Macros  *
+#. * ****************
+#: ../gtk/gtkfilechooserbutton.c:61
 msgid "Select A File"
 msgstr "Pilih Berkas"
 
-#: ../gtk/gtkfilechooserbutton.c:65 ../gtk/gtkfilechooserdefault.c:1839
+#: ../gtk/gtkfilechooserbutton.c:62 ../gtk/gtkfilechooserdefault.c:1837
 msgid "Desktop"
 msgstr "Desktop"
 
-#: ../gtk/gtkfilechooserbutton.c:66
+#: ../gtk/gtkfilechooserbutton.c:63
 msgid "(None)"
 msgstr "(Tidak ada)"
 
-#: ../gtk/gtkfilechooserbutton.c:2021
+#: ../gtk/gtkfilechooserbutton.c:2015
 msgid "Other..."
 msgstr "Lainnya..."
 
-#: ../gtk/gtkfilechooserdefault.c:148
+#: ../gtk/gtkfilechooserdefault.c:146
 msgid "Type name of new folder"
 msgstr "Ketikkan nama untuk folder baru ini"
 
-#: ../gtk/gtkfilechooserdefault.c:965
+#: ../gtk/gtkfilechooserdefault.c:963
 msgid "Could not retrieve information about the file"
 msgstr "Informasi mengenai berkas ini tidak tersedia"
 
-#: ../gtk/gtkfilechooserdefault.c:976
+#: ../gtk/gtkfilechooserdefault.c:974
 msgid "Could not add a bookmark"
 msgstr "Tidak dapat menambah buku alamat"
 
-#: ../gtk/gtkfilechooserdefault.c:987
+#: ../gtk/gtkfilechooserdefault.c:985
 msgid "Could not remove bookmark"
 msgstr "Tidak dapat menghapus buku alamat"
 
-#: ../gtk/gtkfilechooserdefault.c:998
+#: ../gtk/gtkfilechooserdefault.c:996
 msgid "The folder could not be created"
 msgstr "Folder tidak dapat dibuat"
 
-#: ../gtk/gtkfilechooserdefault.c:1011
+#: ../gtk/gtkfilechooserdefault.c:1009
 msgid ""
 "The folder could not be created, as a file with the same name already "
 "exists.  Try using a different name for the folder, or rename the file first."
@@ -1747,11 +851,11 @@ msgstr ""
 "yang sama. Silakan ganti nama folder ini, atau ganti nama berkas itu "
 "terlebih dahulu."
 
-#: ../gtk/gtkfilechooserdefault.c:1022
+#: ../gtk/gtkfilechooserdefault.c:1020
 msgid "Invalid file name"
 msgstr "Nama berkas tidak benar"
 
-#: ../gtk/gtkfilechooserdefault.c:1032
+#: ../gtk/gtkfilechooserdefault.c:1030
 msgid "The folder contents could not be displayed"
 msgstr "Isi folder tidak dapat ditampilkan"
 
@@ -1759,186 +863,186 @@ msgstr "Isi folder tidak dapat ditampilkan"
 #. * is a hostname. Nautilus and the panel contain the same string
 #. * to translate.
 #.
-#: ../gtk/gtkfilechooserdefault.c:1582
+#: ../gtk/gtkfilechooserdefault.c:1580
 #, c-format
 msgid "%1$s on %2$s"
 msgstr "%1$s pada %2$s"
 
-#: ../gtk/gtkfilechooserdefault.c:1758
+#: ../gtk/gtkfilechooserdefault.c:1756
 msgid "Search"
 msgstr "Pencarian"
 
-#: ../gtk/gtkfilechooserdefault.c:1782 ../gtk/gtkfilechooserdefault.c:9458
+#: ../gtk/gtkfilechooserdefault.c:1780 ../gtk/gtkfilechooserdefault.c:9455
 msgid "Recently Used"
 msgstr "Baru-baru Ini Dipakai"
 
-#: ../gtk/gtkfilechooserdefault.c:2422
+#: ../gtk/gtkfilechooserdefault.c:2420
 msgid "Select which types of files are shown"
 msgstr "Pilih jenis berkas yang ingin ditampilkan"
 
-#: ../gtk/gtkfilechooserdefault.c:2781
+#: ../gtk/gtkfilechooserdefault.c:2779
 #, c-format
 msgid "Add the folder '%s' to the bookmarks"
 msgstr "Masukkan folder '%s' ke dalam buku alamat"
 
-#: ../gtk/gtkfilechooserdefault.c:2825
+#: ../gtk/gtkfilechooserdefault.c:2823
 #, c-format
 msgid "Add the current folder to the bookmarks"
 msgstr "Masukkan folder ini ke dalam buku alamat"
 
-#: ../gtk/gtkfilechooserdefault.c:2827
+#: ../gtk/gtkfilechooserdefault.c:2825
 #, c-format
 msgid "Add the selected folders to the bookmarks"
 msgstr "Masukkan folder terpilih ke dalam buku alamat"
 
-#: ../gtk/gtkfilechooserdefault.c:2865
+#: ../gtk/gtkfilechooserdefault.c:2863
 #, c-format
 msgid "Remove the bookmark '%s'"
 msgstr "Hapus buku alamat '%s'"
 
-#: ../gtk/gtkfilechooserdefault.c:2867
+#: ../gtk/gtkfilechooserdefault.c:2865
 #, c-format
 msgid "Bookmark '%s' cannot be removed"
 msgstr "Tanda buku '%s' tak bisa dihapus"
 
-#: ../gtk/gtkfilechooserdefault.c:2874 ../gtk/gtkfilechooserdefault.c:3898
+#: ../gtk/gtkfilechooserdefault.c:2872 ../gtk/gtkfilechooserdefault.c:3896
 msgid "Remove the selected bookmark"
 msgstr "Hapus buku alamat yang sedang dipilih"
 
-#: ../gtk/gtkfilechooserdefault.c:3594
+#: ../gtk/gtkfilechooserdefault.c:3592
 msgid "Remove"
 msgstr "Hapus"
 
-#: ../gtk/gtkfilechooserdefault.c:3603
+#: ../gtk/gtkfilechooserdefault.c:3601
 msgid "Rename..."
 msgstr "Ganti nama..."
 
 #. Accessible object name for the file chooser's shortcuts pane
-#: ../gtk/gtkfilechooserdefault.c:3766
+#: ../gtk/gtkfilechooserdefault.c:3764
 msgid "Places"
 msgstr "Tempat"
 
 #. Column header for the file chooser's shortcuts pane
-#: ../gtk/gtkfilechooserdefault.c:3823
+#: ../gtk/gtkfilechooserdefault.c:3821
 msgid "_Places"
 msgstr "Tem_pat"
 
-#: ../gtk/gtkfilechooserdefault.c:3879
+#: ../gtk/gtkfilechooserdefault.c:3877
 msgid "_Add"
 msgstr "T_ambah"
 
-#: ../gtk/gtkfilechooserdefault.c:3886
+#: ../gtk/gtkfilechooserdefault.c:3884
 msgid "Add the selected folder to the Bookmarks"
 msgstr "Masukkan folder terpilih ke dalam Buku Alamat"
 
-#: ../gtk/gtkfilechooserdefault.c:3891
+#: ../gtk/gtkfilechooserdefault.c:3889
 msgid "_Remove"
 msgstr "Hapu_s"
 
-#: ../gtk/gtkfilechooserdefault.c:4026
+#: ../gtk/gtkfilechooserdefault.c:4024
 msgid "Could not select file"
 msgstr "Berkas tidak dapat dipilih"
 
-#: ../gtk/gtkfilechooserdefault.c:4201
+#: ../gtk/gtkfilechooserdefault.c:4199
 msgid "_Add to Bookmarks"
 msgstr "M_asukkan dalam Buku Alamat"
 
-#: ../gtk/gtkfilechooserdefault.c:4214
+#: ../gtk/gtkfilechooserdefault.c:4212
 msgid "Show _Hidden Files"
 msgstr "Tampilkan Berkas _Tersembunyi"
 
-#: ../gtk/gtkfilechooserdefault.c:4221
+#: ../gtk/gtkfilechooserdefault.c:4219
 msgid "Show _Size Column"
 msgstr "Tampilkan Kolom _Ukuran"
 
-#: ../gtk/gtkfilechooserdefault.c:4441 ../gtk/gtkfilesel.c:730
+#: ../gtk/gtkfilechooserdefault.c:4442
 msgid "Files"
 msgstr "Berkas"
 
-#: ../gtk/gtkfilechooserdefault.c:4492
+#: ../gtk/gtkfilechooserdefault.c:4493
 msgid "Name"
 msgstr "Nama"
 
-#: ../gtk/gtkfilechooserdefault.c:4515
+#: ../gtk/gtkfilechooserdefault.c:4516
 msgid "Size"
 msgstr "Ukuran"
 
-#: ../gtk/gtkfilechooserdefault.c:4529
+#: ../gtk/gtkfilechooserdefault.c:4530
 msgid "Modified"
 msgstr "Tgl Perubahan"
 
 #. Label
-#: ../gtk/gtkfilechooserdefault.c:4784 ../gtk/gtkprinteroptionwidget.c:802
+#: ../gtk/gtkfilechooserdefault.c:4785 ../gtk/gtkprinteroptionwidget.c:801
 msgid "_Name:"
 msgstr "_Nama:"
 
-#: ../gtk/gtkfilechooserdefault.c:4827
+#: ../gtk/gtkfilechooserdefault.c:4828
 msgid "_Browse for other folders"
 msgstr "_Lihat folder lainnya"
 
-#: ../gtk/gtkfilechooserdefault.c:5099
+#: ../gtk/gtkfilechooserdefault.c:5100
 msgid "Type a file name"
 msgstr "Tuliskan nama berkas"
 
 #. Create Folder
-#: ../gtk/gtkfilechooserdefault.c:5140
+#: ../gtk/gtkfilechooserdefault.c:5141
 msgid "Create Fo_lder"
 msgstr "Buat Fo_lder Baru"
 
-#: ../gtk/gtkfilechooserdefault.c:5150
+#: ../gtk/gtkfilechooserdefault.c:5151
 msgid "_Location:"
 msgstr "_Lokasi: "
 
-#: ../gtk/gtkfilechooserdefault.c:5354
+#: ../gtk/gtkfilechooserdefault.c:5355
 msgid "Save in _folder:"
 msgstr "Simpan ke dalam _folder:"
 
-#: ../gtk/gtkfilechooserdefault.c:5356
+#: ../gtk/gtkfilechooserdefault.c:5357
 msgid "Create in _folder:"
 msgstr "Buat di dalam _folder:"
 
-#: ../gtk/gtkfilechooserdefault.c:6423
+#: ../gtk/gtkfilechooserdefault.c:6420
 #, c-format
 msgid "Could not read the contents of %s"
 msgstr "Tidak bisa membaca isi dari %s"
 
-#: ../gtk/gtkfilechooserdefault.c:6427
+#: ../gtk/gtkfilechooserdefault.c:6424
 msgid "Could not read the contents of the folder"
 msgstr "Tidak bisa membaca isi dari folder"
 
-#: ../gtk/gtkfilechooserdefault.c:6520 ../gtk/gtkfilechooserdefault.c:6588
-#: ../gtk/gtkfilechooserdefault.c:6733
+#: ../gtk/gtkfilechooserdefault.c:6517 ../gtk/gtkfilechooserdefault.c:6585
+#: ../gtk/gtkfilechooserdefault.c:6730
 msgid "Unknown"
 msgstr "Tidak Diketahui"
 
-#: ../gtk/gtkfilechooserdefault.c:6535
+#: ../gtk/gtkfilechooserdefault.c:6532
 msgid "%H:%M"
 msgstr "%H:%M"
 
-#: ../gtk/gtkfilechooserdefault.c:6537
+#: ../gtk/gtkfilechooserdefault.c:6534
 msgid "Yesterday at %H:%M"
 msgstr "Kemarin pada %H:%M"
 
-#: ../gtk/gtkfilechooserdefault.c:7203
+#: ../gtk/gtkfilechooserdefault.c:7200
 msgid "Cannot change to folder because it is not local"
 msgstr "Tidak dapat mengganti folder karena tidak berada pada komputer lokal"
 
-#: ../gtk/gtkfilechooserdefault.c:7800 ../gtk/gtkfilechooserdefault.c:7821
+#: ../gtk/gtkfilechooserdefault.c:7797 ../gtk/gtkfilechooserdefault.c:7818
 #, c-format
 msgid "Shortcut %s already exists"
 msgstr "Jalan pintas  %s sudah ada"
 
-#: ../gtk/gtkfilechooserdefault.c:7911
+#: ../gtk/gtkfilechooserdefault.c:7908
 #, c-format
 msgid "Shortcut %s does not exist"
 msgstr "Jalan pintas  %s tidak ada"
 
-#: ../gtk/gtkfilechooserdefault.c:8166 ../gtk/gtkprintunixdialog.c:480
+#: ../gtk/gtkfilechooserdefault.c:8163 ../gtk/gtkprintunixdialog.c:476
 #, c-format
 msgid "A file named \"%s\" already exists.  Do you want to replace it?"
 msgstr "Berkas \"%s\" sudah ada. Ingin menimpanya?"
 
-#: ../gtk/gtkfilechooserdefault.c:8169 ../gtk/gtkprintunixdialog.c:484
+#: ../gtk/gtkfilechooserdefault.c:8166 ../gtk/gtkprintunixdialog.c:480
 #, c-format
 msgid ""
 "The file already exists in \"%s\".  Replacing it will overwrite its contents."
@@ -1946,15 +1050,15 @@ msgstr ""
 "Berkas sudah ada dalam \"%s\". Berkas lama akan diganti dengan yang baru "
 "bila Anda menimpanya."
 
-#: ../gtk/gtkfilechooserdefault.c:8174 ../gtk/gtkprintunixdialog.c:491
+#: ../gtk/gtkfilechooserdefault.c:8171 ../gtk/gtkprintunixdialog.c:487
 msgid "_Replace"
 msgstr "_Timpa"
 
-#: ../gtk/gtkfilechooserdefault.c:8826
+#: ../gtk/gtkfilechooserdefault.c:8823
 msgid "Could not start the search process"
 msgstr "Tidak dapat memulai proses pencarian"
 
-#: ../gtk/gtkfilechooserdefault.c:8827
+#: ../gtk/gtkfilechooserdefault.c:8824
 msgid ""
 "The program was not able to create a connection to the indexer daemon.  "
 "Please make sure it is running."
@@ -1962,36 +1066,36 @@ msgstr ""
 "Program tidak dapat membuat koneksi ke indexer daemon.  Pastikan program "
 "sedang berjalan."
 
-#: ../gtk/gtkfilechooserdefault.c:8841
+#: ../gtk/gtkfilechooserdefault.c:8838
 msgid "Could not send the search request"
 msgstr "Tidak dapat mengirim permintaan pencarian"
 
-#: ../gtk/gtkfilechooserdefault.c:9030
+#: ../gtk/gtkfilechooserdefault.c:9027
 msgid "Search:"
 msgstr "Cari:"
 
-#: ../gtk/gtkfilechooserdefault.c:9634
+#: ../gtk/gtkfilechooserdefault.c:9631
 #, c-format
 msgid "Could not mount %s"
 msgstr "%s tidak dapat dipasang"
 
 #. Translators: this is shown in the feedback for Tab-completion in a file
 #. * chooser's text entry, when the user enters an invalid path.
-#: ../gtk/gtkfilechooserentry.c:698 ../gtk/gtkfilechooserentry.c:1163
+#: ../gtk/gtkfilechooserentry.c:697 ../gtk/gtkfilechooserentry.c:1162
 msgid "Invalid path"
 msgstr "Path tak valid"
 
 #. translators: this text is shown when there are no completions
 #. * for something the user typed in a file chooser entry
 #.
-#: ../gtk/gtkfilechooserentry.c:1095
+#: ../gtk/gtkfilechooserentry.c:1094
 msgid "No match"
 msgstr "Tak ada yang cocok"
 
 #. translators: this text is shown when there is exactly one completion
 #. * for something the user typed in a file chooser entry
 #.
-#: ../gtk/gtkfilechooserentry.c:1106
+#: ../gtk/gtkfilechooserentry.c:1105
 msgid "Sole completion"
 msgstr "Satu-satunya penyelesaian"
 
@@ -1999,13 +1103,13 @@ msgstr "Satu-satunya penyelesaian"
 #. * entry is a complete filename, but could be continued to find
 #. * a longer match
 #.
-#: ../gtk/gtkfilechooserentry.c:1122
+#: ../gtk/gtkfilechooserentry.c:1121
 msgid "Complete, but not unique"
 msgstr "Lengkap, tapi tak unik"
 
 #. Translators: this text is shown while the system is searching
 #. * for possible completions for filenames in a file chooser entry.
-#: ../gtk/gtkfilechooserentry.c:1154
+#: ../gtk/gtkfilechooserentry.c:1153
 msgid "Completing..."
 msgstr "Sedang menyelesaikan..."
 
@@ -2013,7 +1117,7 @@ msgstr "Sedang menyelesaikan..."
 #. Translators: this is shown in the feedback for Tab-completion in a
 #. * file chooser's text entry when the user enters something like
 #. * "sftp://blahblah" in an app that only supports local filenames.
-#: ../gtk/gtkfilechooserentry.c:1176 ../gtk/gtkfilechooserentry.c:1201
+#: ../gtk/gtkfilechooserentry.c:1175 ../gtk/gtkfilechooserentry.c:1200
 msgid "Only local files may be selected"
 msgstr "Hanya boleh memilih berkas lokal"
 
@@ -2021,163 +1125,32 @@ msgstr "Hanya boleh memilih berkas lokal"
 #. Translators: this is shown in the feedback for Tab-completion in a
 #. * file chooser's text entry when the user hasn't entered the first '/'
 #. * after a hostname and yet hits Tab (such as "sftp://blahblah[Tab]")
-#: ../gtk/gtkfilechooserentry.c:1185
+#: ../gtk/gtkfilechooserentry.c:1184
 msgid "Incomplete hostname; end it with '/'"
 msgstr "Nama host tak lengkap; akhirilah dengan '/'"
 
 #. Translators: this is shown in the feedback for Tab-completion in a file
 #. * chooser's text entry when the user enters a path that does not exist
 #. * and then hits Tab
-#: ../gtk/gtkfilechooserentry.c:1196
+#: ../gtk/gtkfilechooserentry.c:1195
 msgid "Path does not exist"
 msgstr "Path tidak ada"
 
-#: ../gtk/gtkfilechoosersettings.c:487 ../gtk/gtkfilesel.c:1349
-#: ../gtk/gtkfilesel.c:1360
+#: ../gtk/gtkfilechoosersettings.c:486
 #, c-format
 msgid "Error creating folder '%s': %s"
 msgstr "Error saat membuat folder '%s': %s"
-
-#: ../gtk/gtkfilesel.c:694
-msgid "Folders"
-msgstr "Folder"
-
-#: ../gtk/gtkfilesel.c:698
-msgid "Fol_ders"
-msgstr "Fol_der"
-
-#: ../gtk/gtkfilesel.c:734
-msgid "_Files"
-msgstr "_Berkas"
-
-#: ../gtk/gtkfilesel.c:821 ../gtk/gtkfilesel.c:2154
-#, c-format
-msgid "Folder unreadable: %s"
-msgstr "Folder tidak dapat dibaca: %s"
-
-#: ../gtk/gtkfilesel.c:905
-#, c-format
-msgid ""
-"The file \"%s\" resides on another machine (called %s) and may not be "
-"available to this program.\n"
-"Are you sure that you want to select it?"
-msgstr ""
-"Berkas %s ada pada mesin lain (bernama %s) dan mungkin tidak bisa dibuka "
-"oleh program ini.\n"
-"Apakah benar ingin memilih berkas itu?"
-
-#: ../gtk/gtkfilesel.c:1020
-msgid "_New Folder"
-msgstr "Buat Folder _Baru"
-
-#: ../gtk/gtkfilesel.c:1031
-msgid "De_lete File"
-msgstr "Ha_pus Berkas"
-
-#: ../gtk/gtkfilesel.c:1042
-msgid "_Rename File"
-msgstr "_Ganti Nama Berkas"
-
-#: ../gtk/gtkfilesel.c:1347
-#, c-format
-msgid ""
-"The folder name \"%s\" contains symbols that are not allowed in filenames"
-msgstr "Nama folder %s berisi simbol yang tidak boleh ada pada nama file"
-
-#: ../gtk/gtkfilesel.c:1394
-msgid "New Folder"
-msgstr "Buat Folder Baru"
-
-#: ../gtk/gtkfilesel.c:1409
-msgid "_Folder name:"
-msgstr "Nama _folder:"
-
-#: ../gtk/gtkfilesel.c:1433
-msgid "C_reate"
-msgstr "Buat Ba_ru"
-
-#: ../gtk/gtkfilesel.c:1476 ../gtk/gtkfilesel.c:1585 ../gtk/gtkfilesel.c:1598
-#, c-format
-msgid "The filename \"%s\" contains symbols that are not allowed in filenames"
-msgstr "Nama berkas %s berisi simbol yang tidak boleh dipakai pada nama file"
-
-#: ../gtk/gtkfilesel.c:1479 ../gtk/gtkfilesel.c:1491
-#, c-format
-msgid "Error deleting file '%s': %s"
-msgstr "Error menghapus berkas '%s': %s"
-
-#: ../gtk/gtkfilesel.c:1534
-#, c-format
-msgid "Really delete file \"%s\"?"
-msgstr "Benarkah ingin menghapus berkas \"%s\"?"
-
-#: ../gtk/gtkfilesel.c:1539
-msgid "Delete File"
-msgstr "Hapus Berkas"
-
-#: ../gtk/gtkfilesel.c:1587
-#, c-format
-msgid "Error renaming file to \"%s\": %s"
-msgstr "Error mengganti nama berkas menjadi \"%s\": %s"
-
-#: ../gtk/gtkfilesel.c:1600
-#, c-format
-msgid "Error renaming file \"%s\": %s"
-msgstr "Error mengganti nama berkas \"%s\": %s"
-
-#: ../gtk/gtkfilesel.c:1611
-#, c-format
-msgid "Error renaming file \"%s\" to \"%s\": %s"
-msgstr "Error saat mengganti nama dari '%s' ke '%s': %s"
-
-#: ../gtk/gtkfilesel.c:1658
-msgid "Rename File"
-msgstr "Ganti Nama Berkas"
-
-#: ../gtk/gtkfilesel.c:1673
-#, c-format
-msgid "Rename file \"%s\" to:"
-msgstr "Ganti nama berkas %s menjadi:"
-
-#: ../gtk/gtkfilesel.c:1702
-msgid "_Rename"
-msgstr "_Ganti nama"
-
-#: ../gtk/gtkfilesel.c:2134
-msgid "_Selection: "
-msgstr "_Yang Dipilih: "
-
-#: ../gtk/gtkfilesel.c:3056
-#, c-format
-msgid ""
-"The filename \"%s\" couldn't be converted to UTF-8. (try setting the "
-"environment variable G_FILENAME_ENCODING): %s"
-msgstr ""
-"Nama berkas '%s' tidak bisa diubah ke UTF-8 (coba set variabel environment "
-"G_FILENAME_ENCODING): %s"
-
-#: ../gtk/gtkfilesel.c:3059
-msgid "Invalid UTF-8"
-msgstr "UTF-8 salah"
-
-#: ../gtk/gtkfilesel.c:3935
-msgid "Name too long"
-msgstr "Nama terlalu panjang"
-
-#: ../gtk/gtkfilesel.c:3937
-msgid "Couldn't convert filename"
-msgstr "Tidak bisa konversikan nama file"
 
 #. The pointers we return for a GtkFileSystemVolume are opaque tokens; they are
 #. * really pointers to GDrive, GVolume or GMount objects.  We need an extra
 #. * token for the fake "File System" volume.  So, we'll return a pointer to
 #. * this particular string.
 #.
-#: ../gtk/gtkfilesystem.c:52
+#: ../gtk/gtkfilesystem.c:50
 msgid "File System"
 msgstr "Sistem Berkas"
 
-#: ../gtk/gtkfontbutton.c:144 ../gtk/gtkfontbutton.c:266
+#: ../gtk/gtkfontbutton.c:142 ../gtk/gtkfontbutton.c:266
 msgid "Pick a Font"
 msgstr "Pilih Fonta"
 
@@ -2192,43 +1165,35 @@ msgstr "Fonta"
 
 #. This is the default text shown in the preview entry, though the user
 #. can set it. Remember that some fonts only have capital letters.
-#: ../gtk/gtkfontsel.c:75
+#: ../gtk/gtkfontsel.c:103
 msgid "abcdefghijk ABCDEFGHIJK"
 msgstr "abcdefghijk ABCDEFGHIJK"
 
-#: ../gtk/gtkfontsel.c:343
+#: ../gtk/gtkfontsel.c:367
 msgid "_Family:"
 msgstr "_Keluarga:"
 
-#: ../gtk/gtkfontsel.c:349
+#: ../gtk/gtkfontsel.c:373
 msgid "_Style:"
 msgstr "_Gaya:"
 
-#: ../gtk/gtkfontsel.c:355
+#: ../gtk/gtkfontsel.c:379
 msgid "Si_ze:"
 msgstr "U_kuran:"
 
 #. create the text entry widget
-#: ../gtk/gtkfontsel.c:532
+#: ../gtk/gtkfontsel.c:556
 msgid "_Preview:"
 msgstr "_Contoh:"
 
-#: ../gtk/gtkfontsel.c:1649
+#: ../gtk/gtkfontsel.c:1660
 msgid "Font Selection"
 msgstr "Pilih Fonta"
-
-#: ../gtk/gtkgamma.c:410
-msgid "Gamma"
-msgstr "Gamma"
-
-#: ../gtk/gtkgamma.c:420
-msgid "_Gamma value"
-msgstr "Nilai _gamma"
 
 #. Remove this icon source so we don't keep trying to
 #. * load it.
 #.
-#: ../gtk/gtkiconfactory.c:1401
+#: ../gtk/gtkiconfactory.c:1419
 #, c-format
 msgid "Error loading icon: %s"
 msgstr "Error saat membuka ikon: %s"
@@ -2255,112 +1220,33 @@ msgstr "Ikon '%s' tidak ada pada tema"
 msgid "Failed to load icon"
 msgstr "Gagal memuat ikon"
 
-#: ../gtk/gtkimmodule.c:527
+#: ../gtk/gtkimmodule.c:526
 msgid "Simple"
 msgstr "Sederhana"
 
-#: ../gtk/gtkimmulticontext.c:563
+#: ../gtk/gtkimmulticontext.c:580
 msgctxt "input method menu"
 msgid "System"
 msgstr "Sistem"
 
-#: ../gtk/gtkimmulticontext.c:573
+#: ../gtk/gtkimmulticontext.c:590
 msgctxt "input method menu"
 msgid "None"
 msgstr "Tak Ada"
 
-#: ../gtk/gtkimmulticontext.c:656
+#: ../gtk/gtkimmulticontext.c:673
 #, c-format
 msgctxt "input method menu"
 msgid "System (%s)"
 msgstr "Sistem (%s)"
 
-#: ../gtk/gtkinputdialog.c:192
-msgid "Input"
-msgstr "Input"
-
-#: ../gtk/gtkinputdialog.c:207
-msgid "No extended input devices"
-msgstr "Tidak ada perangkat input tambahan"
-
-#: ../gtk/gtkinputdialog.c:220
-msgid "_Device:"
-msgstr "_Perangkat:"
-
-#: ../gtk/gtkinputdialog.c:237
-msgid "Disabled"
-msgstr "Tidak Aktif"
-
-#: ../gtk/gtkinputdialog.c:244
-msgid "Screen"
-msgstr "Layar"
-
-#: ../gtk/gtkinputdialog.c:251
-msgid "Window"
-msgstr "Jendela"
-
-#: ../gtk/gtkinputdialog.c:258
-msgid "_Mode:"
-msgstr "_mode:"
-
-#. The axis listbox
-#: ../gtk/gtkinputdialog.c:279
-msgid "Axes"
-msgstr "Sumbu"
-
-#. Keys listbox
-#: ../gtk/gtkinputdialog.c:297
-msgid "Keys"
-msgstr "Tombol"
-
-#: ../gtk/gtkinputdialog.c:524
-msgid "_X:"
-msgstr "_X:"
-
-#: ../gtk/gtkinputdialog.c:525
-msgid "_Y:"
-msgstr "_Y:"
-
-#: ../gtk/gtkinputdialog.c:526
-msgid "_Pressure:"
-msgstr "_Tekanan"
-
-#: ../gtk/gtkinputdialog.c:527
-msgid "X _tilt:"
-msgstr "_Tilt X:"
-
-#: ../gtk/gtkinputdialog.c:528
-msgid "Y t_ilt:"
-msgstr "Y T_ilt:"
-
-#: ../gtk/gtkinputdialog.c:529
-msgid "_Wheel:"
-msgstr "_Roda:"
-
-#: ../gtk/gtkinputdialog.c:581
-msgid "none"
-msgstr "tidak ada"
-
-#: ../gtk/gtkinputdialog.c:618 ../gtk/gtkinputdialog.c:654
-msgid "(disabled)"
-msgstr "(tidak aktif)"
-
-#: ../gtk/gtkinputdialog.c:647
-msgid "(unknown)"
-msgstr "(tidak diketahui)"
-
-#. and clear button
-#: ../gtk/gtkinputdialog.c:751
-msgid "Cl_ear"
-msgstr "B_ersihkan"
-
 #. Open Link
-#: ../gtk/gtklabel.c:5685
+#: ../gtk/gtklabel.c:6227
 msgid "_Open Link"
 msgstr "_Buka Taut"
 
 #. Copy Link Address
-#: ../gtk/gtklabel.c:5697
+#: ../gtk/gtklabel.c:6239
 msgid "Copy _Link Address"
 msgstr "Sa_lin Alamat Taut"
 
@@ -2373,27 +1259,27 @@ msgid "Invalid URI"
 msgstr "URI Salah"
 
 #. Description of --gtk-module=MODULES in --help output
-#: ../gtk/gtkmain.c:452
+#: ../gtk/gtkmain.c:431
 msgid "Load additional GTK+ modules"
 msgstr "Panggil modul GTK+ lainnya"
 
 #. Placeholder in --gtk-module=MODULES in --help output
-#: ../gtk/gtkmain.c:453
+#: ../gtk/gtkmain.c:432
 msgid "MODULES"
 msgstr "MODUL"
 
 #. Description of --g-fatal-warnings in --help output
-#: ../gtk/gtkmain.c:455
+#: ../gtk/gtkmain.c:434
 msgid "Make all warnings fatal"
 msgstr "Buat semua peringatan menjadi pesan fatal"
 
 #. Description of --gtk-debug=FLAGS in --help output
-#: ../gtk/gtkmain.c:458
+#: ../gtk/gtkmain.c:437
 msgid "GTK+ debugging flags to set"
 msgstr "Bendera debug GTK+ yang hendak dipasang"
 
 #. Description of --gtk-no-debug=FLAGS in --help output
-#: ../gtk/gtkmain.c:461
+#: ../gtk/gtkmain.c:440
 msgid "GTK+ debugging flags to unset"
 msgstr "Bendera debug GTK+ yang hendak dilepas"
 
@@ -2402,69 +1288,69 @@ msgstr "Bendera debug GTK+ yang hendak dilepas"
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
 #.
-#: ../gtk/gtkmain.c:713
+#: ../gtk/gtkmain.c:703
 msgid "default:LTR"
 msgstr "default:LTR"
 
-#: ../gtk/gtkmain.c:778
+#: ../gtk/gtkmain.c:768
 #, c-format
 msgid "Cannot open display: %s"
 msgstr "Tak bisa membuka tampilan: %s"
 
-#: ../gtk/gtkmain.c:815
+#: ../gtk/gtkmain.c:805
 msgid "GTK+ Options"
 msgstr "Pilihan GTK+"
 
-#: ../gtk/gtkmain.c:815
+#: ../gtk/gtkmain.c:805
 msgid "Show GTK+ Options"
 msgstr "Tampilkan Pilihan GTK+"
 
-#: ../gtk/gtkmountoperation.c:489
+#: ../gtk/gtkmountoperation.c:492
 msgid "Co_nnect"
 msgstr "S_ambung"
 
-#: ../gtk/gtkmountoperation.c:556
+#: ../gtk/gtkmountoperation.c:559
 msgid "Connect _anonymously"
 msgstr "Menyambung secara _anonim"
 
-#: ../gtk/gtkmountoperation.c:565
+#: ../gtk/gtkmountoperation.c:568
 msgid "Connect as u_ser:"
 msgstr "Menyambung _sebagai pengguna:"
 
-#: ../gtk/gtkmountoperation.c:603
+#: ../gtk/gtkmountoperation.c:606
 msgid "_Username:"
 msgstr "Nama Pengg_una:"
 
-#: ../gtk/gtkmountoperation.c:608
+#: ../gtk/gtkmountoperation.c:611
 msgid "_Domain:"
 msgstr "_Domain:"
 
-#: ../gtk/gtkmountoperation.c:614
+#: ../gtk/gtkmountoperation.c:617
 msgid "_Password:"
 msgstr "Kata _Sandi:"
 
-#: ../gtk/gtkmountoperation.c:632
+#: ../gtk/gtkmountoperation.c:635
 msgid "Forget password _immediately"
 msgstr "Lupakan kata sandi seket_ika"
 
-#: ../gtk/gtkmountoperation.c:642
+#: ../gtk/gtkmountoperation.c:645
 msgid "Remember password until you _logout"
 msgstr "Ingat kata sandi sampai Anda _log keluar"
 
-#: ../gtk/gtkmountoperation.c:652
+#: ../gtk/gtkmountoperation.c:655
 msgid "Remember _forever"
 msgstr "Ingat sela_manya"
 
-#: ../gtk/gtkmountoperation.c:881
+#: ../gtk/gtkmountoperation.c:884
 #, c-format
 msgid "Unknown Application (pid %d)"
 msgstr "Aplikasi Tak Dikenal (pid %d)"
 
-#: ../gtk/gtkmountoperation.c:1064
+#: ../gtk/gtkmountoperation.c:1067
 msgid "Unable to end process"
 msgstr "Tak bisa mengakhiri proses"
 
-#: ../gtk/gtkmountoperation.c:1101
+#: ../gtk/gtkmountoperation.c:1104
 msgid "_End Process"
 msgstr "Akhiri Pros_es"
 
@@ -2474,50 +1360,50 @@ msgid "Cannot kill process with pid %d. Operation is not implemented."
 msgstr "Tak bisa membunuh proses dengan pid %d. Operasi tak diimplementasi."
 
 #. translators: this string is a name for the 'less' command
-#: ../gtk/gtkmountoperation-x11.c:865
+#: ../gtk/gtkmountoperation-x11.c:862
 msgid "Terminal Pager"
 msgstr "Pager Terminal"
 
-#: ../gtk/gtkmountoperation-x11.c:866
+#: ../gtk/gtkmountoperation-x11.c:863
 msgid "Top Command"
 msgstr "Perintah Top"
 
-#: ../gtk/gtkmountoperation-x11.c:867
+#: ../gtk/gtkmountoperation-x11.c:864
 msgid "Bourne Again Shell"
 msgstr "Bourne Again Shell"
 
-#: ../gtk/gtkmountoperation-x11.c:868
+#: ../gtk/gtkmountoperation-x11.c:865
 msgid "Bourne Shell"
 msgstr "Bourne Shell"
 
-#: ../gtk/gtkmountoperation-x11.c:869
+#: ../gtk/gtkmountoperation-x11.c:866
 msgid "Z Shell"
 msgstr "Z Shell"
 
-#: ../gtk/gtkmountoperation-x11.c:966
+#: ../gtk/gtkmountoperation-x11.c:963
 #, c-format
 msgid "Cannot end process with pid %d: %s"
 msgstr "Tak bisa mengakhiri proses dengan pid %d: %s"
 
-#: ../gtk/gtknotebook.c:4704 ../gtk/gtknotebook.c:7269
+#: ../gtk/gtknotebook.c:4670 ../gtk/gtknotebook.c:7165
 #, c-format
 msgid "Page %u"
 msgstr "Halaman %u"
 
-#: ../gtk/gtkpagesetup.c:597 ../gtk/gtkpapersize.c:825
+#: ../gtk/gtkpagesetup.c:596 ../gtk/gtkpapersize.c:825
 #: ../gtk/gtkpapersize.c:867
 msgid "Not a valid page setup file"
 msgstr "Bukan berkas tata halaman yang sah"
 
-#: ../gtk/gtkpagesetupunixdialog.c:167
+#: ../gtk/gtkpagesetupunixdialog.c:179
 msgid "Any Printer"
 msgstr "Sebarang Pencetak"
 
-#: ../gtk/gtkpagesetupunixdialog.c:167
+#: ../gtk/gtkpagesetupunixdialog.c:179
 msgid "For portable documents"
 msgstr "Untuk dokumen portabel"
 
-#: ../gtk/gtkpagesetupunixdialog.c:797
+#: ../gtk/gtkpagesetupunixdialog.c:809
 #, c-format
 msgid ""
 "Margins:\n"
@@ -2532,23 +1418,23 @@ msgstr ""
 " Atas: %s %s\n"
 " Bawah: %s %s"
 
-#: ../gtk/gtkpagesetupunixdialog.c:846 ../gtk/gtkprintunixdialog.c:3277
+#: ../gtk/gtkpagesetupunixdialog.c:858 ../gtk/gtkprintunixdialog.c:3284
 msgid "Manage Custom Sizes..."
 msgstr "Kelola Ukuran Sesuaian..."
 
-#: ../gtk/gtkpagesetupunixdialog.c:894
+#: ../gtk/gtkpagesetupunixdialog.c:910
 msgid "_Format for:"
 msgstr "_Bentuk untuk:"
 
-#: ../gtk/gtkpagesetupunixdialog.c:916 ../gtk/gtkprintunixdialog.c:3449
+#: ../gtk/gtkpagesetupunixdialog.c:932 ../gtk/gtkprintunixdialog.c:3456
 msgid "_Paper size:"
 msgstr "_Ukuran kertas:"
 
-#: ../gtk/gtkpagesetupunixdialog.c:947
+#: ../gtk/gtkpagesetupunixdialog.c:963
 msgid "_Orientation:"
 msgstr "_Orientasi:"
 
-#: ../gtk/gtkpagesetupunixdialog.c:1011 ../gtk/gtkprintunixdialog.c:3511
+#: ../gtk/gtkpagesetupunixdialog.c:1027 ../gtk/gtkprintunixdialog.c:3518
 msgid "Page Setup"
 msgstr "Pengaturan Halaman"
 
@@ -2560,19 +1446,23 @@ msgstr "Path Naik"
 msgid "Down Path"
 msgstr "Path Turun"
 
-#: ../gtk/gtkpathbar.c:1469
+#: ../gtk/gtkpathbar.c:1482
 msgid "File System Root"
 msgstr "Akar Sistem Berkas"
 
-#: ../gtk/gtkprintbackend.c:749
+#: ../gtk/gtkprintbackend.c:745
 msgid "Authentication"
 msgstr "Otentikasi"
 
-#: ../gtk/gtkprinteroptionwidget.c:695
+#: ../gtk/gtkprinteroptionwidget.c:694
 msgid "Not available"
 msgstr "Tidak tersedia"
 
-#: ../gtk/gtkprinteroptionwidget.c:814
+#: ../gtk/gtkprinteroptionwidget.c:794
+msgid "Select a folder"
+msgstr "Pilih suatu folder"
+
+#: ../gtk/gtkprinteroptionwidget.c:813
 msgid "_Save in folder:"
 msgstr "_Simpan ke dalam _folder:"
 
@@ -2585,137 +1475,133 @@ msgstr "_Simpan ke dalam _folder:"
 msgid "%s job #%d"
 msgstr "%s tugas #%d"
 
-#: ../gtk/gtkprintoperation.c:1687
+#: ../gtk/gtkprintoperation.c:1695
 msgctxt "print operation status"
 msgid "Initial state"
 msgstr "Keadaan awal"
 
-#: ../gtk/gtkprintoperation.c:1688
+#: ../gtk/gtkprintoperation.c:1696
 msgctxt "print operation status"
 msgid "Preparing to print"
 msgstr "Menyiapkan mencetak"
 
-#: ../gtk/gtkprintoperation.c:1689
+#: ../gtk/gtkprintoperation.c:1697
 msgctxt "print operation status"
 msgid "Generating data"
 msgstr "Menjangkitkan data"
 
-#: ../gtk/gtkprintoperation.c:1690
+#: ../gtk/gtkprintoperation.c:1698
 msgctxt "print operation status"
 msgid "Sending data"
 msgstr "Mengirim data"
 
-#: ../gtk/gtkprintoperation.c:1691
+#: ../gtk/gtkprintoperation.c:1699
 msgctxt "print operation status"
 msgid "Waiting"
 msgstr "Menunggu"
 
-#: ../gtk/gtkprintoperation.c:1692
+#: ../gtk/gtkprintoperation.c:1700
 msgctxt "print operation status"
 msgid "Blocking on issue"
 msgstr "Menghadang karena ada masalah"
 
-#: ../gtk/gtkprintoperation.c:1693
+#: ../gtk/gtkprintoperation.c:1701
 msgctxt "print operation status"
 msgid "Printing"
 msgstr "Mencetak"
 
-#: ../gtk/gtkprintoperation.c:1694
+#: ../gtk/gtkprintoperation.c:1702
 msgctxt "print operation status"
 msgid "Finished"
 msgstr "Selesai"
 
-#: ../gtk/gtkprintoperation.c:1695
+#: ../gtk/gtkprintoperation.c:1703
 msgctxt "print operation status"
 msgid "Finished with error"
 msgstr "Selesai dengan galat"
 
-#: ../gtk/gtkprintoperation.c:2254
+#: ../gtk/gtkprintoperation.c:2270
 #, c-format
 msgid "Preparing %d"
 msgstr "Persiapan %d"
 
-#: ../gtk/gtkprintoperation.c:2256 ../gtk/gtkprintoperation.c:2875
+#: ../gtk/gtkprintoperation.c:2272 ../gtk/gtkprintoperation.c:2902
 msgid "Preparing"
 msgstr "Persiapan"
 
-#: ../gtk/gtkprintoperation.c:2259
+#: ../gtk/gtkprintoperation.c:2275
 #, c-format
 msgid "Printing %d"
 msgstr "Mencetak %d"
 
-#: ../gtk/gtkprintoperation.c:2905
+#: ../gtk/gtkprintoperation.c:2932
 msgid "Error creating print preview"
 msgstr "Galat membuat pratilik cetak"
 
-#: ../gtk/gtkprintoperation.c:2908
+#: ../gtk/gtkprintoperation.c:2935
 msgid "The most probable reason is that a temporary file could not be created."
 msgstr "Alasan paling mungkin adalah berkas temporer tak dapat dibuat."
 
-#: ../gtk/gtkprintoperation-unix.c:297 ../gtk/gtkprintoperation-unix.c:314
+#: ../gtk/gtkprintoperation-unix.c:297
 msgid "Error launching preview"
 msgstr "Kesalahan meluncurkan pracetak"
 
-#: ../gtk/gtkprintoperation-unix.c:358
-msgid "Error printing"
-msgstr "Kesalahan mencetak"
-
-#: ../gtk/gtkprintoperation-unix.c:494 ../gtk/gtkprintoperation-win32.c:1447
+#: ../gtk/gtkprintoperation-unix.c:470 ../gtk/gtkprintoperation-win32.c:1446
 msgid "Application"
 msgstr "Aplikasi"
 
-#: ../gtk/gtkprintoperation-win32.c:612
+#: ../gtk/gtkprintoperation-win32.c:611
 msgid "Printer offline"
 msgstr "Pencetak offline"
 
-#: ../gtk/gtkprintoperation-win32.c:614
+#: ../gtk/gtkprintoperation-win32.c:613
 msgid "Out of paper"
 msgstr "Habis kertas"
 
 #. Translators: this is a printer status.
-#: ../gtk/gtkprintoperation-win32.c:616
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1997
+#: ../gtk/gtkprintoperation-win32.c:615
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1998
 msgid "Paused"
 msgstr "Istirahat"
 
-#: ../gtk/gtkprintoperation-win32.c:618
+#: ../gtk/gtkprintoperation-win32.c:617
 msgid "Need user intervention"
 msgstr "Perlu campur tangan pengguna"
 
-#: ../gtk/gtkprintoperation-win32.c:718
+#: ../gtk/gtkprintoperation-win32.c:717
 msgid "Custom size"
 msgstr "Ukuran sesuaian"
 
-#: ../gtk/gtkprintoperation-win32.c:1539
+#: ../gtk/gtkprintoperation-win32.c:1538
 msgid "No printer found"
 msgstr "Tidak menemukan pencetak"
 
-#: ../gtk/gtkprintoperation-win32.c:1566
+#: ../gtk/gtkprintoperation-win32.c:1565
 msgid "Invalid argument to CreateDC"
 msgstr "Argumen tak valid untuk CreateDC"
 
-#: ../gtk/gtkprintoperation-win32.c:1602 ../gtk/gtkprintoperation-win32.c:1829
+#: ../gtk/gtkprintoperation-win32.c:1601 ../gtk/gtkprintoperation-win32.c:1828
 msgid "Error from StartDoc"
 msgstr "Kesalahan dari StartDoc"
 
-#: ../gtk/gtkprintoperation-win32.c:1684 ../gtk/gtkprintoperation-win32.c:1707
-#: ../gtk/gtkprintoperation-win32.c:1755
+#: ../gtk/gtkprintoperation-win32.c:1683 ../gtk/gtkprintoperation-win32.c:1706
+#: ../gtk/gtkprintoperation-win32.c:1754
 msgid "Not enough free memory"
 msgstr "Tidak cukup memori bebas"
 
-#: ../gtk/gtkprintoperation-win32.c:1760
+#: ../gtk/gtkprintoperation-win32.c:1759
 msgid "Invalid argument to PrintDlgEx"
 msgstr "Argumen salah untuk PrintDlgEx"
 
-#: ../gtk/gtkprintoperation-win32.c:1765
+#: ../gtk/gtkprintoperation-win32.c:1764
 msgid "Invalid pointer to PrintDlgEx"
 msgstr "Pointer salah untuk PrintDlgEx"
 
-#: ../gtk/gtkprintoperation-win32.c:1770
+#: ../gtk/gtkprintoperation-win32.c:1769
 msgid "Invalid handle to PrintDlgEx"
 msgstr "Penanganan salah untuk PrintDlgEx"
 
-#: ../gtk/gtkprintoperation-win32.c:1775
+#: ../gtk/gtkprintoperation-win32.c:1774
 msgid "Unspecified error"
 msgstr "Kesalahan tidak jelas"
 
@@ -2723,45 +1609,45 @@ msgstr "Kesalahan tidak jelas"
 msgid "Getting printer information failed"
 msgstr "Gagal memperoleh informasi pencetak"
 
-#: ../gtk/gtkprintunixdialog.c:1862
+#: ../gtk/gtkprintunixdialog.c:1869
 msgid "Getting printer information..."
 msgstr "Mengambil informasi pencetak..."
 
-#: ../gtk/gtkprintunixdialog.c:2132
+#: ../gtk/gtkprintunixdialog.c:2139
 msgid "Printer"
 msgstr "Pencetak"
 
 #. Translators: this is the header for the location column in the print dialog
-#: ../gtk/gtkprintunixdialog.c:2142
+#: ../gtk/gtkprintunixdialog.c:2149
 msgid "Location"
 msgstr "Lokasi"
 
 #. Translators: this is the header for the printer status column in the print dialog
-#: ../gtk/gtkprintunixdialog.c:2153
+#: ../gtk/gtkprintunixdialog.c:2160
 msgid "Status"
 msgstr "Status"
 
-#: ../gtk/gtkprintunixdialog.c:2179
+#: ../gtk/gtkprintunixdialog.c:2186
 msgid "Range"
 msgstr "Jangkauan"
 
-#: ../gtk/gtkprintunixdialog.c:2183
+#: ../gtk/gtkprintunixdialog.c:2190
 msgid "_All Pages"
 msgstr "Semu_a Halaman"
 
-#: ../gtk/gtkprintunixdialog.c:2190
+#: ../gtk/gtkprintunixdialog.c:2197
 msgid "C_urrent Page"
 msgstr "Halaman Kini"
 
-#: ../gtk/gtkprintunixdialog.c:2200
+#: ../gtk/gtkprintunixdialog.c:2207
 msgid "Se_lection"
 msgstr "Yang Dipi_lih: "
 
-#: ../gtk/gtkprintunixdialog.c:2209
+#: ../gtk/gtkprintunixdialog.c:2216
 msgid "Pag_es:"
 msgstr "Halama_n:"
 
-#: ../gtk/gtkprintunixdialog.c:2210
+#: ../gtk/gtkprintunixdialog.c:2217
 msgid ""
 "Specify one or more page ranges,\n"
 " e.g. 1-3,7,11"
@@ -2769,28 +1655,28 @@ msgstr ""
 "Nyatakan satu atau lebih rentang halaman,\n"
 "mis: 1-3,7,11"
 
-#: ../gtk/gtkprintunixdialog.c:2220
+#: ../gtk/gtkprintunixdialog.c:2227
 msgid "Pages"
 msgstr "Halaman"
 
-#: ../gtk/gtkprintunixdialog.c:2233
+#: ../gtk/gtkprintunixdialog.c:2240
 msgid "Copies"
 msgstr "Rangkap"
 
 #. FIXME chpe: too much space between Copies and spinbutton, put those 2 in a hbox and make it span 2 columns
-#: ../gtk/gtkprintunixdialog.c:2238
+#: ../gtk/gtkprintunixdialog.c:2245
 msgid "Copie_s:"
 msgstr "Rangka_p:"
 
-#: ../gtk/gtkprintunixdialog.c:2256
+#: ../gtk/gtkprintunixdialog.c:2263
 msgid "C_ollate"
 msgstr "K_olasi"
 
-#: ../gtk/gtkprintunixdialog.c:2264
+#: ../gtk/gtkprintunixdialog.c:2271
 msgid "_Reverse"
 msgstr "_Kembali"
 
-#: ../gtk/gtkprintunixdialog.c:2284
+#: ../gtk/gtkprintunixdialog.c:2291
 msgid "General"
 msgstr "Umum"
 
@@ -2800,168 +1686,168 @@ msgstr "Umum"
 #. Translators: These strings name the possible arrangements of
 #. * multiple pages on a sheet when printing
 #.
-#: ../gtk/gtkprintunixdialog.c:3010
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3505
+#: ../gtk/gtkprintunixdialog.c:3017
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3508
 msgid "Left to right, top to bottom"
 msgstr "Kiri ke kanan, puncak ke dasar"
 
-#: ../gtk/gtkprintunixdialog.c:3010
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3505
+#: ../gtk/gtkprintunixdialog.c:3017
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3508
 msgid "Left to right, bottom to top"
 msgstr "Kiri ke kanan, dasar ke puncak"
 
-#: ../gtk/gtkprintunixdialog.c:3011
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3506
+#: ../gtk/gtkprintunixdialog.c:3018
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3509
 msgid "Right to left, top to bottom"
 msgstr "Kanan ke kiri, puncak ke dasar"
 
-#: ../gtk/gtkprintunixdialog.c:3011
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3506
+#: ../gtk/gtkprintunixdialog.c:3018
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3509
 msgid "Right to left, bottom to top"
 msgstr "Kanan ke kiri, dasar ke puncak"
 
-#: ../gtk/gtkprintunixdialog.c:3012
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3507
+#: ../gtk/gtkprintunixdialog.c:3019
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3510
 msgid "Top to bottom, left to right"
 msgstr "Puncak ke dasar, kiri ke kanan"
 
-#: ../gtk/gtkprintunixdialog.c:3012
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3507
+#: ../gtk/gtkprintunixdialog.c:3019
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3510
 msgid "Top to bottom, right to left"
 msgstr "Puncak ke dasar, kanan ke kiri"
 
-#: ../gtk/gtkprintunixdialog.c:3013
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3508
+#: ../gtk/gtkprintunixdialog.c:3020
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3511
 msgid "Bottom to top, left to right"
 msgstr "Dasar ke puncak, kiri ke kanan"
 
-#: ../gtk/gtkprintunixdialog.c:3013
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3508
+#: ../gtk/gtkprintunixdialog.c:3020
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3511
 msgid "Bottom to top, right to left"
 msgstr "Dasar ke puncak, kanan ke kiri"
 
 #. Translators, this string is used to label the option in the print
 #. * dialog that controls in what order multiple pages are arranged
 #.
-#: ../gtk/gtkprintunixdialog.c:3017 ../gtk/gtkprintunixdialog.c:3030
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3540
+#: ../gtk/gtkprintunixdialog.c:3024 ../gtk/gtkprintunixdialog.c:3037
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3543
 msgid "Page Ordering"
 msgstr "Urutan Halaman"
 
-#: ../gtk/gtkprintunixdialog.c:3046
+#: ../gtk/gtkprintunixdialog.c:3053
 msgid "Left to right"
 msgstr "Kiri ke kanan"
 
-#: ../gtk/gtkprintunixdialog.c:3047
+#: ../gtk/gtkprintunixdialog.c:3054
 msgid "Right to left"
 msgstr "Kanan ke kiri"
 
-#: ../gtk/gtkprintunixdialog.c:3059
+#: ../gtk/gtkprintunixdialog.c:3066
 msgid "Top to bottom"
 msgstr "Puncak ke dasar"
 
-#: ../gtk/gtkprintunixdialog.c:3060
+#: ../gtk/gtkprintunixdialog.c:3067
 msgid "Bottom to top"
 msgstr "Dasar ke puncak"
 
-#: ../gtk/gtkprintunixdialog.c:3300
+#: ../gtk/gtkprintunixdialog.c:3307
 msgid "Layout"
 msgstr "Tata letak"
 
-#: ../gtk/gtkprintunixdialog.c:3304
+#: ../gtk/gtkprintunixdialog.c:3311
 msgid "T_wo-sided:"
 msgstr "D_ua sisi:"
 
-#: ../gtk/gtkprintunixdialog.c:3319
+#: ../gtk/gtkprintunixdialog.c:3326
 msgid "Pages per _side:"
 msgstr "Halaman per _lembar:"
 
-#: ../gtk/gtkprintunixdialog.c:3336
+#: ../gtk/gtkprintunixdialog.c:3343
 msgid "Page or_dering:"
 msgstr "U_rutan halaman:"
 
-#: ../gtk/gtkprintunixdialog.c:3352
+#: ../gtk/gtkprintunixdialog.c:3359
 msgid "_Only print:"
 msgstr "_Hanya cetak:"
 
 #. In enum order
-#: ../gtk/gtkprintunixdialog.c:3367
+#: ../gtk/gtkprintunixdialog.c:3374
 msgid "All sheets"
 msgstr "Seluruh halaman"
 
-#: ../gtk/gtkprintunixdialog.c:3368
+#: ../gtk/gtkprintunixdialog.c:3375
 msgid "Even sheets"
 msgstr "Halaman genap"
 
-#: ../gtk/gtkprintunixdialog.c:3369
+#: ../gtk/gtkprintunixdialog.c:3376
 msgid "Odd sheets"
 msgstr "Halaman Ganjil"
 
-#: ../gtk/gtkprintunixdialog.c:3372
+#: ../gtk/gtkprintunixdialog.c:3379
 msgid "Sc_ale:"
 msgstr "Sk_ala:"
 
-#: ../gtk/gtkprintunixdialog.c:3399
+#: ../gtk/gtkprintunixdialog.c:3406
 msgid "Paper"
 msgstr "Kertas"
 
-#: ../gtk/gtkprintunixdialog.c:3403
+#: ../gtk/gtkprintunixdialog.c:3410
 msgid "Paper _type:"
 msgstr "Jenis _kertas:"
 
-#: ../gtk/gtkprintunixdialog.c:3418
+#: ../gtk/gtkprintunixdialog.c:3425
 msgid "Paper _source:"
 msgstr "Sumber kerta_s:"
 
-#: ../gtk/gtkprintunixdialog.c:3433
+#: ../gtk/gtkprintunixdialog.c:3440
 msgid "Output t_ray:"
 msgstr "Laci kelua_ran:"
 
-#: ../gtk/gtkprintunixdialog.c:3473
+#: ../gtk/gtkprintunixdialog.c:3480
 msgid "Or_ientation:"
 msgstr "Or_ientasi:"
 
 #. In enum order
-#: ../gtk/gtkprintunixdialog.c:3488
+#: ../gtk/gtkprintunixdialog.c:3495
 msgid "Portrait"
 msgstr "Tegak"
 
-#: ../gtk/gtkprintunixdialog.c:3489
+#: ../gtk/gtkprintunixdialog.c:3496
 msgid "Landscape"
 msgstr "Mendatar"
 
-#: ../gtk/gtkprintunixdialog.c:3490
+#: ../gtk/gtkprintunixdialog.c:3497
 msgid "Reverse portrait"
 msgstr "Tegak terjungkir"
 
-#: ../gtk/gtkprintunixdialog.c:3491
+#: ../gtk/gtkprintunixdialog.c:3498
 msgid "Reverse landscape"
 msgstr "Mendatar terjungkir"
 
-#: ../gtk/gtkprintunixdialog.c:3536
+#: ../gtk/gtkprintunixdialog.c:3543
 msgid "Job Details"
 msgstr "Rincian Tugas"
 
-#: ../gtk/gtkprintunixdialog.c:3542
+#: ../gtk/gtkprintunixdialog.c:3549
 msgid "Pri_ority:"
 msgstr "Pri_oritas:"
 
-#: ../gtk/gtkprintunixdialog.c:3557
+#: ../gtk/gtkprintunixdialog.c:3564
 msgid "_Billing info:"
 msgstr "Info _Billing:"
 
-#: ../gtk/gtkprintunixdialog.c:3575
+#: ../gtk/gtkprintunixdialog.c:3582
 msgid "Print Document"
 msgstr "Cetak Dokumen"
 
 #. Translators: this is one of the choices for the print at option
 #. * in the print dialog
 #.
-#: ../gtk/gtkprintunixdialog.c:3584
+#: ../gtk/gtkprintunixdialog.c:3591
 msgid "_Now"
 msgstr "Sekara_ng"
 
-#: ../gtk/gtkprintunixdialog.c:3595
+#: ../gtk/gtkprintunixdialog.c:3602
 msgid "A_t:"
 msgstr "Pa_da:"
 
@@ -2969,7 +1855,7 @@ msgstr "Pa_da:"
 #. * You can remove the am/pm values below for your locale if they are not
 #. * supported.
 #.
-#: ../gtk/gtkprintunixdialog.c:3601
+#: ../gtk/gtkprintunixdialog.c:3608
 msgid ""
 "Specify the time of print,\n"
 " e.g. 15:30, 2:35 pm, 14:15:20, 11:46:30 am, 4 pm"
@@ -2977,83 +1863,83 @@ msgstr ""
 "Nyatakan waktu pencetakan,\n"
 "mis: 15:30, 14:15:20, 4"
 
-#: ../gtk/gtkprintunixdialog.c:3611
+#: ../gtk/gtkprintunixdialog.c:3618
 msgid "Time of print"
 msgstr "Waktu pencetakan"
 
-#: ../gtk/gtkprintunixdialog.c:3627
+#: ../gtk/gtkprintunixdialog.c:3634
 msgid "On _hold"
 msgstr "Ditun_da"
 
-#: ../gtk/gtkprintunixdialog.c:3628
+#: ../gtk/gtkprintunixdialog.c:3635
 msgid "Hold the job until it is explicitly released"
 msgstr "Tahan tugas sampai dilepas secara eksplisit"
 
-#: ../gtk/gtkprintunixdialog.c:3648
+#: ../gtk/gtkprintunixdialog.c:3655
 msgid "Add Cover Page"
 msgstr "Tambahkan Sampulan Halaman"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the front cover page.
 #.
-#: ../gtk/gtkprintunixdialog.c:3657
+#: ../gtk/gtkprintunixdialog.c:3664
 msgid "Be_fore:"
 msgstr "Sebe_lum:"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the back cover page.
 #.
-#: ../gtk/gtkprintunixdialog.c:3675
+#: ../gtk/gtkprintunixdialog.c:3682
 msgid "_After:"
 msgstr "Setel_ah:"
 
 #. Translators: this is the tab label for the notebook tab containing
 #. * job-specific options in the print dialog
 #.
-#: ../gtk/gtkprintunixdialog.c:3693
+#: ../gtk/gtkprintunixdialog.c:3700
 msgid "Job"
 msgstr "Tugas"
 
-#: ../gtk/gtkprintunixdialog.c:3759
+#: ../gtk/gtkprintunixdialog.c:3766
 msgid "Advanced"
 msgstr "Diperluas"
 
 #. Translators: this will appear as tab label in print dialog.
-#: ../gtk/gtkprintunixdialog.c:3794
+#: ../gtk/gtkprintunixdialog.c:3805
 msgid "Image Quality"
 msgstr "Kualitas Gambar"
 
 #. Translators: this will appear as tab label in print dialog.
-#: ../gtk/gtkprintunixdialog.c:3798
+#: ../gtk/gtkprintunixdialog.c:3809
 msgid "Color"
 msgstr "Warna"
 
 #. Translators: this will appear as tab label in print dialog.
 #. It's a typographical term, as in "Binding and finishing"
-#: ../gtk/gtkprintunixdialog.c:3803
+#: ../gtk/gtkprintunixdialog.c:3814
 msgid "Finishing"
 msgstr "Menyelesaikan"
 
-#: ../gtk/gtkprintunixdialog.c:3813
+#: ../gtk/gtkprintunixdialog.c:3824
 msgid "Some of the settings in the dialog conflict"
 msgstr "Beberapa ketentuan pada dialog konflik"
 
-#: ../gtk/gtkprintunixdialog.c:3836
+#: ../gtk/gtkprintunixdialog.c:3847
 msgid "Print"
 msgstr "Cetak"
 
-#: ../gtk/gtkrc.c:2878
+#: ../gtk/gtkrc.c:2837
 #, c-format
 msgid "Unable to find include file: \"%s\""
 msgstr "Tidak dapat menemukan berkas yang hendak disisipkan: \"%s\""
 
-#: ../gtk/gtkrc.c:3508 ../gtk/gtkrc.c:3511
+#: ../gtk/gtkrc.c:3467 ../gtk/gtkrc.c:3470
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "TIdak dapat menemukan berkas gambar pada pixmap_path: \"%s\""
 
-#: ../gtk/gtkrecentaction.c:154 ../gtk/gtkrecentaction.c:162
-#: ../gtk/gtkrecentchoosermenu.c:588 ../gtk/gtkrecentchoosermenu.c:596
+#: ../gtk/gtkrecentaction.c:165 ../gtk/gtkrecentaction.c:173
+#: ../gtk/gtkrecentchoosermenu.c:615 ../gtk/gtkrecentchoosermenu.c:623
 #, c-format
 msgid "This function is not implemented for widgets of class '%s'"
 msgstr "Fungsi ini tidak diterapkan untuk widget kelas '%s'"
@@ -3065,7 +1951,7 @@ msgstr "Pilih jenis berkas mana yang ingin ditampilkan"
 #: ../gtk/gtkrecentchooserdefault.c:1134 ../gtk/gtkrecentchooserdefault.c:1171
 #, c-format
 msgid "No item for URI '%s' found"
-msgstr "Tidak menemukan objek untuk URI '%s'"
+msgstr "Tidak menemukan butir untuk URI '%s'"
 
 #: ../gtk/gtkrecentchooserdefault.c:1298
 msgid "Untitled filter"
@@ -3073,7 +1959,7 @@ msgstr "Filter tanpa judul"
 
 #: ../gtk/gtkrecentchooserdefault.c:1651
 msgid "Could not remove item"
-msgstr "Objek tidak dapat dibuang"
+msgstr "Butir tidak dapat dibuang"
 
 #: ../gtk/gtkrecentchooserdefault.c:1695
 msgid "Could not clear list"
@@ -3105,30 +1991,30 @@ msgstr "Tampilkan Sumber _Pribadi"
 #. * user appended or prepended custom menu items to the
 #. * recent chooser menu widget.
 #.
-#: ../gtk/gtkrecentchoosermenu.c:342
+#: ../gtk/gtkrecentchoosermenu.c:369
 msgid "No items found"
-msgstr "Tidak menemukan objek"
+msgstr "Tidak menemukan butir"
 
-#: ../gtk/gtkrecentchoosermenu.c:508 ../gtk/gtkrecentchoosermenu.c:564
+#: ../gtk/gtkrecentchoosermenu.c:535 ../gtk/gtkrecentchoosermenu.c:591
 #, c-format
 msgid "No recently used resource found with URI `%s'"
 msgstr "Tidak ada sumber yang sering digunakan dengan URI '%s'"
 
-#: ../gtk/gtkrecentchoosermenu.c:775
+#: ../gtk/gtkrecentchoosermenu.c:802
 #, c-format
 msgid "Open '%s'"
 msgstr "Buka '%s'"
 
-#: ../gtk/gtkrecentchoosermenu.c:805
+#: ../gtk/gtkrecentchoosermenu.c:832
 msgid "Unknown item"
-msgstr "Objek tak dikenal"
+msgstr "Butir tak dikenal"
 
 #. This is the label format that is used for the first 10 items
 #. * in a recent files menu. The %d is the number of the item,
 #. * the %s is the name of the item. Please keep the _ in front
 #. * of the number to give these menu items a mnemonic.
 #.
-#: ../gtk/gtkrecentchoosermenu.c:816
+#: ../gtk/gtkrecentchoosermenu.c:843
 #, c-format
 msgctxt "recent menu label"
 msgid "_%d. %s"
@@ -3137,46 +2023,46 @@ msgstr "_%d. %s"
 #. This is the format that is used for items in a recent files menu.
 #. * The %d is the number of the item, the %s is the name of the item.
 #.
-#: ../gtk/gtkrecentchoosermenu.c:821
+#: ../gtk/gtkrecentchoosermenu.c:848
 #, c-format
 msgctxt "recent menu label"
 msgid "%d. %s"
 msgstr "%d. %s"
 
-#: ../gtk/gtkrecentmanager.c:1020 ../gtk/gtkrecentmanager.c:1033
-#: ../gtk/gtkrecentmanager.c:1171 ../gtk/gtkrecentmanager.c:1181
-#: ../gtk/gtkrecentmanager.c:1234 ../gtk/gtkrecentmanager.c:1243
-#: ../gtk/gtkrecentmanager.c:1258
+#: ../gtk/gtkrecentmanager.c:980 ../gtk/gtkrecentmanager.c:993
+#: ../gtk/gtkrecentmanager.c:1131 ../gtk/gtkrecentmanager.c:1141
+#: ../gtk/gtkrecentmanager.c:1194 ../gtk/gtkrecentmanager.c:1203
+#: ../gtk/gtkrecentmanager.c:1218
 #, c-format
 msgid "Unable to find an item with URI '%s'"
-msgstr "Tidak dapat menemukan objek dengan URI '%s'"
+msgstr "Tidak dapat menemukan butir dengan URI '%s'"
 
-#: ../gtk/gtkspinner.c:458
+#: ../gtk/gtkspinner.c:457
 msgctxt "throbbing progress animation widget"
 msgid "Spinner"
 msgstr "Gambar Putar"
 
-#: ../gtk/gtkspinner.c:459
+#: ../gtk/gtkspinner.c:458
 msgid "Provides visual indication of progress"
 msgstr "Menyediakan indikasi visual dari kemajuan"
 
 #. KEEP IN SYNC with gtkiconfactory.c stock icons, when appropriate
-#: ../gtk/gtkstock.c:314
+#: ../gtk/gtkstock.c:313
 msgctxt "Stock label"
 msgid "Information"
 msgstr "Informasi"
 
-#: ../gtk/gtkstock.c:315
+#: ../gtk/gtkstock.c:314
 msgctxt "Stock label"
 msgid "Warning"
 msgstr "Peringatan"
 
-#: ../gtk/gtkstock.c:316
+#: ../gtk/gtkstock.c:315
 msgctxt "Stock label"
 msgid "Error"
 msgstr "Galat"
 
-#: ../gtk/gtkstock.c:317
+#: ../gtk/gtkstock.c:316
 msgctxt "Stock label"
 msgid "Question"
 msgstr "Pertanyaan"
@@ -3184,633 +2070,633 @@ msgstr "Pertanyaan"
 #. FIXME these need accelerators when appropriate, and
 #. * need the mnemonics to be rationalized
 #.
-#: ../gtk/gtkstock.c:322
+#: ../gtk/gtkstock.c:321
 msgctxt "Stock label"
 msgid "_About"
 msgstr "Ihw_al"
 
-#: ../gtk/gtkstock.c:323
+#: ../gtk/gtkstock.c:322
 msgctxt "Stock label"
 msgid "_Add"
 msgstr "T_ambah"
 
-#: ../gtk/gtkstock.c:324
+#: ../gtk/gtkstock.c:323
 msgctxt "Stock label"
 msgid "_Apply"
 msgstr "Ter_apkan"
 
-#: ../gtk/gtkstock.c:325
+#: ../gtk/gtkstock.c:324
 msgctxt "Stock label"
 msgid "_Bold"
 msgstr "_Tebal"
 
-#: ../gtk/gtkstock.c:326
+#: ../gtk/gtkstock.c:325
 msgctxt "Stock label"
 msgid "_Cancel"
 msgstr "Ba_tal"
 
-#: ../gtk/gtkstock.c:327
+#: ../gtk/gtkstock.c:326
 msgctxt "Stock label"
 msgid "_CD-Rom"
 msgstr "_CD-ROM"
 
-#: ../gtk/gtkstock.c:328
+#: ../gtk/gtkstock.c:327
 msgctxt "Stock label"
 msgid "_Clear"
 msgstr "_Bersihkan"
 
-#: ../gtk/gtkstock.c:329
+#: ../gtk/gtkstock.c:328
 msgctxt "Stock label"
 msgid "_Close"
 msgstr "_Tutup"
 
-#: ../gtk/gtkstock.c:330
+#: ../gtk/gtkstock.c:329
 msgctxt "Stock label"
 msgid "C_onnect"
 msgstr "S_ambung"
 
-#: ../gtk/gtkstock.c:331
+#: ../gtk/gtkstock.c:330
 msgctxt "Stock label"
 msgid "_Convert"
 msgstr "_Konversi"
 
-#: ../gtk/gtkstock.c:332
+#: ../gtk/gtkstock.c:331
 msgctxt "Stock label"
 msgid "_Copy"
 msgstr "_Salin"
 
-#: ../gtk/gtkstock.c:333
+#: ../gtk/gtkstock.c:332
 msgctxt "Stock label"
 msgid "Cu_t"
 msgstr "Po_tong"
 
-#: ../gtk/gtkstock.c:334
+#: ../gtk/gtkstock.c:333
 msgctxt "Stock label"
 msgid "_Delete"
 msgstr "_Hapus"
 
-#: ../gtk/gtkstock.c:335
+#: ../gtk/gtkstock.c:334
 msgctxt "Stock label"
 msgid "_Discard"
 msgstr "_Buang"
 
-#: ../gtk/gtkstock.c:336
+#: ../gtk/gtkstock.c:335
 msgctxt "Stock label"
 msgid "_Disconnect"
 msgstr "_Putus"
 
-#: ../gtk/gtkstock.c:337
+#: ../gtk/gtkstock.c:336
 msgctxt "Stock label"
 msgid "_Execute"
 msgstr "_Jalankan"
 
-#: ../gtk/gtkstock.c:338
+#: ../gtk/gtkstock.c:337
 msgctxt "Stock label"
 msgid "_Edit"
 msgstr "_Edit"
 
-#: ../gtk/gtkstock.c:339
+#: ../gtk/gtkstock.c:338
 msgctxt "Stock label"
 msgid "_Find"
 msgstr "_Cari"
 
-#: ../gtk/gtkstock.c:340
+#: ../gtk/gtkstock.c:339
 msgctxt "Stock label"
 msgid "Find and _Replace"
 msgstr "Ca_ri dan Ganti"
 
-#: ../gtk/gtkstock.c:341
+#: ../gtk/gtkstock.c:340
 msgctxt "Stock label"
 msgid "_Floppy"
 msgstr "_Disket"
 
-#: ../gtk/gtkstock.c:342
+#: ../gtk/gtkstock.c:341
 msgctxt "Stock label"
 msgid "_Fullscreen"
 msgstr "Layar _Penuh"
 
-#: ../gtk/gtkstock.c:343
+#: ../gtk/gtkstock.c:342
 msgctxt "Stock label"
 msgid "_Leave Fullscreen"
 msgstr "Ke_luar dari Layar Penuh"
 
 #. This is a navigation label as in "go to the bottom of the page"
-#: ../gtk/gtkstock.c:345
+#: ../gtk/gtkstock.c:344
 msgctxt "Stock label, navigation"
 msgid "_Bottom"
 msgstr "_Dasar"
 
 #. This is a navigation label as in "go to the first page"
-#: ../gtk/gtkstock.c:347
+#: ../gtk/gtkstock.c:346
 msgctxt "Stock label, navigation"
 msgid "_First"
 msgstr "_Pertama"
 
 #. This is a navigation label as in "go to the last page"
-#: ../gtk/gtkstock.c:349
+#: ../gtk/gtkstock.c:348
 msgctxt "Stock label, navigation"
 msgid "_Last"
 msgstr "_Terakhir"
 
 #. This is a navigation label as in "go to the top of the page"
-#: ../gtk/gtkstock.c:351
+#: ../gtk/gtkstock.c:350
 msgctxt "Stock label, navigation"
 msgid "_Top"
 msgstr "_Puncak"
 
 #. This is a navigation label as in "go back"
-#: ../gtk/gtkstock.c:353
+#: ../gtk/gtkstock.c:352
 msgctxt "Stock label, navigation"
 msgid "_Back"
 msgstr "Kem_bali"
 
 #. This is a navigation label as in "go down"
-#: ../gtk/gtkstock.c:355
+#: ../gtk/gtkstock.c:354
 msgctxt "Stock label, navigation"
 msgid "_Down"
 msgstr "_Turun"
 
 #. This is a navigation label as in "go forward"
-#: ../gtk/gtkstock.c:357
+#: ../gtk/gtkstock.c:356
 msgctxt "Stock label, navigation"
 msgid "_Forward"
 msgstr "_Maju"
 
 #. This is a navigation label as in "go up"
-#: ../gtk/gtkstock.c:359
+#: ../gtk/gtkstock.c:358
 msgctxt "Stock label, navigation"
 msgid "_Up"
 msgstr "_Atas"
 
-#: ../gtk/gtkstock.c:360
+#: ../gtk/gtkstock.c:359
 msgctxt "Stock label"
 msgid "_Harddisk"
 msgstr "_Hard Disk"
 
-#: ../gtk/gtkstock.c:361
+#: ../gtk/gtkstock.c:360
 msgctxt "Stock label"
 msgid "_Help"
 msgstr "Ba_ntuan"
 
-#: ../gtk/gtkstock.c:362
+#: ../gtk/gtkstock.c:361
 msgctxt "Stock label"
 msgid "_Home"
 msgstr "_Rumah"
 
-#: ../gtk/gtkstock.c:363
+#: ../gtk/gtkstock.c:362
 msgctxt "Stock label"
 msgid "Increase Indent"
 msgstr "Majukan Inden"
 
-#: ../gtk/gtkstock.c:364
+#: ../gtk/gtkstock.c:363
 msgctxt "Stock label"
 msgid "Decrease Indent"
 msgstr "Mundurkan Inden"
 
-#: ../gtk/gtkstock.c:365
+#: ../gtk/gtkstock.c:364
 msgctxt "Stock label"
 msgid "_Index"
 msgstr "_Indeks"
 
-#: ../gtk/gtkstock.c:366
+#: ../gtk/gtkstock.c:365
 msgctxt "Stock label"
 msgid "_Information"
 msgstr "_Informasi"
 
-#: ../gtk/gtkstock.c:367
+#: ../gtk/gtkstock.c:366
 msgctxt "Stock label"
 msgid "_Italic"
 msgstr "M_iring"
 
-#: ../gtk/gtkstock.c:368
+#: ../gtk/gtkstock.c:367
 msgctxt "Stock label"
 msgid "_Jump to"
 msgstr "_Lompat ke"
 
 #. This is about text justification, "centered text"
-#: ../gtk/gtkstock.c:370
+#: ../gtk/gtkstock.c:369
 msgctxt "Stock label"
 msgid "_Center"
 msgstr "_Tengah"
 
 #. This is about text justification
-#: ../gtk/gtkstock.c:372
+#: ../gtk/gtkstock.c:371
 msgctxt "Stock label"
 msgid "_Fill"
 msgstr "_Isi"
 
 #. This is about text justification, "left-justified text"
-#: ../gtk/gtkstock.c:374
+#: ../gtk/gtkstock.c:373
 msgctxt "Stock label"
 msgid "_Left"
 msgstr "_Kiri"
 
 #. This is about text justification, "right-justified text"
-#: ../gtk/gtkstock.c:376
+#: ../gtk/gtkstock.c:375
 msgctxt "Stock label"
 msgid "_Right"
 msgstr "Ka_nan"
 
 #. Media label, as in "fast forward"
-#: ../gtk/gtkstock.c:379
+#: ../gtk/gtkstock.c:378
 msgctxt "Stock label, media"
 msgid "_Forward"
 msgstr "_Maju"
 
 #. Media label, as in "next song"
-#: ../gtk/gtkstock.c:381
+#: ../gtk/gtkstock.c:380
 msgctxt "Stock label, media"
 msgid "_Next"
 msgstr "_Berikutnya"
 
 #. Media label, as in "pause music"
-#: ../gtk/gtkstock.c:383
+#: ../gtk/gtkstock.c:382
 msgctxt "Stock label, media"
 msgid "P_ause"
 msgstr "_Istirahat"
 
 #. Media label, as in "play music"
-#: ../gtk/gtkstock.c:385
+#: ../gtk/gtkstock.c:384
 msgctxt "Stock label, media"
 msgid "_Play"
 msgstr "_Putar"
 
 #. Media label, as in  "previous song"
-#: ../gtk/gtkstock.c:387
+#: ../gtk/gtkstock.c:386
 msgctxt "Stock label, media"
 msgid "Pre_vious"
 msgstr "Se_belumnya"
 
 #. Media label
-#: ../gtk/gtkstock.c:389
+#: ../gtk/gtkstock.c:388
 msgctxt "Stock label, media"
 msgid "_Record"
 msgstr "_Rekam"
 
 #. Media label
-#: ../gtk/gtkstock.c:391
+#: ../gtk/gtkstock.c:390
 msgctxt "Stock label, media"
 msgid "R_ewind"
 msgstr "Pu_tar Balik"
 
 #. Media label
-#: ../gtk/gtkstock.c:393
+#: ../gtk/gtkstock.c:392
 msgctxt "Stock label, media"
 msgid "_Stop"
 msgstr "_Berhenti"
 
-#: ../gtk/gtkstock.c:394
+#: ../gtk/gtkstock.c:393
 msgctxt "Stock label"
 msgid "_Network"
 msgstr "Jaringa_n"
 
-#: ../gtk/gtkstock.c:395
+#: ../gtk/gtkstock.c:394
 msgctxt "Stock label"
 msgid "_New"
 msgstr "Bar_u"
 
-#: ../gtk/gtkstock.c:396
+#: ../gtk/gtkstock.c:395
 msgctxt "Stock label"
 msgid "_No"
 msgstr "_Tidak"
 
-#: ../gtk/gtkstock.c:397
+#: ../gtk/gtkstock.c:396
 msgctxt "Stock label"
 msgid "_OK"
 msgstr "_OK"
 
-#: ../gtk/gtkstock.c:398
+#: ../gtk/gtkstock.c:397
 msgctxt "Stock label"
 msgid "_Open"
 msgstr "_Buka"
 
 #. Page orientation
-#: ../gtk/gtkstock.c:400
+#: ../gtk/gtkstock.c:399
 msgctxt "Stock label"
 msgid "Landscape"
 msgstr "Mendatar"
 
 #. Page orientation
-#: ../gtk/gtkstock.c:402
+#: ../gtk/gtkstock.c:401
 msgctxt "Stock label"
 msgid "Portrait"
 msgstr "Tegak"
 
 #. Page orientation
-#: ../gtk/gtkstock.c:404
+#: ../gtk/gtkstock.c:403
 msgctxt "Stock label"
 msgid "Reverse landscape"
 msgstr "Mendatar terjungkir"
 
 #. Page orientation
-#: ../gtk/gtkstock.c:406
+#: ../gtk/gtkstock.c:405
 msgctxt "Stock label"
 msgid "Reverse portrait"
 msgstr "Tegak terjungkir"
 
-#: ../gtk/gtkstock.c:407
+#: ../gtk/gtkstock.c:406
 msgctxt "Stock label"
 msgid "Page Set_up"
 msgstr "Pengat_uran Halaman"
 
-#: ../gtk/gtkstock.c:408
+#: ../gtk/gtkstock.c:407
 msgctxt "Stock label"
 msgid "_Paste"
 msgstr "_Tempel"
 
-#: ../gtk/gtkstock.c:409
+#: ../gtk/gtkstock.c:408
 msgctxt "Stock label"
 msgid "_Preferences"
 msgstr "_Preferensi"
 
-#: ../gtk/gtkstock.c:410
+#: ../gtk/gtkstock.c:409
 msgctxt "Stock label"
 msgid "_Print"
 msgstr "_Cetak"
 
-#: ../gtk/gtkstock.c:411
+#: ../gtk/gtkstock.c:410
 msgctxt "Stock label"
 msgid "Print Pre_view"
 msgstr "Pratilik Cetak"
 
-#: ../gtk/gtkstock.c:412
+#: ../gtk/gtkstock.c:411
 msgctxt "Stock label"
 msgid "_Properties"
 msgstr "_Properti"
 
-#: ../gtk/gtkstock.c:413
+#: ../gtk/gtkstock.c:412
 msgctxt "Stock label"
 msgid "_Quit"
 msgstr "_Keluar"
 
-#: ../gtk/gtkstock.c:414
+#: ../gtk/gtkstock.c:413
 msgctxt "Stock label"
 msgid "_Redo"
 msgstr "_Lakukan Lagi"
 
-#: ../gtk/gtkstock.c:415
+#: ../gtk/gtkstock.c:414
 msgctxt "Stock label"
 msgid "_Refresh"
 msgstr "Sega_rkan"
 
-#: ../gtk/gtkstock.c:416
+#: ../gtk/gtkstock.c:415
 msgctxt "Stock label"
 msgid "_Remove"
 msgstr "_Hapus"
 
-#: ../gtk/gtkstock.c:417
+#: ../gtk/gtkstock.c:416
 msgctxt "Stock label"
 msgid "_Revert"
 msgstr "_Kembali ke asal"
 
-#: ../gtk/gtkstock.c:418
+#: ../gtk/gtkstock.c:417
 msgctxt "Stock label"
 msgid "_Save"
 msgstr "_Simpan"
 
-#: ../gtk/gtkstock.c:419
+#: ../gtk/gtkstock.c:418
 msgctxt "Stock label"
 msgid "Save _As"
 msgstr "Simp_an Sebagai"
 
-#: ../gtk/gtkstock.c:420
+#: ../gtk/gtkstock.c:419
 msgctxt "Stock label"
 msgid "Select _All"
 msgstr "Pilih Semu_a"
 
-#: ../gtk/gtkstock.c:421
+#: ../gtk/gtkstock.c:420
 msgctxt "Stock label"
 msgid "_Color"
 msgstr "_Warna"
 
-#: ../gtk/gtkstock.c:422
+#: ../gtk/gtkstock.c:421
 msgctxt "Stock label"
 msgid "_Font"
 msgstr "_Fonta"
 
 #. Sorting direction
-#: ../gtk/gtkstock.c:424
+#: ../gtk/gtkstock.c:423
 msgctxt "Stock label"
 msgid "_Ascending"
 msgstr "Men_aik"
 
 #. Sorting direction
-#: ../gtk/gtkstock.c:426
+#: ../gtk/gtkstock.c:425
 msgctxt "Stock label"
 msgid "_Descending"
 msgstr "Menuru_n"
 
-#: ../gtk/gtkstock.c:427
+#: ../gtk/gtkstock.c:426
 msgctxt "Stock label"
 msgid "_Spell Check"
 msgstr "Perik_sa Ejaan"
 
-#: ../gtk/gtkstock.c:428
+#: ../gtk/gtkstock.c:427
 msgctxt "Stock label"
 msgid "_Stop"
 msgstr "_Berhenti"
 
 #. Font variant
-#: ../gtk/gtkstock.c:430
+#: ../gtk/gtkstock.c:429
 msgctxt "Stock label"
 msgid "_Strikethrough"
 msgstr "_Coret"
 
-#: ../gtk/gtkstock.c:431
+#: ../gtk/gtkstock.c:430
 msgctxt "Stock label"
 msgid "_Undelete"
 msgstr "Batal Hap_us"
 
 #. Font variant
-#: ../gtk/gtkstock.c:433
+#: ../gtk/gtkstock.c:432
 msgctxt "Stock label"
 msgid "_Underline"
 msgstr "_Garis bawah"
 
-#: ../gtk/gtkstock.c:434
+#: ../gtk/gtkstock.c:433
 msgctxt "Stock label"
 msgid "_Undo"
 msgstr "_Batalkan"
 
-#: ../gtk/gtkstock.c:435
+#: ../gtk/gtkstock.c:434
 msgctxt "Stock label"
 msgid "_Yes"
 msgstr "Ya"
 
 #. Zoom
-#: ../gtk/gtkstock.c:437
+#: ../gtk/gtkstock.c:436
 msgctxt "Stock label"
 msgid "_Normal Size"
 msgstr "Ukura_n Normal"
 
 #. Zoom
-#: ../gtk/gtkstock.c:439
+#: ../gtk/gtkstock.c:438
 msgctxt "Stock label"
 msgid "Best _Fit"
 msgstr "Ukuran Pa_s"
 
-#: ../gtk/gtkstock.c:440
+#: ../gtk/gtkstock.c:439
 msgctxt "Stock label"
 msgid "Zoom _In"
 msgstr "_Perbesar"
 
-#: ../gtk/gtkstock.c:441
+#: ../gtk/gtkstock.c:440
 msgctxt "Stock label"
 msgid "Zoom _Out"
 msgstr "P_erkecil"
 
-#: ../gtk/gtktextbufferrichtext.c:651
+#: ../gtk/gtktextbufferrichtext.c:650
 #, c-format
 msgid "Unknown error when trying to deserialize %s"
 msgstr "Kesalahan tidak dikenal ketika mencoba deserialisasi %s"
 
-#: ../gtk/gtktextbufferrichtext.c:710
+#: ../gtk/gtktextbufferrichtext.c:709
 #, c-format
 msgid "No deserialize function found for format %s"
 msgstr "Tidak menemukan fungsi deserialiasi untuk bentuk %s"
 
-#: ../gtk/gtktextbufferserialize.c:796 ../gtk/gtktextbufferserialize.c:822
+#: ../gtk/gtktextbufferserialize.c:795 ../gtk/gtktextbufferserialize.c:821
 #, c-format
 msgid "Both \"id\" and \"name\" were found on the <%s> element"
 msgstr "Bagian \"id\" dan \"nama\" ditemukan pada bagian <%s>"
 
-#: ../gtk/gtktextbufferserialize.c:806 ../gtk/gtktextbufferserialize.c:832
+#: ../gtk/gtktextbufferserialize.c:805 ../gtk/gtktextbufferserialize.c:831
 #, c-format
 msgid "The attribute \"%s\" was found twice on the <%s> element"
 msgstr "Atribu \"%s\" ditemukan dua kali di bagian <%s>"
 
-#: ../gtk/gtktextbufferserialize.c:846
+#: ../gtk/gtktextbufferserialize.c:845
 #, c-format
 msgid "<%s> element has invalid id \"%s\""
 msgstr "bagian <%s> memiliki id \"%s\" yang salah"
 
-#: ../gtk/gtktextbufferserialize.c:856
+#: ../gtk/gtktextbufferserialize.c:855
 #, c-format
 msgid "<%s> element has neither a \"name\" nor an \"id\" attribute"
 msgstr "bagian <%s> telah memiliki atribut \"nama\" ataupun \"id\""
 
-#: ../gtk/gtktextbufferserialize.c:943
+#: ../gtk/gtktextbufferserialize.c:942
 #, c-format
 msgid "Attribute \"%s\" repeated twice on the same <%s> element"
 msgstr "Atribut \"%s\" mengulang dua kali pada bagian <%s> yang sama"
 
-#: ../gtk/gtktextbufferserialize.c:961 ../gtk/gtktextbufferserialize.c:986
+#: ../gtk/gtktextbufferserialize.c:960 ../gtk/gtktextbufferserialize.c:985
 #, c-format
 msgid "Attribute \"%s\" is invalid on <%s> element in this context"
 msgstr "Atribut \"%s\" salah pada bagian <%s> dalam konteks ini"
 
-#: ../gtk/gtktextbufferserialize.c:1022
+#: ../gtk/gtktextbufferserialize.c:1024
 #, c-format
 msgid "Tag \"%s\" has not been defined."
 msgstr "Tag \"%s\" tidak dijelaskan."
 
-#: ../gtk/gtktextbufferserialize.c:1034
+#: ../gtk/gtktextbufferserialize.c:1036
 msgid "Anonymous tag found and tags can not be created."
 msgstr "Tag tak dikenal ditemukan dan tags tidak bisa dibuat."
 
-#: ../gtk/gtktextbufferserialize.c:1045
+#: ../gtk/gtktextbufferserialize.c:1047
 #, c-format
 msgid "Tag \"%s\" does not exist in buffer and tags can not be created."
 msgstr "Tag \"%s\" tidak ada dalam buffer dan tags tidak bisa dibuat."
 
-#: ../gtk/gtktextbufferserialize.c:1144 ../gtk/gtktextbufferserialize.c:1219
-#: ../gtk/gtktextbufferserialize.c:1320 ../gtk/gtktextbufferserialize.c:1394
+#: ../gtk/gtktextbufferserialize.c:1146 ../gtk/gtktextbufferserialize.c:1221
+#: ../gtk/gtktextbufferserialize.c:1324 ../gtk/gtktextbufferserialize.c:1398
 #, c-format
 msgid "Element <%s> is not allowed below <%s>"
 msgstr "Bagian <%s> tidak diperbolehkan di bawah <%s>"
 
-#: ../gtk/gtktextbufferserialize.c:1175
+#: ../gtk/gtktextbufferserialize.c:1177
 #, c-format
 msgid "\"%s\" is not a valid attribute type"
 msgstr "\"%s\" bukan jenis atribut yang benar"
 
-#: ../gtk/gtktextbufferserialize.c:1183
+#: ../gtk/gtktextbufferserialize.c:1185
 #, c-format
 msgid "\"%s\" is not a valid attribute name"
 msgstr "\"%s\" bukan nama atribut yang benar"
 
-#: ../gtk/gtktextbufferserialize.c:1193
+#: ../gtk/gtktextbufferserialize.c:1195
 #, c-format
 msgid ""
 "\"%s\" could not be converted to a value of type \"%s\" for attribute \"%s\""
 msgstr "\"%s\" tidak bisa dirubah ke nilai jenis \"%s\" untuk atribut \"%s\""
 
-#: ../gtk/gtktextbufferserialize.c:1202
+#: ../gtk/gtktextbufferserialize.c:1204
 #, c-format
 msgid "\"%s\" is not a valid value for attribute \"%s\""
 msgstr "\"%s\" tidak benar untuk atribut \"%s\""
 
-#: ../gtk/gtktextbufferserialize.c:1285
+#: ../gtk/gtktextbufferserialize.c:1289
 #, c-format
 msgid "Tag \"%s\" already defined"
 msgstr "Tag \"%s\" sudah ditentukan"
 
-#: ../gtk/gtktextbufferserialize.c:1296
+#: ../gtk/gtktextbufferserialize.c:1300
 #, c-format
 msgid "Tag \"%s\" has invalid priority \"%s\""
 msgstr "Tag \"%s\" memiliki prioritas yang salah \"%s\""
 
-#: ../gtk/gtktextbufferserialize.c:1349
+#: ../gtk/gtktextbufferserialize.c:1353
 #, c-format
 msgid "Outermost element in text must be <text_view_markup> not <%s>"
 msgstr "Bagian terluar dari teks harus <text_view_markup> bukan <%s>"
 
-#: ../gtk/gtktextbufferserialize.c:1358 ../gtk/gtktextbufferserialize.c:1374
+#: ../gtk/gtktextbufferserialize.c:1362 ../gtk/gtktextbufferserialize.c:1378
 #, c-format
 msgid "A <%s> element has already been specified"
 msgstr "Suatu bagian <%s> sudah ditentukan"
 
-#: ../gtk/gtktextbufferserialize.c:1380
+#: ../gtk/gtktextbufferserialize.c:1384
 msgid "A <text> element can't occur before a <tags> element"
 msgstr "Suatu bagian <tek"
 
-#: ../gtk/gtktextbufferserialize.c:1779
+#: ../gtk/gtktextbufferserialize.c:1784
 msgid "Serialized data is malformed"
 msgstr "Data yang diserialkan rusak"
 
-#: ../gtk/gtktextbufferserialize.c:1857
+#: ../gtk/gtktextbufferserialize.c:1862
 msgid ""
 "Serialized data is malformed. First section isn't GTKTEXTBUFFERCONTENTS-0001"
 msgstr ""
 "Data yang diserialkan rusak. Bagian pertama bukan GTKTEXTBUFFERCONTENTS-0001"
 
-#: ../gtk/gtktextutil.c:61
+#: ../gtk/gtktextutil.c:60
 msgid "LRM _Left-to-right mark"
 msgstr "LRM tanda _Left-to-right"
 
-#: ../gtk/gtktextutil.c:62
+#: ../gtk/gtktextutil.c:61
 msgid "RLM _Right-to-left mark"
 msgstr "RLM tanda _Right-to-left"
 
-#: ../gtk/gtktextutil.c:63
+#: ../gtk/gtktextutil.c:62
 msgid "LRE Left-to-right _embedding"
 msgstr "LRE Left-to-right _embedding"
 
-#: ../gtk/gtktextutil.c:64
+#: ../gtk/gtktextutil.c:63
 msgid "RLE Right-to-left e_mbedding"
 msgstr "RLE Right-to-left e_mbedding"
 
-#: ../gtk/gtktextutil.c:65
+#: ../gtk/gtktextutil.c:64
 msgid "LRO Left-to-right _override"
 msgstr "LRO Left-to-right _override"
 
-#: ../gtk/gtktextutil.c:66
+#: ../gtk/gtktextutil.c:65
 msgid "RLO Right-to-left o_verride"
 msgstr "RLO Right-to-left o_verride"
 
-#: ../gtk/gtktextutil.c:67
+#: ../gtk/gtktextutil.c:66
 msgid "PDF _Pop directional formatting"
 msgstr "PDF _Pop directional formatting"
 
-#: ../gtk/gtktextutil.c:68
+#: ../gtk/gtktextutil.c:67
 msgid "ZWS _Zero width space"
 msgstr "ZWS _Zero width space"
 
-#: ../gtk/gtktextutil.c:69
+#: ../gtk/gtktextutil.c:68
 msgid "ZWJ Zero width _joiner"
 msgstr "ZWJ Zero width _joiner"
 
-#: ../gtk/gtktextutil.c:70
+#: ../gtk/gtktextutil.c:69
 msgid "ZWNJ Zero width _non-joiner"
 msgstr "ZWNJ Zero width _non-joiner"
 
@@ -3818,10 +2704,6 @@ msgstr "ZWNJ Zero width _non-joiner"
 #, c-format
 msgid "Unable to locate theme engine in module_path: \"%s\","
 msgstr "Tidak bisa menemukan mesin tematik pada module_path '%s',"
-
-#: ../gtk/gtktipsquery.c:188
-msgid "--- No Tip ---"
-msgstr "--- Tidak ada tip ---"
 
 #: ../gtk/gtkuimanager.c:1505
 #, c-format
@@ -3837,39 +2719,39 @@ msgstr "Data karakter pada baris %d kolom %d seharusnya tidak ada"
 msgid "Empty"
 msgstr "Kosong"
 
-#: ../gtk/gtkvolumebutton.c:73
+#: ../gtk/gtkvolumebutton.c:83
 msgid "Volume"
 msgstr "Volume"
 
-#: ../gtk/gtkvolumebutton.c:75
+#: ../gtk/gtkvolumebutton.c:85
 msgid "Turns volume down or up"
 msgstr "Naikkan atau turunkan keras suara"
 
-#: ../gtk/gtkvolumebutton.c:78
+#: ../gtk/gtkvolumebutton.c:88
 msgid "Adjusts the volume"
 msgstr "Atur keras suara"
 
-#: ../gtk/gtkvolumebutton.c:81 ../gtk/gtkvolumebutton.c:84
+#: ../gtk/gtkvolumebutton.c:94 ../gtk/gtkvolumebutton.c:97
 msgid "Volume Down"
 msgstr "Volume Turun"
 
-#: ../gtk/gtkvolumebutton.c:83
+#: ../gtk/gtkvolumebutton.c:96
 msgid "Decreases the volume"
 msgstr "Pelankan suara"
 
-#: ../gtk/gtkvolumebutton.c:87 ../gtk/gtkvolumebutton.c:90
+#: ../gtk/gtkvolumebutton.c:100 ../gtk/gtkvolumebutton.c:103
 msgid "Volume Up"
 msgstr "Volume Naik"
 
-#: ../gtk/gtkvolumebutton.c:89
+#: ../gtk/gtkvolumebutton.c:102
 msgid "Increases the volume"
 msgstr "Perkeras suara"
 
-#: ../gtk/gtkvolumebutton.c:147
+#: ../gtk/gtkvolumebutton.c:160
 msgid "Muted"
 msgstr "Diam"
 
-#: ../gtk/gtkvolumebutton.c:151
+#: ../gtk/gtkvolumebutton.c:164
 msgid "Full Volume"
 msgstr "Volume penuh"
 
@@ -3878,7 +2760,7 @@ msgstr "Volume penuh"
 #. * Translate the "%d" to "%Id" if you want to use localised digits,
 #. * or otherwise translate the "%d" to "%d".
 #.
-#: ../gtk/gtkvolumebutton.c:164
+#: ../gtk/gtkvolumebutton.c:177
 #, c-format
 msgctxt "volume percentage"
 msgid "%d %%"
@@ -4868,259 +3750,254 @@ msgstr "Vietnam (VIQR)"
 msgid "X Input Method"
 msgstr "X Input Method"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:809
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1018
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:811
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1020
 msgid "Username:"
 msgstr "Nama Pengguna:"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:810
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1027
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:812
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1029
 msgid "Password:"
 msgstr "Kata Sandi:"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:848
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:850
 #, c-format
 msgid "Authentication is required to get a file from %s"
 msgstr "Perlu otentikasi untuk memperoleh suatu berkas dari %s"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:852
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1040
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:854
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1042
 #, c-format
 msgid "Authentication is required to print document '%s' on printer %s"
 msgstr "Perlu otentikasi untuk mencetak dokumen '%s' pada pencetak %s"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:854
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:856
 #, c-format
 msgid "Authentication is required to print a document on %s"
 msgstr "Perlu otentikasi untuk mencetak suatu dokumen pada %s"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:858
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:860
 #, c-format
 msgid "Authentication is required to get attributes of job '%s'"
 msgstr "Perlu otentikasi untuk memperoleh atribut dari tugas '%s'"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:860
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:862
 msgid "Authentication is required to get attributes of a job"
 msgstr "Perlu otentikasi untuk memperoleh atribut dari suatu tugas"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:864
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:866
 #, c-format
 msgid "Authentication is required to get attributes of printer %s"
 msgstr "Perlu otentikasi untuk memperoleh atribut dari pencetak %s"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:866
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:868
 msgid "Authentication is required to get attributes of a printer"
 msgstr "Perlu otentikasi untuk memperoleh atribut dari suatu pencetak"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:869
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:871
 #, c-format
 msgid "Authentication is required to get default printer of %s"
 msgstr "Perlu otentikasi untuk memperoleh pencetak bawaan dari %s"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:872
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:874
 #, c-format
 msgid "Authentication is required to get printers from %s"
 msgstr "Perlu otentikasi untuk memperoleh pencetak dari %s"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:875
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:877
 #, c-format
 msgid "Authentication is required on %s"
 msgstr "Perlu otentikasi pada %s"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1012
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1014
 msgid "Domain:"
 msgstr "Domain:"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1042
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1044
 #, c-format
 msgid "Authentication is required to print document '%s'"
 msgstr "Perlu otentikasi untuk mencetak dokumen '%s'"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1047
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1049
 #, c-format
 msgid "Authentication is required to print this document on printer %s"
 msgstr "Perlu otentikasi untuk mencetak dokumen ini pada pencetak %s"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1049
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1051
 msgid "Authentication is required to print this document"
 msgstr "Perlu otentikasi untuk mencetak dokumen ini"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1670
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1672
 #, c-format
 msgid "Printer '%s' is low on toner."
 msgstr "Tinta pada pencetak '%s' tersisa sedikit."
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1671
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1673
 #, c-format
 msgid "Printer '%s' has no toner left."
 msgstr "Tinta pada pencetak '%s' habis."
 
 #. Translators: "Developer" like on photo development context
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1673
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1675
 #, c-format
 msgid "Printer '%s' is low on developer."
 msgstr "Developer pada pencetak '%s' tersisa sedikit."
 
 #. Translators: "Developer" like on photo development context
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1675
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1677
 #, c-format
 msgid "Printer '%s' is out of developer."
 msgstr "Developer pada pencetak '%s' habis."
 
 #. Translators: "marker" is one color bin of the printer
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1677
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1679
 #, c-format
 msgid "Printer '%s' is low on at least one marker supply."
 msgstr "Paling tidak satu catu penanda pencetak '%s' tersisa sedikit."
 
 #. Translators: "marker" is one color bin of the printer
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1679
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1681
 #, c-format
 msgid "Printer '%s' is out of at least one marker supply."
 msgstr "Paling tidak satu catu penanda pencetak '%s' habis."
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1680
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1682
 #, c-format
 msgid "The cover is open on printer '%s'."
 msgstr "Penutup pencetak '%s' terbuka."
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1681
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1683
 #, c-format
 msgid "The door is open on printer '%s'."
 msgstr "Pintu pencetak '%s' terbuka."
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1682
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1684
 #, c-format
 msgid "Printer '%s' is low on paper."
 msgstr "Kertas di pencetak '%s' tersisa sedikit."
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1683
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1685
 #, c-format
 msgid "Printer '%s' is out of paper."
 msgstr "Pencetak '%s' kehabisan kertas."
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1684
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1686
 #, c-format
 msgid "Printer '%s' is currently off-line."
 msgstr "Pencetak '%s' kini luring."
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1685
-#, c-format
-msgid "Printer '%s' may not be connected."
-msgstr "Pencetak '%s' mungkin tak terhubung."
-
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1686
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1687
 #, c-format
 msgid "There is a problem on printer '%s'."
 msgstr "Ada masalah pada pencetak '%s'."
 
 #. Translators: this is a printer status.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1994
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1995
 msgid "Paused ; Rejecting Jobs"
 msgstr "Jeda ; Menolak Tugas"
 
 #. Translators: this is a printer status.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2000
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2001
 msgid "Rejecting Jobs"
 msgstr "Menolak Tugas"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2774
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2777
 msgid "Two Sided"
 msgstr "Dua Sisi"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2775
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2778
 msgid "Paper Type"
 msgstr "Jenis Kertas"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2776
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2779
 msgid "Paper Source"
 msgstr "Sumber Kertas"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2777
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2780
 msgid "Output Tray"
 msgstr "Laci Keluaran"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2778
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2781
 msgid "Resolution"
 msgstr "Resolusi"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2779
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2782
 msgid "GhostScript pre-filtering"
 msgstr "Pra penapisan GhostScript"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2788
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2791
 msgid "One Sided"
 msgstr "Satu Sisi"
 
 #. Translators: this is an option of "Two Sided"
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2790
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2793
 msgid "Long Edge (Standard)"
 msgstr "Sisi Panjang (Standar)"
 
 #. Translators: this is an option of "Two Sided"
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2792
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2795
 msgid "Short Edge (Flip)"
 msgstr "Sisi Pendek (Putar)"
 
 #. Translators: this is an option of "Paper Source"
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2794
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2796
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2804
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2797
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2799
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2807
 msgid "Auto Select"
 msgstr "Pilih Otomatis"
 
 #. Translators: this is an option of "Paper Source"
 #. Translators: this is an option of "Resolution"
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2798
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2800
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2802
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2806
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3292
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2801
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2803
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2805
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2809
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3295
 msgid "Printer Default"
 msgstr "Pencetak Awal"
 
 #. Translators: this is an option of "GhostScript"
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2808
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2811
 msgid "Embed GhostScript fonts only"
 msgstr "Tempelkan fonta GhostScript saja"
 
 #. Translators: this is an option of "GhostScript"
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2810
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2813
 msgid "Convert to PS level 1"
 msgstr "Konversi ke PS tingkat 1"
 
 #. Translators: this is an option of "GhostScript"
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2812
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2815
 msgid "Convert to PS level 2"
 msgstr "Konversi ke PS tingkat 2"
 
 #. Translators: this is an option of "GhostScript"
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2814
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2817
 msgid "No pre-filtering"
 msgstr "Tanpa pra penapisan"
 
 #. Translators: "Miscellaneous" is the label for a button, that opens
 #. up an extra panel of settings in a print dialog.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2823
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2826
 msgid "Miscellaneous"
 msgstr "Serba neka"
 
 #. Translators: These strings name the possible values of the
 #. * job priority option in the print dialog
 #.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3500
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3503
 msgid "Urgent"
 msgstr "Penting"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3500
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3503
 msgid "High"
 msgstr "Tinggi"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3500
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3503
 msgid "Medium"
 msgstr "Sedang"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3500
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3503
 msgid "Low"
 msgstr "Rendah"
 
@@ -5128,66 +4005,66 @@ msgstr "Rendah"
 #. Translators, this string is used to label the pages-per-sheet option
 #. * in the print dialog
 #.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3524
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3527
 msgid "Pages per Sheet"
 msgstr "Halaman per Lembar"
 
 #. Translators, this string is used to label the job priority option
 #. * in the print dialog
 #.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3561
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3564
 msgid "Job Priority"
 msgstr "Prioritas Tugas"
 
 #. Translators, this string is used to label the billing info entry
 #. * in the print dialog
 #.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3572
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3575
 msgid "Billing Info"
 msgstr "Info Tagihan"
 
 #. Translators, these strings are names for various 'standard' cover
 #. * pages that the printing system may support.
 #.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3587
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3590
 msgid "None"
 msgstr "Tidak ada"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3587
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3590
 msgid "Classified"
 msgstr "Terklasifikasi"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3587
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3590
 msgid "Confidential"
 msgstr "Pribadi"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3587
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3590
 msgid "Secret"
 msgstr "Rahasia"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3587
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3590
 msgid "Standard"
 msgstr "Standard"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3587
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3590
 msgid "Top Secret"
 msgstr "Sangat Rahasia"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3587
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3590
 msgid "Unclassified"
 msgstr "Belum terklasifikasi"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the front cover page.
 #.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3622
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3625
 msgid "Before"
 msgstr "Sebelum"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the back cover page.
 #.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3637
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3640
 msgid "After"
 msgstr "Setelah"
 
@@ -5195,14 +4072,14 @@ msgstr "Setelah"
 #. * a print job is printed. Possible values are 'now', a specified time,
 #. * or 'on hold'
 #.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3657
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3660
 msgid "Print at"
 msgstr "Cetak pada"
 
 #. Translators: this is the name of the option that allows the user
 #. * to specify a time when a print job will be printed.
 #.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3668
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3671
 msgid "Print at time"
 msgstr "Cetak pada waktu"
 
@@ -5210,7 +4087,7 @@ msgstr "Cetak pada waktu"
 #. * size. The two placeholders are replaced with the width and height
 #. * in points. E.g: "Custom 230.4x142.9"
 #.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3703
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3706
 #, c-format
 msgid "Custom %sx%s"
 msgstr "Gubahan %sx%s"
@@ -5301,3 +4178,349 @@ msgstr "Cetak ke Pencetak Uji"
 #, c-format
 msgid "Could not get information for file '%s': %s"
 msgstr "Gagal mengambil informasi mengenai berkas '%s': %s"
+
+#: ../tests/testfilechooser.c:222
+#, c-format
+msgid "Failed to open file '%s': %s"
+msgstr "Gagal membuka berkas '%s': %s"
+
+#: ../tests/testfilechooser.c:267
+#, c-format
+msgid ""
+"Failed to load image '%s': reason not known, probably a corrupt image file"
+msgstr ""
+"Gagal memuat citra '%s': alasan tak diketahui, mungkin berkas citra yang "
+"rusak"
+
+#~ msgid "Image file '%s' contains no data"
+#~ msgstr "Berkas gambar '%s' tak memuat data"
+
+#~ msgid ""
+#~ "Failed to load animation '%s': reason not known, probably a corrupt "
+#~ "animation file"
+#~ msgstr ""
+#~ "Gagal memuat animasi '%s': alasan tak diketahui, mungkin berkas animasi "
+#~ "yang rusak"
+
+#~ msgid "Unable to load image-loading module: %s: %s"
+#~ msgstr "Tidak bisa jalankan modul pembuka gambar: %s: %s"
+
+#~ msgid ""
+#~ "Image-loading module %s does not export the proper interface; perhaps "
+#~ "it's from a different GTK version?"
+#~ msgstr ""
+#~ "Modul pembuka gambar %s tidak bisa ekspor interface yang benar; mungkin "
+#~ "modul berasal dari GTK versi lain?"
+
+#~ msgid "Image type '%s' is not supported"
+#~ msgstr "Tipe gambar '%s' tak didukung"
+
+#~ msgid "Couldn't recognize the image file format for file '%s'"
+#~ msgstr "Format berkas gambar pada berkas '%s' tidak dikenali"
+
+#~ msgid "Unrecognized image file format"
+#~ msgstr "Format berkas gambar tidak dikenali"
+
+#~ msgid "Failed to load image '%s': %s"
+#~ msgstr "Gagal memuat berkas citra '%s': %s"
+
+#~ msgid "Error writing to image file: %s"
+#~ msgstr "Galat saat menulis ke berkas citra: %s"
+
+#~ msgid ""
+#~ "This build of gdk-pixbuf does not support saving the image format: %s"
+#~ msgstr ""
+#~ "gdk-pixbuf yang ada sekarang tak mendukung penyimpanan bentuk citra: %s"
+
+#~ msgid "Insufficient memory to save image to callback"
+#~ msgstr "Memori yang tersedia tidak mencukupi untuk menyimpan gambar"
+
+#~ msgid "Failed to open temporary file"
+#~ msgstr "Gagal membuka berkas sementara"
+
+#~ msgid "Failed to read from temporary file"
+#~ msgstr "Gagal membaca dari berkas sementara"
+
+#~ msgid "Failed to open '%s' for writing: %s"
+#~ msgstr "Gagal membuka '%s' untuk menulis: %s"
+
+#~ msgid ""
+#~ "Failed to close '%s' while writing image, all data may not have been "
+#~ "saved: %s"
+#~ msgstr ""
+#~ "Tak bisa menutup '%s' saat menyimpan gambar, mungkin ada data yang tidak "
+#~ "tersimpan: %s"
+
+#~ msgid "Insufficient memory to save image into a buffer"
+#~ msgstr ""
+#~ "Memori yang tersedia tidak mencukupi untuk menyimpan gambar ke dalam "
+#~ "penyangga"
+
+#~ msgid "Error writing to image stream"
+#~ msgstr "Galat menulis citra ke stream"
+
+#~ msgid ""
+#~ "Internal error: Image loader module '%s' failed to complete an operation, "
+#~ "but didn't give a reason for the failure"
+#~ msgstr ""
+#~ "Error intern: Modul pembuka gambar '%s' gagal menyelesaikan suatu "
+#~ "operasi, tapi tidak menyebutkan alasan errornya"
+
+#~ msgid "Incremental loading of image type '%s' is not supported"
+#~ msgstr "Pemuatan bertahap gambar tipe '%s' tak didukung"
+
+#~ msgid "Image header corrupt"
+#~ msgstr "Kepala berkas gambar rusak"
+
+#~ msgid "Image format unknown"
+#~ msgstr "Format gambar tidak dikenal"
+
+#~ msgid "Image pixel data corrupt"
+#~ msgstr "Data piksel gambar rusak"
+
+#~ msgid "Unexpected icon chunk in animation"
+#~ msgstr "Ada data error pada bagian ikon pada animasi"
+
+#~ msgid "Unsupported animation type"
+#~ msgstr "Tipe animasi tidak bisa dibuka"
+
+#~ msgid "Invalid header in animation"
+#~ msgstr "Header pada animasi tidak benar"
+
+#~ msgid "Not enough memory to load animation"
+#~ msgstr "Tidak cukup memori untuk membuka animasi ini"
+
+#~ msgid "Malformed chunk in animation"
+#~ msgstr "Ada bagian yang rusak pada animasi"
+
+#~ msgid "The ANI image format"
+#~ msgstr "Format gambar ANI"
+
+#~ msgid "BMP image has bogus header data"
+#~ msgstr "Gambar BMP ini memiliki data header yang aneh"
+
+#~ msgid "Not enough memory to load bitmap image"
+#~ msgstr "Tidak cukup memori untuk membuka gambar bitmap"
+
+#~ msgid "BMP image has unsupported header size"
+#~ msgstr "Gambar BMP ini memiliki ukuran header yang tidak dikenal"
+
+#~ msgid "Topdown BMP images cannot be compressed"
+#~ msgstr "Gambar BMP topdown tidak dapat dikompresi"
+
+#~ msgid "Premature end-of-file encountered"
+#~ msgstr "Akhir berkas dijumpai secara mendadak"
+
+#~ msgid "Couldn't allocate memory for saving BMP file"
+#~ msgstr "Tidak bisa menyediakan ruang memori saat membuka berkas BMP"
+
+#~ msgid "Couldn't write to BMP file"
+#~ msgstr "Berkas BMP tidak dapat ditulis"
+
+#~ msgid "The BMP image format"
+#~ msgstr "Format gambar BMP"
+
+#~ msgid "Failure reading GIF: %s"
+#~ msgstr "Ada error saat membaca berkas GIF: %s"
+
+#~ msgid "GIF file was missing some data (perhaps it was truncated somehow?)"
+#~ msgstr "Ada data yang hilang pada berkas GIF ini (mungkin rusak?)"
+
+#~ msgid "Internal error in the GIF loader (%s)"
+#~ msgstr "Error intern pada pembuka berkas GIF (%s)"
+
+#~ msgid "Stack overflow"
+#~ msgstr "Stack meluap"
+
+#~ msgid "GIF image loader cannot understand this image."
+#~ msgstr "Pembuka gambar GIF tidak mengenali isi berkas ini"
+
+#~ msgid "Bad code encountered"
+#~ msgstr "Ada kode yang salah"
+
+#~ msgid "Circular table entry in GIF file"
+#~ msgstr "Ada entri tabel sirkular pada berkas GIF"
+
+#~ msgid "Not enough memory to load GIF file"
+#~ msgstr "Tidak cukup memori untuk membuka berkas GIF"
+
+#~ msgid "Not enough memory to composite a frame in GIF file"
+#~ msgstr ""
+#~ "Tidak cukup memori untuk melakukan komposisi bingkai dalam  berkas GIF"
+
+#~ msgid "GIF image is corrupt (incorrect LZW compression)"
+#~ msgstr "Gambar dalam berkas GIF rusak (kompresi LZWnya salah)"
+
+#~ msgid "File does not appear to be a GIF file"
+#~ msgstr "Berkas ini bukan berkas GIF"
+
+#~ msgid "Version %s of the GIF file format is not supported"
+#~ msgstr "Versi %s berkas GIF ini tidak bisa dibuka"
+
+#~ msgid ""
+#~ "GIF image has no global colormap, and a frame inside it has no local "
+#~ "colormap."
+#~ msgstr ""
+#~ "Gambar GIF tidak memiliki peta warna global, dan frame di dalamnya tidak "
+#~ "memiliki peta warna lokal."
+
+#~ msgid "GIF image was truncated or incomplete."
+#~ msgstr "Gambar GIF rusak atau tidak lengkap."
+
+#~ msgid "The GIF image format"
+#~ msgstr "Format gambar GIF"
+
+#~ msgid "Invalid header in icon"
+#~ msgstr "Header error pada ikon"
+
+#~ msgid "Not enough memory to load icon"
+#~ msgstr "Tidak cukup memori untuk membuka ikon"
+
+#~ msgid "Icon has zero width"
+#~ msgstr "Ikon memiliki lebar 0"
+
+#~ msgid "Icon has zero height"
+#~ msgstr "Ikon memiliki tinggi 0"
+
+#~ msgid "Compressed icons are not supported"
+#~ msgstr "Ikon terkompresi tidak bisa dibuka"
+
+#~ msgid "Unsupported icon type"
+#~ msgstr "Tipe ikon tidak bisa dibuka"
+
+#~ msgid "Not enough memory to load ICO file"
+#~ msgstr "Tidak cukup memori untuk membuka berkas ICO"
+
+#~ msgid "Image too large to be saved as ICO"
+#~ msgstr "Gambar ini terlalu besar untuk berkas ICO"
+
+#~ msgid "Cursor hotspot outside image"
+#~ msgstr "Kursor hotspot di luar gambar"
+
+#~ msgid "Unsupported depth for ICO file: %d"
+#~ msgstr "Kedalaman warna berkas ICO ini tidak didukung: %d"
+
+#~ msgid "The ICO image format"
+#~ msgstr "Format gambar ICO"
+
+#~ msgid "Error reading ICNS image: %s"
+#~ msgstr "Galat saat membaca citra ICNS: %s"
+
+#~ msgid "Could not decode ICNS file"
+#~ msgstr "Tak bisa mengurai kode berkas ICNS"
+
+#~ msgid "The ICNS image format"
+#~ msgstr "Format citra ICNS"
+
+#~ msgid "Couldn't allocate memory for stream"
+#~ msgstr "Tak dapat mengalokasikan memori untuk stream"
+
+#~ msgid "Couldn't decode image"
+#~ msgstr "Tak bisa mengurai kode citra"
+
+#~ msgid "Transformed JPEG2000 has zero width or height"
+#~ msgstr "JPEG2000 yang telah ditransformasi memiliki lebar atau tinggi 0"
+
+#~ msgid "Image type currently not supported"
+#~ msgstr "Tipe citra kini belum didukung"
+
+#~ msgid "Couldn't allocate memory for color profile"
+#~ msgstr "Tak bisa mengalokasikan memori untuk profil warna"
+
+#~ msgid "Insufficient memory to open JPEG 2000 file"
+#~ msgstr "Tak cukup memori untuk membuka berkas JPEG 2000"
+
+#~ msgid "Couldn't allocate memory to buffer image data"
+#~ msgstr "Tak bisa mengalokasikan memori untuk menyangga data citra"
+
+#~ msgid "The JPEG 2000 image format"
+#~ msgstr "Format citra JPEG 2000"
+
+#~ msgid "Error interpreting JPEG image file (%s)"
+#~ msgstr "Galat menginterpretasi berkas citra JPEG (%s)"
+
+#~ msgid ""
+#~ "Insufficient memory to load image, try exiting some applications to free "
+#~ "memory"
+#~ msgstr ""
+#~ "Tidak cukup memori untuk membuka gambar, cobalah untuk menutup aplikasi "
+#~ "lainnya untuk mengosongkan memori"
+
+#~ msgid "Unsupported JPEG color space (%s)"
+#~ msgstr "Ruang warna JPEG tidak bisa ditampilkan (%s)"
+
+#~ msgid "Couldn't allocate memory for loading JPEG file"
+#~ msgstr "Tidak bisa menyediakan ruang memori saat membuka berkas JPEG"
+
+#~ msgid "Transformed JPEG has zero width or height."
+#~ msgstr "JPEG yang telah ditransformasi memiliki lebar atau tinggi 0"
+
+#~ msgid ""
+#~ "JPEG quality must be a value between 0 and 100; value '%s' could not be "
+#~ "parsed."
+#~ msgstr ""
+#~ "Kualitas JPEG harus bernilai antara 0 dan 100; nilai '%s' tidak bisa "
+#~ "diurai."
+
+#~ msgid ""
+#~ "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
+#~ msgstr ""
+#~ "Kualitas JPEG harus bernilai antara 0 dan 100; nilai '%d' tidak boleh."
+
+#~ msgid "The JPEG image format"
+#~ msgstr "Format gambar JPEG"
+
+#~ msgid "Couldn't allocate memory for header"
+#~ msgstr "Tidak dapat mengalokasikan memori untuk header"
+
+#~ msgid "Couldn't allocate memory for context buffer"
+#~ msgstr "Tidak dapat mengalokasikan memori untuk buffer konteks"
+
+#~ msgid "Image has invalid width and/or height"
+#~ msgstr "Gambar memiliki tinggi dan/atau lebar yang salah"
+
+#~ msgid "Image has unsupported bpp"
+#~ msgstr "Gambar ini memiliki bpp yang tidak dapat ditampilkan"
+
+#~ msgid "Image has unsupported number of %d-bit planes"
+#~ msgstr ""
+#~ "Gambar ini memiliki jumlah bidang %d-bit yang tidak dapat ditampilkan"
+
+#~ msgid "Couldn't create new pixbuf"
+#~ msgstr "Tidak dapat membuat pixbuf baru"
+
+#~ msgid "Couldn't allocate memory for line data"
+#~ msgstr "Tidak dapat mengalokasikan memori untuk data baris"
+
+#~ msgid "Couldn't allocate memory for paletted data"
+#~ msgstr "Tidak dapat mengalokasikan memori untuk data berpalet"
+
+#~ msgid "Didn't get all lines of PCX image"
+#~ msgstr "Tidak berhasil memperoleh semua baris pada gambar PCX"
+
+#~ msgid "No palette found at end of PCX data"
+#~ msgstr "TIdak ada palet pada data PCX"
+
+#~ msgid "The PCX image format"
+#~ msgstr "Format gambar PCX"
+
+#~ msgid "Bits per channel of PNG image is invalid."
+#~ msgstr "Nilai bit per channel pada gambar PNG salah."
+
+#~ msgid "Transformed PNG has zero width or height."
+#~ msgstr "PNG tertransformasi memiliki lebar atau tinggi 0"
+
+#~ msgid "Bits per channel of transformed PNG is not 8."
+#~ msgstr ""
+#~ "Nilai bit ber channel pada berkas PNG tertransformasi tidak bernilai 8"
+
+#~ msgid "Transformed PNG not RGB or RGBA."
+#~ msgstr "PNG tertransformasi bukan dalam mode RGB atau RGBA"
+
+#~ msgid "Transformed PNG has unsupported number of channels, must be 3 or 4."
+#~ msgstr ""
+#~ "PNG tertransformasi berisi nilai channel yang salah, seharusnya bernilai "
+#~ "3 atau 4."
+
+#~ msgid "Fatal error in PNG image file: %s"
+#~ msgstr "Error fatal pada berkas gambar PNG: %s"
