@@ -3917,11 +3917,11 @@ gdk_window_get_composite_drawable (GdkDrawable *drawable,
   GSList *list;
   GdkPixmap *tmp_pixmap;
   GdkRectangle rect;
-  GdkGC *tmp_gc;
   gboolean overlap_buffer;
   GdkDrawable *source;
   GdkWindowObject *impl_window;
   GdkWindowPaint *implicit_paint;
+  cairo_t *cr;
 
   *composite_x_offset = -private->abs_x;
   *composite_y_offset = -private->abs_y;
@@ -3985,31 +3985,30 @@ gdk_window_get_composite_drawable (GdkDrawable *drawable,
     return g_object_ref (_gdk_drawable_get_source_drawable (drawable));
 
   tmp_pixmap = gdk_pixmap_new (drawable, width, height, -1);
-  tmp_gc = _gdk_drawable_get_scratch_gc (tmp_pixmap, FALSE);
+  cr = gdk_cairo_create (tmp_pixmap);
 
   source = _gdk_drawable_get_source_drawable (drawable);
 
-  /* Copy the current window contents */
-  gdk_draw_drawable (tmp_pixmap,
-		     tmp_gc,
-		     GDK_WINDOW_OBJECT (source)->impl,
-		     x - *composite_x_offset,
-		     y - *composite_y_offset,
-		     0, 0,
-		     width, height);
+  gdk_cairo_set_source_pixmap (cr, source,
+                               x - *composite_x_offset,
+                               y - *composite_y_offset);
+  cairo_paint (cr);
 
   /* paint the backing stores */
   if (implicit_paint)
     {
       GdkWindowPaint *paint = list->data;
 
-      gdk_gc_set_clip_region (tmp_gc, paint->region);
-      gdk_gc_set_clip_origin (tmp_gc, -x  - paint->x_offset, -y  - paint->y_offset);
+      cairo_save (cr);
 
-      gdk_draw_drawable (tmp_pixmap, tmp_gc, paint->pixmap,
-			 x - paint->x_offset,
-			 y - paint->y_offset,
-			 0, 0, width, height);
+      gdk_cairo_set_source_pixmap (cr, paint->pixmap, 
+                                   x - paint->x_offset,
+                                   y - paint->y_offset);
+      cairo_translate (cr, -x  - paint->x_offset, -y  - paint->y_offset);
+      gdk_cairo_region (cr, paint->region);
+      cairo_fill (cr);
+
+      cairo_restore (cr);
     }
 
   for (list = private->paint_stack; list != NULL; list = list->next)
@@ -4019,17 +4018,19 @@ gdk_window_get_composite_drawable (GdkDrawable *drawable,
       if (paint->uses_implicit)
 	continue; /* We already copied this above */
 
-      gdk_gc_set_clip_region (tmp_gc, paint->region);
-      gdk_gc_set_clip_origin (tmp_gc, -x, -y);
+      cairo_save (cr);
 
-      gdk_draw_drawable (tmp_pixmap, tmp_gc, paint->pixmap,
-			 x - paint->x_offset,
-			 y - paint->y_offset,
-			 0, 0, width, height);
+      gdk_cairo_set_source_pixmap (cr, paint->pixmap, 
+                                   x - paint->x_offset,
+                                   y - paint->y_offset);
+      cairo_translate (cr, -x, -y);
+      gdk_cairo_region (cr, paint->region);
+      cairo_fill (cr);
+
+      cairo_restore (cr);
     }
 
-  /* Reset clip region of the cached GdkGC */
-  gdk_gc_set_clip_region (tmp_gc, NULL);
+  cairo_destroy (cr);
 
   /* Set these to location of tmp_pixmap within the window */
   *composite_x_offset = x;
