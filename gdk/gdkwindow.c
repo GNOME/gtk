@@ -3036,7 +3036,6 @@ setup_redirect_clip (GdkWindow      *window,
   GdkWindowObject *private = (GdkWindowObject *)window;
   cairo_region_t *visible_region;
   GdkRectangle dest_rect;
-  cairo_region_t *tmpreg;
   GdkWindow *toplevel;
   int x_offset, y_offset;
 
@@ -3057,9 +3056,7 @@ setup_redirect_clip (GdkWindow      *window,
   dest_rect.y = -y_offset;
   dest_rect.width = private->redirect->width;
   dest_rect.height = private->redirect->height;
-  tmpreg = cairo_region_create_rectangle (&dest_rect);
-  cairo_region_intersect (visible_region, tmpreg);
-  cairo_region_destroy (tmpreg);
+  cairo_region_intersect_rectangle (visible_region, &dest_rect);
 
   /* Compensate for the dest pos */
   x_offset += private->redirect->dest_x;
@@ -9033,7 +9030,7 @@ _gdk_window_calculate_full_clip_region (GdkWindow *window,
 {
   GdkWindowObject *private = GDK_WINDOW_OBJECT (window);
   GdkRectangle visible_rect;
-  cairo_region_t *real_clip_region, *tmpreg;
+  cairo_region_t *real_clip_region;
   gint x_offset, y_offset;
   GdkWindowObject *parentwin, *lastwin;
 
@@ -9102,9 +9099,7 @@ _gdk_window_calculate_full_clip_region (GdkWindow *window,
 	      visible_rect.y + visible_rect.height <= real_clip_rect.y)
 	    continue;
 
-	  tmpreg = cairo_region_create_rectangle (&visible_rect);
-	  cairo_region_subtract (real_clip_region, tmpreg);
-	  cairo_region_destroy (tmpreg);
+	  cairo_region_subtract_rectangle (real_clip_region, &visible_rect);
 	}
 
       /* Clip to the parent */
@@ -9113,9 +9108,7 @@ _gdk_window_calculate_full_clip_region (GdkWindow *window,
       visible_rect.x += - x_offset;
       visible_rect.y += - y_offset;
 
-      tmpreg = cairo_region_create_rectangle (&visible_rect);
-      cairo_region_intersect (real_clip_region, tmpreg);
-      cairo_region_destroy (tmpreg);
+      cairo_region_intersect_rectangle (real_clip_region, &visible_rect);
     }
 
   if (base_x_offset)
