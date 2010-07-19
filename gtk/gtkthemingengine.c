@@ -542,14 +542,16 @@ gtk_theming_engine_render_option (GtkThemingEngine *engine,
   GdkColor *base_color, *fg_color, *text_color;
   const GtkWidgetPath *path;
   GtkStateType state;
+  gint exterior_size, interior_size, pad, thickness;
   gdouble radius;
+
+  /* FIXME: set clipping */
 
   flags = gtk_theming_engine_get_state (engine);
   path = gtk_theming_engine_get_path (engine);
   radius = MIN (width, height) / 2 - 0.5;
 
   cairo_save (cr);
-  cairo_set_line_width (cr, 1);
 
   if (flags & GTK_STATE_FLAG_PRELIGHT)
     state = GTK_STATE_PRELIGHT;
@@ -562,44 +564,81 @@ gtk_theming_engine_render_option (GtkThemingEngine *engine,
                           "text-color", &text_color,
                           NULL);
 
-  if (!gtk_widget_path_has_parent (path, GTK_TYPE_MENU))
-    {
-      cairo_arc (cr,
-                 x + (width / 2),
-                 y + (height / 2),
-                 radius,
-                 0, 2 * G_PI);
+  exterior_size = MIN (width, height);
 
+  if (exterior_size % 2 == 0) /* Ensure odd */
+    exterior_size -= 1;
+
+  x -= (1 + exterior_size - width) / 2;
+  y -= (1 + exterior_size - height) / 2;
+
+  if (!gtk_theming_engine_has_class (engine, "menu"))
+    {
       gdk_cairo_set_source_color (cr, base_color);
+
+      cairo_arc (cr,
+		 x + exterior_size / 2.,
+		 y + exterior_size / 2.,
+		 (exterior_size - 1) / 2.,
+		 0, 2 * G_PI);
+
       cairo_fill_preserve (cr);
 
-      if (gtk_widget_path_has_parent (path, GTK_TYPE_TREE_VIEW))
-        gdk_cairo_set_source_color (cr, text_color);
+      if (gtk_theming_engine_has_class (engine, "cell"))
+	gdk_cairo_set_source_color (cr, text_color);
       else
-        gdk_cairo_set_source_color (cr, fg_color);
+	gdk_cairo_set_source_color (cr, fg_color);
 
+      cairo_set_line_width (cr, 1.);
       cairo_stroke (cr);
     }
 
-  if (gtk_widget_path_has_parent (path, GTK_TYPE_MENU))
+  if (gtk_theming_engine_has_class (engine, "menu"))
     gdk_cairo_set_source_color (cr, fg_color);
   else
     gdk_cairo_set_source_color (cr, text_color);
 
+  /* FIXME: thickness */
+  thickness = 1;
+
   if (gtk_theming_engine_is_state_set (engine, GTK_STATE_INCONSISTENT))
     {
-      cairo_move_to (cr, x + (width * 0.2), y + (height / 2));
-      cairo_line_to (cr, x + (width * 0.8), y + (height / 2));
-      cairo_stroke (cr);
+      gint line_thickness;
+
+      pad = thickness + MAX (1, (exterior_size - 2 * thickness) / 9);
+      interior_size = MAX (1, exterior_size - 2 * pad);
+
+      if (interior_size < 7)
+        {
+          interior_size = 7;
+          pad = MAX (0, (exterior_size - interior_size) / 2);
+        }
+
+      line_thickness = MAX (1, (3 + interior_size * 2) / 7);
+
+      cairo_rectangle (cr,
+		       x + pad,
+		       y + pad + (interior_size - line_thickness) / 2.,
+		       interior_size,
+		       line_thickness);
+      cairo_fill (cr);
     }
   if (gtk_theming_engine_is_state_set (engine, GTK_STATE_ACTIVE))
     {
-      cairo_arc (cr,
-                 x + (width / 2),
-                 y + (height / 2),
-                 radius / 2,
-                 0, 2 * G_PI);
+      pad = thickness + MAX (1, 2 * (exterior_size - 2 * thickness) / 9);
+      interior_size = MAX (1, exterior_size - 2 * pad);
 
+      if (interior_size < 5)
+	{
+	  interior_size = 7;
+	  pad = MAX (0, (exterior_size - interior_size) / 2);
+	}
+
+      cairo_arc (cr,
+		 x + pad + interior_size / 2.,
+		 y + pad + interior_size / 2.,
+		 interior_size / 2.,
+		 0, 2 * G_PI);
       cairo_fill (cr);
     }
 
