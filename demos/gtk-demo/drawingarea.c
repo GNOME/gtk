@@ -53,18 +53,15 @@ scribble_expose_event (GtkWidget      *widget,
                        GdkEventExpose *event,
                        gpointer        data)
 {
-  /* We use the "foreground GC" for the widget since it already exists,
-   * but honestly any GC would work. The only thing to worry about
-   * is whether the GC has an inappropriate clip region set.
-   */
+  cairo_t *cr;
 
-  gdk_draw_drawable (widget->window,
-                     widget->style->fg_gc[gtk_widget_get_state (widget)],
-                     pixmap,
-                     /* Only copy the area that was exposed. */
-                     event->area.x, event->area.y,
-                     event->area.x, event->area.y,
-                     event->area.width, event->area.height);
+  cr = gdk_cairo_create (widget->window);
+  
+  gdk_cairo_set_source_pixmap (cr, pixmap, 0, 0);
+  gdk_cairo_rectangle (cr, &event->area);
+  cairo_fill (cr);
+
+  cairo_destroy (cr);
 
   return FALSE;
 }
@@ -172,8 +169,6 @@ checkerboard_expose (GtkWidget      *da,
       ycount = xcount % 2; /* start with even/odd depending on row */
       while (j < da->allocation.height)
         {
-          GdkGC *gc;
-
           if (ycount % 2)
             cairo_set_source_rgb (cr, 0.45777, 0, 0.45777);
           else
