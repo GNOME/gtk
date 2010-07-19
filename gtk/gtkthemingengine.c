@@ -1369,22 +1369,30 @@ gtk_theming_engine_render_slider (GtkThemingEngine *engine,
                                   GtkOrientation    orientation)
 {
   const GtkWidgetPath *path;
+  gint thickness;
 
   path = gtk_theming_engine_get_path (engine);
 
   gtk_theming_engine_render_background (engine, cr, x, y, width, height);
   gtk_theming_engine_render_frame (engine, cr, x, y, width, height);
 
-  if (gtk_widget_path_has_parent (path, GTK_TYPE_SCALE))
+  /* FIXME: thickness */
+  thickness = 2;
+
+  if (gtk_widget_path_is_type (path, GTK_TYPE_SCALE))
     {
       if (orientation == GTK_ORIENTATION_VERTICAL)
         gtk_theming_engine_render_line (engine, cr,
-                                        x + 2, y + height / 2 - 1,
-                                        x + width - 4, y + height / 2 - 1);
+                                        x + thickness,
+                                        y + (gint) height / 2,
+                                        x + width - thickness - 1,
+                                        y + (gint) height / 2);
       else
         gtk_theming_engine_render_line (engine, cr,
-                                        x + width / 2 - 1, y + 4,
-                                        x + width / 2 - 1, y + height - 4);
+                                        x + (gint) width / 2,
+                                        y + thickness,
+                                        x + (gint) width / 2,
+                                        y + height - thickness - 1);
     }
 }
 
