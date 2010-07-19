@@ -1596,23 +1596,34 @@ gtk_theming_engine_render_extension (GtkThemingEngine *engine,
 }
 
 static void
-paint_point (cairo_t        *cr,
-             const GdkColor *lighter,
-             const GdkColor *darker,
-             gdouble         x,
-             gdouble         y)
+render_dot (cairo_t        *cr,
+            const GdkColor *lighter,
+            const GdkColor *darker,
+            gdouble         x,
+            gdouble         y,
+            gdouble         size)
 {
-  cairo_move_to (cr, x - 0.5, y + 1);
-  cairo_line_to (cr, x - 0.5, y - 0.5);
-  cairo_line_to (cr, x + 1, y - 0.5);
-  gdk_cairo_set_source_color (cr, lighter);
-  cairo_stroke (cr);
+  size = CLAMP ((gint) size, 2, 3);
 
-  cairo_move_to (cr, x + 1.5, y);
-  cairo_line_to (cr, x + 1.5, y + 1.5);
-  cairo_line_to (cr, x, y + 1.5);
-  gdk_cairo_set_source_color (cr, darker);
-  cairo_stroke (cr);
+  if (size == 2)
+    {
+      gdk_cairo_set_source_color (cr, lighter);
+      cairo_rectangle (cr, x, y, 1, 1);
+      cairo_rectangle (cr, x + 1, y + 1, 1, 1);
+      cairo_fill (cr);
+    }
+  else if (size == 3)
+    {
+      gdk_cairo_set_source_color (cr, lighter);
+      cairo_rectangle (cr, x, y, 2, 1);
+      cairo_rectangle (cr, x, y, 1, 2);
+      cairo_fill (cr);
+
+      gdk_cairo_set_source_color (cr, darker);
+      cairo_rectangle (cr, x + 1, y + 1, 2, 1);
+      cairo_rectangle (cr, x + 2, y, 1, 2);
+      cairo_fill (cr);
+    }
 }
 
 static void
@@ -1650,20 +1661,28 @@ gtk_theming_engine_render_handle (GtkThemingEngine *engine,
   color_shade (bg_color, 0.7, &darker);
   color_shade (bg_color, 1.3, &lighter);
 
-  add_path_rounded_rectangle (cr, 0,
-                              SIDE_BOTTOM | SIDE_RIGHT | SIDE_TOP | SIDE_LEFT,
-                              x, y, width, height);
-  cairo_close_path (cr);
-
   gdk_cairo_set_source_color (cr, bg_color);
+  cairo_rectangle (cr, x, y, width, height);
   cairo_fill (cr);
 
-  if (orientation == GTK_ORIENTATION_HORIZONTAL)
-    for (xx = x + width / 2 - 15; xx <= x + width / 2 + 15; xx += 5)
-      paint_point (cr, &lighter, &darker, xx, y + height / 2 - 1);
+  if (gtk_theming_engine_has_class (engine, "paned"))
+    {
+      if (orientation == GTK_ORIENTATION_HORIZONTAL)
+        for (xx = x + width / 2 - 15; xx <= x + width / 2 + 15; xx += 5)
+          render_dot (cr, &lighter, &darker, xx, y + height / 2 - 1, 3);
+      else
+        for (yy = y + height / 2 - 15; yy <= y + height / 2 + 15; yy += 5)
+          render_dot (cr, &lighter, &darker, x + width / 2 - 1, yy, 3);
+    }
   else
-    for (yy = y + height / 2 - 15; yy <= y + height / 2 + 15; yy += 5)
-      paint_point (cr, &lighter, &darker, x + width / 2, yy);
+    {
+      for (yy = y; yy < y + height; yy += 3)
+	for (xx = x; xx < x + width; xx += 6)
+	  {
+	    render_dot (cr, &lighter, &darker, xx, yy, 2);
+	    render_dot (cr, &lighter, &darker, xx + 3, yy + 1, 2);
+	  }
+    }
 
   cairo_restore (cr);
 
