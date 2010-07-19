@@ -2888,7 +2888,6 @@ gdk_window_flush_implicit_paint (GdkWindow *window)
   GdkWindowObject *impl_window;
   GdkWindowPaint *paint;
   cairo_region_t *region;
-  GdkGC *tmp_gc;
   GSList *list;
 
   impl_window = gdk_window_get_impl_window (private);
@@ -2913,19 +2912,21 @@ gdk_window_flush_implicit_paint (GdkWindow *window)
 
   if (!GDK_WINDOW_DESTROYED (window) && !cairo_region_is_empty (region))
     {
+      cairo_t *cr;
+
       /* Remove flushed region from the implicit paint */
       cairo_region_subtract (paint->region, region);
 
       /* Some regions are valid, push these to window now */
-      tmp_gc = _gdk_drawable_get_scratch_gc ((GdkDrawable *)window, FALSE);
-      _gdk_gc_set_clip_region_internal (tmp_gc, region, TRUE);
-      gdk_draw_drawable (private->impl, tmp_gc, paint->pixmap,
-			 0, 0, paint->x_offset, paint->y_offset, -1, -1);
-      /* Reset clip region of the cached GdkGC */
-      gdk_gc_set_clip_region (tmp_gc, NULL);
+      cr = gdk_cairo_create (private->impl);
+      gdk_cairo_set_source_pixmap (cr, paint->pixmap,
+                                   paint->x_offset, paint->y_offset);
+      gdk_cairo_region (cr, region);
+      cairo_fill (cr);
+      cairo_destroy (cr);
     }
-  else
-    cairo_region_destroy (region);
+  
+  cairo_region_destroy (region);
 }
 
 /* Ends an implicit paint, paired with gdk_window_begin_implicit_paint returning TRUE */
