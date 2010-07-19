@@ -426,6 +426,7 @@ gtk_theming_engine_render_check (GtkThemingEngine *engine,
   const GtkWidgetPath *path;
   GtkStateFlags flags;
   GtkStateType state;
+  gint exterior_size, interior_size, thickness, pad;
 
   flags = gtk_theming_engine_get_state (engine);
   path = gtk_theming_engine_get_path (engine);
@@ -442,41 +443,85 @@ gtk_theming_engine_render_check (GtkThemingEngine *engine,
                           "text-color", &text_color,
                           NULL);
 
-  if (!gtk_widget_path_has_parent (path, GTK_TYPE_MENU))
+  exterior_size = MIN (width, height);
+
+  if (exterior_size % 2 == 0) /* Ensure odd */
+    exterior_size -= 1;
+
+  /* FIXME: thickness */
+  thickness = 1;
+  pad = thickness + MAX (1, (exterior_size - 2 * thickness) / 9);
+  interior_size = MAX (1, exterior_size - 2 * pad);
+
+  if (interior_size < 7)
     {
-      cairo_set_line_width (cr, 1);
+      interior_size = 7;
+      pad = MAX (0, (exterior_size - interior_size) / 2);
+    }
 
-      cairo_rectangle (cr,
-                       x + 0.5, y + 0.5,
-                       width - 1, height - 1);
+  x -= (1 + exterior_size - (gint) width) / 2;
+  y -= (1 + exterior_size - (gint) height) / 2;
 
+  if (!gtk_theming_engine_has_class (engine, "menu"))
+    {
+      cairo_set_line_width (cr, 1.0);
+
+      cairo_rectangle (cr, x + 0.5, y + 0.5, exterior_size - 1, exterior_size - 1);
       gdk_cairo_set_source_color (cr, base_color);
       cairo_fill_preserve (cr);
 
-      if (gtk_widget_path_has_parent (path, GTK_TYPE_TREE_VIEW))
-        gdk_cairo_set_source_color (cr, text_color);
+      if (gtk_theming_engine_has_class (engine, "cell"))
+	gdk_cairo_set_source_color (cr, text_color);
       else
-        gdk_cairo_set_source_color (cr, fg_color);
+	gdk_cairo_set_source_color (cr, fg_color);
 
       cairo_stroke (cr);
     }
 
-  cairo_set_line_width (cr, 1.5);
-  gdk_cairo_set_source_color (cr, text_color);
+  if (gtk_theming_engine_has_class (engine, "menu"))
+    gdk_cairo_set_source_color (cr, fg_color);
+  else
+    gdk_cairo_set_source_color (cr, text_color);
 
   if (gtk_theming_engine_is_state_set (engine, GTK_STATE_INCONSISTENT))
     {
-      cairo_move_to (cr, x + (width * 0.2), y + (height / 2));
-      cairo_line_to (cr, x + (width * 0.8), y + (height / 2));
+      int line_thickness = MAX (1, (3 + interior_size * 2) / 7);
+
+      cairo_rectangle (cr,
+		       x + pad,
+		       y + pad + (1 + interior_size - line_thickness) / 2,
+		       interior_size,
+		       line_thickness);
+      cairo_fill (cr);
     }
   else if (gtk_theming_engine_is_state_set (engine, GTK_STATE_ACTIVE))
     {
-      cairo_move_to (cr, x + (width * 0.2), y + (height / 2));
-      cairo_line_to (cr, x + (width * 0.4), y + (height * 0.8));
-      cairo_line_to (cr, x + (width * 0.8), y + (height * 0.2));
-    }
+      cairo_translate (cr,
+		       x + pad, y + pad);
 
-  cairo_stroke (cr);
+      cairo_scale (cr, interior_size / 7., interior_size / 7.);
+
+      cairo_move_to  (cr, 7.0, 0.0);
+      cairo_line_to  (cr, 7.5, 1.0);
+      cairo_curve_to (cr, 5.3, 2.0,
+		      4.3, 4.0,
+		      3.5, 7.0);
+      cairo_curve_to (cr, 3.0, 5.7,
+		      1.3, 4.7,
+		      0.0, 4.7);
+      cairo_line_to  (cr, 0.2, 3.5);
+      cairo_curve_to (cr, 1.1, 3.5,
+		      2.3, 4.3,
+		      3.0, 5.0);
+      cairo_curve_to (cr, 1.0, 3.9,
+		      2.4, 4.1,
+		      3.2, 4.9);
+      cairo_curve_to (cr, 3.5, 3.1,
+		      5.2, 2.0,
+		      7.0, 0.0);
+
+      cairo_fill (cr);
+    }
 
   cairo_restore (cr);
 
