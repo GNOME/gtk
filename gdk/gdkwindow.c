@@ -3135,17 +3135,21 @@ gdk_window_end_paint (GdkWindow *window)
 
   if (!paint->uses_implicit)
     {
+      cairo_t *cr;
+
       gdk_window_flush_outstanding_moves (window);
 
       full_clip = cairo_region_copy (private->clip_region_with_children);
       cairo_region_intersect (full_clip, paint->region);
-      _gdk_gc_set_clip_region_internal (tmp_gc, full_clip, TRUE); /* Takes ownership of full_clip */
-      gdk_gc_set_clip_origin (tmp_gc, - x_offset, - y_offset);
-      gdk_draw_drawable (private->impl, tmp_gc, paint->pixmap,
-			 clip_box.x - paint->x_offset,
-			 clip_box.y - paint->y_offset,
-			 clip_box.x - x_offset, clip_box.y - y_offset,
-			 clip_box.width, clip_box.height);
+
+      cr = gdk_cairo_create (private->impl);
+      gdk_cairo_set_source_pixmap (cr, paint->pixmap, 0, 0);
+      cairo_translate (cr, - x_offset, - y_offset);
+      gdk_cairo_region (cr, full_clip);
+      cairo_fill (cr);
+
+      cairo_destroy (cr);
+      cairo_region_destroy (full_clip);
     }
 
   if (private->redirect)
