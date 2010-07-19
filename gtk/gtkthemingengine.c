@@ -867,8 +867,8 @@ gtk_theming_engine_render_frame (GtkThemingEngine *engine,
 {
   GtkStateFlags flags;
   GtkStateType state;
-  GdkColor *bg_color;
   GdkColor lighter, darker;
+  GdkColor *bg_color;
 
   cairo_save (cr);
   flags = gtk_theming_engine_get_state (engine);
@@ -888,52 +888,110 @@ gtk_theming_engine_render_frame (GtkThemingEngine *engine,
   color_shade (bg_color, 0.7, &darker);
   color_shade (bg_color, 1.3, &lighter);
 
-  if (flags & GTK_STATE_FLAG_ACTIVE)
+  if (gtk_theming_engine_has_class (engine, "entry") ||
+      gtk_theming_engine_has_class (engine, "scrolled-window"))
     {
-      add_path_rounded_rectangle (cr, 0,
-                                  SIDE_BOTTOM | SIDE_RIGHT,
-                                  x, y, width, height);
+      gdk_cairo_set_source_color (cr, bg_color);
+      add_path_rectangle_sides (cr, x + 1, y + 1, width - 2, height - 2,
+                                SIDE_BOTTOM | SIDE_RIGHT);
+      cairo_stroke (cr);
+
+      cairo_set_source_rgb (cr, 0, 0, 0);
+      add_path_rectangle_sides (cr, x + 1, y + 1, width - 2, height - 2,
+                                SIDE_TOP | SIDE_LEFT);
+      cairo_stroke (cr);
+
+      cairo_set_source_rgb (cr, 1, 1, 1);
+      add_path_rectangle_sides (cr, x, y, width, height,
+                                SIDE_BOTTOM | SIDE_RIGHT);
+      cairo_stroke (cr);
+
+      gdk_cairo_set_source_color (cr, &darker);
+      add_path_rectangle_sides (cr, x, y, width, height,
+                                SIDE_TOP | SIDE_LEFT);
+      cairo_stroke (cr);
+    }
+  else if (gtk_theming_engine_has_class (engine, "button") &&
+           gtk_theming_engine_has_class (engine, "default"))
+    {
+      cairo_set_source_rgb (cr, 0, 0, 0);
+      cairo_rectangle (cr, x + 0.5, x + 0.5, width - 1, height - 1);
+      cairo_stroke (cr);
+    }
+  else if (gtk_theming_engine_has_class (engine, "scrollbar") &&
+           gtk_theming_engine_has_class (engine, "trough"))
+    {
+      gdk_cairo_set_source_color (cr, &darker);
+      add_path_rectangle_sides (cr, x, y, width, height,
+                                SIDE_TOP | SIDE_LEFT);
+      cairo_stroke (cr);
 
       gdk_cairo_set_source_color (cr, &lighter);
+      add_path_rectangle_sides (cr, x, y, width, height,
+                                SIDE_BOTTOM | SIDE_RIGHT);
+      cairo_stroke (cr);
+    }
+  else if (gtk_theming_engine_has_class (engine, "spinbutton"))
+    {
+      gdk_cairo_set_source_color (cr, &lighter);
+      add_path_rectangle_sides (cr, x, y, width, height,
+                                SIDE_BOTTOM | SIDE_RIGHT);
       cairo_stroke (cr);
 
-      add_path_rounded_rectangle (cr, 0,
-                                  SIDE_TOP | SIDE_LEFT,
-                                  x + 1, y + 1, width - 2, height - 2);
-      cairo_set_source_rgb (cr, 0, 0, 0);
-      cairo_stroke (cr);
-
-      add_path_rounded_rectangle (cr, 0,
-                                  SIDE_TOP | SIDE_LEFT,
-                                  x, y, width, height);
       gdk_cairo_set_source_color (cr, &darker);
+      add_path_rectangle_sides (cr, x, y, width, height, SIDE_TOP);
+      cairo_stroke (cr);
+
+      gdk_cairo_set_source_color (cr, bg_color);
+      add_path_rectangle_sides (cr, x, y, width - 1, height - 1, SIDE_BOTTOM);
+      cairo_stroke (cr);
+
+      cairo_set_source_rgb (cr, 0, 0, 0);
+      add_path_rectangle_sides (cr, x + 1, y + 1, width - 2, height - 2,
+                                SIDE_TOP | SIDE_LEFT | SIDE_RIGHT);
       cairo_stroke (cr);
     }
   else
     {
-      add_path_rounded_rectangle (cr, 0,
-                                  SIDE_BOTTOM | SIDE_RIGHT,
-                                  x, y, width, height);
+      if (flags & GTK_STATE_FLAG_ACTIVE)
+        {
+          cairo_set_source_rgb (cr, 0, 0, 0);
+          add_path_rectangle_sides (cr, x + 1, y + 1, width - 2, height - 2,
+                                    SIDE_TOP | SIDE_LEFT);
+          cairo_stroke (cr);
 
-      cairo_set_source_rgb (cr, 0, 0, 0);
-      cairo_stroke (cr);
+          gdk_cairo_set_source_color (cr, &lighter);
+          add_path_rectangle_sides (cr, x, y, width, height,
+                                    SIDE_BOTTOM | SIDE_RIGHT);
+          cairo_stroke (cr);
 
-      add_path_rounded_rectangle (cr, 0,
-                                  SIDE_BOTTOM | SIDE_RIGHT,
-                                  x, y, width - 1, height - 1);
+          gdk_cairo_set_source_color (cr, &darker);
+          add_path_rectangle_sides (cr, x, y, width, height,
+                                    SIDE_TOP | SIDE_LEFT);
+          cairo_stroke (cr);
+        }
+      else
+        {
+          gdk_cairo_set_source_color (cr, &darker);
+          add_path_rectangle_sides (cr, x, y, width - 1, height - 1,
+                                    SIDE_BOTTOM | SIDE_RIGHT);
+          cairo_stroke (cr);
 
-      gdk_cairo_set_source_color (cr, &darker);
-      cairo_stroke (cr);
+          gdk_cairo_set_source_color (cr, &lighter);
+          add_path_rectangle_sides (cr, x, y, width, height,
+                                    SIDE_TOP | SIDE_LEFT);
+          cairo_stroke (cr);
 
-      add_path_rounded_rectangle (cr, 0,
-                                  SIDE_TOP | SIDE_LEFT,
-                                  x, y, width, height);
-
-      gdk_cairo_set_source_color (cr, &lighter);
-      cairo_stroke (cr);
+          cairo_set_source_rgb (cr, 0, 0, 0);
+          add_path_rectangle_sides (cr, x, y, width, height,
+                                    SIDE_BOTTOM | SIDE_RIGHT);
+          cairo_stroke (cr);
+        }
     }
 
   cairo_restore (cr);
+
+  gdk_color_free (bg_color);
 }
 
 static void
