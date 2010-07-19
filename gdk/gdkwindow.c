@@ -3098,7 +3098,6 @@ gdk_window_end_paint (GdkWindow *window)
   GdkWindowPaint *paint;
   GdkGC *tmp_gc;
   GdkRectangle clip_box;
-  gint x_offset, y_offset;
   cairo_region_t *full_clip;
 
   g_return_if_fail (GDK_IS_WINDOW (window));
@@ -3130,9 +3129,6 @@ gdk_window_end_paint (GdkWindow *window)
 
   tmp_gc = _gdk_drawable_get_scratch_gc (window, FALSE);
 
-  x_offset = -private->abs_x;
-  y_offset = -private->abs_y;
-
   if (!paint->uses_implicit)
     {
       cairo_t *cr;
@@ -3144,7 +3140,7 @@ gdk_window_end_paint (GdkWindow *window)
 
       cr = gdk_cairo_create (private->impl);
       gdk_cairo_set_source_pixmap (cr, paint->pixmap, 0, 0);
-      cairo_translate (cr, - x_offset, - y_offset);
+      cairo_translate (cr, private->abs_x, private->abs_y);
       gdk_cairo_region (cr, full_clip);
       cairo_fill (cr);
 
