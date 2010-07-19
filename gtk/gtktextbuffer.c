@@ -42,8 +42,6 @@
 #include "gtkintl.h"
 
 
-#define GTK_TEXT_BUFFER_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), GTK_TYPE_TEXT_BUFFER, GtkTextBufferPrivate))
-
 typedef struct _GtkTextLogAttrCache GtkTextLogAttrCache;
 
 struct _GtkTextBufferPrivate
@@ -623,7 +621,9 @@ gtk_text_buffer_class_init (GtkTextBufferClass *klass)
 static void
 gtk_text_buffer_init (GtkTextBuffer *buffer)
 {
-  buffer->priv = GTK_TEXT_BUFFER_GET_PRIVATE (buffer);
+  buffer->priv = G_TYPE_INSTANCE_GET_PRIVATE (buffer,
+                                              GTK_TYPE_TEXT_BUFFER,
+                                              GtkTextBufferPrivate);
 
   buffer->priv->clipboard_contents_buffers = NULL;
   buffer->priv->tag_table = NULL;
