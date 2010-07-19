@@ -1433,7 +1433,6 @@ gtk_theming_engine_render_extension (GtkThemingEngine *engine,
   GtkStateType state;
   GdkColor *bg_color;
   GdkColor lighter, darker;
-  guint sides;
 
   cairo_save (cr);
   flags = gtk_theming_engine_get_state (engine);
@@ -1455,45 +1454,105 @@ gtk_theming_engine_render_extension (GtkThemingEngine *engine,
   color_shade (bg_color, 0.7, &darker);
   color_shade (bg_color, 1.3, &lighter);
 
-  add_path_rounded_rectangle (cr, 0,
-                              SIDE_BOTTOM | SIDE_RIGHT | SIDE_TOP | SIDE_LEFT,
-                              x, y, width, height);
-  cairo_close_path (cr);
+  switch (gap_side)
+    {
+    case GTK_POS_TOP:
+      gdk_cairo_set_source_color (cr, bg_color);
+      cairo_rectangle (cr, x + 1, y, width - 2, height);
+      cairo_fill (cr);
 
-  gdk_cairo_set_source_color (cr, bg_color);
-  cairo_fill (cr);
+      gdk_cairo_set_source_color (cr, &lighter);
+      add_path_line (cr, x, y, x, y + height - 2);
+      cairo_stroke (cr);
 
-  if (gap_side == GTK_POS_RIGHT)
-    sides = SIDE_BOTTOM;
-  else if (gap_side == GTK_POS_BOTTOM)
-    sides = SIDE_RIGHT;
-  else
-    sides = SIDE_BOTTOM | SIDE_RIGHT;
+      gdk_cairo_set_source_color (cr, bg_color);
+      add_path_line (cr, x + 1, y, x + 1, y + height - 2);
+      cairo_stroke (cr);
 
-  add_path_rounded_rectangle (cr, 0, sides,
-                              x, y, width, height);
+      gdk_cairo_set_source_color (cr, &darker);
+      add_path_line (cr, x + 2, y + height - 2, x + width - 2, y + height - 2);
+      add_path_line (cr, x + width - 2, y, x + width - 2, y + height - 2);
+      cairo_stroke (cr);
 
-  cairo_set_source_rgb (cr, 0, 0, 0);
-  cairo_stroke (cr);
+      cairo_set_source_rgb (cr, 0, 0, 0);
+      add_path_line (cr, x + 1, y + height - 1, x + width - 2, y + height - 1);
+      add_path_line (cr, x + width - 1, y, x + width - 1, y + height - 2);
+      cairo_stroke (cr);
 
-  add_path_rounded_rectangle (cr, 0, sides,
-                              x, y, width - 1, height - 1);
+      break;
+    case GTK_POS_BOTTOM:
+      gdk_cairo_set_source_color (cr, bg_color);
+      cairo_rectangle (cr, x + 1, y, width - 2, height);
+      cairo_fill (cr);
 
-  gdk_cairo_set_source_color (cr, &darker);
-  cairo_stroke (cr);
+      gdk_cairo_set_source_color (cr, &lighter);
+      add_path_line (cr, x + 1, y, x + width - 2, y);
+      add_path_line (cr, x, y + 1, x, y + height - 1);
+      cairo_stroke (cr);
 
-  if (gap_side == GTK_POS_LEFT)
-    sides = SIDE_TOP;
-  else if (gap_side == GTK_POS_TOP)
-    sides = SIDE_LEFT;
-  else
-    sides = SIDE_TOP | SIDE_LEFT;
+      gdk_cairo_set_source_color (cr, bg_color);
+      add_path_line (cr, x + 1, y + 1, x + width - 2, y + 1);
+      add_path_line (cr, x + 1, y + 1, x + 1, y + height - 1);
+      cairo_stroke (cr);
 
-  add_path_rounded_rectangle (cr, 0, sides,
-                              x, y, width, height);
+      gdk_cairo_set_source_color (cr, &darker);
+      add_path_line (cr, x + width - 2, y + 2, x + width - 2, y + height - 1);
+      cairo_stroke (cr);
 
-  gdk_cairo_set_source_color (cr, &lighter);
-  cairo_stroke (cr);
+      cairo_set_source_rgb (cr, 0, 0, 0);
+      add_path_line (cr, x + width - 1, y + 1, x + width - 1, y + height - 1);
+      cairo_stroke (cr);
+
+      break;
+    case GTK_POS_LEFT:
+      gdk_cairo_set_source_color (cr, bg_color);
+      cairo_rectangle (cr, x, y + 1, width, height - 2);
+      cairo_fill (cr);
+
+      gdk_cairo_set_source_color (cr, &lighter);
+      add_path_line (cr, x, y, x + width - 2, y);
+      cairo_stroke (cr);
+
+      gdk_cairo_set_source_color (cr, bg_color);
+      add_path_line (cr, x + 1, y + 1, x + width - 2, y + 1);
+      cairo_stroke (cr);
+
+      gdk_cairo_set_source_color (cr, &darker);
+      add_path_line (cr, x, y + height - 2, x + width - 2, y + height - 2);
+      add_path_line (cr, x + width - 2, y + 2, x + width - 2, y + height - 2);
+      cairo_stroke (cr);
+
+      cairo_set_source_rgb (cr, 0, 0, 0);
+      add_path_line (cr, x, y + height - 1, x + width - 2, y + height - 1);
+      add_path_line (cr, x + width - 1, y + 1, x + width - 1, y + height - 2);
+      cairo_stroke (cr);
+
+      break;
+    case GTK_POS_RIGHT:
+      gdk_cairo_set_source_color (cr, bg_color);
+      cairo_rectangle (cr, x, y + 1, width, height - 2);
+      cairo_fill (cr);
+
+      gdk_cairo_set_source_color (cr, &lighter);
+      add_path_line (cr, x + 1, y, x + width - 1, y);
+      add_path_line (cr, x, y + 1, x, y + height - 2);
+      cairo_stroke (cr);
+
+      gdk_cairo_set_source_color (cr, bg_color);
+      add_path_line (cr, x + 1, y + 1, x + width - 1, y + 1);
+      add_path_line (cr, x + 1, y + 1, x + 1, y + height - 2);
+      cairo_stroke (cr);
+
+      gdk_cairo_set_source_color (cr, &darker);
+      add_path_line (cr, x + 2, y + height - 2, x + width - 1, y + height - 2);
+      cairo_stroke (cr);
+
+      cairo_set_source_rgb (cr, 0, 0, 0);
+      add_path_line (cr, x + 1, y + height - 1, x + width - 1, y + height - 1);
+      cairo_stroke (cr);
+
+      break;
+    }
 
   cairo_restore (cr);
 
