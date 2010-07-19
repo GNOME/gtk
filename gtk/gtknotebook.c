@@ -832,7 +832,7 @@ gtk_notebook_class_init (GtkNotebookClass *class)
 		  G_SIGNAL_RUN_LAST,
 		  G_STRUCT_OFFSET (GtkNotebookClass, switch_page),
 		  NULL, NULL,
-		  _gtk_marshal_VOID__POINTER_UINT,
+		  _gtk_marshal_VOID__OBJECT_UINT,
 		  G_TYPE_NONE, 2,
 		  GTK_TYPE_WIDGET,
 		  G_TYPE_UINT);
@@ -6235,7 +6235,7 @@ gtk_notebook_menu_switch_page (GtkWidget       *widget,
   g_signal_emit (notebook,
 		 notebook_signals[SWITCH_PAGE],
 		 0,
-		 page,
+		 page->child,
 		 page_num);
 }
 
