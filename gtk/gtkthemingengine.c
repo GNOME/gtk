@@ -1372,29 +1372,30 @@ gtk_theming_engine_render_frame_gap (GtkThemingEngine *engine,
   else
     sides = SIDE_BOTTOM | SIDE_RIGHT;
 
-  if (gap_side == GTK_POS_RIGHT ||
-      gap_side == GTK_POS_BOTTOM)
-    add_path_gap_side (cr, gap_side, 0,
-                       x, y, width, height,
-                       xy0_gap, xy1_gap);
-
-  add_path_rounded_rectangle (cr, 0, sides,
-                              x, y, width, height);
+  gdk_cairo_set_source_color (cr, &darker);
+  add_path_rectangle_sides (cr, x + 1, y, width - 2, height, sides);
+  add_path_rectangle_sides (cr, x, y + 1, width, height - 2, sides);
+  cairo_stroke (cr);
 
   cairo_set_source_rgb (cr, 0, 0, 0);
+  add_path_rectangle_sides (cr, x, y, width, height, sides);
   cairo_stroke (cr);
 
   if (gap_side == GTK_POS_RIGHT ||
       gap_side == GTK_POS_BOTTOM)
-    add_path_gap_side (cr, gap_side, 0,
-                       x, y, width, height,
-                       xy0_gap, xy1_gap);
+    {
+      gdk_cairo_set_source_color (cr, &darker);
+      add_path_gap_side (cr, gap_side,
+                         x, y, width - 2, height - 2,
+                         xy0_gap, xy1_gap);
+      cairo_stroke (cr);
 
-  add_path_rounded_rectangle (cr, 0, sides,
-                              x, y, width - 1, height - 1);
-
-  gdk_cairo_set_source_color (cr, &darker);
-  cairo_stroke (cr);
+      cairo_set_source_rgb (cr, 0, 0, 0);
+      add_path_gap_side (cr, gap_side,
+                         x, y, width - 1, height - 1,
+                         xy0_gap, xy1_gap);
+      cairo_stroke (cr);
+    }
 
   if (gap_side == GTK_POS_LEFT)
     sides = SIDE_TOP;
@@ -1403,17 +1404,19 @@ gtk_theming_engine_render_frame_gap (GtkThemingEngine *engine,
   else
     sides = SIDE_TOP | SIDE_LEFT;
 
-  if (gap_side == GTK_POS_TOP ||
-      gap_side == GTK_POS_LEFT)
-    add_path_gap_side (cr, gap_side, 0,
-                       x, y, width, height,
-                       xy0_gap, xy1_gap);
-
-  add_path_rounded_rectangle (cr, 0, sides,
-                              x, y, width, height);
-
   gdk_cairo_set_source_color (cr, &lighter);
+
+  add_path_rectangle_sides (cr, x, y, width, height, sides);
   cairo_stroke (cr);
+
+  if (gap_side == GTK_POS_LEFT ||
+      gap_side == GTK_POS_TOP)
+    {
+      add_path_gap_side (cr, gap_side,
+                         x, y, width, height,
+                         xy0_gap, xy1_gap);
+      cairo_stroke (cr);
+    }
 
   cairo_restore (cr);
 
