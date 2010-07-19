@@ -818,7 +818,7 @@ gtk_theming_engine_render_background (GtkThemingEngine *engine,
 {
   GtkStateFlags flags;
   GtkStateType state;
-  GdkColor *bg_color;
+  GdkColor *color;
 
   cairo_save (cr);
   flags = gtk_theming_engine_get_state (engine);
@@ -830,19 +830,31 @@ gtk_theming_engine_render_background (GtkThemingEngine *engine,
   else
     state = GTK_STATE_NORMAL;
 
-  gtk_theming_engine_get (engine, state,
-                          "background-color", &bg_color,
-                          NULL);
+  if (gtk_theming_engine_has_class (engine, "entry"))
+    gtk_theming_engine_get (engine, state,
+                            "base-color", &color,
+                            NULL);
+  else
+    gtk_theming_engine_get (engine, state,
+                            "background-color", &color,
+                            NULL);
 
-  add_path_rounded_rectangle (cr, 0,
-                              SIDE_BOTTOM | SIDE_RIGHT | SIDE_TOP | SIDE_LEFT,
-                              x, y, width, height);
-  cairo_close_path (cr);
+  gdk_cairo_set_source_color (cr, color);
+  cairo_rectangle (cr, x, y, width, height);
 
-  gdk_cairo_set_source_color (cr, bg_color);
-  cairo_fill (cr);
+  if (gtk_theming_engine_has_class (engine, "tooltip"))
+    {
+      cairo_fill_preserve (cr);
+
+      cairo_set_source_rgb (cr, 0, 0, 0);
+      cairo_stroke (cr);
+    }
+  else
+    cairo_fill (cr);
 
   cairo_restore (cr);
+
+  gdk_color_free (color);
 }
 
 static void
