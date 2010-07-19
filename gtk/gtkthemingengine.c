@@ -709,131 +709,66 @@ gtk_theming_engine_render_arrow (GtkThemingEngine *engine,
 }
 
 static void
-add_path_rounded_rectangle (cairo_t           *cr,
-                            gdouble            radius,
-                            guint              sides,
-                            gdouble            x,
-                            gdouble            y,
-                            gdouble            width,
-                            gdouble            height)
+add_path_line (cairo_t        *cr,
+               gdouble         x1,
+               gdouble         y1,
+               gdouble         x2,
+               gdouble         y2)
 {
-  gdouble r = 0;
-
-  if (sides & SIDE_BOTTOM)
+  /* Adjust endpoints */
+  if (y1 == y2)
     {
-      /* Bottom left corner */
-      if (r == 0)
-        cairo_move_to (cr, x + 0.5, y + height - 0.5);
-      else
-        cairo_arc_negative (cr,
-                            x + r + 0.5,
-                            y + height - r - 0.5,
-                            r,
-                            135 * (G_PI / 180),
-                            90 * (G_PI / 180));
+      y1 += 0.5;
+      y2 += 0.5;
+      x2 += 1;
+    }
+  else if (x1 == x2)
+    {
+      x1 += 0.5;
+      x2 += 0.5;
+      y2 += 1;
+    }
 
-      /* Bottom side */
-      cairo_line_to (cr, x + width - r - 0.5, y + height - 0.5);
+  cairo_move_to (cr, x1, y1);
+  cairo_line_to (cr, x2, y2);
+}
 
-      /* Bottom right corner */
-      if (r > 0)
-        cairo_arc_negative (cr,
-                            x + width - r - 0.5,
-                            y + height - r - 0.5,
-                            r,
-                            90 * (G_PI / 180),
-                            45 * (G_PI / 180));
+static void
+add_path_rectangle_sides (cairo_t  *cr,
+                          gdouble   x,
+                          gdouble   y,
+                          gdouble   width,
+                          gdouble   height,
+                          guint     sides)
+{
+  if (sides & SIDE_TOP)
+    {
+      cairo_move_to (cr, x, y + 0.5);
+      cairo_line_to (cr, x + width, y + 0.5);
     }
 
   if (sides & SIDE_RIGHT)
     {
-      /* Bottom right corner */
-      if (r == 0)
-        {
-          if ((sides & SIDE_BOTTOM) == 0)
-            cairo_move_to (cr, x + width - 0.5, y + height - 0.5);
-        }
-      else
-        cairo_arc_negative (cr,
-                            x + width - r - 0.5,
-                            y + height - r - 0.5,
-                            r,
-                            45 * (G_PI / 180), 0);
-
-      /* Right side */
-      cairo_line_to (cr, x + width - 0.5, y + r);
-
-      /* Top right corner */
-      if (r > 0)
-        cairo_arc_negative (cr,
-                            x + width - r - 0.5,
-                            y + r + 0.5,
-                            r,
-                            0, 315 * (G_PI / 180));
+      cairo_move_to (cr, x + width - 0.5, y);
+      cairo_line_to (cr, x + width - 0.5, y + height);
     }
 
-  if (sides & SIDE_TOP)
+  if (sides & SIDE_BOTTOM)
     {
-      /* Top right corner */
-      if (r == 0)
-        {
-          if ((sides & SIDE_RIGHT) == 0)
-            cairo_move_to (cr, x + width - 1, y + 0.5);
-        }
-      else
-        cairo_arc_negative (cr,
-                            x + width - r - 0.5,
-                            y + r + 0.5,
-                            r,
-                            315 * (G_PI / 180),
-                            270 * (G_PI / 180));
-
-      /* Top side */
-      cairo_line_to (cr, x + 0.5 + r, y + 0.5);
-
-      /* Top left corner */
-      if (r > 0)
-        cairo_arc_negative (cr,
-                            x + r + 0.5,
-                            y + r + 0.5,
-                            r,
-                            270 * (G_PI / 180),
-                            225 * (G_PI / 180));
+      cairo_move_to (cr, x, y + height - 0.5);
+      cairo_line_to (cr, x + width, y + height - 0.5);
     }
 
   if (sides & SIDE_LEFT)
     {
-      /* Top left corner */
-      if (r == 0)
-        {
-          if ((sides & SIDE_TOP) == 0)
-            cairo_move_to (cr, x + 0.5, y + 0.5);
-        }
-      else
-        cairo_arc_negative (cr,
-                            x + + r + 0.5,
-                            y + r + 0.5,
-                            r,
-                            225 * (G_PI / 180),
-                            180 * (G_PI / 180));
-
-      /* Left side */
-      cairo_line_to (cr, x + 0.5, y + height - r);
-
-      if (r > 0)
-        cairo_arc_negative (cr,
-                            x + r + 0.5,
-                            y + height - r + 0.5,
-                            r,
-                            180 * (G_PI / 180),
-                            135 * (G_PI / 180));
+      cairo_move_to (cr, x + 0.5, y + height);
+      cairo_line_to (cr, x + 0.5, y);
     }
 }
 
 static void
 add_path_gap_side (cairo_t           *cr,
                    GtkPositionType    gap_side,
-                   gdouble            radius,
                    gdouble            x,
                    gdouble            y,
                    gdouble            width,
@@ -841,37 +776,24 @@ add_path_gap_side (cairo_t           *cr,
                    gdouble            xy0_gap,
                    gdouble            xy1_gap)
 {
-  if (gap_side == GTK_POS_TOP)
+  switch (gap_side)
     {
-      cairo_move_to (cr, x, y);
-      cairo_line_to (cr, x + xy0_gap, y);
-
-      cairo_move_to (cr, x + xy1_gap, y);
-      cairo_line_to (cr, x + width, y);
-    }
-  else if (gap_side == GTK_POS_BOTTOM)
-    {
-      cairo_move_to (cr, x, y + height);
-      cairo_line_to (cr, x + xy0_gap, y + height);
-
-      cairo_move_to (cr, x + xy1_gap, y + height);
-      cairo_line_to (cr, x + width, y + height);
-    }
-  else if (gap_side == GTK_POS_LEFT)
-    {
-      cairo_move_to (cr, x, y);
-      cairo_line_to (cr, x, y + xy0_gap);
-
-      cairo_move_to (cr, x, y + xy1_gap);
-      cairo_line_to (cr, x, y + height);
-    }
-  else
-    {
-      cairo_move_to (cr, x + width, y);
-      cairo_line_to (cr, x + width, y + xy0_gap);
-
-      cairo_move_to (cr, x + width, y + xy1_gap);
-      cairo_line_to (cr, x + width, y + height);
+    case GTK_POS_TOP:
+      add_path_line (cr, x, y, x + xy0_gap, y);
+      add_path_line (cr, x + xy1_gap, y, x + width, y);
+      break;
+    case GTK_POS_BOTTOM:
+      add_path_line (cr, x, y + height, x + xy0_gap, y + height);
+      add_path_line (cr, x + xy1_gap, y + height, x + width, y + height);
+      break;
+    case GTK_POS_LEFT:
+      add_path_line (cr, x, y, x, y + xy0_gap);
+      add_path_line (cr, x, y + xy1_gap, x, y + height);
+      break;
+    case GTK_POS_RIGHT:
+      add_path_line (cr, x + width, y, x + width, y + xy0_gap);
+      add_path_line (cr, x + width, y + xy1_gap, x + width, y + height);
+      break;
     }
 }
 
