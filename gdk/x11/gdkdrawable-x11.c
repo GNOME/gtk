@@ -1463,7 +1463,7 @@ gdk_x11_ref_cairo_surface (GdkDrawable *drawable)
     {
       int width, height;
   
-      gdk_drawable_get_size (drawable, &width, &height);
+      gdk_drawable_get_size (impl->wrapper, &width, &height);
 
       impl->cairo_surface = _gdk_windowing_create_cairo_surface (drawable, width, height);
       
