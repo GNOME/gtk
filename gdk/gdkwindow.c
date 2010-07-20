@@ -3087,7 +3087,6 @@ gdk_window_end_paint (GdkWindow *window)
   GdkWindowObject *private = (GdkWindowObject *)window;
   GdkWindowObject *composited;
   GdkWindowPaint *paint;
-  GdkGC *tmp_gc;
   GdkRectangle clip_box;
   cairo_region_t *full_clip;
 
@@ -3118,8 +3117,6 @@ gdk_window_end_paint (GdkWindow *window)
 
   cairo_region_get_extents (paint->region, &clip_box);
 
-  tmp_gc = _gdk_drawable_get_scratch_gc (window, FALSE);
-
   if (!paint->uses_implicit)
     {
       cairo_t *cr;
@@ -3143,26 +3140,21 @@ gdk_window_end_paint (GdkWindow *window)
     {
       int x_offset, y_offset;
       cairo_region_t *region;
+      cairo_t *cr;
 
       /* TODO: Should also use paint->region for clipping */
       region = setup_redirect_clip (window, &x_offset, &y_offset);
 
-      gdk_gc_set_clip_region (tmp_gc, region); /* This resets clip origin! */
-      /* offset clip and tiles from window coords to pixmaps coords */
-      gdk_gc_offset (tmp_gc, -x_offset, -y_offset);
+      cr = gdk_cairo_create (private->redirect->pixmap);
 
-      gdk_draw_drawable (private->redirect->pixmap, tmp_gc, paint->pixmap,
-			 clip_box.x - paint->x_offset,
-			 clip_box.y - paint->y_offset,
-			 clip_box.x + x_offset,
-			 clip_box.y + y_offset,
-			 clip_box.width, clip_box.height);
+      cairo_translate (cr, x_offset, y_offset);
+      gdk_cairo_set_source_pixmap (cr, paint->pixmap, 0, 0);
+      gdk_cairo_region (cr, region);
+      cairo_fill (cr);
 
+      cairo_destroy (cr);
       cairo_region_destroy (region);
     }
-
-  /* Reset clip region of the cached GdkGC */
-  gdk_gc_set_clip_region (tmp_gc, NULL);
 
   cairo_surface_destroy (paint->surface);
   g_object_unref (paint->pixmap);
