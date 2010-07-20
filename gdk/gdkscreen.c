@@ -163,16 +163,10 @@ gdk_screen_dispose (GObject *object)
 
   for (i = 0; i < 32; ++i)
     {
-      if (screen->exposure_gcs[i])
+      if (screen->subwindow_gcs[i])
         {
-          g_object_unref (screen->exposure_gcs[i]);
-          screen->exposure_gcs[i] = NULL;
-        }
-
-      if (screen->normal_gcs[i])
-        {
-          g_object_unref (screen->normal_gcs[i]);
-          screen->normal_gcs[i] = NULL;
+          g_object_unref (screen->subwindow_gcs[i]);
+          screen->subwindow_gcs[i] = NULL;
         }
     }
 

@@ -424,65 +424,6 @@ gdk_drawable_real_draw_drawable (GdkDrawable  *drawable,
 /************************************************************************/
 
 /**
- * _gdk_drawable_get_scratch_gc:
- * @drawable: A #GdkDrawable
- * @graphics_exposures: Whether the returned #GdkGC should generate graphics exposures 
- * 
- * Returns a #GdkGC suitable for drawing on @drawable. The #GdkGC has
- * the standard values for @drawable, except for the graphics_exposures
- * field which is determined by the @graphics_exposures parameter.
- *
- * The foreground color of the returned #GdkGC is undefined. The #GdkGC
- * must not be altered in any way, except to change its foreground color.
- * 
- * Return value: A #GdkGC suitable for drawing on @drawable
- * 
- * Since: 2.4
- **/
-GdkGC *
-_gdk_drawable_get_scratch_gc (GdkDrawable *drawable,
-			      gboolean     graphics_exposures)
-{
-  GdkScreen *screen;
-  gint depth;
-
-  g_return_val_if_fail (GDK_IS_DRAWABLE (drawable), NULL);
-
-  screen = gdk_drawable_get_screen (drawable);
-
-  g_return_val_if_fail (!screen->closed, NULL);
-
-  depth = gdk_drawable_get_depth (drawable) - 1;
-
-  if (graphics_exposures)
-    {
-      if (!screen->exposure_gcs[depth])
-	{
-	  GdkGCValues values;
-	  GdkGCValuesMask mask;
-
-	  values.graphics_exposures = TRUE;
-	  mask = GDK_GC_EXPOSURES;  
-
-	  screen->exposure_gcs[depth] =
-	    gdk_gc_new_with_values (drawable, &values, mask);
-	}
-
-      return screen->exposure_gcs[depth];
-    }
-  else
-    {
-      if (!screen->normal_gcs[depth])
-	{
-	  screen->normal_gcs[depth] =
-	    gdk_gc_new (drawable);
-	}
-
-      return screen->normal_gcs[depth];
-    }
-}
-
-/**
  * _gdk_drawable_get_subwindow_scratch_gc:
  * @drawable: A #GdkDrawable
  * 
