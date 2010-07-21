@@ -245,11 +245,9 @@ _gtk_text_util_create_drag_icon (GtkWidget *widget,
   gdk_cairo_set_source_color (cr, &widget->style->base [gtk_widget_get_state (widget)]);
   cairo_paint (cr);
 
-  gdk_draw_layout (drawable,
-                   widget->style->text_gc [gtk_widget_get_state (widget)],
-                   1 + DRAG_ICON_LAYOUT_BORDER,
-                   1 + DRAG_ICON_LAYOUT_BORDER,
-                   layout);
+  gdk_cairo_set_source_color (cr, &widget->style->text [gtk_widget_get_state (widget)]);
+  cairo_move_to (cr, 1 + DRAG_ICON_LAYOUT_BORDER, 1 + DRAG_ICON_LAYOUT_BORDER);
+  pango_cairo_show_layout (cr, layout);
 
   cairo_set_source_rgb (cr, 0, 0, 0);
   cairo_rectangle (cr, 0.5, 0.5, pixmap_width + 1, pixmap_height + 1);
