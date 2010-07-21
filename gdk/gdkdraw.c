@@ -36,13 +36,6 @@
 #include "gdkpixbuf.h"
 
 
-static GdkDrawable* gdk_drawable_real_get_composite_drawable (GdkDrawable  *drawable,
-							      gint          x,
-							      gint          y,
-							      gint          width,
-							      gint          height,
-							      gint         *composite_x_offset,
-							      gint         *composite_y_offset);
 static cairo_region_t *  gdk_drawable_real_get_visible_region     (GdkDrawable  *drawable);
      
 
@@ -51,7 +44,6 @@ G_DEFINE_ABSTRACT_TYPE (GdkDrawable, gdk_drawable, G_TYPE_OBJECT)
 static void
 gdk_drawable_class_init (GdkDrawableClass *klass)
 {
-  klass->get_composite_drawable = gdk_drawable_real_get_composite_drawable;
   /* Default implementation for clip and visible region is the same */
   klass->get_clip_region = gdk_drawable_real_get_visible_region;
   klass->get_visible_region = gdk_drawable_real_get_visible_region;
@@ -199,23 +191,6 @@ gdk_drawable_get_colormap (GdkDrawable *drawable)
   g_return_val_if_fail (GDK_IS_DRAWABLE (drawable), NULL);
 
   return GDK_DRAWABLE_GET_CLASS (drawable)->get_colormap (drawable);
-}
-
-static GdkDrawable *
-gdk_drawable_real_get_composite_drawable (GdkDrawable *drawable,
-                                          gint         x,
-                                          gint         y,
-                                          gint         width,
-                                          gint         height,
-                                          gint        *composite_x_offset,
-                                          gint        *composite_y_offset)
-{
-  g_return_val_if_fail (GDK_IS_DRAWABLE (drawable), NULL);
-
-  *composite_x_offset = 0;
-  *composite_y_offset = 0;
-  
-  return g_object_ref (drawable);
 }
 
 /**

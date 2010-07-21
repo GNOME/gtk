@@ -204,20 +204,6 @@ gdk_offscreen_window_get_source_drawable (GdkDrawable  *drawable)
   return _gdk_drawable_get_source_drawable (offscreen->pixmap);
 }
 
-static GdkDrawable *
-gdk_offscreen_window_get_composite_drawable (GdkDrawable *drawable,
-					     gint         x,
-					     gint         y,
-					     gint         width,
-					     gint         height,
-					     gint        *composite_x_offset,
-					     gint        *composite_y_offset)
-{
-  GdkOffscreenWindow *offscreen = GDK_OFFSCREEN_WINDOW (drawable);
-
-  return g_object_ref (offscreen->pixmap);
-}
-
 static GdkScreen*
 gdk_offscreen_window_get_screen (GdkDrawable *drawable)
 {
@@ -921,7 +907,6 @@ gdk_offscreen_window_class_init (GdkOffscreenWindowClass *klass)
   drawable_class->get_screen = gdk_offscreen_window_get_screen;
   drawable_class->get_visual = gdk_offscreen_window_get_visual;
   drawable_class->get_source_drawable = gdk_offscreen_window_get_source_drawable;
-  drawable_class->get_composite_drawable = gdk_offscreen_window_get_composite_drawable;
 }
 
 static void

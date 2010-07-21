@@ -76,14 +76,6 @@ struct _GdkDrawableClass
   cairo_region_t*   (*get_clip_region)    (GdkDrawable  *drawable);
   cairo_region_t*   (*get_visible_region) (GdkDrawable  *drawable);
 
-  GdkDrawable* (*get_composite_drawable) (GdkDrawable *drawable,
-                                          gint         x,
-                                          gint         y,
-                                          gint         width,
-                                          gint         height,
-                                          gint        *composite_x_offset,
-                                          gint        *composite_y_offset);
-
   cairo_surface_t *(*ref_cairo_surface) (GdkDrawable *drawable);
 
   GdkDrawable *(*get_source_drawable) (GdkDrawable *drawable);
