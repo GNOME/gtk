@@ -3258,58 +3258,30 @@ on_rotated_text_expose (GtkWidget      *widget,
 {
   static const gchar *words[] = { "The", "grand", "old", "Duke", "of", "York",
                                   "had", "10,000", "men" };
-  PangoRenderer *renderer;
-  GdkGC *gc;
   int n_words;
   int i;
   double radius;
-  PangoMatrix matrix = PANGO_MATRIX_INIT;
   PangoLayout *layout;
   PangoContext *context;
   PangoFontDescription *desc;
+  cairo_t *cr;
 
-  gc = g_object_get_data (G_OBJECT (widget), "text-gc");
-  if (!gc)
+  cr = gdk_cairo_create (event->window);
+
+  if (tile_pixbuf)
     {
-      static GdkColor black = { 0, 0, 0, 0 };
-      
-      gc = gdk_gc_new (widget->window);
-      gdk_gc_set_rgb_fg_color (gc, &black);
-      
-      if (tile_pixbuf)
-	{
-	  GdkPixmap *tile;
-          cairo_t *cr;
-	  
-	  gint width = gdk_pixbuf_get_width (tile_pixbuf);
-	  gint height = gdk_pixbuf_get_height (tile_pixbuf);
-	  
-	  tile = gdk_pixmap_new (widget->window, width, height, -1);
-
-          cr = gdk_cairo_create (tile);
-          gdk_cairo_set_source_pixbuf (cr, tile_pixbuf, 0, 0);
-          cairo_paint (cr);
-          cairo_destroy (cr);
-
-	  gdk_gc_set_tile (gc, tile);
-	  gdk_gc_set_fill (gc, GDK_TILED);
-
-	  g_object_unref (tile);
-	}
-
-      g_object_set_data_full (G_OBJECT (widget), "text-gc", gc, (GDestroyNotify)g_object_unref);
+      gdk_cairo_set_source_pixbuf (cr, tile_pixbuf, 0, 0);
+      cairo_pattern_set_extend (cairo_get_source (cr), CAIRO_EXTEND_REPEAT);
     }
-
-  renderer = gdk_pango_renderer_get_default (gtk_widget_get_screen (widget));
-  gdk_pango_renderer_set_drawable (GDK_PANGO_RENDERER (renderer), widget->window);
-  gdk_pango_renderer_set_gc (GDK_PANGO_RENDERER (renderer), gc);
+  else
+    cairo_set_source_rgb (cr, 0, 0, 0);
 
   radius = MIN (widget->allocation.width, widget->allocation.height) / 2.;
 
-  pango_matrix_translate (&matrix,
-			  radius + (widget->allocation.width - 2 * radius) / 2,
-			  radius + (widget->allocation.height - 2 * radius) / 2);
-  pango_matrix_scale (&matrix, radius / DEFAULT_TEXT_RADIUS, radius / DEFAULT_TEXT_RADIUS);
+  cairo_translate (cr,
+                   radius + (widget->allocation.width - 2 * radius) / 2,
+                   radius + (widget->allocation.height - 2 * radius) / 2);
+  cairo_scale (cr, radius / DEFAULT_TEXT_RADIUS, radius / DEFAULT_TEXT_RADIUS);
 
   context = gtk_widget_get_pango_context (widget);
   layout = pango_layout_new (context);
@@ -3320,25 +3292,24 @@ on_rotated_text_expose (GtkWidget      *widget,
   n_words = G_N_ELEMENTS (words);
   for (i = 0; i < n_words; i++)
     {
-      PangoMatrix rotated_matrix = matrix;
       int width, height;
-      
-      pango_matrix_rotate (&rotated_matrix, - (360. * i) / n_words);
 
-      pango_context_set_matrix (context, &rotated_matrix);
-      pango_layout_context_changed (layout);
+      cairo_save (cr);
+
+      cairo_rotate (cr, 2 * G_PI * i / n_words);
+      pango_cairo_update_layout (cr, layout);
+
       pango_layout_set_text (layout, words[i], -1);
-      
       pango_layout_get_size (layout, &width, &height);
 
-      pango_renderer_draw_layout (renderer, layout,
-				  - width / 2, - DEFAULT_TEXT_RADIUS * PANGO_SCALE);
-    }
+      cairo_move_to (cr, - width / 2 / PANGO_SCALE, - DEFAULT_TEXT_RADIUS);
+      pango_cairo_show_layout (cr, layout);
 
-  gdk_pango_renderer_set_drawable (GDK_PANGO_RENDERER (renderer), NULL);
-  gdk_pango_renderer_set_gc (GDK_PANGO_RENDERER (renderer), NULL);
+      cairo_restore (cr);
+    }
   
   g_object_unref (layout);
+  cairo_destroy (cr);
 
   return FALSE;
 }
