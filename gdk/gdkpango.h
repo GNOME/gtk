@@ -51,13 +51,6 @@ typedef struct _GdkPangoRendererPrivate GdkPangoRendererPrivate;
  * pango_renderer_draw_layout_line() are then used to draw objects with
  * the renderer.
  *
- * In most simple cases, applications can just use gdk_draw_layout(), and
- * don't need to directly use #GdkPangoRenderer at all. Using the
- * #GdkPangoRenderer directly is most useful when working with a
- * transformation such as a rotation, because the Pango drawing functions
- * take user space coordinates (coordinates before the transformation)
- * instead of device coordinates.
- *
  * In certain cases it can be useful to subclass #GdkPangoRenderer. Examples
  * of reasons to do this are to add handling of custom attributes by
  * overriding 'prepare_run' or to do custom drawing of embedded objects

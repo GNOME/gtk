@@ -334,12 +334,6 @@ gdk_drawable_get_clip_region
 gdk_drawable_get_visible_region
 
 <SUBSECTION>
-gdk_draw_layout_line
-gdk_draw_layout_line_with_colors
-gdk_draw_layout
-gdk_draw_layout_with_colors
-
-<SUBSECTION>
 gdk_draw_drawable
 
 <SUBSECTION Standard>

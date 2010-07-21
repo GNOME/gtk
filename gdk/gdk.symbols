@@ -553,15 +553,6 @@ gdk_draw_drawable
 #endif
 #endif
 
-#if IN_HEADER(__GDK_DRAWABLE_H__)
-#if IN_FILE(__GDK_PANGO_C__)
-gdk_draw_layout
-gdk_draw_layout_line
-gdk_draw_layout_line_with_colors
-gdk_draw_layout_with_colors
-#endif
-#endif
-
 #if IN_HEADER(__GDK_GC_H__)
 #if IN_FILE(__GDK_GC_C__)
 gdk_gc_new

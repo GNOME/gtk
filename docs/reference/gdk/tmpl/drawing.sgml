@@ -127,58 +127,6 @@ or a #GdkWindow.
 @Returns: 
 
 
-<!-- ##### FUNCTION gdk_draw_layout_line ##### -->
-<para>
-
-</para>
-
-@drawable: 
-@gc: 
-@x: 
-@y: 
-@line: 
-
-
-<!-- ##### FUNCTION gdk_draw_layout_line_with_colors ##### -->
-<para>
-
-</para>
-
-@drawable: 
-@gc: 
-@x: 
-@y: 
-@line: 
-@foreground: 
-@background: 
-
-
-<!-- ##### FUNCTION gdk_draw_layout ##### -->
-<para>
-
-</para>
-
-@drawable: 
-@gc: 
-@x: 
-@y: 
-@layout: 
-
-
-<!-- ##### FUNCTION gdk_draw_layout_with_colors ##### -->
-<para>
-
-</para>
-
-@drawable: 
-@gc: 
-@x: 
-@y: 
-@layout: 
-@foreground: 
-@background: 
-
-
 <!-- ##### FUNCTION gdk_draw_drawable ##### -->
 <para>
 

@@ -153,32 +153,6 @@ void gdk_draw_drawable  (GdkDrawable      *drawable,
 			 gint              width,
 			 gint              height);
 
-void gdk_draw_layout_line (GdkDrawable      *drawable,
-			   GdkGC            *gc,
-			   gint              x,
-			   gint              y,
-			   PangoLayoutLine  *line);
-void gdk_draw_layout      (GdkDrawable      *drawable,
-			   GdkGC            *gc,
-			   gint              x,
-			   gint              y,
-			   PangoLayout      *layout);
-
-void gdk_draw_layout_line_with_colors (GdkDrawable     *drawable,
-                                       GdkGC           *gc,
-                                       gint             x,
-                                       gint             y,
-                                       PangoLayoutLine *line,
-                                       const GdkColor  *foreground,
-                                       const GdkColor  *background);
-void gdk_draw_layout_with_colors      (GdkDrawable     *drawable,
-                                       GdkGC           *gc,
-                                       gint             x,
-                                       gint             y,
-                                       PangoLayout     *layout,
-                                       const GdkColor  *foreground,
-                                       const GdkColor  *background);
-
 cairo_region_t *gdk_drawable_get_clip_region    (GdkDrawable *drawable);
 cairo_region_t *gdk_drawable_get_visible_region (GdkDrawable *drawable);
 

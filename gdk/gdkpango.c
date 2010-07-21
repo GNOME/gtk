@@ -584,8 +584,7 @@ on_renderer_display_closed (GdkDisplay       *display,
  * 
  * Gets the default #PangoRenderer for a screen. This default renderer
  * is shared by all users of the display, so properties such as the color
- * or transformation matrix set for the renderer may be overwritten
- * by functions such as gdk_draw_layout().
+ * or transformation matrix set for the renderer may be overwritten.
  *
  * Before using the renderer, you need to call gdk_pango_renderer_set_drawable()
  * and gdk_pango_renderer_set_gc() to set the drawable and graphics context
@@ -823,223 +822,6 @@ release_renderer (PangoRenderer *renderer)
   
   gdk_pango_renderer_set_drawable (gdk_renderer, NULL);
   gdk_pango_renderer_set_gc (gdk_renderer, NULL);
-}
-
-/**
- * gdk_draw_layout_line_with_colors:
- * @drawable:  the drawable on which to draw the line
- * @gc:        base graphics to use
- * @x:         the x position of start of string (in pixels)
- * @y:         the y position of baseline (in pixels)
- * @line:      a #PangoLayoutLine
- * @foreground: (allow-none): foreground override color, or %NULL for none
- * @background: (allow-none): background override color, or %NULL for none
- *
- * Render a #PangoLayoutLine onto a #GdkDrawable, overriding the
- * layout's normal colors with @foreground and/or @background.
- * @foreground and @background need not be allocated.
- *
- * If the layout's #PangoContext has a transformation matrix set, then
- * @x and @y specify the position of the left edge of the baseline
- * (left is in before-tranform user coordinates) in after-transform
- * device coordinates.
- */
-void 
-gdk_draw_layout_line_with_colors (GdkDrawable      *drawable,
-                                  GdkGC            *gc,
-                                  gint              x, 
-                                  gint              y,
-                                  PangoLayoutLine  *line,
-                                  const GdkColor   *foreground,
-                                  const GdkColor   *background)
-{
-  PangoRenderer *renderer;
-  const PangoMatrix *matrix;
-  
-  g_return_if_fail (GDK_IS_DRAWABLE (drawable));
-  g_return_if_fail (GDK_IS_GC (gc));
-  g_return_if_fail (line != NULL);
-
-  renderer = get_renderer (drawable, gc, foreground, background);
-
-  /* When we have a matrix, we do positioning by adjusting the matrix, and
-   * clamp just pass x=0, y=0 to the lower levels. We don't want to introduce
-   * a matrix when the caller didn't provide one, however, since that adds
-   * lots of floating point arithmetic for each glyph.
-   */
-  matrix = pango_context_get_matrix (pango_layout_get_context (line->layout));
-  if (matrix)
-    {
-      PangoMatrix tmp_matrix;
-      
-      tmp_matrix = *matrix;
-      tmp_matrix.x0 += x;
-      tmp_matrix.y0 += y;
-      pango_renderer_set_matrix (renderer, &tmp_matrix);
-
-      x = 0;
-      y = 0;
-    }
-  /* Fall back to introduce a matrix if the coords would scale out of range.
-   * The x and y here will be added to in-layout coordinates.  So we cannot
-   * support the entire range here safely.  So, we just accept the middle half
-   * and use fallback for the rest. */
-  else if (GDK_PANGO_UNITS_OVERFLOWS (x, y))
-    {
-      PangoMatrix tmp_matrix = PANGO_MATRIX_INIT;
-      tmp_matrix.x0 += x;
-      tmp_matrix.y0 += y;
-      pango_renderer_set_matrix (renderer, &tmp_matrix);
-
-      x = 0;
-      y = 0;
-    }
-  else
-    pango_renderer_set_matrix (renderer, NULL);
-
-  pango_renderer_draw_layout_line (renderer, line, x * PANGO_SCALE, y * PANGO_SCALE);
-
-  release_renderer (renderer);
-}
-
-/**
- * gdk_draw_layout_with_colors:
- * @drawable:  the drawable on which to draw string
- * @gc:        base graphics context to use
- * @x:         the X position of the left of the layout (in pixels)
- * @y:         the Y position of the top of the layout (in pixels)
- * @layout:    a #PangoLayout
- * @foreground: (allow-none): foreground override color, or %NULL for none
- * @background: (allow-none): background override color, or %NULL for none
- *
- * Render a #PangoLayout onto a #GdkDrawable, overriding the
- * layout's normal colors with @foreground and/or @background.
- * @foreground and @background need not be allocated.
- *
- * If the layout's #PangoContext has a transformation matrix set, then
- * @x and @y specify the position of the top left corner of the
- * bounding box (in device space) of the transformed layout.
- *
- * If you're using GTK+, the ususal way to obtain a #PangoLayout
- * is gtk_widget_create_pango_layout().
- */
-void 
-gdk_draw_layout_with_colors (GdkDrawable     *drawable,
-                             GdkGC           *gc,
-                             int              x, 
-                             int              y,
-                             PangoLayout     *layout,
-                             const GdkColor  *foreground,
-                             const GdkColor  *background)
-{
-  PangoRenderer *renderer;
-  const PangoMatrix *matrix;
-  
-  g_return_if_fail (GDK_IS_DRAWABLE (drawable));
-  g_return_if_fail (GDK_IS_GC (gc));
-  g_return_if_fail (PANGO_IS_LAYOUT (layout));
-
-  renderer = get_renderer (drawable, gc, foreground, background);
-
-  /* When we have a matrix, we do positioning by adjusting the matrix, and
-   * clamp just pass x=0, y=0 to the lower levels. We don't want to introduce
-   * a matrix when the caller didn't provide one, however, since that adds
-   * lots of floating point arithmetic for each glyph.
-   */
-  matrix = pango_context_get_matrix (pango_layout_get_context (layout));
-  if (matrix)
-    {
-      PangoMatrix tmp_matrix;
-      PangoRectangle rect;
-
-      pango_layout_get_extents (layout, NULL, &rect);
-      pango_matrix_transform_rectangle (matrix, &rect);
-      pango_extents_to_pixels (&rect, NULL);
-      
-      tmp_matrix = *matrix;
-      tmp_matrix.x0 += x - rect.x;
-      tmp_matrix.y0 += y - rect.y;
-      pango_renderer_set_matrix (renderer, &tmp_matrix);
-      
-      x = 0;
-      y = 0;
-    }
-  else if (GDK_PANGO_UNITS_OVERFLOWS (x, y))
-    {
-      PangoMatrix tmp_matrix = PANGO_MATRIX_INIT;
-      tmp_matrix.x0 = x;
-      tmp_matrix.y0 = y;
-      pango_renderer_set_matrix (renderer, &tmp_matrix);
-
-      x = 0;
-      y = 0;
-    }
-  else
-    pango_renderer_set_matrix (renderer, NULL);
-
-  pango_renderer_draw_layout (renderer, layout, x * PANGO_SCALE, y * PANGO_SCALE);
-  
-  release_renderer (renderer);
-}
-
-/**
- * gdk_draw_layout_line:
- * @drawable:  the drawable on which to draw the line
- * @gc:        base graphics to use
- * @x:         the x position of start of string (in pixels)
- * @y:         the y position of baseline (in pixels)
- * @line:      a #PangoLayoutLine
- *
- * Render a #PangoLayoutLine onto an GDK drawable
- *
- * If the layout's #PangoContext has a transformation matrix set, then
- * @x and @y specify the position of the left edge of the baseline
- * (left is in before-tranform user coordinates) in after-transform
- * device coordinates.
- */
-void 
-gdk_draw_layout_line (GdkDrawable      *drawable,
-		      GdkGC            *gc,
-		      gint              x, 
-		      gint              y,
-		      PangoLayoutLine  *line)
-{
-  g_return_if_fail (GDK_IS_DRAWABLE (drawable));
-  g_return_if_fail (GDK_IS_GC (gc));
-  g_return_if_fail (line != NULL);
-  
-  gdk_draw_layout_line_with_colors (drawable, gc, x, y, line, NULL, NULL);
-}
-
-/**
- * gdk_draw_layout:
- * @drawable:  the drawable on which to draw string
- * @gc:        base graphics context to use
- * @x:         the X position of the left of the layout (in pixels)
- * @y:         the Y position of the top of the layout (in pixels)
- * @layout:    a #PangoLayout
- *
- * Render a #PangoLayout onto a GDK drawable
- *
- * If the layout's #PangoContext has a transformation matrix set, then
- * @x and @y specify the position of the top left corner of the
- * bounding box (in device space) of the transformed layout.
- *
- * If you're using GTK+, the usual way to obtain a #PangoLayout
- * is gtk_widget_create_pango_layout().
- */
-void 
-gdk_draw_layout (GdkDrawable     *drawable,
-		 GdkGC           *gc,
-		 int              x, 
-		 int              y,
-		 PangoLayout     *layout)
-{
-  g_return_if_fail (GDK_IS_DRAWABLE (drawable));
-  g_return_if_fail (GDK_IS_GC (gc));
-  g_return_if_fail (PANGO_IS_LAYOUT (layout));
-
-  gdk_draw_layout_with_colors (drawable, gc, x, y, layout, NULL, NULL);
 }
 
 /* GdkPangoAttrStipple */
@@ -1306,8 +1088,8 @@ layout_iter_get_line_clip_region (PangoLayoutIter *iter,
  * @n_ranges: number of ranges in @index_ranges, i.e. half the size of @index_ranges
  * 
  * Obtains a clip region which contains the areas where the given
- * ranges of text would be drawn. @x_origin and @y_origin are the same
- * position you would pass to gdk_draw_layout_line(). @index_ranges
+ * ranges of text would be drawn. @x_origin and @y_origin are the top left
+ * position of the layout. @index_ranges
  * should contain ranges of bytes in the layout's text. The clip
  * region will include space to the left or right of the line (to the
  * layout bounding box) if you have indexes above or below the indexes
@@ -1355,8 +1137,8 @@ gdk_pango_layout_line_get_clip_region (PangoLayoutLine *line,
  * @n_ranges: number of ranges in @index_ranges, i.e. half the size of @index_ranges
  * 
  * Obtains a clip region which contains the areas where the given ranges
- * of text would be drawn. @x_origin and @y_origin are the same position
- * you would pass to gdk_draw_layout_line(). @index_ranges should contain
+ * of text would be drawn. @x_origin and @y_origin are the top left point
+ * to center the layout. @index_ranges should contain
  * ranges of bytes in the layout's text.
  * 
  * Note that the regions returned correspond to logical extents of the text
