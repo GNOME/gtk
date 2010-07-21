@@ -22,34 +22,32 @@
 
 #include "gdkprivate-quartz.h"
 
+/* FIXME: Tis function has never been compiled.
+ * Please make it work. */
 void
-_gdk_quartz_window_queue_translation (GdkWindow *window,
-				      GdkGC     *gc,
-                                      cairo_region_t *area,
-                                      gint       dx,
-                                      gint       dy)
+_gdk_quartz_window_translate (GdkWindow      *window,
+                              cairo_region_t *area,
+                              gint            dx,
+                              gint            dy)
 {
   GdkWindowObject *private = (GdkWindowObject *)window;
   GdkWindowImplQuartz *impl = (GdkWindowImplQuartz *)private->impl;
+  GdkRectangle extents;
 
-  int i, n_rects;
-  cairo_region_t *intersection;
-  GdkRectangle rect;
+  cairo_region_get_extents (area, &extents);
 
-  /* We will intersect the known region that needs display with the given
-   * area.  This intersection will be translated by dx, dy.  For the end
-   * result, we will also set that it needs display.
-   */
+  [window_impl->view scrollRect:NSMakeRect (extents.x, extents.y, extents.width, extents.height)
+                             by:NSMakeSize (dx, dy)];
 
-  if (!impl->needs_display_region)
-    return;
+  if (impl->needs_display_region)
+    {
+      intersection = cairo_region_copy (impl->needs_display_region);
+      cairo_region_intersect_rectangle (intersection, extents);
+      cairo_region_translate (intersection, dx, dy);
 
-  intersection = cairo_region_copy (impl->needs_display_region);
-  cairo_region_intersect (intersection, area);
-  cairo_region_translate (intersection, dx, dy);
-
-  _gdk_quartz_window_set_needs_display_in_region (window, intersection);
-  cairo_region_destroy (intersection);
+      _gdk_quartz_window_set_needs_display_in_region (window, intersection);
+      cairo_region_destroy (intersection);
+    }
 }
 
 gboolean

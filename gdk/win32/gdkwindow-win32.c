@@ -3282,25 +3282,27 @@ _gdk_win32_window_queue_antiexpose (GdkWindow *window,
   return FALSE;
 }
 
-/*
- * queue_translation is meant to only move any outstanding invalid area
- * in the given area by dx,dy. A typical example of when its needed is an
- * app with two toplevels where one (A) overlaps the other (B). If the
- * app first moves A so that B is invalidated and then scrolls B before
- * handling the expose. The scroll operation will copy the invalid area
- * to a new position, but when the invalid area is then exposed it only
- * redraws the old areas not the place where the invalid data was copied
- * by the scroll.
- */
+/* FIXME: Tis function has never been compiled.
+ * Please make it work. */
 static void
-_gdk_win32_window_queue_translation (GdkWindow *window,
-				     GdkGC     *gc,
-				     cairo_region_t *area,
-				     gint       dx,
-				     gint       dy)
+_gdk_win32_window_translate (GdkWindow *window,
+                             cairo_region_t *area,
+                             gint       dx,
+                             gint       dy)
 {
   HRGN hrgn = CreateRectRgn (0, 0, 0, 0);
-  int ret = GetUpdateRgn (GDK_WINDOW_HWND (window), hrgn, FALSE);
+  HDC hdc;
+  int ret;
+  GdkRectangle extents;
+
+  cairo_region_get_extents (area, &extents);
+  hdc = _gdk_win32_drawable_acquire_dc (GDK_DRAWABLE (window));
+  GDI_CALL (BitBlt, (hdc, extents.x, extents.y, extents.width, extents.height,
+		     hdc, extents.x + dx, extents.y + dy, SRCCOPY));
+
+  /* XXX: We probably need to get invalidations for the whole extents and not
+   * just the area as we BitBlt */
+  ret = GetUpdateRgn (GDK_WINDOW_HWND (window), hrgn, FALSE);
   if (ret == ERROR)
     WIN32_API_FAILED ("GetUpdateRgn");
   else if (ret != NULLREGION)
@@ -3374,7 +3376,7 @@ gdk_window_impl_iface_init (GdkWindowImplIface *iface)
   iface->get_deskrelative_origin = gdk_win32_window_get_deskrelative_origin;
   iface->set_static_gravities = gdk_win32_window_set_static_gravities;
   iface->queue_antiexpose = _gdk_win32_window_queue_antiexpose;
-  iface->queue_translation = _gdk_win32_window_queue_translation;
+  iface->translate = _gdk_win32_window_translate;
   iface->destroy = _gdk_win32_window_destroy;
 }
 

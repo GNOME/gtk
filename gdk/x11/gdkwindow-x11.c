@@ -5562,7 +5562,7 @@ gdk_window_impl_iface_init (GdkWindowImplIface *iface)
   iface->input_shape_combine_region = gdk_window_x11_input_shape_combine_region;
   iface->set_static_gravities = gdk_window_x11_set_static_gravities;
   iface->queue_antiexpose = _gdk_x11_window_queue_antiexpose;
-  iface->queue_translation = _gdk_x11_window_queue_translation;
+  iface->translate = _gdk_x11_window_translate;
   iface->destroy = _gdk_x11_window_destroy;
   iface->supports_native_bg = TRUE;
 }

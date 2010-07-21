@@ -226,24 +226,62 @@ gdk_window_queue (GdkWindow          *window,
 }
 
 void
-_gdk_x11_window_queue_translation (GdkWindow *window,
-				   GdkGC     *gc,
-				   cairo_region_t *area,
-				   gint       dx,
-				   gint       dy)
+_gdk_x11_window_translate (GdkWindow      *window,
+                           cairo_region_t *area,
+                           gint            dx,
+                           gint            dy)
 {
-  GdkWindowQueueItem *item = g_new (GdkWindowQueueItem, 1);
-  item->type = GDK_WINDOW_QUEUE_TRANSLATE;
-  item->u.translate.area = area ? cairo_region_copy (area) : NULL;
-  item->u.translate.dx = dx;
-  item->u.translate.dy = dy;
+  GdkWindowQueueItem *item;
+  GdkGC *tmp_gc;
+  GdkRectangle extents;
+  GdkWindowObject *private, *impl;
+  int px, py;
+
+  /* We need to get data from subwindows here, because we might have
+   * shaped a native window over the moving region (with bg none,
+   * so the pixels are still there). In fact we might need to get data
+   * from overlapping native window that are not children of this window,
+   * so we copy from the toplevel with INCLUDE_INFERIORS.
+   */
+  private = impl = (GdkWindowObject *) window;
+  px = py = 0;
+  while (private->parent != NULL &&
+         private->parent->window_type != GDK_WINDOW_ROOT)
+    {
+      dx -= private->parent->abs_x + private->x;
+      dy -= private->parent->abs_y + private->y;
+      private = (GdkWindowObject *) _gdk_window_get_impl_window ((GdkWindow *) private->parent);
+    }
+
+  cairo_region_get_extents (area, &extents);
+
+  tmp_gc = _gdk_drawable_get_subwindow_scratch_gc ((GdkWindow *)private);
+  gdk_gc_set_clip_region (tmp_gc, area);
+
+  cairo_region_translate (area, -dx, -dy); /* Move to source region */
 
   /* Ensure that the gc is flushed so that we get the right
      serial from NextRequest in gdk_window_queue, i.e. the
      the serial for the XCopyArea, not the ones from flushing
      the gc. */
-  _gdk_x11_gc_flush (gc);
+  _gdk_x11_gc_flush (tmp_gc);
+
+  item = g_new (GdkWindowQueueItem, 1);
+  item->type = GDK_WINDOW_QUEUE_TRANSLATE;
+  item->u.translate.area = cairo_region_copy (area);
+  item->u.translate.dx = dx;
+  item->u.translate.dy = dy;
   gdk_window_queue (window, item);
+
+  XCopyArea (GDK_WINDOW_XDISPLAY (impl),
+             GDK_DRAWABLE_IMPL_X11 (private->impl)->xid,
+             GDK_DRAWABLE_IMPL_X11 (impl->impl)->xid,
+             GDK_GC_GET_XGC (tmp_gc),
+             extents.x - dx, extents.y - dy,
+             extents.width, extents.height,
+             extents.x, extents.y);
+
+  gdk_gc_set_clip_region (tmp_gc, NULL);
 }
 
 gboolean

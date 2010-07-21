@@ -121,10 +121,15 @@ struct _GdkWindowImplIface
    * for destroying the region later.
    */
   gboolean     (* queue_antiexpose)     (GdkWindow       *window,
-					 cairo_region_t       *update_area);
-  void         (* queue_translation)    (GdkWindow       *window,
-					 GdkGC           *gc,
-					 cairo_region_t       *area,
+					 cairo_region_t  *update_area);
+
+  /* Called to move @area inside @window by @dx x @dy pixels. @area is 
+   * guaranteed to be inside @window. If part of @area is not invisible or
+   * invalid, it is this function's job to queue expose events in those 
+   * areas.
+   */
+  void         (* translate)            (GdkWindow       *window,
+					 cairo_region_t  *area,
 					 gint            dx,
 					 gint            dy);
 

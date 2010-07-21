@@ -3223,45 +3223,11 @@ do_move_region_bits_on_impl (GdkWindowObject *impl_window,
 			     cairo_region_t *dest_region, /* In impl window coords */
 			     int dx, int dy)
 {
-  GdkGC *tmp_gc;
-  GdkRectangle copy_rect;
-  GdkWindowObject *private;
   GdkWindowImplIface *impl_iface;
 
-  /* We need to get data from subwindows here, because we might have
-   * shaped a native window over the moving region (with bg none,
-   * so the pixels are still there). In fact we might need to get data
-   * from overlapping native window that are not children of this window,
-   * so we copy from the toplevel with INCLUDE_INFERIORS.
-   */
-  private = impl_window;
-  while (!gdk_window_is_toplevel (private))
-    {
-      dx -= private->parent->abs_x + private->x;
-      dy -= private->parent->abs_y + private->y;
-      private = gdk_window_get_impl_window (private->parent);
-    }
-  tmp_gc = _gdk_drawable_get_subwindow_scratch_gc ((GdkWindow *)private);
+  impl_iface = GDK_WINDOW_IMPL_GET_IFACE (impl_window->impl);
 
-  cairo_region_get_extents (dest_region, &copy_rect);
-  gdk_gc_set_clip_region (tmp_gc, dest_region);
-
-  /* The region area is moved and we queue translations for all expose events
-     to the source area that were sent prior to the copy */
-  cairo_region_translate (dest_region, -dx, -dy); /* Move to source region */
-  impl_iface = GDK_WINDOW_IMPL_GET_IFACE (private->impl);
-
-  impl_iface->queue_translation ((GdkWindow *)impl_window,
-				 tmp_gc,
-				 dest_region, dx, dy);
-
-  gdk_draw_drawable (impl_window->impl,
-		     tmp_gc,
-		     private->impl,
-		     copy_rect.x-dx, copy_rect.y-dy,
-		     copy_rect.x, copy_rect.y,
-		     copy_rect.width, copy_rect.height);
-  gdk_gc_set_clip_region (tmp_gc, NULL);
+  impl_iface->translate ((GdkWindow *) impl_window, dest_region, dx, dy);
 }
 
 static GdkWindowRegionMove *
@@ -3271,7 +3237,7 @@ gdk_window_region_move_new (cairo_region_t *region,
   GdkWindowRegionMove *move;
 
   move = g_slice_new (GdkWindowRegionMove);
-  move->dest_region  = cairo_region_copy (region);
+  move->dest_region = cairo_region_copy (region);
   move->dx = dx;
   move->dy = dy;
 

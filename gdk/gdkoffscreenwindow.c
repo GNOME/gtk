@@ -832,12 +832,38 @@ gdk_offscreen_window_queue_antiexpose (GdkWindow *window,
 }
 
 static void
-gdk_offscreen_window_queue_translation (GdkWindow *window,
-					GdkGC     *gc,
-					cairo_region_t *area,
-					gint       dx,
-					gint       dy)
+gdk_offscreen_window_translate (GdkWindow      *window,
+                                cairo_region_t *area,
+                                gint            dx,
+                                gint            dy)
 {
+  cairo_surface_t *surface;
+  cairo_t *cr;
+
+  /* Can't use gdk_cairo_create here due to clipping */
+  surface = _gdk_drawable_ref_cairo_surface (window);
+  cr = cairo_create (surface);
+  cairo_surface_destroy (surface);
+
+  area = cairo_region_copy (area);
+
+  gdk_cairo_region (cr, area);
+  cairo_clip (cr);
+  
+  /* NB: This is a self-copy and Cairo doesn't support that yet.
+   * So we do a litle trick.
+   */
+  cairo_push_group (cr);
+
+  gdk_cairo_set_source_pixmap (cr, window, dx, dy);
+  cairo_paint (cr);
+
+  cairo_pop_group_to_source (cr);
+  cairo_paint (cr);
+
+  cairo_destroy (cr);
+
+  _gdk_window_add_damage (window, area);
 }
 
 /**
@@ -950,7 +976,7 @@ gdk_offscreen_window_impl_iface_init (GdkWindowImplIface *iface)
   iface->input_shape_combine_region = gdk_offscreen_window_input_shape_combine_region;
   iface->set_static_gravities = gdk_offscreen_window_set_static_gravities;
   iface->queue_antiexpose = gdk_offscreen_window_queue_antiexpose;
-  iface->queue_translation = gdk_offscreen_window_queue_translation;
+  iface->translate = gdk_offscreen_window_translate;
   iface->get_root_coords = gdk_offscreen_window_get_root_coords;
   iface->get_deskrelative_origin = gdk_offscreen_window_get_deskrelative_origin;
   iface->get_device_state = gdk_offscreen_window_get_device_state;

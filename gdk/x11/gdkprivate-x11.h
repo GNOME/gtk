@@ -118,8 +118,7 @@ void _gdk_window_process_expose    (GdkWindow     *window,
 
 gboolean _gdk_x11_window_queue_antiexpose  (GdkWindow *window,
 					    cairo_region_t *area);
-void     _gdk_x11_window_queue_translation (GdkWindow *window,
-					    GdkGC     *gc,
+void     _gdk_x11_window_translate         (GdkWindow *window,
 					    cairo_region_t *area,
 					    gint       dx,
 					    gint       dy);
