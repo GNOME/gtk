@@ -692,15 +692,8 @@ gtk_decorated_window_paint (GtkWidget    *widget,
       /* Title */
       if (deco->title_layout)
 	{
-	  if (area)
-	    gdk_gc_set_clip_rectangle (widget->style->fg_gc [border_state], area);
-
-	  gdk_draw_layout (frame,
-			   widget->style->fg_gc [border_state],
-			   DECORATION_BORDER_LEFT, 1,
-			   deco->title_layout);
-	  if (area)
-	    gdk_gc_set_clip_rectangle (widget->style->fg_gc [border_state], NULL);
+          gdk_cairo_set_source_color (cr, widget->style->fg [border_state]);
+          pango_cairo_show_layout (cr, deco->title_layout);
 	}
 
       cairo_destroy (cr);
