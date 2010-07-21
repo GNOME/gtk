@@ -333,9 +333,6 @@ gdk_drawable_get_size
 gdk_drawable_get_clip_region
 gdk_drawable_get_visible_region
 
-<SUBSECTION>
-gdk_draw_drawable
-
 <SUBSECTION Standard>
 GDK_DRAWABLE
 GDK_DRAWABLE_GET_CLASS

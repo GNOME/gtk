@@ -127,19 +127,3 @@ or a #GdkWindow.
 @Returns: 
 
 
-<!-- ##### FUNCTION gdk_draw_drawable ##### -->
-<para>
-
-</para>
-
-@drawable: 
-@gc: 
-@src: 
-@xsrc: 
-@ysrc: 
-@xdest: 
-@ydest: 
-@width: 
-@height: 
-
-

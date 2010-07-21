@@ -60,15 +60,6 @@ struct _GdkDrawableClass
   GdkGC *(*create_gc)    (GdkDrawable    *drawable,
 		          GdkGCValues    *values,
 		          GdkGCValuesMask mask);
-  void (*draw_drawable)  (GdkDrawable  *drawable,
-			  GdkGC	       *gc,
-			  GdkDrawable  *src,
-			  gint		xsrc,
-			  gint		ysrc,
-			  gint		xdest,
-			  gint		ydest,
-			  gint		width,
-			  gint		height);
 
   gint (*get_depth)      (GdkDrawable  *drawable);
   void (*get_size)       (GdkDrawable  *drawable,
@@ -104,17 +95,6 @@ struct _GdkDrawableClass
 					     int width,
 					     int height);
 
-  void (*draw_drawable_with_src)  (GdkDrawable  *drawable,
-				   GdkGC	       *gc,
-				   GdkDrawable  *src,
-				   gint		xsrc,
-				   gint		ysrc,
-				   gint		xdest,
-				   gint		ydest,
-				   gint		width,
-				   gint		height,
-				   GdkDrawable  *original_src);
-
   /* Padding for future expansion */
   void         (*_gdk_reserved7)  (void);
   void         (*_gdk_reserved9)  (void);
@@ -140,18 +120,6 @@ GdkVisual*      gdk_drawable_get_visual   (GdkDrawable	  *drawable);
 gint            gdk_drawable_get_depth    (GdkDrawable	  *drawable);
 GdkScreen*	gdk_drawable_get_screen   (GdkDrawable    *drawable);
 GdkDisplay*	gdk_drawable_get_display  (GdkDrawable    *drawable);
-
-/* Drawing
- */
-void gdk_draw_drawable  (GdkDrawable      *drawable,
-			 GdkGC            *gc,
-			 GdkDrawable      *src,
-			 gint              xsrc,
-			 gint              ysrc,
-			 gint              xdest,
-			 gint              ydest,
-			 gint              width,
-			 gint              height);
 
 cairo_region_t *gdk_drawable_get_clip_region    (GdkDrawable *drawable);
 cairo_region_t *gdk_drawable_get_visible_region (GdkDrawable *drawable);

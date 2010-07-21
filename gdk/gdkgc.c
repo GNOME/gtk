@@ -921,7 +921,7 @@ _gdk_gc_get_subwindow (GdkGC *gc)
  * Sets whether copying non-visible portions of a drawable
  * using this graphics context generate exposure events
  * for the corresponding regions of the destination
- * drawable. (See gdk_draw_drawable()).
+ * drawable.
  **/
 void
 gdk_gc_set_exposures (GdkGC     *gc,

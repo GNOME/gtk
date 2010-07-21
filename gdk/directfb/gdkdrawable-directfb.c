@@ -397,62 +397,6 @@ gdk_directfb_setup_for_drawing (GdkDrawableImplDirectFB *impl,
   return TRUE;
 }
 
-static void
-gdk_directfb_draw_drawable (GdkDrawable *drawable,
-                            GdkGC       *gc,
-                            GdkDrawable *src,
-                            gint         xsrc,
-                            gint         ysrc,
-                            gint         xdest,
-                            gint         ydest,
-                            gint         width,
-                            gint         height)
-{
-  GdkDrawableImplDirectFB *impl;
-  GdkDrawableImplDirectFB *src_impl;
-  cairo_region_t                clip;
-  GdkRectangle             dest_rect = { xdest,
-                                         ydest,
-                xdest + width ,
-                ydest + height};
-
-  DFBRectangle rect = { xsrc, ysrc, width, height };
-  gint i;
-
-  D_DEBUG_AT( GDKDFB_Drawable, "%s( %p, %p, %p, %4d,%4d -> %4d,%4d - %dx%d )\n", G_STRFUNC,
-              drawable, gc, src, xsrc, ysrc, xdest, ydest, width, height );
-
-  impl = GDK_DRAWABLE_IMPL_DIRECTFB (drawable);
-
-  if (!impl->surface)
-    return;
-
-  if (GDK_IS_PIXMAP (src))
-    src_impl = GDK_DRAWABLE_IMPL_DIRECTFB (GDK_PIXMAP_OBJECT (src)->impl);
-  else if (GDK_IS_WINDOW (src))
-    src_impl = GDK_DRAWABLE_IMPL_DIRECTFB (GDK_WINDOW_OBJECT (src)->impl);
-  else if (GDK_IS_DRAWABLE_IMPL_DIRECTFB (src))
-    src_impl = GDK_DRAWABLE_IMPL_DIRECTFB (src);
-  else
-    return;
-
-  gdk_directfb_clip_region (drawable, gc, &dest_rect, &clip);
-
-  impl->surface->SetBlittingFlags (impl->surface, DSBLIT_NOFX);
-
-  for (i = 0; i < clip.numRects; i++)
-    {
-      DFBRegion reg = { clip.rects[i].x1,     clip.rects[i].y1,
-                        clip.rects[i].x2 , clip.rects[i].y2 };
-
-      impl->surface->SetClip (impl->surface, &reg);
-      impl->surface->Blit (impl->surface, src_impl->surface, &rect,
-                           xdest, ydest);
-    }
-
-  temp_region_deinit( &clip );
-}
-
 static inline void
 convert_rgba_pixbuf_to_image (guint32 *src,
                               guint    src_pitch,
@@ -549,7 +493,6 @@ gdk_drawable_impl_directfb_class_init (GdkDrawableImplDirectFBClass *klass)
   object_class->finalize = gdk_drawable_impl_directfb_finalize;
 
   drawable_class->create_gc      = _gdk_directfb_gc_new;
-  drawable_class->draw_drawable  = gdk_directfb_draw_drawable;
 
   drawable_class->ref_cairo_surface = gdk_directfb_ref_cairo_surface;
   drawable_class->set_colormap   = gdk_directfb_set_colormap;

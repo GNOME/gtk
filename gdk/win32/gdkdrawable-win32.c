@@ -48,17 +48,6 @@
   (gcwin32->line_style == GDK_LINE_DOUBLE_DASH ||		\
    (gcwin32->line_style == GDK_LINE_ON_OFF_DASH && gcwin32->pen_dash_offset))
 
-static void gdk_win32_draw_drawable  (GdkDrawable    *drawable,
-				      GdkGC          *gc,
-				      GdkPixmap      *src,
-				      gint            xsrc,
-				      gint            ysrc,
-				      gint            xdest,
-				      gint            ydest,
-				      gint            width,
-				      gint            height,
-				      GdkDrawable    *original_src);
-
 static cairo_surface_t *gdk_win32_ref_cairo_surface (GdkDrawable *drawable);
      
 static void gdk_win32_set_colormap   (GdkDrawable    *drawable,
@@ -88,7 +77,6 @@ _gdk_drawable_impl_win32_class_init (GdkDrawableImplWin32Class *klass)
   object_class->finalize = gdk_drawable_impl_win32_finalize;
 
   drawable_class->create_gc = _gdk_win32_gc_new;
-  drawable_class->draw_drawable_with_src = gdk_win32_draw_drawable;
   
   drawable_class->ref_cairo_surface = gdk_win32_ref_cairo_surface;
   
@@ -432,25 +420,6 @@ widen_bounds (GdkRectangle *bounds,
 }
 
 static void
-gdk_win32_draw_drawable (GdkDrawable *drawable,
-			 GdkGC       *gc,
-			 GdkPixmap   *src,
-			 gint         xsrc,
-			 gint         ysrc,
-			 gint         xdest,
-			 gint         ydest,
-			 gint         width,
-			 gint         height,
-			 GdkDrawable *original_src)
-{
-  g_assert (GDK_IS_DRAWABLE_IMPL_WIN32 (drawable));
-
-  _gdk_win32_blit (FALSE, (GdkDrawableImplWin32 *) drawable,
-		   gc, src, xsrc, ysrc,
-		   xdest, ydest, width, height);
-}
-
-static void
 blit_from_pixmap (gboolean              use_fg_bg,
 		  GdkDrawableImplWin32 *dest,
 		  HDC                   hdc,
@@ -648,158 +617,6 @@ blit_from_window (HDC                   hdc,
     GDI_CALL (SelectPalette, (srcdc, holdpal, FALSE));
   
   GDI_CALL (ReleaseDC, (src->handle, srcdc));
-}
-
-void
-_gdk_win32_blit (gboolean              use_fg_bg,
-		 GdkDrawableImplWin32 *draw_impl,
-		 GdkGC       	      *gc,
-		 GdkDrawable 	      *src,
-		 gint        	       xsrc,
-		 gint        	       ysrc,
-		 gint        	       xdest,
-		 gint        	       ydest,
-		 gint        	       width,
-		 gint        	       height)
-{
-  HDC hdc;
-  HRGN src_rgn, draw_rgn, outside_rgn;
-  RECT r;
-  GdkDrawableImplWin32 *src_impl = NULL;
-  gint src_width, src_height;
-  
-  GDK_NOTE (DRAW, g_print ("_gdk_win32_blit: src:%s %dx%d@%+d%+d\n"
-			   "                 dst:%s @%+d%+d use_fg_bg=%d\n",
-			   _gdk_win32_drawable_description (src),
-			   width, height, xsrc, ysrc,
-			   _gdk_win32_drawable_description (&draw_impl->parent_instance),
-			   xdest, ydest,
-			   use_fg_bg));
-
-  /* If blitting from the root window, take the multi-monitor offset
-   * into account.
-   */
-  if (src == ((GdkWindowObject *)_gdk_root)->impl)
-    {
-      GDK_NOTE (DRAW, g_print ("... offsetting src coords\n"));
-      xsrc -= _gdk_offset_x;
-      ysrc -= _gdk_offset_y;
-    }
-
-  if (GDK_IS_DRAWABLE_IMPL_WIN32 (src))
-    src_impl = (GdkDrawableImplWin32 *) src;
-  else if (GDK_IS_WINDOW (src))
-    src_impl = (GdkDrawableImplWin32 *) GDK_WINDOW_OBJECT (src)->impl;
-  else if (GDK_IS_PIXMAP (src))
-    src_impl = (GdkDrawableImplWin32 *) GDK_PIXMAP_OBJECT (src)->impl;
-  else
-    g_assert_not_reached ();
-
-  if (GDK_IS_WINDOW_IMPL_WIN32 (draw_impl) &&
-      GDK_IS_PIXMAP_IMPL_WIN32 (src_impl))
-    {
-      GdkPixmapImplWin32 *src_pixmap = GDK_PIXMAP_IMPL_WIN32 (src_impl);
-
-      if (xsrc < 0)
-	{
-	  width += xsrc;
-	  xdest -= xsrc;
-	  xsrc = 0;
-	}
-
-      if (ysrc < 0)
-	{
-	  height += ysrc;
-	  ydest -= ysrc;
-	  ysrc = 0;
-	}
-
-      if (xsrc + width > src_pixmap->width)
-	width = src_pixmap->width - xsrc;
-      if (ysrc + height > src_pixmap->height)
-	height = src_pixmap->height - ysrc;
-    }
-
-  hdc = gdk_win32_hdc_get (&draw_impl->parent_instance, gc, GDK_GC_FOREGROUND);
-
-  gdk_drawable_get_size (src_impl->wrapper, &src_width, &src_height);
-
-  if ((src_rgn = CreateRectRgn (0, 0, src_width + 1, src_height + 1)) == NULL)
-    {
-      WIN32_GDI_FAILED ("CreateRectRgn");
-    }
-  else if ((draw_rgn = CreateRectRgn (xsrc, ysrc,
-				      xsrc + width + 1,
-				      ysrc + height + 1)) == NULL)
-    {
-      WIN32_GDI_FAILED ("CreateRectRgn");
-    }
-  else
-    {
-      if (GDK_IS_WINDOW_IMPL_WIN32 (draw_impl))
-	{
-	  int comb;
-	  
-	  /* If we are drawing on a window, calculate the region that is
-	   * outside the source pixmap, and invalidate that, causing it to
-	   * be cleared. Not completely sure whether this is always needed. XXX
-	   */
-	  SetRectEmpty (&r);
-	  outside_rgn = CreateRectRgnIndirect (&r);
-	  
-	  if ((comb = CombineRgn (outside_rgn,
-				  draw_rgn, src_rgn,
-				  RGN_DIFF)) == ERROR)
-	    WIN32_GDI_FAILED ("CombineRgn");
-	  else if (comb != NULLREGION)
-	    {
-	      OffsetRgn (outside_rgn, xdest, ydest);
-	      GDK_NOTE (DRAW, (GetRgnBox (outside_rgn, &r),
-			       g_print ("... InvalidateRgn "
-					"bbox: %ldx%ld@%+ld%+ld\n",
-					r.right - r.left - 1, r.bottom - r.top - 1,
-					r.left, r.top)));
-	      InvalidateRgn (draw_impl->handle, outside_rgn, TRUE);
-	    }
-	  GDI_CALL (DeleteObject, (outside_rgn));
-	}
-
-#if 1 /* Don't know if this is necessary XXX */
-      if (CombineRgn (draw_rgn, draw_rgn, src_rgn, RGN_AND) == COMPLEXREGION)
-	g_warning ("gdk_win32_blit: CombineRgn returned a COMPLEXREGION");
-      
-      GetRgnBox (draw_rgn, &r);
-      if (r.left != xsrc || r.top != ysrc ||
-	  r.right != xsrc + width + 1 || r.bottom != ysrc + height + 1)
-	{
-	  xdest += r.left - xsrc;
-	  xsrc = r.left;
-	  ydest += r.top - ysrc;
-	  ysrc = r.top;
-	  width = r.right - xsrc - 1;
-	  height = r.bottom - ysrc - 1;
-	  
-	  GDK_NOTE (DRAW, g_print ("... restricted to src: %dx%d@%+d%+d, "
-				   "dest: @%+d%+d\n",
-				   width, height, xsrc, ysrc,
-				   xdest, ydest));
-	}
-#endif
-
-      GDI_CALL (DeleteObject, (src_rgn));
-      GDI_CALL (DeleteObject, (draw_rgn));
-    }
-
-  if (draw_impl->handle == src_impl->handle)
-    blit_inside_drawable (hdc, GDK_GC_WIN32 (gc), xsrc, ysrc, xdest, ydest, width, height);
-  else if (GDK_IS_PIXMAP_IMPL_WIN32 (src_impl))
-    blit_from_pixmap (use_fg_bg, draw_impl, hdc,
-		      (GdkPixmapImplWin32 *) src_impl, gc,
-		      xsrc, ysrc, xdest, ydest, width, height);
-  else
-    blit_from_window (hdc, GDK_GC_WIN32 (gc), src_impl, xsrc, ysrc, xdest, ydest, width, height);
-
-  gdk_win32_hdc_release (&draw_impl->parent_instance, gc, GDK_GC_FOREGROUND);
 }
 
 /**

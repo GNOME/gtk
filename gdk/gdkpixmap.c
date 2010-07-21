@@ -34,16 +34,6 @@
 static GdkGC *gdk_pixmap_create_gc      (GdkDrawable     *drawable,
                                          GdkGCValues     *values,
                                          GdkGCValuesMask  mask);
-static void   gdk_pixmap_draw_drawable  (GdkDrawable     *drawable,
-					 GdkGC           *gc,
-					 GdkPixmap       *src,
-					 gint             xsrc,
-					 gint             ysrc,
-					 gint             xdest,
-					 gint             ydest,
-					 gint             width,
-					 gint             height,
-					 GdkPixmap       *original_src);
 
 static void   gdk_pixmap_real_get_size  (GdkDrawable     *drawable,
                                          gint            *width,
@@ -102,7 +92,6 @@ gdk_pixmap_class_init (GdkPixmapObjectClass *klass)
   object_class->finalize = gdk_pixmap_finalize;
 
   drawable_class->create_gc = gdk_pixmap_create_gc;
-  drawable_class->draw_drawable_with_src = gdk_pixmap_draw_drawable;
   drawable_class->get_depth = gdk_pixmap_real_get_depth;
   drawable_class->get_screen = gdk_pixmap_real_get_screen;
   drawable_class->get_size = gdk_pixmap_real_get_size;
@@ -179,30 +168,6 @@ gdk_pixmap_create_gc (GdkDrawable     *drawable,
 {
   return gdk_gc_new_with_values (((GdkPixmapObject *) drawable)->impl,
                                  values, mask);
-}
-
-static void
-gdk_pixmap_draw_drawable (GdkDrawable *drawable,
-			  GdkGC       *gc,
-			  GdkPixmap   *src,
-			  gint         xsrc,
-			  gint         ysrc,
-			  gint         xdest,
-			  gint         ydest,
-			  gint         width,
-			  gint         height,
-			  GdkPixmap   *original_src)
-{
-  GdkPixmapObject *private = (GdkPixmapObject *)drawable;
-
-  _gdk_gc_remove_drawable_clip (gc);
-  /* Call the method directly to avoid getting the composite drawable again */
-  GDK_DRAWABLE_GET_CLASS (private->impl)->draw_drawable_with_src (private->impl, gc,
-								  src,
-								  xsrc, ysrc,
-								  xdest, ydest,
-								  width, height,
-								  original_src);
 }
 
 static void

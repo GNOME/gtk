@@ -273,37 +273,6 @@ add_damage (GdkOffscreenWindow *offscreen,
   cairo_region_destroy (damage);
 }
 
-static GdkDrawable *
-get_real_drawable (GdkOffscreenWindow *offscreen)
-{
-  GdkPixmapObject *pixmap;
-  pixmap = (GdkPixmapObject *) offscreen->pixmap;
-  return GDK_DRAWABLE (pixmap->impl);
-}
-
-static void
-gdk_offscreen_window_draw_drawable (GdkDrawable *drawable,
-				    GdkGC       *gc,
-				    GdkPixmap   *src,
-				    gint         xsrc,
-				    gint         ysrc,
-				    gint         xdest,
-				    gint         ydest,
-				    gint         width,
-				    gint         height,
-				    GdkDrawable *original_src)
-{
-  GdkOffscreenWindow *offscreen = GDK_OFFSCREEN_WINDOW (drawable);
-  GdkDrawable *real_drawable = get_real_drawable (offscreen);
-
-  gdk_draw_drawable (real_drawable, gc,
-		     src, xsrc, ysrc,
-		     xdest, ydest,
-		     width, height);
-
-  add_damage (offscreen, xdest, ydest, width, height, FALSE);
-}
-
 void
 _gdk_offscreen_window_new (GdkWindow     *window,
 			   GdkScreen     *screen,
@@ -953,8 +922,6 @@ gdk_offscreen_window_class_init (GdkOffscreenWindowClass *klass)
   drawable_class->get_visual = gdk_offscreen_window_get_visual;
   drawable_class->get_source_drawable = gdk_offscreen_window_get_source_drawable;
   drawable_class->get_composite_drawable = gdk_offscreen_window_get_composite_drawable;
-
-  drawable_class->draw_drawable_with_src = gdk_offscreen_window_draw_drawable;
 }
 
 static void

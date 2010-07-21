@@ -48,17 +48,6 @@
 #include "gdkdisplay-x11.h"
 
 
-static void gdk_x11_draw_drawable  (GdkDrawable    *drawable,
-				    GdkGC          *gc,
-				    GdkPixmap      *src,
-				    gint            xsrc,
-				    gint            ysrc,
-				    gint            xdest,
-				    gint            ydest,
-				    gint            width,
-				    gint            height,
-				    GdkDrawable    *original_src);
-
 static cairo_surface_t *gdk_x11_ref_cairo_surface (GdkDrawable *drawable);
      
 static void gdk_x11_set_colormap   (GdkDrawable    *drawable,
@@ -84,7 +73,6 @@ _gdk_drawable_impl_x11_class_init (GdkDrawableImplX11Class *klass)
   object_class->finalize = gdk_drawable_impl_x11_finalize;
   
   drawable_class->create_gc = _gdk_x11_gc_new;
-  drawable_class->draw_drawable_with_src = gdk_x11_draw_drawable;
   
   drawable_class->ref_cairo_surface = gdk_x11_ref_cairo_surface;
 
@@ -275,95 +263,6 @@ gdk_x11_set_colormap (GdkDrawable *drawable,
   impl->colormap = colormap;
   if (impl->colormap)
     g_object_ref (impl->colormap);
-}
-
-/* Drawing
- */
-
-static void
-gdk_x11_draw_drawable (GdkDrawable *drawable,
-		       GdkGC       *gc,
-		       GdkPixmap   *src,
-		       gint         xsrc,
-		       gint         ysrc,
-		       gint         xdest,
-		       gint         ydest,
-		       gint         width,
-		       gint         height,
-		       GdkDrawable *original_src)
-{
-  int src_depth = gdk_drawable_get_depth (src);
-  int dest_depth = gdk_drawable_get_depth (drawable);
-  GdkDrawableImplX11 *impl;
-  GdkDrawableImplX11 *src_impl;
-  
-  impl = GDK_DRAWABLE_IMPL_X11 (drawable);
-
-  if (GDK_IS_DRAWABLE_IMPL_X11 (src))
-    src_impl = GDK_DRAWABLE_IMPL_X11 (src);
-  else if (GDK_IS_WINDOW (src))
-    src_impl = GDK_DRAWABLE_IMPL_X11(((GdkWindowObject *)src)->impl);
-  else
-    src_impl = GDK_DRAWABLE_IMPL_X11(((GdkPixmapObject *)src)->impl);
-
-  if (GDK_IS_WINDOW_IMPL_X11 (impl) &&
-      GDK_IS_PIXMAP_IMPL_X11 (src_impl))
-    {
-      GdkPixmapImplX11 *src_pixmap = GDK_PIXMAP_IMPL_X11 (src_impl);
-      /* Work around an Xserver bug where non-visible areas from
-       * a pixmap to a window will clear the window background
-       * in destination areas that are supposed to be clipped out.
-       * This is a problem with client side windows as this means
-       * things may draw outside the virtual windows. This could
-       * also happen for window to window copies, but I don't
-       * think we generate any calls like that.
-       *
-       * See: 
-       * http://lists.freedesktop.org/archives/xorg/2009-February/043318.html
-       */
-      if (xsrc < 0)
-	{
-	  width += xsrc;
-	  xdest -= xsrc;
-	  xsrc = 0;
-	}
-      
-      if (ysrc < 0)
-	{
-	  height += ysrc;
-	  ydest -= ysrc;
-	  ysrc = 0;
-	}
-
-      if (xsrc + width > src_pixmap->width)
-	width = src_pixmap->width - xsrc;
-      if (ysrc + height > src_pixmap->height)
-	height = src_pixmap->height - ysrc;
-    }
-  
-  if (src_depth == 1)
-    {
-      XCopyArea (GDK_SCREEN_XDISPLAY (impl->screen),
-                 src_impl->xid,
-		 impl->xid,
-		 GDK_GC_GET_XGC (gc),
-		 xsrc, ysrc,
-		 width, height,
-		 xdest, ydest);
-    }
-  else if (dest_depth != 0 && src_depth == dest_depth)
-    {
-      XCopyArea (GDK_SCREEN_XDISPLAY (impl->screen),
-                 src_impl->xid,
-		 impl->xid,
-		 GDK_GC_GET_XGC (gc),
-		 xsrc, ysrc,
-		 width, height,
-		 xdest, ydest);
-    }
-  else
-    g_warning ("Attempt to draw a drawable with depth %d to a drawable with depth %d",
-               src_depth, dest_depth);
 }
 
 static gint

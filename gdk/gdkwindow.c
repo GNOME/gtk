@@ -229,16 +229,6 @@ typedef struct {
 static GdkGC *gdk_window_create_gc      (GdkDrawable     *drawable,
 					 GdkGCValues     *values,
 					 GdkGCValuesMask  mask);
-static void   gdk_window_draw_drawable  (GdkDrawable     *drawable,
-					 GdkGC           *gc,
-					 GdkPixmap       *src,
-					 gint             xsrc,
-					 gint             ysrc,
-					 gint             xdest,
-					 gint             ydest,
-					 gint             width,
-					 gint             height,
-					 GdkDrawable     *original_src);
 
 static cairo_surface_t *gdk_window_ref_cairo_surface (GdkDrawable *drawable);
 static cairo_surface_t *gdk_window_create_cairo_surface (GdkDrawable *drawable,
@@ -417,7 +407,6 @@ gdk_window_class_init (GdkWindowObjectClass *klass)
   object_class->get_property = gdk_window_get_property;
 
   drawable_class->create_gc = gdk_window_create_gc;
-  drawable_class->draw_drawable_with_src = gdk_window_draw_drawable;
   drawable_class->get_depth = gdk_window_real_get_depth;
   drawable_class->get_screen = gdk_window_real_get_screen;
   drawable_class->get_size = gdk_window_real_get_size;
@@ -4031,95 +4020,6 @@ gdk_window_get_visible_region (GdkDrawable *drawable)
   GdkWindowObject *private = (GdkWindowObject*) drawable;
 
   return cairo_region_copy (private->clip_region);
-}
-
-static void
-gdk_window_draw_drawable (GdkDrawable *drawable,
-			  GdkGC       *gc,
-			  GdkPixmap   *src,
-			  gint         xsrc,
-			  gint         ysrc,
-			  gint         xdest,
-			  gint         ydest,
-			  gint         width,
-			  gint         height,
-			  GdkDrawable *original_src)
-{
-  GdkWindowObject *private = (GdkWindowObject *)drawable;
-
-  if (GDK_WINDOW_DESTROYED (drawable))
-    return;
-
-  BEGIN_DRAW;
-
-  /* Call the method directly to avoid getting the composite drawable again */
-  GDK_DRAWABLE_GET_CLASS (impl)->draw_drawable_with_src (impl, gc,
-							 src,
-							 xsrc, ysrc,
-							 xdest - x_offset,
-							 ydest - y_offset,
-							 width, height,
-							 original_src);
-
-  if (!private->paint_stack)
-    {
-      /* We might have drawn from an obscured part of a client
-	 side window, if so we need to send graphics exposures */
-      if (_gdk_gc_get_exposures (gc) &&
-	  GDK_IS_WINDOW (original_src))
-	{
-	  cairo_region_t *exposure_region;
-	  cairo_region_t *clip;
-	  GdkRectangle r;
-
-	  r.x = xdest;
-	  r.y = ydest;
-	  r.width = width;
-	  r.height = height;
-	  exposure_region = cairo_region_create_rectangle (&r);
-
-	  if (_gdk_gc_get_subwindow (gc) == GDK_CLIP_BY_CHILDREN)
-	    clip = private->clip_region_with_children;
-	  else
-	    clip = private->clip_region;
-	  cairo_region_intersect (exposure_region, clip);
-
-	  _gdk_gc_remove_drawable_clip (gc);
-	  clip = _gdk_gc_get_clip_region (gc);
-	  if (clip)
-	    {
-	      cairo_region_translate (exposure_region,
-				 old_clip_x,
-				 old_clip_y);
-	      cairo_region_intersect (exposure_region, clip);
-	      cairo_region_translate (exposure_region,
-				 -old_clip_x,
-				 -old_clip_y);
-	    }
-
-	  /* Note: We don't clip by the clip mask if set, so this
-	     may invalidate to much */
-
-	  /* Remove the area that is correctly copied from the src.
-	   * Note that xsrc/ysrc has been corrected for abs_x/y offsets already,
-	   * which need to be undone */
-	  clip = gdk_drawable_get_visible_region (original_src);
-	  cairo_region_translate (clip,
-			     xdest - (xsrc - GDK_WINDOW_OBJECT (original_src)->abs_x),
-			     ydest - (ysrc - GDK_WINDOW_OBJECT (original_src)->abs_y));
-	  cairo_region_subtract (exposure_region, clip);
-	  cairo_region_destroy (clip);
-
-	  gdk_window_invalidate_region_full (GDK_WINDOW (private),
-					      exposure_region,
-					      _gdk_gc_get_subwindow (gc) == GDK_INCLUDE_INFERIORS,
-					      CLEAR_BG_ALL);
-
-	  cairo_region_destroy (exposure_region);
-	}
-    }
-
-  END_DRAW;
 }
 
 static cairo_t *

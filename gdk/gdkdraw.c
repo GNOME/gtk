@@ -44,15 +44,6 @@ static GdkDrawable* gdk_drawable_real_get_composite_drawable (GdkDrawable  *draw
 							      gint         *composite_x_offset,
 							      gint         *composite_y_offset);
 static cairo_region_t *  gdk_drawable_real_get_visible_region     (GdkDrawable  *drawable);
-static void         gdk_drawable_real_draw_drawable          (GdkDrawable  *drawable,
-							      GdkGC	   *gc,
-							      GdkDrawable  *src,
-							      gint          xsrc,
-							      gint	    ysrc,
-							      gint	    xdest,
-							      gint	    ydest,
-							      gint	    width,
-							      gint	    height);
      
 
 G_DEFINE_ABSTRACT_TYPE (GdkDrawable, gdk_drawable, G_TYPE_OBJECT)
@@ -64,7 +55,6 @@ gdk_drawable_class_init (GdkDrawableClass *klass)
   /* Default implementation for clip and visible region is the same */
   klass->get_clip_region = gdk_drawable_real_get_visible_region;
   klass->get_visible_region = gdk_drawable_real_get_visible_region;
-  klass->draw_drawable = gdk_drawable_real_draw_drawable;
 }
 
 static void
@@ -211,100 +201,6 @@ gdk_drawable_get_colormap (GdkDrawable *drawable)
   return GDK_DRAWABLE_GET_CLASS (drawable)->get_colormap (drawable);
 }
 
-/* Drawing
- */
-
-/**
- * gdk_draw_drawable:
- * @drawable: a #GdkDrawable
- * @gc: a #GdkGC sharing the drawable's visual and colormap
- * @src: the source #GdkDrawable, which may be the same as @drawable
- * @xsrc: X position in @src of rectangle to draw
- * @ysrc: Y position in @src of rectangle to draw
- * @xdest: X position in @drawable where the rectangle should be drawn
- * @ydest: Y position in @drawable where the rectangle should be drawn
- * @width: width of rectangle to draw, or -1 for entire @src width
- * @height: height of rectangle to draw, or -1 for entire @src height
- *
- * Copies the @width x @height region of @src at coordinates (@xsrc,
- * @ysrc) to coordinates (@xdest, @ydest) in @drawable.
- * @width and/or @height may be given as -1, in which case the entire
- * @src drawable will be copied.
- *
- * Most fields in @gc are not used for this operation, but notably the
- * clip mask or clip region will be honored.
- *
- * The source and destination drawables must have the same visual and
- * colormap, or errors will result. (On X11, failure to match
- * visual/colormap results in a BadMatch error from the X server.)
- * A common cause of this problem is an attempt to draw a bitmap to
- * a color drawable. The way to draw a bitmap is to set the bitmap as 
- * the stipple on the #GdkGC, set the fill mode to %GDK_STIPPLED, and 
- * then draw the rectangle.
- **/
-void
-gdk_draw_drawable (GdkDrawable *drawable,
-		   GdkGC       *gc,
-		   GdkDrawable *src,
-		   gint         xsrc,
-		   gint         ysrc,
-		   gint         xdest,
-		   gint         ydest,
-		   gint         width,
-		   gint         height)
-{
-  GdkDrawable *composite;
-  gint composite_x_offset = 0;
-  gint composite_y_offset = 0;
-
-  g_return_if_fail (GDK_IS_DRAWABLE (drawable));
-  g_return_if_fail (GDK_IS_DRAWABLE (src));
-  g_return_if_fail (GDK_IS_GC (gc));
-
-  if (width < 0 || height < 0)
-    {
-      gint real_width;
-      gint real_height;
-      
-      gdk_drawable_get_size (src, &real_width, &real_height);
-
-      if (width < 0)
-        width = real_width;
-      if (height < 0)
-        height = real_height;
-    }
-
-
-  composite =
-    GDK_DRAWABLE_GET_CLASS (src)->get_composite_drawable (src,
-                                                          xsrc, ysrc,
-                                                          width, height,
-                                                          &composite_x_offset,
-                                                          &composite_y_offset);
-
-  /* TODO: For non-native windows this may copy stuff from other overlapping
-     windows. We should clip that and (for windows with bg != None) clear that
-     area in the destination instead. */
-
-  if (GDK_DRAWABLE_GET_CLASS (drawable)->draw_drawable_with_src)
-    GDK_DRAWABLE_GET_CLASS (drawable)->draw_drawable_with_src (drawable, gc,
-							       composite,
-							       xsrc - composite_x_offset,
-							       ysrc - composite_y_offset,
-							       xdest, ydest,
-							       width, height,
-							       src);
-  else /* backwards compat for old out-of-tree implementations of GdkDrawable (are there any?) */
-    GDK_DRAWABLE_GET_CLASS (drawable)->draw_drawable (drawable, gc,
-						      composite,
-						      xsrc - composite_x_offset,
-						      ysrc - composite_y_offset,
-						      xdest, ydest,
-						      width, height);
-
-  g_object_unref (composite);
-}
-
 static GdkDrawable *
 gdk_drawable_real_get_composite_drawable (GdkDrawable *drawable,
                                           gint         x,
@@ -394,31 +290,6 @@ _gdk_drawable_ref_cairo_surface (GdkDrawable *drawable)
   g_return_val_if_fail (GDK_IS_DRAWABLE (drawable), NULL);
 
   return GDK_DRAWABLE_GET_CLASS (drawable)->ref_cairo_surface (drawable);
-}
-
-/* Implementation of the old vfunc in terms of the new one
-   in case someone calls it directly (which they shouldn't!) */
-static void
-gdk_drawable_real_draw_drawable (GdkDrawable  *drawable,
-				 GdkGC	       *gc,
-				 GdkDrawable  *src,
-				 gint		xsrc,
-				 gint		ysrc,
-				 gint		xdest,
-				 gint		ydest,
-				 gint		width,
-				 gint		height)
-{
-  GDK_DRAWABLE_GET_CLASS (drawable)->draw_drawable_with_src (drawable,
-							     gc,
-							     src,
-							     xsrc,
-							     ysrc,
-							     xdest,
-							     ydest,
-							     width,
-							     height,
-							     src);
 }
 
 /************************************************************************/
