@@ -109,10 +109,8 @@ struct _GtkTextTag
    * this tag does not affect it.
    */
   guint GSEAL (bg_color_set) : 1;
-  guint GSEAL (bg_stipple_set) : 1;
   guint GSEAL (fg_color_set) : 1;
   guint GSEAL (scale_set) : 1;
-  guint GSEAL (fg_stipple_set) : 1;
   guint GSEAL (justification_set) : 1;
   guint GSEAL (left_margin_set) : 1;
   guint GSEAL (indent_set) : 1;
@@ -174,8 +172,6 @@ struct _GtkTextAppearance
   /*< public >*/
   GdkColor bg_color;
   GdkColor fg_color;
-  GdkBitmap *bg_stipple;
-  GdkBitmap *fg_stipple;
 
   /* super/subscript rise, can be negative */
   gint rise;

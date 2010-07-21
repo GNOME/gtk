@@ -184,7 +184,6 @@ gtk_text_renderer_prepare_run (PangoRenderer  *renderer,
   GtkTextRenderer *text_renderer = GTK_TEXT_RENDERER (renderer);
   GdkPangoRenderer *gdk_renderer = GDK_PANGO_RENDERER (renderer);
   GdkColor *bg_color, *fg_color, *underline_color;
-  GdkPixmap *fg_stipple, *bg_stipple;
   GtkTextAppearance *appearance;
 
   PANGO_RENDERER_CLASS (_gtk_text_renderer_parent_class)->prepare_run (renderer, run);
@@ -220,31 +219,6 @@ gtk_text_renderer_prepare_run (PangoRenderer  *renderer,
     underline_color = fg_color;
 
   text_renderer_set_gdk_color (text_renderer, PANGO_RENDER_PART_UNDERLINE, underline_color);
-
-  fg_stipple = appearance->fg_stipple;
-  if (fg_stipple && text_renderer->screen != gdk_drawable_get_screen (fg_stipple))
-    {
-      g_warning ("gtk_text_renderer_prepare_run:\n"
-		 "The foreground stipple bitmap has been created on the wrong screen.\n"
-		 "Ignoring the stipple bitmap information.");
-      fg_stipple = NULL;
-    }
-      
-  gdk_pango_renderer_set_stipple (gdk_renderer, PANGO_RENDER_PART_FOREGROUND, fg_stipple);
-  gdk_pango_renderer_set_stipple (gdk_renderer, PANGO_RENDER_PART_STRIKETHROUGH, fg_stipple);
-  gdk_pango_renderer_set_stipple (gdk_renderer, PANGO_RENDER_PART_UNDERLINE, fg_stipple);
-
-  bg_stipple = appearance->draw_bg ? appearance->bg_stipple : NULL;
-  
-  if (bg_stipple && text_renderer->screen != gdk_drawable_get_screen (bg_stipple))
-    {
-      g_warning ("gtk_text_renderer_prepare_run:\n"
-		 "The background stipple bitmap has been created on the wrong screen.\n"
-		 "Ignoring the stipple bitmap information.");
-      bg_stipple = NULL;
-    }
-  
-  gdk_pango_renderer_set_stipple (gdk_renderer, PANGO_RENDER_PART_BACKGROUND, bg_stipple);
 }
 
 static void

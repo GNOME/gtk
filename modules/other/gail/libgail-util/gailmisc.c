@@ -640,12 +640,6 @@ gail_misc_add_to_attr_set (AtkAttributeSet   *attrib_set,
                                attrs->appearance.fg_color.green,
                                attrs->appearance.fg_color.blue);
       break;
-    case ATK_TEXT_ATTR_BG_STIPPLE:
-      value = g_strdup (atk_text_attribute_get_value (attr, attrs->appearance.bg_stipple ? 1 : 0));
-      break;
-    case ATK_TEXT_ATTR_FG_STIPPLE:
-      value = g_strdup (atk_text_attribute_get_value (attr, attrs->appearance.fg_stipple ? 1 : 0));
-      break;
     case ATK_TEXT_ATTR_WRAP_MODE:
       value = g_strdup (atk_text_attribute_get_value (attr, attrs->wrap_mode));
       break;
@@ -810,32 +804,6 @@ gail_misc_buffer_get_run_attributes (GtkTextBuffer *buffer,
       if (val_set)
         attrib_set = gail_misc_add_to_attr_set (attrib_set, tag->values, 
                                                 ATK_TEXT_ATTR_WRAP_MODE);
-      temp_tags = temp_tags->next;
-    }
-  val_set = FALSE;
-
-  temp_tags = tags;
-  while (temp_tags && !val_set)
-    {
-      GtkTextTag *tag = GTK_TEXT_TAG (temp_tags->data);
-
-      val_set = tag->fg_stipple_set;
-      if (val_set)
-        attrib_set = gail_misc_add_to_attr_set (attrib_set, tag->values, 
-                                                ATK_TEXT_ATTR_FG_STIPPLE);
-      temp_tags = temp_tags->next;
-    }
-  val_set = FALSE;
-
-  temp_tags = tags;
-  while (temp_tags && !val_set)
-    {
-      GtkTextTag *tag = GTK_TEXT_TAG (temp_tags->data);
-
-      val_set = tag->bg_stipple_set;
-      if (val_set)
-        attrib_set = gail_misc_add_to_attr_set (attrib_set, tag->values, 
-                                                ATK_TEXT_ATTR_BG_STIPPLE);
       temp_tags = temp_tags->next;
     }
   val_set = FALSE;
