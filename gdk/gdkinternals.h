@@ -327,13 +327,6 @@ cairo_surface_t * _gdk_drawable_create_cairo_surface (GdkDrawable *drawable,
 /* GC caching */
 GdkGC *_gdk_drawable_get_subwindow_scratch_gc (GdkDrawable *drawable);
 
-void _gdk_gc_update_context (GdkGC          *gc,
-			     cairo_t        *cr,
-			     const GdkColor *override_foreground,
-			     GdkBitmap      *override_stipple,
-			     gboolean        gc_changed,
-			     GdkDrawable    *target_drawable);
-
 /*************************************
  * Interfaces used by windowing code *
  *************************************/

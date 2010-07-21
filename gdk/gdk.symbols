@@ -870,20 +870,10 @@ gdk_visual_get_type G_GNUC_CONST
 
 #if IN_HEADER(__GDK_PANGO_H__)
 #if IN_FILE(__GDK_PANGO_C__)
-gdk_pango_attr_emboss_color_new
-gdk_pango_attr_embossed_new
-gdk_pango_attr_stipple_new
 gdk_pango_context_get
 gdk_pango_context_get_for_screen
 gdk_pango_layout_get_clip_region
 gdk_pango_layout_line_get_clip_region
-gdk_pango_renderer_get_default
-gdk_pango_renderer_get_type G_GNUC_CONST
-gdk_pango_renderer_new
-gdk_pango_renderer_set_drawable
-gdk_pango_renderer_set_gc
-gdk_pango_renderer_set_override_color
-gdk_pango_renderer_set_stipple
 #endif
 #endif
 
