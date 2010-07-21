@@ -290,7 +290,7 @@ gdk_window_impl_quartz_begin_paint_region (GdkPaintable    *paintable,
       int x_offset, y_offset;
       int width, height;
       cairo_rectangle_int_t rect;
-      GdkGC *gc;
+      cairo_t *cr;
 
       x_offset = y_offset = 0;
 
@@ -314,32 +314,16 @@ gdk_window_impl_quartz_begin_paint_region (GdkPaintable    *paintable,
           goto done;
         }
 
-      /* Note: There should be a CG API to draw tiled images, we might
-       * want to look into that for this. 
-       */
-      gc = gdk_gc_new (GDK_DRAWABLE (impl));
-
       gdk_drawable_get_size (GDK_DRAWABLE (bg_pixmap), &width, &height);
 
-      x = -x_offset;
-      cairo_region_get_rectangle (clipped_and_offset_region, 0, &rect);
-      while (x < (rect.x + rect.width))
-        {
-          if (x + width >= rect.x)
-	    {
-              y = -y_offset;
-              while (y < (rect.y + rect.height))
-                {
-                  if (y + height >= rect.y)
-                    gdk_draw_drawable (GDK_DRAWABLE (impl), gc, bg_pixmap, 0, 0, x, y, width, height);
-		  
-                  y += height;
-                }
-            }
-          x += width;
-        }
+      cr = gdk_cairo_create (impl);
+      
+      gdk_cairo_set_source_pixmap (cr, bg_pixmap, x_offset, y_offset);
+      cairo_pattern_set_extend (cairo_get_source (cr), CAIRO_EXTEND_REPEAT);
+      gdk_cairo_region (cr, clipped_and_offset_region);
+      cairo_fill (cr);
 
-      g_object_unref (gc);
+      cairo_destroy (cr);
     }
 
  done:
