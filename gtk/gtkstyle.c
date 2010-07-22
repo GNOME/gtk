@@ -29,7 +29,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include <gobject/gvaluecollector.h>
-#include "gtkgc.h"
 #include "gtkmarshalers.h"
 #include "gtkrc.h"
 #include "gtkspinbutton.h"
@@ -331,7 +330,7 @@ static void hls_to_rgb			(gdouble	 *h,
 					 gdouble	 *l,
 					 gdouble	 *s);
 
-static void style_unrealize_cursor_gcs (GtkStyle *style);
+static void style_unrealize_cursors     (GtkStyle *style);
 
 /*
  * Data for default check and radio buttons
@@ -432,9 +431,6 @@ gtk_style_init (GtkStyle *style)
   style->white.green = 65535;
   style->white.blue = 65535;
   
-  style->black_gc = NULL;
-  style->white_gc = NULL;
-  
   style->fg[GTK_STATE_NORMAL] = gtk_default_normal_fg;
   style->fg[GTK_STATE_ACTIVE] = gtk_default_active_fg;
   style->fg[GTK_STATE_PRELIGHT] = gtk_default_prelight_fg;
@@ -465,18 +461,6 @@ gtk_style_init (GtkStyle *style)
   
   style->rc_style = NULL;
   
-  for (i = 0; i < 5; i++)
-    {
-      style->fg_gc[i] = NULL;
-      style->bg_gc[i] = NULL;
-      style->light_gc[i] = NULL;
-      style->dark_gc[i] = NULL;
-      style->mid_gc[i] = NULL;
-      style->text_gc[i] = NULL;
-      style->base_gc[i] = NULL;
-      style->text_aa_gc[i] = NULL;
-    }
-
   style->xthickness = 2;
   style->ythickness = 2;
 
@@ -545,7 +529,7 @@ gtk_style_class_init (GtkStyleClass *klass)
    *
    * Emitted when the aspects of the style specific to a particular colormap
    * and depth are being cleaned up. A connection to this signal can be useful
-   * if a widget wants to cache objects like a #GdkGC as object data on #GtkStyle.
+   * if a widget wants to cache objects as object data on #GtkStyle.
    * This signal provides a convenient place to free such cached objects.
    *
    * Since: 2.4
@@ -1272,9 +1256,6 @@ load_bg_image (GdkColormap *colormap,
 static void
 gtk_style_real_realize (GtkStyle *style)
 {
-  GdkGCValues gc_values;
-  GdkGCValuesMask gc_values_mask;
-  
   gint i;
 
   for (i = 0; i < 5; i++)
@@ -1300,18 +1281,6 @@ gtk_style_real_realize (GtkStyle *style)
   style->white.green = 0xffff;
   style->white.blue = 0xffff;
   gdk_colormap_alloc_color (style->colormap, &style->white, FALSE, TRUE);
-
-  gc_values_mask = GDK_GC_FOREGROUND | GDK_GC_BACKGROUND;
-  
-  gc_values.foreground = style->black;
-  gc_values.background = style->white;
-  style->black_gc = gtk_gc_get (style->depth, style->colormap, &gc_values, gc_values_mask);
-  
-  gc_values.foreground = style->white;
-  gc_values.background = style->black;
-  style->white_gc = gtk_gc_get (style->depth, style->colormap, &gc_values, gc_values_mask);
-  
-  gc_values_mask = GDK_GC_FOREGROUND;
 
   for (i = 0; i < 5; i++)
     {
@@ -1344,30 +1313,6 @@ gtk_style_real_realize (GtkStyle *style)
       if (!gdk_colormap_alloc_color (style->colormap, &style->text_aa[i], FALSE, TRUE))
         g_warning ("unable to allocate color: ( %d %d %d )",
                    style->text_aa[i].red, style->text_aa[i].green, style->text_aa[i].blue);
-      
-      gc_values.foreground = style->fg[i];
-      style->fg_gc[i] = gtk_gc_get (style->depth, style->colormap, &gc_values, gc_values_mask);
-      
-      gc_values.foreground = style->bg[i];
-      style->bg_gc[i] = gtk_gc_get (style->depth, style->colormap, &gc_values, gc_values_mask);
-      
-      gc_values.foreground = style->light[i];
-      style->light_gc[i] = gtk_gc_get (style->depth, style->colormap, &gc_values, gc_values_mask);
-      
-      gc_values.foreground = style->dark[i];
-      style->dark_gc[i] = gtk_gc_get (style->depth, style->colormap, &gc_values, gc_values_mask);
-      
-      gc_values.foreground = style->mid[i];
-      style->mid_gc[i] = gtk_gc_get (style->depth, style->colormap, &gc_values, gc_values_mask);
-      
-      gc_values.foreground = style->text[i];
-      style->text_gc[i] = gtk_gc_get (style->depth, style->colormap, &gc_values, gc_values_mask);
-      
-      gc_values.foreground = style->base[i];
-      style->base_gc[i] = gtk_gc_get (style->depth, style->colormap, &gc_values, gc_values_mask);
-
-      gc_values.foreground = style->text_aa[i];
-      style->text_aa_gc[i] = gtk_gc_get (style->depth, style->colormap, &gc_values, gc_values_mask);
     }
 }
 
@@ -1376,20 +1321,8 @@ gtk_style_real_unrealize (GtkStyle *style)
 {
   int i;
 
-  gtk_gc_release (style->black_gc);
-  gtk_gc_release (style->white_gc);
-      
   for (i = 0; i < 5; i++)
     {
-      gtk_gc_release (style->fg_gc[i]);
-      gtk_gc_release (style->bg_gc[i]);
-      gtk_gc_release (style->light_gc[i]);
-      gtk_gc_release (style->dark_gc[i]);
-      gtk_gc_release (style->mid_gc[i]);
-      gtk_gc_release (style->text_gc[i]);
-      gtk_gc_release (style->base_gc[i]);
-      gtk_gc_release (style->text_aa_gc[i]);
-
       if (style->bg_pixmap[i] &&  style->bg_pixmap[i] != (GdkPixmap*) GDK_PARENT_RELATIVE)
 	{
 	  g_object_unref (style->bg_pixmap[i]);
@@ -1407,7 +1340,7 @@ gtk_style_real_unrealize (GtkStyle *style)
   gdk_colormap_free_colors (style->colormap, style->base, 5);
   gdk_colormap_free_colors (style->colormap, style->text_aa, 5);
 
-  style_unrealize_cursor_gcs (style);
+  style_unrealize_cursors (style);
 }
 
 static void
@@ -2701,16 +2634,16 @@ gtk_default_draw_box (GtkStyle      *style,
   if (is_spinbutton_box)
     {
       cairo_t *cr;
-      GdkColor *upper_gc;
-      GdkColor *lower_gc;
+      GdkColor *upper;
+      GdkColor *lower;
 
       cr = gdk_cairo_create (window);
 
-      lower_gc = &style->dark[state_type];
+      lower = &style->dark[state_type];
       if (shadow_type == GTK_SHADOW_OUT)
-	upper_gc = &style->light[state_type];
+	upper = &style->light[state_type];
       else
-	upper_gc = &style->dark[state_type];
+	upper = &style->dark[state_type];
 
       if (area)
 	{
@@ -2718,8 +2651,8 @@ gtk_default_draw_box (GtkStyle      *style,
           cairo_clip (cr);
 	}
       
-      _cairo_draw_line (cr, upper_gc, x, y, x + width - 1, y);
-      _cairo_draw_line (cr, lower_gc, x, y + height - 1, x + width - 1, y + height - 1);
+      _cairo_draw_line (cr, upper, x, y, x + width - 1, y);
+      _cairo_draw_line (cr, lower, x, y + height - 1, x + width - 1, y + height - 1);
 
       cairo_destroy (cr);
       return;
@@ -5739,7 +5672,7 @@ struct _CursorInfo
 };
 
 static void
-style_unrealize_cursor_gcs (GtkStyle *style)
+style_unrealize_cursors (GtkStyle *style)
 {
   CursorInfo *
   

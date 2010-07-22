@@ -98,17 +98,6 @@ struct _GtkStyle
   gint xthickness;
   gint ythickness;
 
-  GdkGC *fg_gc[5];
-  GdkGC *bg_gc[5];
-  GdkGC *light_gc[5];
-  GdkGC *dark_gc[5];
-  GdkGC *mid_gc[5];
-  GdkGC *text_gc[5];
-  GdkGC *base_gc[5];
-  GdkGC *text_aa_gc[5];
-  GdkGC *black_gc;
-  GdkGC *white_gc;
-
   GdkPixmap *bg_pixmap[5];
 
   /*< private >*/
