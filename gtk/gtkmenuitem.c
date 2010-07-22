@@ -973,7 +973,8 @@ gtk_menu_item_size_request (GtkWidget      *widget,
     requisition->height += 2 * horizontal_padding;
 
   child = gtk_bin_get_child (bin);
-  if (gtk_widget_get_visible (child))
+
+  if (child != NULL && gtk_widget_get_visible (child))
     {
       GtkRequisition child_requisition;
       

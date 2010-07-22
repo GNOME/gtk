@@ -710,7 +710,8 @@ gtk_plug_map (GtkWidget *widget)
       gtk_widget_set_mapped (widget, TRUE);
 
       child = gtk_bin_get_child (bin);
-      if (gtk_widget_get_visible (child) &&
+      if (child != NULL &&
+          gtk_widget_get_visible (child) &&
 	  !gtk_widget_get_mapped (child))
 	gtk_widget_map (child);
 
@@ -765,7 +766,8 @@ gtk_plug_size_allocate (GtkWidget     *widget,
 				allocation->width, allocation->height);
 
       child = gtk_bin_get_child (bin);
-      if (gtk_widget_get_visible (child))
+
+      if (child != NULL && gtk_widget_get_visible (child))
 	{
 	  GtkAllocation child_allocation;
 	  
