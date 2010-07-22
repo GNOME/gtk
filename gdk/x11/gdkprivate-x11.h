@@ -173,9 +173,6 @@ void _gdk_windowing_window_init (GdkScreen *screen);
 void _gdk_visual_init           (GdkScreen *screen);
 void _gdk_dnd_init		(GdkDisplay *display);
 
-PangoRenderer *_gdk_x11_renderer_get (GdkDrawable *drawable,
-				      GdkGC       *gc);
-
 void _gdk_x11_cursor_update_theme (GdkCursor *cursor);
 void _gdk_x11_cursor_display_finalize (GdkDisplay *display);
 

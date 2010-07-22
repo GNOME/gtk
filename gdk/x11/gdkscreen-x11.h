@@ -95,9 +95,6 @@ struct _GdkScreenX11
   GdkX11Monitor	*monitors;
   gint           primary_monitor;
 
-  /* Pango renderer object singleton */
-  PangoRenderer *renderer;
-
   /* Xft resources for the display, used for default values for
    * the Xft/ XSETTINGS
    */
