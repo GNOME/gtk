@@ -34,7 +34,6 @@
 #include "gdkdrawable.h"
 #include "gdktypes.h"
 #include "gdkscreen.h"
-#include "gdkgc.h"
 #include "gdkcolor.h"
 #include "gdkcursor.h"
 
@@ -139,16 +138,6 @@ is_parent_of (GdkWindow *parent,
     }
 
   return FALSE;
-}
-
-static GdkGC *
-gdk_offscreen_window_create_gc (GdkDrawable     *drawable,
-				GdkGCValues     *values,
-				GdkGCValuesMask  values_mask)
-{
-  GdkOffscreenWindow *offscreen = GDK_OFFSCREEN_WINDOW (drawable);
-
-  return gdk_gc_new_with_values (offscreen->pixmap, values, values_mask);
 }
 
 static cairo_surface_t *
@@ -542,7 +531,6 @@ gdk_offscreen_window_move_resize_internal (GdkWindow *window,
   GdkWindowObject *private = (GdkWindowObject *)window;
   GdkOffscreenWindow *offscreen;
   gint dx, dy, dw, dh;
-  GdkGC *gc;
   GdkPixmap *old_pixmap;
 
   offscreen = GDK_OFFSCREEN_WINDOW (private->impl);
@@ -899,7 +887,6 @@ gdk_offscreen_window_class_init (GdkOffscreenWindowClass *klass)
 
   object_class->finalize = gdk_offscreen_window_finalize;
 
-  drawable_class->create_gc = gdk_offscreen_window_create_gc;
   drawable_class->ref_cairo_surface = gdk_offscreen_window_ref_cairo_surface;
   drawable_class->set_colormap = gdk_offscreen_window_set_colormap;
   drawable_class->get_colormap = gdk_offscreen_window_get_colormap;

@@ -35,50 +35,10 @@
 
 #include "config.h"
 
-#define GDK_TYPE_GC_QUARTZ              (_gdk_gc_quartz_get_type ())
-#define GDK_GC_QUARTZ(object)           (G_TYPE_CHECK_INSTANCE_CAST ((object), GDK_TYPE_GC_QUARTZ, GdkGCQuartz))
-#define GDK_GC_QUARTZ_CLASS(klass)      (G_TYPE_CHECK_CLASS_CAST ((klass), GDK_TYPE_GC_QUARTZ, GdkGCQuartzClass))
-#define GDK_IS_GC_QUARTZ(object)        (G_TYPE_CHECK_INSTANCE_TYPE ((object), GDK_TYPE_GC_QUARTZ))
-#define GDK_IS_GC_QUARTZ_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE ((klass), GDK_TYPE_GC_QUARTZ))
-#define GDK_GC_QUARTZ_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), GDK_TYPE_GC_QUARTZ, GdkGCQuartzClass))
-
 #define GDK_DRAG_CONTEXT_PRIVATE(context) ((GdkDragContextPrivate *) GDK_DRAG_CONTEXT (context)->windowing_data)
 
 typedef struct _GdkCursorPrivate GdkCursorPrivate;
-typedef struct _GdkGCQuartz       GdkGCQuartz;
-typedef struct _GdkGCQuartzClass  GdkGCQuartzClass;
 typedef struct _GdkDragContextPrivate GdkDragContextPrivate;
-
-struct _GdkGCQuartz
-{
-  GdkGC             parent_instance;
-
-  GdkFunction       function;
-  GdkSubwindowMode  subwindow_mode;
-  gboolean          graphics_exposures;
-
-  gboolean          have_clip_region;
-  gboolean          have_clip_mask;
-  CGImageRef        clip_mask;
-
-  gint              line_width;
-  GdkLineStyle      line_style;
-  GdkCapStyle       cap_style;
-  GdkJoinStyle      join_style;
-
-  CGFloat          *dash_lengths;
-  gint              dash_count;
-  CGFloat           dash_phase;
-
-  CGPatternRef      ts_pattern;
-
-  guint             is_window : 1;
-};
-
-struct _GdkGCQuartzClass
-{
-  GdkGCClass parent_class;
-};
 
 struct _GdkVisualClass
 {
@@ -119,15 +79,6 @@ typedef enum {
   GDK_QUARTZ_CONTEXT_FILL   = 1 << 1,
   GDK_QUARTZ_CONTEXT_TEXT   = 1 << 2
 } GdkQuartzContextValuesMask;
-
-GType  _gdk_gc_quartz_get_type          (void);
-GdkGC *_gdk_quartz_gc_new               (GdkDrawable                *drawable,
-					 GdkGCValues                *values,
-					 GdkGCValuesMask             values_mask);
-void   _gdk_quartz_gc_update_cg_context (GdkGC                      *gc,
-					 GdkDrawable                *drawable,
-					 CGContextRef                context,
-					 GdkQuartzContextValuesMask  mask);
 
 /* Colormap */
 CGColorRef _gdk_quartz_colormap_get_cgcolor_from_pixel (GdkDrawable *drawable,

@@ -250,20 +250,16 @@ gdk_input_source_get_type G_GNUC_CONST
 gdk_input_mode_get_type G_GNUC_CONST
 gdk_axis_use_get_type G_GNUC_CONST
 gdk_byte_order_get_type G_GNUC_CONST
-gdk_cap_style_get_type G_GNUC_CONST
 gdk_crossing_mode_get_type G_GNUC_CONST
 gdk_device_type_get_type G_GNUC_CONST
 gdk_extension_mode_get_type G_GNUC_CONST
 gdk_event_mask_get_type G_GNUC_CONST
 gdk_event_type_get_type G_GNUC_CONST
-gdk_fill_get_type G_GNUC_CONST
 gdk_filter_return_get_type G_GNUC_CONST
 gdk_function_get_type G_GNUC_CONST
 gdk_grab_ownership_get_type G_GNUC_CONST
 gdk_grab_status_get_type G_GNUC_CONST
 gdk_gravity_get_type G_GNUC_CONST
-gdk_join_style_get_type G_GNUC_CONST
-gdk_line_style_get_type G_GNUC_CONST
 gdk_modifier_type_get_type G_GNUC_CONST
 gdk_notify_type_get_type G_GNUC_CONST
 gdk_owner_change_get_type G_GNUC_CONST
@@ -278,7 +274,6 @@ gdk_wm_decoration_get_type G_GNUC_CONST
 gdk_wm_function_get_type G_GNUC_CONST
 gdk_cursor_type_get_type G_GNUC_CONST
 gdk_drag_action_get_type G_GNUC_CONST
-gdk_gc_values_mask_get_type G_GNUC_CONST
 gdk_window_attributes_type_get_type G_GNUC_CONST
 gdk_window_class_get_type G_GNUC_CONST
 gdk_window_edge_get_type G_GNUC_CONST
@@ -549,43 +544,6 @@ gdk_drawable_get_type G_GNUC_CONST
 gdk_drawable_get_visible_region
 gdk_drawable_get_visual
 gdk_drawable_set_colormap
-#endif
-#endif
-
-#if IN_HEADER(__GDK_GC_H__)
-#if IN_FILE(__GDK_GC_C__)
-gdk_gc_new
-gdk_gc_get_type G_GNUC_CONST
-gdk_gc_new_with_values
-gdk_gc_get_values
-gdk_gc_set_values
-gdk_gc_set_foreground
-gdk_gc_set_background
-gdk_gc_set_function
-gdk_gc_set_fill
-gdk_gc_set_tile
-gdk_gc_set_stipple
-gdk_gc_set_ts_origin
-gdk_gc_set_clip_origin
-gdk_gc_set_clip_mask
-gdk_gc_set_clip_rectangle
-gdk_gc_set_clip_region
-gdk_gc_set_subwindow
-gdk_gc_set_exposures
-gdk_gc_set_line_attributes
-gdk_gc_set_dashes
-gdk_gc_offset
-gdk_gc_copy
-gdk_gc_get_colormap
-gdk_gc_set_colormap
-gdk_gc_set_rgb_bg_color
-gdk_gc_set_rgb_fg_color
-#endif
-#endif
-
-#if IN_HEADER(__GDK_GC_H__)
-#if IN_FILE(__GDK_GC_X11_C__)
-gdk_gc_get_screen
 #endif
 #endif
 

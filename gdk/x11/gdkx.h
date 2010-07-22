@@ -48,8 +48,6 @@ Display *gdk_x11_cursor_get_xdisplay      (GdkCursor   *cursor);
 Cursor   gdk_x11_cursor_get_xcursor       (GdkCursor   *cursor);
 Display *gdk_x11_display_get_xdisplay     (GdkDisplay  *display);
 Visual * gdk_x11_visual_get_xvisual       (GdkVisual   *visual);
-Display *gdk_x11_gc_get_xdisplay          (GdkGC       *gc);
-GC       gdk_x11_gc_get_xgc               (GdkGC       *gc);
 Screen * gdk_x11_screen_get_xscreen       (GdkScreen   *screen);
 int      gdk_x11_screen_get_screen_number (GdkScreen   *screen);
 void     gdk_x11_window_set_user_time     (GdkWindow   *window,
@@ -86,13 +84,10 @@ gint     gdk_x11_get_default_screen       (void);
 #define GDK_PIXMAP_XID(pix)           (GDK_DRAWABLE_IMPL_X11(((GdkPixmapObject *)pix)->impl)->xid)
 #define GDK_DRAWABLE_XDISPLAY(win)    (GDK_IS_WINDOW (win) ? GDK_WINDOW_XDISPLAY (win) : GDK_PIXMAP_XDISPLAY (win))
 #define GDK_DRAWABLE_XID(win)         (GDK_IS_WINDOW (win) ? GDK_WINDOW_XID (win) : GDK_PIXMAP_XID (win))
-#define GDK_GC_XDISPLAY(gc)           (GDK_SCREEN_XDISPLAY(GDK_GC_X11(gc)->screen))
-#define GDK_GC_XGC(gc)		      (GDK_GC_X11(gc)->xgc)
 #define GDK_SCREEN_XDISPLAY(screen)   (GDK_SCREEN_X11 (screen)->xdisplay)
 #define GDK_SCREEN_XSCREEN(screen)    (GDK_SCREEN_X11 (screen)->xscreen)
 #define GDK_SCREEN_XNUMBER(screen)    (GDK_SCREEN_X11 (screen)->screen_num) 
 #define GDK_VISUAL_XVISUAL(vis)       (((GdkVisualPrivate *) vis)->xvisual)
-#define GDK_GC_GET_XGC(gc)	      (GDK_GC_X11(gc)->dirty_mask ? _gdk_x11_gc_flush (gc) : ((GdkGCX11 *)(gc))->xgc)
 #define GDK_WINDOW_XWINDOW	      GDK_DRAWABLE_XID
 
 #else /* GDK_COMPILATION */
@@ -110,8 +105,6 @@ gint     gdk_x11_get_default_screen       (void);
 #define GDK_PIXMAP_XID(win)           (gdk_x11_drawable_get_xid (win))
 #define GDK_DRAWABLE_XDISPLAY(win)    (gdk_x11_drawable_get_xdisplay (win))
 #define GDK_DRAWABLE_XID(win)         (gdk_x11_drawable_get_xid (win))
-#define GDK_GC_XDISPLAY(gc)           (gdk_x11_gc_get_xdisplay (gc))
-#define GDK_GC_XGC(gc)                (gdk_x11_gc_get_xgc (gc))
 #define GDK_SCREEN_XDISPLAY(screen)   (gdk_x11_display_get_xdisplay (gdk_screen_get_display (screen)))
 #define GDK_SCREEN_XSCREEN(screen)    (gdk_x11_screen_get_xscreen (screen))
 #define GDK_SCREEN_XNUMBER(screen)    (gdk_x11_screen_get_screen_number (screen))

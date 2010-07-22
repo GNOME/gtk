@@ -41,7 +41,6 @@
 #include <gdk/gdkdrawable.h>
 #include <gdk/gdkenumtypes.h>
 #include <gdk/gdkevents.h>
-#include <gdk/gdkgc.h>
 #include <gdk/gdkinput.h>
 #include <gdk/gdkkeys.h>
 #include <gdk/gdkpango.h>

@@ -32,7 +32,6 @@
 #define __GDK_DRAWABLE_H__
 
 #include <gdk/gdktypes.h>
-#include <gdk/gdkgc.h>
 #include <gdk-pixbuf/gdk-pixbuf.h>
 
 #include <cairo.h>
@@ -57,10 +56,6 @@ struct _GdkDrawableClass
 {
   GObjectClass parent_class;
   
-  GdkGC *(*create_gc)    (GdkDrawable    *drawable,
-		          GdkGCValues    *values,
-		          GdkGCValuesMask mask);
-
   gint (*get_depth)      (GdkDrawable  *drawable);
   void (*get_size)       (GdkDrawable  *drawable,
                           gint         *width,

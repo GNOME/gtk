@@ -71,18 +71,12 @@ gdk_drag_protocol_get_type
 gdk_event_mask_get_type
 gdk_event_type_get_type
 gdk_extension_mode_get_type
-gdk_fill_get_type
-gdk_fill_rule_get_type
 gdk_filter_return_get_type
-gdk_function_get_type
-gdk_gc_values_mask_get_type
 gdk_grab_ownership_get_type
 gdk_grab_status_get_type
 gdk_gravity_get_type
 gdk_input_mode_get_type
 gdk_input_source_get_type
-gdk_join_style_get_type
-gdk_line_style_get_type
 gdk_modifier_type_get_type
 gdk_notify_type_get_type
 gdk_overlap_type_get_type
@@ -343,69 +337,6 @@ GDK_IS_DRAWABLE_CLASS
 
 <SUBSECTION Private>
 GdkDrawableClass
-</SECTION>
-
-<SECTION>
-<TITLE>Graphics Contexts</TITLE>
-<FILE>gcs</FILE>
-GdkGC
-GdkGCValues
-GdkGCValuesMask
-
-GdkFunction
-
-gdk_gc_new
-gdk_gc_new_with_values
-gdk_gc_get_screen
-gdk_gc_set_values
-gdk_gc_get_values
-gdk_gc_set_foreground
-gdk_gc_set_background
-gdk_gc_set_rgb_fg_color
-gdk_gc_set_rgb_bg_color
-gdk_gc_set_function
-gdk_gc_set_fill
-GdkFill
-gdk_gc_set_tile
-gdk_gc_set_stipple
-gdk_gc_set_ts_origin
-gdk_gc_set_clip_origin
-gdk_gc_set_clip_mask
-gdk_gc_set_clip_rectangle
-gdk_gc_set_clip_region
-gdk_gc_set_subwindow
-GdkSubwindowMode
-gdk_gc_set_exposures
-gdk_gc_set_line_attributes
-GdkLineStyle
-GdkCapStyle
-GdkJoinStyle
-gdk_gc_set_dashes
-gdk_gc_copy
-gdk_gc_set_colormap
-gdk_gc_get_colormap
-
-gdk_gc_offset
-
-<SUBSECTION Standard>
-GDK_GC
-GDK_TYPE_GC
-GDK_IS_GC
-GDK_GC_CLASS
-GDK_GC_GET_CLASS
-GDK_IS_GC_CLASS
-GDK_TYPE_CAP_STYLE
-GDK_TYPE_FILL
-GDK_TYPE_FILL_RULE
-GDK_TYPE_FUNCTION
-GDK_TYPE_GC_VALUES_MASK
-GDK_TYPE_JOIN_STYLE
-GDK_TYPE_LINE_STYLE
-GDK_TYPE_SUBWINDOW_MODE
-
-<SUBSECTION Private>
-GdkGCClass
-gdk_gc_get_type
 </SECTION>
 
 <SECTION>
@@ -1137,8 +1068,6 @@ gdk_x11_display_set_cursor_theme
 gdk_x11_register_standard_event_type
 gdk_x11_drawable_get_xdisplay
 gdk_x11_drawable_get_xid
-gdk_x11_gc_get_xdisplay
-gdk_x11_gc_get_xgc
 gdk_x11_get_default_root_xwindow
 gdk_x11_get_default_screen
 gdk_x11_get_default_xdisplay

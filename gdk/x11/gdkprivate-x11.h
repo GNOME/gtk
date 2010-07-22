@@ -41,34 +41,8 @@
 
 #include "config.h"
 
-#define GDK_TYPE_GC_X11              (_gdk_gc_x11_get_type ())
-#define GDK_GC_X11(object)           (G_TYPE_CHECK_INSTANCE_CAST ((object), GDK_TYPE_GC_X11, GdkGCX11))
-#define GDK_GC_X11_CLASS(klass)      (G_TYPE_CHECK_CLASS_CAST ((klass), GDK_TYPE_GC_X11, GdkGCX11Class))
-#define GDK_IS_GC_X11(object)        (G_TYPE_CHECK_INSTANCE_TYPE ((object), GDK_TYPE_GC_X11))
-#define GDK_IS_GC_X11_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE ((klass), GDK_TYPE_GC_X11))
-#define GDK_GC_X11_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), GDK_TYPE_GC_X11, GdkGCX11Class))
-
 typedef struct _GdkCursorPrivate       GdkCursorPrivate;
 typedef struct _GdkVisualPrivate       GdkVisualPrivate;
-typedef struct _GdkGCX11      GdkGCX11;
-typedef struct _GdkGCX11Class GdkGCX11Class;
-
-struct _GdkGCX11
-{
-  GdkGC parent_instance;
-  
-  GC xgc;
-  GdkScreen *screen;
-  guint16 dirty_mask;
-  guint have_clip_region : 1;
-  guint have_clip_mask : 1;
-  guint depth : 8;
-};
-
-struct _GdkGCX11Class
-{
-  GdkGCClass parent_class;
-};
 
 struct _GdkCursorPrivate
 {
@@ -98,13 +72,7 @@ gint _gdk_send_xevent      (GdkDisplay *display,
 			    glong       event_mask,
 			    XEvent     *event_send);
 
-GType _gdk_gc_x11_get_type (void);
-
 gboolean _gdk_x11_have_render           (GdkDisplay *display);
-
-GdkGC *_gdk_x11_gc_new                  (GdkDrawable     *drawable,
-					 GdkGCValues     *values,
-					 GdkGCValuesMask  values_mask);
 
 /* Routines from gdkgeometry-x11.c */
 void _gdk_window_move_resize_child (GdkWindow     *window,
@@ -149,8 +117,6 @@ void _gdk_keymap_add_virtual_modifiers_compat (GdkKeymap       *keymap,
                                                GdkModifierType *modifiers);
 gboolean _gdk_keymap_key_is_modifier   (GdkKeymap       *keymap,
 					guint            keycode);
-
-GC _gdk_x11_gc_flush (GdkGC *gc);
 
 void _gdk_x11_initialize_locale (void);
 

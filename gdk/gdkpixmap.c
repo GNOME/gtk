@@ -31,10 +31,6 @@
 #include "gdkscreen.h"
 
 
-static GdkGC *gdk_pixmap_create_gc      (GdkDrawable     *drawable,
-                                         GdkGCValues     *values,
-                                         GdkGCValuesMask  mask);
-
 static void   gdk_pixmap_real_get_size  (GdkDrawable     *drawable,
                                          gint            *width,
                                          gint            *height);
@@ -91,7 +87,6 @@ gdk_pixmap_class_init (GdkPixmapObjectClass *klass)
 
   object_class->finalize = gdk_pixmap_finalize;
 
-  drawable_class->create_gc = gdk_pixmap_create_gc;
   drawable_class->get_depth = gdk_pixmap_real_get_depth;
   drawable_class->get_screen = gdk_pixmap_real_get_screen;
   drawable_class->get_size = gdk_pixmap_real_get_size;
@@ -158,16 +153,6 @@ gdk_pixmap_create_from_data (GdkDrawable    *drawable,
   return _gdk_pixmap_create_from_data (source_drawable,
                                        data, width, height,
                                        depth, fg,bg);
-}
-
-
-static GdkGC *
-gdk_pixmap_create_gc (GdkDrawable     *drawable,
-                      GdkGCValues     *values,
-                      GdkGCValuesMask  mask)
-{
-  return gdk_gc_new_with_values (((GdkPixmapObject *) drawable)->impl,
-                                 values, mask);
 }
 
 static void

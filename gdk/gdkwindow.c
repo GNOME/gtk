@@ -175,13 +175,6 @@
  * we reuse the pixmap from the implicit paint. During repaint we create and at the
  * end flush an implicit paint, which means we can collect all the paints on
  * multiple client side windows in the same backing store pixmap.
- *
- * All drawing to windows are wrapped with macros that set up the GC such that
- * the offsets and clip region is right for drawing to the paint object or
- * directly to the emulated window. It also automatically handles any flushing
- * needed when drawing directly to a window. Adding window/paint clipping is
- * done using _gdk_gc_add_drawable_clip which lets us efficiently add and then
- * remove a custom clip region.
  */
 
 #define USE_BACKING_STORE	/* Appears to work on Win32, too, now. */
@@ -225,10 +218,6 @@ typedef struct {
 } GdkWindowRegionMove;
 
 /* Global info */
-
-static GdkGC *gdk_window_create_gc      (GdkDrawable     *drawable,
-					 GdkGCValues     *values,
-					 GdkGCValuesMask  mask);
 
 static cairo_surface_t *gdk_window_ref_cairo_surface (GdkDrawable *drawable);
 static cairo_surface_t *gdk_window_create_cairo_surface (GdkDrawable *drawable,
@@ -406,7 +395,6 @@ gdk_window_class_init (GdkWindowObjectClass *klass)
   object_class->set_property = gdk_window_set_property;
   object_class->get_property = gdk_window_get_property;
 
-  drawable_class->create_gc = gdk_window_create_gc;
   drawable_class->get_depth = gdk_window_real_get_depth;
   drawable_class->get_screen = gdk_window_real_get_screen;
   drawable_class->get_size = gdk_window_real_get_size;
@@ -3606,110 +3594,6 @@ gdk_window_get_internal_paint_info (GdkWindow    *window,
     *x_offset = x_off;
   if (y_offset)
     *y_offset = y_off;
-}
-
-static GdkDrawable *
-start_draw_helper (GdkDrawable *drawable,
-		   GdkGC *gc,
-		   gint *x_offset_out,
-		   gint *y_offset_out)
-{
-  GdkWindowObject *private = (GdkWindowObject *)drawable;
-  gint x_offset, y_offset;
-  GdkDrawable *impl;
-  gint old_clip_x = gc->clip_x_origin;
-  gint old_clip_y = gc->clip_y_origin;
-  cairo_region_t *clip;
-  guint32 clip_region_tag;
-  GdkWindowPaint *paint;
-
-  paint = NULL;
-  if (private->paint_stack)
-    paint = private->paint_stack->data;
-
-  if (paint)
-    {
-      x_offset = paint->x_offset;
-      y_offset = paint->y_offset;
-    }
-  else
-    {
-      x_offset = -private->abs_x;
-      y_offset = -private->abs_y;
-    }
-
-  if (x_offset != 0 || y_offset != 0)
-    {
-      gdk_gc_set_clip_origin (gc,
-			      old_clip_x - x_offset,
-			      old_clip_y - y_offset);
-      gdk_gc_set_ts_origin (gc,
-			    gc->ts_x_origin - x_offset,
-			    gc->ts_y_origin - y_offset);
-    }
-
-  *x_offset_out = x_offset;
-  *y_offset_out = y_offset;
-
-  /* Add client side window clip region to gc */
-  clip = NULL;
-  if (paint)
-    {
-      /* Only need clipping if using implicit paint, otherwise
-	 the pixmap is clipped when copying to the window in end_paint */
-      if (paint->uses_implicit)
-	{
-	  /* This includes the window clip */
-	  clip = paint->region;
-	}
-      clip_region_tag = paint->region_tag;
-
-      /* After having set up the drawable clip rect on a GC we need to make sure
-       * that we draw to th the impl, otherwise the pixmap code will reset the
-       * drawable clip. */
-      impl = ((GdkPixmapObject *)(paint->pixmap))->impl;
-    }
-  else
-    {
-      /* Drawing directly to the window, flush anything outstanding to
-	 guarantee ordering. */
-      gdk_window_flush ((GdkWindow *)drawable);
-
-      /* Don't clip when drawing to root or all native */
-      if (!_gdk_native_windows && private->window_type != GDK_WINDOW_ROOT)
-	{
-	  if (_gdk_gc_get_subwindow (gc) == GDK_CLIP_BY_CHILDREN)
-	    clip = private->clip_region_with_children;
-	  else
-	    clip = private->clip_region;
-	}
-      clip_region_tag = private->clip_tag;
-      impl = private->impl;
-    }
-
-  if (clip)
-    _gdk_gc_add_drawable_clip (gc,
-			       clip_region_tag, clip,
-			       /* If there was a clip origin set appart from the
-				* window offset, need to take that into
-				* consideration */
-			       -old_clip_x, -old_clip_y);
-
-  return impl;
-}
-
-static GdkGC *
-gdk_window_create_gc (GdkDrawable     *drawable,
-		      GdkGCValues     *values,
-		      GdkGCValuesMask  mask)
-{
-  g_return_val_if_fail (GDK_IS_WINDOW (drawable), NULL);
-
-  if (GDK_WINDOW_DESTROYED (drawable))
-    return NULL;
-
-  return gdk_gc_new_with_values (((GdkWindowObject *) drawable)->impl,
-				 values, mask);
 }
 
 static GdkDrawable *

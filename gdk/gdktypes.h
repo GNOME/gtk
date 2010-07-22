@@ -102,7 +102,6 @@ typedef guint32 GdkNativeWindow;
 typedef struct _GdkColor	      GdkColor;
 typedef struct _GdkColormap	      GdkColormap;
 typedef struct _GdkCursor	      GdkCursor;
-typedef struct _GdkGC                 GdkGC;
 typedef struct _GdkVisual             GdkVisual;
 
 typedef struct _GdkDrawable           GdkDrawable;

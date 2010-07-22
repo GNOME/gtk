@@ -72,8 +72,6 @@ _gdk_drawable_impl_x11_class_init (GdkDrawableImplX11Class *klass)
   
   object_class->finalize = gdk_drawable_impl_x11_finalize;
   
-  drawable_class->create_gc = _gdk_x11_gc_new;
-  
   drawable_class->ref_cairo_surface = gdk_x11_ref_cairo_surface;
 
   drawable_class->set_colormap = gdk_x11_set_colormap;

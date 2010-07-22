@@ -364,31 +364,6 @@ void       _gdk_screen_close             (GdkScreen      *screen);
 
 const char *_gdk_get_sm_client_id (void);
 
-void _gdk_gc_init (GdkGC           *gc,
-		   GdkDrawable     *drawable,
-		   GdkGCValues     *values,
-		   GdkGCValuesMask  values_mask);
-
-cairo_region_t *_gdk_gc_get_clip_region (GdkGC *gc);
-GdkBitmap *_gdk_gc_get_clip_mask   (GdkGC *gc);
-gboolean   _gdk_gc_get_exposures   (GdkGC *gc);
-GdkFill    _gdk_gc_get_fill        (GdkGC *gc);
-GdkPixmap *_gdk_gc_get_tile        (GdkGC *gc);
-GdkBitmap *_gdk_gc_get_stipple     (GdkGC *gc);
-guint32    _gdk_gc_get_fg_pixel    (GdkGC *gc);
-guint32    _gdk_gc_get_bg_pixel    (GdkGC *gc);
-void      _gdk_gc_add_drawable_clip     (GdkGC     *gc,
-					 guint32    region_tag,
-					 cairo_region_t *region,
-					 int        offset_x,
-					 int        offset_y);
-void      _gdk_gc_remove_drawable_clip  (GdkGC     *gc);
-void       _gdk_gc_set_clip_region_internal (GdkGC     *gc,
-					     cairo_region_t *region,
-					     gboolean reset_origin);
-GdkSubwindowMode _gdk_gc_get_subwindow (GdkGC *gc);
-
-
 /*****************************************
  * Interfaces provided by windowing code *
  *****************************************/
@@ -491,45 +466,6 @@ GType _gdk_paintable_get_type (void) G_GNUC_CONST;
 /* Implementation types */
 GType _gdk_window_impl_get_type (void) G_GNUC_CONST;
 GType _gdk_pixmap_impl_get_type (void) G_GNUC_CONST;
-
-
-/**
- * _gdk_windowing_gc_set_clip_region:
- * @gc: a #GdkGC
- * @region: the new clip region
- * @reset_origin: if TRUE, reset the clip_x/y_origin values to 0
- * 
- * Do any window-system specific processing necessary
- * for a change in clip region. Since the clip origin
- * will likely change before the GC is used with the
- * new clip, frequently this function will only set a flag and
- * do the real processing later.
- *
- * When this function is called, _gdk_gc_get_clip_region
- * will already return the new region.
- **/
-void _gdk_windowing_gc_set_clip_region (GdkGC           *gc,
-					const cairo_region_t *region,
-					gboolean reset_origin);
-
-/**
- * _gdk_windowing_gc_copy:
- * @dst_gc: a #GdkGC from the GDK backend
- * @src_gc: a #GdkGC from the GDK backend
- * 
- * Copies backend specific state from @src_gc to @dst_gc.
- * This is called before the generic state is copied, so
- * the old generic state is still available from @dst_gc
- **/
-void _gdk_windowing_gc_copy (GdkGC *dst_gc,
-			     GdkGC *src_gc);
-     
-/* Queries the current foreground color of a GdkGC */
-void _gdk_windowing_gc_get_foreground (GdkGC    *gc,
-				       GdkColor *color);
-/* Queries the current background color of a GdkGC */
-void _gdk_windowing_gc_get_background (GdkGC    *gc,
-				       GdkColor *color);
 
 struct GdkAppLaunchContextPrivate
 {

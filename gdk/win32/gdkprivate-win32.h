@@ -105,13 +105,6 @@
 #define GDK_DEBUG_MISC_OR_COLORMAP (GDK_DEBUG_MISC|GDK_DEBUG_COLORMAP)
 #define GDK_DEBUG_MISC_OR_EVENTS (GDK_DEBUG_MISC|GDK_DEBUG_EVENTS)
 
-#define GDK_TYPE_GC_WIN32              (_gdk_gc_win32_get_type ())
-#define GDK_GC_WIN32(object)           (G_TYPE_CHECK_INSTANCE_CAST ((object), GDK_TYPE_GC_WIN32, GdkGCWin32))
-#define GDK_GC_WIN32_CLASS(klass)      (G_TYPE_CHECK_CLASS_CAST ((klass), GDK_TYPE_GC_WIN32, GdkGCWin32Class))
-#define GDK_IS_GC_WIN32(object)        (G_TYPE_CHECK_INSTANCE_TYPE ((object), GDK_TYPE_GC_WIN32))
-#define GDK_IS_GC_WIN32_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE ((klass), GDK_TYPE_GC_WIN32))
-#define GDK_GC_WIN32_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), GDK_TYPE_GC_WIN32, GdkGCWin32Class))
-
 //#define GDK_WINDOW_SCREEN(win)         (_gdk_screen)
 GdkScreen *GDK_WINDOW_SCREEN(GObject *win);
 
@@ -120,8 +113,6 @@ GdkScreen *GDK_WINDOW_SCREEN(GObject *win);
 typedef struct _GdkColormapPrivateWin32 GdkColormapPrivateWin32;
 typedef struct _GdkCursorPrivate        GdkCursorPrivate;
 typedef struct _GdkWin32SingleFont      GdkWin32SingleFont;
-typedef struct _GdkGCWin32		GdkGCWin32;
-typedef struct _GdkGCWin32Class		GdkGCWin32Class;
 
 struct _GdkCursorPrivate
 {
@@ -159,48 +150,6 @@ struct _GdkColormapPrivateWin32
   GdkColorInfo *info;
 };
 
-struct _GdkGCWin32
-{
-  GdkGC parent_instance;
-
-  /* A Windows Device Context (DC) is not equivalent to an X11
-   * GC. We can use a DC only in the window for which it was
-   * allocated, or (in the case of a memory DC) with the bitmap that
-   * has been selected into it. Thus, we have to release and
-   * reallocate a DC each time the GdkGC is used to paint into a new
-   * window or pixmap. We thus keep all the necessary values in the
-   * GdkGCWin32 object.
-   */
-
-  HRGN hcliprgn;
-
-  GdkGCValuesMask values_mask;
-
-  gint rop2;
-  GdkSubwindowMode subwindow_mode;
-  gint graphics_exposures;
-  gint pen_width;
-  DWORD pen_style;
-  GdkLineStyle line_style;
-  GdkCapStyle cap_style;
-  GdkJoinStyle join_style;
-  DWORD *pen_dashes;		/* use for PS_USERSTYLE or step-by-step rendering */
-  gint pen_num_dashes;
-  gint pen_dash_offset;
-  HBRUSH pen_hbrbg;
-
-  /* Following fields are valid while the GC exists as a Windows DC */
-  HDC hdc;
-  int saved_dc;
-
-  HPALETTE holdpal;
-};
-
-struct _GdkGCWin32Class
-{
-  GdkGCClass parent_class;
-};
-
 GType _gdk_gc_win32_get_type (void);
 
 gulong _gdk_win32_get_next_tick (gulong suggested_tick);
@@ -231,10 +180,6 @@ void _gdk_win32_dnd_exit (void);
 void	 gdk_win32_handle_table_insert  (HANDLE   *handle,
 					 gpointer data);
 void	 gdk_win32_handle_table_remove  (HANDLE handle);
-
-GdkGC    *_gdk_win32_gc_new             (GdkDrawable        *drawable,
-					 GdkGCValues        *values,
-					 GdkGCValuesMask     values_mask);
 
 void      _gdk_win32_blit               (gboolean              use_fg_bg,
 					 GdkDrawableImplWin32 *drawable,

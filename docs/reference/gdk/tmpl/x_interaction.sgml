@@ -97,15 +97,6 @@ Returns the X resource (window or pixmap) belonging to a #GdkDrawable.
 @Returns: the ID of @win's X resource.
 
 
-<!-- ##### MACRO GDK_GC_XDISPLAY ##### -->
-<para>
-Returns the display of a #GdkGC.
-</para>
-
-@gc: a #GdkGC.
-@Returns: an Xlib <type>Display*</type>.
-
-
 <!-- ##### MACRO GDK_COLORMAP_XDISPLAY ##### -->
 <para>
 Returns the display of a #GdkColormap.
@@ -177,24 +168,6 @@ Returns the display of a #GdkCursor.
 
 @cursor: a #GdkCursor.
 @Returns: an Xlib <type>Display*</type>.
-
-
-<!-- ##### MACRO GDK_GC_XGC ##### -->
-<para>
-Returns the X GC of a #GdkGC.
-</para>
-
-@gc: a #GdkGC.
-@Returns: an Xlib <type>GC</type>.
-
-
-<!-- ##### MACRO GDK_GC_GET_XGC ##### -->
-<para>
-Returns the X GC of a #GdkGC.
-</para>
-
-@gc: a #GdkGC.
-@Returns: an Xlib <type>GC</type>.
 
 
 <!-- ##### MACRO GDK_WINDOW_XWINDOW ##### -->
@@ -536,24 +509,6 @@ Another name for GDK_DRAWABLE_XID().
 </para>
 
 @drawable: 
-@Returns: 
-
-
-<!-- ##### FUNCTION gdk_x11_gc_get_xdisplay ##### -->
-<para>
-
-</para>
-
-@gc: 
-@Returns: 
-
-
-<!-- ##### FUNCTION gdk_x11_gc_get_xgc ##### -->
-<para>
-
-</para>
-
-@gc: 
 @Returns: 
 
 

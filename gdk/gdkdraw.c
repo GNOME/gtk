@@ -160,10 +160,7 @@ gdk_drawable_get_display (GdkDrawable *drawable)
  * use this function if the drawable-creating function did not have a
  * way to determine the colormap, and you then use drawable operations
  * that require a colormap. The colormap for all drawables and
- * graphics contexts you intend to use together should match. i.e.
- * when using a #GdkGC to draw to a drawable, or copying one drawable
- * to another, the colormaps should match.
- * 
+ * graphics contexts you intend to use together should match.
  **/
 void
 gdk_drawable_set_colormap (GdkDrawable *drawable,
