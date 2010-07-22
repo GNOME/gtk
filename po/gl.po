@@ -21,8 +21,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-master-po-gl-77922___.merged\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-07-20 12:26+0200\n"
-"PO-Revision-Date: 2010-07-20 12:26+0200\n"
+"POT-Creation-Date: 2010-07-22 16:24+0200\n"
+"PO-Revision-Date: 2010-07-22 16:25+0200\n"
 "Last-Translator: Fran Diéguez <frandieguez@ubuntu.com>\n"
 "Language-Team: Galician <gnome-gl-list@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -1400,7 +1400,7 @@ msgstr "Intérprete de ordes Z"
 msgid "Cannot end process with pid %d: %s"
 msgstr "Non é posíbel finalizar o proceso co pid %d: %s"
 
-#: ../gtk/gtknotebook.c:4670 ../gtk/gtknotebook.c:7165
+#: ../gtk/gtknotebook.c:4671 ../gtk/gtknotebook.c:7166
 #, c-format
 msgid "Page %u"
 msgstr "Páxina %u"
@@ -2173,390 +2173,395 @@ msgstr "_Editar"
 
 #: ../gtk/gtkstock.c:338
 msgctxt "Stock label"
+msgid "_File"
+msgstr "_Ficheiro"
+
+#: ../gtk/gtkstock.c:339
+msgctxt "Stock label"
 msgid "_Find"
 msgstr "_Localizar"
 
-#: ../gtk/gtkstock.c:339
+#: ../gtk/gtkstock.c:340
 msgctxt "Stock label"
 msgid "Find and _Replace"
 msgstr "Localizar e _substituír"
 
-#: ../gtk/gtkstock.c:340
+#: ../gtk/gtkstock.c:341
 msgctxt "Stock label"
 msgid "_Floppy"
 msgstr "_Disquete"
 
-#: ../gtk/gtkstock.c:341
+#: ../gtk/gtkstock.c:342
 msgctxt "Stock label"
 msgid "_Fullscreen"
 msgstr "_Pantalla completa"
 
-#: ../gtk/gtkstock.c:342
+#: ../gtk/gtkstock.c:343
 msgctxt "Stock label"
 msgid "_Leave Fullscreen"
 msgstr "_Saír da pantalla completa"
 
 #. This is a navigation label as in "go to the bottom of the page"
-#: ../gtk/gtkstock.c:344
+#: ../gtk/gtkstock.c:345
 msgctxt "Stock label, navigation"
 msgid "_Bottom"
 msgstr "_Final"
 
 #. This is a navigation label as in "go to the first page"
-#: ../gtk/gtkstock.c:346
+#: ../gtk/gtkstock.c:347
 msgctxt "Stock label, navigation"
 msgid "_First"
 msgstr "_Primeira"
 
 #. This is a navigation label as in "go to the last page"
-#: ../gtk/gtkstock.c:348
+#: ../gtk/gtkstock.c:349
 msgctxt "Stock label, navigation"
 msgid "_Last"
 msgstr "Ú_ltima"
 
 #. This is a navigation label as in "go to the top of the page"
-#: ../gtk/gtkstock.c:350
+#: ../gtk/gtkstock.c:351
 msgctxt "Stock label, navigation"
 msgid "_Top"
 msgstr "_Inicio"
 
 #. This is a navigation label as in "go back"
-#: ../gtk/gtkstock.c:352
+#: ../gtk/gtkstock.c:353
 msgctxt "Stock label, navigation"
 msgid "_Back"
 msgstr "_Atrás"
 
 #. This is a navigation label as in "go down"
-#: ../gtk/gtkstock.c:354
+#: ../gtk/gtkstock.c:355
 msgctxt "Stock label, navigation"
 msgid "_Down"
 msgstr "_Abaixo"
 
 #. This is a navigation label as in "go forward"
-#: ../gtk/gtkstock.c:356
+#: ../gtk/gtkstock.c:357
 msgctxt "Stock label, navigation"
 msgid "_Forward"
 msgstr "_Adiante"
 
 #. This is a navigation label as in "go up"
-#: ../gtk/gtkstock.c:358
+#: ../gtk/gtkstock.c:359
 msgctxt "Stock label, navigation"
 msgid "_Up"
 msgstr "_Arriba"
 
-#: ../gtk/gtkstock.c:359
+#: ../gtk/gtkstock.c:360
 msgctxt "Stock label"
 msgid "_Harddisk"
 msgstr "_Disco ríxido"
 
-#: ../gtk/gtkstock.c:360
+#: ../gtk/gtkstock.c:361
 msgctxt "Stock label"
 msgid "_Help"
 msgstr "_Axuda"
 
-#: ../gtk/gtkstock.c:361
+#: ../gtk/gtkstock.c:362
 msgctxt "Stock label"
 msgid "_Home"
 msgstr "_Inicio"
 
-#: ../gtk/gtkstock.c:362
+#: ../gtk/gtkstock.c:363
 msgctxt "Stock label"
 msgid "Increase Indent"
 msgstr "Aumentar a sangría"
 
-#: ../gtk/gtkstock.c:363
+#: ../gtk/gtkstock.c:364
 msgctxt "Stock label"
 msgid "Decrease Indent"
 msgstr "Diminuír a sangría"
 
-#: ../gtk/gtkstock.c:364
+#: ../gtk/gtkstock.c:365
 msgctxt "Stock label"
 msgid "_Index"
 msgstr "Índ_ice"
 
-#: ../gtk/gtkstock.c:365
+#: ../gtk/gtkstock.c:366
 msgctxt "Stock label"
 msgid "_Information"
 msgstr "_Información"
 
-#: ../gtk/gtkstock.c:366
+#: ../gtk/gtkstock.c:367
 msgctxt "Stock label"
 msgid "_Italic"
 msgstr "_Cursiva"
 
-#: ../gtk/gtkstock.c:367
+#: ../gtk/gtkstock.c:368
 msgctxt "Stock label"
 msgid "_Jump to"
 msgstr "_Ir a"
 
 #. This is about text justification, "centered text"
-#: ../gtk/gtkstock.c:369
+#: ../gtk/gtkstock.c:370
 msgctxt "Stock label"
 msgid "_Center"
 msgstr "_Centrar"
 
 #. This is about text justification
-#: ../gtk/gtkstock.c:371
+#: ../gtk/gtkstock.c:372
 msgctxt "Stock label"
 msgid "_Fill"
 msgstr "_Encher"
 
 #. This is about text justification, "left-justified text"
-#: ../gtk/gtkstock.c:373
+#: ../gtk/gtkstock.c:374
 msgctxt "Stock label"
 msgid "_Left"
 msgstr "_Esquerda"
 
 #. This is about text justification, "right-justified text"
-#: ../gtk/gtkstock.c:375
+#: ../gtk/gtkstock.c:376
 msgctxt "Stock label"
 msgid "_Right"
 msgstr "_Dereita"
 
 #. Media label, as in "fast forward"
-#: ../gtk/gtkstock.c:378
+#: ../gtk/gtkstock.c:379
 msgctxt "Stock label, media"
 msgid "_Forward"
 msgstr "_Avanzar"
 
 #. Media label, as in "next song"
-#: ../gtk/gtkstock.c:380
+#: ../gtk/gtkstock.c:381
 msgctxt "Stock label, media"
 msgid "_Next"
 msgstr "_Seguinte"
 
 #. Media label, as in "pause music"
-#: ../gtk/gtkstock.c:382
+#: ../gtk/gtkstock.c:383
 msgctxt "Stock label, media"
 msgid "P_ause"
 msgstr "P_ausa"
 
 #. Media label, as in "play music"
-#: ../gtk/gtkstock.c:384
+#: ../gtk/gtkstock.c:385
 msgctxt "Stock label, media"
 msgid "_Play"
 msgstr "_Reproducir"
 
 #. Media label, as in  "previous song"
-#: ../gtk/gtkstock.c:386
+#: ../gtk/gtkstock.c:387
 msgctxt "Stock label, media"
 msgid "Pre_vious"
 msgstr "An_terior"
 
 #. Media label
-#: ../gtk/gtkstock.c:388
+#: ../gtk/gtkstock.c:389
 msgctxt "Stock label, media"
 msgid "_Record"
 msgstr "_Gravar"
 
 #. Media label
-#: ../gtk/gtkstock.c:390
+#: ../gtk/gtkstock.c:391
 msgctxt "Stock label, media"
 msgid "R_ewind"
 msgstr "R_ebobinar"
 
 #. Media label
-#: ../gtk/gtkstock.c:392
+#: ../gtk/gtkstock.c:393
 msgctxt "Stock label, media"
 msgid "_Stop"
 msgstr "De_ter"
 
-#: ../gtk/gtkstock.c:393
+#: ../gtk/gtkstock.c:394
 msgctxt "Stock label"
 msgid "_Network"
 msgstr "_Rede"
 
-#: ../gtk/gtkstock.c:394
+#: ../gtk/gtkstock.c:395
 msgctxt "Stock label"
 msgid "_New"
 msgstr "_Novo"
 
-#: ../gtk/gtkstock.c:395
+#: ../gtk/gtkstock.c:396
 msgctxt "Stock label"
 msgid "_No"
 msgstr "_Non"
 
-#: ../gtk/gtkstock.c:396
+#: ../gtk/gtkstock.c:397
 msgctxt "Stock label"
 msgid "_OK"
 msgstr "_Aceptar"
 
-#: ../gtk/gtkstock.c:397
+#: ../gtk/gtkstock.c:398
 msgctxt "Stock label"
 msgid "_Open"
 msgstr "_Abrir"
 
 #. Page orientation
-#: ../gtk/gtkstock.c:399
+#: ../gtk/gtkstock.c:400
 msgctxt "Stock label"
 msgid "Landscape"
 msgstr "Horizontal"
 
 #. Page orientation
-#: ../gtk/gtkstock.c:401
+#: ../gtk/gtkstock.c:402
 msgctxt "Stock label"
 msgid "Portrait"
 msgstr "Vertical"
 
 #. Page orientation
-#: ../gtk/gtkstock.c:403
+#: ../gtk/gtkstock.c:404
 msgctxt "Stock label"
 msgid "Reverse landscape"
 msgstr "Horizontal invertido"
 
 #. Page orientation
-#: ../gtk/gtkstock.c:405
+#: ../gtk/gtkstock.c:406
 msgctxt "Stock label"
 msgid "Reverse portrait"
 msgstr "Vertical invertido"
 
-#: ../gtk/gtkstock.c:406
+#: ../gtk/gtkstock.c:407
 msgctxt "Stock label"
 msgid "Page Set_up"
 msgstr "Config_uración da páxina"
 
-#: ../gtk/gtkstock.c:407
+#: ../gtk/gtkstock.c:408
 msgctxt "Stock label"
 msgid "_Paste"
 msgstr "_Pegar"
 
-#: ../gtk/gtkstock.c:408
+#: ../gtk/gtkstock.c:409
 msgctxt "Stock label"
 msgid "_Preferences"
 msgstr "_Preferencias"
 
-#: ../gtk/gtkstock.c:409
+#: ../gtk/gtkstock.c:410
 msgctxt "Stock label"
 msgid "_Print"
 msgstr "_Imprimir"
 
-#: ../gtk/gtkstock.c:410
+#: ../gtk/gtkstock.c:411
 msgctxt "Stock label"
 msgid "Print Pre_view"
 msgstr "Pre_visualización da impresión"
 
-#: ../gtk/gtkstock.c:411
+#: ../gtk/gtkstock.c:412
 msgctxt "Stock label"
 msgid "_Properties"
 msgstr "_Propiedades"
 
-#: ../gtk/gtkstock.c:412
+#: ../gtk/gtkstock.c:413
 msgctxt "Stock label"
 msgid "_Quit"
 msgstr "_Saír"
 
-#: ../gtk/gtkstock.c:413
+#: ../gtk/gtkstock.c:414
 msgctxt "Stock label"
 msgid "_Redo"
 msgstr "_Refacer"
 
-#: ../gtk/gtkstock.c:414
+#: ../gtk/gtkstock.c:415
 msgctxt "Stock label"
 msgid "_Refresh"
 msgstr "_Actualizar"
 
-#: ../gtk/gtkstock.c:415
+#: ../gtk/gtkstock.c:416
 msgctxt "Stock label"
 msgid "_Remove"
 msgstr "_Eliminar"
 
-#: ../gtk/gtkstock.c:416
+#: ../gtk/gtkstock.c:417
 msgctxt "Stock label"
 msgid "_Revert"
 msgstr "_Recuperar"
 
-#: ../gtk/gtkstock.c:417
+#: ../gtk/gtkstock.c:418
 msgctxt "Stock label"
 msgid "_Save"
 msgstr "_Gardar"
 
-#: ../gtk/gtkstock.c:418
+#: ../gtk/gtkstock.c:419
 msgctxt "Stock label"
 msgid "Save _As"
 msgstr "Gardar _como"
 
-#: ../gtk/gtkstock.c:419
+#: ../gtk/gtkstock.c:420
 msgctxt "Stock label"
 msgid "Select _All"
 msgstr "Seleccionar _todo"
 
-#: ../gtk/gtkstock.c:420
+#: ../gtk/gtkstock.c:421
 msgctxt "Stock label"
 msgid "_Color"
 msgstr "_Cor"
 
-#: ../gtk/gtkstock.c:421
+#: ../gtk/gtkstock.c:422
 msgctxt "Stock label"
 msgid "_Font"
 msgstr "_Tipo de letra"
 
 #. Sorting direction
-#: ../gtk/gtkstock.c:423
+#: ../gtk/gtkstock.c:424
 msgctxt "Stock label"
 msgid "_Ascending"
 msgstr "_Ascendente"
 
 #. Sorting direction
-#: ../gtk/gtkstock.c:425
+#: ../gtk/gtkstock.c:426
 msgctxt "Stock label"
 msgid "_Descending"
 msgstr "_Descendente"
 
-#: ../gtk/gtkstock.c:426
+#: ../gtk/gtkstock.c:427
 msgctxt "Stock label"
 msgid "_Spell Check"
 msgstr "Verificación _ortográfica"
 
-#: ../gtk/gtkstock.c:427
+#: ../gtk/gtkstock.c:428
 msgctxt "Stock label"
 msgid "_Stop"
 msgstr "De_ter"
 
 #. Font variant
-#: ../gtk/gtkstock.c:429
+#: ../gtk/gtkstock.c:430
 msgctxt "Stock label"
 msgid "_Strikethrough"
 msgstr "_Riscado"
 
-#: ../gtk/gtkstock.c:430
+#: ../gtk/gtkstock.c:431
 msgctxt "Stock label"
 msgid "_Undelete"
 msgstr "_Recuperar"
 
 #. Font variant
-#: ../gtk/gtkstock.c:432
+#: ../gtk/gtkstock.c:433
 msgctxt "Stock label"
 msgid "_Underline"
 msgstr "_Subliñada"
 
-#: ../gtk/gtkstock.c:433
+#: ../gtk/gtkstock.c:434
 msgctxt "Stock label"
 msgid "_Undo"
 msgstr "_Desfacer"
 
-#: ../gtk/gtkstock.c:434
+#: ../gtk/gtkstock.c:435
 msgctxt "Stock label"
 msgid "_Yes"
 msgstr "_Si"
 
 #. Zoom
-#: ../gtk/gtkstock.c:436
+#: ../gtk/gtkstock.c:437
 msgctxt "Stock label"
 msgid "_Normal Size"
 msgstr "Tamaño _normal"
 
 #. Zoom
-#: ../gtk/gtkstock.c:438
+#: ../gtk/gtkstock.c:439
 msgctxt "Stock label"
 msgid "Best _Fit"
 msgstr "A_xuste óptimo"
 
-#: ../gtk/gtkstock.c:439
+#: ../gtk/gtkstock.c:440
 msgctxt "Stock label"
 msgid "Zoom _In"
 msgstr "_Aumentar"
 
-#: ../gtk/gtkstock.c:440
+#: ../gtk/gtkstock.c:441
 msgctxt "Stock label"
 msgid "Zoom _Out"
 msgstr "Red_ucir"
@@ -4893,9 +4898,6 @@ msgstr ""
 
 #~ msgid "Fol_ders"
 #~ msgstr "Car_tafoles"
-
-#~ msgid "_Files"
-#~ msgstr "_Ficheiros"
 
 #~ msgid "Folder unreadable: %s"
 #~ msgstr "Cartafol ilexíbel: %s"
