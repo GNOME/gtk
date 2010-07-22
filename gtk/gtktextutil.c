@@ -357,7 +357,7 @@ _gtk_text_util_create_rich_drag_icon (GtkWidget     *widget,
    cairo_paint (cr);
 
    gtk_text_layout_draw (layout, widget, drawable,
-                         widget->style->text_gc [gtk_widget_get_state (widget)],
+                         NULL,
                          - (1 + DRAG_ICON_LAYOUT_BORDER),
                          - (1 + DRAG_ICON_LAYOUT_BORDER),
                          0, 0,

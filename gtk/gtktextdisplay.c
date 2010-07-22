@@ -801,7 +801,7 @@ void
 gtk_text_layout_draw (GtkTextLayout *layout,
                       GtkWidget *widget,
                       GdkDrawable *drawable,
-		      GdkGC       *cursor_gc,
+		      gpointer     cursor_gc,
                       /* Location of the drawable
                          in layout coordinates */
                       gint x_offset,
