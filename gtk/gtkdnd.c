@@ -2362,6 +2362,9 @@ gtk_drag_begin_internal (GtkWidget         *widget,
   if (event)
     {
       time = gdk_event_get_time (event);
+      if (time == GDK_CURRENT_TIME)
+        time = gtk_get_current_event_time ();
+
       pointer = gdk_event_get_device (event);
 
       if (pointer->source == GDK_SOURCE_KEYBOARD)
@@ -4063,6 +4066,10 @@ gtk_drag_end (GtkDragSourceInfo *info, guint32 time)
 
   pointer = gdk_drag_context_get_device (info->context);
   keyboard = gdk_device_get_associated_device (pointer);
+
+  /* Prevent ungrab before grab (see bug 623865) */
+  if (info->grab_time == GDK_CURRENT_TIME)
+    time = GDK_CURRENT_TIME;
 
   if (info->update_idle)
     {
