@@ -2335,7 +2335,11 @@ gtk_drag_begin_internal (GtkWidget         *widget,
 				NULL);
   
   if (event)
-    time = gdk_event_get_time (event);
+    {
+      time = gdk_event_get_time (event);
+      if (time == GDK_CURRENT_TIME)
+        time = gtk_get_current_event_time ();
+    }
 
   if (gdk_pointer_grab (ipc_widget->window, FALSE,
 			GDK_POINTER_MOTION_MASK |
@@ -4055,6 +4059,10 @@ gtk_drag_end (GtkDragSourceInfo *info, guint32 time)
   GdkEvent *send_event;
   GtkWidget *source_widget = info->widget;
   GdkDisplay *display = gtk_widget_get_display (source_widget);
+
+  /* Prevent ungrab before grab (see bug 623865) */
+  if (info->grab_time == GDK_CURRENT_TIME)
+    time = GDK_CURRENT_TIME;
 
   if (info->update_idle)
     {
