@@ -93,7 +93,6 @@
 #include <gtk/gtkfontbutton.h>
 #include <gtk/gtkfontsel.h>
 #include <gtk/gtkframe.h>
-#include <gtk/gtkgc.h>
 #include <gtk/gtkhandlebox.h>
 #include <gtk/gtkhbbox.h>
 #include <gtk/gtkhbox.h>

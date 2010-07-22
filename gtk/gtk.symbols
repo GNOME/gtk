@@ -1460,13 +1460,6 @@ gtk_frame_set_shadow_type
 #endif
 #endif
 
-#if IN_HEADER(__GTK_GC_H__)
-#if IN_FILE(__GTK_GC_C__)
-gtk_gc_get
-gtk_gc_release
-#endif
-#endif
-
 #if IN_HEADER(__GTK_HANDLE_BOX_H__)
 #if IN_FILE(__GTK_HANDLE_BOX_C__)
 gtk_handle_box_get_handle_position

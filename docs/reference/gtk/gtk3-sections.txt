@@ -5185,14 +5185,6 @@ GTK_INTERFACE_AGE
 GTK_CHECK_VERSION
 </SECTION>
 
-
-<SECTION>
-<FILE>gtkgc</FILE>
-<TITLE>Graphics Contexts</TITLE>
-gtk_gc_get
-gtk_gc_release
-</SECTION>
-
 <SECTION>
 <FILE>gtkstyle</FILE>
 <TITLE>GtkStyle</TITLE>

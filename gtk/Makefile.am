@@ -209,7 +209,6 @@ gtk_public_h_sources =          \
 	gtkfontbutton.h		\
 	gtkfontsel.h		\
 	gtkframe.h		\
-	gtkgc.h			\
 	gtkhandlebox.h		\
 	gtkhbbox.h		\
 	gtkhbox.h		\
@@ -472,7 +471,6 @@ gtk_base_c_sources =            \
 	gtkfontbutton.c         \
 	gtkfontsel.c            \
 	gtkframe.c		\
-	gtkgc.c			\
 	gtkhandlebox.c		\
 	gtkhbbox.c		\
 	gtkhbox.c		\
