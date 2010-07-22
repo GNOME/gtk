@@ -225,6 +225,47 @@ gdk_window_queue (GdkWindow          *window,
   g_queue_push_tail (display_x11->translate_queue, item);
 }
 
+static GC
+_get_scratch_gc (GdkWindowObject *window, cairo_region_t *clip_region)
+{
+  GdkScreenX11 *screen;
+  XRectangle *rectangles;
+  gint n_rects;
+  gint depth;
+
+  screen = GDK_SCREEN_X11 (gdk_drawable_get_screen (GDK_DRAWABLE (window)));
+  depth = gdk_drawable_get_depth (GDK_DRAWABLE (window)) - 1;
+
+  if (!screen->subwindow_gcs[depth])
+    {
+      XGCValues values;
+      
+      values.graphics_exposures = True;
+      values.subwindow_mode = IncludeInferiors;
+      
+      screen->subwindow_gcs[depth] = XCreateGC (screen->xdisplay,
+                                                GDK_WINDOW_XID (window),
+                                                GCSubwindowMode | GCGraphicsExposures,
+                                                &values);
+    }
+  
+  _gdk_region_get_xrectangles (clip_region,
+                               0, 0,
+                               &rectangles,
+                               &n_rects);
+  
+  XSetClipRectangles (screen->xdisplay,
+                      screen->subwindow_gcs[depth],
+                      0, 0,
+                      rectangles, n_rects,
+                      YXBanded);
+  
+  g_free (rectangles);
+  return screen->subwindow_gcs[depth];
+}
+
+
+
 void
 _gdk_x11_window_translate (GdkWindow      *window,
                            cairo_region_t *area,
@@ -232,7 +273,7 @@ _gdk_x11_window_translate (GdkWindow      *window,
                            gint            dy)
 {
   GdkWindowQueueItem *item;
-  GdkGC *tmp_gc;
+  GC xgc;
   GdkRectangle extents;
   GdkWindowObject *private, *impl;
   int px, py;
@@ -255,16 +296,9 @@ _gdk_x11_window_translate (GdkWindow      *window,
 
   cairo_region_get_extents (area, &extents);
 
-  tmp_gc = _gdk_drawable_get_subwindow_scratch_gc ((GdkWindow *)private);
-  gdk_gc_set_clip_region (tmp_gc, area);
+  xgc = _get_scratch_gc (impl, area);
 
   cairo_region_translate (area, -dx, -dy); /* Move to source region */
-
-  /* Ensure that the gc is flushed so that we get the right
-     serial from NextRequest in gdk_window_queue, i.e. the
-     the serial for the XCopyArea, not the ones from flushing
-     the gc. */
-  _gdk_x11_gc_flush (tmp_gc);
 
   item = g_new (GdkWindowQueueItem, 1);
   item->type = GDK_WINDOW_QUEUE_TRANSLATE;
@@ -276,12 +310,10 @@ _gdk_x11_window_translate (GdkWindow      *window,
   XCopyArea (GDK_WINDOW_XDISPLAY (impl),
              GDK_DRAWABLE_IMPL_X11 (private->impl)->xid,
              GDK_DRAWABLE_IMPL_X11 (impl->impl)->xid,
-             GDK_GC_GET_XGC (tmp_gc),
+             xgc,
              extents.x - dx, extents.y - dy,
              extents.width, extents.height,
              extents.x, extents.y);
-
-  gdk_gc_set_clip_region (tmp_gc, NULL);
 }
 
 gboolean

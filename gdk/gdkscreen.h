@@ -49,8 +49,6 @@ struct _GdkScreen
 
   guint GSEAL (closed) : 1;
 
-  GdkGC *GSEAL (subwindow_gcs[32]);
-
   cairo_font_options_t *GSEAL (font_options);
   double GSEAL (resolution);	/* pixels/points scale factor for fonts */
 };

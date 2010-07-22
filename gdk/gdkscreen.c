@@ -29,7 +29,6 @@
 #include "gdkintl.h"
 
 
-static void gdk_screen_dispose      (GObject        *object);
 static void gdk_screen_finalize     (GObject        *object);
 static void gdk_screen_set_property (GObject        *object,
 				     guint           prop_id,
@@ -64,7 +63,6 @@ gdk_screen_class_init (GdkScreenClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
-  object_class->dispose = gdk_screen_dispose;
   object_class->finalize = gdk_screen_finalize;
   object_class->set_property = gdk_screen_set_property;
   object_class->get_property = gdk_screen_get_property;
@@ -153,24 +151,6 @@ static void
 gdk_screen_init (GdkScreen *screen)
 {
   screen->resolution = -1.;
-}
-
-static void
-gdk_screen_dispose (GObject *object)
-{
-  GdkScreen *screen = GDK_SCREEN (object);
-  gint i;
-
-  for (i = 0; i < 32; ++i)
-    {
-      if (screen->subwindow_gcs[i])
-        {
-          g_object_unref (screen->subwindow_gcs[i]);
-          screen->subwindow_gcs[i] = NULL;
-        }
-    }
-
-  G_OBJECT_CLASS (gdk_screen_parent_class)->dispose (object);
 }
 
 static void

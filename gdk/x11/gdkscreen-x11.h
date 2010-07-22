@@ -95,6 +95,9 @@ struct _GdkScreenX11
   GdkX11Monitor	*monitors;
   gint           primary_monitor;
 
+  /* cache for window->translate vfunc */
+  GC subwindow_gcs[32];
+
   /* Xft resources for the display, used for default values for
    * the Xft/ XSETTINGS
    */
