@@ -4283,8 +4283,9 @@ pack_start_recurse (GtkWidget       *menu,
   for (i = list; i; i = i->next)
     {
       child = gtk_bin_get_child (GTK_BIN (i->data));
-      gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (child),
-                                  cell, expand);
+      if (GTK_IS_CELL_LAYOUT (child))
+        gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (child),
+                                    cell, expand);
 
       submenu = gtk_menu_item_get_submenu (GTK_MENU_ITEM (i->data));
       if (submenu != NULL)
@@ -4338,8 +4339,9 @@ pack_end_recurse (GtkWidget       *menu,
   for (i = list; i; i = i->next)
     {
       child = gtk_bin_get_child (GTK_BIN (i->data));
-      gtk_cell_layout_pack_end (GTK_CELL_LAYOUT (child),
-                                cell, expand);
+      if (GTK_IS_CELL_LAYOUT (child))
+        gtk_cell_layout_pack_end (GTK_CELL_LAYOUT (child),
+                                  cell, expand);
 
       submenu = gtk_menu_item_get_submenu (GTK_MENU_ITEM (i->data));
       if (submenu != NULL)
@@ -4408,7 +4410,8 @@ clear_recurse (GtkWidget *menu)
   for (i = list; i; i = i->next)
     {
       child = gtk_bin_get_child (GTK_BIN (i->data));
-      gtk_cell_layout_clear (GTK_CELL_LAYOUT (child));
+      if (GTK_IS_CELL_LAYOUT (child))
+        gtk_cell_layout_clear (GTK_CELL_LAYOUT (child));
 
       submenu = gtk_menu_item_get_submenu (GTK_MENU_ITEM (i->data));
       if (submenu != NULL)
@@ -4461,8 +4464,9 @@ add_attribute_recurse (GtkWidget       *menu,
   for (i = list; i; i = i->next)
     {
       child = gtk_bin_get_child (GTK_BIN (i->data));
-      gtk_cell_layout_add_attribute (GTK_CELL_LAYOUT (child),
-                                     cell, attribute, column);
+      if (GTK_IS_CELL_LAYOUT (child))
+        gtk_cell_layout_add_attribute (GTK_CELL_LAYOUT (child),
+                                       cell, attribute, column);
 
       submenu = gtk_menu_item_get_submenu (GTK_MENU_ITEM (i->data));
       if (submenu != NULL)
@@ -4607,7 +4611,8 @@ clear_attributes_recurse (GtkWidget       *menu,
   for (i = list; i; i = i->next)
     {
       child = gtk_bin_get_child (GTK_BIN (i->data));
-      gtk_cell_layout_clear_attributes (GTK_CELL_LAYOUT (child), cell);
+      if (GTK_IS_CELL_LAYOUT (child))
+        gtk_cell_layout_clear_attributes (GTK_CELL_LAYOUT (child), cell);
 
       submenu = gtk_menu_item_get_submenu (GTK_MENU_ITEM (i->data));
       if (submenu != NULL)
@@ -4665,8 +4670,9 @@ reorder_recurse (GtkWidget             *menu,
   for (i = list; i; i = i->next)
     {
       child = gtk_bin_get_child (GTK_BIN (i->data));
-      gtk_cell_layout_reorder (GTK_CELL_LAYOUT (child),
-                               cell, position);
+      if (GTK_IS_CELL_LAYOUT (child))
+        gtk_cell_layout_reorder (GTK_CELL_LAYOUT (child),
+                                 cell, position);
 
       submenu = gtk_menu_item_get_submenu (GTK_MENU_ITEM (i->data));
       if (submenu != NULL)
