@@ -6255,7 +6255,7 @@ gtk_notebook_menu_switch_page (GtkWidget       *widget,
   g_signal_emit (notebook,
 		 notebook_signals[SWITCH_PAGE],
 		 0,
-		 page,
+		 page->child,
 		 page_num);
 }
 
