@@ -147,33 +147,6 @@ gdk_quartz_get_depth (GdkDrawable *drawable)
   return gdk_drawable_get_depth (GDK_DRAWABLE_IMPL_QUARTZ (drawable)->wrapper);
 }
 
-static inline void
-gdk_quartz_fix_cap_not_last_line (GdkGCQuartz *private,
-				  gint         x1,
-				  gint         y1,
-				  gint         x2,
-				  gint         y2,
-				  gint        *xfix,
-				  gint        *yfix)
-{
-  *xfix = 0;
-  *yfix = 0;
-
-  if (private->cap_style == GDK_CAP_NOT_LAST && private->line_width == 0)
-    {
-      /* fix only vertical and horizontal lines for now */
-
-      if (y1 == y2 && x1 != x2)
-	{
-	  *xfix = (x1 < x2) ? -1 : 1;
-	}
-      else if (x1 == x2 && y1 != y2)
-	{
-	  *yfix = (y1 < y2) ? -1 : 1;
-	}
-    }
-}
-
 static void
 gdk_drawable_impl_quartz_finalize (GObject *object)
 {
@@ -194,8 +167,6 @@ gdk_drawable_impl_quartz_class_init (GdkDrawableImplQuartzClass *klass)
   parent_class = g_type_class_peek_parent (klass);
 
   object_class->finalize = gdk_drawable_impl_quartz_finalize;
-
-  drawable_class->create_gc = _gdk_quartz_gc_new;
 
   drawable_class->ref_cairo_surface = gdk_quartz_ref_cairo_surface;
 

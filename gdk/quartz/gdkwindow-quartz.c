@@ -286,10 +286,8 @@ gdk_window_impl_quartz_begin_paint_region (GdkPaintable    *paintable,
     }
   else
     {
-      int x, y;
       int x_offset, y_offset;
       int width, height;
-      cairo_rectangle_int_t rect;
       cairo_t *cr;
 
       x_offset = y_offset = 0;
@@ -316,7 +314,7 @@ gdk_window_impl_quartz_begin_paint_region (GdkPaintable    *paintable,
 
       gdk_drawable_get_size (GDK_DRAWABLE (bg_pixmap), &width, &height);
 
-      cr = gdk_cairo_create (impl);
+      cr = gdk_cairo_create (GDK_DRAWABLE (impl));
       
       gdk_cairo_set_source_pixmap (cr, bg_pixmap, x_offset, y_offset);
       cairo_pattern_set_extend (cairo_get_source (cr), CAIRO_EXTEND_REPEAT);

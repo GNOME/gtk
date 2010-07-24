@@ -143,11 +143,10 @@ void        _gdk_quartz_drawable_flush  (GdkDrawable *drawable);
 void        _gdk_quartz_window_scroll      (GdkWindow       *window,
                                             gint             dx,
                                             gint             dy);
-void        _gdk_quartz_window_queue_translation (GdkWindow *window,
-						  GdkGC     *gc,
-                                                  cairo_region_t *area,
-                                                  gint       dx,
-                                                  gint       dy);
+void        _gdk_quartz_window_translate   (GdkWindow       *window,
+                                            cairo_region_t  *area,
+                                            gint             dx,
+                                            gint             dy);
 gboolean    _gdk_quartz_window_queue_antiexpose  (GdkWindow *window,
                                                   cairo_region_t *area);
 
