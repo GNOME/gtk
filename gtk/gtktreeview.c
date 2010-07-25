@@ -4643,23 +4643,6 @@ gtk_tree_view_bin_expose (GtkWidget      *widget,
 				  background_area.height);
 	    }
 
-	  if (draw_hgrid_lines)
-	    {
-	      if (background_area.y > 0)
-		gdk_draw_line (event->window,
-			       tree_view->priv->grid_line_gc,
-			       background_area.x, background_area.y,
-			       background_area.x + background_area.width,
-			       background_area.y);
-
-	      if (y_offset + max_height >= event->area.height)
-		gdk_draw_line (event->window,
-			       tree_view->priv->grid_line_gc,
-			       background_area.x, background_area.y + max_height,
-			       background_area.x + background_area.width,
-			       background_area.y + max_height);
-	    }
-
 	  if (gtk_tree_view_is_expander_column (tree_view, column))
 	    {
 	      if (!rtl)
@@ -4732,6 +4715,23 @@ gtk_tree_view_bin_expose (GtkWidget      *widget,
 						   &cell_area,
 						   &event->area,
 						   flags);
+	    }
+
+	  if (draw_hgrid_lines)
+	    {
+	      if (background_area.y > 0)
+		gdk_draw_line (event->window,
+			       tree_view->priv->grid_line_gc,
+			       background_area.x, background_area.y,
+			       background_area.x + background_area.width,
+			       background_area.y);
+
+	      if (y_offset + max_height >= event->area.height)
+		gdk_draw_line (event->window,
+			       tree_view->priv->grid_line_gc,
+			       background_area.x, background_area.y + max_height,
+			       background_area.x + background_area.width,
+			       background_area.y + max_height);
 	    }
 
 	  if (gtk_tree_view_is_expander_column (tree_view, column) &&
