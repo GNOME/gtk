@@ -6058,8 +6058,8 @@ typedef struct _CursorInfo CursorInfo;
 struct _CursorInfo
 {
   GType for_type;
-  GdkGC *primary_gc;
-  GdkGC *secondary_gc;
+  GdkColor primary;
+  GdkColor secondary;
 };
 
 static void
@@ -6070,54 +6070,23 @@ style_unrealize_cursor_gcs (GtkStyle *style)
   cursor_info = g_object_get_data (G_OBJECT (style), "gtk-style-cursor-info");
   if (cursor_info)
     {
-      if (cursor_info->primary_gc)
-	gtk_gc_release (cursor_info->primary_gc);
-
-      if (cursor_info->secondary_gc)
-	gtk_gc_release (cursor_info->secondary_gc);
-      
       g_free (cursor_info);
       g_object_set_data (G_OBJECT (style), I_("gtk-style-cursor-info"), NULL);
     }
 }
 
-static GdkGC *
-make_cursor_gc (GtkWidget      *widget,
-		const gchar    *property_name,
-		const GdkColor *fallback)
-{
-  GdkGCValues gc_values;
-  GdkGCValuesMask gc_values_mask;
-  GdkColor *cursor_color;
-
-  gtk_widget_style_get (widget, property_name, &cursor_color, NULL);
-  
-  gc_values_mask = GDK_GC_FOREGROUND;
-  if (cursor_color)
-    {
-      gc_values.foreground = *cursor_color;
-      gdk_color_free (cursor_color);
-    }
-  else
-    gc_values.foreground = *fallback;
-  
-  gdk_rgb_find_color (widget->style->colormap, &gc_values.foreground);
-  return gtk_gc_get (widget->style->depth, widget->style->colormap, &gc_values, gc_values_mask);
-}
-
-static GdkGC *
-get_insertion_cursor_gc (GtkWidget *widget,
-			 gboolean   is_primary)
+static const GdkColor *
+get_insertion_cursor_color (GtkWidget *widget,
+			    gboolean   is_primary)
 {
   CursorInfo *cursor_info;
+  GdkColor *cursor_color;
 
   cursor_info = g_object_get_data (G_OBJECT (widget->style), "gtk-style-cursor-info");
   if (!cursor_info)
     {
-      cursor_info = g_new (CursorInfo, 1);
+      cursor_info = g_new0 (CursorInfo, 1);
       g_object_set_data (G_OBJECT (widget->style), I_("gtk-style-cursor-info"), cursor_info);
-      cursor_info->primary_gc = NULL;
-      cursor_info->secondary_gc = NULL;
       cursor_info->for_type = G_TYPE_INVALID;
     }
 
@@ -6130,40 +6099,38 @@ get_insertion_cursor_gc (GtkWidget *widget,
   if (cursor_info->for_type != G_OBJECT_TYPE (widget))
     {
       cursor_info->for_type = G_OBJECT_TYPE (widget);
-      if (cursor_info->primary_gc)
-	{
-	  gtk_gc_release (cursor_info->primary_gc);
-	  cursor_info->primary_gc = NULL;
-	}
-      if (cursor_info->secondary_gc)
-	{
-	  gtk_gc_release (cursor_info->secondary_gc);
-	  cursor_info->secondary_gc = NULL;
-	}
+
+      /* Cursors in text widgets are drawn only in NORMAL state,
+       * so we can use text[GTK_STATE_NORMAL] as text color here */
+      gtk_widget_style_get (widget, "cursor-color", &cursor_color, NULL);
+      if (cursor_color)
+        {
+          cursor_info->primary = *cursor_color;
+          gdk_color_free (cursor_color);
+        }
+      else
+        {
+          cursor_info->primary = widget->style->text[GTK_STATE_NORMAL];
+        }
+
+      gtk_widget_style_get (widget, "secondary-cursor-color", &cursor_color, NULL);
+      if (cursor_color)
+        {
+          cursor_info->secondary = *cursor_color;
+          gdk_color_free (cursor_color);
+        }
+      else
+        {
+          /* text_aa is the average of text and base colors,
+           * in usual black-on-white case it's grey. */
+          cursor_info->secondary = widget->style->text_aa[GTK_STATE_NORMAL];
+        }
     }
 
-  /* Cursors in text widgets are drawn only in NORMAL state,
-   * so we can use text[GTK_STATE_NORMAL] as text color here */
   if (is_primary)
-    {
-      if (!cursor_info->primary_gc)
-	cursor_info->primary_gc = make_cursor_gc (widget,
-						  "cursor-color",
-						  &widget->style->text[GTK_STATE_NORMAL]);
-
-      return cursor_info->primary_gc;
-    }
+    return &cursor_info->primary;
   else
-    {
-      if (!cursor_info->secondary_gc)
-	cursor_info->secondary_gc = make_cursor_gc (widget,
-						    "secondary-cursor-color",
-						    /* text_aa is the average of text and base colors,
-						     * in usual black-on-white case it's grey. */
-						    &widget->style->text_aa[GTK_STATE_NORMAL]);
-
-      return cursor_info->secondary_gc;
-    }
+    return &cursor_info->secondary;
 }
 
 void
@@ -6188,8 +6155,7 @@ _gtk_widget_get_cursor_color (GtkWidget *widget,
 
 static void
 draw_insertion_cursor (GtkWidget          *widget,
-		       GdkDrawable        *drawable,
-		       GdkGC              *gc,
+                       cairo_t            *cr,
 		       const GdkRectangle *location,
 		       GtkTextDirection    direction,
 		       gboolean            draw_arrow)
@@ -6216,10 +6182,10 @@ draw_insertion_cursor (GtkWidget          *widget,
   else
     offset = stem_width - stem_width / 2;
   
-  for (i = 0; i < stem_width; i++)
-    gdk_draw_line (drawable, gc,
-		   location->x + i - offset, location->y,
-		   location->x + i - offset, location->y + location->height - 1);
+  cairo_rectangle (cr, 
+                   location->x - offset, location->y,
+                   stem_width, location->height);
+  cairo_fill (cr);
 
   if (draw_arrow)
     {
@@ -6228,26 +6194,20 @@ draw_insertion_cursor (GtkWidget          *widget,
           x = location->x - offset - 1;
           y = location->y + location->height - arrow_width * 2 - arrow_width + 1;
   
-          for (i = 0; i < arrow_width; i++)
-            {
-              gdk_draw_line (drawable, gc,
-                             x, y + i + 1,
-                             x, y + 2 * arrow_width - i - 1);
-              x --;
-            }
+          cairo_move_to (cr, x, y + 1);
+          cairo_line_to (cr, x - arrow_width, y + arrow_width);
+          cairo_line_to (cr, x, y + 2 * arrow_width);
+          cairo_fill (cr);
         }
       else if (direction == GTK_TEXT_DIR_LTR)
         {
           x = location->x + stem_width - offset;
           y = location->y + location->height - arrow_width * 2 - arrow_width + 1;
   
-          for (i = 0; i < arrow_width; i++) 
-            {
-              gdk_draw_line (drawable, gc,
-                             x, y + i + 1,
-                             x, y + 2 * arrow_width - i - 1);
-              x++;
-            }
+          cairo_move_to (cr, x, y + 1);
+          cairo_line_to (cr, x + arrow_width, y + arrow_width);
+          cairo_line_to (cr, x, y + 2 * arrow_width);
+          cairo_fill (cr);
         }
     }
 }
@@ -6279,20 +6239,22 @@ gtk_draw_insertion_cursor (GtkWidget          *widget,
 			   GtkTextDirection    direction,
 			   gboolean            draw_arrow)
 {
-  GdkGC *gc;
+  cairo_t *cr;
 
   g_return_if_fail (GTK_IS_WIDGET (widget));
   g_return_if_fail (GDK_IS_DRAWABLE (drawable));
   g_return_if_fail (location != NULL);
   g_return_if_fail (direction != GTK_TEXT_DIR_NONE);
 
-  gc = get_insertion_cursor_gc (widget, is_primary);
+  cr = gdk_cairo_create (drawable);
   if (area)
-    gdk_gc_set_clip_rectangle (gc, area);
+    {
+      gdk_cairo_rectangle (cr, area);
+      cairo_clip (cr);
+    }
   
-  draw_insertion_cursor (widget, drawable, gc,
-			 location, direction, draw_arrow);
+  gdk_cairo_set_source_color (cr, get_insertion_cursor_color (widget, is_primary));
+  draw_insertion_cursor (widget, cr, location, direction, draw_arrow);
   
-  if (area)
-    gdk_gc_set_clip_rectangle (gc, NULL);
+  cairo_destroy (cr);
 }
