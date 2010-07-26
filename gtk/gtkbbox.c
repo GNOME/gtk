@@ -457,7 +457,7 @@ _gtk_button_box_child_requisition (GtkWidget *widget,
 
   nchildren = 0;
   nsecondaries = 0;
-  list = children = gtk_container_get_children (GTK_CONTAINER (bbox));
+  list = children = _gtk_box_get_children (GTK_BOX (bbox));
   needed_width = child_min_width;
   needed_height = child_min_height;  
   ipad_w = ipad_x * 2;
@@ -790,7 +790,7 @@ gtk_button_box_size_allocate (GtkWidget     *widget,
         childspace = child_height + childspacing;
       }
 
-  list = children = gtk_container_get_children (GTK_CONTAINER (box));
+  list = children = _gtk_box_get_children (GTK_BOX (box));
 
   while (children)
     {

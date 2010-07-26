@@ -1034,13 +1034,14 @@ has_extra_children (GtkStatusbar *statusbar)
   GtkPackType child_pack_type, frame_pack_type;
   GtkWidget *child, *frame;
   GList *l, *children;
+  gboolean retval = FALSE;
 
   /* If the internal frame has been modified assume we have extra children */
   if (gtk_bin_get_child (GTK_BIN (priv->frame)) != priv->label)
     return TRUE;
 
   frame = NULL;
-  children = gtk_container_get_children (GTK_CONTAINER (statusbar));
+  children = _gtk_box_get_children (GTK_BOX (statusbar));
   for (l = children; l; l = l->next)
     {
       frame = l->data;
@@ -1063,12 +1064,15 @@ has_extra_children (GtkStatusbar *statusbar)
                                    NULL, NULL, NULL, &child_pack_type);
 
       if (frame_pack_type == GTK_PACK_START || child_pack_type == GTK_PACK_END)
-	return TRUE;
+        {
+	  retval = TRUE;
+	  break;
+	}
     }
 
   g_list_free (children);
 
-  return FALSE;
+  return retval;
 }
 
 static void

@@ -1770,3 +1770,27 @@ gtk_box_forall (GtkContainer *container,
 	(* callback) (child->widget, callback_data);
     }
 }
+
+GList *
+_gtk_box_get_children (GtkBox *box)
+{
+  GtkBoxPriv *priv;
+  GtkBoxChild *child;
+  GList *children;
+  GList *retval = NULL;
+
+  g_return_val_if_fail (GTK_IS_BOX (box), NULL);
+
+  priv = box->priv;
+
+  children = priv->children;
+  while (children)
+    {
+      child = children->data;
+      children = children->next;
+
+      retval = g_list_prepend (retval, child->widget);
+    }
+
+  return g_list_reverse (retval);
+}
