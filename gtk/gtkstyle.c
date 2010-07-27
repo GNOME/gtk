@@ -1981,6 +1981,7 @@ gtk_default_draw_shadow (GtkStyle      *style,
 	  draw_spinbutton_shadow (style, cr, state_type, 
 				  get_direction (widget), area, x, y, width, height);
 	  
+	  cairo_destroy (cr);
 	  return;
 	}
     }
@@ -1995,6 +1996,7 @@ gtk_default_draw_shadow (GtkStyle      *style,
   switch (shadow_type)
     {
     case GTK_SHADOW_NONE:
+      cairo_destroy (cr);
       return;
     case GTK_SHADOW_IN:
     case GTK_SHADOW_ETCHED_IN:
@@ -3714,6 +3716,7 @@ gtk_default_draw_extension (GtkStyle       *style,
   switch (shadow_type)
     {
     case GTK_SHADOW_NONE:
+      cairo_destroy (cr);
       return;
     case GTK_SHADOW_IN:
       color1 = style->dark[state_type];
