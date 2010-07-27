@@ -159,7 +159,7 @@ G_DEFINE_ABSTRACT_TYPE (GtkIMContext, gtk_im_context, G_TYPE_OBJECT)
  *   character.
  * @focus_in: Called via gtk_im_context_focus_in() when the input widget
  *   has gained focus. May be overridden to keep track of the current focus.
- * @focus_out: Called via gtk_im_context_focus_in() when the input widget
+ * @focus_out: Called via gtk_im_context_focus_out() when the input widget
  *   has lost focus. May be overridden to keep track of the current focus.
  * @reset: Called via gtk_im_context_reset() to signal a change such as a
  *   change in cursor position. An input method that implements preediting
