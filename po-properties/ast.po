@@ -1,20 +1,21 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
+# Xandru Armesto <xandru@softastur.org>, 2010.
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-05-02 21:21-0400\n"
-"PO-Revision-Date: 2010-01-11 22:48+0100\n"
-"Last-Translator: astur <malditoastur@gmail.com>\n"
-"Language-Team: Asturian <alministradores@softastur.org>\n"
+"PO-Revision-Date: 2010-07-28 13:19+0200\n"
+"Last-Translator: Xandru Armesto <xandru@softastur.org>\n"
+"Language-Team: Softastur alministradores@softastur.org\n"
+"Language: ast\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Virtaal 0.5.2\n"
 "X-Poedit-Language: asturian\n"
 
 #: gdk-pixbuf/gdk-pixbuf-simple-anim.c:165
@@ -1390,19 +1391,17 @@ msgid "Active"
 msgstr "Activu"
 
 #: gtk/gtkcellrendererspinner.c:125
-#, fuzzy
 msgid "Whether the spinner is active (ie. shown) in the cell"
-msgstr "Indica si estilu de fonte esbilláu s'amuesa na etiqueta"
+msgstr "Indica si'l marcador incremental ta activu (ex. amosáu) na caxella"
 
 #: gtk/gtkcellrendererspinner.c:145
-#, fuzzy
 msgid "Pulse of the spinner"
-msgstr "Nome de la imprentadora"
+msgstr "Pulsu del marcador incremental"
 
 #: gtk/gtkcellrendererspinner.c:159
-#, fuzzy
 msgid "The GtkIconSize value that specifies the size of the rendered spinner"
-msgstr "El valor de GTKIconSize qu'especifica el tamañu del iconu renderizáu"
+msgstr ""
+"El valor de GTKIconSize qu'especifica'l tamañu del marcador incrementable"
 
 #: gtk/gtkcellrenderertext.c:196
 msgid "Text to render"
@@ -5711,14 +5710,12 @@ msgid "Style of bevel around the spin button"
 msgstr "Estilu de bisel al rodiu del botón xiratoriu"
 
 #: gtk/gtkspinner.c:129
-#, fuzzy
 msgid "Whether the spinner is active"
-msgstr "Indica si l'iconu primariu ye activable"
+msgstr "Indica si'l marcador incrementable ta activu"
 
 #: gtk/gtkspinner.c:143
-#, fuzzy
 msgid "Number of steps"
-msgstr "Númberu de páxines"
+msgstr "Númberu de pasos"
 
 #: gtk/gtkspinner.c:144
 msgid ""
@@ -5726,16 +5723,20 @@ msgid ""
 "will complete a full cycle in one second by default (see #GtkSpinner:cycle-"
 "duration)."
 msgstr ""
+"Númberu de pasos pa que'l marcador incrementable complete un bucle completu. "
+"La L'animación completará un ciclu completu nun segundu por por defeutu "
+"(mira #GtkSpinner:cycle-duration)."
 
 #: gtk/gtkspinner.c:159
-#, fuzzy
 msgid "Animation duration"
-msgstr "Animación"
+msgstr "Duración de l'animación"
 
 #: gtk/gtkspinner.c:160
 msgid ""
 "The length of time in milliseconds for the spinner to complete a full loop"
 msgstr ""
+"La duración del tiempu en milisegundos pa que'l marcador incremental "
+"complete un bucle completu"
 
 #: gtk/gtkstatusbar.c:148
 msgid "Has Resize Grip"
@@ -6554,102 +6555,87 @@ msgstr ""
 "GTK_TOOLBAR_BOTH_HORIZ"
 
 #: gtk/gtktoolitemgroup.c:1544
-#, fuzzy
 msgid "The human-readable title of this item group"
-msgstr "Una descripción del estáu lleíble por humanos"
+msgstr "Un títulu d'esti grupu d'items llexible pa humanos"
 
 #: gtk/gtktoolitemgroup.c:1551
-#, fuzzy
 msgid "A widget to display in place of the usual label"
-msgstr "Un widget a amosar n'arróu de la usual etiqueta del marcu"
+msgstr "Un widget p'amosar en llugar de la etiqueta davezu"
 
 #: gtk/gtktoolitemgroup.c:1557
 msgid "Collapsed"
-msgstr ""
+msgstr "Colapsáu"
 
 #: gtk/gtktoolitemgroup.c:1558
-#, fuzzy
 msgid "Wether the group has been collapsed and items are hidden"
-msgstr "Indica si l'estensor s'abrió pa revelar el widget fíu"
+msgstr "Indica si'l foi colapsáu y los items tán anubríos"
 
 #: gtk/gtktoolitemgroup.c:1564
-#, fuzzy
 msgid "ellipsize"
-msgstr "Elipsis"
+msgstr "elipsizar"
 
 #: gtk/gtktoolitemgroup.c:1565
 msgid "Ellipsize for item group headers"
 msgstr ""
 
 #: gtk/gtktoolitemgroup.c:1571
-#, fuzzy
 msgid "Header Relief"
-msgstr "Imaxe de la cabecera"
+msgstr "Relieve de la cabecera"
 
 #: gtk/gtktoolitemgroup.c:1572
-#, fuzzy
 msgid "Relief of the group header button"
-msgstr "Amosar botones nos encabezaos de columna"
+msgstr "Relieve del grupu de botones de la cabecera"
 
 #: gtk/gtktoolitemgroup.c:1587
-#, fuzzy
 msgid "Header Spacing"
-msgstr "Separtación de la cabecera"
+msgstr "Espaciáu de la cabecera"
 
 #: gtk/gtktoolitemgroup.c:1588
-#, fuzzy
 msgid "Spacing between expander arrow and caption"
-msgstr "Espaciáu al rodiu de la flecha del estensor"
+msgstr "Espaciáu ente la flecha del estensor y la descripción"
 
 #: gtk/gtktoolitemgroup.c:1604
-#, fuzzy
 msgid "Whether the item should receive extra space when the group grows"
-msgstr ""
-"Indica si'l elementu tendría recibir espaciu estra cuando la barra xorreza"
+msgstr "Indica si'l elementu tendría recibir espaciu estra cuando'l grupu medre"
 
 #: gtk/gtktoolitemgroup.c:1611
-#, fuzzy
 msgid "Whether the item should fill the available space"
-msgstr "Indica si tolos fíos tienen ser del mesmu tamañu"
+msgstr "Indica si l'item debería enllenar l'espaciu disponible"
 
 #: gtk/gtktoolitemgroup.c:1617
 msgid "New Row"
-msgstr ""
+msgstr "Filera Nueva"
 
 #: gtk/gtktoolitemgroup.c:1618
-#, fuzzy
 msgid "Whether the item should start a new row"
-msgstr "Indica si los elementos tienen d'amosase con un númberu"
+msgstr "Indica si l'item debería aniciar una filera nueva"
 
 #: gtk/gtktoolitemgroup.c:1625
-#, fuzzy
 msgid "Position of the item within this group"
-msgstr "Posición de la marca na regla"
+msgstr "Posición del item dientro'l grupu"
 
 #: gtk/gtktoolpalette.c:992
-#, fuzzy
 msgid "Size of icons in this tool palette"
-msgstr "Tamañu de los iconos nesta barra de ferramientes"
+msgstr "Tamañu de los iconos nesta paleta de ferramientes"
 
 #: gtk/gtktoolpalette.c:1022
-#, fuzzy
 msgid "Style of items in the tool palette"
-msgstr "Estilu del bisel al rodiu de la barra de ferramientes"
+msgstr "Estilu del item na paleta de ferramientes"
 
 #: gtk/gtktoolpalette.c:1038
 msgid "Exclusive"
-msgstr ""
+msgstr "Esclusivu"
 
 #: gtk/gtktoolpalette.c:1039
-#, fuzzy
 msgid "Whether the item group should be the only expanded at a given time"
-msgstr "Indica si los elementos tienen d'amosase con un númberu"
+msgstr "Indica si'l grupu d'items debería ser l'únicu espandíu nun tiempu dau"
 
 #: gtk/gtktoolpalette.c:1054
-#, fuzzy
 msgid ""
 "Whether the item group should receive extra space when the palette grows"
-msgstr "Indica si'l fíu tien de recibir espaciu estra cuando'l padre xorrez"
+msgstr ""
+"Indica si'l grupu d'items debería recibir espaciu extra cuando la paleta "
+"medre"
 
 #: gtk/gtktreemodelsort.c:278
 msgid "TreeModelSort Model"
