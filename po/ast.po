@@ -2,24 +2,24 @@
 # Asturian translation for gtk+2.0
 # Copyright (c) 2007 Rosetta Contributors and Canonical Ltd 2007
 # This file is distributed under the same license as the gtk+2.0 package.
-#
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2007.
 # Xose S. Puente <xspuente@gmail.com>, 2007.
+# Xandru Armesto <xandru@softastur.org>, 2010.
 msgid ""
 msgstr ""
 "Project-Id-Version: ast\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-06-26 23:16-0400\n"
-"PO-Revision-Date: 2010-01-15 13:25+0100\n"
+"PO-Revision-Date: 2010-07-28 12:47+0200\n"
 "Last-Translator: Xandru Armesto <xandru@softastur.org>\n"
-"Language-Team: Asturian <alministradores@softastur.org>\n"
+"Language-Team: Softastur alministradores@softastur.org\n"
 "Language: ast\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Virtaal 0.5.2\n"
 "X-Launchpad-Export-Date: 2010-01-11 12:44+0000\n"
-"X-Generator: Launchpad (build Unknown)\n"
 "X-Poedit-Language: asturian\n"
 
 #: gdk/gdk.c:103
@@ -313,7 +313,7 @@ msgstr "Facer llamaes X sincronizaes"
 #: gdk/x11/gdkapplaunchcontext-x11.c:313
 #, c-format
 msgid "Starting %s"
-msgstr "Entamando %s"
+msgstr "Aniciando %s"
 
 #: gdk/x11/gdkapplaunchcontext-x11.c:315
 #, c-format
@@ -611,9 +611,8 @@ msgid "_Saturation:"
 msgstr "_Saturación:"
 
 #: gtk/gtkcolorsel.c:393
-#, fuzzy
 msgid "Intensity of the color."
-msgstr "Tresparencia del color."
+msgstr "Intensidá del color."
 
 #: gtk/gtkcolorsel.c:394
 msgid "_Value:"
@@ -1046,7 +1045,7 @@ msgstr "_Trocar"
 
 #: gtk/gtkfilechooserdefault.c:8822
 msgid "Could not start the search process"
-msgstr "Nun pue entamase'l procesu de gueta"
+msgstr "Nun se pudo aniciar el procesu de gueta"
 
 #: gtk/gtkfilechooserdefault.c:8823
 msgid ""
@@ -1220,7 +1219,6 @@ msgid "System"
 msgstr "Sistema"
 
 #: gtk/gtkimmulticontext.c:573
-#, fuzzy
 msgctxt "input method menu"
 msgid "None"
 msgstr "Dengún"
@@ -1451,9 +1449,8 @@ msgid "Not available"
 msgstr "Non algamable"
 
 #: gtk/gtkprinteroptionwidget.c:795
-#, fuzzy
 msgid "Select a folder"
-msgstr "Escueya un Ficheru"
+msgstr "Seleiciona un direutoriu"
 
 #: gtk/gtkprinteroptionwidget.c:814
 msgid "_Save in folder:"
@@ -2710,7 +2707,7 @@ msgstr "Incapaz d'atopar el motor de temes nel module_path: \"%s\","
 #: gtk/gtkuimanager.c:1505
 #, c-format
 msgid "Unexpected start tag '%s' on line %d char %d"
-msgstr "Etiqueta d'entamu inesperada '%s' na llinia %d car %d"
+msgstr "Etiqueta d'aniciu inesperada '%s' na llinia %d char %d"
 
 #: gtk/gtkuimanager.c:1595
 #, c-format
