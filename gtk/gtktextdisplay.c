@@ -970,5 +970,7 @@ gtk_text_layout_draw (GtkTextLayout *layout,
       g_list_free (tmp_widgets);
     }
 
+  cairo_destroy (cr);
+
   g_slist_free (line_list);
 }
