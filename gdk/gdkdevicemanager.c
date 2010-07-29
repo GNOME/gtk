@@ -283,7 +283,8 @@ gdk_device_manager_get_display (GdkDeviceManager *device_manager)
  * Returns the list of devices of type @type currently attached to
  * @device_manager.
  *
- * Returns: a list of #GdkDevice<!-- -->s. The returned list must be
+ * Returns: (transfer container) (element-type Gdk.Device): a list of 
+ *          #GdkDevice<!-- -->s. The returned list must be
  *          freed with g_list_free (). The list elements are owned by
  *          GTK+ and must not be freed or unreffed.
  *
