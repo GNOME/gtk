@@ -239,13 +239,7 @@ static void         gdk_window_real_set_colormap (GdkDrawable *drawable,
 static GdkColormap* gdk_window_real_get_colormap (GdkDrawable *drawable);
 
 static GdkDrawable* gdk_window_get_source_drawable    (GdkDrawable *drawable);
-static GdkDrawable* gdk_window_get_composite_drawable (GdkDrawable *drawable,
-						       gint         x,
-						       gint         y,
-						       gint         width,
-						       gint         height,
-						       gint        *composite_x_offset,
-						       gint        *composite_y_offset);
+
 static cairo_region_t*   gdk_window_get_clip_region        (GdkDrawable *drawable);
 static cairo_region_t*   gdk_window_get_visible_region     (GdkDrawable *drawable);
 
@@ -3731,7 +3725,6 @@ gdk_window_clear_backing_region_redirect (GdkWindow *window,
   GdkWindowObject *private = (GdkWindowObject *)window;
   GdkWindowRedirect *redirect = private->redirect;
   cairo_region_t *clip_region;
-  GdkRectangle clipbox;
   gint x_offset, y_offset;
   GdkWindowPaint paint;
   cairo_t *cr;
