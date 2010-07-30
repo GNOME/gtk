@@ -1174,7 +1174,7 @@ gtk_tree_model_get_value (GtkTreeModel *tree_model,
 /**
  * gtk_tree_model_iter_next:
  * @tree_model: A #GtkTreeModel.
- * @iter: The #GtkTreeIter.
+ * @iter: (inout): The #GtkTreeIter.
  *
  * Sets @iter to point to the node following it at the current level.  If there
  * is no next @iter, %FALSE is returned and @iter is set to be invalid.
