@@ -402,7 +402,7 @@ gtk_tree_selection_get_selected (GtkTreeSelection  *selection,
 /**
  * gtk_tree_selection_get_selected_rows:
  * @selection: A #GtkTreeSelection.
- * @model: (allow-none): A pointer to set to the #GtkTreeModel, or NULL.
+ * @model: (out) (allow-none) (transfer none): A pointer to set to the #GtkTreeModel, or %NULL.
  *
  * Creates a list of path of all selected rows. Additionally, if you are
  * planning on modifying the model after calling this function, you may
