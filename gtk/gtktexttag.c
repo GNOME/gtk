@@ -699,8 +699,6 @@ gtk_text_tag_finalize (GObject *object)
 
   text_tag = GTK_TEXT_TAG (object);
 
-  g_assert (!text_tag->values->realized);
-
   if (text_tag->table)
     gtk_text_tag_table_remove (text_tag->table, text_tag);
 
@@ -956,8 +954,6 @@ gtk_text_tag_set_property (GObject      *object,
   gboolean size_changed = FALSE;
 
   text_tag = GTK_TEXT_TAG (object);
-
-  g_return_if_fail (!text_tag->values->realized);
 
   switch (prop_id)
     {
@@ -1914,8 +1910,6 @@ gtk_text_attributes_copy_values (GtkTextAttributes *src,
 {
   guint orig_refcount;
 
-  g_return_if_fail (!dest->realized);
-
   if (src == dest)
     return;
 
@@ -1941,7 +1935,6 @@ gtk_text_attributes_copy_values (GtkTextAttributes *src,
     dest->pg_bg_color = gdk_color_copy (src->pg_bg_color);
 
   dest->refcount = orig_refcount;
-  dest->realized = FALSE;
 }
 
 /**
@@ -1979,8 +1972,6 @@ gtk_text_attributes_unref (GtkTextAttributes *values)
 
   if (values->refcount == 0)
     {
-      g_assert (!values->realized);
-
       if (values->tabs)
         pango_tab_array_free (values->tabs);
 
@@ -1995,61 +1986,6 @@ gtk_text_attributes_unref (GtkTextAttributes *values)
 }
 
 void
-_gtk_text_attributes_realize (GtkTextAttributes *values,
-                              GdkColormap *cmap,
-                              GdkVisual *visual)
-{
-  g_return_if_fail (values != NULL);
-  g_return_if_fail (values->refcount > 0);
-  g_return_if_fail (!values->realized);
-
-  /* It is wrong to use this colormap, FIXME */
-  gdk_colormap_alloc_color (cmap,
-                            &values->appearance.fg_color,
-                            FALSE, TRUE);
-
-  gdk_colormap_alloc_color (cmap,
-                            &values->appearance.bg_color,
-                            FALSE, TRUE);
-
-  if (values->pg_bg_color)
-    gdk_colormap_alloc_color (cmap,
-			      values->pg_bg_color,
-			      FALSE, TRUE);
-
-  values->realized = TRUE;
-}
-
-void
-_gtk_text_attributes_unrealize (GtkTextAttributes *values,
-                                GdkColormap *cmap,
-                                GdkVisual *visual)
-{
-  g_return_if_fail (values != NULL);
-  g_return_if_fail (values->refcount > 0);
-  g_return_if_fail (values->realized);
-
-  gdk_colormap_free_colors (cmap,
-                            &values->appearance.fg_color, 1);
-
-
-  gdk_colormap_free_colors (cmap,
-                            &values->appearance.bg_color, 1);
-
-  values->appearance.fg_color.pixel = 0;
-  values->appearance.bg_color.pixel = 0;
-
-  if (values->pg_bg_color)
-    {
-      gdk_colormap_free_colors (cmap, values->pg_bg_color, 1);
-      
-      values->pg_bg_color->pixel = 0;
-    }
-
-  values->realized = FALSE;
-}
-
-void
 _gtk_text_attributes_fill_from_tags (GtkTextAttributes *dest,
                                      GtkTextTag**       tags,
                                      guint              n_tags)
@@ -2058,8 +1994,6 @@ _gtk_text_attributes_fill_from_tags (GtkTextAttributes *dest,
 
   guint left_margin_accumulative = 0;
   guint right_margin_accumulative = 0;
-
-  g_return_if_fail (!dest->realized);
 
   while (n < n_tags)
     {

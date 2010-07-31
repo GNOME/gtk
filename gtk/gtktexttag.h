@@ -259,9 +259,6 @@ struct _GtkTextAttributes
   /* can edit this text */
   guint editable : 1;
 
-  /* colors are allocated etc. */
-  guint realized : 1;
-
   /*< private >*/
   guint pad1 : 1;
   guint pad2 : 1;

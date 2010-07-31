@@ -398,7 +398,6 @@ modified directly.
 @invisible: 
 @bg_full_height: 
 @editable: 
-@realized: 
 
 <!-- ##### FUNCTION gtk_text_tag_new ##### -->
 <para>
