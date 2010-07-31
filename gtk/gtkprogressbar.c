@@ -120,7 +120,6 @@ gtk_progress_bar_class_init (GtkProgressBarClass *class)
   widget_class->style_set = gtk_progress_bar_style_set;
 
   class->paint = gtk_progress_bar_paint;
-  class->update = gtk_progress_bar_real_update;
   class->act_mode_enter = gtk_progress_bar_act_mode_enter;
 
   g_object_class_install_property (gobject_class,

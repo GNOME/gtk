@@ -68,7 +68,6 @@ struct _GtkProgressBarClass
   GtkWidgetClass parent_class;
 
   void (* paint)            (GtkProgressBar *progress);
-  void (* update)           (GtkProgressBar *progress);
   void (* act_mode_enter)   (GtkProgressBar *progress);
 
   /* Padding for future expansion */
