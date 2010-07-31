@@ -50,7 +50,6 @@ struct _GtkPanedPrivate
 
   GdkCursorType  cursor_type;
   GdkDevice     *grab_device;
-  GdkGC         *xor_gc;
   GdkRectangle   handle_pos;
   GdkWindow     *handle;
 
@@ -609,7 +608,6 @@ gtk_paned_init (GtkPaned *paned)
   priv->child1 = NULL;
   priv->child2 = NULL;
   priv->handle = NULL;
-  priv->xor_gc = NULL;
   priv->cursor_type = GDK_CROSS;
 
   priv->handle_pos.width = 5;
@@ -1066,12 +1064,6 @@ gtk_paned_unrealize (GtkWidget *widget)
 {
   GtkPaned *paned = GTK_PANED (widget);
   GtkPanedPrivate *priv = paned->priv;
-
-  if (priv->xor_gc)
-    {
-      g_object_unref (priv->xor_gc);
-      priv->xor_gc = NULL;
-    }
 
   if (priv->handle)
     {
