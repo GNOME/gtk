@@ -304,54 +304,6 @@ gdk_colormap_alloc_colors (GdkColormap *colormap,
   return 0;
 }
 
-void
-gdk_colormap_query_color (GdkColormap *colormap,
-                          gulong       pixel,
-                          GdkColor    *result)
-{
-  GdkVisual *visual;
-
-  g_return_if_fail (GDK_IS_COLORMAP (colormap));
-
-  visual = gdk_colormap_get_visual (colormap);
-
-  switch (visual->type)
-    {
-    case GDK_VISUAL_TRUE_COLOR:
-      result->red = 65535. *
-        (gdouble)((pixel & visual->red_mask) >> visual->red_shift) /
-        ((1 << visual->red_prec) - 1);
-
-      result->green = 65535. *
-        (gdouble)((pixel & visual->green_mask) >> visual->green_shift) /
-        ((1 << visual->green_prec) - 1);
-
-      result->blue = 65535. *
-        (gdouble)((pixel & visual->blue_mask) >> visual->blue_shift) /
-        ((1 << visual->blue_prec) - 1);
-      break;
-
-    case GDK_VISUAL_STATIC_COLOR:
-    case GDK_VISUAL_PSEUDO_COLOR:
-      if (pixel >= 0 && pixel < colormap->size)
-        {
-          result->red   = colormap->colors[pixel].red;
-          result->green = colormap->colors[pixel].green;
-          result->blue  = colormap->colors[pixel].blue;
-        }
-      else
-        g_warning ("gdk_colormap_query_color: pixel outside colormap");
-      break;
-
-    case GDK_VISUAL_DIRECT_COLOR:
-    case GDK_VISUAL_GRAYSCALE:
-    case GDK_VISUAL_STATIC_GRAY:
-      /* unsupported */
-      g_assert_not_reached ();
-      break;
-    }
-}
-
 IDirectFBPalette *
 gdk_directfb_colormap_get_palette (GdkColormap *colormap)
 {

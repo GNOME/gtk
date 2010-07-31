@@ -318,7 +318,6 @@ gdk_colormap_new
 gdk_colormap_get_type G_GNUC_CONST
 gdk_colormap_alloc_colors
 gdk_colormap_free_colors
-gdk_colormap_query_color
 gdk_colormap_get_screen
 #endif
 #endif

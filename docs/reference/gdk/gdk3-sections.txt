@@ -288,7 +288,6 @@ gdk_colormap_get_system
 gdk_colormap_alloc_colors
 gdk_colormap_alloc_color
 gdk_colormap_free_colors
-gdk_colormap_query_color
 gdk_colormap_get_visual
 gdk_colormap_get_screen
 gdk_color_copy
