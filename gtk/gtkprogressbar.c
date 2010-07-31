@@ -112,8 +112,6 @@ gtk_progress_bar_class_init (GtkProgressBarClass *class)
   widget_class->size_request = gtk_progress_bar_size_request;
   widget_class->size_allocate = gtk_progress_bar_size_allocate;
 
-  class->act_mode_enter = gtk_progress_bar_act_mode_enter;
-
   g_object_class_install_property (gobject_class,
                                    PROP_ORIENTATION,
                                    g_param_spec_enum ("orientation",
@@ -933,7 +931,7 @@ gtk_progress_bar_set_activity_mode (GtkProgressBar *pbar,
       priv->activity_mode = activity_mode;
 
       if (priv->activity_mode)
-        GTK_PROGRESS_BAR_GET_CLASS (pbar)->act_mode_enter (pbar);
+        gtk_progress_bar_act_mode_enter (pbar);
 
       if (gtk_widget_is_drawable (GTK_WIDGET (pbar)))
         gtk_widget_queue_resize (GTK_WIDGET (pbar));

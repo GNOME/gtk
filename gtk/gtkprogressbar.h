@@ -67,8 +67,6 @@ struct _GtkProgressBarClass
 {
   GtkWidgetClass parent_class;
 
-  void (* act_mode_enter)   (GtkProgressBar *progress);
-
   /* Padding for future expansion */
   void (*_gtk_reserved1) (void);
   void (*_gtk_reserved2) (void);
