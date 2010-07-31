@@ -119,7 +119,6 @@ gtk_progress_bar_class_init (GtkProgressBarClass *class)
   widget_class->size_allocate = gtk_progress_bar_size_allocate;
   widget_class->style_set = gtk_progress_bar_style_set;
 
-  class->paint = gtk_progress_bar_paint;
   class->act_mode_enter = gtk_progress_bar_act_mode_enter;
 
   g_object_class_install_property (gobject_class,
@@ -629,7 +628,7 @@ gtk_progress_bar_create_pixmap (GtkProgressBar *pbar)
                           GTK_SHADOW_NONE,
                           NULL, widget, "trough", 0, 0, -1, -1);
 
-      GTK_PROGRESS_BAR_GET_CLASS (pbar)->paint (pbar);
+      gtk_progress_bar_paint (pbar);
     }
 }
 
