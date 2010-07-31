@@ -118,9 +118,6 @@ struct _GtkCalendar
   GtkCalendarDisplayOptions  GSEAL (display_flags);
   GdkColor GSEAL (marked_date_color[31]);
   
-  GdkGC *GSEAL (gc);			/* unused */
-  GdkGC *GSEAL (xor_gc);		/* unused */
-
   gint GSEAL (focus_row);
   gint GSEAL (focus_col);
 
