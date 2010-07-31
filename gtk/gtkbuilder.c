@@ -1545,12 +1545,10 @@ gtk_builder_value_from_string_type (GtkBuilder   *builder,
     case G_TYPE_BOXED:
       if (G_VALUE_HOLDS (value, GDK_TYPE_COLOR))
         {
-          GdkColor colour = { 0, };
+          GdkColor color = { 0, };
 
-          if (gdk_color_parse (string, &colour) &&
-              gdk_colormap_alloc_color (gtk_widget_get_default_colormap (),
-                                        &colour, FALSE, TRUE))
-            g_value_set_boxed (value, &colour);
+          if (gdk_color_parse (string, &color))
+            g_value_set_boxed (value, &color);
           else
             {
 	      g_set_error (error,
