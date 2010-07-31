@@ -2199,7 +2199,6 @@ gtk_misc_get_type
 <FILE>gtknotebook</FILE>
 <TITLE>GtkNotebook</TITLE>
 GtkNotebook
-GtkNotebookPage
 gtk_notebook_new
 gtk_notebook_append_page
 gtk_notebook_append_page_menu
