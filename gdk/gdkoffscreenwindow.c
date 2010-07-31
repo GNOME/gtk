@@ -676,10 +676,8 @@ gdk_offscreen_window_set_background (GdkWindow      *window,
 				     const GdkColor *color)
 {
   GdkWindowObject *private = (GdkWindowObject *)window;
-  GdkColormap *colormap = gdk_drawable_get_colormap (window);
 
   private->bg_color = *color;
-  gdk_colormap_query_color (colormap, private->bg_color.pixel, &private->bg_color);
 
   if (private->bg_pixmap &&
       private->bg_pixmap != GDK_PARENT_RELATIVE_BG &&

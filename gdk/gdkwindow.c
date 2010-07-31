@@ -7072,9 +7072,6 @@ gdk_window_get_background (GdkWindow *window,
  * you're an application - or gtk_style_set_background() - if you're
  * implementing a custom widget.)
  *
- * The @color must be allocated; gdk_rgb_find_color() is the best way
- * to allocate a color.
- *
  * See also gdk_window_set_background_pixmap().
  */
 void
@@ -7082,7 +7079,6 @@ gdk_window_set_background (GdkWindow      *window,
 			   const GdkColor *color)
 {
   GdkWindowObject *private;
-  GdkColormap *colormap = gdk_drawable_get_colormap (window);
   GdkWindowImplIface *impl_iface;
 
   g_return_if_fail (GDK_IS_WINDOW (window));
@@ -7090,7 +7086,6 @@ gdk_window_set_background (GdkWindow      *window,
   private = (GdkWindowObject *) window;
 
   private->bg_color = *color;
-  gdk_colormap_query_color (colormap, private->bg_color.pixel, &private->bg_color);
 
   if (private->bg_pixmap &&
       private->bg_pixmap != GDK_PARENT_RELATIVE_BG &&

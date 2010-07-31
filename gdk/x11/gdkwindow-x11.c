@@ -2637,8 +2637,17 @@ static void
 gdk_window_x11_set_background (GdkWindow      *window,
                                const GdkColor *color)
 {
+  GdkColor allocated = *color;
+
+  if (!gdk_colormap_alloc_color (gdk_drawable_get_colormap (window),
+                                 &allocated,
+                                 TRUE, TRUE))
+    return;
+
   XSetWindowBackground (GDK_WINDOW_XDISPLAY (window),
-			GDK_WINDOW_XID (window), color->pixel);
+			GDK_WINDOW_XID (window), allocated.pixel);
+
+  gdk_colormap_free_colors (gdk_drawable_get_colormap (window), &allocated, 1);
 }
 
 static void
