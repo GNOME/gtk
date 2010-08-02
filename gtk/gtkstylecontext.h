@@ -102,6 +102,10 @@ gboolean gtk_style_context_has_child_class   (GtkStyleContext    *context,
 void gtk_style_context_get_style_property (GtkStyleContext *context,
                                            const gchar     *property_name,
                                            GValue          *value);
+void gtk_style_context_get_style_valist   (GtkStyleContext *context,
+                                           va_list          args);
+void gtk_style_context_get_style          (GtkStyleContext *context,
+                                           ...);
 
 GtkIconSet * gtk_style_context_lookup_icon_set (GtkStyleContext *context,
 						const gchar     *stock_id);

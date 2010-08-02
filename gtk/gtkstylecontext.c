@@ -21,6 +21,7 @@
 
 #include <gdk/gdk.h>
 #include <stdlib.h>
+#include <gobject/gvaluecollector.h>
 
 #include "gtkstylecontext.h"
 #include "gtktypebuiltins.h"
@@ -1085,6 +1086,77 @@ gtk_style_context_get_style_property (GtkStyleContext *context,
                G_VALUE_TYPE_NAME (peek_value),
                G_VALUE_TYPE_NAME (value));
 }
+
+void
+gtk_style_context_get_style_valist (GtkStyleContext *context,
+                                    va_list          args)
+{
+  GtkStyleContextPrivate *priv;
+  const gchar *prop_name;
+
+  g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
+
+  prop_name = va_arg (args, const gchar *);
+  priv = context->priv;
+
+  if (!priv->widget_path)
+    return;
+
+  while (prop_name)
+    {
+      GtkWidgetClass *widget_class;
+      GParamSpec *pspec;
+      const GValue *peek_value;
+      GType widget_type;
+      gchar *error;
+
+      widget_type = gtk_widget_path_get_widget_type (priv->widget_path);
+
+      widget_class = g_type_class_ref (widget_type);
+      pspec = gtk_widget_class_find_style_property (widget_class, prop_name);
+      g_type_class_unref (widget_class);
+
+      if (!pspec)
+        {
+          g_warning ("%s: widget class `%s' has no style property named `%s'",
+                     G_STRLOC,
+                     g_type_name (widget_type),
+                     prop_name);
+          continue;
+        }
+
+      peek_value = _gtk_style_context_peek_style_property (context,
+                                                           widget_type,
+                                                           pspec);
+
+      G_VALUE_LCOPY (peek_value, args, 0, &error);
+
+      if (error)
+        {
+          g_warning ("can't retrieve style property `%s' of type `%s': %s",
+                     pspec->name,
+                     G_VALUE_TYPE_NAME (peek_value),
+                     error);
+          g_free (error);
+        }
+
+      prop_name = va_arg (args, const gchar *);
+    }
+}
+
+void
+gtk_style_context_get_style (GtkStyleContext *context,
+                             ...)
+{
+  va_list args;
+
+  g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
+
+  va_start (args, context);
+  gtk_style_context_get_style_valist (context, args);
+  va_end (args);
+}
+
 
 GtkIconSet *
 gtk_style_context_lookup_icon_set (GtkStyleContext *context,
