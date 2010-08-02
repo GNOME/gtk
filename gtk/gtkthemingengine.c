@@ -700,9 +700,9 @@ add_path_arrow (cairo_t *cr,
   cairo_translate (cr, x + (size / 2), y + (size / 2));
   cairo_rotate (cr, angle);
 
-  cairo_move_to (cr, 0, - (size / 4) + 0.5);
-  cairo_line_to (cr, - (size / 2), (size / 4) + 0.5);
-  cairo_line_to (cr, (size / 2), (size / 4) + 0.5);
+  cairo_move_to (cr, 0, - (size / 4));
+  cairo_line_to (cr, - (size / 2), (size / 4));
+  cairo_line_to (cr, (size / 2), (size / 4));
   cairo_close_path (cr);
 
   cairo_restore (cr);
