@@ -646,7 +646,7 @@ style_class_find (GArray *array,
                   GQuark  class_quark,
                   guint  *position)
 {
-  guint min, max, mid;
+  gint min, max, mid;
   gboolean found = FALSE;
 
   if (position)
@@ -668,11 +668,14 @@ style_class_find (GArray *array,
       if (class_quark == item)
         found = TRUE;
       else if (class_quark > item)
-        min = mid + 1;
+        min = mid = mid + 1;
       else
-        max = mid - 1;
+        max = mid = mid - 1;
     }
-  while (!found && min < max);
+  while (!found && min <= max);
+
+  if (mid < 0)
+    mid = 0;
 
   if (position)
     *position = mid;
@@ -685,7 +688,7 @@ child_style_class_find (GArray *array,
                         GQuark  class_quark,
                         guint  *position)
 {
-  guint min, max, mid;
+  gint min, max, mid;
   gboolean found = FALSE;
 
   if (position)
@@ -707,11 +710,14 @@ child_style_class_find (GArray *array,
       if (child_class->class_quark == class_quark)
         found = TRUE;
       else if (child_class->class_quark > class_quark)
-        min = mid + 1;
+        min = mid = mid + 1;
       else
-        max = mid - 1;
+        max = mid = mid - 1;
     }
-  while (!found && min < max);
+  while (!found && min <= max);
+
+  if (mid < 0)
+    mid = 0;
 
   if (position)
     *position = mid;
