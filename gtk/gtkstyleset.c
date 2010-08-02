@@ -38,6 +38,7 @@ struct PropertyNode
 {
   GQuark property_quark;
   GType property_type;
+  GValue default_value;
 };
 
 struct PropertyData
@@ -66,19 +67,24 @@ static void
 gtk_style_set_class_init (GtkStyleSetClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
+  GValue val = { 0 };
 
   object_class->finalize = gtk_style_set_finalize;
 
   /* Initialize default property set */
-  gtk_style_set_register_property ("foreground-color", GDK_TYPE_COLOR);
-  gtk_style_set_register_property ("background-color", GDK_TYPE_COLOR);
-  gtk_style_set_register_property ("text-color", GDK_TYPE_COLOR);
-  gtk_style_set_register_property ("base-color", GDK_TYPE_COLOR);
+  gtk_style_set_register_property ("foreground-color", GDK_TYPE_COLOR, NULL);
+  gtk_style_set_register_property ("background-color", GDK_TYPE_COLOR, NULL);
+  gtk_style_set_register_property ("text-color", GDK_TYPE_COLOR, NULL);
+  gtk_style_set_register_property ("base-color", GDK_TYPE_COLOR, NULL);
 
-  gtk_style_set_register_property ("font", PANGO_TYPE_FONT_DESCRIPTION);
+  gtk_style_set_register_property ("font", PANGO_TYPE_FONT_DESCRIPTION, NULL);
 
-  gtk_style_set_register_property ("padding", GTK_TYPE_BORDER);
-  gtk_style_set_register_property ("engine", GTK_TYPE_THEMING_ENGINE);
+  gtk_style_set_register_property ("padding", GTK_TYPE_BORDER, NULL);
+
+  g_value_init (&val, GTK_TYPE_THEMING_ENGINE);
+  g_value_set_object (&val, (GObject *) gtk_theming_engine_load (NULL));
+  gtk_style_set_register_property ("engine", GTK_TYPE_THEMING_ENGINE, &val);
+  g_value_unset (&val);
 
   g_type_class_add_private (object_class, sizeof (GtkStyleSetPrivate));
 }
@@ -180,7 +186,8 @@ property_node_lookup (GQuark quark)
 /* Property registration functions */
 void
 gtk_style_set_register_property (const gchar  *property_name,
-                                 GType         type)
+                                 GType         type,
+                                 const GValue *default_value)
 {
   PropertyNode *node, new = { 0 };
   GQuark quark;
@@ -205,6 +212,12 @@ gtk_style_set_register_property (const gchar  *property_name,
 
   new.property_quark = quark;
   new.property_type = type;
+
+  if (default_value)
+    {
+      g_value_init (&new.default_value, G_VALUE_TYPE (default_value));
+      g_value_copy (default_value, &new.default_value);
+    }
 
   for (i = 0; i < properties->len; i++)
     {
@@ -516,8 +529,10 @@ gtk_style_set_get_property (GtkStyleSet  *set,
 
   if (G_IS_VALUE (&prop->values[state]))
     val = &prop->values[state];
-  else
+  else if (G_IS_VALUE (&prop->default_value))
     val = &prop->default_value;
+  else
+    val = &node->default_value;
 
   g_return_val_if_fail (G_IS_VALUE (val), FALSE);
 
@@ -565,7 +580,7 @@ gtk_style_set_get_valist (GtkStyleSet  *set,
       prop = g_hash_table_lookup (priv->properties,
                                   GINT_TO_POINTER (node->property_quark));
 
-      if (!prop)
+      if (!prop && !G_IS_VALUE (&node->default_value))
         {
           GValue *empty_value = { 0 };
 
@@ -578,10 +593,15 @@ gtk_style_set_get_valist (GtkStyleSet  *set,
         {
           GValue *val;
 
-          if (G_IS_VALUE (&prop->values[state]))
-            val = &prop->values[state];
+          if (prop)
+            {
+              if (G_IS_VALUE (&prop->values[state]))
+                val = &prop->values[state];
+              else if (G_IS_VALUE (&prop->default_value))
+                val = &prop->default_value;
+            }
           else
-            val = &prop->default_value;
+            val = &node->default_value;
 
           if (G_VALUE_TYPE (val) == GTK_TYPE_SYMBOLIC_COLOR)
             {
@@ -724,8 +744,13 @@ gtk_style_set_merge (GtkStyleSet       *set,
           if (replace ||
               G_VALUE_TYPE (&prop->values[i]) == G_TYPE_INVALID)
             {
-              if (G_VALUE_TYPE (&prop->values[i]) == G_TYPE_INVALID)
+              if (!G_IS_VALUE (&prop->values[i]))
                 g_value_init (&prop->values[i], G_VALUE_TYPE (&prop_to_merge->values[i]));
+              else if (G_VALUE_TYPE (&prop->values[i]) != G_VALUE_TYPE (&prop_to_merge->values[i]))
+                {
+                  g_value_unset (&prop->values[i]);
+                  g_value_init (&prop->values[i], G_VALUE_TYPE (&prop_to_merge->values[i]));
+                }
 
               g_value_copy (&prop_to_merge->values[i],
                             &prop->values[i]);
@@ -746,6 +771,11 @@ gtk_style_set_merge (GtkStyleSet       *set,
 
           if (!G_IS_VALUE (&prop->default_value))
             g_value_init (&prop->default_value, G_VALUE_TYPE (&prop_to_merge->default_value));
+          else if (G_VALUE_TYPE (&prop->default_value) != G_VALUE_TYPE (&prop_to_merge->default_value))
+            {
+              g_value_unset (&prop->default_value);
+              g_value_init (&prop->default_value, G_VALUE_TYPE (&prop_to_merge->default_value));
+            }
 
           g_value_copy (&prop_to_merge->default_value,
                         &prop->default_value);
