@@ -639,6 +639,26 @@ gtk_style_context_restore (GtkStyleContext *context)
       region = style_region_new ();
       priv->regions = g_slist_prepend (priv->regions, region);
     }
+
+  if (priv->widget_path)
+    {
+      GtkStyleRegion *region;
+      guint i;
+
+      /* Update widget path regions */
+      gtk_widget_path_iter_clear_regions (priv->widget_path, 0);
+      region = priv->regions->data;
+
+      for (i = 0; i < region->child_style_classes->len; i++)
+        {
+          GtkChildClass *child_class;
+
+          child_class = &g_array_index (region->child_style_classes, GtkChildClass, i);
+          gtk_widget_path_iter_add_region (priv->widget_path, 0,
+                                           g_quark_to_string (child_class->class_quark),
+                                           child_class->flags);
+        }
+    }
 }
 
 static gboolean
@@ -858,6 +878,12 @@ gtk_style_context_set_child_class (GtkStyleContext    *context,
       child_class.flags = flags;
 
       g_array_insert_val (region->child_style_classes, position, child_class);
+
+      if (priv->widget_path)
+        {
+          gtk_widget_path_iter_add_region (priv->widget_path, 0, class_name, flags);
+          rebuild_properties (context);
+        }
     }
 }
 
@@ -884,7 +910,15 @@ gtk_style_context_unset_child_class (GtkStyleContext    *context,
   region = priv->regions->data;
 
   if (child_style_class_find (region->child_style_classes, class_quark, &position))
-    g_array_remove_index (region->child_style_classes, position);
+    {
+      g_array_remove_index (region->child_style_classes, position);
+
+      if (priv->widget_path)
+        {
+          gtk_widget_path_iter_remove_region (priv->widget_path, 0, class_name);
+          rebuild_properties (context);
+        }
+    }
 }
 
 gboolean
