@@ -78,10 +78,22 @@ typedef struct _GtkStylePrivate GtkStylePrivate;
 
 struct _GtkStylePrivate {
   GSList *color_hashes;
+  GtkStyleContext *context;
+};
+
+enum {
+  PROP_0,
+  PROP_CONTEXT
 };
 
 /* --- prototypes --- */
 static void	 gtk_style_finalize		(GObject	*object);
+static void	 gtk_style_constructed		(GObject	*object);
+static void      gtk_style_set_property         (GObject        *object,
+                                                 guint           prop_id,
+                                                 const GValue   *value,
+                                                 GParamSpec     *pspec);
+
 static void	 gtk_style_realize		(GtkStyle	*style,
 						 GdkVisual      *visual);
 static void      gtk_style_real_realize        (GtkStyle	*style);
@@ -450,6 +462,8 @@ gtk_style_class_init (GtkStyleClass *klass)
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   
   object_class->finalize = gtk_style_finalize;
+  object_class->set_property = gtk_style_set_property;
+  object_class->constructed = gtk_style_constructed;
 
   klass->clone = gtk_style_real_clone;
   klass->copy = gtk_style_real_copy;
@@ -481,6 +495,14 @@ gtk_style_class_init (GtkStyleClass *klass)
   klass->draw_spinner = gtk_default_draw_spinner;
 
   g_type_class_add_private (object_class, sizeof (GtkStylePrivate));
+
+  g_object_class_install_property (object_class,
+				   PROP_CONTEXT,
+				   g_param_spec_object ("context",
+ 							P_("Style context"),
+							P_("GtkStyleContext to get style from"),
+                                                        GTK_TYPE_STYLE_CONTEXT,
+                                                        G_PARAM_CONSTRUCT_ONLY | G_PARAM_WRITABLE));
 
   /**
    * GtkStyle::realize:
@@ -587,9 +609,110 @@ gtk_style_finalize (GObject *object)
   if (style->rc_style)
     g_object_unref (style->rc_style);
 
+  if (priv->context)
+    g_object_unref (priv->context);
+
   G_OBJECT_CLASS (gtk_style_parent_class)->finalize (object);
 }
 
+static void
+gtk_style_set_property (GObject      *object,
+                        guint         prop_id,
+                        const GValue *value,
+                        GParamSpec   *pspec)
+{
+  GtkStylePrivate *priv;
+
+  priv = GTK_STYLE_GET_PRIVATE (object);
+
+  switch (prop_id)
+    {
+    case PROP_CONTEXT:
+      priv->context = g_value_dup_object (value);
+      break;
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      break;
+    }
+}
+
+static void
+set_color (GtkStyle        *style,
+           GtkStyleContext *context,
+           GtkStateType     state,
+           GtkRcFlags       prop)
+{
+  GdkColor *color = NULL;
+
+  switch (prop)
+    {
+    case GTK_RC_BG:
+      gtk_style_context_get (context, state,
+                             "background-color", &color,
+                             NULL);
+      if (color)
+        style->bg[state] = *color;
+      break;
+    case GTK_RC_FG:
+      gtk_style_context_get (context, state,
+                             "foreground-color", &color,
+                             NULL);
+      if (color)
+        style->fg[state] = *color;
+      break;
+    case GTK_RC_TEXT:
+      gtk_style_context_get (context, state,
+                             "text-color", &color,
+                             NULL);
+      if (color)
+        style->text[state] = *color;
+      break;
+    case GTK_RC_BASE:
+      gtk_style_context_get (context, state,
+                             "base-color", &color,
+                             NULL);
+      if (color)
+	style->base[state] = *color;
+      break;
+    }
+
+  if (color)
+    gdk_color_free (color);
+}
+
+static void
+gtk_style_update_from_context (GtkStyle *style)
+{
+  GtkStylePrivate *priv;
+  GtkStateType state;
+
+  priv = GTK_STYLE_GET_PRIVATE (style);
+
+  for (state = GTK_STATE_NORMAL; state <= GTK_STATE_INSENSITIVE; state++)
+    {
+      set_color (style, priv->context, state, GTK_RC_BG);
+      set_color (style, priv->context, state, GTK_RC_FG);
+      set_color (style, priv->context, state, GTK_RC_BASE);
+      set_color (style, priv->context, state, GTK_RC_TEXT);
+    }
+
+  /* FIXME: thickness */
+}
+
+static void
+gtk_style_constructed (GObject *object)
+{
+  GtkStylePrivate *priv;
+
+  priv = GTK_STYLE_GET_PRIVATE (object);
+
+  if (priv->context)
+    {
+      gtk_style_update_from_context (GTK_STYLE (object));
+
+      /* FIXME: Listen to context changes */
+    }
+}
 
 /**
  * gtk_style_copy:
@@ -646,6 +769,16 @@ gtk_style_new (void)
   style = g_object_new (GTK_TYPE_STYLE, NULL);
   
   return style;
+}
+
+gboolean
+gtk_style_has_context (GtkStyle *style)
+{
+  GtkStylePrivate *priv;
+
+  priv = GTK_STYLE_GET_PRIVATE (style);
+
+  return priv->context != NULL;
 }
 
 /**
@@ -793,23 +926,14 @@ GtkIconSet*
 gtk_style_lookup_icon_set (GtkStyle   *style,
                            const char *stock_id)
 {
-  GSList *iter;
+  GtkStylePrivate *priv;
 
   g_return_val_if_fail (GTK_IS_STYLE (style), NULL);
   g_return_val_if_fail (stock_id != NULL, NULL);
-  
-  iter = style->icon_factories;
-  while (iter != NULL)
-    {
-      GtkIconSet *icon_set = gtk_icon_factory_lookup (GTK_ICON_FACTORY (iter->data),
-						      stock_id);
-      if (icon_set)
-        return icon_set;
-      
-      iter = g_slist_next (iter);
-    }
 
-  return gtk_icon_factory_lookup_default (stock_id);
+  priv = GTK_STYLE_GET_PRIVATE (style);
+
+  return gtk_style_context_lookup_icon_set (priv->context, stock_id);
 }
 
 /**
@@ -883,7 +1007,13 @@ gtk_style_set_background (GtkStyle    *style,
 static GtkStyle *
 gtk_style_real_clone (GtkStyle *style)
 {
-  return g_object_new (G_OBJECT_TYPE (style), NULL);
+  GtkStylePrivate *priv;
+
+  priv = GTK_STYLE_GET_PRIVATE (style);
+
+  return g_object_new (G_OBJECT_TYPE (style),
+                       "context", priv->context,
+                       NULL);
 }
 
 static void
