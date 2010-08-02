@@ -709,7 +709,7 @@ css_provider_apply_scope (GtkCssProvider *css_provider,
   else if (scope == SCOPE_SELECTOR)
     {
       priv->scanner->config->cset_identifier_first = G_CSET_a_2_z G_CSET_A_2_Z "*@";
-      priv->scanner->config->cset_identifier_nth = G_CSET_a_2_z "-" G_CSET_A_2_Z;
+      priv->scanner->config->cset_identifier_nth = G_CSET_a_2_z "-_" G_CSET_A_2_Z;
       priv->scanner->config->scan_identifier_1char = TRUE;
     }
   else if (scope == SCOPE_PSEUDO_CLASS ||
