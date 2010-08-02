@@ -13195,7 +13195,6 @@ gtk_widget_get_path (GtkWidget *widget)
   GList *regions, *reg;
 
   g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
-  g_return_val_if_fail ((widget->parent || gtk_widget_is_toplevel (widget)), NULL);
 
   parent = widget->priv->parent;
 
@@ -13254,6 +13253,7 @@ gtk_widget_get_style_context (GtkWidget *widget)
   if (G_UNLIKELY (!context))
     {
       static GtkCssProvider *css_provider = NULL;
+      GtkWidgetPath *path;
 
       context = g_object_new (GTK_TYPE_STYLE_CONTEXT, NULL);
       g_object_set_qdata_full (G_OBJECT (widget),
@@ -13284,18 +13284,13 @@ gtk_widget_get_style_context (GtkWidget *widget)
                                       GTK_STYLE_PROVIDER (css_provider),
                                       GTK_STYLE_PROVIDER_PRIORITY_USER);
 
-      if (widget->parent ||
-          gtk_widget_is_toplevel (widget))
-        {
-          GtkWidgetPath *path;
 
-          path = gtk_widget_get_path (widget);
-          gtk_style_context_set_path (context, path);
-          gtk_widget_path_free (path);
+      path = gtk_widget_get_path (widget);
+      gtk_style_context_set_path (context, path);
+      gtk_widget_path_free (path);
 
-          gtk_style_context_set_screen (context,
-                                        gtk_widget_get_screen (widget));
-        }
+      gtk_style_context_set_screen (context,
+                                    gtk_widget_get_screen (widget));
     }
 
   return context;
