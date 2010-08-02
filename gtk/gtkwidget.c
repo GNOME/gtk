@@ -9578,7 +9578,17 @@ gtk_widget_set_direction (GtkWidget        *widget,
   widget->priv->direction = dir;
 
   if (old_dir != gtk_widget_get_direction (widget))
-    gtk_widget_emit_direction_changed (widget, old_dir);
+    {
+      GtkStyleContext *context;
+
+      context = g_object_get_qdata (G_OBJECT (widget), quark_style_context);
+
+      if (context)
+        gtk_style_context_set_direction (context,
+                                         gtk_widget_get_direction (widget));
+
+      gtk_widget_emit_direction_changed (widget, old_dir);
+    }
 }
 
 /**
@@ -13270,7 +13280,11 @@ gtk_widget_get_style_context (GtkWidget *widget)
       GtkCssProvider *default_provider;
       GtkWidgetPath *path;
 
-      context = g_object_new (GTK_TYPE_STYLE_CONTEXT, NULL);
+      context = g_object_new (GTK_TYPE_STYLE_CONTEXT,
+                              "direction", gtk_widget_get_direction (widget),
+                              NULL);
+
+
       g_object_set_qdata_full (G_OBJECT (widget),
                                quark_style_context, context,
                                (GDestroyNotify) g_object_unref);
