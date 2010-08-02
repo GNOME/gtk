@@ -865,7 +865,11 @@ gtk_theming_engine_render_background (GtkThemingEngine *engine,
   cairo_save (cr);
   flags = gtk_theming_engine_get_state (engine);
 
-  if (flags & GTK_STATE_FLAG_PRELIGHT)
+  if (flags & GTK_STATE_FLAG_ACTIVE)
+    state = GTK_STATE_ACTIVE;
+  else if (flags & GTK_STATE_FLAG_SELECTED)
+    state = GTK_STATE_SELECTED;
+  else if (flags & GTK_STATE_FLAG_PRELIGHT)
     state = GTK_STATE_PRELIGHT;
   else if (flags & GTK_STATE_FLAG_INSENSITIVE)
     state = GTK_STATE_INSENSITIVE;
@@ -882,7 +886,12 @@ gtk_theming_engine_render_background (GtkThemingEngine *engine,
                             NULL);
 
   gdk_cairo_set_source_color (cr, color);
-  cairo_rectangle (cr, x, y, width, height);
+
+  if (gtk_theming_engine_has_class (engine, "spinbutton") &&
+      gtk_theming_engine_has_class (engine, "button"))
+    cairo_rectangle (cr, x + 2, y + 2, width - 4, height - 4);
+  else
+    cairo_rectangle (cr, x, y, width, height);
 
   if (gtk_theming_engine_has_class (engine, "tooltip"))
     {
