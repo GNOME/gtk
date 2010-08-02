@@ -57,6 +57,9 @@ gboolean         gtk_css_provider_load_from_file (GtkCssProvider  *css_provider,
                                                   GFile           *file,
                                                   GError         **error);
 
+GtkCssProvider * gtk_css_provider_get_default (void);
+
+
 G_END_DECLS
 
 #endif /* __GTK_CSS_PROVIDER_H__ */

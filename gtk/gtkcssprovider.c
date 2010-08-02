@@ -1499,5 +1499,80 @@ gtk_css_provider_load_from_file (GtkCssProvider  *css_provider,
   return TRUE;
 }
 
+GtkCssProvider *
+gtk_css_provider_get_default (void)
+{
+  static GtkCssProvider *provider;
+
+  if (G_UNLIKELY (!provider))
+    {
+      const gchar *str =
+        "@fg_color: #000; \n"
+        "@bg_color: #dcdad5; \n"
+        "@text_color: #000; \n"
+        "@base_color: #fff; \n"
+        "@selected_bg_color: #4b6983; \n"
+        "@selected_fg_color: #fff; \n"
+        "@tooltip_bg_color: #eee1b3; \n"
+        "@tooltip_fg_color: #000; \n"
+        "\n"
+        "*, GtkTreeView GtkButton {\n"
+        "  background-color: @bg_color;\n"
+        "  foreground-color: @fg_color;\n"
+        "  text-color: @text_color; \n"
+        "  base-color: @base_color; \n"
+        "}\n"
+        "\n"
+        "*:active {\n"
+        "  background-color: #c4c2bd;\n"
+        "  foreground-color: #000000;\n"
+        "  text-color: #c4c2bd; \n"
+        "  base-color: #9c9a94; \n"
+        "}\n"
+        "\n"
+        "*:prelight {\n"
+        "  background-color: #eeebe7;\n"
+        "  foreground-color: #000000;\n"
+        "  text-color: #eeebe7; \n"
+        "  base-color: #ffffff; \n"
+        "}\n"
+        "\n"
+        "*:selected {\n"
+        "  background-color: #4b6983;\n"
+        "  foreground-color: #ffffff;\n"
+        "  base-color: #4b6983;\n"
+        "  text-color: #ffffff;\n"
+        "}\n"
+        "\n"
+        "*:insensitive {\n"
+        "  background-color: #dcdad5;\n"
+        "  foreground-color: #757575;\n"
+        "}\n"
+        "\n"
+        "GtkTreeView, GtkIconView {\n"
+        "  background-color: #ffffff; \n"
+        "}\n"
+        "\n"
+        "row:nth-child(odd) { \n"
+        "  background-color: shade(#ffffff, 0.93); \n"
+        "}\n"
+        "\n"
+        "tooltip {\n"
+        "  background-color: @tooltip_bg_color; \n"
+        "  foreground-color: @tooltip_fg_color; \n"
+        "}\n"
+        "\n"
+        "GtkToggleButton:prelight {\n"
+        "  text-color: #000; \n"
+        "}\n"
+        "\n";
+
+      provider = gtk_css_provider_new ();
+      gtk_css_provider_load_from_data (provider, str, -1, NULL);
+    }
+
+  return provider;
+}
+
 #define __GTK_CSS_PROVIDER_C__
 #include "gtkaliasdef.c"
