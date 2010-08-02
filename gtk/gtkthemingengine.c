@@ -1487,7 +1487,11 @@ gtk_theming_engine_render_layout (GtkThemingEngine *engine,
 
   /* FIXME: Set clipping */
 
-  if (flags & GTK_STATE_FLAG_PRELIGHT)
+  if (flags & GTK_STATE_FLAG_ACTIVE)
+    state = GTK_STATE_ACTIVE;
+  else if (flags & GTK_STATE_FLAG_SELECTED)
+    state = GTK_STATE_SELECTED;
+  else if (flags & GTK_STATE_FLAG_PRELIGHT)
     state = GTK_STATE_PRELIGHT;
   else if (flags & GTK_STATE_FLAG_INSENSITIVE)
     state = GTK_STATE_INSENSITIVE;
