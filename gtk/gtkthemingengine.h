@@ -150,6 +150,15 @@ void gtk_theming_engine_get          (GtkThemingEngine *engine,
                                       GtkStateType      state,
                                       ...) G_GNUC_NULL_TERMINATED;
 
+void gtk_theming_engine_get_style_property (GtkThemingEngine *engine,
+                                            const gchar      *property_name,
+                                            GValue           *value);
+void gtk_theming_engine_get_style_valist   (GtkThemingEngine *engine,
+                                            va_list           args);
+void gtk_theming_engine_get_style          (GtkThemingEngine *engine,
+                                            ...);
+
+
 G_CONST_RETURN GtkWidgetPath * gtk_theming_engine_get_path (GtkThemingEngine *engine);
 
 gboolean gtk_theming_engine_has_class        (GtkThemingEngine *engine,

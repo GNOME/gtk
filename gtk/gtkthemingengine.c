@@ -243,6 +243,48 @@ gtk_theming_engine_get (GtkThemingEngine *engine,
   va_end (args);
 }
 
+void
+gtk_theming_engine_get_style_property (GtkThemingEngine *engine,
+                                       const gchar      *property_name,
+                                       GValue           *value)
+{
+  GtkThemingEnginePrivate *priv;
+
+  g_return_if_fail (GTK_IS_THEMING_ENGINE (engine));
+  g_return_if_fail (property_name != NULL);
+
+  priv = engine->priv;
+  gtk_style_context_get_style_property (priv->context, property_name, value);
+}
+
+void
+gtk_theming_engine_get_style_valist (GtkThemingEngine *engine,
+                                     va_list           args)
+{
+  GtkThemingEnginePrivate *priv;
+
+  g_return_if_fail (GTK_IS_THEMING_ENGINE (engine));
+
+  priv = engine->priv;
+  gtk_style_context_get_style_valist (priv->context, args);
+}
+
+void
+gtk_theming_engine_get_style (GtkThemingEngine *engine,
+                              ...)
+{
+  GtkThemingEnginePrivate *priv;
+  va_list args;
+
+  g_return_if_fail (GTK_IS_THEMING_ENGINE (engine));
+
+  priv = engine->priv;
+
+  va_start (args, engine);
+  gtk_style_context_get_style_valist (priv->context, args);
+  va_end (args);
+}
+
 GtkStateFlags
 gtk_theming_engine_get_state (GtkThemingEngine *engine)
 {
