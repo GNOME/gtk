@@ -1184,10 +1184,11 @@ gtk_theming_engine_render_focus (GtkThemingEngine *engine,
                                  gdouble           width,
                                  gdouble           height)
 {
-  const double dashes[] = { 0.5, 1.5 };
-  GdkColor *base_color;
   GtkStateFlags flags;
   GtkStateType state;
+  GdkColor *color;
+  gint line_width;
+  gint8 *dash_list;
 
   cairo_save (cr);
   flags = gtk_theming_engine_get_state (engine);
@@ -1200,24 +1201,57 @@ gtk_theming_engine_render_focus (GtkThemingEngine *engine,
     state = GTK_STATE_NORMAL;
 
   gtk_theming_engine_get (engine, state,
-                          "base-color", &base_color,
+                          "foreground-color", &color,
                           NULL);
 
-  cairo_set_line_width (cr, 1.0);
-  cairo_set_dash (cr, dashes, 2, 0);
+  gtk_theming_engine_get_style (engine,
+				"focus-line-width", &line_width,
+				"focus-line-pattern", (gchar *) &dash_list,
+				NULL);
+
+  cairo_set_line_width (cr, (gdouble) line_width);
+
+  if (dash_list[0])
+    {
+      gint n_dashes = strlen ((const gchar *) dash_list);
+      gdouble *dashes = g_new (gdouble, n_dashes);
+      gdouble total_length = 0;
+      gdouble dash_offset;
+      gint i;
+
+      for (i = 0; i < n_dashes; i++)
+	{
+	  dashes[i] = dash_list[i];
+	  total_length += dash_list[i];
+	}
+
+      /* The dash offset here aligns the pattern to integer pixels
+       * by starting the dash at the right side of the left border
+       * Negative dash offsets in cairo don't work
+       * (https://bugs.freedesktop.org/show_bug.cgi?id=2729)
+       */
+      dash_offset = - line_width / 2.;
+
+      while (dash_offset < 0)
+	dash_offset += total_length;
+
+      cairo_set_dash (cr, dashes, n_dashes, dash_offset);
+      g_free (dashes);
+    }
 
   cairo_rectangle (cr,
-                   x + 0.5,
-                   y + 0.5,
-                   width - 1,
-                   height - 1);
+                   x + line_width / 2.,
+                   y + line_width / 2.,
+                   width - line_width,
+                   height - line_width);
 
-  gdk_cairo_set_source_color (cr, base_color);
+  gdk_cairo_set_source_color (cr, color);
   cairo_stroke (cr);
 
   cairo_restore (cr);
 
-  gdk_color_free (base_color);
+  gdk_color_free (color);
+  g_free (dash_list);
 }
 
 static void
