@@ -1070,7 +1070,15 @@ gtk_theming_engine_render_expander (GtkThemingEngine *engine,
   GtkStateFlags flags;
   GdkColor *bg_color, *fg_color, *base_color;
   GtkStateType state;
+  double vertical_overshoot;
+  int diameter;
+  double radius;
+  double interp;		/* interpolation factor for center position */
+  double x_double_horz, y_double_horz;
+  double x_double_vert, y_double_vert;
+  double x_double, y_double;
   gdouble angle;
+  gint line_width;
 
   cairo_save (cr);
   flags = gtk_theming_engine_get_state (engine);
@@ -1088,14 +1096,68 @@ gtk_theming_engine_render_expander (GtkThemingEngine *engine,
                           "base-color", &base_color,
                           NULL);
 
-  if (flags & GTK_STATE_FLAG_ACTIVE)
-    angle = G_PI;
-  else
-    angle = G_PI / 2;
+  line_width = 1;
 
-  cairo_set_line_width (cr, 1);
-  add_path_arrow (cr, angle, x + 2, y + 2,
-                  MIN (width - 1, height - 1) - 4);
+  /* FIXME: LTR/RTL */
+  if (flags & GTK_STATE_FLAG_ACTIVE)
+    {
+      angle = G_PI / 2;
+      interp = 1.0;
+    }
+  else
+    {
+      angle = 0;
+      interp = 0;
+    }
+
+  /* Compute distance that the stroke extends beyonds the end
+   * of the triangle we draw.
+   */
+  vertical_overshoot = line_width / 2.0 * (1. / tan (G_PI / 8));
+
+  /* For odd line widths, we end the vertical line of the triangle
+   * at a half pixel, so we round differently.
+   */
+  if (line_width % 2 == 1)
+    vertical_overshoot = ceil (0.5 + vertical_overshoot) - 0.5;
+  else
+    vertical_overshoot = ceil (vertical_overshoot);
+
+  /* Adjust the size of the triangle we draw so that the entire stroke fits
+   */
+  diameter = (gint) MAX (3, width - 2 * vertical_overshoot);
+
+  /* If the line width is odd, we want the diameter to be even,
+   * and vice versa, so force the sum to be odd. This relationship
+   * makes the point of the triangle look right.
+   */
+  diameter -= (1 - (diameter + line_width) % 2);
+
+  radius = diameter / 2.;
+
+  /* Adjust the center so that the stroke is properly aligned with
+   * the pixel grid. The center adjustment is different for the
+   * horizontal and vertical orientations. For intermediate positions
+   * we interpolate between the two.
+   */
+  x_double_vert = floor ((x + width / 2) - (radius + line_width) / 2.) + (radius + line_width) / 2.;
+  y_double_vert = (y + height / 2) - 0.5;
+
+  x_double_horz = (x + width / 2) - 0.5;
+  y_double_horz = floor ((y + height / 2) - (radius + line_width) / 2.) + (radius + line_width) / 2.;
+
+  x_double = x_double_vert * (1 - interp) + x_double_horz * interp;
+  y_double = y_double_vert * (1 - interp) + y_double_horz * interp;
+
+  cairo_translate (cr, x_double, y_double);
+  cairo_rotate (cr, angle);
+
+  cairo_move_to (cr, - radius / 2., - radius);
+  cairo_line_to (cr,   radius / 2.,   0);
+  cairo_line_to (cr, - radius / 2.,   radius);
+  cairo_close_path (cr);
+
+  cairo_set_line_width (cr, line_width);
 
   if (flags & GTK_STATE_FLAG_PRELIGHT)
     gdk_cairo_set_source_color (cr, fg_color);
