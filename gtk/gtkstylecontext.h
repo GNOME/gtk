@@ -114,6 +114,10 @@ void        gtk_style_context_set_screen (GtkStyleContext *context,
                                           GdkScreen       *screen);
 GdkScreen * gtk_style_context_get_screen (GtkStyleContext *context);
 
+void             gtk_style_context_set_direction (GtkStyleContext  *context,
+                                                  GtkTextDirection  direction);
+GtkTextDirection gtk_style_context_get_direction (GtkStyleContext  *context);
+
 
 /* Semi-private API */
 const GValue * _gtk_style_context_peek_style_property (GtkStyleContext *context,

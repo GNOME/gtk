@@ -81,11 +81,14 @@ struct GtkStyleContextPrivate
   GSList *regions;
 
   GtkThemingEngine *theming_engine;
+
+  GtkTextDirection direction;
 };
 
 enum {
   PROP_0,
-  PROP_SCREEN
+  PROP_SCREEN,
+  PROP_DIRECTION
 };
 
 static void gtk_style_context_finalize (GObject *object);
@@ -118,6 +121,14 @@ gtk_style_context_class_init (GtkStyleContextClass *klass)
                                                         P_("The associated GdkScreen"),
                                                         GDK_TYPE_SCREEN,
                                                         GTK_PARAM_READWRITE));
+  g_object_class_install_property (object_class,
+				   PROP_DIRECTION,
+				   g_param_spec_enum ("direction",
+                                                      P_("Direction"),
+                                                      P_("Text direction"),
+                                                      GTK_TYPE_TEXT_DIRECTION,
+                                                      GTK_TEXT_DIR_LTR,
+                                                      GTK_PARAM_READWRITE));
 
   g_type_class_add_private (object_class, sizeof (GtkStyleContextPrivate));
 }
@@ -170,6 +181,8 @@ gtk_style_context_init (GtkStyleContext *style_context)
 
   priv->store = gtk_style_set_new ();
   priv->theming_engine = (GtkThemingEngine *) gtk_theming_engine_load (NULL);
+
+  priv->direction = GTK_TEXT_DIR_RTL;
 
   /* Create default region */
   region = style_region_new ();
@@ -261,6 +274,10 @@ gtk_style_context_impl_set_property (GObject      *object,
       gtk_style_context_set_screen (style_context,
                                     g_value_get_object (value));
       break;
+    case PROP_DIRECTION:
+      gtk_style_context_set_direction (style_context,
+                                       g_value_get_enum (value));
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -283,6 +300,9 @@ gtk_style_context_impl_get_property (GObject    *object,
     {
     case PROP_SCREEN:
       g_value_set_object (value, priv->screen);
+      break;
+    case PROP_DIRECTION:
+      g_value_set_enum (value, priv->direction);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -1208,6 +1228,31 @@ gtk_style_context_get_screen (GtkStyleContext *context)
 
   priv = context->priv;
   return priv->screen;
+}
+
+void
+gtk_style_context_set_direction (GtkStyleContext  *context,
+                                 GtkTextDirection  direction)
+{
+  GtkStyleContextPrivate *priv;
+
+  g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
+
+  priv = context->priv;
+  priv->direction = direction;
+
+  g_object_notify (G_OBJECT (context), "direction");
+}
+
+GtkTextDirection
+gtk_style_context_get_direction (GtkStyleContext *context)
+{
+  GtkStyleContextPrivate *priv;
+
+  g_return_val_if_fail (GTK_IS_STYLE_CONTEXT (context), GTK_TEXT_DIR_LTR);
+
+  priv = context->priv;
+  return priv->direction;
 }
 
 /* Paint methods */
