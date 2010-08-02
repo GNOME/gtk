@@ -7286,7 +7286,7 @@ gtk_widget_set_parent (GtkWidget *widget,
     }
 
   context = g_object_get_qdata (G_OBJECT (widget),
-                                    quark_style_context);
+                                quark_style_context);
   if (context)
     {
       GtkWidgetPath *path;
@@ -7420,8 +7420,22 @@ gtk_widget_ensure_style (GtkWidget *widget)
 {
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
+  if (!widget->priv->style ||
+      !gtk_style_has_context (widget->priv->style))
+    {
+      GtkStyle *style;
+
+      style = g_object_new (GTK_TYPE_STYLE,
+                            "context", gtk_widget_get_style_context (widget),
+                            NULL);
+
+      gtk_widget_set_style_internal (widget, style, TRUE);
+    }
+
+#if 0
   if (!widget->priv->rc_style && !widget->priv->user_style)
     gtk_widget_reset_rc_style (widget);
+#endif
 }
 
 /* Look up the RC style for this widget, unsetting any user style that
