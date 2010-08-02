@@ -13267,6 +13267,7 @@ gtk_widget_get_style_context (GtkWidget *widget)
   if (G_UNLIKELY (!context))
     {
       static GtkCssProvider *css_provider = NULL;
+      GtkCssProvider *default_provider;
       GtkWidgetPath *path;
 
       context = g_object_new (GTK_TYPE_STYLE_CONTEXT, NULL);
@@ -13298,6 +13299,10 @@ gtk_widget_get_style_context (GtkWidget *widget)
                                       GTK_STYLE_PROVIDER (css_provider),
                                       GTK_STYLE_PROVIDER_PRIORITY_USER);
 
+      default_provider = gtk_css_provider_get_default ();
+      gtk_style_context_add_provider (context,
+                                      GTK_STYLE_PROVIDER (default_provider),
+                                      GTK_STYLE_PROVIDER_PRIORITY_FALLBACK);
 
       path = gtk_widget_get_path (widget);
       gtk_style_context_set_path (context, path);
