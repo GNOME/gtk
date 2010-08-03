@@ -61,6 +61,7 @@ struct GtkStyleRegion
 {
   GArray *style_classes;
   GArray *child_style_classes;
+  GtkJunctionSides junction_sides;
 };
 
 struct GtkStyleContextPrivate
@@ -166,6 +167,9 @@ style_region_copy (const GtkStyleRegion *region)
   g_array_insert_vals (copy->child_style_classes, 0,
                        region->child_style_classes->data,
                        region->child_style_classes->len);
+
+  copy->junction_sides = region->junction_sides;
+
   return copy;
 }
 
@@ -1253,6 +1257,33 @@ gtk_style_context_get_direction (GtkStyleContext *context)
 
   priv = context->priv;
   return priv->direction;
+}
+
+void
+gtk_style_context_set_junction_sides (GtkStyleContext  *context,
+				      GtkJunctionSides  sides)
+{
+  GtkStyleContextPrivate *priv;
+  GtkStyleRegion *region;
+
+  g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
+
+  priv = context->priv;
+  region = priv->regions->data;
+  region->junction_sides = sides;
+}
+
+GtkJunctionSides
+gtk_style_context_get_junction_sides (GtkStyleContext *context)
+{
+  GtkStyleContextPrivate *priv;
+  GtkStyleRegion *region;
+
+  g_return_val_if_fail (GTK_IS_STYLE_CONTEXT (context), 0);
+
+  priv = context->priv;
+  region = priv->regions->data;
+  return region->junction_sides;
 }
 
 gboolean

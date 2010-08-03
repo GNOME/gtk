@@ -118,6 +118,10 @@ void             gtk_style_context_set_direction (GtkStyleContext  *context,
                                                   GtkTextDirection  direction);
 GtkTextDirection gtk_style_context_get_direction (GtkStyleContext  *context);
 
+void             gtk_style_context_set_junction_sides (GtkStyleContext  *context,
+						       GtkJunctionSides  sides);
+GtkJunctionSides gtk_style_context_get_junction_sides (GtkStyleContext  *context);
+
 gboolean gtk_style_context_lookup_color (GtkStyleContext *context,
                                          const gchar     *color_name,
                                          GdkColor        *color);
