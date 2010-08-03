@@ -358,6 +358,17 @@ gtk_theming_engine_get_direction (GtkThemingEngine *engine)
   return gtk_style_context_get_direction (priv->context);
 }
 
+GtkJunctionSides
+gtk_theming_engine_get_junction_sides (GtkThemingEngine *engine)
+{
+  GtkThemingEnginePrivate *priv;
+
+  g_return_val_if_fail (GTK_IS_THEMING_ENGINE (engine), 0);
+
+  priv = engine->priv;
+  return gtk_style_context_get_junction_sides (priv->context);
+}
+
 /* GtkThemingModule */
 
 static gboolean

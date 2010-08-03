@@ -173,6 +173,8 @@ gboolean      gtk_theming_engine_is_state_set  (GtkThemingEngine *engine,
 
 GtkTextDirection gtk_theming_engine_get_direction (GtkThemingEngine *engine);
 
+GtkJunctionSides gtk_theming_engine_get_junction_sides (GtkThemingEngine *engine);
+
 G_CONST_RETURN GtkThemingEngine * gtk_theming_engine_load (const gchar *name);
 
 GdkScreen * gtk_theming_engine_get_screen (GtkThemingEngine *engine);
