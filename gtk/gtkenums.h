@@ -579,6 +579,14 @@ typedef enum {
   GTK_CHILD_CLASS_SORTED  = 1 << 5
 } GtkChildClassFlags;
 
+typedef enum {
+  GTK_JUNCTION_NONE   = 0,
+  GTK_JUNCTION_TOP    = 1 << 0,
+  GTK_JUNCTION_BOTTOM = 1 << 1,
+  GTK_JUNCTION_LEFT   = 1 << 2,
+  GTK_JUNCTION_RIGHT  = 1 << 3
+} GtkJunctionSides;
+
 
 G_END_DECLS
 
