@@ -1009,12 +1009,27 @@ gtk_theming_engine_render_frame (GtkThemingEngine *engine,
     {
       if (gtk_theming_engine_has_class (engine, "button"))
         {
+          GtkJunctionSides sides;
+
+          sides = gtk_theming_engine_get_junction_sides (engine);
+
+          if (sides & GTK_JUNCTION_BOTTOM)
+            y += 2;
+
+          width -= 3;
+          height -= 2;
+
+          if (gtk_theming_engine_get_direction (engine) == GTK_TEXT_DIR_RTL)
+            x += 2;
+          else
+            x += 1;
+
           gdk_cairo_set_source_color (cr, &lighter);
-          add_path_rectangle_sides (cr, x + 1, y + 2, width - 3, height - 2, SIDE_TOP);
+          add_path_rectangle_sides (cr, x, y, width, height, SIDE_TOP);
           cairo_stroke (cr);
 
           gdk_cairo_set_source_color (cr, &darker);
-          add_path_rectangle_sides (cr, x + 1, y + 2, width - 3, height - 2, SIDE_BOTTOM);
+          add_path_rectangle_sides (cr, x, y, width, height, SIDE_BOTTOM);
           cairo_stroke (cr);
         }
       else
