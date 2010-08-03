@@ -1778,11 +1778,17 @@ transform_detail_string (const gchar     *detail,
     }
   else if (strcmp (detail, "spinbutton") == 0)
     gtk_style_context_set_class (context, "spinbutton");
-  else if (strcmp (detail, "spinbutton_up") == 0 ||
-           strcmp (detail, "spinbutton_down") == 0)
+  else if (strcmp (detail, "spinbutton_up") == 0)
     {
       gtk_style_context_set_class (context, "spinbutton");
       gtk_style_context_set_class (context, "button");
+      gtk_style_context_set_junction_sides (context, GTK_JUNCTION_BOTTOM);
+    }
+  else if (strcmp (detail, "spinbutton_down") == 0)
+    {
+      gtk_style_context_set_class (context, "spinbutton");
+      gtk_style_context_set_class (context, "button");
+      gtk_style_context_set_junction_sides (context, GTK_JUNCTION_TOP);
     }
   else if (g_str_has_prefix (detail, "cell_"))
     {
