@@ -171,6 +171,8 @@ GtkStateFlags gtk_theming_engine_get_state     (GtkThemingEngine *engine);
 gboolean      gtk__theming_engine_is_state_set (GtkThemingEngine *engine,
                                                 GtkStateType      state);
 
+GtkTextDirection gtk_theming_engine_get_direction (GtkThemingEngine *engine);
+
 G_CONST_RETURN GtkThemingEngine * gtk_theming_engine_load (const gchar *name);
 
 GdkScreen * gtk_theming_engine_get_screen (GtkThemingEngine *engine);

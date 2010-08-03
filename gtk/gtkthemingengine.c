@@ -347,6 +347,17 @@ gtk_theming_engine_has_child_class (GtkThemingEngine   *engine,
   return gtk_style_context_has_child_class (priv->context, style_class, flags);
 }
 
+GtkTextDirection
+gtk_theming_engine_get_direction (GtkThemingEngine *engine)
+{
+  GtkThemingEnginePrivate *priv;
+
+  g_return_val_if_fail (GTK_IS_THEMING_ENGINE (engine), GTK_TEXT_DIR_LTR);
+
+  priv = engine->priv;
+  return gtk_style_context_get_direction (priv->context);
+}
+
 /* GtkThemingModule */
 
 static gboolean
