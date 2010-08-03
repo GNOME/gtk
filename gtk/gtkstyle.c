@@ -6163,7 +6163,6 @@ draw_insertion_cursor (GtkWidget          *widget,
   gint stem_width;
   gint arrow_width;
   gint x, y;
-  gint i;
   gfloat cursor_aspect_ratio;
   gint offset;
   

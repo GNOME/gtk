@@ -470,7 +470,6 @@ gtk_progress_bar_expose (GtkWidget      *widget,
                          GdkEventExpose *event)
 {
   GtkProgressBar *pbar = GTK_PROGRESS_BAR (widget);
-  GtkProgressBarPriv *priv = pbar->priv;
 
   if (gtk_widget_is_drawable (widget))
     gtk_progress_bar_paint (pbar);
@@ -657,7 +656,6 @@ static void
 gtk_progress_bar_paint_activity (GtkProgressBar            *pbar,
                                  GtkProgressBarOrientation  orientation)
 {
-  GtkProgressBarPriv *priv = pbar->priv;
   GtkWidget *widget = GTK_WIDGET (pbar);
   GdkRectangle area;
 
@@ -694,7 +692,6 @@ gtk_progress_bar_paint_continuous (GtkProgressBar            *pbar,
                                    gint                       amount,
                                    GtkProgressBarOrientation  orientation)
 {
-  GtkProgressBarPriv *priv = pbar->priv;
   GtkWidget *widget = GTK_WIDGET (pbar);
   GdkRectangle area;
 

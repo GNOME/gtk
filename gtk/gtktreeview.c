@@ -3455,8 +3455,6 @@ gtk_tree_view_motion_draw_column_motion_arrow (GtkTreeView *tree_view)
     }
   else if (arrow_type == DRAG_COLUMN_WINDOW_STATE_ARROW)
     {
-      gint i, j = 1;
-
       width = tree_view->priv->expander_size;
 
       /* Get x, y, width, height of arrow */
@@ -3524,8 +3522,6 @@ gtk_tree_view_motion_draw_column_motion_arrow (GtkTreeView *tree_view)
   else if (arrow_type == DRAG_COLUMN_WINDOW_STATE_ARROW_LEFT ||
 	   arrow_type == DRAG_COLUMN_WINDOW_STATE_ARROW_RIGHT)
     {
-      gint i, j = 1;
-
       width = tree_view->priv->expander_size;
 
       /* Get x, y, width, height of arrow */
@@ -4225,7 +4221,6 @@ gtk_tree_view_draw_line (GtkTreeView         *tree_view,
                          int                  y2)
 {
   cairo_t *cr;
-  int line_width;
 
   cr = gdk_cairo_create (window);
 
