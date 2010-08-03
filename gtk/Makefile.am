@@ -946,7 +946,7 @@ if OS_WIN32
 # used... Use a manifest file to tell Windows that
 # gtk-update-icon-cache.exe doesn't require any special privileges.
 
-GTK_UPDATE_ICON_CACHE_MANIFEST = gtk-update-icon-cache.exe.manifest
+GTK_UPDATE_ICON_CACHE_MANIFEST = gtk-update-icon-cache-3.0.exe.manifest
 
 bin_SCRIPTS += \
 	$(GTK_UPDATE_ICON_CACHE_MANIFEST)
@@ -956,7 +956,7 @@ gtk-update-icon-cache.exe.manifest:
 	 echo '<assembly xmlns="urn:schemas-microsoft-com:asm.v1" manifestVersion="1.0">' ; \
 	 echo '  <assemblyIdentity version="1.0.0.0"' ; \
 	 echo '     processorArchitecture="'$(EXE_MANIFEST_ARCHITECTURE)'"' ; \
-	 echo '     name="gtk-update-icon-cache.exe"' ; \
+	 echo '     name="gtk-update-icon-cache-3.0.exe"' ; \
 	 echo '     type="win32"/>' ; \
 	 echo '  <!-- Identify the application security requirements. -->' ; \
 	 echo '  <trustInfo xmlns="urn:schemas-microsoft-com:asm.v3">' ; \
