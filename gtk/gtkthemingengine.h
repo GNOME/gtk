@@ -168,7 +168,7 @@ gboolean gtk_theming_engine_has_child_class (GtkThemingEngine   *engine,
                                              GtkChildClassFlags *flags);
 
 GtkStateFlags gtk_theming_engine_get_state     (GtkThemingEngine *engine);
-gboolean      gtk__theming_engine_is_state_set (GtkThemingEngine *engine,
+gboolean      gtk_theming_engine_is_state_set  (GtkThemingEngine *engine,
                                                 GtkStateType      state);
 
 GtkTextDirection gtk_theming_engine_get_direction (GtkThemingEngine *engine);
