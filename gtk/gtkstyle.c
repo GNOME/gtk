@@ -958,7 +958,6 @@ gtk_style_lookup_color (GtkStyle   *style,
                         GdkColor   *color)
 {
   GtkStylePrivate *priv;
-  GSList *iter;
 
   g_return_val_if_fail (GTK_IS_STYLE (style), FALSE);
   g_return_val_if_fail (color_name != NULL, FALSE);
@@ -966,21 +965,10 @@ gtk_style_lookup_color (GtkStyle   *style,
 
   priv = GTK_STYLE_GET_PRIVATE (style);
 
-  for (iter = priv->color_hashes; iter != NULL; iter = iter->next)
-    {
-      GHashTable *hash    = iter->data;
-      GdkColor   *mapping = g_hash_table_lookup (hash, color_name);
+  if (!priv->context)
+    return FALSE;
 
-      if (mapping)
-        {
-          color->red = mapping->red;
-          color->green = mapping->green;
-          color->blue = mapping->blue;
-          return TRUE;
-        }
-    }
-
-  return FALSE;
+  return gtk_style_context_lookup_color (priv->context, color_name, color);
 }
 
 /**

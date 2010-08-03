@@ -1255,6 +1255,27 @@ gtk_style_context_get_direction (GtkStyleContext *context)
   return priv->direction;
 }
 
+gboolean
+gtk_style_context_lookup_color (GtkStyleContext *context,
+                                const gchar     *color_name,
+                                GdkColor        *color)
+{
+  GtkStyleContextPrivate *priv;
+  GtkSymbolicColor *sym_color;
+
+  g_return_val_if_fail (GTK_IS_STYLE_CONTEXT (context), FALSE);
+  g_return_val_if_fail (color_name != NULL, FALSE);
+  g_return_val_if_fail (color != NULL, FALSE);
+
+  priv = context->priv;
+  sym_color = gtk_style_set_lookup_color (priv->store, color_name);
+
+  if (!sym_color)
+    return FALSE;
+
+  return gtk_symbolic_color_resolve (sym_color, priv->store, color);
+}
+
 /* Paint methods */
 void
 gtk_render_check (GtkStyleContext *context,
