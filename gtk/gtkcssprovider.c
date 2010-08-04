@@ -744,7 +744,7 @@ css_provider_apply_scope (GtkCssProvider *css_provider,
   else if (scope == SCOPE_SELECTOR)
     {
       priv->scanner->config->cset_identifier_first = G_CSET_a_2_z G_CSET_A_2_Z "*@";
-      priv->scanner->config->cset_identifier_nth = G_CSET_a_2_z "-_" G_CSET_A_2_Z;
+      priv->scanner->config->cset_identifier_nth = G_CSET_a_2_z "-_#" G_CSET_A_2_Z;
       priv->scanner->config->scan_identifier_1char = TRUE;
     }
   else if (scope == SCOPE_PSEUDO_CLASS ||
@@ -944,14 +944,36 @@ parse_selector (GtkCssProvider  *css_provider,
           if (scanner->token != G_TOKEN_IDENTIFIER)
             return G_TOKEN_IDENTIFIER;
 
-          /* Add glob selector if path is empty */
-          if (selector_path_depth (path) == 0)
-            selector_path_prepend_glob (path);
-
+          selector_path_prepend_glob (path);
+          selector_path_prepend_combinator (path, COMBINATOR_CHILD);
           selector_path_prepend_name (path, scanner->value.v_identifier);
         }
       else if (g_ascii_isupper (scanner->value.v_identifier[0]))
-        selector_path_prepend_type (path, scanner->value.v_identifier);
+        {
+          gchar *pos;
+
+          pos = strchr (scanner->value.v_identifier, '#');
+
+          if (pos)
+            {
+              gchar *type_name, *name;
+
+              /* Widget type and name put together */
+              name = pos + 1;
+              *pos = '\0';
+              type_name = scanner->value.v_identifier;
+
+              selector_path_prepend_type (path, type_name);
+
+              /* This is only so there is a direct relationship
+               * between widget type and its name.
+               */
+              selector_path_prepend_combinator (path, COMBINATOR_CHILD);
+              selector_path_prepend_name (path, name);
+            }
+          else
+            selector_path_prepend_type (path, scanner->value.v_identifier);
+        }
       else if (g_ascii_islower (scanner->value.v_identifier[0]))
         {
           GtkChildClassFlags flags = 0;
