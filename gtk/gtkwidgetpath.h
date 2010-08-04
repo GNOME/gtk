@@ -67,6 +67,10 @@ gboolean gtk_widget_path_iter_has_region    (const GtkWidgetPath *path,
                                              guint                pos,
                                              const gchar         *name,
                                              GtkChildClassFlags  *flags);
+gboolean gtk_widget_path_iter_has_qregion   (const GtkWidgetPath *path,
+                                             guint                pos,
+                                             GQuark               qname,
+                                             GtkChildClassFlags  *flags);
 
 GType           gtk_widget_path_get_widget_type (const GtkWidgetPath *path);
 

@@ -411,13 +411,11 @@ compare_selector_element (GtkWidgetPath   *path,
     }
   else if (elem->elem_type == SELECTOR_REGION)
     {
-      const gchar *region_name;
       GtkChildClassFlags flags;
 
-      /* FIXME: Need GQuark API here */
-      region_name = g_quark_to_string (elem->region.name);
-
-      if (!gtk_widget_path_iter_has_region (path, index, region_name, &flags))
+      if (!gtk_widget_path_iter_has_qregion (path, index,
+                                             elem->region.name,
+                                             &flags))
         return FALSE;
 
       if (elem->region.flags != 0 &&

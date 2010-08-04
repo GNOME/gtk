@@ -74,15 +74,10 @@ gtk_widget_path_copy (const GtkWidgetPath *path)
           gpointer key, value;
 
           g_hash_table_iter_init (&iter, elem->regions);
-          new.regions = g_hash_table_new_full (g_str_hash,
-                                               g_str_equal,
-                                               (GDestroyNotify) g_free,
-                                               NULL);
+          new.regions = g_hash_table_new (NULL, NULL);
 
           while (g_hash_table_iter_next (&iter, &key, &value))
-            g_hash_table_insert (new.regions,
-                                 g_strdup ((const gchar *) key),
-                                 value);
+            g_hash_table_insert (new.regions, key, value);
         }
 
       g_array_append_val (new_path->elems, new);
@@ -203,21 +198,20 @@ gtk_widget_path_iter_add_region (GtkWidgetPath      *path,
                                  GtkChildClassFlags  flags)
 {
   GtkPathElement *elem;
+  GQuark qname;
 
   g_return_if_fail (path != NULL);
   g_return_if_fail (pos < path->elems->len);
   g_return_if_fail (name != NULL);
 
   elem = &g_array_index (path->elems, GtkPathElement, pos);
+  qname = g_quark_from_string (name);
 
   if (!elem->regions)
-    elem->regions = g_hash_table_new_full (g_str_hash,
-                                           g_str_equal,
-                                           (GDestroyNotify) g_free,
-                                           NULL);
+    elem->regions = g_hash_table_new (NULL, NULL);
 
   g_hash_table_insert (elem->regions,
-                       g_strdup (name),
+                       GUINT_TO_POINTER (qname),
                        GUINT_TO_POINTER (flags));
 }
 
@@ -227,15 +221,21 @@ gtk_widget_path_iter_remove_region (GtkWidgetPath *path,
                                     const gchar   *name)
 {
   GtkPathElement *elem;
+  GQuark qname;
 
   g_return_if_fail (path != NULL);
   g_return_if_fail (pos < path->elems->len);
   g_return_if_fail (name != NULL);
 
+  qname = g_quark_try_string (name);
+
+  if (qname == 0)
+    return;
+
   elem = &g_array_index (path->elems, GtkPathElement, pos);
 
   if (elem->regions)
-    g_hash_table_remove (elem->regions, name);
+    g_hash_table_remove (elem->regions, GUINT_TO_POINTER (qname));
 }
 
 void
@@ -273,9 +273,43 @@ gtk_widget_path_iter_list_regions (const GtkWidgetPath *path,
   g_hash_table_iter_init (&iter, elem->regions);
 
   while (g_hash_table_iter_next (&iter, &key, NULL))
-    list = g_slist_prepend (list, key);
+    {
+      GQuark qname;
+
+      qname = GPOINTER_TO_UINT (key);
+      list = g_slist_prepend (list, (gchar *) g_quark_to_string (qname));
+    }
 
   return list;
+}
+
+gboolean
+gtk_widget_path_iter_has_qregion (const GtkWidgetPath *path,
+                                  guint                pos,
+                                  GQuark               qname,
+                                  GtkChildClassFlags  *flags)
+{
+  GtkPathElement *elem;
+  gpointer value;
+
+  g_return_val_if_fail (path != NULL, FALSE);
+  g_return_val_if_fail (pos < path->elems->len, FALSE);
+  g_return_val_if_fail (qname != 0, FALSE);
+
+  elem = &g_array_index (path->elems, GtkPathElement, pos);
+
+  if (!elem->regions)
+    return FALSE;
+
+  if (!g_hash_table_lookup_extended (elem->regions,
+                                     GUINT_TO_POINTER (qname),
+                                     NULL, &value))
+    return FALSE;
+
+  if (flags)
+    *flags = GPOINTER_TO_UINT (value);
+
+  return TRUE;
 }
 
 gboolean
@@ -284,25 +318,18 @@ gtk_widget_path_iter_has_region (const GtkWidgetPath *path,
                                  const gchar         *name,
                                  GtkChildClassFlags  *flags)
 {
-  GtkPathElement *elem;
-  gpointer value;
+  GQuark qname;
 
   g_return_val_if_fail (path != NULL, FALSE);
   g_return_val_if_fail (pos < path->elems->len, FALSE);
   g_return_val_if_fail (name != NULL, FALSE);
 
-  elem = &g_array_index (path->elems, GtkPathElement, pos);
+  qname = g_quark_try_string (name);
 
-  if (!elem->regions)
+  if (qname == 0)
     return FALSE;
 
-  if (!g_hash_table_lookup_extended (elem->regions, name, NULL, &value))
-    return FALSE;
-
-  if (flags)
-    *flags = GPOINTER_TO_UINT (value);
-
-  return TRUE;
+  return gtk_widget_path_iter_has_qregion (path, pos, qname, flags);
 }
 
 GType
