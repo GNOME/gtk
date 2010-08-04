@@ -209,45 +209,6 @@ gdk_offscreen_window_get_visual (GdkDrawable    *drawable)
   return gdk_drawable_get_visual (offscreen->wrapper);
 }
 
-static void
-add_damage (GdkOffscreenWindow *offscreen,
-	    int x, int y,
-	    int w, int h,
-	    gboolean is_line)
-{
-  GdkRectangle rect;
-  cairo_region_t *damage;
-
-  rect.x = x;
-  rect.y = y;
-  rect.width = w;
-  rect.height = h;
-
-  if (is_line)
-    {
-      /* This should really take into account line width, line
-       * joins (and miter) and line caps. But these are hard
-       * to compute, rarely used and generally a pain. And in
-       * the end a snug damage rectangle is not that important
-       * as multiple damages are generally created anyway.
-       *
-       * So, we just add some padding around the rect.
-       * We use a padding of 3 pixels, plus an extra row
-       * below and on the right for the normal line size. I.E.
-       * line from (0,0) to (2,0) gets h=0 but is really
-       * at least one pixel tall.
-       */
-      rect.x -= 3;
-      rect.y -= 3;
-      rect.width += 7;
-      rect.height += 7;
-    }
-
-  damage = cairo_region_create_rectangle (&rect);
-  _gdk_window_add_damage (offscreen->wrapper, damage);
-  cairo_region_destroy (damage);
-}
-
 void
 _gdk_offscreen_window_new (GdkWindow     *window,
 			   GdkScreen     *screen,

@@ -4305,6 +4305,10 @@ _gdk_window_process_updates_recurse (GdkWindow *window,
   if (cairo_region_is_empty (expose_region))
     return;
 
+  if (gdk_window_is_offscreen (private->impl_window) &&
+      private == private->impl_window)
+    _gdk_window_add_damage ((GdkWindow *) private->impl_window, expose_region);
+
   /* Make this reentrancy safe for expose handlers freeing windows */
   children = g_list_copy (private->children);
   g_list_foreach (children, (GFunc)g_object_ref, NULL);
