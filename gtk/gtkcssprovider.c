@@ -429,10 +429,12 @@ compare_selector (GtkWidgetPath *path,
   GSList *elements = selector->elements;
   gboolean match = TRUE;
   guint64 score = 0;
+  guint len;
   guint i = 0;
 
-  while (elements && match &&
-         i < gtk_widget_path_length (path))
+  len = gtk_widget_path_length (path);
+
+  while (elements && match && i < len)
     {
       SelectorElement *elem;
       guint8 elem_score;
