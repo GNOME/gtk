@@ -38,17 +38,17 @@ guint           gtk_widget_path_length              (const GtkWidgetPath *path);
 guint           gtk_widget_path_prepend_type        (GtkWidgetPath       *path,
                                                      GType                type);
 
-GType               gtk_widget_path_get_element_type (const GtkWidgetPath*path,
-                                                      guint               pos);
-void                gtk_widget_path_set_element_type (GtkWidgetPath      *path,
-                                                      guint               pos,
-                                                      GType               type);
+GType               gtk_widget_path_iter_get_widget_type (const GtkWidgetPath *path,
+                                                          guint                pos);
+void                gtk_widget_path_iter_set_widget_type (GtkWidgetPath       *path,
+                                                          guint                pos,
+                                                          GType                type);
 
-G_CONST_RETURN gchar * gtk_widget_path_get_element_name (const GtkWidgetPath *path,
-                                                         guint                pos);
-void                   gtk_widget_path_set_element_name (GtkWidgetPath       *path,
-                                                         guint                pos,
-                                                         const gchar         *name);
+G_CONST_RETURN gchar * gtk_widget_path_iter_get_name (const GtkWidgetPath *path,
+                                                      guint                pos);
+void                   gtk_widget_path_iter_set_name (GtkWidgetPath       *path,
+                                                      guint                pos,
+                                                      const gchar         *name);
 
 void     gtk_widget_path_iter_add_region    (GtkWidgetPath      *path,
                                              guint               pos,

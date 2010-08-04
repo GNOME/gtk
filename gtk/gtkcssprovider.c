@@ -379,7 +379,7 @@ compare_selector_element (GtkWidgetPath   *path,
     {
       GType type;
 
-      type = gtk_widget_path_get_element_type (path, index);
+      type = gtk_widget_path_iter_get_widget_type (path, index);
 
       if (!g_type_is_a (type, elem->type))
         return FALSE;
@@ -436,7 +436,7 @@ compare_selector_element (GtkWidgetPath   *path,
       const gchar *name, *path_name;
 
       name = g_quark_to_string (elem->name);
-      path_name = gtk_widget_path_get_element_name (path, index);
+      path_name = gtk_widget_path_iter_get_name (path, index);
 
       if (!path_name ||
           strcmp (path_name, name) != 0)
