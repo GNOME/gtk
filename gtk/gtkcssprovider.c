@@ -444,14 +444,16 @@ compare_selector (GtkWidgetPath *path,
       match = compare_selector_element (path, i, elem, &elem_score);
       i++;
 
-      if (!match && elem->combinator == COMBINATOR_DESCENDANT)
+      if (!match &&
+          elem->elem_type != SELECTOR_TYPE_NAME &&
+          elem->combinator == COMBINATOR_DESCENDANT)
         {
           /* With descendant combinators there may
            * be intermediate chidren in the hierarchy
            */
           match = TRUE;
         }
-      else
+      else if (match)
         elements = elements->next;
 
       if (match)
