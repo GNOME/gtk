@@ -1398,7 +1398,9 @@ parse_rule (GtkCssProvider *css_provider,
   while (scanner->token == G_TOKEN_IDENTIFIER)
     {
       const gchar *value_str = NULL;
+      GtkStylePropertyParser parse_func = NULL;
       GType prop_type;
+      GError *error = NULL;
       gchar *prop;
 
       prop = g_strdup (scanner->value.v_identifier);
@@ -1432,7 +1434,7 @@ parse_rule (GtkCssProvider *css_provider,
 
           g_hash_table_insert (priv->cur_properties, prop, val);
         }
-      else if (gtk_style_set_lookup_property (prop, &prop_type))
+      else if (gtk_style_set_lookup_property (prop, &prop_type, &parse_func))
         {
           GValue *val;
 
@@ -1444,10 +1446,17 @@ parse_rule (GtkCssProvider *css_provider,
               g_value_set_string (val, value_str);
               g_hash_table_insert (priv->cur_properties, prop, val);
             }
-          else if (css_provider_parse_value (value_str, val))
+          else if ((parse_func && (parse_func) (value_str, val, &error)) ||
+                   (!parse_func && css_provider_parse_value (value_str, val)))
             g_hash_table_insert (priv->cur_properties, prop, val);
           else
             {
+              if (error)
+                {
+                  g_warning ("Error parsing property value: %s\n", error->message);
+                  g_error_free (error);
+                }
+
               g_value_unset (val);
               g_slice_free (GValue, val);
               g_free (prop);

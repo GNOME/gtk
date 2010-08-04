@@ -48,14 +48,20 @@ struct GtkStyleSetClass
   GObjectClass parent_class;
 };
 
+typedef gboolean (* GtkStylePropertyParser) (const gchar  *string,
+                                             GValue       *value,
+                                             GError      **error);
+
 GType gtk_style_set_get_type (void) G_GNUC_CONST;
 
 /* Functions to register style properties */
-void     gtk_style_set_register_property (const gchar  *property_name,
-                                          GType         type,
-                                          const GValue *default_value);
-gboolean gtk_style_set_lookup_property   (const gchar  *property_name,
-                                          GType        *type);
+void     gtk_style_set_register_property (const gchar            *property_name,
+                                          GType                   type,
+                                          const GValue           *default_value,
+                                          GtkStylePropertyParser  parse_func);
+gboolean gtk_style_set_lookup_property   (const gchar            *property_name,
+                                          GType                  *type,
+                                          GtkStylePropertyParser *parse_func);
 
 GtkStyleSet * gtk_style_set_new (void);
 

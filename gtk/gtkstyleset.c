@@ -39,6 +39,7 @@ struct PropertyNode
   GQuark property_quark;
   GType property_type;
   GValue default_value;
+  GtkStylePropertyParser parse_func;
 };
 
 struct PropertyData
@@ -72,19 +73,19 @@ gtk_style_set_class_init (GtkStyleSetClass *klass)
   object_class->finalize = gtk_style_set_finalize;
 
   /* Initialize default property set */
-  gtk_style_set_register_property ("foreground-color", GDK_TYPE_COLOR, NULL);
-  gtk_style_set_register_property ("background-color", GDK_TYPE_COLOR, NULL);
-  gtk_style_set_register_property ("text-color", GDK_TYPE_COLOR, NULL);
-  gtk_style_set_register_property ("base-color", GDK_TYPE_COLOR, NULL);
+  gtk_style_set_register_property ("foreground-color", GDK_TYPE_COLOR, NULL, NULL);
+  gtk_style_set_register_property ("background-color", GDK_TYPE_COLOR, NULL, NULL);
+  gtk_style_set_register_property ("text-color", GDK_TYPE_COLOR, NULL, NULL);
+  gtk_style_set_register_property ("base-color", GDK_TYPE_COLOR, NULL, NULL);
 
-  gtk_style_set_register_property ("font", PANGO_TYPE_FONT_DESCRIPTION, NULL);
+  gtk_style_set_register_property ("font", PANGO_TYPE_FONT_DESCRIPTION, NULL, NULL);
 
-  gtk_style_set_register_property ("padding", GTK_TYPE_BORDER, NULL);
-  gtk_style_set_register_property ("border", G_TYPE_INT, NULL);
+  gtk_style_set_register_property ("padding", GTK_TYPE_BORDER, NULL, NULL);
+  gtk_style_set_register_property ("border", G_TYPE_INT, NULL, NULL);
 
   g_value_init (&val, GTK_TYPE_THEMING_ENGINE);
   g_value_set_object (&val, (GObject *) gtk_theming_engine_load (NULL));
-  gtk_style_set_register_property ("engine", GTK_TYPE_THEMING_ENGINE, &val);
+  gtk_style_set_register_property ("engine", GTK_TYPE_THEMING_ENGINE, &val, NULL);
   g_value_unset (&val);
 
   g_type_class_add_private (object_class, sizeof (GtkStyleSetPrivate));
@@ -186,9 +187,10 @@ property_node_lookup (GQuark quark)
 
 /* Property registration functions */
 void
-gtk_style_set_register_property (const gchar  *property_name,
-                                 GType         type,
-                                 const GValue *default_value)
+gtk_style_set_register_property (const gchar            *property_name,
+                                 GType                   type,
+                                 const GValue           *default_value,
+                                 GtkStylePropertyParser  parse_func)
 {
   PropertyNode *node, new = { 0 };
   GQuark quark;
@@ -220,6 +222,9 @@ gtk_style_set_register_property (const gchar  *property_name,
       g_value_copy (default_value, &new.default_value);
     }
 
+  if (parse_func)
+    new.parse_func = parse_func;
+
   for (i = 0; i < properties->len; i++)
     {
       node = &g_array_index (properties, PropertyNode, i);
@@ -232,8 +237,9 @@ gtk_style_set_register_property (const gchar  *property_name,
 }
 
 gboolean
-gtk_style_set_lookup_property (const gchar *property_name,
-                               GType       *type)
+gtk_style_set_lookup_property (const gchar            *property_name,
+                               GType                  *type,
+                               GtkStylePropertyParser *parse_func)
 {
   PropertyNode *node;
   GtkStyleSetClass *klass;
@@ -260,6 +266,9 @@ gtk_style_set_lookup_property (const gchar *property_name,
         {
           if (type)
             *type = node->property_type;
+
+          if (parse_func)
+            *parse_func = node->parse_func;
 
           found = TRUE;
           break;
