@@ -139,6 +139,12 @@ GType gtk_theming_engine_get_type (void) G_GNUC_CONST;
 void _gtk_theming_engine_set_context (GtkThemingEngine *engine,
                                       GtkStyleContext  *context);
 
+void gtk_theming_engine_register_property (GtkThemingEngine       *engine,
+                                           const gchar            *property_name,
+                                           GType                   type,
+                                           const GValue           *default_value,
+                                           GtkStylePropertyParser  parse_func);
+
 void gtk_theming_engine_get_property (GtkThemingEngine *engine,
                                       const gchar      *property,
                                       GtkStateType      state,

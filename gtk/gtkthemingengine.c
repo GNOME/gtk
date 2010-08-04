@@ -195,6 +195,25 @@ _gtk_theming_engine_set_context (GtkThemingEngine *engine,
 }
 
 void
+gtk_theming_engine_register_property (GtkThemingEngine       *engine,
+                                      const gchar            *property_name,
+                                      GType                   type,
+                                      const GValue           *default_value,
+                                      GtkStylePropertyParser  parse_func)
+{
+  gchar *name;
+
+  g_return_if_fail (GTK_IS_THEMING_ENGINE (engine));
+  g_return_if_fail (property_name != NULL);
+  g_return_if_fail (type != G_TYPE_INVALID);
+  g_return_if_fail (default_value != NULL && G_IS_VALUE (default_value));
+
+  name = g_strdup_printf ("-%s-%s", G_OBJECT_TYPE_NAME (engine), property_name);
+  gtk_style_set_register_property (name, type, default_value, parse_func);
+  g_free (name);
+}
+
+void
 gtk_theming_engine_get_property (GtkThemingEngine *engine,
                                  const gchar      *property,
                                  GtkStateType      state,

@@ -622,6 +622,14 @@ gtk_css_provider_get_style (GtkStyleProvider *provider,
         {
           gchar *prop = key;
 
+          /* Properties starting with '-' may be both widget style properties
+           * or custom properties from the theming engine, so check whether
+           * the type is registered or not.
+           */
+          if (prop[0] == '-' &&
+              !gtk_style_set_lookup_property (prop, NULL, NULL))
+            continue;
+
           if (info->state == GTK_STATE_NORMAL)
             gtk_style_set_set_default (set, key, value);
           else
@@ -1423,18 +1431,7 @@ parse_rule (GtkCssProvider *css_provider,
 
       value_str = g_strstrip (scanner->value.v_identifier);
 
-      if (prop[0] == '-' &&
-          g_ascii_isupper (prop[1]))
-        {
-          GValue *val;
-
-          val = g_slice_new0 (GValue);
-          g_value_init (val, G_TYPE_STRING);
-          g_value_set_string (val, value_str);
-
-          g_hash_table_insert (priv->cur_properties, prop, val);
-        }
-      else if (gtk_style_set_lookup_property (prop, &prop_type, &parse_func))
+      if (gtk_style_set_lookup_property (prop, &prop_type, &parse_func))
         {
           GValue *val;
 
@@ -1463,6 +1460,17 @@ parse_rule (GtkCssProvider *css_provider,
 
               return G_TOKEN_IDENTIFIER;
             }
+        }
+      else if (prop[0] == '-' &&
+               g_ascii_isupper (prop[1]))
+        {
+          GValue *val;
+
+          val = g_slice_new0 (GValue);
+          g_value_init (val, G_TYPE_STRING);
+          g_value_set_string (val, value_str);
+
+          g_hash_table_insert (priv->cur_properties, prop, val);
         }
       else
         g_free (prop);
