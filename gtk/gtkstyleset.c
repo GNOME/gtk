@@ -601,7 +601,7 @@ gtk_style_set_get_valist (GtkStyleSet  *set,
         }
       else
         {
-          GValue *val;
+          GValue *val = NULL;
 
           if (prop)
             {
@@ -610,7 +610,8 @@ gtk_style_set_get_valist (GtkStyleSet  *set,
               else if (G_IS_VALUE (&prop->default_value))
                 val = &prop->default_value;
             }
-          else
+
+          if (!val)
             val = &node->default_value;
 
           if (G_VALUE_TYPE (val) == GTK_TYPE_SYMBOLIC_COLOR)
