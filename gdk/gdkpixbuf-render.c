@@ -180,14 +180,18 @@ gdk_pixbuf_render_pixmap_and_mask (GdkPixbuf  *pixbuf,
 						  alpha_threshold);
 }
 
-static void
-remove_alpha_channel (GdkPixbuf *pixbuf)
+static GdkPixbuf *
+remove_alpha_channel (GdkPixbuf *orig)
 {
+  GdkPixbuf *pixbuf;
+
   unsigned int x, y, width, height, stride;
   unsigned char *data;
 
-  if (!gdk_pixbuf_get_has_alpha (pixbuf))
-    return;
+  if (!gdk_pixbuf_get_has_alpha (orig))
+    return g_object_ref (orig);
+
+  pixbuf = gdk_pixbuf_copy (orig);
 
   width = gdk_pixbuf_get_width (pixbuf);
   height = gdk_pixbuf_get_height (pixbuf);
@@ -203,6 +207,8 @@ remove_alpha_channel (GdkPixbuf *pixbuf)
 
       data += stride;
     }
+
+  return pixbuf;
 }
 
 /**
@@ -259,17 +265,7 @@ gdk_pixbuf_render_pixmap_and_mask_for_colormap (GdkPixbuf   *pixbuf,
        * transparent. So we treat the pixbuf like a pixbuf without alpha channel;
        * see bug #487865.
        */
-      if (gdk_pixbuf_get_has_alpha (pixbuf))
-        {
-          int width, height;
-
-          width = gdk_pixbuf_get_width (pixbuf);
-          height = gdk_pixbuf_get_height (pixbuf);
-          tmp_pixbuf = gdk_pixbuf_copy (pixbuf);
-          remove_alpha_channel (tmp_pixbuf);
-        }
-      else
-        tmp_pixbuf = g_object_ref (pixbuf);
+      tmp_pixbuf = remove_alpha_channel (pixbuf);
 
       cr = gdk_cairo_create (*pixmap_return);
       gdk_cairo_set_source_pixbuf (cr, pixbuf, 0, 0);
