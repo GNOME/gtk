@@ -433,13 +433,7 @@ compare_selector_element (GtkWidgetPath   *path,
     }
   else if (elem->elem_type == SELECTOR_NAME)
     {
-      const gchar *name, *path_name;
-
-      name = g_quark_to_string (elem->name);
-      path_name = gtk_widget_path_iter_get_name (path, index);
-
-      if (!path_name ||
-          strcmp (path_name, name) != 0)
+      if (!gtk_widget_path_iter_has_qname (path, index, elem->name))
         return FALSE;
 
       *score = 0xF;

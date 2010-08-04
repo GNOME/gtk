@@ -29,7 +29,7 @@ typedef struct GtkPathElement GtkPathElement;
 struct GtkPathElement
 {
   GType type;
-  gchar *name;
+  GQuark name;
   GHashTable *regions;
 };
 
@@ -66,7 +66,7 @@ gtk_widget_path_copy (const GtkWidgetPath *path)
       elem = &g_array_index (path->elems, GtkPathElement, i);
 
       new.type = elem->type;
-      new.name = g_strdup (elem->name);
+      new.name = elem->name;
 
       if (elem->regions)
         {
@@ -98,7 +98,6 @@ gtk_widget_path_free (GtkWidgetPath *path)
       GtkPathElement *elem;
 
       elem = &g_array_index (path->elems, GtkPathElement, i);
-      g_free (elem->name);
 
       if (elem->regions)
         g_hash_table_destroy (elem->regions);
@@ -169,7 +168,7 @@ gtk_widget_path_iter_get_name (const GtkWidgetPath *path,
   g_return_val_if_fail (pos < path->elems->len, NULL);
 
   elem = &g_array_index (path->elems, GtkPathElement, pos);
-  return elem->name;
+  return g_quark_to_string (elem->name);
 }
 
 void
@@ -185,10 +184,42 @@ gtk_widget_path_iter_set_name (GtkWidgetPath *path,
 
   elem = &g_array_index (path->elems, GtkPathElement, pos);
 
-  if (elem->name)
-    g_free (elem->name);
+  elem->name = g_quark_from_string (name);
+}
 
-  elem->name = g_strdup (name);
+gboolean
+gtk_widget_path_iter_has_qname (const GtkWidgetPath *path,
+                                guint                pos,
+                                GQuark               qname)
+{
+  GtkPathElement *elem;
+
+  g_return_val_if_fail (path != NULL, FALSE);
+  g_return_val_if_fail (qname != 0, FALSE);
+  g_return_val_if_fail (pos < path->elems->len, FALSE);
+
+  elem = &g_array_index (path->elems, GtkPathElement, pos);
+
+  return (elem->name == qname);
+}
+
+gboolean
+gtk_widget_path_iter_has_name (const GtkWidgetPath *path,
+                               guint                pos,
+                               const gchar         *name)
+{
+  GQuark qname;
+
+  g_return_val_if_fail (path != NULL, FALSE);
+  g_return_val_if_fail (name != NULL, FALSE);
+  g_return_val_if_fail (pos < path->elems->len, FALSE);
+
+  qname = g_quark_try_string (name);
+
+  if (qname == 0)
+    return FALSE;
+
+  return gtk_widget_path_iter_has_qname (path, pos, qname);
 }
 
 void

@@ -44,11 +44,17 @@ void                gtk_widget_path_iter_set_widget_type (GtkWidgetPath       *p
                                                           guint                pos,
                                                           GType                type);
 
-G_CONST_RETURN gchar * gtk_widget_path_iter_get_name (const GtkWidgetPath *path,
-                                                      guint                pos);
-void                   gtk_widget_path_iter_set_name (GtkWidgetPath       *path,
-                                                      guint                pos,
-                                                      const gchar         *name);
+G_CONST_RETURN gchar * gtk_widget_path_iter_get_name  (const GtkWidgetPath *path,
+                                                       guint                pos);
+void                   gtk_widget_path_iter_set_name  (GtkWidgetPath       *path,
+                                                       guint                pos,
+                                                       const gchar         *name);
+gboolean               gtk_widget_path_iter_has_name  (const GtkWidgetPath *path,
+                                                       guint                pos,
+                                                       const gchar         *name);
+gboolean               gtk_widget_path_iter_has_qname (const GtkWidgetPath *path,
+                                                       guint                pos,
+                                                       GQuark               qname);
 
 void     gtk_widget_path_iter_add_region    (GtkWidgetPath      *path,
                                              guint               pos,
