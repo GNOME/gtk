@@ -442,7 +442,20 @@ compare_selector (GtkWidgetPath *path,
       elem = elements->data;
 
       match = compare_selector_element (path, i, elem, &elem_score);
-      i++;
+
+      /* Only move on to the next index if there is no match
+       * with the current element (whether to continue or not
+       * handled right after in the combinator check), or a
+       * GType or glob has just been matched.
+       *
+       * Region and widget names do not trigger this because
+       * the next element in the selector path could also be
+       * related to the same index.
+       */
+      if (!match ||
+          (elem->elem_type == SELECTOR_GTYPE ||
+           elem->elem_type == SELECTOR_GLOB))
+        i++;
 
       if (!match &&
           elem->elem_type != SELECTOR_TYPE_NAME &&
