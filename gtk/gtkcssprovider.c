@@ -233,6 +233,21 @@ selector_path_prepend_region (SelectorPath       *path,
 }
 
 static void
+selector_path_prepend_name (SelectorPath *path,
+                            const gchar  *name)
+{
+  SelectorElement *elem;
+
+  elem = g_slice_new (SelectorElement);
+  elem->combinator = COMBINATOR_DESCENDANT;
+  elem->elem_type = SELECTOR_NAME;
+
+  elem->name = g_quark_from_string (name);
+
+  path->elements = g_slist_prepend (path->elements, elem);
+}
+
+static void
 selector_path_prepend_combinator (SelectorPath   *path,
                                   CombinatorType  combinator)
 {
@@ -416,6 +431,20 @@ compare_selector_element (GtkWidgetPath   *path,
     {
       /* Treat as lowest matching type */
       *score = 1;
+      return TRUE;
+    }
+  else if (elem->elem_type == SELECTOR_NAME)
+    {
+      const gchar *name, *path_name;
+
+      name = g_quark_to_string (elem->name);
+      path_name = gtk_widget_path_get_element_name (path, index);
+
+      if (!path_name ||
+          strcmp (path_name, name) != 0)
+        return FALSE;
+
+      *score = 0xF;
       return TRUE;
     }
 
@@ -738,6 +767,7 @@ css_provider_apply_scope (GtkCssProvider *css_provider,
     g_assert_not_reached ();
 
   priv->scanner->config->scan_float = FALSE;
+  priv->scanner->config->cpair_comment_single = NULL;
 }
 
 static void
@@ -908,12 +938,27 @@ parse_selector (GtkCssProvider  *css_provider,
   *selector_out = path;
 
   if (scanner->token != ':' &&
+      scanner->token != '#' &&
       scanner->token != G_TOKEN_IDENTIFIER)
     return G_TOKEN_IDENTIFIER;
 
-  while (scanner->token == G_TOKEN_IDENTIFIER)
+  while (scanner->token == '#' ||
+         scanner->token == G_TOKEN_IDENTIFIER)
     {
-      if (g_ascii_isupper (scanner->value.v_identifier[0]))
+      if (scanner->token == '#')
+        {
+          g_scanner_get_next_token (scanner);
+
+          if (scanner->token != G_TOKEN_IDENTIFIER)
+            return G_TOKEN_IDENTIFIER;
+
+          /* Add glob selector if path is empty */
+          if (selector_path_depth (path) == 0)
+            selector_path_prepend_glob (path);
+
+          selector_path_prepend_name (path, scanner->value.v_identifier);
+        }
+      else if (g_ascii_isupper (scanner->value.v_identifier[0]))
         selector_path_prepend_type (path, scanner->value.v_identifier);
       else if (g_ascii_islower (scanner->value.v_identifier[0]))
         {
