@@ -568,13 +568,15 @@ gtk_status_icon_class_init (GtkStatusIconClass *class)
    * @event: the #GdkEventScroll which triggered this signal
    *
    * The ::scroll-event signal is emitted when a button in the 4 to 7
-   * range is pressed. Wheel mice are usually configured to generate 
+   * range is pressed. Wheel mice are usually configured to generate
    * button press events for buttons 4 and 5 when the wheel is turned.
    *
    * Whether this event is emitted is platform-dependent.
    *
-   * Returns: %TRUE to stop other handlers from being invoked for the event. 
+   * Returns: %TRUE to stop other handlers from being invoked for the event.
    *   %FALSE to propagate the event further.
+   *
+   * Since: 2.16
    */
   status_icon_signals[SCROLL_EVENT_SIGNAL] =
     g_signal_new (I_("scroll_event"),
