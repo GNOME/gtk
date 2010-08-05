@@ -27,6 +27,7 @@
 
 #include "gtklabel.h"
 #include "gtkbuildable.h"
+#include "gtksizerequest.h"
 #include "gtkcontainer.h"
 #include "gtkmarshalers.h"
 #include "gtkmain.h"
@@ -80,8 +81,6 @@ static void gtk_expander_destroy (GtkObject *object);
 
 static void     gtk_expander_realize        (GtkWidget        *widget);
 static void     gtk_expander_unrealize      (GtkWidget        *widget);
-static void     gtk_expander_size_request   (GtkWidget        *widget,
-					     GtkRequisition   *requisition);
 static void     gtk_expander_size_allocate  (GtkWidget        *widget,
 					     GtkAllocation    *allocation);
 static void     gtk_expander_map            (GtkWidget        *widget);
@@ -132,9 +131,29 @@ static void gtk_expander_buildable_add_child      (GtkBuildable *buildable,
 						   GObject      *child,
 						   const gchar  *type);
 
+
+/* GtkSizeRequest */
+static void  gtk_expander_size_request_init     (GtkSizeRequestIface *iface);
+static void  gtk_expander_get_width             (GtkSizeRequest      *widget,
+						 gint                *minimum_size,
+						 gint                *natural_size);
+static void  gtk_expander_get_height            (GtkSizeRequest      *widget,
+						 gint                *minimum_size,
+						 gint                *natural_size);
+static void  gtk_expander_get_height_for_width  (GtkSizeRequest      *layout,
+						 gint                 width,
+						 gint                *minimum_height,
+						 gint                *natural_height);
+static void  gtk_expander_get_width_for_height  (GtkSizeRequest      *layout,
+						 gint                 width,
+						 gint                *minimum_height,
+						 gint                *natural_height);
+
 G_DEFINE_TYPE_WITH_CODE (GtkExpander, gtk_expander, GTK_TYPE_BIN,
 			 G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE,
-						gtk_expander_buildable_init))
+						gtk_expander_buildable_init)
+                         G_IMPLEMENT_INTERFACE (GTK_TYPE_SIZE_REQUEST,
+                                                gtk_expander_size_request_init))
 
 static void
 gtk_expander_class_init (GtkExpanderClass *klass)
@@ -156,7 +175,6 @@ gtk_expander_class_init (GtkExpanderClass *klass)
 
   widget_class->realize              = gtk_expander_realize;
   widget_class->unrealize            = gtk_expander_unrealize;
-  widget_class->size_request         = gtk_expander_size_request;
   widget_class->size_allocate        = gtk_expander_size_allocate;
   widget_class->map                  = gtk_expander_map;
   widget_class->unmap                = gtk_expander_unmap;
@@ -459,69 +477,6 @@ gtk_expander_unrealize (GtkWidget *widget)
 }
 
 static void
-gtk_expander_size_request (GtkWidget      *widget,
-			   GtkRequisition *requisition)
-{
-  GtkExpander *expander;
-  GtkBin *bin;
-  GtkExpanderPrivate *priv;
-  GtkWidget *child;
-  gint border_width;
-  gint expander_size;
-  gint expander_spacing;
-  gboolean interior_focus;
-  gint focus_width;
-  gint focus_pad;
-
-  bin = GTK_BIN (widget);
-  expander = GTK_EXPANDER (widget);
-  priv = expander->priv;
-
-  border_width = gtk_container_get_border_width (GTK_CONTAINER (widget));
-
-  gtk_widget_style_get (widget,
-			"interior-focus", &interior_focus,
-			"focus-line-width", &focus_width,
-			"focus-padding", &focus_pad,
-			"expander-size", &expander_size,
-			"expander-spacing", &expander_spacing,
-			NULL);
-
-  requisition->width = expander_size + 2 * expander_spacing +
-		       2 * focus_width + 2 * focus_pad;
-  requisition->height = interior_focus ? (2 * focus_width + 2 * focus_pad) : 0;
-
-  if (priv->label_widget && gtk_widget_get_visible (priv->label_widget))
-    {
-      GtkRequisition label_requisition;
-
-      gtk_widget_size_request (priv->label_widget, &label_requisition);
-
-      requisition->width  += label_requisition.width;
-      requisition->height += label_requisition.height;
-    }
-
-  requisition->height = MAX (expander_size + 2 * expander_spacing, requisition->height);
-
-  if (!interior_focus)
-    requisition->height += 2 * focus_width + 2 * focus_pad;
-
-  child = gtk_bin_get_child (bin);
-  if (child && GTK_WIDGET_CHILD_VISIBLE (child))
-    {
-      GtkRequisition child_requisition;
-
-      gtk_widget_size_request (child, &child_requisition);
-
-      requisition->width = MAX (requisition->width, child_requisition.width);
-      requisition->height += child_requisition.height + priv->spacing;
-    }
-
-  requisition->width  += 2 * border_width;
-  requisition->height += 2 * border_width;
-}
-
-static void
 get_expander_bounds (GtkExpander  *expander,
 		     GdkRectangle *rect)
 {
@@ -592,10 +547,8 @@ gtk_expander_size_allocate (GtkWidget     *widget,
 			    GtkAllocation *allocation)
 {
   GtkExpander *expander;
-  GtkBin *bin;
-  GtkExpanderPrivate *priv;
-  GtkRequisition child_requisition;
   GtkWidget *child;
+  GtkExpanderPrivate *priv;
   gboolean child_visible = FALSE;
   guint border_width;
   gint expander_size;
@@ -603,13 +556,17 @@ gtk_expander_size_allocate (GtkWidget     *widget,
   gboolean interior_focus;
   gint focus_width;
   gint focus_pad;
-  gint label_height;
+  gint label_height, top_min_height;
+  gint label_xpad, label_xoffset;
+  gint child_ypad, child_yoffset;
 
   expander = GTK_EXPANDER (widget);
-  bin = GTK_BIN (widget);
-  priv = expander->priv;
+  child    = gtk_bin_get_child (GTK_BIN (widget));
+  priv     = expander->priv;
 
   border_width = gtk_container_get_border_width (GTK_CONTAINER (widget));
+
+  widget->allocation = *allocation;
 
   gtk_widget_style_get (widget,
 			"interior-focus", &interior_focus,
@@ -619,47 +576,45 @@ gtk_expander_size_allocate (GtkWidget     *widget,
 			"expander-spacing", &expander_spacing,
 			NULL);
 
-  child_requisition.width = 0;
-  child_requisition.height = 0;
 
-  child = gtk_bin_get_child (bin);
-  if (child && GTK_WIDGET_CHILD_VISIBLE (child))
-    {
-      child_visible = TRUE;
-      gtk_widget_get_child_requisition (child, &child_requisition);
-    }
+  /* Calculate some offsets/padding first */
+  label_xoffset  =     border_width + expander_size +     focus_width + 2 * expander_spacing +     focus_pad;
+  label_xpad     = 2 * border_width + expander_size + 2 * focus_width + 2 * expander_spacing + 2 * focus_pad;
 
-  widget->allocation = *allocation;
+  child_yoffset  = border_width + priv->spacing + (interior_focus ? 0 : 2 * focus_width + 2 * focus_pad);
+  child_ypad     = 2 * border_width + priv->spacing + (interior_focus ? 0 : 2 * focus_width + 2 * focus_pad);
+  top_min_height = 2 * expander_spacing + expander_size;
+
+  child_visible = (child && GTK_WIDGET_CHILD_VISIBLE (child));
 
   if (priv->label_widget && gtk_widget_get_visible (priv->label_widget))
     {
       GtkAllocation label_allocation;
-      GtkRequisition label_requisition;
+      gint          natural_label_width;
       gboolean ltr;
 
-      gtk_widget_get_child_requisition (priv->label_widget, &label_requisition);
+      gtk_size_request_get_width (GTK_SIZE_REQUEST (priv->label_widget), NULL, &natural_label_width);
+
+      label_allocation.width = MIN (natural_label_width, allocation->width - label_xpad);
+      label_allocation.width = MAX (label_allocation.width, 1);
+
+      /* We distribute the minimum height to the label widget and prioritize
+       * the child widget giving it the remaining height */
+      gtk_size_request_get_height_for_width (GTK_SIZE_REQUEST (priv->label_widget),
+					     label_allocation.width, &label_height, NULL);
 
       ltr = gtk_widget_get_direction (widget) != GTK_TEXT_DIR_RTL;
 
       if (ltr)
-	label_allocation.x = (widget->allocation.x +
-                              border_width + focus_width + focus_pad +
-                              expander_size + 2 * expander_spacing);
+	label_allocation.x = 
+	  widget->allocation.x + label_xoffset;
       else
-        label_allocation.x = (widget->allocation.x + widget->allocation.width -
-                              (label_requisition.width +
-                               border_width + focus_width + focus_pad +
-                               expander_size + 2 * expander_spacing));
+        label_allocation.x = 
+	  widget->allocation.x + widget->allocation.width -
+	  (label_allocation.width + label_xoffset);
 
       label_allocation.y = widget->allocation.y + border_width + focus_width + focus_pad;
-
-      label_allocation.width = MIN (label_requisition.width,
-				    allocation->width - 2 * border_width -
-				    expander_size - 2 * expander_spacing -
-				    2 * focus_width - 2 * focus_pad);
-      label_allocation.width = MAX (label_allocation.width, 1);
-
-      label_allocation.height = MIN (label_requisition.height,
+      label_allocation.height = MIN (label_height,
 				     allocation->height - 2 * border_width -
 				     2 * focus_width - 2 * focus_pad -
 				     (child_visible ? priv->spacing : 0));
@@ -692,21 +647,14 @@ gtk_expander_size_allocate (GtkWidget     *widget,
       GtkAllocation child_allocation;
       gint top_height;
 
-      top_height = MAX (2 * expander_spacing + expander_size,
-			label_height +
-			(interior_focus ? 2 * focus_width + 2 * focus_pad : 0));
+      top_height = MAX (top_min_height,
+			label_height + (interior_focus ? 2 * focus_width + 2 * focus_pad : 0));
 
       child_allocation.x = widget->allocation.x + border_width;
-      child_allocation.y = widget->allocation.y + border_width + top_height + priv->spacing;
-
-      if (!interior_focus)
-	child_allocation.y += 2 * focus_width + 2 * focus_pad;
+      child_allocation.y = widget->allocation.y + top_height + child_yoffset;
 
       child_allocation.width = MAX (allocation->width - 2 * border_width, 1);
-
-      child_allocation.height = allocation->height - top_height -
-				2 * border_width - priv->spacing -
-				(!interior_focus ? 2 * focus_width + 2 * focus_pad : 0);
+      child_allocation.height = allocation->height - top_height - child_ypad;
       child_allocation.height = MAX (child_allocation.height, 1);
 
       gtk_widget_size_allocate (child, &child_allocation);
@@ -856,8 +804,9 @@ gtk_expander_paint_focus (GtkExpander  *expander,
     {
       if (gtk_widget_get_visible (priv->label_widget))
 	{
-	  GtkAllocation label_allocation = priv->label_widget->allocation;
+	  GtkAllocation label_allocation;
 
+	  gtk_widget_get_allocation (priv->label_widget, &label_allocation);
 	  width  = label_allocation.width;
 	  height = label_allocation.height;
 	}
@@ -1278,6 +1227,233 @@ gtk_expander_activate (GtkExpander *expander)
 {
   gtk_expander_set_expanded (expander, !expander->priv->expanded);
 }
+
+
+static void
+gtk_expander_size_request_init (GtkSizeRequestIface *iface)
+{
+  iface->get_width            = gtk_expander_get_width;
+  iface->get_height           = gtk_expander_get_height;
+  iface->get_height_for_width = gtk_expander_get_height_for_width;
+  iface->get_width_for_height = gtk_expander_get_width_for_height;
+}
+
+static void     
+gtk_expander_get_width (GtkSizeRequest      *widget,
+			gint                *minimum_size,
+			gint                *natural_size)
+{
+  GtkExpander *expander;
+  GtkWidget *child;
+  GtkExpanderPrivate *priv;
+  gint border_width;
+  gint expander_size;
+  gint expander_spacing;
+  gboolean interior_focus;
+  gint focus_width;
+  gint focus_pad;
+
+  child = gtk_bin_get_child (GTK_BIN (widget));
+  expander = GTK_EXPANDER (widget);
+  priv = expander->priv;
+
+  border_width = gtk_container_get_border_width (GTK_CONTAINER (widget));
+
+  gtk_widget_style_get (GTK_WIDGET (widget),
+			"interior-focus", &interior_focus,
+			"focus-line-width", &focus_width,
+			"focus-padding", &focus_pad,
+			"expander-size", &expander_size,
+			"expander-spacing", &expander_spacing,
+			NULL);
+
+  *minimum_size = *natural_size = 
+    expander_size + 2 * expander_spacing +
+    2 * focus_width + 2 * focus_pad;
+
+  if (priv->label_widget && gtk_widget_get_visible (priv->label_widget))
+    {
+      gint label_min, label_nat;
+
+      gtk_size_request_get_width (GTK_SIZE_REQUEST (priv->label_widget), 
+				  &label_min, &label_nat);
+
+      *minimum_size += label_min;
+      *natural_size += label_nat;
+    }
+
+  if (child && GTK_WIDGET_CHILD_VISIBLE (child))
+    {
+      gint child_min, child_nat;
+
+      gtk_size_request_get_width (GTK_SIZE_REQUEST (child), 
+				  &child_min, &child_nat);
+
+      *minimum_size = MAX (*minimum_size, child_min);
+      *natural_size = MAX (*natural_size, child_nat);
+
+    }
+
+  *minimum_size += 2 * border_width;
+  *natural_size += 2 * border_width;
+}
+
+static void
+gtk_expander_get_height (GtkSizeRequest      *widget,
+			 gint                *minimum_size,
+			 gint                *natural_size)
+{  
+  GtkExpander *expander;
+  GtkWidget *child;
+  GtkExpanderPrivate *priv;
+  gint border_width;
+  gint expander_size;
+  gint expander_spacing;
+  gboolean interior_focus;
+  gint focus_width;
+  gint focus_pad;
+
+  child = gtk_bin_get_child (GTK_BIN (widget));
+  expander = GTK_EXPANDER (widget);
+  priv = expander->priv;
+
+  border_width = gtk_container_get_border_width (GTK_CONTAINER (widget));
+
+  gtk_widget_style_get (GTK_WIDGET (widget),
+			"interior-focus", &interior_focus,
+			"focus-line-width", &focus_width,
+			"focus-padding", &focus_pad,
+			"expander-size", &expander_size,
+			"expander-spacing", &expander_spacing,
+			NULL);
+
+  *minimum_size = *natural_size = 
+    interior_focus ? (2 * focus_width + 2 * focus_pad) : 0;
+
+
+  if (priv->label_widget && gtk_widget_get_visible (priv->label_widget))
+    {
+      gint label_min, label_nat;
+
+      gtk_size_request_get_height (GTK_SIZE_REQUEST (priv->label_widget), 
+				   &label_min, &label_nat);
+      
+      *minimum_size += label_min;
+      *natural_size += label_nat;
+    }
+
+  *minimum_size = MAX (*minimum_size, expander_size + 2 * expander_spacing);
+  *natural_size = MAX (*natural_size, *minimum_size);
+
+  if (!interior_focus)
+    {
+      gint extra = 2 * focus_width + 2 * focus_pad;
+      *minimum_size += extra;
+      *natural_size += extra;
+    }
+
+  if (child && GTK_WIDGET_CHILD_VISIBLE (child))
+    {
+      gint child_min, child_nat;
+
+      gtk_size_request_get_height (GTK_SIZE_REQUEST (child), 
+				   &child_min, &child_nat);
+
+      *minimum_size += child_min + priv->spacing;
+      *natural_size += child_nat + priv->spacing;
+
+    }
+
+  *minimum_size += 2 * border_width;
+  *natural_size += 2 * border_width;
+}
+
+static void
+gtk_expander_get_height_for_width (GtkSizeRequest *widget,
+				   gint            width,
+				   gint           *minimum_height,
+				   gint           *natural_height)
+{
+  GtkExpander *expander;
+  GtkWidget *child;
+  GtkExpanderPrivate *priv;
+  gint border_width;
+  gint expander_size;
+  gint expander_spacing;
+  gboolean interior_focus;
+  gint focus_width;
+  gint focus_pad;
+  gint label_xpad;
+
+  child = gtk_bin_get_child (GTK_BIN (widget));
+  expander = GTK_EXPANDER (widget);
+  priv = expander->priv;
+
+  border_width = gtk_container_get_border_width (GTK_CONTAINER (widget));
+
+  gtk_widget_style_get (GTK_WIDGET (widget),
+			"interior-focus", &interior_focus,
+			"focus-line-width", &focus_width,
+			"focus-padding", &focus_pad,
+			"expander-size", &expander_size,
+			"expander-spacing", &expander_spacing,
+			NULL);
+
+  label_xpad = 2 * border_width + expander_size + 2 * expander_spacing - 2 * focus_width + 2 * focus_pad;
+
+  *minimum_height = *natural_height = 
+    interior_focus ? (2 * focus_width + 2 * focus_pad) : 0;
+
+
+  if (priv->label_widget && gtk_widget_get_visible (priv->label_widget))
+    {
+      gint label_min, label_nat;
+
+      gtk_size_request_get_height_for_width (GTK_SIZE_REQUEST (priv->label_widget), 
+					     MAX (width - label_xpad, 1), 
+					     &label_min, &label_nat);
+      
+      *minimum_height += label_min;
+      *natural_height += label_nat;
+    }
+
+  *minimum_height = MAX (*minimum_height, expander_size + 2 * expander_spacing);
+  *natural_height = MAX (*natural_height, *minimum_height);
+
+  if (!interior_focus)
+    {
+      gint extra = 2 * focus_width + 2 * focus_pad;
+      *minimum_height += extra;
+      *natural_height += extra;
+    }
+
+  if (child && GTK_WIDGET_CHILD_VISIBLE (child))
+    {
+      gint child_min, child_nat;
+
+      gtk_size_request_get_height_for_width (GTK_SIZE_REQUEST (child), 
+					     MAX (width - 2 * border_width, 1), 
+					     &child_min, &child_nat);
+
+      *minimum_height += child_min + priv->spacing;
+      *natural_height += child_nat + priv->spacing;
+    }
+
+  *minimum_height += 2 * border_width;
+  *natural_height += 2 * border_width;
+}
+
+static void
+gtk_expander_get_width_for_height (GtkSizeRequest *widget,
+				   gint       height,
+				   gint      *minimum_width,
+				   gint      *natural_width)
+{
+  gtk_size_request_get_width (widget, minimum_width, natural_width);
+  //GTK_SIZE_REQUEST_GET_IFACE (widget)->get_width (widget, minimum_width, natural_width);
+}
+
+
 
 /**
  * gtk_expander_new:
