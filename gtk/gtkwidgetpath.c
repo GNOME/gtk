@@ -114,7 +114,7 @@ gtk_widget_path_free (GtkWidgetPath *path)
 }
 
 guint
-gtk_widget_path_length (GtkWidgetPath *path)
+gtk_widget_path_length (const GtkWidgetPath *path)
 {
   g_return_val_if_fail (path != NULL, 0);
 
@@ -137,8 +137,8 @@ gtk_widget_path_prepend_type (GtkWidgetPath *path,
 }
 
 GType
-gtk_widget_path_get_element_type (GtkWidgetPath *path,
-                                  guint          pos)
+gtk_widget_path_get_element_type (const GtkWidgetPath *path,
+                                  guint                pos)
 {
   GtkPathElement *elem;
 
@@ -165,8 +165,8 @@ gtk_widget_path_set_element_type (GtkWidgetPath *path,
 }
 
 G_CONST_RETURN gchar *
-gtk_widget_path_get_element_name (GtkWidgetPath *path,
-                                  guint          pos)
+gtk_widget_path_get_element_name (const GtkWidgetPath *path,
+                                  guint                pos)
 {
   GtkPathElement *elem;
 
@@ -254,8 +254,8 @@ gtk_widget_path_iter_clear_regions (GtkWidgetPath *path,
 }
 
 GSList *
-gtk_widget_path_iter_list_regions (GtkWidgetPath *path,
-                                   guint          pos)
+gtk_widget_path_iter_list_regions (const GtkWidgetPath *path,
+                                   guint                pos)
 {
   GtkPathElement *elem;
   GHashTableIter iter;
@@ -279,10 +279,10 @@ gtk_widget_path_iter_list_regions (GtkWidgetPath *path,
 }
 
 gboolean
-gtk_widget_path_iter_has_region (GtkWidgetPath      *path,
-                                 guint               pos,
-                                 const gchar        *name,
-                                 GtkChildClassFlags *flags)
+gtk_widget_path_iter_has_region (const GtkWidgetPath *path,
+                                 guint                pos,
+                                 const gchar         *name,
+                                 GtkChildClassFlags  *flags)
 {
   GtkPathElement *elem;
   gpointer value;
