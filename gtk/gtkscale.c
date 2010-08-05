@@ -852,7 +852,7 @@ gtk_scale_get_mark_label_size (GtkScale        *scale,
     {
       GtkScaleMark *mark = m->data;
 
-      if (mark->markup)
+      if (mark->markup && *mark->markup)
         {
           pango_layout_set_markup (layout, mark->markup, -1);
           pango_layout_get_pixel_extents (layout, NULL, &logical_rect);
