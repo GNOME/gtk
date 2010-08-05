@@ -54,7 +54,7 @@
  * For instance when queried in the normal height-for-width mode:
  * First the default minimum and natural width for each widget
  * in the interface will computed and collectively returned to
- * the toplevel by way of gtk_size_request_get_desired_width().
+ * the toplevel by way of gtk_size_request_get_width().
  * Next, the toplevel will use the minimum width to query for the
  * minimum height contextual to that width using
  * gtk_size_request_get_height_for_width(), which will also be a
@@ -351,7 +351,7 @@ compute_size_for_orientation (GtkSizeRequest    *request,
 }
 
 /**
- * gtk_size_request_is_height_for_width:
+ * gtk_size_request_get_request_mode:
  * @widget: a #GtkSizeRequest instance
  *
  * Gets whether the widget prefers a height-for-width layout
@@ -362,8 +362,7 @@ compute_size_for_orientation (GtkSizeRequest    *request,
  * context of their children or in context of their allocation
  * capabilities.</para></note>
  *
- * Returns: %TRUE if the widget prefers height-for-width, %FALSE if
- * the widget should be treated with a width-for-height preference.
+ * Returns: The #GtkSizeRequestMode preferred by @widget.
  *
  * Since: 3.0
  */
@@ -397,8 +396,8 @@ gtk_size_request_get_request_mode (GtkSizeRequest *widget)
  */
 void
 gtk_size_request_get_width (GtkSizeRequest *widget,
-                                       gint              *minimum_width,
-                                       gint              *natural_width)
+			    gint           *minimum_width,
+			    gint           *natural_width)
 {
   compute_size_for_orientation (widget, GTK_SIZE_GROUP_HORIZONTAL,
                                 -1, minimum_width, natural_width);
@@ -435,7 +434,7 @@ gtk_size_request_get_height (GtkSizeRequest *widget,
  * @minimum_width: (out) (allow-none): location for storing the minimum width, or %NULL
  * @natural_width: (out) (allow-none): location for storing the natural width, or %NULL
  *
- * Retrieves a widget's desired width if it would be given
+ * Retrieves a widget's minimum and natural width if it would be given
  * the specified @height.
  *
  * Since: 3.0
@@ -457,7 +456,7 @@ gtk_size_request_get_width_for_height (GtkSizeRequest *widget,
  * @minimum_height: (out) (allow-none): location for storing the minimum height, or %NULL
  * @natural_height: (out) (allow-none): location for storing the natural height, or %NULL
  *
- * Retrieves a widget's desired height if it would be given
+ * Retrieves a widget's minimum and natural height if it would be given
  * the specified @width.
  *
  * Since: 3.0
@@ -514,7 +513,7 @@ gtk_size_request_get_size (GtkSizeRequest    *widget,
 						 NULL, &natural_size->height);
 	}
     }
-  else
+  else /* GTK_SIZE_REQUEST_WIDTH_FOR_HEIGHT */
     {
       gtk_size_request_get_height (widget, &min_height, &nat_height);
 
@@ -533,3 +532,103 @@ gtk_size_request_get_size (GtkSizeRequest    *widget,
 	}
     }
 }
+
+
+static gint
+compare_gap (gconstpointer p1,
+	     gconstpointer p2,
+	     gpointer      data)
+{
+  GtkRequestedSize *sizes = data;
+  const guint *c1 = p1;
+  const guint *c2 = p2;
+
+  const gint d1 = MAX (sizes[*c1].natural_size -
+                       sizes[*c1].minimum_size,
+                       0);
+  const gint d2 = MAX (sizes[*c2].natural_size -
+                       sizes[*c2].minimum_size,
+                       0);
+
+  gint delta = (d2 - d1);
+
+  if (0 == delta)
+    delta = (*c2 - *c1);
+
+  return delta;
+}
+
+/**
+ * gtk_distribute_natural_allocation: 
+ * @extra_space: Extra space to redistribute among children after subtracting
+ *               minimum sizes and any child padding from the overall allocation
+ * @n_requested_sizes: Number of requests to fit into the allocation
+ * @sizes: An array of structs with a client pointer and a minimum/natural size
+ *         in the orientation of the allocation.
+ *
+ * Distributes @extra_space to child @sizes by bringing up smaller
+ * children up to natural size first.
+ *
+ * The remaining space will be added to the @minimum_size member of the
+ * GtkRequestedSize struct. If all sizes reach their natural size then
+ * the remaining space is returned.
+ *
+ * Returns: The remainder of @extra_space after redistributing space
+ * to @sizes.
+ */
+gint 
+gtk_distribute_natural_allocation (gint              extra_space,
+				   guint             n_requested_sizes,
+				   GtkRequestedSize *sizes)
+{
+  guint *spreading = g_newa (guint, n_requested_sizes);
+  gint   i;
+
+  for (i = 0; i < n_requested_sizes; i++)
+    spreading[i] = i;
+
+  /* Distribute the container's extra space c_gap. We want to assign
+   * this space such that the sum of extra space assigned to children
+   * (c^i_gap) is equal to c_cap. The case that there's not enough
+   * space for all children to take their natural size needs some
+   * attention. The goals we want to achieve are:
+   *
+   *   a) Maximize number of children taking their natural size.
+   *   b) The allocated size of children should be a continuous
+   *   function of c_gap.  That is, increasing the container size by
+   *   one pixel should never make drastic changes in the distribution.
+   *   c) If child i takes its natural size and child j doesn't,
+   *   child j should have received at least as much gap as child i.
+   *
+   * The following code distributes the additional space by following
+   * these rules.
+   */
+  
+  /* Sort descending by gap and position. */
+  g_qsort_with_data (spreading,
+		     n_requested_sizes, sizeof (guint),
+		     compare_gap, sizes);
+  
+  /* Distribute available space.
+   * This master piece of a loop was conceived by Behdad Esfahbod.
+   */
+  for (i = n_requested_sizes - 1; extra_space > 0 && i >= 0; --i)
+    {
+      /* Divide remaining space by number of remaining children.
+       * Sort order and reducing remaining space by assigned space
+       * ensures that space is distributed equally.
+       */
+      gint glue = (extra_space + i) / (i + 1);
+      gint gap = sizes[(spreading[i])].natural_size
+	- sizes[(spreading[i])].minimum_size;
+      
+      gint extra = MIN (glue, gap);
+      
+      sizes[spreading[i]].minimum_size += extra;
+      
+      extra_space -= extra;
+    }
+
+  return extra_space;
+}
+
