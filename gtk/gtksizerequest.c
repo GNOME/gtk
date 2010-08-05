@@ -118,11 +118,6 @@ typedef struct {
   guint8      cached_height_age;
 } SizeRequestCache;
 
-typedef struct {
-  gpointer data;
-  gint     index;
-} AllocationSpreading;
-
 static GQuark quark_cache = 0;
 
 
