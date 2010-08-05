@@ -26,7 +26,6 @@
 
 #include "config.h"
 #include "gtktexttypes.h"
-#include "gtkalias.h"
 
 /* These are used to represent embedded non-character objects
  * if you return a string representation of a text buffer
@@ -44,6 +43,3 @@ gtk_text_byte_begins_utf8_char (const gchar *byte)
 {
   return inline_byte_begins_utf8_char (byte);
 }
-
-#define __GTK_TEXT_TYPES_C__
-#include "gtkaliasdef.c"

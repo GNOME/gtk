@@ -48,7 +48,20 @@
 #include "gtksizerequest.h"
 #include "gtkprivate.h"
 #include "gtkintl.h"
-#include "gtkalias.h"
+
+
+struct _GtkAlignmentPriv
+{
+  gfloat        xalign;
+  gfloat        yalign;
+  gfloat        xscale;
+  gfloat        yscale;
+
+  guint         padding_bottom;
+  guint         padding_top;
+  guint         padding_left;
+  guint         padding_right;
+};
 
 enum {
   PROP_0,
@@ -62,16 +75,6 @@ enum {
   PROP_BOTTOM_PADDING,
   PROP_LEFT_PADDING,
   PROP_RIGHT_PADDING
-};
-
-#define GTK_ALIGNMENT_GET_PRIVATE(o)  (G_TYPE_INSTANCE_GET_PRIVATE ((o), GTK_TYPE_ALIGNMENT, GtkAlignmentPrivate))
-
-struct _GtkAlignmentPrivate
-{
-  guint padding_top;
-  guint padding_bottom;
-  guint padding_left;
-  guint padding_right;
 };
 
 static void gtk_alignment_size_allocate (GtkWidget         *widget,
@@ -218,24 +221,28 @@ gtk_alignment_class_init (GtkAlignmentClass *class)
                                                       0,
                                                       GTK_PARAM_READWRITE));
 
-  g_type_class_add_private (gobject_class, sizeof (GtkAlignmentPrivate));  
+  g_type_class_add_private (gobject_class, sizeof (GtkAlignmentPriv));
 }
 
 static void
 gtk_alignment_init (GtkAlignment *alignment)
 {
-  GtkAlignmentPrivate *priv;
-  
+  GtkAlignmentPriv *priv;
+
+  alignment->priv = G_TYPE_INSTANCE_GET_PRIVATE (alignment,
+                                                 GTK_TYPE_ALIGNMENT,
+                                                 GtkAlignmentPriv);
+  priv = alignment->priv;
+
   gtk_widget_set_has_window (GTK_WIDGET (alignment), FALSE);
   gtk_widget_set_redraw_on_allocate (GTK_WIDGET (alignment), FALSE);
 
-  alignment->xalign = 0.5;
-  alignment->yalign = 0.5;
-  alignment->xscale = 1.0;
-  alignment->yscale = 1.0;
+  priv->xalign = 0.5;
+  priv->yalign = 0.5;
+  priv->xscale = 1.0;
+  priv->yscale = 1.0;
 
   /* Initialize padding with default values: */
-  priv = GTK_ALIGNMENT_GET_PRIVATE (alignment);
   priv->padding_top = 0;
   priv->padding_bottom = 0;
   priv->padding_left = 0;
@@ -267,13 +274,16 @@ gtk_alignment_new (gfloat xalign,
 		   gfloat yscale)
 {
   GtkAlignment *alignment;
+  GtkAlignmentPriv *priv;
 
   alignment = g_object_new (GTK_TYPE_ALIGNMENT, NULL);
 
-  alignment->xalign = CLAMP (xalign, 0.0, 1.0);
-  alignment->yalign = CLAMP (yalign, 0.0, 1.0);
-  alignment->xscale = CLAMP (xscale, 0.0, 1.0);
-  alignment->yscale = CLAMP (yscale, 0.0, 1.0);
+  priv = alignment->priv;
+
+  priv->xalign = CLAMP (xalign, 0.0, 1.0);
+  priv->yalign = CLAMP (yalign, 0.0, 1.0);
+  priv->xscale = CLAMP (xscale, 0.0, 1.0);
+  priv->yscale = CLAMP (yscale, 0.0, 1.0);
 
   return GTK_WIDGET (alignment);
 }
@@ -284,40 +294,37 @@ gtk_alignment_set_property (GObject         *object,
 			    const GValue    *value,
 			    GParamSpec      *pspec)
 {
-  GtkAlignment *alignment;
-  GtkAlignmentPrivate *priv;
-  
-  alignment = GTK_ALIGNMENT (object);
-  priv = GTK_ALIGNMENT_GET_PRIVATE (alignment);
-  
+  GtkAlignment *alignment = GTK_ALIGNMENT (object);
+  GtkAlignmentPriv *priv = alignment->priv;
+
   switch (prop_id)
     {
     case PROP_XALIGN:
       gtk_alignment_set (alignment,
 			 g_value_get_float (value),
-			 alignment->yalign,
-			 alignment->xscale,
-			 alignment->yscale);
+			 priv->yalign,
+			 priv->xscale,
+			 priv->yscale);
       break;
     case PROP_YALIGN:
       gtk_alignment_set (alignment,
-			 alignment->xalign,
+			 priv->xalign,
 			 g_value_get_float (value),
-			 alignment->xscale,
-			 alignment->yscale);
+			 priv->xscale,
+			 priv->yscale);
       break;
     case PROP_XSCALE:
       gtk_alignment_set (alignment,
-			 alignment->xalign,
-			 alignment->yalign,
+			 priv->xalign,
+			 priv->yalign,
 			 g_value_get_float (value),
-			 alignment->yscale);
+			 priv->yscale);
       break;
     case PROP_YSCALE:
       gtk_alignment_set (alignment,
-			 alignment->xalign,
-			 alignment->yalign,
-			 alignment->xscale,
+			 priv->xalign,
+			 priv->yalign,
+			 priv->xscale,
 			 g_value_get_float (value));
       break;
       
@@ -363,25 +370,22 @@ gtk_alignment_get_property (GObject         *object,
 			    GValue          *value,
 			    GParamSpec      *pspec)
 {
-  GtkAlignment *alignment;
-  GtkAlignmentPrivate *priv;
+  GtkAlignment *alignment = GTK_ALIGNMENT (object);
+  GtkAlignmentPriv *priv = alignment->priv;
 
-  alignment = GTK_ALIGNMENT (object);
-  priv = GTK_ALIGNMENT_GET_PRIVATE (alignment);
-   
   switch (prop_id)
     {
     case PROP_XALIGN:
-      g_value_set_float(value, alignment->xalign);
+      g_value_set_float(value, priv->xalign);
       break;
     case PROP_YALIGN:
-      g_value_set_float(value, alignment->yalign);
+      g_value_set_float(value, priv->yalign);
       break;
     case PROP_XSCALE:
-      g_value_set_float(value, alignment->xscale);
+      g_value_set_float(value, priv->xscale);
       break;
     case PROP_YSCALE:
-      g_value_set_float(value, alignment->yscale);
+      g_value_set_float(value, priv->yscale);
       break;
 
     /* Padding: */
@@ -428,43 +432,49 @@ gtk_alignment_set (GtkAlignment *alignment,
 		   gfloat        xscale,
 		   gfloat        yscale)
 {
+  GtkAlignmentPriv *priv;
+  GtkWidget *child;
+
   g_return_if_fail (GTK_IS_ALIGNMENT (alignment));
+
+  priv = alignment->priv;
 
   xalign = CLAMP (xalign, 0.0, 1.0);
   yalign = CLAMP (yalign, 0.0, 1.0);
   xscale = CLAMP (xscale, 0.0, 1.0);
   yscale = CLAMP (yscale, 0.0, 1.0);
 
-  if (   (alignment->xalign != xalign)
-      || (alignment->yalign != yalign)
-      || (alignment->xscale != xscale)
-      || (alignment->yscale != yscale))
+  if (   (priv->xalign != xalign)
+      || (priv->yalign != yalign)
+      || (priv->xscale != xscale)
+      || (priv->yscale != yscale))
     {
       g_object_freeze_notify (G_OBJECT (alignment));
-      if (alignment->xalign != xalign)
+      if (priv->xalign != xalign)
         {
-           alignment->xalign = xalign;
+           priv->xalign = xalign;
            g_object_notify (G_OBJECT (alignment), "xalign");
         }
-      if (alignment->yalign != yalign)
+      if (priv->yalign != yalign)
         {
-           alignment->yalign = yalign;
+           priv->yalign = yalign;
            g_object_notify (G_OBJECT (alignment), "yalign");
         }
-      if (alignment->xscale != xscale)
+      if (priv->xscale != xscale)
         {
-           alignment->xscale = xscale;
+           priv->xscale = xscale;
            g_object_notify (G_OBJECT (alignment), "xscale");
         }
-      if (alignment->yscale != yscale)
+      if (priv->yscale != yscale)
         {
-           alignment->yscale = yscale;
+           priv->yscale = yscale;
            g_object_notify (G_OBJECT (alignment), "yscale");
         }
       g_object_thaw_notify (G_OBJECT (alignment));
 
-      if (GTK_BIN (alignment)->child)
-        gtk_widget_queue_resize (GTK_BIN (alignment)->child);
+      child = gtk_bin_get_child (GTK_BIN (alignment));
+      if (child)
+        gtk_widget_queue_resize (child);
       gtk_widget_queue_draw (GTK_WIDGET (alignment));
     }
 }
@@ -474,31 +484,31 @@ static void
 gtk_alignment_size_allocate (GtkWidget     *widget,
 			     GtkAllocation *allocation)
 {
-  GtkAlignment *alignment;
+  GtkAlignment *alignment = GTK_ALIGNMENT (widget);
+  GtkAlignmentPriv *priv = alignment->priv;
   GtkBin *bin;
   GtkAllocation child_allocation;
+  GtkWidget *bin_child;
   gint width, height;
-  gint border_width;
+  guint border_width;
   gint padding_horizontal, padding_vertical;
-  GtkAlignmentPrivate *priv;
 
   padding_horizontal = 0;
   padding_vertical = 0;
 
   widget->allocation = *allocation;
-  alignment = GTK_ALIGNMENT (widget);
   bin = GTK_BIN (widget);
-  
-  if (bin->child && gtk_widget_get_visible (bin->child))
+
+  bin_child = gtk_bin_get_child (bin);
+  if (bin_child && gtk_widget_get_visible (bin_child))
     {
-      GtkSizeRequest *child = GTK_SIZE_REQUEST (bin->child);
+      GtkSizeRequest *child = GTK_SIZE_REQUEST (bin_child);
       gint child_nat_width;
       gint child_nat_height;
       gint child_width, child_height;
 
-      border_width = GTK_CONTAINER (alignment)->border_width;
+      border_width = gtk_container_get_border_width (GTK_CONTAINER (alignment));
 
-      priv = GTK_ALIGNMENT_GET_PRIVATE (widget);
       padding_horizontal = priv->padding_left + priv->padding_right;
       padding_vertical = priv->padding_top + priv->padding_bottom;
 
@@ -528,26 +538,26 @@ gtk_alignment_size_allocate (GtkWidget     *widget,
 
       if (width > child_width)
 	child_allocation.width = (child_width *
-				  (1.0 - alignment->xscale) +
-				  width * alignment->xscale);
+				  (1.0 - priv->xscale) +
+				  width * priv->xscale);
       else
 	child_allocation.width = width;
 
       if (height > child_height)
 	child_allocation.height = (child_height *
-				   (1.0 - alignment->yscale) +
-				   height * alignment->yscale);
+				   (1.0 - priv->yscale) +
+				   height * priv->yscale);
       else
 	child_allocation.height = height;
 
       if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL)
-	child_allocation.x = (1.0 - alignment->xalign) * (width - child_allocation.width) + allocation->x + border_width + priv->padding_right;
+	child_allocation.x = (1.0 - priv->xalign) * (width - child_allocation.width) + allocation->x + border_width + priv->padding_right;
       else 
-	child_allocation.x = alignment->xalign * (width - child_allocation.width) + allocation->x + border_width + priv->padding_left;
+	child_allocation.x = priv->xalign * (width - child_allocation.width) + allocation->x + border_width + priv->padding_left;
 
-      child_allocation.y = alignment->yalign * (height - child_allocation.height) + allocation->y + border_width + priv->padding_top;
+      child_allocation.y = priv->yalign * (height - child_allocation.height) + allocation->y + border_width + priv->padding_top;
 
-      gtk_widget_size_allocate (bin->child, &child_allocation);
+      gtk_widget_size_allocate (bin_child, &child_allocation);
     }
 }
 
@@ -565,13 +575,12 @@ gtk_alignment_get_size (GtkSizeRequest *widget,
 			gint           *minimum_size,
 			gint           *natural_size)
 {
+  GtkAlignment *alignment = GTK_ALIGNMENT (widget);
+  GtkAlignmentPriv *priv = alignment->priv;
   GtkWidget *child;
-  GtkAlignmentPrivate *priv;
-  gint minimum, natural;
+  guint minimum, natural;
 
-  priv = GTK_ALIGNMENT_GET_PRIVATE (widget);
-
-  natural = minimum = GTK_CONTAINER (widget)->border_width * 2;
+  natural = minimum = gtk_container_get_border_width (GTK_CONTAINER (widget)) * 2;
 
   if ((child = gtk_bin_get_child (GTK_BIN (widget))) && gtk_widget_get_visible (child))
     {
@@ -642,11 +651,12 @@ gtk_alignment_set_padding (GtkAlignment    *alignment,
 			   guint            padding_left,
 			   guint            padding_right)
 {
-  GtkAlignmentPrivate *priv;
+  GtkAlignmentPriv *priv;
+  GtkWidget *child;
   
   g_return_if_fail (GTK_IS_ALIGNMENT (alignment));
 
-  priv = GTK_ALIGNMENT_GET_PRIVATE (alignment);
+  priv = alignment->priv;
 
   g_object_freeze_notify (G_OBJECT (alignment));
 
@@ -674,8 +684,9 @@ gtk_alignment_set_padding (GtkAlignment    *alignment,
   g_object_thaw_notify (G_OBJECT (alignment));
   
   /* Make sure that the widget and children are redrawn with the new setting: */
-  if (GTK_BIN (alignment)->child)
-    gtk_widget_queue_resize (GTK_BIN (alignment)->child);
+  child = gtk_bin_get_child (GTK_BIN (alignment));
+  if (child)
+    gtk_widget_queue_resize (child);
 
   gtk_widget_queue_draw (GTK_WIDGET (alignment));
 }
@@ -700,11 +711,12 @@ gtk_alignment_get_padding (GtkAlignment    *alignment,
 			   guint           *padding_left,
 			   guint           *padding_right)
 {
-  GtkAlignmentPrivate *priv;
- 
+  GtkAlignmentPriv *priv;
+
   g_return_if_fail (GTK_IS_ALIGNMENT (alignment));
 
-  priv = GTK_ALIGNMENT_GET_PRIVATE (alignment);
+  priv = alignment->priv;
+
   if(padding_top)
     *padding_top = priv->padding_top;
   if(padding_bottom)
@@ -714,6 +726,3 @@ gtk_alignment_get_padding (GtkAlignment    *alignment,
   if(padding_right)
     *padding_right = priv->padding_right;
 }
-
-#define __GTK_ALIGNMENT_C__
-#include "gtkaliasdef.c"

@@ -26,9 +26,7 @@
 #include "gdkpixbuf.h"
 #include "gdkscreen.h"
 #include "gdkinternals.h"
-#include "gdkalias.h"
 
-
 
 /**
  * gdk_pixbuf_render_threshold_alpha:
@@ -59,8 +57,7 @@ gdk_pixbuf_render_threshold_alpha (GdkPixbuf *pixbuf,
                                    int        height,
                                    int        alpha_threshold)
 {
-  GdkGC *gc;
-  GdkColor color;
+  cairo_t *cr;
   int x, y;
   guchar *p;
   int start, start_status;
@@ -86,22 +83,31 @@ gdk_pixbuf_render_threshold_alpha (GdkPixbuf *pixbuf,
   if (width == 0 || height == 0)
     return;
 
-  gc = _gdk_drawable_get_scratch_gc (bitmap, FALSE);
+  cr = gdk_cairo_create (bitmap);
+  cairo_rectangle (cr, dest_x, dest_y, width, height);
+  cairo_clip (cr);
 
   if (!gdk_pixbuf_get_has_alpha (pixbuf))
     {
-      color.pixel = (alpha_threshold == 255) ? 0 : 1;
-      gdk_gc_set_foreground (gc, &color);
-      gdk_draw_rectangle (bitmap, gc, TRUE, dest_x, dest_y, width, height);
+      cairo_set_source_rgba (cr, 0, 0, 0, alpha_threshold == 255 ? 0 : 1);
+      cairo_paint (cr);
+      cairo_destroy (cr);
       return;
     }
 
-  color.pixel = 0;
-  gdk_gc_set_foreground (gc, &color);
-  gdk_draw_rectangle (bitmap, gc, TRUE, dest_x, dest_y, width, height);
+  cairo_set_operator (cr, CAIRO_OPERATOR_CLEAR);
+  cairo_paint (cr);
 
-  color.pixel = 1;
-  gdk_gc_set_foreground (gc, &color);
+  cairo_set_operator (cr, CAIRO_OPERATOR_SOURCE);
+  if (alpha_threshold == 128)
+    {
+      gdk_cairo_set_source_pixbuf (cr, pixbuf, src_x - dest_x, src_y - dest_y);
+      cairo_paint (cr);
+      cairo_destroy (cr);
+      return;
+    }
+
+  cairo_set_source_rgb (cr, 0, 0, 0);
 
   for (y = 0; y < height; y++)
     {
@@ -118,9 +124,9 @@ gdk_pixbuf_render_threshold_alpha (GdkPixbuf *pixbuf,
 	  if (status != start_status)
 	    {
 	      if (!start_status)
-		gdk_draw_line (bitmap, gc,
-			       start + dest_x, y + dest_y,
-			       x - 1 + dest_x, y + dest_y);
+                cairo_rectangle (cr, 
+                                 start + dest_x, y + dest_y,
+			         x + dest_x, y + dest_y + 1);
 	      
 	      start = x;
 	      start_status = status;
@@ -130,10 +136,13 @@ gdk_pixbuf_render_threshold_alpha (GdkPixbuf *pixbuf,
 	}
       
       if (!start_status)
-	gdk_draw_line (bitmap, gc,
-		       start + dest_x, y + dest_y,
-		       x - 1 + dest_x, y + dest_y);
+        cairo_rectangle (cr, 
+                         start + dest_x, y + dest_y,
+                         x + dest_x, y + dest_y + 1);
     }
+
+  cairo_fill (cr);
+  cairo_destroy (cr);
 }
 
 /**
@@ -152,7 +161,7 @@ gdk_pixbuf_render_threshold_alpha (GdkPixbuf *pixbuf,
  * given drawables should use gdk_draw_pixbuf() and gdk_pixbuf_render_threshold_alpha().
  *
  * The pixmap that is created is created for the colormap returned
- * by gdk_rgb_get_colormap(). You normally will want to instead use
+ * by gdk_colormap_get_system(). You normally will want to instead use
  * the actual colormap for a widget, and use
  * gdk_pixbuf_render_pixmap_and_mask_for_colormap().
  *
@@ -166,9 +175,34 @@ gdk_pixbuf_render_pixmap_and_mask (GdkPixbuf  *pixbuf,
 				   int         alpha_threshold)
 {
   gdk_pixbuf_render_pixmap_and_mask_for_colormap (pixbuf,
-						  gdk_rgb_get_colormap (),
+						  gdk_colormap_get_system (),
 						  pixmap_return, mask_return,
 						  alpha_threshold);
+}
+
+static void
+remove_alpha_channel (GdkPixbuf *pixbuf)
+{
+  unsigned int x, y, width, height, stride;
+  unsigned char *data;
+
+  if (!gdk_pixbuf_get_has_alpha (pixbuf))
+    return;
+
+  width = gdk_pixbuf_get_width (pixbuf);
+  height = gdk_pixbuf_get_height (pixbuf);
+  stride = gdk_pixbuf_get_rowstride (pixbuf);
+  data = gdk_pixbuf_get_pixels (pixbuf);
+
+  for (y = 0; y < height; y++)
+    {
+      for (x = 0; x < width; x++)
+        {
+          data[x * 4 + 3] = 0xFF;
+        }
+
+      data += stride;
+    }
 }
 
 /**
@@ -210,31 +244,39 @@ gdk_pixbuf_render_pixmap_and_mask_for_colormap (GdkPixbuf   *pixbuf,
   
   if (pixmap_return)
     {
-      GdkGC *gc;
+      GdkPixbuf *tmp_pixbuf;
+      cairo_t *cr;
+
       *pixmap_return = gdk_pixmap_new (gdk_screen_get_root_window (screen),
 				       gdk_pixbuf_get_width (pixbuf), gdk_pixbuf_get_height (pixbuf),
 				       gdk_colormap_get_visual (colormap)->depth);
 
       gdk_drawable_set_colormap (GDK_DRAWABLE (*pixmap_return), colormap);
-      gc = _gdk_drawable_get_scratch_gc (*pixmap_return, FALSE);
 
-      /* If the pixbuf has an alpha channel, using gdk_pixbuf_draw would give
+      /* If the pixbuf has an alpha channel, using gdk_cairo_set_source_pixbuf()
+       * would give
        * random pixel values in the area that are within the mask, but semi-
        * transparent. So we treat the pixbuf like a pixbuf without alpha channel;
        * see bug #487865.
        */
       if (gdk_pixbuf_get_has_alpha (pixbuf))
-        gdk_draw_rgb_32_image (*pixmap_return, gc,
-                               0, 0,
-                               gdk_pixbuf_get_width (pixbuf), gdk_pixbuf_get_height (pixbuf),
-                               GDK_RGB_DITHER_NORMAL,
-                               gdk_pixbuf_get_pixels (pixbuf), gdk_pixbuf_get_rowstride (pixbuf));
+        {
+          int width, height;
+
+          width = gdk_pixbuf_get_width (pixbuf);
+          height = gdk_pixbuf_get_height (pixbuf);
+          tmp_pixbuf = gdk_pixbuf_copy (pixbuf);
+          remove_alpha_channel (tmp_pixbuf);
+        }
       else
-        gdk_draw_pixbuf (*pixmap_return, gc, pixbuf, 
-                         0, 0, 0, 0,
-                         gdk_pixbuf_get_width (pixbuf), gdk_pixbuf_get_height (pixbuf),
-                         GDK_RGB_DITHER_NORMAL,
-                         0, 0);
+        tmp_pixbuf = g_object_ref (pixbuf);
+
+      cr = gdk_cairo_create (*pixmap_return);
+      gdk_cairo_set_source_pixbuf (cr, pixbuf, 0, 0);
+      cairo_paint (cr);
+
+      cairo_destroy (cr);
+      g_object_unref (tmp_pixbuf);
     }
   
   if (mask_return)
@@ -253,7 +295,3 @@ gdk_pixbuf_render_pixmap_and_mask_for_colormap (GdkPixbuf   *pixbuf,
 	*mask_return = NULL;
     }
 }
-
-#define __GDK_PIXBUF_RENDER_C__
-#include "gdkaliasdef.c"
-

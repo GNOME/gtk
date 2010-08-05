@@ -58,8 +58,7 @@ struct _GtkUIManager {
   GObject parent;
 
   /*< private >*/
-
-  GtkUIManagerPrivate *GSEAL (private_data);
+  GtkUIManagerPrivate *private_data;
 };
 
 struct _GtkUIManagerClass {

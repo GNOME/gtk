@@ -198,7 +198,7 @@ gail_button_get_name (AtkObject *obj)
       GtkWidget *widget;
       GtkWidget *child;
 
-      widget = GTK_ACCESSIBLE (obj)->widget;
+      widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (obj));
       if (widget == NULL)
         /*
          * State is defunct
@@ -234,21 +234,28 @@ gail_button_get_name (AtkObject *obj)
 static gboolean
 gail_button_is_default_press (GtkWidget *widget)
 {
+  GtkArrowType arrow_type;
   GtkWidget  *child;
   GtkWidget  *parent;
   gboolean ret = FALSE;
   const gchar *parent_type_name;
 
-  child = GTK_BIN (widget)->child;
-  if (GTK_IS_ARROW (child) &&
-      GTK_ARROW (child)->arrow_type == GTK_ARROW_DOWN)
+  child = gtk_bin_get_child (GTK_BIN (widget));
+  if (GTK_IS_ARROW (child))
     {
-      parent = gtk_widget_get_parent (widget);
-      if (parent)
+      g_object_get (child,
+                    "arrow_type", &arrow_type,
+                    NULL);
+
+      if (arrow_type == GTK_ARROW_DOWN)
         {
-          parent_type_name = g_type_name (G_OBJECT_TYPE (parent));
-          if (strcmp (parent_type_name, "ColorCombo"))
-            return TRUE;
+          parent = gtk_widget_get_parent (widget);
+          if (parent)
+            {
+              parent_type_name = g_type_name (G_OBJECT_TYPE (parent));
+              if (g_strcmp0 (parent_type_name, "ColorCombo"))
+                return TRUE;
+            }
         }
     }
 
@@ -452,7 +459,7 @@ gail_button_do_action (AtkAction *action,
   GailButton *button;
   gboolean return_value = TRUE;
 
-  widget = GTK_ACCESSIBLE (action)->widget;
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (action));
   if (widget == NULL)
     /*
      * State is defunct
@@ -494,7 +501,7 @@ idle_do_action (gpointer data)
 
   gail_button = GAIL_BUTTON (data);
   gail_button->action_idle_handler = 0;
-  widget = GTK_ACCESSIBLE (gail_button)->widget;
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (gail_button));
   tmp_event.button.type = GDK_BUTTON_RELEASE;
   tmp_event.button.window = widget->window;
   tmp_event.button.button = 1;
@@ -645,7 +652,7 @@ gail_button_get_keybinding (AtkAction *action,
         GtkWidget *label;
         guint key_val; 
 
-        widget = GTK_ACCESSIBLE (button)->widget;
+        widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (button));
         if (widget == NULL)
           /*
            * State is defunct
@@ -678,10 +685,7 @@ gail_button_get_keybinding (AtkAction *action,
                     target = atk_relation_get_target (relation);
             
                     target_object = g_ptr_array_index (target, 0);
-                    if (GTK_IS_ACCESSIBLE (target_object))
-                      {
-                        label = GTK_ACCESSIBLE (target_object)->widget;
-                      } 
+                    label = gtk_accessible_get_widget (GTK_ACCESSIBLE (target_object));
                   }
                 g_object_unref (set);
               }
@@ -802,7 +806,7 @@ gail_button_get_n_children (AtkObject* obj)
 
   g_return_val_if_fail (GAIL_IS_BUTTON (obj), 0);
 
-  widget = GTK_ACCESSIBLE (obj)->widget;
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (obj));
   if (widget == NULL)
     /*
      * State is defunct
@@ -833,7 +837,7 @@ gail_button_ref_child (AtkObject *obj,
 
   g_return_val_if_fail (GAIL_IS_BUTTON (obj), NULL);
 
-  widget = GTK_ACCESSIBLE (obj)->widget;
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (obj));
   if (widget == NULL)
     /*
      * State is defunct
@@ -876,7 +880,7 @@ gail_button_ref_state_set (AtkObject *obj)
   GtkWidget *widget;
 
   state_set = ATK_OBJECT_CLASS (gail_button_parent_class)->ref_state_set (obj);
-  widget = GTK_ACCESSIBLE (obj)->widget;
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (obj));
 
   if (widget == NULL)
     return state_set;
@@ -973,8 +977,7 @@ gail_button_get_image_description (AtkImage *image) {
   GtkImage  *button_image;
   AtkObject *obj;
 
-  widget = GTK_ACCESSIBLE (image)->widget;
-
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (image));
   if (widget == NULL)
     /*
      * State is defunct
@@ -1002,7 +1005,7 @@ gail_button_get_image_position (AtkImage     *image,
   GtkImage  *button_image;
   AtkObject *obj;
 
-  widget = GTK_ACCESSIBLE (image)->widget;
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (image));
 
   if (widget == NULL)
     {
@@ -1037,7 +1040,7 @@ gail_button_get_image_size (AtkImage *image,
   GtkImage  *button_image;
   AtkObject *obj;
 
-  widget = GTK_ACCESSIBLE (image)->widget;
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (image));
 
   if (widget == NULL)
     {
@@ -1071,7 +1074,7 @@ gail_button_set_image_description (AtkImage    *image,
   GtkImage  *button_image;
   AtkObject *obj;
 
-  widget = GTK_ACCESSIBLE (image)->widget;
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (image));
 
   if (widget == NULL)
     /*
@@ -1117,7 +1120,8 @@ gail_button_get_text (AtkText *text,
   GailButton *button;
   const gchar *label_text;
 
-  widget = GTK_ACCESSIBLE (text)->widget;
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (text));
+
   if (widget == NULL)
     /* State is defunct */
     return NULL;
@@ -1152,9 +1156,9 @@ gail_button_get_text_before_offset (AtkText         *text,
   GtkWidget *widget;
   GtkWidget *label;
   GailButton *button;
-  
-  widget = GTK_ACCESSIBLE (text)->widget;
-  
+
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (text));
+
   if (widget == NULL)
     /* State is defunct */
     return NULL;
@@ -1184,9 +1188,9 @@ gail_button_get_text_at_offset (AtkText         *text,
   GtkWidget *widget;
   GtkWidget *label;
   GailButton *button;
+
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (text));
  
-  widget = GTK_ACCESSIBLE (text)->widget;
-  
   if (widget == NULL)
     /* State is defunct */
     return NULL;
@@ -1217,8 +1221,8 @@ gail_button_get_text_after_offset (AtkText         *text,
   GtkWidget *label;
   GailButton *button;
 
-  widget = GTK_ACCESSIBLE (text)->widget;
-  
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (text));
+
   if (widget == NULL)
   {
     /* State is defunct */
@@ -1246,7 +1250,8 @@ gail_button_get_character_count (AtkText *text)
   GtkWidget *widget;
   GtkWidget *label;
 
-  widget = GTK_ACCESSIBLE (text)->widget;
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (text));
+
   if (widget == NULL)
     /* State is defunct */
     return 0;
@@ -1273,8 +1278,8 @@ gail_button_get_character_extents (AtkText      *text,
   PangoRectangle char_rect;
   gint index, x_layout, y_layout;
   const gchar *label_text;
- 
-  widget = GTK_ACCESSIBLE (text)->widget;
+
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (text));
 
   if (widget == NULL)
     /* State is defunct */
@@ -1305,10 +1310,12 @@ gail_button_get_offset_at_point (AtkText      *text,
   gint index, x_layout, y_layout;
   const gchar *label_text;
 
-  widget = GTK_ACCESSIBLE (text)->widget;
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (text));
+
   if (widget == NULL)
     /* State is defunct */
     return -1;
+
   label = get_label_from_button (widget, 0, FALSE);
 
   if (!GTK_IS_LABEL(label))
@@ -1343,7 +1350,8 @@ gail_button_get_run_attributes (AtkText        *text,
   GtkJustification justify;
   GtkTextDirection dir;
 
-  widget = GTK_ACCESSIBLE (text)->widget;
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (text));
+
   if (widget == NULL)
     /* State is defunct */
     return NULL;
@@ -1385,7 +1393,8 @@ gail_button_get_default_attributes (AtkText        *text)
   GtkWidget *label;
   AtkAttributeSet *at_set = NULL;
 
-  widget = GTK_ACCESSIBLE (text)->widget;
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (text));
+
   if (widget == NULL)
     /* State is defunct */
     return NULL;
@@ -1410,7 +1419,8 @@ gail_button_get_character_at_offset (AtkText	         *text,
   const gchar *string;
   gchar *index;
 
-  widget = GTK_ACCESSIBLE (text)->widget;
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (text));
+
   if (widget == NULL)
     /* State is defunct */
     return '\0';

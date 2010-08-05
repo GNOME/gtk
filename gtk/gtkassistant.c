@@ -64,9 +64,6 @@
 #include "gtkprivate.h"
 #include "gtkbuildable.h"
 
-#include "gtkalias.h"
-
-#define GTK_ASSISTANT_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), GTK_TYPE_ASSISTANT, GtkAssistantPrivate))
 
 #define HEADER_SPACING 12
 #define ACTION_AREA_SPACING 12
@@ -87,6 +84,13 @@ struct _GtkAssistantPage
 
 struct _GtkAssistantPrivate
 {
+  GtkWidget *cancel;
+  GtkWidget *forward;
+  GtkWidget *back;
+  GtkWidget *apply;
+  GtkWidget *close;
+  GtkWidget *last;
+
   GtkWidget *header_image;
   GtkWidget *sidebar_image;
 
@@ -466,12 +470,12 @@ compute_last_button_state (GtkAssistant *assistant)
       (page_info->type == GTK_ASSISTANT_PAGE_CONFIRM ||
        page_info->type == GTK_ASSISTANT_PAGE_SUMMARY))
     {
-      gtk_widget_show (assistant->last);
-      gtk_widget_set_sensitive (assistant->last,
+      gtk_widget_show (priv->last);
+      gtk_widget_set_sensitive (priv->last,
 				current_page_info->complete);
     }
   else
-    gtk_widget_hide (assistant->last);
+    gtk_widget_hide (priv->last);
 }
 
 static void
@@ -486,9 +490,9 @@ compute_progress_state (GtkAssistant *assistant)
   page_num = (priv->forward_function) (page_num, priv->forward_function_data);
 
   if (page_num >= 0 && page_num < n_pages)
-    gtk_widget_show (assistant->forward);
+    gtk_widget_show (priv->forward);
   else
-    gtk_widget_hide (assistant->forward);
+    gtk_widget_hide (priv->forward);
 }
 
 static void
@@ -525,55 +529,55 @@ set_assistant_buttons_state (GtkAssistant *assistant)
   switch (priv->current_page->type)
     {
     case GTK_ASSISTANT_PAGE_INTRO:
-      gtk_widget_set_sensitive (assistant->cancel, TRUE);
-      gtk_widget_set_sensitive (assistant->forward, priv->current_page->complete);
-      gtk_widget_grab_default (assistant->forward);
-      gtk_widget_show (assistant->forward);
-      gtk_widget_hide (assistant->back);
-      gtk_widget_hide (assistant->apply);
-      gtk_widget_hide (assistant->close);
+      gtk_widget_set_sensitive (priv->cancel, TRUE);
+      gtk_widget_set_sensitive (priv->forward, priv->current_page->complete);
+      gtk_widget_grab_default (priv->forward);
+      gtk_widget_show (priv->forward);
+      gtk_widget_hide (priv->back);
+      gtk_widget_hide (priv->apply);
+      gtk_widget_hide (priv->close);
       compute_last_button_state (assistant);
       break;
     case GTK_ASSISTANT_PAGE_CONFIRM:
-      gtk_widget_set_sensitive (assistant->cancel, TRUE);
-      gtk_widget_set_sensitive (assistant->back, TRUE);
-      gtk_widget_set_sensitive (assistant->apply, priv->current_page->complete);
-      gtk_widget_grab_default (assistant->apply);
-      gtk_widget_show (assistant->back);
-      gtk_widget_show (assistant->apply);
-      gtk_widget_hide (assistant->forward);
-      gtk_widget_hide (assistant->close);
-      gtk_widget_hide (assistant->last);
+      gtk_widget_set_sensitive (priv->cancel, TRUE);
+      gtk_widget_set_sensitive (priv->back, TRUE);
+      gtk_widget_set_sensitive (priv->apply, priv->current_page->complete);
+      gtk_widget_grab_default (priv->apply);
+      gtk_widget_show (priv->back);
+      gtk_widget_show (priv->apply);
+      gtk_widget_hide (priv->forward);
+      gtk_widget_hide (priv->close);
+      gtk_widget_hide (priv->last);
       break;
     case GTK_ASSISTANT_PAGE_CONTENT:
-      gtk_widget_set_sensitive (assistant->cancel, TRUE);
-      gtk_widget_set_sensitive (assistant->back, TRUE);
-      gtk_widget_set_sensitive (assistant->forward, priv->current_page->complete);
-      gtk_widget_grab_default (assistant->forward);
-      gtk_widget_show (assistant->back);
-      gtk_widget_show (assistant->forward);
-      gtk_widget_hide (assistant->apply);
-      gtk_widget_hide (assistant->close);
+      gtk_widget_set_sensitive (priv->cancel, TRUE);
+      gtk_widget_set_sensitive (priv->back, TRUE);
+      gtk_widget_set_sensitive (priv->forward, priv->current_page->complete);
+      gtk_widget_grab_default (priv->forward);
+      gtk_widget_show (priv->back);
+      gtk_widget_show (priv->forward);
+      gtk_widget_hide (priv->apply);
+      gtk_widget_hide (priv->close);
       compute_last_button_state (assistant);
       break;
     case GTK_ASSISTANT_PAGE_SUMMARY:
-      gtk_widget_set_sensitive (assistant->close, priv->current_page->complete);
-      gtk_widget_grab_default (assistant->close);
-      gtk_widget_show (assistant->close);
-      gtk_widget_hide (assistant->back);
-      gtk_widget_hide (assistant->forward);
-      gtk_widget_hide (assistant->apply);
-      gtk_widget_hide (assistant->last);
+      gtk_widget_set_sensitive (priv->close, priv->current_page->complete);
+      gtk_widget_grab_default (priv->close);
+      gtk_widget_show (priv->close);
+      gtk_widget_hide (priv->back);
+      gtk_widget_hide (priv->forward);
+      gtk_widget_hide (priv->apply);
+      gtk_widget_hide (priv->last);
       break;
     case GTK_ASSISTANT_PAGE_PROGRESS:
-      gtk_widget_set_sensitive (assistant->cancel, priv->current_page->complete);
-      gtk_widget_set_sensitive (assistant->back, priv->current_page->complete);
-      gtk_widget_set_sensitive (assistant->forward, priv->current_page->complete);
-      gtk_widget_grab_default (assistant->forward);
-      gtk_widget_show (assistant->back);
-      gtk_widget_hide (assistant->apply);
-      gtk_widget_hide (assistant->close);
-      gtk_widget_hide (assistant->last);
+      gtk_widget_set_sensitive (priv->cancel, priv->current_page->complete);
+      gtk_widget_set_sensitive (priv->back, priv->current_page->complete);
+      gtk_widget_set_sensitive (priv->forward, priv->current_page->complete);
+      gtk_widget_grab_default (priv->forward);
+      gtk_widget_show (priv->back);
+      gtk_widget_hide (priv->apply);
+      gtk_widget_hide (priv->close);
+      gtk_widget_hide (priv->last);
       compute_progress_state (assistant);
       break;
     default:
@@ -581,16 +585,16 @@ set_assistant_buttons_state (GtkAssistant *assistant)
     }
 
   if (priv->committed)
-    gtk_widget_hide (assistant->cancel);
+    gtk_widget_hide (priv->cancel);
   else if (priv->current_page->type == GTK_ASSISTANT_PAGE_SUMMARY)
-    gtk_widget_hide (assistant->cancel);
+    gtk_widget_hide (priv->cancel);
   else
-    gtk_widget_show (assistant->cancel);
+    gtk_widget_show (priv->cancel);
 
   /* this is quite general, we don't want to
    * go back if it's the first page */
   if (!priv->visited_pages)
-    gtk_widget_hide (assistant->back);
+    gtk_widget_hide (priv->back);
 }
 
 static void
@@ -634,12 +638,12 @@ set_current_page (GtkAssistant     *assistant,
       gint i;
 
       /* find the best button to focus */
-      button[0] = assistant->apply;
-      button[1] = assistant->close;
-      button[2] = assistant->forward;
-      button[3] = assistant->back;
-      button[4] = assistant->cancel;
-      button[5] = assistant->last;
+      button[0] = priv->apply;
+      button[1] = priv->close;
+      button[2] = priv->forward;
+      button[3] = priv->back;
+      button[4] = priv->cancel;
+      button[5] = priv->last;
       for (i = 0; i < 6; i++)
         {
           if (gtk_widget_get_visible (button[i]) && gtk_widget_get_sensitive (button[i]))
@@ -775,7 +779,10 @@ gtk_assistant_init (GtkAssistant *assistant)
 {
   GtkAssistantPrivate *priv;
 
-  priv = assistant->priv = GTK_ASSISTANT_GET_PRIVATE (assistant);
+  assistant->priv = G_TYPE_INSTANCE_GET_PRIVATE (assistant,
+                                                 GTK_TYPE_ASSISTANT,
+                                                 GtkAssistantPrivate);
+  priv = assistant->priv;
 
   gtk_container_set_reallocate_redraws (GTK_CONTAINER (assistant), TRUE);
   gtk_container_set_border_width (GTK_CONTAINER (assistant), 12);
@@ -797,47 +804,47 @@ gtk_assistant_init (GtkAssistant *assistant)
   /* Action area  */
   priv->action_area  = gtk_hbox_new (FALSE, 6);
   
-  assistant->close   = gtk_button_new_from_stock (GTK_STOCK_CLOSE);
-  assistant->apply   = gtk_button_new_from_stock (GTK_STOCK_APPLY);
-  assistant->forward = gtk_button_new_from_stock (GTK_STOCK_GO_FORWARD);
-  assistant->back    = gtk_button_new_from_stock (GTK_STOCK_GO_BACK);
-  assistant->cancel  = gtk_button_new_from_stock (GTK_STOCK_CANCEL);
-  assistant->last    = gtk_button_new_from_stock (GTK_STOCK_GOTO_LAST);
-  gtk_widget_set_can_default (assistant->close, TRUE);
-  gtk_widget_set_can_default (assistant->apply, TRUE);
-  gtk_widget_set_can_default (assistant->forward, TRUE);
+  priv->close   = gtk_button_new_from_stock (GTK_STOCK_CLOSE);
+  priv->apply   = gtk_button_new_from_stock (GTK_STOCK_APPLY);
+  priv->forward = gtk_button_new_from_stock (GTK_STOCK_GO_FORWARD);
+  priv->back    = gtk_button_new_from_stock (GTK_STOCK_GO_BACK);
+  priv->cancel  = gtk_button_new_from_stock (GTK_STOCK_CANCEL);
+  priv->last    = gtk_button_new_from_stock (GTK_STOCK_GOTO_LAST);
+  gtk_widget_set_can_default (priv->close, TRUE);
+  gtk_widget_set_can_default (priv->apply, TRUE);
+  gtk_widget_set_can_default (priv->forward, TRUE);
 
   priv->size_group   = gtk_size_group_new (GTK_SIZE_GROUP_HORIZONTAL);
-  gtk_size_group_add_widget (priv->size_group, assistant->close);
-  gtk_size_group_add_widget (priv->size_group, assistant->apply);
-  gtk_size_group_add_widget (priv->size_group, assistant->forward);
-  gtk_size_group_add_widget (priv->size_group, assistant->back);
-  gtk_size_group_add_widget (priv->size_group, assistant->cancel);
-  gtk_size_group_add_widget (priv->size_group, assistant->last);
+  gtk_size_group_add_widget (priv->size_group, priv->close);
+  gtk_size_group_add_widget (priv->size_group, priv->apply);
+  gtk_size_group_add_widget (priv->size_group, priv->forward);
+  gtk_size_group_add_widget (priv->size_group, priv->back);
+  gtk_size_group_add_widget (priv->size_group, priv->cancel);
+  gtk_size_group_add_widget (priv->size_group, priv->last);
 
   if (!alternative_button_order (assistant))
     {
-      gtk_box_pack_end (GTK_BOX (priv->action_area), assistant->apply, FALSE, FALSE, 0);
-      gtk_box_pack_end (GTK_BOX (priv->action_area), assistant->forward, FALSE, FALSE, 0);
-      gtk_box_pack_end (GTK_BOX (priv->action_area), assistant->back, FALSE, FALSE, 0);
-      gtk_box_pack_end (GTK_BOX (priv->action_area), assistant->last, FALSE, FALSE, 0);
-      gtk_box_pack_end (GTK_BOX (priv->action_area), assistant->cancel, FALSE, FALSE, 0);
-      gtk_box_pack_end (GTK_BOX (priv->action_area), assistant->close, FALSE, FALSE, 0);
+      gtk_box_pack_end (GTK_BOX (priv->action_area), priv->apply, FALSE, FALSE, 0);
+      gtk_box_pack_end (GTK_BOX (priv->action_area), priv->forward, FALSE, FALSE, 0);
+      gtk_box_pack_end (GTK_BOX (priv->action_area), priv->back, FALSE, FALSE, 0);
+      gtk_box_pack_end (GTK_BOX (priv->action_area), priv->last, FALSE, FALSE, 0);
+      gtk_box_pack_end (GTK_BOX (priv->action_area), priv->cancel, FALSE, FALSE, 0);
+      gtk_box_pack_end (GTK_BOX (priv->action_area), priv->close, FALSE, FALSE, 0);
     }
   else
     {
-      gtk_box_pack_end (GTK_BOX (priv->action_area), assistant->close, FALSE, FALSE, 0);
-      gtk_box_pack_end (GTK_BOX (priv->action_area), assistant->cancel, FALSE, FALSE, 0);
-      gtk_box_pack_end (GTK_BOX (priv->action_area), assistant->apply, FALSE, FALSE, 0);
-      gtk_box_pack_end (GTK_BOX (priv->action_area), assistant->forward, FALSE, FALSE, 0);
-      gtk_box_pack_end (GTK_BOX (priv->action_area), assistant->back, FALSE, FALSE, 0);
-      gtk_box_pack_end (GTK_BOX (priv->action_area), assistant->last, FALSE, FALSE, 0);
+      gtk_box_pack_end (GTK_BOX (priv->action_area), priv->close, FALSE, FALSE, 0);
+      gtk_box_pack_end (GTK_BOX (priv->action_area), priv->cancel, FALSE, FALSE, 0);
+      gtk_box_pack_end (GTK_BOX (priv->action_area), priv->apply, FALSE, FALSE, 0);
+      gtk_box_pack_end (GTK_BOX (priv->action_area), priv->forward, FALSE, FALSE, 0);
+      gtk_box_pack_end (GTK_BOX (priv->action_area), priv->back, FALSE, FALSE, 0);
+      gtk_box_pack_end (GTK_BOX (priv->action_area), priv->last, FALSE, FALSE, 0);
     }
 
   gtk_widget_set_parent (priv->action_area, GTK_WIDGET (assistant));
-  gtk_widget_show (assistant->forward);
-  gtk_widget_show (assistant->back);
-  gtk_widget_show (assistant->cancel);
+  gtk_widget_show (priv->forward);
+  gtk_widget_show (priv->back);
+  gtk_widget_show (priv->cancel);
   gtk_widget_show (priv->action_area);
 
   gtk_widget_pop_composite_child ();
@@ -850,17 +857,17 @@ gtk_assistant_init (GtkAssistant *assistant)
   priv->forward_function_data = assistant;
   priv->forward_data_destroy = NULL;
 
-  g_signal_connect (G_OBJECT (assistant->close), "clicked",
+  g_signal_connect (G_OBJECT (priv->close), "clicked",
 		    G_CALLBACK (on_assistant_close), assistant);
-  g_signal_connect (G_OBJECT (assistant->apply), "clicked",
+  g_signal_connect (G_OBJECT (priv->apply), "clicked",
 		    G_CALLBACK (on_assistant_apply), assistant);
-  g_signal_connect (G_OBJECT (assistant->forward), "clicked",
+  g_signal_connect (G_OBJECT (priv->forward), "clicked",
 		    G_CALLBACK (on_assistant_forward), assistant);
-  g_signal_connect (G_OBJECT (assistant->back), "clicked",
+  g_signal_connect (G_OBJECT (priv->back), "clicked",
 		    G_CALLBACK (on_assistant_back), assistant);
-  g_signal_connect (G_OBJECT (assistant->cancel), "clicked",
+  g_signal_connect (G_OBJECT (priv->cancel), "clicked",
 		    G_CALLBACK (on_assistant_cancel), assistant);
-  g_signal_connect (G_OBJECT (assistant->last), "clicked",
+  g_signal_connect (G_OBJECT (priv->last), "clicked",
 		    G_CALLBACK (on_assistant_last), assistant);
 }
 
@@ -1133,6 +1140,7 @@ gtk_assistant_size_request (GtkWidget      *widget,
   GtkRequisition child_requisition;
   gint header_padding, content_padding;
   gint width, height, header_width, header_height;
+  guint border_width;
   GList *list;
 
   gtk_widget_style_get (widget,
@@ -1181,8 +1189,9 @@ gtk_assistant_size_request (GtkWidget      *widget,
   width   = MAX (width, child_requisition.width);
   height += child_requisition.height + ACTION_AREA_SPACING;
 
-  width += GTK_CONTAINER (widget)->border_width * 2 + content_padding * 2;
-  height += GTK_CONTAINER (widget)->border_width * 2 + content_padding * 2;
+  border_width = gtk_container_get_border_width (GTK_CONTAINER (widget));
+  width += border_width * 2 + content_padding * 2;
+  height += border_width * 2 + content_padding * 2;
 
   requisition->width = width;
   requisition->height = height;
@@ -1198,6 +1207,7 @@ gtk_assistant_size_allocate (GtkWidget      *widget,
   GtkRequisition header_requisition, action_requisition, sidebar_requisition;
   GtkAllocation child_allocation, header_allocation;
   gint header_padding, content_padding;
+  guint border_width;
   gboolean rtl;
   GList *pages;
 
@@ -1210,13 +1220,14 @@ gtk_assistant_size_allocate (GtkWidget      *widget,
 			NULL);
 
   widget->allocation = *allocation;
+  border_width = gtk_container_get_border_width (GTK_CONTAINER (widget));
 
   /* Header */
   gtk_widget_get_child_requisition (priv->header_image, &header_requisition);
 
-  header_allocation.x = GTK_CONTAINER (widget)->border_width + header_padding;
-  header_allocation.y = GTK_CONTAINER (widget)->border_width + header_padding;
-  header_allocation.width  = allocation->width - 2 * GTK_CONTAINER (widget)->border_width - 2 * header_padding;
+  header_allocation.x = border_width + header_padding;
+  header_allocation.y = border_width + header_padding;
+  header_allocation.width  = allocation->width - 2 * border_width - 2 * header_padding;
   header_allocation.height = header_requisition.height;
 
   gtk_widget_size_allocate (priv->header_image, &header_allocation);
@@ -1224,10 +1235,9 @@ gtk_assistant_size_allocate (GtkWidget      *widget,
   /* Action area */
   gtk_widget_get_child_requisition (priv->action_area, &action_requisition);
 
-  child_allocation.x = GTK_CONTAINER (widget)->border_width;
-  child_allocation.y = allocation->height -
-    GTK_CONTAINER (widget)->border_width - action_requisition.height;
-  child_allocation.width  = allocation->width - 2 * GTK_CONTAINER (widget)->border_width;
+  child_allocation.x = border_width;
+  child_allocation.y = allocation->height - border_width - action_requisition.height;
+  child_allocation.width  = allocation->width - 2 * border_width;
   child_allocation.height = action_requisition.height;
 
   gtk_widget_size_allocate (priv->action_area, &child_allocation);
@@ -1236,25 +1246,23 @@ gtk_assistant_size_allocate (GtkWidget      *widget,
   gtk_widget_get_child_requisition (priv->sidebar_image, &sidebar_requisition);
 
   if (rtl)
-    child_allocation.x = allocation->width -
-      GTK_CONTAINER (widget)->border_width - sidebar_requisition.width;
+    child_allocation.x = allocation->width - border_width - sidebar_requisition.width;
   else
-    child_allocation.x = GTK_CONTAINER (widget)->border_width;
+    child_allocation.x = border_width;
 
-  child_allocation.y = GTK_CONTAINER (widget)->border_width +
-    priv->header_image->allocation.height + 2 * header_padding;
+  child_allocation.y = border_width + priv->header_image->allocation.height + 2 * header_padding;
   child_allocation.width = sidebar_requisition.width;
-  child_allocation.height = allocation->height - 2 * GTK_CONTAINER (widget)->border_width -
+  child_allocation.height = allocation->height - 2 * border_width -
     priv->header_image->allocation.height - 2 * header_padding - priv->action_area->allocation.height;
 
   gtk_widget_size_allocate (priv->sidebar_image, &child_allocation);
 
   /* Pages */
-  child_allocation.x = GTK_CONTAINER (widget)->border_width + content_padding;
-  child_allocation.y = GTK_CONTAINER (widget)->border_width +
+  child_allocation.x = border_width + content_padding;
+  child_allocation.y = border_width +
     priv->header_image->allocation.height + 2 * header_padding + content_padding;
-  child_allocation.width  = allocation->width - 2 * GTK_CONTAINER (widget)->border_width - 2 * content_padding;
-  child_allocation.height = allocation->height - 2 * GTK_CONTAINER (widget)->border_width -
+  child_allocation.width  = allocation->width - 2 * border_width - 2 * content_padding;
+  child_allocation.height = allocation->height - 2 * border_width -
     priv->header_image->allocation.height - 2 * header_padding - ACTION_AREA_SPACING - priv->action_area->allocation.height - 2 * content_padding;
 
   if (gtk_widget_get_visible (priv->sidebar_image))
@@ -1445,7 +1453,7 @@ gtk_assistant_focus (GtkWidget        *widget,
   priv = GTK_ASSISTANT (widget)->priv;
 
   /* we only have to care about 2 widgets, action area and the current page */
-  if (container->focus_child == priv->action_area)
+  if (gtk_container_get_focus_child (container) == priv->action_area)
     {
       if (!gtk_widget_child_focus (priv->action_area, direction) &&
 	  (priv->current_page == NULL ||
@@ -2324,7 +2332,7 @@ gtk_assistant_accessible_get_n_children (AtkObject *accessible)
   GtkAssistant *assistant;
   GtkWidget *widget;
 
-  widget = GTK_ACCESSIBLE (accessible)->widget;
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (accessible));
 
   if (!widget)
     return 0;
@@ -2346,7 +2354,7 @@ gtk_assistant_accessible_ref_child (AtkObject *accessible,
   AtkObject *obj;
   const gchar *title;
 
-  widget = GTK_ACCESSIBLE (accessible)->widget;
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (accessible));
   if (!widget)
     return NULL;
 
@@ -2551,7 +2559,3 @@ gtk_assistant_buildable_custom_finished (GtkBuildable *buildable,
   parent_buildable_iface->custom_finished (buildable, builder, child,
                                            tagname, user_data);
 }
-
-
-#define __GTK_ASSISTANT_C__
-#include "gtkaliasdef.c"

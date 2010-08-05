@@ -81,7 +81,8 @@ struct _GtkIconView
 {
   GtkContainer parent;
 
-  GtkIconViewPrivate *GSEAL (priv);
+  /* <private> */
+  GtkIconViewPrivate *priv;
 };
 
 struct _GtkIconViewClass

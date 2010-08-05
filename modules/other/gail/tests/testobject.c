@@ -53,7 +53,7 @@ static void _print_type (AtkObject *obj)
     {
       GtkWidget* widget = NULL;
 
-      widget = GTK_ACCESSIBLE (obj)->widget;
+      widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (obj));
       typename = g_type_name (G_OBJECT_TYPE (widget));
       g_print ("Widget type name: %s\n", typename ? typename : "NULL");
     }
@@ -154,7 +154,7 @@ static void _print_accessible (AtkObject *obj)
    */
   if (GTK_IS_ACCESSIBLE (obj))
     {
-      widget = GTK_ACCESSIBLE (obj)->widget;
+      widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (obj));
       ref_obj = atk_implementor_ref_accessible (ATK_IMPLEMENTOR (widget));
       g_assert (ref_obj == obj);
       g_object_unref (G_OBJECT (ref_obj));

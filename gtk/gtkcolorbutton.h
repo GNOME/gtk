@@ -63,8 +63,7 @@ struct _GtkColorButton {
   GtkButton button;
 
   /*< private >*/
-
-  GtkColorButtonPrivate *GSEAL (priv);
+  GtkColorButtonPrivate *priv;
 };
 
 struct _GtkColorButtonClass {

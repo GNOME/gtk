@@ -54,7 +54,7 @@
 #include "gdkprivate-x11.h"
 #include "gdkdisplay-x11.h"
 #include "gdkscreen-x11.h"
-#include "gdkalias.h"
+
 
 typedef struct _GdkImagePrivateX11     GdkImagePrivateX11;
 
@@ -752,7 +752,3 @@ _gdk_windowing_get_bits_for_depth (GdkDisplay *display,
   g_assert_not_reached ();
   return -1;
 }
-
-
-#define __GDK_IMAGE_X11_C__
-#include "gdkaliasdef.c"

@@ -253,7 +253,7 @@
 #include "gtkwindow.h"
 #include "gtkicontheme.h"
 #include "gtkstock.h"
-#include "gtkalias.h"
+
 
 static void gtk_builder_class_init     (GtkBuilderClass *klass);
 static void gtk_builder_init           (GtkBuilder      *builder);
@@ -1848,6 +1848,3 @@ _gtk_builder_get_absolute_filename (GtkBuilder *builder, const gchar *string)
   
   return filename;
 }
-
-#define __GTK_BUILDER_C__
-#include "gtkaliasdef.c"

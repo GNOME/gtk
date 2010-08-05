@@ -595,6 +595,7 @@ gdk_window_move_resize
 gdk_window_scroll
 gdk_window_move_region
 gdk_window_flush
+gdk_window_has_native
 gdk_window_ensure_native
 gdk_window_reparent
 gdk_window_clear
@@ -725,7 +726,6 @@ gdk_window_get_effective_toplevel
 <SUBSECTION Standard>
 GDK_WINDOW
 GDK_WINDOW_GET_CLASS
-GDK_WINDOW_OBJECT
 GDK_TYPE_WINDOW
 GDK_IS_WINDOW
 GDK_WINDOW_CLASS
@@ -910,6 +910,7 @@ gdk_keymap_get_entries_for_keycode
 gdk_keymap_get_direction
 gdk_keymap_have_bidi_layouts
 gdk_keymap_get_caps_lock_state
+gdk_keymap_get_num_lock_state
 gdk_keymap_add_virtual_modifiers
 gdk_keymap_map_virtual_modifiers
 
@@ -1146,6 +1147,7 @@ gdk_cursor_new_from_name
 gdk_cursor_new_for_display
 gdk_cursor_get_display
 gdk_cursor_get_image
+gdk_cursor_get_cursor_type
 gdk_cursor_ref
 gdk_cursor_unref
 

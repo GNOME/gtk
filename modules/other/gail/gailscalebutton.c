@@ -111,7 +111,7 @@ gail_scale_button_do_action(AtkAction *action,
 {
   GtkWidget *widget;
 
-  widget = GTK_ACCESSIBLE (action)->widget;
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (action));
   if (widget == NULL)
     return FALSE;
 
@@ -191,7 +191,7 @@ gail_scale_button_get_current_value (AtkValue *obj,
 
   g_return_if_fail (GAIL_IS_SCALE_BUTTON (obj));
 
-  gtk_scale_button = GTK_SCALE_BUTTON (GTK_ACCESSIBLE (obj)->widget);
+  gtk_scale_button = GTK_SCALE_BUTTON (gtk_accessible_get_widget (GTK_ACCESSIBLE (obj)));
 
   g_value_set_double (g_value_init (value, G_TYPE_DOUBLE),
                       gtk_scale_button_get_value (gtk_scale_button));
@@ -206,7 +206,7 @@ gail_scale_button_get_maximum_value (AtkValue *obj,
 
   g_return_if_fail (GAIL_IS_SCALE_BUTTON (obj));
 
-  gtk_widget = GTK_ACCESSIBLE (obj)->widget;
+  gtk_widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (obj));
   if (gtk_widget == NULL)
     return;
 
@@ -225,7 +225,7 @@ gail_scale_button_get_minimum_value (AtkValue *obj,
 
   g_return_if_fail (GAIL_IS_SCALE_BUTTON (obj));
 
-  gtk_widget = GTK_ACCESSIBLE (obj)->widget;
+  gtk_widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (obj));
   if (gtk_widget == NULL)
     return;
 
@@ -244,7 +244,7 @@ gail_scale_button_get_minimum_increment (AtkValue *obj,
 
   g_return_if_fail (GAIL_IS_SCALE_BUTTON (obj));
 
-  gtk_widget = GTK_ACCESSIBLE (obj)->widget;
+  gtk_widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (obj));
   if (gtk_widget == NULL)
     return;
 
@@ -262,7 +262,7 @@ gail_scale_button_set_current_value (AtkValue     *obj,
 
   g_return_val_if_fail (GAIL_IS_SCALE_BUTTON (obj), FALSE);
 
-  gtk_widget = GTK_ACCESSIBLE (obj)->widget;
+  gtk_widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (obj));
   if (gtk_widget == NULL)
     return FALSE;
 

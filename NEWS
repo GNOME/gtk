@@ -1,3 +1,55 @@
+Overview of Changes from GTK+ 2.90.4 to 2.90.5
+==============================================
+
+* Support NOCONFIGURE in autogen.sh to avoid running configure
+
+* The cairo dependency has been bumped to 1.9.10
+
+* Drop aliasing hacks instead use -Bsymbolic-funtions.
+
+* Bugs:
+ 589904 Certain drawing in some widgets does not pass on...
+ 610346 Confusion between GtkWindow:allow-grow and GtkWindow:resizable
+ 613284 Replace GdkRegion with cairo_region_t
+ 617386 Migrate API docs from templates to source files (GtkButton)
+ 617389 Migrate API docs from templates to source files (GtkCalendar)
+ 617392 Migrate API docs from templates to source files (GtkCellEditable)
+ 621414 Can't select file on file browser popup after choosing to sort...
+ 622677 Remove GdkWindowObject public structure
+ 623239 also show num-lock warning
+ 623307 Annotate gdk_display_manager_list_displays return value
+ 623389 [iconview] Fix segfault when using rubberband selection
+ 623476 [windows] gdk fails to compile
+ 623520 gtk+ 3 fails to build from outside git source tree
+ 623845 Use -Bsymbolic
+ 461618 use GSlice for gtkrequisition
+
+* Deprecations and cleanups:
+ - GdkRegion has been removed, and region-using code has been ported
+   to cairo_region_t and cairo_rectangle_int_t.
+ - The deprecated GdkFont has been removed, together with vestigial
+   uses in GTK+, including the GdkFontSel::font property and a GdkFont
+   member in GtkStyle.
+ - The GdkWindowObject structure has been removed from public headers.
+ - The GdkWindow::allow-grow and ::allow-shrink properties have been removed.
+
+* Quartz:
+ - Misc fixed to clipping and color handling
+ - Update the DND code for GdkDevice changes
+
+* Translation updates:
+ Breton
+ Czech
+ Estonian
+ Galician
+ Hebrew
+ Kazakh
+ Norwegian bokmål
+ Slovenian
+ Simplified Chinese
+ Spanish
+
+
 Overview of Changes from GTK+ 2.90.3 to 2.90.4
 ==============================================
 

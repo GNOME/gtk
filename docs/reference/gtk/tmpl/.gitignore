@@ -1,6 +1,10 @@
+gtkactiongroup.sgml
 gtkbbox.sgml
 gtkbox.sgml
 gtkbuilder.sgml
+gtkbutton.sgml
+gtkcalendar.sgml
+gtkcelleditable.sgml
 gtkhbox.sgml
 gtkiconview.sgml
 gtkmessagedialog.sgml
@@ -16,6 +20,7 @@ gtkrecentchooser.sgml
 gtkrecentchooserdialog.sgml
 gtkrecentchoosermenu.sgml
 gtkrecentchooserwidget.sgml
+gtkrecentmanager.sgml
 gtkscalebutton.sgml
 gtkseparator.sgml
 gtkseparatormenuitem.sgml

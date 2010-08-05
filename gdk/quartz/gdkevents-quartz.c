@@ -69,13 +69,6 @@ gdk_events_pending (void)
 	  (_gdk_quartz_event_loop_check_pending ()));
 }
 
-GdkEvent*
-gdk_event_get_graphics_expose (GdkWindow *window)
-{
-  /* FIXME: Implement */
-  return NULL;
-}
-
 void
 gdk_device_ungrab (GdkDevice *device,
                    guint32    time_)

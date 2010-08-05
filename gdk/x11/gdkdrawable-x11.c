@@ -47,7 +47,6 @@
 #include "gdkscreen-x11.h"
 #include "gdkdisplay-x11.h"
 
-#include "gdkalias.h"
 
 static void gdk_x11_draw_rectangle (GdkDrawable    *drawable,
 				    GdkGC          *gc,
@@ -1464,7 +1463,7 @@ gdk_x11_ref_cairo_surface (GdkDrawable *drawable)
     {
       int width, height;
   
-      gdk_drawable_get_size (drawable, &width, &height);
+      gdk_drawable_get_size (impl->wrapper, &width, &height);
 
       impl->cairo_surface = _gdk_windowing_create_cairo_surface (drawable, width, height);
       
@@ -1477,6 +1476,3 @@ gdk_x11_ref_cairo_surface (GdkDrawable *drawable)
 
   return impl->cairo_surface;
 }
-
-#define __GDK_DRAWABLE_X11_C__
-#include "gdkaliasdef.c"

@@ -38,8 +38,6 @@
 #include "gtkintl.h"
 #include "gtkprivate.h"
 
-#include "gtkalias.h"
-
 #include <gdk/gdk.h>
 #ifdef GDK_WINDOWING_X11
 #include <gdk/x11/gdkx.h>
@@ -167,6 +165,9 @@ gtk_application_default_action (GtkApplication *application,
   GtkApplicationPrivate *priv = application->priv;
   GtkAction *action;
 
+  if (!priv->main_actions)
+    return;
+
   action = gtk_action_group_get_action (priv->main_actions, action_name);
   if (action)
     gtk_action_activate (action);
@@ -210,27 +211,6 @@ gtk_application_format_activation_data (void)
   return g_variant_builder_end (&builder);
 }
 
-static GVariant *
-variant_from_argv (int    argc,
-		   char **argv)
-{
-  GVariantBuilder builder;
-  int i;
-
-  g_variant_builder_init (&builder, G_VARIANT_TYPE ("aay"));
-
-  for (i = 1; i < argc; i++)
-    {
-      guint8 *argv_bytes;
-
-      argv_bytes = (guint8*) argv[i];
-      g_variant_builder_add_value (&builder,
-				   g_variant_new_byte_array (argv_bytes, -1));
-    }
-  
-  return g_variant_builder_end (&builder);
-}
-
 /**
  * gtk_application_new:
  * @appid: System-dependent application identifier
@@ -255,7 +235,7 @@ gtk_application_new (const gchar   *appid,
 {
   GtkApplication *app;
   gint argc_for_app;
-  gchar **argv_for_app;
+  const gchar **argv_for_app;
   GVariant *argv_variant;
   GError *error = NULL;
 
@@ -267,11 +247,11 @@ gtk_application_new (const gchar   *appid,
     argc_for_app = 0;
 
   if (argv)
-    argv_for_app = *argv;
+    argv_for_app = (const gchar **) *argv;
   else
     argv_for_app = NULL;
 
-  argv_variant = variant_from_argv (argc_for_app, argv_for_app);
+  argv_variant = g_variant_new_bytestring_array (argv_for_app, argc_for_app);
 
   app = g_initable_new (GTK_TYPE_APPLICATION, 
 			NULL,
@@ -367,8 +347,9 @@ static gchar *default_title;
  *
  * Adds a window to the #GtkApplication.
  *
- * If the user closes all of the windows added to @app, the default
- * behaviour is to call gtk_application_quit().
+ * If all the windows managed by #GtkApplication are closed, the
+ * #GtkApplication will call gtk_application_quit(), and quit
+ * the application.
  *
  * If your application uses only a single toplevel window, you can
  * use gtk_application_get_window(). If you are using a sub-class
@@ -443,6 +424,28 @@ gtk_application_get_window (GtkApplication *app)
     return priv->default_window;
 
   return gtk_application_create_window (app);
+}
+
+/**
+ * gtk_application_get_windows:
+ * @app: a #GtkApplication
+ *
+ * Retrieves the list of windows previously registered with
+ * gtk_application_create_window() or gtk_application_add_window().
+ *
+ * Return value: (element-type GtkWindow) (transfer none): A pointer
+ * to the list of #GtkWindow<!-- -->s registered by this application,
+ * or %NULL. The returned #GSList is owned by the #GtkApplication
+ * and it should not be modified or freed directly.
+ *
+ * Since: 3.0
+ */
+G_CONST_RETURN GSList *
+gtk_application_get_windows (GtkApplication *app)
+{
+  g_return_val_if_fail (GTK_IS_APPLICATION (app), NULL);
+
+  return app->priv->windows;
 }
 
 /**
@@ -647,8 +650,9 @@ gtk_application_class_init (GtkApplicationClass *klass)
    * example, when a file browser launches your program to open a
    * file.  The raw operating system arguments are passed in the
    * variant @arguments.
+   *
+   * Since: 3.0
    */
-
   gtk_application_signals[ACTIVATED] =
     g_signal_new (g_intern_static_string ("activated"),
                   G_OBJECT_CLASS_TYPE (klass),
@@ -668,10 +672,30 @@ gtk_application_class_init (GtkApplicationClass *klass)
    * turn trigger this signal.
    *
    * The default handler for this signal exits the mainloop of the
-   * application.
+   * application. It is possible to override the default handler
+   * by simply returning %TRUE from a callback, e.g.:
+   *
+   * |[
+   * static gboolean
+   * my_application_quit (GtkApplication *application)
+   * {
+   *   /&ast; if some_condition is TRUE, do not quit &ast;/
+   *   if (some_condition)
+   *     return TRUE;
+   *
+   *   /&ast; this will cause the application to quit &ast;
+   *   return FALSE;
+   * }
+   *
+   *   g_signal_connect (application, "quit",
+   *                     G_CALLBACK (my_application_quit),
+   *                     NULL);
+   * ]|
    *
    * Returns: %TRUE if the signal has been handled, %FALSE to continue
    *   signal emission
+   *
+   * Since: 3.0
    */
   gtk_application_signals[QUIT] =
     g_signal_new (g_intern_static_string ("quit"),
@@ -695,6 +719,8 @@ gtk_application_class_init (GtkApplicationClass *klass)
    * turn trigger this signal.
    *
    * The signal is never emitted for disabled actions.
+   *
+   * Since: 3.0
    */
   gtk_application_signals[ACTION] =
     g_signal_new (g_intern_static_string ("action"),
@@ -708,6 +734,3 @@ gtk_application_class_init (GtkApplicationClass *klass)
                  
   g_type_class_add_private (gobject_class, sizeof (GtkApplicationPrivate));
 }
-
-#define __GTK_APPLICATION_C__
-#include "gtkaliasdef.c"

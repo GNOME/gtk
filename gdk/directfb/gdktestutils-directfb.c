@@ -35,7 +35,6 @@
 
 #include <gdk/gdktestutils.h>
 #include <gdk/gdkkeysyms.h>
-#include "gdkalias.h"
 
 
 static DFBInputDeviceKeySymbol
@@ -262,6 +261,3 @@ gdk_test_simulate_button (GdkWindow      *window,
 
   return TRUE;
 }
-
-#define __GDK_TEST_UTILS_X11_C__
-#include "gdkaliasdef.c"

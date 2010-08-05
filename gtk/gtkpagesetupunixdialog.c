@@ -54,8 +54,6 @@
 #include "gtkprintbackend.h"
 #include "gtkpapersize.h"
 #include "gtkprintutils.h"
-#include "gtkalias.h"
-
 
 /**
  * SECTION:gtkpagesetupunixdialog
@@ -72,7 +70,7 @@
  */
 
 
-struct GtkPageSetupUnixDialogPrivate
+struct _GtkPageSetupUnixDialogPrivate
 {
   GtkListStore *printer_list;
   GtkListStore *page_setup_list;
@@ -113,9 +111,6 @@ enum {
 };
 
 G_DEFINE_TYPE (GtkPageSetupUnixDialog, gtk_page_setup_unix_dialog, GTK_TYPE_DIALOG)
-
-#define GTK_PAGE_SETUP_UNIX_DIALOG_GET_PRIVATE(o)  \
-   (G_TYPE_INSTANCE_GET_PRIVATE ((o), GTK_TYPE_PAGE_SETUP_UNIX_DIALOG, GtkPageSetupUnixDialogPrivate))
 
 static void gtk_page_setup_unix_dialog_finalize  (GObject                *object);
 static void populate_dialog                      (GtkPageSetupUnixDialog *dialog);
@@ -170,7 +165,9 @@ gtk_page_setup_unix_dialog_init (GtkPageSetupUnixDialog *dialog)
   GtkTreeIter iter;
   gchar *tmp;
 
-  priv = dialog->priv = GTK_PAGE_SETUP_UNIX_DIALOG_GET_PRIVATE (dialog);
+  priv = dialog->priv = G_TYPE_INSTANCE_GET_PRIVATE (dialog,
+                                                     GTK_TYPE_PAGE_SETUP_UNIX_DIALOG,
+                                                     GtkPageSetupUnixDialogPrivate);
 
   priv->print_backends = NULL;
 
@@ -889,21 +886,25 @@ populate_dialog (GtkPageSetupUnixDialog *ps_dialog)
   GtkPageSetupUnixDialogPrivate *priv = ps_dialog->priv;
   GtkDialog *dialog = GTK_DIALOG (ps_dialog);
   GtkWidget *table, *label, *combo, *radio_button;
+  GtkWidget *action_area, *content_area;
   GtkCellRenderer *cell;
 
   gtk_window_set_resizable (GTK_WINDOW (dialog), FALSE);
 
+  content_area = gtk_dialog_get_content_area (dialog);
+  action_area = gtk_dialog_get_action_area (dialog);
+
   gtk_dialog_set_has_separator (dialog, FALSE);
   gtk_container_set_border_width (GTK_CONTAINER (dialog), 5);
-  gtk_box_set_spacing (GTK_BOX (dialog->vbox), 2); /* 2 * 5 + 2 = 12 */
-  gtk_container_set_border_width (GTK_CONTAINER (dialog->action_area), 5);
-  gtk_box_set_spacing (GTK_BOX (dialog->action_area), 6);
+  gtk_box_set_spacing (GTK_BOX (content_area), 2); /* 2 * 5 + 2 = 12 */
+  gtk_container_set_border_width (GTK_CONTAINER (action_area), 5);
+  gtk_box_set_spacing (GTK_BOX (action_area), 6);
 
   table = gtk_table_new (5, 4, FALSE);
   gtk_table_set_row_spacings (GTK_TABLE (table), 6);
   gtk_table_set_col_spacings (GTK_TABLE (table), 12);
   gtk_container_set_border_width (GTK_CONTAINER (table), 5);
-  gtk_box_pack_start (GTK_BOX (dialog->vbox), table, TRUE, TRUE, 0);
+  gtk_box_pack_start (GTK_BOX (content_area), table, TRUE, TRUE, 0);
   gtk_widget_show (table);
 
   label = gtk_label_new_with_mnemonic (_("_Format for:"));
@@ -1207,6 +1208,3 @@ gtk_page_setup_unix_dialog_get_print_settings (GtkPageSetupUnixDialog *dialog)
 
   return priv->print_settings;
 }
-
-#define __GTK_PAGE_SETUP_UNIX_DIALOG_C__
-#include "gtkaliasdef.c"

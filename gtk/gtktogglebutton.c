@@ -33,7 +33,7 @@
 #include "gtkactivatable.h"
 #include "gtkprivate.h"
 #include "gtkintl.h"
-#include "gtkalias.h"
+
 
 #define DEFAULT_LEFT_POS  4
 #define DEFAULT_TOP_POS   4
@@ -421,7 +421,7 @@ gtk_toggle_button_expose (GtkWidget      *widget,
 {
   if (gtk_widget_is_drawable (widget))
     {
-      GtkWidget *child = GTK_BIN (widget)->child;
+      GtkWidget *child = gtk_bin_get_child (GTK_BIN (widget));
       GtkButton *button = GTK_BUTTON (widget);
       GtkStateType state_type;
       GtkShadowType shadow_type;
@@ -531,6 +531,3 @@ gtk_toggle_button_update_state (GtkButton *button)
   _gtk_button_set_depressed (button, depressed); 
   gtk_widget_set_state (GTK_WIDGET (toggle_button), new_state);
 }
-
-#define __GTK_TOGGLE_BUTTON_C__
-#include "gtkaliasdef.c"

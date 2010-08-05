@@ -199,6 +199,15 @@ The standard cursors available.
 @Returns: 
 
 
+<!-- ##### FUNCTION gdk_cursor_get_cursor_type ##### -->
+<para>
+
+</para>
+
+@cursor: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gdk_cursor_ref ##### -->
 <para>
 

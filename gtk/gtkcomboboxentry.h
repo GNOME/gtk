@@ -45,7 +45,7 @@ struct _GtkComboBoxEntry
   GtkComboBox parent_instance;
 
   /*< private >*/
-  GtkComboBoxEntryPrivate *GSEAL (priv);
+  GtkComboBoxEntryPrivate *priv;
 };
 
 struct _GtkComboBoxEntryClass

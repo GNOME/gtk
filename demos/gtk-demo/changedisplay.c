@@ -229,6 +229,7 @@ static void
 open_display_cb (GtkWidget         *button,
 		 ChangeDisplayInfo *info)
 {
+  GtkWidget *content_area;
   GtkWidget *dialog;
   GtkWidget *display_entry;
   GtkWidget *dialog_label;
@@ -248,11 +249,13 @@ open_display_cb (GtkWidget         *button,
   dialog_label =
     gtk_label_new ("Please enter the name of\nthe new display\n");
 
-  gtk_container_add (GTK_CONTAINER (GTK_DIALOG (dialog)->vbox), dialog_label);
-  gtk_container_add (GTK_CONTAINER (GTK_DIALOG (dialog)->vbox), display_entry);
+  content_area = gtk_dialog_get_content_area (GTK_DIALOG (dialog));
+
+  gtk_container_add (GTK_CONTAINER (content_area), dialog_label);
+  gtk_container_add (GTK_CONTAINER (content_area), display_entry);
 
   gtk_widget_grab_focus (display_entry);
-  gtk_widget_show_all (GTK_BIN (dialog)->child);
+  gtk_widget_show_all (gtk_bin_get_child (GTK_BIN (dialog)));
 
   while (!result)
     {
@@ -599,6 +602,7 @@ do_changedisplay (GtkWidget *do_widget)
 
   if (!info)
     {
+      GtkWidget *content_area;
       GtkWidget *vbox;
       GtkWidget *frame;
 
@@ -618,11 +622,11 @@ do_changedisplay (GtkWidget *do_widget)
       g_signal_connect (info->window, "destroy",
 			G_CALLBACK (destroy_cb), &info);
 
+      content_area = gtk_dialog_get_content_area (GTK_DIALOG (info->window));
+
       vbox = gtk_vbox_new (FALSE, 5);
       gtk_container_set_border_width (GTK_CONTAINER (vbox), 8);
-
-      gtk_box_pack_start (GTK_BOX (GTK_DIALOG (info->window)->vbox), vbox,
-			  TRUE, TRUE, 0);
+      gtk_box_pack_start (GTK_BOX (content_area), vbox, TRUE, TRUE, 0);
 
       frame = create_display_frame (info);
       gtk_box_pack_start (GTK_BOX (vbox), frame, TRUE, TRUE, 0);

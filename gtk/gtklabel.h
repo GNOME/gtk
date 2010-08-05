@@ -47,6 +47,7 @@ G_BEGIN_DECLS
 
 
 typedef struct _GtkLabel       GtkLabel;
+typedef struct _GtkLabelPriv   GtkLabelPriv;
 typedef struct _GtkLabelClass  GtkLabelClass;
 
 typedef struct _GtkLabelSelectionInfo GtkLabelSelectionInfo;
@@ -56,31 +57,7 @@ struct _GtkLabel
   GtkMisc misc;
 
   /*< private >*/
-  gchar  *GSEAL (label);
-  guint   GSEAL (jtype)            : 2;
-  guint   GSEAL (wrap)             : 1;
-  guint   GSEAL (use_underline)    : 1;
-  guint   GSEAL (use_markup)       : 1;
-  guint   GSEAL (ellipsize)        : 3;
-  guint   GSEAL (single_line_mode) : 1;
-  guint   GSEAL (have_transform)   : 1;
-  guint   GSEAL (in_click)         : 1;
-  guint   GSEAL (wrap_mode)        : 3;
-  guint   GSEAL (pattern_set)      : 1;
-  guint   GSEAL (track_links)      : 1;
-
-  guint   GSEAL (mnemonic_keyval);
-
-  gchar  *GSEAL (text);
-  PangoAttrList *GSEAL (attrs);
-  PangoAttrList *GSEAL (effective_attrs);
-
-  PangoLayout *GSEAL (layout);
-
-  GtkWidget *GSEAL (mnemonic_widget);
-  GtkWindow *GSEAL (mnemonic_window);
-
-  GtkLabelSelectionInfo *GSEAL (select_info);
+  GtkLabelPriv *priv;
 };
 
 struct _GtkLabelClass

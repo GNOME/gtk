@@ -28,7 +28,7 @@
 
 #include "gtkorientable.h"
 #include "gtkvbox.h"
-#include "gtkalias.h"
+
 
 /**
  * SECTION:gtkvbox
@@ -78,6 +78,3 @@ gtk_vbox_new (gboolean homogeneous,
                        "homogeneous", homogeneous ? TRUE : FALSE,
                        NULL);
 }
-
-#define __GTK_VBOX_C__
-#include "gtkaliasdef.c"

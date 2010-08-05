@@ -48,11 +48,6 @@ only be accessed using the functions below.
 </para>
 
 
-<!-- ##### ARG GtkFontSelection:font ##### -->
-<para>
-
-</para>
-
 <!-- ##### ARG GtkFontSelection:font-name ##### -->
 <para>
 

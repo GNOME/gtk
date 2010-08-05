@@ -31,7 +31,6 @@
 #include "gtktreedatalist.h"
 #include "gtktreednd.h"
 #include "gtktreemodel.h"
-#include "gtkalias.h"
 
 /*** Structure: how GtkFileSystemModel works
  *

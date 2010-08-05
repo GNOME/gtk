@@ -47,7 +47,7 @@ struct _GtkExpander
 {
   GtkBin              bin;
 
-  GtkExpanderPrivate *GSEAL (priv);
+  GtkExpanderPrivate *priv;
 };
 
 struct _GtkExpanderClass

@@ -31,7 +31,7 @@
 
 #include "gtkvscale.h"
 #include "gtkorientable.h"
-#include "gtkalias.h"
+
 
 /**
  * SECTION:gtkvscale
@@ -129,6 +129,3 @@ gtk_vscale_new_with_range (gdouble min,
 
   return GTK_WIDGET (scale);
 }
-
-#define __GTK_VSCALE_C__
-#include "gtkaliasdef.c"

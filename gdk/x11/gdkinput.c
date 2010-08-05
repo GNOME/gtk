@@ -31,7 +31,7 @@
 #include "gdkscreen-x11.h"
 #include "gdkdisplay-x11.h"
 #include "gdkwindow.h"
-#include "gdkalias.h"
+
 
 /* Addition used for extension_events mask */
 #define GDK_ALL_DEVICES_MASK (1<<30)
@@ -229,6 +229,3 @@ _gdk_input_check_extension_events (GdkDevice *device)
       _gdk_input_select_device_events (input_window->impl_window, device);
     }
 }
-
-#define __GDK_INPUT_C__
-#include "gdkaliasdef.c"

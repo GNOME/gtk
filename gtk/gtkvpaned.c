@@ -28,7 +28,7 @@
 
 #include "gtkorientable.h"
 #include "gtkvpaned.h"
-#include "gtkalias.h"
+
 
 /**
  * SECTION:gtkvpaned
@@ -67,6 +67,3 @@ gtk_vpaned_new (void)
 {
   return g_object_new (GTK_TYPE_VPANED, NULL);
 }
-
-#define __GTK_VPANED_C__
-#include "gtkaliasdef.c"

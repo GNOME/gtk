@@ -543,9 +543,9 @@ gdk_win32_gc_set_dashes (GdkGC *gc,
 }
 
 void
-_gdk_windowing_gc_set_clip_region (GdkGC           *gc,
+_gdk_windowing_gc_set_clip_region (GdkGC                *gc,
                                    const cairo_region_t *region,
-				   gboolean         reset_origin)
+				   gboolean              reset_origin)
 {
   GdkGCWin32 *win32_gc = GDK_GC_WIN32 (gc);
 
@@ -556,9 +556,9 @@ _gdk_windowing_gc_set_clip_region (GdkGC           *gc,
     {
       GDK_NOTE (GC, g_print ("gdk_gc_set_clip_region: %p: %s\n",
 			     win32_gc,
-			     _gdk_win32_gdkregion_to_string (region)));
+			     _gdk_win32_cairo_region_to_string (region)));
 
-      win32_gc->hcliprgn = _gdk_win32_gdkregion_to_hrgn (region, 0, 0);
+      win32_gc->hcliprgn = _gdk_win32_cairo_region_to_hrgn (region, 0, 0);
       win32_gc->values_mask |= GDK_GC_CLIP_MASK;
     }
   else
@@ -1055,16 +1055,16 @@ _gdk_win32_bitmap_to_hrgn (GdkPixmap *pixmap)
 }
 
 HRGN
-_gdk_win32_gdkregion_to_hrgn (const cairo_region_t *region,
-			      gint             x_origin,
-			      gint             y_origin)
+_gdk_win32_cairo_region_to_hrgn (const cairo_region_t *region,
+				 gint                  x_origin,
+				 gint                  y_origin)
 {
   HRGN hrgn;
   RGNDATA *rgndata;
   RECT *rect;
-  cairo_region_tBox *boxes = region->rects;
-  guint nbytes =
-    sizeof (RGNDATAHEADER) + (sizeof (RECT) * region->numRects);
+  cairo_rectangle_int_t cairo_rect;
+  guint nbytes = sizeof (RGNDATAHEADER)
+                  + (sizeof (RECT) * cairo_region_num_rectangles (region));
   int i;
 
   rgndata = g_malloc (nbytes);
@@ -1074,14 +1074,15 @@ _gdk_win32_gdkregion_to_hrgn (const cairo_region_t *region,
   SetRect (&rgndata->rdh.rcBound,
 	   G_MAXLONG, G_MAXLONG, G_MINLONG, G_MINLONG);
 
-  for (i = 0; i < region->numRects; i++)
+  for (i = 0; i < cairo_region_num_rectangles (region); i++)
     {
       rect = ((RECT *) rgndata->Buffer) + rgndata->rdh.nCount++;
+      cairo_region_get_rectangle (region, i, &cairo_rect);
 
-      rect->left = boxes[i].x1 + x_origin;
-      rect->right = boxes[i].x2 + x_origin;
-      rect->top = boxes[i].y1 + y_origin;
-      rect->bottom = boxes[i].y2 + y_origin;
+      rect->left = cairo_rect.x + x_origin;
+      rect->right = cairo_rect.x + cairo_rect.width + x_origin;
+      rect->top = cairo_rect.y + y_origin;
+      rect->bottom = cairo_rect.y + cairo_rect.height + y_origin;
 
       if (rect->left < rgndata->rdh.rcBound.left)
 	rgndata->rdh.rcBound.left = rect->left;

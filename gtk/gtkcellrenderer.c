@@ -24,7 +24,7 @@
 #include "gtkmarshalers.h"
 #include "gtkprivate.h"
 #include "gtktreeprivate.h"
-#include "gtkalias.h"
+
 
 static void gtk_cell_renderer_init          (GtkCellRenderer      *cell);
 static void gtk_cell_renderer_class_init    (GtkCellRendererClass *class);
@@ -62,11 +62,25 @@ static void gtk_cell_renderer_get_width_for_height     (GtkCellSizeRequest      
 
 
 
-#define GTK_CELL_RENDERER_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), GTK_TYPE_CELL_RENDERER, GtkCellRendererPrivate))
-
-typedef struct _GtkCellRendererPrivate GtkCellRendererPrivate;
-struct _GtkCellRendererPrivate
+struct _GtkCellRendererPriv
 {
+  gfloat xalign;
+  gfloat yalign;
+
+  gint width;
+  gint height;
+
+  guint16 xpad;
+  guint16 ypad;
+
+  guint mode                : 2;
+  guint visible             : 1;
+  guint is_expander         : 1;
+  guint is_expanded         : 1;
+  guint cell_background_set : 1;
+  guint sensitive           : 1;
+  guint editing             : 1;
+
   GdkColor cell_background;
 };
 
@@ -145,18 +159,25 @@ gtk_cell_renderer_get_type (void)
 static void
 gtk_cell_renderer_init (GtkCellRenderer *cell)
 {
-  cell->mode = GTK_CELL_RENDERER_MODE_INERT;
-  cell->visible = TRUE;
-  cell->width = -1;
-  cell->height = -1;
-  cell->xalign = 0.5;
-  cell->yalign = 0.5;
-  cell->xpad = 0;
-  cell->ypad = 0;
-  cell->sensitive = TRUE;
-  cell->is_expander = FALSE;
-  cell->is_expanded = FALSE;
-  cell->editing = FALSE;
+  GtkCellRendererPriv *priv;
+
+  cell->priv = G_TYPE_INSTANCE_GET_PRIVATE (cell,
+                                            GTK_TYPE_CELL_RENDERER,
+                                            GtkCellRendererPriv);
+  priv = cell->priv;
+
+  priv->mode = GTK_CELL_RENDERER_MODE_INERT;
+  priv->visible = TRUE;
+  priv->width = -1;
+  priv->height = -1;
+  priv->xalign = 0.5;
+  priv->yalign = 0.5;
+  priv->xpad = 0;
+  priv->ypad = 0;
+  priv->sensitive = TRUE;
+  priv->is_expander = FALSE;
+  priv->is_expanded = FALSE;
+  priv->editing = FALSE;
 }
 
 static void
@@ -369,7 +390,7 @@ gtk_cell_renderer_class_init (GtkCellRendererClass *class)
                 P_("Cell background set"),
                 P_("Whether this tag affects the cell background color"));
 
-  g_type_class_add_private (object_class, sizeof (GtkCellRendererPrivate));
+  g_type_class_add_private (class, sizeof (GtkCellRendererPriv));
 }
 
 static void
@@ -379,45 +400,45 @@ gtk_cell_renderer_get_property (GObject     *object,
 				GParamSpec  *pspec)
 {
   GtkCellRenderer *cell = GTK_CELL_RENDERER (object);
-  GtkCellRendererPrivate *priv = GTK_CELL_RENDERER_GET_PRIVATE (object);
+  GtkCellRendererPriv *priv = cell->priv;
 
   switch (param_id)
     {
     case PROP_MODE:
-      g_value_set_enum (value, cell->mode);
+      g_value_set_enum (value, priv->mode);
       break;
     case PROP_VISIBLE:
-      g_value_set_boolean (value, cell->visible);
+      g_value_set_boolean (value, priv->visible);
       break;
     case PROP_SENSITIVE:
-      g_value_set_boolean (value, cell->sensitive);
+      g_value_set_boolean (value, priv->sensitive);
       break;
     case PROP_EDITING:
-      g_value_set_boolean (value, cell->editing);
+      g_value_set_boolean (value, priv->editing);
       break;
     case PROP_XALIGN:
-      g_value_set_float (value, cell->xalign);
+      g_value_set_float (value, priv->xalign);
       break;
     case PROP_YALIGN:
-      g_value_set_float (value, cell->yalign);
+      g_value_set_float (value, priv->yalign);
       break;
     case PROP_XPAD:
-      g_value_set_uint (value, cell->xpad);
+      g_value_set_uint (value, priv->xpad);
       break;
     case PROP_YPAD:
-      g_value_set_uint (value, cell->ypad);
+      g_value_set_uint (value, priv->ypad);
       break;
     case PROP_WIDTH:
-      g_value_set_int (value, cell->width);
+      g_value_set_int (value, priv->width);
       break;
     case PROP_HEIGHT:
-      g_value_set_int (value, cell->height);
+      g_value_set_int (value, priv->height);
       break;
     case PROP_IS_EXPANDER:
-      g_value_set_boolean (value, cell->is_expander);
+      g_value_set_boolean (value, priv->is_expander);
       break;
     case PROP_IS_EXPANDED:
-      g_value_set_boolean (value, cell->is_expanded);
+      g_value_set_boolean (value, priv->is_expanded);
       break;
     case PROP_CELL_BACKGROUND_GDK:
       {
@@ -431,7 +452,7 @@ gtk_cell_renderer_get_property (GObject     *object,
       }
       break;
     case PROP_CELL_BACKGROUND_SET:
-      g_value_set_boolean (value, cell->cell_background_set);
+      g_value_set_boolean (value, priv->cell_background_set);
       break;
     case PROP_CELL_BACKGROUND:
     default:
@@ -448,44 +469,45 @@ gtk_cell_renderer_set_property (GObject      *object,
 				GParamSpec   *pspec)
 {
   GtkCellRenderer *cell = GTK_CELL_RENDERER (object);
+  GtkCellRendererPriv *priv = cell->priv;
 
   switch (param_id)
     {
     case PROP_MODE:
-      cell->mode = g_value_get_enum (value);
+      priv->mode = g_value_get_enum (value);
       break;
     case PROP_VISIBLE:
-      cell->visible = g_value_get_boolean (value);
+      priv->visible = g_value_get_boolean (value);
       break;
     case PROP_SENSITIVE:
-      cell->sensitive = g_value_get_boolean (value);
+      priv->sensitive = g_value_get_boolean (value);
       break;
     case PROP_EDITING:
-      cell->editing = g_value_get_boolean (value);
+      priv->editing = g_value_get_boolean (value);
       break;
     case PROP_XALIGN:
-      cell->xalign = g_value_get_float (value);
+      priv->xalign = g_value_get_float (value);
       break;
     case PROP_YALIGN:
-      cell->yalign = g_value_get_float (value);
+      priv->yalign = g_value_get_float (value);
       break;
     case PROP_XPAD:
-      cell->xpad = g_value_get_uint (value);
+      priv->xpad = g_value_get_uint (value);
       break;
     case PROP_YPAD:
-      cell->ypad = g_value_get_uint (value);
+      priv->ypad = g_value_get_uint (value);
       break;
     case PROP_WIDTH:
-      cell->width = g_value_get_int (value);
+      priv->width = g_value_get_int (value);
       break;
     case PROP_HEIGHT:
-      cell->height = g_value_get_int (value);
+      priv->height = g_value_get_int (value);
       break;
     case PROP_IS_EXPANDER:
-      cell->is_expander = g_value_get_boolean (value);
+      priv->is_expander = g_value_get_boolean (value);
       break;
     case PROP_IS_EXPANDED:
-      cell->is_expanded = g_value_get_boolean (value);
+      priv->is_expanded = g_value_get_boolean (value);
       break;
     case PROP_CELL_BACKGROUND:
       {
@@ -505,7 +527,7 @@ gtk_cell_renderer_set_property (GObject      *object,
       set_cell_bg_color (cell, g_value_get_boxed (value));
       break;
     case PROP_CELL_BACKGROUND_SET:
-      cell->cell_background_set = g_value_get_boolean (value);
+      priv->cell_background_set = g_value_get_boolean (value);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
@@ -517,13 +539,13 @@ static void
 set_cell_bg_color (GtkCellRenderer *cell,
 		   GdkColor        *color)
 {
-  GtkCellRendererPrivate *priv = GTK_CELL_RENDERER_GET_PRIVATE (cell);
+  GtkCellRendererPriv *priv = cell->priv;
 
   if (color)
     {
-      if (!cell->cell_background_set)
+      if (!priv->cell_background_set)
         {
-	  cell->cell_background_set = TRUE;
+	  priv->cell_background_set = TRUE;
 	  g_object_notify (G_OBJECT (cell), "cell-background-set");
 	}
 
@@ -533,9 +555,9 @@ set_cell_bg_color (GtkCellRenderer *cell,
     }
   else
     {
-      if (cell->cell_background_set)
+      if (priv->cell_background_set)
         {
-	  cell->cell_background_set = FALSE;
+	  priv->cell_background_set = FALSE;
 	  g_object_notify (G_OBJECT (cell), "cell-background-set");
 	}
     }
@@ -618,14 +640,14 @@ gtk_cell_renderer_render (GtkCellRenderer      *cell,
 			  GtkCellRendererState  flags)
 {
   gboolean selected = FALSE;
-  GtkCellRendererPrivate *priv = GTK_CELL_RENDERER_GET_PRIVATE (cell);
+  GtkCellRendererPriv *priv = cell->priv;
 
   g_return_if_fail (GTK_IS_CELL_RENDERER (cell));
   g_return_if_fail (GTK_CELL_RENDERER_GET_CLASS (cell)->render != NULL);
 
   selected = (flags & GTK_CELL_RENDERER_SELECTED) == GTK_CELL_RENDERER_SELECTED;
 
-  if (cell->cell_background_set && !selected)
+  if (priv->cell_background_set && !selected)
     {
       cairo_t *cr = gdk_cairo_create (window);
 
@@ -671,9 +693,13 @@ gtk_cell_renderer_activate (GtkCellRenderer      *cell,
 			    const GdkRectangle   *cell_area,
 			    GtkCellRendererState  flags)
 {
+  GtkCellRendererPriv *priv;
+
   g_return_val_if_fail (GTK_IS_CELL_RENDERER (cell), FALSE);
 
-  if (cell->mode != GTK_CELL_RENDERER_MODE_ACTIVATABLE)
+  priv = cell->priv;
+
+  if (priv->mode != GTK_CELL_RENDERER_MODE_ACTIVATABLE)
     return FALSE;
 
   if (GTK_CELL_RENDERER_GET_CLASS (cell)->activate == NULL)
@@ -713,11 +739,14 @@ gtk_cell_renderer_start_editing (GtkCellRenderer      *cell,
 				 GtkCellRendererState  flags)
 
 {
+  GtkCellRendererPriv *priv;
   GtkCellEditable *editable;
 
   g_return_val_if_fail (GTK_IS_CELL_RENDERER (cell), NULL);
 
-  if (cell->mode != GTK_CELL_RENDERER_MODE_EDITABLE)
+  priv = cell->priv;
+
+  if (priv->mode != GTK_CELL_RENDERER_MODE_EDITABLE)
     return NULL;
 
   if (GTK_CELL_RENDERER_GET_CLASS (cell)->start_editing == NULL)
@@ -735,7 +764,7 @@ gtk_cell_renderer_start_editing (GtkCellRenderer      *cell,
 		 cell_renderer_signals[EDITING_STARTED], 0,
 		 editable, path);
 
-  cell->editing = TRUE;
+  priv->editing = TRUE;
 
   return editable;
 }
@@ -753,22 +782,26 @@ gtk_cell_renderer_set_fixed_size (GtkCellRenderer *cell,
 				  gint             width,
 				  gint             height)
 {
+  GtkCellRendererPriv *priv;
+
   g_return_if_fail (GTK_IS_CELL_RENDERER (cell));
   g_return_if_fail (width >= -1 && height >= -1);
 
-  if ((width != cell->width) || (height != cell->height))
+  priv = cell->priv;
+
+  if ((width != priv->width) || (height != priv->height))
     {
       g_object_freeze_notify (G_OBJECT (cell));
 
-      if (width != cell->width)
+      if (width != priv->width)
         {
-          cell->width = width;
+          priv->width = width;
           g_object_notify (G_OBJECT (cell), "width");
         }
 
-      if (height != cell->height)
+      if (height != priv->height)
         {
-          cell->height = height;
+          priv->height = height;
           g_object_notify (G_OBJECT (cell), "height");
         }
 
@@ -789,12 +822,16 @@ gtk_cell_renderer_get_fixed_size (GtkCellRenderer *cell,
 				  gint            *width,
 				  gint            *height)
 {
+  GtkCellRendererPriv *priv;
+
   g_return_if_fail (GTK_IS_CELL_RENDERER (cell));
 
+  priv = cell->priv;
+
   if (width)
-    *width = cell->width;
+    *width = priv->width;
   if (height)
-    *height = cell->height;
+    *height = priv->height;
 }
 
 /**
@@ -812,23 +849,27 @@ gtk_cell_renderer_set_alignment (GtkCellRenderer *cell,
                                  gfloat           xalign,
                                  gfloat           yalign)
 {
+  GtkCellRendererPriv *priv;
+
   g_return_if_fail (GTK_IS_CELL_RENDERER (cell));
   g_return_if_fail (xalign >= 0.0 && xalign <= 1.0);
   g_return_if_fail (yalign >= 0.0 && yalign <= 1.0);
 
-  if ((xalign != cell->xalign) || (yalign != cell->yalign))
+  priv = cell->priv;
+
+  if ((xalign != priv->xalign) || (yalign != priv->yalign))
     {
       g_object_freeze_notify (G_OBJECT (cell));
 
-      if (xalign != cell->xalign)
+      if (xalign != priv->xalign)
         {
-          cell->xalign = xalign;
+          priv->xalign = xalign;
           g_object_notify (G_OBJECT (cell), "xalign");
         }
 
-      if (yalign != cell->yalign)
+      if (yalign != priv->yalign)
         {
-          cell->yalign = yalign;
+          priv->yalign = yalign;
           g_object_notify (G_OBJECT (cell), "yalign");
         }
 
@@ -851,12 +892,16 @@ gtk_cell_renderer_get_alignment (GtkCellRenderer *cell,
                                  gfloat          *xalign,
                                  gfloat          *yalign)
 {
+  GtkCellRendererPriv *priv;
+
   g_return_if_fail (GTK_IS_CELL_RENDERER (cell));
 
+  priv = cell->priv;
+
   if (xalign)
-    *xalign = cell->xalign;
+    *xalign = priv->xalign;
   if (yalign)
-    *yalign = cell->yalign;
+    *yalign = priv->yalign;
 }
 
 /**
@@ -874,22 +919,26 @@ gtk_cell_renderer_set_padding (GtkCellRenderer *cell,
                                gint             xpad,
                                gint             ypad)
 {
+  GtkCellRendererPriv *priv;
+
   g_return_if_fail (GTK_IS_CELL_RENDERER (cell));
   g_return_if_fail (xpad >= 0 && xpad >= 0);
 
-  if ((xpad != cell->xpad) || (ypad != cell->ypad))
+  priv = cell->priv;
+
+  if ((xpad != priv->xpad) || (ypad != priv->ypad))
     {
       g_object_freeze_notify (G_OBJECT (cell));
 
-      if (xpad != cell->xpad)
+      if (xpad != priv->xpad)
         {
-          cell->xpad = xpad;
+          priv->xpad = xpad;
           g_object_notify (G_OBJECT (cell), "xpad");
         }
 
-      if (ypad != cell->ypad)
+      if (ypad != priv->ypad)
         {
-          cell->ypad = ypad;
+          priv->ypad = ypad;
           g_object_notify (G_OBJECT (cell), "ypad");
         }
 
@@ -912,12 +961,16 @@ gtk_cell_renderer_get_padding (GtkCellRenderer *cell,
                                gint            *xpad,
                                gint            *ypad)
 {
+  GtkCellRendererPriv *priv;
+
   g_return_if_fail (GTK_IS_CELL_RENDERER (cell));
 
+  priv = cell->priv;
+
   if (xpad)
-    *xpad = cell->xpad;
+    *xpad = priv->xpad;
   if (ypad)
-    *ypad = cell->ypad;
+    *ypad = priv->ypad;
 }
 
 /**
@@ -933,11 +986,15 @@ void
 gtk_cell_renderer_set_visible (GtkCellRenderer *cell,
                                gboolean         visible)
 {
+  GtkCellRendererPriv *priv;
+
   g_return_if_fail (GTK_IS_CELL_RENDERER (cell));
 
-  if (cell->visible != visible)
+  priv = cell->priv;
+
+  if (priv->visible != visible)
     {
-      cell->visible = visible ? TRUE : FALSE;
+      priv->visible = visible ? TRUE : FALSE;
       g_object_notify (G_OBJECT (cell), "visible");
     }
 }
@@ -957,7 +1014,7 @@ gtk_cell_renderer_get_visible (GtkCellRenderer *cell)
 {
   g_return_val_if_fail (GTK_IS_CELL_RENDERER (cell), FALSE);
 
-  return cell->visible;
+  return cell->priv->visible;
 }
 
 /**
@@ -973,11 +1030,15 @@ void
 gtk_cell_renderer_set_sensitive (GtkCellRenderer *cell,
                                  gboolean         sensitive)
 {
+  GtkCellRendererPriv *priv;
+
   g_return_if_fail (GTK_IS_CELL_RENDERER (cell));
 
-  if (cell->sensitive != sensitive)
+  priv = cell->priv;
+
+  if (priv->sensitive != sensitive)
     {
-      cell->sensitive = sensitive ? TRUE : FALSE;
+      priv->sensitive = sensitive ? TRUE : FALSE;
       g_object_notify (G_OBJECT (cell), "sensitive");
     }
 }
@@ -997,7 +1058,7 @@ gtk_cell_renderer_get_sensitive (GtkCellRenderer *cell)
 {
   g_return_val_if_fail (GTK_IS_CELL_RENDERER (cell), FALSE);
 
-  return cell->sensitive;
+  return cell->priv->sensitive;
 }
 
 /**
@@ -1019,11 +1080,15 @@ void
 gtk_cell_renderer_stop_editing (GtkCellRenderer *cell,
 				gboolean         canceled)
 {
+  GtkCellRendererPriv *priv;
+
   g_return_if_fail (GTK_IS_CELL_RENDERER (cell));
 
-  if (cell->editing)
+  priv = cell->priv;
+
+  if (priv->editing)
     {
-      cell->editing = FALSE;
+      priv->editing = FALSE;
       if (canceled)
 	g_signal_emit (cell, cell_renderer_signals[EDITING_CANCELED], 0);
     }
@@ -1134,24 +1199,25 @@ _gtk_cell_renderer_calc_offset    (GtkCellRenderer      *cell,
 				   gint                 *x_offset,
 				   gint                 *y_offset)
 {
+  GtkCellRendererPriv *priv;
+
   g_return_if_fail (GTK_IS_CELL_RENDERER (cell));
   g_return_if_fail (cell_area != NULL);
   g_return_if_fail (x_offset || y_offset);
 
+  priv = cell->priv;
+
   if (x_offset)
     {
       *x_offset = (((direction == GTK_TEXT_DIR_RTL) ?
-		    (1.0 - cell->xalign) : cell->xalign) * 
+		    (1.0 - priv->xalign) : priv->xalign) * 
 		   (cell_area->width - width));
       *x_offset = MAX (*x_offset, 0);
     }
   if (y_offset)
     {
-      *y_offset = (cell->yalign *
+      *y_offset = (priv->yalign *
 		   (cell_area->height - height));
       *y_offset = MAX (*y_offset, 0);
     }
 }
-
-#define __GTK_CELL_RENDERER_C__
-#include "gtkaliasdef.c"

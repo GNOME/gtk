@@ -34,7 +34,7 @@ test_click_expander (void)
   gboolean expanded;
   gboolean simsuccess;
   gtk_container_add (GTK_CONTAINER (expander), label);
-  gtk_container_add (GTK_CONTAINER (GTK_BIN (window)->child), expander);
+  gtk_container_add (GTK_CONTAINER (gtk_bin_get_child (GTK_BIN (window))), expander);
   gtk_widget_show (expander);
   gtk_widget_show (label);
   gtk_widget_show_now (window);
@@ -66,7 +66,7 @@ test_click_content_widget (void)
   gboolean expanded;
   gboolean simsuccess;
   gtk_container_add (GTK_CONTAINER (expander), entry);
-  gtk_container_add (GTK_CONTAINER (GTK_BIN (window)->child), expander);
+  gtk_container_add (GTK_CONTAINER (gtk_bin_get_child (GTK_BIN (window))), expander);
   gtk_expander_set_expanded (GTK_EXPANDER (expander), TRUE);
   gtk_widget_show (expander);
   gtk_widget_show (entry);

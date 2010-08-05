@@ -25,8 +25,6 @@
 #include "gtkintl.h"
 #include "gtkprivate.h"
 
-#include "gtkalias.h"
-
 typedef struct _GtkFileFilterClass GtkFileFilterClass;
 typedef struct _FilterRule FilterRule;
 
@@ -421,6 +419,3 @@ gtk_file_filter_filter (GtkFileFilter           *filter,
 
   return FALSE;
 }
-
-#define __GTK_FILE_FILTER_C__
-#include "gtkaliasdef.c"

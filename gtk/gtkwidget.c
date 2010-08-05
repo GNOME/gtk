@@ -56,7 +56,7 @@
 #include "gtkbuildable.h"
 #include "gtkbuilderprivate.h"
 #include "gtksizerequest.h"
-#include "gtkalias.h"
+
 
 /**
  * SECTION:gtkwidget
@@ -2199,10 +2199,9 @@ gtk_widget_class_init (GtkWidgetClass *klass)
    *   this signal.
    *
    * The ::no-expose-event will be emitted when the @widget's window is 
-   * drawn as a copy of another #GdkDrawable (with gdk_draw_drawable())
-   * which was completely unobscured. If the source
-   * window was partially obscured #GdkEventExpose events will be generated
-   * for those areas.
+   * drawn as a copy of another #GdkDrawable which was completely unobscured.
+   * If the source window was partially obscured #GdkEventExpose events will
+   * be generated for those areas.
    *
    * Returns: %TRUE to stop other handlers from being invoked for the event. 
    *   %FALSE to propagate the event further.
@@ -2490,6 +2489,13 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 							       P_("Aspect ratio with which to draw insertion cursor"),
 							       0.0, 1.0, 0.04,
 							       GTK_PARAM_READABLE));
+
+  gtk_widget_class_install_style_property (klass,
+                                           g_param_spec_boolean ("window-dragging",
+                                                                 P_("Window dragging"),
+                                                                 P_("Whether windows can be dragged by clicking on empty areas"),
+                                                                 FALSE,
+                                                                 GTK_PARAM_READWRITE));
 
   /**
    * GtkWidget:draw-border:
@@ -3075,7 +3081,7 @@ gtk_widget_unparent (GtkWidget *widget)
   if (gtk_widget_is_toplevel (toplevel))
     _gtk_window_unset_focus_and_default (GTK_WINDOW (toplevel), widget);
 
-  if (GTK_CONTAINER (widget->parent)->focus_child == widget)
+  if (gtk_container_get_focus_child (GTK_CONTAINER (widget->parent)) == widget)
     gtk_container_set_focus_child (GTK_CONTAINER (widget->parent), NULL);
 
   /* If we are unanchoring the child, we save around the toplevel
@@ -4065,7 +4071,7 @@ gtk_widget_size_allocate (GtkWidget	*widget,
     }
 
   if ((size_changed || position_changed) && widget->parent &&
-      gtk_widget_get_realized (widget->parent) && GTK_CONTAINER (widget->parent)->reallocate_redraws)
+      gtk_widget_get_realized (widget->parent) && _gtk_container_get_reallocate_redraws (GTK_CONTAINER (widget->parent)))
     {
       cairo_region_t *invalidate = cairo_region_create_rectangle (&widget->parent->allocation);
       gtk_widget_invalidate_widget_windows (widget->parent, invalidate);
@@ -7588,7 +7594,7 @@ gtk_widget_get_screen_unchecked (GtkWidget *widget)
       if (GTK_IS_WINDOW (toplevel))
 	return GTK_WINDOW (toplevel)->screen;
       else if (GTK_IS_INVISIBLE (toplevel))
-	return GTK_INVISIBLE (widget)->screen;
+	return gtk_invisible_get_screen (GTK_INVISIBLE (widget));
     }
 
   return NULL;
@@ -10179,8 +10185,8 @@ gtk_widget_path (GtkWidget *widget,
  * gtk_widget_class_path:
  * @widget: a #GtkWidget
  * @path_length: (out) (allow-none): location to store the length of the class path, or %NULL
- * @path: (out) (allow-none) location to store the class path as an allocated string, or %NULL
- * @path_reversed: (out) (allow-none) location to store the reverse class path as an allocated
+ * @path: (out) (allow-none): location to store the class path as an allocated string, or %NULL
+ * @path_reversed: (out) (allow-none): location to store the reverse class path as an allocated
  *    string, or %NULL
  *
  * Same as gtk_widget_path(), but always uses the name of a widget's type,
@@ -10241,6 +10247,22 @@ gtk_widget_class_path (GtkWidget *widget,
 }
 
 /**
+ * gtk_requisition_new:
+ *
+ * Allocates a new #GtkRequisition structure and initializes its elements to zero.
+ *
+ * Returns: a new empty #GtkRequisition. The newly allocated #GtkRequisition should
+ *   be freed with gtk_requisition_free().
+ *
+ * Since: 3.0
+ */
+GtkRequisition *
+gtk_requisition_new (void)
+{
+  return g_slice_new0 (GtkRequisition);
+}
+
+/**
  * gtk_requisition_copy:
  * @requisition: a #GtkRequisition
  *
@@ -10251,7 +10273,7 @@ gtk_widget_class_path (GtkWidget *widget,
 GtkRequisition *
 gtk_requisition_copy (const GtkRequisition *requisition)
 {
-  return (GtkRequisition *)g_memdup (requisition, sizeof (GtkRequisition));
+  return g_slice_dup (GtkRequisition, requisition);
 }
 
 /**
@@ -10263,7 +10285,7 @@ gtk_requisition_copy (const GtkRequisition *requisition)
 void
 gtk_requisition_free (GtkRequisition *requisition)
 {
-  g_free (requisition);
+  g_slice_free (GtkRequisition, requisition);
 }
 
 GType
@@ -11618,6 +11640,3 @@ gtk_widget_send_focus_change (GtkWidget *widget,
 
   return res;
 }
-
-#define __GTK_WIDGET_C__
-#include "gtkaliasdef.c"

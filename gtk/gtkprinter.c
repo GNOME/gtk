@@ -29,8 +29,6 @@
 #include "gtkprinter-private.h"
 #include "gtkprintbackend.h"
 #include "gtkprintjob.h"
-#include "gtkalias.h"
-
 
 /**
  * SECTION:gtkprinter
@@ -49,9 +47,6 @@
  * Printing support was added in GTK+ 2.10.
  */
 
-
-#define GTK_PRINTER_GET_PRIVATE(o)  \
-   (G_TYPE_INSTANCE_GET_PRIVATE ((o), GTK_TYPE_PRINTER, GtkPrinterPrivate))
 
 static void gtk_printer_finalize     (GObject *object);
 
@@ -247,7 +242,9 @@ gtk_printer_init (GtkPrinter *printer)
 {
   GtkPrinterPrivate *priv;
 
-  priv = printer->priv = GTK_PRINTER_GET_PRIVATE (printer); 
+  priv = printer->priv = G_TYPE_INSTANCE_GET_PRIVATE (printer,
+                                                      GTK_TYPE_PRINTER,
+                                                      GtkPrinterPrivate);
 
   priv->name = NULL;
   priv->location = NULL;
@@ -1281,7 +1278,3 @@ gtk_print_capabilities_get_type (void)
 
   return etype;
 }
-
-
-#define __GTK_PRINTER_C__
-#include "gtkaliasdef.c"

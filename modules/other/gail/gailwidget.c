@@ -149,7 +149,7 @@ gail_widget_real_initialize (AtkObject *obj,
   widget = GTK_WIDGET (data);
 
   accessible = GTK_ACCESSIBLE (obj);
-  accessible->widget = widget;
+  gtk_accessible_set_widget (accessible, widget);
   gtk_accessible_connect_widget_destroyed (accessible);
   g_signal_connect_after (widget,
                           "focus-in-event",
@@ -209,9 +209,12 @@ gail_widget_new (GtkWidget *widget)
 static void
 gail_widget_connect_widget_destroyed (GtkAccessible *accessible)
 {
-  if (accessible->widget)
+  GtkWidget *widget;
+
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (accessible));
+  if (widget)
     {
-      g_signal_connect_after (accessible->widget,
+      g_signal_connect_after (widget,
                               "destroy",
                               G_CALLBACK (gail_widget_destroyed),
                               accessible);
@@ -227,7 +230,7 @@ static void
 gail_widget_destroyed (GtkWidget     *widget,
                        GtkAccessible *accessible)
 {
-  accessible->widget = NULL;
+  gtk_accessible_set_widget (accessible, NULL);
   atk_object_notify_state_change (ATK_OBJECT (accessible), ATK_STATE_DEFUNCT,
                                   TRUE);
 }
@@ -239,20 +242,17 @@ gail_widget_get_description (AtkObject *accessible)
     return accessible->description;
   else
     {
+      GtkWidget *widget;
+
       /* Get the tooltip from the widget */
-      GtkAccessible *obj = GTK_ACCESSIBLE (accessible);
-
-      gail_return_val_if_fail (obj, NULL);
-
-      if (obj->widget == NULL)
+      widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (accessible));
+      if (widget == NULL)
         /*
          * Object is defunct
          */
         return NULL;
  
-      gail_return_val_if_fail (GTK_WIDGET (obj->widget), NULL);
-
-      return gtk_widget_get_tooltip_text (obj->widget);
+      return gtk_widget_get_tooltip_text (widget);
     }
 }
 
@@ -269,7 +269,7 @@ gail_widget_get_parent (AtkObject *accessible)
     {
       GtkWidget *widget, *parent_widget;
 
-      widget = GTK_ACCESSIBLE (accessible)->widget;
+      widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (accessible));
       if (widget == NULL)
         /*
          * State is defunct
@@ -371,7 +371,7 @@ gail_widget_ref_relation_set (AtkObject *obj)
 
   gail_return_val_if_fail (GAIL_IS_WIDGET (obj), NULL);
 
-  widget = GTK_ACCESSIBLE (obj)->widget;
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (obj));
   if (widget == NULL)
     /*
      * State is defunct
@@ -449,7 +449,7 @@ gail_widget_ref_relation_set (AtkObject *obj)
 static AtkStateSet*
 gail_widget_ref_state_set (AtkObject *accessible)
 {
-  GtkWidget *widget = GTK_ACCESSIBLE (accessible)->widget;
+  GtkWidget *widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (accessible));
   AtkStateSet *state_set;
 
   state_set = ATK_OBJECT_CLASS (gail_widget_parent_class)->ref_state_set (accessible);
@@ -525,7 +525,7 @@ gail_widget_get_index_in_parent (AtkObject *accessible)
   GType type;
 
   type = g_type_from_name ("GailCanvasWidget");
-  widget = GTK_ACCESSIBLE (accessible)->widget;
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (accessible));
 
   if (widget == NULL)
     /*
@@ -632,7 +632,7 @@ gail_widget_get_extents (AtkComponent   *component,
   GdkWindow *window;
   gint x_window, y_window;
   gint x_toplevel, y_toplevel;
-  GtkWidget *widget = GTK_ACCESSIBLE (component)->widget;
+  GtkWidget *widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (component));
 
   if (widget == NULL)
     /*
@@ -683,7 +683,7 @@ gail_widget_get_size (AtkComponent   *component,
                       gint           *width,
                       gint           *height)
 {
-  GtkWidget *widget = GTK_ACCESSIBLE (component)->widget;
+  GtkWidget *widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (component));
 
   if (widget == NULL)
     /*
@@ -709,7 +709,7 @@ gail_widget_get_layer (AtkComponent *component)
 static gboolean 
 gail_widget_grab_focus (AtkComponent   *component)
 {
-  GtkWidget *widget = GTK_ACCESSIBLE (component)->widget;
+  GtkWidget *widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (component));
   GtkWidget *toplevel;
 
   gail_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
@@ -746,7 +746,7 @@ gail_widget_set_extents (AtkComponent   *component,
                          gint           height,
                          AtkCoordType   coord_type)
 {
-  GtkWidget *widget = GTK_ACCESSIBLE (component)->widget;
+  GtkWidget *widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (component));
 
   if (widget == NULL)
     /*
@@ -790,7 +790,7 @@ gail_widget_set_position (AtkComponent   *component,
                           gint           y,
                           AtkCoordType   coord_type)
 {
-  GtkWidget *widget = GTK_ACCESSIBLE (component)->widget;
+  GtkWidget *widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (component));
 
   if (widget == NULL)
     /*
@@ -831,7 +831,7 @@ gail_widget_set_size (AtkComponent   *component,
                       gint           width,
                       gint           height)
 {
-  GtkWidget *widget = GTK_ACCESSIBLE (component)->widget;
+  GtkWidget *widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (component));
 
   if (widget == NULL)
     /*

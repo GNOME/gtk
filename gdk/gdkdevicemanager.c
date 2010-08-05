@@ -21,7 +21,7 @@
 #include "gdkdevicemanager.h"
 #include "gdkintl.h"
 #include "gdkinternals.h"
-#include "gdkalias.h"
+
 
 /**
  * SECTION:gdkdevicemanager
@@ -283,7 +283,8 @@ gdk_device_manager_get_display (GdkDeviceManager *device_manager)
  * Returns the list of devices of type @type currently attached to
  * @device_manager.
  *
- * Returns: a list of #GdkDevice<!-- -->s. The returned list must be
+ * Returns: (transfer container) (element-type Gdk.Device): a list of 
+ *          #GdkDevice<!-- -->s. The returned list must be
  *          freed with g_list_free (). The list elements are owned by
  *          GTK+ and must not be freed or unreffed.
  *
@@ -320,7 +321,3 @@ gdk_device_manager_get_client_pointer (GdkDeviceManager *device_manager)
 
   return GDK_DEVICE_MANAGER_GET_CLASS (device_manager)->get_client_pointer (device_manager);
 }
-
-
-#define __GDK_DEVICE_MANAGER_C__
-#include "gdkaliasdef.c"

@@ -40,12 +40,10 @@
 #include "gtkmarshalers.h"
 #include "gtkprivate.h"
 #include "gtkintl.h"
-#include "gtkalias.h"
 
 #include <string.h>
 #include <stdio.h>
 
-#define GTK_FONT_BUTTON_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), GTK_TYPE_FONT_BUTTON, GtkFontButtonPrivate))
 
 struct _GtkFontButtonPrivate 
 {
@@ -254,7 +252,9 @@ gtk_font_button_class_init (GtkFontButtonClass *klass)
 static void
 gtk_font_button_init (GtkFontButton *font_button)
 {
-  font_button->priv = GTK_FONT_BUTTON_GET_PRIVATE (font_button);
+  font_button->priv = G_TYPE_INSTANCE_GET_PRIVATE (font_button,
+                                                   GTK_TYPE_FONT_BUTTON,
+                                                   GtkFontButtonPrivate);
 
   /* Initialize fields */
   font_button->priv->fontname = g_strdup (_("Sans 12"));
@@ -714,9 +714,9 @@ gtk_font_button_clicked (GtkButton *button)
 				gtk_window_get_modal (GTK_WINDOW (parent)));
 	}
 
-      g_signal_connect (font_dialog->ok_button, "clicked",
+      g_signal_connect (gtk_font_selection_dialog_get_ok_button (font_dialog), "clicked",
                         G_CALLBACK (dialog_ok_clicked), font_button);
-      g_signal_connect (font_dialog->cancel_button, "clicked",
+      g_signal_connect (gtk_font_selection_dialog_get_cancel_button (font_dialog), "clicked",
 			G_CALLBACK (dialog_cancel_clicked), font_button);
       g_signal_connect (font_dialog, "destroy",
                         G_CALLBACK (dialog_destroy), font_button);
@@ -914,6 +914,3 @@ gtk_font_button_update_font_info (GtkFontButton *font_button)
   
   pango_font_description_free (desc);
 } 
-
-#define __GTK_FONT_BUTTON_C__
-#include "gtkaliasdef.c"

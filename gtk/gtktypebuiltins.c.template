@@ -2,7 +2,6 @@
 #undef GTK_DISABLE_DEPRECATED
 #include "gtk.h"
 #include "gtkprivate.h"
-#include "gtkalias.h"
 
 /*** END file-header ***/
 
@@ -34,6 +33,5 @@ GType
 /*** END value-tail ***/
 
 /*** BEGIN file-tail ***/
-#define __GTK_TYPE_BUILTINS_C__
-#include "gtkaliasdef.c"
+
 /*** END file-tail ***/

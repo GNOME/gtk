@@ -94,11 +94,9 @@
 
 #include <config.h>
 #include "gtksizerequest.h"
-#include "gtksizerequestprivate.h"
 #include "gtksizegroup.h"
 #include "gtkprivate.h"
 #include "gtkintl.h"
-#include "gtkalias.h"
 
 /* With GtkSizeRequest, a widget may be requested
  * its width for 2 or maximum 3 heights in one resize
@@ -566,7 +564,7 @@ compare_gap (gconstpointer p1,
 }
 
 /**
- * _gtk_distribute_allocation: 
+ * gtk_distribute_natural_allocation: 
  * @extra_space: Extra space to redistribute among children after subtracting
  *               minimum sizes and any child padding from the overall allocation
  * @n_requested_sizes: Number of requests to fit into the allocation
@@ -581,12 +579,12 @@ compare_gap (gconstpointer p1,
  * the remaining space is returned.
  *
  * Returns: The remainder of @extra_space after redistributing space
- * to @sizes if any.
+ * to @sizes.
  */
 gint 
-_gtk_distribute_allocation (gint              extra_space,
-			    guint             n_requested_sizes,
-			    GtkRequestedSize *sizes)
+gtk_distribute_natural_allocation (gint              extra_space,
+				   guint             n_requested_sizes,
+				   GtkRequestedSize *sizes)
 {
   guint *spreading = g_newa (guint, n_requested_sizes);
   gint   i;
@@ -639,6 +637,3 @@ _gtk_distribute_allocation (gint              extra_space,
   return extra_space;
 }
 
-
-#define __GTK_SIZE_REQUEST_C__
-#include "gtkaliasdef.c"

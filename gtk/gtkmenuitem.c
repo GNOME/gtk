@@ -39,7 +39,6 @@
 #include "gtkbuildable.h"
 #include "gtkactivatable.h"
 #include "gtkintl.h"
-#include "gtkalias.h"
 
 
 typedef struct {
@@ -629,7 +628,9 @@ gtk_menu_item_activatable_interface_init (GtkActivatableIface *iface)
 static void
 activatable_update_label (GtkMenuItem *menu_item, GtkAction *action)
 {
-  GtkWidget *child = GTK_BIN (menu_item)->child;
+  GtkWidget *child;
+
+  child = gtk_bin_get_child (GTK_BIN (menu_item));
 
   if (GTK_IS_LABEL (child))
     {
@@ -668,12 +669,11 @@ gtk_menu_item_sync_action_properties (GtkActivatable *activatable,
 {
   GtkMenuItem *menu_item = GTK_MENU_ITEM (activatable);
   GtkMenuItemPrivate *priv = GET_PRIVATE (menu_item);
+  GtkWidget *label;
 
   if (!priv->use_action_appearance || !action)
     {
-      GtkWidget *label = GTK_BIN (menu_item)->child;
-
-      label = GTK_BIN (menu_item)->child;
+      label = gtk_bin_get_child (GTK_BIN (menu_item));
 
       if (GTK_IS_ACCEL_LABEL (label))
         gtk_accel_label_set_accel_widget (GTK_ACCEL_LABEL (label), GTK_WIDGET (menu_item));
@@ -689,7 +689,7 @@ gtk_menu_item_sync_action_properties (GtkActivatable *activatable,
 
   if (priv->use_action_appearance)
     {
-      GtkWidget *label = GTK_BIN (menu_item)->child;
+      label = gtk_bin_get_child (GTK_BIN (menu_item));
 
       /* make sure label is a label */
       if (label && !GTK_IS_LABEL (label))
@@ -700,8 +700,6 @@ gtk_menu_item_sync_action_properties (GtkActivatable *activatable,
 
       gtk_menu_item_ensure_label (menu_item);
       gtk_menu_item_set_use_underline (menu_item, TRUE);
-
-      label = GTK_BIN (menu_item)->child;
 
       if (GTK_IS_ACCEL_LABEL (label) && gtk_action_get_accel_path (action))
         {
@@ -935,8 +933,10 @@ gtk_menu_item_size_request (GtkWidget      *widget,
 {
   GtkMenuItem *menu_item;
   GtkBin *bin;
+  GtkWidget *child;
   guint accel_width;
   guint horizontal_padding;
+  guint border_width;
   GtkPackDirection pack_dir;
   GtkPackDirection child_pack_dir;
 
@@ -961,10 +961,9 @@ gtk_menu_item_size_request (GtkWidget      *widget,
       child_pack_dir = GTK_PACK_DIRECTION_LTR;
     }
 
-  requisition->width = (GTK_CONTAINER (widget)->border_width +
-			widget->style->xthickness) * 2;
-  requisition->height = (GTK_CONTAINER (widget)->border_width +
-			 widget->style->ythickness) * 2;
+  border_width = gtk_container_get_border_width (GTK_CONTAINER (widget));
+  requisition->width = (border_width + widget->style->xthickness) * 2;
+  requisition->height = (border_width + widget->style->ythickness) * 2;
 
   if ((pack_dir == GTK_PACK_DIRECTION_LTR || pack_dir == GTK_PACK_DIRECTION_RTL) &&
       (child_pack_dir == GTK_PACK_DIRECTION_LTR || child_pack_dir == GTK_PACK_DIRECTION_RTL))
@@ -973,11 +972,13 @@ gtk_menu_item_size_request (GtkWidget      *widget,
       (child_pack_dir == GTK_PACK_DIRECTION_TTB || child_pack_dir == GTK_PACK_DIRECTION_BTT))
     requisition->height += 2 * horizontal_padding;
 
-  if (bin->child && gtk_widget_get_visible (bin->child))
+  child = gtk_bin_get_child (bin);
+
+  if (child != NULL && gtk_widget_get_visible (child))
     {
       GtkRequisition child_requisition;
       
-      gtk_widget_size_request (bin->child, &child_requisition);
+      gtk_widget_size_request (child, &child_requisition);
 
       requisition->width += child_requisition.width;
       requisition->height += child_requisition.height;
@@ -1029,6 +1030,7 @@ gtk_menu_item_size_allocate (GtkWidget     *widget,
   GtkTextDirection direction;
   GtkPackDirection pack_dir;
   GtkPackDirection child_pack_dir;
+  GtkWidget *child;
 
   g_return_if_fail (GTK_IS_MENU_ITEM (widget));
   g_return_if_fail (allocation != NULL);
@@ -1051,17 +1053,20 @@ gtk_menu_item_size_allocate (GtkWidget     *widget,
     
   widget->allocation = *allocation;
 
-  if (bin->child)
+  child = gtk_bin_get_child (bin);
+  if (child)
     {
       GtkRequisition child_requisition;
       guint horizontal_padding;
+      guint border_width;
 
       gtk_widget_style_get (widget,
 			    "horizontal-padding", &horizontal_padding,
 			    NULL);
 
-      child_allocation.x = GTK_CONTAINER (widget)->border_width + widget->style->xthickness;
-      child_allocation.y = GTK_CONTAINER (widget)->border_width + widget->style->ythickness;
+      border_width = gtk_container_get_border_width (GTK_CONTAINER (widget));
+      child_allocation.x = border_width + widget->style->xthickness;
+      child_allocation.y = border_width + widget->style->ythickness;
 
       if ((pack_dir == GTK_PACK_DIRECTION_LTR || pack_dir == GTK_PACK_DIRECTION_RTL) &&
 	  (child_pack_dir == GTK_PACK_DIRECTION_LTR || child_pack_dir == GTK_PACK_DIRECTION_RTL))
@@ -1090,7 +1095,7 @@ gtk_menu_item_size_allocate (GtkWidget     *widget,
       child_allocation.x += widget->allocation.x;
       child_allocation.y += widget->allocation.y;
 
-      gtk_widget_get_child_requisition (bin->child, &child_requisition);
+      gtk_widget_get_child_requisition (child, &child_requisition);
       if (menu_item->submenu && menu_item->show_submenu_indicator) 
 	{
 	  if (direction == GTK_TEXT_DIR_RTL)
@@ -1101,7 +1106,7 @@ gtk_menu_item_size_allocate (GtkWidget     *widget,
       if (child_allocation.width < 1)
 	child_allocation.width = 1;
 
-      gtk_widget_size_allocate (bin->child, &child_allocation);
+      gtk_widget_size_allocate (child, &child_allocation);
     }
 
   if (gtk_widget_get_realized (widget))
@@ -1184,9 +1189,10 @@ gtk_menu_item_paint (GtkWidget    *widget,
   GtkMenuItem *menu_item;
   GtkStateType state_type;
   GtkShadowType shadow_type, selected_shadow_type;
+  GtkWidget *child;
   gint width, height;
   gint x, y;
-  gint border_width = GTK_CONTAINER (widget)->border_width;
+  guint border_width = gtk_container_get_border_width (GTK_CONTAINER (widget));
 
   if (gtk_widget_is_drawable (widget))
     {
@@ -1198,9 +1204,10 @@ gtk_menu_item_paint (GtkWidget    *widget,
       y = widget->allocation.y + border_width;
       width = widget->allocation.width - border_width * 2;
       height = widget->allocation.height - border_width * 2;
+
+      child = gtk_bin_get_child (GTK_BIN (menu_item));
       
-      if ((state_type == GTK_STATE_PRELIGHT) &&
-	  (GTK_BIN (menu_item)->child))
+      if (child && state_type == GTK_STATE_PRELIGHT)
 	{
 	  gtk_widget_style_get (widget,
 				"selected-shadow-type", &selected_shadow_type,
@@ -1232,9 +1239,9 @@ gtk_menu_item_paint (GtkWidget    *widget,
                                 "arrow-scaling", &arrow_scaling,
  				NULL);
  	  
-	  context = gtk_widget_get_pango_context (GTK_BIN (menu_item)->child);
+	  context = gtk_widget_get_pango_context (child);
 	  metrics = pango_context_get_metrics (context, 
-					       GTK_WIDGET (GTK_BIN (menu_item)->child)->style->font_desc,
+					       child->style->font_desc,
 					       pango_context_get_language (context));
 
 	  arrow_size = (PANGO_PIXELS (pango_font_metrics_get_ascent (metrics) +
@@ -1268,7 +1275,7 @@ gtk_menu_item_paint (GtkWidget    *widget,
 			   arrow_x, arrow_y,
 			   arrow_extent, arrow_extent);
 	}
-      else if (!GTK_BIN (menu_item)->child)
+      else if (!child)
 	{
           gboolean wide_separators;
           gint     separator_height;
@@ -1447,11 +1454,14 @@ static void
 gtk_real_menu_item_set_label (GtkMenuItem *menu_item,
 			      const gchar *label)
 {
+  GtkWidget *child;
+
   gtk_menu_item_ensure_label (menu_item);
 
-  if (GTK_IS_LABEL (GTK_BIN (menu_item)->child))
+  child = gtk_bin_get_child (GTK_BIN (menu_item));
+  if (GTK_IS_LABEL (child))
     {
-      gtk_label_set_label (GTK_LABEL (GTK_BIN (menu_item)->child), label ? label : "");
+      gtk_label_set_label (GTK_LABEL (child), label ? label : "");
       
       g_object_notify (G_OBJECT (menu_item), "label");
     }
@@ -1460,10 +1470,13 @@ gtk_real_menu_item_set_label (GtkMenuItem *menu_item,
 static G_CONST_RETURN gchar *
 gtk_real_menu_item_get_label (GtkMenuItem *menu_item)
 {
+  GtkWidget *child;
+
   gtk_menu_item_ensure_label (menu_item);
 
-  if (GTK_IS_LABEL (GTK_BIN (menu_item)->child))
-    return gtk_label_get_label (GTK_LABEL (GTK_BIN (menu_item)->child));
+  child = gtk_bin_get_child (GTK_BIN (menu_item));
+  if (GTK_IS_LABEL (child))
+    return gtk_label_get_label (GTK_LABEL (child));
 
   return NULL;
 }
@@ -2075,21 +2088,20 @@ gtk_menu_item_forall (GtkContainer *container,
 		      GtkCallback   callback,
 		      gpointer      callback_data)
 {
-  GtkBin *bin;
+  GtkWidget *child;
 
   g_return_if_fail (GTK_IS_MENU_ITEM (container));
   g_return_if_fail (callback != NULL);
 
-  bin = GTK_BIN (container);
-
-  if (bin->child)
-    callback (bin->child, callback_data);
+  child = gtk_bin_get_child (GTK_BIN (container));
+  if (child)
+    callback (child, callback_data);
 }
 
 gboolean
 _gtk_menu_item_is_selectable (GtkWidget *menu_item)
 {
-  if ((!GTK_BIN (menu_item)->child &&
+  if ((!gtk_bin_get_child (GTK_BIN (menu_item)) &&
        G_OBJECT_TYPE (menu_item) == GTK_TYPE_MENU_ITEM) ||
       GTK_IS_SEPARATOR_MENU_ITEM (menu_item) ||
       !gtk_widget_is_sensitive (menu_item) ||
@@ -2104,7 +2116,7 @@ gtk_menu_item_ensure_label (GtkMenuItem *menu_item)
 {
   GtkWidget *accel_label;
 
-  if (!GTK_BIN (menu_item)->child)
+  if (!gtk_bin_get_child (GTK_BIN (menu_item)))
     {
       accel_label = g_object_new (GTK_TYPE_ACCEL_LABEL, NULL);
       gtk_misc_set_alignment (GTK_MISC (accel_label), 0.0, 0.5);
@@ -2167,13 +2179,16 @@ void
 gtk_menu_item_set_use_underline (GtkMenuItem *menu_item,
 				 gboolean     setting)
 {
+  GtkWidget *child;
+
   g_return_if_fail (GTK_IS_MENU_ITEM (menu_item));
 
   gtk_menu_item_ensure_label (menu_item);
 
-  if (GTK_IS_LABEL (GTK_BIN (menu_item)->child))
+  child = gtk_bin_get_child (GTK_BIN (menu_item));
+  if (GTK_IS_LABEL (child))
     {
-      gtk_label_set_use_underline (GTK_LABEL (GTK_BIN (menu_item)->child), setting);
+      gtk_label_set_use_underline (GTK_LABEL (child), setting);
 
       g_object_notify (G_OBJECT (menu_item), "use-underline");
     }
@@ -2194,17 +2209,15 @@ gtk_menu_item_set_use_underline (GtkMenuItem *menu_item,
 gboolean
 gtk_menu_item_get_use_underline (GtkMenuItem *menu_item)
 {
+  GtkWidget *child;
+
   g_return_val_if_fail (GTK_IS_MENU_ITEM (menu_item), FALSE);
 
   gtk_menu_item_ensure_label (menu_item);
-  
-  if (GTK_IS_LABEL (GTK_BIN (menu_item)->child))
-    return gtk_label_get_use_underline (GTK_LABEL (GTK_BIN (menu_item)->child));
+
+  child = gtk_bin_get_child (GTK_BIN (menu_item));
+  if (GTK_IS_LABEL (child))
+    return gtk_label_get_use_underline (GTK_LABEL (child));
 
   return FALSE;
 }
-
-
-
-#define __GTK_MENU_ITEM_C__
-#include "gtkaliasdef.c"

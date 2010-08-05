@@ -34,7 +34,6 @@
 #include "gtktoolbar.h"
 #include "gtkactivatable.h"
 #include "gtkprivate.h"
-#include "gtkalias.h"
 
 #include <string.h>
 
@@ -107,7 +106,6 @@ static GObjectClass        *parent_class = NULL;
 static GtkActivatableIface *parent_activatable_iface;
 static guint                toolbutton_signals[LAST_SIGNAL] = { 0 };
 
-#define GTK_TOOL_BUTTON_GET_PRIVATE(obj)(G_TYPE_INSTANCE_GET_PRIVATE ((obj), GTK_TYPE_TOOL_BUTTON, GtkToolButtonPrivate))
 
 GType
 gtk_tool_button_get_type (void)
@@ -291,8 +289,10 @@ gtk_tool_button_init (GtkToolButton      *button,
 		      GtkToolButtonClass *klass)
 {
   GtkToolItem *toolitem = GTK_TOOL_ITEM (button);
-  
-  button->priv = GTK_TOOL_BUTTON_GET_PRIVATE (button);
+
+  button->priv = G_TYPE_INSTANCE_GET_PRIVATE (button,
+                                              GTK_TYPE_TOOL_BUTTON,
+                                              GtkToolButtonPrivate);
 
   button->priv->contents_invalid = TRUE;
 
@@ -312,6 +312,7 @@ static void
 gtk_tool_button_construct_contents (GtkToolItem *tool_item)
 {
   GtkToolButton *button = GTK_TOOL_BUTTON (tool_item);
+  GtkWidget *child;
   GtkWidget *label = NULL;
   GtkWidget *icon = NULL;
   GtkToolbarStyle style;
@@ -341,12 +342,13 @@ gtk_tool_button_construct_contents (GtkToolItem *tool_item)
 			    button->priv->label_widget);
     }
 
-  if (GTK_BIN (button->priv->button)->child)
+  child = gtk_bin_get_child (GTK_BIN (button->priv->button));
+  if (child)
     {
       /* Note: we are not destroying the label_widget or icon_widget
        * here because they were removed from their containers above
        */
-      gtk_widget_destroy (GTK_BIN (button->priv->button)->child);
+      gtk_widget_destroy (child);
     }
 
   style = gtk_tool_item_get_toolbar_style (GTK_TOOL_ITEM (button));
@@ -421,26 +423,29 @@ gtk_tool_button_construct_contents (GtkToolItem *tool_item)
 	  gtk_widget_show (label);
 	}
 
-      gtk_label_set_ellipsize (GTK_LABEL (label),
-			       gtk_tool_item_get_ellipsize_mode (GTK_TOOL_ITEM (button)));
-      text_orientation = gtk_tool_item_get_text_orientation (GTK_TOOL_ITEM (button));
-      if (text_orientation == GTK_ORIENTATION_HORIZONTAL)
-	{
-          gtk_label_set_angle (GTK_LABEL (label), 0);
-          gtk_misc_set_alignment (GTK_MISC (label),
-                                  gtk_tool_item_get_text_alignment (GTK_TOOL_ITEM (button)),
-                                  0.5);
-        }
-      else
+      if (GTK_IS_LABEL (label))
         {
-          gtk_label_set_ellipsize (GTK_LABEL (label), PANGO_ELLIPSIZE_NONE);
-	  if (gtk_widget_get_direction (GTK_WIDGET (tool_item)) == GTK_TEXT_DIR_RTL)
-	    gtk_label_set_angle (GTK_LABEL (label), -90);
-	  else
-	    gtk_label_set_angle (GTK_LABEL (label), 90);
-          gtk_misc_set_alignment (GTK_MISC (label),
-                                  0.5,
-                                  1 - gtk_tool_item_get_text_alignment (GTK_TOOL_ITEM (button)));
+          gtk_label_set_ellipsize (GTK_LABEL (label),
+			           gtk_tool_item_get_ellipsize_mode (GTK_TOOL_ITEM (button)));
+          text_orientation = gtk_tool_item_get_text_orientation (GTK_TOOL_ITEM (button));
+          if (text_orientation == GTK_ORIENTATION_HORIZONTAL)
+	    {
+              gtk_label_set_angle (GTK_LABEL (label), 0);
+              gtk_misc_set_alignment (GTK_MISC (label),
+                                      gtk_tool_item_get_text_alignment (GTK_TOOL_ITEM (button)),
+                                      0.5);
+            }
+          else
+            {
+              gtk_label_set_ellipsize (GTK_LABEL (label), PANGO_ELLIPSIZE_NONE);
+	      if (gtk_widget_get_direction (GTK_WIDGET (tool_item)) == GTK_TEXT_DIR_RTL)
+	        gtk_label_set_angle (GTK_LABEL (label), -90);
+	      else
+	        gtk_label_set_angle (GTK_LABEL (label), 90);
+              gtk_misc_set_alignment (GTK_MISC (label),
+                                      0.5,
+                                      1 - gtk_tool_item_get_text_alignment (GTK_TOOL_ITEM (button)));
+            }
         }
     }
 
@@ -782,7 +787,7 @@ gtk_tool_button_update_icon_spacing (GtkToolButton *button)
   GtkWidget *box;
   guint spacing;
 
-  box = GTK_BIN (button->priv->button)->child;
+  box = gtk_bin_get_child (GTK_BIN (button->priv->button));
   if (GTK_IS_BOX (box))
     {
       gtk_widget_style_get (GTK_WIDGET (button), 
@@ -1291,7 +1296,3 @@ _gtk_tool_button_get_button (GtkToolButton *button)
 
   return button->priv->button;
 }
-
-
-#define __GTK_TOOL_BUTTON_C__
-#include "gtkaliasdef.c"

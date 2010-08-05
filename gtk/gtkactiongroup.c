@@ -28,6 +28,66 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
  */
 
+/**
+ * SECTION:gtkactiongroup
+ * @Short_description: A group of actions
+ * @Title: GtkActionGroup
+ *
+ * Actions are organised into groups. An action group is essentially a
+ * map from names to #GtkAction objects.
+ *
+ * All actions that would make sense to use in a particular context
+ * should be in a single group. Multiple action groups may be used for a
+ * particular user interface. In fact, it is expected that most nontrivial
+ * applications will make use of multiple groups. For example, in an
+ * application that can edit multiple documents, one group holding global
+ * actions (e.g. quit, about, new), and one group per document holding
+ * actions that act on that document (eg. save, cut/copy/paste, etc). Each
+ * window's menus would be constructed from a combination of two action
+ * groups.
+ * </para>
+ * <para id="Action-Accel">
+ * Accelerators are handled by the GTK+ accelerator map. All actions are
+ * assigned an accelerator path (which normally has the form
+ * <literal>&lt;Actions&gt;/group-name/action-name</literal>)
+ * and a shortcut is associated with this accelerator path. All menuitems
+ * and toolitems take on this accelerator path. The GTK+ accelerator map
+ * code makes sure that the correct shortcut is displayed next to the menu
+ * item.
+ *
+ * <refsect2 id="GtkActionGroup-BUILDER-UI">
+ * <title>GtkActionGroup as GtkBuildable</title>
+ * <para>
+ * The #GtkActionGroup implementation of the #GtkBuildable interface accepts
+ * #GtkAction objects as &lt;child&gt; elements in UI definitions.
+ *
+ * Note that it is probably more common to define actions and action groups
+ * in the code, since they are directly related to what the code can do.
+ *
+ * The GtkActionGroup implementation of the GtkBuildable interface supports
+ * a custom &lt;accelerator&gt; element, which has attributes named key and
+ * modifiers and allows to specify accelerators. This is similar to the
+ * &lt;accelerator&gt; element of #GtkWidget, the main difference is that
+ * it doesn't allow you to specify a signal.
+ * </para>
+ * <example>
+ * <title>A #GtkDialog UI definition fragment.</title>
+ * <programlisting><![CDATA[
+ * <object class="GtkActionGroup" id="actiongroup">
+ *   <child>
+ *       <object class="GtkAction" id="About">
+ *           <property name="name">About</property>
+ *           <property name="stock_id">gtk-about</property>
+ *           <signal handler="about_activate" name="activate"/>
+ *       </object>
+ *       <accelerator key="F1" modifiers="GDK_CONTROL_MASK | GDK_SHIFT_MASK"/>
+ *   </child>
+ * </object>
+ * ]]></programlisting>
+ * </example>
+ * </refsect2>
+ */
+
 #include "config.h"
 #include <string.h>
 
@@ -43,9 +103,7 @@
 #include "gtkbuilderprivate.h"
 #include "gtkprivate.h"
 #include "gtkintl.h"
-#include "gtkalias.h"
 
-#define GTK_ACTION_GROUP_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), GTK_TYPE_ACTION_GROUP, GtkActionGroupPrivate))
 
 struct _GtkActionGroupPrivate 
 {
@@ -291,11 +349,14 @@ remove_action (GtkAction *action)
 }
 
 static void
-gtk_action_group_init (GtkActionGroup *self)
+gtk_action_group_init (GtkActionGroup *action_group)
 {
   GtkActionGroupPrivate *private;
 
-  private = GTK_ACTION_GROUP_GET_PRIVATE (self);
+  action_group->priv = G_TYPE_INSTANCE_GET_PRIVATE (action_group,
+                                                    GTK_TYPE_ACTION_GROUP,
+                                                    GtkActionGroupPrivate);
+  private = action_group->priv;
 
   private->name = NULL;
   private->sensitive = TRUE;
@@ -333,7 +394,7 @@ gtk_action_group_buildable_set_name (GtkBuildable *buildable,
 				     const gchar  *name)
 {
   GtkActionGroup *self = GTK_ACTION_GROUP (buildable);
-  GtkActionGroupPrivate *private = GTK_ACTION_GROUP_GET_PRIVATE (self);
+  GtkActionGroupPrivate *private = self->priv;
 
   private->name = g_strdup (name);
 }
@@ -342,7 +403,8 @@ static const gchar *
 gtk_action_group_buildable_get_name (GtkBuildable *buildable)
 {
   GtkActionGroup *self = GTK_ACTION_GROUP (buildable);
-  GtkActionGroupPrivate *private = GTK_ACTION_GROUP_GET_PRIVATE (self);
+  GtkActionGroupPrivate *private = self->priv;
+
   return private->name;
 }
 
@@ -436,7 +498,7 @@ gtk_action_group_buildable_custom_tag_end (GtkBuildable *buildable,
       
       data = (AcceleratorParserData*)user_data;
       action_group = GTK_ACTION_GROUP (buildable);
-      private = GTK_ACTION_GROUP_GET_PRIVATE (action_group);
+      private = action_group->priv;
       action = GTK_ACTION (child);
 	
       accel_path = g_strconcat ("<Actions>/",
@@ -474,7 +536,7 @@ gtk_action_group_new (const gchar *name)
   GtkActionGroupPrivate *private;
 
   self = g_object_new (GTK_TYPE_ACTION_GROUP, NULL);
-  private = GTK_ACTION_GROUP_GET_PRIVATE (self);
+  private = self->priv;
   private->name = g_strdup (name);
 
   return self;
@@ -487,7 +549,7 @@ gtk_action_group_finalize (GObject *object)
   GtkActionGroupPrivate *private;
 
   self = GTK_ACTION_GROUP (object);
-  private = GTK_ACTION_GROUP_GET_PRIVATE (self);
+  private = self->priv;
 
   g_free (private->name);
   private->name = NULL;
@@ -512,7 +574,7 @@ gtk_action_group_set_property (GObject         *object,
   gchar *tmp;
   
   self = GTK_ACTION_GROUP (object);
-  private = GTK_ACTION_GROUP_GET_PRIVATE (self);
+  private = self->priv;
 
   switch (prop_id)
     {
@@ -543,7 +605,7 @@ gtk_action_group_get_property (GObject    *object,
   GtkActionGroupPrivate *private;
   
   self = GTK_ACTION_GROUP (object);
-  private = GTK_ACTION_GROUP_GET_PRIVATE (self);
+  private = self->priv;
 
   switch (prop_id)
     {
@@ -568,7 +630,7 @@ gtk_action_group_real_get_action (GtkActionGroup *self,
 {
   GtkActionGroupPrivate *private;
 
-  private = GTK_ACTION_GROUP_GET_PRIVATE (self);
+  private = self->priv;
 
   return g_hash_table_lookup (private->actions, action_name);
 }
@@ -590,7 +652,7 @@ gtk_action_group_get_name (GtkActionGroup *action_group)
 
   g_return_val_if_fail (GTK_IS_ACTION_GROUP (action_group), NULL);
 
-  private = GTK_ACTION_GROUP_GET_PRIVATE (action_group);
+  private = action_group->priv;
 
   return private->name;
 }
@@ -615,7 +677,7 @@ gtk_action_group_get_sensitive (GtkActionGroup *action_group)
 
   g_return_val_if_fail (GTK_IS_ACTION_GROUP (action_group), FALSE);
 
-  private = GTK_ACTION_GROUP_GET_PRIVATE (action_group);
+  private = action_group->priv;
 
   return private->sensitive;
 }
@@ -647,7 +709,7 @@ gtk_action_group_set_sensitive (GtkActionGroup *action_group,
 
   g_return_if_fail (GTK_IS_ACTION_GROUP (action_group));
 
-  private = GTK_ACTION_GROUP_GET_PRIVATE (action_group);
+  private = action_group->priv;
   sensitive = sensitive != FALSE;
 
   if (private->sensitive != sensitive)
@@ -680,7 +742,7 @@ gtk_action_group_get_visible (GtkActionGroup *action_group)
 
   g_return_val_if_fail (GTK_IS_ACTION_GROUP (action_group), FALSE);
 
-  private = GTK_ACTION_GROUP_GET_PRIVATE (action_group);
+  private = action_group->priv;
 
   return private->visible;
 }
@@ -711,7 +773,7 @@ gtk_action_group_set_visible (GtkActionGroup *action_group,
 
   g_return_if_fail (GTK_IS_ACTION_GROUP (action_group));
 
-  private = GTK_ACTION_GROUP_GET_PRIVATE (action_group);
+  private = action_group->priv;
   visible = visible != FALSE;
 
   if (private->visible != visible)
@@ -754,7 +816,7 @@ check_unique_action (GtkActionGroup *action_group,
     {
       GtkActionGroupPrivate *private;
 
-      private = GTK_ACTION_GROUP_GET_PRIVATE (action_group);
+      private = action_group->priv;
 
       g_warning ("Refusing to add non-unique action '%s' to action group '%s'",
 	 	 action_name,
@@ -795,7 +857,7 @@ gtk_action_group_add_action (GtkActionGroup *action_group,
   if (!check_unique_action (action_group, name))
     return;
 
-  private = GTK_ACTION_GROUP_GET_PRIVATE (action_group);
+  private = action_group->priv;
 
   g_hash_table_insert (private->actions, 
 		       (gpointer) name,
@@ -836,7 +898,7 @@ gtk_action_group_add_action_with_accel (GtkActionGroup *action_group,
   if (!check_unique_action (action_group, name))
     return;
 
-  private = GTK_ACTION_GROUP_GET_PRIVATE (action_group);
+  private = action_group->priv;
   accel_path = g_strconcat ("<Actions>/",
 			    private->name, "/", name, NULL);
 
@@ -899,7 +961,7 @@ gtk_action_group_remove_action (GtkActionGroup *action_group,
   name = gtk_action_get_name (action);
   g_return_if_fail (name != NULL);
 
-  private = GTK_ACTION_GROUP_GET_PRIVATE (action_group);
+  private = action_group->priv;
 
   g_hash_table_remove (private->actions, name);
 }
@@ -932,7 +994,7 @@ gtk_action_group_list_actions (GtkActionGroup *action_group)
 
   g_return_val_if_fail (GTK_IS_ACTION_GROUP (action_group), NULL);
 
-  private = GTK_ACTION_GROUP_GET_PRIVATE (action_group);
+  private = action_group->priv;
   
   g_hash_table_foreach (private->actions, add_single_action, &actions);
 
@@ -1320,7 +1382,7 @@ gtk_action_group_set_translate_func (GtkActionGroup   *action_group,
 
   g_return_if_fail (GTK_IS_ACTION_GROUP (action_group));
   
-  private = GTK_ACTION_GROUP_GET_PRIVATE (action_group);
+  private = action_group->priv;
 
   if (private->translate_notify)
     private->translate_notify (private->translate_data);
@@ -1393,7 +1455,7 @@ gtk_action_group_translate_string (GtkActionGroup *action_group,
   if (string == NULL)
     return NULL;
 
-  private = GTK_ACTION_GROUP_GET_PRIVATE (action_group);
+  private = action_group->priv;
 
   translate_func = private->translate_func;
   translate_data = private->translate_data;
@@ -1436,6 +1498,3 @@ _gtk_action_group_emit_post_activate (GtkActionGroup *action_group,
 {
   g_signal_emit (action_group, action_group_signals[POST_ACTIVATE], 0, action);
 }
-
-#define __GTK_ACTION_GROUP_C__
-#include "gtkaliasdef.c"

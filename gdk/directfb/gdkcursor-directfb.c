@@ -35,7 +35,6 @@
 #include "gdkdirectfb.h"
 #include "gdkprivate-directfb.h"
 #include "gdkcursor.h"
-#include "gdkalias.h"
 
 #include "x-cursors.xbm"
 
@@ -545,7 +544,3 @@ gdk_display_supports_cursor_color (GdkDisplay *display)
   g_return_val_if_fail (GDK_IS_DISPLAY (display), FALSE);
   return TRUE;
 }
-
-#define __GDK_CURSOR_X11_C__
-#include "gdkaliasdef.c"
-

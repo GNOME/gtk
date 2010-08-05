@@ -37,18 +37,15 @@ G_BEGIN_DECLS
 #define GTK_CELL_RENDERER_COMBO_GET_CLASS(obj)   (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_CELL_RENDERER_COMBO, GtkCellRendererTextClass))
 
 typedef struct _GtkCellRendererCombo      GtkCellRendererCombo;
+typedef struct _GtkCellRendererComboPriv  GtkCellRendererComboPriv;
 typedef struct _GtkCellRendererComboClass GtkCellRendererComboClass;
 
 struct _GtkCellRendererCombo
 {
   GtkCellRendererText parent;
 
-  GtkTreeModel *GSEAL (model);
-  gint          GSEAL (text_column);
-  gboolean      GSEAL (has_entry);
-
-  /*< private >*/
-  guint         GSEAL (focus_out_id);
+  /* <private> */
+  GtkCellRendererComboPriv *priv;
 };
 
 struct _GtkCellRendererComboClass

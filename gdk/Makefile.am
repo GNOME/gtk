@@ -26,11 +26,9 @@ EXTRA_DIST +=			\
 	makeenums.pl		\
 	makefile.msc		\
 	gdk.symbols		\
-	makegdkalias.pl		\
 	gdkenumtypes.c.template	\
 	gdkenumtypes.h.template	\
-	abicheck.sh		\
-	pltcheck.sh
+	abicheck.sh
 
 INCLUDES =                              \
 	-DG_LOG_DOMAIN=\"Gdk\"		\
@@ -50,6 +48,7 @@ endif
 # since automake doesn't support conditionalized libsomething_la_LDFLAGS
 # we use the general approach here
 LDADD = \
+	$(GTK_LINK_FLAGS)						\
 	-version-info $(LT_VERSION_INFO)		 		\
 	-export-dynamic 						\
 	-rpath $(libdir) 						\
@@ -104,9 +103,6 @@ gdk_public_h_sources =				\
 gdk_built_public_sources =			\
 	gdkenumtypes.h
 
-gdk_built_private_headers =			\
-	gdkalias.h
-
 gdk_private_headers =				\
 	gdkinternals.h				\
 	gdkdeviceprivate.h			\
@@ -146,12 +142,10 @@ gdk_c_sources =                 \
 	gdkwindowimpl.c
 
 gdk_built_sources =				\
-	gdkaliasdef.c				\
 	gdkenumtypes.c				\
 	gdkmarshalers.h 			\
 	gdkmarshalers.c				\
-	$(gdk_built_public_sources)		\
-	$(gdk_built_private_headers)
+	$(gdk_built_public_sources)
 
 #
 # setup GDK sources and their dependencies
@@ -160,9 +154,9 @@ gdk_built_sources =				\
 gdkincludedir = $(includedir)/gtk-3.0/gdk
 gdkinclude_HEADERS = $(gdk_public_h_sources) $(gdk_built_public_sources)
 
-common_sources =                \
-	$(gdk_private_headers)      \
-    $(gdk_c_sources)	\
+common_sources = 		\
+	$(gdk_private_headers)	\
+	$(gdk_c_sources)	\
 	gdkenumtypes.c		\
 	gdkmarshalers.c		\
 	gdkmarshalers.h
@@ -186,30 +180,67 @@ libgdk_win32_3_0_la_LDFLAGS = -Wl,win32/rc/gdk-win32-res.o -export-symbols $(src
 
 if HAVE_INTROSPECTION
 
-introspection_files = \
-		$(gdk_public_h_sources) \
-		$(gdk_c_sources) \
-        gdkenumtypes.c \
+introspection_files = 		\
+	$(gdk_public_h_sources)	\
+	$(gdk_c_sources)	\
+        gdkenumtypes.c		\
         gdkenumtypes.h
 
 Gdk-3.0.gir: $(gdktargetlib) Makefile
 Gdk_3_0_gir_SCANNERFLAGS = --strip-prefix=Gdk
-Gdk_3_0_gir_INCLUDES = Gio-2.0 GdkPixbuf-2.0 Pango-1.0
+Gdk_3_0_gir_INCLUDES = Gio-2.0 GdkPixbuf-2.0 Pango-1.0 cairo-1.0
 Gdk_3_0_gir_LIBS = $(gdktargetlib)
-Gdk_3_0_gir_FILES = $(addprefix $(srcdir)/,$(introspection_files))
+Gdk_3_0_gir_FILES = $(introspection_files)
 Gdk_3_0_gir_CFLAGS = $(INCLUDES)
 INTROSPECTION_GIRS += Gdk-3.0.gir
 
 if USE_X11
-x11_introspection_files = \
-        x11/*.c \
+x11_introspection_files = 		\
+	x11/checksettings.c		\
+	x11/gdkapplaunchcontext-x11.c	\
+	x11/gdkasync.c			\
+	x11/gdkcolor-x11.c		\
+	x11/gdkcursor-x11.c		\
+	x11/gdkdevice-core.c		\
+	x11/gdkdevicemanager-core.c	\
+	x11/gdkdevicemanager-x11.c	\
+	x11/gdkdevicemanager-xi2.c	\
+	x11/gdkdevicemanager-xi.c	\
+	x11/gdkdevice-xi2.c		\
+	x11/gdkdevice-xi.c		\
+	x11/gdkdisplay-x11.c		\
+	x11/gdkdnd-x11.c		\
+	x11/gdkdrawable-x11.c		\
+	x11/gdkeventsource.c		\
+	x11/gdkeventtranslator.c	\
+	x11/gdkgc-x11.c			\
+	x11/gdkgeometry-x11.c		\
+	x11/gdkglobals-x11.c		\
+	x11/gdkimage-x11.c		\
+	x11/gdkim-x11.c			\
+	x11/gdkinput.c			\
+	x11/gdkkeys-x11.c		\
+	x11/gdkmain-x11.c		\
+	x11/gdkpixmap-x11.c		\
+	x11/gdkproperty-x11.c		\
+	x11/gdkscreen-x11.c		\
+	x11/gdkselection-x11.c		\
+	x11/gdksettings.c		\
+	x11/gdkspawn-x11.c		\
+	x11/gdktestutils-x11.c		\
+	x11/gdkvisual-x11.c		\
+	x11/gdkwindow-x11.c		\
+	x11/gdkxftdefaults.c		\
+	x11/gdkxid.c			\
+	x11/xsettings-client.c		\
+	x11/xsettings-common.c		\
         x11/gdkx.h
 
 GdkX11-3.0.gir: $(gdktargetlib) Gdk-3.0.gir Makefile
 GdkX11_3_0_gir_SCANNERFLAGS = --strip-prefix=gdk_x11
 GdkX11_3_0_gir_INCLUDES = Gio-2.0 Gdk-3.0 GdkPixbuf-2.0 Pango-1.0 xlib-2.0
 GdkX11_3_0_gir_LIBS = $(gdktargetlib)
-GdkX11_3_0_gir_FILES = $(addprefix $(srcdir)/,$(x11_introspection_files))
+GdkX11_3_0_gir_FILES = $(x11_introspection_files)
 GdkX11_3_0_gir_CFLAGS = $(INCLUDES) -L$(top_builddir)/gdk
 INTROSPECTION_GIRS += GdkX11-3.0.gir
 endif # USE_X11
@@ -255,15 +286,9 @@ endif
 gdk.def: gdk.symbols
 	(echo -e EXPORTS; $(CPP) -P -DALL_FILES -DGDK_WINDOWING_WIN32 -DINCLUDE_VARIABLES - <$(srcdir)/gdk.symbols | sed -e '/^$$/d' -e 's/^/	/' -e 's/G_GNUC_[^ ]*//g') > $(srcdir)/gdk.def
 
-gdkalias.h: gdk.symbols
-	 $(PERL) $(srcdir)/makegdkalias.pl < $(srcdir)/gdk.symbols > gdkalias.h
-
-gdkaliasdef.c: gdk.symbols
-	 $(PERL) $(srcdir)/makegdkalias.pl -def < $(srcdir)/gdk.symbols > gdkaliasdef.c
-
 TESTS_ENVIRONMENT = srcdir="$(srcdir)"
 if OS_LINUX
-TESTS = abicheck.sh pltcheck.sh
+TESTS = abicheck.sh
 endif
 
 
@@ -319,7 +344,7 @@ gdkmarshalers.h: @REBUILD@ gdkmarshalers.list
 	&& mv gdkmarshalers-h.tmp gdkmarshalers.h \
 	|| ( rm -f gdkmarshalers-h.tmp && exit 1)
 gdkmarshalers.c: @REBUILD@ gdkmarshalers.list
-	(echo "#include \"gdkalias.h\""; $(GLIB_GENMARSHAL) --prefix=_gdk_marshal $(srcdir)/gdkmarshalers.list --body) > gdkmarshalers-c.tmp	\
+	$(GLIB_GENMARSHAL) --prefix=_gdk_marshal $(srcdir)/gdkmarshalers.list --body > gdkmarshalers-c.tmp	\
 	&& mv gdkmarshalers-c.tmp gdkmarshalers.c \
 	|| ( rm -f gdkmarshalers-c.tmp && exit 1 )
 

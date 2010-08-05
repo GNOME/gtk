@@ -26,7 +26,7 @@
 
 #include "config.h"
 #include <gdk/gdk.h>
-#include "gdkalias.h"
+
 
 /**
  * gdk_rectangle_union:
@@ -62,7 +62,8 @@ gdk_rectangle_union (const GdkRectangle *src1,
  * gdk_rectangle_intersect:
  * @src1: a #GdkRectangle
  * @src2: a #GdkRectangle
- * @dest: (allow-none): return location for the intersection of @src1 and @src2, or %NULL
+ * @dest: (out caller-allocates) (allow-none): return location for the
+ * intersection of @src1 and @src2, or %NULL
  *
  * Calculates the intersection of two rectangles. It is allowed for
  * @dest to be the same as either @src1 or @src2. If the rectangles 
@@ -132,7 +133,3 @@ gdk_rectangle_get_type (void)
 					     (GBoxedFreeFunc)g_free);
   return our_type;
 }
-
-
-#define __GDK_RECTANGLE_C__
-#include "gdkaliasdef.c"

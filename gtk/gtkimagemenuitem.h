@@ -46,6 +46,7 @@ G_BEGIN_DECLS
 
 
 typedef struct _GtkImageMenuItem       GtkImageMenuItem;
+typedef struct _GtkImageMenuItemPriv   GtkImageMenuItemPriv;
 typedef struct _GtkImageMenuItemClass  GtkImageMenuItemClass;
 
 struct _GtkImageMenuItem
@@ -53,8 +54,7 @@ struct _GtkImageMenuItem
   GtkMenuItem menu_item;
 
   /*< private >*/
-  GtkWidget      *GSEAL (image);
-
+  GtkImageMenuItemPriv *priv;
 };
 
 struct _GtkImageMenuItemClass

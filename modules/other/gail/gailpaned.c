@@ -68,7 +68,7 @@ gail_paned_ref_state_set (AtkObject *accessible)
   GtkWidget *widget;
 
   state_set = ATK_OBJECT_CLASS (gail_paned_parent_class)->ref_state_set (accessible);
-  widget = GTK_ACCESSIBLE (accessible)->widget;
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (accessible));
 
   if (widget == NULL)
     return state_set;
@@ -121,7 +121,7 @@ gail_paned_get_current_value (AtkValue             *obj,
   GtkWidget* widget;
   gint current_value;
 
-  widget = GTK_ACCESSIBLE (obj)->widget;
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (obj));
   if (widget == NULL)
     /* State is defunct */
     return;
@@ -139,12 +139,14 @@ gail_paned_get_maximum_value (AtkValue             *obj,
   GtkWidget* widget;
   gint maximum_value;
 
-  widget = GTK_ACCESSIBLE (obj)->widget;
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (obj));
   if (widget == NULL)
     /* State is defunct */
     return;
 
-  maximum_value = GTK_PANED (widget)->max_position;
+  g_object_get (GTK_PANED (widget),
+                "max-position", &maximum_value,
+                NULL);
   memset (value,  0, sizeof (GValue));
   g_value_init (value, G_TYPE_INT);
   g_value_set_int (value, maximum_value);
@@ -157,12 +159,14 @@ gail_paned_get_minimum_value (AtkValue             *obj,
   GtkWidget* widget;
   gint minimum_value;
 
-  widget = GTK_ACCESSIBLE (obj)->widget;
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (obj));
   if (widget == NULL)
     /* State is defunct */
     return;
 
-  minimum_value = GTK_PANED (widget)->min_position;
+  g_object_get (GTK_PANED (widget),
+                "min-position", &minimum_value,
+                NULL);
   memset (value,  0, sizeof (GValue));
   g_value_init (value, G_TYPE_INT);
   g_value_set_int (value, minimum_value);
@@ -182,7 +186,7 @@ gail_paned_set_current_value (AtkValue             *obj,
   GtkWidget* widget;
   gint new_value;
 
-  widget = GTK_ACCESSIBLE (obj)->widget;
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (obj));
   if (widget == NULL)
     /* State is defunct */
     return FALSE;

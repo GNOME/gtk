@@ -32,7 +32,7 @@ AtkAttributeSet* gail_misc_add_attribute          (AtkAttributeSet   *attrib_set
 AtkAttributeSet* gail_misc_layout_get_run_attributes
                                                   (AtkAttributeSet   *attrib_set,
                                                    PangoLayout       *layout,
-                                                   gchar             *text,
+                                                   const gchar       *text,
                                                    gint              offset,
                                                    gint              *start_offset,
                                                    gint              *end_offset);

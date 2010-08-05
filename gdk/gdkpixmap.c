@@ -29,7 +29,7 @@
 #include "gdkinternals.h"
 #include "gdkpixbuf.h"
 #include "gdkscreen.h"
-#include "gdkalias.h"
+
 
 static GdkGC *gdk_pixmap_create_gc      (GdkDrawable     *drawable,
                                          GdkGCValues     *values,
@@ -555,18 +555,14 @@ static GdkBitmap *
 make_solid_mask (GdkScreen *screen, gint width, gint height)
 {
   GdkBitmap *bitmap;
-  GdkGC *gc;
-  GdkGCValues gc_values;
+  cairo_t *cr;
   
   bitmap = gdk_pixmap_new (gdk_screen_get_root_window (screen),
 			   width, height, 1);
 
-  gc_values.foreground.pixel = 1;
-  gc = gdk_gc_new_with_values (bitmap, &gc_values, GDK_GC_FOREGROUND);
-  
-  gdk_draw_rectangle (bitmap, gc, TRUE, 0, 0, width, height);
-  
-  g_object_unref (gc);
+  cr = gdk_cairo_create (bitmap);
+  cairo_paint (cr);
+  cairo_destroy (cr);
   
   return bitmap;
 }
@@ -774,6 +770,3 @@ gdk_pixmap_real_get_screen (GdkDrawable *drawable)
 {
     return gdk_drawable_get_screen (GDK_PIXMAP_OBJECT (drawable)->impl);
 }
-
-#define __GDK_PIXMAP_C__
-#include "gdkaliasdef.c"

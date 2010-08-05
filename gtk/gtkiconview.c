@@ -42,7 +42,6 @@
 #include "gtktreednd.h"
 #include "gtkcellsizerequest.h"
 #include "gtkprivate.h"
-#include "gtkalias.h"
 
 /**
  * SECTION:gtkiconview
@@ -60,8 +59,6 @@
 #undef DEBUG_ICON_VIEW
 
 #define SCROLL_EDGE_SIZE 15
-
-#define GTK_ICON_VIEW_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), GTK_TYPE_ICON_VIEW, GtkIconViewPrivate))
 
 typedef struct _GtkIconViewItem GtkIconViewItem;
 struct _GtkIconViewItem
@@ -1107,8 +1104,10 @@ gtk_icon_view_cell_layout_init (GtkCellLayoutIface *iface)
 static void
 gtk_icon_view_init (GtkIconView *icon_view)
 {
-  icon_view->priv = GTK_ICON_VIEW_GET_PRIVATE (icon_view);
-  
+  icon_view->priv = G_TYPE_INSTANCE_GET_PRIVATE (icon_view,
+                                                 GTK_TYPE_ICON_VIEW,
+                                                 GtkIconViewPrivate);
+
   icon_view->priv->width = 0;
   icon_view->priv->height = 0;
   icon_view->priv->selection_mode = GTK_SELECTION_SINGLE;
@@ -1668,7 +1667,7 @@ gtk_icon_view_expose (GtkWidget *widget,
       
       while (n_rectangles--)
         {
-          cairo_region_get_rectangle (expose->region, n_rectangles--, &rectangle);
+          cairo_region_get_rectangle (expose->region, n_rectangles, &rectangle);
 	  gtk_icon_view_paint_rubberband (icon_view, cr, &rectangle);
         }
     }
@@ -2477,7 +2476,7 @@ gtk_icon_view_item_hit_test (GtkIconView      *icon_view,
     {
       GtkIconViewCellInfo *info = (GtkIconViewCellInfo *)l->data;
       
-      if (!info->cell->visible)
+      if (!gtk_cell_renderer_get_visible (info->cell))
 	continue;
       
       gtk_icon_view_get_cell_box (icon_view, item, info, &box);
@@ -3011,7 +3010,7 @@ gtk_icon_view_calculate_item_size (GtkIconView     *icon_view,
       GtkIconViewCellInfo *info = (GtkIconViewCellInfo *)l->data;
       GtkRequisition min_size;
 
-      if (!info->cell->visible)
+      if (!gtk_cell_renderer_get_visible (info->cell))
 	continue;
       
       gtk_cell_size_request_get_size (GTK_CELL_SIZE_REQUEST (info->cell), 
@@ -3075,7 +3074,7 @@ gtk_icon_view_calculate_item_size2 (GtkIconView     *icon_view,
 	if (info->pack == (k ? GTK_PACK_START : GTK_PACK_END))
 	  continue;
 
-	if (!info->cell->visible)
+	if (!gtk_cell_renderer_get_visible (info->cell))
 	  continue;
 
 	if (icon_view->priv->orientation == GTK_ORIENTATION_HORIZONTAL)
@@ -3223,7 +3222,7 @@ gtk_icon_view_paint_item (GtkIconView     *icon_view,
     {
       GtkIconViewCellInfo *info = (GtkIconViewCellInfo *)l->data;
       
-      if (!info->cell->visible)
+      if (!gtk_cell_renderer_get_visible (info->cell))
 	continue;
       
       gtk_icon_view_get_cell_area (icon_view, item, info, &cell_area);
@@ -3261,14 +3260,16 @@ gtk_icon_view_paint_item (GtkIconView     *icon_view,
     {
       for (l = icon_view->priv->cell_list, i = 0; l; l = l->next, i++)
         {
+          GtkCellRendererMode mode;
           GtkIconViewCellInfo *info = (GtkIconViewCellInfo *)l->data;
 
-          if (!info->cell->visible)
+          if (!gtk_cell_renderer_get_visible (info->cell))
             continue;
 
           /* If found a editable/activatable cell, draw focus on it. */
+          g_object_get (info->cell, "mode", &mode, NULL);
           if (icon_view->priv->cursor_cell < 0 &&
-              info->cell->mode != GTK_CELL_RENDERER_MODE_INERT)
+              mode != GTK_CELL_RENDERER_MODE_INERT)
             icon_view->priv->cursor_cell = i;
 
           gtk_icon_view_get_cell_box (icon_view, item, info, &box);
@@ -3517,7 +3518,7 @@ gtk_icon_view_get_item_at_coords (GtkIconView          *icon_view,
 		{
 		  GtkIconViewCellInfo *info = (GtkIconViewCellInfo *)l->data;
 
-		  if (!info->cell->visible)
+		  if (!gtk_cell_renderer_get_visible (info->cell))
 		    continue;
 
 		  gtk_icon_view_get_cell_box (icon_view, item, info, &box);
@@ -3944,15 +3945,17 @@ find_cell (GtkIconView     *icon_view,
   for (k = 0; k < 2; k++)
     for (l = icon_view->priv->cell_list, i = 0; l; l = l->next, i++)
       {
+        GtkCellRendererMode mode;
 	GtkIconViewCellInfo *info = (GtkIconViewCellInfo *)l->data;
 	
 	if (info->pack == (k ? GTK_PACK_START : GTK_PACK_END))
 	  continue;
 	
-	if (!info->cell->visible)
+	if (!gtk_cell_renderer_get_visible (info->cell))
 	  continue;
 
-	if (info->cell->mode != GTK_CELL_RENDERER_MODE_INERT)
+        g_object_get (info->cell, "mode", &mode, NULL);
+	if (mode != GTK_CELL_RENDERER_MODE_INERT)
 	  {
 	    if (cell == i)
 	      current = n_focusable;
@@ -5011,9 +5014,9 @@ gtk_icon_view_set_tooltip_cell (GtkIconView     *icon_view,
  * @x: the x coordinate (relative to widget coordinates)
  * @y: the y coordinate (relative to widget coordinates)
  * @keyboard_tip: whether this is a keyboard tooltip or not
- * @model: (allow-none): a pointer to receive a #GtkTreeModel or %NULL
- * @path: (allow-none): a pointer to receive a #GtkTreePath or %NULL
- * @iter: (allow-none): a pointer to receive a #GtkTreeIter or %NULL
+ * @model: (out) (allow-none): a pointer to receive a #GtkTreeModel or %NULL
+ * @path: (out) (allow-none): a pointer to receive a #GtkTreePath or %NULL
+ * @iter: (out) (allow-none): a pointer to receive a #GtkTreeIter or %NULL
  *
  * This function is supposed to be used in a #GtkWidget::query-tooltip
  * signal handler for #GtkIconView.  The @x, @y and @keyboard_tip values
@@ -8979,7 +8982,7 @@ gtk_icon_view_accessible_get_n_children (AtkObject *accessible)
   GtkIconView *icon_view;
   GtkWidget *widget;
 
-  widget = GTK_ACCESSIBLE (accessible)->widget;
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (accessible));
   if (!widget)
       return 0;
 
@@ -9019,7 +9022,7 @@ gtk_icon_view_accessible_ref_child (AtkObject *accessible,
   AtkObject *obj;
   GtkIconViewItemAccessible *a11y_item;
 
-  widget = GTK_ACCESSIBLE (accessible)->widget;
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (accessible));
   if (!widget)
     return NULL;
 
@@ -9077,7 +9080,7 @@ gtk_icon_view_accessible_traverse_items (GtkIconViewAccessible *view,
       GtkWidget *widget;
       gboolean act_on_item;
 
-      widget = GTK_ACCESSIBLE (view)->widget;
+      widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (view));
       if (widget == NULL)
         return;
 
@@ -9199,7 +9202,7 @@ gtk_icon_view_accessible_model_row_changed (GtkTreeModel *tree_model,
 
   if (a11y_item)
     {
-      widget = GTK_ACCESSIBLE (atk_obj)->widget;
+      widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (atk_obj));
       icon_view = GTK_ICON_VIEW (widget);
       item = a11y_item->item;
 
@@ -9558,9 +9561,12 @@ gtk_icon_view_accessible_destroyed (GtkWidget *widget,
 static void
 gtk_icon_view_accessible_connect_widget_destroyed (GtkAccessible *accessible)
 {
-  if (accessible->widget)
+  GtkWidget *widget;
+
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (accessible));
+  if (widget)
     {
-      g_signal_connect_after (accessible->widget,
+      g_signal_connect_after (widget,
                               "destroy",
                               G_CALLBACK (gtk_icon_view_accessible_destroyed),
                               accessible);
@@ -9601,7 +9607,7 @@ gtk_icon_view_accessible_ref_accessible_at_point (AtkComponent *component,
   GtkIconViewItem *item;
   gint x_pos, y_pos;
 
-  widget = GTK_ACCESSIBLE (component)->widget;
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (component));
   if (widget == NULL)
   /* State is defunct */
     return NULL;
@@ -9629,7 +9635,7 @@ gtk_icon_view_accessible_add_selection (AtkSelection *selection,
   GtkIconView *icon_view;
   GtkIconViewItem *item;
 
-  widget = GTK_ACCESSIBLE (selection)->widget;
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (selection));
   if (widget == NULL)
     return FALSE;
 
@@ -9651,7 +9657,7 @@ gtk_icon_view_accessible_clear_selection (AtkSelection *selection)
   GtkWidget *widget;
   GtkIconView *icon_view;
 
-  widget = GTK_ACCESSIBLE (selection)->widget;
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (selection));
   if (widget == NULL)
     return FALSE;
 
@@ -9670,7 +9676,7 @@ gtk_icon_view_accessible_ref_selection (AtkSelection *selection,
   GtkIconView *icon_view;
   GtkIconViewItem *item;
 
-  widget = GTK_ACCESSIBLE (selection)->widget;
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (selection));
   if (widget == NULL)
     return NULL;
 
@@ -9702,7 +9708,7 @@ gtk_icon_view_accessible_get_selection_count (AtkSelection *selection)
   GList *l;
   gint count;
 
-  widget = GTK_ACCESSIBLE (selection)->widget;
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (selection));
   if (widget == NULL)
     return 0;
 
@@ -9731,7 +9737,7 @@ gtk_icon_view_accessible_is_child_selected (AtkSelection *selection,
   GtkIconView *icon_view;
   GtkIconViewItem *item;
 
-  widget = GTK_ACCESSIBLE (selection)->widget;
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (selection));
   if (widget == NULL)
     return FALSE;
 
@@ -9754,7 +9760,7 @@ gtk_icon_view_accessible_remove_selection (AtkSelection *selection,
   GList *l;
   gint count;
 
-  widget = GTK_ACCESSIBLE (selection)->widget;
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (selection));
   if (widget == NULL)
     return FALSE;
 
@@ -9785,7 +9791,7 @@ gtk_icon_view_accessible_select_all_selection (AtkSelection *selection)
   GtkWidget *widget;
   GtkIconView *icon_view;
 
-  widget = GTK_ACCESSIBLE (selection)->widget;
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (selection));
   if (widget == NULL)
     return FALSE;
 
@@ -9989,8 +9995,3 @@ gtk_icon_view_buildable_custom_tag_end (GtkBuildable *buildable,
     parent_buildable_iface->custom_tag_end (buildable, builder, child, tagname,
 					    data);
 }
-
-
-
-#define __GTK_ICON_VIEW_C__
-#include "gtkaliasdef.c"

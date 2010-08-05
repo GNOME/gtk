@@ -574,10 +574,11 @@ _object_is_ours (AtkObject *aobject)
    */
    if (aobject != NULL)
      {
-       if (GTK_ACCESSIBLE(toplevel)->widget == mainWindow)
-         {
+       GtkWidget *widget;
+
+       widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (toplevel));
+       if (widget == mainWindow)
            return TRUE;
-         }
      }
 
   return FALSE;
@@ -615,6 +616,7 @@ ferret_get_name_from_container (AtkObject *aobject)
 static gint
 _print_object (AtkObject *aobject)
 {
+    GtkWidget *widget;
     G_CONST_RETURN gchar * parent_name = NULL;
     G_CONST_RETURN gchar * name = NULL;
     G_CONST_RETURN gchar * description = NULL;
@@ -654,11 +656,11 @@ _print_object (AtkObject *aobject)
         accel_name = "";
       }
 
-    if (GTK_IS_ACCESSIBLE (aobject) &&
-        GTK_IS_WIDGET (GTK_ACCESSIBLE (aobject)->widget))
+    widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (aobject));
+    if (widget)
       {
         _print_key_value(tab_n, group_num, "Widget name",
-          (gpointer)gtk_widget_get_name(GTK_ACCESSIBLE (aobject)->widget),
+          (gpointer)gtk_widget_get_name (widget),
           VALUE_STRING);
       }
     else
@@ -2608,7 +2610,7 @@ void _action_cb(GtkWidget *widget, gpointer  *userdata)
 void _toggle_terminal(GtkCheckMenuItem *checkmenuitem,
   gpointer user_data)
 {
-   if (checkmenuitem->active)
+   if (gtk_check_menu_item_get_active (checkmenuitem))
        display_ascii = TRUE;
    else
        display_ascii = FALSE;
@@ -2617,7 +2619,7 @@ void _toggle_terminal(GtkCheckMenuItem *checkmenuitem,
 void _toggle_no_signals(GtkCheckMenuItem *checkmenuitem,
   gpointer user_data)
 {
-   if (checkmenuitem->active)
+   if (gtk_check_menu_item_get_active (checkmenuitem))
        no_signals = TRUE;
    else
        no_signals = FALSE;
@@ -2626,7 +2628,7 @@ void _toggle_no_signals(GtkCheckMenuItem *checkmenuitem,
 void _toggle_magnifier(GtkCheckMenuItem *checkmenuitem,
   gpointer user_data)
 {
-   if (checkmenuitem->active)
+   if (gtk_check_menu_item_get_active (checkmenuitem))
        use_magnifier = TRUE;
    else
        use_magnifier = FALSE;
@@ -2635,7 +2637,7 @@ void _toggle_magnifier(GtkCheckMenuItem *checkmenuitem,
 void _toggle_festival(GtkCheckMenuItem *checkmenuitem,
   gpointer user_data)
 {
-   if (checkmenuitem->active)
+   if (gtk_check_menu_item_get_active (checkmenuitem))
        use_festival = TRUE;
    else
        use_festival = FALSE;
@@ -2644,7 +2646,7 @@ void _toggle_festival(GtkCheckMenuItem *checkmenuitem,
 void _toggle_festival_terse(GtkCheckMenuItem *checkmenuitem,
   gpointer user_data)
 {
-   if (checkmenuitem->active)
+   if (gtk_check_menu_item_get_active (checkmenuitem))
      {
         say_role = FALSE;
         say_accel = FALSE;
@@ -2659,7 +2661,7 @@ void _toggle_festival_terse(GtkCheckMenuItem *checkmenuitem,
 void _toggle_trackmouse(GtkCheckMenuItem *checkmenuitem,
   gpointer user_data)
 {
-   if (checkmenuitem->active)
+   if (gtk_check_menu_item_get_active (checkmenuitem))
      {
         mouse_watcher_focus_id =
           atk_add_global_event_listener(_mouse_watcher,
@@ -2683,7 +2685,7 @@ void _toggle_trackmouse(GtkCheckMenuItem *checkmenuitem,
 void _toggle_trackfocus(GtkCheckMenuItem *checkmenuitem,
   gpointer user_data)
 {
-   if (checkmenuitem->active)
+   if (gtk_check_menu_item_get_active (checkmenuitem))
      {
        track_focus = TRUE;
        focus_tracker_id = atk_add_focus_tracker (_print_accessible);

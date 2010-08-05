@@ -125,7 +125,7 @@ gail_sub_menu_item_add_selection (AtkSelection *selection,
   GtkWidget *widget;
   GtkWidget *submenu;
 
-  widget =  GTK_ACCESSIBLE (selection)->widget;
+  widget =  gtk_accessible_get_widget (GTK_ACCESSIBLE (selection));
   if (widget == NULL)
     /* State is defunct */
     return FALSE;
@@ -152,7 +152,7 @@ gail_sub_menu_item_clear_selection (AtkSelection   *selection)
   GtkWidget *widget;
   GtkWidget *submenu;
 
-  widget =  GTK_ACCESSIBLE (selection)->widget;
+  widget =  gtk_accessible_get_widget (GTK_ACCESSIBLE (selection));
   if (widget == NULL)
     /* State is defunct */
     return FALSE;
@@ -177,7 +177,7 @@ gail_sub_menu_item_ref_selection (AtkSelection   *selection,
   if (i != 0)
     return NULL;
 
-  widget =  GTK_ACCESSIBLE (selection)->widget;
+  widget =  gtk_accessible_get_widget (GTK_ACCESSIBLE (selection));
   if (widget == NULL)
     /* State is defunct */
     return NULL;
@@ -205,7 +205,7 @@ gail_sub_menu_item_get_selection_count (AtkSelection   *selection)
   GtkWidget *widget;
   GtkWidget *submenu;
 
-  widget =  GTK_ACCESSIBLE (selection)->widget;
+  widget =  gtk_accessible_get_widget (GTK_ACCESSIBLE (selection));
   if (widget == NULL)
     /* State is defunct */
     return 0;
@@ -232,7 +232,7 @@ gail_sub_menu_item_is_child_selected (AtkSelection   *selection,
   GtkWidget *widget;
   GtkWidget *submenu;
 
-  widget =  GTK_ACCESSIBLE (selection)->widget;
+  widget =  gtk_accessible_get_widget (GTK_ACCESSIBLE (selection));
   if (widget == NULL)
     /* State is defunct */
     return FALSE;
@@ -260,7 +260,7 @@ gail_sub_menu_item_remove_selection (AtkSelection   *selection,
   if (i != 0)
     return FALSE;
 
-  widget =  GTK_ACCESSIBLE (selection)->widget;
+  widget =  gtk_accessible_get_widget (GTK_ACCESSIBLE (selection));
   if (widget == NULL)
     /* State is defunct */
     return FALSE;

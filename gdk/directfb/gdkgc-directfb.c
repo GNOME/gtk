@@ -43,8 +43,6 @@
 #include "gdkgc.h"
 #include "gdkpixmap.h"
 
-#include "gdkalias.h"
-
 static void gdk_directfb_gc_get_values (GdkGC           *gc,
                                         GdkGCValues     *values);
 static void gdk_directfb_gc_set_values (GdkGC           *gc,
@@ -386,5 +384,3 @@ gdk_gc_get_screen (GdkGC *gc)
   
   return _gdk_screen;
 }
-#define __GDK_GC_X11_C__
-#include "gdkaliasdef.c"

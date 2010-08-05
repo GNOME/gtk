@@ -36,7 +36,6 @@
 
 G_BEGIN_DECLS
 
-typedef struct _GtkIconFactoryClass GtkIconFactoryClass;
 
 #define GTK_TYPE_ICON_FACTORY              (gtk_icon_factory_get_type ())
 #define GTK_ICON_FACTORY(object)           (G_TYPE_CHECK_INSTANCE_CAST ((object), GTK_TYPE_ICON_FACTORY, GtkIconFactory))
@@ -47,11 +46,15 @@ typedef struct _GtkIconFactoryClass GtkIconFactoryClass;
 #define GTK_TYPE_ICON_SET                  (gtk_icon_set_get_type ())
 #define GTK_TYPE_ICON_SOURCE               (gtk_icon_source_get_type ())
 
+typedef struct _GtkIconFactoryPriv  GtkIconFactoryPriv;
+typedef struct _GtkIconFactoryClass GtkIconFactoryClass;
+
 struct _GtkIconFactory
 {
   GObject parent_instance;
 
-  GHashTable *GSEAL (icons);
+  /* <private> */
+  GtkIconFactoryPriv *priv;
 };
 
 struct _GtkIconFactoryClass

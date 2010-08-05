@@ -32,7 +32,6 @@
 #include "gtkiconfactory.h"
 #include "gtkintl.h"
 #include <gdk/gdkkeysyms.h>
-#include "gtkalias.h"
 
 /**
  * SECTION:gtkstock
@@ -51,7 +50,7 @@ Prebuilt common menu/toolbar items and corresponding icons
  * the user-visible label, keyboard accelerator, and translation domain
  * of the menu or toolbar item; and/or with an icon stored in a
  * #GtkIconFactory. See <link
- * linkend="gtk-Themeable-Stock-Images">GtkIconFactory</link> for
+ * linkend="gtk3-Themeable-Stock-Images">GtkIconFactory</link> for
  * more information on stock icons. The connection between a
  * #GtkStockItem and stock icons is purely conventional (by virtue of
  * using the same stock ID); it's possible to register a stock item but
@@ -336,6 +335,7 @@ static const GtkStockItem builtin_items [] =
   { GTK_STOCK_DISCONNECT, NC_("Stock label", "_Disconnect"), 0, 0, GETTEXT_PACKAGE },
   { GTK_STOCK_EXECUTE, NC_("Stock label", "_Execute"), 0, 0, GETTEXT_PACKAGE },
   { GTK_STOCK_EDIT, NC_("Stock label", "_Edit"), 0, 0, GETTEXT_PACKAGE },
+  { GTK_STOCK_FILE, NC_("Stock label", "_File"), 0, 0, GETTEXT_PACKAGE },
   { GTK_STOCK_FIND, NC_("Stock label", "_Find"), GDK_CONTROL_MASK, 'f', GETTEXT_PACKAGE },
   { GTK_STOCK_FIND_AND_REPLACE, NC_("Stock label", "Find and _Replace"), GDK_CONTROL_MASK, 'r', GETTEXT_PACKAGE },
   { GTK_STOCK_FLOPPY, NC_("Stock label", "_Floppy"), 0, 0, GETTEXT_PACKAGE },
@@ -553,6 +553,3 @@ init_stock_hash (void)
 				    NULL);
     }
 }
-
-#define __GTK_STOCK_C__
-#include "gtkaliasdef.c"

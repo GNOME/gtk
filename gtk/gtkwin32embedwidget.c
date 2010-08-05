@@ -31,7 +31,6 @@
 #include "gtkintl.h"
 #include "gtkprivate.h"
 
-#include "gtkalias.h"
 
 static void            gtk_win32_embed_widget_realize               (GtkWidget        *widget);
 static void            gtk_win32_embed_widget_unrealize             (GtkWidget        *widget);
@@ -379,6 +378,3 @@ gtk_win32_embed_widget_set_focus (GtkWindow *window,
 
   gdk_window_focus (GTK_WIDGET(window)->window, 0);
 }
-
-#define __GTK_WIN32_EMBED_WIDGET_C__
-#include "gtkaliasdef.c"

@@ -28,7 +28,6 @@
 #include "gtkitem.h"
 #include "gtkmarshalers.h"
 #include "gtkintl.h"
-#include "gtkalias.h"
 
 
 enum {
@@ -171,6 +170,3 @@ gtk_item_leave (GtkWidget        *widget,
 
   return gtk_widget_event (widget->parent, (GdkEvent*) event);
 }
-
-#define __GTK_ITEM_C__
-#include "gtkaliasdef.c"

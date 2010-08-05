@@ -25,6 +25,8 @@ scribble_configure_event (GtkWidget         *widget,
                           GdkEventConfigure *event,
                           gpointer           data)
 {
+  cairo_t *cr;
+
   if (pixmap)
     g_object_unref (pixmap);
 
@@ -34,12 +36,12 @@ scribble_configure_event (GtkWidget         *widget,
                            -1);
 
   /* Initialize the pixmap to white */
-  gdk_draw_rectangle (pixmap,
-                      widget->style->white_gc,
-                      TRUE,
-                      0, 0,
-                      widget->allocation.width,
-                      widget->allocation.height);
+  cr = gdk_cairo_create (pixmap);
+
+  cairo_set_source_rgb (cr, 1, 1, 1);
+  cairo_paint (cr);
+
+  cairo_destroy (cr);
 
   /* We've handled the configure event, no need for further processing. */
   return TRUE;
@@ -51,18 +53,15 @@ scribble_expose_event (GtkWidget      *widget,
                        GdkEventExpose *event,
                        gpointer        data)
 {
-  /* We use the "foreground GC" for the widget since it already exists,
-   * but honestly any GC would work. The only thing to worry about
-   * is whether the GC has an inappropriate clip region set.
-   */
+  cairo_t *cr;
 
-  gdk_draw_drawable (widget->window,
-                     widget->style->fg_gc[gtk_widget_get_state (widget)],
-                     pixmap,
-                     /* Only copy the area that was exposed. */
-                     event->area.x, event->area.y,
-                     event->area.x, event->area.y,
-                     event->area.width, event->area.height);
+  cr = gdk_cairo_create (widget->window);
+  
+  gdk_cairo_set_source_pixmap (cr, pixmap, 0, 0);
+  gdk_cairo_rectangle (cr, &event->area);
+  cairo_fill (cr);
+
+  cairo_destroy (cr);
 
   return FALSE;
 }
@@ -74,6 +73,7 @@ draw_brush (GtkWidget *widget,
             gdouble    y)
 {
   GdkRectangle update_rect;
+  cairo_t *cr;
 
   update_rect.x = x - 3;
   update_rect.y = y - 3;
@@ -81,11 +81,10 @@ draw_brush (GtkWidget *widget,
   update_rect.height = 6;
 
   /* Paint to the pixmap, where we store our state */
-  gdk_draw_rectangle (pixmap,
-                      widget->style->black_gc,
-                      TRUE,
-                      update_rect.x, update_rect.y,
-                      update_rect.width, update_rect.height);
+  cr = gdk_cairo_create (pixmap);
+
+  gdk_cairo_rectangle (cr, &update_rect);
+  cairo_fill (cr);
 
   /* Now invalidate the affected region of the drawing area. */
   gdk_window_invalidate_rect (widget->window,
@@ -146,8 +145,7 @@ checkerboard_expose (GtkWidget      *da,
                      gpointer        data)
 {
   gint i, j, xcount, ycount;
-  GdkGC *gc1, *gc2;
-  GdkColor color;
+  cairo_t *cr;
 
 #define CHECK_SIZE 10
 #define SPACING 2
@@ -159,21 +157,9 @@ checkerboard_expose (GtkWidget      *da,
    * works.
    */
 
-  /* It would be a bit more efficient to keep these
-   * GC's around instead of recreating on each expose, but
-   * this is the lazy/slow way.
-   */
-  gc1 = gdk_gc_new (da->window);
-  color.red = 30000;
-  color.green = 0;
-  color.blue = 30000;
-  gdk_gc_set_rgb_fg_color (gc1, &color);
-
-  gc2 = gdk_gc_new (da->window);
-  color.red = 65535;
-  color.green = 65535;
-  color.blue = 65535;
-  gdk_gc_set_rgb_fg_color (gc2, &color);
+  cr = gdk_cairo_create (da->window);
+  gdk_cairo_rectangle (cr, &event->area);
+  cairo_clip (cr);
 
   xcount = 0;
   i = SPACING;
@@ -183,23 +169,17 @@ checkerboard_expose (GtkWidget      *da,
       ycount = xcount % 2; /* start with even/odd depending on row */
       while (j < da->allocation.height)
         {
-          GdkGC *gc;
-
           if (ycount % 2)
-            gc = gc1;
+            cairo_set_source_rgb (cr, 0.45777, 0, 0.45777);
           else
-            gc = gc2;
+            cairo_set_source_rgb (cr, 1, 1, 1);
 
           /* If we're outside event->area, this will do nothing.
            * It might be mildly more efficient if we handled
            * the clipping ourselves, but again we're feeling lazy.
            */
-          gdk_draw_rectangle (da->window,
-                              gc,
-                              TRUE,
-                              i, j,
-                              CHECK_SIZE,
-                              CHECK_SIZE);
+          cairo_rectangle (cr, i, j, CHECK_SIZE, CHECK_SIZE);
+          cairo_fill (cr);
 
           j += CHECK_SIZE + SPACING;
           ++ycount;
@@ -209,8 +189,7 @@ checkerboard_expose (GtkWidget      *da,
       ++xcount;
     }
 
-  g_object_unref (gc1);
-  g_object_unref (gc2);
+  cairo_destroy (cr);
 
   /* return TRUE because we've handled this event, so no
    * further processing is required.

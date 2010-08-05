@@ -26,7 +26,6 @@
 
 #include "gtkwin32embed.h"
 
-#include "gtkalias.h"
 
 static guint message_type[GTK_WIN32_EMBED_LAST];
 

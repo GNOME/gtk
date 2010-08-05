@@ -58,8 +58,6 @@
 #include "gtkwindow.h"
 
 #include "gtkintl.h"
-#include "gtkalias.h"
-
 
 /**
  * SECTION:gtkscalebutton
@@ -96,10 +94,10 @@ enum
   PROP_ICONS
 };
 
-#define GET_PRIVATE(obj)        (G_TYPE_INSTANCE_GET_PRIVATE ((obj), GTK_TYPE_SCALE_BUTTON, GtkScaleButtonPrivate))
-
 struct _GtkScaleButtonPrivate
 {
+  GtkWidget *plus_button;
+  GtkWidget *minus_button;
   GtkWidget *dock;
   GtkWidget *box;
   GtkWidget *scale;
@@ -356,7 +354,9 @@ gtk_scale_button_init (GtkScaleButton *button)
   GtkScaleButtonPrivate *priv;
   GtkWidget *frame;
 
-  button->priv = priv = GET_PRIVATE (button);
+  button->priv = priv = G_TYPE_INSTANCE_GET_PRIVATE (button,
+                                                     GTK_TYPE_SCALE_BUTTON,
+                                                     GtkScaleButtonPrivate);
 
   priv->timeout = FALSE;
   priv->click_id = 0;
@@ -394,22 +394,22 @@ gtk_scale_button_init (GtkScaleButton *button)
   gtk_container_add (GTK_CONTAINER (frame), priv->box);
 
   /* + */
-  button->plus_button = gtk_button_new_with_label ("+");
-  gtk_button_set_relief (GTK_BUTTON (button->plus_button), GTK_RELIEF_NONE);
-  g_signal_connect (button->plus_button, "button-press-event",
+  priv->plus_button = gtk_button_new_with_label ("+");
+  gtk_button_set_relief (GTK_BUTTON (priv->plus_button), GTK_RELIEF_NONE);
+  g_signal_connect (priv->plus_button, "button-press-event",
 		    G_CALLBACK (cb_button_press), button);
-  g_signal_connect (button->plus_button, "button-release-event",
+  g_signal_connect (priv->plus_button, "button-release-event",
 		    G_CALLBACK (cb_button_release), button);
-  gtk_box_pack_start (GTK_BOX (priv->box), button->plus_button, FALSE, FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (priv->box), priv->plus_button, FALSE, FALSE, 0);
 
   /* - */
-  button->minus_button = gtk_button_new_with_label ("-");
-  gtk_button_set_relief (GTK_BUTTON (button->minus_button), GTK_RELIEF_NONE);
-  g_signal_connect (button->minus_button, "button-press-event",
+  priv->minus_button = gtk_button_new_with_label ("-");
+  gtk_button_set_relief (GTK_BUTTON (priv->minus_button), GTK_RELIEF_NONE);
+  g_signal_connect (priv->minus_button, "button-press-event",
 		   G_CALLBACK (cb_button_press), button);
-  g_signal_connect (button->minus_button, "button-release-event",
+  g_signal_connect (priv->minus_button, "button-release-event",
 		    G_CALLBACK (cb_button_release), button);
-  gtk_box_pack_end (GTK_BOX (priv->box), button->minus_button, FALSE, FALSE, 0);
+  gtk_box_pack_end (GTK_BOX (priv->box), priv->minus_button, FALSE, FALSE, 0);
 
   priv->adjustment = GTK_ADJUSTMENT (gtk_adjustment_new (0.0, 0.0, 100.0, 2, 20, 0));
   g_object_ref_sink (priv->adjustment);
@@ -737,7 +737,7 @@ gtk_scale_button_get_plus_button (GtkScaleButton *button)
 {
   g_return_val_if_fail (GTK_IS_SCALE_BUTTON (button), NULL);
 
-  return button->plus_button;
+  return button->priv->plus_button;
 }
 
 /**
@@ -755,7 +755,7 @@ gtk_scale_button_get_minus_button (GtkScaleButton *button)
 {
   g_return_val_if_fail (GTK_IS_SCALE_BUTTON (button), NULL);
 
-  return button->minus_button;
+  return button->priv->minus_button;
 }
 
 /**
@@ -789,13 +789,13 @@ gtk_scale_button_set_orientation_private (GtkScaleButton *button,
       gtk_orientable_set_orientation (GTK_ORIENTABLE (priv->box),
                                       orientation);
       gtk_container_child_set (GTK_CONTAINER (priv->box),
-                               button->plus_button,
+                               priv->plus_button,
                                "pack-type",
                                orientation == GTK_ORIENTATION_VERTICAL ?
                                GTK_PACK_START : GTK_PACK_END,
                                NULL);
       gtk_container_child_set (GTK_CONTAINER (priv->box),
-                               button->minus_button,
+                               priv->minus_button,
                                "pack-type",
                                orientation == GTK_ORIENTATION_VERTICAL ?
                                GTK_PACK_END : GTK_PACK_START,
@@ -1236,7 +1236,7 @@ cb_button_press (GtkWidget      *widget,
   if (priv->click_id != 0)
     g_source_remove (priv->click_id);
 
-  if (widget == button->plus_button)
+  if (widget == priv->plus_button)
     priv->direction = fabs (adj->page_increment);
   else
     priv->direction = - fabs (adj->page_increment);
@@ -1607,6 +1607,3 @@ gtk_scale_button_scale_value_changed (GtkRange *range)
   g_signal_emit (button, signals[VALUE_CHANGED], 0, value);
   g_object_notify (G_OBJECT (button), "value");
 }
-
-#define __GTK_SCALE_BUTTON_C__
-#include "gtkaliasdef.c"

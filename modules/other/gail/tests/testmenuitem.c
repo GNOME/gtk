@@ -52,7 +52,7 @@ _check_object (AtkObject *obj)
     }
 
     g_assert (GTK_IS_ACCESSIBLE (atk_menu_item));
-    widget = GTK_ACCESSIBLE (atk_menu_item)->widget;
+    widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (atk_menu_item));
     g_assert (GTK_IS_MENU_ITEM (widget));
 
     if (first_time)
@@ -106,7 +106,9 @@ _check_object (AtkObject *obj)
       g_print ("Name: %s\n", accessible_name);
     else if (GTK_IS_ACCESSIBLE (obj))
     {
-      GtkWidget *widget = GTK_ACCESSIBLE (obj)->widget;
+      GtkWidget *widget;
+
+      widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (obj));
       g_print ("Type: %s\n", g_type_name (G_OBJECT_TYPE (widget)));
     } 
   }

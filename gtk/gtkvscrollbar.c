@@ -30,7 +30,7 @@
 #include "gtkorientable.h"
 #include "gtkvscrollbar.h"
 #include "gtkintl.h"
-#include "gtkalias.h"
+
 
 /**
  * SECTION:gtkvscrollbar
@@ -79,6 +79,3 @@ gtk_vscrollbar_new (GtkAdjustment *adjustment)
                        "adjustment", adjustment,
                        NULL);
 }
-
-#define __GTK_VSCROLLBAR_C__
-#include "gtkaliasdef.c"

@@ -45,7 +45,6 @@
 #include "gdkx.h"
 #include <gdk/gdkpixmap.h>
 #include <gdk-pixbuf/gdk-pixbuf.h>
-#include "gdkalias.h"
 
 static guint theme_serial = 0;
 
@@ -1058,6 +1057,3 @@ gdk_display_get_maximal_cursor_size (GdkDisplay *display,
 		    GDK_WINDOW_XWINDOW (window), 
 		    128, 128, width, height);
 }
-
-#define __GDK_CURSOR_X11_C__
-#include "gdkaliasdef.c"

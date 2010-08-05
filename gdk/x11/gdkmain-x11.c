@@ -49,7 +49,6 @@
 #include "gdkinternals.h"
 #include "gdkprivate-x11.h"
 #include "gdkintl.h"
-#include "gdkalias.h"
 
 #include <gdk/gdkdeviceprivate.h>
 
@@ -623,6 +622,3 @@ void
 _gdk_windowing_event_data_free (GdkEvent *event)
 {
 }
-
-#define __GDK_MAIN_X11_C__
-#include "gdkaliasdef.c"

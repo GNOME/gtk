@@ -46,16 +46,15 @@ G_BEGIN_DECLS
 
 
 typedef struct _GtkCheckMenuItem       GtkCheckMenuItem;
+typedef struct _GtkCheckMenuItemPriv   GtkCheckMenuItemPriv;
 typedef struct _GtkCheckMenuItemClass  GtkCheckMenuItemClass;
 
 struct _GtkCheckMenuItem
 {
   GtkMenuItem menu_item;
 
-  guint GSEAL (active) : 1;
-  guint GSEAL (always_show_toggle) : 1;
-  guint GSEAL (inconsistent) : 1;
-  guint GSEAL (draw_as_radio) : 1;
+  /* <private> */
+  GtkCheckMenuItemPriv *priv;
 };
 
 struct _GtkCheckMenuItemClass
@@ -89,6 +88,11 @@ gboolean   gtk_check_menu_item_get_inconsistent  (GtkCheckMenuItem *check_menu_i
 void       gtk_check_menu_item_set_draw_as_radio (GtkCheckMenuItem *check_menu_item,
 						  gboolean          draw_as_radio);
 gboolean   gtk_check_menu_item_get_draw_as_radio (GtkCheckMenuItem *check_menu_item);
+
+
+/* private */
+void       _gtk_check_menu_item_set_active       (GtkCheckMenuItem *check_menu_item,
+                                                  gboolean          is_active);
 
 
 G_END_DECLS

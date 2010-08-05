@@ -143,6 +143,7 @@ timeout_toggle_toggled (GtkToggleButton *toggle)
 static void
 icon_activated (GtkStatusIcon *icon)
 {
+  GtkWidget *content_area;
   GtkWidget *dialog;
   GtkWidget *toggle;
 
@@ -165,8 +166,10 @@ icon_activated (GtkStatusIcon *icon)
       g_signal_connect (dialog, "delete_event", 
 			G_CALLBACK (gtk_widget_hide_on_delete), NULL);
 
+      content_area = gtk_dialog_get_content_area (GTK_DIALOG (dialog));
+
       toggle = gtk_toggle_button_new_with_mnemonic ("_Show the icon");
-      gtk_box_pack_end (GTK_BOX (GTK_DIALOG (dialog)->vbox), toggle, TRUE, TRUE, 6);
+      gtk_box_pack_end (GTK_BOX (content_area), toggle, TRUE, TRUE, 6);
       gtk_widget_show (toggle);
 
       gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (toggle),
@@ -175,7 +178,7 @@ icon_activated (GtkStatusIcon *icon)
 			G_CALLBACK (visible_toggle_toggled), NULL);
 
       toggle = gtk_toggle_button_new_with_mnemonic ("_Blink the icon");
-      gtk_box_pack_end (GTK_BOX (GTK_DIALOG (dialog)->vbox), toggle, TRUE, TRUE, 6);
+      gtk_box_pack_end (GTK_BOX (content_area), toggle, TRUE, TRUE, 6);
       gtk_widget_show (toggle);
 
       gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (toggle),
@@ -184,7 +187,7 @@ icon_activated (GtkStatusIcon *icon)
 			G_CALLBACK (blink_toggle_toggled), NULL);
 
       toggle = gtk_toggle_button_new_with_mnemonic ("_Change images");
-      gtk_box_pack_end (GTK_BOX (GTK_DIALOG (dialog)->vbox), toggle, TRUE, TRUE, 6);
+      gtk_box_pack_end (GTK_BOX (content_area), toggle, TRUE, TRUE, 6);
       gtk_widget_show (toggle);
 
       gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (toggle),

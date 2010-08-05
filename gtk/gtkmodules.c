@@ -27,7 +27,6 @@
 #include "gtkdebug.h"
 #include "gtkprivate.h" /* GTK_LIBDIR */
 #include "gtkintl.h" 
-#include "gtkalias.h"
 
 #include <gmodule.h>
 

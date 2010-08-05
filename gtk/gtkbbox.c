@@ -59,7 +59,17 @@
 #include "gtkorientable.h"
 #include "gtkprivate.h"
 #include "gtkintl.h"
-#include "gtkalias.h"
+
+
+struct _GtkButtonBoxPriv
+{
+  GtkButtonBoxStyle layout_style;
+
+  gint child_ipad_x;
+  gint child_ipad_y;
+  gint child_min_width;
+  gint child_min_height;
+};
 
 enum {
   PROP_0,
@@ -70,6 +80,8 @@ enum {
   CHILD_PROP_0,
   CHILD_PROP_SECONDARY
 };
+
+#define GTK_BOX_SECONDARY_CHILD "gtk-box-secondary-child"
 
 static void gtk_button_box_set_property       (GObject           *object,
 					       guint              prop_id,
@@ -83,6 +95,8 @@ static void gtk_button_box_size_request       (GtkWidget         *widget,
                                                GtkRequisition    *requisition);
 static void gtk_button_box_size_allocate      (GtkWidget         *widget,
                                                GtkAllocation     *allocation);
+static void gtk_button_box_remove             (GtkContainer      *container,
+                                               GtkWidget         *widget);
 static void gtk_button_box_set_child_property (GtkContainer      *container,
 					       GtkWidget         *child,
 					       guint              property_id,
@@ -118,6 +132,7 @@ gtk_button_box_class_init (GtkButtonBoxClass *class)
   widget_class->size_request = gtk_button_box_size_request;
   widget_class->size_allocate = gtk_button_box_size_allocate;
 
+  container_class->remove = gtk_button_box_remove;
   container_class->set_child_property = gtk_button_box_set_child_property;
   container_class->get_child_property = gtk_button_box_get_child_property;
 
@@ -175,17 +190,26 @@ gtk_button_box_class_init (GtkButtonBoxClass *class)
 								    P_("If TRUE, the child appears in a secondary group of children, suitable for, e.g., help buttons"),
 								    FALSE,
 								    GTK_PARAM_READWRITE));
+
+  g_type_class_add_private (class, sizeof (GtkButtonBoxPriv));
 }
 
 static void
 gtk_button_box_init (GtkButtonBox *button_box)
 {
-  GTK_BOX (button_box)->spacing = 0;
-  button_box->child_min_width = GTK_BUTTONBOX_DEFAULT;
-  button_box->child_min_height = GTK_BUTTONBOX_DEFAULT;
-  button_box->child_ipad_x = GTK_BUTTONBOX_DEFAULT;
-  button_box->child_ipad_y = GTK_BUTTONBOX_DEFAULT;
-  button_box->layout_style = GTK_BUTTONBOX_DEFAULT_STYLE;
+  GtkButtonBoxPriv *priv;
+
+  button_box->priv = G_TYPE_INSTANCE_GET_PRIVATE (button_box,
+                                                  GTK_TYPE_BUTTON_BOX,
+                                                  GtkButtonBoxPriv);
+  priv = button_box->priv;
+
+  gtk_box_set_spacing (GTK_BOX (button_box), 0);
+  priv->child_min_width = GTK_BUTTONBOX_DEFAULT;
+  priv->child_min_height = GTK_BUTTONBOX_DEFAULT;
+  priv->child_ipad_x = GTK_BUTTONBOX_DEFAULT;
+  priv->child_ipad_y = GTK_BUTTONBOX_DEFAULT;
+  priv->layout_style = GTK_BUTTONBOX_DEFAULT_STYLE;
 }
 
 static void
@@ -212,10 +236,12 @@ gtk_button_box_get_property (GObject         *object,
 			     GValue          *value,
 			     GParamSpec      *pspec)
 {
+  GtkButtonBoxPriv *priv = GTK_BUTTON_BOX (object)->priv;
+
   switch (prop_id)
     {
     case PROP_LAYOUT_STYLE:
-      g_value_set_enum (value, GTK_BUTTON_BOX (object)->layout_style);
+      g_value_set_enum (value, priv->layout_style);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -262,6 +288,19 @@ gtk_button_box_get_child_property (GtkContainer *container,
     }
 }
 
+static void
+gtk_button_box_remove (GtkContainer *container,
+                       GtkWidget    *widget)
+{
+  /* clear is_secondary flag in case the widget
+   * is added to another container */
+  gtk_button_box_set_child_secondary (GTK_BUTTON_BOX (container),
+                                      widget,
+                                      FALSE);
+
+  GTK_CONTAINER_CLASS (gtk_button_box_parent_class)->remove (container, widget);
+}
+
 /**
  * gtk_button_box_set_layout:
  * @widget: a #GtkButtonBox
@@ -273,13 +312,17 @@ void
 gtk_button_box_set_layout (GtkButtonBox      *widget, 
                            GtkButtonBoxStyle  layout_style)
 {
+  GtkButtonBoxPriv *priv;
+
   g_return_if_fail (GTK_IS_BUTTON_BOX (widget));
   g_return_if_fail (layout_style >= GTK_BUTTONBOX_DEFAULT_STYLE &&
 		    layout_style <= GTK_BUTTONBOX_CENTER);
 
-  if (widget->layout_style != layout_style)
+  priv = widget->priv;
+
+  if (priv->layout_style != layout_style)
     {
-      widget->layout_style = layout_style;
+      priv->layout_style = layout_style;
       g_object_notify (G_OBJECT (widget), "layout-style");
       gtk_widget_queue_resize (GTK_WIDGET (widget));
     }
@@ -298,7 +341,7 @@ gtk_button_box_get_layout (GtkButtonBox *widget)
 {
   g_return_val_if_fail (GTK_IS_BUTTON_BOX (widget), GTK_BUTTONBOX_SPREAD);
   
-  return widget->layout_style;
+  return widget->priv->layout_style;
 }
 
 /**
@@ -316,26 +359,10 @@ gboolean
 gtk_button_box_get_child_secondary (GtkButtonBox *widget,
 				    GtkWidget    *child)
 {
-  GList *list;
-  GtkBoxChild *child_info;
-
   g_return_val_if_fail (GTK_IS_BUTTON_BOX (widget), FALSE);
   g_return_val_if_fail (GTK_IS_WIDGET (child), FALSE);
 
-  child_info = NULL;
-  list = GTK_BOX (widget)->children;
-  while (list)
-    {
-      child_info = list->data;
-      if (child_info->widget == child)
-	break;
-
-      list = list->next;
-    }
-
-  g_return_val_if_fail (list != NULL, FALSE);
-
-  return child_info->is_secondary;
+  return (g_object_get_data (G_OBJECT (child), GTK_BOX_SECONDARY_CHILD) != NULL);
 }
 
 /**
@@ -363,25 +390,13 @@ gtk_button_box_set_child_secondary (GtkButtonBox *widget,
 				    GtkWidget    *child,
 				    gboolean      is_secondary)
 {
-  GList *list;
-  
   g_return_if_fail (GTK_IS_BUTTON_BOX (widget));
   g_return_if_fail (GTK_IS_WIDGET (child));
   g_return_if_fail (child->parent == GTK_WIDGET (widget));
 
-  list = GTK_BOX (widget)->children;
-  while (list)
-    {
-      GtkBoxChild *child_info = list->data;
-      if (child_info->widget == child)
-	{
-	  child_info->is_secondary = is_secondary;
-	  break;
-	}
-
-      list = list->next;
-    }
-
+  g_object_set_data (G_OBJECT (child),
+                     GTK_BOX_SECONDARY_CHILD,
+                     is_secondary ? GINT_TO_POINTER (1) : NULL);
   gtk_widget_child_notify (child, "secondary");
 
   if (gtk_widget_get_visible (GTK_WIDGET (widget))
@@ -395,13 +410,13 @@ gtk_button_box_set_child_secondary (GtkButtonBox *widget,
 void
 _gtk_button_box_child_requisition (GtkWidget *widget,
                                    int       *nvis_children,
-				   int       *nvis_secondaries,
+                                   int       *nvis_secondaries,
                                    int       *width,
                                    int       *height)
 {
+  GtkButtonBoxPriv *priv;
   GtkButtonBox *bbox;
-  GtkBoxChild *child;
-  GList *children;
+  GList *children, *list;
   gint nchildren;
   gint nsecondaries;
   gint needed_width;
@@ -422,6 +437,7 @@ _gtk_button_box_child_requisition (GtkWidget *widget,
   g_return_if_fail (GTK_IS_BUTTON_BOX (widget));
 
   bbox = GTK_BUTTON_BOX (widget);
+  priv = bbox->priv;
 
   gtk_widget_style_get (widget,
                         "child-min-width", &width_default,
@@ -429,19 +445,19 @@ _gtk_button_box_child_requisition (GtkWidget *widget,
                         "child-internal-pad-x", &ipad_x_default,
                         "child-internal-pad-y", &ipad_y_default, 
 			NULL);
-  
-  child_min_width = bbox->child_min_width   != GTK_BUTTONBOX_DEFAULT
-	  ? bbox->child_min_width : width_default;
-  child_min_height = bbox->child_min_height !=GTK_BUTTONBOX_DEFAULT
-	  ? bbox->child_min_height : height_default;
-  ipad_x = bbox->child_ipad_x != GTK_BUTTONBOX_DEFAULT
-	  ? bbox->child_ipad_x : ipad_x_default;
-  ipad_y = bbox->child_ipad_y != GTK_BUTTONBOX_DEFAULT
-	  ? bbox->child_ipad_y : ipad_y_default;
+
+  child_min_width = priv->child_min_width != GTK_BUTTONBOX_DEFAULT
+                    ? priv->child_min_width : width_default;
+  child_min_height = priv->child_min_height != GTK_BUTTONBOX_DEFAULT
+                     ? priv->child_min_height : height_default;
+  ipad_x = priv->child_ipad_x != GTK_BUTTONBOX_DEFAULT
+           ? priv->child_ipad_x : ipad_x_default;
+  ipad_y = priv->child_ipad_y != GTK_BUTTONBOX_DEFAULT
+           ? priv->child_ipad_y : ipad_y_default;
 
   nchildren = 0;
   nsecondaries = 0;
-  children = GTK_BOX(bbox)->children;
+  list = children = _gtk_box_get_children (GTK_BOX (bbox));
   needed_width = child_min_width;
   needed_height = child_min_height;  
   ipad_w = ipad_x * 2;
@@ -449,22 +465,29 @@ _gtk_button_box_child_requisition (GtkWidget *widget,
   
   while (children)
     {
+      GtkWidget *child;
+      gboolean is_secondary;
+
       child = children->data;
       children = children->next;
 
-      if (gtk_widget_get_visible (child->widget))
+      is_secondary = gtk_button_box_get_child_secondary (bbox, child);
+
+      if (gtk_widget_get_visible (child))
 	{
 	  nchildren += 1;
-	  gtk_widget_size_request (child->widget, &child_requisition);
+	  gtk_widget_size_request (child, &child_requisition);
 
 	  if (child_requisition.width + ipad_w > needed_width)
 	    needed_width = child_requisition.width + ipad_w;
 	  if (child_requisition.height + ipad_h > needed_height)
 	    needed_height = child_requisition.height + ipad_h;
-	  if (child->is_secondary)
+	  if (is_secondary)
 	    nsecondaries++;
 	}
     }
+
+  g_list_free (list);
 
   if (nvis_children)
     *nvis_children = nchildren;
@@ -497,22 +520,25 @@ static void
 gtk_button_box_size_request (GtkWidget      *widget,
                              GtkRequisition *requisition)
 {
+  GtkButtonBoxPriv *priv;
   GtkBox *box;
   GtkButtonBox *bbox;
   gint nvis_children;
   gint child_width;
   gint child_height;
   gint spacing;
+  guint border_width;
   GtkButtonBoxStyle layout;
   GtkOrientation orientation;
 
   box = GTK_BOX (widget);
   bbox = GTK_BUTTON_BOX (widget);
+  priv = bbox->priv;
 
   orientation = gtk_orientable_get_orientation (GTK_ORIENTABLE (widget));
-  spacing = box->spacing;
-  layout = bbox->layout_style != GTK_BUTTONBOX_DEFAULT_STYLE
-	  ? bbox->layout_style : gtk_button_box_kludge_get_layout_default (GTK_BUTTON_BOX (widget));
+  spacing = gtk_box_get_spacing (box);
+  layout = priv->layout_style != GTK_BUTTONBOX_DEFAULT_STYLE
+           ? priv->layout_style : gtk_button_box_kludge_get_layout_default (GTK_BUTTON_BOX (widget));
 
   _gtk_button_box_child_requisition (widget,
                                      &nvis_children,
@@ -561,18 +587,19 @@ gtk_button_box_size_request (GtkWidget      *widget,
         requisition->width = child_width;
     }
 
-  requisition->width += GTK_CONTAINER (box)->border_width * 2;
-  requisition->height += GTK_CONTAINER (box)->border_width * 2;
+  border_width = gtk_container_get_border_width (GTK_CONTAINER (box));
+  requisition->width += border_width * 2;
+  requisition->height += border_width * 2;
 }
 
 static void
 gtk_button_box_size_allocate (GtkWidget     *widget,
                               GtkAllocation *allocation)
 {
+  GtkButtonBoxPriv *priv;
   GtkBox *base_box;
   GtkButtonBox *box;
-  GtkBoxChild *child;
-  GList *children;
+  GList *children, *list;
   GtkAllocation child_allocation;
   gint nvis_children;
   gint n_secondaries;
@@ -588,14 +615,18 @@ gtk_button_box_size_allocate (GtkWidget     *widget,
   gint childspacing = 0;
   GtkButtonBoxStyle layout;
   gint spacing;
+  guint border_width;
   GtkOrientation orientation;
 
-  orientation = gtk_orientable_get_orientation (GTK_ORIENTABLE (widget));
   base_box = GTK_BOX (widget);
   box = GTK_BUTTON_BOX (widget);
-  spacing = base_box->spacing;
-  layout = box->layout_style != GTK_BUTTONBOX_DEFAULT_STYLE
-	  ? box->layout_style : gtk_button_box_kludge_get_layout_default (GTK_BUTTON_BOX (widget));
+  priv = box->priv;
+
+  border_width = gtk_container_get_border_width (GTK_CONTAINER (box));
+  orientation = gtk_orientable_get_orientation (GTK_ORIENTABLE (widget));
+  spacing = gtk_box_get_spacing (base_box);
+  layout = priv->layout_style != GTK_BUTTONBOX_DEFAULT_STYLE
+           ? priv->layout_style : gtk_button_box_kludge_get_layout_default (GTK_BUTTON_BOX (widget));
   _gtk_button_box_child_requisition (widget,
                                      &nvis_children,
                                      &n_secondaries,
@@ -604,9 +635,9 @@ gtk_button_box_size_allocate (GtkWidget     *widget,
   widget->allocation = *allocation;
 
   if (orientation == GTK_ORIENTATION_HORIZONTAL)
-    width = allocation->width - GTK_CONTAINER (box)->border_width*2;
+    width = allocation->width - border_width*2;
   else
-    height = allocation->height - GTK_CONTAINER (box)->border_width*2;
+    height = allocation->height - border_width*2;
 
   switch (layout)
     {
@@ -616,8 +647,7 @@ gtk_button_box_size_allocate (GtkWidget     *widget,
           {
             childspacing = (width - (nvis_children * child_width))
                     / (nvis_children + 1);
-            x = allocation->x + GTK_CONTAINER (box)->border_width
-                    + childspacing;
+            x = allocation->x + border_width + childspacing;
             secondary_x = x + ((nvis_children - n_secondaries)
                             * (child_width + childspacing));
           }
@@ -625,8 +655,7 @@ gtk_button_box_size_allocate (GtkWidget     *widget,
           {
             childspacing = (height - (nvis_children * child_height))
                     / (nvis_children + 1);
-            y = allocation->y + GTK_CONTAINER (box)->border_width
-                    + childspacing;
+            y = allocation->y + border_width + childspacing;
             secondary_y = y + ((nvis_children - n_secondaries)
                             * (child_height + childspacing));
           }
@@ -641,7 +670,7 @@ gtk_button_box_size_allocate (GtkWidget     *widget,
               {
                 childspacing = (width - (nvis_children * child_width))
                       / (nvis_children - 1);
-                x = allocation->x + GTK_CONTAINER (box)->border_width;
+                x = allocation->x + border_width;
                 secondary_x = x + ((nvis_children - n_secondaries)
                                    * (child_width + childspacing));
               }
@@ -659,7 +688,7 @@ gtk_button_box_size_allocate (GtkWidget     *widget,
               {
                 childspacing = (height - (nvis_children*child_height))
                         / (nvis_children-1);
-                y = allocation->y + GTK_CONTAINER (box)->border_width;
+                y = allocation->y + border_width;
                 secondary_y = y + ((nvis_children - n_secondaries)
                                 * (child_height + childspacing));
               }
@@ -679,20 +708,20 @@ gtk_button_box_size_allocate (GtkWidget     *widget,
         if (orientation == GTK_ORIENTATION_HORIZONTAL)
           {
             childspacing = spacing;
-            x = allocation->x + GTK_CONTAINER (box)->border_width;
+            x = allocation->x + border_width;
             secondary_x = allocation->x + allocation->width
               - child_width * n_secondaries
               - spacing * (n_secondaries - 1)
-              - GTK_CONTAINER (box)->border_width;
+              - border_width;
           }
         else
           {
             childspacing = spacing;
-            y = allocation->y + GTK_CONTAINER (box)->border_width;
+            y = allocation->y + border_width;
             secondary_y = allocation->y + allocation->height
               - child_height * n_secondaries
               - spacing * (n_secondaries - 1)
-              - GTK_CONTAINER (box)->border_width;
+              - border_width;
           }
 
         break;
@@ -705,8 +734,8 @@ gtk_button_box_size_allocate (GtkWidget     *widget,
             x = allocation->x + allocation->width
               - child_width * (nvis_children - n_secondaries)
               - spacing * (nvis_children - n_secondaries - 1)
-              - GTK_CONTAINER (box)->border_width;
-            secondary_x = allocation->x + GTK_CONTAINER (box)->border_width;
+              - border_width;
+            secondary_x = allocation->x + border_width;
           }
         else
           {
@@ -714,8 +743,8 @@ gtk_button_box_size_allocate (GtkWidget     *widget,
             y = allocation->y + allocation->height
               - child_height * (nvis_children - n_secondaries)
               - spacing * (nvis_children - n_secondaries - 1)
-              - GTK_CONTAINER (box)->border_width;
-            secondary_y = allocation->y + GTK_CONTAINER (box)->border_width;
+              - border_width;
+            secondary_y = allocation->y + border_width;
           }
 
         break;
@@ -730,7 +759,7 @@ gtk_button_box_size_allocate (GtkWidget     *widget,
                - (child_width * (nvis_children - n_secondaries)
                + spacing * (nvis_children - n_secondaries - 1))) / 2
               + (n_secondaries * child_width + n_secondaries * spacing) / 2;
-            secondary_x = allocation->x + GTK_CONTAINER (box)->border_width;
+            secondary_x = allocation->x + border_width;
           }
         else
           {
@@ -740,7 +769,7 @@ gtk_button_box_size_allocate (GtkWidget     *widget,
                - (child_height * (nvis_children - n_secondaries)
                   + spacing * (nvis_children - n_secondaries - 1))) / 2
               + (n_secondaries * child_height + n_secondaries * spacing) / 2;
-            secondary_y = allocation->y + GTK_CONTAINER (box)->border_width;
+            secondary_y = allocation->y + border_width;
           }
 
         break;
@@ -761,14 +790,19 @@ gtk_button_box_size_allocate (GtkWidget     *widget,
         childspace = child_height + childspacing;
       }
 
-  children = GTK_BOX (box)->children;
+  list = children = _gtk_box_get_children (GTK_BOX (box));
 
   while (children)
     {
+      GtkWidget *child;
+      gboolean is_secondary;
+
       child = children->data;
       children = children->next;
 
-      if (gtk_widget_get_visible (child->widget))
+      is_secondary = gtk_button_box_get_child_secondary (box, child);
+
+      if (gtk_widget_get_visible (child))
         {
           child_allocation.width = child_width;
           child_allocation.height = child_height;
@@ -777,7 +811,7 @@ gtk_button_box_size_allocate (GtkWidget     *widget,
             {
               child_allocation.y = y;
 
-              if (child->is_secondary)
+              if (is_secondary)
                 {
                   child_allocation.x = secondary_x;
                   secondary_x += childspace;
@@ -796,7 +830,7 @@ gtk_button_box_size_allocate (GtkWidget     *widget,
             {
               child_allocation.x = x;
 
-              if (child->is_secondary)
+              if (is_secondary)
                 {
                   child_allocation.y = secondary_y;
                   secondary_y += childspace;
@@ -808,9 +842,11 @@ gtk_button_box_size_allocate (GtkWidget     *widget,
                 }
             }
 
-          gtk_widget_size_allocate (child->widget, &child_allocation);
+          gtk_widget_size_allocate (child, &child_allocation);
         }
     }
+
+  g_list_free (list);
 }
 
 /**
@@ -830,6 +866,3 @@ gtk_button_box_new (GtkOrientation orientation)
                        "orientation", orientation,
                        NULL);
 }
-
-#define __GTK_BUTTON_BOX_C__
-#include "gtkaliasdef.c"

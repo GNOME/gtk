@@ -38,7 +38,6 @@
 #include "gdkprivate-directfb.h"
 
 #include "gdkinternals.h"
-#include "gdkalias.h"
 
 
 static GdkColormap *default_colormap = NULL;
@@ -247,6 +246,3 @@ gdk_screen_is_composited (GdkScreen *screen)
    g_return_val_if_fail (GDK_IS_SCREEN (screen), FALSE);
    return FALSE;
 } 
-
-#define __GDK_SCREEN_X11_C__
-#include "gdkaliasdef.c"

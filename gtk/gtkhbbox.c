@@ -28,7 +28,6 @@
 #include "gtkhbbox.h"
 #include "gtkorientable.h"
 #include "gtkintl.h"
-#include "gtkalias.h"
 
 static gint default_layout_style = GTK_BUTTONBOX_EDGE;
 
@@ -57,6 +56,3 @@ _gtk_hbutton_box_get_layout_default (void)
 {
   return default_layout_style;
 }
-
-#define __GTK_HBUTTON_BOX_C__
-#include "gtkaliasdef.c"

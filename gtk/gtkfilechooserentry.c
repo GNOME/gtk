@@ -30,7 +30,6 @@
 #include "gtkmain.h"
 #include "gtkwindow.h"
 #include "gtkintl.h"
-#include "gtkalias.h"
 
 typedef struct _GtkFileChooserEntryClass GtkFileChooserEntryClass;
 

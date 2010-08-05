@@ -32,12 +32,9 @@
 
 #include "gtkradioaction.h"
 #include "gtkradiomenuitem.h"
-#include "gtktoggleactionprivate.h"
 #include "gtktoggletoolbutton.h"
 #include "gtkintl.h"
 #include "gtkprivate.h"
-#include "gtkalias.h"
-
 
 /**
  * SECTION:gtkradioaction
@@ -49,8 +46,6 @@
  * one time.
  */
 
-
-#define GTK_RADIO_ACTION_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), GTK_TYPE_RADIO_ACTION, GtkRadioActionPrivate))
 
 struct _GtkRadioActionPrivate 
 {
@@ -185,7 +180,10 @@ gtk_radio_action_class_init (GtkRadioActionClass *klass)
 static void
 gtk_radio_action_init (GtkRadioAction *action)
 {
-  action->private_data = GTK_RADIO_ACTION_GET_PRIVATE (action);
+  action->private_data = G_TYPE_INSTANCE_GET_PRIVATE (action,
+                                                      GTK_TYPE_RADIO_ACTION,
+                                                      GtkRadioActionPrivate);
+
   action->private_data->group = g_slist_prepend (NULL, action);
   action->private_data->value = 0;
 
@@ -322,11 +320,13 @@ gtk_radio_action_activate (GtkAction *action)
   GtkToggleAction *toggle_action;
   GtkToggleAction *tmp_action;
   GSList *tmp_list;
+  gboolean active;
 
   radio_action = GTK_RADIO_ACTION (action);
   toggle_action = GTK_TOGGLE_ACTION (action);
 
-  if (toggle_action->private_data->active)
+  active = gtk_toggle_action_get_active (toggle_action);
+  if (active)
     {
       tmp_list = radio_action->private_data->group;
 
@@ -335,9 +335,10 @@ gtk_radio_action_activate (GtkAction *action)
 	  tmp_action = tmp_list->data;
 	  tmp_list = tmp_list->next;
 
-	  if (tmp_action->private_data->active && (tmp_action != toggle_action)) 
+	  if (gtk_toggle_action_get_active (tmp_action) &&
+              (tmp_action != toggle_action))
 	    {
-	      toggle_action->private_data->active = !toggle_action->private_data->active;
+              _gtk_toggle_action_set_active (toggle_action, !active);
 
 	      break;
 	    }
@@ -346,7 +347,7 @@ gtk_radio_action_activate (GtkAction *action)
     }
   else
     {
-      toggle_action->private_data->active = !toggle_action->private_data->active;
+      _gtk_toggle_action_set_active (toggle_action, !active);
       g_object_notify (G_OBJECT (action), "active");
 
       tmp_list = radio_action->private_data->group;
@@ -355,7 +356,8 @@ gtk_radio_action_activate (GtkAction *action)
 	  tmp_action = tmp_list->data;
 	  tmp_list = tmp_list->next;
 
-	  if (tmp_action->private_data->active && (tmp_action != toggle_action))
+          if (gtk_toggle_action_get_active (tmp_action) &&
+              (tmp_action != toggle_action))
 	    {
 	      _gtk_action_emit_activate (GTK_ACTION (tmp_action));
 	      break;
@@ -547,7 +549,7 @@ gtk_radio_action_get_current_value (GtkRadioAction *action)
 	{
 	  GtkToggleAction *toggle_action = slist->data;
 
-	  if (toggle_action->private_data->active)
+	  if (gtk_toggle_action_get_active (toggle_action))
 	    return GTK_RADIO_ACTION (toggle_action)->private_data->value;
 	}
     }
@@ -594,6 +596,3 @@ gtk_radio_action_set_current_value (GtkRadioAction *action,
     g_warning ("Radio group does not contain an action with value '%d'",
 	       current_value);
 }
-
-#define __GTK_RADIO_ACTION_C__
-#include "gtkaliasdef.c"

@@ -49,10 +49,15 @@ static gchar *gtk_src_dir = NULL;
 static void
 win_style_set_cb (GtkWidget *win)
 {
-  gtk_container_set_border_width (GTK_CONTAINER (GTK_DIALOG (win)->vbox), 12);
-  gtk_box_set_spacing (GTK_BOX (GTK_DIALOG (win)->vbox), 24);
-  gtk_container_set_border_width (GTK_CONTAINER (GTK_DIALOG (win)->action_area), 0);
-  gtk_box_set_spacing (GTK_BOX (GTK_DIALOG (win)->action_area), 6);
+  GtkWidget *content_area, *action_area;
+
+  content_area = gtk_dialog_get_content_area (GTK_DIALOG (win));
+  action_area = gtk_dialog_get_action_area (GTK_DIALOG (win));
+
+  gtk_container_set_border_width (GTK_CONTAINER (content_area), 12);
+  gtk_box_set_spacing (GTK_BOX (content_area), 24);
+  gtk_container_set_border_width (GTK_CONTAINER (action_area), 0);
+  gtk_box_set_spacing (GTK_BOX (action_area), 6);
 }
 
 static gboolean
@@ -287,7 +292,7 @@ main (int   argc,
   g_signal_connect (win, "response", G_CALLBACK (gtk_main_quit), NULL);
 
   vbox = gtk_vbox_new (FALSE, 18);
-  gtk_container_add (GTK_CONTAINER (GTK_DIALOG (win)->vbox), vbox);
+  gtk_container_add (GTK_CONTAINER (gtk_dialog_get_content_area (GTK_DIALOG (win))), vbox);
 
   frame = gtk_frame_new ("<b>GtkFileChooserButton</b>");
   gtk_frame_set_shadow_type (GTK_FRAME (frame), GTK_SHADOW_NONE);

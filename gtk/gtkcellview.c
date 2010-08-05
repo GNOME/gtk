@@ -29,7 +29,7 @@
 #include "gtkprivate.h"
 #include <gobject/gmarshal.h>
 #include "gtkbuildable.h"
-#include "gtkalias.h"
+
 
 typedef struct _GtkCellViewCellInfo GtkCellViewCellInfo;
 struct _GtkCellViewCellInfo
@@ -131,7 +131,6 @@ static void       gtk_cell_view_get_height                     (GtkSizeRequest  
 
 static GtkBuildableIface *parent_buildable_iface;
 
-#define GTK_CELL_VIEW_GET_PRIVATE(obj)    (G_TYPE_INSTANCE_GET_PRIVATE ((obj), GTK_TYPE_CELL_VIEW, GtkCellViewPrivate))
 
 enum
 {
@@ -299,9 +298,14 @@ gtk_cell_view_set_property (GObject      *object,
 static void
 gtk_cell_view_init (GtkCellView *cellview)
 {
-  gtk_widget_set_has_window (GTK_WIDGET (cellview), FALSE);
+  GtkCellViewPrivate *priv;
 
-  cellview->priv = GTK_CELL_VIEW_GET_PRIVATE (cellview);
+  cellview->priv = G_TYPE_INSTANCE_GET_PRIVATE (cellview,
+                                                GTK_TYPE_CELL_VIEW,
+                                                GtkCellViewPrivate);
+  priv = cellview->priv;
+
+  gtk_widget_set_has_window (GTK_WIDGET (cellview), FALSE);
 }
 
 static void
@@ -340,7 +344,7 @@ gtk_cell_view_size_allocate (GtkWidget     *widget,
     {
       GtkCellViewCellInfo *info = (GtkCellViewCellInfo *)i->data;
 
-      if (!info->cell->visible)
+      if (!gtk_cell_renderer_get_visible (info->cell))
         continue;
 
       if (info->expand)
@@ -363,7 +367,7 @@ gtk_cell_view_size_allocate (GtkWidget     *widget,
     {
       GtkCellViewCellInfo *info = (GtkCellViewCellInfo *)i->data;
 
-      if (!info->cell->visible)
+      if (!gtk_cell_renderer_get_visible (info->cell))
         continue;
 
       info->real_width = info->requested_width;
@@ -442,7 +446,7 @@ gtk_cell_view_expose (GtkWidget      *widget,
       if (info->pack == GTK_PACK_END)
         continue;
 
-      if (!info->cell->visible)
+      if (!gtk_cell_renderer_get_visible (info->cell))
         continue;
 
       area.width = info->real_width;
@@ -469,7 +473,7 @@ gtk_cell_view_expose (GtkWidget      *widget,
       if (info->pack == GTK_PACK_START)
         continue;
 
-      if (!info->cell->visible)
+      if (!gtk_cell_renderer_get_visible (info->cell))
         continue;
 
       area.width = info->real_width;
@@ -1167,7 +1171,6 @@ gtk_cell_view_buildable_custom_tag_end (GtkBuildable *buildable,
 					    data);
 }
 
-
 static void
 gtk_cell_view_size_request_init (GtkSizeRequestIface *iface)
 {
@@ -1196,7 +1199,7 @@ gtk_cell_view_get_size (GtkSizeRequest *widget,
     {
       GtkCellViewCellInfo *info = (GtkCellViewCellInfo *)i->data;
 
-      if (info->cell->visible)
+      if (gtk_cell_renderer_get_visible (info->cell))
         {
 	  
 	  if (!first_cell && orientation == GTK_ORIENTATION_HORIZONTAL)
@@ -1249,7 +1252,3 @@ gtk_cell_view_get_height (GtkSizeRequest      *widget,
 {
   gtk_cell_view_get_size (widget, GTK_ORIENTATION_VERTICAL, minimum_size, natural_size);
 }
-
-
-#define __GTK_CELL_VIEW_C__
-#include "gtkaliasdef.c"

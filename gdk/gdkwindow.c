@@ -45,8 +45,6 @@
 #include "gdkscreen.h"
 #include "gdkwindowimpl.h"
 
-#include "gdkalias.h"
-
 #undef DEBUG_WINDOW_PRINTING
 
 
@@ -2400,6 +2398,29 @@ from_embedder (GdkWindowObject *window,
 }
 
 /**
+ * gdk_window_has_native:
+ * @window: a #GdkWindow
+ *
+ * Checks whether the window has a native window or not. Note that
+ * you can use gdk_window_ensure_native() if a native window is needed.
+ *
+ * Returns: %TRUE if the %window has a native window, %FALSE otherwise.
+ *
+ * Since: 2.22
+ */
+gboolean
+gdk_window_has_native (GdkWindow *window)
+{
+  GdkWindowObject *w;
+
+  g_return_val_if_fail (GDK_IS_WINDOW (window), FALSE);
+
+  w = GDK_WINDOW_OBJECT (window);
+
+  return w->parent == NULL || w->parent->impl != w->impl;
+}
+
+/**
  * gdk_window_get_position:
  * @window: a #GdkWindow
  * @x: X coordinate of window
@@ -2867,7 +2888,6 @@ gdk_window_flush_implicit_paint (GdkWindow *window)
   GdkWindowObject *impl_window;
   GdkWindowPaint *paint;
   cairo_region_t *region;
-  GdkGC *tmp_gc;
   GSList *list;
 
   impl_window = gdk_window_get_impl_window (private);
@@ -2892,19 +2912,21 @@ gdk_window_flush_implicit_paint (GdkWindow *window)
 
   if (!GDK_WINDOW_DESTROYED (window) && !cairo_region_is_empty (region))
     {
+      cairo_t *cr;
+
       /* Remove flushed region from the implicit paint */
       cairo_region_subtract (paint->region, region);
 
       /* Some regions are valid, push these to window now */
-      tmp_gc = _gdk_drawable_get_scratch_gc ((GdkDrawable *)window, FALSE);
-      _gdk_gc_set_clip_region_internal (tmp_gc, region, TRUE);
-      gdk_draw_drawable (private->impl, tmp_gc, paint->pixmap,
-			 0, 0, paint->x_offset, paint->y_offset, -1, -1);
-      /* Reset clip region of the cached GdkGC */
-      gdk_gc_set_clip_region (tmp_gc, NULL);
+      cr = gdk_cairo_create (private->impl);
+      gdk_cairo_set_source_pixmap (cr, paint->pixmap,
+                                   paint->x_offset, paint->y_offset);
+      gdk_cairo_region (cr, region);
+      cairo_fill (cr);
+      cairo_destroy (cr);
     }
-  else
-    cairo_region_destroy (region);
+  
+  cairo_region_destroy (region);
 }
 
 /* Ends an implicit paint, paired with gdk_window_begin_implicit_paint returning TRUE */
@@ -4482,15 +4504,11 @@ gdk_window_draw_glyphs_transformed (GdkDrawable      *drawable,
   END_DRAW;
 }
 
-typedef struct {
-  cairo_t *cr; /* if non-null, it means use this cairo context */
-  GdkGC *gc;   /* if non-null, it means use this GC instead */
-} BackingRectMethod;
-
-static void
-setup_backing_rect_method (BackingRectMethod *method, GdkWindow *window, GdkWindowPaint *paint, int x_offset_cairo, int y_offset_cairo)
+static cairo_t *
+setup_backing_rect (GdkWindow *window, GdkWindowPaint *paint, int x_offset_cairo, int y_offset_cairo)
 {
   GdkWindowObject *private = (GdkWindowObject *)window;
+  cairo_t *cr;
 
   if (private->bg_pixmap == GDK_PARENT_RELATIVE_BG && private->parent)
     {
@@ -4503,28 +4521,12 @@ setup_backing_rect_method (BackingRectMethod *method, GdkWindow *window, GdkWind
       x_offset_cairo += private->x;
       y_offset_cairo += private->y;
 
-      setup_backing_rect_method (method, GDK_WINDOW (private->parent), &tmp_paint, x_offset_cairo, y_offset_cairo);
+      cr = setup_backing_rect (GDK_WINDOW (private->parent), &tmp_paint, x_offset_cairo, y_offset_cairo);
     }
   else if (private->bg_pixmap &&
 	   private->bg_pixmap != GDK_PARENT_RELATIVE_BG &&
 	   private->bg_pixmap != GDK_NO_BG)
     {
-/* This is a workaround for https://bugs.freedesktop.org/show_bug.cgi?id=4320.
- * In it, using a pixmap as a repeating pattern in Cairo, and painting it to a
- * pixmap destination surface, can be very slow (on the order of seconds for a
- * whole-screen copy).  The workaround is to use pretty much the same code that
- * we used in GTK+ 2.6 (pre-Cairo), which clears the double-buffer pixmap with
- * a tiled GC XFillRectangle().
- */
-
-/* Actually computing this flag is left as an exercise for the reader */
-#if defined (G_OS_UNIX)
-#  define GDK_CAIRO_REPEAT_IS_FAST 0
-#else
-#  define GDK_CAIRO_REPEAT_IS_FAST 1
-#endif
-
-#if GDK_CAIRO_REPEAT_IS_FAST
       cairo_surface_t *surface = _gdk_drawable_ref_cairo_surface (private->bg_pixmap);
       cairo_pattern_t *pattern = cairo_pattern_create_for_surface (surface);
       cairo_surface_destroy (surface);
@@ -4538,31 +4540,19 @@ setup_backing_rect_method (BackingRectMethod *method, GdkWindow *window, GdkWind
 
       cairo_pattern_set_extend (pattern, CAIRO_EXTEND_REPEAT);
 
-      method->cr = cairo_create (paint->surface);
-      method->gc = NULL;
+      cr = cairo_create (paint->surface);
 
-      cairo_set_source (method->cr, pattern);
+      cairo_set_source (cr, pattern);
       cairo_pattern_destroy (pattern);
-#else
-      guint gc_mask;
-      GdkGCValues gc_values;
-
-      gc_values.fill = GDK_TILED;
-      gc_values.tile = private->bg_pixmap;
-      gc_values.ts_x_origin = -x_offset_cairo;
-      gc_values.ts_y_origin = -y_offset_cairo;
-
-      gc_mask = GDK_GC_FILL | GDK_GC_TILE | GDK_GC_TS_X_ORIGIN | GDK_GC_TS_Y_ORIGIN;
-
-      method->gc = gdk_gc_new_with_values (paint->pixmap, &gc_values, gc_mask);
-#endif
     }
   else
     {
-      method->cr = cairo_create (paint->surface);
+      cr = cairo_create (paint->surface);
 
-      gdk_cairo_set_source_color (method->cr, &private->bg_color);
+      gdk_cairo_set_source_color (cr, &private->bg_color);
     }
+
+  return cr;
 }
 
 static void
@@ -4571,64 +4561,25 @@ gdk_window_clear_backing_region (GdkWindow *window,
 {
   GdkWindowObject *private = (GdkWindowObject *)window;
   GdkWindowPaint *paint = private->paint_stack->data;
-  BackingRectMethod method;
   cairo_region_t *clip;
   GdkRectangle clipbox;
-#if 0
-  GTimer *timer;
-  double elapsed;
-#endif
+  cairo_t *cr;
 
   if (GDK_WINDOW_DESTROYED (window))
     return;
 
-#if 0
-  timer = g_timer_new ();
-#endif
-
-  method.cr = NULL;
-  method.gc = NULL;
-  setup_backing_rect_method (&method, window, paint, 0, 0);
+  cr = setup_backing_rect (window, paint, 0, 0);
 
   clip = cairo_region_copy (paint->region);
   cairo_region_intersect (clip, region);
   cairo_region_get_extents (clip, &clipbox);
 
+  gdk_cairo_region (cr, clip);
+  cairo_fill (cr);
 
-  if (method.cr)
-    {
-      g_assert (method.gc == NULL);
-
-      gdk_cairo_region (method.cr, clip);
-      cairo_fill (method.cr);
-
-      cairo_destroy (method.cr);
-#if 0
-      elapsed = g_timer_elapsed (timer, NULL);
-      g_print ("Draw the background with Cairo: %fs\n", elapsed);
-#endif
-    }
-  else
-    {
-      g_assert (method.gc != NULL);
-
-      gdk_gc_set_clip_region (method.gc, clip);
-      gdk_draw_rectangle (window, method.gc, TRUE,
-			  clipbox.x, clipbox.y,
-			  clipbox.width, clipbox.height);
-      g_object_unref (method.gc);
-
-#if 0
-      elapsed = g_timer_elapsed (timer, NULL);
-      g_print ("Draw the background with GDK: %fs\n", elapsed);
-#endif
-    }
+  cairo_destroy (cr);
 
   cairo_region_destroy (clip);
-
-#if 0
-  g_timer_destroy (timer);
-#endif
 }
 
 static void
@@ -4640,8 +4591,8 @@ gdk_window_clear_backing_region_redirect (GdkWindow *window,
   cairo_region_t *clip_region;
   GdkRectangle clipbox;
   gint x_offset, y_offset;
-  BackingRectMethod method;
   GdkWindowPaint paint;
+  cairo_t *cr;
 
   if (GDK_WINDOW_DESTROYED (window))
     return;
@@ -4665,32 +4616,12 @@ gdk_window_clear_backing_region_redirect (GdkWindow *window,
   paint.pixmap = redirect->pixmap;
   paint.surface = _gdk_drawable_ref_cairo_surface (redirect->pixmap);
 
-  method.cr = NULL;
-  method.gc = NULL;
-  setup_backing_rect_method (&method, window, &paint, -x_offset, -y_offset);
+  cr = setup_backing_rect (window, &paint, -x_offset, -y_offset);
 
-  if (method.cr)
-    {
-      g_assert (method.gc == NULL);
+  gdk_cairo_region (cr, clip_region);
+  cairo_fill (cr);
 
-      gdk_cairo_region (method.cr, clip_region);
-      cairo_fill (method.cr);
-
-      cairo_destroy (method.cr);
-    }
-  else
-    {
-      g_assert (method.gc != NULL);
-
-      cairo_region_get_extents (clip_region, &clipbox);
-      gdk_gc_set_clip_region (method.gc, clip_region);
-      gdk_draw_rectangle (redirect->pixmap, method.gc, TRUE,
-			  clipbox.x, clipbox.y,
-			  clipbox.width, clipbox.height);
-      g_object_unref (method.gc);
-
-    }
-
+  cairo_destroy (cr);
   cairo_region_destroy (clip_region);
   cairo_surface_destroy (paint.surface);
 }
@@ -4700,10 +4631,10 @@ gdk_window_clear_backing_region_direct (GdkWindow *window,
 					cairo_region_t *region)
 {
   GdkWindowObject *private = (GdkWindowObject *)window;
-  BackingRectMethod method;
   GdkWindowPaint paint;
   cairo_region_t *clip;
   GdkRectangle clipbox;
+  cairo_t *cr;
 
   if (GDK_WINDOW_DESTROYED (window))
     return;
@@ -4713,34 +4644,16 @@ gdk_window_clear_backing_region_direct (GdkWindow *window,
   paint.pixmap = window;
   paint.surface = _gdk_drawable_ref_cairo_surface (window);
 
-  method.cr = NULL;
-  method.gc = NULL;
-  setup_backing_rect_method (&method, window, &paint, 0, 0);
+  cr = setup_backing_rect (window, &paint, 0, 0);
 
   clip = cairo_region_copy (private->clip_region_with_children);
   cairo_region_intersect (clip, region);
   cairo_region_get_extents (clip, &clipbox);
 
-  if (method.cr)
-    {
-      g_assert (method.gc == NULL);
+  gdk_cairo_region (cr, clip);
+  cairo_fill (cr);
 
-      gdk_cairo_region (method.cr, clip);
-      cairo_fill (method.cr);
-
-      cairo_destroy (method.cr);
-    }
-  else
-    {
-      g_assert (method.gc != NULL);
-
-      gdk_gc_set_clip_region (method.gc, clip);
-      gdk_draw_rectangle (window, method.gc, TRUE,
-			  clipbox.x, clipbox.y,
-			  clipbox.width, clipbox.height);
-      g_object_unref (method.gc);
-
-    }
+  cairo_destroy (cr);
 
   cairo_region_destroy (clip);
   cairo_surface_destroy (paint.surface);
@@ -5871,24 +5784,15 @@ static void
 draw_ugly_color (GdkWindow       *window,
 		 const cairo_region_t *region)
 {
+  cairo_t *cr;
+
+  cr = gdk_cairo_create (window);
   /* Draw ugly color all over the newly-invalid region */
-  GdkColor ugly_color = { 0, 50000, 10000, 10000 };
-  GdkGC *ugly_gc;
-  GdkRectangle clipbox;
+  cairo_set_source_rgb (cr, 50000/65535., 10000/65535., 10000/65535.);
+  gdk_cairo_region (cr, region);
+  cairo_fill (cr);
 
-  ugly_gc = gdk_gc_new (window);
-  gdk_gc_set_rgb_fg_color (ugly_gc, &ugly_color);
-  gdk_gc_set_clip_region (ugly_gc, region);
-
-  cairo_region_get_extents (region, &clipbox);
-
-  gdk_draw_rectangle (window,
-		      ugly_gc,
-		      TRUE,
-		      clipbox.x, clipbox.y,
-		      clipbox.width, clipbox.height);
-
-  g_object_unref (ugly_gc);
+  cairo_destroy (cr);
 }
 
 static void
@@ -8456,7 +8360,7 @@ gdk_window_set_device_cursor (GdkWindow *window,
   if (!cursor)
     g_hash_table_remove (private->device_cursor, device);
   else
-    g_hash_table_replace (private->device_cursor, device, cursor);
+    g_hash_table_replace (private->device_cursor, device, gdk_cursor_ref (cursor));
 
   if (!GDK_WINDOW_DESTROYED (window))
     {
@@ -11739,7 +11643,3 @@ _gdk_window_get_input_window_for_event (GdkWindow *native_window,
 
   return event_win;
 }
-
-
-#define __GDK_WINDOW_C__
-#include "gdkaliasdef.c"

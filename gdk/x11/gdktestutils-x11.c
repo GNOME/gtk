@@ -20,7 +20,6 @@
 #include <gdk/gdktestutils.h>
 #include <gdk/gdkkeysyms.h>
 #include <x11/gdkx.h>
-#include "gdkalias.h"
 
 #include <X11/Xlib.h>
 
@@ -242,6 +241,3 @@ gdk_test_simulate_button (GdkWindow      *window,
   success &= 0 == gdk_error_trap_pop();
   return success;
 }
-
-#define __GDK_TEST_UTILS_X11_C__
-#include "gdkaliasdef.c"

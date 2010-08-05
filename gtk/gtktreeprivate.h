@@ -255,10 +255,12 @@ struct _GtkTreeViewPrivate
 
   /* Grid and tree lines */
   GtkTreeViewGridLines grid_lines;
-  GdkGC *grid_line_gc;
+  double grid_line_dashes[2];
+  int grid_line_width;
 
   gboolean tree_lines_enabled;
-  GdkGC *tree_line_gc;
+  double tree_line_dashes[2];
+  int tree_line_width;
 
   /* Row separators */
   GtkTreeViewRowSeparatorFunc row_separator_func;

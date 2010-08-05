@@ -52,7 +52,7 @@
 #include "gtktextbtree.h"
 #include "gtkprivate.h"
 #include "gtkintl.h"
-#include "gtkalias.h"
+
 
 static void gtk_text_mark_set_property (GObject         *object,
 				        guint            prop_id,
@@ -490,6 +490,3 @@ mark_segment_check_func (GtkTextLineSegment *seg,
   if (seg->body.mark.line != line)
     g_error ("mark_segment_check_func: seg->body.mark.line bogus");
 }
-
-#define __GTK_TEXT_MARK_C__
-#include "gtkaliasdef.c"

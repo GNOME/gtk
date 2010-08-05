@@ -25,7 +25,6 @@
 #include "gtktypebuiltins.h"
 #include "gtkprivate.h"
 #include "gtkmarshalers.h"
-#include "gtkalias.h"
 
 
 /**
@@ -2755,6 +2754,3 @@ gtk_file_chooser_list_shortcut_folders (GtkFileChooser *chooser)
 }
 
 #endif
-
-#define __GTK_FILE_CHOOSER_C__
-#include "gtkaliasdef.c"

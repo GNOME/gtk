@@ -36,7 +36,6 @@
 #include "gtkimage.h"
 #include "gtkspinner.h"
 #include "gtkstyle.h"
-#include "gtkalias.h"
 
 
 /**
@@ -53,8 +52,6 @@
  * use gtk_spinner_stop().
  */
 
-
-#define GTK_SPINNER_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), GTK_TYPE_SPINNER, GtkSpinnerPrivate))
 
 G_DEFINE_TYPE (GtkSpinner, gtk_spinner, GTK_TYPE_DRAWING_AREA);
 
@@ -205,7 +202,9 @@ gtk_spinner_init (GtkSpinner *spinner)
 {
   GtkSpinnerPrivate *priv;
 
-  priv = GTK_SPINNER_GET_PRIVATE (spinner);
+  priv = G_TYPE_INSTANCE_GET_PRIVATE (spinner,
+                                      GTK_TYPE_SPINNER,
+                                      GtkSpinnerPrivate);
   priv->current = 0;
   priv->timeout = 0;
 
@@ -327,7 +326,7 @@ gtk_spinner_screen_changed (GtkWidget* widget, GdkScreen* old_screen)
 
   if (!colormap)
     {
-      colormap = gdk_screen_get_rgb_colormap (new_screen);
+      colormap = gdk_screen_get_default_colormap (new_screen);
     }
 
   gtk_widget_set_colormap (widget, colormap);
@@ -476,7 +475,7 @@ gtk_spinner_accessible_image_get_size (AtkImage *image,
 {
   GtkWidget *widget;
 
-  widget = GTK_ACCESSIBLE (image)->widget;
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (image));
   if (!widget)
     {
       *width = *height = 0;
@@ -626,6 +625,3 @@ gtk_spinner_stop (GtkSpinner *spinner)
 
   gtk_spinner_set_active (spinner, FALSE);
 }
-
-#define __GTK_SPINNER_C__
-#include "gtkaliasdef.c"

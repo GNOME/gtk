@@ -323,9 +323,10 @@ _gail_toplevel_remove_child (GailToplevel *toplevel,
 static gboolean
 is_attached_menu_window (GtkWidget *widget)
 {
-  GtkWidget *child = GTK_BIN (widget)->child;
+  GtkWidget *child;
   gboolean ret = FALSE;
 
+  child = gtk_bin_get_child (GTK_BIN (widget));
   if (GTK_IS_MENU (child))
     {
       GtkWidget *attach;
@@ -342,19 +343,21 @@ is_attached_menu_window (GtkWidget *widget)
 static gboolean
 is_combo_window (GtkWidget *widget)
 {
-  GtkWidget *child = GTK_BIN (widget)->child;
+  GtkWidget *child;
   AtkObject *obj;
   GtkAccessible *accessible;
+
+  child = gtk_bin_get_child (GTK_BIN (widget));
 
   if (!GTK_IS_EVENT_BOX (child))
     return FALSE;
 
-  child = GTK_BIN (child)->child;
+  child = gtk_bin_get_child (GTK_BIN (child));
 
   if (!GTK_IS_FRAME (child))
     return FALSE;
 
-  child = GTK_BIN (child)->child;
+  child = gtk_bin_get_child (GTK_BIN (child));
 
   if (!GTK_IS_SCROLLED_WINDOW (child))
     return FALSE;

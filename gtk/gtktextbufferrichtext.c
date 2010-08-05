@@ -26,7 +26,6 @@
 #include "gtktextbufferrichtext.h"
 #include "gtktextbufferserialize.h"
 #include "gtkintl.h"
-#include "gtkalias.h"
 
 
 typedef struct
@@ -822,6 +821,3 @@ deserialize_quark (void)
 
   return quark;
 }
-
-#define __GTK_TEXT_BUFFER_RICH_TEXT_C__
-#include "gtkaliasdef.c"

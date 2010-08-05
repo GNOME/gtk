@@ -69,6 +69,7 @@ typedef enum
 
 
 typedef struct _GtkSpinButton	    GtkSpinButton;
+typedef struct _GtkSpinButtonPriv   GtkSpinButtonPriv;
 typedef struct _GtkSpinButtonClass  GtkSpinButtonClass;
 
 
@@ -76,26 +77,8 @@ struct _GtkSpinButton
 {
   GtkEntry entry;
 
-  GtkAdjustment *GSEAL (adjustment);
-
-  GdkWindow *GSEAL (panel);
-
-  guint32 GSEAL (timer);
-
-  gdouble GSEAL (climb_rate);
-  gdouble GSEAL (timer_step);
-
-  GtkSpinButtonUpdatePolicy GSEAL (update_policy);
-
-  guint GSEAL (in_child) : 2;
-  guint GSEAL (click_child) : 2; /* valid: GTK_ARROW_UP=0, GTK_ARROW_DOWN=1 or 2=NONE/BOTH */
-  guint GSEAL (button) : 2;
-  guint GSEAL (need_timer) : 1;
-  guint GSEAL (timer_calls) : 3;
-  guint GSEAL (digits) : 10;
-  guint GSEAL (numeric) : 1;
-  guint GSEAL (wrap) : 1;
-  guint GSEAL (snap_to_ticks) : 1;
+  /* <private> */
+  GtkSpinButtonPriv *priv;
 };
 
 struct _GtkSpinButtonClass
@@ -185,6 +168,9 @@ void		gtk_spin_button_set_snap_to_ticks  (GtkSpinButton  *spin_button,
 						    gboolean	    snap_to_ticks);
 gboolean        gtk_spin_button_get_snap_to_ticks  (GtkSpinButton  *spin_button);
 void            gtk_spin_button_update             (GtkSpinButton  *spin_button);
+
+/* private */
+GdkWindow*      _gtk_spin_button_get_panel         (GtkSpinButton  *spin_button);
 
 G_END_DECLS
 

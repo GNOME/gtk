@@ -40,7 +40,6 @@
 #include "gtksizerequest.h"
 #include "gtkintl.h"
 
-#include "gtkalias.h"
 
 /**
  * SECTION:gtksocket
@@ -1005,6 +1004,7 @@ _gtk_socket_advance_toplevel_focus (GtkSocket        *socket,
   GtkBin *bin;
   GtkWindow *window;
   GtkContainer *container;
+  GtkWidget *child;
   GtkWidget *toplevel;
   GtkWidget *old_focus_child;
   GtkWidget *parent;
@@ -1026,7 +1026,7 @@ _gtk_socket_advance_toplevel_focus (GtkSocket        *socket,
   /* This is a copy of gtk_window_focus(), modified so that we
    * can detect wrap-around.
    */
-  old_focus_child = container->focus_child;
+  old_focus_child = gtk_container_get_focus_child (container);
   
   if (old_focus_child)
     {
@@ -1056,9 +1056,10 @@ _gtk_socket_advance_toplevel_focus (GtkSocket        *socket,
     }
 
   /* Now try to focus the first widget in the window */
-  if (bin->child)
+  child = gtk_bin_get_child (bin);
+  if (child)
     {
-      if (gtk_widget_child_focus (bin->child, direction))
+      if (gtk_widget_child_focus (child, direction))
         return;
     }
 }
@@ -1140,6 +1141,3 @@ gtk_socket_get_height (GtkSizeRequest *widget,
   gtk_socket_get_size (widget, GTK_ORIENTATION_VERTICAL, minimum_size, natural_size);
 }
 
-
-#define __GTK_SOCKET_C__
-#include "gtkaliasdef.c"

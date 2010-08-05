@@ -375,6 +375,7 @@ static void
 bool_changed (GObject *object, GParamSpec *pspec, gpointer data)
 {
   GtkToggleButton *tb = GTK_TOGGLE_BUTTON (data);
+  GtkWidget *child;
   GValue val = { 0, };  
   
   g_value_init (&val, G_TYPE_BOOLEAN);
@@ -387,8 +388,9 @@ bool_changed (GObject *object, GParamSpec *pspec, gpointer data)
       unblock_controller (G_OBJECT (tb));
     }
 
-  gtk_label_set_text (GTK_LABEL (GTK_BIN (tb)->child), g_value_get_boolean (&val) ?
-                      "TRUE" : "FALSE");
+  child = gtk_bin_get_child (GTK_BIN (tb));
+  gtk_label_set_text (GTK_LABEL (child),
+                      g_value_get_boolean (&val) ? "TRUE" : "FALSE");
   
   g_value_unset (&val);
 }

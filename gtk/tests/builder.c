@@ -355,7 +355,7 @@ test_uimanager_simple (void)
   g_assert (strcmp (GTK_WIDGET (menu)->name, "file") == 0);
   g_list_free (children);
   
-  label = G_OBJECT (GTK_BIN (menu)->child);
+  label = G_OBJECT (gtk_bin_get_child (GTK_BIN (menu)));
   g_assert (GTK_IS_LABEL (label));
   g_assert (strcmp (gtk_label_get_text (GTK_LABEL (label)), "File") == 0);
 
@@ -970,6 +970,7 @@ static void
 test_children (void)
 {
   GtkBuilder * builder;
+  GtkWidget *content_area, *dialog_action_area;
   GList *children;
   const gchar buffer1[] =
     "<interface>"
@@ -1023,20 +1024,22 @@ test_children (void)
   g_list_free (children);
   
   vbox = gtk_builder_get_object (builder, "dialog1-vbox");
+  content_area = gtk_dialog_get_content_area (GTK_DIALOG (dialog));
   g_assert (vbox != NULL);
   g_assert (GTK_IS_VBOX (vbox));
   g_assert (strcmp (gtk_buildable_get_name (GTK_BUILDABLE (GTK_WIDGET (vbox)->parent)), "dialog1") == 0);
-  g_assert (GTK_CONTAINER (vbox)->border_width == 10);
-  g_assert (strcmp (gtk_buildable_get_name (GTK_BUILDABLE (GTK_DIALOG (dialog)->vbox)), "dialog1-vbox") == 0);
+  g_assert (gtk_container_get_border_width (GTK_CONTAINER (vbox)) == 10);
+  g_assert (strcmp (gtk_buildable_get_name (GTK_BUILDABLE (content_area)), "dialog1-vbox") == 0);
 
   action_area = gtk_builder_get_object (builder, "dialog1-action_area");
+  dialog_action_area = gtk_dialog_get_action_area (GTK_DIALOG (dialog));
   g_assert (action_area != NULL);
   g_assert (GTK_IS_HBUTTON_BOX (action_area));
   g_assert (GTK_WIDGET (action_area)->parent != NULL);
-  g_assert (GTK_CONTAINER (action_area)->border_width == 20);
-  g_assert (GTK_DIALOG (dialog)->action_area != NULL);
-  g_assert (gtk_buildable_get_name (GTK_BUILDABLE (GTK_DIALOG (dialog)->action_area)) != NULL);
-  g_assert (strcmp (gtk_buildable_get_name (GTK_BUILDABLE (GTK_DIALOG (dialog)->action_area)), "dialog1-action_area") == 0);
+  g_assert (gtk_container_get_border_width (GTK_CONTAINER (action_area)) == 20);
+  g_assert (dialog_action_area != NULL);
+  g_assert (gtk_buildable_get_name (GTK_BUILDABLE (action_area)) != NULL);
+  g_assert (strcmp (gtk_buildable_get_name (GTK_BUILDABLE (dialog_action_area)), "dialog1-action_area") == 0);
   gtk_widget_destroy (GTK_WIDGET (dialog));
   g_object_unref (builder);
 }
@@ -2292,7 +2295,7 @@ test_add_objects (void)
   g_assert (strcmp (GTK_WIDGET (menu)->name, "file") == 0);
   g_list_free (children);
  
-  label = G_OBJECT (GTK_BIN (menu)->child);
+  label = G_OBJECT (gtk_bin_get_child (GTK_BIN (menu)));
   g_assert (label != NULL);
   g_assert (GTK_IS_LABEL (label));
   g_assert (strcmp (gtk_label_get_text (GTK_LABEL (label)), "File") == 0);
@@ -2319,7 +2322,7 @@ test_add_objects (void)
   g_assert (strcmp (GTK_WIDGET (menu)->name, "file") == 0);
   g_list_free (children);
  
-  label = G_OBJECT (GTK_BIN (menu)->child);
+  label = G_OBJECT (gtk_bin_get_child (GTK_BIN (menu)));
   g_assert (label != NULL);
   g_assert (GTK_IS_LABEL (label));
   g_assert (strcmp (gtk_label_get_text (GTK_LABEL (label)), "File") == 0);
@@ -2423,6 +2426,7 @@ test_menus (void)
     "<object class=\"GtkAccelGroup\" id=\"accelgroup1\"/>"
     "</interface>";
   GtkBuilder *builder;
+  GtkWidget *child;
   GtkWidget *window, *item;
   GtkAccelGroup *accel_group;
   GtkWidget *item_accel_label, *sample_accel_label, *sample_menu_item, *custom;
@@ -2438,14 +2442,16 @@ test_menus (void)
 
   sample_menu_item = gtk_image_menu_item_new_from_stock (GTK_STOCK_NEW, accel_group);
 
-  g_assert (GTK_BIN (sample_menu_item)->child);
-  g_assert (GTK_IS_ACCEL_LABEL (GTK_BIN (sample_menu_item)->child));
-  sample_accel_label = GTK_WIDGET (GTK_BIN (sample_menu_item)->child);
+  child = gtk_bin_get_child (GTK_BIN (sample_menu_item));
+  g_assert (child);
+  g_assert (GTK_IS_ACCEL_LABEL (child));
+  sample_accel_label = child;
   gtk_widget_show (sample_accel_label);
 
-  g_assert (GTK_BIN (item)->child);
-  g_assert (GTK_IS_ACCEL_LABEL (GTK_BIN (item)->child));
-  item_accel_label = GTK_WIDGET (GTK_BIN (item)->child);
+  child = gtk_bin_get_child (GTK_BIN (item));
+  g_assert (child);
+  g_assert (GTK_IS_ACCEL_LABEL (child));
+  item_accel_label = child;
 
   gtk_accel_label_refetch (GTK_ACCEL_LABEL (sample_accel_label));
   gtk_accel_label_refetch (GTK_ACCEL_LABEL (item_accel_label));

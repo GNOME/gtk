@@ -29,7 +29,12 @@
 #include "gtkinvisible.h"
 #include "gtkprivate.h"
 #include "gtkintl.h"
-#include "gtkalias.h"
+
+struct _GtkInvisiblePriv
+{
+  GdkScreen    *screen;
+  gboolean      has_user_ref_count;
+};
 
 enum {
   PROP_0,
@@ -87,21 +92,29 @@ gtk_invisible_class_init (GtkInvisibleClass *class)
  							P_("The screen where this window will be displayed"),
 							GDK_TYPE_SCREEN,
  							GTK_PARAM_READWRITE));
+
+  g_type_class_add_private (class, sizeof (GtkInvisiblePriv));
 }
 
 static void
 gtk_invisible_init (GtkInvisible *invisible)
 {
+  GtkInvisiblePriv *priv;
   GdkColormap *colormap;
-  
+
+  invisible->priv = G_TYPE_INSTANCE_GET_PRIVATE (invisible,
+                                                 GTK_TYPE_INVISIBLE,
+                                                 GtkInvisiblePriv);
+  priv = invisible->priv;
+
   gtk_widget_set_has_window (GTK_WIDGET (invisible), TRUE);
   _gtk_widget_set_is_toplevel (GTK_WIDGET (invisible), TRUE);
 
   g_object_ref_sink (invisible);
 
-  invisible->has_user_ref_count = TRUE;
-  invisible->screen = gdk_screen_get_default ();
-  
+  priv->has_user_ref_count = TRUE;
+  priv->screen = gdk_screen_get_default ();
+
   colormap = _gtk_widget_peek_colormap ();
   if (colormap)
     gtk_widget_set_colormap (GTK_WIDGET (invisible), colormap);
@@ -111,10 +124,11 @@ static void
 gtk_invisible_destroy (GtkObject *object)
 {
   GtkInvisible *invisible = GTK_INVISIBLE (object);
-  
-  if (invisible->has_user_ref_count)
+  GtkInvisiblePriv *priv = invisible->priv;
+
+  if (priv->has_user_ref_count)
     {
-      invisible->has_user_ref_count = FALSE;
+      priv->has_user_ref_count = FALSE;
       g_object_unref (invisible);
     }
 
@@ -166,25 +180,28 @@ void
 gtk_invisible_set_screen (GtkInvisible *invisible,
 			  GdkScreen    *screen)
 {
+  GtkInvisiblePriv *priv;
   GtkWidget *widget;
   GdkScreen *previous_screen;
   gboolean was_realized;
-  
+
   g_return_if_fail (GTK_IS_INVISIBLE (invisible));
   g_return_if_fail (GDK_IS_SCREEN (screen));
 
-  if (screen == invisible->screen)
+  priv = invisible->priv;
+
+  if (screen == priv->screen)
     return;
 
   widget = GTK_WIDGET (invisible);
 
-  previous_screen = invisible->screen;
+  previous_screen = priv->screen;
   was_realized = gtk_widget_get_realized (widget);
 
   if (was_realized)
     gtk_widget_unrealize (widget);
-  
-  invisible->screen = screen;
+
+  priv->screen = screen;
   if (screen != previous_screen)
     _gtk_widget_propagate_screen_changed (widget, previous_screen);
   g_object_notify (G_OBJECT (invisible), "screen");
@@ -207,8 +224,8 @@ GdkScreen *
 gtk_invisible_get_screen (GtkInvisible *invisible)
 {
   g_return_val_if_fail (GTK_IS_INVISIBLE (invisible), NULL);
-  
-  return invisible->screen;
+
+  return invisible->priv->screen;
 }
 
 static void
@@ -290,11 +307,12 @@ gtk_invisible_get_property  (GObject      *object,
 			     GParamSpec   *pspec)
 {
   GtkInvisible *invisible = GTK_INVISIBLE (object);
+  GtkInvisiblePriv *priv = invisible->priv;
 
   switch (prop_id)
     {
     case PROP_SCREEN:
-      g_value_set_object (value, invisible->screen);
+      g_value_set_object (value, priv->screen);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -320,6 +338,3 @@ gtk_invisible_constructor (GType                  type,
 
   return object;
 }
-
-#define __GTK_INVISIBLE_C__
-#include "gtkaliasdef.c"

@@ -37,7 +37,6 @@
 
 #include "gdkscreen.h"
 #include "gdkvisual.h"
-#include "gdkalias.h"
 
 
 struct _GdkVisualClass
@@ -492,6 +491,3 @@ gdk_directfb_visual_create (DFBSurfacePixelFormat  pixelformat)
 
   return (GdkVisualDirectFB *) visual;
 }
-
-#define __GDK_VISUAL_X11_C__
-#include "gdkaliasdef.c"

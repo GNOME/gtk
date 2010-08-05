@@ -29,8 +29,6 @@
 #include "gtkprivate.h"
 #include "gtktrayicon.h"
 
-#include "gtkalias.h"
-
 #include "x11/gdkx.h"
 #include <X11/Xatom.h>
 
@@ -337,10 +335,10 @@ gtk_tray_icon_expose (GtkWidget      *widget,
   if (GTK_WIDGET_CLASS (gtk_tray_icon_parent_class)->expose_event)
     retval = GTK_WIDGET_CLASS (gtk_tray_icon_parent_class)->expose_event (widget, event);
 
-  focus_child = GTK_CONTAINER (widget)->focus_child;
+  focus_child = gtk_container_get_focus_child (GTK_CONTAINER (widget));
   if (focus_child && gtk_widget_has_focus (focus_child))
     {
-      border_width = GTK_CONTAINER (widget)->border_width;
+      border_width = gtk_container_get_border_width (GTK_CONTAINER (widget));
 
       x = widget->allocation.x + border_width;
       y = widget->allocation.y + border_width;
@@ -997,7 +995,3 @@ _gtk_tray_icon_get_padding (GtkTrayIcon *icon)
 
   return icon->priv->padding;
 }
-
-#define __GTK_TRAY_ICON_X11_C__
-#include "gtkaliasdef.c"
-

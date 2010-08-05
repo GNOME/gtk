@@ -82,6 +82,7 @@ toggle_grouping (GtkToggleButton *check_button,
 GtkWidget *
 do_sizegroup (GtkWidget *do_widget)
 {
+  GtkWidget *content_area;
   GtkWidget *table;
   GtkWidget *frame;
   GtkWidget *vbox;
@@ -115,8 +116,10 @@ do_sizegroup (GtkWidget *do_widget)
       g_signal_connect (window, "destroy",
 			G_CALLBACK (gtk_widget_destroyed), &window);
 
+      content_area = gtk_dialog_get_content_area (GTK_DIALOG (window));
+
       vbox = gtk_vbox_new (FALSE, 5);
-      gtk_box_pack_start (GTK_BOX (GTK_DIALOG (window)->vbox), vbox, TRUE, TRUE, 0);
+      gtk_box_pack_start (GTK_BOX (content_area), vbox, TRUE, TRUE, 0);
       gtk_container_set_border_width (GTK_CONTAINER (vbox), 5);
 
       size_group = gtk_size_group_new (GTK_SIZE_GROUP_HORIZONTAL);

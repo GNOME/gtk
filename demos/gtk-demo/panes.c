@@ -18,11 +18,13 @@ toggle_resize (GtkWidget *widget,
 	       GtkWidget *child)
 {
   GtkPaned *paned = GTK_PANED (child->parent);
-  gboolean is_child1 = (child == paned->child1);
+  gboolean is_child1 = (child == gtk_paned_get_child1 (paned));
   gboolean resize, shrink;
 
-  resize = is_child1 ? paned->child1_resize : paned->child2_resize;
-  shrink = is_child1 ? paned->child1_shrink : paned->child2_shrink;
+  gtk_container_child_get (GTK_CONTAINER (paned), child,
+                           "resize", &resize,
+                           "shrink", &shrink,
+                           NULL);
 
   g_object_ref (child);
   gtk_container_remove (GTK_CONTAINER (child->parent), child);
@@ -38,11 +40,13 @@ toggle_shrink (GtkWidget *widget,
 	       GtkWidget *child)
 {
   GtkPaned *paned = GTK_PANED (child->parent);
-  gboolean is_child1 = (child == paned->child1);
+  gboolean is_child1 = (child == gtk_paned_get_child1 (paned));
   gboolean resize, shrink;
 
-  resize = is_child1 ? paned->child1_resize : paned->child2_resize;
-  shrink = is_child1 ? paned->child1_shrink : paned->child2_shrink;
+  gtk_container_child_get (GTK_CONTAINER (paned), child,
+                           "resize", &resize,
+                           "shrink", &shrink,
+                           NULL);
 
   g_object_ref (child);
   gtk_container_remove (GTK_CONTAINER (child->parent), child);
@@ -59,11 +63,15 @@ create_pane_options (GtkPaned	 *paned,
 		     const gchar *label1,
 		     const gchar *label2)
 {
+  GtkWidget *child1, *child2;
   GtkWidget *frame;
   GtkWidget *table;
   GtkWidget *label;
   GtkWidget *check_button;
-  
+
+  child1 = gtk_paned_get_child1 (paned);
+  child2 = gtk_paned_get_child2 (paned);
+
   frame = gtk_frame_new (frame_label);
   gtk_container_set_border_width (GTK_CONTAINER (frame), 4);
   
@@ -78,16 +86,16 @@ create_pane_options (GtkPaned	 *paned,
   gtk_table_attach_defaults (GTK_TABLE (table), check_button,
 			     0, 1, 1, 2);
   g_signal_connect (check_button, "toggled",
-		    G_CALLBACK (toggle_resize), paned->child1);
-  
+		    G_CALLBACK (toggle_resize), child1);
+
   check_button = gtk_check_button_new_with_mnemonic ("_Shrink");
   gtk_table_attach_defaults (GTK_TABLE (table), check_button,
 			     0, 1, 2, 3);
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (check_button),
 			       TRUE);
   g_signal_connect (check_button, "toggled",
-		    G_CALLBACK (toggle_shrink), paned->child1);
-  
+		    G_CALLBACK (toggle_shrink), child1);
+
   label = gtk_label_new (label2);
   gtk_table_attach_defaults (GTK_TABLE (table), label,
 			     1, 2, 0, 1);
@@ -98,15 +106,15 @@ create_pane_options (GtkPaned	 *paned,
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (check_button),
 			       TRUE);
   g_signal_connect (check_button, "toggled",
-		    G_CALLBACK (toggle_resize), paned->child2);
-  
+		    G_CALLBACK (toggle_resize), child2);
+
   check_button = gtk_check_button_new_with_mnemonic ("_Shrink");
   gtk_table_attach_defaults (GTK_TABLE (table), check_button,
 			     1, 2, 2, 3);
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (check_button),
 			       TRUE);
   g_signal_connect (check_button, "toggled",
-		    G_CALLBACK (toggle_shrink), paned->child2);
+		    G_CALLBACK (toggle_shrink), child2);
 
   return frame;
 }

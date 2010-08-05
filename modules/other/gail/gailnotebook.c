@@ -114,7 +114,7 @@ gail_notebook_ref_child (AtkObject      *obj,
   GtkNotebook *gtk_notebook;
   GtkWidget *widget;
  
-  widget = GTK_ACCESSIBLE (obj)->widget;
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (obj));
   if (widget == NULL)
     /*
      * State is defunct
@@ -124,8 +124,8 @@ gail_notebook_ref_child (AtkObject      *obj,
   gail_notebook = GAIL_NOTEBOOK (obj);
   
   gtk_notebook = GTK_NOTEBOOK (widget);
-  
-  if (gail_notebook->page_count < g_list_length (gtk_notebook->children))
+
+  if (gail_notebook->page_count < gtk_notebook_get_n_pages (gtk_notebook))
     check_cache (gail_notebook, gtk_notebook);
 
   accessible = find_child_in_list (gail_notebook->page_cache, i);
@@ -163,16 +163,13 @@ gail_notebook_real_initialize (AtkObject *obj,
 
   notebook = GAIL_NOTEBOOK (obj);
   gtk_notebook = GTK_NOTEBOOK (data);
-  for (i = 0; i < g_list_length (gtk_notebook->children); i++)
+  for (i = 0; i < gtk_notebook_get_n_pages (gtk_notebook); i++)
     {
       create_notebook_page_accessible (notebook, gtk_notebook, i, FALSE, NULL);
     }
   notebook->page_count = i;
   notebook->selected_page = gtk_notebook_get_current_page (gtk_notebook);
-  if (gtk_notebook->focus_tab && gtk_notebook->focus_tab->data)
-    {
-      notebook->focus_tab_page = g_list_index (gtk_notebook->children, gtk_notebook->focus_tab->data);
-    }
+
   g_signal_connect (gtk_notebook,
                     "focus",
                     G_CALLBACK (gail_notebook_focus_cb),
@@ -209,7 +206,7 @@ gail_notebook_real_notify_gtk (GObject           *obj,
       gail_notebook = GAIL_NOTEBOOK (atk_obj);
       gtk_notebook = GTK_NOTEBOOK (widget);
      
-      if (gail_notebook->page_count < g_list_length (gtk_notebook->children))
+      if (gail_notebook->page_count < gtk_notebook_get_n_pages (gtk_notebook))
        check_cache (gail_notebook, gtk_notebook);
       /*
        * Notify SELECTED state change for old and new page
@@ -217,13 +214,9 @@ gail_notebook_real_notify_gtk (GObject           *obj,
       old_page_num = gail_notebook->selected_page;
       page_num = gtk_notebook_get_current_page (gtk_notebook);
       gail_notebook->selected_page = page_num;
+      gail_notebook->focus_tab_page = page_num;
       old_focus_page_num = gail_notebook->focus_tab_page;
-      if (gtk_notebook->focus_tab && gtk_notebook->focus_tab->data)
-        {
-          focus_page_num = g_list_index (gtk_notebook->children, gtk_notebook->focus_tab->data);
-          gail_notebook->focus_tab_page = focus_page_num;
-        }
-    
+
       if (page_num != old_page_num)
         {
           AtkObject *obj;
@@ -323,7 +316,7 @@ gail_notebook_add_selection (AtkSelection *selection,
   GtkNotebook *notebook;
   GtkWidget *widget;
   
-  widget =  GTK_ACCESSIBLE (selection)->widget;
+  widget =  gtk_accessible_get_widget (GTK_ACCESSIBLE (selection));
   if (widget == NULL)
     /*
      * State is defunct
@@ -350,7 +343,7 @@ gail_notebook_ref_selection (AtkSelection *selection,
   gail_return_val_if_fail (i == 0, NULL);
   g_return_val_if_fail (GAIL_IS_NOTEBOOK (selection), NULL);
   
-  widget = GTK_ACCESSIBLE (selection)->widget;
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (selection));
   if (widget == NULL)
     /* State is defunct */
 	return NULL;
@@ -373,7 +366,7 @@ gail_notebook_get_selection_count (AtkSelection *selection)
   GtkWidget *widget;
   GtkNotebook *notebook;
   
-  widget = GTK_ACCESSIBLE (selection)->widget;
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (selection));
   if (widget == NULL)
     /*
      * State is defunct
@@ -395,7 +388,7 @@ gail_notebook_is_child_selected (AtkSelection *selection,
   GtkNotebook *notebook;
   gint pagenumber;
 
-  widget = GTK_ACCESSIBLE (selection)->widget;
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (selection));
   if (widget == NULL)
     /* 
      * State is defunct
@@ -438,7 +431,7 @@ check_cache (GailNotebook *gail_notebook,
   GList *gail_list;
   gint i;
 
-  gtk_list = notebook->children;
+  gtk_list = gtk_container_get_children (GTK_CONTAINER (notebook));
   gail_list = gail_notebook->page_cache;
 
   i = 0;
@@ -459,6 +452,8 @@ check_cache (GailNotebook *gail_notebook,
       i++;
       gtk_list = gtk_list->next;
     }
+  g_list_free (gtk_list);
+
   gail_notebook->page_count = i;
 }
 
@@ -566,17 +561,17 @@ gail_notebook_check_focus_tab (gpointer data)
 
   atk_obj = ATK_OBJECT (data);
   gail_notebook = GAIL_NOTEBOOK (atk_obj);
-  widget = GTK_ACCESSIBLE (atk_obj)->widget;
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (atk_obj));
 
   gtk_notebook = GTK_NOTEBOOK (widget);
 
   gail_notebook->idle_focus_id = 0;
 
-  if (!gtk_notebook->focus_tab)
+  focus_page_num = gtk_notebook_get_current_page (gtk_notebook);
+  if (focus_page_num == -1)
     return FALSE;
 
   old_focus_page_num = gail_notebook->focus_tab_page;
-  focus_page_num = g_list_index (gtk_notebook->children, gtk_notebook->focus_tab->data);
   gail_notebook->focus_tab_page = focus_page_num;
   if (old_focus_page_num != focus_page_num)
     {

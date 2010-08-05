@@ -37,7 +37,7 @@
 #include "gdkgc.h"
 #include "gdkcolor.h"
 #include "gdkcursor.h"
-#include "gdkalias.h"
+
 
 /* LIMITATIONS:
  *
@@ -873,6 +873,8 @@ gdk_offscreen_window_move_resize_internal (GdkWindow *window,
   if (private->width != width ||
       private->height != height)
     {
+      cairo_t *cr;
+
       private->width = width;
       private->height = height;
 
@@ -882,13 +884,10 @@ gdk_offscreen_window_move_resize_internal (GdkWindow *window,
 					  height,
 					  private->depth);
 
-      gc = _gdk_drawable_get_scratch_gc (offscreen->pixmap, FALSE);
-      gdk_draw_drawable (offscreen->pixmap,
-			 gc,
-			 old_pixmap,
-			 0,0, 0, 0,
-			 -1, -1);
-      g_object_unref (old_pixmap);
+      cr = gdk_cairo_create (offscreen->pixmap);
+      gdk_cairo_set_source_pixmap (cr, old_pixmap, 0, 0);
+      cairo_paint (cr);
+      cairo_destroy (cr);
     }
 
   if (GDK_WINDOW_IS_MAPPED (private))
@@ -1228,6 +1227,3 @@ gdk_offscreen_window_impl_iface_init (GdkWindowImplIface *iface)
   iface->get_device_state = gdk_offscreen_window_get_device_state;
   iface->destroy = gdk_offscreen_window_destroy;
 }
-
-#define __GDK_OFFSCREEN_WINDOW_C__
-#include "gdkaliasdef.c"

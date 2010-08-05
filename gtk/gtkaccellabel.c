@@ -35,7 +35,7 @@
 #include "gtkmain.h"
 #include "gtkprivate.h"
 #include "gtkintl.h"
-#include "gtkalias.h"
+
 #include <gdk/gdkkeysyms.h>
 
 /**
@@ -899,6 +899,3 @@ gtk_accel_label_refetch (GtkAccelLabel *accel_label)
 
   return FALSE;
 }
-
-#define __GTK_ACCEL_LABEL_C__
-#include "gtkaliasdef.c"

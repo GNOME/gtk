@@ -27,7 +27,6 @@
 #include "gdkkeysyms.h"
 #include "gdkprivate-x11.h"
 #include "gdkx.h"
-#include "gdkalias.h"
 
 #ifdef HAVE_XKB
 #include <X11/XKBlib.h>
@@ -910,6 +909,3 @@ gdk_device_manager_core_get_client_pointer (GdkDeviceManager *device_manager)
   device_manager_core = (GdkDeviceManagerCore *) device_manager;
   return device_manager_core->core_pointer;
 }
-
-#define __GDK_DEVICE_MANAGER_CORE_C__
-#include "gdkaliasdef.c"

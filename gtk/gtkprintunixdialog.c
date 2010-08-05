@@ -56,7 +56,6 @@
 #include "gtkprintunixdialog.h"
 #include "gtkprinteroptionwidget.h"
 #include "gtkprintutils.h"
-#include "gtkalias.h"
 
 #include "gtkmessagedialog.h"
 #include "gtkbutton.h"
@@ -65,9 +64,6 @@
 #define RULER_DISTANCE 7.5
 #define RULER_RADIUS 2
 
-
-#define GTK_PRINT_UNIX_DIALOG_GET_PRIVATE(o)  \
-   (G_TYPE_INSTANCE_GET_PRIVATE ((o), GTK_TYPE_PRINT_UNIX_DIALOG, GtkPrintUnixDialogPrivate))
 
 static void     gtk_print_unix_dialog_destroy      (GtkPrintUnixDialog *dialog);
 static void     gtk_print_unix_dialog_finalize     (GObject            *object);
@@ -528,9 +524,13 @@ error_dialogs (GtkPrintUnixDialog *print_dialog,
 static void
 gtk_print_unix_dialog_init (GtkPrintUnixDialog *dialog)
 {
-  GtkPrintUnixDialogPrivate *priv = dialog->priv;
+  GtkPrintUnixDialogPrivate *priv;
 
-  priv = dialog->priv = GTK_PRINT_UNIX_DIALOG_GET_PRIVATE (dialog);
+  dialog->priv = G_TYPE_INSTANCE_GET_PRIVATE (dialog,
+                                              GTK_TYPE_PRINT_UNIX_DIALOG,
+                                              GtkPrintUnixDialogPrivate);
+  priv = dialog->priv;
+
   priv->print_backends = NULL;
   priv->current_page = -1;
   priv->number_up_layout_n_option = NULL;
@@ -1202,7 +1202,7 @@ add_option_to_table (GtkPrinterOption *option,
 {
   GtkTable *table;
   GtkWidget *label, *widget;
-  gint row;
+  guint row;
 
   table = GTK_TABLE (user_data);
 
@@ -1212,8 +1212,8 @@ add_option_to_table (GtkPrinterOption *option,
   widget = gtk_printer_option_widget_new (option);
   gtk_widget_show (widget);
 
-  row = table->nrows;
-  gtk_table_resize (table, table->nrows + 1, 2);
+  gtk_table_get_size (table, &row, NULL);
+  gtk_table_resize (table, row + 1, 2);
 
   if (gtk_printer_option_widget_has_external_label (GTK_PRINTER_OPTION_WIDGET (widget)))
     {
@@ -1240,10 +1240,14 @@ setup_page_table (GtkPrinterOptionSet *options,
                   GtkWidget           *table,
                   GtkWidget           *page)
 {
+  guint nrows;
+
   gtk_printer_option_set_foreach_in_group (options, group,
                                            add_option_to_table,
                                            table);
-  if (GTK_TABLE (table)->nrows == 1)
+
+  gtk_table_get_size (GTK_TABLE (table), &nrows, NULL);
+  if (nrows == 1)
     gtk_widget_hide (page);
   else
     gtk_widget_show (page);
@@ -1336,6 +1340,7 @@ update_dialog_from_settings (GtkPrintUnixDialog *dialog)
   gchar *group;
   GtkWidget *table, *frame;
   gboolean has_advanced, has_job;
+  guint nrows;
 
   if (priv->current_printer == NULL)
     {
@@ -1414,7 +1419,9 @@ update_dialog_from_settings (GtkPrintUnixDialog *dialog)
                                                group,
                                                add_option_to_table,
                                                table);
-      if (GTK_TABLE (table)->nrows == 1)
+
+      gtk_table_get_size (GTK_TABLE (table), &nrows, NULL);
+      if (nrows == 1)
         gtk_widget_destroy (table);
       else
         {
@@ -3720,7 +3727,7 @@ create_optional_page (GtkPrintUnixDialog  *dialog,
 
   gtk_scrolled_window_add_with_viewport (GTK_SCROLLED_WINDOW (scrolled),
                                          table);
-  gtk_viewport_set_shadow_type (GTK_VIEWPORT (GTK_BIN(scrolled)->child),
+  gtk_viewport_set_shadow_type (GTK_VIEWPORT (gtk_bin_get_child (GTK_BIN (scrolled))),
                                 GTK_SHADOW_NONE);
 
   label = gtk_label_new (text);
@@ -3751,7 +3758,7 @@ create_advanced_page (GtkPrintUnixDialog *dialog)
 
   gtk_scrolled_window_add_with_viewport (GTK_SCROLLED_WINDOW (scrolled),
                                          main_vbox);
-  gtk_viewport_set_shadow_type (GTK_VIEWPORT (GTK_BIN(scrolled)->child),
+  gtk_viewport_set_shadow_type (GTK_VIEWPORT (gtk_bin_get_child (GTK_BIN (scrolled))),
                                 GTK_SHADOW_NONE);
 
   priv->advanced_vbox = main_vbox;
@@ -3769,16 +3776,20 @@ populate_dialog (GtkPrintUnixDialog *print_dialog)
   GtkPrintUnixDialogPrivate *priv = print_dialog->priv;
   GtkDialog *dialog = GTK_DIALOG (print_dialog);
   GtkWidget *vbox, *conflict_hbox, *image, *label;
+  GtkWidget *action_area, *content_area;
+
+  content_area = gtk_dialog_get_content_area (dialog);
+  action_area = gtk_dialog_get_action_area (dialog);
 
   gtk_dialog_set_has_separator (dialog, FALSE);
   gtk_container_set_border_width (GTK_CONTAINER (dialog), 5);
-  gtk_box_set_spacing (GTK_BOX (dialog->vbox), 2); /* 2 * 5 + 2 = 12 */
-  gtk_container_set_border_width (GTK_CONTAINER (dialog->action_area), 5);
-  gtk_box_set_spacing (GTK_BOX (dialog->action_area), 6);
+  gtk_box_set_spacing (GTK_BOX (content_area), 2); /* 2 * 5 + 2 = 12 */
+  gtk_container_set_border_width (GTK_CONTAINER (action_area), 5);
+  gtk_box_set_spacing (GTK_BOX (action_area), 6);
 
   vbox = gtk_vbox_new (FALSE, 6);
   gtk_container_set_border_width (GTK_CONTAINER (vbox), 5);
-  gtk_box_pack_start (GTK_BOX (dialog->vbox), vbox, TRUE, TRUE, 0);
+  gtk_box_pack_start (GTK_BOX (content_area), vbox, TRUE, TRUE, 0);
   gtk_widget_show (vbox);
 
   priv->notebook = gtk_notebook_new ();
@@ -4427,6 +4438,3 @@ gtk_print_unix_dialog_get_embed_page_setup (GtkPrintUnixDialog *dialog)
 
   return dialog->priv->embed_page_setup;
 }
-
-#define __GTK_PRINT_UNIX_DIALOG_C__
-#include "gtkaliasdef.c"

@@ -265,6 +265,7 @@ gtk_application_new
 gtk_application_set_action_group
 gtk_application_create_window
 gtk_application_get_window
+gtk_application_get_windows
 gtk_application_add_window
 gtk_application_run
 gtk_application_quit
@@ -2934,8 +2935,6 @@ gtk_recent_manager_remove_item
 gtk_recent_manager_lookup_item
 gtk_recent_manager_has_item
 gtk_recent_manager_move_item
-gtk_recent_manager_set_limit
-gtk_recent_manager_get_limit
 gtk_recent_manager_purge_items
 gtk_recent_info_get_type G_GNUC_CONST
 gtk_recent_info_ref
@@ -4327,6 +4326,7 @@ gtk_vseparator_new
 gtk_requisition_copy
 gtk_requisition_free
 gtk_requisition_get_type G_GNUC_CONST
+gtk_requisition_new G_GNUC_MALLOC
 gtk_widget_activate
 gtk_widget_is_composited
 gtk_widget_add_accelerator

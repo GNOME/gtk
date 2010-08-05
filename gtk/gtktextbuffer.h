@@ -60,8 +60,6 @@ typedef enum
 
 typedef struct _GtkTextBTree GtkTextBTree;
 
-typedef struct _GtkTextLogAttrCache GtkTextLogAttrCache;
-
 #define GTK_TYPE_TEXT_BUFFER            (gtk_text_buffer_get_type ())
 #define GTK_TEXT_BUFFER(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_TEXT_BUFFER, GtkTextBuffer))
 #define GTK_TEXT_BUFFER_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_TEXT_BUFFER, GtkTextBufferClass))
@@ -69,26 +67,14 @@ typedef struct _GtkTextLogAttrCache GtkTextLogAttrCache;
 #define GTK_IS_TEXT_BUFFER_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_TEXT_BUFFER))
 #define GTK_TEXT_BUFFER_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_TEXT_BUFFER, GtkTextBufferClass))
 
+typedef struct _GtkTextBufferPrivate GtkTextBufferPrivate;
 typedef struct _GtkTextBufferClass GtkTextBufferClass;
 
 struct _GtkTextBuffer
 {
   GObject parent_instance;
 
-  GtkTextTagTable *GSEAL (tag_table);
-  GtkTextBTree *GSEAL (btree);
-
-  GSList *GSEAL (clipboard_contents_buffers);
-  GSList *GSEAL (selection_clipboards);
-
-  GtkTextLogAttrCache *GSEAL (log_attr_cache);
-
-  guint GSEAL (user_action_count);
-
-  /* Whether the buffer has been modified since last save */
-  guint GSEAL (modified) : 1;
-
-  guint GSEAL (has_selection) : 1;
+  GtkTextBufferPrivate *priv;
 };
 
 struct _GtkTextBufferClass

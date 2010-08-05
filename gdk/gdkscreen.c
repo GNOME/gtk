@@ -27,7 +27,7 @@
 #include "gdkwindow.h"
 #include "gdkscreen.h"
 #include "gdkintl.h"
-#include "gdkalias.h"
+
 
 static void gdk_screen_dispose      (GObject        *object);
 static void gdk_screen_finalize     (GObject        *object);
@@ -540,6 +540,3 @@ gdk_screen_set_property (GObject      *object,
       break;
     }
 }
-
-#define __GDK_SCREEN_C__
-#include "gdkaliasdef.c"

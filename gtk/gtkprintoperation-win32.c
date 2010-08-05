@@ -43,7 +43,6 @@
 #include "gtkstock.h"
 #include "gtk.h"
 #include "gtkwin32embedwidget.h"
-#include "gtkalias.h"
 
 #define MAX_PAGE_RANGES 20
 #define STATUS_POLLING_TIME 2000
@@ -72,7 +71,7 @@ static void win32_poll_status (GtkPrintOperation *op);
 
 static const GUID myIID_IPrintDialogCallback  = {0x5852a2c3,0x6530,0x11d1,{0xb6,0xa3,0x0,0x0,0xf8,0x75,0x7b,0xf9}};
 
-#if !defined (_MSC_VER) && !defined (MINGW64) && !defined (__MINGW64__)
+#if !defined (_MSC_VER) && !defined (__MINGW64_VERSION_MAJOR)
 #undef INTERFACE
 #define INTERFACE IPrintDialogCallback
 DECLARE_INTERFACE_ (IPrintDialogCallback, IUnknown)
@@ -2134,6 +2133,3 @@ gtk_print_run_page_setup_dialog_async (GtkWindow            *parent,
   done_cb (new_page_setup, data);
   g_object_unref (new_page_setup);
 }
-
-#define __GTK_PRINT_OPERATION_WIN32_C__
-#include "gtkaliasdef.c"

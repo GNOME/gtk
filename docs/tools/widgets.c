@@ -279,13 +279,15 @@ create_combo_box_entry (void)
 {
   GtkWidget *widget;
   GtkWidget *align;
+  GtkWidget *child;
   
   gtk_rc_parse_string ("style \"combo-box-entry-style\" {\n"
 		       "  GtkComboBox::appears-as-list = 1\n"
 		       "}\n"
 		       "widget_class \"GtkComboBoxEntry\" style \"combo-box-entry-style\"\n" );
   widget = gtk_combo_box_entry_new_text ();
-  gtk_entry_set_text (GTK_ENTRY (GTK_BIN (widget)->child), "Combo Box Entry");
+  child = gtk_bin_get_child (GTK_BIN (widget));
+  gtk_entry_set_text (GTK_ENTRY (child), "Combo Box Entry");
   align = gtk_alignment_new (0.5, 0.5, 0.0, 0.0);
   gtk_container_add (GTK_CONTAINER (align), widget);
 
@@ -612,10 +614,12 @@ create_colorsel (void)
   WidgetInfo *info;
   GtkWidget *widget;
   GtkColorSelection *colorsel;
+  GtkColorSelectionDialog *selection_dialog;
   GdkColor color;
 
   widget = gtk_color_selection_dialog_new ("Color Selection Dialog");
-  colorsel = GTK_COLOR_SELECTION (GTK_COLOR_SELECTION_DIALOG (widget)->colorsel);
+  selection_dialog = GTK_COLOR_SELECTION_DIALOG (widget);
+  colorsel = GTK_COLOR_SELECTION (gtk_color_selection_dialog_get_color_selection (selection_dialog));
 
   color.red   = 0x7979;
   color.green = 0xdbdb;
@@ -995,7 +999,7 @@ create_volume_button (void)
   button = gtk_volume_button_new ();
   gtk_scale_button_set_value (GTK_SCALE_BUTTON (button), 33);
   /* Hack: get the private dock */
-  widget = GTK_SCALE_BUTTON (button)->plus_button->parent->parent->parent;
+  widget = gtk_scale_button_get_plus_button (GTK_SCALE_BUTTON (button))->parent->parent->parent;
   gtk_widget_show_all (widget);
   return new_widget_info ("volumebutton", widget, ASIS);
 }

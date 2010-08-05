@@ -46,8 +46,8 @@ G_BEGIN_DECLS
 
 
 typedef struct _GtkColorSelection       GtkColorSelection;
+typedef struct _ColorSelectionPrivate   ColorSelectionPrivate;
 typedef struct _GtkColorSelectionClass  GtkColorSelectionClass;
-
 
 typedef void (* GtkColorSelectionChangePaletteFunc) (const GdkColor    *colors,
                                                      gint               n_colors);
@@ -60,7 +60,7 @@ struct _GtkColorSelection
   GtkVBox parent_instance;
 
   /* < private_data > */
-  gpointer GSEAL (private_data);
+  ColorSelectionPrivate *private_data;
 };
 
 struct _GtkColorSelectionClass

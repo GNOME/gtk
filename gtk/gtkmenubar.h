@@ -45,12 +45,16 @@ G_BEGIN_DECLS
 #define GTK_IS_MENU_BAR_CLASS(klass)    (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_MENU_BAR))
 #define GTK_MENU_BAR_GET_CLASS(obj)     (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_MENU_BAR, GtkMenuBarClass))
 
-typedef struct _GtkMenuBar       GtkMenuBar;
-typedef struct _GtkMenuBarClass  GtkMenuBarClass;
+typedef struct _GtkMenuBar         GtkMenuBar;
+typedef struct _GtkMenuBarPrivate  GtkMenuBarPrivate;
+typedef struct _GtkMenuBarClass    GtkMenuBarClass;
 
 struct _GtkMenuBar
 {
   GtkMenuShell menu_shell;
+
+  /* <private> */
+  GtkMenuBarPrivate *priv;
 };
 
 struct _GtkMenuBarClass

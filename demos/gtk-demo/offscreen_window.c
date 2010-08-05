@@ -226,12 +226,12 @@ gtk_rotated_bin_realize (GtkWidget *widget)
   GtkRotatedBin *bin = GTK_ROTATED_BIN (widget);
   GdkWindowAttr attributes;
   gint attributes_mask;
-  gint border_width;
+  guint border_width;
   GtkRequisition child_requisition;
 
   gtk_widget_set_realized (widget, TRUE);
 
-  border_width = GTK_CONTAINER (widget)->border_width;
+  border_width = gtk_container_get_border_width (GTK_CONTAINER (widget));
 
   attributes.x = widget->allocation.x + border_width;
   attributes.y = widget->allocation.y + border_width;
@@ -378,6 +378,7 @@ gtk_rotated_bin_size_request (GtkWidget      *widget,
   GtkRequisition child_requisition;
   double s, c;
   double w, h;
+  guint border_width;
 
   child_requisition.width = 0;
   child_requisition.height = 0;
@@ -390,8 +391,9 @@ gtk_rotated_bin_size_request (GtkWidget      *widget,
   w = c * child_requisition.width + s * child_requisition.height;
   h = s * child_requisition.width + c * child_requisition.height;
 
-  requisition->width = GTK_CONTAINER (widget)->border_width * 2 + w;
-  requisition->height = GTK_CONTAINER (widget)->border_width * 2 + h;
+  border_width = gtk_container_get_border_width (GTK_CONTAINER (widget));
+  requisition->width = border_width * 2 + w;
+  requisition->height = border_width * 2 + h;
 }
 
 static void
@@ -399,13 +401,13 @@ gtk_rotated_bin_size_allocate (GtkWidget     *widget,
                                GtkAllocation *allocation)
 {
   GtkRotatedBin *bin = GTK_ROTATED_BIN (widget);
-  gint border_width;
+  guint border_width;
   gint w, h;
   gdouble s, c;
 
   widget->allocation = *allocation;
 
-  border_width = GTK_CONTAINER (widget)->border_width;
+  border_width = gtk_container_get_border_width (GTK_CONTAINER (widget));
 
   w = allocation->width - border_width * 2;
   h = allocation->height - border_width * 2;

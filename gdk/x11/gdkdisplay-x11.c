@@ -42,7 +42,6 @@
 #include "gdkdeviceprivate.h"
 #include "gdkdevicemanager.h"
 #include "xsettings-client.h"
-#include "gdkalias.h"
 
 #include <X11/Xatom.h>
 
@@ -2666,6 +2665,3 @@ gdk_x11_register_standard_event_type (GdkDisplay *display,
 
   display_x11->event_types = g_slist_prepend (display_x11->event_types, event_type);
 }
-
-#define __GDK_DISPLAY_X11_C__
-#include "gdkaliasdef.c"

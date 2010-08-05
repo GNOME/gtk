@@ -517,7 +517,6 @@ _gdk_win32_gcvalues_mask_to_string (GdkGCValuesMask mask)
 
   BIT (FOREGROUND);
   BIT (BACKGROUND);
-  BIT (FONT);
   BIT (FUNCTION);
   BIT (FILL);
   BIT (TILE);
@@ -1158,12 +1157,13 @@ _gdk_win32_gdkrectangle_to_string (const GdkRectangle *rect)
 }
 
 gchar *
-_gdk_win32_gdkregion_to_string (const cairo_region_t *rgn)
+_gdk_win32_cairo_region_to_string (const cairo_region_t *rgn)
 {
+  cairo_rectangle_int_t extents;
+  cairo_region_get_extents (rgn, &extents);
   return static_printf ("%dx%d@%+d%+d",
-			(rgn->extents.x2 - rgn->extents.x1),
-			(rgn->extents.y2 - rgn->extents.y1),
-			rgn->extents.x1, rgn->extents.y1);
+			extents.width, extents.height,
+			extents.x, extents.y);
 }
 
 gchar *

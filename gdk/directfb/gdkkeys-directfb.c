@@ -36,12 +36,11 @@
 #include <stdlib.h>
 #include <string.h>
 
-
 #include "gdkdirectfb.h"
 #include "gdkprivate-directfb.h"
 
 #include "gdkkeysyms.h"
-#include "gdkalias.h"
+
 
 static struct gdk_key *gdk_keys_by_name = NULL;
 
@@ -1759,6 +1758,24 @@ gdk_keymap_get_caps_lock_state (GdkKeymap *keymap)
 }
 
 /**
+ * gdk_keymap_get_num_lock_state:
+ * @keymap: a #GdkKeymap
+ *
+ * Returns whether the Num Lock modifer is locked.
+ *
+ * Returns: %TRUE if Num Lock is on
+ *
+ * Since: 3.0
+ */
+gboolean
+gdk_keymap_get_num_lock_state (GdkKeymap *keymap)
+{
+  /* FIXME: Can we implement this? */
+
+  return FALSE;
+}
+
+/**
  * gdk_keymap_get_entries_for_keycode:
  * @keymap: a #GdkKeymap or %NULL to use the default keymap
  * @hardware_keycode: a keycode
@@ -2013,6 +2030,3 @@ gdk_keymap_map_virtual_modifiers (GdkKeymap       *keymap,
 
   return TRUE;
 }
-
-#define __GDK_KEYS_DIRECTFB_C__
-#include "gdkaliasdef.c"

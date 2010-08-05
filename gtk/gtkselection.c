@@ -70,8 +70,6 @@
 #include "win32/gdkwin32.h"
 #endif
 
-#include "gtkalias.h"
-
 #undef DEBUG_SELECTION
 
 /* Maximum size of a sent chunk, in bytes. Also the default size of
@@ -3157,6 +3155,3 @@ gtk_selection_bytes_per_item (gint format)
     }
   return 0;
 }
-
-#define __GTK_SELECTION_C__
-#include "gtkaliasdef.c"

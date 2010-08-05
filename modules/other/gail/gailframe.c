@@ -72,7 +72,7 @@ gail_frame_get_name (AtkObject *obj)
      */
     GtkWidget *widget;
 
-    widget = GTK_ACCESSIBLE (obj)->widget;
+    widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (obj));
     if (widget == NULL)
     {
       /*

@@ -32,7 +32,6 @@
 #include "gdkprivate-directfb.h"
 #include "gdkscreen.h"
 #include "gdkdisplaymanager.h"
-#include "gdkalias.h"
 
 
 extern void _gdk_visual_init            (void);
@@ -540,8 +539,3 @@ gdk_display_supports_composite (GdkDisplay *display)
 {
     return FALSE;
 }
-
-
-#define __GDK_DISPLAY_X11_C__
-#include "gdkaliasdef.c"
-

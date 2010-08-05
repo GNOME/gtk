@@ -92,18 +92,15 @@ typedef enum
 
 
 typedef struct _GtkDialog        GtkDialog;
+typedef struct _GtkDialogPriv    GtkDialogPriv;
 typedef struct _GtkDialogClass   GtkDialogClass;
 
 struct _GtkDialog
 {
   GtkWindow window;
 
-  /*< public >*/
-  GtkWidget *GSEAL (vbox);
-  GtkWidget *GSEAL (action_area);
-
   /*< private >*/
-  GtkWidget *GSEAL (separator);
+  GtkDialogPriv *priv;
 };
 
 struct _GtkDialogClass

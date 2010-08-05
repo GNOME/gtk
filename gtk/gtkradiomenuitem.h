@@ -46,13 +46,15 @@ G_BEGIN_DECLS
 
 
 typedef struct _GtkRadioMenuItem       GtkRadioMenuItem;
+typedef struct _GtkRadioMenuItemPriv   GtkRadioMenuItemPriv;
 typedef struct _GtkRadioMenuItemClass  GtkRadioMenuItemClass;
 
 struct _GtkRadioMenuItem
 {
   GtkCheckMenuItem check_menu_item;
 
-  GSList *GSEAL (group);
+  /* <private> */
+  GtkRadioMenuItemPriv *priv;
 };
 
 struct _GtkRadioMenuItemClass

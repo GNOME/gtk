@@ -35,7 +35,6 @@
 #include "gdkpixmap.h"
 #include "gdkinternals.h"
 #include "gdkdisplay-x11.h"
-#include "gdkalias.h"
 
 
 /* If this variable is FALSE, it indicates that we should
@@ -103,6 +102,3 @@ gdk_set_locale (void)
   
   return setlocale (LC_ALL, NULL);
 }
-
-#define __GDK_IM_X11_C__
-#include "gdkaliasdef.c"

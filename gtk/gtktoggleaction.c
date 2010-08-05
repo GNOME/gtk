@@ -32,12 +32,10 @@
 
 #include "gtkintl.h"
 #include "gtktoggleaction.h"
-#include "gtktoggleactionprivate.h"
 #include "gtktoggletoolbutton.h"
 #include "gtktogglebutton.h"
 #include "gtkcheckmenuitem.h"
 #include "gtkprivate.h"
-#include "gtkalias.h"
 
 
 /**
@@ -49,6 +47,11 @@
  * "active" state specifying whether the action has been checked or not.
  */
 
+struct _GtkToggleActionPrivate
+{
+  guint active        : 1;
+  guint draw_as_radio : 1;
+};
 
 enum 
 {
@@ -153,7 +156,9 @@ gtk_toggle_action_class_init (GtkToggleActionClass *klass)
 static void
 gtk_toggle_action_init (GtkToggleAction *action)
 {
-  action->private_data = GTK_TOGGLE_ACTION_GET_PRIVATE (action);
+  action->private_data = G_TYPE_INSTANCE_GET_PRIVATE (action,
+                                                      GTK_TYPE_TOGGLE_ACTION,
+                                                      GtkToggleActionPrivate);
   action->private_data->active = FALSE;
   action->private_data->draw_as_radio = FALSE;
 }
@@ -360,5 +365,22 @@ create_menu_item (GtkAction *action)
 		       NULL);
 }
 
-#define __GTK_TOGGLE_ACTION_C__
-#include "gtkaliasdef.c"
+
+/* Private */
+
+/*
+ * _gtk_toggle_action_set_active:
+ * @toggle_action: a #GtkToggleAction
+ * @is_active: whether the action is active or not
+ *
+ * Sets the #GtkToggleAction:active property directly. This function does
+ * not emit signals or notifications: it is left to the caller to do so.
+ */
+void
+_gtk_toggle_action_set_active (GtkToggleAction *toggle_action,
+                               gboolean         is_active)
+{
+  GtkToggleActionPrivate *priv = toggle_action->private_data;
+
+  priv->active = is_active;
+}

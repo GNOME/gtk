@@ -59,7 +59,6 @@
 #include "gtkaccessible.h"
 #include "gtkprivate.h"
 #include "gtkintl.h"
-#include "gtkalias.h"
 
 /* Number of elements in the custom palatte */
 #define GTK_CUSTOM_PALETTE_WIDTH 10
@@ -110,7 +109,6 @@ enum {
   COLORSEL_NUM_CHANNELS
 };
 
-typedef struct _ColorSelectionPrivate ColorSelectionPrivate;
 
 struct _ColorSelectionPrivate
 {
@@ -2857,7 +2855,3 @@ make_all_relations (AtkObject *atk_obj,
   make_control_relations (atk_obj, priv->green_spinbutton);
   make_control_relations (atk_obj, priv->blue_spinbutton);
 }
-
-#define __GTK_COLOR_SELECTION_C__
-#include "gtkaliasdef.c"
-

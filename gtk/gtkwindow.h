@@ -71,7 +71,7 @@ struct _GtkWindow
 
   guint16 GSEAL (configure_request_count);
   guint GSEAL (allow_shrink) : 1;
-  guint GSEAL (allow_grow) : 1;
+  guint GSEAL (resizable) : 1;
   guint GSEAL (configure_notify_received) : 1;
   /* The following flags are initially TRUE (before a window is mapped).
    * They cause us to compute a configure request that involves

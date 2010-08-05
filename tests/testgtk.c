@@ -256,6 +256,7 @@ on_alpha_drawing_expose (GtkWidget      *widget,
   int width = widget->allocation.width;
   int height = widget->allocation.height;
   GdkPixbuf *pixbuf;
+  cairo_t *cr;
   guchar *buffer;
   guchar *p;
   int i, j;
@@ -283,11 +284,15 @@ on_alpha_drawing_expose (GtkWidget      *widget,
 
   pixbuf = gdk_pixbuf_new_from_data (buffer, GDK_COLORSPACE_RGB, TRUE,
 				     8, 64, 64, 4 * 64, NULL, NULL);
+  cr = gdk_cairo_create (widget->window);
 
-  gdk_draw_pixbuf (widget->window, widget->style->black_gc, pixbuf,
-		   0, 0, x + width - 18 - 64, y + (height - 64) /2,
-		   64, 64, GDK_RGB_DITHER_NORMAL, 0, 0);
+  gdk_cairo_set_source_pixbuf (cr, pixbuf, 0, 0);
+  cairo_rectangle (cr,
+                   x + width - 18 - 64, y + (height - 64) /2,
+                   64, 64);
+  cairo_fill (cr);
 
+  cairo_destroy (cr);
   g_object_unref (pixbuf);
 
   g_free (buffer);
@@ -319,7 +324,7 @@ on_alpha_screen_changed (GtkWidget *widget,
 
   if (!colormap)
     {
-      colormap = gdk_screen_get_rgb_colormap (screen);
+      colormap = gdk_screen_get_default_colormap (screen);
       gtk_label_set_markup (GTK_LABEL (label), "<b>Screen doesn't support alpha</b>");
     }
   else
@@ -349,6 +354,7 @@ create_alpha_window (GtkWidget *widget)
 
   if (!window)
     {
+      GtkWidget *content_area;
       GtkWidget *vbox;
       GtkWidget *label;
       
@@ -360,10 +366,12 @@ create_alpha_window (GtkWidget *widget)
       gtk_widget_set_app_paintable (window, TRUE);
       g_signal_connect (window, "expose-event",
 			G_CALLBACK (on_alpha_window_expose), NULL);
+
+      content_area = gtk_dialog_get_content_area (GTK_DIALOG (window));
       
       vbox = gtk_vbox_new (FALSE, 8);
       gtk_container_set_border_width (GTK_CONTAINER (vbox), 12);
-      gtk_box_pack_start (GTK_BOX (GTK_DIALOG (window)->vbox), vbox,
+      gtk_box_pack_start (GTK_BOX (content_area), vbox,
 			  TRUE, TRUE, 0);
 
       label = gtk_label_new (NULL);
@@ -554,14 +562,13 @@ pattern_expose (GtkWidget      *widget,
   color = g_object_get_data (G_OBJECT (window), "pattern-color");
   if (color)
     {
-      GdkGC *tmp_gc = gdk_gc_new (window);
-      gdk_gc_set_rgb_fg_color (tmp_gc, color);
+      cairo_t *cr = gdk_cairo_create (window);
 
-      gdk_draw_rectangle (window, tmp_gc, TRUE,
-			  event->area.x, event->area.y,
-			  event->area.width, event->area.height);
+      gdk_cairo_set_source_color (cr, color);
+      gdk_cairo_rectangle (cr, &event->area);
+      cairo_fill (cr);
 
-      g_object_unref (tmp_gc);
+      cairo_destroy (cr);
     }
 
   return FALSE;
@@ -678,6 +685,7 @@ static void
 create_big_windows (GtkWidget *widget)
 {
   static GtkWidget *window = NULL;
+  GtkWidget *content_area;
   GtkWidget *darea, *table, *scrollbar;
   GtkWidget *eventbox;
   GtkAdjustment *hadj;
@@ -709,9 +717,10 @@ create_big_windows (GtkWidget *widget)
                         G_CALLBACK (gtk_widget_destroy),
                         NULL);
 
+      content_area = gtk_dialog_get_content_area (GTK_DIALOG (window));
+
       table = gtk_table_new (2, 2, FALSE);
-      gtk_box_pack_start (GTK_BOX (GTK_DIALOG (window)->vbox),
-			  table, TRUE, TRUE, 0);
+      gtk_box_pack_start (GTK_BOX (content_area), table, TRUE, TRUE, 0);
 
       darea = gtk_drawing_area_new ();
 
@@ -1050,7 +1059,7 @@ create_check_buttons (GtkWidget *widget)
                         G_CALLBACK (gtk_widget_destroy),
                         NULL);
 
-      box1 = GTK_DIALOG (window)->vbox;
+      box1 = gtk_dialog_get_content_area (GTK_DIALOG (window));
       
       box2 = gtk_vbox_new (FALSE, 10);
       gtk_container_set_border_width (GTK_CONTAINER (box2), 10);
@@ -1115,7 +1124,7 @@ create_radio_buttons (GtkWidget *widget)
                         G_CALLBACK (gtk_widget_destroy),
                         NULL);
 
-      box1 = GTK_DIALOG (window)->vbox;
+      box1 = gtk_dialog_get_content_area (GTK_DIALOG (window));
 
       box2 = gtk_vbox_new (FALSE, 10);
       gtk_container_set_border_width (GTK_CONTAINER (box2), 10);
@@ -1622,7 +1631,7 @@ statusbar_popped (GtkStatusbar  *statusbar,
 		  guint          context_id,
 		  const gchar	*text)
 {
-  if (!statusbar->messages)
+  if (!text)
     statusbar_counter = 1;
 }
 
@@ -1768,17 +1777,25 @@ gridded_geometry_expose (GtkWidget      *widget,
 			 GdkEventExpose *event)
 {
   int i, j;
+  cairo_t *cr;
 
-  gdk_draw_rectangle (widget->window, widget->style->base_gc[widget->state], TRUE,
-		      0, 0, widget->allocation.width, widget->allocation.height);
+  cr = gdk_cairo_create (widget->window);
+
+  cairo_rectangle (cr, 0, 0, widget->allocation.width, widget->allocation.height);
+  gdk_cairo_set_source_color (cr, &widget->style->base[widget->state]);
+  cairo_fill (cr);
   
   for (i = 0 ; i * GRID_SIZE < widget->allocation.width; i++)
     for (j = 0 ; j * GRID_SIZE < widget->allocation.height; j++)
       {
 	if ((i + j) % 2 == 0)
-	  gdk_draw_rectangle (widget->window, widget->style->text_gc[widget->state], TRUE,
-			      i * GRID_SIZE, j * GRID_SIZE, GRID_SIZE, GRID_SIZE);
+	  cairo_rectangle (cr, i * GRID_SIZE, j * GRID_SIZE, GRID_SIZE, GRID_SIZE);
       }
+
+  gdk_cairo_set_source_color (cr, &widget->style->text[widget->state]);
+  cairo_fill (cr);
+
+  cairo_destroy (cr);
 
   return FALSE;
 }
@@ -1815,6 +1832,7 @@ gridded_geometry_response (GtkDialog *dialog,
     {
       gchar *geometry_string = g_strdup (gtk_entry_get_text (entry));
       gchar *title = g_strdup_printf ("Gridded window at: %s", geometry_string);
+      GtkWidget *content_area;
       GtkWidget *window;
       GtkWidget *drawing_area;
       GtkWidget *box;
@@ -1832,8 +1850,10 @@ gridded_geometry_response (GtkDialog *dialog,
       g_signal_connect (window, "response",
 			G_CALLBACK (gridded_geometry_subresponse), geometry_string);
 
+      content_area = gtk_dialog_get_content_area (GTK_DIALOG (window));
+
       box = gtk_vbox_new (FALSE, 0);
-      gtk_box_pack_start (GTK_BOX (GTK_DIALOG (window)->vbox), box, TRUE, TRUE, 0);
+      gtk_box_pack_start (GTK_BOX (content_area), box, TRUE, TRUE, 0);
       
       gtk_container_set_border_width (GTK_CONTAINER (box), 7);
       
@@ -1877,6 +1897,7 @@ create_gridded_geometry (GtkWidget *widget)
 {
   static GtkWidget *window = NULL;
   gpointer window_ptr;
+  GtkWidget *content_area;
   GtkWidget *entry;
   GtkWidget *label;
 
@@ -1891,12 +1912,14 @@ create_gridded_geometry (GtkWidget *widget)
       gtk_window_set_screen (GTK_WINDOW (window),
 			     gtk_widget_get_screen (widget));
 
+      content_area = gtk_dialog_get_content_area (GTK_DIALOG (window));
+
       label = gtk_label_new ("Geometry string:");
-      gtk_box_pack_start (GTK_BOX (GTK_DIALOG (window)->vbox), label, FALSE, FALSE, 0);
+      gtk_box_pack_start (GTK_BOX (content_area), label, FALSE, FALSE, 0);
 
       entry = gtk_entry_new ();
       gtk_entry_set_text (GTK_ENTRY (entry), DEFAULT_GEOMETRY);
-      gtk_box_pack_start (GTK_BOX (GTK_DIALOG (window)->vbox), entry, FALSE, FALSE, 0);
+      gtk_box_pack_start (GTK_BOX (content_area), entry, FALSE, FALSE, 0);
 
       g_signal_connect (window, "response",
 			G_CALLBACK (gridded_geometry_response), entry);
@@ -2054,7 +2077,7 @@ take_snapshot (GtkWidget *button,
   GdkGC *black_gc;
   GdkColor color = { 0, 30000, 0, 0 };
   GdkRectangle target;
-  GdkImage *shot;
+  GdkPixbuf *shot;
   
   /* Do some begin_paint_rect on some random rects, draw some
    * distinctive stuff into those rects, then take the snapshot.
@@ -2181,12 +2204,13 @@ take_snapshot (GtkWidget *button,
   target.width = width_fraction * 2;
   target.height = height_fraction * 2;  
 
-  shot = gdk_drawable_get_image (gid->src->window,
-                                 target.x, target.y,
-                                 target.width, target.height);
-
-  gtk_image_set_from_image (GTK_IMAGE (gid->snap),
-                            shot, NULL);
+  shot = gdk_pixbuf_get_from_drawable (NULL,
+                                       gid->src->window,
+                                       NULL,
+                                       target.x, target.y,
+                                       0, 0,
+                                       target.width, target.height);
+  gtk_image_set_from_pixbuf (GTK_IMAGE (gid->snap), shot);
 
   g_object_unref (shot);
   
@@ -2652,6 +2676,7 @@ static void
 create_rotated_label (GtkWidget *widget)
 {
   static GtkWidget *window = NULL;
+  GtkWidget *content_area;
   GtkWidget *vbox;
   GtkWidget *hscale;
   GtkWidget *label;  
@@ -2675,8 +2700,10 @@ create_rotated_label (GtkWidget *widget)
       g_signal_connect (window, "destroy",
 			G_CALLBACK (gtk_widget_destroyed), &window);
 
+      content_area = gtk_dialog_get_content_area (GTK_DIALOG (window));
+
       vbox = gtk_vbox_new (FALSE, 5);
-      gtk_box_pack_start (GTK_BOX (GTK_DIALOG (window)->vbox), vbox, TRUE, TRUE, 0);
+      gtk_box_pack_start (GTK_BOX (content_area), vbox, TRUE, TRUE, 0);
       gtk_container_set_border_width (GTK_CONTAINER (vbox), 10);
 
       label = gtk_label_new (NULL);
@@ -2720,55 +2747,30 @@ on_rotated_text_expose (GtkWidget      *widget,
 {
   static const gchar *words[] = { "The", "grand", "old", "Duke", "of", "York",
                                   "had", "10,000", "men" };
-  PangoRenderer *renderer;
-  GdkGC *gc;
   int n_words;
   int i;
   double radius;
-  PangoMatrix matrix = PANGO_MATRIX_INIT;
   PangoLayout *layout;
   PangoContext *context;
   PangoFontDescription *desc;
+  cairo_t *cr;
 
-  gc = g_object_get_data (G_OBJECT (widget), "text-gc");
-  if (!gc)
+  cr = gdk_cairo_create (event->window);
+
+  if (tile_pixbuf)
     {
-      static GdkColor black = { 0, 0, 0, 0 };
-      
-      gc = gdk_gc_new (widget->window);
-      gdk_gc_set_rgb_fg_color (gc, &black);
-      
-      if (tile_pixbuf)
-	{
-	  GdkPixmap *tile;
-	  
-	  gint width = gdk_pixbuf_get_width (tile_pixbuf);
-	  gint height = gdk_pixbuf_get_height (tile_pixbuf);
-	  
-	  tile = gdk_pixmap_new (widget->window, width, height, -1);
-	  gdk_draw_pixbuf (tile, gc, tile_pixbuf,
-			   0, 0, 0, 0, width, height,
-			   GDK_RGB_DITHER_NORMAL, 0, 0);
-
-	  gdk_gc_set_tile (gc, tile);
-	  gdk_gc_set_fill (gc, GDK_TILED);
-
-	  g_object_unref (tile);
-	}
-
-      g_object_set_data_full (G_OBJECT (widget), "text-gc", gc, (GDestroyNotify)g_object_unref);
+      gdk_cairo_set_source_pixbuf (cr, tile_pixbuf, 0, 0);
+      cairo_pattern_set_extend (cairo_get_source (cr), CAIRO_EXTEND_REPEAT);
     }
-
-  renderer = gdk_pango_renderer_get_default (gtk_widget_get_screen (widget));
-  gdk_pango_renderer_set_drawable (GDK_PANGO_RENDERER (renderer), widget->window);
-  gdk_pango_renderer_set_gc (GDK_PANGO_RENDERER (renderer), gc);
+  else
+    cairo_set_source_rgb (cr, 0, 0, 0);
 
   radius = MIN (widget->allocation.width, widget->allocation.height) / 2.;
 
-  pango_matrix_translate (&matrix,
-			  radius + (widget->allocation.width - 2 * radius) / 2,
-			  radius + (widget->allocation.height - 2 * radius) / 2);
-  pango_matrix_scale (&matrix, radius / DEFAULT_TEXT_RADIUS, radius / DEFAULT_TEXT_RADIUS);
+  cairo_translate (cr,
+                   radius + (widget->allocation.width - 2 * radius) / 2,
+                   radius + (widget->allocation.height - 2 * radius) / 2);
+  cairo_scale (cr, radius / DEFAULT_TEXT_RADIUS, radius / DEFAULT_TEXT_RADIUS);
 
   context = gtk_widget_get_pango_context (widget);
   layout = pango_layout_new (context);
@@ -2779,25 +2781,24 @@ on_rotated_text_expose (GtkWidget      *widget,
   n_words = G_N_ELEMENTS (words);
   for (i = 0; i < n_words; i++)
     {
-      PangoMatrix rotated_matrix = matrix;
       int width, height;
-      
-      pango_matrix_rotate (&rotated_matrix, - (360. * i) / n_words);
 
-      pango_context_set_matrix (context, &rotated_matrix);
-      pango_layout_context_changed (layout);
+      cairo_save (cr);
+
+      cairo_rotate (cr, 2 * G_PI * i / n_words);
+      pango_cairo_update_layout (cr, layout);
+
       pango_layout_set_text (layout, words[i], -1);
-      
       pango_layout_get_size (layout, &width, &height);
 
-      pango_renderer_draw_layout (renderer, layout,
-				  - width / 2, - DEFAULT_TEXT_RADIUS * PANGO_SCALE);
-    }
+      cairo_move_to (cr, - width / 2 / PANGO_SCALE, - DEFAULT_TEXT_RADIUS);
+      pango_cairo_show_layout (cr, layout);
 
-  gdk_pango_renderer_set_drawable (GDK_PANGO_RENDERER (renderer), NULL);
-  gdk_pango_renderer_set_gc (GDK_PANGO_RENDERER (renderer), NULL);
+      cairo_restore (cr);
+    }
   
   g_object_unref (layout);
+  cairo_destroy (cr);
 
   return FALSE;
 }
@@ -2811,6 +2812,7 @@ create_rotated_text (GtkWidget *widget)
     {
       const GdkColor white = { 0, 0xffff, 0xffff, 0xffff };
       GtkRequisition requisition;
+      GtkWidget *content_area;
       GtkWidget *drawing_area;
       GdkPixbuf *tile_pixbuf;
 
@@ -2829,8 +2831,10 @@ create_rotated_text (GtkWidget *widget)
       g_signal_connect (window, "destroy",
 			G_CALLBACK (gtk_widget_destroyed), &window);
 
+      content_area = gtk_dialog_get_content_area (GTK_DIALOG (window));
+
       drawing_area = gtk_drawing_area_new ();
-      gtk_box_pack_start (GTK_BOX (GTK_DIALOG (window)->vbox), drawing_area, TRUE, TRUE, 0);
+      gtk_box_pack_start (GTK_BOX (content_area), drawing_area, TRUE, TRUE, 0);
       gtk_widget_modify_bg (drawing_area, GTK_STATE_NORMAL, &white);
 
       tile_pixbuf = gdk_pixbuf_new_from_file ("marble.xpm", NULL);
@@ -2840,7 +2844,7 @@ create_rotated_text (GtkWidget *widget)
       g_signal_connect (drawing_area, "unrealize",
 			G_CALLBACK (on_rotated_text_unrealize), NULL);
 
-      gtk_widget_show_all (GTK_BIN (window)->child);
+      gtk_widget_show_all (gtk_bin_get_child (GTK_BIN (window)));
       
       gtk_widget_set_size_request (drawing_area, DEFAULT_TEXT_RADIUS * 2, DEFAULT_TEXT_RADIUS * 2);
       gtk_widget_size_request (window, &requisition);
@@ -4066,7 +4070,8 @@ create_key_lookup (GtkWidget *widget)
     {
       GtkAccelGroup *accel_group = gtk_accel_group_new ();
       GtkWidget *button;
-      
+      GtkWidget *content_area;
+
       window = gtk_dialog_new_with_buttons ("Key Lookup", NULL, 0,
 					    GTK_STOCK_CLOSE, GTK_RESPONSE_CLOSE,
 					    NULL);
@@ -4079,35 +4084,37 @@ create_key_lookup (GtkWidget *widget)
       gtk_window_set_default_size (GTK_WINDOW (window), 300, -1);
       
       gtk_window_add_accel_group (GTK_WINDOW (window), accel_group);
+
+      content_area = gtk_dialog_get_content_area (GTK_DIALOG (window));
       
       button = gtk_button_new_with_mnemonic ("Button 1 (_a)");
-      gtk_box_pack_start (GTK_BOX (GTK_DIALOG (window)->vbox), button, FALSE, FALSE, 0);
+      gtk_box_pack_start (GTK_BOX (content_area), button, FALSE, FALSE, 0);
       button = gtk_button_new_with_mnemonic ("Button 2 (_A)");
-      gtk_box_pack_start (GTK_BOX (GTK_DIALOG (window)->vbox), button, FALSE, FALSE, 0);
+      gtk_box_pack_start (GTK_BOX (content_area), button, FALSE, FALSE, 0);
       button = gtk_button_new_with_mnemonic ("Button 3 (_\321\204)");
-      gtk_box_pack_start (GTK_BOX (GTK_DIALOG (window)->vbox), button, FALSE, FALSE, 0);
+      gtk_box_pack_start (GTK_BOX (content_area), button, FALSE, FALSE, 0);
       button = gtk_button_new_with_mnemonic ("Button 4 (_\320\244)");
-      gtk_box_pack_start (GTK_BOX (GTK_DIALOG (window)->vbox), button, FALSE, FALSE, 0);
+      gtk_box_pack_start (GTK_BOX (content_area), button, FALSE, FALSE, 0);
       button = gtk_button_new_with_mnemonic ("Button 6 (_b)");
-      gtk_box_pack_start (GTK_BOX (GTK_DIALOG (window)->vbox), button, FALSE, FALSE, 0);
+      gtk_box_pack_start (GTK_BOX (content_area), button, FALSE, FALSE, 0);
       button = accel_button_new (accel_group, "Button 7", "<Alt><Shift>b");
-      gtk_box_pack_start (GTK_BOX (GTK_DIALOG (window)->vbox), button, FALSE, FALSE, 0);
+      gtk_box_pack_start (GTK_BOX (content_area), button, FALSE, FALSE, 0);
       button = accel_button_new (accel_group, "Button 8", "<Alt>d");
-      gtk_box_pack_start (GTK_BOX (GTK_DIALOG (window)->vbox), button, FALSE, FALSE, 0);
+      gtk_box_pack_start (GTK_BOX (content_area), button, FALSE, FALSE, 0);
       button = accel_button_new (accel_group, "Button 9", "<Alt>Cyrillic_ve");
-      gtk_box_pack_start (GTK_BOX (GTK_DIALOG (window)->vbox), button, FALSE, FALSE, 0);
+      gtk_box_pack_start (GTK_BOX (content_area), button, FALSE, FALSE, 0);
       button = gtk_button_new_with_mnemonic ("Button 10 (_1)");
-      gtk_box_pack_start (GTK_BOX (GTK_DIALOG (window)->vbox), button, FALSE, FALSE, 0);
+      gtk_box_pack_start (GTK_BOX (content_area), button, FALSE, FALSE, 0);
       button = gtk_button_new_with_mnemonic ("Button 11 (_!)");
-      gtk_box_pack_start (GTK_BOX (GTK_DIALOG (window)->vbox), button, FALSE, FALSE, 0);
+      gtk_box_pack_start (GTK_BOX (content_area), button, FALSE, FALSE, 0);
       button = accel_button_new (accel_group, "Button 12", "<Super>a");
-      gtk_box_pack_start (GTK_BOX (GTK_DIALOG (window)->vbox), button, FALSE, FALSE, 0);
+      gtk_box_pack_start (GTK_BOX (content_area), button, FALSE, FALSE, 0);
       button = accel_button_new (accel_group, "Button 13", "<Hyper>a");
-      gtk_box_pack_start (GTK_BOX (GTK_DIALOG (window)->vbox), button, FALSE, FALSE, 0);
+      gtk_box_pack_start (GTK_BOX (content_area), button, FALSE, FALSE, 0);
       button = accel_button_new (accel_group, "Button 14", "<Meta>a");
-      gtk_box_pack_start (GTK_BOX (GTK_DIALOG (window)->vbox), button, FALSE, FALSE, 0);
+      gtk_box_pack_start (GTK_BOX (content_area), button, FALSE, FALSE, 0);
       button = accel_button_new (accel_group, "Button 15", "<Shift><Mod4>b");
-      gtk_box_pack_start (GTK_BOX (GTK_DIALOG (window)->vbox), button, FALSE, FALSE, 0);
+      gtk_box_pack_start (GTK_BOX (content_area), button, FALSE, FALSE, 0);
 
       window_ptr = &window;
       g_object_add_weak_pointer (G_OBJECT (window), window_ptr);
@@ -4137,12 +4144,15 @@ static void
 cmw_color (GtkWidget *widget, GtkWidget *parent)
 {
     GtkWidget *csd;
+    GtkWidget *colorsel;
+    GtkWidget *ok_button, *cancel_button;
 
     csd = gtk_color_selection_dialog_new ("This is a modal color selection dialog");
 
     gtk_window_set_screen (GTK_WINDOW (csd), gtk_widget_get_screen (parent));
 
-    gtk_color_selection_set_has_palette (GTK_COLOR_SELECTION (GTK_COLOR_SELECTION_DIALOG (csd)->colorsel),
+    colorsel = gtk_color_selection_dialog_get_color_selection (GTK_COLOR_SELECTION_DIALOG (csd));
+    gtk_color_selection_set_has_palette (GTK_COLOR_SELECTION (colorsel),
                                          TRUE);
     
     /* Set as modal */
@@ -4154,9 +4164,14 @@ cmw_color (GtkWidget *widget, GtkWidget *parent)
     g_signal_connect (csd, "destroy",
 		      G_CALLBACK (cmw_destroy_cb), NULL);
 
-    g_signal_connect_swapped (GTK_COLOR_SELECTION_DIALOG (csd)->ok_button,
+    g_object_get (csd,
+                  "ok-button", &ok_button,
+                  "cancel-button", &cancel_button,
+                  NULL);
+
+    g_signal_connect_swapped (ok_button,
 			     "clicked", G_CALLBACK (gtk_widget_destroy), csd);
-    g_signal_connect_swapped (GTK_COLOR_SELECTION_DIALOG (csd)->cancel_button,
+    g_signal_connect_swapped (cancel_button,
 			     "clicked", G_CALLBACK (gtk_widget_destroy), csd);
     
     /* wait until destroy calls gtk_main_quit */
@@ -4367,6 +4382,7 @@ static void
 create_scrolled_windows (GtkWidget *widget)
 {
   static GtkWidget *window;
+  GtkWidget *content_area, *action_area;
   GtkWidget *scrolled_window;
   GtkWidget *table;
   GtkWidget *button;
@@ -4384,17 +4400,18 @@ create_scrolled_windows (GtkWidget *widget)
 			G_CALLBACK (gtk_widget_destroyed),
 			&window);
 
+      content_area = gtk_dialog_get_content_area (GTK_DIALOG (window));
+      action_area = gtk_dialog_get_action_area (GTK_DIALOG (window));
+
       gtk_window_set_title (GTK_WINDOW (window), "dialog");
       gtk_container_set_border_width (GTK_CONTAINER (window), 0);
-
 
       scrolled_window = gtk_scrolled_window_new (NULL, NULL);
       gtk_container_set_border_width (GTK_CONTAINER (scrolled_window), 10);
       gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolled_window),
 				      GTK_POLICY_AUTOMATIC,
 				      GTK_POLICY_AUTOMATIC);
-      gtk_box_pack_start (GTK_BOX (GTK_DIALOG (window)->vbox), 
-			  scrolled_window, TRUE, TRUE, 0);
+      gtk_box_pack_start (GTK_BOX (content_area), scrolled_window, TRUE, TRUE, 0);
       gtk_widget_show (scrolled_window);
 
       table = gtk_table_new (20, 20, FALSE);
@@ -4423,8 +4440,7 @@ create_scrolled_windows (GtkWidget *widget)
 			        G_CALLBACK (gtk_widget_destroy),
 				window);
       gtk_widget_set_can_default (button, TRUE);
-      gtk_box_pack_start (GTK_BOX (GTK_DIALOG (window)->action_area), 
-			  button, TRUE, TRUE, 0);
+      gtk_box_pack_start (GTK_BOX (action_area), button, TRUE, TRUE, 0);
       gtk_widget_grab_default (button);
       gtk_widget_show (button);
 
@@ -4433,8 +4449,7 @@ create_scrolled_windows (GtkWidget *widget)
 			G_CALLBACK (scrolled_windows_remove),
 			scrolled_window);
       gtk_widget_set_can_default (button, TRUE);
-      gtk_box_pack_start (GTK_BOX (GTK_DIALOG (window)->action_area), 
-			  button, TRUE, TRUE, 0);
+      gtk_box_pack_start (GTK_BOX (action_area), button, TRUE, TRUE, 0);
       gtk_widget_grab_default (button);
       gtk_widget_show (button);
 
@@ -4827,7 +4842,7 @@ static void
 size_group_hsize_changed (GtkSpinButton *spin_button,
 			  GtkWidget     *button)
 {
-  gtk_widget_set_size_request (GTK_BIN (button)->child,
+  gtk_widget_set_size_request (gtk_bin_get_child (GTK_BIN (button)),
 			       gtk_spin_button_get_value_as_int (spin_button),
 			       -1);
 }
@@ -4836,7 +4851,7 @@ static void
 size_group_vsize_changed (GtkSpinButton *spin_button,
 			  GtkWidget     *button)
 {
-  gtk_widget_set_size_request (GTK_BIN (button)->child,
+  gtk_widget_set_size_request (gtk_bin_get_child (GTK_BIN (button)),
 			       -1,
 			       gtk_spin_button_get_value_as_int (spin_button));
 }
@@ -4845,6 +4860,7 @@ static GtkWidget *
 create_size_group_window (GdkScreen    *screen,
 			  GtkSizeGroup *master_size_group)
 {
+  GtkWidget *content_area;
   GtkWidget *window;
   GtkWidget *table;
   GtkWidget *main_button;
@@ -4870,8 +4886,10 @@ create_size_group_window (GdkScreen    *screen,
 		    G_CALLBACK (gtk_widget_destroy),
 		    NULL);
 
+  content_area = gtk_dialog_get_content_area (GTK_DIALOG (window));
+
   table = gtk_table_new (2, 2, FALSE);
-  gtk_box_pack_start (GTK_BOX (GTK_DIALOG (window)->vbox), table, TRUE, TRUE, 0);
+  gtk_box_pack_start (GTK_BOX (content_area), table, TRUE, TRUE, 0);
 
   gtk_table_set_row_spacings (GTK_TABLE (table), 5);
   gtk_table_set_col_spacings (GTK_TABLE (table), 5);
@@ -4892,7 +4910,7 @@ create_size_group_window (GdkScreen    *screen,
   gtk_size_group_add_widget (master_size_group, main_button);
   gtk_size_group_add_widget (hgroup1, main_button);
   gtk_size_group_add_widget (vgroup1, main_button);
-  gtk_widget_set_size_request (GTK_BIN (main_button)->child,
+  gtk_widget_set_size_request (gtk_bin_get_child (GTK_BIN (main_button)),
 			       SIZE_GROUP_INITIAL_SIZE,
 			       SIZE_GROUP_INITIAL_SIZE);
 
@@ -4926,7 +4944,7 @@ create_size_group_window (GdkScreen    *screen,
   g_object_unref (vgroup2);
   
   hbox = gtk_hbox_new (FALSE, 5);
-  gtk_box_pack_start (GTK_BOX (GTK_DIALOG (window)->vbox), hbox, FALSE, FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (content_area), hbox, FALSE, FALSE, 0);
   
   spin_button = gtk_spin_button_new_with_range (1, 100, 1);
   gtk_spin_button_set_value (GTK_SPIN_BUTTON (spin_button), SIZE_GROUP_INITIAL_SIZE);
@@ -5024,7 +5042,10 @@ get_value (GtkWidget *widget, gpointer data)
   if (GPOINTER_TO_INT (data) == 1)
     sprintf (buf, "%d", gtk_spin_button_get_value_as_int (spin));
   else
-    sprintf (buf, "%0.*f", spin->digits, gtk_spin_button_get_value (spin));
+    sprintf (buf, "%0.*f",
+             gtk_spin_button_get_digits (spin),
+             gtk_spin_button_get_value (spin));
+
   gtk_label_set_text (label, buf);
 }
 
@@ -5038,7 +5059,8 @@ get_spin_value (GtkWidget *widget, gpointer data)
   spin = GTK_SPIN_BUTTON (widget);
   label = GTK_LABEL (data);
 
-  buffer = g_strdup_printf ("%0.*f", spin->digits,
+  buffer = g_strdup_printf ("%0.*f",
+                            gtk_spin_button_get_digits (spin),
 			    gtk_spin_button_get_value (spin));
   gtk_label_set_text (label, buffer);
 
@@ -5048,11 +5070,13 @@ get_spin_value (GtkWidget *widget, gpointer data)
 static gint
 spin_button_time_output_func (GtkSpinButton *spin_button)
 {
+  GtkAdjustment *adjustment;
   static gchar buf[6];
   gdouble hours;
   gdouble minutes;
 
-  hours = spin_button->adjustment->value / 60.0;
+  adjustment = gtk_spin_button_get_adjustment (spin_button);
+  hours = gtk_adjustment_get_value (adjustment) / 60.0;
   minutes = (fabs(floor (hours) - hours) < 1e-5) ? 0.0 : 30;
   sprintf (buf, "%02.0f:%02.0f", floor (hours), minutes);
   if (strcmp (buf, gtk_entry_get_text (GTK_ENTRY (spin_button))))
@@ -5094,13 +5118,17 @@ spin_button_month_input_func (GtkSpinButton *spin_button,
 static gint
 spin_button_month_output_func (GtkSpinButton *spin_button)
 {
+  GtkAdjustment *adjustment;
+  gdouble value;
   gint i;
   static gchar *month[12] = { "January", "February", "March", "April",
 			      "May", "June", "July", "August", "September",
 			      "October", "November", "December" };
 
+  adjustment = gtk_spin_button_get_adjustment (spin_button);
+  value = gtk_adjustment_get_value (adjustment);
   for (i = 1; i <= 12; i++)
-    if (fabs (spin_button->adjustment->value - (double)i) < 1e-5)
+    if (fabs (value - (double)i) < 1e-5)
       {
 	if (strcmp (month[i-1], gtk_entry_get_text (GTK_ENTRY (spin_button))))
 	  gtk_entry_set_text (GTK_ENTRY (spin_button), month[i-1]);
@@ -5128,10 +5156,12 @@ spin_button_hex_input_func (GtkSpinButton *spin_button,
 static gint
 spin_button_hex_output_func (GtkSpinButton *spin_button)
 {
+  GtkAdjustment *adjustment;
   static gchar buf[7];
   gint val;
 
-  val = (gint) spin_button->adjustment->value;
+  adjustment = gtk_spin_button_get_adjustment (spin_button);
+  val = (gint) gtk_adjustment_get_value (adjustment);
   if (fabs (val) < 1e-5)
     sprintf (buf, "0x00");
   else
@@ -5369,43 +5399,33 @@ cursor_expose_event (GtkWidget *widget,
 {
   GtkDrawingArea *darea;
   GdkDrawable *drawable;
-  GdkGC *black_gc;
-  GdkGC *gray_gc;
-  GdkGC *white_gc;
   guint max_width;
   guint max_height;
+  cairo_t *cr;
 
   g_return_val_if_fail (widget != NULL, TRUE);
   g_return_val_if_fail (GTK_IS_DRAWING_AREA (widget), TRUE);
 
   darea = GTK_DRAWING_AREA (widget);
   drawable = widget->window;
-  white_gc = widget->style->white_gc;
-  gray_gc = widget->style->bg_gc[GTK_STATE_NORMAL];
-  black_gc = widget->style->black_gc;
   max_width = widget->allocation.width;
   max_height = widget->allocation.height;
 
-  gdk_draw_rectangle (drawable, white_gc,
-		      TRUE,
-		      0,
-		      0,
-		      max_width,
-		      max_height / 2);
+  cr = gdk_cairo_create (drawable);
 
-  gdk_draw_rectangle (drawable, black_gc,
-		      TRUE,
-		      0,
-		      max_height / 2,
-		      max_width,
-		      max_height / 2);
+  cairo_set_source_rgb (cr, 1, 1, 1);
+  cairo_rectangle (cr, 0, 0, max_width, max_height / 2);
+  cairo_fill (cr);
 
-  gdk_draw_rectangle (drawable, gray_gc,
-		      TRUE,
-		      max_width / 3,
-		      max_height / 3,
-		      max_width / 3,
-		      max_height / 3);
+  cairo_set_source_rgb (cr, 0, 0, 0);
+  cairo_rectangle (cr, 0, max_height / 2, max_width, max_height / 2);
+  cairo_fill (cr);
+
+  gdk_cairo_set_source_color (cr, &widget->style->bg[GTK_STATE_NORMAL]);
+  cairo_rectangle (cr, max_width / 3, max_height / 3, max_width / 3, max_height / 3);
+  cairo_fill (cr);
+
+  cairo_destroy (cr);
 
   return TRUE;
 }
@@ -5765,7 +5785,12 @@ orientable_toggle_orientation (GtkOrientable *orientable)
 void
 flipping_orientation_toggled_cb (GtkWidget *widget, gpointer data)
 {
-  orientable_toggle_orientation (GTK_ORIENTABLE (GTK_DIALOG (gtk_widget_get_toplevel (widget))->vbox));
+  GtkWidget *content_area;
+  GtkWidget *toplevel;
+
+  toplevel = gtk_widget_get_toplevel (widget);
+  content_area = gtk_dialog_get_content_area (GTK_DIALOG (toplevel));
+  orientable_toggle_orientation (GTK_ORIENTABLE (content_area));
 }
 
 static void
@@ -5806,6 +5831,7 @@ create_flipping (GtkWidget *widget)
 {
   static GtkWidget *window = NULL;
   GtkWidget *check_button, *button;
+  GtkWidget *action_area, *content_area;
 
   if (!window)
     {
@@ -5818,12 +5844,14 @@ create_flipping (GtkWidget *widget)
 			G_CALLBACK (gtk_widget_destroyed),
 			&window);
 
+      content_area = gtk_dialog_get_content_area (GTK_DIALOG (window));
+      action_area = gtk_dialog_get_action_area (GTK_DIALOG (window));
+
       gtk_window_set_title (GTK_WINDOW (window), "Bidirectional Flipping");
 
       check_button = gtk_check_button_new_with_label ("Right-to-left global direction");
       gtk_container_set_border_width (GTK_CONTAINER (check_button), 10);
-      gtk_box_pack_start (GTK_BOX (GTK_DIALOG (window)->vbox),
-			  check_button, TRUE, TRUE, 0);
+      gtk_box_pack_start (GTK_BOX (content_area), check_button, TRUE, TRUE, 0);
 
       if (gtk_widget_get_default_direction () == GTK_TEXT_DIR_RTL)
 	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (check_button), TRUE);
@@ -5833,29 +5861,27 @@ create_flipping (GtkWidget *widget)
 
       check_button = gtk_check_button_new_with_label ("Toggle orientation of all boxes");
       gtk_container_set_border_width (GTK_CONTAINER (check_button), 10);
-      gtk_box_pack_start (GTK_BOX (GTK_DIALOG (window)->vbox), 
-			  check_button, TRUE, TRUE, 0);
+      gtk_box_pack_start (GTK_BOX (content_area), check_button, TRUE, TRUE, 0);
 
       g_signal_connect (check_button, "toggled",
 			G_CALLBACK (flipping_orientation_toggled_cb), NULL);
 
-      gtk_box_pack_start (GTK_BOX (GTK_DIALOG (window)->vbox), 
+      gtk_box_pack_start (GTK_BOX (content_area),
 			  create_forward_back ("Default", GTK_TEXT_DIR_NONE),
 			  TRUE, TRUE, 0);
 
-      gtk_box_pack_start (GTK_BOX (GTK_DIALOG (window)->vbox), 
+      gtk_box_pack_start (GTK_BOX (content_area),
 			  create_forward_back ("Left-to-Right", GTK_TEXT_DIR_LTR),
 			  TRUE, TRUE, 0);
 
-      gtk_box_pack_start (GTK_BOX (GTK_DIALOG (window)->vbox), 
+      gtk_box_pack_start (GTK_BOX (content_area),
 			  create_forward_back ("Right-to-Left", GTK_TEXT_DIR_RTL),
 			  TRUE, TRUE, 0);
 
       button = gtk_button_new_with_label ("Close");
       g_signal_connect_swapped (button, "clicked",
 			        G_CALLBACK (gtk_widget_destroy), window);
-      gtk_box_pack_start (GTK_BOX (GTK_DIALOG (window)->action_area), 
-			  button, TRUE, TRUE, 0);
+      gtk_box_pack_start (GTK_BOX (action_area), button, TRUE, TRUE, 0);
     }
   
   if (!gtk_widget_get_visible (window))
@@ -5919,6 +5945,7 @@ create_focus (GtkWidget *widget)
   
   if (!window)
     {
+      GtkWidget *content_area;
       GtkWidget *table;
       GtkWidget *frame;
       GList *list = NULL;
@@ -5939,13 +5966,14 @@ create_focus (GtkWidget *widget)
       g_signal_connect (window, "response",
                         G_CALLBACK (gtk_widget_destroy),
                         NULL);
+
+      content_area = gtk_dialog_get_content_area (GTK_DIALOG (window));
       
       gtk_window_set_title (GTK_WINDOW (window), "Keyboard Focus Navigation");
 
       frame = gtk_frame_new ("Weird tab focus chain");
 
-      gtk_box_pack_start (GTK_BOX (GTK_DIALOG (window)->vbox), 
-			  frame, TRUE, TRUE, 0);
+      gtk_box_pack_start (GTK_BOX (content_area), frame, TRUE, TRUE, 0);
       
       table = make_focus_table (&list);
 
@@ -5958,8 +5986,7 @@ create_focus (GtkWidget *widget)
       
       frame = gtk_frame_new ("Default tab focus chain");
 
-      gtk_box_pack_start (GTK_BOX (GTK_DIALOG (window)->vbox), 
-			  frame, TRUE, TRUE, 0);
+      gtk_box_pack_start (GTK_BOX (content_area), frame, TRUE, TRUE, 0);
 
       list = NULL;
       table = make_focus_table (&list);
@@ -6048,7 +6075,7 @@ label_toggle (GtkWidget  *widget,
 			G_CALLBACK (gtk_widget_destroyed),
 			label);
       gtk_misc_set_padding (GTK_MISC (*label), 10, 10);
-      gtk_box_pack_start (GTK_BOX (GTK_DIALOG (dialog_window)->vbox), 
+      gtk_box_pack_start (GTK_BOX (gtk_dialog_get_content_area (GTK_DIALOG (dialog_window))),
 			  *label, TRUE, TRUE, 0);
       gtk_widget_show (*label);
     }
@@ -6076,6 +6103,7 @@ static void
 create_dialog (GtkWidget *widget)
 {
   static GtkWidget *label;
+  GtkWidget *action_area;
   GtkWidget *button;
 
   if (!dialog_window)
@@ -6098,13 +6126,14 @@ create_dialog (GtkWidget *widget)
 			G_CALLBACK (gtk_widget_destroyed),
 			&dialog_window);
 
+      action_area = gtk_dialog_get_action_area (GTK_DIALOG (dialog_window));
+
       gtk_window_set_title (GTK_WINDOW (dialog_window), "GtkDialog");
       gtk_container_set_border_width (GTK_CONTAINER (dialog_window), 0);
 
       button = gtk_button_new_with_label ("OK");
       gtk_widget_set_can_default (button, TRUE);
-      gtk_box_pack_start (GTK_BOX (GTK_DIALOG (dialog_window)->action_area), 
-			  button, TRUE, TRUE, 0);
+      gtk_box_pack_start (GTK_BOX (action_area), button, TRUE, TRUE, 0);
       gtk_widget_grab_default (button);
       gtk_widget_show (button);
 
@@ -6113,8 +6142,7 @@ create_dialog (GtkWidget *widget)
 			G_CALLBACK (label_toggle),
 			&label);
       gtk_widget_set_can_default (button, TRUE);
-      gtk_box_pack_start (GTK_BOX (GTK_DIALOG (dialog_window)->action_area),
-			  button, TRUE, TRUE, 0);
+      gtk_box_pack_start (GTK_BOX (action_area), button, TRUE, TRUE, 0);
       gtk_widget_show (button);
 
       label = NULL;
@@ -6347,6 +6375,7 @@ event_watcher_toggle (void)
 static void
 create_event_watcher (GtkWidget *widget)
 {
+  GtkWidget *action_area, *content_area;
   GtkWidget *button;
 
   if (!dialog_window)
@@ -6362,6 +6391,9 @@ create_event_watcher (GtkWidget *widget)
 			G_CALLBACK (event_watcher_down),
 			NULL);
 
+      content_area = gtk_dialog_get_content_area (GTK_DIALOG (dialog_window));
+      action_area = gtk_dialog_get_action_area (GTK_DIALOG (dialog_window));
+
       gtk_window_set_title (GTK_WINDOW (dialog_window), "Event Watcher");
       gtk_container_set_border_width (GTK_CONTAINER (dialog_window), 0);
       gtk_widget_set_size_request (dialog_window, 200, 110);
@@ -6371,8 +6403,7 @@ create_event_watcher (GtkWidget *widget)
 			G_CALLBACK (event_watcher_toggle),
 			NULL);
       gtk_container_set_border_width (GTK_CONTAINER (button), 10);
-      gtk_box_pack_start (GTK_BOX (GTK_DIALOG (dialog_window)->vbox), 
-			  button, TRUE, TRUE, 0);
+      gtk_box_pack_start (GTK_BOX (content_area), button, TRUE, TRUE, 0);
       gtk_widget_show (button);
 
       button = gtk_button_new_with_label ("Close");
@@ -6380,8 +6411,7 @@ create_event_watcher (GtkWidget *widget)
 			        G_CALLBACK (gtk_widget_destroy),
 				dialog_window);
       gtk_widget_set_can_default (button, TRUE);
-      gtk_box_pack_start (GTK_BOX (GTK_DIALOG (dialog_window)->action_area),
-			  button, TRUE, TRUE, 0);
+      gtk_box_pack_start (GTK_BOX (action_area), button, TRUE, TRUE, 0);
       gtk_widget_grab_default (button);
       gtk_widget_show (button);
     }
@@ -6681,7 +6711,7 @@ set_page_image (GtkNotebook *notebook, gint page_num, GdkPixbuf *pixbuf)
 }
 
 static void
-page_switch (GtkWidget *widget, GtkNotebookPage *page, gint page_num)
+page_switch (GtkWidget *widget, gpointer *page, gint page_num)
 {
   GtkNotebook *notebook = GTK_NOTEBOOK (widget);
   gint old_page_num = gtk_notebook_get_current_page (notebook);
@@ -6789,7 +6819,7 @@ static void
 rotate_notebook (GtkButton   *button,
 		 GtkNotebook *notebook)
 {
-  gtk_notebook_set_tab_pos (notebook, (notebook->tab_pos + 1) % 4);
+  gtk_notebook_set_tab_pos (notebook, (gtk_notebook_get_tab_pos (notebook) + 1) % 4);
 }
 
 static void
@@ -6844,14 +6874,14 @@ notebook_type_changed (GtkWidget *optionmenu,
       gtk_notebook_set_show_tabs (notebook, TRUE);
       gtk_notebook_set_show_border (notebook, TRUE);
       gtk_notebook_set_scrollable (notebook, TRUE);
-      if (g_list_length (notebook->children) == 5)
+      if (gtk_notebook_get_n_pages (notebook) == 5)
 	create_pages (notebook, 6, 15);
-      
+
       return;
       break;
     }
-  
-  if (g_list_length (notebook->children) == 15)
+
+  if (gtk_notebook_get_n_pages (notebook) == 15)
     for (i = 0; i < 10; i++)
       gtk_notebook_remove_page (notebook, 5);
 }
@@ -7029,12 +7059,16 @@ create_pane_options (GtkPaned    *paned,
 		     const gchar *label1,
 		     const gchar *label2)
 {
+  GtkWidget *child1, *child2;
   GtkWidget *frame;
   GtkWidget *table;
   GtkWidget *label;
   GtkWidget *button;
   GtkWidget *check_button;
-  
+
+  child1 = gtk_paned_get_child1 (paned);
+  child2 = gtk_paned_get_child2 (paned);
+
   frame = gtk_frame_new (frame_label);
   gtk_container_set_border_width (GTK_CONTAINER (frame), 4);
   
@@ -7050,8 +7084,8 @@ create_pane_options (GtkPaned    *paned,
 			     0, 1, 1, 2);
   g_signal_connect (check_button, "toggled",
 		    G_CALLBACK (toggle_resize),
-		    paned->child1);
-  
+                    child1);
+
   check_button = gtk_check_button_new_with_label ("Shrink");
   gtk_table_attach_defaults (GTK_TABLE (table), check_button,
 			     0, 1, 2, 3);
@@ -7059,8 +7093,8 @@ create_pane_options (GtkPaned    *paned,
 			       TRUE);
   g_signal_connect (check_button, "toggled",
 		    G_CALLBACK (toggle_shrink),
-		    paned->child1);
-  
+                    child1);
+
   label = gtk_label_new (label2);
   gtk_table_attach_defaults (GTK_TABLE (table), label,
 			     1, 2, 0, 1);
@@ -7072,8 +7106,8 @@ create_pane_options (GtkPaned    *paned,
 			       TRUE);
   g_signal_connect (check_button, "toggled",
 		    G_CALLBACK (toggle_resize),
-		    paned->child2);
-  
+                    child2);
+
   check_button = gtk_check_button_new_with_label ("Shrink");
   gtk_table_attach_defaults (GTK_TABLE (table), check_button,
 			     1, 2, 2, 3);
@@ -7081,7 +7115,7 @@ create_pane_options (GtkPaned    *paned,
 			       TRUE);
   g_signal_connect (check_button, "toggled",
 		    G_CALLBACK (toggle_shrink),
-		    paned->child2);
+                    child2);
 
   button = gtk_button_new_with_mnemonic ("_Properties");
   gtk_table_attach_defaults (GTK_TABLE (table), button,
@@ -7622,13 +7656,11 @@ shape_create_icon (GdkScreen *screen,
   GtkWidget *pixmap;
   GtkWidget *fixed;
   CursorOffset* icon_pos;
-  GdkGC* gc;
   GdkBitmap *gdk_pixmap_mask;
   GdkPixmap *gdk_pixmap;
   GtkStyle *style;
 
   style = gtk_widget_get_default_style ();
-  gc = style->black_gc;	
 
   /*
    * GDK_WINDOW_TOPLEVEL works also, giving you a title border
@@ -8939,6 +8971,7 @@ entry_changed (GtkWidget *widget, ProgressData *pdata)
 void
 create_progress_bar (GtkWidget *widget)
 {
+  GtkWidget *action_area, *content_area;
   GtkWidget *button;
   GtkWidget *vbox;
   GtkWidget *vbox2;
@@ -8980,16 +9013,17 @@ create_progress_bar (GtkWidget *widget)
       g_signal_connect (pdata->window, "destroy",
 			G_CALLBACK (destroy_progress),
 			&pdata);
-
       pdata->timer = 0;
+
+      content_area = gtk_dialog_get_content_area (GTK_DIALOG (pdata->window));
+      action_area = gtk_dialog_get_action_area (GTK_DIALOG (pdata->window));
 
       gtk_window_set_title (GTK_WINDOW (pdata->window), "GtkProgressBar");
       gtk_container_set_border_width (GTK_CONTAINER (pdata->window), 0);
 
       vbox = gtk_vbox_new (FALSE, 5);
       gtk_container_set_border_width (GTK_CONTAINER (vbox), 10);
-      gtk_box_pack_start (GTK_BOX (GTK_DIALOG (pdata->window)->vbox), 
-			  vbox, FALSE, TRUE, 0);
+      gtk_box_pack_start (GTK_BOX (content_area), vbox, FALSE, TRUE, 0);
 
       frame = gtk_frame_new ("Progress");
       gtk_box_pack_start (GTK_BOX (vbox), frame, FALSE, TRUE, 0);
@@ -9092,8 +9126,7 @@ create_progress_bar (GtkWidget *widget)
 				G_CALLBACK (gtk_widget_destroy),
 				pdata->window);
       gtk_widget_set_can_default (button, TRUE);
-      gtk_box_pack_start (GTK_BOX (GTK_DIALOG (pdata->window)->action_area), 
-			  button, TRUE, TRUE, 0);
+      gtk_box_pack_start (GTK_BOX (action_area), button, TRUE, TRUE, 0);
       gtk_widget_grab_default (button);
     }
 
@@ -9615,6 +9648,7 @@ void
 create_selection_test (GtkWidget *widget)
 {
   static GtkWidget *window = NULL;
+  GtkWidget *action_area, *content_area;
   GtkWidget *button;
   GtkWidget *vbox;
   GtkWidget *scrolled_win;
@@ -9635,6 +9669,9 @@ create_selection_test (GtkWidget *widget)
 			G_CALLBACK (gtk_widget_destroyed),
 			&window);
 
+      content_area = gtk_dialog_get_content_area (GTK_DIALOG (window));
+      action_area = gtk_dialog_get_action_area (GTK_DIALOG (window));
+
       gtk_window_set_title (GTK_WINDOW (window), "Selection Test");
       gtk_container_set_border_width (GTK_CONTAINER (window), 0);
 
@@ -9642,8 +9679,7 @@ create_selection_test (GtkWidget *widget)
 
       vbox = gtk_vbox_new (FALSE, 5);
       gtk_container_set_border_width (GTK_CONTAINER (vbox), 10);
-      gtk_box_pack_start (GTK_BOX (GTK_DIALOG (window)->vbox), vbox,
-			  TRUE, TRUE, 0);
+      gtk_box_pack_start (GTK_BOX (content_area), vbox, TRUE, TRUE, 0);
 
       label = gtk_label_new ("Gets available targets for current selection");
       gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, FALSE, 0);
@@ -9669,15 +9705,13 @@ create_selection_test (GtkWidget *widget)
 
       /* .. And create some buttons */
       button = gtk_button_new_with_label ("Get Targets");
-      gtk_box_pack_start (GTK_BOX (GTK_DIALOG (window)->action_area),
-			  button, TRUE, TRUE, 0);
+      gtk_box_pack_start (GTK_BOX (action_area), button, TRUE, TRUE, 0);
 
       g_signal_connect (button, "clicked",
 			G_CALLBACK (selection_test_get_targets), tree_view);
 
       button = gtk_button_new_with_label ("Quit");
-      gtk_box_pack_start (GTK_BOX (GTK_DIALOG (window)->action_area),
-			  button, TRUE, TRUE, 0);
+      gtk_box_pack_start (GTK_BOX (action_area), button, TRUE, TRUE, 0);
 
       g_signal_connect_swapped (button, "clicked",
 				G_CALLBACK (gtk_widget_destroy),
@@ -9702,6 +9736,7 @@ scroll_test_expose (GtkWidget *widget, GdkEventExpose *event,
 {
   gint i,j;
   gint imin, imax, jmin, jmax;
+  cairo_t *cr;
   
   imin = (event->area.x) / 10;
   imax = (event->area.x + event->area.width + 9) / 10;
@@ -9713,13 +9748,16 @@ scroll_test_expose (GtkWidget *widget, GdkEventExpose *event,
 			 event->area.x, event->area.y,
 			 event->area.width, event->area.height);
 
+  cr = gdk_cairo_create (widget->window);
+
   for (i=imin; i<imax; i++)
     for (j=jmin; j<jmax; j++)
       if ((i+j) % 2)
-	gdk_draw_rectangle (widget->window, 
-			    widget->style->black_gc,
-			    TRUE,
-			    10*i, 10*j - (int)adj->value, 1+i%10, 1+j%10);
+	cairo_rectangle (cr, 10*i, 10*j - (int)adj->value, 1+i%10, 1+j%10);
+
+  cairo_fill (cr);
+
+  cairo_destroy (cr);
 
   return TRUE;
 }
@@ -9767,6 +9805,7 @@ void
 create_scroll_test (GtkWidget *widget)
 {
   static GtkWidget *window = NULL;
+  GtkWidget *action_area, *content_area;
   GtkWidget *hbox;
   GtkWidget *drawing_area;
   GtkWidget *scrollbar;
@@ -9786,12 +9825,14 @@ create_scroll_test (GtkWidget *widget)
 			G_CALLBACK (gtk_widget_destroyed),
 			&window);
 
+      content_area = gtk_dialog_get_content_area (GTK_DIALOG (window));
+      action_area = gtk_dialog_get_action_area (GTK_DIALOG (window));
+
       gtk_window_set_title (GTK_WINDOW (window), "Scroll Test");
       gtk_container_set_border_width (GTK_CONTAINER (window), 0);
 
       hbox = gtk_hbox_new (FALSE, 0);
-      gtk_box_pack_start (GTK_BOX (GTK_DIALOG (window)->vbox), hbox,
-			  TRUE, TRUE, 0);
+      gtk_box_pack_start (GTK_BOX (content_area), hbox, TRUE, TRUE, 0);
       gtk_widget_show (hbox);
 
       drawing_area = gtk_drawing_area_new ();
@@ -9822,8 +9863,7 @@ create_scroll_test (GtkWidget *widget)
       /* .. And create some buttons */
 
       button = gtk_button_new_with_label ("Quit");
-      gtk_box_pack_start (GTK_BOX (GTK_DIALOG (window)->action_area),
-			  button, TRUE, TRUE, 0);
+      gtk_box_pack_start (GTK_BOX (action_area), button, TRUE, TRUE, 0);
 
       g_signal_connect_swapped (button, "clicked",
 				G_CALLBACK (gtk_widget_destroy),
@@ -9905,6 +9945,7 @@ void
 create_timeout_test (GtkWidget *widget)
 {
   static GtkWidget *window = NULL;
+  GtkWidget *action_area, *content_area;
   GtkWidget *button;
   GtkWidget *label;
 
@@ -9919,13 +9960,15 @@ create_timeout_test (GtkWidget *widget)
 			G_CALLBACK (destroy_timeout_test),
 			&window);
 
+      content_area = gtk_dialog_get_content_area (GTK_DIALOG (window));
+      action_area = gtk_dialog_get_content_area (GTK_DIALOG (window));
+
       gtk_window_set_title (GTK_WINDOW (window), "Timeout Test");
       gtk_container_set_border_width (GTK_CONTAINER (window), 0);
 
       label = gtk_label_new ("count: 0");
       gtk_misc_set_padding (GTK_MISC (label), 10, 10);
-      gtk_box_pack_start (GTK_BOX (GTK_DIALOG (window)->vbox), 
-			  label, TRUE, TRUE, 0);
+      gtk_box_pack_start (GTK_BOX (content_area), label, TRUE, TRUE, 0);
       gtk_widget_show (label);
 
       button = gtk_button_new_with_label ("close");
@@ -9933,8 +9976,7 @@ create_timeout_test (GtkWidget *widget)
 				G_CALLBACK (gtk_widget_destroy),
 				window);
       gtk_widget_set_can_default (button, TRUE);
-      gtk_box_pack_start (GTK_BOX (GTK_DIALOG (window)->action_area), 
-			  button, TRUE, TRUE, 0);
+      gtk_box_pack_start (GTK_BOX (action_area), button, TRUE, TRUE, 0);
       gtk_widget_grab_default (button);
       gtk_widget_show (button);
 
@@ -9943,8 +9985,7 @@ create_timeout_test (GtkWidget *widget)
 			G_CALLBACK(start_timeout_test),
 			label);
       gtk_widget_set_can_default (button, TRUE);
-      gtk_box_pack_start (GTK_BOX (GTK_DIALOG (window)->action_area), 
-			  button, TRUE, TRUE, 0);
+      gtk_box_pack_start (GTK_BOX (action_area), button, TRUE, TRUE, 0);
       gtk_widget_show (button);
 
       button = gtk_button_new_with_label ("stop");
@@ -9952,8 +9993,7 @@ create_timeout_test (GtkWidget *widget)
 			G_CALLBACK (stop_timeout_test),
 			NULL);
       gtk_widget_set_can_default (button, TRUE);
-      gtk_box_pack_start (GTK_BOX (GTK_DIALOG (window)->action_area), 
-			  button, TRUE, TRUE, 0);
+      gtk_box_pack_start (GTK_BOX (action_area), button, TRUE, TRUE, 0);
       gtk_widget_show (button);
     }
 
@@ -10028,6 +10068,7 @@ create_idle_test (GtkWidget *widget)
 
   if (!window)
     {
+      GtkWidget *action_area, *content_area;
       GtkWidget *button2;
       GtkWidget *frame;
       GtkWidget *box;
@@ -10040,6 +10081,9 @@ create_idle_test (GtkWidget *widget)
       g_signal_connect (window, "destroy",
 			G_CALLBACK (destroy_idle_test),
 			&window);
+
+      content_area = gtk_dialog_get_content_area (GTK_DIALOG (window));
+      action_area = gtk_dialog_get_action_area (GTK_DIALOG (window));
 
       gtk_window_set_title (GTK_WINDOW (window), "Idle Test");
       gtk_container_set_border_width (GTK_CONTAINER (window), 0);
@@ -10057,15 +10101,14 @@ create_idle_test (GtkWidget *widget)
 			 "child", label,
 			/* NULL), */
 			NULL);
-      gtk_box_pack_start (GTK_BOX (GTK_DIALOG (window)->vbox), 
-			  container, TRUE, TRUE, 0);
+      gtk_box_pack_start (GTK_BOX (content_area), container, TRUE, TRUE, 0);
 
       frame =
 	g_object_new (GTK_TYPE_FRAME,
 			"border_width", 5,
 			"label", "Label Container",
 			"visible", TRUE,
-			"parent", GTK_DIALOG (window)->vbox,
+			"parent", content_area,
 			NULL);
       box =
 	g_object_new (GTK_TYPE_VBOX,
@@ -10109,8 +10152,7 @@ create_idle_test (GtkWidget *widget)
 				G_CALLBACK (gtk_widget_destroy),
 				window);
       gtk_widget_set_can_default (button, TRUE);
-      gtk_box_pack_start (GTK_BOX (GTK_DIALOG (window)->action_area), 
-			  button, TRUE, TRUE, 0);
+      gtk_box_pack_start (GTK_BOX (action_area), button, TRUE, TRUE, 0);
       gtk_widget_grab_default (button);
       gtk_widget_show (button);
 
@@ -10119,8 +10161,7 @@ create_idle_test (GtkWidget *widget)
 			G_CALLBACK (start_idle_test),
 			label);
       gtk_widget_set_can_default (button, TRUE);
-      gtk_box_pack_start (GTK_BOX (GTK_DIALOG (window)->action_area), 
-			  button, TRUE, TRUE, 0);
+      gtk_box_pack_start (GTK_BOX (action_area), button, TRUE, TRUE, 0);
       gtk_widget_show (button);
 
       button = gtk_button_new_with_label ("stop");
@@ -10128,8 +10169,7 @@ create_idle_test (GtkWidget *widget)
 			G_CALLBACK (stop_idle_test),
 			NULL);
       gtk_widget_set_can_default (button, TRUE);
-      gtk_box_pack_start (GTK_BOX (GTK_DIALOG (window)->action_area), 
-			  button, TRUE, TRUE, 0);
+      gtk_box_pack_start (GTK_BOX (action_area), button, TRUE, TRUE, 0);
       gtk_widget_show (button);
     }
 
@@ -10167,6 +10207,7 @@ void
 create_rc_file (GtkWidget *widget)
 {
   static GtkWidget *window = NULL;
+  GtkWidget *action_area, *content_area;
   GtkWidget *button;
   GtkWidget *frame;
   GtkWidget *vbox;
@@ -10183,8 +10224,11 @@ create_rc_file (GtkWidget *widget)
 			G_CALLBACK (gtk_widget_destroyed),
 			&window);
 
+      content_area = gtk_dialog_get_content_area (GTK_DIALOG (window));
+      action_area = gtk_dialog_get_action_area (GTK_DIALOG (window));
+
       frame = gtk_aspect_frame_new ("Testing RC file prioritization", 0.5, 0.5, 0.0, TRUE);
-      gtk_box_pack_start (GTK_BOX (GTK_DIALOG (window)->vbox), frame, FALSE, FALSE, 0);
+      gtk_box_pack_start (GTK_BOX (content_area), frame, FALSE, FALSE, 0);
 
       vbox = gtk_vbox_new (FALSE, 0);
       gtk_container_add (GTK_CONTAINER (frame), vbox);
@@ -10208,24 +10252,21 @@ create_rc_file (GtkWidget *widget)
       g_signal_connect (button, "clicked",
 			G_CALLBACK (gtk_rc_reparse_all), NULL);
       gtk_widget_set_can_default (button, TRUE);
-      gtk_box_pack_start (GTK_BOX (GTK_DIALOG (window)->action_area), 
-			  button, TRUE, TRUE, 0);
+      gtk_box_pack_start (GTK_BOX (action_area), button, TRUE, TRUE, 0);
       gtk_widget_grab_default (button);
 
       button = gtk_button_new_with_label ("Reload All");
       g_signal_connect (button, "clicked",
 			G_CALLBACK (reload_all_rc_files), NULL);
       gtk_widget_set_can_default (button, TRUE);
-      gtk_box_pack_start (GTK_BOX (GTK_DIALOG (window)->action_area), 
-			  button, TRUE, TRUE, 0);
+      gtk_box_pack_start (GTK_BOX (action_area), button, TRUE, TRUE, 0);
 
       button = gtk_button_new_with_label ("Close");
       g_signal_connect_swapped (button, "clicked",
 				G_CALLBACK (gtk_widget_destroy),
 				window);
       gtk_widget_set_can_default (button, TRUE);
-      gtk_box_pack_start (GTK_BOX (GTK_DIALOG (window)->action_area), 
-			  button, TRUE, TRUE, 0);
+      gtk_box_pack_start (GTK_BOX (action_area), button, TRUE, TRUE, 0);
     }
 
   if (!gtk_widget_get_visible (window))
@@ -10249,6 +10290,7 @@ void
 create_mainloop (GtkWidget *widget)
 {
   static GtkWidget *window = NULL;
+  GtkWidget *action_area, *content_area;
   GtkWidget *label;
   GtkWidget *button;
 
@@ -10265,16 +10307,17 @@ create_mainloop (GtkWidget *widget)
 			G_CALLBACK (mainloop_destroyed),
 			&window);
 
+      content_area = gtk_dialog_get_content_area (GTK_DIALOG (window));
+      action_area = gtk_dialog_get_action_area (GTK_DIALOG (window));
+
       label = gtk_label_new ("In recursive main loop...");
       gtk_misc_set_padding (GTK_MISC(label), 20, 20);
 
-      gtk_box_pack_start (GTK_BOX (GTK_DIALOG (window)->vbox), label,
-			  TRUE, TRUE, 0);
+      gtk_box_pack_start (GTK_BOX (content_area), label, TRUE, TRUE, 0);
       gtk_widget_show (label);
 
       button = gtk_button_new_with_label ("Leave");
-      gtk_box_pack_start (GTK_BOX (GTK_DIALOG (window)->action_area), button, 
-			  FALSE, TRUE, 0);
+      gtk_box_pack_start (GTK_BOX (action_area), button, FALSE, TRUE, 0);
 
       g_signal_connect_swapped (button, "clicked",
 				G_CALLBACK (gtk_widget_destroy),
@@ -10302,13 +10345,16 @@ gboolean
 layout_expose_handler (GtkWidget *widget, GdkEventExpose *event)
 {
   GtkLayout *layout;
+  GdkWindow *bin_window;
+  cairo_t *cr;
 
   gint i,j;
   gint imin, imax, jmin, jmax;
 
   layout = GTK_LAYOUT (widget);
+  bin_window = gtk_layout_get_bin_window (layout);
 
-  if (event->window != layout->bin_window)
+  if (event->window != bin_window)
     return FALSE;
   
   imin = (event->area.x) / 10;
@@ -10317,22 +10363,28 @@ layout_expose_handler (GtkWidget *widget, GdkEventExpose *event)
   jmin = (event->area.y) / 10;
   jmax = (event->area.y + event->area.height + 9) / 10;
 
+  cr = gdk_cairo_create (bin_window);
+
   for (i=imin; i<imax; i++)
     for (j=jmin; j<jmax; j++)
       if ((i+j) % 2)
-	gdk_draw_rectangle (layout->bin_window,
-			    widget->style->black_gc,
-			    TRUE,
-			    10*i, 10*j, 
-			    1+i%10, 1+j%10);
+	cairo_rectangle (cr,
+			 10*i, 10*j, 
+			 1+i%10, 1+j%10);
   
+  cairo_fill (cr);
+
+  cairo_destroy (cr);
+
   return FALSE;
 }
 
 void create_layout (GtkWidget *widget)
 {
+  GtkAdjustment *hadjustment, *vadjustment;
+  GtkLayout *layout;
   static GtkWidget *window = NULL;
-  GtkWidget *layout;
+  GtkWidget *layout_widget;
   GtkWidget *scrolledwindow;
   GtkWidget *button;
 
@@ -10360,22 +10412,27 @@ void create_layout (GtkWidget *widget)
 					 GTK_CORNER_TOP_RIGHT);
 
       gtk_container_add (GTK_CONTAINER (window), scrolledwindow);
-      
-      layout = gtk_layout_new (NULL, NULL);
-      gtk_container_add (GTK_CONTAINER (scrolledwindow), layout);
+
+      layout_widget = gtk_layout_new (NULL, NULL);
+      layout = GTK_LAYOUT (layout_widget);
+      gtk_container_add (GTK_CONTAINER (scrolledwindow), layout_widget);
 
       /* We set step sizes here since GtkLayout does not set
        * them itself.
        */
-      GTK_LAYOUT (layout)->hadjustment->step_increment = 10.0;
-      GTK_LAYOUT (layout)->vadjustment->step_increment = 10.0;
-      
-      gtk_widget_set_events (layout, GDK_EXPOSURE_MASK);
+      hadjustment = gtk_layout_get_hadjustment (layout);
+      vadjustment = gtk_layout_get_vadjustment (layout);
+      gtk_adjustment_set_step_increment (hadjustment, 10.0);
+      gtk_adjustment_set_step_increment (vadjustment, 10.0);
+      gtk_layout_set_hadjustment (layout, hadjustment);
+      gtk_layout_set_vadjustment (layout, vadjustment);
+
+      gtk_widget_set_events (layout_widget, GDK_EXPOSURE_MASK);
       g_signal_connect (layout, "expose_event",
 			G_CALLBACK (layout_expose_handler), NULL);
-      
-      gtk_layout_set_size (GTK_LAYOUT (layout), 1600, 128000);
-      
+
+      gtk_layout_set_size (layout, 1600, 128000);
+
       for (i=0 ; i < 16 ; i++)
 	for (j=0 ; j < 16 ; j++)
 	  {
@@ -10385,8 +10442,7 @@ void create_layout (GtkWidget *widget)
 	    else
 	      button = gtk_label_new (buf);
 
-	    gtk_layout_put (GTK_LAYOUT (layout), button,
-			    j*100, i*100);
+	    gtk_layout_put (layout, button, j*100, i*100);
 	  }
 
       for (i=16; i < 1280; i++)
@@ -10397,8 +10453,7 @@ void create_layout (GtkWidget *widget)
 	  else
 	    button = gtk_label_new (buf);
 
-	  gtk_layout_put (GTK_LAYOUT (layout), button,
-			  0, i*100);
+	  gtk_layout_put (layout, button, 0, i*100);
 	}
     }
 
@@ -10412,6 +10467,7 @@ void
 create_styles (GtkWidget *widget)
 {
   static GtkWidget *window = NULL;
+  GtkWidget *content_area, *action_area;
   GtkWidget *label;
   GtkWidget *button;
   GtkWidget *entry;
@@ -10435,19 +10491,20 @@ create_styles (GtkWidget *widget)
 			G_CALLBACK (gtk_widget_destroyed),
 			&window);
 
-      
+      content_area = gtk_dialog_get_content_area (GTK_DIALOG (window));
+      action_area = gtk_dialog_get_action_area (GTK_DIALOG (window));
+
       button = gtk_button_new_with_label ("Close");
       g_signal_connect_swapped (button, "clicked",
 				G_CALLBACK (gtk_widget_destroy),
 				window);
       gtk_widget_set_can_default (button, TRUE);
-      gtk_box_pack_start (GTK_BOX (GTK_DIALOG (window)->action_area), 
-			  button, TRUE, TRUE, 0);
+      gtk_box_pack_start (GTK_BOX (action_area), button, TRUE, TRUE, 0);
       gtk_widget_show (button);
 
       vbox = gtk_vbox_new (FALSE, 5);
       gtk_container_set_border_width (GTK_CONTAINER (vbox), 10);
-      gtk_box_pack_start (GTK_BOX (GTK_DIALOG (window)->vbox), vbox, FALSE, FALSE, 0);
+      gtk_box_pack_start (GTK_BOX (content_area), vbox, FALSE, FALSE, 0);
       
       label = gtk_label_new ("Font:");
       gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
@@ -10456,7 +10513,8 @@ create_styles (GtkWidget *widget)
       font_desc = pango_font_description_from_string ("Helvetica,Sans Oblique 18");
 
       button = gtk_button_new_with_label ("Some Text");
-      gtk_widget_modify_font (GTK_BIN (button)->child, font_desc);
+      gtk_widget_modify_font (gtk_bin_get_child (GTK_BIN (button)),
+                              font_desc);
       gtk_box_pack_start (GTK_BOX (vbox), button, FALSE, FALSE, 0);
 
       label = gtk_label_new ("Foreground:");
@@ -10464,7 +10522,8 @@ create_styles (GtkWidget *widget)
       gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, FALSE, 0);
 
       button = gtk_button_new_with_label ("Some Text");
-      gtk_widget_modify_fg (GTK_BIN (button)->child, GTK_STATE_NORMAL, &red);
+      gtk_widget_modify_fg (gtk_bin_get_child (GTK_BIN (button)),
+                            GTK_STATE_NORMAL, &red);
       gtk_box_pack_start (GTK_BOX (vbox), button, FALSE, FALSE, 0);
 
       label = gtk_label_new ("Background:");
@@ -10524,7 +10583,7 @@ create_styles (GtkWidget *widget)
       rc_style->ythickness = 5;
 
       gtk_widget_modify_style (button, rc_style);
-      gtk_widget_modify_style (GTK_BIN (button)->child, rc_style);
+      gtk_widget_modify_style (gtk_bin_get_child (GTK_BIN (button)), rc_style);
 
       g_object_unref (rc_style);
       

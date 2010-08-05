@@ -44,7 +44,7 @@
 #include "gtkprintjob.h"
 #include "gtklabel.h"
 #include "gtkintl.h"
-#include "gtkalias.h"
+
 
 typedef struct 
 {
@@ -1206,6 +1206,3 @@ find_printer (const gchar *printer,
   if (finder->backends == NULL && !finder->found_printer)
     g_idle_add (find_printer_idle, finder);
 }
-
-#define __GTK_PRINT_OPERATION_UNIX_C__
-#include "gtkaliasdef.c"

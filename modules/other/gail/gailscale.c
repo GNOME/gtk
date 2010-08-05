@@ -145,7 +145,7 @@ gail_scale_notify (GObject    *obj,
     {
       GtkWidget *widget;
 
-      widget = GTK_ACCESSIBLE (obj)->widget;
+      widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (obj));
       if (widget)
         {
           GtkScale *gtk_scale;
@@ -196,7 +196,7 @@ gail_scale_get_text (AtkText *text,
   GtkWidget *widget;
   GailScale *scale;
 
-  widget = GTK_ACCESSIBLE (text)->widget;
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (text));
   if (widget == NULL)
     /* State is defunct */
     return NULL;
@@ -218,7 +218,7 @@ gail_scale_get_text_before_offset (AtkText         *text,
   PangoLayout *layout;
   gchar *txt;
   
-  widget = GTK_ACCESSIBLE (text)->widget;
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (text));
   
   if (widget == NULL)
     /* State is defunct */
@@ -250,7 +250,7 @@ gail_scale_get_text_at_offset (AtkText         *text,
   PangoLayout *layout;
   gchar *txt;
  
-  widget = GTK_ACCESSIBLE (text)->widget;
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (text));
   
   if (widget == NULL)
     /* State is defunct */
@@ -282,7 +282,7 @@ gail_scale_get_text_after_offset (AtkText         *text,
   PangoLayout *layout;
   gchar *txt;
 
-  widget = GTK_ACCESSIBLE (text)->widget;
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (text));
   
   if (widget == NULL)
     /* State is defunct */
@@ -308,7 +308,7 @@ gail_scale_get_character_count (AtkText *text)
   GtkWidget *widget;
   GailScale *scale;
 
-  widget = GTK_ACCESSIBLE (text)->widget;
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (text));
   if (widget == NULL)
     /* State is defunct */
     return 0;
@@ -337,7 +337,7 @@ gail_scale_get_character_extents (AtkText      *text,
   gint index, x_layout, y_layout;
   const gchar *scale_text;
  
-  widget = GTK_ACCESSIBLE (text)->widget;
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (text));
 
   if (widget == NULL)
     /* State is defunct */
@@ -369,7 +369,7 @@ gail_scale_get_offset_at_point (AtkText      *text,
   gint index, x_layout, y_layout;
   const gchar *scale_text;
 
-  widget = GTK_ACCESSIBLE (text)->widget;
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (text));
   if (widget == NULL)
     /* State is defunct */
     return -1;
@@ -410,7 +410,7 @@ gail_scale_get_run_attributes (AtkText *text,
   PangoLayout *layout;
   const gchar *scale_text;
 
-  widget = GTK_ACCESSIBLE (text)->widget;
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (text));
   if (widget == NULL)
     /* State is defunct */
     return NULL;
@@ -448,7 +448,7 @@ gail_scale_get_default_attributes (AtkText *text)
   AtkAttributeSet *at_set = NULL;
   PangoLayout *layout;
 
-  widget = GTK_ACCESSIBLE (text)->widget;
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (text));
   if (widget == NULL)
     /* State is defunct */
     return NULL;
@@ -474,7 +474,7 @@ gail_scale_get_character_at_offset (AtkText *text,
   gchar *index;
   gunichar c;
 
-  widget = GTK_ACCESSIBLE (text)->widget;
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (text));
   if (widget == NULL)
     /* State is defunct */
     return '\0';

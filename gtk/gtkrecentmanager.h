@@ -81,14 +81,29 @@ struct _GtkRecentData
   gboolean is_private;
 };
 
+/**
+ * GtkRecentManager:
+ *
+ * #GtkRecentManager contains only private data
+ * and should be accessed using the provided API.
+ *
+ * Since: 2.10
+ */
 struct _GtkRecentManager
 {
-  /*< private >*/
+  /* <private> */
   GObject parent_instance;
 
-  GtkRecentManagerPrivate *GSEAL (priv);
+  GtkRecentManagerPrivate *priv;
 };
 
+/**
+ * GtkRecentManagerClass:
+ *
+ * #GtkRecentManagerClass contains only private data.
+ *
+ * Since: 2.10
+ */
 struct _GtkRecentManagerClass
 {
   /*< private >*/
@@ -118,8 +133,10 @@ struct _GtkRecentManagerClass
  *   resources file.
  * @GTK_RECENT_MANAGER_ERROR_UNKNOWN: unspecified error.
  *
- * Error codes for GtkRecentManager operations
- **/
+ * Error codes for #GtkRecentManager operations
+ *
+ * Since: 2.10
+ */
 typedef enum
 {
   GTK_RECENT_MANAGER_ERROR_NOT_FOUND,
@@ -131,6 +148,13 @@ typedef enum
   GTK_RECENT_MANAGER_ERROR_UNKNOWN
 } GtkRecentManagerError;
 
+/**
+ * GTK_RECENT_MANAGER_ERROR:
+ *
+ * The #GError domain for #GtkRecentManager errors.
+ *
+ * Since: 2.10
+ */
 #define GTK_RECENT_MANAGER_ERROR	(gtk_recent_manager_error_quark ())
 GQuark 	gtk_recent_manager_error_quark (void);
 
@@ -157,9 +181,6 @@ gboolean          gtk_recent_manager_move_item      (GtkRecentManager     *manag
 						     const gchar          *uri,
 						     const gchar          *new_uri,
 						     GError              **error);
-void              gtk_recent_manager_set_limit      (GtkRecentManager     *manager,
-						     gint                  limit);
-gint              gtk_recent_manager_get_limit      (GtkRecentManager     *manager);
 GList *           gtk_recent_manager_get_items      (GtkRecentManager     *manager);
 gint              gtk_recent_manager_purge_items    (GtkRecentManager     *manager,
 						     GError              **error);

@@ -3149,7 +3149,7 @@ gdk_win32_window_shape_combine_region (GdkWindow       *window,
     {
       HRGN hrgn;
 
-      hrgn = _gdk_win32_gdkregion_to_hrgn (shape_region, 0, 0);
+      hrgn = _gdk_win32_cairo_region_to_hrgn (shape_region, 0, 0);
       
       GDK_NOTE (MISC, g_print ("gdk_win32_window_shape_combine_region: %p: %p\n",
 			       GDK_WINDOW_HWND (window),
@@ -3269,11 +3269,11 @@ static gboolean
 _gdk_win32_window_queue_antiexpose (GdkWindow *window,
 				    cairo_region_t *area)
 {
-  HRGN hrgn = _gdk_win32_gdkregion_to_hrgn (area, 0, 0);
+  HRGN hrgn = _gdk_win32_cairo_region_to_hrgn (area, 0, 0);
 
   GDK_NOTE (EVENTS, g_print ("_gdk_windowing_window_queue_antiexpose: ValidateRgn %p %s\n",
 			     GDK_WINDOW_HWND (window),
-			     _gdk_win32_gdkregion_to_string (area)));
+			     _gdk_win32_cairo_region_to_string (area)));
 
   ValidateRgn (GDK_WINDOW_HWND (window), hrgn);
 
@@ -3306,7 +3306,7 @@ _gdk_win32_window_queue_translation (GdkWindow *window,
   else if (ret != NULLREGION)
     {
       /* Get current updateregion, move any part of it that intersects area by dx,dy */
-      HRGN update = _gdk_win32_gdkregion_to_hrgn (area, 0, 0);
+      HRGN update = _gdk_win32_cairo_region_to_hrgn (area, 0, 0);
       ret = CombineRgn (update, hrgn, update, RGN_AND);
       if (ret == ERROR)
         WIN32_API_FAILED ("CombineRgn");

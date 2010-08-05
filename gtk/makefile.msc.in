@@ -85,7 +85,7 @@ gtkbuiltincache.h: gtk-update-icon-cache.exe
 GENERATED = \
 	gtktypebuiltins.h gtktypebuiltins.c \
 	gtkmarshal.h gtkmarshal.c gtkmarshalers.h gtkmarshalers.c \
-	gtk.def gtkalias.h gtkaliasdef.c gtktypefuncs.c
+	gtk.def gtktypefuncs.c
 
 all :						\
 	..\config.h				\
@@ -566,12 +566,6 @@ gtk.def: gtk.symbols makefile.msc
 	cl /EP -DINCLUDE_VARIABLES -DG_OS_WIN32 -DALL_FILES \
 		-DG_GNUC_MALLOC= -DG_GNUC_CONST= -DG_GNUC_NULL_TERMINATED= -DG_GNUC_NORETURN= \
 		-DG_GNUC_PRINTF=;G_GNUC_PRINTF gtk.symbols >> gtk.def
-
-gtkalias.h: gtk.symbols
-	$(PERL) makegtkalias.pl < gtk.symbols > gtkalias.h
-
-gtkaliasdef.c: gtk.symbols
-	 $(PERL) makegtkalias.pl -def < gtk.symbols > gtkaliasdef.c
 
 # generate type identifier header (GTK_TYPE_WIDGET_FLAGS)
 # use 'echo' to work around 'command line too long'

@@ -29,7 +29,6 @@
 #include <string.h>
 #include "gtkprivate.h"
 #include "gtkintl.h"
-#include "gtkalias.h"
 
 #define ANIMATION_TIMEOUT        50
 #define ANIMATION_DURATION      (ANIMATION_TIMEOUT * 4)
@@ -542,12 +541,12 @@ static void
 gtk_tool_item_group_size_request (GtkWidget      *widget,
                                   GtkRequisition *requisition)
 {
-  const gint border_width = GTK_CONTAINER (widget)->border_width;
   GtkToolItemGroup *group = GTK_TOOL_ITEM_GROUP (widget);
   GtkToolItemGroupPrivate* priv = group->priv;
   GtkOrientation orientation;
   GtkRequisition item_size;
   gint requested_rows;
+  guint border_width;
 
   if (priv->children && gtk_tool_item_group_get_label_widget (group))
     {
@@ -569,6 +568,7 @@ gtk_tool_item_group_size_request (GtkWidget      *widget,
   else
     requisition->height = MAX (requisition->height, item_size.height * requested_rows);
 
+  border_width = gtk_container_get_border_width (GTK_CONTAINER (widget));
   requisition->width += border_width * 2;
   requisition->height += border_width * 2;
 }
@@ -608,7 +608,6 @@ gtk_tool_item_group_real_size_query (GtkWidget      *widget,
                                      GtkAllocation  *allocation,
                                      GtkRequisition *inquery)
 {
-  const gint border_width = GTK_CONTAINER (widget)->border_width;
   GtkToolItemGroup *group = GTK_TOOL_ITEM_GROUP (widget);
   GtkToolItemGroupPrivate* priv = group->priv;
 
@@ -619,7 +618,9 @@ gtk_tool_item_group_real_size_query (GtkWidget      *widget,
   GtkToolbarStyle style;
 
   gint min_rows;
+  guint border_width;
 
+  border_width = gtk_container_get_border_width (GTK_CONTAINER (widget));
   orientation = gtk_tool_shell_get_orientation (GTK_TOOL_SHELL (group));
   style = gtk_tool_shell_get_style (GTK_TOOL_SHELL (group));
 
@@ -844,7 +845,6 @@ static void
 gtk_tool_item_group_real_size_allocate (GtkWidget     *widget,
                                         GtkAllocation *allocation)
 {
-  const gint border_width = GTK_CONTAINER (widget)->border_width;
   GtkToolItemGroup *group = GTK_TOOL_ITEM_GROUP (widget);
   GtkToolItemGroupPrivate* priv = group->priv;
   GtkRequisition child_requisition;
@@ -860,6 +860,9 @@ gtk_tool_item_group_real_size_allocate (GtkWidget     *widget,
 
   gint n_columns, n_rows = 1;
   gint min_rows;
+  guint border_width;
+
+  border_width = gtk_container_get_border_width (GTK_CONTAINER (widget));
 
   GtkTextDirection direction = gtk_widget_get_direction (widget);
 
@@ -1160,10 +1163,12 @@ static void
 gtk_tool_item_group_realize (GtkWidget *widget)
 {
   GtkWidget *toplevel_window;
-  const gint border_width = GTK_CONTAINER (widget)->border_width;
   gint attributes_mask = GDK_WA_X | GDK_WA_Y | GDK_WA_VISUAL | GDK_WA_COLORMAP;
   GdkWindowAttr attributes;
   GdkDisplay *display;
+  guint border_width;
+
+  border_width = gtk_container_get_border_width (GTK_CONTAINER (widget));
 
   attributes.window_type = GDK_WINDOW_CHILD;
   attributes.x = widget->allocation.x + border_width;
@@ -2431,7 +2436,3 @@ _gtk_tool_item_group_palette_reconfigured (GtkToolItemGroup *group)
 
   gtk_tool_item_group_header_adjust_style (group);
 }
-
-
-#define __GTK_TOOL_ITEM_GROUP_C__
-#include "gtkaliasdef.c"

@@ -234,6 +234,7 @@ on_animate (void)
 int
 main (int argc, char **argv)
 {
+  GtkWidget *content_area;
   GtkWidget *dialog;
   GtkWidget *scrolled_window;
   GtkWidget *hbox;
@@ -256,10 +257,12 @@ main (int argc, char **argv)
 					NULL, GTK_DIALOG_NO_SEPARATOR,
 					GTK_STOCK_CLOSE, GTK_RESPONSE_CLOSE,
 					NULL);
-  
+
+  content_area = gtk_dialog_get_content_area (GTK_DIALOG (dialog));
+
   hbox = gtk_hbox_new (FALSE, 12);
   gtk_container_set_border_width (GTK_CONTAINER (hbox), 12);
-  gtk_box_pack_start (GTK_BOX (GTK_DIALOG (dialog)->vbox), hbox, TRUE, TRUE, 0);
+  gtk_box_pack_start (GTK_BOX (content_area), hbox, TRUE, TRUE, 0);
 
   combo_vbox = gtk_vbox_new (FALSE, 8);
   gtk_box_pack_start (GTK_BOX (hbox), combo_vbox, FALSE, FALSE, 0);

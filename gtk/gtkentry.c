@@ -65,7 +65,6 @@
 #include "gtktooltip.h"
 #include "gtkiconfactory.h"
 #include "gtkicontheme.h"
-#include "gtkalias.h"
 
 #define GTK_ENTRY_COMPLETION_KEY "gtk-entry-completion-key"
 
@@ -3210,6 +3209,7 @@ draw_icon (GtkWidget            *widget,
   EntryIconInfo *icon_info = priv->icons[icon_pos];
   GdkPixbuf *pixbuf;
   gint x, y, width, height;
+  cairo_t *cr;
 
   if (!icon_info)
     return;
@@ -3267,9 +3267,10 @@ draw_icon (GtkWidget            *widget,
       pixbuf = temp_pixbuf;
     }
 
-  gdk_draw_pixbuf (icon_info->window, widget->style->black_gc, pixbuf,
-                   0, 0, x, y, -1, -1,
-                   GDK_RGB_DITHER_NORMAL, 0, 0);
+  cr = gdk_cairo_create (icon_info->window);
+  gdk_cairo_set_source_pixbuf (cr, pixbuf, x, y);
+  cairo_paint (cr);
+  cairo_destroy (cr);
 
   g_object_unref (pixbuf);
 }
@@ -10016,7 +10017,12 @@ keymap_state_changed (GdkKeymap *keymap,
 
   if (gtk_entry_get_display_mode (entry) != DISPLAY_NORMAL && priv->caps_lock_warning)
     { 
-      if (gdk_keymap_get_caps_lock_state (keymap))
+      if (gdk_keymap_get_num_lock_state (keymap)
+          && gdk_keymap_get_caps_lock_state (keymap))
+        text = _("Caps Lock and Num Lock are on");
+      else if (gdk_keymap_get_num_lock_state (keymap))
+        text = _("Num Lock is on");
+      else if (gdk_keymap_get_caps_lock_state (keymap))
         text = _("Caps Lock is on");
     }
 
@@ -10025,6 +10031,3 @@ keymap_state_changed (GdkKeymap *keymap,
   else
     remove_capslock_feedback (entry);
 }
-
-#define __GTK_ENTRY_C__
-#include "gtkaliasdef.c"

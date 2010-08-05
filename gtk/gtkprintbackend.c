@@ -28,10 +28,7 @@
 #include "gtkmarshalers.h"
 #include "gtkprivate.h"
 #include "gtkprintbackend.h"
-#include "gtkalias.h"
 
-#define GTK_PRINT_BACKEND_GET_PRIVATE(o)  \
-   (G_TYPE_INSTANCE_GET_PRIVATE ((o), GTK_TYPE_PRINT_BACKEND, GtkPrintBackendPrivate))
 
 static void gtk_print_backend_dispose      (GObject      *object);
 static void gtk_print_backend_set_property (GObject      *object,
@@ -198,9 +195,7 @@ gtk_print_backend_set_property (GObject      *object,
                                 GParamSpec   *pspec)
 {
   GtkPrintBackend *backend = GTK_PRINT_BACKEND (object);
-  GtkPrintBackendPrivate *priv;
-
-  priv = backend->priv = GTK_PRINT_BACKEND_GET_PRIVATE (backend); 
+  GtkPrintBackendPrivate *priv = backend->priv;
 
   switch (prop_id)
     {
@@ -220,9 +215,7 @@ gtk_print_backend_get_property (GObject    *object,
                                 GParamSpec *pspec)
 {
   GtkPrintBackend *backend = GTK_PRINT_BACKEND (object);
-  GtkPrintBackendPrivate *priv;
-
-  priv = backend->priv = GTK_PRINT_BACKEND_GET_PRIVATE (backend); 
+  GtkPrintBackendPrivate *priv = backend->priv;
 
   switch (prop_id)
     {
@@ -455,7 +448,9 @@ gtk_print_backend_init (GtkPrintBackend *backend)
 {
   GtkPrintBackendPrivate *priv;
 
-  priv = backend->priv = GTK_PRINT_BACKEND_GET_PRIVATE (backend); 
+  priv = backend->priv = G_TYPE_INSTANCE_GET_PRIVATE (backend,
+                                                      GTK_TYPE_PRINT_BACKEND,
+                                                      GtkPrintBackendPrivate);
 
   priv->printers = g_hash_table_new_full (g_str_hash, g_str_equal, 
 					  (GDestroyNotify) g_free,
@@ -734,6 +729,7 @@ request_password (GtkPrintBackend  *backend,
   GtkPrintBackendPrivate *priv = backend->priv;
   GtkWidget *dialog, *box, *main_box, *label, *icon, *vbox, *entry;
   GtkWidget *focus = NULL;
+  GtkWidget *content_area;
   gchar     *markup;
   gint       length;
   gint       i;
@@ -776,7 +772,8 @@ request_password (GtkPrintBackend  *backend,
 
 
   /* Packing */
-  gtk_box_pack_start (GTK_BOX (GTK_DIALOG (dialog)->vbox), main_box, TRUE, FALSE, 0);
+  content_area = gtk_dialog_get_content_area (GTK_DIALOG (dialog));
+  gtk_box_pack_start (GTK_BOX (content_area), main_box, TRUE, FALSE, 0);
 
   gtk_box_pack_start (GTK_BOX (main_box), icon, FALSE, FALSE, 6);
   gtk_box_pack_start (GTK_BOX (main_box), vbox, FALSE, FALSE, 6);
@@ -837,7 +834,3 @@ gtk_print_backend_destroy (GtkPrintBackend *print_backend)
    */
   g_object_run_dispose (G_OBJECT (print_backend));
 }
-
-
-#define __GTK_PRINT_BACKEND_C__
-#include "gtkaliasdef.c"

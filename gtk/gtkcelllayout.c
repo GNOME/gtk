@@ -23,7 +23,7 @@
 #include <errno.h>
 #include "gtkcelllayout.h"
 #include "gtkintl.h"
-#include "gtkalias.h"
+
 
 GType
 gtk_cell_layout_get_type (void)
@@ -442,6 +442,3 @@ _gtk_cell_layout_buildable_add_child (GtkBuildable      *buildable,
   g_return_if_fail (iface->pack_start != NULL);
   iface->pack_start (GTK_CELL_LAYOUT (buildable), GTK_CELL_RENDERER (child), FALSE);
 }
-
-#define __GTK_CELL_LAYOUT_C__
-#include "gtkaliasdef.c"

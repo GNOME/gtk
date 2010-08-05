@@ -35,9 +35,6 @@
 #include "gtkmarshalers.h"
 #include "gtkprivate.h"
 
-#include "gtkalias.h"
-
-
 /**
  * SECTION:gtkobject
  * @Short_description: The base class of the GTK+ type hierarchy
@@ -228,6 +225,3 @@ gtk_object_finalize (GObject *gobject)
   
   G_OBJECT_CLASS (gtk_object_parent_class)->finalize (gobject);
 }
-
-#define __GTK_OBJECT_C__
-#include "gtkaliasdef.c"

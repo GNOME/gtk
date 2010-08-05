@@ -25,7 +25,6 @@
 
 #include "config.h"
 #include "gtkprint-win32.h"
-#include "gtkalias.h"
 
 void
 gtk_print_win32_devnames_free (GtkPrintWin32Devnames *devnames)
@@ -155,7 +154,3 @@ gtk_print_win32_devnames_from_printer_name (const char *printer_name)
 
   return devnames;
 }
-
-
-#define __GTK_PRINT_WIN32_C__
-#include "gtkaliasdef.c"

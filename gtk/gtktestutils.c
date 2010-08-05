@@ -18,15 +18,11 @@
  * Boston, MA 02111-1307, USA.
  */
 
-/* need to get the prototypes of all get_type functions */
-#undef GTK_DISABLE_DEPRECATED
-/* Need to get GDK_WINDOW_OBJECT */
-#undef GDK_DISABLE_DEPRECATED
 
 #include "config.h"
 
 #include <gtk/gtk.h>
-#include "gtkalias.h"
+#include "gtkspinbutton.h"
 
 #include <locale.h>
 #include <string.h>
@@ -92,13 +88,13 @@ test_find_widget_input_windows (GtkWidget *widget,
   GSList *matches = NULL;
   gpointer udata;
   gdk_window_get_user_data (widget->window, &udata);
-  if (udata == widget && (!input_only || (GDK_IS_WINDOW (widget->window) && GDK_WINDOW_OBJECT (widget->window)->input_only)))
+  if (udata == widget && (!input_only || (GDK_IS_WINDOW (widget->window) && gdk_window_is_input_only (GDK_WINDOW (widget->window)))))
     matches = g_slist_prepend (matches, widget->window);
   children = gdk_window_get_children (gtk_widget_get_parent_window (widget));
   for (node = children; node; node = node->next)
     {
       gdk_window_get_user_data (node->data, &udata);
-      if (udata == widget && (!input_only || (GDK_IS_WINDOW (node->data) && GDK_WINDOW_OBJECT (node->data)->input_only)))
+      if (udata == widget && (!input_only || (GDK_IS_WINDOW (node->data) && gdk_window_is_input_only (GDK_WINDOW (node->data)))))
         matches = g_slist_prepend (matches, node->data);
     }
   return g_slist_reverse (matches);
@@ -194,14 +190,18 @@ gtk_test_spin_button_click (GtkSpinButton  *spinner,
                             guint           button,
                             gboolean        upwards)
 {
+  GdkWindow *panel;
   gboolean b1res = FALSE, b2res = FALSE;
-  if (spinner->panel)
+
+  panel = _gtk_spin_button_get_panel (spinner);
+
+  if (panel)
     {
       gint width, height, pos;
-      gdk_drawable_get_size (spinner->panel, &width, &height);
+      gdk_drawable_get_size (panel, &width, &height);
       pos = upwards ? 0 : height - 1;
-      b1res = gdk_test_simulate_button (spinner->panel, width - 1, pos, button, 0, GDK_BUTTON_PRESS);
-      b2res = gdk_test_simulate_button (spinner->panel, width - 1, pos, button, 0, GDK_BUTTON_RELEASE);
+      b1res = gdk_test_simulate_button (panel, width - 1, pos, button, 0, GDK_BUTTON_PRESS);
+      b2res = gdk_test_simulate_button (panel, width - 1, pos, button, 0, GDK_BUTTON_RELEASE);
     }
   return b1res && b2res;
 }
@@ -657,6 +657,3 @@ gtk_test_register_all_types (void)
       *tp = 0;
     }
 }
-
-#define __GTK_TEST_UTILS_C__
-#include "gtkaliasdef.c"

@@ -38,7 +38,6 @@
 #include "win32/gdkwin32.h"
 
 #include "gtkwin32embed.h"
-#include "gtkalias.h"
 
 GdkNativeWindow
 _gtk_socket_windowing_get_id (GtkSocket *socket)

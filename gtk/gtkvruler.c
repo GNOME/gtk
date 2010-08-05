@@ -28,7 +28,7 @@
 
 #include "gtkorientable.h"
 #include "gtkvruler.h"
-#include "gtkalias.h"
+
 
 /**
  * SECTION:gtkvruler
@@ -78,6 +78,3 @@ gtk_vruler_new (void)
 {
   return g_object_new (GTK_TYPE_VRULER, NULL);
 }
-
-#define __GTK_VRULER_C__
-#include "gtkaliasdef.c"

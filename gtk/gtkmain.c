@@ -62,7 +62,6 @@
 #include "gtkwindow.h"
 #include "gtktooltip.h"
 #include "gtkdebug.h"
-#include "gtkalias.h"
 #include "gtkmenu.h"
 #include "gdk/gdkkeysyms.h"
 
@@ -2442,6 +2441,3 @@ _gtk_boolean_handled_accumulator (GSignalInvocationHint *ihint,
   
   return continue_emission;
 }
-
-#define __GTK_MAIN_C__
-#include "gtkaliasdef.c"

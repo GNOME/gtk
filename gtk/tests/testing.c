@@ -74,9 +74,12 @@ test_button_keys (void)
 static void
 test_slider_ranges (void)
 {
+  GtkWidget *child;
   GtkWidget *window = gtk_test_create_simple_window ("Test Window", "Test: gtk_test_warp_slider");
   GtkWidget *hscale = gtk_hscale_new_with_range (-50, +50, 5);
-  gtk_container_add (GTK_CONTAINER (GTK_BIN (window)->child), hscale);
+
+  child = gtk_bin_get_child (GTK_BIN (window));
+  gtk_container_add (GTK_CONTAINER (child), hscale);
   gtk_widget_show (hscale);
   gtk_widget_show_now (window);
   while (gtk_events_pending ())
@@ -128,24 +131,30 @@ test_xserver_sync (void)
 {
   GtkWidget *window = gtk_test_create_simple_window ("Test Window", "Test: test_xserver_sync");
   GtkWidget *darea = gtk_drawing_area_new ();
+  GtkWidget *child;
   GTimer *gtimer = g_timer_new();
   gint sync_is_slower = 0, repeat = 5;
+
+  child = gtk_bin_get_child (GTK_BIN (window));
   gtk_widget_set_size_request (darea, 320, 200);
-  gtk_container_add (GTK_CONTAINER (GTK_BIN (window)->child), darea);
+  gtk_container_add (GTK_CONTAINER (child), darea);
   gtk_widget_show (darea);
   gtk_widget_show_now (window);
   while (repeat--)
     {
-      gint i, many = 100;
+      gint i, many = 200;
       double nosync_time, sync_time;
+      cairo_t *cr;
+
       while (gtk_events_pending ())
         gtk_main_iteration ();
+      cr = gdk_cairo_create (darea->window);
+      cairo_set_source_rgba (cr, 0, 1, 0, 0.1);
       /* run a number of consecutive drawing requests, just using drawing queue */
       g_timer_start (gtimer);
       for (i = 0; i < many; i++)
         {
-          gdk_draw_line (darea->window, darea->style->black_gc, 0, 0, 320, 200);
-          gdk_draw_line (darea->window, darea->style->black_gc, 320, 0, 0, 200);
+          cairo_paint (cr);
         }
       g_timer_stop (gtimer);
       nosync_time = g_timer_elapsed (gtimer, NULL);
@@ -156,8 +165,7 @@ test_xserver_sync (void)
       /* run a number of consecutive drawing requests with intermediate drawing syncs */
       for (i = 0; i < many; i++)
         {
-          gdk_draw_line (darea->window, darea->style->black_gc, 0, 0, 320, 200);
-          gdk_draw_line (darea->window, darea->style->black_gc, 320, 0, 0, 200);
+          cairo_paint (cr);
           gdk_test_render_sync (darea->window);
         }
       g_timer_stop (gtimer);
@@ -171,11 +179,14 @@ test_xserver_sync (void)
 static void
 test_spin_button_arrows (void)
 {
+  GtkWidget *child;
   GtkWidget *window = gtk_test_create_simple_window ("Test Window", "Test: test_spin_button_arrows");
   GtkWidget *spinner = gtk_spin_button_new_with_range (0, 100, 5);
   gboolean simsuccess;
   double oldval, newval;
-  gtk_container_add (GTK_CONTAINER (GTK_BIN (window)->child), spinner);
+
+  child = gtk_bin_get_child (GTK_BIN (window));
+  gtk_container_add (GTK_CONTAINER (child), spinner);
   gtk_widget_show (spinner);
   gtk_widget_show_now (window);
   gtk_test_slider_set_perc (spinner, 0);

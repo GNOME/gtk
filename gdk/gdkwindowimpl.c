@@ -28,7 +28,6 @@
 #include "gdkwindowimpl.h"
 #include "gdkinternals.h"
 
-#include "gdkalias.h"
 
 GType
 gdk_window_impl_get_type (void)
@@ -46,7 +45,3 @@ gdk_window_impl_get_type (void)
 
   return gtype;
 }
-
-#define __GDK_WINDOW_IMPL_C__
-#include "gdkaliasdef.c"
-

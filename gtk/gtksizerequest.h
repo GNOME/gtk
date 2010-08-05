@@ -36,6 +36,24 @@ G_BEGIN_DECLS
 
 typedef struct _GtkSizeRequest           GtkSizeRequest;
 typedef struct _GtkSizeRequestIface      GtkSizeRequestIface;
+typedef struct _GtkRequestedSize         GtkRequestedSize;
+
+/**
+ * GtkRequestedSize:
+ * @data: A client pointer
+ * @minimum_size: The minimum size needed for allocation in a given orientation
+ * @natural_size: The natural size for allocation in a given orientation
+ *
+ * Represents a request of a screen object in a given orientation. These
+ * are primarily used in container implementations when allocating a natural
+ * size for children calling. See gtk_distribute_natural_allocation().
+ */
+struct _GtkRequestedSize
+{
+  gpointer data;
+  gint     minimum_size;
+  gint     natural_size;
+};
 
 
 struct _GtkSizeRequestIface
@@ -81,6 +99,13 @@ void                gtk_size_request_get_width_for_height (GtkSizeRequest *widge
 void                gtk_size_request_get_size             (GtkSizeRequest *widget,
 							   GtkRequisition *minimum_size,
 							   GtkRequisition *natural_size);
+
+
+/* General convenience function to aid in allocating natural sizes */
+gint                gtk_distribute_natural_allocation     (gint              extra_space,
+							   guint             n_requested_sizes,
+							   GtkRequestedSize *sizes);
+
 
 G_END_DECLS
 

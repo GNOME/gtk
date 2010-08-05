@@ -18,6 +18,75 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
  */
 
+/**
+ * SECTION:gtkrecentmanager
+ * @Title: GtkRecentManager
+ * @short_description: Managing recently used files
+ * @See_Also: #GBookmarkFile, #GtkSettings, #GtkRecentChooser
+ *
+ * #GtkRecentManager provides a facility for adding, removing and
+ * looking up recently used files. Each recently used file is
+ * identified by its URI, and has meta-data associated to it, like
+ * the names and command lines of the applications that have
+ * registered it, the number of time each application has registered
+ * the same file, the mime type of the file and whether the file
+ * should be displayed only by the applications that have
+ * registered it.
+ *
+ * <note><para>The recently used files list is per user.</para></note>
+ *
+ * The #GtkRecentManager acts like a database of all the recently
+ * used files. You can create new #GtkRecentManager objects, but
+ * it is more efficient to use the default manager created by GTK+.
+ *
+ * Adding a new recently used file is as simple as:
+ *
+ * |[
+ * GtkRecentManager *manager;
+ *
+ * manager = gtk_recent_manager_get_default ();
+ * gtk_recent_manager_add_item (manager, file_uri);
+ * ]|
+ *
+ * The #GtkRecentManager will try to gather all the needed information
+ * from the file itself through GIO.
+ *
+ * Looking up the meta-data associated with a recently used file
+ * given its URI requires calling gtk_recent_manager_lookup_item():
+ *
+ * |[
+ * GtkRecentManager *manager;
+ * GtkRecentInfo *info;
+ * GError *error = NULL;
+ *
+ * manager = gtk_recent_manager_get_default ();
+ * info = gtk_recent_manager_lookup_item (manager, file_uri, &amp;error);
+ * if (error)
+ *   {
+ *     g_warning ("Could not find the file: &percnt;s", error-&gt;message);
+ *     g_error_free (error);
+ *   }
+ * else
+ *  {
+ *    /&ast; Use the info object &ast;/
+ *    gtk_recent_info_unref (info);
+ *  }
+ * ]|
+ *
+ * In order to retrieve the list of recently used files, you can use
+ * gtk_recent_manager_get_items(), which returns a list of #GtkRecentInfo
+ * structures.
+ *
+ * A #GtkRecentManager is the model used to populate the contents of
+ * one, or more #GtkRecentChooser implementations.
+ *
+ * <note><para>The maximum age of the recently used files list is
+ * controllable through the #GtkSettings:gtk-recent-files-max-age
+ * property.</para></note>
+ *
+ * Recently used files are supported since GTK+ 2.10.
+ */
+
 #include "config.h"
 
 #include <sys/types.h>
@@ -39,7 +108,6 @@
 #include "gtktypebuiltins.h"
 #include "gtkprivate.h"
 #include "gtkmarshalers.h"
-#include "gtkalias.h"
 
 /* the file where we store the recently used items */
 #define GTK_RECENTLY_USED_FILE	".recently-used.xbel"
@@ -60,6 +128,17 @@ typedef struct
   time_t stamp;
 } RecentAppInfo;
 
+/**
+ * GtkRecentInfo:
+ *
+ * #GtkRecentInfo is an opaque data structure
+ * whose members can only be accessed using the provided API.
+ *
+ * #GtkRecentInfo constains all the meta-data
+ * associated with an entry in the recently used files list.
+ *
+ * Since: 2.10
+ */
 struct _GtkRecentInfo
 {
   gchar *uri;
@@ -85,15 +164,12 @@ struct _GtkRecentInfo
   gint ref_count;
 };
 
-#define GTK_RECENT_MANAGER_GET_PRIVATE(obj)     (G_TYPE_INSTANCE_GET_PRIVATE ((obj), GTK_TYPE_RECENT_MANAGER, GtkRecentManagerPrivate))
-
 struct _GtkRecentManagerPrivate
 {
   gchar *filename;
 
   guint is_dirty : 1;
   
-  gint limit;
   gint size;
 
   GBookmarkFile *recent_items;
@@ -215,23 +291,7 @@ gtk_recent_manager_class_init (GtkRecentManagerClass *klass)
 							P_("The full path to the file to be used to store and read the list"),
 							NULL,
 							(G_PARAM_CONSTRUCT_ONLY | G_PARAM_READWRITE)));
-  /**
-   * GtkRecentManager:limit
-   *
-   * The maximum number of items to be returned by the
-   * gtk_recent_manager_get_items() function.
-   *
-   * Since: 2.10
-   */
-  g_object_class_install_property (gobject_class,
-  				   PROP_LIMIT,
-  				   g_param_spec_int ("limit",
-  				   		     P_("Limit"),
-  				   		     P_("The maximum number of items to be returned by gtk_recent_manager_get_items()"),
-  				   		     -1,
-  				   		     G_MAXINT,
-  				   		     DEFAULT_LIMIT,
-  				   		     G_PARAM_READWRITE));
+
   /**
    * GtkRecentManager:size
    * 
@@ -254,7 +314,8 @@ gtk_recent_manager_class_init (GtkRecentManagerClass *klass)
    * @recent_manager: the recent manager
    *
    * Emitted when the current recently used resources manager changes its
-   * contents.
+   * contents, either by calling gtk_recent_manager_add_item() or by another
+   * application.
    *
    * Since: 2.10
    */
@@ -277,11 +338,12 @@ gtk_recent_manager_init (GtkRecentManager *manager)
 {
   GtkRecentManagerPrivate *priv;
 
-  manager->priv = priv = GTK_RECENT_MANAGER_GET_PRIVATE (manager);
-  
-  priv->limit = DEFAULT_LIMIT;
-  priv->size = 0;
+  manager->priv = G_TYPE_INSTANCE_GET_PRIVATE (manager,
+                                               GTK_TYPE_RECENT_MANAGER,
+                                               GtkRecentManagerPrivate);
+  priv = manager->priv;
 
+  priv->size = 0;
   priv->filename = NULL;
 }
 
@@ -297,9 +359,6 @@ gtk_recent_manager_set_property (GObject               *object,
     {
     case PROP_FILENAME:
       gtk_recent_manager_set_filename (recent_manager, g_value_get_string (value));
-      break;      
-    case PROP_LIMIT:
-      gtk_recent_manager_set_limit (recent_manager, g_value_get_int (value));
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -319,9 +378,6 @@ gtk_recent_manager_get_property (GObject               *object,
     {
     case PROP_FILENAME:
       g_value_set_string (value, recent_manager->priv->filename);
-      break;
-    case PROP_LIMIT:
-      g_value_set_int (value, recent_manager->priv->limit);
       break;
     case PROP_SIZE:
       g_value_set_int (value, recent_manager->priv->size);
@@ -640,50 +696,6 @@ gtk_recent_manager_get_default (void)
   return recent_manager_singleton;
 }
 
-/**
- * gtk_recent_manager_set_limit:
- * @manager: a #GtkRecentManager
- * @limit: the maximum number of items to return, or -1.
- *
- * Sets the maximum number of item that the gtk_recent_manager_get_items()
- * function should return.  If @limit is set to -1, then return all the
- * items.
- *
- * Since: 2.10
- */
-void
-gtk_recent_manager_set_limit (GtkRecentManager *manager,
-			      gint              limit)
-{
-  GtkRecentManagerPrivate *priv;
-  
-  g_return_if_fail (GTK_IS_RECENT_MANAGER (manager));
-  
-  priv = manager->priv;
-  priv->limit = limit;
-}
-
-/**
- * gtk_recent_manager_get_limit:
- * @manager: a #GtkRecentManager
- *
- * Gets the maximum number of items that the gtk_recent_manager_get_items()
- * function should return.
- *
- * Return value: the number of items to return, or -1 for every item.
- *
- * Since: 2.10
- */
-gint
-gtk_recent_manager_get_limit (GtkRecentManager *manager)
-{
-  GtkRecentManagerPrivate *priv;
-  
-  g_return_val_if_fail (GTK_IS_RECENT_MANAGER (manager), DEFAULT_LIMIT);
-  
-  priv = manager->priv;
-  return priv->limit;
-}
 
 static void
 gtk_recent_manager_add_item_query_info (GObject      *source_object,
@@ -1242,16 +1254,10 @@ gtk_recent_manager_get_items (GtkRecentManager *manager)
   if (!priv->recent_items)
     return NULL;
 
-  if (priv->limit == 0)
-    return NULL;
-  
   uris = g_bookmark_file_get_uris (priv->recent_items, &uris_len);
   for (i = 0; i < uris_len; i++)
     {
       GtkRecentInfo *info;
-      
-      if (priv->limit != -1 && i == priv->limit)
-        break;
       
       info = gtk_recent_info_new (uris[i]);
       build_recent_info (priv->recent_items, info);
@@ -2324,6 +2330,3 @@ _gtk_recent_manager_sync (void)
       gtk_recent_manager_real_changed (recent_manager_singleton);
     }
 }
-
-#define __GTK_RECENT_MANAGER_C__
-#include "gtkaliasdef.c"

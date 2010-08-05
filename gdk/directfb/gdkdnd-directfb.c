@@ -37,7 +37,6 @@
 
 #include "gdkdnd.h"
 #include "gdkproperty.h"
-#include "gdkalias.h"
 
 typedef struct _GdkDragContextPrivate GdkDragContextPrivate;
 
@@ -633,6 +632,3 @@ gdk_drag_get_selection (GdkDragContext *context)
   else
     return GDK_NONE;
 }
-
-#define __GDK_DND_X11_C__
-#include "gdkaliasdef.c"

@@ -28,7 +28,13 @@
 #include "gtkfixed.h"
 #include "gtkprivate.h"
 #include "gtkintl.h"
-#include "gtkalias.h"
+
+
+struct _GtkFixedPriv
+{
+  GList *children;
+};
+
 enum {
   CHILD_PROP_0,
   CHILD_PROP_X,
@@ -103,6 +109,8 @@ gtk_fixed_class_init (GtkFixedClass *class)
                                                                 G_MAXINT,
                                                                 0,
                                                                 GTK_PARAM_READWRITE));
+
+  g_type_class_add_private (class, sizeof (GtkFixedPriv));
 }
 
 static GType
@@ -114,9 +122,16 @@ gtk_fixed_child_type (GtkContainer     *container)
 static void
 gtk_fixed_init (GtkFixed *fixed)
 {
+  GtkFixedPriv *priv;
+
+  fixed->priv = G_TYPE_INSTANCE_GET_PRIVATE (fixed,
+                                             GTK_TYPE_FIXED,
+                                             GtkFixedPriv);
+  priv = fixed->priv;
+
   gtk_widget_set_has_window (GTK_WIDGET (fixed), FALSE);
 
-  fixed->children = NULL;
+  priv->children = NULL;
 }
 
 GtkWidget*
@@ -129,9 +144,10 @@ static GtkFixedChild*
 get_child (GtkFixed  *fixed,
            GtkWidget *widget)
 {
+  GtkFixedPriv *priv = fixed->priv;
   GList *children;
-  
-  children = fixed->children;
+
+  children = priv->children;
   while (children)
     {
       GtkFixedChild *child;
@@ -152,6 +168,7 @@ gtk_fixed_put (GtkFixed       *fixed,
                gint            x,
                gint            y)
 {
+  GtkFixedPriv *priv = fixed->priv;
   GtkFixedChild *child_info;
 
   g_return_if_fail (GTK_IS_FIXED (fixed));
@@ -164,7 +181,7 @@ gtk_fixed_put (GtkFixed       *fixed,
 
   gtk_widget_set_parent (widget, GTK_WIDGET (fixed));
 
-  fixed->children = g_list_append (fixed->children, child_info);
+  priv->children = g_list_append (priv->children, child_info);
 }
 
 static void
@@ -305,16 +322,20 @@ static void
 gtk_fixed_size_request (GtkWidget      *widget,
 			GtkRequisition *requisition)
 {
-  GtkFixed *fixed;  
+  GtkFixedPriv *priv;
+  GtkFixed *fixed;
   GtkFixedChild *child;
   GList *children;
   GtkRequisition child_requisition;
+  guint border_width;
 
   fixed = GTK_FIXED (widget);
+  priv = fixed->priv;
+
   requisition->width = 0;
   requisition->height = 0;
 
-  children = fixed->children;
+  children = priv->children;
   while (children)
     {
       child = children->data;
@@ -333,22 +354,22 @@ gtk_fixed_size_request (GtkWidget      *widget,
 	}
     }
 
-  requisition->height += GTK_CONTAINER (fixed)->border_width * 2;
-  requisition->width += GTK_CONTAINER (fixed)->border_width * 2;
+  border_width = gtk_container_get_border_width (GTK_CONTAINER (fixed));
+  requisition->height += border_width * 2;
+  requisition->width += border_width * 2;
 }
 
 static void
 gtk_fixed_size_allocate (GtkWidget     *widget,
 			 GtkAllocation *allocation)
 {
-  GtkFixed *fixed;
+  GtkFixed *fixed = GTK_FIXED (widget);
+  GtkFixedPriv *priv = fixed->priv;
   GtkFixedChild *child;
   GtkAllocation child_allocation;
   GtkRequisition child_requisition;
   GList *children;
-  guint16 border_width;
-
-  fixed = GTK_FIXED (widget);
+  guint border_width;
 
   widget->allocation = *allocation;
 
@@ -361,10 +382,10 @@ gtk_fixed_size_allocate (GtkWidget     *widget,
 				allocation->width, 
 				allocation->height);
     }
-      
-  border_width = GTK_CONTAINER (fixed)->border_width;
-  
-  children = fixed->children;
+
+  border_width = gtk_container_get_border_width (GTK_CONTAINER (fixed));
+
+  children = priv->children;
   while (children)
     {
       child = children->data;
@@ -400,15 +421,13 @@ static void
 gtk_fixed_remove (GtkContainer *container,
 		  GtkWidget    *widget)
 {
-  GtkFixed *fixed;
+  GtkFixed *fixed = GTK_FIXED (container);
+  GtkFixedPriv *priv = fixed->priv;
   GtkFixedChild *child;
-  GtkWidget *widget_container;
+  GtkWidget *widget_container = GTK_WIDGET (container);
   GList *children;
 
-  fixed = GTK_FIXED (container);
-  widget_container = GTK_WIDGET (container);
-
-  children = fixed->children;
+  children = priv->children;
   while (children)
     {
       child = children->data;
@@ -419,7 +438,7 @@ gtk_fixed_remove (GtkContainer *container,
 	  
 	  gtk_widget_unparent (widget);
 
-	  fixed->children = g_list_remove_link (fixed->children, children);
+	  priv->children = g_list_remove_link (priv->children, children);
 	  g_list_free (children);
 	  g_free (child);
 
@@ -440,10 +459,11 @@ gtk_fixed_forall (GtkContainer *container,
 		  gpointer      callback_data)
 {
   GtkFixed *fixed = GTK_FIXED (container);
+  GtkFixedPriv *priv = fixed->priv;
   GtkFixedChild *child;
   GList *children;
 
-  children = fixed->children;
+  children = priv->children;
   while (children)
     {
       child = children->data;
@@ -452,6 +472,3 @@ gtk_fixed_forall (GtkContainer *container,
       (* callback) (child->widget, callback_data);
     }
 }
-
-#define __GTK_FIXED_C__
-#include "gtkaliasdef.c"

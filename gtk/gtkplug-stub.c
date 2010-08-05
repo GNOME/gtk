@@ -27,7 +27,6 @@
 
 #include "gtkplug.h"
 #include "gtkplugprivate.h"
-#include "gtkalias.h"
 
 GdkNativeWindow
 _gtk_plug_windowing_get_id (GtkPlug *plug)

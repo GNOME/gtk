@@ -62,7 +62,7 @@ gail_scrollbar_get_index_in_parent (AtkObject *accessible)
   gint n_children;
   GList *children;
 
-  widget = GTK_ACCESSIBLE (accessible)->widget;
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (accessible));
 
   if (widget == NULL)
   {

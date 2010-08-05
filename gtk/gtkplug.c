@@ -35,8 +35,6 @@
 #include "gtkprivate.h"
 #include "gtkplugprivate.h"
 
-#include "gtkalias.h"
-
 /**
  * SECTION:gtkplug
  * @Short_description: Toplevel for embedding into other processes
@@ -708,13 +706,15 @@ gtk_plug_map (GtkWidget *widget)
     {
       GtkBin *bin = GTK_BIN (widget);
       GtkPlug *plug = GTK_PLUG (widget);
+      GtkWidget *child;
       
       gtk_widget_set_mapped (widget, TRUE);
 
-      if (bin->child &&
-	  gtk_widget_get_visible (bin->child) &&
-	  !gtk_widget_get_mapped (bin->child))
-	gtk_widget_map (bin->child);
+      child = gtk_bin_get_child (bin);
+      if (child != NULL &&
+          gtk_widget_get_visible (child) &&
+	  !gtk_widget_get_mapped (child))
+	gtk_widget_map (child);
 
       _gtk_plug_windowing_map_toplevel (plug);
       
@@ -751,14 +751,16 @@ static void
 gtk_plug_size_allocate (GtkWidget     *widget,
 			GtkAllocation *allocation)
 {
-  GtkBin *bin = GTK_BIN (widget);
   GtkRequisition natural_size;
+  GtkBin *bin = GTK_BIN (widget);
+  GtkWidget *child;
+
+  child = gtk_bin_get_child (bin);
+
   if (gtk_widget_is_toplevel (widget))
     GTK_WIDGET_CLASS (gtk_plug_parent_class)->size_allocate (widget, allocation);
   else
     {
-      GtkBin *bin = GTK_BIN (widget);
-
       widget->allocation = *allocation;
 
       if (gtk_widget_get_realized (widget))
@@ -766,22 +768,22 @@ gtk_plug_size_allocate (GtkWidget     *widget,
 				allocation->x, allocation->y,
 				allocation->width, allocation->height);
 
-      if (bin->child && gtk_widget_get_visible (bin->child))
+      if (child != NULL && gtk_widget_get_visible (child))
 	{
 	  GtkAllocation child_allocation;
 	  
-	  child_allocation.x = child_allocation.y = GTK_CONTAINER (widget)->border_width;
+	  child_allocation.x = child_allocation.y = gtk_container_get_border_width (GTK_CONTAINER (widget));
 	  child_allocation.width =
 	    MAX (1, (gint)allocation->width - child_allocation.x * 2);
 	  child_allocation.height =
 	    MAX (1, (gint)allocation->height - child_allocation.y * 2);
 	  
-	  gtk_widget_size_allocate (bin->child, &child_allocation);
+	  gtk_widget_size_allocate (child, &child_allocation);
 	}
       
     }
 
-  gtk_size_request_get_size (GTK_SIZE_REQUEST (bin->child),
+  gtk_size_request_get_size (GTK_SIZE_REQUEST (child),
 			     NULL, &natural_size);
   _gtk_plug_windowing_publish_natural_size (GTK_PLUG (widget), &natural_size);
 }
@@ -956,9 +958,11 @@ gtk_plug_focus (GtkWidget        *widget,
   GtkPlug *plug = GTK_PLUG (widget);
   GtkWindow *window = GTK_WINDOW (widget);
   GtkContainer *container = GTK_CONTAINER (widget);
-  GtkWidget *old_focus_child = container->focus_child;
+  GtkWidget *child;
+  GtkWidget *old_focus_child;
   GtkWidget *parent;
-  
+
+  old_focus_child = gtk_container_get_focus_child (container);
   /* We override GtkWindow's behavior, since we don't want wrapping here.
    */
   if (old_focus_child)
@@ -982,11 +986,12 @@ gtk_plug_focus (GtkWidget        *widget,
   else
     {
       /* Try to focus the first widget in the window */
-      if (bin->child && gtk_widget_child_focus (bin->child, direction))
+      child = gtk_bin_get_child (bin);
+      if (child && gtk_widget_child_focus (child, direction))
         return TRUE;
     }
 
-  if (!GTK_CONTAINER (window)->focus_child)
+  if (!gtk_container_get_focus_child (GTK_CONTAINER (window)))
     _gtk_plug_windowing_focus_to_parent (plug, direction);
 
   return FALSE;
@@ -1071,6 +1076,3 @@ _gtk_plug_focus_first_last (GtkPlug          *plug,
 
   gtk_widget_child_focus (GTK_WIDGET (plug), direction);
 }
-
-#define __GTK_PLUG_C__
-#include "gtkaliasdef.c"

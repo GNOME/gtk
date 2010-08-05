@@ -47,15 +47,9 @@
 gboolean gdk_net_wm_supports (GdkAtom property);
 #endif
 
-#include "gdkalias.h"
-
 #define EventBuffer _gdk_display->buffer
 #define DirectFB _gdk_display->directfb
 
-
-
-
-#include "gdkaliasdef.c"
 
 /*********************************************
  * Functions for maintaining the event queue *
@@ -967,6 +961,3 @@ void
 _gdk_windowing_event_data_free (GdkEvent *event)
 {
 }
-
-#define __GDK_EVENTS_X11_C__
-#include "gdkaliasdef.c"

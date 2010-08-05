@@ -103,20 +103,9 @@ endif
 gtk.def: gtk.symbols
 	(echo -e EXPORTS; $(CPP) -P -DINCLUDE_VARIABLES -DG_OS_WIN32 -DALL_FILES - <$(srcdir)/gtk.symbols | $(SED) -e '/^$$/d' -e 's/^/	/' -e 's/G_GNUC_[^ ]*//g') > $(srcdir)/gtk.def
 
-gtkalias.h: gtk.symbols
-	  $(PERL) $(srcdir)/makegtkalias.pl < $(srcdir)/gtk.symbols > gtkalias.h
-gtkaliasdef.c: gtk.symbols
-	  $(PERL) $(srcdir)/makegtkalias.pl -def < $(srcdir)/gtk.symbols > gtkaliasdef.c
-
-check-aliases:
-	@$(TESTS_ENVIRONMENT) $(srcdir)/aliasfilescheck.sh
-
-.PHONY: check-aliases
-
 TESTS_ENVIRONMENT = srcdir="$(srcdir)" gtk_all_c_sources="$(gtk_all_c_sources)"
-TESTS = aliasfilescheck.sh
 if OS_LINUX
-TESTS += abicheck.sh pltcheck.sh
+TESTS = abicheck.sh
 endif
 
 libgtkincludedir = $(includedir)/gtk-3.0/gtk
@@ -129,6 +118,7 @@ deps =
 # since automake doesn't support conditionalized libsomething_la_LDFLAGS
 # we use the general approach here
 libtool_opts =							\
+  $(GTK_LINK_FLAGS)						\
   -version-info $(LT_VERSION_INFO)				\
   -export-dynamic $(no_undefined) $(LIBTOOL_EXPORT_OPTIONS)	\
   -rpath $(libdir) $(libgtk_target_ldflags)
@@ -403,7 +393,6 @@ gtk_private_h_sources =		\
 	gtktexttypes.h		\
 	gtktextutil.h		\
 	gtkthemes.h		\
-	gtktoggleactionprivate.h\
 	gtktoolpaletteprivate.h	\
 	gtktreedatalist.h	\
 	gtktreeprivate.h	\
@@ -733,13 +722,11 @@ gtk_built_public_sources =			\
 
 # built headers that don't get installed
 gtk_built_private_headers =			\
-	gtkalias.h				\
 	gtkmarshalers.h				\
 	gtkbuiltincache.h			\
 	gtkimcontextsimpleseqs.h
 
 gtk_built_sources =				\
-	gtkaliasdef.c				\
 	gtktypebuiltins.c			\
 	gtktypefuncs.c				\
 	gtkmarshalers.c				\
@@ -795,7 +782,6 @@ stamp-gtkmarshalers.h: @REBUILD@ gtkmarshalers.list
 	&& echo timestamp > $(@F)	
 gtkmarshalers.c: @REBUILD@ gtkmarshalers.list
 	(echo "#include \"gtkmarshalers.h\""; \
-	 echo "#include \"gtkalias.h\""; \
 	 $(GLIB_GENMARSHAL) --prefix=_gtk_marshal $(srcdir)/gtkmarshalers.list --body) >> xgen-gmlc \
 	&& cp xgen-gmlc gtkmarshalers.c \
 	&& rm -f xgen-gmlc
@@ -934,7 +920,7 @@ Gtk_3_0_gir_CFLAGS = \
 		-UGTK_DISABLE_DEPRECATED \
 		-DGTK_TEXT_USE_INTERNAL_UNSUPPORTED_API
 Gtk_3_0_gir_LIBS = $(gtktargetlib)
-Gtk_3_0_gir_FILES = $(addprefix $(srcdir)/, $(introspection_files))
+Gtk_3_0_gir_FILES = $(introspection_files)
 INTROSPECTION_GIRS += Gtk-3.0.gir
 
 girdir = $(datadir)/gir-1.0
@@ -962,7 +948,7 @@ if OS_WIN32
 # used... Use a manifest file to tell Windows that
 # gtk-update-icon-cache.exe doesn't require any special privileges.
 
-GTK_UPDATE_ICON_CACHE_MANIFEST = gtk-update-icon-cache.exe.manifest
+GTK_UPDATE_ICON_CACHE_MANIFEST = gtk-update-icon-cache-3.0.exe.manifest
 
 bin_SCRIPTS += \
 	$(GTK_UPDATE_ICON_CACHE_MANIFEST)
@@ -972,7 +958,7 @@ gtk-update-icon-cache.exe.manifest:
 	 echo '<assembly xmlns="urn:schemas-microsoft-com:asm.v1" manifestVersion="1.0">' ; \
 	 echo '  <assemblyIdentity version="1.0.0.0"' ; \
 	 echo '     processorArchitecture="'$(EXE_MANIFEST_ARCHITECTURE)'"' ; \
-	 echo '     name="gtk-update-icon-cache.exe"' ; \
+	 echo '     name="gtk-update-icon-cache-3.0.exe"' ; \
 	 echo '     type="win32"/>' ; \
 	 echo '  <!-- Identify the application security requirements. -->' ; \
 	 echo '  <trustInfo xmlns="urn:schemas-microsoft-com:asm.v3">' ; \
@@ -1332,10 +1318,7 @@ EXTRA_DIST +=                   \
 	gtkrc.key.mac		\
 	makefile.msc		\
 	makefile.msc.in		\
-	makegtkalias.pl		\
-	aliasfilescheck.sh	\
 	abicheck.sh		\
-	pltcheck.sh		\
 	gtktypebuiltins.c.template      \
 	gtktypebuiltins.h.template
 

@@ -75,7 +75,7 @@
 #include "gtkrecentchooserdefault.h"
 
 #include "gtkprivate.h"
-#include "gtkalias.h"
+
 
 enum 
 {

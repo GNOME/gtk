@@ -33,7 +33,6 @@
 #include "gtkiconfactory.h"
 #include "gtkicontheme.h"
 #include "gtkintl.h"
-#include "gtkalias.h"
 
 
 /**
@@ -70,10 +69,6 @@ struct _GtkCellRendererSpinnerPrivate
   gint size;
 };
 
-#define GTK_CELL_RENDERER_SPINNER_GET_PRIVATE(object)        \
-                (G_TYPE_INSTANCE_GET_PRIVATE ((object),        \
-                        GTK_TYPE_CELL_RENDERER_SPINNER, \
-                        GtkCellRendererSpinnerPrivate))
 
 static void gtk_cell_renderer_spinner_get_property (GObject         *object,
                                                     guint            param_id,
@@ -167,7 +162,10 @@ gtk_cell_renderer_spinner_class_init (GtkCellRendererSpinnerClass *klass)
 static void
 gtk_cell_renderer_spinner_init (GtkCellRendererSpinner *cell)
 {
-  cell->priv = GTK_CELL_RENDERER_SPINNER_GET_PRIVATE (cell);
+  cell->priv = G_TYPE_INSTANCE_GET_PRIVATE (cell,
+                                            GTK_TYPE_CELL_RENDERER_SPINNER,
+                                            GtkCellRendererSpinnerPrivate);
+
   cell->priv->pulse = 0;
   cell->priv->old_icon_size = GTK_ICON_SIZE_INVALID;
   cell->priv->icon_size = GTK_ICON_SIZE_MENU;
@@ -360,7 +358,8 @@ gtk_cell_renderer_spinner_render (GtkCellRenderer *cellr,
     }
 
   state = GTK_STATE_NORMAL;
-  if (gtk_widget_get_state (widget) == GTK_STATE_INSENSITIVE || !cellr->sensitive)
+  if (gtk_widget_get_state (widget) == GTK_STATE_INSENSITIVE ||
+      !gtk_cell_renderer_get_sensitive (cellr))
     {
       state = GTK_STATE_INSENSITIVE;
     }
@@ -387,6 +386,3 @@ gtk_cell_renderer_spinner_render (GtkCellRenderer *cellr,
                      draw_rect.x, draw_rect.y,
                      draw_rect.width, draw_rect.height);
 }
-
-#define __GTK_CELL_RENDERER_SPINNER_C__
-#include "gtkaliasdef.c"

@@ -42,12 +42,11 @@ static void _check_text (AtkObject *in_obj)
   else
   {
     GtkWidget *toplevel;
-    GtkWidget* widget = GTK_ACCESSIBLE (in_obj)->widget;
+    GtkWidget* widget;
 
+    widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (in_obj));
     if (widget == NULL)
-    {
       title = NULL;
-    }
 
     toplevel = gtk_widget_get_toplevel (widget);
     if (GTK_IS_WINDOW (toplevel) && GTK_WINDOW (toplevel)->title)

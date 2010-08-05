@@ -51,8 +51,6 @@ gdk-win32-backend :
 all: \
 	..\config.h \
 	gdkconfig.h \
-	gdkalias.h \
-	gdkaliasdef.c \
 	gdkenumtypes.h \
 	gdkenumtypes.c \
 	gdkmarshalers.h \
@@ -137,12 +135,6 @@ gdkenumtypes.c: $(gdk_public_h_sources) gdkenumtypes.c.template
 
 gdkconfig.h : gdkconfig.h.win32
 	copy gdkconfig.h.win32 gdkconfig.h
-
-gdkalias.h: gdk.symbols
-	perl makegdkalias.pl < gdk.symbols > gdkalias.h
-
-gdkaliasdef.c: gdk.symbols
-	 perl makegdkalias.pl -def < gdk.symbols > gdkaliasdef.c
 
 gdk.def: gdk.symbols
 	echo EXPORTS > gdk.def

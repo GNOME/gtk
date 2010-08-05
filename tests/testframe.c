@@ -67,21 +67,30 @@ double_normalize (gdouble n)
 static void
 spin_xalign_cb (GtkSpinButton *spin, GtkFrame *frame)
 {
-  gdouble xalign = double_normalize (gtk_spin_button_get_value (spin));
-  gtk_frame_set_label_align (frame, xalign, frame->label_yalign);
+  gdouble xalign;
+  gfloat yalign;
+
+  xalign = double_normalize (gtk_spin_button_get_value (spin));
+  gtk_frame_get_label_align (frame, NULL, &yalign);
+  gtk_frame_set_label_align (frame, xalign, yalign);
 }
 
 static void
 spin_yalign_cb (GtkSpinButton *spin, GtkFrame *frame)
 {
-  gdouble yalign = double_normalize (gtk_spin_button_get_value (spin));
-  gtk_frame_set_label_align (frame, frame->label_xalign, yalign);
+  gdouble yalign;
+  gfloat xalign;
+
+  yalign = double_normalize (gtk_spin_button_get_value (spin));
+  gtk_frame_get_label_align (frame, &xalign, NULL);
+  gtk_frame_set_label_align (frame, xalign, yalign);
 }
 
 int main (int argc, char **argv)
 {
   GtkWidget *window, *frame, *xthickness_spin, *ythickness_spin, *vbox;
   GtkWidget *xalign_spin, *yalign_spin, *button, *table, *label;
+  gfloat xalign, yalign;
 
   gtk_init (&argc, &argv);
 
@@ -121,13 +130,15 @@ int main (int argc, char **argv)
   gtk_spin_button_set_value (GTK_SPIN_BUTTON (ythickness_spin), frame->style->ythickness);
   gtk_table_attach_defaults (GTK_TABLE (table), ythickness_spin, 1, 2, 1, 2);
 
+  gtk_frame_get_label_align (GTK_FRAME (frame), &xalign, &yalign);
+
   /* Spin to control label xalign */
   label = gtk_label_new ("xalign: ");
   gtk_table_attach_defaults (GTK_TABLE (table), label, 0, 1, 2, 3);
 
   xalign_spin = gtk_spin_button_new_with_range (0.0, 1.0, 0.1);
   g_signal_connect (G_OBJECT (xalign_spin), "value-changed", G_CALLBACK (spin_xalign_cb), frame);
-  gtk_spin_button_set_value (GTK_SPIN_BUTTON (xalign_spin), GTK_FRAME (frame)->label_xalign);
+  gtk_spin_button_set_value (GTK_SPIN_BUTTON (xalign_spin), xalign);
   gtk_table_attach_defaults (GTK_TABLE (table), xalign_spin, 1, 2, 2, 3);
 
   /* Spin to control label yalign */
@@ -136,7 +147,7 @@ int main (int argc, char **argv)
 
   yalign_spin = gtk_spin_button_new_with_range (0.0, 1.0, 0.1);
   g_signal_connect (G_OBJECT (yalign_spin), "value-changed", G_CALLBACK (spin_yalign_cb), frame);
-  gtk_spin_button_set_value (GTK_SPIN_BUTTON (yalign_spin), GTK_FRAME (frame)->label_yalign);
+  gtk_spin_button_set_value (GTK_SPIN_BUTTON (yalign_spin), yalign);
   gtk_table_attach_defaults (GTK_TABLE (table), yalign_spin, 1, 2, 3, 4);
 
   gtk_widget_show_all (window);

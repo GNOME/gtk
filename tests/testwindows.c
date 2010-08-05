@@ -1,4 +1,3 @@
-#undef GDK_DISABLE_DEPRECATED
 #include <gtk/gtk.h>
 #ifdef GDK_WINDOWING_X11
 #include <X11/Xlib.h>
@@ -12,13 +11,6 @@ static void update_store (void);
 
 static GtkWidget *main_window;
 
-static gboolean
-window_has_impl (GdkWindow *window)
-{
-  GdkWindowObject *w;
-  w = (GdkWindowObject *)window;
-  return w->parent == NULL || w->parent->impl != w->impl;
-}
 
 GdkWindow *
 create_window (GdkWindow *parent,
@@ -272,7 +264,7 @@ save_window (GString *s,
   g_string_append_printf (s, "%d,%d %dx%d (%d,%d,%d) %d %d\n",
 			  x, y, w, h,
 			  color->red, color->green, color->blue,
-			  window_has_impl (window),
+			  gdk_window_has_native (window),
 			  g_list_length (gdk_window_peek_children (window)));
 
   save_children (s, window);
@@ -749,6 +741,7 @@ render_window_cell (GtkTreeViewColumn *tree_column,
 		    GtkTreeIter       *iter,
 		    gpointer           data)
 {
+  GdkColor *color = NULL;
   GdkWindow *window;
   char *name;
 
@@ -757,14 +750,16 @@ render_window_cell (GtkTreeViewColumn *tree_column,
 		      0, &window,
 		      -1);
 
-  if (window_has_impl (window))
+  if (gdk_window_has_native (window))
       name = g_strdup_printf ("%p (native)", window);
   else
       name = g_strdup_printf ("%p", window);
+
+  gdk_window_get_background (window, color);
   g_object_set (cell,
 		"text", name,
-		"background-gdk", &((GdkWindowObject *)window)->bg_color,
-		NULL);  
+		"background-gdk", color,
+		NULL);
 }
 
 static void

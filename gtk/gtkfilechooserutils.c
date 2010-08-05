@@ -25,7 +25,7 @@
 #include "gtkfilesystem.h"
 #include "gtktypebuiltins.h"
 #include "gtkintl.h"
-#include "gtkalias.h"
+
 
 static gboolean       delegate_set_current_folder     (GtkFileChooser    *chooser,
 						       GFile             *file,

@@ -59,30 +59,19 @@ G_BEGIN_DECLS
 
 
 typedef struct _GtkFontSelection	     GtkFontSelection;
+typedef struct _GtkFontSelectionPriv         GtkFontSelectionPriv;
 typedef struct _GtkFontSelectionClass	     GtkFontSelectionClass;
 
 typedef struct _GtkFontSelectionDialog	     GtkFontSelectionDialog;
+typedef struct _GtkFontSelectionDialogPriv   GtkFontSelectionDialogPriv;
 typedef struct _GtkFontSelectionDialogClass  GtkFontSelectionDialogClass;
 
 struct _GtkFontSelection
 {
   GtkVBox parent_instance;
-  
-  GtkWidget *GSEAL (font_entry);        /* Used _get_family_entry() for consistency, -mr */
-  GtkWidget *GSEAL (family_list);
-  GtkWidget *GSEAL (font_style_entry);  /* Used _get_face_entry() for consistency, -mr */
-  GtkWidget *GSEAL (face_list);
-  GtkWidget *GSEAL (size_entry);
-  GtkWidget *GSEAL (size_list);
-  GtkWidget *GSEAL (pixels_button);     /* Unused, -mr */
-  GtkWidget *GSEAL (points_button);     /* Unused, -mr */
-  GtkWidget *GSEAL (filter_button);     /* Unused, -mr */
-  GtkWidget *GSEAL (preview_entry);
 
-  PangoFontFamily *GSEAL (family);	/* Current family */
-  PangoFontFace *GSEAL (face);		/* Current face */
-  
-  gint GSEAL (size);
+  /* <private> */
+  GtkFontSelectionPriv *priv;
 };
 
 struct _GtkFontSelectionClass
@@ -96,28 +85,13 @@ struct _GtkFontSelectionClass
   void (*_gtk_reserved4) (void);
 };
 
+
 struct _GtkFontSelectionDialog
 {
   GtkDialog parent_instance;
 
   /*< private >*/
-  GtkWidget *GSEAL (fontsel);
-
-  GtkWidget *GSEAL (main_vbox);     /* Not wrapped with an API, can use GTK_DIALOG->vbox instead, -mr */
-  GtkWidget *GSEAL (action_area);   /* Not wrapped with an API, can use GTK_DIALOG->action_area instead, -mr */
-
-  /*< public >*/
-  GtkWidget *GSEAL (ok_button);
-  GtkWidget *GSEAL (apply_button);
-  GtkWidget *GSEAL (cancel_button);
-
-  /*< private >*/
-
-  /* If the user changes the width of the dialog, we turn auto-shrink off.
-   * (Unused now, autoshrink doesn't mean anything anymore -Yosh)
-   */
-  gint GSEAL (dialog_width);
-  gboolean GSEAL (auto_resize);
+  GtkFontSelectionDialogPriv *priv;
 };
 
 struct _GtkFontSelectionDialogClass

@@ -24,6 +24,20 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
  */
 
+/**
+ * SECTION:gtkbutton
+ * @Short_description: A widget that creates a signal when clicked on
+ * @Title: GtkButton
+ *
+ * The #GtkButton widget is generally used to attach a function to that is
+ * called when the button is pressed.  The various signals and how to use them
+ * are outlined below.
+ *
+ * The #GtkButton widget can hold any valid child widget.  That is it can hold
+ * most any other standard #GtkWidget.  The most commonly used child is the
+ * #GtkLabel.
+ */
+
 #include "config.h"
 #include <string.h>
 #include "gtkalignment.h"
@@ -40,7 +54,7 @@
 #include "gtksizerequest.h"
 #include "gtkprivate.h"
 #include "gtkintl.h"
-#include "gtkalias.h"
+
 
 static const GtkBorder default_default_border = { 1, 1, 1, 1 };
 static const GtkBorder default_default_outside_border = { 0, 0, 0, 0 };
@@ -268,7 +282,7 @@ gtk_button_class_init (GtkButtonClass *klass)
    * If the child of the button is a #GtkMisc or #GtkAlignment, this property 
    * can be used to control it's horizontal alignment. 0.0 is left aligned, 
    * 1.0 is right aligned.
-   * 
+   *
    * Since: 2.4
    */
   g_object_class_install_property (gobject_class,
@@ -287,7 +301,7 @@ gtk_button_class_init (GtkButtonClass *klass)
    * If the child of the button is a #GtkMisc or #GtkAlignment, this property 
    * can be used to control it's vertical alignment. 0.0 is top aligned, 
    * 1.0 is bottom aligned.
-   * 
+   *
    * Since: 2.4
    */
   g_object_class_install_property (gobject_class,
@@ -302,9 +316,9 @@ gtk_button_class_init (GtkButtonClass *klass)
 
   /**
    * GtkButton::image:
-   * 
+   *
    * The child widget to appear next to the button text.
-   * 
+   *
    * Since: 2.6
    */
   g_object_class_install_property (gobject_class,
@@ -319,7 +333,7 @@ gtk_button_class_init (GtkButtonClass *klass)
    * GtkButton:image-position:
    *
    * The position of the image relative to the text inside the button.
-   * 
+   *
    * Since: 2.10
    */
   g_object_class_install_property (gobject_class,
@@ -339,7 +353,7 @@ gtk_button_class_init (GtkButtonClass *klass)
    * @button: the object that received the signal
    *
    * Emitted when the button is pressed.
-   * 
+   *
    * Deprecated: 2.8: Use the #GtkWidget::button-press-event signal.
    */ 
   button_signals[PRESSED] =
@@ -356,7 +370,7 @@ gtk_button_class_init (GtkButtonClass *klass)
    * @button: the object that received the signal
    *
    * Emitted when the button is released.
-   * 
+   *
    * Deprecated: 2.8: Use the #GtkWidget::button-release-event signal.
    */ 
   button_signals[RELEASED] =
@@ -388,7 +402,7 @@ gtk_button_class_init (GtkButtonClass *klass)
    * @button: the object that received the signal
    *
    * Emitted when the pointer enters the button.
-   * 
+   *
    * Deprecated: 2.8: Use the #GtkWidget::enter-notify-event signal.
    */ 
   button_signals[ENTER] =
@@ -405,7 +419,7 @@ gtk_button_class_init (GtkButtonClass *klass)
    * @button: the object that received the signal
    *
    * Emitted when the pointer leaves the button.
-   * 
+   *
    * Deprecated: 2.8: Use the #GtkWidget::leave-notify-event signal.
    */ 
   button_signals[LEAVE] =
@@ -513,9 +527,9 @@ gtk_button_class_init (GtkButtonClass *klass)
 
   /**
    * GtkButton::image-spacing:
-   * 
+   *
    * Spacing in pixels between the image and label.
-   * 
+   *
    * Since: 2.10
    */
   gtk_widget_class_install_style_property (widget_class,
@@ -611,7 +625,7 @@ gtk_button_constructor (GType                  type,
 static GType
 gtk_button_child_type  (GtkContainer     *container)
 {
-  if (!GTK_BIN (container)->child)
+  if (!gtk_bin_get_child (GTK_BIN (container)))
     return GTK_TYPE_WIDGET;
   else
     return G_TYPE_NONE;
@@ -633,10 +647,17 @@ maybe_set_alignment (GtkButton *button,
   else if (GTK_IS_ALIGNMENT (widget))
     {
       GtkAlignment *alignment = GTK_ALIGNMENT (widget);
+      gfloat xscale, yscale;
+
+      g_object_get (alignment,
+                    "xscale", &xscale,
+                    "yscale", &yscale,
+                    NULL);
 
       if (priv->align_set)
-	gtk_alignment_set (alignment, priv->xalign, priv->yalign, 
-			   alignment->xscale, alignment->yscale);
+        gtk_alignment_set (alignment,
+                           priv->xalign, priv->yalign,
+                           xscale, yscale);
     }
 }
 
@@ -784,6 +805,7 @@ static void
 activatable_update_short_label (GtkButton *button,
 				GtkAction *action)
 {
+  GtkWidget *child;
   GtkWidget *image;
 
   if (gtk_button_get_use_stock (button))
@@ -792,9 +814,10 @@ activatable_update_short_label (GtkButton *button,
   image = gtk_button_get_image (button);
 
   /* Dont touch custom child... */
+  child = gtk_bin_get_child (GTK_BIN (button));
   if (GTK_IS_IMAGE (image) ||
-      GTK_BIN (button)->child == NULL || 
-      GTK_IS_LABEL (GTK_BIN (button)->child))
+      child == NULL ||
+      GTK_IS_LABEL (child))
     {
       gtk_button_set_label (button, gtk_action_get_short_label (action));
       gtk_button_set_use_underline (button, TRUE);
@@ -924,6 +947,14 @@ gtk_button_set_use_action_appearance (GtkButton *button,
     }
 }
 
+/**
+ * gtk_button_new:
+ *
+ * Creates a new #GtkButton widget. To add a child widget to the button,
+ * use gtk_container_add().
+ *
+ * Returns: The newly created #GtkButton widget.
+ */
 GtkWidget*
 gtk_button_new (void)
 {
@@ -953,6 +984,7 @@ gtk_button_construct_child (GtkButton *button)
 {
   GtkButtonPrivate *priv = GTK_BUTTON_GET_PRIVATE (button);
   GtkStockItem item;
+  GtkWidget *child;
   GtkWidget *label;
   GtkWidget *box;
   GtkWidget *align;
@@ -979,9 +1011,9 @@ gtk_button_construct_child (GtkButton *button)
 
   priv->image = NULL;
 
-  if (GTK_BIN (button)->child)
-    gtk_container_remove (GTK_CONTAINER (button),
-			  GTK_BIN (button)->child);
+  child = gtk_bin_get_child (GTK_BIN (button));
+  if (child)
+    gtk_container_remove (GTK_CONTAINER (button), child);
 
   if (button->use_stock &&
       button->label_text &&
@@ -1063,6 +1095,15 @@ gtk_button_construct_child (GtkButton *button)
 }
 
 
+/**
+ * gtk_button_new_with_label:
+ * @label: The text you want the #GtkLabel to hold.
+ *
+ * Creates a #GtkButton widget with a #GtkLabel child containing the given
+ * text.
+ *
+ * Returns: The newly created #GtkButton widget.
+ */
 GtkWidget*
 gtk_button_new_with_label (const gchar *label)
 {
@@ -1111,6 +1152,14 @@ gtk_button_new_with_mnemonic (const gchar *label)
   return g_object_new (GTK_TYPE_BUTTON, "label", label, "use-underline", TRUE,  NULL);
 }
 
+/**
+ * gtk_button_pressed:
+ * @button: The #GtkButton you want to send the signal to.
+ *
+ * Emits a #GtkButton::pressed signal to the given #GtkButton.
+ *
+ * Deprecated: 2.20: Use the #GtkWidget::button-press-event signal.
+ */
 void
 gtk_button_pressed (GtkButton *button)
 {
@@ -1120,6 +1169,14 @@ gtk_button_pressed (GtkButton *button)
   g_signal_emit (button, button_signals[PRESSED], 0);
 }
 
+/**
+ * gtk_button_released:
+ * @button: The #GtkButton you want to send the signal to.
+ *
+ * Emits a #GtkButton::released signal to the given #GtkButton.
+ *
+ * Deprecated: 2.20: Use the #GtkWidget::button-release-event signal.
+ */
 void
 gtk_button_released (GtkButton *button)
 {
@@ -1128,6 +1185,12 @@ gtk_button_released (GtkButton *button)
   g_signal_emit (button, button_signals[RELEASED], 0);
 }
 
+/**
+ * gtk_button_clicked:
+ * @button: The #GtkButton you want to send the signal to.
+ *
+ * Emits a #GtkButton::clicked signal to the given #GtkButton.
+ */
 void
 gtk_button_clicked (GtkButton *button)
 {
@@ -1136,6 +1199,14 @@ gtk_button_clicked (GtkButton *button)
   g_signal_emit (button, button_signals[CLICKED], 0);
 }
 
+/**
+ * gtk_button_enter:
+ * @button: The #GtkButton you want to send the signal to.
+ *
+ * Emits a #GtkButton::enter signal to the given #GtkButton.
+ *
+ * Deprecated: 2.20: Use the #GtkWidget::enter-notify-event signal.
+ */
 void
 gtk_button_enter (GtkButton *button)
 {
@@ -1144,6 +1215,14 @@ gtk_button_enter (GtkButton *button)
   g_signal_emit (button, button_signals[ENTER], 0);
 }
 
+/**
+ * gtk_button_leave:
+ * @button: The #GtkButton you want to send the signal to.
+ *
+ * Emits a #GtkButton::leave signal to the given #GtkButton.
+ *
+ * Deprecated: 2.20: Use the #GtkWidget::leave-notify-event signal.
+ */
 void
 gtk_button_leave (GtkButton *button)
 {
@@ -1152,6 +1231,17 @@ gtk_button_leave (GtkButton *button)
   g_signal_emit (button, button_signals[LEAVE], 0);
 }
 
+/**
+ * gtk_button_set_relief:
+ * @button: The #GtkButton you want to set relief styles of.
+ * @newstyle: The GtkReliefStyle as described above.
+ *
+ * Sets the relief style of the edges of the given #GtkButton widget.
+ * Three styles exist, GTK_RELIEF_NORMAL, GTK_RELIEF_HALF, GTK_RELIEF_NONE.
+ * The default style is, as one can guess, GTK_RELIEF_NORMAL.
+ *
+ * <!-- FIXME: put pictures of each style -->
+ */
 void
 gtk_button_set_relief (GtkButton *button,
 		       GtkReliefStyle newrelief)
@@ -1166,6 +1256,14 @@ gtk_button_set_relief (GtkButton *button,
     }
 }
 
+/**
+ * gtk_button_get_relief:
+ * @button: The #GtkButton you want the #GtkReliefStyle from.
+ *
+ * Returns the current relief style of the given #GtkButton.
+ *
+ * Returns: The current #GtkReliefStyle
+ */
 GtkReliefStyle
 gtk_button_get_relief (GtkButton *button)
 {
@@ -1185,7 +1283,7 @@ gtk_button_realize (GtkWidget *widget)
   button = GTK_BUTTON (widget);
   gtk_widget_set_realized (widget, TRUE);
 
-  border_width = GTK_CONTAINER (widget)->border_width;
+  border_width = gtk_container_get_border_width (GTK_CONTAINER (widget));
 
   attributes.window_type = GDK_WINDOW_CHILD;
   attributes.x = widget->allocation.x + border_width;
@@ -1265,10 +1363,10 @@ gtk_button_update_image_spacing (GtkButton *button)
   if (!button->constructed || !priv->image)
     return;
 
-  child = GTK_BIN (button)->child;
+  child = gtk_bin_get_child (GTK_BIN (button));
   if (GTK_IS_ALIGNMENT (child))
     {
-      child = GTK_BIN (child)->child;
+      child = gtk_bin_get_child (GTK_BIN (child));
       if (GTK_IS_BOX (child))
         {
           gtk_widget_style_get (GTK_WIDGET (button),
@@ -1346,8 +1444,9 @@ gtk_button_size_allocate (GtkWidget     *widget,
 {
   GtkButton *button = GTK_BUTTON (widget);
   GtkAllocation child_allocation;
+  GtkWidget *child;
 
-  gint border_width = GTK_CONTAINER (widget)->border_width;
+  guint border_width = gtk_container_get_border_width (GTK_CONTAINER (widget));
   gint xthickness = GTK_WIDGET (widget)->style->xthickness;
   gint ythickness = GTK_WIDGET (widget)->style->ythickness;
   GtkBorder default_border;
@@ -1371,7 +1470,8 @@ gtk_button_size_allocate (GtkWidget     *widget,
 			    widget->allocation.width - border_width * 2,
 			    widget->allocation.height - border_width * 2);
 
-  if (GTK_BIN (button)->child && gtk_widget_get_visible (GTK_BIN (button)->child))
+  child = gtk_bin_get_child (GTK_BIN (button));
+  if (child && gtk_widget_get_visible (child))
     {
       child_allocation.x = widget->allocation.x + border_width + inner_border.left + xthickness;
       child_allocation.y = widget->allocation.y + border_width + inner_border.top + ythickness;
@@ -1416,7 +1516,7 @@ gtk_button_size_allocate (GtkWidget     *widget,
 	  child_allocation.y += child_displacement_y;
 	}
 
-      gtk_widget_size_allocate (GTK_BIN (button)->child, &child_allocation);
+      gtk_widget_size_allocate (child, &child_allocation);
     }
 }
 
@@ -1442,7 +1542,7 @@ _gtk_button_paint (GtkButton          *button,
 
   if (gtk_widget_is_drawable (widget))
     {
-      border_width = GTK_CONTAINER (widget)->border_width;
+      border_width = gtk_container_get_border_width (GTK_CONTAINER (widget));
 
       gtk_button_get_props (button, &default_border, &default_outside_border, NULL, &interior_focus);
       gtk_widget_style_get (widget,
@@ -1795,6 +1895,7 @@ gtk_button_get_size (GtkSizeRequest *widget,
   gint focus_width;
   gint focus_pad;
   gint minimum, natural;
+  guint border_width;
 
   gtk_button_get_props (button, &default_border, NULL, &inner_border, NULL);
   gtk_widget_style_get (GTK_WIDGET (widget),
@@ -1802,18 +1903,19 @@ gtk_button_get_size (GtkSizeRequest *widget,
 			"focus-padding", &focus_pad,
 			NULL);
 
+  border_width = gtk_container_get_border_width (GTK_CONTAINER (widget));
   if (orientation == GTK_ORIENTATION_HORIZONTAL)
     {
-      minimum = ((GTK_CONTAINER (widget)->border_width +
+      minimum = ((border_width +
 		  GTK_WIDGET (widget)->style->xthickness) * 2 +
 		 inner_border.left + inner_border.right);
-      
+
       if (gtk_widget_get_can_default (GTK_WIDGET (widget)))
 	minimum += default_border.left + default_border.right;
     }
   else
     {
-      minimum = ((GTK_CONTAINER (widget)->border_width +
+      minimum = ((border_width +
 		  GTK_WIDGET (widget)->style->ythickness) * 2 +
 		 inner_border.top + inner_border.bottom);
 
@@ -2004,7 +2106,7 @@ gtk_button_get_use_stock (GtkButton *button)
  * gtk_button_set_focus_on_click:
  * @button: a #GtkButton
  * @focus_on_click: whether the button grabs focus when clicked with the mouse
- * 
+ *
  * Sets whether the button will grab focus when it is clicked with the mouse.
  * Making mouse clicks not grab focus is useful in places like toolbars where
  * you don't want the keyboard focus removed from the main area of the
@@ -2031,7 +2133,7 @@ gtk_button_set_focus_on_click (GtkButton *button,
 /**
  * gtk_button_get_focus_on_click:
  * @button: a #GtkButton
- * 
+ *
  * Returns whether the button grabs focus when it is clicked with the mouse.
  * See gtk_button_set_focus_on_click().
  *
@@ -2076,7 +2178,7 @@ gtk_button_set_alignment (GtkButton *button,
   priv->yalign = yalign;
   priv->align_set = 1;
 
-  maybe_set_alignment (button, GTK_BIN (button)->child);
+  maybe_set_alignment (button, gtk_bin_get_child (GTK_BIN (button)));
 
   g_object_freeze_notify (G_OBJECT (button));
   g_object_notify (G_OBJECT (button), "xalign");
@@ -2116,7 +2218,7 @@ gtk_button_get_alignment (GtkButton *button,
  * _gtk_button_set_depressed:
  * @button: a #GtkButton
  * @depressed: %TRUE if the button should be drawn with a recessed shadow.
- * 
+ *
  * Sets whether the button is currently drawn as down or not. This is 
  * purely a visual setting, and is meant only for use by derived widgets
  * such as #GtkToggleButton.
@@ -2406,6 +2508,3 @@ gtk_button_get_event_window (GtkButton *button)
 
   return button->event_window;
 }
-
-#define __GTK_BUTTON_C__
-#include "gtkaliasdef.c"  

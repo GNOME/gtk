@@ -46,7 +46,6 @@
 #include "gtkmain.h"
 #include "gtksettings.h"
 #include "gtkprivate.h"
-#include "gtkalias.h"
 
 #define DEFAULT_THEME_NAME "hicolor"
 
@@ -558,9 +557,10 @@ gtk_icon_theme_init (GtkIconTheme *icon_theme)
   GtkIconThemePrivate *priv;
   const gchar * const *xdg_data_dirs;
   int i, j;
-  
-  priv = g_type_instance_get_private ((GTypeInstance *)icon_theme,
-				      GTK_TYPE_ICON_THEME);
+
+  priv = G_TYPE_INSTANCE_GET_PRIVATE (icon_theme,
+                                      GTK_TYPE_ICON_THEME,
+                                      GtkIconThemePrivate);
   icon_theme->priv = priv;
 
   priv->custom_theme = FALSE;
@@ -3810,6 +3810,3 @@ gtk_icon_info_get_filename (GtkIconInfo *icon_info)
 }
 
 #endif
-
-#define __GTK_ICON_THEME_C__
-#include "gtkaliasdef.c"

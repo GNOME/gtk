@@ -42,7 +42,6 @@
 #include "gtkwindow.h"
 #include "gtkprivate.h"
 #include "gtkintl.h"
-#include "gtkalias.h"
 
 #define MENU_SHELL_TIMEOUT   500
 
@@ -597,18 +596,45 @@ gtk_menu_shell_button_press (GtkWidget      *widget,
 
   if (!menu_shell->active || !menu_shell->button)
     {
-      _gtk_menu_shell_activate (menu_shell);
+      gboolean initially_active = menu_shell->active;
 
       menu_shell->button = event->button;
 
-      if (menu_item && _gtk_menu_item_is_selectable (menu_item) &&
-	  menu_item->parent == widget &&
-          menu_item != menu_shell->active_menu_item)
+      if (menu_item)
         {
-          if (GTK_MENU_SHELL_GET_CLASS (menu_shell)->submenu_placement == GTK_TOP_BOTTOM)
+          if (_gtk_menu_item_is_selectable (menu_item) &&
+              menu_item->parent == widget &&
+              menu_item != menu_shell->active_menu_item)
             {
-              menu_shell->activate_time = event->time;
-              gtk_menu_shell_select_item (menu_shell, menu_item);
+              _gtk_menu_shell_activate (menu_shell);
+              menu_shell->button = event->button;
+
+              if (GTK_MENU_SHELL_GET_CLASS (menu_shell)->submenu_placement == GTK_TOP_BOTTOM)
+                {
+                  menu_shell->activate_time = event->time;
+                  gtk_menu_shell_select_item (menu_shell, menu_item);
+                }
+            }
+        }
+      else
+        {
+          if (!initially_active)
+            {
+              gboolean window_drag = FALSE;
+
+              gtk_widget_style_get (widget,
+                                    "window-dragging", &window_drag,
+                                    NULL);
+
+              if (window_drag)
+                {
+                  gtk_menu_shell_deactivate (menu_shell);
+                  gtk_window_begin_move_drag (GTK_WINDOW (gtk_widget_get_toplevel (widget)),
+                                              event->button,
+                                              event->x_root,
+                                              event->y_root,
+                                              event->time);
+                }
             }
         }
     }
@@ -1860,6 +1886,3 @@ gtk_menu_shell_set_take_focus (GtkMenuShell *menu_shell,
       g_object_notify (G_OBJECT (menu_shell), "take-focus");
     }
 }
-
-#define __GTK_MENU_SHELL_C__
-#include "gtkaliasdef.c"

@@ -34,7 +34,6 @@
 #include "gtktooltip.h"
 #include "gtkintl.h"
 
-#include "gtkalias.h"
 
 /**
  * SECTION:gtkvolumebutton
@@ -71,6 +70,7 @@ gtk_volume_button_init (GtkVolumeButton *button)
 {
   GtkScaleButton *sbutton = GTK_SCALE_BUTTON (button);
   GtkObject *adj;
+  GtkWidget *minus_button, *plus_button;
   const char *icons[] = {
 	"audio-volume-muted",
 	"audio-volume-high",
@@ -87,17 +87,20 @@ gtk_volume_button_init (GtkVolumeButton *button)
 			      1,
 			      _("Adjusts the volume"));
 
-  atk_object_set_name (gtk_widget_get_accessible (sbutton->minus_button),
-		       _("Volume Down"));
-  atk_object_set_description (gtk_widget_get_accessible (sbutton->minus_button),
-		       _("Decreases the volume"));
-  gtk_widget_set_tooltip_text (sbutton->minus_button, _("Volume Down"));
+  minus_button = gtk_scale_button_get_minus_button (sbutton);
+  plus_button = gtk_scale_button_get_plus_button (sbutton);
 
-  atk_object_set_name (gtk_widget_get_accessible (sbutton->plus_button),
+  atk_object_set_name (gtk_widget_get_accessible (minus_button),
+		       _("Volume Down"));
+  atk_object_set_description (gtk_widget_get_accessible (minus_button),
+		       _("Decreases the volume"));
+  gtk_widget_set_tooltip_text (minus_button, _("Volume Down"));
+
+  atk_object_set_name (gtk_widget_get_accessible (plus_button),
 		       _("Volume Up"));
-  atk_object_set_description (gtk_widget_get_accessible (sbutton->plus_button),
+  atk_object_set_description (gtk_widget_get_accessible (plus_button),
 		       _("Increases the volume"));
-  gtk_widget_set_tooltip_text (sbutton->plus_button, _("Volume Up"));
+  gtk_widget_set_tooltip_text (plus_button, _("Volume Up"));
 
   gtk_scale_button_set_icons (sbutton, icons);
 
@@ -186,6 +189,3 @@ cb_value_changed (GtkVolumeButton *button, gdouble value, gpointer user_data)
 {
   gtk_widget_trigger_tooltip_query (GTK_WIDGET (button));
 }
-
-#define __GTK_VOLUME_BUTTON_C__
-#include "gtkaliasdef.c"

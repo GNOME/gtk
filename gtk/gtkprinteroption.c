@@ -23,7 +23,6 @@
 #include <gmodule.h>
 
 #include "gtkprinteroption.h"
-#include "gtkalias.h"
 
 /*****************************************
  *            GtkPrinterOption           *
@@ -232,7 +231,3 @@ gtk_printer_option_get_activates_default (GtkPrinterOption *option)
 
   return option->activates_default;
 }
-
-
-#define __GTK_PRINTER_OPTION_C__
-#include "gtkaliasdef.c"

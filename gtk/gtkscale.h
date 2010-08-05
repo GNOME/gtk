@@ -46,15 +46,15 @@ G_BEGIN_DECLS
 
 
 typedef struct _GtkScale        GtkScale;
+typedef struct _GtkScalePriv    GtkScalePriv;
 typedef struct _GtkScaleClass   GtkScaleClass;
 
 struct _GtkScale
 {
   GtkRange range;
 
-  gint  GSEAL (digits);
-  guint GSEAL (draw_value) : 1;
-  guint GSEAL (value_pos) : 2;
+  /* <private> */
+  GtkScalePriv *priv;
 };
 
 struct _GtkScaleClass

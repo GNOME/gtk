@@ -33,7 +33,6 @@
 #include "gtkhbox.h"
 #include "gtkalignment.h"
 
-#include "gtkalias.h"
 
 #undef DEBUG_TOOLTIP
 
@@ -877,6 +876,8 @@ get_bounding_box (GtkWidget    *widget,
   gint x4, y4;
 
   window = gtk_widget_get_parent_window (widget);
+  if (window == NULL)
+    window = gtk_widget_get_window (widget);
 
   x = widget->allocation.x;
   y = widget->allocation.y;
@@ -1533,7 +1534,3 @@ _gtk_tooltip_handle_event (GdkEvent *event)
 	break;
     }
 }
-
-
-#define __GTK_TOOLTIP_C__
-#include "gtkaliasdef.c"

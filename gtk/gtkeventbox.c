@@ -28,7 +28,7 @@
 #include "gtkeventbox.h"
 #include "gtkprivate.h"
 #include "gtkintl.h"
-#include "gtkalias.h"
+
 
 typedef struct
 {
@@ -374,7 +374,7 @@ gtk_event_box_realize (GtkWidget *widget)
 
   gtk_widget_set_realized (widget, TRUE);
 
-  border_width = GTK_CONTAINER (widget)->border_width;
+  border_width = gtk_container_get_border_width (GTK_CONTAINER (widget));
   
   attributes.x = widget->allocation.x + border_width;
   attributes.y = widget->allocation.y + border_width;
@@ -483,15 +483,19 @@ gtk_event_box_size_request (GtkWidget      *widget,
 			    GtkRequisition *requisition)
 {
   GtkBin *bin = GTK_BIN (widget);
+  guint border_width;
+  GtkWidget *child;
 
-  requisition->width = GTK_CONTAINER (widget)->border_width * 2;
-  requisition->height = GTK_CONTAINER (widget)->border_width * 2;
+  border_width = gtk_container_get_border_width (GTK_CONTAINER (widget));
+  requisition->width = border_width * 2;
+  requisition->height = border_width * 2;
 
-  if (bin->child && gtk_widget_get_visible (bin->child))
+  child = gtk_bin_get_child (bin);
+  if (child && gtk_widget_get_visible (child))
     {
       GtkRequisition child_requisition;
       
-      gtk_widget_size_request (bin->child, &child_requisition);
+      gtk_widget_size_request (child, &child_requisition);
 
       requisition->width += child_requisition.width;
       requisition->height += child_requisition.height;
@@ -505,22 +509,25 @@ gtk_event_box_size_allocate (GtkWidget     *widget,
   GtkBin *bin;
   GtkAllocation child_allocation;
   GtkEventBoxPrivate *priv;
-  
+  guint border_width;
+  GtkWidget *child;
+
   widget->allocation = *allocation;
   bin = GTK_BIN (widget);
+  border_width = gtk_container_get_border_width (GTK_CONTAINER (widget));
   
   if (!gtk_widget_get_has_window (widget))
     {
-      child_allocation.x = allocation->x + GTK_CONTAINER (widget)->border_width;
-      child_allocation.y = allocation->y + GTK_CONTAINER (widget)->border_width;
+      child_allocation.x = allocation->x + border_width;
+      child_allocation.y = allocation->y + border_width;
     }
   else
     {
       child_allocation.x = 0;
       child_allocation.y = 0;
     }
-  child_allocation.width = MAX (allocation->width - GTK_CONTAINER (widget)->border_width * 2, 0);
-  child_allocation.height = MAX (allocation->height - GTK_CONTAINER (widget)->border_width * 2, 0);
+  child_allocation.width = MAX (allocation->width - border_width * 2, 0);
+  child_allocation.height = MAX (allocation->height - border_width * 2, 0);
 
   if (gtk_widget_get_realized (widget))
     {
@@ -535,14 +542,15 @@ gtk_event_box_size_allocate (GtkWidget     *widget,
       
       if (gtk_widget_get_has_window (widget))
 	gdk_window_move_resize (widget->window,
-				allocation->x + GTK_CONTAINER (widget)->border_width,
-				allocation->y + GTK_CONTAINER (widget)->border_width,
+				allocation->x + border_width,
+				allocation->y + border_width,
 				child_allocation.width,
 				child_allocation.height);
     }
-  
-  if (bin->child)
-    gtk_widget_size_allocate (bin->child, &child_allocation);
+
+  child = gtk_bin_get_child (bin);
+  if (child)
+    gtk_widget_size_allocate (child, &child_allocation);
 }
 
 static void
@@ -570,6 +578,3 @@ gtk_event_box_expose (GtkWidget      *widget,
 
   return FALSE;
 }
-
-#define __GTK_EVENT_BOX_C__
-#include "gtkaliasdef.c"

@@ -45,8 +45,6 @@
 #include "gtkactivatable.h"
 #include "gtktypebuiltins.h"
 #include "gtkprivate.h"
-#include "gtkalias.h"
-
 
 /**
  * SECTION:gtkrecentchoosermenu
@@ -127,7 +125,6 @@ enum {
 #define FALLBACK_ITEM_LIMIT 	10
 #define DEFAULT_LABEL_WIDTH     30
 
-#define GTK_RECENT_CHOOSER_MENU_GET_PRIVATE(obj)	(G_TYPE_INSTANCE_GET_PRIVATE ((obj), GTK_TYPE_RECENT_CHOOSER_MENU, GtkRecentChooserMenuPrivate))
 
 static void     gtk_recent_chooser_menu_finalize    (GObject                   *object);
 static void     gtk_recent_chooser_menu_dispose     (GObject                   *object);
@@ -268,11 +265,13 @@ static void
 gtk_recent_chooser_menu_init (GtkRecentChooserMenu *menu)
 {
   GtkRecentChooserMenuPrivate *priv;
-  
-  priv = GTK_RECENT_CHOOSER_MENU_GET_PRIVATE (menu);
-  
-  menu->priv = priv;
-  
+
+  menu->priv = G_TYPE_INSTANCE_GET_PRIVATE (menu,
+                                            GTK_TYPE_RECENT_CHOOSER_MENU,
+                                            GtkRecentChooserMenuPrivate);
+
+  priv = menu->priv;
+
   priv->show_icons= TRUE;
   priv->show_numbers = FALSE;
   priv->show_tips = FALSE;
@@ -867,7 +866,7 @@ gtk_recent_chooser_menu_create_item (GtkRecentChooserMenu *menu,
   /* ellipsize the menu item label, in case the recent document
    * display name is huge.
    */
-  label = GTK_BIN (item)->child;
+  label = gtk_bin_get_child (GTK_BIN (item));
   if (GTK_IS_LABEL (label))
     {
       gtk_label_set_ellipsize (GTK_LABEL (label), PANGO_ELLIPSIZE_END);
@@ -1321,6 +1320,3 @@ gtk_recent_chooser_menu_set_show_numbers (GtkRecentChooserMenu *menu,
   menu->priv->show_numbers = show_numbers;
   g_object_notify (G_OBJECT (menu), "show-numbers");
 }
-
-#define __GTK_RECENT_CHOOSER_MENU_C__
-#include "gtkaliasdef.c"

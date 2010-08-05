@@ -458,7 +458,6 @@ gtk_bin_get_type
 <FILE>gtkbox</FILE>
 <TITLE>GtkBox</TITLE>
 GtkBox
-GtkBoxChild
 gtk_box_new
 gtk_box_pack_start
 gtk_box_pack_end
@@ -2200,7 +2199,6 @@ gtk_misc_get_type
 <FILE>gtknotebook</FILE>
 <TITLE>GtkNotebook</TITLE>
 GtkNotebook
-GtkNotebookPage
 gtk_notebook_new
 gtk_notebook_append_page
 gtk_notebook_append_page_menu
@@ -2644,8 +2642,6 @@ gtk_recent_manager_remove_item
 gtk_recent_manager_lookup_item
 gtk_recent_manager_has_item
 gtk_recent_manager_move_item
-gtk_recent_manager_get_limit
-gtk_recent_manager_set_limit
 gtk_recent_manager_get_items
 gtk_recent_manager_purge_items
 <SUBSECTION>
@@ -4942,6 +4938,7 @@ gtk_widget_get_requisition
 gtk_widget_device_is_shadowed
 
 <SUBSECTION>
+gtk_requisition_new
 gtk_requisition_copy
 gtk_requisition_free
 

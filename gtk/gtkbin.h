@@ -46,13 +46,15 @@ G_BEGIN_DECLS
 
 
 typedef struct _GtkBin       GtkBin;
+typedef struct _GtkBinPriv   GtkBinPriv;
 typedef struct _GtkBinClass  GtkBinClass;
 
 struct _GtkBin
 {
   GtkContainer container;
 
-  GtkWidget *GSEAL (child);
+  /*< private >*/
+  GtkBinPriv *priv;
 };
 
 struct _GtkBinClass
@@ -64,6 +66,9 @@ struct _GtkBinClass
 GType      gtk_bin_get_type  (void) G_GNUC_CONST;
 
 GtkWidget *gtk_bin_get_child (GtkBin *bin);
+
+void       _gtk_bin_set_child (GtkBin    *bin,
+                               GtkWidget *widget);
 
 G_END_DECLS
 

@@ -46,7 +46,8 @@ struct _GtkPrintUnixDialog
 {
   GtkDialog parent_instance;
 
-  GtkPrintUnixDialogPrivate *GSEAL (priv);
+  /* <private> */
+  GtkPrintUnixDialogPrivate *priv;
 };
 
 struct _GtkPrintUnixDialogClass

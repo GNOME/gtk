@@ -36,7 +36,6 @@
 #ifndef HAVE_XCONVERTCASE
 #include "gdkkeysyms.h"
 #endif
-#include "gdkalias.h"
 
 typedef struct _GdkPredicate  GdkPredicate;
 
@@ -809,6 +808,3 @@ gdk_enable_multidevice (void)
 
   _gdk_enable_multidevice = TRUE;
 }
-
-#define __GDK_C__
-#include "gdkaliasdef.c"

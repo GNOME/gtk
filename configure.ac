@@ -12,7 +12,7 @@ AC_PREREQ([2.62])
 
 m4_define([gtk_major_version], [2])
 m4_define([gtk_minor_version], [90])
-m4_define([gtk_micro_version], [5])
+m4_define([gtk_micro_version], [6])
 m4_define([gtk_interface_age], [0])
 m4_define([gtk_binary_age],
           [m4_eval(100 * gtk_minor_version + gtk_micro_version)])
@@ -31,7 +31,7 @@ m4_define([gtk_api_version], [3.0])
 m4_define([gtk_binary_version], [3.0.0])
 
 # required versions of other packages
-m4_define([glib_required_version], [2.25.9])
+m4_define([glib_required_version], [2.25.11])
 m4_define([pango_required_version], [1.20])
 m4_define([atk_required_version], [1.29.2])
 m4_define([cairo_required_version], [1.9.10])
@@ -1556,7 +1556,7 @@ fi
 # GObject introspection
 ##################################################
 
-GOBJECT_INTROSPECTION_CHECK([0.6.14])
+GOBJECT_INTROSPECTION_CHECK([0.9.0])
 
 ##################################################
 # Checks for gtk-doc and docbook-tools
@@ -1671,9 +1671,29 @@ if test x$gdk_working_wctype = xno; then
   gdk_wc="\$gdk_wc
 #define GDK_HAVE_BROKEN_WCTYPE 1"
 fi
-
-
 ])
+
+dnl
+dnl Check for -Bsymbolic-functions linker flag used to avoid
+dnl intra-library PLT jumps, if available.
+dnl
+AC_ARG_ENABLE(Bsymbolic,
+              [AC_HELP_STRING([--disable-Bsymbolic],
+                              [avoid linking with -Bsymbolic])],,
+              [SAVED_LDFLAGS="${LDFLAGS}"
+               AC_MSG_CHECKING([for -Bsymbolic-functions linker flag])
+               LDFLAGS=-Wl,-Bsymbolic-functions
+               AC_TRY_LINK([], [int main (void) { return 0; }],
+                           AC_MSG_RESULT(yes)
+                           enable_Bsymbolic=yes,
+                           AC_MSG_RESULT(no)
+                           enable_Bsymbolic=no)
+               LDFLAGS="${SAVED_LDFLAGS}"])
+
+if test "x${enable_Bsymbolic}" == "xyes"; then
+  GTK_LINK_FLAGS=-Wl,-Bsymbolic-functions
+fi
+AC_SUBST(GTK_LINK_FLAGS)
 
 AC_CONFIG_FILES([
 config.h.win32

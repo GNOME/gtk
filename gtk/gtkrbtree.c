@@ -20,7 +20,6 @@
 #include "config.h"
 #include "gtkrbtree.h"
 #include "gtkdebug.h"
-#include "gtkalias.h"
 
 static GtkRBNode * _gtk_rbnode_new                (GtkRBTree  *tree,
 						   gint        height);

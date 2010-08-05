@@ -25,7 +25,7 @@
 #include "gdkscreen-x11.h"
 #include "gdkdisplay-x11.h"
 #include "gdkwindow-x11.h"
-#include "gdkalias.h"
+
 
 typedef struct _GdkWindowQueueItem GdkWindowQueueItem;
 typedef struct _GdkWindowParentPos GdkWindowParentPos;
@@ -317,6 +317,3 @@ _gdk_window_process_expose (GdkWindow    *window,
 
   cairo_region_destroy (invalidate_region);
 }
-
-#define __GDK_GEOMETRY_X11_C__
-#include "gdkaliasdef.c"

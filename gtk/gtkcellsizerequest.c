@@ -25,7 +25,6 @@
 #include "gtkcellrenderer.h"
 #include "gtkcellsizerequest.h"
 #include "gtkintl.h"
-#include "gtkalias.h"
 
 
 #define DEBUG_CELL_SIZE_REQUEST 0
@@ -335,6 +334,3 @@ gtk_cell_size_request_get_size (GtkCellSizeRequest *cell,
     }
 }
 
-
-#define __GTK_CELL_SIZE_REQUEST_C__
-#include "gtkaliasdef.c"

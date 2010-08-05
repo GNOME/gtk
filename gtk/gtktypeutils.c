@@ -30,7 +30,7 @@
 #include "gtktypeutils.h"
 #include "gtkobject.h"
 #include "gtkintl.h"
-#include "gtkalias.h"
+
 
 GType
 gtk_identifier_get_type (void)
@@ -45,6 +45,3 @@ gtk_identifier_get_type (void)
 
   return our_type;
 }
-
-#define __GTK_TYPE_UTILS_C__
-#include "gtkaliasdef.c"

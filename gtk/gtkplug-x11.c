@@ -50,7 +50,6 @@
 #include <X11/Xatom.h>
 
 #include "gtkxembed.h"
-#include "gtkalias.h"
 
 static void xembed_set_info            (GdkWindow     *window,
 					unsigned long  flags);

@@ -278,12 +278,6 @@ Emitted when the user or a function changes the current page.
 
 </para>
 
-<!-- ##### STRUCT GtkNotebookPage ##### -->
-<para>
-The #GtkNotebookPage is an opaque implementation detail of #GtkNotebook.
-</para>
-
-
 <!-- ##### FUNCTION gtk_notebook_new ##### -->
 <para>
 </para>

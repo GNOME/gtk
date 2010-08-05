@@ -163,7 +163,7 @@ gail_image_cell_get_image_size (AtkImage *image,
   GdkPixbuf *pixbuf;
 
   cell_renderer  = GAIL_RENDERER_CELL (cell)->renderer;
-  pixbuf = GTK_CELL_RENDERER_PIXBUF (cell_renderer)->pixbuf;
+  g_object_get (GTK_CELL_RENDERER_PIXBUF (cell_renderer), "pixbuf", &pixbuf, NULL);
 
   *width = gdk_pixbuf_get_width (pixbuf);
   *height = gdk_pixbuf_get_height (pixbuf);

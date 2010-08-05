@@ -55,8 +55,6 @@
 #include "gtkprivate.h"
 #include "gtkintl.h"
 
-#include "gtkalias.h"
-
 
 /**
  * SECTION:gtkaboutdialog
@@ -2441,6 +2439,3 @@ gtk_show_about_dialog (GtkWindow   *parent,
 
   gtk_window_present (GTK_WINDOW (dialog));
 }
-
-#define __GTK_ABOUT_DIALOG_C__
-#include "gtkaliasdef.c"

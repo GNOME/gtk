@@ -305,7 +305,7 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
 /**
  * GTK_STOCK_FILE:
  *
- * The "File" icon.
+ * The "File" item.
  * <inlinegraphic fileref="gtk-file.png" format="PNG"></inlinegraphic>
  *
  * Since: 2.6

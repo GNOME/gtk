@@ -50,18 +50,41 @@
 #include "gtktooltip.h"
 #include "gtksizerequest.h"
 #include "gtkprivate.h"
-#include "gtkalias.h"
 
-#define GTK_LABEL_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), GTK_TYPE_LABEL, GtkLabelPrivate))
 
-typedef struct
+struct _GtkLabelPriv
 {
-  gint wrap_width;
-  gint width_chars;
-  gint max_width_chars;
+  GtkLabelSelectionInfo *select_info;
+  GtkWidget *mnemonic_widget;
+  GtkWindow *mnemonic_window;
+
+  PangoAttrList *attrs;
+  PangoAttrList *effective_attrs;
+  PangoLayout   *layout;
 
   gboolean mnemonics_visible;
-} GtkLabelPrivate;
+
+  gchar   *label;
+  gchar   *text;
+
+  guint    jtype            : 2;
+  guint    wrap             : 1;
+  guint    use_underline    : 1;
+  guint    use_markup       : 1;
+  guint    ellipsize        : 3;
+  guint    single_line_mode : 1;
+  guint    have_transform   : 1;
+  guint    in_click         : 1;
+  guint    wrap_mode        : 3;
+  guint    pattern_set      : 1;
+  guint    track_links      : 1;
+
+  guint    mnemonic_keyval;
+
+  gint     wrap_width;
+  gint     width_chars;
+  gint     max_width_chars;
+};
 
 /* Notes about the handling of links:
  *
@@ -884,8 +907,7 @@ gtk_label_class_init (GtkLabelClass *class)
 						       TRUE,
 						       GTK_PARAM_READWRITE));
 
-				
-  g_type_class_add_private (class, sizeof (GtkLabelPrivate));
+  g_type_class_add_private (class, sizeof (GtkLabelPriv));
 }
 
 static void 
@@ -894,10 +916,8 @@ gtk_label_set_property (GObject      *object,
 			const GValue *value,
 			GParamSpec   *pspec)
 {
-  GtkLabel *label;
+  GtkLabel *label = GTK_LABEL (object);
 
-  label = GTK_LABEL (object);
-  
   switch (prop_id)
     {
     case PROP_LABEL:
@@ -960,64 +980,63 @@ gtk_label_get_property (GObject     *object,
 			GValue      *value,
 			GParamSpec  *pspec)
 {
-  GtkLabel *label;
-  
-  label = GTK_LABEL (object);
-  
+  GtkLabel *label = GTK_LABEL (object);
+  GtkLabelPriv *priv = label->priv;
+
   switch (prop_id)
     {
     case PROP_LABEL:
-      g_value_set_string (value, label->label);
+      g_value_set_string (value, priv->label);
       break;
     case PROP_ATTRIBUTES:
-      g_value_set_boxed (value, label->attrs);
+      g_value_set_boxed (value, priv->attrs);
       break;
     case PROP_USE_MARKUP:
-      g_value_set_boolean (value, label->use_markup);
+      g_value_set_boolean (value, priv->use_markup);
       break;
     case PROP_USE_UNDERLINE:
-      g_value_set_boolean (value, label->use_underline);
+      g_value_set_boolean (value, priv->use_underline);
       break;
     case PROP_JUSTIFY:
-      g_value_set_enum (value, label->jtype);
+      g_value_set_enum (value, priv->jtype);
       break;
     case PROP_WRAP:
-      g_value_set_boolean (value, label->wrap);
+      g_value_set_boolean (value, priv->wrap);
       break;
     case PROP_WRAP_MODE:
-      g_value_set_enum (value, label->wrap_mode);
+      g_value_set_enum (value, priv->wrap_mode);
       break;
     case PROP_SELECTABLE:
       g_value_set_boolean (value, gtk_label_get_selectable (label));
       break;
     case PROP_MNEMONIC_KEYVAL:
-      g_value_set_uint (value, label->mnemonic_keyval);
+      g_value_set_uint (value, priv->mnemonic_keyval);
       break;
     case PROP_MNEMONIC_WIDGET:
-      g_value_set_object (value, (GObject*) label->mnemonic_widget);
+      g_value_set_object (value, (GObject*) priv->mnemonic_widget);
       break;
     case PROP_CURSOR_POSITION:
-      if (label->select_info && label->select_info->selectable)
+      if (priv->select_info && priv->select_info->selectable)
 	{
-	  gint offset = g_utf8_pointer_to_offset (label->text,
-						  label->text + label->select_info->selection_end);
+	  gint offset = g_utf8_pointer_to_offset (priv->text,
+						  priv->text + priv->select_info->selection_end);
 	  g_value_set_int (value, offset);
 	}
       else
 	g_value_set_int (value, 0);
       break;
     case PROP_SELECTION_BOUND:
-      if (label->select_info && label->select_info->selectable)
+      if (priv->select_info && priv->select_info->selectable)
 	{
-	  gint offset = g_utf8_pointer_to_offset (label->text,
-						  label->text + label->select_info->selection_anchor);
+	  gint offset = g_utf8_pointer_to_offset (priv->text,
+						  priv->text + priv->select_info->selection_anchor);
 	  g_value_set_int (value, offset);
 	}
       else
 	g_value_set_int (value, 0);
       break;
     case PROP_ELLIPSIZE:
-      g_value_set_enum (value, label->ellipsize);
+      g_value_set_enum (value, priv->ellipsize);
       break;
     case PROP_WIDTH_CHARS:
       g_value_set_int (value, gtk_label_get_width_chars (label));
@@ -1043,33 +1062,37 @@ gtk_label_get_property (GObject     *object,
 static void
 gtk_label_init (GtkLabel *label)
 {
-  GtkLabelPrivate *priv;
+  GtkLabelPriv *priv;
+
+  label->priv = G_TYPE_INSTANCE_GET_PRIVATE (label,
+                                             GTK_TYPE_LABEL,
+                                             GtkLabelPriv);
+  priv = label->priv;
 
   gtk_widget_set_has_window (GTK_WIDGET (label), FALSE);
 
-  priv = GTK_LABEL_GET_PRIVATE (label);
   priv->width_chars = -1;
   priv->max_width_chars = -1;
   priv->wrap_width = -1;
-  label->label = NULL;
+  priv->label = NULL;
 
-  label->jtype = GTK_JUSTIFY_LEFT;
-  label->wrap = FALSE;
-  label->wrap_mode = PANGO_WRAP_WORD;
-  label->ellipsize = PANGO_ELLIPSIZE_NONE;
+  priv->jtype = GTK_JUSTIFY_LEFT;
+  priv->wrap = FALSE;
+  priv->wrap_mode = PANGO_WRAP_WORD;
+  priv->ellipsize = PANGO_ELLIPSIZE_NONE;
 
-  label->use_underline = FALSE;
-  label->use_markup = FALSE;
-  label->pattern_set = FALSE;
-  label->track_links = TRUE;
+  priv->use_underline = FALSE;
+  priv->use_markup = FALSE;
+  priv->pattern_set = FALSE;
+  priv->track_links = TRUE;
 
-  label->mnemonic_keyval = GDK_VoidSymbol;
-  label->layout = NULL;
-  label->text = NULL;
-  label->attrs = NULL;
+  priv->mnemonic_keyval = GDK_VoidSymbol;
+  priv->layout = NULL;
+  priv->text = NULL;
+  priv->attrs = NULL;
 
-  label->mnemonic_widget = NULL;
-  label->mnemonic_window = NULL;
+  priv->mnemonic_widget = NULL;
+  priv->mnemonic_window = NULL;
 
   priv->mnemonics_visible = TRUE;
 
@@ -1462,10 +1485,12 @@ static gboolean
 gtk_label_mnemonic_activate (GtkWidget *widget,
 			     gboolean   group_cycling)
 {
+  GtkLabel *label = GTK_LABEL (widget);
+  GtkLabelPriv *priv = label->priv;
   GtkWidget *parent;
 
-  if (GTK_LABEL (widget)->mnemonic_widget)
-    return gtk_widget_mnemonic_activate (GTK_LABEL (widget)->mnemonic_widget, group_cycling);
+  if (priv->mnemonic_widget)
+    return gtk_widget_mnemonic_activate (priv->mnemonic_widget, group_cycling);
 
   /* Try to find the widget to activate by traversing the
    * widget's ancestry.
@@ -1496,6 +1521,7 @@ static void
 gtk_label_setup_mnemonic (GtkLabel *label,
 			  guint     last_key)
 {
+  GtkLabelPriv *priv = label->priv;
   GtkWidget *widget = GTK_WIDGET (label);
   GtkWidget *toplevel;
   GtkWidget *mnemonic_menu;
@@ -1504,12 +1530,12 @@ gtk_label_setup_mnemonic (GtkLabel *label,
   
   if (last_key != GDK_VoidSymbol)
     {
-      if (label->mnemonic_window)
+      if (priv->mnemonic_window)
 	{
-	  gtk_window_remove_mnemonic  (label->mnemonic_window,
+	  gtk_window_remove_mnemonic  (priv->mnemonic_window,
 				       last_key,
 				       widget);
-	  label->mnemonic_window = NULL;
+	  priv->mnemonic_window = NULL;
 	}
       if (mnemonic_menu)
 	{
@@ -1520,7 +1546,7 @@ gtk_label_setup_mnemonic (GtkLabel *label,
 	}
     }
   
-  if (label->mnemonic_keyval == GDK_VoidSymbol)
+  if (priv->mnemonic_keyval == GDK_VoidSymbol)
       goto done;
 
   connect_mnemonics_visible_notify (GTK_LABEL (widget));
@@ -1536,7 +1562,7 @@ gtk_label_setup_mnemonic (GtkLabel *label,
       if (menu_shell)
 	{
 	  _gtk_menu_shell_add_mnemonic (GTK_MENU_SHELL (menu_shell),
-					label->mnemonic_keyval,
+					priv->mnemonic_keyval,
 					widget);
 	  mnemonic_menu = menu_shell;
 	}
@@ -1544,9 +1570,9 @@ gtk_label_setup_mnemonic (GtkLabel *label,
       if (!GTK_IS_MENU (menu_shell))
 	{
 	  gtk_window_add_mnemonic (GTK_WINDOW (toplevel),
-				   label->mnemonic_keyval,
+				   priv->mnemonic_keyval,
 				   widget);
-	  label->mnemonic_window = GTK_WINDOW (toplevel);
+	  priv->mnemonic_window = GTK_WINDOW (toplevel);
 	}
     }
   
@@ -1559,8 +1585,9 @@ gtk_label_hierarchy_changed (GtkWidget *widget,
 			     GtkWidget *old_toplevel)
 {
   GtkLabel *label = GTK_LABEL (widget);
+  GtkLabelPriv *priv = label->priv;
 
-  gtk_label_setup_mnemonic (label, label->mnemonic_keyval);
+  gtk_label_setup_mnemonic (label, priv->mnemonic_keyval);
 }
 
 static void
@@ -1605,12 +1632,8 @@ static void
 mnemonics_visible_apply (GtkWidget *widget,
                          gboolean   mnemonics_visible)
 {
-  GtkLabel *label;
-  GtkLabelPrivate *priv;
-
-  label = GTK_LABEL (widget);
-
-  priv = GTK_LABEL_GET_PRIVATE (label);
+  GtkLabel *label = GTK_LABEL (widget);
+  GtkLabelPriv *priv = label->priv;
 
   mnemonics_visible = mnemonics_visible != FALSE;
 
@@ -1695,8 +1718,9 @@ label_mnemonic_widget_weak_notify (gpointer      data,
 				   GObject      *where_the_object_was)
 {
   GtkLabel *label = data;
+  GtkLabelPriv *priv = label->priv;
 
-  label->mnemonic_widget = NULL;
+  priv->mnemonic_widget = NULL;
   g_object_notify (G_OBJECT (label), "mnemonic-widget");
 }
 
@@ -1724,24 +1748,29 @@ void
 gtk_label_set_mnemonic_widget (GtkLabel  *label,
 			       GtkWidget *widget)
 {
+  GtkLabelPriv *priv;
+
   g_return_if_fail (GTK_IS_LABEL (label));
+
+  priv = label->priv;
+
   if (widget)
     g_return_if_fail (GTK_IS_WIDGET (widget));
 
-  if (label->mnemonic_widget)
+  if (priv->mnemonic_widget)
     {
-      gtk_widget_remove_mnemonic_label (label->mnemonic_widget, GTK_WIDGET (label));
-      g_object_weak_unref (G_OBJECT (label->mnemonic_widget),
+      gtk_widget_remove_mnemonic_label (priv->mnemonic_widget, GTK_WIDGET (label));
+      g_object_weak_unref (G_OBJECT (priv->mnemonic_widget),
 			   label_mnemonic_widget_weak_notify,
 			   label);
     }
-  label->mnemonic_widget = widget;
-  if (label->mnemonic_widget)
+  priv->mnemonic_widget = widget;
+  if (priv->mnemonic_widget)
     {
-      g_object_weak_ref (G_OBJECT (label->mnemonic_widget),
+      g_object_weak_ref (G_OBJECT (priv->mnemonic_widget),
 		         label_mnemonic_widget_weak_notify,
 		         label);
-      gtk_widget_add_mnemonic_label (label->mnemonic_widget, GTK_WIDGET (label));
+      gtk_widget_add_mnemonic_label (priv->mnemonic_widget, GTK_WIDGET (label));
     }
   
   g_object_notify (G_OBJECT (label), "mnemonic-widget");
@@ -1762,7 +1791,7 @@ gtk_label_get_mnemonic_widget (GtkLabel *label)
 {
   g_return_val_if_fail (GTK_IS_LABEL (label), NULL);
 
-  return label->mnemonic_widget;
+  return label->priv->mnemonic_widget;
 }
 
 /**
@@ -1780,16 +1809,18 @@ gtk_label_get_mnemonic_keyval (GtkLabel *label)
 {
   g_return_val_if_fail (GTK_IS_LABEL (label), GDK_VoidSymbol);
 
-  return label->mnemonic_keyval;
+  return label->priv->mnemonic_keyval;
 }
 
 static void
 gtk_label_set_text_internal (GtkLabel *label,
 			     gchar    *str)
 {
-  g_free (label->text);
-  
-  label->text = str;
+  GtkLabelPriv *priv = label->priv;
+
+  g_free (priv->text);
+
+  priv->text = str;
 
   gtk_label_select_region_index (label, 0, 0);
 }
@@ -1798,9 +1829,11 @@ static void
 gtk_label_set_label_internal (GtkLabel *label,
 			      gchar    *str)
 {
-  g_free (label->label);
-  
-  label->label = str;
+  GtkLabelPriv *priv = label->priv;
+
+  g_free (priv->label);
+
+  priv->label = str;
 
   g_object_notify (G_OBJECT (label), "label");
 }
@@ -1809,10 +1842,12 @@ static void
 gtk_label_set_use_markup_internal (GtkLabel *label,
 				   gboolean  val)
 {
+  GtkLabelPriv *priv = label->priv;
+
   val = val != FALSE;
-  if (label->use_markup != val)
+  if (priv->use_markup != val)
     {
-      label->use_markup = val;
+      priv->use_markup = val;
 
       g_object_notify (G_OBJECT (label), "use-markup");
     }
@@ -1822,10 +1857,12 @@ static void
 gtk_label_set_use_underline_internal (GtkLabel *label,
 				      gboolean val)
 {
+  GtkLabelPriv *priv = label->priv;
+
   val = val != FALSE;
-  if (label->use_underline != val)
+  if (priv->use_underline != val)
     {
-      label->use_underline = val;
+      priv->use_underline = val;
 
       g_object_notify (G_OBJECT (label), "use-underline");
     }
@@ -1834,15 +1871,16 @@ gtk_label_set_use_underline_internal (GtkLabel *label,
 static void
 gtk_label_compose_effective_attrs (GtkLabel *label)
 {
+  GtkLabelPriv      *priv = label->priv;
   PangoAttrIterator *iter;
   PangoAttribute    *attr;
   GSList            *iter_attrs, *l;
 
-  if (label->attrs)
+  if (priv->attrs)
     {
-      if (label->effective_attrs)
+      if (priv->effective_attrs)
 	{
-	  if ((iter = pango_attr_list_get_iterator (label->attrs)))
+	  if ((iter = pango_attr_list_get_iterator (priv->attrs)))
 	    {
 	      do
 		{
@@ -1850,7 +1888,7 @@ gtk_label_compose_effective_attrs (GtkLabel *label)
 		  for (l = iter_attrs; l; l = l->next)
 		    {
 		      attr = l->data;
-		      pango_attr_list_insert (label->effective_attrs, attr);
+		      pango_attr_list_insert (priv->effective_attrs, attr);
 		    }
 		  g_slist_free (iter_attrs);
 	        }
@@ -1859,8 +1897,8 @@ gtk_label_compose_effective_attrs (GtkLabel *label)
 	    }
 	}
       else
-	label->effective_attrs =
-	  pango_attr_list_ref (label->attrs);
+	priv->effective_attrs =
+	  pango_attr_list_ref (priv->attrs);
     }
 }
 
@@ -1868,12 +1906,14 @@ static void
 gtk_label_set_attributes_internal (GtkLabel      *label,
 				   PangoAttrList *attrs)
 {
+  GtkLabelPriv *priv = label->priv;
+
   if (attrs)
     pango_attr_list_ref (attrs);
-  
-  if (label->attrs)
-    pango_attr_list_unref (label->attrs);
-  label->attrs = attrs;
+
+  if (priv->attrs)
+    pango_attr_list_unref (priv->attrs);
+  priv->attrs = attrs;
 
   g_object_notify (G_OBJECT (label), "attributes");
 }
@@ -1885,29 +1925,30 @@ gtk_label_set_attributes_internal (GtkLabel      *label,
 static void
 gtk_label_recalculate (GtkLabel *label)
 {
-  guint keyval = label->mnemonic_keyval;
+  GtkLabelPriv *priv = label->priv;
+  guint keyval = priv->mnemonic_keyval;
 
-  if (label->use_markup)
-    gtk_label_set_markup_internal (label, label->label, label->use_underline);
+  if (priv->use_markup)
+    gtk_label_set_markup_internal (label, priv->label, priv->use_underline);
   else
     {
-      if (label->use_underline)
-	gtk_label_set_uline_text_internal (label, label->label);
+      if (priv->use_underline)
+	gtk_label_set_uline_text_internal (label, priv->label);
       else
         {
-          if (label->effective_attrs)
-            pango_attr_list_unref (label->effective_attrs);
-          label->effective_attrs = NULL;
-          gtk_label_set_text_internal (label, g_strdup (label->label));
+          if (priv->effective_attrs)
+            pango_attr_list_unref (priv->effective_attrs);
+          priv->effective_attrs = NULL;
+          gtk_label_set_text_internal (label, g_strdup (priv->label));
         }
     }
 
   gtk_label_compose_effective_attrs (label);
 
-  if (!label->use_underline)
-    label->mnemonic_keyval = GDK_VoidSymbol;
+  if (!priv->use_underline)
+    priv->mnemonic_keyval = GDK_VoidSymbol;
 
-  if (keyval != label->mnemonic_keyval)
+  if (keyval != priv->mnemonic_keyval)
     {
       gtk_label_setup_mnemonic (label, keyval);
       g_object_notify (G_OBJECT (label), "mnemonic-keyval");
@@ -1992,7 +2033,7 @@ gtk_label_get_attributes (GtkLabel *label)
 {
   g_return_val_if_fail (GTK_IS_LABEL (label), NULL);
 
-  return label->attrs;
+  return label->priv->attrs;
 }
 
 /**
@@ -2035,7 +2076,7 @@ gtk_label_get_label (GtkLabel *label)
 {
   g_return_val_if_fail (GTK_IS_LABEL (label), NULL);
 
-  return label->label;
+  return label->priv->label;
 }
 
 typedef struct
@@ -2055,6 +2096,7 @@ start_element_handler (GMarkupParseContext  *context,
                        gpointer              user_data,
                        GError              **error)
 {
+  GtkLabelPriv *priv;
   UriParserData *pdata = user_data;
 
   if (strcmp (element_name, "a") == 0)
@@ -2102,10 +2144,11 @@ start_element_handler (GMarkupParseContext  *context,
         }
 
       visited = FALSE;
-      if (pdata->label->track_links && pdata->label->select_info)
+      priv = pdata->label->priv;
+      if (priv->track_links && priv->select_info)
         {
           GList *l;
-          for (l = pdata->label->select_info->links; l; l = l->next)
+          for (l = priv->select_info->links; l; l = l->next)
             {
               link = l->data;
               if (strcmp (uri, link->uri) == 0)
@@ -2305,10 +2348,11 @@ failed:
 static void
 gtk_label_ensure_has_tooltip (GtkLabel *label)
 {
+  GtkLabelPriv *priv = label->priv;
   GList *l;
   gboolean has_tooltip = FALSE;
 
-  for (l = label->select_info->links; l; l = l->next)
+  for (l = priv->select_info->links; l; l = l->next)
     {
       GtkLabelLink *link = l->data;
       if (link->title)
@@ -2326,7 +2370,7 @@ gtk_label_set_markup_internal (GtkLabel    *label,
                                const gchar *str,
                                gboolean     with_uline)
 {
-  GtkLabelPrivate *priv = GTK_LABEL_GET_PRIVATE (label);
+  GtkLabelPriv *priv = label->priv;
   gchar *text = NULL;
   GError *error = NULL;
   PangoAttrList *attrs = NULL;
@@ -2346,7 +2390,7 @@ gtk_label_set_markup_internal (GtkLabel    *label,
   if (links)
     {
       gtk_label_ensure_select_info (label);
-      label->select_info->links = links;
+      priv->select_info->links = links;
       gtk_label_ensure_has_tooltip (label);
     }
 
@@ -2363,8 +2407,8 @@ gtk_label_set_markup_internal (GtkLabel    *label,
       if (!(enable_mnemonics && priv->mnemonics_visible &&
             (!auto_mnemonics ||
              (gtk_widget_is_sensitive (GTK_WIDGET (label)) &&
-              (!label->mnemonic_widget ||
-               gtk_widget_is_sensitive (label->mnemonic_widget))))))
+              (!priv->mnemonic_widget ||
+               gtk_widget_is_sensitive (priv->mnemonic_widget))))))
         {
           gchar *tmp;
           gchar *pattern;
@@ -2401,15 +2445,15 @@ gtk_label_set_markup_internal (GtkLabel    *label,
 
   if (attrs)
     {
-      if (label->effective_attrs)
-	pango_attr_list_unref (label->effective_attrs);
-      label->effective_attrs = attrs;
+      if (priv->effective_attrs)
+	pango_attr_list_unref (priv->effective_attrs);
+      priv->effective_attrs = attrs;
     }
 
   if (accel_char != 0)
-    label->mnemonic_keyval = gdk_keyval_to_lower (gdk_unicode_to_keyval (accel_char));
+    priv->mnemonic_keyval = gdk_keyval_to_lower (gdk_unicode_to_keyval (accel_char));
   else
-    label->mnemonic_keyval = GDK_VoidSymbol;
+    priv->mnemonic_keyval = GDK_VoidSymbol;
 }
 
 /**
@@ -2433,8 +2477,12 @@ gtk_label_set_markup_internal (GtkLabel    *label,
 void
 gtk_label_set_markup (GtkLabel    *label,
                       const gchar *str)
-{  
+{
+  GtkLabelPriv *priv;
+
   g_return_if_fail (GTK_IS_LABEL (label));
+
+  priv = label->priv;
 
   g_object_freeze_notify (G_OBJECT (label));
 
@@ -2464,7 +2512,11 @@ void
 gtk_label_set_markup_with_mnemonic (GtkLabel    *label,
 				    const gchar *str)
 {
+  GtkLabelPriv *priv;
+
   g_return_if_fail (GTK_IS_LABEL (label));
+
+  priv = label->priv;
 
   g_object_freeze_notify (G_OBJECT (label));
 
@@ -2493,15 +2545,16 @@ gtk_label_get_text (GtkLabel *label)
 {
   g_return_val_if_fail (GTK_IS_LABEL (label), NULL);
 
-  return label->text;
+  return label->priv->text;
 }
 
 static PangoAttrList *
 gtk_label_pattern_to_attrs (GtkLabel      *label,
 			    const gchar   *pattern)
 {
+  GtkLabelPriv *priv = label->priv;
   const char *start;
-  const char *p = label->text;
+  const char *p = priv->text;
   const char *q = pattern;
   PangoAttrList *attrs;
 
@@ -2524,8 +2577,8 @@ gtk_label_pattern_to_attrs (GtkLabel      *label,
       if (p > start)
 	{
 	  PangoAttribute *attr = pango_attr_underline_new (PANGO_UNDERLINE_LOW);
-	  attr->start_index = start - label->text;
-	  attr->end_index = p - label->text;
+	  attr->start_index = start - priv->text;
+	  attr->end_index = p - priv->text;
 	  
 	  pango_attr_list_insert (attrs, attr);
 	}
@@ -2541,14 +2594,12 @@ gtk_label_set_pattern_internal (GtkLabel    *label,
 				const gchar *pattern,
                                 gboolean     is_mnemonic)
 {
-  GtkLabelPrivate *priv = GTK_LABEL_GET_PRIVATE (label);
+  GtkLabelPriv *priv = label->priv;
   PangoAttrList *attrs;
   gboolean enable_mnemonics;
   gboolean auto_mnemonics;
 
-  g_return_if_fail (GTK_IS_LABEL (label));
-
-  if (label->pattern_set)
+  if (priv->pattern_set)
     return;
 
   if (is_mnemonic)
@@ -2561,8 +2612,8 @@ gtk_label_set_pattern_internal (GtkLabel    *label,
       if (enable_mnemonics && priv->mnemonics_visible && pattern &&
           (!auto_mnemonics ||
            (gtk_widget_is_sensitive (GTK_WIDGET (label)) &&
-            (!label->mnemonic_widget ||
-             gtk_widget_is_sensitive (label->mnemonic_widget)))))
+            (!priv->mnemonic_widget ||
+             gtk_widget_is_sensitive (priv->mnemonic_widget)))))
         attrs = gtk_label_pattern_to_attrs (label, pattern);
       else
         attrs = NULL;
@@ -2570,23 +2621,27 @@ gtk_label_set_pattern_internal (GtkLabel    *label,
   else
     attrs = gtk_label_pattern_to_attrs (label, pattern);
 
-  if (label->effective_attrs)
-    pango_attr_list_unref (label->effective_attrs);
-  label->effective_attrs = attrs;
+  if (priv->effective_attrs)
+    pango_attr_list_unref (priv->effective_attrs);
+  priv->effective_attrs = attrs;
 }
 
 void
 gtk_label_set_pattern (GtkLabel	   *label,
 		       const gchar *pattern)
 {
+  GtkLabelPriv *priv = label->priv;
+
   g_return_if_fail (GTK_IS_LABEL (label));
-  
-  label->pattern_set = FALSE;
+
+  priv = label->priv;
+
+  priv->pattern_set = FALSE;
 
   if (pattern)
     {
       gtk_label_set_pattern_internal (label, pattern, FALSE);
-      label->pattern_set = TRUE;
+      priv->pattern_set = TRUE;
     }
   else
     gtk_label_recalculate (label);
@@ -2612,12 +2667,16 @@ void
 gtk_label_set_justify (GtkLabel        *label,
 		       GtkJustification jtype)
 {
+  GtkLabelPriv *priv;
+
   g_return_if_fail (GTK_IS_LABEL (label));
   g_return_if_fail (jtype >= GTK_JUSTIFY_LEFT && jtype <= GTK_JUSTIFY_FILL);
-  
-  if ((GtkJustification) label->jtype != jtype)
+
+  priv = label->priv;
+
+  if ((GtkJustification) priv->jtype != jtype)
     {
-      label->jtype = jtype;
+      priv->jtype = jtype;
 
       /* No real need to be this drastic, but easier than duplicating the code */
       gtk_label_clear_layout (label);
@@ -2640,7 +2699,7 @@ gtk_label_get_justify (GtkLabel *label)
 {
   g_return_val_if_fail (GTK_IS_LABEL (label), 0);
 
-  return label->jtype;
+  return label->priv->jtype;
 }
 
 /**
@@ -2657,12 +2716,16 @@ void
 gtk_label_set_ellipsize (GtkLabel          *label,
 			 PangoEllipsizeMode mode)
 {
+  GtkLabelPriv *priv;
+
   g_return_if_fail (GTK_IS_LABEL (label));
   g_return_if_fail (mode >= PANGO_ELLIPSIZE_NONE && mode <= PANGO_ELLIPSIZE_END);
-  
-  if ((PangoEllipsizeMode) label->ellipsize != mode)
+
+  priv = label->priv;
+
+  if ((PangoEllipsizeMode) priv->ellipsize != mode)
     {
-      label->ellipsize = mode;
+      priv->ellipsize = mode;
 
       /* No real need to be this drastic, but easier than duplicating the code */
       gtk_label_clear_layout (label);
@@ -2687,7 +2750,7 @@ gtk_label_get_ellipsize (GtkLabel *label)
 {
   g_return_val_if_fail (GTK_IS_LABEL (label), PANGO_ELLIPSIZE_NONE);
 
-  return label->ellipsize;
+  return label->priv->ellipsize;
 }
 
 /**
@@ -2703,11 +2766,11 @@ void
 gtk_label_set_width_chars (GtkLabel *label,
 			   gint      n_chars)
 {
-  GtkLabelPrivate *priv;
+  GtkLabelPriv *priv;
 
   g_return_if_fail (GTK_IS_LABEL (label));
 
-  priv = GTK_LABEL_GET_PRIVATE (label);
+  priv = label->priv;
 
   if (priv->width_chars != n_chars)
     {
@@ -2734,7 +2797,7 @@ gtk_label_get_width_chars (GtkLabel *label)
 {
   g_return_val_if_fail (GTK_IS_LABEL (label), -1);
 
-  return GTK_LABEL_GET_PRIVATE (label)->width_chars;
+  return label->priv->width_chars;
 }
 
 /**
@@ -2750,11 +2813,11 @@ void
 gtk_label_set_max_width_chars (GtkLabel *label,
 			       gint      n_chars)
 {
-  GtkLabelPrivate *priv;
+  GtkLabelPriv *priv;
 
   g_return_if_fail (GTK_IS_LABEL (label));
 
-  priv = GTK_LABEL_GET_PRIVATE (label);
+  priv = label->priv;
 
   if (priv->max_width_chars != n_chars)
     {
@@ -2782,7 +2845,7 @@ gtk_label_get_max_width_chars (GtkLabel *label)
 {
   g_return_val_if_fail (GTK_IS_LABEL (label), -1);
 
-  return GTK_LABEL_GET_PRIVATE (label)->max_width_chars;
+  return label->priv->max_width_chars;
 }
 
 /**
@@ -2804,13 +2867,17 @@ void
 gtk_label_set_line_wrap (GtkLabel *label,
 			 gboolean  wrap)
 {
+  GtkLabelPriv *priv;
+
   g_return_if_fail (GTK_IS_LABEL (label));
-  
+
+  priv = label->priv;
+
   wrap = wrap != FALSE;
-  
-  if (label->wrap != wrap)
+
+  if (priv->wrap != wrap)
     {
-      label->wrap = wrap;
+      priv->wrap = wrap;
 
       gtk_label_clear_layout (label);
       gtk_widget_queue_resize (GTK_WIDGET (label));
@@ -2832,7 +2899,7 @@ gtk_label_get_line_wrap (GtkLabel *label)
 {
   g_return_val_if_fail (GTK_IS_LABEL (label), FALSE);
 
-  return label->wrap;
+  return label->priv->wrap;
 }
 
 /**
@@ -2850,11 +2917,15 @@ void
 gtk_label_set_line_wrap_mode (GtkLabel *label,
 			      PangoWrapMode wrap_mode)
 {
+  GtkLabelPriv *priv;
+
   g_return_if_fail (GTK_IS_LABEL (label));
-  
-  if (label->wrap_mode != wrap_mode)
+
+  priv = label->priv;
+
+  if (priv->wrap_mode != wrap_mode)
     {
-      label->wrap_mode = wrap_mode;
+      priv->wrap_mode = wrap_mode;
       g_object_notify (G_OBJECT (label), "wrap-mode");
       
       gtk_widget_queue_resize (GTK_WIDGET (label));
@@ -2876,7 +2947,7 @@ gtk_label_get_line_wrap_mode (GtkLabel *label)
 {
   g_return_val_if_fail (GTK_IS_LABEL (label), FALSE);
 
-  return label->wrap_mode;
+  return label->priv->wrap_mode;
 }
 
 static void
@@ -2893,21 +2964,22 @@ static void
 gtk_label_finalize (GObject *object)
 {
   GtkLabel *label = GTK_LABEL (object);
+  GtkLabelPriv *priv = label->priv;
 
-  g_free (label->label);
-  g_free (label->text);
+  g_free (priv->label);
+  g_free (priv->text);
 
-  if (label->layout)
-    g_object_unref (label->layout);
+  if (priv->layout)
+    g_object_unref (priv->layout);
 
-  if (label->attrs)
-    pango_attr_list_unref (label->attrs);
+  if (priv->attrs)
+    pango_attr_list_unref (priv->attrs);
 
-  if (label->effective_attrs)
-    pango_attr_list_unref (label->effective_attrs);
+  if (priv->effective_attrs)
+    pango_attr_list_unref (priv->effective_attrs);
 
   gtk_label_clear_links (label);
-  g_free (label->select_info);
+  g_free (priv->select_info);
 
   G_OBJECT_CLASS (gtk_label_parent_class)->finalize (object);
 }
@@ -2915,10 +2987,12 @@ gtk_label_finalize (GObject *object)
 static void
 gtk_label_clear_layout (GtkLabel *label)
 {
-  if (label->layout)
+  GtkLabelPriv *priv = label->priv;
+
+  if (priv->layout)
     {
-      g_object_unref (label->layout);
-      label->layout = NULL;
+      g_object_unref (priv->layout);
+      priv->layout = NULL;
 
       //gtk_label_clear_links (label);
     }
@@ -2931,17 +3005,17 @@ get_label_width (GtkLabel *label,
 		 gint     *natural)
 {
   GtkWidgetAuxInfo *aux_info;
-  GtkLabelPrivate  *priv;
+  GtkLabelPriv     *priv;
   PangoLayout      *layout;
   PangoContext     *context;
   PangoFontMetrics *metrics;
   PangoRectangle    rect;
   gint              char_width, digit_width, char_pixels, text_width, ellipsize_chars, guess_width;
 
-  priv     = GTK_LABEL_GET_PRIVATE (label);
+  priv     = label->priv;
   aux_info = _gtk_widget_get_aux_info (GTK_WIDGET (label), FALSE);
 
-  layout  = pango_layout_copy (label->layout);
+  layout  = pango_layout_copy (priv->layout);
   context = pango_layout_get_context (layout);
   metrics = pango_context_get_metrics (context, GTK_WIDGET (label)->style->font_desc, 
 				       pango_context_get_language (context));
@@ -2957,22 +3031,22 @@ get_label_width (GtkLabel *label,
   text_width = rect.width;
 
   /* Fetch the width that was guessed by gtk_label_ensure_layout() */
-  pango_layout_get_extents (label->layout, NULL, &rect);
+  pango_layout_get_extents (priv->layout, NULL, &rect);
   guess_width = rect.width;
 
   /* enforce minimum width for ellipsized labels at ~3 chars */
-  if (label->ellipsize)
+  if (priv->ellipsize)
     ellipsize_chars = 3;
   else
     ellipsize_chars = 0;
 
   /* "width-chars" Hard-coded minimum width: 
    *    - minimum size should be MAX (width-chars, strlen ("..."));
-   *    - natural size should be MAX (width-chars, strlen (label->text));
+   *    - natural size should be MAX (width-chars, strlen (priv->text));
    *
    * "max-width-chars" User specified maximum size requisition
    *    - minimum size should be MAX (width-chars, 0)
-   *    - natural size should be MIN (max-width-chars, strlen (label->text))
+   *    - natural size should be MIN (max-width-chars, strlen (priv->text))
    *
    *    For ellipsizing labels; if max-width-chars is specified: either it is used as 
    *    a minimum size or the label text as a minimum size (natural size still overflows).
@@ -2985,7 +3059,7 @@ get_label_width (GtkLabel *label,
    *    request was provided.
    */
 
-  if (label->ellipsize || label->wrap)
+  if (priv->ellipsize || priv->wrap)
     {
       *minimum = char_pixels * MAX (priv->width_chars, ellipsize_chars);
 
@@ -2995,7 +3069,7 @@ get_label_width (GtkLabel *label,
        * Note that when specifying a small width_chars for a long text;
        * an accordingly large size will be required for the label height.
        */
-      if (label->wrap && priv->width_chars <= 0)
+      if (priv->wrap && priv->width_chars <= 0)
 	*minimum = guess_width;
 
       if (priv->max_width_chars < 0)
@@ -3011,7 +3085,7 @@ get_label_width (GtkLabel *label,
 	   * ellipsized text crawl up to the max-char-width
 	   * (note that we dont want to limit the minimum width for wrapping text).
 	   */
-	  if (label->ellipsize)
+	  if (priv->ellipsize)
 	    *minimum = MIN (text_width, max_width);
 
 	  *natural = MAX (*minimum, max_width);
@@ -3024,7 +3098,7 @@ get_label_width (GtkLabel *label,
     }
 
   /* if a width-request is set, use that as the requested label width */
-  if ((label->wrap || label->ellipsize || priv->width_chars > 0 || priv->max_width_chars > 0) &&
+  if ((priv->wrap || priv->ellipsize || priv->width_chars > 0 || priv->max_width_chars > 0) &&
       aux_info && aux_info->width > 0)
     {
       *minimum = aux_info->width * PANGO_SCALE;
@@ -3037,9 +3111,7 @@ get_label_width (GtkLabel *label,
 static void
 gtk_label_invalidate_wrap_width (GtkLabel *label)
 {
-  GtkLabelPrivate *priv;
-
-  priv = GTK_LABEL_GET_PRIVATE (label);
+  GtkLabelPriv *priv = label->priv;
 
   priv->wrap_width = -1;
 }
@@ -3047,10 +3119,8 @@ gtk_label_invalidate_wrap_width (GtkLabel *label)
 static gint
 get_label_wrap_width (GtkLabel *label)
 {
-  GtkLabelPrivate *priv;
+  GtkLabelPriv *priv = label->priv;
 
-  priv = GTK_LABEL_GET_PRIVATE (label);
-  
   if (priv->wrap_width < 0)
     {
       if (priv->width_chars > 0)
@@ -3061,7 +3131,7 @@ get_label_wrap_width (GtkLabel *label)
 	  PangoRectangle    rect;
 	  gint              char_width, digit_width, char_pixels, text_width;
 
-	  layout  = pango_layout_copy (label->layout);
+	  layout  = pango_layout_copy (priv->layout);
 	  context = pango_layout_get_context (layout);
 	  metrics = pango_context_get_metrics (context, GTK_WIDGET (label)->style->font_desc, 
 					       pango_context_get_language (context));
@@ -3096,6 +3166,7 @@ get_label_wrap_width (GtkLabel *label)
 static void
 gtk_label_ensure_layout (GtkLabel *label, gboolean guess_wrap_width)
 {
+  GtkLabelPriv *priv = label->priv;
   GtkWidget *widget;
   PangoRectangle logical_rect;
   gboolean rtl;
@@ -3104,12 +3175,12 @@ gtk_label_ensure_layout (GtkLabel *label, gboolean guess_wrap_width)
 
   rtl = gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL;
 
-  if (!label->layout)
+  if (!priv->layout)
     {
       PangoAlignment align = PANGO_ALIGN_LEFT; /* Quiet gcc */
       gdouble angle = gtk_label_get_angle (label);
 
-      if (angle != 0.0 && !label->select_info)
+      if (angle != 0.0 && !priv->select_info)
 	{
           PangoMatrix matrix = PANGO_MATRIX_INIT;
 
@@ -3120,25 +3191,25 @@ gtk_label_ensure_layout (GtkLabel *label, gboolean guess_wrap_width)
 	  pango_matrix_rotate (&matrix, angle);
 
 	  pango_context_set_matrix (gtk_widget_get_pango_context (widget), &matrix);
-	  
-	  label->have_transform = TRUE;
+
+	  priv->have_transform = TRUE;
 	}
-      else 
+      else
 	{
-	  if (label->have_transform)
+	  if (priv->have_transform)
 	    pango_context_set_matrix (gtk_widget_get_pango_context (widget), NULL);
 
-	  label->have_transform = FALSE;
+	  priv->have_transform = FALSE;
 	}
 
-      label->layout = gtk_widget_create_pango_layout (widget, label->text);
+      priv->layout = gtk_widget_create_pango_layout (widget, priv->text);
 
-      if (label->effective_attrs)
-	pango_layout_set_attributes (label->layout, label->effective_attrs);
+      if (priv->effective_attrs)
+	pango_layout_set_attributes (priv->layout, priv->effective_attrs);
 
       gtk_label_rescan_links (label);
 
-      switch (label->jtype)
+      switch (priv->jtype)
 	{
 	case GTK_JUSTIFY_LEFT:
 	  align = rtl ? PANGO_ALIGN_RIGHT : PANGO_ALIGN_LEFT;
@@ -3151,20 +3222,20 @@ gtk_label_ensure_layout (GtkLabel *label, gboolean guess_wrap_width)
 	  break;
 	case GTK_JUSTIFY_FILL:
 	  align = rtl ? PANGO_ALIGN_RIGHT : PANGO_ALIGN_LEFT;
-	  pango_layout_set_justify (label->layout, TRUE);
+	  pango_layout_set_justify (priv->layout, TRUE);
 	  break;
 	default:
 	  g_assert_not_reached();
 	}
 
-      pango_layout_set_alignment (label->layout, align);
-      pango_layout_set_ellipsize (label->layout, label->ellipsize);
-      pango_layout_set_single_paragraph_mode (label->layout, label->single_line_mode);
+      pango_layout_set_alignment (priv->layout, align);
+      pango_layout_set_ellipsize (priv->layout, priv->ellipsize);
+      pango_layout_set_single_paragraph_mode (priv->layout, priv->single_line_mode);
 
-      if (label->ellipsize)
-        pango_layout_set_width (label->layout,
+      if (priv->ellipsize)
+        pango_layout_set_width (priv->layout,
                                 widget->allocation.width * PANGO_SCALE);
-      else if (label->wrap)
+      else if (priv->wrap)
 	{
 	  GtkWidgetAuxInfo *aux_info = _gtk_widget_get_aux_info (widget, FALSE);
 	  gint longest_paragraph;
@@ -3177,25 +3248,28 @@ gtk_label_ensure_layout (GtkLabel *label, gboolean guess_wrap_width)
 	    aux_width = aux_info->width;
 
  	  if (aux_width > 0)
-	    pango_layout_set_width (label->layout, aux_width * PANGO_SCALE);
+	    pango_layout_set_width (priv->layout, aux_width * PANGO_SCALE);
 	  else if (guess_wrap_width == FALSE &&
 		   widget->allocation.width > 1 && widget->allocation.height > 1)
  	    {
-	      if (angle == 90 || angle == 270)
-		width = widget->allocation.height - label->misc.ypad * 2;
-	      else
-		width = widget->allocation.width  - label->misc.xpad * 2;
+              gint xpad, ypad;
+              gtk_misc_get_padding (GTK_MISC (label), &xpad, &ypad);
 
-	      pango_layout_set_wrap (label->layout, label->wrap_mode);
-	      pango_layout_set_width (label->layout, MAX (width, 1) * PANGO_SCALE);
+	      if (angle == 90 || angle == 270)
+		width = widget->allocation.height - ypad * 2;
+	      else
+		width = widget->allocation.width  - xpad * 2;
+
+	      pango_layout_set_wrap (priv->layout, priv->wrap_mode);
+	      pango_layout_set_width (priv->layout, MAX (width, 1) * PANGO_SCALE);
  	    }
 	  else
 	    {
 	      GdkScreen *screen = gtk_widget_get_screen (GTK_WIDGET (label));
 	      gint wrap_width;
-	      
-	      pango_layout_set_width (label->layout, -1);
-	      pango_layout_get_extents (label->layout, NULL, &logical_rect);
+
+	      pango_layout_set_width (priv->layout, -1);
+	      pango_layout_get_extents (priv->layout, NULL, &logical_rect);
 
 	      width = logical_rect.width;
 	      /* Try to guess a reasonable maximum width */
@@ -3206,8 +3280,8 @@ gtk_label_ensure_layout (GtkLabel *label, gboolean guess_wrap_width)
 	      width = MIN (width,
 			   PANGO_SCALE * (gdk_screen_get_width (screen) + 1) / 2);
 
-	      pango_layout_set_width (label->layout, width);
-	      pango_layout_get_extents (label->layout, NULL, &logical_rect);
+	      pango_layout_set_width (priv->layout, width);
+	      pango_layout_get_extents (priv->layout, NULL, &logical_rect);
 	      width = logical_rect.width;
 	      height = logical_rect.height;
 
@@ -3217,15 +3291,15 @@ gtk_label_ensure_layout (GtkLabel *label, gboolean guess_wrap_width)
 	      if (longest_paragraph > 0)
 		{
 		  gint nlines, perfect_width;
-		  
-		  nlines = pango_layout_get_line_count (label->layout);
+
+		  nlines = pango_layout_get_line_count (priv->layout);
 		  perfect_width = (longest_paragraph + nlines - 1) / nlines;
 		  
 		  if (perfect_width < width)
 		    {
-		      pango_layout_set_width (label->layout, perfect_width);
-		      pango_layout_get_extents (label->layout, NULL, &logical_rect);
-		      
+		      pango_layout_set_width (priv->layout, perfect_width);
+		      pango_layout_get_extents (priv->layout, NULL, &logical_rect);
+
 		      if (logical_rect.height <= height)
 			width = logical_rect.width;
 		      else
@@ -3234,20 +3308,20 @@ gtk_label_ensure_layout (GtkLabel *label, gboolean guess_wrap_width)
 			  
 			  if (mid_width > perfect_width)
 			    {
-			      pango_layout_set_width (label->layout, mid_width);
-			      pango_layout_get_extents (label->layout, NULL, &logical_rect);
-			      
+			      pango_layout_set_width (priv->layout, mid_width);
+			      pango_layout_get_extents (priv->layout, NULL, &logical_rect);
+
 			      if (logical_rect.height <= height)
 				width = logical_rect.width;
 			    }
 			}
 		    }
 		}
-	      pango_layout_set_width (label->layout, width);
+	      pango_layout_set_width (priv->layout, width);
 	    }
 	}
-      else /* !label->wrap */
-	pango_layout_set_width (label->layout, -1);
+      else /* !priv->wrap */
+	pango_layout_set_width (priv->layout, -1);
     }
 }
 
@@ -3299,6 +3373,7 @@ get_size_for_allocation (GtkLabel        *label,
                          gint            *minimum_size,
                          gint            *natural_size)
 {
+  GtkLabelPriv *priv = label->priv;
   PangoLayout *layout;
   GtkWidgetAuxInfo *aux_info =
     _gtk_widget_get_aux_info (GTK_WIDGET (label), FALSE);
@@ -3306,7 +3381,7 @@ get_size_for_allocation (GtkLabel        *label,
   gint text_height;
 
   gtk_label_ensure_layout (label, FALSE);
-  layout = pango_layout_copy (label->layout);
+  layout = pango_layout_copy (priv->layout);
 
   if (aux_info)
     {
@@ -3341,34 +3416,36 @@ gtk_label_get_size (GtkSizeRequest *widget,
 		    gint           *natural_size)
 {
   GtkLabel      *label = GTK_LABEL (widget);
+  GtkLabelPriv  *priv = label->priv;
   PangoRectangle required_rect;
   PangoRectangle natural_rect;
   gdouble        angle;
+  gint           xpad, ypad;
 
   /* "width-chars" Hard-coded minimum width:
    *    - minimum size should be MAX (width-chars, strlen ("..."));
-   *    - natural size should be MAX (width-chars, strlen (label->text));
+   *    - natural size should be MAX (width-chars, strlen (priv->text));
    *
    * "max-width-chars" User specified maximum size requisition
    *    - minimum size should be MAX (width-chars, 0)
-   *    - natural size should be MIN (max-width-chars, strlen (label->text))
+   *    - natural size should be MIN (max-width-chars, strlen (priv->text))
    *
    */
 
   /* When calculating ->wrap sometimes we need to invent a size; Ideally we should be doing
    * that stuff here instead of inside gtk_label_ensure_layout() */
-  if (label->wrap)
+  if (priv->wrap)
     gtk_label_clear_layout (label);
   gtk_label_ensure_layout (label, TRUE);
 
   angle = gtk_label_get_angle (label);
 
   /* Start off with the pixel extents of the rendered layout */
-  pango_layout_get_extents (label->layout, NULL, &required_rect);
+  pango_layout_get_extents (priv->layout, NULL, &required_rect);
   required_rect.x = required_rect.y = 0;
 
-  if (label->single_line_mode || label->wrap)
-    required_rect.height = get_single_line_height (GTK_WIDGET (label), label->layout);
+  if (priv->single_line_mode || priv->wrap)
+    required_rect.height = get_single_line_height (GTK_WIDGET (label), priv->layout);
 
   natural_rect = required_rect;
 
@@ -3376,10 +3453,10 @@ gtk_label_get_size (GtkSizeRequest *widget,
   get_label_width (label, &required_rect.width, &natural_rect.width);
 
   /* Now that we have minimum and natural sizes in pango extents, apply a possible transform */
-  if (label->have_transform)
+  if (priv->have_transform)
     {
-      PangoLayout       *layout  = pango_layout_copy (label->layout);
-      PangoContext      *context = pango_layout_get_context (label->layout);
+      PangoLayout       *layout  = pango_layout_copy (priv->layout);
+      PangoContext      *context = pango_layout_get_context (priv->layout);
       const PangoMatrix *matrix  = pango_context_get_matrix (context);
 
       pango_layout_set_width (layout, -1);
@@ -3396,7 +3473,7 @@ gtk_label_get_size (GtkSizeRequest *widget,
        * layout to not ellipsize when we know we have been allocated our
        * full natural size, or it may be that pango needs a fix here).
        */
-      if (label->ellipsize && angle != 0 && angle != 90 && angle != 180 && angle != 270 && angle != 360)
+      if (priv->ellipsize && angle != 0 && angle != 90 && angle != 180 && angle != 270 && angle != 360)
         {
           /* For some reason we only need this at about 110 degrees, and only
            * when gaining in height
@@ -3412,12 +3489,14 @@ gtk_label_get_size (GtkSizeRequest *widget,
   natural_rect.width  = PANGO_PIXELS_CEIL (natural_rect.width);
   natural_rect.height = PANGO_PIXELS_CEIL (natural_rect.height);
 
+  gtk_misc_get_padding (GTK_MISC (label), &xpad, &ypad);
+
   if (orientation == GTK_ORIENTATION_HORIZONTAL)
     {
       /* Note, we cant use get_size_for_allocation() when rotating
        * ellipsized labels.
        */
-      if (!(label->ellipsize && label->have_transform) &&
+      if (!(priv->ellipsize && priv->have_transform) &&
           (angle == 90 || angle == 270))
         {
           /* Doing a h4w request on a rotated label here, return the
@@ -3436,15 +3515,15 @@ gtk_label_get_size (GtkSizeRequest *widget,
           *natural_size = natural_rect.width;
         }
 
-      *minimum_size += label->misc.xpad * 2;
-      *natural_size += label->misc.xpad * 2;
+      *minimum_size += xpad * 2;
+      *natural_size += xpad * 2;
     }
   else /* GTK_ORIENTATION_VERTICAL */
     {
       /* Note, we cant use get_size_for_allocation() when rotating
        * ellipsized labels.
        */
-      if (!(label->ellipsize && label->have_transform) &&
+      if (!(priv->ellipsize && priv->have_transform) &&
           (angle == 0 || angle == 180))
         {
           /* Doing a w4h request on a label here, return the required
@@ -3464,8 +3543,8 @@ gtk_label_get_size (GtkSizeRequest *widget,
           *natural_size = natural_rect.height;
         }
 
-      *minimum_size += label->misc.ypad * 2;
-      *natural_size += label->misc.ypad * 2;
+      *minimum_size += ypad * 2;
+      *natural_size += ypad * 2;
     }
 
   /* Restore real allocated size of layout; sometimes size-requests
@@ -3473,7 +3552,7 @@ gtk_label_get_size (GtkSizeRequest *widget,
    * we need to make sure we dont have a mucked up layout because we
    * went and guessed the wrap-size.
    */
-  if (label->wrap)
+  if (priv->wrap)
     gtk_label_clear_layout (label);
   gtk_label_ensure_layout (label, FALSE);
 
@@ -3503,22 +3582,27 @@ gtk_label_get_width_for_height (GtkSizeRequest *widget,
                                 gint           *natural_width)
 {
   GtkLabel *label = GTK_LABEL (widget);
+  GtkLabelPriv *priv = label->priv;
   gdouble angle = gtk_label_get_angle (label);
 
-  if (label->wrap && (angle == 90 || angle == 270))
+  if (priv->wrap && (angle == 90 || angle == 270))
     {
-      if (label->wrap)
+      gint xpad, ypad;
+
+      gtk_misc_get_padding (GTK_MISC (label), &xpad, &ypad);
+
+      if (priv->wrap)
         gtk_label_clear_layout (label);
 
       get_size_for_allocation (label, GTK_ORIENTATION_VERTICAL,
-                               MAX (1, height - (label->misc.ypad * 2)),
+                               MAX (1, height - (ypad * 2)),
                                minimum_width, natural_width);
 
       if (minimum_width)
-        *minimum_width += label->misc.xpad * 2;
+        *minimum_width += xpad * 2;
 
       if (natural_width)
-        *natural_width += label->misc.xpad * 2;
+        *natural_width += xpad * 2;
     }
   else
     GTK_SIZE_REQUEST_GET_IFACE (widget)->get_width (widget, minimum_width, natural_width);
@@ -3531,22 +3615,27 @@ gtk_label_get_height_for_width (GtkSizeRequest *widget,
                                 gint           *natural_height)
 {
   GtkLabel *label = GTK_LABEL (widget);
+  GtkLabelPriv *priv = label->priv;
   gdouble angle = gtk_label_get_angle (label);
 
-  if (label->wrap && (angle == 0 || angle == 180 || angle == 360))
+  if (priv->wrap && (angle == 0 || angle == 180 || angle == 360))
     {
-      if (label->wrap)
+      gint xpad, ypad;
+
+      gtk_misc_get_padding (GTK_MISC (label), &xpad, &ypad);
+
+      if (priv->wrap)
         gtk_label_clear_layout (label);
 
       get_size_for_allocation (label, GTK_ORIENTATION_HORIZONTAL,
-                               MAX (1, width - label->misc.xpad * 2),
+                               MAX (1, width - xpad * 2),
                                minimum_height, natural_height);
 
       if (minimum_height)
-        *minimum_height += label->misc.ypad * 2;
+        *minimum_height += ypad * 2;
 
       if (natural_height)
-        *natural_height += label->misc.ypad * 2;
+        *natural_height += ypad * 2;
     }
   else
     GTK_SIZE_REQUEST_GET_IFACE (widget)->get_height (widget, minimum_height, natural_height);
@@ -3556,35 +3645,37 @@ static void
 gtk_label_size_allocate (GtkWidget     *widget,
                          GtkAllocation *allocation)
 {
-  GtkLabel *label;
-
-  label = GTK_LABEL (widget);
+  GtkLabel *label = GTK_LABEL (widget);
+  GtkLabelPriv *priv = label->priv;
 
   GTK_WIDGET_CLASS (gtk_label_parent_class)->size_allocate (widget, allocation);
 
   /* The layout may have been recently cleared in get_size_for_orientation(),
    * but the width at that point may not be the same as the allocated width
    */
-  if (label->wrap)
+  if (priv->wrap)
     gtk_label_clear_layout (label);
 
   gtk_label_ensure_layout (label, FALSE);
 
-  if (label->ellipsize)
+  if (priv->ellipsize)
     {
-      if (label->layout)
+      if (priv->layout)
         {
           PangoRectangle logical;
           PangoRectangle bounds;
+          gint xpad, ypad;
+
+          gtk_misc_get_padding (GTK_MISC (label), &xpad, &ypad);
 
           bounds.x = bounds.y = 0;
-          bounds.width = allocation->width - label->misc.xpad * 2;
-          bounds.height = allocation->height - label->misc.ypad * 2;
+          bounds.width = allocation->width - xpad * 2;
+          bounds.height = allocation->height - ypad * 2;
 
-          pango_layout_set_width (label->layout, -1);
-          pango_layout_get_pixel_extents (label->layout, NULL, &logical);
+          pango_layout_set_width (priv->layout, -1);
+          pango_layout_get_pixel_extents (priv->layout, NULL, &logical);
 
-          if (label->have_transform)
+          if (priv->have_transform)
             {
               PangoContext *context = gtk_widget_get_pango_context (widget);
               const PangoMatrix *matrix = pango_context_get_matrix (context);
@@ -3594,12 +3685,12 @@ gtk_label_size_allocate (GtkWidget     *widget,
               if (fabs (dy) < 0.01)
                 {
                   if (logical.width > bounds.width)
-                    pango_layout_set_width (label->layout, bounds.width * PANGO_SCALE);
+                    pango_layout_set_width (priv->layout, bounds.width * PANGO_SCALE);
                 }
               else if (fabs (dx) < 0.01)
                 {
                   if (logical.width > bounds.height)
-                    pango_layout_set_width (label->layout, bounds.height * PANGO_SCALE);
+                    pango_layout_set_width (priv->layout, bounds.height * PANGO_SCALE);
                 }
               else
                 {
@@ -3618,8 +3709,8 @@ gtk_label_size_allocate (GtkWidget     *widget,
                     }
 
                   length = 2 * sqrt (x0 * x0 + y0 * y0);
-                  pango_layout_set_width (label->layout, rint (length * PANGO_SCALE));
-                  pango_layout_get_pixel_size (label->layout, NULL, &cy);
+                  pango_layout_set_width (priv->layout, rint (length * PANGO_SCALE));
+                  pango_layout_get_pixel_size (priv->layout, NULL, &cy);
 
                   x1 = +dy * cy/2;
                   y1 = -dx * cy/2;
@@ -3636,17 +3727,17 @@ gtk_label_size_allocate (GtkWidget     *widget,
                     }
  
                   length = length - sqrt (x0 * x0 + y0 * y0) * 2;
-                  pango_layout_set_width (label->layout, rint (length * PANGO_SCALE));
+                  pango_layout_set_width (priv->layout, rint (length * PANGO_SCALE));
                 }
             }
           else if (logical.width > bounds.width)
-            pango_layout_set_width (label->layout, bounds.width * PANGO_SCALE);
+            pango_layout_set_width (priv->layout, bounds.width * PANGO_SCALE);
         }
     }
 
-  if (label->select_info && label->select_info->window)
+  if (priv->select_info && priv->select_info->window)
     {
-      gdk_window_move_resize (label->select_info->window,
+      gdk_window_move_resize (priv->select_info->window,
                               allocation->x,
                               allocation->y,
                               allocation->width,
@@ -3657,9 +3748,10 @@ gtk_label_size_allocate (GtkWidget     *widget,
 static void
 gtk_label_update_cursor (GtkLabel *label)
 {
+  GtkLabelPriv *priv = label->priv;
   GtkWidget *widget;
 
-  if (!label->select_info)
+  if (!priv->select_info)
     return;
 
   widget = GTK_WIDGET (label);
@@ -3673,9 +3765,9 @@ gtk_label_update_cursor (GtkLabel *label)
         {
           display = gtk_widget_get_display (widget);
 
-          if (label->select_info->active_link)
+          if (priv->select_info->active_link)
             cursor = gdk_cursor_new_for_display (display, GDK_HAND2);
-          else if (label->select_info->selectable)
+          else if (priv->select_info->selectable)
             cursor = gdk_cursor_new_for_display (display, GDK_XTERM);
           else
             cursor = NULL;
@@ -3683,7 +3775,7 @@ gtk_label_update_cursor (GtkLabel *label)
       else
         cursor = NULL;
 
-      gdk_window_set_cursor (label->select_info->window, cursor);
+      gdk_window_set_cursor (priv->select_info->window, cursor);
 
       if (cursor)
         gdk_cursor_unref (cursor);
@@ -3695,8 +3787,9 @@ gtk_label_state_changed (GtkWidget   *widget,
                          GtkStateType prev_state)
 {
   GtkLabel *label = GTK_LABEL (widget);
+  GtkLabelPriv *priv = label->priv;
 
-  if (label->select_info)
+  if (priv->select_info)
     {
       gtk_label_select_region (label, 0, 0);
       gtk_label_update_cursor (label);
@@ -3722,9 +3815,10 @@ gtk_label_direction_changed (GtkWidget        *widget,
 			     GtkTextDirection previous_dir)
 {
   GtkLabel *label = GTK_LABEL (widget);
+  GtkLabelPriv *priv = label->priv;
 
-  if (label->layout)
-    pango_layout_context_changed (label->layout);
+  if (priv->layout)
+    pango_layout_context_changed (priv->layout);
 
   GTK_WIDGET_CLASS (gtk_label_parent_class)->direction_changed (widget, previous_dir);
 }
@@ -3736,38 +3830,40 @@ get_layout_location (GtkLabel  *label,
 {
   GtkMisc *misc;
   GtkWidget *widget;
-  GtkLabelPrivate *priv;
-  gfloat xalign;
+  GtkLabelPriv *priv;
   gint req_width, x, y;
   gint req_height;
+  gint xpad, ypad;
+  gfloat xalign, yalign;
   PangoRectangle logical;
   gdouble angle;
 
   misc   = GTK_MISC (label);
   widget = GTK_WIDGET (label);
-  priv   = GTK_LABEL_GET_PRIVATE (label);
+  priv   = label->priv;
   angle  = gtk_label_get_angle (label);
 
-  if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_LTR)
-    xalign = misc->xalign;
-  else
-    xalign = 1.0 - misc->xalign;
+  gtk_misc_get_alignment (misc, &xalign, &yalign);
+  gtk_misc_get_padding (misc, &xpad, &ypad);
 
-  pango_layout_get_extents (label->layout, NULL, &logical);
+  if (gtk_widget_get_direction (widget) != GTK_TEXT_DIR_LTR)
+    xalign = 1.0 - xalign;
+
+  pango_layout_get_extents (priv->layout, NULL, &logical);
 
   /* Do the wrap width delimiting before the transform
    */
-  if (label->wrap || label->ellipsize || priv->width_chars > 0)
+  if (priv->wrap || priv->ellipsize || priv->width_chars > 0)
     {
       int width;
 
-      width = pango_layout_get_width (label->layout);
+      width = pango_layout_get_width (priv->layout);
 
       if (width != -1)
 	logical.width = MIN (width, logical.width);
     }
 
-  if (label->have_transform)
+  if (priv->have_transform)
     {
       PangoContext *context = gtk_widget_get_pango_context (widget);
       const PangoMatrix *matrix = pango_context_get_matrix (context);
@@ -3779,16 +3875,16 @@ get_layout_location (GtkLabel  *label,
   req_width  = logical.width;
   req_height = logical.height;
 
-  req_width  += 2 * misc->xpad;
-  req_height += 2 * misc->ypad;
+  req_width  += 2 * xpad;
+  req_height += 2 * ypad;
 
-  x = floor (widget->allocation.x + (gint)misc->xpad +
-	      xalign * (widget->allocation.width - req_width));
+  x = floor (widget->allocation.x + xpad +
+	     xalign * (widget->allocation.width - req_width));
 
   if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_LTR)
-    x = MAX (x, widget->allocation.x + misc->xpad);
+    x = MAX (x, widget->allocation.x + xpad);
   else
-    x = MIN (x, widget->allocation.x + widget->allocation.width - misc->xpad);
+    x = MIN (x, widget->allocation.x + widget->allocation.width - xpad);
 
 
 
@@ -3806,13 +3902,16 @@ get_layout_location (GtkLabel  *label,
    * - Multi-line labels should not be clipped to showing "something in the
    *   middle".  You want to read the first line, at least, to get some context.
    */
-  if (pango_layout_get_line_count (label->layout) == 1)
-    y = floor (widget->allocation.y + (gint)misc->ypad 
-	       + (widget->allocation.height - req_height) * misc->yalign);
+  if (pango_layout_get_line_count (priv->layout) == 1)
+    {
+      y = floor (widget->allocation.y + ypad
+                 + (widget->allocation.height - req_height) * yalign);
+    }
   else
-    y = floor (widget->allocation.y + (gint)misc->ypad 
-	       + MAX (((widget->allocation.height - req_height) * misc->yalign),
-		      0));
+    {
+      y = floor (widget->allocation.y + ypad
+                 + MAX ((widget->allocation.height - req_height) * yalign, 0));
+    }
 
   if (xp)
     *xp = x;
@@ -3844,24 +3943,25 @@ draw_insertion_cursor (GtkLabel      *label,
 static PangoDirection
 get_cursor_direction (GtkLabel *label)
 {
+  GtkLabelPriv *priv = label->priv;
   GSList *l;
 
-  g_assert (label->select_info);
+  g_assert (priv->select_info);
 
   gtk_label_ensure_layout (label, FALSE);
 
-  for (l = pango_layout_get_lines_readonly (label->layout); l; l = l->next)
+  for (l = pango_layout_get_lines_readonly (priv->layout); l; l = l->next)
     {
       PangoLayoutLine *line = l->data;
 
-      /* If label->select_info->selection_end is at the very end of
+      /* If priv->select_info->selection_end is at the very end of
        * the line, we don't know if the cursor is on this line or
        * the next without looking ahead at the next line. (End
        * of paragraph is different from line break.) But it's
        * definitely in this paragraph, which is good enough
        * to figure out the resolved direction.
        */
-       if (line->start_index + line->length >= label->select_info->selection_end)
+       if (line->start_index + line->length >= priv->select_info->selection_end)
 	return line->resolved_dir;
     }
 
@@ -3871,9 +3971,10 @@ get_cursor_direction (GtkLabel *label)
 static void
 gtk_label_draw_cursor (GtkLabel  *label, gint xoffset, gint yoffset)
 {
+  GtkLabelPriv *priv = label->priv;
   GtkWidget *widget;
 
-  if (label->select_info == NULL)
+  if (priv->select_info == NULL)
     return;
 
   widget = GTK_WIDGET (label);
@@ -3895,7 +3996,7 @@ gtk_label_draw_cursor (GtkLabel  *label, gint xoffset, gint yoffset)
 
       gtk_label_ensure_layout (label, FALSE);
       
-      pango_layout_get_cursor_pos (label->layout, label->select_info->selection_end,
+      pango_layout_get_cursor_pos (priv->layout, priv->select_info->selection_end,
 				   &strong_pos, &weak_pos);
 
       g_object_get (gtk_widget_get_settings (widget),
@@ -3949,7 +4050,8 @@ gtk_label_draw_cursor (GtkLabel  *label, gint xoffset, gint yoffset)
 static GtkLabelLink *
 gtk_label_get_focus_link (GtkLabel *label)
 {
-  GtkLabelSelectionInfo *info = label->select_info;
+  GtkLabelPriv *priv = label->priv;
+  GtkLabelSelectionInfo *info = priv->select_info;
   GList *l;
 
   if (!info)
@@ -3974,13 +4076,14 @@ gtk_label_expose (GtkWidget      *widget,
 		  GdkEventExpose *event)
 {
   GtkLabel *label = GTK_LABEL (widget);
-  GtkLabelSelectionInfo *info = label->select_info;
+  GtkLabelPriv *priv = label->priv;
+  GtkLabelSelectionInfo *info = priv->select_info;
   gint x, y;
 
   gtk_label_ensure_layout (label, FALSE);
-  
+
   if (gtk_widget_get_visible (widget) && gtk_widget_get_mapped (widget) &&
-      label->text && (*label->text != '\0'))
+      priv->text && (*priv->text != '\0'))
     {
       get_layout_location (label, &x, &y);
 
@@ -3992,7 +4095,7 @@ gtk_label_expose (GtkWidget      *widget,
                         widget,
                         "label",
                         x, y,
-                        label->layout);
+                        priv->layout);
 
       if (info &&
           (info->selection_anchor != info->selection_end))
@@ -4011,7 +4114,7 @@ gtk_label_expose (GtkWidget      *widget,
               range[1] = tmp;
             }
 
-          clip = gdk_pango_layout_get_clip_region (label->layout,
+          clip = gdk_pango_layout_get_clip_region (priv->layout,
                                                    x, y,
                                                    range,
                                                    1);
@@ -4031,7 +4134,7 @@ gtk_label_expose (GtkWidget      *widget,
           gdk_draw_layout_with_colors (widget->window,
                                        widget->style->black_gc,
                                        x, y,
-                                       label->layout,
+                                       priv->layout,
                                        &widget->style->text[state],
                                        &widget->style->base[state]);
 
@@ -4061,7 +4164,7 @@ gtk_label_expose (GtkWidget      *widget,
               range[0] = active_link->start;
               range[1] = active_link->end;
 
-              clip = gdk_pango_layout_get_clip_region (label->layout,
+              clip = gdk_pango_layout_get_clip_region (priv->layout,
                                                        x, y,
                                                        range,
                                                        1);
@@ -4079,7 +4182,7 @@ gtk_label_expose (GtkWidget      *widget,
               gdk_draw_layout_with_colors (widget->window,
                                            widget->style->black_gc,
                                            x, y,
-                                           label->layout,
+                                           priv->layout,
                                            text_color,
                                            base_color);
               gdk_color_free (link_color);
@@ -4094,7 +4197,7 @@ gtk_label_expose (GtkWidget      *widget,
               range[0] = focus_link->start;
               range[1] = focus_link->end;
 
-              clip = gdk_pango_layout_get_clip_region (label->layout,
+              clip = gdk_pango_layout_get_clip_region (priv->layout,
                                                        x, y,
                                                        range,
                                                        1);
@@ -4192,6 +4295,7 @@ static void
 gtk_label_set_uline_text_internal (GtkLabel    *label,
 				   const gchar *str)
 {
+  GtkLabelPriv *priv = label->priv;
   guint accel_key = GDK_VoidSymbol;
   gchar *new_str;
   gchar *pattern;
@@ -4207,7 +4311,7 @@ gtk_label_set_uline_text_internal (GtkLabel    *label,
 
   gtk_label_set_text_internal (label, new_str);
   gtk_label_set_pattern_internal (label, pattern, TRUE);
-  label->mnemonic_keyval = accel_key;
+  priv->mnemonic_keyval = accel_key;
 
   g_free (pattern);
 }
@@ -4244,24 +4348,22 @@ gtk_label_set_text_with_mnemonic (GtkLabel    *label,
 static void
 gtk_label_realize (GtkWidget *widget)
 {
-  GtkLabel *label;
-
-  label = GTK_LABEL (widget);
+  GtkLabel *label = GTK_LABEL (widget);
+  GtkLabelPriv *priv = label->priv;
 
   GTK_WIDGET_CLASS (gtk_label_parent_class)->realize (widget);
 
-  if (label->select_info)
+  if (priv->select_info)
     gtk_label_create_window (label);
 }
 
 static void
 gtk_label_unrealize (GtkWidget *widget)
 {
-  GtkLabel *label;
+  GtkLabel *label = GTK_LABEL (widget);
+  GtkLabelPriv *priv = label->priv;
 
-  label = GTK_LABEL (widget);
-
-  if (label->select_info)
+  if (priv->select_info)
     gtk_label_destroy_window (label);
 
   GTK_WIDGET_CLASS (gtk_label_parent_class)->unrealize (widget);
@@ -4270,25 +4372,23 @@ gtk_label_unrealize (GtkWidget *widget)
 static void
 gtk_label_map (GtkWidget *widget)
 {
-  GtkLabel *label;
-
-  label = GTK_LABEL (widget);
+  GtkLabel *label = GTK_LABEL (widget);
+  GtkLabelPriv *priv = label->priv;
 
   GTK_WIDGET_CLASS (gtk_label_parent_class)->map (widget);
 
-  if (label->select_info)
-    gdk_window_show (label->select_info->window);
+  if (priv->select_info)
+    gdk_window_show (priv->select_info->window);
 }
 
 static void
 gtk_label_unmap (GtkWidget *widget)
 {
-  GtkLabel *label;
+  GtkLabel *label = GTK_LABEL (widget);
+  GtkLabelPriv *priv = label->priv;
 
-  label = GTK_LABEL (widget);
-
-  if (label->select_info)
-    gdk_window_hide (label->select_info->window);
+  if (priv->select_info)
+    gdk_window_hide (priv->select_info->window);
 
   GTK_WIDGET_CLASS (gtk_label_parent_class)->unmap (widget);
 }
@@ -4353,6 +4453,7 @@ get_layout_index (GtkLabel *label,
                   gint      y,
                   gint     *index)
 {
+  GtkLabelPriv *priv = label->priv;
   gint trailing = 0;
   const gchar *cluster;
   const gchar *cluster_end;
@@ -4367,11 +4468,11 @@ get_layout_index (GtkLabel *label,
   x *= PANGO_SCALE;
   y *= PANGO_SCALE;
 
-  inside = pango_layout_xy_to_index (label->layout,
+  inside = pango_layout_xy_to_index (priv->layout,
                                      x, y,
                                      index, &trailing);
 
-  cluster = label->text + *index;
+  cluster = priv->text + *index;
   cluster_end = cluster;
   while (trailing)
     {
@@ -4387,15 +4488,16 @@ get_layout_index (GtkLabel *label,
 static void
 gtk_label_select_word (GtkLabel *label)
 {
+  GtkLabelPriv *priv = label->priv;
   gint min, max;
-  
-  gint start_index = gtk_label_move_backward_word (label, label->select_info->selection_end);
-  gint end_index = gtk_label_move_forward_word (label, label->select_info->selection_end);
 
-  min = MIN (label->select_info->selection_anchor,
-	     label->select_info->selection_end);
-  max = MAX (label->select_info->selection_anchor,
-	     label->select_info->selection_end);
+  gint start_index = gtk_label_move_backward_word (label, priv->select_info->selection_end);
+  gint end_index = gtk_label_move_forward_word (label, priv->select_info->selection_end);
+
+  min = MIN (priv->select_info->selection_anchor,
+	     priv->select_info->selection_end);
+  max = MAX (priv->select_info->selection_anchor,
+	     priv->select_info->selection_end);
 
   min = MIN (min, start_index);
   max = MAX (max, end_index);
@@ -4406,34 +4508,33 @@ gtk_label_select_word (GtkLabel *label)
 static void
 gtk_label_grab_focus (GtkWidget *widget)
 {
-  GtkLabel *label;
+  GtkLabel *label = GTK_LABEL (widget);
+  GtkLabelPriv *priv = label->priv;
   gboolean select_on_focus;
   GtkLabelLink *link;
 
-  label = GTK_LABEL (widget);
-
-  if (label->select_info == NULL)
+  if (priv->select_info == NULL)
     return;
 
   GTK_WIDGET_CLASS (gtk_label_parent_class)->grab_focus (widget);
 
-  if (label->select_info->selectable)
+  if (priv->select_info->selectable)
     {
       g_object_get (gtk_widget_get_settings (widget),
                     "gtk-label-select-on-focus",
                     &select_on_focus,
                     NULL);
 
-      if (select_on_focus && !label->in_click)
+      if (select_on_focus && !priv->in_click)
         gtk_label_select_region (label, 0, -1);
     }
   else
     {
-      if (label->select_info->links && !label->in_click)
+      if (priv->select_info->links && !priv->in_click)
         {
-          link = label->select_info->links->data;
-          label->select_info->selection_anchor = link->start;
-          label->select_info->selection_end = link->start;
+          link = priv->select_info->links->data;
+          priv->select_info->selection_anchor = link->start;
+          priv->select_info->selection_end = link->start;
         }
     }
 }
@@ -4443,7 +4544,8 @@ gtk_label_focus (GtkWidget        *widget,
                  GtkDirectionType  direction)
 {
   GtkLabel *label = GTK_LABEL (widget);
-  GtkLabelSelectionInfo *info = label->select_info;
+  GtkLabelPriv *priv = label->priv;
+  GtkLabelSelectionInfo *info = priv->select_info;
   GtkLabelLink *focus_link;
   GList *l;
 
@@ -4552,7 +4654,8 @@ gtk_label_button_press (GtkWidget      *widget,
                         GdkEventButton *event)
 {
   GtkLabel *label = GTK_LABEL (widget);
-  GtkLabelSelectionInfo *info = label->select_info;
+  GtkLabelPriv *priv = label->priv;
+  GtkLabelSelectionInfo *info = priv->select_info;
   gint index = 0;
   gint min, max;
 
@@ -4584,14 +4687,14 @@ gtk_label_button_press (GtkWidget      *widget,
     {
       if (!gtk_widget_has_focus (widget))
 	{
-	  label->in_click = TRUE;
+	  priv->in_click = TRUE;
 	  gtk_widget_grab_focus (widget);
-	  label->in_click = FALSE;
+	  priv->in_click = FALSE;
 	}
 
       if (event->type == GDK_3BUTTON_PRESS)
 	{
-	  gtk_label_select_region_index (label, 0, strlen (label->text));
+	  gtk_label_select_region_index (label, 0, strlen (priv->text));
 	  return TRUE;
 	}
 
@@ -4627,7 +4730,7 @@ gtk_label_button_press (GtkWidget      *widget,
       else
 	{
 	  if (event->type == GDK_3BUTTON_PRESS)
-	    gtk_label_select_region_index (label, 0, strlen (label->text));
+	    gtk_label_select_region_index (label, 0, strlen (priv->text));
 	  else if (event->type == GDK_2BUTTON_PRESS)
 	    gtk_label_select_word (label);
 	  else if (min < max && min <= index && index <= max)
@@ -4658,7 +4761,8 @@ gtk_label_button_release (GtkWidget      *widget,
 
 {
   GtkLabel *label = GTK_LABEL (widget);
-  GtkLabelSelectionInfo *info = label->select_info;
+  GtkLabelPriv *priv = label->priv;
+  GtkLabelSelectionInfo *info = priv->select_info;
   gint index;
 
   if (info == NULL)
@@ -4696,7 +4800,7 @@ gtk_label_button_release (GtkWidget      *widget,
 static void
 connect_mnemonics_visible_notify (GtkLabel *label)
 {
-  GtkLabelPrivate *priv = GTK_LABEL_GET_PRIVATE (label);
+  GtkLabelPriv *priv = label->priv;
   GtkWidget *toplevel;
   gboolean connected;
 
@@ -4730,27 +4834,26 @@ drag_begin_cb (GtkWidget      *widget,
                GdkDragContext *context,
                gpointer        data)
 {
-  GtkLabel *label;
+  GtkLabel *label = GTK_LABEL (widget);
+  GtkLabelPriv *priv = label->priv;
   GdkPixmap *pixmap = NULL;
 
   g_signal_handlers_disconnect_by_func (widget, drag_begin_cb, NULL);
 
-  label = GTK_LABEL (widget);
-
-  if ((label->select_info->selection_anchor !=
-       label->select_info->selection_end) &&
-      label->text)
+  if ((priv->select_info->selection_anchor !=
+       priv->select_info->selection_end) &&
+      priv->text)
     {
       gint start, end;
       gint len;
 
-      start = MIN (label->select_info->selection_anchor,
-                   label->select_info->selection_end);
-      end = MAX (label->select_info->selection_anchor,
-                 label->select_info->selection_end);
-      
-      len = strlen (label->text);
-      
+      start = MIN (priv->select_info->selection_anchor,
+                   priv->select_info->selection_end);
+      end = MAX (priv->select_info->selection_anchor,
+                 priv->select_info->selection_end);
+
+      len = strlen (priv->text);
+
       if (end > len)
         end = len;
       
@@ -4758,7 +4861,7 @@ drag_begin_cb (GtkWidget      *widget,
         start = len;
       
       pixmap = _gtk_text_util_create_drag_icon (widget, 
-						label->text + start,
+						priv->text + start,
 						end - start);
     }
 
@@ -4780,7 +4883,8 @@ gtk_label_motion (GtkWidget      *widget,
                   GdkEventMotion *event)
 {
   GtkLabel *label = GTK_LABEL (widget);
-  GtkLabelSelectionInfo *info = label->select_info;
+  GtkLabelPriv *priv = label->priv;
+  GtkLabelSelectionInfo *info = priv->select_info;
   gint index;
 
   if (info == NULL)
@@ -4915,10 +5019,11 @@ gtk_label_leave_notify (GtkWidget        *widget,
                         GdkEventCrossing *event)
 {
   GtkLabel *label = GTK_LABEL (widget);
+  GtkLabelPriv *priv = label->priv;
 
-  if (label->select_info)
+  if (priv->select_info)
     {
-      label->select_info->active_link = NULL;
+      priv->select_info->active_link = NULL;
       gtk_label_update_cursor (label);
       gtk_widget_queue_draw (widget);
     }
@@ -4932,15 +5037,16 @@ gtk_label_leave_notify (GtkWidget        *widget,
 static void
 gtk_label_create_window (GtkLabel *label)
 {
+  GtkLabelPriv *priv = label->priv;
   GtkWidget *widget;
   GdkWindowAttr attributes;
   gint attributes_mask;
-  
-  g_assert (label->select_info);
+
+  g_assert (priv->select_info);
   widget = GTK_WIDGET (label);
   g_assert (gtk_widget_get_realized (widget));
-  
-  if (label->select_info->window)
+
+  if (priv->select_info->window)
     return;
 
   attributes.x = widget->allocation.x;
@@ -4966,9 +5072,9 @@ gtk_label_create_window (GtkLabel *label)
     }
 
 
-  label->select_info->window = gdk_window_new (widget->window,
+  priv->select_info->window = gdk_window_new (widget->window,
                                                &attributes, attributes_mask);
-  gdk_window_set_user_data (label->select_info->window, widget);
+  gdk_window_set_user_data (priv->select_info->window, widget);
 
   if (attributes_mask & GDK_WA_CURSOR)
     gdk_cursor_unref (attributes.cursor);
@@ -4977,22 +5083,26 @@ gtk_label_create_window (GtkLabel *label)
 static void
 gtk_label_destroy_window (GtkLabel *label)
 {
-  g_assert (label->select_info);
+  GtkLabelPriv *priv = label->priv;
 
-  if (label->select_info->window == NULL)
+  g_assert (priv->select_info);
+
+  if (priv->select_info->window == NULL)
     return;
 
-  gdk_window_set_user_data (label->select_info->window, NULL);
-  gdk_window_destroy (label->select_info->window);
-  label->select_info->window = NULL;
+  gdk_window_set_user_data (priv->select_info->window, NULL);
+  gdk_window_destroy (priv->select_info->window);
+  priv->select_info->window = NULL;
 }
 
 static void
 gtk_label_ensure_select_info (GtkLabel *label)
 {
-  if (label->select_info == NULL)
+  GtkLabelPriv *priv = label->priv;
+
+  if (priv->select_info == NULL)
     {
-      label->select_info = g_new0 (GtkLabelSelectionInfo, 1);
+      priv->select_info = g_new0 (GtkLabelSelectionInfo, 1);
 
       gtk_widget_set_can_focus (GTK_WIDGET (label), TRUE);
 
@@ -5000,22 +5110,24 @@ gtk_label_ensure_select_info (GtkLabel *label)
 	gtk_label_create_window (label);
 
       if (gtk_widget_get_mapped (GTK_WIDGET (label)))
-        gdk_window_show (label->select_info->window);
+        gdk_window_show (priv->select_info->window);
     }
 }
 
 static void
 gtk_label_clear_select_info (GtkLabel *label)
 {
-  if (label->select_info == NULL)
+  GtkLabelPriv *priv = label->priv;
+
+  if (priv->select_info == NULL)
     return;
 
-  if (!label->select_info->selectable && !label->select_info->links)
+  if (!priv->select_info->selectable && !priv->select_info->links)
     {
       gtk_label_destroy_window (label);
 
-      g_free (label->select_info);
-      label->select_info = NULL;
+      g_free (priv->select_info);
+      priv->select_info = NULL;
 
       gtk_widget_set_can_focus (GTK_WIDGET (label), FALSE);
     }
@@ -5033,17 +5145,20 @@ void
 gtk_label_set_selectable (GtkLabel *label,
                           gboolean  setting)
 {
+  GtkLabelPriv *priv;
   gboolean old_setting;
 
   g_return_if_fail (GTK_IS_LABEL (label));
 
+  priv = label->priv;
+
   setting = setting != FALSE;
-  old_setting = label->select_info && label->select_info->selectable;
+  old_setting = priv->select_info && priv->select_info->selectable;
 
   if (setting)
     {
       gtk_label_ensure_select_info (label);
-      label->select_info->selectable = TRUE;
+      priv->select_info->selectable = TRUE;
       gtk_label_update_cursor (label);
     }
   else
@@ -5053,7 +5168,7 @@ gtk_label_set_selectable (GtkLabel *label,
           /* unselect, to give up the selection */
           gtk_label_select_region (label, 0, 0);
 
-          label->select_info->selectable = FALSE;
+          priv->select_info->selectable = FALSE;
           gtk_label_clear_select_info (label);
           gtk_label_update_cursor (label);
         }
@@ -5080,9 +5195,13 @@ gtk_label_set_selectable (GtkLabel *label,
 gboolean
 gtk_label_get_selectable (GtkLabel *label)
 {
+  GtkLabelPriv *priv;
+
   g_return_val_if_fail (GTK_IS_LABEL (label), FALSE);
 
-  return label->select_info && label->select_info->selectable;
+  priv = label->priv;
+
+  return priv->select_info && priv->select_info->selectable;
 }
 
 static void
@@ -5170,28 +5289,30 @@ static void
 gtk_label_set_selection_text (GtkLabel         *label,
 			      GtkSelectionData *selection_data)
 {
-  if ((label->select_info->selection_anchor !=
-       label->select_info->selection_end) &&
-      label->text)
+  GtkLabelPriv *priv = label->priv;
+
+  if ((priv->select_info->selection_anchor !=
+       priv->select_info->selection_end) &&
+      priv->text)
     {
       gint start, end;
       gint len;
-      
-      start = MIN (label->select_info->selection_anchor,
-                   label->select_info->selection_end);
-      end = MAX (label->select_info->selection_anchor,
-                 label->select_info->selection_end);
-      
-      len = strlen (label->text);
-      
+
+      start = MIN (priv->select_info->selection_anchor,
+                   priv->select_info->selection_end);
+      end = MAX (priv->select_info->selection_anchor,
+                 priv->select_info->selection_end);
+
+      len = strlen (priv->text);
+
       if (end > len)
         end = len;
-      
+
       if (start > len)
         start = len;
-      
+
       gtk_selection_data_set_text (selection_data,
-				   label->text + start,
+				   priv->text + start,
 				   end - start);
     }
 }
@@ -5220,13 +5341,15 @@ clear_text_callback (GtkClipboard     *clipboard,
                      gpointer          user_data_or_owner)
 {
   GtkLabel *label;
+  GtkLabelPriv *priv;
 
   label = GTK_LABEL (user_data_or_owner);
+  priv = label->priv;
 
-  if (label->select_info)
+  if (priv->select_info)
     {
-      label->select_info->selection_anchor = label->select_info->selection_end;
-      
+      priv->select_info->selection_anchor = priv->select_info->selection_end;
+
       gtk_widget_queue_draw (GTK_WIDGET (label));
     }
 }
@@ -5236,18 +5359,22 @@ gtk_label_select_region_index (GtkLabel *label,
                                gint      anchor_index,
                                gint      end_index)
 {
+  GtkLabelPriv *priv;
+
   g_return_if_fail (GTK_IS_LABEL (label));
-  
-  if (label->select_info && label->select_info->selectable)
+
+  priv = label->priv;
+
+  if (priv->select_info && priv->select_info->selectable)
     {
       GtkClipboard *clipboard;
 
-      if (label->select_info->selection_anchor == anchor_index &&
-	  label->select_info->selection_end == end_index)
+      if (priv->select_info->selection_anchor == anchor_index &&
+	  priv->select_info->selection_end == end_index)
 	return;
 
-      label->select_info->selection_anchor = anchor_index;
-      label->select_info->selection_end = end_index;
+      priv->select_info->selection_anchor = anchor_index;
+      priv->select_info->selection_end = end_index;
 
       clipboard = gtk_widget_get_clipboard (GTK_WIDGET (label),
 					    GDK_SELECTION_PRIMARY);
@@ -5302,19 +5429,23 @@ gtk_label_select_region  (GtkLabel *label,
                           gint      start_offset,
                           gint      end_offset)
 {
+  GtkLabelPriv *priv;
+
   g_return_if_fail (GTK_IS_LABEL (label));
-  
-  if (label->text && label->select_info)
+
+  priv = label->priv;
+
+  if (priv->text && priv->select_info)
     {
       if (start_offset < 0)
-        start_offset = g_utf8_strlen (label->text, -1);
+        start_offset = g_utf8_strlen (priv->text, -1);
       
       if (end_offset < 0)
-        end_offset = g_utf8_strlen (label->text, -1);
+        end_offset = g_utf8_strlen (priv->text, -1);
       
       gtk_label_select_region_index (label,
-                                     g_utf8_offset_to_pointer (label->text, start_offset) - label->text,
-                                     g_utf8_offset_to_pointer (label->text, end_offset) - label->text);
+                                     g_utf8_offset_to_pointer (priv->text, start_offset) - priv->text,
+                                     g_utf8_offset_to_pointer (priv->text, end_offset) - priv->text);
     }
 }
 
@@ -5334,9 +5465,13 @@ gtk_label_get_selection_bounds (GtkLabel  *label,
                                 gint      *start,
                                 gint      *end)
 {
+  GtkLabelPriv *priv;
+
   g_return_val_if_fail (GTK_IS_LABEL (label), FALSE);
 
-  if (label->select_info == NULL)
+  priv = label->priv;
+
+  if (priv->select_info == NULL)
     {
       /* not a selectable label */
       if (start)
@@ -5352,12 +5487,12 @@ gtk_label_get_selection_bounds (GtkLabel  *label,
       gint start_offset, end_offset;
       gint len;
       
-      start_index = MIN (label->select_info->selection_anchor,
-                   label->select_info->selection_end);
-      end_index = MAX (label->select_info->selection_anchor,
-                 label->select_info->selection_end);
+      start_index = MIN (priv->select_info->selection_anchor,
+                   priv->select_info->selection_end);
+      end_index = MAX (priv->select_info->selection_anchor,
+                 priv->select_info->selection_end);
 
-      len = strlen (label->text);
+      len = strlen (priv->text);
 
       if (end_index > len)
         end_index = len;
@@ -5365,8 +5500,8 @@ gtk_label_get_selection_bounds (GtkLabel  *label,
       if (start_index > len)
         start_index = len;
       
-      start_offset = g_utf8_strlen (label->text, start_index);
-      end_offset = g_utf8_strlen (label->text, end_index);
+      start_offset = g_utf8_strlen (priv->text, start_index);
+      end_offset = g_utf8_strlen (priv->text, end_index);
 
       if (start_offset > end_offset)
         {
@@ -5401,11 +5536,15 @@ gtk_label_get_selection_bounds (GtkLabel  *label,
 PangoLayout*
 gtk_label_get_layout (GtkLabel *label)
 {
+  GtkLabelPriv *priv;
+
   g_return_val_if_fail (GTK_IS_LABEL (label), NULL);
+
+  priv = label->priv;
 
   gtk_label_ensure_layout (label, FALSE);
 
-  return label->layout;
+  return priv->layout;
 }
 
 /**
@@ -5468,8 +5607,8 @@ gboolean
 gtk_label_get_use_markup (GtkLabel *label)
 {
   g_return_val_if_fail (GTK_IS_LABEL (label), FALSE);
-  
-  return label->use_markup;
+
+  return label->priv->use_markup;
 }
 
 /**
@@ -5504,8 +5643,8 @@ gboolean
 gtk_label_get_use_underline (GtkLabel *label)
 {
   g_return_val_if_fail (GTK_IS_LABEL (label), FALSE);
-  
-  return label->use_underline;
+
+  return label->priv->use_underline;
 }
 
 /**
@@ -5521,13 +5660,17 @@ void
 gtk_label_set_single_line_mode (GtkLabel *label,
                                 gboolean single_line_mode)
 {
+  GtkLabelPriv *priv;
+
   g_return_if_fail (GTK_IS_LABEL (label));
+
+  priv = label->priv;
 
   single_line_mode = single_line_mode != FALSE;
 
-  if (label->single_line_mode != single_line_mode)
+  if (priv->single_line_mode != single_line_mode)
     {
-      label->single_line_mode = single_line_mode;
+      priv->single_line_mode = single_line_mode;
 
       gtk_label_clear_layout (label);
       gtk_widget_queue_resize (GTK_WIDGET (label));
@@ -5551,7 +5694,7 @@ gtk_label_get_single_line_mode  (GtkLabel *label)
 {
   g_return_val_if_fail (GTK_IS_LABEL (label), FALSE);
 
-  return label->single_line_mode;
+  return label->priv->single_line_mode;
 }
 
 /* Compute the X position for an offset that corresponds to the "more important
@@ -5565,6 +5708,7 @@ get_better_cursor (GtkLabel *label,
 		   gint      *x,
 		   gint      *y)
 {
+  GtkLabelPriv *priv = label->priv;
   GdkKeymap *keymap = gdk_keymap_get_for_display (gtk_widget_get_display (GTK_WIDGET (label)));
   PangoDirection keymap_direction = gdk_keymap_get_direction (keymap);
   PangoDirection cursor_direction = get_cursor_direction (label);
@@ -5577,7 +5721,7 @@ get_better_cursor (GtkLabel *label,
 
   gtk_label_ensure_layout (label, FALSE);
   
-  pango_layout_get_cursor_pos (label->layout, index,
+  pango_layout_get_cursor_pos (priv->layout, index,
 			       &strong_pos, &weak_pos);
 
   if (split_cursor)
@@ -5606,10 +5750,11 @@ gtk_label_move_logically (GtkLabel *label,
 			  gint      start,
 			  gint      count)
 {
-  gint offset = g_utf8_pointer_to_offset (label->text,
-					  label->text + start);
+  GtkLabelPriv *priv = label->priv;
+  gint offset = g_utf8_pointer_to_offset (priv->text,
+					  priv->text + start);
 
-  if (label->text)
+  if (priv->text)
     {
       PangoLogAttr *log_attrs;
       gint n_attrs;
@@ -5617,9 +5762,9 @@ gtk_label_move_logically (GtkLabel *label,
 
       gtk_label_ensure_layout (label, FALSE);
       
-      length = g_utf8_strlen (label->text, -1);
+      length = g_utf8_strlen (priv->text, -1);
 
-      pango_layout_get_log_attrs (label->layout, &log_attrs, &n_attrs);
+      pango_layout_get_log_attrs (priv->layout, &log_attrs, &n_attrs);
 
       while (count > 0 && offset < length)
 	{
@@ -5641,7 +5786,7 @@ gtk_label_move_logically (GtkLabel *label,
       g_free (log_attrs);
     }
 
-  return g_utf8_offset_to_pointer (label->text, offset) - label->text;
+  return g_utf8_offset_to_pointer (priv->text, offset) - priv->text;
 }
 
 static gint
@@ -5649,6 +5794,7 @@ gtk_label_move_visually (GtkLabel *label,
 			 gint      start,
 			 gint      count)
 {
+  GtkLabelPriv *priv = label->priv;
   gint index;
 
   index = start;
@@ -5677,12 +5823,12 @@ gtk_label_move_visually (GtkLabel *label,
       
       if (count > 0)
 	{
-	  pango_layout_move_cursor_visually (label->layout, strong, index, 0, 1, &new_index, &new_trailing);
+	  pango_layout_move_cursor_visually (priv->layout, strong, index, 0, 1, &new_index, &new_trailing);
 	  count--;
 	}
       else
 	{
-	  pango_layout_move_cursor_visually (label->layout, strong, index, 0, -1, &new_index, &new_trailing);
+	  pango_layout_move_cursor_visually (priv->layout, strong, index, 0, -1, &new_index, &new_trailing);
 	  count++;
 	}
 
@@ -5692,7 +5838,7 @@ gtk_label_move_visually (GtkLabel *label,
       index = new_index;
       
       while (new_trailing--)
-	index = g_utf8_next_char (label->text + new_index) - label->text;
+	index = g_utf8_next_char (priv->text + new_index) - priv->text;
     }
   
   return index;
@@ -5702,20 +5848,21 @@ static gint
 gtk_label_move_forward_word (GtkLabel *label,
 			     gint      start)
 {
-  gint new_pos = g_utf8_pointer_to_offset (label->text,
-					   label->text + start);
+  GtkLabelPriv *priv = label->priv;
+  gint new_pos = g_utf8_pointer_to_offset (priv->text,
+					   priv->text + start);
   gint length;
 
-  length = g_utf8_strlen (label->text, -1);
+  length = g_utf8_strlen (priv->text, -1);
   if (new_pos < length)
     {
       PangoLogAttr *log_attrs;
       gint n_attrs;
 
       gtk_label_ensure_layout (label, FALSE);
-      
-      pango_layout_get_log_attrs (label->layout, &log_attrs, &n_attrs);
-      
+
+      pango_layout_get_log_attrs (priv->layout, &log_attrs, &n_attrs);
+
       /* Find the next word end */
       new_pos++;
       while (new_pos < n_attrs && !log_attrs[new_pos].is_word_end)
@@ -5724,7 +5871,7 @@ gtk_label_move_forward_word (GtkLabel *label,
       g_free (log_attrs);
     }
 
-  return g_utf8_offset_to_pointer (label->text, new_pos) - label->text;
+  return g_utf8_offset_to_pointer (priv->text, new_pos) - priv->text;
 }
 
 
@@ -5732,8 +5879,9 @@ static gint
 gtk_label_move_backward_word (GtkLabel *label,
 			      gint      start)
 {
-  gint new_pos = g_utf8_pointer_to_offset (label->text,
-					   label->text + start);
+  GtkLabelPriv *priv = label->priv;
+  gint new_pos = g_utf8_pointer_to_offset (priv->text,
+					   priv->text + start);
 
   if (new_pos > 0)
     {
@@ -5741,9 +5889,9 @@ gtk_label_move_backward_word (GtkLabel *label,
       gint n_attrs;
 
       gtk_label_ensure_layout (label, FALSE);
-      
-      pango_layout_get_log_attrs (label->layout, &log_attrs, &n_attrs);
-      
+
+      pango_layout_get_log_attrs (priv->layout, &log_attrs, &n_attrs);
+
       new_pos -= 1;
 
       /* Find the previous word beginning */
@@ -5753,7 +5901,7 @@ gtk_label_move_backward_word (GtkLabel *label,
       g_free (log_attrs);
     }
 
-  return g_utf8_offset_to_pointer (label->text, new_pos) - label->text;
+  return g_utf8_offset_to_pointer (priv->text, new_pos) - priv->text;
 }
 
 static void
@@ -5762,15 +5910,16 @@ gtk_label_move_cursor (GtkLabel       *label,
 		       gint            count,
 		       gboolean        extend_selection)
 {
+  GtkLabelPriv *priv = label->priv;
   gint old_pos;
   gint new_pos;
-  
-  if (label->select_info == NULL)
+
+  if (priv->select_info == NULL)
     return;
 
-  old_pos = new_pos = label->select_info->selection_end;
+  old_pos = new_pos = priv->select_info->selection_end;
 
-  if (label->select_info->selection_end != label->select_info->selection_anchor &&
+  if (priv->select_info->selection_end != priv->select_info->selection_anchor &&
       !extend_selection)
     {
       /* If we have a current selection and aren't extending it, move to the
@@ -5783,30 +5932,30 @@ gtk_label_move_cursor (GtkLabel       *label,
 	    gint end_x, end_y;
 	    gint anchor_x, anchor_y;
 	    gboolean end_is_left;
-	    
-	    get_better_cursor (label, label->select_info->selection_end, &end_x, &end_y);
-	    get_better_cursor (label, label->select_info->selection_anchor, &anchor_x, &anchor_y);
+
+	    get_better_cursor (label, priv->select_info->selection_end, &end_x, &end_y);
+	    get_better_cursor (label, priv->select_info->selection_anchor, &anchor_x, &anchor_y);
 
 	    end_is_left = (end_y < anchor_y) || (end_y == anchor_y && end_x < anchor_x);
 	    
 	    if (count < 0)
-	      new_pos = end_is_left ? label->select_info->selection_end : label->select_info->selection_anchor;
+	      new_pos = end_is_left ? priv->select_info->selection_end : priv->select_info->selection_anchor;
 	    else
-	      new_pos = !end_is_left ? label->select_info->selection_end : label->select_info->selection_anchor;
+	      new_pos = !end_is_left ? priv->select_info->selection_end : priv->select_info->selection_anchor;
 	    break;
 	  }
 	case GTK_MOVEMENT_LOGICAL_POSITIONS:
 	case GTK_MOVEMENT_WORDS:
 	  if (count < 0)
-	    new_pos = MIN (label->select_info->selection_end, label->select_info->selection_anchor);
+	    new_pos = MIN (priv->select_info->selection_end, priv->select_info->selection_anchor);
 	  else
-	    new_pos = MAX (label->select_info->selection_end, label->select_info->selection_anchor);
+	    new_pos = MAX (priv->select_info->selection_end, priv->select_info->selection_anchor);
 	  break;
 	case GTK_MOVEMENT_DISPLAY_LINE_ENDS:
 	case GTK_MOVEMENT_PARAGRAPH_ENDS:
 	case GTK_MOVEMENT_BUFFER_ENDS:
 	  /* FIXME: Can do better here */
-	  new_pos = count < 0 ? 0 : strlen (label->text);
+	  new_pos = count < 0 ? 0 : strlen (priv->text);
 	  break;
 	case GTK_MOVEMENT_DISPLAY_LINES:
 	case GTK_MOVEMENT_PARAGRAPHS:
@@ -5864,7 +6013,7 @@ gtk_label_move_cursor (GtkLabel       *label,
 	case GTK_MOVEMENT_PARAGRAPH_ENDS:
 	case GTK_MOVEMENT_BUFFER_ENDS:
 	  /* FIXME: Can do better here */
-	  new_pos = count < 0 ? 0 : strlen (label->text);
+	  new_pos = count < 0 ? 0 : strlen (priv->text);
           if (new_pos == old_pos)
             gtk_widget_error_bell (GTK_WIDGET (label));
 	  break;
@@ -5878,7 +6027,7 @@ gtk_label_move_cursor (GtkLabel       *label,
 
   if (extend_selection)
     gtk_label_select_region_index (label,
-				   label->select_info->selection_anchor,
+				   priv->select_info->selection_anchor,
 				   new_pos);
   else
     gtk_label_select_region_index (label, new_pos, new_pos);
@@ -5887,18 +6036,20 @@ gtk_label_move_cursor (GtkLabel       *label,
 static void
 gtk_label_copy_clipboard (GtkLabel *label)
 {
-  if (label->text && label->select_info)
+  GtkLabelPriv *priv = label->priv;
+
+  if (priv->text && priv->select_info)
     {
       gint start, end;
       gint len;
       GtkClipboard *clipboard;
 
-      start = MIN (label->select_info->selection_anchor,
-                   label->select_info->selection_end);
-      end = MAX (label->select_info->selection_anchor,
-                 label->select_info->selection_end);
+      start = MIN (priv->select_info->selection_anchor,
+                   priv->select_info->selection_end);
+      end = MAX (priv->select_info->selection_anchor,
+                 priv->select_info->selection_end);
 
-      len = strlen (label->text);
+      len = strlen (priv->text);
 
       if (end > len)
         end = len;
@@ -5909,7 +6060,7 @@ gtk_label_copy_clipboard (GtkLabel *label)
       clipboard = gtk_widget_get_clipboard (GTK_WIDGET (label), GDK_SELECTION_CLIPBOARD);
 
       if (start != end)
-	gtk_clipboard_set_text (clipboard, label->text + start, end - start);
+	gtk_clipboard_set_text (clipboard, priv->text + start, end - start);
       else
         {
           GtkLabelLink *link;
@@ -5924,7 +6075,9 @@ gtk_label_copy_clipboard (GtkLabel *label)
 static void
 gtk_label_select_all (GtkLabel *label)
 {
-  gtk_label_select_region_index (label, 0, strlen (label->text));
+  GtkLabelPriv *priv = label->priv;
+
+  gtk_label_select_region_index (label, 0, strlen (priv->text));
 }
 
 /* Quick hack of a popup menu
@@ -5961,9 +6114,10 @@ popup_menu_detach (GtkWidget *attach_widget,
 		   GtkMenu   *menu)
 {
   GtkLabel *label = GTK_LABEL (attach_widget);
+  GtkLabelPriv *priv = label->priv;
 
-  if (label->select_info)
-    label->select_info->popup_menu = NULL;
+  if (priv->select_info)
+    priv->select_info->popup_menu = NULL;
 }
 
 static void
@@ -6037,29 +6191,30 @@ static void
 gtk_label_do_popup (GtkLabel       *label,
                     GdkEventButton *event)
 {
+  GtkLabelPriv *priv = label->priv;
   GtkWidget *menuitem;
   GtkWidget *menu;
   GtkWidget *image;
   gboolean have_selection;
   GtkLabelLink *link;
 
-  if (!label->select_info)
+  if (!priv->select_info)
     return;
 
-  if (label->select_info->popup_menu)
-    gtk_widget_destroy (label->select_info->popup_menu);
+  if (priv->select_info->popup_menu)
+    gtk_widget_destroy (priv->select_info->popup_menu);
 
-  label->select_info->popup_menu = menu = gtk_menu_new ();
+  priv->select_info->popup_menu = menu = gtk_menu_new ();
 
   gtk_menu_attach_to_widget (GTK_MENU (menu), GTK_WIDGET (label), popup_menu_detach);
 
   have_selection =
-    label->select_info->selection_anchor != label->select_info->selection_end;
+    priv->select_info->selection_anchor != priv->select_info->selection_end;
 
   if (event)
     {
-      if (label->select_info->link_clicked)
-        link = label->select_info->active_link;
+      if (priv->select_info->link_clicked)
+        link = priv->select_info->active_link;
       else
         link = NULL;
     }
@@ -6132,24 +6287,27 @@ gtk_label_do_popup (GtkLabel       *label,
 static void
 gtk_label_clear_links (GtkLabel *label)
 {
-  if (!label->select_info)
+  GtkLabelPriv *priv = label->priv;
+
+  if (!priv->select_info)
     return;
 
-  g_list_foreach (label->select_info->links, (GFunc)link_free, NULL);
-  g_list_free (label->select_info->links);
-  label->select_info->links = NULL;
-  label->select_info->active_link = NULL;
+  g_list_foreach (priv->select_info->links, (GFunc)link_free, NULL);
+  g_list_free (priv->select_info->links);
+  priv->select_info->links = NULL;
+  priv->select_info->active_link = NULL;
 }
 
 static void
 gtk_label_rescan_links (GtkLabel *label)
 {
-  PangoLayout *layout = label->layout;
+  GtkLabelPriv *priv = label->priv;
+  PangoLayout *layout = priv->layout;
   PangoAttrList *attlist;
   PangoAttrIterator *iter;
   GList *links;
 
-  if (!label->select_info || !label->select_info->links)
+  if (!priv->select_info || !priv->select_info->links)
     return;
 
   attlist = pango_layout_get_attributes (layout);
@@ -6159,7 +6317,7 @@ gtk_label_rescan_links (GtkLabel *label)
 
   iter = pango_attr_list_get_iterator (attlist);
 
-  links = label->select_info->links;
+  links = priv->select_info->links;
 
   do
     {
@@ -6216,10 +6374,11 @@ static void
 emit_activate_link (GtkLabel     *label,
                     GtkLabelLink *link)
 {
+  GtkLabelPriv *priv = label->priv;
   gboolean handled;
 
   g_signal_emit (label, signals[ACTIVATE_LINK], 0, link->uri, &handled);
-  if (handled && label->track_links && !link->visited)
+  if (handled && priv->track_links && !link->visited)
     {
       link->visited = TRUE;
       /* FIXME: shouldn't have to redo everything here */
@@ -6261,13 +6420,14 @@ gtk_label_activate_current_link (GtkLabel *label)
 static GtkLabelLink *
 gtk_label_get_current_link (GtkLabel *label)
 {
+  GtkLabelPriv *priv = label->priv;
   GtkLabelLink *link;
 
-  if (!label->select_info)
+  if (!priv->select_info)
     return NULL;
 
-  if (label->select_info->link_clicked)
-    link = label->select_info->active_link;
+  if (priv->select_info->link_clicked)
+    link = priv->select_info->active_link;
   else
     link = gtk_label_get_focus_link (label);
 
@@ -6295,6 +6455,7 @@ G_CONST_RETURN gchar *
 gtk_label_get_current_uri (GtkLabel *label)
 {
   GtkLabelLink *link;
+
   g_return_val_if_fail (GTK_IS_LABEL (label), NULL);
 
   link = gtk_label_get_current_link (label);
@@ -6319,13 +6480,17 @@ void
 gtk_label_set_track_visited_links (GtkLabel *label,
                                    gboolean  track_links)
 {
+  GtkLabelPriv *priv;
+
   g_return_if_fail (GTK_IS_LABEL (label));
+
+  priv = label->priv;
 
   track_links = track_links != FALSE;
 
-  if (label->track_links != track_links)
+  if (priv->track_links != track_links)
     {
-      label->track_links = track_links;
+      priv->track_links = track_links;
 
       /* FIXME: shouldn't have to redo everything here */
       gtk_label_recalculate (label);
@@ -6350,7 +6515,7 @@ gtk_label_get_track_visited_links (GtkLabel *label)
 {
   g_return_val_if_fail (GTK_IS_LABEL (label), FALSE);
 
-  return label->track_links;
+  return label->priv->track_links;
 }
 
 static gboolean
@@ -6361,7 +6526,8 @@ gtk_label_query_tooltip (GtkWidget  *widget,
                          GtkTooltip *tooltip)
 {
   GtkLabel *label = GTK_LABEL (widget);
-  GtkLabelSelectionInfo *info = label->select_info;
+  GtkLabelPriv *priv = label->priv;
+  GtkLabelSelectionInfo *info = priv->select_info;
   gint index = -1;
   GList *l;
 
@@ -6401,7 +6567,3 @@ gtk_label_query_tooltip (GtkWidget  *widget,
                                                                    keyboard_tip,
                                                                    tooltip);
 }
-
-
-#define __GTK_LABEL_C__
-#include "gtkaliasdef.c"

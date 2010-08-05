@@ -23,8 +23,7 @@
 
 #include "gtkmarshalers.h"
 #include "gtkwindow.h"  /* in lack of GtkAcceleratable */
-#include "gtkintl.h" 
-#include "gtkalias.h"
+#include "gtkintl.h"
 
 #include <glib/gstdio.h>
 
@@ -198,9 +197,9 @@ gtk_accel_map_add_entry (const gchar    *accel_path,
 
 /**
  * gtk_accel_map_lookup_entry:
- * @accel_path:  a valid accelerator path
- * @key:         the accelerator key to be filled in (optional)
- * @returns:     %TRUE if @accel_path is known, %FALSE otherwise
+ * @accel_path: a valid accelerator path
+ * @key: (allow-none) (out): the accelerator key to be filled in (optional)
+ * @returns:    %TRUE if @accel_path is known, %FALSE otherwise
  *
  * Looks up the accelerator entry for @accel_path and fills in @key.
  */
@@ -980,7 +979,7 @@ gtk_accel_map_init (GtkAccelMap *accel_map)
  * map via the ::changed signal; it isn't a parameter to the
  * other accelerator map functions.
  * 
- * Return value: the global #GtkAccelMap object
+ * Return value: (transfer none): the global #GtkAccelMap object
  *
  * Since: 2.4
  **/
@@ -1032,6 +1031,3 @@ gtk_accel_map_save (const gchar *file_name)
 }
 
 #endif
-
-#define __GTK_ACCEL_MAP_C__
-#include "gtkaliasdef.c"

@@ -49,7 +49,6 @@
 #include "gtkplug.h"
 #include "gtkbuildable.h"
 #include "gtksizerequest.h"
-#include "gtkalias.h"
 
 #ifdef GDK_WINDOWING_X11
 #include "x11/gdkx.h"
@@ -574,23 +573,6 @@ gtk_window_class_init (GtkWindowClass *klass)
 							GTK_PARAM_WRITABLE));
 
   g_object_class_install_property (gobject_class,
-                                   PROP_ALLOW_SHRINK,
-                                   g_param_spec_boolean ("allow-shrink",
-							 P_("Allow Shrink"),
-							 /* xgettext:no-c-format */
-							 P_("If TRUE, the window has no mimimum size. Setting this to TRUE is 99% of the time a bad idea"),
-							 FALSE,
-							 GTK_PARAM_READWRITE));
-
-  g_object_class_install_property (gobject_class,
-                                   PROP_ALLOW_GROW,
-                                   g_param_spec_boolean ("allow-grow",
-							 P_("Allow Grow"),
-							 P_("If TRUE, users can expand the window beyond its minimum size"),
-							 TRUE,
-							 GTK_PARAM_READWRITE));
-
-  g_object_class_install_property (gobject_class,
                                    PROP_RESIZABLE,
                                    g_param_spec_boolean ("resizable",
 							 P_("Resizable"),
@@ -970,8 +952,7 @@ gtk_window_init (GtkWindow *window)
   window->focus_widget = NULL;
   window->default_widget = NULL;
   window->configure_request_count = 0;
-  window->allow_shrink = FALSE;
-  window->allow_grow = TRUE;
+  window->resizable = TRUE;
   window->configure_notify_received = FALSE;
   window->position = GTK_WIN_POS_NONE;
   window->need_default_size = TRUE;
@@ -1038,19 +1019,9 @@ gtk_window_set_property (GObject      *object,
     case PROP_STARTUP_ID:
       gtk_window_set_startup_id (window, g_value_get_string (value));
       break; 
-    case PROP_ALLOW_SHRINK:
-      window->allow_shrink = g_value_get_boolean (value);
-      gtk_widget_queue_resize (GTK_WIDGET (window));
-      break;
-    case PROP_ALLOW_GROW:
-      window->allow_grow = g_value_get_boolean (value);
-      gtk_widget_queue_resize (GTK_WIDGET (window));
-      g_object_notify (G_OBJECT (window), "resizable");
-      break;
     case PROP_RESIZABLE:
-      window->allow_grow = g_value_get_boolean (value);
+      window->resizable = g_value_get_boolean (value);
       gtk_widget_queue_resize (GTK_WIDGET (window));
-      g_object_notify (G_OBJECT (window), "allow-grow");
       break;
     case PROP_MODAL:
       gtk_window_set_modal (window, g_value_get_boolean (value));
@@ -1153,14 +1124,8 @@ gtk_window_get_property (GObject      *object,
     case PROP_TITLE:
       g_value_set_string (value, window->title);
       break;
-    case PROP_ALLOW_SHRINK:
-      g_value_set_boolean (value, window->allow_shrink);
-      break;
-    case PROP_ALLOW_GROW:
-      g_value_set_boolean (value, window->allow_grow);
-      break;
     case PROP_RESIZABLE:
-      g_value_set_boolean (value, window->allow_grow);
+      g_value_set_boolean (value, window->resizable);
       break;
     case PROP_MODAL:
       g_value_set_boolean (value, window->modal);
@@ -1760,24 +1725,6 @@ gtk_window_get_default_widget (GtkWindow *window)
   g_return_val_if_fail (GTK_IS_WINDOW (window), NULL);
 
   return window->default_widget;
-}
-
-static void
-gtk_window_set_policy_internal (GtkWindow *window,
-                                gboolean   allow_shrink,
-                                gboolean   allow_grow,
-                                gboolean   auto_shrink)
-{
-  window->allow_shrink = (allow_shrink != FALSE);
-  window->allow_grow = (allow_grow != FALSE);
-
-  g_object_freeze_notify (G_OBJECT (window));
-  g_object_notify (G_OBJECT (window), "allow-shrink");
-  g_object_notify (G_OBJECT (window), "allow-grow");
-  g_object_notify (G_OBJECT (window), "resizable");
-  g_object_thaw_notify (G_OBJECT (window));
-
-  gtk_widget_queue_resize_no_redraw (GTK_WIDGET (window));
 }
 
 static gboolean
@@ -3709,7 +3656,7 @@ gtk_window_set_icon_from_file (GtkWindow   *window,
 
 /**
  * gtk_window_set_default_icon_list:
- * @list: (element-type GdkPixbuf) (transfer container) a list of #GdkPixbuf
+ * @list: (element-type GdkPixbuf) (transfer container): a list of #GdkPixbuf
  *
  * Sets an icon list to be used as fallback for windows that haven't
  * had gtk_window_set_icon_list() called on them to set up a
@@ -4516,9 +4463,9 @@ gtk_window_show (GtkWidget *widget)
   gboolean need_resize;
 
   GTK_WIDGET_SET_FLAGS (widget, GTK_VISIBLE);
-  
-  need_resize = container->need_resize || !gtk_widget_get_realized (widget);
-  container->need_resize = FALSE;
+
+  need_resize = _gtk_container_get_need_resize (container) || !gtk_widget_get_realized (widget);
+  _gtk_container_set_need_resize (container, FALSE);
 
   if (need_resize)
     {
@@ -4606,6 +4553,7 @@ gtk_window_hide (GtkWidget *widget)
 static void
 gtk_window_map (GtkWidget *widget)
 {
+  GtkWidget *child;
   GtkWindow *window = GTK_WINDOW (widget);
   GtkWindowPrivate *priv = GTK_WINDOW_GET_PRIVATE (window);
   GdkWindow *toplevel;
@@ -4613,10 +4561,11 @@ gtk_window_map (GtkWidget *widget)
 
   gtk_widget_set_mapped (widget, TRUE);
 
-  if (window->bin.child &&
-      gtk_widget_get_visible (window->bin.child) &&
-      !gtk_widget_get_mapped (window->bin.child))
-    gtk_widget_map (window->bin.child);
+  child = gtk_bin_get_child (&(window->bin));
+  if (child &&
+      gtk_widget_get_visible (child) &&
+      !gtk_widget_get_mapped (child))
+    gtk_widget_map (child);
 
   if (window->frame)
     toplevel = window->frame;
@@ -4982,20 +4931,24 @@ gtk_window_size_allocate (GtkWidget     *widget,
 {
   GtkWindow *window;
   GtkAllocation child_allocation;
+  GtkWidget *child;
+  guint border_width;
 
   window = GTK_WINDOW (widget);
   widget->allocation = *allocation;
 
-  if (window->bin.child && gtk_widget_get_visible (window->bin.child))
+  child = gtk_bin_get_child (&(window->bin));
+  if (child && gtk_widget_get_visible (child))
     {
-      child_allocation.x = GTK_CONTAINER (window)->border_width;
-      child_allocation.y = GTK_CONTAINER (window)->border_width;
+      border_width = gtk_container_get_border_width (GTK_CONTAINER (window));
+      child_allocation.x = border_width;
+      child_allocation.y = border_width;
       child_allocation.width =
 	MAX (1, (gint)allocation->width - child_allocation.x * 2);
       child_allocation.height =
 	MAX (1, (gint)allocation->height - child_allocation.y * 2);
 
-      gtk_widget_size_allocate (window->bin.child, &child_allocation);
+      gtk_widget_size_allocate (child, &child_allocation);
     }
 
   if (gtk_widget_get_realized (widget) && window->frame)
@@ -5275,7 +5228,7 @@ gtk_window_move_focus (GtkWindow       *window,
 {
   gtk_widget_child_focus (GTK_WIDGET (window), dir);
   
-  if (!GTK_CONTAINER (window)->focus_child)
+  if (!gtk_container_get_focus_child (GTK_CONTAINER (window)))
     gtk_window_set_focus (window, NULL);
 }
 
@@ -5299,6 +5252,8 @@ do_focus_change (GtkWidget *widget,
 {
   GdkDeviceManager *device_manager;
   GList *devices, *d;
+
+  g_object_ref (widget);
 
   device_manager = gdk_display_get_device_manager (gtk_widget_get_display (widget));
   devices = gdk_device_manager_list_devices (device_manager, GDK_DEVICE_TYPE_MASTER);
@@ -5336,6 +5291,7 @@ do_focus_change (GtkWidget *widget,
     }
 
   g_list_free (devices);
+  g_object_unref (widget);
 }
 
 static gint
@@ -5447,6 +5403,7 @@ gtk_window_focus (GtkWidget        *widget,
   GtkBin *bin;
   GtkWindow *window;
   GtkContainer *container;
+  GtkWidget *child;
   GtkWidget *old_focus_child;
   GtkWidget *parent;
 
@@ -5454,7 +5411,7 @@ gtk_window_focus (GtkWidget        *widget,
   window = GTK_WINDOW (widget);
   bin = GTK_BIN (widget);
 
-  old_focus_child = container->focus_child;
+  old_focus_child = gtk_container_get_focus_child (container);
   
   /* We need a special implementation here to deal properly with wrapping
    * around in the tab chain without the danger of going into an
@@ -5488,9 +5445,10 @@ gtk_window_focus (GtkWidget        *widget,
     }
 
   /* Now try to focus the first widget in the window */
-  if (bin->child)
+  child = gtk_bin_get_child (bin);
+  if (child)
     {
-      if (gtk_widget_child_focus (bin->child, direction))
+      if (gtk_widget_child_focus (child, direction))
         return TRUE;
     }
 
@@ -5609,12 +5567,14 @@ gtk_window_get_width (GtkSizeRequest      *widget,
 {
   GtkWindow *window;
   GtkWidget *child;
+  guint border_width;
 
   window = GTK_WINDOW (widget);
   child  = gtk_bin_get_child (GTK_BIN (window));
-  
-  *minimum_size = GTK_CONTAINER (window)->border_width * 2;
-  *natural_size = GTK_CONTAINER (window)->border_width * 2;
+
+  border_width = gtk_container_get_border_width (GTK_CONTAINER (window));
+  *minimum_size = border_width * 2;
+  *natural_size = border_width * 2;
 
   if (child && gtk_widget_get_visible (child))
     {
@@ -5633,12 +5593,14 @@ gtk_window_get_height (GtkSizeRequest      *widget,
 {
   GtkWindow *window;
   GtkWidget *child;
+  guint border_width;
 
   window = GTK_WINDOW (widget);
   child  = gtk_bin_get_child (GTK_BIN (window));
-  
-  *minimum_size = GTK_CONTAINER (window)->border_width * 2;
-  *natural_size = GTK_CONTAINER (window)->border_width * 2;
+
+  border_width = gtk_container_get_border_width (GTK_CONTAINER (window));
+  *minimum_size = border_width * 2;
+  *natural_size = border_width * 2;
 
   if (child && gtk_widget_get_visible (child))
     {
@@ -5669,7 +5631,7 @@ _gtk_window_unset_focus_and_default (GtkWindow *window,
   g_object_ref (window);
   g_object_ref (widget);
       
-  if (GTK_CONTAINER (widget->parent)->focus_child == widget)
+  if (gtk_container_get_focus_child (GTK_CONTAINER (widget->parent)) == widget)
     {
       child = window->focus_widget;
       
@@ -6454,7 +6416,7 @@ gtk_window_move_resize (GtkWindow *window)
 
 	  gdk_window_process_updates (widget->window, TRUE);
 
-	  if (container->resize_mode == GTK_RESIZE_QUEUE)
+	  if (gtk_container_get_resize_mode (container) == GTK_RESIZE_QUEUE)
 	    gtk_widget_queue_draw (widget);
 	}
       else
@@ -6478,7 +6440,7 @@ gtk_window_move_resize (GtkWindow *window)
 	   * FIXME: we should also dequeue the pending redraws here, since
 	   * we handle those ourselves upon ->configure_notify_received==TRUE.
 	   */
-	  if (container->resize_mode == GTK_RESIZE_QUEUE)
+	  if (gtk_container_get_resize_mode (container) == GTK_RESIZE_QUEUE)
 	    {
 	      gtk_widget_queue_resize_no_redraw (widget);
 	      _gtk_container_dequeue_resize_handler (container);
@@ -6686,7 +6648,7 @@ gtk_window_compute_hints (GtkWindow   *window,
       else
 	new_geometry->min_height += extra_height;
     }
-  else if (!window->allow_shrink)
+  else
     {
       *new_flags |= GDK_HINT_MIN_SIZE;
       
@@ -6706,7 +6668,7 @@ gtk_window_compute_hints (GtkWindow   *window,
       else
 	new_geometry->max_height += extra_height;
     }
-  else if (!window->allow_grow)
+  else if (!window->resizable)
     {
       *new_flags |= GDK_HINT_MAX_SIZE;
       
@@ -7349,7 +7311,11 @@ gtk_window_set_resizable (GtkWindow *window,
 {
   g_return_if_fail (GTK_IS_WINDOW (window));
 
-  gtk_window_set_policy_internal (window, FALSE, resizable, FALSE);
+  window->resizable = (resizable != FALSE);
+
+  g_object_notify (G_OBJECT (window), "resizable");
+
+  gtk_widget_queue_resize_no_redraw (GTK_WIDGET (window));
 }
 
 /**
@@ -7369,7 +7335,7 @@ gtk_window_get_resizable (GtkWindow *window)
    * mean by "resizable" (and will be a reliable indicator if
    * set_policy() hasn't been called)
    */
-  return window->allow_grow;
+  return window->resizable;
 }
 
 /**
@@ -7918,6 +7884,8 @@ gtk_window_has_group (GtkWindow *window)
 GtkWidget *
 gtk_window_group_get_current_grab (GtkWindowGroup *window_group)
 {
+  g_return_val_if_fail (GTK_IS_WINDOW_GROUP (window_group), NULL);
+
   if (window_group->grabs)
     return GTK_WIDGET (window_group->grabs->data);
   return NULL;
@@ -7997,6 +7965,9 @@ gtk_window_group_get_current_device_grab (GtkWindowGroup *window_group,
   GtkDeviceGrabInfo *info;
   GdkDevice *other_device;
   GSList *list;
+
+  g_return_val_if_fail (GTK_IS_WINDOW_GROUP (window_group), NULL);
+  g_return_val_if_fail (GDK_IS_DEVICE (device), NULL);
 
   priv = GTK_WINDOW_GROUP_GET_PRIVATE (window_group);
   list = priv->device_grabs;
@@ -8858,6 +8829,3 @@ gtk_window_set_default_icon_from_file (const gchar *filename,
 }
 
 #endif
-
-#define __GTK_WINDOW_C__
-#include "gtkaliasdef.c"

@@ -23,7 +23,6 @@
 #include "gtkintl.h"
 #include "gtktreednd.h"
 #include "gtkprivate.h"
-#include "gtkalias.h"
 #include <string.h>
 
 /* ITER FORMAT:
@@ -77,7 +76,6 @@ struct _FilterLevel
   FilterLevel *parent_level;
 };
 
-#define GTK_TREE_MODEL_FILTER_GET_PRIVATE(obj)  (G_TYPE_INSTANCE_GET_PRIVATE ((obj), GTK_TYPE_TREE_MODEL_FILTER, GtkTreeModelFilterPrivate))
 
 struct _GtkTreeModelFilterPrivate
 {
@@ -297,7 +295,9 @@ G_DEFINE_TYPE_WITH_CODE (GtkTreeModelFilter, gtk_tree_model_filter, G_TYPE_OBJEC
 static void
 gtk_tree_model_filter_init (GtkTreeModelFilter *filter)
 {
-  filter->priv = GTK_TREE_MODEL_FILTER_GET_PRIVATE (filter);
+  filter->priv = G_TYPE_INSTANCE_GET_PRIVATE (filter,
+                                              GTK_TYPE_TREE_MODEL_FILTER,
+                                              GtkTreeModelFilterPrivate);
 
   filter->priv->visible_column = -1;
   filter->priv->zero_ref_count = 0;
@@ -3177,7 +3177,7 @@ gtk_tree_model_filter_set_visible_column (GtkTreeModelFilter *filter,
 /**
  * gtk_tree_model_filter_convert_child_iter_to_iter:
  * @filter: A #GtkTreeModelFilter.
- * @filter_iter: An uninitialized #GtkTreeIter.
+ * @filter_iter: (out): An uninitialized #GtkTreeIter.
  * @child_iter: A valid #GtkTreeIter pointing to a row on the child model.
  *
  * Sets @filter_iter to point to the row in @filter that corresponds to the
@@ -3224,7 +3224,7 @@ gtk_tree_model_filter_convert_child_iter_to_iter (GtkTreeModelFilter *filter,
 /**
  * gtk_tree_model_filter_convert_iter_to_child_iter:
  * @filter: A #GtkTreeModelFilter.
- * @child_iter: An uninitialized #GtkTreeIter.
+ * @child_iter: (out): An uninitialized #GtkTreeIter.
  * @filter_iter: A valid #GtkTreeIter pointing to a row on @filter.
  *
  * Sets @child_iter to point to the row pointed to by @filter_iter.
@@ -3529,6 +3529,3 @@ gtk_tree_model_filter_clear_cache (GtkTreeModelFilter *filter)
     gtk_tree_model_filter_clear_cache_helper (filter,
                                               FILTER_LEVEL (filter->priv->root));
 }
-
-#define __GTK_TREE_MODEL_FILTER_C__
-#include "gtkaliasdef.c"

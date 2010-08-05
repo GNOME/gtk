@@ -38,13 +38,13 @@ G_BEGIN_DECLS
 
 typedef struct _GtkPageSetupUnixDialog         GtkPageSetupUnixDialog;
 typedef struct _GtkPageSetupUnixDialogClass    GtkPageSetupUnixDialogClass;
-typedef struct GtkPageSetupUnixDialogPrivate   GtkPageSetupUnixDialogPrivate;
+typedef struct _GtkPageSetupUnixDialogPrivate  GtkPageSetupUnixDialogPrivate;
 
 struct _GtkPageSetupUnixDialog
 {
   GtkDialog parent_instance;
 
-  GtkPageSetupUnixDialogPrivate *GSEAL (priv);
+  GtkPageSetupUnixDialogPrivate *priv;
 };
 
 struct _GtkPageSetupUnixDialogClass

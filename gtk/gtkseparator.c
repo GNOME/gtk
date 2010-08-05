@@ -30,8 +30,6 @@
 #include "gtkseparator.h"
 #include "gtkprivate.h"
 #include "gtkintl.h"
-#include "gtkalias.h"
-
 
 /**
  * SECTION:gtkseparator
@@ -265,7 +263,3 @@ gtk_separator_new (GtkOrientation orientation)
                        "orientation", orientation,
                        NULL);
 }
-
-
-#define __GTK_SEPARATOR_C__
-#include "gtkaliasdef.c"

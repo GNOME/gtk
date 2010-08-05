@@ -48,17 +48,15 @@ G_BEGIN_DECLS
 
 
 typedef struct _GtkViewport       GtkViewport;
+typedef struct _GtkViewportPriv   GtkViewportPriv;
 typedef struct _GtkViewportClass  GtkViewportClass;
 
 struct _GtkViewport
 {
   GtkBin bin;
 
-  GtkShadowType GSEAL (shadow_type);
-  GdkWindow *GSEAL (view_window);
-  GdkWindow *GSEAL (bin_window);
-  GtkAdjustment *GSEAL (hadjustment);
-  GtkAdjustment *GSEAL (vadjustment);
+  /* <private> */
+  GtkViewportPriv *priv;
 };
 
 struct _GtkViewportClass

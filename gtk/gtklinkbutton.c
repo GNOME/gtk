@@ -40,7 +40,6 @@
 #include "gtklinkbutton.h"
 
 #include "gtkintl.h"
-#include "gtkalias.h"
 
 
 struct _GtkLinkButtonPrivate
@@ -59,7 +58,6 @@ enum
   PROP_VISITED
 };
 
-#define GTK_LINK_BUTTON_GET_PRIVATE(obj)	(G_TYPE_INSTANCE_GET_PRIVATE ((obj), GTK_TYPE_LINK_BUTTON, GtkLinkButtonPrivate))
 
 static void     gtk_link_button_finalize     (GObject          *object);
 static void     gtk_link_button_get_property (GObject          *object,
@@ -168,8 +166,10 @@ gtk_link_button_class_init (GtkLinkButtonClass *klass)
 static void
 gtk_link_button_init (GtkLinkButton *link_button)
 {
-  link_button->priv = GTK_LINK_BUTTON_GET_PRIVATE (link_button),
-  
+  link_button->priv = G_TYPE_INSTANCE_GET_PRIVATE (link_button,
+                                                   GTK_TYPE_LINK_BUTTON,
+                                                   GtkLinkButtonPrivate);
+
   gtk_button_set_relief (GTK_BUTTON (link_button), GTK_RELIEF_NONE);
   
   g_signal_connect (link_button, "enter-notify-event",
@@ -785,7 +785,3 @@ gtk_link_button_get_visited (GtkLinkButton *link_button)
   
   return link_button->priv->visited;
 }
-
-
-#define __GTK_LINK_BUTTON_C__
-#include "gtkaliasdef.c"

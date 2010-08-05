@@ -39,7 +39,6 @@
 #include "gtkcustompaperunixdialog.h"
 #include "gtkprintbackend.h"
 #include "gtkprintutils.h"
-#include "gtkalias.h"
 
 #define CUSTOM_PAPER_FILENAME ".gtk-custom-papers"
 
@@ -50,7 +49,7 @@ typedef struct
   GtkWidget *spin_button;
 } UnitWidget;
 
-struct GtkCustomPaperUnixDialogPrivate
+struct _GtkCustomPaperUnixDialogPrivate
 {
 
   GtkWidget *treeview;
@@ -87,10 +86,9 @@ enum {
   PRINTER_LIST_N_COLS
 };
 
+
 G_DEFINE_TYPE (GtkCustomPaperUnixDialog, gtk_custom_paper_unix_dialog, GTK_TYPE_DIALOG)
 
-#define GTK_CUSTOM_PAPER_UNIX_DIALOG_GET_PRIVATE(o)  \
-   (G_TYPE_INSTANCE_GET_PRIVATE ((o), GTK_TYPE_CUSTOM_PAPER_UNIX_DIALOG, GtkCustomPaperUnixDialogPrivate))
 
 static void gtk_custom_paper_unix_dialog_finalize  (GObject                *object);
 static void populate_dialog                        (GtkCustomPaperUnixDialog *dialog);
@@ -273,7 +271,10 @@ gtk_custom_paper_unix_dialog_init (GtkCustomPaperUnixDialog *dialog)
   GtkCustomPaperUnixDialogPrivate *priv;
   GtkTreeIter iter;
 
-  priv = dialog->priv = GTK_CUSTOM_PAPER_UNIX_DIALOG_GET_PRIVATE (dialog);
+  dialog->priv = G_TYPE_INSTANCE_GET_PRIVATE (dialog,
+                                              GTK_TYPE_CUSTOM_PAPER_UNIX_DIALOG,
+                                              GtkCustomPaperUnixDialogPrivate);
+  priv = dialog->priv;
 
   priv->print_backends = NULL;
 
@@ -962,6 +963,8 @@ static void
 populate_dialog (GtkCustomPaperUnixDialog *dialog)
 {
   GtkCustomPaperUnixDialogPrivate *priv = dialog->priv;
+  GtkDialog *cpu_dialog = GTK_DIALOG (dialog);
+  GtkWidget *action_area, *content_area;
   GtkWidget *image, *table, *label, *widget, *frame, *combo;
   GtkWidget *hbox, *vbox, *treeview, *scrolled, *button_box, *button;
   GtkCellRenderer *cell;
@@ -970,15 +973,18 @@ populate_dialog (GtkCustomPaperUnixDialog *dialog)
   GtkTreeSelection *selection;
   GtkUnit user_units;
 
-  gtk_dialog_set_has_separator (GTK_DIALOG (dialog), FALSE);
+  content_area = gtk_dialog_get_content_area (cpu_dialog);
+  action_area = gtk_dialog_get_action_area (cpu_dialog);
+
+  gtk_dialog_set_has_separator (cpu_dialog, FALSE);
   gtk_container_set_border_width (GTK_CONTAINER (dialog), 5);
-  gtk_box_set_spacing (GTK_BOX (GTK_DIALOG (dialog)->vbox), 2); /* 2 * 5 + 2 = 12 */
-  gtk_container_set_border_width (GTK_CONTAINER (GTK_DIALOG (dialog)->action_area), 5);
-  gtk_box_set_spacing (GTK_BOX (GTK_DIALOG (dialog)->action_area), 6);
+  gtk_box_set_spacing (GTK_BOX (content_area), 2); /* 2 * 5 + 2 = 12 */
+  gtk_container_set_border_width (GTK_CONTAINER (action_area), 5);
+  gtk_box_set_spacing (GTK_BOX (action_area), 6);
 
   hbox = gtk_hbox_new (FALSE, 18);
   gtk_container_set_border_width (GTK_CONTAINER (hbox), 5);
-  gtk_box_pack_start (GTK_BOX (GTK_DIALOG (dialog)->vbox), hbox, TRUE, TRUE, 0);
+  gtk_box_pack_start (GTK_BOX (content_area), hbox, TRUE, TRUE, 0);
   gtk_widget_show (hbox);
 
   vbox = gtk_vbox_new (FALSE, 6);
@@ -1181,7 +1187,3 @@ populate_dialog (GtkCustomPaperUnixDialog *dialog)
 
   load_print_backends (dialog);
 }
-
-
-#define __GTK_CUSTOM_PAPER_UNIX_DIALOG_C__
-#include "gtkaliasdef.c"
