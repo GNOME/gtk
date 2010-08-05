@@ -568,8 +568,6 @@ gtk_expander_size_allocate (GtkWidget     *widget,
 
   widget->allocation = *allocation;
 
-  widget->allocation = *allocation;
-
   gtk_widget_style_get (widget,
 			"interior-focus", &interior_focus,
 			"focus-line-width", &focus_width,
