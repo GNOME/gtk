@@ -59,24 +59,24 @@ gboolean               gtk_widget_path_iter_has_qname (const GtkWidgetPath *path
 void     gtk_widget_path_iter_add_region    (GtkWidgetPath      *path,
                                              guint               pos,
                                              const gchar        *name,
-                                             GtkChildClassFlags  flags);
+                                             GtkRegionFlags     flags);
 void     gtk_widget_path_iter_remove_region (GtkWidgetPath      *path,
                                              guint               pos,
                                              const gchar        *name);
 void     gtk_widget_path_iter_clear_regions (GtkWidgetPath      *path,
                                              guint               pos);
 
-GSList * gtk_widget_path_iter_list_regions  (const GtkWidgetPath *path,
+GSList * gtk_widget_path_iter_list_regions  (cosnt GtkWidgetPath *path,
                                              guint                pos);
 
 gboolean gtk_widget_path_iter_has_region    (const GtkWidgetPath *path,
                                              guint                pos,
                                              const gchar         *name,
-                                             GtkChildClassFlags  *flags);
+                                             GtkRegionFlags      *flags);
 gboolean gtk_widget_path_iter_has_qregion   (const GtkWidgetPath *path,
                                              guint                pos,
                                              GQuark               qname,
-                                             GtkChildClassFlags  *flags);
+                                             GtkRegionFlags      *flags);
 
 GType           gtk_widget_path_get_widget_type (const GtkWidgetPath *path);
 

@@ -223,10 +223,10 @@ gtk_widget_path_iter_has_name (const GtkWidgetPath *path,
 }
 
 void
-gtk_widget_path_iter_add_region (GtkWidgetPath      *path,
-                                 guint               pos,
-                                 const gchar        *name,
-                                 GtkChildClassFlags  flags)
+gtk_widget_path_iter_add_region (GtkWidgetPath  *path,
+                                 guint           pos,
+                                 const gchar    *name,
+                                 GtkRegionFlags  flags)
 {
   GtkPathElement *elem;
   GQuark qname;
@@ -318,7 +318,7 @@ gboolean
 gtk_widget_path_iter_has_qregion (const GtkWidgetPath *path,
                                   guint                pos,
                                   GQuark               qname,
-                                  GtkChildClassFlags  *flags)
+                                  GtkRegionFlags      *flags)
 {
   GtkPathElement *elem;
   gpointer value;
@@ -347,7 +347,7 @@ gboolean
 gtk_widget_path_iter_has_region (const GtkWidgetPath *path,
                                  guint                pos,
                                  const gchar         *name,
-                                 GtkChildClassFlags  *flags)
+                                 GtkRegionFlags      *flags)
 {
   GQuark qname;
 

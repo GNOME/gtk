@@ -571,13 +571,13 @@ typedef enum
 } GtkStateFlags;
 
 typedef enum {
-  GTK_CHILD_CLASS_EVEN    = 1 << 0,
-  GTK_CHILD_CLASS_ODD     = 1 << 1,
-  GTK_CHILD_CLASS_FIRST   = 1 << 2,
-  GTK_CHILD_CLASS_LAST    = 1 << 3,
-  GTK_CHILD_CLASS_DEFAULT = 1 << 4,
-  GTK_CHILD_CLASS_SORTED  = 1 << 5
-} GtkChildClassFlags;
+  GTK_REGION_EVEN    = 1 << 0,
+  GTK_REGION_ODD     = 1 << 1,
+  GTK_REGION_FIRST   = 1 << 2,
+  GTK_REGION_LAST    = 1 << 3,
+  GTK_REGION_DEFAULT = 1 << 4,
+  GTK_REGION_SORTED  = 1 << 5
+} GtkRegionFlags;
 
 typedef enum {
   GTK_JUNCTION_NONE   = 0,

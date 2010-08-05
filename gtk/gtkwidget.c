@@ -13233,17 +13233,17 @@ gtk_widget_get_path (GtkWidget *widget)
                                 quark_style_context);
 
   if (context)
-    regions = reg = gtk_style_context_list_child_classes (context);
+    regions = reg = gtk_style_context_list_regions (context);
 
   while (reg)
     {
-      GtkChildClassFlags flags;
+      GtkRegionFlags flags;
       const gchar *region_name;
 
       region_name = reg->data;
       reg = reg->next;
 
-      gtk_style_context_has_child_class (context, region_name, &flags);
+      gtk_style_context_has_region (context, region_name, &flags);
       gtk_widget_path_iter_add_region (path, 0, region_name, flags);
     }
 

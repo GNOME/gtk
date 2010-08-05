@@ -1763,7 +1763,7 @@ transform_detail_string (const gchar     *detail,
   else if (strcmp (detail, "expander") == 0)
     gtk_style_context_set_class (context, "expander");
   else if (strcmp (detail, "tooltip") == 0)
-    gtk_style_context_set_child_class (context, "tooltip", 0);
+    gtk_style_context_set_class (context, "tooltip");
   else if (strcmp (detail, "frame") == 0)
     gtk_style_context_set_class (context, "frame");
   else if (strcmp (detail, "scrolled_window") == 0)
@@ -1792,7 +1792,7 @@ transform_detail_string (const gchar     *detail,
     }
   else if (g_str_has_prefix (detail, "cell_"))
     {
-      GtkChildClassFlags row, col;
+      GtkRegionFlags row, col;
       gboolean ruled = FALSE;
       GStrv tokens;
       guint i;
@@ -1804,27 +1804,27 @@ transform_detail_string (const gchar     *detail,
       while (tokens[i])
         {
           if (strcmp (tokens[i], "even") == 0)
-            row |= GTK_CHILD_CLASS_EVEN;
+            row |= GTK_REGION_EVEN;
           else if (strcmp (tokens[i], "odd") == 0)
-            row |= GTK_CHILD_CLASS_ODD;
+            row |= GTK_REGION_ODD;
           else if (strcmp (tokens[i], "start") == 0)
-            col |= GTK_CHILD_CLASS_FIRST;
+            col |= GTK_REGION_FIRST;
           else if (strcmp (tokens[i], "end") == 0)
-            col |= GTK_CHILD_CLASS_LAST;
+            col |= GTK_REGION_LAST;
           else if (strcmp (tokens[i], "ruled") == 0)
             ruled = TRUE;
           else if (strcmp (tokens[i], "sorted") == 0)
-            col |= GTK_CHILD_CLASS_SORTED;
+            col |= GTK_REGION_SORTED;
 
           i++;
         }
 
       if (!ruled)
-        row &= ~(GTK_CHILD_CLASS_EVEN | GTK_CHILD_CLASS_ODD);
+        row &= ~(GTK_REGION_EVEN | GTK_REGION_ODD);
 
       gtk_style_context_set_class (context, "cell");
-      gtk_style_context_set_child_class (context, "row", row);
-      gtk_style_context_set_child_class (context, "column", col);
+      gtk_style_context_set_region (context, "row", row);
+      gtk_style_context_set_region (context, "column", col);
 
       g_strfreev (tokens);
     }

@@ -5041,7 +5041,7 @@ gtk_notebook_draw_tab (GtkNotebook     *notebook,
   GtkStateType state_type;
   GtkWidget *widget;
   GtkStyleContext *context;
-  GtkChildClassFlags flags = 0;
+  GtkRegionFlags flags = 0;
 
   if (!NOTEBOOK_IS_TAB_LABEL_PARENT (notebook, page) ||
       !gtk_widget_get_mapped (page->tab_label) ||
@@ -5056,19 +5056,19 @@ gtk_notebook_draw_tab (GtkNotebook     *notebook,
   else 
     state_type = GTK_STATE_ACTIVE;
 
-  if (position % 2 == 0)
-    flags |= GTK_CHILD_CLASS_ODD;
+  if ((position + 1) % 2 == 0)
+    flags |= GTK_REGION_EVEN;
   else
-    flags |= GTK_CHILD_CLASS_EVEN;
+    flags |= GTK_REGION_ODD;
 
   if (position == 0)
-    flags |= GTK_CHILD_CLASS_FIRST;
+    flags |= GTK_REGION_FIRST;
 
   if (is_last)
-    flags |= GTK_CHILD_CLASS_LAST;
+    flags |= GTK_REGION_LAST;
 
   context = gtk_widget_get_style_context (widget);
-  gtk_style_context_set_child_class (context, "tab", flags);
+  gtk_style_context_set_region (context, "tab", flags);
 
   gtk_paint_extension (gtk_widget_get_style (widget), cr,
                        state_type, GTK_SHADOW_OUT,
@@ -5096,7 +5096,7 @@ gtk_notebook_draw_tab (GtkNotebook     *notebook,
                        allocation.height + 2 * focus_width);
     }
 
-  gtk_style_context_unset_child_class (context, "tab");
+  gtk_style_context_unset_region (context, "tab");
 }
 
 static void

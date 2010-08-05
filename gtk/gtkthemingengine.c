@@ -351,9 +351,9 @@ gtk_theming_engine_has_class (GtkThemingEngine *engine,
 }
 
 gboolean
-gtk_theming_engine_has_child_class (GtkThemingEngine   *engine,
-                                    const gchar        *style_class,
-                                    GtkChildClassFlags *flags)
+gtk_theming_engine_has_region (GtkThemingEngine *engine,
+                               const gchar      *style_class,
+                               GtkRegionFlags   *flags)
 {
   GtkThemingEnginePrivate *priv;
 
@@ -363,7 +363,7 @@ gtk_theming_engine_has_child_class (GtkThemingEngine   *engine,
   g_return_val_if_fail (GTK_IS_THEMING_ENGINE (engine), FALSE);
 
   priv = engine->priv;
-  return gtk_style_context_has_child_class (priv->context, style_class, flags);
+  return gtk_style_context_has_region (priv->context, style_class, flags);
 }
 
 GtkTextDirection

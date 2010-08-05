@@ -63,7 +63,7 @@ struct SelectorElement
     struct
     {
       GQuark name;
-      GtkChildClassFlags flags;
+      GtkRegionFlags flags;
     } region;
   };
 };
@@ -216,9 +216,9 @@ selector_path_prepend_glob (SelectorPath *path)
 }
 
 static void
-selector_path_prepend_region (SelectorPath       *path,
-                              const gchar        *name,
-                              GtkChildClassFlags  flags)
+selector_path_prepend_region (SelectorPath   *path,
+                              const gchar    *name,
+                              GtkRegionFlags  flags)
 {
   SelectorElement *elem;
 
@@ -411,7 +411,7 @@ compare_selector_element (GtkWidgetPath   *path,
     }
   else if (elem->elem_type == SELECTOR_REGION)
     {
-      GtkChildClassFlags flags;
+      GtkRegionFlags flags;
 
       if (!gtk_widget_path_iter_has_qregion (path, index,
                                              elem->region.name,
@@ -856,10 +856,10 @@ css_provider_commit (GtkCssProvider *css_provider)
 }
 
 static GTokenType
-parse_pseudo_class (GtkCssProvider     *css_provider,
-                    GScanner           *scanner,
-                    SelectorPath       *selector,
-                    GtkChildClassFlags *flags)
+parse_pseudo_class (GtkCssProvider *css_provider,
+                    GScanner       *scanner,
+                    SelectorPath   *selector,
+                    GtkRegionFlags *flags)
 {
   ParserSymbol symbol;
 
@@ -889,16 +889,16 @@ parse_pseudo_class (GtkCssProvider     *css_provider,
       switch (symbol)
         {
         case SYMBOL_NTH_CHILD_EVEN:
-          *flags = GTK_CHILD_CLASS_EVEN;
+          *flags = GTK_REGION_EVEN;
           break;
         case SYMBOL_NTH_CHILD_ODD:
-          *flags = GTK_CHILD_CLASS_ODD;
+          *flags = GTK_REGION_ODD;
           break;
         case SYMBOL_NTH_CHILD_FIRST:
-          *flags = GTK_CHILD_CLASS_FIRST;
+          *flags = GTK_REGION_FIRST;
           break;
         case SYMBOL_NTH_CHILD_LAST:
-          *flags = GTK_CHILD_CLASS_LAST;
+          *flags = GTK_REGION_LAST;
           break;
         default:
           break;
@@ -912,9 +912,9 @@ parse_pseudo_class (GtkCssProvider     *css_provider,
       css_provider_pop_scope (css_provider);
     }
   else if (symbol == SYMBOL_FIRST_CHILD)
-    *flags = GTK_CHILD_CLASS_FIRST;
+    *flags = GTK_REGION_FIRST;
   else if (symbol == SYMBOL_LAST_CHILD)
-    *flags = GTK_CHILD_CLASS_LAST;
+    *flags = GTK_REGION_LAST;
   else
     {
       GtkStateType state;
@@ -984,7 +984,7 @@ parse_selector (GtkCssProvider  *css_provider,
         }
       else if (g_ascii_islower (scanner->value.v_identifier[0]))
         {
-          GtkChildClassFlags flags = 0;
+          GtkRegionFlags flags = 0;
           gchar *region_name;
 
           region_name = g_strdup (scanner->value.v_identifier);
@@ -1027,7 +1027,7 @@ parse_selector (GtkCssProvider  *css_provider,
   if (scanner->token == ':' &&
       path->state == GTK_STATE_NORMAL)
     {
-      GtkChildClassFlags flags = 0;
+      GtkRegionFlags flags = 0;
       GTokenType token;
 
       /* Add glob selector if path is empty */
