@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.HEAD.he\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-07-16 17:15+0300\n"
-"PO-Revision-Date: 2010-07-16 17:16+0200\n"
+"POT-Creation-Date: 2010-08-05 13:31+0300\n"
+"PO-Revision-Date: 2010-08-05 13:32+0200\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: Hebrew <he@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -670,38 +670,38 @@ msgstr ""
 "If TRUE, the child appears in a secondary group of children, suitable for, e."
 "g., help buttons"
 
-#: ../gtk/gtkbox.c:215 ../gtk/gtkexpander.c:217 ../gtk/gtkiconview.c:677
+#: ../gtk/gtkbox.c:241 ../gtk/gtkexpander.c:217 ../gtk/gtkiconview.c:677
 #: ../gtk/gtktreeviewcolumn.c:217
 msgid "Spacing"
 msgstr "Spacing"
 
-#: ../gtk/gtkbox.c:216
+#: ../gtk/gtkbox.c:242
 msgid "The amount of space between children"
 msgstr "The amount of space between children"
 
-#: ../gtk/gtkbox.c:225 ../gtk/gtktable.c:181 ../gtk/gtktoolbar.c:518
+#: ../gtk/gtkbox.c:251 ../gtk/gtktable.c:181 ../gtk/gtktoolbar.c:518
 #: ../gtk/gtktoolitemgroup.c:1601
 msgid "Homogeneous"
 msgstr "Homogeneous"
 
-#: ../gtk/gtkbox.c:226
+#: ../gtk/gtkbox.c:252
 msgid "Whether the children should all be the same size"
 msgstr "Whether the children should all be the same size"
 
-#: ../gtk/gtkbox.c:242 ../gtk/gtktoolbar.c:510 ../gtk/gtktoolitemgroup.c:1608
+#: ../gtk/gtkbox.c:268 ../gtk/gtktoolbar.c:510 ../gtk/gtktoolitemgroup.c:1608
 #: ../gtk/gtktoolpalette.c:1057 ../gtk/gtktreeviewcolumn.c:273
 msgid "Expand"
 msgstr "Expand"
 
-#: ../gtk/gtkbox.c:243
+#: ../gtk/gtkbox.c:269
 msgid "Whether the child should receive extra space when the parent grows"
 msgstr "Whether the child should receive extra space when the parent grows"
 
-#: ../gtk/gtkbox.c:259 ../gtk/gtktoolitemgroup.c:1615
+#: ../gtk/gtkbox.c:285 ../gtk/gtktoolitemgroup.c:1615
 msgid "Fill"
 msgstr "Fill"
 
-#: ../gtk/gtkbox.c:260
+#: ../gtk/gtkbox.c:286
 msgid ""
 "Whether extra space given to the child should be allocated to the child or "
 "used as padding"
@@ -709,19 +709,19 @@ msgstr ""
 "Whether extra space given to the child should be allocated to the child or "
 "used as padding"
 
-#: ../gtk/gtkbox.c:267 ../gtk/gtktrayicon-x11.c:161
+#: ../gtk/gtkbox.c:293 ../gtk/gtktrayicon-x11.c:161
 msgid "Padding"
 msgstr "Padding"
 
-#: ../gtk/gtkbox.c:268
+#: ../gtk/gtkbox.c:294
 msgid "Extra space to put between the child and its neighbors, in pixels"
 msgstr "Extra space to put between the child and its neighbors, in pixels"
 
-#: ../gtk/gtkbox.c:274
+#: ../gtk/gtkbox.c:300
 msgid "Pack type"
 msgstr "Pack type"
 
-#: ../gtk/gtkbox.c:275 ../gtk/gtknotebook.c:699
+#: ../gtk/gtkbox.c:301 ../gtk/gtknotebook.c:699
 msgid ""
 "A GtkPackType indicating whether the child is packed with reference to the "
 "start or end of the parent"
@@ -729,12 +729,12 @@ msgstr ""
 "A GtkPackType indicating whether the child is packed with reference to the "
 "start or end of the parent"
 
-#: ../gtk/gtkbox.c:281 ../gtk/gtknotebook.c:677 ../gtk/gtkpaned.c:269
-#: ../gtk/gtkruler.c:155 ../gtk/gtktoolitemgroup.c:1629
+#: ../gtk/gtkbox.c:307 ../gtk/gtknotebook.c:677 ../gtk/gtkpaned.c:268
+#: ../gtk/gtkruler.c:154 ../gtk/gtktoolitemgroup.c:1629
 msgid "Position"
 msgstr "Position"
 
-#: ../gtk/gtkbox.c:282 ../gtk/gtknotebook.c:678
+#: ../gtk/gtkbox.c:308 ../gtk/gtknotebook.c:678
 msgid "The index of the child in the parent"
 msgstr "The index of the child in the parent"
 
@@ -895,27 +895,27 @@ msgstr "Show button images"
 msgid "Whether images should be shown on buttons"
 msgstr "Whether images should be shown on buttons"
 
-#: ../gtk/gtkcalendar.c:462
+#: ../gtk/gtkcalendar.c:458
 msgid "Year"
 msgstr "Year"
 
-#: ../gtk/gtkcalendar.c:463
+#: ../gtk/gtkcalendar.c:459
 msgid "The selected year"
 msgstr "The selected year"
 
-#: ../gtk/gtkcalendar.c:476
+#: ../gtk/gtkcalendar.c:472
 msgid "Month"
 msgstr "Month"
 
-#: ../gtk/gtkcalendar.c:477
+#: ../gtk/gtkcalendar.c:473
 msgid "The selected month (as a number between 0 and 11)"
 msgstr "The selected month (as a number between 0 and 11)"
 
-#: ../gtk/gtkcalendar.c:491
+#: ../gtk/gtkcalendar.c:487
 msgid "Day"
 msgstr "Day"
 
-#: ../gtk/gtkcalendar.c:492
+#: ../gtk/gtkcalendar.c:488
 msgid ""
 "The selected day (as a number between 1 and 31, or 0 to unselect the "
 "currently selected day)"
@@ -923,61 +923,85 @@ msgstr ""
 "The selected day (as a number between 1 and 31, or 0 to unselect the "
 "currently selected day)"
 
-#: ../gtk/gtkcalendar.c:506
+#: ../gtk/gtkcalendar.c:502
 msgid "Show Heading"
 msgstr "Show Heading"
 
-#: ../gtk/gtkcalendar.c:507
+#: ../gtk/gtkcalendar.c:503
 msgid "If TRUE, a heading is displayed"
 msgstr "If TRUE, a heading is displayed"
 
-#: ../gtk/gtkcalendar.c:521
+#: ../gtk/gtkcalendar.c:517
 msgid "Show Day Names"
 msgstr "Show Day Names"
 
-#: ../gtk/gtkcalendar.c:522
+#: ../gtk/gtkcalendar.c:518
 msgid "If TRUE, day names are displayed"
 msgstr "If TRUE, day names are displayed"
 
-#: ../gtk/gtkcalendar.c:535
+#: ../gtk/gtkcalendar.c:531
 msgid "No Month Change"
 msgstr "No Month Change"
 
-#: ../gtk/gtkcalendar.c:536
+#: ../gtk/gtkcalendar.c:532
 msgid "If TRUE, the selected month cannot be changed"
 msgstr "If TRUE, the selected month cannot be changed"
 
-#: ../gtk/gtkcalendar.c:550
+#: ../gtk/gtkcalendar.c:546
 msgid "Show Week Numbers"
 msgstr "Show Week Numbers"
 
-#: ../gtk/gtkcalendar.c:551
+#: ../gtk/gtkcalendar.c:547
 msgid "If TRUE, week numbers are displayed"
 msgstr "If TRUE, week numbers are displayed"
 
-#: ../gtk/gtkcalendar.c:566
+#: ../gtk/gtkcalendar.c:562
 msgid "Details Width"
 msgstr "Details Width"
 
-#: ../gtk/gtkcalendar.c:567
+#: ../gtk/gtkcalendar.c:563
 msgid "Details width in characters"
 msgstr "Details width in characters"
 
-#: ../gtk/gtkcalendar.c:582
+#: ../gtk/gtkcalendar.c:578
 msgid "Details Height"
 msgstr "Details Height"
 
-#: ../gtk/gtkcalendar.c:583
+#: ../gtk/gtkcalendar.c:579
 msgid "Details height in rows"
 msgstr "Details height in rows"
 
-#: ../gtk/gtkcalendar.c:599
+#: ../gtk/gtkcalendar.c:595
 msgid "Show Details"
 msgstr "Show Details"
 
-#: ../gtk/gtkcalendar.c:600
+#: ../gtk/gtkcalendar.c:596
 msgid "If TRUE, details are shown"
 msgstr "If TRUE, details are shown"
+
+#: ../gtk/gtkcalendar.c:608
+msgid "Inner border"
+msgstr "Inner border"
+
+#: ../gtk/gtkcalendar.c:609
+msgid "Inner border space"
+msgstr "Inner border space"
+
+#: ../gtk/gtkcalendar.c:620
+msgid "Vertical separation"
+msgstr "Vertical separation"
+
+#: ../gtk/gtkcalendar.c:621
+msgid "Space between day headers and main area"
+msgstr "Space between day headers and main area"
+
+#: ../gtk/gtkcalendar.c:632
+msgid "Horizontal separation"
+msgstr "Horizontal separation"
+
+#: ../gtk/gtkcalendar.c:633
+msgid "Space between week headers and main area"
+msgstr "Space between week headers and main area"
 
 #: ../gtk/gtkcelleditable.c:53
 msgid "Editing Canceled"
@@ -1228,8 +1252,8 @@ msgstr "Value of the progress bar"
 
 #: ../gtk/gtkcellrendererprogress.c:142 ../gtk/gtkcellrenderertext.c:216
 #: ../gtk/gtkentry.c:739 ../gtk/gtkentrybuffer.c:352
-#: ../gtk/gtkmessagedialog.c:239 ../gtk/gtkprogressbar.c:154
-#: ../gtk/gtktextbuffer.c:197
+#: ../gtk/gtkmessagedialog.c:239 ../gtk/gtkprogressbar.c:143
+#: ../gtk/gtktextbuffer.c:210
 msgid "Text"
 msgstr "Text"
 
@@ -1270,12 +1294,12 @@ msgid "The vertical text alignment, from 0 (top) to 1 (bottom)."
 msgstr "The vertical text alignment, from 0 (top) to 1 (bottom)."
 
 #: ../gtk/gtkcellrendererprogress.c:217 ../gtk/gtkiconview.c:741
-#: ../gtk/gtkorientable.c:62 ../gtk/gtkprogressbar.c:129
+#: ../gtk/gtkorientable.c:62 ../gtk/gtkprogressbar.c:118
 #: ../gtk/gtkstatusicon.c:331 ../gtk/gtktrayicon-x11.c:120
 msgid "Orientation"
 msgstr "Orientation"
 
-#: ../gtk/gtkcellrendererprogress.c:218 ../gtk/gtkprogressbar.c:130
+#: ../gtk/gtkcellrendererprogress.c:218 ../gtk/gtkprogressbar.c:119
 msgid "Orientation and growth direction of the progress bar"
 msgstr "Orientation and growth direction of the progress bar"
 
@@ -1500,7 +1524,7 @@ msgstr ""
 "probably don't need it"
 
 #: ../gtk/gtkcellrenderertext.c:432 ../gtk/gtklabel.c:683
-#: ../gtk/gtkprogressbar.c:184
+#: ../gtk/gtkprogressbar.c:173
 msgid "Ellipsize"
 msgstr "Ellipsize"
 
@@ -1760,37 +1784,37 @@ msgstr "Draw as radio menu item"
 msgid "Whether the menu item looks like a radio menu item"
 msgstr "Whether the menu item looks like a radio menu item"
 
-#: ../gtk/gtkcolorbutton.c:169
+#: ../gtk/gtkcolorbutton.c:159
 msgid "Use alpha"
 msgstr "Use alpha"
 
-#: ../gtk/gtkcolorbutton.c:170
+#: ../gtk/gtkcolorbutton.c:160
 msgid "Whether or not to give the color an alpha value"
 msgstr "Whether or not to give the color an alpha value"
 
-#: ../gtk/gtkcolorbutton.c:184 ../gtk/gtkfilechooserbutton.c:404
+#: ../gtk/gtkcolorbutton.c:174 ../gtk/gtkfilechooserbutton.c:404
 #: ../gtk/gtkfontbutton.c:140 ../gtk/gtkprintjob.c:115
 #: ../gtk/gtkstatusicon.c:427 ../gtk/gtktreeviewcolumn.c:265
 msgid "Title"
 msgstr "Title"
 
-#: ../gtk/gtkcolorbutton.c:185
+#: ../gtk/gtkcolorbutton.c:175
 msgid "The title of the color selection dialog"
 msgstr "The title of the color selection dialog"
 
-#: ../gtk/gtkcolorbutton.c:199 ../gtk/gtkcolorsel.c:293
+#: ../gtk/gtkcolorbutton.c:189 ../gtk/gtkcolorsel.c:293
 msgid "Current Color"
 msgstr "Current Color"
 
-#: ../gtk/gtkcolorbutton.c:200
+#: ../gtk/gtkcolorbutton.c:190
 msgid "The selected color"
 msgstr "The selected color"
 
-#: ../gtk/gtkcolorbutton.c:214 ../gtk/gtkcolorsel.c:300
+#: ../gtk/gtkcolorbutton.c:204 ../gtk/gtkcolorsel.c:300
 msgid "Current Alpha"
 msgstr "Current Alpha"
 
-#: ../gtk/gtkcolorbutton.c:215
+#: ../gtk/gtkcolorbutton.c:205
 msgid "The selected opacity value (0 fully transparent, 65535 fully opaque)"
 msgstr "The selected opacity value (0 fully transparent, 65535 fully opaque)"
 
@@ -3810,57 +3834,57 @@ msgstr "Scroll arrow spacing"
 msgid "The orientation of the orientable"
 msgstr "The orientation of the orientable"
 
-#: ../gtk/gtkpaned.c:270
+#: ../gtk/gtkpaned.c:269
 msgid ""
 "Position of paned separator in pixels (0 means all the way to the left/top)"
 msgstr ""
 "Position of paned separator in pixels (0 means all the way to the left/top)"
 
-#: ../gtk/gtkpaned.c:279
+#: ../gtk/gtkpaned.c:278
 msgid "Position Set"
 msgstr "Position Set"
 
-#: ../gtk/gtkpaned.c:280
+#: ../gtk/gtkpaned.c:279
 msgid "TRUE if the Position property should be used"
 msgstr "TRUE if the Position property should be used"
 
-#: ../gtk/gtkpaned.c:286
+#: ../gtk/gtkpaned.c:285
 msgid "Handle Size"
 msgstr "Handle Size"
 
-#: ../gtk/gtkpaned.c:287
+#: ../gtk/gtkpaned.c:286
 msgid "Width of handle"
 msgstr "Width of handle"
 
-#: ../gtk/gtkpaned.c:303
+#: ../gtk/gtkpaned.c:302
 msgid "Minimal Position"
 msgstr "Minimal Position"
 
-#: ../gtk/gtkpaned.c:304
+#: ../gtk/gtkpaned.c:303
 msgid "Smallest possible value for the \"position\" property"
 msgstr "Smallest possible value for the \"position\" property"
 
-#: ../gtk/gtkpaned.c:321
+#: ../gtk/gtkpaned.c:320
 msgid "Maximal Position"
 msgstr "Maximal Position"
 
-#: ../gtk/gtkpaned.c:322
+#: ../gtk/gtkpaned.c:321
 msgid "Largest possible value for the \"position\" property"
 msgstr "Largest possible value for the \"position\" property"
 
-#: ../gtk/gtkpaned.c:339
+#: ../gtk/gtkpaned.c:338
 msgid "Resize"
 msgstr "Resize"
 
-#: ../gtk/gtkpaned.c:340
+#: ../gtk/gtkpaned.c:339
 msgid "If TRUE, the child expands and shrinks along with the paned widget"
 msgstr "If TRUE, the child expands and shrinks along with the paned widget"
 
-#: ../gtk/gtkpaned.c:355
+#: ../gtk/gtkpaned.c:354
 msgid "Shrink"
 msgstr "Shrink"
 
-#: ../gtk/gtkpaned.c:356
+#: ../gtk/gtkpaned.c:355
 msgid "If TRUE, the child can be made smaller than its requisition"
 msgstr "If TRUE, the child can be made smaller than its requisition"
 
@@ -4181,35 +4205,35 @@ msgstr "Whether the application has a selection"
 msgid "TRUE if page setup combos are embedded in GtkPrintUnixDialog"
 msgstr "TRUE if page setup combos are embedded in GtkPrintUnixDialog"
 
-#: ../gtk/gtkprogressbar.c:138
+#: ../gtk/gtkprogressbar.c:127
 msgid "Fraction"
 msgstr "Fraction"
 
-#: ../gtk/gtkprogressbar.c:139
+#: ../gtk/gtkprogressbar.c:128
 msgid "The fraction of total work that has been completed"
 msgstr "The fraction of total work that has been completed"
 
-#: ../gtk/gtkprogressbar.c:146
+#: ../gtk/gtkprogressbar.c:135
 msgid "Pulse Step"
 msgstr "Pulse Step"
 
-#: ../gtk/gtkprogressbar.c:147
+#: ../gtk/gtkprogressbar.c:136
 msgid "The fraction of total progress to move the bouncing block when pulsed"
 msgstr "The fraction of total progress to move the bouncing block when pulsed"
 
-#: ../gtk/gtkprogressbar.c:155
+#: ../gtk/gtkprogressbar.c:144
 msgid "Text to be displayed in the progress bar"
 msgstr "Text to be displayed in the progress bar"
 
-#: ../gtk/gtkprogressbar.c:162
+#: ../gtk/gtkprogressbar.c:151
 msgid "Show text"
 msgstr "Show text"
 
-#: ../gtk/gtkprogressbar.c:163
+#: ../gtk/gtkprogressbar.c:152
 msgid "Whether the progress is shown as text."
 msgstr "Whether the progress is shown as text."
 
-#: ../gtk/gtkprogressbar.c:185
+#: ../gtk/gtkprogressbar.c:174
 msgid ""
 "The preferred place to ellipsize the string, if the progress bar does not "
 "have enough room to display the entire string, if at all."
@@ -4217,51 +4241,51 @@ msgstr ""
 "The preferred place to ellipsize the string, if the progress bar does not "
 "have enough room to display the entire string, if at all."
 
-#: ../gtk/gtkprogressbar.c:192
+#: ../gtk/gtkprogressbar.c:181
 msgid "XSpacing"
 msgstr "XSpacing"
 
-#: ../gtk/gtkprogressbar.c:193
+#: ../gtk/gtkprogressbar.c:182
 msgid "Extra spacing applied to the width of a progress bar."
 msgstr "Extra spacing applied to the width of a progress bar."
 
-#: ../gtk/gtkprogressbar.c:198
+#: ../gtk/gtkprogressbar.c:187
 msgid "YSpacing"
 msgstr "YSpacing"
 
-#: ../gtk/gtkprogressbar.c:199
+#: ../gtk/gtkprogressbar.c:188
 msgid "Extra spacing applied to the height of a progress bar."
 msgstr "Extra spacing applied to the height of a progress bar."
 
-#: ../gtk/gtkprogressbar.c:212
+#: ../gtk/gtkprogressbar.c:201
 msgid "Min horizontal bar width"
 msgstr "Min horizontal bar width"
 
-#: ../gtk/gtkprogressbar.c:213
+#: ../gtk/gtkprogressbar.c:202
 msgid "The minimum horizontal width of the progress bar"
 msgstr "The minimum horizontal width of the progress bar"
 
-#: ../gtk/gtkprogressbar.c:225
+#: ../gtk/gtkprogressbar.c:214
 msgid "Min horizontal bar height"
 msgstr "Min horizontal bar height"
 
-#: ../gtk/gtkprogressbar.c:226
+#: ../gtk/gtkprogressbar.c:215
 msgid "Minimum horizontal height of the progress bar"
 msgstr "Minimum horizontal height of the progress bar"
 
-#: ../gtk/gtkprogressbar.c:238
+#: ../gtk/gtkprogressbar.c:227
 msgid "Min vertical bar width"
 msgstr "Min vertical bar width"
 
-#: ../gtk/gtkprogressbar.c:239
+#: ../gtk/gtkprogressbar.c:228
 msgid "The minimum vertical width of the progress bar"
 msgstr "The minimum vertical width of the progress bar"
 
-#: ../gtk/gtkprogressbar.c:251
+#: ../gtk/gtkprogressbar.c:240
 msgid "Min vertical bar height"
 msgstr "Min vertical bar height"
 
-#: ../gtk/gtkprogressbar.c:252
+#: ../gtk/gtkprogressbar.c:241
 msgid "The minimum vertical height of the progress bar"
 msgstr "The minimum vertical height of the progress bar"
 
@@ -4570,39 +4594,39 @@ msgstr "The full path to the file to be used to store and read the list"
 msgid "The size of the recently used resources list"
 msgstr "The size of the recently used resources list"
 
-#: ../gtk/gtkruler.c:135
+#: ../gtk/gtkruler.c:134
 msgid "Lower"
 msgstr "Lower"
 
-#: ../gtk/gtkruler.c:136
+#: ../gtk/gtkruler.c:135
 msgid "Lower limit of ruler"
 msgstr "Lower limit of ruler"
 
-#: ../gtk/gtkruler.c:145
+#: ../gtk/gtkruler.c:144
 msgid "Upper"
 msgstr "Upper"
 
-#: ../gtk/gtkruler.c:146
+#: ../gtk/gtkruler.c:145
 msgid "Upper limit of ruler"
 msgstr "Upper limit of ruler"
 
-#: ../gtk/gtkruler.c:156
+#: ../gtk/gtkruler.c:155
 msgid "Position of mark on the ruler"
 msgstr "Position of mark on the ruler"
 
-#: ../gtk/gtkruler.c:165
+#: ../gtk/gtkruler.c:164
 msgid "Max Size"
 msgstr "Max Size"
 
-#: ../gtk/gtkruler.c:166
+#: ../gtk/gtkruler.c:165
 msgid "Maximum size of the ruler"
 msgstr "Maximum size of the ruler"
 
-#: ../gtk/gtkruler.c:181
+#: ../gtk/gtkruler.c:180
 msgid "Metric"
 msgstr "Metric"
 
-#: ../gtk/gtkruler.c:182
+#: ../gtk/gtkruler.c:181
 msgid "The metric used for the ruler"
 msgstr "The metric used for the ruler"
 
@@ -5537,51 +5561,51 @@ msgstr ""
 "Extra space to put between the child and its upper and lower neighbors, in "
 "pixels"
 
-#: ../gtk/gtktextbuffer.c:179
+#: ../gtk/gtktextbuffer.c:192
 msgid "Tag Table"
 msgstr "Tag Table"
 
-#: ../gtk/gtktextbuffer.c:180
+#: ../gtk/gtktextbuffer.c:193
 msgid "Text Tag Table"
 msgstr "Text Tag Table"
 
-#: ../gtk/gtktextbuffer.c:198
+#: ../gtk/gtktextbuffer.c:211
 msgid "Current text of the buffer"
 msgstr "Current text of the buffer"
 
-#: ../gtk/gtktextbuffer.c:212
+#: ../gtk/gtktextbuffer.c:225
 msgid "Has selection"
 msgstr "Has selection"
 
-#: ../gtk/gtktextbuffer.c:213
+#: ../gtk/gtktextbuffer.c:226
 msgid "Whether the buffer has some text currently selected"
 msgstr "Whether the buffer has some text currently selected"
 
-#: ../gtk/gtktextbuffer.c:229
+#: ../gtk/gtktextbuffer.c:242
 msgid "Cursor position"
 msgstr "Cursor position"
 
-#: ../gtk/gtktextbuffer.c:230
+#: ../gtk/gtktextbuffer.c:243
 msgid ""
 "The position of the insert mark (as offset from the beginning of the buffer)"
 msgstr ""
 "The position of the insert mark (as offset from the beginning of the buffer)"
 
-#: ../gtk/gtktextbuffer.c:245
+#: ../gtk/gtktextbuffer.c:258
 msgid "Copy target list"
 msgstr "Copy target list"
 
-#: ../gtk/gtktextbuffer.c:246
+#: ../gtk/gtktextbuffer.c:259
 msgid ""
 "The list of targets this buffer supports for clipboard copying and DND source"
 msgstr ""
 "The list of targets this buffer supports for clipboard copying and DND source"
 
-#: ../gtk/gtktextbuffer.c:261
+#: ../gtk/gtktextbuffer.c:274
 msgid "Paste target list"
 msgstr "Paste target list"
 
-#: ../gtk/gtktextbuffer.c:262
+#: ../gtk/gtktextbuffer.c:275
 msgid ""
 "The list of targets this buffer supports for clipboard pasting and DND "
 "destination"
@@ -6783,51 +6807,51 @@ msgstr "Double Buffered"
 msgid "Whether or not the widget is double buffered"
 msgstr "Whether or not the widget is double buffered"
 
-#: ../gtk/gtkwidget.c:2451
+#: ../gtk/gtkwidget.c:2450
 msgid "Interior Focus"
 msgstr "Interior Focus"
 
-#: ../gtk/gtkwidget.c:2452
+#: ../gtk/gtkwidget.c:2451
 msgid "Whether to draw the focus indicator inside widgets"
 msgstr "Whether to draw the focus indicator inside widgets"
 
-#: ../gtk/gtkwidget.c:2458
+#: ../gtk/gtkwidget.c:2457
 msgid "Focus linewidth"
 msgstr "Focus linewidth"
 
-#: ../gtk/gtkwidget.c:2459
+#: ../gtk/gtkwidget.c:2458
 msgid "Width, in pixels, of the focus indicator line"
 msgstr "Width, in pixels, of the focus indicator line"
 
-#: ../gtk/gtkwidget.c:2465
+#: ../gtk/gtkwidget.c:2464
 msgid "Focus line dash pattern"
 msgstr "Focus line dash pattern"
 
-#: ../gtk/gtkwidget.c:2466
+#: ../gtk/gtkwidget.c:2465
 msgid "Dash pattern used to draw the focus indicator"
 msgstr "Dash pattern used to draw the focus indicator"
 
-#: ../gtk/gtkwidget.c:2471
+#: ../gtk/gtkwidget.c:2470
 msgid "Focus padding"
 msgstr "Focus padding"
 
-#: ../gtk/gtkwidget.c:2472
+#: ../gtk/gtkwidget.c:2471
 msgid "Width, in pixels, between focus indicator and the widget 'box'"
 msgstr "Width, in pixels, between focus indicator and the widget 'box'"
 
-#: ../gtk/gtkwidget.c:2477
+#: ../gtk/gtkwidget.c:2476
 msgid "Cursor color"
 msgstr "Cursor color"
 
-#: ../gtk/gtkwidget.c:2478
+#: ../gtk/gtkwidget.c:2477
 msgid "Color with which to draw insertion cursor"
 msgstr "Color with which to draw insertion cursor"
 
-#: ../gtk/gtkwidget.c:2483
+#: ../gtk/gtkwidget.c:2482
 msgid "Secondary cursor color"
 msgstr "Secondary cursor color"
 
-#: ../gtk/gtkwidget.c:2484
+#: ../gtk/gtkwidget.c:2483
 msgid ""
 "Color with which to draw the secondary insertion cursor when editing mixed "
 "right-to-left and left-to-right text"
@@ -6835,51 +6859,51 @@ msgstr ""
 "Color with which to draw the secondary insertion cursor when editing mixed "
 "right-to-left and left-to-right text"
 
-#: ../gtk/gtkwidget.c:2489
+#: ../gtk/gtkwidget.c:2488
 msgid "Cursor line aspect ratio"
 msgstr "Cursor line aspect ratio"
 
-#: ../gtk/gtkwidget.c:2490
+#: ../gtk/gtkwidget.c:2489
 msgid "Aspect ratio with which to draw insertion cursor"
 msgstr "Aspect ratio with which to draw insertion cursor"
 
-#: ../gtk/gtkwidget.c:2496
+#: ../gtk/gtkwidget.c:2495
 msgid "Window dragging"
 msgstr "Window dragging"
 
-#: ../gtk/gtkwidget.c:2497
+#: ../gtk/gtkwidget.c:2496
 msgid "Whether windows can be dragged by clicking on empty areas"
 msgstr "Whether windows can be dragged by clicking on empty areas"
 
-#: ../gtk/gtkwidget.c:2511
+#: ../gtk/gtkwidget.c:2510
 msgid "Draw Border"
 msgstr "Draw Border"
 
-#: ../gtk/gtkwidget.c:2512
+#: ../gtk/gtkwidget.c:2511
 msgid "Size of areas outside the widget's allocation to draw"
 msgstr "Size of areas outside the widget's allocation to draw"
 
-#: ../gtk/gtkwidget.c:2525
+#: ../gtk/gtkwidget.c:2524
 msgid "Unvisited Link Color"
 msgstr "Unvisited Link Color"
 
-#: ../gtk/gtkwidget.c:2526
+#: ../gtk/gtkwidget.c:2525
 msgid "Color of unvisited links"
 msgstr "Color of unvisited links"
 
-#: ../gtk/gtkwidget.c:2539
+#: ../gtk/gtkwidget.c:2538
 msgid "Visited Link Color"
 msgstr "Visited Link Color"
 
-#: ../gtk/gtkwidget.c:2540
+#: ../gtk/gtkwidget.c:2539
 msgid "Color of visited links"
 msgstr "Color of visited links"
 
-#: ../gtk/gtkwidget.c:2554
+#: ../gtk/gtkwidget.c:2553
 msgid "Wide Separators"
 msgstr "Wide Separators"
 
-#: ../gtk/gtkwidget.c:2555
+#: ../gtk/gtkwidget.c:2554
 msgid ""
 "Whether separators have configurable width and should be drawn using a box "
 "instead of a line"
@@ -6887,35 +6911,35 @@ msgstr ""
 "Whether separators have configurable width and should be drawn using a box "
 "instead of a line"
 
-#: ../gtk/gtkwidget.c:2569
+#: ../gtk/gtkwidget.c:2568
 msgid "Separator Width"
 msgstr "Separator Width"
 
-#: ../gtk/gtkwidget.c:2570
+#: ../gtk/gtkwidget.c:2569
 msgid "The width of separators if wide-separators is TRUE"
 msgstr "The width of separators if wide-separators is TRUE"
 
-#: ../gtk/gtkwidget.c:2584
+#: ../gtk/gtkwidget.c:2583
 msgid "Separator Height"
 msgstr "Separator Height"
 
-#: ../gtk/gtkwidget.c:2585
+#: ../gtk/gtkwidget.c:2584
 msgid "The height of separators if \"wide-separators\" is TRUE"
 msgstr "The height of separators if \"wide-separators\" is TRUE"
 
-#: ../gtk/gtkwidget.c:2599
+#: ../gtk/gtkwidget.c:2598
 msgid "Horizontal Scroll Arrow Length"
 msgstr "Horizontal Scroll Arrow Length"
 
-#: ../gtk/gtkwidget.c:2600
+#: ../gtk/gtkwidget.c:2599
 msgid "The length of horizontal scroll arrows"
 msgstr "The length of horizontal scroll arrows"
 
-#: ../gtk/gtkwidget.c:2614
+#: ../gtk/gtkwidget.c:2613
 msgid "Vertical Scroll Arrow Length"
 msgstr "Vertical Scroll Arrow Length"
 
-#: ../gtk/gtkwidget.c:2615
+#: ../gtk/gtkwidget.c:2614
 msgid "The length of vertical scroll arrows"
 msgstr "The length of vertical scroll arrows"
 
