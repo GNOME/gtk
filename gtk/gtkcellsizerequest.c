@@ -333,4 +333,3 @@ gtk_cell_size_request_get_size (GtkCellSizeRequest *cell,
 	}
     }
 }
-

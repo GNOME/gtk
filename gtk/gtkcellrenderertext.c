@@ -1403,14 +1403,14 @@ get_layout (GtkCellRendererText *celltext,
 
   layout = gtk_widget_create_pango_layout (widget, priv->text);
 
+  gtk_cell_renderer_get_padding (GTK_CELL_RENDERER (celltext), &xpad, NULL);
+
   if (priv->extra_attrs)
     attr_list = pango_attr_list_copy (priv->extra_attrs);
   else
     attr_list = pango_attr_list_new ();
 
   pango_layout_set_single_paragraph_mode (layout, priv->single_paragraph);
-
-  gtk_cell_renderer_get_padding (GTK_CELL_RENDERER (celltext), &xpad, NULL);
 
   if (cell_area)
     {
@@ -2003,9 +2003,10 @@ gtk_cell_renderer_text_get_width (GtkCellSizeRequest *cell,
    */
 
   celltext = GTK_CELL_RENDERER_TEXT (cell);
-  priv     = celltext->priv;
+  priv = celltext->priv;
 
   gtk_cell_renderer_get_padding (GTK_CELL_RENDERER (cell), &xpad, NULL);
+
 
   layout = get_layout (celltext, widget, NULL, 0);
 

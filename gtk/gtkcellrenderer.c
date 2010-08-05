@@ -1198,7 +1198,7 @@ _gtk_cell_renderer_calc_offset    (GtkCellRenderer      *cell,
 				   gint                  height,
 				   gint                 *x_offset,
 				   gint                 *y_offset)
-{
+{ 
   GtkCellRendererPriv *priv;
 
   g_return_if_fail (GTK_IS_CELL_RENDERER (cell));
