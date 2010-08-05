@@ -876,6 +876,8 @@ get_bounding_box (GtkWidget    *widget,
   gint x4, y4;
 
   window = gtk_widget_get_parent_window (widget);
+  if (window == NULL)
+    window = gtk_widget_get_window (widget);
 
   x = widget->allocation.x;
   y = widget->allocation.y;
