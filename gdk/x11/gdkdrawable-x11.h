@@ -32,7 +32,6 @@
 #include <gdk/gdkdrawable.h>
 
 #include <X11/Xlib.h>
-#include <X11/extensions/Xrender.h>
 
 G_BEGIN_DECLS
 
@@ -68,7 +67,6 @@ struct _GdkDrawableImplX11
   Window xid;
   GdkScreen *screen;
 
-  Picture picture;
   cairo_surface_t *cairo_surface;
 };
  

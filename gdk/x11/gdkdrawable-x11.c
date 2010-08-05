@@ -107,13 +107,6 @@ _gdk_x11_drawable_finish (GdkDrawable *drawable)
 {
   GdkDrawableImplX11 *impl = GDK_DRAWABLE_IMPL_X11 (drawable);
   
-  if (impl->picture)
-    {
-      XRenderFreePicture (GDK_SCREEN_XDISPLAY (impl->screen),
-			  impl->picture);
-      impl->picture = None;
-    }
-  
   if (impl->cairo_surface)
     {
       cairo_surface_finish (impl->cairo_surface);

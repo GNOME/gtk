@@ -147,9 +147,6 @@ struct _GdkDisplayX11
   guint have_input_shapes : 1;
   gint shape_event_base;
 
-  /* Alpha mask picture format */
-  XRenderPictFormat *mask_format;
-
   /* The offscreen window that has the pointer in it (if any) */
   GdkWindow *active_offscreen_window;
 };
