@@ -584,9 +584,6 @@ gtk_css_provider_get_style (GtkStyleProvider *provider,
         {
           gchar *prop = key;
 
-          if (prop[0] == '-')
-            continue;
-
           if (info->state == GTK_STATE_NORMAL)
             gtk_style_set_set_default (set, key, value);
           else
@@ -1366,7 +1363,12 @@ parse_rule (GtkCssProvider *css_provider,
           val = g_slice_new0 (GValue);
           g_value_init (val, prop_type);
 
-          if (css_provider_parse_value (value_str, val))
+          if (prop_type == G_TYPE_STRING)
+            {
+              g_value_set_string (val, value_str);
+              g_hash_table_insert (priv->cur_properties, prop, val);
+            }
+          else if (css_provider_parse_value (value_str, val))
             g_hash_table_insert (priv->cur_properties, prop, val);
           else
             {
