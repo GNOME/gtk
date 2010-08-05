@@ -98,7 +98,6 @@ enum {
   CHILD_PROP_POSITION
 };
 
-
 struct _GtkBoxPriv
 {
   GtkOrientation  orientation;
@@ -112,9 +111,6 @@ struct _GtkBoxPriv
   guint           spacing_set    : 1;
 };
 
-
-typedef struct _GtkBoxDesiredSizes GtkBoxDesiredSizes;
-typedef struct _GtkBoxSpreading    GtkBoxSpreading;
 typedef struct _GtkBoxChild        GtkBoxChild;
 
 /*
@@ -140,18 +136,6 @@ struct _GtkBoxChild
   guint      expand : 1;
   guint      fill   : 1;
   guint      pack   : 1;
-};
-
-struct _GtkBoxDesiredSizes
-{
-  gint minimum_size;
-  gint natural_size;
-};
-
-struct _GtkBoxSpreading
-{
-  GtkBoxChild *child;
-  gint index;
 };
 
 static void gtk_box_size_allocate         (GtkWidget              *widget,
@@ -412,30 +396,6 @@ count_expand_children (GtkBox *box,
     }
 }
 
-static gint
-gtk_box_compare_gap (gconstpointer p1,
-                      gconstpointer p2,
-                      gpointer      data)
-{
-  GtkBoxDesiredSizes *sizes = data;
-  const GtkBoxSpreading *c1 = p1;
-  const GtkBoxSpreading *c2 = p2;
-
-  const gint d1 = MAX (sizes[c1->index].natural_size -
-                       sizes[c1->index].minimum_size,
-                       0);
-  const gint d2 = MAX (sizes[c2->index].natural_size -
-                       sizes[c2->index].minimum_size,
-                       0);
-
-  gint delta = (d2 - d1);
-
-  if (0 == delta)
-    delta = (c2->index - c1->index);
-
-  return delta;
-}
-
 static void
 gtk_box_size_allocate (GtkWidget     *widget,
                        GtkAllocation *allocation)
@@ -456,8 +416,7 @@ gtk_box_size_allocate (GtkWidget     *widget,
       guint border_width = gtk_container_get_border_width (GTK_CONTAINER (box));
       GtkTextDirection direction = gtk_widget_get_direction (widget);
       GtkAllocation child_allocation;
-      GtkBoxSpreading *spreading = g_newa (GtkBoxSpreading, nvis_children);
-      GtkBoxDesiredSizes *sizes = g_newa (GtkBoxDesiredSizes, nvis_children);
+      GtkRequestedSize *sizes = g_newa (GtkRequestedSize, nvis_children);
 
       GtkPackType packing;
 
@@ -513,9 +472,8 @@ gtk_box_size_allocate (GtkWidget     *widget,
 	      
 	      size -= sizes[i].minimum_size;
 	      size -= child->padding * 2;
-	      
-	      spreading[i].index = i;
-	      spreading[i].child = child;
+
+	      sizes[i].data = child;
 	      
 	      i += 1;
 	    }
@@ -535,47 +493,8 @@ gtk_box_size_allocate (GtkWidget     *widget,
         }
       else
 	{
-
-          /* Distribute the container's extra space c_gap. We want to assign
-           * this space such that the sum of extra space assigned to children
-           * (c^i_gap) is equal to c_cap. The case that there's not enough
-           * space for all children to take their natural size needs some
-           * attention. The goals we want to achieve are:
-           *
-           *   a) Maximize number of children taking their natural size.
-           *   b) The allocated size of children should be a continuous
-           *   function of c_gap.  That is, increasing the container size by
-           *   one pixel should never make drastic changes in the distribution.
-           *   c) If child i takes its natural size and child j doesn't,
-           *   child j should have received at least as much gap as child i.
-           *
-           * The following code distributes the additional space by following
-           * this rules.
-           */
-
-          /* Sort descending by gap and position. */
-          g_qsort_with_data (spreading,
-                             nvis_children, sizeof (GtkBoxSpreading),
-                             gtk_box_compare_gap, sizes);
-
-          /* Distribute available space.
-           * This master piece of a loop was conceived by Behdad Esfahbod.
-           */
-          for (i = nvis_children - 1; size > 0 && i >= 0; --i)
-            {
-              /* Divide remaining space by number of remaining children.
-               * Sort order and reducing remaining space by assigned space
-               * ensures that space is distributed equally.
-               */
-              gint glue = (size + i) / (i + 1);
-              gint gap = sizes[spreading[i].index].natural_size
-                       - sizes[spreading[i].index].minimum_size;
-
-              extra = MIN (glue, gap);
-              sizes[spreading[i].index].minimum_size += extra;
-
-              size -= extra;
-            }
+	  /* Bring children up to size first */
+	  size = gtk_distribute_natural_allocation (size, nvis_children, sizes);
 
           /* Calculate space which hasn't distributed yet,
            * and is available for expanding children.
@@ -1012,12 +931,10 @@ gtk_box_compute_size_for_opposing_orientation (GtkBox *box,
 
   if (nvis_children > 0)
     {
-      GtkBoxSpreading     *spreading    = g_newa (GtkBoxSpreading, nvis_children);
-      GtkBoxDesiredSizes  *sizes        = g_newa (GtkBoxDesiredSizes, nvis_children);
-      GtkPackType          packing;
-      gint                 size;
-      gint                 extra, i;
-      gint                 child_size, child_minimum, child_natural;
+      GtkRequestedSize *sizes = g_newa (GtkRequestedSize, nvis_children);
+      GtkPackType       packing;
+      gint              size, extra, i;
+      gint              child_size, child_minimum, child_natural;
 
       size = avail_size - border_width * 2 - (nvis_children - 1) * private->spacing;
 
@@ -1053,9 +970,8 @@ gtk_box_compute_size_for_opposing_orientation (GtkBox *box,
 
 	      size -= sizes[i].minimum_size;
 	      size -= child->padding * 2;
-	      
-	      spreading[i].index = i;
-	      spreading[i].child = child;
+
+	      sizes[i].data = child;
 	      
 	      i += 1;
 	    }
@@ -1071,48 +987,8 @@ gtk_box_compute_size_for_opposing_orientation (GtkBox *box,
         }
       else
 	{
-
-          /* Distribute the container's extra space c_gap. We want to assign
-           * this space such that the sum of extra space assigned to children
-           * (c^i_gap) is equal to c_cap. The case that there's not enough
-           * space for all children to take their natural size needs some
-           * attention. The goals we want to achieve are:
-           *
-           *   a) Maximize number of children taking their natural size.
-           *   b) The allocated size of children should be a continuous
-           *   function of c_gap.  That is, increasing the container size by
-           *   one pixel should never make drastic changes in the distribution.
-           *   c) If child i takes its natural size and child j doesn't,
-           *   child j should have received at least as much gap as child i.
-           *
-           * The following code distributes the additional space by following
-           * this rules.
-           */
-
-          /* Sort descending by gap and position. */
-
-          g_qsort_with_data (spreading,
-                             nvis_children, sizeof (GtkBoxSpreading),
-                             gtk_box_compare_gap, sizes);
-
-          /* Distribute available space.
-           * This master piece of a loop was conceived by Behdad Esfahbod.
-           */
-          for (i = nvis_children - 1; size > 0 && i >= 0; --i)
-            {
-              /* Divide remaining space by number of remaining children.
-               * Sort order and reducing remaining space by assigned space
-               * ensures that space is distributed equally.
-               */
-              gint glue = (size + i) / (i + 1);
-              gint gap = sizes[spreading[i].index].natural_size
-                       - sizes[spreading[i].index].minimum_size;
-
-              extra = MIN (glue, gap);
-              sizes[spreading[i].index].minimum_size += extra;
-
-              size -= extra;
-            }
+	  /* Bring children up to size first */
+	  size = gtk_distribute_natural_allocation (size, nvis_children, sizes);
 
           /* Calculate space which hasn't distributed yet,
            * and is available for expanding children.
