@@ -845,6 +845,32 @@ gtk_style_context_has_class (GtkStyleContext *context,
 }
 
 GList *
+gtk_style_context_list_classes (GtkStyleContext *context)
+{
+  GtkStyleContextPrivate *priv;
+  GtkStyleInfo *info;
+  GList *classes = NULL;
+  guint i;
+
+  g_return_val_if_fail (GTK_IS_STYLE_CONTEXT (context), NULL);
+
+  priv = context->priv;
+
+  g_assert (priv->info_stack != NULL);
+  info = priv->info_stack->data;
+
+  for (i = 0; i < info->style_classes->len; i++)
+    {
+      GQuark quark;
+
+      quark = g_array_index (info->style_classes, GQuark, i);
+      classes = g_list_prepend (classes, (gchar *) g_quark_to_string (quark));
+    }
+
+  return classes;
+}
+
+GList *
 gtk_style_context_list_regions (GtkStyleContext *context)
 {
   GtkStyleContextPrivate *priv;
