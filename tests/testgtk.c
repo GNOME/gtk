@@ -6251,7 +6251,7 @@ int ntext_colors = sizeof(text_colors) / sizeof(text_colors[0]);
  * GtkNotebook
  */
 
-static char * book_open_xpm[] = {
+static const char * book_open_xpm[] = {
 "16 16 4 1",
 "       c None s None",
 ".      c black",
@@ -6274,7 +6274,7 @@ static char * book_open_xpm[] = {
 "     ..         ",
 "                "};
 
-static char * book_closed_xpm[] = {
+static const char * book_closed_xpm[] = {
 "16 16 6 1",
 "       c None s None",
 ".      c black",
@@ -6549,10 +6549,10 @@ create_notebook (GtkWidget *widget)
       gtk_widget_realize (sample_notebook);
 
       if (!book_open)
-	book_open = gdk_pixbuf_new_from_xpm_data ((const char **)book_open_xpm);
+	book_open = gdk_pixbuf_new_from_xpm_data (book_open_xpm);
 						  
       if (!book_closed)
-	book_closed = gdk_pixbuf_new_from_xpm_data ((const char **)book_closed_xpm);
+	book_closed = gdk_pixbuf_new_from_xpm_data (book_closed_xpm);
 
       create_pages (GTK_NOTEBOOK (sample_notebook), 1, 5);
 
