@@ -72,8 +72,6 @@ gint _gdk_send_xevent      (GdkDisplay *display,
 			    glong       event_mask,
 			    XEvent     *event_send);
 
-gboolean _gdk_x11_have_render           (GdkDisplay *display);
-
 /* Routines from gdkgeometry-x11.c */
 void _gdk_window_move_resize_child (GdkWindow     *window,
                                     gint           x,
