@@ -576,8 +576,6 @@ gboolean      gdk_window_ensure_native        (GdkWindow       *window);
 /* 
  * This allows for making shaped (partially transparent) windows
  * - cool feature, needed for Drag and Drag for example.
- *  The shape_mask can be the mask
- *  from gdk_pixmap_create_from_xpm.   Stefan Wille
  */
 void gdk_window_shape_combine_mask  (GdkWindow	      *window,
                                      GdkBitmap	      *mask,

@@ -224,59 +224,6 @@ _gdk_pixmap_new (GdkDrawable *drawable,
 }
 
 GdkPixmap *
-_gdk_bitmap_create_from_data (GdkDrawable *window,
-                              const gchar *data,
-                              gint         width,
-                              gint         height)
-{
-  GdkPixmap *pixmap;
-  GdkPixmapImplQuartz *impl;
-  int x, y, bpl;
-
-  g_return_val_if_fail (data != NULL, NULL);
-  g_return_val_if_fail ((width != 0) && (height != 0), NULL);
-  g_return_val_if_fail (window == NULL || GDK_IS_DRAWABLE (window), NULL);
-
-  pixmap = gdk_pixmap_new (window, width, height, 1);
-  impl = GDK_PIXMAP_IMPL_QUARTZ (GDK_PIXMAP_OBJECT (pixmap)->impl);
-
-  g_assert (CGImageGetBytesPerRow (impl->image) == width);
-
-  /* Bytes per line: Each line consumes an integer number of bytes, possibly
-   * ignoring any excess bits. */
-  bpl = (width + 7) / 8;
-  for (y = 0; y < height; y++)
-    {
-      guchar *dst = impl->data + y * width;
-      const gchar *src = data + (y * bpl);   
-      for (x = 0; x < width; x++)
-	{
-	  if ((src[x / 8] >> x % 8) & 1)
-	    *dst = 0xff;
-	  else
-	    *dst = 0;
-
-	  dst++;
-	}
-    }
-
-  return pixmap;
-}
-
-GdkPixmap*
-_gdk_pixmap_create_from_data (GdkDrawable    *drawable,
-                              const gchar    *data,
-                              gint            width,
-                              gint            height,
-                              gint            depth,
-                              const GdkColor *fg,
-                              const GdkColor *bg)
-{	
-  /* FIXME: Implement */
-  return NULL;
-}
-
-GdkPixmap *
 gdk_pixmap_foreign_new_for_display (GdkDisplay      *display,
 				    GdkNativeWindow  anid)
 {

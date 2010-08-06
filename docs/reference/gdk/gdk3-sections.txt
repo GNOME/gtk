@@ -245,12 +245,6 @@ gdk_screen_get_type
 <FILE>pixmaps</FILE>
 GdkPixmap
 gdk_pixmap_new
-gdk_bitmap_create_from_data
-gdk_pixmap_create_from_data
-gdk_pixmap_create_from_xpm
-gdk_pixmap_colormap_create_from_xpm
-gdk_pixmap_create_from_xpm_d
-gdk_pixmap_colormap_create_from_xpm_d
 GdkBitmap
 
 <SUBSECTION Standard>

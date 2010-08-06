@@ -320,44 +320,7 @@ gdk_cursor_new_for_display (GdkDisplay    *display,
  * 
  * Creates a new cursor from a given pixmap and mask. Both the pixmap and mask
  * must have a depth of 1 (i.e. each pixel has only 2 values - on or off).
- * The standard cursor size is 16 by 16 pixels. You can create a bitmap 
- * from inline data as in the below example.
- * 
- * <example><title>Creating a custom cursor</title>
- * <programlisting>
- * /<!-- -->* This data is in X bitmap format, and can be created with the 'bitmap'
- *    utility. *<!-- -->/
- * &num;define cursor1_width 16
- * &num;define cursor1_height 16
- * static unsigned char cursor1_bits[] = {
- *   0x80, 0x01, 0x40, 0x02, 0x20, 0x04, 0x10, 0x08, 0x08, 0x10, 0x04, 0x20,
- *   0x82, 0x41, 0x41, 0x82, 0x41, 0x82, 0x82, 0x41, 0x04, 0x20, 0x08, 0x10,
- *   0x10, 0x08, 0x20, 0x04, 0x40, 0x02, 0x80, 0x01};
- *  
- * static unsigned char cursor1mask_bits[] = {
- *   0x80, 0x01, 0xc0, 0x03, 0x60, 0x06, 0x30, 0x0c, 0x18, 0x18, 0x8c, 0x31,
- *   0xc6, 0x63, 0x63, 0xc6, 0x63, 0xc6, 0xc6, 0x63, 0x8c, 0x31, 0x18, 0x18,
- *   0x30, 0x0c, 0x60, 0x06, 0xc0, 0x03, 0x80, 0x01};
- *  
- *  
- *  GdkCursor *cursor;
- *  GdkPixmap *source, *mask;
- *  GdkColor fg = { 0, 65535, 0, 0 }; /<!-- -->* Red. *<!-- -->/
- *  GdkColor bg = { 0, 0, 0, 65535 }; /<!-- -->* Blue. *<!-- -->/
- *  
- *  
- *  source = gdk_bitmap_create_from_data (NULL, cursor1_bits,
- *                                        cursor1_width, cursor1_height);
- *  mask = gdk_bitmap_create_from_data (NULL, cursor1mask_bits,
- *                                      cursor1_width, cursor1_height);
- *  cursor = gdk_cursor_new_from_pixmap (source, mask, &amp;fg, &amp;bg, 8, 8);
- *  g_object_unref (source);
- *  g_object_unref (mask);
- *  
- *  
- *  gdk_window_set_cursor (widget->window, cursor);
- * </programlisting>
- * </example>
+ * The standard cursor size is 16 by 16 pixels.
  *
  * Return value: a new #GdkCursor.
  **/
