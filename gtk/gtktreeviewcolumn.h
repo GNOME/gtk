@@ -227,11 +227,6 @@ void                    gtk_tree_view_column_cell_get_size       (GtkTreeViewCol
 								  gint                    *width,
 								  gint                    *height);
 
-/* XXX: this ones going away ... */
-void gtk_tree_view_column_get_desired_size (GtkTreeViewColumn *column,
-					    GtkRequisition    *minimal_size,
-					    GtkRequisition    *desired_size);
-
 void                    gtk_tree_view_column_get_natural_width   (GtkTreeViewColumn       *column,
 								  gint                    *minimum_width,
 								  gint                    *natural_width);

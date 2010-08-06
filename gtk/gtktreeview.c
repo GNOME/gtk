@@ -15827,6 +15827,7 @@ gtk_tree_view_get_tooltip_column (GtkTreeView *tree_view)
   return tree_view->priv->tooltip_column;
 }
 
+
 static void
 gtk_tree_view_get_minimum_size (GtkWidget      *widget,
 				GtkRequisition *requisition)
@@ -15923,4 +15924,3 @@ gtk_tree_view_get_height (GtkSizeRequest *widget,
 {
   gtk_tree_view_get_size (widget, GTK_ORIENTATION_VERTICAL, minimum_size, natural_size);
 }
-
