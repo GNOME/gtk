@@ -542,11 +542,18 @@ gtk_box_size_allocate (GtkWidget     *widget,
 	{
 	  child = children->data;
 
-	  /* If widget is not visible or it's packing is not right for current
-	   * loop, skip it.
-	   */
-	  if (child->pack != packing || !gtk_widget_get_visible (child->widget))
+	  /* If widget is not visible, skip it. */
+	  if (!gtk_widget_get_visible (child->widget))
 	    continue;
+
+	  /* If widget is packed differently skip it, but still increment i,
+	   * since widget is visible and will be handled in next loop iteration.
+	   */
+	  if (child->pack != packing)
+	    {
+	      i++;
+	      continue;
+	    }
 
 	  /* Assign the child's size. */
 	  if (private->homogeneous)
@@ -1020,8 +1027,18 @@ gtk_box_compute_size_for_opposing_orientation (GtkBox *box,
 	{
 	  child = children->data;
 
-	  if (child->pack != packing || !gtk_widget_get_visible (child->widget))
+	  /* If widget is not visible, skip it. */
+	  if (!gtk_widget_get_visible (child->widget))
 	    continue;
+
+	  /* If widget is packed differently skip it, but still increment i,
+	   * since widget is visible and will be handled in next loop iteration.
+	   */
+	  if (child->pack != packing)
+	    {
+	      i++;
+	      continue;
+	    }
 
 	  if (child->pack == packing)
 	    {
