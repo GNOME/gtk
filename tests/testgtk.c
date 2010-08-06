@@ -3092,8 +3092,7 @@ create_image (GtkWidget *widget)
   if (window == NULL)
     {
       GtkWidget *vbox;
-      GdkPixmap *pixmap;
-      GdkBitmap *mask;
+      GdkPixbuf *pixbuf;
         
       window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
       
@@ -3117,14 +3116,12 @@ create_image (GtkWidget *widget)
                   gtk_image_new_from_stock (GTK_STOCK_DIALOG_WARNING,
                                             GTK_ICON_SIZE_DIALOG));
 
-      pixmap = gdk_pixmap_colormap_create_from_xpm_d (NULL,
-                                                      gtk_widget_get_colormap (window),
-                                                      &mask,
-                                                      NULL,
-                                                      openfile);
+      pixbuf = gdk_pixbuf_new_from_xpm_data ((const char **) openfile);
       
-      pack_image (vbox, "Pixmap",
-                  gtk_image_new_from_pixmap (pixmap, mask));
+      pack_image (vbox, "Pixbuf",
+                  gtk_image_new_from_pixbuf (pixbuf));
+
+      g_object_unref (pixbuf);
     }
 
   if (!gtk_widget_get_visible (window))
