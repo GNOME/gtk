@@ -42,6 +42,7 @@ enum SelectorElementType {
   SELECTOR_NAME,
   SELECTOR_GTYPE,
   SELECTOR_REGION,
+  SELECTOR_CLASS,
   SELECTOR_GLOB
 };
 
@@ -248,6 +249,21 @@ selector_path_prepend_name (SelectorPath *path,
 }
 
 static void
+selector_path_prepend_class (SelectorPath *path,
+                             const gchar  *name)
+{
+  SelectorElement *elem;
+
+  elem = g_slice_new (SelectorElement);
+  elem->combinator = COMBINATOR_DESCENDANT;
+  elem->elem_type = SELECTOR_CLASS;
+
+  elem->name = g_quark_from_string (name);
+
+  path->elements = g_slist_prepend (path->elements, elem);
+}
+
+static void
 selector_path_prepend_combinator (SelectorPath   *path,
                                   CombinatorType  combinator)
 {
@@ -434,6 +450,14 @@ compare_selector_element (GtkWidgetPath   *path,
   else if (elem->elem_type == SELECTOR_NAME)
     {
       if (!gtk_widget_path_iter_has_qname (path, index, elem->name))
+        return FALSE;
+
+      *score = 0xF;
+      return TRUE;
+    }
+  else if (elem->elem_type == SELECTOR_CLASS)
+    {
+      if (!gtk_widget_path_iter_has_qclass (path, index, elem->name))
         return FALSE;
 
       *score = 0xF;
@@ -939,14 +963,21 @@ parse_selector (GtkCssProvider  *css_provider,
 
   if (scanner->token != ':' &&
       scanner->token != '#' &&
+      scanner->token != '.' &&
       scanner->token != G_TOKEN_IDENTIFIER)
     return G_TOKEN_IDENTIFIER;
 
   while (scanner->token == '#' ||
+         scanner->token == '.' ||
          scanner->token == G_TOKEN_IDENTIFIER)
     {
-      if (scanner->token == '#')
+      if (scanner->token == '#' ||
+          scanner->token == '.')
         {
+          gboolean is_class;
+
+          is_class = (scanner->token == '.');
+
           g_scanner_get_next_token (scanner);
 
           if (scanner->token != G_TOKEN_IDENTIFIER)
@@ -954,19 +985,25 @@ parse_selector (GtkCssProvider  *css_provider,
 
           selector_path_prepend_glob (path);
           selector_path_prepend_combinator (path, COMBINATOR_CHILD);
-          selector_path_prepend_name (path, scanner->value.v_identifier);
+
+          if (is_class)
+            selector_path_prepend_class (path, scanner->value.v_identifier);
+          else
+            selector_path_prepend_name (path, scanner->value.v_identifier);
         }
       else if (g_ascii_isupper (scanner->value.v_identifier[0]))
         {
           gchar *pos;
 
-          pos = strchr (scanner->value.v_identifier, '#');
-
-          if (pos)
+          if ((pos = strchr (scanner->value.v_identifier, '#')) != NULL ||
+              (pos = strchr (scanner->value.v_identifier, '.')) != NULL)
             {
               gchar *type_name, *name;
+              gboolean is_class;
 
-              /* Widget type and name put together */
+              is_class = (*pos == '.');
+
+              /* Widget type and name/class put together */
               name = pos + 1;
               *pos = '\0';
               type_name = scanner->value.v_identifier;
@@ -977,7 +1014,11 @@ parse_selector (GtkCssProvider  *css_provider,
                * between widget type and its name.
                */
               selector_path_prepend_combinator (path, COMBINATOR_CHILD);
-              selector_path_prepend_name (path, name);
+
+              if (is_class)
+                selector_path_prepend_class (path, name);
+              else
+                selector_path_prepend_name (path, name);
             }
           else
             selector_path_prepend_type (path, scanner->value.v_identifier);
