@@ -84,6 +84,8 @@ struct _GtkLabelPriv
   gint     wrap_width;
   gint     width_chars;
   gint     max_width_chars;
+
+  gdouble  angle;
 };
 
 /* Notes about the handling of links:
@@ -345,8 +347,6 @@ static void               gtk_label_get_height_for_width  (GtkSizeRequest      *
 							   gint                *minimum_height,
 							   gint                *natural_height);
 
-static GQuark quark_angle = 0;
-
 static GtkBuildableIface *buildable_parent_iface = NULL;
 
 G_DEFINE_TYPE_WITH_CODE (GtkLabel, gtk_label, GTK_TYPE_MISC,
@@ -385,8 +385,6 @@ gtk_label_class_init (GtkLabelClass *class)
   GtkObjectClass *object_class = GTK_OBJECT_CLASS (class);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (class);
   GtkBindingSet *binding_set;
-
-  quark_angle = g_quark_from_static_string ("angle");
 
   gobject_class->set_property = gtk_label_set_property;
   gobject_class->get_property = gtk_label_get_property;
@@ -3419,7 +3417,6 @@ gtk_label_get_size (GtkSizeRequest *widget,
   GtkLabelPriv  *priv = label->priv;
   PangoRectangle required_rect;
   PangoRectangle natural_rect;
-  gdouble        angle;
   gint           xpad, ypad;
 
   /* "width-chars" Hard-coded minimum width:
@@ -3437,8 +3434,6 @@ gtk_label_get_size (GtkSizeRequest *widget,
   if (priv->wrap)
     gtk_label_clear_layout (label);
   gtk_label_ensure_layout (label, TRUE);
-
-  angle = gtk_label_get_angle (label);
 
   /* Start off with the pixel extents of the rendered layout */
   pango_layout_get_extents (priv->layout, NULL, &required_rect);
@@ -3473,7 +3468,8 @@ gtk_label_get_size (GtkSizeRequest *widget,
        * layout to not ellipsize when we know we have been allocated our
        * full natural size, or it may be that pango needs a fix here).
        */
-      if (priv->ellipsize && angle != 0 && angle != 90 && angle != 180 && angle != 270 && angle != 360)
+      if (priv->ellipsize && priv->angle != 0 && priv->angle != 90 && 
+          priv->angle != 180 && priv->angle != 270 && priv->angle != 360)
         {
           /* For some reason we only need this at about 110 degrees, and only
            * when gaining in height
@@ -3497,7 +3493,7 @@ gtk_label_get_size (GtkSizeRequest *widget,
        * ellipsized labels.
        */
       if (!(priv->ellipsize && priv->have_transform) &&
-          (angle == 90 || angle == 270))
+          (priv->angle == 90 || priv->angle == 270))
         {
           /* Doing a h4w request on a rotated label here, return the
            * required width for the minimum height.
@@ -3524,7 +3520,7 @@ gtk_label_get_size (GtkSizeRequest *widget,
        * ellipsized labels.
        */
       if (!(priv->ellipsize && priv->have_transform) &&
-          (angle == 0 || angle == 180))
+          (priv->angle == 0 || priv->angle == 180 || priv->angle == 360))
         {
           /* Doing a w4h request on a label here, return the required
            * height for the minimum width.
@@ -3583,9 +3579,8 @@ gtk_label_get_width_for_height (GtkSizeRequest *widget,
 {
   GtkLabel *label = GTK_LABEL (widget);
   GtkLabelPriv *priv = label->priv;
-  gdouble angle = gtk_label_get_angle (label);
 
-  if (priv->wrap && (angle == 90 || angle == 270))
+  if (priv->wrap && (priv->angle == 90 || priv->angle == 270))
     {
       gint xpad, ypad;
 
@@ -3616,9 +3611,8 @@ gtk_label_get_height_for_width (GtkSizeRequest *widget,
 {
   GtkLabel *label = GTK_LABEL (widget);
   GtkLabelPriv *priv = label->priv;
-  gdouble angle = gtk_label_get_angle (label);
 
-  if (priv->wrap && (angle == 0 || angle == 180 || angle == 360))
+  if (priv->wrap && (priv->angle == 0 || priv->angle == 180 || priv->angle == 360))
     {
       gint xpad, ypad;
 
@@ -3836,12 +3830,10 @@ get_layout_location (GtkLabel  *label,
   gint xpad, ypad;
   gfloat xalign, yalign;
   PangoRectangle logical;
-  gdouble angle;
 
   misc   = GTK_MISC (label);
   widget = GTK_WIDGET (label);
   priv   = label->priv;
-  angle  = gtk_label_get_angle (label);
 
   gtk_misc_get_alignment (misc, &xalign, &yalign);
   gtk_misc_get_padding (misc, &xpad, &ypad);
@@ -5204,12 +5196,6 @@ gtk_label_get_selectable (GtkLabel *label)
   return priv->select_info && priv->select_info->selectable;
 }
 
-static void
-free_angle (gpointer angle)
-{
-  g_slice_free (gdouble, angle);
-}
-
 /**
  * gtk_label_set_angle:
  * @label: a #GtkLabel
@@ -5227,20 +5213,12 @@ void
 gtk_label_set_angle (GtkLabel *label,
 		     gdouble   angle)
 {
-  gdouble *label_angle;
+  GtkLabelPriv *priv;
 
   g_return_if_fail (GTK_IS_LABEL (label));
 
-  label_angle = (gdouble *)g_object_get_qdata (G_OBJECT (label), quark_angle);
+  priv = label->priv;
 
-  if (!label_angle)
-    {
-      label_angle = g_slice_new (gdouble);
-      *label_angle = 0.0;
-      g_object_set_qdata_full (G_OBJECT (label), quark_angle, 
-			       label_angle, free_angle);
-    }
-  
   /* Canonicalize to [0,360]. We don't canonicalize 360 to 0, because
    * double property ranges are inclusive, and changing 360 to 0 would
    * make a property editor behave strangely.
@@ -5248,9 +5226,9 @@ gtk_label_set_angle (GtkLabel *label,
   if (angle < 0 || angle > 360.0)
     angle = angle - 360. * floor (angle / 360.);
 
-  if (*label_angle != angle)
+  if (priv->angle != angle)
     {
-      *label_angle = angle;
+      priv->angle = angle;
       
       gtk_label_clear_layout (label);
       gtk_widget_queue_resize (GTK_WIDGET (label));
@@ -5273,16 +5251,9 @@ gtk_label_set_angle (GtkLabel *label,
 gdouble
 gtk_label_get_angle  (GtkLabel *label)
 {
-  gdouble *angle;
-
   g_return_val_if_fail (GTK_IS_LABEL (label), 0.0);
   
-  angle = (gdouble *)g_object_get_qdata (G_OBJECT (label), quark_angle);
-
-  if (angle)
-    return *angle;
-  else
-    return 0.0;
+  return label->priv->angle;
 }
 
 static void
