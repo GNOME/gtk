@@ -1247,9 +1247,33 @@ load_bg_image (GdkColormap *colormap,
     return (GdkPixmap*) GDK_PARENT_RELATIVE;
   else
     {
-      return gdk_pixmap_colormap_create_from_xpm (NULL, colormap, NULL,
-						  bg_color,
-						  filename);
+      GdkPixmap *pixmap;
+      GdkPixbuf *pixbuf;
+      cairo_t *cr;
+      GdkScreen *screen = gdk_colormap_get_screen (colormap);
+  
+      pixbuf = gdk_pixbuf_new_from_file (filename, NULL);
+      if (!pixbuf)
+        return NULL;
+
+      pixmap = gdk_pixmap_new (gdk_screen_get_root_window (screen),
+                               gdk_pixbuf_get_width (pixbuf),
+                               gdk_pixbuf_get_height (pixbuf),
+                               gdk_colormap_get_visual (colormap)->depth);
+      gdk_drawable_set_colormap (pixmap, colormap);
+  
+      cr = gdk_cairo_create (pixmap);
+
+      gdk_cairo_set_source_color (cr, bg_color);
+      cairo_paint (cr);
+
+      gdk_cairo_set_source_pixbuf (cr, pixbuf, 0, 0);
+      cairo_paint (cr);
+
+      cairo_destroy (cr);
+      g_object_unref (pixbuf);
+
+      return pixmap;
     }
 }
 
