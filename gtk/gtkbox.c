@@ -407,224 +407,230 @@ gtk_box_size_allocate (GtkWidget     *widget,
   gint nvis_children;
   gint nexpand_children;
 
+  guint border_width;
+  GtkTextDirection direction;
+  GtkAllocation child_allocation;
+  GtkRequestedSize *sizes;
+
+  GtkPackType packing;
+
+  gint size;
+  gint extra;
+  gint n_extra_widgets = 0; /* Number of widgets that receive 1 extra px */
+  gint x = 0, y = 0, i;
+  gint child_size;
+
+
   widget->allocation = *allocation;
 
   count_expand_children (box, &nvis_children, &nexpand_children);
 
-  if (nvis_children > 0)
+  /* If there is no visible child, simply return. */
+  if (nvis_children <= 0)
+    return;
+
+  border_width = gtk_container_get_border_width (GTK_CONTAINER (box));
+  direction = gtk_widget_get_direction (widget);
+  sizes = g_newa (GtkRequestedSize, nvis_children);
+
+  if (private->orientation == GTK_ORIENTATION_HORIZONTAL)
+    size = allocation->width - border_width * 2 - (nvis_children - 1) * private->spacing;
+  else
+    size = allocation->height - border_width * 2 - (nvis_children - 1) * private->spacing;
+
+  /* Retrieve desired size for visible children. */
+  for (i = 0, children = private->children; children; children = children->next)
     {
-      guint border_width = gtk_container_get_border_width (GTK_CONTAINER (box));
-      GtkTextDirection direction = gtk_widget_get_direction (widget);
-      GtkAllocation child_allocation;
-      GtkRequestedSize *sizes = g_newa (GtkRequestedSize, nvis_children);
+      child = children->data;
 
-      GtkPackType packing;
-
-      gint size;
-      gint extra;
-      gint x = 0, y = 0, i;
-      gint child_size;
+      if (!gtk_widget_get_visible (child->widget))
+	continue;
 
       if (private->orientation == GTK_ORIENTATION_HORIZONTAL)
-        size = allocation->width - border_width * 2 - (nvis_children - 1) * private->spacing;
+	gtk_size_request_get_width_for_height (GTK_SIZE_REQUEST (child->widget),
+					       allocation->height,
+					       &sizes[i].minimum_size,
+					       &sizes[i].natural_size);
       else
-        size = allocation->height - border_width * 2 - (nvis_children - 1) * private->spacing;
+	gtk_size_request_get_height_for_width (GTK_SIZE_REQUEST (child->widget),
+					       allocation->width,
+					       &sizes[i].minimum_size,
+					       &sizes[i].natural_size);
 
-      /* Retrieve desired size for visible children */
-      i = 0;
-      children = private->children;
-      while (children)
+
+      /* Assert the api is working properly */
+      if (sizes[i].minimum_size < 0)
+	g_error ("GtkBox child %s minimum %s: %d < 0 for %s %d",
+		 gtk_widget_get_name (GTK_WIDGET (child->widget)),
+		 (private->orientation == GTK_ORIENTATION_HORIZONTAL) ? "width" : "height",
+		 sizes[i].minimum_size,
+		 (private->orientation == GTK_ORIENTATION_HORIZONTAL) ? "height" : "width",
+		 (private->orientation == GTK_ORIENTATION_HORIZONTAL) ? allocation->height : allocation->width);
+
+      if (sizes[i].natural_size < sizes[i].minimum_size)
+	g_error ("GtkBox child %s natural %s: %d < minimum %d for %s %d",
+		 gtk_widget_get_name (GTK_WIDGET (child->widget)),
+		 (private->orientation == GTK_ORIENTATION_HORIZONTAL) ? "width" : "height",
+		 sizes[i].natural_size,
+		 sizes[i].minimum_size,
+		 (private->orientation == GTK_ORIENTATION_HORIZONTAL) ? "height" : "width",
+		 (private->orientation == GTK_ORIENTATION_HORIZONTAL) ? allocation->height : allocation->width);
+
+      size -= sizes[i].minimum_size;
+      size -= child->padding * 2;
+
+      sizes[i].data = child;
+
+      i++;
+    }
+
+  if (private->homogeneous)
+    {
+      /* If were homogenous we still need to run the above loop to get the
+       * minimum sizes for children that are not going to fill
+       */
+      if (private->orientation == GTK_ORIENTATION_HORIZONTAL)
+	size = allocation->width - border_width * 2 - (nvis_children - 1) * private->spacing;
+      else
+	size = allocation->height - border_width * 2 - (nvis_children - 1) * private->spacing;
+
+      extra = size / nvis_children;
+      n_extra_widgets = size % nvis_children;
+    }
+  else
+    {
+      /* Bring children up to size first */
+      size = gtk_distribute_natural_allocation (size, nvis_children, sizes);
+
+      /* Calculate space which hasn't distributed yet,
+       * and is available for expanding children.
+       */
+      if (nexpand_children > 0)
 	{
-	  child = children->data;
-	  children = children->next;
+	  extra = size / nexpand_children;
+	  n_extra_widgets = size % nexpand_children;
+	}
+      else
+	extra = 0;
+    }
 
-	  if (gtk_widget_get_visible (child->widget))
-	    {
-	      if (private->orientation == GTK_ORIENTATION_HORIZONTAL)
-		gtk_size_request_get_width_for_height (GTK_SIZE_REQUEST (child->widget),
-							  allocation->height,
-							  &sizes[i].minimum_size,
-							  &sizes[i].natural_size);
-	      else
-		gtk_size_request_get_height_for_width (GTK_SIZE_REQUEST (child->widget),
-							  allocation->width,
-							  &sizes[i].minimum_size,
-							  &sizes[i].natural_size);
-	      
-	      
-	      /* Assert the api is working properly */
-	      if (sizes[i].minimum_size < 0)
-		g_error ("GtkBox child %s minimum %s: %d < 0 for %s %d",
-			 gtk_widget_get_name (GTK_WIDGET (child->widget)),
-			 (private->orientation == GTK_ORIENTATION_HORIZONTAL) ? "width" : "height",
-			 sizes[i].minimum_size,
-			 (private->orientation == GTK_ORIENTATION_HORIZONTAL) ? "height" : "width",
-			 (private->orientation == GTK_ORIENTATION_HORIZONTAL) ? allocation->height : allocation->width);
-
-	      if (sizes[i].natural_size < sizes[i].minimum_size)
-		g_error ("GtkBox child %s natural %s: %d < minimum %d for %s %d",
-			 gtk_widget_get_name (GTK_WIDGET (child->widget)),
-			 (private->orientation == GTK_ORIENTATION_HORIZONTAL) ? "width" : "height",
-			 sizes[i].natural_size, 
-			 sizes[i].minimum_size,
-			 (private->orientation == GTK_ORIENTATION_HORIZONTAL) ? "height" : "width",
-			 (private->orientation == GTK_ORIENTATION_HORIZONTAL) ? allocation->height : allocation->width);
-	      
-	      size -= sizes[i].minimum_size;
-	      size -= child->padding * 2;
-
-	      sizes[i].data = child;
-	      
-	      i += 1;
-	    }
+  /* Allocate child positions. */
+  for (packing = GTK_PACK_START; packing <= GTK_PACK_END; ++packing)
+    {
+      if (private->orientation == GTK_ORIENTATION_HORIZONTAL)
+	{
+	  child_allocation.y = allocation->y + border_width;
+	  child_allocation.height = MAX (1, allocation->height - border_width * 2);
+	  if (packing == GTK_PACK_START)
+	    x = allocation->x + border_width;
+	  else
+	    x = allocation->x + allocation->width - border_width;
+	}
+      else
+	{
+	  child_allocation.x = allocation->x + border_width;
+	  child_allocation.width = MAX (1, allocation->width - border_width * 2);
+	  if (packing == GTK_PACK_START)
+	    y = allocation->y + border_width;
+	  else
+	    y = allocation->y + allocation->height - border_width;
 	}
 
-      if (private->homogeneous)
+      for (i = 0, children = private->children;
+	   children;
+	   children = children->next)
 	{
-	  /* If were homogenous we still need to run the above loop to get the minimum sizes
-	   * for children that are not going to fill 
+	  child = children->data;
+
+	  /* If widget is not visible or it's packing is not right for current
+	   * loop, skip it.
 	   */
-	  if (private->orientation == GTK_ORIENTATION_HORIZONTAL)
-	    size = allocation->width - border_width * 2 - (nvis_children - 1) * private->spacing;
-	  else
-	    size = allocation->height - border_width * 2 - (nvis_children - 1) * private->spacing;
-	  
-          extra = size / nvis_children;
-        }
-      else
-	{
-	  /* Bring children up to size first */
-	  size = gtk_distribute_natural_allocation (size, nvis_children, sizes);
+	  if (child->pack != packing || !gtk_widget_get_visible (child->widget))
+	    continue;
 
-          /* Calculate space which hasn't distributed yet,
-           * and is available for expanding children.
-           */
-          if (nexpand_children > 0)
-            extra = size / nexpand_children;
-          else
-            extra = 0;
-        }
-
-      /* Allocate child positions. */
-
-      for (packing = GTK_PACK_START; packing <= GTK_PACK_END; ++packing)
-        {
-          if (private->orientation == GTK_ORIENTATION_HORIZONTAL)
-            {
-              child_allocation.y = allocation->y + border_width;
-              child_allocation.height = MAX (1, allocation->height - border_width * 2);
-              if (packing == GTK_PACK_START)
-                x = allocation->x + border_width;
-              else
-                x = allocation->x + allocation->width - border_width;
-            }
-          else
-            {
-              child_allocation.x = allocation->x + border_width;
-              child_allocation.width = MAX (1, allocation->width - border_width * 2);
-              if (packing == GTK_PACK_START)
-                y = allocation->y + border_width;
-              else
-                y = allocation->y + allocation->height - border_width;
-            }
-
-	  i = 0;
-          children = private->children;
-          while (children)
+	  /* Assign the child's size. */
+	  if (private->homogeneous)
 	    {
-	      child = children->data;
-	      children = children->next;
+	      child_size = extra;
 
-	      if (gtk_widget_get_visible (child->widget))
-	        {
-                  if (child->pack == packing)
-                    {
-                      /* Assign the child's size. */
-	              if (private->homogeneous)
-		        {
-		          if (nvis_children == 1)
-                            child_size = size;
-		          else
-                            child_size = extra;
-
-		          nvis_children -= 1;
-		          size -= extra;
-		        }
-	              else
-		        {
-		          child_size = sizes[i].minimum_size + child->padding * 2;
-
-		          if (child->expand)
-		            {
-		              if (nexpand_children == 1)
-                                child_size += size;
-		              else
-                                child_size += extra;
-
-		              nexpand_children -= 1;
-		              size -= extra;
-		            }
-		        }
-
-                      /* Assign the child's position. */
-                      if (private->orientation == GTK_ORIENTATION_HORIZONTAL)
-                        {
-	                  if (child->fill)
-		            {
-                              child_allocation.width = MAX (1, child_size - child->padding * 2);
-                              child_allocation.x = x + child->padding;
-		            }
-	                  else
-		            {
-			      child_allocation.width = sizes[i].minimum_size;
-                              child_allocation.x = x + (child_size - child_allocation.width) / 2;
-		            }
-
-                          if (packing == GTK_PACK_START)
-			    {
-			      x += child_size + private->spacing;
-			    }
-                          else
-			    {
-			      x -= child_size + private->spacing;
-
-			      child_allocation.x -= child_size;
-			    }
-
-	                  if (direction == GTK_TEXT_DIR_RTL)
-                            child_allocation.x = allocation->x + allocation->width - (child_allocation.x - allocation->x) - child_allocation.width;
-
-                        }
-                      else /* (private->orientation == GTK_ORIENTATION_VERTICAL) */
-                        {
-	                  if (child->fill)
-		            {
-                              child_allocation.height = MAX (1, child_size - child->padding * 2);
-                              child_allocation.y = y + child->padding;
-		            }
-	                  else
-		            {
-			      child_allocation.height = sizes[i].minimum_size;
-                              child_allocation.y = y + (child_size - child_allocation.height) / 2;
-		            }
-
-                         if (packing == GTK_PACK_START)
-			   {
-			     y += child_size + private->spacing;
-			   }
-                         else
-			   {
-			     y -= child_size + private->spacing;
-
-			     child_allocation.y -= child_size;
-			   }
-                        }
-	              gtk_widget_size_allocate (child->widget, &child_allocation);
-                    }
-
-		  i += 1;
-                }
+	      if (n_extra_widgets > 0)
+		{
+		  child_size++;
+		  n_extra_widgets--;
+		}
 	    }
+	  else
+	    {
+	      child_size = sizes[i].minimum_size + child->padding * 2;
+
+	      if (child->expand)
+		{
+		  child_size += extra;
+
+		  if (n_extra_widgets > 0)
+		    {
+		      child_size++;
+		      n_extra_widgets--;
+		    }
+		}
+	    }
+
+	  /* Assign the child's position. */
+	  if (private->orientation == GTK_ORIENTATION_HORIZONTAL)
+	    {
+	      if (child->fill)
+		{
+		  child_allocation.width = MAX (1, child_size - child->padding * 2);
+		  child_allocation.x = x + child->padding;
+		}
+	      else
+		{
+		  child_allocation.width = sizes[i].minimum_size;
+		  child_allocation.x = x + (child_size - child_allocation.width) / 2;
+		}
+
+	      if (packing == GTK_PACK_START)
+		{
+		  x += child_size + private->spacing;
+		}
+	      else
+		{
+		  x -= child_size + private->spacing;
+
+		  child_allocation.x -= child_size;
+		}
+
+	      if (direction == GTK_TEXT_DIR_RTL)
+		child_allocation.x = allocation->x + allocation->width - (child_allocation.x - allocation->x) - child_allocation.width;
+
+	    }
+	  else /* (private->orientation == GTK_ORIENTATION_VERTICAL) */
+	    {
+	      if (child->fill)
+		{
+		  child_allocation.height = MAX (1, child_size - child->padding * 2);
+		  child_allocation.y = y + child->padding;
+		}
+	      else
+		{
+		  child_allocation.height = sizes[i].minimum_size;
+		  child_allocation.y = y + (child_size - child_allocation.height) / 2;
+		}
+
+	      if (packing == GTK_PACK_START)
+		{
+		  y += child_size + private->spacing;
+		}
+	      else
+		{
+		  y -= child_size + private->spacing;
+
+		  child_allocation.y -= child_size;
+		}
+	    }
+	  gtk_widget_size_allocate (child->widget, &child_allocation);
+
+	  i++;
 	}
     }
 }
@@ -919,149 +925,156 @@ gtk_box_compute_size_for_opposing_orientation (GtkBox *box,
 					       gint   *minimum_size,
 					       gint   *natural_size)
 {
-  GtkBoxPriv    *private = box->priv;
-  GtkBoxChild   *child;
-  GList         *children;
-  gint           nvis_children;
-  gint           nexpand_children;
-  gint           computed_minimum = 0, computed_natural = 0;
-  guint          border_width = gtk_container_get_border_width (GTK_CONTAINER (box));
+  GtkBoxPriv       *private = box->priv;
+  GtkBoxChild      *child;
+  GList            *children;
+  gint              nvis_children;
+  gint              nexpand_children;
+  gint              computed_minimum = 0, computed_natural = 0;
+  guint             border_width = gtk_container_get_border_width (GTK_CONTAINER (box));
+  GtkRequestedSize *sizes;
+  GtkPackType       packing;
+  gint              size, extra, i;
+  gint              child_size, child_minimum, child_natural;
+  gint              n_extra_widgets = 0;
 
   count_expand_children (box, &nvis_children, &nexpand_children);
 
-  if (nvis_children > 0)
+  if (nvis_children <= 0)
+    return;
+
+  sizes = g_newa (GtkRequestedSize, nvis_children);
+  size = avail_size - border_width * 2 - (nvis_children - 1) * private->spacing;
+
+  /* Retrieve desired size for visible children */
+  for (i = 0, children = private->children; children; children = children->next)
     {
-      GtkRequestedSize *sizes = g_newa (GtkRequestedSize, nvis_children);
-      GtkPackType       packing;
-      gint              size, extra, i;
-      gint              child_size, child_minimum, child_natural;
+      child = children->data;
+	  
+      if (gtk_widget_get_visible (child->widget))
+	{
+	  if (private->orientation == GTK_ORIENTATION_HORIZONTAL)
+	    gtk_size_request_get_width (GTK_SIZE_REQUEST (child->widget),
+					&sizes[i].minimum_size,
+					&sizes[i].natural_size);
+	  else
+	    gtk_size_request_get_height (GTK_SIZE_REQUEST (child->widget),
+					 &sizes[i].minimum_size,
+					 &sizes[i].natural_size);
 
+	  /* Assert the api is working properly */
+	  if (sizes[i].minimum_size < 0)
+	    g_error ("GtkBox child %s minimum %s: %d < 0",
+		     gtk_widget_get_name (GTK_WIDGET (child->widget)),
+		     (private->orientation == GTK_ORIENTATION_HORIZONTAL) ? "width" : "height",
+		     sizes[i].minimum_size);
+
+	  if (sizes[i].natural_size < sizes[i].minimum_size)
+	    g_error ("GtkBox child %s natural %s: %d < minimum %d",
+		     gtk_widget_get_name (GTK_WIDGET (child->widget)),
+		     (private->orientation == GTK_ORIENTATION_HORIZONTAL) ? "width" : "height",
+		     sizes[i].natural_size,
+		     sizes[i].minimum_size);
+
+	  size -= sizes[i].minimum_size;
+	  size -= child->padding * 2;
+
+	  sizes[i].data = child;
+
+	  i += 1;
+	}
+    }
+
+  if (private->homogeneous)
+    {
+      /* If were homogenous we still need to run the above loop to get the
+       * minimum sizes for children that are not going to fill
+       */
       size = avail_size - border_width * 2 - (nvis_children - 1) * private->spacing;
+      extra = size / nvis_children;
+      n_extra_widgets = size % nvis_children;
+    }
+  else
+    {
+      /* Bring children up to size first */
+      size = gtk_distribute_natural_allocation (size, nvis_children, sizes);
 
-      /* Retrieve desired size for visible children */
-      for (i = 0, children = private->children; children; children = children->next)
+      /* Calculate space which hasn't distributed yet,
+       * and is available for expanding children.
+       */
+      if (nexpand_children > 0)
+	{
+	  extra = size / nexpand_children;
+	  n_extra_widgets = size % nexpand_children;
+	}
+      else
+	extra = 0;
+    }
+
+  /* Allocate child positions. */
+  for (packing = GTK_PACK_START; packing <= GTK_PACK_END; ++packing)
+    {
+      for (i = 0, children = private->children;
+	   children;
+	   children = children->next)
 	{
 	  child = children->data;
-	  
-	  if (gtk_widget_get_visible (child->widget))
+
+	  if (child->pack != packing || !gtk_widget_get_visible (child->widget))
+	    continue;
+
+	  if (child->pack == packing)
 	    {
-	      if (private->orientation == GTK_ORIENTATION_HORIZONTAL)
-		gtk_size_request_get_width (GTK_SIZE_REQUEST (child->widget),
-					    &sizes[i].minimum_size,
-					    &sizes[i].natural_size);
+	      /* Assign the child's size. */
+	      if (private->homogeneous)
+		{
+		  child_size = extra;
+
+		  if (n_extra_widgets > 0)
+		    {
+		      child_size++;
+		      n_extra_widgets--;
+		    }
+		}
 	      else
-		gtk_size_request_get_height (GTK_SIZE_REQUEST (child->widget),
-					     &sizes[i].minimum_size,
-					     &sizes[i].natural_size);
-	      
-	      /* Assert the api is working properly */
-	      if (sizes[i].minimum_size < 0)
-		g_error ("GtkBox child %s minimum %s: %d < 0",
-			 gtk_widget_get_name (GTK_WIDGET (child->widget)),
-			 (private->orientation == GTK_ORIENTATION_HORIZONTAL) ? "width" : "height",
-			 sizes[i].minimum_size);
+		{
+		  child_size = sizes[i].minimum_size + child->padding * 2;
 
-	      if (sizes[i].natural_size < sizes[i].minimum_size)
-		g_error ("GtkBox child %s natural %s: %d < minimum %d",
-			 gtk_widget_get_name (GTK_WIDGET (child->widget)),
-			 (private->orientation == GTK_ORIENTATION_HORIZONTAL) ? "width" : "height",
-			 sizes[i].natural_size, 
-			 sizes[i].minimum_size);
+		  if (child->expand)
+		    {
+		      child_size += extra;
 
-	      size -= sizes[i].minimum_size;
-	      size -= child->padding * 2;
-
-	      sizes[i].data = child;
-	      
-	      i += 1;
-	    }
-	}
-
-      if (private->homogeneous)
-	{
-	  /* If were homogenous we still need to run the above loop to get the minimum sizes
-	   * for children that are not going to fill 
-	   */
-	  size = avail_size - border_width * 2 - (nvis_children - 1) * private->spacing;
-          extra = size / nvis_children;
-        }
-      else
-	{
-	  /* Bring children up to size first */
-	  size = gtk_distribute_natural_allocation (size, nvis_children, sizes);
-
-          /* Calculate space which hasn't distributed yet,
-           * and is available for expanding children.
-           */
-          if (nexpand_children > 0)
-            extra = size / nexpand_children;
-          else
-            extra = 0;
-        }
-
-      /* Allocate child positions. */
-      for (packing = GTK_PACK_START; packing <= GTK_PACK_END; ++packing)
-        {
-          for (i = 0, children = private->children; children; children = children->next)
-	    {
-	      child = children->data;
-
-	      if (gtk_widget_get_visible (child->widget))
-	        {
-                  if (child->pack == packing)
-                    {
-                      /* Assign the child's size. */
-	              if (private->homogeneous)
-		        {
-		          if (nvis_children == 1)
-                            child_size = size;
-		          else
-                            child_size = extra;
-
-		          nvis_children -= 1;
-		          size -= extra;
-		        }
-	              else
-		        {
-		          child_size = sizes[i].minimum_size + child->padding * 2;
-
-		          if (child->expand)
-		            {
-		              if (nexpand_children == 1)
-                                child_size += size;
-		              else
-                                child_size += extra;
-
-		              nexpand_children -= 1;
-		              size -= extra;
-		            }
-		        }
-
-		      if (child->fill)
+		      if (n_extra_widgets > 0)
 			{
-			  child_size = MAX (1, child_size - child->padding * 2);
+			  child_size++;
+			  n_extra_widgets--;
 			}
-		      else
-			{
-			  child_size = sizes[i].minimum_size;
-			}
+		    }
+		}
+
+	      if (child->fill)
+		{
+		  child_size = MAX (1, child_size - child->padding * 2);
+		}
+	      else
+		{
+		  child_size = sizes[i].minimum_size;
+		}
 
 
-                      /* Assign the child's position. */
-                      if (private->orientation == GTK_ORIENTATION_HORIZONTAL)
-			gtk_size_request_get_height_for_width (GTK_SIZE_REQUEST (child->widget),
-								  child_size, &child_minimum, &child_natural);
-                      else /* (private->orientation == GTK_ORIENTATION_VERTICAL) */
-			gtk_size_request_get_width_for_height (GTK_SIZE_REQUEST (child->widget),
-								  child_size, &child_minimum, &child_natural);
+	      /* Assign the child's position. */
+	      if (private->orientation == GTK_ORIENTATION_HORIZONTAL)
+		gtk_size_request_get_height_for_width (GTK_SIZE_REQUEST (child->widget),
+						       child_size, &child_minimum, &child_natural);
+	      else /* (private->orientation == GTK_ORIENTATION_VERTICAL) */
+		gtk_size_request_get_width_for_height (GTK_SIZE_REQUEST (child->widget),
+						       child_size, &child_minimum, &child_natural);
 
-		      
-		      computed_minimum = MAX (computed_minimum, child_minimum);
-		      computed_natural = MAX (computed_natural, child_natural);
-                    }
-		  i += 1;
-                }
+
+	      computed_minimum = MAX (computed_minimum, child_minimum);
+	      computed_natural = MAX (computed_natural, child_natural);
 	    }
+	  i += 1;
 	}
     }
 
