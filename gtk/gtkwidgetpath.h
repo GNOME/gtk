@@ -56,6 +56,23 @@ gboolean               gtk_widget_path_iter_has_qname (const GtkWidgetPath *path
                                                        guint                pos,
                                                        GQuark               qname);
 
+void     gtk_widget_path_iter_add_class     (GtkWidgetPath       *path,
+                                             guint                pos,
+                                             const gchar         *name);
+void     gtk_widget_path_iter_remove_class  (GtkWidgetPath       *path,
+                                             guint                pos,
+                                             const gchar         *name);
+void     gtk_widget_path_iter_clear_classes (GtkWidgetPath       *path,
+                                             guint                pos);
+GSList * gtk_widget_path_iter_list_classes  (const GtkWidgetPath *path,
+                                             guint                pos);
+gboolean gtk_widget_path_iter_has_class     (const GtkWidgetPath *path,
+                                             guint                pos,
+                                             const gchar         *name);
+gboolean gtk_widget_path_iter_has_qclass    (const GtkWidgetPath *path,
+                                             guint                pos,
+                                             GQuark               qname);
+
 void     gtk_widget_path_iter_add_region    (GtkWidgetPath      *path,
                                              guint               pos,
                                              const gchar        *name,
@@ -66,7 +83,7 @@ void     gtk_widget_path_iter_remove_region (GtkWidgetPath      *path,
 void     gtk_widget_path_iter_clear_regions (GtkWidgetPath      *path,
                                              guint               pos);
 
-GSList * gtk_widget_path_iter_list_regions  (cosnt GtkWidgetPath *path,
+GSList * gtk_widget_path_iter_list_regions  (const GtkWidgetPath *path,
                                              guint                pos);
 
 gboolean gtk_widget_path_iter_has_region    (const GtkWidgetPath *path,

@@ -31,6 +31,7 @@ struct GtkPathElement
   GType type;
   GQuark name;
   GHashTable *regions;
+  GArray *classes;
 };
 
 struct GtkWidgetPath
@@ -220,6 +221,185 @@ gtk_widget_path_iter_has_name (const GtkWidgetPath *path,
     return FALSE;
 
   return gtk_widget_path_iter_has_qname (path, pos, qname);
+}
+
+void
+gtk_widget_path_iter_add_class (GtkWidgetPath *path,
+                                guint          pos,
+                                const gchar   *name)
+{
+  GtkPathElement *elem;
+  gboolean added = FALSE;
+  GQuark qname;
+  guint i;
+
+  g_return_if_fail (path != NULL);
+  g_return_if_fail (pos < path->elems->len);
+  g_return_if_fail (name != NULL);
+
+  elem = &g_array_index (path->elems, GtkPathElement, pos);
+  qname = g_quark_from_string (name);
+
+  if (!elem->classes)
+    elem->classes = g_array_new (FALSE, FALSE, sizeof (GQuark));
+
+  for (i = 0; i < elem->classes->len; i++)
+    {
+      GQuark quark;
+
+      quark = g_array_index (elem->classes, GQuark, i);
+
+      if (qname == quark)
+        {
+          /* Already there */
+          added = TRUE;
+          break;
+        }
+      if (qname < quark)
+        {
+          g_array_insert_val (elem->classes, i, qname);
+          added = TRUE;
+          break;
+        }
+    }
+
+  if (!added)
+    g_array_append_val (elem->classes, qname);
+}
+
+void
+gtk_widget_path_iter_remove_class (GtkWidgetPath *path,
+                                   guint          pos,
+                                   const gchar   *name)
+{
+  GtkPathElement *elem;
+  GQuark qname;
+  guint i;
+
+  g_return_if_fail (path != NULL);
+  g_return_if_fail (pos < path->elems->len);
+  g_return_if_fail (name != NULL);
+
+  qname = g_quark_try_string (name);
+
+  if (qname == 0)
+    return;
+
+  elem = &g_array_index (path->elems, GtkPathElement, pos);
+
+  if (!elem->classes)
+    return;
+
+  for (i = 0; i < elem->classes->len; i++)
+    {
+      GQuark quark;
+
+      quark = g_array_index (elem->classes, GQuark, i);
+
+      if (quark > qname)
+        break;
+      else if (quark == qname)
+        {
+          g_array_remove_index (elem->classes, i);
+          break;
+        }
+    }
+}
+
+void
+gtk_widget_path_iter_clear_classes (GtkWidgetPath *path,
+                                    guint          pos)
+{
+  GtkPathElement *elem;
+
+  g_return_if_fail (path != NULL);
+  g_return_if_fail (pos < path->elems->len);
+
+  elem = &g_array_index (path->elems, GtkPathElement, pos);
+
+  if (!elem->classes)
+    return;
+
+  if (elem->classes->len > 0)
+    g_array_remove_range (elem->classes, 0, elem->classes->len);
+}
+
+GSList *
+gtk_widget_path_iter_list_classes (const GtkWidgetPath *path,
+                                   guint                pos)
+{
+  GtkPathElement *elem;
+  GSList *list = NULL;
+  guint i;
+
+  g_return_val_if_fail (path != NULL, NULL);
+  g_return_val_if_fail (pos < path->elems->len, NULL);
+
+  elem = &g_array_index (path->elems, GtkPathElement, pos);
+
+  if (!elem->classes)
+    return NULL;
+
+  for (i = 0; i < elem->classes->len; i++)
+    {
+      GQuark quark;
+
+      quark = g_array_index (elem->classes, GQuark, i);
+      list = g_slist_prepend (list, (gchar *) g_quark_to_string (quark));
+    }
+
+  return g_slist_reverse (list);
+}
+
+gboolean
+gtk_widget_path_iter_has_qclass (const GtkWidgetPath *path,
+                                 guint                pos,
+                                 GQuark               qname)
+{
+  GtkPathElement *elem;
+  guint i;
+
+  g_return_val_if_fail (path != NULL, FALSE);
+  g_return_val_if_fail (pos < path->elems->len, FALSE);
+  g_return_val_if_fail (qname != 0, FALSE);
+
+  elem = &g_array_index (path->elems, GtkPathElement, pos);
+
+  if (!elem->classes)
+    return FALSE;
+
+  for (i = 0; i < elem->classes->len; i++)
+    {
+      GQuark quark;
+
+      quark = g_array_index (elem->classes, GQuark, i);
+
+      if (quark == qname)
+        return TRUE;
+      else if (quark > qname)
+        break;
+    }
+
+  return FALSE;
+}
+
+gboolean
+gtk_widget_path_iter_has_class (const GtkWidgetPath *path,
+                                guint                pos,
+                                const gchar         *name)
+{
+  GQuark qname;
+
+  g_return_val_if_fail (path != NULL, FALSE);
+  g_return_val_if_fail (pos < path->elems->len, FALSE);
+  g_return_val_if_fail (name != NULL, FALSE);
+
+  qname = g_quark_try_string (name);
+
+  if (qname == 0)
+    return FALSE;
+
+  return gtk_widget_path_iter_has_qclass (path, pos, qname);
 }
 
 void
