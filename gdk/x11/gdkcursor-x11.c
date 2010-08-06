@@ -161,10 +161,15 @@ get_blank_cursor (GdkDisplay *display)
   Pixmap source_pixmap;
   XColor color;
   Cursor cursor;
+  cairo_t *cr;
 
   screen = gdk_display_get_default_screen (display);
-  pixmap = gdk_bitmap_create_from_data (gdk_screen_get_root_window (screen), 
-					"\0\0\0\0\0\0\0\0", 1, 1);
+  pixmap = gdk_pixmap_new (gdk_screen_get_root_window (screen), 1, 1, 1);
+  /* Clear Pixmap */
+  cr = gdk_cairo_create (pixmap);
+  cairo_set_operator (cr, CAIRO_OPERATOR_CLEAR);
+  cairo_paint (cr);
+  cairo_destroy (cr);
  
   source_pixmap = GDK_PIXMAP_XID (pixmap);
 
