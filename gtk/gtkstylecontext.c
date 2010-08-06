@@ -669,9 +669,10 @@ gtk_style_context_restore (GtkStyleContext *context)
     {
       guint i;
 
+      info = priv->info_stack->data;
+
       /* Update widget path regions */
       gtk_widget_path_iter_clear_regions (priv->widget_path, 0);
-      info = priv->info_stack->data;
 
       for (i = 0; i < info->regions->len; i++)
         {
@@ -681,6 +682,18 @@ gtk_style_context_restore (GtkStyleContext *context)
           gtk_widget_path_iter_add_region (priv->widget_path, 0,
                                            g_quark_to_string (region->class_quark),
                                            region->flags);
+        }
+
+      /* Update widget path classes */
+      gtk_widget_path_iter_clear_classes (priv->widget_path, 0);
+
+      for (i = 0; i < info->style_classes->len; i++)
+        {
+          GQuark quark;
+
+          quark = g_array_index (info->style_classes, GQuark, i);
+          gtk_widget_path_iter_add_class (priv->widget_path, 0,
+                                          g_quark_to_string (quark));
         }
     }
 }
@@ -788,7 +801,15 @@ gtk_style_context_set_class (GtkStyleContext *context,
   info = priv->info_stack->data;
 
   if (!style_class_find (info->style_classes, class_quark, &position))
-    g_array_insert_val (info->style_classes, position, class_quark);
+    {
+      g_array_insert_val (info->style_classes, position, class_quark);
+
+      if (priv->widget_path)
+        {
+          gtk_widget_path_iter_add_class (priv->widget_path, 0, class_name);
+          rebuild_properties (context);
+        }
+    }
 }
 
 void
@@ -814,7 +835,15 @@ gtk_style_context_unset_class (GtkStyleContext *context,
   info = priv->info_stack->data;
 
   if (style_class_find (info->style_classes, class_quark, &position))
-    g_array_remove_index (info->style_classes, position);
+    {
+      g_array_remove_index (info->style_classes, position);
+
+      if (priv->widget_path)
+        {
+          gtk_widget_path_iter_remove_class (priv->widget_path, 0, class_name);
+          rebuild_properties (context);
+        }
+    }
 }
 
 gboolean

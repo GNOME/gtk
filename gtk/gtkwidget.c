@@ -13216,7 +13216,6 @@ gtk_widget_get_path (GtkWidget *widget)
   GtkStyleContext *context;
   GtkWidgetPath *path;
   GtkWidget *parent;
-  GList *regions, *reg;
 
   g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
 
@@ -13224,7 +13223,6 @@ gtk_widget_get_path (GtkWidget *widget)
 
   path = gtk_widget_path_new ();
   gtk_widget_path_prepend_type (path, G_OBJECT_TYPE (widget));
-  regions = reg = NULL;
 
   if (widget->priv->name)
     gtk_widget_path_iter_set_name (path, 0, widget->priv->name);
@@ -13233,21 +13231,39 @@ gtk_widget_get_path (GtkWidget *widget)
                                 quark_style_context);
 
   if (context)
-    regions = reg = gtk_style_context_list_regions (context);
-
-  while (reg)
     {
-      GtkRegionFlags flags;
-      const gchar *region_name;
+      GList *list, *l;
 
-      region_name = reg->data;
-      reg = reg->next;
+      list = l = gtk_style_context_list_regions (context);
 
-      gtk_style_context_has_region (context, region_name, &flags);
-      gtk_widget_path_iter_add_region (path, 0, region_name, flags);
+      while (l)
+        {
+          GtkRegionFlags flags;
+          const gchar *region_name;
+
+          region_name = l->data;
+          l = l->next;
+
+          gtk_style_context_has_region (context, region_name, &flags);
+          gtk_widget_path_iter_add_region (path, 0, region_name, flags);
+        }
+
+      g_list_free (list);
+
+      list = l = gtk_style_context_list_classes (context);
+
+      while (l)
+        {
+          const gchar *class_name;
+
+          class_name = l->data;
+          l = l->next;
+
+          gtk_widget_path_iter_add_class (path, 0, class_name);
+        }
+
+      g_list_free (list);
     }
-
-  g_list_free (regions);
 
   while (parent)
     {
