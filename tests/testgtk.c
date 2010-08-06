@@ -7255,14 +7255,11 @@ shape_create_icon (GdkScreen *screen,
 		   gint       window_type)
 {
   GtkWidget *window;
-  GtkWidget *pixmap;
+  GtkWidget *image;
   GtkWidget *fixed;
   CursorOffset* icon_pos;
-  GdkBitmap *gdk_pixmap_mask;
-  GdkPixmap *gdk_pixmap;
-  GtkStyle *style;
-
-  style = gtk_widget_get_default_style ();
+  GdkBitmap *mask;
+  GdkPixbuf *pixbuf;
 
   /*
    * GDK_WINDOW_TOPLEVEL works also, giving you a title border
@@ -7282,18 +7279,24 @@ shape_create_icon (GdkScreen *screen,
 			 GDK_BUTTON_PRESS_MASK);
 
   gtk_widget_realize (window);
-  gdk_pixmap = gdk_pixmap_create_from_xpm (window->window, &gdk_pixmap_mask, 
-					   &style->bg[GTK_STATE_NORMAL],
-					   xpm_file);
 
-  pixmap = gtk_image_new_from_pixmap (gdk_pixmap, gdk_pixmap_mask);
-  gtk_fixed_put (GTK_FIXED (fixed), pixmap, px,py);
-  gtk_widget_show (pixmap);
+  pixbuf = gdk_pixbuf_new_from_file (xpm_file, NULL);
+  g_assert (pixbuf); /* FIXME: error handling */
+
+  gdk_pixbuf_render_pixmap_and_mask_for_colormap (pixbuf,
+                                                  gtk_widget_get_colormap (window),
+                                                  NULL,
+                                                  &mask,
+                                                  128);
+                                                  
+  image = gtk_image_new_from_pixbuf (pixbuf);
+  gtk_fixed_put (GTK_FIXED (fixed), image, px,py);
+  gtk_widget_show (image);
   
-  gtk_widget_shape_combine_mask (window, gdk_pixmap_mask, px, py);
+  gtk_widget_shape_combine_mask (window, mask, px, py);
   
-  g_object_unref (gdk_pixmap_mask);
-  g_object_unref (gdk_pixmap);
+  g_object_unref (mask);
+  g_object_unref (pixbuf);
 
   g_signal_connect (window, "button_press_event",
 		    G_CALLBACK (shape_pressed), NULL);
