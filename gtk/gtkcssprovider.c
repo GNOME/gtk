@@ -1693,7 +1693,7 @@ gtk_css_provider_get_default (void)
         "  background-color: shade(#ffffff, 0.93); \n"
         "}\n"
         "\n"
-        "tooltip {\n"
+        ".tooltip {\n"
         "  background-color: @tooltip_bg_color; \n"
         "  foreground-color: @tooltip_fg_color; \n"
         "}\n"
