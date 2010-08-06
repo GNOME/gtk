@@ -2881,7 +2881,7 @@ create_saved_position (GtkWidget *widget)
  */
 
 static void
-create_pixmap (GtkWidget *widget)
+create_pixbuf (GtkWidget *widget)
 {
   static GtkWidget *window = NULL;
   GtkWidget *box1;
@@ -2890,7 +2890,7 @@ create_pixmap (GtkWidget *widget)
   GtkWidget *button;
   GtkWidget *label;
   GtkWidget *separator;
-  GtkWidget *pixmapwid;
+  GtkWidget *pixbufwid;
 
   if (!window)
     {
@@ -2917,24 +2917,24 @@ create_pixmap (GtkWidget *widget)
       button = gtk_button_new ();
       gtk_box_pack_start (GTK_BOX (box2), button, FALSE, FALSE, 0);
 
-      pixmapwid = new_pixbuf ("test.xpm", window->window, NULL);
+      pixbufwid = new_pixbuf ("test.xpm", window->window, NULL);
 
-      label = gtk_label_new ("Pixmap\ntest");
+      label = gtk_label_new ("Pixbuf\ntest");
       box3 = gtk_hbox_new (FALSE, 0);
       gtk_container_set_border_width (GTK_CONTAINER (box3), 2);
-      gtk_container_add (GTK_CONTAINER (box3), pixmapwid);
+      gtk_container_add (GTK_CONTAINER (box3), pixbufwid);
       gtk_container_add (GTK_CONTAINER (box3), label);
       gtk_container_add (GTK_CONTAINER (button), box3);
 
       button = gtk_button_new ();
       gtk_box_pack_start (GTK_BOX (box2), button, FALSE, FALSE, 0);
       
-      pixmapwid = new_pixbuf ("test.xpm", window->window, NULL);
+      pixbufwid = new_pixbuf ("test.xpm", window->window, NULL);
 
-      label = gtk_label_new ("Pixmap\ntest");
+      label = gtk_label_new ("Pixbuf\ntest");
       box3 = gtk_hbox_new (FALSE, 0);
       gtk_container_set_border_width (GTK_CONTAINER (box3), 2);
-      gtk_container_add (GTK_CONTAINER (box3), pixmapwid);
+      gtk_container_add (GTK_CONTAINER (box3), pixbufwid);
       gtk_container_add (GTK_CONTAINER (box3), label);
       gtk_container_add (GTK_CONTAINER (button), box3);
 
@@ -10225,7 +10225,7 @@ struct {
   { "notebook", create_notebook },
   { "panes", create_panes },
   { "paned keyboard", create_paned_keyboard_navigation },
-  { "pixmap", create_pixmap },
+  { "pixbuf", create_pixbuf },
   { "progress bar", create_progress_bar },
   { "properties", create_properties },
   { "radio buttons", create_radio_buttons },
