@@ -1252,29 +1252,26 @@ create_button_box (GtkWidget *widget)
  */
 
 static GtkWidget*
-new_pixmap (char      *filename,
+new_pixbuf (char      *filename,
 	    GdkWindow *window,
 	    GdkColor  *background)
 {
-  GtkWidget *wpixmap;
-  GdkPixmap *pixmap;
-  GdkBitmap *mask;
+  GtkWidget *widget;
+  GdkPixbuf *pixbuf;
 
-  if (strcmp (filename, "test.xpm") == 0 ||
-      !file_exists (filename))
-    {
-      pixmap = gdk_pixmap_create_from_xpm_d (window, &mask,
-					     background,
-					     openfile);
-    }
+  if (strcmp (filename, "test.xpm") == 0)
+    pixbuf = NULL;
   else
-    pixmap = gdk_pixmap_create_from_xpm (window, &mask,
-					 background,
-					 filename);
-  
-  wpixmap = gtk_image_new_from_pixmap (pixmap, mask);
+    pixbuf = gdk_pixbuf_new_from_file (filename, NULL);
 
-  return wpixmap;
+  if (pixbuf == NULL)
+    pixbuf = gdk_pixbuf_new_from_xpm_data ((const char **) openfile);
+  
+  widget = gtk_image_new_from_pixbuf (pixbuf);
+
+  g_object_unref (pixbuf);
+
+  return widget;
 }
 
 
@@ -1433,7 +1430,7 @@ create_toolbar (GtkWidget *widget)
             {
               GtkWidget *icon;
 
-              icon = new_pixmap ("test.xpm", window->window,
+              icon = new_pixbuf ("test.xpm", window->window,
                                  &window->style->bg[GTK_STATE_NORMAL]);
               toolitem = gtk_tool_button_new (icon, create_toolbar_items[i].label);
             }
@@ -1504,7 +1501,7 @@ make_toolbar (GtkWidget *window)
           toolitem = gtk_separator_tool_item_new ();
           continue;
         }
-      icon  = new_pixmap ("test.xpm", window->window,
+      icon  = new_pixbuf ("test.xpm", window->window,
                           &window->style->bg[GTK_STATE_NORMAL]);
       toolitem = gtk_tool_button_new (icon, make_toolbar_items[i].label);
       gtk_tool_item_set_tooltip_text (toolitem, make_toolbar_items[i].tooltip);
@@ -2920,7 +2917,7 @@ create_pixmap (GtkWidget *widget)
       button = gtk_button_new ();
       gtk_box_pack_start (GTK_BOX (box2), button, FALSE, FALSE, 0);
 
-      pixmapwid = new_pixmap ("test.xpm", window->window, NULL);
+      pixmapwid = new_pixbuf ("test.xpm", window->window, NULL);
 
       label = gtk_label_new ("Pixmap\ntest");
       box3 = gtk_hbox_new (FALSE, 0);
@@ -2932,7 +2929,7 @@ create_pixmap (GtkWidget *widget)
       button = gtk_button_new ();
       gtk_box_pack_start (GTK_BOX (box2), button, FALSE, FALSE, 0);
       
-      pixmapwid = new_pixmap ("test.xpm", window->window, NULL);
+      pixmapwid = new_pixbuf ("test.xpm", window->window, NULL);
 
       label = gtk_label_new ("Pixmap\ntest");
       box3 = gtk_hbox_new (FALSE, 0);
