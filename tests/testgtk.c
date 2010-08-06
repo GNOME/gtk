@@ -7425,8 +7425,9 @@ create_wmhints (GtkWidget *widget)
   GtkWidget *button;
   GtkWidget *box1;
   GtkWidget *box2;
-
   GdkBitmap *circles;
+  cairo_surface_t *image;
+  cairo_t *cr;
 
   if (!window)
     {
@@ -7444,10 +7445,17 @@ create_wmhints (GtkWidget *widget)
 
       gtk_widget_realize (window);
       
-      circles = gdk_bitmap_create_from_data (window->window,
-					     (gchar *) circles_bits,
-					     circles_width,
-					     circles_height);
+      circles = gdk_pixmap_new (window->window, circles_width, circles_height, 1);
+      cr = gdk_cairo_create (circles);
+      image = cairo_image_surface_create_for_data (circles_bits, CAIRO_FORMAT_A1,
+                                                   circles_width, circles_height,
+                                                   circles_width / 8);
+      cairo_set_source_surface (cr, image, 0, 0);
+      cairo_surface_destroy (image);
+      cairo_set_operator (cr, CAIRO_OPERATOR_SOURCE);
+      cairo_paint (cr);
+      cairo_destroy (cr);
+
       gdk_window_set_icon (window->window, NULL,
 			   circles, circles);
       
