@@ -905,7 +905,7 @@ gtk_frame_get_height_for_width (GtkSizeRequest *request,
   child = gtk_bin_get_child (bin);
   if (child && gtk_widget_get_visible (child))
     {
-      gtk_size_request_get_height_for_width (GTK_SIZE_REQUEST (priv->label_widget),
+      gtk_size_request_get_height_for_width (GTK_SIZE_REQUEST (child),
 					     width, &child_min, &child_nat);
       minimum += child_min;
       natural += child_nat;
