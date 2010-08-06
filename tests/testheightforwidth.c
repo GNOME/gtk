@@ -617,6 +617,49 @@ TestInterface interfaces[] = {
   },
 
   {
+    "Wrapping Frame Label",
+    "This test demonstrates how the frame label can fill to its natural width "
+    "and also trade height for width.",
+    "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
+    "<interface>"
+    "  <requires lib=\"gtk+\" version=\"2.20\"/>"
+    "  <!-- interface-naming-policy project-wide -->"
+    "  <object class=\"GtkWindow\" id=\"window\">"
+    "    <property name=\"default_width\">400</property>"
+    "    <property name=\"default_height\">150</property>"
+    "    <child>"
+    "      <object class=\"GtkFrame\" id=\"frame1\">"
+    "        <property name=\"visible\">True</property>"
+    "        <property name=\"border_width\">8</property>"
+    "        <property name=\"label_xalign\">0</property>"
+    "        <child>"
+    "          <object class=\"GtkAlignment\" id=\"alignment1\">"
+    "            <property name=\"visible\">True</property>"
+    "            <property name=\"left_padding\">12</property>"
+    "            <child>"
+    "              <object class=\"GtkLabel\" id=\"label2\">"
+    "                <property name=\"visible\">True</property>"
+    "                <property name=\"label\" translatable=\"yes\">some content</property>"
+    "              </object>"
+    "            </child>"
+    "          </object>"
+    "        </child>"
+    "        <child type=\"label\">"
+    "          <object class=\"GtkLabel\" id=\"label1\">"
+    "            <property name=\"visible\">True</property>"
+    "            <property name=\"label\" translatable=\"yes\">A frame label that's a little long and wraps</property>"
+    "            <property name=\"use_markup\">True</property>"
+    "            <property name=\"wrap\">True</property>"
+    "          </object>"
+    "        </child>"
+    "      </object>"
+    "    </child>"
+    "  </object>"
+    "</interface>",
+    NULL
+  },
+
+  {
     "Ellipsizing Treeview",
     "Demonstrates how natural size can be shared across treeview columns and renderers.",
     "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
