@@ -92,12 +92,12 @@ struct _GdkImageClass
 
 GType     gdk_image_get_type   (void) G_GNUC_CONST;
 
+#ifndef GDK_DISABLE_DEPRECATED
 GdkImage*  gdk_image_new       (GdkImageType  type,
 				GdkVisual    *visual,
 				gint	      width,
 				gint	      height);
 
-#ifndef GDK_DISABLE_DEPRECATED
 GdkImage*  gdk_image_get       (GdkDrawable  *drawable,
 				gint	      x,
 				gint	      y,
@@ -106,7 +106,6 @@ GdkImage*  gdk_image_get       (GdkDrawable  *drawable,
 
 GdkImage * gdk_image_ref       (GdkImage     *image);
 void       gdk_image_unref     (GdkImage     *image);
-#endif
 
 void	   gdk_image_put_pixel (GdkImage     *image,
 				gint	      x,
@@ -138,7 +137,6 @@ GdkImage* gdk_image_new_bitmap (GdkVisual     *visual,
 				gint          height);
 #endif /* GDK_ENABLE_BROKEN */
 
-#ifndef GDK_DISABLE_DEPRECATED
 #define gdk_image_destroy              g_object_unref
 #endif /* GDK_DISABLE_DEPRECATED */
 

@@ -109,6 +109,8 @@ gdk_image_get (GdkWindow *drawable,
  * correct colormap if you get the image from a drawable. If you
  * create the image from scratch, use the colormap of the drawable you
  * intend to render the image to.
+ *
+ * Deprecated: 2.22: #GdkImage should not be used anymore.
  **/
 void
 gdk_image_set_colormap (GdkImage       *image,
@@ -137,6 +139,8 @@ gdk_image_set_colormap (GdkImage       *image,
  * gdk_image_set_colormap().
  * 
  * Return value: colormap for the image
+ *
+ * Deprecated: 2.22: #GdkImage should not be used anymore.
  **/
 GdkColormap *
 gdk_image_get_colormap (GdkImage *image)
@@ -155,6 +159,8 @@ gdk_image_get_colormap (GdkImage *image)
  * Return value: the #GdkImageType of the image
  *
  * Since: 2.22
+ *
+ * Deprecated: 2.22: #GdkImage should not be used anymore.
  **/
 GdkImageType
 gdk_image_get_image_type (GdkImage *image)
@@ -173,6 +179,8 @@ gdk_image_get_image_type (GdkImage *image)
  * Return value: a #GdkVisual
  *
  * Since: 2.22
+ *
+ * Deprecated: 2.22: #GdkImage should not be used anymore.
  **/
 GdkVisual *
 gdk_image_get_visual (GdkImage *image)
@@ -191,6 +199,8 @@ gdk_image_get_visual (GdkImage *image)
  * Return value: a #GdkVisual
  *
  * Since: 2.22
+ *
+ * Deprecated: 2.22: #GdkImage should not be used anymore.
  **/
 GdkByteOrder
 gdk_image_get_byte_order (GdkImage *image)
@@ -209,6 +219,8 @@ gdk_image_get_byte_order (GdkImage *image)
  * Return value: the width
  *
  * Since: 2.22
+ *
+ * Deprecated: 2.22: #GdkImage should not be used anymore.
  **/
 gint
 gdk_image_get_width (GdkImage *image)
@@ -227,6 +239,8 @@ gdk_image_get_width (GdkImage *image)
  * Return value: the height
  *
  * Since: 2.22
+ *
+ * Deprecated: 2.22: #GdkImage should not be used anymore.
  **/
 gint
 gdk_image_get_height (GdkImage *image)
@@ -245,6 +259,8 @@ gdk_image_get_height (GdkImage *image)
  * Return value: the depth
  *
  * Since: 2.22
+ *
+ * Deprecated: 2.22: #GdkImage should not be used anymore.
  **/
 guint16
 gdk_image_get_depth (GdkImage *image)
@@ -263,6 +279,8 @@ gdk_image_get_depth (GdkImage *image)
  * Return value: the bytes per pixel
  *
  * Since: 2.22
+ *
+ * Deprecated: 2.22: #GdkImage should not be used anymore.
  **/
 guint16
 gdk_image_get_bytes_per_pixel (GdkImage *image)
@@ -281,6 +299,8 @@ gdk_image_get_bytes_per_pixel (GdkImage *image)
  * Return value: the bytes per line
  *
  * Since: 2.22
+ *
+ * Deprecated: 2.22: #GdkImage should not be used anymore.
  **/
 guint16
 gdk_image_get_bytes_per_line (GdkImage *image)
@@ -299,6 +319,8 @@ gdk_image_get_bytes_per_line (GdkImage *image)
  * Return value: the bits per pixel
  *
  * Since: 2.22
+ *
+ * Deprecated: 2.22: #GdkImage should not be used anymore.
  **/
 guint16
 gdk_image_get_bits_per_pixel (GdkImage *image)
@@ -317,6 +339,8 @@ gdk_image_get_bits_per_pixel (GdkImage *image)
  * Returns: the pixel data of the image
  *
  * Since: 2.22
+ *
+ * Deprecated: 2.22: #GdkImage should not be used anymore.
  */
 gpointer
 gdk_image_get_pixels (GdkImage *image)
