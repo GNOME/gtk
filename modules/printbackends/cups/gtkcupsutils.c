@@ -1406,7 +1406,7 @@ _get_read_data (GtkCupsRequest *request)
 #endif /* HAVE_CUPS_API_1_2 */
 
   GTK_NOTE (PRINTING,
-            g_print ("CUPS Backend: %i bytes read\n", bytes));
+            g_print ("CUPS Backend: %" G_GSIZE_FORMAT " bytes read\n", bytes));
   
   if (bytes == 0)
     {
