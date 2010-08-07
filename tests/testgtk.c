@@ -9999,13 +9999,11 @@ shape_create_icon (GdkScreen *screen,
   GtkWidget *pixmap;
   GtkWidget *fixed;
   CursorOffset* icon_pos;
-  GdkGC* gc;
   GdkBitmap *gdk_pixmap_mask;
   GdkPixmap *gdk_pixmap;
   GtkStyle *style;
 
   style = gtk_widget_get_default_style ();
-  gc = style->black_gc;	
 
   /*
    * GDK_WINDOW_TOPLEVEL works also, giving you a title border
