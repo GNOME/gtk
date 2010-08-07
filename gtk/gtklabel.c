@@ -3250,13 +3250,20 @@ gtk_label_ensure_layout (GtkLabel *label, gboolean guess_wrap_width)
 	  else if (guess_wrap_width == FALSE &&
 		   widget->allocation.width > 1 && widget->allocation.height > 1)
  	    {
-              gint xpad, ypad;
+	      PangoRectangle rect;
+	      gint xpad, ypad, natural_width;
               gtk_misc_get_padding (GTK_MISC (label), &xpad, &ypad);
 
 	      if (angle == 90 || angle == 270)
 		width = widget->allocation.height - ypad * 2;
 	      else
 		width = widget->allocation.width  - xpad * 2;
+
+	      /* dont set a wrap width wider than the label's natural width
+	       * incase we're allocated more space than needed */
+	      pango_layout_get_extents (priv->layout, NULL, &rect);
+	      natural_width = PANGO_PIXELS (rect.width);
+	      width = MIN (natural_width, width);
 
 	      pango_layout_set_wrap (priv->layout, priv->wrap_mode);
 	      pango_layout_set_width (priv->layout, MAX (width, 1) * PANGO_SCALE);
@@ -3843,18 +3850,6 @@ get_layout_location (GtkLabel  *label,
 
   pango_layout_get_extents (priv->layout, NULL, &logical);
 
-  /* Do the wrap width delimiting before the transform
-   */
-  if (priv->wrap || priv->ellipsize || priv->width_chars > 0)
-    {
-      int width;
-
-      width = pango_layout_get_width (priv->layout);
-
-      if (width != -1)
-	logical.width = MIN (width, logical.width);
-    }
-
   if (priv->have_transform)
     {
       PangoContext *context = gtk_widget_get_pango_context (widget);
@@ -3877,8 +3872,6 @@ get_layout_location (GtkLabel  *label,
     x = MAX (x, widget->allocation.x + xpad);
   else
     x = MIN (x, widget->allocation.x + widget->allocation.width - xpad);
-
-
 
 
   /* bgo#315462 - For single-line labels, *do* align the requisition with
