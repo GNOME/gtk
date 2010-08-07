@@ -380,6 +380,7 @@ gtk_private_h_sources =		\
 	gtkkeyhash.h		\
 	gtkmnemonichash.h	\
 	gtkmountoperationprivate.h \
+	gtkpango.h		\
 	gtkpathbar.h		\
 	gtkplugprivate.h	\
 	gtkprintoperation-private.h\
@@ -527,6 +528,7 @@ gtk_base_c_sources =            \
 	gtkorientable.c		\
 	gtkpagesetup.c		\
 	gtkpaned.c		\
+	gtkpango.c		\
 	gtkpapersize.c		\
 	gtkpathbar.c		\
 	gtkplug.c		\

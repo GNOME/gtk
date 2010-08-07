@@ -33,6 +33,7 @@
 #include "gtkdnd.h"
 #include "gtkmain.h"
 #include "gtkmarshalers.h"
+#include "gtkpango.h"
 #include "gtkwindow.h"
 #include "gdk/gdkkeysyms.h"
 #include "gtkclipboard.h"
@@ -3582,6 +3583,7 @@ gtk_label_expose (GtkWidget      *widget,
           gint range[2];
           GdkRegion *clip;
 	  GtkStateType state;
+          cairo_t *cr;
 
           range[0] = info->selection_anchor;
           range[1] = info->selection_end;
@@ -3603,21 +3605,23 @@ gtk_label_expose (GtkWidget      *widget,
            * region
            */
 
-          gdk_gc_set_clip_region (widget->style->black_gc, clip);
+          cr = gdk_cairo_create (event->window);
 
+          gdk_cairo_region (cr, clip);
+          cairo_clip (cr);
 
 	  state = GTK_STATE_SELECTED;
 	  if (!gtk_widget_has_focus (widget))
 	    state = GTK_STATE_ACTIVE;
 
-          gdk_draw_layout_with_colors (widget->window,
-                                       widget->style->black_gc,
-                                       x, y,
-                                       label->layout,
-                                       &widget->style->text[state],
-                                       &widget->style->base[state]);
+          gdk_cairo_set_source_color (cr, &widget->style->base[state]);
+          cairo_paint (cr);
 
-          gdk_gc_set_clip_region (widget->style->black_gc, NULL);
+          gdk_cairo_set_source_color (cr, &widget->style->text[state]);
+          cairo_move_to (cr, x, y);
+          _gtk_pango_fill_layout (cr, label->layout);
+
+          cairo_destroy (cr);
           gdk_region_destroy (clip);
         }
       else if (info)
@@ -3638,16 +3642,26 @@ gtk_label_expose (GtkWidget      *widget,
           focus_link = gtk_label_get_focus_link (label);
           active_link = info->active_link;
 
+
           if (active_link)
             {
+              cairo_t *cr;
+
               range[0] = active_link->start;
               range[1] = active_link->end;
+
+              cr = gdk_cairo_create (event->window);
+
+              gdk_cairo_region (cr, event->region);
+              cairo_clip (cr);
 
               clip = gdk_pango_layout_get_clip_region (label->layout,
                                                        x, y,
                                                        range,
                                                        1);
-              gdk_gc_set_clip_region (widget->style->black_gc, clip);
+              gdk_cairo_region (cr, clip);
+              cairo_clip (cr);
+              gdk_region_destroy (clip);
 
               gtk_label_get_link_colors (widget, &link_color, &visited_link_color);
               if (active_link->visited)
@@ -3658,17 +3672,18 @@ gtk_label_expose (GtkWidget      *widget,
                 base_color = &widget->style->base[GTK_STATE_ACTIVE];
               else
                 base_color = &widget->style->base[GTK_STATE_PRELIGHT];
-              gdk_draw_layout_with_colors (widget->window,
-                                           widget->style->black_gc,
-                                           x, y,
-                                           label->layout,
-                                           text_color,
-                                           base_color);
+
+              gdk_cairo_set_source_color (cr, base_color);
+              cairo_paint (cr);
+
+              gdk_cairo_set_source_color (cr, text_color);
+              cairo_move_to (cr, x, y);
+              _gtk_pango_fill_layout (cr, label->layout);
+
               gdk_color_free (link_color);
               gdk_color_free (visited_link_color);
 
-              gdk_gc_set_clip_region (widget->style->black_gc, NULL);
-              gdk_region_destroy (clip);
+              cairo_destroy (cr);
             }
 
           if (focus_link && gtk_widget_has_focus (widget))
