@@ -1476,31 +1476,34 @@ gtk_button_size_allocate (GtkWidget     *widget,
       child_allocation.x = widget->allocation.x + border_width + inner_border.left + xthickness;
       child_allocation.y = widget->allocation.y + border_width + inner_border.top + ythickness;
       
-      child_allocation.width = MAX (1, widget->allocation.width -
-                                    xthickness * 2 -
-                                    inner_border.left -
-                                    inner_border.right -
-				    border_width * 2);
-      child_allocation.height = MAX (1, widget->allocation.height -
-                                     ythickness * 2 -
-                                     inner_border.top -
-                                     inner_border.bottom -
-				     border_width * 2);
+      child_allocation.width = 
+	widget->allocation.width -
+	xthickness * 2 -
+	inner_border.left -
+	inner_border.right -
+	border_width * 2;
+
+      child_allocation.height = 
+	widget->allocation.height -
+	ythickness * 2 -
+	inner_border.top -
+	inner_border.bottom -
+	border_width * 2;
 
       if (gtk_widget_get_can_default (GTK_WIDGET (button)))
 	{
 	  child_allocation.x += default_border.left;
 	  child_allocation.y += default_border.top;
-	  child_allocation.width =  MAX (1, child_allocation.width - default_border.left - default_border.right);
-	  child_allocation.height = MAX (1, child_allocation.height - default_border.top - default_border.bottom);
+	  child_allocation.width =  child_allocation.width - default_border.left - default_border.right;
+	  child_allocation.height = child_allocation.height - default_border.top - default_border.bottom;
 	}
 
       if (gtk_widget_get_can_focus (GTK_WIDGET (button)))
 	{
 	  child_allocation.x += focus_width + focus_pad;
 	  child_allocation.y += focus_width + focus_pad;
-	  child_allocation.width =  MAX (1, child_allocation.width - (focus_width + focus_pad) * 2);
-	  child_allocation.height = MAX (1, child_allocation.height - (focus_width + focus_pad) * 2);
+	  child_allocation.width =  child_allocation.width - (focus_width + focus_pad) * 2;
+	  child_allocation.height = child_allocation.height - (focus_width + focus_pad) * 2;
 	}
 
       if (button->depressed)
@@ -1515,6 +1518,9 @@ gtk_button_size_allocate (GtkWidget     *widget,
 	  child_allocation.x += child_displacement_x;
 	  child_allocation.y += child_displacement_y;
 	}
+
+      child_allocation.width  = MAX (1, child_allocation.width);
+      child_allocation.height = MAX (1, child_allocation.height);
 
       gtk_widget_size_allocate (child, &child_allocation);
     }
