@@ -25,6 +25,9 @@
  */
 
 #include "config.h"
+
+#undef GDK_DISABLE_DEPRECATED
+
 #include "gtkgc.h"
 #include "gtkintl.h"
 #include "gtkalias.h"
