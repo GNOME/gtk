@@ -116,8 +116,7 @@ main (int argc, char *argv[])
 				  "user_data", NULL,
 				  "type", GTK_WINDOW_TOPLEVEL,
 				  "title", label,
-				  "allow_grow", FALSE,
-				  "allow_shrink", FALSE,
+                                  "resizable", FALSE,
 				  "border_width", 10, NULL,
 				  NULL);
       g_signal_connect (window[i], "destroy",

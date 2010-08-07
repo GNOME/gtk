@@ -7599,7 +7599,6 @@ int main (int argc, char *argv[])
   dialog = gtk_dialog_new ();
   gtk_window_set_title (GTK_WINDOW (dialog), "GTKToolbar Tutorial");
   gtk_widget_set_size_request (GTK_WIDGET (dialog), 600, 300);
-  GTK_WINDOW (dialog)->allow_shrink = TRUE;
 
   /* typically we quit if someone tries to close us */
   g_signal_connect (dialog, "delete-event",

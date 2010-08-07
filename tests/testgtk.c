@@ -3375,8 +3375,7 @@ create_tooltips (GtkWidget *widget)
 			"GtkWindow::type", GTK_WINDOW_TOPLEVEL,
 			"GtkContainer::border_width", 0,
 			"GtkWindow::title", "Tooltips",
-			"GtkWindow::allow_shrink", TRUE,
-			"GtkWindow::allow_grow", FALSE,
+			"GtkWindow::resizable", FALSE,
 			NULL);
 
       gtk_window_set_screen (GTK_WINDOW (window),
@@ -3495,8 +3494,8 @@ create_image (GtkWidget *widget)
       /* this is bogus for testing drawing when allocation < request,
        * don't copy into real code
        */
-      g_object_set (window, "allow_shrink", TRUE, "allow_grow", TRUE, NULL);
-      
+      gtk_window_set_resizable (GTK_WINDOW (window), TRUE);
+
       g_signal_connect (window, "destroy",
 			G_CALLBACK (gtk_widget_destroyed),
 			&window);
@@ -6573,7 +6572,7 @@ create_rulers (GtkWidget *widget)
       gtk_window_set_screen (GTK_WINDOW (window),
 			     gtk_widget_get_screen (widget));
 
-      g_object_set (window, "allow_shrink", TRUE, "allow_grow", TRUE, NULL);
+      gtk_window_set_resizable (GTK_WINDOW (window), TRUE);
 
       g_signal_connect (window, "destroy",
 			G_CALLBACK (gtk_widget_destroyed),
@@ -8331,22 +8330,11 @@ set_geometry_callback (GtkWidget *entry,
 }
 
 static void
-allow_shrink_callback (GtkWidget *widget,
-                       gpointer   data)
-{
-  g_object_set (g_object_get_data (data, "target"),
-                "allow_shrink",
-                GTK_TOGGLE_BUTTON (widget)->active,
-                NULL);
-}
-
-static void
-allow_grow_callback (GtkWidget *widget,
+resizable_callback (GtkWidget *widget,
                      gpointer   data)
 {
   g_object_set (g_object_get_data (data, "target"),
-                "allow_grow",
-                GTK_TOGGLE_BUTTON (widget)->active,
+                "resizable", GTK_TOGGLE_BUTTON (widget)->active,
                 NULL);
 }
 
@@ -8719,20 +8707,12 @@ window_controls (GtkWidget *window)
 		    G_CALLBACK (move_to_position_callback),
 		    control_window);
   gtk_box_pack_end (GTK_BOX (vbox), button, FALSE, FALSE, 0);
-  
-  button = gtk_check_button_new_with_label ("Allow shrink");
-  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), FALSE);
-  g_signal_connect (button,
-		    "toggled",
-		    G_CALLBACK (allow_shrink_callback),
-		    control_window);
-  gtk_box_pack_end (GTK_BOX (vbox), button, FALSE, FALSE, 0);
 
-  button = gtk_check_button_new_with_label ("Allow grow");
+  button = gtk_check_button_new_with_label ("Allow resize");
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), TRUE);
   g_signal_connect (button,
 		    "toggled",
-		    G_CALLBACK (allow_grow_callback),
+		    G_CALLBACK (resizable_callback),
                     control_window);
   gtk_box_pack_end (GTK_BOX (vbox), button, FALSE, FALSE, 0);
   

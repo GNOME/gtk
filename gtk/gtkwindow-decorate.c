@@ -717,7 +717,7 @@ gtk_decorated_window_recalculate_regions (GtkWindow *window)
   n_regions += 2; /* close, Title */
   if (deco->maximizable)
     n_regions += 1;
-  if (window->allow_shrink || window->allow_grow)
+  if (gtk_window_get_resizable (window))
     n_regions += 2;
 
   if (deco->n_regions != n_regions)
@@ -759,7 +759,7 @@ gtk_decorated_window_recalculate_regions (GtkWindow *window)
   region->type = GTK_WINDOW_REGION_TITLE;
   region++;
   
-  if (window->allow_shrink || window->allow_grow)
+  if (gtk_window_get_resizable (window))
     {
       region->rect.x = width - (DECORATION_BORDER_RIGHT + 10);
       region->rect.y = height - DECORATION_BORDER_BOTTOM;

@@ -1982,6 +1982,7 @@ gtk_false G_GNUC_CONST
 gtk_true G_GNUC_CONST
 gtk_events_pending
 gtk_disable_setlocale
+gtk_distribute_natural_allocation
 gtk_set_locale
 gtk_check_version
 gtk_get_default_language
