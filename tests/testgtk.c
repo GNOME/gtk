@@ -579,14 +579,13 @@ pattern_expose (GtkWidget      *widget,
   color = g_object_get_data (G_OBJECT (window), "pattern-color");
   if (color)
     {
-      GdkGC *tmp_gc = gdk_gc_new (window);
-      gdk_gc_set_rgb_fg_color (tmp_gc, color);
+      cairo_t *cr = gdk_cairo_create (window);
 
-      gdk_draw_rectangle (window, tmp_gc, TRUE,
-			  event->area.x, event->area.y,
-			  event->area.width, event->area.height);
+      gdk_cairo_set_source_color (cr, color);
+      gdk_cairo_rectangle (cr, &event->area);
+      cairo_fill (cr);
 
-      g_object_unref (tmp_gc);
+      cairo_destroy (cr);
     }
 
   return FALSE;
@@ -2293,17 +2292,25 @@ gridded_geometry_expose (GtkWidget      *widget,
 			 GdkEventExpose *event)
 {
   int i, j;
+  cairo_t *cr;
 
-  gdk_draw_rectangle (widget->window, widget->style->base_gc[widget->state], TRUE,
-		      0, 0, widget->allocation.width, widget->allocation.height);
+  cr = gdk_cairo_create (widget->window);
+
+  cairo_rectangle (cr, 0, 0, widget->allocation.width, widget->allocation.height);
+  gdk_cairo_set_source_color (cr, &widget->style->base[widget->state]);
+  cairo_fill (cr);
   
   for (i = 0 ; i * GRID_SIZE < widget->allocation.width; i++)
     for (j = 0 ; j * GRID_SIZE < widget->allocation.height; j++)
       {
 	if ((i + j) % 2 == 0)
-	  gdk_draw_rectangle (widget->window, widget->style->text_gc[widget->state], TRUE,
-			      i * GRID_SIZE, j * GRID_SIZE, GRID_SIZE, GRID_SIZE);
+	  cairo_rectangle (cr, i * GRID_SIZE, j * GRID_SIZE, GRID_SIZE, GRID_SIZE);
       }
+
+  gdk_cairo_set_source_color (cr, &widget->style->text[widget->state]);
+  cairo_fill (cr);
+
+  cairo_destroy (cr);
 
   return FALSE;
 }
@@ -6144,43 +6151,33 @@ cursor_expose_event (GtkWidget *widget,
 {
   GtkDrawingArea *darea;
   GdkDrawable *drawable;
-  GdkGC *black_gc;
-  GdkGC *gray_gc;
-  GdkGC *white_gc;
   guint max_width;
   guint max_height;
+  cairo_t *cr;
 
   g_return_val_if_fail (widget != NULL, TRUE);
   g_return_val_if_fail (GTK_IS_DRAWING_AREA (widget), TRUE);
 
   darea = GTK_DRAWING_AREA (widget);
   drawable = widget->window;
-  white_gc = widget->style->white_gc;
-  gray_gc = widget->style->bg_gc[GTK_STATE_NORMAL];
-  black_gc = widget->style->black_gc;
   max_width = widget->allocation.width;
   max_height = widget->allocation.height;
 
-  gdk_draw_rectangle (drawable, white_gc,
-		      TRUE,
-		      0,
-		      0,
-		      max_width,
-		      max_height / 2);
+  cr = gdk_cairo_create (drawable);
 
-  gdk_draw_rectangle (drawable, black_gc,
-		      TRUE,
-		      0,
-		      max_height / 2,
-		      max_width,
-		      max_height / 2);
+  cairo_set_source_rgb (cr, 1, 1, 1);
+  cairo_rectangle (cr, 0, 0, max_width, max_height / 2);
+  cairo_fill (cr);
 
-  gdk_draw_rectangle (drawable, gray_gc,
-		      TRUE,
-		      max_width / 3,
-		      max_height / 3,
-		      max_width / 3,
-		      max_height / 3);
+  cairo_set_source_rgb (cr, 0, 0, 0);
+  cairo_rectangle (cr, 0, max_height / 2, max_width, max_height / 2);
+  cairo_fill (cr);
+
+  gdk_cairo_set_source_color (cr, &widget->style->bg[GTK_STATE_NORMAL]);
+  cairo_rectangle (cr, max_width / 3, max_height / 3, max_width / 3, max_height / 3);
+  cairo_fill (cr);
+
+  cairo_destroy (cr);
 
   return TRUE;
 }
@@ -12901,6 +12898,7 @@ scroll_test_expose (GtkWidget *widget, GdkEventExpose *event,
 {
   gint i,j;
   gint imin, imax, jmin, jmax;
+  cairo_t *cr;
   
   imin = (event->area.x) / 10;
   imax = (event->area.x + event->area.width + 9) / 10;
@@ -12912,13 +12910,16 @@ scroll_test_expose (GtkWidget *widget, GdkEventExpose *event,
 			 event->area.x, event->area.y,
 			 event->area.width, event->area.height);
 
+  cr = gdk_cairo_create (widget->window);
+
   for (i=imin; i<imax; i++)
     for (j=jmin; j<jmax; j++)
       if ((i+j) % 2)
-	gdk_draw_rectangle (widget->window, 
-			    widget->style->black_gc,
-			    TRUE,
-			    10*i, 10*j - (int)adj->value, 1+i%10, 1+j%10);
+	cairo_rectangle (cr, 10*i, 10*j - (int)adj->value, 1+i%10, 1+j%10);
+
+  cairo_fill (cr);
+
+  cairo_destroy (cr);
 
   return TRUE;
 }
@@ -13501,13 +13502,16 @@ gboolean
 layout_expose_handler (GtkWidget *widget, GdkEventExpose *event)
 {
   GtkLayout *layout;
+  GdkWindow *bin_window;
+  cairo_t *cr;
 
   gint i,j;
   gint imin, imax, jmin, jmax;
 
   layout = GTK_LAYOUT (widget);
+  bin_window = gtk_layout_get_bin_window (layout);
 
-  if (event->window != layout->bin_window)
+  if (event->window != bin_window)
     return FALSE;
   
   imin = (event->area.x) / 10;
@@ -13516,15 +13520,19 @@ layout_expose_handler (GtkWidget *widget, GdkEventExpose *event)
   jmin = (event->area.y) / 10;
   jmax = (event->area.y + event->area.height + 9) / 10;
 
+  cr = gdk_cairo_create (bin_window);
+
   for (i=imin; i<imax; i++)
     for (j=jmin; j<jmax; j++)
       if ((i+j) % 2)
-	gdk_draw_rectangle (layout->bin_window,
-			    widget->style->black_gc,
-			    TRUE,
-			    10*i, 10*j, 
-			    1+i%10, 1+j%10);
+	cairo_rectangle (cr,
+			 10*i, 10*j, 
+			 1+i%10, 1+j%10);
   
+  cairo_fill (cr);
+
+  cairo_destroy (cr);
+
   return FALSE;
 }
 
