@@ -30,6 +30,7 @@
 #include <string.h>
 #include <gobject/gvaluecollector.h>
 #include "gtkmarshalers.h"
+#include "gtkpango.h"
 #include "gtkrc.h"
 #include "gtkspinbutton.h"
 #include "gtkstyle.h"
@@ -4191,6 +4192,7 @@ gtk_default_draw_layout (GtkStyle        *style,
 {
   cairo_t *cr;
   GdkColor *gc;
+  const PangoMatrix *matrix;
 
   cr = gdk_cairo_create (window);
 
@@ -4200,17 +4202,43 @@ gtk_default_draw_layout (GtkStyle        *style,
       cairo_clip (cr);
     }
 
+  matrix = pango_context_get_matrix (pango_layout_get_context (layout));
+  if (matrix)
+    {
+      cairo_matrix_t cairo_matrix;
+      PangoMatrix tmp_matrix;
+      PangoRectangle rect;
+      
+      cairo_matrix_init (&cairo_matrix,
+                         matrix->xx, matrix->yx,
+                         matrix->xy, matrix->yy,
+                         matrix->x0, matrix->y0);
+
+      pango_layout_get_extents (layout, NULL, &rect);
+      pango_matrix_transform_rectangle (matrix, &rect);
+      pango_extents_to_pixels (&rect, NULL);
+                                          
+      tmp_matrix = *matrix;
+      cairo_matrix.x0 += x - rect.x;
+      cairo_matrix.y0 += y - rect.y;
+
+      cairo_set_matrix (cr, &cairo_matrix);
+    }
+  else
+    cairo_translate (cr, x, y);
+
   if (state_type == GTK_STATE_INSENSITIVE)
     {
+      cairo_save (cr);
       gdk_cairo_set_source_color (cr, &style->white);
-      cairo_move_to (cr, x + 1, y + 1);
+      cairo_move_to (cr, 1, 1);
       pango_cairo_layout_path (cr, layout);
       cairo_fill (cr);
+      cairo_restore (cr);
     }
 
   gc = use_text ? &style->text[state_type] : &style->fg[state_type];
 
-  cairo_move_to (cr, x, y);
   gdk_cairo_set_source_color (cr, gc);
 
   pango_cairo_show_layout (cr, layout);
