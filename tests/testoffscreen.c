@@ -26,11 +26,13 @@ layout_expose_handler (GtkWidget      *widget,
                        GdkEventExpose *event)
 {
   GtkLayout *layout = GTK_LAYOUT (widget);
+  GdkWindow *bin_window = gtk_layout_get_bin_window (layout);
+  cairo_t *cr;
 
   gint i,j;
   gint imin, imax, jmin, jmax;
 
-  if (event->window != layout->bin_window)
+  if (event->window != bin_window)
     return FALSE;
 
   imin = (event->area.x) / 10;
@@ -39,14 +41,18 @@ layout_expose_handler (GtkWidget      *widget,
   jmin = (event->area.y) / 10;
   jmax = (event->area.y + event->area.height + 9) / 10;
 
+  cr = gdk_cairo_create (bin_window);
+
   for (i = imin; i < imax; i++)
     for (j = jmin; j < jmax; j++)
       if ((i + j) % 2)
-	gdk_draw_rectangle (layout->bin_window,
-                            widget->style->black_gc,
-                            TRUE,
-                            10 * i, 10 * j,
-                            1 + i % 10, 1 + j % 10);
+        cairo_rectangle (cr,
+                         10 * i, 10 * j,
+                         1 + i % 10, 1 + j % 10);
+
+  cairo_fill (cr);
+
+  cairo_destroy (cr);
 
   return FALSE;
 }
