@@ -4232,8 +4232,7 @@ gtk_default_draw_layout (GtkStyle        *style,
       cairo_save (cr);
       gdk_cairo_set_source_color (cr, &style->white);
       cairo_move_to (cr, 1, 1);
-      pango_cairo_layout_path (cr, layout);
-      cairo_fill (cr);
+      _gtk_pango_fill_layout (cr, layout);
       cairo_restore (cr);
     }
 
