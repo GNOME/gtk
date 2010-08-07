@@ -299,7 +299,7 @@ void gdk_draw_polygon   (GdkDrawable      *drawable,
 			 gboolean          filled,
 			 const GdkPoint   *points,
 			 gint              n_points);
-#if !defined (GDK_DISABLE_DEPRECATED) || defined (GTK_COMPILATION)
+#ifndef GDK_DISABLE_DEPRECATED
 /* Used by gtk_default_draw_string () */
 void gdk_draw_string    (GdkDrawable      *drawable,
 			 GdkFont          *font,
@@ -307,8 +307,6 @@ void gdk_draw_string    (GdkDrawable      *drawable,
 			 gint              x,
 			 gint              y,
 			 const gchar      *string);
-#endif /* !GDK_DISABLE_DEPRECATED || GTK_COMPILATION */
-#if !defined (GDK_DISABLE_DEPRECATED) || defined (GDK_COMPILATION)
 /* Used by gdk_pixmap_draw_text (), gdk_window_draw_text() */
 void gdk_draw_text      (GdkDrawable      *drawable,
 			 GdkFont          *font,
@@ -325,7 +323,7 @@ void gdk_draw_text_wc   (GdkDrawable      *drawable,
 			 gint              y,
 			 const GdkWChar   *text,
 			 gint              text_length);
-#endif /* !GDK_DISABLE_DEPRECATED || GDK_COMPILATION */
+#endif /* !GDK_DISABLE_DEPRECATED */
 void gdk_draw_drawable  (GdkDrawable      *drawable,
 			 GdkGC            *gc,
 			 GdkDrawable      *src,
