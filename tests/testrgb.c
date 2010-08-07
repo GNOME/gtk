@@ -38,6 +38,8 @@
 #endif
 #include <string.h>
 
+#undef GDK_DISABLE_DEPRECATED
+
 #include "gtk/gtk.h"
 
 static void

@@ -22,6 +22,9 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <string.h>
+
+#undef GDK_DISABLE_DEPRECATED
+
 #include <gtk/gtk.h>
 #include <gdk-pixbuf/gdk-pixbuf.h>
 
