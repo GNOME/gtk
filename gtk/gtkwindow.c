@@ -7331,10 +7331,6 @@ gtk_window_get_resizable (GtkWindow *window)
 {
   g_return_val_if_fail (GTK_IS_WINDOW (window), FALSE);
 
-  /* allow_grow is most likely to indicate the semantic concept we
-   * mean by "resizable" (and will be a reliable indicator if
-   * set_policy() hasn't been called)
-   */
   return window->resizable;
 }
 

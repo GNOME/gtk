@@ -106,8 +106,7 @@ GtkWindow::default_width, GtkWindow::default_height:
  - default_height is -1 if unset, or >= 0 if
    a default height is set
 
-GtkWindow::allow_grow, GtkWindow::resizable:
- - equivalent properties; changing one notifies on the other
+GtkWindow::resizable:
  - if FALSE, we set the min size to the max size in the geometry 
    hints. 
  - If the app programmer has called gtk_window_set_geometry_hints()

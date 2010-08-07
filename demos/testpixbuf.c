@@ -390,7 +390,6 @@ new_testrgb_window (GdkPixbuf *pixbuf, gchar *title)
 				 "GtkObject::user_data", NULL,
 				 "GtkWindow::type", GTK_WINDOW_TOPLEVEL,
 				 "GtkWindow::title", title ? title : "testrgb",
-				 "GtkWindow::allow_shrink", TRUE,
 				 NULL);
 	g_signal_connect (window, "destroy",
 			  G_CALLBACK (quit_func), NULL);
