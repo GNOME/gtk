@@ -75,6 +75,8 @@
  */
 
 #define GTK_TEXT_USE_INTERNAL_UNSUPPORTED_API
+#undef GDK_DISABLE_DEPRECATED
+
 #include "config.h"
 #include "gtktextdisplay.h"
 #include "gtkintl.h"

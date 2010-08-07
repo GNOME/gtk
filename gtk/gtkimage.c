@@ -28,6 +28,8 @@
 #include <math.h>
 #include <string.h>
 
+#undef GDK_DISABLE_DEPRECATED
+
 #include "gtkcontainer.h"
 #include "gtkimage.h"
 #include "gtkiconfactory.h"

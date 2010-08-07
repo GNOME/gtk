@@ -30,6 +30,7 @@
 #include "config.h"
 #include <math.h>
 
+#undef GDK_DISABLE_DEPRECATED
 #undef GTK_DISABLE_DEPRECATED
 #define __GTK_PIXMAP_C__
 

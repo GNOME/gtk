@@ -28,6 +28,7 @@
 #include <math.h>
 #include <string.h>
 
+#undef GDK_DISABLE_DEPRECATED
 #undef GTK_DISABLE_DEPRECATED
 #define __GTK_PROGRESS_C__
 

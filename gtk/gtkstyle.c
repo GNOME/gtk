@@ -29,6 +29,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <gobject/gvaluecollector.h>
+#undef GDK_DISABLE_DEPRECATED
 #include "gtkgc.h"
 #include "gtkmarshalers.h"
 #undef GTK_DISABLE_DEPRECATED

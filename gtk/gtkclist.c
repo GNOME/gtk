@@ -30,6 +30,7 @@
 #include <stdlib.h>
 #include <string.h>
 
+#undef GDK_DISABLE_DEPRECATED
 #undef GTK_DISABLE_DEPRECATED
 #define __GTK_CLIST_C__
 

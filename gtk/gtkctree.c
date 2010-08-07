@@ -31,6 +31,7 @@
 #include "config.h"
 #include <stdlib.h>
 
+#undef GDK_DISABLE_DEPRECATED
 #undef GTK_DISABLE_DEPRECATED
 #define __GTK_CTREE_C__
 

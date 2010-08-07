@@ -320,6 +320,9 @@ gdk_drawable_unref (GdkDrawable *drawable)
  * 
  * Draws a point, using the foreground color and other attributes of 
  * the #GdkGC.
+ *
+ * Deprecated: 2.22: Use cairo_rectangle() and cairo_fill() or 
+ * cairo_move_to() and cairo_stroke() instead.
  **/
 void
 gdk_draw_point (GdkDrawable *drawable,
@@ -349,6 +352,18 @@ gdk_draw_point (GdkDrawable *drawable,
  * 
  * Draws a line, using the foreground color and other attributes of 
  * the #GdkGC.
+ *
+ * Deprecated: 2.22: Use cairo_line_to() and cairo_stroke() instead.
+ * Be aware that the default line width in Cairo is 2 pixels and that your
+ * coordinates need to describe the center of the line. To draw a single
+ * pixel wide pixel-aligned line, you would use:
+ * |[cairo_set_line_width (cr, 1.0);
+ * cairo_set_line_cap (cr, CAIRO_LINE_CAP_SQUARE);
+ * cairo_move_to (cr, 0.5, 0.5);
+ * cairo_line_to (cr, 9.5, 0.5);
+ * cairo_stroke (cr);]|
+ * See also <ulink url="http://cairographics.org/FAQ/#sharp_lines">the Cairo
+ * FAQ</ulink> on this topic.
  **/
 void
 gdk_draw_line (GdkDrawable *drawable,
@@ -390,6 +405,10 @@ gdk_draw_line (GdkDrawable *drawable,
  * <literal>gdk_draw_rectangle (window, gc, FALSE, 0, 0, 20, 20)</literal> 
  * results in an outlined rectangle with corners at (0, 0), (0, 20), (20, 20),
  * and (20, 0), which makes it 21 pixels wide and 21 pixels high.
+ *
+ * Deprecated: 2.22: Use cairo_rectangle() and cairo_fill() or cairo_stroke()
+ * instead. For stroking, the same caveats for converting code apply as for
+ * gdk_draw_line().
  **/
 void
 gdk_draw_rectangle (GdkDrawable *drawable,
@@ -437,6 +456,10 @@ gdk_draw_rectangle (GdkDrawable *drawable,
  * Draws an arc or a filled 'pie slice'. The arc is defined by the bounding
  * rectangle of the entire ellipse, and the start and end angles of the part 
  * of the ellipse to be drawn.
+ *
+ * Deprecated: 2.22: Use cairo_arc() and cairo_fill() or cairo_stroke()
+ * instead. Note that arcs just like any drawing operation in Cairo are
+ * antialiased unless you call cairo_set_antialias().
  **/
 void
 gdk_draw_arc (GdkDrawable *drawable,
@@ -481,6 +504,9 @@ gdk_draw_arc (GdkDrawable *drawable,
  * @n_points: the number of points.
  * 
  * Draws an outlined or filled polygon.
+ *
+ * Deprecated: 2.22: Use cairo_line_to() or cairo_append_path() and
+ * cairo_fill() or cairo_stroke() instead.
  **/
 void
 gdk_draw_polygon (GdkDrawable    *drawable,
@@ -624,6 +650,10 @@ gdk_draw_text_wc (GdkDrawable	 *drawable,
  * a color drawable. The way to draw a bitmap is to set the bitmap as 
  * the stipple on the #GdkGC, set the fill mode to %GDK_STIPPLED, and 
  * then draw the rectangle.
+ *
+ * Deprecated: 2.22: Use gdk_cairo_set_source_pixmap(), cairo_rectangle()
+ * and cairo_fill() to draw pixmap on top of other drawables. Also keep
+ * in mind that the limitations on allowed sources do not apply to Cairo.
  **/
 void
 gdk_draw_drawable (GdkDrawable *drawable,
@@ -704,6 +734,9 @@ gdk_draw_drawable (GdkDrawable *drawable,
  * 
  * Draws a #GdkImage onto a drawable.
  * The depth of the #GdkImage must match the depth of the #GdkDrawable.
+ *
+ * Deprecated: 2.22: Do not use #GdkImage anymore, instead use Cairo image
+ * surfaces.
  **/
 void
 gdk_draw_image (GdkDrawable *drawable,
@@ -760,6 +793,9 @@ gdk_draw_image (GdkDrawable *drawable,
  * variable.
  *
  * Since: 2.2
+ *
+ * Deprecated: 2.22: Use gdk_cairo_set_source_pixbuf() and cairo_paint() or
+ * cairo_rectangle() and cairo_fill() instead.
  **/
 void
 gdk_draw_pixbuf (GdkDrawable     *drawable,
@@ -803,6 +839,9 @@ gdk_draw_pixbuf (GdkDrawable     *drawable,
  * 
  * Draws a number of points, using the foreground color and other 
  * attributes of the #GdkGC.
+ *
+ * Deprecated: 2.22: Use @n_points calls to cairo_rectangle() and
+ * cairo_fill() instead.
  **/
 void
 gdk_draw_points (GdkDrawable    *drawable,
@@ -832,6 +871,10 @@ gdk_draw_points (GdkDrawable    *drawable,
  *   @segs array.
  * 
  * Draws a number of unconnected lines.
+ *
+ * Deprecated: 2.22: Use cairo_move_to(), cairo_line_to() and cairo_stroke()
+ * instead. See the documentation of gdk_draw_line() for notes on line drawing
+ * with Cairo.
  **/
 void
 gdk_draw_segments (GdkDrawable      *drawable,
@@ -863,6 +906,9 @@ gdk_draw_segments (GdkDrawable      *drawable,
  * The way in which joins between lines are draw is determined by the
  * #GdkCapStyle value in the #GdkGC. This can be set with
  * gdk_gc_set_line_attributes().
+ *
+ * Deprecated: 2.22: Use cairo_line_to() and cairo_stroke() instead. See the
+ * documentation of gdk_draw_line() for notes on line drawing with Cairo.
  **/
 void
 gdk_draw_lines (GdkDrawable    *drawable,
@@ -934,6 +980,7 @@ real_draw_glyphs (GdkDrawable       *drawable,
  * understand; thus, use gdk_draw_layout() instead of this function,
  * gdk_draw_layout() handles the details.
  * 
+ * Deprecated: 2.22: Use pango_cairo_show_glyphs() instead.
  **/
 void
 gdk_draw_glyphs (GdkDrawable      *drawable,
@@ -972,6 +1019,8 @@ gdk_draw_glyphs (GdkDrawable      *drawable,
  * See also gdk_draw_glyphs(), gdk_draw_layout().
  *
  * Since: 2.6
+ * 
+ * Deprecated: 2.22: Use pango_cairo_show_glyphs() instead.
  **/
 void
 gdk_draw_glyphs_transformed (GdkDrawable       *drawable,
@@ -1003,6 +1052,9 @@ gdk_draw_glyphs_transformed (GdkDrawable       *drawable,
  * likely not useful for applications.
  *
  * Since: 2.6
+ *
+ * Deprecated: 2.22: Use Cairo path contruction functions and cairo_fill()
+ * instead.
  **/
 void
 gdk_draw_trapezoids (GdkDrawable        *drawable,
@@ -1053,6 +1105,9 @@ gdk_draw_trapezoids (GdkDrawable        *drawable,
  *               of @drawable
  * 
  * Since: 2.4
+ *
+ * Deprecated: 2.22: Use @drawable as the source and draw to a Cairo image
+ * surface if you want to download contents to the client.
  **/
 GdkImage*
 gdk_drawable_copy_to_image (GdkDrawable *drawable,
@@ -1149,6 +1204,9 @@ gdk_drawable_copy_to_image (GdkDrawable *drawable,
  * will contain undefined data.
  * 
  * Return value: a #GdkImage containing the contents of @drawable
+ *
+ * Deprecated: 2.22: Use @drawable as the source and draw to a Cairo image
+ * surface if you want to download contents to the client.
  **/
 GdkImage*
 gdk_drawable_get_image (GdkDrawable *drawable,
