@@ -229,10 +229,9 @@ gdk_window_impl_quartz_begin_paint_region (GdkPaintable    *paintable,
 {
   GdkWindowImplQuartz *impl = GDK_WINDOW_IMPL_QUARTZ (paintable);
   GdkWindowObject *private = (GdkWindowObject*)window;
-  int n_rects;
   GdkPixmap *bg_pixmap;
   cairo_region_t *clipped_and_offset_region;
-  gboolean free_clipped_and_offset_region = TRUE;
+  cairo_t *cr;
 
   bg_pixmap = private->bg_pixmap;
 
@@ -244,51 +243,30 @@ gdk_window_impl_quartz_begin_paint_region (GdkPaintable    *paintable,
                      private->abs_x, private->abs_y);
 
   if (impl->begin_paint_count == 0)
-    {
-      impl->paint_clip_region = clipped_and_offset_region;
-      free_clipped_and_offset_region = FALSE;
-    }
+    impl->paint_clip_region = cairo_region_reference (clipped_and_offset_region);
   else
     cairo_region_union (impl->paint_clip_region, clipped_and_offset_region);
 
   impl->begin_paint_count++;
 
-  if (bg_pixmap == GDK_NO_BG)
+  if (bg_pixmap == GDK_NO_BG ||
+      cairo_region_is_empty (clipped_and_offset_region))
     goto done;
 
-  n_rects = cairo_region_num_rectangles (clipped_and_offset_region);
+  cr = gdk_cairo_create (window);
 
-  if (n_rects == 0)
-    goto done;
+  cairo_translate (cr, -private->abs_x, -private->abs_y);
+
+  gdk_cairo_region (cr, clipped_and_offset_region);
+  cairo_clip (cr);
 
   if (bg_pixmap == NULL)
     {
-      CGContextRef cg_context;
-      CGColorRef color;
-      gint i;
-
-      cg_context = gdk_quartz_drawable_get_context (GDK_DRAWABLE (impl), FALSE);
-      color = _gdk_quartz_colormap_get_cgcolor_from_pixel (window,
-                                                           private->bg_color.pixel);
-      CGContextSetFillColorWithColor (cg_context, color);
-      CGColorRelease (color);
- 
-      for (i = 0; i < n_rects; i++)
-        {
-          cairo_rectangle_int_t rect;
-          cairo_region_get_rectangle (clipped_and_offset_region, i, &rect);
-          CGContextFillRect (cg_context,
-                             CGRectMake (rect.x, rect.y,
-                                         rect.width, rect.height));
-        }
-
-      gdk_quartz_drawable_release_context (GDK_DRAWABLE (impl), cg_context);
+      gdk_cairo_set_source_color (cr, &private->bg_color);
     }
   else
     {
       int x_offset, y_offset;
-      int width, height;
-      cairo_t *cr;
 
       x_offset = y_offset = 0;
 
@@ -304,29 +282,26 @@ gdk_window_impl_quartz_begin_paint_region (GdkPaintable    *paintable,
           bg_pixmap = ((GdkWindowObject *) window)->bg_pixmap;
         }
 
+      /* If we have a parent relative background or we don't have a pixmap,
+       * clear the area to transparent.
+       */ 
       if (bg_pixmap == NULL || bg_pixmap == GDK_NO_BG || bg_pixmap == GDK_PARENT_RELATIVE_BG)
         {
-          /* Parent relative background but the parent doesn't have a
-           * pixmap.
-           */ 
+          cairo_destroy (cr);
           goto done;
         }
 
-      gdk_drawable_get_size (GDK_DRAWABLE (bg_pixmap), &width, &height);
-
-      cr = gdk_cairo_create (GDK_DRAWABLE (impl));
-      
       gdk_cairo_set_source_pixmap (cr, bg_pixmap, x_offset, y_offset);
-      cairo_pattern_set_extend (cairo_get_source (cr), CAIRO_EXTEND_REPEAT);
-      gdk_cairo_region (cr, clipped_and_offset_region);
-      cairo_fill (cr);
-
-      cairo_destroy (cr);
+      cairo_set_extend (cairo_get_source (cr), CAIRO_EXTEND_REPEAT);
     }
 
- done:
-  if (free_clipped_and_offset_region)
-    cairo_region_destroy (clipped_and_offset_region);
+  /* Can use cairo_paint() here, we clipped above */
+  cairo_paint (cr);
+
+  cairo_destroy (cr);
+
+done:
+  cairo_region_destroy (clipped_and_offset_region);
 }
 
 static void
