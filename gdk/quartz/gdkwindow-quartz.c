@@ -355,8 +355,8 @@ _gdk_windowing_window_process_updates_recurse (GdkWindow *window,
     {
       GdkWindow *toplevel;
 
-      toplevel = gdk_window_get_toplevel (window);
-      if (toplevel)
+      toplevel = gdk_window_get_effective_toplevel (window);
+      if (toplevel && WINDOW_IS_TOPLEVEL (toplevel))
         {
           GdkWindowObject *toplevel_private;
           GdkWindowImplQuartz *toplevel_impl;
@@ -378,7 +378,10 @@ _gdk_windowing_window_process_updates_recurse (GdkWindow *window,
         }
     }
 
-  _gdk_quartz_window_set_needs_display_in_region (window, region);
+  if (WINDOW_IS_TOPLEVEL (window))
+    _gdk_quartz_window_set_needs_display_in_region (window, region);
+  else
+    _gdk_window_process_updates_recurse (window, region);
 
   /* NOTE: I'm not sure if we should displayIfNeeded here. It slows down a
    * lot (since it triggers the beam syncing) and things seem to work
@@ -784,7 +787,7 @@ _gdk_quartz_window_did_resign_main (GdkWindow *window)
   if (new_window &&
       new_window != window &&
       GDK_WINDOW_IS_MAPPED (new_window) &&
-      GDK_WINDOW_OBJECT (new_window)->window_type != GDK_WINDOW_TEMP)
+      WINDOW_IS_TOPLEVEL (new_window))
     {
       GdkWindowObject *private = (GdkWindowObject *) new_window;
       GdkWindowImplQuartz *impl = GDK_WINDOW_IMPL_QUARTZ (private->impl);
@@ -900,6 +903,8 @@ _gdk_window_impl_new (GdkWindow     *window,
   gdk_window_set_cursor (window, ((attributes_mask & GDK_WA_CURSOR) ?
 				  (attributes->cursor) :
 				  NULL));
+
+  impl->view = NULL;
 
   switch (attributes->window_type) 
     {
@@ -1148,7 +1153,7 @@ gdk_window_quartz_show (GdkWindow *window, gboolean already_mapped)
   else
     focus_on_map = TRUE;
 
-  if (impl->toplevel)
+  if (WINDOW_IS_TOPLEVEL (window) && impl->toplevel)
     {
       gboolean make_key;
 
@@ -1243,7 +1248,7 @@ gdk_window_quartz_hide (GdkWindow *window)
 
   impl = GDK_WINDOW_IMPL_QUARTZ (private->impl);
 
-  if (impl->toplevel) 
+  if (WINDOW_IS_TOPLEVEL (window)) 
     {
      /* Update main window. */
       main_window_stack = g_slist_remove (main_window_stack, window);
