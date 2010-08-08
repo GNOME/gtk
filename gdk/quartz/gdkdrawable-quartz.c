@@ -32,12 +32,13 @@ typedef struct {
   CGContextRef  cg_context;
 } GdkQuartzCairoSurfaceData;
 
-void
+gboolean
 _gdk_windowing_set_cairo_surface_size (cairo_surface_t *surface,
 				       int              width,
 				       int              height)
 {
   /* This is not supported with quartz surfaces. */
+  return FALSE;
 }
 
 static void

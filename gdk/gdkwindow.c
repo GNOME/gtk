@@ -1054,11 +1054,18 @@ recompute_visible_regions_internal (GdkWindowObject *private,
       width = private->abs_x + private->width;
       height = private->abs_y + private->height;
 
-      _gdk_windowing_set_cairo_surface_size (private->cairo_surface,
-					     width, height);
-      cairo_surface_set_device_offset (private->cairo_surface,
-				       private->abs_x,
-				       private->abs_y);
+      if (_gdk_windowing_set_cairo_surface_size (private->cairo_surface,
+                                                 width, height))
+        {
+          cairo_surface_set_device_offset (private->cairo_surface,
+                                           private->abs_x,
+                                           private->abs_y);
+        }
+      else
+        {
+          cairo_surface_destroy (private->cairo_surface);
+          private->cairo_surface = NULL;
+        }
     }
 }
 
