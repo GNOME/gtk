@@ -5613,7 +5613,10 @@ _gtk_widget_set_has_default (GtkWidget *widget,
  * yourself by calling <literal>gtk_widget_set_can_default (@widget,
  * %TRUE)</literal>. The default widget is activated when 
  * the user presses Enter in a window. Default widgets must be 
- * activatable, that is, gtk_widget_activate() should affect them.
+ * activatable, that is, gtk_widget_activate() should affect them. Note
+ * that #GtkEntry widgets require the "activates-default" property
+ * set to %TRUE before they activate the default widget when Enter
+ * is pressed and the #GtkEntry is focused.
  **/
 void
 gtk_widget_grab_default (GtkWidget *widget)
