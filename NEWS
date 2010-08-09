@@ -1,3 +1,41 @@
+Overview of Changes from GTK+ 2.21.5 to 2.21.6
+==============================================
+
+* Most drawing done by GTK+ itself has been ported from
+  GDK drawing APIs to cairo
+
+* Deprecations:
+ - GtkNotebookPage
+ - The GtkRecenManager::limit property
+ - All GDK drawing functions, ie gdk_draw_*. Use cairo instead
+ - All GdkGC functions. Use cairo instead
+ - All of GdkImage. Use cairo instead
+ - All of GdkRGB. Use cairo instead
+
+* New accessors:
+ - gdk_cursor_get_cursor_type
+ - gdk_device_get_n_axes
+ - gdk_display_is_closed
+
+* Bugs fixed:
+ 599574 Crash in _cairo_surface_set_error
+ 604391 ...assertion `ancestor != NULL' when switching between tab
+ 618327 GtkNotebookPage should be deprecated
+ 623603 meld built with pygtk-2.16.0 giving warnings
+ 623865 gtkdnd: pointer grab may never finish (ungrab before grab)
+ 624087 Missing accessor for GdkCursor.type
+ 624221 Gtk-2.21 Missing accessor for GdkDevice.num_axis
+ 624224 Missing accessor for GdkDisplay.closed
+ 624333 Deprecate GtkRecentManager:limit
+ 624687 switch-page bug when activated from menu
+ 624779 GtkCalendar padding/margin/spacing/border/whatever is too hard...
+ 625491 Generate GdkX11-2.0.typelib (backported from HEAD)
+ 625650 Add annotations to gtk_tree_model_iter_next() and gtk_tree_sel...
+
+* Translation updates:
+ Norwegian bokmål
+
+
 Overview of Changes from GTK+ 2.21.4 to 2.21.5
 ==============================================
 
