@@ -1326,7 +1326,7 @@ cups_request_printer_info_cb (GtkPrintBackendCups *backend,
   response = gtk_cups_result_get_response (result);
 
   /* TODO: determine printer type and use correct icon */
-  gtk_printer_set_icon_name (printer, "gtk-print");
+  gtk_printer_set_icon_name (printer, "printer");
  
   state_msg = "";
   loc = "";
@@ -2047,13 +2047,13 @@ cups_request_printer_list_cb (GtkPrintBackendCups *cups_backend,
       /* Set printer icon according to importance
          (none, report, warning, error - report is omitted). */
       if (printer_state_reason_level == 3)
-        gtk_printer_set_icon_name (printer, "gtk-print-error");
+        gtk_printer_set_icon_name (printer, "printer-error");
       else if (printer_state_reason_level == 2)
-        gtk_printer_set_icon_name (printer, "gtk-print-warning");
+        gtk_printer_set_icon_name (printer, "printer-warning");
       else if (gtk_printer_is_paused (printer))
-        gtk_printer_set_icon_name (printer, "gtk-print-paused");
+        gtk_printer_set_icon_name (printer, "printer-paused");
       else
-        gtk_printer_set_icon_name (printer, "gtk-print");
+        gtk_printer_set_icon_name (printer, "printer");
 
       if (status_changed)
         g_signal_emit_by_name (GTK_PRINT_BACKEND (backend),

@@ -606,7 +606,7 @@ papi_get_printer_list (GtkPrintBackendPapi *papi_backend)
 		    gtk_printer_set_is_default (printer, TRUE);
 	  	  }	
 
-              gtk_printer_set_icon_name (printer, "gtk-print");
+              gtk_printer_set_icon_name (printer, "printer");
 	      gtk_print_backend_add_printer (backend, printer);
               gtk_printer_set_is_active (printer, TRUE);
 
