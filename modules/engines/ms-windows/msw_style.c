@@ -2817,29 +2817,29 @@ draw_box_gap (GtkStyle *style, GdkWindow *window, GtkStateType state_type,
       if (side == GTK_POS_TOP)
 	{
 	  x2 = x;
-	  y2 = y - notebook->tab_vborder;
+	  y2 = y - gtk_notebook_get_tab_vborder (notebook);
 	  w2 = width;
-	  h2 = height + notebook->tab_vborder * 2;
+	  h2 = height + gtk_notebook_get_tab_vborder (notebook) * 2;
 	}
       else if (side == GTK_POS_BOTTOM)
 	{
 	  x2 = x;
 	  y2 = y;
 	  w2 = width;
-	  h2 = height + notebook->tab_vborder * 2;
+	  h2 = height + gtk_notebook_get_tab_vborder (notebook) * 2;
 	}
       else if (side == GTK_POS_LEFT)
 	{
-	  x2 = x - notebook->tab_hborder;
+	  x2 = x - gtk_notebook_get_tab_hborder (notebook);
 	  y2 = y;
-	  w2 = width + notebook->tab_hborder;
+	  w2 = width + gtk_notebook_get_tab_hborder (notebook);
 	  h2 = height;
 	}
       else if (side == GTK_POS_RIGHT)
 	{
 	  x2 = x;
 	  y2 = y;
-	  w2 = width + notebook->tab_hborder * 2;
+	  w2 = width + gtk_notebook_get_tab_hborder (notebook) * 2;
 	  h2 = height;
 	}
 

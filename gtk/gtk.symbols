@@ -2175,6 +2175,8 @@ gtk_notebook_set_show_tabs
 gtk_notebook_set_tab_label
 gtk_notebook_set_tab_label_text
 gtk_notebook_set_tab_pos
+gtk_notebook_get_tab_hborder
+gtk_notebook_get_tab_vborder
 gtk_notebook_set_window_creation_hook
 gtk_notebook_get_group
 gtk_notebook_set_group
