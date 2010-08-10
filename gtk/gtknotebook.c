@@ -7130,7 +7130,7 @@ gtk_notebook_get_tab_hborder (GtkNotebook *notebook)
 {
   g_return_val_if_fail (GTK_IS_NOTEBOOK (notebook), FALSE);
 
-  return notebook->priv->tab_hborder;
+  return notebook->tab_hborder;
 }
 
 /**
@@ -7148,7 +7148,7 @@ gtk_notebook_get_tab_vborder (GtkNotebook *notebook)
 {
   g_return_val_if_fail (GTK_IS_NOTEBOOK (notebook), FALSE);
 
-  return notebook->priv->tab_vborder;
+  return notebook->tab_vborder;
 }
 
 
