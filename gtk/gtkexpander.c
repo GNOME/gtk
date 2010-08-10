@@ -669,7 +669,7 @@ gtk_expander_size_allocate (GtkWidget     *widget,
 
       label_allocation.y = widget->allocation.y + border_width + focus_width + focus_pad;
 
-      if (priv->fill_label)
+      if (priv->label_fill)
         label_allocation.width = allocation->width - 2 * border_width -
 				 expander_size - 2 * expander_spacing -
 				 2 * focus_width - 2 * focus_pad;
@@ -1770,10 +1770,6 @@ gtk_expander_get_label_widget (GtkExpander *expander)
   return expander->priv->label_widget;
 }
 
-<<<<<<< HEAD
-#define __GTK_EXPANDER_C__
-#include "gtkaliasdef.c"
-=======
 /**
  * gtk_expander_set_label_fill:
  * @expander: a #GtkExpander
@@ -1827,5 +1823,3 @@ gtk_expander_get_label_fill (GtkExpander *expander)
 
   return expander->priv->label_fill;
 }
-
->>>>>>> 79ef5de... Make it possible to make the expander label fill the entire space
