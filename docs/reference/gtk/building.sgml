@@ -335,37 +335,33 @@ How to compile GTK+ itself
 	    <arg>--enable-debug=[no|minimum|yes]</arg>
 	  </group>
           <group>
-	    <arg>--disable-visibility</arg>
-	    <arg>--enable-visibility</arg>
-	  </group>
+            <arg>--disable-visibility</arg>
+            <arg>--enable-visibility</arg>
+          </group>
           <group>
-	    <arg>--disable-shm</arg>
-	    <arg>--enable-shm</arg>
-	  </group>
+            <arg>--disable-shm</arg>
+            <arg>--enable-shm</arg>
+          </group>
           <group>
-	    <arg>--disable-xim</arg>
-	    <arg>--enable-xim</arg>
-	  </group>
+            <arg>--disable-xkb</arg>
+            <arg>--enable-xkb</arg>
+          </group>
           <group>
-	    <arg>--disable-xim-inst</arg>
-	    <arg>--enable-xim-inst</arg>
-	  </group>
+            <arg>--disable-xinerama</arg>
+            <arg>--enable-xinerama</arg>
+          </group>
           <group>
-	    <arg>--disable-xkb</arg>
-	    <arg>--enable-xkb</arg>
-	  </group>
+            <arg>--disable-gtk-doc</arg>
+            <arg>--enable-gtk-doc</arg>
+          </group>
           <group>
-	    <arg>--disable-xinerama</arg>
-	    <arg>--enable-xinerama</arg>
-	  </group>
-	  <group>
-	    <arg>--disable-gtk-doc</arg>
-	    <arg>--enable-gtk-doc</arg>
-	  </group>
-	  <group>
-	    <arg>--disable-cups</arg>
-	    <arg>--enable-cups</arg>
-	  </group>
+            <arg>--disable-cups</arg>
+            <arg>--enable-cups</arg>
+          </group>
+          <group>
+            <arg>--disable-papi</arg>
+            <arg>--enable-papi</arg>
+          </group>
           <group>
             <arg>--with-xinput=[no|yes]</arg>
           </group>
@@ -469,30 +465,6 @@ How to compile GTK+ itself
           These options can be used to control whether GTK+ will use shared 
           memory to communicate with the X server when possible.
           The default is 'yes'.
-        </para>
-      </formalpara>
-
-      <formalpara>
-        <title><systemitem>--disable-xim</systemitem> and
-          <systemitem>--enable-xim</systemitem></title>
- 
-        <para>
-          These options can be used to control whether GTK+ will 
-          be compiled with support for XIM. (The X Input Method
-	  extension, used for Japanese input.) The default is yes.
-        </para>
-      </formalpara>
-
-      <formalpara>
-        <title><systemitem>--disable-xim-inst</systemitem> and
-          <systemitem>--enable-xim-inst</systemitem></title>
- 
-        <para>
-          These options determine whether GTK+ will use the 
-	  XIM instantiate callback. 
-          The default is 'yes', unless the host system is Solaris,
-	  where <function>XRegisterIMInstantiateCallback()</function>
-	  seems to cause a segfault.
         </para>
       </formalpara>
 
