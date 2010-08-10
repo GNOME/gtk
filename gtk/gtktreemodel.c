@@ -1415,8 +1415,10 @@ gtk_tree_model_unref_node (GtkTreeModel *tree_model,
  * write: <literal>gtk_tree_model_get (model, iter, 0, &amp;place_string_here, -1)</literal>,
  * where <literal>place_string_here</literal> is a <type>gchar*</type> to be 
  * filled with the string.
- * If appropriate, the returned values have to be freed or unreferenced.
  *
+ * Returned values with type %G_TYPE_OBJECT have to be unreferenced, values
+ * with type %G_TYPE_STRING or %G_TYPE_BOXED have to be freed. Other values are
+ * passed by value.
  **/
 void
 gtk_tree_model_get (GtkTreeModel *tree_model,
