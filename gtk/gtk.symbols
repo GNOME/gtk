@@ -2681,6 +2681,8 @@ gtk_notebook_set_tab_label_packing
 #endif
 gtk_notebook_set_tab_label_text
 gtk_notebook_set_tab_pos
+gtk_notebook_get_tab_hborder
+gtk_notebook_get_tab_vborder
 gtk_notebook_set_window_creation_hook
 #ifndef GTK_DISABLE_DEPRECATED
 gtk_notebook_get_group_id

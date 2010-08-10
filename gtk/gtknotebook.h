@@ -239,6 +239,8 @@ void     gtk_notebook_set_tab_vborder      (GtkNotebook     *notebook,
 void     gtk_notebook_set_scrollable       (GtkNotebook     *notebook,
 					    gboolean         scrollable);
 gboolean gtk_notebook_get_scrollable       (GtkNotebook     *notebook);
+guint16  gtk_notebook_get_tab_hborder      (GtkNotebook     *notebook);
+guint16  gtk_notebook_get_tab_vborder      (GtkNotebook     *notebook);
 
 /***********************************************************
  *               enable/disable PopupMenu                  *
