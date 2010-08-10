@@ -115,9 +115,30 @@
  * #GtkWidget:name property.
  */
 
-
 static GdkColor default_link_color = { 0, 0, 0, 0xeeee };
 static GdkColor default_visited_link_color = { 0, 0x5555, 0x1a1a, 0x8b8b };
+
+/* Translators: this is the license preamble; the string at the end
+ * contains the URL of the license.
+ */
+static const gchar *gtk_license_preamble = N_("This program comes with ABSOLUTELY NO WARRANTY; for details, visit %s");
+
+/* URLs for each GtkLicense type; keep in the same order as the enumeration */
+static const gchar *gtk_license_urls[] = {
+  NULL,
+  NULL,
+
+  "http://www.gnu.org/licenses/old-licenses/gpl-2.0.html",
+  "http://www.gnu.org/licenses/gpl.html",
+
+  "http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html",
+  "http://www.gnu.org/licenses/lgpl.html",
+
+  "http://opensource.org/licenses/bsd-license.php",
+  "http://opensource.org/licenses/mit-license.php",
+
+  "http://opensource.org/licenses/artistic-license-2.0.php"
+};
 
 struct _GtkAboutDialogPrivate 
 {
@@ -150,6 +171,8 @@ struct _GtkAboutDialogPrivate
 
   GSList *visited_links;
 
+  GtkLicense license_type;
+
   guint hovering_over_link : 1;
   guint wrap_license : 1;
 };
@@ -173,7 +196,8 @@ enum
   PROP_ARTISTS,
   PROP_LOGO,
   PROP_LOGO_ICON_NAME,
-  PROP_WRAP_LICENSE
+  PROP_WRAP_LICENSE,
+  PROP_LICENSE_TYPE
 };
 
 static void                 gtk_about_dialog_finalize       (GObject            *object);
@@ -354,6 +378,9 @@ gtk_about_dialog_class_init (GtkAboutDialogClass *klass)
    * a long multi-paragraph text. Note that the text is only wrapped
    * in the text view if the "wrap-license" property is set to %TRUE;
    * otherwise the text itself must contain the intended linebreaks.
+   * When setting this property to a non-%NULL value, the
+   * #GtkAboutDialog:license-type property is set to %GTK_LICENSE_CUSTOM
+   * as a side effect.
    *
    * Since: 2.6
    */
@@ -364,6 +391,36 @@ gtk_about_dialog_class_init (GtkAboutDialogClass *klass)
                                                         _("The license of the program"),
                                                         NULL,
                                                         GTK_PARAM_READWRITE));
+
+  /**
+   * GtkAboutDialog:license-type:
+   *
+   * The license of the program, as a value of the %GtkLicense enumeration.
+   *
+   * The #GtkAboutDialog will automatically fill out a standard disclaimer
+   * and link the user to the appropriate online resource for the license
+   * text.
+   *
+   * If %GTK_LICENSE_UNKNOWN is used, the link used will be the same
+   * specified in the #GtkAboutDialog:website property.
+   *
+   * If %GTK_LICENSE_CUSTOM is used, the current contents of the
+   * #GtkAboutDialog:license property are used.
+   *
+   * For any other #GtkLicense value, the contents of the
+   * #GtkAboutDialog:license property are also set by this property as
+   * a side effect.
+   *
+   * Since: 3.0
+   */
+  g_object_class_install_property (object_class,
+                                   PROP_LICENSE_TYPE,
+                                   g_param_spec_enum ("license-type",
+                                                      P_("License Type"),
+                                                      P_("The license type of the program"),
+                                                      GTK_TYPE_LICENSE,
+                                                      GTK_LICENSE_UNKNOWN,
+                                                      GTK_PARAM_READWRITE));
 
   /**
    * GtkAboutDialog:website:
@@ -569,6 +626,8 @@ gtk_about_dialog_init (GtkAboutDialog *about)
   priv->hovering_over_link = FALSE;
   priv->wrap_license = FALSE;
 
+  priv->license_type = GTK_LICENSE_UNKNOWN;
+
   content_area = gtk_dialog_get_content_area (dialog);
   action_area = gtk_dialog_get_action_area (dialog);
 
@@ -718,6 +777,9 @@ gtk_about_dialog_set_property (GObject      *object,
     case PROP_LICENSE:
       gtk_about_dialog_set_license (about, g_value_get_string (value));
       break;
+    case PROP_LICENSE_TYPE:
+      gtk_about_dialog_set_license_type (about, g_value_get_enum (value));
+      break;
     case PROP_COPYRIGHT:
       gtk_about_dialog_set_copyright (about, g_value_get_string (value));
       break;
@@ -779,6 +841,9 @@ gtk_about_dialog_get_property (GObject    *object,
       break;
     case PROP_LICENSE:
       g_value_set_string (value, priv->license);
+      break;
+    case PROP_LICENSE_TYPE:
+      g_value_set_enum (value, priv->license_type);
       break;
     case PROP_TRANSLATOR_CREDITS:
       g_value_set_string (value, priv->translator_credits);
@@ -1153,16 +1218,19 @@ gtk_about_dialog_set_license (GtkAboutDialog *about,
   if (license)
     {
       priv->license = g_strdup (license);
+      priv->license_type = GTK_LICENSE_CUSTOM;
       gtk_widget_show (priv->license_button);
     }
   else
     {
       priv->license = NULL;
+      priv->license_type = GTK_LICENSE_UNKNOWN;
       gtk_widget_hide (priv->license_button);
     }
   g_free (tmp);
 
   g_object_notify (G_OBJECT (about), "license");
+  g_object_notify (G_OBJECT (about), "license-type");
 }
 
 /**
@@ -2438,4 +2506,91 @@ gtk_show_about_dialog (GtkWindow   *parent,
     }
 
   gtk_window_present (GTK_WINDOW (dialog));
+}
+
+/**
+ * gtk_about_dialog_set_license_type:
+ * @about: a #GtkAboutDialog
+ * @license_type: the type of license
+ *
+ * Sets the license of the application showing the @about dialog from a
+ * list of known licenses.
+ *
+ * This function overrides the license set using
+ * gtk_about_dialog_set_license().
+ *
+ * Since: 3.0
+ */
+void
+gtk_about_dialog_set_license_type (GtkAboutDialog *about,
+                                   GtkLicense      license_type)
+{
+  GtkAboutDialogPrivate *priv;
+
+  g_return_if_fail (GTK_IS_ABOUT_DIALOG (about));
+  g_return_if_fail (license_type >= GTK_LICENSE_UNKNOWN &&
+                    license_type <= GTK_LICENSE_ARTISTIC);
+
+  priv = about->priv;
+
+  if (priv->license_type != license_type)
+    {
+      g_object_freeze_notify (G_OBJECT (about));
+
+      priv->license_type = license_type;
+
+      /* custom licenses use the contents of the :license property */
+      if (priv->license_type != GTK_LICENSE_CUSTOM)
+        {
+          const gchar *url;
+          GString *str;
+
+          url = gtk_license_urls[priv->license_type];
+          if (url == NULL)
+            url = priv->website_url;
+
+          /* compose the new license string as:
+           *
+           *   <program-name>  <copyright>\n
+           *   license preamble + URL
+           *
+           */
+          str = g_string_sized_new (256);
+          g_string_append (str, priv->name);
+          g_string_append (str, "  ");
+          g_string_append (str, priv->copyright);
+          g_string_append (str, "\n");
+          g_string_append_printf (str, gettext (gtk_license_preamble), url);
+
+          g_free (priv->license);
+          priv->license = g_string_free (str, FALSE);
+          priv->wrap_license = TRUE;
+          gtk_widget_show (priv->license_button);
+
+          g_object_notify (G_OBJECT (about), "wrap-license");
+          g_object_notify (G_OBJECT (about), "license");
+        }
+
+      g_object_notify (G_OBJECT (about), "license-type");
+
+      g_object_thaw_notify (G_OBJECT (about));
+    }
+}
+
+/**
+ * gtk_about_dialog_get_license_type:
+ * @about: a #GtkAboutDialog
+ *
+ * Retrieves the license set using gtk_about_dialog_set_license_type()
+ *
+ * Return value: a #GtkLicense value
+ *
+ * Since: 3.0
+ */
+GtkLicense
+gtk_about_dialog_get_license_type (GtkAboutDialog *about)
+{
+  g_return_val_if_fail (GTK_IS_ABOUT_DIALOG (about), GTK_LICENSE_UNKNOWN);
+
+  return about->priv->license_type;
 }

@@ -109,22 +109,6 @@ about_cb (GtkAction *action,
     NULL
   };
 
-  const gchar *license =
-    "This library is free software; you can redistribute it and/or\n"
-    "modify it under the terms of the GNU Library General Public License as\n"
-    "published by the Free Software Foundation; either version 2 of the\n"
-    "License, or (at your option) any later version.\n"
-    "\n"
-    "This library is distributed in the hope that it will be useful,\n"
-    "but WITHOUT ANY WARRANTY; without even the implied warranty of\n"
-    "MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n"
-    "Library General Public License for more details.\n"
-    "\n"
-    "You should have received a copy of the GNU Library General Public\n"
-    "License along with the Gnome Library; see the file COPYING.LIB.  If not,\n"
-    "write to the Free Software Foundation, Inc., 59 Temple Place - Suite 330,\n"
-    "Boston, MA 02111-1307, USA.\n";
-
   pixbuf = NULL;
   transparent = NULL;
   filename = demo_find_file ("gtk-logo-rgb.gif", NULL);
@@ -142,7 +126,7 @@ about_cb (GtkAction *action,
 			 "program-name", "GTK+ Code Demos",
 			 "version", PACKAGE_VERSION,
 			 "copyright", "(C) 1997-2009 The GTK+ Team",
-			 "license", license,
+			 "license-type", GTK_LICENSE_LGPL_2_1,
 			 "website", "http://www.gtk.org",
 			 "comments", "Program to demonstrate GTK+ functions.",
 			 "authors", authors,

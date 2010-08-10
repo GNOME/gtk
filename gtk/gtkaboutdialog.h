@@ -45,6 +45,41 @@ typedef struct _GtkAboutDialogClass   GtkAboutDialogClass;
 typedef struct _GtkAboutDialogPrivate GtkAboutDialogPrivate;
 
 /**
+ * GtkLicense:
+ * @GTK_LICENSE_UNKNOWN: No license specified
+ * @GTK_LICENSE_CUSTOM: A license text is going to be specified by the
+ *   developer
+ * @GTK_LICENSE_GPL_2_0: The GNU General Public License, version 2.0
+ * @GTK_LICENSE_GPL_3_0: The GNU General Public License, version 3.0
+ * @GTK_LICENSE_LGPL_2_1: The GNU Lesser General Public License, version 2.1
+ * @GTK_LICENSE_LGPL_3_0: The GNU Lesser General Public License, version 3.0
+ * @GTK_LICENSE_BSD: The BSD standard license
+ * @GTK_LICENSE_MIT_X11: The MIT/X11 standard license
+ * @GTK_LICENSE_ARTISTIC: The Artistic License, version 2.0
+ *
+ * The type of license for an application.
+ *
+ * This enumeration can be expanded at later date.
+ *
+ * Since: 3.0
+ */
+typedef enum {
+  GTK_LICENSE_UNKNOWN,
+  GTK_LICENSE_CUSTOM,
+
+  GTK_LICENSE_GPL_2_0,
+  GTK_LICENSE_GPL_3_0,
+
+  GTK_LICENSE_LGPL_2_1,
+  GTK_LICENSE_LGPL_3_0,
+
+  GTK_LICENSE_BSD,
+  GTK_LICENSE_MIT_X11,
+
+  GTK_LICENSE_ARTISTIC
+} GtkLicense;
+
+/**
  * GtkAboutDialog:
  *
  * The <structname>GtkAboutDialog</structname> struct contains
@@ -89,6 +124,9 @@ void                   gtk_about_dialog_set_comments           (GtkAboutDialog  
 G_CONST_RETURN gchar  *gtk_about_dialog_get_license            (GtkAboutDialog  *about);
 void                   gtk_about_dialog_set_license            (GtkAboutDialog  *about,
 								const gchar     *license);
+void                   gtk_about_dialog_set_license_type       (GtkAboutDialog  *about,
+                                                                GtkLicense       license_type);
+GtkLicense             gtk_about_dialog_get_license_type       (GtkAboutDialog  *about);
 
 gboolean               gtk_about_dialog_get_wrap_license       (GtkAboutDialog  *about);
 void                   gtk_about_dialog_set_wrap_license       (GtkAboutDialog  *about,
