@@ -481,10 +481,10 @@ gail_tree_view_real_initialize (AtkObject *obj,
       g_object_add_weak_pointer (G_OBJECT (view->tree_model), (gpointer *)&view->tree_model);
       connect_model_signals (tree_view, view);
 
-      if (GTK_IS_TREE_STORE (tree_model))
-        obj->role = ATK_ROLE_TREE_TABLE;
-      else
+      if (gtk_tree_model_get_flags (tree_model) & GTK_TREE_MODEL_LIST_ONLY)
         obj->role = ATK_ROLE_TABLE;
+      else
+        obj->role = ATK_ROLE_TREE_TABLE;
     }
   else
     {
@@ -568,10 +568,10 @@ gail_tree_view_real_notify_gtk (GObject             *obj,
           g_object_add_weak_pointer (G_OBJECT (gailview->tree_model), (gpointer *)&gailview->tree_model);
           connect_model_signals (tree_view, gailview);
 
-          if (GTK_IS_TREE_STORE (tree_model))
-            role = ATK_ROLE_TREE_TABLE;
-          else
+          if (gtk_tree_model_get_flags (tree_model) & GTK_TREE_MODEL_LIST_ONLY)
             role = ATK_ROLE_TABLE;
+          else
+            role = ATK_ROLE_TREE_TABLE;
         }
       else
         {
