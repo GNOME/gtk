@@ -817,24 +817,24 @@ gtk_get_option_group (gboolean open_default_display)
  * @argc: a pointer to the number of command line arguments.
  * @argv: a pointer to the array of command line arguments.
  * @parameter_string: a string which is displayed in
- *    the first line of <option>--help</option> output, after 
+ *    the first line of <option>--help</option> output, after
  *    <literal><replaceable>programname</replaceable> [OPTION...]</literal>
  * @entries: a %NULL-terminated array of #GOptionEntry<!-- -->s
  *    describing the options of your program
  * @translation_domain: a translation domain to use for translating
  *    the <option>--help</option> output for the options in @entries
- *    with gettext(), or %NULL
- * @error: a return location for errors 
+ *    and the @parameter_string with gettext(), or %NULL
+ * @error: a return location for errors
  *
- * This function does the same work as gtk_init_check(). 
- * Additionally, it allows you to add your own commandline options, 
- * and it automatically generates nicely formatted 
+ * This function does the same work as gtk_init_check().
+ * Additionally, it allows you to add your own commandline options,
+ * and it automatically generates nicely formatted
  * <option>--help</option> output. Note that your program will
  * be terminated after writing out the help output.
  *
- * Returns: %TRUE if the GUI has been successfully initialized, 
+ * Returns: %TRUE if the GUI has been successfully initialized,
  *               %FALSE otherwise.
- * 
+ *
  * Since: 2.6
  */
 gboolean
@@ -858,14 +858,15 @@ gtk_init_with_args (gint                 *argc,
     return FALSE;
 
   gtk_group = gtk_get_option_group (TRUE);
-  
+
   context = g_option_context_new (parameter_string);
   g_option_context_add_group (context, gtk_group);
-  
+  g_option_context_set_translation_domain (context, translation_domain);
+
   if (entries)
     g_option_context_add_main_entries (context, entries, translation_domain);
   retval = g_option_context_parse (context, argc, argv, error);
-  
+
   g_option_context_free (context);
 
   return retval;
