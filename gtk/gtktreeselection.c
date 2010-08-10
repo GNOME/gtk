@@ -76,12 +76,7 @@ gtk_tree_selection_finalize (GObject *object)
   GtkTreeSelection *selection = GTK_TREE_SELECTION (object);
 
   if (selection->destroy)
-    {
-      GDestroyNotify d = selection->destroy;
-
-      selection->destroy = NULL;
-      d (selection->user_data);
-    }
+    selection->destroy (selection->user_data);
 
   /* chain parent_class' handler */
   G_OBJECT_CLASS (gtk_tree_selection_parent_class)->finalize (object);
@@ -243,15 +238,17 @@ gtk_tree_selection_get_mode (GtkTreeSelection *selection)
 /**
  * gtk_tree_selection_set_select_function:
  * @selection: A #GtkTreeSelection.
- * @func: The selection function.
- * @data: The selection function's data.
- * @destroy: The destroy function for user data.  May be NULL.
+ * @func: The selection function. May be %NULL
+ * @data: The selection function's data. May be %NULL
+ * @destroy: The destroy function for user data.  May be %NULL
  *
- * Sets the selection function.  If set, this function is called before any node
- * is selected or unselected, giving some control over which nodes are selected.
- * The select function should return %TRUE if the state of the node may be toggled,
- * and %FALSE if the state of the node should be left unchanged.
- **/
+ * Sets the selection function.
+ *
+ * If set, this function is called before any node is selected or unselected,
+ * giving some control over which nodes are selected. The select function
+ * should return %TRUE if the state of the node may be toggled, and %FALSE
+ * if the state of the node should be left unchanged.
+ */
 void
 gtk_tree_selection_set_select_function (GtkTreeSelection     *selection,
 					GtkTreeSelectionFunc  func,
@@ -259,15 +256,9 @@ gtk_tree_selection_set_select_function (GtkTreeSelection     *selection,
 					GDestroyNotify        destroy)
 {
   g_return_if_fail (GTK_IS_TREE_SELECTION (selection));
-  g_return_if_fail (func != NULL);
 
   if (selection->destroy)
-    {
-      GDestroyNotify d = selection->destroy;
-
-      selection->destroy = NULL;
-      d (selection->user_data);
-    }
+    selection->destroy (selection->user_data);
 
   selection->user_func = func;
   selection->user_data = data;
