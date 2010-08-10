@@ -9837,6 +9837,13 @@ gtk_tree_view_move_cursor_page_up_down (GtkTreeView *tree_view,
     _gtk_rbtree_find_offset (tree_view->priv->tree, y,
 			     &cursor_tree, &cursor_node);
 
+  if (cursor_tree == NULL)
+    {
+      /* FIXME: we lost the cursor.  Should we try to get one? */
+      gtk_tree_path_free (old_cursor_path);
+      return;
+    }
+
   if (tree_view->priv->cursor_offset > BACKGROUND_HEIGHT (cursor_node))
     {
       _gtk_rbtree_next_full (cursor_tree, cursor_node,
