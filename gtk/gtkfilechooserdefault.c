@@ -798,34 +798,6 @@ pending_select_files_add (GtkFileChooserDefault *impl,
     g_slist_prepend (impl->pending_select_files, g_object_ref (file));
 }
 
-/* Used from gtk_tree_selection_selected_foreach() */
-static void
-store_selection_foreach (GtkTreeModel *model,
-			 GtkTreePath  *path,
-			 GtkTreeIter  *iter,
-			 gpointer      data)
-{
-  GtkFileChooserDefault *impl;
-  GFile *file;
-
-  impl = GTK_FILE_CHOOSER_DEFAULT (data);
-
-  file = _gtk_file_system_model_get_file (GTK_FILE_SYSTEM_MODEL (model), iter);
-  pending_select_files_add (impl, file);
-}
-
-/* Stores the current selection in the list of paths to select; this is used to
- * preserve the selection when reloading the current folder.
- */
-static void
-pending_select_files_store_selection (GtkFileChooserDefault *impl)
-{
-  GtkTreeSelection *selection;
-
-  selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (impl->browse_files_tree_view));
-  gtk_tree_selection_selected_foreach (selection, store_selection_foreach, impl);
-}
-
 static void
 gtk_file_chooser_default_finalize (GObject *object)
 {
