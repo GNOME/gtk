@@ -381,7 +381,7 @@ gail_notebook_get_selection_count (AtkSelection *selection)
     return 0;
 
   notebook = GTK_NOTEBOOK (widget);
-  if (notebook == NULL)
+  if (notebook == NULL || gtk_notebook_get_current_page (notebook) == -1)
     return 0;
   else
     return 1;
