@@ -1509,10 +1509,6 @@ gdk_region_subtract (GdkRegion       *source1,
  * Sets the area of @source1 to the exclusive-OR of the areas of @source1
  * and @source2. The resulting area is the set of pixels contained in one
  * or the other of the two sources but not in both.
- *
- * Deprecated: 2.22: There is no replacement, but the function can be
- *                   reimplemented using gdk_region_intersect() and
- *                   gdk_region_subract() easily.
  **/
 void
 gdk_region_xor (GdkRegion       *source1,

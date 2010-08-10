@@ -109,10 +109,10 @@ void           gdk_region_union           (GdkRegion          *source1,
                                            const GdkRegion    *source2);
 void           gdk_region_subtract        (GdkRegion          *source1,
                                            const GdkRegion    *source2);
-#ifndef GDK_DISABLE_DEPRECATED
 void           gdk_region_xor             (GdkRegion          *source1,
                                            const GdkRegion    *source2);
 
+#ifndef GDK_DISABLE_DEPRECATED
 void   gdk_region_spans_intersect_foreach (GdkRegion          *region,
                                            const GdkSpan      *spans,
                                            int                 n_spans,
