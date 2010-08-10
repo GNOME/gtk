@@ -1206,6 +1206,7 @@ gtk_event_box_set_visible_window
 #if IN_FILE(__GTK_EXPANDER_C__)
 gtk_expander_get_expanded
 gtk_expander_get_label
+gtk_expander_get_label_fill
 gtk_expander_get_label_widget
 gtk_expander_get_spacing
 gtk_expander_get_type G_GNUC_CONST
@@ -1215,6 +1216,7 @@ gtk_expander_new
 gtk_expander_new_with_mnemonic
 gtk_expander_set_expanded
 gtk_expander_set_label
+gtk_expander_set_label_fill
 gtk_expander_set_label_widget
 gtk_expander_set_spacing
 gtk_expander_set_use_markup

@@ -48,7 +48,8 @@ enum
   PROP_USE_UNDERLINE,
   PROP_USE_MARKUP,
   PROP_SPACING,
-  PROP_LABEL_WIDGET
+  PROP_LABEL_WIDGET,
+  PROP_LABEL_FILL
 };
 
 struct _GtkExpanderPrivate
@@ -66,6 +67,7 @@ struct _GtkExpanderPrivate
   guint             use_markup : 1; 
   guint             button_down : 1;
   guint             prelight : 1;
+  guint             label_fill : 1;
 };
 
 static void gtk_expander_set_property (GObject          *object,
@@ -247,6 +249,14 @@ gtk_expander_class_init (GtkExpanderClass *klass)
 							GTK_TYPE_WIDGET,
 							GTK_PARAM_READWRITE));
 
+  g_object_class_install_property (gobject_class,
+				   PROP_LABEL_FILL,
+				   g_param_spec_boolean ("label-fill",
+							 P_("Label fill"),
+							 P_("Whether the label widget should fill all available horizontal space"),
+							 FALSE,
+							 GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT));
+
   gtk_widget_class_install_style_property (widget_class,
 					   g_param_spec_int ("expander-size",
 							     P_("Expander Size"),
@@ -299,6 +309,7 @@ gtk_expander_init (GtkExpander *expander)
   priv->use_markup = FALSE;
   priv->button_down = FALSE;
   priv->prelight = FALSE;
+  priv->label_fill = FALSE;
   priv->expand_timer = 0;
 
   gtk_drag_dest_set (GTK_WIDGET (expander), 0, NULL, 0, 0);
@@ -353,6 +364,9 @@ gtk_expander_set_property (GObject      *object,
     case PROP_LABEL_WIDGET:
       gtk_expander_set_label_widget (expander, g_value_get_object (value));
       break;
+    case PROP_LABEL_FILL:
+      gtk_expander_set_label_fill (expander, g_value_get_boolean (value));
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -389,6 +403,9 @@ gtk_expander_get_property (GObject    *object,
       g_value_set_object (value,
 			  priv->label_widget ?
 			  G_OBJECT (priv->label_widget) : NULL);
+      break;
+    case PROP_LABEL_FILL:
+      g_value_set_boolean (value, priv->label_fill);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -578,8 +595,8 @@ gtk_expander_size_allocate (GtkWidget     *widget,
 
 
   /* Calculate some offsets/padding first */
-  label_xoffset  =     border_width + expander_size +     focus_width + 2 * expander_spacing +     focus_pad;
-  label_xpad     = 2 * border_width + expander_size + 2 * focus_width + 2 * expander_spacing + 2 * focus_pad;
+  label_xoffset = border_width + expander_size + focus_width + 2 * expander_spacing + focus_pad;
+  label_xpad = 2 * border_width + expander_size + 2 * focus_width + 2 * expander_spacing + 2 * focus_pad;
 
   child_yoffset  = border_width + priv->spacing + (interior_focus ? 0 : 2 * focus_width + 2 * focus_pad);
   child_ypad     = 2 * border_width + priv->spacing + (interior_focus ? 0 : 2 * focus_width + 2 * focus_pad);
@@ -595,7 +612,10 @@ gtk_expander_size_allocate (GtkWidget     *widget,
 
       gtk_size_request_get_width (GTK_SIZE_REQUEST (priv->label_widget), NULL, &natural_label_width);
 
-      label_allocation.width = MIN (natural_label_width, allocation->width - label_xpad);
+      if (priv->label_fill)
+        label_allocation.width = allocation->width - label_xpad;
+      else
+        label_allocation.width = MIN (natural_label_width, allocation->width - label_xpad);
       label_allocation.width = MAX (label_allocation.width, 1);
 
       /* We distribute the minimum height to the label widget and prioritize
@@ -605,13 +625,14 @@ gtk_expander_size_allocate (GtkWidget     *widget,
 
       ltr = gtk_widget_get_direction (widget) != GTK_TEXT_DIR_RTL;
 
-      if (ltr)
-	label_allocation.x = 
-	  widget->allocation.x + label_xoffset;
+      if (priv->label_fill)
+        label_allocation.x = widget->allocation.x + label_xoffset;
+      else if (ltr)
+        label_allocation.x = widget->allocation.x + label_xoffset;
       else
-        label_allocation.x = 
-	  widget->allocation.x + widget->allocation.width -
-	  (label_allocation.width + label_xoffset);
+        label_allocation.x =
+          widget->allocation.x + widget->allocation.width -
+          (label_allocation.width + label_xoffset);
 
       label_allocation.y = widget->allocation.y + border_width + focus_width + focus_pad;
       label_allocation.height = MIN (label_height,
@@ -636,9 +657,9 @@ gtk_expander_size_allocate (GtkWidget     *widget,
       get_expander_bounds (expander, &rect);
 
       gdk_window_move_resize (priv->event_window,
-			      allocation->x + border_width, 
-			      allocation->y + border_width, 
-			      MAX (allocation->width - 2 * border_width, 1), 
+			      allocation->x + border_width,
+			      allocation->y + border_width,
+			      MAX (allocation->width - 2 * border_width, 1),
 			      MAX (rect.height, label_height - 2 * border_width));
     }
 
@@ -1933,3 +1954,58 @@ gtk_expander_get_label_widget (GtkExpander *expander)
 
   return expander->priv->label_widget;
 }
+
+/**
+ * gtk_expander_set_label_fill:
+ * @expander: a #GtkExpander
+ * @label_fill: %TRUE if the label should should fill all available horizontal
+ *              space
+ *
+ * Sets whether the label widget should fill all available horizontal space
+ * allocated to @expander.
+ *
+ * Since: 2.22
+ */
+void
+gtk_expander_set_label_fill (GtkExpander *expander,
+                             gboolean     label_fill)
+{
+  GtkExpanderPrivate *priv;
+
+  g_return_if_fail (GTK_IS_EXPANDER (expander));
+
+  priv = expander->priv;
+
+  label_fill = label_fill != FALSE;
+
+  if (priv->label_fill != label_fill)
+    {
+      priv->label_fill = label_fill;
+
+      if (priv->label_widget != NULL)
+        gtk_widget_queue_resize (GTK_WIDGET (expander));
+
+      g_object_notify (G_OBJECT (expander), "label-fill");
+    }
+}
+
+/**
+ * gtk_expander_get_label_fill:
+ * @expander: a #GtkExpander
+ *
+ * Returns whether the label widget will fill all available horizontal
+ * space allocated to @expander.
+ *
+ * Return value: %TRUE if the label widget will fill all available horizontal
+ *               space
+ *
+ * Since: 2.22
+ */
+gboolean
+gtk_expander_get_label_fill (GtkExpander *expander)
+{
+  g_return_val_if_fail (GTK_IS_EXPANDER (expander), FALSE);
+
+  return expander->priv->label_fill;
+}
+
