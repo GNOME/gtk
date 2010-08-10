@@ -113,7 +113,7 @@ gtk_toggle_button_class_init (GtkToggleButtonClass *class)
                                    PROP_ACTIVE,
                                    g_param_spec_boolean ("active",
 							 P_("Active"),
-							 P_("If the toggle button should be pressed in or not"),
+							 P_("If the toggle button should be pressed in"),
 							 FALSE,
 							 GTK_PARAM_READWRITE));
 

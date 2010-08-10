@@ -789,7 +789,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   /**
    * GtkWidget:double-buffered
    *
-   * Whether or not the widget is double buffered.
+   * Whether the widget is double buffered.
    *
    * Since: 2.18
    */
@@ -797,7 +797,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
                                    PROP_DOUBLE_BUFFERED,
                                    g_param_spec_boolean ("double-buffered",
                                                          P_("Double Buffered"),
-                                                         P_("Whether or not the widget is double buffered"),
+                                                         P_("Whether the widget is double buffered"),
                                                          TRUE,
                                                          GTK_PARAM_READWRITE));
 

@@ -618,14 +618,14 @@ gtk_notebook_class_init (GtkNotebookClass *class)
 				   PROP_SHOW_TABS,
 				   g_param_spec_boolean ("show-tabs",
  							 P_("Show Tabs"),
- 							 P_("Whether tabs should be shown or not"),
+							 P_("Whether tabs should be shown"),
  							 TRUE,
  							 GTK_PARAM_READWRITE));
   g_object_class_install_property (gobject_class,
 				   PROP_SHOW_BORDER,
 				   g_param_spec_boolean ("show-border",
  							 P_("Show Border"),
- 							 P_("Whether the border should be shown or not"),
+							 P_("Whether the border should be shown"),
  							 TRUE,
  							 GTK_PARAM_READWRITE));
   g_object_class_install_property (gobject_class,
@@ -682,14 +682,14 @@ gtk_notebook_class_init (GtkNotebookClass *class)
 					      CHILD_PROP_TAB_EXPAND,
 					      g_param_spec_boolean ("tab-expand", 
 								    P_("Tab expand"), 
-								    P_("Whether to expand the child's tab or not"),
+								    P_("Whether to expand the child's tab"),
 								    FALSE,
 								    GTK_PARAM_READWRITE));
   gtk_container_class_install_child_property (container_class,
 					      CHILD_PROP_TAB_FILL,
 					      g_param_spec_boolean ("tab-fill", 
 								    P_("Tab fill"), 
-								    P_("Whether the child's tab should fill the allocated area or not"),
+								    P_("Whether the child's tab should fill the allocated area"),
 								    TRUE,
 								    GTK_PARAM_READWRITE));
   gtk_container_class_install_child_property (container_class,
@@ -703,7 +703,7 @@ gtk_notebook_class_init (GtkNotebookClass *class)
 					      CHILD_PROP_REORDERABLE,
 					      g_param_spec_boolean ("reorderable",
 								    P_("Tab reorderable"),
-								    P_("Whether the tab is reorderable by user action or not"),
+								    P_("Whether the tab is reorderable by user action"),
 								    FALSE,
 								    GTK_PARAM_READWRITE));
   gtk_container_class_install_child_property (container_class,

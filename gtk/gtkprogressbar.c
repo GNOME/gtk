@@ -178,13 +178,13 @@ gtk_progress_bar_class_init (GtkProgressBarClass *class)
                                                       GTK_PARAM_READWRITE));
   gtk_widget_class_install_style_property (widget_class,
                                            g_param_spec_int ("xspacing",
-                                                             P_("XSpacing"),
+                                                             P_("X spacing"),
                                                              P_("Extra spacing applied to the width of a progress bar."),
                                                              0, G_MAXINT, 7,
                                                              G_PARAM_READWRITE));
   gtk_widget_class_install_style_property (widget_class,
                                            g_param_spec_int ("yspacing",
-                                                             P_("YSpacing"),
+                                                             P_("Y spacing"),
                                                              P_("Extra spacing applied to the height of a progress bar."),
                                                              0, G_MAXINT, 7,
                                                              G_PARAM_READWRITE));
@@ -198,7 +198,7 @@ gtk_progress_bar_class_init (GtkProgressBarClass *class)
    */
   gtk_widget_class_install_style_property (widget_class,
                                            g_param_spec_int ("min-horizontal-bar-width",
-                                                             P_("Min horizontal bar width"),
+                                                             P_("Minimum horizontal bar width"),
                                                              P_("The minimum horizontal width of the progress bar"),
                                                              1, G_MAXINT, MIN_HORIZONTAL_BAR_WIDTH,
                                                              G_PARAM_READWRITE));
@@ -211,7 +211,7 @@ gtk_progress_bar_class_init (GtkProgressBarClass *class)
    */
   gtk_widget_class_install_style_property (widget_class,
                                            g_param_spec_int ("min-horizontal-bar-height",
-                                                             P_("Min horizontal bar height"),
+                                                             P_("Minimum horizontal bar height"),
                                                              P_("Minimum horizontal height of the progress bar"),
                                                              1, G_MAXINT, MIN_HORIZONTAL_BAR_HEIGHT,
                                                              G_PARAM_READWRITE));
@@ -224,7 +224,7 @@ gtk_progress_bar_class_init (GtkProgressBarClass *class)
    */
   gtk_widget_class_install_style_property (widget_class,
                                            g_param_spec_int ("min-vertical-bar-width",
-                                                             P_("Min vertical bar width"),
+                                                             P_("Minimum vertical bar width"),
                                                              P_("The minimum vertical width of the progress bar"),
                                                              1, G_MAXINT, MIN_VERTICAL_BAR_WIDTH,
                                                              G_PARAM_READWRITE));
@@ -237,7 +237,7 @@ gtk_progress_bar_class_init (GtkProgressBarClass *class)
    */
   gtk_widget_class_install_style_property (widget_class,
                                            g_param_spec_int ("min-vertical-bar-height",
-                                                             P_("Min vertical bar height"),
+                                                             P_("Minimum vertical bar height"),
                                                              P_("The minimum vertical height of the progress bar"),
                                                              1, G_MAXINT, MIN_VERTICAL_BAR_HEIGHT,
                                                              G_PARAM_READWRITE));

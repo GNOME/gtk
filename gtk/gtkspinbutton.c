@@ -229,7 +229,7 @@ gtk_spin_button_class_init (GtkSpinButtonClass *class)
                                    PROP_ADJUSTMENT,
                                    g_param_spec_object ("adjustment",
                                                         P_("Adjustment"),
-                                                        P_("The adjustment that holds the value of the spinbutton"),
+                                                        P_("The adjustment that holds the value of the spin button"),
                                                         GTK_TYPE_ADJUSTMENT,
                                                         GTK_PARAM_READWRITE));
   

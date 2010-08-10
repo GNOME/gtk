@@ -238,7 +238,7 @@ gtk_cell_renderer_text_class_init (GtkCellRendererTextClass *class)
                                    PROP_SINGLE_PARAGRAPH_MODE,
                                    g_param_spec_boolean ("single-paragraph-mode",
                                                          P_("Single Paragraph Mode"),
-                                                         P_("Whether or not to keep all text in a single paragraph"),
+                                                         P_("Whether to keep all text in a single paragraph"),
                                                          FALSE,
                                                          GTK_PARAM_READWRITE));
 

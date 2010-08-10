@@ -329,7 +329,7 @@ gtk_print_unix_dialog_class_init (GtkPrintUnixDialogClass *class)
   g_object_class_install_property (object_class,
                                    PROP_MANUAL_CAPABILITIES,
                                    g_param_spec_flags ("manual-capabilities",
-                                                       P_("Manual Capabilites"),
+                                                       P_("Manual Capabilities"),
                                                        P_("Capabilities the application can handle"),
                                                        GTK_TYPE_PRINT_CAPABILITIES,
                                                        0,

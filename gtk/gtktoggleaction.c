@@ -123,7 +123,7 @@ gtk_toggle_action_class_init (GtkToggleActionClass *klass)
   /**
    * GtkToggleAction:active:
    *
-   * If the toggle action should be active in or not.
+   * Whether the toggle action should be active.
    *
    * Since: 2.10
    */
@@ -131,7 +131,7 @@ gtk_toggle_action_class_init (GtkToggleActionClass *klass)
                                    PROP_ACTIVE,
                                    g_param_spec_boolean ("active",
                                                          P_("Active"),
-                                                         P_("If the toggle action should be active in or not"),
+                                                         P_("Whether the toggle action should be active"),
                                                          FALSE,
                                                          GTK_PARAM_READWRITE));
   /**
