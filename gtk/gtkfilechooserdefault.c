@@ -5860,17 +5860,6 @@ gtk_file_chooser_default_map (GtkWidget *widget)
            */
           break;
 
-        case RELOAD_WAS_UNMAPPED:
-          /* Just reload the current folder; else continue
-           * the pending load.
-           */
-          if (impl->current_folder)
-            {
-              pending_select_files_store_selection (impl);
-              change_folder_and_display_error (impl, impl->current_folder, FALSE);
-            }
-          break;
-
         default:
           g_assert_not_reached ();
       }
@@ -5894,8 +5883,6 @@ gtk_file_chooser_default_unmap (GtkWidget *widget)
   settings_save (impl);
 
   GTK_WIDGET_CLASS (_gtk_file_chooser_default_parent_class)->unmap (widget);
-
-  impl->reload_state = RELOAD_WAS_UNMAPPED;
 }
 
 static void
