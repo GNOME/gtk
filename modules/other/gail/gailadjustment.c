@@ -38,6 +38,8 @@ static void	 gail_adjustment_get_maximum_value (AtkValue            *obj,
                                                     GValue              *value);
 static void	 gail_adjustment_get_minimum_value (AtkValue            *obj,
                                                     GValue              *value);
+static void	 gail_adjustment_get_minimum_increment (AtkValue        *obj,
+                                                    GValue              *value);
 static gboolean	 gail_adjustment_set_current_value (AtkValue            *obj,
                                                     const GValue        *value);
 
@@ -101,6 +103,7 @@ atk_value_interface_init (AtkValueIface *iface)
   iface->get_current_value = gail_adjustment_get_current_value;
   iface->get_maximum_value = gail_adjustment_get_maximum_value;
   iface->get_minimum_value = gail_adjustment_get_minimum_value;
+  iface->get_minimum_increment = gail_adjustment_get_minimum_increment;
   iface->set_current_value = gail_adjustment_set_current_value;
 }
 
@@ -162,6 +165,47 @@ gail_adjustment_get_minimum_value (AtkValue             *obj,
   memset (value,  0, sizeof (GValue));
   g_value_init (value, G_TYPE_DOUBLE);
   g_value_set_double (value, minimum_value);
+}
+
+static void
+gail_adjustment_get_minimum_increment (AtkValue        *obj,
+                                       GValue          *value)
+{
+  GtkAdjustment* adjustment;
+  gdouble minimum_increment;
+ 
+  adjustment = GAIL_ADJUSTMENT (obj)->adjustment;
+  if (adjustment == NULL)
+  {
+    /* State is defunct */
+    return;
+  }
+
+  if (adjustment->step_increment != 0 &&
+      adjustment->page_increment != 0)
+    {
+      if (ABS (adjustment->step_increment) < ABS (adjustment->page_increment))
+        minimum_increment = adjustment->step_increment;
+      else
+        minimum_increment = adjustment->page_increment;
+    }
+  else if (adjustment->step_increment == 0 &&
+           adjustment->page_increment == 0)
+    {
+      minimum_increment = 0;
+    }
+  else if (adjustment->step_increment == 0)
+    {
+      minimum_increment = adjustment->page_increment;
+    }
+  else
+    {
+      minimum_increment = adjustment->step_increment;
+    }
+
+  memset (value,  0, sizeof (GValue));
+  g_value_init (value, G_TYPE_DOUBLE);
+  g_value_set_double (value, minimum_increment);
 }
 
 static gboolean	 

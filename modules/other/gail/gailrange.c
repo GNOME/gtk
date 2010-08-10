@@ -48,6 +48,8 @@ static void	    gail_range_get_maximum_value (AtkValue       *obj,
                                                   GValue         *value);
 static void	    gail_range_get_minimum_value (AtkValue       *obj,
                                                   GValue         *value);
+static void         gail_range_get_minimum_increment (AtkValue       *obj,
+                                                      GValue         *value);
 static gboolean	    gail_range_set_current_value (AtkValue       *obj,
                                                   const GValue   *value);
 static void         gail_range_value_changed     (GtkAdjustment  *adjustment,
@@ -159,6 +161,7 @@ atk_value_interface_init (AtkValueIface *iface)
   iface->get_current_value = gail_range_get_current_value;
   iface->get_maximum_value = gail_range_get_maximum_value;
   iface->get_minimum_value = gail_range_get_minimum_value;
+  iface->get_minimum_increment = gail_range_get_minimum_increment;
   iface->set_current_value = gail_range_set_current_value;
 }
 
@@ -214,6 +217,23 @@ gail_range_get_minimum_value (AtkValue		*obj,
     return;
 
   atk_value_get_minimum_value (ATK_VALUE (range->adjustment), value);
+}
+
+static void
+gail_range_get_minimum_increment (AtkValue *obj, GValue *value)
+{
+ GailRange *range;
+
+  g_return_if_fail (GAIL_IS_RANGE (obj));
+
+  range = GAIL_RANGE (obj);
+  if (range->adjustment == NULL)
+    /*
+     * Adjustment has not been specified
+     */
+    return;
+
+  atk_value_get_minimum_increment (ATK_VALUE (range->adjustment), value);
 }
 
 static gboolean	 gail_range_set_current_value (AtkValue		*obj,
