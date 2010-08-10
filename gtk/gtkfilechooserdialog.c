@@ -150,7 +150,8 @@ file_chooser_widget_file_activated (GtkFileChooser       *chooser,
 
       widget = GTK_WIDGET (l->data);
       response_id = gtk_dialog_get_response_for_widget (fc_dialog, widget);
-      if (is_stock_accept_response_id (response_id))
+      if (gtk_widget_is_sensitive (widget) &&
+          is_stock_accept_response_id (response_id))
 	{
 	  gtk_widget_activate (widget); /* Should we gtk_dialog_response (dialog, response_id) instead? */
 	  break;
@@ -249,7 +250,8 @@ file_chooser_widget_response_requested (GtkWidget            *widget,
 
       widget = GTK_WIDGET (l->data);
       response_id = gtk_dialog_get_response_for_widget (fc_dialog, widget);
-      if (is_stock_accept_response_id (response_id))
+      if (gtk_widget_is_sensitive (widget) &&
+          is_stock_accept_response_id (response_id))
 	{
 	  gtk_widget_activate (widget); /* Should we gtk_dialog_response (dialog, response_id) instead? */
 	  break;
