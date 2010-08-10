@@ -1056,7 +1056,7 @@ map_gtk_progress_bar_to_xp (GtkProgressBar *progress_bar, gboolean trough)
 {
   XpThemeElement ret;
 
-  switch (progress_bar->orientation)
+  switch (gtk_progress_bar_get_orientation (progress_bar))
     {
     case GTK_PROGRESS_LEFT_TO_RIGHT:
     case GTK_PROGRESS_RIGHT_TO_LEFT:
