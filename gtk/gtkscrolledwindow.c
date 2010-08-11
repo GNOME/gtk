@@ -1045,19 +1045,24 @@ gtk_scrolled_window_paint (GtkWidget    *widget,
 
   if (scrolled_window->shadow_type != GTK_SHADOW_NONE)
     {
+      GtkAllocation allocation;
       GtkAllocation relative_allocation;
+      GtkStyle *style;
       gboolean scrollbars_within_bevel;
 
+      style = gtk_widget_get_style (widget);
       gtk_widget_style_get (widget, "scrollbars-within-bevel", &scrollbars_within_bevel, NULL);
-      
+
+      gtk_widget_get_allocation (widget, &allocation);
+
       if (!scrollbars_within_bevel)
         {
           gtk_scrolled_window_relative_allocation (widget, &relative_allocation);
 
-          relative_allocation.x -= widget->style->xthickness;
-          relative_allocation.y -= widget->style->ythickness;
-          relative_allocation.width += 2 * widget->style->xthickness;
-          relative_allocation.height += 2 * widget->style->ythickness;
+          relative_allocation.x -= style->xthickness;
+          relative_allocation.y -= style->ythickness;
+          relative_allocation.width += 2 * style->xthickness;
+          relative_allocation.height += 2 * style->ythickness;
         }
       else
         {
@@ -1068,15 +1073,16 @@ gtk_scrolled_window_paint (GtkWidget    *widget,
 
           relative_allocation.x = border_width;
           relative_allocation.y = border_width;
-          relative_allocation.width = widget->allocation.width - 2 * border_width;
-          relative_allocation.height = widget->allocation.height - 2 * border_width;
+          relative_allocation.width = allocation.width - 2 * border_width;
+          relative_allocation.height = allocation.height - 2 * border_width;
         }
 
-      gtk_paint_shadow (widget->style, widget->window,
+      gtk_paint_shadow (style,
+                        gtk_widget_get_window (widget),
 			GTK_STATE_NORMAL, scrolled_window->shadow_type,
 			area, widget, "scrolled_window",
-			widget->allocation.x + relative_allocation.x,
-			widget->allocation.y + relative_allocation.y,
+                        allocation.x + relative_allocation.x,
+                        allocation.y + relative_allocation.y,
 			relative_allocation.width,
 			relative_allocation.height);
     }
@@ -1253,8 +1259,10 @@ static void
 gtk_scrolled_window_relative_allocation (GtkWidget     *widget,
 					 GtkAllocation *allocation)
 {
+  GtkAllocation widget_allocation;
   GtkScrolledWindow *scrolled_window;
   GtkScrolledWindowPrivate *priv;
+  GtkStyle *style;
   gint scrollbar_spacing;
   guint border_width;
 
@@ -1272,12 +1280,14 @@ gtk_scrolled_window_relative_allocation (GtkWidget     *widget,
 
   if (scrolled_window->shadow_type != GTK_SHADOW_NONE)
     {
-      allocation->x += widget->style->xthickness;
-      allocation->y += widget->style->ythickness;
+      style = gtk_widget_get_style (widget);
+      allocation->x += style->xthickness;
+      allocation->y += style->ythickness;
     }
-  
-  allocation->width = MAX (1, (gint)widget->allocation.width - allocation->x * 2);
-  allocation->height = MAX (1, (gint)widget->allocation.height - allocation->y * 2);
+
+  gtk_widget_get_allocation (widget, &widget_allocation);
+  allocation->width = MAX (1, (gint) widget_allocation.width - allocation->x * 2);
+  allocation->height = MAX (1, (gint) widget_allocation.height - allocation->y * 2);
 
   if (scrolled_window->vscrollbar_visible)
     {
@@ -1318,6 +1328,7 @@ gtk_scrolled_window_size_allocate (GtkWidget     *widget,
 {
   GtkScrolledWindow *scrolled_window;
   GtkScrolledWindowPrivate *priv;
+  GtkStyle *style;
   GtkBin *bin;
   GtkAllocation relative_allocation;
   GtkAllocation child_allocation;
@@ -1333,12 +1344,15 @@ gtk_scrolled_window_size_allocate (GtkWidget     *widget,
   bin = GTK_BIN (scrolled_window);
 
   scrollbar_spacing = _gtk_scrolled_window_get_scrollbar_spacing (scrolled_window);
+
+  style = gtk_widget_get_style (widget);
   gtk_widget_style_get (widget, "scrollbars-within-bevel", &scrollbars_within_bevel, NULL);
 
   priv = GTK_SCROLLED_WINDOW_GET_PRIVATE (scrolled_window);
 
   border_width = gtk_container_get_border_width (GTK_CONTAINER (scrolled_window));
-  widget->allocation = *allocation;
+
+  gtk_widget_set_allocation (widget, allocation);
 
   if (scrolled_window->hscrollbar_policy == GTK_POLICY_ALWAYS)
     scrolled_window->hscrollbar_visible = TRUE;
@@ -1414,7 +1428,7 @@ gtk_scrolled_window_size_allocate (GtkWidget     *widget,
 			      relative_allocation.height +
 			      scrollbar_spacing +
 			      (scrolled_window->shadow_type == GTK_SHADOW_NONE ?
-			       0 : widget->style->ythickness));
+			       0 : style->ythickness));
       else
 	child_allocation.y = border_width;
 
@@ -1427,17 +1441,17 @@ gtk_scrolled_window_size_allocate (GtkWidget     *widget,
 	{
           if (!scrollbars_within_bevel)
             {
-              child_allocation.x -= widget->style->xthickness;
-              child_allocation.width += 2 * widget->style->xthickness;
+              child_allocation.x -= style->xthickness;
+              child_allocation.width += 2 * style->xthickness;
             }
           else if (GTK_CORNER_TOP_RIGHT == priv->real_window_placement ||
                    GTK_CORNER_TOP_LEFT == priv->real_window_placement)
             {
-              child_allocation.y -= widget->style->ythickness;
+              child_allocation.y -= style->ythickness;
             }
           else
             {
-              child_allocation.y += widget->style->ythickness;
+              child_allocation.y += style->ythickness;
             }
 	}
 
@@ -1465,7 +1479,7 @@ gtk_scrolled_window_size_allocate (GtkWidget     *widget,
 			      relative_allocation.width +
 			      scrollbar_spacing +
 			      (scrolled_window->shadow_type == GTK_SHADOW_NONE ?
-			       0 : widget->style->xthickness));
+			       0 : style->xthickness));
       else
 	child_allocation.x = border_width;
 
@@ -1479,17 +1493,17 @@ gtk_scrolled_window_size_allocate (GtkWidget     *widget,
 	{
           if (!scrollbars_within_bevel)
             {
-              child_allocation.y -= widget->style->ythickness;
-	      child_allocation.height += 2 * widget->style->ythickness;
+              child_allocation.y -= style->ythickness;
+	      child_allocation.height += 2 * style->ythickness;
             }
           else if (GTK_CORNER_BOTTOM_LEFT == priv->real_window_placement ||
                    GTK_CORNER_TOP_LEFT == priv->real_window_placement)
             {
-              child_allocation.x -= widget->style->xthickness;
+              child_allocation.x -= style->xthickness;
             }
           else
             {
-              child_allocation.x += widget->style->xthickness;
+              child_allocation.x += style->xthickness;
             }
 	}
 
@@ -1679,7 +1693,7 @@ gtk_scrolled_window_add_with_viewport (GtkScrolledWindow *scrolled_window,
 
   g_return_if_fail (GTK_IS_SCROLLED_WINDOW (scrolled_window));
   g_return_if_fail (GTK_IS_WIDGET (child));
-  g_return_if_fail (child->parent == NULL);
+  g_return_if_fail (gtk_widget_get_parent (child) == NULL);
 
   bin = GTK_BIN (scrolled_window);
   child_widget = gtk_bin_get_child (bin);
@@ -1759,6 +1773,7 @@ gtk_scrolled_window_get_size (GtkSizeRequest *widget,
   GtkRequisition hscrollbar_requisition;
   GtkRequisition vscrollbar_requisition;
   GtkRequisition minimum_req, natural_req;
+  GtkStyle *style;
   GtkWidget *child;
   gint min_child_size, nat_child_size;
   guint border_width;
@@ -1867,10 +1882,11 @@ gtk_scrolled_window_get_size (GtkSizeRequest *widget,
 
   if (scrolled_window->shadow_type != GTK_SHADOW_NONE)
     {
-      minimum_req.width += 2 * GTK_WIDGET (widget)->style->xthickness;
-      minimum_req.height += 2 * GTK_WIDGET (widget)->style->ythickness;
-      natural_req.width += 2 * GTK_WIDGET (widget)->style->xthickness;
-      natural_req.height += 2 * GTK_WIDGET (widget)->style->ythickness;
+      style = gtk_widget_get_style (GTK_WIDGET (widget));
+      minimum_req.width += 2 * style->xthickness;
+      minimum_req.height += 2 * style->ythickness;
+      natural_req.width += 2 * style->xthickness;
+      natural_req.height += 2 * style->ythickness;
     }
 
   if (orientation == GTK_ORIENTATION_HORIZONTAL)
