@@ -6,7 +6,7 @@
   <title>Migrating from GTK+ 2.x to GTK+ 3</title>
 
   <para>
-    GTK+ 3 is a major new version of GTK+, which breaks both API and ABI
+    GTK+ 3 is a major new version of GTK+ that breaks both API and ABI
     compared to GTK+ 2.x, which has remained API- and ABI-stable for a
     long time. Thankfully, most of the changes are not hard to adapt to
     and there are a number of steps that you can take to prepare your
@@ -96,7 +96,7 @@
   </section>
 
   <section>
-  <title>Use accessor functions instead direct access</title>
+  <title>Use accessor functions instead of direct access</title>
   <para>
     GTK+ 3 removes many implementation details and struct members from
     its public headers.
@@ -181,7 +181,7 @@ gdk_gc_set_tile (gc, NULL);
 gdk_gc_set_fill (gc, GDK_SOLID);
 gdk_gc_set_ts_origin (gc, 0, 0);
 ]]></programlisting>
-          The equivalent Cairo code looks like this:
+          The equivalent cairo code looks like this:
 <programlisting><![CDATA[
 cairo_t *cr;
 
@@ -213,7 +213,7 @@ gdk_draw_layout (drawable, gc, x, y, layout);
 /* restore */
 gdk_gc_set_clip_rectangle (gc, NULL);
 ]]></programlisting>
-          With Cairo, the same effect can be achieved using:
+          With cairo, the same effect can be achieved using:
 <programlisting><![CDATA[
 cairo_t *cr;
 
