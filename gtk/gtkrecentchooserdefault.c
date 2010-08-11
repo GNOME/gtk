@@ -757,7 +757,8 @@ set_busy_cursor (GtkRecentChooserDefault *impl,
   if (show_busy_cursor)
     cursor = gdk_cursor_new_for_display (display, GDK_WATCH);
 
-  gdk_window_set_cursor (GTK_WIDGET (toplevel)->window, cursor);
+  gdk_window_set_cursor (gtk_widget_get_window (GTK_WIDGET (toplevel)),
+                         cursor);
   gdk_display_flush (display);
 
   if (cursor)
@@ -936,7 +937,7 @@ set_default_size (GtkRecentChooserDefault *impl)
   widget = GTK_WIDGET (impl);
 
   /* Size based on characters and the icon size */
-  font_size = pango_font_description_get_size (widget->style->font_desc);
+  font_size = pango_font_description_get_size (gtk_widget_get_style (widget)->font_desc);
   font_size = PANGO_PIXELS (font_size);
 
   width = impl->icon_size + font_size * NUM_CHARS;
@@ -949,7 +950,8 @@ set_default_size (GtkRecentChooserDefault *impl)
 
   /* ... but no larger than the monitor */
   screen = gtk_widget_get_screen (widget);
-  monitor_num = gdk_screen_get_monitor_at_window (screen, widget->window);
+  monitor_num = gdk_screen_get_monitor_at_window (screen,
+                                                  gtk_widget_get_window (widget));
 
   gdk_screen_get_monitor_geometry (screen, monitor_num, &monitor);
 
@@ -1831,6 +1833,7 @@ popup_position_func (GtkMenu   *menu,
                      gboolean  *push_in,
                      gpointer	user_data)
 {
+  GtkAllocation allocation;
   GtkWidget *widget = GTK_WIDGET (user_data);
   GdkScreen *screen = gtk_widget_get_screen (widget);
   GtkRequisition req;
@@ -1840,12 +1843,14 @@ popup_position_func (GtkMenu   *menu,
   if (G_UNLIKELY (!gtk_widget_get_realized (widget)))
     return;
 
-  gdk_window_get_origin (widget->window, x, y);
+  gdk_window_get_origin (gtk_widget_get_window (widget),
+                         x, y);
 
   gtk_widget_size_request (GTK_WIDGET (menu), &req);
 
-  *x += (widget->allocation.width - req.width) / 2;
-  *y += (widget->allocation.height - req.height) / 2;
+  gtk_widget_get_allocation (widget, &allocation);
+  *x += (allocation.width - req.width) / 2;
+  *y += (allocation.height - req.height) / 2;
 
   monitor_num = gdk_screen_get_monitor_at_point (screen, *x, *y);
   gtk_menu_set_monitor (menu, monitor_num);
