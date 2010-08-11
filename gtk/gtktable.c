@@ -598,8 +598,8 @@ gtk_table_attach (GtkTable	  *table,
   
   g_return_if_fail (GTK_IS_TABLE (table));
   g_return_if_fail (GTK_IS_WIDGET (child));
-  g_return_if_fail (child->parent == NULL);
-  
+  g_return_if_fail (gtk_widget_get_parent (child) == NULL);
+
   /* g_return_if_fail (left_attach >= 0); */
   g_return_if_fail (left_attach < right_attach);
   /* g_return_if_fail (top_attach >= 0); */
@@ -941,7 +941,7 @@ gtk_table_size_allocate (GtkWidget     *widget,
 {
   GtkTable *table = GTK_TABLE (widget);
 
-  widget->allocation = *allocation;
+  gtk_widget_set_allocation (widget, allocation);
 
   gtk_table_size_allocate_init (table);
   gtk_table_size_allocate_pass1 (table);
@@ -1434,6 +1434,7 @@ static void
 gtk_table_size_allocate_pass1 (GtkTable *table)
 {
   GtkTablePriv *priv = table->priv;
+  GtkAllocation allocation;
   gint real_width;
   gint real_height;
   gint width, height;
@@ -1447,9 +1448,10 @@ gtk_table_size_allocate_pass1 (GtkTable *table)
    *  then we have to expand any expandable rows and columns
    *  to fill in the extra space.
    */
+  gtk_widget_get_allocation (GTK_WIDGET (table), &allocation);
   border_width = gtk_container_get_border_width (GTK_CONTAINER (table));
-  real_width = GTK_WIDGET (table)->allocation.width - border_width * 2;
-  real_height = GTK_WIDGET (table)->allocation.height - border_width * 2;
+  real_width = allocation.width - border_width * 2;
+  real_height = allocation.height - border_width * 2;
 
   if (priv->homogeneous)
     {
@@ -1646,6 +1648,7 @@ gtk_table_size_allocate_pass2 (GtkTable *table)
   gint x, y;
   gint row, col;
   GtkAllocation allocation;
+  GtkAllocation table_allocation, widget_allocation;
   GtkWidget *widget = GTK_WIDGET (table);
 
   children = priv->children;
@@ -1661,9 +1664,10 @@ gtk_table_size_allocate_pass2 (GtkTable *table)
 
 	  gtk_widget_get_child_requisition (child->widget, &child_requisition);
 
+          gtk_widget_get_allocation (GTK_WIDGET (table), &table_allocation);
           border_width = gtk_container_get_border_width (GTK_CONTAINER (table));
-	  x = GTK_WIDGET (table)->allocation.x + border_width;
-	  y = GTK_WIDGET (table)->allocation.y + border_width;
+	  x = table_allocation.x + border_width;
+	  y = table_allocation.y + border_width;
 	  max_width = 0;
 	  max_height = 0;
 	  
@@ -1715,10 +1719,11 @@ gtk_table_size_allocate_pass2 (GtkTable *table)
 	      allocation.y = y + (max_height - allocation.height) / 2;
 	    }
 
+          gtk_widget_get_allocation (widget, &widget_allocation);
 	  if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL)
-	    allocation.x = widget->allocation.x + widget->allocation.width
-	      - (allocation.x - widget->allocation.x) - allocation.width;
-	  
+            allocation.x = widget_allocation.x + widget_allocation.width
+                           - (allocation.x - widget_allocation.x) - allocation.width;
+
 	  gtk_widget_size_allocate (child->widget, &allocation);
 	}
     }
