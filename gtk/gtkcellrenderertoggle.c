@@ -376,7 +376,7 @@ gtk_cell_renderer_toggle_render (GtkCellRenderer      *cell,
 
   if (priv->radio)
     {
-      gtk_paint_option (widget->style,
+      gtk_paint_option (gtk_widget_get_style (widget),
                         window,
                         state, shadow,
                         expose_area, widget, "cellradio",
@@ -386,7 +386,7 @@ gtk_cell_renderer_toggle_render (GtkCellRenderer      *cell,
     }
   else
     {
-      gtk_paint_check (widget->style,
+      gtk_paint_check (gtk_widget_get_style (widget),
                        window,
                        state, shadow,
                        expose_area, widget, "cellcheck",
