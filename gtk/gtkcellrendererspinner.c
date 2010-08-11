@@ -376,7 +376,7 @@ gtk_cell_renderer_spinner_render (GtkCellRenderer *cellr,
         state = GTK_STATE_PRELIGHT;
     }
 
-  gtk_paint_spinner (widget->style,
+  gtk_paint_spinner (gtk_widget_get_style (widget),
                      window,
                      state,
                      expose_area,
