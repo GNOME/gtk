@@ -497,8 +497,8 @@ gtk_dialog_close (GtkDialog *dialog)
   GdkEvent *event;
 
   event = gdk_event_new (GDK_DELETE);
-  
-  event->any.window = g_object_ref (widget->window);
+
+  event->any.window = g_object_ref (gtk_widget_get_window (widget));
   event->any.send_event = TRUE;
   
   gtk_main_do_event (event);
