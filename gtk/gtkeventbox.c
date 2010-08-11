@@ -366,20 +366,24 @@ gtk_event_box_set_above_child (GtkEventBox *event_box,
 static void
 gtk_event_box_realize (GtkWidget *widget)
 {
+  GtkAllocation allocation;
+  GdkWindow *window;
   GdkWindowAttr attributes;
   gint attributes_mask;
   gint border_width;
   GtkEventBoxPrivate *priv;
   gboolean visible_window;
 
+  gtk_widget_get_allocation (widget, &allocation);
+
   gtk_widget_set_realized (widget, TRUE);
 
   border_width = gtk_container_get_border_width (GTK_CONTAINER (widget));
-  
-  attributes.x = widget->allocation.x + border_width;
-  attributes.y = widget->allocation.y + border_width;
-  attributes.width = widget->allocation.width - 2*border_width;
-  attributes.height = widget->allocation.height - 2*border_width;
+
+  attributes.x = allocation.x + border_width;
+  attributes.y = allocation.y + border_width;
+  attributes.width = allocation.width - 2*border_width;
+  attributes.height = allocation.height - 2*border_width;
   attributes.window_type = GDK_WINDOW_CHILD;
   attributes.event_mask = gtk_widget_get_events (widget)
 			| GDK_BUTTON_MOTION_MASK
@@ -399,15 +403,17 @@ gtk_event_box_realize (GtkWidget *widget)
       attributes.wclass = GDK_INPUT_OUTPUT;
       
       attributes_mask = GDK_WA_X | GDK_WA_Y | GDK_WA_VISUAL | GDK_WA_COLORMAP;
-      
-      widget->window = gdk_window_new (gtk_widget_get_parent_window (widget),
-				       &attributes, attributes_mask);
-      gdk_window_set_user_data (widget->window, widget);
+
+      window = gdk_window_new (gtk_widget_get_parent_window (widget),
+                               &attributes, attributes_mask);
+      gtk_widget_set_window (widget, window);
+      gdk_window_set_user_data (window, widget);
     }
   else
     {
-      widget->window = gtk_widget_get_parent_window (widget);
-      g_object_ref (widget->window);
+      window = gtk_widget_get_parent_window (widget);
+      gtk_widget_set_window (widget, window);
+      g_object_ref (window);
     }
 
   if (!visible_window || priv->above_child)
@@ -418,16 +424,15 @@ gtk_event_box_realize (GtkWidget *widget)
       else
         attributes_mask = 0;
 
-      priv->event_window = gdk_window_new (widget->window,
+      priv->event_window = gdk_window_new (window,
 					   &attributes, attributes_mask);
       gdk_window_set_user_data (priv->event_window, widget);
     }
 
+  gtk_widget_style_attach (widget);
 
-  widget->style = gtk_style_attach (widget->style, widget->window);
-  
   if (visible_window)
-    gtk_style_set_background (widget->style, widget->window, GTK_STATE_NORMAL);
+    gtk_style_set_background (gtk_widget_get_style (widget), window, GTK_STATE_NORMAL);
 }
 
 static void
@@ -512,8 +517,10 @@ gtk_event_box_size_allocate (GtkWidget     *widget,
   guint border_width;
   GtkWidget *child;
 
-  widget->allocation = *allocation;
   bin = GTK_BIN (widget);
+
+  gtk_widget_set_allocation (widget, allocation);
+
   border_width = gtk_container_get_border_width (GTK_CONTAINER (widget));
   
   if (!gtk_widget_get_has_window (widget))
@@ -541,7 +548,7 @@ gtk_event_box_size_allocate (GtkWidget     *widget,
 				child_allocation.height);
       
       if (gtk_widget_get_has_window (widget))
-	gdk_window_move_resize (widget->window,
+	gdk_window_move_resize (gtk_widget_get_window (widget),
 				allocation->x + border_width,
 				allocation->y + border_width,
 				child_allocation.width,
@@ -558,8 +565,10 @@ gtk_event_box_paint (GtkWidget    *widget,
 		     GdkRectangle *area)
 {
   if (!gtk_widget_get_app_paintable (widget))
-    gtk_paint_flat_box (widget->style, widget->window,
-			widget->state, GTK_SHADOW_NONE,
+    gtk_paint_flat_box (gtk_widget_get_style (widget),
+                        gtk_widget_get_window (widget),
+			gtk_widget_get_state (widget),
+                        GTK_SHADOW_NONE,
 			area, widget, "eventbox",
 			0, 0, -1, -1);
 }
