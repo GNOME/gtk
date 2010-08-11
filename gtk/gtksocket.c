@@ -366,17 +366,21 @@ gtk_socket_get_plug_window (GtkSocket *socket)
 static void
 gtk_socket_realize (GtkWidget *widget)
 {
+  GtkAllocation allocation;
   GtkSocket *socket = GTK_SOCKET (widget);
+  GdkWindow *window;
   GdkWindowAttr attributes;
   gint attributes_mask;
 
   gtk_widget_set_realized (widget, TRUE);
 
+  gtk_widget_get_allocation (widget, &allocation);
+
   attributes.window_type = GDK_WINDOW_CHILD;
-  attributes.x = widget->allocation.x;
-  attributes.y = widget->allocation.y;
-  attributes.width = widget->allocation.width;
-  attributes.height = widget->allocation.height;
+  attributes.x = allocation.x;
+  attributes.y = allocation.y;
+  attributes.width = allocation.width;
+  attributes.height = allocation.height;
   attributes.wclass = GDK_INPUT_OUTPUT;
   attributes.visual = gtk_widget_get_visual (widget);
   attributes.colormap = gtk_widget_get_colormap (widget);
@@ -384,16 +388,18 @@ gtk_socket_realize (GtkWidget *widget)
 
   attributes_mask = GDK_WA_X | GDK_WA_Y | GDK_WA_VISUAL | GDK_WA_COLORMAP;
 
-  widget->window = gdk_window_new (gtk_widget_get_parent_window (widget), 
-				   &attributes, attributes_mask);
-  gdk_window_set_user_data (widget->window, socket);
+  window = gdk_window_new (gtk_widget_get_parent_window (widget),
+                           &attributes, attributes_mask);
+  gtk_widget_set_window (widget, window);
+  gdk_window_set_user_data (window, socket);
 
-  widget->style = gtk_style_attach (widget->style, widget->window);
-  gtk_style_set_background (widget->style, widget->window, GTK_STATE_NORMAL);
+  gtk_widget_style_attach (widget);
+  gtk_style_set_background (gtk_widget_get_style (widget),
+                            window, GTK_STATE_NORMAL);
 
   _gtk_socket_windowing_realize_window (socket);
 
-  gdk_window_add_filter (widget->window,
+  gdk_window_add_filter (window,
 			 _gtk_socket_windowing_filter_func,
 			 widget);
 
@@ -482,10 +488,10 @@ gtk_socket_size_allocate (GtkWidget     *widget,
 {
   GtkSocket *socket = GTK_SOCKET (widget);
 
-  widget->allocation = *allocation;
+  gtk_widget_set_allocation (widget, allocation);
   if (gtk_widget_get_realized (widget))
     {
-      gdk_window_move_resize (widget->window,
+      gdk_window_move_resize (gtk_widget_get_window (widget),
 			      allocation->x, allocation->y,
 			      allocation->width, allocation->height);
 
@@ -898,7 +904,9 @@ _gtk_socket_add_window (GtkSocket       *socket,
       if (need_reparent)
 	{
 	  gdk_window_hide (socket->plug_window); /* Shouldn't actually be necessary for XEMBED, but just in case */
-	  gdk_window_reparent (socket->plug_window, widget->window, 0, 0);
+	  gdk_window_reparent (socket->plug_window,
+                               gtk_widget_get_window (widget),
+                               0, 0);
 	}
 
       socket->have_size = FALSE;
@@ -1029,11 +1037,11 @@ _gtk_socket_advance_toplevel_focus (GtkSocket        *socket,
   if (window->focus_widget)
     {
       /* Wrapped off the end, clear the focus setting for the toplevel */
-      parent = window->focus_widget->parent;
+      parent = gtk_widget_get_parent (window->focus_widget);
       while (parent)
 	{
 	  gtk_container_set_focus_child (GTK_CONTAINER (parent), NULL);
-	  parent = GTK_WIDGET (parent)->parent;
+          parent = gtk_widget_get_parent (parent);
 	}
       
       gtk_window_set_focus (GTK_WINDOW (container), NULL);
