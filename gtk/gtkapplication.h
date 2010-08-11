@@ -1,5 +1,5 @@
-/* GTK - The GIMP Toolkit
- *
+/*
+ * Copyright © 2010 Codethink Limited
  * Copyright (C) 2010 Red Hat, Inc.
  *
  * This library is free software; you can redistribute it and/or
@@ -17,14 +17,8 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
  * Boston, MA 02111-1307, USA.
  *
- * Author: Colin Walters <walters@verbum.org>
- */
-
-/*
- * Modified by the GTK+ Team and others 1997-2000.  See the AUTHORS
- * file for a list of people on the GTK+ Team.  See the ChangeLog
- * files for a list of changes.  These files are distributed with
- * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
+ * Author: Ryan Lortie <desrt@desrt.ca>
+ *         Colin Walters <walters@verbum.org>
  */
 
 #if defined(GTK_DISABLE_SINGLE_INCLUDES) && !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
@@ -34,10 +28,9 @@
 #ifndef __GTK_APPLICATION_H__
 #define __GTK_APPLICATION_H__
 
-#include <gio/gio.h>
-#include <gtk/gtkaction.h>
 #include <gtk/gtkactiongroup.h>
-#include <gtk/gtkwindow.h>
+#include <gtk/gtkwidget.h>
+#include <gio/gio.h>
 
 G_BEGIN_DECLS
 
@@ -57,7 +50,6 @@ struct _GtkApplication
   GApplication parent;
 
   /*< private >*/
-
   GtkApplicationPrivate *priv;
 };
 
@@ -67,39 +59,24 @@ struct _GtkApplicationClass
 
   /*< vfuncs >*/
   GtkWindow *(* create_window) (GtkApplication *application);
-  void       (* activated)     (GtkApplication *application,
-                                GVariant       *args);
-  void       (* action)        (GtkApplication *application,
-                                const gchar    *action_name);
-  gboolean   (* quit)          (GtkApplication *application);
-			       
 
-  /* Padding for future expansion */
-  void (*_gtk_reserved1) (void);
-  void (*_gtk_reserved2) (void);
-  void (*_gtk_reserved3) (void);
-  void (*_gtk_reserved4) (void);
-  void (*_gtk_reserved5) (void);
-  void (*_gtk_reserved6) (void);
-  void (*_gtk_reserved7) (void);
-  void (*_gtk_reserved8) (void);
-  void (*_gtk_reserved9) (void);
-  void (*_gtk_reserved10) (void);
+  /*< private >*/
+  gpointer padding[12];
 };
 
-GType                   gtk_application_get_type         (void) G_GNUC_CONST;
-GtkApplication*         gtk_application_new              (const gchar      *appid,
-                                                          gint             *argc,
-                                                          gchar          ***argv);
-void                    gtk_application_set_action_group (GtkApplication   *app,
-                                                          GtkActionGroup   *group);
-GtkWindow *             gtk_application_create_window    (GtkApplication   *app);
-GtkWindow *             gtk_application_get_window       (GtkApplication   *app);
-G_CONST_RETURN GSList * gtk_application_get_windows      (GtkApplication   *app);
-void                    gtk_application_add_window       (GtkApplication   *app,
-                                                          GtkWindow        *window);
-void                    gtk_application_run              (GtkApplication   *app);
-void                    gtk_application_quit             (GtkApplication   *app);
+GType                   gtk_application_get_type                        (void) G_GNUC_CONST;
+
+GtkApplication*         gtk_application_new                             (const gchar       *appid,
+                                                                         GApplicationFlags  flags,
+                                                                         GtkActionGroup    *action_group);
+
+GtkActionGroup *        gtk_application_get_action_group                (GtkApplication    *application);
+void                    gtk_application_set_action_group                (GtkApplication    *application,
+                                                                         GtkActionGroup    *action_group);
+
+GtkWindow *             gtk_application_get_default_window              (GtkApplication    *application);
+void                    gtk_application_set_default_window              (GtkApplication    *application,
+                                                                         GtkWindow         *window);
 
 G_END_DECLS
 
