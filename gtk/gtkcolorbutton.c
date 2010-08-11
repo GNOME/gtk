@@ -309,7 +309,7 @@ expose_event (GtkWidget      *widget,
 
   if (!gtk_widget_is_sensitive (GTK_WIDGET (color_button)))
     {
-      gdk_cairo_set_source_color (cr, &GTK_WIDGET(color_button)->style->bg[GTK_STATE_INSENSITIVE]);
+      gdk_cairo_set_source_color (cr, &gtk_widget_get_style (GTK_WIDGET(color_button))->bg[GTK_STATE_INSENSITIVE]);
       checkered = gtk_color_button_get_checkered ();
       cairo_mask (cr, checkered);
       cairo_pattern_destroy (checkered);
