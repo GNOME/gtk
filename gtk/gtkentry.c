@@ -2255,7 +2255,7 @@ find_invisible_char (GtkWidget *widget)
     0x273a  /* SIXTEEN POINTED ASTERISK */
   };
 
-  if (widget->style)
+  if (gtk_widget_get_style (widget))
     gtk_widget_style_get (widget,
                           "invisible-char", &invisible_chars[0],
                           NULL);
@@ -2673,12 +2673,12 @@ realize_icon_info (GtkWidget            *widget,
                             GDK_LEAVE_NOTIFY_MASK);
   attributes_mask = GDK_WA_X | GDK_WA_Y | GDK_WA_VISUAL | GDK_WA_COLORMAP;
 
-  icon_info->window = gdk_window_new (widget->window,
+  icon_info->window = gdk_window_new (gtk_widget_get_window (widget),
                                       &attributes,
                                       attributes_mask);
   gdk_window_set_user_data (icon_info->window, widget);
   gdk_window_set_background (icon_info->window,
-                             &widget->style->base[gtk_widget_get_state (widget)]);
+                             &gtk_widget_get_style (widget)->base[gtk_widget_get_state (widget)]);
 
   gtk_widget_queue_resize (widget);
 }
@@ -2752,7 +2752,10 @@ gtk_entry_realize (GtkWidget *widget)
 {
   GtkEntry *entry;
   GtkEntryPrivate *priv;
+  GtkStateType state;
+  GtkStyle *style;
   EntryIconInfo *icon_info;
+  GdkWindow *window;
   GdkWindowAttr attributes;
   gint attributes_mask;
   int i;
@@ -2780,8 +2783,9 @@ gtk_entry_realize (GtkWidget *widget)
 			    GDK_LEAVE_NOTIFY_MASK);
   attributes_mask = GDK_WA_X | GDK_WA_Y | GDK_WA_VISUAL | GDK_WA_COLORMAP;
 
-  widget->window = gdk_window_new (gtk_widget_get_parent_window (widget), &attributes, attributes_mask);
-  gdk_window_set_user_data (widget->window, entry);
+  window = gdk_window_new (gtk_widget_get_parent_window (widget), &attributes, attributes_mask);
+  gtk_widget_set_window (widget, window);
+  gdk_window_set_user_data (window, entry);
 
   get_text_area_size (entry, &attributes.x, &attributes.y, &attributes.width, &attributes.height);
  
@@ -2791,17 +2795,19 @@ gtk_entry_realize (GtkWidget *widget)
       attributes_mask |= GDK_WA_CURSOR;
     }
 
-  entry->text_area = gdk_window_new (widget->window, &attributes, attributes_mask);
+  entry->text_area = gdk_window_new (window, &attributes, attributes_mask);
 
   gdk_window_set_user_data (entry->text_area, entry);
 
   if (attributes_mask & GDK_WA_CURSOR)
     gdk_cursor_unref (attributes.cursor);
 
-  widget->style = gtk_style_attach (widget->style, widget->window);
+  gtk_widget_style_attach (widget);
 
-  gdk_window_set_background (widget->window, &widget->style->base[gtk_widget_get_state (widget)]);
-  gdk_window_set_background (entry->text_area, &widget->style->base[gtk_widget_get_state (widget)]);
+  style = gtk_widget_get_style (widget);
+  state = gtk_widget_get_state (widget);
+  gdk_window_set_background (window, &style->base[state]);
+  gdk_window_set_background (entry->text_area, &style->base[state]);
 
   gdk_window_show (entry->text_area);
 
@@ -2877,11 +2883,14 @@ _gtk_entry_get_borders (GtkEntry *entry,
 {
   GtkWidget *widget = GTK_WIDGET (entry);
   GtkEntryPrivate *priv = GTK_ENTRY_GET_PRIVATE (widget);
+  GtkStyle *style;
 
   if (entry->has_frame)
     {
-      *xborder = widget->style->xthickness;
-      *yborder = widget->style->ythickness;
+      style = gtk_widget_get_style (widget);
+
+      *xborder = style->xthickness;
+      *yborder = style->ythickness;
     }
   else
     {
@@ -2912,7 +2921,7 @@ gtk_entry_size_request (GtkWidget      *widget,
   gtk_widget_ensure_style (widget);
   context = gtk_widget_get_pango_context (widget);
   metrics = pango_context_get_metrics (context,
-				       widget->style->font_desc,
+				       gtk_widget_get_style (widget)->font_desc,
 				       pango_context_get_language (context));
 
   entry->ascent = pango_font_metrics_get_ascent (metrics);
@@ -2991,15 +3000,17 @@ gtk_entry_get_text_area_size (GtkEntry *entry,
 {
   GtkWidget *widget = GTK_WIDGET (entry);
   GtkEntryPrivate *priv = GTK_ENTRY_GET_PRIVATE (widget);
+  GtkAllocation allocation;
+  GtkRequisition requisition;
   gint frame_height;
   gint xborder, yborder;
-  GtkRequisition requisition;
 
   gtk_widget_get_child_requisition (widget, &requisition);
+  gtk_widget_get_allocation (widget, &allocation);
   _gtk_entry_get_borders (entry, &xborder, &yborder);
 
   if (gtk_widget_get_realized (widget))
-    gdk_drawable_get_size (widget->window, NULL, &frame_height);
+    gdk_drawable_get_size (gtk_widget_get_window (widget), NULL, &frame_height);
   else
     frame_height = requisition.height;
 
@@ -3013,7 +3024,7 @@ gtk_entry_get_text_area_size (GtkEntry *entry,
     *y = frame_height / 2 - (requisition.height - yborder * 2) / 2;
 
   if (width)
-    *width = GTK_WIDGET (entry)->allocation.width - xborder * 2;
+    *width = allocation.width - xborder * 2;
 
   if (height)
     *height = requisition.height - yborder * 2;
@@ -3044,29 +3055,31 @@ get_widget_window_size (GtkEntry *entry,
                         gint     *width,
                         gint     *height)
 {
+  GtkAllocation allocation;
   GtkRequisition requisition;
   GtkWidget *widget = GTK_WIDGET (entry);
-      
+
   gtk_widget_get_child_requisition (widget, &requisition);
+  gtk_widget_get_allocation (widget, &allocation);
 
   if (x)
-    *x = widget->allocation.x;
+    *x = allocation.x;
 
   if (y)
     {
       if (entry->is_cell_renderer)
-	*y = widget->allocation.y;
+	*y = allocation.y;
       else
-	*y = widget->allocation.y + (widget->allocation.height - requisition.height) / 2;
+	*y = allocation.y + (allocation.height - requisition.height) / 2;
     }
 
   if (width)
-    *width = widget->allocation.width;
+    *width = allocation.width;
 
   if (height)
     {
       if (entry->is_cell_renderer)
-	*height = widget->allocation.height;
+	*height = allocation.height;
       else
 	*height = requisition.height;
     }
@@ -3103,9 +3116,9 @@ gtk_entry_size_allocate (GtkWidget     *widget,
 			 GtkAllocation *allocation)
 {
   GtkEntry *entry = GTK_ENTRY (widget);
-  
-  widget->allocation = *allocation;
-  
+
+  gtk_widget_set_allocation (widget, allocation);
+
   if (gtk_widget_get_realized (widget))
     {
       /* We call gtk_widget_get_child_requisition, since we want (for
@@ -3116,7 +3129,8 @@ gtk_entry_size_allocate (GtkWidget     *widget,
       GtkEntryCompletion* completion;
 
       get_widget_window_size (entry, &x, &y, &width, &height);
-      gdk_window_move_resize (widget->window, x, y, width, height);
+      gdk_window_move_resize (gtk_widget_get_window (widget),
+                              x, y, width, height);
 
       place_windows (entry);
       gtk_entry_recompute (entry);
@@ -3281,11 +3295,15 @@ gtk_entry_draw_frame (GtkWidget      *widget,
                       GdkEventExpose *event)
 {
   GtkEntryPrivate *priv = GTK_ENTRY_GET_PRIVATE (widget);
+  GtkStyle *style;
+  GdkWindow *window;
   gint x = 0, y = 0, width, height;
   gboolean state_hint;
   GtkStateType state;
 
-  gdk_drawable_get_size (widget->window, &width, &height);
+  window = gtk_widget_get_window (widget);
+
+  gdk_drawable_get_size (window, &width, &height);
 
   /* Fix a problem with some themes which assume that entry->text_area's
    * width equals widget->window's width */
@@ -3308,6 +3326,7 @@ gtk_entry_draw_frame (GtkWidget      *widget,
       height -= 2 * priv->focus_width;
     }
 
+  style = gtk_widget_get_style (widget);
   gtk_widget_style_get (widget, "state-hint", &state_hint, NULL);
   if (state_hint)
       state = gtk_widget_has_focus (widget) ?
@@ -3315,7 +3334,7 @@ gtk_entry_draw_frame (GtkWidget      *widget,
   else
       state = GTK_STATE_NORMAL;
 
-  gtk_paint_shadow (widget->style, widget->window,
+  gtk_paint_shadow (style, window,
                     state, priv->shadow_type,
                     &event->area, widget, "entry", x, y, width, height);
 
@@ -3328,8 +3347,8 @@ gtk_entry_draw_frame (GtkWidget      *widget,
       y -= priv->focus_width;
       width += 2 * priv->focus_width;
       height += 2 * priv->focus_width;
-      
-      gtk_paint_focus (widget->style, widget->window,
+
+      gtk_paint_focus (style, window,
                        gtk_widget_get_state (widget),
 		       &event->area, widget, "entry",
 		       0, 0, width, height);
@@ -3341,6 +3360,7 @@ gtk_entry_get_progress_border (GtkWidget *widget,
                                GtkBorder *progress_border)
 {
   GtkBorder *tmp_border;
+  GtkStyle *style;
 
   gtk_widget_style_get (widget, "progress-border", &tmp_border, NULL);
   if (tmp_border)
@@ -3350,10 +3370,12 @@ gtk_entry_get_progress_border (GtkWidget *widget,
     }
   else
     {
-      progress_border->left = widget->style->xthickness;
-      progress_border->right = widget->style->xthickness;
-      progress_border->top = widget->style->ythickness;
-      progress_border->bottom = widget->style->ythickness;
+      style = gtk_widget_get_style (widget);
+
+      progress_border->left = style->xthickness;
+      progress_border->right = style->xthickness;
+      progress_border->top = style->ythickness;
+      progress_border->bottom = style->ythickness;
     }
 }
 
@@ -3373,7 +3395,7 @@ get_progress_area (GtkWidget *widget,
   *x = progress_border.left;
   *y = progress_border.top;
 
-  gdk_drawable_get_size (widget->window, width, height);
+  gdk_drawable_get_size (gtk_widget_get_window (widget), width, height);
 
   *width -= progress_border.left + progress_border.right;
   *height -= progress_border.top + progress_border.bottom;
@@ -3429,7 +3451,7 @@ gtk_entry_draw_progress (GtkWidget      *widget,
   if ((width <= 0) || (height <= 0))
     return;
 
-  if (event->window != widget->window)
+  if (event->window != gtk_widget_get_window (widget))
     {
       gint pos_x, pos_y;
 
@@ -3443,7 +3465,7 @@ gtk_entry_draw_progress (GtkWidget      *widget,
   if (!gtk_widget_get_sensitive (widget))
     state = GTK_STATE_INSENSITIVE;
 
-  gtk_paint_box (widget->style, event->window,
+  gtk_paint_box (gtk_widget_get_style (widget), event->window,
                  state, GTK_SHADOW_OUT,
                  &event->area, widget, "entry-progress",
                  x, y,
@@ -3455,18 +3477,22 @@ gtk_entry_expose (GtkWidget      *widget,
 		  GdkEventExpose *event)
 {
   GtkEntry *entry = GTK_ENTRY (widget);
+  GtkStyle *style;
   gboolean state_hint;
   GtkStateType state;
   GtkEntryPrivate *priv = GTK_ENTRY_GET_PRIVATE (entry);
 
+  style = gtk_widget_get_style (widget);
+
   gtk_widget_style_get (widget, "state-hint", &state_hint, NULL);
+
   if (state_hint)
     state = gtk_widget_has_focus (widget) ?
       GTK_STATE_ACTIVE : gtk_widget_get_state (widget);
   else
     state = gtk_widget_get_state(widget);
 
-  if (widget->window == event->window)
+  if (gtk_widget_get_window (widget) == event->window)
     {
       gtk_entry_draw_frame (widget, event);
     }
@@ -3476,7 +3502,7 @@ gtk_entry_expose (GtkWidget      *widget,
 
       gdk_drawable_get_size (entry->text_area, &width, &height);
 
-      gtk_paint_flat_box (widget->style, entry->text_area, 
+      gtk_paint_flat_box (style, entry->text_area,
 			  state, GTK_SHADOW_NONE,
 			  &event->area, widget, "entry_bg",
 			  0, 0, width, height);
@@ -3508,7 +3534,7 @@ gtk_entry_expose (GtkWidget      *widget,
 
               gdk_drawable_get_size (icon_info->window, &width, &height);
 
-              gtk_paint_flat_box (widget->style, icon_info->window,
+              gtk_paint_flat_box (style, icon_info->window,
                                   gtk_widget_get_state (widget), GTK_SHADOW_NONE,
                                   NULL, widget, "entry_bg",
                                   0, 0, width, height);
@@ -4251,13 +4277,22 @@ gtk_entry_state_changed (GtkWidget      *widget,
   
   if (gtk_widget_get_realized (widget))
     {
-      gdk_window_set_background (widget->window, &widget->style->base[gtk_widget_get_state (widget)]);
-      gdk_window_set_background (entry->text_area, &widget->style->base[gtk_widget_get_state (widget)]);
+      GtkStateType state;
+      GtkStyle *style;
+
+      style = gtk_widget_get_style (widget);
+      state = gtk_widget_get_state (widget);
+
+      gdk_window_set_background (gtk_widget_get_window (widget),
+                                 &style->base[state]);
+      gdk_window_set_background (entry->text_area,
+                                 &style->base[state]);
       for (i = 0; i < MAX_ICONS; i++) 
         {
           EntryIconInfo *icon_info = priv->icons[i];
           if (icon_info && icon_info->window)
-            gdk_window_set_background (icon_info->window, &widget->style->base[gtk_widget_get_state (widget)]);
+            gdk_window_set_background (icon_info->window,
+                                       &style->base[state]);
         }
 
       if (gtk_widget_is_sensitive (widget))
@@ -4469,13 +4504,20 @@ gtk_entry_style_set (GtkWidget *widget,
 
   if (previous_style && gtk_widget_get_realized (widget))
     {
-      gdk_window_set_background (widget->window, &widget->style->base[gtk_widget_get_state (widget)]);
-      gdk_window_set_background (entry->text_area, &widget->style->base[gtk_widget_get_state (widget)]);
+      GtkStyle *style;
+
+      style = gtk_widget_get_style (widget);
+
+      gdk_window_set_background (gtk_widget_get_window (widget),
+                                 &style->base[gtk_widget_get_state (widget)]);
+      gdk_window_set_background (entry->text_area,
+                                 &style->base[gtk_widget_get_state (widget)]);
       for (i = 0; i < MAX_ICONS; i++) 
         {
           EntryIconInfo *icon_info = priv->icons[i];
           if (icon_info && icon_info->window)
-            gdk_window_set_background (icon_info->window, &widget->style->base[gtk_widget_get_state (widget)]);
+            gdk_window_set_background (icon_info->window,
+                                       &style->base[gtk_widget_get_state (widget)]);
         }
     }
 
@@ -5541,19 +5583,22 @@ draw_text_with_color (GtkEntry *entry, cairo_t *cr, GdkColor *default_color)
       PangoRectangle logical_rect;
       GdkColor *selection_color, *text_color;
       GtkBorder inner_border;
+      GtkStyle *style;
 
       pango_layout_get_pixel_extents (layout, NULL, &logical_rect);
       gtk_entry_get_pixel_ranges (entry, &ranges, &n_ranges);
 
+      style = gtk_widget_get_style (widget);
+
       if (gtk_widget_has_focus (widget))
         {
-          selection_color = &widget->style->base [GTK_STATE_SELECTED];
-          text_color = &widget->style->text [GTK_STATE_SELECTED];
+          selection_color = &style->base [GTK_STATE_SELECTED];
+          text_color = &style->text [GTK_STATE_SELECTED];
         }
       else
         {
-          selection_color = &widget->style->base [GTK_STATE_ACTIVE];
-	  text_color = &widget->style->text [GTK_STATE_ACTIVE];
+          selection_color = &style->base [GTK_STATE_ACTIVE];
+	  text_color = &style->text [GTK_STATE_ACTIVE];
         }
 
       _gtk_entry_effective_inner_border (entry, &inner_border);
@@ -5591,17 +5636,19 @@ gtk_entry_draw_text (GtkEntry *entry)
   
   if (gtk_widget_is_drawable (widget))
     {
+      GtkStateType state;
+      GtkStyle *style;
       GdkColor text_color, bar_text_color;
       gint pos_x, pos_y;
       gint width, height;
       gint progress_x, progress_y, progress_width, progress_height;
-      GtkStateType state;
 
       state = GTK_STATE_SELECTED;
       if (!gtk_widget_get_sensitive (widget))
         state = GTK_STATE_INSENSITIVE;
-      text_color = widget->style->text[widget->state];
-      bar_text_color = widget->style->fg[state];
+      style = gtk_widget_get_style (widget);
+      text_color = style->text[gtk_widget_get_state (widget)];
+      bar_text_color = style->fg[state];
 
       get_progress_area (widget,
                          &progress_x, &progress_y,
@@ -5784,7 +5831,7 @@ gtk_entry_draw_cursor (GtkEntry  *entry,
               gdk_cairo_rectangle (cr, &rect);
               cairo_clip (cr);
               cairo_move_to (cr, x, y);
-              gdk_cairo_set_source_color (cr, &widget->style->base[widget->state]);
+              gdk_cairo_set_source_color (cr, &gtk_widget_get_style (widget)->base[gtk_widget_get_state (widget)]);
               pango_cairo_show_layout (cr, layout);
             }
 
@@ -6047,26 +6094,29 @@ gtk_entry_adjust_scroll (GtkEntry *entry)
 static void
 gtk_entry_move_adjustments (GtkEntry *entry)
 {
+  GtkAllocation allocation;
+  GtkAdjustment *adjustment;
   PangoContext *context;
   PangoFontMetrics *metrics;
   gint x, layout_x, border_x, border_y;
   gint char_width;
-  GtkAdjustment *adjustment;
 
   adjustment = g_object_get_qdata (G_OBJECT (entry), quark_cursor_hadjustment);
   if (!adjustment)
     return;
 
+  gtk_widget_get_allocation (&(entry->widget), &allocation);
+
   /* Cursor position, layout offset, border width, and widget allocation */
   gtk_entry_get_cursor_locations (entry, CURSOR_STANDARD, &x, NULL);
   get_layout_position (entry, &layout_x, NULL);
   _gtk_entry_get_borders (entry, &border_x, &border_y);
-  x += entry->widget.allocation.x + layout_x + border_x;
+  x += allocation.x + layout_x + border_x;
 
   /* Approximate width of a char, so user can see what is ahead/behind */
   context = gtk_widget_get_pango_context (GTK_WIDGET (entry));
   metrics = pango_context_get_metrics (context, 
-                                       entry->widget.style->font_desc,
+                                       gtk_widget_get_style (&(entry->widget))->font_desc,
 				       pango_context_get_language (context));
   char_width = pango_font_metrics_get_approximate_char_width (metrics) / PANGO_SCALE;
 
@@ -8790,14 +8840,16 @@ gtk_entry_drag_motion (GtkWidget        *widget,
 		       guint             time)
 {
   GtkEntry *entry = GTK_ENTRY (widget);
+  GtkStyle *style;
   GtkWidget *source_widget;
   GdkDragAction suggested_action;
   gint new_position, old_position;
   gint sel1, sel2;
-  
-  x -= widget->style->xthickness;
-  y -= widget->style->ythickness;
-  
+
+  style = gtk_widget_get_style (widget);
+  x -= style->xthickness;
+  y -= style->ythickness;
+
   old_position = entry->dnd_position;
   new_position = gtk_entry_find_position (entry, x + entry->scroll_offset);
 
@@ -8855,12 +8907,14 @@ gtk_entry_drag_data_received (GtkWidget        *widget,
 {
   GtkEntry *entry = GTK_ENTRY (widget);
   GtkEditable *editable = GTK_EDITABLE (widget);
+  GtkStyle *style;
   gchar *str;
 
   str = (gchar *) gtk_selection_data_get_text (selection_data);
 
-  x -= widget->style->xthickness;
-  y -= widget->style->ythickness;
+  style = gtk_widget_get_style (widget);
+  x -= style->xthickness;
+  y -= style->ythickness;
 
   if (str && entry->editable)
     {
