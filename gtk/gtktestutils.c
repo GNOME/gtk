@@ -84,12 +84,16 @@ static GSList*
 test_find_widget_input_windows (GtkWidget *widget,
                                 gboolean   input_only)
 {
+  GdkWindow *window;
   GList *node, *children;
   GSList *matches = NULL;
   gpointer udata;
-  gdk_window_get_user_data (widget->window, &udata);
-  if (udata == widget && (!input_only || (GDK_IS_WINDOW (widget->window) && gdk_window_is_input_only (GDK_WINDOW (widget->window)))))
-    matches = g_slist_prepend (matches, widget->window);
+
+  window = gtk_widget_get_window (widget);
+
+  gdk_window_get_user_data (window, &udata);
+  if (udata == widget && (!input_only || (GDK_IS_WINDOW (window) && gdk_window_is_input_only (GDK_WINDOW (window)))))
+    matches = g_slist_prepend (matches, window);
   children = gdk_window_get_children (gtk_widget_get_parent_window (widget));
   for (node = children; node; node = node->next)
     {
@@ -272,13 +276,19 @@ widget_geo_dist (GtkWidget *a,
                  GtkWidget *b,
                  GtkWidget *base)
 {
+  GtkAllocation allocation;
   int ax0, ay0, ax1, ay1, bx0, by0, bx1, by1, xdist = 0, ydist = 0;
+
+  gtk_widget_get_allocation (a, &allocation);
   if (!gtk_widget_translate_coordinates (a, base, 0, 0, &ax0, &ay0) ||
-      !gtk_widget_translate_coordinates (a, base, a->allocation.width, a->allocation.height, &ax1, &ay1))
+      !gtk_widget_translate_coordinates (a, base, allocation.width, allocation.height, &ax1, &ay1))
     return -G_MAXINT;
+
+  gtk_widget_get_allocation (b, &allocation);
   if (!gtk_widget_translate_coordinates (b, base, 0, 0, &bx0, &by0) ||
-      !gtk_widget_translate_coordinates (b, base, b->allocation.width, b->allocation.height, &bx1, &by1))
+      !gtk_widget_translate_coordinates (b, base, allocation.width, allocation.height, &bx1, &by1))
     return +G_MAXINT;
+
   if (bx0 >= ax1)
     xdist = bx0 - ax1;
   else if (ax0 >= bx1)
@@ -287,6 +297,7 @@ widget_geo_dist (GtkWidget *a,
     ydist = by0 - ay1;
   else if (ay0 >= by1)
     ydist = ay0 - by1;
+
   return xdist + ydist;
 }
 
@@ -329,7 +340,7 @@ gtk_test_find_sibling (GtkWidget *base_widget,
   /* find all sibling candidates */
   while (tmpwidget)
     {
-      tmpwidget = tmpwidget->parent;
+      tmpwidget = gtk_widget_get_parent (tmpwidget);
       siblings = g_list_concat (siblings, test_list_descendants (tmpwidget, widget_type));
     }
   /* sort them by distance to base_widget */
