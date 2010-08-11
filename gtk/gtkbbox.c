@@ -381,7 +381,7 @@ gtk_button_box_set_child_secondary (GtkButtonBox *widget,
 {
   g_return_if_fail (GTK_IS_BUTTON_BOX (widget));
   g_return_if_fail (GTK_IS_WIDGET (child));
-  g_return_if_fail (child->parent == GTK_WIDGET (widget));
+  g_return_if_fail (gtk_widget_get_parent (child) == GTK_WIDGET (widget));
 
   g_object_set_data (G_OBJECT (child),
                      GTK_BOX_SECONDARY_CHILD,
@@ -654,6 +654,7 @@ gtk_button_box_size_allocate (GtkWidget     *widget,
   border_width = gtk_container_get_border_width (GTK_CONTAINER (widget));
   orientation = gtk_orientable_get_orientation (GTK_ORIENTABLE (widget));
   spacing = gtk_box_get_spacing (GTK_BOX (widget));
+
   gtk_widget_style_get (widget,
                         "child-internal-pad-x", &ipad_x,
                         "child-internal-pad-y", &ipad_y,
@@ -691,7 +692,7 @@ gtk_button_box_size_allocate (GtkWidget     *widget,
     }
   total_size = primary_size + secondary_size;
 
-  widget->allocation = *allocation;
+  gtk_widget_set_allocation (widget, allocation);
 
   if (orientation == GTK_ORIENTATION_HORIZONTAL)
     width = allocation->width - border_width*2;
