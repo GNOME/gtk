@@ -1588,7 +1588,7 @@ get_size (GtkCellRenderer *cell,
       PangoFontDescription *font_desc;
       gint row_height;
 
-      font_desc = pango_font_description_copy_static (widget->style->font_desc);
+      font_desc = pango_font_description_copy_static (gtk_widget_get_style (widget)->font_desc);
       pango_font_description_merge_static (font_desc, priv->font, TRUE);
 
       if (priv->scale_set)
@@ -1642,7 +1642,9 @@ get_size (GtkCellRenderer *cell,
 	  gint char_width;
 
 	  context = pango_layout_get_context (layout);
-	  metrics = pango_context_get_metrics (context, widget->style->font_desc, pango_context_get_language (context));
+          metrics = pango_context_get_metrics (context,
+                                               gtk_widget_get_style (widget)->font_desc,
+                                               pango_context_get_language (context));
 
 	  char_width = pango_font_metrics_get_approximate_char_width (metrics);
 	  pango_font_metrics_unref (metrics);
@@ -1760,7 +1762,7 @@ gtk_cell_renderer_text_render (GtkCellRenderer      *cell,
   else if (priv->wrap_width == -1)
     pango_layout_set_width (layout, -1);
 
-  gtk_paint_layout (widget->style,
+  gtk_paint_layout (gtk_widget_get_style (widget),
                     window,
                     state,
 		    TRUE,
@@ -2034,6 +2036,7 @@ gtk_cell_renderer_text_get_width (GtkCellSizeRequest *cell,
 {
   GtkCellRendererTextPriv    *priv;
   GtkCellRendererText        *celltext;
+  GtkStyle                   *style;
   PangoLayout                *layout;
   PangoContext               *context;
   PangoFontMetrics           *metrics;
@@ -2053,6 +2056,8 @@ gtk_cell_renderer_text_get_width (GtkCellSizeRequest *cell,
   celltext = GTK_CELL_RENDERER_TEXT (cell);
   priv = celltext->priv;
 
+  style = gtk_widget_get_style (widget);
+
   gtk_cell_renderer_get_padding (GTK_CELL_RENDERER (cell), &xpad, NULL);
 
   layout = get_layout (celltext, widget, NULL, 0);
@@ -2068,7 +2073,7 @@ gtk_cell_renderer_text_get_width (GtkCellSizeRequest *cell,
 
   /* Fetch the average size of a charachter */
   context = pango_layout_get_context (layout);
-  metrics = pango_context_get_metrics (context, widget->style->font_desc, 
+  metrics = pango_context_get_metrics (context, style->font_desc,
 				       pango_context_get_language (context));
   
   char_width = pango_font_metrics_get_approximate_char_width (metrics);
