@@ -216,8 +216,10 @@ static void
 gtk_plug_set_is_child (GtkPlug  *plug,
 		       gboolean  is_child)
 {
-  g_assert (!GTK_WIDGET (plug)->parent);
-      
+  GtkWidget *widget = GTK_WIDGET (plug);
+
+  g_assert (!gtk_widget_get_parent (widget));
+
   if (is_child)
     {
       if (plug->modality_window)
@@ -235,13 +237,13 @@ gtk_plug_set_is_child (GtkPlug  *plug,
        * here, but don't bother remapping -- we will get mapped
        * by gtk_widget_set_parent ().
        */
-      if (gtk_widget_get_mapped (GTK_WIDGET (plug)))
-	gtk_widget_unmap (GTK_WIDGET (plug));
-      
+      if (gtk_widget_get_mapped (widget))
+	gtk_widget_unmap (widget);
+
       _gtk_window_set_is_toplevel (GTK_WINDOW (plug), FALSE);
       gtk_container_set_resize_mode (GTK_CONTAINER (plug), GTK_RESIZE_PARENT);
 
-      _gtk_widget_propagate_hierarchy_changed (GTK_WIDGET (plug), GTK_WIDGET (plug));
+      _gtk_widget_propagate_hierarchy_changed (widget, widget);
     }
   else
     {
@@ -342,15 +344,18 @@ _gtk_plug_add_to_socket (GtkPlug   *plug,
   socket_->same_app = TRUE;
   socket_->plug_widget = widget;
 
-  plug->socket_window = GTK_WIDGET (socket_)->window;
+  plug->socket_window = gtk_widget_get_window (GTK_WIDGET (socket_));
   g_object_ref (plug->socket_window);
   g_signal_emit (plug, plug_signals[EMBEDDED], 0);
   g_object_notify (G_OBJECT (plug), "embedded");
 
   if (gtk_widget_get_realized (widget))
     {
-      gdk_drawable_get_size (GDK_DRAWABLE (widget->window), &w, &h);
-      gdk_window_reparent (widget->window, plug->socket_window, -w, -h);
+      GdkWindow *window;
+
+      window = gtk_widget_get_window (widget);
+      gdk_drawable_get_size (GDK_DRAWABLE (window), &w, &h);
+      gdk_window_reparent (window, plug->socket_window, -w, -h);
     }
 
   gtk_widget_set_parent (widget, GTK_WIDGET (socket_));
@@ -371,7 +376,7 @@ _gtk_plug_send_delete_event (GtkWidget *widget)
 {
   GdkEvent *event = gdk_event_new (GDK_DELETE);
 
-  event->any.window = g_object_ref (widget->window);
+  event->any.window = g_object_ref (gtk_widget_get_window (widget));
   event->any.send_event = FALSE;
 
   g_object_ref (widget);
@@ -396,6 +401,7 @@ _gtk_plug_remove_from_socket (GtkPlug   *plug,
 			      GtkSocket *socket_)
 {
   GtkWidget *widget;
+  GdkWindow *window;
   gboolean result;
   gboolean widget_was_visible;
 
@@ -412,10 +418,11 @@ _gtk_plug_remove_from_socket (GtkPlug   *plug,
   g_object_ref (socket_);
 
   widget_was_visible = gtk_widget_get_visible (widget);
-  
-  gdk_window_hide (widget->window);
+  window = gtk_widget_get_window (widget);
+
+  gdk_window_hide (window);
   GTK_PRIVATE_SET_FLAG (plug, GTK_IN_REPARENT);
-  gdk_window_reparent (widget->window,
+  gdk_window_reparent (window,
 		       gtk_widget_get_root_window (widget),
 		       0, 0);
   gtk_widget_unparent (GTK_WIDGET (plug));
@@ -442,7 +449,7 @@ _gtk_plug_remove_from_socket (GtkPlug   *plug,
   if (!result)
     gtk_widget_destroy (GTK_WIDGET (socket_));
 
-  if (widget->window)
+  if (window)
     _gtk_plug_send_delete_event (widget);
 
   g_object_unref (plug);
@@ -600,19 +607,23 @@ gtk_plug_unrealize (GtkWidget *widget)
 static void
 gtk_plug_realize (GtkWidget *widget)
 {
-  GtkWindow *window = GTK_WINDOW (widget);
+  GtkAllocation allocation;
   GtkPlug *plug = GTK_PLUG (widget);
+  GtkWindow *window = GTK_WINDOW (widget);
+  GdkWindow *gdk_window;
   GdkWindowAttr attributes;
   gint attributes_mask;
 
   gtk_widget_set_realized (widget, TRUE);
 
+  gtk_widget_get_allocation (widget, &allocation);
+
   attributes.window_type = GDK_WINDOW_CHILD;	/* XXX GDK_WINDOW_PLUG ? */
   attributes.title = window->title;
   attributes.wmclass_name = window->wmclass_name;
   attributes.wmclass_class = window->wmclass_class;
-  attributes.width = widget->allocation.width;
-  attributes.height = widget->allocation.height;
+  attributes.width = allocation.width;
+  attributes.height = allocation.height;
   attributes.wclass = GDK_INPUT_OUTPUT;
 
   /* this isn't right - we should match our parent's visual/colormap.
@@ -637,24 +648,26 @@ gtk_plug_realize (GtkWidget *widget)
 
       gdk_error_trap_push ();
       if (plug->socket_window)
-	widget->window = gdk_window_new (plug->socket_window, 
-					 &attributes, attributes_mask);
+        gdk_window = gdk_window_new (plug->socket_window,
+                                     &attributes, attributes_mask);
       else /* If it's a passive plug, we use the root window */
-	widget->window = gdk_window_new (gtk_widget_get_root_window (widget),
-					 &attributes, attributes_mask);
+        gdk_window = gdk_window_new (gtk_widget_get_root_window (widget),
+                                     &attributes, attributes_mask);
+      gtk_widget_set_window (widget, gdk_window);
 
       gdk_display_sync (gtk_widget_get_display (widget));
       if (gdk_error_trap_pop ()) /* Uh-oh */
 	{
 	  gdk_error_trap_push ();
-	  gdk_window_destroy (widget->window);
+	  gdk_window_destroy (gdk_window);
 	  gdk_flush ();
 	  gdk_error_trap_pop ();
-	  widget->window = gdk_window_new (gtk_widget_get_root_window (widget),
-					   &attributes, attributes_mask);
+	  gdk_window = gdk_window_new (gtk_widget_get_root_window (widget),
+                                   &attributes, attributes_mask);
+          gtk_widget_set_window (widget, gdk_window);
 	}
-      
-      gdk_window_add_filter (widget->window,
+
+      gdk_window_add_filter (gdk_window,
 			     _gtk_plug_windowing_filter_func,
 			     widget);
 
@@ -664,15 +677,19 @@ gtk_plug_realize (GtkWidget *widget)
       _gtk_plug_windowing_realize_toplevel (plug);
     }
   else
-    widget->window = gdk_window_new (gtk_widget_get_parent_window (widget), 
-				     &attributes, attributes_mask);      
-  
-  gdk_window_set_user_data (widget->window, window);
+    {
+      gdk_window = gdk_window_new (gtk_widget_get_parent_window (widget),
+                                   &attributes, attributes_mask);
+      gtk_widget_set_window (widget, gdk_window);
+    }
 
-  widget->style = gtk_style_attach (widget->style, widget->window);
-  gtk_style_set_background (widget->style, widget->window, GTK_STATE_NORMAL);
+  gdk_window_set_user_data (gdk_window, window);
 
-  gdk_window_enable_synchronized_configure (widget->window);
+  gtk_widget_style_attach (widget);
+  gtk_style_set_background (gtk_widget_get_style (widget),
+                            gdk_window, GTK_STATE_NORMAL);
+
+  gdk_window_enable_synchronized_configure (gdk_window);
 }
 
 static void
@@ -716,8 +733,8 @@ gtk_plug_map (GtkWidget *widget)
 	gtk_widget_map (child);
 
       _gtk_plug_windowing_map_toplevel (plug);
-      
-      gdk_synthesize_window_state (widget->window,
+
+      gdk_synthesize_window_state (gtk_widget_get_window (widget),
 				   GDK_WINDOW_STATE_WITHDRAWN,
 				   0);
     }
@@ -731,14 +748,17 @@ gtk_plug_unmap (GtkWidget *widget)
   if (gtk_widget_is_toplevel (widget))
     {
       GtkPlug *plug = GTK_PLUG (widget);
+      GdkWindow *window;
+
+      window = gtk_widget_get_window (widget);
 
       gtk_widget_set_mapped (widget, FALSE);
 
-      gdk_window_hide (widget->window);
+      gdk_window_hide (window);
 
       _gtk_plug_windowing_unmap_toplevel (plug);
-      
-      gdk_synthesize_window_state (widget->window,
+
+      gdk_synthesize_window_state (window,
 				   0,
 				   GDK_WINDOW_STATE_WITHDRAWN);
     }
@@ -758,10 +778,10 @@ gtk_plug_size_allocate (GtkWidget     *widget,
     {
       GtkBin *bin = GTK_BIN (widget);
 
-      widget->allocation = *allocation;
+      gtk_widget_set_allocation (widget, allocation);
 
       if (gtk_widget_get_realized (widget))
-	gdk_window_move_resize (widget->window,
+        gdk_window_move_resize (gtk_widget_get_window (widget),
 				allocation->x, allocation->y,
 				allocation->width, allocation->height);
 
@@ -968,11 +988,11 @@ gtk_plug_focus (GtkWidget        *widget,
       if (window->focus_widget)
 	{
 	  /* Wrapped off the end, clear the focus setting for the toplevel */
-	  parent = window->focus_widget->parent;
+	  parent = gtk_widget_get_parent (window->focus_widget);
 	  while (parent)
 	    {
 	      gtk_container_set_focus_child (GTK_CONTAINER (parent), NULL);
-	      parent = GTK_WIDGET (parent)->parent;
+	      parent = gtk_widget_get_parent (parent);
 	    }
 	  
 	  gtk_window_set_focus (GTK_WINDOW (container), NULL);
@@ -1059,11 +1079,11 @@ _gtk_plug_focus_first_last (GtkPlug          *plug,
 
   if (window->focus_widget)
     {
-      parent = window->focus_widget->parent;
+      parent = gtk_widget_get_parent (window->focus_widget);
       while (parent)
 	{
 	  gtk_container_set_focus_child (GTK_CONTAINER (parent), NULL);
-	  parent = GTK_WIDGET (parent)->parent;
+	  parent = gtk_widget_get_parent (parent);
 	}
       
       gtk_window_set_focus (GTK_WINDOW (plug), NULL);
