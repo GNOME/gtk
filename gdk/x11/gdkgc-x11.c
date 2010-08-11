@@ -673,6 +673,8 @@ gdk_gc_get_screen (GdkGC *gc)
  * Returns the display of a #GdkGC.
  * 
  * Return value: an Xlib <type>Display*</type>.
+ *
+ * Deprecated: 2.22: #GdkGC has been replaced by #cairo_t.
  **/
 Display *
 gdk_x11_gc_get_xdisplay (GdkGC *gc)
@@ -689,6 +691,8 @@ gdk_x11_gc_get_xdisplay (GdkGC *gc)
  * Returns the X GC of a #GdkGC.
  * 
  * Return value: an Xlib <type>GC</type>.
+ *
+ * Deprecated: 2.22: #GdkGC has been replaced by #cairo_t.
  **/
 GC
 gdk_x11_gc_get_xgc (GdkGC *gc)

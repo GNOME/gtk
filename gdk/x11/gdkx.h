@@ -50,8 +50,10 @@ Display *gdk_x11_cursor_get_xdisplay      (GdkCursor   *cursor);
 Cursor   gdk_x11_cursor_get_xcursor       (GdkCursor   *cursor);
 Display *gdk_x11_display_get_xdisplay     (GdkDisplay  *display);
 Visual * gdk_x11_visual_get_xvisual       (GdkVisual   *visual);
+#if !defined(GDK_DISABLE_DEPRECATED) || defined(GDK_COMPILATION)
 Display *gdk_x11_gc_get_xdisplay          (GdkGC       *gc);
 GC       gdk_x11_gc_get_xgc               (GdkGC       *gc);
+#endif
 Screen * gdk_x11_screen_get_xscreen       (GdkScreen   *screen);
 int      gdk_x11_screen_get_screen_number (GdkScreen   *screen);
 void     gdk_x11_window_set_user_time     (GdkWindow   *window,
