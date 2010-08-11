@@ -113,6 +113,8 @@ gtk_tooltip_class_init (GtkTooltipClass *klass)
 static void
 gtk_tooltip_init (GtkTooltip *tooltip)
 {
+  GtkStyle *style;
+
   tooltip->timeout_id = 0;
   tooltip->browse_mode_timeout_id = 0;
 
@@ -136,12 +138,12 @@ gtk_tooltip_init (GtkTooltip *tooltip)
   g_signal_connect (tooltip->window, "hide",
 		    G_CALLBACK (gtk_tooltip_window_hide), tooltip);
 
+  style = gtk_widget_get_style (tooltip->window);
+
   tooltip->alignment = gtk_alignment_new (0.5, 0.5, 1.0, 1.0);
   gtk_alignment_set_padding (GTK_ALIGNMENT (tooltip->alignment),
-			     tooltip->window->style->ythickness,
-			     tooltip->window->style->ythickness,
-			     tooltip->window->style->xthickness,
-			     tooltip->window->style->xthickness);
+                             style->ythickness, style->ythickness,
+                             style->xthickness, style->xthickness);
   gtk_container_add (GTK_CONTAINER (tooltip->window), tooltip->alignment);
   gtk_widget_show (tooltip->alignment);
 
@@ -150,7 +152,7 @@ gtk_tooltip_init (GtkTooltip *tooltip)
   g_signal_connect_swapped (tooltip->window, "expose-event",
 			    G_CALLBACK (gtk_tooltip_paint_window), tooltip);
 
-  tooltip->box = gtk_hbox_new (FALSE, tooltip->window->style->xthickness);
+  tooltip->box = gtk_hbox_new (FALSE, style->xthickness);
   gtk_container_add (GTK_CONTAINER (tooltip->alignment), tooltip->box);
   gtk_widget_show (tooltip->box);
 
@@ -498,13 +500,16 @@ gtk_tooltip_reset (GtkTooltip *tooltip)
 static void
 gtk_tooltip_window_style_set (GtkTooltip *tooltip)
 {
+  GtkStyle *style;
+
+  style = gtk_widget_get_style (tooltip->window);
+
   gtk_alignment_set_padding (GTK_ALIGNMENT (tooltip->alignment),
-			     tooltip->window->style->ythickness,
-			     tooltip->window->style->ythickness,
-			     tooltip->window->style->xthickness,
-			     tooltip->window->style->xthickness);
+                             style->ythickness, style->ythickness,
+                             style->xthickness, style->xthickness);
+
   gtk_box_set_spacing (GTK_BOX (tooltip->box),
-		       tooltip->window->style->xthickness);
+                       style->xthickness);
 
   gtk_widget_queue_draw (tooltip->window);
 }
@@ -512,16 +517,18 @@ gtk_tooltip_window_style_set (GtkTooltip *tooltip)
 static gboolean
 gtk_tooltip_paint_window (GtkTooltip *tooltip)
 {
-  gtk_paint_flat_box (tooltip->window->style,
-		      tooltip->window->window,
+  GtkAllocation allocation;
+
+  gtk_widget_get_allocation (tooltip->window, &allocation);
+  gtk_paint_flat_box (gtk_widget_get_style (tooltip->window),
+		      gtk_widget_get_window (tooltip->window),
 		      GTK_STATE_NORMAL,
 		      GTK_SHADOW_OUT,
 		      NULL,
 		      tooltip->window,
 		      "tooltip",
 		      0, 0,
-		      tooltip->window->allocation.width,
-		      tooltip->window->allocation.height);
+                      allocation.width, allocation.height);
 
   return FALSE;
 }
@@ -550,12 +557,15 @@ static void
 child_location_foreach (GtkWidget *child,
 			gpointer   data)
 {
+  GtkAllocation child_allocation;
   gint x, y;
   struct ChildLocation *child_loc = data;
 
   /* Ignore invisible widgets */
   if (!gtk_widget_is_drawable (child))
     return;
+
+  gtk_widget_get_allocation (child, &child_allocation);
 
   x = 0;
   y = 0;
@@ -572,17 +582,17 @@ child_location_foreach (GtkWidget *child,
 #ifdef DEBUG_TOOLTIP
       g_print ("candidate: %s  alloc=[(%d,%d)  %dx%d]     (%d, %d)->(%d, %d)\n",
 	       gtk_widget_get_name (child),
-	       child->allocation.x,
-	       child->allocation.y,
-	       child->allocation.width,
-	       child->allocation.height,
+               child_allocation.x,
+               child_allocation.y,
+               child_allocation.width,
+               child_allocation.height,
 	       child_loc->x, child_loc->y,
 	       x, y);
 #endif /* DEBUG_TOOLTIP */
 
       /* (x, y) relative to child's allocation. */
-      if (x >= 0 && x < child->allocation.width
-	  && y >= 0 && y < child->allocation.height)
+      if (x >= 0 && x < child_allocation.width
+	  && y >= 0 && y < child_allocation.height)
         {
 	  if (GTK_IS_CONTAINER (child))
 	    {
@@ -619,22 +629,28 @@ window_to_alloc (GtkWidget *dest_widget,
 		 gint      *dest_x,
 		 gint      *dest_y)
 {
+  GtkAllocation allocation;
+
+  gtk_widget_get_allocation (dest_widget, &allocation);
+
   /* Translate from window relative to allocation relative */
-  if (gtk_widget_get_has_window (dest_widget) && dest_widget->parent)
+  if (gtk_widget_get_has_window (dest_widget) &&
+      gtk_widget_get_parent (dest_widget))
     {
       gint wx, wy;
-      gdk_window_get_position (dest_widget->window, &wx, &wy);
+      gdk_window_get_position (gtk_widget_get_window (dest_widget),
+                               &wx, &wy);
 
       /* Offset coordinates if widget->window is smaller than
        * widget->allocation.
        */
-      src_x += wx - dest_widget->allocation.x;
-      src_y += wy - dest_widget->allocation.y;
+      src_x += wx - allocation.x;
+      src_y += wy - allocation.y;
     }
   else
     {
-      src_x -= dest_widget->allocation.x;
-      src_y -= dest_widget->allocation.y;
+      src_x -= allocation.x;
+      src_y -= allocation.y;
     }
 
   if (dest_x)
@@ -677,7 +693,7 @@ _gtk_widget_find_at_coords (GdkWindow *window,
    * coordinates stay relative to the current window.
    * We end up with window == widget->window, coordinates relative to that.
    */
-  while (window && window != event_widget->window)
+  while (window && window != gtk_widget_get_window (event_widget))
     {
       gdouble px, py;
 
@@ -747,6 +763,7 @@ find_topmost_widget_coords_from_event (GdkEvent *event,
 				       gint     *x,
 				       gint     *y)
 {
+  GtkAllocation allocation;
   gint tx, ty;
   gdouble dx, dy;
   GtkWidget *tmp;
@@ -760,8 +777,9 @@ find_topmost_widget_coords_from_event (GdkEvent *event,
     return NULL;
 
   /* Make sure the pointer can actually be on the widget returned. */
-  if (tx < 0 || tx >= tmp->allocation.width ||
-      ty < 0 || ty >= tmp->allocation.height)
+  gtk_widget_get_allocation (tmp, &allocation);
+  if (tx < 0 || tx >= allocation.width ||
+      ty < 0 || ty >= allocation.height)
     return NULL;
 
   if (x)
@@ -842,7 +860,7 @@ gtk_tooltip_run_requery (GtkWidget  **widget,
 
       if (!return_value)
         {
-	  GtkWidget *parent = (*widget)->parent;
+	  GtkWidget *parent = gtk_widget_get_parent (*widget);
 
 	  if (parent)
 	    gtk_widget_translate_coordinates (*widget, parent, *x, *y, x, y);
@@ -867,6 +885,7 @@ static void
 get_bounding_box (GtkWidget    *widget,
                   GdkRectangle *bounds)
 {
+  GtkAllocation allocation;
   GdkWindow *window;
   gint x, y;
   gint w, h;
@@ -879,10 +898,11 @@ get_bounding_box (GtkWidget    *widget,
   if (window == NULL)
     window = gtk_widget_get_window (widget);
 
-  x = widget->allocation.x;
-  y = widget->allocation.y;
-  w = widget->allocation.width;
-  h = widget->allocation.height;
+  gtk_widget_get_allocation (widget, &allocation);
+  x = allocation.x;
+  y = allocation.y;
+  w = allocation.width;
+  h = allocation.height;
 
   gdk_window_get_root_coords (window, x, y, &x1, &y1);
   gdk_window_get_root_coords (window, x + w, y, &x2, &y2);
@@ -1276,7 +1296,8 @@ _gtk_tooltip_focus_in (GtkWidget *widget)
 
   tooltip->keyboard_widget = g_object_ref (widget);
 
-  gdk_window_get_device_position (widget->window, device, &x, &y, NULL);
+  gdk_window_get_device_position (gtk_widget_get_window (widget),
+                                  device, &x, &y, NULL);
 
   return_value = gtk_tooltip_run_requery (&widget, tooltip, &x, &y);
   if (!return_value)
@@ -1376,7 +1397,7 @@ _gtk_tooltip_hide (GtkWidget *widget)
   toplevel = gtk_widget_get_toplevel (widget);
 
   if (widget == tooltip->tooltip_widget
-      || toplevel->window == tooltip->toplevel_window)
+      || gtk_widget_get_window (toplevel) == tooltip->toplevel_window)
     gtk_tooltip_hide_tooltip (tooltip);
 }
 
