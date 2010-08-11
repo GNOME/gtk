@@ -232,6 +232,7 @@ static void
 gtk_invisible_realize (GtkWidget *widget)
 {
   GdkWindow *parent;
+  GdkWindow *window;
   GdkWindowAttr attributes;
   gint attributes_mask;
 
@@ -252,11 +253,11 @@ gtk_invisible_realize (GtkWidget *widget)
 
   attributes_mask = GDK_WA_X | GDK_WA_Y | GDK_WA_NOREDIR;
 
-  widget->window = gdk_window_new (parent, &attributes, attributes_mask);
-					      
-  gdk_window_set_user_data (widget->window, widget);
-  
-  widget->style = gtk_style_attach (widget->style, widget->window);
+  window = gdk_window_new (parent, &attributes, attributes_mask);
+  gtk_widget_set_window (widget, window);
+  gdk_window_set_user_data (window, widget);
+
+  gtk_widget_style_attach (widget);
 }
 
 static void
@@ -275,10 +276,10 @@ gtk_invisible_show (GtkWidget *widget)
 
 static void
 gtk_invisible_size_allocate (GtkWidget     *widget,
-			    GtkAllocation *allocation)
+                             GtkAllocation *allocation)
 {
-  widget->allocation = *allocation;
-} 
+  gtk_widget_set_allocation (widget, allocation);
+}
 
 
 static void 
