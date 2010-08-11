@@ -310,21 +310,22 @@ gtk_info_bar_expose (GtkWidget      *widget,
 
   if (priv->message_type != GTK_MESSAGE_OTHER)
     {
+      GtkAllocation allocation;
       const char *detail;
 
       detail = type_detail[priv->message_type];
 
-      gtk_paint_box (widget->style,
-                     widget->window,
+      gtk_widget_get_allocation (widget, &allocation);
+
+      gtk_paint_box (gtk_widget_get_style (widget),
+                     gtk_widget_get_window (widget),
                      GTK_STATE_NORMAL,
                      GTK_SHADOW_OUT,
                      NULL,
                      widget,
                      detail,
-                     widget->allocation.x,
-                     widget->allocation.y,
-                     widget->allocation.width,
-                     widget->allocation.height);
+                     allocation.x, allocation.y,
+                     allocation.width, allocation.height);
     }
 
   if (GTK_WIDGET_CLASS (gtk_info_bar_parent_class)->expose_event)
@@ -569,9 +570,9 @@ gtk_info_bar_update_colors (GtkInfoBar *info_bar)
         }
     }
 
-  if (!gdk_color_equal (bg, &widget->style->bg[GTK_STATE_NORMAL]))
+  if (!gdk_color_equal (bg, &style->bg[GTK_STATE_NORMAL]))
     gtk_widget_modify_bg (widget, GTK_STATE_NORMAL, bg);
-  if (!gdk_color_equal (fg, &widget->style->fg[GTK_STATE_NORMAL]))
+  if (!gdk_color_equal (fg, &style->fg[GTK_STATE_NORMAL]))
     gtk_widget_modify_fg (widget, GTK_STATE_NORMAL, fg);
 }
 
