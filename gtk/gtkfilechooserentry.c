@@ -886,17 +886,19 @@ completion_feedback_window_expose_event_cb (GtkWidget      *widget,
   /* Stolen from gtk_tooltip_paint_window() */
 
   GtkFileChooserEntry *chooser_entry = GTK_FILE_CHOOSER_ENTRY (data);
+  GtkAllocation allocation;
 
-  gtk_paint_flat_box (chooser_entry->completion_feedback_window->style,
-		      chooser_entry->completion_feedback_window->window,
+  gtk_widget_get_allocation (chooser_entry->completion_feedback_window, &allocation);
+
+  gtk_paint_flat_box (gtk_widget_get_style (chooser_entry->completion_feedback_window),
+                      gtk_widget_get_window (chooser_entry->completion_feedback_window),
 		      GTK_STATE_NORMAL,
 		      GTK_SHADOW_OUT,
 		      NULL,
 		      chooser_entry->completion_feedback_window,
 		      "tooltip",
 		      0, 0,
-		      chooser_entry->completion_feedback_window->allocation.width,
-		      chooser_entry->completion_feedback_window->allocation.height);
+                      allocation.width, allocation.height);
 
   return FALSE;
 }
@@ -923,7 +925,7 @@ completion_feedback_window_realize_cb (GtkWidget *widget,
    * GtkEntry hides the cursor when the user types.  We don't want the cursor to
    * come back if the completion feedback ends up where the mouse is.
    */
-  set_invisible_mouse_cursor (widget->window);
+  set_invisible_mouse_cursor (gtk_widget_get_window (widget));
 }
 
 static void
@@ -931,6 +933,7 @@ create_completion_feedback_window (GtkFileChooserEntry *chooser_entry)
 {
   /* Stolen from gtk_tooltip_init() */
 
+  GtkStyle *style;
   GtkWidget *alignment;
 
   chooser_entry->completion_feedback_window = gtk_window_new (GTK_WINDOW_POPUP);
@@ -941,11 +944,10 @@ create_completion_feedback_window (GtkFileChooserEntry *chooser_entry)
   gtk_widget_set_name (chooser_entry->completion_feedback_window, "gtk-tooltip");
 
   alignment = gtk_alignment_new (0.5, 0.5, 1.0, 1.0);
+  style = gtk_widget_get_style (chooser_entry->completion_feedback_window);
   gtk_alignment_set_padding (GTK_ALIGNMENT (alignment),
-			     chooser_entry->completion_feedback_window->style->ythickness,
-			     chooser_entry->completion_feedback_window->style->ythickness,
-			     chooser_entry->completion_feedback_window->style->xthickness,
-			     chooser_entry->completion_feedback_window->style->xthickness);
+                             style->ythickness, style->ythickness,
+                             style->xthickness, style->xthickness);
   gtk_container_add (GTK_CONTAINER (chooser_entry->completion_feedback_window), alignment);
   gtk_widget_show (alignment);
 
@@ -1015,22 +1017,23 @@ show_completion_feedback_window (GtkFileChooserEntry *chooser_entry)
   /* More or less stolen from gtk_tooltip_position() */
 
   GtkRequisition feedback_req;
+  GtkWidget *widget = GTK_WIDGET (chooser_entry);
   gint entry_x, entry_y;
   gint cursor_x;
-  GtkAllocation *entry_allocation;
+  GtkAllocation entry_allocation;
   int feedback_x, feedback_y;
 
   gtk_widget_size_request (chooser_entry->completion_feedback_window, &feedback_req);
 
-  gdk_window_get_origin (GTK_WIDGET (chooser_entry)->window, &entry_x, &entry_y);
-  entry_allocation = &(GTK_WIDGET (chooser_entry)->allocation);
+  gdk_window_get_origin (gtk_widget_get_window (widget), &entry_x, &entry_y);
+  gtk_widget_get_allocation (widget, &entry_allocation);
 
   get_entry_cursor_x (chooser_entry, &cursor_x);
 
   /* FIXME: fit to the screen if we bump on the screen's edge */
   /* cheap "half M-width", use height as approximation of character em-size */
-  feedback_x = entry_x + cursor_x + entry_allocation->height / 2;
-  feedback_y = entry_y + (entry_allocation->height - feedback_req.height) / 2;
+  feedback_x = entry_x + cursor_x + entry_allocation.height / 2;
+  feedback_y = entry_y + (entry_allocation.height - feedback_req.height) / 2;
 
   gtk_window_move (GTK_WINDOW (chooser_entry->completion_feedback_window), feedback_x, feedback_y);
   gtk_widget_show (chooser_entry->completion_feedback_window);
