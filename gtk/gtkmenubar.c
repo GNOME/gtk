@@ -345,8 +345,11 @@ gtk_menu_bar_size_request (GtkWidget      *widget,
 
       if (get_shadow_type (menu_bar) != GTK_SHADOW_NONE)
 	{
-	  requisition->width += widget->style->xthickness * 2;
-	  requisition->height += widget->style->ythickness * 2;
+          GtkStyle *style;
+
+          style = gtk_widget_get_style (widget);
+	  requisition->width += style->xthickness * 2;
+	  requisition->height += style->ythickness * 2;
 	}
     }
 }
@@ -377,9 +380,10 @@ gtk_menu_bar_size_allocate (GtkWidget     *widget,
 
   direction = gtk_widget_get_direction (widget);
 
-  widget->allocation = *allocation;
+  gtk_widget_set_allocation (widget, allocation);
+
   if (gtk_widget_get_realized (widget))
-    gdk_window_move_resize (widget->window,
+    gdk_window_move_resize (gtk_widget_get_window (widget),
 			    allocation->x, allocation->y,
 			    allocation->width, allocation->height);
 
@@ -396,8 +400,11 @@ gtk_menu_bar_size_allocate (GtkWidget     *widget,
       
       if (get_shadow_type (menu_bar) != GTK_SHADOW_NONE)
 	{
-	  child_allocation.x += widget->style->xthickness;
-	  child_allocation.y += widget->style->ythickness;
+          GtkStyle *style;
+
+          style = gtk_widget_get_style (widget);
+          child_allocation.x += style->xthickness;
+          child_allocation.y += style->ythickness;
 	}
       
       if (priv->pack_direction == GTK_PACK_DIRECTION_LTR ||
@@ -512,18 +519,20 @@ gtk_menu_bar_paint (GtkWidget    *widget,
 
   if (gtk_widget_is_drawable (widget))
     {
+      GtkAllocation allocation;
       guint border;
 
       border = gtk_container_get_border_width (GTK_CONTAINER (widget));
-      
-      gtk_paint_box (widget->style,
-		     widget->window,
+      gtk_widget_get_allocation (widget, &allocation);
+
+      gtk_paint_box (gtk_widget_get_style (widget),
+                     gtk_widget_get_window (widget),
                      gtk_widget_get_state (widget),
                      get_shadow_type (GTK_MENU_BAR (widget)),
 		     area, widget, "menubar",
 		     border, border,
-		     widget->allocation.width - border * 2,
-                     widget->allocation.height - border * 2);
+                     allocation.width - border * 2,
+                     allocation.height - border * 2);
     }
 }
 
@@ -567,8 +576,8 @@ get_viewable_menu_bars (GtkWindow *window)
 	{
 	  if (!gtk_widget_get_mapped (widget))
 	    viewable = FALSE;
-	  
-	  widget = widget->parent;
+
+          widget = gtk_widget_get_parent (widget);
 	}
 
       if (viewable)
