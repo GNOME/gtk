@@ -421,7 +421,7 @@ gtk_box_size_allocate (GtkWidget     *widget,
   gint child_size;
 
 
-  widget->allocation = *allocation;
+  gtk_widget_set_allocation (widget, allocation);
 
   count_expand_children (box, &nvis_children, &nexpand_children);
 
@@ -779,7 +779,7 @@ gtk_box_pack (GtkBox      *box,
 
   g_return_if_fail (GTK_IS_BOX (box));
   g_return_if_fail (GTK_IS_WIDGET (child));
-  g_return_if_fail (child->parent == NULL);
+  g_return_if_fail (gtk_widget_get_parent (child) == NULL);
 
   child_info = g_new (GtkBoxChild, 1);
   child_info->widget = child;
