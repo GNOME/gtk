@@ -816,7 +816,7 @@ gtk_decorated_window_move_resize_window (GtkWindow   *window,
 					 gint         width,
 					 gint         height)
 {
-  gdk_window_move_resize (GTK_WIDGET (window)->window,
+  gdk_window_move_resize (gtk_widget_get_window (GTK_WIDGET (window)),
 			  x, y, width, height);
 }
 #endif
