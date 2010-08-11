@@ -1823,3 +1823,7 @@ gtk_expander_get_label_fill (GtkExpander *expander)
 
   return expander->priv->label_fill;
 }
+
+#define __GTK_EXPANDER_C__
+#include "gtkaliasdef.c"
+
