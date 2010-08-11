@@ -2524,6 +2524,7 @@ gtk_status_icon_position_menu (GtkMenu  *menu,
 			       gpointer  user_data)
 {
 #ifdef GDK_WINDOWING_X11
+  GtkAllocation allocation;
   GtkStatusIcon *status_icon;
   GtkStatusIconPrivate *priv;
   GtkTrayIcon *tray_icon;
@@ -2532,6 +2533,7 @@ gtk_status_icon_position_menu (GtkMenu  *menu,
   GtkTextDirection direction;
   GtkRequisition menu_req;
   GdkRectangle monitor;
+  GdkWindow *window;
   gint monitor_num, height, width, xoffset, yoffset;
   
   g_return_if_fail (GTK_IS_MENU (menu));
@@ -2547,30 +2549,32 @@ gtk_status_icon_position_menu (GtkMenu  *menu,
   screen = gtk_widget_get_screen (widget);
   gtk_menu_set_screen (menu, screen);
 
-  monitor_num = gdk_screen_get_monitor_at_window (screen, widget->window);
+  window = gtk_widget_get_window (widget);
+  monitor_num = gdk_screen_get_monitor_at_window (screen, window);
   if (monitor_num < 0)
     monitor_num = 0;
   gtk_menu_set_monitor (menu, monitor_num);
 
   gdk_screen_get_monitor_geometry (screen, monitor_num, &monitor);
 
-  gdk_window_get_origin (widget->window, x, y);
-  
+  gdk_window_get_origin (window, x, y);
+
   gtk_widget_size_request (GTK_WIDGET (menu), &menu_req);
 
+  gtk_widget_get_allocation (widget, &allocation);
   if (_gtk_tray_icon_get_orientation (tray_icon) == GTK_ORIENTATION_VERTICAL)
     {
       width = 0;
-      height = widget->allocation.height;
-      xoffset = widget->allocation.width;
+      height = allocation.height;
+      xoffset = allocation.width;
       yoffset = 0;
     }
   else
     {
-      width = widget->allocation.width;
+      width = allocation.width;
       height = 0;
       xoffset = 0;
-      yoffset = widget->allocation.height;
+      yoffset = allocation.height;
     }
 
   if (direction == GTK_TEXT_DIR_RTL)
@@ -2661,6 +2665,7 @@ gtk_status_icon_get_geometry (GtkStatusIcon    *status_icon,
 			      GtkOrientation   *orientation)
 {
 #ifdef GDK_WINDOWING_X11   
+  GtkAllocation allocation;
   GtkWidget *widget;
   GtkStatusIconPrivate *priv;
   gint x, y;
@@ -2675,11 +2680,14 @@ gtk_status_icon_get_geometry (GtkStatusIcon    *status_icon,
 
   if (area)
     {
-      gdk_window_get_origin (widget->window, &x, &y);
+      gdk_window_get_origin (gtk_widget_get_window (widget),
+                             &x, &y);
+
+      gtk_widget_get_allocation (widget, &allocation);
       area->x = x;
       area->y = y;
-      area->width = widget->allocation.width;
-      area->height = widget->allocation.height;
+      area->width = allocation.width;
+      area->height = allocation.height;
     }
 
   if (orientation)
@@ -2961,7 +2969,7 @@ gtk_status_icon_get_x11_window_id (GtkStatusIcon *status_icon)
 {
 #ifdef GDK_WINDOWING_X11
   gtk_widget_realize (GTK_WIDGET (status_icon->priv->tray_icon));
-  return GDK_WINDOW_XID (GTK_WIDGET (status_icon->priv->tray_icon)->window);
+  return GDK_WINDOW_XID (gtk_widget_get_window (GTK_WIDGET (status_icon->priv->tray_icon)));
 #else
   return 0;
 #endif
