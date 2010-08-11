@@ -2026,6 +2026,7 @@ gtk_text_view_queue_scroll (GtkTextView   *text_view,
 static gboolean
 gtk_text_view_flush_scroll (GtkTextView *text_view)
 {
+  GtkAllocation allocation;
   GtkTextIter iter;
   GtkTextPendingScroll *scroll;
   gboolean retval;
@@ -2056,10 +2057,11 @@ gtk_text_view_flush_scroll (GtkTextView *text_view)
    * the screen.
    */
   DV(g_print (">Validating scroll destination ("G_STRLOC")\n"));
+  gtk_widget_get_allocation (widget, &allocation);
   gtk_text_layout_validate_yrange (text_view->priv->layout, &iter,
-                                   - (widget->allocation.height * 2),
-                                   widget->allocation.height * 2);
-  
+                                   -(allocation.height * 2),
+                                   allocation.height * 2);
+
   DV(g_print (">Done validating scroll destination ("G_STRLOC")\n"));
 
   /* Ensure we have updated width/height */
@@ -3457,6 +3459,7 @@ static void
 gtk_text_view_size_allocate (GtkWidget *widget,
                              GtkAllocation *allocation)
 {
+  GtkAllocation widget_allocation;
   GtkTextView *text_view;
   GtkTextViewPrivate *priv;
   GtkTextIter first_para;
@@ -3478,17 +3481,18 @@ gtk_text_view_size_allocate (GtkWidget *widget,
 
   DV(g_print(G_STRLOC"\n"));
 
+  gtk_widget_get_allocation (widget, &widget_allocation);
   size_changed =
-    widget->allocation.width != allocation->width ||
-    widget->allocation.height != allocation->height;
+    widget_allocation.width != allocation->width ||
+    widget_allocation.height != allocation->height;
 
   border_width = gtk_container_get_border_width (GTK_CONTAINER (text_view));
 
-  widget->allocation = *allocation;
+  gtk_widget_set_allocation (widget, allocation);
 
   if (gtk_widget_get_realized (widget))
     {
-      gdk_window_move_resize (widget->window,
+      gdk_window_move_resize (gtk_widget_get_window (widget),
                               allocation->x, allocation->y,
                               allocation->width, allocation->height);
     }
@@ -3639,7 +3643,7 @@ gtk_text_view_size_allocate (GtkWidget *widget,
    * be invalidated
    */
   if (size_changed && gtk_widget_get_realized (widget))
-    gdk_window_invalidate_rect (widget->window, NULL, FALSE);
+    gdk_window_invalidate_rect (gtk_widget_get_window (widget), NULL, FALSE);
 }
 
 static void
@@ -3953,8 +3957,10 @@ changed_handler (GtkTextLayout     *layout,
 static void
 gtk_text_view_realize (GtkWidget *widget)
 {
+  GtkAllocation allocation;
   GtkTextView *text_view;
   GtkTextViewPrivate *priv;
+  GdkWindow *window;
   GdkWindowAttr attributes;
   gint attributes_mask;
   GSList *tmp_list;
@@ -3964,11 +3970,13 @@ gtk_text_view_realize (GtkWidget *widget)
 
   gtk_widget_set_realized (widget, TRUE);
 
+  gtk_widget_get_allocation (widget, &allocation);
+
   attributes.window_type = GDK_WINDOW_CHILD;
-  attributes.x = widget->allocation.x;
-  attributes.y = widget->allocation.y;
-  attributes.width = widget->allocation.width;
-  attributes.height = widget->allocation.height;
+  attributes.x = allocation.x;
+  attributes.y = allocation.y;
+  attributes.width = allocation.width;
+  attributes.height = allocation.height;
   attributes.wclass = GDK_INPUT_OUTPUT;
   attributes.visual = gtk_widget_get_visual (widget);
   attributes.colormap = gtk_widget_get_colormap (widget);
@@ -3976,15 +3984,16 @@ gtk_text_view_realize (GtkWidget *widget)
 
   attributes_mask = GDK_WA_X | GDK_WA_Y | GDK_WA_VISUAL | GDK_WA_COLORMAP;
 
-  widget->window = gdk_window_new (gtk_widget_get_parent_window (widget),
-                                   &attributes, attributes_mask);
-  gdk_window_set_user_data (widget->window, widget);
+  window = gdk_window_new (gtk_widget_get_parent_window (widget),
+                           &attributes, attributes_mask);
+  gtk_widget_set_window (widget, window);
+  gdk_window_set_user_data (window, widget);
 
   /* must come before text_window_realize calls */
-  widget->style = gtk_style_attach (widget->style, widget->window);
+  gtk_widget_style_attach (widget);
 
-  gdk_window_set_background (widget->window,
-                             &widget->style->bg[gtk_widget_get_state (widget)]);
+  gdk_window_set_background (window,
+                             &gtk_widget_get_style (widget)->bg[gtk_widget_get_state (widget)]);
 
   text_window_realize (priv->text_window, widget);
 
@@ -4069,32 +4078,37 @@ gtk_text_view_unrealize (GtkWidget *widget)
 static void
 gtk_text_view_set_background (GtkTextView *text_view)
 {
+  GtkStyle *style;
+  GtkStateType state;
   GtkWidget *widget;
   GtkTextViewPrivate *priv;
 
   widget = GTK_WIDGET (text_view);
   priv = text_view->priv;
 
-  gdk_window_set_background (widget->window,
-			     &widget->style->bg[gtk_widget_get_state (widget)]);
-  
+  style = gtk_widget_get_style (widget);
+  state = gtk_widget_get_state (widget);
+
+  gdk_window_set_background (gtk_widget_get_window (widget),
+                             &style->bg[state]);
+
   gdk_window_set_background (priv->text_window->bin_window,
-			     &widget->style->base[gtk_widget_get_state (widget)]);
-  
+                             &style->base[state]);
+
   if (priv->left_window)
     gdk_window_set_background (priv->left_window->bin_window,
-			       &widget->style->bg[gtk_widget_get_state (widget)]);
+                               &style->bg[state]);
   if (priv->right_window)
     gdk_window_set_background (priv->right_window->bin_window,
-			       &widget->style->bg[gtk_widget_get_state (widget)]);
-  
+                               &style->bg[state]);
+
   if (priv->top_window)
     gdk_window_set_background (priv->top_window->bin_window,
-			       &widget->style->bg[gtk_widget_get_state (widget)]);
-  
+                               &style->bg[state]);
+
   if (priv->bottom_window)
     gdk_window_set_background (priv->bottom_window->bin_window,
-			       &widget->style->bg[gtk_widget_get_state (widget)]);
+                               &style->bg[state]);
 }
 
 static void
@@ -4117,9 +4131,8 @@ gtk_text_view_style_set (GtkWidget *widget,
     {
       gtk_text_view_set_attributes_from_style (text_view,
                                                priv->layout->default_style,
-                                               widget->style);
-      
-      
+                                               gtk_widget_get_style (widget));
+
       ltr_context = gtk_widget_create_pango_context (widget);
       pango_context_set_base_dir (ltr_context, PANGO_DIRECTION_LTR);
       rtl_context = gtk_widget_create_pango_context (widget);
@@ -4826,7 +4839,7 @@ gtk_text_view_expose_event (GtkWidget *widget, GdkEventExpose *event)
       gtk_text_view_paint (widget, &event->area, event);
     }
 
-  if (event->window == widget->window)
+  if (event->window == gtk_widget_get_window (widget))
     gtk_text_view_draw_focus (widget);
 
   /* Propagate exposes to all unanchored children. 
@@ -4854,6 +4867,8 @@ gtk_text_view_expose_event (GtkWidget *widget, GdkEventExpose *event)
 static void
 gtk_text_view_draw_focus (GtkWidget *widget)
 {
+  GtkAllocation allocation;
+  GdkWindow *window;
   gboolean interior_focus;
 
   /* We clear the focus if we are in interior focus mode. */
@@ -4863,17 +4878,21 @@ gtk_text_view_draw_focus (GtkWidget *widget)
   
   if (gtk_widget_is_drawable (widget))
     {
+      window = gtk_widget_get_window (widget);
+
       if (gtk_widget_has_focus (widget) && !interior_focus)
-        {          
-          gtk_paint_focus (widget->style, widget->window, gtk_widget_get_state (widget),
+        {
+          gtk_widget_get_allocation (widget, &allocation);
+          gtk_paint_focus (gtk_widget_get_style (widget),
+                           window,
+                           gtk_widget_get_state (widget),
                            NULL, widget, "textview",
                            0, 0,
-                           widget->allocation.width,
-                           widget->allocation.height);
+                           allocation.width, allocation.height);
         }
       else
         {
-          gdk_window_clear (widget->window);
+          gdk_window_clear (window);
         }
     }
 }
@@ -6680,7 +6699,8 @@ gtk_text_view_ensure_layout (GtkTextView *text_view)
 
       gtk_widget_ensure_style (widget);
       gtk_text_view_set_attributes_from_style (text_view,
-                                               style, widget->style);
+                                               style,
+                                               gtk_widget_get_style (widget));
 
       style->pixels_above_lines = priv->pixels_above_lines;
       style->pixels_below_lines = priv->pixels_below_lines;
@@ -7449,14 +7469,15 @@ typedef struct
 
 /* The window to which widget->window is relative */
 #define ALLOCATION_WINDOW(widget)		\
-   (!gtk_widget_get_has_window (widget) ?		\
-    (widget)->window :                          \
-     gdk_window_get_parent ((widget)->window))
+   (!gtk_widget_get_has_window (widget) ?		    \
+    gtk_widget_get_window (widget) :                        \
+    gdk_window_get_parent (gtk_widget_get_window (widget)))
 
 static void
 adjust_allocation_recurse (GtkWidget *widget,
 			   gpointer   data)
 {
+  GtkAllocation allocation;
   ScrollData *scroll_data = data;
 
   /* Need to really size allocate instead of just poking
@@ -7467,7 +7488,9 @@ adjust_allocation_recurse (GtkWidget *widget,
     {
       if (gtk_widget_get_visible (widget))
 	{
-	  GdkRectangle tmp_rectangle = widget->allocation;
+	  GdkRectangle tmp_rectangle;
+
+          tmp_rectangle = allocation;
 	  tmp_rectangle.x += scroll_data->dx;
           tmp_rectangle.y += scroll_data->dy;
           
@@ -7478,9 +7501,10 @@ adjust_allocation_recurse (GtkWidget *widget,
     {
       if (ALLOCATION_WINDOW (widget) == scroll_data->window)
 	{
-	  widget->allocation.x += scroll_data->dx;
-          widget->allocation.y += scroll_data->dy;
-          
+	  allocation.x += scroll_data->dx;
+          allocation.y += scroll_data->dy;
+          gtk_widget_set_allocation (widget, &allocation);
+
 	  if (GTK_IS_CONTAINER (widget))
 	    gtk_container_forall (GTK_CONTAINER (widget),
 				  adjust_allocation_recurse,
@@ -8025,6 +8049,7 @@ popup_position_func (GtkMenu   *menu,
                      gboolean  *push_in,
                      gpointer	user_data)
 {
+  GtkAllocation allocation;
   GtkTextView *text_view;
   GtkWidget *widget;
   GdkRectangle cursor_rect;
@@ -8043,7 +8068,8 @@ popup_position_func (GtkMenu   *menu,
   
   screen = gtk_widget_get_screen (widget);
 
-  gdk_window_get_origin (widget->window, &root_x, &root_y);
+  gdk_window_get_origin (gtk_widget_get_window (widget),
+                         &root_x, &root_y);
 
   gtk_text_buffer_get_iter_at_mark (get_buffer (text_view),
                                     &iter,
@@ -8056,6 +8082,8 @@ popup_position_func (GtkMenu   *menu,
   gtk_text_view_get_visible_rect (text_view, &onscreen_rect);
   
   gtk_widget_size_request (text_view->priv->popup_menu, &req);
+
+  gtk_widget_get_allocation (widget, &allocation);
 
   /* can't use rectangle_intersect since cursor rect can have 0 width */
   if (cursor_rect.x >= onscreen_rect.x &&
@@ -8073,14 +8101,14 @@ popup_position_func (GtkMenu   *menu,
     }
   else
     {
-      /* Just center the menu, since cursor is offscreen. */      
-      *x = root_x + (widget->allocation.width / 2 - req.width / 2);
-      *y = root_y + (widget->allocation.height / 2 - req.height / 2);      
+      /* Just center the menu, since cursor is offscreen. */
+      *x = root_x + (allocation.width / 2 - req.width / 2);
+      *y = root_y + (allocation.height / 2 - req.height / 2);
     }
-  
+
   /* Ensure sanity */
-  *x = CLAMP (*x, root_x, (root_x + widget->allocation.width));
-  *y = CLAMP (*y, root_y, (root_y + widget->allocation.height));
+  *x = CLAMP (*x, root_x, (root_x + allocation.width));
+  *y = CLAMP (*y, root_y, (root_y + allocation.height));
 
   monitor_num = gdk_screen_get_monitor_at_point (screen, *x, *y);
   gtk_menu_set_monitor (menu, monitor_num);
@@ -8342,6 +8370,7 @@ static void
 text_window_realize (GtkTextWindow *win,
                      GtkWidget     *widget)
 {
+  GdkWindow *window;
   GdkWindowAttr attributes;
   gint attributes_mask;
   GdkCursor *cursor;
@@ -8358,9 +8387,10 @@ text_window_realize (GtkTextWindow *win,
 
   attributes_mask = GDK_WA_X | GDK_WA_Y | GDK_WA_VISUAL | GDK_WA_COLORMAP;
 
-  win->window = gdk_window_new (widget->window,
-                                &attributes,
-                                attributes_mask);
+  window = gtk_widget_get_window (widget);
+
+  win->window = gdk_window_new (window,
+                                &attributes, attributes_mask);
 
   gdk_window_set_back_pixmap (win->window, NULL, FALSE);
   
@@ -8393,7 +8423,7 @@ text_window_realize (GtkTextWindow *win,
       if (gtk_widget_is_sensitive (widget))
         {
           /* I-beam cursor */
-          cursor = gdk_cursor_new_for_display (gdk_drawable_get_display (widget->window),
+          cursor = gdk_cursor_new_for_display (gdk_drawable_get_display (window),
 					       GDK_XTERM);
           gdk_window_set_cursor (win->bin_window, cursor);
           gdk_cursor_unref (cursor);
@@ -8404,12 +8434,12 @@ text_window_realize (GtkTextWindow *win,
 
 
       gdk_window_set_background (win->bin_window,
-                                 &widget->style->base[gtk_widget_get_state (widget)]);
+                                 &gtk_widget_get_style (widget)->base[gtk_widget_get_state (widget)]);
     }
   else
     {
       gdk_window_set_background (win->bin_window,
-                                 &widget->style->bg[gtk_widget_get_state (widget)]);
+                                 &gtk_widget_get_style (widget)->bg[gtk_widget_get_state (widget)]);
     }
 
   g_object_set_qdata (G_OBJECT (win->window),
@@ -8639,7 +8669,7 @@ gtk_text_view_get_window (GtkTextView *text_view,
   switch (win)
     {
     case GTK_TEXT_WINDOW_WIDGET:
-      return GTK_WIDGET (text_view)->window;
+      return gtk_widget_get_window (GTK_WIDGET (text_view));
       break;
 
     case GTK_TEXT_WINDOW_TEXT:
@@ -8705,7 +8735,7 @@ gtk_text_view_get_window_type (GtkTextView *text_view,
   g_return_val_if_fail (GTK_IS_TEXT_VIEW (text_view), 0);
   g_return_val_if_fail (GDK_IS_WINDOW (window), 0);
 
-  if (window == GTK_WIDGET (text_view)->window)
+  if (window == gtk_widget_get_window (GTK_WIDGET (text_view)))
     return GTK_TEXT_WINDOW_WIDGET;
 
   win = g_object_get_qdata (G_OBJECT (window),
@@ -9309,7 +9339,7 @@ gtk_text_view_add_child_at_anchor (GtkTextView          *text_view,
   g_return_if_fail (GTK_IS_TEXT_VIEW (text_view));
   g_return_if_fail (GTK_IS_WIDGET (child));
   g_return_if_fail (GTK_IS_TEXT_CHILD_ANCHOR (anchor));
-  g_return_if_fail (child->parent == NULL);
+  g_return_if_fail (gtk_widget_get_parent (child) == NULL);
 
   gtk_text_view_ensure_layout (text_view);
 
@@ -9358,7 +9388,7 @@ gtk_text_view_add_child_in_window (GtkTextView       *text_view,
 
   g_return_if_fail (GTK_IS_TEXT_VIEW (text_view));
   g_return_if_fail (GTK_IS_WIDGET (child));
-  g_return_if_fail (child->parent == NULL);
+  g_return_if_fail (gtk_widget_get_parent (child) == NULL);
 
   vc = text_view_child_new_window (child, which_window,
                                    xpos, ypos);
@@ -9388,7 +9418,7 @@ gtk_text_view_move_child (GtkTextView *text_view,
 
   g_return_if_fail (GTK_IS_TEXT_VIEW (text_view));
   g_return_if_fail (GTK_IS_WIDGET (child));
-  g_return_if_fail (child->parent == (GtkWidget*) text_view);
+  g_return_if_fail (gtk_widget_get_parent (child) == GTK_WIDGET (text_view));
 
   vc = g_object_get_data (G_OBJECT (child),
                           "gtk-text-view-child");
