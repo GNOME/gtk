@@ -154,10 +154,12 @@ gtk_separator_size_request (GtkWidget      *widget,
 {
   GtkSeparator *separator = GTK_SEPARATOR (widget);
   GtkSeparatorPrivate *private = separator->priv;
+  GtkStyle *style;
   gboolean wide_separators;
   gint     separator_width;
   gint     separator_height;
 
+  style = gtk_widget_get_style (widget);
   gtk_widget_style_get (widget,
                         "wide-separators",  &wide_separators,
                         "separator-width",  &separator_width,
@@ -172,14 +174,14 @@ gtk_separator_size_request (GtkWidget      *widget,
       if (wide_separators)
         requisition->height = separator_height;
       else
-        requisition->height = widget->style->ythickness;
+        requisition->height = style->ythickness;
     }
   else
     {
       if (wide_separators)
         requisition->width = separator_width;
       else
-        requisition->width = widget->style->xthickness;
+        requisition->width = style->xthickness;
     }
 }
 
@@ -189,6 +191,10 @@ gtk_separator_expose (GtkWidget      *widget,
 {
   GtkSeparator *separator = GTK_SEPARATOR (widget);
   GtkSeparatorPrivate *private = separator->priv;
+  GtkAllocation allocation;
+  GtkStateType state;
+  GtkStyle *style;
+  GdkWindow *window;
   gboolean wide_separators;
   gint     separator_width;
   gint     separator_height;
@@ -196,51 +202,52 @@ gtk_separator_expose (GtkWidget      *widget,
   if (!gtk_widget_is_drawable (widget))
     return FALSE;
 
+  style = gtk_widget_get_style (widget);
   gtk_widget_style_get (widget,
                         "wide-separators",  &wide_separators,
                         "separator-width",  &separator_width,
                         "separator-height", &separator_height,
                         NULL);
 
+  window = gtk_widget_get_window (widget);
+  state = gtk_widget_get_state (widget);
+  gtk_widget_get_allocation (widget, &allocation);
+
   if (private->orientation == GTK_ORIENTATION_HORIZONTAL)
     {
       if (wide_separators)
-        gtk_paint_box (widget->style, widget->window,
-                       gtk_widget_get_state (widget), GTK_SHADOW_ETCHED_OUT,
+        gtk_paint_box (style, window,
+                       state, GTK_SHADOW_ETCHED_OUT,
                        &event->area, widget, "hseparator",
-                       widget->allocation.x,
-                       widget->allocation.y + (widget->allocation.height -
-                                               separator_height) / 2,
-                       widget->allocation.width,
+                       allocation.x,
+                       allocation.y + (allocation.height - separator_height) / 2,
+                       allocation.width,
                        separator_height);
       else
-        gtk_paint_hline (widget->style, widget->window,
-                         gtk_widget_get_state (widget),
+        gtk_paint_hline (style, window,
+                         state,
                          &event->area, widget, "hseparator",
-                         widget->allocation.x,
-                         widget->allocation.x + widget->allocation.width - 1,
-                         widget->allocation.y + (widget->allocation.height -
-                                                 widget->style->ythickness) / 2);
+                         allocation.x,
+                         allocation.x + allocation.width - 1,
+                         allocation.y + (allocation.height - style->ythickness) / 2);
     }
   else
     {
       if (wide_separators)
-        gtk_paint_box (widget->style, widget->window,
-                       gtk_widget_get_state (widget), GTK_SHADOW_ETCHED_OUT,
+        gtk_paint_box (style, window,
+                       state, GTK_SHADOW_ETCHED_OUT,
                        &event->area, widget, "vseparator",
-                       widget->allocation.x + (widget->allocation.width -
-                                               separator_width) / 2,
-                       widget->allocation.y,
+                       allocation.x + (allocation.width - separator_width) / 2,
+                       allocation.y,
                        separator_width,
-                       widget->allocation.height);
+                       allocation.height);
       else
-        gtk_paint_vline (widget->style, widget->window,
-                         gtk_widget_get_state (widget),
+        gtk_paint_vline (style, window,
+                         state,
                          &event->area, widget, "vseparator",
-                         widget->allocation.y,
-                         widget->allocation.y + widget->allocation.height - 1,
-                         widget->allocation.x + (widget->allocation.width -
-                                                 widget->style->xthickness) / 2);
+                         allocation.y,
+                         allocation.y + allocation.height - 1,
+                         allocation.x + (allocation.width - style->xthickness) / 2);
     }
 
   return FALSE;
