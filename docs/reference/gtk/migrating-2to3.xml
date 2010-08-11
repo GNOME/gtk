@@ -6,14 +6,69 @@
   <title>Migrating from GTK+ 2.x to GTK+ 3</title>
 
   <para>
-    There are a number of steps that you can take to prepare your GTK+ 2.x
-    application for the switch to GTK+ 3.
+    GTK+ 3 is a major new version of GTK+, which breaks both API and ABI
+    compared to GTK+ 2.x, which has remained API- and ABI-stable for a
+    long time. Thankfully, most of the changes are not hard to adapt to
+    and there are a number of steps that you can take to prepare your
+    GTK+ 2.x application for the switch to GTK+ 3. After that, there's
+    a small number of adjustments that you may have to do when you actually
+    switch your application to build against GTK+ 3.
   </para>
 
   <section>
-  <title>Only single includes</title>
+    <title>Preparation in GTK+ 2.x</title>
+
+    <para>
+      The steps outlined in the following sections assume that your
+      application is working with GTK+ 2.22, which is the final stable
+      release of GTK+ 2.x. It includes all the necessary APIs and tools
+      to help you port your application to GTK+ 3. If you are still using
+      an older version of GTK+ 2.x, you should first get your application
+      to build and work with 2.22.
+    </para>
+
+  <section>
+  <title>Do not include individual headers</title>
   <para>
-    Make sure your program only include the toplevel headers:
+    With GTK+ 2.x it was common to include just the header files for
+    a few widgets that your application was using, which could lead
+    to problems with missing definitions, etc. GTK+ 3 tightens the
+    rules about which header files you are allowed to include directly.
+    The allowed header files are are
+    <variablelist>
+      <varlistentry>
+        <term><filename>gtk/gtk.h</filename></term>
+        <listitem>for GTK</listitem>
+      </varlistentry>
+      <varlistentry>
+        <term><filename>gtk/gtkunixprint.h</filename></term>
+        <listitem>for low-level, UNIX-specific printing functions</listitem>
+      </varlistentry>
+      <varlistentry>
+        <term><filename>gdk-pixbuf/gdk-pixbuf.h</filename></term>
+        <listitem>for GdkPixbuf</listitem>
+      </varlistentry>
+      <varlistentry>
+        <term><filename>gdk/gdk.h</filename></term>
+        <listitem>for GDK</listitem>
+      </varlistentry>
+      <varlistentry>
+        <term><filename>gdk/gdkx.h</filename></term>
+        <listitem>for GDK functions that are X11-specific</listitem>
+      </varlistentry>
+      <varlistentry>
+        <term><filename>gdk/gdkkeysyms.h</filename></term>
+        <listitem>if you need the GDK keysym definitions</listitem>
+      </varlistentry>
+    </variablelist>
+    (these relative paths are assuming that you are using the include
+     paths that are specified in the gtk+-2.0.pc file, as returned by
+     <literal>pkg-config --cflags gtk+-2.0.pc</literal>.)
+  </para>
+  <para>
+    To check that your application only includes the allowed headers,
+    you can use defines to disable inclusion of individual headers,
+    as follows:
     <programlisting>
     make CFLAGS+="-DG_DISABLE_SINGLE_INCLUDES -DGDK_PIXBUF_DISABLE_SINGLE_INCLUDES -DGTK_DISABLE_SINGLE_INCLUDES"
     </programlisting>
@@ -23,8 +78,17 @@
   <section>
   <title>Do not use deprecated symbols</title>
   <para>
-    Make sure your program doesn't use any functions that have been
-    deprecated in GTK+ 2.x:
+    Over the years, a number of functions, and in some cases, entire
+    widgets have been deprecated. These deprecations are clearly spelled
+    out in the API reference, with hints about the recommended replacements.
+    The API reference also includes an
+    <link linkend="api-index-deprecated">index</link> of all deprecated
+    symbols.
+  </para>
+  <para>
+    To verify that your program does not use any deprecated symbols,
+    you can use defines to remove deprecated symbols from the header files,
+    as follows:
     <programlisting>
     make CFLAGS+="-DG_DISABLE_DEPRECATED -DGDK_PIXBUF_DISABLE_DEPRECATED -DGDK_DISABLE_DEPRECATED -DGTK_DISABLE_DEPRECATED"
     </programlisting>
@@ -35,20 +99,313 @@
   <title>Use accessor functions instead direct access</title>
   <para>
     GTK+ 3 removes many implementation details and struct members from
-    its public headers. To ensure that your application does not have problems
-    with this, you define the preprocessor symbol GSEAL_ENABLE. This will
-    make the compiler catch all uses of direct access to struct fields so that
-    you can go through them one by one and replace them with a call to an
-    accessor function instead.
+    its public headers.
+  </para>
+  <para>
+    To ensure that your application does not have problems with this, you
+    define the preprocessor symbol <literal>GSEAL_ENABLE</literal>. This
+    will make the compiler catch all uses of direct access to struct fields
+    so that you can go through them one by one and replace them with a call
+    to an accessor function instead.
     <programlisting>
     make CFLAGS+="-DGSEAL_ENABLE"
     </programlisting>
-    Starting with 2.90.4, GTK+'s .pc files turn on GSEAL_ENABLE by default.
   </para>
   </section>
 
   <section>
-  <title>GTK+ Modules</title>
+    <title>Use cairo for drawing</title>
+    <para>
+      In GTK+ 3, the GDK drawing API (which closely mimics the X
+      drawing API, which is itself modeled after PostScript) has been
+      removed. All drawing in GTK+ 3 is done via cairo.
+    </para>
+    <para>
+      The #GdkGC and #GdkImage objects, as well as all the functions using
+      them are gone. This includes the <literal>gdk_draw_</literal> family
+      of functions like gdk_draw_rectangle() and gdk_draw_drawable(). As
+      #GdkGC is roughly equivalent to #cairo_t and #GdkImage was used for
+      drawing images to GdkDrawables, which cairo supports automatically,
+      a transition is usually straightforward.
+    </para>
+    <para>
+      The following examples show a few common drawing idioms used by
+      applications that have been ported to use cairo and how the code
+      was replaced.
+    </para>
+    <example>
+       <title>Drawing a GdkPixbuf onto a GdkDrawable</title>
+         <para>
+           Drawing a pixbuf onto a drawable used to be done like this:
+<programlisting><![CDATA[
+gdk_draw_pixbuf (window,
+                 gtk_widget_get_style (widget)->black_gc,
+                 pixbuf,
+                 0, 0
+                 x, y,
+                 gdk_pixbuf_get_width (pixbuf),
+                 gdk_pixbuf_get_height (pixbuf),
+                 GDK_RGB_DITHER_NORMAL,
+                 0, 0);
+]]></programlisting>
+           Doing the same thing with cairo:
+<programlisting><![CDATA[
+cairo_t *cr = gdk_cairo_create (window);
+gdk_cairo_set_source_pixbuf (cr, pixbuf, x, y);
+cairo_paint (cr);
+cairo_destroy (cr);
+]]></programlisting>
+           Note that very similar code can be used for drawing pixmaps
+           by using gdk_cairo_set_source_pixmap() instead of
+           gdk_cairo_set_source_pixbuf().
+         </para>
+      </example>
+      <example>
+        <title>Drawing a tiled GdkPixmap to a GdkDrawable</title>
+        <para>
+          Tiled pixmaps are often used for drawing backgrounds.
+          Old code looked something like this:
+          <programlisting><![CDATA[
+GdkGCValues gc_values;
+GdkGC *gc;
+
+/* setup */
+gc = gtk_widget_get_style (widget)->black_gc;
+gdk_gc_set_tile (gc, pixmap);
+gdk_gc_set_fill (gc, GDK_TILED);
+gdk_gc_set_ts_origin (gc, x_origin, y_origin);
+/* use */
+gdk_draw_rectangle (drawable, gc, TRUE, 0, 0, width, height);
+/* restore */
+gdk_gc_set_tile (gc, NULL);
+gdk_gc_set_fill (gc, GDK_SOLID);
+gdk_gc_set_ts_origin (gc, 0, 0);
+]]></programlisting>
+          The equivalent Cairo code looks like this:
+<programlisting><![CDATA[
+cairo_t *cr;
+
+cr = gdk_cairo_create (drawable);
+gdk_cairo_set_source_pixmap (cr, pixmap, x_origin, y_origin);
+cairo_pattern_set_extend (cairo_get_source (cr), CAIRO_EXTEND_REPEAT);
+cairo_rectangle (cr, 0, 0, width, height);
+cairo_fill (cr);
+cairo_destroy (cr);
+]]></programlisting>
+          Again, you can exchange pixbufs and pixmaps by using
+          gdk_cairo_set_source_pixbuf() instead of
+          gdk_cairo_set_source_pixmap().
+        </para>
+      </example>
+      <example>
+        <title>Drawing a PangoLayout to a clipped area</title>
+        <para>
+          Drawing layouts clipped is often used to avoid overdraw or to
+          allow drawing selections. Code would have looked like this:
+<programlisting><![CDATA[
+GdkGC *gc;
+
+/* setup */
+gc = gtk_widget_get_style (widget)->text_gc[state];
+gdk_gc_set_clip_rectangle (gc, &area);
+/* use */
+gdk_draw_layout (drawable, gc, x, y, layout);
+/* restore */
+gdk_gc_set_clip_rectangle (gc, NULL);
+]]></programlisting>
+          With Cairo, the same effect can be achieved using:
+<programlisting><![CDATA[
+cairo_t *cr;
+
+cr = gdk_cairo_create (drawable);
+/* clip */
+gdk_cairo_rectangle (cr, &area);
+cairo_clip (cr);
+/* set the correct source color */
+gdk_cairo_set_source_color (cr, &gtk_widget_get_style (widget)->text[state]);
+/* draw the text */
+cairo_move_to (cr, x, y);
+pango_cairo_show_layout (cr, layout);
+cairo_destroy (cr);
+]]></programlisting>
+          Clipping using cairo_clip() is of course not restricted to text
+          rendering and can be used everywhere where GC clips were used.
+          And using gdk_cairo_set_source_color() with style colors should
+          be used in all the places where a style’s GC was used to achieve
+          a particular color.
+        </para>
+      </example>
+    <section>
+      <title>what should you be aware of ?</title>
+      <formalpara><title>No more stippling</title>
+        <para>
+          Stippling is the usage of a bi-level mask, called a #GdkBitmap.
+          It was often used to achieve a checkerboard effect. You can use
+          cairo_mask() to achieve this effect. To get a checkerbox mask,
+          you can use code like this:
+<programlisting><![CDATA[
+static cairo_pattern_t *
+gtk_color_button_get_checkered (void)
+{
+    /* need to respect pixman's stride being a multiple of 4 */
+    static unsigned char data[8] = { 0xFF, 0x00, 0x00, 0x00,
+                                     0x00, 0xFF, 0x00, 0x00 };
+    cairo_surface_t *surface;
+    cairo_pattern_t *pattern;
+
+    surface = cairo_image_surface_create_for_data (data,
+                                                   CAIRO_FORMAT_A8,
+                                                   2, 2,
+                                                   4);
+    pattern = cairo_pattern_create_for_surface (surface);
+    cairo_surface_destroy (surface);
+    cairo_pattern_set_extend (pattern, CAIRO_EXTEND_REPEAT);
+    cairo_pattern_set_filter (pattern, CAIRO_FILTER_NEAREST);
+
+    return pattern;
+}
+]]></programlisting>
+          Note that stippling looks very outdated in UIs, and is rarely
+          used in modern applications. All properties that made use of
+          stippling have been removed from GTK+ 3. Most prominently,
+          stippling is absent from text rendering, in particular #GtkTextTag.
+        </para>
+      </formalpara>
+      <formalpara><title>Using the the target drawable also as source or mask</title>
+        <para>
+          The gdk_draw_drawable() function allowed using the same drawable
+          as source and target. This was often used to achieve a scrolling
+          effect. Cairo does not allow this yet. You can however use
+          cairo_push_group() to get a different intermediate target that
+          you can copy to. So you can replace this code:
+<programlisting><![CDATA[
+gdk_draw_drawable (pixmap,
+                   gc,
+                   pixmap,
+                   area.x + dx, area.y + dy,
+                   area.x, area.y,
+                   area.width, area.height);
+]]></programlisting>
+          By using this code:
+<programlisting><![CDATA[
+cairo_t *cr = gdk_cairo_create (pixmap);
+/* clipping restricts the intermediate surface's size, so it's a good idea
+ * to use it. */
+gdk_cairo_rectangle (cr, &area);
+cairo_clip (cr);
+/* Now push a group to change the target */
+cairo_push_group (cr);
+gdk_cairo_set_source_pixmap (cr, pixmap, dx, dy);
+cairo_paint (cr);
+/* Now copy the intermediate target back */
+cairo_pop_group_to_source (cr);
+cairo_paint (cr);
+cairo_destroy (cr);
+]]></programlisting>
+          The cairo developers plan to add self-copies in the future to allow
+          exactly this effect, so you might want to keep up on cairo
+          development to be able to change your code.
+        </para>
+      </formalpara>
+      <formalpara><title>Using pango_cairo_show_layout() instead of gdk_draw_layout_with_colors()</title>
+        <para>
+          GDK provided a way to ignore the color attributes of text and use
+          a hardcoded text color with the gdk_draw_layout_with_colors()
+          function. This is often used to draw text shadows or selections.
+          Pango’s cairo support does not yet provide this functionality. If
+          you use Pango layouts that change colors, the easiest way to achieve
+          a similar effect is using pango_cairo_layout_path() and cairo_fill()
+          instead of gdk_draw_layout_with_colors(). Note that this results in
+          a slightly uglier-looking text, as subpixel anti-aliasing is not
+          supported.
+        </para>
+      </formalpara>
+    </section>
+    </section>
+  </section>
+
+  <section>
+    <title>Changes that need to be done at the time of the switch</title>
+
+  <para>
+    This section outlines porting tasks that you need to tackle when
+    you get to the point that you actually build your application against
+    GTK+ 3. Making it possible to prepare for these in GTK+ 2.22 would
+    have been either impossible or impractical.
+  </para>
+
+  <section>
+    <title>Replace GdkRegion by cairo_region_t</title>
+
+    <para>
+      Starting with version 1.10, cairo provides a region API that is
+      equivalent to the GDK region API (which was itself copied from
+      the X server). Therefore, the region API has been removed in GTK+ 3.
+    </para>
+    <para>
+      Porting your application to the cairo region API should be a straight
+      find-and-replace task. Please refer to the following table:
+      <table>
+        <tgroup cols="2">
+          <thead>
+            <row><entry>GDK</entry><entry>cairo</entry></row>
+          </thead>
+          <tbody>
+            <row><entry>#GdkRegion</entry><entry>#cairo_region_t</entry></row>
+            <row><entry>#GdkRectangle</entry><entry>#cairo_rectangle_int_t</entry></row>
+            <row><entry>gdk_rectangle_intersect()</entry><entry>this function is still there</entry></row>
+            <row><entry>gdk_rectangle_union()</entry><entry>this function is still there</entry></row>
+            <row><entry>gdk_region_new()</entry><entry>cairo_region_create()</entry></row>
+            <row><entry>gdk_region_copy()</entry><entry>cairo_region_copy()</entry></row>
+            <row><entry>gdk_region_destroy()</entry><entry>cairo_region_destroy()</entry></row>
+            <row><entry>gdk_region_rectangle()</entry><entry>cairo_region_create_rectangle()</entry></row>
+            <row><entry>gdk_region_get_clipbox()</entry><entry>cairo_region_get_extents()</entry></row>
+            <row><entry>gdk_region_get_rectangles()</entry><entry>cairo_region_num_rectangles() and
+                                cairo_region_get_rectangle()</entry></row>
+            <row><entry>gdk_region_empty()</entry><entry>cairo_region_is_empty()</entry></row>
+            <row><entry>gdk_region_equal()</entry><entry>cairo_region_equal()</entry></row>
+            <row><entry>gdk_region_point_in()</entry><entry>cairo_region_contains_point()</entry></row>
+            <row><entry>gdk_region_rect_in()</entry><entry>cairo_region_contains_rectangle()</entry></row>
+            <row><entry>gdk_region_offset()</entry><entry>cairo_region_translate()</entry></row>
+            <row><entry>gdk_region_union_with_rect()</entry><entry>cairo_region_union_rectangle()</entry></row>
+            <row><entry>gdk_region_intersect()</entry><entry>cairo_region_intersect()</entry></row>
+            <row><entry>gdk_region_union()</entry><entry>cairo_region_union()</entry></row>
+            <row><entry>gdk_region_subtract()</entry><entry>cairo_region_subtract()</entry></row>
+            <row><entry>gdk_region_xor()</entry><entry>cairo_region_xor()</entry></row>
+            <row><entry>gdk_region_shrink()</entry><entry>no replacement</entry></row>
+            <row><entry>gdk_region_polygon()</entry><entry>no replacement, use cairo paths instead</entry></row>
+          </tbody>
+        </tgroup>
+      </table>
+    </para>
+  </section>
+
+  <section>
+    <title>Prevent mixed linkage</title>
+    <para>
+      Linking against GTK+ 2.x and GTK+ 3 in the same process is problematic
+      and can lead to hard-to-diagnose crashes. The gtk_init() function in
+      both GTK+ 2.22 and in GTK+ 3 tries to detect this situation and abort
+      with a diagnostic message, but this check is not 100% reliable (e.g. if
+      the problematic linking happens only in loadable modules).
+    </para>
+    <para>
+      Direct linking of your application against both versions of GTK+ is
+      easy to avoid; the problem gets harder when your application is using
+      libraries that are themselves linked against some version of GTK+.
+      In that case, you have to verify that you are using a version of the
+      library that is linked against GTK+ 3.
+    </para>
+    <para>
+      If you are using packages provided by a distributor, it is likely that
+      parallel installable versions of the library exist for GTK+ 2.x and
+      GTK+ 3, e.g for vte, check for vte3; for webkitgtk look for webkitgtk3,
+      and so on.
+    </para>
+  </section>
+
+  <section>
+  <title>Install GTK+ modules in the right place</title>
   <para>
     Some software packages install loadable GTK+ modules such as theme engines,
     gdk-pixbuf loaders or input methods. Since GTK+ 3 is parallel-installable
@@ -78,4 +435,7 @@
     unhappiness and must be avoided.
   </para>
   </section>
+
+  </section>
+
 </chapter>
