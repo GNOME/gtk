@@ -196,8 +196,8 @@ gtk_fixed_move_internal (GtkFixed       *fixed,
   
   g_return_if_fail (GTK_IS_FIXED (fixed));
   g_return_if_fail (GTK_IS_WIDGET (widget));
-  g_return_if_fail (widget->parent == GTK_WIDGET (fixed));  
-  
+  g_return_if_fail (gtk_widget_get_parent (widget) == GTK_WIDGET (fixed));
+
   child = get_child (fixed, widget);
 
   g_assert (child);
@@ -287,6 +287,8 @@ gtk_fixed_get_child_property (GtkContainer *container,
 static void
 gtk_fixed_realize (GtkWidget *widget)
 {
+  GtkAllocation allocation;
+  GdkWindow *window;
   GdkWindowAttr attributes;
   gint attributes_mask;
 
@@ -296,11 +298,13 @@ gtk_fixed_realize (GtkWidget *widget)
     {
       gtk_widget_set_realized (widget, TRUE);
 
+      gtk_widget_get_allocation (widget, &allocation);
+
       attributes.window_type = GDK_WINDOW_CHILD;
-      attributes.x = widget->allocation.x;
-      attributes.y = widget->allocation.y;
-      attributes.width = widget->allocation.width;
-      attributes.height = widget->allocation.height;
+      attributes.x = allocation.x;
+      attributes.y = allocation.y;
+      attributes.width = allocation.width;
+      attributes.height = allocation.height;
       attributes.wclass = GDK_INPUT_OUTPUT;
       attributes.visual = gtk_widget_get_visual (widget);
       attributes.colormap = gtk_widget_get_colormap (widget);
@@ -308,13 +312,14 @@ gtk_fixed_realize (GtkWidget *widget)
       attributes.event_mask |= GDK_EXPOSURE_MASK | GDK_BUTTON_PRESS_MASK;
       
       attributes_mask = GDK_WA_X | GDK_WA_Y | GDK_WA_VISUAL | GDK_WA_COLORMAP;
-      
-      widget->window = gdk_window_new (gtk_widget_get_parent_window (widget), &attributes, 
-				       attributes_mask);
-      gdk_window_set_user_data (widget->window, widget);
-      
-      widget->style = gtk_style_attach (widget->style, widget->window);
-      gtk_style_set_background (widget->style, widget->window, GTK_STATE_NORMAL);
+
+      window = gdk_window_new (gtk_widget_get_parent_window (widget),
+                               &attributes, attributes_mask);
+      gtk_widget_set_window (widget, window);
+      gdk_window_set_user_data (window, widget);
+
+      gtk_widget_style_attach (widget);
+      gtk_style_set_background (gtk_widget_get_style (widget), window, GTK_STATE_NORMAL);
     }
 }
 
@@ -371,12 +376,12 @@ gtk_fixed_size_allocate (GtkWidget     *widget,
   GList *children;
   guint border_width;
 
-  widget->allocation = *allocation;
+  gtk_widget_set_allocation (widget, allocation);
 
   if (gtk_widget_get_has_window (widget))
     {
       if (gtk_widget_get_realized (widget))
-	gdk_window_move_resize (widget->window,
+	gdk_window_move_resize (gtk_widget_get_window (widget),
 				allocation->x, 
 				allocation->y,
 				allocation->width, 
@@ -399,8 +404,8 @@ gtk_fixed_size_allocate (GtkWidget     *widget,
 
 	  if (!gtk_widget_get_has_window (widget))
 	    {
-	      child_allocation.x += widget->allocation.x;
-	      child_allocation.y += widget->allocation.y;
+	      child_allocation.x += allocation->x;
+	      child_allocation.y += allocation->y;
 	    }
 	  
 	  child_allocation.width = child_requisition.width;
