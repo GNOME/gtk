@@ -582,9 +582,11 @@ gtk_cell_renderer_accel_start_editing (GtkCellRenderer      *cell,
   GtkCellRendererAccelPriv *priv;
   GtkCellRendererText *celltext;
   GtkCellRendererAccel *accel;
+  GtkStyle *style;
   GtkWidget *label;
   GtkWidget *eventbox;
   GdkDevice *device, *keyb, *pointer;
+  GdkWindow *window;
   gboolean editable;
   guint32 time;
 
@@ -597,7 +599,10 @@ gtk_cell_renderer_accel_start_editing (GtkCellRenderer      *cell,
   if (editable == FALSE)
     return NULL;
 
-  g_return_val_if_fail (widget->window != NULL, NULL);
+  window = gtk_widget_get_window (widget);
+  style = gtk_widget_get_style (widget);
+
+  g_return_val_if_fail (window != NULL, NULL);
 
   if (event)
     device = gdk_event_get_device (event);
@@ -620,13 +625,13 @@ gtk_cell_renderer_accel_start_editing (GtkCellRenderer      *cell,
 
   time = gdk_event_get_time (event);
 
-  if (gdk_device_grab (keyb, widget->window,
+  if (gdk_device_grab (keyb, window,
                        GDK_OWNERSHIP_WINDOW, FALSE,
                        GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK,
                        NULL, time) != GDK_GRAB_SUCCESS)
     return NULL;
 
-  if (gdk_device_grab (pointer, widget->window,
+  if (gdk_device_grab (pointer, window,
                        GDK_OWNERSHIP_WINDOW, FALSE,
                        GDK_BUTTON_PRESS_MASK,
                        NULL, time) != GDK_GRAB_SUCCESS)
@@ -650,13 +655,15 @@ gtk_cell_renderer_accel_start_editing (GtkCellRenderer      *cell,
   
   label = gtk_label_new (NULL);
   gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+
   
+
   gtk_widget_modify_bg (eventbox, GTK_STATE_NORMAL,
-                        &widget->style->bg[GTK_STATE_SELECTED]);
+                        &style->bg[GTK_STATE_SELECTED]);
 
   gtk_widget_modify_fg (label, GTK_STATE_NORMAL,
-                        &widget->style->fg[GTK_STATE_SELECTED]);
-  
+                        &style->fg[GTK_STATE_SELECTED]);
+
   /* This label is displayed in a treeview cell displaying
    * an accelerator when the cell is clicked to change the 
    * acelerator.
