@@ -2010,7 +2010,8 @@ text_view_visibility_notify_event (GtkWidget          *text_view,
     {
       GdkDevice *dev = d->data;
 
-      gdk_window_get_device_position (text_view->window, dev, &wx, &wy, NULL);
+      gdk_window_get_device_position (gtk_widget_get_window (text_view), dev,
+                                      &wx, &wy, NULL);
 
       gtk_text_view_window_to_buffer_coords (GTK_TEXT_VIEW (text_view),
                                              GTK_TEXT_WINDOW_WIDGET,
