@@ -814,6 +814,7 @@ color_sample_drag_handle (GtkWidget        *widget,
 static void
 color_sample_draw_sample (GtkColorSelection *colorsel, int which)
 {
+  GtkAllocation allocation;
   GtkWidget *da;
   gint x, y, wid, heig, goff;
   ColorSelectionPrivate *priv;
@@ -833,14 +834,18 @@ color_sample_draw_sample (GtkColorSelection *colorsel, int which)
     }
   else
     {
+      GtkAllocation old_sample_allocation;
+
       da = priv->cur_sample;
-      goff =  priv->old_sample->allocation.width % 32;
+      gtk_widget_get_allocation (priv->old_sample, &old_sample_allocation);
+      goff =  old_sample_allocation.width % 32;
     }
 
-  cr = gdk_cairo_create (da->window);
-  
-  wid = da->allocation.width;
-  heig = da->allocation.height;
+  cr = gdk_cairo_create (gtk_widget_get_window (da));
+
+  gtk_widget_get_allocation (da, &allocation);
+  wid = allocation.width;
+  heig = allocation.height;
 
   /* Below needs tweaking for non-power-of-two */  
   
@@ -1046,26 +1051,32 @@ palette_paint (GtkWidget    *drawing_area,
 	       GdkRectangle *area,
 	       gpointer      data)
 {
+  GdkWindow *window;
   cairo_t *cr;
   gint focus_width;
-    
-  if (drawing_area->window == NULL)
+
+  window = gtk_widget_get_window (drawing_area);
+
+  if (window == NULL)
     return;
 
-  cr = gdk_cairo_create (drawing_area->window);
+  cr = gdk_cairo_create (window);
 
-  gdk_cairo_set_source_color (cr, &drawing_area->style->bg[GTK_STATE_NORMAL]);
+  gdk_cairo_set_source_color (cr, &gtk_widget_get_style (drawing_area)->bg[GTK_STATE_NORMAL]);
   gdk_cairo_rectangle (cr, area);
   cairo_fill (cr);
   
   if (gtk_widget_has_focus (drawing_area))
     {
+      GtkAllocation allocation;
+
       set_focus_line_attributes (drawing_area, cr, &focus_width);
 
+      gtk_widget_get_allocation (drawing_area, &allocation);
       cairo_rectangle (cr,
-		       focus_width / 2., focus_width / 2.,
-		       drawing_area->allocation.width - focus_width,
-		       drawing_area->allocation.height - focus_width);
+                       focus_width / 2., focus_width / 2.,
+                       allocation.width - focus_width,
+                       allocation.height - focus_width);
       cairo_stroke (cr);
     }
 
@@ -1318,7 +1329,7 @@ palette_expose (GtkWidget      *drawing_area,
 		GdkEventExpose *event,
 		gpointer        data)
 {
-  if (drawing_area->window == NULL)
+  if (gtk_widget_get_window (drawing_area) == NULL)
     return FALSE;
   
   palette_paint (drawing_area, &(event->area), data);
@@ -1333,6 +1344,7 @@ popup_position_func (GtkMenu   *menu,
                      gboolean  *push_in,
                      gpointer	user_data)
 {
+  GtkAllocation allocation;
   GtkWidget *widget;
   GtkRequisition req;      
   gint root_x, root_y;
@@ -1342,13 +1354,15 @@ popup_position_func (GtkMenu   *menu,
   
   g_return_if_fail (gtk_widget_get_realized (widget));
 
-  gdk_window_get_origin (widget->window, &root_x, &root_y);
-  
+  gdk_window_get_origin (gtk_widget_get_window (widget),
+                         &root_x, &root_y);
+
   gtk_widget_size_request (GTK_WIDGET (menu), &req);
+  gtk_widget_get_allocation (widget, &allocation);
 
   /* Put corner of menu centered on color cell */
-  *x = root_x + widget->allocation.width / 2;
-  *y = root_y + widget->allocation.height / 2;
+  *x = root_x + allocation.width / 2;
+  *y = root_y + allocation.height / 2;
 
   /* Ensure sanity */
   screen = gtk_widget_get_screen (widget);
@@ -1887,6 +1901,7 @@ get_screen_color (GtkWidget *button)
   GdkDevice *device, *keyb_device, *pointer_device;
   GdkCursor *picker_cursor;
   GdkGrabStatus grab_status;
+  GdkWindow *window;
   GtkWidget *grab_widget, *toplevel;
 
   guint32 time = gtk_get_current_event_time ();
@@ -1927,8 +1942,10 @@ get_screen_color (GtkWidget *button)
       priv->dropper_grab_widget = grab_widget;
     }
 
+  window = gtk_widget_get_window (priv->dropper_grab_widget);
+
   if (gdk_device_grab (keyb_device,
-                       priv->dropper_grab_widget->window,
+                       window,
                        GDK_OWNERSHIP_APPLICATION, FALSE,
                        GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK,
                        NULL, time) != GDK_GRAB_SUCCESS)
@@ -1936,7 +1953,7 @@ get_screen_color (GtkWidget *button)
 
   picker_cursor = make_picker_cursor (screen);
   grab_status = gdk_device_grab (pointer_device,
-                                 priv->dropper_grab_widget->window,
+                                 window,
                                  GDK_OWNERSHIP_APPLICATION,
                                  FALSE,
                                  GDK_BUTTON_RELEASE_MASK | GDK_BUTTON_PRESS_MASK | GDK_POINTER_MOTION_MASK,
