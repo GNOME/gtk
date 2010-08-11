@@ -2395,7 +2395,7 @@ update_node (GtkUIManager *self,
 	      }
 
             gtk_activatable_set_related_action (GTK_ACTIVATABLE (info->proxy), NULL);
-	    gtk_container_remove (GTK_CONTAINER (info->proxy->parent),
+	    gtk_container_remove (GTK_CONTAINER (gtk_widget_get_parent (info->proxy)),
 				  info->proxy);
 	    g_object_unref (info->proxy);
 	    info->proxy = NULL;
@@ -2506,14 +2506,14 @@ update_node (GtkUIManager *self,
 	{
 	  if (info->proxy)
 	    {
-	      gtk_container_remove (GTK_CONTAINER (info->proxy->parent),
+	      gtk_container_remove (GTK_CONTAINER (gtk_widget_get_parent (info->proxy)),
 				    info->proxy);
 	      g_object_unref (info->proxy);
 	      info->proxy = NULL;
 	    }
 	  if (info->extra)
 	    {
-	      gtk_container_remove (GTK_CONTAINER (info->extra->parent),
+	      gtk_container_remove (GTK_CONTAINER (gtk_widget_get_parent (info->extra)),
 				    info->extra);
 	      g_object_unref (info->extra);
 	      info->extra = NULL;
@@ -2553,14 +2553,14 @@ update_node (GtkUIManager *self,
 	{
 	  if (info->proxy)
 	    {
-	      gtk_container_remove (GTK_CONTAINER (info->proxy->parent),
+	      gtk_container_remove (GTK_CONTAINER (gtk_widget_get_parent (info->proxy)),
 				    info->proxy);
 	      g_object_unref (info->proxy);
 	      info->proxy = NULL;
 	    }
 	  if (info->extra)
 	    {
-	      gtk_container_remove (GTK_CONTAINER (info->extra->parent),
+	      gtk_container_remove (GTK_CONTAINER (gtk_widget_get_parent (info->extra)),
 				    info->extra);
 	      g_object_unref (info->extra);
 	      info->extra = NULL;
@@ -2603,7 +2603,7 @@ update_node (GtkUIManager *self,
 						G_CALLBACK (update_smart_separators),
 						NULL);  
           gtk_activatable_set_related_action (GTK_ACTIVATABLE (info->proxy), NULL);
-	  gtk_container_remove (GTK_CONTAINER (info->proxy->parent),
+	  gtk_container_remove (GTK_CONTAINER (gtk_widget_get_parent (info->proxy)),
 				info->proxy);
 	  g_object_unref (info->proxy);
 	  info->proxy = NULL;
@@ -2661,7 +2661,7 @@ update_node (GtkUIManager *self,
 						G_CALLBACK (update_smart_separators),
 						NULL);
           gtk_activatable_set_related_action (GTK_ACTIVATABLE (info->proxy), NULL);
-	  gtk_container_remove (GTK_CONTAINER (info->proxy->parent),
+	  gtk_container_remove (GTK_CONTAINER (gtk_widget_get_parent (info->proxy)),
 				info->proxy);
 	  g_object_unref (info->proxy);
 	  info->proxy = NULL;
@@ -2707,7 +2707,7 @@ update_node (GtkUIManager *self,
 
 	  if (GTK_IS_SEPARATOR_TOOL_ITEM (info->proxy))
 	    {
-	      gtk_container_remove (GTK_CONTAINER (info->proxy->parent),
+	      gtk_container_remove (GTK_CONTAINER (gtk_widget_get_parent (info->proxy)),
 				    info->proxy);
 	      g_object_unref (info->proxy);
 	      info->proxy = NULL;
@@ -2742,7 +2742,7 @@ update_node (GtkUIManager *self,
 	  
 	  if (GTK_IS_SEPARATOR_MENU_ITEM (info->proxy))
 	    {
-	      gtk_container_remove (GTK_CONTAINER (info->proxy->parent),
+	      gtk_container_remove (GTK_CONTAINER (gtk_widget_get_parent (info->proxy)),
 				    info->proxy);
 	      g_object_unref (info->proxy);
 	      info->proxy = NULL;
