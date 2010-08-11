@@ -4088,6 +4088,7 @@ popup_position_func (GtkMenu   *menu,
                      gboolean  *push_in,
                      gpointer	user_data)
 {
+  GtkAllocation allocation;
   GtkWidget *widget = GTK_WIDGET (user_data);
   GdkScreen *screen = gtk_widget_get_screen (widget);
   GtkRequisition req;
@@ -4096,12 +4097,13 @@ popup_position_func (GtkMenu   *menu,
 
   g_return_if_fail (gtk_widget_get_realized (widget));
 
-  gdk_window_get_origin (widget->window, x, y);
+  gdk_window_get_origin (gtk_widget_get_window (widget), x, y);
 
   gtk_widget_size_request (GTK_WIDGET (menu), &req);
 
-  *x += (widget->allocation.width - req.width) / 2;
-  *y += (widget->allocation.height - req.height) / 2;
+  gtk_widget_get_allocation (widget, &allocation);
+  *x += (allocation.width - req.width) / 2;
+  *y += (allocation.height - req.height) / 2;
 
   monitor_num = gdk_screen_get_monitor_at_point (screen, *x, *y);
   gtk_menu_set_monitor (menu, monitor_num);
@@ -5978,22 +5980,24 @@ static void
 set_busy_cursor (GtkFileChooserDefault *impl,
 		 gboolean               busy)
 {
+  GtkWidget *widget;
   GtkWindow *toplevel;
   GdkDisplay *display;
   GdkCursor *cursor;
 
   toplevel = get_toplevel (GTK_WIDGET (impl));
-  if (!toplevel || !gtk_widget_get_realized (GTK_WIDGET (toplevel)))
+  widget = GTK_WIDGET (toplevel);
+  if (!toplevel || !gtk_widget_get_realized (widget))
     return;
 
-  display = gtk_widget_get_display (GTK_WIDGET (toplevel));
+  display = gtk_widget_get_display (widget);
 
   if (busy)
     cursor = gdk_cursor_new_for_display (display, GDK_WATCH);
   else
     cursor = NULL;
 
-  gdk_window_set_cursor (GTK_WIDGET (toplevel)->window, cursor);
+  gdk_window_set_cursor (gtk_widget_get_window (widget), cursor);
   gdk_display_flush (display);
 
   if (cursor)
@@ -7776,11 +7780,14 @@ find_good_size_from_style (GtkWidget *widget,
 			   gint      *height)
 {
   GtkFileChooserDefault *impl;
+  GtkStyle *style;
   int font_size;
   GdkScreen *screen;
   double resolution;
 
-  g_assert (widget->style != NULL);
+  style = gtk_widget_get_style (widget);
+
+  g_assert (style != NULL);
   impl = GTK_FILE_CHOOSER_DEFAULT (widget);
 
   screen = gtk_widget_get_screen (widget);
@@ -7793,7 +7800,7 @@ find_good_size_from_style (GtkWidget *widget,
   else
     resolution = 96.0; /* wheeee */
 
-  font_size = pango_font_description_get_size (widget->style->font_desc);
+  font_size = pango_font_description_get_size (style->font_desc);
   font_size = PANGO_PIXELS (font_size) * resolution / 72.0;
 
   *width = font_size * NUM_CHARS;
