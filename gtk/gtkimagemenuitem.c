@@ -325,9 +325,13 @@ gtk_image_menu_item_toggle_size_request (GtkMenuItem *menu_item,
   GtkImageMenuItem *image_menu_item = GTK_IMAGE_MENU_ITEM (menu_item);
   GtkImageMenuItemPriv *priv = image_menu_item->priv;
   GtkPackDirection pack_dir;
+  GtkWidget *parent;
+  GtkWidget *widget = GTK_WIDGET (menu_item);
 
-  if (GTK_IS_MENU_BAR (GTK_WIDGET (menu_item)->parent))
-    pack_dir = gtk_menu_bar_get_child_pack_direction (GTK_MENU_BAR (GTK_WIDGET (menu_item)->parent));
+  parent = gtk_widget_get_parent (widget);
+
+  if (GTK_IS_MENU_BAR (parent))
+    pack_dir = gtk_menu_bar_get_child_pack_direction (GTK_MENU_BAR (parent));
   else
     pack_dir = GTK_PACK_DIRECTION_LTR;
 
@@ -420,9 +424,12 @@ gtk_image_menu_item_size_request (GtkWidget      *widget,
   gint child_width = 0;
   gint child_height = 0;
   GtkPackDirection pack_dir;
-  
-  if (GTK_IS_MENU_BAR (widget->parent))
-    pack_dir = gtk_menu_bar_get_child_pack_direction (GTK_MENU_BAR (widget->parent));
+  GtkWidget *parent;
+
+  parent = gtk_widget_get_parent (widget);
+
+  if (GTK_IS_MENU_BAR (parent))
+    pack_dir = gtk_menu_bar_get_child_pack_direction (GTK_MENU_BAR (parent));
   else
     pack_dir = GTK_PACK_DIRECTION_LTR;
 
@@ -460,10 +467,14 @@ gtk_image_menu_item_size_allocate (GtkWidget     *widget,
 {
   GtkImageMenuItem *image_menu_item = GTK_IMAGE_MENU_ITEM (widget);
   GtkImageMenuItemPriv *priv = image_menu_item->priv;
+  GtkAllocation widget_allocation;
   GtkPackDirection pack_dir;
-  
-  if (GTK_IS_MENU_BAR (widget->parent))
-    pack_dir = gtk_menu_bar_get_child_pack_direction (GTK_MENU_BAR (widget->parent));
+  GtkWidget *parent;
+
+  parent = gtk_widget_get_parent (widget);
+
+  if (GTK_IS_MENU_BAR (parent))
+    pack_dir = gtk_menu_bar_get_child_pack_direction (GTK_MENU_BAR (parent));
   else
     pack_dir = GTK_PACK_DIRECTION_LTR;
 
@@ -488,48 +499,50 @@ gtk_image_menu_item_size_allocate (GtkWidget     *widget,
       gtk_widget_get_child_requisition (priv->image,
                                         &child_requisition);
 
+      gtk_widget_get_allocation (widget, &widget_allocation);
+
       if (pack_dir == GTK_PACK_DIRECTION_LTR ||
 	  pack_dir == GTK_PACK_DIRECTION_RTL)
 	{
 	  offset = gtk_container_get_border_width (GTK_CONTAINER (image_menu_item)) +
-	    widget->style->xthickness;
-	  
+                   gtk_widget_get_style (widget)->xthickness;
+
 	  if ((gtk_widget_get_direction (widget) == GTK_TEXT_DIR_LTR) ==
 	      (pack_dir == GTK_PACK_DIRECTION_LTR))
 	    x = offset + horizontal_padding +
 	      (GTK_MENU_ITEM (image_menu_item)->toggle_size -
 	       toggle_spacing - child_requisition.width) / 2;
 	  else
-	    x = widget->allocation.width - offset - horizontal_padding -
+            x = widget_allocation.width - offset - horizontal_padding -
 	      GTK_MENU_ITEM (image_menu_item)->toggle_size + toggle_spacing +
 	      (GTK_MENU_ITEM (image_menu_item)->toggle_size -
 	       toggle_spacing - child_requisition.width) / 2;
-	  
-	  y = (widget->allocation.height - child_requisition.height) / 2;
+
+          y = (widget_allocation.height - child_requisition.height) / 2;
 	}
       else
 	{
 	  offset = gtk_container_get_border_width (GTK_CONTAINER (image_menu_item)) +
-	    widget->style->ythickness;
-	  
+                   gtk_widget_get_style (widget)->ythickness;
+
 	  if ((gtk_widget_get_direction (widget) == GTK_TEXT_DIR_LTR) ==
 	      (pack_dir == GTK_PACK_DIRECTION_TTB))
 	    y = offset + horizontal_padding +
 	      (GTK_MENU_ITEM (image_menu_item)->toggle_size -
 	       toggle_spacing - child_requisition.height) / 2;
 	  else
-	    y = widget->allocation.height - offset - horizontal_padding -
+            y = widget_allocation.height - offset - horizontal_padding -
 	      GTK_MENU_ITEM (image_menu_item)->toggle_size + toggle_spacing +
 	      (GTK_MENU_ITEM (image_menu_item)->toggle_size -
 	       toggle_spacing - child_requisition.height) / 2;
 
-	  x = (widget->allocation.width - child_requisition.width) / 2;
+          x = (widget_allocation.width - child_requisition.width) / 2;
 	}
       
       child_allocation.width = child_requisition.width;
       child_allocation.height = child_requisition.height;
-      child_allocation.x = widget->allocation.x + MAX (x, 0);
-      child_allocation.y = widget->allocation.y + MAX (y, 0);
+      child_allocation.x = widget_allocation.x + MAX (x, 0);
+      child_allocation.y = widget_allocation.y + MAX (y, 0);
 
       gtk_widget_size_allocate (priv->image, &child_allocation);
     }
