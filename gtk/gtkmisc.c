@@ -326,6 +326,8 @@ gtk_misc_get_padding (GtkMisc *misc,
 static void
 gtk_misc_realize (GtkWidget *widget)
 {
+  GtkAllocation allocation;
+  GdkWindow *window;
   GdkWindowAttr attributes;
   gint attributes_mask;
 
@@ -333,27 +335,32 @@ gtk_misc_realize (GtkWidget *widget)
 
   if (!gtk_widget_get_has_window (widget))
     {
-      widget->window = gtk_widget_get_parent_window (widget);
-      g_object_ref (widget->window);
-      widget->style = gtk_style_attach (widget->style, widget->window);
+      window = gtk_widget_get_parent_window (widget);
+      gtk_widget_set_window (widget, window);
+      g_object_ref (window);
+
+      gtk_widget_style_attach (widget);
     }
   else
     {
+      gtk_widget_get_allocation (widget, &allocation);
+
       attributes.window_type = GDK_WINDOW_CHILD;
-      attributes.x = widget->allocation.x;
-      attributes.y = widget->allocation.y;
-      attributes.width = widget->allocation.width;
-      attributes.height = widget->allocation.height;
+      attributes.x = allocation.x;
+      attributes.y = allocation.y;
+      attributes.width = allocation.width;
+      attributes.height = allocation.height;
       attributes.wclass = GDK_INPUT_OUTPUT;
       attributes.visual = gtk_widget_get_visual (widget);
       attributes.colormap = gtk_widget_get_colormap (widget);
       attributes.event_mask = gtk_widget_get_events (widget) | GDK_EXPOSURE_MASK;
       attributes_mask = GDK_WA_X | GDK_WA_Y | GDK_WA_VISUAL | GDK_WA_COLORMAP;
 
-      widget->window = gdk_window_new (gtk_widget_get_parent_window (widget), &attributes, attributes_mask);
-      gdk_window_set_user_data (widget->window, widget);
+      window = gdk_window_new (gtk_widget_get_parent_window (widget), &attributes, attributes_mask);
+      gtk_widget_set_window (widget, window);
+      gdk_window_set_user_data (window, widget);
 
-      widget->style = gtk_style_attach (widget->style, widget->window);
-      gdk_window_set_back_pixmap (widget->window, NULL, TRUE);
+      gtk_widget_style_attach (widget);
+      gdk_window_set_back_pixmap (window, NULL, TRUE);
     }
 }
