@@ -620,15 +620,18 @@ gtk_tool_palette_expose_event (GtkWidget      *widget,
 {
   GtkToolPalette *palette = GTK_TOOL_PALETTE (widget);
   GdkDisplay *display;
+  GdkWindow *window;
   cairo_t *cr;
   guint i;
 
-  display = gdk_drawable_get_display (widget->window);
+  window = gtk_widget_get_window (widget);
+
+  display = gdk_drawable_get_display (window);
 
   if (!gdk_display_supports_composite (display))
     return FALSE;
 
-  cr = gdk_cairo_create (widget->window);
+  cr = gdk_cairo_create (window);
   gdk_cairo_region (cr, event->region);
   cairo_clip (cr);
 
@@ -652,17 +655,23 @@ gtk_tool_palette_expose_event (GtkWidget      *widget,
 static void
 gtk_tool_palette_realize (GtkWidget *widget)
 {
+  GtkAllocation allocation;
+  GdkWindow *window;
   GdkWindowAttr attributes;
-  gint attributes_mask = GDK_WA_X | GDK_WA_Y | GDK_WA_VISUAL | GDK_WA_COLORMAP;
+  gint attributes_mask;
   guint border_width;
+
+  gtk_widget_set_realized (widget, TRUE);
 
   border_width = gtk_container_get_border_width (GTK_CONTAINER (widget));
 
+  gtk_widget_get_allocation (widget, &allocation);
+
   attributes.window_type = GDK_WINDOW_CHILD;
-  attributes.x = widget->allocation.x + border_width;
-  attributes.y = widget->allocation.y + border_width;
-  attributes.width = widget->allocation.width - border_width * 2;
-  attributes.height = widget->allocation.height - border_width * 2;
+  attributes.x = allocation.x + border_width;
+  attributes.y = allocation.y + border_width;
+  attributes.width = allocation.width - border_width * 2;
+  attributes.height = allocation.height - border_width * 2;
   attributes.wclass = GDK_INPUT_OUTPUT;
   attributes.visual = gtk_widget_get_visual (widget);
   attributes.colormap = gtk_widget_get_colormap (widget);
@@ -670,18 +679,19 @@ gtk_tool_palette_realize (GtkWidget *widget)
                          | GDK_VISIBILITY_NOTIFY_MASK | GDK_EXPOSURE_MASK
                          | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK
                          | GDK_BUTTON_MOTION_MASK;
+  attributes_mask = GDK_WA_X | GDK_WA_Y | GDK_WA_VISUAL | GDK_WA_COLORMAP;
 
-  widget->window = gdk_window_new (gtk_widget_get_parent_window (widget),
-                                   &attributes, attributes_mask);
+  window = gdk_window_new (gtk_widget_get_parent_window (widget),
+                           &attributes, attributes_mask);
+  gdk_window_set_user_data (window, widget);
 
-  gdk_window_set_user_data (widget->window, widget);
-  widget->style = gtk_style_attach (widget->style, widget->window);
-  gtk_style_set_background (widget->style, widget->window, GTK_STATE_NORMAL);
-  gtk_widget_set_realized (widget, TRUE);
+  gtk_widget_style_attach (widget);
+  gtk_style_set_background (gtk_widget_get_style (widget),
+                            window, GTK_STATE_NORMAL);
 
   gtk_container_forall (GTK_CONTAINER (widget),
                         (GtkCallback) gtk_widget_set_parent_window,
-                        widget->window);
+                        window);
 
   gtk_widget_queue_resize_no_redraw (widget);
 }
@@ -690,8 +700,11 @@ static void
 gtk_tool_palette_adjustment_value_changed (GtkAdjustment *adjustment,
                                            gpointer       data)
 {
+  GtkAllocation allocation;
   GtkWidget *widget = GTK_WIDGET (data);
-  gtk_tool_palette_size_allocate (widget, &widget->allocation);
+
+  gtk_widget_get_allocation (widget, &allocation);
+  gtk_tool_palette_size_allocate (widget, &allocation);
 }
 
 static void
@@ -1554,13 +1567,17 @@ gtk_tool_palette_get_drop_item (GtkToolPalette *palette,
                                 gint            x,
                                 gint            y)
 {
+  GtkAllocation allocation;
   GtkToolItemGroup *group = gtk_tool_palette_get_drop_group (palette, x, y);
   GtkWidget *widget = GTK_WIDGET (group);
 
   if (group)
-    return gtk_tool_item_group_get_drop_item (group,
-                                              x - widget->allocation.x,
-                                              y - widget->allocation.y);
+    {
+      gtk_widget_get_allocation (widget, &allocation);
+      return gtk_tool_item_group_get_drop_item (group,
+                                                x - allocation.x,
+                                                y - allocation.y);
+    }
 
   return NULL;
 }
@@ -1583,15 +1600,15 @@ gtk_tool_palette_get_drop_group (GtkToolPalette *palette,
                                  gint            x,
                                  gint            y)
 {
-  GtkAllocation *allocation;
+  GtkAllocation allocation;
   guint i;
 
   g_return_val_if_fail (GTK_IS_TOOL_PALETTE (palette), NULL);
 
-  allocation = &GTK_WIDGET (palette)->allocation;
+  gtk_widget_get_allocation (GTK_WIDGET (palette), &allocation);
 
-  g_return_val_if_fail (x >= 0 && x < allocation->width, NULL);
-  g_return_val_if_fail (y >= 0 && y < allocation->height, NULL);
+  g_return_val_if_fail (x >= 0 && x < allocation.width, NULL);
+  g_return_val_if_fail (y >= 0 && y < allocation.height, NULL);
 
   for (i = 0; i < palette->priv->groups->len; ++i)
     {
@@ -1603,12 +1620,13 @@ gtk_tool_palette_get_drop_group (GtkToolPalette *palette,
         continue;
 
       widget = GTK_WIDGET (group->widget);
+      gtk_widget_get_allocation (widget, &allocation);
 
-      x0 = x - widget->allocation.x;
-      y0 = y - widget->allocation.y;
+      x0 = x - allocation.x;
+      y0 = y - allocation.y;
 
-      if (x0 >= 0 && x0 < widget->allocation.width &&
-          y0 >= 0 && y0 < widget->allocation.height)
+      if (x0 >= 0 && x0 < allocation.width &&
+          y0 >= 0 && y0 < allocation.height)
         return GTK_TOOL_ITEM_GROUP (widget);
     }
 
