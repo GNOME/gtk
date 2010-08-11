@@ -402,7 +402,7 @@ setup_primary_label_font (GtkMessageDialog *dialog)
 
   if (priv->has_secondary_text && !priv->has_primary_markup)
     {
-      size = pango_font_description_get_size (priv->label->style->font_desc);
+      size = pango_font_description_get_size (gtk_widget_get_style (priv->label)->font_desc);
       font_desc = pango_font_description_new ();
       pango_font_description_set_weight (font_desc, PANGO_WEIGHT_BOLD);
       pango_font_description_set_size (font_desc, size * PANGO_SCALE_LARGE);
@@ -745,7 +745,7 @@ gtk_message_dialog_set_image (GtkMessageDialog *dialog,
 
   priv->message_type = GTK_MESSAGE_OTHER;
 
-  parent = priv->image->parent;
+  parent = gtk_widget_get_parent (priv->image);
   gtk_container_add (GTK_CONTAINER (parent), image);
   gtk_container_remove (GTK_CONTAINER (parent), priv->image);
   gtk_box_reorder_child (GTK_BOX (parent), image, 0);
@@ -1005,7 +1005,7 @@ gtk_message_dialog_style_set (GtkWidget *widget,
   GtkWidget *parent;
   gint border_width;
 
-  parent = gtk_message_dialog_get_image (GTK_MESSAGE_DIALOG (widget))->parent;
+  parent = gtk_widget_get_parent (gtk_message_dialog_get_image (dialog));
 
   if (parent)
     {
