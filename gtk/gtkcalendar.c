@@ -202,16 +202,16 @@ dates_difference(guint year1, guint mm1, guint dd1,
 #define SCROLL_DELAY_FACTOR      5
 
 /* Color usage */
-#define HEADER_FG_COLOR(widget)		 (& (widget)->style->fg[gtk_widget_get_state (widget)])
-#define HEADER_BG_COLOR(widget)		 (& (widget)->style->bg[gtk_widget_get_state (widget)])
-#define SELECTED_BG_COLOR(widget)	 (& (widget)->style->base[gtk_widget_has_focus (widget) ? GTK_STATE_SELECTED : GTK_STATE_ACTIVE])
-#define SELECTED_FG_COLOR(widget)	 (& (widget)->style->text[gtk_widget_has_focus (widget) ? GTK_STATE_SELECTED : GTK_STATE_ACTIVE])
-#define NORMAL_DAY_COLOR(widget)	 (& (widget)->style->text[gtk_widget_get_state (widget)])
-#define PREV_MONTH_COLOR(widget)	 (& (widget)->style->mid[gtk_widget_get_state (widget)])
-#define NEXT_MONTH_COLOR(widget)	 (& (widget)->style->mid[gtk_widget_get_state (widget)])
-#define MARKED_COLOR(widget)		 (& (widget)->style->text[gtk_widget_get_state (widget)])
-#define BACKGROUND_COLOR(widget)	 (& (widget)->style->base[gtk_widget_get_state (widget)])
-#define HIGHLIGHT_BACK_COLOR(widget)	 (& (widget)->style->mid[gtk_widget_get_state (widget)])
+#define HEADER_FG_COLOR(widget)		 (& gtk_widget_get_style (widget)->fg[gtk_widget_get_state (widget)])
+#define HEADER_BG_COLOR(widget)		 (& gtk_widget_get_style (widget)->bg[gtk_widget_get_state (widget)])
+#define SELECTED_BG_COLOR(widget)	 (& gtk_widget_get_style (widget)->base[gtk_widget_has_focus (widget) ? GTK_STATE_SELECTED : GTK_STATE_ACTIVE])
+#define SELECTED_FG_COLOR(widget)	 (& gtk_widget_get_style (widget)->text[gtk_widget_has_focus (widget) ? GTK_STATE_SELECTED : GTK_STATE_ACTIVE])
+#define NORMAL_DAY_COLOR(widget)	 (& gtk_widget_get_style (widget)->text[gtk_widget_get_state (widget)])
+#define PREV_MONTH_COLOR(widget)	 (& gtk_widget_get_style (widget)->mid[gtk_widget_get_state (widget)])
+#define NEXT_MONTH_COLOR(widget)	 (& gtk_widget_get_style (widget)->mid[gtk_widget_get_state (widget)])
+#define MARKED_COLOR(widget)		 (& gtk_widget_get_style (widget)->text[gtk_widget_get_state (widget)])
+#define BACKGROUND_COLOR(widget)	 (& gtk_widget_get_style (widget)->base[gtk_widget_get_state (widget)])
+#define HIGHLIGHT_BACK_COLOR(widget)	 (& gtk_widget_get_style (widget)->mid[gtk_widget_get_state (widget)])
 
 enum {
   ARROW_YEAR_LEFT,
@@ -1258,7 +1258,12 @@ calendar_arrow_rectangle (GtkCalendar  *calendar,
 {
   GtkWidget *widget = GTK_WIDGET (calendar);
   GtkCalendarPrivate *priv = GTK_CALENDAR_GET_PRIVATE (calendar);
+  GtkAllocation allocation;
+  GtkStyle *style;
   gboolean year_left;
+
+  gtk_widget_get_allocation (widget, &allocation);
+  style = gtk_widget_get_style (widget);
 
   if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_LTR) 
     year_left = priv->year_before;
@@ -1273,14 +1278,14 @@ calendar_arrow_rectangle (GtkCalendar  *calendar,
     {
     case ARROW_MONTH_LEFT:
       if (year_left) 
-	rect->x = (widget->allocation.width - 2 * widget->style->xthickness
-                   - (3 + 2*priv->arrow_width + priv->max_month_width));
+        rect->x = (allocation.width - 2 * style->xthickness
+                   - (3 + 2 * priv->arrow_width + priv->max_month_width));
       else
 	rect->x = 3;
       break;
     case ARROW_MONTH_RIGHT:
       if (year_left) 
-	rect->x = (widget->allocation.width - 2 * widget->style->xthickness 
+        rect->x = (allocation.width - 2 * style->xthickness
 		   - 3 - priv->arrow_width);
       else
 	rect->x = (priv->arrow_width + priv->max_month_width);
@@ -1289,15 +1294,15 @@ calendar_arrow_rectangle (GtkCalendar  *calendar,
       if (year_left) 
 	rect->x = 3;
       else
-	rect->x = (widget->allocation.width - 2 * widget->style->xthickness
-                   - (3 + 2*priv->arrow_width + priv->max_year_width));
+        rect->x = (allocation.width - 2 * style->xthickness
+                   - (3 + 2 * priv->arrow_width + priv->max_year_width));
       break;
     case ARROW_YEAR_RIGHT:
       if (year_left) 
         rect->x = (priv->arrow_width + priv->max_year_width);
       else
-	rect->x = (widget->allocation.width - 2 * widget->style->xthickness 
-                   - 3 - priv->arrow_width);
+        rect->x = (allocation.width - 2 * style->xthickness
+		   - 3 - priv->arrow_width);
       break;
     }
 }
@@ -1595,17 +1600,23 @@ calendar_realize_header (GtkCalendar *calendar)
   /* Header window ------------------------------------- */
   if (priv->display_flags & GTK_CALENDAR_SHOW_HEADING)
     {
+      GtkAllocation allocation;
+      GtkStyle *style;
+
+      style =  gtk_widget_get_style (widget);
+      gtk_widget_get_allocation (widget, &allocation);
+
       attributes.wclass = GDK_INPUT_OUTPUT;
       attributes.window_type = GDK_WINDOW_CHILD;
       attributes.visual = gtk_widget_get_visual (widget);
       attributes.colormap = gtk_widget_get_colormap (widget);
       attributes.event_mask = gtk_widget_get_events (widget) | GDK_EXPOSURE_MASK;
       attributes_mask = GDK_WA_X | GDK_WA_Y | GDK_WA_VISUAL | GDK_WA_COLORMAP;
-      attributes.x = widget->style->xthickness;
-      attributes.y = widget->style->ythickness;
-      attributes.width = widget->allocation.width - 2 * attributes.x;
+      attributes.x = style->xthickness;
+      attributes.y = style->ythickness;
+      attributes.width = allocation.width - 2 * attributes.x;
       attributes.height = priv->header_h;
-      priv->header_win = gdk_window_new (widget->window,
+      priv->header_win = gdk_window_new (gtk_widget_get_window (widget),
 					 &attributes, attributes_mask);
       
       gdk_window_set_background (priv->header_win,
@@ -1669,20 +1680,23 @@ calendar_realize_day_names (GtkCalendar *calendar)
   /* Day names	window --------------------------------- */
   if ( priv->display_flags & GTK_CALENDAR_SHOW_DAY_NAMES)
     {
+      GtkAllocation allocation;
+      GtkStyle *style;
+
+      style = gtk_widget_get_style (widget);
+      gtk_widget_get_allocation (widget, &allocation);
+
       attributes.wclass = GDK_INPUT_OUTPUT;
       attributes.window_type = GDK_WINDOW_CHILD;
       attributes.visual = gtk_widget_get_visual (widget);
       attributes.colormap = gtk_widget_get_colormap (widget);
       attributes.event_mask = gtk_widget_get_events (widget) | GDK_EXPOSURE_MASK;
       attributes_mask = GDK_WA_X | GDK_WA_Y | GDK_WA_VISUAL | GDK_WA_COLORMAP;
-      attributes.x = (widget->style->xthickness + inner_border);
-      attributes.y = priv->header_h + (widget->style->ythickness 
-					   + inner_border);
-      attributes.width = (widget->allocation.width 
-			  - (widget->style->xthickness + inner_border) 
-			  * 2);
+      attributes.x = style->xthickness + inner_border;
+      attributes.y = priv->header_h + (style->ythickness + inner_border);
+      attributes.width = allocation.width - (style->xthickness + inner_border) * 2;
       attributes.height = priv->day_name_h;
-      priv->day_name_win = gdk_window_new (widget->window,
+      priv->day_name_win = gdk_window_new (gtk_widget_get_window (widget),
 					   &attributes, 
 					   attributes_mask);
       gdk_window_set_background (priv->day_name_win, 
@@ -1708,22 +1722,31 @@ calendar_realize_week_numbers (GtkCalendar *calendar)
   /* Week number window -------------------------------- */
   if (priv->display_flags & GTK_CALENDAR_SHOW_WEEK_NUMBERS)
     {
+      GtkStyle *style;
+
+      style = gtk_widget_get_style (widget);
+
       attributes.wclass = GDK_INPUT_OUTPUT;
       attributes.window_type = GDK_WINDOW_CHILD;
       attributes.visual = gtk_widget_get_visual (widget);
       attributes.colormap = gtk_widget_get_colormap (widget);
       attributes.event_mask = gtk_widget_get_events (widget) | GDK_EXPOSURE_MASK;
-      
       attributes_mask = GDK_WA_X | GDK_WA_Y | GDK_WA_VISUAL | GDK_WA_COLORMAP;
-      if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_LTR) 
-	attributes.x = widget->style->xthickness + inner_border;
-      else 
-	attributes.x = widget->allocation.width - priv->week_width - (widget->style->xthickness + inner_border);
-      attributes.y = (priv->header_h + priv->day_name_h 
-		      + (widget->style->ythickness + inner_border));
+      if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_LTR)
+        {
+	  attributes.x = style->xthickness + inner_border;
+        }
+      else
+        {
+          GtkAllocation allocation;
+
+          gtk_widget_get_allocation (widget, &allocation);
+          attributes.x = allocation.width - priv->week_width - (style->xthickness + inner_border);
+        }
+      attributes.y = priv->header_h + priv->day_name_h + (style->ythickness + inner_border);
       attributes.width = priv->week_width;
       attributes.height = priv->main_h;
-      priv->week_win = gdk_window_new (widget->window,
+      priv->week_win = gdk_window_new (gtk_widget_get_window (widget),
 				       &attributes, attributes_mask);
       gdk_window_set_background (priv->week_win,  
 				 BACKGROUND_COLOR (GTK_WIDGET (calendar)));
@@ -1741,16 +1764,22 @@ gtk_calendar_realize (GtkWidget *widget)
 {
   GtkCalendar *calendar = GTK_CALENDAR (widget);
   GtkCalendarPrivate *priv = GTK_CALENDAR_GET_PRIVATE (widget);
+  GtkAllocation allocation;
+  GtkStyle *style;
+  GdkWindow *window;
   GdkWindowAttr attributes;
   gint attributes_mask;
   gint inner_border = calendar_get_inner_border (calendar);
 
+  gtk_widget_get_allocation (widget, &allocation);
+  style =  gtk_widget_get_style (widget);
+
   gtk_widget_set_realized (widget, TRUE);
-  
-  attributes.x = widget->allocation.x;
-  attributes.y = widget->allocation.y;
-  attributes.width = widget->allocation.width;
-  attributes.height = widget->allocation.height;
+
+  attributes.x = allocation.x;
+  attributes.y = allocation.y;
+  attributes.width = allocation.width;
+  attributes.height = allocation.height;
   attributes.wclass = GDK_INPUT_OUTPUT;
   attributes.window_type = GDK_WINDOW_CHILD;
   attributes.event_mask =  (gtk_widget_get_events (widget) 
@@ -1759,11 +1788,13 @@ gtk_calendar_realize (GtkWidget *widget)
   attributes.colormap = gtk_widget_get_colormap (widget);
   
   attributes_mask = GDK_WA_X | GDK_WA_Y | GDK_WA_VISUAL | GDK_WA_COLORMAP;
-  widget->window = gdk_window_new (widget->parent->window,
-				   &attributes, attributes_mask);
-  
-  widget->style = gtk_style_attach (widget->style, widget->window);
-  
+
+  window = gdk_window_new (gtk_widget_get_parent_window (widget),
+                           &attributes, attributes_mask);
+  gtk_widget_set_window (widget, window);
+
+  gtk_widget_style_attach (widget);
+
   /* Header window ------------------------------------- */
   calendar_realize_header (calendar);
   /* Day names	window --------------------------------- */
@@ -1776,27 +1807,26 @@ gtk_calendar_realize (GtkWidget *widget)
 			    | GDK_POINTER_MOTION_MASK | GDK_LEAVE_NOTIFY_MASK);
   
   if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_LTR) 
-    attributes.x = priv->week_width + (widget->style->ythickness + inner_border);
+    attributes.x = priv->week_width + (style->ythickness + inner_border);
   else
-    attributes.x = widget->style->ythickness + inner_border;
+    attributes.x = style->ythickness + inner_border;
 
-  attributes.y = (priv->header_h + priv->day_name_h 
-		  + (widget->style->ythickness + inner_border));
-  attributes.width = (widget->allocation.width - attributes.x 
-		      - (widget->style->xthickness + inner_border));
+  attributes.y = priv->header_h + priv->day_name_h + (style->ythickness + inner_border);
+  attributes.width = allocation.width - attributes.x - (style->xthickness + inner_border);
+
   if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL)
     attributes.width -= priv->week_width;
 
   attributes.height = priv->main_h;
-  priv->main_win = gdk_window_new (widget->window,
+  priv->main_win = gdk_window_new (window,
 				   &attributes, attributes_mask);
   gdk_window_set_background (priv->main_win, 
 			     BACKGROUND_COLOR ( GTK_WIDGET ( calendar)));
   gdk_window_show (priv->main_win);
   gdk_window_set_user_data (priv->main_win, widget);
-  gdk_window_set_background (widget->window, BACKGROUND_COLOR (widget));
-  gdk_window_show (widget->window);
-  gdk_window_set_user_data (widget->window, widget);
+  gdk_window_set_background (window, BACKGROUND_COLOR (widget));
+  gdk_window_show (window);
+  gdk_window_set_user_data (window, widget);
 }
 
 static void
@@ -1934,6 +1964,7 @@ gtk_calendar_size_request (GtkWidget	  *widget,
 {
   GtkCalendar *calendar = GTK_CALENDAR (widget);
   GtkCalendarPrivate *priv = GTK_CALENDAR_GET_PRIVATE (widget);
+  GtkStyle *style;
   PangoLayout *layout;
   PangoRectangle logical_rect;
 
@@ -2125,10 +2156,11 @@ gtk_calendar_size_request (GtkWidget	  *widget,
 		+ (priv->max_week_char_width
 		   ? priv->max_week_char_width * 2 + (focus_padding + focus_width) * 2 + calendar_xsep * 2
 		   : 0));
-  
-  
-  requisition->width = MAX (header_width, main_width + inner_border * 2) + widget->style->xthickness * 2;
-  
+
+  style = gtk_widget_get_style (widget);
+
+  requisition->width = MAX (header_width, main_width + inner_border * 2) + style->xthickness * 2;
+
   /*
    * Calculate the requisition height for the widget.
    */
@@ -2163,8 +2195,8 @@ gtk_calendar_size_request (GtkWidget	  *widget,
   
   height = (priv->header_h + priv->day_name_h 
 	    + priv->main_h);
-  
-  requisition->height = height + (widget->style->ythickness + inner_border) * 2;
+
+  requisition->height = height + (style->ythickness + inner_border) * 2;
 
   g_object_unref (layout);
 }
@@ -2175,14 +2207,18 @@ gtk_calendar_size_allocate (GtkWidget	  *widget,
 {
   GtkCalendar *calendar = GTK_CALENDAR (widget);
   GtkCalendarPrivate *priv = GTK_CALENDAR_GET_PRIVATE (widget);
-  gint xthickness = widget->style->xthickness;
-  gint ythickness = widget->style->xthickness;
+  GtkStyle *style;
+  gint xthickness, ythickness;
   guint i;
   gint inner_border = calendar_get_inner_border (calendar);
   gint calendar_xsep = calendar_get_xsep (calendar);
 
-  widget->allocation = *allocation;
-    
+  style = gtk_widget_get_style (widget);
+  xthickness = style->xthickness;
+  ythickness = style->xthickness;
+
+  gtk_widget_set_allocation (widget, allocation);
+
   if (priv->display_flags & GTK_CALENDAR_SHOW_WEEK_NUMBERS)
     {
       priv->day_width = (priv->min_day_width
@@ -2204,7 +2240,7 @@ gtk_calendar_size_allocate (GtkWidget	  *widget,
   
   if (gtk_widget_get_realized (widget))
     {
-      gdk_window_move_resize (widget->window,
+      gdk_window_move_resize (gtk_widget_get_window (widget),
 			      allocation->x, allocation->y,
 			      allocation->width, allocation->height);
       if (priv->header_win)
@@ -2225,10 +2261,10 @@ gtk_calendar_size_allocate (GtkWidget	  *widget,
 	}
       
       if (priv->day_name_win)
-	gdk_window_move_resize (priv->day_name_win,
-				xthickness + inner_border,
-				priv->header_h + (widget->style->ythickness + inner_border),
-				allocation->width - (xthickness + inner_border) * 2,
+        gdk_window_move_resize (priv->day_name_win,
+                                xthickness + inner_border,
+                                priv->header_h + (style->ythickness + inner_border),
+                                allocation->width - (xthickness + inner_border) * 2,
 				priv->day_name_h);
       if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_LTR) 
 	{
@@ -2236,13 +2272,13 @@ gtk_calendar_size_allocate (GtkWidget	  *widget,
 	    gdk_window_move_resize (priv->week_win,
 				    (xthickness + inner_border),
 				    priv->header_h + priv->day_name_h
-				    + (widget->style->ythickness + inner_border),
+				    + (style->ythickness + inner_border),
 				    priv->week_width,
 				    priv->main_h);
 	  gdk_window_move_resize (priv->main_win,
 				  priv->week_width + (xthickness + inner_border),
 				  priv->header_h + priv->day_name_h
-				  + (widget->style->ythickness + inner_border),
+				  + (style->ythickness + inner_border),
 				  allocation->width 
 				  - priv->week_width 
 				  - (xthickness + inner_border) * 2,
@@ -2253,7 +2289,7 @@ gtk_calendar_size_allocate (GtkWidget	  *widget,
 	  gdk_window_move_resize (priv->main_win,
 				  (xthickness + inner_border),
 				  priv->header_h + priv->day_name_h
-				  + (widget->style->ythickness + inner_border),
+				  + (style->ythickness + inner_border),
 				  allocation->width 
 				  - priv->week_width 
 				  - (xthickness + inner_border) * 2,
@@ -2264,7 +2300,7 @@ gtk_calendar_size_allocate (GtkWidget	  *widget,
 				    - priv->week_width 
 				    - (xthickness + inner_border),
 				    priv->header_h + priv->day_name_h
-				    + (widget->style->ythickness + inner_border),
+				    + (style->ythickness + inner_border),
 				    priv->week_width,
 				    priv->main_h);
 	}
@@ -2281,6 +2317,8 @@ calendar_paint_header (GtkCalendar *calendar)
 {
   GtkWidget *widget = GTK_WIDGET (calendar);
   GtkCalendarPrivate *priv = GTK_CALENDAR_GET_PRIVATE (calendar);
+  GtkAllocation allocation;
+  GtkStyle *style;
   cairo_t *cr;
   char buffer[255];
   int x, y;
@@ -2300,13 +2338,16 @@ calendar_paint_header (GtkCalendar *calendar)
     year_left = !priv->year_before;
 
   cr = gdk_cairo_create (priv->header_win);
-  
-  header_width = widget->allocation.width - 2 * widget->style->xthickness;
-  
+
+  gtk_widget_get_allocation (widget, &allocation);
+  style = gtk_widget_get_style (widget);
+
+  header_width = allocation.width - 2 * style->xthickness;
+
   max_month_width = priv->max_month_width;
   max_year_width = priv->max_year_width;
-  
-  gtk_paint_shadow (widget->style, priv->header_win,
+
+  gtk_paint_shadow (style, priv->header_win,
 		    GTK_STATE_NORMAL, GTK_SHADOW_OUT,
 		    NULL, widget, "calendar",
 		    0, 0, header_width, priv->header_h);
@@ -2385,6 +2426,7 @@ calendar_paint_day_names (GtkCalendar *calendar)
 {
   GtkWidget *widget = GTK_WIDGET (calendar);
   GtkCalendarPrivate *priv = GTK_CALENDAR_GET_PRIVATE (calendar);
+  GtkAllocation allocation;
   cairo_t *cr;
   char buffer[255];
   int day,i;
@@ -2403,9 +2445,11 @@ calendar_paint_day_names (GtkCalendar *calendar)
 			"focus-line-width", &focus_width,
 			"focus-padding", &focus_padding,
 			NULL);
-  
+
+  gtk_widget_get_allocation (widget, &allocation);
+
   day_width = priv->day_width;
-  cal_width = widget->allocation.width;
+  cal_width = allocation.width;
   day_wid_sep = day_width + DAY_XSEP;
   
   /*
@@ -2610,6 +2654,7 @@ calendar_paint_day (GtkCalendar *calendar,
 {
   GtkWidget *widget = GTK_WIDGET (calendar);
   GtkCalendarPrivate *priv = GTK_CALENDAR_GET_PRIVATE (calendar);
+  GtkStyle *style;
   cairo_t *cr;
   GdkColor *text_color;
   gchar *detail;
@@ -2625,6 +2670,8 @@ calendar_paint_day (GtkCalendar *calendar,
 
   g_return_if_fail (row < 6);
   g_return_if_fail (col < 7);
+
+  style = gtk_widget_get_style (widget);
 
   cr = gdk_cairo_create (priv->main_win);
 
@@ -2706,11 +2753,11 @@ calendar_paint_day (GtkCalendar *calendar,
       cairo_save (cr);
 
       if (priv->selected_day == day)
-        gdk_cairo_set_source_color (cr, &widget->style->text[GTK_STATE_ACTIVE]);
+        gdk_cairo_set_source_color (cr, &style->text[GTK_STATE_ACTIVE]);
       else if (priv->day_month[row][col] == MONTH_CURRENT)
-        gdk_cairo_set_source_color (cr, &widget->style->base[GTK_STATE_ACTIVE]);
+        gdk_cairo_set_source_color (cr, &style->base[GTK_STATE_ACTIVE]);
       else
-        gdk_cairo_set_source_color (cr, &widget->style->base[GTK_STATE_INSENSITIVE]);
+        gdk_cairo_set_source_color (cr, &style->base[GTK_STATE_INSENSITIVE]);
 
       cairo_set_line_width (cr, 1);
       cairo_move_to (cr, day_rect.x + 2, y_loc + 0.5);
@@ -2764,8 +2811,8 @@ calendar_paint_day (GtkCalendar *calendar,
 	state = gtk_widget_has_focus (widget) ? GTK_STATE_SELECTED : GTK_STATE_ACTIVE;
       else
 	state = GTK_STATE_NORMAL;
-      
-      gtk_paint_focus (widget->style, 
+
+      gtk_paint_focus (style,
 		       priv->main_win,
 	               state,
 		       NULL, widget, "calendar-day",
@@ -2816,24 +2863,26 @@ calendar_paint_arrow (GtkCalendar *calendar,
   window = priv->arrow_win[arrow];
   if (window)
     {
+      GtkStyle *style;
       cairo_t *cr = gdk_cairo_create (window);
       gint width, height;
       gint state;
-	
+
+      style = gtk_widget_get_style (widget);
       state = priv->arrow_state[arrow];
 
-      gdk_cairo_set_source_color (cr, &widget->style->bg[state]);
+      gdk_cairo_set_source_color (cr, &style->bg[state]);
       cairo_paint (cr);
       cairo_destroy (cr);
       
       gdk_drawable_get_size (window, &width, &height);
       if (arrow == ARROW_MONTH_LEFT || arrow == ARROW_YEAR_LEFT)
-	gtk_paint_arrow (widget->style, window, state, 
+        gtk_paint_arrow (style, window, state,
 			 GTK_SHADOW_OUT, NULL, widget, "calendar",
 			 GTK_ARROW_LEFT, TRUE, 
 			 width/2 - 3, height/2 - 4, 8, 8);
       else 
-	gtk_paint_arrow (widget->style, window, state, 
+        gtk_paint_arrow (style, window, state,
 			 GTK_SHADOW_OUT, NULL, widget, "calendar",
 			 GTK_ARROW_RIGHT, TRUE, 
 			 width/2 - 4, height/2 - 4, 8, 8);
@@ -2850,6 +2899,8 @@ gtk_calendar_expose (GtkWidget	    *widget,
 
   if (gtk_widget_is_drawable (widget))
     {
+      GdkWindow *window;
+
       if (event->window == priv->main_win)
 	calendar_paint_main (calendar);
       
@@ -2865,18 +2916,25 @@ gtk_calendar_expose (GtkWidget	    *widget,
       
       if (event->window == priv->week_win)
 	calendar_paint_week_numbers (calendar);
-      if (event->window == widget->window)
+
+      window = gtk_widget_get_window (widget);
+      if (event->window == window)
 	{
-	  gtk_paint_shadow (widget->style, widget->window, gtk_widget_get_state (widget),
+          GtkAllocation allocation;
+
+          gtk_widget_get_allocation (widget, &allocation);
+          gtk_paint_shadow (gtk_widget_get_style (widget),
+                            window,
+                            gtk_widget_get_state (widget),
 			    GTK_SHADOW_IN, NULL, widget, "calendar",
-			    0, 0, widget->allocation.width, widget->allocation.height);
+			    0, 0, allocation.width, allocation.height);
 	}
     }
   
   return FALSE;
 }
 
-
+
 /****************************************
  *           Mouse handling             *
  ****************************************/
@@ -3400,6 +3458,7 @@ static void
 calendar_set_background (GtkWidget *widget)
 {
   GtkCalendarPrivate *priv = GTK_CALENDAR_GET_PRIVATE (widget);
+  GdkWindow *window;
   gint i;
   
   if (gtk_widget_get_realized (widget))
@@ -3422,8 +3481,10 @@ calendar_set_background (GtkWidget *widget)
       if (priv->main_win)
 	gdk_window_set_background (priv->main_win,
 				   BACKGROUND_COLOR (widget));
-      if (widget->window)
-	gdk_window_set_background (widget->window,
+
+      window = gtk_widget_get_window (widget);
+      if (window)
+        gdk_window_set_background (window,
 				   BACKGROUND_COLOR (widget)); 
     }
 }
