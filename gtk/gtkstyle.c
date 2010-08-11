@@ -5698,13 +5698,16 @@ get_insertion_cursor_color (GtkWidget *widget,
 			    gboolean   is_primary)
 {
   CursorInfo *cursor_info;
+  GtkStyle *style;
   GdkColor *cursor_color;
 
-  cursor_info = g_object_get_data (G_OBJECT (widget->style), "gtk-style-cursor-info");
+  style = gtk_widget_get_style (widget);
+
+  cursor_info = g_object_get_data (G_OBJECT (style), "gtk-style-cursor-info");
   if (!cursor_info)
     {
       cursor_info = g_new0 (CursorInfo, 1);
-      g_object_set_data (G_OBJECT (widget->style), I_("gtk-style-cursor-info"), cursor_info);
+      g_object_set_data (G_OBJECT (style), I_("gtk-style-cursor-info"), cursor_info);
       cursor_info->for_type = G_TYPE_INVALID;
     }
 
@@ -5728,7 +5731,7 @@ get_insertion_cursor_color (GtkWidget *widget,
         }
       else
         {
-          cursor_info->primary = widget->style->text[GTK_STATE_NORMAL];
+          cursor_info->primary = style->text[GTK_STATE_NORMAL];
         }
 
       gtk_widget_style_get (widget, "secondary-cursor-color", &cursor_color, NULL);
@@ -5741,7 +5744,7 @@ get_insertion_cursor_color (GtkWidget *widget,
         {
           /* text_aa is the average of text and base colors,
            * in usual black-on-white case it's grey. */
-          cursor_info->secondary = widget->style->text_aa[GTK_STATE_NORMAL];
+          cursor_info->secondary = style->text_aa[GTK_STATE_NORMAL];
         }
     }
 
@@ -5768,7 +5771,7 @@ _gtk_widget_get_cursor_color (GtkWidget *widget,
       gdk_color_free (style_color);
     }
   else
-    *color = widget->style->text[GTK_STATE_NORMAL];
+    *color = gtk_widget_get_style (widget)->text[GTK_STATE_NORMAL];
 }
 
 static void
