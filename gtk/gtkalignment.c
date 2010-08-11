@@ -496,7 +496,7 @@ gtk_alignment_size_allocate (GtkWidget     *widget,
   padding_horizontal = 0;
   padding_vertical = 0;
 
-  widget->allocation = *allocation;
+  gtk_widget_set_allocation (widget, allocation);
   bin = GTK_BIN (widget);
 
   bin_child = gtk_bin_get_child (bin);
