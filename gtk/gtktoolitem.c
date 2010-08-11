@@ -318,7 +318,7 @@ static void
 gtk_tool_item_parent_set (GtkWidget   *toolitem,
 			  GtkWidget   *prev_parent)
 {
-  if (GTK_WIDGET (toolitem)->parent != NULL)
+  if (gtk_widget_get_parent (GTK_WIDGET (toolitem)) != NULL)
     gtk_tool_item_toolbar_reconfigured (GTK_TOOL_ITEM (toolitem));
 }
 
@@ -398,6 +398,7 @@ gtk_tool_item_property_notify (GObject    *object,
 static void
 create_drag_window (GtkToolItem *toolitem)
 {
+  GtkAllocation allocation;
   GtkWidget *widget;
   GdkWindowAttr attributes;
   gint attributes_mask, border_width;
@@ -405,13 +406,15 @@ create_drag_window (GtkToolItem *toolitem)
   g_return_if_fail (toolitem->priv->use_drag_window == TRUE);
 
   widget = GTK_WIDGET (toolitem);
+
   border_width = gtk_container_get_border_width (GTK_CONTAINER (widget));
+  gtk_widget_get_allocation (widget, &allocation);
 
   attributes.window_type = GDK_WINDOW_CHILD;
-  attributes.x = widget->allocation.x + border_width;
-  attributes.y = widget->allocation.y + border_width;
-  attributes.width = widget->allocation.width - border_width * 2;
-  attributes.height = widget->allocation.height - border_width * 2;
+  attributes.x = allocation.x + border_width;
+  attributes.y = allocation.y + border_width;
+  attributes.width = allocation.width - border_width * 2;
+  attributes.height = allocation.height - border_width * 2;
   attributes.wclass = GDK_INPUT_ONLY;
   attributes.event_mask = gtk_widget_get_events (widget);
   attributes.event_mask |= (GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK);
@@ -427,17 +430,19 @@ static void
 gtk_tool_item_realize (GtkWidget *widget)
 {
   GtkToolItem *toolitem;
+  GdkWindow *window;
 
   toolitem = GTK_TOOL_ITEM (widget);
   gtk_widget_set_realized (widget, TRUE);
 
-  widget->window = gtk_widget_get_parent_window (widget);
-  g_object_ref (widget->window);
+  window = gtk_widget_get_parent_window (widget);
+  gtk_widget_set_window (widget, window);
+  g_object_ref (window);
 
   if (toolitem->priv->use_drag_window)
     create_drag_window(toolitem);
 
-  widget->style = gtk_style_attach (widget->style, widget->window);
+  gtk_widget_style_attach (widget);
 }
 
 static void
@@ -517,17 +522,18 @@ gtk_tool_item_size_allocate (GtkWidget     *widget,
   gint border_width;
   GtkWidget *child;
 
-  child = gtk_bin_get_child (GTK_BIN (widget));
-  widget->allocation = *allocation;
+  gtk_widget_set_allocation (widget, allocation);
+
   border_width = gtk_container_get_border_width (GTK_CONTAINER (widget));
 
   if (toolitem->priv->drag_window)
     gdk_window_move_resize (toolitem->priv->drag_window,
-                            widget->allocation.x + border_width,
-                            widget->allocation.y + border_width,
-                            widget->allocation.width - border_width * 2,
-                            widget->allocation.height - border_width * 2);
-  
+                            allocation->x + border_width,
+                            allocation->y + border_width,
+                            allocation->width - border_width * 2,
+                            allocation->height - border_width * 2);
+
+  child = gtk_bin_get_child (GTK_BIN (widget));
   if (child && gtk_widget_get_visible (child))
     {
       child_allocation.x = allocation->x + border_width;
@@ -694,7 +700,7 @@ gtk_tool_item_get_ellipsize_mode (GtkToolItem *tool_item)
   
   g_return_val_if_fail (GTK_IS_TOOL_ITEM (tool_item), GTK_ORIENTATION_HORIZONTAL);
 
-  parent = GTK_WIDGET (tool_item)->parent;
+  parent = gtk_widget_get_parent (GTK_WIDGET (tool_item));
   if (!parent || !GTK_IS_TOOL_SHELL (parent))
     return PANGO_ELLIPSIZE_NONE;
 
@@ -721,7 +727,7 @@ gtk_tool_item_get_icon_size (GtkToolItem *tool_item)
 
   g_return_val_if_fail (GTK_IS_TOOL_ITEM (tool_item), GTK_ICON_SIZE_LARGE_TOOLBAR);
 
-  parent = GTK_WIDGET (tool_item)->parent;
+  parent = gtk_widget_get_parent (GTK_WIDGET (tool_item));
   if (!parent || !GTK_IS_TOOL_SHELL (parent))
     return GTK_ICON_SIZE_LARGE_TOOLBAR;
 
@@ -748,7 +754,7 @@ gtk_tool_item_get_orientation (GtkToolItem *tool_item)
   
   g_return_val_if_fail (GTK_IS_TOOL_ITEM (tool_item), GTK_ORIENTATION_HORIZONTAL);
 
-  parent = GTK_WIDGET (tool_item)->parent;
+  parent = gtk_widget_get_parent (GTK_WIDGET (tool_item));
   if (!parent || !GTK_IS_TOOL_SHELL (parent))
     return GTK_ORIENTATION_HORIZONTAL;
 
@@ -791,7 +797,7 @@ gtk_tool_item_get_toolbar_style (GtkToolItem *tool_item)
   
   g_return_val_if_fail (GTK_IS_TOOL_ITEM (tool_item), GTK_TOOLBAR_ICONS);
 
-  parent = GTK_WIDGET (tool_item)->parent;
+  parent = gtk_widget_get_parent (GTK_WIDGET (tool_item));
   if (!parent || !GTK_IS_TOOL_SHELL (parent))
     return GTK_TOOLBAR_ICONS;
 
@@ -819,7 +825,7 @@ gtk_tool_item_get_relief_style (GtkToolItem *tool_item)
   
   g_return_val_if_fail (GTK_IS_TOOL_ITEM (tool_item), GTK_RELIEF_NONE);
 
-  parent = GTK_WIDGET (tool_item)->parent;
+  parent = gtk_widget_get_parent (GTK_WIDGET (tool_item));
   if (!parent || !GTK_IS_TOOL_SHELL (parent))
     return GTK_RELIEF_NONE;
 
@@ -846,7 +852,7 @@ gtk_tool_item_get_text_alignment (GtkToolItem *tool_item)
   
   g_return_val_if_fail (GTK_IS_TOOL_ITEM (tool_item), GTK_ORIENTATION_HORIZONTAL);
 
-  parent = GTK_WIDGET (tool_item)->parent;
+  parent = gtk_widget_get_parent (GTK_WIDGET (tool_item));
   if (!parent || !GTK_IS_TOOL_SHELL (parent))
     return 0.5;
 
@@ -873,7 +879,7 @@ gtk_tool_item_get_text_orientation (GtkToolItem *tool_item)
   
   g_return_val_if_fail (GTK_IS_TOOL_ITEM (tool_item), GTK_ORIENTATION_HORIZONTAL);
 
-  parent = GTK_WIDGET (tool_item)->parent;
+  parent = gtk_widget_get_parent (GTK_WIDGET (tool_item));
   if (!parent || !GTK_IS_TOOL_SHELL (parent))
     return GTK_ORIENTATION_HORIZONTAL;
 
@@ -898,7 +904,7 @@ gtk_tool_item_get_text_size_group (GtkToolItem *tool_item)
   
   g_return_val_if_fail (GTK_IS_TOOL_ITEM (tool_item), NULL);
 
-  parent = GTK_WIDGET (tool_item)->parent;
+  parent = gtk_widget_get_parent (GTK_WIDGET (tool_item));
   if (!parent || !GTK_IS_TOOL_SHELL (parent))
     return NULL;
 
@@ -1325,14 +1331,16 @@ gtk_tool_item_get_proxy_menu_item (GtkToolItem *tool_item,
 void
 gtk_tool_item_rebuild_menu (GtkToolItem *tool_item)
 {
+  GtkWidget *parent;
   GtkWidget *widget;
-  
+
   g_return_if_fail (GTK_IS_TOOL_ITEM (tool_item));
 
   widget = GTK_WIDGET (tool_item);
 
-  if (GTK_IS_TOOL_SHELL (widget->parent))
-    gtk_tool_shell_rebuild_menu (GTK_TOOL_SHELL (widget->parent));
+  parent = gtk_widget_get_parent (widget);
+  if (GTK_IS_TOOL_SHELL (parent))
+    gtk_tool_shell_rebuild_menu (GTK_TOOL_SHELL (parent));
 }
 
 /**
