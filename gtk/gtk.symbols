@@ -252,13 +252,6 @@ gtk_alignment_set_padding
 #if IN_FILE(__GTK_APPLICATION_C__)
 gtk_application_get_type G_GNUC_CONST
 gtk_application_new
-gtk_application_set_action_group
-gtk_application_create_window
-gtk_application_get_window
-gtk_application_get_windows
-gtk_application_add_window
-gtk_application_run
-gtk_application_quit
 #endif
 #endif
 
@@ -4400,6 +4393,7 @@ gtk_window_begin_resize_drag
 gtk_window_deiconify
 gtk_window_fullscreen
 gtk_window_get_accept_focus
+gtk_window_get_application
 gtk_window_get_decorated
 gtk_window_get_deletable
 gtk_window_get_default_widget
@@ -4462,6 +4456,7 @@ gtk_window_resize
 gtk_window_resize_grip_is_visible
 gtk_window_resize_to_geometry
 gtk_window_set_accept_focus
+gtk_window_set_application
 gtk_window_set_auto_startup_notification
 gtk_window_set_decorated
 gtk_window_set_deletable

@@ -113,6 +113,8 @@ struct _GtkWindowPrivate
   GdkWindow             *frame;
   GdkWindowTypeHint      gdk_type_hint;
 
+  GtkApplication        *application;
+
   gdouble  opacity;
 
   GdkWindow *grip_window;
@@ -223,7 +225,7 @@ enum {
   PROP_OPACITY,
   PROP_HAS_RESIZE_GRIP,
   PROP_RESIZE_GRIP_VISIBLE,
-
+  PROP_APPLICATION,
   /* Readonly properties */
   PROP_IS_ACTIVE,
   PROP_HAS_TOPLEVEL_FOCUS,
@@ -937,7 +939,6 @@ gtk_window_class_init (GtkWindowClass *klass)
 							1.0,
 							GTK_PARAM_READWRITE));
 
-
   /* Style properties.
    */
   gtk_widget_class_install_style_property (widget_class,
@@ -955,6 +956,24 @@ gtk_window_class_init (GtkWindowClass *klass)
 
   /* Signals
    */
+  /**
+   * GtkWindow:application:
+   *
+   * The #GtkApplication associated with the window.
+   *
+   * The application will be kept alive for at least as long as the
+   * window is open.
+   *
+   * Since: 3.0
+   */
+  g_object_class_install_property (gobject_class,
+                                   PROP_APPLICATION,
+                                   g_param_spec_object ("application",
+                                                        P_("GtkApplication"),
+                                                        P_("The GtkApplication for the window"),
+                                                        GTK_TYPE_APPLICATION,
+                                                        GTK_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+
   window_signals[SET_FOCUS] =
     g_signal_new (I_("set-focus"),
                   G_TYPE_FROM_CLASS (gobject_class),
@@ -1219,6 +1238,9 @@ gtk_window_set_property (GObject      *object,
     case PROP_HAS_RESIZE_GRIP:
       gtk_window_set_has_resize_grip (window, g_value_get_boolean (value));
       break;
+    case PROP_APPLICATION:
+      gtk_window_set_application (window, g_value_get_object (value));
+      break;
     case PROP_MNEMONICS_VISIBLE:
       gtk_window_set_mnemonics_visible (window, g_value_get_boolean (value));
       break;
@@ -1333,6 +1355,9 @@ gtk_window_get_property (GObject      *object,
       break;
     case PROP_RESIZE_GRIP_VISIBLE:
       g_value_set_boolean (value, gtk_window_resize_grip_is_visible (window));
+      break;
+    case PROP_APPLICATION:
+      g_value_set_object (value, gtk_window_get_application (window));
       break;
     case PROP_MNEMONICS_VISIBLE:
       g_value_set_boolean (value, priv->mnemonics_visible);
@@ -2596,6 +2621,70 @@ gtk_window_get_opacity (GtkWindow *window)
   g_return_val_if_fail (GTK_IS_WINDOW (window), 0.0);
 
   return window->priv->opacity;
+}
+
+/**
+ * gtk_window_get_application:
+ * @window: a #GtkWindow
+ *
+ * Gets the #GtkApplication associated with the window (if any).
+ *
+ * Return value: a #GtkApplication, or %NULL
+ *
+ * Since: 3.0
+ **/
+GtkApplication *
+gtk_window_get_application (GtkWindow *window)
+{
+  g_return_val_if_fail (GTK_IS_WINDOW (window), NULL);
+
+  return window->priv->application;
+}
+
+static void
+gtk_window_release_application (GtkWindow *window)
+{
+  if (window->priv->application)
+    {
+      g_application_release (G_APPLICATION (window->priv->application));
+      g_object_unref (window->priv->application);
+
+      window->priv->application = NULL;
+    }
+}
+
+/**
+ * gtk_window_set_application:
+ * @window: a #GtkWindow
+ * @application: a #GtkApplication, or %NULL
+ *
+ * Sets or unsets the #GtkApplication associated with the window.
+ *
+ * The application will be kept alive for at least as long as the window
+ * is open.
+ *
+ * Since: 3.0
+ **/
+void
+gtk_window_set_application (GtkWindow      *window,
+                            GtkApplication *application)
+{
+  g_return_if_fail (GTK_IS_WINDOW (window));
+
+  if (window->priv->application != application)
+    {
+      gtk_window_release_application (window);
+
+      window->priv->application = application;
+
+      if (window->priv->application != NULL)
+        {
+          g_application_hold (G_APPLICATION (window->priv->application));
+          g_object_ref (window->priv->application);
+        }
+
+      g_object_notify (G_OBJECT (window), "application");
+    }
 }
 
 /**
@@ -4488,6 +4577,7 @@ gtk_window_finalize (GObject *object)
   g_free (priv->wmclass_name);
   g_free (priv->wmclass_class);
   g_free (priv->wm_role);
+  gtk_window_release_application (window);
 
   mnemonic_hash = gtk_window_get_mnemonic_hash (window, FALSE);
   if (mnemonic_hash)

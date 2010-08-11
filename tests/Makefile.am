@@ -95,7 +95,7 @@ noinst_PROGRAMS =  $(TEST_PROGS)	\
 	testvolumebutton
 
 if USE_X11
-noinst_PROGRAMS += testapplication testerrors
+noinst_PROGRAMS += testerrors
 endif
 
 if HAVE_CXX
@@ -118,7 +118,6 @@ testheightforwidth_DEPENDENCIES = $(TEST_DEPS)
 testicontheme_DEPENDENCIES = $(TEST_DEPS)
 testiconview_DEPENDENCIES = $(TEST_DEPS)
 testaccel_DEPENDENCIES = $(TEST_DEPS)
-testapplication_DEPENDENCIES = $(TEST_DEPS)
 testadjustsize_DEPENDENCIES = $(TEST_DEPS)
 testassistant_DEPENDENCIES = $(TEST_DEPS)
 testbbox_DEPENDENCIES = $(TEST_DEPS)
@@ -185,7 +184,6 @@ simple_LDADD = $(LDADDS)
 print_editor_LDADD = $(LDADDS)
 testaccel_LDADD = $(LDADDS)
 testadjustsize_LDADD = $(LDADDS)
-testapplication_LDADD = $(LDADDS)
 testassistant_LDADD = $(LDADDS)
 testbbox_LDADD = $(LDADDS)
 testbuttons_LDADD = $(LDADDS)

@@ -32,6 +32,7 @@
 #define __GTK_WINDOW_H__
 
 
+#include <gtk/gtkapplication.h>
 #include <gtk/gtkaccelgroup.h>
 #include <gtk/gtkbin.h>
 
@@ -344,6 +345,10 @@ GList *          gtk_window_group_list_windows  (GtkWindowGroup     *window_grou
 
 GtkWidget *      gtk_window_group_get_current_device_grab (GtkWindowGroup *window_group,
                                                            GdkDevice      *device);
+
+GtkApplication *gtk_window_get_application      (GtkWindow          *window);
+void            gtk_window_set_application      (GtkWindow          *window,
+                                                 GtkApplication     *application);
 
 
 /* Window grips

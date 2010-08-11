@@ -1,60 +1,68 @@
 #include <gtk/gtk.h>
 
-static const char *builder_data =
-"<interface>"
-"<object class=\"GtkAboutDialog\" id=\"about_dialog\">"
-"  <property name=\"program-name\">Example Application</property>"
-"  <property name=\"website\">http://www.gtk.org</property>"
-"</object>"
-"<object class=\"GtkActionGroup\" id=\"actions\">"
-"  <child>"
-"      <object class=\"GtkAction\" id=\"About\">"
-"          <property name=\"name\">About</property>"
-"          <property name=\"stock_id\">gtk-about</property>"
-"      </object>"
-"  </child>"
-"</object>"
-"</interface>";
+static void
+new_window (GtkApplication *app,
+            GFile          *file)
+{
+  GtkWidget *window, *scrolled, *view;
 
-static GtkWidget *about_dialog;
+  window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  gtk_window_set_application (GTK_WINDOW (window), app);
+  gtk_window_set_title (GTK_WINDOW (window), "Bloatpad");
+  scrolled = gtk_scrolled_window_new (NULL, NULL);
+  view = gtk_text_view_new ();
+  gtk_container_add (GTK_CONTAINER (scrolled), view);
+  gtk_container_add (GTK_CONTAINER (window), scrolled);
+
+  if (file != NULL)
+    {
+      gchar *contents;
+      gsize length;
+
+      if (g_file_load_contents (file, NULL, &contents, &length, NULL, NULL))
+        {
+          GtkTextBuffer *buffer;
+
+          buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (view));
+          gtk_text_buffer_set_text (buffer, contents, length);
+          g_free (contents);
+        }
+    }
+
+  gtk_widget_show_all (GTK_WIDGET (window));
+}
 
 static void
-about_activate (GtkAction *action,
-                gpointer   user_data)
+activate (GtkApplication *application)
 {
-  gtk_dialog_run (GTK_DIALOG (about_dialog));
-  gtk_widget_hide (GTK_WIDGET (about_dialog));
+  new_window (application, NULL);
+}
+
+static void
+open (GtkApplication  *application,
+      GFile          **files,
+      gint             n_files,
+      const gchar     *hint,
+      gpointer         user_data)
+{
+  gint i;
+
+  for (i = 0; i < n_files; i++)
+    new_window (application, files[i]);
 }
 
 int
 main (int argc, char **argv)
 {
   GtkApplication *app;
-  GtkWindow *window;
-  GtkBuilder *builder;
-  GtkAction *action;
-  GtkActionGroup *actions;
+  int status;
 
-  app = gtk_application_new ("org.gtk.Example", &argc, &argv);
-  builder = gtk_builder_new ();
-  if (!gtk_builder_add_from_string (builder, builder_data, -1, NULL))
-    g_error ("failed to parse UI");
-  actions = GTK_ACTION_GROUP (gtk_builder_get_object (builder, "actions"));
-  gtk_application_set_action_group (app, actions);
+  app = gtk_application_new ("org.gtk.Test.bloatpad",
+                             G_APPLICATION_HANDLES_OPEN);
+  g_signal_connect (app, "activate", G_CALLBACK (activate), NULL);
+  g_signal_connect (app, "open", G_CALLBACK (open), NULL);
+  status = g_application_run (G_APPLICATION (app), argc, argv);
+  g_object_unref (app);
 
-  action = gtk_action_group_get_action (actions, "About");
-  g_signal_connect (action, "activate", G_CALLBACK (about_activate), app);
-
-  about_dialog = GTK_WIDGET (gtk_builder_get_object (builder, "about_dialog"));
-
-  gtk_builder_connect_signals (builder, app);
-  g_object_unref (builder);
-
-  window = gtk_application_get_window (app);
-  gtk_container_add (GTK_CONTAINER (window), gtk_label_new ("Hello world"));
-  gtk_widget_show_all (GTK_WIDGET (window));
-
-  gtk_application_run (app);
-
-  return 0;
+  return status;
 }
