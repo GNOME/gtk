@@ -1494,7 +1494,7 @@ gtk_label_mnemonic_activate (GtkWidget *widget,
   /* Try to find the widget to activate by traversing the
    * widget's ancestry.
    */
-  parent = widget->parent;
+  parent = gtk_widget_get_parent (widget);
 
   if (GTK_IS_NOTEBOOK (parent))
     return FALSE;
@@ -1503,10 +1503,10 @@ gtk_label_mnemonic_activate (GtkWidget *widget,
     {
       if (gtk_widget_get_can_focus (parent) ||
 	  (!group_cycling && GTK_WIDGET_GET_CLASS (parent)->activate_signal) ||
-          GTK_IS_NOTEBOOK (parent->parent) ||
+          GTK_IS_NOTEBOOK (gtk_widget_get_parent (parent)) ||
 	  GTK_IS_MENU_ITEM (parent))
 	return gtk_widget_mnemonic_activate (parent, group_cycling);
-      parent = parent->parent;
+      parent = gtk_widget_get_parent (parent);
     }
 
   /* barf if there was nothing to activate */
@@ -3016,7 +3016,8 @@ get_label_width (GtkLabel *label,
 
   layout  = pango_layout_copy (priv->layout);
   context = pango_layout_get_context (layout);
-  metrics = pango_context_get_metrics (context, GTK_WIDGET (label)->style->font_desc, 
+  metrics = pango_context_get_metrics (context,
+                                       gtk_widget_get_style (GTK_WIDGET (label))->font_desc,
 				       pango_context_get_language (context));
   
   char_width = pango_font_metrics_get_approximate_char_width (metrics);
@@ -3132,7 +3133,8 @@ get_label_wrap_width (GtkLabel *label)
 
 	  layout  = pango_layout_copy (priv->layout);
 	  context = pango_layout_get_context (layout);
-	  metrics = pango_context_get_metrics (context, GTK_WIDGET (label)->style->font_desc, 
+          metrics = pango_context_get_metrics (context,
+                                               gtk_widget_get_style (GTK_WIDGET (label))->font_desc,
 					       pango_context_get_language (context));
 	  
 	  char_width = pango_font_metrics_get_approximate_char_width (metrics);
@@ -3176,6 +3178,7 @@ gtk_label_ensure_layout (GtkLabel *label, gboolean guess_wrap_width)
 
   if (!priv->layout)
     {
+      GtkAllocation allocation;
       PangoAlignment align = PANGO_ALIGN_LEFT; /* Quiet gcc */
       gdouble angle = gtk_label_get_angle (label);
 
@@ -3231,9 +3234,10 @@ gtk_label_ensure_layout (GtkLabel *label, gboolean guess_wrap_width)
       pango_layout_set_ellipsize (priv->layout, priv->ellipsize);
       pango_layout_set_single_paragraph_mode (priv->layout, priv->single_line_mode);
 
+      gtk_widget_get_allocation (widget, &allocation);
+
       if (priv->ellipsize)
-        pango_layout_set_width (priv->layout,
-                                widget->allocation.width * PANGO_SCALE);
+        pango_layout_set_width (priv->layout, allocation.width * PANGO_SCALE);
       else if (priv->wrap)
 	{
 	  GtkWidgetAuxInfo *aux_info = _gtk_widget_get_aux_info (widget, FALSE);
@@ -3248,17 +3252,16 @@ gtk_label_ensure_layout (GtkLabel *label, gboolean guess_wrap_width)
 
  	  if (aux_width > 0)
 	    pango_layout_set_width (priv->layout, aux_width * PANGO_SCALE);
-	  else if (guess_wrap_width == FALSE &&
-		   widget->allocation.width > 1 && widget->allocation.height > 1)
+	  else if (guess_wrap_width == FALSE && allocation.width > 1 && allocation.height > 1)
  	    {
 	      PangoRectangle rect;
 	      gint xpad, ypad, natural_width;
               gtk_misc_get_padding (GTK_MISC (label), &xpad, &ypad);
 
 	      if (angle == 90 || angle == 270)
-		width = widget->allocation.height - ypad * 2;
+		width = allocation.height - ypad * 2;
 	      else
-		width = widget->allocation.width  - xpad * 2;
+		width = allocation.width  - xpad * 2;
 
 	      /* dont set a wrap width wider than the label's natural width
 	       * incase we're allocated more space than needed */
@@ -3340,7 +3343,7 @@ get_single_line_height (GtkWidget   *widget,
   gint ascent, descent;
 
   context = pango_layout_get_context (layout);
-  metrics = pango_context_get_metrics (context, widget->style->font_desc,
+  metrics = pango_context_get_metrics (context, gtk_widget_get_style (widget)->font_desc,
                                        pango_context_get_language (context));
 
   ascent = pango_font_metrics_get_ascent (metrics);
@@ -3830,6 +3833,7 @@ get_layout_location (GtkLabel  *label,
                      gint      *xp,
                      gint      *yp)
 {
+  GtkAllocation allocation;
   GtkMisc *misc;
   GtkWidget *widget;
   GtkLabelPriv *priv;
@@ -3866,13 +3870,14 @@ get_layout_location (GtkLabel  *label,
   req_width  += 2 * xpad;
   req_height += 2 * ypad;
 
-  x = floor (widget->allocation.x + xpad +
-	     xalign * (widget->allocation.width - req_width));
+  gtk_widget_get_allocation (widget, &allocation);
+
+  x = floor (allocation.x + xpad + xalign * (allocation.width - req_width));
 
   if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_LTR)
-    x = MAX (x, widget->allocation.x + xpad);
+    x = MAX (x, allocation.x + xpad);
   else
-    x = MIN (x, widget->allocation.x + widget->allocation.width - xpad);
+    x = MIN (x, allocation.x + allocation.width - xpad);
 
 
   /* bgo#315462 - For single-line labels, *do* align the requisition with
@@ -3889,15 +3894,9 @@ get_layout_location (GtkLabel  *label,
    *   middle".  You want to read the first line, at least, to get some context.
    */
   if (pango_layout_get_line_count (priv->layout) == 1)
-    {
-      y = floor (widget->allocation.y + ypad
-                 + (widget->allocation.height - req_height) * yalign);
-    }
+    y = floor (allocation.y + ypad + (allocation.height - req_height) * yalign);
   else
-    {
-      y = floor (widget->allocation.y + ypad
-                 + MAX ((widget->allocation.height - req_height) * yalign, 0));
-    }
+    y = floor (allocation.y + ypad + MAX ((allocation.height - req_height) * yalign, 0));
 
   if (xp)
     *xp = x;
@@ -3914,6 +3913,7 @@ draw_insertion_cursor (GtkLabel      *label,
 		       gboolean       draw_arrow)
 {
   GtkWidget *widget = GTK_WIDGET (label);
+  GtkAllocation allocation;
   GtkTextDirection text_dir;
 
   if (direction == PANGO_DIRECTION_LTR)
@@ -3921,8 +3921,9 @@ draw_insertion_cursor (GtkLabel      *label,
   else
     text_dir = GTK_TEXT_DIR_RTL;
 
-  gtk_draw_insertion_cursor (widget, widget->window, &(widget->allocation),
-			     cursor_location,
+  gtk_widget_get_allocation (widget, &allocation);
+  gtk_draw_insertion_cursor (widget, gtk_widget_get_window (widget),
+                             &allocation, cursor_location,
 			     is_primary, text_dir, draw_arrow);
 }
 
@@ -4064,6 +4065,8 @@ gtk_label_expose (GtkWidget      *widget,
   GtkLabel *label = GTK_LABEL (widget);
   GtkLabelPriv *priv = label->priv;
   GtkLabelSelectionInfo *info = priv->select_info;
+  GtkStyle *style;
+  GdkWindow *window;
   gint x, y;
 
   gtk_label_ensure_layout (label, FALSE);
@@ -4073,8 +4076,11 @@ gtk_label_expose (GtkWidget      *widget,
     {
       get_layout_location (label, &x, &y);
 
-      gtk_paint_layout (widget->style,
-                        widget->window,
+      style = gtk_widget_get_style (widget);
+      window = gtk_widget_get_window (widget);
+
+      gtk_paint_layout (style,
+                        window,
                         gtk_widget_get_state (widget),
 			FALSE,
                         &event->area,
@@ -4120,10 +4126,10 @@ gtk_label_expose (GtkWidget      *widget,
 	  if (!gtk_widget_has_focus (widget))
 	    state = GTK_STATE_ACTIVE;
 
-          gdk_cairo_set_source_color (cr, &widget->style->base[state]);
+          gdk_cairo_set_source_color (cr, &style->base[state]);
           cairo_paint (cr);
 
-          gdk_cairo_set_source_color (cr, &widget->style->text[state]);
+          gdk_cairo_set_source_color (cr, &style->text[state]);
           cairo_move_to (cr, x, y);
           _gtk_pango_fill_layout (cr, priv->layout);
 
@@ -4175,9 +4181,9 @@ gtk_label_expose (GtkWidget      *widget,
               else
                 text_color = link_color;
               if (info->link_clicked)
-                base_color = &widget->style->base[GTK_STATE_ACTIVE];
+                base_color = &style->base[GTK_STATE_ACTIVE];
               else
-                base_color = &widget->style->base[GTK_STATE_PRELIGHT];
+                base_color = &style->base[GTK_STATE_PRELIGHT];
 
               gdk_cairo_set_source_color (cr, base_color);
               cairo_paint (cr);
@@ -4203,7 +4209,7 @@ gtk_label_expose (GtkWidget      *widget,
                                                        1);
               cairo_region_get_extents (clip, &rect);
 
-              gtk_paint_focus (widget->style, widget->window, gtk_widget_get_state (widget),
+              gtk_paint_focus (style, window, gtk_widget_get_state (widget),
                                &event->area, widget, "label",
                                rect.x, rect.y, rect.width, rect.height);
 
@@ -4398,6 +4404,7 @@ window_to_layout_coords (GtkLabel *label,
                          gint     *x,
                          gint     *y)
 {
+  GtkAllocation allocation;
   gint lx, ly;
   GtkWidget *widget;
 
@@ -4405,16 +4412,18 @@ window_to_layout_coords (GtkLabel *label,
   
   /* get layout location in widget->window coords */
   get_layout_location (label, &lx, &ly);
-  
+
+  gtk_widget_get_allocation (widget, &allocation);
+
   if (x)
     {
-      *x += widget->allocation.x; /* go to widget->window */
+      *x += allocation.x; /* go to widget->window */
       *x -= lx;                   /* go to layout */
     }
 
   if (y)
     {
-      *y += widget->allocation.y; /* go to widget->window */
+      *y += allocation.y; /* go to widget->window */
       *y -= ly;                   /* go to layout */
     }
 }
@@ -5038,6 +5047,7 @@ static void
 gtk_label_create_window (GtkLabel *label)
 {
   GtkLabelPriv *priv = label->priv;
+  GtkAllocation allocation;
   GtkWidget *widget;
   GdkWindowAttr attributes;
   gint attributes_mask;
@@ -5049,10 +5059,12 @@ gtk_label_create_window (GtkLabel *label)
   if (priv->select_info->window)
     return;
 
-  attributes.x = widget->allocation.x;
-  attributes.y = widget->allocation.y;
-  attributes.width = widget->allocation.width;
-  attributes.height = widget->allocation.height;
+  gtk_widget_get_allocation (widget, &allocation);
+
+  attributes.x = allocation.x;
+  attributes.y = allocation.y;
+  attributes.width = allocation.width;
+  attributes.height = allocation.height;
   attributes.window_type = GDK_WINDOW_CHILD;
   attributes.wclass = GDK_INPUT_ONLY;
   attributes.override_redirect = TRUE;
@@ -5072,7 +5084,7 @@ gtk_label_create_window (GtkLabel *label)
     }
 
 
-  priv->select_info->window = gdk_window_new (widget->window,
+  priv->select_info->window = gdk_window_new (gtk_widget_get_window (widget),
                                                &attributes, attributes_mask);
   gdk_window_set_user_data (priv->select_info->window, widget);
 
@@ -6108,6 +6120,7 @@ popup_position_func (GtkMenu   *menu,
 {
   GtkLabel *label;
   GtkWidget *widget;
+  GtkAllocation allocation;
   GtkRequisition req;
   GdkScreen *screen;
 
@@ -6117,15 +6130,19 @@ popup_position_func (GtkMenu   *menu,
   g_return_if_fail (gtk_widget_get_realized (widget));
 
   screen = gtk_widget_get_screen (widget);
-  gdk_window_get_origin (widget->window, x, y);
+  gdk_window_get_origin (gtk_widget_get_window (widget), x, y);
 
-  *x += widget->allocation.x;
-  *y += widget->allocation.y;
+  gtk_widget_get_allocation (widget, &allocation);
+
+  *x += allocation.x;
+  *y += allocation.y;
 
   gtk_widget_size_request (GTK_WIDGET (menu), &req);
 
-  *x += widget->allocation.width / 2;
-  *y += widget->allocation.height;
+  gtk_widget_get_allocation (widget, &allocation);
+
+  *x += allocation.width / 2;
+  *y += allocation.height;
 
   *x = CLAMP (*x, 0, MAX (0, gdk_screen_get_width (screen) - req.width));
   *y = CLAMP (*y, 0, MAX (0, gdk_screen_get_height (screen) - req.height));
