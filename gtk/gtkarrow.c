@@ -318,8 +318,10 @@ gtk_arrow_expose (GtkWidget      *widget,
     {
       GtkArrow *arrow = GTK_ARROW (widget);
       GtkArrowPrivate *priv = arrow->priv;
+      GtkAllocation allocation;
       GtkMisc *misc = GTK_MISC (widget);
       GtkShadowType shadow_type;
+      GtkStateType state;
       gint width, height;
       gint x, y;
       gint extent;
@@ -330,11 +332,12 @@ gtk_arrow_expose (GtkWidget      *widget,
 
       gtk_widget_style_get (widget, "arrow-scaling", &arrow_scaling, NULL);
 
+      gtk_widget_get_allocation (widget, &allocation);
       gtk_misc_get_padding (misc, &xpad, &ypad);
       gtk_misc_get_alignment (misc, &xalign, &yalign);
 
-      width = widget->allocation.width - xpad * 2;
-      height = widget->allocation.height - ypad * 2;
+      width = allocation.width - xpad * 2;
+      height = allocation.height - ypad * 2;
       extent = MIN (width, height) * arrow_scaling;
       effective_arrow_type = priv->arrow_type;
 
@@ -347,14 +350,14 @@ gtk_arrow_expose (GtkWidget      *widget,
 	    effective_arrow_type = GTK_ARROW_LEFT;
 	}
 
-      x = floor (widget->allocation.x + xpad
-		 + ((widget->allocation.width - extent) * xalign));
-      y = floor (widget->allocation.y + ypad
-		 + ((widget->allocation.height - extent) * yalign));
+      x = floor (allocation.x + xpad + ((allocation.width - extent) * xalign));
+      y = floor (allocation.y + ypad + ((allocation.height - extent) * yalign));
 
       shadow_type = priv->shadow_type;
 
-      if (widget->state == GTK_STATE_ACTIVE)
+      state = gtk_widget_get_state (widget);
+
+      if (state == GTK_STATE_ACTIVE)
 	{
           if (shadow_type == GTK_SHADOW_IN)
             shadow_type = GTK_SHADOW_OUT;
@@ -366,8 +369,9 @@ gtk_arrow_expose (GtkWidget      *widget,
             shadow_type = GTK_SHADOW_ETCHED_IN;
 	}
 
-      gtk_paint_arrow (widget->style, widget->window,
-		       widget->state, shadow_type,
+      gtk_paint_arrow (gtk_widget_get_style (widget),
+                       gtk_widget_get_window (widget),
+		       state, shadow_type,
 		       &event->area, widget, "arrow",
 		       effective_arrow_type, TRUE,
 		       x, y, extent, extent);
