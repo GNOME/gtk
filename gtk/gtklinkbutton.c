@@ -332,7 +332,7 @@ set_hand_cursor (GtkWidget *widget,
   if (show_hand)
     cursor = gdk_cursor_new_for_display (display, GDK_HAND2);
 
-  gdk_window_set_cursor (widget->window, cursor);
+  gdk_window_set_cursor (gtk_widget_get_window (widget), cursor);
   gdk_display_flush (display);
 
   if (cursor)
@@ -357,6 +357,7 @@ popup_position_func (GtkMenu  *menu,
 {
   GtkLinkButton *link_button = GTK_LINK_BUTTON (user_data);
   GtkLinkButtonPrivate *priv = link_button->priv;
+  GtkAllocation allocation;
   GtkWidget *widget = GTK_WIDGET (link_button);
   GdkScreen *screen = gtk_widget_get_screen (widget);
   GtkRequisition req;
@@ -365,12 +366,13 @@ popup_position_func (GtkMenu  *menu,
   
   g_return_if_fail (gtk_widget_get_realized (widget));
 
-  gdk_window_get_origin (widget->window, x, y);
+  gdk_window_get_origin (gtk_widget_get_window (widget), x, y);
 
   gtk_widget_size_request (priv->popup_menu, &req);
 
-  *x += widget->allocation.width / 2;
-  *y += widget->allocation.height;
+  gtk_widget_get_allocation (widget, &allocation);
+  *x += allocation.width / 2;
+  *y += allocation.height;
 
   monitor_num = gdk_screen_get_monitor_at_point (screen, *x, *y);
   gtk_menu_set_monitor (menu, monitor_num);
