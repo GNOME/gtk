@@ -184,13 +184,16 @@ add_widget_to_closure (GtkWidget       *widget,
 static void
 real_queue_resize (GtkWidget *widget)
 {
+  GtkWidget *parent;
+
   GTK_PRIVATE_SET_FLAG (widget, GTK_ALLOC_NEEDED);
   GTK_PRIVATE_SET_FLAG (widget, GTK_REQUEST_NEEDED);
   GTK_PRIVATE_SET_FLAG (widget, GTK_WIDTH_REQUEST_NEEDED);
   GTK_PRIVATE_SET_FLAG (widget, GTK_HEIGHT_REQUEST_NEEDED);
-  
-  if (widget->parent)
-    _gtk_container_queue_resize (GTK_CONTAINER (widget->parent));
+
+  parent = gtk_widget_get_parent (widget);
+  if (parent)
+    _gtk_container_queue_resize (GTK_CONTAINER (parent));
   else if (gtk_widget_is_toplevel (widget) && GTK_IS_CONTAINER (widget))
     _gtk_container_queue_resize (GTK_CONTAINER (widget));
 }
@@ -227,7 +230,7 @@ queue_resize_on_widget (GtkWidget *widget,
       if (widget == parent && !check_siblings)
 	{
 	  real_queue_resize (widget);
-	  parent = parent->parent;
+          parent = gtk_widget_get_parent (parent);
 	  continue;
 	}
       
@@ -237,7 +240,7 @@ queue_resize_on_widget (GtkWidget *widget,
 	  if (widget == parent)
 	    real_queue_resize (widget);
 
-	  parent = parent->parent;
+          parent = gtk_widget_get_parent (parent);
 	  continue;
 	}
 
@@ -300,8 +303,8 @@ queue_resize_on_widget (GtkWidget *widget,
       
       g_slist_free (widgets);
       g_slist_free (groups);
-      
-      parent = parent->parent;
+
+      parent = gtk_widget_get_parent (parent);
     }
 }
 
