@@ -92,12 +92,12 @@ gtk_offscreen_window_size_allocate (GtkWidget *widget,
   GtkWidget *child;
   gint border_width;
 
-  widget->allocation = *allocation;
+  gtk_widget_set_allocation (widget, allocation);
 
   border_width = gtk_container_get_border_width (GTK_CONTAINER (widget));
 
   if (gtk_widget_get_realized (widget))
-    gdk_window_move_resize (widget->window,
+    gdk_window_move_resize (gtk_widget_get_window (widget),
                             allocation->x,
                             allocation->y,
                             allocation->width,
@@ -123,8 +123,10 @@ gtk_offscreen_window_size_allocate (GtkWidget *widget,
 static void
 gtk_offscreen_window_realize (GtkWidget *widget)
 {
+  GtkAllocation allocation;
   GtkBin *bin;
   GtkWidget *child;
+  GdkWindow *window;
   GdkWindowAttr attributes;
   gint attributes_mask;
   gint border_width;
@@ -135,10 +137,12 @@ gtk_offscreen_window_realize (GtkWidget *widget)
 
   border_width = gtk_container_get_border_width (GTK_CONTAINER (widget));
 
-  attributes.x = widget->allocation.x;
-  attributes.y = widget->allocation.y;
-  attributes.width = widget->allocation.width;
-  attributes.height = widget->allocation.height;
+  gtk_widget_get_allocation (widget, &allocation);
+
+  attributes.x = allocation.x;
+  attributes.y = allocation.y;
+  attributes.width = allocation.width;
+  attributes.height = allocation.height;
   attributes.window_type = GDK_WINDOW_OFFSCREEN;
   attributes.event_mask = gtk_widget_get_events (widget) | GDK_EXPOSURE_MASK;
   attributes.visual = gtk_widget_get_visual (widget);
@@ -147,17 +151,18 @@ gtk_offscreen_window_realize (GtkWidget *widget)
 
   attributes_mask = GDK_WA_X | GDK_WA_Y | GDK_WA_VISUAL | GDK_WA_COLORMAP;
 
-  widget->window = gdk_window_new (gtk_widget_get_parent_window (widget),
-                                   &attributes, attributes_mask);
-  gdk_window_set_user_data (widget->window, widget);
+  window = gdk_window_new (gtk_widget_get_parent_window (widget),
+                           &attributes, attributes_mask);
+  gtk_widget_set_window (widget, window);
+  gdk_window_set_user_data (window, widget);
 
   child = gtk_bin_get_child (bin);
   if (child)
-    gtk_widget_set_parent_window (child, widget->window);
+    gtk_widget_set_parent_window (child, window);
 
-  widget->style = gtk_style_attach (widget->style, widget->window);
-
-  gtk_style_set_background (widget->style, widget->window, GTK_STATE_NORMAL);
+  gtk_widget_style_attach (widget);
+  gtk_style_set_background (gtk_widget_get_style (widget),
+                            window, GTK_STATE_NORMAL);
 }
 
 static void
@@ -280,7 +285,7 @@ gtk_offscreen_window_get_pixmap (GtkOffscreenWindow *offscreen)
 {
   g_return_val_if_fail (GTK_IS_OFFSCREEN_WINDOW (offscreen), NULL);
 
-  return gdk_offscreen_window_get_pixmap (GTK_WIDGET (offscreen)->window);
+  return gdk_offscreen_window_get_pixmap (gtk_widget_get_window (GTK_WIDGET (offscreen)));
 }
 
 /**
@@ -304,7 +309,7 @@ gtk_offscreen_window_get_pixbuf (GtkOffscreenWindow *offscreen)
 
   g_return_val_if_fail (GTK_IS_OFFSCREEN_WINDOW (offscreen), NULL);
 
-  pixmap = gdk_offscreen_window_get_pixmap (GTK_WIDGET (offscreen)->window);
+  pixmap = gdk_offscreen_window_get_pixmap (gtk_widget_get_window (GTK_WIDGET (offscreen)));
 
   if (pixmap != NULL)
     {
