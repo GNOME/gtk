@@ -812,8 +812,8 @@ gtk_cell_renderer_pixbuf_render (GtkCellRenderer      *cell,
        */
       gtk_icon_source_set_size (source, GTK_ICON_SIZE_SMALL_TOOLBAR);
       gtk_icon_source_set_size_wildcarded (source, FALSE);
-      
-     invisible = gtk_style_render_icon (widget->style,
+
+     invisible = gtk_style_render_icon (gtk_widget_get_style (widget),
 					source,
 					gtk_widget_get_direction (widget),
 					GTK_STATE_INSENSITIVE,
@@ -844,7 +844,7 @@ gtk_cell_renderer_pixbuf_render (GtkCellRenderer      *cell,
       symbolic = create_symbolic_pixbuf (cellpixbuf, widget, state);
       if (!symbolic) {
         colorized = create_colorized_pixbuf (pixbuf,
-					     &widget->style->base[state]);
+                                             &gtk_widget_get_style (widget)->base[state]);
 
 	pixbuf = colorized;
       } else {
