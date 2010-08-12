@@ -2551,15 +2551,19 @@ gtk_about_dialog_set_license_type (GtkAboutDialog *about,
 
           /* compose the new license string as:
            *
-           *   <program-name>  <copyright>\n
+           *   <program-name>\n
+           *   <copyright line 1>\n
+           *   ...
+           *   <copyright line n>\n
+           *   \n
            *   license preamble + URL
            *
            */
           str = g_string_sized_new (256);
           g_string_append (str, priv->name);
-          g_string_append (str, "  ");
-          g_string_append (str, priv->copyright);
           g_string_append (str, "\n");
+          g_string_append (str, priv->copyright);
+          g_string_append (str, "\n\n");
           g_string_append_printf (str, gettext (gtk_license_preamble), url);
 
           g_free (priv->license);
