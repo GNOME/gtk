@@ -43,6 +43,11 @@ these types.
 <para>
 Create a new pixmap with a given size and depth.
 </para>
+<para>
+Please use gdk_window_create_similar_surface() instead of this
+function if you're not forced to use a #GdkPixmap. It is intended
+as the replacement function for this function in GTK 3.
+</para>
 
 @drawable: A #GdkDrawable, used to determine default values
 for the new pixmap. Can be %NULL if @depth is specified,
