@@ -30,13 +30,17 @@ XVFB_START = \
 # call as: $(XVFB_START) && someprogram
 
 # test: run all tests in cwd and subdirs
-test:	${TEST_PROGS}
+test: test-cwd test-recurse
+# test-cwd: run tests in cwd
+test-cwd: ${TEST_PROGS}
 	@$(SKIP_GDKTARGET) || test -z "${TEST_PROGS}" || { \
-	  $(XVFB_START) && { set -e; ${GTESTER} --verbose ${TEST_PROGS}; }; \
+	  $(XVFB_START) && { set -e; $(TESTS_ENVIRONMENT) ${GTESTER} --verbose ${TEST_PROGS}; }; \
 	}
+# test-recurse: run tests in subdirs
+test-recurse:
 	@ for subdir in $(SUBDIRS) ; do \
 	    test "$$subdir" = "." -o "$$subdir" = "po" -o "$$subdir" = "po-properties" || \
-	    ( cd $$subdir && $(MAKE) $(AM_MAKEFLAGS) $@ ) || exit $? ; \
+	    ( cd $$subdir && $(MAKE) $(AM_MAKEFLAGS) test ) || exit $? ; \
 	  done
 # test-report: run tests in subdirs and generate report
 # perf-report: run tests in subdirs with -m perf and generate report
@@ -77,6 +81,6 @@ test-report perf-report full-report:	${TEST_PROGS}
 	    rm -rf "$$GTESTER_LOGDIR"/ ; \
 	    ${GTESTER_REPORT} --version 2>/dev/null 1>&2 ; test "$$?" != 0 || ${GTESTER_REPORT} $@.xml >$@.html ; \
 	  }
-.PHONY: test test-report perf-report full-report
-# run make test as part of make check
-check-local: test
+.PHONY: test test-cwd test-recurse test-report perf-report full-report
+# run make test-cwd as part of make check
+check-local: test-cwd
