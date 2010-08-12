@@ -901,6 +901,7 @@ gtk_scale_popup (GtkWidget *widget,
   GtkScaleButtonPrivate *priv;
   GtkAdjustment *adj;
   gint x, y, m, dx, dy, sx, sy, startoff;
+  gint min_slider_size;
   gdouble v;
   GdkDisplay *display;
   GdkScreen *screen;
@@ -948,6 +949,7 @@ gtk_scale_popup (GtkWidget *widget,
 
   /* position (needs widget to be shown already) */
   v = gtk_scale_button_get_value (button) / (adj->upper - adj->lower);
+  min_slider_size = gtk_range_get_min_slider_size (GTK_RANGE (priv->scale));
 
   if (priv->orientation == GTK_ORIENTATION_VERTICAL)
     {
@@ -955,8 +957,8 @@ gtk_scale_popup (GtkWidget *widget,
 
       x += (allocation.width - dock_allocation.width) / 2;
       y -= startoff;
-      y -= GTK_RANGE (priv->scale)->min_slider_size / 2;
-      m = scale_allocation.height - GTK_RANGE (priv->scale)->min_slider_size;
+      y -= min_slider_size / 2;
+      m = scale_allocation.height - min_slider_size;
       y -= m * (1.0 - v);
     }
   else
@@ -965,8 +967,8 @@ gtk_scale_popup (GtkWidget *widget,
 
       x -= startoff;
       y += (allocation.height - dock_allocation.height) / 2;
-      x -= GTK_RANGE (priv->scale)->min_slider_size / 2;
-      m = scale_allocation.width - GTK_RANGE (priv->scale)->min_slider_size;
+      x -= min_slider_size / 2;
+      m = scale_allocation.width - min_slider_size;
       x -= m * v;
     }
 
@@ -1081,16 +1083,14 @@ gtk_scale_popup (GtkWidget *widget,
       if (priv->orientation == GTK_ORIENTATION_VERTICAL)
         {
           e->x = scale_allocation.width / 2;
-          m = scale_allocation.height -
-              GTK_RANGE (priv->scale)->min_slider_size;
-          e->y = ((1.0 - v) * m) + GTK_RANGE (priv->scale)->min_slider_size / 2;
+          m = scale_allocation.height - min_slider_size;
+          e->y = ((1.0 - v) * m) + min_slider_size / 2;
         }
       else
         {
           e->y = scale_allocation.height / 2;
-          m = scale_allocation.width -
-              GTK_RANGE (priv->scale)->min_slider_size;
-          e->x = (v * m) + GTK_RANGE (priv->scale)->min_slider_size / 2;
+          m = scale_allocation.width - min_slider_size;
+          e->x = (v * m) + min_slider_size / 2;
         }
 
       gtk_widget_event (priv->scale, (GdkEvent *) e);
