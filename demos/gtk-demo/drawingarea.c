@@ -17,9 +17,9 @@
 
 static GtkWidget *window = NULL;
 /* Pixmap for scribble area, to store current scribbles */
-static GdkPixmap *pixmap = NULL;
+static cairo_surface_t *surface = NULL;
 
-/* Create a new pixmap of the appropriate size to store our scribbles */
+/* Create a new surface of the appropriate size to store our scribbles */
 static gboolean
 scribble_configure_event (GtkWidget         *widget,
                           GdkEventConfigure *event,
@@ -27,16 +27,16 @@ scribble_configure_event (GtkWidget         *widget,
 {
   cairo_t *cr;
 
-  if (pixmap)
-    g_object_unref (pixmap);
+  if (surface)
+    cairo_surface_destroy (surface);
 
-  pixmap = gdk_pixmap_new (widget->window,
-                           widget->allocation.width,
-                           widget->allocation.height,
-                           -1);
+  surface = gdk_window_create_similar_surface (widget->window,
+                                               CAIRO_CONTENT_COLOR,
+                                               widget->allocation.width,
+                                               widget->allocation.height);
 
-  /* Initialize the pixmap to white */
-  cr = gdk_cairo_create (pixmap);
+  /* Initialize the surface to white */
+  cr = cairo_create (surface);
 
   cairo_set_source_rgb (cr, 1, 1, 1);
   cairo_paint (cr);
@@ -47,7 +47,7 @@ scribble_configure_event (GtkWidget         *widget,
   return TRUE;
 }
 
-/* Redraw the screen from the pixmap */
+/* Redraw the screen from the surface */
 static gboolean
 scribble_expose_event (GtkWidget      *widget,
                        GdkEventExpose *event,
@@ -57,7 +57,7 @@ scribble_expose_event (GtkWidget      *widget,
 
   cr = gdk_cairo_create (widget->window);
   
-  gdk_cairo_set_source_pixmap (cr, pixmap, 0, 0);
+  cairo_set_source_surface (cr, surface, 0, 0);
   gdk_cairo_rectangle (cr, &event->area);
   cairo_fill (cr);
 
@@ -80,11 +80,13 @@ draw_brush (GtkWidget *widget,
   update_rect.width = 6;
   update_rect.height = 6;
 
-  /* Paint to the pixmap, where we store our state */
-  cr = gdk_cairo_create (pixmap);
+  /* Paint to the surface, where we store our state */
+  cr = cairo_create (surface);
 
   gdk_cairo_rectangle (cr, &update_rect);
   cairo_fill (cr);
+
+  cairo_destroy (cr);
 
   /* Now invalidate the affected region of the drawing area. */
   gdk_window_invalidate_rect (widget->window,
@@ -97,7 +99,7 @@ scribble_button_press_event (GtkWidget      *widget,
                              GdkEventButton *event,
                              gpointer        data)
 {
-  if (pixmap == NULL)
+  if (surface == NULL)
     return FALSE; /* paranoia check, in case we haven't gotten a configure event */
 
   if (event->button == 1)
@@ -115,7 +117,7 @@ scribble_motion_notify_event (GtkWidget      *widget,
   int x, y;
   GdkModifierType state;
 
-  if (pixmap == NULL)
+  if (surface == NULL)
     return FALSE; /* paranoia check, in case we haven't gotten a configure event */
 
   /* This call is very important; it requests the next motion event.
@@ -202,9 +204,9 @@ close_window (void)
 {
   window = NULL;
 
-  if (pixmap)
-    g_object_unref (pixmap);
-  pixmap = NULL;
+  if (surface)
+    g_object_unref (surface);
+  surface = NULL;
 }
 
 GtkWidget *
@@ -271,7 +273,7 @@ do_drawingarea (GtkWidget *do_widget)
 
       gtk_container_add (GTK_CONTAINER (frame), da);
 
-      /* Signals used to handle backing pixmap */
+      /* Signals used to handle backing surface */
 
       g_signal_connect (da, "expose-event",
                         G_CALLBACK (scribble_expose_event), NULL);
