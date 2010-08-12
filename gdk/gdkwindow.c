@@ -11037,6 +11037,54 @@ _gdk_window_get_input_window_for_event (GdkWindow *native_window,
   return event_win;
 }
 
+/**
+ * gdk_window_create_similar_surface:
+ * @window: window to make new surface similar to
+ * @content: the content for the new surface
+ * @width: width of the new surface
+ * @height: height of the new surface
+ *
+ * Create a new surface that is as compatible as possible with the
+ * given @window. For example the new surface will have the same
+ * fallback resolution and font options as @window. Generally, the new
+ * surface will also use the same backend as @window, unless that is
+ * not possible for some reason. The type of the returned surface may
+ * be examined with cairo_surface_get_type().
+ *
+ * Initially the surface contents are all 0 (transparent if contents
+ * have transparency, black otherwise.)
+ *
+ * Returns: a pointer to the newly allocated surface. The caller
+ * owns the surface and should call cairo_surface_destroy() when done
+ * with it.
+ *
+ * This function always returns a valid pointer, but it will return a
+ * pointer to a "nil" surface if @other is already in an error state
+ * or any other error occurs.
+ *
+ * Since: 2.22
+ **/
+cairo_surface_t *
+gdk_window_create_similar_surface (GdkWindow *     window,
+                                   cairo_content_t content,
+                                   int             width,
+                                   int             height)
+{
+  cairo_surface_t *window_surface, *surface;
+
+  g_return_val_if_fail (GDK_IS_WINDOW (window), NULL);
+  
+  window_surface = _gdk_drawable_ref_cairo_surface (window);
+
+  surface = cairo_surface_create_similar (window_surface,
+                                          content,
+                                          width, height);
+
+  cairo_surface_destroy (window_surface);
+
+  return surface;
+}
+
 
 #define __GDK_WINDOW_C__
 #include "gdkaliasdef.c"

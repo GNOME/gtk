@@ -922,6 +922,7 @@ GdkPangoRendererPrivate
 <SECTION>
 <TITLE>Cairo Interaction</TITLE>
 <FILE>cairo_interaction</FILE>
+gdk_window_create_similar_surface
 gdk_cairo_create
 gdk_cairo_set_source_color
 gdk_cairo_set_source_pixbuf
