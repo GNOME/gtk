@@ -125,7 +125,7 @@ The standard cursors available.
 @GDK_LAST_CURSOR: last cursor type
 @GDK_BLANK_CURSOR: Blank cursor. Since 2.16
 @GDK_CURSOR_IS_PIXMAP: type of cursors constructed with 
-  gdk_cursor_new_from_pixmap() or gdk_cursor_new_from_pixbuf()
+  gdk_cursor_new_from_pixbuf()
 
 <!-- ##### FUNCTION gdk_cursor_new ##### -->
 <para>
@@ -133,19 +133,6 @@ The standard cursors available.
 </para>
 
 @cursor_type: 
-@Returns: 
-
-
-<!-- ##### FUNCTION gdk_cursor_new_from_pixmap ##### -->
-<para>
-</para>
-
-@source: 
-@mask: 
-@fg: 
-@bg: 
-@x: 
-@y: 
 @Returns: 
 
 

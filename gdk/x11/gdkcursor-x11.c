@@ -306,75 +306,6 @@ gdk_cursor_new_for_display (GdkDisplay    *display,
   return cursor;
 }
 
-/**
- * gdk_cursor_new_from_pixmap:
- * @source: the pixmap specifying the cursor.
- * @mask: the pixmap specifying the mask, which must be the same size as 
- *    @source.
- * @fg: the foreground color, used for the bits in the source which are 1.
- *    The color does not have to be allocated first. 
- * @bg: the background color, used for the bits in the source which are 0.
- *    The color does not have to be allocated first.
- * @x: the horizontal offset of the 'hotspot' of the cursor. 
- * @y: the vertical offset of the 'hotspot' of the cursor.
- * 
- * Creates a new cursor from a given pixmap and mask. Both the pixmap and mask
- * must have a depth of 1 (i.e. each pixel has only 2 values - on or off).
- * The standard cursor size is 16 by 16 pixels.
- *
- * Return value: a new #GdkCursor.
- **/
-GdkCursor*
-gdk_cursor_new_from_pixmap (GdkPixmap      *source,
-			    GdkPixmap      *mask,
-			    const GdkColor *fg,
-			    const GdkColor *bg,
-			    gint            x,
-			    gint            y)
-{
-  GdkCursorPrivate *private;
-  GdkCursor *cursor;
-  Pixmap source_pixmap, mask_pixmap;
-  Cursor xcursor;
-  XColor xfg, xbg;
-  GdkDisplay *display;
-
-  g_return_val_if_fail (GDK_IS_PIXMAP (source), NULL);
-  g_return_val_if_fail (GDK_IS_PIXMAP (mask), NULL);
-  g_return_val_if_fail (fg != NULL, NULL);
-  g_return_val_if_fail (bg != NULL, NULL);
-
-  source_pixmap = GDK_PIXMAP_XID (source);
-  mask_pixmap   = GDK_PIXMAP_XID (mask);
-  display = GDK_PIXMAP_DISPLAY (source);
-
-  xfg.pixel = fg->pixel;
-  xfg.red = fg->red;
-  xfg.blue = fg->blue;
-  xfg.green = fg->green;
-  xbg.pixel = bg->pixel;
-  xbg.red = bg->red;
-  xbg.blue = bg->blue;
-  xbg.green = bg->green;
-  
-  if (display->closed)
-    xcursor = None;
-  else
-    xcursor = XCreatePixmapCursor (GDK_DISPLAY_XDISPLAY (display),
-				   source_pixmap, mask_pixmap, &xfg, &xbg, x, y);
-  private = g_new (GdkCursorPrivate, 1);
-  private->display = display;
-  private->xcursor = xcursor;
-  private->name = NULL;
-  private->serial = theme_serial;
-
-  cursor = (GdkCursor *) private;
-  cursor->type = GDK_CURSOR_IS_PIXMAP;
-  cursor->ref_count = 1;
-  
-  return cursor;
-}
-
 void
 _gdk_cursor_destroy (GdkCursor *cursor)
 {
@@ -588,8 +519,8 @@ update_cursor (gpointer data,
  * If the windowing system supports it, existing cursors created 
  * with gdk_cursor_new(), gdk_cursor_new_for_display() and 
  * gdk_cursor_new_for_name() are updated to reflect the theme 
- * change. Custom cursors constructed with gdk_cursor_new_from_pixmap() 
- * or gdk_cursor_new_from_pixbuf() will have to be handled
+ * change. Custom cursors constructed with
+ * gdk_cursor_new_from_pixbuf() will have to be handled
  * by the application (GTK+ applications can learn about 
  * cursor theme changes by listening for change notification
  * for the corresponding #GtkSetting).
@@ -890,6 +821,57 @@ gdk_display_get_default_cursor_size (GdkDisplay *display)
 }
 
 #else
+
+static GdkCursor*
+gdk_cursor_new_from_pixmap (GdkPixmap      *source,
+			    GdkPixmap      *mask,
+			    const GdkColor *fg,
+			    const GdkColor *bg,
+			    gint            x,
+			    gint            y)
+{
+  GdkCursorPrivate *private;
+  GdkCursor *cursor;
+  Pixmap source_pixmap, mask_pixmap;
+  Cursor xcursor;
+  XColor xfg, xbg;
+  GdkDisplay *display;
+
+  g_return_val_if_fail (GDK_IS_PIXMAP (source), NULL);
+  g_return_val_if_fail (GDK_IS_PIXMAP (mask), NULL);
+  g_return_val_if_fail (fg != NULL, NULL);
+  g_return_val_if_fail (bg != NULL, NULL);
+
+  source_pixmap = GDK_PIXMAP_XID (source);
+  mask_pixmap   = GDK_PIXMAP_XID (mask);
+  display = GDK_PIXMAP_DISPLAY (source);
+
+  xfg.pixel = fg->pixel;
+  xfg.red = fg->red;
+  xfg.blue = fg->blue;
+  xfg.green = fg->green;
+  xbg.pixel = bg->pixel;
+  xbg.red = bg->red;
+  xbg.blue = bg->blue;
+  xbg.green = bg->green;
+  
+  if (display->closed)
+    xcursor = None;
+  else
+    xcursor = XCreatePixmapCursor (GDK_DISPLAY_XDISPLAY (display),
+				   source_pixmap, mask_pixmap, &xfg, &xbg, x, y);
+  private = g_new (GdkCursorPrivate, 1);
+  private->display = display;
+  private->xcursor = xcursor;
+  private->name = NULL;
+  private->serial = theme_serial;
+
+  cursor = (GdkCursor *) private;
+  cursor->type = GDK_CURSOR_IS_PIXMAP;
+  cursor->ref_count = 1;
+  
+  return cursor;
+}
 
 GdkCursor *
 gdk_cursor_new_from_pixbuf (GdkDisplay *display, 
