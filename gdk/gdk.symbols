@@ -714,7 +714,6 @@ gdk_window_set_override_redirect
 gdk_window_set_accept_focus
 gdk_window_set_focus_on_map
 gdk_window_set_icon_list
-gdk_window_set_icon
 gdk_window_set_icon_name
 gdk_window_set_opacity
 gdk_window_iconify

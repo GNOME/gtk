@@ -3787,29 +3787,6 @@ gdk_window_set_icon_list (GdkWindow *window,
   gdk_window_update_icon (window, pixbufs);
 }
 
-/**
- * gdk_window_set_icon:
- * @window: a toplevel #GdkWindow
- * @icon_window: a #GdkWindow to use for the icon, or %NULL to unset
- * @pixmap: a #GdkPixmap to use as the icon, or %NULL to unset
- * @mask: a 1-bit pixmap (#GdkBitmap) to use as mask for @pixmap, or %NULL to have none
- *
- * Sets the icon of @window as a pixmap or window. If using GTK+, investigate
- * gtk_window_set_default_icon_list() first, and then gtk_window_set_icon_list()
- * and gtk_window_set_icon(). If those don't meet your needs, look at
- * gdk_window_set_icon_list(). Only if all those are too high-level do you
- * want to fall back to gdk_window_set_icon().
- * 
- **/
-void          
-gdk_window_set_icon (GdkWindow *window, 
-		     GdkWindow *icon_window,
-		     GdkPixmap *pixmap,
-		     GdkBitmap *mask)
-{
-  return;
-}
-
 static gboolean
 gdk_window_icon_name_set (GdkWindow *window)
 {

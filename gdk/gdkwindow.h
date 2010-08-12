@@ -767,10 +767,6 @@ GdkEventMask  gdk_window_get_device_events (GdkWindow    *window,
 
 void          gdk_window_set_icon_list   (GdkWindow       *window,
 					  GList           *pixbufs);
-void	      gdk_window_set_icon	 (GdkWindow	  *window, 
-					  GdkWindow	  *icon_window,
-					  GdkPixmap	  *pixmap,
-					  GdkBitmap	  *mask);
 void	      gdk_window_set_icon_name	 (GdkWindow	  *window, 
 					  const gchar	  *name);
 void	      gdk_window_set_group	 (GdkWindow	  *window, 

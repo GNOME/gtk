@@ -508,7 +508,6 @@ gdk_window_get_children
 gdk_window_peek_children
 gdk_window_get_events
 gdk_window_set_events
-gdk_window_set_icon
 gdk_window_set_icon_name
 gdk_window_set_transient_for
 gdk_window_set_role

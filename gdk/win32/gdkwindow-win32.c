@@ -2283,17 +2283,6 @@ gdk_window_set_icon_list (GdkWindow *window,
   impl->hicon_small = small_hicon;
 }
 
-void          
-gdk_window_set_icon (GdkWindow *window, 
-		     GdkWindow *icon_window,
-		     GdkPixmap *pixmap,
-		     GdkBitmap *mask)
-{
-  g_return_if_fail (GDK_IS_WINDOW (window));
-
-  /* do nothing, use gdk_window_set_icon_list instead */
-}
-
 void
 gdk_window_set_icon_name (GdkWindow   *window, 
 			  const gchar *name)

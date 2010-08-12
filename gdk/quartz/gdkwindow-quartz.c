@@ -2283,15 +2283,6 @@ gdk_window_set_focus_on_map (GdkWindow *window,
 }
 
 void          
-gdk_window_set_icon (GdkWindow *window, 
-		     GdkWindow *icon_window,
-		     GdkPixmap *pixmap,
-		     GdkBitmap *mask)
-{
-  /* FIXME: Implement */
-}
-
-void          
 gdk_window_set_icon_name (GdkWindow   *window, 
 			  const gchar *name)
 {
