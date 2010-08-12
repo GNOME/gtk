@@ -217,8 +217,6 @@ enum {
 typedef struct
 {
   GList     *icon_list;
-  GdkPixmap *icon_pixmap;
-  GdkPixmap *icon_mask;
   gchar     *icon_name;
   guint      realized : 1;
   guint      using_default_icon : 1;
@@ -400,7 +398,6 @@ static gboolean     sent_startup_notification = FALSE;
 
 static GQuark       quark_gtk_embedded = 0;
 static GQuark       quark_gtk_window_key_hash = 0;
-static GQuark       quark_gtk_window_default_icon_pixmap = 0;
 static GQuark       quark_gtk_window_icon_info = 0;
 static GQuark       quark_gtk_buildable_accels = 0;
 
@@ -528,7 +525,6 @@ gtk_window_class_init (GtkWindowClass *klass)
   
   quark_gtk_embedded = g_quark_from_static_string ("gtk-embedded");
   quark_gtk_window_key_hash = g_quark_from_static_string ("gtk-window-key-hash");
-  quark_gtk_window_default_icon_pixmap = g_quark_from_static_string ("gtk-window-default-icon-pixmap");
   quark_gtk_window_icon_info = g_quark_from_static_string ("gtk-window-icon-info");
   quark_gtk_buildable_accels = g_quark_from_static_string ("gtk-window-buildable-accels");
 
@@ -3120,157 +3116,6 @@ ensure_icon_info (GtkWindow *window)
   return info;
 }
 
-typedef struct {
-  guint serial;
-  GdkPixmap *pixmap;
-  GdkPixmap *mask;
-} ScreenIconInfo;
-
-static ScreenIconInfo *
-get_screen_icon_info (GdkScreen *screen)
-{
-  ScreenIconInfo *info = g_object_get_qdata (G_OBJECT (screen), 
-					     quark_gtk_window_default_icon_pixmap);
-  if (!info)
-    {
-      info = g_slice_new0 (ScreenIconInfo);
-      g_object_set_qdata (G_OBJECT (screen), 
-			  quark_gtk_window_default_icon_pixmap, info);
-    }
-
-  if (info->serial != default_icon_serial)
-    {
-      if (info->pixmap)
-	{
-	  g_object_remove_weak_pointer (G_OBJECT (info->pixmap), (gpointer*)&info->pixmap);
-	  info->pixmap = NULL;
-	}
-	  
-      if (info->mask)
-	{
-	  g_object_remove_weak_pointer (G_OBJECT (info->mask), (gpointer*)&info->mask);
-	  info->mask = NULL;
-	}
-
-      info->serial = default_icon_serial;
-    }
-  
-  return info;
-}
-
-static void
-get_pixmap_and_mask (GdkWindow		*window,
-		     GtkWindowIconInfo  *parent_info,
-                     gboolean            is_default_list,
-                     GList              *icon_list,
-                     GdkPixmap         **pmap_return,
-                     GdkBitmap         **mask_return)
-{
-  GdkScreen *screen = gdk_drawable_get_screen (window);
-  ScreenIconInfo *default_icon_info = get_screen_icon_info (screen);
-  GdkPixbuf *best_icon;
-  GList *tmp_list;
-  int best_size;
-  
-  *pmap_return = NULL;
-  *mask_return = NULL;
-  
-  if (is_default_list &&
-      default_icon_info->pixmap != NULL)
-    {
-      /* Use shared icon pixmap for all windows on this screen.
-       */
-      if (default_icon_info->pixmap)
-        g_object_ref (default_icon_info->pixmap);
-      if (default_icon_info->mask)
-        g_object_ref (default_icon_info->mask);
-
-      *pmap_return = default_icon_info->pixmap;
-      *mask_return = default_icon_info->mask;
-    }
-  else if (parent_info && parent_info->icon_pixmap)
-    {
-      if (parent_info->icon_pixmap)
-        g_object_ref (parent_info->icon_pixmap);
-      if (parent_info->icon_mask)
-        g_object_ref (parent_info->icon_mask);
-      
-      *pmap_return = parent_info->icon_pixmap;
-      *mask_return = parent_info->icon_mask;
-    }
-  else
-    {
-#define IDEAL_SIZE 48
-  
-      best_size = G_MAXINT;
-      best_icon = NULL;
-      tmp_list = icon_list;
-      while (tmp_list != NULL)
-        {
-          GdkPixbuf *pixbuf = tmp_list->data;
-          int this;
-      
-          /* average width and height - if someone passes in a rectangular
-           * icon they deserve what they get.
-           */
-          this = gdk_pixbuf_get_width (pixbuf) + gdk_pixbuf_get_height (pixbuf);
-          this /= 2;
-      
-          if (best_icon == NULL)
-            {
-              best_icon = pixbuf;
-              best_size = this;
-            }
-          else
-            {
-              /* icon is better if it's 32 pixels or larger, and closer to
-               * the ideal size than the current best.
-               */
-              if (this >= 32 &&
-                  (ABS (best_size - IDEAL_SIZE) <
-                   ABS (this - IDEAL_SIZE)))
-                {
-                  best_icon = pixbuf;
-                  best_size = this;
-                }
-            }
-
-          tmp_list = tmp_list->next;
-        }
-
-      if (best_icon)
-        gdk_pixbuf_render_pixmap_and_mask_for_colormap (best_icon,
-							gdk_screen_get_system_colormap (screen),
-							pmap_return,
-							mask_return,
-							128);
-
-      /* Save pmap/mask for others to use if appropriate */
-      if (parent_info)
-        {
-          parent_info->icon_pixmap = *pmap_return;
-          parent_info->icon_mask = *mask_return;
-
-          if (parent_info->icon_pixmap)
-            g_object_ref (parent_info->icon_pixmap);
-          if (parent_info->icon_mask)
-            g_object_ref (parent_info->icon_mask);
-        }
-      else if (is_default_list)
-        {
-          default_icon_info->pixmap = *pmap_return;
-          default_icon_info->mask = *mask_return;
-
-          if (default_icon_info->pixmap)
-	    g_object_add_weak_pointer (G_OBJECT (default_icon_info->pixmap),
-				       (gpointer*)&default_icon_info->pixmap);
-          if (default_icon_info->mask) 
-	    g_object_add_weak_pointer (G_OBJECT (default_icon_info->mask),
-				       (gpointer*)&default_icon_info->mask);
-        }
-    }
-}
-
 static GList *
 icon_list_from_theme (GtkWidget    *widget,
 		      const gchar  *name)
@@ -3335,9 +3180,6 @@ gtk_window_realize_icon (GtkWindow *window)
   if (info->realized)
     return;
 
-  g_return_if_fail (info->icon_pixmap == NULL);
-  g_return_if_fail (info->icon_mask == NULL);
-  
   info->using_default_icon = FALSE;
   info->using_parent_icon = FALSE;
   info->using_themed_icon = FALSE;
@@ -3376,23 +3218,6 @@ gtk_window_realize_icon (GtkWindow *window)
       info->using_themed_icon = TRUE;  
     }
 
-  gdk_window_set_icon_list (gdk_window, icon_list);
-
-  get_pixmap_and_mask (gdk_window,
-		       info->using_parent_icon ? ensure_icon_info (priv->transient_parent) : NULL,
-                       info->using_default_icon,
-                       icon_list,
-                       &info->icon_pixmap,
-                       &info->icon_mask);
-  
-  /* This is a slight ICCCM violation since it's a color pixmap not
-   * a bitmap, but everyone does it.
-   */
-  gdk_window_set_icon (gdk_window,
-                       NULL,
-                       info->icon_pixmap,
-                       info->icon_mask);
-
   info->realized = TRUE;
   
   if (info->using_themed_icon) 
@@ -3418,15 +3243,6 @@ gtk_window_unrealize_icon (GtkWindow *window)
   if (info == NULL)
     return;
   
-  if (info->icon_pixmap)
-    g_object_unref (info->icon_pixmap);
-
-  if (info->icon_mask)
-    g_object_unref (info->icon_mask);
-
-  info->icon_pixmap = NULL;
-  info->icon_mask = NULL;
-
   if (info->using_themed_icon)
     {
       GtkIconTheme *icon_theme;
