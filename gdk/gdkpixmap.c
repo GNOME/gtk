@@ -689,6 +689,11 @@ gdk_pixmap_colormap_new_from_pixbuf (GdkColormap    *colormap,
  * Create a pixmap from a XPM file using a particular colormap.
  *
  * Returns: (transfer none): the #GdkPixmap.
+ *
+ * Deprecated: 2.22: Use a #GdkPixbuf instead. You can use
+ * gdk_pixbuf_new_from_file() to create it.
+ * If you must use a pixmap, use gdk_pixmap_new() to
+ * create it and Cairo to draw the pixbuf onto it.
  */
 GdkPixmap*
 gdk_pixmap_colormap_create_from_xpm (GdkDrawable    *drawable,
@@ -733,6 +738,11 @@ gdk_pixmap_colormap_create_from_xpm (GdkDrawable    *drawable,
  * Create a pixmap from a XPM file.
  *
  * Returns: (transfer none): the #GdkPixmap
+ *
+ * Deprecated: 2.22: Use a #GdkPixbuf instead. You can use
+ * gdk_pixbuf_new_from_file() to create it.
+ * If you must use a pixmap, use gdk_pixmap_new() to
+ * create it and Cairo to draw the pixbuf onto it.
  */
 GdkPixmap*
 gdk_pixmap_create_from_xpm (GdkDrawable    *drawable,
@@ -762,6 +772,11 @@ gdk_pixmap_create_from_xpm (GdkDrawable    *drawable,
  * colormap.
  *
  * Returns: (transfer none): the #GdkPixmap.
+ *
+ * Deprecated: 2.22: Use a #GdkPixbuf instead. You can use
+ * gdk_pixbuf_new_from_xpm_data() to create it.
+ * If you must use a pixmap, use gdk_pixmap_new() to
+ * create it and Cairo to draw the pixbuf onto it.
  */
 GdkPixmap*
 gdk_pixmap_colormap_create_from_xpm_d (GdkDrawable     *drawable,
@@ -806,6 +821,11 @@ gdk_pixmap_colormap_create_from_xpm_d (GdkDrawable     *drawable,
  * Create a pixmap from data in XPM format.
  *
  * Returns: (transfer none): the #GdkPixmap.
+ *
+ * Deprecated: 2.22: Use a #GdkPixbuf instead. You can use
+ * gdk_pixbuf_new_from_xpm_data() to create it.
+ * If you must use a pixmap, use gdk_pixmap_new() to
+ * create it and Cairo to draw the pixbuf onto it.
  */
 GdkPixmap*
 gdk_pixmap_create_from_xpm_d (GdkDrawable    *drawable,

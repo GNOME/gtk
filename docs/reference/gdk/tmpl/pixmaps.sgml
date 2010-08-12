@@ -13,6 +13,11 @@ is the number of bits per pixels. Bitmaps are simply pixmaps
 with a depth of 1. (That is, they are monochrome bitmaps - each
 pixel can be either on or off).
 </para>
+<para>
+GTK 3 will remove #GdkPixmap and #GdkBitmap. You should use cairo
+surfaces instead. However, because a lot of functions still use these
+types, they are not deprecated.
+</para>
 
 <!-- ##### SECTION See_Also ##### -->
 <para>
@@ -62,6 +67,14 @@ window is used.
 @height: the height of the new pixmap in pixels.
 @Returns: the #GdkBitmap
 
+@Deprecated: 2.22: You can create a Cairo image surface using
+cairo_image_surface_create_for_data() instead. Specify
+%CAIRO_FORMAT_A1 as the format to get a bitmap. Keep in mind that
+Cairo images must have a rowstride of 4 bytes, so you will need
+to align your data properly. If you must use a pixmap, use
+gdk_pixmap_new() with a depth of 1 to create a bitmap and then use
+gdk_cairo_create(), cairo_set_source_surface() and cairo_paint()
+to draw the image surface to the bitmap.
 
 <!-- ##### FUNCTION gdk_pixmap_create_from_data ##### -->
 <para>
@@ -78,6 +91,11 @@ for the new pixmap. Can be %NULL, if the depth is given.
 @bg: the background color.
 @Returns: the #GdkPixmap
 
+@Deprecated: 2.22: If you must replicate the functionality of this
+function, create a pixmap using gdk_pixmap_new(), cairo_paint() it
+with the background color and then create a Cairo image surface as
+pointed out in the docs to gdk_bitmap_create_from_data() and use
+this surface with cairo_mask_surface() to paint the foreground color.
 
 <!-- ##### FUNCTION gdk_pixmap_create_from_xpm ##### -->
 

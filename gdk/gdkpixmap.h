@@ -70,6 +70,7 @@ GdkPixmap* gdk_pixmap_new		(GdkDrawable *drawable,
 					 gint	      width,
 					 gint	      height,
 					 gint	      depth);
+#ifndef GDK_DISABLE_DEPRECATED
 GdkBitmap* gdk_bitmap_create_from_data	(GdkDrawable *drawable,
 					 const gchar *data,
 					 gint	      width,
@@ -100,6 +101,7 @@ GdkPixmap* gdk_pixmap_colormap_create_from_xpm_d (GdkDrawable    *drawable,
 						  GdkBitmap     **mask,
 						  const GdkColor *transparent_color,
 						  gchar         **data);
+#endif
 
 /* Functions to create/lookup pixmaps from their native equivalents
  */
