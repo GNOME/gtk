@@ -795,6 +795,12 @@ gboolean      gdk_window_get_decorations (GdkWindow       *window,
 void	      gdk_window_set_functions	 (GdkWindow	  *window,
 					  GdkWMFunction	   functions);
 
+cairo_surface_t *
+              gdk_window_create_similar_surface (GdkWindow *window,
+                                          cairo_content_t  content,
+                                          int              width,
+                                          int              height);
+
 void          gdk_window_beep            (GdkWindow       *window);
 void          gdk_window_iconify         (GdkWindow       *window);
 void          gdk_window_deiconify       (GdkWindow       *window);
