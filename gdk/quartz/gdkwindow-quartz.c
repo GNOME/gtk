@@ -292,7 +292,7 @@ gdk_window_impl_quartz_begin_paint_region (GdkPaintable    *paintable,
         }
 
       gdk_cairo_set_source_pixmap (cr, bg_pixmap, x_offset, y_offset);
-      cairo_set_extend (cairo_get_source (cr), CAIRO_EXTEND_REPEAT);
+      cairo_pattern_set_extend (cairo_get_source (cr), CAIRO_EXTEND_REPEAT);
     }
 
   /* Can use cairo_paint() here, we clipped above */
