@@ -73,7 +73,7 @@
 /* The cursor for the dropper */
 #define DROPPER_WIDTH 17
 #define DROPPER_HEIGHT 17
-#define DROPPER_STRIDE 4
+#define DROPPER_STRIDE (DROPPER_WIDTH * 4)
 #define DROPPER_X_HOT 2
 #define DROPPER_Y_HOT 16
 
@@ -241,26 +241,47 @@ static GtkColorSelectionChangePaletteFunc noscreen_change_palette_hook = default
 static GtkColorSelectionChangePaletteWithScreenFunc change_palette_hook = default_change_palette_func;
 
 static const guchar dropper_bits[] = {
-  0xff, 0x8f, 0x01, 0x00,  0xff, 0x77, 0x01, 0x00,
-  0xff, 0xfb, 0x00, 0x00,  0xff, 0xf8, 0x00, 0x00,
-  0x7f, 0xff, 0x00, 0x00,  0xff, 0x7e, 0x01, 0x00,
-  0xff, 0x9d, 0x01, 0x00,  0xff, 0xd8, 0x01, 0x00,
-  0x7f, 0xd4, 0x01, 0x00,  0x3f, 0xee, 0x01, 0x00,
-  0x1f, 0xff, 0x01, 0x00,  0x8f, 0xff, 0x01, 0x00,
-  0xc7, 0xff, 0x01, 0x00,  0xe3, 0xff, 0x01, 0x00,
-  0xf3, 0xff, 0x01, 0x00,  0xfd, 0xff, 0x01, 0x00,
-  0xff, 0xff, 0x01, 0x00 };
-
-static const guchar dropper_mask[] = {
-  0x00, 0x70, 0x00, 0x00,  0x00, 0xf8, 0x00, 0x00,
-  0x00, 0xfc, 0x01, 0x00,  0x00, 0xff, 0x01, 0x00,
-  0x80, 0xff, 0x01, 0x00,  0x00, 0xff, 0x00, 0x00,
-  0x00, 0x7f, 0x00, 0x00,  0x80, 0x3f, 0x00, 0x00,
-  0xc0, 0x3f, 0x00, 0x00,  0xe0, 0x13, 0x00, 0x00,
-  0xf0, 0x01, 0x00, 0x00,  0xf8, 0x00, 0x00, 0x00,
-  0x7c, 0x00, 0x00, 0x00,  0x3e, 0x00, 0x00, 0x00,
-  0x1e, 0x00, 0x00, 0x00,  0x0d, 0x00, 0x00, 0x00,
-  0x02, 0x00, 0x00, 0x00 };
+  "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0"
+  "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\377\377\377\377\377\377\377\377\377\377"
+  "\377\377\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0"
+  "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\377\377\377\377\0\0\0\377"
+  "\0\0\0\377\0\0\0\377\377\377\377\377\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0"
+  "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\377\377\377"
+  "\377\0\0\0\377\0\0\0\377\0\0\0\377\0\0\0\377\0\0\0\377\377\377\377\377"
+  "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\377"
+  "\377\377\377\377\377\377\377\377\377\377\377\0\0\0\377\0\0\0\377\0\0"
+  "\0\377\0\0\0\377\0\0\0\377\377\377\377\377\0\0\0\0\0\0\0\0\0\0\0\0\0"
+  "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\377\377\377\377\0\0\0\377\0\0\0\377\0"
+  "\0\0\377\0\0\0\377\0\0\0\377\0\0\0\377\0\0\0\377\0\0\0\377\377\377\377"
+  "\377\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0"
+  "\377\377\377\377\0\0\0\377\0\0\0\377\0\0\0\377\0\0\0\377\0\0\0\377\0"
+  "\0\0\377\377\377\377\377\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0"
+  "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\377\377\377\377\377\0\0\0\377\0\0"
+  "\0\377\0\0\0\377\377\377\377\377\377\377\377\377\0\0\0\0\0\0\0\0\0\0"
+  "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\377\377\377"
+  "\377\377\377\377\377\377\377\377\377\377\0\0\0\377\0\0\0\377\377\377"
+  "\377\377\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0"
+  "\0\0\0\0\0\0\0\0\0\377\377\377\377\377\377\377\377\377\377\377\377\377"
+  "\0\0\0\377\377\377\377\377\0\0\0\377\377\377\377\377\0\0\0\0\0\0\0\0"
+  "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\377\377\377\377"
+  "\377\377\377\377\377\377\377\377\377\0\0\0\377\0\0\0\0\0\0\0\0\377\377"
+  "\377\377\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0"
+  "\0\0\0\0\0\377\377\377\377\377\377\377\377\377\377\377\377\377\0\0\0"
+  "\377\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0"
+  "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\377\377\377\377\377\377\377\377\377\377"
+  "\377\377\377\0\0\0\377\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0"
+  "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\377\377\377\377\377"
+  "\377\377\377\377\377\377\377\377\0\0\0\377\0\0\0\0\0\0\0\0\0\0\0\0\0"
+  "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0"
+  "\377\377\377\377\377\377\377\377\377\377\377\377\377\0\0\0\377\0\0\0"
+  "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0"
+  "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\377\377\377\377\377\377\377\377\377\0\0"
+  "\0\377\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0"
+  "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\377\0\0\0\0\0\0\0\377\0\0\0"
+  "\377\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0"
+  "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\377\0\0\0\0\0"
+  "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0"
+  "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0"};
 
 G_DEFINE_TYPE (GtkColorSelection, gtk_color_selection, GTK_TYPE_VBOX)
 
@@ -1632,50 +1653,19 @@ make_picker_cursor (GdkScreen *screen)
 
   if (!cursor)
     {
-      GdkColor bg = { 0, 0xffff, 0xffff, 0xffff };
-      GdkColor fg = { 0, 0x0000, 0x0000, 0x0000 };
-      GdkWindow *window;
-      GdkPixmap *pixmap, *mask;
-      cairo_surface_t *image;
-      cairo_t *cr;
+      GdkPixbuf *pixbuf;
 
-      window = gdk_screen_get_root_window (screen);
-      
+      pixbuf = gdk_pixbuf_new_from_data (dropper_bits,
+                                         GDK_COLORSPACE_RGB, TRUE, 8,
+                                         DROPPER_WIDTH, DROPPER_HEIGHT,
+                                         DROPPER_STRIDE,
+                                         NULL, NULL);
 
-      pixmap = gdk_pixmap_new (window, DROPPER_WIDTH, DROPPER_HEIGHT, 1);
-
-      cr = gdk_cairo_create (pixmap);
-      cairo_set_operator (cr, CAIRO_OPERATOR_SOURCE);
-      image = cairo_image_surface_create_for_data ((guchar *) dropper_bits,
-                                                   CAIRO_FORMAT_A1,
-                                                   DROPPER_WIDTH,
-                                                   DROPPER_HEIGHT,
-                                                   DROPPER_STRIDE);
-      cairo_set_source_surface (cr, image, 0, 0);
-      cairo_surface_destroy (image);
-      cairo_paint (cr);
-      cairo_destroy (cr);
-      
-
-      mask = gdk_pixmap_new (window, DROPPER_WIDTH, DROPPER_HEIGHT, 1);
-
-      cr = gdk_cairo_create (mask);
-      cairo_set_operator (cr, CAIRO_OPERATOR_SOURCE);
-      image = cairo_image_surface_create_for_data ((guchar *) dropper_mask,
-                                                   CAIRO_FORMAT_A1,
-                                                   DROPPER_WIDTH,
-                                                   DROPPER_HEIGHT,
-                                                   DROPPER_STRIDE);
-      cairo_set_source_surface (cr, image, 0, 0);
-      cairo_surface_destroy (image);
-      cairo_paint (cr);
-      cairo_destroy (cr);
-      
-      cursor = gdk_cursor_new_from_pixmap (pixmap, mask, &fg, &bg,
+      cursor = gdk_cursor_new_from_pixbuf (gdk_screen_get_display (screen),
+                                           pixbuf,
 					   DROPPER_X_HOT, DROPPER_Y_HOT);
       
-      g_object_unref (pixmap);
-      g_object_unref (mask);
+      g_object_unref (pixbuf);
     }
       
   return cursor;
