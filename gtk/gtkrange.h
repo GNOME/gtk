@@ -201,6 +201,8 @@ void               _gtk_range_set_stop_values              (GtkRange      *range
                                                             gint           n_values);
 gint               _gtk_range_get_stop_positions           (GtkRange      *range,
                                                             gint         **values);          
+void               _gtk_range_set_round_digits             (GtkRange      *range,
+                                                            gint           round_digits);
 
 
 G_END_DECLS

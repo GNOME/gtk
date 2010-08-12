@@ -3997,3 +3997,10 @@ _gtk_range_get_stop_positions (GtkRange  *range,
 
   return range->layout->n_marks;
 }
+
+void
+_gtk_range_set_round_digits (GtkRange *range,
+                             gint     round_digits)
+{
+  range->round_digits = round_digits;
+}

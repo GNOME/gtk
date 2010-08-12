@@ -408,7 +408,7 @@ gtk_scale_init (GtkScale *scale)
   priv->draw_value = TRUE;
   priv->value_pos = GTK_POS_TOP;
   priv->digits = 1;
-  range->round_digits = priv->digits;
+  _gtk_range_set_round_digits (range, priv->digits);
 
   gtk_scale_orientation_notify (range, NULL);
   g_signal_connect (scale, "notify::orientation",
@@ -575,8 +575,8 @@ gtk_scale_set_digits (GtkScale *scale,
     {
       priv->digits = digits;
       if (priv->draw_value)
-	range->round_digits = digits;
-      
+        _gtk_range_set_round_digits (range, digits);
+
       _gtk_scale_clear_layout (scale);
       gtk_widget_queue_resize (GTK_WIDGET (scale));
 
@@ -624,9 +624,9 @@ gtk_scale_set_draw_value (GtkScale *scale,
     {
       priv->draw_value = draw_value;
       if (draw_value)
-	GTK_RANGE (scale)->round_digits = priv->digits;
+        _gtk_range_set_round_digits (GTK_RANGE (scale), priv->digits);
       else
-	GTK_RANGE (scale)->round_digits = -1;
+        _gtk_range_set_round_digits (GTK_RANGE (scale), -1);
 
       _gtk_scale_clear_layout (scale);
 
