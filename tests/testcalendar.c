@@ -158,19 +158,9 @@ calendar_day_selected_double_click (GtkWidget    *widget,
                                          CalendarData *data)
 {
   char buffer[256] = "day_selected_double_click: ";
-  guint day;
 
   calendar_date_to_string (data, buffer+27, 256-27);
   calendar_set_signal_strings (buffer, data);
-
-  gtk_calendar_get_date (GTK_CALENDAR (data->window),
-			 NULL, NULL, &day);
-
-  if (GTK_CALENDAR (data->window)->marked_date[day-1] == 0) {
-    gtk_calendar_mark_day (GTK_CALENDAR (data->window), day);
-  } else { 
-    gtk_calendar_unmark_day (GTK_CALENDAR (data->window), day);
-  }
 }
 
 static void
@@ -298,37 +288,19 @@ demonstrate_details (CalendarData *data)
 {
   static char *rainbow[] = { "#900", "#980", "#390", "#095", "#059", "#309", "#908" };
   GtkCalendar *calendar = GTK_CALENDAR (data->calendar_widget);
-  gint row, col;
+  guint year, month, day;
+  gchar *detail;
 
-  for (row = 0; row < 6; ++row)
-    for (col = 0; col < 7; ++col)
-      {
-        gint year, month, day;
-        gchar *detail;
-    
-        year = calendar->year;
-        month = calendar->month;
-        month += calendar->day_month[row][col];
-        day = calendar->day[row][col];
-    
-        if (month < 1)
-          {
-            month += 12;
-            year -= 1;
-          }
-        else if (month > 12)
-          {
-            month -= 12;
-            year += 1;
-  }
+  gtk_calendar_get_date (calendar,
+                         &year, &month, &day);
 
-        detail = g_strdup_printf ("<span color='%s'>yadda\n"
-                                  "(%04d-%02d-%02d)</span>",
-                                  rainbow[(day - 1) % 7],
-                                  year, month, day);
-
-        calendar_set_detail (data, year, month - 1, day, detail);
-      }
+  for (day = 0; day < 29; ++day)
+    {
+      detail = g_strdup_printf ("<span color='%s'>yadda\n"
+                                "(%04d-%02d-%02d)</span>",
+                                rainbow[(day - 1) % 7], year, month, day);
+      calendar_set_detail (data, year, month, day, detail);
+   }
 
   gtk_widget_queue_resize (data->calendar_widget);
   calendar_update_details (data);
