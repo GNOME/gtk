@@ -102,36 +102,8 @@ typedef gchar* (*GtkCalendarDetailFunc) (GtkCalendar *calendar,
 struct _GtkCalendar
 {
   GtkWidget widget;
-  
-  GtkStyle  *GSEAL (header_style);
-  GtkStyle  *GSEAL (label_style);
-  
-  gint GSEAL (month);
-  gint GSEAL (year);
-  gint GSEAL (selected_day);
-  
-  gint GSEAL (day_month[6][7]);
-  gint GSEAL (day[6][7]);
-  
-  gint GSEAL (num_marked_dates);
-  gint GSEAL (marked_date[31]);
-  GtkCalendarDisplayOptions  GSEAL (display_flags);
-  GdkColor GSEAL (marked_date_color[31]);
-  
-  gint GSEAL (focus_row);
-  gint GSEAL (focus_col);
 
-  gint GSEAL (highlight_row);
-  gint GSEAL (highlight_col);
-  
-  GtkCalendarPrivate *GSEAL (priv);
-  gchar GSEAL (grow_space [32]);
-
-  /* Padding for future expansion */
-  void (*_gtk_reserved1) (void);
-  void (*_gtk_reserved2) (void);
-  void (*_gtk_reserved3) (void);
-  void (*_gtk_reserved4) (void);
+  GtkCalendarPrivate *priv;
 };
 
 struct _GtkCalendarClass
