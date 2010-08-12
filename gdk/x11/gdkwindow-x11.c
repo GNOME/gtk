@@ -3608,6 +3608,74 @@ gdk_x11_window_set_user_time (GdkWindow *window,
        ? XMaxRequestSize (GDK_DISPLAY_XDISPLAY (display)) - 100         \
        : XExtendedMaxRequestSize (GDK_DISPLAY_XDISPLAY (display)) - 100)
 
+static void
+gdk_window_update_icon (GdkWindow *window,
+                        GList     *icon_list)
+{
+  GdkScreen *screen = gdk_drawable_get_screen (window);
+  GdkToplevelX11 *toplevel;
+  GdkPixbuf *best_icon;
+  GList *tmp_list;
+  int best_size;
+  
+  toplevel = _gdk_x11_window_get_toplevel (window);
+
+  if (toplevel->icon_pixmap != NULL)
+    {
+      g_object_unref (toplevel->icon_pixmap);
+      toplevel->icon_pixmap = NULL;
+    }
+  
+  if (toplevel->icon_mask != NULL)
+    {
+      g_object_unref (toplevel->icon_mask);
+      toplevel->icon_mask = NULL;
+    }
+  
+#define IDEAL_SIZE 48
+  
+  best_size = G_MAXINT;
+  best_icon = NULL;
+  for (tmp_list = icon_list; tmp_list; tmp_list = tmp_list->next)
+    {
+      GdkPixbuf *pixbuf = tmp_list->data;
+      int this;
+  
+      /* average width and height - if someone passes in a rectangular
+       * icon they deserve what they get.
+       */
+      this = gdk_pixbuf_get_width (pixbuf) + gdk_pixbuf_get_height (pixbuf);
+      this /= 2;
+  
+      if (best_icon == NULL)
+        {
+          best_icon = pixbuf;
+          best_size = this;
+        }
+      else
+        {
+          /* icon is better if it's 32 pixels or larger, and closer to
+           * the ideal size than the current best.
+           */
+          if (this >= 32 &&
+              (ABS (best_size - IDEAL_SIZE) <
+               ABS (this - IDEAL_SIZE)))
+            {
+              best_icon = pixbuf;
+              best_size = this;
+            }
+        }
+    }
+
+  if (best_icon)
+    gdk_pixbuf_render_pixmap_and_mask_for_colormap (best_icon,
+                                                    gdk_screen_get_system_colormap (screen),
+                                                    &toplevel->icon_pixmap,
+                                                    &toplevel->icon_mask,
+                                                    128);
+  update_wm_hints (window, FALSE);
+}
+
 /**
  * gdk_window_set_icon_list:
  * @window: The #GdkWindow toplevel window to set the icon of.
@@ -3726,6 +3794,8 @@ gdk_window_set_icon_list (GdkWindow *window,
     }
   
   g_free (data);
+
+  gdk_window_update_icon (window, pixbufs);
 }
 
 /**
@@ -3748,40 +3818,7 @@ gdk_window_set_icon (GdkWindow *window,
 		     GdkPixmap *pixmap,
 		     GdkBitmap *mask)
 {
-  GdkToplevelX11 *toplevel;
-
-  if (GDK_WINDOW_DESTROYED (window) ||
-      !WINDOW_IS_TOPLEVEL_OR_FOREIGN (window))
-    return;
-
-  toplevel = _gdk_x11_window_get_toplevel (window);
-
-  if (toplevel->icon_window != icon_window)
-    {
-      if (toplevel->icon_window)
-	g_object_unref (toplevel->icon_window);
-      toplevel->icon_window = g_object_ref (icon_window);
-    }
-  
-  if (toplevel->icon_pixmap != pixmap)
-    {
-      if (pixmap)
-	g_object_ref (pixmap);
-      if (toplevel->icon_pixmap)
-	g_object_unref (toplevel->icon_pixmap);
-      toplevel->icon_pixmap = pixmap;
-    }
-  
-  if (toplevel->icon_mask != mask)
-    {
-      if (mask)
-	g_object_ref (mask);
-      if (toplevel->icon_mask)
-	g_object_unref (toplevel->icon_mask);
-      toplevel->icon_mask = mask;
-    }
-  
-  update_wm_hints (window, FALSE);
+  return;
 }
 
 static gboolean
