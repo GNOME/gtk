@@ -49,7 +49,6 @@
 
 #include "prop-editor.h"
 
-#include "circles.xbm"
 #include "test.xpm"
 
 gboolean
@@ -7431,10 +7430,9 @@ create_wmhints (GtkWidget *widget)
   GtkWidget *button;
   GtkWidget *box1;
   GtkWidget *box2;
-  GdkBitmap *circles;
   GdkWindow *gdk_window;
-  cairo_surface_t *image;
-  cairo_t *cr;
+  GdkPixbuf *pixbuf;
+  GList *list;
 
   if (!window)
     {
@@ -7453,25 +7451,20 @@ create_wmhints (GtkWidget *widget)
       gtk_widget_realize (window);
 
       gdk_window = gtk_widget_get_window (window);
-      circles = gdk_pixmap_new (gdk_window, circles_width, circles_height, 1);
-      cr = gdk_cairo_create (circles);
-      image = cairo_image_surface_create_for_data (circles_bits, CAIRO_FORMAT_A1,
-                                                   circles_width, circles_height,
-                                                   circles_width / 8);
-      cairo_set_source_surface (cr, image, 0, 0);
-      cairo_surface_destroy (image);
-      cairo_set_operator (cr, CAIRO_OPERATOR_SOURCE);
-      cairo_paint (cr);
-      cairo_destroy (cr);
 
-      gdk_window_set_icon (gdk_window, NULL,
-			   circles, circles);
+      pixbuf = gdk_pixbuf_new_from_xpm_data ((const char **) openfile);
+      list = g_list_prepend (NULL, pixbuf);
+
+      gdk_window_set_icon_list (gdk_window, list);
+      
+      g_list_free (list);
+      g_object_unref (pixbuf);
 
       gdk_window_set_icon_name (gdk_window, "WMHints Test Icon");
-
+  
       gdk_window_set_decorations (gdk_window, GDK_DECOR_ALL | GDK_DECOR_MENU);
       gdk_window_set_functions (gdk_window, GDK_FUNC_ALL | GDK_FUNC_RESIZE);
-
+      
       box1 = gtk_vbox_new (FALSE, 0);
       gtk_container_add (GTK_CONTAINER (window), box1);
       gtk_widget_show (box1);

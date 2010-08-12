@@ -366,7 +366,6 @@ EXTRA_DIST += 			\
 	testgtk.1 		\
 	testgtkrc 		\
 	testgtkrc2 		\
-	circles.xbm		\
 	3DRings.xpm		\
 	FilesQueue.xpm		\
 	Modeller.xpm		\
