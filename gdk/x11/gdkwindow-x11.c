@@ -1007,11 +1007,6 @@ static void
 gdk_toplevel_x11_free_contents (GdkDisplay *display,
 				GdkToplevelX11 *toplevel)
 {
-  if (toplevel->icon_window)
-    {
-      g_object_unref (toplevel->icon_window);
-      toplevel->icon_window = NULL;
-    }
   if (toplevel->icon_pixmap)
     {
       g_object_unref (toplevel->icon_pixmap);
@@ -1151,12 +1146,6 @@ update_wm_hints (GdkWindow *window,
     {
       wm_hints.flags |= StateHint;
       wm_hints.initial_state = IconicState;
-    }
-
-  if (toplevel->icon_window && !GDK_WINDOW_DESTROYED (toplevel->icon_window))
-    {
-      wm_hints.flags |= IconWindowHint;
-      wm_hints.icon_window = GDK_WINDOW_XID (toplevel->icon_window);
     }
 
   if (toplevel->icon_pixmap)

@@ -118,7 +118,6 @@ struct _GdkToplevelX11
   
   GdkPixmap *icon_pixmap;
   GdkPixmap *icon_mask;
-  GdkPixmap *icon_window;
   GdkWindow *group_leader;
 
   /* Time of most recent user interaction. */
