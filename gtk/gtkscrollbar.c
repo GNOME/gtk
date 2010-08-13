@@ -115,11 +115,8 @@ gtk_scrollbar_style_set (GtkWidget *widget,
 
   range->min_slider_size = slider_length;
   range->slider_size_fixed = fixed_size;
-
-  range->has_stepper_a = has_a;
-  range->has_stepper_b = has_b;
-  range->has_stepper_c = has_c;
-  range->has_stepper_d = has_d;
+  _gtk_range_set_steppers (range,
+                           has_a, has_b, has_c, has_d);
 
   GTK_WIDGET_CLASS (gtk_scrollbar_parent_class)->style_set (widget, previous);
 }

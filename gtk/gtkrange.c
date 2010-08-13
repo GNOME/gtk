@@ -4004,3 +4004,16 @@ _gtk_range_set_round_digits (GtkRange *range,
 {
   range->round_digits = round_digits;
 }
+
+void
+_gtk_range_set_steppers (GtkRange      *range,
+                         gboolean       has_a,
+                         gboolean       has_b,
+                         gboolean       has_c,
+                         gboolean       has_d)
+{
+  range->has_stepper_a = has_a;
+  range->has_stepper_b = has_b;
+  range->has_stepper_c = has_c;
+  range->has_stepper_d = has_d;
+}

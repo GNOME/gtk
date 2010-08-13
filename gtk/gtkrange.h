@@ -203,7 +203,11 @@ gint               _gtk_range_get_stop_positions           (GtkRange      *range
                                                             gint         **values);          
 void               _gtk_range_set_round_digits             (GtkRange      *range,
                                                             gint           round_digits);
-
+void               _gtk_range_set_steppers                 (GtkRange      *range,
+                                                            gboolean       has_a,
+                                                            gboolean       has_b,
+                                                            gboolean       has_c,
+                                                            gboolean       has_d);
 
 G_END_DECLS
 
