@@ -73,12 +73,6 @@ void              gtk_button_box_set_child_secondary (GtkButtonBox      *widget,
 						      GtkWidget         *child,
 						      gboolean           is_secondary);
 
-/* Internal method - do not use. */
-void _gtk_button_box_child_requisition (GtkWidget *widget,
-					int       *nvis_children,
-					int       *nvis_secondaries,
-					int       *width,
-					int       *height);
 G_END_DECLS
 
 #endif /* __GTK_BUTTON_BOX_H__ */

@@ -396,7 +396,7 @@ gtk_button_box_set_child_secondary (GtkButtonBox *widget,
 /* Ask children how much space they require and round up
    to match minimum size and internal padding.
    Returns the size each single child should have. */
-void
+static void
 _gtk_button_box_child_requisition (GtkWidget *widget,
                                    int       *nvis_children,
                                    int       *nvis_secondaries,
