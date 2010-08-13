@@ -961,9 +961,12 @@ gtk_range_set_slider_size_fixed (GtkRange *range,
     {
       range->slider_size_fixed = size_fixed ? TRUE : FALSE;
 
-      range->need_recalc = TRUE;
-      gtk_range_calc_layout (range, range->adjustment->value);
-      gtk_widget_queue_draw (GTK_WIDGET (range));
+      if (range->adjustment && gtk_widget_get_mapped (GTK_WIDGET (range)))
+        {
+          range->need_recalc = TRUE;
+          gtk_range_calc_layout (range, gtk_adjustment_get_value (range->adjustment));
+          gtk_widget_queue_draw (GTK_WIDGET (range));
+        }
     }
 }
 
