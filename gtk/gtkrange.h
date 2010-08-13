@@ -156,7 +156,7 @@ void               gtk_range_set_slider_size_fixed         (GtkRange      *range
 gboolean           gtk_range_get_slider_size_fixed         (GtkRange      *range);
 
 void               gtk_range_set_min_slider_size           (GtkRange      *range,
-                                                            gboolean       min_size);
+                                                            gint           min_size);
 gint               gtk_range_get_min_slider_size           (GtkRange      *range);
 
 void               gtk_range_get_range_rect                (GtkRange      *range,
