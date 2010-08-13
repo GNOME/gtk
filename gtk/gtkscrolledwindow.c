@@ -1529,7 +1529,7 @@ gtk_scrolled_window_scroll_event (GtkWidget      *widget,
 
   if (range && gtk_widget_get_visible (range))
     {
-      GtkAdjustment *adj = GTK_RANGE (range)->adjustment;
+      GtkAdjustment *adj = gtk_range_get_adjustment (GTK_RANGE (range));
       gdouble delta;
 
       delta = _gtk_range_get_wheel_delta (GTK_RANGE (range), event->direction);

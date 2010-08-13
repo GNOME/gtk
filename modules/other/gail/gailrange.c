@@ -101,6 +101,7 @@ gail_range_real_initialize (AtkObject *obj,
                             gpointer  data)
 {
   GailRange *range = GAIL_RANGE (obj);
+  GtkAdjustment *adj;
   GtkRange *gtk_range;
 
   ATK_OBJECT_CLASS (gail_range_parent_class)->initialize (obj, data);
@@ -110,10 +111,11 @@ gail_range_real_initialize (AtkObject *obj,
    * If a GtkAdjustment already exists for the GtkRange,
    * create the GailAdjustment
    */
-  if (gtk_range->adjustment)
+  adj = gtk_range_get_adjustment (gtk_range);
+  if (adj)
     {
-      range->adjustment = gail_adjustment_new (gtk_range->adjustment);
-      g_signal_connect (gtk_range->adjustment,
+      range->adjustment = gail_adjustment_new (adj);
+      g_signal_connect (adj,
                         "value-changed",
                         G_CALLBACK (gail_range_value_changed),
                         range);
@@ -147,7 +149,7 @@ gail_range_ref_state_set (AtkObject *obj)
    * We do not generate property change for orientation change as there
    * is no interface to change the orientation which emits a notification
    */
-  if (range->orientation == GTK_ORIENTATION_HORIZONTAL)
+  if (gtk_orientable_get_orientation (GTK_ORIENTABLE (range)) == GTK_ORIENTATION_HORIZONTAL)
     atk_state_set_add_state (state_set, ATK_STATE_HORIZONTAL);
   else
     atk_state_set_add_state (state_set, ATK_STATE_VERTICAL);
@@ -298,6 +300,7 @@ static void
 gail_range_real_notify_gtk (GObject           *obj,
                             GParamSpec        *pspec)
 {
+  GtkAdjustment *adj;
   GtkWidget *widget = GTK_WIDGET (obj);
   GailRange *range = GAIL_RANGE (gtk_widget_get_accessible (widget));
 
@@ -316,8 +319,9 @@ gail_range_real_notify_gtk (GObject           *obj,
        * Create the GailAdjustment when notify for "adjustment" property
        * is received
        */
-      range->adjustment = gail_adjustment_new (GTK_RANGE (widget)->adjustment);
-      g_signal_connect (GTK_RANGE (widget)->adjustment,
+      adj = gtk_range_get_adjustment (GTK_RANGE (widget));
+      range->adjustment = gail_adjustment_new (adj);
+      g_signal_connect (adj,
                         "value-changed",
                         G_CALLBACK (gail_range_value_changed),
                         range);
