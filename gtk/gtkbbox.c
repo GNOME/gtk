@@ -413,10 +413,6 @@ _gtk_button_box_child_requisition (GtkWidget *widget,
   GtkRequisition child_requisition;
   gint ipad_w;
   gint ipad_h;
-  gint width_default;
-  gint height_default;
-  gint ipad_x_default;
-  gint ipad_y_default;
   gint child_min_width;
   gint child_min_height;
   gint ipad_x;
@@ -428,16 +424,11 @@ _gtk_button_box_child_requisition (GtkWidget *widget,
   priv = bbox->priv;
 
   gtk_widget_style_get (widget,
-                        "child-min-width", &width_default,
-                        "child-min-height", &height_default,
-                        "child-internal-pad-x", &ipad_x_default,
-                        "child-internal-pad-y", &ipad_y_default,
+                        "child-min-width", &child_min_width,
+                        "child-min-height", &child_min_height,
+                        "child-internal-pad-x", &ipad_x,
+                        "child-internal-pad-y", &ipad_y,
                         NULL);
-
-  child_min_width = width_default;
-  child_min_height = height_default;
-  ipad_x = ipad_x_default;
-  ipad_y = ipad_y_default;
 
   nchildren = 0;
   nsecondaries = 0;
