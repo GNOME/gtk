@@ -55,8 +55,6 @@
  * gtk_button_box_set_layout().
  */
 
-static GtkButtonBoxStyle default_layout_style = GTK_BUTTONBOX_EDGE;
-
 G_DEFINE_TYPE (GtkVButtonBox, gtk_vbutton_box, GTK_TYPE_BUTTON_BOX)
 
 static void
@@ -82,11 +80,4 @@ GtkWidget *
 gtk_vbutton_box_new (void)
 {
   return g_object_new (GTK_TYPE_VBUTTON_BOX, NULL);
-}
-
-
-GtkButtonBoxStyle
-_gtk_vbutton_box_get_layout_default (void)
-{
-  return default_layout_style;
 }
