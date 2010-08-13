@@ -2831,11 +2831,12 @@ gdk_window_end_implicit_paint (GdkWindow *window)
 
       /* Some regions are valid, push these to window now */
       cr = gdk_cairo_create (private->impl);
+      gdk_cairo_region (cr, paint->region);
+      cairo_clip (cr);
       gdk_cairo_set_source_pixmap (cr, paint->pixmap,
                                    paint->x_offset, paint->y_offset);
       cairo_set_operator (cr, CAIRO_OPERATOR_SOURCE);
-      gdk_cairo_region (cr, paint->region);
-      cairo_fill (cr);
+      cairo_paint (cr);
       cairo_destroy (cr);
     }
   
