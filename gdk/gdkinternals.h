@@ -376,7 +376,6 @@ void     _gdk_windowing_window_get_offsets      (GdkWindow  *window,
 						 gint       *y_offset);
 cairo_region_t *_gdk_windowing_window_get_shape      (GdkWindow  *window);
 cairo_region_t *_gdk_windowing_window_get_input_shape(GdkWindow  *window);
-cairo_region_t *_gdk_windowing_get_shape_for_mask    (GdkBitmap *mask);
 void     _gdk_windowing_window_beep             (GdkWindow *window);
 
 

@@ -4550,34 +4550,6 @@ _xwindow_get_shape (Display *xdisplay,
 
 
 cairo_region_t *
-_gdk_windowing_get_shape_for_mask (GdkBitmap *mask)
-{
-  GdkDisplay *display;
-  Window window;
-  cairo_region_t *region;
-
-  display = gdk_drawable_get_display (GDK_DRAWABLE (mask));
-
-  window = XCreateSimpleWindow (GDK_DISPLAY_XDISPLAY (display),
-                                GDK_SCREEN_XROOTWIN (gdk_drawable_get_screen (mask)),
-                                -1, -1, 1, 1, 0,
-                                0, 0);
-  XShapeCombineMask (GDK_DISPLAY_XDISPLAY (display),
-                     window,
-                     ShapeBounding,
-                     0, 0,
-                     GDK_PIXMAP_XID (mask),
-                     ShapeSet);
-
-  region = _xwindow_get_shape (GDK_DISPLAY_XDISPLAY (display),
-                               window, ShapeBounding);
-
-  XDestroyWindow (GDK_DISPLAY_XDISPLAY (display), window);
-
-  return region;
-}
-
-cairo_region_t *
 _gdk_windowing_window_get_shape (GdkWindow *window)
 {
   if (!GDK_WINDOW_DESTROYED (window) &&

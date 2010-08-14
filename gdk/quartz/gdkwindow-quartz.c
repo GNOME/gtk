@@ -3001,13 +3001,6 @@ _gdk_windowing_window_set_composited (GdkWindow *window, gboolean composited)
 }
 
 cairo_region_t *
-_gdk_windowing_get_shape_for_mask (GdkBitmap *mask)
-{
-  /* FIXME: implement */
-  return NULL;
-}
-
-cairo_region_t *
 _gdk_windowing_window_get_shape (GdkWindow *window)
 {
   /* FIXME: implement */
