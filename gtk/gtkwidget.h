@@ -196,6 +196,7 @@ typedef enum
  */
 typedef struct _GtkRequisition	   GtkRequisition;
 typedef struct _GtkSelectionData   GtkSelectionData;
+typedef struct _GtkWidgetPrivate   GtkWidgetPrivate;
 typedef struct _GtkWidgetClass	   GtkWidgetClass;
 typedef struct _GtkWidgetAuxInfo   GtkWidgetAuxInfo;
 typedef struct _GtkWidgetShapeInfo GtkWidgetShapeInfo;
@@ -260,53 +261,7 @@ struct _GtkWidget
   /* internally used private flags. */
   guint GSEAL (private_flags) : 16;
 
-  /* The state of the widget. There are only
-   *  5 widget states (defined in "gtkenums.h")
-   * so 3 bits.
-   */
-  guint GSEAL (state) : 3;
-
-  /* The saved state of the widget. When a widget's state
-   *  is changed to GTK_STATE_INSENSITIVE via
-   *  "gtk_widget_set_state" or "gtk_widget_set_sensitive"
-   *  the old state is kept around in this field. The state
-   *  will be restored once the widget gets sensitive again.
-   */
-  guint GSEAL (saved_state) : 3;
-
-  /* unused bits in our 32-bit block */
-  guint GSEAL (reserved) : 10;
-
-  /* The widget's name. If the widget does not have a name
-   *  (the name is NULL), then its name (as returned by
-   *  "gtk_widget_get_name") is its class's name.
-   * Among other things, the widget name is used to determine
-   *  the style to use for a widget.
-   */
-  gchar *GSEAL (name);
-  
-  /*< public >*/
-
-  /* The style for the widget. The style contains the
-   *  colors the widget should be drawn in for each state
-   *  along with graphics contexts used to draw with and
-   *  the font to use for text.
-   */
-  GtkStyle *GSEAL (style);
-  
-  /* The widget's allocated size.
-   */
-  GtkAllocation GSEAL (allocation);
-  
-  /* The widget's window or its parent window if it does
-   *  not have a window. (Which will be indicated by the
-   *  GTK_NO_WINDOW flag being set).
-   */
-  GdkWindow *GSEAL (window);
-  
-  /* The widget's parent.
-   */
-  GtkWidget *GSEAL (parent);
+  GtkWidgetPrivate *priv;
 };
 
 /**

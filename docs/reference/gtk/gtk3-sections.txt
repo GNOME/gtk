@@ -4970,6 +4970,7 @@ GTK_IS_WIDGET_CLASS
 GTK_WIDGET_GET_CLASS
 GTK_TYPE_REQUISITION
 <SUBSECTION Private>
+GtkWidgetPrivate
 gtk_widget_get_type
 gtk_requisition_get_type
 </SECTION>
