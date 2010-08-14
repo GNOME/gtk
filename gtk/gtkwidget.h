@@ -199,7 +199,6 @@ typedef struct _GtkSelectionData   GtkSelectionData;
 typedef struct _GtkWidgetPrivate   GtkWidgetPrivate;
 typedef struct _GtkWidgetClass	   GtkWidgetClass;
 typedef struct _GtkWidgetAuxInfo   GtkWidgetAuxInfo;
-typedef struct _GtkWidgetShapeInfo GtkWidgetShapeInfo;
 typedef struct _GtkClipboard	   GtkClipboard;
 typedef struct _GtkTooltip         GtkTooltip;
 typedef struct _GtkWindow          GtkWindow;
@@ -528,13 +527,6 @@ struct _GtkWidgetAuxInfo
   guint   valign : 4;
 
   GtkBorder margin;
-};
-
-struct _GtkWidgetShapeInfo
-{
-  gint16     offset_x;
-  gint16     offset_y;
-  GdkBitmap *shape_mask;
 };
 
 GType	   gtk_widget_get_type		  (void) G_GNUC_CONST;
@@ -919,16 +911,12 @@ GtkTextDirection gtk_widget_get_default_direction (void);
 /* Compositing manager functionality */
 gboolean gtk_widget_is_composited (GtkWidget *widget);
 
-/* Counterpart to gdk_window_shape_combine_mask.
+/* Counterpart to gdk_window_shape_combine_region.
  */
-void	     gtk_widget_shape_combine_mask (GtkWidget *widget,
-					    GdkBitmap *shape_mask,
-					    gint       offset_x,
-					    gint       offset_y);
-void	     gtk_widget_input_shape_combine_mask (GtkWidget *widget,
-						  GdkBitmap *shape_mask,
-						  gint       offset_x,
-						  gint       offset_y);
+void	     gtk_widget_shape_combine_region (GtkWidget *widget,
+                                              cairo_region_t *region);
+void	     gtk_widget_input_shape_combine_region (GtkWidget *widget,
+                                                    cairo_region_t *region);
 
 /* internal function */
 void	     gtk_widget_reset_shapes	   (GtkWidget *widget);

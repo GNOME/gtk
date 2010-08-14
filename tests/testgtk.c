@@ -7263,8 +7263,10 @@ shape_create_icon (GdkScreen *screen,
   GtkWidget *image;
   GtkWidget *fixed;
   CursorOffset* icon_pos;
-  GdkBitmap *mask;
+  cairo_surface_t *mask;
+  cairo_region_t *mask_region;
   GdkPixbuf *pixbuf;
+  cairo_t *cr;
 
   /*
    * GDK_WINDOW_TOPLEVEL works also, giving you a title border
@@ -7288,19 +7290,26 @@ shape_create_icon (GdkScreen *screen,
   pixbuf = gdk_pixbuf_new_from_file (xpm_file, NULL);
   g_assert (pixbuf); /* FIXME: error handling */
 
-  gdk_pixbuf_render_pixmap_and_mask_for_colormap (pixbuf,
-                                                  gtk_widget_get_colormap (window),
-                                                  NULL,
-                                                  &mask,
-                                                  128);
+  mask = cairo_image_surface_create (CAIRO_FORMAT_A1,
+                                     gdk_pixbuf_get_width (pixbuf),
+                                     gdk_pixbuf_get_height (pixbuf));
+  cr = cairo_create (mask);
+  gdk_cairo_set_source_pixbuf (cr, pixbuf, 0, 0);
+  cairo_paint (cr);
+  cairo_destroy (cr);
+
+  mask_region = gdk_cairo_region_create_from_surface (mask);
                                                   
+  cairo_region_translate (mask_region, px, py);
+
   image = gtk_image_new_from_pixbuf (pixbuf);
   gtk_fixed_put (GTK_FIXED (fixed), image, px,py);
   gtk_widget_show (image);
   
-  gtk_widget_shape_combine_mask (window, mask, px, py);
+  gtk_widget_shape_combine_region (window, mask_region);
   
-  g_object_unref (mask);
+  cairo_region_destroy (mask_region);
+  cairo_surface_destroy (mask);
   g_object_unref (pixbuf);
 
   g_signal_connect (window, "button_press_event",

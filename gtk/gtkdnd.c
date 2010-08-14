@@ -3139,8 +3139,16 @@ icon_window_realize (GtkWidget *window,
   
   if (mask)
     {
-      gtk_widget_shape_combine_mask (window, mask, 0, 0);
-      g_object_unref (mask);
+      cairo_region_t *region;
+      cairo_t *cr;
+
+      /* XXX: Clean this up properly */
+      cr = gdk_cairo_create (mask);
+      region = gdk_cairo_region_create_from_surface (cairo_get_target (cr));
+      cairo_destroy (cr);
+
+      gtk_widget_shape_combine_region (window, region);
+      cairo_region_destroy (region);
     }
 }
 
@@ -3327,7 +3335,18 @@ gtk_drag_set_icon_pixmap (GdkDragContext    *context,
                               pixmap, FALSE);
 
   if (mask)
-    gtk_widget_shape_combine_mask (window, mask, 0, 0);
+    {
+      cairo_region_t *region;
+      cairo_t *cr;
+
+      /* XXX: Clean this up properly */
+      cr = gdk_cairo_create (mask);
+      region = gdk_cairo_region_create_from_surface (cairo_get_target (cr));
+      cairo_destroy (cr);
+
+      gtk_widget_shape_combine_region (window, region);
+      cairo_region_destroy (region);
+    }
 
   gtk_drag_set_icon_window (context, window, hot_x, hot_y, TRUE);
 }
