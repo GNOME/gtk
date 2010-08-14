@@ -562,7 +562,7 @@ main (gint argc, gchar **argv)
   for (i = 0; i < G_N_ELEMENTS (toolbar_styles); i++)
     gtk_combo_box_append_text (GTK_COMBO_BOX (option_menu), toolbar_styles[i]);
   gtk_combo_box_set_active (GTK_COMBO_BOX (option_menu),
-			       GTK_TOOLBAR (toolbar)->style);
+                            gtk_toolbar_get_style (GTK_TOOLBAR (toolbar)));
   gtk_box_pack_start (GTK_BOX (hbox2), option_menu, FALSE, FALSE, 0);
   g_signal_connect (option_menu, "changed",
 		    G_CALLBACK (change_toolbar_style), toolbar);

@@ -31,6 +31,7 @@ struct _Info
 static void
 add_random (GtkToolbar *toolbar, gint n)
 {
+  gint n_items;
   gint position;
   gchar *label = g_strdup_printf ("Button %d", n);
 
@@ -40,10 +41,11 @@ add_random (GtkToolbar *toolbar, gint n)
   g_free (label);
   gtk_widget_show_all (GTK_WIDGET (toolitem));
 
-  if (g_list_length (toolbar->children) == 0)
+  n_items = gtk_toolbar_get_n_items (toolbar);
+  if (n_items == 0)
     position = 0;
   else
-    position = g_random_int_range (0, g_list_length (toolbar->children));
+    position = g_random_int_range (0, n_items);
 
   gtk_toolbar_insert (toolbar, toolitem, position);
 }
@@ -51,17 +53,21 @@ add_random (GtkToolbar *toolbar, gint n)
 static void
 remove_random (GtkToolbar *toolbar)
 {
-  GtkWidget *child;
+  GtkToolItem *tool_item;
+  gint n_items;
   gint position;
 
-  if (!toolbar->children)
+  n_items = gtk_toolbar_get_n_items (toolbar);
+
+  if (n_items == 0)
     return;
 
-  position = g_random_int_range (0, g_list_length (toolbar->children));
+  position = g_random_int_range (0, n_items);
 
-  child = g_list_nth_data (toolbar->children, position);
-  
-  gtk_container_remove (GTK_CONTAINER (toolbar), child);
+  tool_item = gtk_toolbar_get_nth_item (toolbar, position);
+
+  gtk_container_remove (GTK_CONTAINER (toolbar),
+                        GTK_WIDGET (tool_item));
 }
 
 static gboolean
@@ -75,7 +81,8 @@ stress_test_old_api (gpointer data)
       
   Info *info = data;
   Action action;
-  
+  gint n_items;
+
   if (info->counter++ == 200)
     {
       gtk_main_quit ();
@@ -90,12 +97,13 @@ stress_test_old_api (gpointer data)
       gtk_widget_show (GTK_WIDGET (info->toolbar));
     }
 
-  if (!info->toolbar->children)
+  n_items = gtk_toolbar_get_n_items (info->toolbar);
+  if (n_items == 0)
     {
       add_random (info->toolbar, info->counter);
       return TRUE;
     }
-  else if (g_list_length (info->toolbar->children) > 50)
+  else if (n_items > 50)
     {
       int i;
       for (i = 0; i < 25; i++)
