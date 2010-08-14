@@ -3398,7 +3398,8 @@ gtk_tree_view_motion_draw_column_motion_arrow (GtkTreeView *tree_view)
 {
   GtkTreeViewColumnReorder *reorder = tree_view->priv->cur_reorder;
   GtkWidget *widget = GTK_WIDGET (tree_view);
-  GdkBitmap *mask = NULL;
+  cairo_surface_t *mask_image;
+  cairo_region_t *mask_region;
   gint x;
   gint y;
   gint width;
@@ -3465,19 +3466,20 @@ gtk_tree_view_motion_draw_column_motion_arrow (GtkTreeView *tree_view)
 	  tree_view->priv->drag_highlight_window = gdk_window_new (tree_view->priv->header_window, &attributes, attributes_mask);
 	  gdk_window_set_user_data (tree_view->priv->drag_highlight_window, GTK_WIDGET (tree_view));
 
-	  mask = gdk_pixmap_new (tree_view->priv->drag_highlight_window, width, height, 1);
-          cr = gdk_cairo_create (mask);
+	  mask_image = cairo_image_surface_create (CAIRO_FORMAT_A1, width, height);
+          cr = cairo_create (mask_image);
 
-          cairo_set_operator (cr, CAIRO_OPERATOR_CLEAR);
-          cairo_paint (cr);
-          cairo_set_operator (cr, CAIRO_OPERATOR_SOURCE);
           cairo_rectangle (cr, 1, 1, width - 2, height - 2);
           cairo_stroke (cr);
           cairo_destroy (cr);
 
-	  gdk_window_shape_combine_mask (tree_view->priv->drag_highlight_window,
-					 mask, 0, 0);
-	  if (mask) g_object_unref (mask);
+          mask_region = gdk_cairo_region_create_from_surface (mask_image);
+	  gdk_window_shape_combine_region (tree_view->priv->drag_highlight_window,
+					   mask_region, 0, 0);
+
+          cairo_region_destroy (mask_region);
+          cairo_surface_destroy (mask_image);
+
 	  tree_view->priv->drag_column_window_state = DRAG_COLUMN_WINDOW_STATE_ORIGINAL;
 	}
     }
@@ -3528,12 +3530,9 @@ gtk_tree_view_motion_draw_column_motion_arrow (GtkTreeView *tree_view)
 								   &attributes, attributes_mask);
 	  gdk_window_set_user_data (tree_view->priv->drag_highlight_window, GTK_WIDGET (tree_view));
 
-	  mask = gdk_pixmap_new (tree_view->priv->drag_highlight_window, width, height, 1);
-          cr = gdk_cairo_create (mask);
+	  mask_image = cairo_image_surface_create (CAIRO_FORMAT_A1, width, height);
 
-          cairo_set_operator (cr, CAIRO_OPERATOR_CLEAR);
-          cairo_paint (cr);
-          cairo_set_operator (cr, CAIRO_OPERATOR_SOURCE);
+          cr = cairo_create (mask_image);
           cairo_move_to (cr, 0, 0);
           cairo_line_to (cr, width, 0);
           cairo_line_to (cr, width / 2., width / 2);
@@ -3541,11 +3540,14 @@ gtk_tree_view_motion_draw_column_motion_arrow (GtkTreeView *tree_view)
           cairo_line_to (cr, width, height);
           cairo_line_to (cr, width / 2., height - width / 2.);
           cairo_fill (cr);
-
           cairo_destroy (cr);
-	  gdk_window_shape_combine_mask (tree_view->priv->drag_highlight_window,
-					 mask, 0, 0);
-	  if (mask) g_object_unref (mask);
+
+          mask_region = gdk_cairo_region_create_from_surface (mask_image);
+	  gdk_window_shape_combine_region (tree_view->priv->drag_highlight_window,
+					   mask_region, 0, 0);
+
+          cairo_region_destroy (mask_region);
+          cairo_surface_destroy (mask_image);
 	}
 
       tree_view->priv->drag_column_window_state = DRAG_COLUMN_WINDOW_STATE_ARROW;
@@ -3606,12 +3608,9 @@ gtk_tree_view_motion_draw_column_motion_arrow (GtkTreeView *tree_view)
 	  tree_view->priv->drag_highlight_window = gdk_window_new (NULL, &attributes, attributes_mask);
 	  gdk_window_set_user_data (tree_view->priv->drag_highlight_window, GTK_WIDGET (tree_view));
 
-	  mask = gdk_pixmap_new (tree_view->priv->drag_highlight_window, width, height, 1);
-          cr = gdk_cairo_create (mask);
+	  mask_image = cairo_image_surface_create (CAIRO_FORMAT_A1, width, height);
 
-          cairo_set_operator (cr, CAIRO_OPERATOR_CLEAR);
-          cairo_paint (cr);
-          cairo_set_operator (cr, CAIRO_OPERATOR_SOURCE);
+          cr = cairo_create (mask_image);
           /* mirror if we're on the left */
           if (arrow_type == DRAG_COLUMN_WINDOW_STATE_ARROW_LEFT)
             {
@@ -3625,11 +3624,14 @@ gtk_tree_view_motion_draw_column_motion_arrow (GtkTreeView *tree_view)
           cairo_line_to (cr, width, height - width);
           cairo_line_to (cr, 0, height - tree_view->priv->expander_size);
           cairo_fill (cr);
-
           cairo_destroy (cr);
-	  gdk_window_shape_combine_mask (tree_view->priv->drag_highlight_window,
-					 mask, 0, 0);
-	  if (mask) g_object_unref (mask);
+
+          mask_region = gdk_cairo_region_create_from_surface (mask_image);
+	  gdk_window_shape_combine_region (tree_view->priv->drag_highlight_window,
+					   mask_region, 0, 0);
+
+          cairo_region_destroy (mask_region);
+          cairo_surface_destroy (mask_image);
 	}
 
       tree_view->priv->drag_column_window_state = arrow_type;
