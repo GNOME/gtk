@@ -293,6 +293,7 @@ gdk_cairo_set_source_pixbuf
 gdk_cairo_set_source_pixmap
 gdk_cairo_rectangle
 gdk_cairo_region
+gdk_cairo_region_create_from_surface
 #endif
 #endif
 

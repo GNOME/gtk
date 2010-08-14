@@ -50,6 +50,10 @@ void     gdk_cairo_rectangle         (cairo_t            *cr,
 void     gdk_cairo_region            (cairo_t            *cr,
                                       const cairo_region_t    *region);
 
+cairo_region_t *
+         gdk_cairo_region_create_from_surface
+                                     (cairo_surface_t    *surface);
+
 G_END_DECLS
 
 #endif /* __GDK_CAIRO_H__ */

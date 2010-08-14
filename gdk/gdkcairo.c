@@ -18,6 +18,9 @@
  */
 
 #include "gdkcairo.h"
+
+#include <math.h>
+
 #include "gdkdrawable.h"
 #include "gdkinternals.h"
 
@@ -287,3 +290,141 @@ gdk_cairo_set_source_pixmap (cairo_t   *cr,
   cairo_set_source_surface (cr, surface, pixmap_x, pixmap_y);
   cairo_surface_destroy (surface);
 }
+
+/**
+ * _gdk_cairo_surface_extents:
+ * @surface: surface to measure
+ * @extents: (out): rectangle to put the extents
+ *
+ * Measures the area covered by @surface and puts it into @extents.
+ * Note that this function respects device offsets set on @surface.
+ * if @surface is unbounded, the resulting extents will be empty and
+ * not be a maximal sized rectangle. This is to avoid careless coding.
+ * You must explicitly check the return value of you want to handle
+ * that case.
+ *
+ * Returns: %TRUE if the extents fit in a #GdkRectangle, %FALSE if not.
+ **/
+gboolean
+_gdk_cairo_surface_extents (cairo_surface_t *surface,
+                            GdkRectangle *extents)
+{
+  double x1, x2, y1, y2;
+  cairo_t *cr;
+
+  g_return_val_if_fail (surface != NULL, FALSE);
+  g_return_val_if_fail (extents != NULL, FALSE);
+
+  cr = cairo_create (surface);
+  cairo_clip_extents (cr, &x1, &y1, &x2, &y2);
+
+  x1 = floor (x1);
+  y1 = floor (y1);
+  x2 = ceil (x2);
+  y2 = ceil (y2);
+  x2 -= x1;
+  y2 -= y1;
+  
+  if (x1 < G_MININT || x1 > G_MAXINT ||
+      y1 < G_MININT || y1 > G_MAXINT ||
+      x2 > G_MAXINT || y2 > G_MAXINT)
+    {
+      extents->x = extents->y = extents->width = extents->height = 0;
+      return FALSE;
+    }
+
+  extents->x = x1;
+  extents->y = y1;
+  extents->width = x2;
+  extents->height = y2;
+
+  return TRUE;
+}
+
+/* This function originally from Jean-Edouard Lachand-Robert, and
+ * available at www.codeguru.com. Simplified for our needs, not sure
+ * how much of the original code left any longer. Now handles just
+ * one-bit deep bitmaps (in Window parlance, ie those that GDK calls
+ * bitmaps (and not pixmaps), with zero pixels being transparent.
+ */
+/**
+ * gdk_cairo_region_create_from_surface:
+ * @surface: A surface
+ *
+ * Creates region that describes covers the area where the given @surface
+ * is more than 50% opaque. This function takes into account device
+ * offsets that might be set with cairo_surface_set_device_offset().
+ *
+ * Returns: A new region
+ **/
+cairo_region_t *
+gdk_cairo_region_create_from_surface (cairo_surface_t *surface)
+{
+  cairo_region_t *region;
+  GdkRectangle extents, rect;
+  cairo_surface_t *image;
+  cairo_t *cr;
+  gint x, y, stride;
+  guchar *data;
+
+  _gdk_cairo_surface_extents (surface, &extents);
+
+  if (cairo_surface_get_content (surface) == CAIRO_CONTENT_COLOR)
+    return cairo_region_create_rectangle (&extents);
+
+  if (cairo_surface_get_type (surface) != CAIRO_SURFACE_TYPE_IMAGE ||
+      cairo_image_surface_get_format (surface) != CAIRO_FORMAT_A1)
+    {
+      /* coerce to an A1 image */
+      image = cairo_image_surface_create (CAIRO_FORMAT_A1,
+                                          extents.width, extents.height);
+      cr = cairo_create (image);
+      cairo_set_source_surface (cr, surface, extents.x, extents.y);
+      cairo_paint (cr);
+      cairo_destroy (cr);
+    }
+  else
+    image = cairo_surface_reference (surface);
+
+  data = cairo_image_surface_get_data (image);
+  stride = cairo_image_surface_get_stride (image);
+
+  region = cairo_region_create ();
+
+  for (y = 0; y < extents.height; y++)
+    {
+      for (x = 0; x < extents.width; x++)
+	{
+	  /* Search for a continuous range of "non transparent pixels"*/
+	  gint x0 = x;
+	  while (x < extents.width)
+	    {
+	      if (((data[x / 8] >> (x%8)) & 1) == 0)
+		/* This pixel is "transparent"*/
+		break;
+	      x++;
+	    }
+	  
+	  if (x > x0)
+	    {
+	      /* Add the pixels (x0, y) to (x, y+1) as a new rectangle
+	       * in the region
+	       */
+              rect.x = x0;
+              rect.width = x - x0;
+              rect.y = y;
+              rect.height = 1;
+
+              cairo_region_union_rectangle (region, &rect);
+	    }
+	}
+      data += stride;
+    }
+
+  cairo_surface_destroy (image);
+  
+  cairo_region_translate (region, extents.x, extents.y);
+
+  return region;
+}
+
