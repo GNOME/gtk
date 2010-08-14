@@ -575,10 +575,6 @@ gboolean      gdk_window_ensure_native        (GdkWindow       *window);
  * This allows for making shaped (partially transparent) windows
  * - cool feature, needed for Drag and Drag for example.
  */
-void gdk_window_shape_combine_mask  (GdkWindow	      *window,
-                                     GdkBitmap	      *mask,
-                                     gint	       x,
-                                     gint	       y);
 void gdk_window_shape_combine_region (GdkWindow	      *window,
                                       const cairo_region_t *shape_region,
                                       gint	       offset_x,
@@ -606,10 +602,6 @@ void gdk_window_set_composited   (GdkWindow *window,
  */
 void gdk_window_merge_child_shapes         (GdkWindow       *window);
 
-void gdk_window_input_shape_combine_mask   (GdkWindow       *window,
-					    GdkBitmap       *mask,
-					    gint             x,
-					    gint             y);
 void gdk_window_input_shape_combine_region (GdkWindow       *window,
                                             const cairo_region_t *shape_region,
                                             gint             offset_x,

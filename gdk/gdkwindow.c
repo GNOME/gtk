@@ -7677,55 +7677,6 @@ gdk_window_coords_from_parent (GdkWindow *window,
 }
 
 /**
- * gdk_window_shape_combine_mask:
- * @window: a #GdkWindow
- * @mask: shape mask
- * @x: X position of shape mask with respect to @window
- * @y: Y position of shape mask with respect to @window
- *
- * Applies a shape mask to @window. Pixels in @window corresponding to
- * set bits in the @mask will be visible; pixels in @window
- * corresponding to unset bits in the @mask will be transparent. This
- * gives a non-rectangular window.
- *
- * If @mask is %NULL, the shape mask will be unset, and the @x/@y
- * parameters are not used.
- *
- * On the X11 platform, this uses an X server extension which is
- * widely available on most common platforms, but not available on
- * very old X servers, and occasionally the implementation will be
- * buggy. On servers without the shape extension, this function
- * will do nothing.
- *
- * This function works on both toplevel and child windows.
- */
-void
-gdk_window_shape_combine_mask (GdkWindow *window,
-			       GdkBitmap *mask,
-			       gint       x,
-			       gint       y)
-{
-  GdkWindowObject *private;
-  cairo_region_t *region;
-
-  g_return_if_fail (GDK_IS_WINDOW (window));
-
-  private = (GdkWindowObject *) window;
-
-  if (mask)
-    region = _gdk_windowing_get_shape_for_mask (mask);
-  else
-    region = NULL;
-
-  gdk_window_shape_combine_region (window,
-				   region,
-				   x, y);
-
-  if (region)
-    cairo_region_destroy (region);
-}
-
-/**
  * gdk_window_shape_combine_region:
  * @window: a #GdkWindow
  * @shape_region: region of window to be non-transparent
@@ -7733,8 +7684,7 @@ gdk_window_shape_combine_mask (GdkWindow *window,
  * @offset_y: Y position of @shape_region in @window coordinates
  *
  * Makes pixels in @window outside @shape_region be transparent,
- * so that the window may be nonrectangular. See also
- * gdk_window_shape_combine_mask() to use a bitmap as the mask.
+ * so that the window may be nonrectangular.
  *
  * If @shape_region is %NULL, the shape will be unset, so the whole
  * window will be opaque again. @offset_x and @offset_y are ignored
@@ -7866,7 +7816,7 @@ gdk_window_set_child_shapes (GdkWindow *window)
  * Merges the shape masks for any child windows into the
  * shape mask for @window. i.e. the union of all masks
  * for @window and its children will become the new mask
- * for @window. See gdk_window_shape_combine_mask().
+ * for @window. See gdk_window_shape_combine_region().
  *
  * This function is distinct from gdk_window_set_child_shapes()
  * because it includes @window's shape mask in the set of shapes to
@@ -7878,58 +7828,6 @@ gdk_window_merge_child_shapes (GdkWindow *window)
   g_return_if_fail (GDK_IS_WINDOW (window));
 
   do_child_shapes (window, TRUE);
-}
-
-/**
- * gdk_window_input_shape_combine_mask:
- * @window: a #GdkWindow
- * @mask: (allow-none): shape mask, or %NULL
- * @x: X position of shape mask with respect to @window
- * @y: Y position of shape mask with respect to @window
- *
- * Like gdk_window_shape_combine_mask(), but the shape applies
- * only to event handling. Mouse events which happen while
- * the pointer position corresponds to an unset bit in the
- * mask will be passed on the window below @window.
- *
- * An input shape is typically used with RGBA windows.
- * The alpha channel of the window defines which pixels are
- * invisible and allows for nicely antialiased borders,
- * and the input shape controls where the window is
- * "clickable".
- *
- * On the X11 platform, this requires version 1.1 of the
- * shape extension.
- *
- * On the Win32 platform, this functionality is not present and the
- * function does nothing.
- *
- * Since: 2.10
- */
-void
-gdk_window_input_shape_combine_mask (GdkWindow *window,
-				     GdkBitmap *mask,
-				     gint       x,
-				     gint       y)
-{
-  GdkWindowObject *private;
-  cairo_region_t *region;
-
-  g_return_if_fail (GDK_IS_WINDOW (window));
-
-  private = (GdkWindowObject *) window;
-
-  if (mask)
-    region = _gdk_windowing_get_shape_for_mask (mask);
-  else
-    region = NULL;
-
-  gdk_window_input_shape_combine_region (window,
-					 region,
-					 x, y);
-
-  if (region != NULL)
-    cairo_region_destroy (region);
 }
 
 /**
@@ -8048,7 +7946,7 @@ gdk_window_set_child_input_shapes (GdkWindow *window)
  * Merges the input shape masks for any child windows into the
  * input shape mask for @window. i.e. the union of all input masks
  * for @window and its children will become the new input mask
- * for @window. See gdk_window_input_shape_combine_mask().
+ * for @window. See gdk_window_input_shape_combine_region().
  *
  * This function is distinct from gdk_window_set_child_input_shapes()
  * because it includes @window's input shape mask in the set of
