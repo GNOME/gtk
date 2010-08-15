@@ -43,10 +43,10 @@ void _gtk_text_util_append_special_char_menuitems (GtkMenuShell              *me
 cairo_surface_t * _gtk_text_util_create_drag_icon (GtkWidget     *widget,
                                                    gchar         *text,
                                                    gsize          len);
-GdkPixmap* _gtk_text_util_create_rich_drag_icon (GtkWidget     *widget,
-                                                 GtkTextBuffer *buffer,
-                                                 GtkTextIter   *start,
-                                                 GtkTextIter   *end);
+cairo_surface_t * _gtk_text_util_create_rich_drag_icon (GtkWidget     *widget,
+                                                   GtkTextBuffer *buffer,
+                                                   GtkTextIter   *start,
+                                                   GtkTextIter   *end);
 
 gboolean _gtk_text_util_get_block_cursor_location (PangoLayout    *layout,
 						   gint            index_,

@@ -6905,25 +6905,21 @@ drag_begin_cb (GtkWidget      *widget,
                GdkDragContext *context,
                gpointer        data)
 {
-  GtkTextView   *text_view = GTK_TEXT_VIEW (widget);
-  GtkTextBuffer *buffer = gtk_text_view_get_buffer (text_view);
-  GtkTextIter    start;
-  GtkTextIter    end;
-  GdkPixmap     *pixmap = NULL;
+  GtkTextView     *text_view = GTK_TEXT_VIEW (widget);
+  GtkTextBuffer   *buffer = gtk_text_view_get_buffer (text_view);
+  GtkTextIter      start;
+  GtkTextIter      end;
+  cairo_surface_t *surface = NULL;
 
   g_signal_handlers_disconnect_by_func (widget, drag_begin_cb, NULL);
 
   if (gtk_text_buffer_get_selection_bounds (buffer, &start, &end))
-    pixmap = _gtk_text_util_create_rich_drag_icon (widget, buffer, &start, &end);
+    surface = _gtk_text_util_create_rich_drag_icon (widget, buffer, &start, &end);
 
-  if (pixmap)
+  if (surface)
     {
-      gtk_drag_set_icon_pixmap (context,
-                                gdk_drawable_get_colormap (pixmap),
-                                pixmap,
-                                NULL,
-                                -2, -2);
-      g_object_unref (pixmap);
+      gtk_drag_set_icon_surface (context, surface);
+      cairo_surface_destroy (surface);
     }
   else
     {

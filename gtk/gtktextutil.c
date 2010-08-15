@@ -280,14 +280,14 @@ gtk_text_view_set_attributes_from_style (GtkTextView        *text_view,
   values->font = pango_font_description_copy (style->font_desc);
 }
 
-GdkPixmap *
+cairo_surface_t *
 _gtk_text_util_create_rich_drag_icon (GtkWidget     *widget,
                                       GtkTextBuffer *buffer,
                                       GtkTextIter   *start,
                                       GtkTextIter   *end)
 {
   GtkAllocation      allocation;
-  GdkDrawable       *drawable = NULL;
+  cairo_surface_t   *surface;
   gint               pixmap_height, pixmap_width;
   gint               layout_width, layout_height;
   GtkStyle          *widget_style;
@@ -303,7 +303,7 @@ _gtk_text_util_create_rich_drag_icon (GtkWidget     *widget,
    g_return_val_if_fail (start != NULL, NULL);
    g_return_val_if_fail (end != NULL, NULL);
 
-  widget_style = gtk_widget_get_style (widget);
+   widget_style = gtk_widget_get_style (widget);
 
    new_buffer = gtk_text_buffer_new (gtk_text_buffer_get_tag_table (buffer));
    gtk_text_buffer_get_start_iter (new_buffer, &iter);
@@ -359,12 +359,14 @@ _gtk_text_util_create_rich_drag_icon (GtkWidget     *widget,
    pixmap_width  = layout_width + DRAG_ICON_LAYOUT_BORDER * 2;
    pixmap_height = layout_height + DRAG_ICON_LAYOUT_BORDER * 2;
 
-   drawable = gdk_pixmap_new (gtk_widget_get_window (widget),
-                              pixmap_width  + 2, pixmap_height + 2, -1);
+   surface = gdk_window_create_similar_surface (gtk_widget_get_window (widget),
+                                                CAIRO_CONTENT_COLOR,
+                                                pixmap_width  + 2,
+                                                pixmap_height + 2);
 
-   cr = gdk_cairo_create (drawable);
+   cr = cairo_create (surface);
 
-  gdk_cairo_set_source_color (cr, &widget_style->base [gtk_widget_get_state (widget)]);
+   gdk_cairo_set_source_color (cr, &widget_style->base [gtk_widget_get_state (widget)]);
    cairo_paint (cr);
 
    cairo_save (cr);
@@ -383,7 +385,9 @@ _gtk_text_util_create_rich_drag_icon (GtkWidget     *widget,
    g_object_unref (layout);
    g_object_unref (new_buffer);
 
-   return drawable;
+   cairo_surface_set_device_offset (surface, 2, 2);
+
+   return surface;
 }
 
 
