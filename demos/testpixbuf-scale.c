@@ -34,18 +34,21 @@ overall_changed_cb (GtkAdjustment *adjustment, gpointer data)
 gboolean
 expose_cb (GtkWidget *widget, GdkEventExpose *event, gpointer data)
 {
+  GtkAllocation allocation;
   GdkPixbuf *dest;
   cairo_t *cr;
 
-  gdk_window_set_back_pixmap (widget->window, NULL, FALSE);
-  
+  gdk_window_set_back_pixmap (gtk_widget_get_window (widget),
+                              NULL, FALSE);
+
   dest = gdk_pixbuf_new (GDK_COLORSPACE_RGB, FALSE, 8, event->area.width, event->area.height);
 
+  gtk_widget_get_allocation (widget, &allocation);
   gdk_pixbuf_composite_color (pixbuf, dest,
 			      0, 0, event->area.width, event->area.height,
 			      -event->area.x, -event->area.y,
-			      (double) widget->allocation.width / gdk_pixbuf_get_width (pixbuf),
-			      (double) widget->allocation.height / gdk_pixbuf_get_height (pixbuf),
+                              (double) allocation.width / gdk_pixbuf_get_width (pixbuf),
+                              (double) allocation.height / gdk_pixbuf_get_height (pixbuf),
 			      interp_type, overall_alpha,
 			      event->area.x, event->area.y, 16, 0xaaaaaa, 0x555555);
 
