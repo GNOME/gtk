@@ -56,25 +56,25 @@ static void xembed_set_info            (GdkWindow     *window,
 GdkNativeWindow
 _gtk_plug_windowing_get_id (GtkPlug *plug)
 {
-  return GDK_WINDOW_XWINDOW (GTK_WIDGET (plug)->window);
+  return GDK_WINDOW_XWINDOW (gtk_widget_get_window (GTK_WIDGET (plug)));
 }
 
 void
 _gtk_plug_windowing_realize_toplevel (GtkPlug *plug)
 {
-  xembed_set_info (GTK_WIDGET (plug)->window, 0);
+  xembed_set_info (gtk_widget_get_window (GTK_WIDGET (plug)), 0);
 }
 
 void
 _gtk_plug_windowing_map_toplevel (GtkPlug *plug)
 {
-  xembed_set_info (GTK_WIDGET (plug)->window, XEMBED_MAPPED);
+  xembed_set_info (gtk_widget_get_window (GTK_WIDGET (plug)), XEMBED_MAPPED);
 }
 
 void
 _gtk_plug_windowing_unmap_toplevel (GtkPlug *plug)
 {
-  xembed_set_info (GTK_WIDGET (plug)->window, 0);
+  xembed_set_info (gtk_widget_get_window (GTK_WIDGET (plug)), 0);
 }
 
 void
