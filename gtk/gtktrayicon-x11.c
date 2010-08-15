@@ -311,14 +311,18 @@ gtk_tray_icon_expose (GtkWidget      *widget,
 		      GdkEventExpose *event)
 {
   GtkTrayIcon *icon = GTK_TRAY_ICON (widget);
+  GtkAllocation allocation;
   GtkWidget *focus_child;
+  GdkWindow *window;
   gint border_width, x, y, width, height;
   gboolean retval = FALSE;
+
+  window = gtk_widget_get_window (widget);
 
   if (icon->priv->manager_visual_rgba)
     {
       /* Clear to transparent */
-      cairo_t *cr = gdk_cairo_create (widget->window);
+      cairo_t *cr = gdk_cairo_create (window);
       cairo_set_source_rgba (cr, 0, 0, 0, 0);
       cairo_set_operator (cr, CAIRO_OPERATOR_SOURCE);
       gdk_cairo_region (cr, event->region);
@@ -328,7 +332,7 @@ gtk_tray_icon_expose (GtkWidget      *widget,
   else
     {
       /* Clear to parent-relative pixmap */
-      gdk_window_clear_area (widget->window, event->area.x, event->area.y,
+      gdk_window_clear_area (window, event->area.x, event->area.y,
 			     event->area.width, event->area.height);
     }
 
@@ -338,15 +342,17 @@ gtk_tray_icon_expose (GtkWidget      *widget,
   focus_child = gtk_container_get_focus_child (GTK_CONTAINER (widget));
   if (focus_child && gtk_widget_has_focus (focus_child))
     {
+      gtk_widget_get_allocation (widget, &allocation);
       border_width = gtk_container_get_border_width (GTK_CONTAINER (widget));
 
-      x = widget->allocation.x + border_width;
-      y = widget->allocation.y + border_width;
+      x = allocation.x + border_width;
+      y = allocation.y + border_width;
 
-      width  = widget->allocation.width  - 2 * border_width;
-      height = widget->allocation.height - 2 * border_width;
+      width  = allocation.width  - 2 * border_width;
+      height = allocation.height - 2 * border_width;
 
-      gtk_paint_focus (widget->style, widget->window,
+      gtk_paint_focus (gtk_widget_get_style (widget),
+                       window,
                        gtk_widget_get_state (widget),
                        &event->area, widget, "tray_icon",
                        x, y, width, height);
@@ -666,26 +672,29 @@ gtk_tray_icon_send_manager_message (GtkTrayIcon *icon,
 				    long         data2,
 				    long         data3)
 {
+  GtkWidget *widget;
   XClientMessageEvent ev;
   Display *display;
-  
+
+  widget = GTK_WIDGET (icon);
+
   memset (&ev, 0, sizeof (ev));
   ev.type = ClientMessage;
   ev.window = window;
   ev.message_type = icon->priv->system_tray_opcode_atom;
   ev.format = 32;
-  ev.data.l[0] = gdk_x11_get_server_time (GTK_WIDGET (icon)->window);
+  ev.data.l[0] = gdk_x11_get_server_time (gtk_widget_get_window (widget));
   ev.data.l[1] = message;
   ev.data.l[2] = data1;
   ev.data.l[3] = data2;
   ev.data.l[4] = data3;
 
-  display = GDK_DISPLAY_XDISPLAY (gtk_widget_get_display (GTK_WIDGET (icon)));
-  
+  display = GDK_DISPLAY_XDISPLAY (gtk_widget_get_display (widget));
+
   gdk_error_trap_push ();
   XSendEvent (display,
 	      icon->priv->manager_window, False, NoEventMask, (XEvent *)&ev);
-  gdk_display_sync (gtk_widget_get_display (GTK_WIDGET (icon)));
+  gdk_display_sync (gtk_widget_get_display (widget));
   gdk_error_trap_pop ();
 }
 
@@ -847,27 +856,29 @@ static void
 gtk_tray_icon_realize (GtkWidget *widget)
 {
   GtkTrayIcon *icon = GTK_TRAY_ICON (widget);
+  GdkWindow *window;
 
   /* Set our colormap before realizing */
   gtk_tray_icon_set_colormap (icon);
 
   GTK_WIDGET_CLASS (gtk_tray_icon_parent_class)->realize (widget);
+  window = gtk_widget_get_window (widget);
   if (icon->priv->manager_visual_rgba)
     {
       /* Set a transparent background */
       GdkColor transparent = { 0, 0, 0, 0 }; /* Only pixel=0 matters */
-      gdk_window_set_background (widget->window, &transparent);
+      gdk_window_set_background (window, &transparent);
     }
   else
     {
       /* Set a parent-relative background pixmap */
-      gdk_window_set_back_pixmap (widget->window, NULL, TRUE);
+      gdk_window_set_back_pixmap (window, NULL, TRUE);
     }
 
   GTK_NOTE (PLUGSOCKET,
 	    g_print ("GtkStatusIcon %p: realized, window: %lx, socket window: %lx\n",
 		     widget,
-		     (gulong) GDK_WINDOW_XWINDOW (widget->window),
+		     (gulong) GDK_WINDOW_XWINDOW (window),
 		     GTK_PLUG (icon)->socket_window ?
 			     (gulong) GDK_WINDOW_XWINDOW (GTK_PLUG (icon)->socket_window) : 0UL));
 
