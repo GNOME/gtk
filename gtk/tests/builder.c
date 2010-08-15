@@ -352,7 +352,7 @@ test_uimanager_simple (void)
   children = gtk_container_get_children (GTK_CONTAINER (menubar));
   menu = children->data;
   g_assert (GTK_IS_MENU_ITEM (menu));
-  g_assert (strcmp (GTK_WIDGET (menu)->name, "file") == 0);
+  g_assert (strcmp (gtk_widget_get_name (GTK_WIDGET (menu)), "file") == 0);
   g_list_free (children);
   
   label = G_OBJECT (gtk_bin_get_child (GTK_BIN (menu)));
@@ -1009,8 +1009,8 @@ test_children (void)
   button = gtk_builder_get_object (builder, "button1");
   g_assert (button != NULL);
   g_assert (GTK_IS_BUTTON (button));
-  g_assert (GTK_WIDGET(button)->parent != NULL);
-  g_assert (strcmp (gtk_buildable_get_name (GTK_BUILDABLE (GTK_WIDGET (button)->parent)), "window1") == 0);
+  g_assert (gtk_widget_get_parent (GTK_WIDGET(button)) != NULL);
+  g_assert (strcmp (gtk_buildable_get_name (GTK_BUILDABLE (gtk_widget_get_parent (GTK_WIDGET (button)))), "window1") == 0);
 
   gtk_widget_destroy (GTK_WIDGET (window));
   g_object_unref (builder);
@@ -1027,7 +1027,7 @@ test_children (void)
   content_area = gtk_dialog_get_content_area (GTK_DIALOG (dialog));
   g_assert (vbox != NULL);
   g_assert (GTK_IS_VBOX (vbox));
-  g_assert (strcmp (gtk_buildable_get_name (GTK_BUILDABLE (GTK_WIDGET (vbox)->parent)), "dialog1") == 0);
+  g_assert (strcmp (gtk_buildable_get_name (GTK_BUILDABLE (gtk_widget_get_parent (GTK_WIDGET (vbox)))), "dialog1") == 0);
   g_assert (gtk_container_get_border_width (GTK_CONTAINER (vbox)) == 10);
   g_assert (strcmp (gtk_buildable_get_name (GTK_BUILDABLE (content_area)), "dialog1-vbox") == 0);
 
@@ -1035,7 +1035,7 @@ test_children (void)
   dialog_action_area = gtk_dialog_get_action_area (GTK_DIALOG (dialog));
   g_assert (action_area != NULL);
   g_assert (GTK_IS_HBUTTON_BOX (action_area));
-  g_assert (GTK_WIDGET (action_area)->parent != NULL);
+  g_assert (gtk_widget_get_parent (GTK_WIDGET (action_area)) != NULL);
   g_assert (gtk_container_get_border_width (GTK_CONTAINER (action_area)) == 20);
   g_assert (dialog_action_area != NULL);
   g_assert (gtk_buildable_get_name (GTK_BUILDABLE (action_area)) != NULL);
@@ -2292,7 +2292,7 @@ test_add_objects (void)
   menu = children->data;
   g_assert (menu != NULL);
   g_assert (GTK_IS_MENU_ITEM (menu));
-  g_assert (strcmp (GTK_WIDGET (menu)->name, "file") == 0);
+  g_assert (strcmp (gtk_widget_get_name (GTK_WIDGET (menu)), "file") == 0);
   g_list_free (children);
  
   label = G_OBJECT (gtk_bin_get_child (GTK_BIN (menu)));
@@ -2319,7 +2319,7 @@ test_add_objects (void)
   menu = children->data;
   g_assert (menu != NULL);
   g_assert (GTK_IS_MENU_ITEM (menu));
-  g_assert (strcmp (GTK_WIDGET (menu)->name, "file") == 0);
+  g_assert (strcmp (gtk_widget_get_name (GTK_WIDGET (menu)), "file") == 0);
   g_list_free (children);
  
   label = G_OBJECT (gtk_bin_get_child (GTK_BIN (menu)));
@@ -2333,8 +2333,10 @@ test_add_objects (void)
 static GtkWidget *
 get_parent_menubar (GtkWidget *menuitem)
 {
-  GtkMenuShell *menu_shell = (GtkMenuShell *)menuitem->parent;
+  GtkMenuShell *menu_shell;
   GtkWidget *attach = NULL;
+
+  menu_shell = GTK_MENU_SHELL (gtk_widget_get_parent (menuitem));
 
   g_assert (GTK_IS_MENU_SHELL (menu_shell));
 
@@ -2342,7 +2344,7 @@ get_parent_menubar (GtkWidget *menuitem)
     {
       if (GTK_IS_MENU (menu_shell) && 
 	  (attach = gtk_menu_get_attach_widget (GTK_MENU (menu_shell))) != NULL)
-	menu_shell = (GtkMenuShell *)attach->parent;
+	menu_shell = GTK_MENU_SHELL (gtk_widget_get_parent (attach));
       else
 	menu_shell = NULL;
     }
@@ -2477,7 +2479,7 @@ test_menus (void)
   item = (GtkWidget *)gtk_builder_get_object (builder, "imagemenuitem1");
   custom = (GtkWidget *)gtk_builder_get_object (builder, "custom1");
 
-  g_assert (custom->parent == item);
+  g_assert (gtk_widget_get_parent (custom) == item);
 
   gtk_widget_destroy (GTK_WIDGET (window));
   g_object_unref (builder);
