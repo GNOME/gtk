@@ -6508,13 +6508,6 @@ gtk_widget_set_mapped (GtkWidget *widget,
  * is then entirely responsible for drawing the widget background.
  *
  * Note that the background is still drawn when the widget is mapped.
- * If this is not suitable (e.g. because you want to make a transparent
- * window using an RGBA visual), you can work around this by doing:
- * |[
- *  gtk_widget_realize (window);
- *  gdk_window_set_back_pixmap (window->window, NULL, FALSE);
- *  gtk_widget_show (window);
- * ]|
  **/
 void
 gtk_widget_set_app_paintable (GtkWidget *widget,

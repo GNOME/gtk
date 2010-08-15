@@ -892,7 +892,6 @@ gtk_layout_realize (GtkWidget *widget)
   window = gdk_window_new (gtk_widget_get_parent_window (widget),
                            &attributes, attributes_mask);
   gtk_widget_set_window (widget, window);
-  gdk_window_set_back_pixmap (window, NULL, FALSE);
   gdk_window_set_user_data (window, widget);
 
   gtk_widget_get_allocation (widget, &allocation);

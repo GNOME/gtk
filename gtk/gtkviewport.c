@@ -732,8 +732,6 @@ gtk_viewport_realize (GtkWidget *widget)
                                       &attributes, attributes_mask);
   gdk_window_set_user_data (priv->view_window, viewport);
 
-  gdk_window_set_back_pixmap (priv->view_window, NULL, FALSE);
-  
   attributes.x = - hadjustment->value;
   attributes.y = - vadjustment->value;
   attributes.width = hadjustment->upper;

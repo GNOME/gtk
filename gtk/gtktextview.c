@@ -8410,8 +8410,6 @@ text_window_realize (GtkTextWindow *win,
   win->window = gdk_window_new (window,
                                 &attributes, attributes_mask);
 
-  gdk_window_set_back_pixmap (win->window, NULL, FALSE);
-  
   gdk_window_show (win->window);
   gdk_window_set_user_data (win->window, win->widget);
   gdk_window_lower (win->window);

@@ -1849,7 +1849,6 @@ gtk_tree_view_realize (GtkWidget *widget)
 
   /* Add them all up. */
   gtk_widget_style_attach (widget);
-  gdk_window_set_back_pixmap (window, NULL, FALSE);
   style = gtk_widget_get_style (widget);
   gdk_window_set_background (tree_view->priv->bin_window,
                              &style->base[gtk_widget_get_state (widget)]);
@@ -8089,7 +8088,6 @@ gtk_tree_view_style_set (GtkWidget *widget,
 
   if (gtk_widget_get_realized (widget))
     {
-      gdk_window_set_back_pixmap (gtk_widget_get_window (widget), NULL, FALSE);
       style = gtk_widget_get_style (widget);
       gdk_window_set_background (tree_view->priv->bin_window,
                                  &style->base[gtk_widget_get_state (widget)]);
@@ -15188,7 +15186,6 @@ gtk_tree_view_state_changed (GtkWidget      *widget,
 
   if (gtk_widget_get_realized (widget))
     {
-      gdk_window_set_back_pixmap (gtk_widget_get_window (widget), NULL, FALSE);
       gdk_window_set_background (tree_view->priv->bin_window,
                                  &gtk_widget_get_style (widget)->base[gtk_widget_get_state (widget)]);
     }
