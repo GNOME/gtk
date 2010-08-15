@@ -13,7 +13,7 @@ da_expose (GtkWidget *widget,
     {
       pixmap = gtk_offscreen_window_get_pixmap (offscreen);
 
-      cr = gdk_cairo_create (widget->window);
+      cr = gdk_cairo_create (gtk_widget_get_window (widget));
       gdk_cairo_set_source_pixmap (cr, pixmap, 50, 50);
       cairo_paint (cr);
       cairo_destroy (cr);
