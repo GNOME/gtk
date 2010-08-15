@@ -688,13 +688,8 @@ void          gdk_window_set_startup_id    (GdkWindow     *window,
 					    const gchar   *startup_id);
 void          gdk_window_set_transient_for (GdkWindow     *window,
 					    GdkWindow     *parent);
-void          gdk_window_get_background  (GdkWindow       *window,
-                                          GdkColor        *color);
 void	      gdk_window_set_background	 (GdkWindow	  *window,
 					  const GdkColor  *color);
-void	      gdk_window_get_back_pixmap (GdkWindow       *window,
-					  GdkPixmap	 **pixmap,
-					  gboolean	  *parent_relative);
 void	      gdk_window_set_back_pixmap (GdkWindow	  *window,
 					  GdkPixmap	  *pixmap,
 					  gboolean	   parent_relative);

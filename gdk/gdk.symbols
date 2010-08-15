@@ -579,8 +579,6 @@ gdk_window_move_resize
 gdk_window_scroll
 gdk_window_move_region
 gdk_window_get_accept_focus
-gdk_window_get_back_pixmap
-gdk_window_get_background
 gdk_window_get_composited
 gdk_window_get_cursor
 gdk_window_get_focus_on_map
