@@ -6494,12 +6494,29 @@ _gtk_widget_get_cursor_color (GtkWidget *widget,
     *color = gtk_widget_get_style (widget)->text[GTK_STATE_NORMAL];
 }
 
-static void
-draw_insertion_cursor (GtkWidget          *widget,
-                       cairo_t            *cr,
-		       const GdkRectangle *location,
-		       GtkTextDirection    direction,
-		       gboolean            draw_arrow)
+/**
+ * gtk_cairo_draw_insertion_cursor:
+ * @widget:  a #GtkWidget
+ * @cr: cairo context to draw to
+ * @location: location where to draw the cursor (@location->width is ignored)
+ * @is_primary: if the cursor should be the primary cursor color.
+ * @direction: whether the cursor is left-to-right or
+ *             right-to-left. Should never be #GTK_TEXT_DIR_NONE
+ * @draw_arrow: %TRUE to draw a directional arrow on the
+ *        cursor. Should be %FALSE unless the cursor is split.
+ * 
+ * Draws a text caret on @cr at @location. This is not a style function
+ * but merely a convenience function for drawing the standard cursor shape.
+ *
+ * Since: 3.0
+ **/
+void
+gtk_cairo_draw_insertion_cursor (GtkWidget          *widget,
+                                 cairo_t            *cr,
+                                 const GdkRectangle *location,
+                                 gboolean            is_primary,
+                                 GtkTextDirection    direction,
+                                 gboolean            draw_arrow)
 {
   gint stem_width;
   gint arrow_width;
@@ -6507,6 +6524,13 @@ draw_insertion_cursor (GtkWidget          *widget,
   gfloat cursor_aspect_ratio;
   gint offset;
   
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+  g_return_if_fail (cr != NULL);
+  g_return_if_fail (location != NULL);
+  g_return_if_fail (direction != GTK_TEXT_DIR_NONE);
+
+  gdk_cairo_set_source_color (cr, get_insertion_cursor_color (widget, is_primary));
+
   /* When changing the shape or size of the cursor here,
    * propagate the changes to gtktextview.c:text_window_invalidate_cursors().
    */
@@ -6593,8 +6617,7 @@ gtk_draw_insertion_cursor (GtkWidget          *widget,
       cairo_clip (cr);
     }
   
-  gdk_cairo_set_source_color (cr, get_insertion_cursor_color (widget, is_primary));
-  draw_insertion_cursor (widget, cr, location, direction, draw_arrow);
+  gtk_cairo_draw_insertion_cursor (widget, cr, location, is_primary, direction, draw_arrow);
   
   cairo_destroy (cr);
 }

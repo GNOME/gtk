@@ -900,6 +900,12 @@ void   gtk_draw_insertion_cursor    (GtkWidget          *widget,
                                      gboolean            is_primary,
                                      GtkTextDirection    direction,
                                      gboolean            draw_arrow);
+void   gtk_cairo_draw_insertion_cursor (GtkWidget          *widget,
+                                        cairo_t            *cr,
+                                        const GdkRectangle *location,
+                                        gboolean            is_primary,
+                                        GtkTextDirection    direction,
+                                        gboolean            draw_arrow);
 void   _gtk_widget_get_cursor_color (GtkWidget          *widget,
 				     GdkColor           *color);
 
