@@ -47,10 +47,11 @@ to_child_2 (GtkOffscreenBox *offscreen_box,
   x = widget_x;
   y = widget_y;
 
+  gtk_widget_get_allocation (offscreen_box->child1, &child_area);
   if (offscreen_box->child1 && gtk_widget_get_visible (offscreen_box->child1))
-    y -= offscreen_box->child1->allocation.height;
+    y -= child_area.height;
 
-  child_area = offscreen_box->child2->allocation;
+  gtk_widget_get_allocation (offscreen_box->child2, &child_area);
 
   x -= child_area.width / 2;
   y -= child_area.height / 2;
@@ -79,7 +80,7 @@ to_parent_2 (GtkOffscreenBox *offscreen_box,
   double x, y, xr, yr;
   double cos_angle, sin_angle;
 
-  child_area = offscreen_box->child2->allocation;
+  gtk_widget_get_allocation (offscreen_box->child2, &child_area);
 
   x = offscreen_x;
   y = offscreen_y;
@@ -98,8 +99,9 @@ to_parent_2 (GtkOffscreenBox *offscreen_box,
   x += child_area.width / 2;
   y += child_area.height / 2;
 
+  gtk_widget_get_allocation (offscreen_box->child1, &child_area);
   if (offscreen_box->child1 && gtk_widget_get_visible (offscreen_box->child1))
-    y += offscreen_box->child1->allocation.height;
+    y += child_area.height;
 
   *x_out = x;
   *y_out = y;
@@ -156,7 +158,7 @@ pick_offscreen_child (GdkWindow *offscreen_window,
 		  widget_x, widget_y,
 		  &x, &y);
 
-      child_area = offscreen_box->child2->allocation;
+      gtk_widget_get_allocation (offscreen_box->child2, &child_area);
 
       if (x >= 0 && x < child_area.width &&
 	  y >= 0 && y < child_area.height)
@@ -168,7 +170,7 @@ pick_offscreen_child (GdkWindow *offscreen_window,
      x = widget_x;
      y = widget_y;
 
-     child_area = offscreen_box->child1->allocation;
+     gtk_widget_get_allocation (offscreen_box->child1, &child_area);
 
      if (x >= 0 && x < child_area.width &&
 	 y >= 0 && y < child_area.height)
@@ -232,6 +234,9 @@ static void
 gtk_offscreen_box_realize (GtkWidget *widget)
 {
   GtkOffscreenBox *offscreen_box = GTK_OFFSCREEN_BOX (widget);
+  GtkAllocation allocation, child_area;
+  GtkStyle *style;
+  GdkWindow *window;
   GdkWindowAttr attributes;
   gint attributes_mask;
   guint border_width;
@@ -242,10 +247,12 @@ gtk_offscreen_box_realize (GtkWidget *widget)
 
   border_width = gtk_container_get_border_width (GTK_CONTAINER (widget));
 
-  attributes.x = widget->allocation.x + border_width;
-  attributes.y = widget->allocation.y + border_width;
-  attributes.width = widget->allocation.width - 2 * border_width;
-  attributes.height = widget->allocation.height - 2 * border_width;
+  gtk_widget_get_allocation (widget, &allocation);
+
+  attributes.x = allocation.x + border_width;
+  attributes.y = allocation.y + border_width;
+  attributes.width = allocation.width - 2 * border_width;
+  attributes.height = allocation.height - 2 * border_width;
   attributes.window_type = GDK_WINDOW_CHILD;
   attributes.event_mask = gtk_widget_get_events (widget)
 			| GDK_EXPOSURE_MASK
@@ -262,11 +269,12 @@ gtk_offscreen_box_realize (GtkWidget *widget)
 
   attributes_mask = GDK_WA_X | GDK_WA_Y | GDK_WA_VISUAL | GDK_WA_COLORMAP;
 
-  widget->window = gdk_window_new (gtk_widget_get_parent_window (widget),
-				   &attributes, attributes_mask);
-  gdk_window_set_user_data (widget->window, widget);
+  window = gdk_window_new (gtk_widget_get_parent_window (widget),
+                           &attributes, attributes_mask);
+  gtk_widget_set_window (widget, window);
+  gdk_window_set_user_data (window, widget);
 
-  g_signal_connect (widget->window, "pick-embedded-child",
+  g_signal_connect (window, "pick-embedded-child",
 		    G_CALLBACK (pick_offscreen_child), offscreen_box);
 
   attributes.window_type = GDK_WINDOW_OFFSCREEN;
@@ -275,9 +283,11 @@ gtk_offscreen_box_realize (GtkWidget *widget)
   attributes.x = attributes.y = 0;
   if (offscreen_box->child1 && gtk_widget_get_visible (offscreen_box->child1))
     {
-      attributes.width = offscreen_box->child1->allocation.width;
-      attributes.height = offscreen_box->child1->allocation.height;
-      start_y += offscreen_box->child1->allocation.height;
+      gtk_widget_get_allocation (offscreen_box->child1, &child_area);
+
+      attributes.width = child_area.width;
+      attributes.height = child_area.height;
+      start_y += child_area.height;
     }
   offscreen_box->offscreen_window1 = gdk_window_new (gtk_widget_get_root_window (widget),
 						     &attributes, attributes_mask);
@@ -286,8 +296,8 @@ gtk_offscreen_box_realize (GtkWidget *widget)
     gtk_widget_set_parent_window (offscreen_box->child1, offscreen_box->offscreen_window1);
 
   gdk_offscreen_window_set_embedder (offscreen_box->offscreen_window1,
-				     widget->window);
-  
+				     window);
+
   g_signal_connect (offscreen_box->offscreen_window1, "to-embedder",
 		    G_CALLBACK (offscreen_window_to_parent1), offscreen_box);
   g_signal_connect (offscreen_box->offscreen_window1, "from-embedder",
@@ -298,8 +308,10 @@ gtk_offscreen_box_realize (GtkWidget *widget)
   child_requisition.width = child_requisition.height = 0;
   if (offscreen_box->child2 && gtk_widget_get_visible (offscreen_box->child2))
     {
-      attributes.width = offscreen_box->child2->allocation.width;
-      attributes.height = offscreen_box->child2->allocation.height;
+      gtk_widget_get_allocation (offscreen_box->child2, &child_area);
+
+      attributes.width = child_area.width;
+      attributes.height = child_area.height;
     }
   offscreen_box->offscreen_window2 = gdk_window_new (gtk_widget_get_root_window (widget),
 						     &attributes, attributes_mask);
@@ -307,17 +319,17 @@ gtk_offscreen_box_realize (GtkWidget *widget)
   if (offscreen_box->child2)
     gtk_widget_set_parent_window (offscreen_box->child2, offscreen_box->offscreen_window2);
   gdk_offscreen_window_set_embedder (offscreen_box->offscreen_window2,
-				     widget->window);
+				     window);
   g_signal_connect (offscreen_box->offscreen_window2, "to-embedder",
 		    G_CALLBACK (offscreen_window_to_parent2), offscreen_box);
   g_signal_connect (offscreen_box->offscreen_window2, "from-embedder",
 		    G_CALLBACK (offscreen_window_from_parent2), offscreen_box);
 
-  widget->style = gtk_style_attach (widget->style, widget->window);
-
-  gtk_style_set_background (widget->style, widget->window, GTK_STATE_NORMAL);
-  gtk_style_set_background (widget->style, offscreen_box->offscreen_window1, GTK_STATE_NORMAL);
-  gtk_style_set_background (widget->style, offscreen_box->offscreen_window2, GTK_STATE_NORMAL);
+  gtk_widget_style_attach (widget);
+  style = gtk_widget_get_style (widget);
+  gtk_style_set_background (style, window, GTK_STATE_NORMAL);
+  gtk_style_set_background (style, offscreen_box->offscreen_window1, GTK_STATE_NORMAL);
+  gtk_style_set_background (style, offscreen_box->offscreen_window2, GTK_STATE_NORMAL);
 
   gdk_window_show (offscreen_box->offscreen_window1);
   gdk_window_show (offscreen_box->offscreen_window2);
@@ -496,13 +508,14 @@ gtk_offscreen_box_size_allocate (GtkWidget     *widget,
   gint start_y;
   guint border_width;
 
-  widget->allocation = *allocation;
   offscreen_box = GTK_OFFSCREEN_BOX (widget);
+
+  gtk_widget_set_allocation (widget, allocation);
 
   border_width = gtk_container_get_border_width (GTK_CONTAINER (widget));
 
   if (gtk_widget_get_realized (widget))
-    gdk_window_move_resize (widget->window,
+    gdk_window_move_resize (gtk_widget_get_window (widget),
                             allocation->x + border_width,
                             allocation->y + border_width,
                             allocation->width - border_width * 2,
@@ -518,7 +531,7 @@ gtk_offscreen_box_size_allocate (GtkWidget     *widget,
       gtk_widget_get_child_requisition (offscreen_box->child1, &child_requisition);
       child_allocation.x = child_requisition.width * (CHILD1_SIZE_SCALE - 1.0) / 2;
       child_allocation.y = start_y + child_requisition.height * (CHILD1_SIZE_SCALE - 1.0) / 2;
-      child_allocation.width = MAX (1, (gint) widget->allocation.width - 2 * border_width);
+      child_allocation.width = MAX (1, (gint) allocation->width - 2 * border_width);
       child_allocation.height = child_requisition.height;
 
       start_y += CHILD1_SIZE_SCALE * child_requisition.height;
@@ -542,7 +555,7 @@ gtk_offscreen_box_size_allocate (GtkWidget     *widget,
       gtk_widget_get_child_requisition (offscreen_box->child2, &child_requisition);
       child_allocation.x = child_requisition.width * (CHILD2_SIZE_SCALE - 1.0) / 2;
       child_allocation.y = start_y + child_requisition.height * (CHILD2_SIZE_SCALE - 1.0) / 2;
-      child_allocation.width = MAX (1, (gint) widget->allocation.width - 2 * border_width);
+      child_allocation.width = MAX (1, (gint) allocation->width - 2 * border_width);
       child_allocation.height = child_requisition.height;
 
       start_y += CHILD2_SIZE_SCALE * child_requisition.height;
@@ -563,7 +576,8 @@ static gboolean
 gtk_offscreen_box_damage (GtkWidget      *widget,
                           GdkEventExpose *event)
 {
-  gdk_window_invalidate_rect (widget->window, NULL, FALSE);
+  gdk_window_invalidate_rect (gtk_widget_get_window (widget),
+                              NULL, FALSE);
 
   return TRUE;
 }
@@ -573,10 +587,12 @@ gtk_offscreen_box_expose (GtkWidget      *widget,
 			  GdkEventExpose *event)
 {
   GtkOffscreenBox *offscreen_box = GTK_OFFSCREEN_BOX (widget);
+  GdkWindow *window;
 
   if (gtk_widget_is_drawable (widget))
     {
-      if (event->window == widget->window)
+      window = gtk_widget_get_window (widget);
+      if (event->window == window)
 	{
           GdkPixmap *pixmap;
           GtkAllocation child_area;
@@ -586,9 +602,9 @@ gtk_offscreen_box_expose (GtkWidget      *widget,
 	  if (offscreen_box->child1 && gtk_widget_get_visible (offscreen_box->child1))
 	    {
 	      pixmap = gdk_offscreen_window_get_pixmap (offscreen_box->offscreen_window1);
-              child_area = offscreen_box->child1->allocation;
+              gtk_widget_get_allocation (offscreen_box->child1, &child_area);
 
-	      cr = gdk_cairo_create (widget->window);
+	      cr = gdk_cairo_create (window);
 
               gdk_cairo_set_source_pixmap (cr, pixmap, 0, 0);
               cairo_paint (cr);
@@ -603,9 +619,9 @@ gtk_offscreen_box_expose (GtkWidget      *widget,
               gint w, h;
 
 	      pixmap = gdk_offscreen_window_get_pixmap (offscreen_box->offscreen_window2);
-              child_area = offscreen_box->child2->allocation;
+              gtk_widget_get_allocation (offscreen_box->child2, &child_area);
 
-	      cr = gdk_cairo_create (widget->window);
+	      cr = gdk_cairo_create (window);
 
               /* transform */
 	      cairo_translate (cr, 0, start_y);
@@ -627,7 +643,7 @@ gtk_offscreen_box_expose (GtkWidget      *widget,
 	}
       else if (event->window == offscreen_box->offscreen_window1)
 	{
-	  gtk_paint_flat_box (widget->style, event->window,
+	  gtk_paint_flat_box (gtk_widget_get_style (widget), event->window,
 			      GTK_STATE_NORMAL, GTK_SHADOW_NONE,
 			      &event->area, widget, "blah",
 			      0, 0, -1, -1);
@@ -639,7 +655,7 @@ gtk_offscreen_box_expose (GtkWidget      *widget,
 	}
       else if (event->window == offscreen_box->offscreen_window2)
 	{
-	  gtk_paint_flat_box (widget->style, event->window,
+	  gtk_paint_flat_box (gtk_widget_get_style (widget), event->window,
 			      GTK_STATE_NORMAL, GTK_SHADOW_NONE,
 			      &event->area, widget, "blah",
 			      0, 0, -1, -1);
