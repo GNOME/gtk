@@ -1661,26 +1661,6 @@ gdk_window_x11_reparent (GdkWindow *window,
 }
 
 static void
-gdk_window_x11_clear_region (GdkWindow *window,
-			     cairo_region_t *region,
-			     gboolean   send_expose)
-{
-  cairo_rectangle_int_t rect;
-  int n_rects, i;
-
-  n_rects = cairo_region_num_rectangles (region);
-
-  for (i = 0; i < n_rects; i++)
-    {
-      cairo_region_get_rectangle (region, i, &rect);
-      XClearArea (GDK_WINDOW_XDISPLAY (window), GDK_WINDOW_XID (window),
-                  rect.x, rect.y,
-                  rect.width, rect.height,
-                  send_expose);
-    }
-}
-
-static void
 gdk_window_x11_raise (GdkWindow *window)
 {
   XRaiseWindow (GDK_WINDOW_XDISPLAY (window), GDK_WINDOW_XID (window));
@@ -5474,7 +5454,6 @@ gdk_window_impl_iface_init (GdkWindowImplIface *iface)
   iface->set_background = gdk_window_x11_set_background;
   iface->set_back_pixmap = gdk_window_x11_set_back_pixmap;
   iface->reparent = gdk_window_x11_reparent;
-  iface->clear_region = gdk_window_x11_clear_region;
   iface->set_device_cursor = gdk_window_x11_set_device_cursor;
   iface->get_geometry = gdk_window_x11_get_geometry;
   iface->get_root_coords = gdk_window_x11_get_root_coords;

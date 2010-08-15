@@ -3840,7 +3840,6 @@ gdk_window_clear_region_internal (GdkWindow *window,
 				  gboolean   send_expose)
 {
   GdkWindowObject *private = (GdkWindowObject *)window;
-  GdkWindowImplIface *impl_iface;
 
   if (private->paint_stack)
     gdk_window_clear_backing_region (window, region);
@@ -3849,29 +3848,9 @@ gdk_window_clear_region_internal (GdkWindow *window,
       if (private->redirect)
 	gdk_window_clear_backing_region_redirect (window, region);
 
-      impl_iface = GDK_WINDOW_IMPL_GET_IFACE (private->impl);
-
-      if (impl_iface->clear_region && clears_as_native (private))
-	{
-	  cairo_region_t *copy;
-	  copy = cairo_region_copy (region);
-	  cairo_region_intersect (copy,
-				private->clip_region_with_children);
-
-
-	  /* Drawing directly to the window, flush anything outstanding to
-	     guarantee ordering. */
-	  gdk_window_flush (window);
-	  impl_iface->clear_region (window, copy, send_expose);
-
-	  cairo_region_destroy (copy);
-	}
-      else
-	{
-	  gdk_window_clear_backing_region_direct (window, region);
-	  if (send_expose)
-	    gdk_window_invalidate_region (window, region, FALSE);
-	}
+      gdk_window_clear_backing_region_direct (window, region);
+      if (send_expose)
+        gdk_window_invalidate_region (window, region, FALSE);
     }
 }
 
