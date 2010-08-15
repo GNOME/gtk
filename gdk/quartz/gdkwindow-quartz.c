@@ -2548,7 +2548,7 @@ gdk_window_get_frame_extents (GdkWindow    *window,
   rect->width = 1;
   rect->height = 1;
   
-  toplevel = gdk_window_get_toplevel (window);
+  toplevel = gdk_window_get_effective_toplevel (window);
   impl = GDK_WINDOW_IMPL_QUARTZ (GDK_WINDOW_OBJECT (toplevel)->impl);
 
   ns_rect = [impl->toplevel frame];
