@@ -126,7 +126,7 @@ pick_offscreen_child (GdkWindow     *offscreen_window,
     {
       to_child (bin, widget_x, widget_y, &x, &y);
 
-      child_area = bin->child->allocation;
+      gtk_widget_get_allocation (bin->child, &child_area);
 
       if (x >= 0 && x < child_area.width &&
           y >= 0 && y < child_area.height)
@@ -162,6 +162,9 @@ static void
 gtk_mirror_bin_realize (GtkWidget *widget)
 {
   GtkMirrorBin *bin = GTK_MIRROR_BIN (widget);
+  GtkAllocation allocation;
+  GtkStyle *style;
+  GdkWindow *window;
   GdkWindowAttr attributes;
   gint attributes_mask;
   guint border_width;
@@ -169,12 +172,13 @@ gtk_mirror_bin_realize (GtkWidget *widget)
 
   gtk_widget_set_realized (widget, TRUE);
 
+  gtk_widget_get_allocation (widget, &allocation);
   border_width = gtk_container_get_border_width (GTK_CONTAINER (widget));
 
-  attributes.x = widget->allocation.x + border_width;
-  attributes.y = widget->allocation.y + border_width;
-  attributes.width = widget->allocation.width - 2 * border_width;
-  attributes.height = widget->allocation.height - 2 * border_width;
+  attributes.x = allocation.x + border_width;
+  attributes.y = allocation.y + border_width;
+  attributes.width = allocation.width - 2 * border_width;
+  attributes.height = allocation.height - 2 * border_width;
   attributes.window_type = GDK_WINDOW_CHILD;
   attributes.event_mask = gtk_widget_get_events (widget)
                         | GDK_EXPOSURE_MASK
@@ -191,10 +195,11 @@ gtk_mirror_bin_realize (GtkWidget *widget)
 
   attributes_mask = GDK_WA_X | GDK_WA_Y | GDK_WA_VISUAL | GDK_WA_COLORMAP;
 
-  widget->window = gdk_window_new (gtk_widget_get_parent_window (widget),
-                                   &attributes, attributes_mask);
-  gdk_window_set_user_data (widget->window, widget);
-  g_signal_connect (widget->window, "pick-embedded-child",
+  window = gdk_window_new (gtk_widget_get_parent_window (widget),
+                           &attributes, attributes_mask);
+  gtk_widget_set_window (widget, window);
+  gdk_window_set_user_data (window, widget);
+  g_signal_connect (window, "pick-embedded-child",
                     G_CALLBACK (pick_offscreen_child), bin);
 
   attributes.window_type = GDK_WINDOW_OFFSCREEN;
@@ -202,24 +207,27 @@ gtk_mirror_bin_realize (GtkWidget *widget)
   child_requisition.width = child_requisition.height = 0;
   if (bin->child && gtk_widget_get_visible (bin->child))
     {
-      attributes.width = bin->child->allocation.width;
-      attributes.height = bin->child->allocation.height;
+      GtkAllocation child_allocation;
+
+      gtk_widget_get_allocation (bin->child, &child_allocation);
+      attributes.width = child_allocation.width;
+      attributes.height = child_allocation.height;
     }
   bin->offscreen_window = gdk_window_new (gtk_widget_get_root_window (widget),
                                           &attributes, attributes_mask);
   gdk_window_set_user_data (bin->offscreen_window, widget);
   if (bin->child)
     gtk_widget_set_parent_window (bin->child, bin->offscreen_window);
-  gdk_offscreen_window_set_embedder (bin->offscreen_window, widget->window);
+  gdk_offscreen_window_set_embedder (bin->offscreen_window, window);
   g_signal_connect (bin->offscreen_window, "to-embedder",
                     G_CALLBACK (offscreen_window_to_parent), bin);
   g_signal_connect (bin->offscreen_window, "from-embedder",
                     G_CALLBACK (offscreen_window_from_parent), bin);
 
-  widget->style = gtk_style_attach (widget->style, widget->window);
-
-  gtk_style_set_background (widget->style, widget->window, GTK_STATE_NORMAL);
-  gtk_style_set_background (widget->style, bin->offscreen_window, GTK_STATE_NORMAL);
+  gtk_widget_style_attach (widget);
+  style = gtk_widget_get_style (widget);
+  gtk_style_set_background (style, window, GTK_STATE_NORMAL);
+  gtk_style_set_background (style, bin->offscreen_window, GTK_STATE_NORMAL);
   gdk_window_show (bin->offscreen_window);
 }
 
@@ -323,7 +331,7 @@ gtk_mirror_bin_size_allocate (GtkWidget     *widget,
   gint w, h;
   guint border_width;
 
-  widget->allocation = *allocation;
+  gtk_widget_set_allocation (widget, allocation);
 
   border_width = gtk_container_get_border_width (GTK_CONTAINER (widget));
 
@@ -331,7 +339,7 @@ gtk_mirror_bin_size_allocate (GtkWidget     *widget,
   h = allocation->height - border_width * 2;
 
   if (gtk_widget_get_realized (widget))
-    gdk_window_move_resize (widget->window,
+    gdk_window_move_resize (gtk_widget_get_window (widget),
                             allocation->x + border_width,
                             allocation->y + border_width,
                             w, h);
@@ -360,7 +368,8 @@ static gboolean
 gtk_mirror_bin_damage (GtkWidget      *widget,
                         GdkEventExpose *event)
 {
-  gdk_window_invalidate_rect (widget->window, NULL, FALSE);
+  gdk_window_invalidate_rect (gtk_widget_get_window (widget),
+                              NULL, FALSE);
 
   return TRUE;
 }
@@ -370,11 +379,13 @@ gtk_mirror_bin_expose (GtkWidget      *widget,
                         GdkEventExpose *event)
 {
   GtkMirrorBin *bin = GTK_MIRROR_BIN (widget);
+  GdkWindow *window;
   gint width, height;
 
   if (gtk_widget_is_drawable (widget))
     {
-      if (event->window == widget->window)
+      window = gtk_widget_get_window (widget);
+      if (event->window == window)
         {
           GdkPixmap *pixmap;
           cairo_t *cr;
@@ -386,7 +397,7 @@ gtk_mirror_bin_expose (GtkWidget      *widget,
               pixmap = gdk_offscreen_window_get_pixmap (bin->offscreen_window);
               gdk_drawable_get_size (pixmap, &width, &height);
 
-              cr = gdk_cairo_create (widget->window);
+              cr = gdk_cairo_create (window);
 
               cairo_save (cr);
 
@@ -426,7 +437,7 @@ gtk_mirror_bin_expose (GtkWidget      *widget,
         }
       else if (event->window == bin->offscreen_window)
         {
-          gtk_paint_flat_box (widget->style, event->window,
+          gtk_paint_flat_box (gtk_widget_get_style (widget), event->window,
                               GTK_STATE_NORMAL, GTK_SHADOW_NONE,
                               &event->area, widget, "blah",
                               0, 0, -1, -1);
