@@ -115,16 +115,16 @@ void           gtk_drag_source_add_text_targets  (GtkWidget     *widget);
 void           gtk_drag_source_add_image_targets (GtkWidget    *widget);
 void           gtk_drag_source_add_uri_targets   (GtkWidget    *widget);
 
-void gtk_drag_source_set_icon        (GtkWidget   *widget,
-				      GdkColormap *colormap,
-				      GdkPixmap   *pixmap,
-				      GdkBitmap   *mask);
-void gtk_drag_source_set_icon_pixbuf (GtkWidget   *widget,
-				      GdkPixbuf   *pixbuf);
-void gtk_drag_source_set_icon_stock  (GtkWidget   *widget,
-				      const gchar *stock_id);
-void gtk_drag_source_set_icon_name   (GtkWidget   *widget,
-				      const gchar *icon_name);
+void gtk_drag_source_set_icon         (GtkWidget       *widget,
+				       GdkColormap     *colormap,
+				       GdkPixmap       *pixmap,
+				       GdkBitmap       *mask);
+void gtk_drag_source_set_icon_pixbuf  (GtkWidget       *widget,
+				       GdkPixbuf       *pixbuf);
+void gtk_drag_source_set_icon_stock   (GtkWidget       *widget,
+				       const gchar     *stock_id);
+void gtk_drag_source_set_icon_name    (GtkWidget       *widget,
+				       const gchar     *icon_name);
 
 /* There probably should be functions for setting the targets
  * as a GtkTargetList
@@ -156,6 +156,8 @@ void gtk_drag_set_icon_stock  (GdkDragContext *context,
 			       const gchar    *stock_id,
 			       gint            hot_x,
 			       gint            hot_y);
+void gtk_drag_set_icon_surface(GdkDragContext *context,
+			       cairo_surface_t *surface);
 void gtk_drag_set_icon_name   (GdkDragContext *context,
 			       const gchar    *icon_name,
 			       gint            hot_x,

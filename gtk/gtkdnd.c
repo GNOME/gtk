@@ -26,6 +26,7 @@
 
 #include "config.h"
 
+#include <math.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -3349,6 +3350,130 @@ gtk_drag_set_icon_pixmap (GdkDragContext    *context,
     }
 
   gtk_drag_set_icon_window (context, window, hot_x, hot_y, TRUE);
+}
+
+/* XXX: This function is in gdk, too. Should it be in Cairo? */
+static gboolean
+_gtk_cairo_surface_extents (cairo_surface_t *surface,
+                            GdkRectangle *extents)
+{
+  double x1, x2, y1, y2;
+  cairo_t *cr;
+
+  g_return_val_if_fail (surface != NULL, FALSE);
+  g_return_val_if_fail (extents != NULL, FALSE);
+
+  cr = cairo_create (surface);
+  cairo_clip_extents (cr, &x1, &y1, &x2, &y2);
+
+  x1 = floor (x1);
+  y1 = floor (y1);
+  x2 = ceil (x2);
+  y2 = ceil (y2);
+  x2 -= x1;
+  y2 -= y1;
+  
+  if (x1 < G_MININT || x1 > G_MAXINT ||
+      y1 < G_MININT || y1 > G_MAXINT ||
+      x2 > G_MAXINT || y2 > G_MAXINT)
+    {
+      extents->x = extents->y = extents->width = extents->height = 0;
+      return FALSE;
+    }
+
+  extents->x = x1;
+  extents->y = y1;
+  extents->width = x2;
+  extents->height = y2;
+
+  return TRUE;
+}
+
+/**
+ * gtk_drag_set_icon_surface:
+ * @context: the context for a drag. (This must be called 
+ *            with a  context for the source side of a drag)
+ * @surface: the surface to use as icon 
+ * 
+ * Sets @surface as the icon for a given drag. GTK+ retains
+ * references for the arguments, and will release them when
+ * they are no longer needed.
+ **/
+void 
+gtk_drag_set_icon_surface (GdkDragContext    *context,
+                           cairo_surface_t   *surface)
+{
+  GtkWidget *window;
+  GdkScreen *screen;
+  GdkRectangle extents;
+  cairo_pattern_t *pattern;
+      
+  g_return_if_fail (GDK_IS_DRAG_CONTEXT (context));
+  g_return_if_fail (context->is_source);
+  g_return_if_fail (surface != NULL);
+
+  _gtk_cairo_surface_extents (surface, &extents);
+
+
+  screen = gdk_drawable_get_screen (context->source_window);
+
+  /* Push a NULL colormap to guard against gtk_widget_push_colormap() */
+  gtk_widget_push_colormap (NULL);
+  window = gtk_window_new (GTK_WINDOW_POPUP);
+  gtk_window_set_type_hint (GTK_WINDOW (window), GDK_WINDOW_TYPE_HINT_DND);
+  gtk_window_set_screen (GTK_WINDOW (window), screen);
+  set_can_change_screen (window, TRUE);
+  gtk_widget_pop_colormap ();
+
+  gtk_widget_set_events (window, GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK);
+  gtk_widget_set_app_paintable (window, TRUE);
+
+  gtk_widget_set_size_request (window, extents.width, extents.height);
+  gtk_widget_realize (window);
+
+  if (cairo_surface_get_content (surface) != CAIRO_CONTENT_COLOR)
+    {
+      cairo_surface_t *saturated;
+      cairo_region_t *region;
+      cairo_t *cr;
+
+      region = gdk_cairo_region_create_from_surface (surface);
+      gtk_widget_shape_combine_region (window, region);
+      cairo_region_destroy (region);
+
+      /* Need to saturate the colors, so it doesn't look like semi-transparent
+       * pixels were painted on black. */
+      saturated = gdk_window_create_similar_surface (gtk_widget_get_window (window),
+                                                     CAIRO_CONTENT_COLOR,
+                                                     extents.width,
+                                                     extents.height);
+      
+      cr = cairo_create (saturated);
+      cairo_push_group_with_content (cr, CAIRO_CONTENT_COLOR_ALPHA);
+      cairo_set_source_surface (cr, surface, extents.x, extents.y);
+      cairo_paint (cr);
+      cairo_set_operator (cr, CAIRO_OPERATOR_SATURATE);
+      cairo_paint (cr);
+      cairo_pop_group_to_source (cr);
+      cairo_paint (cr);
+      cairo_destroy (cr);
+    
+      pattern = cairo_pattern_create_for_surface (saturated);
+
+      cairo_surface_destroy (saturated);
+    }
+  else
+    {
+      cairo_matrix_t matrix;
+
+      pattern = cairo_pattern_create_for_surface (surface);
+      cairo_matrix_init_translate (&matrix, extents.x, extents.y);
+      cairo_pattern_set_matrix (pattern, &matrix);
+    }
+
+  gdk_window_set_background_pattern (gtk_widget_get_window (window), pattern);
+
+  gtk_drag_set_icon_window (context, window, extents.x, extents.y, TRUE);
 }
 
 /**
