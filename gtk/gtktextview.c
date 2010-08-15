@@ -4789,6 +4789,7 @@ gtk_text_view_paint (GtkWidget      *widget,
   GtkTextViewPrivate *priv;
   GList *child_exposes;
   GList *tmp_list;
+  cairo_t *cr;
   
   text_view = GTK_TEXT_VIEW (widget);
   priv = text_view->priv;
@@ -4817,15 +4818,20 @@ gtk_text_view_paint (GtkWidget      *widget,
 #endif
 
   child_exposes = NULL;
+
+  cr = gdk_cairo_create (priv->text_window->bin_window);
+
+  gdk_cairo_region (cr, event->region);
+  cairo_clip (cr);
+
+  cairo_translate (cr, -priv->xoffset, -priv->yoffset);
+
   gtk_text_layout_draw (priv->layout,
                         widget,
-                        priv->text_window->bin_window,
-			NULL,
-                        priv->xoffset,
-                        priv->yoffset,
-                        area->x, area->y,
-                        area->width, area->height,
+                        cr,
                         &child_exposes);
+
+  cairo_destroy (cr);
 
   tmp_list = child_exposes;
   while (tmp_list != NULL)

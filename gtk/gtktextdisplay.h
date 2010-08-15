@@ -87,23 +87,13 @@ G_BEGIN_DECLS
 
 /* The drawable should be pre-initialized to your preferred background.
  * widget            - Widget to grab some style info from
- * drawable          - Drawable to render to
- * cursor_gc         - Graphics context to use for cursor
- * x_offset/y_offset - Position of the drawable in layout coordinates
- * x/y/width/height  - Region of the layout to render. x,y must be inside
- *                     the drawable.
+ * cr                - Context to render to, matrix set so that (0, 0)
+ *                     is the top left of the layout
  * widgets           - list of widgets that need exposing
  */
 void gtk_text_layout_draw (GtkTextLayout        *layout,
                            GtkWidget            *widget,
-                           GdkDrawable          *drawable,
-			   gpointer              cursor_gc,
-                           gint                  x_offset,
-                           gint                  y_offset,
-                           gint                  x,
-                           gint                  y,
-                           gint                  width,
-                           gint                  height,
+                           cairo_t              *cr,
                            GList               **widgets);
 
 

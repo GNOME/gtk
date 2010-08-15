@@ -367,12 +367,12 @@ _gtk_text_util_create_rich_drag_icon (GtkWidget     *widget,
   gdk_cairo_set_source_color (cr, &widget_style->base [gtk_widget_get_state (widget)]);
    cairo_paint (cr);
 
-   gtk_text_layout_draw (layout, widget, drawable,
-                         NULL,
-                         - (1 + DRAG_ICON_LAYOUT_BORDER),
-                         - (1 + DRAG_ICON_LAYOUT_BORDER),
-                         0, 0,
-                         pixmap_width, pixmap_height, NULL);
+   cairo_save (cr);
+
+   cairo_translate (cr, 1 + DRAG_ICON_LAYOUT_BORDER, 1 + DRAG_ICON_LAYOUT_BORDER);
+   gtk_text_layout_draw (layout, widget, cr, NULL);
+
+   cairo_restore (cr);
 
    cairo_set_source_rgb (cr, 0, 0, 0);
    cairo_rectangle (cr, 0.5, 0.5, pixmap_width + 1, pixmap_height + 1);
