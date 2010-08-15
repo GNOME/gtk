@@ -871,7 +871,7 @@ gtk_tray_icon_realize (GtkWidget *widget)
   else
     {
       /* Set a parent-relative background pixmap */
-      gdk_window_set_back_pixmap (window, NULL, TRUE);
+      gdk_window_set_background_pattern (window, NULL);
     }
 
   GTK_NOTE (PLUGSOCKET,
