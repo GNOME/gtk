@@ -209,7 +209,7 @@ add_window_clicked (GtkWidget *button,
   if (l != NULL)
     parent = l->data;
   else
-    parent = darea->window;
+    parent = gtk_widget_get_window (darea);
 
   g_list_free (l);
   
@@ -284,7 +284,7 @@ save_clicked (GtkWidget *button,
 
   s = g_string_new ("");
 
-  save_children (s, darea->window);
+  save_children (s, gtk_widget_get_window (darea));
 
   dialog = gtk_file_chooser_dialog_new ("Filename for window data",
 					NULL,
@@ -362,18 +362,21 @@ parse_window (GdkWindow *parent, char **lines)
 static void
 load_file (GFile *file)
 {
+  GdkWindow *window;
   char *data;
   char **lines, **l;
   
   if (g_file_load_contents (file, NULL, &data, NULL, NULL, NULL))
     {
-      destroy_children (darea->window);
+      window = gtk_widget_get_window (darea);
+
+      destroy_children (window);
 
       lines = g_strsplit (data, "\n", -1);
 
       l = lines;
       while (*l != NULL)
-	l = parse_window (darea->window, l);
+	l = parse_window (window, l);
     }
 
   update_store ();
@@ -774,7 +777,7 @@ update_store (void)
 
   gtk_tree_store_clear (window_store);
 
-  add_children (window_store, darea->window, NULL);
+  add_children (window_store, gtk_widget_get_window (darea), NULL);
   gtk_tree_view_expand_all (GTK_TREE_VIEW (treeview));
 
   select_windows (selected);
