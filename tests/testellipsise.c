@@ -70,17 +70,20 @@ ebox_expose_event_cb (GtkWidget      *widget,
 {
   PangoLayout *layout;
   const double dashes[] = { 6, 18 };
+  GtkAllocation allocation, label_allocation;
   GtkRequisition minimum_size, natural_size;
   GtkWidget *label = data;
   cairo_t *cr;
   gint x, y;
 
-  cr = gdk_cairo_create (widget->window);
+  cr = gdk_cairo_create (gtk_widget_get_window (widget));
   cairo_translate (cr, -0.5, -0.5);
   cairo_set_line_width (cr, 1);
 
+  gtk_widget_get_allocation (widget, &allocation);
+
   cairo_set_source_rgb (cr, 1, 1, 1);
-  cairo_rectangle (cr, 0, 0, widget->allocation.width, widget->allocation.height);
+  cairo_rectangle (cr, 0, 0, allocation.width, allocation.height);
   cairo_fill (cr);
 
   gtk_widget_translate_coordinates (label, widget, 0, 0, &x, &y);
@@ -97,22 +100,24 @@ ebox_expose_event_cb (GtkWidget      *widget,
   pango_cairo_show_layout (cr, layout);
   g_object_unref (layout);
 
+  gtk_widget_get_allocation (label, &label_allocation);
+
   cairo_rectangle (cr,
-                   x + 0.5 * (label->allocation.width - minimum_size.width),
-                   y + 0.5 * (label->allocation.height - minimum_size.height),
+                   x + 0.5 * (label_allocation.width - minimum_size.width),
+                   y + 0.5 * (label_allocation.height - minimum_size.height),
                    minimum_size.width, minimum_size.height);
   cairo_set_source_rgb (cr, 0.8, 0.2, 0.2);
   cairo_set_dash (cr, NULL, 0, 0);
   cairo_stroke (cr);
 
-  cairo_rectangle (cr, x, y, label->allocation.width, label->allocation.height);
+  cairo_rectangle (cr, x, y, label_allocation.width, label_allocation.height);
   cairo_set_source_rgb (cr, 0.2, 0.2, 0.8);
   cairo_set_dash (cr, dashes, 2, 0.5);
   cairo_stroke (cr);
 
   cairo_rectangle (cr,
-                   x + 0.5 * (label->allocation.width - natural_size.width),
-                   y + 0.5 * (label->allocation.height - natural_size.height),
+                   x + 0.5 * (label_allocation.width - natural_size.width),
+                   y + 0.5 * (label_allocation.height - natural_size.height),
                    natural_size.width, natural_size.height);
   cairo_set_source_rgb (cr, 0.2, 0.8, 0.2);
   cairo_set_dash (cr, dashes, 2, 12.5);
