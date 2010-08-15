@@ -3836,8 +3836,7 @@ clears_as_native (GdkWindowObject *private)
 
 static void
 gdk_window_clear_region_internal (GdkWindow *window,
-				  cairo_region_t *region,
-				  gboolean   send_expose)
+				  cairo_region_t *region)
 {
   GdkWindowObject *private = (GdkWindowObject *)window;
 
@@ -3849,8 +3848,6 @@ gdk_window_clear_region_internal (GdkWindow *window,
 	gdk_window_clear_backing_region_redirect (window, region);
 
       gdk_window_clear_backing_region_direct (window, region);
-      if (send_expose)
-        gdk_window_invalidate_region (window, region, FALSE);
     }
 }
 
@@ -3892,8 +3889,7 @@ gdk_window_clear_area (GdkWindow *window,
 
   region = cairo_region_create_rectangle (&rect);
   gdk_window_clear_region_internal (window,
-				    region,
-				    FALSE);
+				    region);
   cairo_region_destroy (region);
 }
 
@@ -4326,7 +4322,7 @@ _gdk_window_process_updates_recurse (GdkWindow *window,
 	   * piggyback on the implicit paint */
 
 	  gdk_window_begin_paint_region (window, expose_region);
-	  gdk_window_clear_region_internal (window, expose_region, FALSE);
+	  gdk_window_clear_region_internal (window, expose_region);
 	  gdk_window_end_paint (window);
 	}
     }
