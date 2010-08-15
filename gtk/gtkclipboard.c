@@ -413,7 +413,7 @@ clipboard_get_timestamp (GtkClipboard *clipboard)
   if (timestamp == GDK_CURRENT_TIME)
     {
 #ifdef GDK_WINDOWING_X11
-      timestamp = gdk_x11_get_server_time (clipboard_widget->window);
+      timestamp = gdk_x11_get_server_time (gtk_widget_get_window (clipboard_widget));
 #elif defined GDK_WINDOWING_WIN32
       timestamp = GetMessageTime ();
 #endif
@@ -2025,7 +2025,7 @@ gtk_clipboard_store (GtkClipboard *clipboard)
 						  clipboard);
 
   gdk_display_store_clipboard (clipboard->display,
-			       clipboard_widget->window,
+                               gtk_widget_get_window (clipboard_widget),
 			       clipboard_get_timestamp (clipboard),
 			       clipboard->storable_targets,
 			       clipboard->n_storable_targets);
