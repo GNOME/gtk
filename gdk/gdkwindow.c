@@ -7828,29 +7828,6 @@ gdk_window_move_region (GdkWindow       *window,
 }
 
 /**
- * gdk_window_get_background:
- * @window: a #GdkWindow.
- * @color: (out): a #GdkColor to be filled in
- *
- * Sets @color to equal the current background color of @window.
- *
- * Since: 2.22
- */
-void
-gdk_window_get_background (GdkWindow *window,
-                           GdkColor  *color)
-{
-  GdkWindowObject *private;
-
-  g_return_if_fail (GDK_IS_WINDOW (window));
-  g_return_if_fail (color != NULL);
-
-  private = (GdkWindowObject *) window;
-
-  *color = private->bg_color;
-}
-
-/**
  * gdk_window_set_background:
  * @window: a #GdkWindow
  * @color: an allocated #GdkColor
@@ -7894,43 +7871,6 @@ gdk_window_set_background (GdkWindow      *window,
       impl_iface = GDK_WINDOW_IMPL_GET_IFACE (private->impl);
       impl_iface->set_background (window, &private->bg_color);
     }
-}
-
-/**
- * gdk_window_get_back_pixmap:
- * @window: a #GdkWindow.
- * @pixmap: (out) (allow-none): a #GdkPixmap to be filled in, or %NULL.
- * @parent_relative: (out) (allow-none): a pointer to a #gboolean to be filled in, or %NULL.
- *
- * Sets @pixmap to the current background pixmap of @window.  You do not
- * own the pointer that is returned and this pointer should not be freeed
- * or unreferenced.  Sets @parent_relative to %TRUE if the tiling is done
- * based on the origin of the parent window.
- *
- * Since: 2.22
- */
-void
-gdk_window_get_back_pixmap (GdkWindow  *window,
-                            GdkPixmap **pixmap,
-                            gboolean   *parent_relative)
-{
-  GdkWindowObject *private;
-
-  g_return_if_fail (GDK_IS_WINDOW (window));
-
-  private = (GdkWindowObject *) window;
-
-  if (pixmap)
-    {
-      if (private->bg_pixmap == GDK_PARENT_RELATIVE_BG ||
-          private->bg_pixmap == GDK_NO_BG)
-        *pixmap = NULL;
-      else
-        *pixmap = private->bg_pixmap;
-    }
-
-  if (parent_relative)
-    *parent_relative = (private->bg_pixmap == GDK_PARENT_RELATIVE_BG);
 }
 
 /**
