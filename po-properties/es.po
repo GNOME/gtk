@@ -18,7 +18,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk%"
 "2b&component=general\n"
 "POT-Creation-Date: 2010-08-10 17:44+0000\n"
-"PO-Revision-Date: 2010-08-15 20:58+0200\n"
+"PO-Revision-Date: 2010-08-15 21:43+0200\n"
 "Last-Translator: Jorge González <jorgegonz@svn.gnome.org>\n"
 "Language-Team: Español <gnome-es-list@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -2742,10 +2742,9 @@ msgstr ""
 "confirmación de sobreescritura si fuese necesario."
 
 #: ../gtk/gtkfilechooser.c:841
-#, fuzzy
 #| msgid "Allow folders creation"
 msgid "Allow folder creation"
-msgstr "Permitir la creación de carpetas"
+msgstr "Permitir creación de carpetas"
 
 #: ../gtk/gtkfilechooser.c:842
 msgid ""
@@ -3795,20 +3794,18 @@ msgid "Show Tabs"
 msgstr "Mostrar solapas"
 
 #: ../gtk/gtknotebook.c:621
-#, fuzzy
 #| msgid "Whether tabs should be shown or not"
 msgid "Whether tabs should be shown"
-msgstr "Indica si las solapas deben mostrarse o no"
+msgstr "Indica si se deben mostrar las solapas"
 
 #: ../gtk/gtknotebook.c:627
 msgid "Show Border"
 msgstr "Mostrar borde"
 
 #: ../gtk/gtknotebook.c:628
-#, fuzzy
 #| msgid "Whether the border should be shown or not"
 msgid "Whether the border should be shown"
-msgstr "Indica si el borde debe mostrarse o no"
+msgstr "Indica si se debe mostrar el borde"
 
 #: ../gtk/gtknotebook.c:634
 msgid "Scrollable"
@@ -3862,20 +3859,18 @@ msgid "Tab expand"
 msgstr "Expansión de la solapa"
 
 #: ../gtk/gtknotebook.c:685
-#, fuzzy
 #| msgid "Whether to expand the child's tab or not"
 msgid "Whether to expand the child's tab"
-msgstr "Indica si se deben expandir la solapas del hijo o no"
+msgstr "Indica si se deben expandir la solapas del hijo"
 
 #: ../gtk/gtknotebook.c:691
 msgid "Tab fill"
 msgstr "Relleno de la solapa"
 
 #: ../gtk/gtknotebook.c:692
-#, fuzzy
 #| msgid "Whether the child's tab should fill the allocated area or not"
 msgid "Whether the child's tab should fill the allocated area"
-msgstr "Indica si las solapas hijas deben rellenar el área asignada o no"
+msgstr "Indica si se debe rellenar el área asignada de las solapas hijas "
 
 #: ../gtk/gtknotebook.c:698
 msgid "Tab pack type"
@@ -3886,12 +3881,9 @@ msgid "Tab reorderable"
 msgstr "Solapa reordenable"
 
 #: ../gtk/gtknotebook.c:706
-#, fuzzy
 #| msgid "Whether the tab is reorderable by user action or not"
 msgid "Whether the tab is reorderable by user action"
-msgstr ""
-"Indica si la solapa se puede o no se puede reordenar por una acción del "
-"usuario"
+msgstr "Indica si la solapa se puede reordenar por una acción del usuario"
 
 #: ../gtk/gtknotebook.c:712
 msgid "Tab detachable"
@@ -4027,10 +4019,9 @@ msgid "Embedded"
 msgstr "Empotrado"
 
 #: ../gtk/gtkplug.c:170
-#, fuzzy
 #| msgid "Whether or not the plug is embedded"
 msgid "Whether the plug is embedded"
-msgstr "Indica si el conector está empotrado"
+msgstr "Indica si el complemento está empotrado"
 
 #: ../gtk/gtkplug.c:184
 msgid "Socket Window"
@@ -4326,7 +4317,6 @@ msgid "The GtkPrinter which is selected"
 msgstr "El GtkPrinter que está seleccionado"
 
 #: ../gtk/gtkprintunixdialog.c:332
-#, fuzzy
 #| msgid "Manual Capabilites"
 msgid "Manual Capabilities"
 msgstr "Capacidades manuales"
@@ -4387,27 +4377,24 @@ msgstr ""
 "tiene suficiente espacio para mostrar la cadena completa."
 
 #: ../gtk/gtkprogressbar.c:181
-#, fuzzy
 #| msgid "XSpacing"
 msgid "X spacing"
-msgstr "EspaciadoX"
+msgstr "Espaciado X"
 
 #: ../gtk/gtkprogressbar.c:182
 msgid "Extra spacing applied to the width of a progress bar."
 msgstr "Espacio extra aplicado a la anchura de una barra de progreso."
 
 #: ../gtk/gtkprogressbar.c:187
-#, fuzzy
 #| msgid "YSpacing"
 msgid "Y spacing"
-msgstr "EspaciadoY"
+msgstr "Espaciado Y"
 
 #: ../gtk/gtkprogressbar.c:188
 msgid "Extra spacing applied to the height of a progress bar."
 msgstr "Espacio adicional aplicado a la altura >de una barra de progreso."
 
 #: ../gtk/gtkprogressbar.c:201
-#, fuzzy
 #| msgid "Min horizontal bar width"
 msgid "Minimum horizontal bar width"
 msgstr "Anchura mínima de la barra horizontal"
@@ -4417,7 +4404,6 @@ msgid "The minimum horizontal width of the progress bar"
 msgstr "La anchura mínima horizontal de la barra de progreso"
 
 #: ../gtk/gtkprogressbar.c:214
-#, fuzzy
 #| msgid "Min horizontal bar height"
 msgid "Minimum horizontal bar height"
 msgstr "Altura mínima de la barra horizontal"
@@ -4427,7 +4413,6 @@ msgid "Minimum horizontal height of the progress bar"
 msgstr "La altura mínima horizontal de la barra de progreso"
 
 #: ../gtk/gtkprogressbar.c:227
-#, fuzzy
 #| msgid "Min vertical bar width"
 msgid "Minimum vertical bar width"
 msgstr "Anchura mínima horizontal de la barra"
@@ -4437,7 +4422,6 @@ msgid "The minimum vertical width of the progress bar"
 msgstr "La anchura mínima vertical de la barra de progreso"
 
 #: ../gtk/gtkprogressbar.c:240
-#, fuzzy
 #| msgid "Min vertical bar height"
 msgid "Minimum vertical bar height"
 msgstr "Altura mínima vertical de la barra"
@@ -5623,19 +5607,16 @@ msgid "Blinking"
 msgstr "Parpadeo"
 
 #: ../gtk/gtkstatusicon.c:292
-#, fuzzy
 #| msgid "Whether or not the status icon is blinking"
 msgid "Whether the status icon is blinking"
 msgstr "Indica si el icono de estado parpadea"
 
 #: ../gtk/gtkstatusicon.c:300
-#, fuzzy
 #| msgid "Whether or not the status icon is visible"
 msgid "Whether the status icon is visible"
-msgstr "Indica si la acción es visible"
+msgstr "Indica si el icono de estado es visible"
 
 #: ../gtk/gtkstatusicon.c:316
-#, fuzzy
 #| msgid "Whether or not the status icon is embedded"
 msgid "Whether the status icon is embedded"
 msgstr "Indica si el icono de estado está empotrado"
@@ -6235,16 +6216,14 @@ msgstr ""
 "acción de radio"
 
 #: ../gtk/gtktoggleaction.c:134
-#, fuzzy
 #| msgid "If the toggle action should be active in or not"
 msgid "Whether the toggle action should be active"
-msgstr "Si la acción de conmutación debe estar activa o no"
+msgstr "Indica si la acción de conmutación debe estar activa"
 
 #: ../gtk/gtktogglebutton.c:116 ../gtk/gtktoggletoolbutton.c:113
-#, fuzzy
 #| msgid "If the toggle button should be pressed in or not"
 msgid "If the toggle button should be pressed in"
-msgstr "Si el botón de conmutación debe estar pulsado o no"
+msgstr "Si el botón de conmutación debe estar pulsado"
 
 #: ../gtk/gtktogglebutton.c:124
 msgid "If the toggle button is in an \"in between\" state"
@@ -7074,7 +7053,6 @@ msgid "Double Buffered"
 msgstr "Búfer doble"
 
 #: ../gtk/gtkwidget.c:800
-#, fuzzy
 #| msgid "Whether or not the widget is double buffered"
 msgid "Whether the widget is double buffered"
 msgstr "Indica si el widget tiene búfer doble"
