@@ -3659,50 +3659,32 @@ gdk_window_get_visible_region (GdkDrawable *drawable)
 static cairo_t *
 setup_backing_rect (GdkWindow *window, GdkWindowPaint *paint, int x_offset_cairo, int y_offset_cairo)
 {
-  GdkWindowObject *private = (GdkWindowObject *)window;
+  GdkWindowObject *private = (GdkWindowObject *) window;
+  GdkWindowObject *bg_private;
+  cairo_pattern_t *pattern;
+  int x_offset = 0, y_offset = 0;
   cairo_t *cr;
 
-  if (private->bg_pixmap == GDK_PARENT_RELATIVE_BG && private->parent)
+  cr = cairo_create (paint->surface);
+
+  for (bg_private = private; bg_private; bg_private = bg_private->parent)
     {
-      GdkWindowPaint tmp_paint;
+      pattern = gdk_window_get_background_pattern ((GdkWindow *) bg_private);
+      if (pattern)
+        break;
 
-      tmp_paint = *paint;
-      tmp_paint.x_offset += private->x;
-      tmp_paint.y_offset += private->y;
-
-      x_offset_cairo += private->x;
-      y_offset_cairo += private->y;
-
-      cr = setup_backing_rect (GDK_WINDOW (private->parent), &tmp_paint, x_offset_cairo, y_offset_cairo);
+      x_offset += bg_private->x;
+      y_offset += bg_private->y;
     }
-  else if (private->bg_pixmap &&
-	   private->bg_pixmap != GDK_PARENT_RELATIVE_BG &&
-	   private->bg_pixmap != GDK_NO_BG)
+
+  if (pattern)
     {
-      cairo_surface_t *surface = _gdk_drawable_ref_cairo_surface (private->bg_pixmap);
-      cairo_pattern_t *pattern = cairo_pattern_create_for_surface (surface);
-      cairo_surface_destroy (surface);
-
-      if (x_offset_cairo != 0 || y_offset_cairo != 0)
-	{
-	  cairo_matrix_t matrix;
-	  cairo_matrix_init_translate (&matrix, x_offset_cairo, y_offset_cairo);
-	  cairo_pattern_set_matrix (pattern, &matrix);
-	}
-
-      cairo_pattern_set_extend (pattern, CAIRO_EXTEND_REPEAT);
-
-      cr = cairo_create (paint->surface);
-
+      cairo_translate (cr, -x_offset, -y_offset);
       cairo_set_source (cr, pattern);
-      cairo_pattern_destroy (pattern);
+      cairo_translate (cr, x_offset, y_offset);
     }
   else
-    {
-      cr = cairo_create (paint->surface);
-
-      gdk_cairo_set_source_color (cr, &private->bg_color);
-    }
+    gdk_cairo_set_source_color (cr, &private->bg_color);
 
   return cr;
 }
