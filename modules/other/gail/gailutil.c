@@ -537,6 +537,7 @@ configure_event_watcher (GSignalInvocationHint  *hint,
                          const GValue           *param_values,
                          gpointer               data)
 {
+  GtkAllocation allocation;
   GObject *object;
   GtkWidget *widget;
   AtkObject *atk_obj;
@@ -561,14 +562,15 @@ configure_event_watcher (GSignalInvocationHint  *hint,
      */
     return TRUE;
   widget = GTK_WIDGET (object);
-  if (widget->allocation.x == ((GdkEventConfigure *)event)->x &&
-      widget->allocation.y == ((GdkEventConfigure *)event)->y &&
-      widget->allocation.width == ((GdkEventConfigure *)event)->width &&
-      widget->allocation.height == ((GdkEventConfigure *)event)->height)
+  gtk_widget_get_allocation (widget, &allocation);
+  if (allocation.x == ((GdkEventConfigure *)event)->x &&
+      allocation.y == ((GdkEventConfigure *)event)->y &&
+      allocation.width == ((GdkEventConfigure *)event)->width &&
+      allocation.height == ((GdkEventConfigure *)event)->height)
     return TRUE;
 
-  if (widget->allocation.width != ((GdkEventConfigure *)event)->width ||
-      widget->allocation.height != ((GdkEventConfigure *)event)->height)
+  if (allocation.width != ((GdkEventConfigure *)event)->width ||
+      allocation.height != ((GdkEventConfigure *)event)->height)
     {
       signal_name = "resize";
     }

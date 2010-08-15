@@ -58,6 +58,7 @@ static gint
 gail_scrollbar_get_index_in_parent (AtkObject *accessible)
 {
   GtkWidget *widget;
+  GtkWidget *parent;
   GtkScrolledWindow *scrolled_window;
   gint n_children;
   GList *children;
@@ -73,10 +74,11 @@ gail_scrollbar_get_index_in_parent (AtkObject *accessible)
   }
   g_return_val_if_fail (GTK_IS_SCROLLBAR (widget), -1);
 
-  if (!GTK_IS_SCROLLED_WINDOW(widget->parent))
+  parent = gtk_widget_get_parent (widget);
+  if (!GTK_IS_SCROLLED_WINDOW (parent))
     return ATK_OBJECT_CLASS (gail_scrollbar_parent_class)->get_index_in_parent (accessible);
 
-  scrolled_window = GTK_SCROLLED_WINDOW (widget->parent);
+  scrolled_window = GTK_SCROLLED_WINDOW (parent);
   children = gtk_container_get_children (GTK_CONTAINER (scrolled_window));
   n_children = g_list_length (children);
   g_list_free (children);

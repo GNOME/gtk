@@ -549,9 +549,10 @@ gail_misc_get_origins (GtkWidget *widget,
   if (GTK_IS_TREE_VIEW (widget))
     window = gtk_tree_view_get_bin_window (GTK_TREE_VIEW (widget));
   else
-    window = widget->window;
+    window = gtk_widget_get_window (widget);
+
   gdk_window_get_origin (window, x_window, y_window);
-  window = gdk_window_get_toplevel (widget->window);
+  window = gdk_window_get_toplevel (gtk_widget_get_window (widget));
   gdk_window_get_origin (window, x_toplevel, y_toplevel);
 }
 

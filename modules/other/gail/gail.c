@@ -161,7 +161,7 @@ gail_get_accessible_for_widget (GtkWidget *widget,
     }
   else if (GTK_IS_TOGGLE_BUTTON (widget))
     {
-      GtkWidget *other_widget = widget->parent;
+      GtkWidget *other_widget = gtk_widget_get_parent (widget);
       if (GTK_IS_COMBO_BOX (other_widget))
         {
           gail_set_focus_widget (other_widget, widget);

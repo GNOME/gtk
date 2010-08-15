@@ -277,7 +277,7 @@ gail_widget_get_parent (AtkObject *accessible)
         return NULL;
       gail_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
 
-      parent_widget = widget->parent;
+      parent_widget = gtk_widget_get_parent (widget);
       if (parent_widget == NULL)
         return NULL;
 
@@ -564,7 +564,7 @@ gail_widget_get_index_in_parent (AtkObject *accessible)
     }
 
   gail_return_val_if_fail (GTK_IS_WIDGET (widget), -1);
-  parent_widget = widget->parent;
+  parent_widget = gtk_widget_get_parent (widget);
   if (parent_widget == NULL)
     return -1;
   gail_return_val_if_fail (GTK_IS_CONTAINER (parent_widget), -1);
@@ -629,6 +629,7 @@ gail_widget_get_extents (AtkComponent   *component,
                          gint           *height,
                          AtkCoordType   coord_type)
 {
+  GtkAllocation allocation;
   GdkWindow *window;
   gint x_window, y_window;
   gint x_toplevel, y_toplevel;
@@ -642,8 +643,9 @@ gail_widget_get_extents (AtkComponent   *component,
 
   gail_return_if_fail (GTK_IS_WIDGET (widget));
 
-  *width = widget->allocation.width;
-  *height = widget->allocation.height;
+  gtk_widget_get_allocation (widget, &allocation);
+  *width = allocation.width;
+  *height = allocation.height;
   if (!gail_widget_on_screen (widget) || (!gtk_widget_is_drawable (widget)))
     {
       *x = G_MININT;
@@ -651,17 +653,17 @@ gail_widget_get_extents (AtkComponent   *component,
       return;
     }
 
-  if (widget->parent)
+  if (gtk_widget_get_parent (widget))
     {
-      *x = widget->allocation.x;
-      *y = widget->allocation.y;
+      *x = allocation.x;
+      *y = allocation.y;
       window = gtk_widget_get_parent_window (widget);
     }
   else
     {
       *x = 0;
       *y = 0;
-      window = widget->window;
+      window = gtk_widget_get_window (widget);
     }
   gdk_window_get_origin (window, &x_window, &y_window);
   *x += x_window;
@@ -670,7 +672,7 @@ gail_widget_get_extents (AtkComponent   *component,
  
  if (coord_type == ATK_XY_WINDOW) 
     { 
-      window = gdk_window_get_toplevel (widget->window);
+      window = gdk_window_get_toplevel (gtk_widget_get_window (widget));
       gdk_window_get_origin (window, &x_toplevel, &y_toplevel);
 
       *x -= x_toplevel;
@@ -683,6 +685,7 @@ gail_widget_get_size (AtkComponent   *component,
                       gint           *width,
                       gint           *height)
 {
+  GtkAllocation allocation;
   GtkWidget *widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (component));
 
   if (widget == NULL)
@@ -693,8 +696,9 @@ gail_widget_get_size (AtkComponent   *component,
 
   gail_return_if_fail (GTK_IS_WIDGET (widget));
 
-  *width = widget->allocation.width;
-  *height = widget->allocation.height;
+  gtk_widget_get_allocation (widget, &allocation);
+  *width = allocation.width;
+  *height = allocation.height;
 }
 
 static AtkLayer
@@ -720,7 +724,8 @@ gail_widget_grab_focus (AtkComponent   *component)
       if (gtk_widget_is_toplevel (toplevel))
 	{
 #ifdef GDK_WINDOWING_X11
-	  gtk_window_present_with_time (GTK_WINDOW (toplevel), gdk_x11_get_server_time (widget->window));
+          gtk_window_present_with_time (GTK_WINDOW (toplevel),
+          gdk_x11_get_server_time (gtk_widget_get_window (widget)));
 #else
 	  gtk_window_present (GTK_WINDOW (toplevel));
 #endif
@@ -760,7 +765,7 @@ gail_widget_set_extents (AtkComponent   *component,
       if (coord_type == ATK_XY_WINDOW)
         {
           gint x_current, y_current;
-          GdkWindow *window = widget->window;
+          GdkWindow *window = gtk_widget_get_window (widget);
 
           gdk_window_get_origin (window, &x_current, &y_current);
           x_current += x;
@@ -804,7 +809,7 @@ gail_widget_set_position (AtkComponent   *component,
       if (coord_type == ATK_XY_WINDOW)
         {
           gint x_current, y_current;
-          GdkWindow *window = widget->window;
+          GdkWindow *window = gtk_widget_get_window (widget);
 
           gdk_window_get_origin (window, &x_current, &y_current);
           x_current += x;
@@ -1000,12 +1005,12 @@ gail_widget_find_viewport (GtkWidget *widget)
    */
   GtkWidget *parent;
 
-  parent = widget->parent;
+  parent = gtk_widget_get_parent (widget);
   while (parent != NULL)
     {
       if (GTK_IS_VIEWPORT (parent))
         break;
-      parent = parent->parent;
+      parent = gtk_widget_get_parent (parent);
     }
   return parent;
 }
@@ -1017,26 +1022,32 @@ gail_widget_find_viewport (GtkWidget *widget)
  */ 
 static gboolean gail_widget_on_screen (GtkWidget *widget)
 {
+  GtkAllocation allocation;
   GtkWidget *viewport;
   gboolean return_value;
+
+  gtk_widget_get_allocation (widget, &allocation);
 
   viewport = gail_widget_find_viewport (widget);
   if (viewport)
     {
+      GtkAllocation viewport_allocation;
       GtkAdjustment *adjustment;
       GdkRectangle visible_rect;
+
+      gtk_widget_get_allocation (viewport, &viewport_allocation);
 
       adjustment = gtk_viewport_get_vadjustment (GTK_VIEWPORT (viewport));
       visible_rect.y = adjustment->value;
       adjustment = gtk_viewport_get_hadjustment (GTK_VIEWPORT (viewport));
       visible_rect.x = adjustment->value;
-      visible_rect.width = viewport->allocation.width;
-      visible_rect.height = viewport->allocation.height;
-             
-      if (((widget->allocation.x + widget->allocation.width) < visible_rect.x) ||
-         ((widget->allocation.y + widget->allocation.height) < visible_rect.y) ||
-         (widget->allocation.x > (visible_rect.x + visible_rect.width)) ||
-         (widget->allocation.y > (visible_rect.y + visible_rect.height)))
+      visible_rect.width = viewport_allocation.width;
+      visible_rect.height = viewport_allocation.height;
+
+      if (((allocation.x + allocation.width) < visible_rect.x) ||
+         ((allocation.y + allocation.height) < visible_rect.y) ||
+         (allocation.x > (visible_rect.x + visible_rect.width)) ||
+         (allocation.y > (visible_rect.y + visible_rect.height)))
         return_value = FALSE;
       else
         return_value = TRUE;
@@ -1047,8 +1058,8 @@ static gboolean gail_widget_on_screen (GtkWidget *widget)
        * Check whether the widget has been placed of the screen. The
        * widget may be MAPPED as when toolbar items do not fit on the toolbar.
        */
-      if (widget->allocation.x + widget->allocation.width <= 0 &&
-          widget->allocation.y + widget->allocation.height <= 0)
+      if (allocation.x + allocation.width <= 0 &&
+          allocation.y + allocation.height <= 0)
         return_value = FALSE;
       else 
         return_value = TRUE;

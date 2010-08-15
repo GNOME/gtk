@@ -94,7 +94,7 @@ gail_toplevel_init (GailToplevel *toplevel)
       if (!window || 
           !gtk_widget_get_visible (widget) ||
           is_attached_menu_window (widget) ||
-          GTK_WIDGET (window)->parent ||
+          gtk_widget_get_parent (GTK_WIDGET (window)) ||
           GTK_IS_PLUG (window))
         {
           GList *temp_l  = l->next;
@@ -213,7 +213,7 @@ gail_toplevel_show_event_watcher (GSignalInvocationHint *ihint,
     return TRUE;
 
   widget = GTK_WIDGET (object);
-  if (widget->parent || 
+  if (gtk_widget_get_parent (widget) ||
       is_attached_menu_window (widget) ||
       is_combo_window (widget) ||
       GTK_IS_PLUG (widget))

@@ -498,12 +498,15 @@ idle_do_action (gpointer data)
   GtkWidget *widget;
   GailButton *gail_button;
   GdkEvent tmp_event;
+  GdkWindow *window;
 
   gail_button = GAIL_BUTTON (data);
   gail_button->action_idle_handler = 0;
   widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (gail_button));
+  window = gtk_widget_get_window (widget);
+
   tmp_event.button.type = GDK_BUTTON_RELEASE;
-  tmp_event.button.window = widget->window;
+  tmp_event.button.window = window;
   tmp_event.button.button = 1;
   tmp_event.button.send_event = TRUE;
   tmp_event.button.time = GDK_CURRENT_TIME;
@@ -543,7 +546,7 @@ idle_do_action (gpointer data)
 	   * not get the job done for a GtkOptionMenu.  
 	   */
 	  tmp_event.button.type = GDK_BUTTON_PRESS;
-	  tmp_event.button.window = widget->window;
+	  tmp_event.button.window = window;
 	  tmp_event.button.button = 1;
 	  tmp_event.button.send_event = TRUE;
 	  tmp_event.button.time = GDK_CURRENT_TIME;
@@ -565,7 +568,7 @@ idle_do_action (gpointer data)
 	   * not get the job done for a GtkOptionMenu.  
 	   */
 	  tmp_event.button.type = GDK_BUTTON_PRESS;
-	  tmp_event.button.window = widget->window;
+	  tmp_event.button.window = window;
 	  tmp_event.button.button = 1;
 	  tmp_event.button.send_event = TRUE;
 	  tmp_event.button.time = GDK_CURRENT_TIME;
