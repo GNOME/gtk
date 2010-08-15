@@ -3967,27 +3967,23 @@ gtk_entry_motion_notify (GtkWidget      *widget,
           GtkTargetList  *target_list = gtk_target_list_new (NULL, 0);
           guint actions = entry->editable ? GDK_ACTION_COPY | GDK_ACTION_MOVE : GDK_ACTION_COPY;
           gchar *text = NULL;
-          GdkPixmap *pixmap = NULL;
+          cairo_surface_t *surface;
 
           gtk_target_list_add_text_targets (target_list, 0);
 
           text = _gtk_entry_get_selected_text (entry);
-          pixmap = _gtk_text_util_create_drag_icon (widget, text, -1);
+          surface = _gtk_text_util_create_drag_icon (widget, text, -1);
 
           context = gtk_drag_begin (widget, target_list, actions,
                                     entry->button, (GdkEvent *)event);
           
-          if (pixmap)
-            gtk_drag_set_icon_pixmap (context,
-                                      gdk_drawable_get_colormap (pixmap),
-                                      pixmap,
-                                      NULL,
-                                      -2, -2);
+          if (surface)
+            gtk_drag_set_icon_surface (context, surface);
           else
             gtk_drag_set_icon_default (context);
           
-          if (pixmap)
-            g_object_unref (pixmap);
+          if (surface)
+            cairo_surface_destroy (surface);
           g_free (text);
 
           entry->in_drag = FALSE;

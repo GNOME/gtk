@@ -4845,7 +4845,7 @@ drag_begin_cb (GtkWidget      *widget,
 {
   GtkLabel *label = GTK_LABEL (widget);
   GtkLabelPrivate *priv = label->priv;
-  GdkPixmap *pixmap = NULL;
+  cairo_surface_t *surface = NULL;
 
   g_signal_handlers_disconnect_by_func (widget, drag_begin_cb, NULL);
 
@@ -4869,22 +4869,18 @@ drag_begin_cb (GtkWidget      *widget,
       if (start > len)
         start = len;
       
-      pixmap = _gtk_text_util_create_drag_icon (widget, 
-						priv->text + start,
-						end - start);
+      surface = _gtk_text_util_create_drag_icon (widget, 
+						 priv->text + start,
+						 end - start);
     }
 
-  if (pixmap)
-    gtk_drag_set_icon_pixmap (context,
-                              gdk_drawable_get_colormap (pixmap),
-                              pixmap,
-                              NULL,
-                              -2, -2);
+  if (surface)
+    gtk_drag_set_icon_surface (context, surface);
   else
     gtk_drag_set_icon_default (context);
   
-  if (pixmap)
-    g_object_unref (pixmap);
+  if (surface)
+    g_object_unref (surface);
 }
 
 static gboolean

@@ -201,16 +201,16 @@ limit_layout_lines (PangoLayout *layout)
  *
  * Creates a drag and drop icon from @text.
  *
- * Returns: a #GdkPixmap to use as DND icon
+ * Returns: a #cairo_surface_t to use as DND icon
  */
-GdkPixmap *
+cairo_surface_t *
 _gtk_text_util_create_drag_icon (GtkWidget *widget, 
                                  gchar     *text,
                                  gsize      len)
 {
   GtkStyle     *style;
   GtkStateType  state;
-  GdkDrawable  *drawable = NULL;
+  cairo_surface_t *surface;
   PangoContext *context;
   PangoLayout  *layout;
   cairo_t      *cr;
@@ -238,13 +238,13 @@ _gtk_text_util_create_drag_icon (GtkWidget *widget,
   pixmap_width  = layout_width  / PANGO_SCALE + DRAG_ICON_LAYOUT_BORDER * 2;
   pixmap_height = layout_height / PANGO_SCALE + DRAG_ICON_LAYOUT_BORDER * 2;
 
-  drawable = gdk_pixmap_new (gtk_widget_get_window (widget),
-                             pixmap_width  + 2,
-                             pixmap_height + 2,
-                             -1);
-  cr = gdk_cairo_create (drawable);
   style = gtk_widget_get_style (widget);
   state = gtk_widget_get_state (widget);
+  surface = gdk_window_create_similar_surface (gtk_widget_get_window (widget),
+                                               CAIRO_CONTENT_COLOR,
+                                               pixmap_width  + 2,
+                                               pixmap_height + 2);
+  cr = cairo_create (surface);
 
   gdk_cairo_set_source_color (cr, &style->base [state]);
   cairo_paint (cr);
@@ -261,7 +261,9 @@ _gtk_text_util_create_drag_icon (GtkWidget *widget,
   cairo_destroy (cr);
   g_object_unref (layout);
 
-  return drawable;
+  cairo_surface_set_device_offset (surface, 2, 2);
+
+  return surface;
 }
 
 static void
