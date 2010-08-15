@@ -483,7 +483,6 @@ gtk_handle_box_realize (GtkWidget *widget)
   gtk_style_set_background (style, window, state);
   gtk_style_set_background (style, priv->bin_window, state);
   gtk_style_set_background (style, priv->float_window, state);
-  gdk_window_set_back_pixmap (window, NULL, TRUE);
 }
 
 static void

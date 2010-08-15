@@ -359,8 +359,8 @@ gtk_misc_realize (GtkWidget *widget)
       window = gdk_window_new (gtk_widget_get_parent_window (widget), &attributes, attributes_mask);
       gtk_widget_set_window (widget, window);
       gdk_window_set_user_data (window, widget);
+      gdk_window_set_background_pattern (window, NULL);
 
       gtk_widget_style_attach (widget);
-      gdk_window_set_back_pixmap (window, NULL, TRUE);
     }
 }
