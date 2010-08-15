@@ -3812,28 +3812,6 @@ gdk_window_clear (GdkWindow *window)
 			 width, height);
 }
 
-/* TRUE if the window clears to the same pixels as a native
-   window clear. This means you can use the native window
-   clearing operation, and additionally it means any clearing
-   done by the native window system for you will already be right */
-static gboolean
-clears_as_native (GdkWindowObject *private)
-{
-  GdkWindowObject *next;
-
-  next = private;
-  do
-    {
-      private = next;
-      if (gdk_window_has_impl (private))
-	return TRUE;
-      next = private->parent;
-    }
-  while (private->bg_pixmap == GDK_PARENT_RELATIVE_BG &&
-	 next && next->window_type != GDK_WINDOW_ROOT);
-  return FALSE;
-}
-
 static void
 gdk_window_clear_region_internal (GdkWindow *window,
 				  cairo_region_t *region)
@@ -4842,9 +4820,7 @@ gdk_window_invalidate_maybe_recurse_full (GdkWindow       *window,
 	 for window backgrounds */
       if (private->event_mask & GDK_EXPOSURE_MASK ||
 	  clear_bg == CLEAR_BG_ALL ||
-	  (clear_bg == CLEAR_BG_WINCLEARED &&
-	   (!clears_as_native (private) ||
-	    !GDK_WINDOW_IMPL_GET_IFACE (private->impl)->supports_native_bg)))
+	  clear_bg == CLEAR_BG_WINCLEARED)
 	impl_window_add_update_area (impl_window, visible_region);
     }
 
