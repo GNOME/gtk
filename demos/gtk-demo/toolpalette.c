@@ -84,15 +84,18 @@ static gboolean
 canvas_expose_event (GtkWidget      *widget,
                      GdkEventExpose *event)
 {
+  GtkAllocation allocation;
   cairo_t *cr;
   GList *iter;
 
-  cr = gdk_cairo_create (widget->window);
+  cr = gdk_cairo_create (gtk_widget_get_window (widget));
   gdk_cairo_region (cr, event->region);
   cairo_clip (cr);
 
+  gtk_widget_get_allocation (widget, &allocation);
+
   cairo_set_source_rgb (cr, 1, 1, 1);
-  cairo_rectangle (cr, 0, 0, widget->allocation.width, widget->allocation.height);
+  cairo_rectangle (cr, 0, 0, allocation.width, allocation.height);
   cairo_fill (cr);
 
   for (iter = canvas_items; iter; iter = iter->next)
@@ -173,6 +176,7 @@ palette_drag_data_received (GtkWidget        *widget,
                             guint             time,
                             gpointer          data)
 {
+  GtkAllocation     allocation;
   GtkToolItemGroup *drop_group = NULL;
   GtkWidget        *drag_palette = gtk_drag_get_source_widget (context);
   GtkWidget        *drag_item = NULL;
@@ -193,10 +197,13 @@ palette_drag_data_received (GtkWidget        *widget,
                         GTK_TOOL_ITEM_GROUP (drag_item),
                         drop_group);
   else if (GTK_IS_TOOL_ITEM (drag_item) && drop_group)
-    palette_drop_item (GTK_TOOL_ITEM (drag_item),
-                       drop_group,
-                       x - GTK_WIDGET (drop_group)->allocation.x,
-                       y - GTK_WIDGET (drop_group)->allocation.y);
+    {
+      gtk_widget_get_allocation (GTK_WIDGET (drop_group), &allocation);
+      palette_drop_item (GTK_TOOL_ITEM (drag_item),
+                         drop_group,
+                         x - allocation.x,
+                         y - allocation.y);
+    }
 }
 
 /********************************/
@@ -372,10 +379,12 @@ on_combo_orientation_changed (GtkComboBox *combo_box,
                               gpointer     user_data)
 {
   GtkToolPalette *palette = GTK_TOOL_PALETTE (user_data);
-  GtkScrolledWindow *sw = GTK_SCROLLED_WINDOW (GTK_WIDGET (palette)->parent);
+  GtkScrolledWindow *sw;
   GtkTreeModel *model = gtk_combo_box_get_model (combo_box);
   GtkTreeIter iter;
   gint val = 0;
+
+  sw = GTK_SCROLLED_WINDOW (gtk_widget_get_parent (GTK_WIDGET (palette)));
 
   if (!gtk_combo_box_get_active_iter (combo_box, &iter))
     return;
