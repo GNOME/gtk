@@ -1351,8 +1351,9 @@ gtk_menu_tearoff_bg_copy (GtkMenu *menu)
 
   if (menu->torn_off)
     {
-      GdkPixmap *pixmap;
       GdkWindow *window;
+      cairo_surface_t *surface;
+      cairo_pattern_t *pattern;
       cairo_t *cr;
 
       menu->tearoff_active = FALSE;
@@ -1362,12 +1363,12 @@ gtk_menu_tearoff_bg_copy (GtkMenu *menu)
 
       gdk_drawable_get_size (window, &width, &height);
 
-      pixmap = gdk_pixmap_new (window,
-			       width,
-			       height,
-			       -1);
+      surface = gdk_window_create_similar_surface (window,
+                                                   CAIRO_CONTENT_COLOR,
+                                                   width,
+                                                   height);
 
-      cr = gdk_cairo_create (pixmap);
+      cr = cairo_create (surface);
       /* Let's hope that function never notices we're not passing it a pixmap */
       gdk_cairo_set_source_pixmap (cr,
                                    window,
@@ -1379,8 +1380,11 @@ gtk_menu_tearoff_bg_copy (GtkMenu *menu)
 				   width,
 				   height);
 
-      gdk_window_set_back_pixmap (window, pixmap, FALSE);
-      g_object_unref (pixmap);
+      pattern = cairo_pattern_create_for_surface (surface);
+      gdk_window_set_background_pattern (window, pattern);
+
+      cairo_pattern_destroy (pattern);
+      cairo_surface_destroy (surface);
     }
 }
 
