@@ -437,9 +437,6 @@ gtk_style_init (GtkStyle *style)
   style->base[GTK_STATE_INSENSITIVE] = gtk_default_prelight_bg;
   style->text[GTK_STATE_INSENSITIVE] = gtk_default_insensitive_fg;
   
-  for (i = 0; i < 5; i++)
-    style->bg_pixmap[i] = NULL;
-  
   style->rc_style = NULL;
   
   style->xthickness = 2;
@@ -906,11 +903,11 @@ gtk_style_real_copy (GtkStyle *style,
       style->text[i] = src->text[i];
       style->base[i] = src->base[i];
 
-      if (style->bg_pixmap[i])
-	g_object_unref (style->bg_pixmap[i]),
-      style->bg_pixmap[i] = src->bg_pixmap[i];
-      if (style->bg_pixmap[i])
-	g_object_ref (style->bg_pixmap[i]);
+      if (style->background[i])
+	cairo_pattern_destroy (style->background[i]),
+      style->background[i] = src->background[i];
+      if (style->background[i])
+	cairo_pattern_reference (style->background[i]);
     }
 
   if (style->font_desc)
@@ -1219,17 +1216,24 @@ _gtk_style_peek_property_value (GtkStyle           *style,
   return &pcache->value;
 }
 
-static GdkPixmap *
-load_bg_image (GdkColormap *colormap,
-	       GdkColor    *bg_color,
-	       const gchar *filename)
+static cairo_pattern_t *
+load_background (GdkColormap *colormap,
+	         GdkColor    *bg_color,
+	         const gchar *filename)
 {
+  if (filename == NULL)
+    {
+      return cairo_pattern_create_rgb (bg_color->red   / 65535.0,
+                                       bg_color->green / 65535.0,
+                                       bg_color->blue  / 65535.0);
+    }
   if (strcmp (filename, "<parent>") == 0)
-    return (GdkPixmap*) GDK_PARENT_RELATIVE;
+    return NULL;
   else
     {
-      GdkPixmap *pixmap;
       GdkPixbuf *pixbuf;
+      cairo_surface_t *surface;
+      cairo_pattern_t *pattern;
       cairo_t *cr;
       GdkScreen *screen = gdk_colormap_get_screen (colormap);
   
@@ -1237,13 +1241,12 @@ load_bg_image (GdkColormap *colormap,
       if (!pixbuf)
         return NULL;
 
-      pixmap = gdk_pixmap_new (gdk_screen_get_root_window (screen),
-                               gdk_pixbuf_get_width (pixbuf),
-                               gdk_pixbuf_get_height (pixbuf),
-                               gdk_colormap_get_visual (colormap)->depth);
-      gdk_drawable_set_colormap (pixmap, colormap);
+      surface = gdk_window_create_similar_surface (gdk_screen_get_root_window (screen),
+                                                   CAIRO_CONTENT_COLOR,
+                                                   gdk_pixbuf_get_width (pixbuf),
+                                                   gdk_pixbuf_get_height (pixbuf));
   
-      cr = gdk_cairo_create (pixmap);
+      cr = cairo_create (surface);
 
       gdk_cairo_set_source_color (cr, bg_color);
       cairo_paint (cr);
@@ -1254,7 +1257,11 @@ load_bg_image (GdkColormap *colormap,
       cairo_destroy (cr);
       g_object_unref (pixbuf);
 
-      return pixmap;
+      pattern = cairo_pattern_create_for_surface (surface);
+
+      cairo_surface_destroy (surface);
+
+      return pattern;
     }
 }
 
@@ -1287,10 +1294,16 @@ gtk_style_real_realize (GtkStyle *style)
 
   for (i = 0; i < 5; i++)
     {
-      if (style->rc_style && style->rc_style->bg_pixmap_name[i])
-	style->bg_pixmap[i] = load_bg_image (style->colormap,
-					     &style->bg[i],
-					     style->rc_style->bg_pixmap_name[i]);
+      const char *image_name;
+
+      if (style->rc_style)
+        image_name = style->rc_style->bg_pixmap_name[i];
+      else
+        image_name = NULL;
+
+      style->background[i] = load_background (style->colormap,
+					      &style->bg[i],
+					      image_name);
     }
 }
 
@@ -1301,10 +1314,10 @@ gtk_style_real_unrealize (GtkStyle *style)
 
   for (i = 0; i < 5; i++)
     {
-      if (style->bg_pixmap[i] &&  style->bg_pixmap[i] != (GdkPixmap*) GDK_PARENT_RELATIVE)
+      if (style->background[i])
 	{
-	  g_object_unref (style->bg_pixmap[i]);
-	  style->bg_pixmap[i] = NULL;
+	  cairo_pattern_destroy (style->background[i]);
+	  style->background[i] = NULL;
 	}
       
     }
@@ -1317,26 +1330,7 @@ gtk_style_real_set_background (GtkStyle    *style,
 			       GdkWindow   *window,
 			       GtkStateType state_type)
 {
-  GdkPixmap *pixmap;
-  gint parent_relative;
-  
-  if (style->bg_pixmap[state_type])
-    {
-      if (style->bg_pixmap[state_type] == (GdkPixmap*) GDK_PARENT_RELATIVE)
-        {
-          pixmap = NULL;
-          parent_relative = TRUE;
-        }
-      else
-        {
-          pixmap = style->bg_pixmap[state_type];
-          parent_relative = FALSE;
-        }
-      
-      gdk_window_set_back_pixmap (window, pixmap, parent_relative);
-    }
-  else
-    gdk_window_set_background (window, &style->bg[state_type]);
+  gdk_window_set_background_pattern (window, style->background[state_type]);
 }
 
 /**
@@ -1407,7 +1401,7 @@ gtk_style_apply_default_background (GtkStyle          *style,
 {
   cairo_save (cr);
 
-  if (style->bg_pixmap[state_type] == (GdkPixmap*) GDK_PARENT_RELATIVE)
+  if (style->background[state_type] == NULL)
     {
       GdkWindow *parent = gdk_window_get_parent (window);
       int x_offset, y_offset;
@@ -1425,13 +1419,8 @@ gtk_style_apply_default_background (GtkStyle          *style,
       else
         gdk_cairo_set_source_color (cr, &style->bg[state_type]);
     }
-  else if (style->bg_pixmap[state_type])
-    {
-      gdk_cairo_set_source_pixmap (cr, style->bg_pixmap[state_type], 0, 0);
-      cairo_pattern_set_extend (cairo_get_source (cr), CAIRO_EXTEND_REPEAT);
-    }
   else
-    gdk_cairo_set_source_color (cr, &style->bg[state_type]);
+    cairo_set_source (cr, style->background[state_type]);
 
   cairo_rectangle (cr, x, y, width, height);
   cairo_fill (cr);
@@ -2437,6 +2426,16 @@ option_menu_get_props (GtkWidget      *widget,
     *indicator_spacing = default_option_indicator_spacing;
 }
 
+static gboolean
+background_is_solid (GtkStyle     *style,
+                     GtkStateType  type)
+{
+  if (style->background[type] == NULL)
+    return FALSE;
+
+  return cairo_pattern_get_type (style->background[type]) == CAIRO_PATTERN_TYPE_SOLID;
+}
+
 static void 
 gtk_default_draw_box (GtkStyle      *style,
 		      cairo_t       *cr,
@@ -2480,7 +2479,7 @@ gtk_default_draw_box (GtkStyle      *style,
 	}
     }
   
-  if (!style->bg_pixmap[state_type])
+  if (background_is_solid (style, state_type))
     {
       GdkColor *gc = &style->bg[state_type];
 
@@ -2745,7 +2744,7 @@ gtk_default_draw_flat_box (GtkStyle      *style,
   else
     gc1 = &style->bg[state_type];
   
-  if (!style->bg_pixmap[state_type] || gc1 != &style->bg[state_type])
+  if (background_is_solid (style, state_type) || gc1 != &style->bg[state_type])
     {
       _cairo_draw_rectangle (cr, gc1, TRUE,
                              x, y, width, height);

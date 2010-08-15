@@ -98,7 +98,7 @@ struct _GtkStyle
   gint xthickness;
   gint ythickness;
 
-  GdkPixmap *bg_pixmap[5];
+  cairo_pattern_t *background[5];
 
   /*< private >*/
 
