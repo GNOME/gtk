@@ -52,7 +52,7 @@ update_cursor (GtkWidget *widget,  gdouble x, gdouble y)
 
   if (pixmap != NULL)
     {
-      cairo_t *cr = gdk_cairo_create (widget->window);
+      cairo_t *cr = gdk_cairo_create (gtk_widget_get_window (widget));
 
       if (cursor_present && (cursor_present != state ||
 			     x != cursor_x || y != cursor_y))
@@ -83,14 +83,18 @@ update_cursor (GtkWidget *widget,  gdouble x, gdouble y)
 static gint
 configure_event (GtkWidget *widget, GdkEventConfigure *event)
 {
+  GtkAllocation allocation;
   cairo_t *cr;
 
   if (pixmap)
     g_object_unref (pixmap);
-  pixmap = gdk_pixmap_new(widget->window,
-			  widget->allocation.width,
-			  widget->allocation.height,
-			  -1);
+
+  gtk_widget_get_allocation (widget, &allocation);
+
+  pixmap = gdk_pixmap_new (gtk_widget_get_window (widget),
+			   allocation.width,
+			   allocation.height,
+			   -1);
   cr = gdk_cairo_create (pixmap);
 
   cairo_set_source_rgb (cr, 1, 1, 1);
@@ -105,7 +109,7 @@ configure_event (GtkWidget *widget, GdkEventConfigure *event)
 static gint
 expose_event (GtkWidget *widget, GdkEventExpose *event)
 {
-  cairo_t *cr = gdk_cairo_create (widget->window);
+  cairo_t *cr = gdk_cairo_create (gtk_widget_get_window (widget));
 
   gdk_cairo_set_source_pixmap (cr, pixmap, 0, 0);
   gdk_cairo_rectangle (cr, &event->area);
@@ -122,14 +126,17 @@ static void
 draw_brush (GtkWidget *widget, GdkInputSource source,
 	    gdouble x, gdouble y, gdouble pressure)
 {
+  GtkStyle *style;
   GdkColor color;
   GdkRectangle update_rect;
   cairo_t *cr;
 
+  style = gtk_widget_get_style (widget);
+
   switch (source)
     {
     case GDK_SOURCE_MOUSE:
-      color = widget->style->dark[gtk_widget_get_state (widget)];
+      color = style->dark[gtk_widget_get_state (widget)];
       break;
     case GDK_SOURCE_PEN:
       color.red = color.green = color.blue = 0;
@@ -138,7 +145,7 @@ draw_brush (GtkWidget *widget, GdkInputSource source,
       color.red = color.green = color.blue = 65535;
       break;
     default:
-      color = widget->style->light[gtk_widget_get_state (widget)];
+      color = style->light[gtk_widget_get_state (widget)];
     }
 
   update_rect.x = x - 10 * pressure;
@@ -155,7 +162,7 @@ draw_brush (GtkWidget *widget, GdkInputSource source,
   gtk_widget_queue_draw_area (widget,
 			      update_rect.x, update_rect.y,
 			      update_rect.width, update_rect.height);
-  gdk_window_process_updates (widget->window, TRUE);
+  gdk_window_process_updates (gtk_widget_get_window (widget), TRUE);
 }
 
 static guint32 motion_time;
