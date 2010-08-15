@@ -386,8 +386,8 @@ _gdk_windowing_window_process_updates_recurse (GdkWindow *window,
     {
       GdkWindow *toplevel;
 
-      toplevel = gdk_window_get_toplevel (window);
-      if (toplevel)
+      toplevel = gdk_window_get_effective_toplevel (window);
+      if (toplevel && WINDOW_IS_TOPLEVEL (toplevel))
         {
           GdkWindowObject *toplevel_private;
           GdkWindowImplQuartz *toplevel_impl;
@@ -409,12 +409,17 @@ _gdk_windowing_window_process_updates_recurse (GdkWindow *window,
         }
     }
 
-  gdk_region_get_rectangles (region, &rects, &n_rects);
+  if (WINDOW_IS_TOPLEVEL (window))
+    {
+      gdk_region_get_rectangles (region, &rects, &n_rects);
 
-  for (i = 0; i < n_rects; i++)
-    _gdk_quartz_window_set_needs_display_in_rect (window, &rects[i]);
+      for (i = 0; i < n_rects; i++)
+        _gdk_quartz_window_set_needs_display_in_rect (window, &rects[i]);
 
-  g_free (rects);
+      g_free (rects);
+    }
+  else
+    _gdk_window_process_updates_recurse (window, region);
 
   /* NOTE: I'm not sure if we should displayIfNeeded here. It slows down a
    * lot (since it triggers the beam syncing) and things seem to work
@@ -583,7 +588,7 @@ _gdk_quartz_window_debug_highlight (GdkWindow *window, gint number)
       return;
     }
 
-  toplevel = gdk_window_get_toplevel (window);
+  toplevel = gdk_window_get_effective_toplevel (window);
   get_ancestor_coordinates_from_child (window, 0, 0, toplevel, &x, &y);
 
   gdk_window_get_origin (toplevel, &tx, &ty);
@@ -816,7 +821,7 @@ _gdk_quartz_window_did_resign_main (GdkWindow *window)
   if (new_window &&
       new_window != window &&
       GDK_WINDOW_IS_MAPPED (new_window) &&
-      GDK_WINDOW_OBJECT (new_window)->window_type != GDK_WINDOW_TEMP)
+      WINDOW_IS_TOPLEVEL (new_window))
     {
       GdkWindowObject *private = (GdkWindowObject *) new_window;
       GdkWindowImplQuartz *impl = GDK_WINDOW_IMPL_QUARTZ (private->impl);
@@ -1180,7 +1185,7 @@ gdk_window_quartz_show (GdkWindow *window, gboolean already_mapped)
   else
     focus_on_map = TRUE;
 
-  if (impl->toplevel)
+  if (impl->toplevel && WINDOW_IS_TOPLEVEL (window))
     {
       gboolean make_key;
 
@@ -1275,7 +1280,7 @@ gdk_window_quartz_hide (GdkWindow *window)
 
   impl = GDK_WINDOW_IMPL_QUARTZ (private->impl);
 
-  if (impl->toplevel) 
+  if (window && WINDOW_IS_TOPLEVEL (window))
     {
      /* Update main window. */
       main_window_stack = g_slist_remove (main_window_stack, window);
@@ -1917,7 +1922,7 @@ gdk_window_quartz_get_pointer_helper (GdkWindow       *window,
       return NULL;
     }
   
-  toplevel = GDK_WINDOW_OBJECT (gdk_window_get_toplevel (window));
+  toplevel = GDK_WINDOW_OBJECT (gdk_window_get_effective_toplevel (window));
 
   *mask = _gdk_quartz_events_get_current_event_mask ();
 
@@ -2574,7 +2579,7 @@ gdk_window_get_frame_extents (GdkWindow    *window,
   rect->width = 1;
   rect->height = 1;
   
-  toplevel = gdk_window_get_toplevel (window);
+  toplevel = gdk_window_get_effective_toplevel (window);
   impl = GDK_WINDOW_IMPL_QUARTZ (GDK_WINDOW_OBJECT (toplevel)->impl);
 
   ns_rect = [impl->toplevel frame];

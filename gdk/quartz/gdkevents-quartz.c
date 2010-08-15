@@ -36,6 +36,11 @@
 #define GRIP_WIDTH 15
 #define GRIP_HEIGHT 15
 
+#define WINDOW_IS_TOPLEVEL(window)                      \
+    (GDK_WINDOW_TYPE (window) != GDK_WINDOW_CHILD &&    \
+     GDK_WINDOW_TYPE (window) != GDK_WINDOW_FOREIGN &&  \
+     GDK_WINDOW_TYPE (window) != GDK_WINDOW_OFFSCREEN)
+
 /* This is the window corresponding to the key window */
 static GdkWindow   *current_keyboard_window;
 
@@ -87,7 +92,7 @@ gdk_keyboard_grab (GdkWindow  *window,
   g_return_val_if_fail (GDK_IS_WINDOW (window), 0);
 
   display = gdk_drawable_get_display (window);
-  toplevel = gdk_window_get_toplevel (window);
+  toplevel = gdk_window_get_effective_toplevel (window);
 
   _gdk_display_set_has_keyboard_grab (display,
                                       window,
@@ -520,7 +525,7 @@ find_toplevel_under_pointer (GdkDisplay *display,
   GdkWindow *toplevel;
 
   toplevel = display->pointer_info.toplevel_under_pointer;
-  if (toplevel)
+  if (toplevel && WINDOW_IS_TOPLEVEL (toplevel))
     {
       GdkWindowObject *private;
       NSWindow *nswindow;
@@ -599,7 +604,7 @@ find_window_for_ns_event (NSEvent *nsevent,
 	 * events are discarded.
 	 */
         grab = _gdk_display_get_last_pointer_grab (display);
-	if (grab)
+	if (WINDOW_IS_TOPLEVEL (toplevel) && grab)
 	  {
             /* Implicit grabs do not go through XGrabPointer and thus the
              * event mask should not be checked.
@@ -637,7 +642,7 @@ find_window_for_ns_event (NSEvent *nsevent,
                 GdkWindowObject *grab_private;
                 NSWindow *grab_nswindow;
 
-		grab_toplevel = gdk_window_get_toplevel (grab->window);
+		grab_toplevel = gdk_window_get_effective_toplevel (grab->window);
                 grab_private = (GdkWindowObject *)grab_toplevel;
 
                 grab_nswindow = ((GdkWindowImplQuartz *)grab_private->impl)->toplevel;
@@ -673,7 +678,8 @@ find_window_for_ns_event (NSEvent *nsevent,
             toplevel_under_pointer = find_toplevel_under_pointer (display,
                                                                   screen_point,
                                                                   &x_tmp, &y_tmp);
-            if (toplevel_under_pointer)
+            if (toplevel_under_pointer
+                && WINDOW_IS_TOPLEVEL (toplevel_under_pointer))
               {
                 GdkWindowObject *toplevel_private;
                 GdkWindowImplQuartz *toplevel_impl;
@@ -730,7 +736,7 @@ find_window_for_ns_event (NSEvent *nsevent,
     case NSKeyUp:
     case NSFlagsChanged:
       if (_gdk_display->keyboard_grab.window && !_gdk_display->keyboard_grab.owner_events)
-        return gdk_window_get_toplevel (_gdk_display->keyboard_grab.window);
+        return gdk_window_get_effective_toplevel (_gdk_display->keyboard_grab.window);
 
       return toplevel;
 
