@@ -25,15 +25,17 @@ scribble_configure_event (GtkWidget         *widget,
                           GdkEventConfigure *event,
                           gpointer           data)
 {
+  GtkAllocation allocation;
   cairo_t *cr;
 
   if (surface)
     cairo_surface_destroy (surface);
 
-  surface = gdk_window_create_similar_surface (widget->window,
+  gtk_widget_get_allocation (widget, &allocation);
+  surface = gdk_window_create_similar_surface (gtk_widget_get_window (widget),
                                                CAIRO_CONTENT_COLOR,
-                                               widget->allocation.width,
-                                               widget->allocation.height);
+                                               allocation.width,
+                                               allocation.height);
 
   /* Initialize the surface to white */
   cr = cairo_create (surface);
@@ -55,7 +57,7 @@ scribble_expose_event (GtkWidget      *widget,
 {
   cairo_t *cr;
 
-  cr = gdk_cairo_create (widget->window);
+  cr = gdk_cairo_create (gtk_widget_get_window (widget));
   
   cairo_set_source_surface (cr, surface, 0, 0);
   gdk_cairo_rectangle (cr, &event->area);
@@ -89,7 +91,7 @@ draw_brush (GtkWidget *widget,
   cairo_destroy (cr);
 
   /* Now invalidate the affected region of the drawing area. */
-  gdk_window_invalidate_rect (widget->window,
+  gdk_window_invalidate_rect (gtk_widget_get_window (widget),
                               &update_rect,
                               FALSE);
 }
@@ -146,6 +148,7 @@ checkerboard_expose (GtkWidget      *da,
                      GdkEventExpose *event,
                      gpointer        data)
 {
+  GtkAllocation allocation;
   gint i, j, xcount, ycount;
   cairo_t *cr;
 
@@ -159,17 +162,18 @@ checkerboard_expose (GtkWidget      *da,
    * works.
    */
 
-  cr = gdk_cairo_create (da->window);
+  cr = gdk_cairo_create (gtk_widget_get_window (da));
   gdk_cairo_rectangle (cr, &event->area);
   cairo_clip (cr);
 
+  gtk_widget_get_allocation (da, &allocation);
   xcount = 0;
   i = SPACING;
-  while (i < da->allocation.width)
+  while (i < allocation.width)
     {
       j = SPACING;
       ycount = xcount % 2; /* start with even/odd depending on row */
-      while (j < da->allocation.height)
+      while (j < allocation.height)
         {
           if (ycount % 2)
             cairo_set_source_rgb (cr, 0.45777, 0, 0.45777);
