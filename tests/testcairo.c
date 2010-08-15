@@ -195,11 +195,13 @@ on_expose_event (GtkWidget      *widget,
 		 GdkEventExpose *event,
 		 gpointer        data)
 {
+  GtkAllocation allocation;
   cairo_t *cr;
 
-  cr = gdk_cairo_create (widget->window);
+  cr = gdk_cairo_create (gtk_widget_get_window (widget));
 
-  draw (cr, widget->allocation.width, widget->allocation.height);
+  gtk_widget_get_allocation (widget, &allocation);
+  draw (cr, allocation.width, allocation.height);
 
   cairo_destroy (cr);
 
