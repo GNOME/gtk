@@ -27,7 +27,7 @@ spin_ythickness_cb (GtkSpinButton *spin, gpointer user_data)
   GtkRcStyle *rcstyle;
 
   rcstyle = gtk_rc_style_new ();
-  rcstyle->xthickness = GTK_WIDGET (frame)->style->xthickness;
+  rcstyle->xthickness = gtk_widget_get_style (frame)->xthickness;
   rcstyle->ythickness = gtk_spin_button_get_value (spin);
   gtk_widget_modify_style (frame, rcstyle);
 
@@ -42,7 +42,7 @@ spin_xthickness_cb (GtkSpinButton *spin, gpointer user_data)
 
   rcstyle = gtk_rc_style_new ();
   rcstyle->xthickness = gtk_spin_button_get_value (spin);
-  rcstyle->ythickness = GTK_WIDGET (frame)->style->ythickness;
+  rcstyle->ythickness = gtk_widget_get_style (frame)->ythickness;
   gtk_widget_modify_style (frame, rcstyle);
 
   g_object_unref (rcstyle);
@@ -88,6 +88,7 @@ spin_yalign_cb (GtkSpinButton *spin, GtkFrame *frame)
 
 int main (int argc, char **argv)
 {
+  GtkStyle *style;
   GtkWidget *window, *frame, *xthickness_spin, *ythickness_spin, *vbox;
   GtkWidget *xalign_spin, *yalign_spin, *button, *table, *label;
   gfloat xalign, yalign;
@@ -112,13 +113,15 @@ int main (int argc, char **argv)
   table = gtk_table_new (4, 2, FALSE);
   gtk_box_pack_start (GTK_BOX (vbox), table, FALSE, FALSE, 0);
 
+  style = gtk_widget_get_style (frame);
+
   /* Spin to control xthickness */
   label = gtk_label_new ("xthickness: ");
   gtk_table_attach_defaults (GTK_TABLE (table), label, 0, 1, 0, 1);
 
   xthickness_spin = gtk_spin_button_new_with_range (0, 250, 1);
   g_signal_connect (G_OBJECT (xthickness_spin), "value-changed", G_CALLBACK (spin_xthickness_cb), frame);
-  gtk_spin_button_set_value (GTK_SPIN_BUTTON (xthickness_spin), frame->style->xthickness);
+  gtk_spin_button_set_value (GTK_SPIN_BUTTON (xthickness_spin), style->xthickness);
   gtk_table_attach_defaults (GTK_TABLE (table), xthickness_spin, 1, 2, 0, 1);
 
   /* Spin to control ythickness */
@@ -127,7 +130,7 @@ int main (int argc, char **argv)
 
   ythickness_spin = gtk_spin_button_new_with_range (0, 250, 1);
   g_signal_connect (G_OBJECT (ythickness_spin), "value-changed", G_CALLBACK (spin_ythickness_cb), frame);
-  gtk_spin_button_set_value (GTK_SPIN_BUTTON (ythickness_spin), frame->style->ythickness);
+  gtk_spin_button_set_value (GTK_SPIN_BUTTON (ythickness_spin), style->ythickness);
   gtk_table_attach_defaults (GTK_TABLE (table), ythickness_spin, 1, 2, 1, 2);
 
   gtk_frame_get_label_align (GTK_FRAME (frame), &xalign, &yalign);
