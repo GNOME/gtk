@@ -3875,13 +3875,23 @@ gdk_window_clear_region_internal (GdkWindow *window,
     }
 }
 
-static void
-gdk_window_clear_area_internal (GdkWindow *window,
-				gint       x,
-				gint       y,
-				gint       width,
-				gint       height,
-				gboolean   send_expose)
+/**
+ * gdk_window_clear_area:
+ * @window: a #GdkWindow
+ * @x: x coordinate of rectangle to clear
+ * @y: y coordinate of rectangle to clear
+ * @width: width of rectangle to clear
+ * @height: height of rectangle to clear
+ *
+ * Clears an area of @window to the background color or background pixmap.
+ *
+ **/
+void
+gdk_window_clear_area (GdkWindow *window,
+		       gint       x,
+		       gint       y,
+		       gint       width,
+		       gint       height)
 {
   GdkRectangle rect;
   cairo_region_t *region;
@@ -3904,33 +3914,8 @@ gdk_window_clear_area_internal (GdkWindow *window,
   region = cairo_region_create_rectangle (&rect);
   gdk_window_clear_region_internal (window,
 				    region,
-				    send_expose);
+				    FALSE);
   cairo_region_destroy (region);
-
-}
-
-/**
- * gdk_window_clear_area:
- * @window: a #GdkWindow
- * @x: x coordinate of rectangle to clear
- * @y: y coordinate of rectangle to clear
- * @width: width of rectangle to clear
- * @height: height of rectangle to clear
- *
- * Clears an area of @window to the background color or background pixmap.
- *
- **/
-void
-gdk_window_clear_area (GdkWindow *window,
-		       gint       x,
-		       gint       y,
-		       gint       width,
-		       gint       height)
-{
-  gdk_window_clear_area_internal (window,
-				  x, y,
-				  width, height,
-				  FALSE);
 }
 
 static void
