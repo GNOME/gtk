@@ -610,7 +610,6 @@ gdk_window_begin_paint_rect
 gdk_window_begin_paint_region
 gdk_window_clear
 gdk_window_clear_area
-gdk_window_clear_area_e
 gdk_window_constrain_size
 gdk_window_coords_from_parent
 gdk_window_coords_to_parent

@@ -534,11 +534,6 @@ void          gdk_window_clear_area            (GdkWindow     *window,
                                                 gint           y,
                                                 gint           width,
                                                 gint           height);
-void          gdk_window_clear_area_e          (GdkWindow     *window,
-                                                gint           x,
-                                                gint           y,
-                                                gint           width,
-                                                gint           height);
 void          gdk_window_raise                 (GdkWindow     *window);
 void          gdk_window_lower                 (GdkWindow     *window);
 void          gdk_window_restack               (GdkWindow     *window,

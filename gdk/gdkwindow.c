@@ -3933,34 +3933,6 @@ gdk_window_clear_area (GdkWindow *window,
 				  FALSE);
 }
 
-/**
- * gdk_window_clear_area_e:
- * @window: a #GdkWindow
- * @x: x coordinate of rectangle to clear
- * @y: y coordinate of rectangle to clear
- * @width: width of rectangle to clear
- * @height: height of rectangle to clear
- *
- * Like gdk_window_clear_area(), but also generates an expose event for
- * the cleared area.
- *
- * This function has a stupid name because it dates back to the mists
- * time, pre-GDK-1.0.
- *
- **/
-void
-gdk_window_clear_area_e (GdkWindow *window,
-			 gint       x,
-			 gint       y,
-			 gint       width,
-			 gint       height)
-{
-  gdk_window_clear_area_internal (window,
-				  x, y,
-				  width, height,
-				  TRUE);
-}
-
 static void
 gdk_window_real_get_size (GdkDrawable *drawable,
 			  gint *width,
