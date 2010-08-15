@@ -726,7 +726,6 @@ render_window_cell (GtkTreeViewColumn *tree_column,
 		    GtkTreeIter       *iter,
 		    gpointer           data)
 {
-  GdkColor *color = NULL;
   GdkWindow *window;
   char *name;
 
@@ -740,10 +739,8 @@ render_window_cell (GtkTreeViewColumn *tree_column,
   else
       name = g_strdup_printf ("%p", window);
 
-  gdk_window_get_background (window, color);
   g_object_set (cell,
 		"text", name,
-		"background-gdk", color,
 		NULL);
 }
 
