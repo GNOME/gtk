@@ -205,7 +205,7 @@ toplevel_idle_after_expose_cb (gpointer data)
   profiler = GTK_WIDGET_PROFILER (data);
   priv = profiler->priv;
 
-  gdk_property_change (priv->toplevel->window,
+  gdk_property_change (gtk_widget_get_window (priv->toplevel),
 		       priv->profiler_atom,
 		       gdk_atom_intern ("STRING", FALSE),
 		       8,
@@ -390,6 +390,7 @@ static void
 profile_expose (GtkWidgetProfiler *profiler)
 {
   GtkWidgetProfilerPrivate *priv;
+  GtkAllocation allocation;
   GdkWindow *window;
   GdkWindowAttr attr;
   int attr_mask;
@@ -400,16 +401,19 @@ profile_expose (GtkWidgetProfiler *profiler)
 
   /* Time creation */
 
+  gtk_widget_get_allocation (priv->toplevel, &allocation);
+
   attr.x = 0;
   attr.y = 0;
-  attr.width = priv->toplevel->allocation.width;
-  attr.height = priv->toplevel->allocation.width;
+  attr.width = allocation.width;
+  attr.height = allocation.width;
   attr.wclass = GDK_INPUT_OUTPUT;
   attr.window_type = GDK_WINDOW_CHILD;
 
   attr_mask = GDK_WA_X | GDK_WA_Y;
 
-  window = gdk_window_new (priv->toplevel->window, &attr, attr_mask);
+  window = gdk_window_new (gtk_widget_get_window (priv->toplevel),
+                           &attr, attr_mask);
   gdk_window_set_back_pixmap (window, NULL, TRUE); /* avoid flicker */
 
   gdk_window_show (window);
