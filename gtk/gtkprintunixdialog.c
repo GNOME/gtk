@@ -379,22 +379,26 @@ static void
 set_busy_cursor (GtkPrintUnixDialog *dialog,
 		 gboolean            busy)
 {
+  GtkWidget *widget;
   GtkWindow *toplevel;
   GdkDisplay *display;
   GdkCursor *cursor;
 
   toplevel = get_toplevel (GTK_WIDGET (dialog));
-  if (!toplevel || !gtk_widget_get_realized (GTK_WIDGET (toplevel)))
+  widget = GTK_WIDGET (toplevel);
+
+  if (!toplevel || !gtk_widget_get_realized (widget))
     return;
 
-  display = gtk_widget_get_display (GTK_WIDGET (toplevel));
+  display = gtk_widget_get_display (widget);
 
   if (busy)
     cursor = gdk_cursor_new_for_display (display, GDK_WATCH);
   else
     cursor = NULL;
 
-  gdk_window_set_cursor (GTK_WIDGET (toplevel)->window, cursor);
+  gdk_window_set_cursor (gtk_widget_get_window (widget),
+                         cursor);
   gdk_display_flush (display);
 
   if (cursor)
@@ -1954,6 +1958,7 @@ paint_page (GtkWidget *widget,
             gchar     *text,
             gint       text_x)
 {
+  GtkStyle *style;
   gint x, y, width, height;
   gint text_y, linewidth;
 
@@ -1965,11 +1970,13 @@ paint_page (GtkWidget *widget,
   linewidth = 2;
   text_y = 21;
 
-  gdk_cairo_set_source_color (cr, &widget->style->base[GTK_STATE_NORMAL]);
+  style = gtk_widget_get_style (widget);
+
+  gdk_cairo_set_source_color (cr, &style->base[GTK_STATE_NORMAL]);
   cairo_rectangle (cr, x, y, width, height);
   cairo_fill (cr);
 
-  gdk_cairo_set_source_color (cr, &widget->style->text[GTK_STATE_NORMAL]);
+  gdk_cairo_set_source_color (cr, &style->text[GTK_STATE_NORMAL]);
   cairo_set_line_width (cr, linewidth);
   cairo_rectangle (cr, x + linewidth/2.0, y + linewidth/2.0, width - linewidth, height - linewidth);
   cairo_stroke (cr);
@@ -1987,6 +1994,7 @@ draw_collate_cb (GtkWidget          *widget,
                  GdkEventExpose     *event,
                  GtkPrintUnixDialog *dialog)
 {
+  GtkAllocation allocation;
   GtkSettings *settings;
   cairo_t *cr;
   gint size;
@@ -2009,9 +2017,11 @@ draw_collate_cb (GtkWidget          *widget,
   scale = size / 48.0;
   text_x = rtl ? 4 : 11;
 
-  cr = gdk_cairo_create (widget->window);
+  cr = gdk_cairo_create (gtk_widget_get_window (widget));
 
-  cairo_translate (cr, widget->allocation.x, widget->allocation.y);
+  gtk_widget_get_allocation (widget, &allocation);
+  cairo_translate (cr, allocation.x, allocation.y);
+  gtk_widget_set_allocation (widget, &allocation);
 
   if (copies == 1)
     {
@@ -2580,6 +2590,8 @@ draw_page_cb (GtkWidget          *widget,
               GtkPrintUnixDialog *dialog)
 {
   GtkPrintUnixDialogPrivate *priv = dialog->priv;
+  GtkAllocation allocation;
+  GtkStyle *style;
   cairo_t *cr;
   gdouble ratio;
   gint w, h, tmp, shadow_offset;
@@ -2608,7 +2620,7 @@ draw_page_cb (GtkWidget          *widget,
 
   number_up_layout = dialog_get_number_up_layout (dialog);
 
-  cr = gdk_cairo_create (widget->window);
+  cr = gdk_cairo_create (gtk_widget_get_window (widget));
 
   cairo_save (cr);
 
@@ -2688,25 +2700,27 @@ draw_page_cb (GtkWidget          *widget,
       pages_y = tmp;
     }
 
-  pos_x = widget->allocation.x + (widget->allocation.width - w) / 2;
-  pos_y = widget->allocation.y + (widget->allocation.height - h) / 2 - 10;
-  color = &widget->style->text[GTK_STATE_NORMAL];
+  style = gtk_widget_get_style (widget);
+
+  gtk_widget_get_allocation (widget, &allocation);
+  pos_x = allocation.x + (allocation.width - w) / 2;
+  pos_y = allocation.y + (allocation.height - h) / 2 - 10;
   cairo_translate (cr, pos_x, pos_y);
 
   shadow_offset = 3;
 
-  color = &widget->style->text[GTK_STATE_NORMAL];
+  color = &style->text[GTK_STATE_NORMAL];
   cairo_set_source_rgba (cr, color->red / 65535., color->green / 65535., color->blue / 65535, 0.5);
   cairo_rectangle (cr, shadow_offset + 1, shadow_offset + 1, w, h);
   cairo_fill (cr);
 
-  gdk_cairo_set_source_color (cr, &widget->style->base[GTK_STATE_NORMAL]);
+  gdk_cairo_set_source_color (cr, &style->base[GTK_STATE_NORMAL]);
   cairo_rectangle (cr, 1, 1, w, h);
   cairo_fill (cr);
   cairo_set_line_width (cr, 1.0);
   cairo_rectangle (cr, 0.5, 0.5, w + 1, h + 1);
 
-  gdk_cairo_set_source_color (cr, &widget->style->text[GTK_STATE_NORMAL]);
+  gdk_cairo_set_source_color (cr, &style->text[GTK_STATE_NORMAL]);
   cairo_stroke (cr);
 
   i = 1;
@@ -2900,12 +2914,13 @@ draw_page_cb (GtkWidget          *widget,
 
       ltr = gtk_widget_get_direction (GTK_WIDGET (dialog)) == GTK_TEXT_DIR_LTR;
 
+      gtk_widget_get_allocation (widget, &allocation);
       if (ltr)
         cairo_translate (cr, pos_x - layout_w / PANGO_SCALE - 2 * RULER_DISTANCE,
-                             widget->allocation.y + (widget->allocation.height - layout_h / PANGO_SCALE) / 2);
+                             allocation.y + (allocation.height - layout_h / PANGO_SCALE) / 2);
       else
         cairo_translate (cr, pos_x + w + shadow_offset + 2 * RULER_DISTANCE,
-                             widget->allocation.y + (widget->allocation.height - layout_h / PANGO_SCALE) / 2);
+                             allocation.y + (allocation.height - layout_h / PANGO_SCALE) / 2);
 
       pango_cairo_show_layout (cr, layout);
 
@@ -2921,7 +2936,7 @@ draw_page_cb (GtkWidget          *widget,
       g_free (text);
       pango_layout_get_size (layout, &layout_w, &layout_h);
 
-      cairo_translate (cr, widget->allocation.x + (widget->allocation.width - layout_w / PANGO_SCALE) / 2,
+      cairo_translate (cr, allocation.x + (allocation.width - layout_w / PANGO_SCALE) / 2,
                            pos_y + h + shadow_offset + 2 * RULER_DISTANCE);
 
       pango_cairo_show_layout (cr, layout);
