@@ -286,7 +286,8 @@ grab_window_toggled (GtkToggleButton *button,
     {
       int status;
 
-      status = gdk_keyboard_grab (widget->window, FALSE, GDK_CURRENT_TIME);
+      status = gdk_keyboard_grab (gtk_widget_get_window (widget),
+                                  FALSE, GDK_CURRENT_TIME);
 
       if (status != GDK_GRAB_SUCCESS)
 	g_warning ("Could not grab keyboard!  (%s)", grab_string (status));
