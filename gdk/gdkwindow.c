@@ -1406,10 +1406,8 @@ gdk_window_new (GdkWindow     *parent,
       private->input_only = FALSE;
       private->depth = visual->depth;
 
-      private->bg_color.pixel = 0; /* TODO: BlackPixel (xdisplay, screen_x11->screen_num); */
-      private->bg_color.red = private->bg_color.green = private->bg_color.blue = 0;
-
-      private->bg_pixmap = NULL;
+      /* XXX: Cache this somehow? */
+      private->background = cairo_pattern_create_rgb (0, 0, 0);
     }
   else
     {
@@ -1899,9 +1897,7 @@ gdk_window_ensure_native (GdkWindow *window)
 
   if (!private->input_only)
     {
-      impl_iface->set_background (window, &private->bg_color);
-      if (private->bg_pixmap != NULL)
-	impl_iface->set_back_pixmap (window, private->bg_pixmap);
+      impl_iface->set_background (window, private->background);
     }
 
   impl_iface->input_shape_combine_region (window,
@@ -2056,13 +2052,7 @@ _gdk_window_destroy_hierarchy (GdkWindow *window,
 
 	  gdk_window_free_paint_stack (window);
 
-	  if (private->bg_pixmap &&
-	      private->bg_pixmap != GDK_PARENT_RELATIVE_BG &&
-	      private->bg_pixmap != GDK_NO_BG)
-	    {
-	      g_object_unref (private->bg_pixmap);
-	      private->bg_pixmap = NULL;
-	    }
+          gdk_window_set_background_pattern (window, NULL);
 
           if (private->background)
             {
@@ -3684,7 +3674,7 @@ setup_backing_rect (GdkWindow *window, GdkWindowPaint *paint, int x_offset_cairo
       cairo_translate (cr, x_offset, y_offset);
     }
   else
-    gdk_cairo_set_source_color (cr, &private->bg_color);
+    cairo_set_source_rgb (cr, 0, 0, 0);
 
   return cr;
 }
@@ -4285,8 +4275,7 @@ _gdk_window_process_updates_recurse (GdkWindow *window,
 
 	  g_object_unref (window);
 	}
-      else if (private->bg_pixmap != GDK_NO_BG &&
-	       private->window_type != GDK_WINDOW_FOREIGN)
+      else if (private->window_type != GDK_WINDOW_FOREIGN)
 	{
 	  /* No exposure mask set, so nothing will be drawn, the
 	   * app relies on the background being what it specified
@@ -6952,120 +6941,96 @@ gdk_window_move_region (GdkWindow       *window,
 /**
  * gdk_window_set_background:
  * @window: a #GdkWindow
- * @color: an allocated #GdkColor
+ * @color: a #GdkColor
  *
  * Sets the background color of @window. (However, when using GTK+,
  * set the background of a widget with gtk_widget_modify_bg() - if
  * you're an application - or gtk_style_set_background() - if you're
  * implementing a custom widget.)
  *
- * See also gdk_window_set_background_pixmap().
+ * See also gdk_window_set_background_pattern().
  */
 void
 gdk_window_set_background (GdkWindow      *window,
 			   const GdkColor *color)
 {
-  GdkWindowObject *private;
-  GdkWindowImplIface *impl_iface;
+  cairo_pattern_t *pattern;
 
   g_return_if_fail (GDK_IS_WINDOW (window));
 
-  private = (GdkWindowObject *) window;
+  pattern = cairo_pattern_create_rgb (color->red   / 65535.,
+                                      color->green / 65535.,
+                                      color->blue  / 65535.);
 
-  private->bg_color = *color;
+  gdk_window_set_background_pattern (window, pattern);
 
-  if (private->bg_pixmap &&
-      private->bg_pixmap != GDK_PARENT_RELATIVE_BG &&
-      private->bg_pixmap != GDK_NO_BG)
-    g_object_unref (private->bg_pixmap);
+  cairo_pattern_destroy (pattern);
+}
 
-  private->bg_pixmap = NULL;
+/* NB: This is more or less a hack now and about to go away. */
+void
+gdk_window_set_back_pixmap (GdkWindow *window,
+                            GdkPixmap *pixmap,
+                            gboolean   parent_relative)
+{
+  cairo_pattern_t *pattern;
+  
+  g_return_if_fail (GDK_IS_WINDOW (window));
+  g_return_if_fail (pixmap == NULL || !parent_relative);
 
-  if (private->background)
+  if (parent_relative || pixmap == NULL)
+    pattern = NULL;
+  else
     {
-      cairo_pattern_destroy (private->background);
-      private->background = NULL;
+      static cairo_user_data_key_t key;
+      cairo_surface_t *surface = _gdk_drawable_ref_cairo_surface (pixmap);
+      pattern = cairo_pattern_create_for_surface (surface);
+      cairo_pattern_set_extend (pattern, CAIRO_EXTEND_REPEAT);
+      g_object_ref (pixmap);
+      cairo_pattern_set_user_data (pattern, &key, pixmap, g_object_unref);
     }
 
-  if (!GDK_WINDOW_DESTROYED (window) &&
-      gdk_window_has_impl (private) &&
-      !private->input_only)
-    {
-      impl_iface = GDK_WINDOW_IMPL_GET_IFACE (private->impl);
-      impl_iface->set_background (window, &private->bg_color);
-    }
+  gdk_window_set_background_pattern (window, pattern);
+
+  if (pattern)
+    cairo_pattern_destroy (pattern);
 }
 
 /**
- * gdk_window_set_back_pixmap:
+ * gdk_window_set_background_pattern:
  * @window: a #GdkWindow
- * @pixmap: (allow-none): a #GdkPixmap, or %NULL
- * @parent_relative: whether the tiling origin is at the origin of
- *   @window's parent
+ * @pattern: (allow-none): a pattern to use, or %NULL
  *
- * Sets the background pixmap of @window. May also be used to set a
- * background of "None" on @window, by setting a background pixmap
- * of %NULL.
+ * Sets the background of @window.
  *
- * A background pixmap will be tiled, positioning the first tile at
- * the origin of @window, or if @parent_relative is %TRUE, the tiling
- * will be done based on the origin of the parent window (useful to
- * align tiles in a parent with tiles in a child).
- *
- * A background pixmap of %NULL means that the window will have no
- * background.  A window with no background will never have its
- * background filled by the windowing system, instead the window will
- * contain whatever pixels were already in the corresponding area of
- * the display.
+ * A background of %NULL means that the window will inherit its
+ * background form its parent window.
  *
  * The windowing system will normally fill a window with its background
  * when the window is obscured then exposed, and when you call
  * gdk_window_clear().
  */
 void
-gdk_window_set_back_pixmap (GdkWindow *window,
-			    GdkPixmap *pixmap,
-			    gboolean   parent_relative)
+gdk_window_set_background_pattern (GdkWindow *window,
+                                   cairo_pattern_t *pattern)
 {
   GdkWindowObject *private;
-  GdkWindowImplIface *impl_iface;
 
   g_return_if_fail (GDK_IS_WINDOW (window));
-  g_return_if_fail (pixmap == NULL || !parent_relative);
-  g_return_if_fail (pixmap == NULL || gdk_drawable_get_depth (window) == gdk_drawable_get_depth (pixmap));
 
   private = (GdkWindowObject *) window;
 
-  if (pixmap && !gdk_drawable_get_colormap (pixmap))
-    {
-      g_warning ("gdk_window_set_back_pixmap(): pixmap must have a colormap");
-      return;
-    }
-
-  if (private->bg_pixmap &&
-      private->bg_pixmap != GDK_PARENT_RELATIVE_BG &&
-      private->bg_pixmap != GDK_NO_BG)
-    g_object_unref (private->bg_pixmap);
-
+  if (pattern)
+    cairo_pattern_reference (pattern);
   if (private->background)
-    {
-      cairo_pattern_destroy (private->background);
-      private->background = NULL;
-    }
+    cairo_pattern_destroy (private->background);
+  private->background = pattern;
 
-  if (parent_relative)
-    private->bg_pixmap = GDK_PARENT_RELATIVE_BG;
-  else if (pixmap)
-    private->bg_pixmap = g_object_ref (pixmap);
-  else
-    private->bg_pixmap = GDK_NO_BG;
-
-  if (!GDK_WINDOW_DESTROYED (window) &&
-      gdk_window_has_impl (private) &&
+  if (gdk_window_has_impl (private) &&
       !private->input_only)
     {
-      impl_iface = GDK_WINDOW_IMPL_GET_IFACE (private->impl);
-      impl_iface->set_back_pixmap (window, private->bg_pixmap);
+      GdkWindowImplIface *impl_iface = GDK_WINDOW_IMPL_GET_IFACE (private->impl);
+      impl_iface->set_background (window, pattern);
     }
 }
 
@@ -7088,33 +7053,6 @@ gdk_window_get_background_pattern (GdkWindow *window)
   GdkWindowObject *private = (GdkWindowObject *) window;
 
   g_return_val_if_fail (GDK_IS_WINDOW (window), NULL);
-
-  if (private->background == NULL)
-    {
-      if (private->bg_pixmap == GDK_PARENT_RELATIVE_BG)
-        private->background = NULL;
-      else if (private->bg_pixmap != GDK_NO_BG &&
-               private->bg_pixmap != NULL)
-        {
-          static cairo_user_data_key_t key;
-          cairo_surface_t *surface;
-
-          surface = _gdk_drawable_ref_cairo_surface (private->bg_pixmap);
-          private->background = cairo_pattern_create_for_surface (surface);
-          cairo_surface_destroy (surface);
-
-          cairo_pattern_set_extend (private->background, CAIRO_EXTEND_REPEAT);
-          cairo_pattern_set_user_data (private->background,
-                                       &key,
-                                       g_object_ref (private->bg_pixmap),
-                                       g_object_unref);
-        }
-      else
-        private->background =
-            cairo_pattern_create_rgb (private->bg_color.red   / 65535.,
-                                      private->bg_color.green / 65535.,
-                                      private->bg_color.blue / 65535.);
-    }   
 
   return private->background;
 }

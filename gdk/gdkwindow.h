@@ -678,6 +678,8 @@ void	      gdk_window_set_background	 (GdkWindow	  *window,
 void	      gdk_window_set_back_pixmap (GdkWindow	  *window,
 					  GdkPixmap	  *pixmap,
 					  gboolean	   parent_relative);
+void	      gdk_window_set_background_pattern (GdkWindow	 *window,
+                                                 cairo_pattern_t *pattern);
 cairo_pattern_t *gdk_window_get_background_pattern (GdkWindow     *window);
 
 void	      gdk_window_set_cursor	 (GdkWindow	  *window,

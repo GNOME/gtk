@@ -228,12 +228,9 @@ gdk_window_impl_quartz_begin_paint_region (GdkPaintable    *paintable,
 					   const cairo_region_t *region)
 {
   GdkWindowImplQuartz *impl = GDK_WINDOW_IMPL_QUARTZ (paintable);
-  GdkWindowObject *private = (GdkWindowObject*)window;
-  GdkPixmap *bg_pixmap;
+  GdkWindowObject *private = (GdkWindowObject*) window;
   cairo_region_t *clipped_and_offset_region;
   cairo_t *cr;
-
-  bg_pixmap = private->bg_pixmap;
 
   clipped_and_offset_region = cairo_region_copy (region);
 
@@ -249,8 +246,7 @@ gdk_window_impl_quartz_begin_paint_region (GdkPaintable    *paintable,
 
   impl->begin_paint_count++;
 
-  if (bg_pixmap == GDK_NO_BG ||
-      cairo_region_is_empty (clipped_and_offset_region))
+  if (cairo_region_is_empty (clipped_and_offset_region))
     goto done;
 
   cr = gdk_cairo_create (window);
@@ -260,40 +256,16 @@ gdk_window_impl_quartz_begin_paint_region (GdkPaintable    *paintable,
   gdk_cairo_region (cr, clipped_and_offset_region);
   cairo_clip (cr);
 
-  if (bg_pixmap == NULL)
+  while (private->background == NULL && private->parent)
     {
-      gdk_cairo_set_source_color (cr, &private->bg_color);
+      cairo_translate (cr, -private->x, private->y);
+      private = private->parent;
     }
+  
+  if (private->background)
+    cairo_set_source (cr, private->background);
   else
-    {
-      int x_offset, y_offset;
-
-      x_offset = y_offset = 0;
-
-      while (window && bg_pixmap == GDK_PARENT_RELATIVE_BG)
-        {
-          /* If this window should have the same background as the parent,
-           * fetch the parent. (And if the same goes for the parent, fetch
-           * the grandparent, etc.)
-           */
-          x_offset += ((GdkWindowObject *) window)->x;
-          y_offset += ((GdkWindowObject *) window)->y;
-          window = GDK_WINDOW (((GdkWindowObject *) window)->parent);
-          bg_pixmap = ((GdkWindowObject *) window)->bg_pixmap;
-        }
-
-      /* If we have a parent relative background or we don't have a pixmap,
-       * clear the area to transparent.
-       */ 
-      if (bg_pixmap == NULL || bg_pixmap == GDK_NO_BG || bg_pixmap == GDK_PARENT_RELATIVE_BG)
-        {
-          cairo_destroy (cr);
-          goto done;
-        }
-
-      gdk_cairo_set_source_pixmap (cr, bg_pixmap, x_offset, y_offset);
-      cairo_pattern_set_extend (cairo_get_source (cr), CAIRO_EXTEND_REPEAT);
-    }
+    cairo_set_source_rgba (cr, 0, 0, 0, 0);
 
   /* Can use cairo_paint() here, we clipped above */
   cairo_paint (cr);
@@ -1648,20 +1620,11 @@ gdk_window_quartz_restack_toplevel (GdkWindow *window,
 }
 
 static void
-gdk_window_quartz_set_background (GdkWindow      *window,
-                                  const GdkColor *color)
+gdk_window_quartz_set_background (GdkWindow       *window,
+                                  cairo_pattern_t *pattern)
 {
   /* FIXME: We could theoretically set the background color for toplevels
    * here. (Currently we draw the background before emitting expose events)
-   */
-}
-
-static void
-gdk_window_quartz_set_back_pixmap (GdkWindow *window,
-                                   GdkPixmap *pixmap)
-{
-  /* FIXME: Could theoretically set some background image here. (Currently
-   * the back pixmap is drawn before emitting expose events.
    */
 }
 
@@ -3027,7 +2990,6 @@ gdk_window_impl_iface_init (GdkWindowImplIface *iface)
   iface->restack_toplevel = gdk_window_quartz_restack_toplevel;
   iface->move_resize = gdk_window_quartz_move_resize;
   iface->set_background = gdk_window_quartz_set_background;
-  iface->set_back_pixmap = gdk_window_quartz_set_back_pixmap;
   iface->reparent = gdk_window_quartz_reparent;
   iface->set_device_cursor = gdk_window_quartz_set_device_cursor;
   iface->get_geometry = gdk_window_quartz_get_geometry;

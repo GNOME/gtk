@@ -152,18 +152,6 @@ tmp_unset_bg (GdkWindow *window)
   impl = GDK_WINDOW_IMPL_WIN32 (obj->impl);
 
   impl->no_bg = TRUE;
-
-  /*
-   * The X version sets background = None to avoid updateing for a moment.
-   * Not sure if this could really emulate it.
-   */
-  if (obj->bg_pixmap != GDK_NO_BG)
-    {
-      ///* handled in WM_ERASEBKGRND proceesing */;
-
-      //HDC hdc = GetDC (GDK_WINDOW_HWND (window));
-      //erase_background (window, hdc);
-    }
 }
 
 static void

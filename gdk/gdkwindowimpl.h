@@ -62,9 +62,7 @@ struct _GdkWindowImplIface
                                          gint             width,
                                          gint             height);
   void         (* set_background)       (GdkWindow       *window,
-                                         const GdkColor  *color);
-  void         (* set_back_pixmap)      (GdkWindow       *window,
-                                         GdkPixmap       *pixmap);
+                                         cairo_pattern_t *pattern);
 
   GdkEventMask (* get_events)           (GdkWindow       *window);
   void         (* set_events)           (GdkWindow       *window,

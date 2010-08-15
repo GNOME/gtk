@@ -1790,23 +1790,9 @@ _gdk_modal_current (void)
 }
 
 static void
-gdk_win32_window_set_background (GdkWindow      *window,
-				 const GdkColor *color)
+gdk_win32_window_set_background (GdkWindow       *window,
+				 cairo_pattern_t *pattern)
 {
-  GdkWindowObject *private = (GdkWindowObject *)window;
-  
-  GDK_NOTE (MISC, g_print ("gdk_win32_window_set_background: %p: %s\n",
-			   GDK_WINDOW_HWND (window), 
-			   _gdk_win32_color_to_string (color)));
-
-  private->bg_color = *color;
-}
-
-static void
-gdk_win32_window_set_back_pixmap (GdkWindow *window,
-				  GdkPixmap *pixmap)
-{
-  /* TODO_CSW? but win32 has no XSetWindowBackgroundPixmap */
 }
 
 static void
@@ -3365,7 +3351,6 @@ gdk_window_impl_iface_init (GdkWindowImplIface *iface)
   iface->restack_toplevel = gdk_win32_window_restack_toplevel;
   iface->move_resize = gdk_win32_window_move_resize;
   iface->set_background = gdk_win32_window_set_background;
-  iface->set_back_pixmap = gdk_win32_window_set_back_pixmap;
   iface->reparent = gdk_win32_window_reparent;
   iface->set_device_cursor = gdk_win32_window_set_device_cursor;
   iface->get_geometry = gdk_win32_window_get_geometry;

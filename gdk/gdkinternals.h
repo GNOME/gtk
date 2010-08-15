@@ -203,8 +203,6 @@ struct _GdkWindowObject
   GList *filters;
   GList *children;
 
-  GdkColor bg_color;
-  GdkPixmap *bg_pixmap;
   cairo_pattern_t *background;
   
   GSList *paint_stack;

@@ -35,7 +35,6 @@
 #include "gdktypes.h"
 #include "gdkscreen.h"
 #include "gdkcolor.h"
-#include "gdkcursor.h"
 
 
 /* LIMITATIONS:
@@ -53,7 +52,6 @@ struct _GdkOffscreenWindow
   GdkDrawable parent_instance;
 
   GdkWindow *wrapper;
-  GdkCursor *cursor;
   GdkColormap *colormap;
   GdkScreen *screen;
 
@@ -87,11 +85,6 @@ static void
 gdk_offscreen_window_finalize (GObject *object)
 {
   GdkOffscreenWindow *offscreen = GDK_OFFSCREEN_WINDOW (object);
-
-  if (offscreen->cursor)
-    gdk_cursor_unref (offscreen->cursor);
-
-  offscreen->cursor = NULL;
 
   g_object_unref (offscreen->pixmap);
 
@@ -601,46 +594,8 @@ gdk_offscreen_window_set_events (GdkWindow       *window,
 
 static void
 gdk_offscreen_window_set_background (GdkWindow      *window,
-				     const GdkColor *color)
+				     cairo_pattern_t *pattern)
 {
-  GdkWindowObject *private = (GdkWindowObject *)window;
-
-  private->bg_color = *color;
-
-  if (private->bg_pixmap &&
-      private->bg_pixmap != GDK_PARENT_RELATIVE_BG &&
-      private->bg_pixmap != GDK_NO_BG)
-    g_object_unref (private->bg_pixmap);
-
-  private->bg_pixmap = NULL;
-}
-
-static void
-gdk_offscreen_window_set_back_pixmap (GdkWindow *window,
-				      GdkPixmap *pixmap)
-{
-  GdkWindowObject *private = (GdkWindowObject *)window;
-
-  if (pixmap &&
-      private->bg_pixmap != GDK_PARENT_RELATIVE_BG &&
-      private->bg_pixmap != GDK_NO_BG &&
-      !gdk_drawable_get_colormap (pixmap))
-    {
-      g_warning ("gdk_window_set_back_pixmap(): pixmap must have a colormap");
-      return;
-    }
-
-  if (private->bg_pixmap &&
-      private->bg_pixmap != GDK_PARENT_RELATIVE_BG &&
-      private->bg_pixmap != GDK_NO_BG)
-    g_object_unref (private->bg_pixmap);
-
-  private->bg_pixmap = pixmap;
-
-  if (pixmap &&
-      private->bg_pixmap != GDK_PARENT_RELATIVE_BG &&
-      private->bg_pixmap != GDK_NO_BG)
-    g_object_ref (pixmap);
 }
 
 static void
@@ -832,7 +787,6 @@ gdk_offscreen_window_impl_iface_init (GdkWindowImplIface *iface)
   iface->lower = gdk_offscreen_window_lower;
   iface->move_resize = gdk_offscreen_window_move_resize;
   iface->set_background = gdk_offscreen_window_set_background;
-  iface->set_back_pixmap = gdk_offscreen_window_set_back_pixmap;
   iface->get_events = gdk_offscreen_window_get_events;
   iface->set_events = gdk_offscreen_window_set_events;
   iface->reparent = gdk_offscreen_window_reparent;
