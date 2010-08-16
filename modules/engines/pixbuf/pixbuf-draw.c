@@ -141,45 +141,6 @@ draw_simple_image(GtkStyle       *style,
 }
 
 static gboolean
-draw_simple_image_no_cairo(GtkStyle       *style,
-		  GdkWindow      *window,
-		  GdkRectangle   *area,
-		  GtkWidget      *widget,
-		  ThemeMatchData *match_data,
-		  gboolean        draw_center,
-		  gboolean        allow_setbg,
-		  gint            x,
-		  gint            y,
-		  gint            width,
-		  gint            height)
-{
-  gboolean result;
-  cairo_t *cr;
-
-  if ((width == -1) && (height == -1))
-    gdk_drawable_get_size(window, &width, &height);
-  else if (width == -1)
-    gdk_drawable_get_size(window, &width, NULL);
-  else if (height == -1)
-    gdk_drawable_get_size(window, NULL, &height);
-
-  cr = gdk_cairo_create (window);
-  if (area)
-    {
-      gdk_cairo_rectangle (cr, area);
-      cairo_clip (cr);
-    }
-
-  result = draw_simple_image (style, cr, widget, match_data,
-                              draw_center, allow_setbg,
-                              x, y, width, height);
-
-  cairo_destroy (cr);
-
-  return result;
-}
-
-static gboolean
 draw_gap_image(GtkStyle       *style,
                cairo_t        *cr,
 	       GtkWidget      *widget,
@@ -944,22 +905,18 @@ draw_expander (GtkStyle      *style,
 
 static void
 draw_resize_grip (GtkStyle      *style,
-		     GdkWindow     *window,
-		     GtkStateType   state,
-		     GdkRectangle  *area,
-		     GtkWidget     *widget,
-		     const gchar   *detail,
-		     GdkWindowEdge  edge,
-		     gint           x,
-		     gint           y,
-		     gint           width,
-		     gint           height)
+		  cairo_t       *cr,
+                  GtkStateType   state,
+                  GtkWidget     *widget,
+                  const gchar   *detail,
+                  GdkWindowEdge  edge,
+                  gint           x,
+                  gint           y,
+                  gint           width,
+		  gint           height)
 {
   ThemeMatchData match_data;
   
-  g_return_if_fail (style != NULL);
-  g_return_if_fail (window != NULL);
-
   match_data.function = TOKEN_D_RESIZE_GRIP;
   match_data.detail = (gchar *)detail;
   match_data.flags = (THEME_MATCH_STATE | 
@@ -967,9 +924,9 @@ draw_resize_grip (GtkStyle      *style,
   match_data.state = state;
   match_data.window_edge = edge;
 
-  if (!draw_simple_image_no_cairo (style, window, area, widget, &match_data, TRUE, TRUE,
+  if (!draw_simple_image (style, cr, widget, &match_data, TRUE, TRUE,
 			  x, y, width, height))
-    parent_class->draw_resize_grip (style, window, state, area, widget, detail,
+    parent_class->draw_resize_grip (style, cr, state, widget, detail,
 				    edge, x, y, width, height);
 }
 

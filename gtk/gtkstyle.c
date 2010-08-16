@@ -284,9 +284,8 @@ static void gtk_default_draw_layout     (GtkStyle        *style,
                                          gint             y,
                                          PangoLayout     *layout);
 static void gtk_default_draw_resize_grip (GtkStyle       *style,
-                                          GdkWindow      *window,
+                                          cairo_t        *cr,
                                           GtkStateType    state_type,
-                                          GdkRectangle   *area,
                                           GtkWidget      *widget,
                                           const gchar    *detail,
                                           GdkWindowEdge   edge,
@@ -3978,9 +3977,8 @@ gtk_default_draw_layout (GtkStyle        *style,
 
 static void
 gtk_default_draw_resize_grip (GtkStyle       *style,
-                              GdkWindow      *window,
+                              cairo_t        *cr,
                               GtkStateType    state_type,
-                              GdkRectangle   *area,
                               GtkWidget      *widget,
                               const gchar    *detail,
                               GdkWindowEdge   edge,
@@ -3990,16 +3988,9 @@ gtk_default_draw_resize_grip (GtkStyle       *style,
                               gint            height)
 {
   gint skip;
-  cairo_t *cr;
 
-  cr = gdk_cairo_create (window);
   cairo_rectangle (cr, x, y, width, height);
   cairo_clip (cr);
-  if (area)
-    {
-      gdk_cairo_rectangle (cr, area);
-      cairo_clip (cr);
-    }
 
   cairo_set_line_width (cr, 1.0);
 
@@ -4274,8 +4265,6 @@ gtk_default_draw_resize_grip (GtkStyle       *style,
       g_assert_not_reached ();
       break;
     }
-  
-  cairo_destroy (cr);
 }
 
 static void
@@ -6224,13 +6213,58 @@ gtk_paint_resize_grip (GtkStyle           *style,
                        gint                height)
 
 {
+  cairo_t *cr;
+
   g_return_if_fail (GTK_IS_STYLE (style));
   g_return_if_fail (GTK_STYLE_GET_CLASS (style)->draw_resize_grip != NULL);
   g_return_if_fail (style->depth == gdk_drawable_get_depth (window));
 
-  GTK_STYLE_GET_CLASS (style)->draw_resize_grip (style, window, state_type,
-                                                 (GdkRectangle *) area, widget, detail,
+  cr = gtk_style_cairo_create (window, area);
+
+  GTK_STYLE_GET_CLASS (style)->draw_resize_grip (style, cr, state_type,
+                                                 widget, detail,
                                                  edge, x, y, width, height);
+  cairo_destroy (cr);
+}
+
+/**
+ * gtk_cairo_paint_resize_grip:
+ * @style: a #GtkStyle
+ * @cr: a #cairo_t
+ * @state_type: a state
+ * @widget: (allow-none): the widget
+ * @detail: (allow-none): a style detail
+ * @edge: the edge in which to draw the resize grip
+ * @x: the x origin of the rectangle in which to draw the resize grip
+ * @y: the y origin of the rectangle in which to draw the resize grip
+ * @width: the width of the rectangle in which to draw the resize grip
+ * @height: the height of the rectangle in which to draw the resize grip
+ *
+ * Draws a resize grip in the given rectangle on @cr using the given
+ * parameters. 
+ */
+void
+gtk_cairo_paint_resize_grip (GtkStyle           *style,
+                             cairo_t            *cr,
+                             GtkStateType        state_type,
+                             GtkWidget          *widget,
+                             const gchar        *detail,
+                             GdkWindowEdge       edge,
+                             gint                x,
+                             gint                y,
+                             gint                width,
+                             gint                height)
+{
+  g_return_if_fail (GTK_IS_STYLE (style));
+  g_return_if_fail (GTK_STYLE_GET_CLASS (style)->draw_resize_grip != NULL);
+  g_return_if_fail (cr != NULL);
+
+  cairo_save (cr);
+
+  GTK_STYLE_GET_CLASS (style)->draw_resize_grip (style, cr, state_type,
+                                                 widget, detail,
+                                                 edge, x, y, width, height);
+  cairo_restore (cr);
 }
 
 /**
