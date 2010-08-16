@@ -189,10 +189,9 @@ static void gtk_default_draw_option     (GtkStyle        *style,
 					 gint             width,
 					 gint             height);
 static void gtk_default_draw_tab        (GtkStyle        *style,
-					 GdkWindow       *window,
+					 cairo_t         *cr,
 					 GtkStateType     state_type,
 					 GtkShadowType    shadow_type,
-					 GdkRectangle    *area,
 					 GtkWidget       *widget,
 					 const gchar     *detail,
 					 gint             x,
@@ -3000,10 +2999,9 @@ gtk_default_draw_option (GtkStyle      *style,
 
 static void
 gtk_default_draw_tab (GtkStyle      *style,
-		      GdkWindow     *window,
+		      cairo_t       *cr,
 		      GtkStateType   state_type,
 		      GtkShadowType  shadow_type,
-		      GdkRectangle  *area,
 		      GtkWidget     *widget,
 		      const gchar   *detail,
 		      gint           x,
@@ -3013,18 +3011,9 @@ gtk_default_draw_tab (GtkStyle      *style,
 {
 #define ARROW_SPACE 4
 
-  cairo_t *cr;
   GtkRequisition indicator_size;
   GtkBorder indicator_spacing;
   gint arrow_height;
-
-  cr = gdk_cairo_create (window);
-
-  if (area)
-    {
-      gdk_cairo_rectangle (cr, area);
-      cairo_clip (cr);
-    }
 
   option_menu_get_props (widget, &indicator_size, &indicator_spacing);
 
@@ -3053,8 +3042,6 @@ gtk_default_draw_tab (GtkStyle      *style,
   draw_arrow (cr, &style->fg[state_type],
 	      GTK_ARROW_DOWN, x, y + arrow_height + ARROW_SPACE,
 	      indicator_size.width, arrow_height);
-
-  cairo_destroy (cr);
 }
 
 static void 
@@ -5492,13 +5479,60 @@ gtk_paint_tab (GtkStyle           *style,
                gint                width,
                gint                height)
 {
+  cairo_t *cr;
+
   g_return_if_fail (GTK_IS_STYLE (style));
   g_return_if_fail (GTK_STYLE_GET_CLASS (style)->draw_tab != NULL);
   g_return_if_fail (style->depth == gdk_drawable_get_depth (window));
 
-  GTK_STYLE_GET_CLASS (style)->draw_tab (style, window, state_type, shadow_type,
-                                         (GdkRectangle *) area, widget, detail,
+  cr = gtk_style_cairo_create (window, area);
+
+  gtk_cairo_paint_tab (style, cr, state_type, shadow_type,
+                       widget, detail,
+                       x, y, width, height);
+
+  cairo_destroy (cr);
+}
+
+/**
+ * gtk_cairo_paint_tab:
+ * @style: a #GtkStyle
+ * @cr: a #cairo_t
+ * @state_type: a state
+ * @shadow_type: the type of shadow to draw
+ * @widget: (allow-none): the widget
+ * @detail: (allow-none): a style detail
+ * @x: x origin of the rectangle to draw the tab in
+ * @y: y origin of the rectangle to draw the tab in
+ * @width: the width of the rectangle to draw the tab in
+ * @height: the height of the rectangle to draw the tab in
+ *
+ * Draws an option menu tab (i.e. the up and down pointing arrows)
+ * in the given rectangle on @cr using the given parameters.
+ */ 
+void
+gtk_cairo_paint_tab (GtkStyle           *style,
+                     cairo_t            *cr,
+                     GtkStateType        state_type,
+                     GtkShadowType       shadow_type,
+                     GtkWidget          *widget,
+                     const gchar        *detail,
+                     gint                x,
+                     gint                y,
+                     gint                width,
+                     gint                height)
+{
+  g_return_if_fail (GTK_IS_STYLE (style));
+  g_return_if_fail (GTK_STYLE_GET_CLASS (style)->draw_tab != NULL);
+  g_return_if_fail (cr != NULL);
+
+  cairo_save (cr);
+
+  GTK_STYLE_GET_CLASS (style)->draw_tab (style, cr, state_type, shadow_type,
+                                         widget, detail,
                                          x, y, width, height);
+
+  cairo_restore (cr);
 }
 
 /**
