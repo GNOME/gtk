@@ -450,10 +450,9 @@ draw_vline (GtkStyle     *style,
 
 static void
 draw_shadow(GtkStyle     *style,
-	    GdkWindow    *window,
+	    cairo_t      *cr,
 	    GtkStateType  state,
 	    GtkShadowType shadow,
-	    GdkRectangle *area,
 	    GtkWidget    *widget,
 	    const gchar  *detail,
 	    gint          x,
@@ -463,18 +462,15 @@ draw_shadow(GtkStyle     *style,
 {
   ThemeMatchData match_data;
   
-  g_return_if_fail(style != NULL);
-  g_return_if_fail(window != NULL);
-
   match_data.function = TOKEN_D_SHADOW;
   match_data.detail = (gchar *)detail;
   match_data.flags = THEME_MATCH_SHADOW | THEME_MATCH_STATE;
   match_data.shadow = shadow;
   match_data.state = state;
 
-  if (!draw_simple_image_no_cairo (style, window, area, widget, &match_data, FALSE, FALSE,
+  if (!draw_simple_image (style, cr, widget, &match_data, FALSE, FALSE,
 			  x, y, width, height))
-    parent_class->draw_shadow (style, window, state, shadow, area, widget, detail,
+    parent_class->draw_shadow (style, cr, state, shadow, widget, detail,
 			       x, y, width, height);
 }
 
@@ -524,10 +520,9 @@ reverse_engineer_stepper_box (GtkWidget    *range,
 
 static void
 draw_arrow (GtkStyle     *style,
-	    GdkWindow    *window,
+	    cairo_t      *cr,
 	    GtkStateType  state,
 	    GtkShadowType shadow,
-	    GdkRectangle *area,
 	    GtkWidget    *widget,
 	    const gchar  *detail,
 	    GtkArrowType  arrow_direction,
@@ -539,9 +534,6 @@ draw_arrow (GtkStyle     *style,
 {
   ThemeMatchData match_data;
   
-  g_return_if_fail(style != NULL);
-  g_return_if_fail(window != NULL);
-
   if (detail &&
       (strcmp (detail, "hscrollbar") == 0 || strcmp (detail, "vscrollbar") == 0))
     {
@@ -572,7 +564,7 @@ draw_arrow (GtkStyle     *style,
       match_data.state = state;
       match_data.arrow_direction = arrow_direction;
       
-      if (draw_simple_image_no_cairo (style, window, area, widget, &match_data, TRUE, TRUE,
+      if (draw_simple_image (style, cr, widget, &match_data, TRUE, TRUE,
 			     box_x, box_y, box_width, box_height))
 	{
 	  /* The theme included stepper images, we're done */
@@ -587,9 +579,9 @@ draw_arrow (GtkStyle     *style,
       match_data.shadow = shadow;
       match_data.state = state;
       
-      if (!draw_simple_image_no_cairo (style, window, area, widget, &match_data, TRUE, TRUE,
+      if (!draw_simple_image (style, cr, widget, &match_data, TRUE, TRUE,
 			      box_x, box_y, box_width, box_height))
-	parent_class->draw_box (style, window, state, shadow, area, widget, detail,
+	parent_class->draw_box (style, cr, state, shadow, widget, detail,
 				box_x, box_y, box_width, box_height);
     }
 
@@ -603,18 +595,17 @@ draw_arrow (GtkStyle     *style,
   match_data.state = state;
   match_data.arrow_direction = arrow_direction;
   
-  if (!draw_simple_image_no_cairo (style, window, area, widget, &match_data, TRUE, TRUE,
+  if (!draw_simple_image (style, cr, widget, &match_data, TRUE, TRUE,
 			  x, y, width, height))
-    parent_class->draw_arrow (style, window, state, shadow, area, widget, detail,
+    parent_class->draw_arrow (style, cr, state, shadow, widget, detail,
 			      arrow_direction, fill, x, y, width, height);
 }
 
 static void
 draw_diamond (GtkStyle     *style,
-	      GdkWindow    *window,
+	      cairo_t      *cr,
 	      GtkStateType  state,
 	      GtkShadowType shadow,
-	      GdkRectangle *area,
 	      GtkWidget    *widget,
 	      const gchar  *detail,
 	      gint          x,
@@ -624,27 +615,23 @@ draw_diamond (GtkStyle     *style,
 {
   ThemeMatchData match_data;
   
-  g_return_if_fail(style != NULL);
-  g_return_if_fail(window != NULL);
-
   match_data.function = TOKEN_D_DIAMOND;
   match_data.detail = (gchar *)detail;
   match_data.flags = THEME_MATCH_SHADOW | THEME_MATCH_STATE;
   match_data.shadow = shadow;
   match_data.state = state;
   
-  if (!draw_simple_image_no_cairo (style, window, area, widget, &match_data, TRUE, TRUE,
+  if (!draw_simple_image (style, cr, widget, &match_data, TRUE, TRUE,
 			  x, y, width, height))
-    parent_class->draw_diamond (style, window, state, shadow, area, widget, detail,
+    parent_class->draw_diamond (style, cr, state, shadow, widget, detail,
 				x, y, width, height);
 }
 
 static void
 draw_box (GtkStyle     *style,
-	  GdkWindow    *window,
+	  cairo_t      *cr,
  	  GtkStateType  state,
  	  GtkShadowType shadow,
- 	  GdkRectangle *area,
  	  GtkWidget    *widget,
 	  const gchar  *detail,
 	  gint          x,
@@ -653,9 +640,6 @@ draw_box (GtkStyle     *style,
 	  gint          height)
 {
   ThemeMatchData match_data;
-
-  g_return_if_fail(style != NULL);
-  g_return_if_fail(window != NULL);
 
   if (detail &&
       (strcmp (detail, "hscrollbar") == 0 || strcmp (detail, "vscrollbar") == 0))
@@ -670,9 +654,9 @@ draw_box (GtkStyle     *style,
   match_data.shadow = shadow;
   match_data.state = state;
 
-  if (!draw_simple_image_no_cairo (style, window, area, widget, &match_data, TRUE, TRUE,
+  if (!draw_simple_image (style, cr, widget, &match_data, TRUE, TRUE,
 			  x, y, width, height)) {
-    parent_class->draw_box (style, window, state, shadow, area, widget, detail,
+    parent_class->draw_box (style, cr, state, shadow, widget, detail,
 			    x, y, width, height);
   }
 }
