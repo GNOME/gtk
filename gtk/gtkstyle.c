@@ -275,10 +275,9 @@ static void gtk_default_draw_expander   (GtkStyle        *style,
                                          gint             y,
 					 GtkExpanderStyle expander_style);
 static void gtk_default_draw_layout     (GtkStyle        *style,
-                                         GdkWindow       *window,
+                                         cairo_t         *cr,
                                          GtkStateType     state_type,
 					 gboolean         use_text,
-                                         GdkRectangle    *area,
                                          GtkWidget       *widget,
                                          const gchar     *detail,
                                          gint             x,
@@ -3923,27 +3922,17 @@ gtk_default_draw_expander (GtkStyle        *style,
 
 static void
 gtk_default_draw_layout (GtkStyle        *style,
-                         GdkWindow       *window,
+                         cairo_t         *cr,
                          GtkStateType     state_type,
 			 gboolean         use_text,
-                         GdkRectangle    *area,
                          GtkWidget       *widget,
                          const gchar     *detail,
                          gint             x,
                          gint             y,
                          PangoLayout     *layout)
 {
-  cairo_t *cr;
   GdkColor *gc;
   const PangoMatrix *matrix;
-
-  cr = gdk_cairo_create (window);
-
-  if (area)
-    {
-      gdk_cairo_rectangle (cr, area);
-      cairo_clip (cr);
-    }
 
   matrix = pango_context_get_matrix (pango_layout_get_context (layout));
   if (matrix)
@@ -3985,8 +3974,6 @@ gtk_default_draw_layout (GtkStyle        *style,
   gdk_cairo_set_source_color (cr, gc);
 
   pango_cairo_show_layout (cr, layout);
-
-  cairo_destroy (cr);
 }
 
 static void
@@ -6151,13 +6138,58 @@ gtk_paint_layout (GtkStyle           *style,
                   gint                y,
                   PangoLayout        *layout)
 {
+  cairo_t *cr;
+
   g_return_if_fail (GTK_IS_STYLE (style));
   g_return_if_fail (GTK_STYLE_GET_CLASS (style)->draw_layout != NULL);
   g_return_if_fail (style->depth == gdk_drawable_get_depth (window));
 
-  GTK_STYLE_GET_CLASS (style)->draw_layout (style, window, state_type, use_text,
-                                            (GdkRectangle *) area, widget, detail,
+  cr = gtk_style_cairo_create (window, area);
+
+  gtk_cairo_paint_layout (style, cr, state_type, use_text,
+                          widget, detail,
+                          x, y, layout);
+
+  cairo_destroy (cr);
+}
+
+/**
+ * gtk_cairo_paint_layout:
+ * @style: a #GtkStyle
+ * @cr: a #cairo_t
+ * @state_type: a state
+ * @use_text: whether to use the text or foreground
+ *            graphics context of @style
+ * @widget: (allow-none): the widget
+ * @detail: (allow-none): a style detail
+ * @x: x origin
+ * @y: y origin
+ * @layout: the layout to draw
+ *
+ * Draws a layout on @cr using the given parameters.
+ **/
+void
+gtk_cairo_paint_layout (GtkStyle           *style,
+                        cairo_t            *cr,
+                        GtkStateType        state_type,
+                        gboolean            use_text,
+                        GtkWidget          *widget,
+                        const gchar        *detail,
+                        gint                x,
+                        gint                y,
+                        PangoLayout        *layout)
+{
+  g_return_if_fail (GTK_IS_STYLE (style));
+  g_return_if_fail (GTK_STYLE_GET_CLASS (style)->draw_layout != NULL);
+  g_return_if_fail (cr != NULL);
+
+  cairo_save (cr);
+
+  GTK_STYLE_GET_CLASS (style)->draw_layout (style, cr, state_type, use_text,
+                                            widget, detail,
                                             x, y, layout);
+
+  cairo_restore (cr);
 }
 
 /**
