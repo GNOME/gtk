@@ -418,9 +418,8 @@ draw_hline (GtkStyle     *style,
 
 static void
 draw_vline (GtkStyle     *style,
-	    GdkWindow    *window,
+	    cairo_t      *cr,
 	    GtkStateType  state,
-	    GdkRectangle *area,
 	    GtkWidget    *widget,
 	    const gchar  *detail,
 	    gint          y1,
@@ -430,9 +429,6 @@ draw_vline (GtkStyle     *style,
   ThemeImage    *image;
   ThemeMatchData match_data;
   
-  g_return_if_fail (style != NULL);
-  g_return_if_fail (window != NULL);
-
   match_data.function = TOKEN_D_VLINE;
   match_data.detail = (gchar *)detail;
   match_data.flags = THEME_MATCH_ORIENTATION | THEME_MATCH_STATE;
@@ -443,12 +439,12 @@ draw_vline (GtkStyle     *style,
   if (image)
     {
       if (image->background)
-	theme_pixbuf_render_no_cairo (image->background,
-			     window, area, COMPONENT_ALL, FALSE,
+	theme_pixbuf_render (image->background,
+			     cr, COMPONENT_ALL, FALSE,
 			     x, y1, 2, (y2 - y1) + 1);
     }
   else
-    parent_class->draw_vline (style, window, state, area, widget, detail,
+    parent_class->draw_vline (style, cr, state, widget, detail,
 			      y1, y2, x);
 }
 

@@ -109,9 +109,8 @@ static void gtk_default_draw_hline      (GtkStyle        *style,
 					 gint             x2,
 					 gint             y);
 static void gtk_default_draw_vline      (GtkStyle        *style,
-					 GdkWindow       *window,
+					 cairo_t         *cr,
 					 GtkStateType     state_type,
-					 GdkRectangle    *area,
 					 GtkWidget       *widget,
 					 const gchar     *detail,
 					 gint             y1,
@@ -1688,17 +1687,15 @@ gtk_default_draw_hline (GtkStyle      *style,
 
 
 static void
-gtk_default_draw_vline (GtkStyle     *style,
-                        GdkWindow    *window,
+gtk_default_draw_vline (GtkStyle      *style,
+                        cairo_t       *cr,
                         GtkStateType  state_type,
-                        GdkRectangle  *area,
                         GtkWidget     *widget,
                         const gchar   *detail,
                         gint          y1,
                         gint          y2,
                         gint          x)
 {
-  cairo_t *cr;
   gint thickness_light;
   gint thickness_dark;
   gint i;
@@ -1706,14 +1703,7 @@ gtk_default_draw_vline (GtkStyle     *style,
   thickness_light = style->xthickness / 2;
   thickness_dark = style->xthickness - thickness_light;
 
-  cr = gdk_cairo_create (window);
   cairo_set_line_width (cr, 1.0);
-
-  if (area)
-    {
-      gdk_cairo_rectangle (cr, area);
-      cairo_clip (cr);
-    }
 
   for (i = 0; i < thickness_dark; i++)
     { 
@@ -1731,8 +1721,6 @@ gtk_default_draw_vline (GtkStyle     *style,
       _cairo_draw_line (cr, &style->light[state_type],
                         x + i, y1 + thickness_light - i, x + i, y2);
     }
-
-  cairo_destroy (cr);
 }
 
 static void
@@ -4905,13 +4893,56 @@ gtk_paint_vline (GtkStyle           *style,
                  gint                y2_,
                  gint                x)
 {
+  cairo_t *cr;
+
   g_return_if_fail (GTK_IS_STYLE (style));
   g_return_if_fail (GTK_STYLE_GET_CLASS (style)->draw_vline != NULL);
   g_return_if_fail (style->depth == gdk_drawable_get_depth (window));
 
-  GTK_STYLE_GET_CLASS (style)->draw_vline (style, window, state_type,
-                                           (GdkRectangle *) area, widget, detail,
+  cr = gtk_style_cairo_create (window, area);
+
+  GTK_STYLE_GET_CLASS (style)->draw_vline (style, cr, state_type,
+                                           widget, detail,
                                            y1_, y2_, x);
+
+  cairo_destroy (cr);
+}
+
+/**
+ * gtk_cairo_paint_vline:
+ * @style: a #GtkStyle
+ * @cr: a #cairo_t
+ * @state_type: a state
+ * @widget: (allow-none): the widget
+ * @detail: (allow-none): a style detail
+ * @y1_: the starting y coordinate
+ * @y2_: the ending y coordinate
+ * @x: the x coordinate
+ *
+ * Draws a vertical line from (@x, @y1_) to (@x, @y2_) in @cr
+ * using the given style and state.
+ */
+void
+gtk_cairo_paint_vline (GtkStyle           *style,
+                       cairo_t            *cr,
+                       GtkStateType        state_type,
+                       GtkWidget          *widget,
+                       const gchar        *detail,
+                       gint                y1_,
+                       gint                y2_,
+                       gint                x)
+{
+  g_return_if_fail (GTK_IS_STYLE (style));
+  g_return_if_fail (cr != NULL);
+  g_return_if_fail (GTK_STYLE_GET_CLASS (style)->draw_vline != NULL);
+
+  cairo_save (cr);
+
+  GTK_STYLE_GET_CLASS (style)->draw_vline (style, cr, state_type,
+                                           widget, detail,
+                                           y1_, y2_, x);
+
+  cairo_restore (cr);
 }
 
 /**
