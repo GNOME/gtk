@@ -294,9 +294,8 @@ static void gtk_default_draw_resize_grip (GtkStyle       *style,
                                           gint            width,
                                           gint            height);
 static void gtk_default_draw_spinner     (GtkStyle       *style,
-					  GdkWindow      *window,
+                                          cairo_t        *cr,
 					  GtkStateType    state_type,
-                                          GdkRectangle   *area,
                                           GtkWidget      *widget,
                                           const gchar    *detail,
 					  guint           step,
@@ -4269,9 +4268,8 @@ gtk_default_draw_resize_grip (GtkStyle       *style,
 
 static void
 gtk_default_draw_spinner (GtkStyle     *style,
-                          GdkWindow    *window,
+                          cairo_t      *cr,
                           GtkStateType  state_type,
-                          GdkRectangle *area,
                           GtkWidget    *widget,
                           const gchar  *detail,
                           guint         step,
@@ -4281,7 +4279,6 @@ gtk_default_draw_spinner (GtkStyle     *style,
                           gint          height)
 {
   GdkColor *color;
-  cairo_t *cr;
   guint num_steps;
   gdouble dx, dy;
   gdouble radius;
@@ -4293,9 +4290,6 @@ gtk_default_draw_spinner (GtkStyle     *style,
                  "num-steps", &num_steps,
                  NULL);
   real_step = step % num_steps;
-
-  /* get cairo context */
-  cr = gdk_cairo_create (window);
 
   /* set a clip region for the expose event */
   cairo_rectangle (cr, x, y, width, height);
@@ -4339,9 +4333,6 @@ gtk_default_draw_spinner (GtkStyle     *style,
 
       cairo_restore (cr);
     }
-
-  /* free memory */
-  cairo_destroy (cr);
 }
 
 void
@@ -6299,13 +6290,59 @@ gtk_paint_spinner (GtkStyle           *style,
 		   gint                width,
 		   gint                height)
 {
+  cairo_t *cr;
+
   g_return_if_fail (GTK_IS_STYLE (style));
   g_return_if_fail (GTK_STYLE_GET_CLASS (style)->draw_spinner != NULL);
   g_return_if_fail (style->depth == gdk_drawable_get_depth (window));
 
-  GTK_STYLE_GET_CLASS (style)->draw_spinner (style, window, state_type,
-                                             (GdkRectangle *)area, widget, detail,
+  cr = gtk_style_cairo_create (window, area);
+
+  gtk_cairo_paint_spinner (style, cr, state_type,
+                           widget, detail,
+			   step, x, y, width, height);
+
+  cairo_destroy (cr);
+}
+
+/**
+ * gtk_cairo_paint_spinner:
+ * @style: a #GtkStyle
+ * @cr: a #cairo_t
+ * @state_type: a state
+ * @widget: (allow-none): the widget (may be %NULL)
+ * @detail: (allow-none): a style detail (may be %NULL)
+ * @step: the nth step, a value between 0 and #GtkSpinner:num-steps
+ * @x: the x origin of the rectangle in which to draw the spinner
+ * @y: the y origin of the rectangle in which to draw the spinner
+ * @width: the width of the rectangle in which to draw the spinner
+ * @height: the height of the rectangle in which to draw the spinner
+ *
+ * Draws a spinner on @window using the given parameters.
+ */
+void
+gtk_cairo_paint_spinner (GtkStyle           *style,
+                         cairo_t            *cr,
+                         GtkStateType        state_type,
+                         GtkWidget          *widget,
+                         const gchar        *detail,
+                         guint               step,
+                         gint                x,
+                         gint                y,
+                         gint                width,
+                         gint                height)
+{
+  g_return_if_fail (GTK_IS_STYLE (style));
+  g_return_if_fail (cr != NULL);
+  g_return_if_fail (GTK_STYLE_GET_CLASS (style)->draw_spinner != NULL);
+
+  cairo_save (cr);
+
+  GTK_STYLE_GET_CLASS (style)->draw_spinner (style, cr, state_type,
+                                             widget, detail,
 					     step, x, y, width, height);
+
+  cairo_restore (cr);
 }
 
 /**
