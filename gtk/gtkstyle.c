@@ -267,9 +267,8 @@ static void gtk_default_draw_handle     (GtkStyle        *style,
 					 gint             height,
 					 GtkOrientation   orientation);
 static void gtk_default_draw_expander   (GtkStyle        *style,
-                                         GdkWindow       *window,
+                                         cairo_t         *cr,
                                          GtkStateType     state_type,
-                                         GdkRectangle    *area,
                                          GtkWidget       *widget,
                                          const gchar     *detail,
                                          gint             x,
@@ -3801,9 +3800,8 @@ gtk_default_draw_handle (GtkStyle      *style,
 
 static void
 gtk_default_draw_expander (GtkStyle        *style,
-                           GdkWindow       *window,
+                           cairo_t         *cr,
                            GtkStateType     state_type,
-                           GdkRectangle    *area,
                            GtkWidget       *widget,
                            const gchar     *detail,
                            gint             x,
@@ -3822,14 +3820,6 @@ gtk_default_draw_expander (GtkStyle        *style,
   double x_double_vert, y_double_vert;
   double x_double, y_double;
   gint degrees = 0;
-
-  cairo_t *cr = gdk_cairo_create (window);
-  
-  if (area)
-    {
-      gdk_cairo_rectangle (cr, area);
-      cairo_clip (cr);
-    }
 
   if (widget &&
       gtk_widget_class_find_style_property (GTK_WIDGET_GET_CLASS (widget),
@@ -3929,8 +3919,6 @@ gtk_default_draw_expander (GtkStyle        *style,
   
   gdk_cairo_set_source_color (cr, &style->fg[state_type]);
   cairo_stroke (cr);
-  
-  cairo_destroy (cr);
 }
 
 static void
@@ -6073,13 +6061,65 @@ gtk_paint_expander (GtkStyle           *style,
                     gint                y,
 		    GtkExpanderStyle    expander_style)
 {
+  cairo_t *cr;
+
   g_return_if_fail (GTK_IS_STYLE (style));
   g_return_if_fail (GTK_STYLE_GET_CLASS (style)->draw_expander != NULL);
   g_return_if_fail (style->depth == gdk_drawable_get_depth (window));
 
-  GTK_STYLE_GET_CLASS (style)->draw_expander (style, window, state_type,
-                                              (GdkRectangle *) area, widget, detail,
+  cr = gtk_style_cairo_create (window, area);
+
+  gtk_cairo_paint_expander (style, cr, state_type,
+                            widget, detail,
+                            x, y, expander_style);
+
+  cairo_destroy (cr);
+}
+
+/**
+ * gtk_cairo_paint_expander:
+ * @style: a #GtkStyle
+ * @cr: a #cairo_t
+ * @state_type: a state
+ * @widget: (allow-none): the widget
+ * @detail: (allow-none): a style detail
+ * @x: the x position to draw the expander at
+ * @y: the y position to draw the expander at
+ * @expander_style: the style to draw the expander in; determines
+ *   whether the expander is collapsed, expanded, or in an
+ *   intermediate state.
+ * 
+ * Draws an expander as used in #GtkTreeView. @x and @y specify the
+ * center the expander. The size of the expander is determined by the
+ * "expander-size" style property of @widget.  (If widget is not
+ * specified or doesn't have an "expander-size" property, an
+ * unspecified default size will be used, since the caller doesn't
+ * have sufficient information to position the expander, this is
+ * likely not useful.) The expander is expander_size pixels tall
+ * in the collapsed position and expander_size pixels wide in the
+ * expanded position.
+ **/
+void
+gtk_cairo_paint_expander (GtkStyle           *style,
+                          cairo_t            *cr,
+                          GtkStateType        state_type,
+                          GtkWidget          *widget,
+                          const gchar        *detail,
+                          gint                x,
+                          gint                y,
+                          GtkExpanderStyle    expander_style)
+{
+  g_return_if_fail (GTK_IS_STYLE (style));
+  g_return_if_fail (GTK_STYLE_GET_CLASS (style)->draw_expander != NULL);
+  g_return_if_fail (cr != NULL);
+
+  cairo_save (cr);
+
+  GTK_STYLE_GET_CLASS (style)->draw_expander (style, cr, state_type,
+                                              widget, detail,
                                               x, y, expander_style);
+
+  cairo_restore (cr);
 }
 
 /**

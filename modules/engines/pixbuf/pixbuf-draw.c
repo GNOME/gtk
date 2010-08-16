@@ -902,9 +902,8 @@ draw_handle (GtkStyle      *style,
 
 static void
 draw_expander (GtkStyle      *style,
-	       GdkWindow     *window,
+	       cairo_t       *cr,
 	       GtkStateType   state,
-	       GdkRectangle  *area,
 	       GtkWidget     *widget,
 	       const gchar   *detail,
 	       gint           x,
@@ -917,9 +916,6 @@ draw_expander (GtkStyle      *style,
   gint expander_size;
   gint radius;
   
-  g_return_if_fail (style != NULL);
-  g_return_if_fail (window != NULL);
-
   if (widget &&
       gtk_widget_class_find_style_property (GTK_WIDGET_GET_CLASS (widget),
                                             "expander-size"))
@@ -940,9 +936,9 @@ draw_expander (GtkStyle      *style,
   match_data.state = state;
   match_data.expander_style = expander_style;
 
-  if (!draw_simple_image_no_cairo (style, window, area, widget, &match_data, TRUE, TRUE,
+  if (!draw_simple_image (style, cr, widget, &match_data, TRUE, TRUE,
 			  x - radius, y - radius, expander_size, expander_size))
-    parent_class->draw_expander (style, window, state, area, widget, detail,
+    parent_class->draw_expander (style, cr, state, widget, detail,
 				 x, y, expander_style);
 }
 
