@@ -274,6 +274,8 @@ struct _GdkWindowObject
   
   cairo_surface_t *cairo_surface;
   guint outstanding_surfaces; /* only set on impl window */
+
+  cairo_pattern_t *background;
 };
 
 #define GDK_WINDOW_TYPE(d) (((GdkWindowObject*)(GDK_WINDOW (d)))->window_type)

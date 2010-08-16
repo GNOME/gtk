@@ -2043,6 +2043,12 @@ _gdk_window_destroy_hierarchy (GdkWindow *window,
 	      private->bg_pixmap = NULL;
 	    }
 
+          if (private->background)
+            {
+              cairo_pattern_destroy (private->background);
+              private->background = NULL;
+            }
+
 	  if (private->window_type == GDK_WINDOW_FOREIGN)
 	    g_assert (private->children == NULL);
 	  else
@@ -7864,6 +7870,12 @@ gdk_window_set_background (GdkWindow      *window,
 
   private->bg_pixmap = NULL;
 
+  if (private->background)
+    {
+      cairo_pattern_destroy (private->background);
+      private->background = NULL;
+    }
+
   if (!GDK_WINDOW_DESTROYED (window) &&
       gdk_window_has_impl (private) &&
       !private->input_only)
@@ -7924,6 +7936,12 @@ gdk_window_set_back_pixmap (GdkWindow *window,
       private->bg_pixmap != GDK_NO_BG)
     g_object_unref (private->bg_pixmap);
 
+  if (private->background)
+    {
+      cairo_pattern_destroy (private->background);
+      private->background = NULL;
+    }
+
   if (parent_relative)
     private->bg_pixmap = GDK_PARENT_RELATIVE_BG;
   else if (pixmap)
@@ -7938,6 +7956,56 @@ gdk_window_set_back_pixmap (GdkWindow *window,
       impl_iface = GDK_WINDOW_IMPL_GET_IFACE (private->impl);
       impl_iface->set_back_pixmap (window, private->bg_pixmap);
     }
+}
+
+/**
+ * gdk_window_get_background_pattern:
+ * @window: a window
+ *
+ * Gets the pattern used to clear the background on @window. If @window
+ * does not have its own background and reuses the parent's, %NULL is
+ * returned and you'll have to query it yourself.
+ *
+ * Returns: The pattern to use for the background or %NULL to use the
+ * parent's background.
+ *
+ * Since: 2.22
+ **/
+cairo_pattern_t *
+gdk_window_get_background_pattern (GdkWindow *window)
+{
+  GdkWindowObject *private = (GdkWindowObject *) window;
+
+  g_return_val_if_fail (GDK_IS_WINDOW (window), NULL);
+
+  if (private->background == NULL)
+    {
+      if (private->bg_pixmap == GDK_PARENT_RELATIVE_BG)
+        private->background = NULL;
+      else if (private->bg_pixmap != GDK_NO_BG &&
+               private->bg_pixmap != NULL)
+        {
+          static cairo_user_data_key_t key;
+          cairo_surface_t *surface;
+
+          surface = _gdk_drawable_ref_cairo_surface (private->bg_pixmap);
+          private->background = cairo_pattern_create_for_surface (surface);
+          cairo_surface_destroy (surface);
+
+          cairo_pattern_set_extend (private->background, CAIRO_EXTEND_REPEAT);
+          cairo_pattern_set_user_data (private->background,
+                                       &key,
+                                       g_object_ref (private->bg_pixmap),
+                                       g_object_unref);
+        }
+      else
+        private->background =
+            cairo_pattern_create_rgb (private->bg_color.red   / 65535.,
+                                      private->bg_color.green / 65535.,
+                                      private->bg_color.blue / 65535.);
+    }   
+
+  return private->background;
 }
 
 /**

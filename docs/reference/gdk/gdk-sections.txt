@@ -734,6 +734,7 @@ gdk_window_set_hints
 gdk_window_set_title
 gdk_window_set_background
 gdk_window_set_back_pixmap
+gdk_window_get_background_pattern
 GDK_PARENT_RELATIVE
 gdk_window_set_cursor
 gdk_window_get_cursor

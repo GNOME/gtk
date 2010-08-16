@@ -531,6 +531,8 @@ void	      gdk_window_set_background	 (GdkWindow	  *window,
 void	      gdk_window_set_back_pixmap (GdkWindow	  *window,
 					  GdkPixmap	  *pixmap,
 					  gboolean	   parent_relative);
+cairo_pattern_t *gdk_window_get_background_pattern (GdkWindow     *window);
+
 void	      gdk_window_set_cursor	 (GdkWindow	  *window,
 					  GdkCursor	  *cursor);
 GdkCursor    *gdk_window_get_cursor      (GdkWindow       *window);
