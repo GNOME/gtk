@@ -767,10 +767,9 @@ draw_tab (GtkStyle     *style,
 
 static void
 draw_shadow_gap (GtkStyle       *style,
-		 GdkWindow      *window,
+		 cairo_t        *cr,
 		 GtkStateType    state,
 		 GtkShadowType   shadow,
-		 GdkRectangle   *area,
 		 GtkWidget      *widget,
 		 const gchar    *detail,
 		 gint            x,
@@ -792,9 +791,9 @@ draw_shadow_gap (GtkStyle       *style,
   match_data.shadow = shadow;
   match_data.state = state;
   
-  if (!draw_gap_image_no_cairo (style, window, area, widget, &match_data, FALSE,
+  if (!draw_gap_image (style, cr, widget, &match_data, FALSE,
 		       x, y, width, height, gap_side, gap_x, gap_width))
-    parent_class->draw_shadow_gap (style, window, state, shadow, area, widget, detail,
+    parent_class->draw_shadow_gap (style, cr, state, shadow, widget, detail,
 				   x, y, width, height, gap_side, gap_x, gap_width);
 }
 
