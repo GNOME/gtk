@@ -236,9 +236,8 @@ static void gtk_default_draw_extension  (GtkStyle        *style,
 					 gint             height,
 					 GtkPositionType  gap_side);
 static void gtk_default_draw_focus      (GtkStyle        *style,
-					 GdkWindow       *window,
+					 cairo_t         *cr,
 					 GtkStateType     state_type,
-					 GdkRectangle    *area,
 					 GtkWidget       *widget,
 					 const gchar     *detail,
 					 gint             x,
@@ -3599,9 +3598,8 @@ gtk_default_draw_extension (GtkStyle       *style,
 
 static void 
 gtk_default_draw_focus (GtkStyle      *style,
-			GdkWindow     *window,
+			cairo_t       *cr,
 			GtkStateType   state_type,
-			GdkRectangle  *area,
 			GtkWidget     *widget,
 			const gchar   *detail,
 			gint           x,
@@ -3609,7 +3607,6 @@ gtk_default_draw_focus (GtkStyle      *style,
 			gint           width,
 			gint           height)
 {
-  cairo_t *cr;
   gboolean free_dash_list = FALSE;
   gint line_width = 1;
   gint8 *dash_list = (gint8 *) "\1\1";
@@ -3632,10 +3629,6 @@ gtk_default_draw_focus (GtkStyle      *style,
       dash_list = (gint8 *) "\4\4";
       free_dash_list = FALSE;
     }
-
-  sanitize_size (window, &width, &height);
-
-  cr = gdk_cairo_create (window);
 
   if (detail && !strcmp (detail, "colorwheel_light"))
     cairo_set_source_rgb (cr, 0., 0., 0.);
@@ -3673,19 +3666,12 @@ gtk_default_draw_focus (GtkStyle      *style,
       g_free (dashes);
     }
 
-  if (area)
-    {
-      gdk_cairo_rectangle (cr, area);
-      cairo_clip (cr);
-    }
-
   cairo_rectangle (cr,
 		   x + line_width / 2.,
 		   y + line_width / 2.,
 		   width - line_width,
 		   height - line_width);
   cairo_stroke (cr);
-  cairo_destroy (cr);
 
   if (free_dash_list)
     g_free (dash_list);
@@ -5823,13 +5809,62 @@ gtk_paint_focus (GtkStyle           *style,
                  gint                width,
                  gint                height)
 {
+  cairo_t *cr;
+
   g_return_if_fail (GTK_IS_STYLE (style));
   g_return_if_fail (GTK_STYLE_GET_CLASS (style)->draw_focus != NULL);
   g_return_if_fail (style->depth == gdk_drawable_get_depth (window));
 
-  GTK_STYLE_GET_CLASS (style)->draw_focus (style, window, state_type,
-                                           (GdkRectangle *) area, widget, detail,
+  sanitize_size (window, &width, &height);
+
+  cr = gtk_style_cairo_create (window, area);
+
+  gtk_cairo_paint_focus (style, cr, state_type,
+                         widget, detail,
+                         x, y, width, height);
+
+  cairo_destroy (cr);
+}
+
+/**
+ * gtk_cairo_paint_focus:
+ * @style: a #GtkStyle
+ * @cr: a #cairo_t
+ * @state_type: a state
+ * @widget: (allow-none): the widget
+ * @detail: (allow-none): a style detail
+ * @x: the x origin of the rectangle around which to draw a focus indicator
+ * @y: the y origin of the rectangle around which to draw a focus indicator
+ * @width: the width of the rectangle around which to draw a focus indicator
+ * @height: the height of the rectangle around which to draw a focus indicator
+ *
+ * Draws a focus indicator around the given rectangle on @cr using the
+ * given style.
+ */
+void
+gtk_cairo_paint_focus (GtkStyle           *style,
+                       cairo_t            *cr,
+                       GtkStateType        state_type,
+                       GtkWidget          *widget,
+                       const gchar        *detail,
+                       gint                x,
+                       gint                y,
+                       gint                width,
+                       gint                height)
+{
+  g_return_if_fail (GTK_IS_STYLE (style));
+  g_return_if_fail (GTK_STYLE_GET_CLASS (style)->draw_focus != NULL);
+  g_return_if_fail (cr != NULL);
+  g_return_if_fail (width >= 0);
+  g_return_if_fail (height >= 0);
+
+  cairo_save (cr);
+
+  GTK_STYLE_GET_CLASS (style)->draw_focus (style, cr, state_type,
+                                           widget, detail,
                                            x, y, width, height);
+
+  cairo_restore (cr);
 }
 
 /**

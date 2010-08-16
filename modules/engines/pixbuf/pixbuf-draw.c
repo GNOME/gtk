@@ -818,9 +818,8 @@ draw_extension (GtkStyle       *style,
 
 static void
 draw_focus (GtkStyle     *style,
-	    GdkWindow    *window,
+	    cairo_t      *cr,
 	    GtkStateType  state_type,
-	    GdkRectangle *area,
 	    GtkWidget    *widget,
 	    const gchar  *detail,
 	    gint          x,
@@ -830,16 +829,13 @@ draw_focus (GtkStyle     *style,
 {
   ThemeMatchData match_data;
   
-  g_return_if_fail (style != NULL);
-  g_return_if_fail (window != NULL);
-
   match_data.function = TOKEN_D_FOCUS;
   match_data.detail = (gchar *)detail;
   match_data.flags = 0;
   
-  if (!draw_simple_image_no_cairo (style, window, area, widget, &match_data, TRUE, FALSE,
+  if (!draw_simple_image (style, cr, widget, &match_data, TRUE, FALSE,
 			  x, y, width, height))
-    parent_class->draw_focus (style, window, state_type, area, widget, detail,
+    parent_class->draw_focus (style, cr, state_type, widget, detail,
 			      x, y, width, height);
 }
 
