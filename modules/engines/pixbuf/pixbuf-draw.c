@@ -343,47 +343,6 @@ draw_gap_image(GtkStyle       *style,
     return FALSE;
 }
 
-static gboolean
-draw_gap_image_no_cairo(GtkStyle       *style,
-               GdkWindow      *window,
-               GdkRectangle   *area,
-	       GtkWidget      *widget,
-	       ThemeMatchData *match_data,
-	       gboolean        draw_center,
-	       gint            x,
-	       gint            y,
-	       gint            width,
-	       gint            height,
-	       GtkPositionType gap_side,
-	       gint            gap_x,
-	       gint            gap_width)
-{
-  gboolean result;
-  cairo_t *cr;
-
-  if ((width == -1) && (height == -1))
-    gdk_drawable_get_size(window, &width, &height);
-  else if (width == -1)
-    gdk_drawable_get_size(window, &width, NULL);
-  else if (height == -1)
-    gdk_drawable_get_size(window, NULL, &height);
-
-  cr = gdk_cairo_create (window);
-  if (area)
-    {
-      gdk_cairo_rectangle (cr, area);
-      cairo_clip (cr);
-    }
-
-  result = draw_gap_image (style, cr, widget, match_data,
-                           draw_center, x, y, width, height,
-                           gap_side, gap_x, gap_width);
-
-  cairo_destroy (cr);
-
-  return result;
-}
-
 static void
 draw_hline (GtkStyle     *style,
 	    cairo_t      *cr,
@@ -799,10 +758,9 @@ draw_shadow_gap (GtkStyle       *style,
 
 static void
 draw_box_gap (GtkStyle       *style,
-	      GdkWindow      *window,
+	      cairo_t        *cr,
 	      GtkStateType    state,
 	      GtkShadowType   shadow,
-	      GdkRectangle   *area,
 	      GtkWidget      *widget,
 	      const gchar    *detail,
 	      gint            x,
@@ -824,9 +782,9 @@ draw_box_gap (GtkStyle       *style,
   match_data.shadow = shadow;
   match_data.state = state;
   
-  if (!draw_gap_image_no_cairo (style, window, area, widget, &match_data, TRUE,
+  if (!draw_gap_image (style, cr, widget, &match_data, TRUE,
 		       x, y, width, height, gap_side, gap_x, gap_width))
-    parent_class->draw_box_gap (style, window, state, shadow, area, widget, detail,
+    parent_class->draw_box_gap (style, cr, state, shadow, widget, detail,
 				x, y, width, height, gap_side, gap_x, gap_width);
 }
 

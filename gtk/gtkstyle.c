@@ -212,10 +212,9 @@ static void gtk_default_draw_shadow_gap (GtkStyle        *style,
 					 gint             gap_x,
 					 gint             gap_width);
 static void gtk_default_draw_box_gap    (GtkStyle        *style,
-					 GdkWindow       *window,
+					 cairo_t         *cr,
 					 GtkStateType     state_type,
 					 GtkShadowType    shadow_type,
-					 GdkRectangle    *area,
 					 GtkWidget       *widget,
 					 const gchar     *detail,
 					 gint             x,
@@ -3241,10 +3240,9 @@ gtk_default_draw_shadow_gap (GtkStyle       *style,
 
 static void 
 gtk_default_draw_box_gap (GtkStyle       *style,
-                          GdkWindow      *window,
+                          cairo_t        *cr,
                           GtkStateType    state_type,
                           GtkShadowType   shadow_type,
-                          GdkRectangle   *area,
                           GtkWidget      *widget,
                           const gchar    *detail,
                           gint            x,
@@ -3255,28 +3253,17 @@ gtk_default_draw_box_gap (GtkStyle       *style,
                           gint            gap_x,
                           gint            gap_width)
 {
-  cairo_t *cr;
   GdkColor color1;
   GdkColor color2;
   GdkColor color3;
   GdkColor color4;
   
-  sanitize_size (window, &width, &height);
-
-  cr = gdk_cairo_create (window);
-  if (area)
-    {
-      gdk_cairo_rectangle (cr, area);
-      cairo_clip (cr);
-    }
-
-  gtk_style_apply_default_background (style, cr, window,
+  gtk_style_apply_default_background (style, cr, gtk_widget_get_window (widget),
                                       state_type, x, y, width, height);
 
   switch (shadow_type)
     {
     case GTK_SHADOW_NONE:
-      cairo_destroy (cr);
       return;
     case GTK_SHADOW_IN:
       color1 = style->dark[state_type];
@@ -3449,9 +3436,6 @@ gtk_default_draw_box_gap (GtkStyle       *style,
           break;
         }
     }
-
-
-  cairo_destroy (cr);
 }
 
 static void 
@@ -5665,13 +5649,70 @@ gtk_paint_box_gap (GtkStyle           *style,
                    gint                gap_x,
                    gint                gap_width)
 {
+  cairo_t *cr;
+
   g_return_if_fail (GTK_IS_STYLE (style));
   g_return_if_fail (GTK_STYLE_GET_CLASS (style)->draw_box_gap != NULL);
   g_return_if_fail (style->depth == gdk_drawable_get_depth (window));
 
-  GTK_STYLE_GET_CLASS (style)->draw_box_gap (style, window, state_type, shadow_type,
-                                             (GdkRectangle *) area, widget, detail,
+  sanitize_size (window, &width, &height);
+
+  cr = gtk_style_cairo_create (window, area);
+
+  gtk_cairo_paint_box_gap (style, cr, state_type, shadow_type,
+                           widget, detail,
+                           x, y, width, height, gap_side, gap_x, gap_width);
+
+  cairo_destroy (cr);
+}
+
+/**
+ * gtk_cairo_paint_box_gap:
+ * @style: a #GtkStyle
+ * @cr: a #cairo_t
+ * @state_type: a state
+ * @shadow_type: type of shadow to draw
+ * @widget: (allow-none): the widget
+ * @detail: (allow-none): a style detail
+ * @x: x origin of the rectangle
+ * @y: y origin of the rectangle
+ * @width: width of the rectangle
+ * @height: width of the rectangle
+ * @gap_side: side in which to leave the gap
+ * @gap_x: starting position of the gap
+ * @gap_width: width of the gap
+ *
+ * Draws a box in @cr using the given style and state and shadow type, 
+ * leaving a gap in one side.
+ */
+void
+gtk_cairo_paint_box_gap (GtkStyle           *style,
+                         cairo_t            *cr,
+                         GtkStateType        state_type,
+                         GtkShadowType       shadow_type,
+                         GtkWidget          *widget,
+                         const gchar        *detail,
+                         gint                x,
+                         gint                y,
+                         gint                width,
+                         gint                height,
+                         GtkPositionType     gap_side,
+                         gint                gap_x,
+                         gint                gap_width)
+{
+  g_return_if_fail (GTK_IS_STYLE (style));
+  g_return_if_fail (GTK_STYLE_GET_CLASS (style)->draw_box_gap != NULL);
+  g_return_if_fail (cr != NULL);
+  g_return_if_fail (width >= 0);
+  g_return_if_fail (height >= 0);
+
+  cairo_save (cr);
+
+  GTK_STYLE_GET_CLASS (style)->draw_box_gap (style, cr, state_type, shadow_type,
+                                             widget, detail,
                                              x, y, width, height, gap_side, gap_x, gap_width);
+
+  cairo_restore (cr);
 }
 
 /**
