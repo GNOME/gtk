@@ -159,10 +159,9 @@ static void gtk_default_draw_box        (GtkStyle        *style,
 					 gint             width,
 					 gint             height);
 static void gtk_default_draw_flat_box   (GtkStyle        *style,
-					 GdkWindow       *window,
+					 cairo_t         *cr,
 					 GtkStateType     state_type,
 					 GtkShadowType    shadow_type,
-					 GdkRectangle    *area,
 					 GtkWidget       *widget,
 					 const gchar     *detail,
 					 gint             x,
@@ -2572,10 +2571,9 @@ get_darkened (const GdkColor *color,
 
 static void 
 gtk_default_draw_flat_box (GtkStyle      *style,
-                           GdkWindow     *window,
+                           cairo_t       *cr,
                            GtkStateType   state_type,
                            GtkShadowType  shadow_type,
-                           GdkRectangle  *area,
                            GtkWidget     *widget,
                            const gchar   *detail,
                            gint           x,
@@ -2583,21 +2581,10 @@ gtk_default_draw_flat_box (GtkStyle      *style,
                            gint           width,
                            gint           height)
 {
-  cairo_t *cr;
   GdkColor *gc1;
   GdkColor *freeme = NULL;
   
-  sanitize_size (window, &width, &height);
-  
-  cr = gdk_cairo_create (window);
-
   cairo_set_line_width (cr, 1.0);
-
-  if (area)
-    {
-      gdk_cairo_rectangle (cr, area);
-      cairo_clip (cr);
-    }
 
   if (detail)
     {
@@ -2771,8 +2758,7 @@ gtk_default_draw_flat_box (GtkStyle      *style,
   else
     gc1 = &style->bg[state_type];
   
-  if (!style->bg_pixmap[state_type] || gc1 != &style->bg[state_type] ||
-      GDK_IS_PIXMAP (window))
+  if (!style->bg_pixmap[state_type] || gc1 != &style->bg[state_type])
     {
       _cairo_draw_rectangle (cr, gc1, TRUE,
                              x, y, width, height);
@@ -2782,11 +2768,8 @@ gtk_default_draw_flat_box (GtkStyle      *style,
                                x, y, width - 1, height - 1);
     }
   else
-    gtk_style_apply_default_background (style, cr, window,
+    gtk_style_apply_default_background (style, cr, gtk_widget_get_window (widget),
                                         state_type, x, y, width, height);
-
-
-  cairo_destroy (cr);
 
   if (freeme)
     gdk_color_free (freeme);
@@ -5265,13 +5248,65 @@ gtk_paint_flat_box (GtkStyle           *style,
                     gint                width,
                     gint                height)
 {
+  cairo_t *cr;
+
   g_return_if_fail (GTK_IS_STYLE (style));
   g_return_if_fail (GTK_STYLE_GET_CLASS (style)->draw_flat_box != NULL);
   g_return_if_fail (style->depth == gdk_drawable_get_depth (window));
 
-  GTK_STYLE_GET_CLASS (style)->draw_flat_box (style, window, state_type, shadow_type,
-                                              (GdkRectangle *) area, widget, detail,
+  sanitize_size (window, &width, &height);
+
+  cr = gtk_style_cairo_create (window, area);
+
+  gtk_cairo_paint_flat_box (style, cr, state_type, shadow_type,
+                            widget, detail,
+                            x, y, width, height);
+
+  cairo_destroy (cr);
+}
+
+/**
+ * gtk_cairo_paint_flat_box:
+ * @style: a #GtkStyle
+ * @cr: a #cairo_t
+ * @state_type: a state
+ * @shadow_type: the type of shadow to draw
+ * @area: (allow-none): clip rectangle, or %NULL if the
+ *        output should not be clipped
+ * @widget: (allow-none): the widget
+ * @detail: (allow-none): a style detail
+ * @x: x origin of the box
+ * @y: y origin of the box
+ * @width: the width of the box
+ * @height: the height of the box
+ * 
+ * Draws a flat box on @cr with the given parameters.
+ */
+void
+gtk_cairo_paint_flat_box (GtkStyle           *style,
+                          cairo_t            *cr,
+                          GtkStateType        state_type,
+                          GtkShadowType       shadow_type,
+                          GtkWidget          *widget,
+                          const gchar        *detail,
+                          gint                x,
+                          gint                y,
+                          gint                width,
+                          gint                height)
+{
+  g_return_if_fail (GTK_IS_STYLE (style));
+  g_return_if_fail (GTK_STYLE_GET_CLASS (style)->draw_flat_box != NULL);
+  g_return_if_fail (cr != NULL);
+  g_return_if_fail (width >= 0);
+  g_return_if_fail (height >= 0);
+
+  cairo_save (cr);
+
+  GTK_STYLE_GET_CLASS (style)->draw_flat_box (style, cr, state_type, shadow_type,
+                                              widget, detail,
                                               x, y, width, height);
+
+  cairo_restore (cr);
 }
 
 /**
