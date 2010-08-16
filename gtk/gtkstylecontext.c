@@ -705,6 +705,7 @@ style_class_find (GArray *array,
 {
   gint min, max, mid;
   gboolean found = FALSE;
+  guint pos;
 
   if (position)
     *position = 0;
@@ -719,23 +720,26 @@ style_class_find (GArray *array,
     {
       GQuark item;
 
-      mid = min + max / 2;
+      mid = (min + max) / 2;
       item = g_array_index (array, GQuark, mid);
 
       if (class_quark == item)
-        found = TRUE;
+        {
+          found = TRUE;
+          pos = mid;
+        }
       else if (class_quark > item)
-        min = mid = mid + 1;
+        min = pos = mid + 1;
       else
-        max = mid = mid - 1;
+        {
+          max = mid - 1;
+          pos = mid;
+        }
     }
   while (!found && min <= max);
 
-  if (mid < 0)
-    mid = 0;
-
   if (position)
-    *position = mid;
+    *position = pos;
 
   return found;
 }
@@ -747,6 +751,7 @@ region_find (GArray *array,
 {
   gint min, max, mid;
   gboolean found = FALSE;
+  guint pos;
 
   if (position)
     *position = 0;
@@ -761,23 +766,26 @@ region_find (GArray *array,
     {
       GtkRegion *region;
 
-      mid = min + max / 2;
+      mid = (min + max) / 2;
       region = &g_array_index (array, GtkRegion, mid);
 
       if (region->class_quark == class_quark)
-        found = TRUE;
+        {
+          found = TRUE;
+          pos = mid;
+        }
       else if (region->class_quark > class_quark)
-        min = mid = mid + 1;
+        min = pos = mid + 1;
       else
-        max = mid = mid - 1;
+        {
+          max = mid - 1;
+          pos = mid;
+        }
     }
   while (!found && min <= max);
 
-  if (mid < 0)
-    mid = 0;
-
   if (position)
-    *position = mid;
+    *position = pos;
 
   return found;
 }
