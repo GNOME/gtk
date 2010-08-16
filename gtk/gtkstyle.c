@@ -225,10 +225,9 @@ static void gtk_default_draw_box_gap    (GtkStyle        *style,
 					 gint             gap_x,
 					 gint             gap_width);
 static void gtk_default_draw_extension  (GtkStyle        *style,
-					 GdkWindow       *window,
+					 cairo_t         *cr,
 					 GtkStateType     state_type,
 					 GtkShadowType    shadow_type,
-					 GdkRectangle    *area,
 					 GtkWidget       *widget,
 					 const gchar     *detail,
 					 gint             x,
@@ -3440,10 +3439,9 @@ gtk_default_draw_box_gap (GtkStyle       *style,
 
 static void 
 gtk_default_draw_extension (GtkStyle       *style,
-                            GdkWindow      *window,
+                            cairo_t        *cr,
                             GtkStateType    state_type,
                             GtkShadowType   shadow_type,
-                            GdkRectangle   *area,
                             GtkWidget      *widget,
                             const gchar    *detail,
                             gint            x,
@@ -3452,20 +3450,11 @@ gtk_default_draw_extension (GtkStyle       *style,
                             gint            height,
                             GtkPositionType gap_side)
 {
-  cairo_t *cr;
+  GdkWindow *window = gtk_widget_get_window (widget);
   GdkColor color1;
   GdkColor color2;
   GdkColor color3;
   GdkColor color4;
-  
-  sanitize_size (window, &width, &height);
-
-  cr = gdk_cairo_create (window);
-  if (area)
-    {
-      gdk_cairo_rectangle (cr, area);
-      cairo_clip (cr);
-    }
   
   switch (gap_side)
     {
@@ -3506,7 +3495,6 @@ gtk_default_draw_extension (GtkStyle       *style,
   switch (shadow_type)
     {
     case GTK_SHADOW_NONE:
-      cairo_destroy (cr);
       return;
     case GTK_SHADOW_IN:
       color1 = style->dark[state_type];
@@ -3607,8 +3595,6 @@ gtk_default_draw_extension (GtkStyle       *style,
           break;
         }
     }
-
-  cairo_destroy (cr);
 }
 
 static void 
@@ -5747,13 +5733,65 @@ gtk_paint_extension (GtkStyle           *style,
                      gint                height,
                      GtkPositionType     gap_side)
 {
+  cairo_t *cr;
+
   g_return_if_fail (GTK_IS_STYLE (style));
   g_return_if_fail (GTK_STYLE_GET_CLASS (style)->draw_extension != NULL);
   g_return_if_fail (style->depth == gdk_drawable_get_depth (window));
 
-  GTK_STYLE_GET_CLASS (style)->draw_extension (style, window, state_type, shadow_type,
-                                               (GdkRectangle *) area, widget, detail,
+  sanitize_size (window, &width, &height);
+
+  cr = gtk_style_cairo_create (window, area);
+
+  gtk_cairo_paint_extension (style, cr, state_type, shadow_type,
+                             widget, detail,
+                             x, y, width, height, gap_side);
+
+  cairo_destroy (cr);
+}
+
+/**
+ * gtk_cairo_paint_extension: 
+ * @style: a #GtkStyle
+ * @cr: a #cairo_t
+ * @state_type: a state
+ * @shadow_type: type of shadow to draw
+ * @widget: (allow-none): the widget
+ * @detail: (allow-none): a style detail
+ * @x: x origin of the extension
+ * @y: y origin of the extension
+ * @width: width of the extension
+ * @height: width of the extension
+ * @gap_side: the side on to which the extension is attached
+ * 
+ * Draws an extension, i.e. a notebook tab.
+ **/
+void
+gtk_cairo_paint_extension (GtkStyle           *style,
+                           cairo_t            *cr,
+                           GtkStateType        state_type,
+                           GtkShadowType       shadow_type,
+                           GtkWidget          *widget,
+                           const gchar        *detail,
+                           gint                x,
+                           gint                y,
+                           gint                width,
+                           gint                height,
+                           GtkPositionType     gap_side)
+{
+  g_return_if_fail (GTK_IS_STYLE (style));
+  g_return_if_fail (GTK_STYLE_GET_CLASS (style)->draw_extension != NULL);
+  g_return_if_fail (cr != NULL);
+  g_return_if_fail (width >= 0);
+  g_return_if_fail (height >= 0);
+
+  cairo_save (cr);
+
+  GTK_STYLE_GET_CLASS (style)->draw_extension (style, cr, state_type, shadow_type,
+                                               widget, detail,
                                                x, y, width, height, gap_side);
+
+  cairo_restore (cr);
 }
 
 /**

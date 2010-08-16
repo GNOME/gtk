@@ -790,10 +790,9 @@ draw_box_gap (GtkStyle       *style,
 
 static void
 draw_extension (GtkStyle       *style,
-		GdkWindow      *window,
+		cairo_t        *cr,
 		GtkStateType    state,
 		GtkShadowType   shadow,
-		GdkRectangle   *area,
 		GtkWidget      *widget,
 		const gchar    *detail,
 		gint            x,
@@ -804,9 +803,6 @@ draw_extension (GtkStyle       *style,
 {
   ThemeMatchData match_data;
   
-  g_return_if_fail (style != NULL);
-  g_return_if_fail (window != NULL);
-
   match_data.function = TOKEN_D_EXTENSION;
   match_data.detail = (gchar *)detail;
   match_data.flags = THEME_MATCH_SHADOW | THEME_MATCH_STATE | THEME_MATCH_GAP_SIDE;
@@ -814,9 +810,9 @@ draw_extension (GtkStyle       *style,
   match_data.state = state;
   match_data.gap_side = gap_side;
 
-  if (!draw_simple_image_no_cairo (style, window, area, widget, &match_data, TRUE, TRUE,
+  if (!draw_simple_image (style, cr, widget, &match_data, TRUE, TRUE,
 			  x, y, width, height))
-    parent_class->draw_extension (style, window, state, shadow, area, widget, detail,
+    parent_class->draw_extension (style, cr, state, shadow, widget, detail,
 				  x, y, width, height, gap_side);
 }
 
