@@ -46,60 +46,15 @@ G_BEGIN_DECLS
 #define GTK_IS_RANGE_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_RANGE))
 #define GTK_RANGE_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_RANGE, GtkRangeClass))
 
-/* These two are private/opaque types, ignore */
-typedef struct _GtkRangeLayout    GtkRangeLayout;
-typedef struct _GtkRangeStepTimer GtkRangeStepTimer;
-
 typedef struct _GtkRange        GtkRange;
+typedef struct _GtkRangePriv    GtkRangePriv;
 typedef struct _GtkRangeClass   GtkRangeClass;
 
 struct _GtkRange
 {
   GtkWidget widget;
 
-  GtkAdjustment *GSEAL (adjustment);
-  GtkUpdateType GSEAL (update_policy);
-  guint GSEAL (inverted) : 1;
-
-  /*< protected >*/
-
-  guint GSEAL (flippable) : 1;
-
-  /* Steppers are: < > ---- < >
-   *               a b      c d
-   */
-
-  guint GSEAL (has_stepper_a) : 1;
-  guint GSEAL (has_stepper_b) : 1;
-  guint GSEAL (has_stepper_c) : 1;
-  guint GSEAL (has_stepper_d) : 1;
-
-  guint GSEAL (need_recalc) : 1;
-
-  guint GSEAL (slider_size_fixed) : 1;
-
-  gint GSEAL (min_slider_size);
-
-  GtkOrientation GSEAL (orientation);
-
-  /* Area of entire stepper + trough assembly in widget->window coords */
-  GdkRectangle GSEAL (range_rect);
-  /* Slider range along the long dimension, in widget->window coords */
-  gint GSEAL (slider_start);
-  gint GSEAL (slider_end);
-
-  /* Round off value to this many digits, -1 for no rounding */
-  gint GSEAL (round_digits);
-
-  /*< private >*/
-  guint GSEAL (trough_click_forward) : 1;  /* trough click was on the forward side of slider */
-  guint GSEAL (update_pending) : 1;        /* need to emit value_changed */
-  GtkRangeLayout *GSEAL (layout);
-  GtkRangeStepTimer *GSEAL (timer);
-  gint GSEAL (slide_initial_slider_position);
-  gint GSEAL (slide_initial_coordinate);
-  guint GSEAL (update_timeout_id);
-  GdkWindow *GSEAL (event_window);
+  GtkRangePriv *priv;
 };
 
 struct _GtkRangeClass
