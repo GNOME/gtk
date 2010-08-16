@@ -154,6 +154,8 @@ gtk_accel_label_accelerator_width
 <TITLE>GtkAccessible</TITLE>
 GtkAccessible
 gtk_accessible_connect_widget_destroyed
+gtk_accessible_get_widget
+gtk_accessible_set_widget
 
 <SUBSECTION Standard>
 GTK_ACCESSIBLE
@@ -1379,6 +1381,7 @@ GTK_IS_ENTRY_BUFFER_CLASS
 GTK_ENTRY_BUFFER_GET_CLASS
 GTK_ENTRY_BUFFER_MAX_SIZE
 <SUBSECTION Private>
+GtkEntryBufferPrivate
 gtk_entry_buffer_get_type
 </SECTION>
 
@@ -1754,6 +1757,7 @@ gtk_font_selection_dialog_set_preview_text
 gtk_font_selection_dialog_get_apply_button
 gtk_font_selection_dialog_get_cancel_button
 gtk_font_selection_dialog_get_ok_button
+gtk_font_selection_dialog_get_font_selection
 
 <SUBSECTION Standard>
 GTK_FONT_SELECTION_DIALOG
@@ -2627,6 +2631,7 @@ gtk_message_dialog_new_with_markup
 gtk_message_dialog_set_markup
 gtk_message_dialog_set_image
 gtk_message_dialog_get_image
+gtk_message_dialog_get_message_area
 gtk_message_dialog_format_secondary_text
 gtk_message_dialog_format_secondary_markup
 <SUBSECTION Standard>
@@ -2667,7 +2672,7 @@ GTK_INFO_BAR_GET_CLASS
 
 <SUBSECTION Private>
 gtk_info_bar_get_type
-GtkMessageAreaPrivate
+GtkInfoBarPrivate
 </SECTION>
 
 <SECTION>
@@ -3636,6 +3641,7 @@ GTK_SPINNER_CLASS
 GTK_IS_SPINER_CLASS
 GTK_SPINNER_GET_CLASS
 <SUBSECTION Private>
+GtkSpinnerPrivate
 gtk_spinner_get_type
 </SECTION>
 
@@ -3648,6 +3654,7 @@ gtk_statusbar_get_context_id
 gtk_statusbar_push
 gtk_statusbar_pop
 gtk_statusbar_remove
+gtk_statusbar_remove_all
 gtk_statusbar_set_has_resize_grip
 gtk_statusbar_get_has_resize_grip
 gtk_statusbar_get_message_area
@@ -4133,6 +4140,8 @@ gtk_text_view_get_accepts_tab
 gtk_text_view_get_default_attributes
 gtk_text_view_im_context_filter_keypress
 gtk_text_view_reset_im_context
+gtk_text_view_get_hadjustment
+gtk_text_view_get_vadjustment
 GTK_TEXT_VIEW_PRIORITY_VALIDATE
 <SUBSECTION Standard>
 GTK_TEXT_VIEW
@@ -4534,6 +4543,7 @@ GTK_TOOL_ITEM_GROUP_CLASS
 GTK_IS_TOOL_ITEM_GROUP_CLASS
 GTK_TOOL_ITEM_GROUP_GET_CLASS
 <SUBSECTION Private>
+GtkToolItemGroupPrivate
 gtk_tool_item_group_get_type
 </SECTION>
 
@@ -4676,6 +4686,7 @@ gtk_tree_path_append_index
 gtk_tree_path_prepend_index
 gtk_tree_path_get_depth
 gtk_tree_path_get_indices
+gtk_tree_path_get_indices_with_depth
 gtk_tree_path_free
 gtk_tree_path_copy
 gtk_tree_path_compare
@@ -5878,6 +5889,7 @@ gtk_window_get_urgency_hint
 gtk_window_get_accept_focus
 gtk_window_get_focus_on_map
 gtk_window_get_group
+gtk_window_has_group
 gtk_window_get_window_type
 gtk_window_move
 gtk_window_parse_geometry

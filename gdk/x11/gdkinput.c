@@ -321,7 +321,9 @@ gdk_device_get_axis_use (GdkDevice *device,
  * gdk_device_get_n_axes:
  * @device: a #GdkDevice.
  *
- * Returns: the number of axes of this device.
+ * Gets the number of axes of a device.
+ *
+ * Returns: the number of axes of @device
  *
  * Since: 2.22
  **/

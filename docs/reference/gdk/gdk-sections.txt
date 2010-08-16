@@ -614,6 +614,15 @@ gdk_visual_get_best_with_both
 gdk_visual_ref
 gdk_visual_unref
 gdk_visual_get_screen
+gdk_visual_get_bits_per_rgb
+gdk_visual_get_blue_pixel_details
+gdk_visual_get_byte_order
+gdk_visual_get_colormap_size
+gdk_visual_get_depth
+gdk_visual_get_green_pixel_details
+gdk_visual_get_red_pixel_details
+gdk_visual_get_visual_type
+
 
 <SUBSECTION Standard>
 GDK_TYPE_BYTE_ORDER
@@ -655,6 +664,8 @@ gdk_window_hide
 gdk_window_is_destroyed
 gdk_window_is_visible
 gdk_window_is_viewable
+gdk_window_is_shaped
+gdk_window_is_input_only
 gdk_window_get_state
 gdk_window_withdraw
 gdk_window_iconify
@@ -669,6 +680,7 @@ gdk_window_set_keep_above
 gdk_window_set_keep_below
 gdk_window_set_opacity
 gdk_window_set_composited
+gdk_window_get_composited
 gdk_window_move
 gdk_window_resize
 gdk_window_move_resize
@@ -715,7 +727,9 @@ gdk_window_configure_finished
 gdk_window_set_user_data
 gdk_window_set_override_redirect
 gdk_window_set_accept_focus
+gdk_window_get_accept_focus
 gdk_window_set_focus_on_map
+gdk_window_get_focus_on_map
 gdk_window_add_filter
 gdk_window_remove_filter
 GdkFilterFunc
@@ -744,6 +758,7 @@ gdk_window_get_geometry
 gdk_window_set_geometry_hints
 gdk_window_set_icon_list
 gdk_window_set_modal_hint
+gdk_window_get_modal_hint
 gdk_window_set_type_hint
 gdk_window_get_type_hint
 gdk_window_set_skip_taskbar_hint
@@ -759,10 +774,14 @@ gdk_window_get_type
 gdk_window_get_origin
 gdk_window_get_deskrelative_origin
 gdk_window_get_root_coords
+gdk_window_coords_from_parent
+gdk_window_coords_to_parent
 gdk_window_get_pointer
 GdkModifierType
 gdk_window_get_parent
+gdk_window_get_effective_parent
 gdk_window_get_toplevel
+gdk_window_get_effective_toplevel
 gdk_window_get_children
 gdk_window_peek_children
 gdk_window_get_events
@@ -1061,11 +1080,17 @@ GdkDeviceKey
 GdkDeviceAxis
 GdkAxisUse
 gdk_devices_list
+gdk_device_get_name
 gdk_device_set_source
+gdk_device_get_source
 gdk_device_set_mode
+gdk_device_get_mode
 gdk_device_set_key
+gdk_device_get_key
 gdk_device_set_axis_use
+gdk_device_get_axis_use
 gdk_device_get_core_pointer
+gdk_device_has_cursor
 
 <SUBSECTION>
 gdk_device_get_state
