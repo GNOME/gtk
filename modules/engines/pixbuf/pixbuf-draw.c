@@ -689,10 +689,9 @@ draw_flat_box (GtkStyle     *style,
 
 static void
 draw_check (GtkStyle     *style,
-	    GdkWindow    *window,
+	    cairo_t      *cr,
 	    GtkStateType  state,
 	    GtkShadowType shadow,
-	    GdkRectangle *area,
 	    GtkWidget    *widget,
 	    const gchar  *detail,
 	    gint          x,
@@ -702,18 +701,15 @@ draw_check (GtkStyle     *style,
 {
   ThemeMatchData match_data;
   
-  g_return_if_fail(style != NULL);
-  g_return_if_fail(window != NULL);
-
   match_data.function = TOKEN_D_CHECK;
   match_data.detail = (gchar *)detail;
   match_data.flags = THEME_MATCH_SHADOW | THEME_MATCH_STATE;
   match_data.shadow = shadow;
   match_data.state = state;
   
-  if (!draw_simple_image_no_cairo (style, window, area, widget, &match_data, TRUE, TRUE,
+  if (!draw_simple_image (style, cr, widget, &match_data, TRUE, TRUE,
 			  x, y, width, height))
-    parent_class->draw_check (style, window, state, shadow, area, widget, detail,
+    parent_class->draw_check (style, cr, state, shadow, widget, detail,
 			      x, y, width, height);
 }
 

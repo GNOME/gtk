@@ -169,10 +169,9 @@ static void gtk_default_draw_flat_box   (GtkStyle        *style,
 					 gint             width,
 					 gint             height);
 static void gtk_default_draw_check      (GtkStyle        *style,
-					 GdkWindow       *window,
+					 cairo_t         *cr,
 					 GtkStateType     state_type,
 					 GtkShadowType    shadow_type,
-					 GdkRectangle    *area,
 					 GtkWidget       *widget,
 					 const gchar     *detail,
 					 gint             x,
@@ -2777,10 +2776,9 @@ gtk_default_draw_flat_box (GtkStyle      *style,
 
 static void 
 gtk_default_draw_check (GtkStyle      *style,
-			GdkWindow     *window,
+			cairo_t       *cr,
 			GtkStateType   state_type,
 			GtkShadowType  shadow_type,
-			GdkRectangle  *area,
 			GtkWidget     *widget,
 			const gchar   *detail,
 			gint           x,
@@ -2788,7 +2786,6 @@ gtk_default_draw_check (GtkStyle      *style,
 			gint           width,
 			gint           height)
 {
-  cairo_t *cr = gdk_cairo_create (window);
   enum { BUTTON, MENU, CELL } type = BUTTON;
   int exterior_size;
   int interior_size;
@@ -2802,12 +2799,6 @@ gtk_default_draw_check (GtkStyle      *style,
 	type = MENU;
     }
       
-  if (area)
-    {
-      gdk_cairo_rectangle (cr, area);
-      cairo_clip (cr);
-    }
-  
   exterior_size = MIN (width, height);
   if (exterior_size % 2 == 0) /* Ensure odd */
     exterior_size -= 1;
@@ -2896,8 +2887,6 @@ gtk_default_draw_check (GtkStyle      *style,
 		       line_thickness);
       cairo_fill (cr);
     }
-  
-  cairo_destroy (cr);
 }
 
 static void 
@@ -5340,13 +5329,60 @@ gtk_paint_check (GtkStyle           *style,
                  gint                width,
                  gint                height)
 {
+  cairo_t *cr;
+
   g_return_if_fail (GTK_IS_STYLE (style));
   g_return_if_fail (GTK_STYLE_GET_CLASS (style)->draw_check != NULL);
   g_return_if_fail (style->depth == gdk_drawable_get_depth (window));
 
-  GTK_STYLE_GET_CLASS (style)->draw_check (style, window, state_type, shadow_type,
-                                           (GdkRectangle *) area, widget, detail,
+  cr = gtk_style_cairo_create (window, area);
+
+  gtk_cairo_paint_check (style, cr, state_type, shadow_type,
+                         widget, detail,
+                         x, y, width, height);
+
+  cairo_destroy (cr);
+}
+
+/**
+ * gtk_cairo_paint_check:
+ * @style: a #GtkStyle
+ * @cr: a #cairo_t
+ * @state_type: a state
+ * @shadow_type: the type of shadow to draw
+ * @widget: (allow-none): the widget
+ * @detail: (allow-none): a style detail
+ * @x: x origin of the rectangle to draw the check in
+ * @y: y origin of the rectangle to draw the check in
+ * @width: the width of the rectangle to draw the check in
+ * @height: the height of the rectangle to draw the check in
+ * 
+ * Draws a check button indicator in the given rectangle on @cr with 
+ * the given parameters.
+ */
+void
+gtk_cairo_paint_check (GtkStyle           *style,
+                       cairo_t            *cr,
+                       GtkStateType        state_type,
+                       GtkShadowType       shadow_type,
+                       GtkWidget          *widget,
+                       const gchar        *detail,
+                       gint                x,
+                       gint                y,
+                       gint                width,
+                       gint                height)
+{
+  g_return_if_fail (GTK_IS_STYLE (style));
+  g_return_if_fail (GTK_STYLE_GET_CLASS (style)->draw_check != NULL);
+  g_return_if_fail (cr != NULL);
+
+  cairo_save (cr);
+
+  GTK_STYLE_GET_CLASS (style)->draw_check (style, cr, state_type, shadow_type,
+                                           widget, detail,
                                            x, y, width, height);
+
+  cairo_restore (cr);
 }
 
 /**
