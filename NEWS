@@ -4,6 +4,9 @@ Overview of Changes from GTK+ 2.21.5 to 2.21.6
 * Most drawing done by GTK+ itself has been ported from
   GDK drawing APIs to cairo
 
+* GtkExpander gained a ::label-fill property to make the label
+  fill the entire horizontal space
+
 * Deprecations:
  - GtkNotebookPage
  - The GtkRecenManager::limit property
@@ -11,11 +14,21 @@ Overview of Changes from GTK+ 2.21.5 to 2.21.6
  - All GdkGC functions. Use cairo instead
  - All of GdkImage. Use cairo instead
  - All of GdkRGB. Use cairo instead
+ - gdk_{bit,pix}map_create_from_data
 
 * New accessors:
  - gdk_cursor_get_cursor_type
  - gdk_device_get_n_axes
  - gdk_display_is_closed
+ - gtk_notebook_get_tab_[hv]border
+
+* New cairo-related APIs:
+ - gdk_window_create_similar_surface
+ - gdk_window_get_background_pattern
+
+* Accessiblity:
+ - Make Gail work with custom treemodels
+ - Implement GailAdjustment::get_minimum_increment
 
 * Bugs fixed:
  599574 Crash in _cairo_surface_set_error
