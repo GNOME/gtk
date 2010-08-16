@@ -1405,6 +1405,7 @@ gtk_style_render_icon (GtkStyle            *style,
 /**
  * gtk_style_apply_default_background:
  * @style:
+ * @cr: 
  * @window:
  * @set_bg:
  * @state_type:
@@ -1416,68 +1417,47 @@ gtk_style_render_icon (GtkStyle            *style,
  */
 void
 gtk_style_apply_default_background (GtkStyle          *style,
+                                    cairo_t           *cr,
                                     GdkWindow         *window,
-                                    gboolean           set_bg,
-                                    GtkStateType        state_type,
-                                    const GdkRectangle *area,
-                                    gint                x,
-                                    gint                y,
-                                    gint                width,
-                                    gint                height)
+                                    GtkStateType       state_type,
+                                    gint               x,
+                                    gint               y,
+                                    gint               width,
+                                    gint               height)
 {
-  GdkRectangle new_rect, old_rect;
-  
-  if (area)
-    {
-      old_rect.x = x;
-      old_rect.y = y;
-      old_rect.width = width;
-      old_rect.height = height;
-      
-      if (!gdk_rectangle_intersect (area, &old_rect, &new_rect))
-        return;
-    }
-  else
-    {
-      new_rect.x = x;
-      new_rect.y = y;
-      new_rect.width = width;
-      new_rect.height = height;
-    }
-  
-  if (!style->bg_pixmap[state_type] ||
-      GDK_IS_PIXMAP (window) ||
-      (!set_bg && style->bg_pixmap[state_type] != (GdkPixmap*) GDK_PARENT_RELATIVE))
-    {
-      cairo_t *cr = gdk_cairo_create (window);
+  cairo_save (cr);
 
-      if (style->bg_pixmap[state_type])
+  if (style->bg_pixmap[state_type] == (GdkPixmap*) GDK_PARENT_RELATIVE)
+    {
+      GdkWindow *parent = gdk_window_get_parent (window);
+      int x_offset, y_offset;
+
+      if (parent)
         {
-          gdk_cairo_set_source_pixmap (cr, style->bg_pixmap[state_type], 0, 0);
-          cairo_pattern_set_extend (cairo_get_source (cr), CAIRO_EXTEND_REPEAT);
+          gdk_window_get_position (window, &x_offset, &y_offset);
+          cairo_translate (cr, -x_offset, -y_offset);
+          gtk_style_apply_default_background (style, cr,
+                                              parent, state_type,
+                                              x + x_offset, y + y_offset,
+                                              width, height);
+          goto out;
         }
       else
         gdk_cairo_set_source_color (cr, &style->bg[state_type]);
-
-      gdk_cairo_rectangle (cr, &new_rect);
-      cairo_fill (cr);
-
-      cairo_destroy (cr);
+    }
+  else if (style->bg_pixmap[state_type])
+    {
+      gdk_cairo_set_source_pixmap (cr, style->bg_pixmap[state_type], 0, 0);
+      cairo_pattern_set_extend (cairo_get_source (cr), CAIRO_EXTEND_REPEAT);
     }
   else
-    {
-      if (set_bg)
-        {
-          if (style->bg_pixmap[state_type] == (GdkPixmap*) GDK_PARENT_RELATIVE)
-            gdk_window_set_back_pixmap (window, NULL, TRUE);
-          else
-            gdk_window_set_back_pixmap (window, style->bg_pixmap[state_type], FALSE);
-        }
-      
-      gdk_window_clear_area (window, 
-                             new_rect.x, new_rect.y, 
-                             new_rect.width, new_rect.height);
-    }
+    gdk_cairo_set_source_color (cr, &style->bg[state_type]);
+
+  cairo_rectangle (cr, x, y, width, height);
+  cairo_fill (cr);
+
+out:
+  cairo_restore (cr);
 }
 
 static GdkPixbuf *
@@ -2562,6 +2542,7 @@ gtk_default_draw_box (GtkStyle      *style,
 		      gint           width,
 		      gint           height)
 {
+  cairo_t *cr;
   gboolean is_spinbutton_box = FALSE;
   
   sanitize_size (window, &width, &height);
@@ -2595,13 +2576,18 @@ gtk_default_draw_box (GtkStyle      *style,
 	}
     }
   
+  cr = gdk_cairo_create (window);
+
+  if (area)
+    {
+      gdk_cairo_rectangle (cr, area);
+      cairo_clip (cr);
+    }
+
   if (!style->bg_pixmap[state_type] || 
       GDK_IS_PIXMAP (window))
     {
-      cairo_t *cr;
       GdkColor *gc = &style->bg[state_type];
-
-      cr = gdk_cairo_create (window);
 
       if (state_type == GTK_STATE_SELECTED && detail && strcmp (detail, "paned") == 0)
 	{
@@ -2609,28 +2595,18 @@ gtk_default_draw_box (GtkStyle      *style,
 	    gc = &style->base[GTK_STATE_ACTIVE];
 	}
 
-      if (area)
-        {
-          gdk_cairo_rectangle (cr, area);
-          cairo_clip (cr);
-        }
-
       _cairo_draw_rectangle (cr, gc, TRUE,
                              x, y, width, height);
-      cairo_destroy (cr);
     }
   else
-    gtk_style_apply_default_background (style, window,
-                                        widget && gtk_widget_get_has_window (widget),
-                                        state_type, area, x, y, width, height);
+    gtk_style_apply_default_background (style, cr, window,
+                                        state_type, x, y, width, height);
+
 
   if (is_spinbutton_box)
     {
-      cairo_t *cr;
       GdkColor *upper;
       GdkColor *lower;
-
-      cr = gdk_cairo_create (window);
 
       lower = &style->dark[state_type];
       if (shadow_type == GTK_SHADOW_OUT)
@@ -2650,6 +2626,8 @@ gtk_default_draw_box (GtkStyle      *style,
       cairo_destroy (cr);
       return;
     }
+
+  cairo_destroy (cr);
 
   gtk_paint_shadow (style, window, state_type, shadow_type, area, widget, detail,
                     x, y, width, height);
@@ -2707,11 +2685,22 @@ gtk_default_draw_flat_box (GtkStyle      *style,
                            gint           width,
                            gint           height)
 {
+  cairo_t *cr;
   GdkColor *gc1;
   GdkColor *freeme = NULL;
   
   sanitize_size (window, &width, &height);
   
+  cr = gdk_cairo_create (window);
+
+  cairo_set_line_width (cr, 1.0);
+
+  if (area)
+    {
+      gdk_cairo_rectangle (cr, area);
+      cairo_clip (cr);
+    }
+
   if (detail)
     {
       int trimmed_len = strlen (detail);
@@ -2887,31 +2876,19 @@ gtk_default_draw_flat_box (GtkStyle      *style,
   if (!style->bg_pixmap[state_type] || gc1 != &style->bg[state_type] ||
       GDK_IS_PIXMAP (window))
     {
-      cairo_t *cr;
-
-      cr = gdk_cairo_create (window);
-      cairo_set_line_width (cr, 1.0);
-
-      if (area)
-        {
-          gdk_cairo_rectangle (cr, area);
-          cairo_clip (cr);
-        }
-
       _cairo_draw_rectangle (cr, gc1, TRUE,
                              x, y, width, height);
 
       if (detail && !strcmp ("tooltip", detail))
         _cairo_draw_rectangle (cr, &style->black, FALSE,
                                x, y, width - 1, height - 1);
-
-      cairo_destroy (cr);
     }
   else
-    gtk_style_apply_default_background (style, window,
-                                        widget && gtk_widget_get_has_window (widget),
-                                        state_type, area, x, y, width, height);
+    gtk_style_apply_default_background (style, cr, window,
+                                        state_type, x, y, width, height);
 
+
+  cairo_destroy (cr);
 
   if (freeme)
     gdk_color_free (freeme);
@@ -3454,16 +3431,15 @@ gtk_default_draw_box_gap (GtkStyle       *style,
   
   sanitize_size (window, &width, &height);
 
-  gtk_style_apply_default_background (style, window,
-                                      widget && gtk_widget_get_has_window (widget),
-                                      state_type, area, x, y, width, height);
-
   cr = gdk_cairo_create (window);
   if (area)
     {
       gdk_cairo_rectangle (cr, area);
       cairo_clip (cr);
     }
+
+  gtk_style_apply_default_background (style, cr, window,
+                                      state_type, x, y, width, height);
 
   switch (shadow_type)
     {
@@ -3668,47 +3644,6 @@ gtk_default_draw_extension (GtkStyle       *style,
   
   sanitize_size (window, &width, &height);
 
-  switch (gap_side)
-    {
-    case GTK_POS_TOP:
-      gtk_style_apply_default_background (style, window,
-                                          widget && gtk_widget_get_has_window (widget),
-                                          state_type, area,
-                                          x + 1,
-                                          y,
-                                          width - 2,
-                                          height - 1);
-      break;
-    case GTK_POS_BOTTOM:
-      gtk_style_apply_default_background (style, window,
-                                          widget && gtk_widget_get_has_window (widget),
-                                          state_type, area,
-                                          x + 1,
-                                          y + 1,
-                                          width - 2,
-                                          height - 1);
-      break;
-    case GTK_POS_LEFT:
-      gtk_style_apply_default_background (style, window,
-                                          widget && gtk_widget_get_has_window (widget),
-                                          state_type, area,
-                                          x,
-                                          y + 1,
-                                          width - 1,
-                                          height - 2);
-      break;
-    case GTK_POS_RIGHT:
-      gtk_style_apply_default_background (style, window,
-                                          widget && gtk_widget_get_has_window (widget),
-                                          state_type, area,
-                                          x + 1,
-                                          y + 1,
-                                          width - 1,
-                                          height - 2);
-      break;
-    }
-
-
   cr = gdk_cairo_create (window);
   if (area)
     {
@@ -3716,6 +3651,42 @@ gtk_default_draw_extension (GtkStyle       *style,
       cairo_clip (cr);
     }
   
+  switch (gap_side)
+    {
+    case GTK_POS_TOP:
+      gtk_style_apply_default_background (style, cr, window,
+                                          state_type,
+                                          x + 1,
+                                          y,
+                                          width - 2,
+                                          height - 1);
+      break;
+    case GTK_POS_BOTTOM:
+      gtk_style_apply_default_background (style, cr, window,
+                                          state_type,
+                                          x + 1,
+                                          y + 1,
+                                          width - 2,
+                                          height - 1);
+      break;
+    case GTK_POS_LEFT:
+      gtk_style_apply_default_background (style, cr, window,
+                                          state_type,
+                                          x,
+                                          y + 1,
+                                          width - 1,
+                                          height - 2);
+      break;
+    case GTK_POS_RIGHT:
+      gtk_style_apply_default_background (style, cr, window,
+                                          state_type,
+                                          x + 1,
+                                          y + 1,
+                                          width - 1,
+                                          height - 2);
+      break;
+    }
+
   switch (shadow_type)
     {
     case GTK_SHADOW_NONE:
