@@ -166,9 +166,8 @@ struct _GtkStyleClass
    */
 
   void (*draw_hline)		(GtkStyle		*style,
-				 GdkWindow		*window,
+				 cairo_t                *cr,
 				 GtkStateType		 state_type,
-				 GdkRectangle		*area,
 				 GtkWidget		*widget,
 				 const gchar		*detail,
 				 gint			 x1,
@@ -454,15 +453,23 @@ GdkPixbuf*  gtk_style_render_icon     (GtkStyle            *style,
                                        GtkWidget           *widget,
                                        const gchar         *detail);
 
-void gtk_paint_hline       (GtkStyle           *style,
-			    GdkWindow          *window,
-			    GtkStateType        state_type,
-			    const GdkRectangle *area,
-			    GtkWidget          *widget,
-			    const gchar        *detail,
-			    gint                x1,
-			    gint                x2,
-			    gint                y);
+void gtk_paint_hline             (GtkStyle           *style,
+                                  GdkWindow          *window,
+                                  GtkStateType        state_type,
+                                  const GdkRectangle *area,
+                                  GtkWidget          *widget,
+                                  const gchar        *detail,
+                                  gint                x1,
+                                  gint                x2,
+                                  gint                y);
+void gtk_cairo_paint_hline       (GtkStyle           *style,
+                                  cairo_t            *cr,
+                                  GtkStateType        state_type,
+                                  GtkWidget          *widget,
+                                  const gchar        *detail,
+                                  gint                x1,
+                                  gint                x2,
+                                  gint                y);
 void gtk_paint_vline       (GtkStyle           *style,
 			    GdkWindow          *window,
 			    GtkStateType        state_type,

@@ -101,9 +101,8 @@ static GdkPixbuf *gtk_default_render_icon      (GtkStyle            *style,
                                                 GtkWidget           *widget,
                                                 const gchar         *detail);
 static void gtk_default_draw_hline      (GtkStyle        *style,
-					 GdkWindow       *window,
+					 cairo_t         *cr,
 					 GtkStateType     state_type,
-					 GdkRectangle    *area,
 					 GtkWidget       *widget,
 					 const gchar     *detail,
 					 gint             x1,
@@ -1646,17 +1645,15 @@ _cairo_draw_point (cairo_t *cr,
 }
 
 static void
-gtk_default_draw_hline (GtkStyle     *style,
-                        GdkWindow    *window,
+gtk_default_draw_hline (GtkStyle      *style,
+                        cairo_t       *cr,
                         GtkStateType  state_type,
-                        GdkRectangle  *area,
                         GtkWidget     *widget,
                         const gchar   *detail,
                         gint          x1,
                         gint          x2,
                         gint          y)
 {
-  cairo_t *cr;
   gint thickness_light;
   gint thickness_dark;
   gint i;
@@ -1664,15 +1661,8 @@ gtk_default_draw_hline (GtkStyle     *style,
   thickness_light = style->ythickness / 2;
   thickness_dark = style->ythickness - thickness_light;
   
-  cr = gdk_cairo_create (window);
   cairo_set_line_width (cr, 1.0);
 
-  if (area)
-    {
-      gdk_cairo_rectangle (cr, area);
-      cairo_clip (cr);
-    }
-  
   if (detail && !strcmp (detail, "label"))
     {
       if (state_type == GTK_STATE_INSENSITIVE)
@@ -1694,8 +1684,6 @@ gtk_default_draw_hline (GtkStyle     *style,
           _cairo_draw_line (cr, &style->light[state_type], x1 + thickness_light - i, y + i, x2, y + i);
         }
     }
-
-  cairo_destroy (cr);
 }
 
 
@@ -4795,6 +4783,22 @@ hls_to_rgb (gdouble *h,
 }
 
 
+static cairo_t *
+gtk_style_cairo_create (GdkWindow *window, const GdkRectangle *area)
+{
+  cairo_t *cr;
+
+  cr = gdk_cairo_create (window);
+
+  if (area)
+    {
+      gdk_cairo_rectangle (cr, area);
+      cairo_clip (cr);
+    }
+
+  return cr;
+}
+
 /**
  * gtk_paint_hline:
  * @style: a #GtkStyle
@@ -4822,13 +4826,56 @@ gtk_paint_hline (GtkStyle           *style,
                  gint                x2,
                  gint                y)
 {
+  cairo_t *cr;
+
   g_return_if_fail (GTK_IS_STYLE (style));
   g_return_if_fail (GTK_STYLE_GET_CLASS (style)->draw_hline != NULL);
   g_return_if_fail (style->depth == gdk_drawable_get_depth (window));
 
-  GTK_STYLE_GET_CLASS (style)->draw_hline (style, window, state_type,
-                                           (GdkRectangle *) area, widget, detail,
+  cr = gtk_style_cairo_create (window, area);
+
+  gtk_cairo_paint_hline (style, cr, state_type,
+                         widget, detail,
+                         x1, x2, y);
+
+  cairo_destroy (cr);
+}
+
+/**
+ * gtk_cairo_paint_hline:
+ * @style: a #GtkStyle
+ * @cr: a #caio_t
+ * @state_type: a state
+ * @widget: (allow-none): the widget
+ * @detail: (allow-none): a style detail
+ * @x1: the starting x coordinate
+ * @x2: the ending x coordinate
+ * @y: the y coordinate
+ *
+ * Draws a horizontal line from (@x1, @y) to (@x2, @y) in @cr
+ * using the given style and state.
+ **/ 
+void 
+gtk_cairo_paint_hline (GtkStyle           *style,
+                       cairo_t            *cr,
+                       GtkStateType        state_type,
+                       GtkWidget          *widget,
+                       const gchar        *detail,
+                       gint                x1,
+                       gint                x2,
+                       gint                y)
+{
+  g_return_if_fail (GTK_IS_STYLE (style));
+  g_return_if_fail (cr != NULL);
+  g_return_if_fail (GTK_STYLE_GET_CLASS (style)->draw_hline != NULL);
+
+  cairo_save (cr);
+
+  GTK_STYLE_GET_CLASS (style)->draw_hline (style, cr, state_type,
+                                           widget, detail,
                                            x1, x2, y);
+
+  cairo_restore (cr);
 }
 
 /**

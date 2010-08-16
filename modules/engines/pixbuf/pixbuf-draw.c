@@ -386,9 +386,8 @@ draw_gap_image_no_cairo(GtkStyle       *style,
 
 static void
 draw_hline (GtkStyle     *style,
-	    GdkWindow    *window,
+	    cairo_t      *cr,
 	    GtkStateType  state,
-	    GdkRectangle *area,
 	    GtkWidget    *widget,
 	    const gchar  *detail,
 	    gint          x1,
@@ -398,9 +397,6 @@ draw_hline (GtkStyle     *style,
   ThemeImage *image;
   ThemeMatchData   match_data;
   
-  g_return_if_fail(style != NULL);
-  g_return_if_fail(window != NULL);
-
   match_data.function = TOKEN_D_HLINE;
   match_data.detail = (gchar *)detail;
   match_data.flags = THEME_MATCH_ORIENTATION | THEME_MATCH_STATE;
@@ -411,12 +407,12 @@ draw_hline (GtkStyle     *style,
   if (image)
     {
       if (image->background)
-	theme_pixbuf_render_no_cairo (image->background,
-			     window, area, COMPONENT_ALL, FALSE,
+	theme_pixbuf_render (image->background,
+			     cr, COMPONENT_ALL, FALSE,
 			     x1, y, (x2 - x1) + 1, 2);
     }
   else
-    parent_class->draw_hline (style, window, state, area, widget, detail,
+    parent_class->draw_hline (style, cr, state, widget, detail,
 			      x1, x2, y);
 }
 
