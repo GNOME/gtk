@@ -18,6 +18,8 @@ gtk_about_dialog_get_license
 gtk_about_dialog_set_license
 gtk_about_dialog_get_wrap_license
 gtk_about_dialog_set_wrap_license
+gtk_about_dialog_get_license_type
+gtk_about_dialog_set_license_type
 gtk_about_dialog_get_website
 gtk_about_dialog_set_website
 gtk_about_dialog_get_website_label
@@ -1154,6 +1156,8 @@ gtk_expander_set_use_markup
 gtk_expander_get_use_markup
 gtk_expander_set_label_widget
 gtk_expander_get_label_widget
+gtk_expander_set_label_fill
+gtk_expander_get_label_fill
 <SUBSECTION Standard>
 GTK_TYPE_EXPANDER
 GTK_EXPANDER_CLASS
@@ -1671,7 +1675,6 @@ GtkIconViewPrivate
 GtkImage
 GtkImageType
 gtk_image_get_icon_set
-gtk_image_get_image
 gtk_image_get_pixbuf
 gtk_image_get_pixmap
 gtk_image_get_stock
@@ -1681,7 +1684,6 @@ gtk_image_get_gicon
 gtk_image_get_storage_type
 gtk_image_new_from_file
 gtk_image_new_from_icon_set
-gtk_image_new_from_image
 gtk_image_new_from_pixbuf
 gtk_image_new_from_pixmap
 gtk_image_new_from_stock
@@ -1690,7 +1692,6 @@ gtk_image_new_from_icon_name
 gtk_image_new_from_gicon
 gtk_image_set_from_file
 gtk_image_set_from_icon_set
-gtk_image_set_from_image
 gtk_image_set_from_pixbuf
 gtk_image_set_from_pixmap
 gtk_image_set_from_stock
@@ -2236,6 +2237,8 @@ gtk_notebook_get_tab_label_text
 gtk_notebook_get_tab_pos
 gtk_notebook_get_tab_reorderable
 gtk_notebook_get_tab_detachable
+gtk_notebook_get_tab_hborder
+gtk_notebook_get_tab_vborder
 gtk_notebook_set_current_page
 gtk_notebook_set_group
 gtk_notebook_get_group
@@ -5182,14 +5185,6 @@ GTK_INTERFACE_AGE
 GTK_CHECK_VERSION
 </SECTION>
 
-
-<SECTION>
-<FILE>gtkgc</FILE>
-<TITLE>Graphics Contexts</TITLE>
-gtk_gc_get
-gtk_gc_release
-</SECTION>
-
 <SECTION>
 <FILE>gtkstyle</FILE>
 <TITLE>GtkStyle</TITLE>
@@ -5218,7 +5213,6 @@ gtk_paint_focus
 gtk_paint_handle
 gtk_paint_hline
 gtk_paint_option
-gtk_paint_polygon
 gtk_paint_shadow
 gtk_paint_shadow_gap
 gtk_paint_slider

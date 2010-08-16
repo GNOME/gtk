@@ -83,14 +83,13 @@ pixbufs, see the #GdkPixbuf API documentation.
 @Returns: 
 
 
-<!-- ##### FUNCTION gdk_pixbuf_get_from_image ##### -->
+<!-- ##### FUNCTION gdk_pixbuf_get_from_surface ##### -->
 <para>
 
 </para>
 
 @dest: 
-@src: 
-@cmap: 
+@surface: 
 @src_x: 
 @src_y: 
 @dest_x: 

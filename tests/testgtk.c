@@ -247,73 +247,6 @@ build_alpha_widgets (void)
   return table;
 }
 
-static gboolean
-on_alpha_drawing_expose (GtkWidget      *widget,
-			 GdkEventExpose *expose)
-{
-  int x = widget->allocation.x;
-  int y = widget->allocation.y;
-  int width = widget->allocation.width;
-  int height = widget->allocation.height;
-  GdkPixbuf *pixbuf;
-  cairo_t *cr;
-  guchar *buffer;
-  guchar *p;
-  int i, j;
-
-  buffer = g_malloc (64 * 64 * 4);
-  
-  gdk_draw_rectangle (widget->window, widget->style->black_gc, FALSE,
-		      x,         y,
-		      width - 1, height - 1);
-
-  p = buffer;
-  for (i = 0; i < 64; i++) {
-    for (j = 0; j < 64; j++) {
-      *(p++) = i * 4 + 3;
-      *(p++) = 0;
-      *(p++) = j + 4 + 3;
-      *(p++) = MIN (255, ((32 - i) * (32 - i) + (32 - j) * (32 - j)) / 8);
-    }
-  }
-  p++;
-
-  gdk_draw_rgb_32_image (widget->window, widget->style->black_gc,
-			 x + 18, y + (height - 64) /2,
-			 64, 64, GDK_RGB_DITHER_NORMAL, buffer, 64 * 4);
-
-  pixbuf = gdk_pixbuf_new_from_data (buffer, GDK_COLORSPACE_RGB, TRUE,
-				     8, 64, 64, 4 * 64, NULL, NULL);
-  cr = gdk_cairo_create (widget->window);
-
-  gdk_cairo_set_source_pixbuf (cr, pixbuf, 0, 0);
-  cairo_rectangle (cr,
-                   x + width - 18 - 64, y + (height - 64) /2,
-                   64, 64);
-  cairo_fill (cr);
-
-  cairo_destroy (cr);
-  g_object_unref (pixbuf);
-
-  g_free (buffer);
-  
-  return FALSE;
-}
-
-static GtkWidget *
-build_alpha_drawing ()
-{
-  GtkWidget *hbox;
-
-  hbox = gtk_hbox_new (FALSE, 0);
-  gtk_widget_set_size_request (hbox, 100, 100);
-
-  g_signal_connect (hbox, "expose-event",
-		    G_CALLBACK (on_alpha_drawing_expose), NULL);
-
-  return hbox;
-}
-
 static void
 on_alpha_screen_changed (GtkWidget *widget,
 			 GdkScreen *old_screen,
@@ -386,7 +319,6 @@ create_alpha_window (GtkWidget *widget)
       g_signal_connect (window, "composited_changed", G_CALLBACK (on_composited_changed), label);
       
       gtk_box_pack_start (GTK_BOX (vbox), build_alpha_widgets (), TRUE, TRUE, 0);
-      gtk_box_pack_start (GTK_BOX (vbox), build_alpha_drawing (), TRUE, TRUE, 0);
 
       g_signal_connect (window, "destroy",
 			G_CALLBACK (gtk_widget_destroyed),
@@ -1320,29 +1252,26 @@ create_button_box (GtkWidget *widget)
  */
 
 static GtkWidget*
-new_pixmap (char      *filename,
+new_pixbuf (char      *filename,
 	    GdkWindow *window,
 	    GdkColor  *background)
 {
-  GtkWidget *wpixmap;
-  GdkPixmap *pixmap;
-  GdkBitmap *mask;
+  GtkWidget *widget;
+  GdkPixbuf *pixbuf;
 
-  if (strcmp (filename, "test.xpm") == 0 ||
-      !file_exists (filename))
-    {
-      pixmap = gdk_pixmap_create_from_xpm_d (window, &mask,
-					     background,
-					     openfile);
-    }
+  if (strcmp (filename, "test.xpm") == 0)
+    pixbuf = NULL;
   else
-    pixmap = gdk_pixmap_create_from_xpm (window, &mask,
-					 background,
-					 filename);
-  
-  wpixmap = gtk_image_new_from_pixmap (pixmap, mask);
+    pixbuf = gdk_pixbuf_new_from_file (filename, NULL);
 
-  return wpixmap;
+  if (pixbuf == NULL)
+    pixbuf = gdk_pixbuf_new_from_xpm_data ((const char **) openfile);
+  
+  widget = gtk_image_new_from_pixbuf (pixbuf);
+
+  g_object_unref (pixbuf);
+
+  return widget;
 }
 
 
@@ -1501,7 +1430,7 @@ create_toolbar (GtkWidget *widget)
             {
               GtkWidget *icon;
 
-              icon = new_pixmap ("test.xpm", window->window,
+              icon = new_pixbuf ("test.xpm", window->window,
                                  &window->style->bg[GTK_STATE_NORMAL]);
               toolitem = gtk_tool_button_new (icon, create_toolbar_items[i].label);
             }
@@ -1572,7 +1501,7 @@ make_toolbar (GtkWidget *window)
           toolitem = gtk_separator_tool_item_new ();
           continue;
         }
-      icon  = new_pixmap ("test.xpm", window->window,
+      icon  = new_pixbuf ("test.xpm", window->window,
                           &window->style->bg[GTK_STATE_NORMAL]);
       toolitem = gtk_tool_button_new (icon, make_toolbar_items[i].label);
       gtk_tool_item_set_tooltip_text (toolitem, make_toolbar_items[i].tooltip);
@@ -2052,329 +1981,6 @@ create_handle_box (GtkWidget *widget)
     gtk_widget_show (window);
   else
     gtk_widget_destroy (window);
-}
-
-/*
- * Test for getting an image from a drawable
- */
-
-struct GetImageData
-{
-  GtkWidget *src;
-  GtkWidget *snap;
-  GtkWidget *sw;
-};
-
-static void
-take_snapshot (GtkWidget *button,
-               gpointer data)
-{
-  struct GetImageData *gid = data;
-  GdkRectangle visible;
-  int width_fraction;
-  int height_fraction;
-  GdkGC *gc;
-  GdkGC *black_gc;
-  GdkColor color = { 0, 30000, 0, 0 };
-  GdkRectangle target;
-  GdkPixbuf *shot;
-  
-  /* Do some begin_paint_rect on some random rects, draw some
-   * distinctive stuff into those rects, then take the snapshot.
-   * figure out whether any rects were overlapped and report to
-   * user.
-   */
-
-  visible = gid->sw->allocation;
-
-  visible.x = gtk_scrolled_window_get_hadjustment (GTK_SCROLLED_WINDOW (gid->sw))->value;
-  visible.y = gtk_scrolled_window_get_vadjustment (GTK_SCROLLED_WINDOW (gid->sw))->value;
-  
-  width_fraction = visible.width / 4;
-  height_fraction = visible.height / 4;
-
-  gc = gdk_gc_new (gid->src->window);
-  black_gc = gid->src->style->black_gc;
-  
-  gdk_gc_set_rgb_fg_color (gc, &color);
-
-    
-  target.x = visible.x + width_fraction;
-  target.y = visible.y + height_fraction * 3;
-  target.width = width_fraction;
-  target.height = height_fraction / 2;
-  
-  gdk_window_begin_paint_rect (gid->src->window,
-                               &target);
-
-  gdk_draw_rectangle (gid->src->window,
-                      gc,
-                      TRUE,
-                      target.x, target.y,
-                      target.width, target.height);
-
-  gdk_draw_rectangle (gid->src->window,
-                      black_gc,
-                      FALSE,
-                      target.x + 10, target.y + 10,
-                      target.width - 20, target.height - 20);
-  
-  target.x = visible.x + width_fraction;
-  target.y = visible.y + height_fraction;
-  target.width = width_fraction;
-  target.height = height_fraction;
-  
-  gdk_window_begin_paint_rect (gid->src->window,
-                               &target);
-
-  gdk_draw_rectangle (gid->src->window,
-                      gc,
-                      TRUE,
-                      target.x, target.y,
-                      target.width, target.height);
-
-  gdk_draw_rectangle (gid->src->window,
-                      black_gc,
-                      FALSE,
-                      target.x + 10, target.y + 10,
-                      target.width - 20, target.height - 20);
-  
-  target.x = visible.x + width_fraction * 3;
-  target.y = visible.y + height_fraction;
-  target.width = width_fraction / 2;
-  target.height = height_fraction;
-  
-  gdk_window_begin_paint_rect (gid->src->window,
-                               &target);
-
-  gdk_draw_rectangle (gid->src->window,
-                      gc,
-                      TRUE,
-                      target.x, target.y,
-                      target.width, target.height);
-
-  gdk_draw_rectangle (gid->src->window,
-                      black_gc,
-                      FALSE,
-                      target.x + 10, target.y + 10,
-                      target.width - 20, target.height - 20);
-  
-  target.x = visible.x + width_fraction * 2;
-  target.y = visible.y + height_fraction * 2;
-  target.width = width_fraction / 4;
-  target.height = height_fraction / 4;
-  
-  gdk_window_begin_paint_rect (gid->src->window,
-                               &target);
-
-  gdk_draw_rectangle (gid->src->window,
-                      gc,
-                      TRUE,
-                      target.x, target.y,
-                      target.width, target.height);
-
-  gdk_draw_rectangle (gid->src->window,
-                      black_gc,
-                      FALSE,
-                      target.x + 10, target.y + 10,
-                      target.width - 20, target.height - 20);  
-
-  target.x += target.width / 2;
-  target.y += target.width / 2;
-  
-  gdk_window_begin_paint_rect (gid->src->window,
-                               &target);
-
-  gdk_draw_rectangle (gid->src->window,
-                      gc,
-                      TRUE,
-                      target.x, target.y,
-                      target.width, target.height);
-
-  gdk_draw_rectangle (gid->src->window,
-                      black_gc,
-                      FALSE,
-                      target.x + 10, target.y + 10,
-                      target.width - 20, target.height - 20);
-  
-  /* Screen shot area */
-
-  target.x = visible.x + width_fraction * 1.5;
-  target.y = visible.y + height_fraction * 1.5;
-  target.width = width_fraction * 2;
-  target.height = height_fraction * 2;  
-
-  shot = gdk_pixbuf_get_from_drawable (NULL,
-                                       gid->src->window,
-                                       NULL,
-                                       target.x, target.y,
-                                       0, 0,
-                                       target.width, target.height);
-  gtk_image_set_from_pixbuf (GTK_IMAGE (gid->snap), shot);
-
-  g_object_unref (shot);
-  
-  gdk_window_end_paint (gid->src->window);
-  gdk_window_end_paint (gid->src->window);
-  gdk_window_end_paint (gid->src->window);
-  gdk_window_end_paint (gid->src->window);
-  gdk_window_end_paint (gid->src->window);
-
-  gdk_draw_rectangle (gid->src->window,
-                      gid->src->style->black_gc,
-                      FALSE,
-                      target.x, target.y,
-                      target.width, target.height);
-  
-  g_object_unref (gc);
-}
-
-static gint
-image_source_expose (GtkWidget *da,
-                     GdkEventExpose *event,
-                     gpointer data)
-{
-  int x = event->area.x;
-  GdkColor red = { 0, 65535, 0, 0 };
-  GdkColor green = { 0, 0, 65535, 0 };
-  GdkColor blue = { 0, 0, 0, 65535 };
-  GdkGC *gc;
-
-  gc = gdk_gc_new (event->window);
-  
-  while (x < (event->area.x + event->area.width))
-    {
-      switch (x % 7)
-        {
-        case 0:
-        case 1:
-        case 2:
-          gdk_gc_set_rgb_fg_color (gc, &red);
-          break;
-
-        case 3:
-        case 4:
-        case 5:
-          gdk_gc_set_rgb_fg_color (gc, &green);
-          break;
-
-        case 6:
-        case 7:
-        case 8:
-          gdk_gc_set_rgb_fg_color (gc, &blue);
-          break;
-
-        default:
-          g_assert_not_reached ();
-          break;
-        }
-
-      gdk_draw_line (event->window,
-                     gc,
-                     x, event->area.y,
-                     x, event->area.y + event->area.height);
-      
-      ++x;
-    }
-
-  g_object_unref (gc);
-  
-  return TRUE;
-}
-
-static void
-create_get_image (GtkWidget *widget)
-{
-  static GtkWidget *window = NULL;
-
-  if (window)
-    gtk_widget_destroy (window);
-  else
-    {
-      GtkWidget *sw;
-      GtkWidget *src;
-      GtkWidget *snap;
-      GtkWidget *hbox;
-      GtkWidget *vbox;
-      GtkWidget *button;
-      struct GetImageData *gid;
-
-      gid = g_new (struct GetImageData, 1);
-      
-      window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-      
-      gtk_window_set_screen (GTK_WINDOW (window),
-			     gtk_widget_get_screen (widget));
-
-      g_signal_connect (window,
-                        "destroy",
-                        G_CALLBACK (gtk_widget_destroyed),
-                        &window);
-
-      g_object_set_data_full (G_OBJECT (window),
-                              "testgtk-get-image-data",
-                              gid,
-                              g_free);
-      
-      hbox = gtk_hbox_new (FALSE, 0);
-      
-      gtk_container_add (GTK_CONTAINER (window), hbox);
-      
-      sw = gtk_scrolled_window_new (NULL, NULL);
-      gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (sw),
-                                      GTK_POLICY_AUTOMATIC,
-                                      GTK_POLICY_AUTOMATIC);
-
-      gid->sw = sw;
-
-      gtk_widget_set_size_request (sw, 400, 400);
-      
-      src = gtk_drawing_area_new ();
-      gtk_widget_set_size_request (src, 10000, 10000);
-
-      g_signal_connect (src,
-                        "expose_event",
-                        G_CALLBACK (image_source_expose),
-                        gid);
-      
-      gid->src = src;
-      
-      gtk_scrolled_window_add_with_viewport (GTK_SCROLLED_WINDOW (sw),
-                                             src);
-      
-      gtk_box_pack_start (GTK_BOX (hbox),
-                          sw, TRUE, TRUE, 0);
-
-
-      vbox = gtk_vbox_new (FALSE, 3);
-
-      snap = g_object_new (GTK_TYPE_IMAGE, NULL);
-
-      gid->snap = snap;
-
-      sw = gtk_scrolled_window_new (NULL, NULL);
-      gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (sw),
-                                      GTK_POLICY_AUTOMATIC,
-                                      GTK_POLICY_AUTOMATIC);
-      gtk_widget_set_size_request (sw, 300, 300);
-      
-      gtk_scrolled_window_add_with_viewport (GTK_SCROLLED_WINDOW (sw), snap);
-
-      gtk_box_pack_end (GTK_BOX (vbox), sw, FALSE, FALSE, 5);
-
-      button = gtk_button_new_with_label ("Get image from drawable");
-
-      g_signal_connect (button,
-                        "clicked",
-                        G_CALLBACK (take_snapshot),
-                        gid);
-      
-      gtk_box_pack_start (GTK_BOX (vbox), button, FALSE, FALSE, 0);
-
-      gtk_box_pack_end (GTK_BOX (hbox), vbox, FALSE, FALSE, 0);
-      
-      gtk_widget_show_all (window);
-    }
 }
 
 /* 
@@ -3275,7 +2881,7 @@ create_saved_position (GtkWidget *widget)
  */
 
 static void
-create_pixmap (GtkWidget *widget)
+create_pixbuf (GtkWidget *widget)
 {
   static GtkWidget *window = NULL;
   GtkWidget *box1;
@@ -3284,7 +2890,7 @@ create_pixmap (GtkWidget *widget)
   GtkWidget *button;
   GtkWidget *label;
   GtkWidget *separator;
-  GtkWidget *pixmapwid;
+  GtkWidget *pixbufwid;
 
   if (!window)
     {
@@ -3311,24 +2917,24 @@ create_pixmap (GtkWidget *widget)
       button = gtk_button_new ();
       gtk_box_pack_start (GTK_BOX (box2), button, FALSE, FALSE, 0);
 
-      pixmapwid = new_pixmap ("test.xpm", window->window, NULL);
+      pixbufwid = new_pixbuf ("test.xpm", window->window, NULL);
 
-      label = gtk_label_new ("Pixmap\ntest");
+      label = gtk_label_new ("Pixbuf\ntest");
       box3 = gtk_hbox_new (FALSE, 0);
       gtk_container_set_border_width (GTK_CONTAINER (box3), 2);
-      gtk_container_add (GTK_CONTAINER (box3), pixmapwid);
+      gtk_container_add (GTK_CONTAINER (box3), pixbufwid);
       gtk_container_add (GTK_CONTAINER (box3), label);
       gtk_container_add (GTK_CONTAINER (button), box3);
 
       button = gtk_button_new ();
       gtk_box_pack_start (GTK_BOX (box2), button, FALSE, FALSE, 0);
       
-      pixmapwid = new_pixmap ("test.xpm", window->window, NULL);
+      pixbufwid = new_pixbuf ("test.xpm", window->window, NULL);
 
-      label = gtk_label_new ("Pixmap\ntest");
+      label = gtk_label_new ("Pixbuf\ntest");
       box3 = gtk_hbox_new (FALSE, 0);
       gtk_container_set_border_width (GTK_CONTAINER (box3), 2);
-      gtk_container_add (GTK_CONTAINER (box3), pixmapwid);
+      gtk_container_add (GTK_CONTAINER (box3), pixbufwid);
       gtk_container_add (GTK_CONTAINER (box3), label);
       gtk_container_add (GTK_CONTAINER (button), box3);
 
@@ -3483,8 +3089,7 @@ create_image (GtkWidget *widget)
   if (window == NULL)
     {
       GtkWidget *vbox;
-      GdkPixmap *pixmap;
-      GdkBitmap *mask;
+      GdkPixbuf *pixbuf;
         
       window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
       
@@ -3508,14 +3113,12 @@ create_image (GtkWidget *widget)
                   gtk_image_new_from_stock (GTK_STOCK_DIALOG_WARNING,
                                             GTK_ICON_SIZE_DIALOG));
 
-      pixmap = gdk_pixmap_colormap_create_from_xpm_d (NULL,
-                                                      gtk_widget_get_colormap (window),
-                                                      &mask,
-                                                      NULL,
-                                                      openfile);
+      pixbuf = gdk_pixbuf_new_from_xpm_data ((const char **) openfile);
       
-      pack_image (vbox, "Pixmap",
-                  gtk_image_new_from_pixmap (pixmap, mask));
+      pack_image (vbox, "Pixbuf",
+                  gtk_image_new_from_pixbuf (pixbuf));
+
+      g_object_unref (pixbuf);
     }
 
   if (!gtk_widget_get_visible (window))
@@ -6642,7 +6245,7 @@ int ntext_colors = sizeof(text_colors) / sizeof(text_colors[0]);
  * GtkNotebook
  */
 
-static char * book_open_xpm[] = {
+static const char * book_open_xpm[] = {
 "16 16 4 1",
 "       c None s None",
 ".      c black",
@@ -6665,7 +6268,7 @@ static char * book_open_xpm[] = {
 "     ..         ",
 "                "};
 
-static char * book_closed_xpm[] = {
+static const char * book_closed_xpm[] = {
 "16 16 6 1",
 "       c None s None",
 ".      c black",
@@ -6940,10 +6543,10 @@ create_notebook (GtkWidget *widget)
       gtk_widget_realize (sample_notebook);
 
       if (!book_open)
-	book_open = gdk_pixbuf_new_from_xpm_data ((const char **)book_open_xpm);
+	book_open = gdk_pixbuf_new_from_xpm_data (book_open_xpm);
 						  
       if (!book_closed)
-	book_closed = gdk_pixbuf_new_from_xpm_data ((const char **)book_closed_xpm);
+	book_closed = gdk_pixbuf_new_from_xpm_data (book_closed_xpm);
 
       create_pages (GTK_NOTEBOOK (sample_notebook), 1, 5);
 
@@ -7652,14 +7255,11 @@ shape_create_icon (GdkScreen *screen,
 		   gint       window_type)
 {
   GtkWidget *window;
-  GtkWidget *pixmap;
+  GtkWidget *image;
   GtkWidget *fixed;
   CursorOffset* icon_pos;
-  GdkBitmap *gdk_pixmap_mask;
-  GdkPixmap *gdk_pixmap;
-  GtkStyle *style;
-
-  style = gtk_widget_get_default_style ();
+  GdkBitmap *mask;
+  GdkPixbuf *pixbuf;
 
   /*
    * GDK_WINDOW_TOPLEVEL works also, giving you a title border
@@ -7679,18 +7279,24 @@ shape_create_icon (GdkScreen *screen,
 			 GDK_BUTTON_PRESS_MASK);
 
   gtk_widget_realize (window);
-  gdk_pixmap = gdk_pixmap_create_from_xpm (window->window, &gdk_pixmap_mask, 
-					   &style->bg[GTK_STATE_NORMAL],
-					   xpm_file);
 
-  pixmap = gtk_image_new_from_pixmap (gdk_pixmap, gdk_pixmap_mask);
-  gtk_fixed_put (GTK_FIXED (fixed), pixmap, px,py);
-  gtk_widget_show (pixmap);
+  pixbuf = gdk_pixbuf_new_from_file (xpm_file, NULL);
+  g_assert (pixbuf); /* FIXME: error handling */
+
+  gdk_pixbuf_render_pixmap_and_mask_for_colormap (pixbuf,
+                                                  gtk_widget_get_colormap (window),
+                                                  NULL,
+                                                  &mask,
+                                                  128);
+                                                  
+  image = gtk_image_new_from_pixbuf (pixbuf);
+  gtk_fixed_put (GTK_FIXED (fixed), image, px,py);
+  gtk_widget_show (image);
   
-  gtk_widget_shape_combine_mask (window, gdk_pixmap_mask, px, py);
+  gtk_widget_shape_combine_mask (window, mask, px, py);
   
-  g_object_unref (gdk_pixmap_mask);
-  g_object_unref (gdk_pixmap);
+  g_object_unref (mask);
+  g_object_unref (pixbuf);
 
   g_signal_connect (window, "button_press_event",
 		    G_CALLBACK (shape_pressed), NULL);
@@ -7819,8 +7425,9 @@ create_wmhints (GtkWidget *widget)
   GtkWidget *button;
   GtkWidget *box1;
   GtkWidget *box2;
-
   GdkBitmap *circles;
+  cairo_surface_t *image;
+  cairo_t *cr;
 
   if (!window)
     {
@@ -7838,10 +7445,17 @@ create_wmhints (GtkWidget *widget)
 
       gtk_widget_realize (window);
       
-      circles = gdk_bitmap_create_from_data (window->window,
-					     (gchar *) circles_bits,
-					     circles_width,
-					     circles_height);
+      circles = gdk_pixmap_new (window->window, circles_width, circles_height, 1);
+      cr = gdk_cairo_create (circles);
+      image = cairo_image_surface_create_for_data (circles_bits, CAIRO_FORMAT_A1,
+                                                   circles_width, circles_height,
+                                                   circles_width / 8);
+      cairo_set_source_surface (cr, image, 0, 0);
+      cairo_surface_destroy (image);
+      cairo_set_operator (cr, CAIRO_OPERATOR_SOURCE);
+      cairo_paint (cr);
+      cairo_destroy (cr);
+
       gdk_window_set_icon (window->window, NULL,
 			   circles, circles);
       
@@ -10612,7 +10226,6 @@ struct {
   { "font selection", create_font_selection },
   { "gridded geometry", create_gridded_geometry },
   { "handle box", create_handle_box },
-  { "image from drawable", create_get_image },
   { "image", create_image },
   { "key lookup", create_key_lookup },
   { "labels", create_labels },
@@ -10623,7 +10236,7 @@ struct {
   { "notebook", create_notebook },
   { "panes", create_panes },
   { "paned keyboard", create_paned_keyboard_navigation },
-  { "pixmap", create_pixmap },
+  { "pixbuf", create_pixbuf },
   { "progress bar", create_progress_bar },
   { "properties", create_properties },
   { "radio buttons", create_radio_buttons },

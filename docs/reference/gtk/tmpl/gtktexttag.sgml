@@ -84,16 +84,6 @@ It is working (with minor issues) since 2.8.
 
 </para>
 
-<!-- ##### ARG GtkTextTag:background-stipple ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkTextTag:background-stipple-set ##### -->
-<para>
-
-</para>
-
 <!-- ##### ARG GtkTextTag:direction ##### -->
 <para>
 
@@ -140,16 +130,6 @@ It is working (with minor issues) since 2.8.
 </para>
 
 <!-- ##### ARG GtkTextTag:foreground-set ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkTextTag:foreground-stipple ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkTextTag:foreground-stipple-set ##### -->
 <para>
 
 </para>
@@ -418,7 +398,6 @@ modified directly.
 @invisible: 
 @bg_full_height: 
 @editable: 
-@realized: 
 
 <!-- ##### FUNCTION gtk_text_tag_new ##### -->
 <para>
@@ -466,8 +445,6 @@ modified directly.
 
 @bg_color: 
 @fg_color: 
-@bg_stipple: 
-@fg_stipple: 
 @rise: 
 @underline: 
 @strikethrough: 

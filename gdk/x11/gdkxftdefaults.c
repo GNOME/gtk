@@ -168,42 +168,7 @@ init_xft_settings (GdkScreen *screen)
     screen_x11->xft_hintstyle = FC_HINT_FULL;
 
   if (!get_integer_default (xdisplay, "rgba", &screen_x11->xft_rgba))
-			    
-    {
-      int subpixel = FC_RGBA_UNKNOWN;
-      
-#if RENDER_MAJOR > 0 || RENDER_MINOR >= 6
-      if (_gdk_x11_have_render (screen_x11->display))
-	{
-	  int render_order = XRenderQuerySubpixelOrder (xdisplay, xscreen);
-	  
-	  switch (render_order)
-	    {
-	    default:
-	    case SubPixelUnknown:
-	      subpixel = FC_RGBA_UNKNOWN;
-	      break;
-	    case SubPixelHorizontalRGB:
-	      subpixel = FC_RGBA_RGB;
-	      break;
-	    case SubPixelHorizontalBGR:
-	      subpixel = FC_RGBA_BGR;
-	      break;
-	    case SubPixelVerticalRGB:
-	      subpixel = FC_RGBA_VRGB;
-	      break;
-	    case SubPixelVerticalBGR:
-	      subpixel = FC_RGBA_VBGR;
-	      break;
-	    case SubPixelNone:
-	      subpixel = FC_RGBA_NONE;
-	      break;
-	    }
-	}
-#endif
-
-      screen_x11->xft_rgba = subpixel;
-    }
+    screen_x11->xft_rgba = FC_RGBA_UNKNOWN;
 
   if (!get_double_default (xdisplay, "dpi", &dpi_double))
     dpi_double = (((double) DisplayHeight (xdisplay, xscreen) * 25.4) / 

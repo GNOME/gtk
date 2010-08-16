@@ -289,7 +289,7 @@ gtk_status_icon_class_init (GtkStatusIconClass *class)
 				   PROP_BLINKING,
 				   g_param_spec_boolean ("blinking",
 							 P_("Blinking"),
-							 P_("Whether or not the status icon is blinking"),
+							 P_("Whether the status icon is blinking"),
 							 FALSE,
 							 GTK_PARAM_READWRITE));
 
@@ -297,7 +297,7 @@ gtk_status_icon_class_init (GtkStatusIconClass *class)
 				   PROP_VISIBLE,
 				   g_param_spec_boolean ("visible",
 							 P_("Visible"),
-							 P_("Whether or not the status icon is visible"),
+							 P_("Whether the status icon is visible"),
 							 TRUE,
 							 GTK_PARAM_READWRITE));
 
@@ -313,7 +313,7 @@ gtk_status_icon_class_init (GtkStatusIconClass *class)
 				   PROP_EMBEDDED,
 				   g_param_spec_boolean ("embedded",
 							 P_("Embedded"),
-							 P_("Whether or not the status icon is embedded"),
+							 P_("Whether the status icon is embedded"),
 							 FALSE,
 							 GTK_PARAM_READABLE));
 

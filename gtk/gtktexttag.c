@@ -74,8 +74,6 @@ enum {
   PROP_FOREGROUND,
   PROP_BACKGROUND_GDK,
   PROP_FOREGROUND_GDK,
-  PROP_BACKGROUND_STIPPLE,
-  PROP_FOREGROUND_STIPPLE,
   PROP_FONT,
   PROP_FONT_DESC,
   PROP_FAMILY,
@@ -112,8 +110,6 @@ enum {
   /* Whether-a-style-arg-is-set args */
   PROP_BACKGROUND_SET,
   PROP_FOREGROUND_SET,
-  PROP_BACKGROUND_STIPPLE_SET,
-  PROP_FOREGROUND_STIPPLE_SET,
   PROP_FAMILY_SET,
   PROP_STYLE_SET,
   PROP_VARIANT_SET,
@@ -199,17 +195,7 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
                                                          P_("Whether the background color fills the entire line height or only the height of the tagged characters"),
                                                          FALSE,
                                                          GTK_PARAM_READWRITE));
-
   
-  g_object_class_install_property (object_class,
-                                   PROP_BACKGROUND_STIPPLE,
-                                   g_param_spec_object ("background-stipple",
-                                                        P_("Background stipple mask"),
-                                                        P_("Bitmap to use as a mask when drawing the text background"),
-                                                        GDK_TYPE_PIXMAP,
-                                                        GTK_PARAM_READWRITE));  
-
-
   g_object_class_install_property (object_class,
                                    PROP_FOREGROUND,
                                    g_param_spec_string ("foreground",
@@ -226,15 +212,6 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
                                                        GDK_TYPE_COLOR,
                                                        GTK_PARAM_READWRITE));
 
-  
-  g_object_class_install_property (object_class,
-                                   PROP_FOREGROUND_STIPPLE,
-                                   g_param_spec_object ("foreground-stipple",
-                                                        P_("Foreground stipple mask"),
-                                                        P_("Bitmap to use as a mask when drawing the text foreground"),
-                                                        GDK_TYPE_PIXMAP,
-                                                        GTK_PARAM_READWRITE));  
-  
   g_object_class_install_property (object_class,
                                    PROP_DIRECTION,
                                    g_param_spec_enum ("direction",
@@ -567,18 +544,10 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
                 P_("Background full height set"),
                 P_("Whether this tag affects background height"));
 
-  ADD_SET_PROP ("background-stipple-set", PROP_BACKGROUND_STIPPLE_SET,
-                P_("Background stipple set"),
-                P_("Whether this tag affects the background stipple"));  
-
   ADD_SET_PROP ("foreground-set", PROP_FOREGROUND_SET,
                 P_("Foreground set"),
                 P_("Whether this tag affects the foreground color"));
 
-  ADD_SET_PROP ("foreground-stipple-set", PROP_FOREGROUND_STIPPLE_SET,
-                P_("Foreground stipple set"),
-                P_("Whether this tag affects the foreground stipple"));
-  
   ADD_SET_PROP ("editable-set", PROP_EDITABLE_SET,
                 P_("Editability set"),
                 P_("Whether this tag affects text editability"));
@@ -729,8 +698,6 @@ gtk_text_tag_finalize (GObject *object)
   GtkTextTag *text_tag;
 
   text_tag = GTK_TEXT_TAG (object);
-
-  g_assert (!text_tag->values->realized);
 
   if (text_tag->table)
     gtk_text_tag_table_remove (text_tag->table, text_tag);
@@ -988,8 +955,6 @@ gtk_text_tag_set_property (GObject      *object,
 
   text_tag = GTK_TEXT_TAG (object);
 
-  g_return_if_fail (!text_tag->values->realized);
-
   switch (prop_id)
     {
     case PROP_NAME:
@@ -1040,46 +1005,6 @@ gtk_text_tag_set_property (GObject      *object,
         GdkColor *color = g_value_get_boxed (value);
 
         set_fg_color (text_tag, color);
-      }
-      break;
-
-    case PROP_BACKGROUND_STIPPLE:
-      {
-        GdkBitmap *bitmap = g_value_get_object (value);
-
-        text_tag->bg_stipple_set = TRUE;
-        g_object_notify (object, "background-stipple-set");
-        
-        if (text_tag->values->appearance.bg_stipple != bitmap)
-          {
-            if (bitmap != NULL)
-              g_object_ref (bitmap);
-
-            if (text_tag->values->appearance.bg_stipple)
-              g_object_unref (text_tag->values->appearance.bg_stipple);
-
-            text_tag->values->appearance.bg_stipple = bitmap;
-          }
-      }
-      break;
-
-    case PROP_FOREGROUND_STIPPLE:
-      {
-        GdkBitmap *bitmap = g_value_get_object (value);
-
-        text_tag->fg_stipple_set = TRUE;
-        g_object_notify (object, "foreground-stipple-set");
-
-        if (text_tag->values->appearance.fg_stipple != bitmap)
-          {
-            if (bitmap != NULL)
-              g_object_ref (bitmap);
-
-            if (text_tag->values->appearance.fg_stipple)
-              g_object_unref (text_tag->values->appearance.fg_stipple);
-
-            text_tag->values->appearance.fg_stipple = bitmap;
-          }
       }
       break;
 
@@ -1333,26 +1258,6 @@ gtk_text_tag_set_property (GObject      *object,
       text_tag->fg_color_set = g_value_get_boolean (value);
       break;
 
-    case PROP_BACKGROUND_STIPPLE_SET:
-      text_tag->bg_stipple_set = g_value_get_boolean (value);
-      if (!text_tag->bg_stipple_set &&
-          text_tag->values->appearance.bg_stipple)
-        {
-          g_object_unref (text_tag->values->appearance.bg_stipple);
-          text_tag->values->appearance.bg_stipple = NULL;
-        }
-      break;
-
-    case PROP_FOREGROUND_STIPPLE_SET:
-      text_tag->fg_stipple_set = g_value_get_boolean (value);
-      if (!text_tag->fg_stipple_set &&
-          text_tag->values->appearance.fg_stipple)
-        {
-          g_object_unref (text_tag->values->appearance.fg_stipple);
-          text_tag->values->appearance.fg_stipple = NULL;
-        }
-      break;
-
     case PROP_FAMILY_SET:
     case PROP_STYLE_SET:
     case PROP_VARIANT_SET:
@@ -1506,16 +1411,6 @@ gtk_text_tag_get_property (GObject      *object,
       g_value_set_boxed (value, &tag->values->appearance.fg_color);
       break;
 
-    case PROP_BACKGROUND_STIPPLE:
-      if (tag->bg_stipple_set)
-        g_value_set_object (value, tag->values->appearance.bg_stipple);
-      break;
-
-    case PROP_FOREGROUND_STIPPLE:
-      if (tag->fg_stipple_set)
-        g_value_set_object (value, tag->values->appearance.fg_stipple);
-      break;
-
     case PROP_FONT:
         {
           gchar *str;
@@ -1659,14 +1554,6 @@ gtk_text_tag_get_property (GObject      *object,
 
     case PROP_FOREGROUND_SET:
       g_value_set_boolean (value, tag->fg_color_set);
-      break;
-
-    case PROP_BACKGROUND_STIPPLE_SET:
-      g_value_set_boolean (value, tag->bg_stipple_set);
-      break;
-
-    case PROP_FOREGROUND_STIPPLE_SET:
-      g_value_set_boolean (value, tag->fg_stipple_set);
       break;
 
     case PROP_FAMILY_SET:
@@ -2023,26 +1910,10 @@ gtk_text_attributes_copy_values (GtkTextAttributes *src,
 {
   guint orig_refcount;
 
-  g_return_if_fail (!dest->realized);
-
   if (src == dest)
     return;
 
-  /* Add refs */
-
-  if (src->appearance.bg_stipple)
-    g_object_ref (src->appearance.bg_stipple);
-
-  if (src->appearance.fg_stipple)
-    g_object_ref (src->appearance.fg_stipple);
-
   /* Remove refs */
-
-  if (dest->appearance.bg_stipple)
-    g_object_unref (dest->appearance.bg_stipple);
-
-  if (dest->appearance.fg_stipple)
-    g_object_unref (dest->appearance.fg_stipple);
 
   if (dest->font)
     pango_font_description_free (dest->font);
@@ -2064,7 +1935,6 @@ gtk_text_attributes_copy_values (GtkTextAttributes *src,
     dest->pg_bg_color = gdk_color_copy (src->pg_bg_color);
 
   dest->refcount = orig_refcount;
-  dest->realized = FALSE;
 }
 
 /**
@@ -2102,14 +1972,6 @@ gtk_text_attributes_unref (GtkTextAttributes *values)
 
   if (values->refcount == 0)
     {
-      g_assert (!values->realized);
-
-      if (values->appearance.bg_stipple)
-        g_object_unref (values->appearance.bg_stipple);
-
-      if (values->appearance.fg_stipple)
-        g_object_unref (values->appearance.fg_stipple);
-
       if (values->tabs)
         pango_tab_array_free (values->tabs);
 
@@ -2124,61 +1986,6 @@ gtk_text_attributes_unref (GtkTextAttributes *values)
 }
 
 void
-_gtk_text_attributes_realize (GtkTextAttributes *values,
-                              GdkColormap *cmap,
-                              GdkVisual *visual)
-{
-  g_return_if_fail (values != NULL);
-  g_return_if_fail (values->refcount > 0);
-  g_return_if_fail (!values->realized);
-
-  /* It is wrong to use this colormap, FIXME */
-  gdk_colormap_alloc_color (cmap,
-                            &values->appearance.fg_color,
-                            FALSE, TRUE);
-
-  gdk_colormap_alloc_color (cmap,
-                            &values->appearance.bg_color,
-                            FALSE, TRUE);
-
-  if (values->pg_bg_color)
-    gdk_colormap_alloc_color (cmap,
-			      values->pg_bg_color,
-			      FALSE, TRUE);
-
-  values->realized = TRUE;
-}
-
-void
-_gtk_text_attributes_unrealize (GtkTextAttributes *values,
-                                GdkColormap *cmap,
-                                GdkVisual *visual)
-{
-  g_return_if_fail (values != NULL);
-  g_return_if_fail (values->refcount > 0);
-  g_return_if_fail (values->realized);
-
-  gdk_colormap_free_colors (cmap,
-                            &values->appearance.fg_color, 1);
-
-
-  gdk_colormap_free_colors (cmap,
-                            &values->appearance.bg_color, 1);
-
-  values->appearance.fg_color.pixel = 0;
-  values->appearance.bg_color.pixel = 0;
-
-  if (values->pg_bg_color)
-    {
-      gdk_colormap_free_colors (cmap, values->pg_bg_color, 1);
-      
-      values->pg_bg_color->pixel = 0;
-    }
-
-  values->realized = FALSE;
-}
-
-void
 _gtk_text_attributes_fill_from_tags (GtkTextAttributes *dest,
                                      GtkTextTag**       tags,
                                      guint              n_tags)
@@ -2187,8 +1994,6 @@ _gtk_text_attributes_fill_from_tags (GtkTextAttributes *dest,
 
   guint left_margin_accumulative = 0;
   guint right_margin_accumulative = 0;
-
-  g_return_if_fail (!dest->realized);
 
   while (n < n_tags)
     {
@@ -2211,24 +2016,6 @@ _gtk_text_attributes_fill_from_tags (GtkTextAttributes *dest,
       if (tag->pg_bg_color_set)
         {
           dest->pg_bg_color = gdk_color_copy (vals->pg_bg_color);
-        }
-
-      if (tag->bg_stipple_set)
-        {
-          g_object_ref (vals->appearance.bg_stipple);
-          if (dest->appearance.bg_stipple)
-            g_object_unref (dest->appearance.bg_stipple);
-          dest->appearance.bg_stipple = vals->appearance.bg_stipple;
-
-          dest->appearance.draw_bg = TRUE;
-        }
-
-      if (tag->fg_stipple_set)
-        {
-          g_object_ref (vals->appearance.fg_stipple);
-          if (dest->appearance.fg_stipple)
-            g_object_unref (dest->appearance.fg_stipple);
-          dest->appearance.fg_stipple = vals->appearance.fg_stipple;
         }
 
       if (vals->font)
@@ -2344,9 +2131,7 @@ _gtk_text_tag_affects_nonsize_appearance (GtkTextTag *tag)
 
   return
     tag->bg_color_set ||
-    tag->bg_stipple_set ||
     tag->fg_color_set ||
-    tag->fg_stipple_set ||
     tag->strikethrough_set ||
     tag->bg_full_height_set ||
     tag->pg_bg_color_set;

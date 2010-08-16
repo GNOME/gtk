@@ -28,22 +28,20 @@
 #error "Only <gtk/gtk.h> can be included directly."
 #endif
 
-#ifndef __GTK_GC_H__
-#define __GTK_GC_H__
+#ifndef __GTK_PANGO_H__
+#define __GTK_PANGO_H__
 
 
-#include <gdk/gdk.h>
+#include <pango/pangocairo.h>
 
 
 G_BEGIN_DECLS
 
-GdkGC* gtk_gc_get     (gint             depth,
-		       GdkColormap     *colormap,
-		       GdkGCValues     *values,
-		       GdkGCValuesMask  values_mask);
-void   gtk_gc_release (GdkGC           *gc);
+void
+_gtk_pango_fill_layout (cairo_t     *cr,
+                        PangoLayout *layout);
 
 
 G_END_DECLS
 
-#endif /* __GTK_GC_H__ */
+#endif /* __GTK_PANGO_H__ */

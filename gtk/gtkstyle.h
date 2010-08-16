@@ -98,17 +98,6 @@ struct _GtkStyle
   gint xthickness;
   gint ythickness;
 
-  GdkGC *fg_gc[5];
-  GdkGC *bg_gc[5];
-  GdkGC *light_gc[5];
-  GdkGC *dark_gc[5];
-  GdkGC *mid_gc[5];
-  GdkGC *text_gc[5];
-  GdkGC *base_gc[5];
-  GdkGC *text_aa_gc[5];
-  GdkGC *black_gc;
-  GdkGC *white_gc;
-
   GdkPixmap *bg_pixmap[5];
 
   /*< private >*/
@@ -205,16 +194,6 @@ struct _GtkStyleClass
 				 gint			 y,
 				 gint			 width,
 				 gint			 height);
-  void (*draw_polygon)		(GtkStyle		*style,
-				 GdkWindow		*window,
-				 GtkStateType		 state_type,
-				 GtkShadowType		 shadow_type,
-				 GdkRectangle		*area,
-				 GtkWidget		*widget,
-				 const gchar		*detail,
-				 GdkPoint		*point,
-				 gint			 npoints,
-				 gboolean		 fill);
   void (*draw_arrow)		(GtkStyle		*style,
 				 GdkWindow		*window,
 				 GtkStateType		 state_type,
@@ -505,16 +484,6 @@ void gtk_paint_shadow      (GtkStyle           *style,
 			    gint                y,
 			    gint                width,
 			    gint                height);
-void gtk_paint_polygon     (GtkStyle           *style,
-			    GdkWindow          *window,
-			    GtkStateType        state_type,
-			    GtkShadowType       shadow_type,
-			    const GdkRectangle *area,
-			    GtkWidget          *widget,
-			    const gchar        *detail,
-			    const GdkPoint     *points,
-			    gint                n_points,
-			    gboolean            fill);
 void gtk_paint_arrow       (GtkStyle           *style,
 			    GdkWindow          *window,
 			    GtkStateType        state_type,

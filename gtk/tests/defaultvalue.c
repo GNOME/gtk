@@ -84,8 +84,6 @@ test_type (gconstpointer data)
   
   if (g_type_is_a (type, GTK_TYPE_SETTINGS))
     instance = g_object_ref (gtk_settings_get_default ());
-  else if (g_type_is_a (type, GDK_TYPE_PANGO_RENDERER))
-    instance = g_object_ref (gdk_pango_renderer_get_default (gdk_screen_get_default ()));
   else if (g_type_is_a (type, GDK_TYPE_PIXMAP))
     instance = g_object_ref (gdk_pixmap_new (NULL, 1, 1, 1));
   else if (g_type_is_a (type, GDK_TYPE_COLORMAP))
@@ -119,10 +117,6 @@ test_type (gconstpointer data)
 
       if (g_type_is_a (type, GDK_TYPE_DISPLAY_MANAGER) &&
 	  (strcmp (pspec->name, "default-display") == 0))
-	continue;
-
-      if (g_type_is_a (type, GDK_TYPE_PANGO_RENDERER) &&
-	  (strcmp (pspec->name, "screen") == 0))
 	continue;
 
       if (g_type_is_a (type, GTK_TYPE_ABOUT_DIALOG) &&

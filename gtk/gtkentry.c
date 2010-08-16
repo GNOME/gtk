@@ -832,8 +832,8 @@ gtk_entry_class_init (GtkEntryClass *class)
   g_object_class_install_property (gobject_class,
                                    PROP_INVISIBLE_CHAR_SET,
                                    g_param_spec_boolean ("invisible-char-set",
-                                                         P_("Invisible char set"),
-                                                         P_("Whether the invisible char has been set"),
+                                                         P_("Invisible character set"),
+                                                         P_("Whether the invisible character has been set"),
                                                          FALSE,
                                                          GTK_PARAM_READWRITE));
 

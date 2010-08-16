@@ -180,9 +180,6 @@ gtk_accel_label_class_init (GtkAccelLabelClass *class)
 
 #endif /* GDK_WINDOWING_QUARTZ */
 
-  class->accel_seperator = g_strdup (" / ");
-  class->latin1_to_char = TRUE;
-  
   g_object_class_install_property (gobject_class,
                                    PROP_ACCEL_CLOSURE,
                                    g_param_spec_boxed ("accel-closure",
@@ -802,8 +799,7 @@ _gtk_accel_label_class_get_accelerator_label (GtkAccelLabelClass *klass,
     g_string_append (gstring, klass->mod_separator);
   
   ch = gdk_keyval_to_unicode (accelerator_key);
-  if (ch && (g_unichar_isgraph (ch) || ch == ' ') &&
-      (ch < 0x80 || klass->latin1_to_char))
+  if (ch && ch < 0x80 && (g_unichar_isgraph (ch) || ch == ' '))
     {
       switch (ch)
 	{

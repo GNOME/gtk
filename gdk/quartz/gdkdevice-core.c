@@ -147,7 +147,7 @@ translate_coords_to_child_coords (GdkWindow *parent,
       *x -= tmp_x;
       *y -= tmp_y;
 
-      current = gdk_window_get_parent (current);
+      current = gdk_window_get_effective_parent (current);
     }
 }
 
@@ -204,7 +204,7 @@ gdk_device_core_query_state_helper (GdkWindow       *window,
       return NULL;
     }
 
-  toplevel = GDK_WINDOW_OBJECT (gdk_window_get_toplevel (window));
+  toplevel = GDK_WINDOW_OBJECT (gdk_window_get_effective_toplevel (window));
 
   *mask = _gdk_quartz_events_get_current_event_mask ();
 

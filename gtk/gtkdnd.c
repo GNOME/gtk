@@ -183,14 +183,6 @@ enum {
   TARGET_DELETE
 };
 
-/* Drag icons */
-
-static GdkPixmap   *default_icon_pixmap = NULL;
-static GdkPixmap   *default_icon_mask = NULL;
-static GdkColormap *default_icon_colormap = NULL;
-static gint         default_icon_hot_x;
-static gint         default_icon_hot_y;
-
 /* Forward declarations */
 static void          gtk_drag_get_event_actions (GdkEvent        *event, 
 					         gint             button,
@@ -3012,16 +3004,8 @@ gtk_drag_get_icon (GtkDragSourceInfo *info,
 	  save_destroy_icon = info->destroy_icon;
 
 	  info->icon_window = NULL;
-	  if (!default_icon_pixmap)
-	    set_icon_stock_pixbuf (info->context, 
-				   GTK_STOCK_DND, NULL, -2, -2, TRUE);
-	  else
-	    gtk_drag_set_icon_pixmap (info->context, 
-				      default_icon_colormap, 
-				      default_icon_pixmap, 
-				      default_icon_mask,
-				      default_icon_hot_x,
-				      default_icon_hot_y);
+          set_icon_stock_pixbuf (info->context, 
+                                 GTK_STOCK_DND, NULL, -2, -2, TRUE);
 	  info->fallback_icon = info->icon_window;
 	  
 	  info->icon_window = save_icon_window;
@@ -3035,16 +3019,8 @@ gtk_drag_get_icon (GtkDragSourceInfo *info,
       *icon_window = info->fallback_icon;
       gtk_window_set_screen (GTK_WINDOW (*icon_window), info->cur_screen);
       
-      if (!default_icon_pixmap)
-	{
-	  *hot_x = -2;
-	  *hot_y = -2;
-	}
-      else
-	{
-	  *hot_x = default_icon_hot_x;
-	  *hot_y = default_icon_hot_y;
-	}
+      *hot_x = -2;
+      *hot_y = -2;
     }
   else
     {
@@ -3416,15 +3392,7 @@ gtk_drag_set_icon_default (GdkDragContext *context)
   g_return_if_fail (GDK_IS_DRAG_CONTEXT (context));
   g_return_if_fail (context->is_source);
 
-  if (!default_icon_pixmap)
-    gtk_drag_set_icon_stock (context, GTK_STOCK_DND, -2, -2);
-  else
-    gtk_drag_set_icon_pixmap (context, 
-			      default_icon_colormap, 
-			      default_icon_pixmap, 
-			      default_icon_mask,
-			      default_icon_hot_x,
-			      default_icon_hot_y);
+  gtk_drag_set_icon_stock (context, GTK_STOCK_DND, -2, -2);
 }
 
 /*************************************************************

@@ -33,7 +33,6 @@
 
 #include <cairo.h>
 #include <gdk/gdktypes.h>
-#include <gdk/gdkrgb.h>
 #include <gdk-pixbuf/gdk-pixbuf.h>
 
 G_BEGIN_DECLS
@@ -73,15 +72,14 @@ GdkPixbuf *gdk_pixbuf_get_from_drawable (GdkPixbuf   *dest,
 					 int          width,
 					 int          height);
 
-GdkPixbuf *gdk_pixbuf_get_from_image    (GdkPixbuf   *dest,
-                                         GdkImage    *src,
-                                         GdkColormap *cmap,
-                                         int          src_x,
-                                         int          src_y,
-                                         int          dest_x,
-                                         int          dest_y,
-                                         int          width,
-                                         int          height);
+GdkPixbuf *gdk_pixbuf_get_from_surface  (GdkPixbuf       *dest,
+                                         cairo_surface_t *surface,
+					 int              src_x,
+					 int              src_y,
+					 int              dest_x,
+					 int              dest_y,
+					 int              width,
+					 int              height);
 
 G_END_DECLS
 

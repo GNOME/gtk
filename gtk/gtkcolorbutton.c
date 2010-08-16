@@ -157,7 +157,7 @@ gtk_color_button_class_init (GtkColorButtonClass *klass)
   g_object_class_install_property (gobject_class,
                                    PROP_USE_ALPHA,
                                    g_param_spec_boolean ("use-alpha", P_("Use alpha"), 
-                                                         P_("Whether or not to give the color an alpha value"),
+                                                         P_("Whether to give the color an alpha value"),
                                                          FALSE,
                                                          GTK_PARAM_READWRITE));
 
@@ -314,6 +314,8 @@ expose_event (GtkWidget      *widget,
       cairo_mask (cr, checkered);
       cairo_pattern_destroy (checkered);
     }
+
+  cairo_destroy (cr);
 
   return FALSE;
 }

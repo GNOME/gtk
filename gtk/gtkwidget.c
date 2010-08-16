@@ -789,7 +789,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   /**
    * GtkWidget:double-buffered
    *
-   * Whether or not the widget is double buffered.
+   * Whether the widget is double buffered.
    *
    * Since: 2.18
    */
@@ -797,7 +797,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
                                    PROP_DOUBLE_BUFFERED,
                                    g_param_spec_boolean ("double-buffered",
                                                          P_("Double Buffered"),
-                                                         P_("Whether or not the widget is double buffered"),
+                                                         P_("Whether the widget is double buffered"),
                                                          TRUE,
                                                          GTK_PARAM_READWRITE));
 
@@ -5613,7 +5613,10 @@ _gtk_widget_set_has_default (GtkWidget *widget,
  * yourself by calling <literal>gtk_widget_set_can_default (@widget,
  * %TRUE)</literal>. The default widget is activated when 
  * the user presses Enter in a window. Default widgets must be 
- * activatable, that is, gtk_widget_activate() should affect them.
+ * activatable, that is, gtk_widget_activate() should affect them. Note
+ * that #GtkEntry widgets require the "activates-default" property
+ * set to %TRUE before they activate the default widget when Enter
+ * is pressed and the #GtkEntry is focused.
  **/
 void
 gtk_widget_grab_default (GtkWidget *widget)
@@ -5941,9 +5944,9 @@ gtk_widget_get_visible (GtkWidget *widget)
  * all realized widgets have a non-%NULL "window" pointer
  * (gtk_widget_get_window() never returns a %NULL window when a widget
  * is realized), but for many of them it's actually the #GdkWindow of
- * one of its parent widgets. Widgets that create a %window for
- * themselves in GtkWidget::realize() however must announce this by
- * calling this function with @has_window = %TRUE.
+ * one of its parent widgets. Widgets that do not create a %window for
+ * themselves in GtkWidget::realize() must announce this by
+ * calling this function with @has_window = %FALSE.
  *
  * This function should only be called by widget implementations,
  * and they should call it in their init() function.

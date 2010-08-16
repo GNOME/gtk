@@ -77,16 +77,15 @@ typedef enum {
   GDK_DEBUG_XIM           = 1 << 3,
   GDK_DEBUG_NOGRABS       = 1 << 4,
   GDK_DEBUG_COLORMAP	  = 1 << 5,
-  GDK_DEBUG_GDKRGB	  = 1 << 6,
-  GDK_DEBUG_GC		  = 1 << 7,
-  GDK_DEBUG_PIXMAP	  = 1 << 8,
-  GDK_DEBUG_IMAGE	  = 1 << 9,
-  GDK_DEBUG_INPUT	  = 1 <<10,
-  GDK_DEBUG_CURSOR	  = 1 <<11,
-  GDK_DEBUG_MULTIHEAD	  = 1 <<12,
-  GDK_DEBUG_XINERAMA	  = 1 <<13,
-  GDK_DEBUG_DRAW	  = 1 <<14,
-  GDK_DEBUG_EVENTLOOP     = 1 <<15
+  GDK_DEBUG_GC		  = 1 << 6,
+  GDK_DEBUG_PIXMAP	  = 1 << 7,
+  GDK_DEBUG_IMAGE	  = 1 << 8,
+  GDK_DEBUG_INPUT	  = 1 << 9,
+  GDK_DEBUG_CURSOR	  = 1 <<10,
+  GDK_DEBUG_MULTIHEAD	  = 1 <<11,
+  GDK_DEBUG_XINERAMA	  = 1 <<12,
+  GDK_DEBUG_DRAW	  = 1 <<13,
+  GDK_DEBUG_EVENTLOOP     = 1 <<14
 } GdkDebugFlag;
 
 extern GList            *_gdk_default_filters;
@@ -318,49 +317,12 @@ void gdk_synthesize_window_state (GdkWindow     *window,
 GdkDeviceManager * _gdk_device_manager_new (GdkDisplay *display);
 
 
-#define GDK_SCRATCH_IMAGE_WIDTH 256
-#define GDK_SCRATCH_IMAGE_HEIGHT 64
-
-GdkImage* _gdk_image_new_for_depth (GdkScreen    *screen,
-				    GdkImageType  type,
-				    GdkVisual    *visual,
-				    gint          width,
-				    gint          height,
-				    gint          depth);
-GdkImage *_gdk_image_get_scratch (GdkScreen *screen,
-				  gint	     width,
-				  gint	     height,
-				  gint	     depth,
-				  gint	    *x,
-				  gint	    *y);
-
-GdkImage *_gdk_drawable_copy_to_image (GdkDrawable  *drawable,
-				       GdkImage     *image,
-				       gint          src_x,
-				       gint          src_y,
-				       gint          dest_x,
-				       gint          dest_y,
-				       gint          width,
-				       gint          height);
-
 cairo_surface_t *_gdk_drawable_ref_cairo_surface (GdkDrawable *drawable);
 
 GdkDrawable *_gdk_drawable_get_source_drawable (GdkDrawable *drawable);
 cairo_surface_t * _gdk_drawable_create_cairo_surface (GdkDrawable *drawable,
 						      int width,
 						      int height);
-
-/* GC caching */
-GdkGC *_gdk_drawable_get_scratch_gc (GdkDrawable *drawable,
-				     gboolean     graphics_exposures);
-GdkGC *_gdk_drawable_get_subwindow_scratch_gc (GdkDrawable *drawable);
-
-void _gdk_gc_update_context (GdkGC          *gc,
-			     cairo_t        *cr,
-			     const GdkColor *override_foreground,
-			     GdkBitmap      *override_stipple,
-			     gboolean        gc_changed,
-			     GdkDrawable    *target_drawable);
 
 /*************************************
  * Interfaces used by windowing code *
@@ -370,17 +332,6 @@ GdkPixmap *_gdk_pixmap_new               (GdkDrawable    *drawable,
                                           gint            width,
                                           gint            height,
                                           gint            depth);
-GdkPixmap *_gdk_pixmap_create_from_data  (GdkDrawable    *drawable,
-                                          const gchar    *data,
-                                          gint            width,
-                                          gint            height,
-                                          gint            depth,
-                                          const GdkColor *fg,
-                                          const GdkColor *bg);
-GdkPixmap *_gdk_bitmap_create_from_data  (GdkDrawable    *drawable,
-                                          const gchar    *data,
-                                          gint            width,
-                                          gint            height);
 
 void       _gdk_window_impl_new          (GdkWindow      *window,
 					  GdkWindow      *real_parent,
@@ -401,38 +352,6 @@ void       _gdk_window_process_updates_recurse (GdkWindow *window,
 void       _gdk_screen_close             (GdkScreen      *screen);
 
 const char *_gdk_get_sm_client_id (void);
-
-void _gdk_gc_init (GdkGC           *gc,
-		   GdkDrawable     *drawable,
-		   GdkGCValues     *values,
-		   GdkGCValuesMask  values_mask);
-
-cairo_region_t *_gdk_gc_get_clip_region (GdkGC *gc);
-GdkBitmap *_gdk_gc_get_clip_mask   (GdkGC *gc);
-gboolean   _gdk_gc_get_exposures   (GdkGC *gc);
-GdkFill    _gdk_gc_get_fill        (GdkGC *gc);
-GdkPixmap *_gdk_gc_get_tile        (GdkGC *gc);
-GdkBitmap *_gdk_gc_get_stipple     (GdkGC *gc);
-guint32    _gdk_gc_get_fg_pixel    (GdkGC *gc);
-guint32    _gdk_gc_get_bg_pixel    (GdkGC *gc);
-void      _gdk_gc_add_drawable_clip     (GdkGC     *gc,
-					 guint32    region_tag,
-					 cairo_region_t *region,
-					 int        offset_x,
-					 int        offset_y);
-void      _gdk_gc_remove_drawable_clip  (GdkGC     *gc);
-void       _gdk_gc_set_clip_region_internal (GdkGC     *gc,
-					     cairo_region_t *region,
-					     gboolean reset_origin);
-GdkSubwindowMode _gdk_gc_get_subwindow (GdkGC *gc);
-
-GdkDrawable *_gdk_drawable_begin_direct_draw (GdkDrawable *drawable,
-					      GdkGC *gc,
-					      gpointer *priv_data,
-					      gint *x_offset_out,
-					      gint *y_offset_out);
-void         _gdk_drawable_end_direct_draw (gpointer priv_data);
-
 
 /*****************************************
  * Interfaces provided by windowing code *
@@ -537,45 +456,6 @@ GType _gdk_paintable_get_type (void) G_GNUC_CONST;
 GType _gdk_window_impl_get_type (void) G_GNUC_CONST;
 GType _gdk_pixmap_impl_get_type (void) G_GNUC_CONST;
 
-
-/**
- * _gdk_windowing_gc_set_clip_region:
- * @gc: a #GdkGC
- * @region: the new clip region
- * @reset_origin: if TRUE, reset the clip_x/y_origin values to 0
- * 
- * Do any window-system specific processing necessary
- * for a change in clip region. Since the clip origin
- * will likely change before the GC is used with the
- * new clip, frequently this function will only set a flag and
- * do the real processing later.
- *
- * When this function is called, _gdk_gc_get_clip_region
- * will already return the new region.
- **/
-void _gdk_windowing_gc_set_clip_region (GdkGC           *gc,
-					const cairo_region_t *region,
-					gboolean reset_origin);
-
-/**
- * _gdk_windowing_gc_copy:
- * @dst_gc: a #GdkGC from the GDK backend
- * @src_gc: a #GdkGC from the GDK backend
- * 
- * Copies backend specific state from @src_gc to @dst_gc.
- * This is called before the generic state is copied, so
- * the old generic state is still available from @dst_gc
- **/
-void _gdk_windowing_gc_copy (GdkGC *dst_gc,
-			     GdkGC *src_gc);
-     
-/* Queries the current foreground color of a GdkGC */
-void _gdk_windowing_gc_get_foreground (GdkGC    *gc,
-				       GdkColor *color);
-/* Queries the current background color of a GdkGC */
-void _gdk_windowing_gc_get_background (GdkGC    *gc,
-				       GdkColor *color);
-
 struct GdkAppLaunchContextPrivate
 {
   GdkDisplay *display;
@@ -631,9 +511,9 @@ void _gdk_display_pointer_info_foreach (GdkDisplay                   *display,
 void _gdk_window_invalidate_for_expose (GdkWindow       *window,
 					cairo_region_t       *region);
 
-void _gdk_windowing_set_cairo_surface_size (cairo_surface_t *surface,
-					    int width,
-					    int height);
+gboolean _gdk_windowing_set_cairo_surface_size (cairo_surface_t *surface,
+					        int width,
+					        int height);
 
 cairo_surface_t * _gdk_windowing_create_cairo_surface (GdkDrawable *drawable,
 						       int width,
@@ -701,7 +581,6 @@ void       _gdk_offscreen_window_new                 (GdkWindow     *window,
  * Initialization and exit routines *
  ************************************/
 
-void _gdk_image_exit  (void);
 void _gdk_windowing_exit (void);
 
 G_END_DECLS

@@ -207,7 +207,6 @@ gdk_display_open (const gchar *display_name)
   gdk_screen_set_default_colormap (_gdk_screen,
                                    gdk_screen_get_system_colormap (_gdk_screen));
   _gdk_windowing_window_init (_gdk_screen);
-  _gdk_windowing_image_init ();
   _gdk_events_init ();
   _gdk_input_init (_gdk_display);
   _gdk_dnd_init ();

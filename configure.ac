@@ -942,11 +942,11 @@ if test "x$gdktarget" = "xx11"; then
   #
   # Check for basic X packages; we use pkg-config if available
   #
-  if $PKG_CONFIG --exists x11 xext xrender; then
+  if $PKG_CONFIG --exists x11 xext; then
     have_base_x_pc=true
-    X_PACKAGES="$X_PACKAGES x11 xext xrender"
-    x_libs="`$PKG_CONFIG --libs x11 xext xrender`"
-    X_CFLAGS="`$PKG_CONFIG --cflags x11 xext xrender`"
+    X_PACKAGES="$X_PACKAGES x11 xext"
+    x_libs="`$PKG_CONFIG --libs x11 xext`"
+    X_CFLAGS="`$PKG_CONFIG --cflags x11 xext`"
 
     # Strip out any .la files that pkg-config might give us (this happens
     # with -uninstalled.pc files)
@@ -967,9 +967,9 @@ if test "x$gdktarget" = "xx11"; then
     fi
 
     x_cflags="$X_CFLAGS"
-    x_libs_for_checks="$X_LIBS -lXext -lXrender -lX11 $X_EXTRA_LIBS"
+    x_libs_for_checks="$X_LIBS -lXext -lX11 $X_EXTRA_LIBS"
 
-    GTK_DEP_LIBS_FOR_X="$X_LIBS -lXrender -lX11 $X_EXTRA_LIBS"
+    GTK_DEP_LIBS_FOR_X="$X_LIBS -lX11 $X_EXTRA_LIBS"
   fi
 
   # Extra libraries found during checks (-lXinerama, etc), not from pkg-config.
@@ -988,8 +988,6 @@ if test "x$gdktarget" = "xx11"; then
                 AC_MSG_ERROR([*** libX11 not found. Check 'config.log' for more details.]))
   AC_CHECK_FUNC(XextFindDisplay, :,
                 AC_MSG_ERROR([*** libXext not found. Check 'config.log' for more details.]))
-  AC_CHECK_FUNC(XRenderQueryExtension, :,
-                AC_MSG_ERROR([*** libXrender not found. Check 'config.log' for more details.]))
 
   # Check for xReply
 

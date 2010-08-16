@@ -838,7 +838,7 @@ gtk_file_chooser_class_init (gpointer g_iface)
    */
   g_object_interface_install_property (g_iface,
 				       g_param_spec_boolean ("create-folders",
-							     P_("Allow folders creation"),
+							     P_("Allow folder creation"),
 							     P_("Whether a file chooser not in open mode "
 								"will offer the user to create new folders."),
 							     TRUE,

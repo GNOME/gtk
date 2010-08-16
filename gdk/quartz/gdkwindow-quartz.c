@@ -229,10 +229,9 @@ gdk_window_impl_quartz_begin_paint_region (GdkPaintable    *paintable,
 {
   GdkWindowImplQuartz *impl = GDK_WINDOW_IMPL_QUARTZ (paintable);
   GdkWindowObject *private = (GdkWindowObject*)window;
-  int n_rects;
   GdkPixmap *bg_pixmap;
   cairo_region_t *clipped_and_offset_region;
-  gboolean free_clipped_and_offset_region = TRUE;
+  cairo_t *cr;
 
   bg_pixmap = private->bg_pixmap;
 
@@ -244,53 +243,30 @@ gdk_window_impl_quartz_begin_paint_region (GdkPaintable    *paintable,
                      private->abs_x, private->abs_y);
 
   if (impl->begin_paint_count == 0)
-    {
-      impl->paint_clip_region = clipped_and_offset_region;
-      free_clipped_and_offset_region = FALSE;
-    }
+    impl->paint_clip_region = cairo_region_reference (clipped_and_offset_region);
   else
     cairo_region_union (impl->paint_clip_region, clipped_and_offset_region);
 
   impl->begin_paint_count++;
 
-  if (bg_pixmap == GDK_NO_BG)
+  if (bg_pixmap == GDK_NO_BG ||
+      cairo_region_is_empty (clipped_and_offset_region))
     goto done;
 
-  n_rects = cairo_region_num_rectangles (clipped_and_offset_region);
+  cr = gdk_cairo_create (window);
 
-  if (n_rects == 0)
-    goto done;
+  cairo_translate (cr, -private->abs_x, -private->abs_y);
+
+  gdk_cairo_region (cr, clipped_and_offset_region);
+  cairo_clip (cr);
 
   if (bg_pixmap == NULL)
     {
-      CGContextRef cg_context;
-      CGColorRef color;
-      gint i;
-
-      cg_context = gdk_quartz_drawable_get_context (GDK_DRAWABLE (impl), FALSE);
-      color = _gdk_quartz_colormap_get_cgcolor_from_pixel (window,
-                                                           private->bg_color.pixel);
-      CGContextSetFillColorWithColor (cg_context, color);
-      CGColorRelease (color);
- 
-      for (i = 0; i < n_rects; i++)
-        {
-          cairo_rectangle_int_t rect;
-          cairo_region_get_rectangle (clipped_and_offset_region, i, &rect);
-          CGContextFillRect (cg_context,
-                             CGRectMake (rect.x, rect.y,
-                                         rect.width, rect.height));
-        }
-
-      gdk_quartz_drawable_release_context (GDK_DRAWABLE (impl), cg_context);
+      gdk_cairo_set_source_color (cr, &private->bg_color);
     }
   else
     {
-      int x, y;
       int x_offset, y_offset;
-      int width, height;
-      cairo_rectangle_int_t rect;
-      GdkGC *gc;
 
       x_offset = y_offset = 0;
 
@@ -306,45 +282,26 @@ gdk_window_impl_quartz_begin_paint_region (GdkPaintable    *paintable,
           bg_pixmap = ((GdkWindowObject *) window)->bg_pixmap;
         }
 
+      /* If we have a parent relative background or we don't have a pixmap,
+       * clear the area to transparent.
+       */ 
       if (bg_pixmap == NULL || bg_pixmap == GDK_NO_BG || bg_pixmap == GDK_PARENT_RELATIVE_BG)
         {
-          /* Parent relative background but the parent doesn't have a
-           * pixmap.
-           */ 
+          cairo_destroy (cr);
           goto done;
         }
 
-      /* Note: There should be a CG API to draw tiled images, we might
-       * want to look into that for this. 
-       */
-      gc = gdk_gc_new (GDK_DRAWABLE (impl));
-
-      gdk_drawable_get_size (GDK_DRAWABLE (bg_pixmap), &width, &height);
-
-      x = -x_offset;
-      cairo_region_get_rectangle (clipped_and_offset_region, 0, &rect);
-      while (x < (rect.x + rect.width))
-        {
-          if (x + width >= rect.x)
-	    {
-              y = -y_offset;
-              while (y < (rect.y + rect.height))
-                {
-                  if (y + height >= rect.y)
-                    gdk_draw_drawable (GDK_DRAWABLE (impl), gc, bg_pixmap, 0, 0, x, y, width, height);
-		  
-                  y += height;
-                }
-            }
-          x += width;
-        }
-
-      g_object_unref (gc);
+      gdk_cairo_set_source_pixmap (cr, bg_pixmap, x_offset, y_offset);
+      cairo_set_extend (cairo_get_source (cr), CAIRO_EXTEND_REPEAT);
     }
 
- done:
-  if (free_clipped_and_offset_region)
-    cairo_region_destroy (clipped_and_offset_region);
+  /* Can use cairo_paint() here, we clipped above */
+  cairo_paint (cr);
+
+  cairo_destroy (cr);
+
+done:
+  cairo_region_destroy (clipped_and_offset_region);
 }
 
 static void
@@ -398,8 +355,8 @@ _gdk_windowing_window_process_updates_recurse (GdkWindow *window,
     {
       GdkWindow *toplevel;
 
-      toplevel = gdk_window_get_toplevel (window);
-      if (toplevel)
+      toplevel = gdk_window_get_effective_toplevel (window);
+      if (toplevel && WINDOW_IS_TOPLEVEL (toplevel))
         {
           GdkWindowObject *toplevel_private;
           GdkWindowImplQuartz *toplevel_impl;
@@ -421,7 +378,10 @@ _gdk_windowing_window_process_updates_recurse (GdkWindow *window,
         }
     }
 
-  _gdk_quartz_window_set_needs_display_in_region (window, region);
+  if (WINDOW_IS_TOPLEVEL (window))
+    _gdk_quartz_window_set_needs_display_in_region (window, region);
+  else
+    _gdk_window_process_updates_recurse (window, region);
 
   /* NOTE: I'm not sure if we should displayIfNeeded here. It slows down a
    * lot (since it triggers the beam syncing) and things seem to work
@@ -827,7 +787,7 @@ _gdk_quartz_window_did_resign_main (GdkWindow *window)
   if (new_window &&
       new_window != window &&
       GDK_WINDOW_IS_MAPPED (new_window) &&
-      GDK_WINDOW_OBJECT (new_window)->window_type != GDK_WINDOW_TEMP)
+      WINDOW_IS_TOPLEVEL (new_window))
     {
       GdkWindowObject *private = (GdkWindowObject *) new_window;
       GdkWindowImplQuartz *impl = GDK_WINDOW_IMPL_QUARTZ (private->impl);
@@ -943,6 +903,8 @@ _gdk_window_impl_new (GdkWindow     *window,
   gdk_window_set_cursor (window, ((attributes_mask & GDK_WA_CURSOR) ?
 				  (attributes->cursor) :
 				  NULL));
+
+  impl->view = NULL;
 
   switch (attributes->window_type) 
     {
@@ -1191,7 +1153,7 @@ gdk_window_quartz_show (GdkWindow *window, gboolean already_mapped)
   else
     focus_on_map = TRUE;
 
-  if (impl->toplevel)
+  if (WINDOW_IS_TOPLEVEL (window) && impl->toplevel)
     {
       gboolean make_key;
 
@@ -1286,7 +1248,7 @@ gdk_window_quartz_hide (GdkWindow *window)
 
   impl = GDK_WINDOW_IMPL_QUARTZ (private->impl);
 
-  if (impl->toplevel) 
+  if (WINDOW_IS_TOPLEVEL (window)) 
     {
      /* Update main window. */
       main_window_stack = g_slist_remove (main_window_stack, window);
@@ -3102,6 +3064,6 @@ gdk_window_impl_iface_init (GdkWindowImplIface *iface)
   iface->input_shape_combine_region = gdk_window_quartz_input_shape_combine_region;
   iface->set_static_gravities = gdk_window_quartz_set_static_gravities;
   iface->queue_antiexpose = _gdk_quartz_window_queue_antiexpose;
-  iface->queue_translation = _gdk_quartz_window_queue_translation;
+  iface->translate = _gdk_quartz_window_translate;
   iface->destroy = _gdk_quartz_window_destroy;
 }

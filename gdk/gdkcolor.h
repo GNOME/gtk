@@ -110,9 +110,6 @@ gboolean gdk_colormap_alloc_color (GdkColormap    *colormap,
 void     gdk_colormap_free_colors (GdkColormap    *colormap,
 				   const GdkColor *colors,
 				   gint            n_colors);
-void     gdk_colormap_query_color (GdkColormap    *colormap,
-				   gulong          pixel,
-				   GdkColor       *result);
 
 GdkVisual *gdk_colormap_get_visual (GdkColormap *colormap);
 

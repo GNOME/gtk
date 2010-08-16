@@ -63,7 +63,6 @@ noinst_PROGRAMS =  $(TEST_PROGS)	\
 	testoffscreenwindow		\
 	testorientable			\
 	testprint			\
-	testrgb				\
 	testrecentchooser 		\
 	testrecentchoosermenu		\
 	testrichtext			\
@@ -148,7 +147,6 @@ testorientable_DEPENDENCIES = $(TEST_DEPS)
 testprint_DEPENDENCIES = $(TEST_DEPS)
 testrecentchooser_DEPENDENCIES = $(TEST_DEPS)
 testrecentchoosermenu_DEPENDENCIES = $(TEST_DEPS)
-testrgb_DEPENDENCIES = $(TEST_DEPS)
 testrichtext_DEPENDENCIES = $(TEST_DEPS)
 testscale_DEPENDENCIES = $(TEST_DEPS)
 testselection_DEPENDENCIES = $(TEST_DEPS)
@@ -215,7 +213,6 @@ testorientable_LDADD = $(LDADDS)
 testprint_LDADD = $(LDADDS)
 testrecentchooser_LDADD = $(LDADDS)
 testrecentchoosermenu_LDADD = $(LDADDS)
-testrgb_LDADD = $(LDADDS)
 testrichtext_LDADD = $(LDADDS)
 testscale_LDADD = $(LDADDS)
 testselection_LDADD = $(LDADDS)

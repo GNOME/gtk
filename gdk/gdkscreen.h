@@ -49,10 +49,6 @@ struct _GdkScreen
 
   guint GSEAL (closed) : 1;
 
-  GdkGC *GSEAL (normal_gcs[32]);
-  GdkGC *GSEAL (exposure_gcs[32]);
-  GdkGC *GSEAL (subwindow_gcs[32]);
-
   cairo_font_options_t *GSEAL (font_options);
   double GSEAL (resolution);	/* pixels/points scale factor for fonts */
 };
@@ -72,8 +68,6 @@ void         gdk_screen_set_default_colormap  (GdkScreen   *screen,
 					       GdkColormap *colormap);
 GdkColormap* gdk_screen_get_system_colormap   (GdkScreen   *screen);
 GdkVisual*   gdk_screen_get_system_visual     (GdkScreen   *screen);
-GdkColormap *gdk_screen_get_rgb_colormap      (GdkScreen   *screen);
-GdkVisual *  gdk_screen_get_rgb_visual        (GdkScreen   *screen);
 GdkColormap *gdk_screen_get_rgba_colormap     (GdkScreen   *screen);
 GdkVisual *  gdk_screen_get_rgba_visual       (GdkScreen   *screen);
 gboolean     gdk_screen_is_composited	      (GdkScreen   *screen);

@@ -27,11 +27,9 @@ libgdk_directfb_la_SOURCES =	\
 	gdkdisplay-directfb.h   \
 	gdkdrawable-directfb.c	\
 	gdkevents-directfb.c	\
-	gdkgc-directfb.c	\
 	gdkgeometry-directfb.c	\
 	gdkglobals-directfb.c	\
 	gdkim-directfb.c	\
-	gdkimage-directfb.c	\
 	gdkinput-directfb.c	\
 	gdkinput-directfb.h	\
 	gdkkeys-directfb.c	\

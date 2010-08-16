@@ -1424,11 +1424,6 @@ gtk_text_attr_appearance_destroy (PangoAttribute *attr)
 {
   GtkTextAttrAppearance *appearance_attr = (GtkTextAttrAppearance *)attr;
 
-  if (appearance_attr->appearance.bg_stipple)
-    g_object_unref (appearance_attr->appearance.bg_stipple);
-  if (appearance_attr->appearance.fg_stipple)
-    g_object_unref (appearance_attr->appearance.fg_stipple);
-
   g_slice_free (GtkTextAttrAppearance, appearance_attr);
 }
 
@@ -1441,8 +1436,6 @@ gtk_text_attr_appearance_compare (const PangoAttribute *attr1,
 
   return (gdk_color_equal (&appearance1->fg_color, &appearance2->fg_color) &&
           gdk_color_equal (&appearance1->bg_color, &appearance2->bg_color) &&
-          appearance1->fg_stipple ==  appearance2->fg_stipple &&
-          appearance1->bg_stipple ==  appearance2->bg_stipple &&
           appearance1->underline == appearance2->underline &&
           appearance1->strikethrough == appearance2->strikethrough &&
           appearance1->draw_bg == appearance2->draw_bg);
@@ -1478,11 +1471,6 @@ gtk_text_attr_appearance_new (const GtkTextAppearance *appearance)
   result->attr.klass = &klass;
 
   result->appearance = *appearance;
-
-  if (appearance->bg_stipple)
-    g_object_ref (appearance->bg_stipple);
-  if (appearance->fg_stipple)
-    g_object_ref (appearance->fg_stipple);
 
   return (PangoAttribute *)result;
 }

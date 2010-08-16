@@ -75,7 +75,6 @@ G_BEGIN_DECLS
  */
 typedef struct _GdkPoint	      GdkPoint;
 typedef cairo_rectangle_int_t	      GdkRectangle;
-typedef struct _GdkSegment	      GdkSegment;
 typedef struct _GdkSpan	              GdkSpan;
 
 typedef struct _GdkAtom            *GdkAtom;
@@ -103,8 +102,6 @@ typedef guint32 GdkNativeWindow;
 typedef struct _GdkColor	      GdkColor;
 typedef struct _GdkColormap	      GdkColormap;
 typedef struct _GdkCursor	      GdkCursor;
-typedef struct _GdkGC                 GdkGC;
-typedef struct _GdkImage              GdkImage;
 typedef struct _GdkVisual             GdkVisual;
 
 typedef struct _GdkDrawable           GdkDrawable;
@@ -269,14 +266,6 @@ struct _GdkPoint
 {
   gint x;
   gint y;
-};
-
-struct _GdkSegment
-{
-  gint x1;
-  gint y1;
-  gint x2;
-  gint y2;
 };
 
 struct _GdkSpan

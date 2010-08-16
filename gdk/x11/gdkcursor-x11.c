@@ -161,10 +161,15 @@ get_blank_cursor (GdkDisplay *display)
   Pixmap source_pixmap;
   XColor color;
   Cursor cursor;
+  cairo_t *cr;
 
   screen = gdk_display_get_default_screen (display);
-  pixmap = gdk_bitmap_create_from_data (gdk_screen_get_root_window (screen), 
-					"\0\0\0\0\0\0\0\0", 1, 1);
+  pixmap = gdk_pixmap_new (gdk_screen_get_root_window (screen), 1, 1, 1);
+  /* Clear Pixmap */
+  cr = gdk_cairo_create (pixmap);
+  cairo_set_operator (cr, CAIRO_OPERATOR_CLEAR);
+  cairo_paint (cr);
+  cairo_destroy (cr);
  
   source_pixmap = GDK_PIXMAP_XID (pixmap);
 
@@ -315,44 +320,7 @@ gdk_cursor_new_for_display (GdkDisplay    *display,
  * 
  * Creates a new cursor from a given pixmap and mask. Both the pixmap and mask
  * must have a depth of 1 (i.e. each pixel has only 2 values - on or off).
- * The standard cursor size is 16 by 16 pixels. You can create a bitmap 
- * from inline data as in the below example.
- * 
- * <example><title>Creating a custom cursor</title>
- * <programlisting>
- * /<!-- -->* This data is in X bitmap format, and can be created with the 'bitmap'
- *    utility. *<!-- -->/
- * &num;define cursor1_width 16
- * &num;define cursor1_height 16
- * static unsigned char cursor1_bits[] = {
- *   0x80, 0x01, 0x40, 0x02, 0x20, 0x04, 0x10, 0x08, 0x08, 0x10, 0x04, 0x20,
- *   0x82, 0x41, 0x41, 0x82, 0x41, 0x82, 0x82, 0x41, 0x04, 0x20, 0x08, 0x10,
- *   0x10, 0x08, 0x20, 0x04, 0x40, 0x02, 0x80, 0x01};
- *  
- * static unsigned char cursor1mask_bits[] = {
- *   0x80, 0x01, 0xc0, 0x03, 0x60, 0x06, 0x30, 0x0c, 0x18, 0x18, 0x8c, 0x31,
- *   0xc6, 0x63, 0x63, 0xc6, 0x63, 0xc6, 0xc6, 0x63, 0x8c, 0x31, 0x18, 0x18,
- *   0x30, 0x0c, 0x60, 0x06, 0xc0, 0x03, 0x80, 0x01};
- *  
- *  
- *  GdkCursor *cursor;
- *  GdkPixmap *source, *mask;
- *  GdkColor fg = { 0, 65535, 0, 0 }; /<!-- -->* Red. *<!-- -->/
- *  GdkColor bg = { 0, 0, 0, 65535 }; /<!-- -->* Blue. *<!-- -->/
- *  
- *  
- *  source = gdk_bitmap_create_from_data (NULL, cursor1_bits,
- *                                        cursor1_width, cursor1_height);
- *  mask = gdk_bitmap_create_from_data (NULL, cursor1mask_bits,
- *                                      cursor1_width, cursor1_height);
- *  cursor = gdk_cursor_new_from_pixmap (source, mask, &amp;fg, &amp;bg, 8, 8);
- *  g_object_unref (source);
- *  g_object_unref (mask);
- *  
- *  
- *  gdk_window_set_cursor (widget->window, cursor);
- * </programlisting>
- * </example>
+ * The standard cursor size is 16 by 16 pixels.
  *
  * Return value: a new #GdkCursor.
  **/
@@ -931,11 +899,13 @@ gdk_cursor_new_from_pixbuf (GdkDisplay *display,
 {
   GdkCursor *cursor;
   GdkPixmap *pixmap, *mask;
-  guint width, height, n_channels, rowstride, i, j;
+  guint width, height, n_channels, rowstride, data_stride, i, j;
   guint8 *data, *mask_data, *pixels;
   GdkColor fg = { 0, 0, 0, 0 };
   GdkColor bg = { 0, 0xffff, 0xffff, 0xffff };
   GdkScreen *screen;
+  cairo_surface_t *image;
+  cairo_t *cr;
 
   g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
   g_return_val_if_fail (GDK_IS_PIXBUF (pixbuf), NULL);
@@ -950,14 +920,15 @@ gdk_cursor_new_from_pixbuf (GdkDisplay *display,
   rowstride = gdk_pixbuf_get_rowstride (pixbuf);
   pixels = gdk_pixbuf_get_pixels (pixbuf);
 
-  data = g_new0 (guint8, (width + 7) / 8 * height);
-  mask_data = g_new0 (guint8, (width + 7) / 8 * height);
+  data_stride = 4 * ((width + 31) / 32);
+  data = g_new0 (guint8, data_stride * height);
+  mask_data = g_new0 (guint8, data_stride * height);
 
   for (j = 0; j < height; j++)
     {
       guint8 *src = pixels + j * rowstride;
-      guint8 *d = data + (width + 7) / 8 * j;
-      guint8 *md = mask_data + (width + 7) / 8 * j;
+      guint8 *d = data + data_stride * j;
+      guint8 *md = mask_data + data_stride * j;
 	
       for (i = 0; i < width; i++)
 	{
@@ -977,12 +948,29 @@ gdk_cursor_new_from_pixbuf (GdkDisplay *display,
     }
       
   screen = gdk_display_get_default_screen (display);
-  pixmap = gdk_bitmap_create_from_data (gdk_screen_get_root_window (screen), 
-					data, width, height);
+
+  pixmap = gdk_pixmap_new (gdk_screen_get_root_window (screen), 
+			   width, height, 1);
+  cr = gdk_cairo_create (pixmap);
+  image = cairo_image_surface_create_for_data (data, CAIRO_FORMAT_A1,
+                                               width, height, data_stride);
+  cairo_set_source_surface (cr, image, 0, 0);
+  cairo_surface_destroy (image);
+  cairo_set_operator (cr, CAIRO_OPERATOR_SOURCE);
+  cairo_paint (cr);
+  cairo_destroy (cr);
  
-  mask = gdk_bitmap_create_from_data (gdk_screen_get_root_window (screen),
-				      mask_data, width, height);
-   
+  mask = gdk_pixmap_new (gdk_screen_get_root_window (screen), 
+			 width, height, 1);
+  cr = gdk_cairo_create (mask);
+  image = cairo_image_surface_create_for_data (mask_data, CAIRO_FORMAT_A1,
+                                               width, height, data_stride);
+  cairo_set_source_surface (cr, image, 0, 0);
+  cairo_surface_destroy (image);
+  cairo_set_operator (cr, CAIRO_OPERATOR_SOURCE);
+  cairo_paint (cr);
+  cairo_destroy (cr);
+ 
   cursor = gdk_cursor_new_from_pixmap (pixmap, mask, &fg, &bg, x, y);
    
   g_object_unref (pixmap);

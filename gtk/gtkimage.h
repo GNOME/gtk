@@ -64,11 +64,6 @@ struct _GtkImagePixmapData
   GdkPixmap *pixmap;
 };
 
-struct _GtkImageImageData
-{
-  GdkImage *image;
-};
-
 struct _GtkImagePixbufData
 {
   GdkPixbuf *pixbuf;
@@ -109,7 +104,6 @@ struct _GtkImageGIconData
  * GtkImageType:
  * @GTK_IMAGE_EMPTY: there is no image displayed by the widget
  * @GTK_IMAGE_PIXMAP: the widget contains a #GdkPixmap
- * @GTK_IMAGE_IMAGE: the widget contains a #GdkImage
  * @GTK_IMAGE_PIXBUF: the widget contains a #GdkPixbuf
  * @GTK_IMAGE_STOCK: the widget contains a stock icon name (see
  *  <xref linkend="gtk3-Stock-Items"/>)
@@ -132,7 +126,6 @@ typedef enum
 {
   GTK_IMAGE_EMPTY,
   GTK_IMAGE_PIXMAP,
-  GTK_IMAGE_IMAGE,
   GTK_IMAGE_PIXBUF,
   GTK_IMAGE_STOCK,
   GTK_IMAGE_ICON_SET,
@@ -177,8 +170,6 @@ GType      gtk_image_get_type (void) G_GNUC_CONST;
 GtkWidget* gtk_image_new                (void);
 GtkWidget* gtk_image_new_from_pixmap    (GdkPixmap       *pixmap,
                                          GdkBitmap       *mask);
-GtkWidget* gtk_image_new_from_image     (GdkImage        *image,
-                                         GdkBitmap       *mask);
 GtkWidget* gtk_image_new_from_file      (const gchar     *filename);
 GtkWidget* gtk_image_new_from_pixbuf    (GdkPixbuf       *pixbuf);
 GtkWidget* gtk_image_new_from_stock     (const gchar     *stock_id,
@@ -194,9 +185,6 @@ GtkWidget* gtk_image_new_from_gicon     (GIcon           *icon,
 void gtk_image_clear              (GtkImage        *image);
 void gtk_image_set_from_pixmap    (GtkImage        *image,
                                    GdkPixmap       *pixmap,
-                                   GdkBitmap       *mask);
-void gtk_image_set_from_image     (GtkImage        *image,
-                                   GdkImage        *gdk_image,
                                    GdkBitmap       *mask);
 void gtk_image_set_from_file      (GtkImage        *image,
                                    const gchar     *filename);
@@ -223,9 +211,6 @@ GtkImageType gtk_image_get_storage_type (GtkImage   *image);
 
 void       gtk_image_get_pixmap   (GtkImage         *image,
                                    GdkPixmap       **pixmap,
-                                   GdkBitmap       **mask);
-void       gtk_image_get_image    (GtkImage         *image,
-                                   GdkImage        **gdk_image,
                                    GdkBitmap       **mask);
 GdkPixbuf* gtk_image_get_pixbuf   (GtkImage         *image);
 void       gtk_image_get_stock    (GtkImage         *image,

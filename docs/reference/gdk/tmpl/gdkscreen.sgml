@@ -113,24 +113,6 @@ when GDK gets multihead support.
 @Returns: 
 
 
-<!-- ##### FUNCTION gdk_screen_get_rgb_colormap ##### -->
-<para>
-
-</para>
-
-@screen: 
-@Returns: 
-
-
-<!-- ##### FUNCTION gdk_screen_get_rgb_visual ##### -->
-<para>
-
-</para>
-
-@screen: 
-@Returns: 
-
-
 <!-- ##### FUNCTION gdk_screen_get_rgba_colormap ##### -->
 <para>
 

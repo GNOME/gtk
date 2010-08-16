@@ -34,7 +34,6 @@
 #include "gdkdrawable.h"
 #include "gdktypes.h"
 #include "gdkscreen.h"
-#include "gdkgc.h"
 #include "gdkcolor.h"
 #include "gdkcursor.h"
 
@@ -141,36 +140,6 @@ is_parent_of (GdkWindow *parent,
   return FALSE;
 }
 
-static GdkGC *
-gdk_offscreen_window_create_gc (GdkDrawable     *drawable,
-				GdkGCValues     *values,
-				GdkGCValuesMask  values_mask)
-{
-  GdkOffscreenWindow *offscreen = GDK_OFFSCREEN_WINDOW (drawable);
-
-  return gdk_gc_new_with_values (offscreen->pixmap, values, values_mask);
-}
-
-static GdkImage*
-gdk_offscreen_window_copy_to_image (GdkDrawable    *drawable,
-				    GdkImage       *image,
-				    gint            src_x,
-				    gint            src_y,
-				    gint            dest_x,
-				    gint            dest_y,
-				    gint            width,
-				    gint            height)
-{
-  GdkOffscreenWindow *offscreen = GDK_OFFSCREEN_WINDOW (drawable);
-
-  return gdk_drawable_copy_to_image (offscreen->pixmap,
-				     image,
-				     src_x,
-				     src_y,
-				     dest_x, dest_y,
-				     width, height);
-}
-
 static cairo_surface_t *
 gdk_offscreen_window_ref_cairo_surface (GdkDrawable *drawable)
 {
@@ -224,20 +193,6 @@ gdk_offscreen_window_get_source_drawable (GdkDrawable  *drawable)
   return _gdk_drawable_get_source_drawable (offscreen->pixmap);
 }
 
-static GdkDrawable *
-gdk_offscreen_window_get_composite_drawable (GdkDrawable *drawable,
-					     gint         x,
-					     gint         y,
-					     gint         width,
-					     gint         height,
-					     gint        *composite_x_offset,
-					     gint        *composite_y_offset)
-{
-  GdkOffscreenWindow *offscreen = GDK_OFFSCREEN_WINDOW (drawable);
-
-  return g_object_ref (offscreen->pixmap);
-}
-
 static GdkScreen*
 gdk_offscreen_window_get_screen (GdkDrawable *drawable)
 {
@@ -252,318 +207,6 @@ gdk_offscreen_window_get_visual (GdkDrawable    *drawable)
   GdkOffscreenWindow *offscreen = GDK_OFFSCREEN_WINDOW (drawable);
 
   return gdk_drawable_get_visual (offscreen->wrapper);
-}
-
-static void
-add_damage (GdkOffscreenWindow *offscreen,
-	    int x, int y,
-	    int w, int h,
-	    gboolean is_line)
-{
-  GdkRectangle rect;
-  cairo_region_t *damage;
-
-  rect.x = x;
-  rect.y = y;
-  rect.width = w;
-  rect.height = h;
-
-  if (is_line)
-    {
-      /* This should really take into account line width, line
-       * joins (and miter) and line caps. But these are hard
-       * to compute, rarely used and generally a pain. And in
-       * the end a snug damage rectangle is not that important
-       * as multiple damages are generally created anyway.
-       *
-       * So, we just add some padding around the rect.
-       * We use a padding of 3 pixels, plus an extra row
-       * below and on the right for the normal line size. I.E.
-       * line from (0,0) to (2,0) gets h=0 but is really
-       * at least one pixel tall.
-       */
-      rect.x -= 3;
-      rect.y -= 3;
-      rect.width += 7;
-      rect.height += 7;
-    }
-
-  damage = cairo_region_create_rectangle (&rect);
-  _gdk_window_add_damage (offscreen->wrapper, damage);
-  cairo_region_destroy (damage);
-}
-
-static GdkDrawable *
-get_real_drawable (GdkOffscreenWindow *offscreen)
-{
-  GdkPixmapObject *pixmap;
-  pixmap = (GdkPixmapObject *) offscreen->pixmap;
-  return GDK_DRAWABLE (pixmap->impl);
-}
-
-static void
-gdk_offscreen_window_draw_drawable (GdkDrawable *drawable,
-				    GdkGC       *gc,
-				    GdkPixmap   *src,
-				    gint         xsrc,
-				    gint         ysrc,
-				    gint         xdest,
-				    gint         ydest,
-				    gint         width,
-				    gint         height,
-				    GdkDrawable *original_src)
-{
-  GdkOffscreenWindow *offscreen = GDK_OFFSCREEN_WINDOW (drawable);
-  GdkDrawable *real_drawable = get_real_drawable (offscreen);
-
-  gdk_draw_drawable (real_drawable, gc,
-		     src, xsrc, ysrc,
-		     xdest, ydest,
-		     width, height);
-
-  add_damage (offscreen, xdest, ydest, width, height, FALSE);
-}
-
-static void
-gdk_offscreen_window_draw_rectangle (GdkDrawable  *drawable,
-				     GdkGC	  *gc,
-				     gboolean	   filled,
-				     gint	   x,
-				     gint	   y,
-				     gint	   width,
-				     gint	   height)
-{
-  GdkOffscreenWindow *offscreen = GDK_OFFSCREEN_WINDOW (drawable);
-  GdkDrawable *real_drawable = get_real_drawable (offscreen);
-
-  gdk_draw_rectangle (real_drawable,
-		      gc, filled, x, y, width, height);
-
-  add_damage (offscreen, x, y, width, height, !filled);
-
-}
-
-static void
-gdk_offscreen_window_draw_arc (GdkDrawable  *drawable,
-			       GdkGC	       *gc,
-			       gboolean	filled,
-			       gint		x,
-			       gint		y,
-			       gint		width,
-			       gint		height,
-			       gint		angle1,
-			       gint		angle2)
-{
-  GdkOffscreenWindow *offscreen = GDK_OFFSCREEN_WINDOW (drawable);
-  GdkDrawable *real_drawable = get_real_drawable (offscreen);
-
-  gdk_draw_arc (real_drawable,
-		gc,
-		filled,
-		x,
-		y,
-		width,
-		height,
-		angle1,
-		angle2);
-  add_damage (offscreen, x, y, width, height, !filled);
-}
-
-static void
-gdk_offscreen_window_draw_polygon (GdkDrawable  *drawable,
-				   GdkGC	       *gc,
-				   gboolean	filled,
-				   GdkPoint     *points,
-				   gint		npoints)
-{
-  GdkOffscreenWindow *offscreen = GDK_OFFSCREEN_WINDOW (drawable);
-  GdkDrawable *real_drawable = get_real_drawable (offscreen);
-
-  gdk_draw_polygon (real_drawable,
-		    gc,
-		    filled,
-		    points,
-		    npoints);
-
-  if (npoints > 0)
-    {
-      int min_x, min_y, max_x, max_y, i;
-
-      min_x = max_x = points[0].x;
-      min_y = max_y = points[0].y;
-
-	for (i = 1; i < npoints; i++)
-	  {
-	    min_x = MIN (min_x, points[i].x);
-	    max_x = MAX (max_x, points[i].x);
-	    min_y = MIN (min_y, points[i].y);
-	    max_y = MAX (max_y, points[i].y);
-	  }
-
-	add_damage (offscreen, min_x, min_y,
-		    max_x - min_x,
-		    max_y - min_y, !filled);
-    }
-}
-
-static void
-gdk_offscreen_window_draw_points (GdkDrawable  *drawable,
-				  GdkGC	       *gc,
-				  GdkPoint     *points,
-				  gint		npoints)
-{
-  GdkOffscreenWindow *offscreen = GDK_OFFSCREEN_WINDOW (drawable);
-  GdkDrawable *real_drawable = get_real_drawable (offscreen);
-
-  gdk_draw_points (real_drawable,
-		   gc,
-		   points,
-		   npoints);
-
-
-  if (npoints > 0)
-    {
-      int min_x, min_y, max_x, max_y, i;
-
-      min_x = max_x = points[0].x;
-      min_y = max_y = points[0].y;
-
-	for (i = 1; i < npoints; i++)
-	  {
-	    min_x = MIN (min_x, points[i].x);
-	    max_x = MAX (max_x, points[i].x);
-	    min_y = MIN (min_y, points[i].y);
-	    max_y = MAX (max_y, points[i].y);
-	  }
-
-	add_damage (offscreen, min_x, min_y,
-		    max_x - min_x + 1,
-		    max_y - min_y + 1,
-		    FALSE);
-    }
-}
-
-static void
-gdk_offscreen_window_draw_segments (GdkDrawable  *drawable,
-				    GdkGC	 *gc,
-				    GdkSegment   *segs,
-				    gint	  nsegs)
-{
-  GdkOffscreenWindow *offscreen = GDK_OFFSCREEN_WINDOW (drawable);
-  GdkDrawable *real_drawable = get_real_drawable (offscreen);
-
-  gdk_draw_segments (real_drawable,
-		     gc,
-		     segs,
-		     nsegs);
-
-  if (nsegs > 0)
-    {
-      int min_x, min_y, max_x, max_y, i;
-
-      min_x = max_x = segs[0].x1;
-      min_y = max_y = segs[0].y1;
-
-	for (i = 0; i < nsegs; i++)
-	  {
-	    min_x = MIN (min_x, segs[i].x1);
-	    max_x = MAX (max_x, segs[i].x1);
-	    min_x = MIN (min_x, segs[i].x2);
-	    max_x = MAX (max_x, segs[i].x2);
-	    min_y = MIN (min_y, segs[i].y1);
-	    max_y = MAX (max_y, segs[i].y1);
-	    min_y = MIN (min_y, segs[i].y2);
-	    max_y = MAX (max_y, segs[i].y2);
-	  }
-
-	add_damage (offscreen, min_x, min_y,
-		    max_x - min_x,
-		    max_y - min_y, TRUE);
-    }
-
-}
-
-static void
-gdk_offscreen_window_draw_lines (GdkDrawable  *drawable,
-				 GdkGC        *gc,
-				 GdkPoint     *points,
-				 gint          npoints)
-{
-  GdkOffscreenWindow *offscreen = GDK_OFFSCREEN_WINDOW (drawable);
-  GdkDrawable *real_drawable = get_real_drawable (offscreen);
-  GdkWindowObject *private = GDK_WINDOW_OBJECT (offscreen->wrapper);
-
-  gdk_draw_lines (real_drawable,
-		  gc,
-		  points,
-		  npoints);
-
-  /* Hard to compute the minimal size, as we don't know the line
-     width, and since joins are hard to calculate.
-     Its not that often used anyway, damage it all */
-  add_damage (offscreen, 0, 0, private->width, private->height, TRUE);
-}
-
-static void
-gdk_offscreen_window_draw_image (GdkDrawable *drawable,
-				 GdkGC	      *gc,
-				 GdkImage    *image,
-				 gint	       xsrc,
-				 gint	       ysrc,
-				 gint	       xdest,
-				 gint	       ydest,
-				 gint	       width,
-				 gint	       height)
-{
-  GdkOffscreenWindow *offscreen = GDK_OFFSCREEN_WINDOW (drawable);
-  GdkDrawable *real_drawable = get_real_drawable (offscreen);
-
-  gdk_draw_image (real_drawable,
-		  gc,
-		  image,
-		  xsrc,
-		  ysrc,
-		  xdest,
-		  ydest,
-		  width,
-		  height);
-
-  add_damage (offscreen, xdest, ydest, width, height, FALSE);
-}
-
-
-static void
-gdk_offscreen_window_draw_pixbuf (GdkDrawable *drawable,
-				  GdkGC       *gc,
-				  GdkPixbuf   *pixbuf,
-				  gint         src_x,
-				  gint         src_y,
-				  gint         dest_x,
-				  gint         dest_y,
-				  gint         width,
-				  gint         height,
-				  GdkRgbDither dither,
-				  gint         x_dither,
-				  gint         y_dither)
-{
-  GdkOffscreenWindow *offscreen = GDK_OFFSCREEN_WINDOW (drawable);
-  GdkDrawable *real_drawable = get_real_drawable (offscreen);
-
-  gdk_draw_pixbuf (real_drawable,
-		   gc,
-		   pixbuf,
-		   src_x,
-		   src_y,
-		   dest_x,
-		   dest_y,
-		   width,
-		   height,
-		   dither,
-		   x_dither,
-		   y_dither);
-
-  add_damage (offscreen, dest_x, dest_y, width, height, FALSE);
-
 }
 
 void
@@ -849,7 +492,6 @@ gdk_offscreen_window_move_resize_internal (GdkWindow *window,
   GdkWindowObject *private = (GdkWindowObject *)window;
   GdkOffscreenWindow *offscreen;
   gint dx, dy, dw, dh;
-  GdkGC *gc;
   GdkPixmap *old_pixmap;
 
   offscreen = GDK_OFFSCREEN_WINDOW (private->impl);
@@ -995,10 +637,8 @@ gdk_offscreen_window_set_background (GdkWindow      *window,
 				     const GdkColor *color)
 {
   GdkWindowObject *private = (GdkWindowObject *)window;
-  GdkColormap *colormap = gdk_drawable_get_colormap (window);
 
   private->bg_color = *color;
-  gdk_colormap_query_color (colormap, private->bg_color.pixel, &private->bg_color);
 
   if (private->bg_pixmap &&
       private->bg_pixmap != GDK_PARENT_RELATIVE_BG &&
@@ -1094,12 +734,38 @@ gdk_offscreen_window_queue_antiexpose (GdkWindow *window,
 }
 
 static void
-gdk_offscreen_window_queue_translation (GdkWindow *window,
-					GdkGC     *gc,
-					cairo_region_t *area,
-					gint       dx,
-					gint       dy)
+gdk_offscreen_window_translate (GdkWindow      *window,
+                                cairo_region_t *area,
+                                gint            dx,
+                                gint            dy)
 {
+  cairo_surface_t *surface;
+  cairo_t *cr;
+
+  /* Can't use gdk_cairo_create here due to clipping */
+  surface = _gdk_drawable_ref_cairo_surface (window);
+  cr = cairo_create (surface);
+  cairo_surface_destroy (surface);
+
+  area = cairo_region_copy (area);
+
+  gdk_cairo_region (cr, area);
+  cairo_clip (cr);
+  
+  /* NB: This is a self-copy and Cairo doesn't support that yet.
+   * So we do a litle trick.
+   */
+  cairo_push_group (cr);
+
+  gdk_cairo_set_source_pixmap (cr, window, dx, dy);
+  cairo_paint (cr);
+
+  cairo_pop_group_to_source (cr);
+  cairo_paint (cr);
+
+  cairo_destroy (cr);
+
+  _gdk_window_add_damage (window, area);
 }
 
 /**
@@ -1180,8 +846,6 @@ gdk_offscreen_window_class_init (GdkOffscreenWindowClass *klass)
 
   object_class->finalize = gdk_offscreen_window_finalize;
 
-  drawable_class->create_gc = gdk_offscreen_window_create_gc;
-  drawable_class->_copy_to_image = gdk_offscreen_window_copy_to_image;
   drawable_class->ref_cairo_surface = gdk_offscreen_window_ref_cairo_surface;
   drawable_class->set_colormap = gdk_offscreen_window_set_colormap;
   drawable_class->get_colormap = gdk_offscreen_window_get_colormap;
@@ -1189,17 +853,6 @@ gdk_offscreen_window_class_init (GdkOffscreenWindowClass *klass)
   drawable_class->get_screen = gdk_offscreen_window_get_screen;
   drawable_class->get_visual = gdk_offscreen_window_get_visual;
   drawable_class->get_source_drawable = gdk_offscreen_window_get_source_drawable;
-  drawable_class->get_composite_drawable = gdk_offscreen_window_get_composite_drawable;
-
-  drawable_class->draw_rectangle = gdk_offscreen_window_draw_rectangle;
-  drawable_class->draw_arc = gdk_offscreen_window_draw_arc;
-  drawable_class->draw_polygon = gdk_offscreen_window_draw_polygon;
-  drawable_class->draw_drawable_with_src = gdk_offscreen_window_draw_drawable;
-  drawable_class->draw_points = gdk_offscreen_window_draw_points;
-  drawable_class->draw_segments = gdk_offscreen_window_draw_segments;
-  drawable_class->draw_lines = gdk_offscreen_window_draw_lines;
-  drawable_class->draw_image = gdk_offscreen_window_draw_image;
-  drawable_class->draw_pixbuf = gdk_offscreen_window_draw_pixbuf;
 }
 
 static void
@@ -1221,7 +874,7 @@ gdk_offscreen_window_impl_iface_init (GdkWindowImplIface *iface)
   iface->input_shape_combine_region = gdk_offscreen_window_input_shape_combine_region;
   iface->set_static_gravities = gdk_offscreen_window_set_static_gravities;
   iface->queue_antiexpose = gdk_offscreen_window_queue_antiexpose;
-  iface->queue_translation = gdk_offscreen_window_queue_translation;
+  iface->translate = gdk_offscreen_window_translate;
   iface->get_root_coords = gdk_offscreen_window_get_root_coords;
   iface->get_deskrelative_origin = gdk_offscreen_window_get_deskrelative_origin;
   iface->get_device_state = gdk_offscreen_window_get_device_state;

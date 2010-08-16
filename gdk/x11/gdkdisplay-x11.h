@@ -45,13 +45,6 @@ typedef struct _GdkDisplayX11Class GdkDisplayX11Class;
 #define GDK_IS_DISPLAY_X11_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE ((klass), GDK_TYPE_DISPLAY_X11))
 #define GDK_DISPLAY_X11_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), GDK_TYPE_DISPLAY_X11, GdkDisplayX11Class))
 
-typedef enum 
-{
-  GDK_UNKNOWN,
-  GDK_NO,
-  GDK_YES
-} GdkTristate;
-
 struct _GdkDisplayX11
 {
   GdkDisplay parent_instance;
@@ -76,9 +69,6 @@ struct _GdkDisplayX11
   GdkKeymap *keymap;
   guint	    keymap_serial;
 
-  gboolean use_xshm;
-  gboolean have_shm_pixmaps;
-  GdkTristate have_render;
   gboolean have_xfixes;
   gint xfixes_event_base;
 
@@ -148,9 +138,6 @@ struct _GdkDisplayX11
   guint have_shapes : 1;
   guint have_input_shapes : 1;
   gint shape_event_base;
-
-  /* Alpha mask picture format */
-  XRenderPictFormat *mask_format;
 
   /* The offscreen window that has the pointer in it (if any) */
   GdkWindow *active_offscreen_window;

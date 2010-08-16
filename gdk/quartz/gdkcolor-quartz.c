@@ -140,21 +140,6 @@ gdk_colormap_alloc_colors (GdkColormap *colormap,
   return 0;
 }
 
-void
-gdk_colormap_query_color (GdkColormap *colormap,
-			  gulong       pixel,
-			  GdkColor    *result)
-{
-  result->red = pixel >> 16 & 0xff;
-  result->red += result->red << 8;
-
-  result->green = pixel >> 8 & 0xff;
-  result->green += result->green << 8;
-
-  result->blue = pixel & 0xff;
-  result->blue += result->blue << 8;
-}
-
 GdkScreen*
 gdk_colormap_get_screen (GdkColormap *cmap)
 {

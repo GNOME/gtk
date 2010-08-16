@@ -829,8 +829,6 @@ gtk_tray_icon_set_colormap (GtkTrayIcon *icon)
 
   if (visual == NULL || visual == gdk_screen_get_system_visual (screen))
     colormap = gdk_screen_get_system_colormap (screen);
-  else if (visual == gdk_screen_get_rgb_visual (screen))
-    colormap = gdk_screen_get_rgb_colormap (screen);
   else if (visual == gdk_screen_get_rgba_visual (screen))
     colormap = gdk_screen_get_rgba_colormap (screen);
   else

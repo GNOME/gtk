@@ -297,6 +297,16 @@ static void
 gdk_screen_x11_dispose (GObject *object)
 {
   GdkScreenX11 *screen_x11 = GDK_SCREEN_X11 (object);
+  int i;
+
+  for (i = 0; i < 32; ++i)
+    {
+      if (screen_x11->subwindow_gcs[i])
+        {
+          XFreeGC (screen_x11->xdisplay, screen_x11->subwindow_gcs[i]);
+          screen_x11->subwindow_gcs[i] = 0;
+        }
+    }
 
   _gdk_screen_x11_events_uninit (GDK_SCREEN (object));
 
@@ -338,9 +348,6 @@ gdk_screen_x11_finalize (GObject *object)
 
   if (screen_x11->root_window)
     g_object_unref (screen_x11->root_window);
-
-  if (screen_x11->renderer)
-    g_object_unref (screen_x11->renderer);
 
   /* Visual Part */
   for (i = 0; i < screen_x11->nvisuals; i++)

@@ -100,13 +100,10 @@ enum {
 
 struct _GtkTextRenderer
 {
-  GdkPangoRenderer parent_instance;
-
-  GdkScreen *screen;
+  PangoRenderer parent_instance;
 
   GtkWidget *widget;
-  GdkDrawable *drawable;
-  GdkRectangle clip_rect;
+  cairo_t *cr;
   
   GdkColor *error_color;	/* Error underline color for this widget */
   GList *widgets;		/* widgets encountered when drawing */
@@ -116,10 +113,10 @@ struct _GtkTextRenderer
 
 struct _GtkTextRendererClass
 {
-  GdkPangoRendererClass parent_class;
+  PangoRendererClass parent_class;
 };
 
-G_DEFINE_TYPE (GtkTextRenderer, _gtk_text_renderer, GDK_TYPE_PANGO_RENDERER)
+G_DEFINE_TYPE (GtkTextRenderer, _gtk_text_renderer, PANGO_TYPE_RENDERER)
 
 static GdkColor *
 text_renderer_get_error_color (GtkTextRenderer *text_renderer)
@@ -182,9 +179,7 @@ gtk_text_renderer_prepare_run (PangoRenderer  *renderer,
 			       PangoLayoutRun *run)
 {
   GtkTextRenderer *text_renderer = GTK_TEXT_RENDERER (renderer);
-  GdkPangoRenderer *gdk_renderer = GDK_PANGO_RENDERER (renderer);
   GdkColor *bg_color, *fg_color, *underline_color;
-  GdkPixmap *fg_stipple, *bg_stipple;
   GtkTextAppearance *appearance;
 
   PANGO_RENDERER_CLASS (_gtk_text_renderer_parent_class)->prepare_run (renderer, run);
@@ -220,31 +215,134 @@ gtk_text_renderer_prepare_run (PangoRenderer  *renderer,
     underline_color = fg_color;
 
   text_renderer_set_gdk_color (text_renderer, PANGO_RENDER_PART_UNDERLINE, underline_color);
+}
 
-  fg_stipple = appearance->fg_stipple;
-  if (fg_stipple && text_renderer->screen != gdk_drawable_get_screen (fg_stipple))
-    {
-      g_warning ("gtk_text_renderer_prepare_run:\n"
-		 "The foreground stipple bitmap has been created on the wrong screen.\n"
-		 "Ignoring the stipple bitmap information.");
-      fg_stipple = NULL;
-    }
-      
-  gdk_pango_renderer_set_stipple (gdk_renderer, PANGO_RENDER_PART_FOREGROUND, fg_stipple);
-  gdk_pango_renderer_set_stipple (gdk_renderer, PANGO_RENDER_PART_STRIKETHROUGH, fg_stipple);
-  gdk_pango_renderer_set_stipple (gdk_renderer, PANGO_RENDER_PART_UNDERLINE, fg_stipple);
+static void
+set_color (GtkTextRenderer *text_renderer,
+           PangoRenderPart  part)
+{
+  PangoColor *color;
 
-  bg_stipple = appearance->draw_bg ? appearance->bg_stipple : NULL;
-  
-  if (bg_stipple && text_renderer->screen != gdk_drawable_get_screen (bg_stipple))
-    {
-      g_warning ("gtk_text_renderer_prepare_run:\n"
-		 "The background stipple bitmap has been created on the wrong screen.\n"
-		 "Ignoring the stipple bitmap information.");
-      bg_stipple = NULL;
-    }
-  
-  gdk_pango_renderer_set_stipple (gdk_renderer, PANGO_RENDER_PART_BACKGROUND, bg_stipple);
+  cairo_save (text_renderer->cr);
+
+  color = pango_renderer_get_color (PANGO_RENDERER (text_renderer), part);
+  if (color)
+    cairo_set_source_rgb (text_renderer->cr,
+                          color->red / 65535.,
+                          color->green / 65535.,
+                          color->blue / 65535.);
+}
+
+static void
+unset_color (GtkTextRenderer *text_renderer)
+{
+  cairo_restore (text_renderer->cr);
+}
+
+static void
+gtk_text_renderer_draw_glyphs (PangoRenderer     *renderer,
+                               PangoFont         *font,
+                               PangoGlyphString  *glyphs,
+                               int                x,
+                               int                y)
+{
+  GtkTextRenderer *text_renderer = GTK_TEXT_RENDERER (renderer);
+
+  set_color (text_renderer, PANGO_RENDER_PART_FOREGROUND);
+
+  cairo_move_to (text_renderer->cr, (double)x / PANGO_SCALE, (double)y / PANGO_SCALE);
+  pango_cairo_show_glyph_string (text_renderer->cr, font, glyphs);
+
+  unset_color (text_renderer);
+}
+
+static void
+gtk_text_renderer_draw_glyph_item (PangoRenderer     *renderer,
+                                   const char        *text,
+                                   PangoGlyphItem    *glyph_item,
+                                   int                x,
+                                   int                y)
+{
+  GtkTextRenderer *text_renderer = GTK_TEXT_RENDERER (renderer);
+
+  set_color (text_renderer, PANGO_RENDER_PART_FOREGROUND);
+
+  cairo_move_to (text_renderer->cr, (double)x / PANGO_SCALE, (double)y / PANGO_SCALE);
+  pango_cairo_show_glyph_item (text_renderer->cr, text, glyph_item);
+
+  unset_color (text_renderer);
+}
+
+static void
+gtk_text_renderer_draw_rectangle (PangoRenderer     *renderer,
+				  PangoRenderPart    part,
+				  int                x,
+				  int                y,
+				  int                width,
+				  int                height)
+{
+  GtkTextRenderer *text_renderer = GTK_TEXT_RENDERER (renderer);
+
+  set_color (text_renderer, part);
+
+  cairo_rectangle (text_renderer->cr,
+                   (double)x / PANGO_SCALE, (double)y / PANGO_SCALE,
+		   (double)width / PANGO_SCALE, (double)height / PANGO_SCALE);
+  cairo_fill (text_renderer->cr);
+
+  unset_color (text_renderer);
+}
+
+static void
+gtk_text_renderer_draw_trapezoid (PangoRenderer     *renderer,
+				  PangoRenderPart    part,
+				  double             y1_,
+				  double             x11,
+				  double             x21,
+				  double             y2,
+				  double             x12,
+				  double             x22)
+{
+  GtkTextRenderer *text_renderer = GTK_TEXT_RENDERER (renderer);
+  cairo_t *cr;
+  cairo_matrix_t matrix;
+
+  set_color (text_renderer, part);
+
+  cr = text_renderer->cr;
+
+  cairo_get_matrix (cr, &matrix);
+  matrix.xx = matrix.yy = 1.0;
+  matrix.xy = matrix.yx = 0.0;
+  cairo_set_matrix (cr, &matrix);
+
+  cairo_move_to (cr, x11, y1_);
+  cairo_line_to (cr, x21, y1_);
+  cairo_line_to (cr, x22, y2);
+  cairo_line_to (cr, x12, y2);
+  cairo_close_path (cr);
+
+  cairo_fill (cr);
+
+  unset_color (text_renderer);
+}
+
+static void
+gtk_text_renderer_draw_error_underline (PangoRenderer *renderer,
+					int            x,
+					int            y,
+					int            width,
+					int            height)
+{
+  GtkTextRenderer *text_renderer = GTK_TEXT_RENDERER (renderer);
+
+  set_color (text_renderer, PANGO_RENDER_PART_UNDERLINE);
+
+  pango_cairo_show_error_underline (text_renderer->cr,
+                                    (double)x / PANGO_SCALE, (double)y / PANGO_SCALE,
+                                    (double)width / PANGO_SCALE, (double)height / PANGO_SCALE);
+
+  unset_color (text_renderer);
 }
 
 static void
@@ -273,40 +371,40 @@ gtk_text_renderer_draw_shape (PangoRenderer   *renderer,
       /* This happens if we have an empty widget anchor. Draw
        * something empty-looking.
        */
-      GdkRectangle shape_rect, draw_rect;
+      GdkRectangle shape_rect;
+      cairo_t *cr;
       
       shape_rect.x = PANGO_PIXELS (x);
       shape_rect.y = PANGO_PIXELS (y + attr->logical_rect.y);
       shape_rect.width = PANGO_PIXELS (x + attr->logical_rect.width) - shape_rect.x;
       shape_rect.height = PANGO_PIXELS (y + attr->logical_rect.y + attr->logical_rect.height) - shape_rect.y;
       
-      if (gdk_rectangle_intersect (&shape_rect, &text_renderer->clip_rect,
-				   &draw_rect))
-	{
-          cairo_t *cr = gdk_cairo_create (text_renderer->drawable);
+      cr = text_renderer->cr;
 
-          cairo_set_line_width (cr, 1.0);
-          gdk_cairo_set_source_color (cr, fg);
+      cairo_save (cr);
 
-          cairo_rectangle (cr,
-                           shape_rect.x + 0.5, shape_rect.y + 0.5,
-			   shape_rect.width - 1, shape_rect.height - 1);
-          cairo_move_to (cr, shape_rect.x + 0.5, shape_rect.y + 0.5);
-          cairo_line_to (cr, 
-			 shape_rect.x + shape_rect.width - 0.5,
-			 shape_rect.y + shape_rect.height - 0.5);
-          cairo_move_to (cr, shape_rect.x + 0.5,
-                         shape_rect.y + shape_rect.height - 0.5);
-          cairo_line_to (cr, shape_rect.x + shape_rect.width - 0.5,
-			 shape_rect.y + 0.5);
+      cairo_set_line_width (cr, 1.0);
+      gdk_cairo_set_source_color (cr, fg);
 
-          cairo_stroke (cr);
-          
-          cairo_destroy (cr);
-	}
+      cairo_rectangle (cr,
+                       shape_rect.x + 0.5, shape_rect.y + 0.5,
+                       shape_rect.width - 1, shape_rect.height - 1);
+      cairo_move_to (cr, shape_rect.x + 0.5, shape_rect.y + 0.5);
+      cairo_line_to (cr, 
+                     shape_rect.x + shape_rect.width - 0.5,
+                     shape_rect.y + shape_rect.height - 0.5);
+      cairo_move_to (cr, shape_rect.x + 0.5,
+                     shape_rect.y + shape_rect.height - 0.5);
+      cairo_line_to (cr, shape_rect.x + shape_rect.width - 0.5,
+                     shape_rect.y + 0.5);
+
+      cairo_stroke (cr);
+      
+      cairo_restore (cr);
     }
   else if (GDK_IS_PIXBUF (attr->data))
     {
+      cairo_t *cr = text_renderer->cr;
       gint width, height;
       GdkRectangle pixbuf_rect, draw_rect;
       GdkPixbuf *pixbuf;
@@ -321,17 +419,13 @@ gtk_text_renderer_draw_shape (PangoRenderer   *renderer,
       pixbuf_rect.width = width;
       pixbuf_rect.height = height;
       
-      if (gdk_rectangle_intersect (&pixbuf_rect, &text_renderer->clip_rect,
-				   &draw_rect))
-	{
-          cairo_t *cr = gdk_cairo_create (text_renderer->drawable);
+      cairo_save (cr);
 
-          gdk_cairo_set_source_pixbuf (cr, pixbuf, pixbuf_rect.x, pixbuf_rect.y);
-          gdk_cairo_rectangle (cr, &draw_rect);
-          cairo_fill (cr);
+      gdk_cairo_set_source_pixbuf (cr, pixbuf, pixbuf_rect.x, pixbuf_rect.y);
+      gdk_cairo_rectangle (cr, &draw_rect);
+      cairo_fill (cr);
 
-          cairo_destroy (cr);
-	}
+      cairo_restore (cr);
     }
   else if (GTK_IS_WIDGET (attr->data))
     {
@@ -365,6 +459,11 @@ _gtk_text_renderer_class_init (GtkTextRendererClass *klass)
   PangoRendererClass *renderer_class = PANGO_RENDERER_CLASS (klass);
   
   renderer_class->prepare_run = gtk_text_renderer_prepare_run;
+  renderer_class->draw_glyphs = gtk_text_renderer_draw_glyphs;
+  renderer_class->draw_glyph_item = gtk_text_renderer_draw_glyph_item;
+  renderer_class->draw_rectangle = gtk_text_renderer_draw_rectangle;
+  renderer_class->draw_trapezoid = gtk_text_renderer_draw_trapezoid;
+  renderer_class->draw_error_underline = gtk_text_renderer_draw_error_underline;
   renderer_class->draw_shape = gtk_text_renderer_draw_shape;
 
   object_class->finalize = gtk_text_renderer_finalize;
@@ -379,17 +478,11 @@ text_renderer_set_state (GtkTextRenderer *text_renderer,
 
 static void
 text_renderer_begin (GtkTextRenderer *text_renderer,
-		     GtkWidget       *widget,
-		     GdkDrawable     *drawable,
-		     GdkRectangle    *clip_rect)
+                     GtkWidget       *widget,
+                     cairo_t         *cr)
 {
   text_renderer->widget = widget;
-  text_renderer->drawable = drawable;
-  text_renderer->clip_rect = *clip_rect;
-
-  gdk_pango_renderer_set_drawable (GDK_PANGO_RENDERER (text_renderer), drawable);
-  gdk_pango_renderer_set_gc (GDK_PANGO_RENDERER (text_renderer),
-			     widget->style->text_gc[widget->state]);
+  text_renderer->cr = cr;
 }
 
 /* Returns a GSList of (referenced) widgets encountered while drawing.
@@ -400,7 +493,7 @@ text_renderer_end (GtkTextRenderer *text_renderer)
   GList *widgets = text_renderer->widgets;
 
   text_renderer->widget = NULL;
-  text_renderer->drawable = NULL;
+  text_renderer->cr = NULL;
 
   text_renderer->widgets = NULL;
 
@@ -409,9 +502,6 @@ text_renderer_end (GtkTextRenderer *text_renderer)
       gdk_color_free (text_renderer->error_color);
       text_renderer->error_color = NULL;
     }
-
-  gdk_pango_renderer_set_drawable (GDK_PANGO_RENDERER (text_renderer), NULL);
-  gdk_pango_renderer_set_gc (GDK_PANGO_RENDERER (text_renderer), NULL);
 
   return widgets;
 }
@@ -430,7 +520,6 @@ get_selected_clip (GtkTextRenderer    *text_renderer,
   gint *ranges;
   gint n_ranges, i;
   cairo_region_t *clip_region = cairo_region_create ();
-  cairo_region_t *tmp_region;
 
   pango_layout_line_get_x_ranges (line, start_index, end_index, &ranges, &n_ranges);
 
@@ -445,10 +534,6 @@ get_selected_clip (GtkTextRenderer    *text_renderer,
       
       cairo_region_union_rectangle (clip_region, &rect);
     }
-
-  tmp_region = cairo_region_create_rectangle (&text_renderer->clip_rect);
-  cairo_region_intersect (clip_region, tmp_region);
-  cairo_region_destroy (tmp_region);
 
   g_free (ranges);
   return clip_region;
@@ -469,7 +554,6 @@ render_para (GtkTextRenderer    *text_renderer,
   PangoRectangle layout_logical;
   int screen_width;
   GdkColor *selection;
-  GdkGC *fg_gc;
   gint state;
   
   gboolean first = TRUE;
@@ -491,7 +575,6 @@ render_para (GtkTextRenderer    *text_renderer,
     state = GTK_STATE_ACTIVE;
 
   selection = &text_renderer->widget->style->base [state];
-  fg_gc = text_renderer->widget->style->text_gc[text_renderer->widget->state];
 
   do
     {
@@ -533,13 +616,15 @@ render_para (GtkTextRenderer    *text_renderer,
       if (selection_start_index < byte_offset &&
           selection_end_index > line->length + byte_offset) /* All selected */
         {
-          cairo_t *cr = gdk_cairo_create (text_renderer->drawable);
+          cairo_t *cr = text_renderer->cr;
+
+          cairo_save (cr);
           gdk_cairo_set_source_color (cr, selection);
           cairo_rectangle (cr, 
                            x + line_display->left_margin, selection_y,
                            screen_width, selection_height);
           cairo_fill (cr);
-          cairo_destroy (cr);
+          cairo_restore(cr);
 
 	  text_renderer_set_state (text_renderer, SELECTED);
 	  pango_renderer_draw_layout_line (PANGO_RENDERER (text_renderer),
@@ -551,7 +636,9 @@ render_para (GtkTextRenderer    *text_renderer,
         {
           if (line_display->pg_bg_color)
             {
-              cairo_t *cr = gdk_cairo_create (text_renderer->drawable);
+              cairo_t *cr = text_renderer->cr;
+
+              cairo_save (cr);
 
               gdk_cairo_set_source_color (cr, line_display->pg_bg_color);
               cairo_rectangle (cr, 
@@ -559,7 +646,7 @@ render_para (GtkTextRenderer    *text_renderer,
                                screen_width, selection_height);
               cairo_fill (cr);
 
-              cairo_destroy (cr);
+              cairo_restore (cr);
             }
         
 	  text_renderer_set_state (text_renderer, NORMAL);
@@ -576,16 +663,17 @@ render_para (GtkTextRenderer    *text_renderer,
 	       (selection_start_index == byte_offset + line->length && pango_layout_iter_at_last_line (iter))) &&
 	      selection_end_index > byte_offset)
             {
-              cairo_t *cr;
+              cairo_t *cr = text_renderer->cr;
               cairo_region_t *clip_region = get_selected_clip (text_renderer, layout, line,
                                                           x + line_display->x_offset,
                                                           selection_y,
                                                           selection_height,
                                                           selection_start_index, selection_end_index);
 
-              cr = gdk_cairo_create (text_renderer->drawable);
+              cairo_save (cr);
               gdk_cairo_region (cr, clip_region);
               cairo_clip (cr);
+              cairo_region_destroy (clip_region);
 
               gdk_cairo_set_source_color (cr, selection);
               cairo_rectangle (cr,
@@ -595,34 +683,20 @@ render_para (GtkTextRenderer    *text_renderer,
                                selection_height);
               cairo_fill (cr);
 
-              cairo_destroy (cr);
-
-	      /* When we change the clip on the foreground GC, we have to set
-	       * it on the rendererer again, since the rendererer might have
-	       * copied the GC to change attributes.
-	       */
-	      gdk_pango_renderer_set_gc (GDK_PANGO_RENDERER (text_renderer), NULL);
-              gdk_gc_set_clip_region (fg_gc, clip_region);
-	      gdk_pango_renderer_set_gc (GDK_PANGO_RENDERER (text_renderer), fg_gc);
-
 	      text_renderer_set_state (text_renderer, SELECTED);
 	      pango_renderer_draw_layout_line (PANGO_RENDERER (text_renderer),
 					       line, 
 					       PANGO_SCALE * x + line_rect.x,
 					       PANGO_SCALE * y + baseline);
 
-	      gdk_pango_renderer_set_gc (GDK_PANGO_RENDERER (text_renderer), NULL);
-              gdk_gc_set_clip_region (fg_gc, NULL);
-	      gdk_pango_renderer_set_gc (GDK_PANGO_RENDERER (text_renderer), fg_gc);
-	      
-              cairo_region_destroy (clip_region);
+              cairo_restore (cr);
 
               /* Paint in the ends of the line */
               if (line_rect.x > line_display->left_margin * PANGO_SCALE &&
                   ((line_display->direction == GTK_TEXT_DIR_LTR && selection_start_index < byte_offset) ||
                    (line_display->direction == GTK_TEXT_DIR_RTL && selection_end_index > byte_offset + line->length)))
                 {
-                  cairo_t *cr = gdk_cairo_create (text_renderer->drawable);
+                  cairo_save (cr);
 
                   gdk_cairo_set_source_color (cr, selection);
                   cairo_rectangle (cr,
@@ -631,7 +705,8 @@ render_para (GtkTextRenderer    *text_renderer,
                                    PANGO_PIXELS (line_rect.x) - line_display->left_margin,
                                    selection_height);
                   cairo_fill (cr);
-                  cairo_destroy (cr);
+
+                  cairo_restore (cr);
                 }
 
               if (line_rect.x + line_rect.width <
@@ -639,12 +714,13 @@ render_para (GtkTextRenderer    *text_renderer,
                   ((line_display->direction == GTK_TEXT_DIR_LTR && selection_end_index > byte_offset + line->length) ||
                    (line_display->direction == GTK_TEXT_DIR_RTL && selection_start_index < byte_offset)))
                 {
-                  cairo_t *cr = gdk_cairo_create (text_renderer->drawable);
                   int nonlayout_width;
 
                   nonlayout_width =
                     line_display->left_margin + screen_width -
                     PANGO_PIXELS (line_rect.x) - PANGO_PIXELS (line_rect.width);
+
+                  cairo_save (cr);
 
                   gdk_cairo_set_source_color (cr, selection);
                   cairo_rectangle (cr,
@@ -653,7 +729,8 @@ render_para (GtkTextRenderer    *text_renderer,
                                    nonlayout_width,
                                    selection_height);
                   cairo_fill (cr);
-                  cairo_destroy (cr);
+
+                  cairo_restore (cr);
                 }
             }
 	  else if (line_display->has_block_cursor &&
@@ -664,7 +741,7 @@ render_para (GtkTextRenderer    *text_renderer,
 	    {
 	      GdkRectangle cursor_rect;
               GdkColor cursor_color;
-              cairo_t *cr;
+              cairo_t *cr = text_renderer->cr;
 
 	      /* we draw text using base color on filled cursor rectangle of cursor color
 	       * (normally white on black) */
@@ -675,24 +752,20 @@ render_para (GtkTextRenderer    *text_renderer,
 	      cursor_rect.width = line_display->block_cursor.width;
 	      cursor_rect.height = line_display->block_cursor.height;
 
-              cr = gdk_cairo_create (text_renderer->drawable);
+              cairo_save (cr);
+
               gdk_cairo_rectangle (cr, &cursor_rect);
               cairo_clip (cr);
 
               gdk_cairo_set_source_color (cr, &cursor_color);
               cairo_paint (cr);
 
-              cairo_destroy (cr);
-
 	      /* draw text under the cursor if any */
 	      if (!line_display->cursor_at_line_end)
 		{
-		  GdkGC *cursor_text_gc;
+                  gdk_cairo_set_source_color (cr,
+                                              &text_renderer->widget->style->base[text_renderer->widget->state]);
 
-		  cursor_text_gc = text_renderer->widget->style->base_gc[text_renderer->widget->state];
-		  gdk_gc_set_clip_rectangle (cursor_text_gc, &cursor_rect);
-
-		  gdk_pango_renderer_set_gc (GDK_PANGO_RENDERER (text_renderer), cursor_text_gc);
 		  text_renderer_set_state (text_renderer, CURSOR);
 
 		  pango_renderer_draw_layout_line (PANGO_RENDERER (text_renderer),
@@ -700,9 +773,9 @@ render_para (GtkTextRenderer    *text_renderer,
 						   PANGO_SCALE * x + line_rect.x,
 						   PANGO_SCALE * y + baseline);
 
-		  gdk_pango_renderer_set_gc (GDK_PANGO_RENDERER (text_renderer), fg_gc);
-		  gdk_gc_set_clip_region (cursor_text_gc, NULL);
 		}
+
+              cairo_restore (cr);
 	    }
         }
 
@@ -713,37 +786,13 @@ render_para (GtkTextRenderer    *text_renderer,
   pango_layout_iter_free (iter);
 }
 
-static void
-on_renderer_display_closed (GdkDisplay       *display,
-                            gboolean          is_error,
-			    GtkTextRenderer  *text_renderer)
-{
-  g_signal_handlers_disconnect_by_func (text_renderer->screen,
-					(gpointer)on_renderer_display_closed,
-					text_renderer);
-  g_object_set_data (G_OBJECT (text_renderer->screen), I_("gtk-text-renderer"), NULL);
-}
-
 static GtkTextRenderer *
-get_text_renderer (GdkScreen *screen)
+get_text_renderer (void)
 {
-  GtkTextRenderer *text_renderer;
+  static GtkTextRenderer *text_renderer = NULL;
 
-  g_return_val_if_fail (GDK_IS_SCREEN (screen), NULL);
-  
-  text_renderer = g_object_get_data (G_OBJECT (screen), "gtk-text-renderer");
   if (!text_renderer)
-    {
-      text_renderer = g_object_new (GTK_TYPE_TEXT_RENDERER, "screen", screen, NULL);
-      text_renderer->screen = screen;
-      
-      g_object_set_data_full (G_OBJECT (screen), I_("gtk-text-renderer"), text_renderer,
-			      (GDestroyNotify)g_object_unref);
-
-      g_signal_connect_object (gdk_screen_get_display (screen), "closed",
-                               G_CALLBACK (on_renderer_display_closed),
-                               text_renderer, 0);
-    }
+    text_renderer = g_object_new (GTK_TYPE_TEXT_RENDERER, NULL);
 
   return text_renderer;
 }
@@ -752,7 +801,7 @@ void
 gtk_text_layout_draw (GtkTextLayout *layout,
                       GtkWidget *widget,
                       GdkDrawable *drawable,
-		      GdkGC       *cursor_gc,
+		      gpointer     cursor_gc,
                       /* Location of the drawable
                          in layout coordinates */
                       gint x_offset,
@@ -775,6 +824,7 @@ gtk_text_layout_draw (GtkTextLayout *layout,
   GSList *line_list;
   GSList *tmp_list;
   GList *tmp_widgets;
+  cairo_t *cr;
   
   g_return_if_fail (GTK_IS_TEXT_LAYOUT (layout));
   g_return_if_fail (layout->default_style != NULL);
@@ -792,14 +842,14 @@ gtk_text_layout_draw (GtkTextLayout *layout,
   if (line_list == NULL)
     return; /* nothing on the screen */
 
-  clip.x = x;
-  clip.y = y;
-  clip.width = width;
-  clip.height = height;
+  cr = gdk_cairo_create (drawable);
+  cairo_rectangle (cr, x, y, width, height);
+  cairo_clip (cr);
 
-  text_renderer = get_text_renderer (gdk_drawable_get_screen (drawable));
+  gdk_cairo_set_source_color (cr, &widget->style->text[widget->state]);
 
-  text_renderer_begin (text_renderer, widget, drawable, &clip);
+  text_renderer = get_text_renderer ();
+  text_renderer_begin (text_renderer, widget, cr);
 
   gtk_text_layout_wrap_loop_start (layout);
 
@@ -919,6 +969,8 @@ gtk_text_layout_draw (GtkTextLayout *layout,
       g_list_foreach (tmp_widgets, (GFunc)g_object_unref, NULL);
       g_list_free (tmp_widgets);
     }
+
+  cairo_destroy (cr);
 
   g_slist_free (line_list);
 }

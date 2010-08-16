@@ -618,14 +618,14 @@ gtk_notebook_class_init (GtkNotebookClass *class)
 				   PROP_SHOW_TABS,
 				   g_param_spec_boolean ("show-tabs",
  							 P_("Show Tabs"),
- 							 P_("Whether tabs should be shown or not"),
+							 P_("Whether tabs should be shown"),
  							 TRUE,
  							 GTK_PARAM_READWRITE));
   g_object_class_install_property (gobject_class,
 				   PROP_SHOW_BORDER,
 				   g_param_spec_boolean ("show-border",
  							 P_("Show Border"),
- 							 P_("Whether the border should be shown or not"),
+							 P_("Whether the border should be shown"),
  							 TRUE,
  							 GTK_PARAM_READWRITE));
   g_object_class_install_property (gobject_class,
@@ -682,14 +682,14 @@ gtk_notebook_class_init (GtkNotebookClass *class)
 					      CHILD_PROP_TAB_EXPAND,
 					      g_param_spec_boolean ("tab-expand", 
 								    P_("Tab expand"), 
-								    P_("Whether to expand the child's tab or not"),
+								    P_("Whether to expand the child's tab"),
 								    FALSE,
 								    GTK_PARAM_READWRITE));
   gtk_container_class_install_child_property (container_class,
 					      CHILD_PROP_TAB_FILL,
 					      g_param_spec_boolean ("tab-fill", 
 								    P_("Tab fill"), 
-								    P_("Whether the child's tab should fill the allocated area or not"),
+								    P_("Whether the child's tab should fill the allocated area"),
 								    TRUE,
 								    GTK_PARAM_READWRITE));
   gtk_container_class_install_child_property (container_class,
@@ -703,7 +703,7 @@ gtk_notebook_class_init (GtkNotebookClass *class)
 					      CHILD_PROP_REORDERABLE,
 					      g_param_spec_boolean ("reorderable",
 								    P_("Tab reorderable"),
-								    P_("Whether the tab is reorderable by user action or not"),
+								    P_("Whether the tab is reorderable by user action"),
 								    FALSE,
 								    GTK_PARAM_READWRITE));
   gtk_container_class_install_child_property (container_class,
@@ -6770,13 +6770,15 @@ gtk_notebook_prev_page (GtkNotebook *notebook)
 /* Public GtkNotebook/Tab Style Functions
  *
  * gtk_notebook_set_show_border
+ * gtk_notebook_get_show_border
  * gtk_notebook_set_show_tabs
+ * gtk_notebook_get_show_tabs
  * gtk_notebook_set_tab_pos
- * gtk_notebook_set_homogeneous_tabs
- * gtk_notebook_set_tab_border
- * gtk_notebook_set_tab_hborder
- * gtk_notebook_set_tab_vborder
+ * gtk_notebook_get_tab_pos
  * gtk_notebook_set_scrollable
+ * gtk_notebook_get_scrollable
+ * gtk_notebook_get_tab_hborder
+ * gtk_notebook_get_tab_vborder
  */
 /**
  * gtk_notebook_set_show_border:
@@ -6996,6 +6998,43 @@ gtk_notebook_get_scrollable (GtkNotebook *notebook)
 
   return notebook->priv->scrollable;
 }
+
+/**
+ * gtk_notebook_get_tab_hborder:
+ * @notebook: a #GtkNotebook
+ *
+ * Returns the horizontal width of a tab border.
+ *
+ * Return value: horizontal width of a tab border
+ *
+ * Since: 2.22
+ */
+guint16
+gtk_notebook_get_tab_hborder (GtkNotebook *notebook)
+{
+  g_return_val_if_fail (GTK_IS_NOTEBOOK (notebook), FALSE);
+
+  return notebook->priv->tab_hborder;
+}
+
+/**
+ * gtk_notebook_get_tab_vborder:
+ * @notebook: a #GtkNotebook
+ *
+ * Returns the vertical width of a tab border.
+ *
+ * Return value: vertical width of a tab border
+ *
+ * Since: 2.22
+ */
+guint16
+gtk_notebook_get_tab_vborder (GtkNotebook *notebook)
+{
+  g_return_val_if_fail (GTK_IS_NOTEBOOK (notebook), FALSE);
+
+  return notebook->priv->tab_vborder;
+}
+
 
 /* Public GtkNotebook Popup Menu Methods:
  *

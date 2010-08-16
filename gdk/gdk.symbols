@@ -245,26 +245,21 @@ gdk_utf8_to_compound_text_for_display
 
 #if IN_HEADER(__GDK_ENUM_TYPES_H__)
 #if IN_FILE(__GDK_ENUM_TYPES_C__)
-gdk_rgb_dither_get_type G_GNUC_CONST
 gdk_drag_protocol_get_type G_GNUC_CONST
 gdk_input_source_get_type G_GNUC_CONST
 gdk_input_mode_get_type G_GNUC_CONST
 gdk_axis_use_get_type G_GNUC_CONST
 gdk_byte_order_get_type G_GNUC_CONST
-gdk_cap_style_get_type G_GNUC_CONST
 gdk_crossing_mode_get_type G_GNUC_CONST
 gdk_device_type_get_type G_GNUC_CONST
 gdk_extension_mode_get_type G_GNUC_CONST
 gdk_event_mask_get_type G_GNUC_CONST
 gdk_event_type_get_type G_GNUC_CONST
-gdk_fill_get_type G_GNUC_CONST
 gdk_filter_return_get_type G_GNUC_CONST
 gdk_function_get_type G_GNUC_CONST
 gdk_grab_ownership_get_type G_GNUC_CONST
 gdk_grab_status_get_type G_GNUC_CONST
 gdk_gravity_get_type G_GNUC_CONST
-gdk_join_style_get_type G_GNUC_CONST
-gdk_line_style_get_type G_GNUC_CONST
 gdk_modifier_type_get_type G_GNUC_CONST
 gdk_notify_type_get_type G_GNUC_CONST
 gdk_owner_change_get_type G_GNUC_CONST
@@ -279,7 +274,6 @@ gdk_wm_decoration_get_type G_GNUC_CONST
 gdk_wm_function_get_type G_GNUC_CONST
 gdk_cursor_type_get_type G_GNUC_CONST
 gdk_drag_action_get_type G_GNUC_CONST
-gdk_gc_values_mask_get_type G_GNUC_CONST
 gdk_window_attributes_type_get_type G_GNUC_CONST
 gdk_window_class_get_type G_GNUC_CONST
 gdk_window_edge_get_type G_GNUC_CONST
@@ -287,7 +281,6 @@ gdk_window_hints_get_type G_GNUC_CONST
 gdk_window_state_get_type G_GNUC_CONST
 gdk_window_type_get_type G_GNUC_CONST
 gdk_window_type_hint_get_type G_GNUC_CONST
-gdk_image_type_get_type G_GNUC_CONST
 gdk_visual_type_get_type G_GNUC_CONST
 #endif
 #endif
@@ -325,7 +318,6 @@ gdk_colormap_new
 gdk_colormap_get_type G_GNUC_CONST
 gdk_colormap_alloc_colors
 gdk_colormap_free_colors
-gdk_colormap_query_color
 gdk_colormap_get_screen
 #endif
 #endif
@@ -541,78 +533,16 @@ gdk_drag_get_protocol
 
 #if IN_HEADER(__GDK_DRAWABLE_H__)
 #if IN_FILE(__GDK_DRAW_C__)
-gdk_drawable_copy_to_image
 gdk_drawable_get_clip_region
 gdk_drawable_get_colormap
 gdk_drawable_get_depth
 gdk_drawable_get_display
-gdk_drawable_get_image
 gdk_drawable_get_screen
 gdk_drawable_get_size
 gdk_drawable_get_type G_GNUC_CONST
 gdk_drawable_get_visible_region
 gdk_drawable_get_visual
 gdk_drawable_set_colormap
-gdk_draw_arc
-gdk_draw_drawable
-gdk_draw_glyphs
-gdk_draw_glyphs_transformed
-gdk_draw_image
-gdk_draw_line
-gdk_draw_lines
-gdk_draw_pixbuf
-gdk_draw_point
-gdk_draw_points
-gdk_draw_polygon
-gdk_draw_rectangle
-gdk_draw_segments
-gdk_draw_trapezoids
-#endif
-#endif
-
-#if IN_HEADER(__GDK_DRAWABLE_H__)
-#if IN_FILE(__GDK_PANGO_C__)
-gdk_draw_layout
-gdk_draw_layout_line
-gdk_draw_layout_line_with_colors
-gdk_draw_layout_with_colors
-#endif
-#endif
-
-#if IN_HEADER(__GDK_GC_H__)
-#if IN_FILE(__GDK_GC_C__)
-gdk_gc_new
-gdk_gc_get_type G_GNUC_CONST
-gdk_gc_new_with_values
-gdk_gc_get_values
-gdk_gc_set_values
-gdk_gc_set_foreground
-gdk_gc_set_background
-gdk_gc_set_function
-gdk_gc_set_fill
-gdk_gc_set_tile
-gdk_gc_set_stipple
-gdk_gc_set_ts_origin
-gdk_gc_set_clip_origin
-gdk_gc_set_clip_mask
-gdk_gc_set_clip_rectangle
-gdk_gc_set_clip_region
-gdk_gc_set_subwindow
-gdk_gc_set_exposures
-gdk_gc_set_line_attributes
-gdk_gc_set_dashes
-gdk_gc_offset
-gdk_gc_copy
-gdk_gc_get_colormap
-gdk_gc_set_colormap
-gdk_gc_set_rgb_bg_color
-gdk_gc_set_rgb_fg_color
-#endif
-#endif
-
-#if IN_HEADER(__GDK_GC_H__)
-#if IN_FILE(__GDK_GC_X11_C__)
-gdk_gc_get_screen
 #endif
 #endif
 
@@ -811,32 +741,6 @@ gdk_window_configure_finished
 #endif
 #endif
 
-#if IN_HEADER(__GDK_IMAGE_H__)
-#if IN_FILE(__GDK_IMAGE_C__)
-gdk_image_get_bits_per_pixel
-gdk_image_get_bytes_per_pixel
-gdk_image_get_bytes_per_line
-gdk_image_get_byte_order
-gdk_image_get_colormap
-gdk_image_get_depth
-gdk_image_get_height
-gdk_image_get_image_type
-gdk_image_get_visual
-gdk_image_get_width
-gdk_image_get_pixels
-gdk_image_set_colormap
-gdk_image_new
-#endif
-#endif
-
-#if IN_HEADER(__GDK_IMAGE_H__)
-#if IN_FILE(__GDK_IMAGE_X11_C__)
-gdk_image_get_pixel
-gdk_image_put_pixel
-gdk_image_get_type G_GNUC_CONST
-#endif
-#endif
-
 #if IN_HEADER(__GDK_KEYS_H__)
 #if IN_FILE(__GDK_KEYS_C__)
 gdk_keymap_get_default
@@ -923,27 +827,17 @@ gdk_visual_get_type G_GNUC_CONST
 
 #if IN_HEADER(__GDK_PANGO_H__)
 #if IN_FILE(__GDK_PANGO_C__)
-gdk_pango_attr_emboss_color_new
-gdk_pango_attr_embossed_new
-gdk_pango_attr_stipple_new
 gdk_pango_context_get
 gdk_pango_context_get_for_screen
 gdk_pango_layout_get_clip_region
 gdk_pango_layout_line_get_clip_region
-gdk_pango_renderer_get_default
-gdk_pango_renderer_get_type G_GNUC_CONST
-gdk_pango_renderer_new
-gdk_pango_renderer_set_drawable
-gdk_pango_renderer_set_gc
-gdk_pango_renderer_set_override_color
-gdk_pango_renderer_set_stipple
 #endif
 #endif
 
 #if IN_HEADER(__GDK_PIXBUF_H__)
 #if IN_FILE(__GDK_PIXBUF_DRAWABLE_C__)
 gdk_pixbuf_get_from_drawable
-gdk_pixbuf_get_from_image
+gdk_pixbuf_get_from_surface
 #endif
 #endif
 
@@ -957,12 +851,6 @@ gdk_pixbuf_render_threshold_alpha
 
 #if IN_HEADER(__GDK_PIXMAP_H__)
 #if IN_FILE(__GDK_PIXMAP_C__)
-gdk_bitmap_create_from_data
-gdk_pixmap_colormap_create_from_xpm
-gdk_pixmap_create_from_data
-gdk_pixmap_create_from_xpm
-gdk_pixmap_colormap_create_from_xpm_d
-gdk_pixmap_create_from_xpm_d
 gdk_pixmap_get_type G_GNUC_CONST
 gdk_pixmap_new
 #endif
@@ -975,27 +863,6 @@ gdk_pixmap_foreign_new_for_display
 gdk_pixmap_foreign_new_for_screen
 gdk_pixmap_lookup
 gdk_pixmap_lookup_for_display
-#endif
-#endif
-
-#if IN_HEADER(__GDK_RGB_H__)
-#if IN_FILE(__GDK_RGB_C__)
-gdk_rgb_cmap_free
-gdk_rgb_cmap_new
-gdk_rgb_colormap_ditherable
-gdk_rgb_ditherable
-gdk_rgb_find_color
-gdk_rgb_get_colormap
-gdk_rgb_get_visual
-gdk_rgb_set_install
-gdk_rgb_set_min_colors
-gdk_rgb_set_verbose
-gdk_draw_gray_image
-gdk_draw_indexed_image
-gdk_draw_rgb_32_image
-gdk_draw_rgb_32_image_dithalign
-gdk_draw_rgb_image
-gdk_draw_rgb_image_dithalign
 #endif
 #endif
 
@@ -1014,13 +881,6 @@ gdk_screen_get_resolution
 #if IN_HEADER(__GDK_SCREEN_H__)
 #if IN_FILE(__GDK_DISPLAY_MANAGER_C__)
 gdk_screen_get_default
-#endif
-#endif
-
-#if IN_HEADER(__GDK_SCREEN_H__)
-#if IN_FILE(__GDK_RGB_C__)
-gdk_screen_get_rgb_colormap
-gdk_screen_get_rgb_visual
 #endif
 #endif
 
@@ -1119,8 +979,6 @@ gdk_window_destroy_notify
 #if IN_HEADER(__GDK_WIN32_H__)
 #if IN_FILE(__GDK_WINDOW_WIN32_C__)
 gdk_win32_window_is_win32
-gdk_win32_begin_direct_draw_libgtk_only
-gdk_win32_end_direct_draw_libgtk_only
 #endif
 #endif
 
@@ -1217,11 +1075,6 @@ gdk_x11_get_default_screen
 gdk_x11_get_default_xdisplay
 gdk_x11_grab_server
 gdk_x11_ungrab_server
-#endif
-
-#if IN_FILE(__GDK_IMAGE_X11_C__)
-gdk_x11_image_get_xdisplay
-gdk_x11_image_get_ximage
 #endif
 
 #if IN_FILE(__GDK_SCREEN_X11_C__)

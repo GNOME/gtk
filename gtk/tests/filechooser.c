@@ -758,7 +758,6 @@ test_reload_sequence (gboolean set_folder_before_map)
   passed = passed && (impl->current_folder != NULL
 		      && impl->browse_files_model != NULL
 		      && (impl->load_state == LOAD_PRELOAD || impl->load_state == LOAD_LOADING || impl->load_state == LOAD_FINISHED)
-		      && impl->reload_state == RELOAD_WAS_UNMAPPED
 		      && (impl->load_state == LOAD_PRELOAD ? (impl->load_timeout_id != 0) : TRUE)
 		      && ((impl->load_state == LOAD_LOADING || impl->load_state == LOAD_FINISHED)
 			  ? (impl->load_timeout_id == 0 && impl->sort_model != NULL)

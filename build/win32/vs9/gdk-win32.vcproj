@@ -134,7 +134,6 @@
 			<File RelativePath="..\..\..\gdk\win32\gdkgeometry-win32.c" />
 			<File RelativePath="..\..\..\gdk\win32\gdkglobals-win32.c" />
 			<File RelativePath="..\..\..\gdk\win32\gdkim-win32.c" />
-			<File RelativePath="..\..\..\gdk\win32\gdkimage-win32.c" />
 			<File RelativePath="..\..\..\gdk\win32\gdkinput-win32.c" />
 			<File RelativePath="..\..\..\gdk\win32\gdkinput.c" />
 			<File RelativePath="..\..\..\gdk\win32\gdkkeys-win32.c" />

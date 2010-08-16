@@ -41,16 +41,6 @@ void _gtk_text_attributes_fill_from_tags   (GtkTextAttributes   *values,
 void _gtk_text_tag_array_sort              (GtkTextTag         **tag_array_p,
                                             guint                len);
 
-/* ensure colors are allocated, etc. for drawing */
-void                _gtk_text_attributes_realize   (GtkTextAttributes *values,
-                                                    GdkColormap       *cmap,
-                                                    GdkVisual         *visual);
-
-/* free the stuff again */
-void                _gtk_text_attributes_unrealize (GtkTextAttributes *values,
-                                                    GdkColormap       *cmap,
-                                                    GdkVisual         *visual);
-
 gboolean _gtk_text_tag_affects_size               (GtkTextTag *tag);
 gboolean _gtk_text_tag_affects_nonsize_appearance (GtkTextTag *tag);
 

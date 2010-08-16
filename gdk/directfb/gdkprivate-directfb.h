@@ -198,46 +198,6 @@ typedef struct
   DFBSurfacePixelFormat  format;
 } GdkVisualDirectFB;
 
-typedef struct
-{
-  IDirectFBSurface *surface;
-} GdkImageDirectFB;
-
-
-#define GDK_TYPE_GC_DIRECTFB       (_gdk_gc_directfb_get_type ())
-#define GDK_GC_DIRECTFB(object)    (G_TYPE_CHECK_INSTANCE_CAST ((object), GDK_TYPE_GC_DIRECTFB, GdkGCDirectFB))
-#define GDK_IS_GC_DIRECTFB(object) (G_TYPE_CHECK_INSTANCE_TYPE ((object), GDK_TYPE_GC_DIRECTFB))
-
-typedef struct
-{
-  GdkGC             parent_instance;
-
-  cairo_region_t         clip_region;
-
-  GdkGCValuesMask   values_mask;
-  GdkGCValues       values;
-} GdkGCDirectFB;
-
-typedef struct
-{
-  GdkGCClass        parent_class;
-} GdkGCDirectFBClass;
-
-GType     _gdk_gc_directfb_get_type (void);
-
-GdkGC *   _gdk_directfb_gc_new      (GdkDrawable     *drawable,
-                                     GdkGCValues     *values,
-                                     GdkGCValuesMask  values_mask);
-
-GdkImage* _gdk_directfb_copy_to_image (GdkDrawable  *drawable,
-                                       GdkImage     *image,
-                                       gint          src_x,
-                                       gint          src_y,
-                                       gint          dest_x,
-                                       gint          dest_y,
-                                       gint          width,
-                                       gint          height);
-
 void       gdk_directfb_event_windows_add    (GdkWindow *window);
 void       gdk_directfb_event_windows_remove (GdkWindow *window);
 

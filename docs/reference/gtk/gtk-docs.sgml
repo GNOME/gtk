@@ -428,7 +428,7 @@ that is, GUI components such as #GtkButton or #GtkTextView.
     </partintro>
 
     <xi:include href="xml/migrating-checklist.sgml" />
-    <xi:include href="migrating-2to3.xml" />
+    <xi:include href="xml/migrating-2to3.xml" />
   </part>
 
   <part>

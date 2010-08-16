@@ -168,7 +168,7 @@ gtk_plug_class_init (GtkPlugClass *class)
 				   PROP_EMBEDDED,
 				   g_param_spec_boolean ("embedded",
 							 P_("Embedded"),
-							 P_("Whether or not the plug is embedded"),
+							 P_("Whether the plug is embedded"),
 							 FALSE,
 							 GTK_PARAM_READABLE));
 

@@ -108,7 +108,6 @@ copy ..\..\..\gdk\gdkevents.h $(OutDir)\include\gtk-$(GtkApiVersion)\gdk&#x0D;&#
 copy ..\..\..\gdk\gdkfont.h $(OutDir)\include\gtk-$(GtkApiVersion)\gdk&#x0D;&#x0A;
 copy ..\..\..\gdk\gdkgc.h $(OutDir)\include\gtk-$(GtkApiVersion)\gdk&#x0D;&#x0A;
 copy ..\..\..\gdk\gdki18n.h $(OutDir)\include\gtk-$(GtkApiVersion)\gdk&#x0D;&#x0A;
-copy ..\..\..\gdk\gdkimage.h $(OutDir)\include\gtk-$(GtkApiVersion)\gdk&#x0D;&#x0A;
 copy ..\..\..\gdk\gdkinput.h $(OutDir)\include\gtk-$(GtkApiVersion)\gdk&#x0D;&#x0A;
 copy ..\..\..\gdk\gdkkeys.h $(OutDir)\include\gtk-$(GtkApiVersion)\gdk&#x0D;&#x0A;
 copy ..\..\..\gdk\gdkkeysyms.h $(OutDir)\include\gtk-$(GtkApiVersion)\gdk&#x0D;&#x0A;

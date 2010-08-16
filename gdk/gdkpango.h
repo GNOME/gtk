@@ -28,80 +28,6 @@
 
 G_BEGIN_DECLS
 
-/* Pango interaction */
-
-typedef struct _GdkPangoRenderer        GdkPangoRenderer;
-typedef struct _GdkPangoRendererClass   GdkPangoRendererClass;
-typedef struct _GdkPangoRendererPrivate GdkPangoRendererPrivate;
-
-#define GDK_TYPE_PANGO_RENDERER            (gdk_pango_renderer_get_type())
-#define GDK_PANGO_RENDERER(object)         (G_TYPE_CHECK_INSTANCE_CAST ((object), GDK_TYPE_PANGO_RENDERER, GdkPangoRenderer))
-#define GDK_IS_PANGO_RENDERER(object)      (G_TYPE_CHECK_INSTANCE_TYPE ((object), GDK_TYPE_PANGO_RENDERER))
-#define GDK_PANGO_RENDERER_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), GDK_TYPE_PANGO_RENDERER, GdkPangoRendererClass))
-#define GDK_IS_PANGO_RENDERER_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), GDK_TYPE_PANGO_RENDERER))
-#define GDK_PANGO_RENDERER_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GDK_TYPE_PANGO_RENDERER, GdkPangoRendererClass))
-
-/**
- * GdkPangoRenderer:
- *
- * #GdkPangoRenderer is a subclass of #PangoRenderer used for rendering
- * Pango objects into GDK drawables. The default renderer for a particular
- * screen is obtained with gdk_pango_renderer_get_default(); Pango
- * functions like pango_renderer_draw_layout() and
- * pango_renderer_draw_layout_line() are then used to draw objects with
- * the renderer.
- *
- * In most simple cases, applications can just use gdk_draw_layout(), and
- * don't need to directly use #GdkPangoRenderer at all. Using the
- * #GdkPangoRenderer directly is most useful when working with a
- * transformation such as a rotation, because the Pango drawing functions
- * take user space coordinates (coordinates before the transformation)
- * instead of device coordinates.
- *
- * In certain cases it can be useful to subclass #GdkPangoRenderer. Examples
- * of reasons to do this are to add handling of custom attributes by
- * overriding 'prepare_run' or to do custom drawing of embedded objects
- * by overriding 'draw_shape'.
- *
- * Since: 2.6
- **/
-struct _GdkPangoRenderer
-{
-  /*< private >*/
-  PangoRenderer parent_instance;
-
-  GdkPangoRendererPrivate *priv;
-};
-
-/**
- * GdkPangoRendererClass:
- *
- * #GdkPangoRenderer is the class structure for #GdkPangoRenderer.
- *
- * Since: 2.6
- **/
-struct _GdkPangoRendererClass
-{
-  /*< private >*/
-  PangoRendererClass parent_class;
-};
-
-GType gdk_pango_renderer_get_type (void) G_GNUC_CONST;
-
-PangoRenderer *gdk_pango_renderer_new         (GdkScreen *screen);
-PangoRenderer *gdk_pango_renderer_get_default (GdkScreen *screen);
-
-void gdk_pango_renderer_set_drawable       (GdkPangoRenderer *gdk_renderer,
-					    GdkDrawable      *drawable);
-void gdk_pango_renderer_set_gc             (GdkPangoRenderer *gdk_renderer,
-					    GdkGC            *gc);
-void gdk_pango_renderer_set_stipple        (GdkPangoRenderer *gdk_renderer,
-					    PangoRenderPart   part,
-					    GdkBitmap        *stipple);
-void gdk_pango_renderer_set_override_color (GdkPangoRenderer *gdk_renderer,
-					    PangoRenderPart   part,
-					    const GdkColor   *color);
-
 /************************************************************************/
 
 PangoContext *gdk_pango_context_get_for_screen (GdkScreen    *screen);
@@ -126,36 +52,6 @@ cairo_region_t    *gdk_pango_layout_get_clip_region      (PangoLayout     *layou
                                                      gint             y_origin,
                                                      const gint      *index_ranges,
                                                      gint             n_ranges);
-
-
-
-/* Attributes use to render insensitive text in GTK+. */
-
-typedef struct _GdkPangoAttrStipple GdkPangoAttrStipple;
-typedef struct _GdkPangoAttrEmbossed GdkPangoAttrEmbossed;
-typedef struct _GdkPangoAttrEmbossColor GdkPangoAttrEmbossColor;
-
-struct _GdkPangoAttrStipple
-{
-  PangoAttribute attr;
-  GdkBitmap *stipple;
-};
-
-struct _GdkPangoAttrEmbossed
-{
-  PangoAttribute attr;
-  gboolean embossed;
-};
-
-struct _GdkPangoAttrEmbossColor
-{
-  PangoAttribute attr;
-  PangoColor color;
-};
-
-PangoAttribute *gdk_pango_attr_stipple_new  (GdkBitmap *stipple);
-PangoAttribute *gdk_pango_attr_embossed_new (gboolean embossed);
-PangoAttribute *gdk_pango_attr_emboss_color_new (const GdkColor *color);
 
 G_END_DECLS
 

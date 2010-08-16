@@ -37,11 +37,9 @@ libgdk_x11_la_SOURCES =    	\
 	gdkeventsource.h	\
 	gdkeventtranslator.c	\
 	gdkeventtranslator.h	\
-	gdkgc-x11.c 	   	\
 	gdkgeometry-x11.c  	\
 	gdkglobals-x11.c   	\
 	gdkim-x11.c	   	\
-	gdkimage-x11.c	   	\
 	gdkinput.c		\
 	gdkkeys-x11.c		\
 	gdkmain-x11.c	   	\

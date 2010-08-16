@@ -51,7 +51,8 @@ create_window (GdkWindow *parent,
       bg->green = g_random_int_range (0, 0xffff);;
     }
   
-  gdk_rgb_find_color (gtk_widget_get_colormap (darea), bg);
+  if (!gdk_colormap_alloc_color (gtk_widget_get_colormap (darea), bg, FALSE, TRUE))
+    g_assert_not_reached ();
   gdk_window_set_background (window, bg);
   g_object_set_data_full (G_OBJECT (window), "color", bg, g_free);
   
@@ -215,22 +216,6 @@ add_window_clicked (GtkWidget *button,
   create_window (parent, 10, 10, 100, 100, NULL);
   update_store ();
 }
-
-static void
-draw_drawable_clicked (GtkWidget *button, 
-		       gpointer data)
-{
-  GdkGC *gc;
-  gc = gdk_gc_new (darea->window);
-  gdk_draw_drawable (darea->window,
-		     gc,
-		     darea->window,
-		     -15, -15,
-		     40, 70,
-		     100, 100);
-  g_object_unref (gc);
-}
-
 
 static void
 remove_window_clicked (GtkWidget *button, 
@@ -1045,16 +1030,6 @@ main (int argc, char **argv)
 			     3, 4,
 			     3, 4);
   gtk_widget_show (button);
-
-  button = gtk_button_new_with_label ("draw drawable");
-  gtk_box_pack_start (GTK_BOX (vbox),
-		      button,
-		      FALSE, FALSE,
-		      2);
-  gtk_widget_show (button);
-  g_signal_connect (button, "clicked", 
-		    G_CALLBACK (draw_drawable_clicked), 
-		    NULL);
 
   button = gtk_button_new_with_label ("Add window");
   gtk_box_pack_start (GTK_BOX (vbox),

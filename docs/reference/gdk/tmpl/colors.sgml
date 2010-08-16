@@ -116,16 +116,6 @@ The colormap structure contains the following public fields.
 @n_colors: 
 
 
-<!-- ##### FUNCTION gdk_colormap_query_color ##### -->
-<para>
-
-</para>
-
-@colormap: 
-@pixel: 
-@result: 
-
-
 <!-- ##### FUNCTION gdk_colormap_get_visual ##### -->
 <para>
 </para>

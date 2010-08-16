@@ -89,6 +89,9 @@ gboolean              gtk_expander_get_use_markup    (GtkExpander *expander);
 void                  gtk_expander_set_label_widget  (GtkExpander *expander,
 						      GtkWidget   *label_widget);
 GtkWidget            *gtk_expander_get_label_widget  (GtkExpander *expander);
+void                  gtk_expander_set_label_fill    (GtkExpander *expander,
+						      gboolean     label_fill);
+gboolean              gtk_expander_get_label_fill    (GtkExpander *expander);
 
 G_END_DECLS
 
