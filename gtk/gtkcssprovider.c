@@ -72,7 +72,7 @@ struct SelectorElement
 struct SelectorPath
 {
   GSList *elements;
-  GtkStateType state;
+  GtkStateFlags state;
   guint ref_count;
 };
 
@@ -149,7 +149,6 @@ selector_path_new (void)
   SelectorPath *path;
 
   path = g_slice_new0 (SelectorPath);
-  path->state = GTK_STATE_NORMAL;
   path->ref_count = 1;
 
   return path;
@@ -541,7 +540,7 @@ struct StylePriorityInfo
 {
   guint64 score;
   GHashTable *style;
-  GtkStateType state;
+  GtkStateFlags state;
 };
 
 static GArray *
@@ -654,10 +653,7 @@ gtk_css_provider_get_style (GtkStyleProvider *provider,
               !gtk_style_set_lookup_property (prop, NULL, NULL))
             continue;
 
-          if (info->state == GTK_STATE_NORMAL)
-            gtk_style_set_set_default (set, key, value);
-          else
-            gtk_style_set_set_property (set, key, info->state, value);
+          gtk_style_set_set_property (set, key, info->state, value);
         }
     }
 
@@ -880,14 +876,12 @@ css_provider_commit (GtkCssProvider *css_provider)
 }
 
 static GTokenType
-parse_pseudo_class (GtkCssProvider *css_provider,
-                    GScanner       *scanner,
-                    SelectorPath   *selector,
-                    GtkRegionFlags *flags)
+parse_nth_child (GtkCssProvider *css_provider,
+                 GScanner       *scanner,
+                 GtkRegionFlags *flags)
 {
   ParserSymbol symbol;
 
-  css_provider_push_scope (css_provider, SCOPE_PSEUDO_CLASS);
   g_scanner_get_next_token (scanner);
 
   if (scanner->token != G_TOKEN_SYMBOL)
@@ -941,13 +935,51 @@ parse_pseudo_class (GtkCssProvider *css_provider,
     *flags = GTK_REGION_LAST;
   else
     {
-      GtkStateType state;
-
-      state = GPOINTER_TO_INT (scanner->value.v_symbol);
-      selector->state = state;
+      *flags = 0;
+      return G_TOKEN_SYMBOL;
     }
 
-  css_provider_pop_scope (css_provider);
+  return G_TOKEN_NONE;
+}
+
+static GTokenType
+parse_pseudo_class (GtkCssProvider *css_provider,
+                    GScanner       *scanner,
+                    SelectorPath   *selector)
+{
+  GtkStateType state;
+
+  g_scanner_get_next_token (scanner);
+
+  if (scanner->token != G_TOKEN_SYMBOL)
+    return G_TOKEN_SYMBOL;
+
+  state = GPOINTER_TO_INT (scanner->value.v_symbol);
+
+  switch (state)
+    {
+    case GTK_STATE_ACTIVE:
+      selector->state |= GTK_STATE_FLAG_ACTIVE;
+      break;
+    case GTK_STATE_PRELIGHT:
+      selector->state |= GTK_STATE_FLAG_PRELIGHT;
+      break;
+    case GTK_STATE_SELECTED:
+      selector->state |= GTK_STATE_FLAG_SELECTED;
+      break;
+    case GTK_STATE_INSENSITIVE:
+      selector->state |= GTK_STATE_FLAG_INSENSITIVE;
+      break;
+    case GTK_STATE_INCONSISTENT:
+      selector->state |= GTK_STATE_FLAG_INCONSISTENT;
+      break;
+    case GTK_STATE_FOCUSED:
+      selector->state |= GTK_STATE_FLAG_FOCUSED;
+      break;
+    default:
+      return G_TOKEN_SYMBOL;
+    }
+
   return G_TOKEN_NONE;
 }
 
@@ -1030,18 +1062,39 @@ parse_selector (GtkCssProvider  *css_provider,
 
           region_name = g_strdup (scanner->value.v_identifier);
 
-          /* Parse nth-child type pseudo-class, and
-           * possibly a state pseudo-class after it.
-           */
-          while (path->state == GTK_STATE_NORMAL &&
-                 g_scanner_peek_next_token (scanner) == ':')
+          if (g_scanner_peek_next_token (scanner) == ':')
             {
-              GTokenType token;
+              ParserSymbol symbol;
 
               g_scanner_get_next_token (scanner);
+              css_provider_push_scope (css_provider, SCOPE_PSEUDO_CLASS);
 
-              if ((token = parse_pseudo_class (css_provider, scanner, path, &flags)) != G_TOKEN_NONE)
-                return token;
+              /* Check for the next token being nth-child, parse in that
+               * case, and fallback into common state parsing if not.
+               */
+              if (g_scanner_peek_next_token (scanner) != G_TOKEN_SYMBOL)
+                return G_TOKEN_SYMBOL;
+
+              symbol = GPOINTER_TO_INT (scanner->next_value.v_symbol);
+
+              if (symbol == SYMBOL_FIRST_CHILD ||
+                  symbol == SYMBOL_LAST_CHILD ||
+                  symbol == SYMBOL_NTH_CHILD)
+                {
+                  GTokenType token;
+
+                  if ((token = parse_nth_child (css_provider, scanner, &flags)) != G_TOKEN_NONE)
+                    return token;
+
+                  css_provider_pop_scope (css_provider);
+                }
+              else
+                {
+                  css_provider_pop_scope (css_provider);
+                  selector_path_prepend_region (path, region_name, 0);
+                  g_free (region_name);
+                  break;
+                }
             }
 
           selector_path_prepend_region (path, region_name, flags);
@@ -1054,10 +1107,6 @@ parse_selector (GtkCssProvider  *css_provider,
 
       g_scanner_get_next_token (scanner);
 
-      /* State is the last element in the selector */
-      if (path->state != GTK_STATE_NORMAL)
-        break;
-
       if (scanner->token == '>')
         {
           selector_path_prepend_combinator (path, COMBINATOR_CHILD);
@@ -1065,35 +1114,25 @@ parse_selector (GtkCssProvider  *css_provider,
         }
     }
 
-  if (scanner->token == ':' &&
-      path->state == GTK_STATE_NORMAL)
+  if (scanner->token == ':')
     {
-      GtkRegionFlags flags = 0;
-      GTokenType token;
-
       /* Add glob selector if path is empty */
       if (selector_path_depth (path) == 0)
         selector_path_prepend_glob (path);
 
-      if ((token = parse_pseudo_class (css_provider, scanner, path, &flags)) != G_TOKEN_NONE)
-        return token;
+      css_provider_push_scope (css_provider, SCOPE_PSEUDO_CLASS);
 
-      if (flags != 0)
+      while (scanner->token == ':')
         {
-          /* This means either a standalone :nth-child
-           * selector, or on a invalid element type.
-           */
-          return G_TOKEN_SYMBOL;
+          GTokenType token;
+
+          if ((token = parse_pseudo_class (css_provider, scanner, path)) != G_TOKEN_NONE)
+            return token;
+
+          g_scanner_get_next_token (scanner);
         }
 
-      g_scanner_get_next_token (scanner);
-    }
-  else if (scanner->token == G_TOKEN_SYMBOL)
-    {
-      /* A new pseudo-class was starting, but the state was already
-       * parsed, so nothing is supposed to go after that.
-       */
-      return G_TOKEN_LEFT_CURLY;
+      css_provider_pop_scope (css_provider);
     }
 
   return G_TOKEN_NONE;
@@ -1652,18 +1691,12 @@ gtk_css_provider_get_default (void)
         "@tooltip_bg_color: #eee1b3; \n"
         "@tooltip_fg_color: #000; \n"
         "\n"
-        "*, GtkTreeView > GtkButton {\n"
+        "*,\n"
+        "GtkTreeView > GtkButton {\n"
         "  background-color: @bg_color;\n"
         "  foreground-color: @fg_color;\n"
         "  text-color: @text_color; \n"
         "  base-color: @base_color; \n"
-        "}\n"
-        "\n"
-        "*:active {\n"
-        "  background-color: #c4c2bd;\n"
-        "  foreground-color: #000000;\n"
-        "  text-color: #c4c2bd; \n"
-        "  base-color: #9c9a94; \n"
         "}\n"
         "\n"
         "*:prelight {\n"
@@ -1700,6 +1733,13 @@ gtk_css_provider_get_default (void)
         "\n"
         "GtkToggleButton:prelight {\n"
         "  text-color: #000; \n"
+        "}\n"
+        "\n"
+        ".button:active {\n"
+        "  background-color: #c4c2bd;\n"
+        "  foreground-color: #000000;\n"
+        "  text-color: #c4c2bd; \n"
+        "  base-color: #9c9a94; \n"
         "}\n"
         "\n";
 

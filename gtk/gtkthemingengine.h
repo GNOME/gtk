@@ -147,13 +147,13 @@ void gtk_theming_engine_register_property (GtkThemingEngine       *engine,
 
 void gtk_theming_engine_get_property (GtkThemingEngine *engine,
                                       const gchar      *property,
-                                      GtkStateType      state,
+                                      GtkStateFlags     state,
                                       GValue           *value);
 void gtk_theming_engine_get_valist   (GtkThemingEngine *engine,
-                                      GtkStateType      state,
+                                      GtkStateFlags     state,
                                       va_list           args);
 void gtk_theming_engine_get          (GtkThemingEngine *engine,
-                                      GtkStateType      state,
+                                      GtkStateFlags     state,
                                       ...) G_GNUC_NULL_TERMINATED;
 
 void gtk_theming_engine_get_style_property (GtkThemingEngine *engine,

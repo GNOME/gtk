@@ -343,7 +343,7 @@ rebuild_properties (GtkStyleContext *context)
         }
     }
 
-  gtk_style_set_get (priv->store, GTK_STATE_NORMAL,
+  gtk_style_set_get (priv->store, 0,
                      "engine", &priv->theming_engine,
                      NULL);
 }
@@ -488,14 +488,13 @@ gtk_style_context_remove_provider (GtkStyleContext  *context,
 void
 gtk_style_context_get_property (GtkStyleContext *context,
                                 const gchar     *property,
-                                GtkStateType     state,
+                                GtkStateFlags    state,
                                 GValue          *value)
 {
   GtkStyleContextPrivate *priv;
 
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
   g_return_if_fail (property != NULL);
-  g_return_if_fail (state < GTK_STATE_LAST);
   g_return_if_fail (value != NULL);
 
   priv = context->priv;
@@ -504,13 +503,12 @@ gtk_style_context_get_property (GtkStyleContext *context,
 
 void
 gtk_style_context_get_valist (GtkStyleContext *context,
-                              GtkStateType     state,
+                              GtkStateFlags    state,
                               va_list          args)
 {
   GtkStyleContextPrivate *priv;
 
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
-  g_return_if_fail (state < GTK_STATE_LAST);
 
   priv = context->priv;
   gtk_style_set_get_valist (priv->store, state, args);
@@ -518,14 +516,13 @@ gtk_style_context_get_valist (GtkStyleContext *context,
 
 void
 gtk_style_context_get (GtkStyleContext *context,
-                       GtkStateType     state,
+                       GtkStateFlags    state,
                        ...)
 {
   GtkStyleContextPrivate *priv;
   va_list args;
 
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
-  g_return_if_fail (state < GTK_STATE_LAST);
 
   priv = context->priv;
 

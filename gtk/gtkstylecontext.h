@@ -61,13 +61,13 @@ void gtk_style_context_restore (GtkStyleContext *context);
 
 void gtk_style_context_get_property (GtkStyleContext *context,
                                      const gchar     *property,
-                                     GtkStateType     state,
+                                     GtkStateFlags    state,
                                      GValue          *value);
 void gtk_style_context_get_valist   (GtkStyleContext *context,
-                                     GtkStateType     state,
+                                     GtkStateFlags    state,
                                      va_list          args);
 void gtk_style_context_get          (GtkStyleContext *context,
-                                     GtkStateType     state,
+                                     GtkStateFlags    state,
                                      ...) G_GNUC_NULL_TERMINATED;
 
 void          gtk_style_context_set_state    (GtkStyleContext *context,

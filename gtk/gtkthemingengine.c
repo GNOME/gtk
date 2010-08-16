@@ -216,14 +216,13 @@ gtk_theming_engine_register_property (GtkThemingEngine       *engine,
 void
 gtk_theming_engine_get_property (GtkThemingEngine *engine,
                                  const gchar      *property,
-                                 GtkStateType      state,
+                                 GtkStateFlags     state,
                                  GValue           *value)
 {
   GtkThemingEnginePrivate *priv;
 
   g_return_if_fail (GTK_IS_THEMING_ENGINE (engine));
   g_return_if_fail (property != NULL);
-  g_return_if_fail (state < GTK_STATE_LAST);
   g_return_if_fail (value != NULL);
 
   priv = engine->priv;
@@ -232,13 +231,12 @@ gtk_theming_engine_get_property (GtkThemingEngine *engine,
 
 void
 gtk_theming_engine_get_valist (GtkThemingEngine *engine,
-                               GtkStateType      state,
+                               GtkStateFlags     state,
                                va_list           args)
 {
   GtkThemingEnginePrivate *priv;
 
   g_return_if_fail (GTK_IS_THEMING_ENGINE (engine));
-  g_return_if_fail (state < GTK_STATE_LAST);
 
   priv = engine->priv;
   gtk_style_context_get_valist (priv->context, state, args);
@@ -246,14 +244,13 @@ gtk_theming_engine_get_valist (GtkThemingEngine *engine,
 
 void
 gtk_theming_engine_get (GtkThemingEngine *engine,
-                        GtkStateType      state,
+                        GtkStateFlags     state,
                         ...)
 {
   GtkThemingEnginePrivate *priv;
   va_list args;
 
   g_return_if_fail (GTK_IS_THEMING_ENGINE (engine));
-  g_return_if_fail (state < GTK_STATE_LAST);
 
   priv = engine->priv;
 
@@ -509,19 +506,13 @@ gtk_theming_engine_render_check (GtkThemingEngine *engine,
   GdkColor *fg_color, *base_color, *text_color;
   const GtkWidgetPath *path;
   GtkStateFlags flags;
-  GtkStateType state;
   gint exterior_size, interior_size, thickness, pad;
 
   flags = gtk_theming_engine_get_state (engine);
   path = gtk_theming_engine_get_path (engine);
   cairo_save (cr);
 
-  if (flags & GTK_STATE_FLAG_PRELIGHT)
-    state = GTK_STATE_PRELIGHT;
-  else
-    state = GTK_STATE_NORMAL;
-
-  gtk_theming_engine_get (engine, state,
+  gtk_theming_engine_get (engine, flags,
                           "foreground-color", &fg_color,
                           "base-color", &base_color,
                           "text-color", &text_color,
@@ -625,7 +616,6 @@ gtk_theming_engine_render_option (GtkThemingEngine *engine,
   GtkStateFlags flags;
   GdkColor *base_color, *fg_color, *text_color;
   const GtkWidgetPath *path;
-  GtkStateType state;
   gint exterior_size, interior_size, pad, thickness;
   gdouble radius;
 
@@ -637,12 +627,7 @@ gtk_theming_engine_render_option (GtkThemingEngine *engine,
 
   cairo_save (cr);
 
-  if (flags & GTK_STATE_FLAG_PRELIGHT)
-    state = GTK_STATE_PRELIGHT;
-  else
-    state = GTK_STATE_NORMAL;
-
-  gtk_theming_engine_get (engine, state,
+  gtk_theming_engine_get (engine, flags,
                           "foreground-color", &fg_color,
                           "base-color", &base_color,
                           "text-color", &text_color,
@@ -758,21 +743,13 @@ gtk_theming_engine_render_arrow (GtkThemingEngine *engine,
                                  gdouble           size)
 {
   GtkStateFlags flags;
-  GtkStateType state;
   GdkColor *fg_color;
 
   cairo_save (cr);
 
   flags = gtk_theming_engine_get_state (engine);
 
-  if (flags & GTK_STATE_FLAG_PRELIGHT)
-    state = GTK_STATE_PRELIGHT;
-  else if (flags & GTK_STATE_FLAG_INSENSITIVE)
-    state = GTK_STATE_INSENSITIVE;
-  else
-    state = GTK_STATE_NORMAL;
-
-  gtk_theming_engine_get (engine, state,
+  gtk_theming_engine_get (engine, flags,
                           "foreground-color", &fg_color,
                           NULL);
 
@@ -900,29 +877,17 @@ gtk_theming_engine_render_background (GtkThemingEngine *engine,
                                       gdouble           height)
 {
   GtkStateFlags flags;
-  GtkStateType state;
   GdkColor *color;
 
   cairo_save (cr);
   flags = gtk_theming_engine_get_state (engine);
 
-  if (flags & GTK_STATE_FLAG_ACTIVE)
-    state = GTK_STATE_ACTIVE;
-  else if (flags & GTK_STATE_FLAG_SELECTED)
-    state = GTK_STATE_SELECTED;
-  else if (flags & GTK_STATE_FLAG_PRELIGHT)
-    state = GTK_STATE_PRELIGHT;
-  else if (flags & GTK_STATE_FLAG_INSENSITIVE)
-    state = GTK_STATE_INSENSITIVE;
-  else
-    state = GTK_STATE_NORMAL;
-
   if (gtk_theming_engine_has_class (engine, "entry"))
-    gtk_theming_engine_get (engine, state,
+    gtk_theming_engine_get (engine, flags,
                             "base-color", &color,
                             NULL);
   else
-    gtk_theming_engine_get (engine, state,
+    gtk_theming_engine_get (engine, flags,
                             "background-color", &color,
                             NULL);
 
@@ -958,23 +923,15 @@ gtk_theming_engine_render_frame (GtkThemingEngine *engine,
                                  gdouble           height)
 {
   GtkStateFlags flags;
-  GtkStateType state;
   GdkColor lighter, darker;
   GdkColor *bg_color;
 
   cairo_save (cr);
   flags = gtk_theming_engine_get_state (engine);
 
-  if (flags & GTK_STATE_FLAG_PRELIGHT)
-    state = GTK_STATE_PRELIGHT;
-  else if (flags & GTK_STATE_FLAG_INSENSITIVE)
-    state = GTK_STATE_INSENSITIVE;
-  else
-    state = GTK_STATE_NORMAL;
-
   cairo_set_line_width (cr, 1);
 
-  gtk_theming_engine_get (engine, state,
+  gtk_theming_engine_get (engine, flags,
                           "background-color", &bg_color,
                           NULL);
   color_shade (bg_color, 0.7, &darker);
@@ -1125,7 +1082,6 @@ gtk_theming_engine_render_expander (GtkThemingEngine *engine,
 {
   GtkStateFlags flags;
   GdkColor *bg_color, *fg_color, *base_color;
-  GtkStateType state;
   double vertical_overshoot;
   int diameter;
   double radius;
@@ -1139,14 +1095,7 @@ gtk_theming_engine_render_expander (GtkThemingEngine *engine,
   cairo_save (cr);
   flags = gtk_theming_engine_get_state (engine);
 
-  if (flags & GTK_STATE_FLAG_PRELIGHT)
-    state = GTK_STATE_PRELIGHT;
-  else if (flags & GTK_STATE_FLAG_INSENSITIVE)
-    state = GTK_STATE_INSENSITIVE;
-  else
-    state = GTK_STATE_NORMAL;
-
-  gtk_theming_engine_get (engine, state,
+  gtk_theming_engine_get (engine, flags,
                           "foreground-color", &fg_color,
                           "background-color", &bg_color,
                           "base-color", &base_color,
@@ -1241,7 +1190,6 @@ gtk_theming_engine_render_focus (GtkThemingEngine *engine,
                                  gdouble           height)
 {
   GtkStateFlags flags;
-  GtkStateType state;
   GdkColor *color;
   gint line_width;
   gint8 *dash_list;
@@ -1249,14 +1197,7 @@ gtk_theming_engine_render_focus (GtkThemingEngine *engine,
   cairo_save (cr);
   flags = gtk_theming_engine_get_state (engine);
 
-  if (flags & GTK_STATE_FLAG_PRELIGHT)
-    state = GTK_STATE_PRELIGHT;
-  else if (flags & GTK_STATE_FLAG_INSENSITIVE)
-    state = GTK_STATE_INSENSITIVE;
-  else
-    state = GTK_STATE_NORMAL;
-
-  gtk_theming_engine_get (engine, state,
+  gtk_theming_engine_get (engine, flags,
                           "foreground-color", &color,
                           NULL);
 
@@ -1320,7 +1261,6 @@ gtk_theming_engine_render_line (GtkThemingEngine *engine,
 {
   GdkColor *bg_color, darker, lighter;
   GtkStateFlags flags;
-  GtkStateType state;
   gint i, thickness, thickness_dark, thickness_light, len;
   cairo_matrix_t matrix;
   gdouble angle;
@@ -1333,14 +1273,7 @@ gtk_theming_engine_render_line (GtkThemingEngine *engine,
   flags = gtk_theming_engine_get_state (engine);
   cairo_save (cr);
 
-  if (flags & GTK_STATE_FLAG_PRELIGHT)
-    state = GTK_STATE_PRELIGHT;
-  else if (flags & GTK_STATE_FLAG_INSENSITIVE)
-    state = GTK_STATE_INSENSITIVE;
-  else
-    state = GTK_STATE_NORMAL;
-
-  gtk_theming_engine_get (engine, state,
+  gtk_theming_engine_get (engine, flags,
                           "background-color", &bg_color,
                           NULL);
   color_shade (bg_color, 0.7, &darker);
@@ -1535,7 +1468,6 @@ gtk_theming_engine_render_layout (GtkThemingEngine *engine,
 {
   GdkColor *fg_color;
   GtkStateFlags flags;
-  GtkStateType state;
   GdkScreen *screen;
 
   cairo_save (cr);
@@ -1543,24 +1475,13 @@ gtk_theming_engine_render_layout (GtkThemingEngine *engine,
 
   /* FIXME: Set clipping */
 
-  if (flags & GTK_STATE_FLAG_ACTIVE)
-    state = GTK_STATE_ACTIVE;
-  else if (flags & GTK_STATE_FLAG_SELECTED)
-    state = GTK_STATE_SELECTED;
-  else if (flags & GTK_STATE_FLAG_PRELIGHT)
-    state = GTK_STATE_PRELIGHT;
-  else if (flags & GTK_STATE_FLAG_INSENSITIVE)
-    state = GTK_STATE_INSENSITIVE;
-  else
-    state = GTK_STATE_NORMAL;
-
-  gtk_theming_engine_get (engine, state,
+  gtk_theming_engine_get (engine, flags,
                           "foreground-color", &fg_color,
                           NULL);
 
   screen = gtk_theming_engine_get_screen (engine);
 
-  if (state == GTK_STATE_INSENSITIVE)
+  if (gtk_theming_engine_is_state_set (engine, GTK_STATE_INSENSITIVE))
     {
       PangoLayout *insensitive_layout;
 
@@ -1629,7 +1550,6 @@ gtk_theming_engine_render_frame_gap (GtkThemingEngine *engine,
                                      gdouble           xy1_gap)
 {
   GtkStateFlags flags;
-  GtkStateType state;
   GdkColor *bg_color;
   GdkColor lighter, darker;
   guint sides;
@@ -1637,16 +1557,9 @@ gtk_theming_engine_render_frame_gap (GtkThemingEngine *engine,
   cairo_save (cr);
   flags = gtk_theming_engine_get_state (engine);
 
-  if (flags & GTK_STATE_FLAG_PRELIGHT)
-    state = GTK_STATE_PRELIGHT;
-  else if (flags & GTK_STATE_FLAG_INSENSITIVE)
-    state = GTK_STATE_INSENSITIVE;
-  else
-    state = GTK_STATE_NORMAL;
-
   cairo_set_line_width (cr, 1);
 
-  gtk_theming_engine_get (engine, state,
+  gtk_theming_engine_get (engine, flags,
                           "background-color", &bg_color,
                           NULL);
   color_shade (bg_color, 0.7, &darker);
@@ -1786,25 +1699,15 @@ gtk_theming_engine_render_extension (GtkThemingEngine *engine,
                                      GtkPositionType   gap_side)
 {
   GtkStateFlags flags;
-  GtkStateType state;
   GdkColor *bg_color;
   GdkColor lighter, darker;
 
   cairo_save (cr);
   flags = gtk_theming_engine_get_state (engine);
 
-  if (flags & GTK_STATE_FLAG_ACTIVE)
-    state = GTK_STATE_ACTIVE;
-  else if (flags & GTK_STATE_FLAG_PRELIGHT)
-    state = GTK_STATE_PRELIGHT;
-  else if (flags & GTK_STATE_FLAG_INSENSITIVE)
-    state = GTK_STATE_INSENSITIVE;
-  else
-    state = GTK_STATE_NORMAL;
-
   cairo_set_line_width (cr, 1);
 
-  gtk_theming_engine_get (engine, state,
+  gtk_theming_engine_get (engine, flags,
                           "background-color", &bg_color,
                           NULL);
   color_shade (bg_color, 0.7, &darker);
@@ -1956,7 +1859,6 @@ gtk_theming_engine_render_handle (GtkThemingEngine *engine,
                                   GtkOrientation    orientation)
 {
   GtkStateFlags flags;
-  GtkStateType state;
   GdkColor *bg_color;
   GdkColor lighter, darker;
   gint xx, yy;
@@ -1964,18 +1866,9 @@ gtk_theming_engine_render_handle (GtkThemingEngine *engine,
   cairo_save (cr);
   flags = gtk_theming_engine_get_state (engine);
 
-  if (flags & GTK_STATE_FLAG_ACTIVE)
-    state = GTK_STATE_ACTIVE;
-  else if (flags & GTK_STATE_FLAG_PRELIGHT)
-    state = GTK_STATE_PRELIGHT;
-  else if (flags & GTK_STATE_FLAG_INSENSITIVE)
-    state = GTK_STATE_INSENSITIVE;
-  else
-    state = GTK_STATE_NORMAL;
-
   cairo_set_line_width (cr, 1);
 
-  gtk_theming_engine_get (engine, state,
+  gtk_theming_engine_get (engine, flags,
                           "background-color", &bg_color,
                           NULL);
   color_shade (bg_color, 0.7, &darker);

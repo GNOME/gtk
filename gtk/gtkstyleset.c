@@ -33,6 +33,7 @@
 typedef struct GtkStyleSetPrivate GtkStyleSetPrivate;
 typedef struct PropertyData PropertyData;
 typedef struct PropertyNode PropertyNode;
+typedef struct ValueData ValueData;
 
 struct PropertyNode
 {
@@ -42,10 +43,15 @@ struct PropertyNode
   GtkStylePropertyParser parse_func;
 };
 
+struct ValueData
+{
+  GtkStateFlags state;
+  GValue value;
+};
+
 struct PropertyData
 {
-  GValue default_value;
-  GValue values[GTK_STATE_LAST];
+  GArray *values;
 };
 
 struct GtkStyleSetPrivate
@@ -97,6 +103,7 @@ property_data_new (void)
   PropertyData *data;
 
   data = g_slice_new0 (PropertyData);
+  data->values = g_array_new (FALSE, FALSE, sizeof (ValueData));
 
   return data;
 }
@@ -104,15 +111,136 @@ property_data_new (void)
 static void
 property_data_free (PropertyData *data)
 {
-  gint i;
+  guint i;
 
-  for (i = 0; i <= GTK_STATE_INSENSITIVE; i++)
+  for (i = 0; i < data->values->len; i++)
     {
-      if (G_IS_VALUE (&data->values[i]))
-        g_value_unset (&data->values[i]);
+      ValueData *value_data;
+
+      value_data = &g_array_index (data->values, ValueData, i);
+
+      if (G_IS_VALUE (&value_data->value))
+        g_value_unset (&value_data->value);
     }
 
   g_slice_free (PropertyData, data);
+}
+
+static gboolean
+property_data_find_position (PropertyData  *data,
+                             GtkStateFlags  state,
+                             guint         *pos)
+{
+  gint min, max, mid;
+  gboolean found = FALSE;
+  guint position;
+
+  if (pos)
+    *pos = 0;
+
+  if (data->values->len == 0)
+    return FALSE;
+
+  /* Find position for the given state, or the position where
+   * it would be if not found, the array is ordered by the
+   * state flags.
+   */
+  min = 0;
+  max = data->values->len - 1;
+
+  do
+    {
+      ValueData *value_data;
+
+      mid = (min + max) / 2;
+      value_data = &g_array_index (data->values, ValueData, mid);
+
+      if (value_data->state == state)
+        {
+          found = TRUE;
+          position = mid;
+        }
+      else if (value_data->state < state)
+          position = min = mid + 1;
+      else
+        {
+          max = mid - 1;
+          position = mid;
+        }
+    }
+  while (!found && min <= max);
+
+  if (pos)
+    *pos = position;
+
+  return found;
+}
+
+static GValue *
+property_data_get_value (PropertyData  *data,
+                         GtkStateFlags  state)
+{
+  ValueData *val_data;
+  guint pos;
+
+  if (!property_data_find_position (data, state, &pos))
+    {
+      ValueData new = { 0 };
+
+      //val_data = &g_array_index (data->values, ValueData, pos);
+      new.state = state;
+      g_array_insert_val (data->values, pos, new);
+    }
+
+  val_data = &g_array_index (data->values, ValueData, pos);
+
+  return &val_data->value;
+}
+
+static GValue *
+property_data_match_state (PropertyData  *data,
+                           GtkStateFlags  state)
+{
+  guint pos;
+  gint i;
+
+  if (property_data_find_position (data, state, &pos))
+    {
+      ValueData *val_data;
+
+      /* Exact match */
+      val_data = &g_array_index (data->values, ValueData, pos);
+      return &val_data->value;
+    }
+
+  if (pos >= data->values->len)
+    pos = data->values->len - 1;
+
+  /* No exact match, go downwards the list to find
+   * the closest match to the given state flags, as
+   * a side effect, there is an implicit precedence
+   * of higher flags over the smaller ones.
+   */
+  for (i = pos; i >= 0; i--)
+    {
+      ValueData *val_data;
+
+      val_data = &g_array_index (data->values, ValueData, i);
+
+       /* Check whether any of the requested
+        * flags are set, and no other flags are.
+        *
+        * Also, no flags acts as a wildcard, such
+        * value should be always in the first position
+        * in the array (if present) anyways.
+        */
+      if (val_data->state == 0 ||
+          ((val_data->state & state) != 0 &&
+           (val_data->state & ~state) == 0))
+        return &val_data->value;
+    }
+
+  return NULL;
 }
 
 static void
@@ -331,18 +459,21 @@ gtk_style_set_lookup_color (GtkStyleSet *set,
   return g_hash_table_lookup (priv->color_map, name);
 }
 
-static void
-set_property_internal (GtkStyleSet  *set,
-                       const gchar  *property,
-                       gboolean      is_default,
-                       GtkStateType  state,
-                       const GValue *value)
+void
+gtk_style_set_set_property (GtkStyleSet   *set,
+                            const gchar   *property,
+                            GtkStateFlags  state,
+                            const GValue  *value)
 {
   GtkStyleSetPrivate *priv;
   PropertyNode *node;
   PropertyData *prop;
   GType value_type;
   GValue *val;
+
+  g_return_if_fail (GTK_IS_STYLE_SET (set));
+  g_return_if_fail (property != NULL);
+  g_return_if_fail (value != NULL);
 
   value_type = G_VALUE_TYPE (value);
   node = property_node_lookup (g_quark_try_string (property));
@@ -359,7 +490,7 @@ set_property_internal (GtkStyleSet  *set,
       g_return_if_fail (value_type == GDK_TYPE_COLOR || value_type == GTK_TYPE_SYMBOLIC_COLOR);
     }
   else
-    g_return_if_fail (node->property_type == G_VALUE_TYPE (value));
+    g_return_if_fail (node->property_type == value_type);
 
   priv = set->priv;
   prop = g_hash_table_lookup (priv->properties,
@@ -373,10 +504,7 @@ set_property_internal (GtkStyleSet  *set,
                            prop);
     }
 
-  if (is_default)
-    val = &prop->default_value;
-  else
-    val = &prop->values[state];
+  val = property_data_get_value (prop, state);
 
   if (G_VALUE_TYPE (val) == value_type)
     g_value_reset (val);
@@ -392,41 +520,14 @@ set_property_internal (GtkStyleSet  *set,
 }
 
 void
-gtk_style_set_set_default (GtkStyleSet  *set,
-                           const gchar  *property,
-                           const GValue *value)
-{
-  g_return_if_fail (GTK_IS_STYLE_SET (set));
-  g_return_if_fail (property != NULL);
-  g_return_if_fail (value != NULL);
-
-  set_property_internal (set, property, TRUE, GTK_STATE_NORMAL, value);
-}
-
-void
-gtk_style_set_set_property (GtkStyleSet  *set,
-                            const gchar  *property,
-                            GtkStateType  state,
-                            const GValue *value)
-{
-  g_return_if_fail (GTK_IS_STYLE_SET (set));
-  g_return_if_fail (property != NULL);
-  g_return_if_fail (state < GTK_STATE_LAST);
-  g_return_if_fail (value != NULL);
-
-  set_property_internal (set, property, FALSE, state, value);
-}
-
-void
-gtk_style_set_set_valist (GtkStyleSet  *set,
-                          GtkStateType  state,
-                          va_list       args)
+gtk_style_set_set_valist (GtkStyleSet   *set,
+                          GtkStateFlags  state,
+                          va_list        args)
 {
   GtkStyleSetPrivate *priv;
   const gchar *property_name;
 
   g_return_if_fail (GTK_IS_STYLE_SET (set));
-  g_return_if_fail (state < GTK_STATE_LAST);
 
   priv = set->priv;
   property_name = va_arg (args, const gchar *);
@@ -436,6 +537,7 @@ gtk_style_set_set_valist (GtkStyleSet  *set,
       PropertyNode *node;
       PropertyData *prop;
       gchar *error = NULL;
+      GValue *val;
 
       node = property_node_lookup (g_quark_try_string (property_name));
 
@@ -456,14 +558,19 @@ gtk_style_set_set_valist (GtkStyleSet  *set,
                                prop);
         }
 
-      g_value_init (&prop->values[state], node->property_type);
-      G_VALUE_COLLECT (&prop->values[state], args, 0, &error);
+      val = property_data_get_value (prop, state);
+
+      if (G_IS_VALUE (val))
+        g_value_unset (val);
+
+      g_value_init (val, node->property_type);
+      G_VALUE_COLLECT (val, args, 0, &error);
 
       if (error)
         {
           g_warning ("Could not set style property \"%s\": %s", property_name, error);
-          g_value_unset (&prop->values[state]);
-	  g_free (error);
+          g_value_unset (val);
+          g_free (error);
           break;
         }
 
@@ -472,14 +579,13 @@ gtk_style_set_set_valist (GtkStyleSet  *set,
 }
 
 void
-gtk_style_set_set (GtkStyleSet  *set,
-                   GtkStateType  state,
+gtk_style_set_set (GtkStyleSet   *set,
+                   GtkStateFlags  state,
                    ...)
 {
   va_list args;
 
   g_return_if_fail (GTK_IS_STYLE_SET (set));
-  g_return_if_fail (state < GTK_STATE_LAST);
 
   va_start (args, state);
   gtk_style_set_set_valist (set, state, args);
@@ -505,10 +611,10 @@ resolve_color (GtkStyleSet *set,
 }
 
 gboolean
-gtk_style_set_get_property (GtkStyleSet  *set,
-                            const gchar  *property,
-                            GtkStateType  state,
-                            GValue       *value)
+gtk_style_set_get_property (GtkStyleSet   *set,
+                            const gchar   *property,
+                            GtkStateFlags  state,
+                            GValue        *value)
 {
   GtkStyleSetPrivate *priv;
   PropertyNode *node;
@@ -517,7 +623,6 @@ gtk_style_set_get_property (GtkStyleSet  *set,
 
   g_return_val_if_fail (GTK_IS_STYLE_SET (set), FALSE);
   g_return_val_if_fail (property != NULL, FALSE);
-  g_return_val_if_fail (state < GTK_STATE_LAST, FALSE);
   g_return_val_if_fail (value != NULL, FALSE);
 
   node = property_node_lookup (g_quark_try_string (property));
@@ -537,11 +642,9 @@ gtk_style_set_get_property (GtkStyleSet  *set,
 
   g_value_init (value, node->property_type);
 
-  if (G_IS_VALUE (&prop->values[state]))
-    val = &prop->values[state];
-  else if (G_IS_VALUE (&prop->default_value))
-    val = &prop->default_value;
-  else
+  val = property_data_match_state (prop, state);
+
+  if (!val && G_IS_VALUE (&node->default_value))
     val = &node->default_value;
 
   g_return_val_if_fail (G_IS_VALUE (val), FALSE);
@@ -560,15 +663,14 @@ gtk_style_set_get_property (GtkStyleSet  *set,
 }
 
 void
-gtk_style_set_get_valist (GtkStyleSet  *set,
-                          GtkStateType  state,
-                          va_list       args)
+gtk_style_set_get_valist (GtkStyleSet   *set,
+                          GtkStateFlags  state,
+                          va_list        args)
 {
   GtkStyleSetPrivate *priv;
   const gchar *property_name;
 
   g_return_if_fail (GTK_IS_STYLE_SET (set));
-  g_return_if_fail (state < GTK_STATE_LAST);
 
   priv = set->priv;
   property_name = va_arg (args, const gchar *);
@@ -604,14 +706,9 @@ gtk_style_set_get_valist (GtkStyleSet  *set,
           GValue *val = NULL;
 
           if (prop)
-            {
-              if (G_IS_VALUE (&prop->values[state]))
-                val = &prop->values[state];
-              else if (G_IS_VALUE (&prop->default_value))
-                val = &prop->default_value;
-            }
+            val = property_data_match_state (prop, state);
 
-          if (!val)
+          if (!val && G_IS_VALUE (&node->default_value))
             val = &node->default_value;
 
           if (G_VALUE_TYPE (val) == GTK_TYPE_SYMBOLIC_COLOR)
@@ -637,14 +734,13 @@ gtk_style_set_get_valist (GtkStyleSet  *set,
 }
 
 void
-gtk_style_set_get (GtkStyleSet  *set,
-                   GtkStateType  state,
+gtk_style_set_get (GtkStyleSet   *set,
+                   GtkStateFlags  state,
                    ...)
 {
   va_list args;
 
   g_return_if_fail (GTK_IS_STYLE_SET (set));
-  g_return_if_fail (state < GTK_STATE_LAST);
 
   va_start (args, state);
   gtk_style_set_get_valist (set, state, args);
@@ -652,17 +748,17 @@ gtk_style_set_get (GtkStyleSet  *set,
 }
 
 void
-gtk_style_set_unset_property (GtkStyleSet  *set,
-                              const gchar  *property,
-                              GtkStateType  state)
+gtk_style_set_unset_property (GtkStyleSet   *set,
+                              const gchar   *property,
+                              GtkStateFlags  state)
 {
   GtkStyleSetPrivate *priv;
   PropertyNode *node;
   PropertyData *prop;
+  guint pos;
 
   g_return_if_fail (GTK_IS_STYLE_SET (set));
   g_return_if_fail (property != NULL);
-  g_return_if_fail (state < GTK_STATE_LAST);
 
   node = property_node_lookup (g_quark_try_string (property));
 
@@ -679,7 +775,17 @@ gtk_style_set_unset_property (GtkStyleSet  *set,
   if (!prop)
     return;
 
-  g_value_unset (&prop->values[state]);
+  if (property_data_find_position (prop, state, &pos))
+    {
+      ValueData *data;
+
+      data = &g_array_index (prop->values, ValueData, pos);
+
+      if (G_IS_VALUE (&data->value))
+        g_value_unset (&data->value);
+
+      g_array_remove_index (prop->values, pos);
+    }
 }
 
 void
@@ -735,61 +841,37 @@ gtk_style_set_merge (GtkStyleSet       *set,
   while (g_hash_table_iter_next (&iter, &key, &value))
     {
       PropertyData *prop_to_merge = value;
-      PropertyData *prop = NULL;
-      GtkStateType i;
+      PropertyData *prop;
+      guint i;
 
-      for (i = GTK_STATE_NORMAL; i < GTK_STATE_LAST; i++)
+      prop = g_hash_table_lookup (priv->properties, key);
+
+      if (!prop)
         {
-          if (G_VALUE_TYPE (&prop_to_merge->values[i]) == G_TYPE_INVALID)
-            continue;
-
-          if (!prop)
-            prop = g_hash_table_lookup (priv->properties, key);
-
-          if (!prop)
-            {
-              prop = property_data_new ();
-              g_hash_table_insert (priv->properties, key, prop);
-            }
-
-          if (replace ||
-              G_VALUE_TYPE (&prop->values[i]) == G_TYPE_INVALID)
-            {
-              if (!G_IS_VALUE (&prop->values[i]))
-                g_value_init (&prop->values[i], G_VALUE_TYPE (&prop_to_merge->values[i]));
-              else if (G_VALUE_TYPE (&prop->values[i]) != G_VALUE_TYPE (&prop_to_merge->values[i]))
-                {
-                  g_value_unset (&prop->values[i]);
-                  g_value_init (&prop->values[i], G_VALUE_TYPE (&prop_to_merge->values[i]));
-                }
-
-              g_value_copy (&prop_to_merge->values[i],
-                            &prop->values[i]);
-            }
+          prop = property_data_new ();
+          g_hash_table_insert (priv->properties, key, prop);
         }
 
-      if (G_IS_VALUE (&prop_to_merge->default_value) &&
-          (replace || !prop || !G_IS_VALUE (&prop->default_value)))
+      for (i = 0; i < prop_to_merge->values->len; i++)
         {
-          if (!prop)
-            prop = g_hash_table_lookup (priv->properties, key);
+          ValueData *data;
+          GValue *value;
 
-          if (!prop)
+          data = &g_array_index (prop_to_merge->values, ValueData, i);
+          value = property_data_get_value (prop, data->state);
+
+          if (replace || !G_IS_VALUE (value))
             {
-              prop = property_data_new ();
-              g_hash_table_insert (priv->properties, key, prop);
-            }
+              if (!G_IS_VALUE (value))
+                g_value_init (value, G_VALUE_TYPE (&data->value));
+              else if (G_VALUE_TYPE (value) != G_VALUE_TYPE (&data->value))
+                {
+                  g_value_unset (value);
+                  g_value_init (value, G_VALUE_TYPE (&data->value));
+                }
 
-          if (!G_IS_VALUE (&prop->default_value))
-            g_value_init (&prop->default_value, G_VALUE_TYPE (&prop_to_merge->default_value));
-          else if (G_VALUE_TYPE (&prop->default_value) != G_VALUE_TYPE (&prop_to_merge->default_value))
-            {
-              g_value_unset (&prop->default_value);
-              g_value_init (&prop->default_value, G_VALUE_TYPE (&prop_to_merge->default_value));
+              g_value_copy (&data->value, value);
             }
-
-          g_value_copy (&prop_to_merge->default_value,
-                        &prop->default_value);
         }
     }
 }
