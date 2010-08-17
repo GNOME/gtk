@@ -489,7 +489,7 @@ gtk_cell_renderer_text_class_init (GtkCellRendererTextClass *class)
   /**
    * GtkCellRendererText:wrap-width:
    *
-   * Specifies the width at which the text is wrapped. The wrap-mode property can 
+   * Specifies the minimum width at which the text is wrapped. The wrap-mode property can 
    * be used to influence at what character positions the line breaks can be placed.
    * Setting wrap-width to -1 turns wrapping off.
    *
@@ -1473,6 +1473,11 @@ get_layout (GtkCellRendererText *celltext,
   if (priv->rise_set)
     add_attr (attr_list, pango_attr_rise_new (priv->rise));
 
+  /* Now apply the attributes as they will effect the outcome
+   * of pango_layout_get_extents() */
+  pango_layout_set_attributes (layout, attr_list);
+  pango_attr_list_unref (attr_list);
+
   if (priv->ellipsize_set)
     pango_layout_set_ellipsize (layout, priv->ellipsize);
   else
@@ -1480,12 +1485,20 @@ get_layout (GtkCellRendererText *celltext,
 
   if (priv->wrap_width != -1)
     {
-      if (cell_area)
-	pango_layout_set_width (layout, 
-				(cell_area->width - xpad * 2) * PANGO_SCALE);
-      else
-	pango_layout_set_width (layout, priv->wrap_width * PANGO_SCALE);
+      PangoRectangle rect;
+      gint           width, text_width;
 
+      pango_layout_get_extents (layout, NULL, &rect);
+      text_width = rect.width;
+
+      if (cell_area)
+	width = (cell_area->width - xpad * 2) * PANGO_SCALE;
+      else
+	width = priv->wrap_width * PANGO_SCALE;
+
+      width = MIN (width, text_width);
+
+      pango_layout_set_width (layout, width);
       pango_layout_set_wrap (layout, priv->wrap_mode);
     }
   else
@@ -1507,10 +1520,6 @@ get_layout (GtkCellRendererText *celltext,
 
       pango_layout_set_alignment (layout, align);
     }
-
-  pango_layout_set_attributes (layout, attr_list);
-
-  pango_attr_list_unref (attr_list);
   
   return layout;
 }
@@ -1992,6 +2001,7 @@ gtk_cell_renderer_text_get_width (GtkCellSizeRequest *cell,
   PangoFontMetrics           *metrics;
   PangoRectangle              rect;
   gint char_width, digit_width, char_pixels, text_width, ellipsize_chars, guess_width, xpad;
+  gint min_width;
 
   /* "width-chars" Hard-coded minimum width:
    *    - minimum size should be MAX (width-chars, strlen ("..."));
@@ -2006,7 +2016,6 @@ gtk_cell_renderer_text_get_width (GtkCellSizeRequest *cell,
   priv = celltext->priv;
 
   gtk_cell_renderer_get_padding (GTK_CELL_RENDERER (cell), &xpad, NULL);
-
 
   layout = get_layout (celltext, widget, NULL, 0);
 
@@ -2037,26 +2046,25 @@ gtk_cell_renderer_text_get_width (GtkCellSizeRequest *cell,
   else
     ellipsize_chars = 0;
   
+  if ((priv->ellipsize_set && priv->ellipsize != PANGO_ELLIPSIZE_NONE) || priv->width_chars > 0)
+    min_width = 
+      xpad * 2 + (PANGO_PIXELS (char_width) * MAX (priv->width_chars, ellipsize_chars));
+  /* If no width-chars set, minimum for wrapping text will be the wrap-width */
+  else if (priv->wrap_width > -1)
+    min_width = xpad * 2 + rect.x + priv->wrap_width;
+  else
+    min_width = xpad * 2 + rect.x + guess_width;
+
   if (minimum_size)
-    {
-      if ((priv->ellipsize_set && priv->ellipsize != PANGO_ELLIPSIZE_NONE) || priv->width_chars > 0)
-	*minimum_size = 
-	  xpad * 2 + (PANGO_PIXELS (char_width) * MAX (priv->width_chars, ellipsize_chars));
-	/* If no width-chars set, minimum for wrapping text will be the wrap-width */
-      else if (priv->wrap_width > -1)
-	*minimum_size = xpad * 2 + rect.x + priv->wrap_width;
-      else
-	*minimum_size = xpad * 2 + rect.x + guess_width;
-    }
+    *minimum_size = min_width;
 
   if (natural_size)
     {
-      if (priv->wrap_width > -1)
-	*natural_size = xpad * 2 + 
-	  MIN (priv->wrap_width, PANGO_PIXELS (text_width));
-      else /* Natural size is full text here regardless of ellipsize */
-	*natural_size = xpad * 2 + 
-	  MAX ((PANGO_PIXELS (char_width) * priv->width_chars), PANGO_PIXELS (text_width));
+      /* Control the max wrap width here possibly (add max-width-chars ?) */
+      *natural_size = xpad * 2 + 
+	MAX ((PANGO_PIXELS (char_width) * priv->width_chars), PANGO_PIXELS (text_width));
+
+      *natural_size = MAX (*natural_size, min_width);
     }
 }
 
