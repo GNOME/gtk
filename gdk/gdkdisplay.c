@@ -342,7 +342,9 @@ gdk_display_close (GdkDisplay *display)
  * gdk_display_is_closed:
  * @display: a #GdkDisplay
  *
- * Returns %TRUE if the display is closed.
+ * Finds out if the display has been closed.
+ *
+ * Returns: %TRUE if the display is closed.
  *
  * Since: 2.22
  */

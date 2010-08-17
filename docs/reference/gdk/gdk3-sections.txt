@@ -642,6 +642,8 @@ GDK_TYPE_PROP_MODE
 <FILE>pango_interaction</FILE>
 gdk_pango_layout_get_clip_region
 gdk_pango_layout_line_get_clip_region
+gdk_pango_context_get
+gdk_pango_context_get_for_screen
 </SECTION>
 
 <SECTION>
@@ -1013,7 +1015,6 @@ GDK_PIXMAP_XID
 GDK_DISPLAY_XDISPLAY
 GDK_DRAWABLE_XDISPLAY
 GDK_DRAWABLE_XID
-GDK_GC_XDISPLAY
 GDK_COLORMAP_XDISPLAY
 GDK_COLORMAP_XCOLORMAP
 GDK_SCREEN_XDISPLAY
@@ -1022,8 +1023,6 @@ GDK_SCREEN_XSCREEN
 GDK_VISUAL_XVISUAL
 GDK_CURSOR_XCURSOR
 GDK_CURSOR_XDISPLAY
-GDK_GC_XGC
-GDK_GC_GET_XGC
 GDK_WINDOW_XWINDOW
 gdkx_visual_get
 gdk_pixmap_foreign_new

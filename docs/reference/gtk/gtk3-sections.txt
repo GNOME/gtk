@@ -423,7 +423,6 @@ gtk_aspect_frame_get_type
 <FILE>gtkbbox</FILE>
 <TITLE>GtkButtonBox</TITLE>
 GtkButtonBox
-GTK_BUTTONBOX_DEFAULT
 gtk_button_box_new
 gtk_button_box_get_layout
 gtk_button_box_get_child_secondary
@@ -2024,6 +2023,7 @@ GTK_MENU_BAR_CLASS
 GTK_IS_MENU_BAR_CLASS
 GTK_MENU_BAR_GET_CLASS
 <SUBSECTION Private>
+GtkMenuBarPrivate
 gtk_menu_bar_get_type
 </SECTION>
 
@@ -2144,6 +2144,7 @@ GTK_MESSAGE_DIALOG_CLASS
 GTK_IS_MESSAGE_DIALOG_CLASS
 GTK_MESSAGE_DIALOG_GET_CLASS
 <SUBSECTION Private>
+GtkMessageDialogPriv
 gtk_message_dialog_get_type
 </SECTION>
 
@@ -2193,6 +2194,7 @@ GTK_MISC_CLASS
 GTK_IS_MISC_CLASS
 GTK_MISC_GET_CLASS
 <SUBSECTION Private>
+GtkMiscPriv
 gtk_misc_get_type
 </SECTION>
 
@@ -2256,6 +2258,7 @@ GTK_NOTEBOOK_GET_CLASS
 <SUBSECTION Private>
 gtk_notebook_get_type
 GtkNotebookTab
+GtkNotebookPriv
 </SECTION>
 
 <SECTION>
@@ -2374,6 +2377,7 @@ GTK_PROGRESS_BAR_CLASS
 GTK_IS_PROGRESS_BAR_CLASS
 GTK_PROGRESS_BAR_GET_CLASS
 <SUBSECTION Private>
+GtkProgressBarPriv
 gtk_progress_bar_get_type
 </SECTION>
 
@@ -2419,6 +2423,7 @@ GTK_RADIO_BUTTON_CLASS
 GTK_IS_RADIO_BUTTON_CLASS
 GTK_RADIO_BUTTON_GET_CLASS
 <SUBSECTION Private>
+GtkRadioButtonPriv
 gtk_radio_button_get_type
 </SECTION>
 
@@ -2442,6 +2447,7 @@ GTK_RADIO_MENU_ITEM_CLASS
 GTK_IS_RADIO_MENU_ITEM_CLASS
 GTK_RADIO_MENU_ITEM_GET_CLASS
 <SUBSECTION Private>
+GtkRadioMenuItemPriv
 gtk_radio_menu_item_get_type
 </SECTION>
 
@@ -2725,6 +2731,7 @@ GTK_RULER_CLASS
 GTK_IS_RULER_CLASS
 GTK_RULER_GET_CLASS
 <SUBSECTION Private>
+GtkRulerPriv
 gtk_ruler_get_type
 gtk_ruler_draw_ticks
 gtk_ruler_draw_pos
@@ -2754,6 +2761,7 @@ GTK_SCALE_CLASS
 GTK_IS_SCALE_CLASS
 GTK_SCALE_GET_CLASS
 <SUBSECTION Private>
+GtkScalePriv
 gtk_scale_get_type
 </SECTION>
 
@@ -2913,6 +2921,7 @@ GTK_SIZE_GROUP_CLASS
 GTK_IS_SIZE_GROUP_CLASS
 GTK_SIZE_GROUP_GET_CLASS
 <SUBSECTION Private>
+GtkSizeGroupPriv
 gtk_size_group_get_type
 </SECTION>
 
@@ -2974,6 +2983,7 @@ GTK_SPIN_BUTTON_CLASS
 GTK_IS_SPIN_BUTTON_CLASS
 GTK_SPIN_BUTTON_GET_CLASS
 <SUBSECTION Private>
+GtkSpinButtonPriv
 gtk_spin_button_get_type
 </SECTION>
 
@@ -3020,6 +3030,7 @@ GTK_STATUSBAR_CLASS
 GTK_IS_STATUSBAR_CLASS
 GTK_STATUSBAR_GET_CLASS
 <SUBSECTION Private>
+GtkStatusbarPriv
 gtk_statusbar_get_type
 </SECTION>
 
@@ -3103,6 +3114,7 @@ GTK_TABLE_CLASS
 GTK_IS_TABLE_CLASS
 GTK_TABLE_GET_CLASS
 <SUBSECTION Private>
+GtkTablePriv
 GtkTableChild
 GtkTableRowCol
 gtk_table_get_type
@@ -3121,6 +3133,7 @@ GTK_TEAROFF_MENU_ITEM_CLASS
 GTK_IS_TEAROFF_MENU_ITEM_CLASS
 GTK_TEAROFF_MENU_ITEM_GET_CLASS
 <SUBSECTION Private>
+GtkTearoffMenuItemPriv
 gtk_tearoff_menu_item_get_type
 </SECTION>
 
@@ -3215,6 +3228,7 @@ GTK_TEXT_BUFFER_CLASS
 GTK_IS_TEXT_BUFFER_CLASS
 GTK_TEXT_BUFFER_GET_CLASS
 <SUBSECTION Private>
+GtkTextBufferPrivate
 gtk_text_buffer_get_type
 GtkTextLogAttrCache
 </SECTION>
@@ -3391,6 +3405,7 @@ GTK_TEXT_TAG_TABLE_CLASS
 GTK_IS_TEXT_TAG_TABLE_CLASS
 GTK_TEXT_TAG_TABLE_GET_CLASS
 <SUBSECTION Private>
+GtkTextTagTablePriv
 gtk_text_tag_table_get_type
 </SECTION>
 
@@ -3480,6 +3495,7 @@ GTK_TEXT_CHILD_ANCHOR_CLASS
 GTK_IS_TEXT_CHILD_ANCHOR_CLASS
 GTK_TEXT_CHILD_ANCHOR_GET_CLASS
 <SUBSECTION Private>
+GtkTextViewPrivate
 gtk_text_view_get_type
 gtk_text_child_anchor_get_type
 GtkTextBTree
@@ -3594,7 +3610,7 @@ GTK_IS_TOOLBAR_CLASS
 GTK_TOOLBAR_GET_CLASS
 <SUBSECTION Private>
 gtk_toolbar_get_type
-GtkToolbarPrivate
+GtkToolbarPriv
 </SECTION>
 
 <SECTION>
@@ -4590,6 +4606,7 @@ GTK_LIST_STORE_CLASS
 GTK_IS_LIST_STORE_CLASS
 GTK_LIST_STORE_GET_CLASS
 <SUBSECTION Private>
+GtkListStorePriv
 gtk_list_store_get_type
 </SECTION>
 
@@ -4646,6 +4663,7 @@ GTK_VIEWPORT_CLASS
 GTK_IS_VIEWPORT_CLASS
 GTK_VIEWPORT_GET_CLASS
 <SUBSECTION Private>
+GtkViewportPriv
 gtk_viewport_get_type
 </SECTION>
 
@@ -6294,12 +6312,14 @@ gtk_orientable_get_type
 GtkSizeRequest
 GtkSizeRequestIface
 GtkSizeRequestMode
+GtkRequestedSize
 gtk_size_request_get_height
 gtk_size_request_get_width
 gtk_size_request_get_height_for_width
 gtk_size_request_get_width_for_height
 gtk_size_request_get_request_mode
 gtk_size_request_get_size
+gtk_distribute_natural_allocation
 
 <SUBSECTION Standard>
 GTK_SIZE_REQUEST
@@ -6323,6 +6343,7 @@ gtk_application_quit
 gtk_application_set_action_group
 gtk_application_get_window
 gtk_application_add_window
+gtk_application_get_windows
 gtk_application_create_window
 
 <SUBSECTION Standard>
