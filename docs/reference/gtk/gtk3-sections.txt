@@ -5072,6 +5072,7 @@ GTK_IS_WINDOW_CLASS
 GTK_WINDOW_GET_CLASS
 
 <SUBSECTION Private>
+GtkWindowPrivate
 gtk_window_get_type
 GtkWindowGeometryInfo
 gtk_window_remove_embedded_xid

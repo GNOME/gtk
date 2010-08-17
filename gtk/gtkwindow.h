@@ -47,7 +47,7 @@ G_BEGIN_DECLS
 #define GTK_IS_WINDOW_CLASS(klass)	(G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_WINDOW))
 #define GTK_WINDOW_GET_CLASS(obj)       (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_WINDOW, GtkWindowClass))
 
-
+typedef struct _GtkWindowPrivate      GtkWindowPrivate;
 typedef struct _GtkWindowClass        GtkWindowClass;
 typedef struct _GtkWindowGeometryInfo GtkWindowGeometryInfo;
 typedef struct _GtkWindowGroup        GtkWindowGroup;
@@ -57,63 +57,7 @@ struct _GtkWindow
 {
   GtkBin bin;
 
-  gchar *GSEAL (title);
-  gchar *GSEAL (wmclass_name);
-  gchar *GSEAL (wmclass_class);
-  gchar *GSEAL (wm_role);
-
-  GtkWidget *GSEAL (focus_widget);
-  GtkWidget *GSEAL (default_widget);
-  GtkWindow *GSEAL (transient_parent);
-  GtkWindowGeometryInfo *GSEAL (geometry_info);
-  GdkWindow *GSEAL (frame);
-  GtkWindowGroup *GSEAL (group);
-
-  guint16 GSEAL (configure_request_count);
-  guint GSEAL (allow_shrink) : 1;
-  guint GSEAL (resizable) : 1;
-  guint GSEAL (configure_notify_received) : 1;
-  /* The following flags are initially TRUE (before a window is mapped).
-   * They cause us to compute a configure request that involves
-   * default-only parameters. Once mapped, we set them to FALSE.
-   * Then we set them to TRUE again on unmap (for position)
-   * and on unrealize (for size).
-   */
-  guint GSEAL (need_default_position) : 1;
-  guint GSEAL (need_default_size) : 1;
-  guint GSEAL (position) : 3;
-  guint GSEAL (type) : 4; /* GtkWindowType */ 
-  guint GSEAL (has_user_ref_count) : 1;
-  guint GSEAL (has_focus) : 1;
-
-  guint GSEAL (modal) : 1;
-  guint GSEAL (destroy_with_parent) : 1;
-  
-  guint GSEAL (has_frame) : 1;
-
-  /* gtk_window_iconify() called before realization */
-  guint GSEAL (iconify_initially) : 1;
-  guint GSEAL (stick_initially) : 1;
-  guint GSEAL (maximize_initially) : 1;
-  guint GSEAL (decorated) : 1;
-  
-  guint GSEAL (type_hint) : 3; /* GdkWindowTypeHint if the hint is one of the original eight. If not, then
-				* it contains GDK_WINDOW_TYPE_HINT_NORMAL
-				*/
-  guint GSEAL (gravity) : 5; /* GdkGravity */
-
-  guint GSEAL (is_active) : 1;
-  guint GSEAL (has_toplevel_focus) : 1;
-  
-  guint GSEAL (frame_left);
-  guint GSEAL (frame_top);
-  guint GSEAL (frame_right);
-  guint GSEAL (frame_bottom);
-
-  guint GSEAL (keys_changed_handler);
-  
-  GdkModifierType GSEAL (mnemonic_modifier);
-  GdkScreen      *GSEAL (screen);
+  GtkWindowPrivate *priv;
 };
 
 struct _GtkWindowClass
