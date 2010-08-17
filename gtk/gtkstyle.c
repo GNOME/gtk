@@ -256,10 +256,9 @@ static void gtk_default_draw_slider     (GtkStyle        *style,
 					 gint             height,
 					 GtkOrientation   orientation);
 static void gtk_default_draw_handle     (GtkStyle        *style,
-					 GdkWindow       *window,
+					 cairo_t         *cr,
 					 GtkStateType     state_type,
 					 GtkShadowType    shadow_type,
-					 GdkRectangle    *area,
 					 GtkWidget       *widget,
 					 const gchar     *detail,
 					 gint             x,
@@ -3735,10 +3734,9 @@ draw_dot (cairo_t    *cr,
 
 static void 
 gtk_default_draw_handle (GtkStyle      *style,
-			 GdkWindow     *window,
+			 cairo_t       *cr,
 			 GtkStateType   state_type,
 			 GtkShadowType  shadow_type,
-			 GdkRectangle  *area,
 			 GtkWidget     *widget,
 			 const gchar   *detail,
 			 gint           x,
@@ -3750,19 +3748,9 @@ gtk_default_draw_handle (GtkStyle      *style,
   gint xx, yy;
   gint xthick, ythick;
   GdkColor light, dark;
-  cairo_t *cr;
   
-  sanitize_size (window, &width, &height);
-  
-  gtk_paint_box (style, window, state_type, shadow_type, area, widget, 
-                 detail, x, y, width, height);
-  
-  cr = gdk_cairo_create (window);
-  if (area)
-    {
-      gdk_cairo_rectangle (cr, area);
-      cairo_clip (cr);
-    }
+  gtk_cairo_paint_box (style, cr, state_type, shadow_type, widget, 
+                       detail, x, y, width, height);
   
   if (detail && !strcmp (detail, "paned"))
     {
@@ -3809,8 +3797,6 @@ gtk_default_draw_handle (GtkStyle      *style,
 	    draw_dot (cr, &light, &dark, xx + 3, yy + 1, 2);
 	  }
     }
-
-  cairo_destroy (cr);
 }
 
 static void
@@ -5990,13 +5976,65 @@ gtk_paint_handle (GtkStyle           *style,
                   gint                height,
                   GtkOrientation      orientation)
 {
+  cairo_t *cr;
+
   g_return_if_fail (GTK_IS_STYLE (style));
   g_return_if_fail (GTK_STYLE_GET_CLASS (style)->draw_handle != NULL);
   g_return_if_fail (style->depth == gdk_drawable_get_depth (window));
 
-  GTK_STYLE_GET_CLASS (style)->draw_handle (style, window, state_type, shadow_type,
-                                            (GdkRectangle *) area, widget, detail,
+  sanitize_size (window, &width, &height);
+
+  cr = gtk_style_cairo_create (window, area);
+
+  gtk_cairo_paint_handle (style, cr, state_type, shadow_type,
+                          widget, detail,
+                          x, y, width, height, orientation);
+
+  cairo_destroy (cr);
+}
+
+/**
+ * gtk_cairo_paint_handle:
+ * @style: a #GtkStyle
+ * @cr: a #cairo_t
+ * @state_type: a state
+ * @shadow_type: type of shadow to draw
+ * @widget: (allow-none): the widget
+ * @detail: (allow-none): a style detail
+ * @x: x origin of the handle
+ * @y: y origin of the handle
+ * @width: with of the handle
+ * @height: height of the handle
+ * @orientation: the orientation of the handle
+ * 
+ * Draws a handle as used in #GtkHandleBox and #GtkPaned.
+ **/
+void
+gtk_cairo_paint_handle (GtkStyle           *style,
+                        cairo_t            *cr,
+                        GtkStateType        state_type,
+                        GtkShadowType       shadow_type,
+                        GtkWidget          *widget,
+                        const gchar        *detail,
+                        gint                x,
+                        gint                y,
+                        gint                width,
+                        gint                height,
+                        GtkOrientation      orientation)
+{
+  g_return_if_fail (GTK_IS_STYLE (style));
+  g_return_if_fail (GTK_STYLE_GET_CLASS (style)->draw_handle != NULL);
+  g_return_if_fail (cr != NULL);
+  g_return_if_fail (width >= 0);
+  g_return_if_fail (height >= 0);
+
+  cairo_save (cr);
+
+  GTK_STYLE_GET_CLASS (style)->draw_handle (style, cr, state_type, shadow_type,
+                                            widget, detail,
                                             x, y, width, height, orientation);
+
+  cairo_restore (cr);
 }
 
 /**
