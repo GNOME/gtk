@@ -1802,7 +1802,7 @@ paned_get_focus_widget (GtkPaned *paned)
 
   toplevel = gtk_widget_get_toplevel (GTK_WIDGET (paned));
   if (gtk_widget_is_toplevel (toplevel))
-    return GTK_WINDOW (toplevel)->focus_widget;
+    return gtk_window_get_focus (GTK_WINDOW (toplevel));
 
   return NULL;
 }
@@ -2320,7 +2320,7 @@ gtk_paned_cycle_handle_focus (GtkPaned *paned,
       toplevel = gtk_widget_get_toplevel (GTK_WIDGET (paned));
 
       if (GTK_IS_WINDOW (toplevel))
-	gtk_paned_set_saved_focus (focus, GTK_WINDOW (toplevel)->focus_widget);
+        gtk_paned_set_saved_focus (focus, gtk_window_get_focus (GTK_WINDOW (toplevel)));
       gtk_paned_set_first_paned (focus, first);
       focus->priv->original_position = gtk_paned_get_position (focus);
 
