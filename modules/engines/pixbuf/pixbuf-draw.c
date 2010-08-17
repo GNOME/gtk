@@ -181,8 +181,7 @@ draw_simple_image_no_cairo(GtkStyle       *style,
 
 static gboolean
 draw_gap_image(GtkStyle       *style,
-	       GdkWindow      *window,
-	       GdkRectangle   *area,
+               cairo_t        *cr,
 	       GtkWidget      *widget,
 	       ThemeMatchData *match_data,
 	       gboolean        draw_center,
@@ -196,13 +195,6 @@ draw_gap_image(GtkStyle       *style,
 {
   ThemeImage *image;
   
-  if ((width == -1) && (height == -1))
-    gdk_drawable_get_size(window, &width, &height);
-  else if (width == -1)
-    gdk_drawable_get_size(window, &width, NULL);
-  else if (height == -1)
-    gdk_drawable_get_size(window, NULL, &height);
-
   if (!(match_data->flags & THEME_MATCH_ORIENTATION))
     {
       match_data->flags |= THEME_MATCH_ORIENTATION;
@@ -329,26 +321,67 @@ draw_gap_image(GtkStyle       *style,
 	}
 
       if (image->background)
-	theme_pixbuf_render_no_cairo (image->background,
-			     window, area, components, FALSE,
+	theme_pixbuf_render (image->background,
+			     cr, components, FALSE,
 			     x, y, width, height);
       if (image->gap_start)
-	theme_pixbuf_render_no_cairo (image->gap_start,
-			     window, area, COMPONENT_ALL, FALSE,
+	theme_pixbuf_render (image->gap_start,
+			     cr, COMPONENT_ALL, FALSE,
 			     r1.x, r1.y, r1.width, r1.height);
       if (image->gap)
-	theme_pixbuf_render_no_cairo (image->gap,
-			     window, area, COMPONENT_ALL, FALSE,
+	theme_pixbuf_render (image->gap,
+			     cr, COMPONENT_ALL, FALSE,
 			     r2.x, r2.y, r2.width, r2.height);
       if (image->gap_end)
-	theme_pixbuf_render_no_cairo (image->gap_end,
-			     window, area, COMPONENT_ALL, FALSE,
+	theme_pixbuf_render (image->gap_end,
+			     cr, COMPONENT_ALL, FALSE,
 			     r3.x, r3.y, r3.width, r3.height);
 
       return TRUE;
     }
   else
     return FALSE;
+}
+
+static gboolean
+draw_gap_image_no_cairo(GtkStyle       *style,
+               GdkWindow      *window,
+               GdkRectangle   *area,
+	       GtkWidget      *widget,
+	       ThemeMatchData *match_data,
+	       gboolean        draw_center,
+	       gint            x,
+	       gint            y,
+	       gint            width,
+	       gint            height,
+	       GtkPositionType gap_side,
+	       gint            gap_x,
+	       gint            gap_width)
+{
+  gboolean result;
+  cairo_t *cr;
+
+  if ((width == -1) && (height == -1))
+    gdk_drawable_get_size(window, &width, &height);
+  else if (width == -1)
+    gdk_drawable_get_size(window, &width, NULL);
+  else if (height == -1)
+    gdk_drawable_get_size(window, NULL, &height);
+
+  cr = gdk_cairo_create (window);
+  if (area)
+    {
+      gdk_cairo_rectangle (cr, area);
+      cairo_clip (cr);
+    }
+
+  result = draw_gap_image (style, cr, widget, match_data,
+                           draw_center, x, y, width, height,
+                           gap_side, gap_x, gap_width);
+
+  cairo_destroy (cr);
+
+  return result;
 }
 
 static void
@@ -799,7 +832,7 @@ draw_shadow_gap (GtkStyle       *style,
   match_data.shadow = shadow;
   match_data.state = state;
   
-  if (!draw_gap_image (style, window, area, widget, &match_data, FALSE,
+  if (!draw_gap_image_no_cairo (style, window, area, widget, &match_data, FALSE,
 		       x, y, width, height, gap_side, gap_x, gap_width))
     parent_class->draw_shadow_gap (style, window, state, shadow, area, widget, detail,
 				   x, y, width, height, gap_side, gap_x, gap_width);
@@ -832,7 +865,7 @@ draw_box_gap (GtkStyle       *style,
   match_data.shadow = shadow;
   match_data.state = state;
   
-  if (!draw_gap_image (style, window, area, widget, &match_data, TRUE,
+  if (!draw_gap_image_no_cairo (style, window, area, widget, &match_data, TRUE,
 		       x, y, width, height, gap_side, gap_x, gap_width))
     parent_class->draw_box_gap (style, window, state, shadow, area, widget, detail,
 				x, y, width, height, gap_side, gap_x, gap_width);
