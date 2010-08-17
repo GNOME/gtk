@@ -653,7 +653,7 @@ socket_update_focus_in (GtkSocket *socket)
       GtkWidget *toplevel = gtk_widget_get_toplevel (GTK_WIDGET (socket));
 
       if (gtk_widget_is_toplevel (toplevel) &&
-	  GTK_WINDOW (toplevel)->has_toplevel_focus &&
+	  gtk_window_has_toplevel_focus (GTK_WINDOW (toplevel)) &&
 	  gtk_widget_is_focus (GTK_WIDGET (socket)))
 	focus_in = TRUE;
     }
@@ -676,7 +676,7 @@ socket_update_active (GtkSocket *socket)
       GtkWidget *toplevel = gtk_widget_get_toplevel (GTK_WIDGET (socket));
 
       if (gtk_widget_is_toplevel (toplevel) &&
-	  GTK_WINDOW (toplevel)->is_active)
+	  gtk_window_is_active  (GTK_WINDOW (toplevel)))
 	active = TRUE;
     }
 
@@ -997,6 +997,7 @@ _gtk_socket_advance_toplevel_focus (GtkSocket        *socket,
   GtkWindow *window;
   GtkContainer *container;
   GtkWidget *child;
+  GtkWidget *focus_widget;
   GtkWidget *toplevel;
   GtkWidget *old_focus_child;
   GtkWidget *parent;
@@ -1034,10 +1035,11 @@ _gtk_socket_advance_toplevel_focus (GtkSocket        *socket,
 	_gtk_socket_windowing_embed_set_focus_wrapped ();
     }
 
-  if (window->focus_widget)
+  focus_widget = gtk_window_get_focus (window);
+  if (window)
     {
       /* Wrapped off the end, clear the focus setting for the toplevel */
-      parent = gtk_widget_get_parent (window->focus_widget);
+      parent = gtk_widget_get_parent (focus_widget);
       while (parent)
 	{
 	  gtk_container_set_focus_child (GTK_CONTAINER (parent), NULL);
