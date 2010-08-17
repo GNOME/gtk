@@ -140,7 +140,6 @@ that is, GUI components such as #GtkButton or #GtkTextView.
     <xi:include href="xml/gtksettings.xml" />
     <xi:include href="xml/gtkbindings.xml" />
     <xi:include href="xml/gtkenums.xml" />
-    <xi:include href="xml/gtkgc.xml" />
     <xi:include href="xml/gtkstyle.xml" />
     <xi:include href="xml/gtkselection.xml" />
     <xi:include href="xml/gtkfeatures.xml" />
