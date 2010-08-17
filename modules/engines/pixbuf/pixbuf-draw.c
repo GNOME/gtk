@@ -95,8 +95,7 @@ match_theme_image (GtkStyle       *style,
 
 static gboolean
 draw_simple_image(GtkStyle       *style,
-		  GdkWindow      *window,
-		  GdkRectangle   *area,
+		  cairo_t        *cr,
 		  GtkWidget      *widget,
 		  ThemeMatchData *match_data,
 		  gboolean        draw_center,
@@ -106,15 +105,9 @@ draw_simple_image(GtkStyle       *style,
 		  gint            width,
 		  gint            height)
 {
+
   ThemeImage *image;
   
-  if ((width == -1) && (height == -1))
-    gdk_drawable_get_size(window, &width, &height);
-  else if (width == -1)
-    gdk_drawable_get_size(window, &width, NULL);
-  else if (height == -1)
-    gdk_drawable_get_size(window, NULL, &height);
-
   if (!(match_data->flags & THEME_MATCH_ORIENTATION))
     {
       match_data->flags |= THEME_MATCH_ORIENTATION;
@@ -130,16 +123,14 @@ draw_simple_image(GtkStyle       *style,
     {
       if (image->background)
 	{
-	  theme_pixbuf_render_no_cairo (image->background,
-			       window, area,
+	  theme_pixbuf_render (image->background, cr,
 			       draw_center ? COMPONENT_ALL : COMPONENT_ALL | COMPONENT_CENTER,
 			       FALSE,
 			       x, y, width, height);
 	}
       
       if (image->overlay && draw_center)
-	theme_pixbuf_render_no_cairo (image->overlay,
-			     window, area, COMPONENT_ALL,
+	theme_pixbuf_render (image->overlay, cr, COMPONENT_ALL,
 			     TRUE, 
 			     x, y, width, height);
 
@@ -147,6 +138,45 @@ draw_simple_image(GtkStyle       *style,
     }
   else
     return FALSE;
+}
+
+static gboolean
+draw_simple_image_no_cairo(GtkStyle       *style,
+		  GdkWindow      *window,
+		  GdkRectangle   *area,
+		  GtkWidget      *widget,
+		  ThemeMatchData *match_data,
+		  gboolean        draw_center,
+		  gboolean        allow_setbg,
+		  gint            x,
+		  gint            y,
+		  gint            width,
+		  gint            height)
+{
+  gboolean result;
+  cairo_t *cr;
+
+  if ((width == -1) && (height == -1))
+    gdk_drawable_get_size(window, &width, &height);
+  else if (width == -1)
+    gdk_drawable_get_size(window, &width, NULL);
+  else if (height == -1)
+    gdk_drawable_get_size(window, NULL, &height);
+
+  cr = gdk_cairo_create (window);
+  if (area)
+    {
+      gdk_cairo_rectangle (cr, area);
+      cairo_clip (cr);
+    }
+
+  result = draw_simple_image (style, cr, widget, match_data,
+                              draw_center, allow_setbg,
+                              x, y, width, height);
+
+  cairo_destroy (cr);
+
+  return result;
 }
 
 static gboolean
@@ -417,7 +447,7 @@ draw_shadow(GtkStyle     *style,
   match_data.shadow = shadow;
   match_data.state = state;
 
-  if (!draw_simple_image (style, window, area, widget, &match_data, FALSE, FALSE,
+  if (!draw_simple_image_no_cairo (style, window, area, widget, &match_data, FALSE, FALSE,
 			  x, y, width, height))
     parent_class->draw_shadow (style, window, state, shadow, area, widget, detail,
 			       x, y, width, height);
@@ -517,7 +547,7 @@ draw_arrow (GtkStyle     *style,
       match_data.state = state;
       match_data.arrow_direction = arrow_direction;
       
-      if (draw_simple_image (style, window, area, widget, &match_data, TRUE, TRUE,
+      if (draw_simple_image_no_cairo (style, window, area, widget, &match_data, TRUE, TRUE,
 			     box_x, box_y, box_width, box_height))
 	{
 	  /* The theme included stepper images, we're done */
@@ -532,7 +562,7 @@ draw_arrow (GtkStyle     *style,
       match_data.shadow = shadow;
       match_data.state = state;
       
-      if (!draw_simple_image (style, window, area, widget, &match_data, TRUE, TRUE,
+      if (!draw_simple_image_no_cairo (style, window, area, widget, &match_data, TRUE, TRUE,
 			      box_x, box_y, box_width, box_height))
 	parent_class->draw_box (style, window, state, shadow, area, widget, detail,
 				box_x, box_y, box_width, box_height);
@@ -548,7 +578,7 @@ draw_arrow (GtkStyle     *style,
   match_data.state = state;
   match_data.arrow_direction = arrow_direction;
   
-  if (!draw_simple_image (style, window, area, widget, &match_data, TRUE, TRUE,
+  if (!draw_simple_image_no_cairo (style, window, area, widget, &match_data, TRUE, TRUE,
 			  x, y, width, height))
     parent_class->draw_arrow (style, window, state, shadow, area, widget, detail,
 			      arrow_direction, fill, x, y, width, height);
@@ -578,7 +608,7 @@ draw_diamond (GtkStyle     *style,
   match_data.shadow = shadow;
   match_data.state = state;
   
-  if (!draw_simple_image (style, window, area, widget, &match_data, TRUE, TRUE,
+  if (!draw_simple_image_no_cairo (style, window, area, widget, &match_data, TRUE, TRUE,
 			  x, y, width, height))
     parent_class->draw_diamond (style, window, state, shadow, area, widget, detail,
 				x, y, width, height);
@@ -615,7 +645,7 @@ draw_box (GtkStyle     *style,
   match_data.shadow = shadow;
   match_data.state = state;
 
-  if (!draw_simple_image (style, window, area, widget, &match_data, TRUE, TRUE,
+  if (!draw_simple_image_no_cairo (style, window, area, widget, &match_data, TRUE, TRUE,
 			  x, y, width, height)) {
     parent_class->draw_box (style, window, state, shadow, area, widget, detail,
 			    x, y, width, height);
@@ -646,7 +676,7 @@ draw_flat_box (GtkStyle     *style,
   match_data.shadow = shadow;
   match_data.state = state;
 
-  if (!draw_simple_image (style, window, area, widget, &match_data, TRUE, TRUE,
+  if (!draw_simple_image_no_cairo (style, window, area, widget, &match_data, TRUE, TRUE,
 			  x, y, width, height))
     parent_class->draw_flat_box (style, window, state, shadow, area, widget, detail,
 				 x, y, width, height);
@@ -676,7 +706,7 @@ draw_check (GtkStyle     *style,
   match_data.shadow = shadow;
   match_data.state = state;
   
-  if (!draw_simple_image (style, window, area, widget, &match_data, TRUE, TRUE,
+  if (!draw_simple_image_no_cairo (style, window, area, widget, &match_data, TRUE, TRUE,
 			  x, y, width, height))
     parent_class->draw_check (style, window, state, shadow, area, widget, detail,
 			      x, y, width, height);
@@ -706,7 +736,7 @@ draw_option (GtkStyle      *style,
   match_data.shadow = shadow;
   match_data.state = state;
   
-  if (!draw_simple_image (style, window, area, widget, &match_data, TRUE, TRUE,
+  if (!draw_simple_image_no_cairo (style, window, area, widget, &match_data, TRUE, TRUE,
 			  x, y, width, height))
     parent_class->draw_option (style, window, state, shadow, area, widget, detail,
 			       x, y, width, height);
@@ -736,7 +766,7 @@ draw_tab (GtkStyle     *style,
   match_data.shadow = shadow;
   match_data.state = state;
   
-  if (!draw_simple_image (style, window, area, widget, &match_data, TRUE, TRUE,
+  if (!draw_simple_image_no_cairo (style, window, area, widget, &match_data, TRUE, TRUE,
 			  x, y, width, height))
     parent_class->draw_tab (style, window, state, shadow, area, widget, detail,
 			    x, y, width, height);
@@ -834,7 +864,7 @@ draw_extension (GtkStyle       *style,
   match_data.state = state;
   match_data.gap_side = gap_side;
 
-  if (!draw_simple_image (style, window, area, widget, &match_data, TRUE, TRUE,
+  if (!draw_simple_image_no_cairo (style, window, area, widget, &match_data, TRUE, TRUE,
 			  x, y, width, height))
     parent_class->draw_extension (style, window, state, shadow, area, widget, detail,
 				  x, y, width, height, gap_side);
@@ -861,7 +891,7 @@ draw_focus (GtkStyle     *style,
   match_data.detail = (gchar *)detail;
   match_data.flags = 0;
   
-  if (!draw_simple_image (style, window, area, widget, &match_data, TRUE, FALSE,
+  if (!draw_simple_image_no_cairo (style, window, area, widget, &match_data, TRUE, FALSE,
 			  x, y, width, height))
     parent_class->draw_focus (style, window, state_type, area, widget, detail,
 			      x, y, width, height);
@@ -895,7 +925,7 @@ draw_slider (GtkStyle      *style,
   match_data.state = state;
   match_data.orientation = orientation;
 
-  if (!draw_simple_image (style, window, area, widget, &match_data, TRUE, TRUE,
+  if (!draw_simple_image_no_cairo (style, window, area, widget, &match_data, TRUE, TRUE,
 			  x, y, width, height))
     parent_class->draw_slider (style, window, state, shadow, area, widget, detail,
 			       x, y, width, height, orientation);
@@ -930,7 +960,7 @@ draw_handle (GtkStyle      *style,
   match_data.state = state;
   match_data.orientation = orientation;
 
-  if (!draw_simple_image (style, window, area, widget, &match_data, TRUE, TRUE,
+  if (!draw_simple_image_no_cairo (style, window, area, widget, &match_data, TRUE, TRUE,
 			  x, y, width, height))
     parent_class->draw_handle (style, window, state, shadow, area, widget, detail,
 			       x, y, width, height, orientation);
@@ -976,7 +1006,7 @@ draw_expander (GtkStyle      *style,
   match_data.state = state;
   match_data.expander_style = expander_style;
 
-  if (!draw_simple_image (style, window, area, widget, &match_data, TRUE, TRUE,
+  if (!draw_simple_image_no_cairo (style, window, area, widget, &match_data, TRUE, TRUE,
 			  x - radius, y - radius, expander_size, expander_size))
     parent_class->draw_expander (style, window, state, area, widget, detail,
 				 x, y, expander_style);
@@ -1007,7 +1037,7 @@ draw_resize_grip (GtkStyle      *style,
   match_data.state = state;
   match_data.window_edge = edge;
 
-  if (!draw_simple_image (style, window, area, widget, &match_data, TRUE, TRUE,
+  if (!draw_simple_image_no_cairo (style, window, area, widget, &match_data, TRUE, TRUE,
 			  x, y, width, height))
     parent_class->draw_resize_grip (style, window, state, area, widget, detail,
 				    edge, x, y, width, height);
