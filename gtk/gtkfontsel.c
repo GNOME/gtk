@@ -288,20 +288,23 @@ static void gtk_font_selection_get_property (GObject         *object,
 static gboolean
 list_row_activated (GtkWidget *widget)
 {
+  GtkWidget *default_widget, *focus_widget;
   GtkWindow *window;
   
   window = GTK_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (widget)));
   if (!gtk_widget_is_toplevel (GTK_WIDGET (window)))
     window = NULL;
-  
-  if (window
-      && widget != window->default_widget
-      && !(widget == window->focus_widget &&
-	   (!window->default_widget || !gtk_widget_get_sensitive (window->default_widget))))
+
+  if (window)
     {
-      gtk_window_activate_default (window);
+      default_widget = gtk_window_get_default_widget (window);
+      focus_widget = gtk_window_get_focus (window);
+
+      if (widget != default_widget &&
+          !(widget == focus_widget && (!default_widget || !gtk_widget_get_sensitive (default_widget))))
+        gtk_window_activate_default (window);
     }
-  
+
   return TRUE;
 }
 
