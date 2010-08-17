@@ -5176,6 +5176,7 @@ static void
 gtk_entry_real_activate (GtkEntry *entry)
 {
   GtkWindow *window;
+  GtkWidget *default_widget, *focus_widget;
   GtkWidget *toplevel;
   GtkWidget *widget;
 
@@ -5187,12 +5188,15 @@ gtk_entry_real_activate (GtkEntry *entry)
       if (GTK_IS_WINDOW (toplevel))
 	{
 	  window = GTK_WINDOW (toplevel);
-      
-	  if (window &&
-	      widget != window->default_widget &&
-	      !(widget == window->focus_widget &&
-		(!window->default_widget || !gtk_widget_get_sensitive (window->default_widget))))
-	    gtk_window_activate_default (window);
+
+	  if (window)
+            {
+              default_widget = gtk_window_get_default_widget (window);
+              focus_widget = gtk_window_get_focus (window);
+              if (widget != default_widget &&
+                  !(widget == focus_widget && (!default_widget || !gtk_widget_get_sensitive (default_widget))))
+	        gtk_window_activate_default (window);
+            }
 	}
     }
 }
