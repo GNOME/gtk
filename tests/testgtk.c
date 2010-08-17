@@ -7553,7 +7553,7 @@ window_state_callback (GtkWidget *widget,
   GtkWidget *label = data;
   gchar *msg;
 
-  msg = g_strconcat (GTK_WINDOW (widget)->title, ": ",
+  msg = g_strconcat (gtk_window_get_title (GTK_WINDOW (widget)), ": ",
                      (event->new_window_state & GDK_WINDOW_STATE_WITHDRAWN) ?
                      "withdrawn" : "not withdrawn", ", ",
                      (event->new_window_state & GDK_WINDOW_STATE_ICONIFIED) ?
