@@ -209,13 +209,9 @@ gtk_plug_class_init (GtkPlugClass *class)
 static void
 gtk_plug_init (GtkPlug *plug)
 {
-  GtkWindow *window = GTK_WINDOW (plug);
-
   plug->priv = G_TYPE_INSTANCE_GET_PRIVATE (plug,
                                             GTK_TYPE_PLUG,
                                             GtkPlugPrivate);
-
-  window->type = GTK_WINDOW_TOPLEVEL;
 }
 
 static void
@@ -254,9 +250,9 @@ gtk_plug_set_is_child (GtkPlug  *plug,
     }
   else
     {
-      if (GTK_WINDOW (plug)->focus_widget)
+      if (gtk_window_get_focus (GTK_WINDOW (plug)))
 	gtk_window_set_focus (GTK_WINDOW (plug), NULL);
-      if (GTK_WINDOW (plug)->default_widget)
+      if (gtk_window_get_default_widget (GTK_WINDOW (plug)))
 	gtk_window_set_default (GTK_WINDOW (plug), NULL);
 
       priv->modality_group = gtk_window_group_new ();
@@ -666,8 +662,8 @@ gtk_plug_realize (GtkWidget *widget)
 			    GDK_STRUCTURE_MASK);
 
   attributes_mask = GDK_WA_VISUAL | GDK_WA_COLORMAP;
-  attributes_mask |= (window->title ? GDK_WA_TITLE : 0);
-  attributes_mask |= (window->wmclass_name ? GDK_WA_WMCLASS : 0);
+  attributes_mask |= (title ? GDK_WA_TITLE : 0);
+  attributes_mask |= (g_strdup (g_get_prgname ()) ? GDK_WA_WMCLASS : 0);
 
   if (gtk_widget_is_toplevel (widget))
     {
@@ -862,7 +858,7 @@ gtk_plug_set_focus (GtkWindow *window,
   /* Ask for focus from embedder
    */
 
-  if (focus && !window->has_toplevel_focus)
+  if (focus && !gtk_window_has_toplevel_focus (window))
     _gtk_plug_windowing_set_focus (plug);
 }
 
@@ -1014,13 +1010,16 @@ gtk_plug_focus (GtkWidget        *widget,
    */
   if (old_focus_child)
     {
+      GtkWidget *focus_widget;
+
       if (gtk_widget_child_focus (old_focus_child, direction))
 	return TRUE;
 
-      if (window->focus_widget)
+      focus_widget = gtk_window_get_focus (window);
+      if (focus_widget)
 	{
 	  /* Wrapped off the end, clear the focus setting for the toplevel */
-	  parent = gtk_widget_get_parent (window->focus_widget);
+	  parent = gtk_widget_get_parent (focus_widget);
 	  while (parent)
 	    {
 	      gtk_container_set_focus_child (GTK_CONTAINER (parent), NULL);
@@ -1111,11 +1110,13 @@ _gtk_plug_focus_first_last (GtkPlug          *plug,
 			    GtkDirectionType  direction)
 {
   GtkWindow *window = GTK_WINDOW (plug);
+  GtkWidget *focus_widget;
   GtkWidget *parent;
 
-  if (window->focus_widget)
+  focus_widget = gtk_window_get_focus (window);
+  if (focus_widget)
     {
-      parent = gtk_widget_get_parent (window->focus_widget);
+      parent = gtk_widget_get_parent (focus_widget);
       while (parent)
 	{
 	  gtk_container_set_focus_child (GTK_CONTAINER (parent), NULL);
