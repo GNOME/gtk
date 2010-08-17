@@ -128,6 +128,14 @@ static void       gtk_cell_view_get_width                      (GtkSizeRequest  
 static void       gtk_cell_view_get_height                     (GtkSizeRequest        *widget,
 								gint                  *minimum_size,
 								gint                  *natural_size);
+static void       gtk_cell_view_get_width_for_height           (GtkSizeRequest        *widget,
+								gint                   avail_size,
+								gint                  *minimum_size,
+								gint                  *natural_size);
+static void       gtk_cell_view_get_height_for_width           (GtkSizeRequest        *widget,
+								gint                   avail_size,
+								gint                  *minimum_size,
+								gint                  *natural_size);
 
 static GtkBuildableIface *parent_buildable_iface;
 
@@ -329,20 +337,27 @@ gtk_cell_view_size_allocate (GtkWidget     *widget,
                              GtkAllocation *allocation)
 {
   GtkCellView *cellview;
-  GList *i;
-  gint nexpand_cells = 0;
-  gint requested_width = 0;
-  gint natural_width = 0;
-  gint available, natural, extra;
+  GtkRequestedSize *sizes;
+  GArray           *array;
+  GList            *list;
+  gint              nexpand_cells = 0;
+  gint              avail_width = 0;
+  gint              extra_per_cell, extra_extra, i;
+  gboolean          first_cell = TRUE;
 
   widget->allocation = *allocation;
 
   cellview = GTK_CELL_VIEW (widget);
 
+  avail_width = allocation->width;
+
+  array = g_array_new (0, TRUE, sizeof (GtkRequestedSize));
+
   /* checking how much extra space we have */
-  for (i = cellview->priv->cell_list; i; i = i->next)
+  for (list = cellview->priv->cell_list; list; list = list->next)
     {
-      GtkCellViewCellInfo *info = (GtkCellViewCellInfo *)i->data;
+      GtkCellViewCellInfo *info = (GtkCellViewCellInfo *)list->data;
+      GtkRequestedSize requested;
 
       if (!gtk_cell_renderer_get_visible (info->cell))
         continue;
@@ -350,41 +365,54 @@ gtk_cell_view_size_allocate (GtkWidget     *widget,
       if (info->expand)
         nexpand_cells++;
 
-      requested_width += info->requested_width;
-      natural_width += info->natural_width - info->requested_width;
+      requested.data = info;
+      requested.minimum_size = info->requested_width;
+      requested.natural_size = info->natural_width;
+      g_array_append_val (array, requested);
+
+      if (!first_cell)
+	avail_width -= cellview->priv->spacing;
+
+      avail_width -= requested.minimum_size;
+
+      first_cell = FALSE;
     }
 
-  available = MAX (0, widget->allocation.width - requested_width);
-  natural = MIN (available, natural_width);
-  available -= natural;
+  sizes       = (GtkRequestedSize *)array->data;
+  avail_width = gtk_distribute_natural_allocation (MAX (0, avail_width), array->len, sizes);
 
+  /* Deal with any expand space... */
   if (nexpand_cells > 0)
-    extra = available / nexpand_cells;
-  else
-    extra = 0;
-
-  for (i = cellview->priv->cell_list; i; i = i->next)
     {
-      GtkCellViewCellInfo *info = (GtkCellViewCellInfo *)i->data;
+      extra_per_cell = avail_width / nexpand_cells;
+      extra_extra    = avail_width % nexpand_cells;
+    }
+  else
+    /* Everything just left-aligned if no cells expand */
+    extra_per_cell = extra_extra = 0;
+
+  for (i = 0, list = cellview->priv->cell_list; list; list = list->next)
+    {
+      GtkCellViewCellInfo *info = (GtkCellViewCellInfo *)list->data;
 
       if (!gtk_cell_renderer_get_visible (info->cell))
         continue;
 
-      info->real_width = info->requested_width;
-
-      if (natural_width > 0)
-          info->real_width += natural * (info->natural_width - info->requested_width) / natural_width;
+      info->real_width = sizes[i].minimum_size;
 
       if (info->expand)
         {
-          if (nexpand_cells == 1)
-            info->real_width += available;
-          else
-            info->real_width += extra;
+	  info->real_width += extra_per_cell;
 
-         nexpand_cells -= 1;
-         available -= extra;
-       }
+	  if (extra_extra)
+	    {
+	      info->real_width++;
+	      extra_extra--;
+	    }
+	}
+      
+      /* increment index into sizes for visible children */
+      i++;
     }
 }
 
@@ -392,12 +420,13 @@ static gboolean
 gtk_cell_view_expose (GtkWidget      *widget,
                       GdkEventExpose *event)
 {
-  GList *i;
+  GList *list;
   GtkCellView *cellview;
   GdkRectangle area;
   GtkCellRendererState state;
   gboolean rtl = (gtk_widget_get_direction(widget) == GTK_TEXT_DIR_RTL);
-
+  GtkPackType packing;
+  
   cellview = GTK_CELL_VIEW (widget);
 
   if (!gtk_widget_is_drawable (widget))
@@ -428,7 +457,6 @@ gtk_cell_view_expose (GtkWidget      *widget,
   area = widget->allocation;
 
   /* we draw on our very own window, initialize x and y to zero */
-  area.x = widget->allocation.x + (rtl ? widget->allocation.width : 0); 
   area.y = widget->allocation.y;
 
   if (gtk_widget_get_state (widget) == GTK_STATE_PRELIGHT)
@@ -438,55 +466,44 @@ gtk_cell_view_expose (GtkWidget      *widget,
   else
     state = 0;
       
-  /* PACK_START */
-  for (i = cellview->priv->cell_list; i; i = i->next)
+  for (packing = GTK_PACK_START; packing <= GTK_PACK_END; ++packing)
     {
-      GtkCellViewCellInfo *info = (GtkCellViewCellInfo *)i->data;
+      if (packing == GTK_PACK_START)
+	area.x = widget->allocation.x + (rtl ? widget->allocation.width : 0); 
+      else
+	area.x = rtl ? widget->allocation.x : (widget->allocation.x + widget->allocation.width);  
 
-      if (info->pack == GTK_PACK_END)
-        continue;
+      for (list = cellview->priv->cell_list; list; list = list->next)
+	{
+	  GtkCellViewCellInfo *info = (GtkCellViewCellInfo *)list->data;
 
-      if (!gtk_cell_renderer_get_visible (info->cell))
-        continue;
+	  if (info->pack != packing)
+	    continue;
 
-      area.width = info->real_width;
-      if (rtl)                                             
-         area.x -= area.width;
+	  if (!gtk_cell_renderer_get_visible (info->cell))
+	    continue;
 
-      gtk_cell_renderer_render (info->cell,
-                                event->window,
-                                widget,
-                                /* FIXME! */
-                                &area, &area, &event->area, state);
+	  area.width = info->real_width;
 
-      if (!rtl)                                           
-         area.x += info->real_width;
-    }
+	  if ((packing == GTK_PACK_START && rtl) ||
+	      (packing == GTK_PACK_END && !rtl))
+	    area.x -= area.width;
 
-   area.x = rtl ? widget->allocation.x : (widget->allocation.x + widget->allocation.width);  
+	  gtk_cell_renderer_render (info->cell,
+				    event->window,
+				    widget,
+				    /* FIXME! */
+				    &area, &area, &event->area, state);
 
-  /* PACK_END */
-  for (i = cellview->priv->cell_list; i; i = i->next)
-    {
-      GtkCellViewCellInfo *info = (GtkCellViewCellInfo *)i->data;
-
-      if (info->pack == GTK_PACK_START)
-        continue;
-
-      if (!gtk_cell_renderer_get_visible (info->cell))
-        continue;
-
-      area.width = info->real_width;
-      if (!rtl)
-         area.x -= area.width;   
-
-      gtk_cell_renderer_render (info->cell,
-                                widget->window,
-                                widget,
-                                /* FIXME ! */
-                                &area, &area, &event->area, state);
-      if (rtl)
-         area.x += info->real_width;
+	  if ((packing == GTK_PACK_START && !rtl) ||
+	      (packing == GTK_PACK_END && rtl))
+	    {
+	      area.x += area.width;
+	      area.x += cellview->priv->spacing;
+	    }
+	  else
+	    area.x -= cellview->priv->spacing;
+	}
     }
 
   return FALSE;
@@ -980,7 +997,7 @@ gtk_cell_view_get_displayed_row (GtkCellView *cell_view)
  * Since: 2.6
  * 
  * Deprecated: 3.0: Use gtk_cell_view_get_desired_width_of_row() and
- * gtk_cell_view_get_desired_height_of_row() instead.
+ * gtk_cell_view_get_desired_height_for_width_of_row() instead.
  */
 gboolean
 gtk_cell_view_get_size_of_row (GtkCellView    *cell_view,
@@ -992,8 +1009,9 @@ gtk_cell_view_get_size_of_row (GtkCellView    *cell_view,
   g_return_val_if_fail (GTK_IS_CELL_VIEW (cell_view), FALSE);
   g_return_val_if_fail (path != NULL, FALSE);
 
+  /* Return the minimum height for the minimum width */
   gtk_cell_view_get_desired_width_of_row (cell_view, path, &req.width, NULL);
-  gtk_cell_view_get_desired_height_of_row (cell_view, path, &req.height, NULL);
+  gtk_cell_view_get_desired_height_for_width_of_row (cell_view, path, req.width, &req.height, NULL);
 
   if (requisition)
     *requisition = req;
@@ -1001,35 +1019,6 @@ gtk_cell_view_get_size_of_row (GtkCellView    *cell_view,
   return TRUE;
 }
 
-
-
-static void
-gtk_cell_view_get_desired_size_of_row (GtkCellView     *cell_view,
-				       GtkTreePath     *path,
-				       GtkOrientation   orientation,
-				       gint            *minimum_size,
-				       gint            *natural_size)
-{
-  GtkTreeRowReference *tmp;
-
-  tmp = cell_view->priv->displayed_row;
-  cell_view->priv->displayed_row =
-    gtk_tree_row_reference_new (cell_view->priv->model, path);
-
-  if (orientation == GTK_ORIENTATION_HORIZONTAL)
-    gtk_cell_view_get_width (GTK_SIZE_REQUEST (cell_view), minimum_size, natural_size);
-  else
-    gtk_cell_view_get_height (GTK_SIZE_REQUEST (cell_view), minimum_size, natural_size);
-
-  gtk_tree_row_reference_free (cell_view->priv->displayed_row);
-  cell_view->priv->displayed_row = tmp;
-
-  /* Restore active size */
-  if (orientation == GTK_ORIENTATION_HORIZONTAL)
-    gtk_cell_view_get_width (GTK_SIZE_REQUEST (cell_view), NULL, NULL);
-  else
-    gtk_cell_view_get_height (GTK_SIZE_REQUEST (cell_view), NULL, NULL);
-}
 
 /**
  * gtk_cell_view_get_desired_width_of_row:
@@ -1049,37 +1038,65 @@ gtk_cell_view_get_desired_width_of_row (GtkCellView     *cell_view,
 					gint            *minimum_size,
 					gint            *natural_size)
 {
+  GtkTreeRowReference *tmp;
+
   g_return_if_fail (GTK_IS_CELL_VIEW (cell_view));
   g_return_if_fail (path != NULL);
   g_return_if_fail (minimum_size != NULL || natural_size != NULL);
 
-  gtk_cell_view_get_desired_size_of_row (cell_view, path, GTK_ORIENTATION_HORIZONTAL, minimum_size, natural_size);
+  tmp = cell_view->priv->displayed_row;
+  cell_view->priv->displayed_row =
+    gtk_tree_row_reference_new (cell_view->priv->model, path);
+
+  gtk_cell_view_get_width (GTK_SIZE_REQUEST (cell_view), minimum_size, natural_size);
+
+  gtk_tree_row_reference_free (cell_view->priv->displayed_row);
+  cell_view->priv->displayed_row = tmp;
+
+  /* Restore active size (this will restore the cellrenderer info->width/requested_width's) */
+  gtk_cell_view_get_width (GTK_SIZE_REQUEST (cell_view), NULL, NULL);
 }
 
 
 /**
- * gtk_cell_view_get_desired_height_of_row:
+ * gtk_cell_view_get_desired_height_for_width_of_row:
  * @cell_view: a #GtkCellView
  * @path: a #GtkTreePath 
- * @minimum_size: location to store the minimum size 
- * @natural_size: location to store the natural size 
+ * @avail_size: available width
+ * @minimum_size: location to store the minimum height 
+ * @natural_size: location to store the natural height
  *
  * Sets @minimum_size and @natural_size to the height desired by @cell_view 
- * to display the model row pointed to by @path.
+ * if it were allocated a width of @avail_size to display the model row 
+ * pointed to by @path.
  * 
  * Since: 3.0
  */
 void
-gtk_cell_view_get_desired_height_of_row (GtkCellView     *cell_view,
-					 GtkTreePath     *path,
-					 gint            *minimum_size,
-					 gint            *natural_size)
+gtk_cell_view_get_desired_height_for_width_of_row (GtkCellView     *cell_view,
+						   GtkTreePath     *path,
+						   gint             avail_size,
+						   gint            *minimum_size,
+						   gint            *natural_size)
 {
+  GtkTreeRowReference *tmp;
+
   g_return_if_fail (GTK_IS_CELL_VIEW (cell_view));
   g_return_if_fail (path != NULL);
   g_return_if_fail (minimum_size != NULL || natural_size != NULL);
 
-  gtk_cell_view_get_desired_size_of_row (cell_view, path, GTK_ORIENTATION_VERTICAL, minimum_size, natural_size);
+  tmp = cell_view->priv->displayed_row;
+  cell_view->priv->displayed_row =
+    gtk_tree_row_reference_new (cell_view->priv->model, path);
+
+  /* Then get the collective height_for_width based on the cached values */
+  gtk_cell_view_get_height_for_width (GTK_SIZE_REQUEST (cell_view), avail_size, minimum_size, natural_size);
+
+  gtk_tree_row_reference_free (cell_view->priv->displayed_row);
+  cell_view->priv->displayed_row = tmp;
+
+  /* Restore active size (this will restore the cellrenderer info->width/requested_width's) */
+  gtk_cell_view_get_width (GTK_SIZE_REQUEST (cell_view), NULL, NULL);
 }
 
 /**
@@ -1174,17 +1191,18 @@ gtk_cell_view_buildable_custom_tag_end (GtkBuildable *buildable,
 static void
 gtk_cell_view_size_request_init (GtkSizeRequestIface *iface)
 {
-  iface->get_width  = gtk_cell_view_get_width;
-  iface->get_height = gtk_cell_view_get_height;
+  iface->get_width            = gtk_cell_view_get_width;
+  iface->get_height           = gtk_cell_view_get_height;
+  iface->get_width_for_height = gtk_cell_view_get_width_for_height;
+  iface->get_height_for_width = gtk_cell_view_get_height_for_width;
 }
 
 static void
-gtk_cell_view_get_size (GtkSizeRequest *widget,
-			GtkOrientation  orientation,
-			gint           *minimum_size,
-			gint           *natural_size)
+gtk_cell_view_get_width  (GtkSizeRequest      *widget,
+			  gint                *minimum_size,
+			  gint                *natural_size)
 {
-  GList *i;
+  GList *list;
   gint cell_min, cell_nat;
   gboolean first_cell = TRUE;
   GtkCellView *cellview = GTK_CELL_VIEW (widget);
@@ -1195,37 +1213,28 @@ gtk_cell_view_get_size (GtkSizeRequest *widget,
   if (cellview->priv->displayed_row)
     gtk_cell_view_set_cell_data (cellview);
 
-  for (i = cellview->priv->cell_list; i; i = i->next)
+  for (list = cellview->priv->cell_list; list; list = list->next)
     {
-      GtkCellViewCellInfo *info = (GtkCellViewCellInfo *)i->data;
+      GtkCellViewCellInfo *info = (GtkCellViewCellInfo *)list->data;
 
       if (gtk_cell_renderer_get_visible (info->cell))
         {
 	  
-	  if (!first_cell && orientation == GTK_ORIENTATION_HORIZONTAL)
+	  if (!first_cell)
 	    {
 	      minimum += cellview->priv->spacing;
 	      natural += cellview->priv->spacing;
 	    }
 
-	  if (orientation == GTK_ORIENTATION_HORIZONTAL)
-	    {
-	      gtk_cell_size_request_get_width (GTK_CELL_SIZE_REQUEST (info->cell),
-					       GTK_WIDGET (cellview), &cell_min, &cell_nat);
+	  gtk_cell_size_request_get_width (GTK_CELL_SIZE_REQUEST (info->cell),
+					   GTK_WIDGET (cellview), &cell_min, &cell_nat);
+	  
+	  info->requested_width = cell_min;
+	  info->natural_width   = cell_nat;
+	  
+	  minimum += info->requested_width;
+	  natural += info->natural_width;
 
-	      info->requested_width = cell_min;
-	      info->natural_width   = cell_nat;
-
-	      minimum += info->requested_width;
-	      natural += info->natural_width;
-	    }
-	  else
-	    {
-	      gtk_cell_size_request_get_height (GTK_CELL_SIZE_REQUEST (info->cell),
-						GTK_WIDGET (cellview), &cell_min, &cell_nat);
-	      minimum = MAX (minimum, cell_min);
-	      natural = MAX (natural, cell_nat);
-	    }
 	  first_cell = FALSE;
         }
     }
@@ -1237,18 +1246,134 @@ gtk_cell_view_get_size (GtkSizeRequest *widget,
     *natural_size = natural;
 }
 
-static void
-gtk_cell_view_get_width  (GtkSizeRequest      *widget,
-			  gint                *minimum_size,
-			  gint                *natural_size)
-{
-  gtk_cell_view_get_size (widget, GTK_ORIENTATION_HORIZONTAL, minimum_size, natural_size);
-}
-
 static void       
 gtk_cell_view_get_height (GtkSizeRequest      *widget,
 			  gint                *minimum_size,
 			  gint                *natural_size)
 {
-  gtk_cell_view_get_size (widget, GTK_ORIENTATION_VERTICAL, minimum_size, natural_size);
+  gint minimum_width;
+
+  /* CellViews only need to respond to height-for-width mode (cellview is pretty much
+   * an implementation detail of GtkComboBox) */
+  gtk_cell_view_get_width (widget, &minimum_width, NULL);
+  gtk_cell_view_get_height_for_width (widget, minimum_width, minimum_size, natural_size);
+}
+
+static void       
+gtk_cell_view_get_width_for_height (GtkSizeRequest      *widget,
+				    gint                 for_size,
+				    gint                *minimum_size,
+				    gint                *natural_size)
+{
+  /* CellViews only need to respond to height-for-width mode (cellview is pretty much
+   * an implementation detail of GtkComboBox) */
+  gtk_cell_view_get_width (widget, minimum_size, natural_size);
+}
+
+static void       
+gtk_cell_view_get_height_for_width (GtkSizeRequest      *widget,
+				    gint                 for_size,
+				    gint                *minimum_size,
+				    gint                *natural_size)
+{
+  GtkCellView      *cellview = GTK_CELL_VIEW (widget);
+  GList            *list;
+  GtkRequestedSize *sizes;
+  GArray           *array;
+  gint              minimum, natural, avail_size;
+  gboolean          first_cell = TRUE;
+  gint              n_expand_cells = 0;
+  gint              extra_per_cell, extra_extra, i;
+
+  minimum = natural = 0;
+  avail_size = for_size;
+
+  array = g_array_new (0, TRUE, sizeof (GtkRequestedSize));
+
+  if (cellview->priv->displayed_row)
+    gtk_cell_view_set_cell_data (cellview);
+
+  /* First allocate the right width to all cells */
+  for (list = cellview->priv->cell_list; list; list = list->next)
+    {
+      GtkCellViewCellInfo *info = (GtkCellViewCellInfo *)list->data;
+
+      if (gtk_cell_renderer_get_visible (info->cell))
+        {
+	  GtkRequestedSize requested;
+
+	  gtk_cell_size_request_get_width (GTK_CELL_SIZE_REQUEST (info->cell),
+					   GTK_WIDGET (cellview), 
+					   &requested.minimum_size, 
+					   &requested.natural_size);
+
+	  requested.data = info;
+	  g_array_append_val (array, requested);
+
+	  avail_size -= requested.minimum_size;
+
+	  if (!first_cell)
+	    avail_size -= cellview->priv->spacing;
+
+	  first_cell = FALSE;
+
+	  if (info->expand)
+	    n_expand_cells++;
+        }
+    }
+
+  sizes      = (GtkRequestedSize *)array->data;
+  avail_size = gtk_distribute_natural_allocation (MAX (0, avail_size), array->len, sizes);
+
+  /* Deal with any expand space... */
+  if (n_expand_cells > 0)
+    {
+      extra_per_cell = avail_size / n_expand_cells;
+      extra_extra    = avail_size % n_expand_cells;
+    }
+  else
+    /* Everything just left-aligned if no cells expand */
+    extra_per_cell = extra_extra = 0;
+
+  /* Now get the height for the real width of each cell */
+  for (i = 0, list = cellview->priv->cell_list; list; list = list->next)
+    {
+      GtkCellViewCellInfo *info = (GtkCellViewCellInfo *)list->data;
+      gint cell_minimum, cell_natural;
+
+      if (gtk_cell_renderer_get_visible (info->cell))
+        {
+	  gint cell_width = sizes[i].minimum_size;
+
+	  g_assert (sizes[i].data == info);
+
+	  if (info->expand)
+	    {
+	      cell_width += extra_per_cell;
+	      if (extra_extra)
+		{
+		  cell_width++;
+		  extra_extra--;
+		}
+	    }
+
+	  /* Get the height for the real width of this cell */
+	  gtk_cell_size_request_get_height_for_width (GTK_CELL_SIZE_REQUEST (info->cell),
+						      GTK_WIDGET (widget),
+						      cell_width, &cell_minimum, &cell_natural);
+
+	  minimum = MAX (minimum, cell_minimum);
+	  natural = MAX (natural, cell_natural);
+
+	  /* increment sizes[] index for visible cells */
+	  i++;
+        }
+    }
+
+  g_array_free (array, TRUE);
+
+  if (minimum_size)
+    *minimum_size = minimum;
+  if (natural_size)
+    *natural_size = natural;
 }
