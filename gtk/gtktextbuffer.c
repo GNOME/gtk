@@ -897,7 +897,7 @@ gtk_text_buffer_emit_insert (GtkTextBuffer *buffer,
  * gtk_text_buffer_insert:
  * @buffer: a #GtkTextBuffer
  * @iter: a position in the buffer
- * @text: (array length=len) (element-type uint8): text in UTF-8 format
+ * @text: text in UTF-8 format
  * @len: length of text in bytes, or -1
  *
  * Inserts @len bytes of @text at position @iter.  If @len is -1,
@@ -925,7 +925,7 @@ gtk_text_buffer_insert (GtkTextBuffer *buffer,
 /**
  * gtk_text_buffer_insert_at_cursor:
  * @buffer: a #GtkTextBuffer
- * @text: (array length=len) (element-type uint8): text in UTF-8 format
+ * @text: text in UTF-8 format
  * @len: length of text, in bytes
  *
  * Simply calls gtk_text_buffer_insert(), using the current
