@@ -352,8 +352,7 @@ replicate_cols (GdkPixbuf    *src,
 static void
 pixbuf_render (GdkPixbuf    *src,
 	       guint         hints,
-	       GdkWindow    *window,
-	       GdkRectangle *clip_rect,
+               cairo_t      *cr,
 	       gint          src_x,
 	       gint          src_y,
 	       gint          src_width,
@@ -380,12 +379,6 @@ pixbuf_render (GdkPixbuf    *src,
 
   if (hints & THEME_MISSING)
     return;
-
-  if (clip_rect)
-    {
-      if (!gdk_rectangle_intersect (clip_rect, &rect, &rect))
-	return;
-    }
 
   if (dest_width == src_width && dest_height == src_height)
     {
@@ -471,9 +464,6 @@ pixbuf_render (GdkPixbuf    *src,
 
   if (tmp_pixbuf)
     {
-      cairo_t *cr;
-      
-      cr = gdk_cairo_create (window);
       gdk_cairo_set_source_pixbuf (cr, 
                                    tmp_pixbuf,
                                    -x_offset + rect.x, 
@@ -481,7 +471,6 @@ pixbuf_render (GdkPixbuf    *src,
       gdk_cairo_rectangle (cr, &rect);
       cairo_fill (cr);
 
-      cairo_destroy (cr);
       g_object_unref (tmp_pixbuf);
     }
 }
@@ -727,9 +716,33 @@ theme_pixbuf_get_pixbuf (ThemePixbuf *theme_pb)
 }
 
 void
+theme_pixbuf_render_no_cairo (ThemePixbuf  *theme_pb,
+                              GdkWindow    *window,
+                              GdkRectangle *clip_rect,
+                              guint         component_mask,
+                              gboolean      center,
+                              gint          x,
+                              gint          y,
+                              gint          width,
+                              gint          height)
+{
+  cairo_t *cr;
+
+  cr = gdk_cairo_create (window);
+  if (clip_rect)
+    {
+      gdk_cairo_rectangle (cr, clip_rect);
+      cairo_clip (cr);
+    }
+
+  theme_pixbuf_render (theme_pb, cr, 
+                       component_mask, center,
+                       x, y, width, height);
+}
+
+void
 theme_pixbuf_render (ThemePixbuf  *theme_pb,
-		     GdkWindow    *window,
-		     GdkRectangle *clip_rect,
+                     cairo_t      *cr,
 		     guint         component_mask,
 		     gboolean      center,
 		     gint          x,
@@ -785,7 +798,7 @@ theme_pixbuf_render (ThemePixbuf  *theme_pb,
 
 
 #define RENDER_COMPONENT(X1,X2,Y1,Y2)					   \
-        pixbuf_render (pixbuf, theme_pb->hints[Y1][X1], window, clip_rect, \
+        pixbuf_render (pixbuf, theme_pb->hints[Y1][X1], cr,                \
 	 	       src_x[X1], src_y[Y1],				   \
 		       src_x[X2] - src_x[X1], src_y[Y2] - src_y[Y1],	   \
 		       dest_x[X1], dest_y[Y1],				   \
@@ -825,7 +838,7 @@ theme_pixbuf_render (ThemePixbuf  *theme_pb,
 	  x += (width - pixbuf_width) / 2;
 	  y += (height - pixbuf_height) / 2;
 	  
-	  pixbuf_render (pixbuf, 0, window, clip_rect,
+	  pixbuf_render (pixbuf, 0, cr,
 			 0, 0,
 			 pixbuf_width, pixbuf_height,
 			 x, y,
@@ -833,19 +846,12 @@ theme_pixbuf_render (ThemePixbuf  *theme_pb,
 	}
       else
 	{
-          cairo_t *cr = gdk_cairo_create (window);
-
           gdk_cairo_set_source_pixbuf (cr, pixbuf, 0, 0);
           cairo_pattern_set_extend (cairo_get_source (cr), CAIRO_EXTEND_REPEAT);
 
-	  if (clip_rect)
-	    gdk_cairo_rectangle (cr, clip_rect);
-	  else
-	    cairo_rectangle (cr, x, y, width, height);
+	  cairo_rectangle (cr, x, y, width, height);
 	  
           cairo_fill (cr);
-
-          cairo_destroy (cr);
 	}
     }
 }
