@@ -8671,6 +8671,7 @@ update_cursor (GdkDisplay *display,
   GdkWindowImplIface *impl_iface;
   GdkPointerWindowInfo *pointer_info;
   GdkDeviceGrabInfo *grab;
+  GdkCursor *cursor;
 
   pointer_info = _gdk_display_get_pointer_info (display, device);
   pointer_window = pointer_info->window_under_pointer;
@@ -8699,12 +8700,16 @@ update_cursor (GdkDisplay *display,
 	 parent->window_type != GDK_WINDOW_ROOT)
     cursor_window = parent;
 
+  cursor = g_hash_table_lookup (cursor_window->device_cursor, device);
+
+  if (!cursor)
+    cursor = cursor_window->cursor;
+
   /* Set all cursors on toplevel, otherwise its tricky to keep track of
    * which native window has what cursor set. */
   toplevel = (GdkWindowObject *) get_event_toplevel (pointer_window);
   impl_iface = GDK_WINDOW_IMPL_GET_IFACE (toplevel->impl);
-  impl_iface->set_device_cursor ((GdkWindow *) toplevel, device,
-                                 cursor_window->cursor);
+  impl_iface->set_device_cursor ((GdkWindow *) toplevel, device, cursor);
 }
 
 static gboolean
