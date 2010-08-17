@@ -500,7 +500,7 @@ gtk_box_size_allocate (GtkWidget     *widget,
   else
     {
       /* Bring children up to size first */
-      size = gtk_distribute_natural_allocation (size, nvis_children, sizes);
+      size = gtk_distribute_natural_allocation (MAX (0, size), nvis_children, sizes);
 
       /* Calculate space which hasn't distributed yet,
        * and is available for expanding children.
@@ -1004,7 +1004,7 @@ gtk_box_compute_size_for_opposing_orientation (GtkBox *box,
   else
     {
       /* Bring children up to size first */
-      size = gtk_distribute_natural_allocation (size, nvis_children, sizes);
+      size = gtk_distribute_natural_allocation (MAX (0, size), nvis_children, sizes);
 
       /* Calculate space which hasn't distributed yet,
        * and is available for expanding children.
