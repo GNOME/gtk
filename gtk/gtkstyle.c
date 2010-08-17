@@ -245,10 +245,9 @@ static void gtk_default_draw_focus      (GtkStyle        *style,
 					 gint             width,
 					 gint             height);
 static void gtk_default_draw_slider     (GtkStyle        *style,
-					 GdkWindow       *window,
+					 cairo_t         *cr,
 					 GtkStateType     state_type,
 					 GtkShadowType    shadow_type,
-					 GdkRectangle    *area,
 					 GtkWidget       *widget,
 					 const gchar     *detail,
 					 gint             x,
@@ -3679,10 +3678,9 @@ gtk_default_draw_focus (GtkStyle      *style,
 
 static void 
 gtk_default_draw_slider (GtkStyle      *style,
-                         GdkWindow     *window,
+                         cairo_t       *cr,
                          GtkStateType   state_type,
                          GtkShadowType  shadow_type,
-                         GdkRectangle  *area,
                          GtkWidget     *widget,
                          const gchar   *detail,
                          gint           x,
@@ -3691,23 +3689,21 @@ gtk_default_draw_slider (GtkStyle      *style,
                          gint           height,
                          GtkOrientation orientation)
 {
-  sanitize_size (window, &width, &height);
-  
-  gtk_paint_box (style, window, state_type, shadow_type,
-                 area, widget, detail, x, y, width, height);
+  gtk_cairo_paint_box (style, cr, state_type, shadow_type,
+                       widget, detail, x, y, width, height);
 
   if (detail &&
       (strcmp ("hscale", detail) == 0 ||
        strcmp ("vscale", detail) == 0))
     {
       if (orientation == GTK_ORIENTATION_HORIZONTAL)
-        gtk_paint_vline (style, window, state_type, area, widget, detail, 
-                         y + style->ythickness, 
-                         y + height - style->ythickness - 1, x + width / 2);
+        gtk_cairo_paint_vline (style, cr, state_type, widget, detail, 
+                               y + style->ythickness, 
+                               y + height - style->ythickness - 1, x + width / 2);
       else
-        gtk_paint_hline (style, window, state_type, area, widget, detail, 
-                         x + style->xthickness, 
-                         x + width - style->xthickness - 1, y + height / 2);
+        gtk_cairo_paint_hline (style, cr, state_type, widget, detail, 
+                               x + style->xthickness, 
+                               x + width - style->xthickness - 1, y + height / 2);
     }
 }
 
@@ -5900,13 +5896,66 @@ gtk_paint_slider (GtkStyle           *style,
                   gint                height,
                   GtkOrientation      orientation)
 {
+  cairo_t *cr;
+
   g_return_if_fail (GTK_IS_STYLE (style));
   g_return_if_fail (GTK_STYLE_GET_CLASS (style)->draw_slider != NULL);
   g_return_if_fail (style->depth == gdk_drawable_get_depth (window));
 
-  GTK_STYLE_GET_CLASS (style)->draw_slider (style, window, state_type, shadow_type,
-                                            (GdkRectangle *) area, widget, detail,
+  sanitize_size (window, &width, &height);
+
+  cr = gtk_style_cairo_create (window, area);
+
+  GTK_STYLE_GET_CLASS (style)->draw_slider (style, cr, state_type, shadow_type,
+                                            widget, detail,
                                             x, y, width, height, orientation);
+
+  cairo_destroy (cr);
+}
+
+/**
+ * gtk_cairo_paint_slider:
+ * @style: a #GtkStyle
+ * @cr: a #cairo_t
+ * @state_type: a state
+ * @shadow_type: a shadow
+ * @widget: (allow-none): the widget
+ * @detail: (allow-none): a style detail
+ * @x: the x origin of the rectangle in which to draw a slider
+ * @y: the y origin of the rectangle in which to draw a slider
+ * @width: the width of the rectangle in which to draw a slider
+ * @height: the height of the rectangle in which to draw a slider
+ * @orientation: the orientation to be used
+ *
+ * Draws a slider in the given rectangle on @cr using the
+ * given style and orientation.
+ **/
+void
+gtk_cairo_paint_slider (GtkStyle           *style,
+                        cairo_t            *cr,
+                        GtkStateType        state_type,
+                        GtkShadowType       shadow_type,
+                        GtkWidget          *widget,
+                        const gchar        *detail,
+                        gint                x,
+                        gint                y,
+                        gint                width,
+                        gint                height,
+                        GtkOrientation      orientation)
+{
+  g_return_if_fail (GTK_IS_STYLE (style));
+  g_return_if_fail (GTK_STYLE_GET_CLASS (style)->draw_slider != NULL);
+  g_return_if_fail (cr != NULL);
+  g_return_if_fail (width >= 0);
+  g_return_if_fail (height >= 0);
+
+  cairo_save (cr);
+
+  GTK_STYLE_GET_CLASS (style)->draw_slider (style, cr, state_type, shadow_type,
+                                            widget, detail,
+                                            x, y, width, height, orientation);
+
+  cairo_restore (cr);
 }
 
 /**
