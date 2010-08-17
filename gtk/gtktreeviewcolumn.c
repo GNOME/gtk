@@ -3801,7 +3801,7 @@ gtk_tree_view_column_get_height_for_width (GtkTreeViewColumn *column,
 
   /* Distribute as much of remaining 'size' as possible before sharing expand space */
   sizes = (GtkRequestedSize *)array->data;
-  size  = gtk_distribute_natural_allocation (size, array->len, sizes);
+  size  = gtk_distribute_natural_allocation (MAX (0, size), array->len, sizes);
 
   /* The rest gets split up evenly among expanding cells */
   if (expand_cell_count)
@@ -3903,7 +3903,7 @@ gtk_tree_view_column_allocate_width (GtkTreeViewColumn       *column,
 
   /* Distribute as much of remaining 'size' as possible before sharing expand space */
   sizes = (GtkRequestedSize *)array->data;
-  size  = gtk_distribute_natural_allocation (size, array->len, sizes);
+  size  = gtk_distribute_natural_allocation (MAX (0, size), array->len, sizes);
 
   /* The rest gets split up evenly among expanding cells */
   if (expand_cell_count > 0)
