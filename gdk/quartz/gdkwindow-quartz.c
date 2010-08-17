@@ -292,7 +292,7 @@ gdk_window_impl_quartz_begin_paint_region (GdkPaintable    *paintable,
         }
 
       gdk_cairo_set_source_pixmap (cr, bg_pixmap, x_offset, y_offset);
-      cairo_set_extend (cairo_get_source (cr), CAIRO_EXTEND_REPEAT);
+      cairo_pattern_set_extend (cairo_get_source (cr), CAIRO_EXTEND_REPEAT);
     }
 
   /* Can use cairo_paint() here, we clipped above */
@@ -2548,7 +2548,7 @@ gdk_window_get_frame_extents (GdkWindow    *window,
   rect->width = 1;
   rect->height = 1;
   
-  toplevel = gdk_window_get_toplevel (window);
+  toplevel = gdk_window_get_effective_toplevel (window);
   impl = GDK_WINDOW_IMPL_QUARTZ (GDK_WINDOW_OBJECT (toplevel)->impl);
 
   ns_rect = [impl->toplevel frame];

@@ -688,16 +688,13 @@ void          gdk_window_set_startup_id    (GdkWindow     *window,
 					    const gchar   *startup_id);
 void          gdk_window_set_transient_for (GdkWindow     *window,
 					    GdkWindow     *parent);
-void          gdk_window_get_background  (GdkWindow       *window,
-                                          GdkColor        *color);
 void	      gdk_window_set_background	 (GdkWindow	  *window,
 					  const GdkColor  *color);
-void	      gdk_window_get_back_pixmap (GdkWindow       *window,
-					  GdkPixmap	 **pixmap,
-					  gboolean	  *parent_relative);
 void	      gdk_window_set_back_pixmap (GdkWindow	  *window,
 					  GdkPixmap	  *pixmap,
 					  gboolean	   parent_relative);
+cairo_pattern_t *gdk_window_get_background_pattern (GdkWindow     *window);
+
 void	      gdk_window_set_cursor	 (GdkWindow	  *window,
 					  GdkCursor	  *cursor);
 GdkCursor    *gdk_window_get_cursor      (GdkWindow       *window);
@@ -794,6 +791,12 @@ gboolean      gdk_window_get_decorations (GdkWindow       *window,
 					  GdkWMDecoration *decorations);
 void	      gdk_window_set_functions	 (GdkWindow	  *window,
 					  GdkWMFunction	   functions);
+
+cairo_surface_t *
+              gdk_window_create_similar_surface (GdkWindow *window,
+                                          cairo_content_t  content,
+                                          int              width,
+                                          int              height);
 
 void          gdk_window_beep            (GdkWindow       *window);
 void          gdk_window_iconify         (GdkWindow       *window);

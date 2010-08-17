@@ -256,7 +256,6 @@ gdk_extension_mode_get_type G_GNUC_CONST
 gdk_event_mask_get_type G_GNUC_CONST
 gdk_event_type_get_type G_GNUC_CONST
 gdk_filter_return_get_type G_GNUC_CONST
-gdk_function_get_type G_GNUC_CONST
 gdk_grab_ownership_get_type G_GNUC_CONST
 gdk_grab_status_get_type G_GNUC_CONST
 gdk_gravity_get_type G_GNUC_CONST
@@ -268,7 +267,6 @@ gdk_prop_mode_get_type G_GNUC_CONST
 gdk_scroll_direction_get_type G_GNUC_CONST
 gdk_setting_action_get_type G_GNUC_CONST
 gdk_status_get_type G_GNUC_CONST
-gdk_subwindow_mode_get_type G_GNUC_CONST
 gdk_visibility_state_get_type G_GNUC_CONST
 gdk_wm_decoration_get_type G_GNUC_CONST
 gdk_wm_function_get_type G_GNUC_CONST
@@ -581,8 +579,7 @@ gdk_window_move_resize
 gdk_window_scroll
 gdk_window_move_region
 gdk_window_get_accept_focus
-gdk_window_get_back_pixmap
-gdk_window_get_background
+gdk_window_get_background_pattern
 gdk_window_get_composited
 gdk_window_get_cursor
 gdk_window_get_focus_on_map
@@ -619,6 +616,7 @@ gdk_window_clear_area_e
 gdk_window_constrain_size
 gdk_window_coords_from_parent
 gdk_window_coords_to_parent
+gdk_window_create_similar_surface
 gdk_window_destroy
 gdk_window_end_paint
 gdk_window_flush
@@ -1062,11 +1060,6 @@ gdk_x11_drawable_get_xdisplay
 gdk_x11_drawable_get_xid
 gdk_x11_window_get_drawable_impl
 gdk_x11_pixmap_get_drawable_impl
-#endif
-
-#if IN_FILE(__GDK_GC_X11_C__)
-gdk_x11_gc_get_xdisplay
-gdk_x11_gc_get_xgc
 #endif
 
 #if IN_FILE(__GDK_MAIN_X11_C__)

@@ -477,9 +477,8 @@ gdk_window_merge_child_input_shapes
 gdk_window_set_static_gravities
 gdk_window_set_title
 gdk_window_set_background
-gdk_window_get_background
 gdk_window_set_back_pixmap
-gdk_window_get_back_pixmap
+gdk_window_get_background_pattern
 GDK_PARENT_RELATIVE
 gdk_window_set_cursor
 gdk_window_get_cursor
@@ -643,11 +642,14 @@ GDK_TYPE_PROP_MODE
 <FILE>pango_interaction</FILE>
 gdk_pango_layout_get_clip_region
 gdk_pango_layout_line_get_clip_region
+gdk_pango_context_get
+gdk_pango_context_get_for_screen
 </SECTION>
 
 <SECTION>
 <TITLE>Cairo Interaction</TITLE>
 <FILE>cairo_interaction</FILE>
+gdk_window_create_similar_surface
 gdk_cairo_create
 gdk_cairo_set_source_color
 gdk_cairo_set_source_pixbuf
@@ -1013,7 +1015,6 @@ GDK_PIXMAP_XID
 GDK_DISPLAY_XDISPLAY
 GDK_DRAWABLE_XDISPLAY
 GDK_DRAWABLE_XID
-GDK_GC_XDISPLAY
 GDK_COLORMAP_XDISPLAY
 GDK_COLORMAP_XCOLORMAP
 GDK_SCREEN_XDISPLAY
@@ -1022,8 +1023,6 @@ GDK_SCREEN_XSCREEN
 GDK_VISUAL_XVISUAL
 GDK_CURSOR_XCURSOR
 GDK_CURSOR_XDISPLAY
-GDK_GC_XGC
-GDK_GC_GET_XGC
 GDK_WINDOW_XWINDOW
 gdkx_visual_get
 gdk_pixmap_foreign_new

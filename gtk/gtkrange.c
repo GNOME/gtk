@@ -1000,7 +1000,7 @@ gtk_range_get_slider_size_fixed (GtkRange *range)
  **/
 void
 gtk_range_set_min_slider_size (GtkRange *range,
-                               gboolean  min_size)
+                               gint      min_size)
 {
   g_return_if_fail (GTK_IS_RANGE (range));
   g_return_if_fail (min_size > 0);

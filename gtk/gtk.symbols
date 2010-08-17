@@ -348,6 +348,7 @@ gtk_image_type_get_type G_GNUC_CONST
 gtk_im_preedit_style_get_type G_GNUC_CONST
 gtk_im_status_style_get_type G_GNUC_CONST
 gtk_justification_get_type G_GNUC_CONST
+gtk_license_get_type G_GNUC_CONST
 gtk_menu_direction_type_get_type G_GNUC_CONST
 gtk_message_type_get_type G_GNUC_CONST
 gtk_metric_type_get_type G_GNUC_CONST

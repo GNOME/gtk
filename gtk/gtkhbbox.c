@@ -29,8 +29,6 @@
 #include "gtkorientable.h"
 #include "gtkintl.h"
 
-static gint default_layout_style = GTK_BUTTONBOX_EDGE;
-
 G_DEFINE_TYPE (GtkHButtonBox, gtk_hbutton_box, GTK_TYPE_BUTTON_BOX)
 
 static void
@@ -51,8 +49,3 @@ gtk_hbutton_box_new (void)
   return g_object_new (GTK_TYPE_HBUTTON_BOX, NULL);
 }
 
-GtkButtonBoxStyle
-_gtk_hbutton_box_get_layout_default (void)
-{
-  return default_layout_style;
-}

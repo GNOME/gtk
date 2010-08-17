@@ -209,6 +209,7 @@ struct _GdkWindowObject
 
   GdkColor bg_color;
   GdkPixmap *bg_pixmap;
+  cairo_pattern_t *background;
   
   GSList *paint_stack;
   

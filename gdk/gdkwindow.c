@@ -2067,6 +2067,12 @@ _gdk_window_destroy_hierarchy (GdkWindow *window,
 	      private->bg_pixmap = NULL;
 	    }
 
+          if (private->background)
+            {
+              cairo_pattern_destroy (private->background);
+              private->background = NULL;
+            }
+
 	  if (private->window_type == GDK_WINDOW_FOREIGN)
 	    g_assert (private->children == NULL);
 	  else
@@ -2831,10 +2837,12 @@ gdk_window_end_implicit_paint (GdkWindow *window)
 
       /* Some regions are valid, push these to window now */
       cr = gdk_cairo_create (private->impl);
+      gdk_cairo_region (cr, paint->region);
+      cairo_clip (cr);
       gdk_cairo_set_source_pixmap (cr, paint->pixmap,
                                    paint->x_offset, paint->y_offset);
-      gdk_cairo_region (cr, paint->region);
-      cairo_fill (cr);
+      cairo_set_operator (cr, CAIRO_OPERATOR_SOURCE);
+      cairo_paint (cr);
       cairo_destroy (cr);
     }
   
@@ -3651,50 +3659,32 @@ gdk_window_get_visible_region (GdkDrawable *drawable)
 static cairo_t *
 setup_backing_rect (GdkWindow *window, GdkWindowPaint *paint, int x_offset_cairo, int y_offset_cairo)
 {
-  GdkWindowObject *private = (GdkWindowObject *)window;
+  GdkWindowObject *private = (GdkWindowObject *) window;
+  GdkWindowObject *bg_private;
+  cairo_pattern_t *pattern;
+  int x_offset = 0, y_offset = 0;
   cairo_t *cr;
 
-  if (private->bg_pixmap == GDK_PARENT_RELATIVE_BG && private->parent)
+  cr = cairo_create (paint->surface);
+
+  for (bg_private = private; bg_private; bg_private = bg_private->parent)
     {
-      GdkWindowPaint tmp_paint;
+      pattern = gdk_window_get_background_pattern ((GdkWindow *) bg_private);
+      if (pattern)
+        break;
 
-      tmp_paint = *paint;
-      tmp_paint.x_offset += private->x;
-      tmp_paint.y_offset += private->y;
-
-      x_offset_cairo += private->x;
-      y_offset_cairo += private->y;
-
-      cr = setup_backing_rect (GDK_WINDOW (private->parent), &tmp_paint, x_offset_cairo, y_offset_cairo);
+      x_offset += bg_private->x;
+      y_offset += bg_private->y;
     }
-  else if (private->bg_pixmap &&
-	   private->bg_pixmap != GDK_PARENT_RELATIVE_BG &&
-	   private->bg_pixmap != GDK_NO_BG)
+
+  if (pattern)
     {
-      cairo_surface_t *surface = _gdk_drawable_ref_cairo_surface (private->bg_pixmap);
-      cairo_pattern_t *pattern = cairo_pattern_create_for_surface (surface);
-      cairo_surface_destroy (surface);
-
-      if (x_offset_cairo != 0 || y_offset_cairo != 0)
-	{
-	  cairo_matrix_t matrix;
-	  cairo_matrix_init_translate (&matrix, x_offset_cairo, y_offset_cairo);
-	  cairo_pattern_set_matrix (pattern, &matrix);
-	}
-
-      cairo_pattern_set_extend (pattern, CAIRO_EXTEND_REPEAT);
-
-      cr = cairo_create (paint->surface);
-
+      cairo_translate (cr, -x_offset, -y_offset);
       cairo_set_source (cr, pattern);
-      cairo_pattern_destroy (pattern);
+      cairo_translate (cr, x_offset, y_offset);
     }
   else
-    {
-      cr = cairo_create (paint->surface);
-
-      gdk_cairo_set_source_color (cr, &private->bg_color);
-    }
+    gdk_cairo_set_source_color (cr, &private->bg_color);
 
   return cr;
 }
@@ -7052,29 +7042,6 @@ gdk_window_move_region (GdkWindow       *window,
 }
 
 /**
- * gdk_window_get_background:
- * @window: a #GdkWindow.
- * @color: (out): a #GdkColor to be filled in
- *
- * Sets @color to equal the current background color of @window.
- *
- * Since: 2.22
- */
-void
-gdk_window_get_background (GdkWindow *window,
-                           GdkColor  *color)
-{
-  GdkWindowObject *private;
-
-  g_return_if_fail (GDK_IS_WINDOW (window));
-  g_return_if_fail (color != NULL);
-
-  private = (GdkWindowObject *) window;
-
-  *color = private->bg_color;
-}
-
-/**
  * gdk_window_set_background:
  * @window: a #GdkWindow
  * @color: an allocated #GdkColor
@@ -7106,6 +7073,12 @@ gdk_window_set_background (GdkWindow      *window,
 
   private->bg_pixmap = NULL;
 
+  if (private->background)
+    {
+      cairo_pattern_destroy (private->background);
+      private->background = NULL;
+    }
+
   if (!GDK_WINDOW_DESTROYED (window) &&
       gdk_window_has_impl (private) &&
       !private->input_only)
@@ -7113,43 +7086,6 @@ gdk_window_set_background (GdkWindow      *window,
       impl_iface = GDK_WINDOW_IMPL_GET_IFACE (private->impl);
       impl_iface->set_background (window, &private->bg_color);
     }
-}
-
-/**
- * gdk_window_get_back_pixmap:
- * @window: a #GdkWindow.
- * @pixmap: (out) (allow-none): a #GdkPixmap to be filled in, or %NULL.
- * @parent_relative: (out) (allow-none): a pointer to a #gboolean to be filled in, or %NULL.
- *
- * Sets @pixmap to the current background pixmap of @window.  You do not
- * own the pointer that is returned and this pointer should not be freeed
- * or unreferenced.  Sets @parent_relative to %TRUE if the tiling is done
- * based on the origin of the parent window.
- *
- * Since: 2.22
- */
-void
-gdk_window_get_back_pixmap (GdkWindow  *window,
-                            GdkPixmap **pixmap,
-                            gboolean   *parent_relative)
-{
-  GdkWindowObject *private;
-
-  g_return_if_fail (GDK_IS_WINDOW (window));
-
-  private = (GdkWindowObject *) window;
-
-  if (pixmap)
-    {
-      if (private->bg_pixmap == GDK_PARENT_RELATIVE_BG ||
-          private->bg_pixmap == GDK_NO_BG)
-        *pixmap = NULL;
-      else
-        *pixmap = private->bg_pixmap;
-    }
-
-  if (parent_relative)
-    *parent_relative = (private->bg_pixmap == GDK_PARENT_RELATIVE_BG);
 }
 
 /**
@@ -7203,6 +7139,12 @@ gdk_window_set_back_pixmap (GdkWindow *window,
       private->bg_pixmap != GDK_NO_BG)
     g_object_unref (private->bg_pixmap);
 
+  if (private->background)
+    {
+      cairo_pattern_destroy (private->background);
+      private->background = NULL;
+    }
+
   if (parent_relative)
     private->bg_pixmap = GDK_PARENT_RELATIVE_BG;
   else if (pixmap)
@@ -7217,6 +7159,56 @@ gdk_window_set_back_pixmap (GdkWindow *window,
       impl_iface = GDK_WINDOW_IMPL_GET_IFACE (private->impl);
       impl_iface->set_back_pixmap (window, private->bg_pixmap);
     }
+}
+
+/**
+ * gdk_window_get_background_pattern:
+ * @window: a window
+ *
+ * Gets the pattern used to clear the background on @window. If @window
+ * does not have its own background and reuses the parent's, %NULL is
+ * returned and you'll have to query it yourself.
+ *
+ * Returns: The pattern to use for the background or %NULL to use the
+ * parent's background.
+ *
+ * Since: 2.22
+ **/
+cairo_pattern_t *
+gdk_window_get_background_pattern (GdkWindow *window)
+{
+  GdkWindowObject *private = (GdkWindowObject *) window;
+
+  g_return_val_if_fail (GDK_IS_WINDOW (window), NULL);
+
+  if (private->background == NULL)
+    {
+      if (private->bg_pixmap == GDK_PARENT_RELATIVE_BG)
+        private->background = NULL;
+      else if (private->bg_pixmap != GDK_NO_BG &&
+               private->bg_pixmap != NULL)
+        {
+          static cairo_user_data_key_t key;
+          cairo_surface_t *surface;
+
+          surface = _gdk_drawable_ref_cairo_surface (private->bg_pixmap);
+          private->background = cairo_pattern_create_for_surface (surface);
+          cairo_surface_destroy (surface);
+
+          cairo_pattern_set_extend (private->background, CAIRO_EXTEND_REPEAT);
+          cairo_pattern_set_user_data (private->background,
+                                       &key,
+                                       g_object_ref (private->bg_pixmap),
+                                       g_object_unref);
+        }
+      else
+        private->background =
+            cairo_pattern_create_rgb (private->bg_color.red   / 65535.,
+                                      private->bg_color.green / 65535.,
+                                      private->bg_color.blue / 65535.);
+    }   
+
+  return private->background;
 }
 
 static void
@@ -10646,3 +10638,52 @@ _gdk_window_get_input_window_for_event (GdkWindow *native_window,
 
   return event_win;
 }
+
+/**
+ * gdk_window_create_similar_surface:
+ * @window: window to make new surface similar to
+ * @content: the content for the new surface
+ * @width: width of the new surface
+ * @height: height of the new surface
+ *
+ * Create a new surface that is as compatible as possible with the
+ * given @window. For example the new surface will have the same
+ * fallback resolution and font options as @window. Generally, the new
+ * surface will also use the same backend as @window, unless that is
+ * not possible for some reason. The type of the returned surface may
+ * be examined with cairo_surface_get_type().
+ *
+ * Initially the surface contents are all 0 (transparent if contents
+ * have transparency, black otherwise.)
+ *
+ * Returns: a pointer to the newly allocated surface. The caller
+ * owns the surface and should call cairo_surface_destroy() when done
+ * with it.
+ *
+ * This function always returns a valid pointer, but it will return a
+ * pointer to a "nil" surface if @other is already in an error state
+ * or any other error occurs.
+ *
+ * Since: 2.22
+ **/
+cairo_surface_t *
+gdk_window_create_similar_surface (GdkWindow *     window,
+                                   cairo_content_t content,
+                                   int             width,
+                                   int             height)
+{
+  cairo_surface_t *window_surface, *surface;
+
+  g_return_val_if_fail (GDK_IS_WINDOW (window), NULL);
+  
+  window_surface = _gdk_drawable_ref_cairo_surface (window);
+
+  surface = cairo_surface_create_similar (window_surface,
+                                          content,
+                                          width, height);
+
+  cairo_surface_destroy (window_surface);
+
+  return surface;
+}
+

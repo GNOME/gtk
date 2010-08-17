@@ -16,8 +16,8 @@ msgstr ""
 "Project-Id-Version: gtk+.master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk%"
 "2b&component=general\n"
-"POT-Creation-Date: 2010-07-19 13:27+0000\n"
-"PO-Revision-Date: 2010-07-26 20:56+0200\n"
+"POT-Creation-Date: 2010-08-10 17:44+0000\n"
+"PO-Revision-Date: 2010-08-15 20:56+0200\n"
 "Last-Translator: Jorge González <jorgegonz@svn.gnome.org>\n"
 "Language-Team: Español <gnome-es-list@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -332,50 +332,59 @@ msgid_plural "Opening %d Items"
 msgstr[0] "Aberiendo %d elemento"
 msgstr[1] "Abriendo %d elementos"
 
-#: ../gtk/gtkaboutdialog.c:240
+#. Translators: this is the license preamble; the string at the end
+#. * contains the URL of the license.
+#.
+#: ../gtk/gtkaboutdialog.c:124
+#, c-format
+msgid "This program comes with ABSOLUTELY NO WARRANTY; for details, visit %s"
+msgstr ""
+"Este programa viene SIN NINGUNA GARANTÍA; para obtener más detalles visite %s"
+
+#: ../gtk/gtkaboutdialog.c:264
 msgid "Could not show link"
 msgstr "No se pudo mostrar el enlace"
 
-#: ../gtk/gtkaboutdialog.c:363 ../gtk/gtkaboutdialog.c:2226
+#: ../gtk/gtkaboutdialog.c:390 ../gtk/gtkaboutdialog.c:2294
 msgid "License"
 msgstr "Licencia"
 
-#: ../gtk/gtkaboutdialog.c:364
+#: ../gtk/gtkaboutdialog.c:391
 msgid "The license of the program"
 msgstr "La licencia del programa"
 
 #. Add the credits button
-#: ../gtk/gtkaboutdialog.c:627
+#: ../gtk/gtkaboutdialog.c:686
 msgid "C_redits"
 msgstr "C_réditos"
 
 #. Add the license button
-#: ../gtk/gtkaboutdialog.c:641
+#: ../gtk/gtkaboutdialog.c:700
 msgid "_License"
 msgstr "_Licencia"
 
-#: ../gtk/gtkaboutdialog.c:900
+#: ../gtk/gtkaboutdialog.c:965
 #, c-format
 msgid "About %s"
 msgstr "Acerca de %s"
 
-#: ../gtk/gtkaboutdialog.c:2143
+#: ../gtk/gtkaboutdialog.c:2211
 msgid "Credits"
 msgstr "Créditos"
 
-#: ../gtk/gtkaboutdialog.c:2176
+#: ../gtk/gtkaboutdialog.c:2244
 msgid "Written by"
 msgstr "Escrito por"
 
-#: ../gtk/gtkaboutdialog.c:2179
+#: ../gtk/gtkaboutdialog.c:2247
 msgid "Documented by"
 msgstr "Documentado por"
 
-#: ../gtk/gtkaboutdialog.c:2191
+#: ../gtk/gtkaboutdialog.c:2259
 msgid "Translated by"
 msgstr "Traducido por"
 
-#: ../gtk/gtkaboutdialog.c:2195
+#: ../gtk/gtkaboutdialog.c:2263
 msgid "Artwork by"
 msgstr "Arte por"
 
@@ -414,7 +423,7 @@ msgstr "Alt"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: ../gtk/gtkaccellabel.c:767
+#: ../gtk/gtkaccellabel.c:764
 msgctxt "keyboard label"
 msgid "Super"
 msgstr "Super"
@@ -424,7 +433,7 @@ msgstr "Super"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: ../gtk/gtkaccellabel.c:780
+#: ../gtk/gtkaccellabel.c:777
 msgctxt "keyboard label"
 msgid "Hyper"
 msgstr "Hyper"
@@ -434,17 +443,17 @@ msgstr "Hyper"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: ../gtk/gtkaccellabel.c:794
+#: ../gtk/gtkaccellabel.c:791
 msgctxt "keyboard label"
 msgid "Meta"
 msgstr "Meta"
 
-#: ../gtk/gtkaccellabel.c:811
+#: ../gtk/gtkaccellabel.c:807
 msgctxt "keyboard label"
 msgid "Space"
 msgstr "Espacio"
 
-#: ../gtk/gtkaccellabel.c:814
+#: ../gtk/gtkaccellabel.c:810
 msgctxt "keyboard label"
 msgid "Backslash"
 msgstr "Contrabarra"
@@ -480,7 +489,7 @@ msgstr "Etiqueta no soportada: «%s»"
 #. * text direction of RTL and specify "calendar:YM", then the year
 #. * will appear to the right of the month.
 #.
-#: ../gtk/gtkcalendar.c:830
+#: ../gtk/gtkcalendar.c:863
 msgid "calendar:MY"
 msgstr "calendar:MY"
 
@@ -488,7 +497,7 @@ msgstr "calendar:MY"
 #. * first day of the week to calendar:week_start:1 if you want Monday
 #. * to be the first day of the week, and so on.
 #.
-#: ../gtk/gtkcalendar.c:868
+#: ../gtk/gtkcalendar.c:901
 msgid "calendar:week_start:0"
 msgstr "calendar:week_start:1"
 
@@ -497,7 +506,7 @@ msgstr "calendar:week_start:1"
 #. *
 #. * If you don't understand this, leave it as "2000"
 #.
-#: ../gtk/gtkcalendar.c:1878
+#: ../gtk/gtkcalendar.c:1954
 msgctxt "year measurement template"
 msgid "2000"
 msgstr "2000"
@@ -512,7 +521,7 @@ msgstr "2000"
 #. * digits. That needs support from your system and locale definition
 #. * too.
 #.
-#: ../gtk/gtkcalendar.c:1909 ../gtk/gtkcalendar.c:2567
+#: ../gtk/gtkcalendar.c:1985 ../gtk/gtkcalendar.c:2648
 #, c-format
 msgctxt "calendar:day:digits"
 msgid "%d"
@@ -528,7 +537,7 @@ msgstr "%d"
 #. * digits. That needs support from your system and locale definition
 #. * too.
 #.
-#: ../gtk/gtkcalendar.c:1941 ../gtk/gtkcalendar.c:2430
+#: ../gtk/gtkcalendar.c:2017 ../gtk/gtkcalendar.c:2511
 #, c-format
 msgctxt "calendar:week:digits"
 msgid "%d"
@@ -544,7 +553,7 @@ msgstr "%Id"
 #. *
 #. * "%Y" is appropriate for most locales.
 #.
-#: ../gtk/gtkcalendar.c:2221
+#: ../gtk/gtkcalendar.c:2299
 msgctxt "calendar year format"
 msgid "%Y"
 msgstr "%Y"
@@ -580,11 +589,11 @@ msgctxt "progress bar label"
 msgid "%d %%"
 msgstr "%d %%"
 
-#: ../gtk/gtkcolorbutton.c:186 ../gtk/gtkcolorbutton.c:559
+#: ../gtk/gtkcolorbutton.c:176 ../gtk/gtkcolorbutton.c:457
 msgid "Pick a Color"
 msgstr "Escoja un color"
 
-#: ../gtk/gtkcolorbutton.c:446
+#: ../gtk/gtkcolorbutton.c:348
 msgid "Received invalid color data\n"
 msgstr "Se recibió un dato de color no válido\n"
 
@@ -792,23 +801,23 @@ msgstr "_Derecho:"
 msgid "Paper Margins"
 msgstr "Márgenes del papel"
 
-#: ../gtk/gtkentry.c:8611 ../gtk/gtktextview.c:8258
+#: ../gtk/gtkentry.c:8613 ../gtk/gtktextview.c:8258
 msgid "Input _Methods"
 msgstr "_Métodos de entrada"
 
-#: ../gtk/gtkentry.c:8625 ../gtk/gtktextview.c:8272
+#: ../gtk/gtkentry.c:8627 ../gtk/gtktextview.c:8272
 msgid "_Insert Unicode Control Character"
 msgstr "_Insertar un carácter de control Unicode"
 
-#: ../gtk/gtkentry.c:10020
+#: ../gtk/gtkentry.c:10022
 msgid "Caps Lock and Num Lock are on"
 msgstr "Bloq Mayús y Bloq Num están activados"
 
-#: ../gtk/gtkentry.c:10022
+#: ../gtk/gtkentry.c:10024
 msgid "Num Lock is on"
 msgstr "Bloq Num está activado"
 
-#: ../gtk/gtkentry.c:10024
+#: ../gtk/gtkentry.c:10026
 msgid "Caps Lock is on"
 msgstr "Bloq Mayús está activado"
 
@@ -881,7 +890,7 @@ msgstr "%1$s en %2$s"
 msgid "Search"
 msgstr "Buscar"
 
-#: ../gtk/gtkfilechooserdefault.c:1780 ../gtk/gtkfilechooserdefault.c:9455
+#: ../gtk/gtkfilechooserdefault.c:1780 ../gtk/gtkfilechooserdefault.c:9282
 msgid "Recently Used"
 msgstr "Usados recientemente"
 
@@ -914,161 +923,161 @@ msgstr "Quitar el marcador «%s»"
 msgid "Bookmark '%s' cannot be removed"
 msgstr "No se puede quitar el marcador «%s»"
 
-#: ../gtk/gtkfilechooserdefault.c:2872 ../gtk/gtkfilechooserdefault.c:3896
+#: ../gtk/gtkfilechooserdefault.c:2872 ../gtk/gtkfilechooserdefault.c:3736
 msgid "Remove the selected bookmark"
 msgstr "Quitar el marcador seleccionado"
 
-#: ../gtk/gtkfilechooserdefault.c:3592
+#: ../gtk/gtkfilechooserdefault.c:3432
 msgid "Remove"
 msgstr "Quitar"
 
-#: ../gtk/gtkfilechooserdefault.c:3601
+#: ../gtk/gtkfilechooserdefault.c:3441
 msgid "Rename..."
 msgstr "Renombrar…"
 
 #. Accessible object name for the file chooser's shortcuts pane
-#: ../gtk/gtkfilechooserdefault.c:3764
+#: ../gtk/gtkfilechooserdefault.c:3604
 msgid "Places"
 msgstr "Lugares"
 
 #. Column header for the file chooser's shortcuts pane
-#: ../gtk/gtkfilechooserdefault.c:3821
+#: ../gtk/gtkfilechooserdefault.c:3661
 msgid "_Places"
 msgstr "_Lugares"
 
-#: ../gtk/gtkfilechooserdefault.c:3877
+#: ../gtk/gtkfilechooserdefault.c:3717
 msgid "_Add"
 msgstr "_Añadir"
 
-#: ../gtk/gtkfilechooserdefault.c:3884
+#: ../gtk/gtkfilechooserdefault.c:3724
 msgid "Add the selected folder to the Bookmarks"
 msgstr "Añade la carpeta seleccionada a los marcadores"
 
-#: ../gtk/gtkfilechooserdefault.c:3889
+#: ../gtk/gtkfilechooserdefault.c:3729
 msgid "_Remove"
 msgstr "_Quitar"
 
-#: ../gtk/gtkfilechooserdefault.c:4024
+#: ../gtk/gtkfilechooserdefault.c:3864
 msgid "Could not select file"
 msgstr "No se pudo seleccionar el archivo"
 
-#: ../gtk/gtkfilechooserdefault.c:4199
+#: ../gtk/gtkfilechooserdefault.c:4039
 msgid "_Add to Bookmarks"
 msgstr "_Añadir a los marcadores"
 
-#: ../gtk/gtkfilechooserdefault.c:4212
+#: ../gtk/gtkfilechooserdefault.c:4052
 msgid "Show _Hidden Files"
 msgstr "Mostrar archivos _ocultos"
 
-#: ../gtk/gtkfilechooserdefault.c:4219
+#: ../gtk/gtkfilechooserdefault.c:4059
 msgid "Show _Size Column"
 msgstr "Mostrar columna de _tamaño"
 
-#: ../gtk/gtkfilechooserdefault.c:4442
+#: ../gtk/gtkfilechooserdefault.c:4282
 msgid "Files"
 msgstr "Archivos"
 
-#: ../gtk/gtkfilechooserdefault.c:4493
+#: ../gtk/gtkfilechooserdefault.c:4333
 msgid "Name"
 msgstr "Nombre"
 
-#: ../gtk/gtkfilechooserdefault.c:4516
+#: ../gtk/gtkfilechooserdefault.c:4356
 msgid "Size"
 msgstr "Tamaño"
 
-#: ../gtk/gtkfilechooserdefault.c:4530
+#: ../gtk/gtkfilechooserdefault.c:4370
 msgid "Modified"
 msgstr "Modificado"
 
 #. Label
-#: ../gtk/gtkfilechooserdefault.c:4785 ../gtk/gtkprinteroptionwidget.c:801
+#: ../gtk/gtkfilechooserdefault.c:4625 ../gtk/gtkprinteroptionwidget.c:801
 msgid "_Name:"
 msgstr "_Nombre:"
 
-#: ../gtk/gtkfilechooserdefault.c:4828
+#: ../gtk/gtkfilechooserdefault.c:4668
 msgid "_Browse for other folders"
 msgstr "_Buscar otras carpetas"
 
-#: ../gtk/gtkfilechooserdefault.c:5100
+#: ../gtk/gtkfilechooserdefault.c:4940
 msgid "Type a file name"
 msgstr "Teclee un nombre de archivo"
 
 # C en conflicto con Cancelar
 #. Create Folder
-#: ../gtk/gtkfilechooserdefault.c:5141
+#: ../gtk/gtkfilechooserdefault.c:4981
 msgid "Create Fo_lder"
 msgstr "Crear car_peta"
 
-#: ../gtk/gtkfilechooserdefault.c:5151
+#: ../gtk/gtkfilechooserdefault.c:4991
 msgid "_Location:"
 msgstr "_Lugar:"
 
 # El acelerador c entra en conflicto con cancelar
-#: ../gtk/gtkfilechooserdefault.c:5355
+#: ../gtk/gtkfilechooserdefault.c:5195
 msgid "Save in _folder:"
 msgstr "_Guardar en la carpeta:"
 
-#: ../gtk/gtkfilechooserdefault.c:5357
+#: ../gtk/gtkfilechooserdefault.c:5197
 msgid "Create in _folder:"
 msgstr "Crear en la _carpeta:"
 
-#: ../gtk/gtkfilechooserdefault.c:6420
+#: ../gtk/gtkfilechooserdefault.c:6247
 #, c-format
 msgid "Could not read the contents of %s"
 msgstr "No se pudo leer el contenido de %s"
 
-#: ../gtk/gtkfilechooserdefault.c:6424
+#: ../gtk/gtkfilechooserdefault.c:6251
 msgid "Could not read the contents of the folder"
 msgstr "No se pudo leer el contenido del la carpeta"
 
-#: ../gtk/gtkfilechooserdefault.c:6517 ../gtk/gtkfilechooserdefault.c:6585
-#: ../gtk/gtkfilechooserdefault.c:6730
+#: ../gtk/gtkfilechooserdefault.c:6344 ../gtk/gtkfilechooserdefault.c:6412
+#: ../gtk/gtkfilechooserdefault.c:6557
 msgid "Unknown"
 msgstr "Desconocido"
 
-#: ../gtk/gtkfilechooserdefault.c:6532
+#: ../gtk/gtkfilechooserdefault.c:6359
 msgid "%H:%M"
 msgstr "%H:%M"
 
-#: ../gtk/gtkfilechooserdefault.c:6534
+#: ../gtk/gtkfilechooserdefault.c:6361
 msgid "Yesterday at %H:%M"
 msgstr "Ayer a las %H:%M"
 
-#: ../gtk/gtkfilechooserdefault.c:7200
+#: ../gtk/gtkfilechooserdefault.c:7027
 msgid "Cannot change to folder because it is not local"
 msgstr "No se pudo cambiar a la carpeta porque no es local"
 
-#: ../gtk/gtkfilechooserdefault.c:7797 ../gtk/gtkfilechooserdefault.c:7818
+#: ../gtk/gtkfilechooserdefault.c:7624 ../gtk/gtkfilechooserdefault.c:7645
 #, c-format
 msgid "Shortcut %s already exists"
 msgstr "La combinación %s ya existe"
 
-#: ../gtk/gtkfilechooserdefault.c:7908
+#: ../gtk/gtkfilechooserdefault.c:7735
 #, c-format
 msgid "Shortcut %s does not exist"
 msgstr "La combinación %s no existe"
 
-#: ../gtk/gtkfilechooserdefault.c:8163 ../gtk/gtkprintunixdialog.c:476
+#: ../gtk/gtkfilechooserdefault.c:7990 ../gtk/gtkprintunixdialog.c:476
 #, c-format
 msgid "A file named \"%s\" already exists.  Do you want to replace it?"
 msgstr "Ya existe un archivo llamado «%s». ¿Quiere reemplazarlo?"
 
-#: ../gtk/gtkfilechooserdefault.c:8166 ../gtk/gtkprintunixdialog.c:480
+#: ../gtk/gtkfilechooserdefault.c:7993 ../gtk/gtkprintunixdialog.c:480
 #, c-format
 msgid ""
 "The file already exists in \"%s\".  Replacing it will overwrite its contents."
 msgstr ""
 "El archivo ya existe en «%s». Si lo reemplaza sobreescribirá su contenido."
 
-#: ../gtk/gtkfilechooserdefault.c:8171 ../gtk/gtkprintunixdialog.c:487
+#: ../gtk/gtkfilechooserdefault.c:7998 ../gtk/gtkprintunixdialog.c:487
 msgid "_Replace"
 msgstr "_Reemplazar"
 
-#: ../gtk/gtkfilechooserdefault.c:8823
+#: ../gtk/gtkfilechooserdefault.c:8650
 msgid "Could not start the search process"
 msgstr "No se ha podido iniciar el proceso de búsqueda"
 
-#: ../gtk/gtkfilechooserdefault.c:8824
+#: ../gtk/gtkfilechooserdefault.c:8651
 msgid ""
 "The program was not able to create a connection to the indexer daemon.  "
 "Please make sure it is running."
@@ -1076,15 +1085,15 @@ msgstr ""
 "El programa no fue capaz de crear una conexión con el demonio indexador. Por "
 "favor asegúrese de que se está ejecutando."
 
-#: ../gtk/gtkfilechooserdefault.c:8838
+#: ../gtk/gtkfilechooserdefault.c:8665
 msgid "Could not send the search request"
 msgstr "No se ha podido enviar la petición de búsqueda"
 
-#: ../gtk/gtkfilechooserdefault.c:9027
+#: ../gtk/gtkfilechooserdefault.c:8854
 msgid "Search:"
 msgstr "Buscar:"
 
-#: ../gtk/gtkfilechooserdefault.c:9631
+#: ../gtk/gtkfilechooserdefault.c:9458
 #, c-format
 msgid "Could not mount %s"
 msgstr "No se pudo montar %s"
@@ -1254,12 +1263,12 @@ msgid "System (%s)"
 msgstr "Sistema (%s)"
 
 #. Open Link
-#: ../gtk/gtklabel.c:6227
+#: ../gtk/gtklabel.c:6191
 msgid "_Open Link"
 msgstr "_Abrir enlace"
 
 #. Copy Link Address
-#: ../gtk/gtklabel.c:6239
+#: ../gtk/gtklabel.c:6203
 msgid "Copy _Link Address"
 msgstr "Copiar la dirección del _enlace"
 
@@ -1400,7 +1409,7 @@ msgstr "Shell Z"
 msgid "Cannot end process with pid %d: %s"
 msgstr "No se puede finalizar el proceso con el pid %d: %s"
 
-#: ../gtk/gtknotebook.c:4670 ../gtk/gtknotebook.c:7165
+#: ../gtk/gtknotebook.c:4671 ../gtk/gtknotebook.c:7205
 #, c-format
 msgid "Page %u"
 msgstr "Página %u"
@@ -2171,7 +2180,6 @@ msgid "_Edit"
 msgstr "_Editar"
 
 #: ../gtk/gtkstock.c:338
-#| msgid "_Files"
 msgctxt "Stock label"
 msgid "_File"
 msgstr "_Archivo"

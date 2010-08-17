@@ -57,29 +57,14 @@ typedef enum
 } GtkToolbarSpaceStyle;
 
 typedef struct _GtkToolbar           GtkToolbar;
+typedef struct _GtkToolbarPriv       GtkToolbarPriv;
 typedef struct _GtkToolbarClass      GtkToolbarClass;
-typedef struct _GtkToolbarPrivate    GtkToolbarPrivate;
 
 struct _GtkToolbar
 {
   GtkContainer container;
 
-  /*< public >*/
-  gint             GSEAL (num_children);
-  GList           *GSEAL (children);
-  GtkOrientation   GSEAL (orientation);
-  GtkToolbarStyle  GSEAL (style);
-  GtkIconSize      GSEAL (icon_size);
-
-  /*< private >*/
-  gint             GSEAL (button_maxw);		/* maximum width of homogeneous children */
-  gint             GSEAL (button_maxh);		/* maximum height of homogeneous children */
-
-  guint            _gtk_reserved1;
-  guint            _gtk_reserved2;
-
-  guint            GSEAL (style_set) : 1;
-  guint            GSEAL (icon_size_set) : 1;
+  GtkToolbarPriv *priv;
 };
 
 struct _GtkToolbarClass

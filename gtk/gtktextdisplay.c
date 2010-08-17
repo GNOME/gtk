@@ -405,25 +405,14 @@ gtk_text_renderer_draw_shape (PangoRenderer   *renderer,
   else if (GDK_IS_PIXBUF (attr->data))
     {
       cairo_t *cr = text_renderer->cr;
-      gint width, height;
-      GdkRectangle pixbuf_rect, draw_rect;
-      GdkPixbuf *pixbuf;
-      
-      pixbuf = GDK_PIXBUF (attr->data);
-      
-      width = gdk_pixbuf_get_width (pixbuf);
-      height = gdk_pixbuf_get_height (pixbuf);
-      
-      pixbuf_rect.x = PANGO_PIXELS (x);
-      pixbuf_rect.y = PANGO_PIXELS (y) - height;
-      pixbuf_rect.width = width;
-      pixbuf_rect.height = height;
+      GdkPixbuf *pixbuf = GDK_PIXBUF (attr->data);
       
       cairo_save (cr);
 
-      gdk_cairo_set_source_pixbuf (cr, pixbuf, pixbuf_rect.x, pixbuf_rect.y);
-      gdk_cairo_rectangle (cr, &draw_rect);
-      cairo_fill (cr);
+      gdk_cairo_set_source_pixbuf (cr, pixbuf,
+                                   PANGO_PIXELS (x),
+                                   PANGO_PIXELS (y) -  gdk_pixbuf_get_height (pixbuf));
+      cairo_paint (cr);
 
       cairo_restore (cr);
     }
