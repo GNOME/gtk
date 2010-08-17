@@ -131,7 +131,7 @@ draw_simple_image(GtkStyle       *style,
       if (image->background)
 	{
 	  theme_pixbuf_render (image->background,
-			       window, NULL, area,
+			       window, area,
 			       draw_center ? COMPONENT_ALL : COMPONENT_ALL | COMPONENT_CENTER,
 			       FALSE,
 			       x, y, width, height);
@@ -139,7 +139,7 @@ draw_simple_image(GtkStyle       *style,
       
       if (image->overlay && draw_center)
 	theme_pixbuf_render (image->overlay,
-			     window, NULL, area, COMPONENT_ALL,
+			     window, area, COMPONENT_ALL,
 			     TRUE, 
 			     x, y, width, height);
 
@@ -300,19 +300,19 @@ draw_gap_image(GtkStyle       *style,
 
       if (image->background)
 	theme_pixbuf_render (image->background,
-			     window, NULL, area, components, FALSE,
+			     window, area, components, FALSE,
 			     x, y, width, height);
       if (image->gap_start)
 	theme_pixbuf_render (image->gap_start,
-			     window, NULL, area, COMPONENT_ALL, FALSE,
+			     window, area, COMPONENT_ALL, FALSE,
 			     r1.x, r1.y, r1.width, r1.height);
       if (image->gap)
 	theme_pixbuf_render (image->gap,
-			     window, NULL, area, COMPONENT_ALL, FALSE,
+			     window, area, COMPONENT_ALL, FALSE,
 			     r2.x, r2.y, r2.width, r2.height);
       if (image->gap_end)
 	theme_pixbuf_render (image->gap_end,
-			     window, NULL, area, COMPONENT_ALL, FALSE,
+			     window, area, COMPONENT_ALL, FALSE,
 			     r3.x, r3.y, r3.width, r3.height);
 
       return TRUE;
@@ -349,7 +349,7 @@ draw_hline (GtkStyle     *style,
     {
       if (image->background)
 	theme_pixbuf_render (image->background,
-			     window, NULL, area, COMPONENT_ALL, FALSE,
+			     window, area, COMPONENT_ALL, FALSE,
 			     x1, y, (x2 - x1) + 1, 2);
     }
   else
@@ -385,7 +385,7 @@ draw_vline (GtkStyle     *style,
     {
       if (image->background)
 	theme_pixbuf_render (image->background,
-			     window, NULL, area, COMPONENT_ALL, FALSE,
+			     window, area, COMPONENT_ALL, FALSE,
 			     x, y1, 2, (y2 - y1) + 1);
     }
   else

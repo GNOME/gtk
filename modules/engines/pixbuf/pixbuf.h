@@ -202,7 +202,6 @@ G_GNUC_INTERNAL void         theme_pixbuf_set_stretch  (ThemePixbuf  *theme_pb,
 					gboolean      stretch);
 G_GNUC_INTERNAL void         theme_pixbuf_render       (ThemePixbuf  *theme_pb,
 					GdkWindow    *window,
-					GdkBitmap    *mask,
 					GdkRectangle *clip_rect,
 					guint         component_mask,
 					gboolean      center,

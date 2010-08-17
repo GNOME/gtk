@@ -353,7 +353,6 @@ static void
 pixbuf_render (GdkPixbuf    *src,
 	       guint         hints,
 	       GdkWindow    *window,
-	       GdkBitmap    *mask,
 	       GdkRectangle *clip_rect,
 	       gint          src_x,
 	       gint          src_y,
@@ -382,12 +381,7 @@ pixbuf_render (GdkPixbuf    *src,
   if (hints & THEME_MISSING)
     return;
 
-  /* FIXME: Because we use the mask to shape windows, we don't use
-   * clip_rect to clip what we draw to the mask, only to clip
-   * what we actually draw. But this leads to the horrible ineffiency
-   * of scale the whole image to get a little bit of it.
-   */
-  if (!mask && clip_rect)
+  if (clip_rect)
     {
       if (!gdk_rectangle_intersect (clip_rect, &rect, &rect))
 	return;
@@ -479,19 +473,6 @@ pixbuf_render (GdkPixbuf    *src,
     {
       cairo_t *cr;
       
-      if (mask)
-	{
-          cr = gdk_cairo_create (mask);
-
-          gdk_cairo_set_source_pixbuf (cr, tmp_pixbuf,
-                                       -x_offset + rect.x, 
-                                       -y_offset + rect.y);
-          gdk_cairo_rectangle (cr, &rect);
-          cairo_fill (cr);
-
-          cairo_destroy (cr);
-	}
-
       cr = gdk_cairo_create (window);
       gdk_cairo_set_source_pixbuf (cr, 
                                    tmp_pixbuf,
@@ -748,7 +729,6 @@ theme_pixbuf_get_pixbuf (ThemePixbuf *theme_pb)
 void
 theme_pixbuf_render (ThemePixbuf  *theme_pb,
 		     GdkWindow    *window,
-		     GdkBitmap    *mask,
 		     GdkRectangle *clip_rect,
 		     guint         component_mask,
 		     gboolean      center,
@@ -804,11 +784,11 @@ theme_pixbuf_render (ThemePixbuf  *theme_pb,
 
 
 
-#define RENDER_COMPONENT(X1,X2,Y1,Y2)					         \
-        pixbuf_render (pixbuf, theme_pb->hints[Y1][X1], window, mask, clip_rect, \
-	 	       src_x[X1], src_y[Y1],				         \
-		       src_x[X2] - src_x[X1], src_y[Y2] - src_y[Y1],	         \
-		       dest_x[X1], dest_y[Y1],				         \
+#define RENDER_COMPONENT(X1,X2,Y1,Y2)					   \
+        pixbuf_render (pixbuf, theme_pb->hints[Y1][X1], window, clip_rect, \
+	 	       src_x[X1], src_y[Y1],				   \
+		       src_x[X2] - src_x[X1], src_y[Y2] - src_y[Y1],	   \
+		       dest_x[X1], dest_y[Y1],				   \
 		       dest_x[X2] - dest_x[X1], dest_y[Y2] - dest_y[Y1]);
       
       if (component_mask & COMPONENT_NORTH_WEST)
@@ -845,7 +825,7 @@ theme_pixbuf_render (ThemePixbuf  *theme_pb,
 	  x += (width - pixbuf_width) / 2;
 	  y += (height - pixbuf_height) / 2;
 	  
-	  pixbuf_render (pixbuf, 0, window, NULL, clip_rect,
+	  pixbuf_render (pixbuf, 0, window, clip_rect,
 			 0, 0,
 			 pixbuf_width, pixbuf_height,
 			 x, y,
