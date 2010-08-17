@@ -32,6 +32,8 @@
 #include "gtkintl.h"
 #include "gtkalias.h"
 
+#include "gdkkeysyms.h"
+
 typedef struct _GtkFileChooserEntryClass GtkFileChooserEntryClass;
 
 #define GTK_FILE_CHOOSER_ENTRY_CLASS(klass)     (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_FILE_CHOOSER_ENTRY, GtkFileChooserEntryClass))
@@ -106,8 +108,8 @@ static void     gtk_file_chooser_entry_finalize       (GObject          *object)
 static void     gtk_file_chooser_entry_dispose        (GObject          *object);
 static void     gtk_file_chooser_entry_grab_focus     (GtkWidget        *widget);
 static void     gtk_file_chooser_entry_unmap          (GtkWidget        *widget);
-static gboolean gtk_file_chooser_entry_focus          (GtkWidget        *widget,
-						       GtkDirectionType  direction);
+static gboolean gtk_file_chooser_entry_key_press_event (GtkWidget *widget,
+							GdkEventKey *event);
 static gboolean gtk_file_chooser_entry_focus_out_event (GtkWidget       *widget,
 							GdkEventFocus   *event);
 static void     gtk_file_chooser_entry_activate       (GtkEntry         *entry);
@@ -182,7 +184,7 @@ _gtk_file_chooser_entry_class_init (GtkFileChooserEntryClass *class)
 
   widget_class->grab_focus = gtk_file_chooser_entry_grab_focus;
   widget_class->unmap = gtk_file_chooser_entry_unmap;
-  widget_class->focus = gtk_file_chooser_entry_focus;
+  widget_class->key_press_event = gtk_file_chooser_entry_key_press_event;
   widget_class->focus_out_event = gtk_file_chooser_entry_focus_out_event;
 
   entry_class->activate = gtk_file_chooser_entry_activate;
@@ -1027,7 +1029,8 @@ show_completion_feedback_window (GtkFileChooserEntry *chooser_entry)
   get_entry_cursor_x (chooser_entry, &cursor_x);
 
   /* FIXME: fit to the screen if we bump on the screen's edge */
-  feedback_x = entry_x + cursor_x + entry_allocation->height / 2; /* cheap "half M-width" */
+  /* cheap "half M-width", use height as approximation of character em-size */
+  feedback_x = entry_x + cursor_x + entry_allocation->height / 2;
   feedback_y = entry_y + (entry_allocation->height - feedback_req.height) / 2;
 
   gtk_window_move (GTK_WINDOW (chooser_entry->completion_feedback_window), feedback_x, feedback_y);
@@ -1217,8 +1220,8 @@ start_explicit_completion (GtkFileChooserEntry *chooser_entry)
 }
 
 static gboolean
-gtk_file_chooser_entry_focus (GtkWidget        *widget,
-			      GtkDirectionType  direction)
+gtk_file_chooser_entry_key_press_event (GtkWidget *widget,
+					GdkEventKey *event)
 {
   GtkFileChooserEntry *chooser_entry;
   GtkEditable *editable;
@@ -1231,7 +1234,7 @@ gtk_file_chooser_entry_focus (GtkWidget        *widget,
   entry = GTK_ENTRY (widget);
 
   if (!chooser_entry->eat_tabs)
-    return GTK_WIDGET_CLASS (_gtk_file_chooser_entry_parent_class)->focus (widget, direction);
+    return GTK_WIDGET_CLASS (_gtk_file_chooser_entry_parent_class)->key_press_event (widget, event);
 
   control_pressed = FALSE;
 
@@ -1243,9 +1246,7 @@ gtk_file_chooser_entry_focus (GtkWidget        *widget,
 
   /* This is a bit evil -- it makes Tab never leave the entry. It basically
    * makes it 'safe' for people to hit. */
-  if ((direction == GTK_DIR_TAB_FORWARD) &&
-      (gtk_widget_has_focus (widget)) &&
-      (! control_pressed))
+  if (event->keyval == GDK_Tab && !control_pressed)
     {
       if (chooser_entry->has_completion)
 	gtk_editable_set_position (editable, gtk_entry_get_text_length (entry));
@@ -1253,9 +1254,10 @@ gtk_file_chooser_entry_focus (GtkWidget        *widget,
 	start_explicit_completion (chooser_entry);
 
       return TRUE;
-    }
-  else
-    return GTK_WIDGET_CLASS (_gtk_file_chooser_entry_parent_class)->focus (widget, direction);
+     }
+
+  return GTK_WIDGET_CLASS (_gtk_file_chooser_entry_parent_class)->key_press_event (widget, event);
+
 }
 
 static gboolean
