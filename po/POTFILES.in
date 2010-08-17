@@ -85,7 +85,6 @@ gtk/gtkfixed.c
 gtk/gtkfontbutton.c
 gtk/gtkfontsel.c
 gtk/gtkframe.c
-gtk/gtkgc.c
 gtk/gtkhandlebox.c
 gtk/gtkhbbox.c
 gtk/gtkhbox.c
