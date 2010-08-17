@@ -716,31 +716,6 @@ theme_pixbuf_get_pixbuf (ThemePixbuf *theme_pb)
 }
 
 void
-theme_pixbuf_render_no_cairo (ThemePixbuf  *theme_pb,
-                              GdkWindow    *window,
-                              GdkRectangle *clip_rect,
-                              guint         component_mask,
-                              gboolean      center,
-                              gint          x,
-                              gint          y,
-                              gint          width,
-                              gint          height)
-{
-  cairo_t *cr;
-
-  cr = gdk_cairo_create (window);
-  if (clip_rect)
-    {
-      gdk_cairo_rectangle (cr, clip_rect);
-      cairo_clip (cr);
-    }
-
-  theme_pixbuf_render (theme_pb, cr, 
-                       component_mask, center,
-                       x, y, width, height);
-}
-
-void
 theme_pixbuf_render (ThemePixbuf  *theme_pb,
                      cairo_t      *cr,
 		     guint         component_mask,

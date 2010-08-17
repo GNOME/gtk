@@ -200,15 +200,6 @@ G_GNUC_INTERNAL void         theme_pixbuf_set_border   (ThemePixbuf  *theme_pb,
 					gint          bottom);
 G_GNUC_INTERNAL void         theme_pixbuf_set_stretch  (ThemePixbuf  *theme_pb,
 					gboolean      stretch);
-G_GNUC_INTERNAL void         theme_pixbuf_render_no_cairo (ThemePixbuf  *theme_pb,
-					GdkWindow    *window,
-					GdkRectangle *clip_rect,
-					guint         component_mask,
-					gboolean      center,
-					gint          dest_x,
-					gint          dest_y,
-					gint          dest_width,
-					gint          dest_height);
 G_GNUC_INTERNAL void         theme_pixbuf_render       (ThemePixbuf  *theme_pb,
                                         cairo_t      *cr,
 					guint         component_mask,
