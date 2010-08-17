@@ -1,3 +1,103 @@
+Overview of Changes from GTK+ 2.90.5 to 2.90.6
+==============================================
+
+* All drawing done by GTK+ itself has been ported from
+  GDK drawing APIs to cairo
+
+* GtkExpander and GtkFrame now implement GtkSizeRequest
+
+* GtkExpander gained a ::label-fill property to make the label
+  fill the entire horizontal space
+
+* Allow windows to be dragged by clicking on empty
+  areas in menubars and toolbars
+
+* GtkAboutDialog can now refer to licenses using a ::license-type
+  enumeration instead of embedding the license text
+
+* Deprecations and cleanups:
+ - Remove GtkNotebookPage
+ - Remove public struct members in many classes
+ - Remove the GtkRecentManager::limit property
+ - Remove all GDK drawing functions, ie gdk_draw_*. Use cairo instead
+ - Remove all GdkGC functions. Use cairo instead
+ - Remove all of GdkImage. Use cairo instead
+ - Remove all of GdkRGB. Use cairo instead
+ - Remove gdk_{bit,pix}map_create_from_data
+ - GDK no longer depends on the render X extension
+
+* New accessors:
+ - gdk_cursor_get_cursor_type
+ - gdk_device_get_n_axes
+ - gdk_display_is_closed
+ - gtk_notebook_get_tab_[hv]border
+
+* New cairo-related APIs:
+ - gdk_window_create_similar_surface
+ - gdk_window_get_background_pattern
+
+* Bugs fixed:
+  90935 GtkIMContextClass inheritance ...
+  97414 gtkaccellabel: s/seperator/separator/
+ 336225 Support for common licenses in about dialog
+ 554926 gtk_init_with_args: not setting translation domain...
+ 557263 Notebooks return 1 selection even if they have no pages
+ 579583 GtkStatusIcon's scroll-event documentation missing "Since: ..."
+ 580291 Gail does not work with custom treemodels
+ 596125 Property string fixes
+ 604391 Gtk-CRITICAL when switching between tab
+ 605190 Should delete the description of xim related options...
+ 609264 gtk_(tree/list)_store_set documentation unclear about ownership
+ 611313 Window dragging from menubars/toolbars
+ 612919 crash in System Monitor: I was moving up-down wit...
+ 614049 Allow packing options for GtkExpander label widgets
+ 614443 Doxygen 'forgets' #define documentation under certain conditions
+ 615474 gtk_widget_set_has_window() documentation is not correct
+ 618327 GtkNotebookPage should be deprecated
+ 621571 Fix damage events on offscreen windows
+ 622658 GTK_STOCK_FILE Stock Label
+ 623603 meld built with pygtk-2.16.0 giving warnings
+ 623865 gtkdnd: pointer grab may never finish (ungrab before grab)
+ 624087 Missing accessor for GdkCursor.type
+ 624224 Missing accessor for GdkDisplay.closed
+ 624270 crash in gtk_entry_completion_default_completion_func
+ 624333 Deprecate GtkRecentManager:limit
+ 624362 access an invalid ActionGroup
+ 624367 GtkButtonBox is broken
+ 624397 Move GtkBoxChild from public .h to gtkbox.c
+ 624432 GtkRadioMenuItem is broken
+ 624540 GtkRadionAction loop in its activate handler
+ 624687 switch-page bug when activated from menu
+ 624707 warnings when showing gnome-terminal menus on gtk master
+ 624779 GtkCalendar padding/margin/spacing/border/whatever is hard-coded
+ 625104 Don't try and use the child of a GtkSeparatorMenuItem
+ 625235 Tooltips cause warnings
+ 625300 Buttons order in dialogs broken in gtk+3
+ 625416 gtk_file_chooser_default_map should not reload directory
+ 625650 Add annotations to gtk_tree_model_iter_next() and...
+ 625655 win32 compile failure due to G_SEAL
+ 625715 comment string in GtkAboutDialog is not centered
+ 625953 GailAdjustment does not implement get_minimum_increment...
+ 626052 Activating a file in GtkFileChooserDialog activates action...
+ 626276 gtk_tree_selection_set_select_function() should allow...
+ 626514 License dialog doesn't take into account long copyrights
+
+* Translation updates:
+ Asturian
+ Galician
+ German
+ Hebrew
+ Indonesian
+ Norwegian bokmål
+ Punjabi
+ Romanian
+ Simplified Chinese
+ Slovenian
+ Spanish
+ Swedish
+ Traditional Chinese
+
+
 Overview of Changes from GTK+ 2.90.4 to 2.90.5
 ==============================================
 
