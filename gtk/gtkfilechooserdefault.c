@@ -862,6 +862,7 @@ error_message_with_parent (GtkWindow  *parent,
 			   const char *detail)
 {
   GtkWidget *dialog;
+  GtkWindowGroup *group;
 
   dialog = gtk_message_dialog_new (parent,
 				   GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
@@ -872,8 +873,12 @@ error_message_with_parent (GtkWindow  *parent,
   gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (dialog),
 					    "%s", detail);
 
-  if (parent && parent->group)
-    gtk_window_group_add_window (parent->group, GTK_WINDOW (dialog));
+  if (parent)
+    {
+      group = gtk_window_get_group (parent);
+      if (group)
+        gtk_window_group_add_window (group, GTK_WINDOW (dialog));
+    }
 
   gtk_dialog_run (GTK_DIALOG (dialog));
   gtk_widget_destroy (dialog);
@@ -3783,14 +3788,21 @@ browse_files_key_press_event_cb (GtkWidget   *widget,
       GtkWindow *window;
 
       window = get_toplevel (widget);
-      if (window
-	  && widget != window->default_widget
-	  && !(widget == window->focus_widget &&
-	       (!window->default_widget || !gtk_widget_get_sensitive (window->default_widget))))
-	{
-	  gtk_window_activate_default (window);
-	  return TRUE;
-	}
+      if (window)
+        {
+          GtkWidget *default_widget, *focus_widget;
+
+          default_widget = gtk_window_get_default_widget (window);
+          focus_widget = gtk_window_get_focus (window);
+
+          if (widget != default_widget &&
+              !(widget == focus_widget && (!default_widget || !gtk_widget_get_sensitive (default_widget))))
+	    {
+	      gtk_window_activate_default (window);
+
+	      return TRUE;
+	    }
+        }
     }
 
   return FALSE;
@@ -7971,6 +7983,7 @@ confirm_dialog_should_accept_filename (GtkFileChooserDefault *impl,
 				       const gchar           *folder_display_name)
 {
   GtkWindow *toplevel;
+  GtkWindowGroup *group;
   GtkWidget *dialog;
   int response;
 
@@ -7996,8 +8009,9 @@ confirm_dialog_should_accept_filename (GtkFileChooserDefault *impl,
                                            -1);
   gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_ACCEPT);
 
-  if (toplevel->group)
-    gtk_window_group_add_window (toplevel->group, GTK_WINDOW (dialog));
+  group = gtk_window_get_group (toplevel);
+  if (group)
+    gtk_window_group_add_window (group, GTK_WINDOW (dialog));
 
   response = gtk_dialog_run (GTK_DIALOG (dialog));
 
