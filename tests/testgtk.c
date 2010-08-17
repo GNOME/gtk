@@ -26,6 +26,8 @@
 
 #undef GTK_DISABLE_DEPRECATED
 
+#undef GDK_DISABLE_DEPRECATED
+
 #include "config.h"
 
 #undef	G_LOG_DOMAIN
