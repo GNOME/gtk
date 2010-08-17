@@ -1896,6 +1896,7 @@ static void
 get_screen_color (GtkWidget *button)
 {
   GtkColorSelection *colorsel = g_object_get_data (G_OBJECT (button), "COLORSEL");
+  GtkWindowGroup *group;
   ColorSelectionPrivate *priv = colorsel->private_data;
   GdkScreen *screen = gtk_widget_get_screen (GTK_WIDGET (button));
   GdkDevice *device, *keyb_device, *pointer_device;
@@ -1934,8 +1935,9 @@ get_screen_color (GtkWidget *button)
   
       if (GTK_IS_WINDOW (toplevel))
 	{
-	  if (GTK_WINDOW (toplevel)->group)
-	    gtk_window_group_add_window (GTK_WINDOW (toplevel)->group, 
+          group = gtk_window_get_group (GTK_WINDOW (toplevel));
+	  if (group)
+            gtk_window_group_add_window (group,
 					 GTK_WINDOW (grab_widget));
 	}
 
