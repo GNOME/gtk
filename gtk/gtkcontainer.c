@@ -1956,15 +1956,16 @@ old_focus_coords (GtkContainer *container,
 {
   GtkWidget *widget = GTK_WIDGET (container);
   GtkWidget *toplevel = gtk_widget_get_toplevel (widget);
+  GtkWidget *old_focus;
 
-  if (GTK_IS_WINDOW (toplevel) && GTK_WINDOW (toplevel)->focus_widget)
+  if (GTK_IS_WINDOW (toplevel))
     {
-      GtkWidget *old_focus = GTK_WINDOW (toplevel)->focus_widget;
-      
-      return get_allocation_coords (container, old_focus, old_focus_rect);
+      old_focus = gtk_window_get_focus (GTK_WINDOW (toplevel));
+      if (old_focus)
+        return get_allocation_coords (container, old_focus, old_focus_rect);
     }
-  else
-    return FALSE;
+
+  return FALSE;
 }
 
 typedef struct _CompareInfo CompareInfo;
