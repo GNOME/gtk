@@ -228,7 +228,7 @@ gail_window_real_initialize (AtkObject *obj,
         obj->role = ATK_ROLE_TOOL_TIP;
       else if (GTK_IS_PLUG (widget))
         obj->role = ATK_ROLE_PANEL;
-      else if (GTK_WINDOW (widget)->type == GTK_WINDOW_POPUP)
+      else if (gtk_window_get_window_type (GTK_WINDOW (widget)) == GTK_WINDOW_POPUP)
         obj->role = ATK_ROLE_WINDOW;
       else
         obj->role = ATK_ROLE_FRAME;
@@ -445,7 +445,7 @@ gail_window_ref_state_set (AtkObject *accessible)
 
   window = GTK_WINDOW (widget);
 
-  if (window->has_focus)
+  if (gtk_window_has_toplevel_focus (window) && gtk_window_is_active (window))
     atk_state_set_add_state (state_set, ATK_STATE_ACTIVE);
 
   gdk_window = gtk_widget_get_window (widget);

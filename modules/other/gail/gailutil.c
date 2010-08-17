@@ -500,8 +500,8 @@ window_removed (AtkObject *atk_obj,
    * Deactivate window if it is still focused and we are removing it. This
    * can happen when a dialog displayed by gok is removed.
    */
-  if (window->is_active &&
-      window->has_toplevel_focus)
+  if (gtk_window_is_active (window) &&
+      gtk_window_has_toplevel_focus (window))
     {
       gchar *signal_name;
       AtkObject *atk_obj;
@@ -556,11 +556,6 @@ configure_event_watcher (GSignalInvocationHint  *hint,
   event = g_value_get_boxed (param_values + 1);
   if (event->type != GDK_CONFIGURE)
     return FALSE;
-  if (GTK_WINDOW (object)->configure_request_count)
-    /*
-     * There is another ConfigureRequest pending so we ignore this one.
-     */
-    return TRUE;
   widget = GTK_WIDGET (object);
   gtk_widget_get_allocation (widget, &allocation);
   if (allocation.x == ((GdkEventConfigure *)event)->x &&

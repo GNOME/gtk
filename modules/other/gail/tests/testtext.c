@@ -49,10 +49,8 @@ static void _check_text (AtkObject *in_obj)
       title = NULL;
 
     toplevel = gtk_widget_get_toplevel (widget);
-    if (GTK_IS_WINDOW (toplevel) && GTK_WINDOW (toplevel)->title)
-    {
-      title = GTK_WINDOW (toplevel)->title;
-    }
+    if (GTK_IS_WINDOW (toplevel))
+      title = (gchar *) gtk_window_get_title (GTK_WINDOW (toplevel));
     else
       title = NULL;
   }
