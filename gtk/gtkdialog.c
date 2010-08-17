@@ -407,13 +407,15 @@ gtk_dialog_delete_event_handler (GtkWidget   *widget,
 static void
 gtk_dialog_map (GtkWidget *widget)
 {
+  GtkWidget *default_widget, *focus;
   GtkWindow *window = GTK_WINDOW (widget);
   GtkDialog *dialog = GTK_DIALOG (widget);
   GtkDialogPriv *priv = dialog->priv;
   
   GTK_WIDGET_CLASS (gtk_dialog_parent_class)->map (widget);
 
-  if (!window->focus_widget)
+  focus = gtk_window_get_focus (window);
+  if (!focus)
     {
       GList *children, *tmp_list;
       GtkWidget *first_focus = NULL;
@@ -422,14 +424,15 @@ gtk_dialog_map (GtkWidget *widget)
 	{
 	  g_signal_emit_by_name (window, "move_focus", GTK_DIR_TAB_FORWARD);
 
+          focus = gtk_window_get_focus (window);
 	  if (first_focus == NULL)
-	    first_focus = window->focus_widget;
-	  else if (first_focus == window->focus_widget)
+            first_focus = focus;
+	  else if (first_focus == focus)
             break;
-	  if (!GTK_IS_LABEL (window->focus_widget))
+	  if (!GTK_IS_LABEL (focus))
 	    break;
-          if (!gtk_label_get_current_uri (GTK_LABEL (window->focus_widget)))
-            gtk_label_select_region (GTK_LABEL (window->focus_widget), 0, 0);
+          if (!gtk_label_get_current_uri (GTK_LABEL (focus)))
+            gtk_label_select_region (GTK_LABEL (focus), 0, 0);
 	}
       while (TRUE);
 
@@ -438,13 +441,13 @@ gtk_dialog_map (GtkWidget *widget)
       while (tmp_list)
 	{
 	  GtkWidget *child = tmp_list->data;
-	  
-	  if ((window->focus_widget == NULL || 
-	       child == window->focus_widget) && 
-	      child != window->default_widget &&
-	      window->default_widget)
+
+          default_widget = gtk_window_get_default_widget (window);
+	  if ((focus == NULL || child == focus) &&
+	      child != default_widget &&
+	      default_widget)
 	    {
-	      gtk_widget_grab_focus (window->default_widget);
+	      gtk_widget_grab_focus (default_widget);
 	      break;
 	    }
 	  
@@ -1073,7 +1076,7 @@ gtk_dialog_run (GtkDialog *dialog)
 
   g_object_ref (dialog);
 
-  was_modal = GTK_WINDOW (dialog)->modal;
+  was_modal = gtk_window_get_modal (GTK_WINDOW (dialog));
   if (!was_modal)
     gtk_window_set_modal (GTK_WINDOW (dialog), TRUE);
 
