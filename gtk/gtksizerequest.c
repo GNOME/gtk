@@ -584,6 +584,8 @@ gtk_distribute_natural_allocation (gint              extra_space,
   guint *spreading = g_newa (guint, n_requested_sizes);
   gint   i;
 
+  g_return_val_if_fail (extra_space >= 0, 0);
+
   for (i = 0; i < n_requested_sizes; i++)
     spreading[i] = i;
 
