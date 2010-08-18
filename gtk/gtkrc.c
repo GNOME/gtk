@@ -903,11 +903,6 @@ _gtk_rc_init (void)
 		       "  text[PRELIGHT] = \"#ffffff\"\n"
 		       "}\n"
 		       "\n"
-                       /* Work around clipping of accelerator underlines */
-                       "style \"gtk-default-label-style\" {\n"
-                       "  GtkWidget::draw-border = {0,0,0,1}\n"
-                       "}\n"
-                       "\n"    
 		       "class \"GtkProgressBar\" style : gtk \"gtk-default-progress-bar-style\"\n"
 		       "class \"GtkEntry\" style : gtk \"gtk-default-entry-style\"\n"
 		       "widget \"gtk-tooltip*\" style : gtk \"gtk-default-tooltips-style\"\n"
