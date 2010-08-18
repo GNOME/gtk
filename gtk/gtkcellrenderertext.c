@@ -21,6 +21,7 @@
 #include <stdlib.h>
 #include "gtkcellrenderertext.h"
 #include "gtkeditable.h"
+#include "gtkcellsizerequest.h"
 #include "gtkentry.h"
 #include "gtkmarshalers.h"
 #include "gtkintl.h"
@@ -38,13 +39,6 @@ static void gtk_cell_renderer_text_set_property  (GObject                  *obje
 						  guint                     param_id,
 						  const GValue             *value,
 						  GParamSpec               *pspec);
-static void gtk_cell_renderer_text_get_size   (GtkCellRenderer          *cell,
-					       GtkWidget                *widget,
-					       GdkRectangle             *cell_area,
-					       gint                     *x_offset,
-					       gint                     *y_offset,
-					       gint                     *width,
-					       gint                     *height);
 static void gtk_cell_renderer_text_render     (GtkCellRenderer          *cell,
 					       GdkWindow                *window,
 					       GtkWidget                *widget,
@@ -60,6 +54,21 @@ static GtkCellEditable *gtk_cell_renderer_text_start_editing (GtkCellRenderer   
 							      GdkRectangle         *background_area,
 							      GdkRectangle         *cell_area,
 							      GtkCellRendererState  flags);
+
+static void       gtk_cell_renderer_text_cell_size_request_init (GtkCellSizeRequestIface  *iface);
+static void       gtk_cell_renderer_text_get_width              (GtkCellSizeRequest       *cell,
+							        GtkWidget                 *widget,
+							        gint                      *minimal_size,
+							        gint                      *natural_size);
+static void       gtk_cell_renderer_text_get_height            (GtkCellSizeRequest        *cell,
+							        GtkWidget                 *widget,
+							        gint                      *minimal_size,
+							        gint                      *natural_size);
+static void       gtk_cell_renderer_text_get_height_for_width  (GtkCellSizeRequest        *cell,
+								GtkWidget                 *widget,
+								gint                       width,
+								gint                      *minimum_height,
+								gint                      *natural_height);
 
 enum {
   EDITED,
@@ -169,7 +178,9 @@ struct _GtkCellRendererTextPriv
   gulong entry_menu_popdown_timeout;
 };
 
-G_DEFINE_TYPE (GtkCellRendererText, gtk_cell_renderer_text, GTK_TYPE_CELL_RENDERER)
+G_DEFINE_TYPE_WITH_CODE (GtkCellRendererText, gtk_cell_renderer_text, GTK_TYPE_CELL_RENDERER,
+                         G_IMPLEMENT_INTERFACE (GTK_TYPE_CELL_SIZE_REQUEST,
+                                                gtk_cell_renderer_text_cell_size_request_init))
 
 static void
 gtk_cell_renderer_text_init (GtkCellRendererText *celltext)
@@ -206,7 +217,6 @@ gtk_cell_renderer_text_class_init (GtkCellRendererTextClass *class)
   object_class->get_property = gtk_cell_renderer_text_get_property;
   object_class->set_property = gtk_cell_renderer_text_set_property;
 
-  cell_class->get_size = gtk_cell_renderer_text_get_size;
   cell_class->render = gtk_cell_renderer_text_render;
   cell_class->start_editing = gtk_cell_renderer_text_start_editing;
 
@@ -479,7 +489,7 @@ gtk_cell_renderer_text_class_init (GtkCellRendererTextClass *class)
   /**
    * GtkCellRendererText:wrap-width:
    *
-   * Specifies the width at which the text is wrapped. The wrap-mode property can 
+   * Specifies the minimum width at which the text is wrapped. The wrap-mode property can 
    * be used to influence at what character positions the line breaks can be placed.
    * Setting wrap-width to -1 turns wrapping off.
    *
@@ -1382,15 +1392,18 @@ add_attr (PangoAttrList  *attr_list,
 static PangoLayout*
 get_layout (GtkCellRendererText *celltext,
             GtkWidget           *widget,
-            gboolean             will_render,
+            GdkRectangle        *cell_area,
             GtkCellRendererState flags)
 {
   GtkCellRendererTextPriv *priv = celltext->priv;
   PangoAttrList *attr_list;
   PangoLayout *layout;
   PangoUnderline uline;
+  gint xpad;
 
   layout = gtk_widget_create_pango_layout (widget, priv->text);
+
+  gtk_cell_renderer_get_padding (GTK_CELL_RENDERER (celltext), &xpad, NULL);
 
   if (priv->extra_attrs)
     attr_list = pango_attr_list_copy (priv->extra_attrs);
@@ -1399,7 +1412,7 @@ get_layout (GtkCellRendererText *celltext,
 
   pango_layout_set_single_paragraph_mode (layout, priv->single_paragraph);
 
-  if (will_render)
+  if (cell_area)
     {
       /* Add options that affect appearance but not size */
       
@@ -1460,6 +1473,11 @@ get_layout (GtkCellRendererText *celltext,
   if (priv->rise_set)
     add_attr (attr_list, pango_attr_rise_new (priv->rise));
 
+  /* Now apply the attributes as they will effect the outcome
+   * of pango_layout_get_extents() */
+  pango_layout_set_attributes (layout, attr_list);
+  pango_attr_list_unref (attr_list);
+
   if (priv->ellipsize_set)
     pango_layout_set_ellipsize (layout, priv->ellipsize);
   else
@@ -1467,7 +1485,20 @@ get_layout (GtkCellRendererText *celltext,
 
   if (priv->wrap_width != -1)
     {
-      pango_layout_set_width (layout, priv->wrap_width * PANGO_SCALE);
+      PangoRectangle rect;
+      gint           width, text_width;
+
+      pango_layout_get_extents (layout, NULL, &rect);
+      text_width = rect.width;
+
+      if (cell_area)
+	width = (cell_area->width - xpad * 2) * PANGO_SCALE;
+      else
+	width = priv->wrap_width * PANGO_SCALE;
+
+      width = MIN (width, text_width);
+
+      pango_layout_set_width (layout, width);
       pango_layout_set_wrap (layout, priv->wrap_mode);
     }
   else
@@ -1489,13 +1520,10 @@ get_layout (GtkCellRendererText *celltext,
 
       pango_layout_set_alignment (layout, align);
     }
-
-  pango_layout_set_attributes (layout, attr_list);
-
-  pango_attr_list_unref (attr_list);
   
   return layout;
 }
+
 
 static void
 get_size (GtkCellRenderer *cell,
@@ -1559,7 +1587,7 @@ get_size (GtkCellRenderer *cell,
   if (layout)
     g_object_ref (layout);
   else
-    layout = get_layout (celltext, widget, FALSE, 0);
+    layout = get_layout (celltext, widget, NULL, 0);
 
   pango_layout_get_pixel_extents (layout, NULL, &rect);
 
@@ -1620,20 +1648,6 @@ get_size (GtkCellRenderer *cell,
   g_object_unref (layout);
 }
 
-
-static void
-gtk_cell_renderer_text_get_size (GtkCellRenderer *cell,
-				 GtkWidget       *widget,
-				 GdkRectangle    *cell_area,
-				 gint            *x_offset,
-				 gint            *y_offset,
-				 gint            *width,
-				 gint            *height)
-{
-  get_size (cell, widget, cell_area, NULL,
-	    x_offset, y_offset, width, height);
-}
-
 static void
 gtk_cell_renderer_text_render (GtkCellRenderer      *cell,
 			       GdkDrawable          *window,
@@ -1648,11 +1662,11 @@ gtk_cell_renderer_text_render (GtkCellRenderer      *cell,
   GtkCellRendererTextPriv *priv = celltext->priv;
   PangoLayout *layout;
   GtkStateType state;
-  gint x_offset;
-  gint y_offset;
+  gint x_offset = 0;
+  gint y_offset = 0;
   gint xpad, ypad;
 
-  layout = get_layout (celltext, widget, TRUE, flags);
+  layout = get_layout (celltext, widget, cell_area, flags);
   get_size (cell, widget, cell_area, layout, &x_offset, &y_offset, NULL, NULL);
 
   if (!gtk_cell_renderer_get_sensitive (cell))
@@ -1965,3 +1979,144 @@ gtk_cell_renderer_text_set_fixed_height_from_font (GtkCellRendererText *renderer
       priv->calc_fixed_height = TRUE;
     }
 }
+
+static void
+gtk_cell_renderer_text_cell_size_request_init (GtkCellSizeRequestIface *iface)
+{
+  iface->get_width            = gtk_cell_renderer_text_get_width;
+  iface->get_height           = gtk_cell_renderer_text_get_height;
+  iface->get_height_for_width = gtk_cell_renderer_text_get_height_for_width;
+}
+
+static void
+gtk_cell_renderer_text_get_width (GtkCellSizeRequest *cell,
+				  GtkWidget          *widget,
+				  gint               *minimum_size,
+				  gint               *natural_size)
+{
+  GtkCellRendererTextPriv    *priv;
+  GtkCellRendererText        *celltext;
+  PangoLayout                *layout;
+  PangoContext               *context;
+  PangoFontMetrics           *metrics;
+  PangoRectangle              rect;
+  gint char_width, digit_width, char_pixels, text_width, ellipsize_chars, guess_width, xpad;
+  gint min_width;
+
+  /* "width-chars" Hard-coded minimum width:
+   *    - minimum size should be MAX (width-chars, strlen ("..."));
+   *    - natural size should be MAX (width-chars, strlen (label->text));
+   *
+   * "wrap-width" User specified natural wrap width
+   *    - minimum size should be MAX (width-chars, 0)
+   *    - natural size should be MIN (wrap-width, strlen (label->text))
+   */
+
+  celltext = GTK_CELL_RENDERER_TEXT (cell);
+  priv = celltext->priv;
+
+  gtk_cell_renderer_get_padding (GTK_CELL_RENDERER (cell), &xpad, NULL);
+
+  layout = get_layout (celltext, widget, NULL, 0);
+
+  /* Get the layout with the text possibly wrapping at wrap_width */
+  pango_layout_get_pixel_extents (layout, NULL, &rect);
+  guess_width = rect.width;
+
+  /* Fetch the length of the complete unwrapped text */
+  pango_layout_set_width (layout, -1);
+  pango_layout_get_extents (layout, NULL, &rect);
+  text_width = rect.width;
+
+  /* Fetch the average size of a charachter */
+  context = pango_layout_get_context (layout);
+  metrics = pango_context_get_metrics (context, widget->style->font_desc, 
+				       pango_context_get_language (context));
+  
+  char_width = pango_font_metrics_get_approximate_char_width (metrics);
+  digit_width = pango_font_metrics_get_approximate_digit_width (metrics);
+  char_pixels = MAX (char_width, digit_width);
+
+  pango_font_metrics_unref (metrics);
+  g_object_unref (layout);
+
+  /* enforce minimum width for ellipsized labels at ~3 chars */
+  if (priv->ellipsize_set && priv->ellipsize != PANGO_ELLIPSIZE_NONE)
+    ellipsize_chars = 3;
+  else
+    ellipsize_chars = 0;
+  
+  if ((priv->ellipsize_set && priv->ellipsize != PANGO_ELLIPSIZE_NONE) || priv->width_chars > 0)
+    min_width = 
+      xpad * 2 + (PANGO_PIXELS (char_width) * MAX (priv->width_chars, ellipsize_chars));
+  /* If no width-chars set, minimum for wrapping text will be the wrap-width */
+  else if (priv->wrap_width > -1)
+    min_width = xpad * 2 + rect.x + priv->wrap_width;
+  else
+    min_width = xpad * 2 + rect.x + guess_width;
+
+  if (minimum_size)
+    *minimum_size = min_width;
+
+  if (natural_size)
+    {
+      /* Control the max wrap width here possibly (add max-width-chars ?) */
+      *natural_size = xpad * 2 + 
+	MAX ((PANGO_PIXELS (char_width) * priv->width_chars), PANGO_PIXELS (text_width));
+
+      *natural_size = MAX (*natural_size, min_width);
+    }
+}
+
+static void
+gtk_cell_renderer_text_get_height_for_width (GtkCellSizeRequest *cell,
+					     GtkWidget          *widget,
+					     gint                width,
+					     gint               *minimum_height,
+					     gint               *natural_height)
+{
+  GtkCellRendererTextPriv    *priv;
+  GtkCellRendererText        *celltext;
+  PangoLayout                *layout;
+  gint                        text_height, xpad, ypad;
+
+
+  celltext = GTK_CELL_RENDERER_TEXT (cell);
+  priv = celltext->priv;
+
+  gtk_cell_renderer_get_padding (GTK_CELL_RENDERER (cell), &xpad, &ypad);
+
+  layout = get_layout (celltext, widget, FALSE, 0);
+
+  pango_layout_set_width (layout, (width - xpad * 2) * PANGO_SCALE);
+  pango_layout_get_pixel_size (layout, NULL, &text_height);
+
+  if (minimum_height)
+    *minimum_height = text_height + ypad * 2;
+
+  if (natural_height)
+    *natural_height = text_height + ypad * 2;
+
+  g_object_unref (layout);
+}
+
+static void
+gtk_cell_renderer_text_get_height (GtkCellSizeRequest *cell,
+				   GtkWidget          *widget,
+				   gint               *minimum_size,
+				   gint               *natural_size)
+{
+  gint min_width;
+
+  /* Thankfully cell renderers dont rotate, so they only have to do
+   * height-for-width and not the opposite. Here we have only to return
+   * the height for the base minimum width of the renderer.
+   *
+   * Note this code path wont be followed by GtkTreeView which is
+   * height-for-width specifically.
+   */
+  gtk_cell_size_request_get_width (cell, widget, &min_width, NULL);
+  gtk_cell_renderer_text_get_height_for_width (cell, widget, min_width,
+					       minimum_size, natural_size);
+}
+
