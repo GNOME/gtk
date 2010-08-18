@@ -4467,7 +4467,6 @@ gtk_menu_position (GtkMenu *menu)
   GdkScreen *pointer_screen;
   GdkRectangle monitor;
   GdkDevice *pointer;
-  guint  border_width, vertical_padding;
 
   g_return_if_fail (GTK_IS_MENU (menu));
 
