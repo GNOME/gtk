@@ -1290,18 +1290,9 @@ gtk_icon_set_unref (GtkIconSet *icon_set)
     }
 }
 
-GType
-gtk_icon_set_get_type (void)
-{
-  static GType our_type = 0;
-
-  if (our_type == 0)
-    our_type = g_boxed_type_register_static (I_("GtkIconSet"),
-					     (GBoxedCopyFunc) gtk_icon_set_ref,
-					     (GBoxedFreeFunc) gtk_icon_set_unref);
-
-  return our_type;
-}
+G_DEFINE_BOXED_TYPE (GtkIconSet, gtk_icon_set,
+                     gtk_icon_set_ref,
+                     gtk_icon_set_unref)
 
 /**
  * gtk_icon_set_copy:
@@ -1972,18 +1963,9 @@ gtk_icon_source_free (GtkIconSource *source)
   g_free (source);
 }
 
-GType
-gtk_icon_source_get_type (void)
-{
-  static GType our_type = 0;
-
-  if (our_type == 0)
-    our_type = g_boxed_type_register_static (I_("GtkIconSource"),
-					     (GBoxedCopyFunc) gtk_icon_source_copy,
-					     (GBoxedFreeFunc) gtk_icon_source_free);
-
-  return our_type;
-}
+G_DEFINE_BOXED_TYPE (GtkIconSource, gtk_icon_source,
+                     gtk_icon_source_copy,
+                     gtk_icon_source_free)
 
 static void
 icon_source_clear (GtkIconSource *source)

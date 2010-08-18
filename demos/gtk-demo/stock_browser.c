@@ -58,18 +58,10 @@ stock_item_info_copy (StockItemInfo *src)
   return info;
 }
 
-static GType
-stock_item_info_get_type (void)
-{
-  static GType our_type = 0;
-  
-  if (our_type == 0)
-    our_type = g_boxed_type_register_static ("StockItemInfo",
-                                             (GBoxedCopyFunc) stock_item_info_copy,
-                                             (GBoxedFreeFunc) stock_item_info_free);
-
-  return our_type;
-}
+static
+G_DEFINE_BOXED_TYPE (StockItemInfo, stock_item_info,
+                     stock_item_info_copy,
+                     stock_item_info_free)
 
 typedef struct _StockItemDisplay StockItemDisplay;
 struct _StockItemDisplay

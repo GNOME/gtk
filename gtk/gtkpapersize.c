@@ -47,17 +47,9 @@ struct _GtkPaperSize
   gboolean is_custom;
 };
 
-GType
-gtk_paper_size_get_type (void)
-{
-  static GType our_type = 0;
-  
-  if (our_type == 0)
-    our_type = g_boxed_type_register_static (I_("GtkPaperSize"),
-					     (GBoxedCopyFunc)gtk_paper_size_copy,
-					     (GBoxedFreeFunc)gtk_paper_size_free);
-  return our_type;
-}
+G_DEFINE_BOXED_TYPE (GtkPaperSize, gtk_paper_size,
+                     gtk_paper_size_copy,
+                     gtk_paper_size_free)
 
 static const PaperInfo *
 lookup_paper_info (const gchar *name)
