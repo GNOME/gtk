@@ -7952,7 +7952,9 @@ _gtk_window_group_remove_device_grab (GtkWindowGroup *window_group,
  * Returns the current grab widget for @device, or %NULL if none.
  *
  * Returns: The grab widget, or %NULL
- **/
+ *
+ * Since: 3.0
+ */
 GtkWidget *
 gtk_window_group_get_current_device_grab (GtkWindowGroup *window_group,
                                           GdkDevice      *device)
