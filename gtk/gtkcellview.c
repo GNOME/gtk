@@ -336,11 +336,10 @@ static void
 gtk_cell_view_size_allocate (GtkWidget     *widget,
                              GtkAllocation *allocation)
 {
-  GtkCellView *cellview;
+  GtkCellView      *cellview;
   GtkRequestedSize *sizes;
-  GArray           *array;
   GList            *list;
-  gint              nexpand_cells = 0;
+  gint              n_visible_cells, n_expand_cells;
   gint              avail_width = 0;
   gint              extra_per_cell, extra_extra, i;
   gboolean          first_cell = TRUE;
@@ -351,41 +350,49 @@ gtk_cell_view_size_allocate (GtkWidget     *widget,
 
   avail_width = allocation->width;
 
-  array = g_array_new (0, TRUE, sizeof (GtkRequestedSize));
-
-  /* checking how much extra space we have */
-  for (list = cellview->priv->cell_list; list; list = list->next)
+  /* Count visible/expand children */
+  for (n_visible_cells = 0, n_expand_cells = 0, list = cellview->priv->cell_list; 
+       list; list = list->next)
     {
       GtkCellViewCellInfo *info = (GtkCellViewCellInfo *)list->data;
-      GtkRequestedSize requested;
+
+      n_visible_cells++;
+
+      if (info->expand)
+        n_expand_cells++;
+    }
+
+  sizes = g_new0 (GtkRequestedSize, n_visible_cells);
+
+  /* checking how much extra space we have */
+  for (i = 0, list = cellview->priv->cell_list; list; list = list->next)
+    {
+      GtkCellViewCellInfo *info = (GtkCellViewCellInfo *)list->data;
 
       if (!gtk_cell_renderer_get_visible (info->cell))
         continue;
 
-      if (info->expand)
-        nexpand_cells++;
-
-      requested.data = info;
-      requested.minimum_size = info->requested_width;
-      requested.natural_size = info->natural_width;
-      g_array_append_val (array, requested);
+      sizes[i].data = info;
+      sizes[i].minimum_size = info->requested_width;
+      sizes[i].natural_size = info->natural_width;
 
       if (!first_cell)
 	avail_width -= cellview->priv->spacing;
 
-      avail_width -= requested.minimum_size;
+      avail_width -= sizes[i].minimum_size;
 
       first_cell = FALSE;
+
+      i++;
     }
 
-  sizes       = (GtkRequestedSize *)array->data;
-  avail_width = gtk_distribute_natural_allocation (MAX (0, avail_width), array->len, sizes);
+  avail_width = gtk_distribute_natural_allocation (MAX (0, avail_width), n_visible_cells, sizes);
 
   /* Deal with any expand space... */
-  if (nexpand_cells > 0)
+  if (n_expand_cells > 0)
     {
-      extra_per_cell = avail_width / nexpand_cells;
-      extra_extra    = avail_width % nexpand_cells;
+      extra_per_cell = avail_width / n_expand_cells;
+      extra_extra    = avail_width % n_expand_cells;
     }
   else
     /* Everything just left-aligned if no cells expand */
@@ -414,6 +421,8 @@ gtk_cell_view_size_allocate (GtkWidget     *widget,
       /* increment index into sizes for visible children */
       i++;
     }
+
+  g_free (sizes);
 }
 
 static gboolean
