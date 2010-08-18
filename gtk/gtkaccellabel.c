@@ -33,6 +33,7 @@
 #include "gtkaccellabel.h"
 #include "gtkaccelmap.h"
 #include "gtkmain.h"
+#include "gtksizerequest.h"
 #include "gtkprivate.h"
 #include "gtkintl.h"
 
@@ -119,15 +120,24 @@ static void         gtk_accel_label_get_property (GObject            *object,
 						  GParamSpec         *pspec);
 static void         gtk_accel_label_destroy      (GtkObject          *object);
 static void         gtk_accel_label_finalize     (GObject            *object);
-static void         gtk_accel_label_size_request (GtkWidget          *widget,
-						  GtkRequisition     *requisition);
 static gboolean     gtk_accel_label_expose_event (GtkWidget          *widget,
 						  GdkEventExpose     *event);
 static const gchar *gtk_accel_label_get_string   (GtkAccelLabel      *accel_label);
 
+
+static void         gtk_accel_label_size_request_init (GtkSizeRequestIface *iface);
+static void         gtk_accel_label_get_width         (GtkSizeRequest      *widget,
+						       gint                *min_width,
+						       gint                *nat_width);
+
 #define GTK_ACCEL_LABEL_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), GTK_TYPE_ACCEL_LABEL, GtkAccelLabelPrivate))
 
-G_DEFINE_TYPE (GtkAccelLabel, gtk_accel_label, GTK_TYPE_LABEL)
+
+static GtkSizeRequestIface *parent_size_request_iface;
+
+G_DEFINE_TYPE_WITH_CODE (GtkAccelLabel, gtk_accel_label, GTK_TYPE_LABEL,
+			 G_IMPLEMENT_INTERFACE (GTK_TYPE_SIZE_REQUEST,
+						gtk_accel_label_size_request_init))
 
 static void
 gtk_accel_label_class_init (GtkAccelLabelClass *class)
@@ -142,7 +152,6 @@ gtk_accel_label_class_init (GtkAccelLabelClass *class)
   
   object_class->destroy = gtk_accel_label_destroy;
    
-  widget_class->size_request = gtk_accel_label_size_request;
   widget_class->expose_event = gtk_accel_label_expose_event;
 
   class->signal_quote1 = g_strdup ("<:");
@@ -340,16 +349,25 @@ gtk_accel_label_get_accel_width (GtkAccelLabel *accel_label)
 }
 
 static void
-gtk_accel_label_size_request (GtkWidget	     *widget,
-			      GtkRequisition *requisition)
+gtk_accel_label_size_request_init (GtkSizeRequestIface *iface)
+{
+  parent_size_request_iface = g_type_interface_peek_parent (iface);
+  iface->get_width = gtk_accel_label_get_width;
+}
+
+static void
+gtk_accel_label_get_width (GtkSizeRequest  *widget,
+			   gint            *min_width,
+			   gint            *nat_width)
 {
   GtkAccelLabel *accel_label = GTK_ACCEL_LABEL (widget);
-  PangoLayout *layout;
-  gint width;
+  PangoLayout   *layout;
+  gint           width;
 
-  GTK_WIDGET_CLASS (gtk_accel_label_parent_class)->size_request (widget, requisition);
+  parent_size_request_iface->get_width (widget, min_width, nat_width);
 
-  layout = gtk_widget_create_pango_layout (widget, gtk_accel_label_get_string (accel_label));
+  layout = gtk_widget_create_pango_layout (GTK_WIDGET (widget), 
+					   gtk_accel_label_get_string (accel_label));
   pango_layout_get_pixel_size (layout, &width, NULL);
   accel_label->priv->accel_string_width = width;
 
