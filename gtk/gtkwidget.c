@@ -2470,6 +2470,8 @@ gtk_widget_class_init (GtkWidgetClass *klass)
    * the widget's allocation to draw.
    *
    * Since: 2.8
+   *
+   * Deprecated: 2.22: This property will be removed in GTK+ 3
    */
   gtk_widget_class_install_style_property (klass,
 					   g_param_spec_boxed ("draw-border",
