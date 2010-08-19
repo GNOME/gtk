@@ -81,6 +81,8 @@ void          gtk_style_context_set_path     (GtkStyleContext *context,
                                               GtkWidgetPath   *path);
 G_CONST_RETURN GtkWidgetPath * gtk_style_context_get_path (GtkStyleContext *context);
 
+GList *  gtk_style_context_list_classes (GtkStyleContext *context);
+
 void     gtk_style_context_set_class   (GtkStyleContext *context,
                                         const gchar     *class_name);
 void     gtk_style_context_unset_class (GtkStyleContext *context,
