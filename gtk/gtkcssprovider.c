@@ -24,6 +24,7 @@
 #include <gtk/gtk.h>
 #include <gtkstyleprovider.h>
 
+#include "gtkanimationdescription.h"
 #include "gtkcssprovider.h"
 
 #include "gtkalias.h"
@@ -1392,6 +1393,17 @@ css_provider_parse_value (const gchar *value_str,
 
       engine = gtk_theming_engine_load (value_str);
       g_value_set_object (value, engine);
+    }
+  else if (type == GTK_TYPE_ANIMATION_DESCRIPTION)
+    {
+      GtkAnimationDescription *desc;
+
+      desc = gtk_animation_description_from_string (value_str);
+
+      if (desc)
+        g_value_take_boxed (value, desc);
+      else
+        parsed = FALSE;
     }
   else
     {
