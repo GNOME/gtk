@@ -65,6 +65,7 @@ gtk_symbolic_color_new_literal (GdkColor *color)
   symbolic_color = g_slice_new0 (GtkSymbolicColor);
   symbolic_color->type = COLOR_TYPE_LITERAL;
   symbolic_color->color = *color;
+  symbolic_color->ref_count = 1;
 
   return symbolic_color;
 }
@@ -79,6 +80,7 @@ gtk_symbolic_color_new_name (const gchar *name)
   symbolic_color = g_slice_new0 (GtkSymbolicColor);
   symbolic_color->type = COLOR_TYPE_NAME;
   symbolic_color->name = g_strdup (name);
+  symbolic_color->ref_count = 1;
 
   return symbolic_color;
 }
@@ -95,6 +97,7 @@ gtk_symbolic_color_new_shade (GtkSymbolicColor *color,
   symbolic_color->type = COLOR_TYPE_SHADE;
   symbolic_color->shade.color = gtk_symbolic_color_ref (color);
   symbolic_color->shade.factor = CLAMP (factor, 0, 1);
+  symbolic_color->ref_count = 1;
 
   return symbolic_color;
 }
@@ -114,6 +117,7 @@ gtk_symbolic_color_new_mix (GtkSymbolicColor *color1,
   symbolic_color->mix.color1 = gtk_symbolic_color_ref (color1);
   symbolic_color->mix.color2 = gtk_symbolic_color_ref (color2);
   symbolic_color->mix.factor = CLAMP (factor, 0, 1);
+  symbolic_color->ref_count = 1;
 
   return symbolic_color;
 }
@@ -134,6 +138,27 @@ gtk_symbolic_color_unref (GtkSymbolicColor *color)
   g_return_if_fail (color != NULL);
 
   color->ref_count--;
+
+  if (color->ref_count == 0)
+    {
+      switch (color->type)
+        {
+        case COLOR_TYPE_NAME:
+          g_free (color->name);
+          break;
+        case COLOR_TYPE_SHADE:
+          gtk_symbolic_color_unref (color->shade.color);
+          break;
+        case COLOR_TYPE_MIX:
+          gtk_symbolic_color_unref (color->mix.color1);
+          gtk_symbolic_color_unref (color->mix.color2);
+          break;
+        default:
+          break;
+        }
+
+      g_slice_free (GtkSymbolicColor, color);
+    }
 }
 
 gboolean

@@ -7442,6 +7442,7 @@ gtk_widget_ensure_style (GtkWidget *widget)
                             NULL);
 
       gtk_widget_set_style_internal (widget, style, TRUE);
+      g_object_unref (style);
     }
 
 #if 0

@@ -102,6 +102,9 @@ gtk_widget_path_free (GtkWidgetPath *path)
 
       if (elem->regions)
         g_hash_table_destroy (elem->regions);
+
+      if (elem->classes)
+        g_array_free (elem->classes, TRUE);
     }
 
   g_array_free (path->elems, TRUE);

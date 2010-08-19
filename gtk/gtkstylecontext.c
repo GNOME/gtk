@@ -204,7 +204,7 @@ gtk_style_context_init (GtkStyleContext *style_context)
                                                             GtkStyleContextPrivate);
 
   priv->store = gtk_style_set_new ();
-  priv->theming_engine = (GtkThemingEngine *) gtk_theming_engine_load (NULL);
+  priv->theming_engine = g_object_ref ((gpointer) gtk_theming_engine_load (NULL));
 
   priv->direction = GTK_TEXT_DIR_RTL;
 
@@ -258,13 +258,137 @@ clear_property_cache (GtkStyleContext *context)
 }
 
 static void
+animation_info_free (AnimationInfo *info)
+{
+  g_object_unref (info->timeline);
+  g_object_unref (info->window);
+
+  if (info->invalidation_region)
+    gdk_region_destroy (info->invalidation_region);
+
+  g_array_free (info->rectangles, TRUE);
+  g_slice_free (AnimationInfo, info);
+}
+
+static void
+timeline_frame_cb (GtkTimeline *timeline,
+                   gdouble      progress,
+                   gpointer     user_data)
+{
+  AnimationInfo *info;
+
+  info = user_data;
+
+  if (info->invalidation_region &&
+      !gdk_region_empty (info->invalidation_region))
+    gdk_window_invalidate_region (info->window, info->invalidation_region, TRUE);
+}
+
+static void
+timeline_finished_cb (GtkTimeline *timeline,
+                      gpointer     user_data)
+{
+  GtkStyleContextPrivate *priv;
+  GtkStyleContext *context;
+  AnimationInfo *info;
+  GSList *l;
+
+  context = user_data;
+  priv = context->priv;
+
+  for (l = priv->animations; l; l = l->next)
+    {
+      info = l->data;
+
+      if (info->timeline == timeline)
+        {
+          priv->animations = g_slist_delete_link (priv->animations, l);
+
+          /* Invalidate one last time the area, so the final content is painted */
+          if (info->invalidation_region &&
+              !gdk_region_empty (info->invalidation_region))
+            gdk_window_invalidate_region (info->window, info->invalidation_region, TRUE);
+
+          animation_info_free (info);
+          break;
+        }
+    }
+}
+
+static AnimationInfo *
+animation_info_new (GtkStyleContext         *context,
+                    gdouble                  duration,
+                    GtkTimelineProgressType  progress_type,
+                    GtkStateType             state,
+                    gboolean                 target_value,
+                    GdkWindow               *window)
+{
+  AnimationInfo *info;
+
+  info = g_slice_new0 (AnimationInfo);
+
+  info->rectangles = g_array_new (FALSE, FALSE, sizeof (GdkRectangle));
+  info->timeline = gtk_timeline_new (duration);
+  info->window = g_object_ref (window);
+  info->state = state;
+  info->target_value = target_value;
+
+  gtk_timeline_set_progress_type (info->timeline, progress_type);
+
+  if (!target_value)
+    {
+      gtk_timeline_set_direction (info->timeline, GTK_TIMELINE_DIRECTION_BACKWARD);
+      gtk_timeline_rewind (info->timeline);
+    }
+
+  g_signal_connect (info->timeline, "frame",
+                    G_CALLBACK (timeline_frame_cb), info);
+  g_signal_connect (info->timeline, "finished",
+                    G_CALLBACK (timeline_finished_cb), context);
+
+  gtk_timeline_start (info->timeline);
+
+  return info;
+}
+
+static AnimationInfo *
+animation_info_lookup (GtkStyleContext *context,
+                       gpointer         region_id,
+                       GtkStateType     state)
+{
+  GtkStyleContextPrivate *priv;
+  GSList *l;
+
+  priv = context->priv;
+
+  for (l = priv->animations; l; l = l->next)
+    {
+      AnimationInfo *info;
+
+      info = l->data;
+
+      if (info->state == state &&
+          info->region_id == region_id)
+        return info;
+    }
+
+  return NULL;
+}
+
+static void
 gtk_style_context_finalize (GObject *object)
 {
   GtkStyleContextPrivate *priv;
   GtkStyleContext *style_context;
+  GSList *l;
 
   style_context = GTK_STYLE_CONTEXT (object);
   priv = style_context->priv;
+
+  if (priv->widget_path)
+    gtk_widget_path_free (priv->widget_path);
+
+  g_object_unref (priv->store);
 
   g_list_foreach (priv->providers, (GFunc) style_provider_data_free, NULL);
   g_list_free (priv->providers);
@@ -276,6 +400,16 @@ gtk_style_context_finalize (GObject *object)
 
   g_slist_foreach (priv->icon_factories, (GFunc) g_object_unref, NULL);
   g_slist_free (priv->icon_factories);
+
+  g_slist_free (priv->animation_regions);
+
+  for (l = priv->animations; l; l = l->next)
+    animation_info_free ((AnimationInfo *) l->data);
+
+  g_slist_free (priv->animations);
+
+  if (priv->theming_engine)
+    g_object_unref (priv->theming_engine);
 
   G_OBJECT_CLASS (gtk_style_context_parent_class)->finalize (object);
 }
@@ -362,6 +496,9 @@ rebuild_properties (GtkStyleContext *context)
           g_object_unref (provider_style);
         }
     }
+
+  if (priv->theming_engine)
+    g_object_unref (priv->theming_engine);
 
   gtk_style_set_get (priv->store, 0,
                      "engine", &priv->theming_engine,
@@ -1435,124 +1572,6 @@ gtk_style_context_lookup_color (GtkStyleContext *context,
     return FALSE;
 
   return gtk_symbolic_color_resolve (sym_color, priv->store, color);
-}
-
-static void
-timeline_frame_cb (GtkTimeline *timeline,
-                   gdouble      progress,
-                   gpointer     user_data)
-{
-  AnimationInfo *info;
-
-  info = user_data;
-
-  if (info->invalidation_region &&
-      !gdk_region_empty (info->invalidation_region))
-    gdk_window_invalidate_region (info->window, info->invalidation_region, TRUE);
-}
-
-static void
-animation_info_free (AnimationInfo *info)
-{
-  g_object_unref (info->timeline);
-  g_object_unref (info->window);
-
-  if (info->invalidation_region)
-    gdk_region_destroy (info->invalidation_region);
-
-  g_array_free (info->rectangles, TRUE);
-  g_slice_free (AnimationInfo, info);
-}
-
-static void
-timeline_finished_cb (GtkTimeline *timeline,
-                      gpointer     user_data)
-{
-  GtkStyleContextPrivate *priv;
-  GtkStyleContext *context;
-  AnimationInfo *info;
-  GSList *l;
-
-  context = user_data;
-  priv = context->priv;
-
-  for (l = priv->animations; l; l = l->next)
-    {
-      info = l->data;
-
-      if (info->timeline == timeline)
-        {
-          priv->animations = g_slist_delete_link (priv->animations, l);
-
-          /* Invalidate one last time the area, so the final content is painted */
-          if (info->invalidation_region &&
-              !gdk_region_empty (info->invalidation_region))
-            gdk_window_invalidate_region (info->window, info->invalidation_region, TRUE);
-
-          animation_info_free (info);
-          break;
-        }
-    }
-}
-
-static AnimationInfo *
-animation_info_new (GtkStyleContext         *context,
-                    gdouble                  duration,
-                    GtkTimelineProgressType  progress_type,
-                    GtkStateType             state,
-                    gboolean                 target_value,
-                    GdkWindow               *window)
-{
-  AnimationInfo *info;
-
-  info = g_slice_new0 (AnimationInfo);
-
-  info->rectangles = g_array_new (FALSE, FALSE, sizeof (GdkRectangle));
-  info->timeline = gtk_timeline_new (duration);
-  info->window = g_object_ref (window);
-  info->state = state;
-  info->target_value = target_value;
-
-  gtk_timeline_set_progress_type (info->timeline, progress_type);
-
-  if (!target_value)
-    {
-      gtk_timeline_set_direction (info->timeline, GTK_TIMELINE_DIRECTION_BACKWARD);
-      gtk_timeline_rewind (info->timeline);
-    }
-
-  g_signal_connect (info->timeline, "frame",
-                    G_CALLBACK (timeline_frame_cb), info);
-  g_signal_connect (info->timeline, "finished",
-                    G_CALLBACK (timeline_finished_cb), context);
-
-  gtk_timeline_start (info->timeline);
-
-  return info;
-}
-
-static AnimationInfo *
-animation_info_lookup (GtkStyleContext *context,
-                       gpointer         region_id,
-                       GtkStateType     state)
-{
-  GtkStyleContextPrivate *priv;
-  GSList *l;
-
-  priv = context->priv;
-
-  for (l = priv->animations; l; l = l->next)
-    {
-      AnimationInfo *info;
-
-      info = l->data;
-
-      if (info->state == state &&
-          info->region_id == region_id)
-        return info;
-    }
-
-  return NULL;
 }
 
 void

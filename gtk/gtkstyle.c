@@ -696,7 +696,7 @@ gtk_style_update_from_context (GtkStyle *style)
       set_color (style, priv->context, state, GTK_RC_TEXT);
     }
 
-  /* FIXME: thickness */
+  /* FIXME: thickness, font_desc */
 }
 
 static void

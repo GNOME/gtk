@@ -724,6 +724,10 @@ gtk_theming_engine_render_option (GtkThemingEngine *engine,
     }
 
   cairo_restore (cr);
+
+  gdk_color_free (fg_color);
+  gdk_color_free (base_color);
+  gdk_color_free (text_color);
 }
 
 static void
@@ -1337,6 +1341,8 @@ gtk_theming_engine_render_line (GtkThemingEngine *engine,
     }
 
   cairo_restore (cr);
+
+  gdk_color_free (bg_color);
 }
 
 typedef struct _ByteRange ByteRange;

@@ -129,6 +129,7 @@ property_data_free (PropertyData *data)
         g_value_unset (&value_data->value);
     }
 
+  g_array_free (data->values, TRUE);
   g_slice_free (PropertyData, data);
 }
 
