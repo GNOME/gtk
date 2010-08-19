@@ -570,33 +570,44 @@ gtk_theming_engine_render_check (GtkThemingEngine *engine,
 		       line_thickness);
       cairo_fill (cr);
     }
-  else if (gtk_theming_engine_is_state_set (engine, GTK_STATE_ACTIVE, NULL))
+  else
     {
-      cairo_translate (cr,
-		       x + pad, y + pad);
+      gdouble progress;
+      gboolean active;
 
-      cairo_scale (cr, interior_size / 7., interior_size / 7.);
+      active = gtk_theming_engine_is_state_set (engine, GTK_STATE_ACTIVE, &progress);
 
-      cairo_move_to  (cr, 7.0, 0.0);
-      cairo_line_to  (cr, 7.5, 1.0);
-      cairo_curve_to (cr, 5.3, 2.0,
-		      4.3, 4.0,
-		      3.5, 7.0);
-      cairo_curve_to (cr, 3.0, 5.7,
-		      1.3, 4.7,
-		      0.0, 4.7);
-      cairo_line_to  (cr, 0.2, 3.5);
-      cairo_curve_to (cr, 1.1, 3.5,
-		      2.3, 4.3,
-		      3.0, 5.0);
-      cairo_curve_to (cr, 1.0, 3.9,
-		      2.4, 4.1,
-		      3.2, 4.9);
-      cairo_curve_to (cr, 3.5, 3.1,
-		      5.2, 2.0,
-		      7.0, 0.0);
+      if (active || progress > 0)
+        {
+          cairo_translate (cr,
+                           x + pad, y + pad);
 
-      cairo_fill (cr);
+          cairo_scale (cr, interior_size / 7., interior_size / 7.);
+
+          cairo_rectangle (cr, 0, 0, 7 * progress, 7);
+          cairo_clip (cr);
+
+          cairo_move_to  (cr, 7.0, 0.0);
+          cairo_line_to  (cr, 7.5, 1.0);
+          cairo_curve_to (cr, 5.3, 2.0,
+                          4.3, 4.0,
+                          3.5, 7.0);
+          cairo_curve_to (cr, 3.0, 5.7,
+                          1.3, 4.7,
+                          0.0, 4.7);
+          cairo_line_to  (cr, 0.2, 3.5);
+          cairo_curve_to (cr, 1.1, 3.5,
+                          2.3, 4.3,
+                          3.0, 5.0);
+          cairo_curve_to (cr, 1.0, 3.9,
+                          2.4, 4.1,
+                          3.2, 4.9);
+          cairo_curve_to (cr, 3.5, 3.1,
+                          5.2, 2.0,
+                          7.0, 0.0);
+
+          cairo_fill (cr);
+        }
     }
 
   cairo_restore (cr);
