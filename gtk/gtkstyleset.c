@@ -26,6 +26,7 @@
 #include "gtkstyleset.h"
 #include "gtkprivate.h"
 #include "gtkthemingengine.h"
+#include "gtkanimationdescription.h"
 #include "gtkintl.h"
 
 #include "gtkalias.h"
@@ -92,6 +93,11 @@ gtk_style_set_class_init (GtkStyleSetClass *klass)
   g_value_init (&val, GTK_TYPE_THEMING_ENGINE);
   g_value_set_object (&val, (GObject *) gtk_theming_engine_load (NULL));
   gtk_style_set_register_property ("engine", GTK_TYPE_THEMING_ENGINE, &val, NULL);
+  g_value_unset (&val);
+
+  g_value_init (&val, GTK_TYPE_ANIMATION_DESCRIPTION);
+  g_value_take_boxed (&val, gtk_animation_description_new (0, GTK_TIMELINE_PROGRESS_LINEAR));
+  gtk_style_set_register_property ("transition", GTK_TYPE_ANIMATION_DESCRIPTION, &val, NULL);
   g_value_unset (&val);
 
   g_type_class_add_private (object_class, sizeof (GtkStyleSetPrivate));
