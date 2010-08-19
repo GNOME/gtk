@@ -175,7 +175,8 @@ gboolean gtk_theming_engine_has_region (GtkThemingEngine *engine,
 
 GtkStateFlags gtk_theming_engine_get_state     (GtkThemingEngine *engine);
 gboolean      gtk_theming_engine_is_state_set  (GtkThemingEngine *engine,
-                                                GtkStateType      state);
+                                                GtkStateType      state,
+                                                gdouble          *progress);
 
 GtkTextDirection gtk_theming_engine_get_direction (GtkThemingEngine *engine);
 

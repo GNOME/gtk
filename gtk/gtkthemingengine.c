@@ -314,14 +314,15 @@ gtk_theming_engine_get_state (GtkThemingEngine *engine)
 
 gboolean
 gtk_theming_engine_is_state_set (GtkThemingEngine *engine,
-                                 GtkStateType      state)
+                                 GtkStateType      state,
+                                 gdouble          *progress)
 {
   GtkThemingEnginePrivate *priv;
 
   g_return_val_if_fail (GTK_IS_THEMING_ENGINE (engine), 0);
 
   priv = engine->priv;
-  return gtk_style_context_is_state_set (priv->context, state, NULL);
+  return gtk_style_context_is_state_set (priv->context, state, progress);
 }
 
 G_CONST_RETURN GtkWidgetPath *
@@ -558,7 +559,7 @@ gtk_theming_engine_render_check (GtkThemingEngine *engine,
   else
     gdk_cairo_set_source_color (cr, text_color);
 
-  if (gtk_theming_engine_is_state_set (engine, GTK_STATE_INCONSISTENT))
+  if (gtk_theming_engine_is_state_set (engine, GTK_STATE_INCONSISTENT, NULL))
     {
       int line_thickness = MAX (1, (3 + interior_size * 2) / 7);
 
@@ -569,7 +570,7 @@ gtk_theming_engine_render_check (GtkThemingEngine *engine,
 		       line_thickness);
       cairo_fill (cr);
     }
-  else if (gtk_theming_engine_is_state_set (engine, GTK_STATE_ACTIVE))
+  else if (gtk_theming_engine_is_state_set (engine, GTK_STATE_ACTIVE, NULL))
     {
       cairo_translate (cr,
 		       x + pad, y + pad);
@@ -670,7 +671,7 @@ gtk_theming_engine_render_option (GtkThemingEngine *engine,
   /* FIXME: thickness */
   thickness = 1;
 
-  if (gtk_theming_engine_is_state_set (engine, GTK_STATE_INCONSISTENT))
+  if (gtk_theming_engine_is_state_set (engine, GTK_STATE_INCONSISTENT, NULL))
     {
       gint line_thickness;
 
@@ -692,7 +693,7 @@ gtk_theming_engine_render_option (GtkThemingEngine *engine,
 		       line_thickness);
       cairo_fill (cr);
     }
-  if (gtk_theming_engine_is_state_set (engine, GTK_STATE_ACTIVE))
+  if (gtk_theming_engine_is_state_set (engine, GTK_STATE_ACTIVE, NULL))
     {
       pad = thickness + MAX (1, 2 * (exterior_size - 2 * thickness) / 9);
       interior_size = MAX (1, exterior_size - 2 * pad);
@@ -1481,7 +1482,7 @@ gtk_theming_engine_render_layout (GtkThemingEngine *engine,
 
   screen = gtk_theming_engine_get_screen (engine);
 
-  if (gtk_theming_engine_is_state_set (engine, GTK_STATE_INSENSITIVE))
+  if (gtk_theming_engine_is_state_set (engine, GTK_STATE_INSENSITIVE, NULL))
     {
       PangoLayout *insensitive_layout;
 
