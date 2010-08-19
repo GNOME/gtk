@@ -4660,6 +4660,14 @@ gtk_widget_size_allocate (GtkWidget	*widget,
 	      cairo_region_destroy (invalidate);
 	    }
 	}
+
+      if (size_changed || position_changed)
+        {
+          GtkStyleContext *context;
+
+          context = gtk_widget_get_style_context (widget);
+          _gtk_style_context_invalidate_animation_areas (context);
+        }
     }
 
   if ((size_changed || position_changed) && priv->parent &&
@@ -5632,6 +5640,7 @@ gtk_widget_send_expose (GtkWidget *widget,
   cairo_t *cr;
   int x, y;
   gboolean do_clip;
+  GtkStyleContext *context;
 
   g_return_val_if_fail (GTK_IS_WIDGET (widget), TRUE);
   g_return_val_if_fail (gtk_widget_get_realized (widget), TRUE);
@@ -5655,6 +5664,9 @@ gtk_widget_send_expose (GtkWidget *widget,
    * don't leak the window. */
   gtk_cairo_set_event (cr, NULL);
   cairo_destroy (cr);
+
+  context = gtk_widget_get_style_context (widget);
+  _gtk_style_context_coalesce_animation_areas (context);
 
   return result;
 }
