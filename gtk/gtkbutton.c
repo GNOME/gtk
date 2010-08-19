@@ -2246,6 +2246,18 @@ _gtk_button_set_depressed (GtkButton *button,
 
   if (depressed != priv->depressed)
     {
+      if (gtk_widget_get_realized (widget) &&
+          gtk_widget_is_drawable (widget))
+        {
+          GtkStyleContext *context;
+
+          context = gtk_widget_get_style_context (widget);
+          gtk_style_context_notify_state_change (context,
+                                                 gtk_widget_get_window (widget),
+                                                 NULL, GTK_STATE_ACTIVE,
+                                                 depressed);
+        }
+
       priv->depressed = depressed;
       gtk_widget_queue_resize (widget);
     }
