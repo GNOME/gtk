@@ -475,7 +475,7 @@ gtk_print_backend_test_init (GtkPrintBackendTest *backend)
       g_message ("TEST Backend: Adding printer %d\n", i);
 
       gtk_printer_set_has_details (printer, FALSE);
-      gtk_printer_set_icon_name (printer, "gtk-delete"); /* use a delete icon just for fun */
+      gtk_printer_set_icon_name (printer, "edit-delete"); /* use a delete icon just for fun */
       gtk_printer_set_is_active (printer, TRUE);
 
       gtk_print_backend_add_printer (GTK_PRINT_BACKEND (backend), printer);

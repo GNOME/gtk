@@ -364,13 +364,15 @@ gtk_icon_factory_lookup_default (const gchar *stock_id)
 
 static void
 register_stock_icon (GtkIconFactory *factory,
-		     const gchar    *stock_id)
+		     const gchar    *stock_id,
+                     const gchar    *icon_name)
 {
   GtkIconSet *set = gtk_icon_set_new ();
   GtkIconSource source = GTK_ICON_SOURCE_INIT (TRUE, TRUE, TRUE);
 
   source.type = GTK_ICON_SOURCE_STATIC_ICON_NAME;
-  source.source.icon_name = (gchar *)stock_id;
+  source.source.icon_name = (gchar *)icon_name;
+  source.direction = GTK_TEXT_DIR_NONE;
   gtk_icon_set_add_source (set, &source);
 
   gtk_icon_factory_add (factory, stock_id, set);
@@ -380,19 +382,18 @@ register_stock_icon (GtkIconFactory *factory,
 static void
 register_bidi_stock_icon (GtkIconFactory *factory,
 			  const gchar    *stock_id,
-			  const gchar    *stock_id_ltr,
-			  const gchar    *stock_id_rtl)
+                          const gchar    *icon_name)
 {
   GtkIconSet *set = gtk_icon_set_new ();
   GtkIconSource source = GTK_ICON_SOURCE_INIT (FALSE, TRUE, TRUE);
 
   source.type = GTK_ICON_SOURCE_STATIC_ICON_NAME;
-  source.source.icon_name = (gchar *)stock_id_ltr;
+  source.source.icon_name = (gchar *)icon_name;
   source.direction = GTK_TEXT_DIR_LTR;
   gtk_icon_set_add_source (set, &source);
 
   source.type = GTK_ICON_SOURCE_STATIC_ICON_NAME;
-  source.source.icon_name = (gchar *)stock_id_rtl;
+  source.source.icon_name = (gchar *)icon_name;
   source.direction = GTK_TEXT_DIR_RTL;
   gtk_icon_set_add_source (set, &source);
 
@@ -405,158 +406,110 @@ get_default_icons (GtkIconFactory *factory)
 {
   /* KEEP IN SYNC with gtkstock.c */
 
-  register_stock_icon (factory, GTK_STOCK_DIALOG_AUTHENTICATION);
-  register_stock_icon (factory, GTK_STOCK_DIALOG_ERROR);
-  register_stock_icon (factory, GTK_STOCK_DIALOG_INFO);
-  register_stock_icon (factory, GTK_STOCK_DIALOG_QUESTION);
-  register_stock_icon (factory, GTK_STOCK_DIALOG_WARNING);
-  register_stock_icon (factory, GTK_STOCK_DND);
-  register_stock_icon (factory, GTK_STOCK_DND_MULTIPLE);
-  register_stock_icon (factory, GTK_STOCK_APPLY);
-  register_stock_icon (factory, GTK_STOCK_CANCEL);
-  register_stock_icon (factory, GTK_STOCK_NO);
-  register_stock_icon (factory, GTK_STOCK_OK);
-  register_stock_icon (factory, GTK_STOCK_YES);
-  register_stock_icon (factory, GTK_STOCK_CLOSE);
-  register_stock_icon (factory, GTK_STOCK_ADD);
-  register_stock_icon (factory, GTK_STOCK_JUSTIFY_CENTER);
-  register_stock_icon (factory, GTK_STOCK_JUSTIFY_FILL);
-  register_stock_icon (factory, GTK_STOCK_JUSTIFY_LEFT);
-  register_stock_icon (factory, GTK_STOCK_JUSTIFY_RIGHT);
-  register_stock_icon (factory, GTK_STOCK_GOTO_BOTTOM);
-  register_stock_icon (factory, GTK_STOCK_CDROM);
-  register_stock_icon (factory, GTK_STOCK_CONVERT);
-  register_stock_icon (factory, GTK_STOCK_COPY);
-  register_stock_icon (factory, GTK_STOCK_CUT);
-  register_stock_icon (factory, GTK_STOCK_GO_DOWN);
-  register_stock_icon (factory, GTK_STOCK_EXECUTE);
-  register_stock_icon (factory, GTK_STOCK_QUIT);
-  register_bidi_stock_icon (factory,
-			    GTK_STOCK_GOTO_FIRST,
-			    GTK_STOCK_GOTO_FIRST "-ltr",
-			    GTK_STOCK_GOTO_FIRST "-rtl");
-  register_stock_icon (factory, GTK_STOCK_SELECT_FONT);
-  register_stock_icon (factory, GTK_STOCK_FULLSCREEN);
-  register_stock_icon (factory, GTK_STOCK_LEAVE_FULLSCREEN);
-  register_stock_icon (factory, GTK_STOCK_HARDDISK);
-  register_stock_icon (factory, GTK_STOCK_HELP);
-  register_stock_icon (factory, GTK_STOCK_HOME);
-  register_stock_icon (factory, GTK_STOCK_INFO);
-  register_bidi_stock_icon (factory,
-			    GTK_STOCK_JUMP_TO,
-			    GTK_STOCK_JUMP_TO "-ltr",
-			    GTK_STOCK_JUMP_TO "-rtl");
-  register_bidi_stock_icon (factory,
-			    GTK_STOCK_GOTO_LAST,
-			    GTK_STOCK_GOTO_LAST "-ltr",
-			    GTK_STOCK_GOTO_LAST "-rtl");
-  register_bidi_stock_icon (factory,
-			    GTK_STOCK_GO_BACK,
-			    GTK_STOCK_GO_BACK "-ltr",
-			    GTK_STOCK_GO_BACK "-rtl");
-  register_stock_icon (factory, GTK_STOCK_MISSING_IMAGE);
-  register_stock_icon (factory, GTK_STOCK_NETWORK);
-  register_stock_icon (factory, GTK_STOCK_NEW);
-  register_stock_icon (factory, GTK_STOCK_OPEN);
-  register_stock_icon (factory, GTK_STOCK_ORIENTATION_PORTRAIT);
-  register_stock_icon (factory, GTK_STOCK_ORIENTATION_LANDSCAPE);
-  register_stock_icon (factory, GTK_STOCK_ORIENTATION_REVERSE_PORTRAIT);
-  register_stock_icon (factory, GTK_STOCK_ORIENTATION_REVERSE_LANDSCAPE);
-  register_stock_icon (factory, GTK_STOCK_PAGE_SETUP);
-  register_stock_icon (factory, GTK_STOCK_PASTE);
-  register_stock_icon (factory, GTK_STOCK_PREFERENCES);
-  register_stock_icon (factory, GTK_STOCK_PRINT);
-  register_stock_icon (factory, GTK_STOCK_PRINT_ERROR);
-  register_stock_icon (factory, GTK_STOCK_PRINT_PAUSED);
-  register_stock_icon (factory, GTK_STOCK_PRINT_PREVIEW);
-  register_stock_icon (factory, GTK_STOCK_PRINT_REPORT);
-  register_stock_icon (factory, GTK_STOCK_PRINT_WARNING);
-  register_stock_icon (factory, GTK_STOCK_PROPERTIES);
-  register_bidi_stock_icon (factory,
-			    GTK_STOCK_REDO,
-			    GTK_STOCK_REDO "-ltr",
-			    GTK_STOCK_REDO "-rtl");
-  register_stock_icon (factory, GTK_STOCK_REMOVE);
-  register_stock_icon (factory, GTK_STOCK_REFRESH);
-  register_bidi_stock_icon (factory,
-			    GTK_STOCK_REVERT_TO_SAVED,
-			    GTK_STOCK_REVERT_TO_SAVED "-ltr",
-			    GTK_STOCK_REVERT_TO_SAVED "-rtl");
-  register_bidi_stock_icon (factory,
-			    GTK_STOCK_GO_FORWARD,
-			    GTK_STOCK_GO_FORWARD "-ltr",
-			    GTK_STOCK_GO_FORWARD "-rtl");
-  register_stock_icon (factory, GTK_STOCK_SAVE);
-  register_stock_icon (factory, GTK_STOCK_FLOPPY);
-  register_stock_icon (factory, GTK_STOCK_SAVE_AS);
-  register_stock_icon (factory, GTK_STOCK_FIND);
-  register_stock_icon (factory, GTK_STOCK_FIND_AND_REPLACE);
-  register_stock_icon (factory, GTK_STOCK_SORT_DESCENDING);
-  register_stock_icon (factory, GTK_STOCK_SORT_ASCENDING);
-  register_stock_icon (factory, GTK_STOCK_SPELL_CHECK);
-  register_stock_icon (factory, GTK_STOCK_STOP);
-  register_stock_icon (factory, GTK_STOCK_BOLD);
-  register_stock_icon (factory, GTK_STOCK_ITALIC);
-  register_stock_icon (factory, GTK_STOCK_STRIKETHROUGH);
-  register_stock_icon (factory, GTK_STOCK_UNDERLINE);
-  register_bidi_stock_icon (factory,
-			    GTK_STOCK_INDENT,
-			    GTK_STOCK_INDENT "-ltr",
-			    GTK_STOCK_INDENT "-rtl");
-  register_bidi_stock_icon (factory,
-			    GTK_STOCK_UNINDENT,
-			    GTK_STOCK_UNINDENT "-ltr",
-			    GTK_STOCK_UNINDENT "-rtl");
-  register_stock_icon (factory, GTK_STOCK_GOTO_TOP);
-  register_stock_icon (factory, GTK_STOCK_DELETE);
-  register_bidi_stock_icon (factory,
-			    GTK_STOCK_UNDELETE,
-			    GTK_STOCK_UNDELETE "-ltr",
-			    GTK_STOCK_UNDELETE "-rtl");
-  register_bidi_stock_icon (factory,
-			    GTK_STOCK_UNDO,
-			    GTK_STOCK_UNDO "-ltr",
-			    GTK_STOCK_UNDO "-rtl");
-  register_stock_icon (factory, GTK_STOCK_GO_UP);
-  register_stock_icon (factory, GTK_STOCK_FILE);
-  register_stock_icon (factory, GTK_STOCK_DIRECTORY);
-  register_stock_icon (factory, GTK_STOCK_ABOUT);
-  register_stock_icon (factory, GTK_STOCK_CONNECT);
-  register_stock_icon (factory, GTK_STOCK_DISCONNECT);
-  register_stock_icon (factory, GTK_STOCK_EDIT);
-  register_stock_icon (factory, GTK_STOCK_CAPS_LOCK_WARNING);
-  register_bidi_stock_icon (factory,
-			    GTK_STOCK_MEDIA_FORWARD,
-			    GTK_STOCK_MEDIA_FORWARD "-ltr",
-			    GTK_STOCK_MEDIA_FORWARD "-rtl");
-  register_bidi_stock_icon (factory,
-			    GTK_STOCK_MEDIA_NEXT,
-			    GTK_STOCK_MEDIA_NEXT "-ltr",
-			    GTK_STOCK_MEDIA_NEXT "-rtl");
-  register_stock_icon (factory, GTK_STOCK_MEDIA_PAUSE);
-  register_bidi_stock_icon (factory,
-			    GTK_STOCK_MEDIA_PLAY,
-			    GTK_STOCK_MEDIA_PLAY "-ltr",
-			    GTK_STOCK_MEDIA_PLAY "-rtl");
-  register_bidi_stock_icon (factory,
-			    GTK_STOCK_MEDIA_PREVIOUS,
-			    GTK_STOCK_MEDIA_PREVIOUS "-ltr",
-			    GTK_STOCK_MEDIA_PREVIOUS "-rtl");
-  register_stock_icon (factory, GTK_STOCK_MEDIA_RECORD);
-  register_bidi_stock_icon (factory,
-			    GTK_STOCK_MEDIA_REWIND,
-			    GTK_STOCK_MEDIA_REWIND "-ltr",
-			    GTK_STOCK_MEDIA_REWIND "-rtl");
-  register_stock_icon (factory, GTK_STOCK_MEDIA_STOP);
-  register_stock_icon (factory, GTK_STOCK_INDEX);
-  register_stock_icon (factory, GTK_STOCK_ZOOM_100);
-  register_stock_icon (factory, GTK_STOCK_ZOOM_IN);
-  register_stock_icon (factory, GTK_STOCK_ZOOM_OUT);
-  register_stock_icon (factory, GTK_STOCK_ZOOM_FIT);
-  register_stock_icon (factory, GTK_STOCK_SELECT_ALL);
-  register_stock_icon (factory, GTK_STOCK_CLEAR);
-  register_stock_icon (factory, GTK_STOCK_SELECT_COLOR);
-  register_stock_icon (factory, GTK_STOCK_COLOR_PICKER);
+  register_stock_icon (factory, GTK_STOCK_DIALOG_AUTHENTICATION, "dialog-password");
+  register_stock_icon (factory, GTK_STOCK_DIALOG_ERROR, "dialog-error");
+  register_stock_icon (factory, GTK_STOCK_DIALOG_INFO, "dialog-info");
+  register_stock_icon (factory, GTK_STOCK_DIALOG_QUESTION, "dialog-question");
+  register_stock_icon (factory, GTK_STOCK_DIALOG_WARNING, "dialog-warning");
+  register_stock_icon (factory, GTK_STOCK_DND, GTK_STOCK_DND);
+  register_stock_icon (factory, GTK_STOCK_DND_MULTIPLE, GTK_STOCK_DND_MULTIPLE);
+  register_stock_icon (factory, GTK_STOCK_APPLY, GTK_STOCK_APPLY);
+  register_stock_icon (factory, GTK_STOCK_CANCEL, GTK_STOCK_CANCEL);
+  register_stock_icon (factory, GTK_STOCK_NO, GTK_STOCK_NO);
+  register_stock_icon (factory, GTK_STOCK_OK, GTK_STOCK_OK);
+  register_stock_icon (factory, GTK_STOCK_YES, GTK_STOCK_YES);
+  register_stock_icon (factory, GTK_STOCK_CLOSE, "window-close");
+  register_stock_icon (factory, GTK_STOCK_ADD, "list-add");
+  register_stock_icon (factory, GTK_STOCK_JUSTIFY_CENTER, "format-justify-center");
+  register_stock_icon (factory, GTK_STOCK_JUSTIFY_FILL, "format-justify-fill");
+  register_stock_icon (factory, GTK_STOCK_JUSTIFY_LEFT, "format-justify-left");
+  register_stock_icon (factory, GTK_STOCK_JUSTIFY_RIGHT, "format-justify-right");
+  register_stock_icon (factory, GTK_STOCK_GOTO_BOTTOM, "go-bottom");
+  register_stock_icon (factory, GTK_STOCK_CDROM, "media-optical");
+  register_stock_icon (factory, GTK_STOCK_CONVERT, GTK_STOCK_CONVERT);
+  register_stock_icon (factory, GTK_STOCK_COPY, "edit-copy");
+  register_stock_icon (factory, GTK_STOCK_CUT, "edit-cut");
+  register_stock_icon (factory, GTK_STOCK_GO_DOWN, "go-down");
+  register_stock_icon (factory, GTK_STOCK_EXECUTE, "system-run");
+  register_stock_icon (factory, GTK_STOCK_QUIT, "application-exit");
+  register_bidi_stock_icon (factory, GTK_STOCK_GOTO_FIRST, "go-first");
+  register_stock_icon (factory, GTK_STOCK_SELECT_FONT, GTK_STOCK_SELECT_FONT);
+  register_stock_icon (factory, GTK_STOCK_FULLSCREEN, "view-fullscreen");
+  register_stock_icon (factory, GTK_STOCK_LEAVE_FULLSCREEN, "view-restore");
+  register_stock_icon (factory, GTK_STOCK_HARDDISK, "drive-harddisk");
+  register_stock_icon (factory, GTK_STOCK_HELP, "help-contents");
+  register_stock_icon (factory, GTK_STOCK_HOME, "go-home");
+  register_stock_icon (factory, GTK_STOCK_INFO, "dialog-info");
+  register_bidi_stock_icon (factory, GTK_STOCK_JUMP_TO, "go-jump");
+  register_bidi_stock_icon (factory, GTK_STOCK_GOTO_LAST, "go-last");
+  register_bidi_stock_icon (factory, GTK_STOCK_GO_BACK, "go-previous");
+  register_stock_icon (factory, GTK_STOCK_MISSING_IMAGE, "image-missing");
+  register_stock_icon (factory, GTK_STOCK_NETWORK, "network-idle");
+  register_stock_icon (factory, GTK_STOCK_NEW, "document-new");
+  register_stock_icon (factory, GTK_STOCK_OPEN, "document-open");
+  register_stock_icon (factory, GTK_STOCK_ORIENTATION_PORTRAIT, GTK_STOCK_ORIENTATION_PORTRAIT);
+  register_stock_icon (factory, GTK_STOCK_ORIENTATION_LANDSCAPE, GTK_STOCK_ORIENTATION_LANDSCAPE);
+  register_stock_icon (factory, GTK_STOCK_ORIENTATION_REVERSE_PORTRAIT, GTK_STOCK_ORIENTATION_REVERSE_PORTRAIT);
+  register_stock_icon (factory, GTK_STOCK_ORIENTATION_REVERSE_LANDSCAPE, GTK_STOCK_ORIENTATION_REVERSE_LANDSCAPE);
+  register_stock_icon (factory, GTK_STOCK_PAGE_SETUP, GTK_STOCK_PAGE_SETUP);
+  register_stock_icon (factory, GTK_STOCK_PASTE, "edit-paste");
+  register_stock_icon (factory, GTK_STOCK_PREFERENCES, "edit-preferences");
+  register_stock_icon (factory, GTK_STOCK_PRINT, "document-print");
+  register_stock_icon (factory, GTK_STOCK_PRINT_ERROR, "printer-error");
+  register_stock_icon (factory, GTK_STOCK_PRINT_PAUSED, "printer-paused");
+  register_stock_icon (factory, GTK_STOCK_PRINT_PREVIEW, "document-print-preview");
+  register_stock_icon (factory, GTK_STOCK_PRINT_REPORT, "printer-info");
+  register_stock_icon (factory, GTK_STOCK_PRINT_WARNING, "printer-warning");
+  register_stock_icon (factory, GTK_STOCK_PROPERTIES, "document-properties");
+  register_bidi_stock_icon (factory, GTK_STOCK_REDO, "edit-redo");
+  register_stock_icon (factory, GTK_STOCK_REMOVE, "list-remove");
+  register_stock_icon (factory, GTK_STOCK_REFRESH, "view-refresh");
+  register_bidi_stock_icon (factory, GTK_STOCK_REVERT_TO_SAVED, "document-revert");
+  register_bidi_stock_icon (factory, GTK_STOCK_GO_FORWARD, "go-next");
+  register_stock_icon (factory, GTK_STOCK_SAVE, "document-save");
+  register_stock_icon (factory, GTK_STOCK_FLOPPY, "media-floppy");
+  register_stock_icon (factory, GTK_STOCK_SAVE_AS, "document-save-as");
+  register_stock_icon (factory, GTK_STOCK_FIND, "edit-find");
+  register_stock_icon (factory, GTK_STOCK_FIND_AND_REPLACE, "edit-find-replace");
+  register_stock_icon (factory, GTK_STOCK_SORT_DESCENDING, "view-sort-descending");
+  register_stock_icon (factory, GTK_STOCK_SORT_ASCENDING, "view-sort-ascending");
+  register_stock_icon (factory, GTK_STOCK_SPELL_CHECK, "tools-check-spelling");
+  register_stock_icon (factory, GTK_STOCK_STOP, "process-stop");
+  register_stock_icon (factory, GTK_STOCK_BOLD, "format-text-bold");
+  register_stock_icon (factory, GTK_STOCK_ITALIC, "format-text-italic");
+  register_stock_icon (factory, GTK_STOCK_STRIKETHROUGH, "format-text-strikethrough");
+  register_stock_icon (factory, GTK_STOCK_UNDERLINE, "format-text-underline");
+  register_bidi_stock_icon (factory, GTK_STOCK_INDENT, "format-indent-more");
+  register_bidi_stock_icon (factory, GTK_STOCK_UNINDENT, "format-indent-less");
+  register_stock_icon (factory, GTK_STOCK_GOTO_TOP, "go-top");
+  register_stock_icon (factory, GTK_STOCK_DELETE, "edit-delete");
+  register_bidi_stock_icon (factory, GTK_STOCK_UNDELETE, GTK_STOCK_UNDELETE);
+  register_bidi_stock_icon (factory, GTK_STOCK_UNDO, "edit-undo");
+  register_stock_icon (factory, GTK_STOCK_GO_UP, "go-up");
+  register_stock_icon (factory, GTK_STOCK_FILE, "document-x-generic");
+  register_stock_icon (factory, GTK_STOCK_DIRECTORY, "folder");
+  register_stock_icon (factory, GTK_STOCK_ABOUT, "help-about");
+  register_stock_icon (factory, GTK_STOCK_CONNECT, GTK_STOCK_CONNECT);
+  register_stock_icon (factory, GTK_STOCK_DISCONNECT, GTK_STOCK_DISCONNECT);
+  register_stock_icon (factory, GTK_STOCK_EDIT, GTK_STOCK_EDIT);
+  register_stock_icon (factory, GTK_STOCK_CAPS_LOCK_WARNING, GTK_STOCK_CAPS_LOCK_WARNING);
+  register_bidi_stock_icon (factory, GTK_STOCK_MEDIA_FORWARD, "media-seek-forward");
+  register_bidi_stock_icon (factory, GTK_STOCK_MEDIA_NEXT, "media-skip-forward");
+  register_stock_icon (factory, GTK_STOCK_MEDIA_PAUSE, "media-playback-pause");
+  register_bidi_stock_icon (factory, GTK_STOCK_MEDIA_PLAY, "media-playback-start");
+  register_bidi_stock_icon (factory, GTK_STOCK_MEDIA_PREVIOUS, "media-skip-backward");
+  register_stock_icon (factory, GTK_STOCK_MEDIA_RECORD, "media-record");
+  register_bidi_stock_icon (factory, GTK_STOCK_MEDIA_REWIND, "media-seek-backward");
+  register_stock_icon (factory, GTK_STOCK_MEDIA_STOP, "media-playback-stop");
+  register_stock_icon (factory, GTK_STOCK_INDEX, GTK_STOCK_INDEX);
+  register_stock_icon (factory, GTK_STOCK_ZOOM_100, "zoom-original");
+  register_stock_icon (factory, GTK_STOCK_ZOOM_IN, "zoom-in");
+  register_stock_icon (factory, GTK_STOCK_ZOOM_OUT, "zoom-out");
+  register_stock_icon (factory, GTK_STOCK_ZOOM_FIT, "zoom-fit-best");
+  register_stock_icon (factory, GTK_STOCK_SELECT_ALL, "edit-select-all");
+  register_stock_icon (factory, GTK_STOCK_CLEAR, "edit-clear");
+  register_stock_icon (factory, GTK_STOCK_SELECT_COLOR, GTK_STOCK_SELECT_COLOR);
+  register_stock_icon (factory, GTK_STOCK_COLOR_PICKER, GTK_STOCK_COLOR_PICKER);
 }
 
 /************************************************************
@@ -1427,8 +1380,8 @@ render_icon_name_pixbuf (GtkIconSource    *icon_source,
 			 GtkTextDirection  direction,
 			 GtkStateType      state,
 			 GtkIconSize       size,
-			 GtkWidget         *widget,
-			 const char        *detail)
+			 GtkWidget        *widget,
+			 const char       *detail)
 {
   GdkPixbuf *pixbuf;
   GdkPixbuf *tmp_pixbuf;
@@ -1498,10 +1451,35 @@ render_icon_name_pixbuf (GtkIconSource    *icon_source,
 
   pixel_size = MIN (width, height);
 
-  tmp_pixbuf = gtk_icon_theme_load_icon (icon_theme,
-					 icon_source->source.icon_name,
-					 pixel_size, 0,
-					 &error);
+  if (icon_source->direction != GTK_TEXT_DIR_NONE)
+    {
+      gchar *suffix[3] = { NULL, "-ltr", "-rtl" };
+      gchar *names[3];
+      GtkIconInfo *info;
+
+      names[0] = g_strconcat (icon_source->source.icon_name, suffix[icon_source->direction], NULL);
+      names[1] = icon_source->source.icon_name;
+      names[2] = NULL;
+
+      g_print ("choose icon for %s\n", names[0]);
+      info = gtk_icon_theme_choose_icon (icon_theme,
+                                               names,
+                                               pixel_size, GTK_ICON_LOOKUP_USE_BUILTIN);
+      g_free (names[0]);
+      if (info)
+        {
+          tmp_pixbuf = gtk_icon_info_load_icon (info, &error);
+          gtk_icon_info_free (info);
+        }
+    }
+  else
+    {
+      g_print ("load icon for %s\n", icon_source->source.icon_name);
+      tmp_pixbuf = gtk_icon_theme_load_icon (icon_theme,
+                                             icon_source->source.icon_name,
+                                             pixel_size, 0,
+                                             &error);
+    }
 
   if (!tmp_pixbuf)
     {
