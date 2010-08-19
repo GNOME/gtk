@@ -418,6 +418,7 @@ gtk_private_h_sources =		\
 	gtktexttagprivate.h	\
 	gtktexttypes.h		\
 	gtktextutil.h		\
+	gtktimeline.h		\
 	gtkthemes.h		\
 	gtktoolpaletteprivate.h	\
 	gtktreedatalist.h	\
@@ -621,6 +622,7 @@ gtk_base_c_sources =            \
 	gtktextview.c		\
 	gtkthemes.c		\
 	gtkthemingengine.c	\
+	gtktimeline.c		\
 	gtktoggleaction.c	\
 	gtktogglebutton.c	\
 	gtktoggletoolbutton.c	\
