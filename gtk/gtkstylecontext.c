@@ -29,6 +29,8 @@
 #include "gtkintl.h"
 #include "gtkwidget.h"
 #include "gtkprivate.h"
+#include "gtkanimationdescription.h"
+#include "gtktimeline.h"
 
 #include "gtkalias.h"
 
@@ -37,6 +39,7 @@ typedef struct GtkStyleProviderData GtkStyleProviderData;
 typedef struct GtkStyleInfo GtkStyleInfo;
 typedef struct GtkRegion GtkRegion;
 typedef struct PropertyValue PropertyValue;
+typedef struct AnimationInfo AnimationInfo;
 
 struct GtkRegion
 {
@@ -64,6 +67,19 @@ struct GtkStyleInfo
   GtkJunctionSides junction_sides;
 };
 
+struct AnimationInfo
+{
+  GtkTimeline *timeline;
+
+  gpointer region_id;
+  GdkWindow *window;
+  GtkStateType state;
+  gboolean target_value;
+
+  GdkRegion *invalidation_region;
+  GArray *rectangles;
+};
+
 struct GtkStyleContextPrivate
 {
   GdkScreen *screen;
@@ -80,6 +96,10 @@ struct GtkStyleContextPrivate
 
   GtkStateFlags state_flags;
   GSList *info_stack;
+
+  GSList *animation_regions;
+  GSList *animations;
+  gboolean animations_invalidated;
 
   GtkThemingEngine *theming_engine;
 
@@ -554,11 +574,37 @@ gtk_style_context_get_state (GtkStyleContext *context)
   return priv->state_flags;
 }
 
-gboolean
-gtk_style_context_is_state_set (GtkStyleContext *context,
-                                GtkStateType     state)
+static gboolean
+context_has_animatable_region (GtkStyleContext *context,
+                               gpointer         region_id)
 {
   GtkStyleContextPrivate *priv;
+  GSList *r;
+
+  /* NULL region_id means everything
+   * rendered through the style context
+   */
+  if (!region_id)
+    return TRUE;
+
+  priv = context->priv;
+
+  for (r = priv->animation_regions; r; r = r->next)
+    {
+      if (r->data == region_id)
+        return TRUE;
+    }
+
+  return FALSE;
+}
+
+gboolean
+gtk_style_context_is_state_set (GtkStyleContext *context,
+                                GtkStateType     state,
+                                gdouble         *progress)
+{
+  GtkStyleContextPrivate *priv;
+  gboolean state_set;
 
   g_return_val_if_fail (GTK_IS_STYLE_CONTEXT (context), FALSE);
 
@@ -567,22 +613,51 @@ gtk_style_context_is_state_set (GtkStyleContext *context,
   switch (state)
     {
     case GTK_STATE_NORMAL:
-      return priv->state_flags == 0;
+      state_set = (priv->state_flags == 0);
+      break;
     case GTK_STATE_ACTIVE:
-      return priv->state_flags & GTK_STATE_FLAG_ACTIVE;
+      state_set = (priv->state_flags & GTK_STATE_FLAG_ACTIVE);
+      break;
     case GTK_STATE_PRELIGHT:
-      return priv->state_flags & GTK_STATE_FLAG_PRELIGHT;
+      state_set = (priv->state_flags & GTK_STATE_FLAG_PRELIGHT);
+      break;
     case GTK_STATE_SELECTED:
-      return priv->state_flags & GTK_STATE_FLAG_SELECTED;
+      state_set = (priv->state_flags & GTK_STATE_FLAG_SELECTED);
+      break;
     case GTK_STATE_INSENSITIVE:
-      return priv->state_flags & GTK_STATE_FLAG_INSENSITIVE;
+      state_set = (priv->state_flags & GTK_STATE_FLAG_INSENSITIVE);
+      break;
     case GTK_STATE_INCONSISTENT:
-      return priv->state_flags & GTK_STATE_FLAG_INCONSISTENT;
+      state_set = (priv->state_flags & GTK_STATE_FLAG_INCONSISTENT);
+      break;
     case GTK_STATE_FOCUSED:
-      return priv->state_flags & GTK_STATE_FLAG_FOCUSED;
+      state_set = (priv->state_flags & GTK_STATE_FLAG_FOCUSED);
+      break;
     default:
-      return FALSE;
+      g_assert_not_reached ();
     }
+
+  if (progress)
+    {
+      AnimationInfo *info;
+      GSList *l;
+
+      *progress = (state_set) ? 1 : 0;
+
+      for (l = priv->animations; l; l = l->next)
+        {
+          info = l->data;
+
+          if (info->state == state &&
+              context_has_animatable_region (context, info->region_id))
+            {
+              *progress = gtk_timeline_get_progress (info->timeline);
+              break;
+            }
+        }
+    }
+
+  return state_set;
 }
 
 void
@@ -1362,6 +1437,350 @@ gtk_style_context_lookup_color (GtkStyleContext *context,
   return gtk_symbolic_color_resolve (sym_color, priv->store, color);
 }
 
+static void
+timeline_frame_cb (GtkTimeline *timeline,
+                   gdouble      progress,
+                   gpointer     user_data)
+{
+  AnimationInfo *info;
+
+  info = user_data;
+
+  if (info->invalidation_region &&
+      !gdk_region_empty (info->invalidation_region))
+    gdk_window_invalidate_region (info->window, info->invalidation_region, TRUE);
+}
+
+static void
+animation_info_free (AnimationInfo *info)
+{
+  g_object_unref (info->timeline);
+  g_object_unref (info->window);
+
+  if (info->invalidation_region)
+    gdk_region_destroy (info->invalidation_region);
+
+  g_array_free (info->rectangles, TRUE);
+  g_slice_free (AnimationInfo, info);
+}
+
+static void
+timeline_finished_cb (GtkTimeline *timeline,
+                      gpointer     user_data)
+{
+  GtkStyleContextPrivate *priv;
+  GtkStyleContext *context;
+  AnimationInfo *info;
+  GSList *l;
+
+  context = user_data;
+  priv = context->priv;
+
+  for (l = priv->animations; l; l = l->next)
+    {
+      info = l->data;
+
+      if (info->timeline == timeline)
+        {
+          priv->animations = g_slist_delete_link (priv->animations, l);
+
+          /* Invalidate one last time the area, so the final content is painted */
+          if (info->invalidation_region &&
+              !gdk_region_empty (info->invalidation_region))
+            gdk_window_invalidate_region (info->window, info->invalidation_region, TRUE);
+
+          animation_info_free (info);
+          break;
+        }
+    }
+}
+
+static AnimationInfo *
+animation_info_new (GtkStyleContext         *context,
+                    gdouble                  duration,
+                    GtkTimelineProgressType  progress_type,
+                    GtkStateType             state,
+                    gboolean                 target_value,
+                    GdkWindow               *window)
+{
+  AnimationInfo *info;
+
+  info = g_slice_new0 (AnimationInfo);
+
+  info->rectangles = g_array_new (FALSE, FALSE, sizeof (GdkRectangle));
+  info->timeline = gtk_timeline_new (duration);
+  info->window = g_object_ref (window);
+  info->state = state;
+  info->target_value = target_value;
+
+  gtk_timeline_set_progress_type (info->timeline, progress_type);
+
+  if (!target_value)
+    {
+      gtk_timeline_set_direction (info->timeline, GTK_TIMELINE_DIRECTION_BACKWARD);
+      gtk_timeline_rewind (info->timeline);
+    }
+
+  g_signal_connect (info->timeline, "frame",
+                    G_CALLBACK (timeline_frame_cb), info);
+  g_signal_connect (info->timeline, "finished",
+                    G_CALLBACK (timeline_finished_cb), context);
+
+  gtk_timeline_start (info->timeline);
+
+  return info;
+}
+
+static AnimationInfo *
+animation_info_lookup (GtkStyleContext *context,
+                       gpointer         region_id,
+                       GtkStateType     state)
+{
+  GtkStyleContextPrivate *priv;
+  GSList *l;
+
+  priv = context->priv;
+
+  for (l = priv->animations; l; l = l->next)
+    {
+      AnimationInfo *info;
+
+      info = l->data;
+
+      if (info->state == state &&
+          info->region_id == region_id)
+        return info;
+    }
+
+  return NULL;
+}
+
+void
+gtk_style_context_notify_state_change (GtkStyleContext *context,
+                                       GdkWindow       *window,
+                                       gpointer         region_id,
+                                       GtkStateType     state,
+                                       gboolean         state_value)
+{
+  GtkStyleContextPrivate *priv;
+  GtkAnimationDescription *desc;
+  AnimationInfo *info;
+  GtkStateFlags flags;
+
+  g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
+  g_return_if_fail (GDK_IS_WINDOW (window));
+  g_return_if_fail (state < GTK_STATE_LAST);
+
+  state_value = (state_value == TRUE);
+  priv = context->priv;
+
+  switch (state)
+    {
+    case GTK_STATE_ACTIVE:
+      flags = GTK_STATE_FLAG_ACTIVE;
+      break;
+    case GTK_STATE_PRELIGHT:
+      flags = GTK_STATE_FLAG_PRELIGHT;
+      break;
+    case GTK_STATE_SELECTED:
+      flags = GTK_STATE_FLAG_SELECTED;
+      break;
+    case GTK_STATE_INSENSITIVE:
+      flags = GTK_STATE_FLAG_INSENSITIVE;
+      break;
+    case GTK_STATE_INCONSISTENT:
+      flags = GTK_STATE_FLAG_INCONSISTENT;
+      break;
+    case GTK_STATE_FOCUSED:
+      flags = GTK_STATE_FLAG_FOCUSED;
+      break;
+    case GTK_STATE_NORMAL:
+    default:
+      flags = 0;
+      break;
+    }
+
+  /* Find out if there is any animation description for the given
+   * state, it will fallback to the normal state as well if necessary.
+   */
+  gtk_style_set_get (priv->store, flags,
+                     "transition", &desc,
+                     NULL);
+
+  if (!desc)
+    return;
+
+  if (gtk_animation_description_get_duration (desc) == 0)
+    {
+      gtk_animation_description_unref (desc);
+      return;
+    }
+
+  info = animation_info_lookup (context, region_id, state);
+
+  if (info)
+    {
+      /* Reverse the animation if target values are the opposite */
+      if (info->target_value != state_value)
+        {
+          if (gtk_timeline_get_direction (info->timeline) == GTK_TIMELINE_DIRECTION_FORWARD)
+            gtk_timeline_set_direction (info->timeline, GTK_TIMELINE_DIRECTION_BACKWARD);
+          else
+            gtk_timeline_set_direction (info->timeline, GTK_TIMELINE_DIRECTION_FORWARD);
+
+          info->target_value = state_value;
+        }
+    }
+  else
+    {
+      info = animation_info_new (context,
+                                 gtk_animation_description_get_duration (desc),
+                                 gtk_animation_description_get_progress_type (desc),
+                                 state, state_value, window);
+
+      priv->animations = g_slist_prepend (priv->animations, info);
+      priv->animations_invalidated = TRUE;
+    }
+
+  gtk_animation_description_unref (desc);
+}
+
+void
+gtk_style_context_push_animatable_region (GtkStyleContext *context,
+                                          gpointer         region_id)
+{
+  GtkStyleContextPrivate *priv;
+
+  g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
+  g_return_if_fail (region_id != NULL);
+
+  priv = context->priv;
+  priv->animation_regions = g_slist_prepend (priv->animation_regions, region_id);
+}
+
+void
+gtk_style_context_pop_animatable_region (GtkStyleContext *context)
+{
+  GtkStyleContextPrivate *priv;
+
+  g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
+
+  priv = context->priv;
+  priv->animation_regions = g_slist_delete_link (priv->animation_regions,
+                                                 priv->animation_regions);
+}
+
+void
+_gtk_style_context_invalidate_animation_areas (GtkStyleContext *context)
+{
+  GtkStyleContextPrivate *priv;
+  GSList *l;
+
+  priv = context->priv;
+
+  for (l = priv->animations; l; l = l->next)
+    {
+      AnimationInfo *info;
+
+      info = l->data;
+
+      /* A NULL invalidation region means it has to be recreated on
+       * the next expose event, this happens usually after a widget
+       * allocation change, so the next expose after it will update
+       * the invalidation region.
+       */
+      if (info->invalidation_region)
+        {
+          gdk_region_destroy (info->invalidation_region);
+          info->invalidation_region = NULL;
+        }
+    }
+
+  priv->animations_invalidated = TRUE;
+}
+
+void
+_gtk_style_context_coalesce_animation_areas (GtkStyleContext *context)
+{
+  GtkStyleContextPrivate *priv;
+  GSList *l;
+
+  priv = context->priv;
+
+  if (!priv->animations_invalidated)
+    return;
+
+  for (l = priv->animations; l; l = l->next)
+    {
+      AnimationInfo *info;
+      guint i;
+
+      info = l->data;
+
+      if (info->invalidation_region)
+        continue;
+
+      /* FIXME: If this happens there's not much
+       * point in keeping the animation running.
+       */
+      if (info->rectangles->len == 0)
+        continue;
+
+      info->invalidation_region = gdk_region_new ();
+
+      for (i = 0; i <info->rectangles->len; i++)
+        {
+          GdkRectangle *rect;
+
+          rect = &g_array_index (info->rectangles, GdkRectangle, i);
+          gdk_region_union_with_rect (info->invalidation_region, rect);
+        }
+
+      g_array_remove_range (info->rectangles, 0, info->rectangles->len);
+    }
+}
+
+static void
+store_animation_region (GtkStyleContext *context,
+                        gdouble          x,
+                        gdouble          y,
+                        gdouble          width,
+                        gdouble          height)
+{
+  GtkStyleContextPrivate *priv;
+  GSList *l;
+
+  priv = context->priv;
+
+  if (!priv->animations_invalidated)
+    return;
+
+  for (l = priv->animations; l; l = l->next)
+    {
+      AnimationInfo *info;
+
+      info = l->data;
+
+      /* The animation doesn't need updatring
+       * the invalidation area, bail out.
+       */
+      if (info->invalidation_region)
+        continue;
+
+      if (context_has_animatable_region (context, info->region_id))
+        {
+          GdkRectangle rect;
+
+          rect.x = (gint) x;
+          rect.y = (gint) y;
+          rect.width = (gint) width;
+          rect.height = (gint) height;
+
+          g_array_append_val (info->rectangles, rect);
+        }
+    }
+}
+
 /* Paint methods */
 void
 gtk_render_check (GtkStyleContext *context,
@@ -1379,6 +1798,8 @@ gtk_render_check (GtkStyleContext *context,
 
   priv = context->priv;
   engine_class = GTK_THEMING_ENGINE_GET_CLASS (priv->theming_engine);
+
+  store_animation_region (context, x, y, width, height);
 
   _gtk_theming_engine_set_context (priv->theming_engine, context);
   engine_class->render_check (priv->theming_engine, cr,

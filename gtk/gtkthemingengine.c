@@ -321,7 +321,7 @@ gtk_theming_engine_is_state_set (GtkThemingEngine *engine,
   g_return_val_if_fail (GTK_IS_THEMING_ENGINE (engine), 0);
 
   priv = engine->priv;
-  return gtk_style_context_is_state_set (priv->context, state);
+  return gtk_style_context_is_state_set (priv->context, state, NULL);
 }
 
 G_CONST_RETURN GtkWidgetPath *

@@ -75,7 +75,8 @@ void          gtk_style_context_set_state    (GtkStyleContext *context,
 GtkStateFlags gtk_style_context_get_state    (GtkStyleContext *context);
 
 gboolean      gtk_style_context_is_state_set (GtkStyleContext *context,
-                                              GtkStateType     state);
+                                              GtkStateType     state,
+                                              gdouble         *progress);
 
 void          gtk_style_context_set_path     (GtkStyleContext *context,
                                               GtkWidgetPath   *path);
@@ -128,10 +129,36 @@ gboolean gtk_style_context_lookup_color (GtkStyleContext *context,
                                          const gchar     *color_name,
                                          GdkColor        *color);
 
+void  gtk_style_context_notify_state_change (GtkStyleContext *context,
+                                             GdkWindow       *window,
+                                             gpointer         region_id,
+                                             GtkStateType     state,
+                                             gboolean         state_value);
+void gtk_style_context_push_animatable_region (GtkStyleContext *context,
+                                               gpointer         region_id);
+void gtk_style_context_pop_animatable_region  (GtkStyleContext *context);
+
+
 /* Semi-private API */
 const GValue * _gtk_style_context_peek_style_property (GtkStyleContext *context,
                                                        GType            widget_type,
                                                        GParamSpec      *pspec);
+void           _gtk_style_context_invalidate_animation_areas (GtkStyleContext *context);
+void           _gtk_style_context_coalesce_animation_areas   (GtkStyleContext *context);
+
+/* Animation for state changes */
+void gtk_style_context_state_transition_start  (GtkStyleContext *context,
+                                                gpointer         identifier,
+                                                GtkWidget       *widget,
+                                                GtkStateType     state,
+                                                gboolean         value,
+                                                GdkRectangle    *rect);
+void gtk_style_context_state_transition_update (GtkStyleContext *context,
+                                                gpointer         identifier,
+                                                GdkRectangle    *rect,
+                                                GtkStateType     state);
+void gtk_style_context_state_transition_stop   (GtkStyleContext *context,
+                                                gpointer         identifier);
 
 /* Paint methods */
 void gtk_render_check (GtkStyleContext *context,
