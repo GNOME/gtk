@@ -378,6 +378,7 @@ gtk_private_h_sources =		\
 	gtksearchenginesimple.h	\
 	gtkdndcursors.h		\
 	gtkentryprivate.h	\
+	gtkanimationdescription.h \
 	gtkbuilderprivate.h 	\
 	gtkcustompaperunixdialog.h\
 	gtkfilechooserdefault.h	\
@@ -451,6 +452,7 @@ gtk_base_c_sources =            \
 	gtkappchoosermodule.c	\
 	gtkappchooseronline.c	\
 	gtkapplication.c 	\
+	gtkanimationdescription.c \
 	gtkarrow.c		\
 	gtkaspectframe.c	\
 	gtkassistant.c		\
