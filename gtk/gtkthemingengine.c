@@ -26,8 +26,6 @@
 #include <gtk/gtkstylecontext.h>
 #include <gtk/gtkintl.h>
 
-#include "gtkalias.h"
-
 typedef struct GtkThemingEnginePrivate GtkThemingEnginePrivate;
 
 enum {
@@ -1919,6 +1917,3 @@ gtk_theming_engine_render_handle (GtkThemingEngine *engine,
 
   gdk_color_free (bg_color);
 }
-
-#define __GTK_THEMING_ENGINE_C__
-#include "gtkaliasdef.c"

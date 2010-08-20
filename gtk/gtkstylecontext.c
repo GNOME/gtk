@@ -32,8 +32,6 @@
 #include "gtkanimationdescription.h"
 #include "gtktimeline.h"
 
-#include "gtkalias.h"
-
 typedef struct GtkStyleContextPrivate GtkStyleContextPrivate;
 typedef struct GtkStyleProviderData GtkStyleProviderData;
 typedef struct GtkStyleInfo GtkStyleInfo;
@@ -2085,6 +2083,3 @@ gtk_render_handle (GtkStyleContext *context,
   _gtk_theming_engine_set_context (priv->theming_engine, context);
   engine_class->render_handle (priv->theming_engine, cr, x, y, width, height, orientation);
 }
-
-#define __GTK_STYLE_CONTEXT_C__
-#include "gtkaliasdef.c"

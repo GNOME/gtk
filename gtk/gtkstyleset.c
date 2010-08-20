@@ -29,8 +29,6 @@
 #include "gtkanimationdescription.h"
 #include "gtkintl.h"
 
-#include "gtkalias.h"
-
 typedef struct GtkStyleSetPrivate GtkStyleSetPrivate;
 typedef struct PropertyData PropertyData;
 typedef struct PropertyNode PropertyNode;
@@ -882,6 +880,3 @@ gtk_style_set_merge (GtkStyleSet       *set,
         }
     }
 }
-
-#define __GTK_STYLE_SET_C__
-#include "gtkaliasdef.c"

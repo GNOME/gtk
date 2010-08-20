@@ -597,6 +597,3 @@ gtk_widget_path_has_parent (const GtkWidgetPath *path,
 
   return FALSE;
 }
-
-#define __GTK_WIDGET_PATH_C__
-#include "gtkaliasdef.c"

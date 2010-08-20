@@ -27,8 +27,6 @@
 #include "gtkanimationdescription.h"
 #include "gtkcssprovider.h"
 
-#include "gtkalias.h"
-
 typedef struct GtkCssProviderPrivate GtkCssProviderPrivate;
 typedef struct SelectorElement SelectorElement;
 typedef struct SelectorPath SelectorPath;
@@ -1821,6 +1819,3 @@ gtk_css_provider_get_named (const gchar *name)
 
   return provider;
 }
-
-#define __GTK_CSS_PROVIDER_C__
-#include "gtkaliasdef.c"

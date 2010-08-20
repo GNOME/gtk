@@ -23,8 +23,6 @@
 #include "gtkstyleprovider.h"
 #include "gtkintl.h"
 
-#include "gtkalias.h"
-
 static void gtk_style_provider_iface_init (gpointer g_iface);
 
 GType
@@ -99,6 +97,3 @@ gtk_style_provider_get_icon_factory (GtkStyleProvider *provider,
 
   return iface->get_icon_factory (provider, path);
 }
-
-#define __GTK_STYLE_PROVIDER_C__
-#include "gtkaliasdef.c"

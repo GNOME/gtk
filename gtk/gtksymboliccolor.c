@@ -240,6 +240,3 @@ gtk_symbolic_color_get_type (void)
 
   return type;
 }
-
-#define __GTK_SYMBOLIC_COLOR_C__
-#include "gtkaliasdef.c"

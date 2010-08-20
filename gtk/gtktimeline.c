@@ -733,6 +733,3 @@ gtk_timeline_set_progress_type (GtkTimeline             *timeline,
   priv = timeline->priv;
   priv->progress_type = progress_type;
 }
-
-#define __GTK_TIMELINE_C__
-#include "gtkaliasdef.c"
