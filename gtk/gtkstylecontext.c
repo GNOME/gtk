@@ -74,7 +74,7 @@ struct AnimationInfo
   GtkStateType state;
   gboolean target_value;
 
-  GdkRegion *invalidation_region;
+  cairo_region_t *invalidation_region;
   GArray *rectangles;
 };
 
@@ -262,7 +262,7 @@ animation_info_free (AnimationInfo *info)
   g_object_unref (info->window);
 
   if (info->invalidation_region)
-    gdk_region_destroy (info->invalidation_region);
+    cairo_region_destroy (info->invalidation_region);
 
   g_array_free (info->rectangles, TRUE);
   g_slice_free (AnimationInfo, info);
@@ -278,7 +278,7 @@ timeline_frame_cb (GtkTimeline *timeline,
   info = user_data;
 
   if (info->invalidation_region &&
-      !gdk_region_empty (info->invalidation_region))
+      !cairo_region_is_empty (info->invalidation_region))
     gdk_window_invalidate_region (info->window, info->invalidation_region, TRUE);
 }
 
@@ -304,7 +304,7 @@ timeline_finished_cb (GtkTimeline *timeline,
 
           /* Invalidate one last time the area, so the final content is painted */
           if (info->invalidation_region &&
-              !gdk_region_empty (info->invalidation_region))
+              !cairo_region_is_empty (info->invalidation_region))
             gdk_window_invalidate_region (info->window, info->invalidation_region, TRUE);
 
           animation_info_free (info);
@@ -325,7 +325,7 @@ animation_info_new (GtkStyleContext         *context,
 
   info = g_slice_new0 (AnimationInfo);
 
-  info->rectangles = g_array_new (FALSE, FALSE, sizeof (GdkRectangle));
+  info->rectangles = g_array_new (FALSE, FALSE, sizeof (cairo_rectangle_int_t));
   info->timeline = gtk_timeline_new (duration);
   info->window = g_object_ref (window);
   info->state = state;
@@ -1708,7 +1708,7 @@ _gtk_style_context_invalidate_animation_areas (GtkStyleContext *context)
        */
       if (info->invalidation_region)
         {
-          gdk_region_destroy (info->invalidation_region);
+          cairo_region_destroy (info->invalidation_region);
           info->invalidation_region = NULL;
         }
     }
@@ -1743,14 +1743,14 @@ _gtk_style_context_coalesce_animation_areas (GtkStyleContext *context)
       if (info->rectangles->len == 0)
         continue;
 
-      info->invalidation_region = gdk_region_new ();
+      info->invalidation_region = cairo_region_create ();
 
       for (i = 0; i <info->rectangles->len; i++)
         {
-          GdkRectangle *rect;
+          cairo_rectangle_int_t *rect;
 
-          rect = &g_array_index (info->rectangles, GdkRectangle, i);
-          gdk_region_union_with_rect (info->invalidation_region, rect);
+          rect = &g_array_index (info->rectangles, cairo_rectangle_int_t, i);
+          cairo_region_union_rectangle (info->invalidation_region, rect);
         }
 
       g_array_remove_range (info->rectangles, 0, info->rectangles->len);
@@ -1786,7 +1786,7 @@ store_animation_region (GtkStyleContext *context,
 
       if (context_has_animatable_region (context, info->region_id))
         {
-          GdkRectangle rect;
+          cairo_rectangle_int_t rect;
 
           rect.x = (gint) x;
           rect.y = (gint) y;
