@@ -1686,6 +1686,45 @@ gtk_css_provider_load_from_file (GtkCssProvider  *css_provider,
   return TRUE;
 }
 
+gboolean
+gtk_css_provider_load_from_path (GtkCssProvider  *css_provider,
+                                 const gchar     *path,
+                                 GError         **error)
+{
+  GtkCssProviderPrivate *priv;
+  GError *internal_error = NULL;
+  gchar *data;
+  gsize length;
+
+  g_return_val_if_fail (GTK_IS_CSS_PROVIDER (css_provider), FALSE);
+  g_return_val_if_fail (path != NULL, FALSE);
+
+  priv = css_provider->priv;
+
+  if (g_file_get_contents (path, &data, &length,
+                           &internal_error))
+    {
+      g_propagate_error (error, internal_error);
+      return FALSE;
+    }
+
+  if (priv->selectors_info->len > 0)
+    g_ptr_array_remove_range (priv->selectors_info, 0, priv->selectors_info->len);
+
+  g_free (priv->filename);
+  priv->filename = g_strdup (path);
+
+  css_provider_reset_parser (css_provider);
+  priv->scanner->input_name = priv->filename;
+  g_scanner_input_text (priv->scanner, data, (guint) length);
+
+  parse_stylesheet (css_provider);
+
+  g_free (data);
+
+  return TRUE;
+}
+
 GtkCssProvider *
 gtk_css_provider_get_default (void)
 {
@@ -1757,6 +1796,27 @@ gtk_css_provider_get_default (void)
 
       provider = gtk_css_provider_new ();
       gtk_css_provider_load_from_data (provider, str, -1, NULL);
+    }
+
+  return provider;
+}
+
+GtkCssProvider *
+gtk_css_provider_get_named (const gchar *name)
+{
+  static GHashTable *themes = NULL;
+  GtkCssProvider *provider;
+
+  if (G_UNLIKELY (!themes))
+    themes = g_hash_table_new (g_str_hash, g_str_equal);
+
+  provider = g_hash_table_lookup (themes, name);
+
+  if (!provider)
+    {
+      
+
+      g_hash_table_insert (themes, g_strdup (name), provider);
     }
 
   return provider;

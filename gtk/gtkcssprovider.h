@@ -56,6 +56,9 @@ gboolean         gtk_css_provider_load_from_data (GtkCssProvider *css_provider,
 gboolean         gtk_css_provider_load_from_file (GtkCssProvider  *css_provider,
                                                   GFile           *file,
                                                   GError         **error);
+gboolean         gtk_css_provider_load_from_path (GtkCssProvider  *css_provider,
+                                                  const gchar     *path,
+                                                  GError         **error);
 
 GtkCssProvider * gtk_css_provider_get_default (void);
 
