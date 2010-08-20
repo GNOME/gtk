@@ -26,6 +26,8 @@
 #include <gtk/gtkstylecontext.h>
 #include <gtk/gtkintl.h>
 
+#include "gtkpango.h"
+
 typedef struct GtkThemingEnginePrivate GtkThemingEnginePrivate;
 
 enum {
@@ -1343,138 +1345,6 @@ gtk_theming_engine_render_line (GtkThemingEngine *engine,
   gdk_color_free (bg_color);
 }
 
-typedef struct _ByteRange ByteRange;
-
-struct _ByteRange
-{
-  guint start;
-  guint end;
-};
-
-static ByteRange*
-range_new (guint start,
-           guint end)
-{
-  ByteRange *br = g_new (ByteRange, 1);
-
-  br->start = start;
-  br->end = end;
-
-  return br;
-}
-
-static PangoLayout*
-get_insensitive_layout (PangoLayout *layout)
-{
-  GSList *embossed_ranges = NULL;
-  GSList *shaded_ranges = NULL;
-  PangoLayoutIter *iter;
-  GSList *tmp_list = NULL;
-  PangoLayout *new_layout;
-  PangoAttrList *attrs;
-
-  iter = pango_layout_get_iter (layout);
-
-  do
-    {
-      PangoLayoutRun *run;
-      PangoAttribute *attr;
-      gboolean need_shade = FALSE;
-      ByteRange *br;
-
-      run = pango_layout_iter_get_run_readonly (iter);
-
-      if (run)
-        {
-          tmp_list = run->item->analysis.extra_attrs;
-
-          while (tmp_list != NULL)
-            {
-              attr = tmp_list->data;
-              switch (attr->klass->type)
-                {
-                case PANGO_ATTR_FOREGROUND:
-                case PANGO_ATTR_BACKGROUND:
-                  need_shade = TRUE;
-                  break;
-
-                default:
-                  break;
-                }
-
-              if (need_shade)
-                break;
-
-              tmp_list = g_slist_next (tmp_list);
-            }
-
-          br = range_new (run->item->offset, run->item->offset + run->item->length);
-
-          if (need_shade)
-            shaded_ranges = g_slist_prepend (shaded_ranges, br);
-          else
-            embossed_ranges = g_slist_prepend (embossed_ranges, br);
-        }
-    }
-  while (pango_layout_iter_next_run (iter));
-
-  pango_layout_iter_free (iter);
-
-  new_layout = pango_layout_copy (layout);
-
-  attrs = pango_layout_get_attributes (new_layout);
-
-  if (attrs == NULL)
-    {
-      /* Create attr list if there wasn't one */
-      attrs = pango_attr_list_new ();
-      pango_layout_set_attributes (new_layout, attrs);
-      pango_attr_list_unref (attrs);
-    }
-
-  tmp_list = embossed_ranges;
-  while (tmp_list != NULL)
-    {
-      PangoAttribute *attr;
-      ByteRange *br = tmp_list->data;
-
-      attr = gdk_pango_attr_embossed_new (TRUE);
-
-      attr->start_index = br->start;
-      attr->end_index = br->end;
-
-      pango_attr_list_change (attrs, attr);
-
-      g_free (br);
-
-      tmp_list = g_slist_next (tmp_list);
-    }
-
-  g_slist_free (embossed_ranges);
-
-  tmp_list = shaded_ranges;
-  while (tmp_list != NULL)
-    {
-      PangoAttribute *attr;
-      ByteRange *br = tmp_list->data;
-
-      attr = gdk_pango_attr_shade_new (0.7);
-
-      attr->start_index = br->start;
-      attr->end_index = br->end;
-
-      pango_attr_list_change (attrs, attr);
-
-      g_free (br);
-
-      tmp_list = g_slist_next (tmp_list);
-    }
-
-  g_slist_free (shaded_ranges);
-
-  return new_layout;
-}
-
 static void
 gtk_theming_engine_render_layout (GtkThemingEngine *engine,
                                   cairo_t          *cr,
@@ -1482,6 +1352,7 @@ gtk_theming_engine_render_layout (GtkThemingEngine *engine,
                                   gdouble           y,
                                   PangoLayout      *layout)
 {
+  const PangoMatrix *matrix;
   GdkColor *fg_color;
   GtkStateFlags flags;
   GdkScreen *screen;
@@ -1496,21 +1367,43 @@ gtk_theming_engine_render_layout (GtkThemingEngine *engine,
                           NULL);
 
   screen = gtk_theming_engine_get_screen (engine);
+  matrix = pango_context_get_matrix (pango_layout_get_context (layout));
+
+  if (matrix)
+    {
+      cairo_matrix_t cairo_matrix;
+      PangoMatrix tmp_matrix;
+      PangoRectangle rect;
+
+      cairo_matrix_init (&cairo_matrix,
+                         matrix->xx, matrix->yx,
+                         matrix->xy, matrix->yy,
+                         matrix->x0, matrix->y0);
+
+      pango_layout_get_extents (layout, NULL, &rect);
+      pango_matrix_transform_rectangle (matrix, &rect);
+      pango_extents_to_pixels (&rect, NULL);
+
+      tmp_matrix = *matrix;
+      cairo_matrix.x0 += x - rect.x;
+      cairo_matrix.y0 += y - rect.y;
+
+      cairo_set_matrix (cr, &cairo_matrix);
+    }
+  else
+    cairo_translate (cr, x, y);
 
   if (gtk_theming_engine_is_state_set (engine, GTK_STATE_INSENSITIVE, NULL))
     {
-      PangoLayout *insensitive_layout;
-
-      insensitive_layout = get_insensitive_layout (layout);
-      gdk_pango_show_layout (screen,
-			     cr, x, y,
-			     insensitive_layout,
-			     fg_color, NULL);
-      g_object_unref (insensitive_layout);
+      cairo_save (cr);
+      cairo_set_source_rgb (cr, 1, 1, 1);
+      cairo_move_to (cr, 1, 1);
+      _gtk_pango_fill_layout (cr, layout);
+      cairo_restore (cr);
     }
-  else
-    gdk_pango_show_layout (screen, cr, x, y, layout,
-			   fg_color, NULL);
+
+  gdk_cairo_set_source_color (cr, fg_color);
+  pango_cairo_show_layout (cr, layout);
 
   cairo_restore (cr);
 
