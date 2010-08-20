@@ -3711,7 +3711,7 @@ gtk_widget_queue_draw (GtkWidget *widget)
 
   gtk_widget_get_allocation (widget, &rect);
 
-  if (GTK_WIDGET_NO_WINDOW (widget))
+  if (!gtk_widget_get_has_window (widget))
     gtk_widget_queue_draw_area (widget,
                                 rect.x, rect.y, rect.width, rect.height);
   else
