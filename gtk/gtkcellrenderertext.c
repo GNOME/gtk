@@ -83,6 +83,7 @@ enum {
   PROP_ATTRIBUTES,
   PROP_SINGLE_PARAGRAPH_MODE,
   PROP_WIDTH_CHARS,
+  PROP_MAX_WIDTH_CHARS,
   PROP_WRAP_WIDTH,
   PROP_ALIGN,
   
@@ -155,6 +156,7 @@ struct _GtkCellRendererTextPriv
   gint rise;
   gint fixed_height_rows;
   gint width_chars;
+  gint max_width_chars;
   gint wrap_width;
 
   guint strikethrough     : 1;
@@ -200,6 +202,7 @@ gtk_cell_renderer_text_init (GtkCellRendererText *celltext)
   priv->font = pango_font_description_new ();
 
   priv->width_chars = -1;
+  priv->max_width_chars = -1;
   priv->wrap_width = -1;
   priv->wrap_mode = PANGO_WRAP_CHAR;
   priv->align = PANGO_ALIGN_LEFT;
@@ -466,6 +469,31 @@ gtk_cell_renderer_text_class_init (GtkCellRendererTextClass *class)
                                                      -1,
                                                      GTK_PARAM_READWRITE));
   
+
+  /**
+   * GtkCellRendererText:max-width-chars:
+   * 
+   * The desired maximum width of the cell, in characters. If this property 
+   * is set to -1, the width will be calculated automatically.
+   *
+   * For cell renderers that ellipsize or wrap text; this property
+   * controls the maximum reported width of the cell. The
+   * cell should not receive any greater allocation unless it is
+   * set to expand in its #GtkCellLayout and all of the cell's siblings
+   * have received their natural width.
+   *
+   * Since: 3.0
+   **/
+  g_object_class_install_property (object_class,
+                                   PROP_MAX_WIDTH_CHARS,
+                                   g_param_spec_int ("max-width-chars",
+                                                     P_("Maximum Width In Characters"),
+                                                     P_("The maximum width of the cell, in characters"),
+                                                     -1,
+                                                     G_MAXINT,
+                                                     -1,
+                                                     GTK_PARAM_READWRITE));
+  
   /**
    * GtkCellRendererText:wrap-mode:
    *
@@ -525,6 +553,8 @@ gtk_cell_renderer_text_class_init (GtkCellRendererTextClass *class)
 						      PANGO_ALIGN_LEFT,
 						      GTK_PARAM_READWRITE));
   
+
+
   /* Style props are set or not */
 
 #define ADD_SET_PROP(propname, propval, nick, blurb) g_object_class_install_property (object_class, propval, g_param_spec_boolean (propname, nick, blurb, FALSE, GTK_PARAM_READWRITE))
@@ -837,6 +867,10 @@ gtk_cell_renderer_text_get_property (GObject        *object,
       
     case PROP_WIDTH_CHARS:
       g_value_set_int (value, priv->width_chars);
+      break;  
+
+    case PROP_MAX_WIDTH_CHARS:
+      g_value_set_int (value, priv->max_width_chars);
       break;  
 
     case PROP_BACKGROUND:
@@ -1285,6 +1319,10 @@ gtk_cell_renderer_text_set_property (GObject      *object,
             
     case PROP_WIDTH_CHARS:
       priv->width_chars = g_value_get_int (value);
+      break;  
+
+    case PROP_MAX_WIDTH_CHARS:
+      priv->max_width_chars = g_value_get_int (value);
       break;  
 
     case PROP_ALIGN:
@@ -2001,7 +2039,7 @@ gtk_cell_renderer_text_get_width (GtkCellSizeRequest *cell,
   PangoFontMetrics           *metrics;
   PangoRectangle              rect;
   gint char_width, digit_width, char_pixels, text_width, ellipsize_chars, guess_width, xpad;
-  gint min_width;
+  gint min_width, nat_width;
 
   /* "width-chars" Hard-coded minimum width:
    *    - minimum size should be MAX (width-chars, strlen ("..."));
@@ -2055,17 +2093,28 @@ gtk_cell_renderer_text_get_width (GtkCellSizeRequest *cell,
   else
     min_width = xpad * 2 + rect.x + guess_width;
 
+  if (priv->width_chars > 0)
+    nat_width = xpad * 2 + 
+      MAX ((PANGO_PIXELS (char_width) * priv->width_chars), PANGO_PIXELS (text_width));
+  else
+    nat_width = xpad * 2 + PANGO_PIXELS (text_width);
+
+  nat_width = MAX (nat_width, min_width);
+  
+  if (priv->max_width_chars > 0)
+    {
+      gint max_width = xpad * 2 + PANGO_PIXELS (char_width) * priv->max_width_chars;
+      
+      min_width = MIN (min_width, max_width);
+      nat_width = MIN (nat_width, max_width);
+    }
+
   if (minimum_size)
     *minimum_size = min_width;
 
   if (natural_size)
-    {
-      /* Control the max wrap width here possibly (add max-width-chars ?) */
-      *natural_size = xpad * 2 + 
-	MAX ((PANGO_PIXELS (char_width) * priv->width_chars), PANGO_PIXELS (text_width));
+    *natural_size = nat_width;
 
-      *natural_size = MAX (*natural_size, min_width);
-    }
 }
 
 static void
