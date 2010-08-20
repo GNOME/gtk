@@ -1587,6 +1587,9 @@ gtk_container_foreach (GtkContainer *container,
  * This function emits the GtkContainer::set_focus_child signal of
  * @container. Implementations of #GtkContainer can override the
  * default behaviour by overriding the class closure of this signal.
+ *
+ * This is function is mostly meant to be used by widgets. Applications can use
+ * gtk_widget_grab_focus() to manualy set the focus to a specific widget.
  */
 void
 gtk_container_set_focus_child (GtkContainer *container,
@@ -1603,10 +1606,12 @@ gtk_container_set_focus_child (GtkContainer *container,
  * gtk_container_get_focus_child:
  * @container: a #GtkContainer
  *
- * Returns the current focus child widget inside @container.
+ * Returns the current focus child widget inside @container. This is not the
+ * currently focused widget. That can be obtained by calling
+ * gtk_window_get_focus().
  *
- * Returns: The child widget which has the focus
- *          inside @container, or %NULL if none is set.
+ * Returns: The child widget which will recieve the focus inside @container when
+ *          the @conatiner is focussed, or %NULL if none is set.
  *
  * Since: 2.14
  **/
