@@ -798,7 +798,7 @@ create_message_dialog (void)
 				   GTK_MESSAGE_INFO,
 				   GTK_BUTTONS_OK,
 				   NULL);
-  gtk_window_set_icon_name (GTK_WINDOW (widget), "gtk-copy");
+  gtk_window_set_icon_name (GTK_WINDOW (widget), "edit-copy");
   gtk_message_dialog_set_markup (GTK_MESSAGE_DIALOG (widget),
 				 "<b>Message Dialog</b>\n\nWith secondary text");
   return new_widget_info ("messagedialog", widget, ASIS);
@@ -823,11 +823,11 @@ create_about_dialog (void)
                 "copyright", "(C) 1997-2009 The GTK+ Team",
                 "website", "http://www.gtk.org",
                 "comments", "Program to demonstrate GTK+ functions.",
-                "logo-icon-name", "gtk-about",
+                "logo-icon-name", "help-about",
                 "title", "About GTK+ Code Demos",
                 "authors", authors,
 		NULL);
-  gtk_window_set_icon_name (GTK_WINDOW (widget), "gtk-about");
+  gtk_window_set_icon_name (GTK_WINDOW (widget), "help-about");
   return new_widget_info ("aboutdialog", widget, ASIS);
 }
 
