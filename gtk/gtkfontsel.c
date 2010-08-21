@@ -1528,10 +1528,7 @@ gtk_font_selection_set_font_name (GtkFontSelection *fontsel,
 
   pango_font_description_free (new_desc);
   
-  g_object_freeze_notify (G_OBJECT (fontsel));
   g_object_notify (G_OBJECT (fontsel), "font-name");
-  g_object_notify (G_OBJECT (fontsel), "font");
-  g_object_thaw_notify (G_OBJECT (fontsel));
 
   return TRUE;
 }
