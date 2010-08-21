@@ -85,13 +85,12 @@ static void gtk_cell_renderer_spinner_get_size     (GtkCellRenderer *cell,
                                                     gint            *y_offset,
                                                     gint            *width,
                                                     gint            *height);
-static void gtk_cell_renderer_spinner_render       (GtkCellRenderer *cell,
-                                                    GdkWindow       *window,
-                                                    GtkWidget       *widget,
-                                                    GdkRectangle    *background_area,
-                                                    GdkRectangle    *cell_area,
-                                                    GdkRectangle    *expose_area,
-                                                    guint            flags);
+static void gtk_cell_renderer_spinner_render       (GtkCellRenderer      *cell,
+                                                    cairo_t              *cr,
+                                                    GtkWidget            *widget,
+                                                    const GdkRectangle   *background_area,
+                                                    const GdkRectangle   *cell_area,
+                                                    GtkCellRendererState  flags);
 
 G_DEFINE_TYPE (GtkCellRendererSpinner, gtk_cell_renderer_spinner, GTK_TYPE_CELL_RENDERER)
 
@@ -320,13 +319,12 @@ gtk_cell_renderer_spinner_get_size (GtkCellRenderer *cellr,
 }
 
 static void
-gtk_cell_renderer_spinner_render (GtkCellRenderer *cellr,
-                                  GdkWindow       *window,
-                                  GtkWidget       *widget,
-                                  GdkRectangle    *background_area,
-                                  GdkRectangle    *cell_area,
-                                  GdkRectangle    *expose_area,
-                                  guint            flags)
+gtk_cell_renderer_spinner_render (GtkCellRenderer      *cellr,
+                                  cairo_t              *cr,
+                                  GtkWidget            *widget,
+                                  const GdkRectangle   *background_area,
+                                  const GdkRectangle   *cell_area,
+                                  GtkCellRendererState  flags)
 {
   GtkCellRendererSpinner *cell = GTK_CELL_RENDERER_SPINNER (cellr);
   GtkCellRendererSpinnerPrivate *priv = cell->priv;
@@ -338,7 +336,7 @@ gtk_cell_renderer_spinner_render (GtkCellRenderer *cellr,
   if (!priv->active)
     return;
 
-  gtk_cell_renderer_spinner_get_size (cellr, widget, cell_area,
+  gtk_cell_renderer_spinner_get_size (cellr, widget, (GdkRectangle *) cell_area,
                                       &pix_rect.x, &pix_rect.y,
                                       &pix_rect.width, &pix_rect.height);
 
@@ -351,11 +349,8 @@ gtk_cell_renderer_spinner_render (GtkCellRenderer *cellr,
   pix_rect.width -= xpad * 2;
   pix_rect.height -= ypad * 2;
 
-  if (!gdk_rectangle_intersect (cell_area, &pix_rect, &draw_rect) ||
-      !gdk_rectangle_intersect (expose_area, &pix_rect, &draw_rect))
-    {
-      return;
-    }
+  if (!gdk_rectangle_intersect (cell_area, &pix_rect, &draw_rect))
+    return;
 
   state = GTK_STATE_NORMAL;
   if (gtk_widget_get_state (widget) == GTK_STATE_INSENSITIVE ||
@@ -376,13 +371,12 @@ gtk_cell_renderer_spinner_render (GtkCellRenderer *cellr,
         state = GTK_STATE_PRELIGHT;
     }
 
-  gtk_paint_spinner (gtk_widget_get_style (widget),
-                     window,
-                     state,
-                     expose_area,
-                     widget,
-                     "cell",
-                     priv->pulse,
-                     draw_rect.x, draw_rect.y,
-                     draw_rect.width, draw_rect.height);
+  gtk_cairo_paint_spinner (gtk_widget_get_style (widget),
+                           cr,
+                           state,
+                           widget,
+                           "cell",
+                           priv->pulse,
+                           draw_rect.x, draw_rect.y,
+                           draw_rect.width, draw_rect.height);
 }

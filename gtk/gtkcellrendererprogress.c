@@ -89,11 +89,10 @@ static void gtk_cell_renderer_progress_get_size     (GtkCellRenderer         *ce
 						     gint                    *width,
 						     gint                    *height);
 static void gtk_cell_renderer_progress_render       (GtkCellRenderer         *cell,
-						     GdkWindow               *window,
+						     cairo_t                 *cr,
 						     GtkWidget               *widget,
-						     GdkRectangle            *background_area,
-						     GdkRectangle            *cell_area,
-						     GdkRectangle            *expose_area,
+						     const GdkRectangle      *background_area,
+						     const GdkRectangle      *cell_area,
 						     guint                    flags);
 
      
@@ -527,13 +526,12 @@ get_bar_position (gint     start,
 }
 
 static void
-gtk_cell_renderer_progress_render (GtkCellRenderer *cell,
-				   GdkWindow       *window,
-				   GtkWidget       *widget,
-				   GdkRectangle    *background_area,
-				   GdkRectangle    *cell_area,
-				   GdkRectangle    *expose_area,
-				   guint            flags)
+gtk_cell_renderer_progress_render (GtkCellRenderer      *cell,
+                                   cairo_t              *cr,
+				   GtkWidget            *widget,
+				   const GdkRectangle   *background_area,
+				   const GdkRectangle   *cell_area,
+				   GtkCellRendererState  flags)
 {
   GtkCellRendererProgress *cellprogress = GTK_CELL_RENDERER_PROGRESS (cell);
   GtkCellRendererProgressPrivate *priv= cellprogress->priv; 
@@ -559,11 +557,11 @@ gtk_cell_renderer_progress_render (GtkCellRenderer *cell,
    * but some engines don't paint anything with that detail for
    * non-GtkProgressBar widgets.
    */
-  gtk_paint_box (style,
-		 window,
-		 GTK_STATE_NORMAL, GTK_SHADOW_IN, 
-		 NULL, widget, NULL,
-		 x, y, w, h);
+  gtk_cairo_paint_box (style,
+                       cr,
+                       GTK_STATE_NORMAL, GTK_SHADOW_IN, 
+                       widget, NULL,
+                       x, y, w, h);
 
   if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
     {
@@ -606,12 +604,12 @@ gtk_cell_renderer_progress_render (GtkCellRenderer *cell,
       clip.y = bar_position;
     }
 
-  gtk_paint_box (style,
-		 window,
-		 GTK_STATE_SELECTED, GTK_SHADOW_OUT,
-		 &clip, widget, "bar",
-		 clip.x, clip.y,
-		 clip.width, clip.height);
+  gtk_cairo_paint_box (style,
+                       cr,
+                       GTK_STATE_SELECTED, GTK_SHADOW_OUT,
+                       widget, "bar",
+                       clip.x, clip.y,
+                       clip.width, clip.height);
 
   if (priv->label)
     {
@@ -631,11 +629,17 @@ gtk_cell_renderer_progress_render (GtkCellRenderer *cell,
       y_pos = y + style->ythickness + priv->text_yalign *
 	(h - 2 * style->ythickness - logical_rect.height);
 
-      gtk_paint_layout (style, window,
-	  	        GTK_STATE_SELECTED,
-		        FALSE, &clip, widget, "progressbar",
-		        x_pos, y_pos, 
-		        layout);
+      cairo_save (cr);
+      gdk_cairo_rectangle (cr, &clip);
+      cairo_clip (cr);
+
+      gtk_cairo_paint_layout (style, cr,
+                              GTK_STATE_SELECTED,
+                              FALSE, widget, "progressbar",
+                              x_pos, y_pos, 
+                              layout);
+
+      cairo_restore (cr);
 
       if (bar_position > start)
         {
@@ -650,11 +654,17 @@ gtk_cell_renderer_progress_render (GtkCellRenderer *cell,
 	      clip.height = bar_position - y;
 	    }
 
-          gtk_paint_layout (style, window,
-	  	            GTK_STATE_NORMAL,
-		            FALSE, &clip, widget, "progressbar",
-		            x_pos, y_pos,
-		            layout);
+          cairo_save (cr);
+          gdk_cairo_rectangle (cr, &clip);
+          cairo_clip (cr);
+
+          gtk_cairo_paint_layout (style, cr,
+                                  GTK_STATE_NORMAL,
+                                  FALSE, widget, "progressbar",
+                                  x_pos, y_pos,
+                                  layout);
+
+          cairo_restore (cr);
         }
 
       if (bar_position + bar_size < start + full_size)
@@ -670,11 +680,17 @@ gtk_cell_renderer_progress_render (GtkCellRenderer *cell,
 	      clip.height = y + h - (bar_position + bar_size);
 	    }
 
-          gtk_paint_layout (style, window,
-		            GTK_STATE_NORMAL,
-		            FALSE, &clip, widget, "progressbar",
-		            x_pos, y_pos,
-		            layout);
+          cairo_save (cr);
+          gdk_cairo_rectangle (cr, &clip);
+          cairo_clip (cr);
+
+          gtk_cairo_paint_layout (style, cr,
+                                  GTK_STATE_NORMAL,
+                                  FALSE, widget, "progressbar",
+                                  x_pos, y_pos,
+                                  layout);
+          
+          cairo_restore (cr);
         }
 
       g_object_unref (layout);

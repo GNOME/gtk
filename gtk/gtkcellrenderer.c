@@ -641,30 +641,32 @@ gtk_cell_renderer_render (GtkCellRenderer      *cell,
 {
   gboolean selected = FALSE;
   GtkCellRendererPrivate *priv = cell->priv;
+  cairo_t *cr;
 
   g_return_if_fail (GTK_IS_CELL_RENDERER (cell));
   g_return_if_fail (GTK_CELL_RENDERER_GET_CLASS (cell)->render != NULL);
 
   selected = (flags & GTK_CELL_RENDERER_SELECTED) == GTK_CELL_RENDERER_SELECTED;
 
+  cr = gdk_cairo_create (window);
+  gdk_cairo_rectangle (cr, expose_area);
+  cairo_clip (cr);
+
   if (priv->cell_background_set && !selected)
     {
-      cairo_t *cr = gdk_cairo_create (window);
-
       gdk_cairo_rectangle (cr, background_area);
       gdk_cairo_set_source_color (cr, &priv->cell_background);
       cairo_fill (cr);
-      
-      cairo_destroy (cr);
     }
 
   GTK_CELL_RENDERER_GET_CLASS (cell)->render (cell,
-					      window,
+                                              cr,
 					      widget,
-					      (GdkRectangle *) background_area,
-					      (GdkRectangle *) cell_area,
-					      (GdkRectangle *) expose_area,
+					      background_area,
+					      cell_area,
 					      flags);
+
+  cairo_destroy (cr);
 }
 
 /**

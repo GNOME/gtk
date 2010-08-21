@@ -44,11 +44,10 @@ static void gtk_cell_renderer_text_set_property  (GObject                  *obje
 						  const GValue             *value,
 						  GParamSpec               *pspec);
 static void gtk_cell_renderer_text_render     (GtkCellRenderer          *cell,
-					       GdkWindow                *window,
+					       cairo_t                  *cr,
 					       GtkWidget                *widget,
-					       GdkRectangle             *background_area,
-					       GdkRectangle             *cell_area,
-					       GdkRectangle             *expose_area,
+					       const GdkRectangle       *background_area,
+					       const GdkRectangle       *cell_area,
 					       GtkCellRendererState      flags);
 
 static GtkCellEditable *gtk_cell_renderer_text_start_editing (GtkCellRenderer      *cell,
@@ -1434,7 +1433,7 @@ add_attr (PangoAttrList  *attr_list,
 static PangoLayout*
 get_layout (GtkCellRendererText *celltext,
             GtkWidget           *widget,
-            GdkRectangle        *cell_area,
+            const GdkRectangle  *cell_area,
             GtkCellRendererState flags)
 {
   GtkCellRendererTextPrivate *priv = celltext->priv;
@@ -1694,11 +1693,10 @@ get_size (GtkCellRenderer *cell,
 
 static void
 gtk_cell_renderer_text_render (GtkCellRenderer      *cell,
-			       GdkDrawable          *window,
+			       cairo_t              *cr,
 			       GtkWidget            *widget,
-			       GdkRectangle         *background_area,
-			       GdkRectangle         *cell_area,
-			       GdkRectangle         *expose_area,
+			       const GdkRectangle   *background_area,
+			       const GdkRectangle   *cell_area,
 			       GtkCellRendererState  flags)
 
 {
@@ -1711,7 +1709,7 @@ gtk_cell_renderer_text_render (GtkCellRenderer      *cell,
   gint xpad, ypad;
 
   layout = get_layout (celltext, widget, cell_area, flags);
-  get_size (cell, widget, cell_area, layout, &x_offset, &y_offset, NULL, NULL);
+  get_size (cell, widget, (GdkRectangle *) cell_area, layout, &x_offset, &y_offset, NULL, NULL);
 
   if (!gtk_cell_renderer_get_sensitive (cell))
     {
@@ -1740,22 +1738,12 @@ gtk_cell_renderer_text_render (GtkCellRenderer      *cell,
   if (priv->background_set && 
       (flags & GTK_CELL_RENDERER_SELECTED) == 0)
     {
-      cairo_t *cr = gdk_cairo_create (window);
-
-      if (expose_area)
-	{
-	  gdk_cairo_rectangle (cr, expose_area);
-	  cairo_clip (cr);
-	}
-
       gdk_cairo_rectangle (cr, background_area);
       cairo_set_source_rgb (cr,
 			    priv->background.red / 65535.,
 			    priv->background.green / 65535.,
 			    priv->background.blue / 65535.);
       cairo_fill (cr);
-      
-      cairo_destroy (cr);
     }
 
   gtk_cell_renderer_get_padding (cell, &xpad, &ypad);
@@ -1766,16 +1754,15 @@ gtk_cell_renderer_text_render (GtkCellRenderer      *cell,
   else if (priv->wrap_width == -1)
     pango_layout_set_width (layout, -1);
 
-  gtk_paint_layout (gtk_widget_get_style (widget),
-                    window,
-                    state,
-		    TRUE,
-                    expose_area,
-                    widget,
-                    "cellrenderertext",
-                    cell_area->x + x_offset + xpad,
-                    cell_area->y + y_offset + ypad,
-                    layout);
+  gtk_cairo_paint_layout (gtk_widget_get_style (widget),
+                          cr,
+                          state,
+                          TRUE,
+                          widget,
+                          "cellrenderertext",
+                          cell_area->x + x_offset + xpad,
+                          cell_area->y + y_offset + ypad,
+                          layout);
 
   g_object_unref (layout);
 }
@@ -2145,7 +2132,7 @@ gtk_cell_renderer_text_get_height_for_width (GtkCellSizeRequest *cell,
 
   gtk_cell_renderer_get_padding (GTK_CELL_RENDERER (cell), &xpad, &ypad);
 
-  layout = get_layout (celltext, widget, FALSE, 0);
+  layout = get_layout (celltext, widget, NULL, 0);
 
   pango_layout_set_width (layout, (width - xpad * 2) * PANGO_SCALE);
   pango_layout_get_pixel_size (layout, NULL, &text_height);

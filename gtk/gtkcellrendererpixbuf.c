@@ -45,11 +45,10 @@ static void gtk_cell_renderer_pixbuf_get_size   (GtkCellRenderer            *cel
 						 gint                       *width,
 						 gint                       *height);
 static void gtk_cell_renderer_pixbuf_render     (GtkCellRenderer            *cell,
-						 GdkDrawable                *window,
+						 cairo_t                    *cr,
 						 GtkWidget                  *widget,
-						 GdkRectangle               *background_area,
-						 GdkRectangle               *cell_area,
-						 GdkRectangle               *expose_area,
+						 const GdkRectangle         *background_area,
+						 const GdkRectangle         *cell_area,
 						 GtkCellRendererState        flags);
 
 
@@ -743,11 +742,10 @@ gtk_cell_renderer_pixbuf_get_size (GtkCellRenderer *cell,
 
 static void
 gtk_cell_renderer_pixbuf_render (GtkCellRenderer      *cell,
-				 GdkWindow            *window,
+                                 cairo_t              *cr,
 				 GtkWidget            *widget,
-				 GdkRectangle         *background_area,
-				 GdkRectangle         *cell_area,
-				 GdkRectangle         *expose_area,
+				 const GdkRectangle   *background_area,
+				 const GdkRectangle   *cell_area,
 				 GtkCellRendererState  flags)
 
 {
@@ -759,11 +757,10 @@ gtk_cell_renderer_pixbuf_render (GtkCellRenderer      *cell,
   GdkPixbuf *symbolic = NULL;
   GdkRectangle pix_rect;
   GdkRectangle draw_rect;
-  cairo_t *cr;
   gboolean is_expander;
   gint xpad, ypad;
 
-  gtk_cell_renderer_pixbuf_get_size (cell, widget, cell_area,
+  gtk_cell_renderer_pixbuf_get_size (cell, widget, (GdkRectangle *) cell_area,
 				     &pix_rect.x,
 				     &pix_rect.y,
 				     &pix_rect.width,
@@ -775,8 +772,7 @@ gtk_cell_renderer_pixbuf_render (GtkCellRenderer      *cell,
   pix_rect.width  -= xpad * 2;
   pix_rect.height -= ypad * 2;
 
-  if (!gdk_rectangle_intersect (cell_area, &pix_rect, &draw_rect) ||
-      !gdk_rectangle_intersect (expose_area, &draw_rect, &draw_rect))
+  if (!gdk_rectangle_intersect (cell_area, &pix_rect, &draw_rect))
     return;
 
   pixbuf = priv->pixbuf;
@@ -852,14 +848,10 @@ gtk_cell_renderer_pixbuf_render (GtkCellRenderer      *cell,
       }
     }
 
-  cr = gdk_cairo_create (window);
-  
   gdk_cairo_set_source_pixbuf (cr, pixbuf, pix_rect.x, pix_rect.y);
   gdk_cairo_rectangle (cr, &draw_rect);
   cairo_fill (cr);
 
-  cairo_destroy (cr);
-  
   if (invisible)
     g_object_unref (invisible);
 

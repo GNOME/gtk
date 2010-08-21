@@ -77,11 +77,10 @@ struct _GtkCellRendererClass
 				      gint                 *width,
 				      gint                 *height);
   void             (* render)        (GtkCellRenderer      *cell,
-				      GdkDrawable          *window,
+                                      cairo_t              *cr,
 				      GtkWidget            *widget,
-				      GdkRectangle         *background_area,
-				      GdkRectangle         *cell_area,
-				      GdkRectangle         *expose_area,
+				      const GdkRectangle   *background_area,
+				      const GdkRectangle   *cell_area,
 				      GtkCellRendererState  flags);
   gboolean         (* activate)      (GtkCellRenderer      *cell,
 				      GdkEvent             *event,
