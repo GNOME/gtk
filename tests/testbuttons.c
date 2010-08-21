@@ -55,7 +55,7 @@ int main (int argc, char *argv[])
 	hbox = gtk_hbox_new (0, FALSE);
 	gtk_container_add (GTK_CONTAINER (box), hbox);
 	button = g_object_new (GTK_TYPE_BUTTON,
-                               "label", "gtk-save",
+                               "label", "document-save",
 			       "use-stock", TRUE,
 			       NULL);
 	gtk_container_add (GTK_CONTAINER (hbox), button);

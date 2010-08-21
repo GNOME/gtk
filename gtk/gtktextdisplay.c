@@ -835,6 +835,12 @@ gtk_text_layout_draw (GtkTextLayout *layout,
   cairo_rectangle (cr, x, y, width, height);
   cairo_clip (cr);
 
+  /* cursor code needs this */
+  clip.x = x;
+  clip.y = y;
+  clip.width = width;
+  clip.height = height;
+
   gdk_cairo_set_source_color (cr, &widget->style->text[widget->state]);
 
   text_renderer = get_text_renderer ();

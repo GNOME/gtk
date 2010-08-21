@@ -1565,12 +1565,9 @@ gtk_combo_box_menu_position_over (GtkMenu  *menu,
   GtkWidget      *active;
   GtkWidget      *child;
   GtkWidget      *widget;
-  GtkRequisition  requisition;
+  GtkAllocation   child_allocation;
   GList          *children;
-  guint           horizontal_padding, border_width;
   gint            screen_width;
-  gint            menu_item_avail_width;
-  gint            min_item_height;
   gint            menu_xpos;
   gint            menu_ypos;
   gint            menu_width;
@@ -1578,30 +1575,17 @@ gtk_combo_box_menu_position_over (GtkMenu  *menu,
   combo_box = GTK_COMBO_BOX (user_data);
   widget = GTK_WIDGET (combo_box);
 
-  gtk_widget_style_get (GTK_WIDGET (menu),
-                        "horizontal-padding", &horizontal_padding,
-			NULL);
-
-  border_width = gtk_container_get_border_width (GTK_CONTAINER (menu));
-
-  /* Get the minimum height for minimum width of the menu */
-  gtk_size_request_get_size (GTK_SIZE_REQUEST (menu), &requisition, NULL);
-  menu_width = requisition.width;
-
-  /* Get the size for the height-for-width menu-item requests */
-  menu_item_avail_width = 
-    menu_width - (border_width + horizontal_padding + widget->style->xthickness) * 2;
-
   active = gtk_menu_get_active (GTK_MENU (combo_box->priv->popup_widget));
 
   menu_xpos = widget->allocation.x;
   menu_ypos = widget->allocation.y + widget->allocation.height / 2 - 2;
 
+  gtk_size_request_get_width (GTK_SIZE_REQUEST (menu), &menu_width, NULL);
+
   if (active != NULL)
     {
-      gtk_size_request_get_height_for_width (GTK_SIZE_REQUEST (active), 
-					     menu_item_avail_width, &min_item_height, NULL);
-      menu_ypos -= min_item_height / 2;
+      gtk_widget_get_allocation (active, &child_allocation);
+      menu_ypos -= child_allocation.height / 2;
     }
 
   children = GTK_MENU_SHELL (combo_box->priv->popup_widget)->children;
@@ -1614,9 +1598,9 @@ gtk_combo_box_menu_position_over (GtkMenu  *menu,
 
       if (gtk_widget_get_visible (child))
 	{
-	  gtk_size_request_get_height_for_width (GTK_SIZE_REQUEST (child), 
-						 menu_item_avail_width, &min_item_height, NULL);
-	  menu_ypos -= min_item_height;
+	  gtk_widget_get_allocation (child, &child_allocation);
+
+	  menu_ypos -= child_allocation.height;
 	}
 
       children = children->next;

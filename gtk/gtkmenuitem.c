@@ -1932,6 +1932,7 @@ gtk_menu_item_position_menu (GtkMenu  *menu,
   gint vertical_offset;
   gint parent_xthickness;
   gint available_left, available_right;
+  GtkRequisition requisition;
 
   g_return_if_fail (menu != NULL);
   g_return_if_fail (x != NULL);
@@ -1945,8 +1946,10 @@ gtk_menu_item_position_menu (GtkMenu  *menu,
 
   direction = gtk_widget_get_direction (widget);
 
-  twidth = GTK_WIDGET (menu)->requisition.width;
-  theight = GTK_WIDGET (menu)->requisition.height;
+  gtk_size_request_get_size (GTK_SIZE_REQUEST (menu), &requisition, NULL);
+
+  twidth = requisition.width;
+  theight = requisition.height;
 
   screen = gtk_widget_get_screen (GTK_WIDGET (menu));
   monitor_num = gdk_screen_get_monitor_at_window (screen, menu_item->event_window);

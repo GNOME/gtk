@@ -123,7 +123,7 @@ main (int argc, char **argv)
 		    GTK_FILL | GTK_EXPAND, GTK_FILL, 0, 0);
 
   icon = g_themed_icon_new ("folder");
-  g_themed_icon_append_name (G_THEMED_ICON (icon), "gtk-directory");
+  g_themed_icon_append_name (G_THEMED_ICON (icon), "folder");
 
   gtk_entry_set_icon_from_gicon (GTK_ENTRY (entry),
 				 GTK_ENTRY_ICON_PRIMARY,
