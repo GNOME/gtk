@@ -2,73 +2,74 @@
 # Copyright (C) 1998-2004, 2005 Free Software Foundation, Inc.
 # Kjartan Maraas <kmaraas@gnome.org>, 1998-2010.
 # Terance Edward Sola <terance@lyse.net>, 2005.
-#
+# Torstein Adolf Winterseth <kvikende@fsfe.org>, 2010.
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.90.x\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-07-19 21:37+0200\n"
-"PO-Revision-Date: 2010-07-19 21:38+0200\n"
-"Last-Translator: Kjartan Maraas <kmaraas@gnome.org>\n"
-"Language-Team: Norwegian Bokmål <i18n-nb@lister.ping.uio.no>\n"
-"Language: \n"
+"POT-Creation-Date: 2010-08-21 11:18+0200\n"
+"PO-Revision-Date: 2010-08-21 11:18+0200\n"
+"Last-Translator: Torstein Adolf Winterseth <kvikende@fsfe.org>\n"
+"Language-Team: Norwegian Nynorsk <i18n-nn@lister.ping.uio.no>\n"
+"Language: nn\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8-bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Virtaal 0.6.1\n"
 
-#: ../gdk/gdk.c:102
+#: ../gdk/gdk.c:101
 #, c-format
 msgid "Error parsing option --gdk-debug"
 msgstr "Feil ved lesing av flagg --gdk-debug"
 
-#: ../gdk/gdk.c:122
+#: ../gdk/gdk.c:121
 #, c-format
 msgid "Error parsing option --gdk-no-debug"
 msgstr "Feil ved lesing av flagg --gdk-no-debug"
 
 #. Description of --class=CLASS in --help output
-#: ../gdk/gdk.c:150
+#: ../gdk/gdk.c:149
 msgid "Program class as used by the window manager"
 msgstr "Programklasse som brukes av vindushåndtereren"
 
 #. Placeholder in --class=CLASS in --help output
-#: ../gdk/gdk.c:151
+#: ../gdk/gdk.c:150
 msgid "CLASS"
 msgstr "KLASSE"
 
 #. Description of --name=NAME in --help output
-#: ../gdk/gdk.c:153
+#: ../gdk/gdk.c:152
 msgid "Program name as used by the window manager"
 msgstr "Programnavn som brukes av vindushåndtereren"
 
 #. Placeholder in --name=NAME in --help output
-#: ../gdk/gdk.c:154
+#: ../gdk/gdk.c:153
 msgid "NAME"
 msgstr "NAVN"
 
 #. Description of --display=DISPLAY in --help output
-#: ../gdk/gdk.c:156
+#: ../gdk/gdk.c:155
 msgid "X display to use"
 msgstr "X-skjerm som skal brukes"
 
 #. Placeholder in --display=DISPLAY in --help output
-#: ../gdk/gdk.c:157
+#: ../gdk/gdk.c:156
 msgid "DISPLAY"
 msgstr "SKJERM"
 
 #. Description of --screen=SCREEN in --help output
-#: ../gdk/gdk.c:159
+#: ../gdk/gdk.c:158
 msgid "X screen to use"
 msgstr "X-skjerm som skal brukes"
 
 #. Placeholder in --screen=SCREEN in --help output
-#: ../gdk/gdk.c:160
+#: ../gdk/gdk.c:159
 msgid "SCREEN"
 msgstr "SKJERM"
 
 #. Description of --gdk-debug=FLAGS in --help output
-#: ../gdk/gdk.c:163
+#: ../gdk/gdk.c:162
 msgid "Gdk debugging flags to set"
 msgstr "Feilsøkingsflagg som skal settes for Gdk"
 
@@ -76,19 +77,19 @@ msgstr "Feilsøkingsflagg som skal settes for Gdk"
 #. Placeholder in --gdk-no-debug=FLAGS in --help output
 #. Placeholder in --gtk-debug=FLAGS in --help output
 #. Placeholder in --gtk-no-debug=FLAGS in --help output
-#: ../gdk/gdk.c:164 ../gdk/gdk.c:167 ../gtk/gtkmain.c:438 ../gtk/gtkmain.c:441
+#: ../gdk/gdk.c:163 ../gdk/gdk.c:166 ../gtk/gtkmain.c:438 ../gtk/gtkmain.c:441
 msgid "FLAGS"
 msgstr "FLAGG"
 
 #. Description of --gdk-no-debug=FLAGS in --help output
-#: ../gdk/gdk.c:166
+#: ../gdk/gdk.c:165
 msgid "Gdk debugging flags to unset"
 msgstr "Feilsøkingsflagg for Gdk som skal fjernes"
 
 #: ../gdk/keyname-table.h:3940
 msgctxt "keyboard label"
 msgid "BackSpace"
-msgstr "Tilbake"
+msgstr "Rettetast"
 
 #: ../gdk/keyname-table.h:3941
 msgctxt "keyboard label"
@@ -322,50 +323,58 @@ msgid_plural "Opening %d Items"
 msgstr[0] "Åpner %d oppføring"
 msgstr[1] "Åpner %d oppføringer"
 
-#: ../gtk/gtkaboutdialog.c:240
-msgid "Could not show link"
-msgstr "Kunne ikke vise lenke"
+#. Translators: this is the license preamble; the string at the end
+#. * contains the URL of the license.
+#.
+#: ../gtk/gtkaboutdialog.c:124
+#, c-format
+msgid "This program comes with ABSOLUTELY NO WARRANTY; for details, visit %s"
+msgstr "Dette programmet kommer UTEN NOEN SOM HELST GARANTI; besøk %s for detaljer"
 
-#: ../gtk/gtkaboutdialog.c:363 ../gtk/gtkaboutdialog.c:2226
+#: ../gtk/gtkaboutdialog.c:264
+msgid "Could not show link"
+msgstr "Klarte ikke å vise lenke"
+
+#: ../gtk/gtkaboutdialog.c:390 ../gtk/gtkaboutdialog.c:2294
 msgid "License"
 msgstr "Lisens"
 
-#: ../gtk/gtkaboutdialog.c:364
+#: ../gtk/gtkaboutdialog.c:391
 msgid "The license of the program"
 msgstr "Programmets lisens"
 
 #. Add the credits button
-#: ../gtk/gtkaboutdialog.c:627
+#: ../gtk/gtkaboutdialog.c:686
 msgid "C_redits"
 msgstr "Bid_ragsytere"
 
 #. Add the license button
-#: ../gtk/gtkaboutdialog.c:641
+#: ../gtk/gtkaboutdialog.c:700
 msgid "_License"
 msgstr "_Lisens"
 
-#: ../gtk/gtkaboutdialog.c:900
+#: ../gtk/gtkaboutdialog.c:965
 #, c-format
 msgid "About %s"
 msgstr "Om %s"
 
-#: ../gtk/gtkaboutdialog.c:2143
+#: ../gtk/gtkaboutdialog.c:2211
 msgid "Credits"
 msgstr "Bidragsytere"
 
-#: ../gtk/gtkaboutdialog.c:2176
+#: ../gtk/gtkaboutdialog.c:2244
 msgid "Written by"
 msgstr "Skrevet av"
 
-#: ../gtk/gtkaboutdialog.c:2179
+#: ../gtk/gtkaboutdialog.c:2247
 msgid "Documented by"
 msgstr "Dokumentert av"
 
-#: ../gtk/gtkaboutdialog.c:2191
+#: ../gtk/gtkaboutdialog.c:2259
 msgid "Translated by"
 msgstr "Oversatt av"
 
-#: ../gtk/gtkaboutdialog.c:2195
+#: ../gtk/gtkaboutdialog.c:2263
 msgid "Artwork by"
 msgstr "Grafikk av"
 
@@ -374,7 +383,7 @@ msgstr "Grafikk av"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: ../gtk/gtkaccellabel.c:157
+#: ../gtk/gtkaccellabel.c:166
 msgctxt "keyboard label"
 msgid "Shift"
 msgstr "Shift"
@@ -384,7 +393,7 @@ msgstr "Shift"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: ../gtk/gtkaccellabel.c:163
+#: ../gtk/gtkaccellabel.c:172
 msgctxt "keyboard label"
 msgid "Ctrl"
 msgstr "Ctrl"
@@ -394,7 +403,7 @@ msgstr "Ctrl"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: ../gtk/gtkaccellabel.c:169
+#: ../gtk/gtkaccellabel.c:178
 msgctxt "keyboard label"
 msgid "Alt"
 msgstr "Alt"
@@ -404,7 +413,7 @@ msgstr "Alt"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: ../gtk/gtkaccellabel.c:767
+#: ../gtk/gtkaccellabel.c:782
 msgctxt "keyboard label"
 msgid "Super"
 msgstr "Super"
@@ -414,7 +423,7 @@ msgstr "Super"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: ../gtk/gtkaccellabel.c:780
+#: ../gtk/gtkaccellabel.c:795
 msgctxt "keyboard label"
 msgid "Hyper"
 msgstr "Hyper"
@@ -424,17 +433,17 @@ msgstr "Hyper"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: ../gtk/gtkaccellabel.c:794
+#: ../gtk/gtkaccellabel.c:809
 msgctxt "keyboard label"
 msgid "Meta"
 msgstr "Meta"
 
-#: ../gtk/gtkaccellabel.c:811
+#: ../gtk/gtkaccellabel.c:825
 msgctxt "keyboard label"
 msgid "Space"
 msgstr "Mellomrom"
 
-#: ../gtk/gtkaccellabel.c:814
+#: ../gtk/gtkaccellabel.c:828
 msgctxt "keyboard label"
 msgid "Backslash"
 msgstr "Backslash"
@@ -469,7 +478,7 @@ msgstr "Uhåndtert tag «%s»"
 #. * text direction of RTL and specify "calendar:YM", then the year
 #. * will appear to the right of the month.
 #.
-#: ../gtk/gtkcalendar.c:830
+#: ../gtk/gtkcalendar.c:886
 msgid "calendar:MY"
 msgstr "calendar:MY"
 
@@ -477,7 +486,7 @@ msgstr "calendar:MY"
 #. * first day of the week to calendar:week_start:1 if you want Monday
 #. * to be the first day of the week, and so on.
 #.
-#: ../gtk/gtkcalendar.c:868
+#: ../gtk/gtkcalendar.c:924
 msgid "calendar:week_start:0"
 msgstr "calendar:week_start:1"
 
@@ -486,7 +495,7 @@ msgstr "calendar:week_start:1"
 #. *
 #. * If you don't understand this, leave it as "2000"
 #.
-#: ../gtk/gtkcalendar.c:1878
+#: ../gtk/gtkcalendar.c:1983
 msgctxt "year measurement template"
 msgid "2000"
 msgstr "2000"
@@ -501,7 +510,7 @@ msgstr "2000"
 #. * digits. That needs support from your system and locale definition
 #. * too.
 #.
-#: ../gtk/gtkcalendar.c:1909 ../gtk/gtkcalendar.c:2567
+#: ../gtk/gtkcalendar.c:2014 ../gtk/gtkcalendar.c:2678
 #, c-format
 msgctxt "calendar:day:digits"
 msgid "%d"
@@ -517,7 +526,7 @@ msgstr "%d"
 #. * digits. That needs support from your system and locale definition
 #. * too.
 #.
-#: ../gtk/gtkcalendar.c:1941 ../gtk/gtkcalendar.c:2430
+#: ../gtk/gtkcalendar.c:2046 ../gtk/gtkcalendar.c:2540
 #, c-format
 msgctxt "calendar:week:digits"
 msgid "%d"
@@ -533,7 +542,7 @@ msgstr "%d"
 #. *
 #. * "%Y" is appropriate for most locales.
 #.
-#: ../gtk/gtkcalendar.c:2221
+#: ../gtk/gtkcalendar.c:2328
 msgctxt "calendar year format"
 msgid "%Y"
 msgstr "%Y"
@@ -561,7 +570,7 @@ msgstr "Ugyldig"
 #.
 #: ../gtk/gtkcellrendereraccel.c:414 ../gtk/gtkcellrendereraccel.c:664
 msgid "New accelerator..."
-msgstr "Ny hurtigtast..."
+msgstr "Ny hurtigtast …"
 
 #: ../gtk/gtkcellrendererprogress.c:360 ../gtk/gtkcellrendererprogress.c:450
 #, c-format
@@ -569,15 +578,15 @@ msgctxt "progress bar label"
 msgid "%d %%"
 msgstr "%d %%"
 
-#: ../gtk/gtkcolorbutton.c:186 ../gtk/gtkcolorbutton.c:559
+#: ../gtk/gtkcolorbutton.c:176 ../gtk/gtkcolorbutton.c:459
 msgid "Pick a Color"
 msgstr "Velg en farge"
 
-#: ../gtk/gtkcolorbutton.c:446
+#: ../gtk/gtkcolorbutton.c:350
 msgid "Received invalid color data\n"
 msgstr "Mottok ugyldige fargedata\n"
 
-#: ../gtk/gtkcolorsel.c:354
+#: ../gtk/gtkcolorsel.c:363
 msgid ""
 "Select the color you want from the outer ring. Select the darkness or "
 "lightness of that color using the inner triangle."
@@ -585,75 +594,75 @@ msgstr ""
 "Velg fargen du ønsker fra den ytre ringen. Velg lysstyrke for denne fargen "
 "ved å bruke den indre trekanten."
 
-#: ../gtk/gtkcolorsel.c:378
+#: ../gtk/gtkcolorsel.c:387
 msgid ""
 "Click the eyedropper, then click a color anywhere on your screen to select "
 "that color."
 msgstr ""
-"Klikk på dråpetelleren og klikk så på en farge hvor som helst på skjermen "
+"Trykk på dråpetelleren og trykk så på en farge hvor som helst på skjermen "
 "for å velge denne fargen."
 
-#: ../gtk/gtkcolorsel.c:387
+#: ../gtk/gtkcolorsel.c:396
 msgid "_Hue:"
 msgstr "_Glød:"
 
-#: ../gtk/gtkcolorsel.c:388
+#: ../gtk/gtkcolorsel.c:397
 msgid "Position on the color wheel."
 msgstr "Posisjon på fargehjulet."
 
-#: ../gtk/gtkcolorsel.c:390
+#: ../gtk/gtkcolorsel.c:399
 msgid "_Saturation:"
 msgstr "_Metning:"
 
-#: ../gtk/gtkcolorsel.c:391
+#: ../gtk/gtkcolorsel.c:400
 msgid "Intensity of the color."
 msgstr "Intensitet for fargen."
 
-#: ../gtk/gtkcolorsel.c:392
+#: ../gtk/gtkcolorsel.c:401
 msgid "_Value:"
 msgstr "_Verdi:"
 
-#: ../gtk/gtkcolorsel.c:393
+#: ../gtk/gtkcolorsel.c:402
 msgid "Brightness of the color."
 msgstr "Lysstyrke for fargen."
 
-#: ../gtk/gtkcolorsel.c:394
+#: ../gtk/gtkcolorsel.c:403
 msgid "_Red:"
 msgstr "_Rød:"
 
-#: ../gtk/gtkcolorsel.c:395
+#: ../gtk/gtkcolorsel.c:404
 msgid "Amount of red light in the color."
 msgstr "Mende med rødt lys i fargen."
 
-#: ../gtk/gtkcolorsel.c:396
+#: ../gtk/gtkcolorsel.c:405
 msgid "_Green:"
 msgstr "_Grønn:"
 
-#: ../gtk/gtkcolorsel.c:397
+#: ../gtk/gtkcolorsel.c:406
 msgid "Amount of green light in the color."
 msgstr "Mengde med grønt lys i fargen."
 
-#: ../gtk/gtkcolorsel.c:398
+#: ../gtk/gtkcolorsel.c:407
 msgid "_Blue:"
 msgstr "_Blå:"
 
-#: ../gtk/gtkcolorsel.c:399
+#: ../gtk/gtkcolorsel.c:408
 msgid "Amount of blue light in the color."
 msgstr "Mengde med blått lys i fargen."
 
-#: ../gtk/gtkcolorsel.c:402
+#: ../gtk/gtkcolorsel.c:411
 msgid "Op_acity:"
 msgstr "_Ugjennomsiktighet:"
 
-#: ../gtk/gtkcolorsel.c:409 ../gtk/gtkcolorsel.c:419
+#: ../gtk/gtkcolorsel.c:418 ../gtk/gtkcolorsel.c:428
 msgid "Transparency of the color."
 msgstr "Gjennomsiktighet for fargen."
 
-#: ../gtk/gtkcolorsel.c:426
+#: ../gtk/gtkcolorsel.c:435
 msgid "Color _name:"
 msgstr "Farge_navn:"
 
-#: ../gtk/gtkcolorsel.c:440
+#: ../gtk/gtkcolorsel.c:449
 msgid ""
 "You can enter an HTML-style hexadecimal color value, or simply a color name "
 "such as 'orange' in this entry."
@@ -661,15 +670,15 @@ msgstr ""
 "Du kan skrive inn en heksadesimal fargeverdi i HTML-stil, eller bruke et "
 "fargenavn som f.eks. «oransje» i denne oppføringen."
 
-#: ../gtk/gtkcolorsel.c:470
+#: ../gtk/gtkcolorsel.c:479
 msgid "_Palette:"
 msgstr "_Palett:"
 
-#: ../gtk/gtkcolorsel.c:499
+#: ../gtk/gtkcolorsel.c:508
 msgid "Color Wheel"
 msgstr "Fargehjul"
 
-#: ../gtk/gtkcolorsel.c:958
+#: ../gtk/gtkcolorsel.c:967
 msgid ""
 "The previously-selected color, for comparison to the color you're selecting "
 "now. You can drag this color to a palette entry, or select this color as "
@@ -679,7 +688,7 @@ msgstr ""
 "denne fargen til en palettoppføring, eller velge denne fargen som aktiv ved "
 "å dra den til den andre fargeprøven ved siden av."
 
-#: ../gtk/gtkcolorsel.c:961
+#: ../gtk/gtkcolorsel.c:970
 msgid ""
 "The color you've chosen. You can drag this color to a palette entry to save "
 "it for use in the future."
@@ -687,21 +696,21 @@ msgstr ""
 "Fargen du har valgt. Du kan dra denne fargen til en palettoppføring for å "
 "lagre den for senere bruk."
 
-#: ../gtk/gtkcolorsel.c:966
+#: ../gtk/gtkcolorsel.c:975
 msgid ""
 "The previously-selected color, for comparison to the color you're selecting "
 "now."
 msgstr "Tidligere valgt farge. For sammenligning med fargen du velger nå."
 
-#: ../gtk/gtkcolorsel.c:969
+#: ../gtk/gtkcolorsel.c:978
 msgid "The color you've chosen."
 msgstr "Fargen du har valgt."
 
-#: ../gtk/gtkcolorsel.c:1382
+#: ../gtk/gtkcolorsel.c:1391
 msgid "_Save color here"
 msgstr "_Lagre fargen her"
 
-#: ../gtk/gtkcolorsel.c:1587
+#: ../gtk/gtkcolorsel.c:1596
 msgid ""
 "Click this palette entry to make it the current color. To change this entry, "
 "drag a color swatch here or right-click it and select \"Save color here.\""
@@ -739,7 +748,7 @@ msgstr "mm"
 
 #: ../gtk/gtkcustompaperunixdialog.c:581
 msgid "Margins from Printer..."
-msgstr "Marger fra skriver..."
+msgstr "Marger fra skriver …"
 
 #: ../gtk/gtkcustompaperunixdialog.c:747
 #, c-format
@@ -778,23 +787,23 @@ msgstr "Høy_re:"
 msgid "Paper Margins"
 msgstr "Papirmarger"
 
-#: ../gtk/gtkentry.c:8611 ../gtk/gtktextview.c:8258
+#: ../gtk/gtkentry.c:8613 ../gtk/gtktextview.c:8258
 msgid "Input _Methods"
 msgstr "Inndata_metoder"
 
-#: ../gtk/gtkentry.c:8625 ../gtk/gtktextview.c:8272
+#: ../gtk/gtkentry.c:8627 ../gtk/gtktextview.c:8272
 msgid "_Insert Unicode Control Character"
 msgstr "Sett _inn Unicode kontrolltegn"
 
-#: ../gtk/gtkentry.c:10020
+#: ../gtk/gtkentry.c:10022
 msgid "Caps Lock and Num Lock are on"
 msgstr "Caps Lock og Num Lock er på"
 
-#: ../gtk/gtkentry.c:10022
+#: ../gtk/gtkentry.c:10024
 msgid "Num Lock is on"
 msgstr "Num Lock er på"
 
-#: ../gtk/gtkentry.c:10024
+#: ../gtk/gtkentry.c:10026
 msgid "Caps Lock is on"
 msgstr "Caps Lock er på"
 
@@ -805,7 +814,7 @@ msgstr "Caps Lock er på"
 msgid "Select A File"
 msgstr "Velg en fil"
 
-#: ../gtk/gtkfilechooserbutton.c:62 ../gtk/gtkfilechooserdefault.c:1837
+#: ../gtk/gtkfilechooserbutton.c:62 ../gtk/gtkfilechooserdefault.c:1809
 msgid "Desktop"
 msgstr "Skrivebord"
 
@@ -815,41 +824,41 @@ msgstr "(Ingen)"
 
 #: ../gtk/gtkfilechooserbutton.c:2015
 msgid "Other..."
-msgstr "Annet..."
+msgstr "Annet …"
 
 #: ../gtk/gtkfilechooserdefault.c:146
 msgid "Type name of new folder"
 msgstr "Skriv inn navn på ny mappe"
 
-#: ../gtk/gtkfilechooserdefault.c:963
+#: ../gtk/gtkfilechooserdefault.c:935
 msgid "Could not retrieve information about the file"
-msgstr "Kunne ikke hente informasjon om filen"
+msgstr "Klarte ikke å hente informasjon om filen"
 
-#: ../gtk/gtkfilechooserdefault.c:974
+#: ../gtk/gtkfilechooserdefault.c:946
 msgid "Could not add a bookmark"
-msgstr "Kunne ikke legge til bokmerke"
+msgstr "Klarte ikke å legge til bokmerke"
 
-#: ../gtk/gtkfilechooserdefault.c:985
+#: ../gtk/gtkfilechooserdefault.c:957
 msgid "Could not remove bookmark"
-msgstr "Kunne ikke fjerne bokmerke"
+msgstr "Klarte ikke å fjerne bokmerke"
 
-#: ../gtk/gtkfilechooserdefault.c:996
+#: ../gtk/gtkfilechooserdefault.c:968
 msgid "The folder could not be created"
-msgstr "Mappen kunne ikke opprettes"
+msgstr "Klarte ikke å lage mappen"
 
-#: ../gtk/gtkfilechooserdefault.c:1009
+#: ../gtk/gtkfilechooserdefault.c:981
 msgid ""
 "The folder could not be created, as a file with the same name already "
 "exists.  Try using a different name for the folder, or rename the file first."
 msgstr ""
-"Kunne ikke opprette mappen på grunn av at det allerede eksisterer en fil med "
-"samme navnet. Bruk et annet navn for mappen eller gi et nytt navn til filen."
+"Klarte ikke å lage mappen på grunn av at det allerede eksisterer en fil med "
+"samme navn. Bruk et annet navn for mappen eller gi et nytt navn til filen."
 
-#: ../gtk/gtkfilechooserdefault.c:1020
+#: ../gtk/gtkfilechooserdefault.c:992
 msgid "Invalid file name"
 msgstr "Ugyldig filnavn"
 
-#: ../gtk/gtkfilechooserdefault.c:1030
+#: ../gtk/gtkfilechooserdefault.c:1002
 msgid "The folder contents could not be displayed"
 msgstr "Mappeinholdet kunne ikke vises"
 
@@ -857,202 +866,202 @@ msgstr "Mappeinholdet kunne ikke vises"
 #. * is a hostname. Nautilus and the panel contain the same string
 #. * to translate.
 #.
-#: ../gtk/gtkfilechooserdefault.c:1580
+#: ../gtk/gtkfilechooserdefault.c:1552
 #, c-format
 msgid "%1$s on %2$s"
 msgstr "%1$s på %2$s"
 
-#: ../gtk/gtkfilechooserdefault.c:1756
+#: ../gtk/gtkfilechooserdefault.c:1728
 msgid "Search"
 msgstr "Søk"
 
-#: ../gtk/gtkfilechooserdefault.c:1780 ../gtk/gtkfilechooserdefault.c:9455
+#: ../gtk/gtkfilechooserdefault.c:1752 ../gtk/gtkfilechooserdefault.c:9268
 msgid "Recently Used"
 msgstr "Sist brukt"
 
-#: ../gtk/gtkfilechooserdefault.c:2420
+#: ../gtk/gtkfilechooserdefault.c:2406
 msgid "Select which types of files are shown"
 msgstr "Velg hvilke filtyper som skal vises"
 
-#: ../gtk/gtkfilechooserdefault.c:2779
+#: ../gtk/gtkfilechooserdefault.c:2765
 #, c-format
 msgid "Add the folder '%s' to the bookmarks"
 msgstr "Legg til mappe «%s» i bokmerker"
 
-#: ../gtk/gtkfilechooserdefault.c:2823
+#: ../gtk/gtkfilechooserdefault.c:2809
 #, c-format
 msgid "Add the current folder to the bookmarks"
 msgstr "Legg til aktiv mappe i bokmerker"
 
-#: ../gtk/gtkfilechooserdefault.c:2825
+#: ../gtk/gtkfilechooserdefault.c:2811
 #, c-format
 msgid "Add the selected folders to the bookmarks"
 msgstr "Legg til valgte mapper i bokmerker"
 
-#: ../gtk/gtkfilechooserdefault.c:2863
+#: ../gtk/gtkfilechooserdefault.c:2849
 #, c-format
 msgid "Remove the bookmark '%s'"
 msgstr "Fjern bokmerke «%s»"
 
-#: ../gtk/gtkfilechooserdefault.c:2865
+#: ../gtk/gtkfilechooserdefault.c:2851
 #, c-format
 msgid "Bookmark '%s' cannot be removed"
 msgstr "Bokmerke «%s» kan ikke fjernes"
 
-#: ../gtk/gtkfilechooserdefault.c:2872 ../gtk/gtkfilechooserdefault.c:3896
+#: ../gtk/gtkfilechooserdefault.c:2858 ../gtk/gtkfilechooserdefault.c:3722
 msgid "Remove the selected bookmark"
 msgstr "Fjern valgt bokmerke"
 
-#: ../gtk/gtkfilechooserdefault.c:3592
+#: ../gtk/gtkfilechooserdefault.c:3418
 msgid "Remove"
 msgstr "Fjern"
 
-#: ../gtk/gtkfilechooserdefault.c:3601
+#: ../gtk/gtkfilechooserdefault.c:3427
 msgid "Rename..."
-msgstr "Gi nytt navn..."
+msgstr "Gi nytt navn …"
 
 #. Accessible object name for the file chooser's shortcuts pane
-#: ../gtk/gtkfilechooserdefault.c:3764
+#: ../gtk/gtkfilechooserdefault.c:3590
 msgid "Places"
 msgstr "Steder"
 
 #. Column header for the file chooser's shortcuts pane
-#: ../gtk/gtkfilechooserdefault.c:3821
+#: ../gtk/gtkfilechooserdefault.c:3647
 msgid "_Places"
 msgstr "_Steder"
 
-#: ../gtk/gtkfilechooserdefault.c:3877
+#: ../gtk/gtkfilechooserdefault.c:3703
 msgid "_Add"
 msgstr "_Legg til"
 
-#: ../gtk/gtkfilechooserdefault.c:3884
+#: ../gtk/gtkfilechooserdefault.c:3710
 msgid "Add the selected folder to the Bookmarks"
 msgstr "Legg til valgt mappe i bokmerker"
 
-#: ../gtk/gtkfilechooserdefault.c:3889
+#: ../gtk/gtkfilechooserdefault.c:3715
 msgid "_Remove"
 msgstr "Fje_rn"
 
-#: ../gtk/gtkfilechooserdefault.c:4024
+#: ../gtk/gtkfilechooserdefault.c:3850
 msgid "Could not select file"
-msgstr "Kunne ikke velge fil"
+msgstr "Klarte ikke å merke filen"
 
-#: ../gtk/gtkfilechooserdefault.c:4199
+#: ../gtk/gtkfilechooserdefault.c:4025
 msgid "_Add to Bookmarks"
 msgstr "L_egg til i bokmerker"
 
-#: ../gtk/gtkfilechooserdefault.c:4212
+#: ../gtk/gtkfilechooserdefault.c:4038
 msgid "Show _Hidden Files"
 msgstr "Vis sk_julte filer"
 
-#: ../gtk/gtkfilechooserdefault.c:4219
+#: ../gtk/gtkfilechooserdefault.c:4045
 msgid "Show _Size Column"
 msgstr "Vis kolonne for _størrelse"
 
-#: ../gtk/gtkfilechooserdefault.c:4442
+#: ../gtk/gtkfilechooserdefault.c:4268
 msgid "Files"
 msgstr "Filer"
 
-#: ../gtk/gtkfilechooserdefault.c:4493
+#: ../gtk/gtkfilechooserdefault.c:4319
 msgid "Name"
 msgstr "Navn"
 
-#: ../gtk/gtkfilechooserdefault.c:4516
+#: ../gtk/gtkfilechooserdefault.c:4342
 msgid "Size"
 msgstr "Størrelse"
 
-#: ../gtk/gtkfilechooserdefault.c:4530
+#: ../gtk/gtkfilechooserdefault.c:4356
 msgid "Modified"
 msgstr "Endret"
 
 #. Label
-#: ../gtk/gtkfilechooserdefault.c:4785 ../gtk/gtkprinteroptionwidget.c:801
+#: ../gtk/gtkfilechooserdefault.c:4611 ../gtk/gtkprinteroptionwidget.c:801
 msgid "_Name:"
 msgstr "_Navn:"
 
-#: ../gtk/gtkfilechooserdefault.c:4828
+#: ../gtk/gtkfilechooserdefault.c:4654
 msgid "_Browse for other folders"
 msgstr "_Se gjennom andre mapper"
 
-#: ../gtk/gtkfilechooserdefault.c:5100
+#: ../gtk/gtkfilechooserdefault.c:4926
 msgid "Type a file name"
 msgstr "Skriv et filnavn"
 
 #. Create Folder
-#: ../gtk/gtkfilechooserdefault.c:5141
+#: ../gtk/gtkfilechooserdefault.c:4967
 msgid "Create Fo_lder"
 msgstr "Opprett _mappe"
 
-#: ../gtk/gtkfilechooserdefault.c:5151
+#: ../gtk/gtkfilechooserdefault.c:4977
 msgid "_Location:"
 msgstr "_Lokasjon:"
 
-#: ../gtk/gtkfilechooserdefault.c:5355
+#: ../gtk/gtkfilechooserdefault.c:5181
 msgid "Save in _folder:"
 msgstr "Lagre i _mappe:"
 
-#: ../gtk/gtkfilechooserdefault.c:5357
+#: ../gtk/gtkfilechooserdefault.c:5183
 msgid "Create in _folder:"
 msgstr "Opprett i _mappe:"
 
-#: ../gtk/gtkfilechooserdefault.c:6420
+#: ../gtk/gtkfilechooserdefault.c:6233
 #, c-format
 msgid "Could not read the contents of %s"
-msgstr "Kunne ikke lese innholdet av %s"
+msgstr "Klarte ikke å lese innholdet av %s"
 
-#: ../gtk/gtkfilechooserdefault.c:6424
+#: ../gtk/gtkfilechooserdefault.c:6237
 msgid "Could not read the contents of the folder"
-msgstr "Kunne ikke lese innholdet i mappen"
+msgstr "Klarte ikke å lese innholdet i mappen"
 
-#: ../gtk/gtkfilechooserdefault.c:6517 ../gtk/gtkfilechooserdefault.c:6585
-#: ../gtk/gtkfilechooserdefault.c:6730
+#: ../gtk/gtkfilechooserdefault.c:6330 ../gtk/gtkfilechooserdefault.c:6398
+#: ../gtk/gtkfilechooserdefault.c:6543
 msgid "Unknown"
 msgstr "Ukjent"
 
-#: ../gtk/gtkfilechooserdefault.c:6532
+#: ../gtk/gtkfilechooserdefault.c:6345
 msgid "%H:%M"
 msgstr "%H.%M"
 
-#: ../gtk/gtkfilechooserdefault.c:6534
+#: ../gtk/gtkfilechooserdefault.c:6347
 msgid "Yesterday at %H:%M"
 msgstr "I går kl. %H.%M"
 
-#: ../gtk/gtkfilechooserdefault.c:7200
+#: ../gtk/gtkfilechooserdefault.c:7013
 msgid "Cannot change to folder because it is not local"
-msgstr "Kan ikke gå til mappen fordi den ikke er lokal."
+msgstr "Kan ikke gå til mappen fordi den ikke er lokal"
 
-#: ../gtk/gtkfilechooserdefault.c:7797 ../gtk/gtkfilechooserdefault.c:7818
+#: ../gtk/gtkfilechooserdefault.c:7610 ../gtk/gtkfilechooserdefault.c:7631
 #, c-format
 msgid "Shortcut %s already exists"
 msgstr "Snarvei %s eksisterer allerede"
 
-#: ../gtk/gtkfilechooserdefault.c:7908
+#: ../gtk/gtkfilechooserdefault.c:7721
 #, c-format
 msgid "Shortcut %s does not exist"
 msgstr "Snarvei %s eksisterer ikke"
 
-#: ../gtk/gtkfilechooserdefault.c:8163 ../gtk/gtkprintunixdialog.c:476
+#: ../gtk/gtkfilechooserdefault.c:7976 ../gtk/gtkprintunixdialog.c:476
 #, c-format
 msgid "A file named \"%s\" already exists.  Do you want to replace it?"
 msgstr "En fil med navn «%s» eksisterer allerede. Vil du erstatte den?"
 
-#: ../gtk/gtkfilechooserdefault.c:8166 ../gtk/gtkprintunixdialog.c:480
+#: ../gtk/gtkfilechooserdefault.c:7979 ../gtk/gtkprintunixdialog.c:480
 #, c-format
 msgid ""
 "The file already exists in \"%s\".  Replacing it will overwrite its contents."
 msgstr ""
-"Filen eksisterer allerede i «%s». Hvis du erstatter denne vil du overskrive "
+"Fila eksisterer allerede i «%s». Hvis du erstatter denne vil du overskrive "
 "innholdet."
 
-#: ../gtk/gtkfilechooserdefault.c:8171 ../gtk/gtkprintunixdialog.c:487
+#: ../gtk/gtkfilechooserdefault.c:7984 ../gtk/gtkprintunixdialog.c:487
 msgid "_Replace"
 msgstr "E_rstatt"
 
-#: ../gtk/gtkfilechooserdefault.c:8823
+#: ../gtk/gtkfilechooserdefault.c:8636
 msgid "Could not start the search process"
-msgstr "Kunne ikke starte søkeprosessen"
+msgstr "Klarte ikke å starte søkeprosessen"
 
-#: ../gtk/gtkfilechooserdefault.c:8824
+#: ../gtk/gtkfilechooserdefault.c:8637
 msgid ""
 "The program was not able to create a connection to the indexer daemon.  "
 "Please make sure it is running."
@@ -1060,36 +1069,36 @@ msgstr ""
 "Programmet kunne ikke opprette en tilkobling til indekseringstjenesten. "
 "Sjekk at denne kjører."
 
-#: ../gtk/gtkfilechooserdefault.c:8838
+#: ../gtk/gtkfilechooserdefault.c:8651
 msgid "Could not send the search request"
-msgstr "Kunne ikke sende søkeforespørselen"
+msgstr "Klarte ikke å sende søkeforespørselen"
 
-#: ../gtk/gtkfilechooserdefault.c:9027
+#: ../gtk/gtkfilechooserdefault.c:8840
 msgid "Search:"
 msgstr "Søk:"
 
-#: ../gtk/gtkfilechooserdefault.c:9631
+#: ../gtk/gtkfilechooserdefault.c:9444
 #, c-format
 msgid "Could not mount %s"
-msgstr "Kunne ikke montere %s"
+msgstr "Klarte ikke å montere %s"
 
 #. Translators: this is shown in the feedback for Tab-completion in a file
 #. * chooser's text entry, when the user enters an invalid path.
-#: ../gtk/gtkfilechooserentry.c:697 ../gtk/gtkfilechooserentry.c:1162
+#: ../gtk/gtkfilechooserentry.c:699 ../gtk/gtkfilechooserentry.c:1165
 msgid "Invalid path"
 msgstr "Ugyldig sti"
 
 #. translators: this text is shown when there are no completions
 #. * for something the user typed in a file chooser entry
 #.
-#: ../gtk/gtkfilechooserentry.c:1094
+#: ../gtk/gtkfilechooserentry.c:1097
 msgid "No match"
 msgstr "Ingen treff"
 
 #. translators: this text is shown when there is exactly one completion
 #. * for something the user typed in a file chooser entry
 #.
-#: ../gtk/gtkfilechooserentry.c:1105
+#: ../gtk/gtkfilechooserentry.c:1108
 msgid "Sole completion"
 msgstr "Eneste fullføring"
 
@@ -1097,21 +1106,21 @@ msgstr "Eneste fullføring"
 #. * entry is a complete filename, but could be continued to find
 #. * a longer match
 #.
-#: ../gtk/gtkfilechooserentry.c:1121
+#: ../gtk/gtkfilechooserentry.c:1124
 msgid "Complete, but not unique"
 msgstr "Fullført men ikke unik"
 
 #. Translators: this text is shown while the system is searching
 #. * for possible completions for filenames in a file chooser entry.
-#: ../gtk/gtkfilechooserentry.c:1153
+#: ../gtk/gtkfilechooserentry.c:1156
 msgid "Completing..."
-msgstr "Fullfører..."
+msgstr "Fullfører …"
 
 #. hostnames in a local_only file chooser?  user error
 #. Translators: this is shown in the feedback for Tab-completion in a
 #. * file chooser's text entry when the user enters something like
 #. * "sftp://blahblah" in an app that only supports local filenames.
-#: ../gtk/gtkfilechooserentry.c:1175 ../gtk/gtkfilechooserentry.c:1200
+#: ../gtk/gtkfilechooserentry.c:1178 ../gtk/gtkfilechooserentry.c:1203
 msgid "Only local files may be selected"
 msgstr "Du kan kun velge lokale filer"
 
@@ -1119,14 +1128,14 @@ msgstr "Du kan kun velge lokale filer"
 #. Translators: this is shown in the feedback for Tab-completion in a
 #. * file chooser's text entry when the user hasn't entered the first '/'
 #. * after a hostname and yet hits Tab (such as "sftp://blahblah[Tab]")
-#: ../gtk/gtkfilechooserentry.c:1184
+#: ../gtk/gtkfilechooserentry.c:1187
 msgid "Incomplete hostname; end it with '/'"
 msgstr "Ikke fullstendig vertsnavn; avslutt med «/»"
 
 #. Translators: this is shown in the feedback for Tab-completion in a file
 #. * chooser's text entry when the user enters a path that does not exist
 #. * and then hits Tab
-#: ../gtk/gtkfilechooserentry.c:1195
+#: ../gtk/gtkfilechooserentry.c:1198
 msgid "Path does not exist"
 msgstr "Stien eksisterer ikke"
 
@@ -1187,7 +1196,7 @@ msgstr "Valg av skrift"
 #. Remove this icon source so we don't keep trying to
 #. * load it.
 #.
-#: ../gtk/gtkiconfactory.c:1419
+#: ../gtk/gtkiconfactory.c:1363
 #, c-format
 msgid "Error loading icon: %s"
 msgstr "Feil under lasting av ikon: %s"
@@ -1200,8 +1209,8 @@ msgid ""
 "You can get a copy from:\n"
 "\t%s"
 msgstr ""
-"Kunne ikke finne ikonet «%s». Temaet «%s»\n"
-"ble heller ikke funnet. Kanskj du må installere det.\n"
+"Klarte ikke å finne ikonet «%s». Temaet «%s»\n"
+"ble heller ikke funnet. Kanskje du må installere det.\n"
 "Du kan finne en kopi av det på:\n"
 "\t%s"
 
@@ -1210,7 +1219,7 @@ msgstr ""
 msgid "Icon '%s' not present in theme"
 msgstr "Ikon «%s» er ikke tilstede i tema"
 
-#: ../gtk/gtkicontheme.c:3074
+#: ../gtk/gtkicontheme.c:3065
 msgid "Failed to load icon"
 msgstr "Feil under lasting av ikon"
 
@@ -1235,14 +1244,14 @@ msgid "System (%s)"
 msgstr "System (%s)"
 
 #. Open Link
-#: ../gtk/gtklabel.c:6227
+#: ../gtk/gtklabel.c:6206
 msgid "_Open Link"
 msgstr "_Åpne lenke"
 
 #. Copy Link Address
-#: ../gtk/gtklabel.c:6239
+#: ../gtk/gtklabel.c:6218
 msgid "Copy _Link Address"
-msgstr "Kopier _lenkens adresse"
+msgstr "Kopier _lenkas adresse"
 
 #: ../gtk/gtklinkbutton.c:428
 msgid "Copy URL"
@@ -1380,13 +1389,13 @@ msgstr "Z Shell"
 msgid "Cannot end process with pid %d: %s"
 msgstr "Kan ikke avslutte prosess med pid %d: %s"
 
-#: ../gtk/gtknotebook.c:4671 ../gtk/gtknotebook.c:7166
+#: ../gtk/gtknotebook.c:4671 ../gtk/gtknotebook.c:7205
 #, c-format
 msgid "Page %u"
 msgstr "Side %u"
 
-#: ../gtk/gtkpagesetup.c:596 ../gtk/gtkpapersize.c:825
-#: ../gtk/gtkpapersize.c:867
+#: ../gtk/gtkpagesetup.c:596 ../gtk/gtkpapersize.c:817
+#: ../gtk/gtkpapersize.c:859
 msgid "Not a valid page setup file"
 msgstr "Ikke en gyldig fil for sideoppsett"
 
@@ -1415,7 +1424,7 @@ msgstr ""
 
 #: ../gtk/gtkpagesetupunixdialog.c:858 ../gtk/gtkprintunixdialog.c:3284
 msgid "Manage Custom Sizes..."
-msgstr "Håndter egendefinerte størrelser..."
+msgstr "Håndter egendefinerte størrelser …"
 
 #: ../gtk/gtkpagesetupunixdialog.c:910
 msgid "_Format for:"
@@ -1607,7 +1616,7 @@ msgstr "Klarte ikke å hente informasjon om skriveren"
 
 #: ../gtk/gtkprintunixdialog.c:1869
 msgid "Getting printer information..."
-msgstr "Henter informasjon om skriver..."
+msgstr "Henter informasjon om skriver …"
 
 #: ../gtk/gtkprintunixdialog.c:2139
 msgid "Printer"
@@ -1924,15 +1933,15 @@ msgstr "Noen innstillinger i dialogen er i konflikt"
 msgid "Print"
 msgstr "Skriv ut"
 
-#: ../gtk/gtkrc.c:2837
+#: ../gtk/gtkrc.c:2832
 #, c-format
 msgid "Unable to find include file: \"%s\""
 msgstr "Kan ikke finne include-fil: «%s»"
 
-#: ../gtk/gtkrc.c:3467 ../gtk/gtkrc.c:3470
+#: ../gtk/gtkrc.c:3462 ../gtk/gtkrc.c:3465
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
-msgstr "Kunne ikke finne bildefil i pixmap_path: «%s»"
+msgstr "Klarte ikke å finne bildefil i pixmap_path: «%s»"
 
 #: ../gtk/gtkrecentaction.c:165 ../gtk/gtkrecentaction.c:173
 #: ../gtk/gtkrecentchoosermenu.c:615 ../gtk/gtkrecentchoosermenu.c:623
@@ -1955,11 +1964,11 @@ msgstr "Filter uten tittel"
 
 #: ../gtk/gtkrecentchooserdefault.c:1651
 msgid "Could not remove item"
-msgstr "Kunne ikke fjerne oppføring"
+msgstr "Klarte ikke å fjerne oppføring"
 
 #: ../gtk/gtkrecentchooserdefault.c:1695
 msgid "Could not clear list"
-msgstr "Kunne ikke tømme listen"
+msgstr "Klarte ikke tømme listen"
 
 #: ../gtk/gtkrecentchooserdefault.c:1779
 msgid "Copy _Location"
@@ -2040,7 +2049,7 @@ msgstr "Spinner"
 
 #: ../gtk/gtkspinner.c:458
 msgid "Provides visual indication of progress"
-msgstr "Gir visuell indikasjon av fremdrift"
+msgstr "Gir visuell indikasjon av framdrift"
 
 #. KEEP IN SYNC with gtkiconfactory.c stock icons, when appropriate
 #: ../gtk/gtkstock.c:313
@@ -2221,7 +2230,7 @@ msgstr "Ne_d"
 #: ../gtk/gtkstock.c:357
 msgctxt "Stock label, navigation"
 msgid "_Forward"
-msgstr "_Fremover"
+msgstr "_Framover"
 
 #. This is a navigation label as in "go up"
 #: ../gtk/gtkstock.c:359
@@ -2302,7 +2311,7 @@ msgstr "Høy_re"
 #: ../gtk/gtkstock.c:379
 msgctxt "Stock label, media"
 msgid "_Forward"
-msgstr "_Fremover"
+msgstr "_Framover"
 
 #. Media label, as in "next song"
 #: ../gtk/gtkstock.c:381
@@ -2706,7 +2715,7 @@ msgstr "ZWNJ Zero width _non-joiner"
 #: ../gtk/gtkthemes.c:71
 #, c-format
 msgid "Unable to locate theme engine in module_path: \"%s\","
-msgstr "Kunne ikke finne temamotor i module_path: «%s»."
+msgstr "Klarte ikke å finne temamotor i module_path: «%s»."
 
 #: ../gtk/gtkuimanager.c:1505
 #, c-format
@@ -2777,7 +2786,7 @@ msgstr "asme_f"
 #: ../gtk/paper_names_offsets.c:5
 msgctxt "paper size"
 msgid "A0x2"
-msgstr "A0x2"
+msgstr "A0×2"
 
 #: ../gtk/paper_names_offsets.c:6
 msgctxt "paper size"
@@ -2787,7 +2796,7 @@ msgstr "A0"
 #: ../gtk/paper_names_offsets.c:7
 msgctxt "paper size"
 msgid "A0x3"
-msgstr "A0x3"
+msgstr "A0×3"
 
 #: ../gtk/paper_names_offsets.c:8
 msgctxt "paper size"
@@ -2802,12 +2811,12 @@ msgstr "A10"
 #: ../gtk/paper_names_offsets.c:10
 msgctxt "paper size"
 msgid "A1x3"
-msgstr "A1x3"
+msgstr "A1×3"
 
 #: ../gtk/paper_names_offsets.c:11
 msgctxt "paper size"
 msgid "A1x4"
-msgstr "A1x4"
+msgstr "A1×4"
 
 #: ../gtk/paper_names_offsets.c:12
 msgctxt "paper size"
@@ -2817,17 +2826,17 @@ msgstr "A2"
 #: ../gtk/paper_names_offsets.c:13
 msgctxt "paper size"
 msgid "A2x3"
-msgstr "A2x3"
+msgstr "A2×3"
 
 #: ../gtk/paper_names_offsets.c:14
 msgctxt "paper size"
 msgid "A2x4"
-msgstr "A2x4"
+msgstr "A2×4"
 
 #: ../gtk/paper_names_offsets.c:15
 msgctxt "paper size"
 msgid "A2x5"
-msgstr "A2x5"
+msgstr "A2×5"
 
 #: ../gtk/paper_names_offsets.c:16
 msgctxt "paper size"
@@ -2842,27 +2851,27 @@ msgstr "A3 ekstra"
 #: ../gtk/paper_names_offsets.c:18
 msgctxt "paper size"
 msgid "A3x3"
-msgstr "A3x3"
+msgstr "A3×3"
 
 #: ../gtk/paper_names_offsets.c:19
 msgctxt "paper size"
 msgid "A3x4"
-msgstr "A3x4"
+msgstr "A3×4"
 
 #: ../gtk/paper_names_offsets.c:20
 msgctxt "paper size"
 msgid "A3x5"
-msgstr "A3x5"
+msgstr "A3×5"
 
 #: ../gtk/paper_names_offsets.c:21
 msgctxt "paper size"
 msgid "A3x6"
-msgstr "A3x6"
+msgstr "A3×6"
 
 #: ../gtk/paper_names_offsets.c:22
 msgctxt "paper size"
 msgid "A3x7"
-msgstr "A3x7"
+msgstr "A3×7"
 
 #: ../gtk/paper_names_offsets.c:23
 msgctxt "paper size"
@@ -2882,37 +2891,37 @@ msgstr "A4 tab"
 #: ../gtk/paper_names_offsets.c:26
 msgctxt "paper size"
 msgid "A4x3"
-msgstr "A4x3"
+msgstr "A4×3"
 
 #: ../gtk/paper_names_offsets.c:27
 msgctxt "paper size"
 msgid "A4x4"
-msgstr "A4x4"
+msgstr "A4×4"
 
 #: ../gtk/paper_names_offsets.c:28
 msgctxt "paper size"
 msgid "A4x5"
-msgstr "A4x5"
+msgstr "A4×5"
 
 #: ../gtk/paper_names_offsets.c:29
 msgctxt "paper size"
 msgid "A4x6"
-msgstr "A4x6"
+msgstr "A4×6"
 
 #: ../gtk/paper_names_offsets.c:30
 msgctxt "paper size"
 msgid "A4x7"
-msgstr "A4x7"
+msgstr "A4×7"
 
 #: ../gtk/paper_names_offsets.c:31
 msgctxt "paper size"
 msgid "A4x8"
-msgstr "A4x8"
+msgstr "A4×8"
 
 #: ../gtk/paper_names_offsets.c:32
 msgctxt "paper size"
 msgid "A4x9"
-msgstr "A4x9"
+msgstr "A4×9"
 
 #: ../gtk/paper_names_offsets.c:33
 msgctxt "paper size"
@@ -3212,57 +3221,57 @@ msgstr "you4 konvolutt"
 #: ../gtk/paper_names_offsets.c:92
 msgctxt "paper size"
 msgid "10x11"
-msgstr "10x11"
+msgstr "10×11"
 
 #: ../gtk/paper_names_offsets.c:93
 msgctxt "paper size"
 msgid "10x13"
-msgstr "10x13"
+msgstr "10×13"
 
 #: ../gtk/paper_names_offsets.c:94
 msgctxt "paper size"
 msgid "10x14"
-msgstr "10x14"
+msgstr "10×14"
 
 #: ../gtk/paper_names_offsets.c:95 ../gtk/paper_names_offsets.c:96
 msgctxt "paper size"
 msgid "10x15"
-msgstr "10x15"
+msgstr "10×15"
 
 #: ../gtk/paper_names_offsets.c:97
 msgctxt "paper size"
 msgid "11x12"
-msgstr "11x12"
+msgstr "11×12"
 
 #: ../gtk/paper_names_offsets.c:98
 msgctxt "paper size"
 msgid "11x15"
-msgstr "11x15"
+msgstr "11×15"
 
 #: ../gtk/paper_names_offsets.c:99
 msgctxt "paper size"
 msgid "12x19"
-msgstr "12x19"
+msgstr "12×19"
 
 #: ../gtk/paper_names_offsets.c:100
 msgctxt "paper size"
 msgid "5x7"
-msgstr "5x7"
+msgstr "5×7"
 
 #: ../gtk/paper_names_offsets.c:101
 msgctxt "paper size"
 msgid "6x9 Envelope"
-msgstr "6x9 konvolutt"
+msgstr "6×9 konvolutt"
 
 #: ../gtk/paper_names_offsets.c:102
 msgctxt "paper size"
 msgid "7x9 Envelope"
-msgstr "7x9 konvolutt"
+msgstr "7×9 konvolutt"
 
 #: ../gtk/paper_names_offsets.c:103
 msgctxt "paper size"
 msgid "9x11 Envelope"
-msgstr "9x11 konvolutt"
+msgstr "9×11 konvolutt"
 
 #: ../gtk/paper_names_offsets.c:104
 msgctxt "paper size"
@@ -3367,22 +3376,22 @@ msgstr "Offentlig brev"
 #: ../gtk/paper_names_offsets.c:124
 msgctxt "paper size"
 msgid "Index 3x5"
-msgstr "Indeks 3x5"
+msgstr "Indeks 3×5"
 
 #: ../gtk/paper_names_offsets.c:125
 msgctxt "paper size"
 msgid "Index 4x6 (postcard)"
-msgstr "Indeks 4x6 (postkort)"
+msgstr "Indeks 4×6 (postkort)"
 
 #: ../gtk/paper_names_offsets.c:126
 msgctxt "paper size"
 msgid "Index 4x6 ext"
-msgstr "Indeks 4x6 ext"
+msgstr "Indeks 4×6 ext"
 
 #: ../gtk/paper_names_offsets.c:127
 msgctxt "paper size"
 msgid "Index 5x8"
-msgstr "Indeks 5x8"
+msgstr "Indeks 5×8"
 
 #: ../gtk/paper_names_offsets.c:128
 msgctxt "paper size"
@@ -3632,17 +3641,17 @@ msgstr "Generert buffer var ugyldig.\n"
 #: ../gtk/updateiconcache.c:1521
 #, c-format
 msgid "Could not rename %s to %s: %s, removing %s then.\n"
-msgstr "Kunne ikke endre navn på %s til %s: %s, fjerner %s.\n"
+msgstr "Klarte ikke å endre navn på %s til %s: %s, fjerner %s.\n"
 
 #: ../gtk/updateiconcache.c:1535
 #, c-format
 msgid "Could not rename %s to %s: %s\n"
-msgstr "Kunne ikke endre navn på %s til %s: %s\n"
+msgstr "Klarte ikke å endre navn på %s til %s: %s\n"
 
 #: ../gtk/updateiconcache.c:1545
 #, c-format
 msgid "Could not rename %s back to %s: %s.\n"
-msgstr "Kunne ikke endre navn på %s tilbake til %s: %s\n"
+msgstr "Klarte ikke å endre navn på %s tilbake til %s: %s\n"
 
 #: ../gtk/updateiconcache.c:1572
 #, c-format
@@ -4092,7 +4101,7 @@ msgstr "Tidspunkt for utskrift"
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:3706
 #, c-format
 msgid "Custom %sx%s"
-msgstr "Egendefinert %sx%s"
+msgstr "Egendefinert %s×%s"
 
 #. default filename used for print-to-file
 #: ../modules/printbackends/file/gtkprintbackendfile.c:250
@@ -4179,7 +4188,7 @@ msgstr "Skriv ut til testskriver"
 #: ../tests/testfilechooser.c:207
 #, c-format
 msgid "Could not get information for file '%s': %s"
-msgstr "Kunne ikke hente informasjon for fil «%s»: %s"
+msgstr "Klarte ikke å hente informasjon for fil «%s»: %s"
 
 #: ../tests/testfilechooser.c:222
 #, c-format
@@ -4193,568 +4202,3 @@ msgid ""
 msgstr ""
 "Feil under lasting av bilde «%s»: årsak ikke kjent, sannsynligvis korrupt "
 "bildefil"
-
-#~ msgid "failed to allocate image buffer of %u byte"
-#~ msgid_plural "failed to allocate image buffer of %u bytes"
-#~ msgstr[0] "klarte ikke å allokere bildebuffer på %u byte"
-#~ msgstr[1] "klarte ikke å allokere bildebuffer på %u bytes"
-
-#~ msgid "Unexpected icon chunk in animation"
-#~ msgstr "Uventet ikondel i animasjonen"
-
-#~ msgid "Unsupported animation type"
-#~ msgstr "Animasjonstype ikke støttet"
-
-#~ msgid "Invalid header in animation"
-#~ msgstr "Ugyldig header i animasjon"
-
-#~ msgid "Not enough memory to load animation"
-#~ msgstr "Ikke nok minne til å laste animasjon"
-
-#~ msgid "Malformed chunk in animation"
-#~ msgstr "Feil i en del av animasjonen"
-
-#~ msgid "The ANI image format"
-#~ msgstr "ANI bildeformat"
-
-#~ msgid "BMP image has bogus header data"
-#~ msgstr "BMP-bilde har ugyldige data i header"
-
-#~ msgid "Not enough memory to load bitmap image"
-#~ msgstr "Ikke nok minne til å laste bitkart-bilde"
-
-#~ msgid "BMP image has unsupported header size"
-#~ msgstr "BMP-bilde har ustøttet headerstørrelse"
-
-#~ msgid "Topdown BMP images cannot be compressed"
-#~ msgstr "Topdown BMP-bilder kan ikke komprimeres"
-
-#~ msgid "Premature end-of-file encountered"
-#~ msgstr "Prematur slutt-på-fil funnet"
-
-#~ msgid "Couldn't allocate memory for saving BMP file"
-#~ msgstr "Kunne ikke allokere minne for lagring av BMP-fil"
-
-#~ msgid "Couldn't write to BMP file"
-#~ msgstr "Kunne ikke skrive til BMP-fil"
-
-#~ msgid "The BMP image format"
-#~ msgstr "BMP bildeformat"
-
-#~ msgid "Failure reading GIF: %s"
-#~ msgstr "Feil under lesing av GIF: %s"
-
-#~ msgid "GIF file was missing some data (perhaps it was truncated somehow?)"
-#~ msgstr "GIF-fil mangler data (kanskje den har blitt avkuttet på en måte?)"
-
-#~ msgid "Internal error in the GIF loader (%s)"
-#~ msgstr "Intern feil i GIF-laster (%s)"
-
-#~ msgid "Stack overflow"
-#~ msgstr "Stabeloverflyt"
-
-#~ msgid "GIF image loader cannot understand this image."
-#~ msgstr "Laster for GIF-bilder forstår ikke dette bildet."
-
-#~ msgid "Bad code encountered"
-#~ msgstr "Ugyldig kode funnet"
-
-#~ msgid "Circular table entry in GIF file"
-#~ msgstr "Sirkulær tabelloppføring i GIF-fil"
-
-#~ msgid "Not enough memory to load GIF file"
-#~ msgstr "Ikke nok minne til å laste GIF-bilde"
-
-#~ msgid "Not enough memory to composite a frame in GIF file"
-#~ msgstr "Ikke nok minne til å sette sammen en ramme i GIF-filen"
-
-#~ msgid "GIF image is corrupt (incorrect LZW compression)"
-#~ msgstr "GIF-bilde er korrupt (ukorrekt LZW-kompresjon)"
-
-#~ msgid "File does not appear to be a GIF file"
-#~ msgstr "Filen ser ikke ut til å være en GIF-fil"
-
-#~ msgid "Version %s of the GIF file format is not supported"
-#~ msgstr "Versjon %s av GIF filformatet er ikke støttet"
-
-#~ msgid ""
-#~ "GIF image has no global colormap, and a frame inside it has no local "
-#~ "colormap."
-#~ msgstr ""
-#~ "GIF-bildet har ikke globalt fargekart, og et delbilde i det har ikke "
-#~ "lokalt fargekart."
-
-#~ msgid "GIF image was truncated or incomplete."
-#~ msgstr "GIF-bildet er avkuttet eller ukomplett."
-
-#~ msgid "The GIF image format"
-#~ msgstr "GIF bildeformat"
-
-#~ msgid "Invalid header in icon"
-#~ msgstr "Ugyldig header i ikon"
-
-#~ msgid "Not enough memory to load icon"
-#~ msgstr "Ikke nok minne til å laste ikon"
-
-#~ msgid "Icon has zero width"
-#~ msgstr "Ikon har null bredde"
-
-#~ msgid "Icon has zero height"
-#~ msgstr "Ikon har null høyde"
-
-#~ msgid "Compressed icons are not supported"
-#~ msgstr "Komprimerte ikoner er ikke støttet"
-
-#~ msgid "Unsupported icon type"
-#~ msgstr "Ikontype ikke støttet"
-
-#~ msgid "Not enough memory to load ICO file"
-#~ msgstr "Ikke nok minne til å laste ICO-fil"
-
-#~ msgid "Image too large to be saved as ICO"
-#~ msgstr "Bildet er for stort til å lagre som ICO"
-
-#~ msgid "Cursor hotspot outside image"
-#~ msgstr "Markørposisjon utenfor bildet"
-
-#~ msgid "Unsupported depth for ICO file: %d"
-#~ msgstr "Ikke støttet dybde for ICO-fil: %d"
-
-#~ msgid "The ICO image format"
-#~ msgstr "ICO bildeformat"
-
-#~ msgid "Error reading ICNS image: %s"
-#~ msgstr "Feil under lesing av ICNS-bilde: %s"
-
-#~ msgid "Could not decode ICNS file"
-#~ msgstr "Kunne ikke dekode ICNS-fil"
-
-#~ msgid "The ICNS image format"
-#~ msgstr "ICNS bildeformat"
-
-#~ msgid "Couldn't allocate memory for stream"
-#~ msgstr "Kan ikke allokere minne for strøm"
-
-#~ msgid "Couldn't decode image"
-#~ msgstr "Kunne ikke dekode bilde"
-
-#~ msgid "Transformed JPEG2000 has zero width or height"
-#~ msgstr "Transformert JPEG2000 har bredde eller høyde lik null"
-
-#~ msgid "Image type currently not supported"
-#~ msgstr "Bildetypen er ikke støttet"
-
-#~ msgid "Couldn't allocate memory for color profile"
-#~ msgstr "Kunne ikke allokere minne for fargeprofil"
-
-#~ msgid "Insufficient memory to open JPEG 2000 file"
-#~ msgstr "Ikke nok minne til å åpne JPEG2000-bilde"
-
-#~ msgid "Couldn't allocate memory to buffer image data"
-#~ msgstr "Kunne ikke allokere minne for buffer til bildedata"
-
-#~ msgid "The JPEG 2000 image format"
-#~ msgstr "JPEG2000 bildeformatet"
-
-#~ msgid "Error interpreting JPEG image file (%s)"
-#~ msgstr "Feil under tolking av JPEG-bildefil (%s)"
-
-#~ msgid ""
-#~ "Insufficient memory to load image, try exiting some applications to free "
-#~ "memory"
-#~ msgstr ""
-#~ "Ikke nok minne til å laste bildet. Prøv å avslutte noen applikasjoner for "
-#~ "å frigjøre minne"
-
-#~ msgid "Unsupported JPEG color space (%s)"
-#~ msgstr "JPEG-fargeområde ikke støttet (%s)"
-
-#~ msgid "Couldn't allocate memory for loading JPEG file"
-#~ msgstr "Kunne ikke allokere minne for lasting av JPEG-fil"
-
-#~ msgid "Transformed JPEG has zero width or height."
-#~ msgstr "Transformert JPEG har bredde eller høyde lik null."
-
-#~ msgid ""
-#~ "JPEG quality must be a value between 0 and 100; value '%s' could not be "
-#~ "parsed."
-#~ msgstr ""
-#~ "JPEG-kvalitet må være en verdi mellom 0 og 100; verdien «%s» kunne ikke "
-#~ "tolkes."
-
-#~ msgid ""
-#~ "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
-#~ msgstr ""
-#~ "JPEG-kvalitet må være en verdi mellom 0 og 100; verdien «%d» er ikke "
-#~ "tillatt."
-
-#~ msgid "The JPEG image format"
-#~ msgstr "JPEG bildeformatet"
-
-#~ msgid "Couldn't allocate memory for header"
-#~ msgstr "Kan ikke allokere minne for hode"
-
-#~ msgid "Couldn't allocate memory for context buffer"
-#~ msgstr "Kan ikke allokere minne for kontekstbuffer"
-
-#~ msgid "Image has invalid width and/or height"
-#~ msgstr "Bilde har ugyldig bredde og/eller høyde"
-
-#~ msgid "Image has unsupported bpp"
-#~ msgstr "Bildet har ustøttet bpp"
-
-#~ msgid "Image has unsupported number of %d-bit planes"
-#~ msgstr "Bildet har ustøttet antall %d-bits plan"
-
-#~ msgid "Couldn't create new pixbuf"
-#~ msgstr "Kan ikke opprette ny pixbuf"
-
-#~ msgid "Couldn't allocate memory for line data"
-#~ msgstr "Kunne ikke allokere minne for linjedata"
-
-#~ msgid "Couldn't allocate memory for paletted data"
-#~ msgstr "Kan ikke allokere minne for palett-data"
-
-#~ msgid "Didn't get all lines of PCX image"
-#~ msgstr "Mottok ikke alle linjene for PCX-bilde"
-
-#~ msgid "No palette found at end of PCX data"
-#~ msgstr "Ingen palett funnet ved slutten av PCX-data"
-
-#~ msgid "The PCX image format"
-#~ msgstr "PCX bildeformat"
-
-#~ msgid "Bits per channel of PNG image is invalid."
-#~ msgstr "Ugyldig antall biter per kanal i PNG-bilde."
-
-#~ msgid "Transformed PNG has zero width or height."
-#~ msgstr "Transformert PNG har bredde eller høyde lik null."
-
-#~ msgid "Bits per channel of transformed PNG is not 8."
-#~ msgstr "Antall biter per kanal i transformert PNG er forskjellig fra 8."
-
-#~ msgid "Transformed PNG not RGB or RGBA."
-#~ msgstr "Transformert PNG er ikke RGB eller RGBA."
-
-#~ msgid "Transformed PNG has unsupported number of channels, must be 3 or 4."
-#~ msgstr ""
-#~ "Transformert PNG har et ikke-støttet antall kanaler, må være 3 eller 4."
-
-#~ msgid "Fatal error in PNG image file: %s"
-#~ msgstr "Fatal feil i PNG-bildefil: %s"
-
-#~ msgid "Insufficient memory to load PNG file"
-#~ msgstr "Ikke nok minne til å laste PNG-fil"
-
-#~ msgid ""
-#~ "Insufficient memory to store a %ld by %ld image; try exiting some "
-#~ "applications to reduce memory usage"
-#~ msgstr ""
-#~ "Ikke nok minne til å lagre et %ld ganger %ld bilde; prøv å avslutte noen "
-#~ "applikasjoner for å redusere minnebruken"
-
-#~ msgid "Fatal error reading PNG image file"
-#~ msgstr "Fatal feil under lesing av PNG-bildefil"
-
-#~ msgid "Fatal error reading PNG image file: %s"
-#~ msgstr "Fatal feil under lesing av PNG-bildefil: %s"
-
-#~ msgid ""
-#~ "Keys for PNG text chunks must have at least 1 and at most 79 characters."
-#~ msgstr "Nøkler for PNG tekstbiter må minst ha mellom 1 og 79 tegn."
-
-#~ msgid "Keys for PNG text chunks must be ASCII characters."
-#~ msgstr "Nøkler for PNG tekstbiter må bestå av ASCII-tegn."
-
-#~ msgid "Color profile has invalid length %d."
-#~ msgstr "Fargeprofilen har ugyldig lengde %d."
-
-#~ msgid ""
-#~ "PNG compression level must be a value between 0 and 9; value '%s' could "
-#~ "not be parsed."
-#~ msgstr ""
-#~ "Nivået til PNG-komprimeringen må være en verdi mello 0 og 9; verdi «%s» "
-#~ "kan ikke brukes."
-
-#~ msgid ""
-#~ "PNG compression level must be a value between 0 and 9; value '%d' is not "
-#~ "allowed."
-#~ msgstr ""
-#~ "Nivået på PNG-komprimering må være en verdi mellom 0 og 9; verdien «%d» "
-#~ "er ikke tillat."
-
-#~ msgid ""
-#~ "Value for PNG text chunk %s cannot be converted to ISO-8859-1 encoding."
-#~ msgstr ""
-#~ "Verdi for PNG-tekstbit %s kan ikke konverteres til ISO-8859-1-koding."
-
-#~ msgid "The PNG image format"
-#~ msgstr "PNG-bildeformat"
-
-#~ msgid "PNM loader expected to find an integer, but didn't"
-#~ msgstr "PNM-laster ventet å finne et heltall, men gjorde ikke det"
-
-#~ msgid "PNM file has an incorrect initial byte"
-#~ msgstr "PNM-filen har ukorrekt initiell byte"
-
-#~ msgid "PNM file is not in a recognized PNM subformat"
-#~ msgstr "PNM-filen er ikke i et gjenkjent PNM-underformat"
-
-#~ msgid "PNM file has an image width of 0"
-#~ msgstr "PNM-filen har en bildebredde på 0"
-
-#~ msgid "PNM file has an image height of 0"
-#~ msgstr "PNM-filen har en bildehøyde på 0"
-
-#~ msgid "Maximum color value in PNM file is 0"
-#~ msgstr "Maksimal fargeverdi i PNM-filen er 0"
-
-#~ msgid "Maximum color value in PNM file is too large"
-#~ msgstr "Maksimal fargeverdi i PNM-filen er for stor"
-
-#~ msgid "Raw PNM image type is invalid"
-#~ msgstr "Rå PNM-bildetype er ugyldig"
-
-#~ msgid "PNM image loader does not support this PNM subformat"
-#~ msgstr "PNM-bildelaster støtter ikke dette PNM-underformatet"
-
-#~ msgid "Raw PNM formats require exactly one whitespace before sample data"
-#~ msgstr ""
-#~ "Ubehandlede PNM-formater krever eksakt ett blankt felt før eksempeldata"
-
-#~ msgid "Cannot allocate memory for loading PNM image"
-#~ msgstr "Kan ikke allokere minne for lasting av PNM-bilde"
-
-#~ msgid "Insufficient memory to load PNM context struct"
-#~ msgstr "Ikke nok minne til å laste PNM kontekstdata"
-
-#~ msgid "Unexpected end of PNM image data"
-#~ msgstr "Uventet slutt på PNM-bildedata"
-
-#~ msgid "Insufficient memory to load PNM file"
-#~ msgstr "Ikke nok minne til å laste PNM-fil"
-
-#~ msgid "The PNM/PBM/PGM/PPM image format family"
-#~ msgstr "PNM/PBM/PGM/PPM-bildeformatfamilien"
-
-#~ msgid "Input file descriptor is NULL."
-#~ msgstr "Fildeskriptor for inndata er NULL."
-
-#~ msgid "Failed to read QTIF header"
-#~ msgstr "Klarte ikke å lese QTIF-hode"
-
-#~ msgid "QTIF atom size too large (%d bytes)"
-#~ msgstr "Størrelse på QTIF-atom for stor (%d bytes)"
-
-#~ msgid "Failed to allocate %d bytes for file read buffer"
-#~ msgstr "Klarte ikke å allokere %d byte for lesebuffer for filen"
-
-#~ msgid "File error when reading QTIF atom: %s"
-#~ msgstr "Feil med fil under lesing av QTIF-atom: %s"
-
-#~ msgid "Failed to skip the next %d bytes with seek()."
-#~ msgstr "Klarte ikke å hoppe over neste %d bytes med seek()."
-
-#~ msgid "Failed to allocate QTIF context structure."
-#~ msgstr "Klarte ikke å allokere QTIF-kontekststruktur."
-
-#~ msgid "Failed to create GdkPixbufLoader object."
-#~ msgstr "Klarte ikke å lage GdkPixbufLoader-objekt."
-
-#~ msgid "Failed to find an image data atom."
-#~ msgstr "Klarte ikke å finne atom for bildedata."
-
-#~ msgid "The QTIF image format"
-#~ msgstr "QTIF bildeformatet"
-
-#~ msgid "RAS image has bogus header data"
-#~ msgstr "RAS-bilde har ugyldige data i header"
-
-#~ msgid "RAS image has unknown type"
-#~ msgstr "RAS-bilde har ukjent type"
-
-#~ msgid "unsupported RAS image variation"
-#~ msgstr "RAS-bildevariasjon ikke støttet"
-
-#~ msgid "Not enough memory to load RAS image"
-#~ msgstr "Ikke nok minne til å laste RAS-bilde"
-
-#~ msgid "The Sun raster image format"
-#~ msgstr "Sun raster-bildeformat"
-
-#~ msgid "Cannot allocate memory for IOBuffer struct"
-#~ msgstr "Kan ikke allokere minne for IOBuffer-struct"
-
-#~ msgid "Cannot allocate memory for IOBuffer data"
-#~ msgstr "Kan ikke allokere minne for IOBuffer-data"
-
-#~ msgid "Cannot realloc IOBuffer data"
-#~ msgstr "Kan ikke kjøre realloc for IOBuffer-data"
-
-#~ msgid "Cannot allocate temporary IOBuffer data"
-#~ msgstr "Kan ikke allokere midlertidige IOBuffer-data"
-
-#~ msgid "Cannot allocate new pixbuf"
-#~ msgstr "Kan ikke allokere ny pixbuf"
-
-#~ msgid "Image is corrupted or truncated"
-#~ msgstr "Bildet er korrupt eller avkuttet"
-
-#~ msgid "Cannot allocate colormap structure"
-#~ msgstr "Kan ikke allokere struktur for fargekart"
-
-#~ msgid "Cannot allocate colormap entries"
-#~ msgstr "Kan ikke allokere fargekartoppføringer"
-
-#~ msgid "Unexpected bitdepth for colormap entries"
-#~ msgstr "Uventet oppløsning for fargekartoppføringer"
-
-#~ msgid "Cannot allocate TGA header memory"
-#~ msgstr "Kan ikke allokere minne for TGA-hode"
-
-#~ msgid "TGA image has invalid dimensions"
-#~ msgstr "TGA-bilde har ugyldige dimensjoner"
-
-#~ msgid "TGA image type not supported"
-#~ msgstr "TGA bildetype er ikke støttet"
-
-#~ msgid "Cannot allocate memory for TGA context struct"
-#~ msgstr "Kan ikke allokere minne for TGA-kontekststruktur"
-
-#~ msgid "Excess data in file"
-#~ msgstr "Overflødige data i filen"
-
-#~ msgid "The Targa image format"
-#~ msgstr "Targa bildeformatet"
-
-#~ msgid "Could not get image width (bad TIFF file)"
-#~ msgstr "Kunne ikke finne bildebredde (ugyldig TIFF-fil)"
-
-#~ msgid "Could not get image height (bad TIFF file)"
-#~ msgstr "Kunne ikke finne bildehøyde (ugyldig TIFF-fil)"
-
-#~ msgid "Width or height of TIFF image is zero"
-#~ msgstr "Bredde eller høyde på TIFF-bilde er null"
-
-#~ msgid "Dimensions of TIFF image too large"
-#~ msgstr "TIFF-bildet er for stort"
-
-#~ msgid "Insufficient memory to open TIFF file"
-#~ msgstr "Ikke nok minne til å åpne TIFF-bilde"
-
-#~ msgid "Failed to load RGB data from TIFF file"
-#~ msgstr "Feil under lasting av RGB-data fra TIFF-fil"
-
-#~ msgid "Failed to open TIFF image"
-#~ msgstr "Feil under åpning av TIFF-bilde"
-
-#~ msgid "TIFFClose operation failed"
-#~ msgstr "TIFFClose operasjonen feilet"
-
-#~ msgid "Failed to load TIFF image"
-#~ msgstr "Feil under åpning av TIFF-bilde"
-
-#~ msgid "Failed to save TIFF image"
-#~ msgstr "Klarte ikke å lagre TIFF-bilde"
-
-#~ msgid "TIFF compression doesn't refer to a valid codec."
-#~ msgstr "TIFF-komprimering har ingen referanse til en gyldig kodek."
-
-#~ msgid "Failed to write TIFF data"
-#~ msgstr "Klarte ikke å lagre TIFF-data"
-
-#~ msgid "Couldn't write to TIFF file"
-#~ msgstr "Kunne ikke skrive til TIFF-fil"
-
-#~ msgid "The TIFF image format"
-#~ msgstr "TIFF bildeformat"
-
-#~ msgid "Image has zero width"
-#~ msgstr "Bilde har null bredde"
-
-#~ msgid "Image has zero height"
-#~ msgstr "Bilde har null høyde"
-
-#~ msgid "Not enough memory to load image"
-#~ msgstr "Ikke nok minne til å laste bilde"
-
-#~ msgid "Couldn't save the rest"
-#~ msgstr "Kunne ikke lagre resten"
-
-#~ msgid "The WBMP image format"
-#~ msgstr "WBMP bildeformatet"
-
-#~ msgid "Invalid XBM file"
-#~ msgstr "Ugyldig XBM-fil"
-
-#~ msgid "Insufficient memory to load XBM image file"
-#~ msgstr "Ikke nok minne til å laste XBM-bildefil"
-
-#~ msgid "Failed to write to temporary file when loading XBM image"
-#~ msgstr "Feil under skriving til midlertidig file under lasting av XBM-bilde"
-
-#~ msgid "The XBM image format"
-#~ msgstr "XBM bildeformat"
-
-#~ msgid "No XPM header found"
-#~ msgstr "Ingen XPM-header funnet"
-
-#~ msgid "Invalid XPM header"
-#~ msgstr "Ugyldig XPM-hode"
-
-#~ msgid "XPM file has image width <= 0"
-#~ msgstr "XPM-filen har en bildebredde <= 0"
-
-#~ msgid "XPM file has image height <= 0"
-#~ msgstr "XPM-filen har en bildehøyde <= 0"
-
-#~ msgid "XPM has invalid number of chars per pixel"
-#~ msgstr "XPM har et ugyldig antall tegn per piksel"
-
-#~ msgid "XPM file has invalid number of colors"
-#~ msgstr "XPM-filen har et ugyldig antall farger"
-
-#~ msgid "Cannot allocate memory for loading XPM image"
-#~ msgstr "Kan ikke allokere minne for lasting av XPM-bilde"
-
-#~ msgid "Cannot read XPM colormap"
-#~ msgstr "Kan ikke lese fargekart for XPM"
-
-#~ msgid "Failed to write to temporary file when loading XPM image"
-#~ msgstr "Feil under skriving til midlertidig fil under lasting av XPM-bilde"
-
-#~ msgid "The XPM image format"
-#~ msgstr "XPM bildeformat"
-
-#~ msgid "The EMF image format"
-#~ msgstr "EMF bildeformat"
-
-#~ msgid "Could not allocate memory: %s"
-#~ msgstr "Kan ikke allokere minne: %s"
-
-#~ msgid "Could not create stream: %s"
-#~ msgstr "Kunne ikke opprette strøm: %s"
-
-#~ msgid "Could not seek stream: %s"
-#~ msgstr "Kunne ikke søke i strøm: %s"
-
-#~ msgid "Could not read from stream: %s"
-#~ msgstr "Kunne ikke lese fra strøm: %s"
-
-#~ msgid "Couldn't load bitmap"
-#~ msgstr "Kunne ikke laste bitkart"
-
-#~ msgid "Couldn't load metafile"
-#~ msgstr "Kunne ikke laste metafil"
-
-#~ msgid "Unsupported image format for GDI+"
-#~ msgstr "Bildeformat ikke støttet for GDI+"
-
-#~ msgid "Couldn't save"
-#~ msgstr "Kunne ikke lagre"
-
-#~ msgid "The WMF image format"
-#~ msgstr "WMF bildeformat"
-
-#~ msgid "Printer '%s' may not be connected."
-#~ msgstr "Skriver «%s» er kanskje ikke tilkoblet."
