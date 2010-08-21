@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.HEAD.he\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-08-19 09:27+0300\n"
-"PO-Revision-Date: 2010-08-19 09:28+0200\n"
+"POT-Creation-Date: 2010-08-21 11:54+0300\n"
+"PO-Revision-Date: 2010-08-21 11:55+0200\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: Hebrew <he@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -1248,7 +1248,7 @@ msgstr "Icon"
 msgid "Value of the progress bar"
 msgstr "Value of the progress bar"
 
-#: ../gtk/gtkcellrendererprogress.c:142 ../gtk/gtkcellrenderertext.c:226
+#: ../gtk/gtkcellrendererprogress.c:142 ../gtk/gtkcellrenderertext.c:229
 #: ../gtk/gtkentry.c:739 ../gtk/gtkentrybuffer.c:352
 #: ../gtk/gtkmessagedialog.c:239 ../gtk/gtkprogressbar.c:143
 #: ../gtk/gtktextbuffer.c:210
@@ -1345,173 +1345,173 @@ msgstr "Pulse of the spinner"
 msgid "The GtkIconSize value that specifies the size of the rendered spinner"
 msgstr "The GtkIconSize value that specifies the size of the rendered spinner"
 
-#: ../gtk/gtkcellrenderertext.c:227
+#: ../gtk/gtkcellrenderertext.c:230
 msgid "Text to render"
 msgstr "Text to render"
 
-#: ../gtk/gtkcellrenderertext.c:234
+#: ../gtk/gtkcellrenderertext.c:237
 msgid "Markup"
 msgstr "Markup"
 
-#: ../gtk/gtkcellrenderertext.c:235
+#: ../gtk/gtkcellrenderertext.c:238
 msgid "Marked up text to render"
 msgstr "Marked up text to render"
 
-#: ../gtk/gtkcellrenderertext.c:242 ../gtk/gtklabel.c:557
+#: ../gtk/gtkcellrenderertext.c:245 ../gtk/gtklabel.c:557
 msgid "Attributes"
 msgstr "Attributes"
 
-#: ../gtk/gtkcellrenderertext.c:243
+#: ../gtk/gtkcellrenderertext.c:246
 msgid "A list of style attributes to apply to the text of the renderer"
 msgstr "A list of style attributes to apply to the text of the renderer"
 
-#: ../gtk/gtkcellrenderertext.c:250
+#: ../gtk/gtkcellrenderertext.c:253
 msgid "Single Paragraph Mode"
 msgstr "Single Paragraph Mode"
 
-#: ../gtk/gtkcellrenderertext.c:251
+#: ../gtk/gtkcellrenderertext.c:254
 msgid "Whether to keep all text in a single paragraph"
 msgstr "Whether to keep all text in a single paragraph"
 
-#: ../gtk/gtkcellrenderertext.c:259 ../gtk/gtkcellview.c:178
+#: ../gtk/gtkcellrenderertext.c:262 ../gtk/gtkcellview.c:178
 #: ../gtk/gtktexttag.c:178
 msgid "Background color name"
 msgstr "Background color name"
 
-#: ../gtk/gtkcellrenderertext.c:260 ../gtk/gtkcellview.c:179
+#: ../gtk/gtkcellrenderertext.c:263 ../gtk/gtkcellview.c:179
 #: ../gtk/gtktexttag.c:179
 msgid "Background color as a string"
 msgstr "Background color as a string"
 
-#: ../gtk/gtkcellrenderertext.c:267 ../gtk/gtkcellview.c:185
+#: ../gtk/gtkcellrenderertext.c:270 ../gtk/gtkcellview.c:185
 #: ../gtk/gtktexttag.c:186
 msgid "Background color"
 msgstr "Background color"
 
-#: ../gtk/gtkcellrenderertext.c:268 ../gtk/gtkcellview.c:186
+#: ../gtk/gtkcellrenderertext.c:271 ../gtk/gtkcellview.c:186
 msgid "Background color as a GdkColor"
 msgstr "Background color as a GdkColor"
 
-#: ../gtk/gtkcellrenderertext.c:275 ../gtk/gtktexttag.c:202
+#: ../gtk/gtkcellrenderertext.c:278 ../gtk/gtktexttag.c:202
 msgid "Foreground color name"
 msgstr "Foreground color name"
 
-#: ../gtk/gtkcellrenderertext.c:276 ../gtk/gtktexttag.c:203
+#: ../gtk/gtkcellrenderertext.c:279 ../gtk/gtktexttag.c:203
 msgid "Foreground color as a string"
 msgstr "Foreground color as a string"
 
-#: ../gtk/gtkcellrenderertext.c:283 ../gtk/gtktexttag.c:210
+#: ../gtk/gtkcellrenderertext.c:286 ../gtk/gtktexttag.c:210
 #: ../gtk/gtktrayicon-x11.c:129
 msgid "Foreground color"
 msgstr "Foreground color"
 
-#: ../gtk/gtkcellrenderertext.c:284
+#: ../gtk/gtkcellrenderertext.c:287
 msgid "Foreground color as a GdkColor"
 msgstr "Foreground color as a GdkColor"
 
-#: ../gtk/gtkcellrenderertext.c:292 ../gtk/gtkentry.c:663
+#: ../gtk/gtkcellrenderertext.c:295 ../gtk/gtkentry.c:663
 #: ../gtk/gtktexttag.c:227 ../gtk/gtktextview.c:661
 msgid "Editable"
 msgstr "Editable"
 
-#: ../gtk/gtkcellrenderertext.c:293 ../gtk/gtktexttag.c:228
+#: ../gtk/gtkcellrenderertext.c:296 ../gtk/gtktexttag.c:228
 #: ../gtk/gtktextview.c:662
 msgid "Whether the text can be modified by the user"
 msgstr "Whether the text can be modified by the user"
 
-#: ../gtk/gtkcellrenderertext.c:300 ../gtk/gtkcellrenderertext.c:308
+#: ../gtk/gtkcellrenderertext.c:303 ../gtk/gtkcellrenderertext.c:311
 #: ../gtk/gtktexttag.c:243 ../gtk/gtktexttag.c:251
 msgid "Font"
 msgstr "Font"
 
-#: ../gtk/gtkcellrenderertext.c:301 ../gtk/gtktexttag.c:244
+#: ../gtk/gtkcellrenderertext.c:304 ../gtk/gtktexttag.c:244
 msgid "Font description as a string, e.g. \"Sans Italic 12\""
 msgstr "Font description as a string, e.g. \"Sans Italic 12\""
 
-#: ../gtk/gtkcellrenderertext.c:309 ../gtk/gtktexttag.c:252
+#: ../gtk/gtkcellrenderertext.c:312 ../gtk/gtktexttag.c:252
 msgid "Font description as a PangoFontDescription struct"
 msgstr "Font description as a PangoFontDescription struct"
 
-#: ../gtk/gtkcellrenderertext.c:317 ../gtk/gtktexttag.c:259
+#: ../gtk/gtkcellrenderertext.c:320 ../gtk/gtktexttag.c:259
 msgid "Font family"
 msgstr "Font family"
 
-#: ../gtk/gtkcellrenderertext.c:318 ../gtk/gtktexttag.c:260
+#: ../gtk/gtkcellrenderertext.c:321 ../gtk/gtktexttag.c:260
 msgid "Name of the font family, e.g. Sans, Helvetica, Times, Monospace"
 msgstr "Name of the font family, e.g. Sans, Helvetica, Times, Monospace"
 
-#: ../gtk/gtkcellrenderertext.c:325 ../gtk/gtkcellrenderertext.c:326
+#: ../gtk/gtkcellrenderertext.c:328 ../gtk/gtkcellrenderertext.c:329
 #: ../gtk/gtktexttag.c:267
 msgid "Font style"
 msgstr "Font style"
 
-#: ../gtk/gtkcellrenderertext.c:334 ../gtk/gtkcellrenderertext.c:335
+#: ../gtk/gtkcellrenderertext.c:337 ../gtk/gtkcellrenderertext.c:338
 #: ../gtk/gtktexttag.c:276
 msgid "Font variant"
 msgstr "Font variant"
 
-#: ../gtk/gtkcellrenderertext.c:343 ../gtk/gtkcellrenderertext.c:344
+#: ../gtk/gtkcellrenderertext.c:346 ../gtk/gtkcellrenderertext.c:347
 #: ../gtk/gtktexttag.c:285
 msgid "Font weight"
 msgstr "Font weight"
 
-#: ../gtk/gtkcellrenderertext.c:353 ../gtk/gtkcellrenderertext.c:354
+#: ../gtk/gtkcellrenderertext.c:356 ../gtk/gtkcellrenderertext.c:357
 #: ../gtk/gtktexttag.c:296
 msgid "Font stretch"
 msgstr "Font stretch"
 
-#: ../gtk/gtkcellrenderertext.c:362 ../gtk/gtkcellrenderertext.c:363
+#: ../gtk/gtkcellrenderertext.c:365 ../gtk/gtkcellrenderertext.c:366
 #: ../gtk/gtktexttag.c:305
 msgid "Font size"
 msgstr "Font size"
 
-#: ../gtk/gtkcellrenderertext.c:372 ../gtk/gtktexttag.c:325
+#: ../gtk/gtkcellrenderertext.c:375 ../gtk/gtktexttag.c:325
 msgid "Font points"
 msgstr "Font points"
 
-#: ../gtk/gtkcellrenderertext.c:373 ../gtk/gtktexttag.c:326
+#: ../gtk/gtkcellrenderertext.c:376 ../gtk/gtktexttag.c:326
 msgid "Font size in points"
 msgstr "Font size in points"
 
-#: ../gtk/gtkcellrenderertext.c:382 ../gtk/gtktexttag.c:315
+#: ../gtk/gtkcellrenderertext.c:385 ../gtk/gtktexttag.c:315
 msgid "Font scale"
 msgstr "Font scale"
 
-#: ../gtk/gtkcellrenderertext.c:383
+#: ../gtk/gtkcellrenderertext.c:386
 msgid "Font scaling factor"
 msgstr "Font scaling factor"
 
-#: ../gtk/gtkcellrenderertext.c:392 ../gtk/gtktexttag.c:394
+#: ../gtk/gtkcellrenderertext.c:395 ../gtk/gtktexttag.c:394
 msgid "Rise"
 msgstr "Rise"
 
-#: ../gtk/gtkcellrenderertext.c:393
+#: ../gtk/gtkcellrenderertext.c:396
 msgid ""
 "Offset of text above the baseline (below the baseline if rise is negative)"
 msgstr ""
 "Offset of text above the baseline (below the baseline if rise is negative)"
 
-#: ../gtk/gtkcellrenderertext.c:404 ../gtk/gtktexttag.c:434
+#: ../gtk/gtkcellrenderertext.c:407 ../gtk/gtktexttag.c:434
 msgid "Strikethrough"
 msgstr "Strikethrough"
 
-#: ../gtk/gtkcellrenderertext.c:405 ../gtk/gtktexttag.c:435
+#: ../gtk/gtkcellrenderertext.c:408 ../gtk/gtktexttag.c:435
 msgid "Whether to strike through the text"
 msgstr "Whether to strike through the text"
 
-#: ../gtk/gtkcellrenderertext.c:412 ../gtk/gtktexttag.c:442
+#: ../gtk/gtkcellrenderertext.c:415 ../gtk/gtktexttag.c:442
 msgid "Underline"
 msgstr "Underline"
 
-#: ../gtk/gtkcellrenderertext.c:413 ../gtk/gtktexttag.c:443
+#: ../gtk/gtkcellrenderertext.c:416 ../gtk/gtktexttag.c:443
 msgid "Style of underline for this text"
 msgstr "Style of underline for this text"
 
-#: ../gtk/gtkcellrenderertext.c:421 ../gtk/gtktexttag.c:354
+#: ../gtk/gtkcellrenderertext.c:424 ../gtk/gtktexttag.c:354
 msgid "Language"
 msgstr "Language"
 
-#: ../gtk/gtkcellrenderertext.c:422
+#: ../gtk/gtkcellrenderertext.c:425
 msgid ""
 "The language this text is in, as an ISO code. Pango can use this as a hint "
 "when rendering the text. If you don't understand this parameter, you "
@@ -1521,12 +1521,12 @@ msgstr ""
 "when rendering the text. If you don't understand this parameter, you "
 "probably don't need it"
 
-#: ../gtk/gtkcellrenderertext.c:442 ../gtk/gtklabel.c:682
+#: ../gtk/gtkcellrenderertext.c:445 ../gtk/gtklabel.c:682
 #: ../gtk/gtkprogressbar.c:173
 msgid "Ellipsize"
 msgstr "Ellipsize"
 
-#: ../gtk/gtkcellrenderertext.c:443
+#: ../gtk/gtkcellrenderertext.c:446
 msgid ""
 "The preferred place to ellipsize the string, if the cell renderer does not "
 "have enough room to display the entire string"
@@ -1534,20 +1534,28 @@ msgstr ""
 "The preferred place to ellipsize the string, if the cell renderer does not "
 "have enough room to display the entire string"
 
-#: ../gtk/gtkcellrenderertext.c:462 ../gtk/gtkfilechooserbutton.c:418
+#: ../gtk/gtkcellrenderertext.c:465 ../gtk/gtkfilechooserbutton.c:418
 #: ../gtk/gtklabel.c:703
 msgid "Width In Characters"
 msgstr "Width In Characters"
 
-#: ../gtk/gtkcellrenderertext.c:463 ../gtk/gtklabel.c:704
+#: ../gtk/gtkcellrenderertext.c:466 ../gtk/gtklabel.c:704
 msgid "The desired width of the label, in characters"
 msgstr "The desired width of the label, in characters"
 
-#: ../gtk/gtkcellrenderertext.c:481 ../gtk/gtktexttag.c:451
+#: ../gtk/gtkcellrenderertext.c:490 ../gtk/gtklabel.c:764
+msgid "Maximum Width In Characters"
+msgstr "Maximum Width In Characters"
+
+#: ../gtk/gtkcellrenderertext.c:491
+msgid "The maximum width of the cell, in characters"
+msgstr "The maximum width of the cell, in characters"
+
+#: ../gtk/gtkcellrenderertext.c:509 ../gtk/gtktexttag.c:451
 msgid "Wrap mode"
 msgstr "Wrap mode"
 
-#: ../gtk/gtkcellrenderertext.c:482
+#: ../gtk/gtkcellrenderertext.c:510
 msgid ""
 "How to break the string into multiple lines, if the cell renderer does not "
 "have enough room to display the entire string"
@@ -1555,149 +1563,149 @@ msgstr ""
 "How to break the string into multiple lines, if the cell renderer does not "
 "have enough room to display the entire string"
 
-#: ../gtk/gtkcellrenderertext.c:501 ../gtk/gtkcombobox.c:703
+#: ../gtk/gtkcellrenderertext.c:529 ../gtk/gtkcombobox.c:703
 msgid "Wrap width"
 msgstr "Wrap width"
 
-#: ../gtk/gtkcellrenderertext.c:502
+#: ../gtk/gtkcellrenderertext.c:530
 msgid "The width at which the text is wrapped"
 msgstr "The width at which the text is wrapped"
 
-#: ../gtk/gtkcellrenderertext.c:522 ../gtk/gtktreeviewcolumn.c:298
+#: ../gtk/gtkcellrenderertext.c:550 ../gtk/gtktreeviewcolumn.c:298
 msgid "Alignment"
 msgstr "Alignment"
 
-#: ../gtk/gtkcellrenderertext.c:523
+#: ../gtk/gtkcellrenderertext.c:551
 msgid "How to align the lines"
 msgstr "How to draw the toolbar"
 
-#: ../gtk/gtkcellrenderertext.c:533 ../gtk/gtkcellview.c:208
+#: ../gtk/gtkcellrenderertext.c:563 ../gtk/gtkcellview.c:208
 #: ../gtk/gtktexttag.c:540
 msgid "Background set"
 msgstr "Background set"
 
-#: ../gtk/gtkcellrenderertext.c:534 ../gtk/gtkcellview.c:209
+#: ../gtk/gtkcellrenderertext.c:564 ../gtk/gtkcellview.c:209
 #: ../gtk/gtktexttag.c:541
 msgid "Whether this tag affects the background color"
 msgstr "Whether this tag affects the background color"
 
-#: ../gtk/gtkcellrenderertext.c:537 ../gtk/gtktexttag.c:548
+#: ../gtk/gtkcellrenderertext.c:567 ../gtk/gtktexttag.c:548
 msgid "Foreground set"
 msgstr "Foreground set"
 
-#: ../gtk/gtkcellrenderertext.c:538 ../gtk/gtktexttag.c:549
+#: ../gtk/gtkcellrenderertext.c:568 ../gtk/gtktexttag.c:549
 msgid "Whether this tag affects the foreground color"
 msgstr "Whether this tag affects the foreground color"
 
-#: ../gtk/gtkcellrenderertext.c:541 ../gtk/gtktexttag.c:552
+#: ../gtk/gtkcellrenderertext.c:571 ../gtk/gtktexttag.c:552
 msgid "Editability set"
 msgstr "Editability set"
 
-#: ../gtk/gtkcellrenderertext.c:542 ../gtk/gtktexttag.c:553
+#: ../gtk/gtkcellrenderertext.c:572 ../gtk/gtktexttag.c:553
 msgid "Whether this tag affects text editability"
 msgstr "Whether this tag affects text editability"
 
-#: ../gtk/gtkcellrenderertext.c:545 ../gtk/gtktexttag.c:556
+#: ../gtk/gtkcellrenderertext.c:575 ../gtk/gtktexttag.c:556
 msgid "Font family set"
 msgstr "Font family set"
 
-#: ../gtk/gtkcellrenderertext.c:546 ../gtk/gtktexttag.c:557
+#: ../gtk/gtkcellrenderertext.c:576 ../gtk/gtktexttag.c:557
 msgid "Whether this tag affects the font family"
 msgstr "Whether this tag affects the font family"
 
-#: ../gtk/gtkcellrenderertext.c:549 ../gtk/gtktexttag.c:560
+#: ../gtk/gtkcellrenderertext.c:579 ../gtk/gtktexttag.c:560
 msgid "Font style set"
 msgstr "Font style set"
 
-#: ../gtk/gtkcellrenderertext.c:550 ../gtk/gtktexttag.c:561
+#: ../gtk/gtkcellrenderertext.c:580 ../gtk/gtktexttag.c:561
 msgid "Whether this tag affects the font style"
 msgstr "Whether this tag affects the font style"
 
-#: ../gtk/gtkcellrenderertext.c:553 ../gtk/gtktexttag.c:564
+#: ../gtk/gtkcellrenderertext.c:583 ../gtk/gtktexttag.c:564
 msgid "Font variant set"
 msgstr "Font variant set"
 
-#: ../gtk/gtkcellrenderertext.c:554 ../gtk/gtktexttag.c:565
+#: ../gtk/gtkcellrenderertext.c:584 ../gtk/gtktexttag.c:565
 msgid "Whether this tag affects the font variant"
 msgstr "Whether this tag affects the font variant"
 
-#: ../gtk/gtkcellrenderertext.c:557 ../gtk/gtktexttag.c:568
+#: ../gtk/gtkcellrenderertext.c:587 ../gtk/gtktexttag.c:568
 msgid "Font weight set"
 msgstr "Font weight set"
 
-#: ../gtk/gtkcellrenderertext.c:558 ../gtk/gtktexttag.c:569
+#: ../gtk/gtkcellrenderertext.c:588 ../gtk/gtktexttag.c:569
 msgid "Whether this tag affects the font weight"
 msgstr "Whether this tag affects the font weight"
 
-#: ../gtk/gtkcellrenderertext.c:561 ../gtk/gtktexttag.c:572
+#: ../gtk/gtkcellrenderertext.c:591 ../gtk/gtktexttag.c:572
 msgid "Font stretch set"
 msgstr "Font stretch set"
 
-#: ../gtk/gtkcellrenderertext.c:562 ../gtk/gtktexttag.c:573
+#: ../gtk/gtkcellrenderertext.c:592 ../gtk/gtktexttag.c:573
 msgid "Whether this tag affects the font stretch"
 msgstr "Whether this tag affects the font stretch"
 
-#: ../gtk/gtkcellrenderertext.c:565 ../gtk/gtktexttag.c:576
+#: ../gtk/gtkcellrenderertext.c:595 ../gtk/gtktexttag.c:576
 msgid "Font size set"
 msgstr "Font size set"
 
-#: ../gtk/gtkcellrenderertext.c:566 ../gtk/gtktexttag.c:577
+#: ../gtk/gtkcellrenderertext.c:596 ../gtk/gtktexttag.c:577
 msgid "Whether this tag affects the font size"
 msgstr "Whether this tag affects the font size"
 
-#: ../gtk/gtkcellrenderertext.c:569 ../gtk/gtktexttag.c:580
+#: ../gtk/gtkcellrenderertext.c:599 ../gtk/gtktexttag.c:580
 msgid "Font scale set"
 msgstr "Font scale set"
 
-#: ../gtk/gtkcellrenderertext.c:570 ../gtk/gtktexttag.c:581
+#: ../gtk/gtkcellrenderertext.c:600 ../gtk/gtktexttag.c:581
 msgid "Whether this tag scales the font size by a factor"
 msgstr "Whether this tag scales the font size by a factor"
 
-#: ../gtk/gtkcellrenderertext.c:573 ../gtk/gtktexttag.c:600
+#: ../gtk/gtkcellrenderertext.c:603 ../gtk/gtktexttag.c:600
 msgid "Rise set"
 msgstr "Rise set"
 
-#: ../gtk/gtkcellrenderertext.c:574 ../gtk/gtktexttag.c:601
+#: ../gtk/gtkcellrenderertext.c:604 ../gtk/gtktexttag.c:601
 msgid "Whether this tag affects the rise"
 msgstr "Whether this tag affects the rise"
 
-#: ../gtk/gtkcellrenderertext.c:577 ../gtk/gtktexttag.c:616
+#: ../gtk/gtkcellrenderertext.c:607 ../gtk/gtktexttag.c:616
 msgid "Strikethrough set"
 msgstr "Strikethrough set"
 
-#: ../gtk/gtkcellrenderertext.c:578 ../gtk/gtktexttag.c:617
+#: ../gtk/gtkcellrenderertext.c:608 ../gtk/gtktexttag.c:617
 msgid "Whether this tag affects strikethrough"
 msgstr "Whether this tag affects strikethrough"
 
-#: ../gtk/gtkcellrenderertext.c:581 ../gtk/gtktexttag.c:624
+#: ../gtk/gtkcellrenderertext.c:611 ../gtk/gtktexttag.c:624
 msgid "Underline set"
 msgstr "Underline set"
 
-#: ../gtk/gtkcellrenderertext.c:582 ../gtk/gtktexttag.c:625
+#: ../gtk/gtkcellrenderertext.c:612 ../gtk/gtktexttag.c:625
 msgid "Whether this tag affects underlining"
 msgstr "Whether this tag affects underlining"
 
-#: ../gtk/gtkcellrenderertext.c:585 ../gtk/gtktexttag.c:588
+#: ../gtk/gtkcellrenderertext.c:615 ../gtk/gtktexttag.c:588
 msgid "Language set"
 msgstr "Language set"
 
-#: ../gtk/gtkcellrenderertext.c:586 ../gtk/gtktexttag.c:589
+#: ../gtk/gtkcellrenderertext.c:616 ../gtk/gtktexttag.c:589
 msgid "Whether this tag affects the language the text is rendered as"
 msgstr "Whether this tag affects the language the text is rendered as"
 
-#: ../gtk/gtkcellrenderertext.c:589
+#: ../gtk/gtkcellrenderertext.c:619
 msgid "Ellipsize set"
 msgstr "Ellipsize set"
 
-#: ../gtk/gtkcellrenderertext.c:590
+#: ../gtk/gtkcellrenderertext.c:620
 msgid "Whether this tag affects the ellipsize mode"
 msgstr "Whether this tag affects the ellipsize mode"
 
-#: ../gtk/gtkcellrenderertext.c:593
+#: ../gtk/gtkcellrenderertext.c:623
 msgid "Align set"
 msgstr "Align set"
 
-#: ../gtk/gtkcellrenderertext.c:594
+#: ../gtk/gtkcellrenderertext.c:624
 msgid "Whether this tag affects the alignment mode"
 msgstr "Whether this tag affects the alignment mode"
 
@@ -3199,10 +3207,6 @@ msgstr "Angle"
 #: ../gtk/gtklabel.c:743
 msgid "Angle at which the label is rotated"
 msgstr "Angle at which the label is rotated"
-
-#: ../gtk/gtklabel.c:764
-msgid "Maximum Width In Characters"
-msgstr "Maximum Width In Characters"
 
 #: ../gtk/gtklabel.c:765
 msgid "The desired maximum width of the label, in characters"
