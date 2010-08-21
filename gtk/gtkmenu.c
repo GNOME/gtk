@@ -1028,28 +1028,6 @@ gtk_menu_window_event (GtkWidget *window,
 }
 
 static void
-gtk_menu_window_size_request (GtkWidget      *window,
-			      GtkRequisition *requisition,
-			      GtkMenu        *menu)
-{
-  GtkMenuPrivate *private = gtk_menu_get_private (menu);
-
-  if (private->have_position)
-    {
-      GdkScreen *screen = gtk_widget_get_screen (window);
-      GdkRectangle monitor;
-      
-      gdk_screen_get_monitor_geometry (screen, private->monitor_num, &monitor);
-
-      if (private->y + requisition->height > monitor.y + monitor.height)
-	requisition->height = monitor.y + monitor.height - private->y;
-
-      if (private->y < monitor.y)
-	requisition->height -= monitor.y - private->y;
-    }
-}
-
-static void
 gtk_menu_init (GtkMenu *menu)
 {
   GtkMenuPrivate *priv = gtk_menu_get_private (menu);
@@ -1066,7 +1044,6 @@ gtk_menu_init (GtkMenu *menu)
 						   "child", menu,
 						   NULL),
 				     "signal::event", gtk_menu_window_event, menu,
-				     "signal::size-request", gtk_menu_window_size_request, menu,
 				     "signal::destroy", gtk_widget_destroyed, &menu->toplevel,
 				     NULL);
   gtk_window_set_resizable (GTK_WINDOW (menu->toplevel), FALSE);
@@ -1641,7 +1618,10 @@ gtk_menu_popup_for_device (GtkMenu             *menu,
     GtkRequisition tmp_request;
     GtkAllocation tmp_allocation = { 0, };
 
-    gtk_size_request_get_size (GTK_SIZE_REQUEST (menu->toplevel), NULL, &tmp_request);
+    /* Instead of trusting the menu position function to queue a resize when the
+     * menu goes out of bounds, invalidate the cached size here. */
+    gtk_widget_queue_resize (GTK_WIDGET (menu));
+    gtk_size_request_get_size (GTK_SIZE_REQUEST (menu->toplevel), &tmp_request, NULL);
     
     tmp_allocation.width = tmp_request.width;
     tmp_allocation.height = tmp_request.height;
@@ -3144,11 +3124,12 @@ gtk_menu_get_height_for_width (GtkSizeRequest      *widget,
 			       gint                *minimum_size,
 			       gint                *natural_size)
 {
-  GtkMenu  *menu = GTK_MENU (widget);
-  guint    *min_heights, *nat_heights;
-  guint     vertical_padding, border_width;
-  gint      n_heights, i;
-  gint      min_height, nat_height;
+  GtkMenu        *menu = GTK_MENU (widget);
+  GtkMenuPrivate *private = gtk_menu_get_private (menu);
+  guint          *min_heights, *nat_heights;
+  guint           vertical_padding, border_width;
+  gint            n_heights, i;
+  gint            min_height, nat_height;
 
   gtk_widget_style_get (GTK_WIDGET (menu), "vertical-padding", &vertical_padding, NULL);
   border_width = gtk_container_get_border_width (GTK_CONTAINER (menu));
@@ -3162,6 +3143,26 @@ gtk_menu_get_height_for_width (GtkSizeRequest      *widget,
     {
       min_height += min_heights[i];
       nat_height += nat_heights[i];
+    }
+
+  if (private->have_position)
+    {
+      GdkScreen *screen = gtk_widget_get_screen (menu->toplevel);
+      GdkRectangle monitor;
+      
+      gdk_screen_get_monitor_geometry (screen, private->monitor_num, &monitor);
+
+      if (private->y + min_height > monitor.y + monitor.height)
+	min_height = monitor.y + monitor.height - private->y;
+
+      if (private->y + nat_height > monitor.y + monitor.height)
+	nat_height = monitor.y + monitor.height - private->y;
+
+      if (private->y < monitor.y)
+	{
+	  min_height -= monitor.y - private->y;
+	  nat_height -= monitor.y - private->y;
+	}
     }
 
   if (minimum_size)
@@ -4685,7 +4686,7 @@ gtk_menu_position (GtkMenu *menu)
       gtk_window_resize (GTK_WINDOW (menu->tearoff_window),
 			 requisition.width, requisition.height);
     }
-  
+
   menu->scroll_offset = scroll_offset;
 }
 
