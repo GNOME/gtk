@@ -5,6 +5,7 @@
 <FILE>gtkaboutdialog</FILE>
 <TITLE>GtkAboutDialog</TITLE>
 GtkAboutDialog
+GtkLicense
 gtk_about_dialog_new
 gtk_about_dialog_get_program_name
 gtk_about_dialog_set_program_name
