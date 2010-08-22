@@ -299,14 +299,11 @@ static void                 gtk_icon_view_adjustment_changed             (GtkAdj
 									  GtkIconView            *icon_view);
 static void                 gtk_icon_view_layout                         (GtkIconView            *icon_view);
 static void                 gtk_icon_view_paint_item                     (GtkIconView            *icon_view,
-									  cairo_t *cr,
-
+									  cairo_t                *cr,
 									  GtkIconViewItem        *item,
-									  GdkRectangle           *area,
-									  GdkDrawable *drawable,
-									  gint         x,
-									  gint         y,
-									  gboolean     draw_focus);
+									  gint                    x,
+									  gint                    y,
+									  gboolean                draw_focus);
 static void                 gtk_icon_view_paint_rubberband               (GtkIconView            *icon_view,
 								          cairo_t *cr,
 									  GdkRectangle           *area);
@@ -1598,21 +1595,27 @@ gtk_icon_view_expose (GtkWidget *widget,
       GtkIconViewItem *item = icons->data;
       GdkRectangle area;
       
+      cairo_save (cr);
+
+      cairo_rectangle (cr, item->x, item->y, item->width, item->height);
+      cairo_clip (cr);
+
       area.x = item->x;
       area.y = item->y;
       area.width = item->width;
       area.height = item->height;
 	
-      if (cairo_region_contains_rectangle (expose->region, &area) == CAIRO_REGION_OVERLAP_OUT)
-	continue;
-      
-      gtk_icon_view_paint_item (icon_view, cr, item, &expose->area, 
-				icon_view->priv->bin_window,
-				item->x, item->y,
-				icon_view->priv->draw_focus); 
- 
-      if (dest_index == item->index)
-	dest_item = item;
+      if (cairo_region_contains_rectangle (expose->region, &area) != CAIRO_REGION_OVERLAP_OUT)
+        {
+          gtk_icon_view_paint_item (icon_view, cr, item,
+                                    item->x, item->y,
+                                    icon_view->priv->draw_focus); 
+     
+          if (dest_index == item->index)
+            dest_item = item;
+        }
+
+      cairo_restore (cr);
     }
 
   if (dest_item)
@@ -1626,44 +1629,49 @@ gtk_icon_view_expose (GtkWidget *widget,
       switch (dest_pos)
 	{
 	case GTK_ICON_VIEW_DROP_INTO:
-	  gtk_paint_focus (style, icon_view->priv->bin_window,
-                           state, NULL,
-			   widget,
-			   "iconview-drop-indicator",
-			   dest_item->x, dest_item->y,
-			   dest_item->width, dest_item->height);
+	  gtk_cairo_paint_focus (style,
+                                 cr,
+                                 state,
+                                 widget,
+                                 "iconview-drop-indicator",
+                                 dest_item->x, dest_item->y,
+                                 dest_item->width, dest_item->height);
 	  break;
 	case GTK_ICON_VIEW_DROP_ABOVE:
-	  gtk_paint_focus (style, icon_view->priv->bin_window,
-                           state, NULL,
-			   widget,
-			   "iconview-drop-indicator",
-			   dest_item->x, dest_item->y - 1,
-			   dest_item->width, 2);
+	  gtk_cairo_paint_focus (style,
+                                 cr,
+                                 state,
+                                 widget,
+                                 "iconview-drop-indicator",
+                                 dest_item->x, dest_item->y - 1,
+                                 dest_item->width, 2);
 	  break;
 	case GTK_ICON_VIEW_DROP_LEFT:
-	  gtk_paint_focus (style, icon_view->priv->bin_window,
-			   state, NULL,
-			   widget,
-			   "iconview-drop-indicator",
-			   dest_item->x - 1, dest_item->y,
-			   2, dest_item->height);
+	  gtk_cairo_paint_focus (style,
+                                 cr,
+                                 state,
+                                 widget,
+                                 "iconview-drop-indicator",
+                                 dest_item->x - 1, dest_item->y,
+                                 2, dest_item->height);
 	  break;
 	case GTK_ICON_VIEW_DROP_BELOW:
-	  gtk_paint_focus (style, icon_view->priv->bin_window,
-			   state, NULL,
-			   widget,
-			   "iconview-drop-indicator",
-			   dest_item->x, dest_item->y + dest_item->height - 1,
-			   dest_item->width, 2);
+	  gtk_cairo_paint_focus (style,
+                                 cr,
+                                 state,
+                                 widget,
+                                 "iconview-drop-indicator",
+                                 dest_item->x, dest_item->y + dest_item->height - 1,
+                                 dest_item->width, 2);
 	  break;
 	case GTK_ICON_VIEW_DROP_RIGHT:
-	  gtk_paint_focus (style, icon_view->priv->bin_window,
-			   state, NULL,
-			   widget,
-			   "iconview-drop-indicator",
-			   dest_item->x + dest_item->width - 1, dest_item->y,
-			   2, dest_item->height);
+	  gtk_cairo_paint_focus (style,
+                                 cr,
+                                 state,
+                                 widget,
+                                 "iconview-drop-indicator",
+                                 dest_item->x + dest_item->width - 1, dest_item->y,
+                                 2, dest_item->height);
 	case GTK_ICON_VIEW_NO_DROP: ;
 	  break;
 	}
@@ -3182,8 +3190,6 @@ static void
 gtk_icon_view_paint_item (GtkIconView     *icon_view,
 			  cairo_t         *cr,
 			  GtkIconViewItem *item,
-			  GdkRectangle    *area,
-			  GdkDrawable     *drawable,
 			  gint             x,
 			  gint             y,
 			  gboolean         draw_focus)
@@ -3226,15 +3232,14 @@ gtk_icon_view_paint_item (GtkIconView     *icon_view,
 
   if (item->selected)
     {
-      gtk_paint_flat_box (style,
-                          GDK_WINDOW (drawable),
-			  GTK_STATE_SELECTED,
-			  GTK_SHADOW_NONE,
-			  area,
-                          widget,
-			  "icon_view_item",
-			  x, y,
-			  item->width, item->height);
+      gtk_cairo_paint_flat_box (style,
+                          cr,
+                          GTK_STATE_SELECTED,
+                          GTK_SHADOW_NONE,
+                          GTK_WIDGET (icon_view),
+                          "icon_view_item",
+                          x, y,
+                          item->width, item->height);
     }
   
   for (l = icon_view->priv->cell_list; l; l = l->next)
@@ -3249,10 +3254,10 @@ gtk_icon_view_paint_item (GtkIconView     *icon_view,
       cell_area.x = x - item->x + cell_area.x;
       cell_area.y = y - item->y + cell_area.y;
 
-      gtk_cell_renderer_render (info->cell,
-				drawable,
-				widget,
-				&cell_area, &cell_area, area, flags);
+      gtk_cell_renderer_render_cairo (info->cell,
+                                      cr,
+                                      widget,
+                                      &cell_area, &cell_area, flags);
     }
 
   if (draw_focus &&
@@ -3277,10 +3282,9 @@ gtk_icon_view_paint_item (GtkIconView     *icon_view,
 
           if (i == icon_view->priv->cursor_cell)
             {
-              gtk_paint_focus (style,
-                               drawable,
+              gtk_cairo_paint_focus (style,
+                               cr,
                                GTK_STATE_NORMAL,
-                               area,
                                widget,
                                "icon_view",
                                x - item->x + box.x - padding,
@@ -3295,10 +3299,9 @@ gtk_icon_view_paint_item (GtkIconView     *icon_view,
        * around the whole item.
        */
       if (icon_view->priv->cursor_cell < 0)
-        gtk_paint_focus (style,
-                         drawable,
+        gtk_cairo_paint_focus (style,
+                         cr,
                          GTK_STATE_NORMAL,
-                         area,
                          widget,
                          "icon_view",
                          x - padding,
@@ -7487,7 +7490,6 @@ gtk_icon_view_create_drag_icon (GtkIconView *icon_view,
   GdkPixmap *drawable;
   GList *l;
   gint index;
-  GdkRectangle area;
 
   g_return_val_if_fail (GTK_IS_ICON_VIEW (icon_view), NULL);
   g_return_val_if_fail (path != NULL, NULL);
@@ -7517,13 +7519,14 @@ gtk_icon_view_create_drag_icon (GtkIconView *icon_view,
 	  cairo_rectangle (cr, 0, 0, item->width + 2, item->height + 2);
 	  cairo_fill (cr);
 
-	  area.x = 0;
-	  area.y = 0;
-	  area.width = item->width;
-	  area.height = item->height;
+          cairo_save (cr);
 
-	  gtk_icon_view_paint_item (icon_view, cr, item, &area, 
- 				    drawable, 1, 1, FALSE); 
+          cairo_rectangle (cr, 0, 0, item->width, item->height);
+          cairo_clip (cr);
+
+	  gtk_icon_view_paint_item (icon_view, cr, item, 1, 1, FALSE);
+
+          cairo_restore (cr);
 
 	  cairo_set_source_rgb (cr, 0.0, 0.0, 0.0); /* black */
 	  cairo_rectangle (cr, 0.5, 0.5, item->width + 1, item->height + 1);
