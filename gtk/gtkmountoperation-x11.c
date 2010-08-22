@@ -963,7 +963,7 @@ _gtk_mount_operation_kill_process (GPid      pid,
       g_set_error (error,
                    G_IO_ERROR,
                    g_io_error_from_errno (errsv),
-                   _("Cannot end process with pid %d: %s"),
+                   _("Cannot end process with PID %d: %s"),
                    pid,
                    g_strerror (errsv));
     }

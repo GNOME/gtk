@@ -1683,7 +1683,7 @@ cups_request_printer_list_cb (GtkPrintBackendCups *cups_backend,
           N_("The door is open on printer '%s'."),
           N_("Printer '%s' is low on paper."),
           N_("Printer '%s' is out of paper."),
-          N_("Printer '%s' is currently off-line."),
+          N_("Printer '%s' is currently offline."),
           N_("There is a problem on printer '%s'.")
         };
       gboolean is_paused = FALSE;

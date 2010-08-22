@@ -61,7 +61,7 @@ _gtk_mount_operation_kill_process (GPid      pid,
   g_set_error (error,
                G_IO_ERROR,
                G_IO_ERROR_NOT_SUPPORTED,
-               _("Cannot kill process with pid %d. Operation is not implemented."),
+               _("Cannot kill process with PID %d. Operation is not implemented."),
                pid);
   return FALSE;
 }
