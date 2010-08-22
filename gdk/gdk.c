@@ -159,10 +159,10 @@ static const GOptionEntry gdk_args[] = {
     /* Placeholder in --screen=SCREEN in --help output */      N_("SCREEN") },
 #ifdef G_ENABLE_DEBUG
   { "gdk-debug",    0, 0, G_OPTION_ARG_CALLBACK, gdk_arg_debug_cb,  
-    /* Description of --gdk-debug=FLAGS in --help output */    N_("Gdk debugging flags to set"),
+    /* Description of --gdk-debug=FLAGS in --help output */    N_("GDK debugging flags to set"),
     /* Placeholder in --gdk-debug=FLAGS in --help output */    N_("FLAGS") },
   { "gdk-no-debug", 0, 0, G_OPTION_ARG_CALLBACK, gdk_arg_no_debug_cb, 
-    /* Description of --gdk-no-debug=FLAGS in --help output */ N_("Gdk debugging flags to unset"), 
+    /* Description of --gdk-no-debug=FLAGS in --help output */ N_("GDK debugging flags to unset"),
     /* Placeholder in --gdk-no-debug=FLAGS in --help output */ N_("FLAGS") },
 #endif 
   { NULL }
