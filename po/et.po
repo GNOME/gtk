@@ -14,10 +14,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ MASTER\n"
-"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk"
-"%2b&component=general\n"
-"POT-Creation-Date: 2010-07-02 01:47+0000\n"
-"PO-Revision-Date: 2010-07-09 09:32+0300\n"
+"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk%"
+"2b&component=general\n"
+"POT-Creation-Date: 2010-07-28 15:03+0000\n"
+"PO-Revision-Date: 2010-08-01 21:51+0300\n"
 "Last-Translator: Ivar Smolin <okul@linux.ee>\n"
 "Language-Team: Estonian <gnome-et@linux.ee>\n"
 "MIME-Version: 1.0\n"
@@ -666,6 +666,9 @@ msgstr "Num Lock on sisse lülitatud"
 msgid "Caps Lock is on"
 msgstr "Caps Lock on sisse lülitatud"
 
+#. **************** *
+#. *  Private Macros  *
+#. * ****************
 msgid "Select A File"
 msgstr "Faili valimine"
 
@@ -1723,6 +1726,10 @@ msgstr "K_äivita"
 msgctxt "Stock label"
 msgid "_Edit"
 msgstr "_Redigeeri"
+
+msgctxt "Stock label"
+msgid "_File"
+msgstr "_Fail"
 
 msgctxt "Stock label"
 msgid "_Find"
@@ -3636,9 +3643,6 @@ msgstr ""
 
 #~ msgid "Fol_ders"
 #~ msgstr "_Kataloogid"
-
-#~ msgid "_Files"
-#~ msgstr "_Failid"
 
 #~ msgid "Folder unreadable: %s"
 #~ msgstr "Kataloog on loetamatu: %s"
