@@ -639,18 +639,61 @@ gtk_cell_renderer_render (GtkCellRenderer      *cell,
 			  const GdkRectangle   *expose_area,
 			  GtkCellRendererState  flags)
 {
-  gboolean selected = FALSE;
-  GtkCellRendererPrivate *priv = cell->priv;
   cairo_t *cr;
 
   g_return_if_fail (GTK_IS_CELL_RENDERER (cell));
   g_return_if_fail (GTK_CELL_RENDERER_GET_CLASS (cell)->render != NULL);
 
-  selected = (flags & GTK_CELL_RENDERER_SELECTED) == GTK_CELL_RENDERER_SELECTED;
-
   cr = gdk_cairo_create (window);
   gdk_cairo_rectangle (cr, expose_area);
   cairo_clip (cr);
+
+  gtk_cell_renderer_render_cairo (cell,
+                                  cr,
+                                  widget,
+                                  background_area,
+                                  cell_area,
+                                  flags);
+
+  cairo_destroy (cr);
+}
+
+/**
+ * gtk_cell_renderer_render_cairo:
+ * @cell: a #GtkCellRenderer
+ * @cr: a cairo context to draw to
+ * @widget: the widget owning @window
+ * @background_area: entire cell area (including tree expanders and maybe 
+ *    padding on the sides)
+ * @cell_area: area normally rendered by a cell renderer
+ * @flags: flags that affect rendering
+ *
+ * Invokes the virtual render function of the #GtkCellRenderer. The three
+ * passed-in rectangles are areas in @cr. Most renderers will draw within
+ * @cell_area; the xalign, yalign, xpad, and ypad fields of the #GtkCellRenderer
+ * should be honored with respect to @cell_area. @background_area includes the
+ * blank space around the cell, and also the area containing the tree expander;
+ * so the @background_area rectangles for all cells tile to cover the entire
+ * @window.
+ **/
+void
+gtk_cell_renderer_render_cairo (GtkCellRenderer      *cell,
+                                cairo_t              *cr,
+                                GtkWidget            *widget,
+                                const GdkRectangle   *background_area,
+                                const GdkRectangle   *cell_area,
+                                GtkCellRendererState  flags)
+{
+  gboolean selected = FALSE;
+  GtkCellRendererPrivate *priv = cell->priv;
+
+  g_return_if_fail (GTK_IS_CELL_RENDERER (cell));
+  g_return_if_fail (GTK_CELL_RENDERER_GET_CLASS (cell)->render != NULL);
+  g_return_if_fail (cr != NULL);
+
+  selected = (flags & GTK_CELL_RENDERER_SELECTED) == GTK_CELL_RENDERER_SELECTED;
+
+  cairo_save (cr);
 
   if (priv->cell_background_set && !selected)
     {
@@ -666,7 +709,7 @@ gtk_cell_renderer_render (GtkCellRenderer      *cell,
 					      cell_area,
 					      flags);
 
-  cairo_destroy (cr);
+  cairo_restore (cr);
 }
 
 /**
