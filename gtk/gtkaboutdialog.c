@@ -2565,7 +2565,7 @@ gtk_about_dialog_set_license_type (GtkAboutDialog *about,
           g_string_append (str, "\n");
           g_string_append (str, priv->copyright);
           g_string_append (str, "\n\n");
-          g_string_append_printf (str, gettext (gtk_license_preamble), url);
+          g_string_append_printf (str, _(gtk_license_preamble), url);
 
           g_free (priv->license);
           priv->license = g_string_free (str, FALSE);
