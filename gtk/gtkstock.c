@@ -323,7 +323,7 @@ static const GtkStockItem builtin_items [] =
   { GTK_STOCK_APPLY, NC_("Stock label", "_Apply"), 0, 0, GETTEXT_PACKAGE },
   { GTK_STOCK_BOLD, NC_("Stock label", "_Bold"), 0, 0, GETTEXT_PACKAGE },
   { GTK_STOCK_CANCEL, NC_("Stock label", "_Cancel"), 0, 0, GETTEXT_PACKAGE },
-  { GTK_STOCK_CDROM, NC_("Stock label", "_CD-Rom"), 0, 0, GETTEXT_PACKAGE },
+  { GTK_STOCK_CDROM, NC_("Stock label", "_CD-ROM"), 0, 0, GETTEXT_PACKAGE },
   { GTK_STOCK_CLEAR, NC_("Stock label", "_Clear"), 0, 0, GETTEXT_PACKAGE },
   { GTK_STOCK_CLOSE, NC_("Stock label", "_Close"), GDK_CONTROL_MASK, 'w', GETTEXT_PACKAGE },
   { GTK_STOCK_CONNECT, NC_("Stock label", "C_onnect"), 0, 0, GETTEXT_PACKAGE },
@@ -357,7 +357,7 @@ static const GtkStockItem builtin_items [] =
   { GTK_STOCK_GO_FORWARD, NC_("Stock label, navigation", "_Forward"), 0, 0, GETTEXT_PACKAGE "-navigation" },
   /* This is a navigation label as in "go up" */
   { GTK_STOCK_GO_UP, NC_("Stock label, navigation", "_Up"), 0, 0, GETTEXT_PACKAGE "-navigation" },
-  { GTK_STOCK_HARDDISK, NC_("Stock label", "_Harddisk"), 0, 0, GETTEXT_PACKAGE },
+  { GTK_STOCK_HARDDISK, NC_("Stock label", "_Hard Disk"), 0, 0, GETTEXT_PACKAGE },
   { GTK_STOCK_HELP, NC_("Stock label", "_Help"), GDK_CONTROL_MASK, 'h', GETTEXT_PACKAGE },
   { GTK_STOCK_HOME, NC_("Stock label", "_Home"), 0, 0, GETTEXT_PACKAGE },
   { GTK_STOCK_INDENT, NC_("Stock label", "Increase Indent"), 0, 0, GETTEXT_PACKAGE },
