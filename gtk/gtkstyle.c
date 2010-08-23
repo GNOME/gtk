@@ -2220,6 +2220,9 @@ gtk_default_draw_arrow (GtkStyle      *style,
   GtkStateFlags flags = 0;
   gdouble angle, size;
 
+  if (arrow_type == GTK_ARROW_NONE)
+    return;
+
   if (widget)
     context = gtk_widget_get_style_context (widget);
   else
