@@ -4967,7 +4967,7 @@ gtk_notebook_paint (GtkWidget    *widget,
 	    gap_x = priv->cur_page->allocation.x - allocation.x - border_width;
 
 	  gap_width = priv->cur_page->allocation.width;
-	  step = is_rtl ? STEP_NEXT : STEP_PREV;
+	  step = is_rtl ? STEP_PREV : STEP_NEXT;
 	  break;
 	case GTK_POS_LEFT:
 	case GTK_POS_RIGHT:
