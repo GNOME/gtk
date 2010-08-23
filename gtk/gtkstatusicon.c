@@ -2489,7 +2489,7 @@ gtk_status_icon_is_embedded (GtkStatusIcon *status_icon)
 #ifdef GDK_WINDOWING_X11
   plug = GTK_PLUG (status_icon->priv->tray_icon);
 
-  if (plug->socket_window)
+  if (gtk_plug_get_embedded (plug))
     return TRUE;
   else
     return FALSE;
