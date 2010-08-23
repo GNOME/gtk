@@ -453,7 +453,7 @@ get_default_icons (GtkIconFactory *factory)
   register_stock_icon (factory, GTK_STOCK_ORIENTATION_REVERSE_LANDSCAPE, GTK_STOCK_ORIENTATION_REVERSE_LANDSCAPE);
   register_stock_icon (factory, GTK_STOCK_PAGE_SETUP, GTK_STOCK_PAGE_SETUP);
   register_stock_icon (factory, GTK_STOCK_PASTE, "edit-paste");
-  register_stock_icon (factory, GTK_STOCK_PREFERENCES, "edit-preferences");
+  register_stock_icon (factory, GTK_STOCK_PREFERENCES, GTK_STOCK_PREFERENCES);
   register_stock_icon (factory, GTK_STOCK_PRINT, "document-print");
   register_stock_icon (factory, GTK_STOCK_PRINT_ERROR, "printer-error");
   register_stock_icon (factory, GTK_STOCK_PRINT_PAUSED, "printer-paused");
