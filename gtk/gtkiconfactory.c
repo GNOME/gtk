@@ -408,7 +408,7 @@ get_default_icons (GtkIconFactory *factory)
 
   register_stock_icon (factory, GTK_STOCK_DIALOG_AUTHENTICATION, "dialog-password");
   register_stock_icon (factory, GTK_STOCK_DIALOG_ERROR, "dialog-error");
-  register_stock_icon (factory, GTK_STOCK_DIALOG_INFO, "dialog-info");
+  register_stock_icon (factory, GTK_STOCK_DIALOG_INFO, "dialog-information");
   register_stock_icon (factory, GTK_STOCK_DIALOG_QUESTION, "dialog-question");
   register_stock_icon (factory, GTK_STOCK_DIALOG_WARNING, "dialog-warning");
   register_stock_icon (factory, GTK_STOCK_DND, GTK_STOCK_DND);
@@ -439,7 +439,7 @@ get_default_icons (GtkIconFactory *factory)
   register_stock_icon (factory, GTK_STOCK_HARDDISK, "drive-harddisk");
   register_stock_icon (factory, GTK_STOCK_HELP, "help-contents");
   register_stock_icon (factory, GTK_STOCK_HOME, "go-home");
-  register_stock_icon (factory, GTK_STOCK_INFO, "dialog-info");
+  register_stock_icon (factory, GTK_STOCK_INFO, "dialog-information");
   register_bidi_stock_icon (factory, GTK_STOCK_JUMP_TO, "go-jump");
   register_bidi_stock_icon (factory, GTK_STOCK_GOTO_LAST, "go-last");
   register_bidi_stock_icon (factory, GTK_STOCK_GO_BACK, "go-previous");

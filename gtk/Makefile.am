@@ -1018,7 +1018,7 @@ STOCK_ICONS = \
 	stock-icons/16/format-indent-more-ltr.png 	\
 	stock-icons/16/format-indent-more-rtl.png 	\
 	stock-icons/16/gtk-index.png 			\
-	stock-icons/16/dialog-info.png 			\
+	stock-icons/16/dialog-information.png		\
 	stock-icons/16/go-jump-ltr.png 			\
 	stock-icons/16/go-jump-rtl.png 			\
 	stock-icons/16/format-justify-center.png 	\
@@ -1123,7 +1123,7 @@ STOCK_ICONS = \
 	stock-icons/24/format-indent-more-ltr.png 	\
 	stock-icons/24/format-indent-more-rtl.png 	\
 	stock-icons/24/gtk-index.png  			\
-	stock-icons/24/dialog-info.png 			\
+	stock-icons/24/dialog-information.png		\
 	stock-icons/24/format-text-italic.png 		\
 	stock-icons/24/go-jump-ltr.png 			\
 	stock-icons/24/go-jump-rtl.png 			\
@@ -1193,7 +1193,7 @@ STOCK_ICONS = \
 	stock-icons/32/gtk-dnd.png 			\
 	stock-icons/48/dialog-password.png 		\
 	stock-icons/48/dialog-error.png 		\
-	stock-icons/48/dialog-info.png 			\
+	stock-icons/48/dialog-information.png		\
 	stock-icons/48/dialog-question.png 		\
 	stock-icons/48/dialog-warning.png
 
