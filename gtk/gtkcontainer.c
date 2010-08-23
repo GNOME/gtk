@@ -1352,7 +1352,7 @@ gtk_container_get_resize_container (GtkContainer *container)
   GtkWidget *parent;
   GtkWidget *widget = GTK_WIDGET (container);
 
-  while (parent = gtk_widget_get_parent (widget))  
+  while ((parent = gtk_widget_get_parent (widget)))
     {
       widget = parent;
       if (GTK_IS_RESIZE_CONTAINER (widget))
