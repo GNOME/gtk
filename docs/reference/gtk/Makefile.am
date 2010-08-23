@@ -117,7 +117,6 @@ content_files =					\
 	running.sgml				\
 	building.sgml				\
 	compiling.sgml				\
-	directfb.sgml				\
 	drawing-model.xml			\
 	glossary.xml				\
 	migrating-2to3.xml			\

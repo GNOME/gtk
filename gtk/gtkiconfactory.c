@@ -1462,8 +1462,8 @@ render_icon_name_pixbuf (GtkIconSource    *icon_source,
       names[2] = NULL;
 
       info = gtk_icon_theme_choose_icon (icon_theme,
-                                               names,
-                                               pixel_size, GTK_ICON_LOOKUP_USE_BUILTIN);
+                                         (const char **) names,
+                                         pixel_size, GTK_ICON_LOOKUP_USE_BUILTIN);
       g_free (names[0]);
       if (info)
         {

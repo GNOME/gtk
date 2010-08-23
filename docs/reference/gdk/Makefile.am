@@ -29,7 +29,6 @@ IGNORE_HFILES=			\
 	gdkpoly-generic.h	\
 	keyname-table.h		\
 	win32 			\
-	directfb		\
 	x11			\
 	quartz
 

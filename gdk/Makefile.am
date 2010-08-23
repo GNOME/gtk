@@ -9,7 +9,7 @@ INTROSPECTION_COMPILER_ARGS = \
    --includedir=.
 
 SUBDIRS = $(gdktarget) . tests
-DIST_SUBDIRS = win32 x11 quartz directfb tests
+DIST_SUBDIRS = win32 x11 quartz tests
 
 CLEANFILES =
 
@@ -155,10 +155,6 @@ common_sources = 		\
 	gdkmarshalers.c		\
 	gdkmarshalers.h
 
-libgdk_directfb_3_0_la_SOURCES = $(common_sources)
-libgdk_directfb_3_0_la_LIBADD = directfb/libgdk-directfb.la $(GDK_DEP_LIBS)
-libgdk_directfb_3_0_la_LDFLAGS = $(LDADD)
-
 libgdk_x11_3_0_la_SOURCES = $(common_sources)
 libgdk_x11_3_0_la_LIBADD = x11/libgdk-x11.la $(GDK_DEP_LIBS)
 libgdk_x11_3_0_la_LDFLAGS = $(LDADD)
@@ -286,7 +282,7 @@ endif
 
 lib_LTLIBRARIES = $(gdktargetlib)
 
-EXTRA_LTLIBRARIES = libgdk-x11-3.0.la libgdk-win32-3.0.la libgdk-quartz-3.0.la libgdk-directfb-3.0.la
+EXTRA_LTLIBRARIES = libgdk-x11-3.0.la libgdk-win32-3.0.la libgdk-quartz-3.0.la
 
 MAINTAINERCLEANFILES = $(gdk_built_sources) stamp-gdkenumtypes.h
 EXTRA_DIST += $(gdk_built_sources)

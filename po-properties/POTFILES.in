@@ -1,6 +1,5 @@
 # Files from the Gtk distribution which have already been
 # marked to allow runtime translation of messages
-gdk/directfb/gdkdisplay-directfb.c
 gdk/gdk.c
 gdk/gdkdisplaymanager.c
 gdk/gdkpango.c
