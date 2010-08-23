@@ -129,6 +129,37 @@ gdk_pixmap_impl_win32_get_size (GdkDrawable *drawable,
     *height = GDK_PIXMAP_IMPL_WIN32 (drawable)->height;
 }
 
+static int
+bits_for_depth (gint depth)
+{
+  switch (depth)
+    {
+    case 1:
+      return 1;
+
+    case 2:
+    case 3:
+    case 4:
+      return 4;
+
+    case 5:
+    case 6:
+    case 7:
+    case 8:
+      return 8;
+
+    case 15:
+    case 16:
+      return 16;
+
+    case 24:
+    case 32:
+      return 32;
+    }
+  g_assert_not_reached ();
+  return 0;
+}
+
 GdkPixmap*
 _gdk_pixmap_new (GdkDrawable *drawable,
 		gint         width,
@@ -210,7 +241,7 @@ _gdk_pixmap_new (GdkDrawable *drawable,
     case 1:
     case 24:
     case 32:
-      bmi.bmiHeader.biBitCount = _gdk_windowing_get_bits_for_depth (gdk_display_get_default (), depth);
+      bmi.bmiHeader.biBitCount = bits_for_depth (depth);
       break;
 
     case 4:

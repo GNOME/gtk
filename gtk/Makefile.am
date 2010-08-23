@@ -942,14 +942,14 @@ if OS_WIN32
 # Workaround for UAC silliness: programs with "update" in their name
 # are believed to be installers and require elevated privileges to be
 # used... Use a manifest file to tell Windows that
-# gtk-update-icon-cache.exe doesn't require any special privileges.
+# gtk-update-icon-cache-3.0.exe doesn't require any special privileges.
 
 GTK_UPDATE_ICON_CACHE_MANIFEST = gtk-update-icon-cache-3.0.exe.manifest
 
 bin_SCRIPTS += \
 	$(GTK_UPDATE_ICON_CACHE_MANIFEST)
 
-gtk-update-icon-cache.exe.manifest:
+$(GTK_UPDATE_ICON_CACHE_MANIFEST):
 	(echo '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>' ; \
 	 echo '<assembly xmlns="urn:schemas-microsoft-com:asm.v1" manifestVersion="1.0">' ; \
 	 echo '  <assemblyIdentity version="1.0.0.0"' ; \

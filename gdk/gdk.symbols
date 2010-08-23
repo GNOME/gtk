@@ -989,13 +989,6 @@ gdk_win32_set_modal_dialog_libgtk_only
 #endif
 
 #if IN_HEADER(__GDK_WIN32_H__)
-#if IN_FILE(__GDK_GC_WIN32_C__)
-gdk_win32_hdc_get
-gdk_win32_hdc_release
-#endif
-#endif
-
-#if IN_HEADER(__GDK_WIN32_H__)
 #if IN_FILE(__GDK_SELECTION_WIN32_C__)
 gdk_win32_selection_add_targets
 #endif

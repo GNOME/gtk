@@ -181,17 +181,6 @@ void	 gdk_win32_handle_table_insert  (HANDLE   *handle,
 					 gpointer data);
 void	 gdk_win32_handle_table_remove  (HANDLE handle);
 
-void      _gdk_win32_blit               (gboolean              use_fg_bg,
-					 GdkDrawableImplWin32 *drawable,
-					 GdkGC       	       *gc,
-					 GdkDrawable   	       *src,
-					 gint        	    	xsrc,
-					 gint        	    	ysrc,
-					 gint        	    	xdest,
-					 gint        	    	ydest,
-					 gint        	    	width,
-					 gint        	    	height);
-
 COLORREF  _gdk_win32_colormap_color     (GdkColormap *colormap,
 				         gulong       pixel);
 
@@ -223,13 +212,7 @@ void   _gdk_win32_print_system_palette (void);
 void   _gdk_win32_print_hpalette       (HPALETTE     hpal);
 void   _gdk_win32_print_dc             (HDC          hdc);
 
-gchar *_gdk_win32_cap_style_to_string  (GdkCapStyle  cap_style);
-gchar *_gdk_win32_fill_style_to_string (GdkFill      fill);
-gchar *_gdk_win32_function_to_string   (GdkFunction  function);
-gchar *_gdk_win32_join_style_to_string (GdkJoinStyle join_style);
-gchar *_gdk_win32_line_style_to_string (GdkLineStyle line_style);
 gchar *_gdk_win32_drag_protocol_to_string (GdkDragProtocol protocol);
-gchar *_gdk_win32_gcvalues_mask_to_string (GdkGCValuesMask mask);
 gchar *_gdk_win32_window_state_to_string (GdkWindowState state);
 gchar *_gdk_win32_window_style_to_string (LONG style);
 gchar *_gdk_win32_window_exstyle_to_string (LONG style);
