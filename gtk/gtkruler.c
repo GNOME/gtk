@@ -46,7 +46,7 @@ struct _GtkRulerPrivate
   GtkOrientation        orientation;
   GtkRulerMetric       *metric;
 
-  GdkPixmap            *backing_store;
+  cairo_surface_t      *backing_store;
 
   gint                  slider_size;
   gint                  xsrc;
@@ -503,7 +503,7 @@ gtk_ruler_unrealize (GtkWidget *widget)
 
   if (priv->backing_store)
     {
-      g_object_unref (priv->backing_store);
+      cairo_surface_destroy (priv->backing_store);
       priv->backing_store = NULL;
     }
 
@@ -537,6 +537,12 @@ gtk_ruler_size_allocate (GtkWidget     *widget,
 			 GtkAllocation *allocation)
 {
   GtkRuler *ruler = GTK_RULER (widget);
+  GtkAllocation old_allocation;
+  gboolean resized;
+
+  gtk_widget_get_allocation (widget, &old_allocation);
+  resized = (old_allocation.width != allocation->width ||
+             old_allocation.height != allocation->height);
 
   gtk_widget_set_allocation (widget, allocation);
 
@@ -546,7 +552,8 @@ gtk_ruler_size_allocate (GtkWidget     *widget,
 			      allocation->x, allocation->y,
 			      allocation->width, allocation->height);
 
-      gtk_ruler_make_pixmap (ruler);
+      if (resized)
+        gtk_ruler_make_pixmap (ruler);
     }
 }
 
@@ -592,8 +599,8 @@ gtk_ruler_expose (GtkWidget      *widget,
       gtk_ruler_draw_ticks (ruler);
 
       cr = gdk_cairo_create (gtk_widget_get_window (widget));
-      gdk_cairo_set_source_pixmap (cr, priv->backing_store, 0, 0);
-      gdk_cairo_rectangle (cr, &event->area);
+      cairo_set_source_surface (cr, priv->backing_store, 0, 0);
+      gdk_cairo_region (cr, event->region);
       cairo_fill (cr);
       cairo_destroy (cr);
       
@@ -609,27 +616,18 @@ gtk_ruler_make_pixmap (GtkRuler *ruler)
   GtkRulerPrivate *priv = ruler->priv;
   GtkAllocation allocation;
   GtkWidget *widget;
-  gint width;
-  gint height;
 
   widget = GTK_WIDGET (ruler);
 
   gtk_widget_get_allocation (widget, &allocation);
 
   if (priv->backing_store)
-    {
-      gdk_drawable_get_size (priv->backing_store, &width, &height);
-      if ((width == allocation.width) &&
-	  (height == allocation.height))
-	return;
+    cairo_surface_destroy (priv->backing_store);
 
-      g_object_unref (priv->backing_store);
-    }
-
-  priv->backing_store = gdk_pixmap_new (gtk_widget_get_window (widget),
-                                        allocation.width,
-                                        allocation.height,
-                                        -1);
+  priv->backing_store = gdk_window_create_similar_surface (gtk_widget_get_window (widget),
+                                                           CAIRO_CONTENT_COLOR,
+                                                           allocation.width,
+                                                           allocation.height);
 
   priv->xsrc = 0;
   priv->ysrc = 0;
@@ -690,16 +688,16 @@ gtk_ruler_real_draw_ticks (GtkRuler *ruler)
 
 #define DETAILE(private) (priv->orientation == GTK_ORIENTATION_HORIZONTAL ? "hruler" : "vruler");
 
-  gtk_paint_box (style, priv->backing_store,
-		 GTK_STATE_NORMAL, GTK_SHADOW_OUT,
-		 NULL, widget,
-                 priv->orientation == GTK_ORIENTATION_HORIZONTAL ?
-                 "hruler" : "vruler",
-		 0, 0,
-                 allocation.width, allocation.height);
-
-  cr = gdk_cairo_create (priv->backing_store);
+  cr = cairo_create (priv->backing_store);
   gdk_cairo_set_source_color (cr, &style->fg[gtk_widget_get_state (widget)]);
+
+  gtk_cairo_paint_box (style, cr,
+                       GTK_STATE_NORMAL, GTK_SHADOW_OUT,
+                       widget,
+                       priv->orientation == GTK_ORIENTATION_HORIZONTAL ?
+                       "hruler" : "vruler",
+                       0, 0,
+                       allocation.width, allocation.height);
 
   if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
     {
@@ -813,15 +811,14 @@ gtk_ruler_real_draw_ticks (GtkRuler *ruler)
                   pango_layout_set_text (layout, unit_str, -1);
                   pango_layout_get_extents (layout, &logical_rect, NULL);
 
-                  gtk_paint_layout (style,
-                                    priv->backing_store,
-                                    gtk_widget_get_state (widget),
-                                    FALSE,
-                                    NULL,
-                                    widget,
-                                    "hruler",
-                                    pos + 2, ythickness + PANGO_PIXELS (logical_rect.y - digit_offset),
-                                    layout);
+                  gtk_cairo_paint_layout (style,
+                                          cr,
+                                          gtk_widget_get_state (widget),
+                                          FALSE,
+                                          widget,
+                                          "hruler",
+                                          pos + 2, ythickness + PANGO_PIXELS (logical_rect.y - digit_offset),
+                                          layout);
                 }
               else
                 {
@@ -830,16 +827,15 @@ gtk_ruler_real_draw_ticks (GtkRuler *ruler)
                       pango_layout_set_text (layout, unit_str + j, 1);
                       pango_layout_get_extents (layout, NULL, &logical_rect);
 
-                      gtk_paint_layout (style,
-                                        priv->backing_store,
-                                        gtk_widget_get_state (widget),
-                                        FALSE,
-                                        NULL,
-                                        widget,
-                                        "vruler",
-                                        xthickness + 1,
-                                        pos + digit_height * j + 2 + PANGO_PIXELS (logical_rect.y - digit_offset),
-                                        layout);
+                      gtk_cairo_paint_layout (style,
+                                              cr,
+                                              gtk_widget_get_state (widget),
+                                              FALSE,
+                                              widget,
+                                              "vruler",
+                                              xthickness + 1,
+                                              pos + digit_height * j + 2 + PANGO_PIXELS (logical_rect.y - digit_offset),
+                                              layout);
                     }
                 }
 	    }
@@ -906,7 +902,7 @@ gtk_ruler_real_draw_pos (GtkRuler *ruler)
 	  if (priv->backing_store) {
             cairo_t *cr = gdk_cairo_create (window);
 
-            gdk_cairo_set_source_pixmap (cr, priv->backing_store, 0, 0);
+            cairo_set_source_surface (cr, priv->backing_store, 0, 0);
             cairo_rectangle (cr, priv->xsrc, priv->ysrc, bs_width, bs_height);
             cairo_fill (cr);
 
