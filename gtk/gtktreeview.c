@@ -4390,6 +4390,7 @@ gtk_tree_view_bin_expose (GtkWidget      *widget,
   gint grid_line_width;
   gboolean got_pointer = FALSE;
   gboolean draw_vgrid_lines, draw_hgrid_lines;
+  cairo_t *cr;
 
   rtl = (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL);
 
@@ -4409,6 +4410,10 @@ gtk_tree_view_bin_expose (GtkWidget      *widget,
   /* clip event->area to the visible area */
   if (event->area.height < 0)
     return TRUE;
+
+  cr = gdk_cairo_create (event->window);
+  gdk_cairo_region (cr, event->region);
+  cairo_clip (cr);
 
   validate_visible_area (tree_view);
 
@@ -4437,7 +4442,10 @@ gtk_tree_view_bin_expose (GtkWidget      *widget,
     }
 
   if (node == NULL)
-    return TRUE;
+    {
+      cairo_destroy (cr);
+      return TRUE;
+    }
 
   /* find the path for the node */
   path = _gtk_tree_view_find_path ((GtkTreeView *)widget,
@@ -4731,10 +4739,9 @@ gtk_tree_view_bin_expose (GtkWidget      *widget,
 				 cell_area.y + cell_area.height / 2);
 	      else
 		_gtk_tree_view_column_cell_render (column,
-						   event->window,
+						   cr,
 						   &background_area,
 						   &cell_area,
-						   &event->area,
 						   flags);
 	      if (TREE_VIEW_DRAW_EXPANDERS(tree_view)
 		  && (node->flags & GTK_RBNODE_IS_PARENT) == GTK_RBNODE_IS_PARENT)
@@ -4766,10 +4773,9 @@ gtk_tree_view_bin_expose (GtkWidget      *widget,
 				 cell_area.y + cell_area.height / 2);
 	      else
 		_gtk_tree_view_column_cell_render (column,
-						   event->window,
+						   cr,
 						   &background_area,
 						   &cell_area,
-						   &event->area,
 						   flags);
 	    }
 
@@ -4869,10 +4875,9 @@ gtk_tree_view_bin_expose (GtkWidget      *widget,
 	       (column == tree_view->priv->edited_column)))
 	    {
 	      _gtk_tree_view_column_cell_draw_focus (column,
-						     event->window,
+						     cr,
 						     &background_area,
 						     &cell_area,
-						     &event->area,
 						     flags);
 	    }
 
@@ -5058,6 +5063,8 @@ done:
 
   if (drag_dest_path)
     gtk_tree_path_free (drag_dest_path);
+
+  cairo_destroy (cr);
 
   return FALSE;
 }
@@ -13883,21 +13890,19 @@ gtk_tree_view_create_row_drag_icon (GtkTreeView  *tree_view,
       if (gtk_tree_view_column_cell_is_visible (column))
 	{
 	  if (is_separator)
-	    gtk_paint_hline (style,
-			     drawable,
-			     GTK_STATE_NORMAL,
-			     &cell_area,
-			     widget,
-			     NULL,
-			     cell_area.x,
-			     cell_area.x + cell_area.width,
-			     cell_area.y + cell_area.height / 2);
+	    gtk_cairo_paint_hline (style,
+                                   cr,
+                                   GTK_STATE_NORMAL,
+                                   widget,
+                                   NULL,
+                                   cell_area.x,
+                                   cell_area.x + cell_area.width,
+                                   cell_area.y + cell_area.height / 2);
 	  else
 	    _gtk_tree_view_column_cell_render (column,
-					       drawable,
+                                               cr,
 					       &background_area,
 					       &cell_area,
-					       &expose_area,
 					       0);
 	}
       cell_offset += column->width;

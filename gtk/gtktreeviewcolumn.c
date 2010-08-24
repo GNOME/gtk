@@ -2670,12 +2670,11 @@ enum {
 
 static gboolean
 gtk_tree_view_column_cell_process_action (GtkTreeViewColumn  *tree_column,
-					  GdkWindow          *window,
+					  cairo_t            *cr,
 					  const GdkRectangle *background_area,
 					  const GdkRectangle *cell_area,
 					  guint               flags,
 					  gint                action,
-					  const GdkRectangle *expose_area,     /* RENDER */
 					  GdkRectangle       *focus_rectangle, /* FOCUS  */
 					  GtkCellEditable   **editable_widget, /* EVENT  */
 					  GdkEvent           *event,           /* EVENT  */
@@ -2684,7 +2683,6 @@ gtk_tree_view_column_cell_process_action (GtkTreeViewColumn  *tree_column,
   GList *list;
   GdkRectangle real_cell_area;
   GdkRectangle real_background_area;
-  GdkRectangle real_expose_area = *cell_area;
   gint depth = 0;
   gint expand_cell_count = 0;
   gint full_requested_width = 0;
@@ -2828,13 +2826,12 @@ gtk_tree_view_column_cell_process_action (GtkTreeViewColumn  *tree_column,
       /* RENDER */
       if (action == CELL_ACTION_RENDER)
 	{
-	  gtk_cell_renderer_render (info->cell,
-				    window,
-				    tree_column->tree_view,
-				    &rtl_background_area,
-				    &rtl_cell_area,
-				    &real_expose_area, 
-				    flags);
+	  gtk_cell_renderer_render_cairo (info->cell,
+                                          cr,
+                                          tree_column->tree_view,
+                                          &rtl_background_area,
+                                          &rtl_cell_area,
+                                          flags);
 	}
       /* FOCUS */
       else if (action == CELL_ACTION_FOCUS)
@@ -2997,13 +2994,12 @@ gtk_tree_view_column_cell_process_action (GtkTreeViewColumn  *tree_column,
       /* RENDER */
       if (action == CELL_ACTION_RENDER)
 	{
-	  gtk_cell_renderer_render (info->cell,
-				    window,
-				    tree_column->tree_view,
-				    &rtl_background_area,
-				    &rtl_cell_area,
-				    &real_expose_area,
-				    flags);
+	  gtk_cell_renderer_render_cairo (info->cell,
+                                          cr,
+                                          tree_column->tree_view,
+                                          &rtl_background_area,
+                                          &rtl_cell_area,
+                                          flags);
 	}
       /* FOCUS */
       else if (action == CELL_ACTION_FOCUS)
@@ -3147,10 +3143,9 @@ gtk_tree_view_column_cell_process_action (GtkTreeViewColumn  *tree_column,
 /**
  * gtk_tree_view_column_cell_render:
  * @tree_column: A #GtkTreeViewColumn.
- * @window: a #GdkDrawable to draw to
+ * @cr: cairo context to draw to
  * @background_area: entire cell area (including tree expanders and maybe padding on the sides)
  * @cell_area: area normally rendered by a cell renderer
- * @expose_area: area that actually needs updating
  * @flags: flags that affect rendering
  * 
  * Renders the cell contained by #tree_column. This is used primarily by the
@@ -3158,25 +3153,27 @@ gtk_tree_view_column_cell_process_action (GtkTreeViewColumn  *tree_column,
  **/
 void
 _gtk_tree_view_column_cell_render (GtkTreeViewColumn  *tree_column,
-				   GdkWindow          *window,
+				   cairo_t            *cr,
 				   const GdkRectangle *background_area,
 				   const GdkRectangle *cell_area,
-				   const GdkRectangle *expose_area,
 				   guint               flags)
 {
   g_return_if_fail (GTK_IS_TREE_VIEW_COLUMN (tree_column));
+  g_return_if_fail (cr != NULL);
   g_return_if_fail (background_area != NULL);
   g_return_if_fail (cell_area != NULL);
-  g_return_if_fail (expose_area != NULL);
+
+  cairo_save (cr);
 
   gtk_tree_view_column_cell_process_action (tree_column,
-					    window,
+					    cr,
 					    background_area,
 					    cell_area,
 					    flags,
 					    CELL_ACTION_RENDER,
-					    expose_area,
 					    NULL, NULL, NULL, NULL);
+
+  cairo_restore (cr);
 }
 
 gboolean
@@ -3191,12 +3188,12 @@ _gtk_tree_view_column_cell_event (GtkTreeViewColumn  *tree_column,
   g_return_val_if_fail (GTK_IS_TREE_VIEW_COLUMN (tree_column), FALSE);
 
   return gtk_tree_view_column_cell_process_action (tree_column,
-						   NULL,
+                                                   NULL,
 						   background_area,
 						   cell_area,
 						   flags,
 						   CELL_ACTION_EVENT,
-						   NULL, NULL,
+						   NULL,
 						   editable_widget,
 						   event,
 						   path_string);
@@ -3214,7 +3211,6 @@ _gtk_tree_view_column_get_focus_area (GtkTreeViewColumn  *tree_column,
 					    cell_area,
 					    0,
 					    CELL_ACTION_FOCUS,
-					    NULL,
 					    focus_area,
 					    NULL, NULL, NULL);
 }
@@ -3470,16 +3466,17 @@ _gtk_tree_view_column_cell_focus (GtkTreeViewColumn *tree_column,
 
 void
 _gtk_tree_view_column_cell_draw_focus (GtkTreeViewColumn  *tree_column,
-				       GdkWindow          *window,
+				       cairo_t            *cr,
 				       const GdkRectangle *background_area,
 				       const GdkRectangle *cell_area,
-				       const GdkRectangle *expose_area,
 				       guint               flags)
 {
   gint focus_line_width;
   GtkStateType cell_state;
   
   g_return_if_fail (GTK_IS_TREE_VIEW_COLUMN (tree_column));
+  g_return_if_fail (cr != NULL);
+
   gtk_widget_style_get (GTK_WIDGET (tree_column->tree_view),
 			"focus-line-width", &focus_line_width, NULL);
   if (tree_column->editable_widget)
@@ -3503,28 +3500,26 @@ _gtk_tree_view_column_cell_draw_focus (GtkTreeViewColumn  *tree_column,
     {
       GdkRectangle focus_rectangle;
       gtk_tree_view_column_cell_process_action (tree_column,
-						window,
+						cr,
 						background_area,
 						cell_area,
 						flags,
 						CELL_ACTION_FOCUS,
-						expose_area,
 						&focus_rectangle,
 						NULL, NULL, NULL);
 
       cell_state = flags & GTK_CELL_RENDERER_SELECTED ? GTK_STATE_SELECTED :
 	      (flags & GTK_CELL_RENDERER_PRELIT ? GTK_STATE_PRELIGHT :
 	      (flags & GTK_CELL_RENDERER_INSENSITIVE ? GTK_STATE_INSENSITIVE : GTK_STATE_NORMAL));
-      gtk_paint_focus (gtk_widget_get_style (tree_column->tree_view),
-		       window,
-		       cell_state,
-		       cell_area,
-		       tree_column->tree_view,
-		       "treeview",
-		       focus_rectangle.x,
-		       focus_rectangle.y,
-		       focus_rectangle.width,
-		       focus_rectangle.height);
+      gtk_cairo_paint_focus (gtk_widget_get_style (tree_column->tree_view),
+                             cr,
+                             cell_state,
+                             tree_column->tree_view,
+                             "treeview",
+                             focus_rectangle.x,
+                             focus_rectangle.y,
+                             focus_rectangle.width,
+                             focus_rectangle.height);
     }
 }
 

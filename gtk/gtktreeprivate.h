@@ -439,10 +439,9 @@ gboolean          _gtk_tree_selection_row_is_selectable  (GtkTreeSelection *sele
 							  GtkTreePath      *path);
 
 void		  _gtk_tree_view_column_cell_render      (GtkTreeViewColumn  *tree_column,
-							  GdkWindow          *window,
+							  cairo_t            *cr,
 							  const GdkRectangle *background_area,
 							  const GdkRectangle *cell_area,
-							  const GdkRectangle *expose_area,
 							  guint               flags);
 void		  _gtk_tree_view_column_get_focus_area   (GtkTreeViewColumn  *tree_column,
 							  const GdkRectangle *background_area,
@@ -453,10 +452,9 @@ gboolean	  _gtk_tree_view_column_cell_focus       (GtkTreeViewColumn  *tree_colu
 							  gboolean            left,
 							  gboolean            right);
 void		  _gtk_tree_view_column_cell_draw_focus  (GtkTreeViewColumn  *tree_column,
-							  GdkWindow          *window,
+							  cairo_t            *cr,
 							  const GdkRectangle *background_area,
 							  const GdkRectangle *cell_area,
-							  const GdkRectangle *expose_area,
 							  guint               flags);
 void		  _gtk_tree_view_column_cell_set_dirty	 (GtkTreeViewColumn  *tree_column,
 							  gboolean            install_handler);
