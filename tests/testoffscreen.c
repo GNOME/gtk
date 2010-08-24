@@ -373,21 +373,6 @@ main (int   argc,
                     G_CALLBACK (remove_clicked),
                     widget);
 
-  /* redirect */
-  if (0)
-    {
-      GtkWidget *redirect_win;
-
-      redirect_win = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-      gtk_window_set_default_size (GTK_WINDOW (redirect_win), 400,400);
-      gtk_widget_show (redirect_win);
-      gtk_widget_realize (redirect_win);
-      gtk_widget_realize (window);
-      gdk_window_redirect_to_drawable (gtk_widget_get_window (window),
-                                       GDK_DRAWABLE (gtk_widget_get_window (redirect_win)),
-				       0, 0, 0, 0, -1, -1);
-    }
-
   gtk_main ();
 
   return 0;
