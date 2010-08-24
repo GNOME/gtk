@@ -7239,7 +7239,7 @@ gtk_tree_view_drag_begin (GtkWidget      *widget,
   GtkTreeView *tree_view;
   GtkTreePath *path = NULL;
   gint cell_x, cell_y;
-  GdkPixmap *row_pix;
+  cairo_surface_t *row_pix;
   TreeViewDragInfo *di;
 
   tree_view = GTK_TREE_VIEW (widget);
@@ -7262,16 +7262,14 @@ gtk_tree_view_drag_begin (GtkWidget      *widget,
 
   row_pix = gtk_tree_view_create_row_drag_icon (tree_view,
                                                 path);
+  cairo_surface_set_device_offset (row_pix,
+                                   /* the + 1 is for the black border in the icon */
+                                   - (tree_view->priv->press_start_x + 1),
+                                   - (cell_y + 1));
 
-  gtk_drag_set_icon_pixmap (context,
-                            gdk_drawable_get_colormap (row_pix),
-                            row_pix,
-                            NULL,
-                            /* the + 1 is for the black border in the icon */
-                            tree_view->priv->press_start_x + 1,
-                            cell_y + 1);
+  gtk_drag_set_icon_surface (context, row_pix);
 
-  g_object_unref (row_pix);
+  cairo_surface_destroy (row_pix);
   gtk_tree_path_free (path);
 }
 
@@ -13768,12 +13766,12 @@ gtk_tree_view_get_dest_row_at_pos (GtkTreeView             *tree_view,
  * @tree_view: a #GtkTreeView
  * @path: a #GtkTreePath in @tree_view
  *
- * Creates a #GdkPixmap representation of the row at @path.
+ * Creates a #cairo_surface_t representation of the row at @path.  
  * This image is used for a drag icon.
  *
- * Return value: (transfer full): a newly-allocated pixmap of the drag icon.
+ * Return value: (transfer full): a newly-allocated surface of the drag icon.
  **/
-GdkPixmap *
+cairo_surface_t *
 gtk_tree_view_create_row_drag_icon (GtkTreeView  *tree_view,
                                     GtkTreePath  *path)
 {
@@ -13784,12 +13782,11 @@ gtk_tree_view_create_row_drag_icon (GtkTreeView  *tree_view,
   gint cell_offset;
   GList *list;
   GdkRectangle background_area;
-  GdkRectangle expose_area;
   GtkWidget *widget;
   gint depth;
   /* start drawing inside the black outline */
   gint x = 1, y = 1;
-  GdkDrawable *drawable;
+  cairo_surface_t *surface;
   gint bin_window_width;
   gboolean is_separator = FALSE;
   gboolean rtl;
@@ -13830,17 +13827,12 @@ gtk_tree_view_create_row_drag_icon (GtkTreeView  *tree_view,
   gdk_drawable_get_size (tree_view->priv->bin_window,
                          &bin_window_width, NULL);
 
-  drawable = gdk_pixmap_new (tree_view->priv->bin_window,
-                             bin_window_width + 2,
-                             background_area.height + 2,
-                             -1);
+  surface = gdk_window_create_similar_surface (tree_view->priv->bin_window,
+                                               CAIRO_CONTENT_COLOR,
+                                               bin_window_width + 2,
+                                               background_area.height + 2);
 
-  expose_area.x = 0;
-  expose_area.y = 0;
-  expose_area.width = bin_window_width + 2;
-  expose_area.height = background_area.height + 2;
-
-  cr = gdk_cairo_create (drawable);
+  cr = cairo_create (surface);
   gdk_cairo_set_source_color (cr, &style->base [gtk_widget_get_state (widget)]);
   cairo_paint (cr);
 
@@ -13918,7 +13910,9 @@ gtk_tree_view_create_row_drag_icon (GtkTreeView  *tree_view,
 
   cairo_destroy (cr);
 
-  return drawable;
+  cairo_surface_set_device_offset (surface, 2, 2);
+
+  return surface;
 }
 
 

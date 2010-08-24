@@ -291,7 +291,7 @@ gboolean               gtk_tree_view_get_dest_row_at_pos           (GtkTreeView 
 								    gint                       drag_y,
 								    GtkTreePath              **path,
 								    GtkTreeViewDropPosition   *pos);
-GdkPixmap             *gtk_tree_view_create_row_drag_icon          (GtkTreeView               *tree_view,
+cairo_surface_t       *gtk_tree_view_create_row_drag_icon          (GtkTreeView               *tree_view,
 								    GtkTreePath               *path);
 
 /* Interactive search */
