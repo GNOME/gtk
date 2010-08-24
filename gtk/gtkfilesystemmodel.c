@@ -1778,7 +1778,10 @@ _gtk_file_system_model_update_file (GtkFileSystemModel *model,
 
   id = node_get_for_file (model, file);
   if (id == 0)
-    add_file (model, file, info);
+    {
+      add_file (model, file, info);
+      id = node_get_for_file (model, file);
+    }
 
   node = get_node (model, id);
 
