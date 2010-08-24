@@ -3661,7 +3661,7 @@ setup_backing_rect (GdkWindow *window, GdkWindowPaint *paint, int x_offset_cairo
 {
   GdkWindowObject *private = (GdkWindowObject *) window;
   GdkWindowObject *bg_private;
-  cairo_pattern_t *pattern;
+  cairo_pattern_t *pattern = NULL;
   int x_offset = 0, y_offset = 0;
   cairo_t *cr;
 
