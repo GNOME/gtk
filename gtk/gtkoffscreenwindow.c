@@ -31,11 +31,9 @@
  *
  * GtkOffscreenWindow is strictly intended to be used for obtaining
  * snapshots of widgets that are not part of a normal widget hierarchy.
- * It differs from gtk_widget_get_snapshot() in that the widget you
- * want to get a snapshot of need not be displayed on the user's screen
- * as a part of a widget hierarchy.  However, since GtkOffscreenWindow
- * is a toplevel widget you cannot obtain snapshots of a full window
- * with it since you cannot pack a toplevel widget in another toplevel.
+ * Since #GtkOffscreenWindow is a toplevel widget you cannot obtain
+ * snapshots of a full window with it since you cannot pack a toplevel
+ * widget in another toplevel.
  *
  * The idea is to take a widget and manually set the state of it,
  * add it to a GtkOffscreenWindow and then retrieve the snapshot
@@ -259,9 +257,7 @@ gtk_offscreen_window_init (GtkOffscreenWindow *window)
  * gtk_offscreen_window_new:
  *
  * Creates a toplevel container widget that is used to retrieve
- * snapshots of widgets without showing them on the screen.  For
- * widgets that are on the screen and part of a normal widget
- * hierarchy, gtk_widget_get_snapshot() can be used instead.
+ * snapshots of widgets without showing them on the screen.
  *
  * Return value: A pointer to a #GtkWidget
  *

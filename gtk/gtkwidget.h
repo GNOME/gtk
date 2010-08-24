@@ -741,8 +741,6 @@ GdkWindow *   gtk_widget_get_root_window (GtkWidget *widget);
 GtkSettings*  gtk_widget_get_settings    (GtkWidget *widget);
 GtkClipboard *gtk_widget_get_clipboard   (GtkWidget *widget,
 					  GdkAtom    selection);
-GdkPixmap *   gtk_widget_get_snapshot    (GtkWidget    *widget,
-                                          GdkRectangle *clip_rect);
 
 /* Multidevice support */
 gboolean         gtk_widget_get_support_multidevice (GtkWidget      *widget);
