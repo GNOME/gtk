@@ -6872,7 +6872,7 @@ gtk_icon_view_drag_begin (GtkWidget      *widget,
 {
   GtkIconView *icon_view;
   GtkIconViewItem *item;
-  GdkPixmap *icon;
+  cairo_surface_t *icon;
   gint x, y;
   GtkTreePath *path;
 
@@ -6897,13 +6897,11 @@ gtk_icon_view_drag_begin (GtkWidget      *widget,
   icon = gtk_icon_view_create_drag_icon (icon_view, path);
   gtk_tree_path_free (path);
 
-  gtk_drag_set_icon_pixmap (context, 
-			    gdk_drawable_get_colormap (icon),
-			    icon, 
-			    NULL, 
-			    x, y);
+  cairo_surface_set_device_offset (icon, -x, -y);
 
-  g_object_unref (icon);
+  gtk_drag_set_icon_surface (context, icon);
+
+  cairo_surface_destroy (icon);
 }
 
 static void 
@@ -7474,20 +7472,20 @@ gtk_icon_view_get_dest_item_at_pos (GtkIconView              *icon_view,
  * @icon_view: a #GtkIconView
  * @path: a #GtkTreePath in @icon_view
  *
- * Creates a #GdkPixmap representation of the item at @path.
+ * Creates a #cairo_surface_t representation of the item at @path.  
  * This image is used for a drag icon.
  *
- * Return value: (transfer full): a newly-allocated pixmap of the drag icon.
+ * Return value: (transfer full) a newly-allocated surface of the drag icon.
  * 
  * Since: 2.8
  **/
-GdkPixmap *
+cairo_surface_t *
 gtk_icon_view_create_drag_icon (GtkIconView *icon_view,
 				GtkTreePath *path)
 {
   GtkWidget *widget;
   cairo_t *cr;
-  GdkPixmap *drawable;
+  cairo_surface_t *surface;
   GList *l;
   gint index;
 
@@ -7507,12 +7505,12 @@ gtk_icon_view_create_drag_icon (GtkIconView *icon_view,
       
       if (index == item->index)
 	{
-	  drawable = gdk_pixmap_new (icon_view->priv->bin_window,
-				     item->width + 2,
-				     item->height + 2,
-				     -1);
+	  surface = gdk_window_create_similar_surface (icon_view->priv->bin_window,
+                                                       CAIRO_CONTENT_COLOR,
+                                                       item->width + 2,
+                                                       item->height + 2);
 
-	  cr = gdk_cairo_create (drawable);
+	  cr = cairo_create (surface);
 	  cairo_set_line_width (cr, 1.);
 
           gdk_cairo_set_source_color (cr, &gtk_widget_get_style (widget)->base[gtk_widget_get_state (widget)]);
@@ -7534,7 +7532,7 @@ gtk_icon_view_create_drag_icon (GtkIconView *icon_view,
 
 	  cairo_destroy (cr);
 
-	  return drawable;
+	  return surface;
 	}
     }
   
