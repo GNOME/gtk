@@ -862,7 +862,6 @@ error_message_with_parent (GtkWindow  *parent,
 			   const char *detail)
 {
   GtkWidget *dialog;
-  GtkWindowGroup *group;
 
   dialog = gtk_message_dialog_new (parent,
 				   GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
@@ -873,12 +872,9 @@ error_message_with_parent (GtkWindow  *parent,
   gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (dialog),
 					    "%s", detail);
 
-  if (parent)
-    {
-      group = gtk_window_get_group (parent);
-      if (group)
-        gtk_window_group_add_window (group, GTK_WINDOW (dialog));
-    }
+  if (parent && gtk_window_has_group (parent))
+    gtk_window_group_add_window (gtk_window_get_group (parent),
+                                 GTK_WINDOW (dialog));
 
   gtk_dialog_run (GTK_DIALOG (dialog));
   gtk_widget_destroy (dialog);
@@ -7983,7 +7979,6 @@ confirm_dialog_should_accept_filename (GtkFileChooserDefault *impl,
 				       const gchar           *folder_display_name)
 {
   GtkWindow *toplevel;
-  GtkWindowGroup *group;
   GtkWidget *dialog;
   int response;
 
@@ -8009,9 +8004,9 @@ confirm_dialog_should_accept_filename (GtkFileChooserDefault *impl,
                                            -1);
   gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_ACCEPT);
 
-  group = gtk_window_get_group (toplevel);
-  if (group)
-    gtk_window_group_add_window (group, GTK_WINDOW (dialog));
+  if (gtk_window_has_group (toplevel))
+    gtk_window_group_add_window (gtk_window_get_group (toplevel),
+                                 GTK_WINDOW (dialog));
 
   response = gtk_dialog_run (GTK_DIALOG (dialog));
 

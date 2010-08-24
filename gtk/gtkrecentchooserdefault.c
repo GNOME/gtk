@@ -700,7 +700,6 @@ error_message_with_parent (GtkWindow   *parent,
 			   const gchar *detail)
 {
   GtkWidget *dialog;
-  GtkWindowGroup *group;
 
   dialog = gtk_message_dialog_new (parent,
 				   GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
@@ -711,9 +710,9 @@ error_message_with_parent (GtkWindow   *parent,
   gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (dialog),
 					    "%s", detail);
 
-  group = gtk_window_get_group (parent);
-  if (group)
-    gtk_window_group_add_window (group, GTK_WINDOW (dialog));
+  if (gtk_window_has_group (parent))
+    gtk_window_group_add_window (gtk_window_get_group (parent),
+                                 GTK_WINDOW (dialog));
 
   gtk_dialog_run (GTK_DIALOG (dialog));
   gtk_widget_destroy (dialog);

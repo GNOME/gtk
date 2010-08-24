@@ -372,7 +372,6 @@ gtk_drag_get_ipc_widget (GtkWidget *widget)
 {
   GtkWidget *result;
   GtkWidget *toplevel;
-  GtkWindowGroup *group;
 
   result = gtk_drag_get_ipc_widget_for_screen (gtk_widget_get_screen (widget));
   
@@ -380,9 +379,8 @@ gtk_drag_get_ipc_widget (GtkWidget *widget)
   
   if (GTK_IS_WINDOW (toplevel))
     {
-      group = gtk_window_get_group (GTK_WINDOW (toplevel));
-      if (group)
-        gtk_window_group_add_window (group,
+      if (gtk_window_has_group (GTK_WINDOW (toplevel)))
+        gtk_window_group_add_window (gtk_window_get_group (GTK_WINDOW (toplevel)),
                                      GTK_WINDOW (result));
     }
 
@@ -547,7 +545,6 @@ static void
 gtk_drag_release_ipc_widget (GtkWidget *widget)
 {
   GtkWindow *window = GTK_WINDOW (widget);
-  GtkWindowGroup *group;
   GdkScreen *screen = gtk_widget_get_screen (widget);
   GdkDragContext *context = g_object_get_data (G_OBJECT (widget), "drag-context");
   GSList *drag_widgets = g_object_get_data (G_OBJECT (screen),
@@ -563,9 +560,9 @@ gtk_drag_release_ipc_widget (GtkWidget *widget)
         ungrab_dnd_keys (widget, keyboard, GDK_CURRENT_TIME);
     }
 
-  group = gtk_window_get_group (window);
-  if (group)
-    gtk_window_group_remove_window (group, window);
+  if (gtk_window_has_group (window))
+    gtk_window_group_remove_window (gtk_window_get_group (window),
+                                    window);
   drag_widgets = g_slist_prepend (drag_widgets, widget);
   g_object_set_data (G_OBJECT (screen),
 		     I_("gtk-dnd-ipc-widgets"),

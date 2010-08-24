@@ -2924,7 +2924,6 @@ print_pages (GtkPrintOperation       *op,
       if (!handled)
         {
           GtkWidget *error_dialog;
-          GtkWindowGroup *group;
 
           error_dialog = gtk_message_dialog_new (parent,
                                                  GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
@@ -2935,12 +2934,9 @@ print_pages (GtkPrintOperation       *op,
           gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (error_dialog),
                                                     _("The most probable reason is that a temporary file could not be created."));
 
-          if (parent)
-            {
-              group = gtk_window_get_group (parent);
-              if (group)
-                gtk_window_group_add_window (group, GTK_WINDOW (error_dialog));
-            }
+          if (parent && gtk_window_has_group (parent))
+            gtk_window_group_add_window (gtk_window_get_group (parent),
+                                         GTK_WINDOW (error_dialog));
 
           g_signal_connect (error_dialog, "response",
                             G_CALLBACK (gtk_widget_destroy), NULL);

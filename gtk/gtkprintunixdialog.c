@@ -467,8 +467,6 @@ error_dialogs (GtkPrintUnixDialog *print_dialog,
                   if (file != NULL &&
                       g_file_query_exists (file, NULL))
                     {
-                      GtkWindowGroup *group;
-
                       toplevel = get_toplevel (GTK_WIDGET (print_dialog));
 
                       basename = g_file_get_basename (file);
@@ -500,9 +498,8 @@ error_dialogs (GtkPrintUnixDialog *print_dialog,
                       gtk_dialog_set_default_response (GTK_DIALOG (dialog),
                                                        GTK_RESPONSE_ACCEPT);
 
-                      group = gtk_window_get_group (toplevel);
-                      if (group)
-                        gtk_window_group_add_window (group,
+                      if (gtk_window_has_group (toplevel))
+                        gtk_window_group_add_window (gtk_window_get_group (toplevel),
                                                      GTK_WINDOW (dialog));
 
                       response = gtk_dialog_run (GTK_DIALOG (dialog));
