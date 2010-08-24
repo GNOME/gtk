@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-property.HEAD.hy\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-08-23 14:59+0500\n"
+"POT-Creation-Date: 2010-08-24 10:00+0500\n"
 "PO-Revision-Date: 2010-08-18 17:51+0400\n"
 "Last-Translator: Nune <nune@instigatedesign.com>\n"
 "Language-Team:  <norik@freenet.am>\n"
@@ -306,8 +306,8 @@ msgid ""
 "Whether the action is considered important. When TRUE, toolitem proxies for "
 "this action show text in GTK_TOOLBAR_BOTH_HORIZ mode."
 msgstr ""
-"Արդյոք այս գործողությունը համարվում է կարևոր։ Երբ ՃՇՄԱՐԻՏ է, գործիքների տարրի "
-"պրոքսիները այս գործողության համար ցուցադրում են տեքստը "
+"Արդյոք այս գործողությունը համարվում է կարևոր։ Երբ ՃՇՄԱՐԻՏ է, գործիքների "
+"տարրի պրոքսիները այս գործողության համար ցուցադրում են տեքստը "
 "GTK_TOOLBAR_BOTH_HORIZ ռեժիմում։"
 
 #: ../gtk/gtkaction.c:374
@@ -675,9 +675,8 @@ msgid ""
 "How to layout the buttons in the box. Possible values are spread, edge, "
 "start and end"
 msgstr ""
-"Ինչպես դասավորել կոճակները պատուհանում։ Հավանական արժեքներն են` 
-spread («տարածված»), edge («եզրերով»), start («սկզբից») и end "
-"(«վերջից») "
+"Ինչպես դասավորել կոճակները պատուհանում։ Հավանական արժեքներն են` spread "
+"(«տարածված»), edge («եզրերով»), start («սկզբից») и end («վերջից») "
 
 #: ../gtk/gtkbbox.c:183
 msgid "Secondary"
@@ -1323,7 +1322,7 @@ msgstr "Կողմնորոշվածություն"
 msgid "Orientation and growth direction of the progress bar"
 msgstr "Կատարման ինդիկատորի կողմնորոշումը և աճի ուղղությունը"
 
-#: ../gtk/gtkcellrendererspin.c:91 ../gtk/gtkrange.c:399
+#: ../gtk/gtkcellrendererspin.c:91 ../gtk/gtkrange.c:422
 #: ../gtk/gtkscalebutton.c:239 ../gtk/gtkspinbutton.c:231
 msgid "Adjustment"
 msgstr "Կարգավորում"
@@ -1340,7 +1339,7 @@ msgstr "Արագացում"
 msgid "The acceleration rate when you hold down a button"
 msgstr "Արժեքների փոփոխման արագությունը, երբ կոճակը սեղմած է պահվում"
 
-#: ../gtk/gtkcellrendererspin.c:121 ../gtk/gtkscale.c:219
+#: ../gtk/gtkcellrendererspin.c:121 ../gtk/gtkscale.c:220
 #: ../gtk/gtkspinbutton.c:249
 msgid "Digits"
 msgstr "Թվանշաններ"
@@ -3742,8 +3741,8 @@ msgstr "Ոլորվող"
 #: ../gtk/gtknotebook.c:635
 msgid "If TRUE, scroll arrows are added if there are too many tabs to fit"
 msgstr ""
-"Եթե ՃՇՄԱՐԻՏ է, ապա ոլորման սլաքներ կավելացվեն այն դեպքում, երբ ներդիրները չափից "
-"շատ են պատուհանում տեղավորվելու համար"
+"Եթե ՃՇՄԱՐԻՏ է, ապա ոլորման սլաքներ կավելացվեն այն դեպքում, երբ ներդիրները "
+"չափից շատ են պատուհանում տեղավորվելու համար"
 
 #: ../gtk/gtknotebook.c:641
 msgid "Enable Popup"
@@ -3754,8 +3753,8 @@ msgid ""
 "If TRUE, pressing the right mouse button on the notebook pops up a menu that "
 "you can use to go to a page"
 msgstr ""
-"Եթե ՃՇՄԱՐԻՏ է, ապա գրանցատետրի վրա մկնիկի աջ ստեղնի սեղմումից ելնում է մենյու, "
-"որը կարող եք օգտագործել էջերի վրա գնալու համար "
+"Եթե ՃՇՄԱՐԻՏ է, ապա գրանցատետրի վրա մկնիկի աջ ստեղնի սեղմումից ելնում է "
+"մենյու, որը կարող եք օգտագործել էջերի վրա գնալու համար "
 
 #: ../gtk/gtknotebook.c:656 ../gtk/gtkradioaction.c:135
 #: ../gtk/gtkradiobutton.c:162 ../gtk/gtkradiomenuitem.c:360
@@ -4076,8 +4075,8 @@ msgid ""
 "TRUE if the print job will continue to emit status-changed signals after the "
 "print data has been sent to the printer or print server."
 msgstr ""
-"ՃՇՄԱՐԻՏ, եթե տպման աշխատանքը կշարունակի թողնել status-changed ազդանշան, տպիչին "
-"կամ տպման սերվերին տվյալներ ուղարկելիս"
+"ՃՇՄԱՐԻՏ, եթե տպման աշխատանքը կշարունակի թողնել status-changed ազդանշան, "
+"տպիչին կամ տպման սերվերին տվյալներ ուղարկելիս"
 
 #: ../gtk/gtkprintoperation.c:1005
 msgid "Default Page Setup"
@@ -4386,31 +4385,31 @@ msgstr "Ռադիո մենյուի տարր, որի խմբին պատկանում
 msgid "The radio tool button whose group this button belongs to."
 msgstr "Ռադիո գործողության կոճակ, որի խմբին պատկանում է այս կոճակը"
 
-#: ../gtk/gtkrange.c:390
+#: ../gtk/gtkrange.c:413
 msgid "Update policy"
 msgstr "Թարմացման կանոն"
 
-#: ../gtk/gtkrange.c:391
+#: ../gtk/gtkrange.c:414
 msgid "How the range should be updated on the screen"
 msgstr "Ինչպես պետք է միջակայքը թարմացվի էկրանի վրա"
 
-#: ../gtk/gtkrange.c:400
+#: ../gtk/gtkrange.c:423
 msgid "The GtkAdjustment that contains the current value of this range object"
 msgstr "GtkAdjustment, որը պարունակում է այս միջակայքի օբյեկտի ընթացիկ արժեքը"
 
-#: ../gtk/gtkrange.c:407
+#: ../gtk/gtkrange.c:430
 msgid "Inverted"
 msgstr "Շրջված"
 
-#: ../gtk/gtkrange.c:408
+#: ../gtk/gtkrange.c:431
 msgid "Invert direction slider moves to increase range value"
 msgstr "Հակադարձել ողղության սահիչը, միջակայքի մեծացման համար"
 
-#: ../gtk/gtkrange.c:415
+#: ../gtk/gtkrange.c:438
 msgid "Lower stepper sensitivity"
 msgstr "Դեպի ներքև շարժման զգայունությունը"
 
-#: ../gtk/gtkrange.c:416
+#: ../gtk/gtkrange.c:439
 msgid ""
 "The sensitivity policy for the stepper that points to the adjustment's lower "
 "side"
@@ -4418,11 +4417,11 @@ msgstr ""
 "Շարժման համար զգայունության կանոնը, որն ուղղված է հավասարեցման ներքևի կողմի "
 "վրա"
 
-#: ../gtk/gtkrange.c:424
+#: ../gtk/gtkrange.c:447
 msgid "Upper stepper sensitivity"
 msgstr "Դեպի վերև շարժման զգայունություն"
 
-#: ../gtk/gtkrange.c:425
+#: ../gtk/gtkrange.c:448
 msgid ""
 "The sensitivity policy for the stepper that points to the adjustment's upper "
 "side"
@@ -4430,86 +4429,86 @@ msgstr ""
 "Շարժման համար զգայունության կանոնը, որն ուղղված է հավասարեցման վերևի կողմի "
 "վրա"
 
-#: ../gtk/gtkrange.c:442
+#: ../gtk/gtkrange.c:465
 msgid "Show Fill Level"
 msgstr "Ցույց տալ Լրացման Մակարդակը"
 
-#: ../gtk/gtkrange.c:443
+#: ../gtk/gtkrange.c:466
 msgid "Whether to display a fill level indicator graphics on trough."
 msgstr "Ցուցադրել արդյոք լցվածության մակարդակի ցուցիչի գրաֆիկը իջվածքում"
 
-#: ../gtk/gtkrange.c:459
+#: ../gtk/gtkrange.c:482
 msgid "Restrict to Fill Level"
 msgstr "Սահմանափակել Լրացման Մակարդակը"
 
-#: ../gtk/gtkrange.c:460
+#: ../gtk/gtkrange.c:483
 msgid "Whether to restrict the upper boundary to the fill level."
 msgstr "Արդյոք սահմանափակել վերևի սահմանը մինչև լրացման մակարդակ։"
 
-#: ../gtk/gtkrange.c:475
+#: ../gtk/gtkrange.c:498
 msgid "Fill Level"
 msgstr "Լրացման Մակարդակ"
 
-#: ../gtk/gtkrange.c:476
+#: ../gtk/gtkrange.c:499
 msgid "The fill level."
 msgstr "Լրացման մակարդակը։"
 
-#: ../gtk/gtkrange.c:484
+#: ../gtk/gtkrange.c:507
 msgid "Slider Width"
 msgstr "Սողանիկի լայնությունը"
 
-#: ../gtk/gtkrange.c:485
+#: ../gtk/gtkrange.c:508
 msgid "Width of scrollbar or scale thumb"
 msgstr "Սողանիկի կամ մասշտաբի ցուցչի լայնությունը"
 
-#: ../gtk/gtkrange.c:492
+#: ../gtk/gtkrange.c:515
 msgid "Trough Border"
 msgstr "Իջվածքի եզրագիծ"
 
-#: ../gtk/gtkrange.c:493
+#: ../gtk/gtkrange.c:516
 msgid "Spacing between thumb/steppers and outer trough bevel"
 msgstr ""
 "Տեղափոխման ցուցիչի/կոճակների և իջվածքի արտաքին սահմանի միջև հեռավորությունը"
 
-#: ../gtk/gtkrange.c:500
+#: ../gtk/gtkrange.c:523
 msgid "Stepper Size"
 msgstr "Տեղափոխման կոճակի չափը"
 
-#: ../gtk/gtkrange.c:501
+#: ../gtk/gtkrange.c:524
 msgid "Length of step buttons at ends"
 msgstr "Տեղափոխման կոճակների երկարությունը մի ծայրից մյուս ծայր"
 
-#: ../gtk/gtkrange.c:516
+#: ../gtk/gtkrange.c:539
 msgid "Stepper Spacing"
 msgstr "Տեղափոխման կոճակների միջև հեռավորությունը"
 
-#: ../gtk/gtkrange.c:517
+#: ../gtk/gtkrange.c:540
 msgid "Spacing between step buttons and thumb"
 msgstr "Տեղափոխման կոճակների և ցուցչի միջև հեռավորությունը"
 
-#: ../gtk/gtkrange.c:524
+#: ../gtk/gtkrange.c:547
 msgid "Arrow X Displacement"
 msgstr "Սլաքի X Տեղափոխություն"
 
-#: ../gtk/gtkrange.c:525
+#: ../gtk/gtkrange.c:548
 msgid ""
 "How far in the x direction to move the arrow when the button is depressed"
 msgstr "Ինչ չափով կտեղաշարժվի սլաքը հորիզոնական ուղղությամբ, կոճակը սեղմելիս"
 
-#: ../gtk/gtkrange.c:532
+#: ../gtk/gtkrange.c:555
 msgid "Arrow Y Displacement"
 msgstr "Սլաքի Y Տեղափոխություն"
 
-#: ../gtk/gtkrange.c:533
+#: ../gtk/gtkrange.c:556
 msgid ""
 "How far in the y direction to move the arrow when the button is depressed"
 msgstr "Ինչ չափով կտեղաշարժվի սլաքը ուղղահայաց ուղղությամբ, կոճակը սեղմելիս"
 
-#: ../gtk/gtkrange.c:541
+#: ../gtk/gtkrange.c:564
 msgid "Draw slider ACTIVE during drag"
 msgstr "Նկարել ACTIVE պտտման շերտը մկնիկով տեղափոխման ժամանակ"
 
-#: ../gtk/gtkrange.c:542
+#: ../gtk/gtkrange.c:565
 msgid ""
 "With this option set to TRUE, sliders will be drawn ACTIVE and with shadow "
 "IN while they are dragged"
@@ -4517,11 +4516,11 @@ msgstr ""
 "Եթե այս ընտրանքը սահմանված է ՃՇՄԱՐԻՏ, սողանիկները կգծագրվեն ԱԿՏԻՎ և ստվերով՝ "
 "օգտագործման ժամանակ"
 
-#: ../gtk/gtkrange.c:556
+#: ../gtk/gtkrange.c:579
 msgid "Trough Side Details"
 msgstr "Իջվածքի եզրերի մանրամասները"
 
-#: ../gtk/gtkrange.c:557
+#: ../gtk/gtkrange.c:580
 msgid ""
 "When TRUE, the parts of the trough on the two sides of the slider are drawn "
 "with different details"
@@ -4529,11 +4528,11 @@ msgstr ""
 "Եթե ՃՇՄԱՐԻՏ է,  ապա պտտման շերտի երկու կողմերում իջվածքները կնկարվեն տարբեր "
 "ձևերով "
 
-#: ../gtk/gtkrange.c:573
+#: ../gtk/gtkrange.c:596
 msgid "Trough Under Steppers"
 msgstr "Նշանների տակ գտնվող իջվածք"
 
-#: ../gtk/gtkrange.c:574
+#: ../gtk/gtkrange.c:597
 msgid ""
 "Whether to draw trough for full length of range or exclude the steppers and "
 "spacing"
@@ -4541,23 +4540,25 @@ msgstr ""
 "Նկարել արդյոք իջվածքները միջակայքի ամբողջ լայնությամբ, թե բացառել կոճակներն "
 "ու բացատները"
 
-#: ../gtk/gtkrange.c:587
+#: ../gtk/gtkrange.c:610
 msgid "Arrow scaling"
 msgstr "Սլաքի Մասշտաբավորումը"
 
-#: ../gtk/gtkrange.c:588
+#: ../gtk/gtkrange.c:611
 msgid "Arrow scaling with regard to scroll button size"
 msgstr "Սլաքի մասշտաբավորումը ոլորման կոճակի չափի համեմատությամբ"
 
-#: ../gtk/gtkrange.c:602
+#: ../gtk/gtkrange.c:625
 msgid "Stepper Position Details"
 msgstr "Շարժման Դիրքի մանրամասներ"
 
-#: ../gtk/gtkrange.c:603
+#: ../gtk/gtkrange.c:626
 msgid ""
 "When TRUE, the detail string for rendering the steppers is suffixed with "
 "position information"
-msgstr "Եթե ՃՇՄԱՐԻՏ Է, տեղաշարժման վերարտադրման մանրամասն տողը ավարտվում է դիրքի ինֆորմացիայով"
+msgstr ""
+"Եթե ՃՇՄԱՐԻՏ Է, տեղաշարժման վերարտադրման մանրամասն տողը ավարտվում է դիրքի "
+"ինֆորմացիայով"
 
 #: ../gtk/gtkrecentaction.c:635 ../gtk/gtkrecentchoosermenu.c:252
 msgid "Show Numbers"
@@ -4683,39 +4684,39 @@ msgstr "Մետրիկա"
 msgid "The metric used for the ruler"
 msgstr "Քանոնի համար օգտագործվող միավորների համակարգ"
 
-#: ../gtk/gtkscale.c:220
+#: ../gtk/gtkscale.c:221
 msgid "The number of decimal places that are displayed in the value"
 msgstr "Արժեքների համար ցուցադրվող տասական թվերի քանակը"
 
-#: ../gtk/gtkscale.c:229
+#: ../gtk/gtkscale.c:230
 msgid "Draw Value"
 msgstr "Գծագրել Արժեք"
 
-#: ../gtk/gtkscale.c:230
+#: ../gtk/gtkscale.c:231
 msgid "Whether the current value is displayed as a string next to the slider"
 msgstr "Ընթացիկ արժեքը ցուցադրվի արդյոք որպես տող սողանիկից հետո"
 
-#: ../gtk/gtkscale.c:237
+#: ../gtk/gtkscale.c:238
 msgid "Value Position"
 msgstr "Արժեքի Դիրքը"
 
-#: ../gtk/gtkscale.c:238
+#: ../gtk/gtkscale.c:239
 msgid "The position in which the current value is displayed"
 msgstr "Դիրքը, որտեղ ցուցադրվում է ընթացիկ արժեքը"
 
-#: ../gtk/gtkscale.c:245
+#: ../gtk/gtkscale.c:246
 msgid "Slider Length"
 msgstr "Սողանիկի երկարությունը"
 
-#: ../gtk/gtkscale.c:246
+#: ../gtk/gtkscale.c:247
 msgid "Length of scale's slider"
 msgstr "Մասշտաբավորման սողանիկի երկարությունը"
 
-#: ../gtk/gtkscale.c:254
+#: ../gtk/gtkscale.c:255
 msgid "Value spacing"
 msgstr "Արժեքի տարածություն"
 
-#: ../gtk/gtkscale.c:255
+#: ../gtk/gtkscale.c:256
 msgid "Space between value text and the slider/trough area"
 msgstr "Արժեքի տեքստի և սողանիկի/իջվածքի միջև եղած տարածությունը"
 
@@ -5181,7 +5182,8 @@ msgstr "Տեղաշարժվել միայն սլաքների օգնությամբ"
 
 #: ../gtk/gtksettings.c:676
 msgid "When TRUE, there are only cursor keys available to navigate widgets"
-msgstr "Եթե ՃՇՄԱՐԻՏ է, ապա վիջեթները կարող են տեղաշարժել միայն սլաքների միջոցով"
+msgstr ""
+"Եթե ՃՇՄԱՐԻՏ է, ապա վիջեթները կարող են տեղաշարժել միայն սլաքների միջոցով"
 
 #: ../gtk/gtksettings.c:693
 msgid "Keynav Wrap Around"
@@ -5376,8 +5378,8 @@ msgstr "Անտեսել թաքնվածները"
 msgid ""
 "If TRUE, unmapped widgets are ignored when determining the size of the group"
 msgstr ""
-"Եթե ՃՇՄԱՐԻՏ է, ապա չարտապատկերված վիջեթները անտեսվում են, երբ սահմանվում է խմբի "
-"չափը"
+"Եթե ՃՇՄԱՐԻՏ է, ապա չարտապատկերված վիջեթները անտեսվում են, երբ սահմանվում է "
+"խմբի չափը"
 
 #: ../gtk/gtkspinbutton.c:239
 msgid "Climb Rate"
@@ -6193,8 +6195,9 @@ msgid ""
 "Whether the toolbar item is considered important. When TRUE, toolbar buttons "
 "show text in GTK_TOOLBAR_BOTH_HORIZ mode"
 msgstr ""
-"Գործիքների վահանակի տարրը համարվի արդյոք կարևոր։ Եթե ՃՇՄԱՐԻՏ է, ապա գործիքների "
-"վահանակի կոճակները ցույց կտան տեքստը GTK_TOOLBAR_BOTH_HORIZ ռեժիմում"
+"Գործիքների վահանակի տարրը համարվի արդյոք կարևոր։ Եթե ՃՇՄԱՐԻՏ է, ապա "
+"գործիքների վահանակի կոճակները ցույց կտան տեքստը GTK_TOOLBAR_BOTH_HORIZ "
+"ռեժիմում"
 
 #: ../gtk/gtktoolitemgroup.c:1566
 msgid "The human-readable title of this item group"
@@ -6924,7 +6927,8 @@ msgstr "Պատուհանի Տեղաշարժ"
 
 #: ../gtk/gtkwidget.c:2494
 msgid "Whether windows can be dragged by clicking on empty areas"
-msgstr "Պատուհանները կարող են արդյոք տեղաշարժվել դատարկ տարածության վրա սեղմելիս"
+msgstr ""
+"Պատուհանները կարող են արդյոք տեղաշարժվել դատարկ տարածության վրա սեղմելիս"
 
 #: ../gtk/gtkwidget.c:2507
 msgid "Unvisited Link Color"
