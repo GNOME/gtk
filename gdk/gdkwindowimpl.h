@@ -146,23 +146,6 @@ struct _GdkWindowImplIface
 /* Interface Functions */
 GType gdk_window_impl_get_type (void) G_GNUC_CONST;
 
-/* private definitions from gdkwindow.h */
-
-struct _GdkWindowRedirect
-{
-  GdkWindowObject *redirected;
-  GdkDrawable *pixmap;
-
-  gint src_x;
-  gint src_y;
-  gint dest_x;
-  gint dest_y;
-  gint width;
-  gint height;
-
-  cairo_region_t *damage;
-  guint damage_idle;
-};
 
 G_END_DECLS
 

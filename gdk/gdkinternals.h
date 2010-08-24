@@ -232,8 +232,6 @@ struct _GdkWindowObject
 
   guint update_and_descendants_freeze_count;
 
-  GdkWindowRedirect *redirect;
-
   /* The GdkWindowObject that has the impl, ref:ed if another window.
    * This ref is required to keep the wrapper of the impl window alive
    * for as long as any GdkWindow references the impl. */

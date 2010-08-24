@@ -857,16 +857,6 @@ void       gdk_offscreen_window_set_embedder   (GdkWindow     *window,
 GdkWindow *gdk_offscreen_window_get_embedder   (GdkWindow     *window);
 void       gdk_window_geometry_changed         (GdkWindow     *window);
 
-void       gdk_window_redirect_to_drawable   (GdkWindow     *window,
-                                              GdkDrawable   *drawable,
-                                              gint           src_x,
-                                              gint           src_y,
-                                              gint           dest_x,
-                                              gint           dest_y,
-                                              gint           width,
-                                              gint           height);
-void       gdk_window_remove_redirection     (GdkWindow     *window);
-
 /* Multidevice support */
 void       gdk_window_set_support_multidevice (GdkWindow *window,
                                                gboolean   support_multidevice);
