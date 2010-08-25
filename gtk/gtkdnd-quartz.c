@@ -77,14 +77,10 @@ struct _GtkDragSourceSite
   GtkImageType icon_type;
   union
   {
-    GtkImagePixmapData pixmap;
     GtkImagePixbufData pixbuf;
     GtkImageStockData stock;
     GtkImageIconNameData name;
   } icon_data;
-  GdkBitmap *icon_mask;
-
-  GdkColormap       *colormap;	         /* Colormap for drag icon */
 
   /* Stored button press information to detect drag beginning */
   gint               state;
@@ -1161,30 +1157,6 @@ gtk_drag_begin_internal (GtkWidget         *widget,
       else
 	switch (site->icon_type)
 	  {
-	  case GTK_IMAGE_PIXMAP:
-	    /* This is not supported, so just set a small transparent pixbuf
-	     * since we need to have something.
-	     */
-	    if (0)
-	      gtk_drag_set_icon_pixmap (context,
-					site->colormap,
-					site->icon_data.pixmap.pixmap,
-					site->icon_mask,
-					-2, -2);
-	    else
-	      {
-		GdkPixbuf *pixbuf;
-
-		pixbuf = gdk_pixbuf_new (GDK_COLORSPACE_RGB, FALSE, 8, 1, 1);
- 		gdk_pixbuf_fill (pixbuf, 0xffffff);
-
- 		gtk_drag_set_icon_pixbuf (context,
- 					  pixbuf,
-					  0, 0);
-
- 		g_object_unref (pixbuf);
-	      }
-	    break;
 	  case GTK_IMAGE_PIXBUF:
 	    gtk_drag_set_icon_pixbuf (context,
 				      site->icon_data.pixbuf.pixbuf,
@@ -1474,12 +1446,6 @@ gtk_drag_source_unset_icon (GtkDragSourceSite *site)
     {
     case GTK_IMAGE_EMPTY:
       break;
-    case GTK_IMAGE_PIXMAP:
-      if (site->icon_data.pixmap.pixmap)
-	g_object_unref (site->icon_data.pixmap.pixmap);
-      if (site->icon_mask)
-	g_object_unref (site->icon_mask);
-      break;
     case GTK_IMAGE_PIXBUF:
       g_object_unref (site->icon_data.pixbuf.pixbuf);
       break;
@@ -1494,10 +1460,6 @@ gtk_drag_source_unset_icon (GtkDragSourceSite *site)
       break;
     }
   site->icon_type = GTK_IMAGE_EMPTY;
-  
-  if (site->colormap)
-    g_object_unref (site->colormap);
-  site->colormap = NULL;
 }
 
 static void 
@@ -1510,36 +1472,6 @@ gtk_drag_source_site_destroy (gpointer data)
 
   gtk_drag_source_unset_icon (site);
   g_free (site);
-}
-
-void 
-gtk_drag_source_set_icon (GtkWidget     *widget,
-			  GdkColormap   *colormap,
-			  GdkPixmap     *pixmap,
-			  GdkBitmap     *mask)
-{
-  GtkDragSourceSite *site;
-
-  g_return_if_fail (GTK_IS_WIDGET (widget));
-  g_return_if_fail (GDK_IS_COLORMAP (colormap));
-  g_return_if_fail (GDK_IS_PIXMAP (pixmap));
-  g_return_if_fail (!mask || GDK_IS_PIXMAP (mask));
-
-  site = g_object_get_data (G_OBJECT (widget), "gtk-site-data");
-  g_return_if_fail (site != NULL);
-  
-  g_object_ref (colormap);
-  g_object_ref (pixmap);
-  if (mask)
-    g_object_ref (mask);
-
-  gtk_drag_source_unset_icon (site);
-
-  site->icon_type = GTK_IMAGE_PIXMAP;
-  
-  site->icon_data.pixmap.pixmap = pixmap;
-  site->icon_mask = mask;
-  site->colormap = colormap;
 }
 
 void 
@@ -1719,45 +1651,6 @@ gtk_drag_set_icon_stock  (GdkDragContext *context,
   g_return_if_fail (stock_id != NULL);
 
   set_icon_stock_pixbuf (context, stock_id, NULL, hot_x, hot_y);
-}
-
-/**
- * gtk_drag_set_icon_pixmap:
- * @context: the context for a drag. (This must be called 
- *            with a  context for the source side of a drag)
- * @colormap: the colormap of the icon 
- * @pixmap: the image data for the icon 
- * @mask: the transparency mask for the icon
- * @hot_x: the X offset within @pixmap of the hotspot.
- * @hot_y: the Y offset within @pixmap of the hotspot.
- * 
- * Sets @pixmap as the icon for a given drag. GTK+ retains
- * references for the arguments, and will release them when
- * they are no longer needed. In general, gtk_drag_set_icon_pixbuf()
- * will be more convenient to use.
- **/
-void 
-gtk_drag_set_icon_pixmap (GdkDragContext    *context,
-			  GdkColormap       *colormap,
-			  GdkPixmap         *pixmap,
-			  GdkBitmap         *mask,
-			  gint               hot_x,
-			  gint               hot_y)
-{
-  GdkPixbuf *pixbuf;
-
-  g_return_if_fail (GDK_IS_DRAG_CONTEXT (context));
-  g_return_if_fail (context->is_source);
-  g_return_if_fail (GDK_IS_COLORMAP (colormap));
-  g_return_if_fail (GDK_IS_PIXMAP (pixmap));
-
-  pixbuf = gdk_pixbuf_get_from_drawable (NULL, pixmap, colormap,
-                                         0, 0, /* src */
-                                         0, 0, /* dst */
-                                         -1, -1);
-
-  gtk_drag_set_icon_pixbuf (context, pixbuf, hot_x, hot_y);
-  g_object_unref (pixbuf);
 }
 
 /**

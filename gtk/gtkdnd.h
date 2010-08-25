@@ -115,10 +115,6 @@ void           gtk_drag_source_add_text_targets  (GtkWidget     *widget);
 void           gtk_drag_source_add_image_targets (GtkWidget    *widget);
 void           gtk_drag_source_add_uri_targets   (GtkWidget    *widget);
 
-void gtk_drag_source_set_icon         (GtkWidget       *widget,
-				       GdkColormap     *colormap,
-				       GdkPixmap       *pixmap,
-				       GdkBitmap       *mask);
 void gtk_drag_source_set_icon_pixbuf  (GtkWidget       *widget,
 				       GdkPixbuf       *pixbuf);
 void gtk_drag_source_set_icon_stock   (GtkWidget       *widget,
@@ -140,12 +136,6 @@ GdkDragContext *gtk_drag_begin (GtkWidget         *widget,
  */
 void gtk_drag_set_icon_widget (GdkDragContext *context,
 			       GtkWidget      *widget,
-			       gint            hot_x,
-			       gint            hot_y);
-void gtk_drag_set_icon_pixmap (GdkDragContext *context,
-			       GdkColormap    *colormap,
-			       GdkPixmap      *pixmap,
-			       GdkBitmap      *mask,
 			       gint            hot_x,
 			       gint            hot_y);
 void gtk_drag_set_icon_pixbuf (GdkDragContext *context,

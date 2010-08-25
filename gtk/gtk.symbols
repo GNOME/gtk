@@ -947,7 +947,6 @@ gtk_drag_highlight
 gtk_drag_set_icon_default
 gtk_drag_set_icon_name
 gtk_drag_set_icon_pixbuf
-gtk_drag_set_icon_pixmap
 gtk_drag_set_icon_stock
 gtk_drag_set_icon_surface
 gtk_drag_set_icon_widget
@@ -956,7 +955,6 @@ gtk_drag_source_add_text_targets
 gtk_drag_source_add_uri_targets
 gtk_drag_source_get_target_list
 gtk_drag_source_set
-gtk_drag_source_set_icon
 gtk_drag_source_set_icon_name
 gtk_drag_source_set_icon_pixbuf
 gtk_drag_source_set_icon_stock
