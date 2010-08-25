@@ -460,8 +460,8 @@ gtk_button_box_child_requisition (GtkWidget  *widget,
           avg_h += child_requisition.height + ipad_h;
         }
     }
-  avg_w /= nchildren;
-  avg_h /= nchildren;
+  avg_w /= MAX (nchildren, 1);
+  avg_h /= MAX (nchildren, 1);
 
   *widths = g_new (gint, nchildren);
   *heights = g_new (gint, nchildren);
@@ -484,9 +484,7 @@ gtk_button_box_child_requisition (GtkWidget  *widget,
 
           gtk_widget_get_child_requisition (child, &child_requisition);
 
-          if (homogeneous ||
-              (child_requisition.width + ipad_w < avg_w * 1.5)) /* &&
-               child_requisition.width + ipad_w > avg_w / 1.5)) */
+          if (homogeneous || (child_requisition.width + ipad_w < avg_w * 1.5))
             {
               (*widths)[i] = -1;
               if (child_requisition.width + ipad_w > needed_width)
@@ -497,9 +495,7 @@ gtk_button_box_child_requisition (GtkWidget  *widget,
               (*widths)[i] = child_requisition.width + ipad_w;
             }
 
-          if (homogeneous ||
-              (child_requisition.height + ipad_h < avg_h * 1.5)) /* &&
-               child_requisition.height + ipad_h > avg_h / 1.5)) */
+          if (homogeneous || (child_requisition.height + ipad_h < avg_h * 1.5))
             {
               (*heights)[i] = -1;
               if (child_requisition.height + ipad_h > needed_height)
