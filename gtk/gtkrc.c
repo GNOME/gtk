@@ -2219,13 +2219,15 @@ gtk_rc_parse_any (GtkRcContext *context,
 
 	      if (scanner->scope_id == 0)
 		{
+                  guint token;
+
 		  /* if we are in scope 0, we know the symbol names
 		   * that are associated with certain token values.
 		   * so we look them up to make the error messages
 		   * more readable.
 		   */
-		  if (expected_token > GTK_RC_TOKEN_INVALID &&
-		      expected_token < GTK_RC_TOKEN_LAST)
+                  if (expected_token > GTK_RC_TOKEN_INVALID &&
+                      expected_token < GTK_RC_TOKEN_LAST)
 		    {
                       const gchar *sym = NULL;
 
@@ -2237,8 +2239,9 @@ gtk_rc_parse_any (GtkRcContext *context,
 			msg = g_strconcat ("e.g. `", sym, "'", NULL);
 		    }
 
-		  if (scanner->token > GTK_RC_TOKEN_INVALID &&
-		      scanner->token < GTK_RC_TOKEN_LAST)
+                  token = scanner->token;
+                  if (token > GTK_RC_TOKEN_INVALID &&
+                      token < GTK_RC_TOKEN_LAST)
 		    {
 		      symbol_name = "???";
 		      for (i = 0; i < G_N_ELEMENTS (symbols); i++)
@@ -3324,7 +3327,10 @@ static guint
 gtk_rc_parse_xthickness (GScanner   *scanner,
 			 GtkRcStyle *style)
 {
-  if (g_scanner_get_next_token (scanner) != GTK_RC_TOKEN_XTHICKNESS)
+  guint token;
+
+  token = g_scanner_get_next_token (scanner);
+  if (token != GTK_RC_TOKEN_XTHICKNESS)
     return GTK_RC_TOKEN_XTHICKNESS;
 
   if (g_scanner_get_next_token (scanner) != G_TOKEN_EQUAL_SIGN)
@@ -3342,7 +3348,10 @@ static guint
 gtk_rc_parse_ythickness (GScanner   *scanner,
 			 GtkRcStyle *style)
 {
-  if (g_scanner_get_next_token (scanner) != GTK_RC_TOKEN_YTHICKNESS)
+  guint token;
+
+  token =  g_scanner_get_next_token (scanner);
+  if (token != GTK_RC_TOKEN_YTHICKNESS)
     return GTK_RC_TOKEN_YTHICKNESS;
 
   if (g_scanner_get_next_token (scanner) != G_TOKEN_EQUAL_SIGN)

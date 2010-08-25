@@ -1350,6 +1350,7 @@ gtk_binding_parse_signal (GScanner       *scanner,
   gboolean negate;
   gboolean need_arg;
   gboolean seen_comma;
+  guint token;
 
   g_return_val_if_fail (scanner != NULL, G_TOKEN_ERROR);
   
@@ -1377,8 +1378,9 @@ gtk_binding_parse_signal (GScanner       *scanner,
 	expected_token = G_TOKEN_INT;
       else
 	expected_token = ')';
-      g_scanner_get_next_token (scanner);
-      switch (scanner->token)
+
+      token = g_scanner_get_next_token (scanner);
+      switch (token)
 	{
 	  GtkBindingArg *arg;
 
@@ -1501,14 +1503,15 @@ gtk_binding_parse_bind (GScanner       *scanner,
   guint keyval = 0;
   GdkModifierType modifiers = 0;
   gboolean unbind = FALSE;
+  guint token;
 
   g_return_val_if_fail (scanner != NULL, G_TOKEN_ERROR);
-  
-  g_scanner_get_next_token (scanner);
-  if (scanner->token != GTK_RC_TOKEN_BIND &&
-      scanner->token != GTK_RC_TOKEN_UNBIND)
+
+  token = g_scanner_get_next_token (scanner);
+  if (token != GTK_RC_TOKEN_BIND &&
+      token != GTK_RC_TOKEN_UNBIND)
     return GTK_RC_TOKEN_BIND;
-  unbind = scanner->token == GTK_RC_TOKEN_UNBIND;
+  unbind = token == GTK_RC_TOKEN_UNBIND;
   g_scanner_get_next_token (scanner);
   if (scanner->token != G_TOKEN_STRING)
     return G_TOKEN_STRING;
@@ -1559,13 +1562,14 @@ gtk_binding_parse_bind (GScanner       *scanner,
 guint
 _gtk_binding_parse_binding (GScanner *scanner)
 {
-  gchar *name;
   GtkBindingSet *binding_set;
+  gchar *name;
+  guint token;
 
   g_return_val_if_fail (scanner != NULL, G_TOKEN_ERROR);
 
-  g_scanner_get_next_token (scanner);
-  if (scanner->token != GTK_RC_TOKEN_BINDING)
+  token = g_scanner_get_next_token (scanner);
+  if (token != GTK_RC_TOKEN_BINDING)
     return GTK_RC_TOKEN_BINDING;
   g_scanner_get_next_token (scanner);
   if (scanner->token != G_TOKEN_STRING)
@@ -1590,7 +1594,8 @@ _gtk_binding_parse_binding (GScanner *scanner)
   g_scanner_peek_next_token (scanner);
   while (scanner->next_token != '}')
     {
-      switch (scanner->next_token)
+      guint next_token = scanner->next_token;
+      switch (next_token)
 	{
 	  guint expected_token;
 
