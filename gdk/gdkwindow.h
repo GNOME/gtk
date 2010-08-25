@@ -836,11 +836,6 @@ void       gdk_window_constrain_size      (GdkGeometry  *geometry,
                                            gint         *new_width,
                                            gint         *new_height);
 
-void gdk_window_get_internal_paint_info (GdkWindow    *window,
-					 GdkDrawable **real_drawable,
-					 gint         *x_offset,
-					 gint         *y_offset);
-
 void gdk_window_enable_synchronized_configure (GdkWindow *window);
 void gdk_window_configure_finished            (GdkWindow *window);
 

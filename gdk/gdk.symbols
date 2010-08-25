@@ -622,7 +622,6 @@ gdk_window_foreign_new
 gdk_window_freeze_toplevel_updates_libgtk_only
 gdk_window_freeze_updates
 gdk_window_get_children
-gdk_window_get_internal_paint_info
 gdk_window_get_parent
 gdk_window_get_effective_parent
 #ifndef GDK_MULTIDEVICE_SAFE
