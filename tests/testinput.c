@@ -28,9 +28,9 @@
 #include <stdio.h>
 #include "gtk/gtk.h"
 
-/* Backing pixmap for drawing area */
+/* Backing surface for drawing area */
 
-static GdkPixmap *pixmap = NULL;
+static cairo_surface_t *surface = NULL;
 
 /* Information about cursor */
 
@@ -48,14 +48,14 @@ update_cursor (GtkWidget *widget,  gdouble x, gdouble y)
   static gint cursor_present = 0;
   gint state = !current_device->has_cursor && cursor_proximity;
 
-  if (pixmap != NULL)
+  if (surface != NULL)
     {
       cairo_t *cr = gdk_cairo_create (gtk_widget_get_window (widget));
 
       if (cursor_present && (cursor_present != state ||
 			     x != cursor_x || y != cursor_y))
 	{
-          gdk_cairo_set_source_pixmap (cr, pixmap, 0, 0);
+          cairo_set_source_surface (cr, surface, 0, 0);
           cairo_rectangle (cr, cursor_x - 5, cursor_y - 5, 10, 10);
           cairo_fill (cr);
 	}
@@ -77,23 +77,23 @@ update_cursor (GtkWidget *widget,  gdouble x, gdouble y)
     }
 }
 
-/* Create a new backing pixmap of the appropriate size */
+/* Create a new backing surface of the appropriate size */
 static gint
 configure_event (GtkWidget *widget, GdkEventConfigure *event)
 {
   GtkAllocation allocation;
   cairo_t *cr;
 
-  if (pixmap)
-    g_object_unref (pixmap);
+  if (surface)
+    cairo_surface_destroy (surface);
 
   gtk_widget_get_allocation (widget, &allocation);
 
-  pixmap = gdk_pixmap_new (gtk_widget_get_window (widget),
-			   allocation.width,
-			   allocation.height,
-			   -1);
-  cr = gdk_cairo_create (pixmap);
+  surface = gdk_window_create_similar_surface (gtk_widget_get_window (widget),
+                                               CAIRO_CONTENT_COLOR,
+                                               allocation.width,
+                                               allocation.height);
+  cr = cairo_create (surface);
 
   cairo_set_source_rgb (cr, 1, 1, 1);
   cairo_paint (cr);
@@ -103,14 +103,14 @@ configure_event (GtkWidget *widget, GdkEventConfigure *event)
   return TRUE;
 }
 
-/* Refill the screen from the backing pixmap */
+/* Refill the screen from the backing surface */
 static gint
 expose_event (GtkWidget *widget, GdkEventExpose *event)
 {
   cairo_t *cr = gdk_cairo_create (gtk_widget_get_window (widget));
 
-  gdk_cairo_set_source_pixmap (cr, pixmap, 0, 0);
-  gdk_cairo_rectangle (cr, &event->area);
+  cairo_set_source_surface (cr, surface, 0, 0);
+  gdk_cairo_region (cr, event->region);
   cairo_fill (cr);
 
   cairo_destroy (cr);
@@ -151,7 +151,7 @@ draw_brush (GtkWidget *widget, GdkInputSource source,
   update_rect.width = 20 * pressure;
   update_rect.height = 20 * pressure;
 
-  cr = gdk_cairo_create (pixmap);
+  cr = cairo_create (surface);
   gdk_cairo_set_source_color (cr, &color);
   gdk_cairo_rectangle (cr, &update_rect);
   cairo_fill (cr);
@@ -187,7 +187,7 @@ button_press_event (GtkWidget *widget, GdkEventButton *event)
   current_device = event->device;
   cursor_proximity = TRUE;
 
-  if (event->button == 1 && pixmap != NULL)
+  if (event->button == 1 && surface != NULL)
     {
       gdouble pressure = 0.5;
 
@@ -224,7 +224,7 @@ motion_notify_event (GtkWidget *widget, GdkEventMotion *event)
   current_device = event->device;
   cursor_proximity = TRUE;
 
-  if (event->state & GDK_BUTTON1_MASK && pixmap != NULL)
+  if (event->state & GDK_BUTTON1_MASK && surface != NULL)
     {
       if (gdk_device_get_history (event->device, event->window, 
 				  motion_time, event->time,
@@ -323,7 +323,7 @@ main (int argc, char *argv[])
 
   gtk_widget_show (drawing_area);
 
-  /* Signals used to handle backing pixmap */
+  /* Signals used to handle backing surface */
 
   g_signal_connect (drawing_area, "expose_event",
 		    G_CALLBACK (expose_event), NULL);
