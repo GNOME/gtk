@@ -183,7 +183,7 @@ gdk_offscreen_window_get_source_drawable (GdkDrawable  *drawable)
 {
   GdkOffscreenWindow *offscreen = GDK_OFFSCREEN_WINDOW (drawable);
 
-  return _gdk_drawable_get_source_drawable (offscreen->pixmap);
+  return gdk_screen_get_root_window (offscreen->screen);
 }
 
 static GdkScreen*
