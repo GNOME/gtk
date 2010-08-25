@@ -2924,6 +2924,7 @@ _gtk_file_chooser_get_visible_roots (GtkFileChooser *chooser)
       GtkFileSystemVolume *volume;
       GFileInfo *file_info;
       char *file_path;
+      gboolean is_home_or_desktop;
 
       if (file == NULL)
         continue;
@@ -2934,12 +2935,14 @@ _gtk_file_chooser_get_visible_roots (GtkFileChooser *chooser)
        * See if this is the Desktop directory or Home directory, which will
        * already be listed.
        */
-      if (!g_strcmp0 (file_path,
-                      g_get_user_special_dir (G_USER_DIRECTORY_DESKTOP)) ||
-          !g_strcmp0 (file_path, g_get_home_dir()))
+      is_home_or_desktop = (!g_strcmp0 (file_path,
+					g_get_user_special_dir (G_USER_DIRECTORY_DESKTOP)) ||
+			    !g_strcmp0 (file_path, g_get_home_dir()));
+      g_free (file_path);
+
+      if (is_home_or_desktop)
         {
           g_object_unref (file);
-          g_free (file_path);
           continue;
         }
 
@@ -2952,7 +2955,6 @@ _gtk_file_chooser_get_visible_roots (GtkFileChooser *chooser)
 
       if (file_info == NULL)
         {
-          g_object_unref (file_info);
           g_object_unref (file);
           continue;
         }
