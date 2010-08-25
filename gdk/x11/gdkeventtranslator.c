@@ -22,23 +22,15 @@
 #include "gdkeventtranslator.h"
 
 
-GType
-gdk_event_translator_get_type (void)
+typedef GdkEventTranslatorIface GdkEventTranslatorInterface;
+G_DEFINE_INTERFACE (GdkEventTranslator, gdk_event_translator, G_TYPE_OBJECT);
+
+
+static void
+gdk_event_translator_default_init (GdkEventTranslatorInterface *iface)
 {
-  static GType translator_type = 0;
-
-  if (G_UNLIKELY (!translator_type))
-    {
-      translator_type = g_type_register_static_simple (G_TYPE_INTERFACE,
-                                                       g_intern_static_string ("GdkEventTranslator"),
-                                                       sizeof (GdkEventTranslatorIface),
-                                                       NULL, 0, NULL, 0);
-
-      g_type_interface_add_prerequisite (translator_type, G_TYPE_OBJECT);
-    }
-
-  return translator_type;
 }
+
 
 GdkEvent *
 gdk_event_translator_translate (GdkEventTranslator *translator,
