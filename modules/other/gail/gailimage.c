@@ -207,13 +207,6 @@ gail_image_get_image_size (AtkImage *image,
   image_type = gtk_image_get_storage_type(gtk_image);
  
   switch(image_type) {
-    case GTK_IMAGE_PIXMAP:
-    {	
-      GdkPixmap *pixmap;
-      gtk_image_get_pixmap(gtk_image, &pixmap, NULL);
-      gdk_drawable_get_size (pixmap, width, height);
-      break;
-    }
     case GTK_IMAGE_PIXBUF:
     {
       GdkPixbuf *pixbuf;
