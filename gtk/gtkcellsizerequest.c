@@ -29,22 +29,16 @@
 
 #define DEBUG_CELL_SIZE_REQUEST 0
 
-GType
-gtk_cell_size_request_get_type (void)
+
+typedef GtkCellSizeRequestIface GtkCellSizeRequestInterface;
+G_DEFINE_INTERFACE (GtkCellSizeRequest, gtk_cell_size_request, GTK_TYPE_CELL_RENDERER);
+
+
+static void
+gtk_cell_size_request_default_init (GtkCellSizeRequestInterface *iface)
 {
-  static GType cell_size_request_type = 0;
-
-  if (G_UNLIKELY(!cell_size_request_type))
-    {
-      cell_size_request_type =
-	g_type_register_static_simple (G_TYPE_INTERFACE, I_("GtkCellSizeRequest"),
-				       sizeof (GtkCellSizeRequestIface),
-				       NULL, 0, NULL, 0);
-
-      g_type_interface_add_prerequisite (cell_size_request_type, GTK_TYPE_CELL_RENDERER);
-    }
-  return cell_size_request_type;
 }
+
 
 /**
  * gtk_cell_size_request_get_request_mode:
