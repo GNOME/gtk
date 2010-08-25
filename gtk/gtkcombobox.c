@@ -5008,8 +5008,6 @@ gtk_combo_box_get_active_iter (GtkComboBox     *combo_box,
  * 
  * Sets the current active item to be the one referenced by @iter, or
  * unsets the active item if @iter is %NULL.
- *
- * @iter must correspond to a path of depth one, or be %NULL.
  * 
  * Since: 2.4
  */
