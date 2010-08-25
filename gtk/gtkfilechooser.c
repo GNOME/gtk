@@ -524,26 +524,8 @@
  */
 
 
-static void gtk_file_chooser_class_init (gpointer g_iface);
-
-GType
-gtk_file_chooser_get_type (void)
-{
-  static GType file_chooser_type = 0;
-
-  if (!file_chooser_type)
-    {
-      file_chooser_type = g_type_register_static_simple (G_TYPE_INTERFACE,
-							 I_("GtkFileChooser"),
-							 sizeof (GtkFileChooserIface),
-							 (GClassInitFunc) gtk_file_chooser_class_init,
-							 0, NULL, 0);
-      
-      g_type_interface_add_prerequisite (file_chooser_type, GTK_TYPE_WIDGET);
-    }
-
-  return file_chooser_type;
-}
+typedef GtkFileChooserIface GtkFileChooserInterface;
+G_DEFINE_INTERFACE (GtkFileChooser, gtk_file_chooser, GTK_TYPE_WIDGET);
 
 static gboolean
 confirm_overwrite_accumulator (GSignalInvocationHint *ihint,
@@ -562,9 +544,9 @@ confirm_overwrite_accumulator (GSignalInvocationHint *ihint,
 }
 
 static void
-gtk_file_chooser_class_init (gpointer g_iface)
+gtk_file_chooser_default_init (GtkFileChooserInterface *iface)
 {
-  GType iface_type = G_TYPE_FROM_INTERFACE (g_iface);
+  GType iface_type = G_TYPE_FROM_INTERFACE (iface);
 
   /**
    * GtkFileChooser::current-folder-changed
@@ -753,57 +735,57 @@ gtk_file_chooser_class_init (gpointer g_iface)
 		_gtk_marshal_ENUM__VOID,
 		GTK_TYPE_FILE_CHOOSER_CONFIRMATION, 0);
   
-  g_object_interface_install_property (g_iface,
+  g_object_interface_install_property (iface,
 				       g_param_spec_enum ("action",
 							  P_("Action"),
 							  P_("The type of operation that the file selector is performing"),
 							  GTK_TYPE_FILE_CHOOSER_ACTION,
 							  GTK_FILE_CHOOSER_ACTION_OPEN,
 							  GTK_PARAM_READWRITE));
-  g_object_interface_install_property (g_iface,
+  g_object_interface_install_property (iface,
 				       g_param_spec_object ("filter",
 							    P_("Filter"),
 							    P_("The current filter for selecting which files are displayed"),
 							    GTK_TYPE_FILE_FILTER,
 							    GTK_PARAM_READWRITE));
-  g_object_interface_install_property (g_iface,
+  g_object_interface_install_property (iface,
 				       g_param_spec_boolean ("local-only",
 							     P_("Local Only"),
 							     P_("Whether the selected file(s) should be limited to local file: URLs"),
 							     TRUE,
 							     GTK_PARAM_READWRITE));
-  g_object_interface_install_property (g_iface,
+  g_object_interface_install_property (iface,
 				       g_param_spec_object ("preview-widget",
 							    P_("Preview widget"),
 							    P_("Application supplied widget for custom previews."),
 							    GTK_TYPE_WIDGET,
 							    GTK_PARAM_READWRITE));
-  g_object_interface_install_property (g_iface,
+  g_object_interface_install_property (iface,
 				       g_param_spec_boolean ("preview-widget-active",
 							     P_("Preview Widget Active"),
 							     P_("Whether the application supplied widget for custom previews should be shown."),
 							     TRUE,
 							     GTK_PARAM_READWRITE));
-  g_object_interface_install_property (g_iface,
+  g_object_interface_install_property (iface,
 				       g_param_spec_boolean ("use-preview-label",
 							     P_("Use Preview Label"),
 							     P_("Whether to display a stock label with the name of the previewed file."),
 							     TRUE,
 							     GTK_PARAM_READWRITE));
-  g_object_interface_install_property (g_iface,
+  g_object_interface_install_property (iface,
 				       g_param_spec_object ("extra-widget",
 							    P_("Extra widget"),
 							    P_("Application supplied widget for extra options."),
 							    GTK_TYPE_WIDGET,
 							    GTK_PARAM_READWRITE));
-  g_object_interface_install_property (g_iface,
+  g_object_interface_install_property (iface,
 				       g_param_spec_boolean ("select-multiple",
 							     P_("Select Multiple"),
 							     P_("Whether to allow multiple files to be selected"),
 							     FALSE,
 							     GTK_PARAM_READWRITE));
-  
-  g_object_interface_install_property (g_iface,
+
+  g_object_interface_install_property (iface,
 				       g_param_spec_boolean ("show-hidden",
 							     P_("Show Hidden"),
 							     P_("Whether the hidden files and folders should be displayed"),
@@ -819,7 +801,7 @@ gtk_file_chooser_class_init (gpointer g_iface)
    *
    * Since: 2.8
    */
-  g_object_interface_install_property (g_iface,
+  g_object_interface_install_property (iface,
 				       g_param_spec_boolean ("do-overwrite-confirmation",
 							     P_("Do overwrite confirmation"),
 							     P_("Whether a file chooser in save mode "
@@ -836,7 +818,7 @@ gtk_file_chooser_class_init (gpointer g_iface)
    *
    * Since: 2.18
    */
-  g_object_interface_install_property (g_iface,
+  g_object_interface_install_property (iface,
 				       g_param_spec_boolean ("create-folders",
 							     P_("Allow folder creation"),
 							     P_("Whether a file chooser not in open mode "
