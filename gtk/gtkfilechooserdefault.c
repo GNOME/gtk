@@ -3191,23 +3191,15 @@ shortcuts_compute_drop_position (GtkFileChooserDefault   *impl,
 				 GtkTreeViewDropPosition *pos)
 {
   GtkTreeView *tree_view;
-  GtkTreeViewColumn *column;
-  int cell_y;
-  GdkRectangle cell;
   int row;
   int bookmarks_index;
+  GtkTreeViewDropPosition raw_pos;
 
   tree_view = GTK_TREE_VIEW (impl->browse_shortcuts_tree_view);
 
   bookmarks_index = shortcuts_get_index (impl, SHORTCUTS_BOOKMARKS);
 
-  if (!gtk_tree_view_get_path_at_pos (tree_view,
-                                      x,
-				      y - TREE_VIEW_HEADER_HEIGHT (tree_view),
-                                      path,
-                                      &column,
-                                      NULL,
-                                      &cell_y))
+  if (!gtk_tree_view_get_dest_row_at_pos (tree_view, x, y, path, &raw_pos))
     {
       row = bookmarks_index + impl->num_bookmarks - 1;
       *path = gtk_tree_path_new_from_indices (row, -1);
@@ -3216,7 +3208,6 @@ shortcuts_compute_drop_position (GtkFileChooserDefault   *impl,
     }
 
   row = *gtk_tree_path_get_indices (*path);
-  gtk_tree_view_get_background_area (tree_view, *path, column, &cell);
   gtk_tree_path_free (*path);
 
   if (row < bookmarks_index)
@@ -3231,7 +3222,11 @@ shortcuts_compute_drop_position (GtkFileChooserDefault   *impl,
     }
   else
     {
-      if (cell_y < cell.height / 2)
+      /* For dropping folders in the shortcuts pane, we don't support
+       * "drop into".  So, we cook GTK+'s idea of where things should
+       * be dropped into just "before" or "after".
+       */
+      if (pos == GTK_TREE_VIEW_DROP_BEFORE || pos == GTK_TREE_VIEW_DROP_INTO_OR_BEFORE)
 	*pos = GTK_TREE_VIEW_DROP_BEFORE;
       else
 	*pos = GTK_TREE_VIEW_DROP_AFTER;
