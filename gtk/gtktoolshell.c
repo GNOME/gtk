@@ -43,21 +43,16 @@
  * Dummy structure for accessing instances of #GtkToolShellIface.
  */
 
-GType
-gtk_tool_shell_get_type (void)
+
+typedef GtkToolShellIface GtkToolShellInterface;
+G_DEFINE_INTERFACE (GtkToolShell, gtk_tool_shell, GTK_TYPE_WIDGET);
+
+
+static void
+gtk_tool_shell_default_init (GtkToolShellInterface *iface)
 {
-  static GType type = 0;
-
-  if (!type)
-    {
-      type = g_type_register_static_simple (G_TYPE_INTERFACE, I_("GtkToolShell"),
-                                            sizeof (GtkToolShellIface),
-                                            NULL, 0, NULL, 0);
-      g_type_interface_add_prerequisite (type, GTK_TYPE_WIDGET);
-    }
-
-  return type;
 }
+
 
 /**
  * gtk_tool_shell_get_icon_size:
