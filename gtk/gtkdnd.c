@@ -3070,29 +3070,49 @@ static void
 icon_window_realize (GtkWidget *window,
 		     GdkPixbuf *pixbuf)
 {
-  GdkPixmap *pixmap;
-  GdkPixmap *mask;
+  cairo_surface_t *surface;
+  cairo_pattern_t *pattern;
+  cairo_t *cr;
 
-  gdk_pixbuf_render_pixmap_and_mask_for_colormap (pixbuf,
-						  gtk_widget_get_colormap (window),
-						  &pixmap, &mask, 128);
+  surface = gdk_window_create_similar_surface (gtk_widget_get_window (window),
+                                               CAIRO_CONTENT_COLOR,
+                                               gdk_pixbuf_get_width (pixbuf),
+                                               gdk_pixbuf_get_height (pixbuf));
 
-  gdk_window_set_back_pixmap (gtk_widget_get_window (window),
-                              pixmap, FALSE);
-  g_object_unref (pixmap);
-  
-  if (mask)
+  cr = cairo_create (surface);
+  cairo_push_group_with_content (cr, CAIRO_CONTENT_COLOR_ALPHA);
+  gdk_cairo_set_source_pixbuf (cr, pixbuf, 0, 0);
+  cairo_paint (cr);
+  cairo_set_operator (cr, CAIRO_OPERATOR_SATURATE);
+  cairo_paint (cr);
+  cairo_pop_group_to_source (cr);
+  cairo_paint (cr);
+  cairo_destroy (cr);
+
+  pattern = cairo_pattern_create_for_surface (surface);
+  gdk_window_set_background_pattern (gtk_widget_get_window (window), pattern);
+  cairo_pattern_destroy (pattern);
+
+  cairo_surface_destroy (surface);
+
+  if (gdk_pixbuf_get_has_alpha (pixbuf))
     {
       cairo_region_t *region;
-      cairo_t *cr;
 
-      /* XXX: Clean this up properly */
-      cr = gdk_cairo_create (mask);
-      region = gdk_cairo_region_create_from_surface (cairo_get_target (cr));
+      surface = cairo_image_surface_create (CAIRO_FORMAT_A1,
+                                            gdk_pixbuf_get_width (pixbuf),
+                                            gdk_pixbuf_get_height (pixbuf));
+      
+      cr = cairo_create (surface);
+      gdk_cairo_set_source_pixbuf (cr, pixbuf, 0, 0);
+      cairo_paint (cr);
       cairo_destroy (cr);
 
+      region = gdk_cairo_region_create_from_surface (surface);
       gtk_widget_shape_combine_region (window, region);
       cairo_region_destroy (region);
+
+      cairo_surface_destroy (surface);
     }
 }
 
