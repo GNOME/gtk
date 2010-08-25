@@ -509,9 +509,6 @@ gboolean _gdk_windowing_set_cairo_surface_size (cairo_surface_t *surface,
 					        int width,
 					        int height);
 
-cairo_surface_t * _gdk_windowing_create_cairo_surface (GdkDrawable *drawable,
-						       int width,
-						       int height);
 GdkWindow * _gdk_window_find_child_at (GdkWindow *window,
 				       int x, int y);
 GdkWindow * _gdk_window_find_descendant_at (GdkWindow *toplevel,

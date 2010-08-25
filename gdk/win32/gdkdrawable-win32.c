@@ -49,6 +49,9 @@
    (gcwin32->line_style == GDK_LINE_ON_OFF_DASH && gcwin32->pen_dash_offset))
 
 static cairo_surface_t *gdk_win32_ref_cairo_surface (GdkDrawable *drawable);
+static cairo_surface_t *gdk_win32_create_cairo_surface (GdkDrawable *drawable,
+                                                        int          width,
+                                                        int          height);
      
 static void gdk_win32_set_colormap   (GdkDrawable    *drawable,
 				      GdkColormap    *colormap);
@@ -77,6 +80,7 @@ _gdk_drawable_impl_win32_class_init (GdkDrawableImplWin32Class *klass)
   object_class->finalize = gdk_drawable_impl_win32_finalize;
 
   drawable_class->ref_cairo_surface = gdk_win32_ref_cairo_surface;
+  drawable_class->create_cairo_surface = gdk_win32_create_cairo_surface;
   
   drawable_class->set_colormap = gdk_win32_set_colormap;
   drawable_class->get_colormap = gdk_win32_get_colormap;
@@ -222,10 +226,10 @@ _gdk_win32_drawable_release_dc (GdkDrawable *drawable)
     }
 }
 
-cairo_surface_t *
-_gdk_windowing_create_cairo_surface (GdkDrawable *drawable,
-				     gint width,
-				     gint height)
+static cairo_surface_t *
+gdk_win32_create_cairo_surface (GdkDrawable *drawable,
+				gint width,
+				gint height)
 {
   /* width and height are determined from the DC */
   return gdk_win32_ref_cairo_surface (drawable);

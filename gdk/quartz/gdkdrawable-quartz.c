@@ -55,10 +55,10 @@ gdk_quartz_cairo_surface_destroy (void *data)
   g_free (surface_data);
 }
 
-cairo_surface_t *
-_gdk_windowing_create_cairo_surface (GdkDrawable *drawable,
-				     int          width,
-				     int          height)
+static cairo_surface_t *
+gdk_quartz_create_cairo_surface (GdkDrawable *drawable,
+				 int          width,
+				 int          height)
 {
   CGContextRef cg_context;
   GdkQuartzCairoSurfaceData *surface_data;
@@ -97,8 +97,8 @@ gdk_quartz_ref_cairo_surface (GdkDrawable *drawable)
       int width, height;
 
       gdk_drawable_get_size (drawable, &width, &height);
-      impl->cairo_surface = _gdk_windowing_create_cairo_surface (drawable,
-                                                                 width, height);
+      impl->cairo_surface = gdk_quartz_create_cairo_surface (drawable,
+                                                             width, height);
     }
   else
     cairo_surface_reference (impl->cairo_surface);
@@ -170,6 +170,7 @@ gdk_drawable_impl_quartz_class_init (GdkDrawableImplQuartzClass *klass)
   object_class->finalize = gdk_drawable_impl_quartz_finalize;
 
   drawable_class->ref_cairo_surface = gdk_quartz_ref_cairo_surface;
+  drawable_class->create_cairo_surface = gdk_quartz_create_cairo_surface;
 
   drawable_class->set_colormap = gdk_quartz_set_colormap;
   drawable_class->get_colormap = gdk_quartz_get_colormap;

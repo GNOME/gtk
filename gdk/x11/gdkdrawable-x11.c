@@ -49,6 +49,9 @@
 
 
 static cairo_surface_t *gdk_x11_ref_cairo_surface (GdkDrawable *drawable);
+static cairo_surface_t *gdk_x11_create_cairo_surface (GdkDrawable *drawable,
+                                                      int          width,
+                                                      int          height);
      
 static void gdk_x11_set_colormap   (GdkDrawable    *drawable,
                                     GdkColormap    *colormap);
@@ -73,6 +76,7 @@ _gdk_drawable_impl_x11_class_init (GdkDrawableImplX11Class *klass)
   object_class->finalize = gdk_drawable_impl_x11_finalize;
   
   drawable_class->ref_cairo_surface = gdk_x11_ref_cairo_surface;
+  drawable_class->create_cairo_surface = gdk_x11_create_cairo_surface;
 
   drawable_class->set_colormap = gdk_x11_set_colormap;
   drawable_class->get_colormap = gdk_x11_get_colormap;
@@ -470,10 +474,10 @@ _gdk_windowing_set_cairo_surface_size (cairo_surface_t *surface,
   return TRUE;
 }
 
-cairo_surface_t *
-_gdk_windowing_create_cairo_surface (GdkDrawable *drawable,
-				     int width,
-				     int height)
+static cairo_surface_t *
+gdk_x11_create_cairo_surface (GdkDrawable *drawable,
+			      int width,
+			      int height)
 {
   GdkDrawableImplX11 *impl = GDK_DRAWABLE_IMPL_X11 (drawable);
   GdkVisual *visual;
@@ -516,7 +520,7 @@ gdk_x11_ref_cairo_surface (GdkDrawable *drawable)
   
       gdk_drawable_get_size (impl->wrapper, &width, &height);
 
-      impl->cairo_surface = _gdk_windowing_create_cairo_surface (drawable, width, height);
+      impl->cairo_surface = gdk_x11_create_cairo_surface (drawable, width, height);
       
       if (impl->cairo_surface)
 	cairo_surface_set_user_data (impl->cairo_surface, &gdk_x11_cairo_key,

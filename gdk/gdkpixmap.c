@@ -185,8 +185,8 @@ gdk_pixmap_create_cairo_surface (GdkDrawable *drawable,
 				 int width,
 				 int height)
 {
-  return _gdk_windowing_create_cairo_surface (GDK_PIXMAP_OBJECT(drawable)->impl,
-					      width, height);
+  return _gdk_drawable_create_cairo_surface (GDK_PIXMAP_OBJECT(drawable)->impl,
+					     width, height);
 }
 
 static GdkScreen*
