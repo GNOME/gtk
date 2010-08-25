@@ -121,25 +121,18 @@ typedef struct {
 static GQuark quark_cache = 0;
 
 
-GType
-gtk_size_request_get_type (void)
+typedef GtkSizeRequestIface GtkSizeRequestInterface;
+G_DEFINE_INTERFACE_WITH_CODE (GtkSizeRequest,
+                              gtk_size_request,
+                              GTK_TYPE_WIDGET,
+                              quark_cache = g_quark_from_static_string ("gtk-size-request-cache"));
+
+
+static void
+gtk_size_request_default_init (GtkSizeRequestInterface *iface)
 {
-  static GType size_request_type = 0;
-
-  if (G_UNLIKELY(!size_request_type))
-    {
-      size_request_type =
-        g_type_register_static_simple (G_TYPE_INTERFACE, I_("GtkSizeRequest"),
-                                       sizeof (GtkSizeRequestIface),
-                                       NULL, 0, NULL, 0);
-
-      g_type_interface_add_prerequisite (size_request_type, GTK_TYPE_WIDGET);
-
-      quark_cache = g_quark_from_static_string ("gtk-size-request-cache");
-    }
-
-  return size_request_type;
 }
+
 
 /* looks for a cached size request for this for_size. If not
  * found, returns the oldest entry so it can be overwritten
