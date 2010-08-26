@@ -203,9 +203,6 @@ typedef enum {
 struct _GdkWindowPaint
 {
   cairo_region_t *region;
-  GdkPixmap *pixmap;
-  gint x_offset;
-  gint y_offset;
   cairo_surface_t *surface;
   guint uses_implicit : 1;
   guint flushed : 1;
@@ -2697,14 +2694,13 @@ gdk_window_begin_implicit_paint (GdkWindow *window, GdkRectangle *rect)
 
   paint = g_new (GdkWindowPaint, 1);
   paint->region = cairo_region_create (); /* Empty */
-  paint->x_offset = rect->x;
-  paint->y_offset = rect->y;
   paint->uses_implicit = FALSE;
   paint->flushed = FALSE;
-  paint->surface = NULL;
-  paint->pixmap =
-    gdk_pixmap_new (window,
-		    MAX (rect->width, 1), MAX (rect->height, 1), -1);
+  paint->surface = gdk_window_create_similar_surface (window,
+                                                      CAIRO_CONTENT_COLOR,
+		                                      MAX (rect->width, 1),
+                                                      MAX (rect->height, 1));
+  cairo_surface_set_device_offset (paint->surface, -rect->x, -rect->y);
 
   private->implicit_paint = paint;
 
@@ -2740,7 +2736,7 @@ gdk_window_flush_implicit_paint (GdkWindow *window)
       cairo_region_subtract (region, tmp_paint->region);
     }
 
-  cairo_region_translate (region, private->abs_x, private->abs_y);
+  cairo_region_translate (region, -private->abs_x, -private->abs_y);
   cairo_region_intersect (region, paint->region);
 
   if (!GDK_WINDOW_DESTROYED (window) && !cairo_region_is_empty (region))
@@ -2752,10 +2748,11 @@ gdk_window_flush_implicit_paint (GdkWindow *window)
 
       /* Some regions are valid, push these to window now */
       cr = gdk_cairo_create (private->impl);
-      gdk_cairo_set_source_pixmap (cr, paint->pixmap,
-                                   paint->x_offset, paint->y_offset);
       gdk_cairo_region (cr, region);
-      cairo_fill (cr);
+      cairo_clip (cr);
+      cairo_set_source_surface (cr, paint->surface, 0, 0);
+      cairo_set_operator (cr, CAIRO_OPERATOR_SOURCE);
+      cairo_paint (cr);
       cairo_destroy (cr);
     }
   
@@ -2785,8 +2782,7 @@ gdk_window_end_implicit_paint (GdkWindow *window)
       cr = gdk_cairo_create (private->impl);
       gdk_cairo_region (cr, paint->region);
       cairo_clip (cr);
-      gdk_cairo_set_source_pixmap (cr, paint->pixmap,
-                                   paint->x_offset, paint->y_offset);
+      cairo_set_source_surface (cr, paint->surface, 0, 0);
       cairo_set_operator (cr, CAIRO_OPERATOR_SOURCE);
       cairo_paint (cr);
       cairo_destroy (cr);
@@ -2794,7 +2790,7 @@ gdk_window_end_implicit_paint (GdkWindow *window)
   
   cairo_region_destroy (paint->region);
 
-  g_object_unref (paint->pixmap);
+  cairo_surface_destroy (paint->surface);
   g_free (paint);
 }
 
@@ -2902,7 +2898,6 @@ gdk_window_begin_paint_region (GdkWindow       *window,
   cairo_region_intersect (paint->region, private->clip_region_with_children);
   cairo_region_get_extents (paint->region, &clip_box);
 
-  /* Convert to impl coords */
   cairo_region_translate (paint->region, private->abs_x, private->abs_y);
 
   /* Mark the region as valid on the implicit paint */
@@ -2915,30 +2910,22 @@ gdk_window_begin_paint_region (GdkWindow       *window,
 
   if (implicit_paint)
     {
-      int width, height;
-
       paint->uses_implicit = TRUE;
-      paint->pixmap = g_object_ref (implicit_paint->pixmap);
-      paint->x_offset = -private->abs_x + implicit_paint->x_offset;
-      paint->y_offset = -private->abs_y + implicit_paint->y_offset;
-
-      gdk_drawable_get_size (paint->pixmap, &width, &height);
-      paint->surface = _gdk_drawable_create_cairo_surface (paint->pixmap, width, height);
+      paint->surface = cairo_surface_create_for_rectangle (implicit_paint->surface,
+                                                           private->abs_x + clip_box.x,
+                                                           private->abs_y + clip_box.y,
+			                                   MAX (clip_box.width, 1),
+                                                           MAX (clip_box.height, 1));
     }
   else
     {
       paint->uses_implicit = FALSE;
-      paint->x_offset = clip_box.x;
-      paint->y_offset = clip_box.y;
-      paint->pixmap =
-	gdk_pixmap_new (window,
-			MAX (clip_box.width, 1), MAX (clip_box.height, 1), -1);
-      paint->surface = _gdk_drawable_ref_cairo_surface (paint->pixmap);
+      paint->surface = gdk_window_create_similar_surface (window,
+                                                          CAIRO_CONTENT_COLOR,
+			                                  MAX (clip_box.width, 1),
+                                                          MAX (clip_box.height, 1));
     }
-
-  if (paint->surface)
-    cairo_surface_set_device_offset (paint->surface,
-				     -paint->x_offset, -paint->y_offset);
+  cairo_surface_set_device_offset (paint->surface, -clip_box.x, -clip_box.y);
 
   for (list = private->paint_stack; list != NULL; list = list->next)
     {
@@ -3018,8 +3005,7 @@ gdk_window_end_paint (GdkWindow *window)
       cairo_region_intersect (full_clip, paint->region);
 
       cr = gdk_cairo_create (private->impl);
-      gdk_cairo_set_source_pixmap (cr, paint->pixmap, 0, 0);
-      cairo_translate (cr, private->abs_x, private->abs_y);
+      cairo_set_source_surface (cr, paint->surface, 0, 0);
       gdk_cairo_region (cr, full_clip);
       cairo_fill (cr);
 
@@ -3028,7 +3014,6 @@ gdk_window_end_paint (GdkWindow *window)
     }
 
   cairo_surface_destroy (paint->surface);
-  g_object_unref (paint->pixmap);
   cairo_region_destroy (paint->region);
   g_free (paint);
 
@@ -3076,7 +3061,7 @@ gdk_window_free_paint_stack (GdkWindow *window)
 	  GdkWindowPaint *paint = tmp_list->data;
 
 	  if (tmp_list == private->paint_stack)
-	    g_object_unref (paint->pixmap);
+	    cairo_surface_destroy (paint->surface);
 
 	  cairo_region_destroy (paint->region);
 	  g_free (paint);
@@ -3534,9 +3519,6 @@ gdk_window_clear_backing_region_direct (GdkWindow *window,
   if (GDK_WINDOW_DESTROYED (window))
     return;
 
-  paint.x_offset = 0;
-  paint.y_offset = 0;
-  paint.pixmap = window;
   paint.surface = _gdk_drawable_ref_cairo_surface (window);
 
   cr = setup_backing_rect (window, &paint, 0, 0);
