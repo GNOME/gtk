@@ -37,7 +37,7 @@
  *
  * The idea is to take a widget and manually set the state of it,
  * add it to a GtkOffscreenWindow and then retrieve the snapshot
- * as a #GdkPixmap or #GdkPixbuf.
+ * as a #cairo_surface_t or #GdkPixbuf.
  *
  * GtkOffscreenWindow derives from #GtkWindow only as an implementation
  * detail.  Applications should not use any API specific to #GtkWindow
@@ -270,24 +270,24 @@ gtk_offscreen_window_new (void)
 }
 
 /**
- * gtk_offscreen_window_get_pixmap:
+ * gtk_offscreen_window_get_surface:
  * @offscreen: the #GtkOffscreenWindow contained widget.
  *
  * Retrieves a snapshot of the contained widget in the form of
- * a #GdkPixmap.  If you need to keep this around over window
+ * a #cairo_surface_t.  If you need to keep this around over window
  * resizes then you should add a reference to it.
  *
- * Returns: (transfer none): A #GdkPixmap pointer to the offscreen pixmap,
- *     or %NULL.
+ * Returns: (transfer none): A #cairo_surface_t pointer to the offscreen
+ *     surface, or %NULL.
  *
  * Since: 2.20
  */
-GdkPixmap *
-gtk_offscreen_window_get_pixmap (GtkOffscreenWindow *offscreen)
+cairo_surface_t *
+gtk_offscreen_window_get_surface (GtkOffscreenWindow *offscreen)
 {
   g_return_val_if_fail (GTK_IS_OFFSCREEN_WINDOW (offscreen), NULL);
 
-  return gdk_offscreen_window_get_pixmap (gtk_widget_get_window (GTK_WIDGET (offscreen)));
+  return gdk_offscreen_window_get_surface (gtk_widget_get_window (GTK_WIDGET (offscreen)));
 }
 
 /**
@@ -306,22 +306,24 @@ gtk_offscreen_window_get_pixmap (GtkOffscreenWindow *offscreen)
 GdkPixbuf *
 gtk_offscreen_window_get_pixbuf (GtkOffscreenWindow *offscreen)
 {
-  GdkPixmap *pixmap = NULL;
+  cairo_surface_t *surface;
   GdkPixbuf *pixbuf = NULL;
+  GdkWindow *window;
 
   g_return_val_if_fail (GTK_IS_OFFSCREEN_WINDOW (offscreen), NULL);
 
-  pixmap = gdk_offscreen_window_get_pixmap (gtk_widget_get_window (GTK_WIDGET (offscreen)));
+  window = gtk_widget_get_window (GTK_WIDGET (offscreen));
+  surface = gdk_offscreen_window_get_surface (window);
 
-  if (pixmap != NULL)
+  if (surface != NULL)
     {
       gint width, height;
 
-      gdk_drawable_get_size (pixmap, &width, &height);
+      gdk_drawable_get_size (window, &width, &height);
 
-      pixbuf = gdk_pixbuf_get_from_drawable (NULL, pixmap, NULL,
-                                             0, 0, 0, 0,
-                                             width, height);
+      pixbuf = gdk_pixbuf_get_from_surface (NULL, surface,
+                                            0, 0, 0, 0,
+                                            width, height);
     }
 
   return pixbuf;

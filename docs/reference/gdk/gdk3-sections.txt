@@ -530,7 +530,7 @@ GdkPointerHooks
 gdk_set_pointer_hooks
 
 <SUBSECTION>
-gdk_offscreen_window_get_pixmap
+gdk_offscreen_window_get_surface
 gdk_offscreen_window_set_embedder
 gdk_offscreen_window_get_embedder
 gdk_window_geometry_changed

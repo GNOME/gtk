@@ -846,7 +846,8 @@ GdkPointerHooks *gdk_set_pointer_hooks (const GdkPointerHooks *new_hooks);
 GdkWindow *gdk_get_default_root_window (void);
 
 /* Offscreen redirection */
-GdkPixmap *gdk_offscreen_window_get_pixmap     (GdkWindow     *window);
+cairo_surface_t *
+           gdk_offscreen_window_get_surface    (GdkWindow     *window);
 void       gdk_offscreen_window_set_embedder   (GdkWindow     *window,
 						GdkWindow     *embedder);
 GdkWindow *gdk_offscreen_window_get_embedder   (GdkWindow     *window);

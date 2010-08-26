@@ -389,15 +389,15 @@ gtk_mirror_bin_expose (GtkWidget      *widget,
       window = gtk_widget_get_window (widget);
       if (event->window == window)
         {
-          GdkPixmap *pixmap;
+          cairo_surface_t *surface;
           cairo_t *cr;
           cairo_matrix_t matrix;
           cairo_pattern_t *mask;
 
           if (bin->child && gtk_widget_get_visible (bin->child))
             {
-              pixmap = gdk_offscreen_window_get_pixmap (bin->offscreen_window);
-              gdk_drawable_get_size (pixmap, &width, &height);
+              surface = gdk_offscreen_window_get_surface (bin->offscreen_window);
+              gdk_drawable_get_size (bin->offscreen_window, &width, &height);
 
               cr = gdk_cairo_create (window);
 
@@ -407,7 +407,7 @@ gtk_mirror_bin_expose (GtkWidget      *widget,
               cairo_clip (cr);
 
               /* paint the offscreen child */
-              gdk_cairo_set_source_pixmap (cr, pixmap, 0, 0);
+              cairo_set_source_surface (cr, surface, 0, 0);
               cairo_paint (cr);
 
               cairo_restore (cr);
@@ -420,7 +420,7 @@ gtk_mirror_bin_expose (GtkWidget      *widget,
               cairo_rectangle (cr, 0, height, width, height);
               cairo_clip (cr);
 
-              gdk_cairo_set_source_pixmap (cr, pixmap, 0, height);
+              cairo_set_source_surface (cr, surface, 0, height);
 
               /* create linear gradient as mask-pattern to fade out the source */
               mask = cairo_pattern_create_linear (0.0, height, 0.0, 2*height);

@@ -30,7 +30,6 @@
 #include "gdkwindow.h"
 #include "gdkinternals.h"
 #include "gdkwindowimpl.h"
-#include "gdkpixmap.h"
 #include "gdkdrawable.h"
 #include "gdktypes.h"
 #include "gdkscreen.h"
@@ -55,7 +54,7 @@ struct _GdkOffscreenWindow
   GdkColormap *colormap;
   GdkScreen *screen;
 
-  GdkPixmap *pixmap;
+  cairo_surface_t *surface;
   GdkWindow *embedder;
 };
 
@@ -86,7 +85,7 @@ gdk_offscreen_window_finalize (GObject *object)
 {
   GdkOffscreenWindow *offscreen = GDK_OFFSCREEN_WINDOW (object);
 
-  g_object_unref (offscreen->pixmap);
+  cairo_surface_destroy (offscreen->surface);
 
   G_OBJECT_CLASS (gdk_offscreen_window_parent_class)->finalize (object);
 }
@@ -138,7 +137,7 @@ gdk_offscreen_window_ref_cairo_surface (GdkDrawable *drawable)
 {
   GdkOffscreenWindow *offscreen = GDK_OFFSCREEN_WINDOW (drawable);
 
-  return _gdk_drawable_ref_cairo_surface (offscreen->pixmap);
+  return cairo_surface_reference (offscreen->surface);
 }
 
 static GdkColormap*
@@ -241,11 +240,10 @@ _gdk_offscreen_window_new (GdkWindow     *window,
 	offscreen->colormap = gdk_colormap_new (visual, FALSE);
     }
 
-  offscreen->pixmap = gdk_pixmap_new ((GdkDrawable *)private->parent,
-				      private->width,
-				      private->height,
-				      private->depth);
-  gdk_drawable_set_colormap (offscreen->pixmap, offscreen->colormap);
+  offscreen->surface = gdk_window_create_similar_surface ((GdkWindow *)private->parent,
+                                                          CAIRO_CONTENT_COLOR,
+                                                          private->width,
+                                                          private->height);
 }
 
 static gboolean
@@ -399,19 +397,17 @@ gdk_offscreen_window_get_device_state (GdkWindow       *window,
 }
 
 /**
- * gdk_offscreen_window_get_pixmap:
+ * gdk_offscreen_window_get_surface:
  * @window: a #GdkWindow
  *
- * Gets the offscreen pixmap that an offscreen window renders into.
+ * Gets the offscreen surface that an offscreen window renders into.
  * If you need to keep this around over window resizes, you need to
  * add a reference to it.
  *
- * Returns: The offscreen pixmap, or %NULL if not offscreen
- *
- * Since: 2.18
+ * Returns: The offscreen surface, or %NULL if not offscreen
  */
-GdkPixmap *
-gdk_offscreen_window_get_pixmap (GdkWindow *window)
+cairo_surface_t *
+gdk_offscreen_window_get_surface (GdkWindow *window)
 {
   GdkWindowObject *private = (GdkWindowObject *)window;
   GdkOffscreenWindow *offscreen;
@@ -422,7 +418,7 @@ gdk_offscreen_window_get_pixmap (GdkWindow *window)
     return NULL;
 
   offscreen = GDK_OFFSCREEN_WINDOW (private->impl);
-  return offscreen->pixmap;
+  return offscreen->surface;
 }
 
 static void
@@ -450,7 +446,7 @@ gdk_offscreen_window_move_resize_internal (GdkWindow *window,
   GdkWindowObject *private = (GdkWindowObject *)window;
   GdkOffscreenWindow *offscreen;
   gint dx, dy, dw, dh;
-  GdkPixmap *old_pixmap;
+  cairo_surface_t *old_surface;
 
   offscreen = GDK_OFFSCREEN_WINDOW (private->impl);
 
@@ -478,16 +474,18 @@ gdk_offscreen_window_move_resize_internal (GdkWindow *window,
       private->width = width;
       private->height = height;
 
-      old_pixmap = offscreen->pixmap;
-      offscreen->pixmap = gdk_pixmap_new (GDK_DRAWABLE (old_pixmap),
-					  width,
-					  height,
-					  private->depth);
+      old_surface = offscreen->surface;
+      offscreen->surface = cairo_surface_create_similar (old_surface,
+                                                         cairo_surface_get_content (old_surface),
+                                                         width,
+                                                         height);
 
-      cr = gdk_cairo_create (offscreen->pixmap);
-      gdk_cairo_set_source_pixmap (cr, old_pixmap, 0, 0);
+      cr = cairo_create (offscreen->surface);
+      cairo_set_source_surface (cr, old_surface, 0, 0);
       cairo_paint (cr);
       cairo_destroy (cr);
+
+      cairo_surface_destroy (old_surface);
     }
 
   if (GDK_WINDOW_IS_MAPPED (private))
@@ -661,13 +659,10 @@ gdk_offscreen_window_translate (GdkWindow      *window,
                                 gint            dx,
                                 gint            dy)
 {
-  cairo_surface_t *surface;
+  GdkOffscreenWindow *offscreen = GDK_OFFSCREEN_WINDOW (((GdkWindowObject *) window)->impl);
   cairo_t *cr;
 
-  /* Can't use gdk_cairo_create here due to clipping */
-  surface = _gdk_drawable_ref_cairo_surface (window);
-  cr = cairo_create (surface);
-  cairo_surface_destroy (surface);
+  cr = cairo_create (offscreen->surface);
 
   area = cairo_region_copy (area);
 
@@ -679,7 +674,7 @@ gdk_offscreen_window_translate (GdkWindow      *window,
    */
   cairo_push_group (cr);
 
-  gdk_cairo_set_source_pixmap (cr, window, dx, dy);
+  cairo_set_source_surface (cr, offscreen->surface, dx, dy);
   cairo_paint (cr);
 
   cairo_pop_group_to_source (cr);

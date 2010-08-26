@@ -6,15 +6,15 @@ da_expose (GtkWidget *widget,
            gpointer user_data)
 {
   GtkOffscreenWindow *offscreen = (GtkOffscreenWindow *)user_data;
-  GdkPixmap *pixmap;
+  cairo_surface_t *surface;
   cairo_t *cr;
 
   if (gtk_widget_is_drawable (widget))
     {
-      pixmap = gtk_offscreen_window_get_pixmap (offscreen);
+      surface = gtk_offscreen_window_get_surface (offscreen);
 
       cr = gdk_cairo_create (gtk_widget_get_window (widget));
-      gdk_cairo_set_source_pixmap (cr, pixmap, 50, 50);
+      cairo_set_source_surface (cr, surface, 50, 50);
       cairo_paint (cr);
       cairo_destroy (cr);
     }

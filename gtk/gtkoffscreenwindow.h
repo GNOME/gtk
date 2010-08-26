@@ -49,11 +49,11 @@ struct _GtkOffscreenWindowClass
   GtkWindowClass parent_class;
 };
 
-GType      gtk_offscreen_window_get_type   (void) G_GNUC_CONST;
+GType            gtk_offscreen_window_get_type    (void) G_GNUC_CONST;
 
-GtkWidget *gtk_offscreen_window_new        (void);
-GdkPixmap *gtk_offscreen_window_get_pixmap (GtkOffscreenWindow *offscreen);
-GdkPixbuf *gtk_offscreen_window_get_pixbuf (GtkOffscreenWindow *offscreen);
+GtkWidget       *gtk_offscreen_window_new         (void);
+cairo_surface_t *gtk_offscreen_window_get_surface (GtkOffscreenWindow *offscreen);
+GdkPixbuf       *gtk_offscreen_window_get_pixbuf  (GtkOffscreenWindow *offscreen);
 
 G_END_DECLS
 

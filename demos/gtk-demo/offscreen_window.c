@@ -485,13 +485,13 @@ gtk_rotated_bin_expose (GtkWidget      *widget,
       window = gtk_widget_get_window (widget);
       if (event->window == window)
         {
-          GdkPixmap *pixmap;
+          cairo_surface_t *surface;
           GtkAllocation child_area;
           cairo_t *cr;
 
           if (bin->child && gtk_widget_get_visible (bin->child))
             {
-              pixmap = gdk_offscreen_window_get_pixmap (bin->offscreen_window);
+              surface = gdk_offscreen_window_get_surface (bin->offscreen_window);
               gtk_widget_get_allocation (bin->child, &child_area);
 
               cr = gdk_cairo_create (window);
@@ -508,11 +508,11 @@ gtk_rotated_bin_expose (GtkWidget      *widget,
               cairo_translate (cr, -child_area.width / 2, -child_area.height / 2);
 
               /* clip */
-              gdk_drawable_get_size (pixmap, &width, &height);
+              gdk_drawable_get_size (bin->offscreen_window, &width, &height);
               cairo_rectangle (cr, 0, 0, width, height);
               cairo_clip (cr);
               /* paint */
-              gdk_cairo_set_source_pixmap (cr, pixmap, 0, 0);
+              cairo_set_source_surface (cr, surface, 0, 0);
               cairo_paint (cr);
 
               cairo_destroy (cr);

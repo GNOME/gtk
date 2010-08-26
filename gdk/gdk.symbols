@@ -668,7 +668,7 @@ gdk_window_get_device_position
 
 #if IN_HEADER(__GDK_WINDOW_H__)
 #if IN_FILE(__GDK_OFFSCREEN_WINDOW_C__)
-gdk_offscreen_window_get_pixmap
+gdk_offscreen_window_get_surface
 gdk_offscreen_window_set_embedder
 gdk_offscreen_window_get_embedder
 #endif

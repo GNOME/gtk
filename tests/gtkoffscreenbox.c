@@ -598,19 +598,19 @@ gtk_offscreen_box_expose (GtkWidget      *widget,
       window = gtk_widget_get_window (widget);
       if (event->window == window)
 	{
-          GdkPixmap *pixmap;
+          cairo_surface_t *surface;
           GtkAllocation child_area;
           cairo_t *cr;
 	  int start_y = 0;
 
 	  if (offscreen_box->child1 && gtk_widget_get_visible (offscreen_box->child1))
 	    {
-	      pixmap = gdk_offscreen_window_get_pixmap (offscreen_box->offscreen_window1);
+	      surface = gdk_offscreen_window_get_surface (offscreen_box->offscreen_window1);
               gtk_widget_get_allocation (offscreen_box->child1, &child_area);
 
 	      cr = gdk_cairo_create (window);
 
-              gdk_cairo_set_source_pixmap (cr, pixmap, 0, 0);
+              cairo_set_source_surface (cr, surface, 0, 0);
               cairo_paint (cr);
 
               cairo_destroy (cr);
@@ -622,7 +622,7 @@ gtk_offscreen_box_expose (GtkWidget      *widget,
 	    {
               gint w, h;
 
-	      pixmap = gdk_offscreen_window_get_pixmap (offscreen_box->offscreen_window2);
+	      surface = gdk_offscreen_window_get_surface (offscreen_box->offscreen_window2);
               gtk_widget_get_allocation (offscreen_box->child2, &child_area);
 
 	      cr = gdk_cairo_create (window);
@@ -634,12 +634,12 @@ gtk_offscreen_box_expose (GtkWidget      *widget,
 	      cairo_translate (cr, -child_area.width / 2, -child_area.height / 2);
 
               /* clip */
-              gdk_drawable_get_size (pixmap, &w, &h);
+              gdk_drawable_get_size (offscreen_box->offscreen_window2, &w, &h);
               cairo_rectangle (cr, 0, 0, w, h);
               cairo_clip (cr);
 
               /* paint */
-	      gdk_cairo_set_source_pixmap (cr, pixmap, 0, 0);
+	      cairo_set_source_surface (cr, surface, 0, 0);
 	      cairo_paint (cr);
 
               cairo_destroy (cr);

@@ -3004,7 +3004,7 @@ gdk_window_end_paint (GdkWindow *window)
       full_clip = cairo_region_copy (private->clip_region_with_children);
       cairo_region_intersect (full_clip, paint->region);
 
-      cr = gdk_cairo_create (private->impl);
+      cr = gdk_cairo_create (window);
       cairo_set_source_surface (cr, paint->surface, 0, 0);
       gdk_cairo_region (cr, full_clip);
       cairo_fill (cr);
