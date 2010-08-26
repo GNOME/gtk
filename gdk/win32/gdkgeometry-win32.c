@@ -61,8 +61,6 @@ _gdk_window_move_resize_child (GdkWindow *window,
 {
   GdkWindowImplWin32 *impl;
   GdkWindowObject *obj;
-  gboolean is_move;
-  gboolean is_resize;
 
   g_return_if_fail (window != NULL);
   g_return_if_fail (GDK_IS_WINDOW (window));
@@ -70,9 +68,6 @@ _gdk_window_move_resize_child (GdkWindow *window,
   obj = GDK_WINDOW_OBJECT (window);
   impl = GDK_WINDOW_IMPL_WIN32 (obj->impl);
 
-  is_move = (x - obj->x != 0) && (y - obj->y != 0);
-  is_resize = obj->width != width && obj->height != height;
-  
   GDK_NOTE (MISC, g_print ("_gdk_window_move_resize_child: %s@%+d%+d %dx%d@%+d%+d\n",
 			   _gdk_win32_drawable_description (window),
 			   obj->x, obj->y, width, height, x, y));
@@ -96,19 +91,15 @@ _gdk_window_move_resize_child (GdkWindow *window,
   _gdk_win32_window_tmp_unset_bg (window, TRUE);
   
   GDK_NOTE (MISC, g_print ("... SetWindowPos(%p,NULL,%d,%d,%d,%d,"
-			   "NOACTIVATE|NOZORDER%s%s)\n",
+			   "NOACTIVATE|NOZORDER)\n",
 			   GDK_WINDOW_HWND (window),
 			   obj->x + obj->parent->abs_x, obj->y + obj->parent->abs_y, 
-			   width, height,
-			   (is_move ? "" : "|NOMOVE"),
-			   (is_resize ? "" : "|NOSIZE")));
+			   width, height));
 
   API_CALL (SetWindowPos, (GDK_WINDOW_HWND (window), NULL,
 			   obj->x + obj->parent->abs_x, obj->y + obj->parent->abs_y, 
 			   width, height,
-			   SWP_NOACTIVATE | SWP_NOZORDER | 
-			   (is_move ? 0 : SWP_NOMOVE) |
-			   (is_resize ? 0 : SWP_NOSIZE)));
+			   SWP_NOACTIVATE | SWP_NOZORDER));
 
   //_gdk_win32_window_tmp_reset_parent_bg (window);
   _gdk_win32_window_tmp_reset_bg (window, TRUE);
