@@ -1040,27 +1040,14 @@ recompute_visible_regions_internal (GdkWindowObject *private,
       recompute_visible_regions_internal (private->parent, TRUE, FALSE, FALSE);
     }
 
-  if (private->cairo_surface)
+  if (private->cairo_surface &&
+      (!gdk_window_has_impl (private) ||
+       !_gdk_windowing_set_cairo_surface_size (private->cairo_surface,
+                                               private->width,
+                                               private->height)))
     {
-      int width, height;
-
-      /* It would be nice if we had some cairo support here so we
-	 could set the clip rect on the cairo surface */
-      width = private->abs_x + private->width;
-      height = private->abs_y + private->height;
-
-      if (_gdk_windowing_set_cairo_surface_size (private->cairo_surface,
-                                                 width, height))
-        {
-          cairo_surface_set_device_offset (private->cairo_surface,
-                                           private->abs_x,
-                                           private->abs_y);
-        }
-      else
-        {
-          cairo_surface_destroy (private->cairo_surface);
-          private->cairo_surface = NULL;
-        }
+      cairo_surface_destroy (private->cairo_surface);
+      private->cairo_surface = NULL;
     }
 }
 
@@ -3736,7 +3723,20 @@ gdk_window_create_cairo_surface (GdkDrawable *drawable,
 				 int width,
 				 int height)
 {
-  return _gdk_drawable_ref_cairo_surface (GDK_WINDOW_OBJECT(drawable)->impl);
+  GdkWindowObject *private = GDK_WINDOW_OBJECT(drawable);
+  cairo_surface_t *surface, *subsurface;
+  
+  surface =_gdk_drawable_ref_cairo_surface (private->impl);
+  if (gdk_window_has_impl (private))
+    return surface;
+
+  subsurface = cairo_surface_create_for_rectangle (surface,
+                                                   private->abs_x,
+                                                   private->abs_y,
+                                                   width,
+                                                   height);
+  cairo_surface_destroy (surface);
+  return subsurface;
 }
 
 
@@ -3761,22 +3761,13 @@ gdk_window_ref_cairo_surface (GdkDrawable *drawable)
 
       if (!private->cairo_surface)
 	{
-	  int width, height;
-
-	  /* It would be nice if we had some cairo support here so we
-	     could set the clip rect on the cairo surface */
-	  width = private->abs_x + private->width;
-	  height = private->abs_y + private->height;
-
-	  private->cairo_surface = _gdk_drawable_create_cairo_surface (drawable, width, height);
+	  private->cairo_surface = _gdk_drawable_create_cairo_surface (drawable,
+                                                                       private->width,
+                                                                       private->height);
 
 	  if (private->cairo_surface)
 	    {
 	      private->impl_window->outstanding_surfaces++;
-
-	      cairo_surface_set_device_offset (private->cairo_surface,
-					       private->abs_x,
-					       private->abs_y);
 
 	      cairo_surface_set_user_data (private->cairo_surface, &gdk_window_cairo_key,
 					   drawable, gdk_window_cairo_surface_destroy);
