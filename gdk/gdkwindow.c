@@ -1863,6 +1863,13 @@ gdk_window_ensure_native (GdkWindow *window)
   screen = gdk_drawable_get_screen (window);
   visual = gdk_drawable_get_visual (window);
 
+  /* These fields are required in the attributes struct so we can't
+     ignore them by clearing a flag in the attributes mask */
+  attributes.wclass = private->input_only ? GDK_INPUT_ONLY : GDK_INPUT_OUTPUT;
+  attributes.width = private->width;
+  attributes.height = private->height;
+  attributes.window_type = private->window_type;
+
   attributes.colormap = gdk_drawable_get_colormap (window);
 
   old_impl = private->impl;
