@@ -33,6 +33,11 @@ G_BEGIN_DECLS
 #define GTK_IS_FILE_SYSTEM_CLASS(c)  (G_TYPE_CHECK_CLASS_TYPE    ((c), GTK_TYPE_FILE_SYSTEM))
 #define GTK_FILE_SYSTEM_GET_CLASS(o) (G_TYPE_INSTANCE_GET_CLASS  ((o), GTK_TYPE_FILE_SYSTEM, GtkFileSystemClass))
 
+typedef struct GtkFileSystem          GtkFileSystem;
+typedef struct GtkFileSystemPriv      GtkFileSystemPriv;
+typedef struct GtkFileSystemClass     GtkFileSystemClass;
+
+
 #define GTK_TYPE_FOLDER         (_gtk_folder_get_type ())
 #define GTK_FOLDER(o)           (G_TYPE_CHECK_INSTANCE_CAST ((o), GTK_TYPE_FOLDER, GtkFolder))
 #define GTK_FOLDER_CLASS(c)     (G_TYPE_CHECK_CLASS_CAST    ((c), GTK_TYPE_FOLDER, GtkFolderClass))
@@ -40,12 +45,20 @@ G_BEGIN_DECLS
 #define GTK_IS_FOLDER_CLASS(c)  (G_TYPE_CHECK_CLASS_TYPE    ((c), GTK_TYPE_FOLDER))
 #define GTK_FOLDER_GET_CLASS(o) (G_TYPE_INSTANCE_GET_CLASS  ((o), GTK_TYPE_FOLDER, GtkFolderClass))
 
-typedef struct GtkFileSystemClass GtkFileSystemClass;
-typedef struct GtkFileSystem GtkFileSystem;
-typedef struct GtkFolderClass GtkFolderClass;
-typedef struct GtkFolder GtkFolder;
+typedef struct GtkFolder          GtkFolder;
+typedef struct GtkFolderPriv      GtkFolderPriv;
+typedef struct GtkFolderClass     GtkFolderClass;
+
 typedef struct GtkFileSystemVolume GtkFileSystemVolume; /* opaque struct */
 typedef struct GtkFileSystemBookmark GtkFileSystemBookmark; /* opaque struct */
+
+
+struct GtkFileSystem
+{
+  GObject parent_object;
+
+  GtkFileSystemPriv *priv;
+};
 
 struct GtkFileSystemClass
 {
@@ -55,9 +68,12 @@ struct GtkFileSystemClass
   void (*volumes_changed)   (GtkFileSystem *file_system);
 };
 
-struct GtkFileSystem
+
+struct GtkFolder
 {
   GObject parent_object;
+
+  GtkFolderPriv *priv;
 };
 
 struct GtkFolderClass
@@ -74,10 +90,6 @@ struct GtkFolderClass
   void (*deleted)          (GtkFolder *folder);
 };
 
-struct GtkFolder
-{
-  GObject parent_object;
-};
 
 typedef void (* GtkFileSystemGetFolderCallback)    (GCancellable        *cancellable,
 						    GtkFolder           *folder,
