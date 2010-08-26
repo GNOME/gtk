@@ -42,7 +42,7 @@
 
 static GSList *all_icon_factories = NULL;
 
-struct _GtkIconFactoryPriv
+struct _GtkIconFactoryPrivate
 {
   GHashTable *icons;
 };
@@ -122,11 +122,11 @@ G_DEFINE_TYPE_WITH_CODE (GtkIconFactory, gtk_icon_factory, G_TYPE_OBJECT,
 static void
 gtk_icon_factory_init (GtkIconFactory *factory)
 {
-  GtkIconFactoryPriv *priv;
+  GtkIconFactoryPrivate *priv;
 
   factory->priv = G_TYPE_INSTANCE_GET_PRIVATE (factory,
                                                GTK_TYPE_ICON_FACTORY,
-                                               GtkIconFactoryPriv);
+                                               GtkIconFactoryPrivate);
   priv = factory->priv;
 
   priv->icons = g_hash_table_new (g_str_hash, g_str_equal);
@@ -140,7 +140,7 @@ gtk_icon_factory_class_init (GtkIconFactoryClass *klass)
 
   object_class->finalize = gtk_icon_factory_finalize;
 
-  g_type_class_add_private (klass, sizeof (GtkIconFactoryPriv));
+  g_type_class_add_private (klass, sizeof (GtkIconFactoryPrivate));
 }
 
 static void
@@ -161,7 +161,7 @@ static void
 gtk_icon_factory_finalize (GObject *object)
 {
   GtkIconFactory *factory = GTK_ICON_FACTORY (object);
-  GtkIconFactoryPriv *priv = factory->priv;
+  GtkIconFactoryPrivate *priv = factory->priv;
 
   all_icon_factories = g_slist_remove (all_icon_factories, factory);
 
@@ -219,7 +219,7 @@ gtk_icon_factory_add (GtkIconFactory *factory,
                       const gchar    *stock_id,
                       GtkIconSet     *icon_set)
 {
-  GtkIconFactoryPriv *priv = factory->priv;
+  GtkIconFactoryPrivate *priv = factory->priv;
   gpointer old_key = NULL;
   gpointer old_value = NULL;
 
@@ -262,7 +262,7 @@ GtkIconSet *
 gtk_icon_factory_lookup (GtkIconFactory *factory,
                          const gchar    *stock_id)
 {
-  GtkIconFactoryPriv *priv;
+  GtkIconFactoryPrivate *priv;
 
   g_return_val_if_fail (GTK_IS_ICON_FACTORY (factory), NULL);
   g_return_val_if_fail (stock_id != NULL, NULL);
@@ -2686,7 +2686,7 @@ _gtk_icon_factory_list_ids (void)
     {
       GList *these_ids;
       GtkIconFactory *factory = GTK_ICON_FACTORY (tmp_list->data);
-      GtkIconFactoryPriv *priv = factory->priv;
+      GtkIconFactoryPrivate *priv = factory->priv;
 
       these_ids = g_hash_table_get_keys (priv->icons);
 

@@ -46,15 +46,15 @@ G_BEGIN_DECLS
 #define GTK_IS_RANGE_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_RANGE))
 #define GTK_RANGE_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_RANGE, GtkRangeClass))
 
-typedef struct _GtkRange        GtkRange;
-typedef struct _GtkRangePriv    GtkRangePriv;
-typedef struct _GtkRangeClass   GtkRangeClass;
+typedef struct _GtkRange              GtkRange;
+typedef struct _GtkRangePrivate       GtkRangePrivate;
+typedef struct _GtkRangeClass         GtkRangeClass;
 
 struct _GtkRange
 {
   GtkWidget widget;
 
-  GtkRangePriv *priv;
+  GtkRangePrivate *priv;
 };
 
 struct _GtkRangeClass

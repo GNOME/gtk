@@ -45,16 +45,16 @@ G_BEGIN_DECLS
 #define GTK_MISC_GET_CLASS(obj)        (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_MISC, GtkMiscClass))
 
 
-typedef struct _GtkMisc	      GtkMisc;
-typedef struct _GtkMiscPriv   GtkMiscPriv;
-typedef struct _GtkMiscClass  GtkMiscClass;
+typedef struct _GtkMisc              GtkMisc;
+typedef struct _GtkMiscPrivate       GtkMiscPrivate;
+typedef struct _GtkMiscClass         GtkMiscClass;
 
 struct _GtkMisc
 {
   GtkWidget widget;
 
   /* <private> */
-  GtkMiscPriv *priv;
+  GtkMiscPrivate *priv;
 };
 
 struct _GtkMiscClass

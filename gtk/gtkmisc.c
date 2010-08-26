@@ -31,7 +31,7 @@
 #include "gtkprivate.h"
 
 
-struct _GtkMiscPriv
+struct _GtkMiscPrivate
 {
   gfloat        xalign;
   gfloat        yalign;
@@ -115,17 +115,17 @@ gtk_misc_class_init (GtkMiscClass *class)
 						     0,
 						     GTK_PARAM_READWRITE));
 
-  g_type_class_add_private (class, sizeof (GtkMiscPriv));
+  g_type_class_add_private (class, sizeof (GtkMiscPrivate));
 }
 
 static void
 gtk_misc_init (GtkMisc *misc)
 {
-  GtkMiscPriv *priv;
+  GtkMiscPrivate *priv;
 
   misc->priv = G_TYPE_INSTANCE_GET_PRIVATE (misc,
                                             GTK_TYPE_MISC,
-                                            GtkMiscPriv);
+                                            GtkMiscPrivate);
   priv = misc->priv;
 
   priv->xalign = 0.5;
@@ -141,7 +141,7 @@ gtk_misc_set_property (GObject      *object,
 		       GParamSpec   *pspec)
 {
   GtkMisc *misc = GTK_MISC (object);
-  GtkMiscPriv *priv = misc->priv;
+  GtkMiscPrivate *priv = misc->priv;
 
   switch (prop_id)
     {
@@ -170,7 +170,7 @@ gtk_misc_get_property (GObject      *object,
 		       GParamSpec   *pspec)
 {
   GtkMisc *misc = GTK_MISC (object);
-  GtkMiscPriv *priv = misc->priv;
+  GtkMiscPrivate *priv = misc->priv;
 
   switch (prop_id)
     {
@@ -197,7 +197,7 @@ gtk_misc_set_alignment (GtkMisc *misc,
 			gfloat   xalign,
 			gfloat   yalign)
 {
-  GtkMiscPriv *priv;
+  GtkMiscPrivate *priv;
   GtkWidget *widget;
 
   g_return_if_fail (GTK_IS_MISC (misc));
@@ -250,7 +250,7 @@ gtk_misc_get_alignment (GtkMisc *misc,
 		        gfloat  *xalign,
 			gfloat  *yalign)
 {
-  GtkMiscPriv *priv;
+  GtkMiscPrivate *priv;
 
   g_return_if_fail (GTK_IS_MISC (misc));
 
@@ -267,7 +267,7 @@ gtk_misc_set_padding (GtkMisc *misc,
 		      gint     xpad,
 		      gint     ypad)
 {
-  GtkMiscPriv *priv;
+  GtkMiscPrivate *priv;
   GtkRequisition *requisition;
 
   g_return_if_fail (GTK_IS_MISC (misc));
@@ -319,7 +319,7 @@ gtk_misc_get_padding (GtkMisc *misc,
 		      gint    *xpad,
 		      gint    *ypad)
 {
-  GtkMiscPriv *priv;
+  GtkMiscPrivate *priv;
 
   g_return_if_fail (GTK_IS_MISC (misc));
 

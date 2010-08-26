@@ -45,16 +45,16 @@ G_BEGIN_DECLS
 #define GTK_SCALE_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_SCALE, GtkScaleClass))
 
 
-typedef struct _GtkScale        GtkScale;
-typedef struct _GtkScalePriv    GtkScalePriv;
-typedef struct _GtkScaleClass   GtkScaleClass;
+typedef struct _GtkScale              GtkScale;
+typedef struct _GtkScalePrivate       GtkScalePrivate;
+typedef struct _GtkScaleClass         GtkScaleClass;
 
 struct _GtkScale
 {
   GtkRange range;
 
   /* <private> */
-  GtkScalePriv *priv;
+  GtkScalePrivate *priv;
 };
 
 struct _GtkScaleClass

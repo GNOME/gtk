@@ -45,16 +45,16 @@ G_BEGIN_DECLS
 #define GTK_RADIO_BUTTON_GET_CLASS(obj)        (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_RADIO_BUTTON, GtkRadioButtonClass))
 
 
-typedef struct _GtkRadioButton	     GtkRadioButton;
-typedef struct _GtkRadioButtonPriv   GtkRadioButtonPriv;
-typedef struct _GtkRadioButtonClass  GtkRadioButtonClass;
+typedef struct _GtkRadioButton              GtkRadioButton;
+typedef struct _GtkRadioButtonPrivate       GtkRadioButtonPrivate;
+typedef struct _GtkRadioButtonClass         GtkRadioButtonClass;
 
 struct _GtkRadioButton
 {
   GtkCheckButton check_button;
 
   /* <private> */
-  GtkRadioButtonPriv *priv;
+  GtkRadioButtonPrivate *priv;
 };
 
 struct _GtkRadioButtonClass

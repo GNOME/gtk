@@ -75,7 +75,7 @@
  */
 typedef struct _GtkStatusbarMsg GtkStatusbarMsg;
 
-struct _GtkStatusbarPriv
+struct _GtkStatusbarPrivate
 {
   GtkWidget     *frame;
   GtkWidget     *label;
@@ -250,20 +250,20 @@ gtk_statusbar_class_init (GtkStatusbarClass *class)
                                                               GTK_SHADOW_IN,
                                                               GTK_PARAM_READABLE));
 
-   g_type_class_add_private (class, sizeof (GtkStatusbarPriv));
+   g_type_class_add_private (class, sizeof (GtkStatusbarPrivate));
 }
 
 static void
 gtk_statusbar_init (GtkStatusbar *statusbar)
 {
-  GtkStatusbarPriv *priv;
+  GtkStatusbarPrivate *priv;
   GtkBox *box = GTK_BOX (statusbar);
   GtkWidget *message_area;
   GtkShadowType shadow_type;
 
   statusbar->priv = G_TYPE_INSTANCE_GET_PRIVATE (statusbar,
                                                  GTK_TYPE_STATUSBAR,
-                                                 GtkStatusbarPriv);
+                                                 GtkStatusbarPrivate);
   priv = statusbar->priv;
 
   gtk_widget_set_redraw_on_allocate (GTK_WIDGET (box), TRUE);
@@ -314,7 +314,7 @@ gtk_statusbar_buildable_get_internal_child (GtkBuildable *buildable,
                                             const gchar  *childname)
 {
   GtkStatusbar *statusbar = GTK_STATUSBAR (buildable);
-  GtkStatusbarPriv *priv = statusbar->priv;
+  GtkStatusbarPrivate *priv = statusbar->priv;
 
     if (strcmp (childname, "message_area") == 0)
       return G_OBJECT (gtk_bin_get_child (GTK_BIN (priv->frame)));
@@ -342,7 +342,7 @@ gtk_statusbar_update (GtkStatusbar *statusbar,
 		      guint	    context_id,
 		      const gchar  *text)
 {
-  GtkStatusbarPriv *priv;
+  GtkStatusbarPrivate *priv;
 
   g_return_if_fail (GTK_IS_STATUSBAR (statusbar));
 
@@ -370,7 +370,7 @@ guint
 gtk_statusbar_get_context_id (GtkStatusbar *statusbar,
 			      const gchar  *context_description)
 {
-  GtkStatusbarPriv *priv;
+  GtkStatusbarPrivate *priv;
   gchar *string;
   guint id;
   
@@ -412,7 +412,7 @@ gtk_statusbar_push (GtkStatusbar *statusbar,
 		    guint	  context_id,
 		    const gchar  *text)
 {
-  GtkStatusbarPriv *priv;
+  GtkStatusbarPrivate *priv;
   GtkStatusbarMsg *msg;
 
   g_return_val_if_fail (GTK_IS_STATUSBAR (statusbar), 0);
@@ -452,7 +452,7 @@ void
 gtk_statusbar_pop (GtkStatusbar *statusbar,
 		   guint	 context_id)
 {
-  GtkStatusbarPriv *priv;
+  GtkStatusbarPrivate *priv;
   GtkStatusbarMsg *msg;
 
   g_return_if_fail (GTK_IS_STATUSBAR (statusbar));
@@ -502,7 +502,7 @@ gtk_statusbar_remove (GtkStatusbar *statusbar,
 		      guint	   context_id,
 		      guint        message_id)
 {
-  GtkStatusbarPriv *priv;
+  GtkStatusbarPrivate *priv;
   GtkStatusbarMsg *msg;
 
   g_return_if_fail (GTK_IS_STATUSBAR (statusbar));
@@ -555,7 +555,7 @@ void
 gtk_statusbar_remove_all (GtkStatusbar *statusbar,
                           guint         context_id)
 {
-  GtkStatusbarPriv *priv;
+  GtkStatusbarPrivate *priv;
   GtkStatusbarMsg *msg;
   GSList *prev, *list;
 
@@ -622,7 +622,7 @@ void
 gtk_statusbar_set_has_resize_grip (GtkStatusbar *statusbar,
 				   gboolean      setting)
 {
-  GtkStatusbarPriv *priv;
+  GtkStatusbarPrivate *priv;
 
   g_return_if_fail (GTK_IS_STATUSBAR (statusbar));
 
@@ -681,7 +681,7 @@ gtk_statusbar_get_has_resize_grip (GtkStatusbar *statusbar)
 GtkWidget*
 gtk_statusbar_get_message_area (GtkStatusbar *statusbar)
 {
-  GtkStatusbarPriv *priv;
+  GtkStatusbarPrivate *priv;
 
   g_return_val_if_fail (GTK_IS_STATUSBAR (statusbar), NULL);
 
@@ -694,7 +694,7 @@ static void
 gtk_statusbar_destroy (GtkObject *object)
 {
   GtkStatusbar *statusbar = GTK_STATUSBAR (object);
-  GtkStatusbarPriv *priv = statusbar->priv;
+  GtkStatusbarPrivate *priv = statusbar->priv;
   GSList *list;
 
   for (list = priv->messages; list; list = list->next)
@@ -742,7 +742,7 @@ gtk_statusbar_get_property (GObject    *object,
 			    GParamSpec *pspec)
 {
   GtkStatusbar *statusbar = GTK_STATUSBAR (object);
-  GtkStatusbarPriv *priv = statusbar->priv;
+  GtkStatusbarPrivate *priv = statusbar->priv;
 
   switch (prop_id) 
     {
@@ -801,7 +801,7 @@ get_grip_rect (GtkStatusbar *statusbar,
 static void
 set_grip_cursor (GtkStatusbar *statusbar)
 {
-  GtkStatusbarPriv *priv = statusbar->priv;
+  GtkStatusbarPrivate *priv = statusbar->priv;
 
   if (priv->has_resize_grip && priv->grip_window != NULL)
     {
@@ -830,7 +830,7 @@ static void
 gtk_statusbar_create_window (GtkStatusbar *statusbar)
 {
   GtkWidget *widget;
-  GtkStatusbarPriv *priv = statusbar->priv;
+  GtkStatusbarPrivate *priv = statusbar->priv;
   GdkWindowAttr attributes;
   gint attributes_mask;
   GdkRectangle rect;
@@ -883,7 +883,7 @@ gtk_statusbar_state_changed (GtkWidget    *widget,
 static void
 gtk_statusbar_destroy_window (GtkStatusbar *statusbar)
 {
-  GtkStatusbarPriv *priv = statusbar->priv;
+  GtkStatusbarPrivate *priv = statusbar->priv;
 
   gdk_window_set_user_data (priv->grip_window, NULL);
   gdk_window_destroy (priv->grip_window);
@@ -894,7 +894,7 @@ static void
 gtk_statusbar_realize (GtkWidget *widget)
 {
   GtkStatusbar *statusbar = GTK_STATUSBAR (widget);
-  GtkStatusbarPriv *priv = statusbar->priv;
+  GtkStatusbarPrivate *priv = statusbar->priv;
 
   GTK_WIDGET_CLASS (gtk_statusbar_parent_class)->realize (widget);
 
@@ -906,7 +906,7 @@ static void
 gtk_statusbar_unrealize (GtkWidget *widget)
 {
   GtkStatusbar *statusbar = GTK_STATUSBAR (widget);
-  GtkStatusbarPriv *priv = statusbar->priv;
+  GtkStatusbarPrivate *priv = statusbar->priv;
 
   if (priv->grip_window)
     gtk_statusbar_destroy_window (statusbar);
@@ -918,7 +918,7 @@ static void
 gtk_statusbar_map (GtkWidget *widget)
 {
   GtkStatusbar *statusbar = GTK_STATUSBAR (widget);
-  GtkStatusbarPriv *priv = statusbar->priv;
+  GtkStatusbarPrivate *priv = statusbar->priv;
 
   GTK_WIDGET_CLASS (gtk_statusbar_parent_class)->map (widget);
 
@@ -930,7 +930,7 @@ static void
 gtk_statusbar_unmap (GtkWidget *widget)
 {
   GtkStatusbar *statusbar = GTK_STATUSBAR (widget);
-  GtkStatusbarPriv *priv = statusbar->priv;
+  GtkStatusbarPrivate *priv = statusbar->priv;
 
   if (priv->grip_window)
     gdk_window_hide (priv->grip_window);
@@ -943,7 +943,7 @@ gtk_statusbar_button_press (GtkWidget      *widget,
                             GdkEventButton *event)
 {
   GtkStatusbar *statusbar = GTK_STATUSBAR (widget);
-  GtkStatusbarPriv *priv = statusbar->priv;
+  GtkStatusbarPrivate *priv = statusbar->priv;
   GtkWidget *ancestor;
   GdkWindowEdge edge;
 
@@ -981,7 +981,7 @@ gtk_statusbar_expose_event (GtkWidget      *widget,
                             GdkEventExpose *event)
 {
   GtkStatusbar *statusbar = GTK_STATUSBAR (widget);
-  GtkStatusbarPriv *priv = statusbar->priv;
+  GtkStatusbarPrivate *priv = statusbar->priv;
   GtkStyle *style;
   GdkRectangle rect;
 
@@ -1019,7 +1019,7 @@ gtk_statusbar_size_request (GtkWidget      *widget,
 			    GtkRequisition *requisition)
 {
   GtkStatusbar *statusbar = GTK_STATUSBAR (widget);
-  GtkStatusbarPriv *priv = statusbar->priv;
+  GtkStatusbarPrivate *priv = statusbar->priv;
   GtkShadowType shadow_type;
 
   gtk_widget_style_get (GTK_WIDGET (statusbar), "shadow-type", &shadow_type, NULL);  
@@ -1034,7 +1034,7 @@ gtk_statusbar_size_request (GtkWidget      *widget,
 static gboolean
 has_extra_children (GtkStatusbar *statusbar)
 {
-  GtkStatusbarPriv *priv = statusbar->priv;
+  GtkStatusbarPrivate *priv = statusbar->priv;
   GtkPackType child_pack_type, frame_pack_type;
   GtkWidget *child, *frame;
   GList *l, *children;
@@ -1084,7 +1084,7 @@ gtk_statusbar_size_allocate  (GtkWidget     *widget,
                               GtkAllocation *allocation)
 {
   GtkStatusbar *statusbar = GTK_STATUSBAR (widget);
-  GtkStatusbarPriv *priv = statusbar->priv;
+  GtkStatusbarPrivate *priv = statusbar->priv;
   gboolean extra_children = FALSE;
   GdkRectangle rect;
 
@@ -1166,7 +1166,7 @@ label_selectable_changed (GtkWidget  *label,
 			  gpointer    data)
 {
   GtkStatusbar *statusbar = GTK_STATUSBAR (data);
-  GtkStatusbarPriv *priv = statusbar->priv;
+  GtkStatusbarPrivate *priv = statusbar->priv;
 
   if (statusbar &&
       priv->has_resize_grip && priv->grip_window)

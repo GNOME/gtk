@@ -53,7 +53,7 @@
 #include "gtkprivate.h"
 
 
-struct _GtkLabelPriv
+struct _GtkLabelPrivate
 {
   GtkLabelSelectionInfo *select_info;
   GtkWidget *mnemonic_widget;
@@ -906,7 +906,7 @@ gtk_label_class_init (GtkLabelClass *class)
 						       TRUE,
 						       GTK_PARAM_READWRITE));
 
-  g_type_class_add_private (class, sizeof (GtkLabelPriv));
+  g_type_class_add_private (class, sizeof (GtkLabelPrivate));
 }
 
 static void 
@@ -980,7 +980,7 @@ gtk_label_get_property (GObject     *object,
 			GParamSpec  *pspec)
 {
   GtkLabel *label = GTK_LABEL (object);
-  GtkLabelPriv *priv = label->priv;
+  GtkLabelPrivate *priv = label->priv;
 
   switch (prop_id)
     {
@@ -1061,11 +1061,11 @@ gtk_label_get_property (GObject     *object,
 static void
 gtk_label_init (GtkLabel *label)
 {
-  GtkLabelPriv *priv;
+  GtkLabelPrivate *priv;
 
   label->priv = G_TYPE_INSTANCE_GET_PRIVATE (label,
                                              GTK_TYPE_LABEL,
-                                             GtkLabelPriv);
+                                             GtkLabelPrivate);
   priv = label->priv;
 
   gtk_widget_set_has_window (GTK_WIDGET (label), FALSE);
@@ -1485,7 +1485,7 @@ gtk_label_mnemonic_activate (GtkWidget *widget,
 			     gboolean   group_cycling)
 {
   GtkLabel *label = GTK_LABEL (widget);
-  GtkLabelPriv *priv = label->priv;
+  GtkLabelPrivate *priv = label->priv;
   GtkWidget *parent;
 
   if (priv->mnemonic_widget)
@@ -1520,7 +1520,7 @@ static void
 gtk_label_setup_mnemonic (GtkLabel *label,
 			  guint     last_key)
 {
-  GtkLabelPriv *priv = label->priv;
+  GtkLabelPrivate *priv = label->priv;
   GtkWidget *widget = GTK_WIDGET (label);
   GtkWidget *toplevel;
   GtkWidget *mnemonic_menu;
@@ -1584,7 +1584,7 @@ gtk_label_hierarchy_changed (GtkWidget *widget,
 			     GtkWidget *old_toplevel)
 {
   GtkLabel *label = GTK_LABEL (widget);
-  GtkLabelPriv *priv = label->priv;
+  GtkLabelPrivate *priv = label->priv;
 
   gtk_label_setup_mnemonic (label, priv->mnemonic_keyval);
 }
@@ -1632,7 +1632,7 @@ mnemonics_visible_apply (GtkWidget *widget,
                          gboolean   mnemonics_visible)
 {
   GtkLabel *label = GTK_LABEL (widget);
-  GtkLabelPriv *priv = label->priv;
+  GtkLabelPrivate *priv = label->priv;
 
   mnemonics_visible = mnemonics_visible != FALSE;
 
@@ -1717,7 +1717,7 @@ label_mnemonic_widget_weak_notify (gpointer      data,
 				   GObject      *where_the_object_was)
 {
   GtkLabel *label = data;
-  GtkLabelPriv *priv = label->priv;
+  GtkLabelPrivate *priv = label->priv;
 
   priv->mnemonic_widget = NULL;
   g_object_notify (G_OBJECT (label), "mnemonic-widget");
@@ -1747,7 +1747,7 @@ void
 gtk_label_set_mnemonic_widget (GtkLabel  *label,
 			       GtkWidget *widget)
 {
-  GtkLabelPriv *priv;
+  GtkLabelPrivate *priv;
 
   g_return_if_fail (GTK_IS_LABEL (label));
 
@@ -1815,7 +1815,7 @@ static void
 gtk_label_set_text_internal (GtkLabel *label,
 			     gchar    *str)
 {
-  GtkLabelPriv *priv = label->priv;
+  GtkLabelPrivate *priv = label->priv;
 
   g_free (priv->text);
 
@@ -1828,7 +1828,7 @@ static void
 gtk_label_set_label_internal (GtkLabel *label,
 			      gchar    *str)
 {
-  GtkLabelPriv *priv = label->priv;
+  GtkLabelPrivate *priv = label->priv;
 
   g_free (priv->label);
 
@@ -1841,7 +1841,7 @@ static void
 gtk_label_set_use_markup_internal (GtkLabel *label,
 				   gboolean  val)
 {
-  GtkLabelPriv *priv = label->priv;
+  GtkLabelPrivate *priv = label->priv;
 
   val = val != FALSE;
   if (priv->use_markup != val)
@@ -1856,7 +1856,7 @@ static void
 gtk_label_set_use_underline_internal (GtkLabel *label,
 				      gboolean val)
 {
-  GtkLabelPriv *priv = label->priv;
+  GtkLabelPrivate *priv = label->priv;
 
   val = val != FALSE;
   if (priv->use_underline != val)
@@ -1870,7 +1870,7 @@ gtk_label_set_use_underline_internal (GtkLabel *label,
 static void
 gtk_label_compose_effective_attrs (GtkLabel *label)
 {
-  GtkLabelPriv      *priv = label->priv;
+  GtkLabelPrivate      *priv = label->priv;
   PangoAttrIterator *iter;
   PangoAttribute    *attr;
   GSList            *iter_attrs, *l;
@@ -1905,7 +1905,7 @@ static void
 gtk_label_set_attributes_internal (GtkLabel      *label,
 				   PangoAttrList *attrs)
 {
-  GtkLabelPriv *priv = label->priv;
+  GtkLabelPrivate *priv = label->priv;
 
   if (attrs)
     pango_attr_list_ref (attrs);
@@ -1924,7 +1924,7 @@ gtk_label_set_attributes_internal (GtkLabel      *label,
 static void
 gtk_label_recalculate (GtkLabel *label)
 {
-  GtkLabelPriv *priv = label->priv;
+  GtkLabelPrivate *priv = label->priv;
   guint keyval = priv->mnemonic_keyval;
 
   if (priv->use_markup)
@@ -2095,7 +2095,7 @@ start_element_handler (GMarkupParseContext  *context,
                        gpointer              user_data,
                        GError              **error)
 {
-  GtkLabelPriv *priv;
+  GtkLabelPrivate *priv;
   UriParserData *pdata = user_data;
 
   if (strcmp (element_name, "a") == 0)
@@ -2347,7 +2347,7 @@ failed:
 static void
 gtk_label_ensure_has_tooltip (GtkLabel *label)
 {
-  GtkLabelPriv *priv = label->priv;
+  GtkLabelPrivate *priv = label->priv;
   GList *l;
   gboolean has_tooltip = FALSE;
 
@@ -2369,7 +2369,7 @@ gtk_label_set_markup_internal (GtkLabel    *label,
                                const gchar *str,
                                gboolean     with_uline)
 {
-  GtkLabelPriv *priv = label->priv;
+  GtkLabelPrivate *priv = label->priv;
   gchar *text = NULL;
   GError *error = NULL;
   PangoAttrList *attrs = NULL;
@@ -2477,7 +2477,7 @@ void
 gtk_label_set_markup (GtkLabel    *label,
                       const gchar *str)
 {
-  GtkLabelPriv *priv;
+  GtkLabelPrivate *priv;
 
   g_return_if_fail (GTK_IS_LABEL (label));
 
@@ -2511,7 +2511,7 @@ void
 gtk_label_set_markup_with_mnemonic (GtkLabel    *label,
 				    const gchar *str)
 {
-  GtkLabelPriv *priv;
+  GtkLabelPrivate *priv;
 
   g_return_if_fail (GTK_IS_LABEL (label));
 
@@ -2551,7 +2551,7 @@ static PangoAttrList *
 gtk_label_pattern_to_attrs (GtkLabel      *label,
 			    const gchar   *pattern)
 {
-  GtkLabelPriv *priv = label->priv;
+  GtkLabelPrivate *priv = label->priv;
   const char *start;
   const char *p = priv->text;
   const char *q = pattern;
@@ -2593,7 +2593,7 @@ gtk_label_set_pattern_internal (GtkLabel    *label,
 				const gchar *pattern,
                                 gboolean     is_mnemonic)
 {
-  GtkLabelPriv *priv = label->priv;
+  GtkLabelPrivate *priv = label->priv;
   PangoAttrList *attrs;
   gboolean enable_mnemonics;
   gboolean auto_mnemonics;
@@ -2629,7 +2629,7 @@ void
 gtk_label_set_pattern (GtkLabel	   *label,
 		       const gchar *pattern)
 {
-  GtkLabelPriv *priv = label->priv;
+  GtkLabelPrivate *priv = label->priv;
 
   g_return_if_fail (GTK_IS_LABEL (label));
 
@@ -2666,7 +2666,7 @@ void
 gtk_label_set_justify (GtkLabel        *label,
 		       GtkJustification jtype)
 {
-  GtkLabelPriv *priv;
+  GtkLabelPrivate *priv;
 
   g_return_if_fail (GTK_IS_LABEL (label));
   g_return_if_fail (jtype >= GTK_JUSTIFY_LEFT && jtype <= GTK_JUSTIFY_FILL);
@@ -2715,7 +2715,7 @@ void
 gtk_label_set_ellipsize (GtkLabel          *label,
 			 PangoEllipsizeMode mode)
 {
-  GtkLabelPriv *priv;
+  GtkLabelPrivate *priv;
 
   g_return_if_fail (GTK_IS_LABEL (label));
   g_return_if_fail (mode >= PANGO_ELLIPSIZE_NONE && mode <= PANGO_ELLIPSIZE_END);
@@ -2765,7 +2765,7 @@ void
 gtk_label_set_width_chars (GtkLabel *label,
 			   gint      n_chars)
 {
-  GtkLabelPriv *priv;
+  GtkLabelPrivate *priv;
 
   g_return_if_fail (GTK_IS_LABEL (label));
 
@@ -2812,7 +2812,7 @@ void
 gtk_label_set_max_width_chars (GtkLabel *label,
 			       gint      n_chars)
 {
-  GtkLabelPriv *priv;
+  GtkLabelPrivate *priv;
 
   g_return_if_fail (GTK_IS_LABEL (label));
 
@@ -2866,7 +2866,7 @@ void
 gtk_label_set_line_wrap (GtkLabel *label,
 			 gboolean  wrap)
 {
-  GtkLabelPriv *priv;
+  GtkLabelPrivate *priv;
 
   g_return_if_fail (GTK_IS_LABEL (label));
 
@@ -2916,7 +2916,7 @@ void
 gtk_label_set_line_wrap_mode (GtkLabel *label,
 			      PangoWrapMode wrap_mode)
 {
-  GtkLabelPriv *priv;
+  GtkLabelPrivate *priv;
 
   g_return_if_fail (GTK_IS_LABEL (label));
 
@@ -2963,7 +2963,7 @@ static void
 gtk_label_finalize (GObject *object)
 {
   GtkLabel *label = GTK_LABEL (object);
-  GtkLabelPriv *priv = label->priv;
+  GtkLabelPrivate *priv = label->priv;
 
   g_free (priv->label);
   g_free (priv->text);
@@ -2986,7 +2986,7 @@ gtk_label_finalize (GObject *object)
 static void
 gtk_label_clear_layout (GtkLabel *label)
 {
-  GtkLabelPriv *priv = label->priv;
+  GtkLabelPrivate *priv = label->priv;
 
   if (priv->layout)
     {
@@ -3004,7 +3004,7 @@ get_label_width (GtkLabel *label,
 		 gint     *natural)
 {
   GtkWidgetAuxInfo *aux_info;
-  GtkLabelPriv     *priv;
+  GtkLabelPrivate     *priv;
   PangoLayout      *layout;
   PangoContext     *context;
   PangoFontMetrics *metrics;
@@ -3111,7 +3111,7 @@ get_label_width (GtkLabel *label,
 static void
 gtk_label_invalidate_wrap_width (GtkLabel *label)
 {
-  GtkLabelPriv *priv = label->priv;
+  GtkLabelPrivate *priv = label->priv;
 
   priv->wrap_width = -1;
 }
@@ -3119,7 +3119,7 @@ gtk_label_invalidate_wrap_width (GtkLabel *label)
 static gint
 get_label_wrap_width (GtkLabel *label)
 {
-  GtkLabelPriv *priv = label->priv;
+  GtkLabelPrivate *priv = label->priv;
 
   if (priv->wrap_width < 0)
     {
@@ -3167,7 +3167,7 @@ get_label_wrap_width (GtkLabel *label)
 static void
 gtk_label_ensure_layout (GtkLabel *label, gboolean guess_wrap_width)
 {
-  GtkLabelPriv *priv = label->priv;
+  GtkLabelPrivate *priv = label->priv;
   GtkWidget *widget;
   PangoRectangle logical_rect;
   gboolean rtl;
@@ -3382,7 +3382,7 @@ get_size_for_allocation (GtkLabel        *label,
                          gint            *minimum_size,
                          gint            *natural_size)
 {
-  GtkLabelPriv *priv = label->priv;
+  GtkLabelPrivate *priv = label->priv;
   PangoLayout *layout;
   GtkWidgetAuxInfo *aux_info =
     _gtk_widget_get_aux_info (GTK_WIDGET (label), FALSE);
@@ -3425,7 +3425,7 @@ gtk_label_get_size (GtkSizeRequest *widget,
 		    gint           *natural_size)
 {
   GtkLabel      *label = GTK_LABEL (widget);
-  GtkLabelPriv  *priv = label->priv;
+  GtkLabelPrivate  *priv = label->priv;
   PangoRectangle required_rect;
   PangoRectangle natural_rect;
   gint           xpad, ypad;
@@ -3589,7 +3589,7 @@ gtk_label_get_width_for_height (GtkSizeRequest *widget,
                                 gint           *natural_width)
 {
   GtkLabel *label = GTK_LABEL (widget);
-  GtkLabelPriv *priv = label->priv;
+  GtkLabelPrivate *priv = label->priv;
 
   if (priv->wrap && (priv->angle == 90 || priv->angle == 270))
     {
@@ -3621,7 +3621,7 @@ gtk_label_get_height_for_width (GtkSizeRequest *widget,
                                 gint           *natural_height)
 {
   GtkLabel *label = GTK_LABEL (widget);
-  GtkLabelPriv *priv = label->priv;
+  GtkLabelPrivate *priv = label->priv;
 
   if (priv->wrap && (priv->angle == 0 || priv->angle == 180 || priv->angle == 360))
     {
@@ -3651,7 +3651,7 @@ gtk_label_size_allocate (GtkWidget     *widget,
                          GtkAllocation *allocation)
 {
   GtkLabel *label = GTK_LABEL (widget);
-  GtkLabelPriv *priv = label->priv;
+  GtkLabelPrivate *priv = label->priv;
 
   GTK_WIDGET_CLASS (gtk_label_parent_class)->size_allocate (widget, allocation);
 
@@ -3753,7 +3753,7 @@ gtk_label_size_allocate (GtkWidget     *widget,
 static void
 gtk_label_update_cursor (GtkLabel *label)
 {
-  GtkLabelPriv *priv = label->priv;
+  GtkLabelPrivate *priv = label->priv;
   GtkWidget *widget;
 
   if (!priv->select_info)
@@ -3792,7 +3792,7 @@ gtk_label_state_changed (GtkWidget   *widget,
                          GtkStateType prev_state)
 {
   GtkLabel *label = GTK_LABEL (widget);
-  GtkLabelPriv *priv = label->priv;
+  GtkLabelPrivate *priv = label->priv;
 
   if (priv->select_info)
     {
@@ -3820,7 +3820,7 @@ gtk_label_direction_changed (GtkWidget        *widget,
 			     GtkTextDirection previous_dir)
 {
   GtkLabel *label = GTK_LABEL (widget);
-  GtkLabelPriv *priv = label->priv;
+  GtkLabelPrivate *priv = label->priv;
 
   if (priv->layout)
     pango_layout_context_changed (priv->layout);
@@ -3836,7 +3836,7 @@ get_layout_location (GtkLabel  *label,
   GtkAllocation allocation;
   GtkMisc *misc;
   GtkWidget *widget;
-  GtkLabelPriv *priv;
+  GtkLabelPrivate *priv;
   gint req_width, x, y;
   gint req_height;
   gint xpad, ypad;
@@ -3930,7 +3930,7 @@ draw_insertion_cursor (GtkLabel      *label,
 static PangoDirection
 get_cursor_direction (GtkLabel *label)
 {
-  GtkLabelPriv *priv = label->priv;
+  GtkLabelPrivate *priv = label->priv;
   GSList *l;
 
   g_assert (priv->select_info);
@@ -3958,7 +3958,7 @@ get_cursor_direction (GtkLabel *label)
 static void
 gtk_label_draw_cursor (GtkLabel  *label, gint xoffset, gint yoffset)
 {
-  GtkLabelPriv *priv = label->priv;
+  GtkLabelPrivate *priv = label->priv;
   GtkWidget *widget;
 
   if (priv->select_info == NULL)
@@ -4037,7 +4037,7 @@ gtk_label_draw_cursor (GtkLabel  *label, gint xoffset, gint yoffset)
 static GtkLabelLink *
 gtk_label_get_focus_link (GtkLabel *label)
 {
-  GtkLabelPriv *priv = label->priv;
+  GtkLabelPrivate *priv = label->priv;
   GtkLabelSelectionInfo *info = priv->select_info;
   GList *l;
 
@@ -4063,7 +4063,7 @@ gtk_label_expose (GtkWidget      *widget,
 		  GdkEventExpose *event)
 {
   GtkLabel *label = GTK_LABEL (widget);
-  GtkLabelPriv *priv = label->priv;
+  GtkLabelPrivate *priv = label->priv;
   GtkLabelSelectionInfo *info = priv->select_info;
   GtkStyle *style;
   GdkWindow *window;
@@ -4301,7 +4301,7 @@ static void
 gtk_label_set_uline_text_internal (GtkLabel    *label,
 				   const gchar *str)
 {
-  GtkLabelPriv *priv = label->priv;
+  GtkLabelPrivate *priv = label->priv;
   guint accel_key = GDK_VoidSymbol;
   gchar *new_str;
   gchar *pattern;
@@ -4355,7 +4355,7 @@ static void
 gtk_label_realize (GtkWidget *widget)
 {
   GtkLabel *label = GTK_LABEL (widget);
-  GtkLabelPriv *priv = label->priv;
+  GtkLabelPrivate *priv = label->priv;
 
   GTK_WIDGET_CLASS (gtk_label_parent_class)->realize (widget);
 
@@ -4367,7 +4367,7 @@ static void
 gtk_label_unrealize (GtkWidget *widget)
 {
   GtkLabel *label = GTK_LABEL (widget);
-  GtkLabelPriv *priv = label->priv;
+  GtkLabelPrivate *priv = label->priv;
 
   if (priv->select_info)
     gtk_label_destroy_window (label);
@@ -4379,7 +4379,7 @@ static void
 gtk_label_map (GtkWidget *widget)
 {
   GtkLabel *label = GTK_LABEL (widget);
-  GtkLabelPriv *priv = label->priv;
+  GtkLabelPrivate *priv = label->priv;
 
   GTK_WIDGET_CLASS (gtk_label_parent_class)->map (widget);
 
@@ -4391,7 +4391,7 @@ static void
 gtk_label_unmap (GtkWidget *widget)
 {
   GtkLabel *label = GTK_LABEL (widget);
-  GtkLabelPriv *priv = label->priv;
+  GtkLabelPrivate *priv = label->priv;
 
   if (priv->select_info)
     gdk_window_hide (priv->select_info->window);
@@ -4462,7 +4462,7 @@ get_layout_index (GtkLabel *label,
                   gint      y,
                   gint     *index)
 {
-  GtkLabelPriv *priv = label->priv;
+  GtkLabelPrivate *priv = label->priv;
   gint trailing = 0;
   const gchar *cluster;
   const gchar *cluster_end;
@@ -4497,7 +4497,7 @@ get_layout_index (GtkLabel *label,
 static void
 gtk_label_select_word (GtkLabel *label)
 {
-  GtkLabelPriv *priv = label->priv;
+  GtkLabelPrivate *priv = label->priv;
   gint min, max;
 
   gint start_index = gtk_label_move_backward_word (label, priv->select_info->selection_end);
@@ -4518,7 +4518,7 @@ static void
 gtk_label_grab_focus (GtkWidget *widget)
 {
   GtkLabel *label = GTK_LABEL (widget);
-  GtkLabelPriv *priv = label->priv;
+  GtkLabelPrivate *priv = label->priv;
   gboolean select_on_focus;
   GtkLabelLink *link;
 
@@ -4553,7 +4553,7 @@ gtk_label_focus (GtkWidget        *widget,
                  GtkDirectionType  direction)
 {
   GtkLabel *label = GTK_LABEL (widget);
-  GtkLabelPriv *priv = label->priv;
+  GtkLabelPrivate *priv = label->priv;
   GtkLabelSelectionInfo *info = priv->select_info;
   GtkLabelLink *focus_link;
   GList *l;
@@ -4663,7 +4663,7 @@ gtk_label_button_press (GtkWidget      *widget,
                         GdkEventButton *event)
 {
   GtkLabel *label = GTK_LABEL (widget);
-  GtkLabelPriv *priv = label->priv;
+  GtkLabelPrivate *priv = label->priv;
   GtkLabelSelectionInfo *info = priv->select_info;
   gint index = 0;
   gint min, max;
@@ -4770,7 +4770,7 @@ gtk_label_button_release (GtkWidget      *widget,
 
 {
   GtkLabel *label = GTK_LABEL (widget);
-  GtkLabelPriv *priv = label->priv;
+  GtkLabelPrivate *priv = label->priv;
   GtkLabelSelectionInfo *info = priv->select_info;
   gint index;
 
@@ -4809,7 +4809,7 @@ gtk_label_button_release (GtkWidget      *widget,
 static void
 connect_mnemonics_visible_notify (GtkLabel *label)
 {
-  GtkLabelPriv *priv = label->priv;
+  GtkLabelPrivate *priv = label->priv;
   GtkWidget *toplevel;
   gboolean connected;
 
@@ -4844,7 +4844,7 @@ drag_begin_cb (GtkWidget      *widget,
                gpointer        data)
 {
   GtkLabel *label = GTK_LABEL (widget);
-  GtkLabelPriv *priv = label->priv;
+  GtkLabelPrivate *priv = label->priv;
   GdkPixmap *pixmap = NULL;
 
   g_signal_handlers_disconnect_by_func (widget, drag_begin_cb, NULL);
@@ -4892,7 +4892,7 @@ gtk_label_motion (GtkWidget      *widget,
                   GdkEventMotion *event)
 {
   GtkLabel *label = GTK_LABEL (widget);
-  GtkLabelPriv *priv = label->priv;
+  GtkLabelPrivate *priv = label->priv;
   GtkLabelSelectionInfo *info = priv->select_info;
   gint index;
 
@@ -5028,7 +5028,7 @@ gtk_label_leave_notify (GtkWidget        *widget,
                         GdkEventCrossing *event)
 {
   GtkLabel *label = GTK_LABEL (widget);
-  GtkLabelPriv *priv = label->priv;
+  GtkLabelPrivate *priv = label->priv;
 
   if (priv->select_info)
     {
@@ -5046,7 +5046,7 @@ gtk_label_leave_notify (GtkWidget        *widget,
 static void
 gtk_label_create_window (GtkLabel *label)
 {
-  GtkLabelPriv *priv = label->priv;
+  GtkLabelPrivate *priv = label->priv;
   GtkAllocation allocation;
   GtkWidget *widget;
   GdkWindowAttr attributes;
@@ -5095,7 +5095,7 @@ gtk_label_create_window (GtkLabel *label)
 static void
 gtk_label_destroy_window (GtkLabel *label)
 {
-  GtkLabelPriv *priv = label->priv;
+  GtkLabelPrivate *priv = label->priv;
 
   g_assert (priv->select_info);
 
@@ -5110,7 +5110,7 @@ gtk_label_destroy_window (GtkLabel *label)
 static void
 gtk_label_ensure_select_info (GtkLabel *label)
 {
-  GtkLabelPriv *priv = label->priv;
+  GtkLabelPrivate *priv = label->priv;
 
   if (priv->select_info == NULL)
     {
@@ -5129,7 +5129,7 @@ gtk_label_ensure_select_info (GtkLabel *label)
 static void
 gtk_label_clear_select_info (GtkLabel *label)
 {
-  GtkLabelPriv *priv = label->priv;
+  GtkLabelPrivate *priv = label->priv;
 
   if (priv->select_info == NULL)
     return;
@@ -5157,7 +5157,7 @@ void
 gtk_label_set_selectable (GtkLabel *label,
                           gboolean  setting)
 {
-  GtkLabelPriv *priv;
+  GtkLabelPrivate *priv;
   gboolean old_setting;
 
   g_return_if_fail (GTK_IS_LABEL (label));
@@ -5207,7 +5207,7 @@ gtk_label_set_selectable (GtkLabel *label,
 gboolean
 gtk_label_get_selectable (GtkLabel *label)
 {
-  GtkLabelPriv *priv;
+  GtkLabelPrivate *priv;
 
   g_return_val_if_fail (GTK_IS_LABEL (label), FALSE);
 
@@ -5233,7 +5233,7 @@ void
 gtk_label_set_angle (GtkLabel *label,
 		     gdouble   angle)
 {
-  GtkLabelPriv *priv;
+  GtkLabelPrivate *priv;
 
   g_return_if_fail (GTK_IS_LABEL (label));
 
@@ -5280,7 +5280,7 @@ static void
 gtk_label_set_selection_text (GtkLabel         *label,
 			      GtkSelectionData *selection_data)
 {
-  GtkLabelPriv *priv = label->priv;
+  GtkLabelPrivate *priv = label->priv;
 
   if ((priv->select_info->selection_anchor !=
        priv->select_info->selection_end) &&
@@ -5332,7 +5332,7 @@ clear_text_callback (GtkClipboard     *clipboard,
                      gpointer          user_data_or_owner)
 {
   GtkLabel *label;
-  GtkLabelPriv *priv;
+  GtkLabelPrivate *priv;
 
   label = GTK_LABEL (user_data_or_owner);
   priv = label->priv;
@@ -5350,7 +5350,7 @@ gtk_label_select_region_index (GtkLabel *label,
                                gint      anchor_index,
                                gint      end_index)
 {
-  GtkLabelPriv *priv;
+  GtkLabelPrivate *priv;
 
   g_return_if_fail (GTK_IS_LABEL (label));
 
@@ -5420,7 +5420,7 @@ gtk_label_select_region  (GtkLabel *label,
                           gint      start_offset,
                           gint      end_offset)
 {
-  GtkLabelPriv *priv;
+  GtkLabelPrivate *priv;
 
   g_return_if_fail (GTK_IS_LABEL (label));
 
@@ -5456,7 +5456,7 @@ gtk_label_get_selection_bounds (GtkLabel  *label,
                                 gint      *start,
                                 gint      *end)
 {
-  GtkLabelPriv *priv;
+  GtkLabelPrivate *priv;
 
   g_return_val_if_fail (GTK_IS_LABEL (label), FALSE);
 
@@ -5527,7 +5527,7 @@ gtk_label_get_selection_bounds (GtkLabel  *label,
 PangoLayout*
 gtk_label_get_layout (GtkLabel *label)
 {
-  GtkLabelPriv *priv;
+  GtkLabelPrivate *priv;
 
   g_return_val_if_fail (GTK_IS_LABEL (label), NULL);
 
@@ -5651,7 +5651,7 @@ void
 gtk_label_set_single_line_mode (GtkLabel *label,
                                 gboolean single_line_mode)
 {
-  GtkLabelPriv *priv;
+  GtkLabelPrivate *priv;
 
   g_return_if_fail (GTK_IS_LABEL (label));
 
@@ -5699,7 +5699,7 @@ get_better_cursor (GtkLabel *label,
 		   gint      *x,
 		   gint      *y)
 {
-  GtkLabelPriv *priv = label->priv;
+  GtkLabelPrivate *priv = label->priv;
   GdkKeymap *keymap = gdk_keymap_get_for_display (gtk_widget_get_display (GTK_WIDGET (label)));
   PangoDirection keymap_direction = gdk_keymap_get_direction (keymap);
   PangoDirection cursor_direction = get_cursor_direction (label);
@@ -5741,7 +5741,7 @@ gtk_label_move_logically (GtkLabel *label,
 			  gint      start,
 			  gint      count)
 {
-  GtkLabelPriv *priv = label->priv;
+  GtkLabelPrivate *priv = label->priv;
   gint offset = g_utf8_pointer_to_offset (priv->text,
 					  priv->text + start);
 
@@ -5785,7 +5785,7 @@ gtk_label_move_visually (GtkLabel *label,
 			 gint      start,
 			 gint      count)
 {
-  GtkLabelPriv *priv = label->priv;
+  GtkLabelPrivate *priv = label->priv;
   gint index;
 
   index = start;
@@ -5839,7 +5839,7 @@ static gint
 gtk_label_move_forward_word (GtkLabel *label,
 			     gint      start)
 {
-  GtkLabelPriv *priv = label->priv;
+  GtkLabelPrivate *priv = label->priv;
   gint new_pos = g_utf8_pointer_to_offset (priv->text,
 					   priv->text + start);
   gint length;
@@ -5870,7 +5870,7 @@ static gint
 gtk_label_move_backward_word (GtkLabel *label,
 			      gint      start)
 {
-  GtkLabelPriv *priv = label->priv;
+  GtkLabelPrivate *priv = label->priv;
   gint new_pos = g_utf8_pointer_to_offset (priv->text,
 					   priv->text + start);
 
@@ -5901,7 +5901,7 @@ gtk_label_move_cursor (GtkLabel       *label,
 		       gint            count,
 		       gboolean        extend_selection)
 {
-  GtkLabelPriv *priv = label->priv;
+  GtkLabelPrivate *priv = label->priv;
   gint old_pos;
   gint new_pos;
 
@@ -6027,7 +6027,7 @@ gtk_label_move_cursor (GtkLabel       *label,
 static void
 gtk_label_copy_clipboard (GtkLabel *label)
 {
-  GtkLabelPriv *priv = label->priv;
+  GtkLabelPrivate *priv = label->priv;
 
   if (priv->text && priv->select_info)
     {
@@ -6066,7 +6066,7 @@ gtk_label_copy_clipboard (GtkLabel *label)
 static void
 gtk_label_select_all (GtkLabel *label)
 {
-  GtkLabelPriv *priv = label->priv;
+  GtkLabelPrivate *priv = label->priv;
 
   gtk_label_select_region_index (label, 0, strlen (priv->text));
 }
@@ -6105,7 +6105,7 @@ popup_menu_detach (GtkWidget *attach_widget,
 		   GtkMenu   *menu)
 {
   GtkLabel *label = GTK_LABEL (attach_widget);
-  GtkLabelPriv *priv = label->priv;
+  GtkLabelPrivate *priv = label->priv;
 
   if (priv->select_info)
     priv->select_info->popup_menu = NULL;
@@ -6187,7 +6187,7 @@ static void
 gtk_label_do_popup (GtkLabel       *label,
                     GdkEventButton *event)
 {
-  GtkLabelPriv *priv = label->priv;
+  GtkLabelPrivate *priv = label->priv;
   GtkWidget *menuitem;
   GtkWidget *menu;
   GtkWidget *image;
@@ -6283,7 +6283,7 @@ gtk_label_do_popup (GtkLabel       *label,
 static void
 gtk_label_clear_links (GtkLabel *label)
 {
-  GtkLabelPriv *priv = label->priv;
+  GtkLabelPrivate *priv = label->priv;
 
   if (!priv->select_info)
     return;
@@ -6297,7 +6297,7 @@ gtk_label_clear_links (GtkLabel *label)
 static void
 gtk_label_rescan_links (GtkLabel *label)
 {
-  GtkLabelPriv *priv = label->priv;
+  GtkLabelPrivate *priv = label->priv;
   PangoLayout *layout = priv->layout;
   PangoAttrList *attlist;
   PangoAttrIterator *iter;
@@ -6370,7 +6370,7 @@ static void
 emit_activate_link (GtkLabel     *label,
                     GtkLabelLink *link)
 {
-  GtkLabelPriv *priv = label->priv;
+  GtkLabelPrivate *priv = label->priv;
   gboolean handled;
 
   g_signal_emit (label, signals[ACTIVATE_LINK], 0, link->uri, &handled);
@@ -6421,7 +6421,7 @@ gtk_label_activate_current_link (GtkLabel *label)
 static GtkLabelLink *
 gtk_label_get_current_link (GtkLabel *label)
 {
-  GtkLabelPriv *priv = label->priv;
+  GtkLabelPrivate *priv = label->priv;
   GtkLabelLink *link;
 
   if (!priv->select_info)
@@ -6481,7 +6481,7 @@ void
 gtk_label_set_track_visited_links (GtkLabel *label,
                                    gboolean  track_links)
 {
-  GtkLabelPriv *priv;
+  GtkLabelPrivate *priv;
 
   g_return_if_fail (GTK_IS_LABEL (label));
 
@@ -6527,7 +6527,7 @@ gtk_label_query_tooltip (GtkWidget  *widget,
                          GtkTooltip *tooltip)
 {
   GtkLabel *label = GTK_LABEL (widget);
-  GtkLabelPriv *priv = label->priv;
+  GtkLabelPrivate *priv = label->priv;
   GtkLabelSelectionInfo *info = priv->select_info;
   gint index = -1;
   GList *l;

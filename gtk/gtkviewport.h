@@ -47,16 +47,16 @@ G_BEGIN_DECLS
 #define GTK_VIEWPORT_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_VIEWPORT, GtkViewportClass))
 
 
-typedef struct _GtkViewport       GtkViewport;
-typedef struct _GtkViewportPriv   GtkViewportPriv;
-typedef struct _GtkViewportClass  GtkViewportClass;
+typedef struct _GtkViewport              GtkViewport;
+typedef struct _GtkViewportPrivate       GtkViewportPrivate;
+typedef struct _GtkViewportClass         GtkViewportClass;
 
 struct _GtkViewport
 {
   GtkBin bin;
 
   /* <private> */
-  GtkViewportPriv *priv;
+  GtkViewportPrivate *priv;
 };
 
 struct _GtkViewportClass

@@ -36,7 +36,7 @@
 #define LABEL_PAD 1
 #define LABEL_SIDE_PAD 2
 
-struct _GtkFramePriv
+struct _GtkFramePrivate
 {
   /* Properties */
   GtkWidget *label_widget;
@@ -188,7 +188,7 @@ gtk_frame_class_init (GtkFrameClass *class)
 
   class->compute_child_allocation = gtk_frame_real_compute_child_allocation;
 
-  g_type_class_add_private (class, sizeof (GtkFramePriv));
+  g_type_class_add_private (class, sizeof (GtkFramePrivate));
 }
 
 static void
@@ -214,11 +214,11 @@ gtk_frame_buildable_add_child (GtkBuildable *buildable,
 static void
 gtk_frame_init (GtkFrame *frame)
 {
-  GtkFramePriv *priv;
+  GtkFramePrivate *priv;
 
   frame->priv = G_TYPE_INSTANCE_GET_PRIVATE (frame,
                                              GTK_TYPE_FRAME,
-                                             GtkFramePriv);
+                                             GtkFramePrivate);
   priv = frame->priv;
 
   priv->label_widget = NULL;
@@ -234,7 +234,7 @@ gtk_frame_set_property (GObject         *object,
 			GParamSpec      *pspec)
 {
   GtkFrame *frame = GTK_FRAME (object);
-  GtkFramePriv *priv = frame->priv;
+  GtkFramePrivate *priv = frame->priv;
 
   switch (prop_id)
     {
@@ -269,7 +269,7 @@ gtk_frame_get_property (GObject         *object,
 			GParamSpec      *pspec)
 {
   GtkFrame *frame = GTK_FRAME (object);
-  GtkFramePriv *priv = frame->priv;
+  GtkFramePrivate *priv = frame->priv;
 
   switch (prop_id)
     {
@@ -317,7 +317,7 @@ gtk_frame_remove (GtkContainer *container,
 		  GtkWidget    *child)
 {
   GtkFrame *frame = GTK_FRAME (container);
-  GtkFramePriv *priv = frame->priv;
+  GtkFramePrivate *priv = frame->priv;
 
   if (priv->label_widget == child)
     gtk_frame_set_label_widget (frame, NULL);
@@ -333,7 +333,7 @@ gtk_frame_forall (GtkContainer *container,
 {
   GtkBin *bin = GTK_BIN (container);
   GtkFrame *frame = GTK_FRAME (container);
-  GtkFramePriv *priv = frame->priv;
+  GtkFramePrivate *priv = frame->priv;
   GtkWidget *child;
 
   child = gtk_bin_get_child (bin);
@@ -388,7 +388,7 @@ gtk_frame_set_label (GtkFrame *frame,
 G_CONST_RETURN gchar *
 gtk_frame_get_label (GtkFrame *frame)
 {
-  GtkFramePriv *priv;
+  GtkFramePrivate *priv;
 
   g_return_val_if_fail (GTK_IS_FRAME (frame), NULL);
 
@@ -413,7 +413,7 @@ void
 gtk_frame_set_label_widget (GtkFrame  *frame,
 			    GtkWidget *label_widget)
 {
-  GtkFramePriv *priv;
+  GtkFramePrivate *priv;
   gboolean need_resize = FALSE;
 
   g_return_if_fail (GTK_IS_FRAME (frame));
@@ -485,7 +485,7 @@ gtk_frame_set_label_align (GtkFrame *frame,
 			   gfloat    xalign,
 			   gfloat    yalign)
 {
-  GtkFramePriv *priv;
+  GtkFramePrivate *priv;
 
   g_return_if_fail (GTK_IS_FRAME (frame));
 
@@ -525,7 +525,7 @@ gtk_frame_get_label_align (GtkFrame *frame,
 		           gfloat   *xalign,
 			   gfloat   *yalign)
 {
-  GtkFramePriv *priv;
+  GtkFramePrivate *priv;
 
   g_return_if_fail (GTK_IS_FRAME (frame));
 
@@ -548,7 +548,7 @@ void
 gtk_frame_set_shadow_type (GtkFrame      *frame,
 			   GtkShadowType  type)
 {
-  GtkFramePriv *priv;
+  GtkFramePrivate *priv;
   GtkWidget *widget;
 
   g_return_if_fail (GTK_IS_FRAME (frame));
@@ -592,7 +592,7 @@ gtk_frame_paint (GtkWidget    *widget,
 		 GdkRectangle *area)
 {
   GtkFrame *frame;
-  GtkFramePriv *priv;
+  GtkFramePrivate *priv;
   GtkStateType state;
   GtkStyle *style;
   GdkWindow *window;
@@ -670,7 +670,7 @@ gtk_frame_size_allocate (GtkWidget     *widget,
 			 GtkAllocation *allocation)
 {
   GtkFrame *frame = GTK_FRAME (widget);
-  GtkFramePriv *priv = frame->priv;
+  GtkFramePrivate *priv = frame->priv;
   GtkBin *bin = GTK_BIN (widget);
   GtkAllocation new_allocation;
   GtkWidget *child;
@@ -740,7 +740,7 @@ static void
 gtk_frame_real_compute_child_allocation (GtkFrame      *frame,
 					 GtkAllocation *child_allocation)
 {
-  GtkFramePriv *priv = frame->priv;
+  GtkFramePrivate *priv = frame->priv;
   GtkWidget *widget = GTK_WIDGET (frame);
   GtkAllocation allocation;
   GtkStyle *style;
@@ -790,7 +790,7 @@ gtk_frame_get_size (GtkSizeRequest *request,
 		    gint           *natural_size)
 {
   GtkFrame *frame = GTK_FRAME (request);
-  GtkFramePriv *priv = frame->priv;
+  GtkFramePrivate *priv = frame->priv;
   GtkStyle *style;
   GtkWidget *widget = GTK_WIDGET (request);
   GtkWidget *child;
@@ -889,7 +889,7 @@ gtk_frame_get_height_for_width (GtkSizeRequest *request,
   GtkWidget *widget = GTK_WIDGET (request);
   GtkWidget *child;
   GtkFrame *frame = GTK_FRAME (widget);
-  GtkFramePriv *priv = frame->priv;
+  GtkFramePrivate *priv = frame->priv;
   GtkBin *bin = GTK_BIN (widget);
   GtkStyle *style;
   gint child_min, child_nat, label_width;

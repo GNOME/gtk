@@ -56,7 +56,7 @@ typedef enum {
 } DragMode;
 
 /* Private part of the GtkHSV structure */
-struct _GtkHSVPriv
+struct _GtkHSVPrivate
 {
   /* Color value */
   double h;
@@ -195,16 +195,16 @@ gtk_hsv_class_init (GtkHSVClass *class)
                                 "move", 1,
                                 G_TYPE_ENUM, GTK_DIR_LEFT);
 
-  g_type_class_add_private (gobject_class, sizeof (GtkHSVPriv));
+  g_type_class_add_private (gobject_class, sizeof (GtkHSVPrivate));
 }
 
 /* Object initialization function for the HSV color selector */
 static void
 gtk_hsv_init (GtkHSV *hsv)
 {
-  GtkHSVPriv *priv;
+  GtkHSVPrivate *priv;
 
-  priv = G_TYPE_INSTANCE_GET_PRIVATE (hsv, GTK_TYPE_HSV, GtkHSVPriv);
+  priv = G_TYPE_INSTANCE_GET_PRIVATE (hsv, GTK_TYPE_HSV, GtkHSVPrivate);
   
   hsv->priv = priv;
 
@@ -235,7 +235,7 @@ static void
 gtk_hsv_map (GtkWidget *widget)
 {
   GtkHSV *hsv = GTK_HSV (widget);
-  GtkHSVPriv *priv = hsv->priv;
+  GtkHSVPrivate *priv = hsv->priv;
 
   GTK_WIDGET_CLASS (gtk_hsv_parent_class)->map (widget);
 
@@ -248,7 +248,7 @@ static void
 gtk_hsv_unmap (GtkWidget *widget)
 {
   GtkHSV *hsv = GTK_HSV (widget);
-  GtkHSVPriv *priv = hsv->priv;
+  GtkHSVPrivate *priv = hsv->priv;
 
   gdk_window_hide (priv->window);
 
@@ -260,7 +260,7 @@ static void
 gtk_hsv_realize (GtkWidget *widget)
 {
   GtkHSV *hsv = GTK_HSV (widget);
-  GtkHSVPriv *priv = hsv->priv;
+  GtkHSVPrivate *priv = hsv->priv;
   GtkAllocation allocation;
   GdkWindow *parent_window;
   GdkWindowAttr attr;
@@ -302,7 +302,7 @@ static void
 gtk_hsv_unrealize (GtkWidget *widget)
 {
   GtkHSV *hsv = GTK_HSV (widget);
-  GtkHSVPriv *priv = hsv->priv;
+  GtkHSVPrivate *priv = hsv->priv;
 
   gdk_window_set_user_data (priv->window, NULL);
   gdk_window_destroy (priv->window);
@@ -317,7 +317,7 @@ gtk_hsv_size_request (GtkWidget      *widget,
 		      GtkRequisition *requisition)
 {
   GtkHSV *hsv = GTK_HSV (widget);
-  GtkHSVPriv *priv = hsv->priv;
+  GtkHSVPrivate *priv = hsv->priv;
   gint focus_width;
   gint focus_pad;
 
@@ -336,7 +336,7 @@ gtk_hsv_size_allocate (GtkWidget     *widget,
 		       GtkAllocation *allocation)
 {
   GtkHSV *hsv = GTK_HSV (widget);
-  GtkHSVPriv *priv = hsv->priv;
+  GtkHSVPrivate *priv = hsv->priv;
 
   gtk_widget_set_allocation (widget, allocation);
 
@@ -511,7 +511,7 @@ compute_triangle (GtkHSV *hsv,
 		  gint   *vx,
 		  gint   *vy)
 {
-  GtkHSVPriv *priv = hsv->priv;
+  GtkHSVPrivate *priv = hsv->priv;
   GtkAllocation allocation;
   GtkWidget *widget = GTK_WIDGET (hsv);
   gdouble center_x;
@@ -541,7 +541,7 @@ is_in_ring (GtkHSV *hsv,
 	    gdouble x,
 	    gdouble y)
 {
-  GtkHSVPriv *priv = hsv->priv;
+  GtkHSVPrivate *priv = hsv->priv;
   GtkAllocation allocation;
   GtkWidget *widget = GTK_WIDGET (hsv);
   gdouble dx, dy, dist;
@@ -705,7 +705,7 @@ static void
 set_cross_grab (GtkHSV *hsv,
 		guint32 time)
 {
-  GtkHSVPriv *priv = hsv->priv;
+  GtkHSVPrivate *priv = hsv->priv;
   GdkCursor *cursor;
 
   cursor = gdk_cursor_new_for_display (gtk_widget_get_display (GTK_WIDGET (hsv)),
@@ -725,7 +725,7 @@ gtk_hsv_grab_broken (GtkWidget          *widget,
 		     GdkEventGrabBroken *event)
 {
   GtkHSV *hsv = GTK_HSV (widget);
-  GtkHSVPriv *priv = hsv->priv;
+  GtkHSVPrivate *priv = hsv->priv;
 
   priv->mode = DRAG_NONE;
   
@@ -738,7 +738,7 @@ gtk_hsv_button_press (GtkWidget      *widget,
 		      GdkEventButton *event)
 {
   GtkHSV *hsv = GTK_HSV (widget);
-  GtkHSVPriv *priv = hsv->priv;
+  GtkHSVPrivate *priv = hsv->priv;
   double x, y;
 
   if (priv->mode != DRAG_NONE || event->button != 1)
@@ -788,7 +788,7 @@ gtk_hsv_button_release (GtkWidget      *widget,
 			GdkEventButton *event)
 {
   GtkHSV *hsv = GTK_HSV (widget);
-  GtkHSVPriv *priv = hsv->priv;
+  GtkHSVPrivate *priv = hsv->priv;
   DragMode mode;
   gdouble x, y;
 
@@ -826,7 +826,7 @@ gtk_hsv_motion (GtkWidget      *widget,
 		GdkEventMotion *event)
 {
   GtkHSV *hsv = GTK_HSV (widget);
-  GtkHSVPriv *priv = hsv->priv;
+  GtkHSVPrivate *priv = hsv->priv;
   GdkModifierType mods;
   double x, y;
 
@@ -868,7 +868,7 @@ paint_ring (GtkHSV      *hsv,
 	    gint         width,
 	    gint         height)
 {
-  GtkHSVPriv *priv = hsv->priv;
+  GtkHSVPrivate *priv = hsv->priv;
   GtkAllocation allocation;
   GtkWidget *widget = GTK_WIDGET (hsv);
   int xx, yy;
@@ -1020,7 +1020,7 @@ paint_triangle (GtkHSV      *hsv,
 		gint         width,
 		gint         height)
 {
-  GtkHSVPriv *priv = hsv->priv;
+  GtkHSVPrivate *priv = hsv->priv;
   GtkWidget *widget = GTK_WIDGET (hsv);
   gint hx, hy, sx, sy, vx, vy; /* HSV vertices */
   gint x1, y1, r1, g1, b1; /* First vertex in scanline order */
@@ -1241,7 +1241,7 @@ gtk_hsv_expose (GtkWidget      *widget,
 		GdkEventExpose *event)
 {
   GtkHSV *hsv = GTK_HSV (widget);
-  GtkHSVPriv *priv = hsv->priv;
+  GtkHSVPrivate *priv = hsv->priv;
   GtkAllocation allocation;
   GdkRectangle rect, dest;
   GdkWindow *window;
@@ -1287,7 +1287,7 @@ gtk_hsv_focus (GtkWidget       *widget,
                GtkDirectionType dir)
 {
   GtkHSV *hsv = GTK_HSV (widget);
-  GtkHSVPriv *priv = hsv->priv;
+  GtkHSVPrivate *priv = hsv->priv;
 
   if (!gtk_widget_has_focus (widget))
     {
@@ -1371,7 +1371,7 @@ gtk_hsv_set_color (GtkHSV *hsv,
 		   gdouble s,
 		   gdouble v)
 {
-  GtkHSVPriv *priv;
+  GtkHSVPrivate *priv;
 
   g_return_if_fail (GTK_IS_HSV (hsv));
   g_return_if_fail (h >= 0.0 && h <= 1.0);
@@ -1407,7 +1407,7 @@ gtk_hsv_get_color (GtkHSV *hsv,
                    double *s,
                    double *v)
 {
-  GtkHSVPriv *priv = hsv->priv;
+  GtkHSVPrivate *priv = hsv->priv;
 
   g_return_if_fail (GTK_IS_HSV (hsv));
 
@@ -1438,7 +1438,7 @@ gtk_hsv_set_metrics (GtkHSV *hsv,
 		     gint    size,
 		     gint    ring_width)
 {
-  GtkHSVPriv *priv = hsv->priv;
+  GtkHSVPrivate *priv = hsv->priv;
   int same_size;
 
   g_return_if_fail (GTK_IS_HSV (hsv));
@@ -1474,7 +1474,7 @@ gtk_hsv_get_metrics (GtkHSV *hsv,
 		     gint   *size,
 		     gint   *ring_width)
 {
-  GtkHSVPriv *priv = hsv->priv;
+  GtkHSVPrivate *priv = hsv->priv;
 
   g_return_if_fail (GTK_IS_HSV (hsv));
 
@@ -1505,7 +1505,7 @@ gtk_hsv_get_metrics (GtkHSV *hsv,
 gboolean
 gtk_hsv_is_adjusting (GtkHSV *hsv)
 {
-  GtkHSVPriv *priv = hsv->priv;
+  GtkHSVPrivate *priv = hsv->priv;
 
   g_return_val_if_fail (GTK_IS_HSV (hsv), FALSE);
 
@@ -1596,7 +1596,7 @@ static void
 gtk_hsv_move (GtkHSV          *hsv,
               GtkDirectionType dir)
 {
-  GtkHSVPriv *priv = hsv->priv;
+  GtkHSVPrivate *priv = hsv->priv;
   gdouble hue, sat, val;
   gint hx, hy, sx, sy, vx, vy; /* HSV vertices */
   gint x, y; /* position in triangle */

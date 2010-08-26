@@ -37,16 +37,16 @@ G_BEGIN_DECLS
 #define GTK_SIZE_GROUP_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_SIZE_GROUP, GtkSizeGroupClass))
 
 
-typedef struct _GtkSizeGroup       GtkSizeGroup;
-typedef struct _GtkSizeGroupPriv   GtkSizeGroupPriv;
-typedef struct _GtkSizeGroupClass  GtkSizeGroupClass;
+typedef struct _GtkSizeGroup              GtkSizeGroup;
+typedef struct _GtkSizeGroupPrivate       GtkSizeGroupPrivate;
+typedef struct _GtkSizeGroupClass         GtkSizeGroupClass;
 
 struct _GtkSizeGroup
 {
   GObject parent_instance;
 
   /* <private> */
-  GtkSizeGroupPriv *priv;
+  GtkSizeGroupPrivate *priv;
 };
 
 struct _GtkSizeGroupClass

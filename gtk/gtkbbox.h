@@ -44,16 +44,16 @@ G_BEGIN_DECLS
 #define GTK_BUTTON_BOX_GET_CLASS(obj)   (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_BUTTON_BOX, GtkButtonBoxClass))
 
 
-typedef struct _GtkButtonBox       GtkButtonBox;
-typedef struct _GtkButtonBoxPriv   GtkButtonBoxPriv;
-typedef struct _GtkButtonBoxClass  GtkButtonBoxClass;
+typedef struct _GtkButtonBox              GtkButtonBox;
+typedef struct _GtkButtonBoxPrivate       GtkButtonBoxPrivate;
+typedef struct _GtkButtonBoxClass         GtkButtonBoxClass;
 
 struct _GtkButtonBox
 {
   GtkBox box;
 
   /*< private >*/
-  GtkButtonBoxPriv *priv;
+  GtkButtonBoxPrivate *priv;
 };
 
 struct _GtkButtonBoxClass

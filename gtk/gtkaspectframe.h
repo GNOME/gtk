@@ -44,16 +44,16 @@ G_BEGIN_DECLS
 #define GTK_IS_ASPECT_FRAME_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_ASPECT_FRAME))
 #define GTK_ASPECT_FRAME_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_ASPECT_FRAME, GtkAspectFrameClass))
 
-typedef struct _GtkAspectFrame       GtkAspectFrame;
-typedef struct _GtkAspectFramePriv   GtkAspectFramePriv;
-typedef struct _GtkAspectFrameClass  GtkAspectFrameClass;
+typedef struct _GtkAspectFrame              GtkAspectFrame;
+typedef struct _GtkAspectFramePrivate       GtkAspectFramePrivate;
+typedef struct _GtkAspectFrameClass         GtkAspectFrameClass;
 
 struct _GtkAspectFrame
 {
   GtkFrame frame;
 
   /*< private >*/
-  GtkAspectFramePriv *priv;
+  GtkAspectFramePrivate *priv;
 };
 
 struct _GtkAspectFrameClass

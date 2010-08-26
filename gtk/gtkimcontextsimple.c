@@ -33,7 +33,7 @@
 typedef struct _GtkComposeTable GtkComposeTable;
 typedef struct _GtkComposeTableCompact GtkComposeTableCompact;
 
-struct _GtkIMContextSimplePriv
+struct _GtkIMContextSimplePrivate
 {
   GSList        *tables;
 
@@ -119,7 +119,7 @@ gtk_im_context_simple_class_init (GtkIMContextSimpleClass *class)
   im_context_class->get_preedit_string = gtk_im_context_simple_get_preedit_string;
   gobject_class->finalize = gtk_im_context_simple_finalize;
 
-  g_type_class_add_private (class, sizeof (GtkIMContextSimplePriv));
+  g_type_class_add_private (class, sizeof (GtkIMContextSimplePrivate));
 }
 
 static void
@@ -127,14 +127,14 @@ gtk_im_context_simple_init (GtkIMContextSimple *im_context_simple)
 {
   im_context_simple->priv = G_TYPE_INSTANCE_GET_PRIVATE (im_context_simple,
                                                          GTK_TYPE_IM_CONTEXT_SIMPLE,
-                                                         GtkIMContextSimplePriv);
+                                                         GtkIMContextSimplePrivate);
 }
 
 static void
 gtk_im_context_simple_finalize (GObject *obj)
 {
   GtkIMContextSimple *context_simple = GTK_IM_CONTEXT_SIMPLE (obj);
-  GtkIMContextSimplePriv *priv = context_simple->priv;
+  GtkIMContextSimplePrivate *priv = context_simple->priv;
 
   if (priv->tables)
     {
@@ -165,7 +165,7 @@ gtk_im_context_simple_commit_char (GtkIMContext *context,
 				   gunichar ch)
 {
   GtkIMContextSimple *context_simple = GTK_IM_CONTEXT_SIMPLE (context);
-  GtkIMContextSimplePriv *priv = context_simple->priv;
+  GtkIMContextSimplePrivate *priv = context_simple->priv;
   gchar buf[10];
   gint len;
 
@@ -225,7 +225,7 @@ check_table (GtkIMContextSimple    *context_simple,
 	     const GtkComposeTable *table,
 	     gint                   n_compose)
 {
-  GtkIMContextSimplePriv *priv = context_simple->priv;
+  GtkIMContextSimplePrivate *priv = context_simple->priv;
   gint row_stride = table->max_seq_len + 2; 
   guint16 *seq; 
   
@@ -313,7 +313,7 @@ static gboolean
 check_win32_special_cases (GtkIMContextSimple    *context_simple,
 			   gint                   n_compose)
 {
-  GtkIMContextSimplePriv *priv = context_simple->priv;
+  GtkIMContextSimplePrivate *priv = context_simple->priv;
   if (n_compose == 2 &&
       priv->compose_buffer[1] == GDK_space)
     {
@@ -343,7 +343,7 @@ check_win32_special_case_after_compact_match (GtkIMContextSimple    *context_sim
 					      gint                   n_compose,
 					      guint                  value)
 {
-  GtkIMContextSimplePriv *priv = context_simple->priv;
+  GtkIMContextSimplePrivate *priv = context_simple->priv;
 
   /* On Windows user expectation is that typing two dead accents will input
    * two corresponding spacing accents.
@@ -364,7 +364,7 @@ check_compact_table (GtkIMContextSimple    *context_simple,
 	     const GtkComposeTableCompact *table,
 	     gint                   n_compose)
 {
-  GtkIMContextSimplePriv *priv = context_simple->priv;
+  GtkIMContextSimplePrivate *priv = context_simple->priv;
   gint row_stride;
   guint16 *seq_index;
   guint16 *seq; 
@@ -519,7 +519,7 @@ check_algorithmically (GtkIMContextSimple    *context_simple,
 		       gint                   n_compose)
 
 {
-  GtkIMContextSimplePriv *priv = context_simple->priv;
+  GtkIMContextSimplePrivate *priv = context_simple->priv;
   gint i;
   gunichar combination_buffer[GTK_MAX_COMPOSE_LEN];
   gchar *combination_utf8, *nfc;
@@ -626,7 +626,7 @@ static gboolean
 check_hex (GtkIMContextSimple *context_simple,
            gint                n_compose)
 {
-  GtkIMContextSimplePriv *priv = context_simple->priv;
+  GtkIMContextSimplePrivate *priv = context_simple->priv;
   /* See if this is a hex sequence, return TRUE if so */
   gint i;
   GString *str;
@@ -711,7 +711,7 @@ no_sequence_matches (GtkIMContextSimple *context_simple,
                      gint                n_compose,
                      GdkEventKey        *event)
 {
-  GtkIMContextSimplePriv *priv = context_simple->priv;
+  GtkIMContextSimplePrivate *priv = context_simple->priv;
   GtkIMContext *context;
   gunichar ch;
   
@@ -816,7 +816,7 @@ gtk_im_context_simple_filter_keypress (GtkIMContext *context,
 				       GdkEventKey  *event)
 {
   GtkIMContextSimple *context_simple = GTK_IM_CONTEXT_SIMPLE (context);
-  GtkIMContextSimplePriv *priv = context_simple->priv;
+  GtkIMContextSimplePrivate *priv = context_simple->priv;
   GSList *tmp_list;  
   int n_compose = 0;
   gboolean have_hex_mods;
@@ -1068,7 +1068,7 @@ static void
 gtk_im_context_simple_reset (GtkIMContext *context)
 {
   GtkIMContextSimple *context_simple = GTK_IM_CONTEXT_SIMPLE (context);
-  GtkIMContextSimplePriv *priv = context_simple->priv;
+  GtkIMContextSimplePrivate *priv = context_simple->priv;
 
   priv->compose_buffer[0] = 0;
 
@@ -1089,7 +1089,7 @@ gtk_im_context_simple_get_preedit_string (GtkIMContext   *context,
 					  gint           *cursor_pos)
 {
   GtkIMContextSimple *context_simple = GTK_IM_CONTEXT_SIMPLE (context);
-  GtkIMContextSimplePriv *priv = context_simple->priv;
+  GtkIMContextSimplePrivate *priv = context_simple->priv;
   char outbuf[37]; /* up to 6 hex digits */
   int len = 0;
 
@@ -1158,7 +1158,7 @@ gtk_im_context_simple_add_table (GtkIMContextSimple *context_simple,
 				 gint                max_seq_len,
 				 gint                n_seqs)
 {
-  GtkIMContextSimplePriv *priv = context_simple->priv;
+  GtkIMContextSimplePrivate *priv = context_simple->priv;
   GtkComposeTable *table;
 
   g_return_if_fail (GTK_IS_IM_CONTEXT_SIMPLE (context_simple));

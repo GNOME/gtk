@@ -30,7 +30,7 @@
 #include "gtkprivate.h"
 #include "gtkintl.h"
 
-struct _GtkInvisiblePriv
+struct _GtkInvisiblePrivate
 {
   GdkScreen    *screen;
   gboolean      has_user_ref_count;
@@ -93,18 +93,18 @@ gtk_invisible_class_init (GtkInvisibleClass *class)
 							GDK_TYPE_SCREEN,
  							GTK_PARAM_READWRITE));
 
-  g_type_class_add_private (class, sizeof (GtkInvisiblePriv));
+  g_type_class_add_private (class, sizeof (GtkInvisiblePrivate));
 }
 
 static void
 gtk_invisible_init (GtkInvisible *invisible)
 {
-  GtkInvisiblePriv *priv;
+  GtkInvisiblePrivate *priv;
   GdkColormap *colormap;
 
   invisible->priv = G_TYPE_INSTANCE_GET_PRIVATE (invisible,
                                                  GTK_TYPE_INVISIBLE,
-                                                 GtkInvisiblePriv);
+                                                 GtkInvisiblePrivate);
   priv = invisible->priv;
 
   gtk_widget_set_has_window (GTK_WIDGET (invisible), TRUE);
@@ -124,7 +124,7 @@ static void
 gtk_invisible_destroy (GtkObject *object)
 {
   GtkInvisible *invisible = GTK_INVISIBLE (object);
-  GtkInvisiblePriv *priv = invisible->priv;
+  GtkInvisiblePrivate *priv = invisible->priv;
 
   if (priv->has_user_ref_count)
     {
@@ -180,7 +180,7 @@ void
 gtk_invisible_set_screen (GtkInvisible *invisible,
 			  GdkScreen    *screen)
 {
-  GtkInvisiblePriv *priv;
+  GtkInvisiblePrivate *priv;
   GtkWidget *widget;
   GdkScreen *previous_screen;
   gboolean was_realized;
@@ -308,7 +308,7 @@ gtk_invisible_get_property  (GObject      *object,
 			     GParamSpec   *pspec)
 {
   GtkInvisible *invisible = GTK_INVISIBLE (object);
-  GtkInvisiblePriv *priv = invisible->priv;
+  GtkInvisiblePrivate *priv = invisible->priv;
 
   switch (prop_id)
     {

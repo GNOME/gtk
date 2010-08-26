@@ -44,14 +44,14 @@ typedef void (* GtkTextTagTableForeach) (GtkTextTag *tag, gpointer data);
 #define GTK_IS_TEXT_TAG_TABLE_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_TEXT_TAG_TABLE))
 #define GTK_TEXT_TAG_TABLE_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_TEXT_TAG_TABLE, GtkTextTagTableClass))
 
-typedef struct _GtkTextTagTablePriv  GtkTextTagTablePriv;
-typedef struct _GtkTextTagTableClass GtkTextTagTableClass;
+typedef struct _GtkTextTagTablePrivate       GtkTextTagTablePrivate;
+typedef struct _GtkTextTagTableClass         GtkTextTagTableClass;
 
 struct _GtkTextTagTable
 {
   GObject parent_instance;
 
-  GtkTextTagTablePriv *priv;
+  GtkTextTagTablePrivate *priv;
 };
 
 struct _GtkTextTagTableClass

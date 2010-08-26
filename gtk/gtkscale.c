@@ -51,7 +51,7 @@
 
 typedef struct _GtkScaleMark GtkScaleMark;
 
-struct _GtkScalePriv
+struct _GtkScalePrivate
 {
   PangoLayout  *layout;
 
@@ -377,7 +377,7 @@ gtk_scale_class_init (GtkScaleClass *class)
   add_slider_binding (binding_set, GDK_KP_End, 0,
                       GTK_SCROLL_END);
 
-  g_type_class_add_private (gobject_class, sizeof (GtkScalePriv));
+  g_type_class_add_private (gobject_class, sizeof (GtkScalePrivate));
 }
 
 static void
@@ -394,12 +394,12 @@ gtk_scale_orientation_notify (GtkRange         *range,
 static void
 gtk_scale_init (GtkScale *scale)
 {
-  GtkScalePriv *priv;
+  GtkScalePrivate *priv;
   GtkRange *range = GTK_RANGE (scale);
 
   scale->priv = G_TYPE_INSTANCE_GET_PRIVATE (scale,
                                              GTK_TYPE_SCALE,
-                                             GtkScalePriv);
+                                             GtkScalePrivate);
   priv = scale->priv;
 
   gtk_widget_set_can_focus (GTK_WIDGET (scale), TRUE);
@@ -451,7 +451,7 @@ gtk_scale_get_property (GObject      *object,
 			GParamSpec   *pspec)
 {
   GtkScale *scale = GTK_SCALE (object);
-  GtkScalePriv *priv = scale->priv;
+  GtkScalePrivate *priv = scale->priv;
 
   switch (prop_id)
     {
@@ -562,7 +562,7 @@ void
 gtk_scale_set_digits (GtkScale *scale,
 		      gint      digits)
 {
-  GtkScalePriv *priv;
+  GtkScalePrivate *priv;
   GtkRange *range;
 
   g_return_if_fail (GTK_IS_SCALE (scale));
@@ -613,7 +613,7 @@ void
 gtk_scale_set_draw_value (GtkScale *scale,
 			  gboolean  draw_value)
 {
-  GtkScalePriv *priv;
+  GtkScalePrivate *priv;
 
   g_return_if_fail (GTK_IS_SCALE (scale));
 
@@ -665,7 +665,7 @@ void
 gtk_scale_set_value_pos (GtkScale        *scale,
 			 GtkPositionType  pos)
 {
-  GtkScalePriv *priv;
+  GtkScalePrivate *priv;
   GtkWidget *widget;
 
   g_return_if_fail (GTK_IS_SCALE (scale));
@@ -705,7 +705,7 @@ static void
 gtk_scale_get_range_border (GtkRange  *range,
                             GtkBorder *border)
 {
-  GtkScalePriv *priv;
+  GtkScalePrivate *priv;
   GtkWidget *widget;
   GtkScale *scale;
   gint w, h;
@@ -780,7 +780,7 @@ _gtk_scale_get_value_size (GtkScale *scale,
                            gint     *width,
                            gint     *height)
 {
-  GtkScalePriv *priv = scale->priv;
+  GtkScalePrivate *priv = scale->priv;
   GtkRange *range;
 
   if (priv->draw_value)
@@ -839,7 +839,7 @@ gtk_scale_get_mark_label_size (GtkScale        *scale,
                                gint            *width2,
                                gint            *height2)
 {
-  GtkScalePriv *priv = scale->priv;
+  GtkScalePrivate *priv = scale->priv;
   PangoLayout *layout;
   PangoRectangle logical_rect;
   GSList *m;
@@ -974,7 +974,7 @@ gtk_scale_expose (GtkWidget      *widget,
                   GdkEventExpose *event)
 {
   GtkScale *scale = GTK_SCALE (widget);
-  GtkScalePriv *priv = scale->priv;
+  GtkScalePrivate *priv = scale->priv;
   GtkRange *range = GTK_RANGE (scale);
   GtkStateType state_type;
   GtkStyle *style;
@@ -1166,7 +1166,7 @@ gtk_scale_real_get_layout_offsets (GtkScale *scale,
                                    gint     *x,
                                    gint     *y)
 {
-  GtkScalePriv *priv = scale->priv;
+  GtkScalePrivate *priv = scale->priv;
   GtkAllocation allocation;
   GtkWidget *widget = GTK_WIDGET (scale);
   GtkRange *range = GTK_RANGE (widget);
@@ -1274,7 +1274,7 @@ gchar*
 _gtk_scale_format_value (GtkScale *scale,
                          gdouble   value)
 {
-  GtkScalePriv *priv = scale->priv;
+  GtkScalePrivate *priv = scale->priv;
   gchar *fmt = NULL;
 
   g_signal_emit (scale,
@@ -1317,7 +1317,7 @@ gtk_scale_finalize (GObject *object)
 PangoLayout *
 gtk_scale_get_layout (GtkScale *scale)
 {
-  GtkScalePriv *priv;
+  GtkScalePrivate *priv;
   gchar *txt;
 
   g_return_val_if_fail (GTK_IS_SCALE (scale), NULL);
@@ -1380,7 +1380,7 @@ gtk_scale_get_layout_offsets (GtkScale *scale,
 void
 _gtk_scale_clear_layout (GtkScale *scale)
 {
-  GtkScalePriv *priv = scale->priv;
+  GtkScalePrivate *priv = scale->priv;
 
   g_return_if_fail (GTK_IS_SCALE (scale));
 
@@ -1409,7 +1409,7 @@ gtk_scale_mark_free (GtkScaleMark *mark)
 void
 gtk_scale_clear_marks (GtkScale *scale)
 {
-  GtkScalePriv *priv;
+  GtkScalePrivate *priv;
 
   g_return_if_fail (GTK_IS_SCALE (scale));
 
@@ -1464,7 +1464,7 @@ gtk_scale_add_mark (GtkScale        *scale,
                     GtkPositionType  position,
                     const gchar     *markup)
 {
-  GtkScalePriv *priv;
+  GtkScalePrivate *priv;
   GtkScaleMark *mark;
   GSList *m;
   gdouble *values;

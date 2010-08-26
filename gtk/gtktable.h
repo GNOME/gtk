@@ -45,18 +45,18 @@ G_BEGIN_DECLS
 #define GTK_TABLE_GET_CLASS(obj)        (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_TABLE, GtkTableClass))
 
 
-typedef struct _GtkTable	GtkTable;
-typedef struct _GtkTablePriv    GtkTablePriv;
-typedef struct _GtkTableClass	GtkTableClass;
-typedef struct _GtkTableChild	GtkTableChild;
-typedef struct _GtkTableRowCol	GtkTableRowCol;
+typedef struct _GtkTable              GtkTable;
+typedef struct _GtkTablePrivate       GtkTablePrivate;
+typedef struct _GtkTableClass         GtkTableClass;
+typedef struct _GtkTableChild         GtkTableChild;
+typedef struct _GtkTableRowCol        GtkTableRowCol;
 
 struct _GtkTable
 {
   GtkContainer container;
 
   /* <private> */
-  GtkTablePriv *priv;
+  GtkTablePrivate *priv;
 };
 
 struct _GtkTableClass

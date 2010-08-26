@@ -91,16 +91,16 @@ typedef enum
 #define GTK_DIALOG_GET_CLASS(obj)        (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_DIALOG, GtkDialogClass))
 
 
-typedef struct _GtkDialog        GtkDialog;
-typedef struct _GtkDialogPriv    GtkDialogPriv;
-typedef struct _GtkDialogClass   GtkDialogClass;
+typedef struct _GtkDialog              GtkDialog;
+typedef struct _GtkDialogPrivate       GtkDialogPrivate;
+typedef struct _GtkDialogClass         GtkDialogClass;
 
 struct _GtkDialog
 {
   GtkWindow window;
 
   /*< private >*/
-  GtkDialogPriv *priv;
+  GtkDialogPrivate *priv;
 };
 
 struct _GtkDialogClass

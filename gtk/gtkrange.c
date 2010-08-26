@@ -71,7 +71,7 @@ typedef enum {
   MOUSE_WIDGET /* inside widget but not in any of the above GUI elements */
 } MouseLocation;
 
-struct _GtkRangePriv
+struct _GtkRangePrivate
 {
   MouseLocation      mouse_location;
   /* last mouse coords we got, or -1 if mouse is outside the range */
@@ -627,7 +627,7 @@ gtk_range_class_init (GtkRangeClass *class)
                                                                  FALSE,
                                                                  GTK_PARAM_READABLE));
 
-  g_type_class_add_private (class, sizeof (GtkRangePriv));
+  g_type_class_add_private (class, sizeof (GtkRangePrivate));
 }
 
 static void
@@ -637,7 +637,7 @@ gtk_range_set_property (GObject      *object,
 			GParamSpec   *pspec)
 {
   GtkRange *range = GTK_RANGE (object);
-  GtkRangePriv *priv = range->priv;
+  GtkRangePrivate *priv = range->priv;
 
   switch (prop_id)
     {
@@ -689,7 +689,7 @@ gtk_range_get_property (GObject      *object,
 			GParamSpec   *pspec)
 {
   GtkRange *range = GTK_RANGE (object);
-  GtkRangePriv *priv = range->priv;
+  GtkRangePrivate *priv = range->priv;
 
   switch (prop_id)
     {
@@ -729,11 +729,11 @@ gtk_range_get_property (GObject      *object,
 static void
 gtk_range_init (GtkRange *range)
 {
-  GtkRangePriv *priv;
+  GtkRangePrivate *priv;
 
   range->priv = G_TYPE_INSTANCE_GET_PRIVATE (range,
                                              GTK_TYPE_RANGE,
-                                             GtkRangePriv);
+                                             GtkRangePrivate);
   priv = range->priv;
 
   gtk_widget_set_has_window (GTK_WIDGET (range), FALSE);
@@ -779,7 +779,7 @@ gtk_range_init (GtkRange *range)
 GtkAdjustment*
 gtk_range_get_adjustment (GtkRange *range)
 {
-  GtkRangePriv *priv;
+  GtkRangePrivate *priv;
 
   g_return_val_if_fail (GTK_IS_RANGE (range), NULL);
 
@@ -809,7 +809,7 @@ void
 gtk_range_set_update_policy (GtkRange      *range,
 			     GtkUpdateType  policy)
 {
-  GtkRangePriv *priv;
+  GtkRangePrivate *priv;
 
   g_return_if_fail (GTK_IS_RANGE (range));
 
@@ -855,7 +855,7 @@ void
 gtk_range_set_adjustment (GtkRange      *range,
 			  GtkAdjustment *adjustment)
 {
-  GtkRangePriv *priv;
+  GtkRangePrivate *priv;
 
   g_return_if_fail (GTK_IS_RANGE (range));
 
@@ -908,7 +908,7 @@ void
 gtk_range_set_inverted (GtkRange *range,
                         gboolean  setting)
 {
-  GtkRangePriv *priv;
+  GtkRangePrivate *priv;
 
   g_return_if_fail (GTK_IS_RANGE (range));
 
@@ -956,7 +956,7 @@ void
 gtk_range_set_flippable (GtkRange *range,
                          gboolean  flippable)
 {
-  GtkRangePriv *priv;
+  GtkRangePrivate *priv;
 
   g_return_if_fail (GTK_IS_RANGE (range));
 
@@ -1006,7 +1006,7 @@ void
 gtk_range_set_slider_size_fixed (GtkRange *range,
                                  gboolean  size_fixed)
 {
-  GtkRangePriv *priv;
+  GtkRangePrivate *priv;
 
   g_return_if_fail (GTK_IS_RANGE (range));
 
@@ -1060,7 +1060,7 @@ void
 gtk_range_set_min_slider_size (GtkRange *range,
                                gint      min_size)
 {
-  GtkRangePriv *priv;
+  GtkRangePrivate *priv;
 
   g_return_if_fail (GTK_IS_RANGE (range));
   g_return_if_fail (min_size > 0);
@@ -1113,7 +1113,7 @@ void
 gtk_range_get_range_rect (GtkRange     *range,
                           GdkRectangle *range_rect)
 {
-  GtkRangePriv *priv;
+  GtkRangePrivate *priv;
 
   g_return_if_fail (GTK_IS_RANGE (range));
   g_return_if_fail (range_rect != NULL);
@@ -1143,7 +1143,7 @@ gtk_range_get_slider_range (GtkRange *range,
                             gint     *slider_start,
                             gint     *slider_end)
 {
-  GtkRangePriv *priv;
+  GtkRangePrivate *priv;
 
   g_return_if_fail (GTK_IS_RANGE (range));
 
@@ -1172,7 +1172,7 @@ void
 gtk_range_set_lower_stepper_sensitivity (GtkRange           *range,
                                          GtkSensitivityType  sensitivity)
 {
-  GtkRangePriv *priv;
+  GtkRangePrivate *priv;
 
   g_return_if_fail (GTK_IS_RANGE (range));
 
@@ -1223,7 +1223,7 @@ void
 gtk_range_set_upper_stepper_sensitivity (GtkRange           *range,
                                          GtkSensitivityType  sensitivity)
 {
-  GtkRangePriv *priv;
+  GtkRangePrivate *priv;
 
   g_return_if_fail (GTK_IS_RANGE (range));
 
@@ -1276,7 +1276,7 @@ gtk_range_set_increments (GtkRange *range,
                           gdouble   step,
                           gdouble   page)
 {
-  GtkRangePriv *priv;
+  GtkRangePrivate *priv;
 
   g_return_if_fail (GTK_IS_RANGE (range));
 
@@ -1303,7 +1303,7 @@ gtk_range_set_range (GtkRange *range,
                      gdouble   min,
                      gdouble   max)
 {
-  GtkRangePriv *priv;
+  GtkRangePrivate *priv;
   gdouble value;
   
   g_return_if_fail (GTK_IS_RANGE (range));
@@ -1338,7 +1338,7 @@ void
 gtk_range_set_value (GtkRange *range,
                      gdouble   value)
 {
-  GtkRangePriv *priv;
+  GtkRangePrivate *priv;
 
   g_return_if_fail (GTK_IS_RANGE (range));
 
@@ -1382,7 +1382,7 @@ void
 gtk_range_set_show_fill_level (GtkRange *range,
                                gboolean  show_fill_level)
 {
-  GtkRangePriv *priv;
+  GtkRangePrivate *priv;
 
   g_return_if_fail (GTK_IS_RANGE (range));
 
@@ -1431,7 +1431,7 @@ void
 gtk_range_set_restrict_to_fill_level (GtkRange *range,
                                       gboolean  restrict_to_fill_level)
 {
-  GtkRangePriv *priv;
+  GtkRangePrivate *priv;
 
   g_return_if_fail (GTK_IS_RANGE (range));
 
@@ -1495,7 +1495,7 @@ void
 gtk_range_set_fill_level (GtkRange *range,
                           gdouble   fill_level)
 {
-  GtkRangePriv *priv;
+  GtkRangePrivate *priv;
 
   g_return_if_fail (GTK_IS_RANGE (range));
 
@@ -1535,7 +1535,7 @@ gtk_range_get_fill_level (GtkRange *range)
 static gboolean
 should_invert (GtkRange *range)
 {
-  GtkRangePriv *priv = range->priv;
+  GtkRangePrivate *priv = range->priv;
 
   if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
     return
@@ -1550,7 +1550,7 @@ static void
 gtk_range_destroy (GtkObject *object)
 {
   GtkRange *range = GTK_RANGE (object);
-  GtkRangePriv *priv = range->priv;
+  GtkRangePrivate *priv = range->priv;
 
   gtk_range_remove_step_timer (range);
   gtk_range_remove_update_timer (range);
@@ -1614,7 +1614,7 @@ gtk_range_size_allocate (GtkWidget     *widget,
                          GtkAllocation *allocation)
 {
   GtkRange *range = GTK_RANGE (widget);
-  GtkRangePriv *priv = range->priv;
+  GtkRangePrivate *priv = range->priv;
 
   gtk_widget_set_allocation (widget, allocation);
 
@@ -1634,7 +1634,7 @@ gtk_range_realize (GtkWidget *widget)
 {
   GtkAllocation allocation;
   GtkRange *range = GTK_RANGE (widget);
-  GtkRangePriv *priv = range->priv;
+  GtkRangePrivate *priv = range->priv;
   GdkWindow *window;
   GdkWindowAttr attributes;
   gint attributes_mask;  
@@ -1676,7 +1676,7 @@ static void
 gtk_range_unrealize (GtkWidget *widget)
 {
   GtkRange *range = GTK_RANGE (widget);
-  GtkRangePriv *priv = range->priv;
+  GtkRangePrivate *priv = range->priv;
 
   gtk_range_remove_step_timer (range);
   gtk_range_remove_update_timer (range);
@@ -1692,7 +1692,7 @@ static void
 gtk_range_map (GtkWidget *widget)
 {
   GtkRange *range = GTK_RANGE (widget);
-  GtkRangePriv *priv = range->priv;
+  GtkRangePrivate *priv = range->priv;
 
   gdk_window_show (priv->event_window);
 
@@ -1703,7 +1703,7 @@ static void
 gtk_range_unmap (GtkWidget *widget)
 {
   GtkRange *range = GTK_RANGE (widget);
-  GtkRangePriv *priv = range->priv;
+  GtkRangePrivate *priv = range->priv;
 
   stop_scrolling (range);
 
@@ -1715,7 +1715,7 @@ gtk_range_unmap (GtkWidget *widget)
 static const gchar *
 gtk_range_get_slider_detail (GtkRange *range)
 {
-  GtkRangePriv *priv = range->priv;
+  GtkRangePrivate *priv = range->priv;
   const gchar *slider_detail;
 
   if (priv->slider_detail_quark)
@@ -1743,7 +1743,7 @@ static const gchar *
 gtk_range_get_stepper_detail (GtkRange *range,
                               Stepper   stepper)
 {
-  GtkRangePriv *priv = range->priv;
+  GtkRangePrivate *priv = range->priv;
   const gchar *stepper_detail;
   gboolean need_orientation;
   gboolean need_position;
@@ -1814,7 +1814,7 @@ draw_stepper (GtkRange     *range,
               gboolean      prelighted,
               GdkRectangle *area)
 {
-  GtkRangePriv *priv = range->priv;
+  GtkRangePrivate *priv = range->priv;
   GtkAllocation allocation;
   GtkStateType state_type;
   GtkShadowType shadow_type;
@@ -1931,7 +1931,7 @@ gtk_range_expose (GtkWidget      *widget,
 {
   GtkAllocation allocation;
   GtkRange *range = GTK_RANGE (widget);
-  GtkRangePriv *priv = range->priv;
+  GtkRangePrivate *priv = range->priv;
   gboolean sensitive;
   GtkStateType state;
   GtkShadowType shadow_type;
@@ -2243,7 +2243,7 @@ range_grab_add (GtkRange      *range,
                 MouseLocation  location,
                 gint           button)
 {
-  GtkRangePriv *priv = range->priv;
+  GtkRangePrivate *priv = range->priv;
 
   if (device == priv->grab_device)
     return;
@@ -2268,7 +2268,7 @@ range_grab_add (GtkRange      *range,
 static void
 range_grab_remove (GtkRange *range)
 {
-  GtkRangePriv *priv = range->priv;
+  GtkRangePrivate *priv = range->priv;
   MouseLocation location;
 
   if (priv->grab_device)
@@ -2290,7 +2290,7 @@ range_grab_remove (GtkRange *range)
 static GtkScrollType
 range_get_scroll_for_grab (GtkRange      *range)
 {
-  GtkRangePriv *priv = range->priv;
+  GtkRangePrivate *priv = range->priv;
   gboolean invert;
 
   invert = should_invert (range);
@@ -2353,7 +2353,7 @@ static gdouble
 coord_to_value (GtkRange *range,
                 gint      coord)
 {
-  GtkRangePriv *priv = range->priv;
+  GtkRangePrivate *priv = range->priv;
   gdouble frac;
   gdouble value;
   gint    trough_length;
@@ -2406,7 +2406,7 @@ gtk_range_key_press (GtkWidget   *widget,
 {
   GdkDevice *device;
   GtkRange *range = GTK_RANGE (widget);
-  GtkRangePriv *priv = range->priv;
+  GtkRangePrivate *priv = range->priv;
 
   device = gdk_event_get_device ((GdkEvent *) event);
   device = gdk_device_get_associated_device (device);
@@ -2432,7 +2432,7 @@ gtk_range_button_press (GtkWidget      *widget,
 			GdkEventButton *event)
 {
   GtkRange *range = GTK_RANGE (widget);
-  GtkRangePriv *priv = range->priv;
+  GtkRangePrivate *priv = range->priv;
   GdkDevice *device;
 
   if (!gtk_widget_has_focus (widget))
@@ -2574,7 +2574,7 @@ update_slider_position (GtkRange *range,
                         gint      mouse_x,
                         gint      mouse_y)
 {
-  GtkRangePriv *priv = range->priv;
+  GtkRangePrivate *priv = range->priv;
   gint delta;
   gint c;
   gdouble new_value;
@@ -2627,7 +2627,7 @@ gtk_range_grab_broken (GtkWidget          *widget,
 		       GdkEventGrabBroken *event)
 {
   GtkRange *range = GTK_RANGE (widget);
-  GtkRangePriv *priv = range->priv;
+  GtkRangePrivate *priv = range->priv;
   GdkDevice *device;
 
   device = gdk_event_get_device ((GdkEvent *) event);
@@ -2651,7 +2651,7 @@ gtk_range_button_release (GtkWidget      *widget,
 			  GdkEventButton *event)
 {
   GtkRange *range = GTK_RANGE (widget);
-  GtkRangePriv *priv = range->priv;
+  GtkRangePrivate *priv = range->priv;
   GdkDevice *device;
 
   if (event->window == priv->event_window)
@@ -2699,7 +2699,7 @@ gdouble
 _gtk_range_get_wheel_delta (GtkRange           *range,
 			    GdkScrollDirection  direction)
 {
-  GtkRangePriv *priv = range->priv;
+  GtkRangePrivate *priv = range->priv;
   GtkAdjustment *adj = priv->adjustment;
   gdouble delta;
 
@@ -2723,7 +2723,7 @@ gtk_range_scroll_event (GtkWidget      *widget,
 			GdkEventScroll *event)
 {
   GtkRange *range = GTK_RANGE (widget);
-  GtkRangePriv *priv = range->priv;
+  GtkRangePrivate *priv = range->priv;
 
   if (gtk_widget_get_realized (widget))
     {
@@ -2753,7 +2753,7 @@ gtk_range_motion_notify (GtkWidget      *widget,
 			 GdkEventMotion *event)
 {
   GtkRange *range = GTK_RANGE (widget);
-  GtkRangePriv *priv = range->priv;
+  GtkRangePrivate *priv = range->priv;
 
   gdk_event_request_motions (event);
 
@@ -2775,7 +2775,7 @@ gtk_range_enter_notify (GtkWidget        *widget,
 			GdkEventCrossing *event)
 {
   GtkRange *range = GTK_RANGE (widget);
-  GtkRangePriv *priv = range->priv;
+  GtkRangePrivate *priv = range->priv;
 
   priv->mouse_x = event->x;
   priv->mouse_y = event->y;
@@ -2791,7 +2791,7 @@ gtk_range_leave_notify (GtkWidget        *widget,
 			GdkEventCrossing *event)
 {
   GtkRange *range = GTK_RANGE (widget);
-  GtkRangePriv *priv = range->priv;
+  GtkRangePrivate *priv = range->priv;
 
   priv->mouse_x = -1;
   priv->mouse_y = -1;
@@ -2806,7 +2806,7 @@ static void
 gtk_range_grab_notify (GtkWidget *widget,
 		       gboolean   was_grabbed)
 {
-  GtkRangePriv *priv = GTK_RANGE (widget)->priv;
+  GtkRangePrivate *priv = GTK_RANGE (widget)->priv;
 
   if (priv->grab_device &&
       gtk_widget_device_is_shadowed (widget, priv->grab_device))
@@ -2830,8 +2830,8 @@ gtk_range_state_changed (GtkWidget    *widget,
   }
 
 static gboolean
-layout_changed (GtkRangePriv *priv1,
-		GtkRangePriv *priv2)
+layout_changed (GtkRangePrivate *priv1,
+		GtkRangePrivate *priv2)
 {
   check_rectangle (priv1->slider, priv2->slider);
   check_rectangle (priv1->trough, priv2->trough);
@@ -2851,8 +2851,8 @@ gtk_range_adjustment_changed (GtkAdjustment *adjustment,
 			      gpointer       data)
 {
   GtkRange *range = GTK_RANGE (data);
-  GtkRangePriv *priv = range->priv;
-  GtkRangePriv priv_aux = *priv;
+  GtkRangePrivate *priv = range->priv;
+  GtkRangePrivate priv_aux = *priv;
 
   priv->recalc_marks = TRUE;
   priv->need_recalc = TRUE;
@@ -2875,7 +2875,7 @@ static gboolean
 force_repaint (gpointer data)
 {
   GtkRange *range = GTK_RANGE (data);
-  GtkRangePriv *priv = range->priv;
+  GtkRangePrivate *priv = range->priv;
   GtkWidget *widget = GTK_WIDGET (range);
 
   priv->repaint_id = 0;
@@ -2890,8 +2890,8 @@ gtk_range_adjustment_value_changed (GtkAdjustment *adjustment,
 				    gpointer       data)
 {
   GtkRange *range = GTK_RANGE (data);
-  GtkRangePriv *priv = range->priv;
-  GtkRangePriv priv_aux = *priv;
+  GtkRangePrivate *priv = range->priv;
+  GtkRangePrivate priv_aux = *priv;
 
   priv->need_recalc = TRUE;
   gtk_range_calc_layout (range, priv->adjustment->value);
@@ -2922,7 +2922,7 @@ gtk_range_style_set (GtkWidget *widget,
                      GtkStyle  *previous_style)
 {
   GtkRange *range = GTK_RANGE (widget);
-  GtkRangePriv *priv = range->priv;
+  GtkRangePrivate *priv = range->priv;
 
   priv->need_recalc = TRUE;
 
@@ -2934,7 +2934,7 @@ apply_marks (GtkRange *range,
              gdouble   oldval,
              gdouble  *newval)
 {
-  GtkRangePriv *priv = range->priv;
+  GtkRangePrivate *priv = range->priv;
   gint i;
   gdouble mark;
 
@@ -2953,7 +2953,7 @@ apply_marks (GtkRange *range,
 static void
 step_back (GtkRange *range)
 {
-  GtkRangePriv *priv = range->priv;
+  GtkRangePrivate *priv = range->priv;
   gdouble newval;
   gboolean handled;
 
@@ -2966,7 +2966,7 @@ step_back (GtkRange *range)
 static void
 step_forward (GtkRange *range)
 {
-  GtkRangePriv *priv = range->priv;
+  GtkRangePrivate *priv = range->priv;
   gdouble newval;
   gboolean handled;
 
@@ -2980,7 +2980,7 @@ step_forward (GtkRange *range)
 static void
 page_back (GtkRange *range)
 {
-  GtkRangePriv *priv = range->priv;
+  GtkRangePrivate *priv = range->priv;
   gdouble newval;
   gboolean handled;
 
@@ -2993,7 +2993,7 @@ page_back (GtkRange *range)
 static void
 page_forward (GtkRange *range)
 {
-  GtkRangePriv *priv = range->priv;
+  GtkRangePrivate *priv = range->priv;
   gdouble newval;
   gboolean handled;
 
@@ -3006,7 +3006,7 @@ page_forward (GtkRange *range)
 static void
 scroll_begin (GtkRange *range)
 {
-  GtkRangePriv *priv = range->priv;
+  GtkRangePrivate *priv = range->priv;
   gboolean handled;
 
   g_signal_emit (range, signals[CHANGE_VALUE], 0,
@@ -3017,7 +3017,7 @@ scroll_begin (GtkRange *range)
 static void
 scroll_end (GtkRange *range)
 {
-  GtkRangePriv *priv = range->priv;
+  GtkRangePrivate *priv = range->priv;
   gdouble newval;
   gboolean handled;
 
@@ -3030,7 +3030,7 @@ static gboolean
 gtk_range_scroll (GtkRange     *range,
                   GtkScrollType scroll)
 {
-  GtkRangePriv *priv = range->priv;
+  GtkRangePrivate *priv = range->priv;
   gdouble old_value = priv->adjustment->value;
 
   switch (scroll)
@@ -3130,7 +3130,7 @@ static void
 gtk_range_move_slider (GtkRange     *range,
                        GtkScrollType scroll)
 {
-  GtkRangePriv *priv = range->priv;
+  GtkRangePrivate *priv = range->priv;
   gboolean cursor_only;
 
   g_object_get (gtk_widget_get_settings (GTK_WIDGET (range)),
@@ -3259,7 +3259,7 @@ gtk_range_get_props (GtkRange  *range,
 static gboolean
 gtk_range_update_mouse_location (GtkRange *range)
 {
-  GtkRangePriv *priv = range->priv;
+  GtkRangePrivate *priv = range->priv;
   GtkAllocation allocation;
   gint x, y;
   MouseLocation old;
@@ -3404,7 +3404,7 @@ gtk_range_calc_request (GtkRange      *range,
                         gboolean      *has_steppers_cd,
                         gint          *slider_length_p)
 {
-  GtkRangePriv *priv = range->priv;
+  GtkRangePrivate *priv = range->priv;
   gint slider_length;
   gint n_steppers;
   gint n_steppers_ab;
@@ -3480,7 +3480,7 @@ static void
 gtk_range_calc_layout (GtkRange *range,
 		       gdouble   adjustment_value)
 {
-  GtkRangePriv *priv = range->priv;
+  GtkRangePrivate *priv = range->priv;
   gint slider_width, stepper_size, focus_width, trough_border, stepper_spacing;
   gint slider_length;
   GtkBorder border;
@@ -3872,7 +3872,7 @@ static GdkRectangle*
 get_area (GtkRange     *range,
           MouseLocation location)
 {
-  GtkRangePriv *priv = range->priv;
+  GtkRangePrivate *priv = range->priv;
 
   switch (location)
     {
@@ -3900,7 +3900,7 @@ get_area (GtkRange     *range,
 static void
 gtk_range_calc_marks (GtkRange *range)
 {
-  GtkRangePriv *priv = range->priv;
+  GtkRangePrivate *priv = range->priv;
   gint i;
 
   if (!priv->recalc_marks)
@@ -3926,7 +3926,7 @@ gtk_range_real_change_value (GtkRange     *range,
                              GtkScrollType scroll,
                              gdouble       value)
 {
-  GtkRangePriv *priv = range->priv;
+  GtkRangePrivate *priv = range->priv;
 
   /* potentially adjust the bounds _before_ we clamp */
   g_signal_emit (range, signals[ADJUST_BOUNDS], 0, value);
@@ -3982,7 +3982,7 @@ gtk_range_real_change_value (GtkRange     *range,
 static void
 gtk_range_update_value (GtkRange *range)
 {
-  GtkRangePriv *priv = range->priv;
+  GtkRangePrivate *priv = range->priv;
 
   gtk_range_remove_update_timer (range);
 
@@ -4004,7 +4004,7 @@ static gboolean
 second_timeout (gpointer data)
 {
   GtkRange *range = GTK_RANGE (data);
-  GtkRangePriv *priv = range->priv;
+  GtkRangePrivate *priv = range->priv;
 
   gtk_range_scroll (range, priv->timer->step);
 
@@ -4015,7 +4015,7 @@ static gboolean
 initial_timeout (gpointer data)
 {
   GtkRange *range = GTK_RANGE (data);
-  GtkRangePriv *priv = range->priv;
+  GtkRangePrivate *priv = range->priv;
   GtkSettings *settings;
   guint        timeout;
 
@@ -4033,7 +4033,7 @@ static void
 gtk_range_add_step_timer (GtkRange      *range,
                           GtkScrollType  step)
 {
-  GtkRangePriv *priv = range->priv;
+  GtkRangePrivate *priv = range->priv;
   GtkSettings *settings;
   guint        timeout;
 
@@ -4056,7 +4056,7 @@ gtk_range_add_step_timer (GtkRange      *range,
 static void
 gtk_range_remove_step_timer (GtkRange *range)
 {
-  GtkRangePriv *priv = range->priv;
+  GtkRangePrivate *priv = range->priv;
 
   if (priv->timer)
     {
@@ -4073,7 +4073,7 @@ static gboolean
 update_timeout (gpointer data)
 {
   GtkRange *range = GTK_RANGE (data);
-  GtkRangePriv *priv = range->priv;
+  GtkRangePrivate *priv = range->priv;
 
   gtk_range_update_value (range);
   priv->update_timeout_id = 0;
@@ -4085,7 +4085,7 @@ update_timeout (gpointer data)
 static void
 gtk_range_reset_update_timer (GtkRange *range)
 {
-  GtkRangePriv *priv = range->priv;
+  GtkRangePrivate *priv = range->priv;
 
   gtk_range_remove_update_timer (range);
 
@@ -4097,7 +4097,7 @@ gtk_range_reset_update_timer (GtkRange *range)
 static void
 gtk_range_remove_update_timer (GtkRange *range)
 {
-  GtkRangePriv *priv = range->priv;
+  GtkRangePrivate *priv = range->priv;
 
   if (priv->update_timeout_id != 0)
     {
@@ -4111,7 +4111,7 @@ _gtk_range_set_stop_values (GtkRange *range,
                             gdouble  *values,
                             gint      n_values)
 {
-  GtkRangePriv *priv = range->priv;
+  GtkRangePrivate *priv = range->priv;
   gint i;
 
   g_free (priv->marks);
@@ -4132,7 +4132,7 @@ gint
 _gtk_range_get_stop_positions (GtkRange  *range,
                                gint     **values)
 {
-  GtkRangePriv *priv = range->priv;
+  GtkRangePrivate *priv = range->priv;
 
   gtk_range_calc_marks (range);
 

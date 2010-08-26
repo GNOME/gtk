@@ -34,7 +34,7 @@ G_BEGIN_DECLS
 #define GTK_FILE_SYSTEM_GET_CLASS(o) (G_TYPE_INSTANCE_GET_CLASS  ((o), GTK_TYPE_FILE_SYSTEM, GtkFileSystemClass))
 
 typedef struct GtkFileSystem          GtkFileSystem;
-typedef struct GtkFileSystemPriv      GtkFileSystemPriv;
+typedef struct GtkFileSystemPrivate      GtkFileSystemPrivate;
 typedef struct GtkFileSystemClass     GtkFileSystemClass;
 
 
@@ -46,7 +46,7 @@ typedef struct GtkFileSystemClass     GtkFileSystemClass;
 #define GTK_FOLDER_GET_CLASS(o) (G_TYPE_INSTANCE_GET_CLASS  ((o), GTK_TYPE_FOLDER, GtkFolderClass))
 
 typedef struct GtkFolder          GtkFolder;
-typedef struct GtkFolderPriv      GtkFolderPriv;
+typedef struct GtkFolderPrivate      GtkFolderPrivate;
 typedef struct GtkFolderClass     GtkFolderClass;
 
 typedef struct GtkFileSystemVolume GtkFileSystemVolume; /* opaque struct */
@@ -57,7 +57,7 @@ struct GtkFileSystem
 {
   GObject parent_object;
 
-  GtkFileSystemPriv *priv;
+  GtkFileSystemPrivate *priv;
 };
 
 struct GtkFileSystemClass
@@ -73,7 +73,7 @@ struct GtkFolder
 {
   GObject parent_object;
 
-  GtkFolderPriv *priv;
+  GtkFolderPrivate *priv;
 };
 
 struct GtkFolderClass

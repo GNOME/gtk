@@ -75,7 +75,7 @@ static guint folder_signals [FOLDER_LAST_SIGNAL] = { 0, };
 
 typedef struct AsyncFuncData AsyncFuncData;
 
-struct GtkFileSystemPriv
+struct GtkFileSystemPrivate
 {
   GVolumeMonitor *volume_monitor;
 
@@ -90,7 +90,7 @@ struct GtkFileSystemPriv
   GFileMonitor *bookmarks_monitor;
 };
 
-struct GtkFolderPriv
+struct GtkFolderPrivate
 {
   GFile *folder_file;
   GHashTable *children;
@@ -160,7 +160,7 @@ static void
 gtk_file_system_dispose (GObject *object)
 {
   GtkFileSystem *file_system = GTK_FILE_SYSTEM (object);
-  GtkFileSystemPriv *priv = file_system->priv;
+  GtkFileSystemPrivate *priv = file_system->priv;
 
   DEBUG ("dispose");
 
@@ -185,7 +185,7 @@ static void
 gtk_file_system_finalize (GObject *object)
 {
   GtkFileSystem *file_system = GTK_FILE_SYSTEM (object);
-  GtkFileSystemPriv *priv = file_system->priv;
+  GtkFileSystemPrivate *priv = file_system->priv;
 
   DEBUG ("finalize");
 
@@ -227,7 +227,7 @@ _gtk_file_system_class_init (GtkFileSystemClass *class)
 		  g_cclosure_marshal_VOID__VOID,
 		  G_TYPE_NONE, 0);
 
-  g_type_class_add_private (object_class, sizeof (GtkFileSystemPriv));
+  g_type_class_add_private (object_class, sizeof (GtkFileSystemPrivate));
 }
 
 static GFile *
@@ -330,7 +330,7 @@ bookmarks_file_changed (GFileMonitor      *monitor,
 			gpointer           data)
 {
   GtkFileSystem *file_system = GTK_FILE_SYSTEM (data);
-  GtkFileSystemPriv *priv = file_system->priv;
+  GtkFileSystemPrivate *priv = file_system->priv;
 
   switch (event)
     {
@@ -389,7 +389,7 @@ mount_referenced_by_volume_activation_root (GList *volumes, GMount *mount)
 static void
 get_volumes_list (GtkFileSystem *file_system)
 {
-  GtkFileSystemPriv *priv = file_system->priv;
+  GtkFileSystemPrivate *priv = file_system->priv;
   GList *l, *ll;
   GList *drives;
   GList *volumes;
@@ -530,7 +530,7 @@ get_volumes_list (GtkFileSystem *file_system)
 static void
 _gtk_file_system_init (GtkFileSystem *file_system)
 {
-  GtkFileSystemPriv *priv;
+  GtkFileSystemPrivate *priv;
   GFile *bookmarks_file;
   GError *error = NULL;
 
@@ -538,7 +538,7 @@ _gtk_file_system_init (GtkFileSystem *file_system)
 
   file_system->priv = G_TYPE_INSTANCE_GET_PRIVATE (file_system,
                                                    GTK_TYPE_FILE_SYSTEM,
-                                                   GtkFileSystemPriv);
+                                                   GtkFileSystemPrivate);
   priv = file_system->priv;
 
   /* Volumes */
@@ -591,7 +591,7 @@ _gtk_file_system_new (void)
 GSList *
 _gtk_file_system_list_volumes (GtkFileSystem *file_system)
 {
-  GtkFileSystemPriv *priv = file_system->priv;
+  GtkFileSystemPrivate *priv = file_system->priv;
   GSList *list;
 
   DEBUG ("list_volumes");
@@ -611,7 +611,7 @@ _gtk_file_system_list_volumes (GtkFileSystem *file_system)
 GSList *
 _gtk_file_system_list_bookmarks (GtkFileSystem *file_system)
 {
-  GtkFileSystemPriv *priv = file_system->priv;
+  GtkFileSystemPrivate *priv = file_system->priv;
   GSList *bookmarks, *files = NULL;
 
   DEBUG ("list_bookmarks");
@@ -1063,7 +1063,7 @@ _gtk_file_system_insert_bookmark (GtkFileSystem  *file_system,
 				  gint            position,
 				  GError        **error)
 {
-  GtkFileSystemPriv *priv = file_system->priv;
+  GtkFileSystemPrivate *priv = file_system->priv;
   GSList *bookmarks;
   GtkFileSystemBookmark *bookmark;
   gboolean result = TRUE;
@@ -1118,7 +1118,7 @@ _gtk_file_system_remove_bookmark (GtkFileSystem  *file_system,
 				  GFile          *file,
 				  GError        **error)
 {
-  GtkFileSystemPriv *priv = file_system->priv;
+  GtkFileSystemPrivate *priv = file_system->priv;
   GtkFileSystemBookmark *bookmark;
   GSList *bookmarks;
   gboolean result = FALSE;
@@ -1173,7 +1173,7 @@ gchar *
 _gtk_file_system_get_bookmark_label (GtkFileSystem *file_system,
 				     GFile         *file)
 {
-  GtkFileSystemPriv *priv = file_system->priv;
+  GtkFileSystemPrivate *priv = file_system->priv;
   GSList *bookmarks;
   gchar *label = NULL;
 
@@ -1203,7 +1203,7 @@ _gtk_file_system_set_bookmark_label (GtkFileSystem *file_system,
 				     GFile         *file,
 				     const gchar   *label)
 {
-  GtkFileSystemPriv *priv = file_system->priv;
+  GtkFileSystemPrivate *priv = file_system->priv;
   gboolean changed = FALSE;
   GFile *bookmarks_file;
   GSList *bookmarks;
@@ -1260,7 +1260,7 @@ gtk_folder_set_property (GObject      *object,
 			 GParamSpec   *pspec)
 {
   GtkFolder *folder = GTK_FOLDER (object);
-  GtkFolderPriv *priv = folder->priv;
+  GtkFolderPrivate *priv = folder->priv;
 
   switch (prop_id)
     {
@@ -1286,7 +1286,7 @@ gtk_folder_get_property (GObject    *object,
 			 GParamSpec *pspec)
 {
   GtkFolder *folder = GTK_FOLDER (object);
-  GtkFolderPriv *priv = folder->priv;
+  GtkFolderPrivate *priv = folder->priv;
 
   switch (prop_id)
     {
@@ -1342,7 +1342,7 @@ directory_monitor_changed (GFileMonitor      *monitor,
 			   gpointer           data)
 {
   GtkFolder *folder = GTK_FOLDER (data);
-  GtkFolderPriv *priv = folder->priv;
+  GtkFolderPrivate *priv = folder->priv;
   GSList *files;
 
   files = g_slist_prepend (NULL, file);
@@ -1381,7 +1381,7 @@ enumerator_files_callback (GObject      *source_object,
 			   gpointer      user_data)
 {
   GtkFolder *folder = GTK_FOLDER (user_data);
-  GtkFolderPriv *priv = folder->priv;
+  GtkFolderPrivate *priv = folder->priv;
   GFileEnumerator *enumerator;
   GError *error = NULL;
   GSList *files = NULL;
@@ -1441,7 +1441,7 @@ static void
 gtk_folder_constructed (GObject *object)
 {
   GtkFolder *folder = GTK_FOLDER (object);
-  GtkFolderPriv *priv = folder->priv;
+  GtkFolderPrivate *priv = folder->priv;
   GError *error = NULL;
 
   priv->directory_monitor = g_file_monitor_directory (priv->folder_file, G_FILE_MONITOR_NONE, NULL, &error);
@@ -1470,7 +1470,7 @@ static void
 gtk_folder_finalize (GObject *object)
 {
   GtkFolder *folder = GTK_FOLDER (object);
-  GtkFolderPriv *priv = folder->priv;
+  GtkFolderPrivate *priv = folder->priv;
 
   g_hash_table_unref (priv->children);
 
@@ -1559,13 +1559,13 @@ _gtk_folder_class_init (GtkFolderClass *class)
 		  g_cclosure_marshal_VOID__VOID,
 		  G_TYPE_NONE, 0);
 
-  g_type_class_add_private (object_class, sizeof (GtkFolderPriv));
+  g_type_class_add_private (object_class, sizeof (GtkFolderPrivate));
 }
 
 static void
 _gtk_folder_init (GtkFolder *folder)
 {
-  GtkFolderPriv *priv = folder->priv;
+  GtkFolderPrivate *priv = folder->priv;
 
   priv->children = g_hash_table_new_full (g_file_hash,
 					  (GEqualFunc) g_file_equal,
@@ -1578,7 +1578,7 @@ static void
 gtk_folder_set_finished_loading (GtkFolder *folder,
 				 gboolean   finished_loading)
 {
-  GtkFolderPriv *priv = folder->priv;
+  GtkFolderPrivate *priv = folder->priv;
 
   priv->finished_loading = (finished_loading == TRUE);
 
@@ -1592,7 +1592,7 @@ gtk_folder_add_file (GtkFolder *folder,
 		     GFile     *file,
 		     GFileInfo *info)
 {
-  GtkFolderPriv *priv = folder->priv;
+  GtkFolderPrivate *priv = folder->priv;
 
   g_hash_table_insert (priv->children,
 		       g_object_ref (file),
@@ -1602,7 +1602,7 @@ gtk_folder_add_file (GtkFolder *folder,
 GSList *
 _gtk_folder_list_children (GtkFolder *folder)
 {
-  GtkFolderPriv *priv = folder->priv;
+  GtkFolderPrivate *priv = folder->priv;
   GList *files, *elem;
   GSList *children = NULL;
 
@@ -1621,7 +1621,7 @@ GFileInfo *
 _gtk_folder_get_info (GtkFolder  *folder,
 		      GFile      *file)
 {
-  GtkFolderPriv *priv = folder->priv;
+  GtkFolderPrivate *priv = folder->priv;
   GFileInfo *info;
 
   info = g_hash_table_lookup (priv->children, file);

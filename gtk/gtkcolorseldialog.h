@@ -45,9 +45,9 @@ G_BEGIN_DECLS
 #define GTK_COLOR_SELECTION_DIALOG_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_COLOR_SELECTION_DIALOG, GtkColorSelectionDialogClass))
 
 
-typedef struct _GtkColorSelectionDialog       GtkColorSelectionDialog;
-typedef struct _GtkColorSelectionDialogPriv   GtkColorSelectionDialogPriv;
-typedef struct _GtkColorSelectionDialogClass  GtkColorSelectionDialogClass;
+typedef struct _GtkColorSelectionDialog              GtkColorSelectionDialog;
+typedef struct _GtkColorSelectionDialogPrivate       GtkColorSelectionDialogPrivate;
+typedef struct _GtkColorSelectionDialogClass         GtkColorSelectionDialogClass;
 
 
 struct _GtkColorSelectionDialog
@@ -55,7 +55,7 @@ struct _GtkColorSelectionDialog
   GtkDialog parent_instance;
 
   /* <private> */
-  GtkColorSelectionDialogPriv *priv;
+  GtkColorSelectionDialogPrivate *priv;
 };
 
 struct _GtkColorSelectionDialogClass

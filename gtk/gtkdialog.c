@@ -42,7 +42,7 @@
 #include "gtkbuildable.h"
 
 
-struct _GtkDialogPriv
+struct _GtkDialogPrivate
 {
   GtkWidget *vbox;
   GtkWidget *action_area;
@@ -136,7 +136,7 @@ gtk_dialog_class_init (GtkDialogClass *class)
 
   class->close = gtk_dialog_close;
   
-  g_type_class_add_private (gobject_class, sizeof (GtkDialogPriv));
+  g_type_class_add_private (gobject_class, sizeof (GtkDialogPrivate));
 
   /**
    * GtkDialog:has-separator:
@@ -242,7 +242,7 @@ gtk_dialog_class_init (GtkDialogClass *class)
 static void
 update_spacings (GtkDialog *dialog)
 {
-  GtkDialogPriv *priv = dialog->priv;
+  GtkDialogPrivate *priv = dialog->priv;
   gint content_area_border;
   gint content_area_spacing;
   gint button_spacing;
@@ -271,11 +271,11 @@ update_spacings (GtkDialog *dialog)
 static void
 gtk_dialog_init (GtkDialog *dialog)
 {
-  GtkDialogPriv *priv;
+  GtkDialogPrivate *priv;
 
   dialog->priv = G_TYPE_INSTANCE_GET_PRIVATE (dialog,
                                               GTK_TYPE_DIALOG,
-                                              GtkDialogPriv);
+                                              GtkDialogPrivate);
   priv = dialog->priv;
 
   priv->ignore_separator = FALSE;
@@ -328,7 +328,7 @@ gtk_dialog_buildable_get_internal_child (GtkBuildable *buildable,
 					 GtkBuilder   *builder,
 					 const gchar  *childname)
 {
-  GtkDialogPriv *priv = GTK_DIALOG (buildable)->priv;
+  GtkDialogPrivate *priv = GTK_DIALOG (buildable)->priv;
 
   if (strcmp (childname, "vbox") == 0)
     return G_OBJECT (priv->vbox);
@@ -369,7 +369,7 @@ gtk_dialog_get_property (GObject     *object,
                          GParamSpec  *pspec)
 {
   GtkDialog *dialog = GTK_DIALOG (object);
-  GtkDialogPriv *priv = dialog->priv;
+  GtkDialogPrivate *priv = dialog->priv;
   
   switch (prop_id)
     {
@@ -410,7 +410,7 @@ gtk_dialog_map (GtkWidget *widget)
   GtkWidget *default_widget, *focus;
   GtkWindow *window = GTK_WINDOW (widget);
   GtkDialog *dialog = GTK_DIALOG (widget);
-  GtkDialogPriv *priv = dialog->priv;
+  GtkDialogPrivate *priv = dialog->priv;
   
   GTK_WIDGET_CLASS (gtk_dialog_parent_class)->map (widget);
 
@@ -472,7 +472,7 @@ static GtkWidget *
 dialog_find_button (GtkDialog *dialog,
 		    gint       response_id)
 {
-  GtkDialogPriv *priv = dialog->priv;
+  GtkDialogPrivate *priv = dialog->priv;
   GtkWidget *child = NULL;
   GList *children, *tmp_list;
       
@@ -662,7 +662,7 @@ gtk_dialog_add_action_widget (GtkDialog *dialog,
                               GtkWidget *child,
                               gint       response_id)
 {
-  GtkDialogPriv *priv;
+  GtkDialogPrivate *priv;
   ResponseData *ad;
   guint signal_id;
   
@@ -809,7 +809,7 @@ gtk_dialog_set_response_sensitive (GtkDialog *dialog,
                                    gint       response_id,
                                    gboolean   setting)
 {
-  GtkDialogPriv *priv;
+  GtkDialogPrivate *priv;
   GList *children;
   GList *tmp_list;
 
@@ -847,7 +847,7 @@ void
 gtk_dialog_set_default_response (GtkDialog *dialog,
                                  gint       response_id)
 {
-  GtkDialogPriv *priv;
+  GtkDialogPrivate *priv;
   GList *children;
   GList *tmp_list;
 
@@ -884,7 +884,7 @@ void
 gtk_dialog_set_has_separator (GtkDialog *dialog,
                               gboolean   setting)
 {
-  GtkDialogPriv *priv;
+  GtkDialogPrivate *priv;
 
   g_return_if_fail (GTK_IS_DIALOG (dialog));
 
@@ -1140,7 +1140,7 @@ void
 _gtk_dialog_set_ignore_separator (GtkDialog *dialog,
 				  gboolean   ignore_separator)
 {
-  GtkDialogPriv *priv = dialog->priv;
+  GtkDialogPrivate *priv = dialog->priv;
 
   priv->ignore_separator = ignore_separator;
 }
@@ -1161,7 +1161,7 @@ GtkWidget*
 gtk_dialog_get_widget_for_response (GtkDialog *dialog,
 				    gint       response_id)
 {
-  GtkDialogPriv *priv;
+  GtkDialogPrivate *priv;
   GList *children;
   GList *tmp_list;
 
@@ -1257,7 +1257,7 @@ gtk_dialog_set_alternative_button_order_valist (GtkDialog *dialog,
 						gint       first_response_id,
 						va_list    args)
 {
-  GtkDialogPriv *priv = dialog->priv;
+  GtkDialogPrivate *priv = dialog->priv;
   GtkWidget *child;
   gint response_id;
   gint position;
@@ -1362,7 +1362,7 @@ gtk_dialog_set_alternative_button_order_from_array (GtkDialog *dialog,
                                                     gint       n_params,
                                                     gint      *new_order)
 {
-  GtkDialogPriv *priv = dialog->priv;
+  GtkDialogPrivate *priv = dialog->priv;
   GdkScreen *screen;
   GtkWidget *child;
   gint position;
@@ -1480,7 +1480,7 @@ gtk_dialog_buildable_custom_finished (GtkBuildable *buildable,
 				      gpointer      user_data)
 {
   GtkDialog *dialog = GTK_DIALOG (buildable);
-  GtkDialogPriv *priv = dialog->priv;
+  GtkDialogPrivate *priv = dialog->priv;
   GSList *l;
   ActionWidgetsSubParserData *parser_data;
   GObject *object;

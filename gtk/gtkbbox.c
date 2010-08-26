@@ -59,7 +59,7 @@
 #include "gtkintl.h"
 
 
-struct _GtkButtonBoxPriv
+struct _GtkButtonBoxPrivate
 {
   GtkButtonBoxStyle layout_style;
 };
@@ -185,17 +185,17 @@ gtk_button_box_class_init (GtkButtonBoxClass *class)
                                                                     FALSE,
                                                                     GTK_PARAM_READWRITE));
 
-  g_type_class_add_private (class, sizeof (GtkButtonBoxPriv));
+  g_type_class_add_private (class, sizeof (GtkButtonBoxPrivate));
 }
 
 static void
 gtk_button_box_init (GtkButtonBox *button_box)
 {
-  GtkButtonBoxPriv *priv;
+  GtkButtonBoxPrivate *priv;
 
   button_box->priv = G_TYPE_INSTANCE_GET_PRIVATE (button_box,
                                                   GTK_TYPE_BUTTON_BOX,
-                                                  GtkButtonBoxPriv);
+                                                  GtkButtonBoxPrivate);
   priv = button_box->priv;
 
   gtk_box_set_spacing (GTK_BOX (button_box), 0);
@@ -226,7 +226,7 @@ gtk_button_box_get_property (GObject    *object,
                              GValue     *value,
                              GParamSpec *pspec)
 {
-  GtkButtonBoxPriv *priv = GTK_BUTTON_BOX (object)->priv;
+  GtkButtonBoxPrivate *priv = GTK_BUTTON_BOX (object)->priv;
 
   switch (prop_id)
     {
@@ -303,7 +303,7 @@ void
 gtk_button_box_set_layout (GtkButtonBox      *widget,
                            GtkButtonBoxStyle  layout_style)
 {
-  GtkButtonBoxPriv *priv;
+  GtkButtonBoxPrivate *priv;
 
   g_return_if_fail (GTK_IS_BUTTON_BOX (widget));
 
@@ -404,7 +404,7 @@ gtk_button_box_child_requisition (GtkWidget  *widget,
                                   gint      **widths,
                                   gint      **heights)
 {
-  GtkButtonBoxPriv *priv;
+  GtkButtonBoxPrivate *priv;
   GtkButtonBox *bbox;
   GList *children, *list;
   gint nchildren;
@@ -531,7 +531,7 @@ static void
 gtk_button_box_size_request (GtkWidget      *widget,
                              GtkRequisition *requisition)
 {
-  GtkButtonBoxPriv *priv;
+  GtkButtonBoxPrivate *priv;
   GtkButtonBox *bbox;
   gint nvis_children;
   gint max_size;
@@ -618,7 +618,7 @@ static void
 gtk_button_box_size_allocate (GtkWidget     *widget,
                               GtkAllocation *allocation)
 {
-  GtkButtonBoxPriv *priv;
+  GtkButtonBoxPrivate *priv;
   GtkButtonBox *bbox;
   GList *children, *list;
   GtkAllocation child_allocation;

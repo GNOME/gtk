@@ -31,7 +31,7 @@
 
 
 
-struct _GtkTablePriv
+struct _GtkTablePrivate
 {
   GtkTableRowCol *cols;
   GtkTableRowCol *rows;
@@ -240,7 +240,7 @@ gtk_table_class_init (GtkTableClass *class)
 								 0, 65535, 0,
 								 GTK_PARAM_READWRITE));
 
-  g_type_class_add_private (class, sizeof (GtkTablePriv));
+  g_type_class_add_private (class, sizeof (GtkTablePrivate));
 }
 
 static GType
@@ -256,7 +256,7 @@ gtk_table_get_property (GObject      *object,
 			GParamSpec   *pspec)
 {
   GtkTable *table = GTK_TABLE (object);
-  GtkTablePriv *priv = table->priv;
+  GtkTablePrivate *priv = table->priv;
 
   switch (prop_id)
     {
@@ -288,7 +288,7 @@ gtk_table_set_property (GObject      *object,
 			GParamSpec   *pspec)
 {
   GtkTable *table = GTK_TABLE (object);
-  GtkTablePriv *priv = table->priv;
+  GtkTablePrivate *priv = table->priv;
 
   switch (prop_id)
     {
@@ -321,7 +321,7 @@ gtk_table_set_child_property (GtkContainer    *container,
 			      GParamSpec      *pspec)
 {
   GtkTable *table = GTK_TABLE (container);
-  GtkTablePriv *priv = table->priv;
+  GtkTablePrivate *priv = table->priv;
   GtkTableChild *table_child;
   GList *list;
 
@@ -402,7 +402,7 @@ gtk_table_get_child_property (GtkContainer    *container,
 			      GParamSpec      *pspec)
 {
   GtkTable *table = GTK_TABLE (container);
-  GtkTablePriv *priv = table->priv;
+  GtkTablePrivate *priv = table->priv;
   GtkTableChild *table_child;
   GList *list;
 
@@ -459,11 +459,11 @@ gtk_table_get_child_property (GtkContainer    *container,
 static void
 gtk_table_init (GtkTable *table)
 {
-  GtkTablePriv *priv;
+  GtkTablePrivate *priv;
 
   table->priv = G_TYPE_INSTANCE_GET_PRIVATE (table,
                                              GTK_TYPE_TABLE,
-                                             GtkTablePriv);
+                                             GtkTablePrivate);
   priv = table->priv;
 
   gtk_widget_set_has_window (GTK_WIDGET (table), FALSE);
@@ -487,7 +487,7 @@ gtk_table_new (guint	rows,
 	       gboolean homogeneous)
 {
   GtkTable *table;
-  GtkTablePriv *priv;
+  GtkTablePrivate *priv;
 
   if (rows == 0)
     rows = 1;
@@ -509,7 +509,7 @@ gtk_table_resize (GtkTable *table,
 		  guint     n_rows,
 		  guint     n_cols)
 {
-  GtkTablePriv *priv;
+  GtkTablePrivate *priv;
 
   g_return_if_fail (GTK_IS_TABLE (table));
   g_return_if_fail (n_rows > 0 && n_rows <= 65535);
@@ -593,7 +593,7 @@ gtk_table_attach (GtkTable	  *table,
 		  guint		   xpadding,
 		  guint		   ypadding)
 {
-  GtkTablePriv *priv = table->priv;
+  GtkTablePrivate *priv = table->priv;
   GtkTableChild *table_child;
   
   g_return_if_fail (GTK_IS_TABLE (table));
@@ -654,7 +654,7 @@ gtk_table_set_row_spacing (GtkTable *table,
 			   guint     row,
 			   guint     spacing)
 {
-  GtkTablePriv *priv;
+  GtkTablePrivate *priv;
 
   g_return_if_fail (GTK_IS_TABLE (table));
 
@@ -685,7 +685,7 @@ guint
 gtk_table_get_row_spacing (GtkTable *table,
 			   guint     row)
 {
-  GtkTablePriv *priv;
+  GtkTablePrivate *priv;
 
   g_return_val_if_fail (GTK_IS_TABLE (table), 0);
 
@@ -701,7 +701,7 @@ gtk_table_set_col_spacing (GtkTable *table,
 			   guint     column,
 			   guint     spacing)
 {
-  GtkTablePriv *priv;
+  GtkTablePrivate *priv;
 
   g_return_if_fail (GTK_IS_TABLE (table));
 
@@ -732,7 +732,7 @@ guint
 gtk_table_get_col_spacing (GtkTable *table,
 			   guint     column)
 {
-  GtkTablePriv *priv;
+  GtkTablePrivate *priv;
 
   g_return_val_if_fail (GTK_IS_TABLE (table), 0);
 
@@ -747,7 +747,7 @@ void
 gtk_table_set_row_spacings (GtkTable *table,
 			    guint     spacing)
 {
-  GtkTablePriv *priv;
+  GtkTablePrivate *priv;
   guint row;
   
   g_return_if_fail (GTK_IS_TABLE (table));
@@ -786,7 +786,7 @@ void
 gtk_table_set_col_spacings (GtkTable *table,
 			    guint     spacing)
 {
-  GtkTablePriv *priv;
+  GtkTablePrivate *priv;
   guint col;
 
   g_return_if_fail (GTK_IS_TABLE (table));
@@ -825,7 +825,7 @@ void
 gtk_table_set_homogeneous (GtkTable *table,
 			   gboolean  homogeneous)
 {
-  GtkTablePriv *priv;
+  GtkTablePrivate *priv;
 
   g_return_if_fail (GTK_IS_TABLE (table));
 
@@ -877,7 +877,7 @@ gtk_table_get_size (GtkTable *table,
                     guint    *rows,
                     guint    *columns)
 {
-  GtkTablePriv *priv;
+  GtkTablePrivate *priv;
 
   g_return_if_fail (GTK_IS_TABLE (table));
 
@@ -894,7 +894,7 @@ static void
 gtk_table_finalize (GObject *object)
 {
   GtkTable *table = GTK_TABLE (object);
-  GtkTablePriv *priv = table->priv;
+  GtkTablePrivate *priv = table->priv;
 
   g_free (priv->rows);
   g_free (priv->cols);
@@ -907,7 +907,7 @@ gtk_table_size_request (GtkWidget      *widget,
 			GtkRequisition *requisition)
 {
   GtkTable *table = GTK_TABLE (widget);
-  GtkTablePriv *priv = table->priv;
+  GtkTablePrivate *priv = table->priv;
   gint row, col;
   guint border_width;
 
@@ -960,7 +960,7 @@ gtk_table_remove (GtkContainer *container,
 		  GtkWidget    *widget)
 {
   GtkTable *table = GTK_TABLE (container);
-  GtkTablePriv *priv = table->priv;
+  GtkTablePrivate *priv = table->priv;
   GtkTableChild *child;
   GtkWidget *widget_container = GTK_WIDGET (container);
   GList *children;
@@ -995,7 +995,7 @@ gtk_table_forall (GtkContainer *container,
 		  gpointer	callback_data)
 {
   GtkTable *table = GTK_TABLE (container);
-  GtkTablePriv *priv = table->priv;
+  GtkTablePrivate *priv = table->priv;
   GtkTableChild *child;
   GList *children;
 
@@ -1013,7 +1013,7 @@ gtk_table_forall (GtkContainer *container,
 static void
 gtk_table_size_request_init (GtkTable *table)
 {
-  GtkTablePriv *priv = table->priv;
+  GtkTablePrivate *priv = table->priv;
   GtkTableChild *child;
   GList *children;
   gint row, col;
@@ -1049,7 +1049,7 @@ gtk_table_size_request_init (GtkTable *table)
 static void
 gtk_table_size_request_pass1 (GtkTable *table)
 {
-  GtkTablePriv *priv = table->priv;
+  GtkTablePrivate *priv = table->priv;
   GtkTableChild *child;
   GList *children;
   gint width;
@@ -1088,7 +1088,7 @@ gtk_table_size_request_pass1 (GtkTable *table)
 static void
 gtk_table_size_request_pass2 (GtkTable *table)
 {
-  GtkTablePriv *priv = table->priv;
+  GtkTablePrivate *priv = table->priv;
   gint max_width;
   gint max_height;
   gint row, col;
@@ -1113,7 +1113,7 @@ gtk_table_size_request_pass2 (GtkTable *table)
 static void
 gtk_table_size_request_pass3 (GtkTable *table)
 {
-  GtkTablePriv *priv = table->priv;
+  GtkTablePrivate *priv = table->priv;
   GtkTableChild *child;
   GList *children;
   gint width, height;
@@ -1238,7 +1238,7 @@ gtk_table_size_request_pass3 (GtkTable *table)
 static void
 gtk_table_size_allocate_init (GtkTable *table)
 {
-  GtkTablePriv *priv = table->priv;
+  GtkTablePrivate *priv = table->priv;
   GtkTableChild *child;
   GList *children;
   gint row, col;
@@ -1433,7 +1433,7 @@ gtk_table_size_allocate_init (GtkTable *table)
 static void
 gtk_table_size_allocate_pass1 (GtkTable *table)
 {
-  GtkTablePriv *priv = table->priv;
+  GtkTablePrivate *priv = table->priv;
   GtkAllocation allocation;
   gint real_width;
   gint real_height;
@@ -1640,7 +1640,7 @@ gtk_table_size_allocate_pass1 (GtkTable *table)
 static void
 gtk_table_size_allocate_pass2 (GtkTable *table)
 {
-  GtkTablePriv *priv = table->priv;
+  GtkTablePrivate *priv = table->priv;
   GtkTableChild *child;
   GList *children;
   gint max_width;

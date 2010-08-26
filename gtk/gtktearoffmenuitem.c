@@ -34,7 +34,7 @@
 #define TEAR_LENGTH 5
 #define BORDER_SPACING  3
 
-struct _GtkTearoffMenuItemPriv
+struct _GtkTearoffMenuItemPrivate
 {
   guint torn_off : 1;
 };
@@ -70,17 +70,17 @@ gtk_tearoff_menu_item_class_init (GtkTearoffMenuItemClass *klass)
 
   menu_item_class->activate = gtk_tearoff_menu_item_activate;
 
-  g_type_class_add_private (klass, sizeof (GtkTearoffMenuItemPriv));
+  g_type_class_add_private (klass, sizeof (GtkTearoffMenuItemPrivate));
 }
 
 static void
 gtk_tearoff_menu_item_init (GtkTearoffMenuItem *tearoff_menu_item)
 {
-  GtkTearoffMenuItemPriv *priv;
+  GtkTearoffMenuItemPrivate *priv;
 
   tearoff_menu_item->priv = G_TYPE_INSTANCE_GET_PRIVATE (tearoff_menu_item,
                                                          GTK_TYPE_TEAROFF_MENU_ITEM,
-                                                         GtkTearoffMenuItemPriv);
+                                                         GtkTearoffMenuItemPrivate);
   priv = tearoff_menu_item->priv;
 
   priv->torn_off = FALSE;
@@ -260,7 +260,7 @@ tearoff_state_changed (GtkMenu            *menu,
 		       gpointer            data)
 {
   GtkTearoffMenuItem *tearoff_menu_item = GTK_TEAROFF_MENU_ITEM (data);
-  GtkTearoffMenuItemPriv *priv = tearoff_menu_item->priv;
+  GtkTearoffMenuItemPrivate *priv = tearoff_menu_item->priv;
 
   priv->torn_off = gtk_menu_get_tearoff_state (menu);
 }
@@ -270,7 +270,7 @@ gtk_tearoff_menu_item_parent_set (GtkWidget *widget,
 				  GtkWidget *previous)
 {
   GtkTearoffMenuItem *tearoff_menu_item = GTK_TEAROFF_MENU_ITEM (widget);
-  GtkTearoffMenuItemPriv *priv = tearoff_menu_item->priv;
+  GtkTearoffMenuItemPrivate *priv = tearoff_menu_item->priv;
   GtkMenu *menu;
   GtkWidget *parent;
 

@@ -36,16 +36,16 @@ G_BEGIN_DECLS
 #define GTK_IS_CELL_RENDERER_COMBO_CLASS(klass)	(G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_CELL_RENDERER_COMBO))
 #define GTK_CELL_RENDERER_COMBO_GET_CLASS(obj)   (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_CELL_RENDERER_COMBO, GtkCellRendererTextClass))
 
-typedef struct _GtkCellRendererCombo      GtkCellRendererCombo;
-typedef struct _GtkCellRendererComboPriv  GtkCellRendererComboPriv;
-typedef struct _GtkCellRendererComboClass GtkCellRendererComboClass;
+typedef struct _GtkCellRendererCombo              GtkCellRendererCombo;
+typedef struct _GtkCellRendererComboPrivate       GtkCellRendererComboPrivate;
+typedef struct _GtkCellRendererComboClass         GtkCellRendererComboClass;
 
 struct _GtkCellRendererCombo
 {
   GtkCellRendererText parent;
 
   /* <private> */
-  GtkCellRendererComboPriv *priv;
+  GtkCellRendererComboPrivate *priv;
 };
 
 struct _GtkCellRendererComboClass

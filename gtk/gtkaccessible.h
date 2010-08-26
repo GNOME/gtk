@@ -37,7 +37,7 @@ G_BEGIN_DECLS
 #define GTK_ACCESSIBLE_GET_CLASS(obj)        (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_ACCESSIBLE, GtkAccessibleClass))
 
 typedef struct _GtkAccessible                GtkAccessible;
-typedef struct _GtkAccessiblePriv            GtkAccessiblePriv;
+typedef struct _GtkAccessiblePrivate         GtkAccessiblePrivate;
 typedef struct _GtkAccessibleClass           GtkAccessibleClass;
 
   /*
@@ -48,7 +48,7 @@ struct _GtkAccessible
   AtkObject parent;
 
   /*< private >*/
-  GtkAccessiblePriv *priv;
+  GtkAccessiblePrivate *priv;
 };
 
 struct _GtkAccessibleClass

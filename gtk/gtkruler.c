@@ -41,7 +41,7 @@
 
 #define ROUND(x) ((int) ((x) + 0.5))
 
-struct _GtkRulerPriv
+struct _GtkRulerPrivate
 {
   GtkOrientation        orientation;
   GtkRulerMetric       *metric;
@@ -183,18 +183,18 @@ gtk_ruler_class_init (GtkRulerClass *class)
 						      GTK_PIXELS,
 						      GTK_PARAM_READWRITE));  
 
-  g_type_class_add_private (gobject_class, sizeof (GtkRulerPriv));
+  g_type_class_add_private (gobject_class, sizeof (GtkRulerPrivate));
 }
 
 static void
 gtk_ruler_init (GtkRuler *ruler)
 {
   GtkWidget *widget = GTK_WIDGET (ruler);
-  GtkRulerPriv *priv;
+  GtkRulerPrivate *priv;
 
   ruler->priv = G_TYPE_INSTANCE_GET_PRIVATE (ruler,
                                              GTK_TYPE_RULER,
-                                             GtkRulerPriv);
+                                             GtkRulerPrivate);
   priv = ruler->priv;
 
   priv->orientation = GTK_ORIENTATION_HORIZONTAL;
@@ -221,7 +221,7 @@ gtk_ruler_set_property (GObject      *object,
 			GParamSpec   *pspec)
 {
   GtkRuler *ruler = GTK_RULER (object);
-  GtkRulerPriv *priv = ruler->priv;
+  GtkRulerPrivate *priv = ruler->priv;
 
   switch (prop_id)
     {
@@ -261,7 +261,7 @@ gtk_ruler_get_property (GObject      *object,
 			GParamSpec   *pspec)
 {
   GtkRuler *ruler = GTK_RULER (object);
-  GtkRulerPriv *priv = ruler->priv;
+  GtkRulerPrivate *priv = ruler->priv;
 
   switch (prop_id)
     {
@@ -311,7 +311,7 @@ void
 gtk_ruler_set_metric (GtkRuler      *ruler,
 		      GtkMetricType  metric)
 {
-  GtkRulerPriv *priv;
+  GtkRulerPrivate *priv;
 
   g_return_if_fail (GTK_IS_RULER (ruler));
 
@@ -336,7 +336,7 @@ gtk_ruler_set_metric (GtkRuler      *ruler,
 GtkMetricType
 gtk_ruler_get_metric (GtkRuler *ruler)
 {
-  GtkRulerPriv *priv;
+  GtkRulerPrivate *priv;
   gint i;
 
   g_return_val_if_fail (GTK_IS_RULER (ruler), 0);
@@ -370,7 +370,7 @@ gtk_ruler_set_range (GtkRuler *ruler,
 		     gdouble   position,
 		     gdouble   max_size)
 {
-  GtkRulerPriv *priv;
+  GtkRulerPrivate *priv;
 
   g_return_if_fail (GTK_IS_RULER (ruler));
 
@@ -422,7 +422,7 @@ gtk_ruler_get_range (GtkRuler *ruler,
 		     gdouble  *position,
 		     gdouble  *max_size)
 {
-  GtkRulerPriv *priv;
+  GtkRulerPrivate *priv;
 
   g_return_if_fail (GTK_IS_RULER (ruler));
 
@@ -496,7 +496,7 @@ static void
 gtk_ruler_unrealize (GtkWidget *widget)
 {
   GtkRuler *ruler = GTK_RULER (widget);
-  GtkRulerPriv *priv = ruler->priv;
+  GtkRulerPrivate *priv = ruler->priv;
 
   if (priv->backing_store)
     {
@@ -512,7 +512,7 @@ gtk_ruler_size_request (GtkWidget      *widget,
                         GtkRequisition *requisition)
 {
   GtkRuler *ruler = GTK_RULER (widget);
-  GtkRulerPriv *priv = ruler->priv;
+  GtkRulerPrivate *priv = ruler->priv;
 
   if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
     {
@@ -549,7 +549,7 @@ gtk_ruler_motion_notify (GtkWidget      *widget,
                          GdkEventMotion *event)
 {
   GtkRuler *ruler = GTK_RULER (widget);
-  GtkRulerPriv *priv = ruler->priv;
+  GtkRulerPrivate *priv = ruler->priv;
   gint x;
   gint y;
 
@@ -578,7 +578,7 @@ gtk_ruler_expose (GtkWidget      *widget,
   if (gtk_widget_is_drawable (widget))
     {
       GtkRuler *ruler = GTK_RULER (widget);
-      GtkRulerPriv *priv = ruler->priv;
+      GtkRulerPrivate *priv = ruler->priv;
       cairo_t *cr;
 
       gtk_ruler_draw_ticks (ruler);
@@ -598,7 +598,7 @@ gtk_ruler_expose (GtkWidget      *widget,
 static void
 gtk_ruler_make_pixmap (GtkRuler *ruler)
 {
-  GtkRulerPriv *priv = ruler->priv;
+  GtkRulerPrivate *priv = ruler->priv;
   GtkWidget *widget;
   gint width;
   gint height;
@@ -628,7 +628,7 @@ static void
 gtk_ruler_real_draw_ticks (GtkRuler *ruler)
 {
   GtkWidget *widget = GTK_WIDGET (ruler);
-  GtkRulerPriv *priv = ruler->priv;
+  GtkRulerPrivate *priv = ruler->priv;
   cairo_t *cr;
   gint i, j;
   gint width, height;
@@ -841,7 +841,7 @@ static void
 gtk_ruler_real_draw_pos (GtkRuler *ruler)
 {
   GtkWidget *widget = GTK_WIDGET (ruler);
-  GtkRulerPriv *priv = ruler->priv;
+  GtkRulerPrivate *priv = ruler->priv;
   gint x, y;
   gint width, height;
   gint bs_width, bs_height;

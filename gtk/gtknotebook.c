@@ -65,7 +65,7 @@ enum {
   N_ACTION_WIDGETS
 };
 
-struct _GtkNotebookPriv
+struct _GtkNotebookPrivate
 {
   GtkNotebookDragOperation   operation;
   GtkNotebookPage           *cur_page;
@@ -1038,20 +1038,20 @@ gtk_notebook_class_init (GtkNotebookClass *class)
   add_tab_bindings (binding_set, GDK_CONTROL_MASK, GTK_DIR_TAB_FORWARD);
   add_tab_bindings (binding_set, GDK_CONTROL_MASK | GDK_SHIFT_MASK, GTK_DIR_TAB_BACKWARD);
 
-  g_type_class_add_private (class, sizeof (GtkNotebookPriv));
+  g_type_class_add_private (class, sizeof (GtkNotebookPrivate));
 }
 
 static void
 gtk_notebook_init (GtkNotebook *notebook)
 {
-  GtkNotebookPriv *priv;
+  GtkNotebookPrivate *priv;
 
   gtk_widget_set_can_focus (GTK_WIDGET (notebook), TRUE);
   gtk_widget_set_has_window (GTK_WIDGET (notebook), FALSE);
 
   notebook->priv = G_TYPE_INSTANCE_GET_PRIVATE (notebook,
                                                 GTK_TYPE_NOTEBOOK,
-                                                GtkNotebookPriv);
+                                                GtkNotebookPrivate);
   priv = notebook->priv;
 
   priv->cur_page = NULL;
@@ -1144,7 +1144,7 @@ static gboolean
 gtk_notebook_select_page (GtkNotebook *notebook,
                           gboolean     move_focus)
 {
-  GtkNotebookPriv *priv = notebook->priv;
+  GtkNotebookPrivate *priv = notebook->priv;
 
   if (gtk_widget_is_focus (GTK_WIDGET (notebook)) && priv->show_tabs)
     {
@@ -1159,7 +1159,7 @@ static gboolean
 gtk_notebook_focus_tab (GtkNotebook       *notebook,
                         GtkNotebookTab     type)
 {
-  GtkNotebookPriv *priv = notebook->priv;
+  GtkNotebookPrivate *priv = notebook->priv;
   GList *list;
 
   if (gtk_widget_is_focus (GTK_WIDGET (notebook)) && priv->show_tabs)
@@ -1188,7 +1188,7 @@ static gboolean
 gtk_notebook_change_current_page (GtkNotebook *notebook,
 				  gint         offset)
 {
-  GtkNotebookPriv *priv = notebook->priv;
+  GtkNotebookPrivate *priv = notebook->priv;
   GList *current = NULL;
 
   if (!priv->show_tabs)
@@ -1234,7 +1234,7 @@ static GtkDirectionType
 get_effective_direction (GtkNotebook      *notebook,
 			 GtkDirectionType  direction)
 {
-  GtkNotebookPriv *priv = notebook->priv;
+  GtkNotebookPrivate *priv = notebook->priv;
 
   /* Remap the directions into the effective direction it would be for a
    * GTK_POS_TOP notebook
@@ -1263,7 +1263,7 @@ get_effective_direction (GtkNotebook      *notebook,
 static gint
 get_effective_tab_pos (GtkNotebook *notebook)
 {
-  GtkNotebookPriv *priv = notebook->priv;
+  GtkNotebookPrivate *priv = notebook->priv;
 
   if (gtk_widget_get_direction (GTK_WIDGET (notebook)) == GTK_TEXT_DIR_RTL)
     {
@@ -1309,7 +1309,7 @@ static void
 gtk_notebook_move_focus_out (GtkNotebook      *notebook,
 			     GtkDirectionType  direction_type)
 {
-  GtkNotebookPriv *priv = notebook->priv;
+  GtkNotebookPrivate *priv = notebook->priv;
   GtkDirectionType effective_direction = get_effective_direction (notebook, direction_type);
   GtkWidget *toplevel;
   
@@ -1339,7 +1339,7 @@ gtk_notebook_move_focus_out (GtkNotebook      *notebook,
 static gint
 reorder_tab (GtkNotebook *notebook, GList *position, GList *tab)
 {
-  GtkNotebookPriv *priv = notebook->priv;
+  GtkNotebookPrivate *priv = notebook->priv;
   GList *elem;
 
   if (position == tab)
@@ -1386,7 +1386,7 @@ gtk_notebook_reorder_tab (GtkNotebook      *notebook,
 			  GtkDirectionType  direction_type,
 			  gboolean          move_to_last)
 {
-  GtkNotebookPriv *priv = notebook->priv;
+  GtkNotebookPrivate *priv = notebook->priv;
   GtkDirectionType effective_direction = get_effective_direction (notebook, direction_type);
   GtkNotebookPage *page;
   GList *last, *child;
@@ -1472,7 +1472,7 @@ static void
 gtk_notebook_destroy (GtkObject *object)
 {
   GtkNotebook *notebook = GTK_NOTEBOOK (object);
-  GtkNotebookPriv *priv = notebook->priv;
+  GtkNotebookPrivate *priv = notebook->priv;
 
   if (priv->menu)
     gtk_notebook_popup_disable (notebook);
@@ -1541,7 +1541,7 @@ gtk_notebook_get_property (GObject         *object,
 			   GParamSpec      *pspec)
 {
   GtkNotebook *notebook = GTK_NOTEBOOK (object);
-  GtkNotebookPriv *priv = notebook->priv;
+  GtkNotebookPrivate *priv = notebook->priv;
 
   switch (prop_id)
     {
@@ -1602,7 +1602,7 @@ static gboolean
 gtk_notebook_get_event_window_position (GtkNotebook  *notebook,
 					GdkRectangle *rectangle)
 {
-  GtkNotebookPriv *priv = notebook->priv;
+  GtkNotebookPrivate *priv = notebook->priv;
   GtkWidget *widget = GTK_WIDGET (notebook);
   guint border_width = gtk_container_get_border_width (GTK_CONTAINER (notebook));
   GtkNotebookPage *visible_page = NULL;
@@ -1690,7 +1690,7 @@ static void
 gtk_notebook_map (GtkWidget *widget)
 {
   GtkNotebook *notebook = GTK_NOTEBOOK (widget);
-  GtkNotebookPriv *priv = notebook->priv;
+  GtkNotebookPrivate *priv = notebook->priv;
   GtkNotebookPage *page;
   GList *children;
   gint i;
@@ -1737,7 +1737,7 @@ static void
 gtk_notebook_unmap (GtkWidget *widget)
 {
   GtkNotebook *notebook = GTK_NOTEBOOK (widget);
-  GtkNotebookPriv *priv = notebook->priv;
+  GtkNotebookPrivate *priv = notebook->priv;
 
   stop_scrolling (notebook);
 
@@ -1752,7 +1752,7 @@ static void
 gtk_notebook_realize (GtkWidget *widget)
 {
   GtkNotebook *notebook = GTK_NOTEBOOK (widget);
-  GtkNotebookPriv *priv = notebook->priv;
+  GtkNotebookPrivate *priv = notebook->priv;
   GdkWindowAttr attributes;
   gint attributes_mask;
   GdkRectangle event_window_pos;
@@ -1788,7 +1788,7 @@ static void
 gtk_notebook_unrealize (GtkWidget *widget)
 {
   GtkNotebook *notebook = GTK_NOTEBOOK (widget);
-  GtkNotebookPriv *priv = notebook->priv;
+  GtkNotebookPrivate *priv = notebook->priv;
 
   gdk_window_set_user_data (priv->event_window, NULL);
   gdk_window_destroy (priv->event_window);
@@ -1809,7 +1809,7 @@ gtk_notebook_size_request (GtkWidget      *widget,
 			   GtkRequisition *requisition)
 {
   GtkNotebook *notebook = GTK_NOTEBOOK (widget);
-  GtkNotebookPriv *priv = notebook->priv;
+  GtkNotebookPrivate *priv = notebook->priv;
   GtkNotebookPage *page;
   GList *children;
   GtkRequisition child_requisition;
@@ -2102,7 +2102,7 @@ gtk_notebook_size_allocate (GtkWidget     *widget,
 			    GtkAllocation *allocation)
 {
   GtkNotebook *notebook = GTK_NOTEBOOK (widget);
-  GtkNotebookPriv *priv = notebook->priv;
+  GtkNotebookPrivate *priv = notebook->priv;
   gint tab_pos = get_effective_tab_pos (notebook);
   gboolean is_rtl;
   gint focus_width;
@@ -2238,7 +2238,7 @@ gtk_notebook_expose (GtkWidget      *widget,
 		     GdkEventExpose *event)
 {
   GtkNotebook *notebook = GTK_NOTEBOOK (widget);
-  GtkNotebookPriv *priv = notebook->priv;
+  GtkNotebookPrivate *priv = notebook->priv;
   gint i;
 
   if (event->window == priv->drag_window)
@@ -2312,7 +2312,7 @@ gtk_notebook_expose (GtkWidget      *widget,
 static gboolean
 gtk_notebook_show_arrows (GtkNotebook *notebook)
 {
-  GtkNotebookPriv *priv = notebook->priv;
+  GtkNotebookPrivate *priv = notebook->priv;
   gboolean show_arrow = FALSE;
   GList *children;
 
@@ -2338,7 +2338,7 @@ gtk_notebook_get_arrow_rect (GtkNotebook     *notebook,
 			     GdkRectangle    *rectangle,
 			     GtkNotebookArrow arrow)
 {
-  GtkNotebookPriv *priv = notebook->priv;
+  GtkNotebookPrivate *priv = notebook->priv;
   GdkRectangle event_window_pos;
   gboolean before = ARROW_IS_BEFORE (arrow);
   gboolean left = ARROW_IS_LEFT (arrow);
@@ -2402,7 +2402,7 @@ gtk_notebook_get_arrow (GtkNotebook *notebook,
 			gint         x,
 			gint         y)
 {
-  GtkNotebookPriv *priv = notebook->priv;
+  GtkNotebookPrivate *priv = notebook->priv;
   GdkRectangle arrow_rect;
   GdkRectangle event_window_pos;
   gint i;
@@ -2440,7 +2440,7 @@ static void
 gtk_notebook_do_arrow (GtkNotebook     *notebook,
 		       GtkNotebookArrow arrow)
 {
-  GtkNotebookPriv *priv = notebook->priv;
+  GtkNotebookPrivate *priv = notebook->priv;
   GtkWidget *widget = GTK_WIDGET (notebook);
   gboolean is_rtl, left;
 
@@ -2463,7 +2463,7 @@ gtk_notebook_arrow_button_press (GtkNotebook      *notebook,
 				 GtkNotebookArrow  arrow,
 				 gint              button)
 {
-  GtkNotebookPriv *priv = notebook->priv;
+  GtkNotebookPrivate *priv = notebook->priv;
   GtkWidget *widget = GTK_WIDGET (notebook);
   gboolean is_rtl = gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL;
   gboolean left = (ARROW_IS_LEFT (arrow) && !is_rtl) || 
@@ -2532,7 +2532,7 @@ gtk_notebook_scroll (GtkWidget      *widget,
                      GdkEventScroll *event)
 {
   GtkNotebook *notebook = GTK_NOTEBOOK (widget);
-  GtkNotebookPriv *priv = notebook->priv;
+  GtkNotebookPrivate *priv = notebook->priv;
   GtkWidget *child, *event_widget;
   gint i;
 
@@ -2573,7 +2573,7 @@ gtk_notebook_scroll (GtkWidget      *widget,
 static GList*
 get_tab_at_pos (GtkNotebook *notebook, gint x, gint y)
 {
-   GtkNotebookPriv *priv = notebook->priv;
+   GtkNotebookPrivate *priv = notebook->priv;
   GtkNotebookPage *page;
   GList *children;
 
@@ -2601,7 +2601,7 @@ gtk_notebook_button_press (GtkWidget      *widget,
 			   GdkEventButton *event)
 {
   GtkNotebook *notebook = GTK_NOTEBOOK (widget);
-  GtkNotebookPriv *priv = notebook->priv;
+  GtkNotebookPrivate *priv = notebook->priv;
   GtkNotebookPage *page;
   GList *tab;
   GtkNotebookArrow arrow;
@@ -2672,7 +2672,7 @@ popup_position_func (GtkMenu  *menu,
                      gpointer  data)
 {
   GtkNotebook *notebook = data;
-  GtkNotebookPriv *priv = notebook->priv;
+  GtkNotebookPrivate *priv = notebook->priv;
   GtkWidget *w;
   GtkRequisition requisition;
 
@@ -2705,7 +2705,7 @@ static gboolean
 gtk_notebook_popup_menu (GtkWidget *widget)
 {
   GtkNotebook *notebook = GTK_NOTEBOOK (widget);
-  GtkNotebookPriv *priv = notebook->priv;
+  GtkNotebookPrivate *priv = notebook->priv;
 
   if (priv->menu)
     {
@@ -2722,7 +2722,7 @@ gtk_notebook_popup_menu (GtkWidget *widget)
 static void 
 stop_scrolling (GtkNotebook *notebook)
 {
-  GtkNotebookPriv *priv = notebook->priv;
+  GtkNotebookPrivate *priv = notebook->priv;
 
   if (priv->timer)
     {
@@ -2739,7 +2739,7 @@ static GList*
 get_drop_position (GtkNotebook *notebook,
 		   guint        pack)
 {
-  GtkNotebookPriv *priv = notebook->priv;
+  GtkNotebookPrivate *priv = notebook->priv;
   GList *children, *last_child;
   GtkNotebookPage *page;
   gboolean is_rtl;
@@ -2800,7 +2800,7 @@ get_drop_position (GtkNotebook *notebook,
 
 static void
 show_drag_window (GtkNotebook        *notebook,
-		  GtkNotebookPriv    *priv,
+		  GtkNotebookPrivate    *priv,
 		  GtkNotebookPage    *page,
                   GdkDevice          *device)
 {
@@ -2848,7 +2848,7 @@ show_drag_window (GtkNotebook        *notebook,
  */
 static void
 hide_drag_window (GtkNotebook        *notebook,
-		  GtkNotebookPriv    *priv,
+		  GtkNotebookPrivate    *priv,
 		  GtkNotebookPage    *page)
 {
   GtkWidget *widget = GTK_WIDGET (notebook);
@@ -2879,7 +2879,7 @@ hide_drag_window (GtkNotebook        *notebook,
 static void
 gtk_notebook_stop_reorder (GtkNotebook *notebook)
 {
-  GtkNotebookPriv *priv = notebook->priv;
+  GtkNotebookPrivate *priv = notebook->priv;
   GtkNotebookPage *page;
 
   if (priv->operation == DRAG_OPERATION_DETACH)
@@ -2931,7 +2931,7 @@ gtk_notebook_button_release (GtkWidget      *widget,
 			     GdkEventButton *event)
 {
   GtkNotebook *notebook;
-  GtkNotebookPriv *priv;
+  GtkNotebookPrivate *priv;
   GtkNotebookPage *page;
 
   if (event->type != GDK_BUTTON_RELEASE)
@@ -2961,7 +2961,7 @@ gtk_notebook_leave_notify (GtkWidget        *widget,
 			   GdkEventCrossing *event)
 {
   GtkNotebook *notebook = GTK_NOTEBOOK (widget);
-  GtkNotebookPriv *priv = notebook->priv;
+  GtkNotebookPrivate *priv = notebook->priv;
   gint x, y;
 
   if (!get_widget_coordinates (widget, (GdkEvent *)event, &x, &y))
@@ -2979,7 +2979,7 @@ gtk_notebook_leave_notify (GtkWidget        *widget,
 static GtkNotebookPointerPosition
 get_pointer_position (GtkNotebook *notebook)
 {
-  GtkNotebookPriv *priv = notebook->priv;
+  GtkNotebookPrivate *priv = notebook->priv;
   GtkWidget *widget = GTK_WIDGET (notebook);
   gint wx, wy, width, height;
   gboolean is_rtl;
@@ -3023,7 +3023,7 @@ static gboolean
 scroll_notebook_timer (gpointer data)
 {
   GtkNotebook *notebook = GTK_NOTEBOOK (data);
-  GtkNotebookPriv *priv = notebook->priv;
+  GtkNotebookPrivate *priv = notebook->priv;
   GtkNotebookPointerPosition pointer_position;
   GList *element, *first_tab;
 
@@ -3055,7 +3055,7 @@ check_threshold (GtkNotebook *notebook,
 		 gint         current_x,
 		 gint         current_y)
 {
-  GtkNotebookPriv *priv = notebook->priv;
+  GtkNotebookPrivate *priv = notebook->priv;
   GtkWidget *widget;
   gint dnd_threshold;
   GdkRectangle rectangle = { 0, }; /* shut up gcc */
@@ -3087,7 +3087,7 @@ gtk_notebook_motion_notify (GtkWidget      *widget,
 			    GdkEventMotion *event)
 {
   GtkNotebook *notebook = GTK_NOTEBOOK (widget);
-  GtkNotebookPriv *priv = notebook->priv;
+  GtkNotebookPrivate *priv = notebook->priv;
   GtkNotebookPage *page;
   GtkNotebookArrow arrow;
   GtkNotebookPointerPosition pointer_position;
@@ -3239,7 +3239,7 @@ gtk_notebook_draw_focus (GtkWidget      *widget,
 			 GdkEventExpose *event)
 {
   GtkNotebook *notebook = GTK_NOTEBOOK (widget);
-  GtkNotebookPriv *priv = notebook->priv;
+  GtkNotebookPrivate *priv = notebook->priv;
 
   if (gtk_widget_has_focus (widget) && gtk_widget_is_drawable (widget) &&
       priv->show_tabs && priv->cur_page &&
@@ -3273,7 +3273,7 @@ gtk_notebook_style_set  (GtkWidget *widget,
 			 GtkStyle  *previous)
 {
   GtkNotebook *notebook = GTK_NOTEBOOK (widget);
-  GtkNotebookPriv *priv = notebook->priv;
+  GtkNotebookPrivate *priv = notebook->priv;
 
   gboolean has_before_previous;
   gboolean has_before_next;
@@ -3328,7 +3328,7 @@ gtk_notebook_drag_begin (GtkWidget        *widget,
 			 GdkDragContext   *context)
 {
   GtkNotebook *notebook = GTK_NOTEBOOK (widget);
-  GtkNotebookPriv *priv = notebook->priv;
+  GtkNotebookPrivate *priv = notebook->priv;
   GtkWidget *tab_label;
 
   if (priv->dnd_timer)
@@ -3366,7 +3366,7 @@ gtk_notebook_drag_end (GtkWidget      *widget,
 		       GdkDragContext *context)
 {
   GtkNotebook *notebook = GTK_NOTEBOOK (widget);
-  GtkNotebookPriv *priv = notebook->priv;
+  GtkNotebookPrivate *priv = notebook->priv;
 
   gtk_notebook_stop_reorder (notebook);
 
@@ -3401,7 +3401,7 @@ gtk_notebook_drag_failed (GtkWidget      *widget,
   if (result == GTK_DRAG_RESULT_NO_TARGET)
     {
       GtkNotebook *notebook = GTK_NOTEBOOK (widget);
-      GtkNotebookPriv *priv = notebook->priv;
+      GtkNotebookPrivate *priv = notebook->priv;
       GtkNotebook *dest_notebook = NULL;
       GdkDisplay *display;
       gint x, y;
@@ -3425,7 +3425,7 @@ static gboolean
 gtk_notebook_switch_tab_timeout (gpointer data)
 {
   GtkNotebook *notebook = GTK_NOTEBOOK (data);
-  GtkNotebookPriv *priv = notebook->priv;
+  GtkNotebookPrivate *priv = notebook->priv;
   GList *tab;
   gint x, y;
 
@@ -3453,7 +3453,7 @@ gtk_notebook_drag_motion (GtkWidget      *widget,
 			  guint           time)
 {
   GtkNotebook *notebook = GTK_NOTEBOOK (widget);
-  GtkNotebookPriv *priv = notebook->priv;
+  GtkNotebookPrivate *priv = notebook->priv;
   GdkRectangle position;
   GtkSettings *settings;
   GtkNotebookArrow arrow;
@@ -3540,7 +3540,7 @@ gtk_notebook_drag_leave (GtkWidget      *widget,
 			 guint           time)
 {
   GtkNotebook *notebook = GTK_NOTEBOOK (widget);
-  GtkNotebookPriv *priv = notebook->priv;
+  GtkNotebookPrivate *priv = notebook->priv;
 
   if (priv->switch_tab_timer)
     {
@@ -3579,7 +3579,7 @@ do_detach_tab (GtkNotebook     *from,
 	       gint             x,
 	       gint             y)
 {
-  GtkNotebookPriv *to_priv = to->priv;
+  GtkNotebookPrivate *to_priv = to->priv;
   GtkWidget *tab_label, *menu_label;
   gboolean tab_expand, tab_fill, reorderable, detachable;
   GList *element;
@@ -3645,7 +3645,7 @@ gtk_notebook_drag_data_get (GtkWidget        *widget,
   if (data->target == gdk_atom_intern_static_string ("GTK_NOTEBOOK_TAB"))
     {
       GtkNotebook *notebook = GTK_NOTEBOOK (widget);
-      GtkNotebookPriv *priv = notebook->priv;
+      GtkNotebookPrivate *priv = notebook->priv;
 
       gtk_selection_data_set (data,
 			      data->target,
@@ -3770,7 +3770,7 @@ gtk_notebook_get_child_property (GtkContainer    *container,
 				 GParamSpec      *pspec)
 {
   GtkNotebook *notebook = GTK_NOTEBOOK (container);
-  GtkNotebookPriv *priv = notebook->priv;
+  GtkNotebookPrivate *priv = notebook->priv;
   GList *list;
   GtkWidget *label;
   gboolean expand;
@@ -3849,7 +3849,7 @@ gtk_notebook_remove (GtkContainer *container,
 		     GtkWidget    *widget)
 {
   GtkNotebook *notebook = GTK_NOTEBOOK (container);
-  GtkNotebookPriv *priv = notebook->priv;
+  GtkNotebookPrivate *priv = notebook->priv;
   GtkNotebookPage *page;
   GList *children;
   gint page_num = 0;
@@ -3885,7 +3885,7 @@ gtk_notebook_remove (GtkContainer *container,
 static gboolean
 focus_tabs_in (GtkNotebook *notebook)
 {
-  GtkNotebookPriv *priv = notebook->priv;
+  GtkNotebookPrivate *priv = notebook->priv;
 
   if (priv->show_tabs && priv->cur_page)
     {
@@ -3906,7 +3906,7 @@ focus_tabs_move (GtkNotebook     *notebook,
 		 GtkDirectionType direction,
 		 gint             search_direction)
 {
-  GtkNotebookPriv *priv = notebook->priv;
+  GtkNotebookPrivate *priv = notebook->priv;
   GList *new_page;
 
   new_page = gtk_notebook_search_page (notebook, priv->focus_tab,
@@ -3936,7 +3936,7 @@ static gboolean
 focus_child_in (GtkNotebook      *notebook,
 		GtkDirectionType  direction)
 {
-  GtkNotebookPriv *priv = notebook->priv;
+  GtkNotebookPrivate *priv = notebook->priv;
 
   if (priv->cur_page)
     return gtk_widget_child_focus (priv->cur_page->child, direction);
@@ -3949,7 +3949,7 @@ focus_action_in (GtkNotebook      *notebook,
                  gint              action,
                  GtkDirectionType  direction)
 {
-  GtkNotebookPriv *priv = notebook->priv;
+  GtkNotebookPrivate *priv = notebook->priv;
 
   if (priv->action_widget[action] &&
       gtk_widget_get_visible (priv->action_widget[action]))
@@ -3966,7 +3966,7 @@ gtk_notebook_focus (GtkWidget        *widget,
 		    GtkDirectionType  direction)
 {
   GtkNotebook *notebook = GTK_NOTEBOOK (widget);
-  GtkNotebookPriv *priv = notebook->priv;
+  GtkNotebookPrivate *priv = notebook->priv;
   GtkWidget *old_focus_child;
   GtkDirectionType effective_direction;
   gint first_action;
@@ -4140,7 +4140,7 @@ gtk_notebook_set_focus_child (GtkContainer *container,
 			      GtkWidget    *child)
 {
   GtkNotebook *notebook = GTK_NOTEBOOK (container);
-  GtkNotebookPriv *priv = notebook->priv;
+  GtkNotebookPrivate *priv = notebook->priv;
   GtkWidget *page_child;
   GtkWidget *toplevel;
 
@@ -4209,7 +4209,7 @@ gtk_notebook_forall (GtkContainer *container,
 		     gpointer      callback_data)
 {
   GtkNotebook *notebook = GTK_NOTEBOOK (container);
-  GtkNotebookPriv *priv = notebook->priv;
+  GtkNotebookPrivate *priv = notebook->priv;
   GList *children;
   gint i;
 
@@ -4254,7 +4254,7 @@ page_visible_cb (GtkWidget  *page,
                  gpointer    data)
 {
   GtkNotebook *notebook = GTK_NOTEBOOK (data);
-  GtkNotebookPriv *priv = notebook->priv;
+  GtkNotebookPrivate *priv = notebook->priv;
   GList *list;
   GList *next = NULL;
 
@@ -4282,7 +4282,7 @@ gtk_notebook_real_insert_page (GtkNotebook *notebook,
 			       GtkWidget   *menu_label,
 			       gint         position)
 {
-  GtkNotebookPriv *priv = notebook->priv;
+  GtkNotebookPrivate *priv = notebook->priv;
   GtkNotebookPage *page;
   gint nchildren;
 
@@ -4392,7 +4392,7 @@ gtk_notebook_real_insert_page (GtkNotebook *notebook,
 static void
 gtk_notebook_redraw_tabs (GtkNotebook *notebook)
 {
-  GtkNotebookPriv *priv = notebook->priv;
+  GtkNotebookPrivate *priv = notebook->priv;
   GtkWidget *widget;
   GtkNotebookPage *page;
   GdkRectangle redraw_rect;
@@ -4451,7 +4451,7 @@ gtk_notebook_redraw_tabs (GtkNotebook *notebook)
 static void
 gtk_notebook_redraw_arrows (GtkNotebook *notebook)
 {
-  GtkNotebookPriv *priv = notebook->priv;
+  GtkNotebookPrivate *priv = notebook->priv;
 
   if (gtk_widget_get_mapped (GTK_WIDGET (notebook)) &&
       gtk_notebook_show_arrows (notebook))
@@ -4480,7 +4480,7 @@ gtk_notebook_redraw_arrows (GtkNotebook *notebook)
 static gboolean
 gtk_notebook_timer (GtkNotebook *notebook)
 {
-  GtkNotebookPriv *priv = notebook->priv;
+  GtkNotebookPrivate *priv = notebook->priv;
   gboolean retval = FALSE;
 
   if (priv->timer)
@@ -4510,7 +4510,7 @@ gtk_notebook_timer (GtkNotebook *notebook)
 static void
 gtk_notebook_set_scroll_timer (GtkNotebook *notebook)
 {
-  GtkNotebookPriv *priv = notebook->priv;
+  GtkNotebookPrivate *priv = notebook->priv;
   GtkWidget *widget = GTK_WIDGET (notebook);
 
   if (!priv->timer)
@@ -4539,7 +4539,7 @@ gtk_notebook_find_child (GtkNotebook *notebook,
 			 GtkWidget   *child,
 			 const gchar *function)
 {
-  GtkNotebookPriv *priv = notebook->priv;
+  GtkNotebookPrivate *priv = notebook->priv;
   GList *list = g_list_find_custom (priv->children, child,
 				    gtk_notebook_page_compare);
 
@@ -4573,7 +4573,7 @@ static void
 gtk_notebook_real_remove (GtkNotebook *notebook,
 			  GList       *list)
 {
-  GtkNotebookPriv *priv = notebook->priv;
+  GtkNotebookPrivate *priv = notebook->priv;
   GtkNotebookPage *page;
   GList * next_list;
   gint need_resize = FALSE;
@@ -4654,7 +4654,7 @@ gtk_notebook_real_remove (GtkNotebook *notebook,
 static void
 gtk_notebook_update_labels (GtkNotebook *notebook)
 {
-  GtkNotebookPriv *priv = notebook->priv;
+  GtkNotebookPrivate *priv = notebook->priv;
   GtkNotebookPage *page;
   GList *list;
   gchar string[32];
@@ -4705,7 +4705,7 @@ static gint
 gtk_notebook_real_page_position (GtkNotebook *notebook,
 				 GList       *list)
 {
-  GtkNotebookPriv *priv = notebook->priv;
+  GtkNotebookPrivate *priv = notebook->priv;
   GList *work;
   gint count_start;
 
@@ -4729,7 +4729,7 @@ gtk_notebook_search_page (GtkNotebook *notebook,
 			  gint         direction,
 			  gboolean     find_visible)
 {
-  GtkNotebookPriv *priv = notebook->priv;
+  GtkNotebookPrivate *priv = notebook->priv;
   GtkNotebookPage *page = NULL;
   GList *old_list = NULL;
   gint flag = 0;
@@ -4801,7 +4801,7 @@ gtk_notebook_paint (GtkWidget    *widget,
 		    GdkRectangle *area)
 {
   GtkNotebook *notebook;
-  GtkNotebookPriv *priv;
+  GtkNotebookPrivate *priv;
   GtkNotebookPage *page;
   GList *children;
   gboolean showarrow;
@@ -4934,7 +4934,7 @@ gtk_notebook_draw_tab (GtkNotebook     *notebook,
 		       GtkNotebookPage *page,
 		       GdkRectangle    *area)
 {
-  GtkNotebookPriv *priv;
+  GtkNotebookPrivate *priv;
   GdkRectangle child_area;
   GdkRectangle page_area;
   GtkStateType state_type;
@@ -4982,7 +4982,7 @@ static void
 gtk_notebook_draw_arrow (GtkNotebook      *notebook,
 			 GtkNotebookArrow  nbarrow)
 {
-  GtkNotebookPriv *priv = notebook->priv;
+  GtkNotebookPrivate *priv = notebook->priv;
   GtkStateType state_type;
   GtkShadowType shadow_type;
   GtkWidget *widget;
@@ -5067,7 +5067,7 @@ gtk_notebook_tab_space (GtkNotebook *notebook,
 			gint        *max,
 			gint        *tab_space)
 {
-  GtkNotebookPriv *priv = notebook->priv;
+  GtkNotebookPrivate *priv = notebook->priv;
   GtkWidget *widget;
   GList *children;
   gint tab_pos = get_effective_tab_pos (notebook);
@@ -5230,7 +5230,7 @@ gtk_notebook_calculate_shown_tabs (GtkNotebook *notebook,
 				   gint        *n,
 				   gint        *remaining_space)
 {
-  GtkNotebookPriv *priv = notebook->priv;
+  GtkNotebookPrivate *priv = notebook->priv;
   GtkWidget *widget;
   GtkContainer *container;
   GList *children;
@@ -5459,7 +5459,7 @@ gtk_notebook_calculate_tabs_allocation (GtkNotebook  *notebook,
 					gint          min,
 					gint          max)
 {
-  GtkNotebookPriv *priv = notebook->priv;
+  GtkNotebookPrivate *priv = notebook->priv;
   GtkWidget *widget;
   GtkContainer *container;
   GtkNotebookPage *page;
@@ -5780,7 +5780,7 @@ gtk_notebook_calculate_tabs_allocation (GtkNotebook  *notebook,
 static void
 gtk_notebook_pages_allocate (GtkNotebook *notebook)
 {
-  GtkNotebookPriv *priv = notebook->priv;
+  GtkNotebookPrivate *priv = notebook->priv;
   GList *children = NULL;
   GList *last_child = NULL;
   gboolean showarrow = FALSE;
@@ -5834,7 +5834,7 @@ gtk_notebook_page_allocate (GtkNotebook     *notebook,
 			    GtkNotebookPage *page)
 {
   GtkWidget *widget = GTK_WIDGET (notebook);
-  GtkNotebookPriv *priv = notebook->priv;
+  GtkNotebookPrivate *priv = notebook->priv;
   GtkAllocation child_allocation;
   GtkRequisition tab_requisition;
   gint xthickness;
@@ -6046,7 +6046,7 @@ gtk_notebook_calc_tabs (GtkNotebook  *notebook,
 static void
 gtk_notebook_update_tab_states (GtkNotebook *notebook)
 {
-  GtkNotebookPriv *priv = notebook->priv;
+  GtkNotebookPrivate *priv = notebook->priv;
   GList *list;
 
   for (list = priv->children; list != NULL; list = list->next)
@@ -6072,7 +6072,7 @@ gtk_notebook_real_switch_page (GtkNotebook     *notebook,
 			       GtkWidget*       child,
 			       guint            page_num)
 {
-  GtkNotebookPriv *priv = notebook->priv;
+  GtkNotebookPrivate *priv = notebook->priv;
   GList *list = gtk_notebook_find_child (notebook, GTK_WIDGET (child), NULL);
   GtkNotebookPage *page = GTK_NOTEBOOK_PAGE (list);
   gboolean child_has_focus;
@@ -6125,7 +6125,7 @@ static void
 gtk_notebook_switch_page (GtkNotebook     *notebook,
 			  GtkNotebookPage *page)
 {
-  GtkNotebookPriv *priv = notebook->priv;
+  GtkNotebookPrivate *priv = notebook->priv;
   guint page_num;
 
   if (priv->cur_page == page)
@@ -6144,7 +6144,7 @@ static gint
 gtk_notebook_page_select (GtkNotebook *notebook,
 			  gboolean     move_focus)
 {
-  GtkNotebookPriv *priv = notebook->priv;
+  GtkNotebookPrivate *priv = notebook->priv;
   GtkNotebookPage *page;
   GtkDirectionType dir = GTK_DIR_DOWN; /* Quiet GCC */
   gint tab_pos = get_effective_tab_pos (notebook);
@@ -6183,7 +6183,7 @@ static void
 gtk_notebook_switch_focus_tab (GtkNotebook *notebook, 
 			       GList       *new_child)
 {
-  GtkNotebookPriv *priv = notebook->priv;
+  GtkNotebookPrivate *priv = notebook->priv;
   GList *old_child;
   GtkNotebookPage *page;
 
@@ -6212,7 +6212,7 @@ static void
 gtk_notebook_menu_switch_page (GtkWidget       *widget,
 			       GtkNotebookPage *page)
 {
-  GtkNotebookPriv *priv;
+  GtkNotebookPrivate *priv;
   GtkNotebook *notebook;
   GList *children;
   guint page_num;
@@ -6249,7 +6249,7 @@ static void
 gtk_notebook_menu_item_create (GtkNotebook *notebook, 
 			       GList       *list)
 {
-  GtkNotebookPriv *priv = notebook->priv;
+  GtkNotebookPrivate *priv = notebook->priv;
   GtkNotebookPage *page;
   GtkWidget *menu_item;
 
@@ -6287,7 +6287,7 @@ gtk_notebook_menu_detacher (GtkWidget *widget,
 			    GtkMenu   *menu)
 {
   GtkNotebook *notebook = GTK_NOTEBOOK (widget);
-  GtkNotebookPriv *priv = notebook->priv;
+  GtkNotebookPrivate *priv = notebook->priv;
 
   g_return_if_fail (priv->menu == (GtkWidget*) menu);
 
@@ -6459,7 +6459,7 @@ gtk_notebook_mnemonic_activate_switch_page (GtkWidget *child,
 					    gpointer data)
 {
   GtkNotebook *notebook = GTK_NOTEBOOK (data);
-  GtkNotebookPriv *priv = notebook->priv;
+  GtkNotebookPrivate *priv = notebook->priv;
   GList *list;
 
   list = g_list_find_custom (priv->children, child,
@@ -6530,7 +6530,7 @@ void
 gtk_notebook_remove_page (GtkNotebook *notebook,
 			  gint         page_num)
 {
-  GtkNotebookPriv *priv;
+  GtkNotebookPrivate *priv;
   GList *list = NULL;
 
   g_return_if_fail (GTK_IS_NOTEBOOK (notebook));
@@ -6567,7 +6567,7 @@ gtk_notebook_remove_page (GtkNotebook *notebook,
 gint
 gtk_notebook_get_current_page (GtkNotebook *notebook)
 {
-  GtkNotebookPriv *priv;
+  GtkNotebookPrivate *priv;
 
   g_return_val_if_fail (GTK_IS_NOTEBOOK (notebook), -1);
 
@@ -6594,7 +6594,7 @@ GtkWidget*
 gtk_notebook_get_nth_page (GtkNotebook *notebook,
 			   gint         page_num)
 {
-  GtkNotebookPriv *priv;
+  GtkNotebookPrivate *priv;
   GtkNotebookPage *page;
   GList *list;
 
@@ -6629,7 +6629,7 @@ gtk_notebook_get_nth_page (GtkNotebook *notebook,
 gint
 gtk_notebook_get_n_pages (GtkNotebook *notebook)
 {
-  GtkNotebookPriv *priv;
+  GtkNotebookPrivate *priv;
 
   g_return_val_if_fail (GTK_IS_NOTEBOOK (notebook), 0);
 
@@ -6653,7 +6653,7 @@ gint
 gtk_notebook_page_num (GtkNotebook      *notebook,
 		       GtkWidget        *child)
 {
-  GtkNotebookPriv *priv;
+  GtkNotebookPrivate *priv;
   GList *children;
   gint num;
 
@@ -6696,7 +6696,7 @@ void
 gtk_notebook_set_current_page (GtkNotebook *notebook,
 			       gint         page_num)
 {
-  GtkNotebookPriv *priv;
+  GtkNotebookPrivate *priv;
   GList *list;
 
   g_return_if_fail (GTK_IS_NOTEBOOK (notebook));
@@ -6721,7 +6721,7 @@ gtk_notebook_set_current_page (GtkNotebook *notebook,
 void
 gtk_notebook_next_page (GtkNotebook *notebook)
 {
-  GtkNotebookPriv *priv;
+  GtkNotebookPrivate *priv;
   GList *list;
 
   g_return_if_fail (GTK_IS_NOTEBOOK (notebook));
@@ -6749,7 +6749,7 @@ gtk_notebook_next_page (GtkNotebook *notebook)
 void
 gtk_notebook_prev_page (GtkNotebook *notebook)
 {
-  GtkNotebookPriv *priv;
+  GtkNotebookPrivate *priv;
   GList *list;
 
   g_return_if_fail (GTK_IS_NOTEBOOK (notebook));
@@ -6793,7 +6793,7 @@ void
 gtk_notebook_set_show_border (GtkNotebook *notebook,
 			      gboolean     show_border)
 {
-  GtkNotebookPriv *priv;
+  GtkNotebookPrivate *priv;
 
   g_return_if_fail (GTK_IS_NOTEBOOK (notebook));
 
@@ -6838,7 +6838,7 @@ void
 gtk_notebook_set_show_tabs (GtkNotebook *notebook,
 			    gboolean     show_tabs)
 {
-  GtkNotebookPriv *priv;
+  GtkNotebookPrivate *priv;
   GtkNotebookPage *page;
   GList *children;
   gint i;
@@ -6918,7 +6918,7 @@ void
 gtk_notebook_set_tab_pos (GtkNotebook     *notebook,
 			  GtkPositionType  pos)
 {
-  GtkNotebookPriv *priv;
+  GtkNotebookPrivate *priv;
 
   g_return_if_fail (GTK_IS_NOTEBOOK (notebook));
 
@@ -6963,7 +6963,7 @@ void
 gtk_notebook_set_scrollable (GtkNotebook *notebook,
 			     gboolean     scrollable)
 {
-  GtkNotebookPriv *priv;
+  GtkNotebookPrivate *priv;
 
   g_return_if_fail (GTK_IS_NOTEBOOK (notebook));
 
@@ -7053,7 +7053,7 @@ gtk_notebook_get_tab_vborder (GtkNotebook *notebook)
 void
 gtk_notebook_popup_enable (GtkNotebook *notebook)
 {
-  GtkNotebookPriv *priv;
+  GtkNotebookPrivate *priv;
   GList *list;
 
   g_return_if_fail (GTK_IS_NOTEBOOK (notebook));
@@ -7086,7 +7086,7 @@ gtk_notebook_popup_enable (GtkNotebook *notebook)
 void       
 gtk_notebook_popup_disable  (GtkNotebook *notebook)
 {
-  GtkNotebookPriv *priv;
+  GtkNotebookPrivate *priv;
 
   g_return_if_fail (GTK_IS_NOTEBOOK (notebook));
 
@@ -7163,7 +7163,7 @@ gtk_notebook_set_tab_label (GtkNotebook *notebook,
 			    GtkWidget   *child,
 			    GtkWidget   *tab_label)
 {
-  GtkNotebookPriv *priv;
+  GtkNotebookPrivate *priv;
   GtkNotebookPage *page;
   GList *list;
 
@@ -7323,7 +7323,7 @@ gtk_notebook_set_menu_label (GtkNotebook *notebook,
 			     GtkWidget   *child,
 			     GtkWidget   *menu_label)
 {
-  GtkNotebookPriv *priv;
+  GtkNotebookPrivate *priv;
   GtkNotebookPage *page;
   GList *list;
 
@@ -7424,7 +7424,7 @@ static void
 gtk_notebook_child_reordered (GtkNotebook     *notebook,
 			      GtkNotebookPage *page)
 {
-  GtkNotebookPriv *priv = notebook->priv;
+  GtkNotebookPrivate *priv = notebook->priv;
 
   if (priv->menu)
     {
@@ -7447,7 +7447,7 @@ gtk_notebook_set_tab_label_packing (GtkNotebook *notebook,
                                     gboolean     fill,
                                     GtkPackType  pack_type)
 {
-  GtkNotebookPriv *priv;
+  GtkNotebookPrivate *priv;
   GtkNotebookPage *page;
   GList *list;
 
@@ -7523,7 +7523,7 @@ gtk_notebook_reorder_child (GtkNotebook *notebook,
 			    GtkWidget   *child,
 			    gint         position)
 {
-  GtkNotebookPriv *priv;
+  GtkNotebookPrivate *priv;
   GList *list, *new_list;
   GtkNotebookPage *page;
   gint old_pos;
@@ -7618,7 +7618,7 @@ void
 gtk_notebook_set_group (GtkNotebook *notebook,
 			gpointer     group)
 {
-  GtkNotebookPriv *priv;
+  GtkNotebookPrivate *priv;
 
   g_return_if_fail (GTK_IS_NOTEBOOK (notebook));
 
@@ -7842,7 +7842,7 @@ gtk_notebook_set_action_widget (GtkNotebook *notebook,
 				GtkWidget   *widget,
                                 GtkPackType  pack_type)
 {
-  GtkNotebookPriv *priv;
+  GtkNotebookPrivate *priv;
 
   g_return_if_fail (GTK_IS_NOTEBOOK (notebook));
   g_return_if_fail (!widget || GTK_IS_WIDGET (widget));

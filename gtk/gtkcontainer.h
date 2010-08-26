@@ -46,16 +46,16 @@ G_BEGIN_DECLS
 #define GTK_CONTAINER_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_CONTAINER, GtkContainerClass))
 
 
-typedef struct _GtkContainer	   GtkContainer;
-typedef struct _GtkContainerPriv   GtkContainerPriv;
-typedef struct _GtkContainerClass  GtkContainerClass;
+typedef struct _GtkContainer              GtkContainer;
+typedef struct _GtkContainerPrivate       GtkContainerPrivate;
+typedef struct _GtkContainerClass         GtkContainerClass;
 
 struct _GtkContainer
 {
   GtkWidget widget;
 
   /*< private >*/
-  GtkContainerPriv *priv;
+  GtkContainerPrivate *priv;
 };
 
 struct _GtkContainerClass

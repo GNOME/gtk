@@ -49,16 +49,16 @@ G_BEGIN_DECLS
 #define GTK_IS_HANDLE_BOX_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_HANDLE_BOX))
 #define GTK_HANDLE_BOX_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_HANDLE_BOX, GtkHandleBoxClass))
 
-typedef struct _GtkHandleBox       GtkHandleBox;
-typedef struct _GtkHandleBoxPriv   GtkHandleBoxPriv;
-typedef struct _GtkHandleBoxClass  GtkHandleBoxClass;
+typedef struct _GtkHandleBox              GtkHandleBox;
+typedef struct _GtkHandleBoxPrivate       GtkHandleBoxPrivate;
+typedef struct _GtkHandleBoxClass         GtkHandleBoxClass;
 
 struct _GtkHandleBox
 {
   GtkBin bin;
 
   /* <private> */
-  GtkHandleBoxPriv *priv;
+  GtkHandleBoxPrivate *priv;
 };
 
 struct _GtkHandleBoxClass

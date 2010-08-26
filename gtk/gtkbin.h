@@ -45,16 +45,16 @@ G_BEGIN_DECLS
 #define GTK_BIN_GET_CLASS(obj)        (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_BIN, GtkBinClass))
 
 
-typedef struct _GtkBin       GtkBin;
-typedef struct _GtkBinPriv   GtkBinPriv;
-typedef struct _GtkBinClass  GtkBinClass;
+typedef struct _GtkBin              GtkBin;
+typedef struct _GtkBinPrivate       GtkBinPrivate;
+typedef struct _GtkBinClass         GtkBinClass;
 
 struct _GtkBin
 {
   GtkContainer container;
 
   /*< private >*/
-  GtkBinPriv *priv;
+  GtkBinPrivate *priv;
 };
 
 struct _GtkBinClass

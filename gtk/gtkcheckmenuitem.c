@@ -35,7 +35,7 @@
 
 
 
-struct _GtkCheckMenuItemPriv
+struct _GtkCheckMenuItemPrivate
 {
   guint active             : 1;
   guint always_show_toggle : 1;
@@ -152,7 +152,7 @@ gtk_check_menu_item_class_init (GtkCheckMenuItemClass *klass)
 		  _gtk_marshal_VOID__VOID,
 		  G_TYPE_NONE, 0);
 
-  g_type_class_add_private (klass, sizeof (GtkCheckMenuItemPriv));
+  g_type_class_add_private (klass, sizeof (GtkCheckMenuItemPrivate));
 }
 
 static void 
@@ -251,7 +251,7 @@ void
 gtk_check_menu_item_set_active (GtkCheckMenuItem *check_menu_item,
 				gboolean          is_active)
 {
-  GtkCheckMenuItemPriv *priv;
+  GtkCheckMenuItemPrivate *priv;
 
   g_return_if_fail (GTK_IS_CHECK_MENU_ITEM (check_menu_item));
 
@@ -322,7 +322,7 @@ void
 gtk_check_menu_item_set_inconsistent (GtkCheckMenuItem *check_menu_item,
                                       gboolean          setting)
 {
-  GtkCheckMenuItemPriv *priv;
+  GtkCheckMenuItemPrivate *priv;
 
   g_return_if_fail (GTK_IS_CHECK_MENU_ITEM (check_menu_item));
 
@@ -367,7 +367,7 @@ void
 gtk_check_menu_item_set_draw_as_radio (GtkCheckMenuItem *check_menu_item,
 				       gboolean          draw_as_radio)
 {
-  GtkCheckMenuItemPriv *priv;
+  GtkCheckMenuItemPrivate *priv;
 
   g_return_if_fail (GTK_IS_CHECK_MENU_ITEM (check_menu_item));
 
@@ -406,11 +406,11 @@ gtk_check_menu_item_get_draw_as_radio (GtkCheckMenuItem *check_menu_item)
 static void
 gtk_check_menu_item_init (GtkCheckMenuItem *check_menu_item)
 {
-  GtkCheckMenuItemPriv *priv;
+  GtkCheckMenuItemPrivate *priv;
 
   check_menu_item->priv = G_TYPE_INSTANCE_GET_PRIVATE (check_menu_item,
                                                        GTK_TYPE_CHECK_MENU_ITEM,
-                                                       GtkCheckMenuItemPriv);
+                                                       GtkCheckMenuItemPrivate);
   priv = check_menu_item->priv; 
 
   priv->active = FALSE;
@@ -432,7 +432,7 @@ gtk_check_menu_item_expose (GtkWidget      *widget,
 static void
 gtk_check_menu_item_activate (GtkMenuItem *menu_item)
 {
-  GtkCheckMenuItemPriv *priv;
+  GtkCheckMenuItemPrivate *priv;
 
   GtkCheckMenuItem *check_menu_item = GTK_CHECK_MENU_ITEM (menu_item);
   priv = check_menu_item->priv;
@@ -459,7 +459,7 @@ static void
 gtk_real_check_menu_item_draw_indicator (GtkCheckMenuItem *check_menu_item,
 					 GdkRectangle     *area)
 {
-  GtkCheckMenuItemPriv *priv = check_menu_item->priv;
+  GtkCheckMenuItemPrivate *priv = check_menu_item->priv;
   GtkWidget *widget;
   GtkStateType state_type;
   GtkShadowType shadow_type;
@@ -550,7 +550,7 @@ gtk_check_menu_item_get_property (GObject     *object,
 				  GParamSpec  *pspec)
 {
   GtkCheckMenuItem *checkitem = GTK_CHECK_MENU_ITEM (object);
-  GtkCheckMenuItemPriv *priv = checkitem->priv;
+  GtkCheckMenuItemPrivate *priv = checkitem->priv;
   
   switch (prop_id)
     {
@@ -610,7 +610,7 @@ void
 _gtk_check_menu_item_set_active (GtkCheckMenuItem *check_menu_item,
                                  gboolean          is_active)
 {
-  GtkCheckMenuItemPriv *priv = check_menu_item->priv;
+  GtkCheckMenuItemPrivate *priv = check_menu_item->priv;
 
   priv->active = is_active;
 }

@@ -68,9 +68,9 @@ typedef enum
 } GtkSpinType;
 
 
-typedef struct _GtkSpinButton	    GtkSpinButton;
-typedef struct _GtkSpinButtonPriv   GtkSpinButtonPriv;
-typedef struct _GtkSpinButtonClass  GtkSpinButtonClass;
+typedef struct _GtkSpinButton              GtkSpinButton;
+typedef struct _GtkSpinButtonPrivate       GtkSpinButtonPrivate;
+typedef struct _GtkSpinButtonClass         GtkSpinButtonClass;
 
 
 struct _GtkSpinButton
@@ -78,7 +78,7 @@ struct _GtkSpinButton
   GtkEntry entry;
 
   /* <private> */
-  GtkSpinButtonPriv *priv;
+  GtkSpinButtonPrivate *priv;
 };
 
 struct _GtkSpinButtonClass

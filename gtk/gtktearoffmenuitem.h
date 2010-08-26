@@ -45,16 +45,16 @@ G_BEGIN_DECLS
 #define GTK_TEAROFF_MENU_ITEM_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_TEAROFF_MENU_ITEM, GtkTearoffMenuItemClass))
 
 
-typedef struct _GtkTearoffMenuItem       GtkTearoffMenuItem;
-typedef struct _GtkTearoffMenuItemPriv   GtkTearoffMenuItemPriv;
-typedef struct _GtkTearoffMenuItemClass  GtkTearoffMenuItemClass;
+typedef struct _GtkTearoffMenuItem              GtkTearoffMenuItem;
+typedef struct _GtkTearoffMenuItemPrivate       GtkTearoffMenuItemPrivate;
+typedef struct _GtkTearoffMenuItemClass         GtkTearoffMenuItemClass;
 
 struct _GtkTearoffMenuItem
 {
   GtkMenuItem menu_item;
 
   /* <private> */
-  GtkTearoffMenuItemPriv *priv;
+  GtkTearoffMenuItemPrivate *priv;
 };
 
 struct _GtkTearoffMenuItemClass

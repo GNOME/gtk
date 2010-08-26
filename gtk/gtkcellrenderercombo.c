@@ -31,7 +31,7 @@
 #include "gtkmarshalers.h"
 #include "gtkprivate.h"
 
-struct _GtkCellRendererComboPriv
+struct _GtkCellRendererComboPrivate
 {
   GtkTreeModel *model;
 
@@ -187,17 +187,17 @@ gtk_cell_renderer_combo_class_init (GtkCellRendererComboClass *klass)
 		  G_TYPE_STRING,
 		  GTK_TYPE_TREE_ITER);
 
-  g_type_class_add_private (klass, sizeof (GtkCellRendererComboPriv));
+  g_type_class_add_private (klass, sizeof (GtkCellRendererComboPrivate));
 }
 
 static void
 gtk_cell_renderer_combo_init (GtkCellRendererCombo *self)
 {
-  GtkCellRendererComboPriv *priv;
+  GtkCellRendererComboPrivate *priv;
 
   self->priv = G_TYPE_INSTANCE_GET_PRIVATE (self,
                                             GTK_TYPE_CELL_RENDERER_COMBO,
-                                            GtkCellRendererComboPriv);
+                                            GtkCellRendererComboPrivate);
   priv = self->priv;
 
   priv->model = NULL;
@@ -231,7 +231,7 @@ static void
 gtk_cell_renderer_combo_finalize (GObject *object)
 {
   GtkCellRendererCombo *cell = GTK_CELL_RENDERER_COMBO (object);
-  GtkCellRendererComboPriv *priv = cell->priv;
+  GtkCellRendererComboPrivate *priv = cell->priv;
   
   if (priv->model)
     {
@@ -249,7 +249,7 @@ gtk_cell_renderer_combo_get_property (GObject    *object,
 				      GParamSpec *pspec)
 {
   GtkCellRendererCombo *cell = GTK_CELL_RENDERER_COMBO (object);
-  GtkCellRendererComboPriv *priv = cell->priv;
+  GtkCellRendererComboPrivate *priv = cell->priv;
 
   switch (prop_id)
     {
@@ -275,7 +275,7 @@ gtk_cell_renderer_combo_set_property (GObject      *object,
 				      GParamSpec   *pspec)
 {
   GtkCellRendererCombo *cell = GTK_CELL_RENDERER_COMBO (object);
-  GtkCellRendererComboPriv *priv = cell->priv;
+  GtkCellRendererComboPrivate *priv = cell->priv;
 
   switch (prop_id)
     {
@@ -330,7 +330,7 @@ gtk_cell_renderer_combo_editing_done (GtkCellEditable *combo,
   GtkCellRendererCombo *cell;
   GtkEntry *entry;
   gboolean canceled;
-  GtkCellRendererComboPriv *priv;
+  GtkCellRendererComboPrivate *priv;
 
   cell = GTK_CELL_RENDERER_COMBO (data);
   priv = cell->priv;
@@ -397,7 +397,7 @@ find_text (GtkTreeModel *model,
 	   GtkTreeIter  *iter, 
 	   gpointer      data)
 {
-  GtkCellRendererComboPriv *priv;
+  GtkCellRendererComboPrivate *priv;
   SearchData *search_data = (SearchData *)data;
   gchar *text, *cell_text;
 
@@ -432,7 +432,7 @@ gtk_cell_renderer_combo_start_editing (GtkCellRenderer     *cell,
   GtkCellRendererText *cell_text;
   GtkWidget *combo;
   SearchData search_data;
-  GtkCellRendererComboPriv *priv;
+  GtkCellRendererComboPrivate *priv;
   gboolean editable;
   gchar *text;
 

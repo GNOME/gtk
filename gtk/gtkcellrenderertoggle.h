@@ -37,16 +37,16 @@ G_BEGIN_DECLS
 #define GTK_IS_CELL_RENDERER_TOGGLE_CLASS(klass)	(G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_CELL_RENDERER_TOGGLE))
 #define GTK_CELL_RENDERER_TOGGLE_GET_CLASS(obj)         (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_CELL_RENDERER_TOGGLE, GtkCellRendererToggleClass))
 
-typedef struct _GtkCellRendererToggle      GtkCellRendererToggle;
-typedef struct _GtkCellRendererTogglePriv  GtkCellRendererTogglePriv;
-typedef struct _GtkCellRendererToggleClass GtkCellRendererToggleClass;
+typedef struct _GtkCellRendererToggle              GtkCellRendererToggle;
+typedef struct _GtkCellRendererTogglePrivate       GtkCellRendererTogglePrivate;
+typedef struct _GtkCellRendererToggleClass         GtkCellRendererToggleClass;
 
 struct _GtkCellRendererToggle
 {
   GtkCellRenderer parent;
 
   /*< private >*/
-  GtkCellRendererTogglePriv *priv;
+  GtkCellRendererTogglePrivate *priv;
 };
 
 struct _GtkCellRendererToggleClass

@@ -48,16 +48,16 @@ G_BEGIN_DECLS
 #define GTK_HSV_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_HSV, GtkHSVClass))
 
 
-typedef struct _GtkHSV       GtkHSV;
-typedef struct _GtkHSVPriv   GtkHSVPriv;
-typedef struct _GtkHSVClass  GtkHSVClass;
+typedef struct _GtkHSV              GtkHSV;
+typedef struct _GtkHSVPrivate       GtkHSVPrivate;
+typedef struct _GtkHSVClass         GtkHSVClass;
 
 struct _GtkHSV
 {
   GtkWidget parent_instance;
 
   /* <private> */
-  GtkHSVPriv *priv;
+  GtkHSVPrivate *priv;
 };
 
 struct _GtkHSVClass

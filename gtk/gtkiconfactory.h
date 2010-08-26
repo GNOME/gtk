@@ -46,15 +46,15 @@ G_BEGIN_DECLS
 #define GTK_TYPE_ICON_SET                  (gtk_icon_set_get_type ())
 #define GTK_TYPE_ICON_SOURCE               (gtk_icon_source_get_type ())
 
-typedef struct _GtkIconFactoryPriv  GtkIconFactoryPriv;
-typedef struct _GtkIconFactoryClass GtkIconFactoryClass;
+typedef struct _GtkIconFactoryPrivate       GtkIconFactoryPrivate;
+typedef struct _GtkIconFactoryClass         GtkIconFactoryClass;
 
 struct _GtkIconFactory
 {
   GObject parent_instance;
 
   /* <private> */
-  GtkIconFactoryPriv *priv;
+  GtkIconFactoryPrivate *priv;
 };
 
 struct _GtkIconFactoryClass
