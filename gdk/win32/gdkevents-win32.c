@@ -139,6 +139,13 @@ static UINT     sync_timer = 0;
 static int debug_indent = 0;
 
 static void
+synthesize_enter_or_leave_event (GdkWindow    	*window,
+				 MSG          	*msg,
+				 GdkEventType 	 type,
+				 GdkCrossingMode mode,
+				 GdkNotifyType detail);
+
+static void
 assign_object (gpointer lhsp,
 	       gpointer rhs)
 {
@@ -2195,14 +2202,6 @@ gdk_event_translate (MSG  *msg,
       GDK_NOTE (EVENTS,
 		g_print (" (%d,%d)",
 			 GET_X_LPARAM (msg->lParam), GET_Y_LPARAM (msg->lParam)));
-#if 0 /* TODO_CSW? */
-      if (current_toplevel != NULL &&
-	  (current_toplevel->event_mask & GDK_LEAVE_NOTIFY_MASK))
-	{
-	  synthesize_enter_or_leave_event (current_toplevel, msg,
-	                                   GDK_LEAVE_NOTIFY, GDK_CROSSING_NORMAL, GDK_NOTIFY_ANCESTOR);
-	}
-#endif
       break;
 
     case WM_MOUSELEAVE:
@@ -2214,14 +2213,17 @@ gdk_event_translate (MSG  *msg,
 	  /* we are only interested if we don't know the new window */
 	  if (current_toplevel)
 	    synthesize_enter_or_leave_event (current_toplevel, msg,
-                                       GDK_LEAVE_NOTIFY, GDK_CROSSING_NORMAL, GDK_NOTIFY_ANCESTOR);
+					     GDK_LEAVE_NOTIFY, GDK_CROSSING_NORMAL, GDK_NOTIFY_ANCESTOR);
 	  assign_object (&current_toplevel, NULL);
 	}
-      else
+      else if (window != gdk_window_get_toplevel (window)) /* xxx: only for native child windows? */
 	{
-	  GDK_NOTE (EVENTS, g_print (" (ignored)"));
+	  /* XXX: this used to be ignored pre-csw, but I think we need at least some 
+	   * of the leave events */
+	  synthesize_enter_or_leave_event (window, msg,
+					   GDK_LEAVE_NOTIFY, GDK_CROSSING_NORMAL, GDK_NOTIFY_ANCESTOR);
 	}
-      
+
       return_val = TRUE;
       break;
 
