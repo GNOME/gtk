@@ -51,8 +51,6 @@ create_window (GdkWindow *parent,
       bg->green = g_random_int_range (0, 0xffff);;
     }
   
-  if (!gdk_colormap_alloc_color (gtk_widget_get_colormap (darea), bg, FALSE, TRUE))
-    g_assert_not_reached ();
   gdk_window_set_background (window, bg);
   g_object_set_data_full (G_OBJECT (window), "color", bg, g_free);
   
