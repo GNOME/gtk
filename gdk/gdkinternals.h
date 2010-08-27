@@ -77,13 +77,12 @@ typedef enum {
   GDK_DEBUG_XIM           = 1 << 3,
   GDK_DEBUG_NOGRABS       = 1 << 4,
   GDK_DEBUG_COLORMAP	  = 1 << 5,
-  GDK_DEBUG_PIXMAP	  = 1 << 6,
-  GDK_DEBUG_INPUT	  = 1 << 7,
-  GDK_DEBUG_CURSOR	  = 1 << 8,
-  GDK_DEBUG_MULTIHEAD	  = 1 << 9,
-  GDK_DEBUG_XINERAMA	  = 1 <<10,
-  GDK_DEBUG_DRAW	  = 1 <<11,
-  GDK_DEBUG_EVENTLOOP     = 1 <<12
+  GDK_DEBUG_INPUT	  = 1 << 6,
+  GDK_DEBUG_CURSOR	  = 1 << 7,
+  GDK_DEBUG_MULTIHEAD	  = 1 << 8,
+  GDK_DEBUG_XINERAMA	  = 1 << 9,
+  GDK_DEBUG_DRAW	  = 1 <<10,
+  GDK_DEBUG_EVENTLOOP     = 1 <<11
 } GdkDebugFlag;
 
 extern GList            *_gdk_default_filters;
