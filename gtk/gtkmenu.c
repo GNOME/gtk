@@ -1369,8 +1369,7 @@ gtk_menu_tearoff_bg_copy (GtkMenu *menu)
                                                    height);
 
       cr = cairo_create (surface);
-      /* Let's hope that function never notices we're not passing it a pixmap */
-      gdk_cairo_set_source_pixmap (cr,
+      gdk_cairo_set_source_window (cr,
                                    window,
                                    0, 0);
       cairo_paint (cr);

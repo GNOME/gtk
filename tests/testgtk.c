@@ -397,7 +397,7 @@ window_expose_event (GtkWidget *widget,
   gtk_widget_get_allocation (child, &allocation);
 
   /* the source data is the (composited) event box */
-  gdk_cairo_set_source_pixmap (cr, gtk_widget_get_window (child),
+  gdk_cairo_set_source_window (cr, gtk_widget_get_window (child),
                                allocation.x,
                                allocation.y);
 

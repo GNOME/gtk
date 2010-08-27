@@ -2326,7 +2326,7 @@ _gtk_tool_item_group_paint (GtkToolItemGroup *group,
 
   gtk_widget_get_allocation (widget, &allocation);
 
-  gdk_cairo_set_source_pixmap (cr, gtk_widget_get_window (widget),
+  gdk_cairo_set_source_window (cr, gtk_widget_get_window (widget),
                                allocation.x,
                                allocation.y);
 

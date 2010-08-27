@@ -266,28 +266,34 @@ gdk_cairo_set_source_pixbuf (cairo_t         *cr,
 }
 
 /**
- * gdk_cairo_set_source_pixmap:
+ * gdk_cairo_set_source_window:
  * @cr: a #Cairo context
- * @pixmap: a #GdkPixmap
- * @pixmap_x: X coordinate of location to place upper left corner of @pixmap
- * @pixmap_y: Y coordinate of location to place upper left corner of @pixmap
+ * @window: a #GdkWindow
+ * @x: X coordinate of location to place upper left corner of @window
+ * @y: Y coordinate of location to place upper left corner of @window
  * 
- * Sets the given pixmap as the source pattern for the Cairo context.
+ * Sets the given window as the source pattern for the Cairo context.
  * The pattern has an extend mode of %CAIRO_EXTEND_NONE and is aligned
- * so that the origin of @pixmap is @pixmap_x, @pixmap_y
+ * so that the origin of @window is @x, @y. The window contains all its
+ * subwindows when rendering.
+ * Note that the contents of @window are undefined outside of the
+ * visible part of @window, so use this function with care.
  *
  * Since: 2.10
  **/
 void
-gdk_cairo_set_source_pixmap (cairo_t   *cr,
-			     GdkPixmap *pixmap,
-			     double     pixmap_x,
-			     double     pixmap_y)
+gdk_cairo_set_source_window (cairo_t   *cr,
+			     GdkWindow *window,
+			     double     x,
+			     double     y)
 {
   cairo_surface_t *surface;
   
-  surface = _gdk_drawable_ref_cairo_surface (GDK_DRAWABLE (pixmap));
-  cairo_set_source_surface (cr, surface, pixmap_x, pixmap_y);
+  g_return_if_fail (cr != NULL);
+  g_return_if_fail (GDK_IS_WINDOW (window));
+
+  surface = _gdk_drawable_ref_cairo_surface (GDK_DRAWABLE (window));
+  cairo_set_source_surface (cr, surface, x, y);
   cairo_surface_destroy (surface);
 }
 
