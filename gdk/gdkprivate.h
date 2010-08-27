@@ -31,9 +31,6 @@
 
 G_BEGIN_DECLS
 
-#define GDK_PARENT_RELATIVE_BG ((GdkPixmap *)1L)
-#define GDK_NO_BG ((GdkPixmap *)2L)
-
 #ifndef GDK_COMPILATION
 #define GDK_WINDOW_TYPE(d) (gdk_window_get_window_type (GDK_WINDOW (d)))
 #define GDK_WINDOW_DESTROYED(d) (gdk_window_is_destroyed (GDK_WINDOW (d)))

@@ -6716,35 +6716,6 @@ gdk_window_set_background (GdkWindow      *window,
   cairo_pattern_destroy (pattern);
 }
 
-/* NB: This is more or less a hack now and about to go away. */
-void
-gdk_window_set_back_pixmap (GdkWindow *window,
-                            GdkPixmap *pixmap,
-                            gboolean   parent_relative)
-{
-  cairo_pattern_t *pattern;
-  
-  g_return_if_fail (GDK_IS_WINDOW (window));
-  g_return_if_fail (pixmap == NULL || !parent_relative);
-
-  if (parent_relative || pixmap == NULL)
-    pattern = NULL;
-  else
-    {
-      static cairo_user_data_key_t key;
-      cairo_surface_t *surface = _gdk_drawable_ref_cairo_surface (pixmap);
-      pattern = cairo_pattern_create_for_surface (surface);
-      cairo_pattern_set_extend (pattern, CAIRO_EXTEND_REPEAT);
-      g_object_ref (pixmap);
-      cairo_pattern_set_user_data (pattern, &key, pixmap, g_object_unref);
-    }
-
-  gdk_window_set_background_pattern (window, pattern);
-
-  if (pattern)
-    cairo_pattern_destroy (pattern);
-}
-
 /**
  * gdk_window_set_background_pattern:
  * @window: a #GdkWindow
