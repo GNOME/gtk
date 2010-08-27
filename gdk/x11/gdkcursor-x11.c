@@ -592,50 +592,32 @@ create_cursor_image (GdkPixbuf *pixbuf,
 		     gint       x,
 		     gint       y)
 {
-  guint width, height, rowstride, n_channels;
-  guchar *pixels, *src;
+  guint width, height;
   XcursorImage *xcimage;
-  XcursorPixel *dest;
+  cairo_surface_t *surface;
+  cairo_t *cr;
 
   width = gdk_pixbuf_get_width (pixbuf);
   height = gdk_pixbuf_get_height (pixbuf);
-
-  n_channels = gdk_pixbuf_get_n_channels (pixbuf);
-  rowstride = gdk_pixbuf_get_rowstride (pixbuf);
-  pixels = gdk_pixbuf_get_pixels (pixbuf);
 
   xcimage = XcursorImageCreate (width, height);
 
   xcimage->xhot = x;
   xcimage->yhot = y;
 
-  dest = xcimage->pixels;
+  surface = cairo_image_surface_create_for_data ((guchar *) xcimage->pixels,
+                                                 CAIRO_FORMAT_ARGB32,
+                                                 width,
+                                                 height,
+                                                 width * 4);
 
-  if (n_channels == 3)
-    {
-      gint i, j;
+  cr = cairo_create (surface);
+  cairo_set_operator (cr, CAIRO_OPERATOR_SOURCE);
+  gdk_cairo_set_source_pixbuf (cr, pixbuf, 0, 0);
+  cairo_paint (cr);
+  cairo_destroy (cr);
 
-      for (j = 0; j < height; j++)
-        {
-          src = pixels + j * rowstride;
-          for (i = 0; i < width; i++)
-            {
-              *dest = (0xff << 24) | (src[0] << 16) | (src[1] << 8) | src[2];
-            }
-
-	  src += n_channels;
-	  dest++;
-	}
-    }
-  else
-    {
-      _gdk_x11_convert_to_format (pixels, rowstride,
-                                  (guchar *) dest, 4 * width,
-                                  GDK_X11_FORMAT_ARGB,
-                                  (G_BYTE_ORDER == G_BIG_ENDIAN) ?
-                                  GDK_MSB_FIRST : GDK_LSB_FIRST,
-                                  width, height);
-    }
+  cairo_surface_destroy (surface);
 
   return xcimage;
 }
