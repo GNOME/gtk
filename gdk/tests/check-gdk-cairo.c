@@ -47,9 +47,9 @@ test (cairo_t* cr)
 }
 
 static void
-test_pixmap_orientation (void)
+test_surface_orientation (void)
 {
-	GdkPixmap* pixmap;
+	cairo_surface_t *surface;
 	GdkPixbuf* pixbuf;
 	GdkPixbuf* pbuf_platform;
 	GdkPixbuf* pbuf_imagesrf;
@@ -60,24 +60,26 @@ test_pixmap_orientation (void)
 	guchar* data_imagesrf;
 	guint i;
 
-	/* create "platform.png" via GdkPixmap */
-	pixmap = gdk_pixmap_new (NULL /* drawable */, 100 /* w */, 80 /* h */, 24 /* d */);
-	cr = gdk_cairo_create (pixmap);
+	/* create "platform.png" via native cairo surface */
+	surface = gdk_window_create_similar_surface (gdk_get_default_root_window (),
+                                                     CAIRO_CONTENT_COLOR,
+                                                     100,
+                                                     80);
+	cr = cairo_create (surface);
 	test (cr);
 	cairo_destroy (cr);
 
-	pixbuf = gdk_pixbuf_get_from_drawable (NULL,
-					       pixmap,
-					       gdk_rgb_get_colormap (),
-					       0, 0,
-					       0, 0,
-					       100, 80);
+	pixbuf = gdk_pixbuf_get_from_surface (NULL,
+					      surface,
+					      0, 0,
+					      0, 0,
+					      100, 80);
 	if (!gdk_pixbuf_save (pixbuf, "gdksurface.png", "png", NULL, NULL)) {
 		g_error ("Eeek! Couldn't save the file \"gdksurface.png\"");
 	}
 	g_object_unref (pixbuf);
 
-	g_object_unref (pixmap);
+	cairo_surface_destroy (surface);
 
 	/* create "cairosurface.png" via pure cairo */
 #ifndef CAIRO_HAS_QUARTZ_SURFACE
@@ -139,8 +141,8 @@ main (int   argc,
 	g_test_init (&argc, &argv, NULL);
 	gdk_init (&argc, &argv);
 
-	g_test_add_func ("/gdk/pixmap/orientation",
-			 test_pixmap_orientation);
+	g_test_add_func ("/gdk/surface/orientation",
+			 test_surface_orientation);
 
 	return g_test_run ();
 }
