@@ -265,9 +265,6 @@ GdkPixmapObjectClass
 <SECTION>
 <TITLE>Pixbufs</TITLE>
 <FILE>pixbufs</FILE>
-gdk_pixbuf_render_threshold_alpha
-gdk_pixbuf_render_pixmap_and_mask
-gdk_pixbuf_render_pixmap_and_mask_for_colormap
 gdk_pixbuf_get_from_drawable
 gdk_pixbuf_get_from_surface
 </SECTION>

@@ -37,30 +37,6 @@
 
 G_BEGIN_DECLS
 
-/* Rendering to a drawable */
-
-void gdk_pixbuf_render_threshold_alpha   (GdkPixbuf           *pixbuf,
-					  GdkBitmap           *bitmap,
-					  int                  src_x,
-					  int                  src_y,
-					  int                  dest_x,
-					  int                  dest_y,
-					  int                  width,
-					  int                  height,
-					  int                  alpha_threshold);
-void gdk_pixbuf_render_pixmap_and_mask_for_colormap (GdkPixbuf    *pixbuf,
-						     GdkColormap  *colormap,
-						     GdkPixmap   **pixmap_return,
-						     GdkBitmap   **mask_return,
-						     int           alpha_threshold);
-#ifndef GDK_MULTIHEAD_SAFE
-void gdk_pixbuf_render_pixmap_and_mask              (GdkPixbuf    *pixbuf,
-						     GdkPixmap   **pixmap_return,
-						     GdkBitmap   **mask_return,
-						     int           alpha_threshold);
-#endif
-
-
 /* Fetching a region from a drawable */
 GdkPixbuf *gdk_pixbuf_get_from_drawable (GdkPixbuf   *dest,
 					 GdkDrawable *src,

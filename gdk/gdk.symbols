@@ -816,14 +816,6 @@ gdk_pixbuf_get_from_surface
 #endif
 #endif
 
-#if IN_HEADER(__GDK_PIXBUF_H__)
-#if IN_FILE(__GDK_PIXBUF_RENDER_C__)
-gdk_pixbuf_render_pixmap_and_mask
-gdk_pixbuf_render_pixmap_and_mask_for_colormap
-gdk_pixbuf_render_threshold_alpha
-#endif
-#endif
-
 #if IN_HEADER(__GDK_PIXMAP_H__)
 #if IN_FILE(__GDK_PIXMAP_C__)
 gdk_pixmap_get_type G_GNUC_CONST

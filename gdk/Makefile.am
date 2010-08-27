@@ -127,7 +127,6 @@ gdk_c_sources =                 \
 	gdkoffscreenwindow.c	\
 	gdkpango.c		\
 	gdkpixbuf-drawable.c	\
-	gdkpixbuf-render.c	\
 	gdkpixmap.c		\
 	gdkrectangle.c		\
 	gdkscreen.c		\
