@@ -28,7 +28,7 @@ PERL = perl
 
 INCLUDES = -FImsvc_recommended_pragmas.h \
 	-I . -I .. \
-	$(GLIB_CFLAGS) $(PANGO_CFLAGS) $(CAIRO_CFLAGS) -I ../gdk-pixbuf \
+	$(GLIB_CFLAGS) $(GDK_PIXBUF_CFLAGS) $(PANGO_CFLAGS) $(CAIRO_CFLAGS) -I ../gdk-pixbuf \
 
 DEFINES = \
 	-DHAVE_CONFIG_H -DGDK_ENABLE_BROKEN \
@@ -38,8 +38,7 @@ DEFINES = \
 
 EXTRALIBS = \
 	$(WTKIT)\lib\i386\wntab32x.lib \
-	$(GLIB_LIBS) \
-	..\gdk-pixbuf\gdk_pixbuf-$(GDK_PIXBUF_VER).lib \
+	$(GLIB_LIBS) $(GDK_PIXBUF_LIBS) \
 	$(PANGOWIN32_LIBS) $(PANGOCAIRO_LIBS) $(INTL_LIBS) $(CAIRO_LIBS) \
 	$(PANGOCAIRO_LIBS)
 

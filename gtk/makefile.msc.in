@@ -16,7 +16,6 @@ GDK_PIXBUF_VER = 2.0
 
 GDK_LIBS = ../gdk/gdk-win32-$(GTK_VER).lib
 GTK_LIBS = gtk-win32-$(GTK_VER).lib
-GDK_PIXBUF_LIBS = ../gdk-pixbuf/gdk_pixbuf-$(GDK_PIXBUF_VER).lib
 GTK_BINARY_VERSION = @GTK_BINARY_VERSION@
 
 # Perl and awk are needed to generate some source files.
@@ -25,7 +24,7 @@ GTK_BINARY_VERSION = @GTK_BINARY_VERSION@
 PERL = perl
 AWK = gawk
 
-INCLUDES = -FImsvc_recommended_pragmas.h -I . -I .. -I ../gdk -I ../gdk-pixbuf
+INCLUDES = -FImsvc_recommended_pragmas.h -I . -I .. -I ../gdk $(GDK_PIXBUF_CFLAGS)
 DEPCFLAGS = $(PANGO_CFLAGS) $(GLIB_CFLAGS) $(LIBICONV_CFLAGS) \
 		$(INTL_CFLAGS) $(ATK_CFLAGS) $(CAIRO_CFLAGS)
 LDFLAGS = $(ATK_LIBS) /link /machine:ix86 $(LINKDEBUG)
@@ -127,11 +126,12 @@ gtk_OBJECTS_cell = \
 	gtkcellrenderer.obj \
 	gtkcellrendereraccel.obj \
 	gtkcellrenderercombo.obj \
+	gtkcellrendererspin.obj	\
+	gtkcellrendererspinner.obj \
 	gtkcellrenderertext.obj \
 	gtkcellrenderertoggle.obj \
 	gtkcellrendererpixbuf.obj \
 	gtkcellrendererprogress.obj \
-	gtkcellrendererspin.obj	\
 	gtkcellview.obj \
 	gtkliststore.obj \
 	gtktreednd.obj \
@@ -289,9 +289,11 @@ gtk_OBJECTS = \
 	gtkmountoperation-stub.obj \
 	gtknotebook.obj \
 	gtkobject.obj \
+	gtkoffscreenwindow.obj \
 	gtkorientable.obj \
 	gtkpagesetup.obj \
 	gtkpaned.obj \
+	gtkpango.obj \
 	gtkpapersize.obj \
 	gtkpathbar.obj \
 	gtkplug.obj \
@@ -322,6 +324,7 @@ gtk_OBJECTS = \
 	gtksocket.obj \
 	gtksocket-win32.obj \
 	gtkspinbutton.obj \
+	gtkspinner.obj \
 	gtkstatusicon.obj \
 	gtkstyle.obj \
 	gtkstatusbar.obj \
@@ -334,6 +337,8 @@ gtk_OBJECTS = \
 	gtktoggletoolbutton.obj \
 	gtktoolbutton.obj \
 	gtktoolitem.obj \
+	gtktoolitemgroup.obj \
+	gtktoolpalette.obj \
 	gtktoolshell.obj \
 	gtktooltip.obj \
 	gtktreedatalist.obj \
@@ -386,6 +391,7 @@ gtk_public_h_sources =		\
 	gtkcellrendererpixbuf.h	\
 	gtkcellrendererprogress.h \
 	gtkcellrendererspin.h   \
+	gtkcellrendererspinner.h \
 	gtkcellrenderertext.h	\
 	gtkcellrenderertoggle.h	\
 	gtkcellview.h		\
@@ -464,10 +470,12 @@ gtk_public_h_sources =		\
 	gtkmountoperation.h	\
 	gtknotebook.h		\
 	gtkobject.h		\
+	gtkoffscreenwindow.h	\
 	gtkoldeditable.h	\
 	gtkoptionmenu.h		\
 	gtkpagesetup.h		\
 	gtkpaned.h		\
+	gtkpango.h		\
 	gtkpapersize.h		\
 	gtkpixmap.h		\
 	gtkplug.h		\
@@ -506,6 +514,7 @@ gtk_public_h_sources =		\
 	gtksizegroup.h		\
 	gtksocket.h		\
 	gtkspinbutton.h		\
+	gtkspinner.h		\
 	gtkstatusbar.h		\
 	gtkstatusicon.h		\
 	gtkstock.h		\
@@ -529,6 +538,8 @@ gtk_public_h_sources =		\
 	gtktoolbar.h		\
 	gtktoolbutton.h		\
 	gtktoolitem.h		\
+	gtktoolitemgroup.h	\
+	gtktoolpalette.h	\
 	gtktooltip.h		\
 	gtktooltips.h		\
 	gtktree.h		\

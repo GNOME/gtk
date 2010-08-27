@@ -1696,6 +1696,7 @@ draw_stepper (GtkRange     *range,
   gint arrow_y;
   gint arrow_width;
   gint arrow_height;
+  gboolean arrow_sensitive = TRUE;
 
   switch (stepper)
     {
@@ -1714,8 +1715,6 @@ draw_stepper (GtkRange     *range,
     default:
       g_assert_not_reached ();
     };
-
-  gboolean arrow_sensitive = TRUE;
 
   /* More to get the right clip region than for efficiency */
   if (!gdk_rectangle_intersect (area, rect, &intersection))
