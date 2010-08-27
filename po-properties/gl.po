@@ -24,8 +24,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-master-po-properties-gl-77816____.merged\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-08-23 02:21+0200\n"
-"PO-Revision-Date: 2010-08-23 02:21+0200\n"
+"POT-Creation-Date: 2010-08-27 23:19+0200\n"
+"PO-Revision-Date: 2010-08-27 23:24+0200\n"
 "Last-Translator: Fran Dieguez <frandieguez@ubuntu.com>\n"
 "Language-Team: Galician <gnome-gl-list@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -34,6 +34,74 @@ msgstr ""
 "Language: gl\n"
 "Plural-Forms: nplurals=2; plural=(n!=1);\n"
 "X-Generator: KBabel 1.11.4\n"
+
+#: ../gdk/gdkdevice.c:97
+msgid "Device Display"
+msgstr "Pantalla do dispositivo"
+
+#: ../gdk/gdkdevice.c:98
+msgid "Display to which the device belongs to"
+msgstr "Pantalla á cal pertence o dispositivo"
+
+#: ../gdk/gdkdevice.c:112
+msgid "Device manager"
+msgstr "Xestor de dispositivos"
+
+#: ../gdk/gdkdevice.c:113
+msgid "Device manager to which the device belongs to"
+msgstr "Xestor de dispositivos ao que pertence o dispositivos"
+
+#: ../gdk/gdkdevice.c:127 ../gdk/gdkdevice.c:128
+msgid "Device name"
+msgstr "Nome do dispositivo"
+
+#: ../gdk/gdkdevice.c:142
+msgid "Device type"
+msgstr "Tipo de dispositivo"
+
+#: ../gdk/gdkdevice.c:143
+msgid "Device role in the device manager"
+msgstr "Rol do dispositivo no xestor de dispositivos"
+
+#: ../gdk/gdkdevice.c:159
+msgid "Associated device"
+msgstr "Dispositivo asociado"
+
+#: ../gdk/gdkdevice.c:160
+msgid "Associated pointer or keyboard to this device"
+msgstr "Punteiro ou teclado asociado a este dispositivo"
+
+#: ../gdk/gdkdevice.c:173
+msgid "Input source"
+msgstr "Orixe de entrada"
+
+#: ../gdk/gdkdevice.c:174
+msgid "Source type for the device"
+msgstr "Tipo de orixe para o dispositivo"
+
+#: ../gdk/gdkdevice.c:189 ../gdk/gdkdevice.c:190
+msgid "Input mode for the device"
+msgstr "Modo de entrada para o dispositivo"
+
+#: ../gdk/gdkdevice.c:205
+msgid "Whether the device has cursor"
+msgstr "Indica se o dispositivo ten un cursor"
+
+#: ../gdk/gdkdevice.c:206
+msgid "Whether there is a visible cursor following device motion"
+msgstr "Indica se hai un cursor visíbel seguindo o movemento do dispositivo"
+
+#: ../gdk/gdkdevice.c:220 ../gdk/gdkdevice.c:221
+msgid "Number of axes in the device"
+msgstr "Número de eixos no dispositivo"
+
+#: ../gdk/gdkdevicemanager.c:134
+msgid "Display"
+msgstr "Pantalla"
+
+#: ../gdk/gdkdevicemanager.c:135
+msgid "Display for the device manager"
+msgstr "Pantalla para o xestor de dispositivos"
 
 #: ../gdk/gdkdisplaymanager.c:102
 msgid "Default Display"
@@ -62,6 +130,23 @@ msgstr "A resolución para os tipos de letra na pantalla"
 #: ../gdk/gdkwindow.c:421 ../gdk/gdkwindow.c:422
 msgid "Cursor"
 msgstr "Cursor"
+
+#: ../gdk/x11/gdkdevice-xi.c:132 ../gdk/x11/gdkdevice-xi.c:133
+#: ../gdk/x11/gdkdevice-xi2.c:111
+msgid "Device ID"
+msgstr "ID do dispositivo"
+
+#: ../gdk/x11/gdkdevice-xi2.c:112
+msgid "Device identifier"
+msgstr "Identificador do dispotitivo"
+
+#: ../gdk/x11/gdkdevicemanager-xi.c:84
+msgid "Event base"
+msgstr "Evento base"
+
+#: ../gdk/x11/gdkdevicemanager-xi.c:85
+msgid "Event base for XInput events"
+msgstr "Evento base para os eventos XInput"
 
 #: ../gtk/gtkaboutdialog.c:320
 msgid "Program name"
@@ -379,19 +464,19 @@ msgstr "Indica se o grupo de acción está activado."
 msgid "Whether the action group is visible."
 msgstr "Indica se o grupo de acción é visíbel."
 
-#: ../gtk/gtkactivatable.c:307
+#: ../gtk/gtkactivatable.c:290
 msgid "Related Action"
 msgstr "Acción relacionada"
 
-#: ../gtk/gtkactivatable.c:308
+#: ../gtk/gtkactivatable.c:291
 msgid "The action this activatable will activate and receive updates from"
 msgstr "A acción que activará este activábel e do cal recibirá actualizacións"
 
-#: ../gtk/gtkactivatable.c:330
+#: ../gtk/gtkactivatable.c:313
 msgid "Use Action Appearance"
 msgstr "Usar aparencia de activación"
 
-#: ../gtk/gtkactivatable.c:331
+#: ../gtk/gtkactivatable.c:314
 msgid "Whether to use the related actions appearance properties"
 msgstr "Cando usar as accións relacionadas coas propiedades da aparencia"
 
@@ -1035,6 +1120,38 @@ msgstr "Edición cancelada"
 msgid "Indicates that editing has been canceled"
 msgstr "Indica que a edición foi cancelada"
 
+#: ../gtk/gtkcellrendereraccel.c:134
+msgid "Accelerator key"
+msgstr "Tecla rápida"
+
+#: ../gtk/gtkcellrendereraccel.c:135
+msgid "The keyval of the accelerator"
+msgstr "O valor (keyval) da tecla rápida"
+
+#: ../gtk/gtkcellrendereraccel.c:151
+msgid "Accelerator modifiers"
+msgstr "Modificadores de tecla rápida"
+
+#: ../gtk/gtkcellrendereraccel.c:152
+msgid "The modifier mask of the accelerator"
+msgstr "A máscara do modificador da tecla rápida"
+
+#: ../gtk/gtkcellrendereraccel.c:169
+msgid "Accelerator keycode"
+msgstr "Código de tecla da tecla rápida"
+
+#: ../gtk/gtkcellrendereraccel.c:170
+msgid "The hardware keycode of the accelerator"
+msgstr "O código de tecla de hardware da tecla rápida"
+
+#: ../gtk/gtkcellrendereraccel.c:189
+msgid "Accelerator Mode"
+msgstr "Modo de teclas rápidas"
+
+#: ../gtk/gtkcellrendereraccel.c:190
+msgid "The type of accelerators"
+msgstr "O tipo de teclas rápidas"
+
 #: ../gtk/gtkcellrenderer.c:264
 msgid "mode"
 msgstr "modo"
@@ -1150,38 +1267,6 @@ msgstr "Definición do fondo da cela"
 #: ../gtk/gtkcellrenderer.c:391
 msgid "Whether this tag affects the cell background color"
 msgstr "Indica se esta etiqueta afecta á cor de fondo da cela"
-
-#: ../gtk/gtkcellrendereraccel.c:134
-msgid "Accelerator key"
-msgstr "Tecla rápida"
-
-#: ../gtk/gtkcellrendereraccel.c:135
-msgid "The keyval of the accelerator"
-msgstr "O valor (keyval) da tecla rápida"
-
-#: ../gtk/gtkcellrendereraccel.c:151
-msgid "Accelerator modifiers"
-msgstr "Modificadores de tecla rápida"
-
-#: ../gtk/gtkcellrendereraccel.c:152
-msgid "The modifier mask of the accelerator"
-msgstr "A máscara do modificador da tecla rápida"
-
-#: ../gtk/gtkcellrendereraccel.c:169
-msgid "Accelerator keycode"
-msgstr "Código de tecla da tecla rápida"
-
-#: ../gtk/gtkcellrendereraccel.c:170
-msgid "The hardware keycode of the accelerator"
-msgstr "O código de tecla de hardware da tecla rápida"
-
-#: ../gtk/gtkcellrendereraccel.c:189
-msgid "Accelerator Mode"
-msgstr "Modo de teclas rápidas"
-
-#: ../gtk/gtkcellrendereraccel.c:190
-msgid "The type of accelerators"
-msgstr "O tipo de teclas rápidas"
 
 #: ../gtk/gtkcellrenderercombo.c:110
 msgid "Model"
@@ -1327,7 +1412,7 @@ msgstr "Orientación"
 msgid "Orientation and growth direction of the progress bar"
 msgstr "Orientación e dirección de crecemento da barra de progreso"
 
-#: ../gtk/gtkcellrendererspin.c:91 ../gtk/gtkrange.c:399
+#: ../gtk/gtkcellrendererspin.c:91 ../gtk/gtkrange.c:422
 #: ../gtk/gtkscalebutton.c:239 ../gtk/gtkspinbutton.c:231
 msgid "Adjustment"
 msgstr "Axuste"
@@ -1344,7 +1429,7 @@ msgstr "Taxa de incremento"
 msgid "The acceleration rate when you hold down a button"
 msgstr "A taxa de aceleración cando mantén premido un botón"
 
-#: ../gtk/gtkcellrendererspin.c:121 ../gtk/gtkscale.c:219
+#: ../gtk/gtkcellrendererspin.c:121 ../gtk/gtkscale.c:220
 #: ../gtk/gtkspinbutton.c:249
 msgid "Digits"
 msgstr "Díxitos"
@@ -2631,108 +2716,6 @@ msgstr "Tamaño da frecha do expansor"
 msgid "Spacing around expander arrow"
 msgstr "Espazamento ao redor da frecha do expansor"
 
-#: ../gtk/gtkfilechooser.c:758
-msgid "Action"
-msgstr "Acción"
-
-#: ../gtk/gtkfilechooser.c:759
-msgid "The type of operation that the file selector is performing"
-msgstr "O tipo de operación que o selector de ficheiro está realizando"
-
-#: ../gtk/gtkfilechooser.c:765 ../gtk/gtkrecentchooser.c:279
-msgid "Filter"
-msgstr "Filtro"
-
-#: ../gtk/gtkfilechooser.c:766
-msgid "The current filter for selecting which files are displayed"
-msgstr "O filtro actual para seleccionar que ficheiros se mostran"
-
-#: ../gtk/gtkfilechooser.c:771
-msgid "Local Only"
-msgstr "Só local"
-
-#: ../gtk/gtkfilechooser.c:772
-msgid "Whether the selected file(s) should be limited to local file: URLs"
-msgstr ""
-"Indica se os ficheiros seleccionados deben limitarse a URL tipo 'file:' "
-"locais"
-
-#: ../gtk/gtkfilechooser.c:777
-msgid "Preview widget"
-msgstr "Widget de previsualización"
-
-#: ../gtk/gtkfilechooser.c:778
-msgid "Application supplied widget for custom previews."
-msgstr "Widget de aplicativo fornecido para previsualizacións personalizadas."
-
-#: ../gtk/gtkfilechooser.c:783
-msgid "Preview Widget Active"
-msgstr "Widget de previsualización activo"
-
-#: ../gtk/gtkfilechooser.c:784
-msgid ""
-"Whether the application supplied widget for custom previews should be shown."
-msgstr ""
-"Indica se se debería mostrar o widget fornecido polo aplicativo para "
-"previsualizacións personalizadas."
-
-#: ../gtk/gtkfilechooser.c:789
-msgid "Use Preview Label"
-msgstr "Usar a etiqueta de previsualización"
-
-#: ../gtk/gtkfilechooser.c:790
-msgid "Whether to display a stock label with the name of the previewed file."
-msgstr ""
-"Indica se se debe mostrar unha etiqueta co nome do ficheiro previsualizado."
-
-#: ../gtk/gtkfilechooser.c:795
-msgid "Extra widget"
-msgstr "Widget adicional"
-
-#: ../gtk/gtkfilechooser.c:796
-msgid "Application supplied widget for extra options."
-msgstr "Widget de aplicativo fornecido para opcións adicionais."
-
-#: ../gtk/gtkfilechooser.c:801 ../gtk/gtkrecentchooser.c:218
-msgid "Select Multiple"
-msgstr "Selección múltiple"
-
-#: ../gtk/gtkfilechooser.c:802
-msgid "Whether to allow multiple files to be selected"
-msgstr "Indica se se permite seleccionar múltiples ficheiros"
-
-#: ../gtk/gtkfilechooser.c:808
-msgid "Show Hidden"
-msgstr "Mostrar os ocultos"
-
-#: ../gtk/gtkfilechooser.c:809
-msgid "Whether the hidden files and folders should be displayed"
-msgstr "Indica se os ficheiros e cartafoles ocultos se deben mostrar"
-
-#: ../gtk/gtkfilechooser.c:824
-msgid "Do overwrite confirmation"
-msgstr "Confirmar a sobrescritura"
-
-#: ../gtk/gtkfilechooser.c:825
-msgid ""
-"Whether a file chooser in save mode will present an overwrite confirmation "
-"dialog if necessary."
-msgstr ""
-"Indica se un selector de ficheiros en modo de gardado presentará un diálogo "
-"de confirmación de sobrescritura se é necesario."
-
-#: ../gtk/gtkfilechooser.c:841
-msgid "Allow folder creation"
-msgstr "Permitir a creación de cartafoles"
-
-#: ../gtk/gtkfilechooser.c:842
-msgid ""
-"Whether a file chooser not in open mode will offer the user to create new "
-"folders."
-msgstr ""
-"Indica se un selector de ficheiros sen estar en modo aberto lle ofrecerá ao "
-"usuario crear cartafoles novos."
-
 #: ../gtk/gtkfilechooserbutton.c:373
 msgid "Dialog"
 msgstr "Diálogo"
@@ -2748,6 +2731,108 @@ msgstr "O título do diálogo de selección de ficheiros."
 #: ../gtk/gtkfilechooserbutton.c:419
 msgid "The desired width of the button widget, in characters."
 msgstr "A largura desexada do widget de botón, en caracteres."
+
+#: ../gtk/gtkfilechooser.c:740
+msgid "Action"
+msgstr "Acción"
+
+#: ../gtk/gtkfilechooser.c:741
+msgid "The type of operation that the file selector is performing"
+msgstr "O tipo de operación que o selector de ficheiro está realizando"
+
+#: ../gtk/gtkfilechooser.c:747 ../gtk/gtkrecentchooser.c:264
+msgid "Filter"
+msgstr "Filtro"
+
+#: ../gtk/gtkfilechooser.c:748
+msgid "The current filter for selecting which files are displayed"
+msgstr "O filtro actual para seleccionar que ficheiros se mostran"
+
+#: ../gtk/gtkfilechooser.c:753
+msgid "Local Only"
+msgstr "Só local"
+
+#: ../gtk/gtkfilechooser.c:754
+msgid "Whether the selected file(s) should be limited to local file: URLs"
+msgstr ""
+"Indica se os ficheiros seleccionados deben limitarse a URL tipo 'file:' "
+"locais"
+
+#: ../gtk/gtkfilechooser.c:759
+msgid "Preview widget"
+msgstr "Widget de previsualización"
+
+#: ../gtk/gtkfilechooser.c:760
+msgid "Application supplied widget for custom previews."
+msgstr "Widget de aplicativo fornecido para previsualizacións personalizadas."
+
+#: ../gtk/gtkfilechooser.c:765
+msgid "Preview Widget Active"
+msgstr "Widget de previsualización activo"
+
+#: ../gtk/gtkfilechooser.c:766
+msgid ""
+"Whether the application supplied widget for custom previews should be shown."
+msgstr ""
+"Indica se se debería mostrar o widget fornecido polo aplicativo para "
+"previsualizacións personalizadas."
+
+#: ../gtk/gtkfilechooser.c:771
+msgid "Use Preview Label"
+msgstr "Usar a etiqueta de previsualización"
+
+#: ../gtk/gtkfilechooser.c:772
+msgid "Whether to display a stock label with the name of the previewed file."
+msgstr ""
+"Indica se se debe mostrar unha etiqueta co nome do ficheiro previsualizado."
+
+#: ../gtk/gtkfilechooser.c:777
+msgid "Extra widget"
+msgstr "Widget adicional"
+
+#: ../gtk/gtkfilechooser.c:778
+msgid "Application supplied widget for extra options."
+msgstr "Widget de aplicativo fornecido para opcións adicionais."
+
+#: ../gtk/gtkfilechooser.c:783 ../gtk/gtkrecentchooser.c:203
+msgid "Select Multiple"
+msgstr "Selección múltiple"
+
+#: ../gtk/gtkfilechooser.c:784
+msgid "Whether to allow multiple files to be selected"
+msgstr "Indica se se permite seleccionar múltiples ficheiros"
+
+#: ../gtk/gtkfilechooser.c:790
+msgid "Show Hidden"
+msgstr "Mostrar os ocultos"
+
+#: ../gtk/gtkfilechooser.c:791
+msgid "Whether the hidden files and folders should be displayed"
+msgstr "Indica se os ficheiros e cartafoles ocultos se deben mostrar"
+
+#: ../gtk/gtkfilechooser.c:806
+msgid "Do overwrite confirmation"
+msgstr "Confirmar a sobrescritura"
+
+#: ../gtk/gtkfilechooser.c:807
+msgid ""
+"Whether a file chooser in save mode will present an overwrite confirmation "
+"dialog if necessary."
+msgstr ""
+"Indica se un selector de ficheiros en modo de gardado presentará un diálogo "
+"de confirmación de sobrescritura se é necesario."
+
+#: ../gtk/gtkfilechooser.c:823
+msgid "Allow folder creation"
+msgstr "Permitir a creación de cartafoles"
+
+#: ../gtk/gtkfilechooser.c:824
+msgid ""
+"Whether a file chooser not in open mode will offer the user to create new "
+"folders."
+msgstr ""
+"Indica se un selector de ficheiros sen estar en modo aberto lle ofrecerá ao "
+"usuario crear cartafoles novos."
 
 #: ../gtk/gtkfixed.c:96 ../gtk/gtklayout.c:603
 msgid "X position"
@@ -3338,6 +3423,44 @@ msgstr "Visitada"
 msgid "Whether this link has been visited."
 msgstr "Indica se esta ligazón foi visitada."
 
+#: ../gtk/gtkmenubar.c:162
+msgid "Pack direction"
+msgstr "Dirección do empaquetado"
+
+#: ../gtk/gtkmenubar.c:163
+msgid "The pack direction of the menubar"
+msgstr "A dirección do empaquetado da barra de menú"
+
+#: ../gtk/gtkmenubar.c:179
+msgid "Child Pack direction"
+msgstr "Dirección do empaquetado fillo"
+
+#: ../gtk/gtkmenubar.c:180
+msgid "The child pack direction of the menubar"
+msgstr "A dirección do empaquetado fillo da barra de menú"
+
+#: ../gtk/gtkmenubar.c:189
+msgid "Style of bevel around the menubar"
+msgstr "Estilo do bisel ao redor da barra de menús"
+
+#: ../gtk/gtkmenubar.c:196 ../gtk/gtktoolbar.c:543
+msgid "Internal padding"
+msgstr "Recheo interno"
+
+#: ../gtk/gtkmenubar.c:197
+msgid "Amount of border space between the menubar shadow and the menu items"
+msgstr ""
+"Cantidade de espazo do bordo entre a sombra da barra de menús e os elementos "
+"de menú"
+
+#: ../gtk/gtkmenubar.c:204
+msgid "Delay before drop down menus appear"
+msgstr "Atraso antes de que os menús despregábeis aparezan"
+
+#: ../gtk/gtkmenubar.c:205
+msgid "Delay before the submenus of a menu bar appear"
+msgstr "Atraso antes de que os submenús dunha barra de menú aparezan"
+
 #: ../gtk/gtkmenu.c:529
 msgid "The currently selected menu item"
 msgstr "O elemento de menú actualmente seleccionado"
@@ -3526,44 +3649,6 @@ msgid ""
 msgstr ""
 "Tempo antes de ocultar un submenú cando o punteiro se estea a mover cara ao "
 "submenú"
-
-#: ../gtk/gtkmenubar.c:162
-msgid "Pack direction"
-msgstr "Dirección do empaquetado"
-
-#: ../gtk/gtkmenubar.c:163
-msgid "The pack direction of the menubar"
-msgstr "A dirección do empaquetado da barra de menú"
-
-#: ../gtk/gtkmenubar.c:179
-msgid "Child Pack direction"
-msgstr "Dirección do empaquetado fillo"
-
-#: ../gtk/gtkmenubar.c:180
-msgid "The child pack direction of the menubar"
-msgstr "A dirección do empaquetado fillo da barra de menú"
-
-#: ../gtk/gtkmenubar.c:189
-msgid "Style of bevel around the menubar"
-msgstr "Estilo do bisel ao redor da barra de menús"
-
-#: ../gtk/gtkmenubar.c:196 ../gtk/gtktoolbar.c:543
-msgid "Internal padding"
-msgstr "Recheo interno"
-
-#: ../gtk/gtkmenubar.c:197
-msgid "Amount of border space between the menubar shadow and the menu items"
-msgstr ""
-"Cantidade de espazo do bordo entre a sombra da barra de menús e os elementos "
-"de menú"
-
-#: ../gtk/gtkmenubar.c:204
-msgid "Delay before drop down menus appear"
-msgstr "Atraso antes de que os menús despregábeis aparezan"
-
-#: ../gtk/gtkmenubar.c:205
-msgid "Delay before the submenus of a menu bar appear"
-msgstr "Atraso antes de que os submenús dunha barra de menú aparezan"
 
 #: ../gtk/gtkmenuitem.c:267
 msgid "Right Justified"
@@ -3980,19 +4065,19 @@ msgstr "Reducir"
 msgid "If TRUE, the child can be made smaller than its requisition"
 msgstr "Se é TRUE, o fillo pode facerse máis pequeno que a súa solicitude"
 
-#: ../gtk/gtkplug.c:169 ../gtk/gtkstatusicon.c:315
+#: ../gtk/gtkplug.c:170 ../gtk/gtkstatusicon.c:315
 msgid "Embedded"
 msgstr "Incorporado"
 
-#: ../gtk/gtkplug.c:170
+#: ../gtk/gtkplug.c:171
 msgid "Whether the plug is embedded"
 msgstr "Indica se o conectador está incrustado"
 
-#: ../gtk/gtkplug.c:184
+#: ../gtk/gtkplug.c:185
 msgid "Socket Window"
 msgstr "Xanela de conectador"
 
-#: ../gtk/gtkplug.c:185
+#: ../gtk/gtkplug.c:186
 msgid "The window of the socket the plug is embedded in"
 msgstr "A xanela do conectador en que o obxecto \"plug\" está incorporado"
 
@@ -4428,33 +4513,33 @@ msgstr "O elemento do menú de opción a cuxo grupo pertence este widget."
 msgid "The radio tool button whose group this button belongs to."
 msgstr "O botón de ferramenta de opción a cuxo grupo pertence este botón."
 
-#: ../gtk/gtkrange.c:390
+#: ../gtk/gtkrange.c:413
 msgid "Update policy"
 msgstr "Política de actualización"
 
-#: ../gtk/gtkrange.c:391
+#: ../gtk/gtkrange.c:414
 msgid "How the range should be updated on the screen"
 msgstr "Como se debe actualizar o intervalo na pantalla"
 
-#: ../gtk/gtkrange.c:400
+#: ../gtk/gtkrange.c:423
 msgid "The GtkAdjustment that contains the current value of this range object"
 msgstr "O GtkAdjustment que contén o valor actual deste intervalo de obxectos"
 
-#: ../gtk/gtkrange.c:407
+#: ../gtk/gtkrange.c:430
 msgid "Inverted"
 msgstr "Invertido"
 
-#: ../gtk/gtkrange.c:408
+#: ../gtk/gtkrange.c:431
 msgid "Invert direction slider moves to increase range value"
 msgstr ""
 "Inverter a dirección en que se move o control desprazábel para incrementar o "
 "valor do intervalo"
 
-#: ../gtk/gtkrange.c:415
+#: ../gtk/gtkrange.c:438
 msgid "Lower stepper sensitivity"
 msgstr "Sensibilidade de paso inferior"
 
-#: ../gtk/gtkrange.c:416
+#: ../gtk/gtkrange.c:439
 msgid ""
 "The sensitivity policy for the stepper that points to the adjustment's lower "
 "side"
@@ -4462,11 +4547,11 @@ msgstr ""
 "A política de sensibilidade para o paso que apunta ao lado máis baixo do "
 "axuste"
 
-#: ../gtk/gtkrange.c:424
+#: ../gtk/gtkrange.c:447
 msgid "Upper stepper sensitivity"
 msgstr "Sensibilidade do paso superior"
 
-#: ../gtk/gtkrange.c:425
+#: ../gtk/gtkrange.c:448
 msgid ""
 "The sensitivity policy for the stepper that points to the adjustment's upper "
 "side"
@@ -4474,89 +4559,89 @@ msgstr ""
 "A política de sensibilidade para o paso que apunta ao lado máis alto do "
 "axuste"
 
-#: ../gtk/gtkrange.c:442
+#: ../gtk/gtkrange.c:465
 msgid "Show Fill Level"
 msgstr "Mostrar nivel de recheo"
 
-#: ../gtk/gtkrange.c:443
+#: ../gtk/gtkrange.c:466
 msgid "Whether to display a fill level indicator graphics on trough."
 msgstr ""
 "Indica se se debe mostrar o indicador gráfico de nivel de recheo mentres se "
 "enche."
 
-#: ../gtk/gtkrange.c:459
+#: ../gtk/gtkrange.c:482
 msgid "Restrict to Fill Level"
 msgstr "Restrinxir ao nivel de recheo"
 
-#: ../gtk/gtkrange.c:460
+#: ../gtk/gtkrange.c:483
 msgid "Whether to restrict the upper boundary to the fill level."
 msgstr "Indica se se debe restrinxir o bordo superior ao nivel de recheo."
 
-#: ../gtk/gtkrange.c:475
+#: ../gtk/gtkrange.c:498
 msgid "Fill Level"
 msgstr "Nivel de recheo"
 
-#: ../gtk/gtkrange.c:476
+#: ../gtk/gtkrange.c:499
 msgid "The fill level."
 msgstr "O nivel de recheo."
 
-#: ../gtk/gtkrange.c:484
+#: ../gtk/gtkrange.c:507
 msgid "Slider Width"
 msgstr "Largura do control desprazábel"
 
-#: ../gtk/gtkrange.c:485
+#: ../gtk/gtkrange.c:508
 msgid "Width of scrollbar or scale thumb"
 msgstr "Largura da barra de desprazamento ou do indicador de escala"
 
-#: ../gtk/gtkrange.c:492
+#: ../gtk/gtkrange.c:515
 msgid "Trough Border"
 msgstr "Bordo do canal"
 
-#: ../gtk/gtkrange.c:493
+#: ../gtk/gtkrange.c:516
 msgid "Spacing between thumb/steppers and outer trough bevel"
 msgstr ""
 "Espazamento entre o indicador de escala ou os pasos e o bisel do canal "
 "exterior"
 
-#: ../gtk/gtkrange.c:500
+#: ../gtk/gtkrange.c:523
 msgid "Stepper Size"
 msgstr "Tamaño do paso"
 
-#: ../gtk/gtkrange.c:501
+#: ../gtk/gtkrange.c:524
 msgid "Length of step buttons at ends"
 msgstr "Lonxitude dos botóns de paso nos extremos"
 
-#: ../gtk/gtkrange.c:516
+#: ../gtk/gtkrange.c:539
 msgid "Stepper Spacing"
 msgstr "Espazamento do paso"
 
-#: ../gtk/gtkrange.c:517
+#: ../gtk/gtkrange.c:540
 msgid "Spacing between step buttons and thumb"
 msgstr "Espazamento entre os botóns de paso e o indicador de escala"
 
-#: ../gtk/gtkrange.c:524
+#: ../gtk/gtkrange.c:547
 msgid "Arrow X Displacement"
 msgstr "Desprazamento X da frecha"
 
-#: ../gtk/gtkrange.c:525
+#: ../gtk/gtkrange.c:548
 msgid ""
 "How far in the x direction to move the arrow when the button is depressed"
 msgstr "Até onde se move a frecha na dirección X cando se solta o botón"
 
-#: ../gtk/gtkrange.c:532
+#: ../gtk/gtkrange.c:555
 msgid "Arrow Y Displacement"
 msgstr "Desprazamento Y da frecha"
 
-#: ../gtk/gtkrange.c:533
+#: ../gtk/gtkrange.c:556
 msgid ""
 "How far in the y direction to move the arrow when the button is depressed"
 msgstr "Até onde se move a frecha na dirección Y cando se solta o botón"
 
-#: ../gtk/gtkrange.c:541
+#: ../gtk/gtkrange.c:564
 msgid "Draw slider ACTIVE during drag"
 msgstr "Debuxar control desprazábel ACTIVO durante o arrastre"
 
-#: ../gtk/gtkrange.c:542
+#: ../gtk/gtkrange.c:565
 msgid ""
 "With this option set to TRUE, sliders will be drawn ACTIVE and with shadow "
 "IN while they are dragged"
@@ -4564,11 +4649,11 @@ msgstr ""
 "Con esta opción definida como TRUE, os controis desprazábeis debuxaranse "
 "como ACTIVOS e con sombra DENTRO ao arrastralos"
 
-#: ../gtk/gtkrange.c:556
+#: ../gtk/gtkrange.c:579
 msgid "Trough Side Details"
 msgstr "Detalles do lado do canal"
 
-#: ../gtk/gtkrange.c:557
+#: ../gtk/gtkrange.c:580
 msgid ""
 "When TRUE, the parts of the trough on the two sides of the slider are drawn "
 "with different details"
@@ -4576,11 +4661,11 @@ msgstr ""
 "Cando é TRUE, as partes do canal nos dous lados do control desprazábel "
 "debúxanse con detalles diferentes"
 
-#: ../gtk/gtkrange.c:573
+#: ../gtk/gtkrange.c:596
 msgid "Trough Under Steppers"
 msgstr "Canal baixo os pasos"
 
-#: ../gtk/gtkrange.c:574
+#: ../gtk/gtkrange.c:597
 msgid ""
 "Whether to draw trough for full length of range or exclude the steppers and "
 "spacing"
@@ -4588,19 +4673,19 @@ msgstr ""
 "Indica se se debuxa para toda a lonxitude do intervalo ou se exclúe os pasos "
 "e o espazamento"
 
-#: ../gtk/gtkrange.c:587
+#: ../gtk/gtkrange.c:610
 msgid "Arrow scaling"
 msgstr "Escalado de frecha"
 
-#: ../gtk/gtkrange.c:588
+#: ../gtk/gtkrange.c:611
 msgid "Arrow scaling with regard to scroll button size"
 msgstr "O escalado da frecha con atención ao tamaño do botón de desprazamento"
 
-#: ../gtk/gtkrange.c:602
+#: ../gtk/gtkrange.c:625
 msgid "Stepper Position Details"
 msgstr "Detalles da posición da frecha"
 
-#: ../gtk/gtkrange.c:603
+#: ../gtk/gtkrange.c:626
 msgid ""
 "When TRUE, the detail string for rendering the steppers is suffixed with "
 "position information"
@@ -4616,79 +4701,79 @@ msgstr "Mostrar números"
 msgid "Whether the items should be displayed with a number"
 msgstr "Indica se os elementos deberían mostrarse cun número"
 
-#: ../gtk/gtkrecentchooser.c:147
+#: ../gtk/gtkrecentchooser.c:132
 msgid "Recent Manager"
 msgstr "Xestionar os recentes"
 
-#: ../gtk/gtkrecentchooser.c:148
+#: ../gtk/gtkrecentchooser.c:133
 msgid "The RecentManager object to use"
 msgstr "O obxecto RecentManager que se vai usar"
 
-#: ../gtk/gtkrecentchooser.c:162
+#: ../gtk/gtkrecentchooser.c:147
 msgid "Show Private"
 msgstr "Mostrar os privados"
 
-#: ../gtk/gtkrecentchooser.c:163
+#: ../gtk/gtkrecentchooser.c:148
 msgid "Whether the private items should be displayed"
 msgstr "Indica se os elementos privados se deben mostrar"
 
-#: ../gtk/gtkrecentchooser.c:176
+#: ../gtk/gtkrecentchooser.c:161
 msgid "Show Tooltips"
 msgstr "Mostrar as indicacións"
 
-#: ../gtk/gtkrecentchooser.c:177
+#: ../gtk/gtkrecentchooser.c:162
 msgid "Whether there should be a tooltip on the item"
 msgstr "Indica se debe haber unha indicación no elemento"
 
-#: ../gtk/gtkrecentchooser.c:189
+#: ../gtk/gtkrecentchooser.c:174
 msgid "Show Icons"
 msgstr "Mostrar iconas"
 
-#: ../gtk/gtkrecentchooser.c:190
+#: ../gtk/gtkrecentchooser.c:175
 msgid "Whether there should be an icon near the item"
 msgstr "Indica se debe haber unha icona cerca do elemento"
 
-#: ../gtk/gtkrecentchooser.c:205
+#: ../gtk/gtkrecentchooser.c:190
 msgid "Show Not Found"
 msgstr "Mostrar os non encontrados"
 
-#: ../gtk/gtkrecentchooser.c:206
+#: ../gtk/gtkrecentchooser.c:191
 msgid "Whether the items pointing to unavailable resources should be displayed"
 msgstr ""
 "Indica se se deben mostrar os elementos que apuntan a recursos non "
 "dispoñíbeis"
 
-#: ../gtk/gtkrecentchooser.c:219
+#: ../gtk/gtkrecentchooser.c:204
 msgid "Whether to allow multiple items to be selected"
 msgstr "Indica se se permite a selección de múltiples elementos"
 
-#: ../gtk/gtkrecentchooser.c:232
+#: ../gtk/gtkrecentchooser.c:217
 msgid "Local only"
 msgstr "Só local"
 
-#: ../gtk/gtkrecentchooser.c:233
+#: ../gtk/gtkrecentchooser.c:218
 msgid "Whether the selected resource(s) should be limited to local file: URIs"
 msgstr ""
 "Indica se os recursos seleccionados deberían limitarse a URI de tipo 'file:' "
 "locais"
 
-#: ../gtk/gtkrecentchooser.c:249
+#: ../gtk/gtkrecentchooser.c:234
 msgid "Limit"
 msgstr "Límite"
 
-#: ../gtk/gtkrecentchooser.c:250
+#: ../gtk/gtkrecentchooser.c:235
 msgid "The maximum number of items to be displayed"
 msgstr "O número máximo de elementos para mostrar"
 
-#: ../gtk/gtkrecentchooser.c:264
+#: ../gtk/gtkrecentchooser.c:249
 msgid "Sort Type"
 msgstr "Tipo de ordenación"
 
-#: ../gtk/gtkrecentchooser.c:265
+#: ../gtk/gtkrecentchooser.c:250
 msgid "The sorting order of the items displayed"
 msgstr "A orde de clasificación dos elementos mostrados"
 
-#: ../gtk/gtkrecentchooser.c:280
+#: ../gtk/gtkrecentchooser.c:265
 msgid "The current filter for selecting which resources are displayed"
 msgstr "O filtro actual para seleccionar que recursos se mostran"
 
@@ -4738,45 +4823,6 @@ msgstr "Métrica"
 msgid "The metric used for the ruler"
 msgstr "A métrica que se usa na regra"
 
-#: ../gtk/gtkscale.c:220
-msgid "The number of decimal places that are displayed in the value"
-msgstr "O número de lugares decimais que se mostran no valor"
-
-#: ../gtk/gtkscale.c:229
-msgid "Draw Value"
-msgstr "Valor de debuxo"
-
-#: ../gtk/gtkscale.c:230
-msgid "Whether the current value is displayed as a string next to the slider"
-msgstr ""
-"Indica se o valor actual se mostra como unha cadea contigua ao control "
-"desprazábel"
-
-#: ../gtk/gtkscale.c:237
-msgid "Value Position"
-msgstr "Posición do valor"
-
-#: ../gtk/gtkscale.c:238
-msgid "The position in which the current value is displayed"
-msgstr "A posición na que se mostra o valor actual"
-
-#: ../gtk/gtkscale.c:245
-msgid "Slider Length"
-msgstr "Lonxitude do control desprazábel"
-
-#: ../gtk/gtkscale.c:246
-msgid "Length of scale's slider"
-msgstr "Lonxitude da escala do control desprazábel"
-
-#: ../gtk/gtkscale.c:254
-msgid "Value spacing"
-msgstr "Espazamento do valor"
-
-#: ../gtk/gtkscale.c:255
-msgid "Space between value text and the slider/trough area"
-msgstr ""
-"Espazo entre os valores de texto e a área do control desprazábel ou o canal"
-
 #: ../gtk/gtkscalebutton.c:221
 msgid "The value of the scale"
 msgstr "O valor da escala"
@@ -4798,6 +4844,45 @@ msgstr "Iconas"
 #: ../gtk/gtkscalebutton.c:269
 msgid "List of icon names"
 msgstr "Lista dos nomes de iconas"
+
+#: ../gtk/gtkscale.c:221
+msgid "The number of decimal places that are displayed in the value"
+msgstr "O número de lugares decimais que se mostran no valor"
+
+#: ../gtk/gtkscale.c:230
+msgid "Draw Value"
+msgstr "Valor de debuxo"
+
+#: ../gtk/gtkscale.c:231
+msgid "Whether the current value is displayed as a string next to the slider"
+msgstr ""
+"Indica se o valor actual se mostra como unha cadea contigua ao control "
+"desprazábel"
+
+#: ../gtk/gtkscale.c:238
+msgid "Value Position"
+msgstr "Posición do valor"
+
+#: ../gtk/gtkscale.c:239
+msgid "The position in which the current value is displayed"
+msgstr "A posición na que se mostra o valor actual"
+
+#: ../gtk/gtkscale.c:246
+msgid "Slider Length"
+msgstr "Lonxitude do control desprazábel"
+
+#: ../gtk/gtkscale.c:247
+msgid "Length of scale's slider"
+msgstr "Lonxitude da escala do control desprazábel"
+
+#: ../gtk/gtkscale.c:255
+msgid "Value spacing"
+msgstr "Espazamento do valor"
+
+#: ../gtk/gtkscale.c:256
+msgid "Space between value text and the slider/trough area"
+msgstr ""
+"Espazo entre os valores de texto e a área do control desprazábel ou o canal"
 
 #: ../gtk/gtkscrollbar.c:50
 msgid "Minimum Slider Length"
@@ -7486,9 +7571,6 @@ msgstr "Como debuxar o método de entrada da barra de estado"
 
 #~ msgid "Whether entered values must already be present in the list"
 #~ msgstr "Indica se os valores introducidos deben estar xa presentes na lista"
-
-#~ msgid "Curve type"
-#~ msgstr "Tipo de curva"
 
 #~ msgid "Is this curve linear, spline interpolated, or free-form"
 #~ msgstr "Se esta curva é lineal, spline interpolada ou de forma libre"
