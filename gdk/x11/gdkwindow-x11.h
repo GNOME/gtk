@@ -116,8 +116,8 @@ struct _GdkToplevelX11
   
   gulong map_serial;	/* Serial of last transition from unmapped */
   
-  GdkPixmap *icon_pixmap;
-  GdkPixmap *icon_mask;
+  cairo_surface_t *icon_pixmap;
+  cairo_surface_t *icon_mask;
   GdkWindow *group_leader;
 
   /* Time of most recent user interaction. */

@@ -221,6 +221,87 @@ gdk_window_impl_x11_finalize (GObject *object)
   G_OBJECT_CLASS (gdk_window_impl_x11_parent_class)->finalize (object);
 }
 
+typedef struct {
+  GdkDisplay *display;
+  Pixmap pixmap;
+} FreePixmapData;
+
+static void
+free_pixmap (gpointer datap)
+{
+  FreePixmapData *data = datap;
+
+  if (!gdk_display_is_closed (data->display))
+    {
+      XFreePixmap (GDK_DISPLAY_XDISPLAY (data->display),
+                   data->pixmap);
+    }
+
+  g_object_unref (data->display);
+  g_slice_free (FreePixmapData, data);
+}
+
+static void
+attach_free_pixmap_handler (cairo_surface_t *surface,
+                            GdkDisplay      *display,
+                            Pixmap           pixmap)
+{
+  static const cairo_user_data_key_t key;
+  FreePixmapData *data;
+  
+  data = g_slice_new (FreePixmapData);
+  data->display = g_object_ref (display);
+  data->pixmap = pixmap;
+
+  cairo_surface_set_user_data (surface, &key, data, free_pixmap);
+}
+
+/* Cairo does not guarantee we get an xlib surface if we call
+ * cairo_surface_create_similar(). In some cases however, we must use a
+ * pixmap or bitmap in the X11 API.
+ * These functions ensure an Xlib surface.
+ */
+static cairo_surface_t *
+gdk_x11_window_create_bitmap_surface (GdkWindow *window,
+                                      int        width,
+                                      int        height)
+{
+  cairo_surface_t *surface;
+  Pixmap pixmap;
+
+  pixmap = XCreatePixmap (GDK_WINDOW_XDISPLAY (window),
+                          GDK_WINDOW_XID (window),
+                          width, height, 1);
+  surface = cairo_xlib_surface_create_for_bitmap (GDK_WINDOW_XDISPLAY (window),
+                                                  pixmap,
+                                                  GDK_SCREEN_XSCREEN (GDK_WINDOW_SCREEN (window)),
+                                                  width, height);
+  attach_free_pixmap_handler (surface, GDK_WINDOW_DISPLAY (window), pixmap);
+
+  return surface;
+}
+
+static cairo_surface_t *
+gdk_x11_window_create_pixmap_surface (GdkWindow *window,
+                                      int        width,
+                                      int        height)
+{
+  cairo_surface_t *surface;
+  Pixmap pixmap;
+
+  pixmap = XCreatePixmap (GDK_WINDOW_XDISPLAY (window),
+                          GDK_WINDOW_XID (window),
+                          width, height,
+                          DefaultDepthOfScreen (GDK_SCREEN_XSCREEN (GDK_WINDOW_SCREEN (window))));
+  surface = cairo_xlib_surface_create (GDK_WINDOW_XDISPLAY (window),
+                                       pixmap,
+                                       GDK_VISUAL_XVISUAL (gdk_drawable_get_visual (window)),
+                                       width, height);
+  attach_free_pixmap_handler (surface, GDK_WINDOW_DISPLAY (window), pixmap);
+
+  return surface;
+}
+
 static void
 tmp_unset_bg (GdkWindow *window)
 {
@@ -992,12 +1073,12 @@ gdk_toplevel_x11_free_contents (GdkDisplay *display,
 {
   if (toplevel->icon_pixmap)
     {
-      g_object_unref (toplevel->icon_pixmap);
+      cairo_surface_destroy (toplevel->icon_pixmap);
       toplevel->icon_pixmap = NULL;
     }
   if (toplevel->icon_mask)
     {
-      g_object_unref (toplevel->icon_mask);
+      cairo_surface_destroy (toplevel->icon_mask);
       toplevel->icon_mask = NULL;
     }
   if (toplevel->group_leader)
@@ -1134,13 +1215,13 @@ update_wm_hints (GdkWindow *window,
   if (toplevel->icon_pixmap)
     {
       wm_hints.flags |= IconPixmapHint;
-      wm_hints.icon_pixmap = GDK_PIXMAP_XID (toplevel->icon_pixmap);
+      wm_hints.icon_pixmap = cairo_xlib_surface_get_drawable (toplevel->icon_pixmap);
     }
 
   if (toplevel->icon_mask)
     {
       wm_hints.flags |= IconMaskHint;
-      wm_hints.icon_mask = GDK_PIXMAP_XID (toplevel->icon_mask);
+      wm_hints.icon_mask = cairo_xlib_surface_get_drawable (toplevel->icon_mask);
     }
   
   wm_hints.flags |= WindowGroupHint;
@@ -3612,7 +3693,6 @@ static void
 gdk_window_update_icon (GdkWindow *window,
                         GList     *icon_list)
 {
-  GdkScreen *screen = gdk_drawable_get_screen (window);
   GdkToplevelX11 *toplevel;
   GdkPixbuf *best_icon;
   GList *tmp_list;
@@ -3622,13 +3702,13 @@ gdk_window_update_icon (GdkWindow *window,
 
   if (toplevel->icon_pixmap != NULL)
     {
-      g_object_unref (toplevel->icon_pixmap);
+      cairo_surface_destroy (toplevel->icon_pixmap);
       toplevel->icon_pixmap = NULL;
     }
   
   if (toplevel->icon_mask != NULL)
     {
-      g_object_unref (toplevel->icon_mask);
+      cairo_surface_destroy (toplevel->icon_mask);
       toplevel->icon_mask = NULL;
     }
   
@@ -3668,11 +3748,44 @@ gdk_window_update_icon (GdkWindow *window,
     }
 
   if (best_icon)
-    gdk_pixbuf_render_pixmap_and_mask_for_colormap (best_icon,
-                                                    gdk_screen_get_system_colormap (screen),
-                                                    &toplevel->icon_pixmap,
-                                                    &toplevel->icon_mask,
-                                                    128);
+    {
+      int width = gdk_pixbuf_get_width (best_icon);
+      int height = gdk_pixbuf_get_height (best_icon);
+      cairo_t *cr;
+
+      toplevel->icon_pixmap = gdk_x11_window_create_pixmap_surface (window,
+                                                                    width,
+                                                                    height);
+
+      cr = cairo_create (toplevel->icon_pixmap);
+      cairo_set_operator (cr, CAIRO_OPERATOR_SOURCE);
+      gdk_cairo_set_source_pixbuf (cr, best_icon, 0, 0);
+      if (gdk_pixbuf_get_has_alpha (best_icon))
+        {
+          /* Saturate the image, so it has bilevel alpha */
+          cairo_push_group_with_content (cr, CAIRO_CONTENT_COLOR_ALPHA);
+          cairo_paint (cr);
+          cairo_set_operator (cr, CAIRO_OPERATOR_SATURATE);
+          cairo_paint (cr);
+          cairo_pop_group_to_source (cr);
+        }
+      cairo_paint (cr);
+      cairo_destroy (cr);
+
+      if (gdk_pixbuf_get_has_alpha (best_icon))
+        {
+          toplevel->icon_mask = gdk_x11_window_create_bitmap_surface (window,
+                                                                      width,
+                                                                      height);
+
+          cr = cairo_create (toplevel->icon_mask);
+          gdk_cairo_set_source_pixbuf (cr, best_icon, 0, 0);
+          cairo_set_operator (cr, CAIRO_OPERATOR_SOURCE);
+          cairo_paint (cr);
+          cairo_destroy (cr);
+        }
+    }
+
   update_wm_hints (window, FALSE);
 }
 
