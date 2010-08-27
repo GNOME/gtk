@@ -38,9 +38,6 @@ expose_cb (GtkWidget *widget, GdkEventExpose *event, gpointer data)
   GdkPixbuf *dest;
   cairo_t *cr;
 
-  gdk_window_set_back_pixmap (gtk_widget_get_window (widget),
-                              NULL, FALSE);
-
   dest = gdk_pixbuf_new (GDK_COLORSPACE_RGB, FALSE, 8, event->area.width, event->area.height);
 
   gtk_widget_get_allocation (widget, &allocation);
