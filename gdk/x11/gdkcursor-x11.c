@@ -157,21 +157,21 @@ static Cursor
 get_blank_cursor (GdkDisplay *display)
 {
   GdkScreen *screen;
-  GdkPixmap *pixmap;
-  Pixmap source_pixmap;
+  Pixmap pixmap;
   XColor color;
   Cursor cursor;
+  cairo_surface_t *surface;
   cairo_t *cr;
 
   screen = gdk_display_get_default_screen (display);
-  pixmap = gdk_pixmap_new (gdk_screen_get_root_window (screen), 1, 1, 1);
-  /* Clear Pixmap */
-  cr = gdk_cairo_create (pixmap);
+  surface = _gdk_x11_window_create_bitmap_surface (gdk_screen_get_root_window (screen), 1, 1);
+  /* Clear surface */
+  cr = cairo_create (surface);
   cairo_set_operator (cr, CAIRO_OPERATOR_CLEAR);
   cairo_paint (cr);
   cairo_destroy (cr);
  
-  source_pixmap = GDK_PIXMAP_XID (pixmap);
+  pixmap = cairo_xlib_surface_get_drawable (surface);
 
   color.pixel = 0; 
   color.red = color.blue = color.green = 0;
@@ -180,9 +180,9 @@ get_blank_cursor (GdkDisplay *display)
     cursor = None;
   else
     cursor = XCreatePixmapCursor (GDK_DISPLAY_XDISPLAY (display),
-                                  source_pixmap, source_pixmap,
+                                  pixmap, pixmap,
                                   &color, &color, 1, 1);
-  g_object_unref (pixmap);
+  cairo_surface_destroy (surface);
 
   return cursor;
 }
