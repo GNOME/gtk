@@ -805,8 +805,9 @@ gdk_display_get_default_cursor_size (GdkDisplay *display)
 #else
 
 static GdkCursor*
-gdk_cursor_new_from_pixmap (GdkPixmap      *source,
-			    GdkPixmap      *mask,
+gdk_cursor_new_from_pixmap (GdkDisplay     *display,
+                            Pixmap          source_pixmap,
+			    Pixmap          mask_pixmap,
 			    const GdkColor *fg,
 			    const GdkColor *bg,
 			    gint            x,
@@ -814,19 +815,11 @@ gdk_cursor_new_from_pixmap (GdkPixmap      *source,
 {
   GdkCursorPrivate *private;
   GdkCursor *cursor;
-  Pixmap source_pixmap, mask_pixmap;
   Cursor xcursor;
   XColor xfg, xbg;
-  GdkDisplay *display;
 
-  g_return_val_if_fail (GDK_IS_PIXMAP (source), NULL);
-  g_return_val_if_fail (GDK_IS_PIXMAP (mask), NULL);
   g_return_val_if_fail (fg != NULL, NULL);
   g_return_val_if_fail (bg != NULL, NULL);
-
-  source_pixmap = GDK_PIXMAP_XID (source);
-  mask_pixmap   = GDK_PIXMAP_XID (mask);
-  display = GDK_PIXMAP_DISPLAY (source);
 
   xfg.pixel = fg->pixel;
   xfg.red = fg->red;
@@ -862,7 +855,7 @@ gdk_cursor_new_from_pixbuf (GdkDisplay *display,
 			    gint        y)
 {
   GdkCursor *cursor;
-  GdkPixmap *pixmap, *mask;
+  cairo_surface_t *pixmap, *mask;
   guint width, height, n_channels, rowstride, data_stride, i, j;
   guint8 *data, *mask_data, *pixels;
   GdkColor fg = { 0, 0, 0, 0 };
@@ -913,9 +906,9 @@ gdk_cursor_new_from_pixbuf (GdkDisplay *display,
       
   screen = gdk_display_get_default_screen (display);
 
-  pixmap = gdk_pixmap_new (gdk_screen_get_root_window (screen), 
-			   width, height, 1);
-  cr = gdk_cairo_create (pixmap);
+  pixmap = _gdk_x11_window_create_bitmap_surface (gdk_screen_get_root_window (screen), 
+	 		                          width, height);
+  cr = cairo_create (pixmap);
   image = cairo_image_surface_create_for_data (data, CAIRO_FORMAT_A1,
                                                width, height, data_stride);
   cairo_set_source_surface (cr, image, 0, 0);
@@ -924,9 +917,9 @@ gdk_cursor_new_from_pixbuf (GdkDisplay *display,
   cairo_paint (cr);
   cairo_destroy (cr);
  
-  mask = gdk_pixmap_new (gdk_screen_get_root_window (screen), 
-			 width, height, 1);
-  cr = gdk_cairo_create (mask);
+  mask = _gdk_x11_window_create_bitmap_surface (gdk_screen_get_root_window (screen), 
+			                        width, height);
+  cr = cairo_create (mask);
   image = cairo_image_surface_create_for_data (mask_data, CAIRO_FORMAT_A1,
                                                width, height, data_stride);
   cairo_set_source_surface (cr, image, 0, 0);
@@ -935,10 +928,14 @@ gdk_cursor_new_from_pixbuf (GdkDisplay *display,
   cairo_paint (cr);
   cairo_destroy (cr);
  
-  cursor = gdk_cursor_new_from_pixmap (pixmap, mask, &fg, &bg, x, y);
+  cursor = gdk_cursor_new_from_pixmap (display,
+                                       cairo_xlib_surface_get_drawable (pixmap),
+                                       cairo_xlib_surface_get_drawable (mask),
+                                       &fg, &bg,
+                                       x, y);
    
-  g_object_unref (pixmap);
-  g_object_unref (mask);
+  cairo_surface_destroy (pixmap);
+  cairo_surface_destroy (mask);
 
   g_free (data);
   g_free (mask_data);

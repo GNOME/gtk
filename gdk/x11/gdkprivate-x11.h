@@ -31,6 +31,8 @@
 #ifndef __GDK_PRIVATE_X11_H__
 #define __GDK_PRIVATE_X11_H__
 
+#include <cairo-xlib.h>
+
 #include <gdk/gdkcursor.h>
 #include <gdk/gdkprivate.h>
 #include <gdk/x11/gdkwindow-x11.h>
@@ -148,6 +150,9 @@ gboolean _gdk_x11_get_xft_setting (GdkScreen   *screen,
 
 GdkGrabStatus _gdk_x11_convert_grab_status (gint status);
 
+cairo_surface_t * _gdk_x11_window_create_bitmap_surface (GdkWindow *window,
+                                                         int        width,
+                                                         int        height);
 
 extern GdkDrawableClass  _gdk_x11_drawable_class;
 extern gboolean	         _gdk_use_xshm;

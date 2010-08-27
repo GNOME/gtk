@@ -261,10 +261,10 @@ attach_free_pixmap_handler (cairo_surface_t *surface,
  * pixmap or bitmap in the X11 API.
  * These functions ensure an Xlib surface.
  */
-static cairo_surface_t *
-gdk_x11_window_create_bitmap_surface (GdkWindow *window,
-                                      int        width,
-                                      int        height)
+cairo_surface_t *
+_gdk_x11_window_create_bitmap_surface (GdkWindow *window,
+                                       int        width,
+                                       int        height)
 {
   cairo_surface_t *surface;
   Pixmap pixmap;
@@ -3774,9 +3774,9 @@ gdk_window_update_icon (GdkWindow *window,
 
       if (gdk_pixbuf_get_has_alpha (best_icon))
         {
-          toplevel->icon_mask = gdk_x11_window_create_bitmap_surface (window,
-                                                                      width,
-                                                                      height);
+          toplevel->icon_mask = _gdk_x11_window_create_bitmap_surface (window,
+                                                                       width,
+                                                                       height);
 
           cr = cairo_create (toplevel->icon_mask);
           gdk_cairo_set_source_pixbuf (cr, best_icon, 0, 0);
