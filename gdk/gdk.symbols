@@ -545,14 +545,6 @@ gdk_drawable_set_colormap
 #endif
 #endif
 
-#if IN_HEADER(__GDK_PIXMAP_X11_H__)
-#if IN_FILE(__GDK_PIXMAP_X11_C__)
-#ifdef GDK_WINDOWING_X11
-gdk_pixmap_impl_x11_get_type G_GNUC_CONST
-#endif
-#endif
-#endif
-
 #if IN_HEADER(__GDK_WINDOW_X11_H__)
 #if IN_FILE(__GDK_WINDOW_X11_C__)
 #ifdef GDK_WINDOWING_X11
@@ -815,23 +807,6 @@ gdk_pixbuf_get_from_surface
 #endif
 #endif
 
-#if IN_HEADER(__GDK_PIXMAP_H__)
-#if IN_FILE(__GDK_PIXMAP_C__)
-gdk_pixmap_get_type G_GNUC_CONST
-gdk_pixmap_new
-#endif
-#endif
-
-#if IN_HEADER(__GDK_PIXMAP_H__)
-#if IN_FILE(__GDK_PIXMAP_X11_C__)
-gdk_pixmap_foreign_new
-gdk_pixmap_foreign_new_for_display
-gdk_pixmap_foreign_new_for_screen
-gdk_pixmap_lookup
-gdk_pixmap_lookup_for_display
-#endif
-#endif
-
 #if IN_HEADER(__GDK_SCREEN_H__)
 #if IN_FILE(__GDK_SCREEN_C__)
 gdk_screen_get_type G_GNUC_CONST
@@ -1023,7 +998,6 @@ gdk_x11_display_error_trap_pop_ignored
 gdk_x11_drawable_get_xdisplay
 gdk_x11_drawable_get_xid
 gdk_x11_window_get_drawable_impl
-gdk_x11_pixmap_get_drawable_impl
 #endif
 
 #if IN_FILE(__GDK_MAIN_X11_C__)

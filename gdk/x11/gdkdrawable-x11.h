@@ -74,7 +74,6 @@ GType _gdk_drawable_impl_x11_get_type (void);
 void _gdk_x11_drawable_finish           (GdkDrawable  *drawable);
 void _gdk_x11_drawable_update_size      (GdkDrawable  *drawable);
 GdkDrawable *gdk_x11_window_get_drawable_impl (GdkWindow *window);
-GdkDrawable *gdk_x11_pixmap_get_drawable_impl (GdkPixmap *pixmap);
 
 G_END_DECLS
 

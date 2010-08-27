@@ -39,8 +39,6 @@ libgdk_quartz_la_SOURCES =    	\
 	gdkinputprivate.h	\
 	gdkkeys-quartz.c	\
 	gdkmain-quartz.c	\
-	gdkpixmap-quartz.c	\
-	gdkpixmap-quartz.h	\
 	gdkprivate-quartz.h	\
 	gdkproperty-quartz.c	\
 	gdkquartz.h		\

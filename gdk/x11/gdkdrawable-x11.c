@@ -35,7 +35,6 @@
 
 #include "gdkprivate-x11.h"
 #include "gdkdrawable-x11.h"
-#include "gdkpixmap-x11.h"
 #include "gdkscreen-x11.h"
 #include "gdkdisplay-x11.h"
 
@@ -95,8 +94,7 @@ gdk_drawable_impl_x11_finalize (GObject *object)
  * _gdk_x11_drawable_finish:
  * @drawable: a #GdkDrawableImplX11.
  * 
- * Performs necessary cleanup prior to freeing a pixmap or
- * destroying a window.
+ * Performs necessary cleanup prior to destroying a window.
  **/
 void
 _gdk_x11_drawable_finish (GdkDrawable *drawable)
@@ -177,11 +175,9 @@ get_impl_drawable (GdkDrawable *drawable)
 {
   if (GDK_IS_WINDOW (drawable))
     return ((GdkWindowObject *)drawable)->impl;
-  else if (GDK_IS_PIXMAP (drawable))
-    return ((GdkPixmapObject *)drawable)->impl;
   else
     {
-      g_warning (G_STRLOC " drawable is not a pixmap or window");
+      g_warning (G_STRLOC " drawable is not a window");
       return NULL;
     }
 }
@@ -222,7 +218,7 @@ gdk_x11_drawable_get_xdisplay (GdkDrawable *drawable)
  * gdk_x11_drawable_get_xid:
  * @drawable: a #GdkDrawable.
  * 
- * Returns the X resource (window or pixmap) belonging to a #GdkDrawable.
+ * Returns the X resource (window) belonging to a #GdkDrawable.
  * 
  * Return value: the ID of @drawable's X resource.
  **/
@@ -255,11 +251,9 @@ gdk_x11_drawable_get_xid (GdkDrawable *drawable)
       
       impl = ((GdkWindowObject *)drawable)->impl;
     }
-  else if (GDK_IS_PIXMAP (drawable))
-    impl = ((GdkPixmapObject *)drawable)->impl;
   else
     {
-      g_warning (G_STRLOC " drawable is not a pixmap or window");
+      g_warning (G_STRLOC " drawable is not a window");
       return None;
     }
 
@@ -270,11 +264,6 @@ GdkDrawable *
 gdk_x11_window_get_drawable_impl (GdkWindow *window)
 {
   return ((GdkWindowObject *)window)->impl;
-}
-GdkDrawable *
-gdk_x11_pixmap_get_drawable_impl (GdkPixmap *pixmap)
-{
-  return ((GdkPixmapObject *)pixmap)->impl;
 }
 
 static void
@@ -317,9 +306,7 @@ gdk_x11_create_cairo_surface (GdkDrawable *drawable,
     {
       g_warning ("Using Cairo rendering requires the drawable argument to\n"
 		 "have a specified colormap. All windows have a colormap,\n"
-		 "however, pixmaps only have colormap by default if they\n"
-		 "were created with a non-NULL window argument. Otherwise\n"
-		 "a colormap must be set on them with gdk_drawable_set_colormap");
+		 "so why is this code even reached?");
       return NULL;
     }
   

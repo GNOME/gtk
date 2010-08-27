@@ -241,28 +241,6 @@ gdk_screen_get_type
 </SECTION>
 
 <SECTION>
-<TITLE>Bitmaps and Pixmaps</TITLE>
-<FILE>pixmaps</FILE>
-GdkPixmap
-gdk_pixmap_new
-GdkBitmap
-
-<SUBSECTION Standard>
-GDK_PIXMAP
-GDK_PIXMAP_GET_CLASS
-GDK_PIXMAP_OBJECT
-GDK_TYPE_PIXMAP
-GDK_IS_PIXMAP
-GDK_PIXMAP_CLASS
-GDK_IS_PIXMAP_CLASS
-
-<SUBSECTION Private>
-gdk_pixmap_get_type
-GdkPixmapObject
-GdkPixmapObjectClass
-</SECTION>
-
-<SECTION>
 <TITLE>Pixbufs</TITLE>
 <FILE>pixbufs</FILE>
 gdk_pixbuf_get_from_drawable
@@ -1014,17 +992,12 @@ GDK_CURSOR_XCURSOR
 GDK_CURSOR_XDISPLAY
 GDK_WINDOW_XWINDOW
 gdkx_visual_get
-gdk_pixmap_foreign_new
-gdk_pixmap_foreign_new_for_display
-gdk_pixmap_foreign_new_for_screen
 gdk_window_foreign_new
 gdk_window_foreign_new_for_display
 gdk_xid_table_lookup
 gdk_xid_table_lookup_for_display
 gdk_window_lookup
 gdk_window_lookup_for_display
-gdk_pixmap_lookup
-gdk_pixmap_lookup_for_display
 gdk_x11_lookup_xdisplay
 gdk_x11_get_server_time
 gdk_net_wm_supports
@@ -1072,7 +1045,6 @@ gdk_x11_get_xatom_name_for_display
 <SUBSECTION Private>
 GDK_HAVE_WCHAR_H
 GDK_HAVE_WCTYPE_H
-gdk_x11_pixmap_get_drawable_impl
 gdk_x11_window_get_drawable_impl
 </SECTION>
 

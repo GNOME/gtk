@@ -43,8 +43,6 @@ libgdk_x11_la_SOURCES =    	\
 	gdkinput.c		\
 	gdkkeys-x11.c		\
 	gdkmain-x11.c	   	\
-	gdkpixmap-x11.c	   	\
-	gdkpixmap-x11.h		\
 	gdkproperty-x11.c  	\
 	gdkscreen-x11.c		\
 	gdkscreen-x11.h		\

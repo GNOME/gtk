@@ -25,7 +25,6 @@
 #define GDK_QUARTZ_RELEASE_POOL [pool release]
 
 #include <gdk/gdkprivate.h>
-#include <gdk/quartz/gdkpixmap-quartz.h>
 #include <gdk/quartz/gdkwindow-quartz.h>
 #include <gdk/quartz/gdkquartz.h>
 

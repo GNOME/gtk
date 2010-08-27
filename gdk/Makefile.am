@@ -87,7 +87,6 @@ gdk_public_h_sources =				\
 	gdkkeysyms-compat.h			\
 	gdkpango.h				\
 	gdkpixbuf.h				\
-	gdkpixmap.h				\
 	gdkprivate.h				\
 	gdkproperty.h				\
 	gdkscreen.h				\
@@ -127,7 +126,6 @@ gdk_c_sources =                 \
 	gdkoffscreenwindow.c	\
 	gdkpango.c		\
 	gdkpixbuf-drawable.c	\
-	gdkpixmap.c		\
 	gdkrectangle.c		\
 	gdkscreen.c		\
 	gdkselection.c		\
@@ -209,7 +207,6 @@ x11_introspection_files = 		\
 	x11/gdkinput.c			\
 	x11/gdkkeys-x11.c		\
 	x11/gdkmain-x11.c		\
-	x11/gdkpixmap-x11.c		\
 	x11/gdkproperty-x11.c		\
 	x11/gdkscreen-x11.c		\
 	x11/gdkselection-x11.c		\

@@ -41,9 +41,7 @@
 #include "gdkprivate-x11.h"
 #include "gdkcursor.h"
 #include "gdkdisplay-x11.h"
-#include "gdkpixmap-x11.h"
 #include "gdkx.h"
-#include <gdk/gdkpixmap.h>
 #include <gdk-pixbuf/gdk-pixbuf.h>
 
 static guint theme_serial = 0;

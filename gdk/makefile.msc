@@ -84,7 +84,6 @@ gdk_OBJECTS = \
 	gdkpango.obj \
 	gdkpixbuf-drawable.obj \
 	gdkpixbuf-render.obj \
-	gdkpixmap.obj \
 	gdkrectangle.obj \
 	gdkscreen.obj \
 	gdkselection.obj \
@@ -104,7 +103,6 @@ gdk_public_h_sources = \
 	gdkkeys.h	\
 	gdkpango.h	\
 	gdkpixbuf.h	\
-	gdkpixmap.h	\
 	gdkproperty.h	\
 	gdkselection.h	\
 	gdktypes.h	\

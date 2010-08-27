@@ -310,9 +310,8 @@ gdk_win32_drawable_get_handle (GdkDrawable *drawable)
  * @drawable: a Win32 #GdkDrawable implementation
  * 
  * Releases any resources allocated internally for the drawable.
- * This is called when the drawable becomes unusable
- * (gdk_window_destroy() for a window, or the refcount going to
- * zero for a pixmap.)
+ * This is called when the drawable becomes unusable, i.e.
+ * gdk_window_destroy() is called.
  **/
 void
 _gdk_win32_drawable_finish (GdkDrawable *drawable)

@@ -28,7 +28,6 @@
 #include "gdkcolor.h"
 #include "gdkwindow.h"
 #include "gdkpixbuf.h"
-#include "gdkpixmap.h"
 #include "gdkinternals.h"
 
 
@@ -53,14 +52,8 @@
  * 
  * If the drawable @src has no colormap (gdk_drawable_get_colormap()
  * returns %NULL), then a suitable colormap must be specified.
- * Typically a #GdkWindow or a pixmap created by passing a #GdkWindow
- * to gdk_pixmap_new() will already have a colormap associated with
- * it.  If the drawable has a colormap, the @cmap argument will be
- * ignored.  If the drawable is a bitmap (1 bit per pixel pixmap),
- * then a colormap is not required; pixels with a value of 1 are
- * assumed to be white, and pixels with a value of 0 are assumed to be
- * black. For taking screenshots, gdk_colormap_get_system() returns
- * the correct colormap to use.
+ * If the drawable has a colormap, the @cmap argument will be
+ * ignored.
  *
  * If the specified destination pixbuf @dest is %NULL, then this
  * function will create an RGB pixbuf with 8 bits per channel and no
@@ -69,12 +62,6 @@
  * specified as 0.  If the specified destination pixbuf is not %NULL
  * and it contains alpha information, then the filled pixels will be
  * set to full opacity (alpha = 255).
- *
- * If the specified drawable is a pixmap, then the requested source
- * rectangle must be completely contained within the pixmap, otherwise
- * the function will return %NULL. For pixmaps only (not for windows)
- * passing -1 for width or height is allowed to mean the full width
- * or height of the pixmap.
  *
  * If the specified drawable is a window, and the window is off the
  * screen, then there is no image data in the obscured/offscreen
@@ -106,7 +93,6 @@ gdk_pixbuf_get_from_drawable (GdkPixbuf   *dest,
 			      int dest_x, int dest_y,
 			      int width,  int height)
 {
-  int src_width, src_height;
   cairo_surface_t *surface;
   int depth;
   
@@ -155,18 +141,6 @@ gdk_pixbuf_get_from_drawable (GdkPixbuf   *dest,
  
   /* Coordinate sanity checks */
   
-  if (GDK_IS_PIXMAP (src))
-    {
-      gdk_drawable_get_size (src, &src_width, &src_height);
-      if (width < 0)
-        width = src_width;
-      if (height < 0)
-        height = src_height;
-      
-      g_return_val_if_fail (src_x >= 0 && src_y >= 0, NULL);
-      g_return_val_if_fail (src_x + width <= src_width && src_y + height <= src_height, NULL);
-    }
-
   surface = _gdk_drawable_ref_cairo_surface (src);
   dest = gdk_pixbuf_get_from_surface (dest,
                                       surface,

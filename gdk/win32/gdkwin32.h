@@ -42,9 +42,8 @@ G_BEGIN_DECLS
 #include "gdkprivate-win32.h"
 
 #define GDK_WINDOW_HWND(win)          (GDK_DRAWABLE_IMPL_WIN32(((GdkWindowObject *)win)->impl)->handle)
-#define GDK_PIXMAP_HBITMAP(pixmap)    (GDK_DRAWABLE_IMPL_WIN32(((GdkPixmapObject *)pixmap)->impl)->handle)
 #define GDK_DRAWABLE_IMPL_WIN32_HANDLE(d) (((GdkDrawableImplWin32 *) d)->handle)
-#define GDK_DRAWABLE_HANDLE(win)      (GDK_IS_WINDOW (win) ? GDK_WINDOW_HWND (win) : (GDK_IS_PIXMAP (win) ? GDK_PIXMAP_HBITMAP (win) : (GDK_IS_DRAWABLE_IMPL_WIN32 (win) ? GDK_DRAWABLE_IMPL_WIN32_HANDLE (win) : 0)))
+#define GDK_DRAWABLE_HANDLE(win)      (GDK_IS_WINDOW (win) ? GDK_WINDOW_HWND (win) : (GDK_IS_DRAWABLE_IMPL_WIN32 (win) ? GDK_DRAWABLE_IMPL_WIN32_HANDLE (win) : 0))
 #else
 /* definition for exported 'internals' go here */
 #define GDK_WINDOW_HWND(d) (gdk_win32_drawable_get_handle (d))

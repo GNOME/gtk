@@ -323,11 +323,6 @@ cairo_surface_t * _gdk_drawable_create_cairo_surface (GdkDrawable *drawable,
  * Interfaces used by windowing code *
  *************************************/
 
-GdkPixmap *_gdk_pixmap_new               (GdkDrawable    *drawable,
-                                          gint            width,
-                                          gint            height,
-                                          gint            depth);
-
 void       _gdk_window_impl_new          (GdkWindow      *window,
 					  GdkWindow      *real_parent,
 					  GdkScreen      *screen,
@@ -448,7 +443,6 @@ GType _gdk_paintable_get_type (void) G_GNUC_CONST;
 
 /* Implementation types */
 GType _gdk_window_impl_get_type (void) G_GNUC_CONST;
-GType _gdk_pixmap_impl_get_type (void) G_GNUC_CONST;
 
 struct GdkAppLaunchContextPrivate
 {

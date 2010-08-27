@@ -51,8 +51,8 @@
 /**
  * GDK_PARENT_RELATIVE:
  *
- * A special value for #GdkPixmap variables, indicating that the background
- * pixmap for a window should be inherited from the parent window.
+ * A special value, indicating that the background
+ * for a window should be inherited from the parent window.
  */
 #define GDK_PARENT_RELATIVE  1L
 
@@ -95,16 +95,11 @@ typedef struct _GdkCursor	      GdkCursor;
 typedef struct _GdkVisual             GdkVisual;
 
 typedef struct _GdkDrawable           GdkDrawable;
-typedef struct _GdkDrawable           GdkBitmap;
-typedef struct _GdkDrawable           GdkPixmap;
 
 /**
  * GdkWindow:
  *
- * An opaque structure representing an onscreen drawable. Pointers to structures
- * of type #GdkPixmap, #GdkBitmap, and #GdkWindow can often be used
- * interchangeably. The type #GdkDrawable refers generically to any of these
- * types.
+ * An opaque structure representing an onscreen drawable.
  */
 typedef struct _GdkDrawable           GdkWindow;
 typedef struct _GdkDisplay	      GdkDisplay;

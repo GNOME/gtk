@@ -46,8 +46,6 @@ libgdk_win32_la_SOURCES = \
 	gdkinput.c \
 	gdkkeys-win32.c \
 	gdkmain-win32.c \
-	gdkpixmap-win32.c \
-	gdkpixmap-win32.h \
 	gdkprivate-win32.h \
 	gdkproperty-win32.c \
 	gdkscreen-win32.c \

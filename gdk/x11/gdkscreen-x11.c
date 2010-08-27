@@ -541,8 +541,8 @@ gdk_screen_get_monitor_geometry (GdkScreen    *screen,
  * gdk_screen_get_rgba_colormap:
  * @screen: a #GdkScreen.
  * 
- * Gets a colormap to use for creating windows or pixmaps with an
- * alpha channel. The windowing system on which GTK+ is running
+ * Gets a colormap to use for creating windows with an alpha
+ * channel. The windowing system on which GTK+ is running
  * may not support this capability, in which case %NULL will
  * be returned. Even if a non-%NULL value is returned, its
  * possible that the window's alpha channel won't be honored
@@ -583,9 +583,8 @@ gdk_screen_get_rgba_colormap (GdkScreen *screen)
  * gdk_screen_get_rgba_visual:
  * @screen: a #GdkScreen
  * 
- * Gets a visual to use for creating windows or pixmaps with an
- * alpha channel. See the docs for gdk_screen_get_rgba_colormap()
- * for caveats.
+ * Gets a visual to use for creating windows with an alpha channel.
+ * See the docs for gdk_screen_get_rgba_colormap() for caveats.
  * 
  * Return value: (transfer none): a visual to use for windows with an
  *     alpha channel or %NULL if the capability is not available.

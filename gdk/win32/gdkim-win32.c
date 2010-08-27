@@ -31,7 +31,6 @@
 #include <string.h>
 #include <locale.h>
 
-#include "gdkpixmap.h"
 #include "gdkinternals.h"
 #include "gdkwin32.h"
 

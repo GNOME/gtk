@@ -46,7 +46,6 @@
 #include <gdk/gdkkeysyms.h>
 #include <gdk/gdkpango.h>
 #include <gdk/gdkpixbuf.h>
-#include <gdk/gdkpixmap.h>
 #include <gdk/gdkproperty.h>
 #include <gdk/gdkscreen.h>
 #include <gdk/gdkselection.h>
