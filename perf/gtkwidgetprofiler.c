@@ -408,13 +408,12 @@ profile_expose (GtkWidgetProfiler *profiler)
   attr.width = allocation.width;
   attr.height = allocation.width;
   attr.wclass = GDK_INPUT_OUTPUT;
-  attr.window_type = GDK_WINDOW_CHILD;
+  attr.window_type = GDK_WINDOW_TEMP;
 
   attr_mask = GDK_WA_X | GDK_WA_Y;
 
-  window = gdk_window_new (gtk_widget_get_window (priv->toplevel),
+  window = gdk_window_new (gdk_screen_get_root_window (gtk_widget_get_screen (priv->toplevel)),
                            &attr, attr_mask);
-  gdk_window_set_back_pixmap (window, NULL, TRUE); /* avoid flicker */
 
   gdk_window_show (window);
   gdk_window_hide (window);
