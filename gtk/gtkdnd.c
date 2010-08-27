@@ -3135,13 +3135,10 @@ set_icon_stock_pixbuf (GdkDragContext    *context,
 
   screen = gdk_drawable_get_screen (context->source_window);
 
-  /* Push a NULL colormap to guard against gtk_widget_push_colormap() */
-  gtk_widget_push_colormap (NULL);
   window = gtk_window_new (GTK_WINDOW_POPUP);
   gtk_window_set_type_hint (GTK_WINDOW (window), GDK_WINDOW_TYPE_HINT_DND);
   gtk_window_set_screen (GTK_WINDOW (window), screen);
   set_can_change_screen (window, TRUE);
-  gtk_widget_pop_colormap ();
 
   gtk_widget_set_events (window, GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK);
   gtk_widget_set_app_paintable (window, TRUE);
@@ -3306,13 +3303,10 @@ gtk_drag_set_icon_surface (GdkDragContext    *context,
 
   screen = gdk_drawable_get_screen (context->source_window);
 
-  /* Push a NULL colormap to guard against gtk_widget_push_colormap() */
-  gtk_widget_push_colormap (NULL);
   window = gtk_window_new (GTK_WINDOW_POPUP);
   gtk_window_set_type_hint (GTK_WINDOW (window), GDK_WINDOW_TYPE_HINT_DND);
   gtk_window_set_screen (GTK_WINDOW (window), screen);
   set_can_change_screen (window, TRUE);
-  gtk_widget_pop_colormap ();
 
   gtk_widget_set_events (window, GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK);
   gtk_widget_set_app_paintable (window, TRUE);

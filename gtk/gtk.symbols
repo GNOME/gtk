@@ -4280,9 +4280,7 @@ gtk_widget_modify_text
 gtk_widget_modify_symbolic_color
 gtk_widget_new
 gtk_widget_path
-gtk_widget_pop_colormap
 gtk_widget_pop_composite_child
-gtk_widget_push_colormap
 gtk_widget_push_composite_child
 gtk_widget_queue_draw
 gtk_widget_queue_draw_area

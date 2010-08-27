@@ -972,13 +972,12 @@ static void
 gtk_window_init (GtkWindow *window)
 {
   GtkWindowPrivate *priv;
-  GdkColormap *colormap;
 
   window->priv = G_TYPE_INSTANCE_GET_PRIVATE (window,
                                               GTK_TYPE_WINDOW,
                                               GtkWindowPrivate);
   priv = window->priv;
-
+  
   gtk_widget_set_has_window (GTK_WIDGET (window), TRUE);
   _gtk_widget_set_is_toplevel (GTK_WIDGET (window), TRUE);
 
@@ -1021,10 +1020,6 @@ gtk_window_init (GtkWindow *window)
   priv->startup_id = NULL;
   priv->mnemonics_visible = TRUE;
 
-  colormap = _gtk_widget_peek_colormap ();
-  if (colormap)
-    gtk_widget_set_colormap (GTK_WIDGET (window), colormap);
-  
   g_object_ref_sink (window);
   priv->has_user_ref_count = TRUE;
   toplevel_list = g_slist_prepend (toplevel_list, window);

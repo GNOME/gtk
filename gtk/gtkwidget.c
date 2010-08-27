@@ -437,7 +437,6 @@ static void gtk_widget_add_events_internal (GtkWidget *widget,
 static gpointer         gtk_widget_parent_class = NULL;
 static guint            widget_signals[LAST_SIGNAL] = { 0 };
 static GtkStyle        *gtk_default_style = NULL;
-static GSList          *colormap_stack = NULL;
 static guint            composite_child_stack = 0;
 static GtkTextDirection gtk_default_direction = GTK_TEXT_DIR_LTR;
 static GParamSpecPool  *style_property_spec_pool = NULL;
@@ -8992,35 +8991,6 @@ gtk_widget_pop_composite_child (void)
 }
 
 /**
- * gtk_widget_push_colormap:
- * @cmap: a #GdkColormap
- *
- * Pushes @cmap onto a global stack of colormaps; the topmost
- * colormap on the stack will be used to create all widgets.
- * Remove @cmap with gtk_widget_pop_colormap(). There's little
- * reason to use this function.
- **/
-void
-gtk_widget_push_colormap (GdkColormap *cmap)
-{
-  g_return_if_fail (!cmap || GDK_IS_COLORMAP (cmap));
-
-  colormap_stack = g_slist_prepend (colormap_stack, cmap);
-}
-
-/**
- * gtk_widget_pop_colormap:
- *
- * Removes a colormap pushed with gtk_widget_push_colormap().
- **/
-void
-gtk_widget_pop_colormap (void)
-{
-  if (colormap_stack)
-    colormap_stack = g_slist_delete_link (colormap_stack, colormap_stack);
-}
-
-/**
  * gtk_widget_set_default_colormap:
  * @colormap: a #GdkColormap
  * 
@@ -9437,21 +9407,6 @@ gtk_widget_real_adjust_size_request (GtkWidget         *widget,
       *minimum_size += (aux_info->margin.top + aux_info->margin.bottom);
       *natural_size += (aux_info->margin.top + aux_info->margin.bottom);
     }
-}
-
-/**
- * _gtk_widget_peek_colormap:
- * 
- * Returns colormap currently pushed by gtk_widget_push_colormap, if any.
- * 
- * Return value: the currently pushed colormap, or %NULL if there is none.
- **/
-GdkColormap*
-_gtk_widget_peek_colormap (void)
-{
-  if (colormap_stack)
-    return (GdkColormap*) colormap_stack->data;
-  return NULL;
 }
 
 /**

@@ -100,7 +100,6 @@ static void
 gtk_invisible_init (GtkInvisible *invisible)
 {
   GtkInvisiblePrivate *priv;
-  GdkColormap *colormap;
 
   invisible->priv = G_TYPE_INSTANCE_GET_PRIVATE (invisible,
                                                  GTK_TYPE_INVISIBLE,
@@ -114,10 +113,6 @@ gtk_invisible_init (GtkInvisible *invisible)
 
   priv->has_user_ref_count = TRUE;
   priv->screen = gdk_screen_get_default ();
-
-  colormap = _gtk_widget_peek_colormap ();
-  if (colormap)
-    gtk_widget_set_colormap (GTK_WIDGET (invisible), colormap);
 }
 
 static void

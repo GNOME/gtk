@@ -860,10 +860,8 @@ void       gtk_widget_reset_rc_styles   (GtkWidget      *widget);
  * This will override the values that got set by the
  * gtk_widget_set_default_* () functions.
  */
-void	     gtk_widget_push_colormap	     (GdkColormap *cmap);
 void	     gtk_widget_push_composite_child (void);
 void	     gtk_widget_pop_composite_child  (void);
-void	     gtk_widget_pop_colormap	     (void);
 
 /* widget style properties
  */
@@ -985,8 +983,6 @@ void       _gtk_widget_synthesize_crossing (GtkWidget      *from,
 					    GtkWidget      *to,
                                             GdkDevice      *device,
 					    GdkCrossingMode mode);
-
-GdkColormap* _gtk_widget_peek_colormap (void);
 
 gpointer     _gtk_widget_peek_request_cache (GtkWidget *widget);
 
