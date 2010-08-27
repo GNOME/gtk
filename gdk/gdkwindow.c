@@ -41,7 +41,6 @@
 #include "gdkdeviceprivate.h"
 #include "gdkdrawable.h"
 #include "gdkmarshalers.h"
-#include "gdkpixmap.h"
 #include "gdkscreen.h"
 #include "gdkwindowimpl.h"
 
@@ -105,8 +104,8 @@
  * the offscreen window.
  *
  * For rendering an offscreen window onto its embedder, the contents of the
- * offscreen window are available as a pixmap, via
- * gdk_offscreen_window_get_pixmap().
+ * offscreen window are available as a surface, via
+ * gdk_offscreen_window_get_surface().
  * </para>
  * </refsect2>
  */
@@ -132,8 +131,8 @@
  * Additionally there is a new type of platform independent impl object,
  * GdkOffscreenWindow. All windows of type GDK_WINDOW_OFFSCREEN get an impl
  * of this type (while their children are generally GDK_WINDOW_CHILD virtual
- * windows). Such windows work by allocating a GdkPixmap as the backing store
- * for drawing operations, which is resized with the window.
+ * windows). Such windows work by allocating a #cairo_surface_t as the backing
+ * store for drawing operations, which is resized with the window.
  *
  * GdkWindows have a pointer to the "impl window" they are in, i.e.
  * the topmost GdkWindow which have the same "impl" value. This is stored
@@ -161,7 +160,7 @@
  * we store this in outstanding_moves instead of applying immediately. We then
  * delay this move until we really need it (because something depends on being
  * able to read it), or until we're handing a redraw from an expose/invalidation
- * (actually we delay it past redraw, but before blitting the double buffer pixmap
+ * (actually we delay it past redraw, but before blitting the double buffer
  * to the window). This gives us two advantages. First of all it minimizes the time
  * from the window is moved to the exposes related to that move, secondly it allows
  * us to be smart about how to do the copy. We combine multiple moves into one (when
@@ -172,9 +171,9 @@
  * An implicit paint is similar to a regular paint for the paint stack, but it is
  * not put on the stack. Instead, it is set on the impl window, and later when
  * regular gdk_window_begin_paint_region()  happen on a window of this impl window
- * we reuse the pixmap from the implicit paint. During repaint we create and at the
+ * we reuse the surface from the implicit paint. During repaint we create and at the
  * end flush an implicit paint, which means we can collect all the paints on
- * multiple client side windows in the same backing store pixmap.
+ * multiple client side windows in the same backing store.
  */
 
 #define USE_BACKING_STORE	/* Appears to work on Win32, too, now. */
@@ -2654,8 +2653,8 @@ gdk_window_get_state (GdkWindow *window)
 
 /* This creates an empty "implicit" paint region for the impl window.
  * By itself this does nothing, but real paints to this window
- * or children of it can use this pixmap as backing to avoid allocating
- * multiple pixmaps for subwindow rendering. When doing so they
+ * or children of it can use this surface as backing to avoid allocating
+ * multiple surfaces for subwindow rendering. When doing so they
  * add to the region of the implicit paint region, which will be
  * pushed to the window when the implicit paint region is ended.
  * Such paints should not copy anything to the window on paint end, but
@@ -2686,7 +2685,7 @@ gdk_window_begin_implicit_paint (GdkWindow *window, GdkRectangle *rect)
 
   /* Never do implicit paints for foreign windows, they don't need
    * double buffer combination since they have no client side children,
-   * and creating pixmaps for them is risky since they could disappear
+   * and creating surfaces for them is risky since they could disappear
    * at any time
    */
   if (private->window_type == GDK_WINDOW_FOREIGN)
@@ -2825,7 +2824,7 @@ gdk_window_begin_paint_rect (GdkWindow          *window,
  * Indicates that you are beginning the process of redrawing @region.
  * A backing store (offscreen buffer) large enough to contain @region
  * will be created. The backing store will be initialized with the
- * background color or background pixmap for @window. Then, all
+ * background color or background surface for @window. Then, all
  * drawing operations performed on @window will be diverted to the
  * backing store.  When you call gdk_window_end_paint(), the backing
  * store will be copied to @window, making it visible onscreen. Only
@@ -3326,7 +3325,7 @@ gdk_window_flush_outstanding_moves (GdkWindow *window)
  *
  * Gdk uses multiple kinds of caching to get better performance and
  * nicer drawing. For instance, during exposes all paints to a window
- * using double buffered rendering are keep on a pixmap until the last
+ * using double buffered rendering are keep on a surface until the last
  * window has been exposed. It also delays window moves/scrolls until
  * as long as possible until next update to avoid tearing when moving
  * windows.
@@ -3541,7 +3540,7 @@ gdk_window_clear_backing_region_direct (GdkWindow *window,
  * gdk_window_clear:
  * @window: a #GdkWindow
  *
- * Clears an entire @window to the background color or background pixmap.
+ * Clears an entire @window to the background pattern.
  **/
 void
 gdk_window_clear (GdkWindow *window)
@@ -3576,8 +3575,7 @@ gdk_window_clear_region_internal (GdkWindow *window,
  * @width: width of rectangle to clear
  * @height: height of rectangle to clear
  *
- * Clears an area of @window to the background color or background pixmap.
- *
+ * Clears an area of @window to the background pattern.
  **/
 void
 gdk_window_clear_area (GdkWindow *window,
@@ -3788,7 +3786,7 @@ gdk_window_set_cairo_clip (GdkDrawable *drawable,
       GdkWindowPaint *paint = private->paint_stack->data;
 
       /* Only needs to clip to region if piggybacking
-	 on an implicit paint pixmap */
+	 on an implicit paint */
       cairo_reset_clip (cr);
       if (paint->uses_implicit)
 	{
@@ -4135,10 +4133,10 @@ gdk_window_process_updates_internal (GdkWindow *window)
 	   * First of all, each subwindow expose may be double buffered by
 	   * itself (depending on widget setting) via
 	   * gdk_window_begin/end_paint(). But we also do an "implicit" paint,
-	   * creating a single pixmap the size of the invalid area on the
+	   * creating a single surface the size of the invalid area on the
 	   * native window which all the individual normal paints will draw
-	   * into. This way in the normal case there will be only one pixmap
-	   * allocated and only once pixmap draw done for all the windows
+	   * into. This way in the normal case there will be only one surface
+	   * allocated and only once surface draw done for all the windows
 	   * in this native window.
 	   * There are a couple of reasons this may fail, for instance, some
 	   * backends (like quartz) do its own double buffering, so we disable
@@ -4146,10 +4144,10 @@ gdk_window_process_updates_internal (GdkWindow *window)
 	   * non-double buffered and draw directly to the window outside a
 	   * begin/end_paint pair. That will be lead to a gdk_window_flush
 	   * which immediately executes all outstanding moves and paints+removes
-	   * the implicit paint (further paints will allocate their own pixmap).
+	   * the implicit paint (further paints will allocate their own surfaces).
 	   *
 	   * Secondly, in the case of implicit double buffering we expose all
-	   * the child windows into the implicit pixmap before we execute
+	   * the child windows into the implicit surface before we execute
 	   * the outstanding moves. This way we minimize the time between
 	   * doing the moves and rendering the new update area, thus minimizing
 	   * flashing. Of course, if any subwindow is non-double buffered we
@@ -4460,7 +4458,7 @@ impl_window_add_update_area (GdkWindowObject *impl_window,
 }
 
 /* clear_bg controls if the region will be cleared to
- * the background color/pixmap if the exposure mask is not
+ * the background pattern if the exposure mask is not
  * set for the window, whereas this might not otherwise be
  * done (unless necessary to emulate background settings).
  * Set this to CLEAR_BG_WINCLEARED or CLEAR_BG_ALL if you
@@ -6827,7 +6825,7 @@ gdk_window_get_cursor (GdkWindow *window)
  * @cursor: (allow-none): a cursor
  *
  * Sets the default mouse pointer for a #GdkWindow. Use gdk_cursor_new_for_display()
- * or gdk_cursor_new_from_pixmap() to create the cursor. To make the cursor
+ * or gdk_cursor_new_from_pixbuf() to create the cursor. To make the cursor
  * invisible, use %GDK_BLANK_CURSOR. Passing %NULL for the @cursor argument
  * to gdk_window_set_cursor() means that @window will use the cursor of its
  * parent window. Most windows should use this default.
@@ -6900,7 +6898,7 @@ gdk_window_get_device_cursor (GdkWindow *window,
  * @cursor: a #GdkCursor
  *
  * Sets a specific #GdkCursor for a given device when it gets inside @window.
- * Use gdk_cursor_new_for_display() or gdk_cursor_new_from_pixmap() to create
+ * Use gdk_cursor_new_for_display() or gdk_cursor_new_from_pixbuf() to create
  * the cursor. To make the cursor invisible, use %GDK_BLANK_CURSOR. Passing
  * %NULL for the @cursor argument to gdk_window_set_cursor() means that
  * @window will use the cursor of its parent window. Most windows should
