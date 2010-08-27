@@ -237,10 +237,6 @@ AC_ARG_ENABLE(debug,
               AC_HELP_STRING([--enable-debug=@<:@no/minimum/yes@:>@],
                              [turn on debugging @<:@default=debug_default@:>@]),,
               enable_debug=debug_default)
-AC_ARG_ENABLE(shm,
-              [AC_HELP_STRING([--enable-shm],
-                              [support shared memory if available [default=yes]])],,
-              [enable_shm="yes"])
 AC_ARG_ENABLE(xkb,
               [AC_HELP_STRING([--enable-xkb],
                               [support XKB [default=maybe]])],,
@@ -1038,54 +1034,6 @@ if test "x$gdktarget" = "xx11"; then
 	  :, [#include <X11/Xlib.h>])])
 
   CFLAGS="$gtk_save_CFLAGS"
-
-  # Xshm checks
-
-  if test "x$enable_shm" = "xyes"; then
-     # Check for the XShm extension, normally in Xext
-     AC_CHECK_FUNC(XShmAttach,
-	:,
-	# On AIX, it is in XextSam instead
-	[AC_CHECK_LIB(XextSam, XShmAttach,
-	    [GTK_ADD_LIB(x_extra_libs,XextSam)])])
-  fi
-
-  if test "x$enable_shm" = "xyes"; then
-    # Check for shared memory
-    AC_CHECK_HEADER(sys/ipc.h,
-                    AC_DEFINE(HAVE_IPC_H, 1,
-                              [Define to 1 if ipc.h is available]),
-                    no_sys_ipc=yes)
-    AC_CHECK_HEADER(sys/shm.h,
-                    AC_DEFINE(HAVE_SHM_H, 1,
-                              [Define to 1 if shm.h is available]),
-                    no_sys_shm=yes)
-
-    # Check for the X shared memory extension header file
-    have_xshm=no
-    AC_MSG_CHECKING(X11/extensions/XShm.h)
-    if test "x$no_xext_lib" = "xyes"; then
-      :
-    else
-      gtk_save_CFLAGS="$CFLAGS"
-      CFLAGS="$CFLAGS $x_cflags"
-      AC_TRY_COMPILE([
-#include <stdlib.h>
-#include <sys/types.h>
-#include <sys/ipc.h>
-#include <sys/shm.h>
-#include <X11/Xlib.h>
-#include <X11/Xutil.h>
-#include <X11/extensions/XShm.h>
-], [XShmSegmentInfo *x_shm_info;], have_xshm=yes)
-      CFLAGS="$gtk_save_CFLAGS"
-    fi
-    AC_MSG_RESULT($have_xshm)
-    if test $have_xshm = yes ; then
-      AC_DEFINE(HAVE_XSHM_H, 1,
-                [Define to 1 if xshm.h is available])
-    fi
-  fi
 
   if test "x$enable_xinerama" = "xyes"; then
     # Check for Xinerama extension (Solaris impl or Xfree impl)

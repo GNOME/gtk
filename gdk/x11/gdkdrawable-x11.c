@@ -33,14 +33,6 @@
 #include <stdlib.h>
 #include <string.h>		/* for memcpy() */
 
-#if defined (HAVE_IPC_H) && defined (HAVE_SHM_H) && defined (HAVE_XSHM_H)
-#define USE_SHM
-#endif
-
-#ifdef USE_SHM
-#include <X11/extensions/XShm.h>
-#endif /* USE_SHM */
-
 #include "gdkprivate-x11.h"
 #include "gdkdrawable-x11.h"
 #include "gdkpixmap-x11.h"
