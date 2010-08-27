@@ -38,14 +38,6 @@ G_BEGIN_DECLS
 /* Drawable implementation for X11
  */
 
-typedef enum
-{
-  GDK_X11_FORMAT_NONE,
-  GDK_X11_FORMAT_EXACT_MASK,
-  GDK_X11_FORMAT_ARGB_MASK,
-  GDK_X11_FORMAT_ARGB
-} GdkX11FormatType;
-
 typedef struct _GdkDrawableImplX11 GdkDrawableImplX11;
 typedef struct _GdkDrawableImplX11Class GdkDrawableImplX11Class;
 
@@ -77,15 +69,6 @@ struct _GdkDrawableImplX11Class
 };
 
 GType _gdk_drawable_impl_x11_get_type (void);
-
-void  _gdk_x11_convert_to_format      (guchar           *src_buf,
-                                       gint              src_rowstride,
-                                       guchar           *dest_buf,
-                                       gint              dest_rowstride,
-                                       GdkX11FormatType  dest_format,
-                                       GdkByteOrder      dest_byteorder,
-                                       gint              width,
-                                       gint              height);
 
 /* Note that the following take GdkDrawableImplX11, not the wrapper drawable */
 void _gdk_x11_drawable_finish           (GdkDrawable  *drawable);
