@@ -1543,7 +1543,7 @@ fi
 # GObject introspection
 ##################################################
 
-GOBJECT_INTROSPECTION_CHECK([0.9.0])
+GOBJECT_INTROSPECTION_CHECK([0.9.5])
 
 ##################################################
 # Checks for gtk-doc and docbook-tools
