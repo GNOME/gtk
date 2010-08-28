@@ -8710,9 +8710,21 @@ gtk_widget_get_colormap (GtkWidget *widget)
 GdkVisual*
 gtk_widget_get_visual (GtkWidget *widget)
 {
+  GtkWidget *w;
+
   g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
 
-  return gdk_colormap_get_visual (gtk_widget_get_colormap (widget));
+  for (w = widget; w != NULL; w = w->priv->parent)
+    {
+      if (gtk_widget_get_has_window (w) &&
+          w->priv->window)
+        return gdk_drawable_get_visual (w->priv->window);
+
+      if (GTK_IS_WINDOW (w))
+        return gdk_screen_get_system_visual (GTK_WINDOW (w)->screen);
+    }
+
+  return gdk_screen_get_system_visual (gdk_screen_get_default ());
 }
 
 /**
