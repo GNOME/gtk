@@ -1555,7 +1555,7 @@ gtk_tool_item_group_class_init (GtkToolItemGroupClass *cls)
   g_object_class_install_property (oclass, PROP_COLLAPSED,
                                    g_param_spec_boolean ("collapsed",
                                                          P_("Collapsed"),
-                                                         P_("Wether the group has been collapsed and items are hidden"),
+                                                         P_("Whether the group has been collapsed and items are hidden"),
                                                          DEFAULT_COLLAPSED,
                                                          GTK_PARAM_READWRITE));
 
