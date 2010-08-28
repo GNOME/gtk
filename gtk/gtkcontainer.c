@@ -1252,13 +1252,7 @@ gtk_container_remove (GtkContainer *container,
 {
   g_return_if_fail (GTK_IS_CONTAINER (container));
   g_return_if_fail (GTK_IS_WIDGET (widget));
-
-  /* When using the deprecated API of the toolbar, it is possible
-   * to legitimately call this function with a widget that is not
-   * a direct child of the container.
-   */
-  g_return_if_fail (GTK_IS_TOOLBAR (container) ||
-                    gtk_widget_get_parent (widget) == GTK_WIDGET (container));
+  g_return_if_fail (gtk_widget_get_parent (widget) == GTK_WIDGET (container));
 
   g_signal_emit (container, container_signals[REMOVE], 0, widget);
 }
