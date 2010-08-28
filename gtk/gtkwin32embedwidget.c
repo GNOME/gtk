@@ -217,7 +217,6 @@ gtk_win32_embed_widget_realize (GtkWidget *widget)
   /* this isn't right - we should match our parent's visual/colormap.
    * though that will require handling "foreign" colormaps */
   attributes.visual = gtk_widget_get_visual (widget);
-  attributes.colormap = gtk_widget_get_colormap (widget);
   attributes.event_mask = gtk_widget_get_events (widget);
   attributes.event_mask |= (GDK_EXPOSURE_MASK |
 			    GDK_KEY_PRESS_MASK |
@@ -227,7 +226,7 @@ gtk_win32_embed_widget_realize (GtkWidget *widget)
 			    GDK_STRUCTURE_MASK |
 			    GDK_FOCUS_CHANGE_MASK);
 
-  attributes_mask = GDK_WA_VISUAL | GDK_WA_COLORMAP;
+  attributes_mask = GDK_WA_VISUAL;
   attributes_mask |= (gtk_window_get_title (window) ? GDK_WA_TITLE : 0);
   attributes_mask |= (attributes.wmclass_name ? GDK_WA_WMCLASS : 0);
 

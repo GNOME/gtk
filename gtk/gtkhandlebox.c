@@ -422,10 +422,9 @@ gtk_handle_box_realize (GtkWidget *widget)
   attributes.window_type = GDK_WINDOW_CHILD;
   attributes.wclass = GDK_INPUT_OUTPUT;
   attributes.visual = gtk_widget_get_visual (widget);
-  attributes.colormap = gtk_widget_get_colormap (widget);
   attributes.event_mask = (gtk_widget_get_events (widget)
 			   | GDK_EXPOSURE_MASK);
-  attributes_mask = GDK_WA_X | GDK_WA_Y | GDK_WA_VISUAL | GDK_WA_COLORMAP;
+  attributes_mask = GDK_WA_X | GDK_WA_Y | GDK_WA_VISUAL;
 
   window = gdk_window_new (gtk_widget_get_parent_window (widget),
                            &attributes, attributes_mask);
@@ -443,7 +442,7 @@ gtk_handle_box_realize (GtkWidget *widget)
 			   GDK_POINTER_MOTION_HINT_MASK |
 			   GDK_BUTTON_PRESS_MASK |
 			    GDK_BUTTON_RELEASE_MASK);
-  attributes_mask = GDK_WA_X | GDK_WA_Y | GDK_WA_VISUAL | GDK_WA_COLORMAP;
+  attributes_mask = GDK_WA_X | GDK_WA_Y | GDK_WA_VISUAL;
 
   priv->bin_window = gdk_window_new (window,
                                      &attributes, attributes_mask);
@@ -462,7 +461,6 @@ gtk_handle_box_realize (GtkWidget *widget)
   attributes.window_type = GDK_WINDOW_TOPLEVEL;
   attributes.wclass = GDK_INPUT_OUTPUT;
   attributes.visual = gtk_widget_get_visual (widget);
-  attributes.colormap = gtk_widget_get_colormap (widget);
   attributes.event_mask = (gtk_widget_get_events (widget) |
 			   GDK_KEY_PRESS_MASK |
 			   GDK_ENTER_NOTIFY_MASK |
@@ -470,7 +468,7 @@ gtk_handle_box_realize (GtkWidget *widget)
 			   GDK_FOCUS_CHANGE_MASK |
 			   GDK_STRUCTURE_MASK);
   attributes.type_hint = GDK_WINDOW_TYPE_HINT_TOOLBAR;
-  attributes_mask = GDK_WA_X | GDK_WA_Y | GDK_WA_VISUAL | GDK_WA_COLORMAP | GDK_WA_TYPE_HINT;
+  attributes_mask = GDK_WA_X | GDK_WA_Y | GDK_WA_VISUAL | GDK_WA_TYPE_HINT;
   priv->float_window = gdk_window_new (gtk_widget_get_root_window (widget),
 				     &attributes, attributes_mask);
   gdk_window_set_user_data (priv->float_window, widget);

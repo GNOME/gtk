@@ -4674,7 +4674,6 @@ gtk_window_realize (GtkWidget *widget)
   attributes.wmclass_class = priv->wmclass_class;
   attributes.wclass = GDK_INPUT_OUTPUT;
   attributes.visual = gtk_widget_get_visual (widget);
-  attributes.colormap = gtk_widget_get_colormap (widget);
 
   if (priv->has_frame)
     {
@@ -4692,7 +4691,7 @@ gtk_window_realize (GtkWidget *widget)
 			       GDK_BUTTON_PRESS_MASK |
 			       GDK_BUTTON_RELEASE_MASK);
       
-      attributes_mask = GDK_WA_VISUAL | GDK_WA_COLORMAP;
+      attributes_mask = GDK_WA_VISUAL;
       
       priv->frame = gdk_window_new (gtk_widget_get_root_window (widget),
 				      &attributes, attributes_mask);
@@ -4734,7 +4733,7 @@ gtk_window_realize (GtkWidget *widget)
 			    GDK_STRUCTURE_MASK);
   attributes.type_hint = priv->type_hint;
 
-  attributes_mask |= GDK_WA_VISUAL | GDK_WA_COLORMAP | GDK_WA_TYPE_HINT;
+  attributes_mask |= GDK_WA_VISUAL | GDK_WA_TYPE_HINT;
   attributes_mask |= (priv->title ? GDK_WA_TITLE : 0);
   attributes_mask |= (priv->wmclass_name ? GDK_WA_WMCLASS : 0);
 

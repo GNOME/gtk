@@ -1555,11 +1555,10 @@ calendar_realize_arrows (GtkCalendar *calendar)
       attributes.wclass = GDK_INPUT_OUTPUT;
       attributes.window_type = GDK_WINDOW_CHILD;
       attributes.visual = gtk_widget_get_visual (widget);
-      attributes.colormap = gtk_widget_get_colormap (widget);
       attributes.event_mask = (gtk_widget_get_events (widget) | GDK_EXPOSURE_MASK
 			       | GDK_BUTTON_PRESS_MASK	| GDK_BUTTON_RELEASE_MASK
 			       | GDK_ENTER_NOTIFY_MASK | GDK_LEAVE_NOTIFY_MASK);
-      attributes_mask = GDK_WA_X | GDK_WA_Y | GDK_WA_VISUAL | GDK_WA_COLORMAP;
+      attributes_mask = GDK_WA_X | GDK_WA_Y | GDK_WA_VISUAL;
       for (i = 0; i < 4; i++)
 	{
 	  GdkRectangle rect;
@@ -1609,9 +1608,8 @@ calendar_realize_header (GtkCalendar *calendar)
       attributes.wclass = GDK_INPUT_OUTPUT;
       attributes.window_type = GDK_WINDOW_CHILD;
       attributes.visual = gtk_widget_get_visual (widget);
-      attributes.colormap = gtk_widget_get_colormap (widget);
       attributes.event_mask = gtk_widget_get_events (widget) | GDK_EXPOSURE_MASK;
-      attributes_mask = GDK_WA_X | GDK_WA_Y | GDK_WA_VISUAL | GDK_WA_COLORMAP;
+      attributes_mask = GDK_WA_X | GDK_WA_Y | GDK_WA_VISUAL;
       attributes.x = style->xthickness;
       attributes.y = style->ythickness;
       attributes.width = allocation.width - 2 * attributes.x;
@@ -1689,9 +1687,8 @@ calendar_realize_day_names (GtkCalendar *calendar)
       attributes.wclass = GDK_INPUT_OUTPUT;
       attributes.window_type = GDK_WINDOW_CHILD;
       attributes.visual = gtk_widget_get_visual (widget);
-      attributes.colormap = gtk_widget_get_colormap (widget);
       attributes.event_mask = gtk_widget_get_events (widget) | GDK_EXPOSURE_MASK;
-      attributes_mask = GDK_WA_X | GDK_WA_Y | GDK_WA_VISUAL | GDK_WA_COLORMAP;
+      attributes_mask = GDK_WA_X | GDK_WA_Y | GDK_WA_VISUAL;
       attributes.x = style->xthickness + inner_border;
       attributes.y = priv->header_h + (style->ythickness + inner_border);
       attributes.width = allocation.width - (style->xthickness + inner_border) * 2;
@@ -1729,9 +1726,8 @@ calendar_realize_week_numbers (GtkCalendar *calendar)
       attributes.wclass = GDK_INPUT_OUTPUT;
       attributes.window_type = GDK_WINDOW_CHILD;
       attributes.visual = gtk_widget_get_visual (widget);
-      attributes.colormap = gtk_widget_get_colormap (widget);
       attributes.event_mask = gtk_widget_get_events (widget) | GDK_EXPOSURE_MASK;
-      attributes_mask = GDK_WA_X | GDK_WA_Y | GDK_WA_VISUAL | GDK_WA_COLORMAP;
+      attributes_mask = GDK_WA_X | GDK_WA_Y | GDK_WA_VISUAL;
       if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_LTR)
         {
 	  attributes.x = style->xthickness + inner_border;
@@ -1785,9 +1781,8 @@ gtk_calendar_realize (GtkWidget *widget)
   attributes.event_mask =  (gtk_widget_get_events (widget) 
 			    | GDK_EXPOSURE_MASK |GDK_KEY_PRESS_MASK | GDK_SCROLL_MASK);
   attributes.visual = gtk_widget_get_visual (widget);
-  attributes.colormap = gtk_widget_get_colormap (widget);
   
-  attributes_mask = GDK_WA_X | GDK_WA_Y | GDK_WA_VISUAL | GDK_WA_COLORMAP;
+  attributes_mask = GDK_WA_X | GDK_WA_Y | GDK_WA_VISUAL;
 
   window = gdk_window_new (gtk_widget_get_parent_window (widget),
                            &attributes, attributes_mask);

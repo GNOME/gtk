@@ -652,7 +652,6 @@ gtk_plug_realize (GtkWidget *widget)
   /* this isn't right - we should match our parent's visual/colormap.
    * though that will require handling "foreign" colormaps */
   attributes.visual = gtk_widget_get_visual (widget);
-  attributes.colormap = gtk_widget_get_colormap (widget);
   attributes.event_mask = gtk_widget_get_events (widget);
   attributes.event_mask |= (GDK_EXPOSURE_MASK |
 			    GDK_KEY_PRESS_MASK |
@@ -661,7 +660,7 @@ gtk_plug_realize (GtkWidget *widget)
 			    GDK_LEAVE_NOTIFY_MASK |
 			    GDK_STRUCTURE_MASK);
 
-  attributes_mask = GDK_WA_VISUAL | GDK_WA_COLORMAP;
+  attributes_mask = GDK_WA_VISUAL;
   attributes_mask |= (title ? GDK_WA_TITLE : 0);
   attributes_mask |= (g_strdup (g_get_prgname ()) ? GDK_WA_WMCLASS : 0);
 
