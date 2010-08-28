@@ -102,7 +102,7 @@ gdk_test_simulate_key (GdkWindow      *window,
   g_return_val_if_fail (window != NULL, FALSE);
   if (!GDK_WINDOW_IS_MAPPED (window))
     return FALSE;
-  screen = gdk_colormap_get_screen (gdk_drawable_get_colormap (window));
+  screen = gdk_window_get_screen (window);
   if (x < 0 && y < 0)
     {
       gdk_drawable_get_size (window, &x, &y);
@@ -208,7 +208,7 @@ gdk_test_simulate_button (GdkWindow      *window,
 
   if (!GDK_WINDOW_IS_MAPPED (window))
     return FALSE;
-  screen = gdk_colormap_get_screen (gdk_drawable_get_colormap (window));
+  screen = gdk_window_get_screen (window);
   if (x < 0 && y < 0)
     {
       gdk_drawable_get_size (window, &x, &y);
