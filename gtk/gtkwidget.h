@@ -877,12 +877,7 @@ void gtk_widget_style_get          (GtkWidget	     *widget,
 
 /* Set certain default values to be used at widget creation time.
  */
-void	     gtk_widget_set_default_colormap (GdkColormap *colormap);
 GtkStyle*    gtk_widget_get_default_style    (void);
-#ifndef GDK_MULTIHEAD_SAFE
-GdkColormap* gtk_widget_get_default_colormap (void);
-GdkVisual*   gtk_widget_get_default_visual   (void);
-#endif
 
 /* Functions for setting directionality for widgets
  */

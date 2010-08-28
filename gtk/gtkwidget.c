@@ -8933,50 +8933,6 @@ gtk_widget_pop_composite_child (void)
     composite_child_stack--;
 }
 
-/**
- * gtk_widget_set_default_colormap:
- * @colormap: a #GdkColormap
- * 
- * Sets the default colormap to use when creating widgets.
- * gtk_widget_push_colormap() is a better function to use if
- * you only want to affect a few widgets, rather than all widgets.
- **/
-void
-gtk_widget_set_default_colormap (GdkColormap *colormap)
-{
-  g_return_if_fail (GDK_IS_COLORMAP (colormap));
-  
-  gdk_screen_set_default_colormap (gdk_colormap_get_screen (colormap),
-				   colormap);
-}
-
-/**
- * gtk_widget_get_default_colormap:
- * 
- * Obtains the default colormap used to create widgets.
- *
- * Return value: (transfer none): default widget colormap
- **/
-GdkColormap*
-gtk_widget_get_default_colormap (void)
-{
-  return gdk_screen_get_default_colormap (gdk_screen_get_default ());
-}
-
-/**
- * gtk_widget_get_default_visual:
- * 
- * Obtains the visual of the default colormap. Not really useful;
- * used to be useful before gdk_colormap_get_visual() existed.
- *
- * Return value: (transfer none): visual of the default colormap
- **/
-GdkVisual*
-gtk_widget_get_default_visual (void)
-{
-  return gdk_colormap_get_visual (gtk_widget_get_default_colormap ());
-}
-
 static void
 gtk_widget_emit_direction_changed (GtkWidget        *widget,
 				   GtkTextDirection  old_dir)
