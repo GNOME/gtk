@@ -849,6 +849,47 @@ xp_theme_map_gtk_state (XpThemeElement element, GtkStateType state)
   return ret;
 }
 
+HDC
+get_window_dc (GtkStyle *style,
+	       GdkWindow *window,
+	       GtkStateType state_type,
+	       XpDCInfo *dc_info_out,
+	       gint x, gint y, gint width, gint height,
+	       RECT *rect_out)
+{
+  GdkDrawable *drawable = NULL;
+  GdkGC *gc = style->dark_gc[state_type];
+  gint x_offset, y_offset;
+  
+  dc_info_out->data = NULL;
+  
+  drawable = gdk_win32_begin_direct_draw_libgtk_only (window,
+						      gc, &dc_info_out->data,
+						      &x_offset, &y_offset);
+  if (!drawable)
+    return NULL;
+
+  rect_out->left = x - x_offset;
+  rect_out->top = y - y_offset;
+  rect_out->right = rect_out->left + width;
+  rect_out->bottom = rect_out->top + height;
+  
+  dc_info_out->drawable = drawable;
+  dc_info_out->gc = gc;
+  dc_info_out->x_offset = x_offset;
+  dc_info_out->y_offset = y_offset;
+  
+  return gdk_win32_hdc_get (drawable, gc, 0);
+}
+
+void
+release_window_dc (XpDCInfo *dc_info)
+{
+  gdk_win32_hdc_release (dc_info->drawable, dc_info->gc, 0);
+
+  gdk_win32_end_direct_draw_libgtk_only (dc_info->data);
+}
+
 gboolean
 xp_theme_draw (GdkWindow *win, XpThemeElement element, GtkStyle *style,
 	       int x, int y, int width, int height,
@@ -856,9 +897,8 @@ xp_theme_draw (GdkWindow *win, XpThemeElement element, GtkStyle *style,
 {
   HTHEME theme;
   RECT rect, clip, *pClip;
-  int xoff, yoff;
   HDC dc;
-  GdkDrawable *drawable;
+  XpDCInfo dc_info;
   int part_state;
 
   if (!xp_theme_is_drawable (element))
@@ -869,28 +909,19 @@ xp_theme_draw (GdkWindow *win, XpThemeElement element, GtkStyle *style,
     return FALSE;
 
   /* FIXME: Recheck its function */
+  if (GDK_IS_WINDOW (win) && gdk_win32_window_is_win32 (win))
   enable_theme_dialog_texture_func (GDK_WINDOW_HWND (win), ETDT_ENABLETAB);
 
-  if (!GDK_IS_WINDOW (win))
-    {
-      xoff = 0;
-      yoff = 0;
-      drawable = win;
-    }
-  else
-    {
-      gdk_window_get_internal_paint_info (win, &drawable, &xoff, &yoff);
-    }
-
-  rect.left = x - xoff;
-  rect.top = y - yoff;
-  rect.right = rect.left + width;
-  rect.bottom = rect.top + height;
+  dc = get_window_dc (style, win, state_type, &dc_info,
+		      x, y, width, height,
+		      &rect);
+  if (!dc)
+    return FALSE;
 
   if (area)
     {
-      clip.left = area->x - xoff;
-      clip.top = area->y - yoff;
+      clip.left = area->x - dc_info.x_offset;
+      clip.top = area->y - dc_info.y_offset;
       clip.right = clip.left + area->width;
       clip.bottom = clip.top + area->height;
 
@@ -901,17 +932,12 @@ xp_theme_draw (GdkWindow *win, XpThemeElement element, GtkStyle *style,
       pClip = NULL;
     }
 
-  gdk_gc_set_clip_rectangle (style->dark_gc[state_type], NULL);
-  dc = gdk_win32_hdc_get (drawable, style->dark_gc[state_type], 0);
-  if (!dc)
-    return FALSE;
-
   part_state = xp_theme_map_gtk_state (element, state_type);
 
   draw_theme_background_func (theme, dc, element_part_map[element],
 			      part_state, &rect, pClip);
 
-  gdk_win32_hdc_release (drawable, style->dark_gc[state_type], 0);
+  release_window_dc (&dc_info);
 
   return TRUE;
 }
@@ -919,9 +945,6 @@ xp_theme_draw (GdkWindow *win, XpThemeElement element, GtkStyle *style,
 gboolean
 xp_theme_is_active (void)
 {
-  /* Workaround for bug #598299 */
-  return FALSE;
-
   return use_xp_theme;
 }
 
