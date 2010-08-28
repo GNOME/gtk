@@ -2647,6 +2647,20 @@ gdk_window_get_state (GdkWindow *window)
   return private->state;
 }
 
+static cairo_content_t
+gdk_window_get_content (GdkWindow *window)
+{
+  cairo_surface_t *surface;
+  cairo_content_t content;
+
+  g_return_val_if_fail (GDK_IS_WINDOW (window), 0);
+
+  surface = _gdk_drawable_ref_cairo_surface (window);
+  content = cairo_surface_get_content (surface);
+  cairo_surface_destroy (surface);
+
+  return content;
+}
 
 /* This creates an empty "implicit" paint region for the impl window.
  * By itself this does nothing, but real paints to this window
@@ -2693,7 +2707,7 @@ gdk_window_begin_implicit_paint (GdkWindow *window, GdkRectangle *rect)
   paint->uses_implicit = FALSE;
   paint->flushed = FALSE;
   paint->surface = gdk_window_create_similar_surface (window,
-                                                      CAIRO_CONTENT_COLOR,
+                                                      gdk_window_get_content (window),
 		                                      MAX (rect->width, 1),
                                                       MAX (rect->height, 1));
   cairo_surface_set_device_offset (paint->surface, -rect->x, -rect->y);
@@ -2917,7 +2931,7 @@ gdk_window_begin_paint_region (GdkWindow       *window,
     {
       paint->uses_implicit = FALSE;
       paint->surface = gdk_window_create_similar_surface (window,
-                                                          CAIRO_CONTENT_COLOR,
+                                                          gdk_window_get_content (window),
 			                                  MAX (clip_box.width, 1),
                                                           MAX (clip_box.height, 1));
     }
