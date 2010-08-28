@@ -1687,10 +1687,10 @@ grab_color_at_pointer (GdkScreen *screen,
   
   priv = colorsel->private_data;
   
-  pixbuf = gdk_pixbuf_get_from_drawable (NULL, root_window, NULL,
-                                         x_root, y_root,
-                                         0, 0,
-                                         1, 1);
+  pixbuf = gdk_pixbuf_get_from_window (NULL, root_window,
+                                       x_root, y_root,
+                                       0, 0,
+                                       1, 1);
   if (!pixbuf)
     {
       gint x, y;
@@ -1698,10 +1698,10 @@ grab_color_at_pointer (GdkScreen *screen,
       GdkWindow *window = gdk_display_get_window_at_device_position (display, device, &x, &y);
       if (!window)
 	return;
-      pixbuf = gdk_pixbuf_get_from_drawable (NULL, window, NULL,
-                                             x, y,
-                                             0, 0,
-                                             1, 1);
+      pixbuf = gdk_pixbuf_get_from_window (NULL, window,
+                                           x, y,
+                                           0, 0,
+                                           1, 1);
       if (!pixbuf)
 	return;
     }

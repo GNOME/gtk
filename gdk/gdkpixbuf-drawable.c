@@ -34,10 +34,9 @@
 /* Exported functions */
 
 /**
- * gdk_pixbuf_get_from_drawable:
+ * gdk_pixbuf_get_from_window:
  * @dest: (allow-none): Destination pixbuf, or %NULL if a new pixbuf should be created.
  * @src: Source drawable.
- * @cmap: A colormap if @src doesn't have one set.
  * @src_x: Source X coordinate within drawable.
  * @src_y: Source Y coordinate within drawable.
  * @dest_x: Destination X coordinate in pixbuf, or 0 if @dest is NULL.
@@ -50,11 +49,6 @@
  * image data from a server-side drawable to a client-side RGB(A) buffer.
  * This allows you to efficiently read individual pixels on the client side.
  * 
- * If the drawable @src has no colormap (gdk_drawable_get_colormap()
- * returns %NULL), then a suitable colormap must be specified.
- * If the drawable has a colormap, the @cmap argument will be
- * ignored.
- *
  * If the specified destination pixbuf @dest is %NULL, then this
  * function will create an RGB pixbuf with 8 bits per channel and no
  * alpha, with the same size specified by the @width and @height
@@ -86,27 +80,16 @@
  * pixbuf with a reference count of 1 if no destination pixbuf was specified, or %NULL on error
  **/
 GdkPixbuf *
-gdk_pixbuf_get_from_drawable (GdkPixbuf   *dest,
-			      GdkDrawable *src,
-			      GdkColormap *cmap,
-			      int src_x,  int src_y,
-			      int dest_x, int dest_y,
-			      int width,  int height)
+gdk_pixbuf_get_from_window (GdkPixbuf   *dest,
+                            GdkWindow   *src,
+                            int src_x,  int src_y,
+                            int dest_x, int dest_y,
+                            int width,  int height)
 {
   cairo_surface_t *surface;
-  int depth;
   
-  /* General sanity checks */
-
-  g_return_val_if_fail (src != NULL, NULL);
-
-  if (GDK_IS_WINDOW (src))
-    /* FIXME: this is not perfect, since is_viewable() only tests
-     * recursively up the Gdk parent window tree, but stops at
-     * foreign windows or Gdk toplevels.  I.e. if a window manager
-     * unmapped one of its own windows, this won't work.
-     */
-    g_return_val_if_fail (gdk_window_is_viewable (src), NULL);
+  g_return_val_if_fail (GDK_IS_WINDOW (src), NULL);
+  g_return_val_if_fail (gdk_window_is_viewable (src), NULL);
 
   if (!dest)
     g_return_val_if_fail (dest_x == 0 && dest_y == 0, NULL);
@@ -118,29 +101,6 @@ gdk_pixbuf_get_from_drawable (GdkPixbuf   *dest,
       g_return_val_if_fail (gdk_pixbuf_get_bits_per_sample (dest) == 8, NULL);
     }
 
-  if (cmap == NULL)
-    cmap = gdk_drawable_get_colormap (src);
-
-  depth = gdk_drawable_get_depth (src);
-  
-  if (depth != 1 && cmap == NULL)
-    {
-      g_warning ("%s: Source drawable has no colormap; either pass "
-                 "in a colormap, or set the colormap on the drawable "
-                 "with gdk_drawable_set_colormap()", G_STRLOC);
-      return NULL;
-    }
-  
-  if (cmap != NULL && depth != cmap->visual->depth)
-    {
-      g_warning ("%s: Depth of the source drawable is %d where as "
-                 "the visual depth of the colormap passed is %d",
-                 G_STRLOC, depth, cmap->visual->depth);
-      return NULL;
-    } 
- 
-  /* Coordinate sanity checks */
-  
   surface = _gdk_drawable_ref_cairo_surface (src);
   dest = gdk_pixbuf_get_from_surface (dest,
                                       surface,

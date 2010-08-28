@@ -802,7 +802,7 @@ gdk_pango_layout_line_get_clip_region
 
 #if IN_HEADER(__GDK_PIXBUF_H__)
 #if IN_FILE(__GDK_PIXBUF_DRAWABLE_C__)
-gdk_pixbuf_get_from_drawable
+gdk_pixbuf_get_from_window
 gdk_pixbuf_get_from_surface
 #endif
 #endif

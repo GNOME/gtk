@@ -38,9 +38,8 @@
 G_BEGIN_DECLS
 
 /* Fetching a region from a drawable */
-GdkPixbuf *gdk_pixbuf_get_from_drawable (GdkPixbuf   *dest,
-					 GdkDrawable *src,
-					 GdkColormap *cmap,
+GdkPixbuf *gdk_pixbuf_get_from_window   (GdkPixbuf   *dest,
+					 GdkWindow   *window,
 					 int          src_x,
 					 int          src_y,
 					 int          dest_x,
