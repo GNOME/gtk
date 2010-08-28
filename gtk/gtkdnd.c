@@ -84,8 +84,6 @@ struct _GtkDragSourceSite
     GtkImageIconNameData name;
   } icon_data;
 
-  GdkColormap       *colormap;	         /* Colormap for drag icon */
-
   /* Stored button press information to detect drag beginning */
   gint               state;
   gint               x, y;
@@ -2839,10 +2837,6 @@ gtk_drag_source_unset_icon (GtkDragSourceSite *site)
       break;
     }
   site->icon_type = GTK_IMAGE_EMPTY;
-  
-  if (site->colormap)
-    g_object_unref (site->colormap);
-  site->colormap = NULL;
 }
 
 /**
