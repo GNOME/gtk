@@ -26,8 +26,8 @@
 
 #include "config.h"
 #include <gdkdnd.h>
-#include <gdkdrawable.h>
 #include <gdkdisplay.h>
+#include <gdkwindow.h>
 
 
 /**
@@ -71,7 +71,7 @@ gdk_drag_find_window (GdkDragContext  *context,
 		      GdkDragProtocol *protocol)
 {
   gdk_drag_find_window_for_screen (context, drag_window,
-				   gdk_drawable_get_screen (context->source_window),
+				   gdk_window_get_screen (context->source_window),
 				   x_root, y_root, dest_window, protocol);
 }
 

@@ -1724,7 +1724,7 @@ gdk_window_quartz_get_geometry (GdkWindow *window,
     }
     
   if (depth)
-      *depth = gdk_drawable_get_depth (window);
+      *depth = gdk_visual_get_depth (gdk_window_get_visual (window));
 }
 
 static gint

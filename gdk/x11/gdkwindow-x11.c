@@ -292,7 +292,7 @@ gdk_x11_window_create_pixmap_surface (GdkWindow *window,
                           DefaultDepthOfScreen (GDK_SCREEN_XSCREEN (GDK_WINDOW_SCREEN (window))));
   surface = cairo_xlib_surface_create (GDK_WINDOW_XDISPLAY (window),
                                        pixmap,
-                                       GDK_VISUAL_XVISUAL (gdk_drawable_get_visual (window)),
+                                       GDK_VISUAL_XVISUAL (gdk_window_get_visual (window)),
                                        width, height);
   attach_free_pixmap_handler (surface, GDK_WINDOW_DISPLAY (window), pixmap);
 
@@ -1130,7 +1130,7 @@ _gdk_windowing_window_destroy_foreign (GdkWindow *window)
 static GdkWindow *
 get_root (GdkWindow *window)
 {
-  GdkScreen *screen = gdk_drawable_get_screen (window);
+  GdkScreen *screen = gdk_window_get_screen (window);
 
   return gdk_screen_get_root_window (screen);
 }
@@ -3037,7 +3037,7 @@ _gdk_windowing_get_device_state (GdkDisplay       *display,
                                                   x, y,
                                                   NULL, NULL,
                                                   mask);
-      *screen = gdk_drawable_get_screen (root);
+      *screen = gdk_window_get_screen (root);
     }
   else
     {
@@ -3062,7 +3062,7 @@ _gdk_windowing_get_device_state (GdkDisplay       *display,
       if (root != None)
         {
           GdkWindow *gdk_root = gdk_window_lookup_for_display (display, root);
-          *screen = gdk_drawable_get_screen (gdk_root);
+          *screen = gdk_window_get_screen (gdk_root);
         }
 
       *x = rootx;

@@ -1278,7 +1278,7 @@ gdk_event_get_screen (const GdkEvent *event)
     }
 
   if (event->any.window)
-    return gdk_drawable_get_screen (event->any.window);
+    return gdk_window_get_screen (event->any.window);
 
   return NULL;
 }

@@ -1274,7 +1274,7 @@ gdk_window_new (GdkWindow     *parent,
       parent = gdk_screen_get_root_window (screen);
     }
   else
-    screen = gdk_drawable_get_screen (parent);
+    screen = gdk_window_get_screen (parent);
 
   g_return_val_if_fail (GDK_IS_WINDOW (parent), NULL);
 
@@ -1396,7 +1396,7 @@ gdk_window_new (GdkWindow     *parent,
 	   ((attributes_mask & GDK_WA_COLORMAP &&
 	     attributes->colormap != gdk_drawable_get_colormap ((GdkDrawable *)private->parent)) ||
 	    (attributes_mask & GDK_WA_VISUAL &&
-	     attributes->visual != gdk_drawable_get_visual ((GdkDrawable *)private->parent))))
+	     attributes->visual != gdk_window_get_visual (GDK_WINDOW (private->parent)))))
     native = TRUE; /* InputOutput window with different colormap or visual than parent, needs native window */
 
   if (gdk_window_is_offscreen (private))
@@ -1551,7 +1551,7 @@ gdk_window_reparent (GdkWindow *window,
       (new_parent && GDK_WINDOW_DESTROYED (new_parent)))
     return;
 
-  screen = gdk_drawable_get_screen (GDK_DRAWABLE (window));
+  screen = gdk_window_get_screen (window);
   if (!new_parent)
     new_parent = gdk_screen_get_root_window (screen);
 
@@ -1806,7 +1806,7 @@ gdk_window_ensure_native (GdkWindow *window)
 
   gdk_window_drop_cairo_surface (private);
 
-  screen = gdk_drawable_get_screen (window);
+  screen = gdk_window_get_screen (window);
 
   attributes.colormap = gdk_drawable_get_colormap (window);
 
@@ -1944,7 +1944,7 @@ _gdk_window_destroy_hierarchy (GdkWindow *window,
     return;
 
   display = gdk_drawable_get_display (GDK_DRAWABLE (window));
-  screen = gdk_drawable_get_screen (GDK_DRAWABLE (window));
+  screen = gdk_window_get_screen (window);
   temp_window = g_object_get_qdata (G_OBJECT (screen), quark_pointer_window);
   if (temp_window == window)
     g_object_set_qdata (G_OBJECT (screen), quark_pointer_window, NULL);

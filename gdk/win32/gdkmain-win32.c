@@ -1050,7 +1050,7 @@ _gdk_win32_drawable_description (GdkDrawable *d)
   g_return_val_if_fail (GDK_IS_DRAWABLE (d), NULL);
 
   gdk_drawable_get_size (d, &width, &height);
-  depth = gdk_drawable_get_depth (d);
+  depth = gdk_visual_get_depth (gdk_window_get_visual (GDK_WINDOW (d)));
 
   return static_printf ("%s:%p:%dx%dx%d",
 			G_OBJECT_TYPE_NAME (d),

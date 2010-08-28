@@ -233,8 +233,8 @@ _get_scratch_gc (GdkWindowObject *window, cairo_region_t *clip_region)
   gint n_rects;
   gint depth;
 
-  screen = GDK_SCREEN_X11 (gdk_drawable_get_screen (GDK_DRAWABLE (window)));
-  depth = gdk_drawable_get_depth (GDK_DRAWABLE (window)) - 1;
+  screen = GDK_SCREEN_X11 (gdk_window_get_screen (GDK_WINDOW (window)));
+  depth = gdk_visual_get_depth (gdk_window_get_visual (GDK_WINDOW (window))) - 1;
 
   if (!screen->subwindow_gcs[depth])
     {

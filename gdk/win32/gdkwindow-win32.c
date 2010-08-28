@@ -1881,12 +1881,12 @@ gdk_win32_window_get_geometry (GdkWindow *window,
       if (height)
 	*height = rect.bottom - rect.top;
       if (depth)
-	*depth = gdk_drawable_get_visual (window)->depth;
+	*depth = gdk_window_get_visual (window)->depth;
 
       GDK_NOTE (MISC, g_print ("gdk_win32_window_get_geometry: %p: %ldx%ldx%d@%+ld%+ld\n",
 			       GDK_WINDOW_HWND (window),
 			       rect.right - rect.left, rect.bottom - rect.top,
-			       gdk_drawable_get_visual (window)->depth,
+			       gdk_window_get_visual (window)->depth,
 			       rect.left, rect.top));
     }
 }

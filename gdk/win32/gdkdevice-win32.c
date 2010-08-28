@@ -300,7 +300,7 @@ gdk_device_win32_query_state (GdkDevice        *device,
     {
       GdkScreen *screen;
 
-      screen = gdk_drawable_get_screen (GDK_DRAWABLE (window));
+      screen = gdk_window_get_screen (window);
       *root_window = gdk_screen_get_root_window (screen);
     }
 

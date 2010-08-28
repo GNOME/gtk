@@ -256,7 +256,7 @@ gdk_x11_create_cairo_surface (GdkDrawable *drawable,
   GdkDrawableImplX11 *impl = GDK_DRAWABLE_IMPL_X11 (drawable);
   GdkVisual *visual;
     
-  visual = gdk_drawable_get_visual (drawable);
+  visual = gdk_window_get_visual (impl->wrapper);
   if (visual) 
     return cairo_xlib_surface_create (GDK_SCREEN_XDISPLAY (impl->screen),
 				      impl->xid,
@@ -274,7 +274,6 @@ gdk_x11_create_cairo_surface (GdkDrawable *drawable,
 		 "so why is this code even reached?");
       return NULL;
     }
-  
 }
 
 static cairo_surface_t *

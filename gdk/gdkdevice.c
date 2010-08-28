@@ -1242,7 +1242,7 @@ _gdk_device_translate_window_coord (GdkDevice *device,
     x_min = axis_info_x->min_value;
   else
     {
-      device_width = gdk_screen_get_width (gdk_drawable_get_screen (window));
+      device_width = gdk_screen_get_width (gdk_window_get_screen (window));
       x_min = 0;
     }
 
@@ -1250,7 +1250,7 @@ _gdk_device_translate_window_coord (GdkDevice *device,
     y_min = axis_info_y->min_value;
   else
     {
-      device_height = gdk_screen_get_height (gdk_drawable_get_screen (window));
+      device_height = gdk_screen_get_height (gdk_window_get_screen (window));
       y_min = 0;
     }
 
@@ -1343,7 +1343,7 @@ _gdk_device_translate_screen_coord (GdkDevice *device,
   if (axis_info.use == GDK_AXIS_X)
     {
       if (axis_width > 0)
-        scale = gdk_screen_get_width (gdk_drawable_get_screen (window)) / axis_width;
+        scale = gdk_screen_get_width (gdk_window_get_screen (window)) / axis_width;
       else
         scale = 1;
 
@@ -1352,7 +1352,7 @@ _gdk_device_translate_screen_coord (GdkDevice *device,
   else
     {
       if (axis_width > 0)
-        scale = gdk_screen_get_height (gdk_drawable_get_screen (window)) / axis_width;
+        scale = gdk_screen_get_height (gdk_window_get_screen (window)) / axis_width;
       else
         scale = 1;
 
