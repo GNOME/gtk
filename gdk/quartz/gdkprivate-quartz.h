@@ -79,10 +79,6 @@ typedef enum {
   GDK_QUARTZ_CONTEXT_TEXT   = 1 << 2
 } GdkQuartzContextValuesMask;
 
-/* Colormap */
-CGColorRef _gdk_quartz_colormap_get_cgcolor_from_pixel (GdkDrawable *drawable,
-                                                        guint32      pixel);
-
 /* Window */
 gboolean    _gdk_quartz_window_is_ancestor          (GdkWindow *ancestor,
                                                      GdkWindow *window);
