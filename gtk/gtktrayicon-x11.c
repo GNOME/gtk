@@ -821,12 +821,10 @@ gtk_tray_icon_delete (GtkWidget   *widget,
 }
 
 static void
-gtk_tray_icon_set_colormap (GtkTrayIcon *icon)
+gtk_tray_icon_set_visual (GtkTrayIcon *icon)
 {
   GdkScreen *screen = gtk_widget_get_screen (GTK_WIDGET (icon));
-  GdkColormap *colormap;
   GdkVisual *visual = icon->priv->manager_visual;
-  gboolean new_colormap = FALSE;
 
   /* To avoid uncertainty about colormaps, _NET_SYSTEM_TRAY_VISUAL is supposed
    * to be either the screen default visual or a TrueColor visual; ignore it
@@ -835,20 +833,10 @@ gtk_tray_icon_set_colormap (GtkTrayIcon *icon)
   if (visual && visual->type != GDK_VISUAL_TRUE_COLOR)
     visual = NULL;
 
-  if (visual == NULL || visual == gdk_screen_get_system_visual (screen))
-    colormap = gdk_screen_get_system_colormap (screen);
-  else if (visual == gdk_screen_get_rgba_visual (screen))
-    colormap = gdk_screen_get_rgba_colormap (screen);
-  else
-    {
-      colormap = gdk_colormap_new (visual, FALSE);
-      new_colormap = TRUE;
-    }
+  if (visual == NULL)
+    visual = gdk_screen_get_system_visual (screen);
 
-  gtk_widget_set_colormap (GTK_WIDGET (icon), colormap);
-
-  if (new_colormap)
-    g_object_unref (colormap);
+  gtk_window_set_visual (GTK_WINDOW (icon), visual);
 }
 
 static void
@@ -857,8 +845,8 @@ gtk_tray_icon_realize (GtkWidget *widget)
   GtkTrayIcon *icon = GTK_TRAY_ICON (widget);
   GdkWindow *window;
 
-  /* Set our colormap before realizing */
-  gtk_tray_icon_set_colormap (icon);
+  /* Set our visual before realizing */
+  gtk_tray_icon_set_visual (icon);
 
   GTK_WIDGET_CLASS (gtk_tray_icon_parent_class)->realize (widget);
   window = gtk_widget_get_window (widget);
