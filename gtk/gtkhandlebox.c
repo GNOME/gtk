@@ -167,7 +167,7 @@ gtk_handle_box_class_init (GtkHandleBoxClass *class)
                                                       P_("Deprecated property, use shadow_type instead"),
 						      GTK_TYPE_SHADOW_TYPE,
 						      GTK_SHADOW_OUT,
-                                                      GTK_PARAM_READWRITE));
+                                                      GTK_PARAM_READWRITE | G_PARAM_DEPRECATED));
   g_object_class_install_property (gobject_class,
                                    PROP_SHADOW_TYPE,
                                    g_param_spec_enum ("shadow-type",
