@@ -177,14 +177,6 @@ gdk_offscreen_window_get_depth (GdkDrawable *drawable)
   return gdk_drawable_get_depth (offscreen->wrapper);
 }
 
-static GdkDrawable *
-gdk_offscreen_window_get_source_drawable (GdkDrawable  *drawable)
-{
-  GdkOffscreenWindow *offscreen = GDK_OFFSCREEN_WINDOW (drawable);
-
-  return gdk_screen_get_root_window (offscreen->screen);
-}
-
 static GdkScreen*
 gdk_offscreen_window_get_screen (GdkDrawable *drawable)
 {
@@ -769,7 +761,6 @@ gdk_offscreen_window_class_init (GdkOffscreenWindowClass *klass)
   drawable_class->get_depth = gdk_offscreen_window_get_depth;
   drawable_class->get_screen = gdk_offscreen_window_get_screen;
   drawable_class->get_visual = gdk_offscreen_window_get_visual;
-  drawable_class->get_source_drawable = gdk_offscreen_window_get_source_drawable;
 }
 
 static void

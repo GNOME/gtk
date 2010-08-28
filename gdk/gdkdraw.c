@@ -266,26 +266,6 @@ _gdk_drawable_ref_cairo_surface (GdkDrawable *drawable)
 
 /************************************************************************/
 
-/*
- * _gdk_drawable_get_source_drawable:
- * @drawable: a #GdkDrawable
- *
- * Returns a drawable for the passed @drawable that is guaranteed to be
- * usable to create a pixmap (e.g.: not an offscreen window).
- *
- * Since: 2.16
- */
-GdkDrawable *
-_gdk_drawable_get_source_drawable (GdkDrawable *drawable)
-{
-  g_return_val_if_fail (GDK_IS_DRAWABLE (drawable), NULL);
-
-  if (GDK_DRAWABLE_GET_CLASS (drawable)->get_source_drawable)
-    return GDK_DRAWABLE_GET_CLASS (drawable)->get_source_drawable (drawable);
-
-  return drawable;
-}
-
 cairo_surface_t *
 _gdk_drawable_create_cairo_surface (GdkDrawable *drawable,
 				    int width,

@@ -313,7 +313,6 @@ gboolean _gdk_cairo_surface_extents (cairo_surface_t *surface,
 
 cairo_surface_t *_gdk_drawable_ref_cairo_surface (GdkDrawable *drawable);
 
-GdkDrawable *_gdk_drawable_get_source_drawable (GdkDrawable *drawable);
 cairo_surface_t * _gdk_drawable_create_cairo_surface (GdkDrawable *drawable,
 						      int width,
 						      int height);

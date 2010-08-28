@@ -234,8 +234,6 @@ static void         gdk_window_real_set_colormap (GdkDrawable *drawable,
 						  GdkColormap *cmap);
 static GdkColormap* gdk_window_real_get_colormap (GdkDrawable *drawable);
 
-static GdkDrawable* gdk_window_get_source_drawable    (GdkDrawable *drawable);
-
 static cairo_region_t*   gdk_window_get_clip_region        (GdkDrawable *drawable);
 static cairo_region_t*   gdk_window_get_visible_region     (GdkDrawable *drawable);
 
@@ -391,7 +389,6 @@ gdk_window_class_init (GdkWindowObjectClass *klass)
   drawable_class->set_cairo_clip = gdk_window_set_cairo_clip;
   drawable_class->get_clip_region = gdk_window_get_clip_region;
   drawable_class->get_visible_region = gdk_window_get_visible_region;
-  drawable_class->get_source_drawable = gdk_window_get_source_drawable;
 
   quark_pointer_window = g_quark_from_static_string ("gtk-pointer-window");
 
@@ -3393,19 +3390,6 @@ gdk_window_flush_recursive (GdkWindowObject *window)
 {
   gdk_window_flush ((GdkWindow *)window);
   gdk_window_flush_recursive_helper (window, window->impl);
-}
-
-static GdkDrawable *
-gdk_window_get_source_drawable (GdkDrawable *drawable)
-{
-  GdkWindow *window = GDK_WINDOW (drawable);
-  GdkWindowObject *private;
-
-  private = (GdkWindowObject *) window;
-  if (GDK_DRAWABLE_GET_CLASS (private->impl)->get_source_drawable)
-    return GDK_DRAWABLE_GET_CLASS (private->impl)->get_source_drawable (private->impl);
-
-  return drawable;
 }
 
 static cairo_region_t*
