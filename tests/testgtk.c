@@ -147,7 +147,7 @@ on_alpha_window_expose (GtkWidget      *widget,
                                          allocation.height / 2,
 					 radius * 1.33);
 
-  if (gdk_screen_get_rgba_colormap (gtk_widget_get_screen (widget)) &&
+  if (gdk_screen_get_rgba_visual (gtk_widget_get_screen (widget)) &&
       gtk_widget_is_composited (widget))
     cairo_set_source_rgba (cr, 1.0, 1.0, 1.0, 0.0); /* transparent */
   else
