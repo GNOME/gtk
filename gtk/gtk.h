@@ -218,6 +218,7 @@
 #include <gtk/gtkvseparator.h>
 #include <gtk/gtkwidget.h>
 #include <gtk/gtkwindow.h>
+#include <gtk/gtkwrapbox.h>
 
 #undef __GTK_H_INSIDE__
 

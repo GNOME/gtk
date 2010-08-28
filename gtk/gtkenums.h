@@ -560,6 +560,52 @@ typedef enum
 } GtkSizeRequestMode;
 
 
+/**
+ * GtkWrapAllocationMode:
+ * @GTK_WRAP_ALLOCATE_FREE:        Items wrap freely in the box's orientation
+ * @GTK_WRAP_ALLOCATE_ALIGNED:     Items are aligned into rows and columns
+ * @GTK_WRAP_ALLOCATE_HOMOGENEOUS: Items are all allocated the same size
+ *
+ * Describes how an #GtkWrapBox positions its children.
+ */
+typedef enum {
+  GTK_WRAP_ALLOCATE_FREE = 0,
+  GTK_WRAP_ALLOCATE_ALIGNED,
+  GTK_WRAP_ALLOCATE_HOMOGENEOUS
+} GtkWrapAllocationMode;
+
+/**
+ * GtkWrapBoxSpreading:
+ * @GTK_WRAP_BOX_SPREAD_BEGIN:  Items are allocated no more than their natural size
+ *                              in the layout's orientation and any extra space is left trailing at 
+ *                              the end of each line.
+ * @GTK_WRAP_BOX_SPREAD_END:    Items are allocated no more than their natural size
+ *                              in the layout's orientation and any extra space skipped at the beginning
+ *                              of each line.
+ * @GTK_WRAP_BOX_SPREAD_EVEN:   Items are allocated no more than their natural size
+ *                              in the layout's orientation and any extra space is evenly distributed
+ *                              between children.
+ * @GTK_WRAP_BOX_SPREAD_EXPAND: Items share the extra space evenly (or among children that 'expand' when
+ *                              in %GTK_WRAP_ALLOCATE_FREE mode.
+ *
+ * Describes how an #GtkWrapBox deals with extra space when allocating children.
+ *
+ * The box always tries to fit as many children at their natural size 
+ * in the given orentation as possible with the exception of fitting "minimum-line-children"
+ * items into the available size. When the available size is larger than
+ * the size needed to fit a given number of children at their natural size
+ * then extra space is available to distribute among children. The
+ * #GtkWrapBoxSpreading option describes what to do with this space.
+ *
+ */
+typedef enum {
+  GTK_WRAP_BOX_SPREAD_BEGIN = 0,
+  GTK_WRAP_BOX_SPREAD_END,
+  GTK_WRAP_BOX_SPREAD_EVEN,
+  GTK_WRAP_BOX_SPREAD_EXPAND
+} GtkWrapBoxSpreading;
+
+
 G_END_DECLS
 
 #endif /* __GTK_ENUMS_H__ */
