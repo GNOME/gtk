@@ -1388,8 +1388,8 @@ render_icon_name_pixbuf (GtkIconSource    *icon_source,
 
   if (widget && gtk_widget_has_screen (widget))
     screen = gtk_widget_get_screen (widget);
-  else if (style && style->colormap)
-    screen = gdk_colormap_get_screen (style->colormap);
+  else if (style && style->visual)
+    screen = gdk_visual_get_screen (style->visual);
   else
     {
       screen = gdk_screen_get_default ();

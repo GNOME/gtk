@@ -82,7 +82,7 @@ struct _GtkStylePrivate {
 /* --- prototypes --- */
 static void	 gtk_style_finalize		(GObject	*object);
 static void	 gtk_style_realize		(GtkStyle	*style,
-						 GdkColormap	*colormap);
+						 GdkVisual      *visual);
 static void      gtk_style_real_realize        (GtkStyle	*style);
 static void      gtk_style_real_unrealize      (GtkStyle	*style);
 static void      gtk_style_real_copy           (GtkStyle	*style,
@@ -401,7 +401,6 @@ gtk_style_init (GtkStyle *style)
     style->font_desc = pango_font_description_from_string ("Sans 10");
   
   style->attach_count = 0;
-  style->colormap = NULL;
   
   style->black.red = 0;
   style->black.green = 0;
@@ -487,7 +486,7 @@ gtk_style_class_init (GtkStyleClass *klass)
    * @style: the object which received the signal
    *
    * Emitted when the style has been initialized for a particular
-   * colormap. Connecting to this signal is probably seldom
+   * visual. Connecting to this signal is probably seldom
    * useful since most of the time applications and widgets only
    * deal with styles that have been already realized.
    *
@@ -504,7 +503,7 @@ gtk_style_class_init (GtkStyleClass *klass)
    * GtkStyle::unrealize:
    * @style: the object which received the signal
    *
-   * Emitted when the aspects of the style specific to a particular colormap
+   * Emitted when the aspects of the style specific to a particular visual
    * is being cleaned up. A connection to this signal can be useful
    * if a widget wants to cache objects as object data on #GtkStyle.
    * This signal provides a convenient place to free such cached objects.
@@ -655,9 +654,9 @@ gtk_style_new (void)
  *
  * Attaches a style to a window; this process allocates the
  * colors and creates the GC's for the style - it specializes
- * it to a particular visual and colormap. The process may
- * involve the creation of a new style if the style has already
- * been attached to a window with a different style and colormap.
+ * it to a particular visual. The process may involve the creation
+ * of a new style if the style has already been attached to a
+ * window with a different style and visual.
  *
  * Since this function may return a new object, you have to use it
  * in the following way:
@@ -674,12 +673,12 @@ gtk_style_attach (GtkStyle  *style,
 {
   GSList *styles;
   GtkStyle *new_style = NULL;
-  GdkColormap *colormap;
+  GdkVisual *visual;
   
   g_return_val_if_fail (GTK_IS_STYLE (style), NULL);
   g_return_val_if_fail (window != NULL, NULL);
   
-  colormap = gdk_drawable_get_colormap (window);
+  visual = gdk_drawable_get_visual (window);
   
   if (!style->styles)
     style->styles = g_slist_append (NULL, style);
@@ -689,7 +688,7 @@ gtk_style_attach (GtkStyle  *style,
     {
       new_style = styles->data;
       
-      if (new_style->colormap == colormap)
+      if (new_style->visual == visual)
         break;
 
       new_style = NULL;
@@ -706,7 +705,7 @@ gtk_style_attach (GtkStyle  *style,
 	  
 	  if (new_style->attach_count == 0)
 	    {
-	      gtk_style_realize (new_style, colormap);
+	      gtk_style_realize (new_style, visual);
 	      break;
 	    }
 	  
@@ -718,7 +717,7 @@ gtk_style_attach (GtkStyle  *style,
   if (!new_style)
     {
       new_style = gtk_style_duplicate (style);
-      gtk_style_realize (new_style, colormap);
+      gtk_style_realize (new_style, visual);
     }
 
   /* A style gets a refcount from being attached */
@@ -756,8 +755,8 @@ gtk_style_detach (GtkStyle *style)
     {
       g_signal_emit (style, unrealize_signal, 0);
       
-      g_object_unref (style->colormap);
-      style->colormap = NULL;
+      g_object_unref (style->visual);
+      style->visual = NULL;
 
       if (style->private_font_desc)
 	{
@@ -770,10 +769,10 @@ gtk_style_detach (GtkStyle *style)
 }
 
 static void
-gtk_style_realize (GtkStyle    *style,
-                   GdkColormap *colormap)
+gtk_style_realize (GtkStyle  *style,
+                   GdkVisual *visual)
 {
-  style->colormap = g_object_ref (colormap);
+  style->visual = g_object_ref (visual);
 
   g_signal_emit (style, realize_signal, 0);
 }
@@ -1215,7 +1214,7 @@ _gtk_style_peek_property_value (GtkStyle           *style,
 }
 
 static cairo_pattern_t *
-load_background (GdkColormap *colormap,
+load_background (GdkVisual   *visual,
 	         GdkColor    *bg_color,
 	         const gchar *filename)
 {
@@ -1233,7 +1232,7 @@ load_background (GdkColormap *colormap,
       cairo_surface_t *surface;
       cairo_pattern_t *pattern;
       cairo_t *cr;
-      GdkScreen *screen = gdk_colormap_get_screen (colormap);
+      GdkScreen *screen = gdk_visual_get_screen (visual);
   
       pixbuf = gdk_pixbuf_new_from_file (filename, NULL);
       if (!pixbuf)
@@ -1299,7 +1298,7 @@ gtk_style_real_realize (GtkStyle *style)
       else
         image_name = NULL;
 
-      style->background[i] = load_background (style->colormap,
+      style->background[i] = load_background (style->visual,
 					      &style->bg[i],
 					      image_name);
     }
@@ -1460,9 +1459,9 @@ lookup_icon_size (GtkStyle    *style,
       screen = gtk_widget_get_screen (widget);
       settings = gtk_settings_get_for_screen (screen);
     }
-  else if (style && style->colormap)
+  else if (style && style->visual)
     {
-      screen = gdk_colormap_get_screen (style->colormap);
+      screen = gdk_visual_get_screen (style->visual);
       settings = gtk_settings_get_for_screen (screen);
     }
   else
