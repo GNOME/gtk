@@ -344,9 +344,6 @@ static void gtk_text_view_move_cursor       (GtkTextView           *text_view,
                                              GtkMovementStep        step,
                                              gint                   count,
                                              gboolean               extend_selection);
-static void gtk_text_view_page_horizontally (GtkTextView          *text_view,
-                                             gint                  count,
-                                             gboolean              extend_selection);
 static gboolean gtk_text_view_move_viewport (GtkTextView           *text_view,
                                              GtkScrollStep          step,
                                              gint                   count);
@@ -609,7 +606,6 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
   container_class->forall = gtk_text_view_forall;
 
   klass->move_cursor = gtk_text_view_move_cursor;
-  klass->page_horizontally = gtk_text_view_page_horizontally;
   klass->set_anchor = gtk_text_view_set_anchor;
   klass->insert_at_cursor = gtk_text_view_insert_at_cursor;
   klass->delete_from_cursor = gtk_text_view_delete_from_cursor;
@@ -826,32 +822,6 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
 		  G_TYPE_INT, 
 		  G_TYPE_BOOLEAN);
 
-  /**
-   * GtkTextView::page-horizontally:
-   * @text_view: the object which received the signal
-   * @count: the number of @step units to move
-   * @extend_selection: %TRUE if the move should extend the selection
-   *
-   * The ::page-horizontally signal is a 
-   * <link linkend="keybinding-signals">keybinding signal</link> 
-   * which can be bound to key combinations to allow the user
-   * to initiate horizontal cursor movement by pages.  
-   * 
-   * This signal should not be used anymore, instead use the
-   * #GtkTextview::move-cursor signal with the #GTK_MOVEMENT_HORIZONTAL_PAGES
-   * granularity.
-   */
-  signals[PAGE_HORIZONTALLY] =
-    g_signal_new (I_("page-horizontally"),
-		  G_OBJECT_CLASS_TYPE (gobject_class),
-		  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
-		  G_STRUCT_OFFSET (GtkTextViewClass, page_horizontally),
-		  NULL, NULL,
-		  _gtk_marshal_VOID__INT_BOOLEAN,
-		  G_TYPE_NONE, 2,
-		  G_TYPE_INT,
-		  G_TYPE_BOOLEAN);
-  
   /**
    * GtkTextView::move-viewport:
    * @text_view: the object which received the signal
@@ -5521,16 +5491,6 @@ gtk_text_view_move_cursor (GtkTextView     *text_view,
 {
   gtk_text_view_move_cursor_internal (text_view, step, count, extend_selection);
 }
-
-static void
-gtk_text_view_page_horizontally (GtkTextView     *text_view,
-                                 gint             count,
-                                 gboolean         extend_selection)
-{
-  gtk_text_view_move_cursor_internal (text_view, GTK_MOVEMENT_HORIZONTAL_PAGES,
-                                      count, extend_selection);
-}
-
 
 static gboolean
 gtk_text_view_move_viewport (GtkTextView     *text_view,
