@@ -213,30 +213,31 @@ _gdk_image_new_for_depth (GdkScreen    *screen,
       return NULL;
     }
 
-  surface = gdk_display_dfb_create_surface(_gdk_display,format,width,height);
+  surface = gdk_display_dfb_create_surface (_gdk_display, format,
+                                            width, height);
   if (!surface)
     {
       return NULL;
     }
-  surface->GetPixelFormat( surface, &format );
+  surface->GetPixelFormat (surface, &format);
 
   image = g_object_new (gdk_image_get_type (), NULL);
   private = image->windowing_data;
 
   private->surface = surface;
 
-  ret = surface->Lock( surface, DSLF_WRITE, &image->mem, &pitch );
+  ret = surface->Lock (surface, DSLF_WRITE, &image->mem, &pitch);
   if (ret)
     {
-      DirectFBError( "IDirectFBSurface::Lock() for writing failed!\n", ret );
-      gdk_image_unref( image );
+      DirectFBError ("IDirectFBSurface::Lock() for writing failed!\n", ret);
+      g_object_unref (image);
       return NULL;
     }
 
   image->type           = type;
   image->visual         = visual;
 #if G_BYTE_ORDER == G_BIG_ENDIAN
-  image->byte_order		= GDK_MSB_FIRST;
+  image->byte_order	= GDK_MSB_FIRST;
 #else
   image->byte_order 	= GDK_LSB_FIRST;
 #endif
@@ -266,8 +267,8 @@ _gdk_directfb_copy_to_image (GdkDrawable *drawable,
   GdkDrawableImplDirectFB *impl;
   GdkImageDirectFB        *private;
   int                      pitch;
-  DFBRectangle             rect = { src_x, src_y, width, height };
-  IDirectFBDisplayLayer *layer = _gdk_display->layer;
+  DFBRectangle             rect  = { src_x, src_y, width, height };
+  IDirectFBDisplayLayer   *layer = _gdk_display->layer;
 
   g_return_val_if_fail (GDK_IS_DRAWABLE_IMPL_DIRECTFB (drawable), NULL);
   g_return_val_if_fail (image != NULL || (dest_x == 0 && dest_y == 0), NULL);
@@ -295,7 +296,7 @@ _gdk_directfb_copy_to_image (GdkDrawable *drawable,
         }
     }
 
-  if (! impl->surface)
+  if (!impl->surface)
     return NULL;
 
   if (!image)
@@ -304,12 +305,14 @@ _gdk_directfb_copy_to_image (GdkDrawable *drawable,
 
   private = image->windowing_data;
 
-  private->surface->Unlock( private->surface );
+  private->surface->Unlock (private->surface);
 
-  private->surface->Blit( private->surface,
-                          impl->surface, &rect, dest_x, dest_y );
+  private->surface->Blit (private->surface,
+                          impl->surface, &rect, dest_x, dest_y);
 
-  private->surface->Lock( private->surface, DSLF_READ | DSLF_WRITE, &image->mem, &pitch );
+  private->surface->Lock (private->surface,
+                          DSLF_READ | DSLF_WRITE,
+                          &image->mem, &pitch);
   image->bpl = pitch;
 
   if (impl->wrapper == _gdk_parent_root)
@@ -371,7 +374,7 @@ gdk_image_put_pixel (GdkImage *image,
 {
   g_return_if_fail (image != NULL);
 
-  if  (!(x >= 0 && x < image->width && y >= 0 && y < image->height))
+  if (!(x >= 0 && x < image->width && y >= 0 && y < image->height))
     return;
 
   if (image->depth == 1)
@@ -412,8 +415,8 @@ gdk_directfb_image_destroy (GdkImage *image)
   GDK_NOTE (MISC, g_print ("gdk_directfb_image_destroy: %#lx\n",
                            (gulong) private->surface));
 
-  private->surface->Unlock( private->surface );
-  private->surface->Release( private->surface );
+  private->surface->Unlock (private->surface);
+  private->surface->Release (private->surface);
 
   g_free (private);
   image->windowing_data = NULL;

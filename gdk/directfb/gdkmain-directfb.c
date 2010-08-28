@@ -32,16 +32,16 @@
  */
 
 /*
- Main entry point for 2.6 seems to be open_display so 
- most stuff in main is moved over to gdkdisplay-directfb.c
- I'll move stub functions here that make no sense for directfb
- and true globals
- Michael Emmel
+  Main entry point for 2.6 seems to be open_display so
+  most stuff in main is moved over to gdkdisplay-directfb.c
+  I'll move stub functions here that make no sense for directfb
+  and true globals
+  Michael Emmel
 */
 
 #include "config.h"
-#include <string.h> 
-#include <stdlib.h> 
+#include <string.h>
+#include <stdlib.h>
 #include "gdk.h"
 
 #include "gdkdisplay.h"
@@ -84,7 +84,7 @@ _gdk_windowing_display_set_sm_client_id (GdkDisplay *display,const gchar *sm_cli
 void
 _gdk_windowing_exit (void)
 {
- 
+
   if (_gdk_display->buffer)
     _gdk_display->buffer->Release (_gdk_display->buffer);
 
@@ -95,7 +95,7 @@ _gdk_windowing_exit (void)
 
   _gdk_display->layer->Release (_gdk_display->layer);
 
-   _gdk_display->directfb->Release (_gdk_display->directfb);
+  _gdk_display->directfb->Release (_gdk_display->directfb);
 
   g_free (_gdk_display);
   _gdk_display = NULL;
@@ -110,40 +110,40 @@ gdk_get_display (void)
 
 /* utils */
 static const guint type_masks[] =
-{
-  GDK_STRUCTURE_MASK,        /* GDK_DELETE            =  0, */
-  GDK_STRUCTURE_MASK,        /* GDK_DESTROY           =  1, */
-  GDK_EXPOSURE_MASK,         /* GDK_EXPOSE            =  2, */
-  GDK_POINTER_MOTION_MASK,   /* GDK_MOTION_NOTIFY     =  3, */
-  GDK_BUTTON_PRESS_MASK,     /* GDK_BUTTON_PRESS      =  4, */
-  GDK_BUTTON_PRESS_MASK,     /* GDK_2BUTTON_PRESS     =  5, */
-  GDK_BUTTON_PRESS_MASK,     /* GDK_3BUTTON_PRESS     =  6, */
-  GDK_BUTTON_RELEASE_MASK,   /* GDK_BUTTON_RELEASE    =  7, */
-  GDK_KEY_PRESS_MASK,        /* GDK_KEY_PRESS         =  8, */
-  GDK_KEY_RELEASE_MASK,      /* GDK_KEY_RELEASE       =  9, */
-  GDK_ENTER_NOTIFY_MASK,     /* GDK_ENTER_NOTIFY      = 10, */
-  GDK_LEAVE_NOTIFY_MASK,     /* GDK_LEAVE_NOTIFY      = 11, */
-  GDK_FOCUS_CHANGE_MASK,     /* GDK_FOCUS_CHANGE      = 12, */
-  GDK_STRUCTURE_MASK,        /* GDK_CONFIGURE         = 13, */
-  GDK_VISIBILITY_NOTIFY_MASK,/* GDK_MAP               = 14, */
-  GDK_VISIBILITY_NOTIFY_MASK,/* GDK_UNMAP             = 15, */
-  GDK_PROPERTY_CHANGE_MASK,  /* GDK_PROPERTY_NOTIFY   = 16, */
-  GDK_PROPERTY_CHANGE_MASK,  /* GDK_SELECTION_CLEAR   = 17, */
-  GDK_PROPERTY_CHANGE_MASK,  /* GDK_SELECTION_REQUEST = 18, */
-  GDK_PROPERTY_CHANGE_MASK,  /* GDK_SELECTION_NOTIFY  = 19, */
-  GDK_PROXIMITY_IN_MASK,     /* GDK_PROXIMITY_IN      = 20, */
-  GDK_PROXIMITY_OUT_MASK,    /* GDK_PROXIMITY_OUT     = 21, */
-  GDK_ALL_EVENTS_MASK,       /* GDK_DRAG_ENTER        = 22, */
-  GDK_ALL_EVENTS_MASK,       /* GDK_DRAG_LEAVE        = 23, */
-  GDK_ALL_EVENTS_MASK,       /* GDK_DRAG_MOTION       = 24, */
-  GDK_ALL_EVENTS_MASK,       /* GDK_DRAG_STATUS       = 25, */
-  GDK_ALL_EVENTS_MASK,       /* GDK_DROP_START        = 26, */
-  GDK_ALL_EVENTS_MASK,       /* GDK_DROP_FINISHED     = 27, */
-  GDK_ALL_EVENTS_MASK,       /* GDK_CLIENT_EVENT      = 28, */
-  GDK_VISIBILITY_NOTIFY_MASK,/* GDK_VISIBILITY_NOTIFY = 29, */
-  GDK_EXPOSURE_MASK,         /* GDK_NO_EXPOSE         = 30, */
-  GDK_SCROLL_MASK            /* GDK_SCROLL            = 31  */
-};
+  {
+    GDK_STRUCTURE_MASK,        /* GDK_DELETE            =  0, */
+    GDK_STRUCTURE_MASK,        /* GDK_DESTROY           =  1, */
+    GDK_EXPOSURE_MASK,         /* GDK_EXPOSE            =  2, */
+    GDK_POINTER_MOTION_MASK,   /* GDK_MOTION_NOTIFY     =  3, */
+    GDK_BUTTON_PRESS_MASK,     /* GDK_BUTTON_PRESS      =  4, */
+    GDK_BUTTON_PRESS_MASK,     /* GDK_2BUTTON_PRESS     =  5, */
+    GDK_BUTTON_PRESS_MASK,     /* GDK_3BUTTON_PRESS     =  6, */
+    GDK_BUTTON_RELEASE_MASK,   /* GDK_BUTTON_RELEASE    =  7, */
+    GDK_KEY_PRESS_MASK,        /* GDK_KEY_PRESS         =  8, */
+    GDK_KEY_RELEASE_MASK,      /* GDK_KEY_RELEASE       =  9, */
+    GDK_ENTER_NOTIFY_MASK,     /* GDK_ENTER_NOTIFY      = 10, */
+    GDK_LEAVE_NOTIFY_MASK,     /* GDK_LEAVE_NOTIFY      = 11, */
+    GDK_FOCUS_CHANGE_MASK,     /* GDK_FOCUS_CHANGE      = 12, */
+    GDK_STRUCTURE_MASK,        /* GDK_CONFIGURE         = 13, */
+    GDK_VISIBILITY_NOTIFY_MASK,/* GDK_MAP               = 14, */
+    GDK_VISIBILITY_NOTIFY_MASK,/* GDK_UNMAP             = 15, */
+    GDK_PROPERTY_CHANGE_MASK,  /* GDK_PROPERTY_NOTIFY   = 16, */
+    GDK_PROPERTY_CHANGE_MASK,  /* GDK_SELECTION_CLEAR   = 17, */
+    GDK_PROPERTY_CHANGE_MASK,  /* GDK_SELECTION_REQUEST = 18, */
+    GDK_PROPERTY_CHANGE_MASK,  /* GDK_SELECTION_NOTIFY  = 19, */
+    GDK_PROXIMITY_IN_MASK,     /* GDK_PROXIMITY_IN      = 20, */
+    GDK_PROXIMITY_OUT_MASK,    /* GDK_PROXIMITY_OUT     = 21, */
+    GDK_ALL_EVENTS_MASK,       /* GDK_DRAG_ENTER        = 22, */
+    GDK_ALL_EVENTS_MASK,       /* GDK_DRAG_LEAVE        = 23, */
+    GDK_ALL_EVENTS_MASK,       /* GDK_DRAG_MOTION       = 24, */
+    GDK_ALL_EVENTS_MASK,       /* GDK_DRAG_STATUS       = 25, */
+    GDK_ALL_EVENTS_MASK,       /* GDK_DROP_START        = 26, */
+    GDK_ALL_EVENTS_MASK,       /* GDK_DROP_FINISHED     = 27, */
+    GDK_ALL_EVENTS_MASK,       /* GDK_CLIENT_EVENT      = 28, */
+    GDK_VISIBILITY_NOTIFY_MASK,/* GDK_VISIBILITY_NOTIFY = 29, */
+    GDK_EXPOSURE_MASK,         /* GDK_NO_EXPOSE         = 30, */
+    GDK_SCROLL_MASK            /* GDK_SCROLL            = 31  */
+  };
 
 GdkWindow *
 gdk_directfb_other_event_window (GdkWindow    *window,
@@ -201,22 +201,22 @@ gdk_directfb_pointer_event_window (GdkWindow    *window,
 
       if (evmask & type_masks[type]) {
 
-        if( _gdk_directfb_pointer_grab_owner_events ) {
-        return _gdk_directfb_pointer_grab_window;
-        }else {
-                GdkWindowObject *obj= GDK_WINDOW_OBJECT(window);
-                while (obj != NULL && 
-                    obj != GDK_WINDOW_OBJECT(_gdk_directfb_pointer_grab_window)) {
-                    obj = (GdkWindowObject *)obj->parent;
-                }
-                if( obj ==GDK_WINDOW_OBJECT(_gdk_directfb_pointer_grab_window) ) {
-                    return  window;
-                }else {
-                    //was not  child of the grab window so return the grab window
-                    return _gdk_directfb_pointer_grab_window;
-                }
-         }
+        if (_gdk_directfb_pointer_grab_owner_events) {
+          return _gdk_directfb_pointer_grab_window;
+        } else {
+          GdkWindowObject *obj = GDK_WINDOW_OBJECT (window);
+          while (obj != NULL &&
+                 obj != GDK_WINDOW_OBJECT (_gdk_directfb_pointer_grab_window)) {
+            obj = (GdkWindowObject *)obj->parent;
+          }
+          if (obj == GDK_WINDOW_OBJECT (_gdk_directfb_pointer_grab_window)) {
+            return window;
+          } else {
+            //was not  child of the grab window so return the grab window
+            return _gdk_directfb_pointer_grab_window;
+          }
         }
+      }
     }
 
   w = window;
@@ -281,7 +281,7 @@ gdk_directfb_keyboard_event_window (GdkWindow    *window,
 
       w = gdk_window_get_parent (w);
     }
-   return w;
+  return w;
 }
 
 
@@ -291,6 +291,7 @@ gdk_directfb_event_make (GdkWindow    *window,
 {
   GdkEvent *event    = gdk_event_new (GDK_NOTHING);
   guint32   the_time = gdk_directfb_get_time ();
+
   event->any.type       = type;
   event->any.window     = g_object_ref (window);
   event->any.send_event = FALSE;
@@ -372,7 +373,7 @@ gdk_error_trap_pop (void)
 GdkGrabStatus
 gdk_keyboard_grab (GdkWindow *window,
                    gint       owner_events,
-                   guint32    time) 
+                   guint32    time)
 {
   return gdk_directfb_keyboard_grab (gdk_display_get_default(),
                                      window,

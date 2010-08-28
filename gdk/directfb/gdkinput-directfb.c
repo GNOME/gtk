@@ -44,18 +44,18 @@
 
 
 static GdkDeviceAxis gdk_input_core_axes[] =
-{
-  { GDK_AXIS_X, 0, 0 },
-  { GDK_AXIS_Y, 0, 0 }
-};
+  {
+    { GDK_AXIS_X, 0, 0 },
+    { GDK_AXIS_Y, 0, 0 }
+  };
 
 
-GdkDevice     * _gdk_core_pointer       = NULL;
-GList         * _gdk_input_devices      = NULL;
-gboolean        _gdk_input_ignore_core  = FALSE;
+GdkDevice *_gdk_core_pointer      = NULL;
+GList     *_gdk_input_devices     = NULL;
+gboolean   _gdk_input_ignore_core = FALSE;
 
-int             _gdk_directfb_mouse_x   = 0;
-int             _gdk_directfb_mouse_y   = 0;
+int _gdk_directfb_mouse_x = 0;
+int _gdk_directfb_mouse_y = 0;
 
 
 void
@@ -96,17 +96,17 @@ gdk_device_get_type (void)
   if (!object_type)
     {
       const GTypeInfo object_info =
-      {
-        sizeof (GdkDeviceClass),
-        (GBaseInitFunc) NULL,
-        (GBaseFinalizeFunc) NULL,
-        (GClassInitFunc) gdk_device_class_init,
-        NULL,           /* class_finalize */
-        NULL,           /* class_data */
-        sizeof (GdkDevice),
-        0,              /* n_preallocs */
-        (GInstanceInitFunc) NULL,
-      };
+        {
+          sizeof (GdkDeviceClass),
+          (GBaseInitFunc) NULL,
+          (GBaseFinalizeFunc) NULL,
+          (GClassInitFunc) gdk_device_class_init,
+          NULL,           /* class_finalize */
+          NULL,           /* class_data */
+          sizeof (GdkDevice),
+          0,              /* n_preallocs */
+          (GInstanceInitFunc) NULL,
+        };
 
       object_type = g_type_register_static (G_TYPE_OBJECT,
                                             "GdkDevice",

@@ -134,7 +134,7 @@ gdk_colormap_new (GdkVisual *visual,
         private = g_new0 (GdkColormapPrivateDirectFB, 1);
         private->info = g_new0 (GdkColorInfo, colormap->size);
 
-	if (visual == gdk_visual_get_system())
+	if (visual == gdk_visual_get_system ())
 	  {
             /* save the first (transparent) palette entry */
             private->info[0].ref_count++;
@@ -181,7 +181,7 @@ gdk_screen_get_system_colormap (GdkScreen *screen)
 
   if (!colormap)
     {
-      GdkVisual *visual = gdk_visual_get_system();
+      GdkVisual *visual = gdk_visual_get_system ();
 
       /* special case PSEUDO_COLOR to use the system palette */
       if (visual->type == GDK_VISUAL_PSEUDO_COLOR)
@@ -197,9 +197,9 @@ gdk_screen_get_system_colormap (GdkScreen *screen)
 
           private = g_new0 (GdkColormapPrivateDirectFB, 1);
           private->info = g_new0 (GdkColorInfo, colormap->size);
-	
-          surface=GDK_WINDOW_IMPL_DIRECTFB (
-				GDK_WINDOW_OBJECT (_gdk_parent_root)->impl)->drawable.surface;
+
+          surface = GDK_WINDOW_IMPL_DIRECTFB (
+                        GDK_WINDOW_OBJECT (_gdk_parent_root)->impl)->drawable.surface;
           surface->GetPalette (surface, &private->palette);
 
           colormap->windowing_data = private;

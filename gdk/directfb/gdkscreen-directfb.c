@@ -46,7 +46,7 @@ static GdkColormap *default_colormap = NULL;
 GdkDisplay *
 gdk_screen_get_display (GdkScreen *screen)
 {
-  return GDK_DISPLAY_OBJECT(_gdk_display);
+  return GDK_DISPLAY_OBJECT (_gdk_display);
 }
 
 GdkWindow *
@@ -102,8 +102,8 @@ gdk_screen_get_monitor_geometry (GdkScreen    *screen,
   g_return_if_fail (GDK_IS_SCREEN (screen));
   g_return_if_fail (dest != NULL);
 
-  dest->x = 0;
-  dest->y = 0;
+  dest->x      = 0;
+  dest->y      = 0;
   dest->width  = gdk_screen_width ();
   dest->height = gdk_screen_height ();
 }
@@ -179,8 +179,7 @@ gdk_screen_get_width_mm (GdkScreen *screen)
 
   if (first_call)
     {
-      g_message
-        ("gdk_screen_width_mm() assumes a screen resolution of 72 dpi");
+      g_message ("gdk_screen_width_mm() assumes a screen resolution of 72 dpi");
       first_call = FALSE;
     }
 
@@ -211,8 +210,10 @@ GdkVisual *
 gdk_screen_get_rgba_visual (GdkScreen *screen)
 {
   static GdkVisual *rgba_visual;
-  if( !rgba_visual )
-    rgba_visual = gdk_directfb_visual_by_format(DSPF_ARGB);
+
+  if (!rgba_visual)
+    rgba_visual = gdk_directfb_visual_by_format (DSPF_ARGB);
+
   return rgba_visual;
 }
 
@@ -220,8 +221,8 @@ GdkColormap *
 gdk_screen_get_rgba_colormap (GdkScreen *screen)
 {
   static GdkColormap *rgba_colormap;
-  if( !rgba_colormap && gdk_screen_get_rgba_visual(screen) )
-    rgba_colormap = gdk_colormap_new (gdk_screen_get_rgba_visual(screen),FALSE);
+  if (!rgba_colormap && gdk_screen_get_rgba_visual (screen))
+    rgba_colormap = gdk_colormap_new (gdk_screen_get_rgba_visual (screen), FALSE);
   return rgba_colormap;
 }
 
@@ -244,9 +245,10 @@ gdk_screen_get_window_stack (GdkScreen *screen)
 gboolean
 gdk_screen_is_composited (GdkScreen *screen)
 {
-   g_return_val_if_fail (GDK_IS_SCREEN (screen), FALSE);
-   return FALSE;
-} 
+  g_return_val_if_fail (GDK_IS_SCREEN (screen), FALSE);
+
+  return FALSE;
+}
 
 #define __GDK_SCREEN_X11_C__
 #include "gdkaliasdef.c"

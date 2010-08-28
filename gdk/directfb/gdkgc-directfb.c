@@ -117,13 +117,13 @@ _gdk_directfb_gc_new (GdkDrawable     *drawable,
   private = GDK_GC_DIRECTFB (gc);
 #if 0
   private->values.background.pixel = 0;
-  private->values.background.red   =
-  private->values.background.green =
+  private->values.background.red   = 0;
+  private->values.background.green = 0;
   private->values.background.blue  = 0;
 
   private->values.foreground.pixel = 0;
-  private->values.foreground.red   =
-  private->values.foreground.green =
+  private->values.foreground.red   = 0;
+  private->values.foreground.green = 0;
   private->values.foreground.blue  = 0;
 #endif
 
@@ -146,11 +146,8 @@ void
 _gdk_windowing_gc_get_foreground (GdkGC    *gc,
                                   GdkColor *color)
 {
-  GdkGCDirectFB *private;
-  private = GDK_GC_DIRECTFB (gc);
+  GdkGCDirectFB *private = GDK_GC_DIRECTFB (gc);
   *color =private->values.foreground;
-
-
 }
 #endif
 
@@ -344,8 +341,8 @@ _gdk_windowing_gc_set_clip_region (GdkGC           *gc,
 
   if (reset_origin)
     {
-      gc->clip_x_origin = 0;
-      gc->clip_y_origin = 0;
+      gc->clip_x_origin          = 0;
+      gc->clip_y_origin          = 0;
       data->values.clip_x_origin = 0;
       data->values.clip_y_origin = 0;
     }
@@ -355,7 +352,7 @@ _gdk_windowing_gc_set_clip_region (GdkGC           *gc,
 
 void
 _gdk_windowing_gc_copy (GdkGC *dst_gc,
-             GdkGC *src_gc)
+                        GdkGC *src_gc)
 {
   GdkGCDirectFB *dst_private;
 
@@ -396,11 +393,11 @@ _gdk_windowing_gc_copy (GdkGC *dst_gc,
  *
  * Since: 2.2
  */
-GdkScreen *  
+GdkScreen *
 gdk_gc_get_screen (GdkGC *gc)
 {
   g_return_val_if_fail (GDK_IS_GC_DIRECTFB (gc), NULL);
-  
+
   return _gdk_screen;
 }
 #define __GDK_GC_X11_C__

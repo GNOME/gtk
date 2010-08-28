@@ -40,23 +40,23 @@
 
 
 GdkDisplayDFB *_gdk_display = NULL;
-GdkScreen          * _gdk_screen                              = NULL;
+GdkScreen     *_gdk_screen  = NULL;
 
-gboolean              gdk_directfb_apply_focus_opacity        = FALSE;
-gboolean              gdk_directfb_enable_color_keying        = FALSE;
-DFBColor              gdk_directfb_bg_color                   = { 0, 0, 0, 0 };
-DFBColor              gdk_directfb_bg_color_key               = { 0, 0, 0, 0 };
-gboolean              gdk_directfb_monochrome_fonts           = FALSE;
+gboolean gdk_directfb_apply_focus_opacity = FALSE;
+gboolean gdk_directfb_enable_color_keying = FALSE;
+DFBColor gdk_directfb_bg_color            = { 0, 0, 0, 0 };
+DFBColor gdk_directfb_bg_color_key        = { 0, 0, 0, 0 };
+gboolean gdk_directfb_monochrome_fonts    = FALSE;
 
-GdkWindow          * _gdk_directfb_pointer_grab_window        = NULL;
-GdkWindow          * _gdk_directfb_keyboard_grab_window       = NULL;
-GdkWindow          * _gdk_directfb_pointer_grab_confine       = NULL;
-gboolean             _gdk_directfb_pointer_grab_owner_events  = FALSE;
-gboolean             _gdk_directfb_keyboard_grab_owner_events = FALSE;
-GdkEventMask         _gdk_directfb_pointer_grab_events        = 0;
-GdkEventMask         _gdk_directfb_keyboard_grab_events       = 0;
-GdkCursor          * _gdk_directfb_pointer_grab_cursor        = NULL;
+GdkWindow    *_gdk_directfb_pointer_grab_window        = NULL;
+GdkWindow    *_gdk_directfb_keyboard_grab_window       = NULL;
+GdkWindow    *_gdk_directfb_pointer_grab_confine       = NULL;
+gboolean      _gdk_directfb_pointer_grab_owner_events  = FALSE;
+gboolean      _gdk_directfb_keyboard_grab_owner_events = FALSE;
+GdkEventMask  _gdk_directfb_pointer_grab_events        = 0;
+GdkEventMask  _gdk_directfb_keyboard_grab_events       = 0;
+GdkCursor    *_gdk_directfb_pointer_grab_cursor        = NULL;
 
-GdkAtom              _gdk_selection_property                  = 0;
+GdkAtom _gdk_selection_property = 0;
 
 #include "gdkaliasdef.c"

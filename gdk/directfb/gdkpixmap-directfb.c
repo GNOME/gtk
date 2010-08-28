@@ -113,7 +113,7 @@ gdk_pixmap_impl_directfb_finalize (GObject *object)
     G_OBJECT_CLASS (parent_class)->finalize (object);
 }
 
-GdkPixmap*
+GdkPixmap *
 _gdk_pixmap_new (GdkDrawable *drawable,
                  gint       width,
                  gint       height,
@@ -175,9 +175,9 @@ _gdk_pixmap_new (GdkDrawable *drawable,
         }
     }
 
-  if( !(surface = 
-	gdk_display_dfb_create_surface(_gdk_display,format,width,height) )) { 
-    g_assert( surface != NULL);
+  if (!(surface =
+	gdk_display_dfb_create_surface (_gdk_display, format, width, height))) {
+    g_assert (surface != NULL);
     return NULL;
   }
 
@@ -196,7 +196,7 @@ _gdk_pixmap_new (GdkDrawable *drawable,
 }
 
 GdkPixmap *
-_gdk_bitmap_create_from_data (GdkDrawable   *drawable,
+_gdk_bitmap_create_from_data (GdkDrawable *drawable,
                               const gchar *data,
                               gint         width,
                               gint         height)
@@ -212,7 +212,7 @@ _gdk_bitmap_create_from_data (GdkDrawable   *drawable,
 
   pixmap = gdk_pixmap_new (drawable, width, height, 1);
 
-#define GET_PIXEL(data,pixel) \
+#define GET_PIXEL(data,pixel)                                           \
   ((data[(pixel / 8)] & (0x1 << ((pixel) % 8))) >> ((pixel) % 8))
 
   if (pixmap)
@@ -224,7 +224,7 @@ _gdk_bitmap_create_from_data (GdkDrawable   *drawable,
 
       surface = GDK_DRAWABLE_IMPL_DIRECTFB (GDK_PIXMAP_OBJECT (pixmap)->impl)->surface;
 
-      if (surface->Lock( surface, DSLF_WRITE, (void**)(&dst), &pitch ) == DFB_OK)
+      if (surface->Lock (surface, DSLF_WRITE, (void**)(&dst), &pitch) == DFB_OK)
         {
           gint i, j;
 
@@ -239,7 +239,7 @@ _gdk_bitmap_create_from_data (GdkDrawable   *drawable,
 	      dst += pitch;
             }
 
-          surface->Unlock( surface );
+          surface->Unlock (surface);
         }
     }
 
@@ -248,14 +248,14 @@ _gdk_bitmap_create_from_data (GdkDrawable   *drawable,
   return pixmap;
 }
 
-GdkPixmap*
-_gdk_pixmap_create_from_data (GdkDrawable   *drawable,
-                              const gchar *data,
-                              gint         width,
-                              gint         height,
-                              gint         depth,
-                              const GdkColor    *fg,
-                              const GdkColor    *bg)
+GdkPixmap *
+_gdk_pixmap_create_from_data (GdkDrawable    *drawable,
+                              const gchar    *data,
+                              gint            width,
+                              gint            height,
+                              gint            depth,
+                              const GdkColor *fg,
+                              const GdkColor *bg)
 {
   GdkPixmap *pixmap;
 
@@ -281,8 +281,8 @@ _gdk_pixmap_create_from_data (GdkDrawable   *drawable,
 
       surface = GDK_DRAWABLE_IMPL_DIRECTFB (GDK_PIXMAP_OBJECT (pixmap)->impl)->surface;
 
-      if (surface->Lock( surface,
-                         DSLF_WRITE, (void**)(&dst), &pitch ) == DFB_OK)
+      if (surface->Lock (surface,
+                         DSLF_WRITE, (void**)(&dst), &pitch) == DFB_OK)
         {
           gint i;
 
@@ -293,27 +293,27 @@ _gdk_pixmap_create_from_data (GdkDrawable   *drawable,
               data += src_pitch;
             }
 
-          surface->Unlock( surface );
+          surface->Unlock (surface);
         }
     }
 
   return pixmap;
 }
 
-GdkPixmap*
+GdkPixmap *
 gdk_pixmap_foreign_new (GdkNativeWindow anid)
 {
-  g_warning(" gdk_pixmap_foreign_new unsuporrted \n");
+  g_warning (" gdk_pixmap_foreign_new unsuporrted \n");
   return NULL;
 }
 
-GdkPixmap*
+GdkPixmap *
 gdk_pixmap_foreign_new_for_display (GdkDisplay *display, GdkNativeWindow anid)
 {
-  return gdk_pixmap_foreign_new(anid);
+  return gdk_pixmap_foreign_new (anid);
 }
 
-GdkPixmap*
+GdkPixmap *
 gdk_pixmap_foreign_new_for_screen (GdkScreen       *screen,
                                    GdkNativeWindow  anid,
                                    gint             width,
@@ -321,18 +321,19 @@ gdk_pixmap_foreign_new_for_screen (GdkScreen       *screen,
                                    gint             depth)
 {
   /*Use the root drawable for now since only one screen */
-  return gdk_pixmap_new(NULL,width,height,depth);
+  return gdk_pixmap_new (NULL, width, height, depth);
 }
 
 
-GdkPixmap*
+GdkPixmap *
 gdk_pixmap_lookup (GdkNativeWindow anid)
 {
-  g_warning(" gdk_pixmap_lookup unsuporrted \n");
+  g_warning (" gdk_pixmap_lookup unsuporrted \n");
   return NULL;
 }
 
-GdkPixmap* gdk_pixmap_lookup_for_display (GdkDisplay *display,GdkNativeWindow anid)
+GdkPixmap *
+gdk_pixmap_lookup_for_display (GdkDisplay *display, GdkNativeWindow anid)
 {
   return gdk_pixmap_lookup (anid);
 }

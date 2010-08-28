@@ -119,7 +119,7 @@ _gdk_directfb_window_scroll (GdkWindow *window,
               impl->surface->SetClip (impl->surface, &update);
               impl->surface->Blit (impl->surface, impl->surface, NULL, dx, dy);
               impl->surface->SetClip (impl->surface, NULL);
-              impl->surface->Flip(impl->surface,&update,0);
+              impl->surface->Flip (impl->surface, &update, 0);
             }
         }
     }
@@ -151,13 +151,13 @@ _gdk_directfb_window_scroll (GdkWindow *window,
  * @region: The #GdkRegion to move
  * @dx: Amount to move in the X direction
  * @dy: Amount to move in the Y direction
- * 
- * Move the part of @window indicated by @region by @dy pixels in the Y 
- * direction and @dx pixels in the X direction. The portions of @region 
+ *
+ * Move the part of @window indicated by @region by @dy pixels in the Y
+ * direction and @dx pixels in the X direction. The portions of @region
  * that not covered by the new position of @region are invalidated.
- * 
+ *
  * Child windows are not moved.
- * 
+ *
  * Since: 2.8
  **/
 void
@@ -168,21 +168,21 @@ _gdk_directfb_window_move_region (GdkWindow       *window,
 {
   GdkWindowObject         *private;
   GdkDrawableImplDirectFB *impl;
-  GdkRegion *window_clip;
-  GdkRegion *src_region;
-  GdkRegion *brought_in;
-  GdkRegion *dest_region;
-  GdkRegion *moving_invalid_region;
-  GdkRectangle dest_extents;
-  
+  GdkRegion               *window_clip;
+  GdkRegion               *src_region;
+  GdkRegion               *brought_in;
+  GdkRegion               *dest_region;
+  GdkRegion               *moving_invalid_region;
+  GdkRectangle             dest_extents;
+
   g_return_if_fail (GDK_IS_WINDOW (window));
   g_return_if_fail (region != NULL);
-  
+
   if (GDK_WINDOW_DESTROYED (window))
     return;
-  
+
   private = GDK_WINDOW_OBJECT (window);
-  impl = GDK_DRAWABLE_IMPL_DIRECTFB (private->impl);  
+  impl = GDK_DRAWABLE_IMPL_DIRECTFB (private->impl);
 
   if (dx == 0 && dy == 0)
     return;
@@ -214,14 +214,14 @@ _gdk_directfb_window_move_region (GdkWindow       *window,
       gdk_region_intersect (moving_invalid_region, src_region);
       gdk_region_offset (moving_invalid_region, dx, dy);
     }
-  
+
   /* invalidate all of the src region */
   gdk_window_invalidate_region (window, src_region, FALSE);
 
   /* un-invalidate destination region */
   if (private->update_area)
     gdk_region_subtract (private->update_area, dest_region);
-  
+
   /* invalidate moving parts of existing update area */
   if (moving_invalid_region)
     {
@@ -234,22 +234,22 @@ _gdk_directfb_window_move_region (GdkWindow       *window,
   gdk_region_destroy (brought_in);
 
   /* Actually do the moving */
-	if (impl->surface)
-	{
-    	DFBRectangle source = { dest_extents.x - dx, 
-					    dest_extents.y - dy,
-                             dest_extents.width,
-                             dest_extents.height};
-    	DFBRegion destination = { dest_extents.x, 
-						 dest_extents.y,
-                             	 dest_extents.x+dest_extents.width-1,
-                             	 dest_extents.y+dest_extents.height-1};
+  if (impl->surface)
+    {
+      DFBRectangle source = { dest_extents.x - dx,
+                              dest_extents.y - dy,
+                              dest_extents.width,
+                              dest_extents.height};
+      DFBRegion destination = { dest_extents.x,
+                                dest_extents.y,
+                                dest_extents.x + dest_extents.width - 1,
+                                dest_extents.y + dest_extents.height - 1};
 
-              impl->surface->SetClip (impl->surface, &destination);
-              impl->surface->Blit (impl->surface, impl->surface,&source,dx,dy);
-              impl->surface->SetClip (impl->surface, NULL);
-              impl->surface->Flip(impl->surface,&destination,0);
-	}
+      impl->surface->SetClip (impl->surface, &destination);
+      impl->surface->Blit (impl->surface, impl->surface, &source, dx, dy);
+      impl->surface->SetClip (impl->surface, NULL);
+      impl->surface->Flip (impl->surface, &destination, 0);
+    }
   gdk_region_destroy (src_region);
   gdk_region_destroy (dest_region);
 }

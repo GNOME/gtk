@@ -398,7 +398,6 @@ gdk_drag_find_window_for_screen (GdkDragContext   *context,
 
       *protocol = context->protocol;
     }
-
 }
 
 gboolean

@@ -102,12 +102,12 @@ apply_filters (GdkWindow      *window,
    * more events and append them after it if it likes.
    */
   node = _gdk_event_queue_append ((GdkDisplay*)_gdk_display, event);
-  
+
   tmp_list = filters;
   while (tmp_list)
     {
       GdkEventFilter *filter = (GdkEventFilter *) tmp_list->data;
-      
+
       tmp_list = tmp_list->next;
       result = filter->function (dfbevent, event, filter->data);
       if (result != GDK_FILTER_CONTINUE)
@@ -173,7 +173,7 @@ gdk_event_send_client_message_by_window (GdkEvent *event,
   evt.type = GPOINTER_TO_UINT (GDK_ATOM_TO_POINTER (event->client.message_type));
   evt.data = (void *) event->client.data.l[0];
 
-  _gdk_display->buffer->PostEvent(_gdk_display->buffer, DFB_EVENT (&evt));
+  _gdk_display->buffer->PostEvent (_gdk_display->buffer, DFB_EVENT (&evt));
 
   return TRUE;
 }
@@ -225,8 +225,8 @@ dfb_events_io_func (GIOChannel   *channel,
         {
         case DFEC_WINDOW:
           /* TODO workaround to prevent two DWET_ENTER in a row from being delivered */
-          if (event->window.type == DWET_ENTER ) {
-            if ( i>0 && buf[i-1].window.type != DWET_ENTER )
+          if (event->window.type == DWET_ENTER) {
+            if (i > 0 && buf[i - 1].window.type != DWET_ENTER)
               dfb_events_process_window_event (&event->window);
           }
           else
@@ -356,7 +356,7 @@ _gdk_events_queue (GdkDisplay *display)
 void
 gdk_flush (void)
 {
-gdk_display_flush ( GDK_DISPLAY_OBJECT(_gdk_display));
+  gdk_display_flush (GDK_DISPLAY_OBJECT (_gdk_display));
 }
 
 /* Sends a ClientMessage to all toplevel client windows */
@@ -368,22 +368,22 @@ gdk_event_send_client_message_for_display (GdkDisplay *display,
   GdkWindow *win = NULL;
   gboolean ret = TRUE;
 
-  g_return_val_if_fail(event != NULL, FALSE);
+  g_return_val_if_fail (event != NULL, FALSE);
 
   win = gdk_window_lookup_for_display (display, (GdkNativeWindow) xid);
 
-  g_return_val_if_fail(win != NULL, FALSE);
+  g_return_val_if_fail (win != NULL, FALSE);
 
-  if ((GDK_WINDOW_OBJECT(win)->window_type != GDK_WINDOW_CHILD) &&
+  if ((GDK_WINDOW_OBJECT (win)->window_type != GDK_WINDOW_CHILD) &&
       (g_object_get_data (G_OBJECT (win), "gdk-window-child-handler")))
     {
       /* Managed window, check children */
       GList *ltmp = NULL;
-      for (ltmp = GDK_WINDOW_OBJECT(win)->children; ltmp; ltmp = ltmp->next)
-       {
-         ret &= gdk_event_send_client_message_by_window (event,
-                                                         GDK_WINDOW(ltmp->data));
-       }
+      for (ltmp = GDK_WINDOW_OBJECT (win)->children; ltmp; ltmp = ltmp->next)
+        {
+          ret &= gdk_event_send_client_message_by_window (event,
+                                                          GDK_WINDOW(ltmp->data));
+        }
     }
   else
     {
@@ -437,7 +437,7 @@ gdk_directfb_event_windows_remove (GdkWindow *window)
 
   if (EventBuffer)
     impl->window->DetachEventBuffer (impl->window, EventBuffer);
-/* FIXME: should we warn if (! EventBuffer) ? */
+  /* FIXME: should we warn if (! EventBuffer) ? */
 }
 
 GdkWindow *
@@ -464,7 +464,7 @@ gdk_directfb_child_at (GdkWindow *window,
           *winx -= win->x;
           *winy -= win->y;
 
-          return gdk_directfb_child_at (GDK_WINDOW (win), winx, winy );
+          return gdk_directfb_child_at (GDK_WINDOW (win), winx, winy);
         }
     }
 
@@ -636,67 +636,65 @@ gdk_event_translate (DFBWindowEvent *dfbevent,
         _gdk_directfb_mouse_y = dfbevent->cy;
 
 	//child = gdk_directfb_child_at (window, &dfbevent->x, &dfbevent->y);
-    /* Go all the way to root to catch popup menus */
-    int wx=_gdk_directfb_mouse_x;
-    int wy=_gdk_directfb_mouse_y;
+        /* Go all the way to root to catch popup menus */
+        int wx=_gdk_directfb_mouse_x;
+        int wy=_gdk_directfb_mouse_y;
 	child = gdk_directfb_child_at (_gdk_parent_root, &wx, &wy);
 
-    /* first let's see if any cossing event has to be send */
-    gdk_directfb_window_send_crossing_events (NULL, child, GDK_CROSSING_NORMAL);
+        /* first let's see if any cossing event has to be send */
+        gdk_directfb_window_send_crossing_events (NULL, child, GDK_CROSSING_NORMAL);
 
-    /* then dispatch the motion event to the window the cursor it's inside */
-	event_win = gdk_directfb_pointer_event_window (child, GDK_MOTION_NOTIFY);
+        /* then dispatch the motion event to the window the cursor it's inside */
+        event_win = gdk_directfb_pointer_event_window (child, GDK_MOTION_NOTIFY);
 
 
-	if (event_win)
-	  {
+        if (event_win)
+          {
+            if (event_win == _gdk_directfb_pointer_grab_window) {
+              GdkDrawableImplDirectFB *impl;
 
-	    if (event_win == _gdk_directfb_pointer_grab_window) {
-		GdkDrawableImplDirectFB *impl;
+              child = _gdk_directfb_pointer_grab_window;
+              impl = GDK_DRAWABLE_IMPL_DIRECTFB (GDK_WINDOW_OBJECT (child)->impl);
 
-		child = _gdk_directfb_pointer_grab_window;
-		impl = GDK_DRAWABLE_IMPL_DIRECTFB (GDK_WINDOW_OBJECT (child)->impl);
+              dfbevent->x = _gdk_directfb_mouse_x - impl->abs_x;
+              dfbevent->y = _gdk_directfb_mouse_y - impl->abs_y;
+            }
 
-		dfbevent->x = _gdk_directfb_mouse_x - impl->abs_x;
-		dfbevent->y = _gdk_directfb_mouse_y - impl->abs_y;
-	      }
+            event = gdk_directfb_event_make (child, GDK_MOTION_NOTIFY);
 
-	    event = gdk_directfb_event_make (child, GDK_MOTION_NOTIFY);
+            event->motion.x_root = _gdk_directfb_mouse_x;
+            event->motion.y_root = _gdk_directfb_mouse_y;
 
-	    event->motion.x_root = _gdk_directfb_mouse_x;
-	    event->motion.y_root = _gdk_directfb_mouse_y;
+            //event->motion.x = dfbevent->x;
+            //event->motion.y = dfbevent->y;
+            event->motion.x = wx;
+            event->motion.y = wy;
 
-	    //event->motion.x = dfbevent->x;
-	    //event->motion.y = dfbevent->y;
-	    event->motion.x = wx;
-	    event->motion.y = wy;
+            event->motion.state   = _gdk_directfb_modifiers;
+            event->motion.is_hint = FALSE;
+            event->motion.device  = display->core_pointer;
 
-	    event->motion.state   = _gdk_directfb_modifiers;
-	    event->motion.is_hint = FALSE;
-	    event->motion.device  = display->core_pointer;
-
-	    if (GDK_WINDOW_OBJECT (event_win)->event_mask &
-		GDK_POINTER_MOTION_HINT_MASK)
-	      {
-		while (EventBuffer->PeekEvent (EventBuffer,
-					       DFB_EVENT (dfbevent)) == DFB_OK
-		       && dfbevent->type == DWET_MOTION)
-		  {
-		    EventBuffer->GetEvent (EventBuffer, DFB_EVENT (dfbevent));
-		    event->motion.is_hint = TRUE;
-		  }
-	      }
-	  }
-          /* make sure crossing events go to the event window found */
-/*        GdkWindow *ev_win = ( event_win == NULL ) ? gdk_window_at_pointer (NULL,NULL) :event_win;
-	     gdk_directfb_window_send_crossing_events (NULL,ev_win,GDK_CROSSING_NORMAL);
-*/
+            if (GDK_WINDOW_OBJECT (event_win)->event_mask &
+                GDK_POINTER_MOTION_HINT_MASK)
+              {
+                while (EventBuffer->PeekEvent (EventBuffer,
+                                               DFB_EVENT (dfbevent)) == DFB_OK
+                       && dfbevent->type == DWET_MOTION)
+                  {
+                    EventBuffer->GetEvent (EventBuffer, DFB_EVENT (dfbevent));
+                    event->motion.is_hint = TRUE;
+                  }
+              }
+          }
+        /* make sure crossing events go to the event window found */
+        /*        GdkWindow *ev_win = (event_win == NULL) ? gdk_window_at_pointer (NULL,NULL) :event_win;
+                  gdk_directfb_window_send_crossing_events (NULL,ev_win,GDK_CROSSING_NORMAL);
+        */
       }
       break;
 
     case DWET_GOTFOCUS:
       gdk_directfb_change_focus (window);
-
       break;
 
     case DWET_LOSTFOCUS:
@@ -836,7 +834,7 @@ gdk_event_translate (DFBWindowEvent *dfbevent,
 
     case DWET_CLOSE:
       {
- 
+
         GdkWindow *event_win;
 
         event_win = gdk_directfb_other_event_window (window, GDK_DELETE);
@@ -946,25 +944,25 @@ void
 gdk_screen_broadcast_client_message (GdkScreen *screen,
 				     GdkEvent  *sev)
 {
-  GdkWindow *root_window;
+  GdkWindow       *root_window;
   GdkWindowObject *private;
-  GList *top_level = NULL;
+  GList           *top_level = NULL;
 
   g_return_if_fail (GDK_IS_SCREEN (screen));
-  g_return_if_fail(sev != NULL);
+  g_return_if_fail (sev != NULL);
 
   root_window = gdk_screen_get_root_window (screen);
 
-  g_return_if_fail(GDK_IS_WINDOW(root_window));
+  g_return_if_fail (GDK_IS_WINDOW (root_window));
 
   private = GDK_WINDOW_OBJECT (root_window);
 
   for (top_level = private->children; top_level; top_level = top_level->next)
     {
-      gdk_event_send_client_message_for_display (gdk_drawable_get_display(GDK_DRAWABLE(root_window)),
-                                                sev,
-                                                (guint32)(GDK_WINDOW_DFB_ID(GDK_WINDOW(top_level->data))));
-   }
+      gdk_event_send_client_message_for_display (gdk_drawable_get_display (GDK_DRAWABLE (root_window)),
+                                                 sev,
+                                                 (guint32)(GDK_WINDOW_DFB_ID (GDK_WINDOW (top_level->data))));
+    }
 }
 
 
@@ -984,7 +982,7 @@ gdk_screen_broadcast_client_message (GdkScreen *screen,
 gboolean
 gdk_net_wm_supports (GdkAtom property)
 {
-   return FALSE;
+  return FALSE;
 }
 
 void

@@ -1,7 +1,7 @@
 /* GDK - The GIMP Drawing Kit
  * Copyright (C) 1995-1997 Peter Mattis, Spencer Kimball and Josh MacDonald
  *
- * This library is free software; you can redistribute it and/or
+ * This library is free software; you can redistribute it and/ or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
  * version 2 of the License, or (at your option) any later version.
@@ -45,9 +45,9 @@
 #include "gdkalias.h"
 
 static GHashTable *names_to_atoms;
-static GPtrArray *atoms_to_names;
+static GPtrArray  *atoms_to_names;
 
-static const gchar xatoms_string[] = 
+static const gchar xatoms_string[] =
   /* These are all the standard predefined X atoms */
   "NONE\0"
   "PRIMARY\0"
@@ -121,11 +121,11 @@ static const gchar xatoms_string[] =
 ;
 
 static const gint xatoms_offset[] = {
-    0,   5,  13,  23,  27,  32,  39,  48,  57,  64,  76,  88, 
-  100, 112, 124, 136, 148, 160, 169, 174, 182, 189, 195, 205, 
-  222, 236, 249, 262, 278, 291, 305, 317, 324, 333, 340, 351, 
-  360, 378, 391, 404, 412, 428, 442, 456, 466, 477, 487, 497, 
-  511, 525, 537, 549, 568, 588, 605, 623, 636, 645, 656, 663, 
+    0,   5,  13,  23,  27,  32,  39,  48,  57,  64,  76,  88,
+  100, 112, 124, 136, 148, 160, 169, 174, 182, 189, 195, 205,
+  222, 236, 249, 262, 278, 291, 305, 317, 324, 333, 340, 351,
+  360, 378, 391, 404, 412, 428, 442, 456, 466, 477, 487, 497,
+  511, 525, 537, 549, 568, 588, 605, 623, 636, 645, 656, 663,
   674, 685, 695, 702, 712, 724, 734, 745, 754
 };
 
@@ -135,7 +135,7 @@ static void
 ensure_atom_tables (void)
 {
   int i;
-  
+
   if (names_to_atoms)
     return;
 
@@ -144,29 +144,33 @@ ensure_atom_tables (void)
 
   for (i = 0; i < G_N_ELEMENTS (xatoms_offset); i++)
     {
-      g_hash_table_insert(names_to_atoms, (gchar *)xatoms_string + xatoms_offset[i], GINT_TO_POINTER (i));
-      g_ptr_array_add(atoms_to_names, (gchar *)xatoms_string + xatoms_offset[i]);
+      g_hash_table_insert (names_to_atoms,
+                           (gchar *)xatoms_string + xatoms_offset[i],
+                           GINT_TO_POINTER (i));
+      g_ptr_array_add (atoms_to_names,
+                       (gchar *)xatoms_string + xatoms_offset[i]);
     }
 }
 
 static GdkAtom
 intern_atom_internal (const gchar *atom_name, gboolean allocate)
 {
-  gpointer result;
-  gchar *name;
+  gpointer  result;
+  gchar    *name;
+
   g_return_val_if_fail (atom_name != NULL, GDK_NONE);
 
   ensure_atom_tables ();
-  
+
   if (g_hash_table_lookup_extended (names_to_atoms, atom_name, NULL, &result))
     return result;
-  
+
   result = GINT_TO_POINTER (atoms_to_names->len);
-  name = allocate ? g_strdup (atom_name) : (gchar *)atom_name;
-  g_hash_table_insert(names_to_atoms, name, result);
-  g_ptr_array_add(atoms_to_names, name);
-  
-  return result;  
+  name   = allocate ? g_strdup (atom_name) : (gchar *)atom_name;
+  g_hash_table_insert (names_to_atoms, name, result);
+  g_ptr_array_add (atoms_to_names, name);
+
+  return result;
 }
 
 GdkAtom
@@ -188,10 +192,11 @@ gdk_atom_name (GdkAtom atom)
 {
   if (!atoms_to_names)
     return NULL;
-    
+
   if (GPOINTER_TO_INT (atom) >= atoms_to_names->len)
     return NULL;
-  return g_strdup(g_ptr_array_index (atoms_to_names, GPOINTER_TO_INT (atom)));
+
+  return g_strdup (g_ptr_array_index (atoms_to_names, GPOINTER_TO_INT (atom)));
 }
 
 
@@ -213,7 +218,7 @@ gdk_property_delete_2 (GdkWindow         *window,
 
   if (event_window)
     {
-      event = gdk_directfb_event_make (event_window, GDK_PROPERTY_NOTIFY);
+      event                 = gdk_directfb_event_make (event_window, GDK_PROPERTY_NOTIFY);
       event->property.atom  = property;
       event->property.state = GDK_PROPERTY_DELETE;
     }
@@ -241,16 +246,16 @@ gdk_property_delete (GdkWindow *window,
 }
 
 gboolean
-gdk_property_get (GdkWindow   *window,
-                  GdkAtom      property,
-                  GdkAtom      type,
-                  gulong       offset,
-                  gulong       length,
-                  gint         pdelete,
-                  GdkAtom     *actual_property_type,
-                  gint        *actual_format_type,
-                  gint        *actual_length,
-                  guchar     **data)
+gdk_property_get (GdkWindow  *window,
+                  GdkAtom     property,
+                  GdkAtom     type,
+                  gulong      offset,
+                  gulong      length,
+                  gint        pdelete,
+                  GdkAtom    *actual_property_type,
+                  gint       *actual_format_type,
+                  gint       *actual_length,
+                  guchar    **data)
 {
   GdkWindowImplDirectFB *impl;
   GdkWindowProperty     *prop;
@@ -293,11 +298,11 @@ gdk_property_get (GdkWindow   *window,
     }
 
   if (actual_length)
-    *actual_length = nbytes;
+    *actual_length        = nbytes;
   if (actual_property_type)
     *actual_property_type = prop->type;
   if (actual_format_type)
-    *actual_format_type = prop->format;
+    *actual_format_type   = prop->format;
 
   /* only delete the property if it was completely retrieved */
   if (pdelete && length >= *actual_length && *data != NULL)
@@ -357,7 +362,7 @@ gdk_property_change (GdkWindow    *window,
       break;
     }
 
-  new_prop = g_malloc (G_STRUCT_OFFSET (GdkWindowProperty, data) + new_size);
+  new_prop         = g_malloc (G_STRUCT_OFFSET (GdkWindowProperty, data) + new_size);
   new_prop->length = new_size;
   new_prop->type   = type;
   new_prop->format = format;
@@ -391,10 +396,11 @@ gdk_property_change (GdkWindow    *window,
 
   if (event_window)
     {
-      event = gdk_directfb_event_make (event_window, GDK_PROPERTY_NOTIFY);
+      event                 = gdk_directfb_event_make (event_window, GDK_PROPERTY_NOTIFY);
       event->property.atom  = property;
       event->property.state = GDK_PROPERTY_NEW_VALUE;
     }
 }
+
 #define __GDK_PROPERTY_X11_C__
 #include "gdkaliasdef.c"
