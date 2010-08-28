@@ -227,9 +227,6 @@ static void   gdk_window_real_get_size  (GdkDrawable     *drawable,
 					 gint            *width,
 					 gint            *height);
 
-static GdkVisual*   gdk_window_real_get_visual   (GdkDrawable *drawable);
-static gint         gdk_window_real_get_depth    (GdkDrawable *drawable);
-static GdkScreen*   gdk_window_real_get_screen   (GdkDrawable *drawable);
 static GdkColormap* gdk_window_real_get_colormap (GdkDrawable *drawable);
 
 static cairo_region_t*   gdk_window_get_clip_region        (GdkDrawable *drawable);
@@ -376,11 +373,8 @@ gdk_window_class_init (GdkWindowObjectClass *klass)
   object_class->set_property = gdk_window_set_property;
   object_class->get_property = gdk_window_get_property;
 
-  drawable_class->get_depth = gdk_window_real_get_depth;
-  drawable_class->get_screen = gdk_window_real_get_screen;
   drawable_class->get_size = gdk_window_real_get_size;
   drawable_class->get_colormap = gdk_window_real_get_colormap;
-  drawable_class->get_visual = gdk_window_real_get_visual;
   drawable_class->ref_cairo_surface = gdk_window_ref_cairo_surface;
   drawable_class->create_cairo_surface = gdk_window_create_cairo_surface;
   drawable_class->set_cairo_clip = gdk_window_set_cairo_clip;
@@ -3649,31 +3643,6 @@ gdk_window_real_get_size (GdkDrawable *drawable,
     *width = private->width;
   if (height)
     *height = private->height;
-}
-
-static GdkVisual*
-gdk_window_real_get_visual (GdkDrawable *drawable)
-{
-  GdkColormap *colormap;
-
-  g_return_val_if_fail (GDK_IS_WINDOW (drawable), NULL);
-
-  colormap = gdk_drawable_get_colormap (drawable);
-  return colormap ? gdk_colormap_get_visual (colormap) : NULL;
-}
-
-static gint
-gdk_window_real_get_depth (GdkDrawable *drawable)
-{
-  g_return_val_if_fail (GDK_IS_WINDOW (drawable), 0);
-
-  return ((GdkWindowObject *)GDK_WINDOW (drawable))->depth;
-}
-
-static GdkScreen*
-gdk_window_real_get_screen (GdkDrawable *drawable)
-{
-  return gdk_drawable_get_screen (GDK_WINDOW_OBJECT (drawable)->impl);
 }
 
 static GdkColormap*

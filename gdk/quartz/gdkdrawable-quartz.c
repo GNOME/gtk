@@ -112,26 +112,6 @@ gdk_quartz_get_colormap (GdkDrawable *drawable)
   return GDK_DRAWABLE_IMPL_QUARTZ (drawable)->colormap;
 }
 
-static GdkScreen*
-gdk_quartz_get_screen (GdkDrawable *drawable)
-{
-  return _gdk_screen;
-}
-
-static GdkVisual*
-gdk_quartz_get_visual (GdkDrawable *drawable)
-{
-  return gdk_drawable_get_visual (GDK_DRAWABLE_IMPL_QUARTZ (drawable)->wrapper);
-}
-
-static int
-gdk_quartz_get_depth (GdkDrawable *drawable)
-{
-  /* This is a bit bogus but I'm not sure the other way is better */
-
-  return gdk_drawable_get_depth (GDK_DRAWABLE_IMPL_QUARTZ (drawable)->wrapper);
-}
-
 static void
 gdk_drawable_impl_quartz_finalize (GObject *object)
 {
@@ -157,10 +137,6 @@ gdk_drawable_impl_quartz_class_init (GdkDrawableImplQuartzClass *klass)
   drawable_class->create_cairo_surface = gdk_quartz_create_cairo_surface;
 
   drawable_class->get_colormap = gdk_quartz_get_colormap;
-
-  drawable_class->get_depth = gdk_quartz_get_depth;
-  drawable_class->get_screen = gdk_quartz_get_screen;
-  drawable_class->get_visual = gdk_quartz_get_visual;
 }
 
 GType

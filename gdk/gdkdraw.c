@@ -82,57 +82,6 @@ gdk_drawable_get_size (GdkDrawable *drawable,
 }
 
 /**
- * gdk_drawable_get_visual:
- * @drawable: a #GdkDrawable
- * 
- * Gets the #GdkVisual describing the pixel format of @drawable.
- * 
- * Return value: a #GdkVisual
- **/
-GdkVisual*
-gdk_drawable_get_visual (GdkDrawable *drawable)
-{
-  g_return_val_if_fail (GDK_IS_DRAWABLE (drawable), NULL);
-  
-  return GDK_DRAWABLE_GET_CLASS (drawable)->get_visual (drawable);
-}
-
-/**
- * gdk_drawable_get_depth:
- * @drawable: a #GdkDrawable
- * 
- * Obtains the bit depth of the drawable, that is, the number of bits
- * that make up a pixel in the drawable's visual. Examples are 8 bits
- * per pixel, 24 bits per pixel, etc.
- * 
- * Return value: number of bits per pixel
- **/
-gint
-gdk_drawable_get_depth (GdkDrawable *drawable)
-{
-  g_return_val_if_fail (GDK_IS_DRAWABLE (drawable), 0);
-
-  return GDK_DRAWABLE_GET_CLASS (drawable)->get_depth (drawable);
-}
-/**
- * gdk_drawable_get_screen:
- * @drawable: a #GdkDrawable
- * 
- * Gets the #GdkScreen associated with a #GdkDrawable.
- * 
- * Return value: the #GdkScreen associated with @drawable
- *
- * Since: 2.2
- **/
-GdkScreen*
-gdk_drawable_get_screen(GdkDrawable *drawable)
-{
-  g_return_val_if_fail (GDK_IS_DRAWABLE (drawable), NULL);
-
-  return GDK_DRAWABLE_GET_CLASS (drawable)->get_screen (drawable);
-}
-
-/**
  * gdk_drawable_get_display:
  * @drawable: a #GdkDrawable
  * 
@@ -147,7 +96,7 @@ gdk_drawable_get_display (GdkDrawable *drawable)
 {
   g_return_val_if_fail (GDK_IS_DRAWABLE (drawable), NULL);
   
-  return gdk_screen_get_display (gdk_drawable_get_screen (drawable));
+  return gdk_screen_get_display (gdk_colormap_get_screen (gdk_drawable_get_colormap (drawable)));
 }
 	
 /**

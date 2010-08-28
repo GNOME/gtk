@@ -55,12 +55,6 @@ static cairo_surface_t *gdk_win32_create_cairo_surface (GdkDrawable *drawable,
      
 static GdkColormap* gdk_win32_get_colormap   (GdkDrawable    *drawable);
 
-static gint         gdk_win32_get_depth      (GdkDrawable    *drawable);
-
-static GdkScreen *  gdk_win32_get_screen     (GdkDrawable    *drawable);
-
-static GdkVisual*   gdk_win32_get_visual     (GdkDrawable    *drawable);
-
 static void gdk_drawable_impl_win32_finalize   (GObject *object);
 
 static const cairo_user_data_key_t gdk_win32_cairo_key;
@@ -80,10 +74,6 @@ _gdk_drawable_impl_win32_class_init (GdkDrawableImplWin32Class *klass)
   drawable_class->create_cairo_surface = gdk_win32_create_cairo_surface;
   
   drawable_class->get_colormap = gdk_win32_get_colormap;
-
-  drawable_class->get_depth = gdk_win32_get_depth;
-  drawable_class->get_screen = gdk_win32_get_screen;
-  drawable_class->get_visual = gdk_win32_get_visual;
 }
 
 static void
@@ -255,26 +245,6 @@ _gdk_windowing_set_cairo_surface_size (cairo_surface_t *surface,
 {
   // Do nothing.  The surface size is determined by the DC
   return FALSE;
-}
-
-static gint
-gdk_win32_get_depth (GdkDrawable *drawable)
-{
-  /* This is a bit bogus but I'm not sure the other way is better */
-
-  return gdk_drawable_get_depth (GDK_DRAWABLE_IMPL_WIN32 (drawable)->wrapper);
-}
-
-static GdkScreen*
-gdk_win32_get_screen (GdkDrawable *drawable)
-{
-  return gdk_screen_get_default ();
-}
- 
-static GdkVisual*
-gdk_win32_get_visual (GdkDrawable *drawable)
-{
-  return gdk_drawable_get_visual (GDK_DRAWABLE_IMPL_WIN32 (drawable)->wrapper);
 }
 
 HGDIOBJ

@@ -45,9 +45,6 @@ static cairo_surface_t *gdk_x11_create_cairo_surface (GdkDrawable *drawable,
                                                       int          height);
      
 static GdkColormap* gdk_x11_get_colormap   (GdkDrawable    *drawable);
-static gint         gdk_x11_get_depth      (GdkDrawable    *drawable);
-static GdkScreen *  gdk_x11_get_screen	   (GdkDrawable    *drawable);
-static GdkVisual*   gdk_x11_get_visual     (GdkDrawable    *drawable);
 
 static const cairo_user_data_key_t gdk_x11_cairo_key;
 
@@ -62,10 +59,6 @@ _gdk_drawable_impl_x11_class_init (GdkDrawableImplX11Class *klass)
   drawable_class->create_cairo_surface = gdk_x11_create_cairo_surface;
 
   drawable_class->get_colormap = gdk_x11_get_colormap;
-
-  drawable_class->get_depth = gdk_x11_get_depth;
-  drawable_class->get_screen = gdk_x11_get_screen;
-  drawable_class->get_visual = gdk_x11_get_visual;
 }
 
 static void
@@ -127,14 +120,6 @@ gdk_x11_get_colormap (GdkDrawable *drawable)
   return impl->colormap;
 }
 
-static gint
-gdk_x11_get_depth (GdkDrawable *drawable)
-{
-  /* This is a bit bogus but I'm not sure the other way is better */
-
-  return gdk_drawable_get_depth (GDK_DRAWABLE_IMPL_X11 (drawable)->wrapper);
-}
-
 static GdkDrawable *
 get_impl_drawable (GdkDrawable *drawable)
 {
@@ -145,21 +130,6 @@ get_impl_drawable (GdkDrawable *drawable)
       g_warning (G_STRLOC " drawable is not a window");
       return NULL;
     }
-}
-
-static GdkScreen*
-gdk_x11_get_screen (GdkDrawable *drawable)
-{
-  if (GDK_IS_DRAWABLE_IMPL_X11 (drawable))
-    return GDK_DRAWABLE_IMPL_X11 (drawable)->screen;
-  else
-    return GDK_DRAWABLE_IMPL_X11 (get_impl_drawable (drawable))->screen;
-}
-
-static GdkVisual*
-gdk_x11_get_visual (GdkDrawable    *drawable)
-{
-  return gdk_drawable_get_visual (GDK_DRAWABLE_IMPL_X11 (drawable)->wrapper);
 }
 
 /**
@@ -257,23 +227,10 @@ gdk_x11_create_cairo_surface (GdkDrawable *drawable,
   GdkVisual *visual;
     
   visual = gdk_window_get_visual (impl->wrapper);
-  if (visual) 
-    return cairo_xlib_surface_create (GDK_SCREEN_XDISPLAY (impl->screen),
-				      impl->xid,
-				      GDK_VISUAL_XVISUAL (visual),
-				      width, height);
-  else if (gdk_drawable_get_depth (drawable) == 1)
-    return cairo_xlib_surface_create_for_bitmap (GDK_SCREEN_XDISPLAY (impl->screen),
-						    impl->xid,
-						    GDK_SCREEN_XSCREEN (impl->screen),
-						    width, height);
-  else
-    {
-      g_warning ("Using Cairo rendering requires the drawable argument to\n"
-		 "have a specified colormap. All windows have a colormap,\n"
-		 "so why is this code even reached?");
-      return NULL;
-    }
+  return cairo_xlib_surface_create (GDK_SCREEN_XDISPLAY (impl->screen),
+                                    impl->xid,
+                                    GDK_VISUAL_XVISUAL (visual),
+                                    width, height);
 }
 
 static cairo_surface_t *

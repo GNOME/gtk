@@ -286,10 +286,7 @@ gdk_color_get_type
 <FILE>drawing</FILE>
 GdkDrawable
 gdk_drawable_get_display
-gdk_drawable_get_screen
-gdk_drawable_get_visual
 gdk_drawable_get_colormap
-gdk_drawable_get_depth
 gdk_drawable_get_size
 gdk_drawable_get_clip_region
 gdk_drawable_get_visible_region
