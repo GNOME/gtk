@@ -175,7 +175,6 @@ gdk_offscreen_window_get_visual (GdkDrawable    *drawable)
 void
 _gdk_offscreen_window_new (GdkWindow     *window,
 			   GdkScreen     *screen,
-			   GdkVisual     *visual,
 			   GdkWindowAttr *attributes,
 			   gint           attributes_mask)
 {
@@ -202,13 +201,13 @@ _gdk_offscreen_window_new (GdkWindow     *window,
     offscreen->colormap = g_object_ref (attributes->colormap);
   else
     {
-      if (gdk_screen_get_system_visual (screen) == visual)
+      if (gdk_screen_get_system_visual (screen) == private->visual)
 	{
 	  offscreen->colormap = gdk_screen_get_system_colormap (screen);
 	  g_object_ref (offscreen->colormap);
 	}
       else
-	offscreen->colormap = gdk_colormap_new (visual, FALSE);
+	offscreen->colormap = gdk_colormap_new (private->visual, FALSE);
     }
 
   offscreen->surface = gdk_window_create_similar_surface ((GdkWindow *)private->parent,

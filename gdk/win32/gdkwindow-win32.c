@@ -236,6 +236,7 @@ _gdk_windowing_window_init (GdkScreen *screen)
   private = (GdkWindowObject *)_gdk_root;
   private->impl = g_object_new (_gdk_window_impl_get_type (), NULL);
   private->impl_window = private;
+  private->visual = gdk_screen_get_system_visual (screen);
 
   draw_impl = GDK_DRAWABLE_IMPL_WIN32 (private->impl);
   
@@ -428,7 +429,6 @@ void
 _gdk_window_impl_new (GdkWindow     *window,
 		      GdkWindow     *real_parent,
 		      GdkScreen     *screen,
-		      GdkVisual     *visual,
 		      GdkEventMask   event_mask,
 		      GdkWindowAttr *attributes,
 		      gint           attributes_mask)
@@ -486,7 +486,6 @@ _gdk_window_impl_new (GdkWindow     *window,
       dwExStyle = 0;
 
       private->input_only = FALSE;
-      private->depth = visual->depth;
       
       if (attributes_mask & GDK_WA_COLORMAP)
 	{
@@ -679,6 +678,7 @@ gdk_window_foreign_new_for_display (GdkDisplay      *display,
 
   window = g_object_new (GDK_TYPE_WINDOW, NULL);
   private = (GdkWindowObject *)window;
+  private->visual = gdk_screen_get_system_visual (_gdk_screen);
   private->impl = g_object_new (_gdk_window_impl_get_type (), NULL);
   impl = GDK_WINDOW_IMPL_WIN32 (private->impl);
   draw_impl = GDK_DRAWABLE_IMPL_WIN32 (private->impl);

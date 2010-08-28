@@ -191,6 +191,7 @@ struct _GdkWindowObject
   GdkDrawable *impl; /* window-system-specific delegate object */  
   
   GdkWindowObject *parent;
+  GdkVisual *visual;
 
   gpointer user_data;
 
@@ -324,7 +325,6 @@ cairo_surface_t * _gdk_drawable_create_cairo_surface (GdkDrawable *drawable,
 void       _gdk_window_impl_new          (GdkWindow      *window,
 					  GdkWindow      *real_parent,
 					  GdkScreen      *screen,
-					  GdkVisual      *visual,
 					  GdkEventMask    event_mask,
                                           GdkWindowAttr  *attributes,
                                           gint            attributes_mask);
@@ -555,7 +555,6 @@ GdkWindow *_gdk_window_get_input_window_for_event (GdkWindow *native_window,
 GType gdk_offscreen_window_get_type (void);
 void       _gdk_offscreen_window_new                 (GdkWindow     *window,
 						      GdkScreen     *screen,
-						      GdkVisual     *visual,
 						      GdkWindowAttr *attributes,
 						      gint           attributes_mask);
 

@@ -802,7 +802,6 @@ void
 _gdk_window_impl_new (GdkWindow     *window,
 		      GdkWindow     *real_parent,
 		      GdkScreen     *screen,
-		      GdkVisual     *visual,
 		      GdkEventMask   event_mask,
 		      GdkWindowAttr *attributes,
 		      gint           attributes_mask)
@@ -843,19 +842,19 @@ _gdk_window_impl_new (GdkWindow     *window,
 	}
       else
 	{
-	  if (visual == gdk_screen_get_system_visual (_gdk_screen))
+	  if (private->visual == gdk_screen_get_system_visual (_gdk_screen))
 	    {
 	      draw_impl->colormap = gdk_screen_get_system_colormap (_gdk_screen);
 	      g_object_ref (draw_impl->colormap);
 	    }
-	  else if (visual == gdk_screen_get_rgba_visual (_gdk_screen))
+	  else if (private->visual == gdk_screen_get_rgba_visual (_gdk_screen))
 	    {
 	      draw_impl->colormap = gdk_screen_get_rgba_colormap (_gdk_screen);
 	      g_object_ref (draw_impl->colormap);
 	    }
 	  else
 	    {
-	      draw_impl->colormap = gdk_colormap_new (visual, FALSE);
+	      draw_impl->colormap = gdk_colormap_new (private->visual, FALSE);
 	    }
 	}
     }
@@ -1043,6 +1042,7 @@ _gdk_windowing_window_init (void)
   private = (GdkWindowObject *)_gdk_root;
   private->impl = g_object_new (_gdk_window_impl_get_type (), NULL);
   private->impl_window = private;
+  private->visual = gdk_screen_get_system_visual (_gdk_screen);
 
   impl = GDK_WINDOW_IMPL_QUARTZ (GDK_WINDOW_OBJECT (_gdk_root)->impl);
 

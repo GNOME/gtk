@@ -1257,7 +1257,6 @@ gdk_window_new (GdkWindow     *parent,
   GdkWindow *window;
   GdkWindowObject *private;
   GdkScreen *screen;
-  GdkVisual *visual;
   int x, y;
   gboolean native;
   GdkEventMask event_mask;
@@ -1367,16 +1366,16 @@ gdk_window_new (GdkWindow     *parent,
     }
 
   if (attributes_mask & GDK_WA_VISUAL)
-    visual = attributes->visual;
+    private->visual = attributes->visual;
   else
-    visual = gdk_screen_get_system_visual (screen);
+    private->visual = gdk_screen_get_system_visual (screen);
 
   private->event_mask = attributes->event_mask;
 
   if (attributes->wclass == GDK_INPUT_OUTPUT)
     {
       private->input_only = FALSE;
-      private->depth = visual->depth;
+      private->depth = private->visual->depth;
 
       /* XXX: Cache this somehow? */
       private->background = cairo_pattern_create_rgb (0, 0, 0);
@@ -1402,7 +1401,7 @@ gdk_window_new (GdkWindow     *parent,
 
   if (gdk_window_is_offscreen (private))
     {
-      _gdk_offscreen_window_new (window, screen, visual, attributes, attributes_mask);
+      _gdk_offscreen_window_new (window, screen, attributes, attributes_mask);
       private->impl_window = private;
     }
   else if (native)
@@ -1410,7 +1409,7 @@ gdk_window_new (GdkWindow     *parent,
       event_mask = get_native_event_mask (private);
 
       /* Create the impl */
-      _gdk_window_impl_new (window, real_parent, screen, visual, event_mask, attributes, attributes_mask);
+      _gdk_window_impl_new (window, real_parent, screen, event_mask, attributes, attributes_mask);
       private->impl_window = private;
 
       /* This will put the native window topmost in the native parent, which may
@@ -1774,7 +1773,6 @@ gdk_window_ensure_native (GdkWindow *window)
   GdkWindowObject *impl_window;
   GdkDrawable *new_impl, *old_impl;
   GdkScreen *screen;
-  GdkVisual *visual;
   GdkWindowAttr attributes;
   GdkWindowObject *above;
   GList listhead;
@@ -1809,13 +1807,12 @@ gdk_window_ensure_native (GdkWindow *window)
   gdk_window_drop_cairo_surface (private);
 
   screen = gdk_drawable_get_screen (window);
-  visual = gdk_drawable_get_visual (window);
 
   attributes.colormap = gdk_drawable_get_colormap (window);
 
   old_impl = private->impl;
   _gdk_window_impl_new (window, (GdkWindow *)private->parent,
-			screen, visual,
+			screen,
 			get_native_event_mask (private),
 			&attributes, GDK_WA_COLORMAP);
   new_impl = private->impl;

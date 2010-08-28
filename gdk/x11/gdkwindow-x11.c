@@ -470,6 +470,7 @@ _gdk_windowing_window_init (GdkScreen * screen)
   private = (GdkWindowObject *) screen_x11->root_window;
   private->impl = g_object_new (_gdk_window_impl_get_type (), NULL);
   private->impl_window = private;
+  private->visual = gdk_screen_get_system_visual (screen);
 
   draw_impl = GDK_DRAWABLE_IMPL_X11 (private->impl);
   
@@ -689,7 +690,6 @@ void
 _gdk_window_impl_new (GdkWindow     *window,
 		      GdkWindow     *real_parent,
 		      GdkScreen     *screen,
-		      GdkVisual     *visual,
 		      GdkEventMask   event_mask,
 		      GdkWindowAttr *attributes,
 		      gint           attributes_mask)
@@ -728,7 +728,7 @@ _gdk_window_impl_new (GdkWindow     *window,
 
   xattributes_mask = 0;
 
-  xvisual = ((GdkVisualPrivate*) visual)->xvisual;
+  xvisual = ((GdkVisualPrivate*) private->visual)->xvisual;
   
   if (attributes_mask & GDK_WA_NOREDIR)
     {
@@ -770,14 +770,14 @@ _gdk_window_impl_new (GdkWindow     *window,
         }
       else
 	{
-	  if ((((GdkVisualPrivate *)gdk_screen_get_system_visual (screen))->xvisual) ==  xvisual)
+	  if ((((GdkVisualPrivate *)gdk_screen_get_system_visual (screen))->xvisual) == xvisual)
             {
 	      draw_impl->colormap = gdk_screen_get_system_colormap (screen);
               g_object_ref (draw_impl->colormap);
             }
 	  else
             {
-              draw_impl->colormap = gdk_colormap_new (visual, FALSE);
+              draw_impl->colormap = gdk_colormap_new (private->visual, FALSE);
             }
 	}
       
@@ -917,6 +917,7 @@ GdkWindow *
 gdk_window_foreign_new_for_display (GdkDisplay     *display,
 				    GdkNativeWindow anid)
 {
+  GdkScreen *screen;
   GdkWindow *window;
   GdkWindowObject *private;
   GdkWindowImplX11 *impl;
@@ -950,16 +951,20 @@ gdk_window_foreign_new_for_display (GdkDisplay     *display,
   if (children)
     XFree (children);
   
+  screen = _gdk_x11_display_screen_for_xrootwin (display, root);
+
   window = g_object_new (GDK_TYPE_WINDOW, NULL);
 
   private = (GdkWindowObject *) window;
   private->impl = g_object_new (_gdk_window_impl_get_type (), NULL);
   private->impl_window = private;
+  private->visual = gdk_x11_screen_lookup_visual (screen,
+                                                  XVisualIDFromVisual (attrs.visual));
 
   impl = GDK_WINDOW_IMPL_X11 (private->impl);
   draw_impl = GDK_DRAWABLE_IMPL_X11 (private->impl);
   draw_impl->wrapper = GDK_DRAWABLE (window);
-  draw_impl->screen = _gdk_x11_display_screen_for_xrootwin (display, root);
+  draw_impl->screen = screen;
   
   private->parent = gdk_xid_table_lookup_for_display (display, parent);
   
