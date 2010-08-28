@@ -8721,7 +8721,7 @@ gtk_widget_get_visual (GtkWidget *widget)
         return gdk_drawable_get_visual (w->priv->window);
 
       if (GTK_IS_WINDOW (w))
-        return gdk_screen_get_system_visual (GTK_WINDOW (w)->screen);
+        return _gtk_window_get_visual (GTK_WINDOW (w));
     }
 
   return gdk_screen_get_system_visual (gdk_screen_get_default ());

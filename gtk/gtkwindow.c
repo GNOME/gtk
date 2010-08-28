@@ -99,7 +99,7 @@ struct _GtkWindowPrivate
   GtkWindowGroup        *group;
 
   GdkModifierType        mnemonic_modifier;
-  GdkScreen             *screen;
+  GdkVisual             *visual;
   GdkWindow             *frame;
   GdkWindowTypeHint      gdk_type_hint;
 
@@ -190,6 +190,7 @@ enum {
   PROP_ICON,
   PROP_ICON_NAME,
   PROP_SCREEN,
+  PROP_VISUAL,
   PROP_TYPE_HINT,
   PROP_SKIP_TASKBAR_HINT,
   PROP_SKIP_PAGER_HINT,
@@ -702,6 +703,20 @@ gtk_window_class_init (GtkWindowClass *klass)
 							GDK_TYPE_SCREEN,
  							GTK_PARAM_READWRITE));
 
+  /**
+   * GtkWindow:visual:
+   *
+   * Specifies the visual used to create the window with. See gtk_window_set_visual()
+   * for more details.
+   */
+  g_object_class_install_property (gobject_class,
+				   PROP_VISUAL,
+				   g_param_spec_object ("visual",
+ 							P_("Visual"),
+ 							P_("The visual this window is created from"),
+							GDK_TYPE_VISUAL,
+ 							GTK_PARAM_READWRITE));
+
   g_object_class_install_property (gobject_class,
                                    PROP_IS_ACTIVE,
                                    g_param_spec_boolean ("is-active",
@@ -1010,7 +1025,7 @@ gtk_window_init (GtkWindow *window)
   priv->gravity = GDK_GRAVITY_NORTH_WEST;
   priv->decorated = TRUE;
   priv->mnemonic_modifier = GDK_MOD1_MASK;
-  priv->screen = gdk_screen_get_default ();
+  priv->visual = gdk_screen_get_system_visual (gdk_screen_get_default ());
 
   priv->accept_focus = TRUE;
   priv->focus_on_map = TRUE;
@@ -1026,7 +1041,7 @@ gtk_window_init (GtkWindow *window)
 
   gtk_decorated_window_init (window);
 
-  g_signal_connect (priv->screen, "composited-changed",
+  g_signal_connect (gdk_screen_get_default (), "composited-changed",
 		    G_CALLBACK (gtk_window_on_composited_changed), window);
 }
 
@@ -1085,6 +1100,9 @@ gtk_window_set_property (GObject      *object,
       break;
     case PROP_SCREEN:
       gtk_window_set_screen (window, g_value_get_object (value));
+      break;
+    case PROP_VISUAL:
+      gtk_window_set_visual (window, g_value_get_object (value));
       break;
     case PROP_TYPE_HINT:
       gtk_window_set_type_hint (window,
@@ -1188,7 +1206,10 @@ gtk_window_get_property (GObject      *object,
       g_value_set_string (value, gtk_window_get_icon_name (window));
       break;
     case PROP_SCREEN:
-      g_value_set_object (value, priv->screen);
+      g_value_set_object (value, gdk_visual_get_screen (priv->visual));
+      break;
+    case PROP_VISUAL:
+      g_value_set_object (value, priv->visual);
       break;
     case PROP_IS_ACTIVE:
       g_value_set_boolean (value, priv->is_active);
@@ -2308,7 +2329,7 @@ gtk_window_transient_parent_screen_changed (GtkWindow	*parent,
 					    GParamSpec	*pspec,
 					    GtkWindow   *window)
 {
-  gtk_window_set_screen (window, parent->priv->screen);
+  gtk_window_set_screen (window, gtk_window_get_screen (parent));
 }
 
 static void       
@@ -2402,8 +2423,8 @@ gtk_window_set_transient_for  (GtkWindow *window,
       g_signal_connect (parent, "notify::screen",
 			G_CALLBACK (gtk_window_transient_parent_screen_changed),
 			window);
-
-      gtk_window_set_screen (window, parent->priv->screen);
+      
+      gtk_window_set_screen (window, gtk_window_get_screen (parent));
 
       if (priv->destroy_with_parent)
         connect_parent_destroyed (window);
@@ -4351,8 +4372,8 @@ gtk_window_finalize (GObject *object)
       priv->keys_changed_handler = 0;
     }
 
-  if (priv->screen)
-    g_signal_handlers_disconnect_by_func (priv->screen,
+  if (priv->visual)
+    g_signal_handlers_disconnect_by_func (gdk_visual_get_screen (priv->visual),
                                           gtk_window_on_composited_changed, window);
 
   g_free (priv->startup_id);
@@ -7511,48 +7532,62 @@ gtk_window_begin_move_drag  (GtkWindow *window,
                               timestamp);
 }
 
-/** 
- * gtk_window_set_screen:
- * @window: a #GtkWindow.
- * @screen: a #GdkScreen.
+GdkVisual *
+_gtk_window_get_visual (GtkWindow *window)
+{
+  g_return_val_if_fail (GTK_IS_WINDOW (window), NULL);
+
+  return window->priv->visual;
+}
+
+/**
+ * gtk_window_set_visual:
+ * @window: window to set the visual from
+ * @visual: the new visual to use
  *
- * Sets the #GdkScreen where the @window is displayed; if
- * the window is already mapped, it will be unmapped, and
- * then remapped on the new screen.
+ * Sets the #GdkVisual used to display @window; if the window
+ * is already mapped, it will be unmapped, and then remapped
+ * with the new visual. It is fine if @visual is on a
+ * different #GdkScreen.
  *
- * Since: 2.2
- */
+ * By default, a window's visual is set to the system visual
+ * of the default screen.
+ **/
 void
-gtk_window_set_screen (GtkWindow *window,
-		       GdkScreen *screen)
+gtk_window_set_visual (GtkWindow *window,
+		       GdkVisual *visual)
 {
   GtkWindowPrivate *priv;
   GtkWidget *widget;
-  GdkScreen *previous_screen;
+  GdkVisual *previous_visual;
+  GdkScreen *previous_screen, *screen;
   gboolean was_mapped;
   
   g_return_if_fail (GTK_IS_WINDOW (window));
-  g_return_if_fail (GDK_IS_SCREEN (screen));
+  g_return_if_fail (GDK_IS_VISUAL (visual));
 
   priv = window->priv;
 
-  if (screen == priv->screen)
+  if (priv->visual == visual)
     return;
 
   widget = GTK_WIDGET (window);
 
-  previous_screen = priv->screen;
+  previous_visual = priv->visual;
+  previous_screen = gdk_visual_get_screen (previous_visual);
+  screen = gdk_visual_get_screen (visual);
   was_mapped = gtk_widget_get_mapped (widget);
 
   if (was_mapped)
     gtk_widget_unmap (widget);
   if (gtk_widget_get_realized (widget))
     gtk_widget_unrealize (widget);
-      
+  g_object_freeze_notify (G_OBJECT (window));
+
   gtk_window_free_key_hash (window);
-  priv->screen = screen;
+  priv->visual = visual;
   gtk_widget_reset_rc_styles (widget);
-  if (screen != previous_screen)
+  if (previous_screen != screen)
     {
       g_signal_handlers_disconnect_by_func (previous_screen,
 					    gtk_window_on_composited_changed, window);
@@ -7561,11 +7596,45 @@ gtk_window_set_screen (GtkWindow *window,
       
       _gtk_widget_propagate_screen_changed (widget, previous_screen);
       _gtk_widget_propagate_composited_changed (widget);
+      g_object_notify (G_OBJECT (window), "screen");
     }
-  g_object_notify (G_OBJECT (window), "screen");
+  g_object_notify (G_OBJECT (window), "visual");
 
+  g_object_thaw_notify (G_OBJECT (window));
   if (was_mapped)
     gtk_widget_map (widget);
+}
+
+/** 
+ * gtk_window_set_screen:
+ * @window: a #GtkWindow.
+ * @screen: a #GdkScreen.
+ *
+ * Sets the #GdkScreen where the @window is displayed. If
+ * the @screen is equal to @window's current screen, this
+ * function does nothing. If it is not and the window is
+ * already mapped, it will be unmapped, and then remapped
+ * on the new screen.
+ *
+ * This function resets @window's visual to the system
+ * visual of the given @screen. If you want to use a
+ * different visual, consider using gtk_window_set_visual()
+ * instead.
+ *
+ * Since: 2.2
+ */
+void
+gtk_window_set_screen (GtkWindow *window,
+		       GdkScreen *screen)
+{
+  g_return_if_fail (GTK_IS_WINDOW (window));
+  g_return_if_fail (GDK_IS_SCREEN (screen));
+
+  if (screen == gdk_visual_get_screen (window->priv->visual))
+    return;
+
+  gtk_window_set_visual (window,
+                         gdk_screen_get_system_visual (screen));
 }
 
 static void
@@ -7582,8 +7651,8 @@ gtk_window_check_screen (GtkWindow *window)
 {
   GtkWindowPrivate *priv = window->priv;
 
-  if (priv->screen)
-    return priv->screen;
+  if (priv->visual)
+    return gdk_visual_get_screen (priv->visual);
   else
     {
       g_warning ("Screen for GtkWindow not set; you must always set\n"
@@ -7607,7 +7676,7 @@ gtk_window_get_screen (GtkWindow *window)
 {
   g_return_val_if_fail (GTK_IS_WINDOW (window), NULL);
 
-  return window->priv->screen;
+  return gdk_visual_get_screen (window->priv->visual);
 }
 
 /**

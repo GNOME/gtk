@@ -4483,6 +4483,7 @@ gtk_window_set_urgency_hint
 gtk_window_set_title
 gtk_window_set_transient_for
 gtk_window_set_type_hint
+gtk_window_set_visual
 gtk_window_set_wmclass
 gtk_window_stick
 gtk_window_unfullscreen
