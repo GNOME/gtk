@@ -3875,20 +3875,16 @@ gtk_calendar_set_display_options (GtkCalendar	       *calendar,
 	    }
 	}
 
-      if ((flags ^ priv->display_flags) & GTK_CALENDAR_WEEK_START_MONDAY)
-	g_warning ("GTK_CALENDAR_WEEK_START_MONDAY is ignored; the first day of the week is determined from the locale");
-      
       if ((flags ^ priv->display_flags) & GTK_CALENDAR_SHOW_DETAILS)
         resize++;
 
       priv->display_flags = flags;
       if (resize)
 	gtk_widget_queue_resize (GTK_WIDGET (calendar));
-      
-    } 
+    }
   else
     priv->display_flags = flags;
-  
+
   g_object_freeze_notify (G_OBJECT (calendar));
   if ((old_flags ^ priv->display_flags) & GTK_CALENDAR_SHOW_HEADING)
     g_object_notify (G_OBJECT (calendar), "show-heading");
