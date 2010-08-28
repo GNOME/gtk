@@ -4805,8 +4805,6 @@ gtk_widget_get_device_events
 gtk_widget_add_device_events
 gtk_widget_get_toplevel
 gtk_widget_get_ancestor
-gtk_widget_get_colormap
-gtk_widget_set_colormap
 gtk_widget_get_visual
 gtk_widget_get_pointer
 gtk_widget_is_ancestor

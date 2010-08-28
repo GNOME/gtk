@@ -452,7 +452,6 @@ static GQuark		quark_parent_window = 0;
 static GQuark		quark_pointer_window = 0;
 static GQuark		quark_shape_info = 0;
 static GQuark		quark_input_shape_info = 0;
-static GQuark		quark_colormap = 0;
 static GQuark		quark_pango_context = 0;
 static GQuark		quark_rc_style = 0;
 static GQuark		quark_accessible_object = 0;
@@ -549,7 +548,6 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   quark_pointer_window = g_quark_from_static_string ("gtk-pointer-window");
   quark_shape_info = g_quark_from_static_string ("gtk-shape-info");
   quark_input_shape_info = g_quark_from_static_string ("gtk-input-shape-info");
-  quark_colormap = g_quark_from_static_string ("gtk-colormap");
   quark_pango_context = g_quark_from_static_string ("gtk-pango-context");
   quark_rc_style = g_quark_from_static_string ("gtk-rc-style");
   quark_accessible_object = g_quark_from_static_string ("gtk-accessible-object");
@@ -8659,47 +8657,6 @@ gtk_widget_get_ancestor (GtkWidget *widget,
 }
 
 /**
- * gtk_widget_get_colormap:
- * @widget: a #GtkWidget
- * 
- * Gets the colormap that will be used to render @widget. No reference will
- * be added to the returned colormap; it should not be unreferenced.
- *
- * Return value: (transfer none): the colormap used by @widget
- **/
-GdkColormap*
-gtk_widget_get_colormap (GtkWidget *widget)
-{
-  GtkWidgetPrivate *priv;
-  GdkColormap *colormap;
-  GtkWidget *tmp_widget;
-  
-  g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
-
-  priv = widget->priv;
-
-  if (priv->window)
-    {
-      colormap = gdk_drawable_get_colormap (priv->window);
-      /* If window was destroyed previously, we'll get NULL here */
-      if (colormap)
-	return colormap;
-    }
-
-  tmp_widget = widget;
-  while (tmp_widget)
-    {
-      colormap = g_object_get_qdata (G_OBJECT (tmp_widget), quark_colormap);
-      if (colormap)
-	return colormap;
-
-      tmp_widget= tmp_widget->priv->parent;
-    }
-
-  return gdk_screen_get_default_colormap (gtk_widget_get_screen (widget));
-}
-
-/**
  * gtk_widget_get_visual:
  * @widget: a #GtkWidget
  * 
@@ -8746,32 +8703,6 @@ gtk_widget_get_settings (GtkWidget *widget)
   g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
   
   return gtk_settings_get_for_screen (gtk_widget_get_screen (widget));
-}
-
-/**
- * gtk_widget_set_colormap:
- * @widget: a #GtkWidget
- * @colormap: a colormap
- *
- * Sets the colormap for the widget to the given value. Widget must not
- * have been previously realized. This probably should only be used
- * from an <function>init()</function> function (i.e. from the constructor 
- * for the widget).
- **/
-void
-gtk_widget_set_colormap (GtkWidget   *widget,
-                         GdkColormap *colormap)
-{
-  g_return_if_fail (GTK_IS_WIDGET (widget));
-  g_return_if_fail (!gtk_widget_get_realized (widget));
-  g_return_if_fail (GDK_IS_COLORMAP (colormap));
-
-  g_object_ref (colormap);
-  
-  g_object_set_qdata_full (G_OBJECT (widget), 
-			   quark_colormap,
-			   colormap,
-			   g_object_unref);
 }
 
 /**

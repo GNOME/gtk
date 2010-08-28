@@ -731,7 +731,6 @@ GdkExtensionMode gtk_widget_get_extension_events (GtkWidget	*widget);
 GtkWidget*   gtk_widget_get_toplevel	(GtkWidget	*widget);
 GtkWidget*   gtk_widget_get_ancestor	(GtkWidget	*widget,
 					 GType		 widget_type);
-GdkColormap* gtk_widget_get_colormap	(GtkWidget	*widget);
 GdkVisual*   gtk_widget_get_visual	(GtkWidget	*widget);
 
 GdkScreen *   gtk_widget_get_screen      (GtkWidget *widget);
@@ -771,15 +770,6 @@ gint     gtk_widget_get_margin_bottom (GtkWidget *widget);
 void     gtk_widget_set_margin_bottom (GtkWidget *widget,
                                        gint       margin);
 
-
-/* The following functions must not be called on an already
- * realized widget. Because it is possible that somebody
- * can call get_colormap() or get_visual() and save the
- * result, these functions are probably only safe to
- * call in a widget's init() function.
- */
-void         gtk_widget_set_colormap    (GtkWidget      *widget,
-					 GdkColormap    *colormap);
 
 gint	     gtk_widget_get_events	(GtkWidget	*widget);
 GdkEventMask gtk_widget_get_device_events (GtkWidget	*widget,

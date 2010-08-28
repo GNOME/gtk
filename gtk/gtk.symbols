@@ -4213,7 +4213,6 @@ gtk_widget_get_child_requisition
 #endif
 gtk_widget_get_child_visible
 gtk_widget_get_clipboard
-gtk_widget_get_colormap
 gtk_widget_get_composite_name
 gtk_widget_get_default_colormap
 gtk_widget_get_default_direction
@@ -4300,7 +4299,6 @@ gtk_widget_set_accel_path
 gtk_widget_set_allocation
 gtk_widget_set_app_paintable
 gtk_widget_set_child_visible
-gtk_widget_set_colormap
 gtk_widget_set_composite_name
 gtk_widget_set_default_colormap
 gtk_widget_set_default_direction
