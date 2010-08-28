@@ -250,16 +250,16 @@ build_alpha_widgets (void)
 }
 
 static void
-on_alpha_screen_changed (GtkWidget *widget,
+on_alpha_screen_changed (GtkWindow *window,
 			 GdkScreen *old_screen,
 			 GtkWidget *label)
 {
-  GdkScreen *screen = gtk_widget_get_screen (widget);
-  GdkColormap *colormap = gdk_screen_get_rgba_colormap (screen);
+  GdkScreen *screen = gtk_widget_get_screen (GTK_WIDGET (window));
+  GdkVisual *visual = gdk_screen_get_rgba_visual (screen);
 
-  if (!colormap)
+  if (!visual)
     {
-      colormap = gdk_screen_get_default_colormap (screen);
+      visual = gdk_screen_get_system_visual (screen);
       gtk_label_set_markup (GTK_LABEL (label), "<b>Screen doesn't support alpha</b>");
     }
   else
@@ -267,7 +267,7 @@ on_alpha_screen_changed (GtkWidget *widget,
       gtk_label_set_markup (GTK_LABEL (label), "<b>Screen supports alpha</b>");
     }
 
-  gtk_widget_set_colormap (widget, colormap);
+  gtk_window_set_visual (window, visual);
 }
 
 static void
@@ -311,7 +311,7 @@ create_alpha_window (GtkWidget *widget)
 
       label = gtk_label_new (NULL);
       gtk_box_pack_start (GTK_BOX (vbox), label, TRUE, TRUE, 0);
-      on_alpha_screen_changed (window, NULL, label);
+      on_alpha_screen_changed (GTK_WINDOW (window), NULL, label);
       g_signal_connect (window, "screen-changed",
 			G_CALLBACK (on_alpha_screen_changed), label);
       
