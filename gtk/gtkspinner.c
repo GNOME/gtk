@@ -75,8 +75,6 @@ static void gtk_spinner_map            (GtkWidget       *widget);
 static void gtk_spinner_unmap          (GtkWidget       *widget);
 static gboolean gtk_spinner_expose     (GtkWidget       *widget,
                                         GdkEventExpose  *event);
-static void gtk_spinner_screen_changed (GtkWidget       *widget,
-                                        GdkScreen       *old_screen);
 static void gtk_spinner_style_set      (GtkWidget       *widget,
                                         GtkStyle        *prev_style);
 static void gtk_spinner_get_property   (GObject         *object,
@@ -113,7 +111,6 @@ gtk_spinner_class_init (GtkSpinnerClass *klass)
   widget_class->map = gtk_spinner_map;
   widget_class->unmap = gtk_spinner_unmap;
   widget_class->expose_event = gtk_spinner_expose;
-  widget_class->screen_changed = gtk_spinner_screen_changed;
   widget_class->style_set = gtk_spinner_style_set;
   widget_class->get_accessible = gtk_spinner_get_accessible;
 
@@ -341,26 +338,6 @@ gtk_spinner_unmap (GtkWidget *widget)
     gtk_spinner_remove_timeout (spinner);
 
   GTK_WIDGET_CLASS (gtk_spinner_parent_class)->unmap (widget);
-}
-
-static void
-gtk_spinner_screen_changed (GtkWidget* widget, GdkScreen* old_screen)
-{
-  GtkSpinner *spinner;
-  GdkScreen* new_screen;
-  GdkColormap* colormap;
-
-  spinner = GTK_SPINNER (widget);
-
-  new_screen = gtk_widget_get_screen (widget);
-  colormap = gdk_screen_get_rgba_colormap (new_screen);
-
-  if (!colormap)
-    {
-      colormap = gdk_screen_get_default_colormap (new_screen);
-    }
-
-  gtk_widget_set_colormap (widget, colormap);
 }
 
 static void
