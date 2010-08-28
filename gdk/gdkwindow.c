@@ -2173,6 +2173,46 @@ gdk_window_get_window_type (GdkWindow *window)
 }
 
 /**
+ * gdk_window_get_visual:
+ * @window: a #GdkWindow
+ * 
+ * Gets the #GdkVisual describing the pixel format of @window.
+ * 
+ * Return value: a #GdkVisual
+ **/
+GdkVisual*
+gdk_window_get_visual (GdkWindow *window)
+{
+  GdkWindowObject *private;
+
+  g_return_val_if_fail (GDK_IS_WINDOW (window), NULL);
+  
+  private = (GdkWindowObject *) window;
+
+  return private->visual;
+}
+
+/**
+ * gdk_window_get_screen:
+ * @window: a #GdkWindow
+ * 
+ * Gets the #GdkScreen associated with a #GdkWindow.
+ * 
+ * Return value: the #GdkScreen associated with @window
+ **/
+GdkScreen*
+gdk_window_get_screen (GdkWindow *window)
+{
+  GdkWindowObject *private;
+
+  g_return_val_if_fail (GDK_IS_WINDOW (window), NULL);
+
+  private = (GdkWindowObject *) window;
+
+  return gdk_visual_get_screen (private->visual);
+}
+
+/**
  * gdk_window_is_destroyed:
  * @window: a #GdkWindow
  *
