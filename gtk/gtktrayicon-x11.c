@@ -331,9 +331,14 @@ gtk_tray_icon_expose (GtkWidget      *widget,
     }
   else
     {
-      /* Clear to parent-relative pixmap */
-      gdk_window_clear_area (window, event->area.x, event->area.y,
-			     event->area.width, event->area.height);
+      /* Clear to parent-relative pixmap
+       * We need to use direct X access here because GDK doesn't know about
+       * the parent realtive pixmap. */
+      XClearArea (GDK_WINDOW_XDISPLAY (window),
+                  GDK_WINDOW_XID (window),
+                  event->area.x, event->area.y,
+		  event->area.width, event->area.height,
+                  False);
     }
 
   if (GTK_WIDGET_CLASS (gtk_tray_icon_parent_class)->expose_event)
