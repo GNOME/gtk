@@ -552,10 +552,9 @@ create_pattern (GtkWidget   *widget,
 	      attributes.wclass = GDK_INPUT_OUTPUT;
 	      attributes.event_mask = GDK_EXPOSURE_MASK;
 	      attributes.visual = gtk_widget_get_visual (widget);
-	      attributes.colormap = gtk_widget_get_colormap (widget);
 	      
 	      child = gdk_window_new (parent, &attributes,
-				      GDK_WA_X | GDK_WA_Y | GDK_WA_VISUAL | GDK_WA_COLORMAP);
+				      GDK_WA_X | GDK_WA_Y | GDK_WA_VISUAL);
 
 	      pattern_set_bg (widget, child, level);
 
