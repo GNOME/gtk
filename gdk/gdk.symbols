@@ -1148,6 +1148,14 @@ gdk_window_destroy_notify
 
 #ifdef GDK_WINDOWING_WIN32
 #if IN_HEADER(__GDK_WIN32_H__)
+#if IN_FILE(__GDK_WINDOW_WIN32_C__)
+gdk_win32_window_is_win32
+gdk_win32_begin_direct_draw_libgtk_only
+gdk_win32_end_direct_draw_libgtk_only
+#endif
+#endif
+
+#if IN_HEADER(__GDK_WIN32_H__)
 #if IN_FILE(__GDK_WIN32ID_C__)
 gdk_win32_handle_table_lookup
 #endif

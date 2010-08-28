@@ -3545,3 +3545,33 @@ gdk_window_impl_iface_init (GdkWindowImplIface *iface)
   iface->input_window_destroy = _gdk_input_window_destroy;
   iface->input_window_crossing = _gdk_input_crossing_event;
 }
+
+gboolean
+gdk_win32_window_is_win32 (GdkWindow *window)
+{
+  return GDK_WINDOW_IS_WIN32 (window);
+}
+
+GdkDrawable *
+gdk_win32_begin_direct_draw_libgtk_only (GdkDrawable *drawable,
+					 GdkGC *gc,
+					 gpointer *priv_data,
+					 gint *x_offset_out,
+					 gint *y_offset_out)
+{
+  GdkDrawable *impl;
+
+  impl = _gdk_drawable_begin_direct_draw (drawable,
+					  gc,
+					  priv_data,
+					  x_offset_out,
+					  y_offset_out);
+
+  return impl;
+}
+
+void
+gdk_win32_end_direct_draw_libgtk_only (gpointer priv_data)
+{
+  _gdk_drawable_end_direct_draw (priv_data);
+}

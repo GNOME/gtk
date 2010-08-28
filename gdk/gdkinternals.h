@@ -423,6 +423,14 @@ void       _gdk_gc_set_clip_region_internal (GdkGC     *gc,
 					     gboolean reset_origin);
 GdkSubwindowMode _gdk_gc_get_subwindow (GdkGC *gc);
 
+GdkDrawable *_gdk_drawable_begin_direct_draw (GdkDrawable *drawable,
+					      GdkGC *gc,
+					      gpointer *priv_data,
+					      gint *x_offset_out,
+					      gint *y_offset_out);
+void         _gdk_drawable_end_direct_draw (gpointer priv_data);
+
+
 /*****************************************
  * Interfaces provided by windowing code *
  *****************************************/
