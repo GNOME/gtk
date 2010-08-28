@@ -1385,7 +1385,7 @@ motif_set_targets (GdkDragContext *context)
   GdkDragContextPrivateX11 *private = PRIVATE_DATA (context);
   MotifDragInitiatorInfo info;
   gint i;
-  GdkDisplay *display = GDK_DRAWABLE_DISPLAY (context->source_window);
+  GdkDisplay *display = GDK_WINDOW_DISPLAY (context->source_window);
   
   info.byte_order = local_byte_order;
   info.protocol_version = 0;
@@ -1465,7 +1465,7 @@ motif_send_enter (GdkDragContext  *context,
 		  guint32          time)
 {
   GdkDragContextPrivateX11 *private = PRIVATE_DATA (context);
-  GdkDisplay *display = GDK_DRAWABLE_DISPLAY (context->source_window);
+  GdkDisplay *display = GDK_WINDOW_DISPLAY (context->source_window);
   XEvent xev;
 
   if (!G_LIKELY (GDK_DISPLAY_X11 (display)->trusted_client))
@@ -1500,7 +1500,7 @@ static void
 motif_send_leave (GdkDragContext  *context,
 		  guint32          time)
 {
-  GdkDisplay *display = GDK_DRAWABLE_DISPLAY (context->source_window);
+  GdkDisplay *display = GDK_WINDOW_DISPLAY (context->source_window);
   XEvent xev;
 
   xev.xclient.type = ClientMessage;
@@ -1532,7 +1532,7 @@ motif_send_motion (GdkDragContext  *context,
 		    guint32         time)
 {
   GdkDragContextPrivateX11 *private = PRIVATE_DATA (context);
-  GdkDisplay *display = GDK_DRAWABLE_DISPLAY (context->source_window);
+  GdkDisplay *display = GDK_WINDOW_DISPLAY (context->source_window);
   gboolean retval;
   XEvent xev;
 
@@ -1580,7 +1580,7 @@ static void
 motif_send_drop (GdkDragContext *context, guint32 time)
 {
   GdkDragContextPrivateX11 *private = PRIVATE_DATA (context);
-  GdkDisplay *display = GDK_DRAWABLE_DISPLAY (context->source_window);
+  GdkDisplay *display = GDK_WINDOW_DISPLAY (context->source_window);
   XEvent xev;
 
   xev.xclient.type = ClientMessage;
@@ -1685,7 +1685,7 @@ motif_drag_context_new (GdkWindow *dest_window,
 {
   GdkDragContext *new_context;
   GdkDragContextPrivateX11 *private;
-  GdkDisplay *display = GDK_DRAWABLE_DISPLAY (dest_window);
+  GdkDisplay *display = GDK_WINDOW_DISPLAY (dest_window);
   GdkDisplayX11 *display_x11 = GDK_DISPLAY_X11 (display);
 
   /* FIXME, current_dest_drag really shouldn't be NULL'd
@@ -1752,7 +1752,7 @@ motif_top_level_enter (GdkEvent *event,
 		       guint32   source_window, 
 		       guint32   atom)
 {
-  GdkDisplayX11 *display_x11 = GDK_DISPLAY_X11 (GDK_DRAWABLE_DISPLAY (event->any.window));
+  GdkDisplayX11 *display_x11 = GDK_DISPLAY_X11 (GDK_WINDOW_DISPLAY (event->any.window));
   GdkDragContext *new_context;
 
   GDK_NOTE(DND, g_message ("Motif DND top level enter: flags: %#4x time: %d source_widow: %#4x atom: %d",
@@ -1776,7 +1776,7 @@ motif_top_level_leave (GdkEvent *event,
 		       guint16   flags, 
 		       guint32   timestamp)
 {
-  GdkDisplayX11 *display_x11 = GDK_DISPLAY_X11 (GDK_DRAWABLE_DISPLAY (event->any.window));
+  GdkDisplayX11 *display_x11 = GDK_DISPLAY_X11 (GDK_WINDOW_DISPLAY (event->any.window));
 
   GDK_NOTE(DND, g_message ("Motif DND top level leave: flags: %#4x time: %d",
 			   flags, timestamp));
@@ -1805,7 +1805,7 @@ motif_motion (GdkEvent *event,
 	      gint16    y_root)
 {
   GdkDragContextPrivateX11 *private;
-  GdkDisplayX11 *display_x11 = GDK_DISPLAY_X11 (GDK_DRAWABLE_DISPLAY (event->any.window));
+  GdkDisplayX11 *display_x11 = GDK_DISPLAY_X11 (GDK_WINDOW_DISPLAY (event->any.window));
   
   GDK_NOTE(DND, g_message ("Motif DND motion: flags: %#4x time: %d (%d, %d)",
 			   flags, timestamp, x_root, y_root));
@@ -1844,7 +1844,7 @@ motif_operation_changed (GdkEvent *event,
 			 guint32   timestamp)
 {
   GdkDragContextPrivateX11 *private;
-  GdkDisplayX11 *display_x11 = GDK_DISPLAY_X11 (GDK_DRAWABLE_DISPLAY (event->any.window));
+  GdkDisplayX11 *display_x11 = GDK_DISPLAY_X11 (GDK_WINDOW_DISPLAY (event->any.window));
   GDK_NOTE(DND, g_message ("Motif DND operation changed: flags: %#4x time: %d",
 			   flags, timestamp));
 
@@ -1883,7 +1883,7 @@ motif_drop_start (GdkEvent *event,
 		  gint16    y_root)
 {
   GdkDragContext *new_context;
-  GdkDisplayX11 *display_x11 = GDK_DISPLAY_X11 (GDK_DRAWABLE_DISPLAY (event->any.window));
+  GdkDisplayX11 *display_x11 = GDK_DISPLAY_X11 (GDK_WINDOW_DISPLAY (event->any.window));
 
   GDK_NOTE(DND, g_message ("Motif DND drop start: flags: %#4x time: %d (%d, %d) source_widow: %#4x atom: %d",
 			   flags, timestamp, x_root, y_root, source_window, atom));
@@ -2216,7 +2216,7 @@ xdnd_set_targets (GdkDragContext *context)
   GList *tmp_list = context->targets;
   gint i;
   gint n_atoms = g_list_length (context->targets);
-  GdkDisplay *display = GDK_DRAWABLE_DISPLAY (context->source_window);
+  GdkDisplay *display = GDK_WINDOW_DISPLAY (context->source_window);
 
   atomlist = g_new (Atom, n_atoms);
   i = 0;
@@ -2246,7 +2246,7 @@ xdnd_set_actions (GdkDragContext *context)
   gint i;
   gint n_atoms;
   guint actions;
-  GdkDisplay *display = GDK_DRAWABLE_DISPLAY (context->source_window);
+  GdkDisplay *display = GDK_WINDOW_DISPLAY (context->source_window);
 
   if (!xdnd_actions_initialized)
     xdnd_initialize_actions();
@@ -2334,9 +2334,9 @@ static GdkDisplay *
 gdk_drag_context_get_display (GdkDragContext *context)
 {
   if (context->source_window)
-    return GDK_DRAWABLE_DISPLAY (context->source_window);
+    return GDK_WINDOW_DISPLAY (context->source_window);
   else if (context->dest_window)
-    return GDK_DRAWABLE_DISPLAY (context->dest_window);
+    return GDK_WINDOW_DISPLAY (context->dest_window);
 
   g_assert_not_reached ();
   return NULL;
@@ -2414,7 +2414,7 @@ xdnd_send_enter (GdkDragContext *context)
 {
   XEvent xev;
   GdkDragContextPrivateX11 *private = PRIVATE_DATA (context);
-  GdkDisplay *display = GDK_DRAWABLE_DISPLAY (context->dest_window);
+  GdkDisplay *display = GDK_WINDOW_DISPLAY (context->dest_window);
 
   xev.xclient.type = ClientMessage;
   xev.xclient.message_type = gdk_x11_get_xatom_by_name_for_display (display, "XdndEnter");
@@ -2465,7 +2465,7 @@ xdnd_send_enter (GdkDragContext *context)
 static void
 xdnd_send_leave (GdkDragContext *context)
 {
-  GdkDisplay *display = GDK_DRAWABLE_DISPLAY (context->source_window);
+  GdkDisplay *display = GDK_WINDOW_DISPLAY (context->source_window);
   XEvent xev;
 
   GdkDragContextPrivateX11 *private = PRIVATE_DATA (context);
@@ -2497,7 +2497,7 @@ static void
 xdnd_send_drop (GdkDragContext *context, guint32 time)
 {
   GdkDragContextPrivateX11 *private = PRIVATE_DATA (context);
-  GdkDisplay *display = GDK_DRAWABLE_DISPLAY (context->source_window);
+  GdkDisplay *display = GDK_WINDOW_DISPLAY (context->source_window);
   XEvent xev;
 
   xev.xclient.type = ClientMessage;
@@ -2531,7 +2531,7 @@ xdnd_send_motion (GdkDragContext *context,
 		  guint32         time)
 {
   GdkDragContextPrivateX11 *private = PRIVATE_DATA (context);
-  GdkDisplay *display = GDK_DRAWABLE_DISPLAY (context->source_window);
+  GdkDisplay *display = GDK_WINDOW_DISPLAY (context->source_window);
   XEvent xev;
 
   xev.xclient.type = ClientMessage;
@@ -2853,7 +2853,7 @@ xdnd_enter_filter (GdkXEvent *xev,
   get_types = ((xevent->xclient.data.l[1] & 1) != 0);
   version = (xevent->xclient.data.l[1] & 0xff000000) >> 24;
   
-  display = GDK_DRAWABLE_DISPLAY (event->any.window);
+  display = GDK_WINDOW_DISPLAY (event->any.window);
   display_x11 = GDK_DISPLAY_X11 (display);
 
   xdnd_precache_atoms (display);
@@ -2975,7 +2975,7 @@ xdnd_leave_filter (GdkXEvent *xev,
 	    g_message ("XdndLeave: source_window: %#x",
 		       source_window));
 
-  display = GDK_DRAWABLE_DISPLAY (event->any.window);
+  display = GDK_WINDOW_DISPLAY (event->any.window);
   display_x11 = GDK_DISPLAY_X11 (display);
 
   xdnd_precache_atoms (display);
@@ -3020,7 +3020,7 @@ xdnd_position_filter (GdkXEvent *xev,
 	    g_message ("XdndPosition: source_window: %#x position: (%d, %d)  time: %d  action: %ld",
 		       source_window, x_root, y_root, time, action));
 
-  display = GDK_DRAWABLE_DISPLAY (event->any.window);
+  display = GDK_WINDOW_DISPLAY (event->any.window);
   display_x11 = GDK_DISPLAY_X11 (display);
   
   xdnd_precache_atoms (display);
@@ -3072,7 +3072,7 @@ xdnd_drop_filter (GdkXEvent *xev,
 	    g_message ("XdndDrop: source_window: %#x  time: %d",
 		       source_window, time));
 
-  display = GDK_DRAWABLE_DISPLAY (event->any.window);
+  display = GDK_WINDOW_DISPLAY (event->any.window);
   display_x11 = GDK_DISPLAY_X11 (display);
 
   xdnd_precache_atoms (display);
@@ -3720,7 +3720,7 @@ gdk_drag_status (GdkDragContext   *context,
   g_return_if_fail (context != NULL);
 
   private = PRIVATE_DATA (context);
-  display = GDK_DRAWABLE_DISPLAY (context->source_window);
+  display = GDK_WINDOW_DISPLAY (context->source_window);
   
   context->action = action;
 
@@ -3847,7 +3847,7 @@ gdk_drop_reply (GdkDragContext   *context,
   
   if (context->protocol == GDK_DRAG_PROTO_MOTIF)
     {
-      GdkDisplay *display = GDK_DRAWABLE_DISPLAY (context->source_window);
+      GdkDisplay *display = GDK_WINDOW_DISPLAY (context->source_window);
       XEvent xev;
 
       xev.xclient.type = ClientMessage;
@@ -3898,7 +3898,7 @@ gdk_drop_finish (GdkDragContext   *context,
 
   if (context->protocol == GDK_DRAG_PROTO_XDND)
     {
-      GdkDisplay *display = GDK_DRAWABLE_DISPLAY (context->source_window);
+      GdkDisplay *display = GDK_WINDOW_DISPLAY (context->source_window);
       XEvent xev;
 
       xev.xclient.type = ClientMessage;
@@ -4000,7 +4000,7 @@ gdk_drag_get_selection (GdkDragContext *context)
   g_return_val_if_fail (context != NULL, GDK_NONE);
 
   if (context->protocol == GDK_DRAG_PROTO_MOTIF)
-    return gdk_x11_xatom_to_atom_for_display (GDK_DRAWABLE_DISPLAY (context->source_window),
+    return gdk_x11_xatom_to_atom_for_display (GDK_WINDOW_DISPLAY (context->source_window),
 					      (PRIVATE_DATA (context))->motif_selection);
   else if (context->protocol == GDK_DRAG_PROTO_XDND)
     return gdk_atom_intern_static_string ("XdndSelection");
