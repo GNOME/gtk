@@ -104,7 +104,6 @@ struct _GtkStyle
 
   gint attach_count;
 
-  gint depth;
   GdkColormap *colormap;
   PangoFontDescription *private_font_desc; /* Font description for style->private_font or %NULL */
 
@@ -120,9 +119,9 @@ struct _GtkStyleClass
 {
   GObjectClass parent_class;
 
-  /* Initialize for a particular colormap/depth
-   * combination. style->colormap/style->depth will have
-   * been set at this point. Will typically chain to parent.
+  /* Initialize for a particular colormap. style->colormap
+   * will have been set at this point. Will typically chain
+   * to parent.
    */
   void (*realize)               (GtkStyle               *style);
 

@@ -402,7 +402,6 @@ gtk_style_init (GtkStyle *style)
   
   style->attach_count = 0;
   style->colormap = NULL;
-  style->depth = -1;
   
   style->black.red = 0;
   style->black.green = 0;
@@ -488,7 +487,7 @@ gtk_style_class_init (GtkStyleClass *klass)
    * @style: the object which received the signal
    *
    * Emitted when the style has been initialized for a particular
-   * colormap and depth. Connecting to this signal is probably seldom
+   * colormap. Connecting to this signal is probably seldom
    * useful since most of the time applications and widgets only
    * deal with styles that have been already realized.
    *
@@ -506,7 +505,7 @@ gtk_style_class_init (GtkStyleClass *klass)
    * @style: the object which received the signal
    *
    * Emitted when the aspects of the style specific to a particular colormap
-   * and depth are being cleaned up. A connection to this signal can be useful
+   * is being cleaned up. A connection to this signal can be useful
    * if a widget wants to cache objects as object data on #GtkStyle.
    * This signal provides a convenient place to free such cached objects.
    *
@@ -775,7 +774,6 @@ gtk_style_realize (GtkStyle    *style,
                    GdkColormap *colormap)
 {
   style->colormap = g_object_ref (colormap);
-  style->depth = gdk_colormap_get_visual (colormap)->depth;
 
   g_signal_emit (style, realize_signal, 0);
 }
