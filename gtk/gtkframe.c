@@ -55,7 +55,6 @@ enum {
   PROP_LABEL,
   PROP_LABEL_XALIGN,
   PROP_LABEL_YALIGN,
-  PROP_SHADOW,
   PROP_SHADOW_TYPE,
   PROP_LABEL_WIDGET
 };
@@ -157,13 +156,6 @@ gtk_frame_class_init (GtkFrameClass *class)
 						       0.5,
 						       GTK_PARAM_READWRITE));
   g_object_class_install_property (gobject_class,
-                                   PROP_SHADOW,
-                                   g_param_spec_enum ("shadow", NULL,
-                                                      P_("Deprecated property, use shadow_type instead"),
-						      GTK_TYPE_SHADOW_TYPE,
-						      GTK_SHADOW_ETCHED_IN,
-                                                      GTK_PARAM_READWRITE));
-  g_object_class_install_property (gobject_class,
                                    PROP_SHADOW_TYPE,
                                    g_param_spec_enum ("shadow-type",
                                                       P_("Frame shadow"),
@@ -249,7 +241,6 @@ gtk_frame_set_property (GObject         *object,
       gtk_frame_set_label_align (frame, priv->label_xalign,
 				 g_value_get_float (value));
       break;
-    case PROP_SHADOW:
     case PROP_SHADOW_TYPE:
       gtk_frame_set_shadow_type (frame, g_value_get_enum (value));
       break;
@@ -282,7 +273,6 @@ gtk_frame_get_property (GObject         *object,
     case PROP_LABEL_YALIGN:
       g_value_set_float (value, priv->label_yalign);
       break;
-    case PROP_SHADOW:
     case PROP_SHADOW_TYPE:
       g_value_set_enum (value, priv->shadow_type);
       break;

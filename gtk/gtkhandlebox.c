@@ -69,7 +69,6 @@ struct _GtkHandleBoxPrivate
 
 enum {
   PROP_0,
-  PROP_SHADOW,
   PROP_SHADOW_TYPE,
   PROP_HANDLE_POSITION,
   PROP_SNAP_EDGE,
@@ -185,13 +184,6 @@ gtk_handle_box_class_init (GtkHandleBoxClass *class)
   gobject_class->get_property = gtk_handle_box_get_property;
   
   g_object_class_install_property (gobject_class,
-                                   PROP_SHADOW,
-                                   g_param_spec_enum ("shadow", NULL,
-                                                      P_("Deprecated property, use shadow_type instead"),
-						      GTK_TYPE_SHADOW_TYPE,
-						      GTK_SHADOW_OUT,
-                                                      GTK_PARAM_READWRITE));
-  g_object_class_install_property (gobject_class,
                                    PROP_SHADOW_TYPE,
                                    g_param_spec_enum ("shadow-type",
                                                       P_("Shadow type"),
@@ -306,7 +298,6 @@ gtk_handle_box_set_property (GObject         *object,
 
   switch (prop_id)
     {
-    case PROP_SHADOW:
     case PROP_SHADOW_TYPE:
       gtk_handle_box_set_shadow_type (handle_box, g_value_get_enum (value));
       break;
@@ -337,7 +328,6 @@ gtk_handle_box_get_property (GObject         *object,
 
   switch (prop_id)
     {
-    case PROP_SHADOW:
     case PROP_SHADOW_TYPE:
       g_value_set_enum (value, priv->shadow_type);
       break;
