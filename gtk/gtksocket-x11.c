@@ -129,7 +129,7 @@ _gtk_socket_windowing_send_key_event (GtkSocket *socket,
 				      gboolean   mask_key_presses)
 {
   XKeyEvent xkey;
-  GdkScreen *screen = gdk_drawable_get_screen (socket->plug_window);
+  GdkScreen *screen = gdk_window_get_screen (socket->plug_window);
 
   memset (&xkey, 0, sizeof (xkey));
   xkey.type = (gdk_event->type == GDK_KEY_PRESS) ? KeyPress : KeyRelease;

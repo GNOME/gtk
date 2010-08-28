@@ -701,7 +701,7 @@ beep_window (GdkWindow *window)
     }
   else
     {
-      GdkScreen *screen = gdk_drawable_get_screen (GDK_DRAWABLE (window));
+      GdkScreen *screen = gdk_window_get_screen (GDK_DRAWABLE (window));
       gboolean   beep;
 
       g_object_get (gtk_settings_get_for_screen (screen),

@@ -678,7 +678,7 @@ gtk_style_attach (GtkStyle  *style,
   g_return_val_if_fail (GTK_IS_STYLE (style), NULL);
   g_return_val_if_fail (window != NULL, NULL);
   
-  visual = gdk_drawable_get_visual (window);
+  visual = gdk_window_get_visual (window);
   
   if (!style->styles)
     style->styles = g_slist_append (NULL, style);

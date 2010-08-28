@@ -1685,7 +1685,7 @@ gtk_drag_set_icon_name (GdkDragContext *context,
   g_return_if_fail (context->is_source);
   g_return_if_fail (icon_name != NULL);
 
-  screen = gdk_drawable_get_screen (context->source_window);
+  screen = gdk_window_get_screen (context->source_window);
   g_return_if_fail (screen != NULL);
 
   settings = gtk_settings_get_for_screen (screen);

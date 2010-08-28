@@ -169,7 +169,7 @@ _gtk_plug_windowing_filter_func (GdkXEvent *gdk_xevent,
 	{
 	  HWND parent = GetAncestor (msg->hwnd, GA_PARENT);
 	  gboolean was_embedded = priv->socket_window != NULL;
-	  GdkScreen *screen = gdk_drawable_get_screen (event->any.window);
+	  GdkScreen *screen = gdk_window_get_screen (event->any.window);
 	  GdkDisplay *display = gdk_screen_get_display (screen);
 
 	  GTK_NOTE (PLUGSOCKET, g_printerr ("WM_WINDOWPOSCHANGED: hwnd=%p GA_PARENT=%p socket_window=%p\n", msg->hwnd, parent, priv->socket_window));

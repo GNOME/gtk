@@ -8675,7 +8675,7 @@ gtk_widget_get_visual (GtkWidget *widget)
     {
       if (gtk_widget_get_has_window (w) &&
           w->priv->window)
-        return gdk_drawable_get_visual (w->priv->window);
+        return gdk_window_get_visual (w->priv->window);
 
       if (GTK_IS_WINDOW (w))
         return _gtk_window_get_visual (GTK_WINDOW (w));
@@ -9350,7 +9350,7 @@ _gtk_widget_set_device_window (GtkWidget *widget,
   if (!gtk_widget_get_realized (widget))
     return;
 
-  screen = gdk_drawable_get_screen (priv->window);
+  screen = gdk_window_get_screen (priv->window);
   device_window = g_object_get_qdata (G_OBJECT (screen), quark_pointer_window);
 
   if (G_UNLIKELY (!device_window))
@@ -9394,7 +9394,7 @@ _gtk_widget_get_device_window (GtkWidget *widget,
   if (!gtk_widget_get_realized (widget))
     return NULL;
 
-  screen = gdk_drawable_get_screen (priv->window);
+  screen = gdk_window_get_screen (priv->window);
   device_window = g_object_get_qdata (G_OBJECT (screen), quark_pointer_window);
 
   if (G_UNLIKELY (!device_window))
@@ -9438,7 +9438,7 @@ _gtk_widget_list_devices (GtkWidget *widget)
   if (!gtk_widget_get_realized (widget))
     return NULL;
 
-  screen = gdk_drawable_get_screen (priv->window);
+  screen = gdk_window_get_screen (priv->window);
   device_window = g_object_get_qdata (G_OBJECT (screen), quark_pointer_window);
 
   if (G_UNLIKELY (!device_window))

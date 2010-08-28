@@ -1076,7 +1076,7 @@ gtk_drag_finish (GdkDragContext *context,
 
   if (target != GDK_NONE)
     {
-      GtkWidget *selection_widget = gtk_drag_get_ipc_widget_for_screen (gdk_drawable_get_screen (context->source_window));
+      GtkWidget *selection_widget = gtk_drag_get_ipc_widget_for_screen (gdk_window_get_screen (context->source_window));
 
       g_object_ref (context);
       
@@ -2143,7 +2143,7 @@ gtk_drag_dest_motion (GtkWidget	     *widget,
 	{
 	  gdk_drag_find_window_for_screen (info->proxy_source->context,
 					   NULL,
-					   gdk_drawable_get_screen (current_event->dnd.window),
+					   gdk_window_get_screen (current_event->dnd.window),
 					   current_event->dnd.x_root, 
 					   current_event->dnd.y_root,
 					   &dest_window, &proto);
@@ -2265,7 +2265,7 @@ gtk_drag_dest_drop (GtkWidget	     *widget,
 	    {
 	      gdk_drag_find_window_for_screen (info->proxy_source->context,
 					       NULL,
-					       gdk_drawable_get_screen (current_event->dnd.window),
+					       gdk_window_get_screen (current_event->dnd.window),
 					       current_event->dnd.x_root, 
 					       current_event->dnd.y_root,
 					       &dest_window, &proto);
@@ -3127,7 +3127,7 @@ set_icon_stock_pixbuf (GdkDragContext    *context,
   g_return_if_fail (pixbuf != NULL || stock_id != NULL);
   g_return_if_fail (pixbuf == NULL || stock_id == NULL);
 
-  screen = gdk_drawable_get_screen (context->source_window);
+  screen = gdk_window_get_screen (context->source_window);
 
   window = gtk_window_new (GTK_WINDOW_POPUP);
   gtk_window_set_type_hint (GTK_WINDOW (window), GDK_WINDOW_TYPE_HINT_DND);
@@ -3295,7 +3295,7 @@ gtk_drag_set_icon_surface (GdkDragContext    *context,
   _gtk_cairo_surface_extents (surface, &extents);
 
 
-  screen = gdk_drawable_get_screen (context->source_window);
+  screen = gdk_window_get_screen (context->source_window);
 
   window = gtk_window_new (GTK_WINDOW_POPUP);
   gtk_window_set_type_hint (GTK_WINDOW (window), GDK_WINDOW_TYPE_HINT_DND);
@@ -3385,7 +3385,7 @@ gtk_drag_set_icon_name (GdkDragContext *context,
   g_return_if_fail (context->is_source);
   g_return_if_fail (icon_name != NULL);
 
-  screen = gdk_drawable_get_screen (context->source_window);
+  screen = gdk_window_get_screen (context->source_window);
   g_return_if_fail (screen != NULL);
 
   settings = gtk_settings_get_for_screen (screen);

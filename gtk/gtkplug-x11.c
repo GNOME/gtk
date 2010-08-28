@@ -223,7 +223,7 @@ _gtk_plug_windowing_filter_func (GdkXEvent *gdk_xevent,
 				 GdkEvent  *event,
 				 gpointer   data)
 {
-  GdkScreen *screen = gdk_drawable_get_screen (event->any.window);
+  GdkScreen *screen = gdk_window_get_screen (event->any.window);
   GdkDisplay *display = gdk_screen_get_display (screen);
   GtkPlug *plug = GTK_PLUG (data);
   GtkPlugPrivate *priv = plug->priv;

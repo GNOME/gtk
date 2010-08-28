@@ -495,7 +495,7 @@ get_im (GdkWindow *client_window,
 {
   GSList *tmp_list;
   GtkXIMInfo *info;
-  GdkScreen *screen = gdk_drawable_get_screen (client_window);
+  GdkScreen *screen = gdk_window_get_screen (client_window);
 
   info = NULL;
   tmp_list = open_ims;
@@ -716,7 +716,7 @@ gtk_im_context_xim_filter_keypress (GtkIMContext *context,
   KeySym keysym;
   Status status;
   gboolean result = FALSE;
-  GdkWindow *root_window = gdk_screen_get_root_window (gdk_drawable_get_screen (event->window));
+  GdkWindow *root_window = gdk_screen_get_root_window (gdk_window_get_screen (event->window));
 
   XKeyPressedEvent xevent;
 

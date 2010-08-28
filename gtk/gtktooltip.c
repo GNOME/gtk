@@ -1412,7 +1412,7 @@ tooltips_enabled (GdkWindow *window)
   GdkScreen *screen;
   GtkSettings *settings;
 
-  screen = gdk_drawable_get_screen (window);
+  screen = gdk_window_get_screen (window);
   settings = gtk_settings_get_for_screen (screen);
 
   g_object_get (settings,
