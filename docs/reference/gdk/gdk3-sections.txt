@@ -288,7 +288,6 @@ GdkDrawable
 gdk_drawable_get_display
 gdk_drawable_get_screen
 gdk_drawable_get_visual
-gdk_drawable_set_colormap
 gdk_drawable_get_colormap
 gdk_drawable_get_depth
 gdk_drawable_get_size

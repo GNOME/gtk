@@ -53,9 +53,6 @@ static cairo_surface_t *gdk_win32_create_cairo_surface (GdkDrawable *drawable,
                                                         int          width,
                                                         int          height);
      
-static void gdk_win32_set_colormap   (GdkDrawable    *drawable,
-				      GdkColormap    *colormap);
-
 static GdkColormap* gdk_win32_get_colormap   (GdkDrawable    *drawable);
 
 static gint         gdk_win32_get_depth      (GdkDrawable    *drawable);
@@ -82,7 +79,6 @@ _gdk_drawable_impl_win32_class_init (GdkDrawableImplWin32Class *klass)
   drawable_class->ref_cairo_surface = gdk_win32_ref_cairo_surface;
   drawable_class->create_cairo_surface = gdk_win32_create_cairo_surface;
   
-  drawable_class->set_colormap = gdk_win32_set_colormap;
   drawable_class->get_colormap = gdk_win32_get_colormap;
 
   drawable_class->get_depth = gdk_win32_get_depth;
@@ -98,8 +94,6 @@ _gdk_drawable_impl_win32_init (GdkDrawableImplWin32 *impl)
 static void
 gdk_drawable_impl_win32_finalize (GObject *object)
 {
-  gdk_drawable_set_colormap (GDK_DRAWABLE (object), NULL);
-
   G_OBJECT_CLASS (_gdk_drawable_impl_win32_parent_class)->finalize (object);
 }
 
@@ -111,22 +105,6 @@ static GdkColormap*
 gdk_win32_get_colormap (GdkDrawable *drawable)
 {
   return GDK_DRAWABLE_IMPL_WIN32 (drawable)->colormap;
-}
-
-static void
-gdk_win32_set_colormap (GdkDrawable *drawable,
-			GdkColormap *colormap)
-{
-  GdkDrawableImplWin32 *impl = GDK_DRAWABLE_IMPL_WIN32 (drawable);
-
-  if (impl->colormap == colormap)
-    return;
-  
-  if (impl->colormap)
-    g_object_unref (impl->colormap);
-  impl->colormap = colormap;
-  if (impl->colormap)
-    g_object_ref (impl->colormap);
 }
 
 /* Drawing

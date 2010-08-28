@@ -541,7 +541,6 @@ gdk_drawable_get_size
 gdk_drawable_get_type G_GNUC_CONST
 gdk_drawable_get_visible_region
 gdk_drawable_get_visual
-gdk_drawable_set_colormap
 #endif
 #endif
 

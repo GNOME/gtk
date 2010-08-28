@@ -151,29 +151,6 @@ gdk_drawable_get_display (GdkDrawable *drawable)
 }
 	
 /**
- * gdk_drawable_set_colormap:
- * @drawable: a #GdkDrawable
- * @colormap: a #GdkColormap
- *
- * Sets the colormap associated with @drawable. Normally this will
- * happen automatically when the drawable is created; you only need to
- * use this function if the drawable-creating function did not have a
- * way to determine the colormap, and you then use drawable operations
- * that require a colormap. The colormap for all drawables and
- * graphics contexts you intend to use together should match.
- **/
-void
-gdk_drawable_set_colormap (GdkDrawable *drawable,
-                           GdkColormap *cmap)
-{
-  g_return_if_fail (GDK_IS_DRAWABLE (drawable));
-  g_return_if_fail (cmap == NULL || gdk_drawable_get_depth (drawable)
-                    == cmap->visual->depth);
-
-  GDK_DRAWABLE_GET_CLASS (drawable)->set_colormap (drawable, cmap);
-}
-
-/**
  * gdk_drawable_get_colormap:
  * @drawable: a #GdkDrawable
  * 

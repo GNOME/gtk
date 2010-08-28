@@ -38,8 +38,6 @@
 #include "gdkenumtypes.h"
 
 static GdkColormap* gdk_window_impl_win32_get_colormap (GdkDrawable *drawable);
-static void         gdk_window_impl_win32_set_colormap (GdkDrawable *drawable,
-							GdkColormap *cmap);
 static void gdk_window_impl_win32_init       (GdkWindowImplWin32      *window);
 static void gdk_window_impl_win32_class_init (GdkWindowImplWin32Class *klass);
 static void gdk_window_impl_win32_finalize   (GObject                 *object);
@@ -134,7 +132,6 @@ gdk_window_impl_win32_class_init (GdkWindowImplWin32Class *klass)
 
   object_class->finalize = gdk_window_impl_win32_finalize;
 
-  drawable_class->set_colormap = gdk_window_impl_win32_set_colormap;
   drawable_class->get_colormap = gdk_window_impl_win32_get_colormap;
 }
 
@@ -209,28 +206,6 @@ gdk_window_impl_win32_get_colormap (GdkDrawable *drawable)
     }
   
   return drawable_impl->colormap;
-}
-
-static void
-gdk_window_impl_win32_set_colormap (GdkDrawable *drawable,
-				    GdkColormap *cmap)
-{
-  GdkWindowImplWin32 *impl;
-  GdkDrawableImplWin32 *draw_impl;
-  
-  g_return_if_fail (GDK_IS_WINDOW_IMPL_WIN32 (drawable));
-
-  impl = GDK_WINDOW_IMPL_WIN32 (drawable);
-  draw_impl = GDK_DRAWABLE_IMPL_WIN32 (drawable);
-
-  /* chain up */
-  GDK_DRAWABLE_CLASS (parent_class)->set_colormap (drawable, cmap);
-  
-  if (cmap)
-    {
-      /* XXX */
-      g_print ("gdk_window_impl_win32_set_colormap: XXX\n");
-    }
 }
 
 void

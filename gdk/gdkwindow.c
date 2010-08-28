@@ -230,8 +230,6 @@ static void   gdk_window_real_get_size  (GdkDrawable     *drawable,
 static GdkVisual*   gdk_window_real_get_visual   (GdkDrawable *drawable);
 static gint         gdk_window_real_get_depth    (GdkDrawable *drawable);
 static GdkScreen*   gdk_window_real_get_screen   (GdkDrawable *drawable);
-static void         gdk_window_real_set_colormap (GdkDrawable *drawable,
-						  GdkColormap *cmap);
 static GdkColormap* gdk_window_real_get_colormap (GdkDrawable *drawable);
 
 static cairo_region_t*   gdk_window_get_clip_region        (GdkDrawable *drawable);
@@ -381,7 +379,6 @@ gdk_window_class_init (GdkWindowObjectClass *klass)
   drawable_class->get_depth = gdk_window_real_get_depth;
   drawable_class->get_screen = gdk_window_real_get_screen;
   drawable_class->get_size = gdk_window_real_get_size;
-  drawable_class->set_colormap = gdk_window_real_set_colormap;
   drawable_class->get_colormap = gdk_window_real_get_colormap;
   drawable_class->get_visual = gdk_window_real_get_visual;
   drawable_class->ref_cairo_surface = gdk_window_ref_cairo_surface;
@@ -2059,8 +2056,6 @@ _gdk_window_destroy_hierarchy (GdkWindow *window,
 
 	  window_remove_filters (window);
 
-	  gdk_drawable_set_colormap (GDK_DRAWABLE (window), NULL);
-
 	  window_remove_from_pointer_info (window, display);
 
 	  if (private->clip_region)
@@ -3642,27 +3637,6 @@ static GdkScreen*
 gdk_window_real_get_screen (GdkDrawable *drawable)
 {
   return gdk_drawable_get_screen (GDK_WINDOW_OBJECT (drawable)->impl);
-}
-
-static void
-gdk_window_real_set_colormap (GdkDrawable *drawable,
-			      GdkColormap *cmap)
-{
-  GdkWindowObject *private;
-
-  g_return_if_fail (GDK_IS_WINDOW (drawable));
-
-  if (GDK_WINDOW_DESTROYED (drawable))
-    return;
-
-  private = (GdkWindowObject *)drawable;
-
-  /* different colormap than parent, requires native window */
-  if (!private->input_only &&
-      cmap != gdk_drawable_get_colormap ((GdkDrawable *)(private->parent)))
-    gdk_window_ensure_native ((GdkWindow *)drawable);
-
-  gdk_drawable_set_colormap (private->impl, cmap);
 }
 
 static GdkColormap*

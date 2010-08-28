@@ -112,8 +112,6 @@ static void     gdk_window_x11_set_background     (GdkWindow      *window,
                                                    cairo_pattern_t *pattern);
 
 static GdkColormap* gdk_window_impl_x11_get_colormap (GdkDrawable *drawable);
-static void         gdk_window_impl_x11_set_colormap (GdkDrawable *drawable,
-						      GdkColormap *cmap);
 static void        gdk_window_impl_x11_finalize   (GObject            *object);
 static void        gdk_window_impl_iface_init     (GdkWindowImplIface *iface);
 
@@ -182,7 +180,6 @@ gdk_window_impl_x11_class_init (GdkWindowImplX11Class *klass)
   
   object_class->finalize = gdk_window_impl_x11_finalize;
 
-  drawable_class->set_colormap = gdk_window_impl_x11_set_colormap;
   drawable_class->get_colormap = gdk_window_impl_x11_get_colormap;
 }
 
@@ -453,35 +450,6 @@ gdk_window_impl_x11_get_colormap (GdkDrawable *drawable)
   
   return drawable_impl->colormap;
 }
-
-static void
-gdk_window_impl_x11_set_colormap (GdkDrawable *drawable,
-                                  GdkColormap *cmap)
-{
-  GdkDrawableImplX11 *draw_impl;
-  
-  g_return_if_fail (GDK_IS_WINDOW_IMPL_X11 (drawable));
-
-  draw_impl = GDK_DRAWABLE_IMPL_X11 (drawable);
-
-  if (cmap && GDK_WINDOW_DESTROYED (draw_impl->wrapper))
-    return;
-
-  /* chain up */
-  GDK_DRAWABLE_CLASS (gdk_window_impl_x11_parent_class)->set_colormap (drawable, cmap);
-
-  if (cmap)
-    {
-      XSetWindowColormap (GDK_SCREEN_XDISPLAY (draw_impl->screen),
-                          draw_impl->xid,
-                          GDK_COLORMAP_XCOLORMAP (cmap));
-
-      if (((GdkWindowObject*)draw_impl->wrapper)->window_type !=
-          GDK_WINDOW_TOPLEVEL)
-        gdk_window_add_colormap_windows (GDK_WINDOW (draw_impl->wrapper));
-    }
-}
-
 
 void
 _gdk_windowing_window_init (GdkScreen * screen)

@@ -106,22 +106,6 @@ gdk_quartz_ref_cairo_surface (GdkDrawable *drawable)
   return impl->cairo_surface;
 }
 
-static void
-gdk_quartz_set_colormap (GdkDrawable *drawable,
-			 GdkColormap *colormap)
-{
-  GdkDrawableImplQuartz *impl = GDK_DRAWABLE_IMPL_QUARTZ (drawable);
-
-  if (impl->colormap == colormap)
-    return;
-  
-  if (impl->colormap)
-    g_object_unref (impl->colormap);
-  impl->colormap = colormap;
-  if (impl->colormap)
-    g_object_ref (impl->colormap);
-}
-
 static GdkColormap*
 gdk_quartz_get_colormap (GdkDrawable *drawable)
 {
@@ -172,7 +156,6 @@ gdk_drawable_impl_quartz_class_init (GdkDrawableImplQuartzClass *klass)
   drawable_class->ref_cairo_surface = gdk_quartz_ref_cairo_surface;
   drawable_class->create_cairo_surface = gdk_quartz_create_cairo_surface;
 
-  drawable_class->set_colormap = gdk_quartz_set_colormap;
   drawable_class->get_colormap = gdk_quartz_get_colormap;
 
   drawable_class->get_depth = gdk_quartz_get_depth;

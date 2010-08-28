@@ -44,15 +44,10 @@ static cairo_surface_t *gdk_x11_create_cairo_surface (GdkDrawable *drawable,
                                                       int          width,
                                                       int          height);
      
-static void gdk_x11_set_colormap   (GdkDrawable    *drawable,
-                                    GdkColormap    *colormap);
-
 static GdkColormap* gdk_x11_get_colormap   (GdkDrawable    *drawable);
 static gint         gdk_x11_get_depth      (GdkDrawable    *drawable);
 static GdkScreen *  gdk_x11_get_screen	   (GdkDrawable    *drawable);
 static GdkVisual*   gdk_x11_get_visual     (GdkDrawable    *drawable);
-
-static void gdk_drawable_impl_x11_finalize   (GObject *object);
 
 static const cairo_user_data_key_t gdk_x11_cairo_key;
 
@@ -62,14 +57,10 @@ static void
 _gdk_drawable_impl_x11_class_init (GdkDrawableImplX11Class *klass)
 {
   GdkDrawableClass *drawable_class = GDK_DRAWABLE_CLASS (klass);
-  GObjectClass *object_class = G_OBJECT_CLASS (klass);
-  
-  object_class->finalize = gdk_drawable_impl_x11_finalize;
   
   drawable_class->ref_cairo_surface = gdk_x11_ref_cairo_surface;
   drawable_class->create_cairo_surface = gdk_x11_create_cairo_surface;
 
-  drawable_class->set_colormap = gdk_x11_set_colormap;
   drawable_class->get_colormap = gdk_x11_get_colormap;
 
   drawable_class->get_depth = gdk_x11_get_depth;
@@ -80,14 +71,6 @@ _gdk_drawable_impl_x11_class_init (GdkDrawableImplX11Class *klass)
 static void
 _gdk_drawable_impl_x11_init (GdkDrawableImplX11 *impl)
 {
-}
-
-static void
-gdk_drawable_impl_x11_finalize (GObject *object)
-{
-  gdk_drawable_set_colormap (GDK_DRAWABLE (object), NULL);
-
-  G_OBJECT_CLASS (_gdk_drawable_impl_x11_parent_class)->finalize (object);
 }
 
 /**
@@ -142,24 +125,6 @@ gdk_x11_get_colormap (GdkDrawable *drawable)
   impl = GDK_DRAWABLE_IMPL_X11 (drawable);
 
   return impl->colormap;
-}
-
-static void
-gdk_x11_set_colormap (GdkDrawable *drawable,
-                      GdkColormap *colormap)
-{
-  GdkDrawableImplX11 *impl;
-
-  impl = GDK_DRAWABLE_IMPL_X11 (drawable);
-
-  if (impl->colormap == colormap)
-    return;
-  
-  if (impl->colormap)
-    g_object_unref (impl->colormap);
-  impl->colormap = colormap;
-  if (impl->colormap)
-    g_object_ref (impl->colormap);
 }
 
 static gint

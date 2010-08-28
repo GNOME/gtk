@@ -148,27 +148,6 @@ gdk_offscreen_window_get_colormap (GdkDrawable *drawable)
   return offscreen->colormap;
 }
 
-static void
-gdk_offscreen_window_set_colormap (GdkDrawable *drawable,
-				   GdkColormap*colormap)
-{
-  GdkOffscreenWindow *offscreen = GDK_OFFSCREEN_WINDOW (drawable);
-
-  if (colormap && GDK_WINDOW_DESTROYED (offscreen->wrapper))
-    return;
-
-  if (offscreen->colormap == colormap)
-    return;
-
-  if (offscreen->colormap)
-    g_object_unref (offscreen->colormap);
-
-  offscreen->colormap = colormap;
-  if (offscreen->colormap)
-    g_object_ref (offscreen->colormap);
-}
-
-
 static gint
 gdk_offscreen_window_get_depth (GdkDrawable *drawable)
 {
@@ -756,7 +735,6 @@ gdk_offscreen_window_class_init (GdkOffscreenWindowClass *klass)
   object_class->finalize = gdk_offscreen_window_finalize;
 
   drawable_class->ref_cairo_surface = gdk_offscreen_window_ref_cairo_surface;
-  drawable_class->set_colormap = gdk_offscreen_window_set_colormap;
   drawable_class->get_colormap = gdk_offscreen_window_get_colormap;
   drawable_class->get_depth = gdk_offscreen_window_get_depth;
   drawable_class->get_screen = gdk_offscreen_window_get_screen;
