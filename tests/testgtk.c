@@ -425,8 +425,6 @@ create_composited_window (GtkWidget *widget)
   if (!window)
     {
       GtkWidget *event, *button;
-      GdkScreen *screen;
-      GdkColormap *rgba;
       GdkColor red;
 
       /* make the widgets */
@@ -441,13 +439,6 @@ create_composited_window (GtkWidget *widget)
       /* put a red background on the window */
       gdk_color_parse ("red", &red);
       gtk_widget_modify_bg (window, GTK_STATE_NORMAL, &red);
-
-      /* set the colourmap for the event box.
-       * must be done before the event box is realised.
-       */
-      screen = gtk_widget_get_screen (event);
-      rgba = gdk_screen_get_rgba_colormap (screen);
-      gtk_widget_set_colormap (event, rgba);
 
       /* set our event box to have a fully-transparent background
        * drawn on it.  currently there is no way to simply tell gtk
