@@ -4566,7 +4566,6 @@ gtk_paint_hline (GtkStyle           *style,
 
   g_return_if_fail (GTK_IS_STYLE (style));
   g_return_if_fail (GTK_STYLE_GET_CLASS (style)->draw_hline != NULL);
-  g_return_if_fail (style->depth == gdk_drawable_get_depth (window));
 
   cr = gtk_style_cairo_create (window, area);
 
@@ -4645,7 +4644,6 @@ gtk_paint_vline (GtkStyle           *style,
 
   g_return_if_fail (GTK_IS_STYLE (style));
   g_return_if_fail (GTK_STYLE_GET_CLASS (style)->draw_vline != NULL);
-  g_return_if_fail (style->depth == gdk_drawable_get_depth (window));
 
   cr = gtk_style_cairo_create (window, area);
 
@@ -4728,7 +4726,6 @@ gtk_paint_shadow (GtkStyle           *style,
 
   g_return_if_fail (GTK_IS_STYLE (style));
   g_return_if_fail (GTK_STYLE_GET_CLASS (style)->draw_shadow != NULL);
-  g_return_if_fail (style->depth == gdk_drawable_get_depth (window));
 
   sanitize_size (window, &width, &height);
 
@@ -4823,7 +4820,6 @@ gtk_paint_arrow (GtkStyle           *style,
 
   g_return_if_fail (GTK_IS_STYLE (style));
   g_return_if_fail (GTK_STYLE_GET_CLASS (style)->draw_arrow != NULL);
-  g_return_if_fail (style->depth == gdk_drawable_get_depth (window));
 
   sanitize_size (window, &width, &height);
 
@@ -4918,7 +4914,6 @@ gtk_paint_diamond (GtkStyle           *style,
 
   g_return_if_fail (GTK_IS_STYLE (style));
   g_return_if_fail (GTK_STYLE_GET_CLASS (style)->draw_diamond != NULL);
-  g_return_if_fail (style->depth == gdk_drawable_get_depth (window));
 
   sanitize_size (window, &width, &height);
   
@@ -5008,7 +5003,6 @@ gtk_paint_box (GtkStyle           *style,
 
   g_return_if_fail (GTK_IS_STYLE (style));
   g_return_if_fail (GTK_STYLE_GET_CLASS (style)->draw_box != NULL);
-  g_return_if_fail (style->depth == gdk_drawable_get_depth (window));
 
   sanitize_size (window, &width, &height);
 
@@ -5095,7 +5089,6 @@ gtk_paint_flat_box (GtkStyle           *style,
 
   g_return_if_fail (GTK_IS_STYLE (style));
   g_return_if_fail (GTK_STYLE_GET_CLASS (style)->draw_flat_box != NULL);
-  g_return_if_fail (style->depth == gdk_drawable_get_depth (window));
 
   sanitize_size (window, &width, &height);
 
@@ -5187,7 +5180,6 @@ gtk_paint_check (GtkStyle           *style,
 
   g_return_if_fail (GTK_IS_STYLE (style));
   g_return_if_fail (GTK_STYLE_GET_CLASS (style)->draw_check != NULL);
-  g_return_if_fail (style->depth == gdk_drawable_get_depth (window));
 
   cr = gtk_style_cairo_create (window, area);
 
@@ -5274,7 +5266,6 @@ gtk_paint_option (GtkStyle           *style,
 
   g_return_if_fail (GTK_IS_STYLE (style));
   g_return_if_fail (GTK_STYLE_GET_CLASS (style)->draw_option != NULL);
-  g_return_if_fail (style->depth == gdk_drawable_get_depth (window));
 
   cr = gtk_style_cairo_create (window, area);
 
@@ -5361,7 +5352,6 @@ gtk_paint_tab (GtkStyle           *style,
 
   g_return_if_fail (GTK_IS_STYLE (style));
   g_return_if_fail (GTK_STYLE_GET_CLASS (style)->draw_tab != NULL);
-  g_return_if_fail (style->depth == gdk_drawable_get_depth (window));
 
   cr = gtk_style_cairo_create (window, area);
 
@@ -5455,7 +5445,6 @@ gtk_paint_shadow_gap (GtkStyle           *style,
 
   g_return_if_fail (GTK_IS_STYLE (style));
   g_return_if_fail (GTK_STYLE_GET_CLASS (style)->draw_shadow_gap != NULL);
-  g_return_if_fail (style->depth == gdk_drawable_get_depth (window));
 
   sanitize_size (window, &width, &height);
   
@@ -5561,7 +5550,6 @@ gtk_paint_box_gap (GtkStyle           *style,
 
   g_return_if_fail (GTK_IS_STYLE (style));
   g_return_if_fail (GTK_STYLE_GET_CLASS (style)->draw_box_gap != NULL);
-  g_return_if_fail (style->depth == gdk_drawable_get_depth (window));
 
   sanitize_size (window, &width, &height);
 
@@ -5659,7 +5647,6 @@ gtk_paint_extension (GtkStyle           *style,
 
   g_return_if_fail (GTK_IS_STYLE (style));
   g_return_if_fail (GTK_STYLE_GET_CLASS (style)->draw_extension != NULL);
-  g_return_if_fail (style->depth == gdk_drawable_get_depth (window));
 
   sanitize_size (window, &width, &height);
 
@@ -5749,7 +5736,6 @@ gtk_paint_focus (GtkStyle           *style,
 
   g_return_if_fail (GTK_IS_STYLE (style));
   g_return_if_fail (GTK_STYLE_GET_CLASS (style)->draw_focus != NULL);
-  g_return_if_fail (style->depth == gdk_drawable_get_depth (window));
 
   sanitize_size (window, &width, &height);
 
@@ -5840,7 +5826,6 @@ gtk_paint_slider (GtkStyle           *style,
 
   g_return_if_fail (GTK_IS_STYLE (style));
   g_return_if_fail (GTK_STYLE_GET_CLASS (style)->draw_slider != NULL);
-  g_return_if_fail (style->depth == gdk_drawable_get_depth (window));
 
   sanitize_size (window, &width, &height);
 
@@ -5934,7 +5919,6 @@ gtk_paint_handle (GtkStyle           *style,
 
   g_return_if_fail (GTK_IS_STYLE (style));
   g_return_if_fail (GTK_STYLE_GET_CLASS (style)->draw_handle != NULL);
-  g_return_if_fail (style->depth == gdk_drawable_get_depth (window));
 
   sanitize_size (window, &width, &height);
 
@@ -6031,7 +6015,6 @@ gtk_paint_expander (GtkStyle           *style,
 
   g_return_if_fail (GTK_IS_STYLE (style));
   g_return_if_fail (GTK_STYLE_GET_CLASS (style)->draw_expander != NULL);
-  g_return_if_fail (style->depth == gdk_drawable_get_depth (window));
 
   cr = gtk_style_cairo_create (window, area);
 
@@ -6121,7 +6104,6 @@ gtk_paint_layout (GtkStyle           *style,
 
   g_return_if_fail (GTK_IS_STYLE (style));
   g_return_if_fail (GTK_STYLE_GET_CLASS (style)->draw_layout != NULL);
-  g_return_if_fail (style->depth == gdk_drawable_get_depth (window));
 
   cr = gtk_style_cairo_create (window, area);
 
@@ -6207,7 +6189,6 @@ gtk_paint_resize_grip (GtkStyle           *style,
 
   g_return_if_fail (GTK_IS_STYLE (style));
   g_return_if_fail (GTK_STYLE_GET_CLASS (style)->draw_resize_grip != NULL);
-  g_return_if_fail (style->depth == gdk_drawable_get_depth (window));
 
   cr = gtk_style_cairo_create (window, area);
 
@@ -6293,7 +6274,6 @@ gtk_paint_spinner (GtkStyle           *style,
 
   g_return_if_fail (GTK_IS_STYLE (style));
   g_return_if_fail (GTK_STYLE_GET_CLASS (style)->draw_spinner != NULL);
-  g_return_if_fail (style->depth == gdk_drawable_get_depth (window));
 
   cr = gtk_style_cairo_create (window, area);
 
