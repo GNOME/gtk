@@ -95,7 +95,7 @@ gdk_device_class_init (GdkDeviceClass *klass)
 				   PROP_DISPLAY,
 				   g_param_spec_object ("display",
                                                         P_("Device Display"),
-                                                        P_("Display to which the device belongs to"),
+                                                        P_("Display which the device belongs to"),
                                                         GDK_TYPE_DISPLAY,
                                                         G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY |
                                                         G_PARAM_STATIC_STRINGS));
@@ -110,7 +110,7 @@ gdk_device_class_init (GdkDeviceClass *klass)
 				   PROP_DEVICE_MANAGER,
 				   g_param_spec_object ("device-manager",
                                                         P_("Device manager"),
-                                                        P_("Device manager to which the device belongs to"),
+                                                        P_("Device manager which the device belongs to"),
                                                         GDK_TYPE_DEVICE_MANAGER,
                                                         G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY |
                                                         G_PARAM_STATIC_STRINGS));
@@ -148,7 +148,7 @@ gdk_device_class_init (GdkDeviceClass *klass)
   /**
    * GdkDevice:associated-device:
    *
-   * Associated pointer or keyboard to this device, if any. Devices of type #GDK_DEVICE_TYPE_MASTER
+   * Associated pointer or keyboard with this device, if any. Devices of type #GDK_DEVICE_TYPE_MASTER
    * always come in keyboard/pointer pairs. Other device types will have a %NULL associated device.
    *
    * Since: 3.0
@@ -157,7 +157,7 @@ gdk_device_class_init (GdkDeviceClass *klass)
 				   PROP_ASSOCIATED_DEVICE,
 				   g_param_spec_object ("associated-device",
                                                         P_("Associated device"),
-                                                        P_("Associated pointer or keyboard to this device"),
+                                                        P_("Associated pointer or keyboard with this device"),
                                                         GDK_TYPE_DEVICE,
                                                         G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
   /**
@@ -202,7 +202,7 @@ gdk_device_class_init (GdkDeviceClass *klass)
   g_object_class_install_property (object_class,
 				   PROP_HAS_CURSOR,
 				   g_param_spec_boolean ("has-cursor",
-                                                         P_("Whether the device has cursor"),
+                                                         P_("Whether the device has a cursor"),
                                                          P_("Whether there is a visible cursor following device motion"),
                                                          FALSE,
                                                          G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY |

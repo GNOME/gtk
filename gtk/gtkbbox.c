@@ -172,7 +172,7 @@ gtk_button_box_class_init (GtkButtonBoxClass *class)
                                    PROP_LAYOUT_STYLE,
                                    g_param_spec_enum ("layout-style",
                                                       P_("Layout style"),
-                                                      P_("How to layout the buttons in the box. Possible values are spread, edge, start and end"),
+                                                      P_("How to lay out the buttons in the box. Possible values are: spread, edge, start and end"),
                                                       GTK_TYPE_BUTTON_BOX_STYLE,
                                                       DEFAULT_LAYOUT_STYLE,
                                                       GTK_PARAM_READWRITE));
@@ -323,7 +323,7 @@ gtk_button_box_set_layout (GtkButtonBox      *widget,
  *
  * Retrieves the method being used to arrange the buttons in a button box.
  *
- * Returns: the method used to layout buttons in @widget.
+ * Returns: the method used to lay out buttons in @widget.
  */
 GtkButtonBoxStyle
 gtk_button_box_get_layout (GtkButtonBox *widget)
