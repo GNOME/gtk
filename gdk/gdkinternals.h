@@ -347,8 +347,6 @@ const char *_gdk_get_sm_client_id (void);
 
 /* Font/string functions implemented in module-specific code */
 
-void _gdk_colormap_real_destroy (GdkColormap *colormap);
-
 void _gdk_cursor_destroy (GdkCursor *cursor);
 
 void     _gdk_windowing_init                    (void);
