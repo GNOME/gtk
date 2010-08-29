@@ -1727,7 +1727,7 @@ insert_text_callback (GtkFileChooserEntry *chooser_entry,
        *position + (colon - new_text) != 1) ||
       (new_text_length > 0 &&
        *position <= 1 &&
-       GTK_ENTRY (chooser_entry)->text_length >= 2 &&
+       gtk_entry_get_text_length (GTK_ENTRY (chooser_entry)) >= 2 &&
        gtk_entry_get_text (GTK_ENTRY (chooser_entry))[1] == ':'))
     {
       gtk_widget_error_bell (GTK_WIDGET (chooser_entry));
@@ -1746,7 +1746,7 @@ delete_text_callback (GtkFileChooserEntry *chooser_entry,
 {
   /* If deleting a drive letter, delete the colon, too */
   if (start_pos == 0 && end_pos == 1 &&
-      GTK_ENTRY (chooser_entry)->text_length >= 2 &&
+      gtk_entry_get_text_length (GTK_ENTRY (chooser_entry)) >= 2 &&
       gtk_entry_get_text (GTK_ENTRY (chooser_entry))[1] == ':')
     {
       g_signal_handlers_block_by_func (chooser_entry,

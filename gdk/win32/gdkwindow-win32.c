@@ -308,7 +308,6 @@ static ATOM
 RegisterGdkClass (GdkWindowType wtype, GdkWindowTypeHint wtype_hint)
 {
   static ATOM klassTOPLEVEL   = 0;
-  static ATOM klassDIALOG     = 0;
   static ATOM klassCHILD      = 0;
   static ATOM klassTEMP       = 0;
   static ATOM klassTEMPSHADOW = 0;
@@ -482,7 +481,7 @@ _gdk_window_impl_new (GdkWindow     *window,
 		     (attributes->window_type == GDK_WINDOW_TOPLEVEL ? "TOPLEVEL" :
 		      (attributes->window_type == GDK_WINDOW_CHILD ? "CHILD" :
 			(attributes->window_type == GDK_WINDOW_TEMP ? "TEMP" :
-			 "???"))))));
+			 "???")))));
 
   hparent = GDK_WINDOW_HWND (real_parent);
 
