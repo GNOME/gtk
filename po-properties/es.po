@@ -1,4 +1,4 @@
-# translation of gtk+-properties.master.po to Español
+# translation of gtk+-properties.gtk-2-22.po to Español
 # GTK+-properties Spanish translation.
 # Copyright © 1999-2006, 2007, 2008 Free Software Foundation, Inc.
 # This file is distributed under the same license as the gtk+ package.
@@ -14,11 +14,11 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: gtk+-properties.master\n"
+"Project-Id-Version: gtk+-properties.gtk-2-22\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk%"
 "2b&component=general\n"
-"POT-Creation-Date: 2010-08-27 18:52+0000\n"
-"PO-Revision-Date: 2010-08-28 10:12+0200\n"
+"POT-Creation-Date: 2010-08-29 18:04+0000\n"
+"PO-Revision-Date: 2010-08-30 00:58+0200\n"
 "Last-Translator: Jorge González <jorgegonz@svn.gnome.org>\n"
 "Language-Team: Español <gnome-es-list@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -676,12 +676,15 @@ msgid "Layout style"
 msgstr "Estilo de la distribución"
 
 #: ../gtk/gtkbbox.c:138
+#| msgid ""
+#| "How to layout the buttons in the box. Possible values are default, "
+#| "spread, edge, start and end"
 msgid ""
-"How to layout the buttons in the box. Possible values are default, spread, "
+"How to lay out the buttons in the box. Possible values are: default, spread, "
 "edge, start and end"
 msgstr ""
-"Como disponer los botones en la caja. Los valores posibles son: "
-"predeterminado, esparcidos, esquinas, inicio  y final"
+"Cómo disponer los botones en la caja. Los valores posibles son: "
+"predeterminado, esparcidos, esquinas, inicio y final"
 
 #: ../gtk/gtkbbox.c:146
 msgid "Secondary"
@@ -1007,32 +1010,26 @@ msgid "If TRUE, details are shown"
 msgstr "Si es TRUE, se muestran los detalles"
 
 #: ../gtk/gtkcalendar.c:586
-#| msgid "Inner Border"
 msgid "Inner border"
 msgstr "Borde interior"
 
 #: ../gtk/gtkcalendar.c:587
-#| msgid "Inner Border"
 msgid "Inner border space"
 msgstr "Espacio del borde interior"
 
 #: ../gtk/gtkcalendar.c:598
-#| msgid "Vertical options"
 msgid "Vertical separation"
 msgstr "Separación vertical"
 
 #: ../gtk/gtkcalendar.c:599
-#| msgid "Spacing between expander arrow and caption"
 msgid "Space between day headers and main area"
 msgstr "Espacio entre las cabeceras del día y el área principal"
 
 #: ../gtk/gtkcalendar.c:610
-#| msgid "Horizontal options"
 msgid "Horizontal separation"
 msgstr "Separación horizontal"
 
 #: ../gtk/gtkcalendar.c:611
-#| msgid "Spacing between elements of the main dialog area"
 msgid "Space between week headers and main area"
 msgstr "Espacio entre las cabeceras de la semana y el área principal"
 
@@ -2702,12 +2699,10 @@ msgid "A widget to display in place of the usual expander label"
 msgstr "Un widget para mostrar en lugar de la etiqueta usual del expansor"
 
 #: ../gtk/gtkexpander.c:239
-#| msgid "Tab fill"
 msgid "Label fill"
 msgstr "Relleno de etiqueta"
 
 #: ../gtk/gtkexpander.c:240
-#| msgid "Whether the item should fill the available space"
 msgid "Whether the label widget should fill all available horizontal space"
 msgstr ""
 "Indica si el widget de etiqueta debería llenar todo el espacio horizontal "
@@ -3817,7 +3812,6 @@ msgid "The image"
 msgstr "La imagen"
 
 #: ../gtk/gtkmessagedialog.c:320
-#| msgid "Message Type"
 msgid "Message area"
 msgstr "Área de mensajes"
 
@@ -4858,7 +4852,6 @@ msgstr ""
 "desplazamiento"
 
 #: ../gtk/gtkrange.c:578
-#| msgid "Position Set"
 msgid "Stepper Position Details"
 msgstr "Detalles de la posición de la flecha"
 
@@ -6637,7 +6630,8 @@ msgid "Collapsed"
 msgstr "Contraído"
 
 #: ../gtk/gtktoolitemgroup.c:1558
-msgid "Wether the group has been collapsed and items are hidden"
+#| msgid "Wether the group has been collapsed and items are hidden"
+msgid "Whether the group has been collapsed and items are hidden"
 msgstr "Indica si el grupo se ha colapsado y sus elementos están ocultos"
 
 #: ../gtk/gtktoolitemgroup.c:1564
