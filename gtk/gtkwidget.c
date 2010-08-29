@@ -2493,7 +2493,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
                                                                  P_("Window dragging"),
                                                                  P_("Whether windows can be dragged by clicking on empty areas"),
                                                                  FALSE,
-                                                                 GTK_PARAM_READWRITE));
+                                                                 GTK_PARAM_READABLE));
 
   /**
    * GtkWidget:link-color:
