@@ -3784,9 +3784,9 @@ _gdk_drawable_begin_direct_draw (GdkDrawable *drawable,
 				 gint *x_offset_out,
 				 gint *y_offset_out)
 {
-  g_return_val_if_fail (priv_data != NULL, NULL);
-
   GdkDrawable *out_impl = NULL;
+
+  g_return_val_if_fail (priv_data != NULL, NULL);
 
   *priv_data = NULL;
 
@@ -3802,6 +3802,8 @@ _gdk_drawable_begin_direct_draw (GdkDrawable *drawable,
     }
   else
     {
+      DirectDrawInfo *priv;
+
       if (GDK_WINDOW_DESTROYED (drawable))
         return NULL;
 
@@ -3815,7 +3817,7 @@ _gdk_drawable_begin_direct_draw (GdkDrawable *drawable,
       *x_offset_out = x_offset;
       *y_offset_out = y_offset;
 
-      DirectDrawInfo *priv = g_new (DirectDrawInfo, 1);
+      priv = g_new (DirectDrawInfo, 1);
 
       priv->drawable = impl;
       priv->gc = gc;
@@ -3838,26 +3840,31 @@ _gdk_drawable_begin_direct_draw (GdkDrawable *drawable,
 void
 _gdk_drawable_end_direct_draw (gpointer priv_data)
 {
+  DirectDrawInfo *priv;
+  GdkGC *gc;
+
   /* Its a GdkPixmap or the call to _gdk_drawable_begin_direct_draw failed. */
   if (priv_data == NULL)
     return;
 
-  DirectDrawInfo *priv = priv_data;
-  GdkGC *gc = priv->gc;
+  priv = priv_data;
+  gc = priv->gc;
 
   /* This is only for GdkWindows - if GdkPixmaps need any handling here in
    * the future, then we should keep track of what type of drawable it is in
    * DirectDrawInfo. */
   BEGIN_DRAW_MACRO;
 
-  gint x_offset = priv->x_offset;
-  gint y_offset = priv->y_offset;
-  gint old_clip_x = priv->clip_x;
-  gint old_clip_y = priv->clip_y;
-  gint old_ts_x = priv->ts_x;
-  gint old_ts_y = priv->ts_y;
+  {
+    gint x_offset = priv->x_offset;
+    gint y_offset = priv->y_offset;
+    gint old_clip_x = priv->clip_x;
+    gint old_clip_y = priv->clip_y;
+    gint old_ts_x = priv->ts_x;
+    gint old_ts_y = priv->ts_y;
 
-  END_DRAW;
+    END_DRAW;
+  }
 
   g_free (priv_data);
 }
