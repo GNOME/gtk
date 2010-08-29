@@ -21,8 +21,6 @@
 #include "gdk.h"
 #include "gdkprivate-win32.h"
 
-static GdkColormap *default_colormap = NULL;
-
 GdkDisplay *
 gdk_screen_get_display (GdkScreen *screen)
 {
@@ -33,29 +31,6 @@ GdkWindow *
 gdk_screen_get_root_window (GdkScreen *screen)
 {
   return _gdk_root;
-}
-
-GdkColormap *
-gdk_screen_get_default_colormap (GdkScreen *screen)
-{
-  return default_colormap;
-}
-
-void
-gdk_screen_set_default_colormap (GdkScreen   *screen,
-				 GdkColormap *colormap)
-{
-  GdkColormap *old_colormap;
-  
-  g_return_if_fail (screen == _gdk_screen);
-  g_return_if_fail (GDK_IS_COLORMAP (colormap));
-
-  old_colormap = default_colormap;
-
-  default_colormap = g_object_ref (colormap);
-  
-  if (old_colormap)
-    g_object_unref (old_colormap);
 }
 
 gint
@@ -119,14 +94,6 @@ gdk_screen_get_monitor_geometry (GdkScreen    *screen,
   *dest = _gdk_monitors[num_monitor].rect;
 }
 
-GdkColormap *
-gdk_screen_get_rgba_colormap (GdkScreen *screen)
-{
-  g_return_val_if_fail (screen == _gdk_screen, NULL);
-
-  return NULL;
-}
-  
 GdkVisual *
 gdk_screen_get_rgba_visual (GdkScreen *screen)
 {

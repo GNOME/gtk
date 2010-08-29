@@ -23,7 +23,6 @@
 
 #include "config.h"
 #include "gdk.h"		/* For gdk_rectangle_intersect() */
-#include "gdkcolor.h"
 #include "gdkwindow.h"
 #include "gdkscreen.h"
 #include "gdkintl.h"

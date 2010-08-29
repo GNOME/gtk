@@ -237,50 +237,6 @@ gdk_screen_get_root_window (GdkScreen *screen)
   return GDK_SCREEN_X11 (screen)->root_window;
 }
 
-/**
- * gdk_screen_get_default_colormap:
- * @screen: a #GdkScreen
- *
- * Gets the default colormap for @screen.
- * 
- * Returns: (transfer none): the default #GdkColormap.
- *
- * Since: 2.2
- **/
-GdkColormap *
-gdk_screen_get_default_colormap (GdkScreen *screen)
-{
-  g_return_val_if_fail (GDK_IS_SCREEN (screen), NULL);
-
-  return GDK_SCREEN_X11 (screen)->default_colormap;
-}
-
-/**
- * gdk_screen_set_default_colormap:
- * @screen: a #GdkScreen
- * @colormap: a #GdkColormap
- *
- * Sets the default @colormap for @screen.
- *
- * Since: 2.2
- **/
-void
-gdk_screen_set_default_colormap (GdkScreen   *screen,
-				 GdkColormap *colormap)
-{
-  GdkColormap *old_colormap;
-  
-  g_return_if_fail (GDK_IS_SCREEN (screen));
-  g_return_if_fail (GDK_IS_COLORMAP (colormap));
-
-  old_colormap = GDK_SCREEN_X11 (screen)->default_colormap;
-
-  GDK_SCREEN_X11 (screen)->default_colormap = g_object_ref (colormap);
-  
-  if (old_colormap)
-    g_object_unref (old_colormap);
-}
-
 static void
 _gdk_screen_x11_events_uninit (GdkScreen *screen)
 {
@@ -309,24 +265,6 @@ gdk_screen_x11_dispose (GObject *object)
     }
 
   _gdk_screen_x11_events_uninit (GDK_SCREEN (object));
-
-  if (screen_x11->default_colormap)
-    {
-      g_object_unref (screen_x11->default_colormap);
-      screen_x11->default_colormap = NULL;
-    }
-
-  if (screen_x11->system_colormap)
-    {
-      g_object_unref (screen_x11->system_colormap);
-      screen_x11->system_colormap = NULL;
-    }
-
-  if (screen_x11->rgba_colormap)
-    {
-      g_object_unref (screen_x11->rgba_colormap);
-      screen_x11->rgba_colormap = NULL;
-    }
 
   if (screen_x11->root_window)
     _gdk_window_destroy (screen_x11->root_window, TRUE);
@@ -538,11 +476,11 @@ gdk_screen_get_monitor_geometry (GdkScreen    *screen,
 }
 
 /**
- * gdk_screen_get_rgba_colormap:
- * @screen: a #GdkScreen.
+ * gdk_screen_get_rgba_visual:
+ * @screen: a #GdkScreen
  * 
- * Gets a colormap to use for creating windows with an alpha
- * channel. The windowing system on which GTK+ is running
+ * Gets a visual to use for creating windows with an alpha channel.
+ * The windowing system on which GTK+ is running
  * may not support this capability, in which case %NULL will
  * be returned. Even if a non-%NULL value is returned, its
  * possible that the window's alpha channel won't be honored
@@ -554,37 +492,6 @@ gdk_screen_get_monitor_geometry (GdkScreen    *screen,
  *
  * For setting an overall opacity for a top-level window, see
  * gdk_window_set_opacity().
-
- * Return value: (transfer none): a colormap to use for windows with
- *     an alpha channel or %NULL if the capability is not available.
- *
- * Since: 2.8
- **/
-GdkColormap *
-gdk_screen_get_rgba_colormap (GdkScreen *screen)
-{
-  GdkScreenX11 *screen_x11;
-
-  g_return_val_if_fail (GDK_IS_SCREEN (screen), NULL);
-
-  screen_x11 = GDK_SCREEN_X11 (screen);
-
-  if (!screen_x11->rgba_visual)
-    return NULL;
-
-  if (!screen_x11->rgba_colormap)
-    screen_x11->rgba_colormap = gdk_colormap_new (screen_x11->rgba_visual,
-						  FALSE);
-  
-  return screen_x11->rgba_colormap;
-}
-
-/**
- * gdk_screen_get_rgba_visual:
- * @screen: a #GdkScreen
- * 
- * Gets a visual to use for creating windows with an alpha channel.
- * See the docs for gdk_screen_get_rgba_colormap() for caveats.
  * 
  * Return value: (transfer none): a visual to use for windows with an
  *     alpha channel or %NULL if the capability is not available.

@@ -91,10 +91,6 @@ GType        gdk_colormap_get_type (void) G_GNUC_CONST;
 GdkColormap* gdk_colormap_new	  (GdkVisual   *visual,
 				   gboolean	allocate);
 
-#ifndef GDK_MULTIHEAD_SAFE
-GdkColormap* gdk_colormap_get_system	        (void);
-#endif
-
 GdkScreen *gdk_colormap_get_screen (GdkColormap *cmap);
 
 gint  gdk_colormap_alloc_colors   (GdkColormap    *colormap,

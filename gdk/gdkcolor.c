@@ -224,17 +224,3 @@ gdk_color_to_string (const GdkColor *color)
 
   return pango_color_to_string (&pango_color);
 }
-
-/**
- * gdk_colormap_get_system:
- * 
- * Gets the system's default colormap for the default screen. (See
- * gdk_colormap_get_system_for_screen ())
- * 
- * Return value: the default colormap.
- **/
-GdkColormap*
-gdk_colormap_get_system (void)
-{
-  return gdk_screen_get_system_colormap (gdk_screen_get_default ());
-}

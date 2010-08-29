@@ -84,9 +84,6 @@ _gdk_screen_quartz_init (GdkScreenQuartz *screen_quartz)
   GdkScreen *screen = GDK_SCREEN (screen_quartz);
   NSScreen *nsscreen;
 
-  gdk_screen_set_default_colormap (screen,
-                                   gdk_screen_get_system_colormap (screen));
-
   nsscreen = [[NSScreen screens] objectAtIndex:0];
   gdk_screen_set_resolution (screen,
                              72.0 * [nsscreen userSpaceScaleFactor]);
@@ -103,12 +100,6 @@ static void
 gdk_screen_quartz_dispose (GObject *object)
 {
   GdkScreenQuartz *screen = GDK_SCREEN_QUARTZ (object);
-
-  if (screen->default_colormap)
-    {
-      g_object_unref (screen->default_colormap);
-      screen->default_colormap = NULL;
-    }
 
   if (screen->screen_changed_id)
     {
@@ -311,31 +302,6 @@ _gdk_windowing_substitute_screen_number (const gchar *display_name,
     return NULL;
 
   return g_strdup (display_name);
-}
-
-GdkColormap*
-gdk_screen_get_default_colormap (GdkScreen *screen)
-{
-  g_return_val_if_fail (GDK_IS_SCREEN (screen), NULL);
-
-  return GDK_SCREEN_QUARTZ (screen)->default_colormap;
-}
-
-void
-gdk_screen_set_default_colormap (GdkScreen   *screen,
-				 GdkColormap *colormap)
-{
-  GdkColormap *old_colormap;
-  
-  g_return_if_fail (GDK_IS_SCREEN (screen));
-  g_return_if_fail (GDK_IS_COLORMAP (colormap));
-
-  old_colormap = GDK_SCREEN_QUARTZ (screen)->default_colormap;
-
-  GDK_SCREEN_QUARTZ (screen)->default_colormap = g_object_ref (colormap);
-  
-  if (old_colormap)
-    g_object_unref (old_colormap);
 }
 
 gint

@@ -81,11 +81,6 @@ struct _GdkScreenX11
   GHashTable *colormap_hash;
   GdkVisual *rgba_visual;
   
-  /* Colormap Part */
-  GdkColormap *default_colormap;
-  GdkColormap *system_colormap;
-  GdkColormap *rgba_colormap;
-
   /* X settings */
   XSettingsClient *xsettings_client;
   guint xsettings_in_init : 1;

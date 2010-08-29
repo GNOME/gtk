@@ -38,7 +38,6 @@ struct _GdkScreenQuartz
   GdkScreen parent_instance;
 
   GdkDisplay *display;
-  GdkColormap *default_colormap;
 
   /* Origin of "root window" in Cocoa coordinates */
   gint min_x;

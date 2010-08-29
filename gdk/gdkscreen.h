@@ -63,12 +63,7 @@ struct _GdkScreenClass
 };
 
 GType        gdk_screen_get_type              (void) G_GNUC_CONST;
-GdkColormap *gdk_screen_get_default_colormap  (GdkScreen   *screen);
-void         gdk_screen_set_default_colormap  (GdkScreen   *screen,
-					       GdkColormap *colormap);
-GdkColormap* gdk_screen_get_system_colormap   (GdkScreen   *screen);
 GdkVisual*   gdk_screen_get_system_visual     (GdkScreen   *screen);
-GdkColormap *gdk_screen_get_rgba_colormap     (GdkScreen   *screen);
 GdkVisual *  gdk_screen_get_rgba_visual       (GdkScreen   *screen);
 gboolean     gdk_screen_is_composited	      (GdkScreen   *screen);
 

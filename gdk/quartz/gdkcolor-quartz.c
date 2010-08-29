@@ -62,43 +62,6 @@ gdk_colormap_new (GdkVisual *visual,
   return NULL;
 }
 
-GdkColormap *
-gdk_screen_get_system_colormap (GdkScreen *screen)
-{
-  static GdkColormap *colormap = NULL;
-
-  g_return_val_if_fail (GDK_IS_SCREEN (screen), NULL);
-
-  if (!colormap)
-    {
-      colormap = g_object_new (GDK_TYPE_COLORMAP, NULL);
-
-      colormap->visual = gdk_visual_get_system ();
-      colormap->size = colormap->visual->colormap_size;
-    }
-
-  return colormap;
-}
-
-
-GdkColormap *
-gdk_screen_get_rgba_colormap (GdkScreen *screen)
-{
-  static GdkColormap *colormap = NULL;
-
-  g_return_val_if_fail (GDK_IS_SCREEN (screen), NULL);
-
-  if (!colormap)
-    {
-      colormap = g_object_new (GDK_TYPE_COLORMAP, NULL);
-
-      colormap->visual = gdk_screen_get_rgba_visual (screen);
-      colormap->size = colormap->visual->colormap_size;
-    }
-
-  return colormap;
-}
-
 void
 gdk_colormap_free_colors (GdkColormap    *colormap,
                           const GdkColor *colors,

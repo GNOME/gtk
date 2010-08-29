@@ -190,11 +190,7 @@ gdk_display_manager_get_type
 <TITLE>GdkScreen</TITLE>
 GdkScreen
 gdk_screen_get_default
-gdk_screen_get_default_colormap
-gdk_screen_set_default_colormap
-gdk_screen_get_system_colormap
 gdk_screen_get_system_visual
-gdk_screen_get_rgba_colormap
 gdk_screen_get_rgba_visual
 gdk_screen_is_composited
 gdk_screen_get_root_window
@@ -253,7 +249,6 @@ gdk_pixbuf_get_from_surface
 GdkColor
 GdkColormap
 gdk_colormap_new
-gdk_colormap_get_system
 gdk_colormap_alloc_colors
 gdk_colormap_alloc_color
 gdk_colormap_free_colors

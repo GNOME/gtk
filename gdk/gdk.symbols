@@ -305,7 +305,6 @@ gdk_color_free
 gdk_color_get_type G_GNUC_CONST
 gdk_color_hash
 gdk_colormap_alloc_color
-gdk_colormap_get_system
 gdk_colormap_get_visual
 gdk_color_parse
 gdk_color_to_string
@@ -847,25 +846,16 @@ gdk_screen_get_number
 gdk_screen_get_primary_monitor
 gdk_screen_get_root_window
 gdk_screen_get_setting
-gdk_screen_get_default_colormap
-gdk_screen_set_default_colormap
 gdk_screen_get_n_monitors
 gdk_screen_get_monitor_geometry
 gdk_screen_get_monitor_width_mm
 gdk_screen_get_monitor_height_mm
 gdk_screen_get_monitor_plug_name
-gdk_screen_get_rgba_colormap
 gdk_screen_get_rgba_visual
 gdk_screen_get_active_window
 gdk_screen_get_window_stack
 gdk_screen_is_composited
 gdk_screen_make_display_name
-#endif
-#endif
-
-#if IN_HEADER(__GDK_SCREEN_H__)
-#if IN_FILE(__GDK_COLOR_X11_C__)
-gdk_screen_get_system_colormap
 #endif
 #endif
 

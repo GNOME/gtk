@@ -590,53 +590,6 @@ gdk_colormap_new (GdkVisual *visual,
   return colormap;
 }
 
-GdkColormap*
-gdk_screen_get_system_colormap (GdkScreen *screen)
-{
-  static GdkColormap *colormap = NULL;
-  GdkColormapPrivateWin32 *private;
-
-  g_return_val_if_fail (screen == _gdk_screen, NULL);
-
-  if (!colormap)
-    {
-      colormap = g_object_new (gdk_colormap_get_type (), NULL);
-      private = GDK_WIN32_COLORMAP_DATA (colormap);
-
-      colormap->visual = gdk_visual_get_system ();
-
-      colormap->size = colormap->visual->colormap_size;
-
-      private->private_val = FALSE;
-
-      switch (colormap->visual->type)
-	{
-	case GDK_VISUAL_GRAYSCALE:
-	case GDK_VISUAL_PSEUDO_COLOR:
-	  private->info = g_new0 (GdkColorInfo, colormap->size);
-	  private->hash = g_hash_table_new ((GHashFunc) gdk_color_hash,
-					    (GEqualFunc) gdk_color_equal);
-	  /* Fallthrough */
-
-	case GDK_VISUAL_STATIC_GRAY:
-	case GDK_VISUAL_STATIC_COLOR:
-	  create_colormap (colormap, FALSE);
-
-	  colormap->colors = g_new (GdkColor, colormap->size);
-	  sync_colors (colormap);
-	  break;
-
-	case GDK_VISUAL_TRUE_COLOR:
-	  break;
-
-	default:
-	  g_assert_not_reached ();
-	}
-    }
-
-  return colormap;
-}
-
 static void
 gdk_colors_free (GdkColormap *colormap,
 		 gulong      *in_pixels,
