@@ -61,8 +61,8 @@
   if (GDK_WINDOW_DESTROYED (gdk_window))
     return YES;
 
-  /* A view is opaque if its GdkWindow doesn't have the RGBA colormap */
-  return gdk_drawable_get_colormap (gdk_window) != gdk_screen_get_rgba_colormap (_gdk_screen);
+  /* A view is opaque if its GdkWindow doesn't have the RGBA visual */
+  return gdk_window_get_visual (gdk_window) != gdk_screen_get_rgba_visual (_gdk_screen);
 }
 
 -(void)drawRect:(NSRect)rect 
