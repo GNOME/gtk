@@ -8784,3 +8784,12 @@ gtk_window_set_mnemonics_visible (GtkWindow *window,
 
   priv->mnemonics_visible_set = TRUE;
 }
+
+void
+_gtk_window_get_wmclass (GtkWindow  *window,
+                         gchar     **wmclass_name,
+                         gchar     **wmclass_class)
+{
+  *wmclass_name = window->wmclass_name;
+  *wmclass_class = window->wmclass_class;
+}

@@ -33,6 +33,7 @@
 #include "gtkintl.h"
 #include "gtkprivate.h"
 #include "gtkplugprivate.h"
+#include "gtkwindow.h"
 
 /**
  * SECTION:gtkplug
@@ -634,16 +635,20 @@ gtk_plug_realize (GtkWidget *widget)
   GtkWindow *window = GTK_WINDOW (widget);
   GdkWindow *gdk_window;
   GdkWindowAttr attributes;
+  const gchar *title;
+  gchar *wmclass_name, *wmclass_class;
   gint attributes_mask;
 
   gtk_widget_set_realized (widget, TRUE);
 
+  title = gtk_window_get_title (window);
+  _gtk_window_get_wmclass (window, &wmclass_name, &wmclass_class);
   gtk_widget_get_allocation (widget, &allocation);
 
   attributes.window_type = GDK_WINDOW_CHILD;	/* XXX GDK_WINDOW_PLUG ? */
-  attributes.title = window->title;
-  attributes.wmclass_name = window->wmclass_name;
-  attributes.wmclass_class = window->wmclass_class;
+  attributes.title = (gchar *) title;
+  attributes.wmclass_name = wmclass_name;
+  attributes.wmclass_class = wmclass_class;
   attributes.width = allocation.width;
   attributes.height = allocation.height;
   attributes.wclass = GDK_INPUT_OUTPUT;
