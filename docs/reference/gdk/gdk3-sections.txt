@@ -285,7 +285,6 @@ gdk_color_get_type
 <TITLE>Drawing Primitives</TITLE>
 <FILE>drawing</FILE>
 GdkDrawable
-gdk_drawable_get_display
 gdk_drawable_get_colormap
 gdk_drawable_get_size
 gdk_drawable_get_clip_region

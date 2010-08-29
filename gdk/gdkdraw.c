@@ -82,24 +82,6 @@ gdk_drawable_get_size (GdkDrawable *drawable,
 }
 
 /**
- * gdk_drawable_get_display:
- * @drawable: a #GdkDrawable
- * 
- * Gets the #GdkDisplay associated with a #GdkDrawable.
- * 
- * Return value: the #GdkDisplay associated with @drawable
- *
- * Since: 2.2
- **/
-GdkDisplay*
-gdk_drawable_get_display (GdkDrawable *drawable)
-{
-  g_return_val_if_fail (GDK_IS_DRAWABLE (drawable), NULL);
-  
-  return gdk_screen_get_display (gdk_colormap_get_screen (gdk_drawable_get_colormap (drawable)));
-}
-	
-/**
  * gdk_drawable_get_colormap:
  * @drawable: a #GdkDrawable
  * 

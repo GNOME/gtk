@@ -93,7 +93,6 @@ void            gdk_drawable_get_size     (GdkDrawable	  *drawable,
 					   gint	          *width,
 					   gint  	  *height);
 GdkColormap*    gdk_drawable_get_colormap (GdkDrawable	  *drawable);
-GdkDisplay*	gdk_drawable_get_display  (GdkDrawable    *drawable);
 
 cairo_region_t *gdk_drawable_get_clip_region    (GdkDrawable *drawable);
 cairo_region_t *gdk_drawable_get_visible_region (GdkDrawable *drawable);
