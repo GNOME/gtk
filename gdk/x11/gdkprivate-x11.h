@@ -56,6 +56,8 @@ struct _GdkCursorPrivate
 void _gdk_x11_error_handler_push (void);
 void _gdk_x11_error_handler_pop  (void);
 
+Colormap _gdk_visual_get_x11_colormap (GdkVisual *visual);
+
 void _gdk_xid_table_insert (GdkDisplay *display,
 			    XID        *xid,
 			    gpointer    data);

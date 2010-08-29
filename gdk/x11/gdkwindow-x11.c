@@ -784,7 +784,7 @@ _gdk_window_impl_new (GdkWindow     *window,
       
       xattributes_mask |= CWBitGravity;
 
-      xattributes.colormap = GDK_COLORMAP_XCOLORMAP (draw_impl->colormap);
+      xattributes.colormap = _gdk_visual_get_x11_colormap (private->visual);
       xattributes_mask |= CWColormap;
 
       if (private->window_type == GDK_WINDOW_TEMP)

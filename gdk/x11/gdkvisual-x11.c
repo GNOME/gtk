@@ -38,6 +38,7 @@ struct _GdkVisualPrivate
 {
   Visual *xvisual;
   GdkScreen *screen;
+  Colormap colormap;
 };
 
 struct _GdkVisualClass
@@ -71,11 +72,25 @@ static const gchar *const visual_names[] =
 G_DEFINE_TYPE (GdkVisual, gdk_visual, G_TYPE_OBJECT)
 
 static void
+gdk_visual_finalize (GObject *object)
+{
+  GdkVisualPrivate *priv = (GdkVisualPrivate *) object;
+
+  if (priv->colormap != None)
+    XFreeColormap (GDK_SCREEN_XDISPLAY (priv->screen),
+                   priv->colormap);
+
+  G_OBJECT_CLASS (gdk_visual_parent_class)->finalize (object);
+}
+
+static void
 gdk_visual_class_init (GdkVisualClass *visual_class)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (visual_class);
 
   g_type_class_add_private (object_class, sizeof (GdkVisualPrivate));
+
+  object_class->finalize = gdk_visual_finalize;
 }
 
 static void
@@ -84,6 +99,8 @@ gdk_visual_init (GdkVisual *visual)
   visual->priv = G_TYPE_INSTANCE_GET_PRIVATE (visual,
                                               GDK_TYPE_VISUAL,
                                               GdkVisualPrivate);
+
+  visual->priv->colormap = None;
 }
 
 void
@@ -241,7 +258,11 @@ _gdk_visual_init (GdkScreen *screen)
   for (i = 0; i < nvisuals; i++)
     {
       if (default_xvisual->visualid == visuals[i]->priv->xvisual->visualid)
-	screen_x11->system_visual = visuals[i];
+         {
+ 	   screen_x11->system_visual = visuals[i];
+           visuals[i]->priv->colormap = DefaultColormap (screen_x11->xdisplay,
+                                                         screen_x11->screen_num);
+         }
 
       /* For now, we only support 8888 ARGB for the "rgba visual".
        * Additional formats (like ABGR) could be added later if they
@@ -630,6 +651,34 @@ gdk_visual_equal (Visual *a,
 		  Visual *b)
 {
   return (a->visualid == b->visualid);
+}
+
+/**
+ * _gdk_visual_get_x11_colormap:
+ * @visual: the visual to get the colormap from
+ *
+ * Gets the colormap to use
+ *
+ * Returns: the X Colormap to use for new windows using @visual
+ **/
+Colormap
+_gdk_visual_get_x11_colormap (GdkVisual *visual)
+{
+  GdkVisualPrivate *priv;
+
+  g_return_val_if_fail (GDK_IS_VISUAL (visual), None);
+
+  priv = visual->priv;
+
+  if (priv->colormap == None)
+    {
+      priv->colormap = XCreateColormap (GDK_SCREEN_XDISPLAY (priv->screen),
+                                        GDK_SCREEN_XROOTWIN (priv->screen),
+                                        GDK_VISUAL_XVISUAL (visual),
+                                        AllocNone);
+    }
+
+  return priv->colormap;
 }
 
 /**
