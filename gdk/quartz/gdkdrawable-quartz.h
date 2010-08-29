@@ -46,8 +46,6 @@ struct _GdkDrawableImplQuartz
 
   GdkDrawable     *wrapper;
 
-  GdkColormap     *colormap;
-
   cairo_surface_t *cairo_surface;
 };
  

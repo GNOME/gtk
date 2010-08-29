@@ -110,7 +110,6 @@ static void     move_to_current_desktop           (GdkWindow *window);
 static void     gdk_window_x11_set_background     (GdkWindow      *window,
                                                    cairo_pattern_t *pattern);
 
-static GdkColormap* gdk_window_impl_x11_get_colormap (GdkDrawable *drawable);
 static void        gdk_window_impl_x11_finalize   (GObject            *object);
 static void        gdk_window_impl_iface_init     (GdkWindowImplIface *iface);
 
@@ -175,11 +174,8 @@ static void
 gdk_window_impl_x11_class_init (GdkWindowImplX11Class *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
-  GdkDrawableClass *drawable_class = GDK_DRAWABLE_CLASS (klass);
   
   object_class->finalize = gdk_window_impl_x11_finalize;
-
-  drawable_class->get_colormap = gdk_window_impl_x11_get_colormap;
 }
 
 static void
@@ -422,34 +418,6 @@ _gdk_x11_window_tmp_reset_parent_bg (GdkWindow *window)
   _gdk_x11_window_tmp_reset_bg (window, FALSE);
 }
 
-static GdkColormap*
-gdk_window_impl_x11_get_colormap (GdkDrawable *drawable)
-{
-  GdkDrawableImplX11 *drawable_impl;
-  
-  g_return_val_if_fail (GDK_IS_WINDOW_IMPL_X11 (drawable), NULL);
-
-  drawable_impl = GDK_DRAWABLE_IMPL_X11 (drawable);
-
-  if (!((GdkWindowObject *) drawable_impl->wrapper)->input_only && 
-      drawable_impl->colormap == NULL)
-    {
-      XWindowAttributes window_attributes;
-      GdkVisual *visual;
-
-      XGetWindowAttributes (GDK_SCREEN_XDISPLAY (drawable_impl->screen),
-                            drawable_impl->xid,
-                            &window_attributes);
-
-      visual = gdk_x11_screen_lookup_visual (drawable_impl->screen,
-					     window_attributes.visual->visualid);
-      drawable_impl->colormap = gdk_x11_colormap_foreign_new (visual,
-							      window_attributes.colormap);
-    }
-  
-  return drawable_impl->colormap;
-}
-
 void
 _gdk_windowing_window_init (GdkScreen * screen)
 {
@@ -476,8 +444,6 @@ _gdk_windowing_window_init (GdkScreen * screen)
   draw_impl->screen = screen;
   draw_impl->xid = screen_x11->xroot_window;
   draw_impl->wrapper = GDK_DRAWABLE (private);
-  draw_impl->colormap = gdk_screen_get_system_colormap (screen);
-  g_object_ref (draw_impl->colormap);
   
   private->window_type = GDK_WINDOW_ROOT;
   private->depth = DefaultDepthOfScreen (screen_x11->xscreen);
@@ -762,16 +728,6 @@ _gdk_window_impl_new (GdkWindow     *window,
     {
       class = InputOutput;
 
-      if ((gdk_screen_get_system_visual (screen)) == private->visual)
-        {
-          draw_impl->colormap = gdk_screen_get_system_colormap (screen);
-          g_object_ref (draw_impl->colormap);
-        }
-      else
-        {
-          draw_impl->colormap = gdk_colormap_new (private->visual, FALSE);
-        }
-  
       xattributes.background_pixel = BlackPixel (xdisplay, screen_x11->screen_num);
 
       xattributes.border_pixel = BlackPixel (xdisplay, screen_x11->screen_num);
@@ -800,8 +756,6 @@ _gdk_window_impl_new (GdkWindow     *window,
   else
     {
       class = InputOnly;
-      draw_impl->colormap = gdk_screen_get_system_colormap (screen);
-      g_object_ref (draw_impl->colormap);
     }
 
   if (private->width > 65535 ||
@@ -5440,7 +5394,7 @@ _gdk_windowing_window_beep (GdkWindow *window)
  * On X11, this works only on X screens with a compositing manager 
  * running.
  *
- * For setting up per-pixel alpha, see gdk_screen_get_rgba_colormap().
+ * For setting up per-pixel alpha, see gdk_screen_get_rgba_visual().
  * For making non-toplevel windows translucent, see 
  * gdk_window_set_composited().
  *

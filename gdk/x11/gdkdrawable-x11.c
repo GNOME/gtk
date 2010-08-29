@@ -44,8 +44,6 @@ static cairo_surface_t *gdk_x11_create_cairo_surface (GdkDrawable *drawable,
                                                       int          width,
                                                       int          height);
      
-static GdkColormap* gdk_x11_get_colormap   (GdkDrawable    *drawable);
-
 static const cairo_user_data_key_t gdk_x11_cairo_key;
 
 G_DEFINE_TYPE (GdkDrawableImplX11, _gdk_drawable_impl_x11, GDK_TYPE_DRAWABLE)
@@ -57,8 +55,6 @@ _gdk_drawable_impl_x11_class_init (GdkDrawableImplX11Class *klass)
   
   drawable_class->ref_cairo_surface = gdk_x11_ref_cairo_surface;
   drawable_class->create_cairo_surface = gdk_x11_create_cairo_surface;
-
-  drawable_class->get_colormap = gdk_x11_get_colormap;
 }
 
 static void
@@ -109,16 +105,6 @@ _gdk_x11_drawable_update_size (GdkDrawable *drawable)
 /*****************************************************
  * X11 specific implementations of generic functions *
  *****************************************************/
-
-static GdkColormap*
-gdk_x11_get_colormap (GdkDrawable *drawable)
-{
-  GdkDrawableImplX11 *impl;
-
-  impl = GDK_DRAWABLE_IMPL_X11 (drawable);
-
-  return impl->colormap;
-}
 
 static GdkDrawable *
 get_impl_drawable (GdkDrawable *drawable)

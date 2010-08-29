@@ -227,8 +227,6 @@ static void   gdk_window_real_get_size  (GdkDrawable     *drawable,
 					 gint            *width,
 					 gint            *height);
 
-static GdkColormap* gdk_window_real_get_colormap (GdkDrawable *drawable);
-
 static cairo_region_t*   gdk_window_get_clip_region        (GdkDrawable *drawable);
 static cairo_region_t*   gdk_window_get_visible_region     (GdkDrawable *drawable);
 
@@ -374,7 +372,6 @@ gdk_window_class_init (GdkWindowObjectClass *klass)
   object_class->get_property = gdk_window_get_property;
 
   drawable_class->get_size = gdk_window_real_get_size;
-  drawable_class->get_colormap = gdk_window_real_get_colormap;
   drawable_class->ref_cairo_surface = gdk_window_ref_cairo_surface;
   drawable_class->create_cairo_surface = gdk_window_create_cairo_surface;
   drawable_class->set_cairo_clip = gdk_window_set_cairo_clip;
@@ -3657,17 +3654,6 @@ gdk_window_real_get_size (GdkDrawable *drawable,
     *width = private->width;
   if (height)
     *height = private->height;
-}
-
-static GdkColormap*
-gdk_window_real_get_colormap (GdkDrawable *drawable)
-{
-  g_return_val_if_fail (GDK_IS_WINDOW (drawable), NULL);
-
-  if (GDK_WINDOW_DESTROYED (drawable))
-    return NULL;
-
-  return gdk_drawable_get_colormap (((GdkWindowObject*)drawable)->impl);
 }
 
 static void

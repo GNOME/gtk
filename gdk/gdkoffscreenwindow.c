@@ -51,7 +51,6 @@ struct _GdkOffscreenWindow
   GdkDrawable parent_instance;
 
   GdkWindow *wrapper;
-  GdkColormap *colormap;
   GdkScreen *screen;
 
   cairo_surface_t *surface;
@@ -109,9 +108,6 @@ gdk_offscreen_window_destroy (GdkWindow *window,
   
   if (!recursing)
     gdk_offscreen_window_hide (window);
-
-  g_object_unref (offscreen->colormap);
-  offscreen->colormap = NULL;
 }
 
 static gboolean
@@ -140,14 +136,6 @@ gdk_offscreen_window_ref_cairo_surface (GdkDrawable *drawable)
   return cairo_surface_reference (offscreen->surface);
 }
 
-static GdkColormap*
-gdk_offscreen_window_get_colormap (GdkDrawable *drawable)
-{
-  GdkOffscreenWindow *offscreen = GDK_OFFSCREEN_WINDOW (drawable);
-
-  return offscreen->colormap;
-}
-
 void
 _gdk_offscreen_window_new (GdkWindow     *window,
 			   GdkScreen     *screen,
@@ -172,14 +160,6 @@ _gdk_offscreen_window_new (GdkWindow     *window,
   offscreen->wrapper = window;
 
   offscreen->screen = screen;
-
-  if (gdk_screen_get_system_visual (screen) == private->visual)
-    {
-      offscreen->colormap = gdk_screen_get_system_colormap (screen);
-      g_object_ref (offscreen->colormap);
-    }
-  else
-    offscreen->colormap = gdk_colormap_new (private->visual, FALSE);
 
   offscreen->surface = gdk_window_create_similar_surface ((GdkWindow *)private->parent,
                                                           CAIRO_CONTENT_COLOR,
@@ -705,7 +685,6 @@ gdk_offscreen_window_class_init (GdkOffscreenWindowClass *klass)
   object_class->finalize = gdk_offscreen_window_finalize;
 
   drawable_class->ref_cairo_surface = gdk_offscreen_window_ref_cairo_surface;
-  drawable_class->get_colormap = gdk_offscreen_window_get_colormap;
 }
 
 static void

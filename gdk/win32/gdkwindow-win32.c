@@ -37,7 +37,6 @@
 #include "gdkdevicemanager-win32.h"
 #include "gdkenumtypes.h"
 
-static GdkColormap* gdk_window_impl_win32_get_colormap (GdkDrawable *drawable);
 static void gdk_window_impl_win32_init       (GdkWindowImplWin32      *window);
 static void gdk_window_impl_win32_class_init (GdkWindowImplWin32Class *klass);
 static void gdk_window_impl_win32_finalize   (GObject                 *object);
@@ -126,13 +125,10 @@ static void
 gdk_window_impl_win32_class_init (GdkWindowImplWin32Class *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
-  GdkDrawableClass *drawable_class = GDK_DRAWABLE_CLASS (klass);
   
   parent_class = g_type_class_peek_parent (klass);
 
   object_class->finalize = gdk_window_impl_win32_finalize;
-
-  drawable_class->get_colormap = gdk_window_impl_win32_get_colormap;
 }
 
 static void
@@ -189,25 +185,6 @@ _gdk_win32_adjust_client_rect (GdkWindow *window,
   API_CALL (AdjustWindowRectEx, (rect, style, FALSE, exstyle));
 }
 
-static GdkColormap*
-gdk_window_impl_win32_get_colormap (GdkDrawable *drawable)
-{
-  GdkDrawableImplWin32 *drawable_impl;
-  
-  g_return_val_if_fail (GDK_IS_WINDOW_IMPL_WIN32 (drawable), NULL);
-
-  drawable_impl = GDK_DRAWABLE_IMPL_WIN32 (drawable);
-
-  if (!((GdkWindowObject *) drawable_impl->wrapper)->input_only && 
-      drawable_impl->colormap == NULL)
-    {
-      drawable_impl->colormap = gdk_screen_get_system_colormap (_gdk_screen);
-      g_object_ref (drawable_impl->colormap);
-    }
-  
-  return drawable_impl->colormap;
-}
-
 void
 _gdk_root_window_size_init (void)
 {
@@ -242,8 +219,6 @@ _gdk_windowing_window_init (GdkScreen *screen)
   
   draw_impl->handle = GetDesktopWindow ();
   draw_impl->wrapper = GDK_DRAWABLE (private);
-  draw_impl->colormap = gdk_screen_get_default_colormap (_gdk_screen);
-  g_object_ref (draw_impl->colormap);
   
   private->window_type = GDK_WINDOW_ROOT;
   private->depth = gdk_visual_get_system ()->depth;
@@ -486,9 +461,6 @@ _gdk_window_impl_new (GdkWindow     *window,
       dwExStyle = 0;
 
       private->input_only = FALSE;
-      
-      draw_impl->colormap = gdk_screen_get_system_colormap (_gdk_screen);
-      g_object_ref (draw_impl->colormap);
     }
   else
     {
@@ -499,9 +471,7 @@ _gdk_window_impl_new (GdkWindow     *window,
       dwExStyle = WS_EX_TRANSPARENT;
       private->depth = 0;
       private->input_only = TRUE;
-      draw_impl->colormap = gdk_screen_get_system_colormap (_gdk_screen);
-      g_object_ref (draw_impl->colormap);
-      GDK_NOTE (MISC, g_print ("... GDK_INPUT_ONLY, system colormap\n"));
+      GDK_NOTE (MISC, g_print ("... GDK_INPUT_ONLY\n"));
     }
 
   switch (private->window_type)

@@ -60,8 +60,6 @@ struct _GdkDrawableClass
                           gint         *width,
                           gint         *height);
 
-  GdkColormap* (*get_colormap)	(GdkDrawable  *drawable);
-
   cairo_region_t*   (*get_clip_region)    (GdkDrawable  *drawable);
   cairo_region_t*   (*get_visible_region) (GdkDrawable  *drawable);
 
@@ -92,7 +90,6 @@ GType           gdk_drawable_get_type     (void) G_GNUC_CONST;
 void            gdk_drawable_get_size     (GdkDrawable	  *drawable,
 					   gint	          *width,
 					   gint  	  *height);
-GdkColormap*    gdk_drawable_get_colormap (GdkDrawable	  *drawable);
 
 cairo_region_t *gdk_drawable_get_clip_region    (GdkDrawable *drawable);
 cairo_region_t *gdk_drawable_get_visible_region (GdkDrawable *drawable);

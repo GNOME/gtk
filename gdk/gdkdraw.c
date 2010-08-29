@@ -82,23 +82,6 @@ gdk_drawable_get_size (GdkDrawable *drawable,
 }
 
 /**
- * gdk_drawable_get_colormap:
- * @drawable: a #GdkDrawable
- * 
- * Gets the colormap for @drawable, if one is set; returns
- * %NULL otherwise.
- * 
- * Return value: the colormap, or %NULL
- **/
-GdkColormap*
-gdk_drawable_get_colormap (GdkDrawable *drawable)
-{
-  g_return_val_if_fail (GDK_IS_DRAWABLE (drawable), NULL);
-
-  return GDK_DRAWABLE_GET_CLASS (drawable)->get_colormap (drawable);
-}
-
-/**
  * gdk_drawable_get_clip_region:
  * @drawable: a #GdkDrawable
  * 

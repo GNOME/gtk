@@ -833,29 +833,6 @@ _gdk_window_impl_new (GdkWindow     *window,
 	}
     }
 
-  if (!private->input_only)
-    {
-      if (private->visual == gdk_screen_get_system_visual (_gdk_screen))
-        {
-          draw_impl->colormap = gdk_screen_get_system_colormap (_gdk_screen);
-          g_object_ref (draw_impl->colormap);
-        }
-      else if (private->visual == gdk_screen_get_rgba_visual (_gdk_screen))
-        {
-          draw_impl->colormap = gdk_screen_get_rgba_colormap (_gdk_screen);
-          g_object_ref (draw_impl->colormap);
-        }
-      else
-        {
-          draw_impl->colormap = gdk_colormap_new (private->visual, FALSE);
-        }
-    }
-  else
-    {
-      draw_impl->colormap = gdk_screen_get_system_colormap (_gdk_screen);
-      g_object_ref (draw_impl->colormap);
-    }
-
   /* Maintain the z-ordered list of children. */
   if (private->parent != (GdkWindowObject *)_gdk_root)
     parent_impl->sorted_children = g_list_prepend (parent_impl->sorted_children, window);
@@ -922,7 +899,7 @@ _gdk_window_impl_new (GdkWindow     *window,
 
 	gdk_window_set_title (window, title);
   
-	if (draw_impl->colormap == gdk_screen_get_rgba_colormap (_gdk_screen))
+	if (gdk_window_get_visual (window) == gdk_screen_get_rgba_visual (_gdk_screen))
 	  {
 	    [impl->toplevel setOpaque:NO];
 	    [impl->toplevel setBackgroundColor:[NSColor clearColor]];
@@ -1048,8 +1025,6 @@ _gdk_windowing_window_init (void)
   drawable_impl = GDK_DRAWABLE_IMPL_QUARTZ (private->impl);
   
   drawable_impl->wrapper = GDK_DRAWABLE (private);
-  drawable_impl->colormap = gdk_screen_get_system_colormap (_gdk_screen);
-  g_object_ref (drawable_impl->colormap);
 }
 
 static void

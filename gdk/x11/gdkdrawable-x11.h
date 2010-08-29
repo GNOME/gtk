@@ -54,8 +54,6 @@ struct _GdkDrawableImplX11
 
   GdkDrawable *wrapper;
   
-  GdkColormap *colormap;
-  
   Window xid;
   GdkScreen *screen;
 

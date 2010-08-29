@@ -53,8 +53,6 @@ static cairo_surface_t *gdk_win32_create_cairo_surface (GdkDrawable *drawable,
                                                         int          width,
                                                         int          height);
      
-static GdkColormap* gdk_win32_get_colormap   (GdkDrawable    *drawable);
-
 static void gdk_drawable_impl_win32_finalize   (GObject *object);
 
 static const cairo_user_data_key_t gdk_win32_cairo_key;
@@ -72,8 +70,6 @@ _gdk_drawable_impl_win32_class_init (GdkDrawableImplWin32Class *klass)
 
   drawable_class->ref_cairo_surface = gdk_win32_ref_cairo_surface;
   drawable_class->create_cairo_surface = gdk_win32_create_cairo_surface;
-  
-  drawable_class->get_colormap = gdk_win32_get_colormap;
 }
 
 static void
@@ -90,12 +86,6 @@ gdk_drawable_impl_win32_finalize (GObject *object)
 /*****************************************************
  * Win32 specific implementations of generic functions *
  *****************************************************/
-
-static GdkColormap*
-gdk_win32_get_colormap (GdkDrawable *drawable)
-{
-  return GDK_DRAWABLE_IMPL_WIN32 (drawable)->colormap;
-}
 
 /* Drawing
  */

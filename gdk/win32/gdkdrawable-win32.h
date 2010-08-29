@@ -49,7 +49,6 @@ struct _GdkDrawableImplWin32
 {
   GdkDrawable parent_instance;
   GdkDrawable *wrapper;
-  GdkColormap *colormap;
   HANDLE handle;
 
   guint hdc_count;
