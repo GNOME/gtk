@@ -507,6 +507,7 @@ gboolean      gdk_window_is_destroyed          (GdkWindow     *window);
 
 GdkVisual *   gdk_window_get_visual            (GdkWindow     *window);
 GdkScreen *   gdk_window_get_screen            (GdkWindow     *window);
+GdkDisplay *  gdk_window_get_display           (GdkWindow     *window);
 #ifndef GDK_MULTIDEVICE_SAFE
 GdkWindow*    gdk_window_at_pointer            (gint          *win_x,
                                                 gint          *win_y);

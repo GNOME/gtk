@@ -2207,6 +2207,25 @@ gdk_window_get_screen (GdkWindow *window)
 }
 
 /**
+ * gdk_window_get_display:
+ * @window: a #GdkWindow
+ * 
+ * Gets the #GdkDisplay associated with a #GdkWindow.
+ * 
+ * Return value: the #GdkDisplay associated with @window
+ **/
+GdkDisplay *
+gdk_window_get_display (GdkWindow *window)
+{
+  GdkWindowObject *private;
+
+  g_return_val_if_fail (GDK_IS_WINDOW (window), NULL);
+
+  private = (GdkWindowObject *) window;
+
+  return gdk_screen_get_display (gdk_visual_get_screen (private->visual));
+}
+/**
  * gdk_window_is_destroyed:
  * @window: a #GdkWindow
  *
