@@ -157,7 +157,7 @@ gdk_colormap_new (GdkVisual *visual,
   colormap->visual = visual;
   private->screen = gdk_visual_get_screen (visual);
   
-  xvisual = ((GdkVisualPrivate*) visual)->xvisual;
+  xvisual = gdk_x11_visual_get_xvisual (visual);
   xdisplay = GDK_SCREEN_XDISPLAY (private->screen);
   xrootwin = GDK_SCREEN_XROOTWIN (private->screen);
 

@@ -43,7 +43,6 @@
 #include "config.h"
 
 typedef struct _GdkCursorPrivate       GdkCursorPrivate;
-typedef struct _GdkVisualPrivate       GdkVisualPrivate;
 
 struct _GdkCursorPrivate
 {
@@ -52,13 +51,6 @@ struct _GdkCursorPrivate
   GdkDisplay *display;
   gchar *name;
   guint serial;
-};
-
-struct _GdkVisualPrivate
-{
-  GdkVisual visual;
-  Visual *xvisual;
-  GdkScreen *screen;
 };
 
 void _gdk_x11_error_handler_push (void);

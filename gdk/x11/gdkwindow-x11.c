@@ -727,7 +727,7 @@ _gdk_window_impl_new (GdkWindow     *window,
 
   xattributes_mask = 0;
 
-  xvisual = ((GdkVisualPrivate*) private->visual)->xvisual;
+  xvisual = gdk_x11_visual_get_xvisual (private->visual);
   
   if (attributes_mask & GDK_WA_NOREDIR)
     {
@@ -762,7 +762,7 @@ _gdk_window_impl_new (GdkWindow     *window,
     {
       class = InputOutput;
 
-      if ((((GdkVisualPrivate *)gdk_screen_get_system_visual (screen))->xvisual) == xvisual)
+      if ((gdk_screen_get_system_visual (screen)) == private->visual)
         {
           draw_impl->colormap = gdk_screen_get_system_colormap (screen);
           g_object_ref (draw_impl->colormap);

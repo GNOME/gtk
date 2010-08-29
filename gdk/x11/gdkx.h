@@ -76,7 +76,6 @@ gint     gdk_x11_get_default_screen       (void);
 #define GDK_SCREEN_XDISPLAY(screen)   (GDK_SCREEN_X11 (screen)->xdisplay)
 #define GDK_SCREEN_XSCREEN(screen)    (GDK_SCREEN_X11 (screen)->xscreen)
 #define GDK_SCREEN_XNUMBER(screen)    (GDK_SCREEN_X11 (screen)->screen_num) 
-#define GDK_VISUAL_XVISUAL(vis)       (((GdkVisualPrivate *) vis)->xvisual)
 #define GDK_WINDOW_XWINDOW	      GDK_DRAWABLE_XID
 
 #else /* GDK_COMPILATION */
@@ -95,9 +94,10 @@ gint     gdk_x11_get_default_screen       (void);
 #define GDK_SCREEN_XDISPLAY(screen)   (gdk_x11_display_get_xdisplay (gdk_screen_get_display (screen)))
 #define GDK_SCREEN_XSCREEN(screen)    (gdk_x11_screen_get_xscreen (screen))
 #define GDK_SCREEN_XNUMBER(screen)    (gdk_x11_screen_get_screen_number (screen))
-#define GDK_VISUAL_XVISUAL(visual)    (gdk_x11_visual_get_xvisual (visual))
 
 #endif /* GDK_COMPILATION */
+
+#define GDK_VISUAL_XVISUAL(visual)    (gdk_x11_visual_get_xvisual (visual))
 
 GdkVisual* gdk_x11_screen_lookup_visual (GdkScreen *screen,
 					 VisualID   xvisualid);

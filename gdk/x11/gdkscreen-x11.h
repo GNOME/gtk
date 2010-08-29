@@ -70,8 +70,8 @@ struct _GdkScreenX11
   guint need_refetch_wm_name : 1;
   
   /* Visual Part */
-  GdkVisualPrivate *system_visual;
-  GdkVisualPrivate **visuals;
+  GdkVisual *system_visual;
+  GdkVisual **visuals;
   gint nvisuals;
   gint available_depths[7];
   gint navailable_depths;

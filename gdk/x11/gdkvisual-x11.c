@@ -34,6 +34,11 @@
 #include "gdkscreen-x11.h"
 #include "gdkinternals.h"
 
+struct _GdkVisualPrivate
+{
+  Visual *xvisual;
+  GdkScreen *screen;
+};
 
 struct _GdkVisualClass
 {
@@ -63,34 +68,23 @@ static const gchar *const visual_names[] =
 
 #endif /* G_ENABLE_DEBUG */
 
-GType
-gdk_visual_get_type (void)
-{
-  static GType object_type = 0;
+G_DEFINE_TYPE (GdkVisual, gdk_visual, G_TYPE_OBJECT)
 
-  if (!object_type)
-    {
-      const GTypeInfo object_info =
-      {
-        sizeof (GdkVisualClass),
-        (GBaseInitFunc) NULL,
-        (GBaseFinalizeFunc) NULL,
-        (GClassInitFunc) NULL,
-        NULL,           /* class_finalize */
-        NULL,           /* class_data */
-        sizeof (GdkVisualPrivate),
-        0,              /* n_preallocs */
-        (GInstanceInitFunc) NULL,
-      };
-      
-      object_type = g_type_register_static (G_TYPE_OBJECT,
-                                            g_intern_static_string ("GdkVisual"),
-                                            &object_info, 0);
-    }
-  
-  return object_type;
+static void
+gdk_visual_class_init (GdkVisualClass *visual_class)
+{
+  GObjectClass *object_class = G_OBJECT_CLASS (visual_class);
+
+  g_type_class_add_private (object_class, sizeof (GdkVisualPrivate));
 }
 
+static void
+gdk_visual_init (GdkVisual *visual)
+{
+  visual->priv = G_TYPE_INSTANCE_GET_PRIVATE (visual,
+                                              GDK_TYPE_VISUAL,
+                                              GdkVisualPrivate);
+}
 
 void
 _gdk_visual_init (GdkScreen *screen)
@@ -109,9 +103,9 @@ _gdk_visual_init (GdkScreen *screen)
   GdkScreenX11 *screen_x11;
   XVisualInfo *visual_list;
   XVisualInfo visual_template;
-  GdkVisualPrivate *temp_visual;
+  GdkVisual *temp_visual;
   Visual *default_xvisual;
-  GdkVisualPrivate **visuals;
+  GdkVisual **visuals;
   int nxvisuals;
   int nvisuals;
   int i, j;
@@ -123,7 +117,7 @@ _gdk_visual_init (GdkScreen *screen)
   visual_template.screen = screen_x11->screen_num;
   visual_list = XGetVisualInfo (screen_x11->xdisplay, VisualScreenMask, &visual_template, &nxvisuals);
   
-  visuals = g_new (GdkVisualPrivate *, nxvisuals);
+  visuals = g_new (GdkVisual *, nxvisuals);
   for (i = 0; i < nxvisuals; i++)
     visuals[i] = g_object_new (GDK_TYPE_VISUAL, NULL);
 
@@ -132,7 +126,7 @@ _gdk_visual_init (GdkScreen *screen)
   nvisuals = 0;
   for (i = 0; i < nxvisuals; i++)
     {
-      visuals[nvisuals]->screen = screen;
+      visuals[nvisuals]->priv->screen = screen;
       
       if (visual_list[i].depth >= 1)
 	{
@@ -143,64 +137,64 @@ _gdk_visual_init (GdkScreen *screen)
 #endif /* __cplusplus */
 	    {
 	    case StaticGray:
-	      visuals[nvisuals]->visual.type = GDK_VISUAL_STATIC_GRAY;
+	      visuals[nvisuals]->type = GDK_VISUAL_STATIC_GRAY;
 	      break;
 	    case GrayScale:
-	      visuals[nvisuals]->visual.type = GDK_VISUAL_GRAYSCALE;
+	      visuals[nvisuals]->type = GDK_VISUAL_GRAYSCALE;
 	      break;
 	    case StaticColor:
-	      visuals[nvisuals]->visual.type = GDK_VISUAL_STATIC_COLOR;
+	      visuals[nvisuals]->type = GDK_VISUAL_STATIC_COLOR;
 	      break;
 	    case PseudoColor:
-	      visuals[nvisuals]->visual.type = GDK_VISUAL_PSEUDO_COLOR;
+	      visuals[nvisuals]->type = GDK_VISUAL_PSEUDO_COLOR;
 	      break;
 	    case TrueColor:
-	      visuals[nvisuals]->visual.type = GDK_VISUAL_TRUE_COLOR;
+	      visuals[nvisuals]->type = GDK_VISUAL_TRUE_COLOR;
 	      break;
 	    case DirectColor:
-	      visuals[nvisuals]->visual.type = GDK_VISUAL_DIRECT_COLOR;
+	      visuals[nvisuals]->type = GDK_VISUAL_DIRECT_COLOR;
 	      break;
 	    }
 
-	  visuals[nvisuals]->visual.depth = visual_list[i].depth;
-	  visuals[nvisuals]->visual.byte_order =
+	  visuals[nvisuals]->depth = visual_list[i].depth;
+	  visuals[nvisuals]->byte_order =
 	    (ImageByteOrder(screen_x11->xdisplay) == LSBFirst) ?
 	    GDK_LSB_FIRST : GDK_MSB_FIRST;
-	  visuals[nvisuals]->visual.red_mask = visual_list[i].red_mask;
-	  visuals[nvisuals]->visual.green_mask = visual_list[i].green_mask;
-	  visuals[nvisuals]->visual.blue_mask = visual_list[i].blue_mask;
-	  visuals[nvisuals]->visual.colormap_size = visual_list[i].colormap_size;
-	  visuals[nvisuals]->visual.bits_per_rgb = visual_list[i].bits_per_rgb;
-	  visuals[nvisuals]->xvisual = visual_list[i].visual;
+	  visuals[nvisuals]->red_mask = visual_list[i].red_mask;
+	  visuals[nvisuals]->green_mask = visual_list[i].green_mask;
+	  visuals[nvisuals]->blue_mask = visual_list[i].blue_mask;
+	  visuals[nvisuals]->colormap_size = visual_list[i].colormap_size;
+	  visuals[nvisuals]->bits_per_rgb = visual_list[i].bits_per_rgb;
+	  visuals[nvisuals]->priv->xvisual = visual_list[i].visual;
 
-	  if ((visuals[nvisuals]->visual.type == GDK_VISUAL_TRUE_COLOR) ||
-	      (visuals[nvisuals]->visual.type == GDK_VISUAL_DIRECT_COLOR))
+	  if ((visuals[nvisuals]->type == GDK_VISUAL_TRUE_COLOR) ||
+	      (visuals[nvisuals]->type == GDK_VISUAL_DIRECT_COLOR))
 	    {
-	      gdk_visual_decompose_mask (visuals[nvisuals]->visual.red_mask,
-					 &visuals[nvisuals]->visual.red_shift,
-					 &visuals[nvisuals]->visual.red_prec);
+	      gdk_visual_decompose_mask (visuals[nvisuals]->red_mask,
+					 &visuals[nvisuals]->red_shift,
+					 &visuals[nvisuals]->red_prec);
 
-	      gdk_visual_decompose_mask (visuals[nvisuals]->visual.green_mask,
-					 &visuals[nvisuals]->visual.green_shift,
-					 &visuals[nvisuals]->visual.green_prec);
+	      gdk_visual_decompose_mask (visuals[nvisuals]->green_mask,
+					 &visuals[nvisuals]->green_shift,
+					 &visuals[nvisuals]->green_prec);
 
-	      gdk_visual_decompose_mask (visuals[nvisuals]->visual.blue_mask,
-					 &visuals[nvisuals]->visual.blue_shift,
-					 &visuals[nvisuals]->visual.blue_prec);
+	      gdk_visual_decompose_mask (visuals[nvisuals]->blue_mask,
+					 &visuals[nvisuals]->blue_shift,
+					 &visuals[nvisuals]->blue_prec);
 	    }
 	  else
 	    {
-	      visuals[nvisuals]->visual.red_mask = 0;
-	      visuals[nvisuals]->visual.red_shift = 0;
-	      visuals[nvisuals]->visual.red_prec = 0;
+	      visuals[nvisuals]->red_mask = 0;
+	      visuals[nvisuals]->red_shift = 0;
+	      visuals[nvisuals]->red_prec = 0;
 
-	      visuals[nvisuals]->visual.green_mask = 0;
-	      visuals[nvisuals]->visual.green_shift = 0;
-	      visuals[nvisuals]->visual.green_prec = 0;
+	      visuals[nvisuals]->green_mask = 0;
+	      visuals[nvisuals]->green_shift = 0;
+	      visuals[nvisuals]->green_prec = 0;
 
-	      visuals[nvisuals]->visual.blue_mask = 0;
-	      visuals[nvisuals]->visual.blue_shift = 0;
-	      visuals[nvisuals]->visual.blue_prec = 0;
+	      visuals[nvisuals]->blue_mask = 0;
+	      visuals[nvisuals]->blue_shift = 0;
+	      visuals[nvisuals]->blue_prec = 0;
 	    }
 	  
 	  nvisuals += 1;
@@ -214,27 +208,27 @@ _gdk_visual_init (GdkScreen *screen)
     {
       for (j = i+1; j < nvisuals; j++)
 	{
-	  if (visuals[j]->visual.depth >= visuals[i]->visual.depth)
+	  if (visuals[j]->depth >= visuals[i]->depth)
 	    {
-	      if ((visuals[j]->visual.depth == 8) && (visuals[i]->visual.depth == 8))
+	      if ((visuals[j]->depth == 8) && (visuals[i]->depth == 8))
 		{
-		  if (visuals[j]->visual.type == GDK_VISUAL_PSEUDO_COLOR)
+		  if (visuals[j]->type == GDK_VISUAL_PSEUDO_COLOR)
 		    {
 		      temp_visual = visuals[j];
 		      visuals[j] = visuals[i];
 		      visuals[i] = temp_visual;
 		    }
-		  else if ((visuals[i]->visual.type != GDK_VISUAL_PSEUDO_COLOR) &&
-			   visuals[j]->visual.type > visuals[i]->visual.type)
+		  else if ((visuals[i]->type != GDK_VISUAL_PSEUDO_COLOR) &&
+			   visuals[j]->type > visuals[i]->type)
 		    {
 		      temp_visual = visuals[j];
 		      visuals[j] = visuals[i];
 		      visuals[i] = temp_visual;
 		    }
 		}
-	      else if ((visuals[j]->visual.depth > visuals[i]->visual.depth) ||
-		       ((visuals[j]->visual.depth == visuals[i]->visual.depth) &&
-			(visuals[j]->visual.type > visuals[i]->visual.type)))
+	      else if ((visuals[j]->depth > visuals[i]->depth) ||
+		       ((visuals[j]->depth == visuals[i]->depth) &&
+			(visuals[j]->type > visuals[i]->type)))
 		{
 		  temp_visual = visuals[j];
 		  visuals[j] = visuals[i];
@@ -246,17 +240,17 @@ _gdk_visual_init (GdkScreen *screen)
 
   for (i = 0; i < nvisuals; i++)
     {
-      if (default_xvisual->visualid == visuals[i]->xvisual->visualid)
+      if (default_xvisual->visualid == visuals[i]->priv->xvisual->visualid)
 	screen_x11->system_visual = visuals[i];
 
       /* For now, we only support 8888 ARGB for the "rgba visual".
        * Additional formats (like ABGR) could be added later if they
        * turn up.
        */
-      if (visuals[i]->visual.depth == 32 &&
-	  (visuals[i]->visual.red_mask   == 0xff0000 &&
-	   visuals[i]->visual.green_mask == 0x00ff00 &&
-	   visuals[i]->visual.blue_mask  == 0x0000ff))
+      if (visuals[i]->depth == 32 &&
+	  (visuals[i]->red_mask   == 0xff0000 &&
+	   visuals[i]->green_mask == 0x00ff00 &&
+	   visuals[i]->blue_mask  == 0x0000ff))
 	{
 	  screen_x11->rgba_visual = GDK_VISUAL (visuals[i]);
 	}
@@ -275,9 +269,9 @@ _gdk_visual_init (GdkScreen *screen)
     {
       for (j = 0; j < nvisuals; j++)
 	{
-	  if (visuals[j]->visual.depth == possible_depths[i])
+	  if (visuals[j]->depth == possible_depths[i])
 	    {
-	      screen_x11->available_depths[screen_x11->navailable_depths++] = visuals[j]->visual.depth;
+	      screen_x11->available_depths[screen_x11->navailable_depths++] = visuals[j]->depth;
 	      break;
 	    }
 	}
@@ -291,9 +285,9 @@ _gdk_visual_init (GdkScreen *screen)
     {
       for (j = 0; j < nvisuals; j++)
 	{
-	  if (visuals[j]->visual.type == possible_types[i])
+	  if (visuals[j]->type == possible_types[i])
 	    {
-	      screen_x11->available_types[screen_x11->navailable_types++] = visuals[j]->visual.type;
+	      screen_x11->available_types[screen_x11->navailable_types++] = visuals[j]->type;
 	      break;
 	    }
 	}
@@ -397,7 +391,7 @@ gdk_visual_get_best_with_depth (gint depth)
   
   return_val = NULL;
   for (i = 0; i < screen_x11->nvisuals; i++)
-    if (depth == screen_x11->visuals[i]->visual.depth)
+    if (depth == screen_x11->visuals[i]->depth)
       {
 	return_val = (GdkVisual *) screen_x11->visuals[i];
 	break;
@@ -426,7 +420,7 @@ gdk_visual_get_best_with_type (GdkVisualType visual_type)
 
   return_val = NULL;
   for (i = 0; i < screen_x11->nvisuals; i++)
-    if (visual_type == screen_x11->visuals[i]->visual.type)
+    if (visual_type == screen_x11->visuals[i]->type)
       {
 	return_val = (GdkVisual *) screen_x11->visuals[i];
 	break;
@@ -455,8 +449,8 @@ gdk_visual_get_best_with_both (gint          depth,
 
   return_val = NULL;
   for (i = 0; i < screen_x11->nvisuals; i++)
-    if ((depth == screen_x11->visuals[i]->visual.depth) &&
-	(visual_type == screen_x11->visuals[i]->visual.type))
+    if ((depth == screen_x11->visuals[i]->depth) &&
+	(visual_type == screen_x11->visuals[i]->type))
       {
 	return_val = (GdkVisual *) screen_x11->visuals[i];
 	break;
@@ -566,7 +560,7 @@ gdk_x11_screen_lookup_visual (GdkScreen *screen,
   screen_x11 = GDK_SCREEN_X11 (screen);
 
   for (i = 0; i < screen_x11->nvisuals; i++)
-    if (xvisualid == screen_x11->visuals[i]->xvisual->visualid)
+    if (xvisualid == screen_x11->visuals[i]->priv->xvisual->visualid)
       return (GdkVisual *)  screen_x11->visuals[i];
 
   return NULL;
@@ -589,14 +583,13 @@ gdkx_visual_get (VisualID xvisualid)
 static void
 gdk_visual_add (GdkVisual *visual)
 {
-  GdkVisualPrivate *private = (GdkVisualPrivate *) visual;
-  GdkScreenX11 *screen_x11 = GDK_SCREEN_X11 (private->screen);
+  GdkScreenX11 *screen_x11 = GDK_SCREEN_X11 (visual->priv->screen);
   
   if (!screen_x11->visual_hash)
     screen_x11->visual_hash = g_hash_table_new ((GHashFunc) gdk_visual_hash,
                                                 (GEqualFunc) gdk_visual_equal);
 
-  g_hash_table_insert (screen_x11->visual_hash, private->xvisual, visual);
+  g_hash_table_insert (screen_x11->visual_hash, visual->priv->xvisual, visual);
 }
 
 static void
@@ -652,7 +645,7 @@ gdk_x11_visual_get_xvisual (GdkVisual *visual)
 {
   g_return_val_if_fail (visual != NULL, NULL);
 
-  return  ((GdkVisualPrivate*) visual)->xvisual;
+  return visual->priv->xvisual;
 }
 
 /**
@@ -670,5 +663,5 @@ gdk_visual_get_screen (GdkVisual *visual)
 {
   g_return_val_if_fail (GDK_IS_VISUAL (visual), NULL);
 
-  return  ((GdkVisualPrivate*) visual)->screen;
+  return visual->priv->screen;
 }

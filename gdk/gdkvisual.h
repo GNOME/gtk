@@ -42,6 +42,7 @@ G_BEGIN_DECLS
 #define GDK_IS_VISUAL_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE ((klass), GDK_TYPE_VISUAL))
 #define GDK_VISUAL_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), GDK_TYPE_VISUAL, GdkVisualClass))
 
+typedef struct _GdkVisualPrivate  GdkVisualPrivate;
 typedef struct _GdkVisualClass    GdkVisualClass;
 
 /* Types of visuals.
@@ -95,6 +96,8 @@ struct _GdkVisual
   guint32 GSEAL (blue_mask);
   gint GSEAL (blue_shift);
   gint GSEAL (blue_prec);
+
+  GdkVisualPrivate *priv;
 };
 
 GType         gdk_visual_get_type            (void) G_GNUC_CONST;
