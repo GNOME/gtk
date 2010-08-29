@@ -512,7 +512,7 @@ _gdk_window_impl_new (GdkWindow     *window,
 		       (private->window_type == GDK_WINDOW_DIALOG ? "DIALOG" :
 			(private->window_type == GDK_WINDOW_TEMP ? "TEMP" :
 			 "???")))),
-		     (attributes->wclass == GDK_INPUT_OUTPUT ? "" : "input-only")),
+		     (attributes->wclass == GDK_INPUT_OUTPUT ? "" : "input-only"))
 			   );
 
   /* to ensure to not miss important information some additional check against
