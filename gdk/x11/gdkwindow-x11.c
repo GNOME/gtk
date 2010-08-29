@@ -2612,21 +2612,59 @@ gdk_window_set_transient_for (GdkWindow *window,
 			  GDK_WINDOW_XID (parent));
 }
 
-static void
+static gboolean
 gdk_window_x11_set_back_color (GdkWindow *window,
-                               GdkColor *color)
+                               double     red,
+                               double     green,
+                               double     blue,
+                               double     alpha)
 {
-  GdkColor allocated = *color;
+  GdkVisual *visual = gdk_window_get_visual (window);
 
-  if (!gdk_colormap_alloc_color (gdk_drawable_get_colormap (window),
-                                 &allocated,
-                                 TRUE, TRUE))
-    return;
+  /* I suppose we could handle these, but that'd require fiddling with 
+   * xrender formats... */
+  if (alpha != 1.0)
+    return FALSE;
 
-  XSetWindowBackground (GDK_WINDOW_XDISPLAY (window),
-			GDK_WINDOW_XID (window), allocated.pixel);
+  switch (visual->type)
+    {
+    case GDK_VISUAL_DIRECT_COLOR:
+    case GDK_VISUAL_TRUE_COLOR:
+	{
+	  /* If bits not used for color are used for something other than padding,
+	   * it's likely alpha, so we set them to 1s.
+	   */
+	  guint padding, pixel;
 
-  gdk_colormap_free_colors (gdk_drawable_get_colormap (window), &allocated, 1);
+	  /* Shifting by >= width-of-type isn't defined in C */
+	  if (visual->depth >= 32)
+	    padding = 0;
+	  else
+	    padding = ((~(guint32)0)) << visual->depth;
+	  
+	  pixel = ~ (visual->red_mask | visual->green_mask | visual->blue_mask | padding);
+	  
+	  pixel += (((int) (red   * ((1 << visual->red_prec  ) - 1))) << visual->red_shift  ) +
+		   (((int) (green * ((1 << visual->green_prec) - 1))) << visual->green_shift) +
+		   (((int) (blue  * ((1 << visual->blue_prec ) - 1))) << visual->blue_shift );
+
+          XSetWindowBackground (GDK_WINDOW_XDISPLAY (window),
+                                GDK_WINDOW_XID (window), pixel);
+	}
+      return TRUE;
+
+    /* These require fiddling with the colormap, and as they're essentially unused
+     * we're just gonna skip them for now.
+     */
+    case GDK_VISUAL_PSEUDO_COLOR:
+    case GDK_VISUAL_GRAYSCALE:
+    case GDK_VISUAL_STATIC_GRAY:
+    case GDK_VISUAL_STATIC_COLOR:
+    default:
+      break;
+    }
+
+  return FALSE;
 }
 
 static gboolean
@@ -2641,7 +2679,6 @@ static void
 gdk_window_x11_set_background (GdkWindow      *window,
                                cairo_pattern_t *pattern)
 {
-  GdkColor color = { 0, };
   double r, g, b, a;
   cairo_surface_t *surface;
   cairo_matrix_t matrix;
@@ -2660,9 +2697,8 @@ gdk_window_x11_set_background (GdkWindow      *window,
     {
     case CAIRO_PATTERN_TYPE_SOLID:
       cairo_pattern_get_rgba (pattern, &r, &g, &b, &a);
-      color.red = r * 65535;
-      color.green = g * 65535;
-      color.blue = b * 65535;
+      if (gdk_window_x11_set_back_color (window, r, g, b, a))
+        return;
       break;
     case CAIRO_PATTERN_TYPE_SURFACE:
       cairo_pattern_get_matrix (pattern, &matrix);
@@ -2692,7 +2728,8 @@ gdk_window_x11_set_background (GdkWindow      *window,
       break;
     }
 
-  gdk_window_x11_set_back_color (window, &color);
+  XSetWindowBackgroundPixmap (GDK_WINDOW_XDISPLAY (window),
+                              GDK_WINDOW_XID (window), None);
 }
 
 static void
