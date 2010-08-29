@@ -22,8 +22,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-master-po-gl-77922___.merged\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-08-27 23:29+0200\n"
-"PO-Revision-Date: 2010-08-27 23:29+0200\n"
+"POT-Creation-Date: 2010-08-29 22:39+0200\n"
+"PO-Revision-Date: 2010-08-29 22:42+0200\n"
 "Last-Translator: Fran Dieguez <frandieguez@ubuntu.com>\n"
 "Language-Team: Galician <gnome-gl-list@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -85,8 +85,8 @@ msgstr "PANTALLA"
 
 #. Description of --gdk-debug=FLAGS in --help output
 #: ../gdk/gdk.c:164
-msgid "Gdk debugging flags to set"
-msgstr "Parámetros de depuración Gdk para activar"
+msgid "GDK debugging flags to set"
+msgstr "Marcas de depuración GTK+ para activar"
 
 #. Placeholder in --gdk-debug=FLAGS in --help output
 #. Placeholder in --gdk-no-debug=FLAGS in --help output
@@ -98,8 +98,8 @@ msgstr "PARÁMETROS"
 
 #. Description of --gdk-no-debug=FLAGS in --help output
 #: ../gdk/gdk.c:167
-msgid "Gdk debugging flags to unset"
-msgstr "Parámetros de depuración Gdk para desconfigurar"
+msgid "GDK debugging flags to unset"
+msgstr "Marcas de depuración GTK+ para desestabelecer"
 
 #: ../gdk/keyname-table.h:3940
 msgctxt "keyboard label"
@@ -462,9 +462,9 @@ msgstr "Tipo de función incorrecta na liña %d: '%s'"
 
 #: ../gtk/gtkbuilderparser.c:407
 #, c-format
-msgid "Duplicate object id '%s' on line %d (previously on line %d)"
+msgid "Duplicate object ID '%s' on line %d (previously on line %d)"
 msgstr ""
-"O identificador de obxecto '%s' na liña %d está duplicado (anteriormente na "
+"O identificador de obxecto «%s» na liña %d está duplicado (anteriormente na "
 "liña %d)"
 
 #: ../gtk/gtkbuilderparser.c:859
@@ -1570,8 +1570,8 @@ msgstr "Recordar _sempre"
 
 #: ../gtk/gtkmountoperation.c:881
 #, c-format
-msgid "Unknown Application (pid %d)"
-msgstr "Aplicativo descoñecido (pid %d)"
+msgid "Unknown Application (PID %d)"
+msgstr "Aplicativo descoñecido (PID %d)"
 
 #: ../gtk/gtkmountoperation.c:1064
 msgid "Unable to end process"
@@ -1583,9 +1583,9 @@ msgstr "Finalizar o _proceso"
 
 #: ../gtk/gtkmountoperation-stub.c:64
 #, c-format
-msgid "Cannot kill process with pid %d. Operation is not implemented."
+msgid "Cannot kill process with PID %d. Operation is not implemented."
 msgstr ""
-"Non é posíbel matar o proceso co pid %d. A operación non está implementada."
+"Non é posíbel matar o proceso co PID %d. A operación non está implementada."
 
 #. translators: this string is a name for the 'less' command
 #: ../gtk/gtkmountoperation-x11.c:865
@@ -1610,8 +1610,8 @@ msgstr "Intérprete de ordes Z"
 
 #: ../gtk/gtkmountoperation-x11.c:966
 #, c-format
-msgid "Cannot end process with pid %d: %s"
-msgstr "Non é posíbel finalizar o proceso co pid %d: %s"
+msgid "Cannot end process with PID %d: %s"
+msgstr "Non é posíbel finalizar o proceso co PID %d: %s"
 
 #: ../gtk/gtknotebook.c:4705 ../gtk/gtknotebook.c:7311
 #, c-format
@@ -2796,8 +2796,8 @@ msgstr "O atributo \"%s\" localizouse dúas veces no elemento <%s>"
 
 #: ../gtk/gtktextbufferserialize.c:846
 #, c-format
-msgid "<%s> element has invalid id \"%s\""
-msgstr "O elemento <%s> ten un id \"%s\" incorrecto"
+msgid "<%s> element has invalid ID \"%s\""
+msgstr "O elemento <%s> ten un id «%s» incorrecto"
 
 #: ../gtk/gtktextbufferserialize.c:856
 #, c-format
@@ -4127,8 +4127,8 @@ msgstr "A impresora '%s' está sen papel."
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1686
 #, c-format
-msgid "Printer '%s' is currently off-line."
-msgstr "A impresora '%s' está desconectada actualmente."
+msgid "Printer '%s' is currently offline."
+msgstr "A impresora «%s» está desconectada actualmente."
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1687
 #, c-format
@@ -4435,6 +4435,12 @@ msgid ""
 msgstr ""
 "Produciuse un fallo ao cargar a imaxe '%s': o motivo é descoñecido, é "
 "probábel que o ficheiro de imaxe estea corrupto"
+
+#~ msgid "Gdk debugging flags to set"
+#~ msgstr "Parámetros de depuración Gdk para activar"
+
+#~ msgid "Gdk debugging flags to unset"
+#~ msgstr "Parámetros de depuración Gdk para desconfigurar"
 
 #~ msgid "Image file '%s' contains no data"
 #~ msgstr "O ficheiro de imaxe '%s' non contén datos"

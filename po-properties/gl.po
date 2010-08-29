@@ -24,8 +24,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-master-po-properties-gl-77816____.merged\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-08-27 23:30+0200\n"
-"PO-Revision-Date: 2010-08-27 23:40+0200\n"
+"POT-Creation-Date: 2010-08-29 22:43+0200\n"
+"PO-Revision-Date: 2010-08-29 22:44+0200\n"
 "Last-Translator: Fran Dieguez <frandieguez@ubuntu.com>\n"
 "Language-Team: Galician <gnome-gl-list@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -676,7 +676,7 @@ msgstr "Estilo de disposición"
 
 #: ../gtk/gtkbbox.c:138
 msgid ""
-"How to layout the buttons in the box. Possible values are default, spread, "
+"How to lay out the buttons in the box. Possible values are: default, spread, "
 "edge, start and end"
 msgstr ""
 "Como dispor os botóns na caixa. Os valores posíbeis son: default "
@@ -6608,8 +6608,8 @@ msgid "Collapsed"
 msgstr "Recollido"
 
 #: ../gtk/gtktoolitemgroup.c:1558
-msgid "Wether the group has been collapsed and items are hidden"
-msgstr "Indica se grupo foi expandido e os elementos agochados"
+msgid "Whether the group has been collapsed and items are hidden"
+msgstr "Indica se o grupo foi recollido e os elementos agochados"
 
 #: ../gtk/gtktoolitemgroup.c:1564
 msgid "ellipsize"
