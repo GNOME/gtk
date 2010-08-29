@@ -598,12 +598,9 @@ setup_toplevel_window (GdkWindow *window,
   XSizeHints size_hints;
   long pid;
   Window leader_window;
-    
-  if (GDK_WINDOW_TYPE (window) == GDK_WINDOW_DIALOG)
-    XSetTransientForHint (xdisplay, xid, xparent);
-  
+
   set_wm_protocols (window);
-  
+
   if (!obj->input_only)
     {
       /* The focus window is off the visible area, and serves to receive key
@@ -723,7 +720,6 @@ _gdk_window_impl_new (GdkWindow     *window,
   switch (private->window_type)
     {
     case GDK_WINDOW_TOPLEVEL:
-    case GDK_WINDOW_DIALOG:
     case GDK_WINDOW_TEMP:
       if (GDK_WINDOW_TYPE (private->parent) != GDK_WINDOW_ROOT)
 	{
@@ -809,7 +805,6 @@ _gdk_window_impl_new (GdkWindow     *window,
 
   switch (GDK_WINDOW_TYPE (private))
     {
-    case GDK_WINDOW_DIALOG:
     case GDK_WINDOW_TOPLEVEL:
     case GDK_WINDOW_TEMP:
       if (attributes_mask & GDK_WA_TITLE)
@@ -1426,7 +1421,6 @@ gdk_window_x11_hide (GdkWindow *window)
   switch (private->window_type)
     {
     case GDK_WINDOW_TOPLEVEL:
-    case GDK_WINDOW_DIALOG:
     case GDK_WINDOW_TEMP: /* ? */
       gdk_window_withdraw (window);
       return;
@@ -1659,7 +1653,6 @@ gdk_window_x11_reparent (GdkWindow *window,
       
     case GDK_WINDOW_TOPLEVEL:
     case GDK_WINDOW_CHILD:
-    case GDK_WINDOW_DIALOG:
     case GDK_WINDOW_TEMP:
       if (WINDOW_IS_TOPLEVEL (window) &&
 	  impl->toplevel)

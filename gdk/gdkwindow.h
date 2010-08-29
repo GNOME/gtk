@@ -65,7 +65,6 @@ typedef enum
  *  screen, and is created by the window system
  * @GDK_WINDOW_TOPLEVEL: toplevel window (used to implement #GtkWindow)
  * @GDK_WINDOW_CHILD: child window (used to implement e.g. #GtkEntry)
- * @GDK_WINDOW_DIALOG: useless/deprecated compatibility type
  * @GDK_WINDOW_TEMP: override redirect temporary window (used to implement
  *  #GtkMenu)
  * @GDK_WINDOW_FOREIGN: foreign window (see gdk_window_foreign_new())
@@ -79,7 +78,6 @@ typedef enum
   GDK_WINDOW_ROOT,
   GDK_WINDOW_TOPLEVEL,
   GDK_WINDOW_CHILD,
-  GDK_WINDOW_DIALOG,
   GDK_WINDOW_TEMP,
   GDK_WINDOW_FOREIGN,
   GDK_WINDOW_OFFSCREEN

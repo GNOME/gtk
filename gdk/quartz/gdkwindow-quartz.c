@@ -854,7 +854,6 @@ _gdk_window_impl_new (GdkWindow     *window,
   switch (private->window_type)
     {
     case GDK_WINDOW_TOPLEVEL:
-    case GDK_WINDOW_DIALOG:
     case GDK_WINDOW_TEMP:
       if (GDK_WINDOW_TYPE (private->parent) != GDK_WINDOW_ROOT)
 	{
@@ -906,10 +905,9 @@ _gdk_window_impl_new (GdkWindow     *window,
 
   impl->view = NULL;
 
-  switch (attributes->window_type) 
+  switch (attributes->window_type)
     {
     case GDK_WINDOW_TOPLEVEL:
-    case GDK_WINDOW_DIALOG:
     case GDK_WINDOW_TEMP:
       {
         NSScreen *screen;

@@ -401,17 +401,6 @@ RegisterGdkClass (GdkWindowType wtype, GdkWindowTypeHint wtype_hint)
       klass = klassCHILD;
       break;
       
-    case GDK_WINDOW_DIALOG:
-      if (0 == klassDIALOG)
-	{
-	  wcl.lpszClassName = L"gdkWindowDialog";
-	  wcl.style |= CS_SAVEBITS;
-	  ONCE_PER_CLASS ();
-	  klassDIALOG = RegisterClassExW (&wcl);
-	}
-      klass = klassDIALOG;
-      break;
-      
     case GDK_WINDOW_TEMP:
       if ((wtype_hint == GDK_WINDOW_TYPE_HINT_MENU) ||
           (wtype_hint == GDK_WINDOW_TYPE_HINT_DROPDOWN_MENU) ||
@@ -492,7 +481,6 @@ _gdk_window_impl_new (GdkWindow     *window,
 	    g_print ("_gdk_window_impl_new: %s\n",
 		     (attributes->window_type == GDK_WINDOW_TOPLEVEL ? "TOPLEVEL" :
 		      (attributes->window_type == GDK_WINDOW_CHILD ? "CHILD" :
-		       (attributes->window_type == GDK_WINDOW_DIALOG ? "DIALOG" :
 			(attributes->window_type == GDK_WINDOW_TEMP ? "TEMP" :
 			 "???"))))));
 
@@ -554,7 +542,6 @@ _gdk_window_impl_new (GdkWindow     *window,
   switch (private->window_type)
     {
     case GDK_WINDOW_TOPLEVEL:
-    case GDK_WINDOW_DIALOG:
       if (GDK_WINDOW_TYPE (private->parent) != GDK_WINDOW_ROOT)
 	{
 	  /* The common code warns for this case. */
@@ -1061,8 +1048,7 @@ show_window_internal (GdkWindow *window,
         SetWindowPos (GDK_WINDOW_HWND (window), HWND_TOPMOST,
 		      0, 0, 0, 0,
 		      SWP_NOACTIVATE | SWP_NOMOVE | SWP_NOSIZE);
-      else if (GDK_WINDOW_TYPE (window) == GDK_WINDOW_TOPLEVEL ||
-	       GDK_WINDOW_TYPE (window) == GDK_WINDOW_DIALOG)
+      else if (GDK_WINDOW_TYPE (window) == GDK_WINDOW_TOPLEVEL)
 	{
           if (focus_on_map && private->accept_focus)
 	    {
@@ -1399,7 +1385,6 @@ gdk_win32_window_reparent (GdkWindow *window,
 
     case GDK_WINDOW_TOPLEVEL:
     case GDK_WINDOW_CHILD:
-    case GDK_WINDOW_DIALOG:
     case GDK_WINDOW_TEMP:
       if (WINDOW_IS_TOPLEVEL (window))
 	{
@@ -1504,8 +1489,7 @@ get_effective_window_decorations (GdkWindow       *window,
   if (gdk_window_get_decorations (window, decoration))
     return TRUE;
     
-  if (((GdkWindowObject *) window)->window_type != GDK_WINDOW_TOPLEVEL &&
-      ((GdkWindowObject *) window)->window_type != GDK_WINDOW_DIALOG)
+  if (((GdkWindowObject *) window)->window_type != GDK_WINDOW_TOPLEVEL) 
     {
       return FALSE;
     }

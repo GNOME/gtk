@@ -1381,7 +1381,6 @@ gdk_window_new (GdkWindow     *parent,
   switch (private->window_type)
     {
     case GDK_WINDOW_TOPLEVEL:
-    case GDK_WINDOW_DIALOG:
     case GDK_WINDOW_TEMP:
     case GDK_WINDOW_OFFSCREEN:
       if (GDK_WINDOW_TYPE (parent) != GDK_WINDOW_ROOT)
@@ -1683,7 +1682,6 @@ gdk_window_reparent (GdkWindow *window,
     case GDK_WINDOW_OFFSCREEN:
     case GDK_WINDOW_TOPLEVEL:
     case GDK_WINDOW_CHILD:
-    case GDK_WINDOW_DIALOG:
     case GDK_WINDOW_TEMP:
       if (GDK_WINDOW_TYPE (window) != GDK_WINDOW_CHILD && \
 	  GDK_WINDOW_TYPE (window) != GDK_WINDOW_FOREIGN)
@@ -2018,7 +2016,6 @@ _gdk_window_destroy_hierarchy (GdkWindow *window,
       /* else fall thru */
     case GDK_WINDOW_TOPLEVEL:
     case GDK_WINDOW_CHILD:
-    case GDK_WINDOW_DIALOG:
     case GDK_WINDOW_TEMP:
     case GDK_WINDOW_FOREIGN:
     case GDK_WINDOW_OFFSCREEN:

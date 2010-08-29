@@ -1445,7 +1445,6 @@ gdk_synthesize_window_state (GdkWindow     *window,
   switch (((GdkWindowObject*) window)->window_type)
     {
     case GDK_WINDOW_TOPLEVEL:
-    case GDK_WINDOW_DIALOG:
     case GDK_WINDOW_TEMP: /* ? */
       gdk_display_put_event (gdk_drawable_get_display (window), &temp_event);
       break;
