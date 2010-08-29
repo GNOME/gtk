@@ -463,7 +463,7 @@ RegisterGdkClass (GdkWindowType wtype, GdkWindowTypeHint wtype_hint)
 /*
  * Create native windows.
  *
- * With the default Gdk the created windows are only toplevel.
+ * With the default Gdk the created windows are mostly toplevel windows.
  * A lot of child windows are only created for GDK_NATIVE_WINDOWS.
  *
  * Placement of the window is derived from the passed in window,
@@ -544,7 +544,11 @@ _gdk_window_impl_new (GdkWindow     *window,
 
   impl->extension_events_selected = FALSE;
 
-  if (attributes->wclass == GDK_INPUT_OUTPUT)
+  /* wclass is not any longer set always, but if is ... */
+  if ((attributes_mask & GDK_WA_WMCLASS) == GDK_WA_WMCLASS)
+    g_assert ((attributes->wclass == GDK_INPUT_OUTPUT) == !private->input_only);
+
+  if (!private->input_only)
     {
       dwExStyle = 0;
 
@@ -637,8 +641,6 @@ _gdk_window_impl_new (GdkWindow     *window,
   else
     {
       /* adjust position relative to real_parent */
-      GdkWindowObject *parent = private->parent;
-
       window_width = private->width;
       window_height = private->height;
       /* use given position for initial placement, native coordinates */
@@ -660,9 +662,6 @@ _gdk_window_impl_new (GdkWindow     *window,
 
   if (impl->type_hint == GDK_WINDOW_TYPE_HINT_UTILITY)
     dwExStyle |= WS_EX_TOOLWINDOW;
-
-  if (private->parent)
-    private->parent->children = g_list_prepend (private->parent->children, window);
 
   klass = RegisterGdkClass (private->window_type, impl->type_hint);
 
@@ -888,8 +887,7 @@ gdk_window_destroy_notify (GdkWindow *window)
     }
   
   gdk_win32_handle_table_remove (GDK_WINDOW_HWND (window));
-  // crash on GDK_NATIVE_WINDOWS:
-  // g_object_unref (window);
+  g_object_unref (window);
 }
 
 static void
