@@ -627,7 +627,7 @@ gtk_tool_palette_expose_event (GtkWidget      *widget,
 
   window = gtk_widget_get_window (widget);
 
-  display = gdk_drawable_get_display (window);
+  display = gdk_window_get_display (window);
 
   if (!gdk_display_supports_composite (display))
     return FALSE;

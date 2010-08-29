@@ -3153,7 +3153,7 @@ set_icon_stock_pixbuf (GdkDragContext    *context,
   else
     g_object_ref (pixbuf);
 
-  display = gdk_drawable_get_display (context->source_window);
+  display = gdk_window_get_display (context->source_window);
   width = gdk_pixbuf_get_width (pixbuf);
   height = gdk_pixbuf_get_height (pixbuf);
 

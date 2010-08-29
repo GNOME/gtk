@@ -1934,7 +1934,7 @@ text_view_visibility_notify_event (GtkWidget          *text_view,
   GList *devices, *d;
   gint wx, wy, bx, by;
 
-  display = gdk_drawable_get_display (event->window);
+  display = gdk_window_get_display (event->window);
   device_manager = gdk_display_get_device_manager (display);
   devices = gdk_device_manager_list_devices (device_manager, GDK_DEVICE_TYPE_MASTER);
 

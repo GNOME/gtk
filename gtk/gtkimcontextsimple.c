@@ -777,7 +777,7 @@ is_hex_keyval (guint keyval)
 static guint
 canonical_hex_keyval (GdkEventKey *event)
 {
-  GdkKeymap *keymap = gdk_keymap_get_for_display (gdk_drawable_get_display (event->window));
+  GdkKeymap *keymap = gdk_keymap_get_for_display (gdk_window_get_display (event->window));
   guint keyval;
   guint *keyvals = NULL;
   gint n_vals = 0;

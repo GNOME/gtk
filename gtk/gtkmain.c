@@ -1521,7 +1521,7 @@ rewrite_event_for_grabs (GdkEvent *event)
     case GDK_PROXIMITY_OUT:
     case GDK_KEY_PRESS:
     case GDK_KEY_RELEASE:
-      display = gdk_drawable_get_display (event->any.window);
+      display = gdk_window_get_display (event->any.window);
       device = gdk_event_get_device (event);
 
       if (!gdk_device_grab_info_libgtk_only (display, device, &grab_window, &owner_events) ||

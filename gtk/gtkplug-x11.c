@@ -136,7 +136,7 @@ static void
 xembed_set_info (GdkWindow     *window,
 		 unsigned long  flags)
 {
-  GdkDisplay *display = gdk_drawable_get_display (window);
+  GdkDisplay *display = gdk_window_get_display (window);
   unsigned long buffer[2];
 
   Atom xembed_info_atom = gdk_x11_get_xatom_by_name_for_display (display, "_XEMBED_INFO");

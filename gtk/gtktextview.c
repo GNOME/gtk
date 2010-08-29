@@ -4214,7 +4214,7 @@ set_invisible_cursor (GdkWindow *window)
   GdkDisplay *display;
   GdkCursor *cursor;
 
-  display = gdk_drawable_get_display (window);
+  display = gdk_window_get_display (window);
   cursor = gdk_cursor_new_for_display (display, GDK_BLANK_CURSOR);
  
   gdk_window_set_cursor (window, cursor);
@@ -8439,7 +8439,7 @@ text_window_realize (GtkTextWindow *win,
       if (gtk_widget_is_sensitive (widget))
         {
           /* I-beam cursor */
-          cursor = gdk_cursor_new_for_display (gdk_drawable_get_display (window),
+          cursor = gdk_cursor_new_for_display (gdk_window_get_display (window),
 					       GDK_XTERM);
           gdk_window_set_cursor (win->bin_window, cursor);
           gdk_cursor_unref (cursor);

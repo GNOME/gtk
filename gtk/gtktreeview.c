@@ -3036,7 +3036,7 @@ gtk_tree_view_button_release_column_resize (GtkWidget      *widget,
 
   GTK_TREE_VIEW_UNSET_FLAG (tree_view, GTK_TREE_VIEW_IN_COLUMN_RESIZE);
   gtk_grab_remove (widget);
-  gdk_display_pointer_ungrab (gdk_drawable_get_display (event->window),
+  gdk_display_pointer_ungrab (gdk_window_get_display (event->window),
 			      event->time);
   return TRUE;
 }
