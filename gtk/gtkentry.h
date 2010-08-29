@@ -67,16 +67,11 @@ struct _GtkEntry
 {
   GtkWidget  widget;
 
-  gchar       *GSEAL (text);                        /* COMPAT: Deprecated, not used. Remove in GTK+ 3.x */
-
   guint        GSEAL (editable) : 1;
   guint        GSEAL (visible)  : 1;
   guint        GSEAL (overwrite_mode) : 1;
   guint        GSEAL (in_drag) : 1;	            /* FIXME: Should be private?
                                                        Dragging within the selection */
-
-  guint16      GSEAL (text_length);                 /* COMPAT: Deprecated, not used. Remove in GTK+ 3.x */
-  guint16      GSEAL (text_max_length);             /* COMPAT: Deprecated, not used. Remove in GTK+ 3.x */
 
   /*< private >*/
   GdkWindow    *GSEAL (text_area);

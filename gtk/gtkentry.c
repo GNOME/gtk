@@ -4377,8 +4377,8 @@ gtk_entry_get_chars      (GtkEditable   *editable,
   start_pos = MIN (text_length, start_pos);
   end_pos = MIN (text_length, end_pos);
 
-  start_index = g_utf8_offset_to_pointer (text, start_pos) - entry->text;
-  end_index = g_utf8_offset_to_pointer (text, end_pos) - entry->text;
+  start_index = g_utf8_offset_to_pointer (text, start_pos) - text;
+  end_index = g_utf8_offset_to_pointer (text, end_pos) - text;
 
   return g_strndup (text + start_index, end_index - start_index);
 }
@@ -4720,9 +4720,6 @@ buffer_notify_text (GtkEntryBuffer *buffer,
                     GParamSpec     *spec,
                     GtkEntry       *entry)
 {
-  /* COMPAT: Deprecated, not used. This struct field will be removed in GTK+ 3.x */
-  entry->text = (gchar*)gtk_entry_buffer_get_text (buffer);
-
   gtk_entry_recompute (entry);
   emit_changed (entry);
   g_object_notify (G_OBJECT (entry), "text");
@@ -4733,9 +4730,6 @@ buffer_notify_length (GtkEntryBuffer *buffer,
                       GParamSpec     *spec,
                       GtkEntry       *entry)
 {
-  /* COMPAT: Deprecated, not used. This struct field will be removed in GTK+ 3.x */
-  entry->text_length = gtk_entry_buffer_get_length (buffer);
-
   g_object_notify (G_OBJECT (entry), "text-length");
 }
 
@@ -4744,9 +4738,6 @@ buffer_notify_max_length (GtkEntryBuffer *buffer,
                           GParamSpec     *spec,
                           GtkEntry       *entry)
 {
-  /* COMPAT: Deprecated, not used. This struct field will be removed in GTK+ 3.x */
-  entry->text_max_length = gtk_entry_buffer_get_max_length (buffer);
-
   g_object_notify (G_OBJECT (entry), "max-length");
 }
 
@@ -6762,24 +6753,12 @@ gtk_entry_set_buffer (GtkEntry       *entry,
     {
       buffer_disconnect_signals (entry);
       g_object_unref (priv->buffer);
-
-      /* COMPAT: Deprecated. Not used. Setting these fields no longer necessary in GTK 3.x */
-      entry->text = NULL;
-      entry->text_length = 0;
-      entry->text_max_length = 0;
     }
 
   priv->buffer = buffer;
 
   if (priv->buffer)
-    {
-       buffer_connect_signals (entry);
-
-      /* COMPAT: Deprecated. Not used. Setting these fields no longer necessary in GTK 3.x */
-      entry->text = (char*)gtk_entry_buffer_get_text (priv->buffer);
-      entry->text_length = gtk_entry_buffer_get_length (priv->buffer);
-      entry->text_max_length = gtk_entry_buffer_get_max_length (priv->buffer);
-    }
+     buffer_connect_signals (entry);
 
   obj = G_OBJECT (entry);
   g_object_freeze_notify (obj);
