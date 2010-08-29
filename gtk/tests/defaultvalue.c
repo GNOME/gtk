@@ -84,8 +84,6 @@ test_type (gconstpointer data)
   
   if (g_type_is_a (type, GTK_TYPE_SETTINGS))
     instance = g_object_ref (gtk_settings_get_default ());
-  else if (g_type_is_a (type, GDK_TYPE_COLORMAP))
-    instance = g_object_ref (gdk_colormap_new (gdk_visual_get_best (), TRUE));
   else if (g_type_is_a (type, GDK_TYPE_WINDOW))
     {
       GdkWindowAttr attributes;

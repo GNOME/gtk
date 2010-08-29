@@ -90,7 +90,6 @@ typedef guint32 GdkNativeWindow;
 /* Forward declarations of commonly used types
  */
 typedef struct _GdkColor	      GdkColor;
-typedef struct _GdkColormap	      GdkColormap;
 typedef struct _GdkCursor	      GdkCursor;
 typedef struct _GdkVisual             GdkVisual;
 

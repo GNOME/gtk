@@ -78,7 +78,6 @@ struct _GdkScreenX11
   GdkVisualType available_types[6];
   gint navailable_types;
   GHashTable *visual_hash;
-  GHashTable *colormap_hash;
   GdkVisual *rgba_visual;
   
   /* X settings */

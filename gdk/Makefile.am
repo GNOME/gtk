@@ -187,7 +187,6 @@ x11_introspection_files = 		\
 	x11/checksettings.c		\
 	x11/gdkapplaunchcontext-x11.c	\
 	x11/gdkasync.c			\
-	x11/gdkcolor-x11.c		\
 	x11/gdkcursor-x11.c		\
 	x11/gdkdevice-core.c		\
 	x11/gdkdevicemanager-core.c	\

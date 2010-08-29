@@ -304,20 +304,8 @@ gdk_color_equal
 gdk_color_free
 gdk_color_get_type G_GNUC_CONST
 gdk_color_hash
-gdk_colormap_alloc_color
-gdk_colormap_get_visual
 gdk_color_parse
 gdk_color_to_string
-#endif
-#endif
-
-#if IN_HEADER(__GDK_COLOR_H__)
-#if IN_FILE(__GDK_COLOR_X11_C__)
-gdk_colormap_new
-gdk_colormap_get_type G_GNUC_CONST
-gdk_colormap_alloc_colors
-gdk_colormap_free_colors
-gdk_colormap_get_screen
 #endif
 #endif
 

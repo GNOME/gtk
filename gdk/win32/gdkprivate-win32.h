@@ -179,9 +179,6 @@ void	 gdk_win32_handle_table_insert  (HANDLE   *handle,
 					 gpointer data);
 void	 gdk_win32_handle_table_remove  (HANDLE handle);
 
-COLORREF  _gdk_win32_colormap_color     (GdkColormap *colormap,
-				         gulong       pixel);
-
 HRGN	  _gdk_win32_cairo_region_to_hrgn (const cairo_region_t *region,
 					   gint                  x_origin,
 					   gint                  y_origin);

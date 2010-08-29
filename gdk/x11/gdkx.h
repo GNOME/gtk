@@ -37,8 +37,6 @@ G_BEGIN_DECLS
 Display *gdk_x11_drawable_get_xdisplay    (GdkDrawable *drawable);
 XID      gdk_x11_drawable_get_xid         (GdkDrawable *drawable);
 GdkDrawable *gdk_x11_window_get_drawable_impl (GdkWindow *window);
-Display *gdk_x11_colormap_get_xdisplay    (GdkColormap *colormap);
-Colormap gdk_x11_colormap_get_xcolormap   (GdkColormap *colormap);
 Display *gdk_x11_cursor_get_xdisplay      (GdkCursor   *cursor);
 Cursor   gdk_x11_cursor_get_xcursor       (GdkCursor   *cursor);
 Display *gdk_x11_display_get_xdisplay     (GdkDisplay  *display);
@@ -57,8 +55,6 @@ Display *gdk_x11_get_default_xdisplay     (void);
 gint     gdk_x11_get_default_screen       (void);
 #endif
 
-#define GDK_COLORMAP_XDISPLAY(cmap)   (gdk_x11_colormap_get_xdisplay (cmap))
-#define GDK_COLORMAP_XCOLORMAP(cmap)  (gdk_x11_colormap_get_xcolormap (cmap))
 #define GDK_CURSOR_XDISPLAY(cursor)   (gdk_x11_cursor_get_xdisplay (cursor))
 #define GDK_CURSOR_XCURSOR(cursor)    (gdk_x11_cursor_get_xcursor (cursor))
 
@@ -104,9 +100,6 @@ GdkVisual* gdk_x11_screen_lookup_visual (GdkScreen *screen,
 #ifndef GDK_MULTIHEAD_SAFE
 GdkVisual* gdkx_visual_get            (VisualID   xvisualid);
 #endif
-
-GdkColormap *gdk_x11_colormap_foreign_new (GdkVisual *visual,
-					   Colormap   xcolormap);
 
      /* Return the Gdk* for a particular XID */
 gpointer      gdk_xid_table_lookup_for_display (GdkDisplay *display,

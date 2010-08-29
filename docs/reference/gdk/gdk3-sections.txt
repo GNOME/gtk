@@ -244,16 +244,9 @@ gdk_pixbuf_get_from_surface
 </SECTION>
 
 <SECTION>
-<TITLE>Colormaps and Colors</TITLE>
+<TITLE>Colors</TITLE>
 <FILE>colors</FILE>
 GdkColor
-GdkColormap
-gdk_colormap_new
-gdk_colormap_alloc_colors
-gdk_colormap_alloc_color
-gdk_colormap_free_colors
-gdk_colormap_get_visual
-gdk_colormap_get_screen
 gdk_color_copy
 gdk_color_free
 gdk_color_parse
@@ -262,18 +255,8 @@ gdk_color_hash
 gdk_color_to_string
 
 <SUBSECTION Standard>
-GDK_COLORMAP
-GDK_COLORMAP_GET_CLASS
-GDK_TYPE_COLORMAP
-GDK_IS_COLORMAP
-GDK_COLORMAP_CLASS
-GDK_IS_COLORMAP_CLASS
 GDK_TYPE_COLOR
 
-<SUBSECTION Private>
-GdkColormapClass
-gdk_colormap_get_type
-gdk_color_get_type
 </SECTION>
 
 <SECTION>
@@ -1000,9 +983,6 @@ gdk_x11_screen_lookup_visual
 gdk_x11_window_set_user_time
 gdk_x11_window_move_to_current_desktop
 gdk_x11_display_get_user_time
-gdk_x11_colormap_foreign_new
-gdk_x11_colormap_get_xcolormap
-gdk_x11_colormap_get_xdisplay
 gdk_x11_cursor_get_xcursor
 gdk_x11_cursor_get_xdisplay
 gdk_x11_display_broadcast_startup_message

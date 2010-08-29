@@ -33,22 +33,6 @@
 
 
 /**
- * gdk_colormap_get_visual:
- * @colormap: a #GdkColormap.
- * 
- * Returns the visual for which a given colormap was created.
- * 
- * Return value: the visual of the colormap.
- **/
-GdkVisual *
-gdk_colormap_get_visual (GdkColormap *colormap)
-{
-  g_return_val_if_fail (GDK_IS_COLORMAP (colormap), NULL);
-
-  return colormap->visual;
-}
-
-/**
  * gdk_color_copy:
  * @color: a #GdkColor.
  * 
@@ -82,39 +66,6 @@ gdk_color_free (GdkColor *color)
   g_return_if_fail (color != NULL);
 
   g_slice_free (GdkColor, color);
-}
-
-/********************
- * Color allocation *
- ********************/
-
-/**
- * gdk_colormap_alloc_color:
- * @colormap: a #GdkColormap.
- * @color: the color to allocate. On return the
- *    <structfield>pixel</structfield> field will be
- *    filled in if allocation succeeds.
- * @writeable: this parameter has no effect, and it's here for mere
- *   compatibility.
- * @best_match: If %TRUE, GDK will attempt to do matching against
- *    existing colors if the color cannot be allocated as requested.
- *
- * Allocates a single color from a colormap.
- *
- * Return value: %TRUE if the allocation succeeded.
- **/
-gboolean
-gdk_colormap_alloc_color (GdkColormap *colormap,
-			  GdkColor    *color,
-			  gboolean     writeable,
-			  gboolean     best_match)
-{
-  gboolean success;
-
-  gdk_colormap_alloc_colors (colormap, color, 1, writeable, best_match,
-			     &success);
-
-  return success;
 }
 
 /**
@@ -168,15 +119,13 @@ G_DEFINE_BOXED_TYPE (GdkColor, gdk_color,
  * Parses a textual specification of a color and fill in the
  * <structfield>red</structfield>, <structfield>green</structfield>,
  * and <structfield>blue</structfield> fields of a #GdkColor
- * structure. The color is <emphasis>not</emphasis> allocated, you
- * must call gdk_colormap_alloc_color() yourself. The string can
- * either one of a large set of standard names. (Taken from the X11
- * <filename>rgb.txt</filename> file), or it can be a hex value in the
- * form '&num;rgb' '&num;rrggbb' '&num;rrrgggbbb' or
- * '&num;rrrrggggbbbb' where 'r', 'g' and 'b' are hex digits of the
- * red, green, and blue components of the color, respectively. (White
- * in the four forms is '&num;fff' '&num;ffffff' '&num;fffffffff' and
- * '&num;ffffffffffff')
+ * structure. The string can either one of a large set of standard
+ * names. (Taken from the X11 <filename>rgb.txt</filename> file), or
+ * it can be a hex value in the form '&num;rgb' '&num;rrggbb'
+ * '&num;rrrgggbbb' or '&num;rrrrggggbbbb' where 'r', 'g' and 'b' are
+ * hex digits of the red, green, and blue components of the color,
+ * respectively. (White in the four forms is '&num;fff' '&num;ffffff'
+ * '&num;fffffffff' and '&num;ffffffffffff')
  * 
  * Return value: %TRUE if the parsing succeeded.
  **/

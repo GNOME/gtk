@@ -21,7 +21,6 @@ libgdk_x11_la_SOURCES =    	\
 	gdkapplaunchcontext-x11.c \
 	gdkasync.c		\
 	gdkasync.h		\
-	gdkcolor-x11.c	   	\
 	gdkcursor-x11.c	   	\
 	gdkdevice-core.h	\
 	gdkdevice-core.c	\

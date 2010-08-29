@@ -38,10 +38,7 @@ G_BEGIN_DECLS
 
 /* The color type.
  *   A color consists of red, green and blue values in the
- *    range 0-65535 and a pixel value. The pixel value is highly
- *    dependent on the depth and colormap which this color will
- *    be used to draw into. Therefore, sharing colors between
- *    colormaps is a bad idea.
+ *    range 0-65535 and a pixel value. The pixel value is unused.
  */
 struct _GdkColor
 {
@@ -51,63 +48,7 @@ struct _GdkColor
   guint16 blue;
 };
 
-/* The colormap type.
- */
-
-typedef struct _GdkColormapClass GdkColormapClass;
-
-#define GDK_TYPE_COLORMAP              (gdk_colormap_get_type ())
-#define GDK_COLORMAP(object)           (G_TYPE_CHECK_INSTANCE_CAST ((object), GDK_TYPE_COLORMAP, GdkColormap))
-#define GDK_COLORMAP_CLASS(klass)      (G_TYPE_CHECK_CLASS_CAST ((klass), GDK_TYPE_COLORMAP, GdkColormapClass))
-#define GDK_IS_COLORMAP(object)        (G_TYPE_CHECK_INSTANCE_TYPE ((object), GDK_TYPE_COLORMAP))
-#define GDK_IS_COLORMAP_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE ((klass), GDK_TYPE_COLORMAP))
-#define GDK_COLORMAP_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), GDK_TYPE_COLORMAP, GdkColormapClass))
-
 #define GDK_TYPE_COLOR                 (gdk_color_get_type ())
-
-struct _GdkColormap
-{
-  /*< private >*/
-  GObject parent_instance;
-
-  /*< public >*/
-  gint      GSEAL (size);
-  GdkColor *GSEAL (colors);
-
-  /*< private >*/
-  GdkVisual *GSEAL (visual);
-  
-  gpointer GSEAL (windowing_data);
-};
-
-struct _GdkColormapClass
-{
-  GObjectClass parent_class;
-
-};
-
-GType        gdk_colormap_get_type (void) G_GNUC_CONST;
-
-GdkColormap* gdk_colormap_new	  (GdkVisual   *visual,
-				   gboolean	allocate);
-
-GdkScreen *gdk_colormap_get_screen (GdkColormap *cmap);
-
-gint  gdk_colormap_alloc_colors   (GdkColormap    *colormap,
-				   GdkColor       *colors,
-				   gint            n_colors,
-				   gboolean        writeable,
-				   gboolean        best_match,
-				   gboolean       *success);
-gboolean gdk_colormap_alloc_color (GdkColormap    *colormap,
-				   GdkColor       *color,
-				   gboolean        writeable,
-				   gboolean        best_match);
-void     gdk_colormap_free_colors (GdkColormap    *colormap,
-				   const GdkColor *colors,
-				   gint            n_colors);
-
-GdkVisual *gdk_colormap_get_visual (GdkColormap *colormap);
 
 GdkColor *gdk_color_copy      (const GdkColor *color);
 void      gdk_color_free      (GdkColor       *color);

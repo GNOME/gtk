@@ -295,8 +295,6 @@ gdk_screen_x11_finalize (GObject *object)
 
   g_free (screen_x11->window_manager_name);
 
-  g_hash_table_destroy (screen_x11->colormap_hash);
-
   deinit_multihead (GDK_SCREEN (object));
   
   G_OBJECT_CLASS (_gdk_screen_x11_parent_class)->finalize (object);
