@@ -506,12 +506,14 @@ _gdk_window_impl_new (GdkWindow     *window,
   private = (GdkWindowObject *)window;
 
   GDK_NOTE (MISC,
-	    g_print ("_gdk_window_impl_new: %s\n",
-		     (attributes->window_type == GDK_WINDOW_TOPLEVEL ? "TOPLEVEL" :
-		      (attributes->window_type == GDK_WINDOW_CHILD ? "CHILD" :
-		       (attributes->window_type == GDK_WINDOW_DIALOG ? "DIALOG" :
-			(attributes->window_type == GDK_WINDOW_TEMP ? "TEMP" :
-			 "???"))))));
+	    g_print ("_gdk_window_impl_new: %s %s\n",
+		     (private->window_type == GDK_WINDOW_TOPLEVEL ? "TOPLEVEL" :
+		      (private->window_type == GDK_WINDOW_CHILD ? "CHILD" :
+		       (private->window_type == GDK_WINDOW_DIALOG ? "DIALOG" :
+			(private->window_type == GDK_WINDOW_TEMP ? "TEMP" :
+			 "???")))),
+		     (attributes->wclass == GDK_INPUT_OUTPUT ? "" : "input-only")),
+			   );
 
   /* to ensure to not miss important information some additional check against
    * attributes which may silently work on X11 */
