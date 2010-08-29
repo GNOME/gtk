@@ -103,7 +103,6 @@ const int _gdk_nenvent_masks = sizeof (_gdk_event_mask_table) / sizeof (int);
 static void     gdk_window_set_static_win_gravity (GdkWindow  *window,
 						   gboolean    on);
 static gboolean gdk_window_icon_name_set          (GdkWindow  *window);
-static void     gdk_window_add_colormap_windows   (GdkWindow  *window);
 static void     set_wm_name                       (GdkDisplay  *display,
 						   Window       xwindow,
 						   const gchar *name);
@@ -763,24 +762,16 @@ _gdk_window_impl_new (GdkWindow     *window,
     {
       class = InputOutput;
 
-      if (attributes_mask & GDK_WA_COLORMAP)
+      if ((((GdkVisualPrivate *)gdk_screen_get_system_visual (screen))->xvisual) == xvisual)
         {
-          draw_impl->colormap = attributes->colormap;
-          g_object_ref (attributes->colormap);
+          draw_impl->colormap = gdk_screen_get_system_colormap (screen);
+          g_object_ref (draw_impl->colormap);
         }
       else
-	{
-	  if ((((GdkVisualPrivate *)gdk_screen_get_system_visual (screen))->xvisual) == xvisual)
-            {
-	      draw_impl->colormap = gdk_screen_get_system_colormap (screen);
-              g_object_ref (draw_impl->colormap);
-            }
-	  else
-            {
-              draw_impl->colormap = gdk_colormap_new (private->visual, FALSE);
-            }
-	}
-      
+        {
+          draw_impl->colormap = gdk_colormap_new (private->visual, FALSE);
+        }
+  
       xattributes.background_pixel = BlackPixel (xdisplay, screen_x11->screen_num);
 
       xattributes.border_pixel = BlackPixel (xdisplay, screen_x11->screen_num);
@@ -858,15 +849,6 @@ _gdk_window_impl_new (GdkWindow     *window,
       break;
 
     case GDK_WINDOW_CHILD:
-      if (!private->input_only &&
-	  (draw_impl->colormap != gdk_screen_get_system_colormap (screen)) &&
-	  (draw_impl->colormap != gdk_drawable_get_colormap (gdk_window_get_toplevel (window))))
-	{
-	  GDK_NOTE (MISC, g_message ("adding colormap window\n"));
-	  gdk_window_add_colormap_windows (window);
-	}
-      break;
-      
     default:
       break;
     }
@@ -3345,51 +3327,6 @@ gdk_window_x11_set_events (GdkWindow    *window,
                                       GDK_WINDOW_XWINDOW (window), event_mask,
                                       xevent_mask);
     }
-}
-
-static void
-gdk_window_add_colormap_windows (GdkWindow *window)
-{
-  GdkWindow *toplevel;
-  Window *old_windows;
-  Window *new_windows;
-  int i, count;
-  
-  g_return_if_fail (GDK_IS_WINDOW (window));
-
-  if (GDK_WINDOW_DESTROYED (window))
-    return;
-
-  toplevel = gdk_window_get_toplevel (window);
-  
-  old_windows = NULL;
-  if (!XGetWMColormapWindows (GDK_WINDOW_XDISPLAY (toplevel),
-			      GDK_WINDOW_XID (toplevel),
-			      &old_windows, &count))
-    {
-      count = 0;
-    }
-  
-  for (i = 0; i < count; i++)
-    if (old_windows[i] == GDK_WINDOW_XID (window))
-      {
-	XFree (old_windows);
-	return;
-      }
-  
-  new_windows = g_new (Window, count + 1);
-  
-  for (i = 0; i < count; i++)
-    new_windows[i] = old_windows[i];
-  new_windows[count] = GDK_WINDOW_XID (window);
-  
-  XSetWMColormapWindows (GDK_WINDOW_XDISPLAY (toplevel),
-			 GDK_WINDOW_XID (toplevel),
-			 new_windows, count + 1);
-  
-  g_free (new_windows);
-  if (old_windows)
-    XFree (old_windows);
 }
 
 static inline void

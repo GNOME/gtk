@@ -835,28 +835,20 @@ _gdk_window_impl_new (GdkWindow     *window,
 
   if (!private->input_only)
     {
-      if (attributes_mask & GDK_WA_COLORMAP)
-	{
-	  draw_impl->colormap = attributes->colormap;
-	  g_object_ref (attributes->colormap);
-	}
+      if (private->visual == gdk_screen_get_system_visual (_gdk_screen))
+        {
+          draw_impl->colormap = gdk_screen_get_system_colormap (_gdk_screen);
+          g_object_ref (draw_impl->colormap);
+        }
+      else if (private->visual == gdk_screen_get_rgba_visual (_gdk_screen))
+        {
+          draw_impl->colormap = gdk_screen_get_rgba_colormap (_gdk_screen);
+          g_object_ref (draw_impl->colormap);
+        }
       else
-	{
-	  if (private->visual == gdk_screen_get_system_visual (_gdk_screen))
-	    {
-	      draw_impl->colormap = gdk_screen_get_system_colormap (_gdk_screen);
-	      g_object_ref (draw_impl->colormap);
-	    }
-	  else if (private->visual == gdk_screen_get_rgba_visual (_gdk_screen))
-	    {
-	      draw_impl->colormap = gdk_screen_get_rgba_colormap (_gdk_screen);
-	      g_object_ref (draw_impl->colormap);
-	    }
-	  else
-	    {
-	      draw_impl->colormap = gdk_colormap_new (private->visual, FALSE);
-	    }
-	}
+        {
+          draw_impl->colormap = gdk_colormap_new (private->visual, FALSE);
+        }
     }
   else
     {

@@ -1387,11 +1387,9 @@ gdk_window_new (GdkWindow     *parent,
   if (private->parent->window_type == GDK_WINDOW_ROOT)
     native = TRUE; /* Always use native windows for toplevels */
   else if (!private->input_only &&
-	   ((attributes_mask & GDK_WA_COLORMAP &&
-	     attributes->colormap != gdk_drawable_get_colormap ((GdkDrawable *)private->parent)) ||
-	    (attributes_mask & GDK_WA_VISUAL &&
-	     attributes->visual != gdk_window_get_visual (GDK_WINDOW (private->parent)))))
-    native = TRUE; /* InputOutput window with different colormap or visual than parent, needs native window */
+	   (attributes_mask & GDK_WA_VISUAL &&
+	    attributes->visual != gdk_window_get_visual (GDK_WINDOW (private->parent))))
+    native = TRUE; /* InputOutput window with different visual than parent, needs native window */
 
   if (gdk_window_is_offscreen (private))
     {
@@ -1767,7 +1765,6 @@ gdk_window_ensure_native (GdkWindow *window)
   GdkWindowObject *impl_window;
   GdkDrawable *new_impl, *old_impl;
   GdkScreen *screen;
-  GdkWindowAttr attributes;
   GdkWindowObject *above;
   GList listhead;
   GdkWindowImplIface *impl_iface;
@@ -1802,13 +1799,11 @@ gdk_window_ensure_native (GdkWindow *window)
 
   screen = gdk_window_get_screen (window);
 
-  attributes.colormap = gdk_drawable_get_colormap (window);
-
   old_impl = private->impl;
   _gdk_window_impl_new (window, (GdkWindow *)private->parent,
 			screen,
 			get_native_event_mask (private),
-			&attributes, GDK_WA_COLORMAP);
+			NULL, 0);
   new_impl = private->impl;
 
   private->impl = old_impl;

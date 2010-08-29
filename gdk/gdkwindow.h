@@ -89,7 +89,6 @@ typedef enum
  * @GDK_WA_X: Honor the X coordinate field
  * @GDK_WA_Y: Honor the Y coordinate field
  * @GDK_WA_CURSOR: Honor the cursor field
- * @GDK_WA_COLORMAP: Honor the colormap field
  * @GDK_WA_VISUAL: Honor the visual field
  * @GDK_WA_WMCLASS: Honor the wmclass_class and wmclass_name fields
  * @GDK_WA_NOREDIR: Honor the override_redirect field
@@ -108,11 +107,10 @@ typedef enum
   GDK_WA_X	   = 1 << 2,
   GDK_WA_Y	   = 1 << 3,
   GDK_WA_CURSOR	   = 1 << 4,
-  GDK_WA_COLORMAP  = 1 << 5,
-  GDK_WA_VISUAL	   = 1 << 6,
-  GDK_WA_WMCLASS   = 1 << 7,
-  GDK_WA_NOREDIR   = 1 << 8,
-  GDK_WA_TYPE_HINT = 1 << 9
+  GDK_WA_VISUAL	   = 1 << 5,
+  GDK_WA_WMCLASS   = 1 << 6,
+  GDK_WA_NOREDIR   = 1 << 7,
+  GDK_WA_TYPE_HINT = 1 << 8
 } GdkWindowAttributesType;
 
 /* Size restriction enumeration.
@@ -332,7 +330,6 @@ typedef enum
  * @wclass: #GDK_INPUT_OUTPUT (normal window) or #GDK_INPUT_ONLY (invisible
  *  window that receives events)
  * @visual: #GdkVisual for window
- * @colormap: #GdkColormap for window
  * @window_type: type of window
  * @cursor: cursor for the window (see gdk_window_set_cursor())
  * @wmclass_name: don't use (see gtk_window_set_wmclass())
@@ -351,7 +348,6 @@ struct _GdkWindowAttr
   gint height;
   GdkWindowClass wclass;
   GdkVisual *visual;
-  GdkColormap *colormap;
   GdkWindowType window_type;
   GdkCursor *cursor;
   gchar *wmclass_name;

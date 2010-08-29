@@ -173,18 +173,13 @@ _gdk_offscreen_window_new (GdkWindow     *window,
 
   offscreen->screen = screen;
 
-  if (attributes_mask & GDK_WA_COLORMAP)
-    offscreen->colormap = g_object_ref (attributes->colormap);
-  else
+  if (gdk_screen_get_system_visual (screen) == private->visual)
     {
-      if (gdk_screen_get_system_visual (screen) == private->visual)
-	{
-	  offscreen->colormap = gdk_screen_get_system_colormap (screen);
-	  g_object_ref (offscreen->colormap);
-	}
-      else
-	offscreen->colormap = gdk_colormap_new (private->visual, FALSE);
+      offscreen->colormap = gdk_screen_get_system_colormap (screen);
+      g_object_ref (offscreen->colormap);
     }
+  else
+    offscreen->colormap = gdk_colormap_new (private->visual, FALSE);
 
   offscreen->surface = gdk_window_create_similar_surface ((GdkWindow *)private->parent,
                                                           CAIRO_CONTENT_COLOR,

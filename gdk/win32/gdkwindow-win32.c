@@ -487,16 +487,8 @@ _gdk_window_impl_new (GdkWindow     *window,
 
       private->input_only = FALSE;
       
-      if (attributes_mask & GDK_WA_COLORMAP)
-	{
-	  draw_impl->colormap = attributes->colormap;
-	  g_object_ref (attributes->colormap);
-	}
-      else
-	{
-	  draw_impl->colormap = gdk_screen_get_system_colormap (_gdk_screen);
-	  g_object_ref (draw_impl->colormap);
-	}
+      draw_impl->colormap = gdk_screen_get_system_colormap (_gdk_screen);
+      g_object_ref (draw_impl->colormap);
     }
   else
     {
