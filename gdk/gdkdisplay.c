@@ -1107,7 +1107,7 @@ singlehead_default_window_get_pointer (GdkWindow       *window,
 {
   GdkDisplay *display;
 
-  display = gdk_drawable_get_display (window);
+  display = gdk_window_get_display (window);
 
   return gdk_window_real_window_get_device_position (display,
                                                      display->core_pointer,

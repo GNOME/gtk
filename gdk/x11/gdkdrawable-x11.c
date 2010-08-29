@@ -175,7 +175,7 @@ gdk_x11_drawable_get_xid (GdkDrawable *drawable)
 	   * this function returns. This is required because the returned XID
 	   * for this window must be valid immediately, even with another
 	   * connection to the Xserver */
-	  gdk_display_sync (gdk_drawable_get_display (window));
+	  gdk_display_sync (gdk_window_get_display (window));
 	}
       
       if (!GDK_WINDOW_IS_X11 (window))

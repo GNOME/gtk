@@ -248,7 +248,7 @@ gdk_device_core_query_state (GdkDevice        *device,
   int xroot_x, xroot_y, xwin_x, xwin_y;
   unsigned int xmask;
 
-  display = gdk_drawable_get_display (window);
+  display = gdk_window_get_display (window);
 
   if (!XQueryPointer (GDK_WINDOW_XDISPLAY (window),
                       GDK_WINDOW_XID (window),

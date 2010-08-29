@@ -888,7 +888,7 @@ _gdk_input_other_event (GdkEvent  *event,
     window = _gdk_root;
 
   g_object_ref (window);
-  display = gdk_drawable_get_display (window);
+  display = gdk_window_get_display (window);
 
   GDK_NOTE (EVENTS_OR_INPUT,
 	    g_print ("_gdk_input_other_event: window=%p %+d%+d\n",

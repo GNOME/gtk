@@ -307,7 +307,7 @@ gdk_device_xi2_query_state (GdkDevice        *device,
     return FALSE;
 
   priv = GDK_DEVICE_XI2 (device)->priv;
-  display = gdk_drawable_get_display (window);
+  display = gdk_window_get_display (window);
 
   if (!XIQueryPointer (GDK_WINDOW_XDISPLAY (window),
                        priv->device_id,

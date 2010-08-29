@@ -192,7 +192,7 @@ void
 _gdk_xgrab_check_unmap (GdkWindow *window,
 			gulong     serial)
 {
-  GdkDisplay *display = gdk_drawable_get_display (window);
+  GdkDisplay *display = gdk_window_get_display (window);
   GdkDeviceManager *device_manager;
   GList *devices, *d;
 
@@ -220,7 +220,7 @@ _gdk_xgrab_check_unmap (GdkWindow *window,
 void
 _gdk_xgrab_check_destroy (GdkWindow *window)
 {
-  GdkDisplay *display = gdk_drawable_get_display (window);
+  GdkDisplay *display = gdk_window_get_display (window);
   GdkDeviceManager *device_manager;
   GdkDeviceGrabInfo *grab;
   GList *devices, *d;

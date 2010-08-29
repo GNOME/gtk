@@ -286,8 +286,8 @@ gdk_drag_context_find (GdkDisplay *display,
       context = (GdkDragContext *)tmp_list->data;
       private = PRIVATE_DATA (context);
 
-      if ((context->source_window && gdk_drawable_get_display (context->source_window) != display) ||
-	  (context->dest_window && gdk_drawable_get_display (context->dest_window) != display))
+      if ((context->source_window && gdk_window_get_display (context->source_window) != display) ||
+	  (context->dest_window && gdk_window_get_display (context->dest_window) != display))
 	continue;
 
       context_dest_xid = context->dest_window ? 
@@ -1919,7 +1919,7 @@ motif_drag_status (GdkEvent *event,
   GDK_NOTE (DND, 
 	    g_message ("Motif status message: flags %x", flags));
 
-  display = gdk_drawable_get_display (event->any.window);
+  display = gdk_window_get_display (event->any.window);
   if (!display)
     return GDK_FILTER_REMOVE;
   
@@ -2137,7 +2137,7 @@ xdnd_status_filter (GdkXEvent *xev,
 	    g_message ("XdndStatus: dest_window: %#x  action: %ld",
 		       dest_window, action));
 
-  display = gdk_drawable_get_display (event->any.window);
+  display = gdk_window_get_display (event->any.window);
   context = gdk_drag_context_find (display, TRUE, xevent->xclient.window, dest_window);
   
   if (context)
@@ -2186,7 +2186,7 @@ xdnd_finished_filter (GdkXEvent *xev,
   GDK_NOTE (DND, 
 	    g_message ("XdndFinished: dest_window: %#x", dest_window));
 
-  display = gdk_drawable_get_display (event->any.window);
+  display = gdk_window_get_display (event->any.window);
   context = gdk_drag_context_find (display, TRUE, xevent->xclient.window, dest_window);
   
   if (context)
@@ -3185,7 +3185,7 @@ gdk_drag_begin (GdkWindow     *window,
   
   new_context->actions = 0;
 
-  display = gdk_drawable_get_display (GDK_DRAWABLE (window));
+  display = gdk_window_get_display (window);
   device_manager = gdk_display_get_device_manager (display);
   device = gdk_device_manager_get_client_pointer (device_manager);
   gdk_drag_context_set_device (new_context, device);
@@ -3942,7 +3942,7 @@ gdk_window_register_dnd (GdkWindow      *window)
   static const gulong xdnd_version = 5;
   MotifDragReceiverInfo info;
   Atom motif_drag_receiver_info_atom;
-  GdkDisplay *display = gdk_drawable_get_display (window);
+  GdkDisplay *display = gdk_window_get_display (window);
 
   g_return_if_fail (window != NULL);
 

@@ -453,7 +453,7 @@ gdk_device_manager_xi_translate_event (GdkEventTranslator *translator,
       event->button.button = xdbe->button;
 
       if (event->button.type == GDK_BUTTON_PRESS)
-	_gdk_event_button_generate (gdk_drawable_get_display (event->button.window),
+	_gdk_event_button_generate (gdk_window_get_display (event->button.window),
 				    event);
 
       GDK_NOTE (EVENTS,

@@ -145,7 +145,7 @@ static void
 check_grab_unmap (GdkWindow *window)
 {
   GList *list, *l;
-  GdkDisplay *display = gdk_drawable_get_display (window);
+  GdkDisplay *display = gdk_window_get_display (window);
   GdkDeviceManager *device_manager;
 
   device_manager = gdk_display_get_device_manager (display);
@@ -163,7 +163,7 @@ static void
 check_grab_destroy (GdkWindow *window)
 {
   GList *list, *l;
-  GdkDisplay *display = gdk_drawable_get_display (window);
+  GdkDisplay *display = gdk_window_get_display (window);
   GdkDeviceManager *device_manager;
 
   /* Make sure there is no lasting grab in this native window */

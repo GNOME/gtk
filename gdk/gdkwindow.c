@@ -509,7 +509,7 @@ gdk_window_finalize (GObject *object)
   GdkWindowObject *obj = (GdkWindowObject *) object;
   GdkDeviceManager *device_manager;
 
-  device_manager = gdk_display_get_device_manager (gdk_drawable_get_display (GDK_DRAWABLE (window)));
+  device_manager = gdk_display_get_device_manager (gdk_window_get_display (window));
   g_signal_handlers_disconnect_by_func (device_manager, device_removed_cb, window);
 
   if (!GDK_WINDOW_DESTROYED (window))
@@ -1426,7 +1426,7 @@ gdk_window_new (GdkWindow     *parent,
   private->device_cursor = g_hash_table_new_full (NULL, NULL, NULL,
                                                   (GDestroyNotify) gdk_cursor_unref);
 
-  device_manager = gdk_display_get_device_manager (gdk_drawable_get_display (GDK_DRAWABLE (parent)));
+  device_manager = gdk_display_get_device_manager (gdk_window_get_display (parent));
   g_signal_connect (device_manager, "device-removed",
                     G_CALLBACK (device_removed_cb), window);
 
@@ -1937,7 +1937,7 @@ _gdk_window_destroy_hierarchy (GdkWindow *window,
   if (GDK_WINDOW_DESTROYED (window))
     return;
 
-  display = gdk_drawable_get_display (GDK_DRAWABLE (window));
+  display = gdk_window_get_display (window);
   screen = gdk_window_get_screen (window);
   temp_window = g_object_get_qdata (G_OBJECT (screen), quark_pointer_window);
   if (temp_window == window)
@@ -4077,7 +4077,7 @@ gdk_window_process_updates_internal (GdkWindow *window)
 	  if (debug_updates)
 	    {
 	      /* Make sure we see the red invalid area before redrawing. */
-	      gdk_display_sync (gdk_drawable_get_display (window));
+	      gdk_display_sync (gdk_window_get_display (window));
 	      g_usleep (70000);
 	    }
 
@@ -5077,7 +5077,7 @@ gdk_window_get_pointer (GdkWindow	  *window,
 
   g_return_val_if_fail (GDK_IS_WINDOW (window), NULL);
 
-  display = gdk_drawable_get_display (window);
+  display = gdk_window_get_display (window);
 
   return gdk_window_get_device_position (window, display->core_pointer, x, y, mask);
 }
@@ -5115,7 +5115,7 @@ gdk_window_get_device_position (GdkWindow       *window,
   g_return_val_if_fail (GDK_IS_WINDOW (window), NULL);
   g_return_val_if_fail (GDK_IS_DEVICE (device), NULL);
 
-  display = gdk_drawable_get_display (window);
+  display = gdk_window_get_display (window);
   child = display->device_hooks->window_get_device_position (display, device, window,
                                                              &tmp_x, &tmp_y, &tmp_mask);
 
@@ -5802,7 +5802,7 @@ gdk_window_hide (GdkWindow *window)
       GList *devices, *d;
 
       /* May need to break grabs on children */
-      display = gdk_drawable_get_display (window);
+      display = gdk_window_get_display (window);
       device_manager = gdk_display_get_device_manager (display);
 
       /* Get all devices */
@@ -5924,7 +5924,7 @@ gdk_window_set_events (GdkWindow       *window,
     return;
 
   /* If motion hint is disabled, enable motion events again */
-  display = gdk_drawable_get_display (window);
+  display = gdk_window_get_display (window);
   if ((private->event_mask & GDK_POINTER_MOTION_HINT_MASK) &&
       !(event_mask & GDK_POINTER_MOTION_HINT_MASK))
     {
@@ -6004,7 +6004,7 @@ gdk_window_set_device_events (GdkWindow    *window,
   private = (GdkWindowObject *) window;
 
   /* If motion hint is disabled, enable motion events again */
-  display = gdk_drawable_get_display (window);
+  display = gdk_window_get_display (window);
   if ((private->event_mask & GDK_POINTER_MOTION_HINT_MASK) &&
       !(event_mask & GDK_POINTER_MOTION_HINT_MASK))
     _gdk_display_enable_motion_hints (display, device);
@@ -6837,7 +6837,7 @@ gdk_window_set_cursor (GdkWindow *window,
   g_return_if_fail (GDK_IS_WINDOW (window));
 
   private = (GdkWindowObject *) window;
-  display = gdk_drawable_get_display (window);
+  display = gdk_window_get_display (window);
 
   if (private->cursor)
     {
@@ -6915,7 +6915,7 @@ gdk_window_set_device_cursor (GdkWindow *window,
   g_return_if_fail (GDK_IS_DEVICE (device));
 
   private = (GdkWindowObject *) window;
-  display = gdk_drawable_get_display (window);
+  display = gdk_window_get_display (window);
 
   if (!cursor)
     g_hash_table_remove (private->device_cursor, device);
@@ -7628,7 +7628,7 @@ gdk_window_set_composited (GdkWindow *window,
   if (composited)
     gdk_window_ensure_native (window);
 
-  display = gdk_drawable_get_display (GDK_DRAWABLE (window));
+  display = gdk_window_get_display (window);
 
   if (!gdk_display_supports_composite (display) && composited)
     {
@@ -7884,7 +7884,7 @@ _gdk_window_add_damage (GdkWindow *toplevel,
   event.expose.send_event = FALSE;
   event.expose.region = damaged_region;
   cairo_region_get_extents (event.expose.region, &event.expose.area);
-  display = gdk_drawable_get_display (event.expose.window);
+  display = gdk_window_get_display (event.expose.window);
   _gdk_event_queue_append (display, gdk_event_copy (&event));
 }
 
@@ -8204,7 +8204,7 @@ gdk_window_beep (GdkWindow *window)
     return;
 
   toplevel = get_event_toplevel (window);
-  display = gdk_drawable_get_display (GDK_DRAWABLE (window));
+  display = gdk_window_get_display (window);
 
   if (toplevel && !gdk_window_is_offscreen ((GdkWindowObject *)toplevel))
     _gdk_windowing_window_beep (toplevel);
@@ -8478,12 +8478,12 @@ _gdk_make_event (GdkWindow    *window,
   if (event_in_queue)
     {
     if (before_event)
-      _gdk_event_queue_insert_before (gdk_drawable_get_display (window), event_in_queue, event);
+      _gdk_event_queue_insert_before (gdk_window_get_display (window), event_in_queue, event);
     else
-      _gdk_event_queue_insert_after (gdk_drawable_get_display (window), event_in_queue, event);
+      _gdk_event_queue_insert_after (gdk_window_get_display (window), event_in_queue, event);
     }
   else
-    _gdk_event_queue_append (gdk_drawable_get_display (window), event);
+    _gdk_event_queue_append (gdk_window_get_display (window), event);
 
   return event;
 }
@@ -8899,7 +8899,7 @@ gdk_pointer_grab (GdkWindow *	  window,
       native = gdk_window_get_toplevel (native);
     }
 
-  display = gdk_drawable_get_display (window);
+  display = gdk_window_get_display (window);
 
   serial = _gdk_windowing_window_get_next_serial (display);
   device_manager = gdk_display_get_device_manager (display);
@@ -9004,7 +9004,7 @@ gdk_keyboard_grab (GdkWindow *window,
       native = gdk_window_get_toplevel (native);
     }
 
-  display = gdk_drawable_get_display (window);
+  display = gdk_window_get_display (window);
 
   serial = _gdk_windowing_window_get_next_serial (display);
   device_manager = gdk_display_get_device_manager (display);
@@ -9081,7 +9081,7 @@ do_synthesize_crossing_event (gpointer data)
   if (GDK_WINDOW_DESTROYED (changed_toplevel))
     return FALSE;
 
-  display = gdk_drawable_get_display (changed_toplevel);
+  display = gdk_window_get_display (changed_toplevel);
   serial = _gdk_windowing_window_get_next_serial (display);
   g_hash_table_iter_init (&iter, display->pointers_info);
 
@@ -9131,7 +9131,7 @@ _gdk_synthesize_crossing_events_for_geometry_change (GdkWindow *changed_window)
   if (_gdk_native_windows)
     return; /* We use the native crossing events if all native */
 
-  display = gdk_drawable_get_display (changed_window);
+  display = gdk_window_get_display (changed_window);
 
   toplevel = get_event_toplevel (changed_window);
   toplevel_priv = (GdkWindowObject *) toplevel;
@@ -9442,7 +9442,7 @@ proxy_button_event (GdkEvent *source_event,
   gdk_event_get_state (source_event, &state);
   time_ = gdk_event_get_time (source_event);
   device = gdk_event_get_device (source_event);
-  display = gdk_drawable_get_display (source_event->any.window);
+  display = gdk_window_get_display (source_event->any.window);
   toplevel_window = convert_native_coords_to_toplevel (event_window,
 						       toplevel_x, toplevel_y,
 						       &toplevel_x, &toplevel_y);
@@ -9900,7 +9900,7 @@ _gdk_window_get_input_window_for_event (GdkWindow *native_window,
   toplevel_x = x;
   toplevel_y = y;
 
-  display = gdk_drawable_get_display (native_window);
+  display = gdk_window_get_display (native_window);
   toplevel_window = convert_native_coords_to_toplevel (native_window,
 						       toplevel_x, toplevel_y,
 						       &toplevel_x, &toplevel_y);

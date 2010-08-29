@@ -366,7 +366,7 @@ generate_motion_event (GdkWindow *window)
   nswindow = ((GdkWindowImplQuartz *)private->impl)->toplevel;
   view = (GdkQuartzView *)[nswindow contentView];
 
-  display = gdk_drawable_get_display (window);
+  display = gdk_window_get_display (window);
 
   screen_point = [NSEvent mouseLocation];
 
@@ -540,7 +540,7 @@ find_toplevel_for_keyboard_event (NSEvent *nsevent)
   view = (GdkQuartzView *)[[nsevent window] contentView];
   window = [view gdkWindow];
 
-  display = gdk_drawable_get_display (GDK_DRAWABLE (window));
+  display = gdk_window_get_display (window);
 
   device_manager = gdk_display_get_device_manager (display);
   list = gdk_device_manager_list_devices (device_manager,
@@ -583,7 +583,7 @@ find_toplevel_for_mouse_event (NSEvent    *nsevent,
   view = (GdkQuartzView *)[[nsevent window] contentView];
   toplevel = [view gdkWindow];
 
-  display = gdk_drawable_get_display (toplevel);
+  display = gdk_window_get_display (toplevel);
   private = GDK_WINDOW_OBJECT (toplevel);
 
   event_type = [nsevent type];

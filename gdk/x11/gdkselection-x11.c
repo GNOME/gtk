@@ -83,7 +83,7 @@ _gdk_selection_filter_clear_event (XSelectionClearEvent *event)
     {
       OwnerInfo *info = tmp_list->data;
 
-      if (gdk_drawable_get_display (info->owner) == display &&
+      if (gdk_window_get_display (info->owner) == display &&
 	  info->selection == gdk_x11_xatom_to_atom_for_display (display, event->selection))
 	{
 	  if ((GDK_DRAWABLE_XID (info->owner) == event->window &&

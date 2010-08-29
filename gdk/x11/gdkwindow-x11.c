@@ -504,7 +504,7 @@ _gdk_windowing_window_init (GdkScreen * screen)
 static void
 set_wm_protocols (GdkWindow *window)
 {
-  GdkDisplay *display = gdk_drawable_get_display (window);
+  GdkDisplay *display = gdk_window_get_display (window);
   Atom protocols[4];
   int n = 0;
   
@@ -623,7 +623,7 @@ setup_toplevel_window (GdkWindow *window,
 {
   GdkWindowObject *obj = (GdkWindowObject *)window;
   GdkToplevelX11 *toplevel = _gdk_x11_window_get_toplevel (window);
-  GdkDisplay *display = gdk_drawable_get_display (window);
+  GdkDisplay *display = gdk_window_get_display (window);
   Display *xdisplay = GDK_WINDOW_XDISPLAY (window);
   XID xid = GDK_WINDOW_XID (window);
   GdkScreenX11 *screen_x11 = GDK_SCREEN_X11 (GDK_WINDOW_SCREEN (parent));
@@ -1354,7 +1354,7 @@ gdk_window_x11_show (GdkWindow *window, gboolean already_mapped)
       
   if (WINDOW_IS_TOPLEVEL (window))
     {
-      display = gdk_drawable_get_display (window);
+      display = gdk_window_get_display (window);
       display_x11 = GDK_DISPLAY_X11 (display);
       toplevel = _gdk_x11_window_get_toplevel (window);
       
@@ -1788,7 +1788,7 @@ move_to_current_desktop (GdkWindow *window)
       gulong *current_desktop;
       GdkDisplay *display;
       
-      display = gdk_drawable_get_display (window);
+      display = gdk_window_get_display (window);
 
       /* Get current desktop, then set it; this is a race, but not
        * one that matters much in practice.
@@ -1910,7 +1910,7 @@ gdk_window_set_type_hint (GdkWindow        *window,
       !WINDOW_IS_TOPLEVEL_OR_FOREIGN (window))
     return;
 
-  display = gdk_drawable_get_display (window);
+  display = gdk_window_get_display (window);
 
   switch (hint)
     {
@@ -1996,7 +1996,7 @@ gdk_window_get_type_hint (GdkWindow *window)
 
   type = GDK_WINDOW_TYPE_HINT_NORMAL;
 
-  display = gdk_drawable_get_display (window);
+  display = gdk_window_get_display (window);
 
   if (XGetWindowProperty (GDK_DISPLAY_XDISPLAY (display), GDK_WINDOW_XID (window),
                           gdk_x11_get_xatom_by_name_for_display (display, "_NET_WM_WINDOW_TYPE"),
@@ -2512,7 +2512,7 @@ gdk_window_set_title (GdkWindow   *window,
       !WINDOW_IS_TOPLEVEL_OR_FOREIGN (window))
     return;
   
-  display = gdk_drawable_get_display (window);
+  display = gdk_window_get_display (window);
   xdisplay = GDK_DISPLAY_XDISPLAY (display);
   xwindow = GDK_WINDOW_XID (window);
 
@@ -2556,7 +2556,7 @@ gdk_window_set_role (GdkWindow   *window,
 {
   GdkDisplay *display;
 
-  display = gdk_drawable_get_display (window);
+  display = gdk_window_get_display (window);
 
   if (GDK_WINDOW_DESTROYED (window) ||
       !WINDOW_IS_TOPLEVEL_OR_FOREIGN (window))
@@ -2590,7 +2590,7 @@ gdk_window_set_startup_id (GdkWindow   *window,
 
   g_return_if_fail (GDK_IS_WINDOW (window));
 
-  display = gdk_drawable_get_display (window);
+  display = gdk_window_get_display (window);
 
   if (GDK_WINDOW_DESTROYED (window) ||
       !WINDOW_IS_TOPLEVEL_OR_FOREIGN (window))
@@ -2903,7 +2903,7 @@ gdk_window_get_frame_extents (GdkWindow    *window,
 
   gdk_error_trap_push();
   
-  display = gdk_drawable_get_display (window);
+  display = gdk_window_get_display (window);
   xwindow = GDK_WINDOW_XID (window);
 
   /* first try: use _NET_FRAME_EXTENTS */
@@ -3106,7 +3106,7 @@ gdk_window_x11_get_device_state (GdkWindow       *window,
           int winy = 0;
           unsigned int xmask = 0;
 
-          _gdk_windowing_get_device_state (gdk_drawable_get_display (window), device,
+          _gdk_windowing_get_device_state (gdk_window_get_display (window), device,
                                            &screen, &rootx, &rooty, &xmask);
 	  gdk_window_get_origin (window, &originx, &originy);
 	  winx = rootx - originx;
@@ -3340,7 +3340,7 @@ gdk_window_x11_set_events (GdkWindow    *window,
       if (GDK_WINDOW_XID (window) != GDK_WINDOW_XROOTWIN (window))
         xevent_mask = StructureNotifyMask | PropertyChangeMask;
 
-      display_x11 = GDK_DISPLAY_X11 (gdk_drawable_get_display (window));
+      display_x11 = GDK_DISPLAY_X11 (gdk_window_get_display (window));
       gdk_event_source_select_events ((GdkEventSource *) display_x11->event_source,
                                       GDK_WINDOW_XWINDOW (window), event_mask,
                                       xevent_mask);
@@ -3625,7 +3625,7 @@ gdk_x11_window_set_user_time (GdkWindow *window,
       !WINDOW_IS_TOPLEVEL_OR_FOREIGN (window))
     return;
 
-  display = gdk_drawable_get_display (window);
+  display = gdk_window_get_display (window);
   display_x11 = GDK_DISPLAY_X11 (display);
   toplevel = _gdk_x11_window_get_toplevel (window);
 
@@ -3797,7 +3797,7 @@ gdk_window_set_icon_list (GdkWindow *window,
       !WINDOW_IS_TOPLEVEL_OR_FOREIGN (window))
     return;
 
-  display = gdk_drawable_get_display (window);
+  display = gdk_window_get_display (window);
   
   l = pixbufs;
   size = 0;
@@ -3917,7 +3917,7 @@ gdk_window_set_icon_name (GdkWindow   *window,
       !WINDOW_IS_TOPLEVEL_OR_FOREIGN (window))
     return;
 
-  display = gdk_drawable_get_display (window);
+  display = gdk_window_get_display (window);
 
   g_object_set_qdata (G_OBJECT (window), g_quark_from_static_string ("gdk-icon-name-set"),
                       GUINT_TO_POINTER (name != NULL));
@@ -4390,7 +4390,7 @@ gdk_window_set_group (GdkWindow *window,
   toplevel = _gdk_x11_window_get_toplevel (window);
 
   if (leader == NULL)
-    leader = gdk_display_get_default_group (gdk_drawable_get_display (window));
+    leader = gdk_display_get_default_group (gdk_window_get_display (window));
   
   if (toplevel->group_leader != leader)
     {
@@ -4417,7 +4417,7 @@ gdk_window_get_mwm_hints (GdkWindow *window)
   if (GDK_WINDOW_DESTROYED (window))
     return NULL;
 
-  display = gdk_drawable_get_display (window);
+  display = gdk_window_get_display (window);
   
   hints_atom = gdk_x11_get_xatom_by_name_for_display (display, _XA_MOTIF_WM_HINTS);
 
@@ -4448,7 +4448,7 @@ gdk_window_set_mwm_hints (GdkWindow *window,
   if (GDK_WINDOW_DESTROYED (window))
     return;
   
-  display = gdk_drawable_get_display (window);
+  display = gdk_window_get_display (window);
   
   hints_atom = gdk_x11_get_xatom_by_name_for_display (display, _XA_MOTIF_WM_HINTS);
 
@@ -5485,7 +5485,7 @@ gdk_window_set_opacity (GdkWindow *window,
       !WINDOW_IS_TOPLEVEL (window))
     return;
 
-  display = gdk_drawable_get_display (window);
+  display = gdk_window_get_display (window);
 
   if (opacity < 0)
     opacity = 0;

@@ -268,7 +268,7 @@ gdk_device_core_query_state (GdkDevice        *device,
   if (!found_window)
     return FALSE;
 
-  display = gdk_drawable_get_display (window);
+  display = gdk_window_get_display (window);
 
   if (root_window)
     *root_window = _gdk_root;

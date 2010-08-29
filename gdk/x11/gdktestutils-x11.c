@@ -127,7 +127,7 @@ gdk_test_simulate_key (GdkWindow      *window,
   xev.y_root = 0;
   xev.state = modifiers;
   xev.keycode = 0;
-  success = gdk_keymap_get_entries_for_keyval (gdk_keymap_get_for_display (gdk_drawable_get_display (window)), keyval, &keys, &n_keys);
+  success = gdk_keymap_get_entries_for_keyval (gdk_keymap_get_for_display (gdk_window_get_display (window)), keyval, &keys, &n_keys);
   success &= n_keys > 0;
   if (success)
     {

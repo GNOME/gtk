@@ -319,7 +319,7 @@ gdk_event_put (const GdkEvent *event)
   g_return_if_fail (event != NULL);
 
   if (event->any.window)
-    display = gdk_drawable_get_display (event->any.window);
+    display = gdk_window_get_display (event->any.window);
   else
     {
       GDK_NOTE (MULTIHEAD,
@@ -1040,9 +1040,9 @@ gdk_event_get_device (const GdkEvent *event)
                    "It is most likely synthesized outside Gdk/GTK+\n",
                    event->type);
 
-        display = gdk_drawable_get_display (event->any.window);
+        display = gdk_window_get_display (event->any.window);
         device_manager = gdk_display_get_device_manager (display);
-        core_pointer = gdk_device_manager_get_client_pointer (device_manager);
+        core_pointer = gdk_display_get_core_pointer (display);
 
         if (event->type == GDK_KEY_PRESS ||
             event->type == GDK_KEY_RELEASE)
@@ -1090,7 +1090,7 @@ gdk_event_request_motions (const GdkEventMotion *event)
     {
       gdk_device_get_state (event->device, event->window, NULL, NULL);
       
-      display = gdk_drawable_get_display (event->window);
+      display = gdk_window_get_display (event->window);
       _gdk_display_enable_motion_hints (display, event->device);
     }
 }
@@ -1449,7 +1449,7 @@ gdk_synthesize_window_state (GdkWindow     *window,
     {
     case GDK_WINDOW_TOPLEVEL:
     case GDK_WINDOW_TEMP: /* ? */
-      gdk_display_put_event (gdk_drawable_get_display (window), &temp_event);
+      gdk_display_put_event (gdk_window_get_display (window), &temp_event);
       break;
       
     case GDK_WINDOW_FOREIGN:

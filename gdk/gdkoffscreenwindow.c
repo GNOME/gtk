@@ -498,7 +498,7 @@ gdk_offscreen_window_hide (GdkWindow *window)
   offscreen = GDK_OFFSCREEN_WINDOW (private->impl);
 
   /* May need to break grabs on children */
-  display = gdk_drawable_get_display (window);
+  display = gdk_window_get_display (window);
 
   /* TODO: This needs updating to the new grab world */
 #if 0
