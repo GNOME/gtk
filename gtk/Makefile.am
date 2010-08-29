@@ -372,6 +372,7 @@ gtk_private_h_sources =		\
 	gtkiconcache.h		\
 	gtkintl.h		\
 	gtkkeyhash.h		\
+	gtkmenuprivate.h	\
 	gtkmnemonichash.h	\
 	gtkmountoperationprivate.h \
 	gtkpango.h		\

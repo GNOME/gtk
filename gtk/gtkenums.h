@@ -371,22 +371,6 @@ typedef enum
   GTK_STATE_INSENSITIVE
 } GtkStateType;
 
-#if !defined(GTK_DISABLE_DEPRECATED) || defined (GTK_MENU_INTERNALS)
-/* Directions for submenus */
-typedef enum
-{
-  GTK_DIRECTION_LEFT,
-  GTK_DIRECTION_RIGHT
-} GtkSubmenuDirection;
-
-/* Placement of submenus */
-typedef enum
-{
-  GTK_TOP_BOTTOM,
-  GTK_LEFT_RIGHT
-} GtkSubmenuPlacement;
-#endif /* GTK_DISABLE_DEPRECATED */
-
 /* Style for toolbars */
 typedef enum
 {

@@ -24,8 +24,6 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
-#define GTK_MENU_INTERNALS
-
 #include "config.h"
 #include <string.h>
 
@@ -34,6 +32,7 @@
 #include "gtkmarshalers.h"
 #include "gtkmenu.h"
 #include "gtkmenubar.h"
+#include "gtkmenuprivate.h"
 #include "gtkseparatormenuitem.h"
 #include "gtkprivate.h"
 #include "gtkbuildable.h"
