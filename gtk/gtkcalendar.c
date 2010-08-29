@@ -4030,6 +4030,33 @@ gtk_calendar_mark_day (GtkCalendar *calendar,
 }
 
 /**
+ * gtk_calendar_get_day_is_marked:
+ * @calendar: a #GtkCalendar
+ * @day: the day number between 1 and 31.
+ *
+ * Returns if the @day of the @calendar is already marked.
+ *
+ * Returns: whether the day is marked.
+ *
+ * Since: 3.0
+ */
+gboolean
+gtk_calendar_get_day_is_marked (GtkCalendar *calendar,
+                                guint        day)
+{
+  GtkCalendarPrivate *priv;
+
+  g_return_val_if_fail (GTK_IS_CALENDAR (calendar), FALSE);
+
+  priv = calendar->priv;
+
+  if (day >= 1 && day <= 31)
+    return priv->marked_date[day - 1];
+
+  return FALSE;
+}
+
+/**
  * gtk_calendar_unmark_day:
  * @calendar: a #GtkCalendar.
  * @day: the day number to unmark between 1 and 31.

@@ -554,6 +554,7 @@ gtk_button_set_use_underline
 #if IN_FILE(__GTK_CALENDAR_C__)
 gtk_calendar_clear_marks
 gtk_calendar_get_date
+gtk_calendar_get_day_is_marked
 gtk_calendar_get_detail_height_rows
 gtk_calendar_get_detail_width_chars
 gtk_calendar_get_display_options

@@ -157,6 +157,9 @@ void       gtk_calendar_set_detail_height_rows (GtkCalendar    *calendar,
 gint       gtk_calendar_get_detail_width_chars (GtkCalendar    *calendar);
 gint       gtk_calendar_get_detail_height_rows (GtkCalendar    *calendar);
 
+gboolean   gtk_calendar_get_day_is_marked      (GtkCalendar    *calendar,
+                                                guint           day);
+
 G_END_DECLS
 
 #endif /* __GTK_CALENDAR_H__ */

@@ -594,6 +594,7 @@ gtk_calendar_select_month
 gtk_calendar_select_day
 gtk_calendar_mark_day
 gtk_calendar_unmark_day
+gtk_calendar_get_day_is_marked
 gtk_calendar_clear_marks
 
 <SUBSECTION>
