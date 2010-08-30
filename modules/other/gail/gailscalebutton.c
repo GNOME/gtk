@@ -30,12 +30,12 @@ static void gail_scale_button_class_init (GailScaleButtonClass *klass);
 static void gail_scale_button_init       (GailScaleButton      *button);
 
 /* GailWidget */
-static void gail_scale_button_notify_gtk (GObject    *obj,
-                                          GParamSpec *pspec);
+static void gail_scale_button_real_notify_gtk (GObject    *obj,
+                                               GParamSpec *pspec);
 
 /* AtkObject */
-static void gail_scale_button_initialize (AtkObject *obj,
-                                          gpointer   data);
+static void gail_scale_button_real_initialize (AtkObject *obj,
+                                               gpointer   data);
 
 /* AtkAction */
 static void                  atk_action_interface_init        (AtkActionIface *iface);
@@ -64,6 +64,8 @@ static void	gail_scale_button_get_minimum_increment (AtkValue       *obj,
                                                          GValue         *value);
 static gboolean	gail_scale_button_set_current_value     (AtkValue       *obj,
                                                          const GValue   *value);
+static void     gail_scale_button_value_changed         (GtkAdjustment  *adjustment,
+                                                         gpointer       data);
 
 G_DEFINE_TYPE_WITH_CODE (GailScaleButton, gail_scale_button, GAIL_TYPE_BUTTON,
                          G_IMPLEMENT_INTERFACE (ATK_TYPE_ACTION, atk_action_interface_init)
@@ -75,9 +77,9 @@ gail_scale_button_class_init (GailScaleButtonClass *klass)
   AtkObjectClass *atk_object_class = ATK_OBJECT_CLASS (klass);
   GailWidgetClass *widget_class = GAIL_WIDGET_CLASS (klass);
 
-  atk_object_class->initialize = gail_scale_button_initialize;
+  atk_object_class->initialize = gail_scale_button_real_initialize;
 
-  widget_class->notify_gtk = gail_scale_button_notify_gtk;
+  widget_class->notify_gtk = gail_scale_button_real_notify_gtk;
 }
 
 static void
@@ -86,10 +88,31 @@ gail_scale_button_init (GailScaleButton *button)
 }
 
 static void
-gail_scale_button_initialize (AtkObject *obj,
-                              gpointer   data)
+gail_scale_button_real_initialize (AtkObject *obj,
+                                   gpointer  data)
 {
+  GailScaleButton *scale_button = GAIL_SCALE_BUTTON (obj);
+  GtkScaleButton *gtk_scale_button;
+  GtkAdjustment *gtk_adjustment;
+
   ATK_OBJECT_CLASS (gail_scale_button_parent_class)->initialize (obj, data);
+
+  gtk_scale_button = GTK_SCALE_BUTTON (data);
+  gtk_adjustment = gtk_scale_button_get_adjustment (gtk_scale_button);
+  /*
+   * If a GtkAdjustment already exists for the scale_button,
+   * create the GailAdjustment
+   */
+  if (gtk_adjustment)
+    {
+      scale_button->adjustment = gail_adjustment_new (gtk_adjustment);
+      g_signal_connect (gtk_adjustment,
+                        "value-changed",
+                        G_CALLBACK (gail_scale_button_value_changed),
+                        obj);
+    }
+  else
+    scale_button->adjustment = NULL;
 
   obj->role = ATK_ROLE_SLIDER;
 }
@@ -187,96 +210,95 @@ static void
 gail_scale_button_get_current_value (AtkValue *obj,
                                      GValue   *value)
 {
-  GtkScaleButton *gtk_scale_button;
+  GailScaleButton *scale_button;
 
   g_return_if_fail (GAIL_IS_SCALE_BUTTON (obj));
 
-  gtk_scale_button = GTK_SCALE_BUTTON (gtk_accessible_get_widget (GTK_ACCESSIBLE (obj)));
+  scale_button = GAIL_SCALE_BUTTON (obj);
+  if (scale_button->adjustment == NULL)
+    /*
+     * Adjustment has not been specified
+     */
+    return;
 
-  g_value_set_double (g_value_init (value, G_TYPE_DOUBLE),
-                      gtk_scale_button_get_value (gtk_scale_button));
+  atk_value_get_current_value (ATK_VALUE (scale_button->adjustment), value);
 }
 
 static void
 gail_scale_button_get_maximum_value (AtkValue *obj,
                                      GValue   *value)
 {
-  GtkWidget *gtk_widget;
-  GtkAdjustment *adj;
+  GailScaleButton *scale_button;
 
   g_return_if_fail (GAIL_IS_SCALE_BUTTON (obj));
 
-  gtk_widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (obj));
-  if (gtk_widget == NULL)
+  scale_button = GAIL_SCALE_BUTTON (obj);
+  if (scale_button->adjustment == NULL)
+    /*
+     * Adjustment has not been specified
+     */
     return;
 
-  adj = gtk_scale_button_get_adjustment (GTK_SCALE_BUTTON (gtk_widget));
-  if (adj != NULL)
-    g_value_set_double (g_value_init (value, G_TYPE_DOUBLE),
-                        adj->upper);
+  atk_value_get_maximum_value (ATK_VALUE (scale_button->adjustment), value);
 }
 
 static void
 gail_scale_button_get_minimum_value (AtkValue *obj,
                                      GValue   *value)
 {
-  GtkWidget *gtk_widget;
-  GtkAdjustment *adj;
+  GailScaleButton *scale_button;
 
   g_return_if_fail (GAIL_IS_SCALE_BUTTON (obj));
 
-  gtk_widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (obj));
-  if (gtk_widget == NULL)
+  scale_button = GAIL_SCALE_BUTTON (obj);
+  if (scale_button->adjustment == NULL)
+    /*
+     * Adjustment has not been specified
+     */
     return;
 
-  adj = gtk_scale_button_get_adjustment (GTK_SCALE_BUTTON (gtk_widget));
-  if (adj != NULL)
-    g_value_set_double (g_value_init (value, G_TYPE_DOUBLE),
-                        adj->lower);
+  atk_value_get_minimum_value (ATK_VALUE (scale_button->adjustment), value);
 }
 
 static void
 gail_scale_button_get_minimum_increment (AtkValue *obj,
                                          GValue   *value)
 {
-  GtkWidget *gtk_widget;
-  GtkAdjustment *adj;
+  GailScaleButton *scale_button;
 
   g_return_if_fail (GAIL_IS_SCALE_BUTTON (obj));
 
-  gtk_widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (obj));
-  if (gtk_widget == NULL)
+  scale_button = GAIL_SCALE_BUTTON (obj);
+  if (scale_button->adjustment == NULL)
+    /*
+     * Adjustment has not been specified
+     */
     return;
 
-  adj = gtk_scale_button_get_adjustment (GTK_SCALE_BUTTON (gtk_widget));
-  if (adj != NULL)
-    g_value_set_double (g_value_init (value, G_TYPE_DOUBLE),
-                        adj->step_increment);
+  atk_value_get_minimum_increment (ATK_VALUE (scale_button->adjustment), value);
 }
 
 static gboolean
 gail_scale_button_set_current_value (AtkValue     *obj,
                                      const GValue *value)
 {
-  GtkWidget *gtk_widget;
+  GailScaleButton *scale_button;
 
   g_return_val_if_fail (GAIL_IS_SCALE_BUTTON (obj), FALSE);
 
-  gtk_widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (obj));
-  if (gtk_widget == NULL)
+  scale_button = GAIL_SCALE_BUTTON (obj);
+  if (scale_button->adjustment == NULL)
+    /*
+     * Adjustment has not been specified
+     */
     return FALSE;
 
-  if (G_VALUE_HOLDS_DOUBLE (value))
-    {
-      gtk_scale_button_set_value (GTK_SCALE_BUTTON (gtk_widget), g_value_get_double (value));
-      return TRUE;
-    }
-  return FALSE;
+  return atk_value_set_current_value (ATK_VALUE (scale_button->adjustment), value);
 }
 
 static void
-gail_scale_button_notify_gtk (GObject    *obj,
-                              GParamSpec *pspec)
+gail_scale_button_real_notify_gtk (GObject    *obj,
+                                   GParamSpec *pspec)
 {
   GtkScaleButton *gtk_scale_button;
   GailScaleButton *scale_button;
@@ -286,9 +308,29 @@ gail_scale_button_notify_gtk (GObject    *obj,
   gtk_scale_button = GTK_SCALE_BUTTON (obj);
   scale_button = GAIL_SCALE_BUTTON (gtk_widget_get_accessible (GTK_WIDGET (gtk_scale_button)));
 
-  if (strcmp (pspec->name, "value") == 0)
+  if (strcmp (pspec->name, "adjustment") == 0)
     {
-      g_object_notify (G_OBJECT (scale_button), "accessible-value");
+      /*
+       * Get rid of the GailAdjustment for the GtkAdjustment
+       * which was associated with the scale_button.
+       */
+      GtkAdjustment* gtk_adjustment;
+
+      if (scale_button->adjustment)
+        {
+          g_object_unref (scale_button->adjustment);
+          scale_button->adjustment = NULL;
+        }
+      /*
+       * Create the GailAdjustment when notify for "adjustment" property
+       * is received
+       */
+      gtk_adjustment = gtk_scale_button_get_adjustment (gtk_scale_button);
+      scale_button->adjustment = gail_adjustment_new (gtk_adjustment);
+      g_signal_connect (gtk_adjustment,
+                        "value-changed",
+                        G_CALLBACK (gail_scale_button_value_changed),
+                        scale_button);
     }
   else
     {
@@ -296,4 +338,17 @@ gail_scale_button_notify_gtk (GObject    *obj,
     }
 }
 
+static void
+gail_scale_button_value_changed (GtkAdjustment    *adjustment,
+                                 gpointer         data)
+{
+  GailScaleButton *scale_button;
+
+  gail_return_if_fail (adjustment != NULL);
+  gail_return_if_fail (data != NULL);
+
+  scale_button = GAIL_SCALE_BUTTON (data);
+
+  g_object_notify (G_OBJECT (scale_button), "accessible-value");
+}
 

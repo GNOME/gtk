@@ -38,6 +38,8 @@ typedef struct _GailScaleButtonClass              GailScaleButtonClass;
 struct _GailScaleButton
 {
   GailButton parent;
+
+  AtkObject *adjustment;
 };
 
 struct _GailScaleButtonClass
