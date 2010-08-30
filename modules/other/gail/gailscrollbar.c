@@ -85,18 +85,18 @@ gail_scrollbar_get_index_in_parent (AtkObject *accessible)
 
   if (GTK_IS_HSCROLLBAR (widget))
   {
-    if (!scrolled_window->hscrollbar_visible) 
+    if (!gtk_scrolled_window_get_hscrollbar (scrolled_window))
     {
       n_children = -1;
     }
   }
   else if (GTK_IS_VSCROLLBAR (widget))
   {
-    if (!scrolled_window->vscrollbar_visible) 
+    if (!gtk_scrolled_window_get_vscrollbar (scrolled_window))
     {
       n_children = -1;
     }
-    else if (scrolled_window->hscrollbar_visible) 
+    else if (gtk_scrolled_window_get_hscrollbar (scrolled_window))
     {
       n_children++;
     }
