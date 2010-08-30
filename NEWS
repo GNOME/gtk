@@ -1,3 +1,32 @@
+Overview of Changes from GTK+ 2.21.6 to 2.21.7
+==============================================
+
+* Deprecations:
+ - GtkWidget::draw-border has been deprecated
+
+* The Windows backend has seen quite a bit of work
+  towards fixing CSW regressions.
+
+* Bugs fixed:
+ 528257 File selector and stock string problems
+ 614006 File chooser crashes when creating a new folder...
+ 616401 Noneffective gdk_keymap_map_virtual_modifiers...
+ 626537 Toggle button does not set indeterminate state
+ 627139 gtkfilechooserentry shows completion progress tool...
+ 627843 set_active_iter: remove restriction on path length
+ 628049 Native windows don't work very well
+
+* Updated translations:
+ British English
+ French
+ Galician
+ Hebrew
+ Indonesian
+ Hungarian
+ Norwegian bokmål
+ Spanish
+
+
 Overview of Changes from GTK+ 2.21.5 to 2.21.6
 ==============================================
 
