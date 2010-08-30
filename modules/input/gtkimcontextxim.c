@@ -1692,8 +1692,9 @@ on_status_toplevel_configure (GtkWidget         *toplevel,
   if (status_window->window)
     {
       height = gdk_screen_get_height (gtk_widget_get_screen (toplevel));
-  
-      gdk_window_get_frame_extents (toplevel->window, &rect);
+
+      gdk_window_get_frame_extents (gtk_widget_get_window (toplevel),
+                                    &rect);
       gtk_widget_size_request (status_window->window, &requisition);
       
       if (rect.y + rect.height + requisition.height < height)
@@ -1772,20 +1773,25 @@ static gboolean
 on_status_window_expose_event (GtkWidget      *widget,
 			       GdkEventExpose *event)
 {
+  GtkAllocation allocation;
+  GtkStyle *style;
   cairo_t *cr;
 
-  cr = gdk_cairo_create (widget->window);
+  style = gtk_widget_get_style (widget);
+  gtk_widget_get_allocation (widget, &allocation);
 
-  gdk_cairo_set_source_color (cr, &widget->style->base[GTK_STATE_NORMAL]);
+  cr = gdk_cairo_create (gtk_widget_get_window (widget));
+
+  gdk_cairo_set_source_color (cr, &style->base[GTK_STATE_NORMAL]);
   cairo_rectangle (cr,
                    0, 0,
-                   widget->allocation.width, widget->allocation.height);
+                   allocation.width, allocation.height);
   cairo_fill (cr);
 
-  gdk_cairo_set_source_color (cr, &widget->style->text[GTK_STATE_NORMAL]);
+  gdk_cairo_set_source_color (cr, &style->text[GTK_STATE_NORMAL]);
   cairo_rectangle (cr, 
                    0, 0,
-                   widget->allocation.width - 1, widget->allocation.height - 1);
+                   allocation.width - 1, allocation.height - 1);
   cairo_fill (cr);
 
   return FALSE;
@@ -1802,10 +1808,13 @@ on_status_window_style_set (GtkWidget *toplevel,
 			    GtkStyle  *previous_style,
 			    GtkWidget *label)
 {
+  GtkStyle *style;
   gint i;
-  
+
+  style = gtk_widget_get_style (toplevel);
+
   for (i = 0; i < 5; i++)
-    gtk_widget_modify_fg (label, i, &toplevel->style->text[i]);
+    gtk_widget_modify_fg (label, i, &style->text[i]);
 }
 
 /* Creates the widgets for the status window; called when we

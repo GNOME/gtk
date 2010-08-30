@@ -51,7 +51,7 @@
  * exactly this, so you can ignore the presence of the viewport.
  */
 
-struct _GtkViewportPriv
+struct _GtkViewportPrivate
 {
   GtkAdjustment  *hadjustment;
   GtkAdjustment  *vadjustment;
@@ -183,7 +183,7 @@ gtk_viewport_class_init (GtkViewportClass *class)
 		  GTK_TYPE_ADJUSTMENT,
 		  GTK_TYPE_ADJUSTMENT);
 
-  g_type_class_add_private (class, sizeof (GtkViewportPriv));
+  g_type_class_add_private (class, sizeof (GtkViewportPrivate));
 }
 
 static void
@@ -220,7 +220,7 @@ gtk_viewport_get_property (GObject         *object,
 			   GParamSpec      *pspec)
 {
   GtkViewport *viewport = GTK_VIEWPORT (object);
-  GtkViewportPriv *priv = viewport->priv;
+  GtkViewportPrivate *priv = viewport->priv;
 
   switch (prop_id)
     {
@@ -242,11 +242,11 @@ gtk_viewport_get_property (GObject         *object,
 static void
 gtk_viewport_init (GtkViewport *viewport)
 {
-  GtkViewportPriv *priv;
+  GtkViewportPrivate *priv;
 
   viewport->priv = G_TYPE_INSTANCE_GET_PRIVATE (viewport,
                                                 GTK_TYPE_VIEWPORT,
-                                                GtkViewportPriv);
+                                                GtkViewportPrivate);
   priv = viewport->priv;
 
   gtk_widget_set_has_window (GTK_WIDGET (viewport), TRUE);
@@ -337,7 +337,7 @@ gtk_viewport_destroy (GtkObject *object)
 GtkAdjustment*
 gtk_viewport_get_hadjustment (GtkViewport *viewport)
 {
-  GtkViewportPriv *priv;
+  GtkViewportPrivate *priv;
 
   g_return_val_if_fail (GTK_IS_VIEWPORT (viewport), NULL);
 
@@ -360,7 +360,7 @@ gtk_viewport_get_hadjustment (GtkViewport *viewport)
 GtkAdjustment*
 gtk_viewport_get_vadjustment (GtkViewport *viewport)
 {
-  GtkViewportPriv *priv;
+  GtkViewportPrivate *priv;
 
   g_return_val_if_fail (GTK_IS_VIEWPORT (viewport), NULL);
 
@@ -376,11 +376,13 @@ static void
 viewport_get_view_allocation (GtkViewport   *viewport,
 			      GtkAllocation *view_allocation)
 {
-  GtkViewportPriv *priv = viewport->priv;
+  GtkViewportPrivate *priv = viewport->priv;
+  GtkStyle *style;
   GtkWidget *widget = GTK_WIDGET (viewport);
-  GtkAllocation *allocation = &widget->allocation;
+  GtkAllocation allocation;
   guint border_width;
 
+  gtk_widget_get_allocation (widget, &allocation);
   border_width = gtk_container_get_border_width (GTK_CONTAINER (viewport));
 
   view_allocation->x = 0;
@@ -388,12 +390,13 @@ viewport_get_view_allocation (GtkViewport   *viewport,
 
   if (priv->shadow_type != GTK_SHADOW_NONE)
     {
-      view_allocation->x = widget->style->xthickness;
-      view_allocation->y = widget->style->ythickness;
+      style = gtk_widget_get_style (widget);
+      view_allocation->x = style->xthickness;
+      view_allocation->y = style->ythickness;
     }
 
-  view_allocation->width = MAX (1, allocation->width - view_allocation->x * 2 - border_width * 2);
-  view_allocation->height = MAX (1, allocation->height - view_allocation->y * 2 - border_width * 2);
+  view_allocation->width = MAX (1, allocation.width - view_allocation->x * 2 - border_width * 2);
+  view_allocation->height = MAX (1, allocation.height - view_allocation->y * 2 - border_width * 2);
 }
 
 static void
@@ -587,20 +590,25 @@ void
 gtk_viewport_set_shadow_type (GtkViewport   *viewport,
 			      GtkShadowType  type)
 {
-  GtkViewportPriv *priv;
+  GtkViewportPrivate *priv;
+  GtkAllocation allocation;
+  GtkWidget *widget;
 
   g_return_if_fail (GTK_IS_VIEWPORT (viewport));
 
+  widget = GTK_WIDGET (viewport);
   priv = viewport->priv;
 
   if ((GtkShadowType) priv->shadow_type != type)
     {
       priv->shadow_type = type;
 
-      if (gtk_widget_get_visible (GTK_WIDGET (viewport)))
+      if (gtk_widget_get_visible (widget))
 	{
-	  gtk_widget_size_allocate (GTK_WIDGET (viewport), &(GTK_WIDGET (viewport)->allocation));
-	  gtk_widget_queue_draw (GTK_WIDGET (viewport));
+          gtk_widget_get_allocation (widget, &allocation);
+          gtk_widget_size_allocate (widget, &allocation);
+          gtk_widget_set_allocation (widget, &allocation);
+          gtk_widget_queue_draw (widget);
 	}
 
       g_object_notify (G_OBJECT (viewport), "shadow-type");
@@ -664,12 +672,15 @@ static void
 gtk_viewport_realize (GtkWidget *widget)
 {
   GtkViewport *viewport = GTK_VIEWPORT (widget);
-  GtkViewportPriv *priv = viewport->priv;
+  GtkViewportPrivate *priv = viewport->priv;
   GtkBin *bin = GTK_BIN (widget);
   GtkAdjustment *hadjustment = gtk_viewport_get_hadjustment (viewport);
   GtkAdjustment *vadjustment = gtk_viewport_get_vadjustment (viewport);
+  GtkAllocation allocation;
   GtkAllocation view_allocation;
+  GtkStyle *style;
   GtkWidget *child;
+  GdkWindow *window;
   GdkWindowAttr attributes;
   gint attributes_mask;
   gint event_mask;
@@ -679,10 +690,12 @@ gtk_viewport_realize (GtkWidget *widget)
 
   gtk_widget_set_realized (widget, TRUE);
 
-  attributes.x = widget->allocation.x + border_width;
-  attributes.y = widget->allocation.y + border_width;
-  attributes.width = widget->allocation.width - border_width * 2;
-  attributes.height = widget->allocation.height - border_width * 2;
+  gtk_widget_get_allocation (widget, &allocation);
+
+  attributes.x = allocation.x + border_width;
+  attributes.y = allocation.y + border_width;
+  attributes.width = allocation.width - border_width * 2;
+  attributes.height = allocation.height - border_width * 2;
   attributes.window_type = GDK_WINDOW_CHILD;
   attributes.wclass = GDK_INPUT_OUTPUT;
   attributes.visual = gtk_widget_get_visual (widget);
@@ -695,9 +708,10 @@ gtk_viewport_realize (GtkWidget *widget)
 
   attributes_mask = GDK_WA_X | GDK_WA_Y | GDK_WA_VISUAL | GDK_WA_COLORMAP;
 
-  widget->window = gdk_window_new (gtk_widget_get_parent_window (widget),
-				   &attributes, attributes_mask);
-  gdk_window_set_user_data (widget->window, viewport);
+  window = gdk_window_new (gtk_widget_get_parent_window (widget),
+                           &attributes, attributes_mask);
+  gtk_widget_set_window (widget, window);
+  gdk_window_set_user_data (window, viewport);
 
   viewport_get_view_allocation (viewport, &view_allocation);
   
@@ -707,7 +721,8 @@ gtk_viewport_realize (GtkWidget *widget)
   attributes.height = view_allocation.height;
   attributes.event_mask = 0;
 
-  priv->view_window = gdk_window_new (widget->window, &attributes, attributes_mask);
+  priv->view_window = gdk_window_new (window,
+                                      &attributes, attributes_mask);
   gdk_window_set_user_data (priv->view_window, viewport);
 
   gdk_window_set_back_pixmap (priv->view_window, NULL, FALSE);
@@ -726,13 +741,14 @@ gtk_viewport_realize (GtkWidget *widget)
   if (child)
     gtk_widget_set_parent_window (child, priv->bin_window);
 
-  widget->style = gtk_style_attach (widget->style, widget->window);
-  gtk_style_set_background (widget->style, widget->window, GTK_STATE_NORMAL);
-  gtk_style_set_background (widget->style, priv->bin_window, GTK_STATE_NORMAL);
+  gtk_widget_style_attach (widget);
+  style = gtk_widget_get_style (widget);
+  gtk_style_set_background (style, window, GTK_STATE_NORMAL);
+  gtk_style_set_background (style, priv->bin_window, GTK_STATE_NORMAL);
 
   /* Call paint here to allow a theme to set the background without flashing
    */
-  gtk_paint_flat_box(widget->style, priv->bin_window, GTK_STATE_NORMAL,
+  gtk_paint_flat_box(style, priv->bin_window, GTK_STATE_NORMAL,
 		     GTK_SHADOW_NONE,
 		     NULL, widget, "viewportbin",
 		     0, 0, -1, -1);
@@ -745,7 +761,7 @@ static void
 gtk_viewport_unrealize (GtkWidget *widget)
 {
   GtkViewport *viewport = GTK_VIEWPORT (widget);
-  GtkViewportPriv *priv = viewport->priv;
+  GtkViewportPrivate *priv = viewport->priv;
 
   gdk_window_set_user_data (priv->view_window, NULL);
   gdk_window_destroy (priv->view_window);
@@ -765,9 +781,10 @@ gtk_viewport_paint (GtkWidget    *widget,
   if (gtk_widget_is_drawable (widget))
     {
       GtkViewport *viewport = GTK_VIEWPORT (widget);
-      GtkViewportPriv *priv = viewport->priv;
+      GtkViewportPrivate *priv = viewport->priv;
 
-      gtk_paint_shadow (widget->style, widget->window,
+      gtk_paint_shadow (gtk_widget_get_style (widget),
+                        gtk_widget_get_window (widget),
 			GTK_STATE_NORMAL, priv->shadow_type,
 			area, widget, "viewport",
 			0, 0, -1, -1);
@@ -783,13 +800,13 @@ gtk_viewport_expose (GtkWidget      *widget,
   if (gtk_widget_is_drawable (widget))
     {
       viewport = GTK_VIEWPORT (widget);
-      GtkViewportPriv *priv = viewport->priv;
+      GtkViewportPrivate *priv = viewport->priv;
 
-      if (event->window == widget->window)
+      if (event->window == gtk_widget_get_window (widget))
 	gtk_viewport_paint (widget, &event->area);
       else if (event->window == priv->bin_window)
 	{
-	  gtk_paint_flat_box(widget->style, priv->bin_window, 
+          gtk_paint_flat_box(gtk_widget_get_style (widget), priv->bin_window,
 			     GTK_STATE_NORMAL, GTK_SHADOW_NONE,
 			     &event->area, widget, "viewportbin",
 			     0, 0, -1, -1);
@@ -807,7 +824,7 @@ gtk_viewport_add (GtkContainer *container,
 {
   GtkBin *bin = GTK_BIN (container);
   GtkViewport *viewport = GTK_VIEWPORT (bin);
-  GtkViewportPriv *priv = viewport->priv;
+  GtkViewportPrivate *priv = viewport->priv;
 
   g_return_if_fail (gtk_bin_get_child (bin) == NULL);
 
@@ -820,8 +837,9 @@ static void
 gtk_viewport_size_allocate (GtkWidget     *widget,
 			    GtkAllocation *allocation)
 {
+  GtkAllocation widget_allocation;
   GtkViewport *viewport = GTK_VIEWPORT (widget);
-  GtkViewportPriv *priv = viewport->priv;
+  GtkViewportPrivate *priv = viewport->priv;
   GtkBin *bin = GTK_BIN (widget);
   guint border_width;
   gboolean hadjustment_value_changed, vadjustment_value_changed;
@@ -835,14 +853,15 @@ gtk_viewport_size_allocate (GtkWidget     *widget,
   /* If our size changed, and we have a shadow, queue a redraw on widget->window to
    * redraw the shadow correctly.
    */
+  gtk_widget_get_allocation (widget, &widget_allocation);
   if (gtk_widget_get_mapped (widget) &&
       priv->shadow_type != GTK_SHADOW_NONE &&
-      (widget->allocation.width != allocation->width ||
-       widget->allocation.height != allocation->height))
-    gdk_window_invalidate_rect (widget->window, NULL, FALSE);
-  
-  widget->allocation = *allocation;
-  
+      (widget_allocation.width != allocation->width ||
+       widget_allocation.height != allocation->height))
+    gdk_window_invalidate_rect (gtk_widget_get_window (widget), NULL, FALSE);
+
+  gtk_widget_set_allocation (widget, allocation);
+
   viewport_set_hadjustment_values (viewport, &hadjustment_value_changed);
   viewport_set_vadjustment_values (viewport, &vadjustment_value_changed);
   
@@ -853,7 +872,8 @@ gtk_viewport_size_allocate (GtkWidget     *widget,
   if (gtk_widget_get_realized (widget))
     {
       GtkAllocation view_allocation;
-      gdk_window_move_resize (widget->window,
+
+      gdk_window_move_resize (gtk_widget_get_window (widget),
 			      allocation->x + border_width,
 			      allocation->y + border_width,
 			      allocation->width - border_width * 2,
@@ -889,7 +909,7 @@ gtk_viewport_adjustment_value_changed (GtkAdjustment *adjustment,
 				       gpointer       data)
 {
   GtkViewport *viewport = GTK_VIEWPORT (data);
-  GtkViewportPriv *priv = viewport->priv;
+  GtkViewportPrivate *priv = viewport->priv;
   GtkBin *bin = GTK_BIN (data);
   GtkWidget *child;
 
@@ -921,11 +941,15 @@ gtk_viewport_style_set (GtkWidget *widget,
    if (gtk_widget_get_realized (widget) &&
        gtk_widget_get_has_window (widget))
      {
+        GtkStyle *style;
 	GtkViewport *viewport = GTK_VIEWPORT (widget);
-        GtkViewportPriv *priv = viewport->priv;
+        GtkViewportPrivate *priv = viewport->priv;
 
-	gtk_style_set_background (widget->style, priv->bin_window, GTK_STATE_NORMAL);
-	gtk_style_set_background (widget->style, widget->window, widget->state);
+        style = gtk_widget_get_style (widget);
+        gtk_style_set_background (style, priv->bin_window, GTK_STATE_NORMAL);
+        gtk_style_set_background (style,
+                                  gtk_widget_get_window (widget),
+                                  gtk_widget_get_state (widget));
      }
 }
 
@@ -944,7 +968,8 @@ gtk_viewport_get_size (GtkSizeRequest *widget,
 		       gint           *natural_size)
 {
   GtkViewport *viewport = GTK_VIEWPORT (widget);
-  GtkViewportPriv *priv = viewport->priv;
+  GtkViewportPrivate *priv = viewport->priv;
+  GtkStyle  *style;
   GtkWidget *child;
   gint       child_min, child_nat;
   gint       minimum, natural;
@@ -958,10 +983,11 @@ gtk_viewport_get_size (GtkSizeRequest *widget,
 
   if (priv->shadow_type != GTK_SHADOW_NONE)
     {
+      style = gtk_widget_get_style (GTK_WIDGET (widget));
       if (orientation == GTK_ORIENTATION_HORIZONTAL)
-	  minimum += 2 * GTK_WIDGET (widget)->style->xthickness;
+	  minimum += 2 * style->xthickness;
       else
-	  minimum += 2 * GTK_WIDGET (widget)->style->ythickness;
+	  minimum += 2 * style->ythickness;
     }
 
   natural = minimum;

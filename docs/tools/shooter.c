@@ -193,6 +193,7 @@ int main (int argc, char **argv)
 
   for (node = toplevels; node; node = g_list_next (node))
     {
+      GtkAllocation allocation;
       GdkWindow *window;
       WidgetInfo *info;
       XID id;
@@ -202,13 +203,14 @@ int main (int argc, char **argv)
 
       gtk_widget_show (info->window);
 
-      window = info->window->window;
+      window = gtk_widget_get_window (info->window);
+      gtk_widget_get_allocation (info->window, &allocation);
 
       gtk_widget_show_now (info->window);
       gtk_widget_queue_draw_area (info->window,
-        info->window->allocation.x, info->window->allocation.y,
-        info->window->allocation.width, info->window->allocation.height);
-      gdk_window_process_updates (info->window->window, TRUE);
+                                  allocation.x, allocation.y,
+                                  allocation.width, allocation.height);
+      gdk_window_process_updates (window, TRUE);
 
       while (gtk_events_pending ())
 	{

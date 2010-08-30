@@ -62,6 +62,8 @@ static void
 gtk_drawing_area_realize (GtkWidget *widget)
 {
   GtkDrawingArea *darea = GTK_DRAWING_AREA (widget);
+  GtkAllocation allocation;
+  GdkWindow *window;
   GdkWindowAttr attributes;
   gint attributes_mask;
 
@@ -73,11 +75,13 @@ gtk_drawing_area_realize (GtkWidget *widget)
     {
       gtk_widget_set_realized (widget, TRUE);
 
+      gtk_widget_get_allocation (widget, &allocation);
+
       attributes.window_type = GDK_WINDOW_CHILD;
-      attributes.x = widget->allocation.x;
-      attributes.y = widget->allocation.y;
-      attributes.width = widget->allocation.width;
-      attributes.height = widget->allocation.height;
+      attributes.x = allocation.x;
+      attributes.y = allocation.y;
+      attributes.width = allocation.width;
+      attributes.height = allocation.height;
       attributes.wclass = GDK_INPUT_OUTPUT;
       attributes.visual = gtk_widget_get_visual (widget);
       attributes.colormap = gtk_widget_get_colormap (widget);
@@ -85,12 +89,13 @@ gtk_drawing_area_realize (GtkWidget *widget)
 
       attributes_mask = GDK_WA_X | GDK_WA_Y | GDK_WA_VISUAL | GDK_WA_COLORMAP;
 
-      widget->window = gdk_window_new (gtk_widget_get_parent_window (widget),
-                                       &attributes, attributes_mask);
-      gdk_window_set_user_data (widget->window, darea);
+      window = gdk_window_new (gtk_widget_get_parent_window (widget),
+                               &attributes, attributes_mask);
+      gdk_window_set_user_data (window, darea);
+      gtk_widget_set_window (widget, window);
 
-      widget->style = gtk_style_attach (widget->style, widget->window);
-      gtk_style_set_background (widget->style, widget->window, GTK_STATE_NORMAL);
+      gtk_widget_style_attach (widget);
+      gtk_style_set_background (gtk_widget_get_style (widget), window, GTK_STATE_NORMAL);
     }
 
   gtk_drawing_area_send_configure (GTK_DRAWING_AREA (widget));
@@ -103,12 +108,12 @@ gtk_drawing_area_size_allocate (GtkWidget     *widget,
   g_return_if_fail (GTK_IS_DRAWING_AREA (widget));
   g_return_if_fail (allocation != NULL);
 
-  widget->allocation = *allocation;
+  gtk_widget_set_allocation (widget, allocation);
 
   if (gtk_widget_get_realized (widget))
     {
       if (gtk_widget_get_has_window (widget))
-        gdk_window_move_resize (widget->window,
+        gdk_window_move_resize (gtk_widget_get_window (widget),
                                 allocation->x, allocation->y,
                                 allocation->width, allocation->height);
 
@@ -119,17 +124,19 @@ gtk_drawing_area_size_allocate (GtkWidget     *widget,
 static void
 gtk_drawing_area_send_configure (GtkDrawingArea *darea)
 {
+  GtkAllocation allocation;
   GtkWidget *widget;
   GdkEvent *event = gdk_event_new (GDK_CONFIGURE);
 
   widget = GTK_WIDGET (darea);
+  gtk_widget_get_allocation (widget, &allocation);
 
-  event->configure.window = g_object_ref (widget->window);
+  event->configure.window = g_object_ref (gtk_widget_get_window (widget));
   event->configure.send_event = TRUE;
-  event->configure.x = widget->allocation.x;
-  event->configure.y = widget->allocation.y;
-  event->configure.width = widget->allocation.width;
-  event->configure.height = widget->allocation.height;
+  event->configure.x = allocation.x;
+  event->configure.y = allocation.y;
+  event->configure.width = allocation.width;
+  event->configure.height = allocation.height;
   
   gtk_widget_event (widget, event);
   gdk_event_free (event);

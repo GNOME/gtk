@@ -33,7 +33,7 @@
 #include "gtkintl.h"
 
 
-struct _GtkRadioMenuItemPriv
+struct _GtkRadioMenuItemPrivate
 {
   GSList *group;
 };
@@ -116,7 +116,7 @@ void
 gtk_radio_menu_item_set_group (GtkRadioMenuItem *radio_menu_item,
 			       GSList           *group)
 {
-  GtkRadioMenuItemPriv *priv;
+  GtkRadioMenuItemPrivate *priv;
   GtkWidget *old_group_singleton = NULL;
   GtkWidget *new_group_singleton = NULL;
   
@@ -387,17 +387,17 @@ gtk_radio_menu_item_class_init (GtkRadioMenuItemClass *klass)
 				       _gtk_marshal_VOID__VOID,
 				       G_TYPE_NONE, 0);
 
-  g_type_class_add_private (klass, sizeof (GtkRadioMenuItemPriv));
+  g_type_class_add_private (klass, sizeof (GtkRadioMenuItemPrivate));
 }
 
 static void
 gtk_radio_menu_item_init (GtkRadioMenuItem *radio_menu_item)
 {
-  GtkRadioMenuItemPriv *priv;
+  GtkRadioMenuItemPrivate *priv;
 
   radio_menu_item->priv = G_TYPE_INSTANCE_GET_PRIVATE (radio_menu_item,
                                                        GTK_TYPE_RADIO_MENU_ITEM,
-                                                       GtkRadioMenuItemPriv);
+                                                       GtkRadioMenuItemPrivate);
   priv = radio_menu_item->priv;
 
   priv->group = g_slist_prepend (NULL, radio_menu_item);
@@ -408,7 +408,7 @@ static void
 gtk_radio_menu_item_destroy (GtkObject *object)
 {
   GtkRadioMenuItem *radio_menu_item = GTK_RADIO_MENU_ITEM (object);
-  GtkRadioMenuItemPriv *priv = radio_menu_item->priv;
+  GtkRadioMenuItemPrivate *priv = radio_menu_item->priv;
   GtkWidget *old_group_singleton = NULL;
   GtkRadioMenuItem *tmp_menu_item;
   GSList *tmp_list;
@@ -445,7 +445,7 @@ static void
 gtk_radio_menu_item_activate (GtkMenuItem *menu_item)
 {
   GtkRadioMenuItem *radio_menu_item = GTK_RADIO_MENU_ITEM (menu_item);
-  GtkRadioMenuItemPriv *priv = radio_menu_item->priv;
+  GtkRadioMenuItemPrivate *priv = radio_menu_item->priv;
   GtkCheckMenuItem *check_menu_item = GTK_CHECK_MENU_ITEM (menu_item);
   GtkCheckMenuItem *tmp_menu_item;
   GtkAction        *action;

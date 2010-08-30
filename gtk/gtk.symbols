@@ -694,7 +694,7 @@ gtk_cell_size_request_get_width_for_height
 
 #if IN_HEADER(__GTK_CELL_VIEW_H__)
 #if IN_FILE(__GTK_CELL_VIEW_C__)
-gtk_cell_view_get_desired_height_of_row
+gtk_cell_view_get_desired_height_for_width_of_row
 gtk_cell_view_get_desired_width_of_row
 gtk_cell_view_get_displayed_row
 gtk_cell_view_get_model
@@ -4629,6 +4629,29 @@ gtk_window_unmaximize
 gtk_window_unstick
 #endif
 #endif
+
+
+#if IN_HEADER(__GTK_WRAP_BOX_H__)
+#if IN_FILE(__GTK_WRAP_BOX_C__)
+gtk_wrap_box_get_allocation_mode
+gtk_wrap_box_get_horizontal_spacing
+gtk_wrap_box_get_minimum_line_children
+gtk_wrap_box_get_natural_line_children
+gtk_wrap_box_get_spreading
+gtk_wrap_box_get_type G_GNUC_CONST
+gtk_wrap_box_get_vertical_spacing
+gtk_wrap_box_insert_child
+gtk_wrap_box_new
+gtk_wrap_box_reorder_child
+gtk_wrap_box_set_allocation_mode
+gtk_wrap_box_set_horizontal_spacing
+gtk_wrap_box_set_minimum_line_children
+gtk_wrap_box_set_natural_line_children
+gtk_wrap_box_set_spreading
+gtk_wrap_box_set_vertical_spacing
+#endif
+#endif
+
 
 #if IN_HEADER(__GTK_WIN32_EMBED_WIDGET_H__)
 #if IN_FILE(__GTK_WIN32_EMBED_WIDGET_C__)

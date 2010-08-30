@@ -182,8 +182,6 @@ create_menubar (GtkWindow *window)
 
   menuitem = gtk_menu_item_new_with_mnemonic ("O_K");
   gtk_menu_shell_append (GTK_MENU_SHELL (menubar), menuitem);
-  menu = gtk_menu_new ();
-  gtk_menu_item_set_submenu (GTK_MENU_ITEM (menuitem), menu);
 
   menuitem = gtk_menu_item_new_with_mnemonic ("_Help");
   gtk_menu_shell_append (GTK_MENU_SHELL (menubar), menuitem);
@@ -277,9 +275,9 @@ create_child_plug (guint32  xid,
 
   if (gtk_widget_get_realized (window))
 #if defined (GDK_WINDOWING_X11)
-    return GDK_WINDOW_XID (window->window);
+    return GDK_WINDOW_XID (gtk_widget_get_window (window));
 #elif defined (GDK_WINDOWING_WIN32)
-    return (guint32) GDK_WINDOW_HWND (window->window);
+    return (guint32) GDK_WINDOW_HWND (gtk_widget_get_window (window));
 #endif
   else
     return 0;

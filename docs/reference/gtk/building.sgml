@@ -361,7 +361,7 @@ How to compile GTK+ itself
             <arg>--with-xinput=[no|yes]</arg>
           </group>
           <group>
-            <arg>--with-gdktarget=[x11|win32|quartz|directfb]</arg>
+            <arg>--with-gdktarget=[x11|win32|quartz]</arg>
           </group>
           <group>
             <arg>--disable-introspection</arg>
@@ -551,8 +551,7 @@ How to compile GTK+ itself
           Toggles between the supported backends for GDK.
           The default is x11, unless the platform is Windows, in which
           case the default is win32. Other supported backends are
-          the quartz backend for OS X, and the DirectFB backend
-          for the Linux framebuffer.
+          the quartz backend for OS X.
         </para>
       </formalpara>
       <formalpara>

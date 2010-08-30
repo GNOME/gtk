@@ -56,7 +56,6 @@ enum
   LAST_SIGNAL
 };
 
-static void     gtk_recent_chooser_class_init         (gpointer          g_iface);
 static gboolean recent_chooser_has_show_numbers       (GtkRecentChooser *chooser);
 
 static GQuark      quark_gtk_related_action               = 0;
@@ -67,29 +66,15 @@ static const gchar gtk_use_action_appearance_key[]        = "gtk-use-action-appe
 
 static guint chooser_signals[LAST_SIGNAL] = { 0, };
 
-GType
-gtk_recent_chooser_get_type (void)
-{
-  static GType chooser_type = 0;
-  
-  if (!chooser_type)
-    {
-      chooser_type = g_type_register_static_simple (G_TYPE_INTERFACE,
-						    I_("GtkRecentChooser"),
-						    sizeof (GtkRecentChooserIface),
-						    (GClassInitFunc) gtk_recent_chooser_class_init,
-						    0, NULL, 0);
-      
-      g_type_interface_add_prerequisite (chooser_type, G_TYPE_OBJECT);
-    }
-  
-  return chooser_type;
-}
+
+typedef GtkRecentChooserIface GtkRecentChooserInterface;
+G_DEFINE_INTERFACE (GtkRecentChooser, gtk_recent_chooser, G_TYPE_OBJECT);
+
 
 static void
-gtk_recent_chooser_class_init (gpointer g_iface)
+gtk_recent_chooser_default_init (GtkRecentChooserInterface *iface)
 {
-  GType iface_type = G_TYPE_FROM_INTERFACE (g_iface);
+  GType iface_type = G_TYPE_FROM_INTERFACE (iface);
 
   quark_gtk_related_action        = g_quark_from_static_string (gtk_related_action_key);
   quark_gtk_use_action_appearance = g_quark_from_static_string (gtk_use_action_appearance_key);
@@ -142,7 +127,7 @@ gtk_recent_chooser_class_init (gpointer g_iface)
    *
    * Since: 2.10
    */
-  g_object_interface_install_property (g_iface,
+  g_object_interface_install_property (iface,
   				       g_param_spec_object ("recent-manager",
   				       			    P_("Recent Manager"),
   				       			    P_("The RecentManager object to use"),
@@ -157,7 +142,7 @@ gtk_recent_chooser_class_init (gpointer g_iface)
    *
    * Since: 2.10
    */
-  g_object_interface_install_property (g_iface,
+  g_object_interface_install_property (iface,
    				       g_param_spec_boolean ("show-private",
    							     P_("Show Private"),
    							     P_("Whether the private items should be displayed"),
@@ -171,7 +156,7 @@ gtk_recent_chooser_class_init (gpointer g_iface)
    *
    * Since: 2.10
    */
-  g_object_interface_install_property (g_iface,
+  g_object_interface_install_property (iface,
   				       g_param_spec_boolean ("show-tips",
   				       			     P_("Show Tooltips"),
   				       			     P_("Whether there should be a tooltip on the item"),
@@ -184,7 +169,7 @@ gtk_recent_chooser_class_init (gpointer g_iface)
    *
    * Since: 2.10
    */
-  g_object_interface_install_property (g_iface,
+  g_object_interface_install_property (iface,
   				       g_param_spec_boolean ("show-icons",
   				       			     P_("Show Icons"),
   				       			     P_("Whether there should be an icon near the item"),
@@ -200,7 +185,7 @@ gtk_recent_chooser_class_init (gpointer g_iface)
    *
    * Since: 2.10
    */
-  g_object_interface_install_property (g_iface,
+  g_object_interface_install_property (iface,
   				       g_param_spec_boolean ("show-not-found",
   				       			     P_("Show Not Found"),
   				       			     P_("Whether the items pointing to unavailable resources should be displayed"),
@@ -213,7 +198,7 @@ gtk_recent_chooser_class_init (gpointer g_iface)
    *
    * Since: 2.10
    */
-  g_object_interface_install_property (g_iface,
+  g_object_interface_install_property (iface,
    				       g_param_spec_boolean ("select-multiple",
    							     P_("Select Multiple"),
    							     P_("Whether to allow multiple items to be selected"),
@@ -227,7 +212,7 @@ gtk_recent_chooser_class_init (gpointer g_iface)
    *
    * Since: 2.10
    */
-  g_object_interface_install_property (g_iface,
+  g_object_interface_install_property (iface,
 		  		       g_param_spec_boolean ("local-only",
 					       		     P_("Local only"),
 							     P_("Whether the selected resource(s) should be limited to local file: URIs"),
@@ -244,7 +229,7 @@ gtk_recent_chooser_class_init (gpointer g_iface)
    *
    * Since: 2.10
    */
-  g_object_interface_install_property (g_iface,
+  g_object_interface_install_property (iface,
    				       g_param_spec_int ("limit",
    							 P_("Limit"),
    							 P_("The maximum number of items to be displayed"),
@@ -259,7 +244,7 @@ gtk_recent_chooser_class_init (gpointer g_iface)
    *
    * Since: 2.10
    */
-  g_object_interface_install_property (g_iface,
+  g_object_interface_install_property (iface,
 		  		       g_param_spec_enum ("sort-type",
 					       		  P_("Sort Type"),
 							  P_("The sorting order of the items displayed"),
@@ -274,7 +259,7 @@ gtk_recent_chooser_class_init (gpointer g_iface)
    *
    * Since: 2.10
    */
-  g_object_interface_install_property (g_iface,
+  g_object_interface_install_property (iface,
   				       g_param_spec_object ("filter",
   				       			    P_("Filter"),
   				       			    P_("The current filter for selecting which resources are displayed"),

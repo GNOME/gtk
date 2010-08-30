@@ -38,9 +38,9 @@ G_BEGIN_DECLS
 #define GTK_IM_CONTEXT_SIMPLE_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_IM_CONTEXT_SIMPLE, GtkIMContextSimpleClass))
 
 
-typedef struct _GtkIMContextSimple       GtkIMContextSimple;
-typedef struct _GtkIMContextSimplePriv   GtkIMContextSimplePriv;
-typedef struct _GtkIMContextSimpleClass  GtkIMContextSimpleClass;
+typedef struct _GtkIMContextSimple              GtkIMContextSimple;
+typedef struct _GtkIMContextSimplePrivate       GtkIMContextSimplePrivate;
+typedef struct _GtkIMContextSimpleClass         GtkIMContextSimpleClass;
 
 #define GTK_MAX_COMPOSE_LEN 7
 
@@ -49,7 +49,7 @@ struct _GtkIMContextSimple
   GtkIMContext object;
 
   /* <private> */
-  GtkIMContextSimplePriv *priv;
+  GtkIMContextSimplePrivate *priv;
 };
 
 struct _GtkIMContextSimpleClass

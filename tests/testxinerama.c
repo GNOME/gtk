@@ -32,7 +32,7 @@ request (GtkWidget      *widget,
   gchar *str;
   GdkScreen *screen = gtk_widget_get_screen (widget);
   gint i = gdk_screen_get_monitor_at_window (screen,
-					     widget->window);
+                                             gtk_widget_get_window (widget));
 
   if (i < 0)
     str = g_strdup ("<big><span foreground='white' background='black'>Not on a monitor </span></big>");

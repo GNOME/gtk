@@ -3130,6 +3130,54 @@ gdk_window_get_type_hint (GdkWindow *window)
   return GDK_WINDOW_IMPL_WIN32 (((GdkWindowObject *) window)->impl)->type_hint;
 }
 
+static HRGN
+cairo_region_to_hrgn (const cairo_region_t *region,
+		      gint                  x_origin,
+		      gint                  y_origin)
+{
+  HRGN hrgn;
+  RGNDATA *rgndata;
+  RECT *rect;
+  cairo_rectangle_int_t r;
+  const int nrects = cairo_region_num_rectangles (region);
+  guint nbytes =
+    sizeof (RGNDATAHEADER) + (sizeof (RECT) * nrects);
+  int i;
+
+  rgndata = g_malloc (nbytes);
+  rgndata->rdh.dwSize = sizeof (RGNDATAHEADER);
+  rgndata->rdh.iType = RDH_RECTANGLES;
+  rgndata->rdh.nCount = rgndata->rdh.nRgnSize = 0;
+  SetRect (&rgndata->rdh.rcBound,
+	   G_MAXLONG, G_MAXLONG, G_MINLONG, G_MINLONG);
+
+  for (i = 0; i < nrects; i++)
+    {
+      rect = ((RECT *) rgndata->Buffer) + rgndata->rdh.nCount++;
+      
+      cairo_region_get_rectangle (region, i, &r);
+      rect->left = r.x + x_origin;
+      rect->right = rect->left + r.width;
+      rect->top = r.y + y_origin;
+      rect->bottom = rect->top + r.height;
+
+      if (rect->left < rgndata->rdh.rcBound.left)
+	rgndata->rdh.rcBound.left = rect->left;
+      if (rect->right > rgndata->rdh.rcBound.right)
+	rgndata->rdh.rcBound.right = rect->right;
+      if (rect->top < rgndata->rdh.rcBound.top)
+	rgndata->rdh.rcBound.top = rect->top;
+      if (rect->bottom > rgndata->rdh.rcBound.bottom)
+	rgndata->rdh.rcBound.bottom = rect->bottom;
+    }
+  if ((hrgn = ExtCreateRegion (NULL, nbytes, rgndata)) == NULL)
+    WIN32_API_FAILED ("ExtCreateRegion");
+
+  g_free (rgndata);
+
+  return (hrgn);
+}
+
 static void
 gdk_win32_window_shape_combine_region (GdkWindow       *window,
 				       const cairo_region_t *shape_region,
@@ -3149,7 +3197,7 @@ gdk_win32_window_shape_combine_region (GdkWindow       *window,
     {
       HRGN hrgn;
 
-      hrgn = _gdk_win32_cairo_region_to_hrgn (shape_region, 0, 0);
+      hrgn = cairo_region_to_hrgn (shape_region, 0, 0);
       
       GDK_NOTE (MISC, g_print ("gdk_win32_window_shape_combine_region: %p: %p\n",
 			       GDK_WINDOW_HWND (window),
@@ -3224,11 +3272,134 @@ gdk_window_set_opacity (GdkWindow *window,
     }
 }
 
+/* This function originally from Jean-Edouard Lachand-Robert, and
+ * available at www.codeguru.com. Simplified for our needs, not sure
+ * how much of the original code left any longer. Now handles just
+ * one-bit deep bitmaps (in Window parlance, ie those that GDK calls
+ * bitmaps (and not pixmaps), with zero pixels being transparent.
+ */
+
+/* bitmap_to_hrgn : Create a region from the
+ * "non-transparent" pixels of a bitmap.
+ */
+
+static HRGN
+bitmap_to_hrgn (GdkPixmap *pixmap)
+{
+  HRGN hRgn = NULL;
+  HRGN h;
+  DWORD maxRects;
+  RGNDATA *pData;
+  guchar *bits;
+  gint width, height, bpl;
+  guchar *p;
+  gint x, y;
+
+  g_assert (GDK_PIXMAP_OBJECT(pixmap)->depth == 1);
+
+  bits = GDK_PIXMAP_IMPL_WIN32 (GDK_PIXMAP_OBJECT (pixmap)->impl)->bits;
+  width = GDK_PIXMAP_IMPL_WIN32 (GDK_PIXMAP_OBJECT (pixmap)->impl)->width;
+  height = GDK_PIXMAP_IMPL_WIN32 (GDK_PIXMAP_OBJECT (pixmap)->impl)->height;
+  bpl = ((width - 1)/32 + 1)*4;
+
+  /* For better performances, we will use the ExtCreateRegion()
+   * function to create the region. This function take a RGNDATA
+   * structure on entry. We will add rectangles by amount of
+   * ALLOC_UNIT number in this structure.
+   */
+  #define ALLOC_UNIT  100
+  maxRects = ALLOC_UNIT;
+
+  pData = g_malloc (sizeof (RGNDATAHEADER) + (sizeof (RECT) * maxRects));
+  pData->rdh.dwSize = sizeof (RGNDATAHEADER);
+  pData->rdh.iType = RDH_RECTANGLES;
+  pData->rdh.nCount = pData->rdh.nRgnSize = 0;
+  SetRect (&pData->rdh.rcBound, MAXLONG, MAXLONG, 0, 0);
+
+  for (y = 0; y < height; y++)
+    {
+      /* Scan each bitmap row from left to right*/
+      p = (guchar *) bits + y * bpl;
+      for (x = 0; x < width; x++)
+	{
+	  /* Search for a continuous range of "non transparent pixels"*/
+	  gint x0 = x;
+	  while (x < width)
+	    {
+	      if ((((p[x/8])>>(7-(x%8)))&1) == 0)
+		/* This pixel is "transparent"*/
+		break;
+	      x++;
+	    }
+	  
+	  if (x > x0)
+	    {
+	      RECT *pr;
+	      /* Add the pixels (x0, y) to (x, y+1) as a new rectangle
+	       * in the region
+	       */
+	      if (pData->rdh.nCount >= maxRects)
+		{
+		  maxRects += ALLOC_UNIT;
+		  pData = g_realloc (pData, sizeof(RGNDATAHEADER)
+				     + (sizeof(RECT) * maxRects));
+		}
+	      pr = (RECT *) &pData->Buffer;
+	      SetRect (&pr[pData->rdh.nCount], x0, y, x, y+1);
+	      if (x0 < pData->rdh.rcBound.left)
+		pData->rdh.rcBound.left = x0;
+	      if (y < pData->rdh.rcBound.top)
+		pData->rdh.rcBound.top = y;
+	      if (x > pData->rdh.rcBound.right)
+		pData->rdh.rcBound.right = x;
+	      if (y+1 > pData->rdh.rcBound.bottom)
+		pData->rdh.rcBound.bottom = y+1;
+	      pData->rdh.nCount++;
+	      
+	      /* On Windows98, ExtCreateRegion() may fail if the
+	       * number of rectangles is too large (ie: >
+	       * 4000). Therefore, we have to create the region by
+	       * multiple steps.
+	       */
+	      if (pData->rdh.nCount == 2000)
+		{
+		  HRGN h = ExtCreateRegion (NULL, sizeof(RGNDATAHEADER) + (sizeof(RECT) * maxRects), pData);
+		  if (hRgn)
+		    {
+		      CombineRgn(hRgn, hRgn, h, RGN_OR);
+		      DeleteObject(h);
+		    }
+		  else
+		    hRgn = h;
+		  pData->rdh.nCount = 0;
+		  SetRect (&pData->rdh.rcBound, MAXLONG, MAXLONG, 0, 0);
+		}
+	    }
+	}
+    }
+  
+  /* Create or extend the region with the remaining rectangles*/
+  h = ExtCreateRegion (NULL, sizeof (RGNDATAHEADER)
+		       + (sizeof (RECT) * maxRects), pData);
+  if (hRgn)
+    {
+      CombineRgn (hRgn, hRgn, h, RGN_OR);
+      DeleteObject (h);
+    }
+  else
+    hRgn = h;
+
+  /* Clean up*/
+  g_free (pData);
+
+  return hRgn;
+}
+
 cairo_region_t *
 _gdk_windowing_get_shape_for_mask (GdkBitmap *mask)
 {
   cairo_region_t *region;
-  HRGN hrgn = _gdk_win32_bitmap_to_hrgn (mask);
+  HRGN hrgn = bitmap_to_hrgn (mask);
 
   region = _gdk_win32_hrgn_to_region (hrgn);
   DeleteObject (hrgn);
@@ -3269,7 +3440,7 @@ static gboolean
 _gdk_win32_window_queue_antiexpose (GdkWindow *window,
 				    cairo_region_t *area)
 {
-  HRGN hrgn = _gdk_win32_cairo_region_to_hrgn (area, 0, 0);
+  HRGN hrgn = cairo_region_to_hrgn (area, 0, 0);
 
   GDK_NOTE (EVENTS, g_print ("_gdk_windowing_window_queue_antiexpose: ValidateRgn %p %s\n",
 			     GDK_WINDOW_HWND (window),
@@ -3308,7 +3479,7 @@ _gdk_win32_window_translate (GdkWindow *window,
   else if (ret != NULLREGION)
     {
       /* Get current updateregion, move any part of it that intersects area by dx,dy */
-      HRGN update = _gdk_win32_cairo_region_to_hrgn (area, 0, 0);
+      HRGN update = cairo_region_to_hrgn (area, 0, 0);
       ret = CombineRgn (update, hrgn, update, RGN_AND);
       if (ret == ERROR)
         WIN32_API_FAILED ("CombineRgn");

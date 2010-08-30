@@ -150,22 +150,39 @@ gtk_check_button_paint (GtkWidget    *widget,
       border_width = gtk_container_get_border_width (GTK_CONTAINER (widget));
       if (gtk_widget_has_focus (widget))
 	{
+          GtkStateType state;
+          GtkStyle *style;
 	  GtkWidget *child = gtk_bin_get_child (GTK_BIN (widget));
-	  
+          GdkWindow *window;
+
+          style = gtk_widget_get_style (widget);
+          window = gtk_widget_get_window (widget);
+          state = gtk_widget_get_state (widget);
+
 	  if (interior_focus && child && gtk_widget_get_visible (child))
-	    gtk_paint_focus (widget->style, widget->window, gtk_widget_get_state (widget),
-			     area, widget, "checkbutton",
-			     child->allocation.x - focus_width - focus_pad,
-			     child->allocation.y - focus_width - focus_pad,
-			     child->allocation.width + 2 * (focus_width + focus_pad),
-			     child->allocation.height + 2 * (focus_width + focus_pad));
+            {
+              GtkAllocation child_allocation;
+
+              gtk_widget_get_allocation (child, &child_allocation);
+              gtk_paint_focus (style, window, state,
+                               area, widget, "checkbutton",
+                               child_allocation.x - focus_width - focus_pad,
+                               child_allocation.y - focus_width - focus_pad,
+                               child_allocation.width + 2 * (focus_width + focus_pad),
+                               child_allocation.height + 2 * (focus_width + focus_pad));
+            }
 	  else
-	    gtk_paint_focus (widget->style, widget->window, gtk_widget_get_state (widget),
-			     area, widget, "checkbutton",
-			     border_width + widget->allocation.x,
-			     border_width + widget->allocation.y,
-			     widget->allocation.width - 2 * border_width,
-			     widget->allocation.height - 2 * border_width);
+            {
+              GtkAllocation allocation;
+
+              gtk_widget_get_allocation (widget, &allocation);
+              gtk_paint_focus (style, window, state,
+                               area, widget, "checkbutton",
+                               allocation.x + border_width,
+                               allocation.y + border_width,
+                               allocation.width - 2 * border_width,
+                               allocation.height - 2 * border_width);
+            }
 	}
     }
 }
@@ -259,8 +276,9 @@ gtk_check_button_size_allocate (GtkWidget     *widget,
 			    "focus-line-width", &focus_width,
 			    "focus-padding", &focus_pad,
 			    NULL);
-						    
-      widget->allocation = *allocation;
+
+      gtk_widget_set_allocation (widget, allocation);
+
       if (gtk_widget_get_realized (widget))
 	gdk_window_move_resize (button->event_window,
 				allocation->x, allocation->y,
@@ -285,9 +303,8 @@ gtk_check_button_size_allocate (GtkWidget     *widget,
 	  child_allocation.height = MAX (child_allocation.height, 1);
 	  
 	  child_allocation.x = (border_width + indicator_size + indicator_spacing * 3 +
-				widget->allocation.x + focus_width + focus_pad);
-	  child_allocation.y = widget->allocation.y +
-		  (allocation->height - child_allocation.height) / 2;
+                                allocation->x + focus_width + focus_pad);
+          child_allocation.y = allocation->y + (allocation->height - child_allocation.height) / 2;
 
 	  if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL)
 	    child_allocation.x = allocation->x + allocation->width
@@ -367,9 +384,17 @@ gtk_real_check_button_draw_indicator (GtkCheckButton *check_button,
 
   if (gtk_widget_is_drawable (widget))
     {
+      GtkAllocation allocation;
+      GtkStyle *style;
+      GdkWindow *window;
+
       button = GTK_BUTTON (check_button);
       toggle_button = GTK_TOGGLE_BUTTON (check_button);
-  
+
+      gtk_widget_get_allocation (widget, &allocation);
+      style = gtk_widget_get_style (widget);
+      window = gtk_widget_get_window (widget);
+
       gtk_widget_style_get (widget, 
 			    "interior-focus", &interior_focus,
 			    "focus-line-width", &focus_width, 
@@ -380,8 +405,8 @@ gtk_real_check_button_draw_indicator (GtkCheckButton *check_button,
 
       border_width = gtk_container_get_border_width (GTK_CONTAINER (widget));
 
-      x = widget->allocation.x + indicator_spacing + border_width;
-      y = widget->allocation.y + (widget->allocation.height - indicator_size) / 2;
+      x = allocation.x + indicator_spacing + border_width;
+      y = allocation.y + (allocation.height - indicator_size) / 2;
 
       child = gtk_bin_get_child (GTK_BIN (check_button));
       if (!interior_focus || !(child && gtk_widget_get_visible (child)))
@@ -404,21 +429,21 @@ gtk_real_check_button_draw_indicator (GtkCheckButton *check_button,
 	state_type = GTK_STATE_NORMAL;
       
       if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL)
-	x = widget->allocation.x + widget->allocation.width - (indicator_size + x - widget->allocation.x);
+	x = allocation.x + allocation.width - (indicator_size + x - allocation.x);
 
       if (gtk_widget_get_state (widget) == GTK_STATE_PRELIGHT)
 	{
 	  GdkRectangle restrict_area;
 	  GdkRectangle new_area;
-	      
-	  restrict_area.x = widget->allocation.x + border_width;
-	  restrict_area.y = widget->allocation.y + border_width;
-	  restrict_area.width = widget->allocation.width - (2 * border_width);
-	  restrict_area.height = widget->allocation.height - (2 * border_width);
-	  
+
+	  restrict_area.x = allocation.x + border_width;
+	  restrict_area.y = allocation.y + border_width;
+	  restrict_area.width = allocation.width - (2 * border_width);
+	  restrict_area.height = allocation.height - (2 * border_width);
+
 	  if (gdk_rectangle_intersect (area, &restrict_area, &new_area))
 	    {
-	      gtk_paint_flat_box (widget->style, widget->window, GTK_STATE_PRELIGHT,
+              gtk_paint_flat_box (style, window, GTK_STATE_PRELIGHT,
 				  GTK_SHADOW_ETCHED_OUT, 
 				  area, widget, "checkbutton",
 				  new_area.x, new_area.y,
@@ -426,7 +451,7 @@ gtk_real_check_button_draw_indicator (GtkCheckButton *check_button,
 	    }
 	}
 
-      gtk_paint_check (widget->style, widget->window,
+      gtk_paint_check (style, window,
 		       state_type, shadow_type,
 		       area, widget, "checkbutton",
 		       x, y, indicator_size, indicator_size);

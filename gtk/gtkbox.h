@@ -46,16 +46,16 @@ G_BEGIN_DECLS
 #define GTK_BOX_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_BOX, GtkBoxClass))
 
 
-typedef struct _GtkBox	      GtkBox;
-typedef struct _GtkBoxPriv    GtkBoxPriv;
-typedef struct _GtkBoxClass   GtkBoxClass;
+typedef struct _GtkBox              GtkBox;
+typedef struct _GtkBoxPrivate       GtkBoxPrivate;
+typedef struct _GtkBoxClass         GtkBoxClass;
 
 struct _GtkBox
 {
   GtkContainer container;
 
   /*< private >*/
-  GtkBoxPriv *priv;
+  GtkBoxPrivate *priv;
 };
 
 struct _GtkBoxClass

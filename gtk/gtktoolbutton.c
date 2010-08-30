@@ -323,6 +323,7 @@ gtk_tool_button_construct_contents (GtkToolItem *tool_item)
   guint icon_spacing;
   GtkOrientation text_orientation = GTK_ORIENTATION_HORIZONTAL;
   GtkSizeGroup *size_group = NULL;
+  GtkWidget *parent;
 
   button->priv->contents_invalid = FALSE;
 
@@ -330,16 +331,24 @@ gtk_tool_button_construct_contents (GtkToolItem *tool_item)
 			"icon-spacing", &icon_spacing,
 			NULL);
 
-  if (button->priv->icon_widget && button->priv->icon_widget->parent)
+  if (button->priv->icon_widget)
     {
-      gtk_container_remove (GTK_CONTAINER (button->priv->icon_widget->parent),
-			    button->priv->icon_widget);
+      parent = gtk_widget_get_parent (button->priv->icon_widget);
+      if (parent)
+        {
+          gtk_container_remove (GTK_CONTAINER (parent),
+                                button->priv->icon_widget);
+        }
     }
 
-  if (button->priv->label_widget && button->priv->label_widget->parent)
+  if (button->priv->label_widget)
     {
-      gtk_container_remove (GTK_CONTAINER (button->priv->label_widget->parent),
-			    button->priv->label_widget);
+      parent = gtk_widget_get_parent (button->priv->label_widget);
+      if (parent)
+        {
+          gtk_container_remove (GTK_CONTAINER (parent),
+                                button->priv->label_widget);
+        }
     }
 
   child = gtk_bin_get_child (GTK_BIN (button->priv->button));
@@ -1193,9 +1202,12 @@ gtk_tool_button_set_icon_widget (GtkToolButton *button,
     {
       if (button->priv->icon_widget)
 	{
-	  if (button->priv->icon_widget->parent)
-	    gtk_container_remove (GTK_CONTAINER (button->priv->icon_widget->parent),
-				    button->priv->icon_widget);
+          GtkWidget *parent;
+
+          parent = gtk_widget_get_parent (button->priv->icon_widget);
+	  if (parent)
+            gtk_container_remove (GTK_CONTAINER (parent),
+                                  button->priv->icon_widget);
 
 	  g_object_unref (button->priv->icon_widget);
 	}
@@ -1234,10 +1246,13 @@ gtk_tool_button_set_label_widget (GtkToolButton *button,
     {
       if (button->priv->label_widget)
 	{
-	  if (button->priv->label_widget->parent)
-	    gtk_container_remove (GTK_CONTAINER (button->priv->label_widget->parent),
-		    	          button->priv->label_widget);
-	  
+          GtkWidget *parent;
+
+          parent = gtk_widget_get_parent (button->priv->label_widget);
+          if (parent)
+            gtk_container_remove (GTK_CONTAINER (parent),
+                                  button->priv->label_widget);
+
 	  g_object_unref (button->priv->label_widget);
 	}
       

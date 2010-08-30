@@ -45,20 +45,16 @@ G_BEGIN_DECLS
 #define GTK_PLUG_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_PLUG, GtkPlugClass))
 
 
-typedef struct _GtkPlug        GtkPlug;
-typedef struct _GtkPlugClass   GtkPlugClass;
+typedef struct _GtkPlug              GtkPlug;
+typedef struct _GtkPlugPrivate       GtkPlugPrivate;
+typedef struct _GtkPlugClass         GtkPlugClass;
 
 
 struct _GtkPlug
 {
   GtkWindow window;
 
-  GdkWindow *GSEAL (socket_window);
-  GtkWidget *GSEAL (modality_window);
-  GtkWindowGroup *GSEAL (modality_group);
-  GHashTable *GSEAL (grabbed_keys);
-
-  guint GSEAL (same_app) : 1;
+  GtkPlugPrivate *priv;
 };
 
 struct _GtkPlugClass

@@ -36,7 +36,7 @@
 
 
 
-struct _GtkColorSelectionDialogPriv
+struct _GtkColorSelectionDialogPrivate
 {
   GtkWidget *colorsel;
   GtkWidget *ok_button;
@@ -76,7 +76,7 @@ gtk_color_selection_dialog_get_property (GObject         *object,
 					 GParamSpec      *pspec)
 {
   GtkColorSelectionDialog *colorsel = GTK_COLOR_SELECTION_DIALOG (object);
-  GtkColorSelectionDialogPriv *priv = colorsel->priv;
+  GtkColorSelectionDialogPrivate *priv = colorsel->priv;
 
   switch (prop_id)
     {
@@ -133,19 +133,19 @@ gtk_color_selection_dialog_class_init (GtkColorSelectionDialogClass *klass)
 						     GTK_TYPE_WIDGET,
 						     G_PARAM_READABLE));
 
-  g_type_class_add_private (klass, sizeof (GtkColorSelectionDialogPriv));
+  g_type_class_add_private (klass, sizeof (GtkColorSelectionDialogPrivate));
 }
 
 static void
 gtk_color_selection_dialog_init (GtkColorSelectionDialog *colorseldiag)
 {
-  GtkColorSelectionDialogPriv *priv;
+  GtkColorSelectionDialogPrivate *priv;
   GtkDialog *dialog = GTK_DIALOG (colorseldiag);
   GtkWidget *action_area, *content_area;
 
   colorseldiag->priv = G_TYPE_INSTANCE_GET_PRIVATE (colorseldiag,
                                                     GTK_TYPE_COLOR_SELECTION_DIALOG,
-                                                    GtkColorSelectionDialogPriv);
+                                                    GtkColorSelectionDialogPrivate);
   priv = colorseldiag->priv;
 
   content_area = gtk_dialog_get_content_area (dialog);
@@ -238,7 +238,7 @@ gtk_color_selection_dialog_buildable_get_internal_child (GtkBuildable *buildable
 							 const gchar  *childname)
 {
   GtkColorSelectionDialog *selection_dialog = GTK_COLOR_SELECTION_DIALOG (buildable);
-  GtkColorSelectionDialogPriv *priv = selection_dialog->priv;
+  GtkColorSelectionDialogPrivate *priv = selection_dialog->priv;
 
   if (g_strcmp0 (childname, "ok_button") == 0)
     return G_OBJECT (priv->ok_button);

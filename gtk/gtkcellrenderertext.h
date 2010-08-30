@@ -38,16 +38,16 @@ G_BEGIN_DECLS
 #define GTK_IS_CELL_RENDERER_TEXT_CLASS(klass)	(G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_CELL_RENDERER_TEXT))
 #define GTK_CELL_RENDERER_TEXT_GET_CLASS(obj)   (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_CELL_RENDERER_TEXT, GtkCellRendererTextClass))
 
-typedef struct _GtkCellRendererText      GtkCellRendererText;
-typedef struct _GtkCellRendererTextPriv  GtkCellRendererTextPriv;
-typedef struct _GtkCellRendererTextClass GtkCellRendererTextClass;
+typedef struct _GtkCellRendererText              GtkCellRendererText;
+typedef struct _GtkCellRendererTextPrivate       GtkCellRendererTextPrivate;
+typedef struct _GtkCellRendererTextClass         GtkCellRendererTextClass;
 
 struct _GtkCellRendererText
 {
   GtkCellRenderer parent;
 
   /*< private >*/
-  GtkCellRendererTextPriv *priv;
+  GtkCellRendererTextPrivate *priv;
 };
 
 struct _GtkCellRendererTextClass

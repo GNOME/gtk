@@ -91,7 +91,7 @@ gail_menu_get_parent (AtkObject *accessible)
       parent_widget = gtk_menu_get_attach_widget (GTK_MENU (widget));
 
       if (!GTK_IS_MENU_ITEM (parent_widget) && !GTK_IS_BUTTON (parent_widget) && !GTK_IS_COMBO_BOX (parent_widget))
-        parent_widget = widget->parent;
+        parent_widget = gtk_widget_get_parent (widget);
 
       if (parent_widget == NULL)
         return NULL;

@@ -52,7 +52,7 @@
 
 #define MIN_ARROW_SIZE  15
 
-struct _GtkArrowPriv
+struct _GtkArrowPrivate
 {
   gint16 arrow_type;
   gint16 shadow_type;
@@ -119,7 +119,7 @@ gtk_arrow_class_init (GtkArrowClass *class)
                                                                0.0, 1.0, 0.7,
                                                                GTK_PARAM_READABLE));
 
-  g_type_class_add_private (class, sizeof (GtkArrowPriv));
+  g_type_class_add_private (class, sizeof (GtkArrowPrivate));
 }
 
 static void
@@ -129,7 +129,7 @@ gtk_arrow_set_property (GObject         *object,
 			GParamSpec      *pspec)
 {
   GtkArrow *arrow = GTK_ARROW (object);
-  GtkArrowPriv *priv = arrow->priv;
+  GtkArrowPrivate *priv = arrow->priv;
 
   switch (prop_id)
     {
@@ -156,7 +156,7 @@ gtk_arrow_get_property (GObject         *object,
 			GParamSpec      *pspec)
 {
   GtkArrow *arrow = GTK_ARROW (object);
-  GtkArrowPriv *priv = arrow->priv;
+  GtkArrowPrivate *priv = arrow->priv;
 
   switch (prop_id)
     {
@@ -175,12 +175,12 @@ gtk_arrow_get_property (GObject         *object,
 static void
 gtk_arrow_init (GtkArrow *arrow)
 {
-  GtkArrowPriv *priv;
+  GtkArrowPrivate *priv;
   gint xpad, ypad;
 
   arrow->priv = G_TYPE_INSTANCE_GET_PRIVATE (arrow,
                                              GTK_TYPE_ARROW,
-                                             GtkArrowPriv);
+                                             GtkArrowPrivate);
   priv = arrow->priv;
 
   gtk_widget_set_has_window (GTK_WIDGET (arrow), FALSE);
@@ -206,7 +206,7 @@ GtkWidget*
 gtk_arrow_new (GtkArrowType  arrow_type,
 	       GtkShadowType shadow_type)
 {
-  GtkArrowPriv *priv;
+  GtkArrowPrivate *priv;
   GtkArrow *arrow;
 
   arrow = g_object_new (GTK_TYPE_ARROW, NULL);
@@ -232,7 +232,7 @@ gtk_arrow_set (GtkArrow      *arrow,
 	       GtkArrowType   arrow_type,
 	       GtkShadowType  shadow_type)
 {
-  GtkArrowPriv *priv;
+  GtkArrowPrivate *priv;
   GtkWidget *widget;
 
   g_return_if_fail (GTK_IS_ARROW (arrow));
@@ -272,7 +272,7 @@ gtk_arrow_expose (GtkWidget      *widget,
   if (gtk_widget_is_drawable (widget))
     {
       GtkArrow *arrow = GTK_ARROW (widget);
-      GtkArrowPriv *priv = arrow->priv;
+      GtkArrowPrivate *priv = arrow->priv;
       GtkMisc *misc = GTK_MISC (widget);
       GtkShadowType shadow_type;
       gint width, height;

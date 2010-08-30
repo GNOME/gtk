@@ -43,7 +43,7 @@
 #include "gtkintl.h"
 
 
-struct _GtkBinPriv
+struct _GtkBinPrivate
 {
   GtkWidget *child;
 };
@@ -88,17 +88,17 @@ gtk_bin_class_init (GtkBinClass *class)
   container_class->forall = gtk_bin_forall;
   container_class->child_type = gtk_bin_child_type;
 
-  g_type_class_add_private (class, sizeof (GtkBinPriv));
+  g_type_class_add_private (class, sizeof (GtkBinPrivate));
 }
 
 static void
 gtk_bin_init (GtkBin *bin)
 {
-  GtkBinPriv *priv;
+  GtkBinPrivate *priv;
 
   bin->priv = G_TYPE_INSTANCE_GET_PRIVATE (bin,
                                            GTK_TYPE_BIN,
-                                           GtkBinPriv);
+                                           GtkBinPrivate);
   priv = bin->priv;
 
   gtk_widget_set_has_window (GTK_WIDGET (bin), FALSE);
@@ -110,7 +110,7 @@ gtk_bin_init (GtkBin *bin)
 static GType
 gtk_bin_child_type (GtkContainer *container)
 {
-  GtkBinPriv *priv = GTK_BIN (container)->priv;
+  GtkBinPrivate *priv = GTK_BIN (container)->priv;
 
   if (!priv->child)
     return GTK_TYPE_WIDGET;
@@ -123,7 +123,7 @@ gtk_bin_add (GtkContainer *container,
 	     GtkWidget    *child)
 {
   GtkBin *bin = GTK_BIN (container);
-  GtkBinPriv *priv = bin->priv;
+  GtkBinPrivate *priv = bin->priv;
 
   if (priv->child != NULL)
     {
@@ -146,7 +146,7 @@ gtk_bin_remove (GtkContainer *container,
 		GtkWidget    *child)
 {
   GtkBin *bin = GTK_BIN (container);
-  GtkBinPriv *priv = bin->priv;
+  GtkBinPrivate *priv = bin->priv;
   gboolean widget_was_visible;
 
   g_return_if_fail (priv->child == child);
@@ -170,7 +170,7 @@ gtk_bin_forall (GtkContainer *container,
 		gpointer      callback_data)
 {
   GtkBin *bin = GTK_BIN (container);
-  GtkBinPriv *priv = bin->priv;
+  GtkBinPrivate *priv = bin->priv;
 
   if (priv->child)
     (* callback) (priv->child, callback_data);
@@ -200,7 +200,7 @@ static GtkSizeRequestMode
 gtk_bin_get_request_mode (GtkSizeRequest      *widget)
 {
   GtkBin *bin = GTK_BIN (widget);
-  GtkBinPriv *priv = bin->priv;
+  GtkBinPrivate *priv = bin->priv;
 
   if (priv->child)
     return gtk_size_request_get_request_mode (GTK_SIZE_REQUEST (priv->child));
@@ -213,7 +213,7 @@ get_child_padding_delta (GtkBin         *bin,
 			 gint           *delta_h,
 			 gint           *delta_v)
 {
-  GtkBinPriv *priv = bin->priv;
+  GtkBinPrivate *priv = bin->priv;
   gint hmin, vmin, child_hmin, child_vmin;
 
   gtk_size_request_get_width (GTK_SIZE_REQUEST (bin), &hmin, NULL);
@@ -233,7 +233,7 @@ gtk_bin_get_width_for_height (GtkSizeRequest      *widget,
 			      gint                *natural_width)
 {
   GtkBin *bin = GTK_BIN (widget);
-  GtkBinPriv *priv = bin->priv;
+  GtkBinPrivate *priv = bin->priv;
   gint    hdelta, vdelta, child_min, child_nat;
 
   if (priv->child)
@@ -261,7 +261,7 @@ gtk_bin_get_height_for_width  (GtkSizeRequest      *widget,
 			       gint                *natural_height)
 {
   GtkBin *bin = GTK_BIN (widget);
-  GtkBinPriv *priv = bin->priv;
+  GtkBinPrivate *priv = bin->priv;
   gint    hdelta, vdelta, child_min, child_nat;
 
   if (priv->child)

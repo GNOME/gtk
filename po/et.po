@@ -14,10 +14,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ MASTER\n"
-"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk"
-"%2b&component=general\n"
-"POT-Creation-Date: 2010-07-02 01:47+0000\n"
-"PO-Revision-Date: 2010-07-09 09:32+0300\n"
+"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk%"
+"2b&component=general\n"
+"POT-Creation-Date: 2010-08-22 14:07+0000\n"
+"PO-Revision-Date: 2010-08-24 14:57+0300\n"
 "Last-Translator: Ivar Smolin <okul@linux.ee>\n"
 "Language-Team: Estonian <gnome-et@linux.ee>\n"
 "MIME-Version: 1.0\n"
@@ -67,8 +67,8 @@ msgid "SCREEN"
 msgstr "EKRAAN"
 
 #. Description of --gdk-debug=FLAGS in --help output
-msgid "Gdk debugging flags to set"
-msgstr "Gdk silumislipud, mida seada"
+msgid "GDK debugging flags to set"
+msgstr "GDK silumislipud, mida seada"
 
 #. Placeholder in --gdk-debug=FLAGS in --help output
 #. Placeholder in --gdk-no-debug=FLAGS in --help output
@@ -78,8 +78,8 @@ msgid "FLAGS"
 msgstr "LIPUD"
 
 #. Description of --gdk-no-debug=FLAGS in --help output
-msgid "Gdk debugging flags to unset"
-msgstr "Gdk silumislipud, mida maha võtta"
+msgid "GDK debugging flags to unset"
+msgstr "GDK silumislipud, mida maha võtta"
 
 msgctxt "keyboard label"
 msgid "BackSpace"
@@ -271,6 +271,13 @@ msgid_plural "Opening %d Items"
 msgstr[0] "Avamine: %d kirje"
 msgstr[1] "Avamine: %d kirjet"
 
+#. Translators: this is the license preamble; the string at the end
+#. * contains the URL of the license.
+#.
+#, c-format
+msgid "This program comes with ABSOLUTELY NO WARRANTY; for details, visit %s"
+msgstr "See programm on ILMA IGASUGUSE GARANTIITA. Üksikasjade kohta vaata %s"
+
 msgid "Could not show link"
 msgstr "Linki pole võimalik kuvada"
 
@@ -374,8 +381,8 @@ msgid "Invalid type function on line %d: '%s'"
 msgstr "Vigast liiki funktsioon real %d: '%s'"
 
 #, c-format
-msgid "Duplicate object id '%s' on line %d (previously on line %d)"
-msgstr "Duplikaatobjekt id-ga '%s' real %d (eelmine real %d)"
+msgid "Duplicate object ID '%s' on line %d (previously on line %d)"
+msgstr "Duplikaatobjekt ID-ga '%s' real %d (eelmine real %d)"
 
 #, c-format
 msgid "Invalid root element: '%s'"
@@ -666,6 +673,9 @@ msgstr "Num Lock on sisse lülitatud"
 msgid "Caps Lock is on"
 msgstr "Caps Lock on sisse lülitatud"
 
+#. **************** *
+#. *  Private Macros  *
+#. * ****************
 msgid "Select A File"
 msgstr "Faili valimine"
 
@@ -1091,8 +1101,8 @@ msgid "Remember _forever"
 msgstr "_Jäta igavesti meelde"
 
 #, c-format
-msgid "Unknown Application (pid %d)"
-msgstr "Tundmatu rakendus (pid %d)"
+msgid "Unknown Application (PID %d)"
+msgstr "Tundmatu rakendus (PID %d)"
 
 msgid "Unable to end process"
 msgstr "Protsessi pole võimalik lõpetada"
@@ -1101,9 +1111,9 @@ msgid "_End Process"
 msgstr "_Lõpeta protsess"
 
 #, c-format
-msgid "Cannot kill process with pid %d. Operation is not implemented."
+msgid "Cannot kill process with PID %d. Operation is not implemented."
 msgstr ""
-"Protsessi pid-iga %d pole võimalik kõrvaldada. Toiming pole implementeeritud."
+"Protsessi PID-iga %d pole võimalik kõrvaldada. Toiming pole implementeeritud."
 
 #. translators: this string is a name for the 'less' command
 msgid "Terminal Pager"
@@ -1122,8 +1132,8 @@ msgid "Z Shell"
 msgstr "Z-kest"
 
 #, c-format
-msgid "Cannot end process with pid %d: %s"
-msgstr "Protsessi pid-iga %d pole võimalik lõpetada: %s"
+msgid "Cannot end process with PID %d: %s"
+msgstr "Protsessi PID-iga %d pole võimalik lõpetada: %s"
 
 #, c-format
 msgid "Page %u"
@@ -1677,7 +1687,7 @@ msgid "_Cancel"
 msgstr "_Loobu"
 
 msgctxt "Stock label"
-msgid "_CD-Rom"
+msgid "_CD-ROM"
 msgstr "_CD-ROM"
 
 msgctxt "Stock label"
@@ -1723,6 +1733,10 @@ msgstr "K_äivita"
 msgctxt "Stock label"
 msgid "_Edit"
 msgstr "_Redigeeri"
+
+msgctxt "Stock label"
+msgid "_File"
+msgstr "_Fail"
 
 msgctxt "Stock label"
 msgid "_Find"
@@ -1785,7 +1799,7 @@ msgid "_Up"
 msgstr "_Üles"
 
 msgctxt "Stock label"
-msgid "_Harddisk"
+msgid "_Hard Disk"
 msgstr "_Kõvaketas"
 
 msgctxt "Stock label"
@@ -2059,8 +2073,8 @@ msgid "The attribute \"%s\" was found twice on the <%s> element"
 msgstr "\"%s\" rekvisiit esineb <%s> kirjes kaks korda"
 
 #, c-format
-msgid "<%s> element has invalid id \"%s\""
-msgstr "<%s> kirjel on vigane id \"%s\""
+msgid "<%s> element has invalid ID \"%s\""
+msgstr "<%s> kirjel on vigane ID \"%s\""
 
 #, c-format
 msgid "<%s> element has neither a \"name\" nor an \"id\" attribute"
@@ -3110,7 +3124,7 @@ msgid "Printer '%s' is out of paper."
 msgstr "Printeril '%s' on paber otsas."
 
 #, c-format
-msgid "Printer '%s' is currently off-line."
+msgid "Printer '%s' is currently offline."
 msgstr "Printer '%s' on hetkel ühendamata."
 
 #, c-format
@@ -3553,9 +3567,6 @@ msgstr ""
 #~ msgid "Failed to skip the next %d bytes with seek()."
 #~ msgstr "Tõrge seek() abil järgnevast %d baidist ülehüppamisel."
 
-#~ msgid "Failed to create GdkPixbufLoader object."
-#~ msgstr "Tõrge GdkPixbufLoader objekti loomisel."
-
 #~ msgid "Failed to find an image data atom."
 #~ msgstr "Pildi andmeaatomi leidmine nurjus."
 
@@ -3636,9 +3647,6 @@ msgstr ""
 
 #~ msgid "Fol_ders"
 #~ msgstr "_Kataloogid"
-
-#~ msgid "_Files"
-#~ msgstr "_Failid"
 
 #~ msgid "Folder unreadable: %s"
 #~ msgstr "Kataloog on loetamatu: %s"

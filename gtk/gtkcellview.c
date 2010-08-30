@@ -344,7 +344,7 @@ gtk_cell_view_size_allocate (GtkWidget     *widget,
   gint              extra_per_cell, extra_extra, i;
   gboolean          first_cell = TRUE;
 
-  widget->allocation = *allocation;
+  gtk_widget_set_allocation (widget, allocation);
 
   cellview = GTK_CELL_VIEW (widget);
 
@@ -429,6 +429,7 @@ static gboolean
 gtk_cell_view_expose (GtkWidget      *widget,
                       GdkEventExpose *event)
 {
+  GtkAllocation allocation;
   GList *list;
   GtkCellView *cellview;
   GdkRectangle area;
@@ -441,12 +442,14 @@ gtk_cell_view_expose (GtkWidget      *widget,
   if (!gtk_widget_is_drawable (widget))
     return FALSE;
 
+  gtk_widget_get_allocation (widget, &allocation);
+
   /* "blank" background */
   if (cellview->priv->background_set)
     {
-      cairo_t *cr = gdk_cairo_create (GTK_WIDGET (cellview)->window);
+      cairo_t *cr = gdk_cairo_create (gtk_widget_get_window (GTK_WIDGET (cellview)));
 
-      gdk_cairo_rectangle (cr, &widget->allocation);
+      gdk_cairo_rectangle (cr, &allocation);
       cairo_set_source_rgb (cr,
 			    cellview->priv->background.red / 65535.,
 			    cellview->priv->background.green / 65535.,
@@ -463,10 +466,10 @@ gtk_cell_view_expose (GtkWidget      *widget,
     return FALSE;
 
   /* render cells */
-  area = widget->allocation;
+  area = allocation;
 
   /* we draw on our very own window, initialize x and y to zero */
-  area.y = widget->allocation.y;
+  area.y = allocation.y;
 
   if (gtk_widget_get_state (widget) == GTK_STATE_PRELIGHT)
     state = GTK_CELL_RENDERER_PRELIT;
@@ -478,9 +481,9 @@ gtk_cell_view_expose (GtkWidget      *widget,
   for (packing = GTK_PACK_START; packing <= GTK_PACK_END; ++packing)
     {
       if (packing == GTK_PACK_START)
-	area.x = widget->allocation.x + (rtl ? widget->allocation.width : 0); 
+	area.x = allocation.x + (rtl ? allocation.width : 0);
       else
-	area.x = rtl ? widget->allocation.x : (widget->allocation.x + widget->allocation.width);  
+	area.x = rtl ? allocation.x : (allocation.x + allocation.width);
 
       for (list = cellview->priv->cell_list; list; list = list->next)
 	{

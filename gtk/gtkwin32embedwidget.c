@@ -111,13 +111,15 @@ BOOL
 _gtk_win32_embed_widget_dialog_procedure (GtkWin32EmbedWidget *embed_widget,
 					  HWND wnd, UINT message, WPARAM wparam, LPARAM lparam)
 {
+  GtkAllocation allocation;
   GtkWidget *widget = GTK_WIDGET (embed_widget);
   
  if (message == WM_SIZE)
    {
-     widget->allocation.width = LOWORD(lparam);
-     widget->allocation.height = HIWORD(lparam);
-     
+     allocation.width = LOWORD(lparam);
+     allocation.height = HIWORD(lparam);
+     gtk_widget_set_allocation (widget, &allocation);
+
      gtk_widget_queue_resize (widget);
    }
         
@@ -172,15 +174,17 @@ gtk_win32_embed_widget_realize (GtkWidget *widget)
 {
   GtkWindow *window = GTK_WINDOW (widget);
   GtkWin32EmbedWidget *embed_widget = GTK_WIN32_EMBED_WIDGET (widget);
+  GtkAllocation allocation;
+  GdkWindow *gdk_window;
   GdkWindowAttr attributes;
   gint attributes_mask;
   LONG_PTR styles;
 
+  gtk_widget_get_allocation (widget, &allocation);
+
   /* ensure widget tree is properly size allocated */
-  if (widget->allocation.x == -1 &&
-      widget->allocation.y == -1 &&
-      widget->allocation.width == 1 &&
-      widget->allocation.height == 1)
+  if (allocation.x == -1 && allocation.y == -1 &&
+      allocation.width == 1 && allocation.height == 1)
     {
       GtkRequisition requisition;
       GtkAllocation allocation = { 0, 0, 200, 200 };
@@ -201,12 +205,14 @@ gtk_win32_embed_widget_realize (GtkWidget *widget)
 
   gtk_widget_set_realized (widget, TRUE);
 
+  gtk_widget_get_allocation (widget, &allocation);
+
   attributes.window_type = GDK_WINDOW_CHILD;
   attributes.title = window->title;
   attributes.wmclass_name = window->wmclass_name;
   attributes.wmclass_class = window->wmclass_class;
-  attributes.width = widget->allocation.width;
-  attributes.height = widget->allocation.height;
+  attributes.width = allocation.width;
+  attributes.height = allocation.height;
   attributes.wclass = GDK_INPUT_OUTPUT;
 
   /* this isn't right - we should match our parent's visual/colormap.
@@ -226,22 +232,22 @@ gtk_win32_embed_widget_realize (GtkWidget *widget)
   attributes_mask |= (window->title ? GDK_WA_TITLE : 0);
   attributes_mask |= (window->wmclass_name ? GDK_WA_WMCLASS : 0);
 
-  widget->window = gdk_window_new (embed_widget->parent_window, 
-				   &attributes, attributes_mask);
-
-  gdk_window_set_user_data (widget->window, window);
+  gdk_window = gdk_window_new (embed_widget->parent_window,
+                               &attributes, attributes_mask);
+  gtk_widget_set_window (widget, gdk_window);
+  gdk_window_set_user_data (gdk_window, window);
 
   embed_widget->old_window_procedure = (gpointer)
-    SetWindowLongPtrW(GDK_WINDOW_HWND (widget->window),
+    SetWindowLongPtrW(GDK_WINDOW_HWND (gdk_window),
 		      GWLP_WNDPROC,
 		      (LONG_PTR)gtk_win32_embed_widget_window_process);
 
   /* Enable tab to focus the widget */
-  styles = GetWindowLongPtr(GDK_WINDOW_HWND (widget->window), GWL_STYLE);
-  SetWindowLongPtrW(GDK_WINDOW_HWND (widget->window), GWL_STYLE, styles | WS_TABSTOP);
-  
-  widget->style = gtk_style_attach (widget->style, widget->window);
-  gtk_style_set_background (widget->style, widget->window, GTK_STATE_NORMAL);
+  styles = GetWindowLongPtr(GDK_WINDOW_HWND (gdk_window), GWL_STYLE);
+  SetWindowLongPtrW(GDK_WINDOW_HWND (gdk_window), GWL_STYLE, styles | WS_TABSTOP);
+
+  gtk_widget_style_attach (widget);
+  gtk_style_set_background (gtk_widget_get_style (widget), gdk_window, GTK_STATE_NORMAL);
 }
 
 static void
@@ -275,14 +281,14 @@ gtk_win32_embed_widget_map (GtkWidget *widget)
       !gtk_widget_get_mapped (child))
     gtk_widget_map (child);
 
-  gdk_window_show (widget->window);
+  gdk_window_show (gtk_widget_get_window (widget));
 }
 
 static void
 gtk_win32_embed_widget_unmap (GtkWidget *widget)
 {
   gtk_widget_set_mapped (widget, FALSE);
-  gdk_window_hide (widget->window);
+  gdk_window_hide (gtk_widget_get_window (widget));
 }
 
 static void
@@ -292,10 +298,10 @@ gtk_win32_embed_widget_size_allocate (GtkWidget     *widget,
   GtkBin    *bin = GTK_BIN (widget);
   GtkWidget *child;
   
-  widget->allocation = *allocation;
+  gtk_widget_set_allocation (widget, allocation);
   
   if (gtk_widget_get_realized (widget))
-    gdk_window_move_resize (widget->window,
+    gdk_window_move_resize (gtk_widget_get_window (widget),
 			    allocation->x, allocation->y,
 			    allocation->width, allocation->height);
 
@@ -383,5 +389,5 @@ gtk_win32_embed_widget_set_focus (GtkWindow *window,
 {
   GTK_WINDOW_CLASS (gtk_win32_embed_widget_parent_class)->set_focus (window, focus);
 
-  gdk_window_focus (GTK_WIDGET(window)->window, 0);
+  gdk_window_focus (gtk_widget_get_window (GTK_WIDGET(window)), 0);
 }

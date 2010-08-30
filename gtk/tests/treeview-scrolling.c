@@ -416,6 +416,7 @@ test_position (GtkTreeView *tree_view,
 	/* This is only tested for during test_single() */
 	model = gtk_tree_view_get_model (GTK_TREE_VIEW (tree_view));
 	if (gtk_tree_model_iter_n_children (model, NULL) == 1) {
+                GtkAllocation allocation;
 		GtkTreePath *tmppath;
 
 		/* Test nothing is dangling at the bottom; read
@@ -423,7 +424,8 @@ test_position (GtkTreeView *tree_view,
 		 */
 
 		/* FIXME: hardcoded width */
-		if (gtk_tree_view_get_path_at_pos (GTK_TREE_VIEW (tree_view), 0, GTK_WIDGET (tree_view)->allocation.height - 30, &tmppath, NULL, NULL, NULL)) {
+                gtk_widget_get_allocation (GTK_WIDGET (tree_view), &allocation);
+		if (gtk_tree_view_get_path_at_pos (GTK_TREE_VIEW (tree_view), 0, allocation.height - 30, &tmppath, NULL, NULL, NULL)) {
 			g_assert_not_reached ();
 			gtk_tree_path_free (tmppath);
 		}
@@ -715,6 +717,7 @@ test_editable_position (GtkWidget   *tree_view,
 			GtkWidget   *editable,
 			GtkTreePath *cursor_path)
 {
+        GtkAllocation allocation;
 	GdkRectangle rect;
 	GtkAdjustment *vadj;
 
@@ -724,7 +727,8 @@ test_editable_position (GtkWidget   *tree_view,
 	vadj = gtk_tree_view_get_vadjustment (GTK_TREE_VIEW (tree_view));
 
 	/* There are all in bin_window coordinates */
-	g_assert (editable->allocation.y == rect.y + ((rect.height - editable->allocation.height) / 2));
+        gtk_widget_get_allocation (editable, &allocation);
+        g_assert (allocation.y == rect.y + ((rect.height - allocation.height) / 2));
 }
 
 static void

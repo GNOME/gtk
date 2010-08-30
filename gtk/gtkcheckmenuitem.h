@@ -45,16 +45,16 @@ G_BEGIN_DECLS
 #define GTK_CHECK_MENU_ITEM_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_CHECK_MENU_ITEM, GtkCheckMenuItemClass))
 
 
-typedef struct _GtkCheckMenuItem       GtkCheckMenuItem;
-typedef struct _GtkCheckMenuItemPriv   GtkCheckMenuItemPriv;
-typedef struct _GtkCheckMenuItemClass  GtkCheckMenuItemClass;
+typedef struct _GtkCheckMenuItem              GtkCheckMenuItem;
+typedef struct _GtkCheckMenuItemPrivate       GtkCheckMenuItemPrivate;
+typedef struct _GtkCheckMenuItemClass         GtkCheckMenuItemClass;
 
 struct _GtkCheckMenuItem
 {
   GtkMenuItem menu_item;
 
   /* <private> */
-  GtkCheckMenuItemPriv *priv;
+  GtkCheckMenuItemPrivate *priv;
 };
 
 struct _GtkCheckMenuItemClass

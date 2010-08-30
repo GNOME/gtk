@@ -52,16 +52,16 @@ typedef enum
   GTK_NOTEBOOK_TAB_LAST
 } GtkNotebookTab;
 
-typedef struct _GtkNotebook       GtkNotebook;
-typedef struct _GtkNotebookPriv   GtkNotebookPriv;
-typedef struct _GtkNotebookClass  GtkNotebookClass;
+typedef struct _GtkNotebook              GtkNotebook;
+typedef struct _GtkNotebookPrivate       GtkNotebookPrivate;
+typedef struct _GtkNotebookClass         GtkNotebookClass;
 
 struct _GtkNotebook
 {
   GtkContainer container;
 
   /* <private> */
-  GtkNotebookPriv *priv;
+  GtkNotebookPrivate *priv;
 };
 
 struct _GtkNotebookClass

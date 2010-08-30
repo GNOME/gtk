@@ -661,7 +661,7 @@ gtk_file_chooser_button_constructor (GType                  type,
 
       gtk_file_chooser_button_set_title (button, _(DEFAULT_TITLE));
     }
-  else if (!GTK_WINDOW (priv->dialog)->title)
+  else if (!gtk_window_get_title (GTK_WINDOW (priv->dialog)))
     {
       gtk_file_chooser_button_set_title (button, _(DEFAULT_TITLE));
     }

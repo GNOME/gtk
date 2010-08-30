@@ -5210,8 +5210,7 @@ gtk_widget_real_grab_focus (GtkWidget *focus_widget)
       toplevel = gtk_widget_get_toplevel (focus_widget);
       if (gtk_widget_is_toplevel (toplevel) && GTK_IS_WINDOW (toplevel))
 	{
-	  widget = GTK_WINDOW (toplevel)->focus_widget;
-	  
+          widget = gtk_window_get_focus (GTK_WINDOW (toplevel));
 	  if (widget == focus_widget)
 	    {
 	      /* We call _gtk_window_internal_set_focus() here so that the
@@ -5442,7 +5441,7 @@ gtk_widget_is_focus (GtkWidget *widget)
   toplevel = gtk_widget_get_toplevel (widget);
   
   if (GTK_IS_WINDOW (toplevel))
-    return widget == GTK_WINDOW (toplevel)->focus_widget;
+    return widget == gtk_window_get_focus (GTK_WINDOW (toplevel));
   else
     return FALSE;
 }
@@ -7516,7 +7515,7 @@ gtk_widget_get_screen_unchecked (GtkWidget *widget)
   if (gtk_widget_is_toplevel (toplevel))
     {
       if (GTK_IS_WINDOW (toplevel))
-	return GTK_WINDOW (toplevel)->screen;
+	return gtk_window_get_screen (GTK_WINDOW (toplevel));
       else if (GTK_IS_INVISIBLE (toplevel))
 	return gtk_invisible_get_screen (GTK_INVISIBLE (widget));
     }

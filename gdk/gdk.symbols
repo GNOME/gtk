@@ -776,23 +776,6 @@ gdk_keyval_name G_GNUC_CONST
 #endif
 #endif
 
-#if IN_HEADER(__GDK_KEYS_H__)
-#if IN_FILE(__GDK_KEYS_DIRECTFB_C__)
-gdk_keymap_get_direction
-gdk_keymap_get_entries_for_keycode
-gdk_keymap_get_entries_for_keyval
-gdk_keymap_get_for_display
-gdk_keymap_get_caps_lock_state
-gdk_keymap_get_num_lock_state
-gdk_keymap_lookup_key
-gdk_keymap_translate_keyboard_state
-gdk_keymap_add_virtual_modifiers
-gdk_keymap_map_virtual_modifiers
-gdk_keyval_from_name
-gdk_keyval_name G_GNUC_CONST
-#endif
-#endif
-
 #if IN_HEADER(__GDK_VISUAL_H__)
 #if IN_FILE(__GDK_VISUAL_C__)
 gdk_list_visuals
@@ -1002,13 +985,6 @@ gdk_win32_drawable_get_handle
 #if IN_HEADER(__GDK_WIN32_H__)
 #if IN_FILE(__GDK_EVENTS_WIN32_C__)
 gdk_win32_set_modal_dialog_libgtk_only
-#endif
-#endif
-
-#if IN_HEADER(__GDK_WIN32_H__)
-#if IN_FILE(__GDK_GC_WIN32_C__)
-gdk_win32_hdc_get
-gdk_win32_hdc_release
 #endif
 #endif
 

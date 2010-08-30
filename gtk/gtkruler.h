@@ -55,10 +55,10 @@ G_BEGIN_DECLS
 #define GTK_RULER_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_RULER, GtkRulerClass))
 
 
-typedef struct _GtkRuler        GtkRuler;
-typedef struct _GtkRulerPriv    GtkRulerPriv;
-typedef struct _GtkRulerClass   GtkRulerClass;
-typedef struct _GtkRulerMetric  GtkRulerMetric;
+typedef struct _GtkRuler              GtkRuler;
+typedef struct _GtkRulerPrivate       GtkRulerPrivate;
+typedef struct _GtkRulerClass         GtkRulerClass;
+typedef struct _GtkRulerMetric        GtkRulerMetric;
 
 /* All distances below are in 1/72nd's of an inch. (According to
  * Adobe that's a point, but points are really 1/72.27 in.)
@@ -68,7 +68,7 @@ struct _GtkRuler
   GtkWidget widget;
 
   /* <private> */
-  GtkRulerPriv *priv;
+  GtkRulerPrivate *priv;
 };
 
 struct _GtkRulerClass

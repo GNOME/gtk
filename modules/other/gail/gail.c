@@ -161,7 +161,7 @@ gail_get_accessible_for_widget (GtkWidget *widget,
     }
   else if (GTK_IS_TOGGLE_BUTTON (widget))
     {
-      GtkWidget *other_widget = widget->parent;
+      GtkWidget *other_widget = gtk_widget_get_parent (widget);
       if (GTK_IS_COMBO_BOX (other_widget))
         {
           gail_set_focus_widget (other_widget, widget);
@@ -213,10 +213,15 @@ gail_focus_watcher (GSignalInvocationHint *ihint,
         {
           if (GTK_IS_WINDOW (widget))
             {
+              GtkWidget *focus_widget;
               GtkWindow *window;
+              GtkWindowType type;
 
               window = GTK_WINDOW (widget);
-              if (window->focus_widget)
+              focus_widget = gtk_window_get_focus (window);
+              g_object_get (window, "type", &type, NULL);
+
+              if (focus_widget)
                 {
                   /*
                    * If we already have a potential focus widget set this
@@ -229,15 +234,15 @@ gail_focus_watcher (GSignalInvocationHint *ihint,
                           !focus_before_menu)
                         {
                           void *vp_focus_before_menu = &focus_before_menu;
-                          focus_before_menu = window->focus_widget;
+                          focus_before_menu = focus_widget;
                           g_object_add_weak_pointer (G_OBJECT (focus_before_menu), vp_focus_before_menu);
                         }
 
                       return TRUE;
                     }
-                  widget = window->focus_widget;
+                  widget = focus_widget;
                 }
-              else if (window->type == GTK_WINDOW_POPUP) 
+              else if (type == GTK_WINDOW_POPUP)
                 {
 	          if (GTK_IS_BIN (widget))
 		    {

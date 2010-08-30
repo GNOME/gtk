@@ -37,7 +37,7 @@
 
 
 
-struct _GtkHandleBoxPriv
+struct _GtkHandleBoxPrivate
 {
   /* Properties */
   GtkPositionType handle_position;
@@ -270,17 +270,17 @@ gtk_handle_box_class_init (GtkHandleBoxClass *class)
 		  G_TYPE_NONE, 1,
 		  GTK_TYPE_WIDGET);
 
-  g_type_class_add_private (gobject_class, sizeof (GtkHandleBoxPriv));
+  g_type_class_add_private (gobject_class, sizeof (GtkHandleBoxPrivate));
 }
 
 static void
 gtk_handle_box_init (GtkHandleBox *handle_box)
 {
-  GtkHandleBoxPriv *priv;
+  GtkHandleBoxPrivate *priv;
 
   handle_box->priv = G_TYPE_INSTANCE_GET_PRIVATE (handle_box,
                                                   GTK_TYPE_HANDLE_BOX,
-                                                  GtkHandleBoxPriv);
+                                                  GtkHandleBoxPrivate);
   priv = handle_box->priv;
 
   gtk_widget_set_has_window (GTK_WIDGET (handle_box), TRUE);
@@ -333,7 +333,7 @@ gtk_handle_box_get_property (GObject         *object,
 			     GParamSpec      *pspec)
 {
   GtkHandleBox *handle_box = GTK_HANDLE_BOX (object);
-  GtkHandleBoxPriv *priv = handle_box->priv;
+  GtkHandleBoxPrivate *priv = handle_box->priv;
 
   switch (prop_id)
     {
@@ -371,7 +371,7 @@ static void
 gtk_handle_box_map (GtkWidget *widget)
 {
   GtkHandleBox *hb = GTK_HANDLE_BOX (widget);
-  GtkHandleBoxPriv *priv = hb->priv;
+  GtkHandleBoxPrivate *priv = hb->priv;
   GtkBin *bin = GTK_BIN (widget);
   GtkWidget *child;
 
@@ -397,7 +397,7 @@ static void
 gtk_handle_box_unmap (GtkWidget *widget)
 {
   GtkHandleBox *hb = GTK_HANDLE_BOX (widget);
-  GtkHandleBoxPriv *priv = hb->priv;
+  GtkHandleBoxPrivate *priv = hb->priv;
 
   gtk_widget_set_mapped (widget, FALSE);
 
@@ -413,7 +413,7 @@ static void
 gtk_handle_box_realize (GtkWidget *widget)
 {
   GtkHandleBox *hb = GTK_HANDLE_BOX (widget);
-  GtkHandleBoxPriv *priv = hb->priv;
+  GtkHandleBoxPrivate *priv = hb->priv;
   GtkWidget *child;
   GdkWindowAttr attributes;
   gint attributes_mask;
@@ -486,7 +486,7 @@ static void
 gtk_handle_box_unrealize (GtkWidget *widget)
 {
   GtkHandleBox *hb = GTK_HANDLE_BOX (widget);
-  GtkHandleBoxPriv *priv = hb->priv;
+  GtkHandleBoxPrivate *priv = hb->priv;
 
   gdk_window_set_user_data (priv->bin_window, NULL);
   gdk_window_destroy (priv->bin_window);
@@ -503,7 +503,7 @@ gtk_handle_box_style_set (GtkWidget *widget,
 			  GtkStyle  *previous_style)
 {
   GtkHandleBox *hb = GTK_HANDLE_BOX (widget);
-  GtkHandleBoxPriv *priv = hb->priv;
+  GtkHandleBoxPrivate *priv = hb->priv;
 
   if (gtk_widget_get_realized (widget) &&
       gtk_widget_get_has_window (widget))
@@ -518,7 +518,7 @@ gtk_handle_box_style_set (GtkWidget *widget,
 static int
 effective_handle_position (GtkHandleBox *hb)
 {
-  GtkHandleBoxPriv *priv = hb->priv;
+  GtkHandleBoxPrivate *priv = hb->priv;
   int handle_position;
 
   if (gtk_widget_get_direction (GTK_WIDGET (hb)) == GTK_TEXT_DIR_LTR)
@@ -548,7 +548,7 @@ gtk_handle_box_size_request (GtkWidget      *widget,
 {
   GtkBin *bin = GTK_BIN (widget);
   GtkHandleBox *hb = GTK_HANDLE_BOX (widget);
-  GtkHandleBoxPriv *priv = hb->priv;
+  GtkHandleBoxPrivate *priv = hb->priv;
   GtkRequisition child_requisition;
   GtkWidget *child;
   gint handle_position;
@@ -626,7 +626,7 @@ gtk_handle_box_size_allocate (GtkWidget     *widget,
 {
   GtkBin *bin = GTK_BIN (widget);
   GtkHandleBox *hb = GTK_HANDLE_BOX (widget);
-  GtkHandleBoxPriv *priv = hb->priv;
+  GtkHandleBoxPrivate *priv = hb->priv;
   GtkRequisition child_requisition;
   GtkWidget *child;
   gint handle_position;
@@ -789,7 +789,7 @@ void
 gtk_handle_box_set_shadow_type (GtkHandleBox  *handle_box,
 				GtkShadowType  type)
 {
-  GtkHandleBoxPriv *priv;
+  GtkHandleBoxPrivate *priv;
 
   g_return_if_fail (GTK_IS_HANDLE_BOX (handle_box));
 
@@ -824,7 +824,7 @@ void
 gtk_handle_box_set_handle_position  (GtkHandleBox    *handle_box,
 				     GtkPositionType  position)
 {
-  GtkHandleBoxPriv *priv;
+  GtkHandleBoxPrivate *priv;
 
   g_return_if_fail (GTK_IS_HANDLE_BOX (handle_box));
 
@@ -859,7 +859,7 @@ void
 gtk_handle_box_set_snap_edge        (GtkHandleBox    *handle_box,
 				     GtkPositionType  edge)
 {
-  GtkHandleBoxPriv *priv;
+  GtkHandleBoxPrivate *priv;
 
   g_return_if_fail (GTK_IS_HANDLE_BOX (handle_box));
 
@@ -918,7 +918,7 @@ gtk_handle_box_paint (GtkWidget      *widget,
 		      GdkRectangle   *area)
 {
   GtkHandleBox *hb = GTK_HANDLE_BOX (widget);
-  GtkHandleBoxPriv *priv = hb->priv;
+  GtkHandleBoxPrivate *priv = hb->priv;
   GtkBin *bin = GTK_BIN (widget);
   GtkWidget *child;
   gint width, height;
@@ -1005,7 +1005,7 @@ gtk_handle_box_expose (GtkWidget      *widget,
 		       GdkEventExpose *event)
 {
   GtkHandleBox *hb;
-  GtkHandleBoxPriv *priv;
+  GtkHandleBoxPrivate *priv;
 
   if (gtk_widget_is_drawable (widget))
     {
@@ -1043,7 +1043,7 @@ gtk_handle_box_grab_event (GtkWidget    *widget,
 			   GdkEvent     *event,
 			   GtkHandleBox *hb)
 {
-  GtkHandleBoxPriv *priv = hb->priv;
+  GtkHandleBoxPrivate *priv = hb->priv;
 
   switch (event->type)
     {
@@ -1071,7 +1071,7 @@ gtk_handle_box_button_press (GtkWidget      *widget,
                              GdkEventButton *event)
 {
   GtkHandleBox *hb = GTK_HANDLE_BOX (widget);
-  GtkHandleBoxPriv *priv = hb->priv;
+  GtkHandleBoxPrivate *priv = hb->priv;
   gboolean event_handled;
   GdkCursor *fleur;
   gint handle_position;
@@ -1206,7 +1206,7 @@ gtk_handle_box_motion (GtkWidget      *widget,
 		       GdkEventMotion *event)
 {
   GtkHandleBox *hb = GTK_HANDLE_BOX (widget);
-  GtkHandleBoxPriv *priv = hb->priv;
+  GtkHandleBoxPrivate *priv = hb->priv;
   GtkWidget *child;
   gint new_x, new_y;
   gint snap_edge;
@@ -1416,7 +1416,7 @@ static void
 gtk_handle_box_add (GtkContainer *container,
 		    GtkWidget    *widget)
 {
-  GtkHandleBoxPriv *priv = GTK_HANDLE_BOX (container)->priv;
+  GtkHandleBoxPrivate *priv = GTK_HANDLE_BOX (container)->priv;
 
   gtk_widget_set_parent_window (widget, priv->bin_window);
   GTK_CONTAINER_CLASS (gtk_handle_box_parent_class)->add (container, widget);
@@ -1436,7 +1436,7 @@ gtk_handle_box_delete_event (GtkWidget *widget,
 			     GdkEventAny  *event)
 {
   GtkHandleBox *hb = GTK_HANDLE_BOX (widget);
-  GtkHandleBoxPriv *priv = hb->priv;
+  GtkHandleBoxPrivate *priv = hb->priv;
 
   if (event->window == priv->float_window)
     {
@@ -1451,7 +1451,7 @@ gtk_handle_box_delete_event (GtkWidget *widget,
 static void
 gtk_handle_box_reattach (GtkHandleBox *hb)
 {
-  GtkHandleBoxPriv *priv = hb->priv;
+  GtkHandleBoxPrivate *priv = hb->priv;
   GtkWidget *child;
   GtkWidget *widget = GTK_WIDGET (hb);
   
@@ -1483,7 +1483,7 @@ static void
 gtk_handle_box_end_drag (GtkHandleBox *hb,
 			 guint32       time)
 {
-  GtkHandleBoxPriv *priv = hb->priv;
+  GtkHandleBoxPrivate *priv = hb->priv;
   GtkWidget *invisible = gtk_handle_box_get_invisible ();
 
   priv->in_drag = FALSE;

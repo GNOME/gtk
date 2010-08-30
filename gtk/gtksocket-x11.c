@@ -57,14 +57,16 @@ static gboolean xembed_get_info     (GdkWindow     *gdk_window,
 GdkNativeWindow
 _gtk_socket_windowing_get_id (GtkSocket *socket)
 {
-  return GDK_WINDOW_XWINDOW (GTK_WIDGET (socket)->window);
+  return GDK_WINDOW_XWINDOW (gtk_widget_get_window (GTK_WIDGET (socket)));
 }
 
 void
 _gtk_socket_windowing_realize_window (GtkSocket *socket)
 {
-  GdkWindow *window = GTK_WIDGET (socket)->window;
+  GdkWindow *window;
   XWindowAttributes xattrs;
+
+  window = gtk_widget_get_window (GTK_WIDGET (socket));
 
   XGetWindowAttributes (GDK_WINDOW_XDISPLAY (window),
 			GDK_WINDOW_XWINDOW (window),
@@ -267,6 +269,7 @@ _gtk_socket_windowing_focus (GtkSocket       *socket,
 void
 _gtk_socket_windowing_send_configure_event (GtkSocket *socket)
 {
+  GtkAllocation allocation;
   XConfigureEvent xconfigure;
   gint x, y;
 
@@ -285,11 +288,12 @@ _gtk_socket_windowing_send_configure_event (GtkSocket *socket)
   gdk_error_trap_push ();
   gdk_window_get_origin (socket->plug_window, &x, &y);
   gdk_error_trap_pop ();
-			 
+
+  gtk_widget_get_allocation (GTK_WIDGET(socket), &allocation);
   xconfigure.x = x;
   xconfigure.y = y;
-  xconfigure.width = GTK_WIDGET(socket)->allocation.width;
-  xconfigure.height = GTK_WIDGET(socket)->allocation.height;
+  xconfigure.width = allocation.width;
+  xconfigure.height = allocation.height;
 
   xconfigure.border_width = 0;
   xconfigure.above = None;
@@ -342,7 +346,7 @@ _gtk_socket_windowing_embed_notify (GtkSocket *socket)
 #endif
   _gtk_xembed_send_message (socket->plug_window,
 			    XEMBED_EMBEDDED_NOTIFY, 0,
-			    GDK_WINDOW_XWINDOW (GTK_WIDGET (socket)->window),
+			    GDK_WINDOW_XWINDOW (gtk_widget_get_window (GTK_WIDGET (socket))),
 			    socket->xembed_version);
 }
 
@@ -667,10 +671,14 @@ _gtk_socket_windowing_filter_func (GdkXEvent *gdk_xevent,
       break;
     case ReparentNotify:
       {
+        GdkWindow *window;
 	XReparentEvent *xre = &xevent->xreparent;
 
+        window = gtk_widget_get_window (widget);
+
 	GTK_NOTE (PLUGSOCKET, g_message ("GtkSocket - ReparentNotify received"));
-	if (!socket->plug_window && xre->parent == GDK_WINDOW_XWINDOW (widget->window))
+	if (!socket->plug_window &&
+            xre->parent == GDK_WINDOW_XWINDOW (window))
 	  {
 	    _gtk_socket_add_window (socket, xre->window, FALSE);
 	    
@@ -683,7 +691,9 @@ _gtk_socket_windowing_filter_func (GdkXEvent *gdk_xevent,
 	  }
         else
           {
-            if (socket->plug_window && xre->window == GDK_WINDOW_XWINDOW (socket->plug_window) && xre->parent != GDK_WINDOW_XWINDOW (widget->window))
+            if (socket->plug_window &&
+                xre->window == GDK_WINDOW_XWINDOW (socket->plug_window) &&
+                xre->parent != GDK_WINDOW_XWINDOW (window))
               {
                 gboolean result;
 

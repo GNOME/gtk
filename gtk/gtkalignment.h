@@ -45,16 +45,16 @@ G_BEGIN_DECLS
 #define GTK_ALIGNMENT_GET_CLASS(obj)        (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_ALIGNMENT, GtkAlignmentClass))
 
 
-typedef struct _GtkAlignment       GtkAlignment;
-typedef struct _GtkAlignmentPriv   GtkAlignmentPriv;
-typedef struct _GtkAlignmentClass  GtkAlignmentClass;
+typedef struct _GtkAlignment              GtkAlignment;
+typedef struct _GtkAlignmentPrivate       GtkAlignmentPrivate;
+typedef struct _GtkAlignmentClass         GtkAlignmentClass;
 
 struct _GtkAlignment
 {
   GtkBin bin;
 
   /* <private> */
-  GtkAlignmentPriv *priv;
+  GtkAlignmentPrivate *priv;
 };
 
 struct _GtkAlignmentClass

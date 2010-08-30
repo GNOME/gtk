@@ -44,16 +44,16 @@ G_BEGIN_DECLS
 #define GTK_STATUSBAR_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_STATUSBAR, GtkStatusbarClass))
 
 
-typedef struct _GtkStatusbar      GtkStatusbar;
-typedef struct _GtkStatusbarPriv  GtkStatusbarPriv;
-typedef struct _GtkStatusbarClass GtkStatusbarClass;
+typedef struct _GtkStatusbar              GtkStatusbar;
+typedef struct _GtkStatusbarPrivate       GtkStatusbarPrivate;
+typedef struct _GtkStatusbarClass         GtkStatusbarClass;
 
 struct _GtkStatusbar
 {
   GtkHBox parent_widget;
 
   /* <private> */
-  GtkStatusbarPriv *priv;
+  GtkStatusbarPrivate *priv;
 };
 
 struct _GtkStatusbarClass

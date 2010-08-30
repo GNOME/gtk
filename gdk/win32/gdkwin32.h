@@ -82,22 +82,6 @@ gpointer      gdk_win32_handle_table_lookup (GdkNativeWindow handle);
 /* Translate from drawable to Windows handle */
 HGDIOBJ       gdk_win32_drawable_get_handle (GdkDrawable *drawable);
 
-/* Return a device context to draw in a drawable, given a GDK GC,
- * and a mask indicating which GC values might be used (for efficiency,
- * no need to muck around with text-related stuff if we aren't going
- * to output text, for instance).
- */
-HDC           gdk_win32_hdc_get      (GdkDrawable    *drawable,
-				      GdkGC          *gc,
-				      GdkGCValuesMask usage);
-
-/* Each HDC returned from gdk_win32_hdc_get must be released with
- * this function
- */
-void          gdk_win32_hdc_release  (GdkDrawable    *drawable,
-				      GdkGC          *gc,
-				      GdkGCValuesMask usage);
-
 void          gdk_win32_selection_add_targets (GdkWindow  *owner,
 					       GdkAtom     selection,
 					       gint	   n_targets,

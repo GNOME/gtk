@@ -1479,7 +1479,7 @@ _mouse_watcher (GSignalInvocationHint *ihint,
     widget = GTK_WIDGET (object);
     if (GTK_IS_WINDOW (widget))
     {
-        GtkWidget *focus_widget = GTK_WINDOW (widget)->focus_widget;
+        GtkWidget *focus_widget = gtk_window_get_focus (GTK_WINDOW (widget));
         if (focus_widget != NULL)
             widget = focus_widget;
     }

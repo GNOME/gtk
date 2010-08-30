@@ -103,7 +103,7 @@
  */
 
 
-struct _GtkRadioButtonPriv
+struct _GtkRadioButtonPrivate
 {
   GSList *group;
 };
@@ -194,17 +194,17 @@ gtk_radio_button_class_init (GtkRadioButtonClass *class)
 				       _gtk_marshal_VOID__VOID,
 				       G_TYPE_NONE, 0);
 
-  g_type_class_add_private (class, sizeof (GtkRadioButtonPriv));
+  g_type_class_add_private (class, sizeof (GtkRadioButtonPrivate));
 }
 
 static void
 gtk_radio_button_init (GtkRadioButton *radio_button)
 {
-  GtkRadioButtonPriv *priv;
+  GtkRadioButtonPrivate *priv;
 
   radio_button->priv = G_TYPE_INSTANCE_GET_PRIVATE (radio_button,
                                                     GTK_TYPE_RADIO_BUTTON,
-                                                    GtkRadioButtonPriv);
+                                                    GtkRadioButtonPrivate);
   priv = radio_button->priv;
 
   gtk_widget_set_has_window (GTK_WIDGET (radio_button), FALSE);
@@ -279,7 +279,7 @@ void
 gtk_radio_button_set_group (GtkRadioButton *radio_button,
 			    GSList         *group)
 {
-  GtkRadioButtonPriv *priv;
+  GtkRadioButtonPrivate *priv;
   GtkWidget *old_group_singleton = NULL;
   GtkWidget *new_group_singleton = NULL;
 
@@ -507,7 +507,7 @@ gtk_radio_button_destroy (GtkObject *object)
 {
   GtkWidget *old_group_singleton = NULL;
   GtkRadioButton *radio_button = GTK_RADIO_BUTTON (object);
-  GtkRadioButtonPriv *priv = radio_button->priv;
+  GtkRadioButtonPrivate *priv = radio_button->priv;
   GtkRadioButton *tmp_button;
   GSList *tmp_list;
   gboolean was_in_group;
@@ -545,9 +545,12 @@ get_coordinates (GtkWidget    *widget,
 		 gint         *x,
 		 gint         *y)
 {
-  *x = widget->allocation.x + widget->allocation.width / 2;
-  *y = widget->allocation.y + widget->allocation.height / 2;
-  
+  GtkAllocation allocation;
+
+  gtk_widget_get_allocation (widget, &allocation);
+  *x = allocation.x + allocation.width / 2;
+  *y = allocation.y + allocation.height / 2;
+
   gtk_widget_translate_coordinates (widget, reference, *x, *y, x, y);
 }
 
@@ -588,7 +591,7 @@ gtk_radio_button_focus (GtkWidget         *widget,
 			GtkDirectionType   direction)
 {
   GtkRadioButton *radio_button = GTK_RADIO_BUTTON (widget);
-  GtkRadioButtonPriv *priv = radio_button->priv;
+  GtkRadioButtonPrivate *priv = radio_button->priv;
   GSList *tmp_slist;
 
   /* Radio buttons with draw_indicator unset focus "normally", since
@@ -725,7 +728,7 @@ static void
 gtk_radio_button_clicked (GtkButton *button)
 {
   GtkRadioButton *radio_button = GTK_RADIO_BUTTON (button);
-  GtkRadioButtonPriv *priv = radio_button->priv;
+  GtkRadioButtonPrivate *priv = radio_button->priv;
   GtkToggleButton *toggle_button = GTK_TOGGLE_BUTTON (button);
   GtkToggleButton *tmp_button;
   GtkStateType new_state;
@@ -813,12 +816,15 @@ static void
 gtk_radio_button_draw_indicator (GtkCheckButton *check_button,
 				 GdkRectangle   *area)
 {
+  GtkAllocation allocation;
   GtkWidget *widget;
   GtkWidget *child;
   GtkButton *button;
   GtkToggleButton *toggle_button;
   GtkStateType state_type;
   GtkShadowType shadow_type;
+  GtkStyle *style;
+  GdkWindow *window;
   gint x, y;
   gint indicator_size, indicator_spacing;
   gint focus_width;
@@ -835,16 +841,21 @@ gtk_radio_button_draw_indicator (GtkCheckButton *check_button,
 
       border_width = gtk_container_get_border_width (GTK_CONTAINER (widget));
 
+      style = gtk_widget_get_style (widget);
       gtk_widget_style_get (widget,
 			    "interior-focus", &interior_focus,
 			    "focus-line-width", &focus_width,
 			    "focus-padding", &focus_pad,
 			    NULL);
 
+      window = gtk_widget_get_window (widget);
+
       _gtk_check_button_get_props (check_button, &indicator_size, &indicator_spacing);
 
-      x = widget->allocation.x + indicator_spacing + border_width;
-      y = widget->allocation.y + (widget->allocation.height - indicator_size) / 2;
+      gtk_widget_get_allocation (widget, &allocation);
+
+      x = allocation.x + indicator_spacing + border_width;
+      y = allocation.y + (allocation.height - indicator_size) / 2;
 
       child = gtk_bin_get_child (GTK_BIN (check_button));
       if (!interior_focus || !(child && gtk_widget_get_visible (child)))
@@ -867,21 +878,22 @@ gtk_radio_button_draw_indicator (GtkCheckButton *check_button,
 	state_type = GTK_STATE_NORMAL;
 
       if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL)
-	x = widget->allocation.x + widget->allocation.width - (indicator_size + x - widget->allocation.x);
+	x = allocation.x + allocation.width - (indicator_size + x - allocation.x);
 
       if (gtk_widget_get_state (widget) == GTK_STATE_PRELIGHT)
 	{
 	  GdkRectangle restrict_area;
 	  GdkRectangle new_area;
-	      
-	  restrict_area.x = widget->allocation.x + border_width;
-	  restrict_area.y = widget->allocation.y + border_width;
-	  restrict_area.width = widget->allocation.width - (2 * border_width);
-	  restrict_area.height = widget->allocation.height - (2 * border_width);
-	  
+
+	  restrict_area.x = allocation.x + border_width;
+	  restrict_area.y = allocation.y + border_width;
+	  restrict_area.width = allocation.width - (2 * border_width);
+	  restrict_area.height = allocation.height - (2 * border_width);
+
 	  if (gdk_rectangle_intersect (area, &restrict_area, &new_area))
 	    {
-	      gtk_paint_flat_box (widget->style, widget->window, GTK_STATE_PRELIGHT,
+              gtk_paint_flat_box (style, window,
+                                  GTK_STATE_PRELIGHT,
 				  GTK_SHADOW_ETCHED_OUT, 
 				  area, widget, "checkbutton",
 				  new_area.x, new_area.y,
@@ -889,7 +901,7 @@ gtk_radio_button_draw_indicator (GtkCheckButton *check_button,
 	    }
 	}
 
-      gtk_paint_option (widget->style, widget->window,
+      gtk_paint_option (style, window,
 			state_type, shadow_type,
 			area, widget, "radiobutton",
 			x, y, indicator_size, indicator_size);

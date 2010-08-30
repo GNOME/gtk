@@ -43,9 +43,9 @@ G_BEGIN_DECLS
 #define GTK_PROGRESS_BAR_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_PROGRESS_BAR, GtkProgressBarClass))
 
 
-typedef struct _GtkProgressBar       GtkProgressBar;
-typedef struct _GtkProgressBarPriv   GtkProgressBarPriv;
-typedef struct _GtkProgressBarClass  GtkProgressBarClass;
+typedef struct _GtkProgressBar              GtkProgressBar;
+typedef struct _GtkProgressBarPrivate       GtkProgressBarPrivate;
+typedef struct _GtkProgressBarClass         GtkProgressBarClass;
 
 typedef enum
 {
@@ -60,7 +60,7 @@ struct _GtkProgressBar
   GtkWidget parent;
 
   /* <private> */
-  GtkProgressBarPriv *priv;
+  GtkProgressBarPrivate *priv;
 };
 
 struct _GtkProgressBarClass

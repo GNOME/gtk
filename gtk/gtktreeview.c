@@ -678,7 +678,7 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
     /**
      * GtkTreeView:hover-selection:
      * 
-     * Enables of disables the hover selection mode of @tree_view.
+     * Enables or disables the hover selection mode of @tree_view.
      * Hover selection makes the selected row follow the pointer.
      * Currently, this works only for the selection modes 
      * %GTK_SELECTION_SINGLE and %GTK_SELECTION_BROWSE.
@@ -699,7 +699,7 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
     /**
      * GtkTreeView:hover-expand:
      * 
-     * Enables of disables the hover expansion mode of @tree_view.
+     * Enables or disables the hover expansion mode of @tree_view.
      * Hover expansion makes rows expand or collapse if the pointer moves 
      * over them.
      *
@@ -10492,21 +10492,23 @@ gtk_tree_view_ensure_interactive_directory (GtkTreeView *tree_view)
 
    if (tree_view->priv->search_window != NULL)
      {
-       if (GTK_WINDOW (toplevel)->group)
-	 gtk_window_group_add_window (GTK_WINDOW (toplevel)->group,
-				      GTK_WINDOW (tree_view->priv->search_window));
-       else if (GTK_WINDOW (tree_view->priv->search_window)->group)
-	 gtk_window_group_remove_window (GTK_WINDOW (tree_view->priv->search_window)->group,
-					 GTK_WINDOW (tree_view->priv->search_window));
+       if (gtk_window_has_group (GTK_WINDOW (toplevel)))
+         gtk_window_group_add_window (gtk_window_get_group (GTK_WINDOW (toplevel)),
+                                      GTK_WINDOW (tree_view->priv->search_window));
+       else if (gtk_window_has_group (GTK_WINDOW (tree_view->priv->search_window)))
+         gtk_window_group_remove_window (gtk_window_get_group (GTK_WINDOW (tree_view->priv->search_window)),
+                                         GTK_WINDOW (tree_view->priv->search_window));
+
        gtk_window_set_screen (GTK_WINDOW (tree_view->priv->search_window), screen);
+
        return;
      }
    
   tree_view->priv->search_window = gtk_window_new (GTK_WINDOW_POPUP);
   gtk_window_set_screen (GTK_WINDOW (tree_view->priv->search_window), screen);
 
-  if (GTK_WINDOW (toplevel)->group)
-    gtk_window_group_add_window (GTK_WINDOW (toplevel)->group,
+  if (gtk_window_has_group (GTK_WINDOW (toplevel)))
+    gtk_window_group_add_window (gtk_window_get_group (GTK_WINDOW (toplevel)),
 				 GTK_WINDOW (tree_view->priv->search_window));
 
   gtk_window_set_type_hint (GTK_WINDOW (tree_view->priv->search_window),

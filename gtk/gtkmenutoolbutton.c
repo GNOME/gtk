@@ -67,6 +67,7 @@ gtk_menu_tool_button_construct_contents (GtkMenuToolButton *button)
 {
   GtkMenuToolButtonPrivate *priv = button->priv;
   GtkWidget *box;
+  GtkWidget *parent;
   GtkOrientation orientation;
 
   orientation = gtk_tool_item_get_orientation (GTK_TOOL_ITEM (button));
@@ -82,19 +83,21 @@ gtk_menu_tool_button_construct_contents (GtkMenuToolButton *button)
       gtk_arrow_set (GTK_ARROW (priv->arrow), GTK_ARROW_RIGHT, GTK_SHADOW_NONE);
     }
 
-  if (priv->button && priv->button->parent)
+  parent = gtk_widget_get_parent (priv->button);
+  if (priv->button && parent)
     {
       g_object_ref (priv->button);
-      gtk_container_remove (GTK_CONTAINER (priv->button->parent),
+      gtk_container_remove (GTK_CONTAINER (parent),
                             priv->button);
       gtk_container_add (GTK_CONTAINER (box), priv->button);
       g_object_unref (priv->button);
     }
 
-  if (priv->arrow_button && priv->arrow_button->parent)
+  parent = gtk_widget_get_parent (priv->arrow_button);
+  if (priv->arrow_button && parent)
     {
       g_object_ref (priv->arrow_button);
-      gtk_container_remove (GTK_CONTAINER (priv->arrow_button->parent),
+      gtk_container_remove (GTK_CONTAINER (parent),
                             priv->arrow_button);
       gtk_box_pack_end (GTK_BOX (box), priv->arrow_button,
                         FALSE, FALSE, 0);
@@ -253,6 +256,7 @@ menu_position_func (GtkMenu           *menu,
                     GtkMenuToolButton *button)
 {
   GtkMenuToolButtonPrivate *priv = button->priv;
+  GtkAllocation arrow_allocation;
   GtkWidget *widget = GTK_WIDGET (button);
   GtkRequisition req;
   GtkRequisition menu_req;
@@ -261,35 +265,42 @@ menu_position_func (GtkMenu           *menu,
   GdkRectangle monitor;
   gint monitor_num;
   GdkScreen *screen;
+  GdkWindow *window;
 
   gtk_widget_size_request (GTK_WIDGET (priv->menu), &menu_req);
 
   orientation = gtk_tool_item_get_orientation (GTK_TOOL_ITEM (button));
   direction = gtk_widget_get_direction (widget);
+  window = gtk_widget_get_window (widget);
 
   screen = gtk_widget_get_screen (GTK_WIDGET (menu));
-  monitor_num = gdk_screen_get_monitor_at_window (screen, widget->window);
+  monitor_num = gdk_screen_get_monitor_at_window (screen, window);
   if (monitor_num < 0)
     monitor_num = 0;
   gdk_screen_get_monitor_geometry (screen, monitor_num, &monitor);
 
   if (orientation == GTK_ORIENTATION_HORIZONTAL)
     {
-      gdk_window_get_origin (widget->window, x, y);
-      *x += widget->allocation.x;
-      *y += widget->allocation.y;
+      GtkAllocation allocation;
+
+      gtk_widget_get_allocation (widget, &allocation);
+      gtk_widget_get_allocation (priv->arrow_button, &arrow_allocation);
+
+      gdk_window_get_origin (window, x, y);
+      *x += allocation.x;
+      *y += allocation.y;
 
       if (direction == GTK_TEXT_DIR_LTR)
-	*x += MAX (widget->allocation.width - menu_req.width, 0);
-      else if (menu_req.width > widget->allocation.width)
-        *x -= menu_req.width - widget->allocation.width;
+	*x += MAX (allocation.width - menu_req.width, 0);
+      else if (menu_req.width > allocation.width)
+        *x -= menu_req.width - allocation.width;
 
-      if ((*y + priv->arrow_button->allocation.height + menu_req.height) <= monitor.y + monitor.height)
-	*y += priv->arrow_button->allocation.height;
+      if ((*y + arrow_allocation.height + menu_req.height) <= monitor.y + monitor.height)
+	*y += arrow_allocation.height;
       else if ((*y - menu_req.height) >= monitor.y)
 	*y -= menu_req.height;
-      else if (monitor.y + monitor.height - (*y + priv->arrow_button->allocation.height) > *y)
-	*y += priv->arrow_button->allocation.height;
+      else if (monitor.y + monitor.height - (*y + arrow_allocation.height) > *y)
+	*y += arrow_allocation.height;
       else
 	*y -= menu_req.height;
     }
@@ -298,14 +309,16 @@ menu_position_func (GtkMenu           *menu,
       gdk_window_get_origin (GTK_BUTTON (priv->arrow_button)->event_window, x, y);
       gtk_widget_size_request (priv->arrow_button, &req);
 
+      gtk_widget_get_allocation (priv->arrow_button, &arrow_allocation);
+
       if (direction == GTK_TEXT_DIR_LTR)
-        *x += priv->arrow_button->allocation.width;
+        *x += arrow_allocation.width;
       else 
         *x -= menu_req.width;
 
       if (*y + menu_req.height > monitor.y + monitor.height &&
-	  *y + priv->arrow_button->allocation.height - monitor.y > monitor.y + monitor.height - *y)
-	*y += priv->arrow_button->allocation.height - menu_req.height;
+	  *y + arrow_allocation.height - monitor.y > monitor.y + monitor.height - *y)
+	*y += arrow_allocation.height - menu_req.height;
     }
 
   *push_in = FALSE;

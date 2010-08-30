@@ -19,14 +19,17 @@ expose_event_callback (GtkWidget      *widget,
                        GdkEventExpose *event, 
                        gpointer        data)
 {
-  if (widget->window)
+  GdkWindow *window;
+
+  window = gtk_widget_get_window (widget);
+  if (window)
     {
       GtkStyle *style;
       cairo_t *cr;
 
       style = gtk_widget_get_style (widget);
 
-      cr = gdk_cairo_create (widget->window);
+      cr = gdk_cairo_create (window);
 
       gdk_cairo_set_source_color (cr, &style->bg[GTK_STATE_NORMAL]);
       gdk_cairo_rectangle (cr, &event->area);

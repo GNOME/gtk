@@ -34,7 +34,7 @@
 #define TEAR_LENGTH 5
 #define BORDER_SPACING  3
 
-struct _GtkTearoffMenuItemPriv
+struct _GtkTearoffMenuItemPrivate
 {
   guint torn_off : 1;
 };
@@ -70,17 +70,17 @@ gtk_tearoff_menu_item_class_init (GtkTearoffMenuItemClass *klass)
 
   menu_item_class->activate = gtk_tearoff_menu_item_activate;
 
-  g_type_class_add_private (klass, sizeof (GtkTearoffMenuItemPriv));
+  g_type_class_add_private (klass, sizeof (GtkTearoffMenuItemPrivate));
 }
 
 static void
 gtk_tearoff_menu_item_init (GtkTearoffMenuItem *tearoff_menu_item)
 {
-  GtkTearoffMenuItemPriv *priv;
+  GtkTearoffMenuItemPrivate *priv;
 
   tearoff_menu_item->priv = G_TYPE_INSTANCE_GET_PRIVATE (tearoff_menu_item,
                                                          GTK_TYPE_TEAROFF_MENU_ITEM,
-                                                         GtkTearoffMenuItemPriv);
+                                                         GtkTearoffMenuItemPrivate);
   priv = tearoff_menu_item->priv;
 
   priv->torn_off = FALSE;
@@ -90,19 +90,24 @@ static void
 gtk_tearoff_menu_item_size_request (GtkWidget      *widget,
 				    GtkRequisition *requisition)
 {
+  GtkStyle *style;
+  GtkWidget *parent;
   guint border_width;
 
-  border_width = gtk_container_get_border_width (GTK_CONTAINER (widget));
-  requisition->width = (border_width + widget->style->xthickness + BORDER_SPACING) * 2;
-  requisition->height = (border_width + widget->style->ythickness) * 2;
+  style = gtk_widget_get_style (widget);
 
-  if (GTK_IS_MENU (widget->parent) && GTK_MENU (widget->parent)->torn_off)
+  border_width = gtk_container_get_border_width (GTK_CONTAINER (widget));
+  requisition->width = (border_width + style->xthickness + BORDER_SPACING) * 2;
+  requisition->height = (border_width + style->ythickness) * 2;
+
+  parent = gtk_widget_get_parent (widget);
+  if (GTK_IS_MENU (parent) && GTK_MENU (parent)->torn_off)
     {
       requisition->height += ARROW_SIZE;
     }
   else
     {
-      requisition->height += widget->style->ythickness + 4;
+      requisition->height += style->ythickness + 4;
     }
 }
 
@@ -110,50 +115,61 @@ static void
 gtk_tearoff_menu_item_paint (GtkWidget   *widget,
 			     GdkRectangle *area)
 {
+  GtkAllocation allocation;
   GtkMenuItem *menu_item;
   GtkShadowType shadow_type;
+  GtkStateType state;
+  GtkStyle *style;
   gint width, height;
   gint x, y;
   gint right_max;
   guint border_width;
   GtkArrowType arrow_type;
   GtkTextDirection direction;
-  
+  GtkWidget *parent;
+  GdkWindow *window;
+
   if (gtk_widget_is_drawable (widget))
     {
       menu_item = GTK_MENU_ITEM (widget);
 
+      style = gtk_widget_get_style (widget);
+      window = gtk_widget_get_window (widget);
       direction = gtk_widget_get_direction (widget);
 
       border_width = gtk_container_get_border_width (GTK_CONTAINER (menu_item));
-      x = widget->allocation.x + border_width;
-      y = widget->allocation.y + border_width;
-      width = widget->allocation.width - border_width * 2;
-      height = widget->allocation.height - border_width * 2;
+      gtk_widget_get_allocation (widget, &allocation);
+      x = allocation.x + border_width;
+      y = allocation.y + border_width;
+      width = allocation.width - border_width * 2;
+      height = allocation.height - border_width * 2;
       right_max = x + width;
 
-      if (widget->state == GTK_STATE_PRELIGHT)
+      state = gtk_widget_get_state (widget);
+
+      if (state == GTK_STATE_PRELIGHT)
 	{
 	  gint selected_shadow_type;
 	  
 	  gtk_widget_style_get (widget,
 				"selected-shadow-type", &selected_shadow_type,
 				NULL);
-	  gtk_paint_box (widget->style,
-			 widget->window,
+          gtk_paint_box (style,
+                         window,
 			 GTK_STATE_PRELIGHT,
 			 selected_shadow_type,
 			 area, widget, "menuitem",
 			 x, y, width, height);
 	}
       else
-	gdk_window_clear_area (widget->window, area->x, area->y, area->width, area->height);
+	gdk_window_clear_area (window, area->x, area->y, area->width, area->height);
 
-      if (GTK_IS_MENU (widget->parent) && GTK_MENU (widget->parent)->torn_off)
+      parent = gtk_widget_get_parent (widget);
+      if (GTK_IS_MENU (parent) && GTK_MENU (parent)->torn_off)
 	{
 	  gint arrow_x;
 
-	  if (widget->state == GTK_STATE_PRELIGHT)
+          if (state == GTK_STATE_PRELIGHT)
 	    shadow_type = GTK_SHADOW_IN;
 	  else
 	    shadow_type = GTK_SHADOW_OUT;
@@ -184,8 +200,8 @@ gtk_tearoff_menu_item_paint (GtkWidget   *widget,
 	    }
 
 
-	  gtk_paint_arrow (widget->style, widget->window,
-			   widget->state, shadow_type,
+          gtk_paint_arrow (style, window,
+                           state, shadow_type,
 			   NULL, widget, "tearoffmenuitem",
 			   arrow_type, FALSE,
 			   arrow_x, y + height / 2 - 5, 
@@ -204,10 +220,10 @@ gtk_tearoff_menu_item_paint (GtkWidget   *widget,
 	    x1 = right_max - x;
 	    x2 = MAX (right_max - x - TEAR_LENGTH, 0);
 	  }
-	  
-	  gtk_paint_hline (widget->style, widget->window, GTK_STATE_NORMAL,
+
+          gtk_paint_hline (style, window, GTK_STATE_NORMAL,
 			   NULL, widget, "tearoffmenuitem",
-			   x1, x2, y + (height - widget->style->ythickness) / 2);
+                           x1, x2, y + (height - style->ythickness) / 2);
 	  x += 2 * TEAR_LENGTH;
 	}
     }
@@ -225,12 +241,15 @@ gtk_tearoff_menu_item_expose (GtkWidget      *widget,
 static void
 gtk_tearoff_menu_item_activate (GtkMenuItem *menu_item)
 {
-  if (GTK_IS_MENU (GTK_WIDGET (menu_item)->parent))
+  GtkWidget *parent;
+
+  parent = gtk_widget_get_parent (GTK_WIDGET (menu_item));
+  if (GTK_IS_MENU (parent))
     {
-      GtkMenu *menu = GTK_MENU (GTK_WIDGET (menu_item)->parent);
-      
+      GtkMenu *menu = GTK_MENU (parent);
+
       gtk_widget_queue_resize (GTK_WIDGET (menu_item));
-      gtk_menu_set_tearoff_state (GTK_MENU (GTK_WIDGET (menu_item)->parent),
+      gtk_menu_set_tearoff_state (GTK_MENU (parent),
 				  !menu->torn_off);
     }
 }
@@ -241,7 +260,7 @@ tearoff_state_changed (GtkMenu            *menu,
 		       gpointer            data)
 {
   GtkTearoffMenuItem *tearoff_menu_item = GTK_TEAROFF_MENU_ITEM (data);
-  GtkTearoffMenuItemPriv *priv = tearoff_menu_item->priv;
+  GtkTearoffMenuItemPrivate *priv = tearoff_menu_item->priv;
 
   priv->torn_off = gtk_menu_get_tearoff_state (menu);
 }
@@ -251,8 +270,12 @@ gtk_tearoff_menu_item_parent_set (GtkWidget *widget,
 				  GtkWidget *previous)
 {
   GtkTearoffMenuItem *tearoff_menu_item = GTK_TEAROFF_MENU_ITEM (widget);
-  GtkTearoffMenuItemPriv *priv = tearoff_menu_item->priv;
-  GtkMenu *menu = GTK_IS_MENU (widget->parent) ? GTK_MENU (widget->parent) : NULL;
+  GtkTearoffMenuItemPrivate *priv = tearoff_menu_item->priv;
+  GtkMenu *menu;
+  GtkWidget *parent;
+
+  parent = gtk_widget_get_parent (widget);
+  menu = GTK_IS_MENU (parent) ? GTK_MENU (parent) : NULL;
 
   if (previous)
     g_signal_handlers_disconnect_by_func (previous, 

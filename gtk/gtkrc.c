@@ -908,7 +908,6 @@ _gtk_rc_init (void)
 		       "widget \"gtk-tooltip*\" style : gtk \"gtk-default-tooltips-style\"\n"
 		       "widget_class \"*<GtkMenuItem>*\" style : gtk \"gtk-default-menu-item-style\"\n"
 		       "widget_class \"*<GtkMenuBar>*<GtkMenuItem>\" style : gtk \"gtk-default-menu-bar-item-style\"\n"
-                       "class \"GtkLabel\" style : gtk \"gtk-default-label-style\"\n"
       );
 }
   

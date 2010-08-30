@@ -217,14 +217,16 @@ static gboolean
 gtk_spinner_expose (GtkWidget      *widget,
                     GdkEventExpose *event)
 {
+  GtkAllocation allocation;
   GtkStateType state_type;
   GtkSpinnerPrivate *priv;
   int width, height;
 
   priv = GTK_SPINNER (widget)->priv;
 
-  width = widget->allocation.width;
-  height = widget->allocation.height;
+  gtk_widget_get_allocation (widget, &allocation);
+  width = allocation.width;
+  height = allocation.height;
 
   if ((width < 12) || (height <12))
     gtk_widget_set_size_request (widget, 12, 12);
@@ -233,8 +235,8 @@ gtk_spinner_expose (GtkWidget      *widget,
   if (!gtk_widget_is_sensitive (widget))
    state_type = GTK_STATE_INSENSITIVE;
 
-  gtk_paint_spinner (widget->style,
-                     widget->window,
+  gtk_paint_spinner (gtk_widget_get_style (widget),
+                     gtk_widget_get_window (widget),
                      state_type,
                      &event->area,
                      widget,
@@ -473,6 +475,7 @@ gtk_spinner_accessible_image_get_size (AtkImage *image,
                                        gint     *width,
                                        gint     *height)
 {
+  GtkAllocation allocation;
   GtkWidget *widget;
 
   widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (image));
@@ -482,8 +485,9 @@ gtk_spinner_accessible_image_get_size (AtkImage *image,
     }
   else
     {
-      *width = widget->allocation.width;
-      *height = widget->allocation.height;
+      gtk_widget_get_allocation (widget, &allocation);
+      *width = allocation.width;
+      *height = allocation.height;
     }
 }
 

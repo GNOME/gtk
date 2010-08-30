@@ -515,15 +515,19 @@ gtk_menu_shell_deactivate (GtkMenuShell *menu_shell)
 static void
 gtk_menu_shell_realize (GtkWidget *widget)
 {
+  GtkAllocation allocation;
+  GdkWindow *window;
   GdkWindowAttr attributes;
   gint attributes_mask;
 
   gtk_widget_set_realized (widget, TRUE);
 
-  attributes.x = widget->allocation.x;
-  attributes.y = widget->allocation.y;
-  attributes.width = widget->allocation.width;
-  attributes.height = widget->allocation.height;
+  gtk_widget_get_allocation (widget, &allocation);
+
+  attributes.x = allocation.x;
+  attributes.y = allocation.y;
+  attributes.width = allocation.width;
+  attributes.height = allocation.height;
   attributes.window_type = GDK_WINDOW_CHILD;
   attributes.wclass = GDK_INPUT_OUTPUT;
   attributes.visual = gtk_widget_get_visual (widget);
@@ -537,11 +541,14 @@ gtk_menu_shell_realize (GtkWidget *widget)
 			    GDK_LEAVE_NOTIFY_MASK);
 
   attributes_mask = GDK_WA_X | GDK_WA_Y | GDK_WA_VISUAL | GDK_WA_COLORMAP;
-  widget->window = gdk_window_new (gtk_widget_get_parent_window (widget), &attributes, attributes_mask);
-  gdk_window_set_user_data (widget->window, widget);
 
-  widget->style = gtk_style_attach (widget->style, widget->window);
-  gtk_style_set_background (widget->style, widget->window, GTK_STATE_NORMAL);
+  window = gdk_window_new (gtk_widget_get_parent_window (widget),
+                           &attributes, attributes_mask);
+  gtk_widget_set_window (widget, window);
+  gdk_window_set_user_data (window, widget);
+
+  gtk_widget_style_attach (widget);
+  gtk_style_set_background (gtk_widget_get_style (widget), window, GTK_STATE_NORMAL);
 }
 
 void
@@ -567,6 +574,7 @@ gtk_menu_shell_button_press (GtkWidget      *widget,
 {
   GtkMenuShell *menu_shell;
   GtkWidget *menu_item;
+  GtkWidget *parent;
 
   if (event->type != GDK_BUTTON_PRESS)
     return FALSE;
@@ -578,19 +586,21 @@ gtk_menu_shell_button_press (GtkWidget      *widget,
 
   menu_item = gtk_menu_shell_get_item (menu_shell, (GdkEvent *)event);
 
-  if (menu_item && _gtk_menu_item_is_selectable (menu_item) &&
-      menu_item != GTK_MENU_SHELL (menu_item->parent)->active_menu_item)
+  if (menu_item && _gtk_menu_item_is_selectable (menu_item))
     {
-      /*  select the menu item *before* activating the shell, so submenus
-       *  which might be open are closed the friendly way. If we activate
-       *  (and thus grab) this menu shell first, we might get grab_broken
-       *  events which will close the entire menu hierarchy. Selecting the
-       *  menu item also fixes up the state as if enter_notify() would
-       *  have run before (which normally selects the item).
-       */
-      if (GTK_MENU_SHELL_GET_CLASS (menu_item->parent)->submenu_placement != GTK_TOP_BOTTOM)
+      parent = gtk_widget_get_parent (menu_item);
+
+      if (menu_item != GTK_MENU_SHELL (parent)->active_menu_item)
         {
-          gtk_menu_shell_select_item (GTK_MENU_SHELL (menu_item->parent), menu_item);
+          /*  select the menu item *before* activating the shell, so submenus
+           *  which might be open are closed the friendly way. If we activate
+           *  (and thus grab) this menu shell first, we might get grab_broken
+           *  events which will close the entire menu hierarchy. Selecting the
+           *  menu item also fixes up the state as if enter_notify() would
+           *  have run before (which normally selects the item).
+           */
+          if (GTK_MENU_SHELL_GET_CLASS (parent)->submenu_placement != GTK_TOP_BOTTOM)
+            gtk_menu_shell_select_item (GTK_MENU_SHELL (parent), menu_item);
         }
     }
 
@@ -603,7 +613,7 @@ gtk_menu_shell_button_press (GtkWidget      *widget,
       if (menu_item)
         {
           if (_gtk_menu_item_is_selectable (menu_item) &&
-              menu_item->parent == widget &&
+              gtk_widget_get_parent (menu_item) == widget &&
               menu_item != menu_shell->active_menu_item)
             {
               _gtk_menu_shell_activate (menu_shell);
@@ -656,7 +666,7 @@ gtk_menu_shell_button_press (GtkWidget      *widget,
 
       _gtk_menu_item_popup_submenu (menu_item, FALSE);
 
-      priv = GTK_MENU_SHELL_GET_PRIVATE (menu_item->parent);
+      priv = GTK_MENU_SHELL_GET_PRIVATE (gtk_widget_get_parent (menu_item));
       priv->activated_submenu = TRUE;
     }
 
@@ -927,6 +937,7 @@ gtk_menu_shell_enter_notify (GtkWidget        *widget,
   if (menu_shell->active)
     {
       GtkWidget *menu_item;
+      GtkWidget *parent;
 
       menu_item = gtk_get_event_widget ((GdkEvent*) event);
 
@@ -944,7 +955,8 @@ gtk_menu_shell_enter_notify (GtkWidget        *widget,
           return TRUE;
         }
 
-      if (menu_item->parent == widget &&
+      parent = gtk_widget_get_parent (menu_item);
+      if (parent == widget &&
 	  GTK_IS_MENU_ITEM (menu_item))
 	{
 	  if (menu_shell->ignore_enter)
@@ -968,7 +980,7 @@ gtk_menu_shell_enter_notify (GtkWidget        *widget,
                 {
                   GtkMenuShellPrivate *priv;
 
-                  priv = GTK_MENU_SHELL_GET_PRIVATE (menu_item->parent);
+                  priv = GTK_MENU_SHELL_GET_PRIVATE (parent);
                   priv->activated_submenu = TRUE;
 
                   if (!gtk_widget_get_visible (GTK_MENU_ITEM (menu_item)->submenu))
@@ -1153,7 +1165,7 @@ gtk_menu_shell_is_item (GtkMenuShell *menu_shell,
   g_return_val_if_fail (GTK_IS_MENU_SHELL (menu_shell), FALSE);
   g_return_val_if_fail (child != NULL, FALSE);
 
-  parent = child->parent;
+  parent = gtk_widget_get_parent (child);
   while (GTK_IS_MENU_SHELL (parent))
     {
       if (parent == (GtkWidget*) menu_shell)
@@ -1173,7 +1185,7 @@ gtk_menu_shell_get_item (GtkMenuShell *menu_shell,
   menu_item = gtk_get_event_widget ((GdkEvent*) event);
   
   while (menu_item && !GTK_IS_MENU_ITEM (menu_item))
-    menu_item = menu_item->parent;
+    menu_item = gtk_widget_get_parent (menu_item);
 
   if (menu_item && gtk_menu_shell_is_item (menu_shell, menu_item))
     return menu_item;

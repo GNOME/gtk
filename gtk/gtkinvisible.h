@@ -43,16 +43,16 @@ G_BEGIN_DECLS
 #define GTK_INVISIBLE_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_INVISIBLE, GtkInvisibleClass))
 
 
-typedef struct _GtkInvisible	   GtkInvisible;
-typedef struct _GtkInvisiblePriv   GtkInvisiblePriv;
-typedef struct _GtkInvisibleClass  GtkInvisibleClass;
+typedef struct _GtkInvisible              GtkInvisible;
+typedef struct _GtkInvisiblePrivate       GtkInvisiblePrivate;
+typedef struct _GtkInvisibleClass         GtkInvisibleClass;
 
 struct _GtkInvisible
 {
   GtkWidget widget;
 
   /* <private> */
-  GtkInvisiblePriv *priv;
+  GtkInvisiblePrivate *priv;
 };
 
 struct _GtkInvisibleClass

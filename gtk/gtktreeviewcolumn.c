@@ -1277,6 +1277,7 @@ gtk_tree_view_column_setup_sort_column_id_callback (GtkTreeViewColumn *tree_colu
 void
 _gtk_tree_view_column_realize_button (GtkTreeViewColumn *column)
 {
+  GtkAllocation allocation;
   GtkTreeView *tree_view;
   GdkWindowAttr attr;
   guint attributes_mask;
@@ -1312,7 +1313,8 @@ _gtk_tree_view_column_realize_button (GtkTreeViewColumn *column)
   attr.width = TREE_VIEW_DRAG_WIDTH;
   attr.height = tree_view->priv->header_height;
 
-  attr.x = (column->button->allocation.x + (rtl ? 0 : column->button->allocation.width)) - TREE_VIEW_DRAG_WIDTH / 2;
+  gtk_widget_get_allocation (column->button, &allocation);
+  attr.x = (allocation.x + (rtl ? 0 : allocation.width)) - TREE_VIEW_DRAG_WIDTH / 2;
   column->window = gdk_window_new (tree_view->priv->header_window,
 				   &attr, attributes_mask);
   gdk_window_set_user_data (column->window, tree_view);
@@ -3366,7 +3368,7 @@ _gtk_tree_view_column_cell_draw_focus (GtkTreeViewColumn  *tree_column,
       cell_state = flags & GTK_CELL_RENDERER_SELECTED ? GTK_STATE_SELECTED :
 	      (flags & GTK_CELL_RENDERER_PRELIT ? GTK_STATE_PRELIGHT :
 	      (flags & GTK_CELL_RENDERER_INSENSITIVE ? GTK_STATE_INSENSITIVE : GTK_STATE_NORMAL));
-      gtk_paint_focus (tree_column->tree_view->style,
+      gtk_paint_focus (gtk_widget_get_style (tree_column->tree_view),
 		       window,
 		       cell_state,
 		       cell_area,

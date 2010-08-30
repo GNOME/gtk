@@ -17,9 +17,15 @@ void
 toggle_resize (GtkWidget *widget,
 	       GtkWidget *child)
 {
-  GtkPaned *paned = GTK_PANED (child->parent);
-  gboolean is_child1 = (child == gtk_paned_get_child1 (paned));
+  GtkWidget *parent;
+  GtkPaned *paned;
+  gboolean is_child1;
   gboolean resize, shrink;
+
+  parent = gtk_widget_get_parent (child);
+  paned = GTK_PANED (parent);
+
+  is_child1 = (child == gtk_paned_get_child1 (paned));
 
   gtk_container_child_get (GTK_CONTAINER (paned), child,
                            "resize", &resize,
@@ -27,7 +33,7 @@ toggle_resize (GtkWidget *widget,
                            NULL);
 
   g_object_ref (child);
-  gtk_container_remove (GTK_CONTAINER (child->parent), child);
+  gtk_container_remove (GTK_CONTAINER (parent), child);
   if (is_child1)
     gtk_paned_pack1 (paned, child, !resize, shrink);
   else
@@ -39,9 +45,15 @@ void
 toggle_shrink (GtkWidget *widget,
 	       GtkWidget *child)
 {
-  GtkPaned *paned = GTK_PANED (child->parent);
-  gboolean is_child1 = (child == gtk_paned_get_child1 (paned));
+  GtkWidget *parent;
+  GtkPaned *paned;
+  gboolean is_child1;
   gboolean resize, shrink;
+
+  parent = gtk_widget_get_parent (child);
+  paned = GTK_PANED (parent);
+
+  is_child1 = (child == gtk_paned_get_child1 (paned));
 
   gtk_container_child_get (GTK_CONTAINER (paned), child,
                            "resize", &resize,
@@ -49,7 +61,7 @@ toggle_shrink (GtkWidget *widget,
                            NULL);
 
   g_object_ref (child);
-  gtk_container_remove (GTK_CONTAINER (child->parent), child);
+  gtk_container_remove (GTK_CONTAINER (parent), child);
   if (is_child1)
     gtk_paned_pack1 (paned, child, resize, !shrink);
   else

@@ -31,7 +31,7 @@
 #include "gtkbuilderprivate.h"
 
 
-struct _GtkListStorePriv
+struct _GtkListStorePrivate
 {
   GtkSortType order;
   GtkTreeIterCompareFunc default_sort_func;
@@ -174,7 +174,7 @@ gtk_list_store_class_init (GtkListStoreClass *class)
 
   object_class->finalize = gtk_list_store_finalize;
 
-  g_type_class_add_private (class, sizeof (GtkListStorePriv));
+  g_type_class_add_private (class, sizeof (GtkListStorePrivate));
 }
 
 static void
@@ -229,11 +229,11 @@ gtk_list_store_buildable_init (GtkBuildableIface *iface)
 static void
 gtk_list_store_init (GtkListStore *list_store)
 {
-  GtkListStorePriv *priv;
+  GtkListStorePrivate *priv;
 
   list_store->priv = G_TYPE_INSTANCE_GET_PRIVATE (list_store,
                                                   GTK_TYPE_LIST_STORE,
-                                                  GtkListStorePriv);
+                                                  GtkListStorePrivate);
   priv = list_store->priv;
 
   priv->seq = g_sequence_new (NULL);
@@ -345,7 +345,7 @@ gtk_list_store_set_column_types (GtkListStore *list_store,
 				 gint          n_columns,
 				 GType        *types)
 {
-  GtkListStorePriv *priv;
+  GtkListStorePrivate *priv;
   gint i;
 
   g_return_if_fail (GTK_IS_LIST_STORE (list_store));
@@ -370,7 +370,7 @@ static void
 gtk_list_store_set_n_columns (GtkListStore *list_store,
 			      gint          n_columns)
 {
-  GtkListStorePriv *priv = list_store->priv;
+  GtkListStorePrivate *priv = list_store->priv;
   int i;
 
   if (priv->n_columns == n_columns)
@@ -391,7 +391,7 @@ gtk_list_store_set_column_type (GtkListStore *list_store,
 				gint          column,
 				GType         type)
 {
-  GtkListStorePriv *priv = list_store->priv;
+  GtkListStorePrivate *priv = list_store->priv;
 
   if (!_gtk_tree_data_list_check_type (type))
     {
@@ -406,7 +406,7 @@ static void
 gtk_list_store_finalize (GObject *object)
 {
   GtkListStore *list_store = GTK_LIST_STORE (object);
-  GtkListStorePriv *priv = list_store->priv;
+  GtkListStorePrivate *priv = list_store->priv;
 
   g_sequence_foreach (priv->seq,
 		      (GFunc) _gtk_tree_data_list_free, priv->column_headers);
@@ -439,7 +439,7 @@ static gint
 gtk_list_store_get_n_columns (GtkTreeModel *tree_model)
 {
   GtkListStore *list_store = GTK_LIST_STORE (tree_model);
-  GtkListStorePriv *priv = list_store->priv;
+  GtkListStorePrivate *priv = list_store->priv;
 
   priv->columns_dirty = TRUE;
 
@@ -451,7 +451,7 @@ gtk_list_store_get_column_type (GtkTreeModel *tree_model,
 				gint          index)
 {
   GtkListStore *list_store = GTK_LIST_STORE (tree_model);
-  GtkListStorePriv *priv = list_store->priv;
+  GtkListStorePrivate *priv = list_store->priv;
 
   g_return_val_if_fail (index < priv->n_columns, G_TYPE_INVALID);
 
@@ -466,7 +466,7 @@ gtk_list_store_get_iter (GtkTreeModel *tree_model,
 			 GtkTreePath  *path)
 {
   GtkListStore *list_store = GTK_LIST_STORE (tree_model);
-  GtkListStorePriv *priv = list_store->priv;
+  GtkListStorePrivate *priv = list_store->priv;
   GSequence *seq;
   gint i;
 
@@ -490,7 +490,7 @@ gtk_list_store_get_path (GtkTreeModel *tree_model,
 			 GtkTreeIter  *iter)
 {
   GtkListStore *list_store = GTK_LIST_STORE (tree_model);
-  GtkListStorePriv *priv = list_store->priv;
+  GtkListStorePrivate *priv = list_store->priv;
   GtkTreePath *path;
 
   g_return_val_if_fail (iter->stamp == priv->stamp, NULL);
@@ -511,7 +511,7 @@ gtk_list_store_get_value (GtkTreeModel *tree_model,
 			  GValue       *value)
 {
   GtkListStore *list_store = GTK_LIST_STORE (tree_model);
-  GtkListStorePriv *priv = list_store->priv;
+  GtkListStorePrivate *priv = list_store->priv;
   GtkTreeDataList *list;
   gint tmp_column = column;
 
@@ -536,7 +536,7 @@ gtk_list_store_iter_next (GtkTreeModel  *tree_model,
 			  GtkTreeIter   *iter)
 {
   GtkListStore *list_store = GTK_LIST_STORE (tree_model);
-  GtkListStorePriv *priv = list_store->priv;
+  GtkListStorePrivate *priv = list_store->priv;
   gboolean retval;
 
   g_return_val_if_fail (priv->stamp == iter->stamp, FALSE);
@@ -555,7 +555,7 @@ gtk_list_store_iter_children (GtkTreeModel *tree_model,
 			      GtkTreeIter  *parent)
 {
   GtkListStore *list_store = (GtkListStore *) tree_model;
-  GtkListStorePriv *priv = list_store->priv;
+  GtkListStorePrivate *priv = list_store->priv;
 
   /* this is a list, nodes have no children */
   if (parent)
@@ -589,7 +589,7 @@ gtk_list_store_iter_n_children (GtkTreeModel *tree_model,
 				GtkTreeIter  *iter)
 {
   GtkListStore *list_store = GTK_LIST_STORE (tree_model);
-  GtkListStorePriv *priv = list_store->priv;
+  GtkListStorePrivate *priv = list_store->priv;
 
   if (iter == NULL)
     return g_sequence_get_length (priv->seq);
@@ -606,7 +606,7 @@ gtk_list_store_iter_nth_child (GtkTreeModel *tree_model,
 			       gint          n)
 {
   GtkListStore *list_store = GTK_LIST_STORE (tree_model);
-  GtkListStorePriv *priv = list_store->priv;
+  GtkListStorePrivate *priv = list_store->priv;
   GSequenceIter *child;
 
   iter->stamp = 0;
@@ -641,7 +641,7 @@ gtk_list_store_real_set_value (GtkListStore *list_store,
 			       GValue       *value,
 			       gboolean      sort)
 {
-  GtkListStorePriv *priv = list_store->priv;
+  GtkListStorePrivate *priv = list_store->priv;
   GtkTreeDataList *list;
   GtkTreeDataList *prev;
   gint old_column = column;
@@ -749,7 +749,7 @@ gtk_list_store_set_value (GtkListStore *list_store,
 			  gint          column,
 			  GValue       *value)
 {
-  GtkListStorePriv *priv = list_store->priv;
+  GtkListStorePrivate *priv = list_store->priv;
 
   g_return_if_fail (GTK_IS_LIST_STORE (list_store));
   g_return_if_fail (VALID_ITER (iter, list_store));
@@ -770,7 +770,7 @@ gtk_list_store_set_value (GtkListStore *list_store,
 static GtkTreeIterCompareFunc
 gtk_list_store_get_compare_func (GtkListStore *list_store)
 {
-  GtkListStorePriv *priv = list_store->priv;
+  GtkListStorePrivate *priv = list_store->priv;
   GtkTreeIterCompareFunc func = NULL;
 
   if (GTK_LIST_STORE_IS_SORTED (list_store))
@@ -802,7 +802,7 @@ gtk_list_store_set_vector_internal (GtkListStore *list_store,
 				    GValue       *values,
 				    gint          n_values)
 {
-  GtkListStorePriv *priv = list_store->priv;
+  GtkListStorePrivate *priv = list_store->priv;
   gint i;
   GtkTreeIterCompareFunc func = NULL;
 
@@ -831,7 +831,7 @@ gtk_list_store_set_valist_internal (GtkListStore *list_store,
 				    gboolean     *maybe_need_sort,
 				    va_list	  var_args)
 {
-  GtkListStorePriv *priv = list_store->priv;
+  GtkListStorePrivate *priv = list_store->priv;
   gint column;
   GtkTreeIterCompareFunc func = NULL;
 
@@ -905,7 +905,7 @@ gtk_list_store_set_valuesv (GtkListStore *list_store,
 			    GValue       *values,
 			    gint          n_values)
 {
-  GtkListStorePriv *priv;
+  GtkListStorePrivate *priv;
   gboolean emit_signal = FALSE;
   gboolean maybe_need_sort = FALSE;
 
@@ -947,7 +947,7 @@ gtk_list_store_set_valist (GtkListStore *list_store,
                            GtkTreeIter  *iter,
                            va_list	 var_args)
 {
-  GtkListStorePriv *priv;
+  GtkListStorePrivate *priv;
   gboolean emit_signal = FALSE;
   gboolean maybe_need_sort = FALSE;
 
@@ -1017,7 +1017,7 @@ gboolean
 gtk_list_store_remove (GtkListStore *list_store,
 		       GtkTreeIter  *iter)
 {
-  GtkListStorePriv *priv;
+  GtkListStorePrivate *priv;
   GtkTreePath *path;
   GSequenceIter *ptr, *next;
 
@@ -1070,7 +1070,7 @@ gtk_list_store_insert (GtkListStore *list_store,
 		       GtkTreeIter  *iter,
 		       gint          position)
 {
-  GtkListStorePriv *priv;
+  GtkListStorePrivate *priv;
   GtkTreePath *path;
   GSequence *seq;
   GSequenceIter *ptr;
@@ -1123,7 +1123,7 @@ gtk_list_store_insert_before (GtkListStore *list_store,
 			      GtkTreeIter  *iter,
 			      GtkTreeIter  *sibling)
 {
-  GtkListStorePriv *priv;
+  GtkListStorePrivate *priv;
   GSequenceIter *after;
   
   g_return_if_fail (GTK_IS_LIST_STORE (list_store));
@@ -1159,7 +1159,7 @@ gtk_list_store_insert_after (GtkListStore *list_store,
 			     GtkTreeIter  *iter,
 			     GtkTreeIter  *sibling)
 {
-  GtkListStorePriv *priv;
+  GtkListStorePrivate *priv;
   GSequenceIter *after;
 
   g_return_if_fail (GTK_IS_LIST_STORE (list_store));
@@ -1212,7 +1212,7 @@ void
 gtk_list_store_append (GtkListStore *list_store,
 		       GtkTreeIter  *iter)
 {
-  GtkListStorePriv *priv;
+  GtkListStorePrivate *priv;
 
   g_return_if_fail (GTK_IS_LIST_STORE (list_store));
   g_return_if_fail (iter != NULL);
@@ -1225,7 +1225,7 @@ gtk_list_store_append (GtkListStore *list_store,
 static void
 gtk_list_store_increment_stamp (GtkListStore *list_store)
 {
-  GtkListStorePriv *priv = list_store->priv;
+  GtkListStorePrivate *priv = list_store->priv;
 
   do
     {
@@ -1244,7 +1244,7 @@ gtk_list_store_increment_stamp (GtkListStore *list_store)
 void
 gtk_list_store_clear (GtkListStore *list_store)
 {
-  GtkListStorePriv *priv;
+  GtkListStorePrivate *priv;
   GtkTreeIter iter;
 
   g_return_if_fail (GTK_IS_LIST_STORE (list_store));
@@ -1279,7 +1279,7 @@ gboolean
 gtk_list_store_iter_is_valid (GtkListStore *list_store,
                               GtkTreeIter  *iter)
 {
-  GtkListStorePriv *priv;
+  GtkListStorePrivate *priv;
 
   g_return_val_if_fail (GTK_IS_LIST_STORE (list_store), FALSE);
   g_return_val_if_fail (iter != NULL, FALSE);
@@ -1349,7 +1349,7 @@ gtk_list_store_drag_data_received (GtkTreeDragDest   *drag_dest,
 {
   GtkTreeModel *tree_model = GTK_TREE_MODEL (drag_dest);
   GtkListStore *list_store = GTK_LIST_STORE (tree_model);
-  GtkListStorePriv *priv = list_store->priv;
+  GtkListStorePrivate *priv = list_store->priv;
   GtkTreeModel *src_model = NULL;
   GtkTreePath *src_path = NULL;
   gboolean retval = FALSE;
@@ -1523,7 +1523,7 @@ void
 gtk_list_store_reorder (GtkListStore *store,
 			gint         *new_order)
 {
-  GtkListStorePriv *priv;
+  GtkListStorePrivate *priv;
   gint i;
   GtkTreePath *path;
   GHashTable *new_positions;
@@ -1618,7 +1618,7 @@ gtk_list_store_swap (GtkListStore *store,
 		     GtkTreeIter  *a,
 		     GtkTreeIter  *b)
 {
-  GtkListStorePriv *priv;
+  GtkListStorePrivate *priv;
   GHashTable *old_positions;
   gint *order;
   GtkTreePath *path;
@@ -1652,7 +1652,7 @@ gtk_list_store_move_to (GtkListStore *store,
 			GtkTreeIter  *iter,
 			gint	      new_pos)
 {
-  GtkListStorePriv *priv = store->priv;
+  GtkListStorePrivate *priv = store->priv;
   GHashTable *old_positions;
   GtkTreePath *path;
   gint *order;
@@ -1743,7 +1743,7 @@ gtk_list_store_compare_func (GSequenceIter *a,
 			     gpointer      user_data)
 {
   GtkListStore *list_store = user_data;
-  GtkListStorePriv *priv = list_store->priv;
+  GtkListStorePrivate *priv = list_store->priv;
   GtkTreeIter iter_a;
   GtkTreeIter iter_b;
   gint retval;
@@ -1793,7 +1793,7 @@ gtk_list_store_compare_func (GSequenceIter *a,
 static void
 gtk_list_store_sort (GtkListStore *list_store)
 {
-  GtkListStorePriv *priv = list_store->priv;
+  GtkListStorePrivate *priv = list_store->priv;
   gint *new_order;
   GtkTreePath *path;
   GHashTable *old_positions;
@@ -1845,7 +1845,7 @@ gtk_list_store_sort_iter_changed (GtkListStore *list_store,
 				  gint          column)
 
 {
-  GtkListStorePriv *priv = list_store->priv;
+  GtkListStorePrivate *priv = list_store->priv;
   GtkTreePath *path;
 
   path = gtk_list_store_get_path (GTK_TREE_MODEL (list_store), iter);
@@ -1876,7 +1876,7 @@ gtk_list_store_get_sort_column_id (GtkTreeSortable  *sortable,
 				   GtkSortType      *order)
 {
   GtkListStore *list_store = GTK_LIST_STORE (sortable);
-  GtkListStorePriv *priv = list_store->priv;
+  GtkListStorePrivate *priv = list_store->priv;
 
   if (sort_column_id)
     * sort_column_id = priv->sort_column_id;
@@ -1896,7 +1896,7 @@ gtk_list_store_set_sort_column_id (GtkTreeSortable  *sortable,
 				   GtkSortType       order)
 {
   GtkListStore *list_store = GTK_LIST_STORE (sortable);
-  GtkListStorePriv *priv = list_store->priv;
+  GtkListStorePrivate *priv = list_store->priv;
 
   if ((priv->sort_column_id == sort_column_id) &&
       (priv->order == order))
@@ -1938,7 +1938,7 @@ gtk_list_store_set_sort_func (GtkTreeSortable        *sortable,
 			      GDestroyNotify          destroy)
 {
   GtkListStore *list_store = GTK_LIST_STORE (sortable);
-  GtkListStorePriv *priv = list_store->priv;
+  GtkListStorePrivate *priv = list_store->priv;
 
   priv->sort_list = _gtk_tree_data_list_set_header (priv->sort_list, 
 							  sort_column_id, 
@@ -1955,7 +1955,7 @@ gtk_list_store_set_default_sort_func (GtkTreeSortable        *sortable,
 				      GDestroyNotify          destroy)
 {
   GtkListStore *list_store = GTK_LIST_STORE (sortable);
-  GtkListStorePriv *priv = list_store->priv;
+  GtkListStorePrivate *priv = list_store->priv;
 
   if (priv->default_sort_destroy)
     {
@@ -1977,7 +1977,7 @@ static gboolean
 gtk_list_store_has_default_sort_func (GtkTreeSortable *sortable)
 {
   GtkListStore *list_store = GTK_LIST_STORE (sortable);
-  GtkListStorePriv *priv = list_store->priv;
+  GtkListStorePrivate *priv = list_store->priv;
 
   return (priv->default_sort_func != NULL);
 }
@@ -2017,7 +2017,7 @@ gtk_list_store_insert_with_values (GtkListStore *list_store,
 				   gint          position,
 				   ...)
 {
-  GtkListStorePriv *priv;
+  GtkListStorePrivate *priv;
   GtkTreePath *path;
   GSequence *seq;
   GSequenceIter *ptr;
@@ -2096,7 +2096,7 @@ gtk_list_store_insert_with_valuesv (GtkListStore *list_store,
 				    GValue       *values,
 				    gint          n_values)
 {
-  GtkListStorePriv *priv;
+  GtkListStorePrivate *priv;
   GtkTreePath *path;
   GSequence *seq;
   GSequenceIter *ptr;

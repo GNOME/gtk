@@ -179,6 +179,7 @@ gtk_text_renderer_prepare_run (PangoRenderer  *renderer,
 			       PangoLayoutRun *run)
 {
   GtkTextRenderer *text_renderer = GTK_TEXT_RENDERER (renderer);
+  GtkStyle *style;
   GdkColor *bg_color, *fg_color, *underline_color;
   GtkTextAppearance *appearance;
 
@@ -194,15 +195,16 @@ gtk_text_renderer_prepare_run (PangoRenderer  *renderer,
   
   text_renderer_set_gdk_color (text_renderer, PANGO_RENDER_PART_BACKGROUND, bg_color);
 
+  style = gtk_widget_get_style (text_renderer->widget);
   if (text_renderer->state == SELECTED)
     {
       if (gtk_widget_has_focus (text_renderer->widget))
-	fg_color = &text_renderer->widget->style->text[GTK_STATE_SELECTED];
+	fg_color = &style->text[GTK_STATE_SELECTED];
       else
-	fg_color = &text_renderer->widget->style->text[GTK_STATE_ACTIVE];
+	fg_color = &style->text[GTK_STATE_ACTIVE];
     }
   else if (text_renderer->state == CURSOR && gtk_widget_has_focus (text_renderer->widget))
-    fg_color = &text_renderer->widget->style->base[GTK_STATE_NORMAL];
+    fg_color = &style->base[GTK_STATE_NORMAL];
   else
     fg_color = &appearance->fg_color;
 
@@ -352,20 +354,22 @@ gtk_text_renderer_draw_shape (PangoRenderer   *renderer,
 			      int              y)
 {
   GtkTextRenderer *text_renderer = GTK_TEXT_RENDERER (renderer);
+  GtkStyle *style;
   GdkColor *fg;
 
+  style = gtk_widget_get_style (text_renderer->widget);
   if (text_renderer->state == SELECTED)
     {
       if (gtk_widget_has_focus (text_renderer->widget))
-	fg = &text_renderer->widget->style->text[GTK_STATE_SELECTED];
+	fg = &style->text[GTK_STATE_SELECTED];
       else
-	fg = &text_renderer->widget->style->text[GTK_STATE_SELECTED];
+	fg = &style->text[GTK_STATE_SELECTED];
     }
   else if (text_renderer->state == CURSOR && gtk_widget_has_focus (text_renderer->widget))
-    fg = &text_renderer->widget->style->base[GTK_STATE_NORMAL];
+    fg = &style->base[GTK_STATE_NORMAL];
   else
-    fg = &text_renderer->widget->style->text[GTK_STATE_NORMAL];
-  
+    fg = &style->text[GTK_STATE_NORMAL];
+
   if (attr->data == NULL)
     {
       /* This happens if we have an empty widget anchor. Draw
@@ -537,6 +541,7 @@ render_para (GtkTextRenderer    *text_renderer,
              int                 selection_start_index,
              int                 selection_end_index)
 {
+  GtkStyle *style;
   PangoLayout *layout = line_display->layout;
   int byte_offset = 0;
   PangoLayoutIter *iter;
@@ -544,8 +549,9 @@ render_para (GtkTextRenderer    *text_renderer,
   int screen_width;
   GdkColor *selection;
   gint state;
-  
   gboolean first = TRUE;
+
+  style = gtk_widget_get_style (text_renderer->widget);
 
   iter = pango_layout_get_iter (layout);
 
@@ -563,7 +569,7 @@ render_para (GtkTextRenderer    *text_renderer,
   else
     state = GTK_STATE_ACTIVE;
 
-  selection = &text_renderer->widget->style->base [state];
+  selection = &style->base [state];
 
   do
     {
@@ -752,8 +758,12 @@ render_para (GtkTextRenderer    *text_renderer,
 	      /* draw text under the cursor if any */
 	      if (!line_display->cursor_at_line_end)
 		{
-                  gdk_cairo_set_source_color (cr,
-                                              &text_renderer->widget->style->base[text_renderer->widget->state]);
+                  GtkStateType state;
+                  GtkStyle *style;
+
+                  style = gtk_widget_get_style (text_renderer->widget);
+                  state = gtk_widget_get_state (text_renderer->widget);
+                  gdk_cairo_set_source_color (cr, &style->base[state]);
 
 		  text_renderer_set_state (text_renderer, CURSOR);
 
@@ -841,7 +851,7 @@ gtk_text_layout_draw (GtkTextLayout *layout,
   clip.width = width;
   clip.height = height;
 
-  gdk_cairo_set_source_color (cr, &widget->style->text[widget->state]);
+  gdk_cairo_set_source_color (cr, &gtk_widget_get_style (widget)->text[gtk_widget_get_state (widget)]);
 
   text_renderer = get_text_renderer ();
   text_renderer_begin (text_renderer, widget, cr);

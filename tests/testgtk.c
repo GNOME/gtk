@@ -131,18 +131,21 @@ static gboolean
 on_alpha_window_expose (GtkWidget      *widget,
 			GdkEventExpose *expose)
 {
+  GtkAllocation allocation;
   cairo_t *cr;
   cairo_pattern_t *pattern;
   int radius;
 
-  cr = gdk_cairo_create (widget->window);
+  cr = gdk_cairo_create (gtk_widget_get_window (widget));
 
-  radius = MIN (widget->allocation.width, widget->allocation.height) / 2;
-  pattern = cairo_pattern_create_radial (widget->allocation.width / 2,
-					 widget->allocation.height / 2,
+  gtk_widget_get_allocation (widget, &allocation);
+
+  radius = MIN (allocation.width, allocation.height) / 2;
+  pattern = cairo_pattern_create_radial (allocation.width / 2,
+                                         allocation.height / 2,
 					 0.0,
-					 widget->allocation.width / 2,
-					 widget->allocation.height / 2,
+                                         allocation.width / 2,
+                                         allocation.height / 2,
 					 radius * 1.33);
 
   if (gdk_screen_get_rgba_colormap (gtk_widget_get_screen (widget)) &&
@@ -357,7 +360,7 @@ transparent_expose (GtkWidget *widget,
 {
   cairo_t *cr;
 
-  cr = gdk_cairo_create (widget->window);
+  cr = gdk_cairo_create (gtk_widget_get_window (widget));
   cairo_set_operator (cr, CAIRO_OPERATOR_CLEAR);
   gdk_cairo_region (cr, event->region);
   cairo_fill (cr);
@@ -381,6 +384,7 @@ static gboolean
 window_expose_event (GtkWidget *widget,
                      GdkEventExpose *event)
 {
+  GtkAllocation allocation;
   cairo_region_t *region;
   GtkWidget *child;
   cairo_t *cr;
@@ -389,15 +393,17 @@ window_expose_event (GtkWidget *widget,
   child = gtk_bin_get_child (GTK_BIN (widget));
 
   /* create a cairo context to draw to the window */
-  cr = gdk_cairo_create (widget->window);
+  cr = gdk_cairo_create (gtk_widget_get_window (widget));
+
+  gtk_widget_get_allocation (child, &allocation);
 
   /* the source data is the (composited) event box */
-  gdk_cairo_set_source_pixmap (cr, child->window,
-                               child->allocation.x,
-                               child->allocation.y);
+  gdk_cairo_set_source_pixmap (cr, gtk_widget_get_window (child),
+                               allocation.x,
+                               allocation.y);
 
   /* draw no more than our expose event intersects our child */
-  region = cairo_region_create_rectangle (&child->allocation);
+  region = cairo_region_create_rectangle (&allocation);
   cairo_region_intersect (region, event->region);
   gdk_cairo_region (cr, region);
   cairo_clip (cr);
@@ -463,7 +469,8 @@ create_composited_window (GtkWidget *widget)
       /* set the event box GdkWindow to be composited.
        * obviously must be performed after event box is realised.
        */
-      gdk_window_set_composited (event->window, TRUE);
+      gdk_window_set_composited (gtk_widget_get_window (event),
+                                 TRUE);
 
       /* set up the compositing handler.
        * note that we do _after so that the normal (red) background is drawn
@@ -586,7 +593,8 @@ pattern_hadj_changed (GtkAdjustment *adj,
 
   if (gtk_widget_get_realized (darea))
     {
-      gdk_window_scroll (darea->window, *old_value - new_value, 0);
+      gdk_window_scroll (gtk_widget_get_window (darea),
+                         *old_value - new_value, 0);
       *old_value = new_value;
     }
 }
@@ -600,7 +608,8 @@ pattern_vadj_changed (GtkAdjustment *adj,
 
   if (gtk_widget_get_realized (darea))
     {
-      gdk_window_scroll (darea->window, 0, *old_value - new_value);
+      gdk_window_scroll (gtk_widget_get_window (darea),
+                         0, *old_value - new_value);
       *old_value = new_value;
     }
 }
@@ -609,8 +618,11 @@ static void
 pattern_realize (GtkWidget *widget,
 		 gpointer   data)
 {
-  pattern_set_bg (widget, widget->window, 0);
-  create_pattern (widget, widget->window, 1, PATTERN_SIZE, PATTERN_SIZE);
+  GdkWindow *window;
+
+  window = gtk_widget_get_window (widget);
+  pattern_set_bg (widget, window, 0);
+  create_pattern (widget, window, 1, PATTERN_SIZE, PATTERN_SIZE);
 }
 
 static void 
@@ -1430,8 +1442,8 @@ create_toolbar (GtkWidget *widget)
             {
               GtkWidget *icon;
 
-              icon = new_pixbuf ("test.xpm", window->window,
-                                 &window->style->bg[GTK_STATE_NORMAL]);
+              icon = new_pixbuf ("test.xpm", gtk_widget_get_window (window),
+                                 &gtk_widget_get_style (window)->bg[GTK_STATE_NORMAL]);
               toolitem = gtk_tool_button_new (icon, create_toolbar_items[i].label);
             }
           if (create_toolbar_items[i].callback)
@@ -1501,8 +1513,8 @@ make_toolbar (GtkWidget *window)
           toolitem = gtk_separator_tool_item_new ();
           continue;
         }
-      icon  = new_pixbuf ("test.xpm", window->window,
-                          &window->style->bg[GTK_STATE_NORMAL]);
+      icon  = new_pixbuf ("test.xpm", gtk_widget_get_window (window),
+                          &gtk_widget_get_style (window)->bg[GTK_STATE_NORMAL]);
       toolitem = gtk_tool_button_new (icon, make_toolbar_items[i].label);
       gtk_tool_item_set_tooltip_text (toolitem, make_toolbar_items[i].tooltip);
       if (make_toolbar_items[i].callback != NULL)
@@ -1705,23 +1717,30 @@ static gboolean
 gridded_geometry_expose (GtkWidget      *widget,
 			 GdkEventExpose *event)
 {
-  int i, j;
+  GtkAllocation allocation;
+  GtkStateType state;
+  GtkStyle *style;
   cairo_t *cr;
+  int i, j;
 
-  cr = gdk_cairo_create (widget->window);
+  gtk_widget_get_allocation (widget, &allocation);
+  style = gtk_widget_get_style (widget);
+  state = gtk_widget_get_state (widget);
 
-  cairo_rectangle (cr, 0, 0, widget->allocation.width, widget->allocation.height);
-  gdk_cairo_set_source_color (cr, &widget->style->base[widget->state]);
+  cr = gdk_cairo_create (gtk_widget_get_window (widget));
+
+  cairo_rectangle (cr, 0, 0, allocation.width, allocation.height);
+  gdk_cairo_set_source_color (cr, &style->base[state]);
   cairo_fill (cr);
-  
-  for (i = 0 ; i * GRID_SIZE < widget->allocation.width; i++)
-    for (j = 0 ; j * GRID_SIZE < widget->allocation.height; j++)
+
+  for (i = 0 ; i * GRID_SIZE < allocation.width; i++)
+    for (j = 0 ; j * GRID_SIZE < allocation.height; j++)
       {
 	if ((i + j) % 2 == 0)
 	  cairo_rectangle (cr, i * GRID_SIZE, j * GRID_SIZE, GRID_SIZE, GRID_SIZE);
       }
 
-  gdk_cairo_set_source_color (cr, &widget->style->text[widget->state]);
+  gdk_cairo_set_source_color (cr, &style->text[state]);
   cairo_fill (cr);
 
   cairo_destroy (cr);
@@ -2351,6 +2370,7 @@ on_rotated_text_expose (GtkWidget      *widget,
 			GdkEventExpose *event,
 			GdkPixbuf      *tile_pixbuf)
 {
+  GtkAllocation allocation;
   static const gchar *words[] = { "The", "grand", "old", "Duke", "of", "York",
                                   "had", "10,000", "men" };
   int n_words;
@@ -2371,11 +2391,13 @@ on_rotated_text_expose (GtkWidget      *widget,
   else
     cairo_set_source_rgb (cr, 0, 0, 0);
 
-  radius = MIN (widget->allocation.width, widget->allocation.height) / 2.;
+  gtk_widget_get_allocation (widget, &allocation);
+
+  radius = MIN (allocation.width, allocation.height) / 2.;
 
   cairo_translate (cr,
-                   radius + (widget->allocation.width - 2 * radius) / 2,
-                   radius + (widget->allocation.height - 2 * radius) / 2);
+                   radius + (allocation.width - 2 * radius) / 2,
+                   radius + (allocation.height - 2 * radius) / 2);
   cairo_scale (cr, radius / DEFAULT_TEXT_RADIUS, radius / DEFAULT_TEXT_RADIUS);
 
   context = gtk_widget_get_pango_context (widget);
@@ -2484,9 +2506,12 @@ set_parent_signal (GtkWidget *child,
 		   GtkWidget *old_parent,
 		   gpointer   func_data)
 {
+  GtkWidget *parent;
+
+  parent = gtk_widget_get_parent (child);
   g_message ("set_parent for \"%s\": new parent: \"%s\", old parent: \"%s\", data: %d\n",
              g_type_name (G_OBJECT_TYPE (child)),
-             child->parent ? g_type_name (G_OBJECT_TYPE (child->parent)) : "NULL",
+             parent ? g_type_name (G_OBJECT_TYPE (parent)) : "NULL",
              old_parent ? g_type_name (G_OBJECT_TYPE (old_parent)) : "NULL",
              GPOINTER_TO_INT (func_data));
 }
@@ -2612,16 +2637,18 @@ grippy_button_press (GtkWidget *area, GdkEventButton *event, GdkWindowEdge edge)
 static gboolean
 grippy_expose (GtkWidget *area, GdkEventExpose *event, GdkWindowEdge edge)
 {
-  gtk_paint_resize_grip (area->style,
-			 area->window,
+  GtkAllocation allocation;
+
+  gtk_widget_get_allocation (area, &allocation);
+  gtk_paint_resize_grip (gtk_widget_get_style (area),
+                         gtk_widget_get_window (area),
 			 gtk_widget_get_state (area),
 			 &event->area,
 			 area,
 			 "statusbar",
 			 edge,
 			 0, 0,
-			 area->allocation.width,
-			 area->allocation.height);
+                         allocation.width, allocation.height);
 
   return TRUE;
 }
@@ -2756,7 +2783,8 @@ uposition_configure (GtkWidget *window)
   lx = g_object_get_data (G_OBJECT (window), "x");
   ly = g_object_get_data (G_OBJECT (window), "y");
 
-  gdk_window_get_root_origin (window->window, &upositionx, &upositiony);
+  gdk_window_get_root_origin (gtk_widget_get_window (window),
+                              &upositionx, &upositiony);
   sprintf (buffer, "%d", upositionx);
   gtk_label_set_text (lx, buffer);
   sprintf (buffer, "%d", upositiony);
@@ -2891,6 +2919,7 @@ create_pixbuf (GtkWidget *widget)
   GtkWidget *label;
   GtkWidget *separator;
   GtkWidget *pixbufwid;
+  GdkWindow *gdk_window;
 
   if (!window)
     {
@@ -2917,7 +2946,9 @@ create_pixbuf (GtkWidget *widget)
       button = gtk_button_new ();
       gtk_box_pack_start (GTK_BOX (box2), button, FALSE, FALSE, 0);
 
-      pixbufwid = new_pixbuf ("test.xpm", window->window, NULL);
+      gdk_window = gtk_widget_get_window (window);
+
+      pixbufwid = new_pixbuf ("test.xpm", gdk_window, NULL);
 
       label = gtk_label_new ("Pixbuf\ntest");
       box3 = gtk_hbox_new (FALSE, 0);
@@ -2928,8 +2959,8 @@ create_pixbuf (GtkWidget *widget)
 
       button = gtk_button_new ();
       gtk_box_pack_start (GTK_BOX (box2), button, FALSE, FALSE, 0);
-      
-      pixbufwid = new_pixbuf ("test.xpm", window->window, NULL);
+
+      pixbufwid = new_pixbuf ("test.xpm", gdk_window, NULL);
 
       label = gtk_label_new ("Pixbuf\ntest");
       box3 = gtk_hbox_new (FALSE, 0);
@@ -3962,7 +3993,7 @@ scrolled_windows_remove (GtkWidget *widget, GtkWidget *scrollwin)
     }
   else
     {
-      sw_parent = scrollwin->parent;
+      sw_parent = gtk_widget_get_parent (scrollwin);
       sw_float_parent = gtk_window_new (GTK_WINDOW_TOPLEVEL);
       gtk_window_set_screen (GTK_WINDOW (sw_float_parent),
 			     gtk_widget_get_screen (widget));
@@ -4999,6 +5030,7 @@ cursor_expose_event (GtkWidget *widget,
 		     GdkEvent  *event,
 		     gpointer   user_data)
 {
+  GtkAllocation allocation;
   GtkDrawingArea *darea;
   GdkDrawable *drawable;
   guint max_width;
@@ -5009,9 +5041,11 @@ cursor_expose_event (GtkWidget *widget,
   g_return_val_if_fail (GTK_IS_DRAWING_AREA (widget), TRUE);
 
   darea = GTK_DRAWING_AREA (widget);
-  drawable = widget->window;
-  max_width = widget->allocation.width;
-  max_height = widget->allocation.height;
+  drawable = gtk_widget_get_window (widget);
+
+  gtk_widget_get_allocation (widget, &allocation);
+  max_width = allocation.width;
+  max_height = allocation.height;
 
   cr = gdk_cairo_create (drawable);
 
@@ -5023,7 +5057,7 @@ cursor_expose_event (GtkWidget *widget,
   cairo_rectangle (cr, 0, max_height / 2, max_width, max_height / 2);
   cairo_fill (cr);
 
-  gdk_cairo_set_source_color (cr, &widget->style->bg[GTK_STATE_NORMAL]);
+  gdk_cairo_set_source_color (cr, &gtk_widget_get_style (widget)->bg[GTK_STATE_NORMAL]);
   cairo_rectangle (cr, max_width / 3, max_height / 3, max_width / 3, max_height / 3);
   cairo_fill (cr);
 
@@ -5060,7 +5094,8 @@ set_cursor (GtkWidget *spinner,
   g_type_class_unref (class);
 
   cursor = gdk_cursor_new_for_display (gtk_widget_get_display (widget), c);
-  gdk_window_set_cursor (widget->window, cursor);
+  gdk_window_set_cursor (gtk_widget_get_window (widget),
+                         cursor);
   gdk_cursor_unref (cursor);
 }
 
@@ -7212,7 +7247,7 @@ shape_pressed (GtkWidget *widget, GdkEventButton *event)
   p->y = (int) event->y;
 
   gtk_grab_add (widget);
-  gdk_pointer_grab (widget->window, TRUE,
+  gdk_pointer_grab (gtk_widget_get_window (widget), TRUE,
 		    GDK_BUTTON_RELEASE_MASK |
 		    GDK_BUTTON_MOTION_MASK |
 		    GDK_POINTER_MOTION_HINT_MASK,
@@ -7404,7 +7439,7 @@ create_shapes (GtkWidget *widget)
           x += 20;
         }
 
-      gdk_window_shape_combine_region (with_region->window,
+      gdk_window_shape_combine_region (gtk_widget_get_window (with_region),
                                        region,
                                        0, 0);
     }
@@ -7426,6 +7461,7 @@ create_wmhints (GtkWidget *widget)
   GtkWidget *box1;
   GtkWidget *box2;
   GdkBitmap *circles;
+  GdkWindow *gdk_window;
   cairo_surface_t *image;
   cairo_t *cr;
 
@@ -7444,8 +7480,9 @@ create_wmhints (GtkWidget *widget)
       gtk_container_set_border_width (GTK_CONTAINER (window), 0);
 
       gtk_widget_realize (window);
-      
-      circles = gdk_pixmap_new (window->window, circles_width, circles_height, 1);
+
+      gdk_window = gtk_widget_get_window (window);
+      circles = gdk_pixmap_new (gdk_window, circles_width, circles_height, 1);
       cr = gdk_cairo_create (circles);
       image = cairo_image_surface_create_for_data (circles_bits, CAIRO_FORMAT_A1,
                                                    circles_width, circles_height,
@@ -7456,14 +7493,14 @@ create_wmhints (GtkWidget *widget)
       cairo_paint (cr);
       cairo_destroy (cr);
 
-      gdk_window_set_icon (window->window, NULL,
+      gdk_window_set_icon (gdk_window, NULL,
 			   circles, circles);
-      
-      gdk_window_set_icon_name (window->window, "WMHints Test Icon");
-  
-      gdk_window_set_decorations (window->window, GDK_DECOR_ALL | GDK_DECOR_MENU);
-      gdk_window_set_functions (window->window, GDK_FUNC_ALL | GDK_FUNC_RESIZE);
-      
+
+      gdk_window_set_icon_name (gdk_window, "WMHints Test Icon");
+
+      gdk_window_set_decorations (gdk_window, GDK_DECOR_ALL | GDK_DECOR_MENU);
+      gdk_window_set_functions (gdk_window, GDK_FUNC_ALL | GDK_FUNC_RESIZE);
+
       box1 = gtk_vbox_new (FALSE, 0);
       gtk_container_add (GTK_CONTAINER (window), box1);
       gtk_widget_show (box1);
@@ -7516,7 +7553,7 @@ window_state_callback (GtkWidget *widget,
   GtkWidget *label = data;
   gchar *msg;
 
-  msg = g_strconcat (GTK_WINDOW (widget)->title, ": ",
+  msg = g_strconcat (gtk_window_get_title (GTK_WINDOW (widget)), ": ",
                      (event->new_window_state & GDK_WINDOW_STATE_WITHDRAWN) ?
                      "withdrawn" : "not withdrawn", ", ",
                      (event->new_window_state & GDK_WINDOW_STATE_ICONIFIED) ?
@@ -8749,7 +8786,7 @@ find_widget (GtkWidget *widget, FindWidgetData *data)
   gint x_offset = 0;
   gint y_offset = 0;
 
-  new_allocation = widget->allocation;
+  gtk_widget_get_allocation (widget, &new_allocation);
 
   if (data->found || !gtk_widget_get_mapped (widget))
     return;
@@ -8765,11 +8802,11 @@ find_widget (GtkWidget *widget, FindWidgetData *data)
       new_allocation.x = 0;
       new_allocation.y = 0;
     }
-  
-  if (widget->parent && !data->first)
+
+  if (gtk_widget_get_parent (widget) && !data->first)
     {
-      GdkWindow *window = widget->window;
-      while (window != widget->parent->window)
+      GdkWindow *window = gtk_widget_get_window (widget);
+      while (window != gtk_widget_get_window (gtk_widget_get_parent (widget)))
 	{
 	  gint tx, ty, twidth, theight;
 	  gdk_drawable_get_size (window, &twidth, &theight);
@@ -8794,7 +8831,7 @@ find_widget (GtkWidget *widget, FindWidgetData *data)
 	  x_offset += tx;
 	  new_allocation.y += ty;
 	  y_offset += ty;
-	  
+
 	  window = gdk_window_get_parent (window);
 	}
     }
@@ -8856,7 +8893,7 @@ find_widget_at_pointer (GdkDisplay *display)
 
  if (widget)
    {
-     gdk_window_get_pointer (widget->window,
+     gdk_window_get_pointer (gtk_widget_get_window (widget),
 			     &x, &y, NULL);
      
      data.x = x;
@@ -8938,6 +8975,7 @@ static void
 query_properties (GtkButton *button,
 		  struct PropertiesData *data)
 {
+  GtkWidget *widget = GTK_WIDGET (button);
   gint failure;
 
   g_signal_connect (button, "event",
@@ -8945,17 +8983,17 @@ query_properties (GtkButton *button,
 
 
   if (!data->cursor)
-    data->cursor = gdk_cursor_new_for_display (gtk_widget_get_display (GTK_WIDGET (button)),
+    data->cursor = gdk_cursor_new_for_display (gtk_widget_get_display (widget),
 					       GDK_TARGET);
-  
-  failure = gdk_pointer_grab (GTK_WIDGET (button)->window,
+
+  failure = gdk_pointer_grab (gtk_widget_get_window (widget),
 			      TRUE,
 			      GDK_BUTTON_RELEASE_MASK,
 			      NULL,
 			      data->cursor,
 			      GDK_CURRENT_TIME);
 
-  gtk_grab_add (GTK_WIDGET (button));
+  gtk_grab_add (widget);
 
   data->in_query = TRUE;
 }
@@ -9067,7 +9105,7 @@ snapshot_widget_event (GtkWidget	       *widget,
 	  window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
 	  pixmap = gtk_widget_get_snapshot (res_widget, NULL);
           gtk_widget_realize (window);
-          if (gdk_drawable_get_depth (window->window) != gdk_drawable_get_depth (pixmap))
+          if (gdk_drawable_get_depth (gtk_widget_get_window (window)) != gdk_drawable_get_depth (pixmap))
             {
               /* this branch is needed to convert ARGB -> RGB */
               int width, height;
@@ -9098,25 +9136,26 @@ static void
 snapshot_widget (GtkButton *button,
 		 struct SnapshotData *data)
 {
+  GtkWidget *widget = GTK_WIDGET (button);
   gint failure;
 
   g_signal_connect (button, "event",
 		    G_CALLBACK (snapshot_widget_event), data);
 
-  data->is_toplevel = GTK_WIDGET (button) == data->toplevel_button;
-  
+  data->is_toplevel = widget == data->toplevel_button;
+
   if (!data->cursor)
-    data->cursor = gdk_cursor_new_for_display (gtk_widget_get_display (GTK_WIDGET (button)),
+    data->cursor = gdk_cursor_new_for_display (gtk_widget_get_display (widget),
 					       GDK_TARGET);
-  
-  failure = gdk_pointer_grab (GTK_WIDGET (button)->window,
+
+  failure = gdk_pointer_grab (gtk_widget_get_window (widget),
 			      TRUE,
 			      GDK_BUTTON_RELEASE_MASK,
 			      NULL,
 			      data->cursor,
 			      GDK_CURRENT_TIME);
 
-  gtk_grab_add (GTK_WIDGET (button));
+  gtk_grab_add (widget);
 
   data->in_query = TRUE;
 }
@@ -9328,6 +9367,7 @@ static gint
 scroll_test_expose (GtkWidget *widget, GdkEventExpose *event,
 		    GtkAdjustment *adj)
 {
+  GdkWindow *window;
   gint i,j;
   gint imin, imax, jmin, jmax;
   cairo_t *cr;
@@ -9338,11 +9378,13 @@ scroll_test_expose (GtkWidget *widget, GdkEventExpose *event,
   jmin = ((int)adj->value + event->area.y) / 10;
   jmax = ((int)adj->value + event->area.y + event->area.height + 9) / 10;
 
-  gdk_window_clear_area (widget->window,
+  window = gtk_widget_get_window (widget);
+
+  gdk_window_clear_area (window,
 			 event->area.x, event->area.y,
 			 event->area.width, event->area.height);
 
-  cr = gdk_cairo_create (widget->window);
+  cr = gdk_cairo_create (window);
 
   for (i=imin; i<imax; i++)
     for (j=jmin; j<jmax; j++)
@@ -9373,8 +9415,11 @@ static void
 scroll_test_configure (GtkWidget *widget, GdkEventConfigure *event,
 		       GtkAdjustment *adj)
 {
-  adj->page_increment = 0.9 * widget->allocation.height;
-  adj->page_size = widget->allocation.height;
+  GtkAllocation allocation;
+
+  gtk_widget_get_allocation (widget, &allocation);
+  adj->page_increment = 0.9 * allocation.height;
+  adj->page_size = allocation.height;
 
   g_signal_emit_by_name (adj, "changed");
 }
@@ -9382,7 +9427,7 @@ scroll_test_configure (GtkWidget *widget, GdkEventConfigure *event,
 static void
 scroll_test_adjustment_changed (GtkAdjustment *adj, GtkWidget *widget)
 {
-  /* gint source_min = (int)adj->value - scroll_test_pos; */
+  GdkWindow *window;
   gint dy;
 
   dy = scroll_test_pos - (int)adj->value;
@@ -9390,8 +9435,10 @@ scroll_test_adjustment_changed (GtkAdjustment *adj, GtkWidget *widget)
 
   if (!gtk_widget_is_drawable (widget))
     return;
-  gdk_window_scroll (widget->window, 0, dy);
-  gdk_window_process_updates (widget->window, FALSE);
+
+  window = gtk_widget_get_window (widget);
+  gdk_window_scroll (window, 0, dy);
+  gdk_window_process_updates (window, FALSE);
 }
 
 

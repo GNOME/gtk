@@ -447,7 +447,7 @@ preview_expose (GtkWidget      *widget,
 {
   PreviewOp *pop = data;
 
-  gdk_window_clear (pop->area->window);
+  gdk_window_clear (gtk_widget_get_window (pop->area));
   gtk_print_operation_preview_render_page (pop->preview,
 					   pop->page - 1);
 
@@ -481,6 +481,7 @@ preview_got_page_size (GtkPrintOperationPreview *preview,
 		       gpointer                  data)
 {
   PreviewOp *pop = data;
+  GtkAllocation allocation;
   GtkPaperSize *paper_size;
   double w, h;
   cairo_t *cr;
@@ -491,10 +492,11 @@ preview_got_page_size (GtkPrintOperationPreview *preview,
   w = gtk_paper_size_get_width (paper_size, GTK_UNIT_INCH);
   h = gtk_paper_size_get_height (paper_size, GTK_UNIT_INCH);
 
-  cr = gdk_cairo_create (pop->area->window);
+  cr = gdk_cairo_create (gtk_widget_get_window (pop->area));
 
-  dpi_x = pop->area->allocation.width/w;
-  dpi_y = pop->area->allocation.height/h;
+  gtk_widget_get_allocation (pop->area, &allocation);
+  dpi_x = allocation.width/w;
+  dpi_y = allocation.height/h;
 
   if (fabs (dpi_x - pop->dpi_x) > 0.001 ||
       fabs (dpi_y - pop->dpi_y) > 0.001)
@@ -570,8 +572,8 @@ preview_cb (GtkPrintOperation        *op,
   gtk_widget_set_double_buffered (da, FALSE);
 
   gtk_widget_realize (da);
-  
-  cr = gdk_cairo_create (da->window);
+
+  cr = gdk_cairo_create (gtk_widget_get_window (da));
 
   /* TODO: What dpi to use here? This will be used for pagination.. */
   gtk_print_context_set_cairo_context (context, cr, 72, 72);

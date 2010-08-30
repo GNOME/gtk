@@ -50,7 +50,7 @@
 
 
 
-struct _GtkAspectFramePriv
+struct _GtkAspectFramePrivate
 {
   GtkAllocation center_allocation;
 
@@ -128,17 +128,17 @@ gtk_aspect_frame_class_init (GtkAspectFrameClass *class)
                                                          TRUE,
                                                          GTK_PARAM_READWRITE));
 
-  g_type_class_add_private (class, sizeof (GtkAspectFramePriv));
+  g_type_class_add_private (class, sizeof (GtkAspectFramePrivate));
 }
 
 static void
 gtk_aspect_frame_init (GtkAspectFrame *aspect_frame)
 {
-  GtkAspectFramePriv *priv;
+  GtkAspectFramePrivate *priv;
 
   aspect_frame->priv = G_TYPE_INSTANCE_GET_PRIVATE (aspect_frame,
                                                     GTK_TYPE_ASPECT_FRAME,
-                                                    GtkAspectFramePriv);
+                                                    GtkAspectFramePrivate);
   priv = aspect_frame->priv;
 
   priv->xalign = 0.5;
@@ -154,7 +154,7 @@ gtk_aspect_frame_set_property (GObject         *object,
 			       GParamSpec      *pspec)
 {
   GtkAspectFrame *aspect_frame = GTK_ASPECT_FRAME (object);
-  GtkAspectFramePriv *priv = aspect_frame->priv;
+  GtkAspectFramePrivate *priv = aspect_frame->priv;
   
   switch (prop_id)
     {
@@ -200,7 +200,7 @@ gtk_aspect_frame_get_property (GObject         *object,
 			       GParamSpec      *pspec)
 {
   GtkAspectFrame *aspect_frame = GTK_ASPECT_FRAME (object);
-  GtkAspectFramePriv *priv = aspect_frame->priv;
+  GtkAspectFramePrivate *priv = aspect_frame->priv;
   
   switch (prop_id)
     {
@@ -247,7 +247,7 @@ gtk_aspect_frame_new (const gchar *label,
 		      gboolean     obey_child)
 {
   GtkAspectFrame *aspect_frame;
-  GtkAspectFramePriv *priv;
+  GtkAspectFramePrivate *priv;
 
   aspect_frame = g_object_new (GTK_TYPE_ASPECT_FRAME, NULL);
 
@@ -285,7 +285,7 @@ gtk_aspect_frame_set (GtkAspectFrame *aspect_frame,
 		      gfloat          ratio,
 		      gboolean        obey_child)
 {
-  GtkAspectFramePriv *priv;
+  GtkAspectFramePrivate *priv;
 
   g_return_if_fail (GTK_IS_ASPECT_FRAME (aspect_frame));
 
@@ -334,7 +334,7 @@ gtk_aspect_frame_compute_child_allocation (GtkFrame      *frame,
 					   GtkAllocation *child_allocation)
 {
   GtkAspectFrame *aspect_frame = GTK_ASPECT_FRAME (frame);
-  GtkAspectFramePriv *priv = aspect_frame->priv;
+  GtkAspectFramePrivate *priv = aspect_frame->priv;
   GtkBin *bin = GTK_BIN (frame);
   GtkWidget *child;
   gdouble ratio;

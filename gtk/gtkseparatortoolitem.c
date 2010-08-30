@@ -89,8 +89,10 @@ static gint
 get_space_size (GtkToolItem *tool_item)
 {
   gint space_size = _gtk_toolbar_get_default_space_size();
-  GtkWidget *parent = GTK_WIDGET (tool_item)->parent;
-  
+  GtkWidget *parent;
+
+  parent = gtk_widget_get_parent (GTK_WIDGET (tool_item));
+
   if (GTK_IS_TOOLBAR (parent))
     {
       gtk_widget_style_get (parent,
@@ -236,32 +238,36 @@ gtk_separator_tool_item_size_allocate (GtkWidget     *widget,
   GtkSeparatorToolItem *separator = GTK_SEPARATOR_TOOL_ITEM (widget);
   GtkSeparatorToolItemPrivate *priv = separator->priv;
 
-  widget->allocation = *allocation;
+  gtk_widget_set_allocation (widget, allocation);
 
   if (gtk_widget_get_realized (widget))
     gdk_window_move_resize (priv->event_window,
-                            widget->allocation.x,
-                            widget->allocation.y,
-                            widget->allocation.width,
-                            widget->allocation.height);
+                            allocation->x,
+                            allocation->y,
+                            allocation->width,
+                            allocation->height);
 
 }
 
 static void
 gtk_separator_tool_item_realize (GtkWidget *widget)
 {
+  GtkAllocation allocation;
   GtkSeparatorToolItem *separator = GTK_SEPARATOR_TOOL_ITEM (widget);
   GtkSeparatorToolItemPrivate *priv = separator->priv;
+  GdkWindow *window;
   GdkWindowAttr attributes;
   gint attributes_mask;
 
   gtk_widget_set_realized (widget, TRUE);
 
+  gtk_widget_get_allocation (widget, &allocation);
+
   attributes.window_type = GDK_WINDOW_CHILD;
-  attributes.x = widget->allocation.x;
-  attributes.y = widget->allocation.y;
-  attributes.width = widget->allocation.width;
-  attributes.height = widget->allocation.height;
+  attributes.x = allocation.x;
+  attributes.y = allocation.y;
+  attributes.width = allocation.width;
+  attributes.height = allocation.height;
   attributes.wclass = GDK_INPUT_ONLY;
   attributes.visual = gtk_widget_get_visual (widget);
   attributes.colormap = gtk_widget_get_colormap (widget);
@@ -270,14 +276,15 @@ gtk_separator_tool_item_realize (GtkWidget *widget)
                           GDK_BUTTON_RELEASE_MASK;
   attributes_mask = GDK_WA_X | GDK_WA_Y;
 
-  widget->window = gtk_widget_get_parent_window (widget);
-  g_object_ref (widget->window);
+  window = gtk_widget_get_parent_window (widget);
+  gtk_widget_set_window (widget, window);
+  g_object_ref (window);
 
   priv->event_window = gdk_window_new (gtk_widget_get_parent_window (widget),
                                        &attributes, attributes_mask);
   gdk_window_set_user_data (priv->event_window, widget);
 
-  widget->style = gtk_style_attach (widget->style, widget->window);
+  gtk_widget_style_attach (widget);
 }
 
 static void
@@ -337,17 +344,21 @@ static gboolean
 gtk_separator_tool_item_expose (GtkWidget      *widget,
                                 GdkEventExpose *event)
 {
+  GtkAllocation allocation;
   GtkToolbar *toolbar = NULL;
   GtkSeparatorToolItem *separator = GTK_SEPARATOR_TOOL_ITEM (widget);
   GtkSeparatorToolItemPrivate *priv = separator->priv;
+  GtkWidget *parent;
 
   if (priv->draw)
     {
-      if (GTK_IS_TOOLBAR (widget->parent))
-        toolbar = GTK_TOOLBAR (widget->parent);
+      parent = gtk_widget_get_parent (widget);
+      if (GTK_IS_TOOLBAR (parent))
+        toolbar = GTK_TOOLBAR (parent);
 
+      gtk_widget_get_allocation (widget, &allocation);
       _gtk_toolbar_paint_space_line (widget, toolbar,
-                                     &(event->area), &widget->allocation);
+                                     &(event->area), &allocation);
     }
 
   return FALSE;

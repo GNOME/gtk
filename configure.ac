@@ -257,13 +257,13 @@ else
   gdktarget=x11
 fi
 
-AC_ARG_WITH(gdktarget, [  --with-gdktarget=[[x11/win32/quartz/directfb]] select non-default GDK target],
+AC_ARG_WITH(gdktarget, [  --with-gdktarget=[[x11/win32/quartz]] select non-default GDK target],
 	gdktarget=$with_gdktarget)
 
 AC_SUBST(gdktarget)
 case $gdktarget in
-  x11|win32|quartz|directfb) ;;
-  *) AC_MSG_ERROR([Invalid target for GDK: use x11, quartz, directfb or win32.]);;
+  x11|win32|quartz) ;;
+  *) AC_MSG_ERROR([Invalid target for GDK: use x11, quartz or win32.]);;
 esac
 
 gdktargetlib=libgdk-$gdktarget-$GTK_API_VERSION.la
@@ -1248,17 +1248,6 @@ else
   AM_CONDITIONAL(USE_QUARTZ, false)
 fi
 
-if test "x$gdktarget" = "xdirectfb"; then
-  DIRECTFB_REQUIRED_VERSION=1.0.0
-  AC_MSG_CHECKING(for DirectFB)
-
-  PKG_CHECK_MODULES(DIRECTFB, [directfb >= $DIRECTFB_REQUIRED_VERSION])
-  AM_CONDITIONAL(USE_DIRECTFB, true)
-else
-  AM_CONDITIONAL(USE_DIRECTFB, false)
-fi
-
-
 # Check for Pango flags
 
 if test "x$gdktarget" = "xwin32"; then
@@ -1652,9 +1641,6 @@ elif test "x$gdktarget" = "xwin32" ; then
 elif test "x$gdktarget" = "xquartz" ; then
   gdk_windowing='
 #define GDK_WINDOWING_QUARTZ'
-elif test "x$gdktarget" = "xdirectfb" ; then
-  gdk_windowing='
-#define GDK_WINDOWING_DIRECTFB'
 fi
 
 if test x$gdk_wchar_h = xyes; then
@@ -1730,7 +1716,6 @@ gdk/win32/Makefile
 gdk/win32/rc/Makefile
 gdk/win32/rc/gdk.rc
 gdk/quartz/Makefile
-gdk/directfb/Makefile
 gdk/tests/Makefile
 gtk/Makefile
 gtk/makefile.msc

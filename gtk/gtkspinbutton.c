@@ -50,7 +50,7 @@
 #define MIN_ARROW_WIDTH       6
 
 
-struct _GtkSpinButtonPriv
+struct _GtkSpinButtonPrivate
 {
   GtkSpinButtonUpdatePolicy update_policy;
   GtkAdjustment *adjustment;
@@ -400,7 +400,7 @@ gtk_spin_button_class_init (GtkSpinButtonClass *class)
   add_spin_binding (binding_set, GDK_Page_Up, GDK_CONTROL_MASK, GTK_SCROLL_END);
   add_spin_binding (binding_set, GDK_Page_Down, GDK_CONTROL_MASK, GTK_SCROLL_START);
 
-  g_type_class_add_private (class, sizeof (GtkSpinButtonPriv));
+  g_type_class_add_private (class, sizeof (GtkSpinButtonPrivate));
 }
 
 static void
@@ -416,7 +416,7 @@ gtk_spin_button_set_property (GObject      *object,
 			      GParamSpec   *pspec)
 {
   GtkSpinButton *spin_button = GTK_SPIN_BUTTON (object);
-  GtkSpinButtonPriv *priv = spin_button->priv;
+  GtkSpinButtonPrivate *priv = spin_button->priv;
 
   switch (prop_id)
     {
@@ -468,7 +468,7 @@ gtk_spin_button_get_property (GObject      *object,
 			      GParamSpec   *pspec)
 {
   GtkSpinButton *spin_button = GTK_SPIN_BUTTON (object);
-  GtkSpinButtonPriv *priv = spin_button->priv;
+  GtkSpinButtonPrivate *priv = spin_button->priv;
 
   switch (prop_id)
     {
@@ -505,11 +505,11 @@ gtk_spin_button_get_property (GObject      *object,
 static void
 gtk_spin_button_init (GtkSpinButton *spin_button)
 {
-  GtkSpinButtonPriv *priv;
+  GtkSpinButtonPrivate *priv;
 
   spin_button->priv = G_TYPE_INSTANCE_GET_PRIVATE (spin_button,
                                                    GTK_TYPE_SPIN_BUTTON,
-                                                   GtkSpinButtonPriv);
+                                                   GtkSpinButtonPrivate);
   priv = spin_button->priv;
 
   priv->adjustment = NULL;
@@ -552,7 +552,7 @@ static void
 gtk_spin_button_map (GtkWidget *widget)
 {
   GtkSpinButton *spin_button = GTK_SPIN_BUTTON (widget);
-  GtkSpinButtonPriv *priv = spin_button->priv;
+  GtkSpinButtonPrivate *priv = spin_button->priv;
 
   if (gtk_widget_get_realized (widget) && !gtk_widget_get_mapped (widget))
     {
@@ -565,7 +565,7 @@ static void
 gtk_spin_button_unmap (GtkWidget *widget)
 {
   GtkSpinButton *spin_button = GTK_SPIN_BUTTON (widget);
-  GtkSpinButtonPriv *priv = spin_button->priv;
+  GtkSpinButtonPrivate *priv = spin_button->priv;
 
   if (gtk_widget_get_mapped (widget))
     {
@@ -580,7 +580,7 @@ static void
 gtk_spin_button_realize (GtkWidget *widget)
 {
   GtkSpinButton *spin_button = GTK_SPIN_BUTTON (widget);
-  GtkSpinButtonPriv *priv = spin_button->priv;
+  GtkSpinButtonPrivate *priv = spin_button->priv;
   GdkWindowAttr attributes;
   gint attributes_mask;
   gboolean return_val;
@@ -628,7 +628,7 @@ static void
 gtk_spin_button_unrealize (GtkWidget *widget)
 {
   GtkSpinButton *spin = GTK_SPIN_BUTTON (widget);
-  GtkSpinButtonPriv *priv = spin->priv;
+  GtkSpinButtonPrivate *priv = spin->priv;
 
   GTK_WIDGET_CLASS (gtk_spin_button_parent_class)->unrealize (widget);
 
@@ -668,7 +668,7 @@ gtk_spin_button_size_request (GtkWidget      *widget,
 			      GtkRequisition *requisition)
 {
   GtkSpinButton *spin_button = GTK_SPIN_BUTTON (widget);
-  GtkSpinButtonPriv *priv = spin_button->priv;
+  GtkSpinButtonPrivate *priv = spin_button->priv;
   GtkEntry *entry = GTK_ENTRY (widget);
   gint arrow_size;
 
@@ -735,7 +735,7 @@ gtk_spin_button_size_allocate (GtkWidget     *widget,
 			       GtkAllocation *allocation)
 {
   GtkSpinButton *spin = GTK_SPIN_BUTTON (widget);
-  GtkSpinButtonPriv *priv = spin->priv;
+  GtkSpinButtonPrivate *priv = spin->priv;
   GtkAllocation panel_allocation;
   gint arrow_size;
   gint panel_width;
@@ -774,7 +774,7 @@ gtk_spin_button_expose (GtkWidget      *widget,
 			GdkEventExpose *event)
 {
   GtkSpinButton *spin = GTK_SPIN_BUTTON (widget);
-  GtkSpinButtonPriv *priv = spin->priv;
+  GtkSpinButtonPrivate *priv = spin->priv;
 
   if (gtk_widget_is_drawable (widget))
     {
@@ -819,7 +819,7 @@ static gboolean
 spin_button_at_limit (GtkSpinButton *spin_button,
                      GtkArrowType   arrow)
 {
-  GtkSpinButtonPriv *priv = spin_button->priv;
+  GtkSpinButtonPrivate *priv = spin_button->priv;
   GtkArrowType effective_arrow;
 
   if (priv->wrap)
@@ -846,7 +846,7 @@ gtk_spin_button_draw_arrow (GtkSpinButton *spin_button,
 			    GdkRectangle  *area,
 			    GtkArrowType   arrow_type)
 {
-  GtkSpinButtonPriv *priv;
+  GtkSpinButtonPrivate *priv;
   GtkStateType state_type;
   GtkShadowType shadow_type;
   GtkWidget *widget;
@@ -957,7 +957,7 @@ gtk_spin_button_enter_notify (GtkWidget        *widget,
 			      GdkEventCrossing *event)
 {
   GtkSpinButton *spin = GTK_SPIN_BUTTON (widget);
-  GtkSpinButtonPriv *priv = spin->priv;
+  GtkSpinButtonPrivate *priv = spin->priv;
 
   if (event->window == priv->panel)
     {
@@ -987,7 +987,7 @@ gtk_spin_button_leave_notify (GtkWidget        *widget,
 			      GdkEventCrossing *event)
 {
   GtkSpinButton *spin = GTK_SPIN_BUTTON (widget);
-  GtkSpinButtonPriv *priv = spin->priv;
+  GtkSpinButtonPrivate *priv = spin->priv;
 
   priv->in_child = NO_ARROW;
   gtk_widget_queue_draw (GTK_WIDGET (spin));
@@ -1039,7 +1039,7 @@ gtk_spin_button_style_set (GtkWidget *widget,
 		           GtkStyle  *previous_style)
 {
   GtkSpinButton *spin = GTK_SPIN_BUTTON (widget);
-  GtkSpinButtonPriv *priv = spin->priv;
+  GtkSpinButtonPrivate *priv = spin->priv;
 
   if (previous_style && gtk_widget_get_realized (widget))
     gtk_style_set_background (widget->style, priv->panel, GTK_STATE_NORMAL);
@@ -1053,7 +1053,7 @@ gtk_spin_button_scroll (GtkWidget      *widget,
 			GdkEventScroll *event)
 {
   GtkSpinButton *spin = GTK_SPIN_BUTTON (widget);
-  GtkSpinButtonPriv *priv = spin->priv;
+  GtkSpinButtonPrivate *priv = spin->priv;
 
   if (event->direction == GDK_SCROLL_UP)
     {
@@ -1076,7 +1076,7 @@ gtk_spin_button_scroll (GtkWidget      *widget,
 static void
 gtk_spin_button_stop_spinning (GtkSpinButton *spin)
 {
-  GtkSpinButtonPriv *priv = spin->priv;
+  GtkSpinButtonPrivate *priv = spin->priv;
 
   if (priv->timer)
     {
@@ -1100,7 +1100,7 @@ start_spinning (GtkSpinButton *spin,
 		GtkArrowType   click_child,
 		gdouble        step)
 {
-  GtkSpinButtonPriv *priv;
+  GtkSpinButtonPrivate *priv;
 
   g_return_if_fail (click_child == GTK_ARROW_UP || click_child == GTK_ARROW_DOWN);
 
@@ -1131,7 +1131,7 @@ gtk_spin_button_button_press (GtkWidget      *widget,
 			      GdkEventButton *event)
 {
   GtkSpinButton *spin = GTK_SPIN_BUTTON (widget);
-  GtkSpinButtonPriv *priv = spin->priv;
+  GtkSpinButtonPrivate *priv = spin->priv;
 
   if (!priv->button)
     {
@@ -1175,7 +1175,7 @@ gtk_spin_button_button_release (GtkWidget      *widget,
 				GdkEventButton *event)
 {
   GtkSpinButton *spin = GTK_SPIN_BUTTON (widget);
-  GtkSpinButtonPriv *priv = spin->priv;
+  GtkSpinButtonPrivate *priv = spin->priv;
   gint arrow_size;
 
   arrow_size = spin_button_get_arrow_size (spin);
@@ -1225,7 +1225,7 @@ gtk_spin_button_motion_notify (GtkWidget      *widget,
 			       GdkEventMotion *event)
 {
   GtkSpinButton *spin = GTK_SPIN_BUTTON (widget);
-  GtkSpinButtonPriv *priv = spin->priv;
+  GtkSpinButtonPrivate *priv = spin->priv;
 
   if (priv->button)
     return FALSE;
@@ -1258,7 +1258,7 @@ gtk_spin_button_motion_notify (GtkWidget      *widget,
 static gint
 gtk_spin_button_timer (GtkSpinButton *spin_button)
 {
-  GtkSpinButtonPriv *priv = spin_button->priv;
+  GtkSpinButtonPrivate *priv = spin_button->priv;
   gboolean retval = FALSE;
 
   if (priv->timer)
@@ -1324,7 +1324,7 @@ static void
 gtk_spin_button_real_change_value (GtkSpinButton *spin,
 				   GtkScrollType  scroll)
 {
-  GtkSpinButtonPriv *priv = spin->priv;
+  GtkSpinButtonPrivate *priv = spin->priv;
   gdouble old_value;
 
   /* When the key binding is activated, there may be an outstanding
@@ -1422,7 +1422,7 @@ gtk_spin_button_key_release (GtkWidget   *widget,
 			     GdkEventKey *event)
 {
   GtkSpinButton *spin = GTK_SPIN_BUTTON (widget);
-  GtkSpinButtonPriv *priv = spin->priv;
+  GtkSpinButtonPrivate *priv = spin->priv;
 
   /* We only get a release at the end of a key repeat run, so reset the timer_step */
   priv->timer_step = priv->adjustment->step_increment;
@@ -1435,7 +1435,7 @@ static void
 gtk_spin_button_snap (GtkSpinButton *spin_button,
 		      gdouble        val)
 {
-  GtkSpinButtonPriv *priv = spin_button->priv;
+  GtkSpinButtonPrivate *priv = spin_button->priv;
   gdouble inc;
   gdouble tmp;
 
@@ -1492,7 +1492,7 @@ gtk_spin_button_insert_text (GtkEditable *editable,
 {
   GtkEntry *entry = GTK_ENTRY (editable);
   GtkSpinButton *spin = GTK_SPIN_BUTTON (editable);
-  GtkSpinButtonPriv *priv = spin->priv;
+  GtkSpinButtonPrivate *priv = spin->priv;
   GtkEditableClass *parent_editable_iface = g_type_interface_peek (gtk_spin_button_parent_class, GTK_TYPE_EDITABLE);
 
   if (priv->numeric)
@@ -1593,7 +1593,7 @@ static void
 gtk_spin_button_real_spin (GtkSpinButton *spin_button,
 			   gdouble        increment)
 {
-  GtkSpinButtonPriv *priv = spin_button->priv;
+  GtkSpinButtonPrivate *priv = spin_button->priv;
   GtkAdjustment *adj;
   gdouble new_value = 0.0;
   gboolean wrapped = FALSE;
@@ -1658,7 +1658,7 @@ gtk_spin_button_default_input (GtkSpinButton *spin_button,
 static gint
 gtk_spin_button_default_output (GtkSpinButton *spin_button)
 {
-  GtkSpinButtonPriv *priv = spin_button->priv;
+  GtkSpinButtonPrivate *priv = spin_button->priv;
 
   gchar *buf = g_strdup_printf ("%0.*f", priv->digits, priv->adjustment->value);
 
@@ -1692,7 +1692,7 @@ gtk_spin_button_configure (GtkSpinButton  *spin_button,
 			   gdouble         climb_rate,
 			   guint           digits)
 {
-  GtkSpinButtonPriv *priv;
+  GtkSpinButtonPrivate *priv;
 
   g_return_if_fail (GTK_IS_SPIN_BUTTON (spin_button));
 
@@ -1793,7 +1793,7 @@ static void
 adjustment_changed_cb (GtkAdjustment *adjustment, gpointer data)
 {
   GtkSpinButton *spin_button = GTK_SPIN_BUTTON (data);
-  GtkSpinButtonPriv *priv = spin_button->priv;
+  GtkSpinButtonPrivate *priv = spin_button->priv;
 
   priv->timer_step = priv->adjustment->step_increment;
   gtk_widget_queue_resize (GTK_WIDGET (spin_button));
@@ -1810,7 +1810,7 @@ void
 gtk_spin_button_set_adjustment (GtkSpinButton *spin_button,
 				GtkAdjustment *adjustment)
 {
-  GtkSpinButtonPriv *priv;
+  GtkSpinButtonPrivate *priv;
 
   g_return_if_fail (GTK_IS_SPIN_BUTTON (spin_button));
 
@@ -1875,7 +1875,7 @@ void
 gtk_spin_button_set_digits (GtkSpinButton *spin_button,
 			    guint          digits)
 {
-  GtkSpinButtonPriv *priv;
+  GtkSpinButtonPrivate *priv;
 
   g_return_if_fail (GTK_IS_SPIN_BUTTON (spin_button));
 
@@ -1922,7 +1922,7 @@ gtk_spin_button_set_increments (GtkSpinButton *spin_button,
 				gdouble        step,
 				gdouble        page)
 {
-  GtkSpinButtonPriv *priv;
+  GtkSpinButtonPrivate *priv;
 
   g_return_if_fail (GTK_IS_SPIN_BUTTON (spin_button));
 
@@ -1946,7 +1946,7 @@ gtk_spin_button_get_increments (GtkSpinButton *spin_button,
 				gdouble       *step,
 				gdouble       *page)
 {
-  GtkSpinButtonPriv *priv;
+  GtkSpinButtonPrivate *priv;
 
   g_return_if_fail (GTK_IS_SPIN_BUTTON (spin_button));
 
@@ -1971,7 +1971,7 @@ gtk_spin_button_set_range (GtkSpinButton *spin_button,
 			   gdouble        min,
 			   gdouble        max)
 {
-  GtkSpinButtonPriv *priv;
+  GtkSpinButtonPrivate *priv;
   gdouble value;
 
   g_return_if_fail (GTK_IS_SPIN_BUTTON (spin_button));
@@ -2005,7 +2005,7 @@ gtk_spin_button_get_range (GtkSpinButton *spin_button,
 			   gdouble       *min,
 			   gdouble       *max)
 {
-  GtkSpinButtonPriv *priv;
+  GtkSpinButtonPrivate *priv;
 
   g_return_if_fail (GTK_IS_SPIN_BUTTON (spin_button));
 
@@ -2044,7 +2044,7 @@ gtk_spin_button_get_value (GtkSpinButton *spin_button)
 gint
 gtk_spin_button_get_value_as_int (GtkSpinButton *spin_button)
 {
-  GtkSpinButtonPriv *priv;
+  GtkSpinButtonPrivate *priv;
   gdouble val;
 
   g_return_val_if_fail (GTK_IS_SPIN_BUTTON (spin_button), 0);
@@ -2069,7 +2069,7 @@ void
 gtk_spin_button_set_value (GtkSpinButton *spin_button, 
 			   gdouble        value)
 {
-  GtkSpinButtonPriv *priv;
+  GtkSpinButtonPrivate *priv;
 
   g_return_if_fail (GTK_IS_SPIN_BUTTON (spin_button));
 
@@ -2098,7 +2098,7 @@ void
 gtk_spin_button_set_update_policy (GtkSpinButton             *spin_button,
 				   GtkSpinButtonUpdatePolicy  policy)
 {
-  GtkSpinButtonPriv *priv;
+  GtkSpinButtonPrivate *priv;
 
   g_return_if_fail (GTK_IS_SPIN_BUTTON (spin_button));
 
@@ -2140,7 +2140,7 @@ void
 gtk_spin_button_set_numeric (GtkSpinButton  *spin_button,
 			     gboolean        numeric)
 {
-  GtkSpinButtonPriv *priv;
+  GtkSpinButtonPrivate *priv;
 
   g_return_if_fail (GTK_IS_SPIN_BUTTON (spin_button));
 
@@ -2184,7 +2184,7 @@ void
 gtk_spin_button_set_wrap (GtkSpinButton  *spin_button,
 			  gboolean        wrap)
 {
-  GtkSpinButtonPriv *priv;
+  GtkSpinButtonPrivate *priv;
 
   g_return_if_fail (GTK_IS_SPIN_BUTTON (spin_button));
 
@@ -2260,7 +2260,7 @@ void
 gtk_spin_button_set_snap_to_ticks (GtkSpinButton *spin_button,
 				   gboolean       snap_to_ticks)
 {
-  GtkSpinButtonPriv *priv;
+  GtkSpinButtonPrivate *priv;
   guint new_val;
 
   g_return_if_fail (GTK_IS_SPIN_BUTTON (spin_button));
@@ -2310,7 +2310,7 @@ gtk_spin_button_spin (GtkSpinButton *spin_button,
 		      GtkSpinType    direction,
 		      gdouble        increment)
 {
-  GtkSpinButtonPriv *priv;
+  GtkSpinButtonPrivate *priv;
   GtkAdjustment *adj;
   gdouble diff;
 
@@ -2386,7 +2386,7 @@ gtk_spin_button_spin (GtkSpinButton *spin_button,
 void 
 gtk_spin_button_update (GtkSpinButton *spin_button)
 {
-  GtkSpinButtonPriv *priv;
+  GtkSpinButtonPrivate *priv;
   gdouble val;
   gint error = 0;
   gint return_val;

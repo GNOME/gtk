@@ -881,7 +881,7 @@ add_pid_to_process_list_store (GtkMountOperation              *mount_operation,
                                     &pixbuf);
 
   if (name == NULL)
-    name = g_strdup_printf (_("Unknown Application (pid %d)"), pid);
+    name = g_strdup_printf (_("Unknown Application (PID %d)"), pid);
 
   if (command_line == NULL)
     command_line = g_strdup ("");

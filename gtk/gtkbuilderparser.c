@@ -404,7 +404,7 @@ parse_object (GMarkupParseContext  *context,
     {
       g_set_error (error, GTK_BUILDER_ERROR,
                    GTK_BUILDER_ERROR_DUPLICATE_ID,
-                   _("Duplicate object id '%s' on line %d (previously on line %d)"),
+                   _("Duplicate object ID '%s' on line %d (previously on line %d)"),
                    object_id, line, line2);
       return;
     }

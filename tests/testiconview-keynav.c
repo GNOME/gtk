@@ -213,11 +213,15 @@ static void
 header_style_set (GtkWidget *widget,
                   GtkStyle  *old_style)
 {
+  GtkStyle *style;
+
+  style = gtk_widget_get_style (widget);
+
   g_signal_handlers_block_by_func (widget, header_style_set, NULL);
   gtk_widget_modify_bg (widget, GTK_STATE_NORMAL,
-                        &widget->style->base[GTK_STATE_NORMAL]);
+                        &style->base[GTK_STATE_NORMAL]);
   gtk_widget_modify_fg (widget, GTK_STATE_NORMAL,
-                        &widget->style->text[GTK_STATE_NORMAL]);
+                        &style->text[GTK_STATE_NORMAL]);
   g_signal_handlers_unblock_by_func (widget, header_style_set, NULL);
 }
 

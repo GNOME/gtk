@@ -58,20 +58,20 @@ G_BEGIN_DECLS
 #define GTK_FONT_SELECTION_DIALOG_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_FONT_SELECTION_DIALOG, GtkFontSelectionDialogClass))
 
 
-typedef struct _GtkFontSelection	     GtkFontSelection;
-typedef struct _GtkFontSelectionPriv         GtkFontSelectionPriv;
-typedef struct _GtkFontSelectionClass	     GtkFontSelectionClass;
+typedef struct _GtkFontSelection              GtkFontSelection;
+typedef struct _GtkFontSelectionPrivate       GtkFontSelectionPrivate;
+typedef struct _GtkFontSelectionClass         GtkFontSelectionClass;
 
-typedef struct _GtkFontSelectionDialog	     GtkFontSelectionDialog;
-typedef struct _GtkFontSelectionDialogPriv   GtkFontSelectionDialogPriv;
-typedef struct _GtkFontSelectionDialogClass  GtkFontSelectionDialogClass;
+typedef struct _GtkFontSelectionDialog              GtkFontSelectionDialog;
+typedef struct _GtkFontSelectionDialogPrivate       GtkFontSelectionDialogPrivate;
+typedef struct _GtkFontSelectionDialogClass         GtkFontSelectionDialogClass;
 
 struct _GtkFontSelection
 {
   GtkVBox parent_instance;
 
   /* <private> */
-  GtkFontSelectionPriv *priv;
+  GtkFontSelectionPrivate *priv;
 };
 
 struct _GtkFontSelectionClass
@@ -91,7 +91,7 @@ struct _GtkFontSelectionDialog
   GtkDialog parent_instance;
 
   /*< private >*/
-  GtkFontSelectionDialogPriv *priv;
+  GtkFontSelectionDialogPrivate *priv;
 };
 
 struct _GtkFontSelectionDialogClass

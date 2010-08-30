@@ -209,16 +209,19 @@ drawing_area_expose (GtkWidget      *drawing_area,
 		     GdkEventExpose *event,
 		     gpointer        data)
 {
+  GtkAllocation allocation;
+  GdkWindow *window;
   gint i;
   cairo_t *cr;
 
-  gdk_window_get_pointer (drawing_area->window, NULL, NULL, NULL);
+  window =  gtk_widget_get_window (drawing_area);
 
-  cr = gdk_cairo_create (drawing_area->window);
+  gdk_window_get_pointer (window, NULL, NULL, NULL);
 
-  cairo_rectangle (cr, 0, 0,
-		   drawing_area->allocation.width,
-		   drawing_area->allocation.height);
+  cr = gdk_cairo_create (window);
+
+  gtk_widget_get_allocation (drawing_area, &allocation);
+  cairo_rectangle (cr, 0, 0, allocation.width, allocation.height);
   cairo_set_source_rgb (cr, 1.0, 1.0, 1.0);
   cairo_fill (cr);
 

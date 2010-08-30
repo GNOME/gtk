@@ -57,31 +57,33 @@ static void xembed_set_info            (GdkWindow     *window,
 GdkNativeWindow
 _gtk_plug_windowing_get_id (GtkPlug *plug)
 {
-  return GDK_WINDOW_XWINDOW (GTK_WIDGET (plug)->window);
+  return GDK_WINDOW_XWINDOW (gtk_widget_get_window (GTK_WIDGET (plug)));
 }
 
 void
 _gtk_plug_windowing_realize_toplevel (GtkPlug *plug)
 {
-  xembed_set_info (GTK_WIDGET (plug)->window, 0);
+  xembed_set_info (gtk_widget_get_window (GTK_WIDGET (plug)), 0);
 }
 
 void
 _gtk_plug_windowing_map_toplevel (GtkPlug *plug)
 {
-  xembed_set_info (GTK_WIDGET (plug)->window, XEMBED_MAPPED);
+  xembed_set_info (gtk_widget_get_window (GTK_WIDGET (plug)), XEMBED_MAPPED);
 }
 
 void
 _gtk_plug_windowing_unmap_toplevel (GtkPlug *plug)
 {
-  xembed_set_info (GTK_WIDGET (plug)->window, 0);
+  xembed_set_info (gtk_widget_get_window (GTK_WIDGET (plug)), 0);
 }
 
 void
 _gtk_plug_windowing_set_focus (GtkPlug *plug)
 {
-  _gtk_xembed_send_message (plug->socket_window,
+  GtkPlugPrivate *priv = plug->priv;
+
+  _gtk_xembed_send_message (priv->socket_window,
 			    XEMBED_REQUEST_FOCUS, 0, 0, 0);
 }
 
@@ -90,7 +92,9 @@ _gtk_plug_windowing_add_grabbed_key (GtkPlug        *plug,
 				     guint           accelerator_key,
 				     GdkModifierType accelerator_mods)
 {
-  _gtk_xembed_send_message (plug->socket_window, XEMBED_GTK_GRAB_KEY, 0, 
+  GtkPlugPrivate *priv = plug->priv;
+
+  _gtk_xembed_send_message (priv->socket_window, XEMBED_GTK_GRAB_KEY, 0,
 			    accelerator_key, accelerator_mods);
 }
 
@@ -99,7 +103,9 @@ _gtk_plug_windowing_remove_grabbed_key (GtkPlug        *plug,
 					guint           accelerator_key,
 					GdkModifierType accelerator_mods)
 {
-  _gtk_xembed_send_message (plug->socket_window, XEMBED_GTK_UNGRAB_KEY, 0, 
+  GtkPlugPrivate *priv = plug->priv;
+
+  _gtk_xembed_send_message (priv->socket_window, XEMBED_GTK_UNGRAB_KEY, 0,
 			    accelerator_key, accelerator_mods);
 }
 
@@ -107,6 +113,7 @@ void
 _gtk_plug_windowing_focus_to_parent (GtkPlug         *plug,
 				     GtkDirectionType direction)
 {
+  GtkPlugPrivate *priv = plug->priv;
   XEmbedMessageType message = XEMBED_FOCUS_PREV; /* Quiet GCC */
   
   switch (direction)
@@ -122,8 +129,8 @@ _gtk_plug_windowing_focus_to_parent (GtkPlug         *plug,
       message = XEMBED_FOCUS_NEXT;
       break;
     }
-  
-  _gtk_xembed_send_focus_message (plug->socket_window, message, 0);
+
+  _gtk_xembed_send_focus_message (priv->socket_window, message, 0);
 }
 
 static void
@@ -220,6 +227,7 @@ _gtk_plug_windowing_filter_func (GdkXEvent *gdk_xevent,
   GdkScreen *screen = gdk_drawable_get_screen (event->any.window);
   GdkDisplay *display = gdk_screen_get_display (screen);
   GtkPlug *plug = GTK_PLUG (data);
+  GtkPlugPrivate *priv = plug->priv;
   XEvent *xevent = (XEvent *)gdk_xevent;
 
   GdkFilterReturn return_val;
@@ -254,7 +262,7 @@ _gtk_plug_windowing_filter_func (GdkXEvent *gdk_xevent,
     case ReparentNotify:
       {
 	XReparentEvent *xre = &xevent->xreparent;
-	gboolean was_embedded = plug->socket_window != NULL;
+        gboolean was_embedded = priv->socket_window != NULL;
 
 	GTK_NOTE (PLUGSOCKET, g_message("GtkPlug: ReparentNotify received"));
 
@@ -271,14 +279,14 @@ _gtk_plug_windowing_filter_func (GdkXEvent *gdk_xevent,
 	     * then add to a local window before we get notification
 	     * Probably need check in _gtk_plug_add_to_socket
 	     */
-	    
-	    if (xre->parent != GDK_WINDOW_XWINDOW (plug->socket_window))
+
+            if (xre->parent != GDK_WINDOW_XWINDOW (priv->socket_window))
 	      {
 		GtkWidget *widget = GTK_WIDGET (plug);
 
-		gdk_window_set_user_data (plug->socket_window, NULL);
-		g_object_unref (plug->socket_window);
-		plug->socket_window = NULL;
+                gdk_window_set_user_data (priv->socket_window, NULL);
+		g_object_unref (priv->socket_window);
+		priv->socket_window = NULL;
 
 		/* Emit a delete window, as if the user attempted
 		 * to close the toplevel. Simple as to how we
@@ -306,25 +314,26 @@ _gtk_plug_windowing_filter_func (GdkXEvent *gdk_xevent,
 	    /* Start of embedding protocol */
 
 	    GTK_NOTE (PLUGSOCKET, g_message ("GtkPlug: start of embedding"));
-	    plug->socket_window = gdk_window_lookup_for_display (display, xre->parent);
-	    if (plug->socket_window)
+
+            priv->socket_window = gdk_window_lookup_for_display (display, xre->parent);
+            if (priv->socket_window)
 	      {
 		gpointer user_data = NULL;
-		gdk_window_get_user_data (plug->socket_window, &user_data);
+		gdk_window_get_user_data (priv->socket_window, &user_data);
 
 		if (user_data)
 		  {
 		    g_warning (G_STRLOC "Plug reparented unexpectedly into window in the same process");
-		    plug->socket_window = NULL;
+                    priv->socket_window = NULL;
 		    break; /* FIXME: shouldn't this unref the plug? i.e. "goto done;" instead */
 		  }
 
-		g_object_ref (plug->socket_window);
+		g_object_ref (priv->socket_window);
 	      }
 	    else
 	      {
-		plug->socket_window = gdk_window_foreign_new_for_display (display, xre->parent);
-		if (!plug->socket_window) /* Already gone */
+		priv->socket_window = gdk_window_foreign_new_for_display (display, xre->parent);
+		if (!priv->socket_window) /* Already gone */
 		  break; /* FIXME: shouldn't this unref the plug? i.e. "goto done;" instead */
 	      }
 

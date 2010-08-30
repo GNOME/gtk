@@ -132,14 +132,18 @@ test_xserver_sync (void)
   GtkWidget *window = gtk_test_create_simple_window ("Test Window", "Test: test_xserver_sync");
   GtkWidget *darea = gtk_drawing_area_new ();
   GtkWidget *child;
+  GdkWindow *gdk_window;
   GTimer *gtimer = g_timer_new();
   gint sync_is_slower = 0, repeat = 5;
 
   child = gtk_bin_get_child (GTK_BIN (window));
+  //gdk_window = gtk_widget_get_window (darea);
+
   gtk_widget_set_size_request (darea, 320, 200);
   gtk_container_add (GTK_CONTAINER (child), darea);
   gtk_widget_show (darea);
   gtk_widget_show_now (window);
+
   while (repeat--)
     {
       gint i, many = 200;
@@ -148,7 +152,8 @@ test_xserver_sync (void)
 
       while (gtk_events_pending ())
         gtk_main_iteration ();
-      cr = gdk_cairo_create (darea->window);
+      gdk_window = gtk_widget_get_window (darea);
+      cr = gdk_cairo_create (gdk_window);
       cairo_set_source_rgba (cr, 0, 1, 0, 0.1);
       /* run a number of consecutive drawing requests, just using drawing queue */
       g_timer_start (gtimer);
@@ -166,7 +171,7 @@ test_xserver_sync (void)
       for (i = 0; i < many; i++)
         {
           cairo_paint (cr);
-          gdk_test_render_sync (darea->window);
+          gdk_test_render_sync (gdk_window);
         }
       g_timer_stop (gtimer);
       sync_time = g_timer_elapsed (gtimer, NULL);

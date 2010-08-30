@@ -46,9 +46,9 @@ G_BEGIN_DECLS
 #define GTK_LABEL_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_LABEL, GtkLabelClass))
 
 
-typedef struct _GtkLabel       GtkLabel;
-typedef struct _GtkLabelPriv   GtkLabelPriv;
-typedef struct _GtkLabelClass  GtkLabelClass;
+typedef struct _GtkLabel              GtkLabel;
+typedef struct _GtkLabelPrivate       GtkLabelPrivate;
+typedef struct _GtkLabelClass         GtkLabelClass;
 
 typedef struct _GtkLabelSelectionInfo GtkLabelSelectionInfo;
 
@@ -57,7 +57,7 @@ struct _GtkLabel
   GtkMisc misc;
 
   /*< private >*/
-  GtkLabelPriv *priv;
+  GtkLabelPrivate *priv;
 };
 
 struct _GtkLabelClass

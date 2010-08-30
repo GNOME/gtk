@@ -1,7 +1,8 @@
 # Files from the Gtk distribution which have already been
 # marked to allow runtime translation of messages
-gdk/directfb/gdkdisplay-directfb.c
 gdk/gdk.c
+gdk/gdkdevice.c
+gdk/gdkdevicemanager.c
 gdk/gdkdisplaymanager.c
 gdk/gdkpango.c
 gdk/gdkscreen.c
@@ -9,6 +10,9 @@ gdk/gdkwindow.c
 gdk/keyname-table.h
 gdk/win32/gdkmain-win32.c
 gdk/x11/gdkapplaunchcontext-x11.c
+gdk/x11/gdkdevice-xi.c
+gdk/x11/gdkdevice-xi2.c
+gdk/x11/gdkdevicemanager-xi.c
 gdk/x11/gdkmain-x11.c
 gtk/gtkaboutdialog.c
 gtk/gtkaccelgroup.c
@@ -33,8 +37,8 @@ gtk/gtkbutton.c
 gtk/gtkcalendar.c
 gtk/gtkcelleditable.c
 gtk/gtkcelllayout.c
-gtk/gtkcellrenderer.c
 gtk/gtkcellrendereraccel.c
+gtk/gtkcellrenderer.c
 gtk/gtkcellrenderercombo.c
 gtk/gtkcellrendererpixbuf.c
 gtk/gtkcellrendererprogress.c
@@ -45,8 +49,8 @@ gtk/gtkcellrenderertoggle.c
 gtk/gtkcellview.c
 gtk/gtkcheckbutton.c
 gtk/gtkcheckmenuitem.c
-gtk/gtkclipboard-quartz.c
 gtk/gtkclipboard.c
+gtk/gtkclipboard-quartz.c
 gtk/gtkcolorbutton.c
 gtk/gtkcolorsel.c
 gtk/gtkcolorseldialog.c
@@ -55,8 +59,8 @@ gtk/gtkcomboboxentry.c
 gtk/gtkcontainer.c
 gtk/gtkcustompaperunixdialog.c
 gtk/gtkdialog.c
-gtk/gtkdnd-quartz.c
 gtk/gtkdnd.c
+gtk/gtkdnd-quartz.c
 gtk/gtkdrawingarea.c
 gtk/gtkeditable.c
 gtk/gtkentry.c
@@ -64,8 +68,8 @@ gtk/gtkentrybuffer.c
 gtk/gtkentrycompletion.c
 gtk/gtkeventbox.c
 gtk/gtkexpander.c
-gtk/gtkfilechooser.c
 gtk/gtkfilechooserbutton.c
+gtk/gtkfilechooser.c
 gtk/gtkfilechooserdefault.c
 gtk/gtkfilechooserdialog.c
 gtk/gtkfilechooserembed.c
@@ -106,8 +110,8 @@ gtk/gtklayout.c
 gtk/gtklinkbutton.c
 gtk/gtkliststore.c
 gtk/gtkmain.c
-gtk/gtkmenu.c
 gtk/gtkmenubar.c
+gtk/gtkmenu.c
 gtk/gtkmenuitem.c
 gtk/gtkmenushell.c
 gtk/gtkmenutoolbutton.c
@@ -130,10 +134,10 @@ gtk/gtkprintbackend.c
 gtk/gtkprinter.c
 gtk/gtkprinteroptionwidget.c
 gtk/gtkprintjob.c
-gtk/gtkprintoperation-unix.c
-gtk/gtkprintoperation-win32.c
 gtk/gtkprintoperation.c
 gtk/gtkprintoperationpreview.c
+gtk/gtkprintoperation-unix.c
+gtk/gtkprintoperation-win32.c
 gtk/gtkprintunixdialog.c
 gtk/gtkprogressbar.c
 gtk/gtkradioaction.c
@@ -148,8 +152,8 @@ gtk/gtkrecentchooserdefault.c
 gtk/gtkrecentchoosermenu.c
 gtk/gtkrecentmanager.c
 gtk/gtkruler.c
-gtk/gtkscale.c
 gtk/gtkscalebutton.c
+gtk/gtkscale.c
 gtk/gtkscrollbar.c
 gtk/gtkscrolledwindow.c
 gtk/gtkselection.c
@@ -210,8 +214,8 @@ gtk/gtkvscale.c
 gtk/gtkvscrollbar.c
 gtk/gtkvseparator.c
 gtk/gtkwidget.c
-gtk/gtkwindow-decorate.c
 gtk/gtkwindow.c
+gtk/gtkwindow-decorate.c
 gtk/paper_names.c
 gtk/paper_names_offsets.c
 gtk/updateiconcache.c

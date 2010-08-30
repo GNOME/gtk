@@ -308,6 +308,8 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  * The "File" item.
  * <inlinegraphic fileref="gtk-file.png" format="PNG"></inlinegraphic>
  *
+ * Since 3.0, this item has a label, before it only had an icon.
+ *
  * Since: 2.6
  */
 #define GTK_STOCK_FILE             "gtk-file"

@@ -383,8 +383,8 @@ main (int   argc,
       gtk_widget_show (redirect_win);
       gtk_widget_realize (redirect_win);
       gtk_widget_realize (window);
-      gdk_window_redirect_to_drawable (window->window,
-				       GDK_DRAWABLE (redirect_win->window),
+      gdk_window_redirect_to_drawable (gtk_widget_get_window (window),
+                                       GDK_DRAWABLE (gtk_widget_get_window (redirect_win)),
 				       0, 0, 0, 0, -1, -1);
     }
 

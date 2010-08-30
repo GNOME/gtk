@@ -42,6 +42,7 @@ adjust_size_callback (WidgetInfo *info)
 {
   Window toplevel;
   Window root;
+  GdkWindow *window;
   gint tx;
   gint ty;
   guint twidth;
@@ -51,8 +52,9 @@ adjust_size_callback (WidgetInfo *info)
   gint target_width = 0;
   gint target_height = 0;
 
-  toplevel = find_toplevel_window (GDK_WINDOW_XID (info->window->window));
-  XGetGeometry (GDK_WINDOW_XDISPLAY (info->window->window),
+  window = gtk_widget_get_window (info->window);
+  toplevel = find_toplevel_window (GDK_WINDOW_XID (window));
+  XGetGeometry (GDK_WINDOW_XDISPLAY (window),
 		toplevel,
 		&root, &tx, &ty, &twidth, &theight, &tborder_width, &tdepth);
 
@@ -995,11 +997,13 @@ static WidgetInfo *
 create_volume_button (void)
 {
   GtkWidget *button, *widget;
+  GtkWidget *plus_button;
 
   button = gtk_volume_button_new ();
   gtk_scale_button_set_value (GTK_SCALE_BUTTON (button), 33);
   /* Hack: get the private dock */
-  widget = gtk_scale_button_get_plus_button (GTK_SCALE_BUTTON (button))->parent->parent->parent;
+  plus_button = gtk_scale_button_get_plus_button (GTK_SCALE_BUTTON (button));
+  widget = gtk_widget_get_parent (gtk_widget_get_parent (gtk_widget_get_parent (plus_button)));
   gtk_widget_show_all (widget);
   return new_widget_info ("volumebutton", widget, ASIS);
 }

@@ -5,6 +5,7 @@
 <FILE>gtkaboutdialog</FILE>
 <TITLE>GtkAboutDialog</TITLE>
 GtkAboutDialog
+GtkLicense
 gtk_about_dialog_new
 gtk_about_dialog_get_program_name
 gtk_about_dialog_set_program_name
@@ -2144,7 +2145,7 @@ GTK_MESSAGE_DIALOG_CLASS
 GTK_IS_MESSAGE_DIALOG_CLASS
 GTK_MESSAGE_DIALOG_GET_CLASS
 <SUBSECTION Private>
-GtkMessageDialogPriv
+GtkMessageDialogPrivate
 gtk_message_dialog_get_type
 </SECTION>
 
@@ -2194,7 +2195,7 @@ GTK_MISC_CLASS
 GTK_IS_MISC_CLASS
 GTK_MISC_GET_CLASS
 <SUBSECTION Private>
-GtkMiscPriv
+GtkMiscPrivate
 gtk_misc_get_type
 </SECTION>
 
@@ -2258,7 +2259,7 @@ GTK_NOTEBOOK_GET_CLASS
 <SUBSECTION Private>
 gtk_notebook_get_type
 GtkNotebookTab
-GtkNotebookPriv
+GtkNotebookPrivate
 </SECTION>
 
 <SECTION>
@@ -2347,6 +2348,7 @@ GTK_PLUG_CLASS
 GTK_IS_PLUG_CLASS
 GTK_PLUG_GET_CLASS
 <SUBSECTION Private>
+GtkPlugPrivate
 gtk_plug_get_type
 </SECTION>
 
@@ -2377,7 +2379,7 @@ GTK_PROGRESS_BAR_CLASS
 GTK_IS_PROGRESS_BAR_CLASS
 GTK_PROGRESS_BAR_GET_CLASS
 <SUBSECTION Private>
-GtkProgressBarPriv
+GtkProgressBarPrivate
 gtk_progress_bar_get_type
 </SECTION>
 
@@ -2423,7 +2425,7 @@ GTK_RADIO_BUTTON_CLASS
 GTK_IS_RADIO_BUTTON_CLASS
 GTK_RADIO_BUTTON_GET_CLASS
 <SUBSECTION Private>
-GtkRadioButtonPriv
+GtkRadioButtonPrivate
 gtk_radio_button_get_type
 </SECTION>
 
@@ -2447,7 +2449,7 @@ GTK_RADIO_MENU_ITEM_CLASS
 GTK_IS_RADIO_MENU_ITEM_CLASS
 GTK_RADIO_MENU_ITEM_GET_CLASS
 <SUBSECTION Private>
-GtkRadioMenuItemPriv
+GtkRadioMenuItemPrivate
 gtk_radio_menu_item_get_type
 </SECTION>
 
@@ -2731,7 +2733,7 @@ GTK_RULER_CLASS
 GTK_IS_RULER_CLASS
 GTK_RULER_GET_CLASS
 <SUBSECTION Private>
-GtkRulerPriv
+GtkRulerPrivate
 gtk_ruler_get_type
 gtk_ruler_draw_ticks
 gtk_ruler_draw_pos
@@ -2761,7 +2763,7 @@ GTK_SCALE_CLASS
 GTK_IS_SCALE_CLASS
 GTK_SCALE_GET_CLASS
 <SUBSECTION Private>
-GtkScalePriv
+GtkScalePrivate
 gtk_scale_get_type
 </SECTION>
 
@@ -2921,7 +2923,7 @@ GTK_SIZE_GROUP_CLASS
 GTK_IS_SIZE_GROUP_CLASS
 GTK_SIZE_GROUP_GET_CLASS
 <SUBSECTION Private>
-GtkSizeGroupPriv
+GtkSizeGroupPrivate
 gtk_size_group_get_type
 </SECTION>
 
@@ -2983,7 +2985,7 @@ GTK_SPIN_BUTTON_CLASS
 GTK_IS_SPIN_BUTTON_CLASS
 GTK_SPIN_BUTTON_GET_CLASS
 <SUBSECTION Private>
-GtkSpinButtonPriv
+GtkSpinButtonPrivate
 gtk_spin_button_get_type
 </SECTION>
 
@@ -3030,7 +3032,7 @@ GTK_STATUSBAR_CLASS
 GTK_IS_STATUSBAR_CLASS
 GTK_STATUSBAR_GET_CLASS
 <SUBSECTION Private>
-GtkStatusbarPriv
+GtkStatusbarPrivate
 gtk_statusbar_get_type
 </SECTION>
 
@@ -3114,7 +3116,7 @@ GTK_TABLE_CLASS
 GTK_IS_TABLE_CLASS
 GTK_TABLE_GET_CLASS
 <SUBSECTION Private>
-GtkTablePriv
+GtkTablePrivate
 GtkTableChild
 GtkTableRowCol
 gtk_table_get_type
@@ -3133,7 +3135,7 @@ GTK_TEAROFF_MENU_ITEM_CLASS
 GTK_IS_TEAROFF_MENU_ITEM_CLASS
 GTK_TEAROFF_MENU_ITEM_GET_CLASS
 <SUBSECTION Private>
-GtkTearoffMenuItemPriv
+GtkTearoffMenuItemPrivate
 gtk_tearoff_menu_item_get_type
 </SECTION>
 
@@ -3405,7 +3407,7 @@ GTK_TEXT_TAG_TABLE_CLASS
 GTK_IS_TEXT_TAG_TABLE_CLASS
 GTK_TEXT_TAG_TABLE_GET_CLASS
 <SUBSECTION Private>
-GtkTextTagTablePriv
+GtkTextTagTablePrivate
 gtk_text_tag_table_get_type
 </SECTION>
 
@@ -3610,7 +3612,7 @@ GTK_IS_TOOLBAR_CLASS
 GTK_TOOLBAR_GET_CLASS
 <SUBSECTION Private>
 gtk_toolbar_get_type
-GtkToolbarPriv
+GtkToolbarPrivate
 </SECTION>
 
 <SECTION>
@@ -4606,7 +4608,7 @@ GTK_LIST_STORE_CLASS
 GTK_IS_LIST_STORE_CLASS
 GTK_LIST_STORE_GET_CLASS
 <SUBSECTION Private>
-GtkListStorePriv
+GtkListStorePrivate
 gtk_list_store_get_type
 </SECTION>
 
@@ -4663,7 +4665,7 @@ GTK_VIEWPORT_CLASS
 GTK_IS_VIEWPORT_CLASS
 GTK_VIEWPORT_GET_CLASS
 <SUBSECTION Private>
-GtkViewportPriv
+GtkViewportPrivate
 gtk_viewport_get_type
 </SECTION>
 

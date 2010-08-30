@@ -128,7 +128,7 @@ query_for_toplevel (GdkScreen  *screen,
   gtk_widget_show_all (popup);
   cursor = gdk_cursor_new_for_display (display, GDK_CROSSHAIR);
 
-  if (gdk_pointer_grab (popup->window, FALSE,
+  if (gdk_pointer_grab (gtk_widget_get_window (popup), FALSE,
 			GDK_BUTTON_RELEASE_MASK,
 			NULL,
 			cursor,

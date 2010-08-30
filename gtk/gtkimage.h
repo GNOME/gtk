@@ -46,9 +46,9 @@ G_BEGIN_DECLS
 #define GTK_IMAGE_GET_CLASS(obj)        (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_IMAGE, GtkImageClass))
 
 
-typedef struct _GtkImage       GtkImage;
-typedef struct _GtkImagePriv   GtkImagePriv;
-typedef struct _GtkImageClass  GtkImageClass;
+typedef struct _GtkImage              GtkImage;
+typedef struct _GtkImagePrivate       GtkImagePrivate;
+typedef struct _GtkImageClass         GtkImageClass;
 
 typedef struct _GtkImagePixmapData  GtkImagePixmapData;
 typedef struct _GtkImageImageData   GtkImageImageData;
@@ -145,7 +145,7 @@ struct _GtkImage
   GtkMisc misc;
 
   /* <private> */
-  GtkImagePriv *priv;
+  GtkImagePrivate *priv;
 };
 
 struct _GtkImageClass

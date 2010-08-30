@@ -286,7 +286,8 @@ grab_window_toggled (GtkToggleButton *button,
     {
       int status;
 
-      status = gdk_keyboard_grab (widget->window, FALSE, GDK_CURRENT_TIME);
+      status = gdk_keyboard_grab (gtk_widget_get_window (widget),
+                                  FALSE, GDK_CURRENT_TIME);
 
       if (status != GDK_GRAB_SUCCESS)
 	g_warning ("Could not grab keyboard!  (%s)", grab_string (status));
@@ -325,12 +326,13 @@ main (int argc, char *argv[])
 
   menubar = gtk_menu_bar_new ();
   menuitem = gtk_menu_item_new_with_mnemonic ("_File");
+  gtk_menu_shell_append (GTK_MENU_SHELL (menubar), menuitem);
+
   menu = gtk_menu_new ();
   gtk_menu_item_set_submenu (GTK_MENU_ITEM (menuitem), menu);
   menuitem = gtk_menu_item_new_with_mnemonic ("_Quit");
   g_signal_connect (menuitem, "activate", G_CALLBACK (quit_cb), window);
   gtk_menu_shell_append (GTK_MENU_SHELL (menu), menuitem);
-  gtk_menu_shell_append (GTK_MENU_SHELL (menubar), menuitem);
 
   accel_group = gtk_accel_group_new ();
   gtk_window_add_accel_group (GTK_WINDOW (window), accel_group);

@@ -121,15 +121,19 @@ gtk_item_toggle (GtkItem *item)
 static void
 gtk_item_realize (GtkWidget *widget)
 {
+  GtkAllocation allocation;
+  GdkWindow *window;
   GdkWindowAttr attributes;
   gint attributes_mask;
 
   gtk_widget_set_realized (widget, TRUE);
 
-  attributes.x = widget->allocation.x;
-  attributes.y = widget->allocation.y;
-  attributes.width = widget->allocation.width;
-  attributes.height = widget->allocation.height;
+  gtk_widget_get_allocation (widget, &allocation);
+
+  attributes.x = allocation.x;
+  attributes.y = allocation.y;
+  attributes.width = allocation.width;
+  attributes.height = allocation.height;
   attributes.window_type = GDK_WINDOW_CHILD;
   attributes.wclass = GDK_INPUT_OUTPUT;
   attributes.visual = gtk_widget_get_visual (widget);
@@ -143,12 +147,15 @@ gtk_item_realize (GtkWidget *widget)
 			   GDK_POINTER_MOTION_MASK);
 
   attributes_mask = GDK_WA_X | GDK_WA_Y | GDK_WA_VISUAL | GDK_WA_COLORMAP;
-  widget->window = gdk_window_new (gtk_widget_get_parent_window (widget), &attributes, attributes_mask);
-  gdk_window_set_user_data (widget->window, widget);
 
-  widget->style = gtk_style_attach (widget->style, widget->window);
-  gtk_style_set_background (widget->style, widget->window, GTK_STATE_NORMAL);
-  gdk_window_set_back_pixmap (widget->window, NULL, TRUE);
+  window = gdk_window_new (gtk_widget_get_parent_window (widget),
+                           &attributes, attributes_mask);
+  gtk_widget_set_window (widget, window);
+  gdk_window_set_user_data (window, widget);
+
+  gtk_widget_style_attach (widget);
+  gtk_style_set_background (gtk_widget_get_style (widget), window, GTK_STATE_NORMAL);
+  gdk_window_set_back_pixmap (window, NULL, TRUE);
 }
 
 static gint
@@ -158,7 +165,7 @@ gtk_item_enter (GtkWidget        *widget,
   g_return_val_if_fail (GTK_IS_ITEM (widget), FALSE);
   g_return_val_if_fail (event != NULL, FALSE);
 
-  return gtk_widget_event (widget->parent, (GdkEvent*) event);
+  return gtk_widget_event (gtk_widget_get_parent (widget), (GdkEvent *) event);
 }
 
 static gint
@@ -168,5 +175,5 @@ gtk_item_leave (GtkWidget        *widget,
   g_return_val_if_fail (GTK_IS_ITEM (widget), FALSE);
   g_return_val_if_fail (event != NULL, FALSE);
 
-  return gtk_widget_event (widget->parent, (GdkEvent*) event);
+  return gtk_widget_event (gtk_widget_get_parent (widget), (GdkEvent*) event);
 }

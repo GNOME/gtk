@@ -35,7 +35,7 @@
  * @widget: The GtkWidget whose properties and features are exported via this
  *   accessible instance
  */
-struct _GtkAccessiblePriv
+struct _GtkAccessiblePrivate
 {
   GtkWidget *widget;
 };
@@ -49,7 +49,7 @@ gtk_accessible_init (GtkAccessible *accesible)
 {
   accesible->priv = G_TYPE_INSTANCE_GET_PRIVATE (accesible,
                                                  GTK_TYPE_ACCESSIBLE,
-                                                 GtkAccessiblePriv);
+                                                 GtkAccessiblePrivate);
 }
 
 static void
@@ -57,7 +57,7 @@ gtk_accessible_class_init (GtkAccessibleClass *klass)
 {
   klass->connect_widget_destroyed = gtk_accessible_real_connect_widget_destroyed;
 
-  g_type_class_add_private (klass, sizeof (GtkAccessiblePriv));
+  g_type_class_add_private (klass, sizeof (GtkAccessiblePrivate));
 }
 
 /**
@@ -121,7 +121,7 @@ gtk_accessible_connect_widget_destroyed (GtkAccessible *accessible)
 static void
 gtk_accessible_real_connect_widget_destroyed (GtkAccessible *accessible)
 {
-  GtkAccessiblePriv *priv = accessible->priv;
+  GtkAccessiblePrivate *priv = accessible->priv;
 
   if (priv->widget)
   {

@@ -39,7 +39,7 @@
 #define MIN_VERTICAL_BAR_HEIGHT    80
 
 
-struct _GtkProgressBarPriv
+struct _GtkProgressBarPrivate
 {
   GtkProgressBarOrientation orientation;
 
@@ -242,17 +242,17 @@ gtk_progress_bar_class_init (GtkProgressBarClass *class)
                                                              1, G_MAXINT, MIN_VERTICAL_BAR_HEIGHT,
                                                              G_PARAM_READWRITE));
 
-  g_type_class_add_private (class, sizeof (GtkProgressBarPriv));
+  g_type_class_add_private (class, sizeof (GtkProgressBarPrivate));
 }
 
 static void
 gtk_progress_bar_init (GtkProgressBar *pbar)
 {
-  GtkProgressBarPriv *priv;
+  GtkProgressBarPrivate *priv;
 
   pbar->priv = G_TYPE_INSTANCE_GET_PRIVATE (pbar,
                                             GTK_TYPE_PROGRESS_BAR,
-                                            GtkProgressBarPriv);
+                                            GtkProgressBarPrivate);
   priv = pbar->priv;
 
   priv->blocks = 10;
@@ -273,16 +273,20 @@ gtk_progress_bar_init (GtkProgressBar *pbar)
 static void
 gtk_progress_bar_realize (GtkWidget *widget)
 {
+  GtkAllocation allocation;
+  GdkWindow *window;
   GdkWindowAttr attributes;
   gint attributes_mask;
 
   gtk_widget_set_realized (widget, TRUE);
 
+  gtk_widget_get_allocation (widget, &allocation);
+
   attributes.window_type = GDK_WINDOW_CHILD;
-  attributes.x = widget->allocation.x;
-  attributes.y = widget->allocation.y;
-  attributes.width = widget->allocation.width;
-  attributes.height = widget->allocation.height;
+  attributes.x = allocation.x;
+  attributes.y = allocation.y;
+  attributes.width = allocation.width;
+  attributes.height = allocation.height;
   attributes.wclass = GDK_INPUT_OUTPUT;
   attributes.visual = gtk_widget_get_visual (widget);
   attributes.colormap = gtk_widget_get_colormap (widget);
@@ -290,12 +294,14 @@ gtk_progress_bar_realize (GtkWidget *widget)
   attributes.event_mask |= GDK_EXPOSURE_MASK;
 
   attributes_mask = GDK_WA_X | GDK_WA_Y | GDK_WA_VISUAL | GDK_WA_COLORMAP;
-  widget->window = gdk_window_new (gtk_widget_get_parent_window (widget),
-                                   &attributes, attributes_mask);
-  gdk_window_set_user_data (widget->window, widget);
+  window = gdk_window_new (gtk_widget_get_parent_window (widget),
+                           &attributes, attributes_mask);
+  gtk_widget_set_window (widget, window);
+  gdk_window_set_user_data (window, widget);
 
-  widget->style = gtk_style_attach (widget->style, widget->window);
-  gtk_style_set_background (widget->style, widget->window, GTK_STATE_ACTIVE);
+  gtk_widget_style_attach (widget);
+  gtk_style_set_background (gtk_widget_get_style (widget),
+                            window, GTK_STATE_ACTIVE);
 }
 
 static void
@@ -341,7 +347,7 @@ gtk_progress_bar_get_property (GObject      *object,
                                GParamSpec   *pspec)
 {
   GtkProgressBar *pbar = GTK_PROGRESS_BAR (object);
-  GtkProgressBarPriv* priv = pbar->priv;
+  GtkProgressBarPrivate* priv = pbar->priv;
 
   switch (prop_id)
     {
@@ -382,7 +388,7 @@ gtk_progress_bar_new (void)
 static void
 gtk_progress_bar_real_update (GtkProgressBar *pbar)
 {
-  GtkProgressBarPriv *priv;
+  GtkProgressBarPrivate *priv;
   GtkWidget *widget;
 
   g_return_if_fail (GTK_IS_PROGRESS_BAR (pbar));
@@ -392,33 +398,37 @@ gtk_progress_bar_real_update (GtkProgressBar *pbar)
 
   if (priv->activity_mode)
     {
+      GtkAllocation allocation;
+      GtkStyle *style;
       guint size;
+
+      gtk_widget_get_allocation (widget, &allocation);
+      style = gtk_widget_get_style (widget);
 
       /* advance the block */
       if (priv->orientation == GTK_PROGRESS_LEFT_TO_RIGHT ||
           priv->orientation == GTK_PROGRESS_RIGHT_TO_LEFT)
         {
           /* Update our activity step. */
-          priv->activity_step = widget->allocation.width * priv->pulse_fraction;
+          priv->activity_step = allocation.width * priv->pulse_fraction;
 
-          size = MAX (2, widget->allocation.width / priv->activity_blocks);
+          size = MAX (2, allocation.width / priv->activity_blocks);
 
           if (priv->activity_dir == 0)
             {
               priv->activity_pos += priv->activity_step;
-              if (priv->activity_pos + size >= widget->allocation.width - widget->style->xthickness)
+              if (priv->activity_pos + size >= allocation.width - style->xthickness)
                 {
-                  priv->activity_pos = widget->allocation.width -
-                    widget->style->xthickness - size;
+                  priv->activity_pos = allocation.width - style->xthickness - size;
                   priv->activity_dir = 1;
                 }
             }
           else
             {
               priv->activity_pos -= priv->activity_step;
-              if (priv->activity_pos <= widget->style->xthickness)
+              if (priv->activity_pos <= style->xthickness)
                 {
-                  priv->activity_pos = widget->style->xthickness;
+                  priv->activity_pos = style->xthickness;
                   priv->activity_dir = 0;
                 }
             }
@@ -426,26 +436,25 @@ gtk_progress_bar_real_update (GtkProgressBar *pbar)
       else
         {
           /* Update our activity step. */
-          priv->activity_step = widget->allocation.height * priv->pulse_fraction;
+          priv->activity_step = allocation.height * priv->pulse_fraction;
 
-          size = MAX (2, widget->allocation.height / priv->activity_blocks);
+          size = MAX (2, allocation.height / priv->activity_blocks);
 
           if (priv->activity_dir == 0)
             {
               priv->activity_pos += priv->activity_step;
-              if (priv->activity_pos + size >= widget->allocation.height - widget->style->ythickness)
+              if (priv->activity_pos + size >= allocation.height - style->ythickness)
                 {
-                  priv->activity_pos = widget->allocation.height -
-                    widget->style->ythickness - size;
+                  priv->activity_pos = allocation.height - style->ythickness - size;
                   priv->activity_dir = 1;
                 }
             }
           else
             {
               priv->activity_pos -= priv->activity_step;
-              if (priv->activity_pos <= widget->style->ythickness)
+              if (priv->activity_pos <= style->ythickness)
                 {
-                  priv->activity_pos = widget->style->ythickness;
+                  priv->activity_pos = style->ythickness;
                   priv->activity_dir = 0;
                 }
             }
@@ -458,7 +467,7 @@ static void
 gtk_progress_bar_finalize (GObject *object)
 {
   GtkProgressBar *pbar = GTK_PROGRESS_BAR (object);
-  GtkProgressBarPriv *priv = pbar->priv;
+  GtkProgressBarPrivate *priv = pbar->priv;
 
   g_free (priv->text);
 
@@ -480,7 +489,7 @@ gtk_progress_bar_expose (GtkWidget      *widget,
 static gchar *
 get_current_text (GtkProgressBar *pbar)
 {
-  GtkProgressBarPriv *priv = pbar->priv;
+  GtkProgressBarPrivate *priv = pbar->priv;
 
   if (priv->text)
     return g_strdup (priv->text);
@@ -493,7 +502,8 @@ gtk_progress_bar_size_request (GtkWidget      *widget,
                                GtkRequisition *requisition)
 {
   GtkProgressBar *pbar;
-  GtkProgressBarPriv *priv;
+  GtkProgressBarPrivate *priv;
+  GtkStyle *style;
   gchar *buf;
   PangoRectangle logical_rect;
   PangoLayout *layout;
@@ -504,6 +514,7 @@ gtk_progress_bar_size_request (GtkWidget      *widget,
   g_return_if_fail (GTK_IS_PROGRESS_BAR (widget));
   g_return_if_fail (requisition != NULL);
 
+  style = gtk_widget_get_style (widget);
   gtk_widget_style_get (widget,
                         "xspacing", &xspacing,
                         "yspacing", &yspacing,
@@ -512,8 +523,8 @@ gtk_progress_bar_size_request (GtkWidget      *widget,
   pbar = GTK_PROGRESS_BAR (widget);
   priv = pbar->priv;
 
-  width = 2 * widget->style->xthickness + xspacing;
-  height = 2 * widget->style->ythickness + yspacing;
+  width = 2 * style->xthickness + xspacing;
+  height = 2 * style->ythickness + yspacing;
 
   if (priv->show_text)
     {
@@ -530,7 +541,7 @@ gtk_progress_bar_size_request (GtkWidget      *widget,
 
           /* The minimum size for ellipsized text is ~ 3 chars */
           context = pango_layout_get_context (layout);
-          metrics = pango_context_get_metrics (context, widget->style->font_desc, pango_context_get_language (context));
+          metrics = pango_context_get_metrics (context, style->font_desc, pango_context_get_language (context));
 
           char_width = pango_font_metrics_get_approximate_char_width (metrics);
           pango_font_metrics_unref (metrics);
@@ -566,11 +577,11 @@ static void
 gtk_progress_bar_size_allocate (GtkWidget     *widget,
                                 GtkAllocation *allocation)
 {
-  widget->allocation = *allocation;
+  gtk_widget_set_allocation (widget, allocation);
 
   if (gtk_widget_get_realized (widget))
     {
-      gdk_window_move_resize (widget->window,
+      gdk_window_move_resize (gtk_widget_get_window (widget),
                               allocation->x, allocation->y,
                               allocation->width, allocation->height);
     }
@@ -579,9 +590,13 @@ gtk_progress_bar_size_allocate (GtkWidget     *widget,
 static void
 gtk_progress_bar_act_mode_enter (GtkProgressBar *pbar)
 {
-  GtkProgressBarPriv *priv = pbar->priv;
+  GtkProgressBarPrivate *priv = pbar->priv;
+  GtkAllocation allocation;
+  GtkStyle *style;
   GtkWidget *widget = GTK_WIDGET (pbar);
   GtkProgressBarOrientation orientation;
+
+  style = gtk_widget_get_style (widget);
 
   orientation = priv->orientation;
   if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL)
@@ -599,14 +614,14 @@ gtk_progress_bar_act_mode_enter (GtkProgressBar *pbar)
     {
       if (orientation == GTK_PROGRESS_LEFT_TO_RIGHT)
         {
-          priv->activity_pos = widget->style->xthickness;
+          priv->activity_pos = style->xthickness;
           priv->activity_dir = 0;
         }
       else
         {
-          priv->activity_pos = widget->allocation.width -
-            widget->style->xthickness - (widget->allocation.height -
-                widget->style->ythickness * 2);
+          gtk_widget_get_allocation (widget, &allocation);
+          priv->activity_pos = allocation.width - style->xthickness -
+                               (allocation.height - style->ythickness * 2);
           priv->activity_dir = 1;
         }
     }
@@ -614,14 +629,14 @@ gtk_progress_bar_act_mode_enter (GtkProgressBar *pbar)
     {
       if (orientation == GTK_PROGRESS_TOP_TO_BOTTOM)
         {
-          priv->activity_pos = widget->style->ythickness;
+          priv->activity_pos = style->ythickness;
           priv->activity_dir = 0;
         }
       else
         {
-          priv->activity_pos = widget->allocation.height -
-            widget->style->ythickness - (widget->allocation.width -
-                widget->style->xthickness * 2);
+          gtk_widget_get_allocation (widget, &allocation);
+          priv->activity_pos = allocation.height - style->ythickness -
+                               (allocation.width - style->xthickness * 2);
           priv->activity_dir = 1;
         }
     }
@@ -633,21 +648,24 @@ gtk_progress_bar_get_activity (GtkProgressBar            *pbar,
                                gint                      *offset,
                                gint                      *amount)
 {
-  GtkProgressBarPriv *priv = pbar->priv;
+  GtkProgressBarPrivate *priv = pbar->priv;
+  GtkAllocation allocation;
   GtkWidget *widget = GTK_WIDGET (pbar);
 
   *offset = priv->activity_pos;
+
+  gtk_widget_get_allocation (widget, &allocation);
 
   switch (orientation)
     {
     case GTK_PROGRESS_LEFT_TO_RIGHT:
     case GTK_PROGRESS_RIGHT_TO_LEFT:
-      *amount = MAX (2, widget->allocation.width / priv->activity_blocks);
+      *amount = MAX (2, allocation.width / priv->activity_blocks);
       break;
 
     case GTK_PROGRESS_TOP_TO_BOTTOM:
     case GTK_PROGRESS_BOTTOM_TO_TOP:
-      *amount = MAX (2, widget->allocation.height / priv->activity_blocks);
+      *amount = MAX (2, allocation.height / priv->activity_blocks);
       break;
     }
 }
@@ -656,23 +674,28 @@ static void
 gtk_progress_bar_paint_activity (GtkProgressBar            *pbar,
                                  GtkProgressBarOrientation  orientation)
 {
+  GtkAllocation allocation;
+  GtkStyle *style;
   GtkWidget *widget = GTK_WIDGET (pbar);
   GdkRectangle area;
+
+  style = gtk_widget_get_style (widget);
+  gtk_widget_get_allocation (widget, &allocation);
 
   switch (orientation)
     {
     case GTK_PROGRESS_LEFT_TO_RIGHT:
     case GTK_PROGRESS_RIGHT_TO_LEFT:
       gtk_progress_bar_get_activity (pbar, orientation, &area.x, &area.width);
-      area.y = widget->style->ythickness;
-      area.height = widget->allocation.height - 2 * widget->style->ythickness;
+      area.y = style->ythickness;
+      area.height = allocation.height - 2 * style->ythickness;
       break;
 
     case GTK_PROGRESS_TOP_TO_BOTTOM:
     case GTK_PROGRESS_BOTTOM_TO_TOP:
       gtk_progress_bar_get_activity (pbar, orientation, &area.y, &area.height);
-      area.x = widget->style->xthickness;
-      area.width = widget->allocation.width - 2 * widget->style->xthickness;
+      area.x = style->xthickness;
+      area.width = allocation.width - 2 * style->xthickness;
       break;
 
     default:
@@ -680,7 +703,7 @@ gtk_progress_bar_paint_activity (GtkProgressBar            *pbar,
       break;
     }
 
-  gtk_paint_box (widget->style,
+  gtk_paint_box (style,
                  gtk_widget_get_window (widget),
                  GTK_STATE_PRELIGHT, GTK_SHADOW_OUT,
                  &area, widget, "bar",
@@ -692,34 +715,39 @@ gtk_progress_bar_paint_continuous (GtkProgressBar            *pbar,
                                    gint                       amount,
                                    GtkProgressBarOrientation  orientation)
 {
+  GtkAllocation allocation;
+  GtkStyle *style;
   GtkWidget *widget = GTK_WIDGET (pbar);
   GdkRectangle area;
 
   if (amount <= 0)
     return;
 
+  style = gtk_widget_get_style (widget);
+  gtk_widget_get_allocation (widget, &allocation);
+
   switch (orientation)
     {
     case GTK_PROGRESS_LEFT_TO_RIGHT:
     case GTK_PROGRESS_RIGHT_TO_LEFT:
       area.width = amount;
-      area.height = widget->allocation.height - widget->style->ythickness * 2;
-      area.y = widget->style->ythickness;
+      area.height = allocation.height - style->ythickness * 2;
+      area.y = style->ythickness;
 
-      area.x = widget->style->xthickness;
+      area.x = style->xthickness;
       if (orientation == GTK_PROGRESS_RIGHT_TO_LEFT)
-        area.x = widget->allocation.width - amount - area.x;
+        area.x = allocation.width - amount - area.x;
       break;
 
     case GTK_PROGRESS_TOP_TO_BOTTOM:
     case GTK_PROGRESS_BOTTOM_TO_TOP:
-      area.width = widget->allocation.width - widget->style->xthickness * 2;
+      area.width = allocation.width - style->xthickness * 2;
       area.height = amount;
-      area.x = widget->style->xthickness;
+      area.x = style->xthickness;
 
-      area.y = widget->style->ythickness;
+      area.y = style->ythickness;
       if (orientation == GTK_PROGRESS_BOTTOM_TO_TOP)
-        area.y = widget->allocation.height - amount - area.y;
+        area.y = allocation.height - amount - area.y;
       break;
 
     default:
@@ -727,7 +755,7 @@ gtk_progress_bar_paint_continuous (GtkProgressBar            *pbar,
       break;
     }
 
-  gtk_paint_box (widget->style,
+  gtk_paint_box (style,
                  gtk_widget_get_window (widget),
                  GTK_STATE_PRELIGHT, GTK_SHADOW_OUT,
                  &area, widget, "bar",
@@ -740,7 +768,9 @@ gtk_progress_bar_paint_text (GtkProgressBar            *pbar,
                              gint                       amount,
                              GtkProgressBarOrientation  orientation)
 {
-  GtkProgressBarPriv *priv = pbar->priv;
+  GtkProgressBarPrivate *priv = pbar->priv;
+  GtkAllocation allocation;
+  GtkStyle *style;
   GtkWidget *widget = GTK_WIDGET (pbar);
   gint x;
   gint y;
@@ -752,6 +782,9 @@ gtk_progress_bar_paint_text (GtkProgressBar            *pbar,
   gfloat text_xalign = 0.5;
   gfloat text_yalign = 0.5;
 
+  style = gtk_widget_get_style (widget);
+  gtk_widget_get_allocation (widget, &allocation);
+
   if (gtk_widget_get_direction (widget) != GTK_TEXT_DIR_LTR)
     text_xalign = 1.0 - text_xalign;
 
@@ -760,22 +793,18 @@ gtk_progress_bar_paint_text (GtkProgressBar            *pbar,
   layout = gtk_widget_create_pango_layout (widget, buf);
   pango_layout_set_ellipsize (layout, priv->ellipsize);
   if (priv->ellipsize)
-    pango_layout_set_width (layout, widget->allocation.width * PANGO_SCALE);
+    pango_layout_set_width (layout, allocation.width * PANGO_SCALE);
 
   pango_layout_get_pixel_extents (layout, NULL, &logical_rect);
 
-  x = widget->style->xthickness + 1 + text_xalign *
-      (widget->allocation.width - 2 * widget->style->xthickness -
-       2 - logical_rect.width);
+  x = style->xthickness + 1 + text_xalign * (allocation.width - 2 * style->xthickness - 2 - logical_rect.width);
 
-  y = widget->style->ythickness + 1 + text_yalign *
-      (widget->allocation.height - 2 * widget->style->ythickness -
-       2 - logical_rect.height);
+  y = style->ythickness + 1 + text_yalign * (allocation.height - 2 * style->ythickness - 2 - logical_rect.height);
 
-  rect.x = widget->style->xthickness;
-  rect.y = widget->style->ythickness;
-  rect.width = widget->allocation.width - 2 * widget->style->xthickness;
-  rect.height = widget->allocation.height - 2 * widget->style->ythickness;
+  rect.x = style->xthickness;
+  rect.y = style->ythickness;
+  rect.width = allocation.width - 2 * style->xthickness;
+  rect.height = allocation.height - 2 * style->ythickness;
 
   prelight_clip = start_clip = end_clip = rect;
 
@@ -823,7 +852,7 @@ gtk_progress_bar_paint_text (GtkProgressBar            *pbar,
     }
 
   if (start_clip.width > 0 && start_clip.height > 0)
-    gtk_paint_layout (widget->style,
+    gtk_paint_layout (style,
                       gtk_widget_get_window (widget),
                       GTK_STATE_NORMAL,
                       FALSE,
@@ -834,7 +863,7 @@ gtk_progress_bar_paint_text (GtkProgressBar            *pbar,
                       layout);
 
   if (end_clip.width > 0 && end_clip.height > 0)
-    gtk_paint_layout (widget->style,
+    gtk_paint_layout (style,
                       gtk_widget_get_window (widget),
                       GTK_STATE_NORMAL,
                       FALSE,
@@ -844,7 +873,7 @@ gtk_progress_bar_paint_text (GtkProgressBar            *pbar,
                       x, y,
                       layout);
 
-  gtk_paint_layout (widget->style,
+  gtk_paint_layout (style,
                     gtk_widget_get_window (widget),
                     GTK_STATE_PRELIGHT,
                     FALSE,
@@ -861,9 +890,14 @@ gtk_progress_bar_paint_text (GtkProgressBar            *pbar,
 static void
 gtk_progress_bar_paint (GtkProgressBar *pbar)
 {
-  GtkProgressBarPriv *priv = pbar->priv;
+  GtkProgressBarPrivate *priv = pbar->priv;
+  GtkAllocation allocation;
   GtkWidget *widget = GTK_WIDGET (pbar);
   GtkProgressBarOrientation orientation;
+  GtkStyle *style;
+
+  style = gtk_widget_get_style (widget);
+  gtk_widget_get_allocation (widget, &allocation);
 
   orientation = priv->orientation;
   if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL)
@@ -874,13 +908,13 @@ gtk_progress_bar_paint (GtkProgressBar *pbar)
         orientation = GTK_PROGRESS_LEFT_TO_RIGHT;
     }
 
-  gtk_paint_box (widget->style,
+  gtk_paint_box (style,
                  gtk_widget_get_window (widget),
                  GTK_STATE_NORMAL, GTK_SHADOW_IN,
                  NULL, widget, "trough",
                  0, 0,
-                 widget->allocation.width,
-                 widget->allocation.height);
+                 allocation.width,
+                 allocation.height);
 
   if (priv->activity_mode)
     {
@@ -902,9 +936,9 @@ gtk_progress_bar_paint (GtkProgressBar *pbar)
 
       if (orientation == GTK_PROGRESS_LEFT_TO_RIGHT ||
           orientation == GTK_PROGRESS_RIGHT_TO_LEFT)
-        space = widget->allocation.width - 2 * widget->style->xthickness;
+        space = allocation.width - 2 * style->xthickness;
       else
-        space = widget->allocation.height - 2 * widget->style->ythickness;
+        space = allocation.height - 2 * style->ythickness;
 
       amount = space * gtk_progress_bar_get_fraction (pbar);
 
@@ -919,7 +953,7 @@ static void
 gtk_progress_bar_set_activity_mode (GtkProgressBar *pbar,
                                     gboolean        activity_mode)
 {
-  GtkProgressBarPriv *priv = pbar->priv;
+  GtkProgressBarPrivate *priv = pbar->priv;
 
   activity_mode = !!activity_mode;
 
@@ -949,7 +983,7 @@ void
 gtk_progress_bar_set_fraction (GtkProgressBar *pbar,
                                gdouble         fraction)
 {
-  GtkProgressBarPriv* priv;
+  GtkProgressBarPrivate* priv;
 
   g_return_if_fail (GTK_IS_PROGRESS_BAR (pbar));
 
@@ -992,7 +1026,7 @@ void
 gtk_progress_bar_set_text (GtkProgressBar *pbar,
                            const gchar    *text)
 {
-  GtkProgressBarPriv *priv;
+  GtkProgressBarPrivate *priv;
 
   g_return_if_fail (GTK_IS_PROGRESS_BAR (pbar));
 
@@ -1023,7 +1057,7 @@ void
 gtk_progress_bar_set_show_text (GtkProgressBar *pbar,
                                 gboolean        show_text)
 {
-  GtkProgressBarPriv *priv;
+  GtkProgressBarPrivate *priv;
 
   g_return_if_fail (GTK_IS_PROGRESS_BAR (pbar));
 
@@ -1073,7 +1107,7 @@ void
 gtk_progress_bar_set_pulse_step (GtkProgressBar *pbar,
                                  gdouble         fraction)
 {
-  GtkProgressBarPriv *priv;
+  GtkProgressBarPrivate *priv;
 
   g_return_if_fail (GTK_IS_PROGRESS_BAR (pbar));
 
@@ -1096,7 +1130,7 @@ void
 gtk_progress_bar_set_orientation (GtkProgressBar           *pbar,
                                   GtkProgressBarOrientation orientation)
 {
-  GtkProgressBarPriv *priv;
+  GtkProgressBarPrivate *priv;
 
   g_return_if_fail (GTK_IS_PROGRESS_BAR (pbar));
 
@@ -1195,7 +1229,7 @@ void
 gtk_progress_bar_set_ellipsize (GtkProgressBar     *pbar,
                                 PangoEllipsizeMode  mode)
 {
-  GtkProgressBarPriv *priv;
+  GtkProgressBarPrivate *priv;
 
   g_return_if_fail (GTK_IS_PROGRESS_BAR (pbar));
   g_return_if_fail (mode >= PANGO_ELLIPSIZE_NONE &&

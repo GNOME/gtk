@@ -45,16 +45,16 @@ G_BEGIN_DECLS
 #define GTK_IMAGE_MENU_ITEM_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_IMAGE_MENU_ITEM, GtkImageMenuItemClass))
 
 
-typedef struct _GtkImageMenuItem       GtkImageMenuItem;
-typedef struct _GtkImageMenuItemPriv   GtkImageMenuItemPriv;
-typedef struct _GtkImageMenuItemClass  GtkImageMenuItemClass;
+typedef struct _GtkImageMenuItem              GtkImageMenuItem;
+typedef struct _GtkImageMenuItemPrivate       GtkImageMenuItemPrivate;
+typedef struct _GtkImageMenuItemClass         GtkImageMenuItemClass;
 
 struct _GtkImageMenuItem
 {
   GtkMenuItem menu_item;
 
   /*< private >*/
-  GtkImageMenuItemPriv *priv;
+  GtkImageMenuItemPrivate *priv;
 };
 
 struct _GtkImageMenuItemClass

@@ -335,7 +335,8 @@ gtk_public_h_sources =          \
 	gtkvscrollbar.h		\
 	gtkvseparator.h		\
 	gtkwidget.h		\
-	gtkwindow.h
+	gtkwindow.h		\
+	gtkwrapbox.h
 
 if OS_UNIX
 gtk_unix_print_public_h_sources =    \
@@ -619,6 +620,7 @@ gtk_base_c_sources =            \
 	gtkwidget.c		\
 	gtkwindow-decorate.c    \
 	gtkwindow.c		\
+	gtkwrapbox.c		\
 	$(gtk_clipboard_dnd_c_sources)
 
 gtk_c_sources = $(gtk_base_c_sources)
@@ -821,27 +823,23 @@ gtkunixprintinclude_HEADERS = $(gtk_unix_print_public_h_sources)
 libgtk_x11_3_0_la_SOURCES = $(gtk_c_sources)
 libgtk_win32_3_0_la_SOURCES = $(gtk_c_sources)
 libgtk_quartz_3_0_la_SOURCES = $(gtk_c_sources)
-libgtk_directfb_3_0_la_SOURCES = $(gtk_c_sources)
 
 libgtk_x11_3_0_la_LDFLAGS = $(libtool_opts)
 libgtk_win32_3_0_la_LDFLAGS = $(libtool_opts) -Wl,-luuid
 libgtk_quartz_3_0_la_LDFLAGS = $(libtool_opts)
-libgtk_directfb_3_0_la_LDFLAGS = $(libtool_opts)
 
 libgtk_x11_3_0_la_LIBADD = $(libadd)
 libgtk_win32_3_0_la_LIBADD = $(libadd) -lole32 -lgdi32 -lcomdlg32 -lwinspool -lcomctl32
 libgtk_quartz_3_0_la_LIBADD = $(libadd)
-libgtk_directfb_3_0_la_LIBADD = $(libadd)
 
 libgtk_x11_3_0_la_DEPENDENCIES = $(deps)
 libgtk_win32_3_0_la_DEPENDENCIES = $(gtk_def) $(gtk_win32_res) $(deps)
 libgtk_quartz_3_0_la_DEPENDENCIES = $(deps)
-libgtk_directfb_3_0_la_DEPENDENCIES = $(deps)
 
 if USE_WIN32
 libgtk_target_ldflags = $(gtk_win32_res_ldflag) $(gtk_win32_symbols)
 endif
-EXTRA_LTLIBRARIES = libgtk-x11-3.0.la libgtk-win32-3.0.la libgtk-quartz-3.0.la libgtk-directfb-3.0.la
+EXTRA_LTLIBRARIES = libgtk-x11-3.0.la libgtk-win32-3.0.la libgtk-quartz-3.0.la
 
 install-exec-hook:
 if DISABLE_EXPLICIT_DEPS
@@ -946,14 +944,14 @@ if OS_WIN32
 # Workaround for UAC silliness: programs with "update" in their name
 # are believed to be installers and require elevated privileges to be
 # used... Use a manifest file to tell Windows that
-# gtk-update-icon-cache.exe doesn't require any special privileges.
+# gtk-update-icon-cache-3.0.exe doesn't require any special privileges.
 
 GTK_UPDATE_ICON_CACHE_MANIFEST = gtk-update-icon-cache-3.0.exe.manifest
 
 bin_SCRIPTS += \
 	$(GTK_UPDATE_ICON_CACHE_MANIFEST)
 
-gtk-update-icon-cache.exe.manifest:
+$(GTK_UPDATE_ICON_CACHE_MANIFEST):
 	(echo '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>' ; \
 	 echo '<assembly xmlns="urn:schemas-microsoft-com:asm.v1" manifestVersion="1.0">' ; \
 	 echo '  <assemblyIdentity version="1.0.0.0"' ; \
@@ -1022,7 +1020,7 @@ STOCK_ICONS = \
 	stock-icons/16/format-indent-more-ltr.png 	\
 	stock-icons/16/format-indent-more-rtl.png 	\
 	stock-icons/16/gtk-index.png 			\
-	stock-icons/16/dialog-info.png 			\
+	stock-icons/16/dialog-information.png		\
 	stock-icons/16/go-jump-ltr.png 			\
 	stock-icons/16/go-jump-rtl.png 			\
 	stock-icons/16/format-justify-center.png 	\
@@ -1045,7 +1043,7 @@ STOCK_ICONS = \
 	stock-icons/16/document-open.png 		\
 	stock-icons/16/gtk-page-setup.png 		\
 	stock-icons/16/edit-paste.png 			\
-	stock-icons/16/edit-preferences.png 		\
+	stock-icons/16/gtk-preferences.png 		\
 	stock-icons/16/document-print.png 		\
 	stock-icons/16/printer-error.png 		\
 	stock-icons/16/printer-paused.png 		\
@@ -1127,7 +1125,7 @@ STOCK_ICONS = \
 	stock-icons/24/format-indent-more-ltr.png 	\
 	stock-icons/24/format-indent-more-rtl.png 	\
 	stock-icons/24/gtk-index.png  			\
-	stock-icons/24/dialog-info.png 			\
+	stock-icons/24/dialog-information.png		\
 	stock-icons/24/format-text-italic.png 		\
 	stock-icons/24/go-jump-ltr.png 			\
 	stock-icons/24/go-jump-rtl.png 			\
@@ -1155,7 +1153,7 @@ STOCK_ICONS = \
 	stock-icons/24/gtk-orientation-portrait.png	\
 	stock-icons/24/gtk-page-setup.png 		\
 	stock-icons/24/edit-paste.png 			\
-	stock-icons/24/edit-preferences.png 		\
+	stock-icons/24/gtk-preferences.png 		\
 	stock-icons/24/document-print.png 		\
 	stock-icons/24/printer-error.png 		\
 	stock-icons/24/printer-paused.png 		\
@@ -1197,7 +1195,7 @@ STOCK_ICONS = \
 	stock-icons/32/gtk-dnd.png 			\
 	stock-icons/48/dialog-password.png 		\
 	stock-icons/48/dialog-error.png 		\
-	stock-icons/48/dialog-info.png 			\
+	stock-icons/48/dialog-information.png		\
 	stock-icons/48/dialog-question.png 		\
 	stock-icons/48/dialog-warning.png
 

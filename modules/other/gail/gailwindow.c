@@ -228,7 +228,7 @@ gail_window_real_initialize (AtkObject *obj,
         obj->role = ATK_ROLE_TOOL_TIP;
       else if (GTK_IS_PLUG (widget))
         obj->role = ATK_ROLE_PANEL;
-      else if (GTK_WINDOW (widget)->type == GTK_WINDOW_POPUP)
+      else if (gtk_window_get_window_type (GTK_WINDOW (widget)) == GTK_WINDOW_POPUP)
         obj->role = ATK_ROLE_WINDOW;
       else
         obj->role = ATK_ROLE_FRAME;
@@ -434,6 +434,7 @@ gail_window_ref_state_set (AtkObject *accessible)
   AtkStateSet *state_set;
   GtkWidget *widget;
   GtkWindow *window;
+  GdkWindow *gdk_window;
   GdkWindowState state;
 
   state_set = ATK_OBJECT_CLASS (gail_window_parent_class)->ref_state_set (accessible);
@@ -444,12 +445,13 @@ gail_window_ref_state_set (AtkObject *accessible)
 
   window = GTK_WINDOW (widget);
 
-  if (window->has_focus)
+  if (gtk_window_has_toplevel_focus (window) && gtk_window_is_active (window))
     atk_state_set_add_state (state_set, ATK_STATE_ACTIVE);
 
-  if (widget->window)
+  gdk_window = gtk_widget_get_window (widget);
+  if (window)
     {
-      state = gdk_window_get_state (widget->window);
+      state = gdk_window_get_state (gdk_window);
       if (state & GDK_WINDOW_STATE_ICONIFIED)
         atk_state_set_add_state (state_set, ATK_STATE_ICONIFIED);
     } 
@@ -570,7 +572,8 @@ gail_window_get_extents (AtkComponent  *component,
       return;
     }
 
-  gdk_window_get_frame_extents (widget->window, &rect);
+  gdk_window_get_frame_extents (gtk_widget_get_window (widget),
+                                &rect);
 
   *width = rect.width;
   *height = rect.height;
@@ -584,7 +587,8 @@ gail_window_get_extents (AtkComponent  *component,
   *y = rect.y;
   if (coord_type == ATK_XY_WINDOW)
     {
-      gdk_window_get_origin (widget->window, &x_toplevel, &y_toplevel);
+      gdk_window_get_origin (gtk_widget_get_window (widget),
+                             &x_toplevel, &y_toplevel);
       *x -= x_toplevel;
       *y -= y_toplevel;
     }
@@ -614,7 +618,7 @@ gail_window_get_size (AtkComponent *component,
       parent_iface->get_size (component, width, height);
       return;
     }
-  gdk_window_get_frame_extents (widget->window, &rect);
+  gdk_window_get_frame_extents (gtk_widget_get_window (widget), &rect);
 
   *width = rect.width;
   *height = rect.height;
@@ -1010,7 +1014,7 @@ gail_window_get_mdi_zorder (AtkComponent *component)
 
   gail_return_val_if_fail (GTK_IS_WINDOW (widget), -1);
 
-  return get_window_zorder (widget->window);
+  return get_window_zorder (gtk_widget_get_window (widget));
 }
 
 #elif defined (GDK_WINDOWING_WIN32)

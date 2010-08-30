@@ -534,12 +534,15 @@ gtk_cell_renderer_progress_render (GtkCellRenderer *cell,
 {
   GtkCellRendererProgress *cellprogress = GTK_CELL_RENDERER_PROGRESS (cell);
   GtkCellRendererProgressPrivate *priv= cellprogress->priv; 
+  GtkStyle *style;
   PangoLayout *layout;
   PangoRectangle logical_rect;
   gint x, y, w, h, x_pos, y_pos, bar_position, bar_size, start, full_size;
   gint xpad, ypad;
   GdkRectangle clip;
   gboolean is_rtl;
+
+  style = gtk_widget_get_style (widget);
 
   is_rtl = gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL;
 
@@ -553,7 +556,7 @@ gtk_cell_renderer_progress_render (GtkCellRenderer *cell,
    * but some engines don't paint anything with that detail for
    * non-GtkProgressBar widgets.
    */
-  gtk_paint_box (widget->style,
+  gtk_paint_box (style,
 		 window,
 		 GTK_STATE_NORMAL, GTK_SHADOW_IN, 
 		 NULL, widget, NULL,
@@ -601,7 +604,7 @@ gtk_cell_renderer_progress_render (GtkCellRenderer *cell,
       clip.y = bar_position;
     }
 
-  gtk_paint_box (widget->style,
+  gtk_paint_box (style,
 		 window,
 		 GTK_STATE_SELECTED, GTK_SHADOW_OUT,
 		 &clip, widget, "bar",
@@ -620,13 +623,13 @@ gtk_cell_renderer_progress_render (GtkCellRenderer *cell,
       else
 	text_xalign = priv->text_xalign;
 
-      x_pos = x + widget->style->xthickness + text_xalign *
-	(w - 2 * widget->style->xthickness - logical_rect.width);
+      x_pos = x + style->xthickness + text_xalign *
+	(w - 2 * style->xthickness - logical_rect.width);
 
-      y_pos = y + widget->style->ythickness + priv->text_yalign *
-	(h - 2 * widget->style->ythickness - logical_rect.height);
-  
-      gtk_paint_layout (widget->style, window, 
+      y_pos = y + style->ythickness + priv->text_yalign *
+	(h - 2 * style->ythickness - logical_rect.height);
+
+      gtk_paint_layout (style, window,
 	  	        GTK_STATE_SELECTED,
 		        FALSE, &clip, widget, "progressbar",
 		        x_pos, y_pos, 
@@ -646,7 +649,7 @@ gtk_cell_renderer_progress_render (GtkCellRenderer *cell,
 	      clip.height = bar_position - y;
 	    }
 
-          gtk_paint_layout (widget->style, window, 
+          gtk_paint_layout (style, window,
 	  	            GTK_STATE_NORMAL,
 		            FALSE, &clip, widget, "progressbar",
 		            x_pos, y_pos,
@@ -667,7 +670,7 @@ gtk_cell_renderer_progress_render (GtkCellRenderer *cell,
 	      clip.height = y + h - (bar_position + bar_size);
 	    }
 
-          gtk_paint_layout (widget->style, window, 
+          gtk_paint_layout (style, window,
 		            GTK_STATE_NORMAL,
 		            FALSE, &clip, widget, "progressbar",
 		            x_pos, y_pos,

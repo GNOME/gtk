@@ -113,6 +113,7 @@ _gtk_mnemonic_hash_activate (GtkMnemonicHash *mnemonic_hash,
 {
   GSList *list, *targets;
   GtkWidget *widget, *chosen_widget;
+  GdkWindow *window;
   gboolean overloaded;
 
   targets = g_hash_table_lookup (mnemonic_hash->hash,
@@ -125,11 +126,11 @@ _gtk_mnemonic_hash_activate (GtkMnemonicHash *mnemonic_hash,
   for (list = targets; list; list = list->next)
     {
       widget = GTK_WIDGET (list->data);
-      
+      window = gtk_widget_get_window (widget);
+
       if (gtk_widget_is_sensitive (widget) &&
 	  gtk_widget_get_mapped (widget) &&
-          widget->window &&
-	  gdk_window_is_viewable (widget->window))
+          window && gdk_window_is_viewable (window))
 	{
 	  if (chosen_widget)
 	    {
