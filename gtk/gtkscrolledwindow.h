@@ -48,27 +48,15 @@ G_BEGIN_DECLS
 #define GTK_SCROLLED_WINDOW_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_SCROLLED_WINDOW, GtkScrolledWindowClass))
 
 
-
-typedef struct _GtkScrolledWindow       GtkScrolledWindow;
-typedef struct _GtkScrolledWindowClass  GtkScrolledWindowClass;
+typedef struct _GtkScrolledWindow              GtkScrolledWindow;
+typedef struct _GtkScrolledWindowPrivate       GtkScrolledWindowPrivate;
+typedef struct _GtkScrolledWindowClass         GtkScrolledWindowClass;
 
 struct _GtkScrolledWindow
 {
   GtkBin container;
 
-  /*< public >*/
-  GtkWidget *GSEAL (hscrollbar);
-  GtkWidget *GSEAL (vscrollbar);
-
-  /*< private >*/
-  guint GSEAL (hscrollbar_policy)      : 2;
-  guint GSEAL (vscrollbar_policy)      : 2;
-  guint GSEAL (hscrollbar_visible)     : 1;
-  guint GSEAL (vscrollbar_visible)     : 1;
-  guint GSEAL (window_placement)       : 2;
-  guint GSEAL (focus_out)              : 1;	/* Flag used by ::move-focus-out implementation */
-
-  guint16 GSEAL (shadow_type);
+  GtkScrolledWindowPrivate *priv;
 };
 
 struct _GtkScrolledWindowClass
