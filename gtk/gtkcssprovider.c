@@ -1403,6 +1403,43 @@ css_provider_parse_value (const gchar *value_str,
       else
         parsed = FALSE;
     }
+  else if (type == GTK_TYPE_BORDER)
+    {
+      guint first, second, third, fourth;
+      GtkBorder border;
+
+      /* FIXME: no unit support */
+      if (sscanf (value_str, "%d %d %d %d",
+                  &first, &second, &third, &fourth) == 4)
+        {
+          border.top = first;
+          border.right = second;
+          border.bottom = third;
+          border.left = fourth;
+        }
+      else if (sscanf (value_str, "%d %d %d",
+                       &first, &second, &third) == 3)
+        {
+          border.top = first;
+          border.left = border.right = second;
+          border.bottom = third;
+        }
+      else if (sscanf (value_str, "%d %d", &first, &second) == 2)
+        {
+          border.top = border.bottom = first;
+          border.left = border.right = second;
+        }
+      else if (sscanf (value_str, "%d", &first) == 1)
+        {
+          border.top = border.bottom = first;
+          border.left = border.right = first;
+        }
+      else
+        parsed = FALSE;
+
+      if (parsed)
+        g_value_set_boxed (value, &border);
+    }
   else
     {
       g_warning ("Cannot parse string '%s' for type %s", value_str, g_type_name (type));
