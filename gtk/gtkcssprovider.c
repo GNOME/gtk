@@ -1783,6 +1783,7 @@ gtk_css_provider_get_default (void)
         "  foreground-color: @fg_color;\n"
         "  text-color: @text_color; \n"
         "  base-color: @base_color; \n"
+        "  padding: 2 2; \n"
         "}\n"
         "\n"
         "*:prelight {\n"
