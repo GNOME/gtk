@@ -2903,8 +2903,21 @@ draw_hline (GtkStyle *style,
 {
   if (xp_theme_is_active () && detail && !strcmp (detail, "menuitem"))
     {
+      gint cx, cy;
+      gint new_y, new_height;
+      gint y_offset;
+
+      xp_theme_get_element_dimensions (XP_THEME_ELEMENT_MENU_SEPARATOR,
+				       state_type,
+				       &cx, &cy);
+
+      /* Center the separator */
+      y_offset = (area->height / 2) - (cy / 2);
+      new_y = y_offset >= 0 ? area->y + y_offset : area->y;
+      new_height = cy;
+
       if (xp_theme_draw
-	  (window, XP_THEME_ELEMENT_MENU_SEPARATOR, style, x1, y, x2, 1,
+	  (window, XP_THEME_ELEMENT_MENU_SEPARATOR, style, x1, new_y, x2, new_height,
 	   state_type, area))
 	{
 	  return;

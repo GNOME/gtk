@@ -86,6 +86,7 @@
 #define MBI_DISABLEDHOT    5
 #define MBI_DISABLEDPUSHED 6
 
+#define MENU_POPUPGUTTER    13
 #define MENU_POPUPITEM      14
 #define MENU_POPUPSEPARATOR 15
 
@@ -188,6 +189,13 @@ typedef BOOL (FAR PASCAL *IsThemeBackgroundPartiallyTransparentFunc) (HTHEME hTh
 typedef HRESULT (FAR PASCAL *DrawThemeParentBackgroundFunc) (HWND hwnd,
 							     HDC hdc,
 							     RECT *prc);
+typedef HRESULT (FAR PASCAL *GetThemePartSizeFunc)          (HTHEME hTheme,
+							     HDC hdc,
+							     int iPartId,
+							     int iStateId,
+							     RECT *prc,
+							     int eSize,
+							     SIZE *psz);
 
 static GetThemeSysFontFunc get_theme_sys_font_func = NULL;
 static GetThemeSysColorFunc get_theme_sys_color_func = NULL;
@@ -200,6 +208,7 @@ static IsThemeActiveFunc is_theme_active_func = NULL;
 static IsAppThemedFunc is_app_themed_func = NULL;
 static IsThemeBackgroundPartiallyTransparentFunc is_theme_partially_transparent_func = NULL;
 static DrawThemeParentBackgroundFunc draw_theme_parent_background_func = NULL;
+static GetThemePartSizeFunc get_theme_part_size_func = NULL;
 
 static void
 xp_theme_close_open_handles (void)
@@ -242,6 +251,7 @@ xp_theme_init (void)
       get_theme_sys_metric_func = (GetThemeSysSizeFunc) GetProcAddress (uxtheme_dll, "GetThemeSysSize");
       is_theme_partially_transparent_func = (IsThemeBackgroundPartiallyTransparentFunc) GetProcAddress (uxtheme_dll, "IsThemeBackgroundPartiallyTransparent");
       draw_theme_parent_background_func = (DrawThemeParentBackgroundFunc) GetProcAddress (uxtheme_dll, "DrawThemeParentBackground");
+      get_theme_part_size_func = (GetThemePartSizeFunc) GetProcAddress (uxtheme_dll, "GetThemePartSize");
     }
 
   if (is_app_themed_func && is_theme_active_func)
@@ -292,6 +302,7 @@ xp_theme_exit (void)
   get_theme_sys_metric_func = NULL;
   is_theme_partially_transparent_func = NULL;
   draw_theme_parent_background_func = NULL;
+  get_theme_part_size_func = NULL;
 }
 
 static HTHEME
@@ -782,8 +793,11 @@ xp_theme_map_gtk_state (XpThemeElement element, GtkStateType state)
       ret = 1;
       break;
 
-    case XP_THEME_ELEMENT_MENU_ITEM:
     case XP_THEME_ELEMENT_MENU_SEPARATOR:
+      ret = TS_NORMAL;
+      break;
+
+    case XP_THEME_ELEMENT_MENU_ITEM:
       switch (state)
 	{
 	case GTK_STATE_SELECTED:
@@ -934,6 +948,10 @@ xp_theme_draw (GdkWindow *win, XpThemeElement element, GtkStyle *style,
 
   part_state = xp_theme_map_gtk_state (element, state_type);
 
+  /* Support transparency */
+  if (is_theme_partially_transparent_func (theme, element_part_map[element], part_state))
+    draw_theme_parent_background_func (GDK_WINDOW_HWND (win), dc, pClip);
+
   draw_theme_background_func (theme, dc, element_part_map[element],
 			      part_state, &rect, pClip);
 
@@ -955,6 +973,55 @@ xp_theme_is_drawable (XpThemeElement element)
     return (xp_theme_get_handle_by_element (element) != NULL);
 
   return FALSE;
+}
+
+gboolean
+xp_theme_get_element_dimensions (XpThemeElement element,
+				 GtkStateType state_type,
+				 gint *cx, gint *cy)
+{
+  HTHEME theme;
+  SIZE part_size;
+  int part_state;
+
+  if (!xp_theme_is_active ())
+    return FALSE;
+
+  theme = xp_theme_get_handle_by_element (element);
+  if (!theme)
+    return FALSE;
+
+  part_state = xp_theme_map_gtk_state (element, state_type);
+
+  get_theme_part_size_func (theme,
+			    NULL,
+			    element_part_map[element],
+			    part_state,
+			    NULL,
+			    TS_MIN,
+			    &part_size);
+
+  *cx = part_size.cx;
+  *cy = part_size.cy;
+
+  if (element == XP_THEME_ELEMENT_MENU_ITEM ||
+      element == XP_THEME_ELEMENT_MENU_SEPARATOR)
+  {
+    SIZE gutter_size;
+
+    get_theme_part_size_func (theme,
+			      NULL,
+			      MENU_POPUPGUTTER,
+			      0,
+			      NULL,
+			      TS_MIN,
+			      &gutter_size);
+
+	*cx += gutter_size.cx * 2;
+	*cy += gutter_size.cy * 2;
+  }
+
+  return TRUE;
 }
 
 gboolean
