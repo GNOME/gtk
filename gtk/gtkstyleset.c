@@ -85,6 +85,7 @@ gtk_style_set_class_init (GtkStyleSetClass *klass)
 
   gtk_style_set_register_property ("font", PANGO_TYPE_FONT_DESCRIPTION, NULL, NULL);
 
+  gtk_style_set_register_property ("margin", GTK_TYPE_BORDER, NULL, NULL);
   gtk_style_set_register_property ("padding", GTK_TYPE_BORDER, NULL, NULL);
   gtk_style_set_register_property ("border", G_TYPE_INT, NULL, NULL);
 
