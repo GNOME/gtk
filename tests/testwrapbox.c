@@ -2,7 +2,7 @@
  * Copyright (C) 2010 Openismus GmbH
  *
  * Author:
- *      Tristan Van Berkom <tristan.van.berkom@gmail.com>
+ *      Tristan Van Berkom <tristanvb@openismus.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
