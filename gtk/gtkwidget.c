@@ -13308,6 +13308,7 @@ gtk_widget_get_style_context (GtkWidget *widget)
       static GtkCssProvider *css_provider = NULL;
       GtkCssProvider *default_provider;
       GtkWidgetPath *path;
+      GtkSettings *settings;
 
       context = g_object_new (GTK_TYPE_STYLE_CONTEXT,
                               "direction", gtk_widget_get_direction (widget),
@@ -13346,6 +13347,11 @@ gtk_widget_get_style_context (GtkWidget *widget)
       gtk_style_context_add_provider (context,
                                       GTK_STYLE_PROVIDER (default_provider),
                                       GTK_STYLE_PROVIDER_PRIORITY_FALLBACK);
+
+      settings = gtk_widget_get_settings (widget);
+      gtk_style_context_add_provider (context,
+                                      GTK_STYLE_PROVIDER (settings),
+                                      GTK_STYLE_PROVIDER_PRIORITY_SETTINGS);
 
       path = gtk_widget_get_path (widget);
       gtk_style_context_set_path (context, path);

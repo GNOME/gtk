@@ -179,6 +179,8 @@ enum {
 };
 
 /* --- prototypes --- */
+static void     gtk_settings_provider_iface_init (GtkStyleProviderIface *iface);
+
 static void	gtk_settings_finalize		 (GObject		*object);
 static void	gtk_settings_get_property	 (GObject		*object,
 						  guint			 property_id,
@@ -221,7 +223,9 @@ static GSList           *object_list = NULL;
 static guint		 class_n_properties = 0;
 
 
-G_DEFINE_TYPE (GtkSettings, gtk_settings, G_TYPE_OBJECT)
+G_DEFINE_TYPE_EXTENDED (GtkSettings, gtk_settings, G_TYPE_OBJECT, 0,
+                        G_IMPLEMENT_INTERFACE (GTK_TYPE_STYLE_PROVIDER,
+                                               gtk_settings_provider_iface_init));
 
 /* --- functions --- */
 static void
@@ -1244,6 +1248,76 @@ gtk_settings_class_init (GtkSettingsClass *class)
                                                                 GTK_PARAM_READWRITE),
                                              gtk_rc_property_parse_enum);
   g_assert (result == PROP_IM_STATUS_STYLE);
+}
+
+static GtkStyleSet *
+gtk_settings_get_style (GtkStyleProvider *provider,
+                        GtkWidgetPath    *path)
+{
+  PangoFontDescription *font_desc;
+  gchar *font_name, *color_scheme;
+  GtkSettings *settings;
+  GtkStyleSet *set;
+  gchar **colors;
+  guint i;
+
+  settings = GTK_SETTINGS (provider);
+  set = gtk_style_set_new ();
+
+  g_object_get (settings,
+                "gtk-font-name", &font_name,
+                "gtk-color-scheme", &color_scheme,
+                NULL);
+
+  colors = g_strsplit_set (color_scheme, "\n;", -1);
+
+  for (i = 0; colors[i]; i++)
+    {
+      gchar *name, *pos;
+      GdkColor col;
+
+      if (!*colors[i])
+        continue;
+
+      name = colors[i];
+      pos = strchr (colors[i], ':');
+
+      if (!pos)
+        continue;
+
+      /* Set NUL after color name */
+      *pos = '\0';
+      pos++;
+
+      /* Find start of color string */
+      while (*pos == ' ')
+        pos++;
+
+      if (!*pos || !gdk_color_parse (pos, &col))
+        continue;
+
+      gtk_style_set_map_color (set, name,
+                               gtk_symbolic_color_new_literal (&col));
+    }
+
+  font_desc = pango_font_description_from_string (font_name);
+
+  gtk_style_set_set (set, 0,
+                     "font", font_desc,
+                     NULL);
+
+  pango_font_description_free (font_desc);
+  g_strfreev (colors);
+  g_free (color_scheme);
+  g_free (font_name);
+
+  return set;
+}
+
+static void
+gtk_settings_provider_iface_init (GtkStyleProviderIface *iface)
+{
+  iface->get_style = gtk_settings_get_style;
 }
 
 static void
