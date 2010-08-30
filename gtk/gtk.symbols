@@ -111,22 +111,12 @@ gtk_accel_map_foreach
 gtk_accel_map_foreach_unfiltered
 gtk_accel_map_get
 gtk_accel_map_get_type G_GNUC_CONST
-#ifndef _WIN64
-gtk_accel_map_load PRIVATE
-#endif
-#ifdef G_OS_WIN32
-gtk_accel_map_load_utf8
-#endif
+gtk_accel_map_load
 gtk_accel_map_load_fd
 gtk_accel_map_load_scanner
 gtk_accel_map_lock_path
 gtk_accel_map_lookup_entry
-#ifndef _WIN64
-gtk_accel_map_save PRIVATE
-#endif
-#ifdef G_OS_WIN32
-gtk_accel_map_save_utf8
-#endif
+gtk_accel_map_save
 gtk_accel_map_save_fd
 gtk_accel_map_unlock_path
 #endif
@@ -1242,47 +1232,22 @@ gtk_expander_set_use_underline
 #if IN_HEADER(__GTK_FILE_CHOOSER_H__)
 #if IN_FILE(__GTK_FILE_CHOOSER_C__)
 gtk_file_chooser_add_filter
-#ifndef _WIN64
-gtk_file_chooser_add_shortcut_folder PRIVATE
-#endif
-#ifdef G_OS_WIN32
-gtk_file_chooser_add_shortcut_folder_utf8
-#endif
+gtk_file_chooser_add_shortcut_folder
 gtk_file_chooser_add_shortcut_folder_uri
 gtk_file_chooser_error_quark
 gtk_file_chooser_get_action
-#ifndef _WIN64
-gtk_file_chooser_get_current_folder PRIVATE
-#endif
+gtk_file_chooser_get_current_folder
 gtk_file_chooser_get_current_folder_file
-#ifdef G_OS_WIN32
-gtk_file_chooser_get_current_folder_utf8
-#endif
 gtk_file_chooser_get_current_folder_uri
 gtk_file_chooser_get_extra_widget
 gtk_file_chooser_get_file
-#ifndef _WIN64
-gtk_file_chooser_get_filename PRIVATE
-#endif
-#ifdef G_OS_WIN32
-gtk_file_chooser_get_filename_utf8
-#endif
-#ifndef _WIN64
-gtk_file_chooser_get_filenames PRIVATE
-#endif
-#ifdef G_OS_WIN32
-gtk_file_chooser_get_filenames_utf8
-#endif
+gtk_file_chooser_get_filename
+gtk_file_chooser_get_filenames
 gtk_file_chooser_get_files
 gtk_file_chooser_get_filter
 gtk_file_chooser_get_local_only
 gtk_file_chooser_get_preview_file
-#ifndef _WIN64
-gtk_file_chooser_get_preview_filename PRIVATE
-#endif
-#ifdef G_OS_WIN32
-gtk_file_chooser_get_preview_filename_utf8
-#endif
+gtk_file_chooser_get_preview_filename
 gtk_file_chooser_get_preview_uri
 gtk_file_chooser_get_preview_widget
 gtk_file_chooser_get_preview_widget_active
@@ -1297,48 +1262,23 @@ gtk_file_chooser_get_uri
 gtk_file_chooser_get_uris
 gtk_file_chooser_get_use_preview_label
 gtk_file_chooser_list_filters
-#ifndef _WIN64
-gtk_file_chooser_list_shortcut_folders PRIVATE
-#endif
-#ifdef G_OS_WIN32
-gtk_file_chooser_list_shortcut_folders_utf8
-#endif
+gtk_file_chooser_list_shortcut_folders
 gtk_file_chooser_list_shortcut_folder_uris
 gtk_file_chooser_remove_filter
-#ifndef _WIN64
-gtk_file_chooser_remove_shortcut_folder PRIVATE
-#endif
-#ifdef G_OS_WIN32
-gtk_file_chooser_remove_shortcut_folder_utf8
-#endif
+gtk_file_chooser_remove_shortcut_folder
 gtk_file_chooser_remove_shortcut_folder_uri
 gtk_file_chooser_select_all
 gtk_file_chooser_select_file
-#ifndef _WIN64
-gtk_file_chooser_select_filename PRIVATE
-#endif
-#ifdef G_OS_WIN32
-gtk_file_chooser_select_filename_utf8
-#endif
+gtk_file_chooser_select_filename
 gtk_file_chooser_select_uri
 gtk_file_chooser_set_action
-#ifndef _WIN64
-gtk_file_chooser_set_current_folder PRIVATE
-#endif
+gtk_file_chooser_set_current_folder
 gtk_file_chooser_set_current_folder_file
-#ifdef G_OS_WIN32
-gtk_file_chooser_set_current_folder_utf8
-#endif
 gtk_file_chooser_set_current_folder_uri
 gtk_file_chooser_set_current_name
 gtk_file_chooser_set_extra_widget
 gtk_file_chooser_set_file
-#ifndef _WIN64
-gtk_file_chooser_set_filename PRIVATE
-#endif
-#ifdef G_OS_WIN32
-gtk_file_chooser_set_filename_utf8
-#endif
+gtk_file_chooser_set_filename
 gtk_file_chooser_set_filter
 gtk_file_chooser_set_local_only
 gtk_file_chooser_set_preview_widget
@@ -1349,12 +1289,7 @@ gtk_file_chooser_set_uri
 gtk_file_chooser_set_use_preview_label
 gtk_file_chooser_unselect_all
 gtk_file_chooser_unselect_file
-#ifndef _WIN64
-gtk_file_chooser_unselect_filename PRIVATE
-#endif
-#ifdef G_OS_WIN32
-gtk_file_chooser_unselect_filename_utf8
-#endif
+gtk_file_chooser_unselect_filename
 gtk_file_chooser_unselect_uri
 #endif
 #endif
@@ -1580,12 +1515,7 @@ gtk_icon_source_copy
 gtk_icon_source_free
 gtk_icon_source_get_direction
 gtk_icon_source_get_direction_wildcarded
-#ifndef _WIN64
-gtk_icon_source_get_filename PRIVATE
-#endif
-#ifdef G_OS_WIN32
-gtk_icon_source_get_filename_utf8
-#endif
+gtk_icon_source_get_filename
 gtk_icon_source_get_icon_name
 gtk_icon_source_get_pixbuf
 gtk_icon_source_get_size
@@ -1596,12 +1526,7 @@ gtk_icon_source_get_type G_GNUC_CONST
 gtk_icon_source_new
 gtk_icon_source_set_direction
 gtk_icon_source_set_direction_wildcarded
-#ifndef _WIN64
-gtk_icon_source_set_filename PRIVATE
-#endif
-#ifdef G_OS_WIN32
-gtk_icon_source_set_filename_utf8
-#endif
+gtk_icon_source_set_filename
 gtk_icon_source_set_icon_name
 gtk_icon_source_set_pixbuf
 gtk_icon_source_set_size
@@ -1621,35 +1546,20 @@ gtk_icon_info_get_base_size
 gtk_icon_info_get_builtin_pixbuf
 gtk_icon_info_get_display_name
 gtk_icon_info_get_embedded_rect
-#ifndef _WIN64
-gtk_icon_info_get_filename PRIVATE
-#endif
-#ifdef G_OS_WIN32
-gtk_icon_info_get_filename_utf8
-#endif
+gtk_icon_info_get_filename
 gtk_icon_info_get_type G_GNUC_CONST
 gtk_icon_info_load_icon
 gtk_icon_info_load_symbolic
 gtk_icon_info_load_symbolic_for_style
 gtk_icon_info_set_raw_coordinates
 gtk_icon_theme_add_builtin_icon
-#ifndef _WIN64
-gtk_icon_theme_append_search_path PRIVATE
-#endif
-#ifdef G_OS_WIN32
-gtk_icon_theme_append_search_path_utf8
-#endif
+gtk_icon_theme_append_search_path
 gtk_icon_theme_error_quark
 gtk_icon_theme_get_default
 gtk_icon_theme_get_example_icon_name
 gtk_icon_theme_get_for_screen
 gtk_icon_theme_get_icon_sizes
-#ifndef _WIN64
-gtk_icon_theme_get_search_path PRIVATE
-#endif
-#ifdef G_OS_WIN32
-gtk_icon_theme_get_search_path_utf8
-#endif
+gtk_icon_theme_get_search_path
 gtk_icon_theme_get_type G_GNUC_CONST
 gtk_icon_theme_has_icon
 gtk_icon_theme_list_contexts
@@ -1659,21 +1569,11 @@ gtk_icon_theme_lookup_icon
 gtk_icon_theme_lookup_by_gicon
 gtk_icon_theme_choose_icon
 gtk_icon_theme_new
-#ifndef _WIN64
-gtk_icon_theme_prepend_search_path PRIVATE
-#endif
-#ifdef G_OS_WIN32
-gtk_icon_theme_prepend_search_path_utf8
-#endif
+gtk_icon_theme_prepend_search_path
 gtk_icon_theme_rescan_if_needed
 gtk_icon_theme_set_custom_theme
 gtk_icon_theme_set_screen
-#ifndef _WIN64
-gtk_icon_theme_set_search_path PRIVATE
-#endif
-#ifdef G_OS_WIN32
-gtk_icon_theme_set_search_path_utf8
-#endif
+gtk_icon_theme_set_search_path
 #endif
 #endif
 
@@ -1758,12 +1658,7 @@ gtk_image_get_storage_type
 gtk_image_get_type G_GNUC_CONST
 gtk_image_new
 gtk_image_new_from_animation
-#ifndef _WIN64
-gtk_image_new_from_file PRIVATE
-#endif
-#ifdef G_OS_WIN32
-gtk_image_new_from_file_utf8
-#endif
+gtk_image_new_from_file
 gtk_image_new_from_icon_name
 gtk_image_new_from_icon_set
 gtk_image_new_from_pixbuf
@@ -1771,12 +1666,7 @@ gtk_image_new_from_pixmap
 gtk_image_new_from_stock
 gtk_image_new_from_gicon
 gtk_image_set_from_animation
-#ifndef _WIN64
-gtk_image_set_from_file PRIVATE
-#endif
-#ifdef G_OS_WIN32
-gtk_image_set_from_file_utf8
-#endif
+gtk_image_set_from_file
 gtk_image_set_from_icon_name
 gtk_image_set_from_icon_set
 gtk_image_set_from_pixbuf
@@ -2784,12 +2674,7 @@ gtk_range_set_value
 
 #if IN_HEADER(__GTK_RC_H__)
 #if IN_FILE(__GTK_RC_C__)
-#ifndef _WIN64
-gtk_rc_add_default_file PRIVATE
-#endif
-#ifdef G_OS_WIN32
-gtk_rc_add_default_file_utf8
-#endif
+gtk_rc_add_default_file
 gtk_rc_find_module_in_path
 gtk_rc_find_pixmap_in_path
 gtk_rc_get_default_files
@@ -2799,12 +2684,7 @@ gtk_rc_get_module_dir
 gtk_rc_get_style
 gtk_rc_get_style_by_paths
 gtk_rc_get_theme_dir
-#ifndef _WIN64
-gtk_rc_parse PRIVATE
-#endif
-#ifdef G_OS_WIN32
-gtk_rc_parse_utf8
-#endif
+gtk_rc_parse
 gtk_rc_parse_color
 gtk_rc_parse_color_full
 gtk_rc_parse_priority
@@ -2814,12 +2694,7 @@ gtk_rc_reparse_all
 gtk_rc_reparse_all_for_settings
 gtk_rc_reset_styles
 gtk_rc_scanner_new
-#ifndef _WIN64
-gtk_rc_set_default_files PRIVATE
-#endif
-#ifdef G_OS_WIN32
-gtk_rc_set_default_files_utf8
-#endif
+gtk_rc_set_default_files
 gtk_rc_style_copy
 gtk_rc_style_get_type G_GNUC_CONST
 gtk_rc_style_new
@@ -4219,12 +4094,7 @@ gtk_identifier_get_type G_GNUC_CONST
 #if IN_HEADER(__GTK_UI_MANAGER_H__)
 #if IN_FILE(__GTK_UI_MANAGER_C__)
 gtk_ui_manager_add_ui
-#ifndef _WIN64
-gtk_ui_manager_add_ui_from_file PRIVATE
-#endif
-#ifdef G_OS_WIN32
-gtk_ui_manager_add_ui_from_file_utf8
-#endif
+gtk_ui_manager_add_ui_from_file
 gtk_ui_manager_add_ui_from_string
 gtk_ui_manager_ensure_update
 gtk_ui_manager_get_accel_group
@@ -4577,12 +4447,7 @@ gtk_window_set_decorated
 gtk_window_set_deletable
 gtk_window_set_default
 gtk_window_set_default_icon
-#ifndef _WIN64
-gtk_window_set_default_icon_from_file PRIVATE
-#endif
-#ifdef G_OS_WIN32
-gtk_window_set_default_icon_from_file_utf8
-#endif
+gtk_window_set_default_icon_from_file
 gtk_window_set_default_icon_list
 gtk_window_set_default_icon_name
 gtk_window_set_default_size
@@ -4595,12 +4460,7 @@ gtk_window_set_geometry_hints
 gtk_window_set_gravity
 gtk_window_set_has_frame
 gtk_window_set_icon
-#ifndef _WIN64
-gtk_window_set_icon_from_file PRIVATE
-#endif
-#ifdef G_OS_WIN32
-gtk_window_set_icon_from_file_utf8
-#endif
+gtk_window_set_icon_from_file
 gtk_window_set_icon_list
 gtk_window_set_icon_name
 gtk_window_set_keep_above

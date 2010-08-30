@@ -123,13 +123,6 @@ struct _GtkRcStyleClass
   void (*_gtk_reserved4) (void);
 };
 
-#ifdef G_OS_WIN32
-/* Reserve old names for DLL ABI backward compatibility */
-#define gtk_rc_add_default_file gtk_rc_add_default_file_utf8
-#define gtk_rc_set_default_files gtk_rc_set_default_files_utf8
-#define gtk_rc_parse gtk_rc_parse_utf8
-#endif
-
 void	  _gtk_rc_init			 (void);
 GSList*   _gtk_rc_parse_widget_class_path (const gchar *pattern);
 void      _gtk_rc_free_widget_class_path (GSList       *list);

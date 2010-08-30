@@ -1003,31 +1003,3 @@ do_accel_map_changed (AccelEntry *entry)
 		   entry->accel_key,
 		   entry->accel_mods);
 }
-
-#if defined (G_OS_WIN32) && !defined (_WIN64)
-
-#undef gtk_accel_map_load
-
-void
-gtk_accel_map_load (const gchar *file_name)
-{
-  gchar *utf8_file_name = g_locale_to_utf8 (file_name, -1, NULL, NULL, NULL);
-
-  gtk_accel_map_load_utf8 (utf8_file_name);
-
-  g_free (utf8_file_name);
-}
-
-#undef gtk_accel_map_save
-
-void
-gtk_accel_map_save (const gchar *file_name)
-{
-  gchar *utf8_file_name = g_locale_to_utf8 (file_name, -1, NULL, NULL, NULL);
-
-  gtk_accel_map_save_utf8 (utf8_file_name);
-
-  g_free (utf8_file_name);
-}
-
-#endif

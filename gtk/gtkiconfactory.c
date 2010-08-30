@@ -78,13 +78,6 @@ struct _GtkIconSource
   guint any_direction : 1;
   guint any_state : 1;
   guint any_size : 1;
-
-#if defined (G_OS_WIN32) && !defined (_WIN64)
-  /* System codepage version of filename, for DLL ABI backward
-   * compatibility functions.
-   */
-  gchar *cp_filename;
-#endif
 };
 
 
@@ -1907,9 +1900,6 @@ gtk_icon_source_copy (const GtkIconSource *source)
       break;
     case GTK_ICON_SOURCE_FILENAME:
       copy->source.filename = g_strdup (copy->source.filename);
-#if defined (G_OS_WIN32) && !defined (_WIN64)
-      copy->cp_filename = g_strdup (copy->cp_filename);
-#endif
       if (copy->filename_pixbuf)
 	g_object_ref (copy->filename_pixbuf);
       break;
@@ -1959,10 +1949,6 @@ icon_source_clear (GtkIconSource *source)
     case GTK_ICON_SOURCE_FILENAME:
       g_free (source->source.filename);
       source->source.filename = NULL;
-#if defined (G_OS_WIN32) && !defined (_WIN64)
-      g_free (source->cp_filename);
-      source->cp_filename = NULL;
-#endif
       if (source->filename_pixbuf) 
 	g_object_unref (source->filename_pixbuf);
       source->filename_pixbuf = NULL;
@@ -2003,9 +1989,6 @@ gtk_icon_source_set_filename (GtkIconSource *source,
     {
       source->type = GTK_ICON_SOURCE_FILENAME;
       source->source.filename = g_strdup (filename);
-#if defined (G_OS_WIN32) && !defined (_WIN64)
-      source->cp_filename = g_locale_from_utf8 (filename, -1, NULL, NULL, NULL);
-#endif
     }
 }
 
@@ -2948,35 +2931,3 @@ gtk_icon_factory_buildable_custom_tag_end (GtkBuildable *buildable,
       gtk_icon_factory_add_default (icon_factory);
     }
 }
-
-#if defined (G_OS_WIN32) && !defined (_WIN64)
-
-/* DLL ABI stability backward compatibility versions */
-
-#undef gtk_icon_source_set_filename
-
-void
-gtk_icon_source_set_filename (GtkIconSource *source,
-			      const gchar   *filename)
-{
-  gchar *utf8_filename = g_locale_to_utf8 (filename, -1, NULL, NULL, NULL);
-
-  gtk_icon_source_set_filename_utf8 (source, utf8_filename);
-
-  g_free (utf8_filename);
-}
-
-#undef gtk_icon_source_get_filename
-
-G_CONST_RETURN gchar*
-gtk_icon_source_get_filename (const GtkIconSource *source)
-{
-  g_return_val_if_fail (source != NULL, NULL);
-
-  if (source->type == GTK_ICON_SOURCE_FILENAME)
-    return source->cp_filename;
-  else
-    return NULL;
-}
-
-#endif

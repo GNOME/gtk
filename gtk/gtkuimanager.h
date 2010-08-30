@@ -104,11 +104,6 @@ typedef enum {
   GTK_UI_MANAGER_POPUP_WITH_ACCELS = 1 << 9
 } GtkUIManagerItemType;
 
-#ifdef G_OS_WIN32
-/* Reserve old name for DLL ABI backward compatibility */
-#define gtk_ui_manager_add_ui_from_file gtk_ui_manager_add_ui_from_file_utf8
-#endif
-
 GType          gtk_ui_manager_get_type            (void) G_GNUC_CONST;
 GtkUIManager  *gtk_ui_manager_new                 (void);
 void           gtk_ui_manager_set_add_tearoffs    (GtkUIManager          *self,
