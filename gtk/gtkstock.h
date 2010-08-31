@@ -73,7 +73,7 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  * GTK_STOCK_ABOUT:
  *
  * The "About" item.
- * <inlinegraphic fileref="gtk-about.png" format="PNG"></inlinegraphic>
+ * <inlinegraphic fileref="help-about.png" format="PNG"></inlinegraphic>
  *
  * Since: 2.6
  */
@@ -83,7 +83,7 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  * GTK_STOCK_ADD:
  *
  * The "Add" item.
- * <inlinegraphic fileref="gtk-add.png" format="PNG"></inlinegraphic>
+ * <inlinegraphic fileref="list-add.png" format="PNG"></inlinegraphic>
  */
 #define GTK_STOCK_ADD              "gtk-add"
 
@@ -125,7 +125,7 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  * GTK_STOCK_CDROM:
  *
  * The "CD-Rom" item.
- * <inlinegraphic fileref="gtk-cdrom.png" format="PNG"></inlinegraphic>
+ * <inlinegraphic fileref="media-optical.png" format="PNG"></inlinegraphic>
  */
 #define GTK_STOCK_CDROM            "gtk-cdrom"
 
@@ -141,7 +141,7 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  * GTK_STOCK_CLOSE:
  *
  * The "Close" item.
- * <inlinegraphic fileref="gtk-close.png" format="PNG"></inlinegraphic>
+ * <inlinegraphic fileref="window-close.png" format="PNG"></inlinegraphic>
  */
 #define GTK_STOCK_CLOSE            "gtk-close"
 
@@ -177,7 +177,7 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  * GTK_STOCK_COPY:
  *
  * The "Copy" item.
- * <inlinegraphic fileref="gtk-copy.png" format="PNG"></inlinegraphic>
+ * <inlinegraphic fileref="edit-copy.png" format="PNG"></inlinegraphic>
  */
 #define GTK_STOCK_COPY             "gtk-copy"
 
@@ -185,7 +185,7 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  * GTK_STOCK_CUT:
  *
  * The "Cut" item.
- * <inlinegraphic fileref="gtk-cut.png" format="PNG"></inlinegraphic>
+ * <inlinegraphic fileref="edit-cut.png" format="PNG"></inlinegraphic>
  */
 #define GTK_STOCK_CUT              "gtk-cut"
 
@@ -193,7 +193,7 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  * GTK_STOCK_DELETE:
  *
  * The "Delete" item.
- * <inlinegraphic fileref="gtk-delete.png" format="PNG"></inlinegraphic>
+ * <inlinegraphic fileref="edit-delete.png" format="PNG"></inlinegraphic>
  */
 #define GTK_STOCK_DELETE           "gtk-delete"
 
@@ -201,7 +201,7 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  * GTK_STOCK_DIALOG_AUTHENTICATION:
  *
  * The "Authentication" item.
- * <inlinegraphic fileref="gtk-dialog-authentication.png" format="PNG"></inlinegraphic>
+ * <inlinegraphic fileref="dialog-password.png" format="PNG"></inlinegraphic>
  *
  * Since: 2.4
  */
@@ -211,7 +211,7 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  * GTK_STOCK_DIALOG_INFO:
  *
  * The "Information" item.
- * <inlinegraphic fileref="gtk-dialog-info.png" format="PNG"></inlinegraphic>
+ * <inlinegraphic fileref="dialog-information.png" format="PNG"></inlinegraphic>
  */
 #define GTK_STOCK_DIALOG_INFO      "gtk-dialog-info"
 
@@ -219,7 +219,7 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  * GTK_STOCK_DIALOG_WARNING:
  *
  * The "Warning" item.
- * <inlinegraphic fileref="gtk-dialog-warning.png" format="PNG"></inlinegraphic>
+ * <inlinegraphic fileref="dialog-warning.png" format="PNG"></inlinegraphic>
  */
 #define GTK_STOCK_DIALOG_WARNING   "gtk-dialog-warning"
 
@@ -227,7 +227,7 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  * GTK_STOCK_DIALOG_ERROR:
  *
  * The "Error" item.
- * <inlinegraphic fileref="gtk-dialog-error.png" format="PNG"></inlinegraphic>
+ * <inlinegraphic fileref="dialog-error.png" format="PNG"></inlinegraphic>
  */
 #define GTK_STOCK_DIALOG_ERROR     "gtk-dialog-error"
 
@@ -235,7 +235,7 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  * GTK_STOCK_DIALOG_QUESTION:
  *
  * The "Question" item.
- * <inlinegraphic fileref="gtk-dialog-question.png" format="PNG"></inlinegraphic>
+ * <inlinegraphic fileref="dialog-question.png" format="PNG"></inlinegraphic>
  */
 #define GTK_STOCK_DIALOG_QUESTION  "gtk-dialog-question"
 
@@ -243,7 +243,7 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  * GTK_STOCK_DIRECTORY:
  *
  * The "Directory" icon.
- * <inlinegraphic fileref="gtk-directory.png" format="PNG"></inlinegraphic>
+ * <inlinegraphic fileref="folder.png" format="PNG"></inlinegraphic>
  *
  * Since: 2.6
  */
@@ -298,7 +298,7 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  * GTK_STOCK_EXECUTE:
  *
  * The "Execute" item.
- * <inlinegraphic fileref="gtk-execute.png" format="PNG"></inlinegraphic>
+ * <inlinegraphic fileref="system-run.png" format="PNG"></inlinegraphic>
  */
 #define GTK_STOCK_EXECUTE          "gtk-execute"
 
@@ -306,7 +306,7 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  * GTK_STOCK_FILE:
  *
  * The "File" item.
- * <inlinegraphic fileref="gtk-file.png" format="PNG"></inlinegraphic>
+ * <inlinegraphic fileref="document-x-generic.png" format="PNG"></inlinegraphic>
  *
  * Since 3.0, this item has a label, before it only had an icon.
  *
@@ -318,7 +318,7 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  * GTK_STOCK_FIND:
  *
  * The "Find" item.
- * <inlinegraphic fileref="gtk-find.png" format="PNG"></inlinegraphic>
+ * <inlinegraphic fileref="edit-find.png" format="PNG"></inlinegraphic>
  */
 #define GTK_STOCK_FIND             "gtk-find"
 
@@ -326,7 +326,7 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  * GTK_STOCK_FIND_AND_REPLACE:
  *
  * The "Find and Replace" item.
- * <inlinegraphic fileref="gtk-find-and-replace.png" format="PNG"></inlinegraphic>
+ * <inlinegraphic fileref="edit-find-replace.png" format="PNG"></inlinegraphic>
  */
 #define GTK_STOCK_FIND_AND_REPLACE "gtk-find-and-replace"
 
@@ -334,7 +334,7 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  * GTK_STOCK_FLOPPY:
  *
  * The "Floppy" item.
- * <inlinegraphic fileref="gtk-floppy.png" format="PNG"></inlinegraphic>
+ * <inlinegraphic fileref="media-floppy.png" format="PNG"></inlinegraphic>
  */
 #define GTK_STOCK_FLOPPY           "gtk-floppy"
 
@@ -342,7 +342,7 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  * GTK_STOCK_FULLSCREEN:
  *
  * The "Fullscreen" item.
- * <inlinegraphic fileref="gtk-fullscreen.png" format="PNG"></inlinegraphic>
+ * <inlinegraphic fileref="view-fullscreen.png" format="PNG"></inlinegraphic>
  *
  * Since: 2.8
  */
@@ -352,7 +352,7 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  * GTK_STOCK_GOTO_BOTTOM:
  *
  * The "Bottom" item.
- * <inlinegraphic fileref="gtk-goto-bottom.png" format="PNG"></inlinegraphic>
+ * <inlinegraphic fileref="go-bottom.png" format="PNG"></inlinegraphic>
  */
 #define GTK_STOCK_GOTO_BOTTOM      "gtk-goto-bottom"
 
@@ -360,9 +360,9 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  * GTK_STOCK_GOTO_FIRST:
  *
  * The "First" item.
- * <inlinegraphic fileref="gtk-goto-first-ltr.png" format="PNG"></inlinegraphic>
+ * <inlinegraphic fileref="go-first-ltr.png" format="PNG"></inlinegraphic>
  * RTL variant
- * <inlinegraphic fileref="gtk-goto-first-rtl.png" format="PNG"></inlinegraphic>
+ * <inlinegraphic fileref="go-first-rtl.png" format="PNG"></inlinegraphic>
  */
 #define GTK_STOCK_GOTO_FIRST       "gtk-goto-first"
 
@@ -370,9 +370,9 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  * GTK_STOCK_GOTO_LAST:
  *
  * The "Last" item.
- * <inlinegraphic fileref="gtk-goto-last-ltr.png" format="PNG"></inlinegraphic>
+ * <inlinegraphic fileref="go-last-ltr.png" format="PNG"></inlinegraphic>
  * RTL variant
- * <inlinegraphic fileref="gtk-goto-last-rtl.png" format="PNG"></inlinegraphic>
+ * <inlinegraphic fileref="go-last-rtl.png" format="PNG"></inlinegraphic>
  */
 #define GTK_STOCK_GOTO_LAST        "gtk-goto-last"
 
@@ -380,7 +380,7 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  * GTK_STOCK_GOTO_TOP:
  *
  * The "Top" item.
- * <inlinegraphic fileref="gtk-goto-top.png" format="PNG"></inlinegraphic>
+ * <inlinegraphic fileref="go-top.png" format="PNG"></inlinegraphic>
  */
 #define GTK_STOCK_GOTO_TOP         "gtk-goto-top"
 
@@ -388,9 +388,9 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  * GTK_STOCK_GO_BACK:
  *
  * The "Back" item.
- * <inlinegraphic fileref="gtk-go-back-ltr.png" format="PNG"></inlinegraphic>
+ * <inlinegraphic fileref="go-previous-ltr.png" format="PNG"></inlinegraphic>
  * RTL variant
- * <inlinegraphic fileref="gtk-go-back-rtl.png" format="PNG"></inlinegraphic>
+ * <inlinegraphic fileref="go-previous-rtl.png" format="PNG"></inlinegraphic>
  */
 #define GTK_STOCK_GO_BACK          "gtk-go-back"
 
@@ -398,7 +398,7 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  * GTK_STOCK_GO_DOWN:
  *
  * The "Down" item.
- * <inlinegraphic fileref="gtk-go-down.png" format="PNG"></inlinegraphic>
+ * <inlinegraphic fileref="go-down.png" format="PNG"></inlinegraphic>
  */
 #define GTK_STOCK_GO_DOWN          "gtk-go-down"
 
@@ -406,9 +406,9 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  * GTK_STOCK_GO_FORWARD:
  *
  * The "Forward" item.
- * <inlinegraphic fileref="gtk-go-forward-ltr.png" format="PNG"></inlinegraphic>
+ * <inlinegraphic fileref="go-next-ltr.png" format="PNG"></inlinegraphic>
  * RTL variant
- * <inlinegraphic fileref="gtk-go-forward-rtl.png" format="PNG"></inlinegraphic>
+ * <inlinegraphic fileref="go-next-rtl.png" format="PNG"></inlinegraphic>
  */
 #define GTK_STOCK_GO_FORWARD       "gtk-go-forward"
 
@@ -416,7 +416,7 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  * GTK_STOCK_GO_UP:
  *
  * The "Up" item.
- * <inlinegraphic fileref="gtk-go-up.png" format="PNG"></inlinegraphic>
+ * <inlinegraphic fileref="go-up.png" format="PNG"></inlinegraphic>
  */
 #define GTK_STOCK_GO_UP            "gtk-go-up"
 
@@ -424,7 +424,7 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  * GTK_STOCK_HARDDISK:
  *
  * The "Harddisk" item.
- * <inlinegraphic fileref="gtk-harddisk.png" format="PNG"></inlinegraphic>
+ * <inlinegraphic fileref="drive-harddisk.png" format="PNG"></inlinegraphic>
  *
  * Since: 2.4
  */
@@ -434,7 +434,7 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  * GTK_STOCK_HELP:
  *
  * The "Help" item.
- * <inlinegraphic fileref="gtk-help.png" format="PNG"></inlinegraphic>
+ * <inlinegraphic fileref="help-contents.png" format="PNG"></inlinegraphic>
  */
 #define GTK_STOCK_HELP             "gtk-help"
 
@@ -442,7 +442,7 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  * GTK_STOCK_HOME:
  *
  * The "Home" item.
- * <inlinegraphic fileref="gtk-home.png" format="PNG"></inlinegraphic>
+ * <inlinegraphic fileref="go-home.png" format="PNG"></inlinegraphic>
  */
 #define GTK_STOCK_HOME             "gtk-home"
 
@@ -470,7 +470,7 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  * GTK_STOCK_INFO:
  *
  * The "Info" item.
- * <inlinegraphic fileref="gtk-info.png" format="PNG"></inlinegraphic>
+ * <inlinegraphic fileref="dialog-information.png" format="PNG"></inlinegraphic>
  *
  * Since: 2.8
  */
@@ -480,7 +480,7 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  * GTK_STOCK_ITALIC:
  *
  * The "Italic" item.
- * <inlinegraphic fileref="gtk-italic.png" format="PNG"></inlinegraphic>
+ * <inlinegraphic fileref="format-text-italic.png" format="PNG"></inlinegraphic>
  */
 #define GTK_STOCK_ITALIC           "gtk-italic"
 
@@ -488,9 +488,9 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  * GTK_STOCK_JUMP_TO:
  *
  * The "Jump to" item.
- * <inlinegraphic fileref="gtk-jump-to-ltr.png" format="PNG"></inlinegraphic>
+ * <inlinegraphic fileref="go-jump-ltr.png" format="PNG"></inlinegraphic>
  * RTL-variant
- * <inlinegraphic fileref="gtk-jump-to-rtl.png" format="PNG"></inlinegraphic>
+ * <inlinegraphic fileref="go-jump-rtl.png" format="PNG"></inlinegraphic>
  */
 #define GTK_STOCK_JUMP_TO          "gtk-jump-to"
 
@@ -498,7 +498,7 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  * GTK_STOCK_JUSTIFY_CENTER:
  *
  * The "Center" item.
- * <inlinegraphic fileref="gtk-justify-center.png" format="PNG"></inlinegraphic>
+ * <inlinegraphic fileref="format-justify-center.png" format="PNG"></inlinegraphic>
  */
 #define GTK_STOCK_JUSTIFY_CENTER   "gtk-justify-center"
 
@@ -506,7 +506,7 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  * GTK_STOCK_JUSTIFY_FILL:
  *
  * The "Fill" item.
- * <inlinegraphic fileref="gtk-justify-fill.png" format="PNG"></inlinegraphic>
+ * <inlinegraphic fileref="format-justify-fill.png" format="PNG"></inlinegraphic>
  */
 #define GTK_STOCK_JUSTIFY_FILL     "gtk-justify-fill"
 
@@ -514,7 +514,7 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  * GTK_STOCK_JUSTIFY_LEFT:
  *
  * The "Left" item.
- * <inlinegraphic fileref="gtk-justify-left.png" format="PNG"></inlinegraphic>
+ * <inlinegraphic fileref="format-justify-left.png" format="PNG"></inlinegraphic>
  */
 #define GTK_STOCK_JUSTIFY_LEFT     "gtk-justify-left"
 
@@ -522,7 +522,7 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  * GTK_STOCK_JUSTIFY_RIGHT:
  *
  * The "Right" item.
- * <inlinegraphic fileref="gtk-justify-right.png" format="PNG"></inlinegraphic>
+ * <inlinegraphic fileref="format-justify-right.png" format="PNG"></inlinegraphic>
  */
 #define GTK_STOCK_JUSTIFY_RIGHT    "gtk-justify-right"
 
@@ -530,7 +530,7 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  * GTK_STOCK_LEAVE_FULLSCREEN:
  *
  * The "Leave Fullscreen" item.
- * <inlinegraphic fileref="gtk-leave-fullscreen.png" format="PNG"></inlinegraphic>
+ * <inlinegraphic fileref="view-restore.png" format="PNG"></inlinegraphic>
  *
  * Since: 2.8
  */
@@ -540,7 +540,7 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  * GTK_STOCK_MISSING_IMAGE:
  *
  * The "Missing image" icon.
- * <inlinegraphic fileref="gtk-missing-image.png" format="PNG"></inlinegraphic>
+ * <inlinegraphic fileref="image-missing.png" format="PNG"></inlinegraphic>
  */
 #define GTK_STOCK_MISSING_IMAGE    "gtk-missing-image"
 
@@ -548,9 +548,9 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  * GTK_STOCK_MEDIA_FORWARD:
  *
  * The "Media Forward" item.
- * <inlinegraphic fileref="gtk-media-forward-ltr.png" format="PNG"></inlinegraphic>
+ * <inlinegraphic fileref="media-seek-forward-ltr.png" format="PNG"></inlinegraphic>
  * RTL variant
- * <inlinegraphic fileref="gtk-media-forward-rtl.png" format="PNG"></inlinegraphic>
+ * <inlinegraphic fileref="media-seek-forward-rtl.png" format="PNG"></inlinegraphic>
  *
  * Since: 2.6
  */
@@ -560,9 +560,9 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  * GTK_STOCK_MEDIA_NEXT:
  *
  * The "Media Next" item.
- * <inlinegraphic fileref="gtk-media-next-ltr.png" format="PNG"></inlinegraphic>
+ * <inlinegraphic fileref="media-skip-forward-ltr.png" format="PNG"></inlinegraphic>
  * RTL variant
- * <inlinegraphic fileref="gtk-media-next-rtl.png" format="PNG"></inlinegraphic>
+ * <inlinegraphic fileref="media-skip-forward-rtl.png" format="PNG"></inlinegraphic>
  *
  * Since: 2.6
  */
@@ -572,7 +572,7 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  * GTK_STOCK_MEDIA_PAUSE:
  *
  * The "Media Pause" item.
- * <inlinegraphic fileref="gtk-media-pause.png" format="PNG"></inlinegraphic>
+ * <inlinegraphic fileref="media-playback-pause.png" format="PNG"></inlinegraphic>
  *
  * Since: 2.6
  */
@@ -582,9 +582,9 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  * GTK_STOCK_MEDIA_PLAY:
  *
  * The "Media Play" item.
- * <inlinegraphic fileref="gtk-media-play-ltr.png" format="PNG"></inlinegraphic>
+ * <inlinegraphic fileref="media-playback-start-ltr.png" format="PNG"></inlinegraphic>
  * RTL variant
- * <inlinegraphic fileref="gtk-media-play-rtl.png" format="PNG"></inlinegraphic>
+ * <inlinegraphic fileref="media-playback-start-rtl.png" format="PNG"></inlinegraphic>
  *
  * Since: 2.6
  */
@@ -594,9 +594,9 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  * GTK_STOCK_MEDIA_PREVIOUS:
  *
  * The "Media Previous" item.
- * <inlinegraphic fileref="gtk-media-previous-ltr.png" format="PNG"></inlinegraphic>
+ * <inlinegraphic fileref="media-skip-backward-ltr.png" format="PNG"></inlinegraphic>
  * RTL variant
- * <inlinegraphic fileref="gtk-media-previous-rtl.png" format="PNG"></inlinegraphic>
+ * <inlinegraphic fileref="media-skip-backward-rtl.png" format="PNG"></inlinegraphic>
  *
  * Since: 2.6
  */
@@ -606,7 +606,7 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  * GTK_STOCK_MEDIA_RECORD:
  *
  * The "Media Record" item.
- * <inlinegraphic fileref="gtk-media-record.png" format="PNG"></inlinegraphic>
+ * <inlinegraphic fileref="media-record.png" format="PNG"></inlinegraphic>
  *
  * Since: 2.6
  */
@@ -616,9 +616,9 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  * GTK_STOCK_MEDIA_REWIND:
  *
  * The "Media Rewind" item.
- * <inlinegraphic fileref="gtk-media-rewind-ltr.png" format="PNG"></inlinegraphic>
+ * <inlinegraphic fileref="media-seek-backward-ltr.png" format="PNG"></inlinegraphic>
  * RTL variant
- * <inlinegraphic fileref="gtk-media-rewind-rtl.png" format="PNG"></inlinegraphic>
+ * <inlinegraphic fileref="media-seek-backward-rtl.png" format="PNG"></inlinegraphic>
  *
  * Since: 2.6
  */
@@ -628,7 +628,7 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  * GTK_STOCK_MEDIA_STOP:
  *
  * The "Media Stop" item.
- * <inlinegraphic fileref="gtk-media-stop.png" format="PNG"></inlinegraphic>
+ * <inlinegraphic fileref="media-playback-stop.png" format="PNG"></inlinegraphic>
  *
  * Since: 2.6
  */
@@ -638,7 +638,7 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  * GTK_STOCK_NETWORK:
  *
  * The "Network" item.
- * <inlinegraphic fileref="gtk-network.png" format="PNG"></inlinegraphic>
+ * <inlinegraphic fileref="network-idle.png" format="PNG"></inlinegraphic>
  *
  * Since: 2.4
  */
@@ -648,7 +648,7 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  * GTK_STOCK_NEW:
  *
  * The "New" item.
- * <inlinegraphic fileref="gtk-new.png" format="PNG"></inlinegraphic>
+ * <inlinegraphic fileref="document-new.png" format="PNG"></inlinegraphic>
  */
 #define GTK_STOCK_NEW              "gtk-new"
 
@@ -672,7 +672,7 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  * GTK_STOCK_OPEN:
  *
  * The "Open" item.
- * <inlinegraphic fileref="gtk-open.png" format="PNG"></inlinegraphic>
+ * <inlinegraphic fileref="document-open.png" format="PNG"></inlinegraphic>
  */
 #define GTK_STOCK_OPEN             "gtk-open"
 
@@ -730,7 +730,7 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  * GTK_STOCK_PASTE:
  *
  * The "Paste" item.
- * <inlinegraphic fileref="gtk-paste.png" format="PNG"></inlinegraphic>
+ * <inlinegraphic fileref="edit-paste.png" format="PNG"></inlinegraphic>
  */
 #define GTK_STOCK_PASTE            "gtk-paste"
 
@@ -746,7 +746,7 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  * GTK_STOCK_PRINT:
  *
  * The "Print" item.
- * <inlinegraphic fileref="gtk-print.png" format="PNG"></inlinegraphic>
+ * <inlinegraphic fileref="document-print.png" format="PNG"></inlinegraphic>
  */
 #define GTK_STOCK_PRINT            "gtk-print"
 
@@ -754,7 +754,7 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  * GTK_STOCK_PRINT_ERROR:
  *
  * The "Print Error" icon.
- * <inlinegraphic fileref="gtk-print-error.png" format="PNG"></inlinegraphic>
+ * <inlinegraphic fileref="printer-error.png" format="PNG"></inlinegraphic>
  *
  * Since: 2.14
  */
@@ -764,7 +764,7 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  * GTK_STOCK_PRINT_PAUSED:
  *
  * The "Print Paused" icon.
- * <inlinegraphic fileref="gtk-print-paused.png" format="PNG"></inlinegraphic>
+ * <inlinegraphic fileref="printer-paused.png" format="PNG"></inlinegraphic>
  *
  * Since: 2.14
  */
@@ -774,7 +774,7 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  * GTK_STOCK_PRINT_PREVIEW:
  *
  * The "Print Preview" item.
- * <inlinegraphic fileref="gtk-print-preview.png" format="PNG"></inlinegraphic>
+ * <inlinegraphic fileref="document-print-preview.png" format="PNG"></inlinegraphic>
  */
 #define GTK_STOCK_PRINT_PREVIEW    "gtk-print-preview"
 
@@ -782,7 +782,7 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  * GTK_STOCK_PRINT_REPORT:
  *
  * The "Print Report" icon.
- * <inlinegraphic fileref="gtk-print-report.png" format="PNG"></inlinegraphic>
+ * <inlinegraphic fileref="printer-info.png" format="PNG"></inlinegraphic>
  *
  * Since: 2.14
  */
@@ -793,7 +793,7 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  * GTK_STOCK_PRINT_WARNING:
  *
  * The "Print Warning" icon.
- * <inlinegraphic fileref="gtk-print-warning.png" format="PNG"></inlinegraphic>
+ * <inlinegraphic fileref="printer-warning.png" format="PNG"></inlinegraphic>
  *
  * Since: 2.14
  */
@@ -803,7 +803,7 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  * GTK_STOCK_PROPERTIES:
  *
  * The "Properties" item.
- * <inlinegraphic fileref="gtk-properties.png" format="PNG"></inlinegraphic>
+ * <inlinegraphic fileref="document-properties.png" format="PNG"></inlinegraphic>
  */
 #define GTK_STOCK_PROPERTIES       "gtk-properties"
 
@@ -811,7 +811,7 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  * GTK_STOCK_QUIT:
  *
  * The "Quit" item.
- * <inlinegraphic fileref="gtk-quit.png" format="PNG"></inlinegraphic>
+ * <inlinegraphic fileref="application-exit.png" format="PNG"></inlinegraphic>
  */
 #define GTK_STOCK_QUIT             "gtk-quit"
 
@@ -819,9 +819,9 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  * GTK_STOCK_REDO:
  *
  * The "Redo" item.
- * <inlinegraphic fileref="gtk-redo-ltr.png" format="PNG"></inlinegraphic>
+ * <inlinegraphic fileref="edit-redo-ltr.png" format="PNG"></inlinegraphic>
  * RTL variant
- * <inlinegraphic fileref="gtk-redo-rtl.png" format="PNG"></inlinegraphic>
+ * <inlinegraphic fileref="edit-redo-rtl.png" format="PNG"></inlinegraphic>
  */
 #define GTK_STOCK_REDO             "gtk-redo"
 
@@ -829,7 +829,7 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  * GTK_STOCK_REFRESH:
  *
  * The "Refresh" item.
- * <inlinegraphic fileref="gtk-refresh.png" format="PNG"></inlinegraphic>
+ * <inlinegraphic fileref="view-refresh.png" format="PNG"></inlinegraphic>
  */
 #define GTK_STOCK_REFRESH          "gtk-refresh"
 
@@ -837,7 +837,7 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  * GTK_STOCK_REMOVE:
  *
  * The "Remove" item.
- * <inlinegraphic fileref="gtk-remove.png" format="PNG"></inlinegraphic>
+ * <inlinegraphic fileref="list-remove.png" format="PNG"></inlinegraphic>
  */
 #define GTK_STOCK_REMOVE           "gtk-remove"
 
@@ -845,9 +845,9 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  * GTK_STOCK_REVERT_TO_SAVED:
  *
  * The "Revert" item.
- * <inlinegraphic fileref="gtk-revert-to-saved-ltr.png" format="PNG"></inlinegraphic>
+ * <inlinegraphic fileref="document-revert-ltr.png" format="PNG"></inlinegraphic>
  * RTL variant
- * <inlinegraphic fileref="gtk-revert-to-saved-rtl.png" format="PNG"></inlinegraphic>
+ * <inlinegraphic fileref="document-revert-rtl.png" format="PNG"></inlinegraphic>
  */
 #define GTK_STOCK_REVERT_TO_SAVED  "gtk-revert-to-saved"
 
@@ -855,7 +855,7 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  * GTK_STOCK_SAVE:
  *
  * The "Save" item.
- * <inlinegraphic fileref="gtk-save.png" format="PNG"></inlinegraphic>
+ * <inlinegraphic fileref="document-save.png" format="PNG"></inlinegraphic>
  */
 #define GTK_STOCK_SAVE             "gtk-save"
 
@@ -863,7 +863,7 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  * GTK_STOCK_SAVE_AS:
  *
  * The "Save As" item.
- * <inlinegraphic fileref="gtk-save-as.png" format="PNG"></inlinegraphic>
+ * <inlinegraphic fileref="document-save-as.png" format="PNG"></inlinegraphic>
  */
 #define GTK_STOCK_SAVE_AS          "gtk-save-as"
 
@@ -871,7 +871,7 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  * GTK_STOCK_SELECT_ALL:
  *
  * The "Select All" item.
- * <inlinegraphic fileref="gtk-select-all.png" format="PNG"></inlinegraphic>
+ * <inlinegraphic fileref="edit-select-all.png" format="PNG"></inlinegraphic>
  *
  * Since: 2.10
  */
@@ -897,7 +897,7 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  * GTK_STOCK_SORT_ASCENDING:
  *
  * The "Ascending" item.
- * <inlinegraphic fileref="gtk-sort-ascending.png" format="PNG"></inlinegraphic>
+ * <inlinegraphic fileref="view-sort-ascending.png" format="PNG"></inlinegraphic>
  */
 #define GTK_STOCK_SORT_ASCENDING   "gtk-sort-ascending"
 
@@ -905,7 +905,7 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  * GTK_STOCK_SORT_DESCENDING:
  *
  * The "Descending" item.
- * <inlinegraphic fileref="gtk-sort-descending.png" format="PNG"></inlinegraphic>
+ * <inlinegraphic fileref="view-sort-descending.png" format="PNG"></inlinegraphic>
  */
 #define GTK_STOCK_SORT_DESCENDING  "gtk-sort-descending"
 
@@ -913,7 +913,7 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  * GTK_STOCK_SPELL_CHECK:
  *
  * The "Spell Check" item.
- * <inlinegraphic fileref="gtk-spell-check.png" format="PNG"></inlinegraphic>
+ * <inlinegraphic fileref="tools-check-spelling.png" format="PNG"></inlinegraphic>
  */
 #define GTK_STOCK_SPELL_CHECK      "gtk-spell-check"
 
@@ -921,7 +921,7 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  * GTK_STOCK_STOP:
  *
  * The "Stop" item.
- * <inlinegraphic fileref="gtk-stop.png" format="PNG"></inlinegraphic>
+ * <inlinegraphic fileref="process-stop.png" format="PNG"></inlinegraphic>
  */
 #define GTK_STOCK_STOP             "gtk-stop"
 
@@ -929,7 +929,7 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  * GTK_STOCK_STRIKETHROUGH:
  *
  * The "Strikethrough" item.
- * <inlinegraphic fileref="gtk-strikethrough.png" format="PNG"></inlinegraphic>
+ * <inlinegraphic fileref="format-text-strikethrough.png" format="PNG"></inlinegraphic>
  */
 #define GTK_STOCK_STRIKETHROUGH    "gtk-strikethrough"
 
@@ -947,7 +947,7 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  * GTK_STOCK_UNDERLINE:
  *
  * The "Underline" item.
- * <inlinegraphic fileref="gtk-underline.png" format="PNG"></inlinegraphic>
+ * <inlinegraphic fileref="format-text-underline.png" format="PNG"></inlinegraphic>
  */
 #define GTK_STOCK_UNDERLINE        "gtk-underline"
 
@@ -955,9 +955,9 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  * GTK_STOCK_UNDO:
  *
  * The "Undo" item.
- * <inlinegraphic fileref="gtk-undo-ltr.png" format="PNG"></inlinegraphic>
+ * <inlinegraphic fileref="edit-undo-ltr.png" format="PNG"></inlinegraphic>
  * RTL variant
- * <inlinegraphic fileref="gtk-undo-rtl.png" format="PNG"></inlinegraphic>
+ * <inlinegraphic fileref="edit-undo-rtl.png" format="PNG"></inlinegraphic>
  */
 #define GTK_STOCK_UNDO             "gtk-undo"
 
@@ -965,9 +965,9 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  * GTK_STOCK_UNINDENT:
  *
  * The "Unindent" item.
- * <inlinegraphic fileref="gtk-unindent-ltr.png" format="PNG"></inlinegraphic>
+ * <inlinegraphic fileref="format-indent-less-ltr.png" format="PNG"></inlinegraphic>
  * RTL variant
- * <inlinegraphic fileref="gtk-unindent-rtl.png" format="PNG"></inlinegraphic>
+ * <inlinegraphic fileref="format-indent-less-rtl.png" format="PNG"></inlinegraphic>
  *
  * Since: 2.4
  */
@@ -985,7 +985,7 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  * GTK_STOCK_ZOOM_100:
  *
  * The "Zoom 100%" item.
- * <inlinegraphic fileref="gtk-zoom-100.png" format="PNG"></inlinegraphic>
+ * <inlinegraphic fileref="zoom-original.png" format="PNG"></inlinegraphic>
  */
 #define GTK_STOCK_ZOOM_100         "gtk-zoom-100"
 
@@ -993,7 +993,7 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  * GTK_STOCK_ZOOM_FIT:
  *
  * The "Zoom to Fit" item.
- * <inlinegraphic fileref="gtk-zoom-fit.png" format="PNG"></inlinegraphic>
+ * <inlinegraphic fileref="zoom-fit-best.png" format="PNG"></inlinegraphic>
  */
 #define GTK_STOCK_ZOOM_FIT         "gtk-zoom-fit"
 
@@ -1001,7 +1001,7 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  * GTK_STOCK_ZOOM_IN:
  *
  * The "Zoom In" item.
- * <inlinegraphic fileref="gtk-zoom-in.png" format="PNG"></inlinegraphic>
+ * <inlinegraphic fileref="zoom-in.png" format="PNG"></inlinegraphic>
  */
 #define GTK_STOCK_ZOOM_IN          "gtk-zoom-in"
 
@@ -1009,7 +1009,7 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  * GTK_STOCK_ZOOM_OUT:
  *
  * The "Zoom Out" item.
- * <inlinegraphic fileref="gtk-zoom-out.png" format="PNG"></inlinegraphic>
+ * <inlinegraphic fileref="zoom-out.png" format="PNG"></inlinegraphic>
  */
 #define GTK_STOCK_ZOOM_OUT         "gtk-zoom-out"
 
