@@ -23,6 +23,13 @@
 #include "gdkregion-generic.h"
 #include "gdkalias.h"
 
+static void
+gdk_ensure_surface_flush (gpointer surface)
+{
+  cairo_surface_flush (surface);
+  cairo_surface_destroy (surface);
+}
+
 /**
  * gdk_cairo_create:
  * @drawable: a #GdkDrawable
@@ -43,6 +50,7 @@
 cairo_t *
 gdk_cairo_create (GdkDrawable *drawable)
 {
+  static const cairo_user_data_key_t key;
   cairo_surface_t *surface;
   cairo_t *cr;
     
@@ -54,7 +62,12 @@ gdk_cairo_create (GdkDrawable *drawable)
   if (GDK_DRAWABLE_GET_CLASS (drawable)->set_cairo_clip)
     GDK_DRAWABLE_GET_CLASS (drawable)->set_cairo_clip (drawable, cr);
     
-  cairo_surface_destroy (surface);
+  /* Ugly workaround for GTK not ensuring to flush surfaces before
+   * directly accessing the drawable backed by the surface. Not visible
+   * on X11 (where flushing is a no-op). For details, see
+   * https://bugzilla.gnome.org/show_bug.cgi?id=628291
+   */
+  cairo_set_user_data (cr, &key, surface, gdk_ensure_surface_flush);
 
   return cr;
 }
