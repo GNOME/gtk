@@ -3,13 +3,14 @@
 # This file is distributed under the same licence as the gtk+ package.
 # Abigail Brady <morwen@evilmagic.org>, Gareth Owen <gowen72@yahoo.com> 2004
 # Bruce Cowan <bcowan@fastmail.co.uk>, 2009, 2010.
+# Philip Withnall <philip@tecnocode.co.uk>, 2010.
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-08-28 16:02+0100\n"
+"POT-Creation-Date: 2010-08-31 09:38+0100\n"
 "PO-Revision-Date: 2010-02-24 16:36+0100\n"
-"Last-Translator: Bruce Cowan <bcowan@fastmail.co.uk>\n"
+"Last-Translator: Philip Withnall <philip@tecnocode.co.uk>\n"
 "Language-Team: British English <en@li.org>\n"
 "Language: en_GB\n"
 "MIME-Version: 1.0\n"
@@ -72,7 +73,7 @@ msgstr "SCREEN"
 
 #. Description of --gdk-debug=FLAGS in --help output
 #: ../gdk/gdk.c:164
-msgid "Gdk debugging flags to set"
+msgid "GDK debugging flags to set"
 msgstr "GDK debugging flags to set"
 
 #. Placeholder in --gdk-debug=FLAGS in --help output
@@ -85,7 +86,7 @@ msgstr "FLAGS"
 
 #. Description of --gdk-no-debug=FLAGS in --help output
 #: ../gdk/gdk.c:167
-msgid "Gdk debugging flags to unset"
+msgid "GDK debugging flags to unset"
 msgstr "GDK debugging flags to unset"
 
 #: ../gdk/keyname-table.h:3940
@@ -449,7 +450,7 @@ msgstr "Invalid type function on line %d: '%s'"
 
 #: ../gtk/gtkbuilderparser.c:407
 #, c-format
-msgid "Duplicate object id '%s' on line %d (previously on line %d)"
+msgid "Duplicate object ID '%s' on line %d (previously on line %d)"
 msgstr "Duplicate object ID '%s' on line %d (previously on line %d)"
 
 #: ../gtk/gtkbuilderparser.c:859
@@ -1320,7 +1321,7 @@ msgstr "_Gamma value"
 #. Remove this icon source so we don't keep trying to
 #. * load it.
 #.
-#: ../gtk/gtkiconfactory.c:1401
+#: ../gtk/gtkiconfactory.c:1354
 #, c-format
 msgid "Error loading icon: %s"
 msgstr "Error loading icon: %s"
@@ -1549,7 +1550,7 @@ msgstr "Remember _forever"
 
 #: ../gtk/gtkmountoperation.c:881
 #, c-format
-msgid "Unknown Application (pid %d)"
+msgid "Unknown Application (PID %d)"
 msgstr "Unknown Application (PID %d)"
 
 #: ../gtk/gtkmountoperation.c:1064
@@ -1562,7 +1563,7 @@ msgstr "_End Process"
 
 #: ../gtk/gtkmountoperation-stub.c:64
 #, c-format
-msgid "Cannot kill process with pid %d. Operation is not implemented."
+msgid "Cannot kill process with PID %d. Operation is not implemented."
 msgstr "Cannot kill process with PID %d. Operation is not implemented."
 
 #. translators: this string is a name for the 'less' command
@@ -1588,7 +1589,7 @@ msgstr "Z Shell"
 
 #: ../gtk/gtkmountoperation-x11.c:966
 #, c-format
-msgid "Cannot end process with pid %d: %s"
+msgid "Cannot end process with PID %d: %s"
 msgstr "Cannot end process with PID %d: %s"
 
 #: ../gtk/gtknotebook.c:4705 ../gtk/gtknotebook.c:7311
@@ -2774,7 +2775,7 @@ msgstr "The attribute \"%s\" was found twice on the <%s> element"
 
 #: ../gtk/gtktextbufferserialize.c:846
 #, c-format
-msgid "<%s> element has invalid id \"%s\""
+msgid "<%s> element has invalid ID \"%s\""
 msgstr "<%s> element has invalid ID \"%s\""
 
 #: ../gtk/gtktextbufferserialize.c:856
@@ -4094,7 +4095,7 @@ msgstr "Printer '%s' is out of paper."
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1686
 #, c-format
-msgid "Printer '%s' is currently off-line."
+msgid "Printer '%s' is currently offline."
 msgstr "Printer '%s' is currently offline."
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1687
@@ -4401,6 +4402,12 @@ msgid ""
 "Failed to load image '%s': reason not known, probably a corrupt image file"
 msgstr ""
 "Failed to load image '%s': reason not known, probably a corrupt image file"
+
+#~ msgid "Gdk debugging flags to set"
+#~ msgstr "GDK debugging flags to set"
+
+#~ msgid "Gdk debugging flags to unset"
+#~ msgstr "GDK debugging flags to unset"
 
 #~ msgid "Image file '%s' contains no data"
 #~ msgstr "Image file '%s' contains no data"

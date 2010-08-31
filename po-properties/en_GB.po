@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-08-28 16:02+0100\n"
+"POT-Creation-Date: 2010-08-31 09:39+0100\n"
 "PO-Revision-Date: 2010-02-24 16:40+0100\n"
 "Last-Translator: Philip Withnall <philip@tecnocode.co.uk>\n"
 "Language-Team: British English <en@li.org>\n"
@@ -656,11 +656,11 @@ msgstr "Layout style"
 
 #: ../gtk/gtkbbox.c:138
 msgid ""
-"How to layout the buttons in the box. Possible values are default, spread, "
+"How to lay out the buttons in the box. Possible values are: default, spread, "
 "edge, start and end"
 msgstr ""
-"How to lay out the buttons in the box. Possible values are: default, spread, edge, "
-"start and end"
+"How to lay out the buttons in the box. Possible values are: default, spread, "
+"edge, start and end"
 
 #: ../gtk/gtkbbox.c:146
 msgid "Secondary"
@@ -6439,7 +6439,7 @@ msgid "Collapsed"
 msgstr "Collapsed"
 
 #: ../gtk/gtktoolitemgroup.c:1558
-msgid "Wether the group has been collapsed and items are hidden"
+msgid "Whether the group has been collapsed and items are hidden"
 msgstr "Whether the group has been collapsed and items are hidden"
 
 #: ../gtk/gtktoolitemgroup.c:1564
