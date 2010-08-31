@@ -10,14 +10,13 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-08-26 04:01+0200\n"
-"PO-Revision-Date: 2010-08-26 04:01+0200\n"
+"POT-Creation-Date: 2010-08-31 02:28+0200\n"
+"PO-Revision-Date: 2010-08-31 02:27+0200\n"
 "Last-Translator: Gabor Kelemen <kelemeng at gnome dot hu>\n"
 "Language-Team: Hungarian <gnome at fsf dot hu>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: \n"
 "Plural-Forms:  nplurals=2; plural=(n != 1);\n"
 "X-Generator: KBabel 1.11.4\n"
 
@@ -304,11 +303,6 @@ msgstr "A paletta mérete 8 bites módban"
 msgid "COLORS"
 msgstr "COLORS"
 
-#. Description of --sync in --help output
-#: ../gdk/x11/gdkmain-x11.c:93
-msgid "Make X calls synchronous"
-msgstr "Legyenek szinkron X-hívások"
-
 #: ../gdk/x11/gdkapplaunchcontext-x11.c:312
 #, c-format
 msgid "Starting %s"
@@ -326,13 +320,18 @@ msgid_plural "Opening %d Items"
 msgstr[0] "%d elem megnyitása"
 msgstr[1] "%d elem megnyitása"
 
+#. Description of --sync in --help output
+#: ../gdk/x11/gdkmain-x11.c:93
+msgid "Make X calls synchronous"
+msgstr "Legyenek szinkron X-hívások"
+
 #. Translators: this is the license preamble; the string at the end
 #. * contains the URL of the license.
 #.
 #: ../gtk/gtkaboutdialog.c:124
 #, c-format
 msgid "This program comes with ABSOLUTELY NO WARRANTY; for details, visit %s"
-msgstr "A programra nem vállalunk SEMMIFÉLE GARANCIÁT; részletekért lásd: %s"
+msgstr ""
 
 #: ../gtk/gtkaboutdialog.c:264
 msgid "Could not show link"
@@ -621,8 +620,9 @@ msgid "_Saturation:"
 msgstr "Telített_ség:"
 
 #: ../gtk/gtkcolorsel.c:400
+#, fuzzy
 msgid "Intensity of the color."
-msgstr "A szín intenzitása."
+msgstr "A szín átlátszósága."
 
 #: ../gtk/gtkcolorsel.c:401
 msgid "_Value:"
@@ -796,23 +796,24 @@ msgstr "J_obb:"
 msgid "Paper Margins"
 msgstr "Papírmargók"
 
-#: ../gtk/gtkentry.c:8667 ../gtk/gtktextview.c:8258
+#: ../gtk/gtkentry.c:8646 ../gtk/gtktextview.c:8218
 msgid "Input _Methods"
 msgstr "Beviteli mó_dok"
 
-#: ../gtk/gtkentry.c:8681 ../gtk/gtktextview.c:8272
+#: ../gtk/gtkentry.c:8660 ../gtk/gtktextview.c:8232
 msgid "_Insert Unicode Control Character"
 msgstr "_Unicode vezérlőkarakter beszúrása"
 
-#: ../gtk/gtkentry.c:10080
+#: ../gtk/gtkentry.c:10059
 msgid "Caps Lock and Num Lock are on"
-msgstr "a Caps Lock és Num Lock be van kapcsolva"
+msgstr ""
 
-#: ../gtk/gtkentry.c:10082
+#: ../gtk/gtkentry.c:10061
+#, fuzzy
 msgid "Num Lock is on"
-msgstr "A Num Lock be van kapcsolva"
+msgstr "A Caps Lock be van kapcsolva"
 
-#: ../gtk/gtkentry.c:10084
+#: ../gtk/gtkentry.c:10063
 msgid "Caps Lock is on"
 msgstr "A Caps Lock be van kapcsolva"
 
@@ -1158,7 +1159,7 @@ msgstr "Hiba a(z) „%s” mappa létrehozásakor: %s"
 #. * token for the fake "File System" volume.  So, we'll return a pointer to
 #. * this particular string.
 #.
-#: ../gtk/gtkfilesystem.c:50
+#: ../gtk/gtkfilesystem.c:48
 msgid "File System"
 msgstr "Fájlrendszer"
 
@@ -1205,12 +1206,12 @@ msgstr "Betűkészlet-választó"
 #. Remove this icon source so we don't keep trying to
 #. * load it.
 #.
-#: ../gtk/gtkiconfactory.c:1363
+#: ../gtk/gtkiconfactory.c:1356
 #, c-format
 msgid "Error loading icon: %s"
 msgstr "Hiba az ikon betöltésekor: %s"
 
-#: ../gtk/gtkicontheme.c:1363
+#: ../gtk/gtkicontheme.c:1353
 #, c-format
 msgid ""
 "Could not find the icon '%s'. The '%s' theme\n"
@@ -1223,12 +1224,12 @@ msgstr ""
 "Beszerezhet egy másolatot a következő helyről:\n"
 "\t%s"
 
-#: ../gtk/gtkicontheme.c:1543
+#: ../gtk/gtkicontheme.c:1533
 #, c-format
 msgid "Icon '%s' not present in theme"
 msgstr "„%s” ikon nincs a témában"
 
-#: ../gtk/gtkicontheme.c:3065
+#: ../gtk/gtkicontheme.c:3045
 msgid "Failed to load icon"
 msgstr "Nem sikerült betölteni az ikont"
 
@@ -1472,8 +1473,9 @@ msgid "Not available"
 msgstr "Nem érhető el"
 
 #: ../gtk/gtkprinteroptionwidget.c:794
+#, fuzzy
 msgid "Select a folder"
-msgstr "Válasszon ki egy mappát"
+msgstr "Válasszon ki egy fájlt"
 
 #: ../gtk/gtkprinteroptionwidget.c:813
 msgid "_Save in folder:"
@@ -2110,9 +2112,10 @@ msgid "_Cancel"
 msgstr "Mé_gse"
 
 #: ../gtk/gtkstock.c:326
+#, fuzzy
 msgctxt "Stock label"
 msgid "_CD-ROM"
-msgstr "_CD-ROM"
+msgstr "_CD-Rom"
 
 #: ../gtk/gtkstock.c:327
 msgctxt "Stock label"
@@ -2170,9 +2173,10 @@ msgid "_Edit"
 msgstr "S_zerkesztés"
 
 #: ../gtk/gtkstock.c:338
+#, fuzzy
 msgctxt "Stock label"
 msgid "_File"
-msgstr "_Fájl"
+msgstr "_Fájlok"
 
 #: ../gtk/gtkstock.c:339
 msgctxt "Stock label"
@@ -2248,6 +2252,7 @@ msgid "_Up"
 msgstr "_Fel"
 
 #: ../gtk/gtkstock.c:360
+#, fuzzy
 msgctxt "Stock label"
 msgid "_Hard Disk"
 msgstr "_Merevlemez"
@@ -4221,3 +4226,167 @@ msgid ""
 msgstr ""
 "Nem sikerült betölteni a(z) „%s” képet: ok ismeretlen, valószínűleg sérült a "
 "képfájl"
+
+#~ msgid "\"Deepness\" of the color."
+#~ msgstr "A szín telítettsége."
+
+#~ msgid "Folders"
+#~ msgstr "Mappák"
+
+#~ msgid "Fol_ders"
+#~ msgstr "_Mappák"
+
+#~ msgid "Folder unreadable: %s"
+#~ msgstr "Olvashatatlan könyvtár: %s"
+
+#~ msgid ""
+#~ "The file \"%s\" resides on another machine (called %s) and may not be "
+#~ "available to this program.\n"
+#~ "Are you sure that you want to select it?"
+#~ msgstr ""
+#~ "A(z) „%s” fájl egy másik (%s nevű) gépen helyezkedik el és nem érhető el "
+#~ "ezen program számára.\n"
+#~ "Valóban ki akarja választani?"
+
+#~ msgid "_New Folder"
+#~ msgstr "Új _mappa"
+
+#~ msgid "De_lete File"
+#~ msgstr "Fájl _törlése"
+
+#~ msgid "_Rename File"
+#~ msgstr "Fájl át_nevezése"
+
+#~ msgid ""
+#~ "The folder name \"%s\" contains symbols that are not allowed in filenames"
+#~ msgstr ""
+#~ "A(z) „%s” mappanév fájlnevekben meg nem engedett szimbólumokat tartalmaz"
+
+#~ msgid "New Folder"
+#~ msgstr "Új mappa"
+
+#~ msgid "_Folder name:"
+#~ msgstr "_Mappa neve:"
+
+#~ msgid "C_reate"
+#~ msgstr "Lét_rehozás"
+
+#~ msgid ""
+#~ "The filename \"%s\" contains symbols that are not allowed in filenames"
+#~ msgstr ""
+#~ "A(z) „%s” fájlnév fájlnevekben meg nem engedett szimbólumokat tartalmaz"
+
+#~ msgid "Error deleting file '%s': %s"
+#~ msgstr "Hiba a(z) „%s” fájl törlése közben: %s"
+
+#~ msgid "Really delete file \"%s\"?"
+#~ msgstr "Biztos törli a(z) „%s” fájlt?"
+
+#~ msgid "Delete File"
+#~ msgstr "Fájl törlése"
+
+#~ msgid "Error renaming file to \"%s\": %s"
+#~ msgstr "Hiba a fájl átnevezése közben erre: „%s” : %s"
+
+#~ msgid "Error renaming file \"%s\": %s"
+#~ msgstr "Hiba „%s” fájl átnevezése közben: %s"
+
+#~ msgid "Error renaming file \"%s\" to \"%s\": %s"
+#~ msgstr "Hiba „%s” fájl erre: „%s” való átnevezése közben: %s"
+
+#~ msgid "Rename File"
+#~ msgstr "Fájl átnevezése"
+
+#~ msgid "Rename file \"%s\" to:"
+#~ msgstr "„%s” fájl átnevezése:"
+
+#~ msgid "_Rename"
+#~ msgstr "Á_tnevezés"
+
+#~ msgid "_Selection: "
+#~ msgstr "_Kijelölés: "
+
+#~ msgid ""
+#~ "The filename \"%s\" couldn't be converted to UTF-8. (try setting the "
+#~ "environment variable G_FILENAME_ENCODING): %s"
+#~ msgstr ""
+#~ "A(z) „%s” fájlnevet nem lehet UTF-8-ra konvertálni. (próbálja meg "
+#~ "beállítani a G_FILENAME_ENCODING környezeti változót): %s"
+
+#~ msgid "Invalid UTF-8"
+#~ msgstr "Érvénytelen UTF-8"
+
+#~ msgid "Name too long"
+#~ msgstr "Túl hosszú a név"
+
+#~ msgid "Couldn't convert filename"
+#~ msgstr "Nem lehet konvertálni a fájlnevet"
+
+#~ msgid "Gamma"
+#~ msgstr "Gamma"
+
+#~ msgid "_Gamma value"
+#~ msgstr "_Gamma érték"
+
+#~ msgid "Input"
+#~ msgstr "Bevitel"
+
+#~ msgid "No extended input devices"
+#~ msgstr "Nincs kiterjesztett beviteli eszköz"
+
+#~ msgid "_Device:"
+#~ msgstr "_Eszköz:"
+
+#~ msgid "Disabled"
+#~ msgstr "Tiltva"
+
+#~ msgid "Screen"
+#~ msgstr "Képernyő"
+
+#~ msgid "Window"
+#~ msgstr "Ablak"
+
+#~ msgid "_Mode:"
+#~ msgstr "_Mód:"
+
+#~ msgid "Axes"
+#~ msgstr "Tengelyek"
+
+#~ msgid "Keys"
+#~ msgstr "Billentyűk"
+
+#~ msgid "_X:"
+#~ msgstr "_X:"
+
+#~ msgid "_Y:"
+#~ msgstr "_Y:"
+
+#~ msgid "_Pressure:"
+#~ msgstr "_Nyomás:"
+
+#~ msgid "X _tilt:"
+#~ msgstr "X _döntés:"
+
+#~ msgid "Y t_ilt:"
+#~ msgstr "Y dö_ntés:"
+
+#~ msgid "_Wheel:"
+#~ msgstr "_Görgő:"
+
+#~ msgid "none"
+#~ msgstr "nincs"
+
+#~ msgid "(disabled)"
+#~ msgstr "(tiltva)"
+
+#~ msgid "(unknown)"
+#~ msgstr "(ismeretlen)"
+
+#~ msgid "Cl_ear"
+#~ msgstr "_Törlés"
+
+#~ msgid "Error printing"
+#~ msgstr "Nyomtatási hiba"
+
+#~ msgid "--- No Tip ---"
+#~ msgstr "-- Nincs segédszöveg --"
