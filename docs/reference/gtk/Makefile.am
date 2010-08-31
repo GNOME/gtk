@@ -179,125 +179,125 @@ expand_content_files = 				\
 
 # Images to copy into HTML directory
 HTML_IMAGES = \
-	$(top_srcdir)/gtk/stock-icons/24/gtk-about.png			\
-	$(top_srcdir)/gtk/stock-icons/24/gtk-add.png			\
+	$(top_srcdir)/gtk/stock-icons/24/help-about.png			\
+	$(top_srcdir)/gtk/stock-icons/24/list-add.png			\
 	$(top_srcdir)/gtk/stock-icons/20/gtk-apply.png			\
 	$(top_srcdir)/gtk/stock-icons/24/gtk-bold.png			\
 	$(top_srcdir)/gtk/stock-icons/20/gtk-cancel.png			\
 	$(top_srcdir)/gtk/stock-icons/24/gtk-caps-lock-warning.png	\
-	$(top_srcdir)/gtk/stock-icons/24/gtk-cdrom.png			\
+	$(top_srcdir)/gtk/stock-icons/24/media-optical.png		\
 	$(top_srcdir)/gtk/stock-icons/24/gtk-clear.png			\
-	$(top_srcdir)/gtk/stock-icons/24/gtk-close.png			\
+	$(top_srcdir)/gtk/stock-icons/24/window-close.png		\
 	$(top_srcdir)/gtk/stock-icons/24/gtk-connect.png		\
 	$(top_srcdir)/gtk/stock-icons/24/gtk-convert.png		\
-	$(top_srcdir)/gtk/stock-icons/24/gtk-copy.png			\
-	$(top_srcdir)/gtk/stock-icons/24/gtk-cut.png			\
-	$(top_srcdir)/gtk/stock-icons/24/gtk-delete.png			\
-	$(top_srcdir)/gtk/stock-icons/48/gtk-dialog-authentication.png 	\
-	$(top_srcdir)/gtk/stock-icons/48/gtk-dialog-error.png		\
-	$(top_srcdir)/gtk/stock-icons/48/gtk-dialog-info.png		\
-	$(top_srcdir)/gtk/stock-icons/48/gtk-dialog-question.png	\
-	$(top_srcdir)/gtk/stock-icons/48/gtk-dialog-warning.png		\
-	$(top_srcdir)/gtk/stock-icons/24/gtk-directory.png		\
+	$(top_srcdir)/gtk/stock-icons/24/edit-copy.png			\
+	$(top_srcdir)/gtk/stock-icons/24/edit-cut.png			\
+	$(top_srcdir)/gtk/stock-icons/24/edit-delete.png		\
+	$(top_srcdir)/gtk/stock-icons/48/dialog-password.png		\
+	$(top_srcdir)/gtk/stock-icons/48/dialog-error.png		\
+	$(top_srcdir)/gtk/stock-icons/48/dialog-info.png		\
+	$(top_srcdir)/gtk/stock-icons/48/dialog-question.png		\
+	$(top_srcdir)/gtk/stock-icons/48/dialog-warning.png		\
+	$(top_srcdir)/gtk/stock-icons/24/folder.png			\
 	$(top_srcdir)/gtk/stock-icons/24/gtk-disconnect.png		\
 	$(top_srcdir)/gtk/stock-icons/32/gtk-dnd.png			\
 	$(top_srcdir)/gtk/stock-icons/32/gtk-dnd-multiple.png		\
 	$(top_srcdir)/gtk/stock-icons/24/gtk-edit.png			\
-	$(top_srcdir)/gtk/stock-icons/24/gtk-execute.png		\
-	$(top_srcdir)/gtk/stock-icons/24/gtk-file.png			\
-	$(top_srcdir)/gtk/stock-icons/24/gtk-find.png			\
-	$(top_srcdir)/gtk/stock-icons/24/gtk-find-and-replace.png	\
-	$(top_srcdir)/gtk/stock-icons/24/gtk-goto-bottom.png		\
-	$(top_srcdir)/gtk/stock-icons/24/gtk-goto-first-ltr.png		\
-	$(top_srcdir)/gtk/stock-icons/24/gtk-goto-first-rtl.png		\
-	$(top_srcdir)/gtk/stock-icons/24/gtk-goto-last-ltr.png		\
-	$(top_srcdir)/gtk/stock-icons/24/gtk-goto-last-rtl.png		\
-	$(top_srcdir)/gtk/stock-icons/24/gtk-goto-top.png		\
-	$(top_srcdir)/gtk/stock-icons/24/gtk-go-back-ltr.png		\
-	$(top_srcdir)/gtk/stock-icons/24/gtk-go-back-rtl.png		\
-	$(top_srcdir)/gtk/stock-icons/24/gtk-go-down.png		\
-	$(top_srcdir)/gtk/stock-icons/24/gtk-go-forward-ltr.png		\
-	$(top_srcdir)/gtk/stock-icons/24/gtk-go-forward-rtl.png		\
-	$(top_srcdir)/gtk/stock-icons/24/gtk-go-up.png			\
-	$(top_srcdir)/gtk/stock-icons/24/gtk-harddisk.png		\
-	$(top_srcdir)/gtk/stock-icons/24/gtk-network.png		\
-	$(top_srcdir)/gtk/stock-icons/24/gtk-help.png			\
-	$(top_srcdir)/gtk/stock-icons/24/gtk-home.png			\
+	$(top_srcdir)/gtk/stock-icons/24/system-run.png			\
+	$(top_srcdir)/gtk/stock-icons/24/document-x-generic.png		\
+	$(top_srcdir)/gtk/stock-icons/24/edit-find.png			\
+	$(top_srcdir)/gtk/stock-icons/24/edit-find-replace.png		\
+	$(top_srcdir)/gtk/stock-icons/24/go-bottom.png			\
+	$(top_srcdir)/gtk/stock-icons/24/go-first-ltr.png		\
+	$(top_srcdir)/gtk/stock-icons/24/go-first-rtl.png		\
+	$(top_srcdir)/gtk/stock-icons/24/go-last-ltr.png		\
+	$(top_srcdir)/gtk/stock-icons/24/go-last-rtl.png		\
+	$(top_srcdir)/gtk/stock-icons/24/go-top.png			\
+	$(top_srcdir)/gtk/stock-icons/24/go-previous-ltr.png		\
+	$(top_srcdir)/gtk/stock-icons/24/go-previous-rtl.png		\
+	$(top_srcdir)/gtk/stock-icons/24/go-down.png			\
+	$(top_srcdir)/gtk/stock-icons/24/go-next-ltr.png		\
+	$(top_srcdir)/gtk/stock-icons/24/go-next-rtl.png		\
+	$(top_srcdir)/gtk/stock-icons/24/go-up.png			\
+	$(top_srcdir)/gtk/stock-icons/24/drive-harddisk.png		\
+	$(top_srcdir)/gtk/stock-icons/24/network-idle.png		\
+	$(top_srcdir)/gtk/stock-icons/24/help-contents.png		\
+	$(top_srcdir)/gtk/stock-icons/24/go-home.png			\
 	$(top_srcdir)/gtk/stock-icons/24/gtk-index.png			\
-	$(top_srcdir)/gtk/stock-icons/24/gtk-indent-ltr.png		\
-	$(top_srcdir)/gtk/stock-icons/24/gtk-indent-rtl.png		\
-	$(top_srcdir)/gtk/stock-icons/24/gtk-unindent-ltr.png		\
-	$(top_srcdir)/gtk/stock-icons/24/gtk-unindent-rtl.png		\
-	$(top_srcdir)/gtk/stock-icons/24/gtk-italic.png			\
-	$(top_srcdir)/gtk/stock-icons/24/gtk-jump-to-ltr.png		\
-	$(top_srcdir)/gtk/stock-icons/24/gtk-jump-to-rtl.png		\
-	$(top_srcdir)/gtk/stock-icons/24/gtk-justify-center.png		\
-	$(top_srcdir)/gtk/stock-icons/24/gtk-justify-fill.png		\
-	$(top_srcdir)/gtk/stock-icons/24/gtk-justify-left.png		\
-	$(top_srcdir)/gtk/stock-icons/24/gtk-justify-right.png		\
-	$(top_srcdir)/gtk/stock-icons/24/gtk-missing-image.png		\
-	$(top_srcdir)/gtk/stock-icons/24/gtk-new.png			\
+	$(top_srcdir)/gtk/stock-icons/24/format-indent-more-ltr.png	\
+	$(top_srcdir)/gtk/stock-icons/24/format-indent-more-rtl.png	\
+	$(top_srcdir)/gtk/stock-icons/24/format-indent-less-ltr.png	\
+	$(top_srcdir)/gtk/stock-icons/24/format-indent-less-rtl.png	\
+	$(top_srcdir)/gtk/stock-icons/24/format-text-italic.png		\
+	$(top_srcdir)/gtk/stock-icons/24/go-jump-ltr.png		\
+	$(top_srcdir)/gtk/stock-icons/24/go-jump-rtl.png		\
+	$(top_srcdir)/gtk/stock-icons/24/format-justify-center.png	\
+	$(top_srcdir)/gtk/stock-icons/24/format-justify-fill.png	\
+	$(top_srcdir)/gtk/stock-icons/24/format-justify-left.png	\
+	$(top_srcdir)/gtk/stock-icons/24/format-justify-right.png	\
+	$(top_srcdir)/gtk/stock-icons/24/image-missing.png		\
+	$(top_srcdir)/gtk/stock-icons/24/document-new.png		\
 	$(top_srcdir)/gtk/stock-icons/20/gtk-no.png			\
 	$(top_srcdir)/gtk/stock-icons/20/gtk-ok.png			\
-	$(top_srcdir)/gtk/stock-icons/24/gtk-open.png			\
+	$(top_srcdir)/gtk/stock-icons/24/document-open.png		\
 	$(top_srcdir)/gtk/stock-icons/24/gtk-orientation-landscape.png	\
 	$(top_srcdir)/gtk/stock-icons/24/gtk-orientation-portrait.png	\
 	$(top_srcdir)/gtk/stock-icons/24/gtk-orientation-reverse-landscape.png \
 	$(top_srcdir)/gtk/stock-icons/24/gtk-orientation-reverse-portrait.png \
-	$(top_srcdir)/gtk/stock-icons/24/gtk-paste.png			\
+	$(top_srcdir)/gtk/stock-icons/24/edit-paste.png			\
 	$(top_srcdir)/gtk/stock-icons/24/gtk-preferences.png		\
-	$(top_srcdir)/gtk/stock-icons/24/gtk-print.png			\
-	$(top_srcdir)/gtk/stock-icons/24/gtk-print-error.png		\
-	$(top_srcdir)/gtk/stock-icons/24/gtk-print-paused.png		\
-	$(top_srcdir)/gtk/stock-icons/24/gtk-print-preview.png		\
-	$(top_srcdir)/gtk/stock-icons/24/gtk-print-report.png		\
-	$(top_srcdir)/gtk/stock-icons/24/gtk-print-warning.png		\
-	$(top_srcdir)/gtk/stock-icons/24/gtk-properties.png		\
-	$(top_srcdir)/gtk/stock-icons/24/gtk-quit.png			\
-	$(top_srcdir)/gtk/stock-icons/24/gtk-redo-ltr.png		\
-	$(top_srcdir)/gtk/stock-icons/24/gtk-redo-rtl.png		\
-	$(top_srcdir)/gtk/stock-icons/24/gtk-refresh.png		\
-	$(top_srcdir)/gtk/stock-icons/24/gtk-remove.png			\
-	$(top_srcdir)/gtk/stock-icons/24/gtk-revert-to-saved-ltr.png	\
-	$(top_srcdir)/gtk/stock-icons/24/gtk-revert-to-saved-rtl.png	\
-	$(top_srcdir)/gtk/stock-icons/24/gtk-floppy.png			\
-	$(top_srcdir)/gtk/stock-icons/24/gtk-save.png			\
-	$(top_srcdir)/gtk/stock-icons/24/gtk-save-as.png		\
-	$(top_srcdir)/gtk/stock-icons/24/gtk-select-all.png		\
+	$(top_srcdir)/gtk/stock-icons/24/document-print.png		\
+	$(top_srcdir)/gtk/stock-icons/24/printer-error.png		\
+	$(top_srcdir)/gtk/stock-icons/24/printer-paused.png		\
+	$(top_srcdir)/gtk/stock-icons/24/document-print-preview.png	\
+	$(top_srcdir)/gtk/stock-icons/24/printer-info.png		\
+	$(top_srcdir)/gtk/stock-icons/24/printer-warning.png		\
+	$(top_srcdir)/gtk/stock-icons/24/document-properties.png	\
+	$(top_srcdir)/gtk/stock-icons/24/application-exit.png		\
+	$(top_srcdir)/gtk/stock-icons/24/edit-redo-ltr.png		\
+	$(top_srcdir)/gtk/stock-icons/24/edit-redo-rtl.png		\
+	$(top_srcdir)/gtk/stock-icons/24/view-refresh.png		\
+	$(top_srcdir)/gtk/stock-icons/24/list-remove.png		\
+	$(top_srcdir)/gtk/stock-icons/24/document-revert-ltr.png	\
+	$(top_srcdir)/gtk/stock-icons/24/document-revert-rtl.png	\
+	$(top_srcdir)/gtk/stock-icons/24/media-floppy.png		\
+	$(top_srcdir)/gtk/stock-icons/24/document-save.png		\
+	$(top_srcdir)/gtk/stock-icons/24/document-save-as.png		\
+	$(top_srcdir)/gtk/stock-icons/24/edit-select-all.png		\
 	$(top_srcdir)/gtk/stock-icons/24/gtk-select-color.png		\
 	$(top_srcdir)/gtk/stock-icons/24/gtk-color-picker.png		\
 	$(top_srcdir)/gtk/stock-icons/24/gtk-font.png			\
-	$(top_srcdir)/gtk/stock-icons/24/gtk-sort-ascending.png		\
-	$(top_srcdir)/gtk/stock-icons/24/gtk-sort-descending.png	\
-	$(top_srcdir)/gtk/stock-icons/24/gtk-spell-check.png		\
-	$(top_srcdir)/gtk/stock-icons/24/gtk-stop.png			\
-	$(top_srcdir)/gtk/stock-icons/24/gtk-strikethrough.png		\
+	$(top_srcdir)/gtk/stock-icons/24/view-sort-ascending.png	\
+	$(top_srcdir)/gtk/stock-icons/24/view-sort-descending.png	\
+	$(top_srcdir)/gtk/stock-icons/24/tools-check-spelling.png	\
+	$(top_srcdir)/gtk/stock-icons/24/process-stop.png		\
+	$(top_srcdir)/gtk/stock-icons/24/format-text--strikethrough.png	\
 	$(top_srcdir)/gtk/stock-icons/24/gtk-undelete-ltr.png		\
 	$(top_srcdir)/gtk/stock-icons/24/gtk-undelete-rtl.png		\
-	$(top_srcdir)/gtk/stock-icons/24/gtk-underline.png		\
-	$(top_srcdir)/gtk/stock-icons/24/gtk-undo-ltr.png		\
-	$(top_srcdir)/gtk/stock-icons/24/gtk-undo-rtl.png		\
+	$(top_srcdir)/gtk/stock-icons/24/format-text-underline.png	\
+	$(top_srcdir)/gtk/stock-icons/24/edit-undo-ltr.png		\
+	$(top_srcdir)/gtk/stock-icons/24/edit-undo-rtl.png		\
 	$(top_srcdir)/gtk/stock-icons/20/gtk-yes.png			\
-	$(top_srcdir)/gtk/stock-icons/24/gtk-zoom-100.png		\
-	$(top_srcdir)/gtk/stock-icons/24/gtk-zoom-fit.png		\
-	$(top_srcdir)/gtk/stock-icons/24/gtk-zoom-in.png		\
-	$(top_srcdir)/gtk/stock-icons/24/gtk-zoom-out.png		\
-	$(top_srcdir)/gtk/stock-icons/24/gtk-media-forward-ltr.png	\
-	$(top_srcdir)/gtk/stock-icons/24/gtk-media-forward-rtl.png	\
-	$(top_srcdir)/gtk/stock-icons/24/gtk-media-next-ltr.png		\
-	$(top_srcdir)/gtk/stock-icons/24/gtk-media-next-rtl.png		\
-	$(top_srcdir)/gtk/stock-icons/24/gtk-media-pause.png		\
-	$(top_srcdir)/gtk/stock-icons/24/gtk-media-play-ltr.png		\
-	$(top_srcdir)/gtk/stock-icons/24/gtk-media-play-rtl.png		\
-	$(top_srcdir)/gtk/stock-icons/24/gtk-media-previous-ltr.png	\
-	$(top_srcdir)/gtk/stock-icons/24/gtk-media-previous-rtl.png	\
-	$(top_srcdir)/gtk/stock-icons/24/gtk-media-record.png		\
-	$(top_srcdir)/gtk/stock-icons/24/gtk-media-rewind-ltr.png	\
-	$(top_srcdir)/gtk/stock-icons/24/gtk-media-rewind-rtl.png	\
-	$(top_srcdir)/gtk/stock-icons/24/gtk-media-stop.png		\
-	$(top_srcdir)/gtk/stock-icons/24/gtk-fullscreen.png		\
-	$(top_srcdir)/gtk/stock-icons/24/gtk-leave-fullscreen.png	\
-	$(top_srcdir)/gtk/stock-icons/24/gtk-info.png			\
+	$(top_srcdir)/gtk/stock-icons/24/zoom-original.png		\
+	$(top_srcdir)/gtk/stock-icons/24/zoom-fit-best.png		\
+	$(top_srcdir)/gtk/stock-icons/24/zoom-in.png			\
+	$(top_srcdir)/gtk/stock-icons/24/zoom-out.png			\
+	$(top_srcdir)/gtk/stock-icons/24/media-seek-forward-ltr.png	\
+	$(top_srcdir)/gtk/stock-icons/24/media-seek-forward-rtl.png	\
+	$(top_srcdir)/gtk/stock-icons/24/media-skip-forward-ltr.png	\
+	$(top_srcdir)/gtk/stock-icons/24/media-skip-forward-rtl.png	\
+	$(top_srcdir)/gtk/stock-icons/24/media-playback-pause.png	\
+	$(top_srcdir)/gtk/stock-icons/24/media-playback-start-ltr.png	\
+	$(top_srcdir)/gtk/stock-icons/24/media-playback-start-rtl.png	\
+	$(top_srcdir)/gtk/stock-icons/24/media-seek-backward-ltr.png	\
+	$(top_srcdir)/gtk/stock-icons/24/media-seek-backward-rtl.png	\
+	$(top_srcdir)/gtk/stock-icons/24/media-record.png		\
+	$(top_srcdir)/gtk/stock-icons/24/media-skip-backward-ltr.png	\
+	$(top_srcdir)/gtk/stock-icons/24/media-skip-backward-rtl.png	\
+	$(top_srcdir)/gtk/stock-icons/24/media-playbackstop.png		\
+	$(top_srcdir)/gtk/stock-icons/24/view-fullscreen.png		\
+	$(top_srcdir)/gtk/stock-icons/24/view-restore.png		\
+	$(top_srcdir)/gtk/stock-icons/24/gtk-page-setup.png		\
 	$(srcdir)/images/aboutdialog.png				\
 	$(srcdir)/images/accel-label.png				\
 	$(srcdir)/images/assistant.png					\
