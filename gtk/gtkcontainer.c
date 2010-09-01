@@ -1078,10 +1078,10 @@ gtk_container_destroy (GtkObject *object)
   if (GTK_CONTAINER_RESIZE_PENDING (container))
     _gtk_container_dequeue_resize_handler (container);
 
-  if (container->focus_child)
+  if (priv->focus_child)
     {
-      g_object_unref (container->focus_child);
-      container->focus_child = NULL;
+      g_object_unref (priv->focus_child);
+      priv->focus_child = NULL;
     }
 
   /* do this before walking child widgets, to avoid
