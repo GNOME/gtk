@@ -32,6 +32,9 @@
 G_BEGIN_DECLS
 
 cairo_t *gdk_cairo_create            (GdkWindow          *window);
+#define GDK_TYPE_CAIRO_PATTERN (gdk_cairo_pattern_get_type ())
+
+GType    gdk_cairo_pattern_get_type  (void) G_GNUC_CONST;
 gboolean gdk_cairo_get_clip_rectangle(cairo_t            *cr,
                                       GdkRectangle       *rect);
 

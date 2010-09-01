@@ -25,6 +25,8 @@
 
 #include <math.h>
 
+G_DEFINE_BOXED_TYPE (cairo_pattern_t, gdk_cairo_pattern, cairo_pattern_reference, cairo_pattern_destroy)
+
 /**
  * SECTION:cairo_interaction
  * @Short_description: Functions to support using Cairo
