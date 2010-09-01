@@ -29,6 +29,12 @@
 
 G_BEGIN_DECLS
 
+/**
+ * GTK_MAX_COMPOSE_LEN:
+ *
+ * The maximum length of sequences in compose tables.
+ */
+#define GTK_MAX_COMPOSE_LEN 7
 
 #define GTK_TYPE_IM_CONTEXT_SIMPLE              (gtk_im_context_simple_get_type ())
 #define GTK_IM_CONTEXT_SIMPLE(obj)              (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_IM_CONTEXT_SIMPLE, GtkIMContextSimple))
@@ -41,8 +47,6 @@ G_BEGIN_DECLS
 typedef struct _GtkIMContextSimple              GtkIMContextSimple;
 typedef struct _GtkIMContextSimplePrivate       GtkIMContextSimplePrivate;
 typedef struct _GtkIMContextSimpleClass         GtkIMContextSimpleClass;
-
-#define GTK_MAX_COMPOSE_LEN 7
 
 struct _GtkIMContextSimple
 {

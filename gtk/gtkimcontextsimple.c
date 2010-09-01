@@ -30,6 +30,13 @@
 #include "gtkintl.h"
 
 
+/**
+ * SECTION:gtkimcontextsimple
+ * @Short_description: An input method context supporting table-based input methods
+ * @Title: GtkIMContextSimple
+ */
+
+
 typedef struct _GtkComposeTable GtkComposeTable;
 typedef struct _GtkComposeTableCompact GtkComposeTableCompact;
 
