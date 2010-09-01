@@ -32,6 +32,16 @@
 #include "gtkintl.h"
 
 
+/**
+ * SECTION:gtktypeutils
+ * @Short_description: Handle run-time type creation
+ * @Title: Types
+ *
+ * The GTK+ type system is extensible.  Because of that, types have to be
+ * managed at runtime.
+ */
+
+
 GType
 gtk_identifier_get_type (void)
 {

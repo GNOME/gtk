@@ -47,7 +47,26 @@ GType gtk_identifier_get_type (void) G_GNUC_CONST;
  */
 typedef struct _GtkArg	       	     GtkArg;
 typedef struct _GtkObject   	     GtkObject; /* object forward declaration */
+
+/**
+ * GtkFunction:
+ * @data: #gpointer
+ *
+ * Defines a function pointer.
+ *
+ * Returns: #gint
+ */
 typedef gboolean (*GtkFunction)	    (gpointer      data);
+
+/**
+ * GtkCallbackMarshal:
+ * @object: #GtkObject*
+ * @data: #gpointer
+ * @n_args: #guint
+ * @args: #GtkArg*
+ *
+ * Defines a function pointer.
+ */
 typedef void (*GtkCallbackMarshal)  (GtkObject    *object,
 				     gpointer      data,
 				     guint         n_args,
@@ -60,7 +79,11 @@ typedef gchar * (*GtkTranslateFunc) (const gchar  *path,
 				     gpointer      func_data);
 
 #if defined (GTK_COMPILATION)
-/* GtkArg, used to hold differently typed values */
+/**
+ * GtkArg:
+ *
+ * This is a structure that we use to pass in typed values (and names).
+ */
 struct _GtkArg
 {
   GType type;
