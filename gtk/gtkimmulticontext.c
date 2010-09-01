@@ -29,6 +29,14 @@
 #include "gtkintl.h"
 #include "gtkprivate.h" /* To get redefinition of GTK_LOCALE_DIR on Win32 */
 
+
+/**
+ * SECTION:gtkimmulticontext
+ * @Short_description: An input method context supporting multiple, loadable input methods
+ * @Title: GtkIMMulticontext
+ */
+
+
 #define NONE_ID "gtk-im-context-none"
 
 struct _GtkIMMulticontextPrivate
