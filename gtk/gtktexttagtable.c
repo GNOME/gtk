@@ -33,6 +33,17 @@
 #include <stdlib.h>
 
 
+/**
+ * SECTION:gtktexttagtable
+ * @Short_description: Collection of tags that can be used together
+ * @Title: GtkTextTagTable
+ *
+ * You may wish to begin by reading the <link linkend="TextWidget">text widget
+ * conceptual overview</link> which gives an overview of all the objects and data
+ * types related to the text widget and how they work together.
+ */
+
+
 struct _GtkTextTagTablePrivate
 {
   GHashTable *hash;
@@ -77,7 +88,13 @@ gtk_text_tag_table_class_init (GtkTextTagTableClass *klass)
   object_class->get_property = gtk_text_tag_table_get_property;
   
   object_class->finalize = gtk_text_tag_table_finalize;
-  
+
+  /**
+   * GtkTextTagTable::tag-changed:
+   * @texttagtable: the object which received the signal.
+   * @tag: the changed tag.
+   * @size_changed: whether the size has been changed.
+   */
   signals[TAG_CHANGED] =
     g_signal_new (I_("tag-changed"),
                   G_OBJECT_CLASS_TYPE (object_class),
@@ -90,6 +107,11 @@ gtk_text_tag_table_class_init (GtkTextTagTableClass *klass)
                   GTK_TYPE_TEXT_TAG,
                   G_TYPE_BOOLEAN);  
 
+  /**
+   * GtkTextTagTable::tag-added:
+   * @texttagtable: the object which received the signal.
+   * @tag: the added tag.
+   */
   signals[TAG_ADDED] =
     g_signal_new (I_("tag-added"),
                   G_OBJECT_CLASS_TYPE (object_class),
@@ -101,6 +123,11 @@ gtk_text_tag_table_class_init (GtkTextTagTableClass *klass)
                   1,
                   GTK_TYPE_TEXT_TAG);
 
+  /**
+   * GtkTextTagTable::tag-removed:
+   * @texttagtable: the object which received the signal.
+   * @tag: the removed tag.
+   */
   signals[TAG_REMOVED] =
     g_signal_new (I_("tag-removed"),  
                   G_OBJECT_CLASS_TYPE (object_class),
