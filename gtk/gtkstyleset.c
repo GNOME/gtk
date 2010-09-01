@@ -355,6 +355,8 @@ gtk_style_set_register_property (const gchar            *property_name,
       g_value_init (&new.default_value, G_VALUE_TYPE (default_value));
       g_value_copy (default_value, &new.default_value);
     }
+  else
+    g_value_init (&new.default_value, type);
 
   if (parse_func)
     new.parse_func = parse_func;
@@ -650,7 +652,7 @@ gtk_style_set_get_property (GtkStyleSet   *set,
 
   val = property_data_match_state (prop, state);
 
-  if (!val && G_IS_VALUE (&node->default_value))
+  if (!val)
     val = &node->default_value;
 
   g_return_val_if_fail (G_IS_VALUE (val), FALSE);
@@ -686,6 +688,7 @@ gtk_style_set_get_valist (GtkStyleSet   *set,
       PropertyNode *node;
       PropertyData *prop;
       gchar *error = NULL;
+      GValue *val = NULL;
 
       node = property_node_lookup (g_quark_try_string (property_name));
 
@@ -698,35 +701,21 @@ gtk_style_set_get_valist (GtkStyleSet   *set,
       prop = g_hash_table_lookup (priv->properties,
                                   GINT_TO_POINTER (node->property_quark));
 
-      if (!prop && !G_IS_VALUE (&node->default_value))
+      if (prop)
+        val = property_data_match_state (prop, state);
+
+      if (!val)
+        val = &node->default_value;
+
+      if (G_VALUE_TYPE (val) == GTK_TYPE_SYMBOLIC_COLOR)
         {
-          GValue *empty_value = { 0 };
+          g_return_if_fail (node->property_type == GDK_TYPE_COLOR);
 
-          g_warning ("No value for style property \"%s\"", property_name);
-
-          g_value_init (&empty_value, node->property_type);
-          G_VALUE_LCOPY (&empty_value, args, 0, &error);
-        }
-      else
-        {
-          GValue *val = NULL;
-
-          if (prop)
-            val = property_data_match_state (prop, state);
-
-          if (!val && G_IS_VALUE (&node->default_value))
+          if (!resolve_color (set, val))
             val = &node->default_value;
-
-          if (G_VALUE_TYPE (val) == GTK_TYPE_SYMBOLIC_COLOR)
-            {
-              g_return_if_fail (node->property_type == GDK_TYPE_COLOR);
-
-              if (!resolve_color (set, val))
-                return;
-            }
-
-          G_VALUE_LCOPY (val, args, 0, &error);
         }
+
+      G_VALUE_LCOPY (val, args, 0, &error);
 
       if (error)
         {
