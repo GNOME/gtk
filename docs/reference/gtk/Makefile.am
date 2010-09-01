@@ -148,11 +148,11 @@ HTML_IMAGES = \
 	$(top_srcdir)/gtk/stock-icons/24/help-about.png			\
 	$(top_srcdir)/gtk/stock-icons/24/list-add.png			\
 	$(top_srcdir)/gtk/stock-icons/20/gtk-apply.png			\
-	$(top_srcdir)/gtk/stock-icons/24/gtk-bold.png			\
+	$(top_srcdir)/gtk/stock-icons/24/format-text-bold.png		\
 	$(top_srcdir)/gtk/stock-icons/20/gtk-cancel.png			\
 	$(top_srcdir)/gtk/stock-icons/24/gtk-caps-lock-warning.png	\
 	$(top_srcdir)/gtk/stock-icons/24/media-optical.png		\
-	$(top_srcdir)/gtk/stock-icons/24/gtk-clear.png			\
+	$(top_srcdir)/gtk/stock-icons/24/edit-clear.png			\
 	$(top_srcdir)/gtk/stock-icons/24/window-close.png		\
 	$(top_srcdir)/gtk/stock-icons/24/gtk-connect.png		\
 	$(top_srcdir)/gtk/stock-icons/24/gtk-convert.png		\
@@ -161,7 +161,7 @@ HTML_IMAGES = \
 	$(top_srcdir)/gtk/stock-icons/24/edit-delete.png		\
 	$(top_srcdir)/gtk/stock-icons/48/dialog-password.png		\
 	$(top_srcdir)/gtk/stock-icons/48/dialog-error.png		\
-	$(top_srcdir)/gtk/stock-icons/48/dialog-info.png		\
+	$(top_srcdir)/gtk/stock-icons/48/dialog-information.png		\
 	$(top_srcdir)/gtk/stock-icons/48/dialog-question.png		\
 	$(top_srcdir)/gtk/stock-icons/48/dialog-warning.png		\
 	$(top_srcdir)/gtk/stock-icons/24/folder.png			\
@@ -237,7 +237,7 @@ HTML_IMAGES = \
 	$(top_srcdir)/gtk/stock-icons/24/view-sort-descending.png	\
 	$(top_srcdir)/gtk/stock-icons/24/tools-check-spelling.png	\
 	$(top_srcdir)/gtk/stock-icons/24/process-stop.png		\
-	$(top_srcdir)/gtk/stock-icons/24/format-text--strikethrough.png	\
+	$(top_srcdir)/gtk/stock-icons/24/format-text-strikethrough.png	\
 	$(top_srcdir)/gtk/stock-icons/24/gtk-undelete-ltr.png		\
 	$(top_srcdir)/gtk/stock-icons/24/gtk-undelete-rtl.png		\
 	$(top_srcdir)/gtk/stock-icons/24/format-text-underline.png	\
@@ -260,7 +260,7 @@ HTML_IMAGES = \
 	$(top_srcdir)/gtk/stock-icons/24/media-record.png		\
 	$(top_srcdir)/gtk/stock-icons/24/media-skip-backward-ltr.png	\
 	$(top_srcdir)/gtk/stock-icons/24/media-skip-backward-rtl.png	\
-	$(top_srcdir)/gtk/stock-icons/24/media-playbackstop.png		\
+	$(top_srcdir)/gtk/stock-icons/24/media-playback-stop.png	\
 	$(top_srcdir)/gtk/stock-icons/24/view-fullscreen.png		\
 	$(top_srcdir)/gtk/stock-icons/24/view-restore.png		\
 	$(top_srcdir)/gtk/stock-icons/24/gtk-page-setup.png		\
