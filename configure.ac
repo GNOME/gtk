@@ -34,7 +34,7 @@ m4_define([gtk_binary_version], [3.0.0])
 m4_define([glib_required_version], [2.27.0])
 m4_define([pango_required_version], [1.20])
 m4_define([atk_required_version], [1.29.2])
-m4_define([cairo_required_version], [1.9.10])
+m4_define([cairo_required_version], [1.10.0])
 m4_define([gdk_pixbuf_required_version], [2.21.0])
 GLIB_REQUIRED_VERSION=glib_required_version
 PANGO_REQUIRED_VERSION=pango_required_version
@@ -362,6 +362,7 @@ PKG_CHECK_MODULES(BASE_DEPENDENCIES,
    atk >= atk_required_version dnl
    pango >= pango_required_version dnl
    cairo >= cairo_required_version dnl
+   cairo-gobject >= cairo_required_version dnl
    gdk-pixbuf-2.0 >= gdk_pixbuf_required_version])
 
 ## In addition to checking that cairo is present, we also need to
@@ -1276,7 +1277,7 @@ else
         LIBS="$gtk_save_LIBS"
 fi
 
-GTK_PACKAGES="atk cairo gdk-pixbuf-2.0 gio-2.0"
+GTK_PACKAGES="atk cairo cairo-gobject gdk-pixbuf-2.0 gio-2.0"
 if test "x$gdktarget" = "xx11"; then
   GTK_PACKAGES="$GTK_PACKAGES pangoft2"
 fi
