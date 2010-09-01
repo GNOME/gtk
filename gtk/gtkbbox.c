@@ -30,26 +30,18 @@
  * @Title: GtkButtonBox
  * @See_also: #GtkVButtonBox, #GtkHButtonBox
  *
- * The primary purpose of this class is to keep track of the various properties
- * of #GtkHButtonBox and #GtkVButtonBox widgets.
- *
- * gtk_button_box_get_child_size() retrieves the minimum width and height
- * for widgets in a given button box.
- *
- * The internal padding of buttons can be retrieved and changed per button box
- * using gtk_button_box_get_child_ipadding() and
- * gtk_button_box_set_child_ipadding() respectively.
- *
- * gtk_button_box_get_spacing() and gtk_button_box_set_spacing() retrieve and
- * change default number of pixels between buttons, respectively.
+ * The primary purpose of this class is to keep track of the various
+ * properties of #GtkHButtonBox and #GtkVButtonBox widgets.
  *
  * gtk_button_box_get_layout() and gtk_button_box_set_layout() retrieve and
  * alter the method used to spread the buttons in a button box across the
  * container, respectively.
  *
  * The main purpose of GtkButtonBox is to make sure the children have all the
- * same size. Therefore it ignores the homogeneous property which it inherited
- * from GtkBox, and always behaves as if homogeneous was %TRUE.
+ * same size. GtkButtonBox gives all children the same size, but it does allow
+ * 'outliers' to keep their own larger size. To force all children to be
+ * strictly the same size without exceptions, you can set the
+ * #GtkButtonBox::homogeneous property to %TRUE.
  */
 
 #include "config.h"
