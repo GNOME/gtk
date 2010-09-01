@@ -99,7 +99,7 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  * GTK_STOCK_BOLD:
  *
  * The "Bold" item.
- * <inlinegraphic fileref="gtk-bold.png" format="PNG"></inlinegraphic>
+ * <inlinegraphic fileref="format-text-bold.png" format="PNG"></inlinegraphic>
  */
 #define GTK_STOCK_BOLD             "gtk-bold"
 
@@ -133,7 +133,7 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  * GTK_STOCK_CLEAR:
  *
  * The "Clear" item.
- * <inlinegraphic fileref="gtk-clear.png" format="PNG"></inlinegraphic>
+ * <inlinegraphic fileref="edit-clear.png" format="PNG"></inlinegraphic>
  */
 #define GTK_STOCK_CLEAR            "gtk-clear"
 
