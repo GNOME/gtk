@@ -1465,7 +1465,7 @@ parse_rule (GtkCssProvider *css_provider,
       scanner->value.v_identifier[0] == '@')
     {
       GtkSymbolicColor *color;
-      gchar *color_name;
+      gchar *color_name, *color_str;
 
       /* Rule is a color mapping */
       color_name = g_strdup (&scanner->value.v_identifier[1]);
@@ -1480,7 +1480,8 @@ parse_rule (GtkCssProvider *css_provider,
       if (scanner->token != G_TOKEN_IDENTIFIER)
         return G_TOKEN_IDENTIFIER;
 
-      color = symbolic_color_parse (scanner->value.v_identifier);
+      color_str = g_strstrip (scanner->value.v_identifier);
+      color = symbolic_color_parse (color_str);
 
       if (!color)
         return G_TOKEN_IDENTIFIER;
