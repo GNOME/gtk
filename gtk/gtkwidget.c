@@ -5281,6 +5281,10 @@ _gtk_widget_grab_notify (GtkWidget *widget,
  *
  * More precisely, it must have the %GTK_CAN_FOCUS flag set. Use
  * gtk_widget_set_can_focus() to modify that flag.
+ *
+ * The widget also needs to be realized and mapped. This is indicated by the
+ * related signals. Grabbing the focus immediately after creating the widget
+ * will likely fail and cause critical warnings.
  **/
 void
 gtk_widget_grab_focus (GtkWidget *widget)
