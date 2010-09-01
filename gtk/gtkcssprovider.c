@@ -765,7 +765,7 @@ css_provider_apply_scope (GtkCssProvider *css_provider,
   if (scope == SCOPE_VALUE)
     {
       priv->scanner->config->cset_identifier_first = G_CSET_a_2_z "@#-_0123456789" G_CSET_A_2_Z;
-      priv->scanner->config->cset_identifier_nth = G_CSET_a_2_z "@#-_ 0123456789(),." G_CSET_A_2_Z;
+      priv->scanner->config->cset_identifier_nth = G_CSET_a_2_z "@#-_ 0123456789(),.\n" G_CSET_A_2_Z;
       priv->scanner->config->scan_identifier_1char = TRUE;
     }
   else if (scope == SCOPE_SELECTOR)
@@ -1137,7 +1137,7 @@ parse_selector (GtkCssProvider  *css_provider,
   return G_TOKEN_NONE;
 }
 
-#define SKIP_SPACES(s) while (s[0] == ' ') s++;
+#define SKIP_SPACES(s) while (s[0] == ' ' || s[0] == '\t' || s[0] == '\n') s++;
 
 static GtkSymbolicColor *
 symbolic_color_parse_str (const gchar  *string,
