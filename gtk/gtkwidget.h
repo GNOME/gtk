@@ -348,6 +348,8 @@ struct _GtkWidgetClass
 				gboolean          was_grabbed);
   void (* child_notify)        (GtkWidget	 *widget,
 				GParamSpec       *pspec);
+  gboolean (* draw)	       (GtkWidget	 *widget,
+                                cairo_t          *cr);
   
   /* Mnemonics */
   gboolean (* mnemonic_activate) (GtkWidget    *widget,
@@ -936,6 +938,9 @@ gchar *    gtk_widget_get_tooltip_markup    (GtkWidget   *widget);
 void       gtk_widget_set_has_tooltip       (GtkWidget   *widget,
 					     gboolean     has_tooltip);
 gboolean   gtk_widget_get_has_tooltip       (GtkWidget   *widget);
+
+gboolean   gtk_cairo_should_draw_window     (cairo_t     *cr,
+                                             GdkWindow   *window);
 
 GType           gtk_requisition_get_type (void) G_GNUC_CONST;
 GtkRequisition *gtk_requisition_new      (void) G_GNUC_MALLOC;

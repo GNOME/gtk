@@ -49,6 +49,7 @@
 #include "gdk/gdkprivate.h" /* Used in gtk_reset_shapes_recurse to avoid copy */
 #include <gobject/gvaluecollector.h>
 #include <gobject/gobjectnotifyqueue.c>
+#include <cairo-gobject.h>
 #include "gdk/gdkkeysyms.h"
 #include "gtkaccessible.h"
 #include "gtktooltip.h"
@@ -198,6 +199,7 @@ enum {
   DIRECTION_CHANGED,
   GRAB_NOTIFY,
   CHILD_NOTIFY,
+  DRAW,
   MNEMONIC_ACTIVATE,
   GRAB_FOCUS,
   FOCUS,
@@ -340,6 +342,8 @@ static gboolean gtk_widget_real_show_help        (GtkWidget         *widget,
 static void	gtk_widget_dispatch_child_properties_changed	(GtkWidget        *object,
 								 guint             n_pspecs,
 								 GParamSpec      **pspecs);
+static gboolean		gtk_widget_real_expose_event    	(GtkWidget        *widget,
+								 GdkEventExpose   *event);
 static gboolean		gtk_widget_real_key_press_event   	(GtkWidget        *widget,
 								 GdkEventKey      *event);
 static gboolean		gtk_widget_real_key_release_event 	(GtkWidget        *widget,
@@ -527,6 +531,32 @@ child_property_notify_dispatcher (GObject     *object,
   GTK_WIDGET_GET_CLASS (object)->dispatch_child_properties_changed (GTK_WIDGET (object), n_pspecs, pspecs);
 }
 
+/* We guard against the draw signal callbacks modifying the state of the
+ * cairo context by surounding it with save/restore.
+ * Maybe we should also cairo_new_path() just to be sure?
+ */
+static void
+gtk_widget_draw_marshaller (GClosure     *closure,
+                            GValue       *return_value,
+                            guint         n_param_values,
+                            const GValue *param_values,
+                            gpointer      invocation_hint,
+                            gpointer      marshal_data)
+{
+  cairo_t *cr = g_value_get_boxed (&param_values[1]);
+
+  cairo_save (cr);
+
+  _gtk_marshal_BOOLEAN__BOXED (closure,
+                               return_value,
+                               n_param_values,
+                               param_values,
+                               invocation_hint,
+                               marshal_data);
+
+  cairo_restore (cr);
+}
+
 static void
 gtk_widget_class_init (GtkWidgetClass *klass)
 {
@@ -589,6 +619,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   klass->direction_changed = gtk_widget_real_direction_changed;
   klass->grab_notify = NULL;
   klass->child_notify = NULL;
+  klass->draw = NULL;
   klass->mnemonic_activate = gtk_widget_real_mnemonic_activate;
   klass->grab_focus = gtk_widget_real_grab_focus;
   klass->focus = gtk_widget_real_focus;
@@ -598,7 +629,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   klass->motion_notify_event = NULL;
   klass->delete_event = NULL;
   klass->destroy_event = NULL;
-  klass->expose_event = NULL;
+  klass->expose_event = gtk_widget_real_expose_event;
   klass->key_press_event = gtk_widget_real_key_press_event;
   klass->key_release_event = gtk_widget_real_key_release_event;
   klass->enter_notify_event = NULL;
@@ -1248,6 +1279,32 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		   g_cclosure_marshal_VOID__PARAM,
 		   G_TYPE_NONE, 1,
 		   G_TYPE_PARAM);
+
+  /**
+   * GtkWidget::draw:
+   * @widget: the object which received the signal
+   * @cr: the cairo context to draw to
+   * @width: width of the widget
+   * @height: height of the widget
+   *
+   * This signal is emitted when a widget is supposed to render itself.
+   * The @widget's top left corner must be painted at the origin of
+   * the passed in context and be sized in the given @width and @height.
+   *
+   * Signal handlers connected to this signal can modify the cairo
+   * context passed as @cr in any way they like and don't need to
+   * restore it. The signal emission takes care of calling cairo_save()
+   * before and cairo_restore() after invoking the handler.
+   */
+  widget_signals[DRAW] =
+    g_signal_new (I_("draw"),
+		   G_TYPE_FROM_CLASS (gobject_class),
+		   G_SIGNAL_RUN_LAST,
+		   G_STRUCT_OFFSET (GtkWidgetClass, draw),
+                   _gtk_boolean_handled_accumulator, NULL,
+                   gtk_widget_draw_marshaller,
+		   G_TYPE_BOOLEAN, 1,
+		   CAIRO_GOBJECT_TYPE_CONTEXT);
 
   /**
    * GtkWidget::mnemonic-activate:
@@ -5011,6 +5068,36 @@ gtk_widget_real_mnemonic_activate (GtkWidget *widget,
       gtk_widget_error_bell (widget);
     }
   return TRUE;
+}
+
+static gboolean
+gtk_widget_real_expose_event (GtkWidget      *widget,
+			      GdkEventExpose *expose)
+{
+  gboolean result = FALSE;
+  cairo_t *cr;
+
+  if (!gtk_widget_is_drawable (widget))
+    return FALSE;
+
+  cr = gdk_cairo_create (expose->window);
+  gdk_cairo_region (cr, expose->region);
+  cairo_clip (cr);
+
+  if (!gtk_widget_get_has_window (widget))
+    {
+      cairo_translate (cr,
+                       widget->priv->allocation.x,
+                       widget->priv->allocation.y);
+    }
+
+  g_signal_emit (widget, widget_signals[DRAW], 
+                 0, cr,
+                 &result);
+                
+  cairo_destroy (cr);
+
+  return result;
 }
 
 static gboolean
