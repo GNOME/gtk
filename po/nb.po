@@ -5,10 +5,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: gtk+ 2.19.x\n"
+"Project-Id-Version: gtk+ 2.22.x\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-08-21 11:12+0200\n"
-"PO-Revision-Date: 2010-03-03 13:51+0100\n"
+"POT-Creation-Date: 2010-09-02 12:01+0200\n"
+"PO-Revision-Date: 2010-09-02 12:01+0200\n"
 "Last-Translator: Kjartan Maraas <kmaraas@gnome.org>\n"
 "Language-Team: Norwegian Bokmål <i18n-nb@lister.ping.uio.no>\n"
 "Language: \n"
@@ -69,8 +69,8 @@ msgstr "SKJERM"
 
 #. Description of --gdk-debug=FLAGS in --help output
 #: ../gdk/gdk.c:164
-msgid "Gdk debugging flags to set"
-msgstr "Feilsøkingsflagg som skal settes for Gdk"
+msgid "GDK debugging flags to set"
+msgstr "Feilsøkingsflagg som skal settes for GDK"
 
 #. Placeholder in --gdk-debug=FLAGS in --help output
 #. Placeholder in --gdk-no-debug=FLAGS in --help output
@@ -82,8 +82,8 @@ msgstr "FLAGG"
 
 #. Description of --gdk-no-debug=FLAGS in --help output
 #: ../gdk/gdk.c:167
-msgid "Gdk debugging flags to unset"
-msgstr "Feilsøkingsflagg for Gdk som skal fjernes"
+msgid "GDK debugging flags to unset"
+msgstr "Feilsøkingsflagg som skal fjernes for GDK"
 
 #: ../gdk/keyname-table.h:3940
 msgctxt "keyboard label"
@@ -446,7 +446,7 @@ msgstr "Ugyldig type funksjon på linje %d: «%s»"
 
 #: ../gtk/gtkbuilderparser.c:407
 #, c-format
-msgid "Duplicate object id '%s' on line %d (previously on line %d)"
+msgid "Duplicate object ID '%s' on line %d (previously on line %d)"
 msgstr "Duplisert objekt-ID «%s» på linje %d (tidligere på linje %d)"
 
 #: ../gtk/gtkbuilderparser.c:859
@@ -778,15 +778,15 @@ msgstr "Høy_re:"
 msgid "Paper Margins"
 msgstr "Papirmarger"
 
-#: ../gtk/gtkentry.c:8749 ../gtk/gtktextview.c:7974
+#: ../gtk/gtkentry.c:8751 ../gtk/gtktextview.c:7974
 msgid "Input _Methods"
 msgstr "Inndata_metoder"
 
-#: ../gtk/gtkentry.c:8763 ../gtk/gtktextview.c:7988
+#: ../gtk/gtkentry.c:8765 ../gtk/gtktextview.c:7988
 msgid "_Insert Unicode Control Character"
 msgstr "Sett _inn Unicode kontrolltegn"
 
-#: ../gtk/gtkentry.c:10142
+#: ../gtk/gtkentry.c:10144
 msgid "Caps Lock is on"
 msgstr "Caps Lock er på"
 
@@ -1315,7 +1315,7 @@ msgstr "_Gammaverdi"
 #. Remove this icon source so we don't keep trying to
 #. * load it.
 #.
-#: ../gtk/gtkiconfactory.c:1401
+#: ../gtk/gtkiconfactory.c:1354
 #, c-format
 msgid "Error loading icon: %s"
 msgstr "Feil under lasting av ikon: %s"
@@ -1544,8 +1544,8 @@ msgstr "Husk _for alltid"
 
 #: ../gtk/gtkmountoperation.c:881
 #, c-format
-msgid "Unknown Application (pid %d)"
-msgstr "Ukjent program (pid %d)"
+msgid "Unknown Application (PID %d)"
+msgstr "Ukjent program (PID %d)"
 
 #: ../gtk/gtkmountoperation.c:1064
 msgid "Unable to end process"
@@ -1557,9 +1557,9 @@ msgstr "A_vslutt prosess"
 
 #: ../gtk/gtkmountoperation-stub.c:64
 #, c-format
-msgid "Cannot kill process with pid %d. Operation is not implemented."
+msgid "Cannot kill process with PID %d. Operation is not implemented."
 msgstr ""
-"Kan ikke terminere prosess med pid %d. Operasjonen er ikke implementert."
+"Kan ikke terminere prosess med PID %d. Operasjonen er ikke implementert."
 
 #. translators: this string is a name for the 'less' command
 #: ../gtk/gtkmountoperation-x11.c:865
@@ -1584,8 +1584,8 @@ msgstr "Z Shell"
 
 #: ../gtk/gtkmountoperation-x11.c:966
 #, c-format
-msgid "Cannot end process with pid %d: %s"
-msgstr "Kan ikke avslutte prosess med pid %d: %s"
+msgid "Cannot end process with PID %d: %s"
+msgstr "Kan ikke avslutte prosess med PID %d: %s"
 
 #: ../gtk/gtknotebook.c:4705 ../gtk/gtknotebook.c:7311
 #, c-format
@@ -2770,8 +2770,8 @@ msgstr "Attributten «%s» ble funnet to ganger på element <%s>"
 
 #: ../gtk/gtktextbufferserialize.c:846
 #, c-format
-msgid "<%s> element has invalid id \"%s\""
-msgstr "Element <%s> har ugyldig id «%s»"
+msgid "<%s> element has invalid ID \"%s\""
+msgstr "Element <%s> har ugyldig ID «%s»"
 
 #: ../gtk/gtktextbufferserialize.c:856
 #, c-format
@@ -4091,7 +4091,7 @@ msgstr "Skriver «%s» er tom for papir."
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1686
 #, c-format
-msgid "Printer '%s' is currently off-line."
+msgid "Printer '%s' is currently offline."
 msgstr "Skriver «%s» er frakoblet for tiden."
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1687
@@ -4399,652 +4399,3 @@ msgid ""
 msgstr ""
 "Feil under lasting av bilde «%s»: årsak ikke kjent, sannsynligvis korrupt "
 "bildefil"
-
-#~ msgid "Image file '%s' contains no data"
-#~ msgstr "Bildefil «%s» inneholder ikke data"
-
-#~ msgid ""
-#~ "Failed to load animation '%s': reason not known, probably a corrupt "
-#~ "animation file"
-#~ msgstr ""
-#~ "Feil under lasting av animasjon «%s»: årsak ikke kjent, sannsynligvis "
-#~ "korrupt animasjonsfil"
-
-#~ msgid "Unable to load image-loading module: %s: %s"
-#~ msgstr "Kan ikke laste modul for innlesing av bilder: %s: %s"
-
-#~ msgid ""
-#~ "Image-loading module %s does not export the proper interface; perhaps "
-#~ "it's from a different GTK version?"
-#~ msgstr ""
-#~ "Modul %s for bildelasting eksporterer ikke riktig grensesnitt; kanskje "
-#~ "den er fra en annen GTK-versjon?"
-
-#~ msgid "Image type '%s' is not supported"
-#~ msgstr "Bildetype «%s» er ikke støttet"
-
-#~ msgid "Couldn't recognize the image file format for file '%s'"
-#~ msgstr "Kunne ikke gjenkjenne bildeformatet for fil «%s»"
-
-#~ msgid "Unrecognized image file format"
-#~ msgstr "Ikke-gjenkjent bildeformat"
-
-#~ msgid "Failed to load image '%s': %s"
-#~ msgstr "Feil under lasting av bilde «%s»: %s"
-
-#~ msgid "Error writing to image file: %s"
-#~ msgstr "Feil under skriving til bildefil: %s"
-
-#~ msgid ""
-#~ "This build of gdk-pixbuf does not support saving the image format: %s"
-#~ msgstr ""
-#~ "Dette versjonen av gdk-pixbuf støtter ikke lagring av bildeformatet: %s"
-
-#~ msgid "Insufficient memory to save image to callback"
-#~ msgstr "Ikke nok minne til å lagre bilde til callback"
-
-#~ msgid "Failed to open temporary file"
-#~ msgstr "Kunne ikke åpne midlertidig fil"
-
-#~ msgid "Failed to read from temporary file"
-#~ msgstr "Kunne ikke lese fra midlertidig fil"
-
-#~ msgid "Failed to open '%s' for writing: %s"
-#~ msgstr "Feil under åpning av «%s» for skriving: %s"
-
-#~ msgid ""
-#~ "Failed to close '%s' while writing image, all data may not have been "
-#~ "saved: %s"
-#~ msgstr ""
-#~ "Feil under lukking av «%s» under skriving av bilde. Det er ikke sikkert "
-#~ "at alle data er lagret: %s"
-
-#~ msgid "Insufficient memory to save image into a buffer"
-#~ msgstr "Ikke nok minne til å lagre bilde til buffer"
-
-#~ msgid "Error writing to image stream"
-#~ msgstr "Feil under skriving til bildestrøm"
-
-#~ msgid ""
-#~ "Internal error: Image loader module '%s' failed to complete an operation, "
-#~ "but didn't give a reason for the failure"
-#~ msgstr ""
-#~ "Intern feil: Modul for lasting av bilder «%s» klarte ikke å fullføre en "
-#~ "operasjon, men ga ingen årsak for feilen"
-
-#~ msgid "Incremental loading of image type '%s' is not supported"
-#~ msgstr "Stegvis lasting av bildetype «%s» er ikke støttet"
-
-#~ msgid "Image header corrupt"
-#~ msgstr "Korrupt header i bilde"
-
-#~ msgid "Image format unknown"
-#~ msgstr "Ukjent bildeformat"
-
-#~ msgid "Image pixel data corrupt"
-#~ msgstr "Korrupt pikseldata i bilde"
-
-#~ msgid "failed to allocate image buffer of %u byte"
-#~ msgid_plural "failed to allocate image buffer of %u bytes"
-#~ msgstr[0] "klarte ikke å allokere bildebuffer på %u byte"
-#~ msgstr[1] "klarte ikke å allokere bildebuffer på %u bytes"
-
-#~ msgid "Unexpected icon chunk in animation"
-#~ msgstr "Uventet ikondel i animasjonen"
-
-#~ msgid "Unsupported animation type"
-#~ msgstr "Animasjonstype ikke støttet"
-
-#~ msgid "Invalid header in animation"
-#~ msgstr "Ugyldig header i animasjon"
-
-#~ msgid "Not enough memory to load animation"
-#~ msgstr "Ikke nok minne til å laste animasjon"
-
-#~ msgid "Malformed chunk in animation"
-#~ msgstr "Feil i en del av animasjonen"
-
-#~ msgid "The ANI image format"
-#~ msgstr "ANI bildeformat"
-
-#~ msgid "BMP image has bogus header data"
-#~ msgstr "BMP-bilde har ugyldige data i header"
-
-#~ msgid "Not enough memory to load bitmap image"
-#~ msgstr "Ikke nok minne til å laste bitkart-bilde"
-
-#~ msgid "BMP image has unsupported header size"
-#~ msgstr "BMP-bilde har ustøttet headerstørrelse"
-
-#~ msgid "Topdown BMP images cannot be compressed"
-#~ msgstr "Topdown BMP-bilder kan ikke komprimeres"
-
-#~ msgid "Premature end-of-file encountered"
-#~ msgstr "Prematur slutt-på-fil funnet"
-
-#~ msgid "Couldn't allocate memory for saving BMP file"
-#~ msgstr "Kunne ikke allokere minne for lagring av BMP-fil"
-
-#~ msgid "Couldn't write to BMP file"
-#~ msgstr "Kunne ikke skrive til BMP-fil"
-
-#~ msgid "The BMP image format"
-#~ msgstr "BMP bildeformat"
-
-#~ msgid "Failure reading GIF: %s"
-#~ msgstr "Feil under lesing av GIF: %s"
-
-#~ msgid "GIF file was missing some data (perhaps it was truncated somehow?)"
-#~ msgstr "GIF-fil mangler data (kanskje den har blitt avkuttet på en måte?)"
-
-#~ msgid "Internal error in the GIF loader (%s)"
-#~ msgstr "Intern feil i GIF-laster (%s)"
-
-#~ msgid "Stack overflow"
-#~ msgstr "Stabeloverflyt"
-
-#~ msgid "GIF image loader cannot understand this image."
-#~ msgstr "Laster for GIF-bilder forstår ikke dette bildet."
-
-#~ msgid "Bad code encountered"
-#~ msgstr "Ugyldig kode funnet"
-
-#~ msgid "Circular table entry in GIF file"
-#~ msgstr "Sirkulær tabelloppføring i GIF-fil"
-
-#~ msgid "Not enough memory to load GIF file"
-#~ msgstr "Ikke nok minne til å laste GIF-bilde"
-
-#~ msgid "Not enough memory to composite a frame in GIF file"
-#~ msgstr "Ikke nok minne til å sette sammen en ramme i GIF-filen"
-
-#~ msgid "GIF image is corrupt (incorrect LZW compression)"
-#~ msgstr "GIF-bilde er korrupt (ukorrekt LZW-kompresjon)"
-
-#~ msgid "File does not appear to be a GIF file"
-#~ msgstr "Filen ser ikke ut til å være en GIF-fil"
-
-#~ msgid "Version %s of the GIF file format is not supported"
-#~ msgstr "Versjon %s av GIF filformatet er ikke støttet"
-
-#~ msgid ""
-#~ "GIF image has no global colormap, and a frame inside it has no local "
-#~ "colormap."
-#~ msgstr ""
-#~ "GIF-bildet har ikke globalt fargekart, og et delbilde i det har ikke "
-#~ "lokalt fargekart."
-
-#~ msgid "GIF image was truncated or incomplete."
-#~ msgstr "GIF-bildet er avkuttet eller ukomplett."
-
-#~ msgid "The GIF image format"
-#~ msgstr "GIF bildeformat"
-
-#~ msgid "Invalid header in icon"
-#~ msgstr "Ugyldig header i ikon"
-
-#~ msgid "Not enough memory to load icon"
-#~ msgstr "Ikke nok minne til å laste ikon"
-
-#~ msgid "Icon has zero width"
-#~ msgstr "Ikon har null bredde"
-
-#~ msgid "Icon has zero height"
-#~ msgstr "Ikon har null høyde"
-
-#~ msgid "Compressed icons are not supported"
-#~ msgstr "Komprimerte ikoner er ikke støttet"
-
-#~ msgid "Unsupported icon type"
-#~ msgstr "Ikontype ikke støttet"
-
-#~ msgid "Not enough memory to load ICO file"
-#~ msgstr "Ikke nok minne til å laste ICO-fil"
-
-#~ msgid "Image too large to be saved as ICO"
-#~ msgstr "Bildet er for stort til å lagre som ICO"
-
-#~ msgid "Cursor hotspot outside image"
-#~ msgstr "Markørposisjon utenfor bildet"
-
-#~ msgid "Unsupported depth for ICO file: %d"
-#~ msgstr "Ikke støttet dybde for ICO-fil: %d"
-
-#~ msgid "The ICO image format"
-#~ msgstr "ICO bildeformat"
-
-#~ msgid "Error reading ICNS image: %s"
-#~ msgstr "Feil under lesing av ICNS-bilde: %s"
-
-#~ msgid "Could not decode ICNS file"
-#~ msgstr "Kunne ikke dekode ICNS-fil"
-
-#~ msgid "The ICNS image format"
-#~ msgstr "ICNS bildeformat"
-
-#~ msgid "Couldn't allocate memory for stream"
-#~ msgstr "Kan ikke allokere minne for strøm"
-
-#~ msgid "Couldn't decode image"
-#~ msgstr "Kunne ikke dekode bilde"
-
-#~ msgid "Transformed JPEG2000 has zero width or height"
-#~ msgstr "Transformert JPEG2000 har bredde eller høyde lik null"
-
-#~ msgid "Image type currently not supported"
-#~ msgstr "Bildetypen er ikke støttet"
-
-#~ msgid "Couldn't allocate memory for color profile"
-#~ msgstr "Kunne ikke allokere minne for fargeprofil"
-
-#~ msgid "Insufficient memory to open JPEG 2000 file"
-#~ msgstr "Ikke nok minne til å åpne JPEG2000-bilde"
-
-#~ msgid "Couldn't allocate memory to buffer image data"
-#~ msgstr "Kunne ikke allokere minne for buffer til bildedata"
-
-#~ msgid "The JPEG 2000 image format"
-#~ msgstr "JPEG2000 bildeformatet"
-
-#~ msgid "Error interpreting JPEG image file (%s)"
-#~ msgstr "Feil under tolking av JPEG-bildefil (%s)"
-
-#~ msgid ""
-#~ "Insufficient memory to load image, try exiting some applications to free "
-#~ "memory"
-#~ msgstr ""
-#~ "Ikke nok minne til å laste bildet. Prøv å avslutte noen applikasjoner for "
-#~ "å frigjøre minne"
-
-#~ msgid "Unsupported JPEG color space (%s)"
-#~ msgstr "JPEG-fargeområde ikke støttet (%s)"
-
-#~ msgid "Couldn't allocate memory for loading JPEG file"
-#~ msgstr "Kunne ikke allokere minne for lasting av JPEG-fil"
-
-#~ msgid "Transformed JPEG has zero width or height."
-#~ msgstr "Transformert JPEG har bredde eller høyde lik null."
-
-#~ msgid ""
-#~ "JPEG quality must be a value between 0 and 100; value '%s' could not be "
-#~ "parsed."
-#~ msgstr ""
-#~ "JPEG-kvalitet må være en verdi mellom 0 og 100; verdien «%s» kunne ikke "
-#~ "tolkes."
-
-#~ msgid ""
-#~ "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
-#~ msgstr ""
-#~ "JPEG-kvalitet må være en verdi mellom 0 og 100; verdien «%d» er ikke "
-#~ "tillatt."
-
-#~ msgid "The JPEG image format"
-#~ msgstr "JPEG bildeformatet"
-
-#~ msgid "Couldn't allocate memory for header"
-#~ msgstr "Kan ikke allokere minne for hode"
-
-#~ msgid "Couldn't allocate memory for context buffer"
-#~ msgstr "Kan ikke allokere minne for kontekstbuffer"
-
-#~ msgid "Image has invalid width and/or height"
-#~ msgstr "Bilde har ugyldig bredde og/eller høyde"
-
-#~ msgid "Image has unsupported bpp"
-#~ msgstr "Bildet har ustøttet bpp"
-
-#~ msgid "Image has unsupported number of %d-bit planes"
-#~ msgstr "Bildet har ustøttet antall %d-bits plan"
-
-#~ msgid "Couldn't create new pixbuf"
-#~ msgstr "Kan ikke opprette ny pixbuf"
-
-#~ msgid "Couldn't allocate memory for line data"
-#~ msgstr "Kunne ikke allokere minne for linjedata"
-
-#~ msgid "Couldn't allocate memory for paletted data"
-#~ msgstr "Kan ikke allokere minne for palett-data"
-
-#~ msgid "Didn't get all lines of PCX image"
-#~ msgstr "Mottok ikke alle linjene for PCX-bilde"
-
-#~ msgid "No palette found at end of PCX data"
-#~ msgstr "Ingen palett funnet ved slutten av PCX-data"
-
-#~ msgid "The PCX image format"
-#~ msgstr "PCX bildeformat"
-
-#~ msgid "Bits per channel of PNG image is invalid."
-#~ msgstr "Ugyldig antall biter per kanal i PNG-bilde."
-
-#~ msgid "Transformed PNG has zero width or height."
-#~ msgstr "Transformert PNG har bredde eller høyde lik null."
-
-#~ msgid "Bits per channel of transformed PNG is not 8."
-#~ msgstr "Antall biter per kanal i transformert PNG er forskjellig fra 8."
-
-#~ msgid "Transformed PNG not RGB or RGBA."
-#~ msgstr "Transformert PNG er ikke RGB eller RGBA."
-
-#~ msgid "Transformed PNG has unsupported number of channels, must be 3 or 4."
-#~ msgstr ""
-#~ "Transformert PNG har et ikke-støttet antall kanaler, må være 3 eller 4."
-
-#~ msgid "Fatal error in PNG image file: %s"
-#~ msgstr "Fatal feil i PNG-bildefil: %s"
-
-#~ msgid "Insufficient memory to load PNG file"
-#~ msgstr "Ikke nok minne til å laste PNG-fil"
-
-#~ msgid ""
-#~ "Insufficient memory to store a %ld by %ld image; try exiting some "
-#~ "applications to reduce memory usage"
-#~ msgstr ""
-#~ "Ikke nok minne til å lagre et %ld ganger %ld bilde; prøv å avslutte noen "
-#~ "applikasjoner for å redusere minnebruken"
-
-#~ msgid "Fatal error reading PNG image file"
-#~ msgstr "Fatal feil under lesing av PNG-bildefil"
-
-#~ msgid "Fatal error reading PNG image file: %s"
-#~ msgstr "Fatal feil under lesing av PNG-bildefil: %s"
-
-#~ msgid ""
-#~ "Keys for PNG text chunks must have at least 1 and at most 79 characters."
-#~ msgstr "Nøkler for PNG tekstbiter må minst ha mellom 1 og 79 tegn."
-
-#~ msgid "Keys for PNG text chunks must be ASCII characters."
-#~ msgstr "Nøkler for PNG tekstbiter må bestå av ASCII-tegn."
-
-#~ msgid "Color profile has invalid length %d."
-#~ msgstr "Fargeprofilen har ugyldig lengde %d."
-
-#~ msgid ""
-#~ "PNG compression level must be a value between 0 and 9; value '%s' could "
-#~ "not be parsed."
-#~ msgstr ""
-#~ "Nivået til PNG-komprimeringen må være en verdi mello 0 og 9; verdi «%s» "
-#~ "kan ikke brukes."
-
-#~ msgid ""
-#~ "PNG compression level must be a value between 0 and 9; value '%d' is not "
-#~ "allowed."
-#~ msgstr ""
-#~ "Nivået på PNG-komprimering må være en verdi mellom 0 og 9; verdien «%d» "
-#~ "er ikke tillat."
-
-#~ msgid ""
-#~ "Value for PNG text chunk %s cannot be converted to ISO-8859-1 encoding."
-#~ msgstr ""
-#~ "Verdi for PNG-tekstbit %s kan ikke konverteres til ISO-8859-1-koding."
-
-#~ msgid "The PNG image format"
-#~ msgstr "PNG-bildeformat"
-
-#~ msgid "PNM loader expected to find an integer, but didn't"
-#~ msgstr "PNM-laster ventet å finne et heltall, men gjorde ikke det"
-
-#~ msgid "PNM file has an incorrect initial byte"
-#~ msgstr "PNM-filen har ukorrekt initiell byte"
-
-#~ msgid "PNM file is not in a recognized PNM subformat"
-#~ msgstr "PNM-filen er ikke i et gjenkjent PNM-underformat"
-
-#~ msgid "PNM file has an image width of 0"
-#~ msgstr "PNM-filen har en bildebredde på 0"
-
-#~ msgid "PNM file has an image height of 0"
-#~ msgstr "PNM-filen har en bildehøyde på 0"
-
-#~ msgid "Maximum color value in PNM file is 0"
-#~ msgstr "Maksimal fargeverdi i PNM-filen er 0"
-
-#~ msgid "Maximum color value in PNM file is too large"
-#~ msgstr "Maksimal fargeverdi i PNM-filen er for stor"
-
-#~ msgid "Raw PNM image type is invalid"
-#~ msgstr "Rå PNM-bildetype er ugyldig"
-
-#~ msgid "PNM image loader does not support this PNM subformat"
-#~ msgstr "PNM-bildelaster støtter ikke dette PNM-underformatet"
-
-#~ msgid "Raw PNM formats require exactly one whitespace before sample data"
-#~ msgstr ""
-#~ "Ubehandlede PNM-formater krever eksakt ett blankt felt før eksempeldata"
-
-#~ msgid "Cannot allocate memory for loading PNM image"
-#~ msgstr "Kan ikke allokere minne for lasting av PNM-bilde"
-
-#~ msgid "Insufficient memory to load PNM context struct"
-#~ msgstr "Ikke nok minne til å laste PNM kontekstdata"
-
-#~ msgid "Unexpected end of PNM image data"
-#~ msgstr "Uventet slutt på PNM-bildedata"
-
-#~ msgid "Insufficient memory to load PNM file"
-#~ msgstr "Ikke nok minne til å laste PNM-fil"
-
-#~ msgid "The PNM/PBM/PGM/PPM image format family"
-#~ msgstr "PNM/PBM/PGM/PPM-bildeformatfamilien"
-
-#~ msgid "Input file descriptor is NULL."
-#~ msgstr "Fildeskriptor for inndata er NULL."
-
-#~ msgid "Failed to read QTIF header"
-#~ msgstr "Klarte ikke å lese QTIF-hode"
-
-#~ msgid "QTIF atom size too large (%d bytes)"
-#~ msgstr "Størrelse på QTIF-atom for stor (%d bytes)"
-
-#~ msgid "Failed to allocate %d bytes for file read buffer"
-#~ msgstr "Klarte ikke å allokere %d byte for lesebuffer for filen"
-
-#~ msgid "File error when reading QTIF atom: %s"
-#~ msgstr "Feil med fil under lesing av QTIF-atom: %s"
-
-#~ msgid "Failed to skip the next %d bytes with seek()."
-#~ msgstr "Klarte ikke å hoppe over neste %d bytes med seek()."
-
-#~ msgid "Failed to allocate QTIF context structure."
-#~ msgstr "Klarte ikke å allokere QTIF-kontekststruktur."
-
-#~ msgid "Failed to create GdkPixbufLoader object."
-#~ msgstr "Klarte ikke å lage GdkPixbufLoader-objekt."
-
-#~ msgid "Failed to find an image data atom."
-#~ msgstr "Klarte ikke å finne atom for bildedata."
-
-#~ msgid "The QTIF image format"
-#~ msgstr "QTIF bildeformatet"
-
-#~ msgid "RAS image has bogus header data"
-#~ msgstr "RAS-bilde har ugyldige data i header"
-
-#~ msgid "RAS image has unknown type"
-#~ msgstr "RAS-bilde har ukjent type"
-
-#~ msgid "unsupported RAS image variation"
-#~ msgstr "RAS-bildevariasjon ikke støttet"
-
-#~ msgid "Not enough memory to load RAS image"
-#~ msgstr "Ikke nok minne til å laste RAS-bilde"
-
-#~ msgid "The Sun raster image format"
-#~ msgstr "Sun raster-bildeformat"
-
-#~ msgid "Cannot allocate memory for IOBuffer struct"
-#~ msgstr "Kan ikke allokere minne for IOBuffer-struct"
-
-#~ msgid "Cannot allocate memory for IOBuffer data"
-#~ msgstr "Kan ikke allokere minne for IOBuffer-data"
-
-#~ msgid "Cannot realloc IOBuffer data"
-#~ msgstr "Kan ikke kjøre realloc for IOBuffer-data"
-
-#~ msgid "Cannot allocate temporary IOBuffer data"
-#~ msgstr "Kan ikke allokere midlertidige IOBuffer-data"
-
-#~ msgid "Cannot allocate new pixbuf"
-#~ msgstr "Kan ikke allokere ny pixbuf"
-
-#~ msgid "Image is corrupted or truncated"
-#~ msgstr "Bildet er korrupt eller avkuttet"
-
-#~ msgid "Cannot allocate colormap structure"
-#~ msgstr "Kan ikke allokere struktur for fargekart"
-
-#~ msgid "Cannot allocate colormap entries"
-#~ msgstr "Kan ikke allokere fargekartoppføringer"
-
-#~ msgid "Unexpected bitdepth for colormap entries"
-#~ msgstr "Uventet oppløsning for fargekartoppføringer"
-
-#~ msgid "Cannot allocate TGA header memory"
-#~ msgstr "Kan ikke allokere minne for TGA-hode"
-
-#~ msgid "TGA image has invalid dimensions"
-#~ msgstr "TGA-bilde har ugyldige dimensjoner"
-
-#~ msgid "TGA image type not supported"
-#~ msgstr "TGA bildetype er ikke støttet"
-
-#~ msgid "Cannot allocate memory for TGA context struct"
-#~ msgstr "Kan ikke allokere minne for TGA-kontekststruktur"
-
-#~ msgid "Excess data in file"
-#~ msgstr "Overflødige data i filen"
-
-#~ msgid "The Targa image format"
-#~ msgstr "Targa bildeformatet"
-
-#~ msgid "Could not get image width (bad TIFF file)"
-#~ msgstr "Kunne ikke finne bildebredde (ugyldig TIFF-fil)"
-
-#~ msgid "Could not get image height (bad TIFF file)"
-#~ msgstr "Kunne ikke finne bildehøyde (ugyldig TIFF-fil)"
-
-#~ msgid "Width or height of TIFF image is zero"
-#~ msgstr "Bredde eller høyde på TIFF-bilde er null"
-
-#~ msgid "Dimensions of TIFF image too large"
-#~ msgstr "TIFF-bildet er for stort"
-
-#~ msgid "Insufficient memory to open TIFF file"
-#~ msgstr "Ikke nok minne til å åpne TIFF-bilde"
-
-#~ msgid "Failed to load RGB data from TIFF file"
-#~ msgstr "Feil under lasting av RGB-data fra TIFF-fil"
-
-#~ msgid "Failed to open TIFF image"
-#~ msgstr "Feil under åpning av TIFF-bilde"
-
-#~ msgid "TIFFClose operation failed"
-#~ msgstr "TIFFClose operasjonen feilet"
-
-#~ msgid "Failed to load TIFF image"
-#~ msgstr "Feil under åpning av TIFF-bilde"
-
-#~ msgid "Failed to save TIFF image"
-#~ msgstr "Klarte ikke å lagre TIFF-bilde"
-
-#~ msgid "TIFF compression doesn't refer to a valid codec."
-#~ msgstr "TIFF-komprimering har ingen referanse til en gyldig kodek."
-
-#~ msgid "Failed to write TIFF data"
-#~ msgstr "Klarte ikke å lagre TIFF-data"
-
-#~ msgid "Couldn't write to TIFF file"
-#~ msgstr "Kunne ikke skrive til TIFF-fil"
-
-#~ msgid "The TIFF image format"
-#~ msgstr "TIFF bildeformat"
-
-#~ msgid "Image has zero width"
-#~ msgstr "Bilde har null bredde"
-
-#~ msgid "Image has zero height"
-#~ msgstr "Bilde har null høyde"
-
-#~ msgid "Not enough memory to load image"
-#~ msgstr "Ikke nok minne til å laste bilde"
-
-#~ msgid "Couldn't save the rest"
-#~ msgstr "Kunne ikke lagre resten"
-
-#~ msgid "The WBMP image format"
-#~ msgstr "WBMP bildeformatet"
-
-#~ msgid "Invalid XBM file"
-#~ msgstr "Ugyldig XBM-fil"
-
-#~ msgid "Insufficient memory to load XBM image file"
-#~ msgstr "Ikke nok minne til å laste XBM-bildefil"
-
-#~ msgid "Failed to write to temporary file when loading XBM image"
-#~ msgstr "Feil under skriving til midlertidig file under lasting av XBM-bilde"
-
-#~ msgid "The XBM image format"
-#~ msgstr "XBM bildeformat"
-
-#~ msgid "No XPM header found"
-#~ msgstr "Ingen XPM-header funnet"
-
-#~ msgid "Invalid XPM header"
-#~ msgstr "Ugyldig XPM-hode"
-
-#~ msgid "XPM file has image width <= 0"
-#~ msgstr "XPM-filen har en bildebredde <= 0"
-
-#~ msgid "XPM file has image height <= 0"
-#~ msgstr "XPM-filen har en bildehøyde <= 0"
-
-#~ msgid "XPM has invalid number of chars per pixel"
-#~ msgstr "XPM har et ugyldig antall tegn per piksel"
-
-#~ msgid "XPM file has invalid number of colors"
-#~ msgstr "XPM-filen har et ugyldig antall farger"
-
-#~ msgid "Cannot allocate memory for loading XPM image"
-#~ msgstr "Kan ikke allokere minne for lasting av XPM-bilde"
-
-#~ msgid "Cannot read XPM colormap"
-#~ msgstr "Kan ikke lese fargekart for XPM"
-
-#~ msgid "Failed to write to temporary file when loading XPM image"
-#~ msgstr "Feil under skriving til midlertidig fil under lasting av XPM-bilde"
-
-#~ msgid "The XPM image format"
-#~ msgstr "XPM bildeformat"
-
-#~ msgid "The EMF image format"
-#~ msgstr "EMF bildeformat"
-
-#~ msgid "Could not allocate memory: %s"
-#~ msgstr "Kan ikke allokere minne: %s"
-
-#~ msgid "Could not create stream: %s"
-#~ msgstr "Kunne ikke opprette strøm: %s"
-
-#~ msgid "Could not seek stream: %s"
-#~ msgstr "Kunne ikke søke i strøm: %s"
-
-#~ msgid "Could not read from stream: %s"
-#~ msgstr "Kunne ikke lese fra strøm: %s"
-
-#~ msgid "Couldn't load bitmap"
-#~ msgstr "Kunne ikke laste bitkart"
-
-#~ msgid "Couldn't load metafile"
-#~ msgstr "Kunne ikke laste metafil"
-
-#~ msgid "Unsupported image format for GDI+"
-#~ msgstr "Bildeformat ikke støttet for GDI+"
-
-#~ msgid "Couldn't save"
-#~ msgstr "Kunne ikke lagre"
-
-#~ msgid "The WMF image format"
-#~ msgstr "WMF bildeformat"
-
-#~ msgid "Printer '%s' may not be connected."
-#~ msgstr "Skriver «%s» er kanskje ikke tilkoblet."
