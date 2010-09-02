@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.HEAD.he\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-08-28 10:34+0300\n"
-"PO-Revision-Date: 2010-08-28 10:39+0200\n"
+"POT-Creation-Date: 2010-09-02 18:08+0300\n"
+"PO-Revision-Date: 2010-09-02 18:08+0200\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: Hebrew <he@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -72,8 +72,8 @@ msgstr "SCREEN"
 
 #. Description of --gdk-debug=FLAGS in --help output
 #: ../gdk/gdk.c:164
-msgid "Gdk debugging flags to set"
-msgstr "Gdk debugging flags to set"
+msgid "GDK debugging flags to set"
+msgstr "GDK debugging flags to set"
 
 #. Placeholder in --gdk-debug=FLAGS in --help output
 #. Placeholder in --gdk-no-debug=FLAGS in --help output
@@ -85,8 +85,8 @@ msgstr "FLAGS"
 
 #. Description of --gdk-no-debug=FLAGS in --help output
 #: ../gdk/gdk.c:167
-msgid "Gdk debugging flags to unset"
-msgstr "Gdk debugging flags to unset"
+msgid "GDK debugging flags to unset"
+msgstr "GDK debugging flags to unset"
 
 #: ../gdk/keyname-table.h:3940
 msgctxt "keyboard label"
@@ -451,7 +451,7 @@ msgstr "סוג הפונקציה שבשורה %d אינו תקין: '%s'"
 
 #: ../gtk/gtkbuilderparser.c:407
 #, c-format
-msgid "Duplicate object id '%s' on line %d (previously on line %d)"
+msgid "Duplicate object ID '%s' on line %d (previously on line %d)"
 msgstr "מזהה פריט כפול '%s' בשורה %d (לשעבר בשורה %d)"
 
 #: ../gtk/gtkbuilderparser.c:859
@@ -777,15 +777,15 @@ msgstr "_ימין:"
 msgid "Paper Margins"
 msgstr "שולי נייר"
 
-#: ../gtk/gtkentry.c:8749 ../gtk/gtktextview.c:7974
+#: ../gtk/gtkentry.c:8751 ../gtk/gtktextview.c:7974
 msgid "Input _Methods"
 msgstr "_שיטות קלט"
 
-#: ../gtk/gtkentry.c:8763 ../gtk/gtktextview.c:7988
+#: ../gtk/gtkentry.c:8765 ../gtk/gtktextview.c:7988
 msgid "_Insert Unicode Control Character"
 msgstr "ה_זנת תו בקרה יוניקוד"
 
-#: ../gtk/gtkentry.c:10142
+#: ../gtk/gtkentry.c:10144
 msgid "Caps Lock is on"
 msgstr "ה־Caps Lock פעיל"
 
@@ -1319,7 +1319,7 @@ msgstr "ערכי _גאמא"
 #. Remove this icon source so we don't keep trying to
 #. * load it.
 #.
-#: ../gtk/gtkiconfactory.c:1401
+#: ../gtk/gtkiconfactory.c:1354
 #, c-format
 msgid "Error loading icon: %s"
 msgstr "שגיאה בטעינת סמל: %s"
@@ -1550,7 +1550,7 @@ msgstr "שמירה ל_תמיד"
 
 #: ../gtk/gtkmountoperation.c:881
 #, c-format
-msgid "Unknown Application (pid %d)"
+msgid "Unknown Application (PID %d)"
 msgstr "יישום בלתי מוכר (מזהה תהליך %d)"
 
 #: ../gtk/gtkmountoperation.c:1064
@@ -1563,7 +1563,7 @@ msgstr "_סיום התהליך"
 
 #: ../gtk/gtkmountoperation-stub.c:64
 #, c-format
-msgid "Cannot kill process with pid %d. Operation is not implemented."
+msgid "Cannot kill process with PID %d. Operation is not implemented."
 msgstr "לא ניתן לסיים את התהליך בעל המזהה %d. הפעולה אינה מוטמעת עדיין."
 
 #. translators: this string is a name for the 'less' command
@@ -1589,7 +1589,7 @@ msgstr "מעטפת Z"
 
 #: ../gtk/gtkmountoperation-x11.c:966
 #, c-format
-msgid "Cannot end process with pid %d: %s"
+msgid "Cannot end process with PID %d: %s"
 msgstr "לא ניתן לסיים את התהליך בעל המזהה %d: ‏%s"
 
 #: ../gtk/gtknotebook.c:4705 ../gtk/gtknotebook.c:7311
@@ -2779,8 +2779,8 @@ msgstr "The attribute \"%s\" was found twice on the <%s> element"
 
 #: ../gtk/gtktextbufferserialize.c:846
 #, c-format
-msgid "<%s> element has invalid id \"%s\""
-msgstr "<%s> element has invalid id \"%s\""
+msgid "<%s> element has invalid ID \"%s\""
+msgstr "<%s> element has invalid ID \"%s\""
 
 #: ../gtk/gtktextbufferserialize.c:856
 #, c-format
@@ -4099,7 +4099,7 @@ msgstr "במדפסת '%s' אין נייר"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1686
 #, c-format
-msgid "Printer '%s' is currently off-line."
+msgid "Printer '%s' is currently offline."
 msgstr "המדפסת '%s' אינה מקוונת נכון לעכשיו."
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1687
@@ -4408,11 +4408,11 @@ msgid ""
 "Failed to load image '%s': reason not known, probably a corrupt image file"
 msgstr "נכשל בפתיחת התמונה '%s': הסיבה איננה ידועה, כנראה קובץ תמונה פגום"
 
-#~ msgid "GDK debugging flags to set"
-#~ msgstr "GDK debugging flags to set"
+#~ msgid "Gdk debugging flags to set"
+#~ msgstr "Gdk debugging flags to set"
 
-#~ msgid "GDK debugging flags to unset"
-#~ msgstr "GDK debugging flags to unset"
+#~ msgid "Gdk debugging flags to unset"
+#~ msgstr "Gdk debugging flags to unset"
 
 #~ msgid ""
 #~ "This program comes with ABSOLUTELY NO WARRANTY; for details, visit %s"
