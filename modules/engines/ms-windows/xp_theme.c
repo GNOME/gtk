@@ -928,12 +928,11 @@ get_window_dc (GtkStyle *style,
   cairo_t *cr;
   cairo_surface_t *crs;
   gint x_offset, y_offset;
-  GdkWindowObject *private = (GdkWindowObject *)GDK_DRAWABLE(window);
 
   cr = gdk_cairo_create (window);
   crs = cairo_get_target (cr);
-  x_offset = -private->abs_x;
-  y_offset = -private->abs_y;
+  x_offset = 0;
+  y_offset = 0;
 
 
   dc_info_out->data = NULL;
