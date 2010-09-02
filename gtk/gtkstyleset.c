@@ -497,6 +497,12 @@ gtk_style_set_set_property (GtkStyleSet   *set,
       /* Allow GtkSymbolicColor as well */
       g_return_if_fail (value_type == GDK_TYPE_COLOR || value_type == GTK_TYPE_SYMBOLIC_COLOR);
     }
+  else if (node->property_type == GDK_TYPE_CAIRO_PATTERN)
+    {
+      /* Allow GtkGradient as a substitute */
+      g_return_if_fail (value_type == GDK_TYPE_CAIRO_PATTERN ||
+                        value_type == GTK_TYPE_GRADIENT);
+    }
   else
     g_return_if_fail (node->property_type == value_type);
 
@@ -618,6 +624,23 @@ resolve_color (GtkStyleSet *set,
   return TRUE;
 }
 
+static gboolean
+resolve_gradient (GtkStyleSet *set,
+                  GValue      *value)
+{
+  cairo_pattern_t *gradient;
+
+  if (!gtk_gradient_resolve (g_value_get_boxed (value), set, &gradient))
+    return FALSE;
+
+  /* Store it back, this is where cairo_pattern_t caching happens */
+  g_value_unset (value);
+  g_value_init (value, GDK_TYPE_CAIRO_PATTERN);
+  g_value_take_boxed (value, gradient);
+
+  return TRUE;
+}
+
 gboolean
 gtk_style_set_get_property (GtkStyleSet   *set,
                             const gchar   *property,
@@ -662,6 +685,13 @@ gtk_style_set_get_property (GtkStyleSet   *set,
       g_return_val_if_fail (node->property_type == GDK_TYPE_COLOR, FALSE);
 
       if (!resolve_color (set, val))
+        return FALSE;
+    }
+  else if (G_VALUE_TYPE (val) == GTK_TYPE_GRADIENT)
+    {
+      g_return_val_if_fail (node->property_type == GDK_TYPE_CAIRO_PATTERN, FALSE);
+
+      if (!resolve_gradient (set, val))
         return FALSE;
     }
 
@@ -712,6 +742,13 @@ gtk_style_set_get_valist (GtkStyleSet   *set,
           g_return_if_fail (node->property_type == GDK_TYPE_COLOR);
 
           if (!resolve_color (set, val))
+            val = &node->default_value;
+        }
+      else if (G_VALUE_TYPE (val) == GTK_TYPE_GRADIENT)
+        {
+          g_return_val_if_fail (node->property_type == GDK_TYPE_CAIRO_PATTERN, FALSE);
+
+          if (!resolve_gradient (set, val))
             val = &node->default_value;
         }
 
