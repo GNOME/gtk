@@ -24,8 +24,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-master-po-properties-gl-77816____.merged\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-08-29 22:43+0200\n"
-"PO-Revision-Date: 2010-08-29 22:44+0200\n"
+"POT-Creation-Date: 2010-09-02 10:42+0200\n"
+"PO-Revision-Date: 2010-09-02 10:42+0200\n"
 "Last-Translator: Fran Dieguez <frandieguez@ubuntu.com>\n"
 "Language-Team: Galician <gnome-gl-list@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -695,7 +695,7 @@ msgstr ""
 "Se é TRUE, o fillo aparece nun grupo secundario de fillos; é útil, por "
 "exemplo, para botóns de axuda"
 
-#: ../gtk/gtkbox.c:130 ../gtk/gtkexpander.c:221 ../gtk/gtkiconview.c:665
+#: ../gtk/gtkbox.c:130 ../gtk/gtkexpander.c:221 ../gtk/gtkiconview.c:666
 #: ../gtk/gtktreeviewcolumn.c:217
 msgid "Spacing"
 msgstr "Espazamento"
@@ -1321,7 +1321,7 @@ msgstr "Aliñamento y do texto"
 msgid "The vertical text alignment, from 0 (top) to 1 (bottom)."
 msgstr "O aliñamento vertical do texto, desde 0 (superior) até 1 (inferior)."
 
-#: ../gtk/gtkcellrendererprogress.c:221 ../gtk/gtkiconview.c:729
+#: ../gtk/gtkcellrendererprogress.c:221 ../gtk/gtkiconview.c:732
 #: ../gtk/gtkorientable.c:47 ../gtk/gtkprogressbar.c:126
 #: ../gtk/gtkstatusicon.c:328 ../gtk/gtktrayicon-x11.c:110
 msgid "Orientation"
@@ -2531,30 +2531,30 @@ msgstr "O bordo ao redor da barra de progreso"
 msgid "Border between text and frame."
 msgstr "Bordo entre o texto e o marco."
 
-#: ../gtk/gtkentry.c:1755
+#: ../gtk/gtkentry.c:1757
 msgid "State Hint"
 msgstr "Suxestión de estado"
 
-#: ../gtk/gtkentry.c:1756
+#: ../gtk/gtkentry.c:1758
 msgid "Whether to pass a proper state when drawing shadow or background"
 msgstr ""
 "Indica se se pasa unha propiedade de estado cando se debuxe a sombra ou o "
 "fondo"
 
-#: ../gtk/gtkentry.c:1761 ../gtk/gtklabel.c:859
+#: ../gtk/gtkentry.c:1763 ../gtk/gtklabel.c:859
 msgid "Select on focus"
 msgstr "Seleccionar ao enfocar"
 
-#: ../gtk/gtkentry.c:1762
+#: ../gtk/gtkentry.c:1764
 msgid "Whether to select the contents of an entry when it is focused"
 msgstr ""
 "Indica se se deben seleccionar os contidos dunha entrada cando está enfocada"
 
-#: ../gtk/gtkentry.c:1776
+#: ../gtk/gtkentry.c:1778
 msgid "Password Hint Timeout"
 msgstr "Tempo de espera para a suxestión de contrasinal"
 
-#: ../gtk/gtkentry.c:1777
+#: ../gtk/gtkentry.c:1779
 msgid "How long to show the last input character in hidden entries"
 msgstr ""
 "Durante canto tempo hai que mostrar o último carácter introducido nas "
@@ -2584,7 +2584,7 @@ msgstr "Lonxitude mínima da chave"
 msgid "Minimum length of the search key in order to look up matches"
 msgstr "Lonxitude mínima da chave de busca para encontrar coincidencias"
 
-#: ../gtk/gtkentrycompletion.c:303 ../gtk/gtkiconview.c:586
+#: ../gtk/gtkentrycompletion.c:303 ../gtk/gtkiconview.c:587
 msgid "Text column"
 msgstr "Columna de texto"
 
@@ -3022,132 +3022,136 @@ msgstr ""
 "Un valor booleano que indica se a caixa de manipulación do fillo está "
 "separada ou anexada."
 
-#: ../gtk/gtkiconview.c:549
+#: ../gtk/gtkiconview.c:550
 msgid "Selection mode"
 msgstr "Modo de selección"
 
-#: ../gtk/gtkiconview.c:550
+#: ../gtk/gtkiconview.c:551
 msgid "The selection mode"
 msgstr "O modo de selección"
 
-#: ../gtk/gtkiconview.c:568
+#: ../gtk/gtkiconview.c:569
 msgid "Pixbuf column"
 msgstr "Columna de pixbuf"
 
-#: ../gtk/gtkiconview.c:569
+#: ../gtk/gtkiconview.c:570
 msgid "Model column used to retrieve the icon pixbuf from"
 msgstr "Columna modelo usada para recuperar o pixbuf da icona"
 
-#: ../gtk/gtkiconview.c:587
+#: ../gtk/gtkiconview.c:588
 msgid "Model column used to retrieve the text from"
 msgstr "Columna modelo usada para recuperar o texto"
 
-#: ../gtk/gtkiconview.c:606
+#: ../gtk/gtkiconview.c:607
 msgid "Markup column"
 msgstr "Columna de marcación"
 
-#: ../gtk/gtkiconview.c:607
+#: ../gtk/gtkiconview.c:608
 msgid "Model column used to retrieve the text if using Pango markup"
 msgstr ""
 "Columna modelo usada para recuperar o texto se se emprega a marcación Pango"
 
-#: ../gtk/gtkiconview.c:614
+#: ../gtk/gtkiconview.c:615
 msgid "Icon View Model"
 msgstr "Modelo de visualización de icona"
 
-#: ../gtk/gtkiconview.c:615
+#: ../gtk/gtkiconview.c:616
 msgid "The model for the icon view"
 msgstr "O modelo para a visualización de icona"
 
-#: ../gtk/gtkiconview.c:631
+#: ../gtk/gtkiconview.c:632
 msgid "Number of columns"
 msgstr "Número de columnas"
 
-#: ../gtk/gtkiconview.c:632
+#: ../gtk/gtkiconview.c:633
 msgid "Number of columns to display"
 msgstr "O número de columnas que se mostran"
 
-#: ../gtk/gtkiconview.c:649
+#: ../gtk/gtkiconview.c:650
 msgid "Width for each item"
 msgstr "Largura de cada elemento"
 
-#: ../gtk/gtkiconview.c:650
+#: ../gtk/gtkiconview.c:651
 msgid "The width used for each item"
 msgstr "A largura usada para cada elemento"
 
-#: ../gtk/gtkiconview.c:666
+#: ../gtk/gtkiconview.c:667
 msgid "Space which is inserted between cells of an item"
 msgstr "Espazo que se introduce entre as celas dun elemento"
 
-#: ../gtk/gtkiconview.c:681
+#: ../gtk/gtkiconview.c:682
 msgid "Row Spacing"
 msgstr "Espazamento de fila"
 
-#: ../gtk/gtkiconview.c:682
+#: ../gtk/gtkiconview.c:683
 msgid "Space which is inserted between grid rows"
 msgstr "Espazo que se introduce entre as filas da grade"
 
-#: ../gtk/gtkiconview.c:697
+#: ../gtk/gtkiconview.c:698
 msgid "Column Spacing"
 msgstr "Espazamento de columna"
 
-#: ../gtk/gtkiconview.c:698
+#: ../gtk/gtkiconview.c:699
 msgid "Space which is inserted between grid columns"
 msgstr "Espazo que se introduce entre as columnas da grade"
 
-#: ../gtk/gtkiconview.c:713
+#: ../gtk/gtkiconview.c:714
 msgid "Margin"
 msgstr "Marxe"
 
-#: ../gtk/gtkiconview.c:714
+#: ../gtk/gtkiconview.c:715
 msgid "Space which is inserted at the edges of the icon view"
 msgstr "Espazo que se insire nos bordos da visualización de icona"
 
-#: ../gtk/gtkiconview.c:730
+#: ../gtk/gtkiconview.c:733 ../gtk/gtkiconview.c:750
 msgid ""
 "How the text and icon of each item are positioned relative to each other"
 msgstr ""
 "Como se sitúan o texto e a icona de cada elemento en relación un ao outro"
 
-#: ../gtk/gtkiconview.c:746 ../gtk/gtktreeview.c:615
+#: ../gtk/gtkiconview.c:749
+msgid "Item Orientation"
+msgstr "Orientación do elemento"
+
+#: ../gtk/gtkiconview.c:766 ../gtk/gtktreeview.c:615
 #: ../gtk/gtktreeviewcolumn.c:308
 msgid "Reorderable"
 msgstr "Reordenábel"
 
-#: ../gtk/gtkiconview.c:747 ../gtk/gtktreeview.c:616
+#: ../gtk/gtkiconview.c:767 ../gtk/gtktreeview.c:616
 msgid "View is reorderable"
 msgstr "A visualización é reordenábel"
 
-#: ../gtk/gtkiconview.c:754 ../gtk/gtktreeview.c:766
+#: ../gtk/gtkiconview.c:774 ../gtk/gtktreeview.c:766
 msgid "Tooltip Column"
 msgstr "Columna de indicación"
 
-#: ../gtk/gtkiconview.c:755
+#: ../gtk/gtkiconview.c:775
 msgid "The column in the model containing the tooltip texts for the items"
 msgstr ""
 "A columna do modelo que contén os textos de indicación para os elementos"
 
-#: ../gtk/gtkiconview.c:772
+#: ../gtk/gtkiconview.c:792
 msgid "Item Padding"
 msgstr "Recheo de ítem"
 
-#: ../gtk/gtkiconview.c:773
+#: ../gtk/gtkiconview.c:793
 msgid "Padding around icon view items"
 msgstr "Recheo arredor dos ítems de iconas"
 
-#: ../gtk/gtkiconview.c:782
+#: ../gtk/gtkiconview.c:802
 msgid "Selection Box Color"
 msgstr "Cor da caixa de selección"
 
-#: ../gtk/gtkiconview.c:783
+#: ../gtk/gtkiconview.c:803
 msgid "Color of the selection box"
 msgstr "Cor da caixa de selección"
 
-#: ../gtk/gtkiconview.c:789
+#: ../gtk/gtkiconview.c:809
 msgid "Selection Box Alpha"
 msgstr "Alfa da caixa de selección"
 
-#: ../gtk/gtkiconview.c:790
+#: ../gtk/gtkiconview.c:810
 msgid "Opacity of the selection box"
 msgstr "Opacidade da caixa de selección"
 
@@ -4785,11 +4789,11 @@ msgid ""
 "How far in the y direction to move the arrow when the button is depressed"
 msgstr "Até onde se move a frecha na dirección Y cando se solta o botón"
 
-#: ../gtk/gtkrange.c:517
+#: ../gtk/gtkrange.c:525
 msgid "Draw slider ACTIVE during drag"
 msgstr "Debuxar control desprazábel ACTIVO durante o arrastre"
 
-#: ../gtk/gtkrange.c:518
+#: ../gtk/gtkrange.c:526
 msgid ""
 "With this option set to TRUE, sliders will be drawn ACTIVE and with shadow "
 "IN while they are dragged"
@@ -4797,11 +4801,11 @@ msgstr ""
 "Con esta opción definida como TRUE, os controis desprazábeis debuxaranse "
 "como ACTIVOS e con sombra DENTRO ao arrastralos"
 
-#: ../gtk/gtkrange.c:532
+#: ../gtk/gtkrange.c:542
 msgid "Trough Side Details"
 msgstr "Detalles do lado do canal"
 
-#: ../gtk/gtkrange.c:533
+#: ../gtk/gtkrange.c:543
 msgid ""
 "When TRUE, the parts of the trough on the two sides of the slider are drawn "
 "with different details"
@@ -4809,11 +4813,11 @@ msgstr ""
 "Cando é TRUE, as partes do canal nos dous lados do control desprazábel "
 "debúxanse con detalles diferentes"
 
-#: ../gtk/gtkrange.c:549
+#: ../gtk/gtkrange.c:559
 msgid "Trough Under Steppers"
 msgstr "Canal baixo os pasos"
 
-#: ../gtk/gtkrange.c:550
+#: ../gtk/gtkrange.c:560
 msgid ""
 "Whether to draw trough for full length of range or exclude the steppers and "
 "spacing"
@@ -4821,19 +4825,19 @@ msgstr ""
 "Indica se se debuxa para toda a lonxitude do intervalo ou se exclúe os pasos "
 "e o espazamento"
 
-#: ../gtk/gtkrange.c:563
+#: ../gtk/gtkrange.c:573
 msgid "Arrow scaling"
 msgstr "Escalado de frecha"
 
-#: ../gtk/gtkrange.c:564
+#: ../gtk/gtkrange.c:574
 msgid "Arrow scaling with regard to scroll button size"
 msgstr "O escalado da frecha con atención ao tamaño do botón de desprazamento"
 
-#: ../gtk/gtkrange.c:578
+#: ../gtk/gtkrange.c:590
 msgid "Stepper Position Details"
 msgstr "Detalles da posición da frecha"
 
-#: ../gtk/gtkrange.c:579
+#: ../gtk/gtkrange.c:591
 msgid ""
 "When TRUE, the detail string for rendering the steppers is suffixed with "
 "position information"
@@ -6878,45 +6882,45 @@ msgstr "Cor da fila impar"
 msgid "Color to use for odd rows"
 msgstr "Cor que usar para as filas impares"
 
-#: ../gtk/gtktreeview.c:835
+#: ../gtk/gtktreeview.c:842
 msgid "Row Ending details"
 msgstr "Detalles de terminación de fila"
 
-#: ../gtk/gtktreeview.c:836
+#: ../gtk/gtktreeview.c:843
 msgid "Enable extended row background theming"
 msgstr "Activar o tema do fondo de estendido de fila"
 
-#: ../gtk/gtktreeview.c:842
+#: ../gtk/gtktreeview.c:849
 msgid "Grid line width"
 msgstr "Largura da liña da grade"
 
-#: ../gtk/gtktreeview.c:843
+#: ../gtk/gtktreeview.c:850
 msgid "Width, in pixels, of the tree view grid lines"
 msgstr "Largura en píxeles das liñas da grade da visualización en árbore"
 
-#: ../gtk/gtktreeview.c:849
+#: ../gtk/gtktreeview.c:856
 msgid "Tree line width"
 msgstr "Largura da liña da árbore"
 
-#: ../gtk/gtktreeview.c:850
+#: ../gtk/gtktreeview.c:857
 msgid "Width, in pixels, of the tree view lines"
 msgstr "Largura en píxeles das liñas da visualización en árbore"
 
-#: ../gtk/gtktreeview.c:856
+#: ../gtk/gtktreeview.c:863
 msgid "Grid line pattern"
 msgstr "Patrón da liña da grade"
 
-#: ../gtk/gtktreeview.c:857
+#: ../gtk/gtktreeview.c:864
 msgid "Dash pattern used to draw the tree view grid lines"
 msgstr ""
 "Patrón de trazos usado para debuxar as liñas da grade da visualización en "
 "árbore"
 
-#: ../gtk/gtktreeview.c:863
+#: ../gtk/gtktreeview.c:870
 msgid "Tree line pattern"
 msgstr "Patrón da liña da árbore"
 
-#: ../gtk/gtktreeview.c:864
+#: ../gtk/gtktreeview.c:871
 msgid "Dash pattern used to draw the tree view lines"
 msgstr ""
 "Patrón de trazos usado para debuxar as liñas da visualización en árbore"
