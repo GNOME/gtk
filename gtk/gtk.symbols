@@ -4491,6 +4491,7 @@ gtk_window_unstick
 
 #if IN_HEADER(__GTK_WRAP_BOX_H__)
 #if IN_FILE(__GTK_WRAP_BOX_C__)
+gtk_wrap_allocation_mode_get_type
 gtk_wrap_box_get_allocation_mode
 gtk_wrap_box_get_horizontal_spacing
 gtk_wrap_box_get_minimum_line_children
@@ -4507,6 +4508,7 @@ gtk_wrap_box_set_minimum_line_children
 gtk_wrap_box_set_natural_line_children
 gtk_wrap_box_set_spreading
 gtk_wrap_box_set_vertical_spacing
+gtk_wrap_box_spreading_get_type
 #endif
 #endif
 
