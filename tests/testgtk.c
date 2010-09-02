@@ -5720,22 +5720,6 @@ label_toggle (GtkWidget  *widget,
     gtk_widget_destroy (*label);
 }
 
-#define RESPONSE_TOGGLE_SEPARATOR 1
-
-static void
-print_response (GtkWidget *dialog,
-                gint       response_id,
-                gpointer   data)
-{
-  g_print ("response signal received (%d)\n", response_id);
-
-  if (response_id == RESPONSE_TOGGLE_SEPARATOR)
-    {
-      gtk_dialog_set_has_separator (GTK_DIALOG (dialog),
-                                    !gtk_dialog_get_has_separator (GTK_DIALOG (dialog)));
-    }
-}
-
 static void
 create_dialog (GtkWidget *widget)
 {
@@ -5754,11 +5738,6 @@ create_dialog (GtkWidget *widget)
       gtk_window_set_screen (GTK_WINDOW (dialog_window),
 			     gtk_widget_get_screen (widget));
 
-      g_signal_connect (dialog_window,
-                        "response",
-                        G_CALLBACK (print_response),
-                        NULL);
-      
       g_signal_connect (dialog_window, "destroy",
 			G_CALLBACK (gtk_widget_destroyed),
 			&dialog_window);
@@ -5783,15 +5762,6 @@ create_dialog (GtkWidget *widget)
       gtk_widget_show (button);
 
       label = NULL;
-      
-      button = gtk_button_new_with_label ("Separator");
-
-      gtk_widget_set_can_default (button, TRUE);
-
-      gtk_dialog_add_action_widget (GTK_DIALOG (dialog_window),
-                                    button,
-                                    RESPONSE_TOGGLE_SEPARATOR);
-      gtk_widget_show (button);
     }
 
   if (!gtk_widget_get_visible (dialog_window))

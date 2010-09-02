@@ -254,7 +254,7 @@ main (int argc, char **argv)
   contents = g_array_new (FALSE, FALSE, sizeof (char));
   
   dialog = gtk_dialog_new_with_buttons ("GtkComboBox model changes",
-					NULL, GTK_DIALOG_NO_SEPARATOR,
+					NULL, 0,
 					GTK_STOCK_CLOSE, GTK_RESPONSE_CLOSE,
 					NULL);
 

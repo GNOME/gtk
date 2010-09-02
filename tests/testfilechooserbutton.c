@@ -286,7 +286,7 @@ main (int   argc,
   gtk_src_dir = g_path_get_dirname (cwd);
   g_free (cwd);
 
-  win = gtk_dialog_new_with_buttons ("TestFileChooserButton", NULL, GTK_DIALOG_NO_SEPARATOR,
+  win = gtk_dialog_new_with_buttons ("TestFileChooserButton", NULL, 0,
 				     GTK_STOCK_QUIT, GTK_RESPONSE_CLOSE, NULL);
   g_signal_connect (win, "style-set", G_CALLBACK (win_style_set_cb), NULL);
   g_signal_connect (win, "response", G_CALLBACK (gtk_main_quit), NULL);
