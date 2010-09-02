@@ -141,7 +141,7 @@ struct _GtkIconViewPrivate
 
   gint cursor_cell;
 
-  GtkOrientation orientation;
+  GtkOrientation item_orientation;
 
   gint columns;
   gint item_width;
@@ -212,6 +212,7 @@ enum
   PROP_MARKUP_COLUMN,  
   PROP_SELECTION_MODE,
   PROP_ORIENTATION,
+  PROP_ITEM_ORIENTATION,
   PROP_MODEL,
   PROP_COLUMNS,
   PROP_ITEM_WIDTH,
@@ -722,6 +723,8 @@ gtk_icon_view_class_init (GtkIconViewClass *klass)
    * the text) of the item are positioned relative to each other.
    *
    * Since: 2.6
+   *
+   * Deprecated: 2.22: Use the #GtkIconView::item-orientation property
    */
   g_object_class_install_property (gobject_class,
 				   PROP_ORIENTATION,
@@ -730,7 +733,24 @@ gtk_icon_view_class_init (GtkIconViewClass *klass)
 						      P_("How the text and icon of each item are positioned relative to each other"),
 						      GTK_TYPE_ORIENTATION,
 						      GTK_ORIENTATION_VERTICAL,
-						      GTK_PARAM_READWRITE));
+						      GTK_PARAM_READWRITE | G_PARAM_DEPRECATED));
+
+  /**
+   * GtkIconView:item-orientation:
+   *
+   * The item-orientation property specifies how the cells (i.e. the icon and
+   * the text) of the item are positioned relative to each other.
+   *
+   * Since: 2.22
+   */
+  g_object_class_install_property (gobject_class,
+                                   PROP_ITEM_ORIENTATION,
+                                   g_param_spec_enum ("item-orientation",
+                                                      P_("Item Orientation"),
+                                                      P_("How the text and icon of each item are positioned relative to each other"),
+                                                      GTK_TYPE_ORIENTATION,
+                                                      GTK_ORIENTATION_VERTICAL,
+                                                      GTK_PARAM_READWRITE));
 
   /**
    * GtkIconView:reorderable:
@@ -1114,7 +1134,7 @@ gtk_icon_view_init (GtkIconView *icon_view)
   icon_view->priv->n_cells = 0;
   icon_view->priv->cursor_cell = -1;
 
-  icon_view->priv->orientation = GTK_ORIENTATION_VERTICAL;
+  icon_view->priv->item_orientation = GTK_ORIENTATION_VERTICAL;
 
   icon_view->priv->columns = -1;
   icon_view->priv->item_width = -1;
@@ -1205,7 +1225,8 @@ gtk_icon_view_set_property (GObject      *object,
       gtk_icon_view_set_model (icon_view, g_value_get_object (value));
       break;
     case PROP_ORIENTATION:
-      gtk_icon_view_set_orientation (icon_view, g_value_get_enum (value));
+    case PROP_ITEM_ORIENTATION:
+      gtk_icon_view_set_item_orientation (icon_view, g_value_get_enum (value));
       break;
     case PROP_COLUMNS:
       gtk_icon_view_set_columns (icon_view, g_value_get_int (value));
@@ -1271,7 +1292,8 @@ gtk_icon_view_get_property (GObject      *object,
       g_value_set_object (value, icon_view->priv->model);
       break;
     case PROP_ORIENTATION:
-      g_value_set_enum (value, icon_view->priv->orientation);
+    case PROP_ITEM_ORIENTATION:
+      g_value_set_enum (value, icon_view->priv->item_orientation);
       break;
     case PROP_COLUMNS:
       g_value_set_int (value, icon_view->priv->columns);
@@ -2885,7 +2907,7 @@ gtk_icon_view_get_cell_area (GtkIconView         *icon_view,
 {
   g_return_if_fail (info->position < item->n_cells);
 
-  if (icon_view->priv->orientation == GTK_ORIENTATION_HORIZONTAL)
+  if (icon_view->priv->item_orientation == GTK_ORIENTATION_HORIZONTAL)
     {
       cell_area->x = item->box[info->position].x - item->before[info->position];
       cell_area->y = item->y + icon_view->priv->item_padding;
@@ -2946,7 +2968,7 @@ adjust_wrap_width (GtkIconView     *icon_view,
       else
 	item_width = item->width;
 
-      if (icon_view->priv->orientation == GTK_ORIENTATION_VERTICAL)
+      if (icon_view->priv->item_orientation == GTK_ORIENTATION_VERTICAL)
         wrap_width = item_width;
       else {
         if (item->width == -1 && item_width <= 0)
@@ -3003,7 +3025,7 @@ gtk_icon_view_calculate_item_size (GtkIconView     *icon_view,
 				  &item->box[info->position].width, 
 				  &item->box[info->position].height);
 
-      if (icon_view->priv->orientation == GTK_ORIENTATION_HORIZONTAL)
+      if (icon_view->priv->item_orientation == GTK_ORIENTATION_HORIZONTAL)
 	{
 	  item->width += item->box[info->position].width 
 	    + (info->position > 0 ? spacing : 0);
@@ -3040,7 +3062,7 @@ gtk_icon_view_calculate_item_size2 (GtkIconView     *icon_view,
   item->height = 0;
   for (i = 0; i < icon_view->priv->n_cells; i++)
     {
-      if (icon_view->priv->orientation == GTK_ORIENTATION_HORIZONTAL)
+      if (icon_view->priv->item_orientation == GTK_ORIENTATION_HORIZONTAL)
 	item->height = MAX (item->height, max_height[i]);
       else
 	item->height += max_height[i] + (i > 0 ? spacing : 0);
@@ -3060,7 +3082,7 @@ gtk_icon_view_calculate_item_size2 (GtkIconView     *icon_view,
 	if (!info->cell->visible)
 	  continue;
 
-	if (icon_view->priv->orientation == GTK_ORIENTATION_HORIZONTAL)
+	if (icon_view->priv->item_orientation == GTK_ORIENTATION_HORIZONTAL)
 	  {
             /* We should not subtract icon_view->priv->item_padding from item->height,
              * because item->height is recalculated above using
@@ -3085,7 +3107,7 @@ gtk_icon_view_calculate_item_size2 (GtkIconView     *icon_view,
 	
 	item->box[info->position].x += cell_area.x;
 	item->box[info->position].y += cell_area.y;
-	if (icon_view->priv->orientation == GTK_ORIENTATION_HORIZONTAL)
+	if (icon_view->priv->item_orientation == GTK_ORIENTATION_HORIZONTAL)
 	  {
 	    item->before[info->position] = item->box[info->position].x - cell_area.x;
 	    item->after[info->position] = cell_area.width - item->box[info->position].width - item->before[info->position];
@@ -3104,7 +3126,7 @@ gtk_icon_view_calculate_item_size2 (GtkIconView     *icon_view,
 	  }
       }
   
-  if (rtl && icon_view->priv->orientation == GTK_ORIENTATION_HORIZONTAL)
+  if (rtl && icon_view->priv->item_orientation == GTK_ORIENTATION_HORIZONTAL)
     {
       for (i = 0; i < icon_view->priv->n_cells; i++)
 	{
@@ -3907,7 +3929,7 @@ find_cell (GtkIconView     *icon_view,
   gint i, k;
   GList *l;
 
-  if (icon_view->priv->orientation != orientation)
+  if (icon_view->priv->item_orientation != orientation)
     return cell;
 
   gtk_icon_view_set_cell_data (icon_view, item);
@@ -5486,7 +5508,7 @@ update_text_cell (GtkIconView *icon_view)
 					"text", icon_view->priv->text_column, 
 					NULL);
 
-      if (icon_view->priv->orientation == GTK_ORIENTATION_VERTICAL)
+      if (icon_view->priv->item_orientation == GTK_ORIENTATION_VERTICAL)
 	g_object_set (info->cell,
                       "alignment", PANGO_ALIGN_CENTER,
 		      "wrap-mode", PANGO_WRAP_WORD_CHAR,
@@ -5554,7 +5576,7 @@ update_pixbuf_cell (GtkIconView *icon_view)
 					"pixbuf", icon_view->priv->pixbuf_column, 
 					NULL);
 
-	if (icon_view->priv->orientation == GTK_ORIENTATION_VERTICAL)
+	if (icon_view->priv->item_orientation == GTK_ORIENTATION_VERTICAL)
 	  g_object_set (info->cell,
 			"xalign", 0.5,
 			"yalign", 1.0,
@@ -6023,24 +6045,24 @@ gtk_icon_view_item_activated (GtkIconView      *icon_view,
 }
 
 /**
- * gtk_icon_view_set_orientation:
+ * gtk_icon_view_set_item_orientation:
  * @icon_view: a #GtkIconView
  * @orientation: the relative position of texts and icons 
  * 
- * Sets the ::orientation property which determines whether the labels 
- * are drawn beside the icons instead of below.
+ * Sets the ::item-orientation property which determines whether
+ * the labels are drawn beside the icons instead of below.
  *
- * Since: 2.6
+ * Since: 2.22
  **/
 void 
-gtk_icon_view_set_orientation (GtkIconView    *icon_view,
-			       GtkOrientation  orientation)
+gtk_icon_view_set_item_orientation (GtkIconView    *icon_view,
+                                    GtkOrientation  orientation)
 {
   g_return_if_fail (GTK_IS_ICON_VIEW (icon_view));
 
-  if (icon_view->priv->orientation != orientation)
+  if (icon_view->priv->item_orientation != orientation)
     {
-      icon_view->priv->orientation = orientation;
+      icon_view->priv->item_orientation = orientation;
 
       gtk_icon_view_stop_editing (icon_view, TRUE);
       gtk_icon_view_invalidate_sizes (icon_view);
@@ -6049,8 +6071,48 @@ gtk_icon_view_set_orientation (GtkIconView    *icon_view,
       update_text_cell (icon_view);
       update_pixbuf_cell (icon_view);
       
+      g_object_notify (G_OBJECT (icon_view), "item-orientation");
       g_object_notify (G_OBJECT (icon_view), "orientation");
     }
+}
+
+/**
+ * gtk_icon_view_set_orientation:
+ * @icon_view: a #GtkIconView
+ * @orientation: the relative position of texts and icons 
+ * 
+ * Sets the ::orientation property which determines whether the labels 
+ * are drawn beside the icons instead of below.
+ *
+ * Since: 2.6
+ *
+ * Deprecated: 2.22: Use gtk_icon_view_set_item_orientation()
+ **/
+void 
+gtk_icon_view_set_orientation (GtkIconView    *icon_view,
+                               GtkOrientation  orientation)
+{
+  gtk_icon_view_set_item_orientation (icon_view, orientation);
+}
+
+/**
+ * gtk_icon_view_get_item_orientation:
+ * @icon_view: a #GtkIconView
+ *
+ * Returns the value of the ::item-orientation property which determines
+ * whether the labels are drawn beside the icons instead of below.
+ *
+ * Return value: the relative position of texts and icons
+ *
+ * Since: 2.22
+ */
+GtkOrientation
+gtk_icon_view_get_item_orientation (GtkIconView *icon_view)
+{
+  g_return_val_if_fail (GTK_IS_ICON_VIEW (icon_view),
+			GTK_ORIENTATION_VERTICAL);
+
+  return icon_view->priv->item_orientation;
 }
 
 /**
@@ -6063,14 +6125,13 @@ gtk_icon_view_set_orientation (GtkIconView    *icon_view,
  * Return value: the relative position of texts and icons 
  *
  * Since: 2.6
+ *
+ * Deprecated: 2.22: Use gtk_icon_view_get_item_orientation()
  **/
 GtkOrientation
 gtk_icon_view_get_orientation (GtkIconView *icon_view)
 {
-  g_return_val_if_fail (GTK_IS_ICON_VIEW (icon_view), 
-			GTK_ORIENTATION_VERTICAL);
-
-  return icon_view->priv->orientation;
+  return gtk_icon_view_get_item_orientation (icon_view);
 }
 
 /**

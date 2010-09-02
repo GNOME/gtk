@@ -107,6 +107,9 @@ gint           gtk_icon_view_get_pixbuf_column (GtkIconView    *icon_view);
 void           gtk_icon_view_set_orientation   (GtkIconView    *icon_view,
 	   			                GtkOrientation  orientation);
 GtkOrientation gtk_icon_view_get_orientation   (GtkIconView    *icon_view);
+void           gtk_icon_view_set_item_orientation (GtkIconView    *icon_view,
+	   			                   GtkOrientation  orientation);
+GtkOrientation gtk_icon_view_get_item_orientation (GtkIconView    *icon_view);
 void           gtk_icon_view_set_columns       (GtkIconView    *icon_view,
 		 			        gint            columns);
 gint           gtk_icon_view_get_columns       (GtkIconView    *icon_view);
