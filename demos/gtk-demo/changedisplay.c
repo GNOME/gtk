@@ -610,7 +610,7 @@ do_changedisplay (GtkWidget *do_widget)
 
       info->window = gtk_dialog_new_with_buttons ("Change Screen or display",
 					    GTK_WINDOW (do_widget),
-					    GTK_DIALOG_NO_SEPARATOR,
+					    0,
 					    GTK_STOCK_CLOSE,  GTK_RESPONSE_CLOSE,
 					    "Change",         GTK_RESPONSE_OK,
 					    NULL);
