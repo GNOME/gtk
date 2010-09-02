@@ -29,6 +29,7 @@
 #include <string.h>
 
 #include "gtkprogressbar.h"
+#include "gtkorientable.h"
 #include "gtkprivate.h"
 #include "gtkintl.h"
 
@@ -92,9 +93,11 @@ static void gtk_progress_bar_paint         (GtkProgressBar      *progress);
 static void gtk_progress_bar_act_mode_enter (GtkProgressBar     *progress);
 static void gtk_progress_bar_realize       (GtkWidget           *widget);
 static void gtk_progress_bar_finalize      (GObject             *object);
+static void gtk_progress_bar_set_orientation (GtkProgressBar    *progress,
+                                              GtkOrientation     orientation);
 
-
-G_DEFINE_TYPE (GtkProgressBar, gtk_progress_bar, GTK_TYPE_WIDGET)
+G_DEFINE_TYPE_WITH_CODE (GtkProgressBar, gtk_progress_bar, GTK_TYPE_WIDGET,
+                         G_IMPLEMENT_INTERFACE (GTK_TYPE_ORIENTABLE, NULL))
 
 static void
 gtk_progress_bar_class_init (GtkProgressBarClass *class)
@@ -114,14 +117,9 @@ gtk_progress_bar_class_init (GtkProgressBarClass *class)
   widget_class->size_request = gtk_progress_bar_size_request;
   widget_class->size_allocate = gtk_progress_bar_size_allocate;
 
-  g_object_class_install_property (gobject_class,
-                                   PROP_ORIENTATION,
-                                   g_param_spec_enum ("orientation",
-                                                      P_("Orientation"),
-                                                      P_("Orientation and of the progress bar"),
-                                                      GTK_TYPE_ORIENTATION,
-                                                      GTK_ORIENTATION_HORIZONTAL,
-                                                      GTK_PARAM_READWRITE));
+  g_object_class_override_property (gobject_class,
+                                    PROP_ORIENTATION,
+                                    "orientation");
 
   g_object_class_install_property (gobject_class,
                                    PROP_INVERTED,
@@ -1112,22 +1110,11 @@ gtk_progress_bar_set_pulse_step (GtkProgressBar *pbar,
   g_object_notify (G_OBJECT (pbar), "pulse-step");
 }
 
-/**
- * gtk_progress_bar_set_orientation:
- * @pbar: a #GtkProgressBar
- * @orientation: orientation of the progress bar
- *
- * Causes the progress bar to switch to a different orientation.
- */
-void
+static void
 gtk_progress_bar_set_orientation (GtkProgressBar *pbar,
                                   GtkOrientation  orientation)
 {
-  GtkProgressBarPrivate *priv;
-
-  g_return_if_fail (GTK_IS_PROGRESS_BAR (pbar));
-
-  priv = pbar->priv;
+  GtkProgressBarPrivate *priv = pbar->priv;
 
   if (priv->orientation != orientation)
     {
@@ -1135,8 +1122,6 @@ gtk_progress_bar_set_orientation (GtkProgressBar *pbar,
 
       if (gtk_widget_is_drawable (GTK_WIDGET (pbar)))
         gtk_widget_queue_resize (GTK_WIDGET (pbar));
-
-      g_object_notify (G_OBJECT (pbar), "orientation");
     }
 }
 
@@ -1219,22 +1204,6 @@ gtk_progress_bar_get_pulse_step (GtkProgressBar *pbar)
   g_return_val_if_fail (GTK_IS_PROGRESS_BAR (pbar), 0);
 
   return pbar->priv->pulse_fraction;
-}
-
-/**
- * gtk_progress_bar_get_orientation:
- * @pbar: a #GtkProgressBar
- *
- * Retrieves the current progress bar orientation.
- *
- * Return value: orientation of the progress bar
- **/
-GtkOrientation
-gtk_progress_bar_get_orientation (GtkProgressBar *pbar)
-{
-  g_return_val_if_fail (GTK_IS_PROGRESS_BAR (pbar), GTK_ORIENTATION_HORIZONTAL);
-
-  return pbar->priv->orientation;
 }
 
 /**
