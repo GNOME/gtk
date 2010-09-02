@@ -559,15 +559,15 @@ typedef enum {
 
 /**
  * GtkWrapBoxSpreading:
- * @GTK_WRAP_BOX_SPREAD_BEGIN:  Items are allocated no more than their natural size
+ * @GTK_WRAP_BOX_SPREAD_START:  Children are allocated no more than their natural size
  *                              in the layout's orientation and any extra space is left trailing at 
  *                              the end of each line.
- * @GTK_WRAP_BOX_SPREAD_END:    Items are allocated no more than their natural size
+ * @GTK_WRAP_BOX_SPREAD_END:    Children are allocated no more than their natural size
  *                              in the layout's orientation and any extra space skipped at the beginning
  *                              of each line.
- * @GTK_WRAP_BOX_SPREAD_EVEN:   Items are allocated no more than their natural size
+ * @GTK_WRAP_BOX_SPREAD_EVEN:   Children are allocated no more than their natural size
  *                              in the layout's orientation and any extra space is evenly distributed
- *                              between children.
+ *                              as empty space between children.
  * @GTK_WRAP_BOX_SPREAD_EXPAND: Items share the extra space evenly (or among children that 'expand' when
  *                              in %GTK_WRAP_ALLOCATE_FREE mode.
  *
@@ -582,7 +582,7 @@ typedef enum {
  *
  */
 typedef enum {
-  GTK_WRAP_BOX_SPREAD_BEGIN = 0,
+  GTK_WRAP_BOX_SPREAD_START = 0,
   GTK_WRAP_BOX_SPREAD_END,
   GTK_WRAP_BOX_SPREAD_EVEN,
   GTK_WRAP_BOX_SPREAD_EXPAND

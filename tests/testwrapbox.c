@@ -29,7 +29,7 @@ enum {
 };
 
 #define INITIAL_ALLOCATION_MODE GTK_WRAP_ALLOCATE_HOMOGENEOUS
-#define INITIAL_SPREADING       GTK_WRAP_BOX_SPREAD_BEGIN
+#define INITIAL_SPREADING       GTK_WRAP_BOX_SPREAD_START
 #define INITIAL_MINIMUM_LENGTH  3
 #define INITIAL_HSPACING        2
 #define INITIAL_VSPACING        2
@@ -302,7 +302,7 @@ create_window (void)
 
   /* Add Spreading control */
   widget = gtk_combo_box_new_text ();
-  gtk_combo_box_append_text (GTK_COMBO_BOX (widget), "Spread Begin");
+  gtk_combo_box_append_text (GTK_COMBO_BOX (widget), "Spread Start");
   gtk_combo_box_append_text (GTK_COMBO_BOX (widget), "Spread End");
   gtk_combo_box_append_text (GTK_COMBO_BOX (widget), "Spread Even");
   gtk_combo_box_append_text (GTK_COMBO_BOX (widget), "Spread Expand");

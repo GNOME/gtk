@@ -200,7 +200,7 @@ gtk_wrap_box_class_init (GtkWrapBoxClass *class)
                                                       P_("Spreading"),
                                                       P_("The spreading mode to use"),
                                                       GTK_TYPE_WRAP_BOX_SPREADING,
-                                                      GTK_WRAP_BOX_SPREAD_BEGIN,
+                                                      GTK_WRAP_BOX_SPREAD_START,
                                                       GTK_PARAM_READWRITE));
 
 
@@ -382,7 +382,7 @@ gtk_wrap_box_init (GtkWrapBox *box)
 
   priv->orientation        = GTK_ORIENTATION_HORIZONTAL;
   priv->mode               = GTK_WRAP_ALLOCATE_FREE;
-  priv->spreading          = GTK_WRAP_BOX_SPREAD_BEGIN;
+  priv->spreading          = GTK_WRAP_BOX_SPREAD_START;
   priv->vertical_spacing   = 0;
   priv->horizontal_spacing = 0;
   priv->children           = NULL;
@@ -1036,7 +1036,7 @@ gtk_wrap_box_size_allocate (GtkWidget     *widget,
       if (priv->spreading != GTK_WRAP_BOX_SPREAD_EXPAND)
         item_size = MIN (item_size, nat_item_size);
 
-      /* Get the real extra pixels incase of GTK_WRAP_BOX_SPREAD_BEGIN lines */
+      /* Get the real extra pixels incase of GTK_WRAP_BOX_SPREAD_START lines */
       extra_pixels   = avail_size - (line_length - 1) * item_spacing - item_size * line_length;
       extra_per_item = extra_pixels / MAX (line_length -1, 1);
       extra_extra    = extra_pixels % MAX (line_length -1, 1);

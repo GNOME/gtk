@@ -91,6 +91,7 @@ void                  gtk_wrap_box_insert_child              (GtkWrapBox        
                                                               gboolean              yexpand,
                                                               gboolean              xfill,
                                                               gboolean              yfill);
+
 void                  gtk_wrap_box_reorder_child             (GtkWrapBox           *layout,
                                                               GtkWidget            *widget,
                                                               guint                 index);
