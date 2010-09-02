@@ -129,9 +129,11 @@ void                  gtk_status_icon_set_visible        (GtkStatusIcon      *st
 							  gboolean            visible);
 gboolean              gtk_status_icon_get_visible        (GtkStatusIcon      *status_icon);
 
+#if !defined (GTK_DISABLE_DEPRECATED) || defined (GTK_COMPILATION)
 void                  gtk_status_icon_set_blinking       (GtkStatusIcon      *status_icon,
 							  gboolean            blinking);
 gboolean              gtk_status_icon_get_blinking       (GtkStatusIcon      *status_icon);
+#endif
 
 gboolean              gtk_status_icon_is_embedded        (GtkStatusIcon      *status_icon);
 

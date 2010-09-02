@@ -282,13 +282,20 @@ gtk_status_icon_class_init (GtkStatusIconClass *class)
 							GDK_TYPE_SCREEN,
  							GTK_PARAM_READWRITE));
 
+  /**
+   * GtkStatusIcon:blinking:
+   *
+   * Whether or not the status icon is blinking.
+   *
+   * Deprecated: 2.22: This property will be removed in GTK+ 3
+   */
   g_object_class_install_property (gobject_class,
 				   PROP_BLINKING,
 				   g_param_spec_boolean ("blinking",
 							 P_("Blinking"),
 							 P_("Whether or not the status icon is blinking"),
 							 FALSE,
-							 GTK_PARAM_READWRITE));
+							 GTK_PARAM_READWRITE | G_PARAM_DEPRECATED));
 
   g_object_class_install_property (gobject_class,
 				   PROP_VISIBLE,
@@ -2354,6 +2361,8 @@ gtk_status_icon_get_visible (GtkStatusIcon *status_icon)
  * this setting has no effect.
  *
  * Since: 2.10
+ *
+ * Deprecated: 2.22: This function will be removed in GTK+ 3
  **/
 void
 gtk_status_icon_set_blinking (GtkStatusIcon *status_icon,
@@ -2390,6 +2399,8 @@ gtk_status_icon_set_blinking (GtkStatusIcon *status_icon,
  * Return value: %TRUE if the icon is blinking
  *
  * Since: 2.10
+ *
+ * Deprecated: 2.22: This function will be removed in GTK+ 3
  **/
 gboolean
 gtk_status_icon_get_blinking (GtkStatusIcon *status_icon)

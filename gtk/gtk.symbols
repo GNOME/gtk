@@ -1147,7 +1147,6 @@ gtk_dialog_add_button
 gtk_dialog_add_buttons G_GNUC_NULL_TERMINATED
 gtk_dialog_get_action_area
 gtk_dialog_get_content_area
-gtk_dialog_get_has_separator
 gtk_dialog_get_widget_for_response
 gtk_dialog_get_response_for_widget
 gtk_dialog_get_type G_GNUC_CONST
@@ -1159,7 +1158,10 @@ gtk_alternative_dialog_button_order
 gtk_dialog_set_alternative_button_order
 gtk_dialog_set_alternative_button_order_from_array
 gtk_dialog_set_default_response
+#ifndef GTK_DISABLE_DEPRECATED
+gtk_dialog_get_has_separator
 gtk_dialog_set_has_separator
+#endif
 gtk_dialog_set_response_sensitive
 #endif
 #endif
@@ -1240,8 +1242,10 @@ gtk_status_icon_set_has_tooltip
 gtk_status_icon_get_has_tooltip
 gtk_status_icon_set_visible
 gtk_status_icon_get_visible
+#ifndef GTK_DISABLE_DEPRECATED
 gtk_status_icon_set_blinking
 gtk_status_icon_get_blinking
+#endif
 gtk_status_icon_is_embedded
 gtk_status_icon_position_menu
 gtk_status_icon_get_geometry
