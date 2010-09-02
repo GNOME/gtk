@@ -88,6 +88,7 @@ static gboolean gtk_ruler_motion_notify   (GtkWidget      *widget,
 static gboolean gtk_ruler_expose          (GtkWidget      *widget,
                                            GdkEventExpose *event);
 static void     gtk_ruler_make_pixmap     (GtkRuler       *ruler);
+static void     gtk_ruler_draw_ticks      (GtkRuler       *ruler);
 static void     gtk_ruler_real_draw_ticks (GtkRuler       *ruler,
                                            cairo_t        *cr);
 static void     gtk_ruler_real_draw_pos   (GtkRuler       *ruler);
@@ -453,7 +454,7 @@ gtk_ruler_get_range (GtkRuler *ruler,
     *max_size = priv->max_size;
 }
 
-void
+static void
 gtk_ruler_draw_ticks (GtkRuler *ruler)
 {
   GtkRulerPrivate *priv = ruler->priv;
@@ -472,7 +473,7 @@ gtk_ruler_draw_ticks (GtkRuler *ruler)
   cairo_destroy (cr);
 }
 
-void
+static void
 gtk_ruler_draw_pos (GtkRuler *ruler)
 {
   g_return_if_fail (GTK_IS_RULER (ruler));

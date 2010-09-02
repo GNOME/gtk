@@ -2711,8 +2711,6 @@ GTK_RULER_GET_CLASS
 <SUBSECTION Private>
 GtkRulerPrivate
 gtk_ruler_get_type
-gtk_ruler_draw_ticks
-gtk_ruler_draw_pos
 </SECTION>
 
 <SECTION>

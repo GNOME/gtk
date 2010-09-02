@@ -2864,8 +2864,6 @@ gtk_text_buffer_unregister_serialize_format
 #if IN_HEADER(__GTK_RULER_H__)
 #if IN_FILE(__GTK_RULER_C__)
 gtk_ruler_new
-gtk_ruler_draw_pos
-gtk_ruler_draw_ticks
 gtk_ruler_get_metric
 gtk_ruler_get_range
 gtk_ruler_get_type G_GNUC_CONST

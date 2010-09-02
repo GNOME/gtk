@@ -114,9 +114,6 @@ void            gtk_ruler_get_range  (GtkRuler       *ruler,
                                       gdouble        *position,
                                       gdouble        *max_size);
 
-void            gtk_ruler_draw_ticks (GtkRuler       *ruler);
-void            gtk_ruler_draw_pos   (GtkRuler       *ruler);
-
 G_END_DECLS
 
 #endif /* __GTK_RULER_H__ */
