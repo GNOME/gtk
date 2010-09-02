@@ -4176,6 +4176,7 @@ gtk_vseparator_new
 
 #if IN_HEADER(__GTK_WIDGET_H__)
 #if IN_FILE(__GTK_WIDGET_C__)
+gtk_cairo_should_draw_window
 gtk_requisition_copy
 gtk_requisition_free
 gtk_requisition_get_type G_GNUC_CONST

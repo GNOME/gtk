@@ -5070,10 +5070,59 @@ gtk_widget_real_mnemonic_activate (GtkWidget *widget,
   return TRUE;
 }
 
+static const cairo_user_data_key_t window_key;
+
+static GdkWindow *
+gtk_cairo_get_window (cairo_t *cr)
+{
+  g_return_val_if_fail (cr != NULL, NULL);
+
+  return cairo_get_user_data (cr, &window_key);
+}
+
+/**
+ * gtk_cairo_should_draw_window:
+ * @cr: a cairo context
+ * @window: the window to check
+ *
+ * This function is supposed to be called in GtkWidget::draw
+ * implementations for widgets that support multiple windows.
+ * @cr must be untransformed from invoking of the draw function.
+ * This function will return %TRUE if the contents of the given
+ * @window are supposed to be drawn and %FALSE otherwise. Note
+ * that when the drawing was not initiated by the windowing
+ * system this function will return %TRUE for all windows, so
+ * you need to draw the bottommost window first. Also, do not
+ * use "else if" statements to check which window should be drawn.
+ *
+ * Returns: %TRUE if @window should be drawn
+ **/
+gboolean
+gtk_cairo_should_draw_window (cairo_t *cr,
+                              GdkWindow *window)
+{
+  GdkWindow *cairo_window;
+
+  g_return_val_if_fail (cr != NULL, FALSE);
+  g_return_val_if_fail (GDK_IS_WINDOW (window), FALSE);
+
+  cairo_window = gtk_cairo_get_window (cr);
+  
+  return cairo_window == NULL ||
+         cairo_window == window;
+}
+
+static void
+gtk_cairo_set_window (cairo_t   *cr,
+                      GdkWindow *window)
+{
+  cairo_set_user_data (cr, &window_key, window, NULL);
+}
 static gboolean
 gtk_widget_real_expose_event (GtkWidget      *widget,
 			      GdkEventExpose *expose)
 {
+  GdkWindow *window;
   gboolean result = FALSE;
   cairo_t *cr;
 
@@ -5081,8 +5130,33 @@ gtk_widget_real_expose_event (GtkWidget      *widget,
     return FALSE;
 
   cr = gdk_cairo_create (expose->window);
+  gtk_cairo_set_window (cr, expose->window);
+
   gdk_cairo_region (cr, expose->region);
   cairo_clip (cr);
+
+  /* translate cairo context properly */
+  window = gtk_widget_get_window (widget);
+  if (window != expose->window)
+    {
+      int x, y;
+
+      if (gdk_window_get_parent (expose->window) == window)
+        {
+          gdk_window_get_position (expose->window, &x, &y);
+        }
+      else
+        {
+          int ex, ey;
+          gdk_window_get_origin (expose->window, &ex, &ey);
+          gdk_window_get_origin (window, &x, &y);
+          x = ex - x;
+          y = ey - y;
+        }
+
+      cairo_translate (cr, -x, -y);
+    }
+
 
   if (!gtk_widget_get_has_window (widget))
     {
@@ -5094,7 +5168,10 @@ gtk_widget_real_expose_event (GtkWidget      *widget,
   g_signal_emit (widget, widget_signals[DRAW], 
                  0, cr,
                  &result);
-                
+
+  /* unset here, so if someone keeps a reference to cr we
+   * don't leak the window. */
+  gtk_cairo_set_window (cr, NULL);
   cairo_destroy (cr);
 
   return result;
