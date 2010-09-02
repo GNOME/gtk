@@ -152,40 +152,19 @@ static void
 track_mouse_event (DWORD dwFlags,
 		   HWND  hwnd)
 {
-  typedef BOOL (WINAPI *PFN_TrackMouseEvent) (LPTRACKMOUSEEVENT);
-  static PFN_TrackMouseEvent p_TrackMouseEvent = NULL;
-  static gboolean once = FALSE;
+  TRACKMOUSEEVENT tme;
 
-  if (!once)
-    {
-      HMODULE user32;
-      HINSTANCE commctrl32;
+  tme.cbSize = sizeof(TRACKMOUSEEVENT);
+  tme.dwFlags = dwFlags;
+  tme.hwndTrack = hwnd;
+  tme.dwHoverTime = HOVER_DEFAULT; /* not used */
 
-      user32 = GetModuleHandle ("user32.dll");
-      if ((p_TrackMouseEvent = (PFN_TrackMouseEvent)GetProcAddress (user32, "TrackMouseEvent")) == NULL)
-        {
-          if ((commctrl32 = LoadLibrary ("commctrl32.dll")) != NULL)
-	    p_TrackMouseEvent = (PFN_TrackMouseEvent)
-	      GetProcAddress (commctrl32, "_TrackMouseEvent");
-        }
-      once = TRUE;
-    }
-
-  if (p_TrackMouseEvent)
-    {
-      TRACKMOUSEEVENT tme;
-      tme.cbSize = sizeof(TRACKMOUSEEVENT);
-      tme.dwFlags = dwFlags;
-      tme.hwndTrack = hwnd;
-      tme.dwHoverTime = HOVER_DEFAULT; /* not used */
-
-      if (!p_TrackMouseEvent (&tme))
-        WIN32_API_FAILED ("TrackMouseEvent");
-      else if (dwFlags == TME_LEAVE)
-        GDK_NOTE (EVENTS, g_print(" (TrackMouseEvent %p)", hwnd));
-      else if (dwFlags == TME_CANCEL)
-	GDK_NOTE (EVENTS, g_print(" (cancel TrackMouseEvent %p)", hwnd));
-    }
+  if (!TrackMouseEvent (&tme))
+    WIN32_API_FAILED ("TrackMouseEvent");
+  else if (dwFlags == TME_LEAVE)
+    GDK_NOTE (EVENTS, g_print(" (TrackMouseEvent %p)", hwnd));
+  else if (dwFlags == TME_CANCEL)
+    GDK_NOTE (EVENTS, g_print(" (cancel TrackMouseEvent %p)", hwnd));
 }
 
 gulong
