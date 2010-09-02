@@ -124,6 +124,7 @@ AC_CANONICAL_HOST
 MATH_LIB=-lm
 AC_MSG_CHECKING([for native Win32])
 LIB_EXE_MACHINE_FLAG=X86
+EXE_MANIFEST_ARCHITECTURE=X86
 case "$host" in
   *-*-mingw*)
     os_win32=yes
@@ -132,6 +133,7 @@ case "$host" in
     case "$host" in
     x86_64-*-*)
       LIB_EXE_MACHINE_FLAG=X64
+      EXE_MANIFEST_ARCHITECTURE=AMD64
       ;;
     esac
     ;;
@@ -142,6 +144,7 @@ esac
 AC_MSG_RESULT([$os_win32])
 
 AC_SUBST(LIB_EXE_MACHINE_FLAG)
+AC_SUBST(EXE_MANIFEST_ARCHITECTURE)
 
 case $host in
   *-*-linux*)
