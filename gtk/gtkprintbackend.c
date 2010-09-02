@@ -748,7 +748,6 @@ request_password (GtkPrintBackend  *backend,
                                          NULL);
 
   gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_OK);
-  gtk_dialog_set_has_separator (GTK_DIALOG (dialog), FALSE);
 
   main_box = gtk_hbox_new (FALSE, 0);
 

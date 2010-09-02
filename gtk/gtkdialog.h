@@ -41,8 +41,7 @@ G_BEGIN_DECLS
 typedef enum
 {
   GTK_DIALOG_MODAL               = 1 << 0, /* call gtk_window_set_modal (win, TRUE) */
-  GTK_DIALOG_DESTROY_WITH_PARENT = 1 << 1, /* call gtk_window_set_destroy_with_parent () */
-  GTK_DIALOG_NO_SEPARATOR        = 1 << 2  /* no separator bar above buttons */
+  GTK_DIALOG_DESTROY_WITH_PARENT = 1 << 1  /* call gtk_window_set_destroy_with_parent () */
 } GtkDialogFlags;
 
 /* Convenience enum to use for response_id's.  Positive values are
@@ -150,10 +149,6 @@ GtkWidget* gtk_dialog_get_widget_for_response (GtkDialog *dialog,
 gint gtk_dialog_get_response_for_widget (GtkDialog *dialog,
 					 GtkWidget *widget);
 
-void     gtk_dialog_set_has_separator (GtkDialog *dialog,
-                                       gboolean   setting);
-gboolean gtk_dialog_get_has_separator (GtkDialog *dialog);
-
 gboolean gtk_alternative_dialog_button_order (GdkScreen *screen);
 void     gtk_dialog_set_alternative_button_order (GtkDialog *dialog,
 						  gint       first_response_id,
@@ -171,10 +166,6 @@ gint gtk_dialog_run                (GtkDialog *dialog);
 
 GtkWidget * gtk_dialog_get_action_area  (GtkDialog *dialog);
 GtkWidget * gtk_dialog_get_content_area (GtkDialog *dialog);
-
-/* For private use only */
-void _gtk_dialog_set_ignore_separator (GtkDialog *dialog,
-				       gboolean   ignore_separator);
 
 G_END_DECLS
 

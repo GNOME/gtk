@@ -151,7 +151,6 @@ gtk_color_selection_dialog_init (GtkColorSelectionDialog *colorseldiag)
   content_area = gtk_dialog_get_content_area (dialog);
   action_area = gtk_dialog_get_action_area (dialog);
 
-  gtk_dialog_set_has_separator (dialog, FALSE);
   gtk_container_set_border_width (GTK_CONTAINER (dialog), 5);
   gtk_box_set_spacing (GTK_BOX (content_area), 2); /* 2 * 5 + 2 = 12 */
   gtk_container_set_border_width (GTK_CONTAINER (action_area), 5);
@@ -188,8 +187,6 @@ gtk_color_selection_dialog_init (GtkColorSelectionDialog *colorseldiag)
 
   gtk_window_set_title (GTK_WINDOW (colorseldiag),
                         _("Color Selection"));
-
-  _gtk_dialog_set_ignore_separator (dialog, TRUE);
 }
 
 GtkWidget*

@@ -477,7 +477,6 @@ gtk_mount_operation_ask_password (GMountOperation   *mount_op,
   action_area = gtk_dialog_get_action_area (dialog);
 
   /* Set the dialog up with HIG properties */
-  gtk_dialog_set_has_separator (dialog, FALSE);
   gtk_container_set_border_width (GTK_CONTAINER (dialog), 5);
   gtk_box_set_spacing (GTK_BOX (content_area), 2); /* 2 * 5 + 2 = 12 */
   gtk_container_set_border_width (GTK_CONTAINER (action_area), 5);
@@ -1217,7 +1216,6 @@ create_show_processes_dialog (GMountOperation *op,
   if (priv->parent_window != NULL)
     gtk_window_set_transient_for (GTK_WINDOW (dialog), priv->parent_window);
   gtk_window_set_title (GTK_WINDOW (dialog), "");
-  gtk_dialog_set_has_separator (GTK_DIALOG (dialog), FALSE);
 
   content_area = gtk_dialog_get_content_area (GTK_DIALOG (dialog));
   vbox = gtk_vbox_new (FALSE, 12);

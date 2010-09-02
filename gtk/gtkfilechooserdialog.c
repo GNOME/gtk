@@ -92,7 +92,6 @@ gtk_file_chooser_dialog_init (GtkFileChooserDialog *dialog)
   content_area = gtk_dialog_get_content_area (fc_dialog);
   action_area = gtk_dialog_get_action_area (fc_dialog);
 
-  gtk_dialog_set_has_separator (fc_dialog, FALSE);
   gtk_container_set_border_width (GTK_CONTAINER (fc_dialog), 5);
   gtk_box_set_spacing (GTK_BOX (content_area), 2); /* 2 * 5 + 2 = 12 */
   gtk_container_set_border_width (GTK_CONTAINER (action_area), 5);

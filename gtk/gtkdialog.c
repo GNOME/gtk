@@ -31,7 +31,6 @@
 #include "gtkdialog.h"
 #include "gtkhbbox.h"
 #include "gtklabel.h"
-#include "gtkhseparator.h"
 #include "gtkmarshalers.h"
 #include "gtkvbox.h"
 #include "gdkkeysyms.h"
@@ -46,10 +45,6 @@ struct _GtkDialogPrivate
 {
   GtkWidget *vbox;
   GtkWidget *action_area;
-
-  GtkWidget *separator;
-
-  guint ignore_separator : 1;
 };
 
 typedef struct _ResponseData ResponseData;
@@ -66,15 +61,6 @@ static void      gtk_dialog_add_buttons_valist   (GtkDialog    *dialog,
 static gboolean  gtk_dialog_delete_event_handler (GtkWidget    *widget,
                                                   GdkEventAny  *event,
                                                   gpointer      user_data);
-
-static void      gtk_dialog_set_property         (GObject      *object,
-                                                  guint         prop_id,
-                                                  const GValue *value,
-                                                  GParamSpec   *pspec);
-static void      gtk_dialog_get_property         (GObject      *object,
-                                                  guint         prop_id,
-                                                  GValue       *value,
-                                                  GParamSpec   *pspec);
 static void      gtk_dialog_style_set            (GtkWidget    *widget,
                                                   GtkStyle     *prev_style);
 static void      gtk_dialog_map                  (GtkWidget    *widget);
@@ -124,32 +110,16 @@ gtk_dialog_class_init (GtkDialogClass *class)
   GObjectClass *gobject_class;
   GtkWidgetClass *widget_class;
   GtkBindingSet *binding_set;
-  
+
   gobject_class = G_OBJECT_CLASS (class);
   widget_class = GTK_WIDGET_CLASS (class);
-  
-  gobject_class->set_property = gtk_dialog_set_property;
-  gobject_class->get_property = gtk_dialog_get_property;
-  
+
   widget_class->map = gtk_dialog_map;
   widget_class->style_set = gtk_dialog_style_set;
 
   class->close = gtk_dialog_close;
-  
-  g_type_class_add_private (gobject_class, sizeof (GtkDialogPrivate));
 
-  /**
-   * GtkDialog:has-separator:
-   *
-   * When %TRUE, the dialog has a separator bar above its buttons.
-   */
-  g_object_class_install_property (gobject_class,
-                                   PROP_HAS_SEPARATOR,
-                                   g_param_spec_boolean ("has-separator",
-							 P_("Has separator"),
-							 P_("The dialog has a separator bar above its buttons"),
-                                                         TRUE,
-                                                         GTK_PARAM_READWRITE));
+  g_type_class_add_private (gobject_class, sizeof (GtkDialogPrivate));
 
   /**
    * GtkDialog::response:
@@ -278,8 +248,6 @@ gtk_dialog_init (GtkDialog *dialog)
                                               GtkDialogPrivate);
   priv = dialog->priv;
 
-  priv->ignore_separator = FALSE;
-
   /* To avoid breaking old code that prevents destroy on delete event
    * by connecting a handler, we have to have the FIRST signal
    * connection on the dialog.
@@ -302,10 +270,6 @@ gtk_dialog_init (GtkDialog *dialog)
   gtk_box_pack_end (GTK_BOX (priv->vbox), priv->action_area,
                     FALSE, TRUE, 0);
   gtk_widget_show (priv->action_area);
-
-  priv->separator = gtk_hseparator_new ();
-  gtk_box_pack_end (GTK_BOX (priv->vbox), priv->separator, FALSE, TRUE, 0);
-  gtk_widget_show (priv->separator);
 
   gtk_window_set_type_hint (GTK_WINDOW (dialog),
 			    GDK_WINDOW_TYPE_HINT_DIALOG);
@@ -338,49 +302,6 @@ gtk_dialog_buildable_get_internal_child (GtkBuildable *buildable,
   return parent_buildable_iface->get_internal_child (buildable,
                                                      builder,
                                                      childname);
-}
-
-static void 
-gtk_dialog_set_property (GObject      *object,
-                         guint         prop_id,
-                         const GValue *value,
-                         GParamSpec   *pspec)
-{
-  GtkDialog *dialog;
-  
-  dialog = GTK_DIALOG (object);
-  
-  switch (prop_id)
-    {
-    case PROP_HAS_SEPARATOR:
-      gtk_dialog_set_has_separator (dialog, g_value_get_boolean (value));
-      break;
-
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
-      break;
-    }
-}
-
-static void 
-gtk_dialog_get_property (GObject     *object,
-                         guint        prop_id,
-                         GValue      *value,
-                         GParamSpec  *pspec)
-{
-  GtkDialog *dialog = GTK_DIALOG (object);
-  GtkDialogPrivate *priv = dialog->priv;
-  
-  switch (prop_id)
-    {
-    case PROP_HAS_SEPARATOR:
-      g_value_set_boolean (value, priv->separator != NULL);
-      break;
-
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
-      break;
-    }
 }
 
 static gboolean
@@ -534,13 +455,10 @@ gtk_dialog_new_empty (const gchar     *title,
 
   if (flags & GTK_DIALOG_MODAL)
     gtk_window_set_modal (GTK_WINDOW (dialog), TRUE);
-  
+
   if (flags & GTK_DIALOG_DESTROY_WITH_PARENT)
     gtk_window_set_destroy_with_parent (GTK_WINDOW (dialog), TRUE);
 
-  if (flags & GTK_DIALOG_NO_SEPARATOR)
-    gtk_dialog_set_has_separator (dialog, FALSE);
-  
   return GTK_WIDGET (dialog);
 }
 
@@ -873,69 +791,6 @@ gtk_dialog_set_default_response (GtkDialog *dialog,
 }
 
 /**
- * gtk_dialog_set_has_separator:
- * @dialog: a #GtkDialog
- * @setting: %TRUE to have a separator
- *
- * Sets whether the dialog has a separator above the buttons.
- * %TRUE by default.
- **/
-void
-gtk_dialog_set_has_separator (GtkDialog *dialog,
-                              gboolean   setting)
-{
-  GtkDialogPrivate *priv;
-
-  g_return_if_fail (GTK_IS_DIALOG (dialog));
-
-  priv = dialog->priv;
-
-  /* this might fail if we get called before _init() somehow */
-  g_assert (priv->vbox != NULL);
-
-  if (priv->ignore_separator)
-    {
-      g_warning ("Ignoring the separator setting");
-      return;
-    }
-  
-  if (setting && priv->separator == NULL)
-    {
-      priv->separator = gtk_hseparator_new ();
-      gtk_box_pack_end (GTK_BOX (priv->vbox), priv->separator, FALSE, TRUE, 0);
-
-      /* The app programmer could screw this up, but, their own fault.
-       * Moves the separator just above the action area.
-       */
-      gtk_box_reorder_child (GTK_BOX (priv->vbox), priv->separator, 1);
-      gtk_widget_show (priv->separator);
-    }
-  else if (!setting && priv->separator != NULL)
-    {
-      gtk_widget_destroy (priv->separator);
-      priv->separator = NULL;
-    }
-
-  g_object_notify (G_OBJECT (dialog), "has-separator");
-}
-
-/**
- * gtk_dialog_get_has_separator:
- * @dialog: a #GtkDialog
- * 
- * Accessor for whether the dialog has a separator.
- * 
- * Return value: %TRUE if the dialog has a separator
- **/
-gboolean
-gtk_dialog_get_has_separator (GtkDialog *dialog)
-{
-  g_return_val_if_fail (GTK_IS_DIALOG (dialog), FALSE);
-
-  return dialog->priv->separator != NULL;
-}
-
-/**
  * gtk_dialog_response:
  * @dialog: a #GtkDialog
  * @response_id: response ID 
@@ -1134,15 +989,6 @@ gtk_dialog_run (GtkDialog *dialog)
   g_object_unref (dialog);
 
   return ri.response_id;
-}
-
-void
-_gtk_dialog_set_ignore_separator (GtkDialog *dialog,
-				  gboolean   ignore_separator)
-{
-  GtkDialogPrivate *priv = dialog->priv;
-
-  priv->ignore_separator = ignore_separator;
 }
 
 /**

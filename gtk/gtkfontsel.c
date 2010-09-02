@@ -1618,7 +1618,6 @@ gtk_font_selection_dialog_init (GtkFontSelectionDialog *fontseldiag)
   content_area = gtk_dialog_get_content_area (dialog);
   action_area = gtk_dialog_get_action_area (dialog);
 
-  gtk_dialog_set_has_separator (dialog, FALSE);
   gtk_container_set_border_width (GTK_CONTAINER (dialog), 5);
   gtk_box_set_spacing (GTK_BOX (content_area), 2); /* 2 * 5 + 2 = 12 */
   gtk_container_set_border_width (GTK_CONTAINER (action_area), 5);
@@ -1660,8 +1659,6 @@ gtk_font_selection_dialog_init (GtkFontSelectionDialog *fontseldiag)
                         _("Font Selection"));
 
   gtk_widget_pop_composite_child ();
-
-  _gtk_dialog_set_ignore_separator (dialog, TRUE);
 }
 
 /**

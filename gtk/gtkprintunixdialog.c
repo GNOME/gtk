@@ -3796,7 +3796,6 @@ populate_dialog (GtkPrintUnixDialog *print_dialog)
   content_area = gtk_dialog_get_content_area (dialog);
   action_area = gtk_dialog_get_action_area (dialog);
 
-  gtk_dialog_set_has_separator (dialog, FALSE);
   gtk_container_set_border_width (GTK_CONTAINER (dialog), 5);
   gtk_box_set_spacing (GTK_BOX (content_area), 2); /* 2 * 5 + 2 = 12 */
   gtk_container_set_border_width (GTK_CONTAINER (action_area), 5);

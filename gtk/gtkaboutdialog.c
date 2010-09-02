@@ -631,7 +631,6 @@ gtk_about_dialog_init (GtkAboutDialog *about)
   content_area = gtk_dialog_get_content_area (dialog);
   action_area = gtk_dialog_get_action_area (dialog);
 
-  gtk_dialog_set_has_separator (dialog, FALSE);
   gtk_container_set_border_width (GTK_CONTAINER (dialog), 5);
   gtk_box_set_spacing (GTK_BOX (content_area), 2); /* 2 * 5 + 2 = 12 */
   gtk_container_set_border_width (GTK_CONTAINER (action_area), 5);
@@ -2219,7 +2218,6 @@ display_credits_dialog (GtkWidget *button,
   content_area = gtk_dialog_get_content_area (credits_dialog);
   action_area = gtk_dialog_get_action_area (credits_dialog);
 
-  gtk_dialog_set_has_separator (credits_dialog, FALSE);
   gtk_container_set_border_width (GTK_CONTAINER (credits_dialog), 5);
   gtk_box_set_spacing (GTK_BOX (content_area), 2); /* 2 * 5 + 2 = 12 */
   gtk_container_set_border_width (GTK_CONTAINER (action_area), 5);
@@ -2302,7 +2300,6 @@ display_license_dialog (GtkWidget *button,
   content_area = gtk_dialog_get_content_area (license_dialog);
   action_area = gtk_dialog_get_action_area (license_dialog);
 
-  gtk_dialog_set_has_separator (license_dialog, FALSE);
   gtk_container_set_border_width (GTK_CONTAINER (license_dialog), 5);
   gtk_box_set_spacing (GTK_BOX (content_area), 2); /* 2 * 5 + 2 = 12 */
   gtk_container_set_border_width (GTK_CONTAINER (action_area), 5);

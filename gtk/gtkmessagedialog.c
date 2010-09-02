@@ -187,20 +187,7 @@ gtk_message_dialog_class_init (GtkMessageDialogClass *class)
                                                              G_MAXINT,
                                                              12,
                                                              GTK_PARAM_READABLE));
-  /**
-   * GtkMessageDialog:use-separator:
-   *
-   * Whether to draw a separator line between the message label and the buttons
-   * in the dialog.
-   *
-   * Since: 2.4
-   */
-  gtk_widget_class_install_style_property (widget_class,
-					   g_param_spec_boolean ("use-separator",
-								 P_("Use separator"),
-								 P_("Whether to put a separator between the message dialog's text and the buttons"),
-								 FALSE,
-								 GTK_PARAM_READABLE));
+
   /**
    * GtkMessageDialog:message-type:
    *
@@ -386,8 +373,6 @@ gtk_message_dialog_init (GtkMessageDialog *dialog)
   gtk_box_set_spacing (GTK_BOX (action_area), 6);
 
   gtk_widget_show_all (hbox);
-
-  _gtk_dialog_set_ignore_separator (GTK_DIALOG (dialog), TRUE);
 }
 
 static void
@@ -615,12 +600,6 @@ gtk_message_dialog_new (GtkWindow     *parent,
 			 "buttons", buttons,
 			 NULL);
   dialog = GTK_DIALOG (widget);
-
-  if (flags & GTK_DIALOG_NO_SEPARATOR)
-    {
-      g_warning ("The GTK_DIALOG_NO_SEPARATOR flag cannot be used for GtkMessageDialog");
-      flags &= ~GTK_DIALOG_NO_SEPARATOR;
-    }
 
   if (message_format)
     {
@@ -1001,7 +980,6 @@ gtk_message_dialog_style_set (GtkWidget *widget,
                               GtkStyle  *prev_style)
 {
   GtkMessageDialog *dialog = GTK_MESSAGE_DIALOG (widget);
-  gboolean use_separator;
   GtkWidget *parent;
   gint border_width;
 
@@ -1015,14 +993,6 @@ gtk_message_dialog_style_set (GtkWidget *widget,
       gtk_container_set_border_width (GTK_CONTAINER (parent),
                                       MAX (0, border_width - 7));
     }
-
-  gtk_widget_style_get (widget,
-			"use-separator", &use_separator,
-			NULL);
-
-  _gtk_dialog_set_ignore_separator (GTK_DIALOG (widget), FALSE);
-  gtk_dialog_set_has_separator (GTK_DIALOG (widget), use_separator);
-  _gtk_dialog_set_ignore_separator (GTK_DIALOG (widget), TRUE);
 
   setup_primary_label_font (dialog);
 
