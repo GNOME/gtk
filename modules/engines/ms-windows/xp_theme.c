@@ -165,6 +165,8 @@ static const short element_part_map[XP_THEME_ELEMENT__SIZEOF] = {
   TKP_TICSVERT
 };
 
+#define UXTHEME_DLL "uxtheme.dll"
+
 static HINSTANCE uxtheme_dll = NULL;
 static HTHEME open_themes[XP_THEME_CLASS__SIZEOF];
 static gboolean use_xp_theme = FALSE;
@@ -219,12 +221,36 @@ xp_theme_close_open_handles (void)
 void
 xp_theme_init (void)
 {
+  char *buf;
+  char dummy;
+  int n, k;
+
   if (uxtheme_dll)
     return;
 
   memset (open_themes, 0, sizeof (open_themes));
 
-  uxtheme_dll = LoadLibrary ("uxtheme.dll");
+  n = GetSystemDirectory (&dummy, 0);
+
+  if (n <= 0)
+    return;
+
+  buf = g_malloc (n + 1 + strlen (UXTHEME_DLL));
+  k = GetSystemDirectory (buf, n);
+  
+  if (k == 0 || k > n)
+    {
+      g_free (buf);
+      return;
+    }
+
+  if (!G_IS_DIR_SEPARATOR (buf[strlen (buf) -1]))
+    strcat (buf, G_DIR_SEPARATOR_S);
+  strcat (buf, UXTHEME_DLL);
+
+  uxtheme_dll = LoadLibrary (buf);
+  g_free (buf);
+
   if (!uxtheme_dll)
     return;
 
