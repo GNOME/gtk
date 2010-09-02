@@ -1312,8 +1312,6 @@ symbolic_color_parse_str (const gchar  *string,
   return symbolic_color;
 }
 
-#undef SKIP_SPACES
-
 static GtkSymbolicColor *
 symbolic_color_parse (const gchar *str)
 {
@@ -1335,6 +1333,235 @@ symbolic_color_parse (const gchar *str)
     }
 
   return color;
+}
+
+static GtkGradient *
+gradient_parse_str (const gchar  *str,
+                    gchar       **end_ptr)
+{
+  GtkGradient *gradient = NULL;
+
+  if (g_str_has_prefix (str, "-gtk-gradient"))
+    {
+      cairo_pattern_type_t type;
+
+      str += strlen ("-gtk-gradient");
+      SKIP_SPACES (str);
+
+      if (*str != '(')
+        {
+          *end_ptr = (gchar *) str;
+          return NULL;
+        }
+
+      str++;
+      SKIP_SPACES (str);
+
+      /* Parse gradient type */
+      if (g_str_has_prefix (str, "linear"))
+        {
+          type = CAIRO_PATTERN_TYPE_LINEAR;
+          str += strlen ("linear");
+        }
+      else if (g_str_has_prefix (str, "radial"))
+        {
+          type = CAIRO_PATTERN_TYPE_RADIAL;
+          str += strlen ("radial");
+        }
+      else
+        {
+          *end_ptr = (gchar *) str;
+          return NULL;
+        }
+
+      SKIP_SPACES (str);
+
+      if (type == CAIRO_PATTERN_TYPE_LINEAR)
+        {
+          gdouble coords[4];
+          gchar *end;
+          guint i;
+
+          /* Parse start/stop position parameters */
+          for (i = 0; i < 2; i++)
+            {
+              if (*str != ',')
+                {
+                  *end_ptr = (gchar *) str;
+                  return NULL;
+                }
+
+              str++;
+              SKIP_SPACES (str);
+
+              if (g_str_has_prefix (str, "left"))
+                {
+                  coords[i * 2] = 0;
+                  str += strlen ("left");
+                }
+              else if (g_str_has_prefix (str, "right"))
+                {
+                  coords[i * 2] = 1;
+                  str += strlen ("right");
+                }
+              else
+                {
+                  coords[i * 2] = g_ascii_strtod (str, &end);
+                  str = end;
+                }
+
+              SKIP_SPACES (str);
+
+              if (g_str_has_prefix (str, "top"))
+                {
+                  coords[(i * 2) + 1] = 0;
+                  str += strlen ("top");
+                }
+              else if (g_str_has_prefix (str, "bottom"))
+                {
+                  coords[(i * 2) + 1] = 1;
+                  str += strlen ("bottom");
+                }
+              else
+                {
+                  coords[(i * 2) + 1] = g_ascii_strtod (str, &end);
+                  str = end;
+                }
+
+              SKIP_SPACES (str);
+            }
+
+          gradient = gtk_gradient_new_linear (coords[0], coords[1], coords[2], coords[3]);
+
+          while (*str == ',')
+            {
+              GtkSymbolicColor *color;
+              gdouble position;
+
+              if (*str != ',')
+                {
+                  *end_ptr = (gchar *) str;
+                  return gradient;
+                }
+
+              str++;
+              SKIP_SPACES (str);
+
+              if (g_str_has_prefix (str, "from"))
+                {
+                  position = 0;
+                  str += strlen ("from");
+                  SKIP_SPACES (str);
+
+                  if (*str != '(')
+                    {
+                      *end_ptr = (gchar *) str;
+                      return gradient;
+                    }
+                }
+              else if (g_str_has_prefix (str, "to"))
+                {
+                  position = 1;
+                  str += strlen ("to");
+                  SKIP_SPACES (str);
+
+                  if (*str != '(')
+                    {
+                      *end_ptr = (gchar *) str;
+                      return gradient;
+                    }
+                }
+              else if (g_str_has_prefix (str, "color-stop"))
+                {
+                  str += strlen ("color-stop");
+                  SKIP_SPACES (str);
+
+                  if (*str != '(')
+                    {
+                      *end_ptr = (gchar *) str;
+                      return gradient;
+                    }
+
+                  str++;
+                  SKIP_SPACES (str);
+
+                  position = g_strtod (str, &end);
+
+                  str = end;
+                  SKIP_SPACES (str);
+
+                  if (*str != ',')
+                    {
+                      *end_ptr = (gchar *) str;
+                      return gradient;
+                    }
+                }
+              else
+                {
+                  *end_ptr = (gchar *) str;
+                  return gradient;
+                }
+
+              str++;
+              SKIP_SPACES (str);
+
+              color = symbolic_color_parse_str (str, &end);
+
+              str = end;
+              SKIP_SPACES (str);
+
+              if (*str != ')')
+                {
+                  *end_ptr = (gchar *) str;
+                  return gradient;
+                }
+
+              str++;
+              SKIP_SPACES (str);
+
+              if (color)
+                {
+                  gtk_gradient_add_color_stop (gradient, position, color);
+                  gtk_symbolic_color_unref (color);
+                }
+            }
+
+          if (*str != ')')
+            {
+              *end_ptr = (gchar *) str;
+              return gradient;
+            }
+
+          str++;
+        }
+    }
+
+  *end_ptr = (gchar *) str;
+
+  return gradient;
+}
+
+static GtkGradient *
+gradient_parse (const gchar *str)
+{
+  GtkGradient *gradient;
+  gchar *end;
+
+  gradient = gradient_parse_str (str, &end);
+
+  if (*end != '\0')
+    {
+      g_warning ("Error parsing pattern \"%s\", stopped at char %ld : '%c'",
+                 str, end - str, *end);
+
+      if (gradient)
+        {
+          gtk_gradient_unref (gradient);
+          gradient = NULL;
+        }
+    }
+
+  return gradient;
 }
 
 static gboolean
@@ -1439,6 +1666,21 @@ css_provider_parse_value (const gchar *value_str,
 
       if (parsed)
         g_value_set_boxed (value, &border);
+    }
+  else if (type == GDK_TYPE_CAIRO_PATTERN)
+    {
+      GtkGradient *gradient;
+
+      gradient = gradient_parse (value_str);
+
+      if (gradient)
+        {
+          g_value_unset (value);
+          g_value_init (value, GTK_TYPE_GRADIENT);
+          g_value_take_boxed (value, gradient);
+        }
+      else
+        parsed = FALSE;
     }
   else
     {
