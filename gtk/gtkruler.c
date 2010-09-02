@@ -304,6 +304,26 @@ gtk_ruler_new (GtkOrientation orientation)
                        NULL);
 }
 
+/**
+ * gtk_ruler_invalidate_ticks:
+ * @ruler: the ruler to invalidate
+ *
+ * For performance reasons, #GtkRuler keeps a backbuffer containing the
+ * prerendered contents of the ticks. To cause a repaint this buffer,
+ * call this function instead of gtk_widget_queue_draw().
+ **/
+static void
+gtk_ruler_invalidate_ticks (GtkRuler *ruler)
+{
+  g_return_if_fail (GTK_IS_RULER (ruler));
+
+  if (ruler->priv->backing_store == NULL)
+    return;
+
+  gtk_ruler_draw_ticks (ruler);
+  gtk_widget_queue_draw (GTK_WIDGET (ruler));
+}
+
 void
 gtk_ruler_set_metric (GtkRuler      *ruler,
 		      GtkMetricType  metric)
@@ -316,10 +336,9 @@ gtk_ruler_set_metric (GtkRuler      *ruler,
 
   priv->metric = (GtkRulerMetric *) &ruler_metrics[metric];
 
-  if (gtk_widget_is_drawable (GTK_WIDGET (ruler)))
-    gtk_widget_queue_draw (GTK_WIDGET (ruler));
-
   g_object_notify (G_OBJECT (ruler), "metric");
+
+  gtk_ruler_invalidate_ticks (ruler);
 }
 
 /**
@@ -396,8 +415,7 @@ gtk_ruler_set_range (GtkRuler *ruler,
     }
   g_object_thaw_notify (G_OBJECT (ruler));
 
-  if (gtk_widget_is_drawable (GTK_WIDGET (ruler)))
-    gtk_widget_queue_draw (GTK_WIDGET (ruler));
+  gtk_ruler_invalidate_ticks (ruler);
 }
 
 /**
@@ -589,9 +607,7 @@ gtk_ruler_motion_notify (GtkWidget      *widget,
 
   g_object_notify (G_OBJECT (ruler), "position");
 
-  /*  Make sure the ruler has been allocated already  */
-  if (priv->backing_store != NULL)
-    gtk_ruler_draw_pos (ruler);
+  gtk_widget_queue_draw (widget);
 
   return FALSE;
 }
@@ -605,8 +621,6 @@ gtk_ruler_expose (GtkWidget      *widget,
       GtkRuler *ruler = GTK_RULER (widget);
       GtkRulerPrivate *priv = ruler->priv;
       cairo_t *cr;
-
-      gtk_ruler_draw_ticks (ruler);
 
       cr = gdk_cairo_create (gtk_widget_get_window (widget));
       cairo_set_source_surface (cr, priv->backing_store, 0, 0);
@@ -641,6 +655,8 @@ gtk_ruler_make_pixmap (GtkRuler *ruler)
 
   priv->xsrc = 0;
   priv->ysrc = 0;
+
+  gtk_ruler_draw_ticks (ruler);
 }
 
 static void
