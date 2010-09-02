@@ -3068,8 +3068,6 @@ gtk_status_icon_get_title
 gtk_status_icon_set_name
 gtk_status_icon_set_visible
 gtk_status_icon_get_visible
-gtk_status_icon_set_blinking
-gtk_status_icon_get_blinking
 gtk_status_icon_is_embedded
 gtk_status_icon_position_menu
 gtk_status_icon_get_geometry

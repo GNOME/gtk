@@ -140,11 +140,6 @@ struct _GtkStatusIconPrivate
       GIcon     *gicon;
     } image_data;
 
-  GdkPixbuf    *blank_icon;
-  guint         blinking_timeout;
-
-  guint         blinking : 1;
-  guint         blink_off : 1;
   guint         visible : 1;
 };
 
@@ -189,7 +184,6 @@ static gboolean gtk_status_icon_button_press     (GtkStatusIcon  *status_icon,
 						  GdkEventButton *event);
 static gboolean gtk_status_icon_button_release   (GtkStatusIcon  *status_icon,
 						  GdkEventButton *event);
-static void     gtk_status_icon_disable_blinking (GtkStatusIcon  *status_icon);
 static void     gtk_status_icon_reset_image_data (GtkStatusIcon  *status_icon);
 static void     gtk_status_icon_update_image    (GtkStatusIcon *status_icon);
 
@@ -284,14 +278,6 @@ gtk_status_icon_class_init (GtkStatusIconClass *class)
  							P_("The screen where this status icon will be displayed"),
 							GDK_TYPE_SCREEN,
  							GTK_PARAM_READWRITE));
-
-  g_object_class_install_property (gobject_class,
-				   PROP_BLINKING,
-				   g_param_spec_boolean ("blinking",
-							 P_("Blinking"),
-							 P_("Whether the status icon is blinking"),
-							 FALSE,
-							 GTK_PARAM_READWRITE));
 
   g_object_class_install_property (gobject_class,
 				   PROP_VISIBLE,
@@ -972,13 +958,7 @@ gtk_status_icon_finalize (GObject *object)
   GtkStatusIcon *status_icon = GTK_STATUS_ICON (object);
   GtkStatusIconPrivate *priv = status_icon->priv;
 
-  gtk_status_icon_disable_blinking (status_icon);
-  
   gtk_status_icon_reset_image_data (status_icon);
-
-  if (priv->blank_icon)
-    g_object_unref (priv->blank_icon);
-  priv->blank_icon = NULL;
 
 #ifdef GDK_WINDOWING_X11
   g_signal_handlers_disconnect_by_func (priv->tray_icon,
@@ -1059,9 +1039,6 @@ gtk_status_icon_set_property (GObject      *object,
     case PROP_SCREEN:
       gtk_status_icon_set_screen (status_icon, g_value_get_object (value));
       break;
-    case PROP_BLINKING:
-      gtk_status_icon_set_blinking (status_icon, g_value_get_boolean (value));
-      break;
     case PROP_VISIBLE:
       gtk_status_icon_set_visible (status_icon, g_value_get_boolean (value));
       break;
@@ -1132,9 +1109,6 @@ gtk_status_icon_get_property (GObject    *object,
       break;
     case PROP_SCREEN:
       g_value_set_object (value, gtk_status_icon_get_screen (status_icon));
-      break;
-    case PROP_BLINKING:
-      g_value_set_boolean (value, gtk_status_icon_get_blinking (status_icon));
       break;
     case PROP_VISIBLE:
       g_value_set_boolean (value, gtk_status_icon_get_visible (status_icon));
@@ -1321,37 +1295,6 @@ emit_size_changed_signal (GtkStatusIcon *status_icon,
 
 #endif
 
-static GdkPixbuf *
-gtk_status_icon_blank_icon (GtkStatusIcon *status_icon)
-{
-  GtkStatusIconPrivate *priv = status_icon->priv;
-
-  if (priv->blank_icon)
-    {
-      gint width, height;
-
-      width  = gdk_pixbuf_get_width (priv->blank_icon);
-      height = gdk_pixbuf_get_height (priv->blank_icon);
-
-
-      if (width == priv->image_width && height == priv->image_height)
-	return priv->blank_icon;
-      else
-	{
-	  g_object_unref (priv->blank_icon);
-	  priv->blank_icon = NULL;
-	}
-    }
-
-  priv->blank_icon = gdk_pixbuf_new (GDK_COLORSPACE_RGB, TRUE, 8,
-				     priv->image_width, 
-				     priv->image_height);
-  if (priv->blank_icon)
-    gdk_pixbuf_fill (priv->blank_icon, 0);
-
-  return priv->blank_icon;
-}
-
 #ifdef GDK_WINDOWING_X11
 
 static GtkIconSize
@@ -1399,30 +1342,6 @@ gtk_status_icon_update_image (GtkStatusIcon *status_icon)
 #ifdef GDK_WINDOWING_WIN32
   HICON prev_hicon;
 #endif
-
-  if (priv->blink_off)
-    {
-#ifdef GDK_WINDOWING_X11
-      gtk_image_set_from_pixbuf (GTK_IMAGE (priv->image),
-				 gtk_status_icon_blank_icon (status_icon));
-#endif
-#ifdef GDK_WINDOWING_WIN32
-      prev_hicon = priv->nid.hIcon;
-      priv->nid.hIcon = gdk_win32_pixbuf_to_hicon_libgtk_only (gtk_status_icon_blank_icon (status_icon));
-      priv->nid.uFlags |= NIF_ICON;
-      if (priv->nid.hWnd != NULL && priv->visible)
-	if (!Shell_NotifyIconW (NIM_MODIFY, &priv->nid))
-	  g_warning (G_STRLOC ": Shell_NotifyIcon(NIM_MODIFY) failed");
-      if (prev_hicon)
-	DestroyIcon (prev_hicon);
-#endif
-#ifdef GDK_WINDOWING_QUARTZ
-      QUARTZ_POOL_ALLOC;
-      [priv->status_item setImage:gtk_status_icon_blank_icon (status_icon)];
-      QUARTZ_POOL_RELEASE;
-#endif
-      return;
-    }
 
   switch (priv->storage_type)
     {
@@ -2293,49 +2212,6 @@ gtk_status_icon_get_screen (GtkStatusIcon *status_icon)
 #endif
 }
 
-static gboolean
-gtk_status_icon_blinker (GtkStatusIcon *status_icon)
-{
-  GtkStatusIconPrivate *priv = status_icon->priv;
-  
-  priv->blink_off = !priv->blink_off;
-
-  gtk_status_icon_update_image (status_icon);
-
-  return TRUE;
-}
-
-static void
-gtk_status_icon_enable_blinking (GtkStatusIcon *status_icon)
-{
-  GtkStatusIconPrivate *priv = status_icon->priv;
-  
-  if (!priv->blinking_timeout)
-    {
-      gtk_status_icon_blinker (status_icon);
-
-      priv->blinking_timeout =
-	gdk_threads_add_timeout (BLINK_TIMEOUT, 
-		       (GSourceFunc) gtk_status_icon_blinker, 
-		       status_icon);
-    }
-}
-
-static void
-gtk_status_icon_disable_blinking (GtkStatusIcon *status_icon)
-{
-  GtkStatusIconPrivate *priv = status_icon->priv;
-  
-  if (priv->blinking_timeout)
-    {
-      g_source_remove (priv->blinking_timeout);
-      priv->blinking_timeout = 0;
-      priv->blink_off = FALSE;
-
-      gtk_status_icon_update_image (status_icon);
-    }
-}
-
 /**
  * gtk_status_icon_set_visible:
  * @status_icon: a #GtkStatusIcon
@@ -2407,62 +2283,6 @@ gtk_status_icon_get_visible (GtkStatusIcon *status_icon)
   g_return_val_if_fail (GTK_IS_STATUS_ICON (status_icon), FALSE);
 
   return status_icon->priv->visible;
-}
-
-/**
- * gtk_status_icon_set_blinking:
- * @status_icon: a #GtkStatusIcon
- * @blinking: %TRUE to turn blinking on, %FALSE to turn it off
- * 
- * Makes the status icon start or stop blinking. 
- * Note that blinking user interface elements may be problematic
- * for some users, and thus may be turned off, in which case
- * this setting has no effect.
- *
- * Since: 2.10
- **/
-void
-gtk_status_icon_set_blinking (GtkStatusIcon *status_icon,
-			      gboolean       blinking)
-{
-  GtkStatusIconPrivate *priv;
-
-  g_return_if_fail (GTK_IS_STATUS_ICON (status_icon));
-
-  priv = status_icon->priv;
-
-  blinking = blinking != FALSE;
-
-  if (priv->blinking != blinking)
-    {
-      priv->blinking = blinking;
-
-      if (blinking)
-	gtk_status_icon_enable_blinking (status_icon);
-      else
-	gtk_status_icon_disable_blinking (status_icon);
-
-      g_object_notify (G_OBJECT (status_icon), "blinking");
-    }
-}
-
-/**
- * gtk_status_icon_get_blinking:
- * @status_icon: a #GtkStatusIcon
- * 
- * Returns whether the icon is blinking, see 
- * gtk_status_icon_set_blinking().
- * 
- * Return value: %TRUE if the icon is blinking
- *
- * Since: 2.10
- **/
-gboolean
-gtk_status_icon_get_blinking (GtkStatusIcon *status_icon)
-{
-  g_return_val_if_fail (GTK_IS_STATUS_ICON (status_icon), FALSE);
-
-  return status_icon->priv->blinking;
 }
 
 /**

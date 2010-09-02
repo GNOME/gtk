@@ -107,16 +107,6 @@ timeout_handler (gpointer data)
 }
 
 static void
-blink_toggle_toggled (GtkToggleButton *toggle)
-{
-  GSList *l;
-
-  for (l = icons; l; l = l->next)
-    gtk_status_icon_set_blinking (GTK_STATUS_ICON (l->data), 
-                                  gtk_toggle_button_get_active (toggle));
-}
-
-static void
 visible_toggle_toggled (GtkToggleButton *toggle)
 {
   GSList *l;
@@ -177,15 +167,6 @@ icon_activated (GtkStatusIcon *icon)
       g_signal_connect (toggle, "toggled", 
 			G_CALLBACK (visible_toggle_toggled), NULL);
 
-      toggle = gtk_toggle_button_new_with_mnemonic ("_Blink the icon");
-      gtk_box_pack_end (GTK_BOX (content_area), toggle, TRUE, TRUE, 6);
-      gtk_widget_show (toggle);
-
-      gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (toggle),
-				    gtk_status_icon_get_blinking (icon));
-      g_signal_connect (toggle, "toggled", 
-			G_CALLBACK (blink_toggle_toggled), NULL);
-
       toggle = gtk_toggle_button_new_with_mnemonic ("_Change images");
       gtk_box_pack_end (GTK_BOX (content_area), toggle, TRUE, TRUE, 6);
       gtk_widget_show (toggle);
@@ -197,35 +178,6 @@ icon_activated (GtkStatusIcon *icon)
     }
 
   gtk_window_present (GTK_WINDOW (dialog));
-}
-
-static void
-check_activated (GtkCheckMenuItem *item)
-{
-  GSList *l;
-  GdkScreen *screen;
-
-  screen = NULL;
-
-  for (l = icons; l; l = l->next)
-    {
-      GtkStatusIcon *icon = l->data;
-      GdkScreen *orig_screen;
-
-      orig_screen = gtk_status_icon_get_screen (icon);
-
-      if (screen != NULL)
-        gtk_status_icon_set_screen (icon, screen);
-
-      screen = orig_screen;
-
-      gtk_status_icon_set_blinking (icon,
-                                    gtk_check_menu_item_get_active (item));
-    }
-
-  g_assert (screen != NULL);
-
-  gtk_status_icon_set_screen (GTK_STATUS_ICON (icons->data), screen);
 }
 
 static void
@@ -278,11 +230,6 @@ popup_menu (GtkStatusIcon *icon,
 
   gtk_menu_set_screen (GTK_MENU (menu),
                        gtk_status_icon_get_screen (icon));
-
-  menuitem = gtk_check_menu_item_new_with_label ("Blink");
-  gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (menuitem), 
-				  gtk_status_icon_get_blinking (icon));
-  g_signal_connect (menuitem, "activate", G_CALLBACK (check_activated), NULL);
 
   gtk_menu_shell_append (GTK_MENU_SHELL (menu), menuitem);
 
@@ -340,7 +287,6 @@ main (int argc, char **argv)
       g_signal_connect (icon, "notify::orientation", G_CALLBACK (orientation_changed_cb), NULL);
       g_signal_connect (icon, "notify::screen", G_CALLBACK (screen_changed_cb), NULL);
       g_print ("icon size %d\n", gtk_status_icon_get_size (icon));
-      gtk_status_icon_set_blinking (GTK_STATUS_ICON (icon), FALSE);
 
       g_signal_connect (icon, "activate",
                         G_CALLBACK (icon_activated), NULL);
