@@ -1,3 +1,71 @@
+Overview of Changes from GTK+ 2.90.6 to 2.90.7
+==============================================
+
+* Various deprecated APIs have been removed:
+ - the GtkWidget::draw-border style property
+ - the GTK_CALENDAR_WEEK_START_MONDAY option
+ - the GtkFrame::shadow and GtkHandleBox::shadow properties
+ - the GtkTextView::page-horizontally signal
+ - the GDK_WINDOW_DIALOG window type
+ - the GTK_SELECTION_EXTENDED selection mode
+
+* GtkWrapBox is a new container, which distributes its children
+  over multiple rows/columns
+
+* GTK+ now uses standard icon names when looking up stock icons
+
+* More widgets and cell renderers have been converted to support
+  width-for-height: GtkCellRendererText, GtkAccelLabel, GtkCellView,
+  GtkComboBox, GtkMenu, GtkMenuItem
+
+* Button boxes are now semi-homogeneous.
+
+* The directfb backend has been removed
+
+* Bugs fixed:
+  77669 GtkWrapBox for gtk itself, not gimp?
+  84188 "Dialogue" button widths should not be homogenous
+ 414712 gtk_container_set_focus_child leaks widget
+ 527499 FileFilter combo becames too wide
+ 528257 File selector and stock string problems
+ 605186 Use G_DEFINE_INTERFACE macro
+ 614006 File chooser crashes when creating a new folder...
+ 616401 Noneffective gdk_keymap_map_virtual_modifiers in early use
+ 626710 GailScaleButton calculates wrong value for minimum increment
+ 627028 Marked state of calendar day is not accessible
+ 627139 gtkfilechooserentry shows completion progress tooltip on first show
+ 627445 Removal of GtkWidget::draw-border breaks gtk_widget_queue_draw()
+ 627580 GtkFontSelection: don't notify the non-existent "font" property
+ 627643 gtkaboutdialog gettext problem
+ 627828 Drag and drop between treeviews in different window groups broken...
+ 627843 set_active_iter doc: remove restriction on path length
+ 627867 tests/testsocket is broken
+ 627912 misprint in the desc. of "hover-expand" and "hover-selection"...
+ 628160 introspection: Update to new scanner API
+ 628308 docs referencing non existing icons
+
+* Translation updates
+ Arabic
+ Armenian
+ Brazilian Portuguese
+ British English
+ Bulgarian
+ Danish
+ Estonian
+ French
+ Galician
+ Hebrew
+ Hungarian
+ Indonesian
+ Norwegian bokmål
+ Norwegian Nynorsk
+ Serbian
+ Slovenian
+ Spanish
+ Telugu
+ Traditional Chinese
+
+
 Overview of Changes from GTK+ 2.90.5 to 2.90.6
 ==============================================
 
