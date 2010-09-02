@@ -89,6 +89,8 @@ gtk_style_set_class_init (GtkStyleSetClass *klass)
   gtk_style_set_register_property ("padding", GTK_TYPE_BORDER, NULL, NULL);
   gtk_style_set_register_property ("border", G_TYPE_INT, NULL, NULL);
 
+  gtk_style_set_register_property ("background-image", GDK_TYPE_CAIRO_PATTERN, NULL, NULL);
+
   g_value_init (&val, GTK_TYPE_THEMING_ENGINE);
   g_value_set_object (&val, (GObject *) gtk_theming_engine_load (NULL));
   gtk_style_set_register_property ("engine", GTK_TYPE_THEMING_ENGINE, &val, NULL);
