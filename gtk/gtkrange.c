@@ -597,21 +597,6 @@ gtk_range_class_init (GtkRangeClass *class)
 							       0.0, 1.0, 0.5,
 							       GTK_PARAM_READABLE));
 
-  /**
-   * GtkRange:stepper-position-details:
-   *
-   * When %TRUE, the detail string for rendering the steppers will be
-   * suffixed with information about the stepper position.
-   *
-   * Since: 2.22
-   */
-  gtk_widget_class_install_style_property (widget_class,
-                                           g_param_spec_boolean ("stepper-position-details",
-                                                                 P_("Stepper Position Details"),
-                                                                 P_("When TRUE, the detail string for rendering the steppers is suffixed with position information"),
-                                                                 FALSE,
-                                                                 GTK_PARAM_READABLE));
-
   g_type_class_add_private (class, sizeof (GtkRangePrivate));
 }
 
@@ -1731,64 +1716,48 @@ gtk_range_get_stepper_detail (GtkRange *range,
   GtkRangePrivate *priv = range->priv;
   const gchar *stepper_detail;
   gboolean need_orientation;
-  gboolean need_position;
+  gchar *detail;
+  const gchar *position = NULL;
 
   if (priv->stepper_detail_quark[stepper])
     return g_quark_to_string (priv->stepper_detail_quark[stepper]);
 
   stepper_detail = GTK_RANGE_GET_CLASS (range)->stepper_detail;
 
-  need_orientation = stepper_detail && stepper_detail[0] == 'X';
-
-  gtk_widget_style_get (GTK_WIDGET (range),
-                        "stepper-position-details", &need_position,
-                        NULL);
-
-  if (need_orientation || need_position)
+  switch (stepper)
     {
-      gchar *detail;
-      const gchar *position = NULL;
-
-      if (need_position)
-        {
-          switch (stepper)
-            {
-            case STEPPER_A:
-              position = "_start";
-              break;
-            case STEPPER_B:
-              if (priv->has_stepper_a)
-                position = "_start_inner";
-              else
-                position = "_start";
-              break;
-            case STEPPER_C:
-              if (priv->has_stepper_d)
-                position = "_end_inner";
-              else
-                position = "_end";
-              break;
-            case STEPPER_D:
-              position = "_end";
-              break;
-            default:
-              g_assert_not_reached ();
-            }
-        }
-
-      detail = g_strconcat (stepper_detail, position, NULL);
-
-      if (need_orientation)
-        detail[0] = priv->orientation == GTK_ORIENTATION_HORIZONTAL ? 'h' : 'v';
-
-      priv->stepper_detail_quark[stepper] = g_quark_from_string (detail);
-
-      g_free (detail);
-
-      return g_quark_to_string (priv->stepper_detail_quark[stepper]);
+    case STEPPER_A:
+      position = "_start";
+      break;
+    case STEPPER_B:
+      if (priv->has_stepper_a)
+        position = "_start_inner";
+      else
+        position = "_start";
+      break;
+    case STEPPER_C:
+      if (priv->has_stepper_d)
+        position = "_end_inner";
+      else
+        position = "_end";
+      break;
+    case STEPPER_D:
+      position = "_end";
+      break;
+    default:
+      g_assert_not_reached ();
     }
 
-  return stepper_detail;
+  detail = g_strconcat (stepper_detail, position, NULL);
+
+  if (detail[0] == 'X')
+    detail[0] = priv->orientation == GTK_ORIENTATION_HORIZONTAL ? 'h' : 'v';
+
+  priv->stepper_detail_quark[stepper] = g_quark_from_string (detail);
+
+  g_free (detail);
+
+  return g_quark_to_string (priv->stepper_detail_quark[stepper]);
 }
 
 static void
