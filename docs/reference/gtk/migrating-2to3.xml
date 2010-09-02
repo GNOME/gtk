@@ -381,6 +381,35 @@ cairo_destroy (cr);
   </section>
 
   <section>
+    <title>GtkProgressBar orientation</title>
+
+    <para>
+      In GTK+ 2.x, #GtkProgressBar and #GtkCellRendererProgress were using the
+      GtkProgressBarOrientation enumeration to specify their orientation and
+      direction. In GTK+ 3, both the widget and the cell renderer implement
+      #GtkOrientable, and have an additional 'inverted' property to determine
+      their direction. Therefore, a call to gtk_progress_bar_set_orientation()
+      needs to be replaced by a pair of calls to
+      gtk_orientable_set_orientation() and gtk_progress_bar_set_inverted().
+      The following values correspond:
+      <table>
+        <tgroup cols="3">
+          <thead>
+            <row><entry>GTK+ 2.x</entry><entry morerows="1">GTK+ 3</entry></row>
+            <row><entry>GtkProgressBarOrientation</entry><entry>GtkOrientation</entry><entry>inverted</entry></row>
+          </thead>
+          <tbody>
+            <row><entry>GTK_PROGRESS_LEFT_TO_RIGHT</entry><entry>GTK_ORIENTATION_HORIZONTAL</entry><entry>FALSE</entry></row>
+            <row><entry>GTK_PROGRESS_RIGHT_TO_LEFT</entry><entry>GTK_ORIENTATION_HORIZONTAL</entry><entry>TRUE</entry></row>
+            <row><entry>GTK_PROGRESS_TOP_TO_BOTTOM</entry><entry>GTK_ORIENTATION_VERTICAL</entry><entry>FALSE</entry></row>
+            <row><entry>GTK_PROGRESS_BOTTOM_TO_TOP</entry><entry>GTK_ORIENTATION_VERTICAL</entry><entry>TRUE</entry></row>
+          </tbody>
+        </tgroup>
+      </table>
+    </para>
+  </section>
+
+  <section>
     <title>Prevent mixed linkage</title>
     <para>
       Linking against GTK+ 2.x and GTK+ 3 in the same process is problematic
