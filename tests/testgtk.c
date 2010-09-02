@@ -8561,12 +8561,12 @@ progressbar_toggle_orientation (GtkWidget *widget, gpointer data)
 
   i = gtk_combo_box_get_active (GTK_COMBO_BOX (widget));
 
-  if (i == GTK_PROGRESS_LEFT_TO_RIGHT || i == GTK_PROGRESS_RIGHT_TO_LEFT)
+  if (i == 0 || i == 1)
     gtk_orientable_set_orientation (GTK_ORIENTABLE (pdata->pbar), GTK_ORIENTATION_HORIZONTAL);
   else
     gtk_orientable_set_orientation (GTK_ORIENTABLE (pdata->pbar), GTK_ORIENTATION_VERTICAL);
  
-  if (i == GTK_PROGRESS_RIGHT_TO_LEFT || i == GTK_PROGRESS_BOTTOM_TO_TOP)
+  if (i == 1 || i == 2)
     gtk_progress_bar_set_inverted (GTK_PROGRESS_BAR (pdata->pbar), TRUE);
   else
     gtk_progress_bar_set_inverted (GTK_PROGRESS_BAR (pdata->pbar), FALSE);

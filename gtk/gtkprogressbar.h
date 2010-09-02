@@ -47,14 +47,6 @@ typedef struct _GtkProgressBar              GtkProgressBar;
 typedef struct _GtkProgressBarPrivate       GtkProgressBarPrivate;
 typedef struct _GtkProgressBarClass         GtkProgressBarClass;
 
-typedef enum
-{
-  GTK_PROGRESS_LEFT_TO_RIGHT,
-  GTK_PROGRESS_RIGHT_TO_LEFT,
-  GTK_PROGRESS_BOTTOM_TO_TOP,
-  GTK_PROGRESS_TOP_TO_BOTTOM
-} GtkProgressBarOrientation;
-
 struct _GtkProgressBar
 {
   GtkWidget parent;
