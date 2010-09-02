@@ -120,8 +120,8 @@ do_iconview_edit (GtkWidget *do_widget)
 
       gtk_icon_view_set_selection_mode (GTK_ICON_VIEW (icon_view),
 					GTK_SELECTION_SINGLE);
-      gtk_icon_view_set_orientation (GTK_ICON_VIEW (icon_view),
-				     GTK_ORIENTATION_HORIZONTAL);
+      gtk_icon_view_set_item_orientation (GTK_ICON_VIEW (icon_view),
+				          GTK_ORIENTATION_HORIZONTAL);
       gtk_icon_view_set_columns (GTK_ICON_VIEW (icon_view), 2);
       gtk_icon_view_set_reorderable (GTK_ICON_VIEW (icon_view), TRUE);
 
