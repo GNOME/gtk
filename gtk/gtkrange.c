@@ -567,21 +567,6 @@ gtk_range_class_init (GtkRangeClass *class)
 							         GTK_PARAM_READABLE));
 
   /**
-   * GtkRange:trough-side-details:
-   *
-   * When %TRUE, the parts of the trough on the two sides of the 
-   * slider are drawn with different details.
-   *
-   * Since: 2.10
-   */
-  gtk_widget_class_install_style_property (widget_class,
-                                           g_param_spec_boolean ("trough-side-details",
-                                                                 P_("Trough Side Details"),
-                                                                 P_("When TRUE, the parts of the trough on the two sides of the slider are drawn with different details"),
-                                                                 FALSE,
-                                                                 GTK_PARAM_READABLE));
-
-  /**
    * GtkRange:trough-under-steppers:
    *
    * Whether to draw the trough across the full length of the range or
@@ -1990,7 +1975,6 @@ gtk_range_expose (GtkWidget      *widget,
                          2 * (focus_line_width + focus_padding));
       gint     height = (priv->range_rect.height -
                          2 * (focus_line_width + focus_padding));
-      gboolean trough_side_details;
       gboolean trough_under_steppers;
       gint     stepper_size;
       gint     stepper_spacing;
@@ -1999,7 +1983,6 @@ gtk_range_expose (GtkWidget      *widget,
       area.y += allocation.y;
 
       gtk_widget_style_get (GTK_WIDGET (range),
-                            "trough-side-details",   &trough_side_details,
                             "trough-under-steppers", &trough_under_steppers,
                             "stepper-size",          &stepper_size,
                             "stepper-spacing",       &stepper_spacing,
@@ -2008,7 +1991,7 @@ gtk_range_expose (GtkWidget      *widget,
       if (stepper_spacing > 0)
         trough_under_steppers = FALSE;
 
-      if (! trough_under_steppers)
+      if (!trough_under_steppers)
         {
           gint offset  = 0;
           gint shorter = 0;
@@ -2050,16 +2033,6 @@ gtk_range_expose (GtkWidget      *widget,
             }
 	}
 
-      if (! trough_side_details)
-        {
-          gtk_paint_box (style, window,
-                         sensitive ? GTK_STATE_ACTIVE : GTK_STATE_INSENSITIVE,
-                         GTK_SHADOW_IN,
-                         &area, GTK_WIDGET(range), "trough",
-                         x, y,
-                         width, height);
-        }
-      else
         {
 	  gint trough_change_pos_x = width;
 	  gint trough_change_pos_y = height;
