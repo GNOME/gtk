@@ -115,8 +115,13 @@ typedef enum
 
 typedef struct
 {
+#if 0
   GdkDrawable *drawable;
   GdkGC *gc;
+#else
+  cairo_t *cr;
+  cairo_surface_t *crs;
+#endif
   
   gint x_offset;
   gint y_offset;

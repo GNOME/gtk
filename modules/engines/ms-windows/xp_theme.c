@@ -37,6 +37,9 @@
 #include "gdk/win32/gdkwin32.h"
 #endif
 
+#include <cairo-win32.h>
+#include <gdk/gdk.h>
+
 #include "xp_theme_defs.h"
 
 #ifndef TMT_CAPTIONFONT
@@ -897,6 +900,7 @@ get_window_dc (GtkStyle *style,
 	       gint x, gint y, gint width, gint height,
 	       RECT *rect_out)
 {
+#if 0
   GdkDrawable *drawable = NULL;
   GdkGC *gc = style->dark_gc[state_type];
   gint x_offset, y_offset;
@@ -920,14 +924,43 @@ get_window_dc (GtkStyle *style,
   dc_info_out->y_offset = y_offset;
   
   return gdk_win32_hdc_get (drawable, gc, 0);
+#else
+  cairo_t *cr;
+  cairo_surface_t *crs;
+  gint x_offset, y_offset;
+  GdkWindowObject *private = (GdkWindowObject *)GDK_DRAWABLE(window);
+
+  cr = gdk_cairo_create (window);
+  crs = cairo_get_target (cr);
+  x_offset = -private->abs_x;
+  y_offset = -private->abs_y;
+
+
+  dc_info_out->data = NULL;
+  
+  rect_out->left = x - x_offset;
+  rect_out->top = y - y_offset;
+  rect_out->right = rect_out->left + width;
+  rect_out->bottom = rect_out->top + height;
+  
+  dc_info_out->cr = cr;
+  dc_info_out->x_offset = x_offset;
+  dc_info_out->y_offset = y_offset;
+  
+  return cairo_win32_surface_get_dc (crs);
+#endif
 }
 
 void
 release_window_dc (XpDCInfo *dc_info)
 {
+#if 0
   gdk_win32_hdc_release (dc_info->drawable, dc_info->gc, 0);
 
   gdk_win32_end_direct_draw_libgtk_only (dc_info->data);
+#else
+  cairo_destroy (dc_info->cr);
+#endif
 }
 
 gboolean
