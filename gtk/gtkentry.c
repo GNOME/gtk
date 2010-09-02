@@ -3281,7 +3281,8 @@ gtk_entry_draw_frame (GtkWidget      *widget,
   gdk_drawable_get_size (window, &width, &height);
 
   /* Fix a problem with some themes which assume that entry->text_area's
-   * width equals widget->window's width */
+   * width equals widget->window's width
+   * http://bugzilla.gnome.org/show_bug.cgi?id=466000 */
   if (GTK_IS_SPIN_BUTTON (widget))
     {
       gint xborder, yborder;
