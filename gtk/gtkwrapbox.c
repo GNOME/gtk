@@ -55,12 +55,9 @@ enum {
 enum
 {
   CHILD_PROP_0,
-  CHILD_PROP_X_EXPAND,
-  CHILD_PROP_X_FILL,
-  CHILD_PROP_Y_EXPAND,
-  CHILD_PROP_Y_FILL,
-  CHILD_PROP_X_PADDING,
-  CHILD_PROP_Y_PADDING
+  CHILD_PROP_PACKING,
+  CHILD_PROP_HORIZONTAL_PADDING,
+  CHILD_PROP_VERTICAL_PADDING
 };
 
 struct _GtkWrapBoxPrivate
@@ -80,15 +77,11 @@ struct _GtkWrapBoxPrivate
 
 struct _GtkWrapBoxChild
 {
-  GtkWidget *widget;
+  GtkWidget        *widget;
 
-  guint16    xpadding;
-  guint16    ypadding;
-
-  guint16    xexpand : 1;
-  guint16    xfill   : 1;
-  guint16    yexpand : 1;
-  guint16    yfill   : 1;
+  guint16           hpadding;
+  guint16           vpadding;
+  GtkWrapBoxPacking packing;
 };
 
 /* GObjectClass */
@@ -277,75 +270,29 @@ gtk_wrap_box_class_init (GtkWrapBoxClass *class)
   /* GtkContainerClass child properties */
 
   /**
-   * GtkWrapBox:x-expand:
+   * GtkWrapBox:packing:
    *
-   * Whether the child expands horizontally.
-   *
+   * The #GtkWrapBoxPacking options to specify how to pack a child into the box.
    */
   gtk_container_class_install_child_property (container_class,
-                                              CHILD_PROP_X_EXPAND,
-                                              g_param_spec_boolean
-                                              ("x-expand",
-                                               P_("Horizontally expand"),
-                                               P_("Whether the child expands horizontally."),
-                                               FALSE,
+                                              CHILD_PROP_PACKING,
+                                              g_param_spec_flags
+                                              ("packing",
+                                               P_("Packing"),
+                                               P_("The packing options to use for this child"),
+					       GTK_TYPE_WRAP_BOX_PACKING, 0,
                                                GTK_PARAM_READWRITE));
 
   /**
-   * GtkWrapBox:x-fill:
-   *
-   * Whether the child fills its allocated horizontal space.
-   *
-   */
-  gtk_container_class_install_child_property (container_class,
-                                              CHILD_PROP_X_FILL,
-                                              g_param_spec_boolean
-                                              ("x-fill",
-                                               P_("Horizontally fills"),
-                                               P_("Whether the child fills its allocated horizontal space."),
-                                               FALSE,
-                                               GTK_PARAM_READWRITE));
-
-  /**
-   * GtkWrapBox:y-expand:
-   *
-   * Whether the child expands vertically.
-   *
-   */
-  gtk_container_class_install_child_property (container_class,
-                                              CHILD_PROP_Y_EXPAND,
-                                              g_param_spec_boolean
-                                              ("y-expand",
-                                               P_("Vertically expand"),
-                                               P_("Whether the child expands vertically."),
-                                               FALSE,
-                                               GTK_PARAM_READWRITE));
-
-  /**
-   * GtkWrapBox:y-fill:
-   *
-   * Whether the child fills its allocated vertical space.
-   *
-   */
-  gtk_container_class_install_child_property (container_class,
-                                              CHILD_PROP_Y_FILL,
-                                              g_param_spec_boolean
-                                              ("y-fill",
-                                               P_("Vertically fills"),
-                                               P_("Whether the child fills its allocated vertical space."),
-                                               FALSE,
-                                               GTK_PARAM_READWRITE));
-
-  /**
-   * GtkWrapBox:x-padding:
+   * GtkWrapBox:horizontal-padding:
    *
    * Extra space to put between the child and its left and right neighbors, in pixels.
    *
    */
   gtk_container_class_install_child_property (container_class,
-                                              CHILD_PROP_X_PADDING,
+                                              CHILD_PROP_HORIZONTAL_PADDING,
                                               g_param_spec_uint
-                                              ("x-padding",
+                                              ("horizontal-padding",
                                                P_("Horizontal padding"),
                                                P_("Extra space to put between the child and "
                                                   "its left and right neighbors, in pixels"),
@@ -354,15 +301,15 @@ gtk_wrap_box_class_init (GtkWrapBoxClass *class)
 
 
   /**
-   * GtkWrapBox:y-padding:
+   * GtkWrapBox:vertical-padding:
    *
    * Extra space to put between the child and its upper and lower neighbors, in pixels.
    *
    */
   gtk_container_class_install_child_property (container_class,
-                                              CHILD_PROP_Y_PADDING,
+                                              CHILD_PROP_VERTICAL_PADDING,
                                               g_param_spec_uint
-                                              ("y-padding",
+                                              ("vertical-padding",
                                                P_("Vertical padding"),
                                                P_("Extra space to put between the child and "
                                                   "its upper and lower neighbors, in pixels"),
@@ -512,8 +459,8 @@ get_visible_expand_children (GtkWrapBox     *box,
       if (!gtk_widget_get_visible (child->widget))
         continue;
 
-      if ((orientation == GTK_ORIENTATION_HORIZONTAL && child->xexpand) ||
-          (orientation == GTK_ORIENTATION_VERTICAL   && child->yexpand))
+      if ((orientation == GTK_ORIENTATION_HORIZONTAL && (child->packing & GTK_WRAP_BOX_H_EXPAND) != 0) ||
+          (orientation == GTK_ORIENTATION_VERTICAL   && (child->packing & GTK_WRAP_BOX_V_EXPAND) != 0))
         expand_children++;
 
       i++;
@@ -549,16 +496,16 @@ get_average_item_size (GtkWrapBox      *box,
           gtk_size_request_get_width (GTK_SIZE_REQUEST (child->widget),
                                       &child_min, &child_nat);
 
-          child_min += child->xpadding * 2;
-          child_nat += child->xpadding * 2;
+          child_min += child->hpadding * 2;
+          child_nat += child->hpadding * 2;
         }
       else
         {
           gtk_size_request_get_height (GTK_SIZE_REQUEST (child->widget),
                                        &child_min, &child_nat);
 
-          child_min += child->ypadding * 2;
-          child_nat += child->ypadding * 2;
+          child_min += child->vpadding * 2;
+          child_nat += child->vpadding * 2;
         }
       max_min_size = MAX (max_min_size, child_min);
       max_nat_size = MAX (max_nat_size, child_nat);
@@ -597,18 +544,18 @@ get_largest_size_for_opposing_orientation (GtkWrapBox         *box,
       if (orientation == GTK_ORIENTATION_HORIZONTAL)
         {
           gtk_size_request_get_height_for_width (GTK_SIZE_REQUEST (child->widget),
-                                                 item_size - child->xpadding * 2,
+                                                 item_size - child->hpadding * 2,
                                                  &child_min, &child_nat);
-          child_min += child->ypadding * 2;
-          child_nat += child->ypadding * 2;
+          child_min += child->vpadding * 2;
+          child_nat += child->vpadding * 2;
         }
       else
         {
           gtk_size_request_get_width_for_height (GTK_SIZE_REQUEST (child->widget),
-                                                 item_size - child->ypadding * 2,
+                                                 item_size - child->vpadding * 2,
                                                  &child_min, &child_nat);
-          child_min += child->xpadding * 2;
-          child_nat += child->xpadding * 2;
+          child_min += child->hpadding * 2;
+          child_nat += child->hpadding * 2;
         }
 
       max_min_size = MAX (max_min_size, child_min);
@@ -663,18 +610,18 @@ get_largest_size_for_line_in_opposing_orientation (GtkWrapBox      *box,
       if (orientation == GTK_ORIENTATION_HORIZONTAL)
         {
           gtk_size_request_get_height_for_width (GTK_SIZE_REQUEST (child->widget),
-                                                 this_item_size - child->xpadding * 2,
+                                                 this_item_size - child->hpadding * 2,
                                                  &child_min, &child_nat);
-          child_min += child->ypadding * 2;
-          child_nat += child->ypadding * 2;
+          child_min += child->vpadding * 2;
+          child_nat += child->vpadding * 2;
         }
       else
         {
           gtk_size_request_get_width_for_height (GTK_SIZE_REQUEST (child->widget),
-                                                 this_item_size - child->ypadding * 2,
+                                                 this_item_size - child->vpadding * 2,
                                                  &child_min, &child_nat);
-          child_min += child->xpadding * 2;
-          child_nat += child->xpadding * 2;
+          child_min += child->hpadding * 2;
+          child_nat += child->hpadding * 2;
         }
 
       max_min_size = MAX (max_min_size, child_min);
@@ -738,13 +685,13 @@ get_largest_size_for_free_line_in_opposing_orientation (GtkWrapBox      *box,
         {
           gtk_size_request_get_width (GTK_SIZE_REQUEST (child->widget),
                                       NULL, &child_size);
-          child_size += child->xpadding * 2;
+          child_size += child->hpadding * 2;
         }
       else
         {
           gtk_size_request_get_height (GTK_SIZE_REQUEST (child->widget),
                                        NULL, &child_size);
-          child_size += child->ypadding * 2;
+          child_size += child->vpadding * 2;
         }
 
       if (i > 0)
@@ -779,7 +726,7 @@ get_largest_size_for_free_line_in_opposing_orientation (GtkWrapBox      *box,
                                       &requested.minimum_size,
                                       &requested.natural_size);
 
-          size -= child->xpadding * 2;
+          size -= child->hpadding * 2;
         }
       else
         {
@@ -787,7 +734,7 @@ get_largest_size_for_free_line_in_opposing_orientation (GtkWrapBox      *box,
                                        &requested.minimum_size,
                                        &requested.natural_size);
 
-          size -= child->ypadding * 2;
+          size -= child->vpadding * 2;
         }
 
       if (i > 0)
@@ -838,8 +785,8 @@ get_largest_size_for_free_line_in_opposing_orientation (GtkWrapBox      *box,
 
       g_assert (child == sizes[i].data);
 
-      if ((orientation == GTK_ORIENTATION_HORIZONTAL && child->xexpand) ||
-          (orientation == GTK_ORIENTATION_VERTICAL   && child->yexpand) ||
+      if ((orientation == GTK_ORIENTATION_HORIZONTAL && (child->packing & GTK_WRAP_BOX_H_EXPAND) != 0) ||
+          (orientation == GTK_ORIENTATION_VERTICAL   && (child->packing & GTK_WRAP_BOX_V_EXPAND) != 0) ||
           expand_children == 0)
         {
           sizes[i].minimum_size += expand_per_child;
@@ -855,16 +802,16 @@ get_largest_size_for_free_line_in_opposing_orientation (GtkWrapBox      *box,
           gtk_size_request_get_height_for_width (GTK_SIZE_REQUEST (child->widget),
                                                  sizes[i].minimum_size,
                                                  &child_min, &child_nat);
-          child_min += child->ypadding * 2;
-          child_nat += child->ypadding * 2;
+          child_min += child->vpadding * 2;
+          child_nat += child->vpadding * 2;
         }
       else
         {
           gtk_size_request_get_width_for_height (GTK_SIZE_REQUEST (child->widget),
                                                  sizes[i].minimum_size,
                                                  &child_min, &child_nat);
-          child_min += child->xpadding * 2;
-          child_nat += child->xpadding * 2;
+          child_min += child->hpadding * 2;
+          child_nat += child->hpadding * 2;
         }
 
       max_min_size = MAX (max_min_size, child_min);
@@ -905,25 +852,25 @@ allocate_child (GtkWrapBox      *box,
 
   if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
     {
-      child_allocation.x      = widget_allocation.x + item_offset + child->xpadding;
-      child_allocation.y      = widget_allocation.y + line_offset + child->ypadding;
-      child_allocation.width  = item_size - child->xpadding * 2;
-      child_allocation.height = line_size - child->ypadding * 2;
+      child_allocation.x      = widget_allocation.x + item_offset + child->hpadding;
+      child_allocation.y      = widget_allocation.y + line_offset + child->vpadding;
+      child_allocation.width  = item_size - child->hpadding * 2;
+      child_allocation.height = line_size - child->vpadding * 2;
     }
   else /* GTK_ORIENTATION_VERTICAL */
     {
-      child_allocation.x      = widget_allocation.x + line_offset + child->xpadding;
-      child_allocation.y      = widget_allocation.y + item_offset + child->ypadding;
-      child_allocation.width  = line_size - child->xpadding * 2;
-      child_allocation.height = item_size - child->ypadding * 2;
+      child_allocation.x      = widget_allocation.x + line_offset + child->hpadding;
+      child_allocation.y      = widget_allocation.y + item_offset + child->vpadding;
+      child_allocation.width  = line_size - child->hpadding * 2;
+      child_allocation.height = item_size - child->vpadding * 2;
     }
 
   request_mode = gtk_size_request_get_request_mode (GTK_SIZE_REQUEST (child->widget));
-  if (!child->xfill)
+  if (!(child->packing & GTK_WRAP_BOX_H_FILL))
     {
       gint width, height;
 
-      if (!child->yfill && request_mode == GTK_SIZE_REQUEST_WIDTH_FOR_HEIGHT)
+      if (!(child->packing & GTK_WRAP_BOX_V_FILL) && request_mode == GTK_SIZE_REQUEST_WIDTH_FOR_HEIGHT)
         {
           gtk_size_request_get_height (GTK_SIZE_REQUEST (child->widget), NULL, &height);
 
@@ -943,11 +890,11 @@ allocate_child (GtkWrapBox      *box,
       child_allocation.width = width;
     }
 
-  if (!child->yfill)
+  if (!(child->packing & GTK_WRAP_BOX_V_FILL))
     {
       gint height;
 
-      /* Note here child_allocation.width is already changed if (!child->xfill) */
+      /* Note here child_allocation.width is already changed if (!(child->packing & GTK_WRAP_BOX_H_FILL)) */
       if (request_mode == GTK_SIZE_REQUEST_HEIGHT_FOR_WIDTH)
         gtk_size_request_get_height_for_width (GTK_SIZE_REQUEST (child->widget),
                                                child_allocation.width, NULL, &height);
@@ -1242,7 +1189,7 @@ gtk_wrap_box_size_allocate (GtkWidget     *widget,
               gint                item_size = line_sizes[i].minimum_size;
 
               item_size += (priv->orientation == GTK_ORIENTATION_HORIZONTAL) ?
-                child->xpadding * 2 : child->ypadding * 2;
+                child->hpadding * 2 : child->vpadding * 2;
 
               /* Do the actual allocation */
               allocate_child (box, child, item_offset, line_offset, item_size, line_size);
@@ -1280,8 +1227,7 @@ static void
 gtk_wrap_box_add (GtkContainer *container,
                      GtkWidget    *widget)
 {
-  gtk_wrap_box_insert_child (GTK_WRAP_BOX (container), widget, -1,
-                             0, 0, FALSE, FALSE, FALSE, FALSE);
+  gtk_wrap_box_insert_child_with_padding (GTK_WRAP_BOX (container), widget, -1, 0, 0, 0);
 }
 
 static gint
@@ -1349,8 +1295,8 @@ gtk_wrap_box_set_child_property (GtkContainer    *container,
                                  const GValue    *value,
                                  GParamSpec      *pspec)
 {
-  GtkWrapBox        *box = GTK_WRAP_BOX (container);
-  GtkWrapBoxPrivate *priv   = box->priv;
+  GtkWrapBox        *box  = GTK_WRAP_BOX (container);
+  GtkWrapBoxPrivate *priv = box->priv;
   GtkWrapBoxChild   *child;
   GList             *list;
 
@@ -1362,23 +1308,14 @@ gtk_wrap_box_set_child_property (GtkContainer    *container,
 
   switch (property_id)
     {
-    case CHILD_PROP_X_EXPAND:
-      child->xexpand = g_value_get_boolean (value);
+    case CHILD_PROP_PACKING:
+      child->packing = g_value_get_flags (value);
       break;
-    case CHILD_PROP_X_FILL:
-      child->xfill = g_value_get_boolean (value);
+    case CHILD_PROP_HORIZONTAL_PADDING:
+      child->hpadding = g_value_get_uint (value);
       break;
-    case CHILD_PROP_Y_EXPAND:
-      child->yexpand = g_value_get_boolean (value);
-      break;
-    case CHILD_PROP_Y_FILL:
-      child->yfill = g_value_get_boolean (value);
-      break;
-    case CHILD_PROP_X_PADDING:
-      child->xpadding = g_value_get_uint (value);
-      break;
-    case CHILD_PROP_Y_PADDING:
-      child->ypadding = g_value_get_uint (value);
+    case CHILD_PROP_VERTICAL_PADDING:
+      child->vpadding = g_value_get_uint (value);
       break;
     default:
       GTK_CONTAINER_WARN_INVALID_CHILD_PROPERTY_ID (container, property_id, pspec);
@@ -1410,23 +1347,14 @@ gtk_wrap_box_get_child_property (GtkContainer    *container,
 
   switch (property_id)
     {
-    case CHILD_PROP_X_EXPAND:
-      g_value_set_boolean (value, child->xexpand);
+    case CHILD_PROP_PACKING:
+      g_value_set_flags (value, child->packing);
       break;
-    case CHILD_PROP_X_FILL:
-      g_value_set_boolean (value, child->xfill);
+    case CHILD_PROP_HORIZONTAL_PADDING:
+      g_value_set_uint (value, child->hpadding);
       break;
-    case CHILD_PROP_Y_EXPAND:
-      g_value_set_boolean (value, child->yexpand);
-      break;
-    case CHILD_PROP_Y_FILL:
-      g_value_set_boolean (value, child->yfill);
-      break;
-    case CHILD_PROP_X_PADDING:
-      g_value_set_uint (value, child->xpadding);
-      break;
-    case CHILD_PROP_Y_PADDING:
-      g_value_set_uint (value, child->ypadding);
+    case CHILD_PROP_VERTICAL_PADDING:
+      g_value_set_uint (value, child->vpadding);
       break;
     default:
       GTK_CONTAINER_WARN_INVALID_CHILD_PROPERTY_ID (container, property_id, pspec);
@@ -1500,16 +1428,16 @@ get_largest_line_length (GtkWrapBox      *box,
               gtk_size_request_get_width (GTK_SIZE_REQUEST (child->widget),
                                           &child_min, &child_nat);
 
-              child_min += child->xpadding * 2;
-              child_nat += child->xpadding * 2;
+              child_min += child->hpadding * 2;
+              child_nat += child->hpadding * 2;
             }
           else /* GTK_ORIENTATION_VERTICAL */
             {
               gtk_size_request_get_height (GTK_SIZE_REQUEST (child->widget),
                                            &child_min, &child_nat);
 
-              child_min += child->ypadding * 2;
-              child_nat += child->ypadding * 2;
+              child_min += child->vpadding * 2;
+              child_nat += child->vpadding * 2;
             }
 
           if (i > 0)
@@ -2317,30 +2245,24 @@ gtk_wrap_box_get_natural_line_children (GtkWrapBox *box)
 
 
 /**
- * gtk_wrap_box_insert_child:
+ * gtk_wrap_box_insert_child_with_padding:
  * @box: And #GtkWrapBox
  * @widget: the child #GtkWidget to add
  * @index: the position in the child list to insert, specify -1 to append to the list.
- * @xpad: horizontal spacing for this child
- * @ypad: vertical spacing for this child
- * @xexpand: whether this child expands horizontally
- * @yexpand: whether this child expands vertically
- * @xfill: whether this child fills its horizontal allocation
- * @yfill: whether this child fills its vertical allocation
+ * @horizontal_padding: horizontal padding for this child
+ * @vertical_padding: vertical padding for this child
+ * @packing: The #GtkWrapBoxPacking options to use.
  *
  * Adds a child to an #GtkWrapBox with its packing options set
  *
  */
 void
-gtk_wrap_box_insert_child (GtkWrapBox *box,
-                           GtkWidget  *widget,
-                           gint        index,
-                           guint       xpad,
-                           guint       ypad,
-                           gboolean    xexpand,
-                           gboolean    yexpand,
-                           gboolean    xfill,
-                           gboolean    yfill)
+gtk_wrap_box_insert_child_with_padding (GtkWrapBox       *box,
+					GtkWidget        *widget,
+					gint              index,
+					guint             horizontal_padding,
+					guint             vertical_padding,
+					GtkWrapBoxPacking packing)
 {
   GtkWrapBoxPrivate *priv;
   GtkWrapBoxChild   *child;
@@ -2357,12 +2279,9 @@ gtk_wrap_box_insert_child (GtkWrapBox *box,
 
   child           = g_slice_new0 (GtkWrapBoxChild);
   child->widget   = widget;
-  child->xpadding = xpad;
-  child->ypadding = ypad;
-  child->xexpand  = xexpand;
-  child->yexpand  = yexpand;
-  child->xfill    = xfill;
-  child->yfill    = yfill;
+  child->hpadding = horizontal_padding;
+  child->vpadding = vertical_padding;
+  child->packing  = packing;
 
   priv->children = g_list_insert (priv->children, child, index);
 

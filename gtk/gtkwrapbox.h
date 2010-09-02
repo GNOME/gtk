@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) 2010 Openismus GmbH
  *
  * Authors:
@@ -66,31 +66,28 @@ void                  gtk_wrap_box_set_spreading             (GtkWrapBox        
                                                               GtkWrapBoxSpreading   spreading);
 GtkWrapBoxSpreading   gtk_wrap_box_get_spreading             (GtkWrapBox           *layout);
 
-void                  gtk_wrap_box_set_vertical_spacing      (GtkWrapBox           *layout, 
+void                  gtk_wrap_box_set_vertical_spacing      (GtkWrapBox           *layout,
                                                               guint                 spacing);
 guint                 gtk_wrap_box_get_vertical_spacing      (GtkWrapBox           *layout);
 
-void                  gtk_wrap_box_set_horizontal_spacing    (GtkWrapBox           *layout, 
+void                  gtk_wrap_box_set_horizontal_spacing    (GtkWrapBox           *layout,
                                                               guint                 spacing);
 guint                 gtk_wrap_box_get_horizontal_spacing    (GtkWrapBox           *layout);
 
-void                  gtk_wrap_box_set_minimum_line_children (GtkWrapBox           *layout, 
+void                  gtk_wrap_box_set_minimum_line_children (GtkWrapBox           *layout,
                                                               guint                 n_children);
 guint                 gtk_wrap_box_get_minimum_line_children (GtkWrapBox           *layout);
 
-void                  gtk_wrap_box_set_natural_line_children (GtkWrapBox           *layout, 
+void                  gtk_wrap_box_set_natural_line_children (GtkWrapBox           *layout,
                                                               guint                 n_children);
 guint                 gtk_wrap_box_get_natural_line_children (GtkWrapBox           *layout);
 
-void                  gtk_wrap_box_insert_child              (GtkWrapBox           *layout,
+void                  gtk_wrap_box_insert_child_with_padding (GtkWrapBox           *layout,
                                                               GtkWidget            *widget,
                                                               gint                  index,
-                                                              guint                 xpad,
-                                                              guint                 ypad,
-                                                              gboolean              xexpand,
-                                                              gboolean              yexpand,
-                                                              gboolean              xfill,
-                                                              gboolean              yfill);
+                                                              guint                 horizontal_padding,
+                                                              guint                 vertical_padding,
+							      GtkWrapBoxPacking     packing);
 
 void                  gtk_wrap_box_reorder_child             (GtkWrapBox           *layout,
                                                               GtkWidget            *widget,

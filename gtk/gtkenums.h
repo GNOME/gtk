@@ -588,6 +588,24 @@ typedef enum {
   GTK_WRAP_BOX_SPREAD_EXPAND
 } GtkWrapBoxSpreading;
 
+/**
+ * GtkWrapBoxPacking:
+ * @GTK_WRAP_BOX_H_EXPAND: Whether the child expands horizontally.
+ * @GTK_WRAP_BOX_H_FILL:   Whether the child fills its allocated horizontal space.
+ * @GTK_WRAP_BOX_V_EXPAND: Whether the child expands vertically.
+ * @GTK_WRAP_BOX_V_FILL:   Whether the child fills its allocated vertical space.
+ *
+ * Specifies how widgets will expand/fill vertically and
+ * horizontally when placed inside a #GtkWrapBox.
+ */
+typedef enum
+{
+  GTK_WRAP_BOX_H_EXPAND = 1 << 0,
+  GTK_WRAP_BOX_H_FILL   = 1 << 1,
+  GTK_WRAP_BOX_V_EXPAND = 1 << 2,
+  GTK_WRAP_BOX_V_FILL   = 1 << 3
+} GtkWrapBoxPacking;
+
 
 G_END_DECLS
 
