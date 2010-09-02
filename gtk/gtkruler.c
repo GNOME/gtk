@@ -91,7 +91,8 @@ static void     gtk_ruler_make_pixmap     (GtkRuler       *ruler);
 static void     gtk_ruler_draw_ticks      (GtkRuler       *ruler);
 static void     gtk_ruler_real_draw_ticks (GtkRuler       *ruler,
                                            cairo_t        *cr);
-static void     gtk_ruler_real_draw_pos   (GtkRuler       *ruler);
+static void     gtk_ruler_real_draw_pos   (GtkRuler       *ruler,
+                                           cairo_t        *cr);
 
 
 static const GtkRulerMetric ruler_metrics[] =
@@ -474,16 +475,6 @@ gtk_ruler_draw_ticks (GtkRuler *ruler)
 }
 
 static void
-gtk_ruler_draw_pos (GtkRuler *ruler)
-{
-  g_return_if_fail (GTK_IS_RULER (ruler));
-
-  if (GTK_RULER_GET_CLASS (ruler)->draw_pos)
-     GTK_RULER_GET_CLASS (ruler)->draw_pos (ruler);
-}
-
-
-static void
 gtk_ruler_realize (GtkWidget *widget)
 {
   GtkAllocation allocation;
@@ -627,9 +618,12 @@ gtk_ruler_expose (GtkWidget      *widget,
       cairo_set_source_surface (cr, priv->backing_store, 0, 0);
       gdk_cairo_region (cr, event->region);
       cairo_fill (cr);
-      cairo_destroy (cr);
       
-      gtk_ruler_draw_pos (ruler);
+      if (GTK_RULER_GET_CLASS (ruler)->draw_pos)
+         GTK_RULER_GET_CLASS (ruler)->draw_pos (ruler,
+                                                cr);
+
+      cairo_destroy (cr);
     }
 
   return FALSE;
@@ -875,97 +869,76 @@ out:
 }
 
 static void
-gtk_ruler_real_draw_pos (GtkRuler *ruler)
+gtk_ruler_real_draw_pos (GtkRuler *ruler,
+                         cairo_t  *cr)
 {
-  GtkAllocation allocation;
   GtkWidget *widget = GTK_WIDGET (ruler);
   GtkRulerPrivate *priv = ruler->priv;
   GtkStyle *style;
-  gint x, y;
-  gint width, height;
+  gint x, y, width, height;
   gint bs_width, bs_height;
   gint xthickness;
   gint ythickness;
   gdouble increment;
 
-  if (gtk_widget_is_drawable (widget))
+  style = gtk_widget_get_style (widget);
+  xthickness = style->xthickness;
+  ythickness = style->ythickness;
+  width = gtk_widget_get_allocated_width (widget);
+  height = gtk_widget_get_allocated_height (widget);
+
+  if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
     {
-      style = gtk_widget_get_style (widget);
-      gtk_widget_get_allocation (widget, &allocation);
+      height -= ythickness * 2;
 
-      xthickness = style->xthickness;
-      ythickness = style->ythickness;
-      width = allocation.width;
-      height = allocation.height;
+      bs_width = height / 2 + 2;
+      bs_width |= 1;  /* make sure it's odd */
+      bs_height = bs_width / 2 + 1;
+    }
+  else
+    {
+      width -= xthickness * 2;
 
+      bs_height = width / 2 + 2;
+      bs_height |= 1;  /* make sure it's odd */
+      bs_width = bs_height / 2 + 1;
+    }
+
+  if ((bs_width > 0) && (bs_height > 0))
+    {
       if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
         {
-          height -= ythickness * 2;
+          increment = (gdouble) width / (priv->upper - priv->lower);
 
-          bs_width = height / 2 + 2;
-          bs_width |= 1;  /* make sure it's odd */
-          bs_height = bs_width / 2 + 1;
+          x = ROUND ((priv->position - priv->lower) * increment) + (xthickness - bs_width) / 2 - 1;
+          y = (height + bs_height) / 2 + ythickness;
         }
       else
         {
-          width -= xthickness * 2;
+          increment = (gdouble) height / (priv->upper - priv->lower);
 
-          bs_height = width / 2 + 2;
-          bs_height |= 1;  /* make sure it's odd */
-          bs_width = bs_height / 2 + 1;
+          x = (width + bs_width) / 2 + xthickness;
+          y = ROUND ((priv->position - priv->lower) * increment) + (ythickness - bs_height) / 2 - 1;
         }
 
-      if ((bs_width > 0) && (bs_height > 0))
-	{
-          GdkWindow *window;
+      gdk_cairo_set_source_color (cr, &style->fg[gtk_widget_get_state (widget)]);
 
-          window = gtk_widget_get_window (widget);
+      cairo_move_to (cr, x, y);
 
-	  cairo_t *cr = gdk_cairo_create (window);
+      if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
+        {
+          cairo_line_to (cr, x + bs_width / 2.0, y + bs_height);
+          cairo_line_to (cr, x + bs_width,       y);
+        }
+      else
+        {
+          cairo_line_to (cr, x + bs_width, y + bs_height / 2.0);
+          cairo_line_to (cr, x,            y + bs_height);
+        }
 
-	  /*  If a backing store exists, restore the ruler  */
-	  if (priv->backing_store) {
-            cairo_set_source_surface (cr, priv->backing_store, 0, 0);
-            cairo_rectangle (cr, priv->xsrc, priv->ysrc, bs_width, bs_height);
-            cairo_fill (cr);
-          }
+      cairo_fill (cr);
 
-          if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
-            {
-              increment = (gdouble) width / (priv->upper - priv->lower);
-
-              x = ROUND ((priv->position - priv->lower) * increment) + (xthickness - bs_width) / 2 - 1;
-              y = (height + bs_height) / 2 + ythickness;
-            }
-          else
-            {
-              increment = (gdouble) height / (priv->upper - priv->lower);
-
-              x = (width + bs_width) / 2 + xthickness;
-              y = ROUND ((priv->position - priv->lower) * increment) + (ythickness - bs_height) / 2 - 1;
-            }
-
-	  gdk_cairo_set_source_color (cr, &style->fg[gtk_widget_get_state (widget)]);
-
-	  cairo_move_to (cr, x, y);
-
-          if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
-            {
-              cairo_line_to (cr, x + bs_width / 2.0, y + bs_height);
-              cairo_line_to (cr, x + bs_width,       y);
-            }
-          else
-            {
-              cairo_line_to (cr, x + bs_width, y + bs_height / 2.0);
-              cairo_line_to (cr, x,            y + bs_height);
-            }
-
-	  cairo_fill (cr);
-
-	  cairo_destroy (cr);
-
-	  priv->xsrc = x;
-	  priv->ysrc = y;
-	}
+      priv->xsrc = x;
+      priv->ysrc = y;
     }
 }

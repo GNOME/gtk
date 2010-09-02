@@ -77,7 +77,8 @@ struct _GtkRulerClass
 
   void (* draw_ticks) (GtkRuler *ruler,
                        cairo_t  *cr);
-  void (* draw_pos)   (GtkRuler *ruler);
+  void (* draw_pos)   (GtkRuler *ruler,
+                       cairo_t  *cr);
 
   /* Padding for future expansion */
   void (*_gtk_reserved1) (void);
