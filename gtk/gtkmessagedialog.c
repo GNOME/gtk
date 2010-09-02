@@ -196,6 +196,8 @@ gtk_message_dialog_class_init (GtkMessageDialogClass *class)
    * in the dialog.
    *
    * Since: 2.4
+   *
+   * Deprecated: 2.22: This style property will be removed in GTK+ 3
    */
   gtk_widget_class_install_style_property (widget_class,
 					   g_param_spec_boolean ("use-separator",

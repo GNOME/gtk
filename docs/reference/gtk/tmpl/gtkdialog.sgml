@@ -231,7 +231,7 @@ Flags used to influence dialog construction.
 @GTK_DIALOG_DESTROY_WITH_PARENT: Destroy the dialog when its
   parent is destroyed, see gtk_window_set_destroy_with_parent().
 @GTK_DIALOG_NO_SEPARATOR: Don't put a separator between the
-  action area and the dialog content.
+  action area and the dialog content. This option has been deprecated in GTK+ 2.22. It will be removed in GTK+ 3
 
 <!-- ##### ENUM GtkResponseType ##### -->
 <para>

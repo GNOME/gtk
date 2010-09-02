@@ -138,6 +138,8 @@ gtk_dialog_class_init (GtkDialogClass *class)
    * GtkDialog:has-separator:
    *
    * When %TRUE, the dialog has a separator bar above its buttons.
+   *
+   * Deprecated: 2.22: This property will be removed in GTK+ 3.
    */
   g_object_class_install_property (gobject_class,
                                    PROP_HAS_SEPARATOR,
@@ -145,7 +147,7 @@ gtk_dialog_class_init (GtkDialogClass *class)
 							 P_("Has separator"),
 							 P_("The dialog has a separator bar above its buttons"),
                                                          TRUE,
-                                                         GTK_PARAM_READWRITE));
+                                                         GTK_PARAM_READWRITE | G_PARAM_DEPRECATED));
 
   /**
    * GtkDialog::response:
@@ -852,6 +854,8 @@ gtk_dialog_set_default_response (GtkDialog *dialog,
  *
  * Sets whether the dialog has a separator above the buttons.
  * %TRUE by default.
+ *
+ * Deprecated: 2.22: This function will be removed in GTK+ 3
  **/
 void
 gtk_dialog_set_has_separator (GtkDialog *dialog,
@@ -899,6 +903,8 @@ gtk_dialog_set_has_separator (GtkDialog *dialog,
  * Accessor for whether the dialog has a separator.
  * 
  * Return value: %TRUE if the dialog has a separator
+ *
+ * Deprecated: 2.22: This function will be removed in GTK+ 3
  **/
 gboolean
 gtk_dialog_get_has_separator (GtkDialog *dialog)
