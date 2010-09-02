@@ -106,6 +106,9 @@ void     gtk_style_set_merge          (GtkStyleSet       *set,
 gboolean gtk_symbolic_color_resolve (GtkSymbolicColor    *color,
 				     GtkStyleSet         *style_set,
                                      GdkColor            *resolved_color);
+gboolean gtk_gradient_resolve (GtkGradient      *gradient,
+                               GtkStyleSet      *style_set,
+                               cairo_pattern_t **resolved_gradient);
 
 G_END_DECLS
 

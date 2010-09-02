@@ -22,6 +22,9 @@
 #include "gtkstyleset.h"
 #include "gtkintl.h"
 
+G_DEFINE_BOXED_TYPE (GtkGradient, gtk_gradient,
+                     gtk_gradient_ref, gtk_gradient_unref)
+
 /* Symbolic colors */
 typedef enum {
   COLOR_TYPE_LITERAL,
@@ -53,6 +56,26 @@ struct GtkSymbolicColor
       gdouble factor;
     } mix;
   };
+};
+
+typedef struct ColorStop ColorStop;
+
+struct ColorStop
+{
+  gdouble offset;
+  GtkSymbolicColor *color;
+};
+
+struct GtkGradient
+{
+  gdouble x0;
+  gdouble y0;
+  gdouble x1;
+  gdouble y1;
+
+  GArray *stops;
+
+  guint ref_count;
 };
 
 GtkSymbolicColor *
@@ -239,4 +262,113 @@ gtk_symbolic_color_get_type (void)
 					 (GBoxedFreeFunc) gtk_symbolic_color_unref);
 
   return type;
+}
+
+/* GtkGradient */
+GtkGradient *
+gtk_gradient_new_linear (gdouble x0,
+                         gdouble y0,
+                         gdouble x1,
+                         gdouble y1)
+{
+  GtkGradient *gradient;
+
+  gradient = g_slice_new (GtkGradient);
+  gradient->stops = g_array_new (FALSE, FALSE, sizeof (ColorStop));
+
+  gradient->x0 = x0;
+  gradient->y0 = y0;
+  gradient->x1 = x1;
+  gradient->y1 = y1;
+
+  gradient->ref_count = 1;
+
+  return gradient;
+}
+
+void
+gtk_gradient_add_color_stop (GtkGradient      *gradient,
+                             gdouble           offset,
+                             GtkSymbolicColor *color)
+{
+  ColorStop stop;
+
+  g_return_if_fail (gradient != NULL);
+
+  stop.offset = offset;
+  stop.color = gtk_symbolic_color_ref (color);
+
+  g_array_append_val (gradient->stops, stop);
+}
+
+GtkGradient *
+gtk_gradient_ref (GtkGradient *gradient)
+{
+  g_return_val_if_fail (gradient != NULL, NULL);
+
+  gradient->ref_count++;
+
+  return gradient;
+}
+
+void
+gtk_gradient_unref (GtkGradient *gradient)
+{
+  g_return_if_fail (gradient != NULL);
+
+  gradient->ref_count--;
+
+  if (gradient->ref_count == 0)
+    {
+      guint i;
+
+      for (i = 0; i < gradient->stops->len; i++)
+        {
+          ColorStop *stop;
+
+          stop = &g_array_index (gradient->stops, ColorStop, i);
+          gtk_symbolic_color_unref (stop->color);
+        }
+
+      g_array_free (gradient->stops, TRUE);
+      g_slice_free (GtkGradient, gradient);
+    }
+}
+
+gboolean
+gtk_gradient_resolve (GtkGradient      *gradient,
+                      GtkStyleSet      *style_set,
+                      cairo_pattern_t **resolved_gradient)
+{
+  cairo_pattern_t *pattern;
+  guint i;
+
+  g_return_val_if_fail (gradient != NULL, FALSE);
+  g_return_val_if_fail (GTK_IS_STYLE_SET (style_set), FALSE);
+  g_return_val_if_fail (resolved_gradient != NULL, FALSE);
+
+  pattern = cairo_pattern_create_linear (gradient->x0, gradient->y0,
+                                         gradient->x1, gradient->y1);
+
+  for (i = 0; i < gradient->stops->len; i++)
+    {
+      ColorStop *stop;
+      GdkColor color;
+
+      stop = &g_array_index (gradient->stops, ColorStop, i);
+
+      if (!gtk_symbolic_color_resolve (stop->color, style_set, &color))
+        {
+          cairo_pattern_destroy (pattern);
+          return FALSE;
+        }
+
+      cairo_pattern_add_color_stop_rgb (pattern, stop->offset,
+                                        color.red / 65535.,
+                                        color.green / 65535.,
+                                        color.blue / 65535.);
+    }
+
+  *resolved_gradient = pattern;
+  return TRUE;
 }
