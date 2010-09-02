@@ -830,6 +830,13 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
 							       GDK_TYPE_COLOR,
 							       GTK_PARAM_READABLE));
 
+  /**
+   * GtkTreeView:row-ending-details:
+   *
+   * Enable extended row background themeing
+   *
+   * Deprecated: 2.22: This style property will be removed in GTK+ 3
+   */
   gtk_widget_class_install_style_property (widget_class,
 					   g_param_spec_boolean ("row-ending-details",
 								 P_("Row Ending details"),

@@ -512,6 +512,14 @@ gtk_range_class_init (GtkRangeClass *class)
 							     0,
 							     GTK_PARAM_READABLE));
 
+  /**
+   * GtkRange:activate-slider:
+   *
+   * When %TRUE, sliders will be drawn active and with shadow in
+   * while they are dragged.
+   *
+   * Deprecated: 2.22: This style property will be removed in GTK+ 3
+   */
   gtk_widget_class_install_style_property (widget_class,
 					   g_param_spec_boolean ("activate-slider",
                                                                  P_("Draw slider ACTIVE during drag"),
@@ -526,6 +534,8 @@ gtk_range_class_init (GtkRangeClass *class)
    * slider are drawn with different details.
    *
    * Since: 2.10
+   *
+   * Deprecated: 2.22: This style property will be removed in GTK+ 3
    */
   gtk_widget_class_install_style_property (widget_class,
                                            g_param_spec_boolean ("trough-side-details",
@@ -572,6 +582,8 @@ gtk_range_class_init (GtkRangeClass *class)
    * suffixed with information about the stepper position.
    *
    * Since: 2.22
+   *
+   * Deprecated: 2.22: This style property will be removed in GTK+ 3
    */
   gtk_widget_class_install_style_property (widget_class,
                                            g_param_spec_boolean ("stepper-position-details",

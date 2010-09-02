@@ -1749,6 +1749,8 @@ gtk_entry_class_init (GtkEntryClass *class)
     * drawing the shadow and the widget background.
     *
     * Since: 2.16
+    *
+    * Deprecated: 2.22: This style property will be removed in GTK+ 3
     */
    gtk_widget_class_install_style_property (widget_class,
                                             g_param_spec_boolean ("state-hint",
