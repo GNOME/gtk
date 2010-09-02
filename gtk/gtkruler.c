@@ -88,7 +88,8 @@ static gboolean gtk_ruler_motion_notify   (GtkWidget      *widget,
 static gboolean gtk_ruler_expose          (GtkWidget      *widget,
                                            GdkEventExpose *event);
 static void     gtk_ruler_make_pixmap     (GtkRuler       *ruler);
-static void     gtk_ruler_real_draw_ticks (GtkRuler       *ruler);
+static void     gtk_ruler_real_draw_ticks (GtkRuler       *ruler,
+                                           cairo_t        *cr);
 static void     gtk_ruler_real_draw_pos   (GtkRuler       *ruler);
 
 
@@ -437,10 +438,20 @@ gtk_ruler_get_range (GtkRuler *ruler,
 void
 gtk_ruler_draw_ticks (GtkRuler *ruler)
 {
+  GtkRulerPrivate *priv = ruler->priv;
+  cairo_t *cr;
+
   g_return_if_fail (GTK_IS_RULER (ruler));
 
+  if (priv->backing_store == NULL)
+    return;
+  
+  cr = cairo_create (priv->backing_store);
+
   if (GTK_RULER_GET_CLASS (ruler)->draw_ticks)
-    GTK_RULER_GET_CLASS (ruler)->draw_ticks (ruler);
+    GTK_RULER_GET_CLASS (ruler)->draw_ticks (ruler, cr);
+
+  cairo_destroy (cr);
 }
 
 void
@@ -633,14 +644,14 @@ gtk_ruler_make_pixmap (GtkRuler *ruler)
 }
 
 static void
-gtk_ruler_real_draw_ticks (GtkRuler *ruler)
+gtk_ruler_real_draw_ticks (GtkRuler *ruler,
+                           cairo_t  *cr)
 {
-  GtkAllocation allocation;
   GtkWidget *widget = GTK_WIDGET (ruler);
   GtkRulerPrivate *priv = ruler->priv;
   GtkStyle *style;
-  cairo_t *cr;
   gint i, j;
+  gint w, h;
   gint width, height;
   gint xthickness;
   gint ythickness;
@@ -659,11 +670,7 @@ gtk_ruler_real_draw_ticks (GtkRuler *ruler)
   PangoLayout *layout;
   PangoRectangle logical_rect, ink_rect;
 
-  if (!gtk_widget_is_drawable (widget))
-    return;
-
   style = gtk_widget_get_style (widget);
-  gtk_widget_get_allocation (widget, &allocation);
 
   xthickness = style->xthickness;
   ythickness = style->ythickness;
@@ -674,20 +681,22 @@ gtk_ruler_real_draw_ticks (GtkRuler *ruler)
   digit_height = PANGO_PIXELS (ink_rect.height) + 2;
   digit_offset = ink_rect.y;
 
+  w = gtk_widget_get_allocated_width (widget);
+  h = gtk_widget_get_allocated_height (widget);
+
   if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
     {
-      width = allocation.width;
-      height = allocation.height - ythickness * 2;
+      width = w;
+      height = h - ythickness * 2;
     }
   else
     {
-      width = allocation.height;
-      height = allocation.width - ythickness * 2;
+      width = h;
+      height = w - ythickness * 2;
     }
 
 #define DETAILE(private) (priv->orientation == GTK_ORIENTATION_HORIZONTAL ? "hruler" : "vruler");
 
-  cr = cairo_create (priv->backing_store);
   gdk_cairo_set_source_color (cr, &style->fg[gtk_widget_get_state (widget)]);
 
   gtk_cairo_paint_box (style, cr,
@@ -696,14 +705,14 @@ gtk_ruler_real_draw_ticks (GtkRuler *ruler)
                        priv->orientation == GTK_ORIENTATION_HORIZONTAL ?
                        "hruler" : "vruler",
                        0, 0,
-                       allocation.width, allocation.height);
+                       w, h);
 
   if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
     {
       cairo_rectangle (cr,
                        xthickness,
                        height + ythickness,
-                       allocation.width - 2 * xthickness,
+                       w - 2 * xthickness,
                        1);
     }
   else
@@ -712,7 +721,7 @@ gtk_ruler_real_draw_ticks (GtkRuler *ruler)
                        height + xthickness,
                        ythickness,
                        1,
-                       allocation.height - 2 * ythickness);
+                       h - 2 * ythickness);
     }
 
   upper = priv->upper / priv->metric->pixels_per_unit;
@@ -799,6 +808,7 @@ gtk_ruler_real_draw_ticks (GtkRuler *ruler)
                                height + xthickness - length, pos,
                                length,                       1);
             }
+          cairo_fill (cr);
 
 	  /* draw label */
 	  if (i == 0)
@@ -842,9 +852,8 @@ gtk_ruler_real_draw_ticks (GtkRuler *ruler)
     }
 
   cairo_fill (cr);
-out:
-  cairo_destroy (cr);
 
+out:
   g_object_unref (layout);
 }
 

@@ -75,7 +75,8 @@ struct _GtkRulerClass
 {
   GtkWidgetClass parent_class;
 
-  void (* draw_ticks) (GtkRuler *ruler);
+  void (* draw_ticks) (GtkRuler *ruler,
+                       cairo_t  *cr);
   void (* draw_pos)   (GtkRuler *ruler);
 
   /* Padding for future expansion */
