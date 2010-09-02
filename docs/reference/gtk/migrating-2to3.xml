@@ -394,8 +394,11 @@ cairo_destroy (cr);
       The following values correspond:
       <table>
         <tgroup cols="3">
+          <colspec colname="1"/>
+          <colspec colname="2"/>
+          <colspec colname="3"/>
           <thead>
-            <row><entry>GTK+ 2.x</entry><entry morerows="1">GTK+ 3</entry></row>
+            <row><entry>GTK+ 2.x</entry><entry namest="2" nameend="3">GTK+ 3</entry></row>
             <row><entry>GtkProgressBarOrientation</entry><entry>GtkOrientation</entry><entry>inverted</entry></row>
           </thead>
           <tbody>
