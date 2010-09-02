@@ -892,28 +892,47 @@ gtk_theming_engine_render_background (GtkThemingEngine *engine,
                                       gdouble           width,
                                       gdouble           height)
 {
+  GdkColor *bg_color, *base_color;
+  cairo_pattern_t *pattern;
   GtkStateFlags flags;
-  GdkColor *color;
 
-  cairo_save (cr);
   flags = gtk_theming_engine_get_state (engine);
-
-  if (gtk_theming_engine_has_class (engine, "entry"))
-    gtk_theming_engine_get (engine, flags,
-                            "base-color", &color,
-                            NULL);
-  else
-    gtk_theming_engine_get (engine, flags,
-                            "background-color", &color,
-                            NULL);
-
-  gdk_cairo_set_source_color (cr, color);
+  cairo_save (cr);
 
   if (gtk_theming_engine_has_class (engine, "spinbutton") &&
       gtk_theming_engine_has_class (engine, "button"))
-    cairo_rectangle (cr, x + 2, y + 2, width - 4, height - 4);
+    {
+      x += 2;
+      y += 2;
+      width -= 4;
+      height -= 4;
+    }
+
+  gtk_theming_engine_get (engine, flags,
+                          "background-image", &pattern,
+                          "background-color", &bg_color,
+                          "base-color", &base_color,
+                          NULL);
+
+  if (pattern)
+    {
+      cairo_translate (cr, x, y);
+      cairo_scale (cr, width, height);
+
+      cairo_rectangle (cr, 0, 0, 1, 1);
+      cairo_set_source (cr, pattern);
+
+      cairo_pattern_destroy (pattern);
+    }
   else
-    cairo_rectangle (cr, x, y, width, height);
+    {
+      if (gtk_theming_engine_has_class (engine, "entry"))
+        gdk_cairo_set_source_color (cr, base_color);
+      else
+        gdk_cairo_set_source_color (cr, bg_color);
+
+      cairo_rectangle (cr, x, y, width, height);
+    }
 
   if (gtk_theming_engine_has_class (engine, "tooltip"))
     {
@@ -927,7 +946,8 @@ gtk_theming_engine_render_background (GtkThemingEngine *engine,
 
   cairo_restore (cr);
 
-  gdk_color_free (color);
+  gdk_color_free (base_color);
+  gdk_color_free (bg_color);
 }
 
 static void
