@@ -29,7 +29,7 @@
 #include <stdlib.h>
 
 #include "gtkcellrendererprogress.h"
-#include "gtkprogressbar.h"
+#include "gtkorientable.h"
 #include "gtkprivate.h"
 #include "gtkintl.h"
 
@@ -42,8 +42,9 @@ enum
   PROP_PULSE,
   PROP_TEXT_XALIGN,
   PROP_TEXT_YALIGN,
-  PROP_ORIENTATION
-}; 
+  PROP_ORIENTATION,
+  PROP_INVERTED
+};
 
 struct _GtkCellRendererProgressPrivate
 {
@@ -56,7 +57,8 @@ struct _GtkCellRendererProgressPrivate
   gint offset;
   gfloat text_xalign;
   gfloat text_yalign;
-  GtkProgressBarOrientation orientation;
+  GtkOrientation orientation;
+  gboolean inverted;
 };
 
 static void gtk_cell_renderer_progress_finalize     (GObject                 *object);
@@ -95,7 +97,8 @@ static void gtk_cell_renderer_progress_render       (GtkCellRenderer         *ce
 						     guint                    flags);
 
      
-G_DEFINE_TYPE (GtkCellRendererProgress, gtk_cell_renderer_progress, GTK_TYPE_CELL_RENDERER)
+G_DEFINE_TYPE_WITH_CODE (GtkCellRendererProgress, gtk_cell_renderer_progress, GTK_TYPE_CELL_RENDERER,
+                         G_IMPLEMENT_INTERFACE (GTK_TYPE_ORIENTABLE, NULL))
 
 static void
 gtk_cell_renderer_progress_class_init (GtkCellRendererProgressClass *klass)
@@ -112,9 +115,9 @@ gtk_cell_renderer_progress_class_init (GtkCellRendererProgressClass *klass)
   
   /**
    * GtkCellRendererProgress:value:
-   * 
+   *
    * The "value" property determines the percentage to which the
-   * progress bar will be "filled in". 
+   * progress bar will be "filled in".
    *
    * Since: 2.6
    **/
@@ -202,24 +205,17 @@ gtk_cell_renderer_progress_class_init (GtkCellRendererProgressClass *klass)
                                                        0.0, 1.0, 0.5,
                                                        GTK_PARAM_READWRITE));
 
-  /**
-   * GtkCellRendererProgress:orientation:
-   *
-   * The "orientation" property controls the direction and growth
-   * direction of the progress bar (left-to-right, right-to-left,
-   * top-to-bottom or bottom-to-top).
-   *
-   * Since: 2.12
-   */
-  g_object_class_install_property (object_class,
-                                   PROP_ORIENTATION,
-                                   g_param_spec_enum ("orientation",
-                                                      P_("Orientation"),
-                                                      P_("Orientation and growth direction of the progress bar"),
-                                                      GTK_TYPE_PROGRESS_BAR_ORIENTATION,
-                                                      GTK_PROGRESS_LEFT_TO_RIGHT,
-                                                      GTK_PARAM_READWRITE));
+  g_object_class_override_property (object_class,
+                                    PROP_ORIENTATION,
+                                    "orientation");
 
+  g_object_class_install_property (object_class,
+                                   PROP_INVERTED,
+                                   g_param_spec_boolean ("inverted",
+                                                         P_("Inverted"),
+                                                         P_("Invert the direction in which the progress bar grows"),
+                                                         FALSE,
+                                                         GTK_PARAM_READWRITE));
 
   g_type_class_add_private (object_class, 
 			    sizeof (GtkCellRendererProgressPrivate));
@@ -246,7 +242,8 @@ gtk_cell_renderer_progress_init (GtkCellRendererProgress *cellprogress)
   priv->text_xalign = 0.5;
   priv->text_yalign = 0.5;
 
-  priv->orientation = GTK_PROGRESS_LEFT_TO_RIGHT;
+  priv->orientation = GTK_ORIENTATION_HORIZONTAL,
+  priv->inverted = FALSE;
 }
 
 
@@ -306,6 +303,9 @@ gtk_cell_renderer_progress_get_property (GObject *object,
     case PROP_ORIENTATION:
       g_value_set_enum (value, priv->orientation);
       break;
+    case PROP_INVERTED:
+      g_value_set_boolean (value, priv->inverted);
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
     }
@@ -342,6 +342,9 @@ gtk_cell_renderer_progress_set_property (GObject *object,
       break;
     case PROP_ORIENTATION:
       priv->orientation = g_value_get_enum (value);
+      break;
+    case PROP_INVERTED:
+      priv->orientation = g_value_get_boolean (value);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
@@ -562,8 +565,7 @@ gtk_cell_renderer_progress_render (GtkCellRenderer *cell,
 		 NULL, widget, NULL,
 		 x, y, w, h);
 
-  if (priv->orientation == GTK_PROGRESS_LEFT_TO_RIGHT
-      || priv->orientation == GTK_PROGRESS_RIGHT_TO_LEFT)
+  if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
     {
       clip.y = y;
       clip.height = h;
@@ -573,7 +575,7 @@ gtk_cell_renderer_progress_render (GtkCellRenderer *cell,
 
       bar_size = get_bar_size (priv->pulse, priv->value, full_size);
 
-      if (priv->orientation == GTK_PROGRESS_LEFT_TO_RIGHT)
+      if (!priv->inverted)
 	bar_position = get_bar_position (start, full_size, bar_size,
 					 priv->pulse, priv->offset, is_rtl);
       else
@@ -593,7 +595,7 @@ gtk_cell_renderer_progress_render (GtkCellRenderer *cell,
 
       bar_size = get_bar_size (priv->pulse, priv->value, full_size);
 
-      if (priv->orientation == GTK_PROGRESS_BOTTOM_TO_TOP)
+      if (priv->inverted)
 	bar_position = get_bar_position (start, full_size, bar_size,
 					 priv->pulse, priv->offset, TRUE);
       else
@@ -637,8 +639,7 @@ gtk_cell_renderer_progress_render (GtkCellRenderer *cell,
 
       if (bar_position > start)
         {
-	  if (priv->orientation == GTK_PROGRESS_LEFT_TO_RIGHT
-	      || priv->orientation == GTK_PROGRESS_RIGHT_TO_LEFT)
+	  if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
 	    {
 	      clip.x = x;
 	      clip.width = bar_position - x;
@@ -658,8 +659,7 @@ gtk_cell_renderer_progress_render (GtkCellRenderer *cell,
 
       if (bar_position + bar_size < start + full_size)
         {
-	  if (priv->orientation == GTK_PROGRESS_LEFT_TO_RIGHT
-	      || priv->orientation == GTK_PROGRESS_RIGHT_TO_LEFT)
+	  if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
 	    {
 	      clip.x = bar_position + bar_size;
 	      clip.width = x + w - (bar_position + bar_size);
