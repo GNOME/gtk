@@ -832,13 +832,6 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
 							       GTK_PARAM_READABLE));
 
   gtk_widget_class_install_style_property (widget_class,
-					   g_param_spec_boolean ("row-ending-details",
-								 P_("Row Ending details"),
-								 P_("Enable extended row background theming"),
-								 FALSE,
-								 GTK_PARAM_READABLE));
-
-  gtk_widget_class_install_style_property (widget_class,
 					   g_param_spec_int ("grid-line-width",
 							     P_("Grid line width"),
 							     P_("Width, in pixels, of the tree view grid lines"),
@@ -4337,7 +4330,6 @@ gtk_tree_view_bin_expose (GtkWidget      *widget,
   gint pointer_x, pointer_y;
   gint grid_line_width;
   gboolean got_pointer = FALSE;
-  gboolean row_ending_details;
   gboolean draw_vgrid_lines, draw_hgrid_lines;
 
   rtl = (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL);
@@ -4347,7 +4339,6 @@ gtk_tree_view_bin_expose (GtkWidget      *widget,
 			"vertical-separator", &vertical_separator,
 			"allow-rules", &allow_rules,
 			"focus-line-width", &focus_line_width,
-			"row-ending-details", &row_ending_details,
 			NULL);
 
   if (tree_view->priv->tree == NULL)
@@ -4501,6 +4492,7 @@ gtk_tree_view_bin_expose (GtkWidget      *widget,
 	{
 	  GtkTreeViewColumn *column = list->data;
 	  const gchar *detail = NULL;
+	  gchar new_detail[128];
 	  GtkStateType state;
 
 	  if (!column->visible)
@@ -4619,51 +4611,32 @@ gtk_tree_view_bin_expose (GtkWidget      *widget,
 	    state = GTK_STATE_NORMAL;
 
 	  /* Draw background */
-	  if (row_ending_details)
-	    {
-	      char new_detail[128];
+	  is_first = (rtl ? !list->next : !list->prev);
+	  is_last = (rtl ? !list->prev : !list->next);
 
-	      is_first = (rtl ? !list->next : !list->prev);
-	      is_last = (rtl ? !list->prev : !list->next);
-
-	      /* (I don't like the snprintfs either, but couldn't find a
-	       * less messy way).
-	       */
-	      if (is_first && is_last)
-		g_snprintf (new_detail, 127, "%s", detail);
-	      else if (is_first)
-		g_snprintf (new_detail, 127, "%s_start", detail);
-	      else if (is_last)
-		g_snprintf (new_detail, 127, "%s_end", detail);
-	      else
-		g_snprintf (new_detail, 128, "%s_middle", detail);
-
-	      gtk_paint_flat_box (widget->style,
-				  event->window,
-				  state,
-				  GTK_SHADOW_NONE,
-				  &event->area,
-				  widget,
-				  new_detail,
-				  background_area.x,
-				  background_area.y,
-				  background_area.width,
-				  background_area.height);
-	    }
+	  /* (I don't like the snprintfs either, but couldn't find a
+	   * less messy way).
+	   */
+	  if (is_first && is_last)
+	    g_snprintf (new_detail, 127, "%s", detail);
+	  else if (is_first)
+	    g_snprintf (new_detail, 127, "%s_start", detail);
+	  else if (is_last)
+	    g_snprintf (new_detail, 127, "%s_end", detail);
 	  else
-	    {
-	      gtk_paint_flat_box (widget->style,
-				  event->window,
-				  state,
-				  GTK_SHADOW_NONE,
-				  &event->area,
-				  widget,
-				  detail,
-				  background_area.x,
-				  background_area.y,
-				  background_area.width,
-				  background_area.height);
-	    }
+	    g_snprintf (new_detail, 127, "%s_middle", detail);
+
+	  gtk_paint_flat_box (widget->style,
+			      event->window,
+			      state,
+			      GTK_SHADOW_NONE,
+			      &event->area,
+			      widget,
+			      new_detail,
+			      background_area.x,
+			      background_area.y,
+			      background_area.width,
+			      background_area.height);
 
 	  if (gtk_tree_view_is_expander_column (tree_view, column))
 	    {
@@ -4875,30 +4848,18 @@ gtk_tree_view_bin_expose (GtkWidget      *widget,
 	      gdk_drawable_get_size (tree_view->priv->bin_window,
 				     &width, NULL);
 
-	      if (row_ending_details)
-		gtk_paint_focus (widget->style,
-			         tree_view->priv->bin_window,
-				 gtk_widget_get_state (widget),
-				 &event->area,
-				 widget,
-				 (is_first
-				  ? (is_last ? "treeview-drop-indicator" : "treeview-drop-indicator-left" )
-				  : (is_last ? "treeview-drop-indicator-right" : "tree-view-drop-indicator-middle" )),
-				 0, BACKGROUND_FIRST_PIXEL (tree_view, tree, node)
-				 - focus_line_width / 2,
-				 width, ROW_HEIGHT (tree_view, BACKGROUND_HEIGHT (node))
-			       - focus_line_width + 1);
-	      else
-		gtk_paint_focus (widget->style,
-			         tree_view->priv->bin_window,
-				 gtk_widget_get_state (widget),
-				 &event->area,
-				 widget,
-				 "treeview-drop-indicator",
-				 0, BACKGROUND_FIRST_PIXEL (tree_view, tree, node)
-				 - focus_line_width / 2,
-				 width, ROW_HEIGHT (tree_view, BACKGROUND_HEIGHT (node))
-				 - focus_line_width + 1);
+	      gtk_paint_focus (widget->style,
+			       tree_view->priv->bin_window,
+			       gtk_widget_get_state (widget),
+			       &event->area,
+			       widget,
+			       (is_first
+			        ? (is_last ? "treeview-drop-indicator" : "treeview-drop-indicator-left" )
+			        : (is_last ? "treeview-drop-indicator-right" : "tree-view-drop-indicator-middle" )),
+			        0, BACKGROUND_FIRST_PIXEL (tree_view, tree, node)
+			           - focus_line_width / 2,
+			        width, ROW_HEIGHT (tree_view, BACKGROUND_HEIGHT (node))
+			               - focus_line_width + 1);
               break;
             }
 
@@ -4942,27 +4903,17 @@ gtk_tree_view_bin_expose (GtkWidget      *widget,
 	      tmp_height = ROW_HEIGHT (tree_view, BACKGROUND_HEIGHT (node));
 	    }
 
-	  if (row_ending_details)
-	    gtk_paint_focus (widget->style,
-			     tree_view->priv->bin_window,
-			     focus_rect_state,
-			     &event->area,
-			     widget,
-			     (is_first
-			      ? (is_last ? "treeview" : "treeview-left" )
-			      : (is_last ? "treeview-right" : "treeview-middle" )),
-			     0, tmp_y,
-			     width, tmp_height);
-	  else
-	    gtk_paint_focus (widget->style,
-			     tree_view->priv->bin_window,
-			     focus_rect_state,
-			     &event->area,
-			     widget,
-			     "treeview",
-			     0, tmp_y,
-			     width, tmp_height);
-	}
+	  gtk_paint_focus (widget->style,
+			   tree_view->priv->bin_window,
+			   focus_rect_state,
+			   &event->area,
+			   widget,
+			   (is_first
+			    ? (is_last ? "treeview" : "treeview-left" )
+			    : (is_last ? "treeview-right" : "treeview-middle" )),
+			   0, tmp_y,
+			   width, tmp_height);
+        }
 
       y_offset += max_height;
       if (node->children)
