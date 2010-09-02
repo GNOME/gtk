@@ -1743,21 +1743,6 @@ gtk_entry_class_init (GtkEntryClass *class)
                                                                GTK_TYPE_BORDER,
                                                                GTK_PARAM_READABLE));
 
-   /**
-    * GtkEntry:state-hint:
-    *
-    * Indicates whether to pass a proper widget state when
-    * drawing the shadow and the widget background.
-    *
-    * Since: 2.16
-    */
-   gtk_widget_class_install_style_property (widget_class,
-                                            g_param_spec_boolean ("state-hint",
-                                                                  P_("State Hint"),
-                                                                  P_("Whether to pass a proper state when drawing shadow or background"),
-                                                                  FALSE,
-                                                                  GTK_PARAM_READABLE));
-
    gtk_settings_install_property (g_param_spec_boolean ("gtk-entry-select-on-focus",
 						       P_("Select on focus"),
 						       P_("Whether to select the contents of an entry when it is focused"),
@@ -3298,7 +3283,6 @@ gtk_entry_draw_frame (GtkWidget      *widget,
   GtkStyle *style;
   GdkWindow *window;
   gint x = 0, y = 0, width, height;
-  gboolean state_hint;
   GtkStateType state;
 
   window = gtk_widget_get_window (widget);
@@ -3327,12 +3311,8 @@ gtk_entry_draw_frame (GtkWidget      *widget,
     }
 
   style = gtk_widget_get_style (widget);
-  gtk_widget_style_get (widget, "state-hint", &state_hint, NULL);
-  if (state_hint)
-      state = gtk_widget_has_focus (widget) ?
-        GTK_STATE_ACTIVE : gtk_widget_get_state (widget);
-  else
-      state = GTK_STATE_NORMAL;
+  state = gtk_widget_has_focus (widget) ?
+    GTK_STATE_ACTIVE : gtk_widget_get_state (widget);
 
   gtk_paint_shadow (style, window,
                     state, priv->shadow_type,
@@ -3478,19 +3458,13 @@ gtk_entry_expose (GtkWidget      *widget,
 {
   GtkEntry *entry = GTK_ENTRY (widget);
   GtkStyle *style;
-  gboolean state_hint;
   GtkStateType state;
   GtkEntryPrivate *priv = GTK_ENTRY_GET_PRIVATE (entry);
 
   style = gtk_widget_get_style (widget);
 
-  gtk_widget_style_get (widget, "state-hint", &state_hint, NULL);
-
-  if (state_hint)
-    state = gtk_widget_has_focus (widget) ?
-      GTK_STATE_ACTIVE : gtk_widget_get_state (widget);
-  else
-    state = gtk_widget_get_state(widget);
+  state = gtk_widget_has_focus (widget) ?
+    GTK_STATE_ACTIVE : gtk_widget_get_state (widget);
 
   if (gtk_widget_get_window (widget) == event->window)
     {
