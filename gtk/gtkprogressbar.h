@@ -91,13 +91,16 @@ void       gtk_progress_bar_set_fraction         (GtkProgressBar *pbar,
 void       gtk_progress_bar_set_pulse_step       (GtkProgressBar *pbar,
                                                   gdouble         fraction);
 void       gtk_progress_bar_set_orientation      (GtkProgressBar *pbar,
-                                                  GtkProgressBarOrientation orientation);
+                                                  GtkOrientation  orientation);
+void       gtk_progress_bar_set_inverted         (GtkProgressBar *pbar,
+                                                  gboolean        inverted);
 
 G_CONST_RETURN gchar* gtk_progress_bar_get_text       (GtkProgressBar *pbar);
 gdouble               gtk_progress_bar_get_fraction   (GtkProgressBar *pbar);
 gdouble               gtk_progress_bar_get_pulse_step (GtkProgressBar *pbar);
 
-GtkProgressBarOrientation gtk_progress_bar_get_orientation (GtkProgressBar *pbar);
+GtkOrientation     gtk_progress_bar_get_orientation (GtkProgressBar *pbar);
+gboolean           gtk_progress_bar_get_inverted    (GtkProgressBar *pbar);
 void               gtk_progress_bar_set_ellipsize (GtkProgressBar     *pbar,
                                                    PangoEllipsizeMode  mode);
 PangoEllipsizeMode gtk_progress_bar_get_ellipsize (GtkProgressBar     *pbar);
