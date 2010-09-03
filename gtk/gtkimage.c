@@ -155,8 +155,8 @@ struct _GtkImagePrivate
 
 
 #define DEFAULT_ICON_SIZE GTK_ICON_SIZE_BUTTON
-static gint gtk_image_expose       (GtkWidget      *widget,
-                                    GdkEventExpose *event);
+static gint gtk_image_draw         (GtkWidget      *widget,
+                                    cairo_t        *cr);
 static void gtk_image_unmap        (GtkWidget      *widget);
 static void gtk_image_unrealize    (GtkWidget      *widget);
 static void gtk_image_size_request (GtkWidget      *widget,
@@ -219,7 +219,7 @@ gtk_image_class_init (GtkImageClass *class)
 
   widget_class = GTK_WIDGET_CLASS (class);
   
-  widget_class->expose_event = gtk_image_expose;
+  widget_class->draw = gtk_image_draw;
   widget_class->size_request = gtk_image_size_request;
   widget_class->unmap = gtk_image_unmap;
   widget_class->unrealize = gtk_image_unrealize;
@@ -1569,20 +1569,18 @@ ensure_pixbuf_for_gicon (GtkImage     *image,
 }
 
 static gint
-gtk_image_expose (GtkWidget      *widget,
-		  GdkEventExpose *event)
+gtk_image_draw (GtkWidget *widget,
+                cairo_t   *cr)
 {
   GtkImage *image;
   GtkImagePrivate *priv;
 
   g_return_val_if_fail (GTK_IS_IMAGE (widget), FALSE);
-  g_return_val_if_fail (event != NULL, FALSE);
 
   image = GTK_IMAGE (widget);
   priv = image->priv;
   
-  if (gtk_widget_get_mapped (widget) &&
-      priv->storage_type != GTK_IMAGE_EMPTY)
+  if (priv->storage_type != GTK_IMAGE_EMPTY)
     {
       GtkAllocation allocation;
       GtkMisc *misc;
@@ -1745,8 +1743,6 @@ gtk_image_expose (GtkWidget      *widget,
 
       if (pixbuf)
         {
-          cairo_t *cr;
-
           if (needs_state_transform)
             {
               GtkIconSource *source;
@@ -1777,16 +1773,13 @@ gtk_image_expose (GtkWidget      *widget,
               pixbuf = rendered;
             }
 
-          cr = gdk_cairo_create (gtk_widget_get_window (widget));
           gdk_cairo_set_source_pixbuf (cr, pixbuf, x, y);
           gdk_cairo_rectangle (cr, &image_bound);
           cairo_fill (cr);
-          cairo_destroy (cr);
-        } /* if rectangle intersects */      
 
-      g_object_unref (pixbuf);
-
-    } /* if widget is drawable */
+          g_object_unref (pixbuf);
+        }
+    }
 
   return FALSE;
 }
