@@ -2746,7 +2746,7 @@ gtk_default_draw_flat_box (GtkStyle      *style,
           if (!strcmp ("viewportbin", detail))
             gc1 = &style->bg[GTK_STATE_NORMAL];
           else if (!strcmp ("entry_bg", detail))
-            gc1 = &style->base[state_type];
+            gc1 = &style->base[gtk_widget_get_state (widget)];
 
           /* For trees: even rows are base color, odd rows are a shade of
            * the base color, the sort column is a shade of the original color
