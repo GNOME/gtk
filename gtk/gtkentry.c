@@ -3466,9 +3466,13 @@ gtk_entry_draw (GtkWidget *widget,
 
   if (gtk_cairo_should_draw_window (cr, entry->text_area))
     {
-      gint width, height;
+      gint x, y, width, height;
+
+      cairo_save (cr);
 
       gdk_drawable_get_size (entry->text_area, &width, &height);
+      gdk_window_get_position (entry->text_area, &x, &y);
+      cairo_translate (cr, x, y);
 
       gtk_cairo_paint_flat_box (style, cr,
 			  state, GTK_SHADOW_NONE,
@@ -3487,6 +3491,8 @@ gtk_entry_draw (GtkWidget *widget,
 	  gtk_widget_has_focus (widget) &&
 	  entry->selection_bound == entry->current_pos && entry->cursor_visible) 
         gtk_entry_draw_cursor (GTK_ENTRY (widget), cr, CURSOR_STANDARD);
+
+      cairo_restore (cr);
     }
 
   for (i = 0; i < MAX_ICONS; i++)
@@ -3495,9 +3501,13 @@ gtk_entry_draw (GtkWidget *widget,
 
       if (icon_info != NULL && gtk_cairo_should_draw_window (cr, icon_info->window))
         {
-          gint width, height;
+          gint x, y, width, height;
+
+          cairo_save (cr);
 
           gdk_drawable_get_size (icon_info->window, &width, &height);
+          gdk_window_get_position (icon_info->window, &x, &y);
+          cairo_translate (cr, x, y);
 
           gtk_cairo_paint_flat_box (style, cr,
                               state, GTK_SHADOW_NONE,
@@ -3506,6 +3516,8 @@ gtk_entry_draw (GtkWidget *widget,
 
           gtk_entry_draw_progress (widget, cr, icon_info->window);
           draw_icon (widget, cr, i);
+
+          cairo_restore (cr);
 
           break;
         }
@@ -5584,71 +5596,68 @@ gtk_entry_draw_text (GtkEntry *entry,
                      cairo_t  *cr)
 {
   GtkWidget *widget = GTK_WIDGET (entry);
+  GtkStateType state;
+  GtkStyle *style;
+  GdkColor text_color, bar_text_color;
+  gint pos_x, pos_y;
+  gint width, height;
+  gint progress_x, progress_y, progress_width, progress_height;
+
 
   /* Nothing to display at all */
   if (gtk_entry_get_display_mode (entry) == DISPLAY_BLANK)
     return;
   
-  if (gtk_widget_is_drawable (widget))
+  state = GTK_STATE_SELECTED;
+  if (!gtk_widget_get_sensitive (widget))
+    state = GTK_STATE_INSENSITIVE;
+  style = gtk_widget_get_style (widget);
+  text_color = style->text[gtk_widget_get_state (widget)];
+  bar_text_color = style->fg[state];
+
+  get_progress_area (widget,
+                     &progress_x, &progress_y,
+                     &progress_width, &progress_height);
+
+  /* If the color is the same, or the progress area has a zero
+   * size, then we only need to draw once. */
+  if ((text_color.pixel == bar_text_color.pixel) ||
+      ((progress_width == 0) || (progress_height == 0)))
     {
-      GtkStateType state;
-      GtkStyle *style;
-      GdkColor text_color, bar_text_color;
-      gint pos_x, pos_y;
-      gint width, height;
-      gint progress_x, progress_y, progress_width, progress_height;
+      draw_text_with_color (entry, cr, &text_color);
+    }
+  else
+    {
+      gdk_drawable_get_size (entry->text_area, &width, &height);
 
-      state = GTK_STATE_SELECTED;
-      if (!gtk_widget_get_sensitive (widget))
-        state = GTK_STATE_INSENSITIVE;
-      style = gtk_widget_get_style (widget);
-      text_color = style->text[gtk_widget_get_state (widget)];
-      bar_text_color = style->fg[state];
+      cairo_save (cr);
 
-      get_progress_area (widget,
-                         &progress_x, &progress_y,
-                         &progress_width, &progress_height);
+      cairo_rectangle (cr, 0, 0, width, height);
+      cairo_clip (cr);
+      cairo_save (cr);
 
-      /* If the color is the same, or the progress area has a zero
-       * size, then we only need to draw once. */
-      if ((text_color.pixel == bar_text_color.pixel) ||
-          ((progress_width == 0) || (progress_height == 0)))
-        {
-          draw_text_with_color (entry, cr, &text_color);
-        }
-      else
-        {
-          gdk_drawable_get_size (entry->text_area, &width, &height);
+      cairo_set_fill_rule (cr, CAIRO_FILL_RULE_EVEN_ODD);
+      cairo_rectangle (cr, 0, 0, width, height);
 
-          cairo_save (cr);
+      gdk_window_get_position (entry->text_area, &pos_x, &pos_y);
+      progress_x -= pos_x;
+      progress_y -= pos_y;
 
-          cairo_rectangle (cr, 0, 0, width, height);
-          cairo_clip (cr);
-          cairo_save (cr);
+      cairo_rectangle (cr, progress_x, progress_y,
+                       progress_width, progress_height);
+      cairo_clip (cr);
+      cairo_set_fill_rule (cr, CAIRO_FILL_RULE_WINDING);
+  
+      draw_text_with_color (entry, cr, &text_color);
+      cairo_restore (cr);
 
-          cairo_set_fill_rule (cr, CAIRO_FILL_RULE_EVEN_ODD);
-          cairo_rectangle (cr, 0, 0, width, height);
+      cairo_rectangle (cr, progress_x, progress_y,
+                       progress_width, progress_height);
+      cairo_clip (cr);
 
-          gdk_window_get_position (entry->text_area, &pos_x, &pos_y);
-          progress_x -= pos_x;
-          progress_y -= pos_y;
+      draw_text_with_color (entry, cr, &bar_text_color);
 
-          cairo_rectangle (cr, progress_x, progress_y,
-                           progress_width, progress_height);
-          cairo_clip (cr);
-          cairo_set_fill_rule (cr, CAIRO_FILL_RULE_WINDING);
-      
-          draw_text_with_color (entry, cr, &text_color);
-          cairo_restore (cr);
-
-          cairo_rectangle (cr, progress_x, progress_y,
-                           progress_width, progress_height);
-          cairo_clip (cr);
-
-          draw_text_with_color (entry, cr, &bar_text_color);
-
-          cairo_restore (cr);
-        }
+      cairo_restore (cr);
     }
 }
 
@@ -5681,118 +5690,114 @@ gtk_entry_draw_cursor (GtkEntry  *entry,
   GtkWidget *widget = GTK_WIDGET (entry);
   GdkKeymap *keymap = gdk_keymap_get_for_display (gtk_widget_get_display (GTK_WIDGET (entry)));
   PangoDirection keymap_direction = gdk_keymap_get_direction (keymap);
-  
-  if (gtk_widget_is_drawable (widget))
+  GdkRectangle cursor_location;
+  gboolean split_cursor;
+  PangoRectangle cursor_rect;
+  GtkBorder inner_border;
+  gint xoffset;
+  gint text_area_height;
+  gint cursor_index;
+  gboolean block;
+  gboolean block_at_line_end;
+  PangoLayout *layout;
+  const char *text;
+
+  _gtk_entry_effective_inner_border (entry, &inner_border);
+
+  xoffset = inner_border.left - entry->scroll_offset;
+
+  gdk_drawable_get_size (entry->text_area, NULL, &text_area_height);
+
+  layout = gtk_entry_ensure_layout (entry, TRUE);
+  text = pango_layout_get_text (layout);
+  cursor_index = g_utf8_offset_to_pointer (text, entry->current_pos + entry->preedit_cursor) - text;
+  if (!entry->overwrite_mode)
+    block = FALSE;
+  else
+    block = _gtk_text_util_get_block_cursor_location (layout,
+                                                      cursor_index, &cursor_rect, &block_at_line_end);
+
+  if (!block)
     {
-      GdkRectangle cursor_location;
-      gboolean split_cursor;
-      PangoRectangle cursor_rect;
-      GtkBorder inner_border;
-      gint xoffset;
-      gint text_area_height;
-      gint cursor_index;
-      gboolean block;
-      gboolean block_at_line_end;
-      PangoLayout *layout;
-      const char *text;
+      gint strong_x, weak_x;
+      PangoDirection dir1 = PANGO_DIRECTION_NEUTRAL;
+      PangoDirection dir2 = PANGO_DIRECTION_NEUTRAL;
+      gint x1 = 0;
+      gint x2 = 0;
 
-      _gtk_entry_effective_inner_border (entry, &inner_border);
+      gtk_entry_get_cursor_locations (entry, type, &strong_x, &weak_x);
 
-      xoffset = inner_border.left - entry->scroll_offset;
+      g_object_get (gtk_widget_get_settings (widget),
+                    "gtk-split-cursor", &split_cursor,
+                    NULL);
 
-      gdk_drawable_get_size (entry->text_area, NULL, &text_area_height);
+      dir1 = entry->resolved_dir;
+  
+      if (split_cursor)
+        {
+          x1 = strong_x;
 
-      layout = gtk_entry_ensure_layout (entry, TRUE);
-      text = pango_layout_get_text (layout);
-      cursor_index = g_utf8_offset_to_pointer (text, entry->current_pos + entry->preedit_cursor) - text;
-      if (!entry->overwrite_mode)
-        block = FALSE;
+          if (weak_x != strong_x)
+            {
+              dir2 = (entry->resolved_dir == PANGO_DIRECTION_LTR) ? PANGO_DIRECTION_RTL : PANGO_DIRECTION_LTR;
+              x2 = weak_x;
+            }
+        }
       else
-        block = _gtk_text_util_get_block_cursor_location (layout,
-                                                          cursor_index, &cursor_rect, &block_at_line_end);
-
-      if (!block)
         {
-          gint strong_x, weak_x;
-          PangoDirection dir1 = PANGO_DIRECTION_NEUTRAL;
-          PangoDirection dir2 = PANGO_DIRECTION_NEUTRAL;
-          gint x1 = 0;
-          gint x2 = 0;
-
-          gtk_entry_get_cursor_locations (entry, type, &strong_x, &weak_x);
-
-          g_object_get (gtk_widget_get_settings (widget),
-                        "gtk-split-cursor", &split_cursor,
-                        NULL);
-
-          dir1 = entry->resolved_dir;
-      
-          if (split_cursor)
-            {
-              x1 = strong_x;
-
-              if (weak_x != strong_x)
-                {
-                  dir2 = (entry->resolved_dir == PANGO_DIRECTION_LTR) ? PANGO_DIRECTION_RTL : PANGO_DIRECTION_LTR;
-                  x2 = weak_x;
-                }
-            }
+          if (keymap_direction == entry->resolved_dir)
+            x1 = strong_x;
           else
-            {
-              if (keymap_direction == entry->resolved_dir)
-                x1 = strong_x;
-              else
-                x1 = weak_x;
-            }
-
-          cursor_location.x = xoffset + x1;
-          cursor_location.y = inner_border.top;
-          cursor_location.width = 0;
-          cursor_location.height = text_area_height - inner_border.top - inner_border.bottom;
-
-          draw_insertion_cursor (entry, cr,
-                                 &cursor_location, TRUE, dir1,
-                                 dir2 != PANGO_DIRECTION_NEUTRAL);
-      
-          if (dir2 != PANGO_DIRECTION_NEUTRAL)
-            {
-              cursor_location.x = xoffset + x2;
-              draw_insertion_cursor (entry, cr,
-                                     &cursor_location, FALSE, dir2,
-                                     TRUE);
-            }
+            x1 = weak_x;
         }
-      else /* overwrite_mode */
+
+      cursor_location.x = xoffset + x1;
+      cursor_location.y = inner_border.top;
+      cursor_location.width = 0;
+      cursor_location.height = text_area_height - inner_border.top - inner_border.bottom;
+
+      draw_insertion_cursor (entry, cr,
+                             &cursor_location, TRUE, dir1,
+                             dir2 != PANGO_DIRECTION_NEUTRAL);
+  
+      if (dir2 != PANGO_DIRECTION_NEUTRAL)
         {
-          GdkColor cursor_color;
-          GdkRectangle rect;
-          gint x, y;
-
-          cairo_save (cr);
-
-          get_layout_position (entry, &x, &y);
-
-          rect.x = PANGO_PIXELS (cursor_rect.x) + x;
-          rect.y = PANGO_PIXELS (cursor_rect.y) + y;
-          rect.width = PANGO_PIXELS (cursor_rect.width);
-          rect.height = PANGO_PIXELS (cursor_rect.height);
-
-          _gtk_widget_get_cursor_color (widget, &cursor_color);
-          gdk_cairo_set_source_color (cr, &cursor_color);
-          gdk_cairo_rectangle (cr, &rect);
-          cairo_fill (cr);
-
-          if (!block_at_line_end)
-            {
-              gdk_cairo_rectangle (cr, &rect);
-              cairo_clip (cr);
-              cairo_move_to (cr, x, y);
-              gdk_cairo_set_source_color (cr, &gtk_widget_get_style (widget)->base[gtk_widget_get_state (widget)]);
-              pango_cairo_show_layout (cr, layout);
-            }
-
-          cairo_restore (cr);
+          cursor_location.x = xoffset + x2;
+          draw_insertion_cursor (entry, cr,
+                                 &cursor_location, FALSE, dir2,
+                                 TRUE);
         }
+    }
+  else /* overwrite_mode */
+    {
+      GdkColor cursor_color;
+      GdkRectangle rect;
+      gint x, y;
+
+      cairo_save (cr);
+
+      get_layout_position (entry, &x, &y);
+
+      rect.x = PANGO_PIXELS (cursor_rect.x) + x;
+      rect.y = PANGO_PIXELS (cursor_rect.y) + y;
+      rect.width = PANGO_PIXELS (cursor_rect.width);
+      rect.height = PANGO_PIXELS (cursor_rect.height);
+
+      _gtk_widget_get_cursor_color (widget, &cursor_color);
+      gdk_cairo_set_source_color (cr, &cursor_color);
+      gdk_cairo_rectangle (cr, &rect);
+      cairo_fill (cr);
+
+      if (!block_at_line_end)
+        {
+          gdk_cairo_rectangle (cr, &rect);
+          cairo_clip (cr);
+          cairo_move_to (cr, x, y);
+          gdk_cairo_set_source_color (cr, &gtk_widget_get_style (widget)->base[gtk_widget_get_state (widget)]);
+          pango_cairo_show_layout (cr, layout);
+        }
+
+      cairo_restore (cr);
     }
 }
 
