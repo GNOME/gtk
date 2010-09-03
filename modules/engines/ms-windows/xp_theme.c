@@ -900,66 +900,54 @@ get_window_dc (GtkStyle *style,
 	       gint x, gint y, gint width, gint height,
 	       RECT *rect_out)
 {
-#if 0
-  GdkDrawable *drawable = NULL;
-  GdkGC *gc = style->dark_gc[state_type];
-  gint x_offset, y_offset;
+  cairo_t *cr;
+  cairo_surface_t *surface;
+  HDC dc;
+  gint x_offset = 0, y_offset = 0;
+  double x_off, y_off;
+
+  dc_info_out->cr = NULL;
+  dc_info_out->dc = NULL;
   
-  dc_info_out->data = NULL;
-  
-  drawable = gdk_win32_begin_direct_draw_libgtk_only (window,
-						      gc, &dc_info_out->data,
-						      &x_offset, &y_offset);
-  if (!drawable)
+  cr = gdk_cairo_create (window);
+  if (!cr)
     return NULL;
 
-  rect_out->left = x - x_offset;
-  rect_out->top = y - y_offset;
-  rect_out->right = rect_out->left + width;
-  rect_out->bottom = rect_out->top + height;
+  surface = cairo_get_target (cr);
+  cairo_surface_get_device_offset (surface, &x_off, &y_off);
+  cairo_surface_flush (surface);
   
-  dc_info_out->drawable = drawable;
-  dc_info_out->gc = gc;
-  dc_info_out->x_offset = x_offset;
-  dc_info_out->y_offset = y_offset;
+  dc = cairo_win32_surface_get_dc (surface);
+  if (!dc)
+   return NULL;
   
-  return gdk_win32_hdc_get (drawable, gc, 0);
-#else
-  cairo_t *cr;
-  cairo_surface_t *crs;
-  gint x_offset, y_offset;
+  x_offset = -x_off;
+  y_offset = -y_off;
 
-  cr = gdk_cairo_create (window);
-  crs = cairo_get_target (cr);
-  x_offset = 0;
-  y_offset = 0;
-
-
-  dc_info_out->data = NULL;
-  
   rect_out->left = x - x_offset;
   rect_out->top = y - y_offset;
   rect_out->right = rect_out->left + width;
   rect_out->bottom = rect_out->top + height;
   
   dc_info_out->cr = cr;
+  dc_info_out->dc = dc;
   dc_info_out->x_offset = x_offset;
   dc_info_out->y_offset = y_offset;
   
-  return cairo_win32_surface_get_dc (crs);
-#endif
+  return dc;
 }
 
 void
 release_window_dc (XpDCInfo *dc_info)
 {
-#if 0
-  gdk_win32_hdc_release (dc_info->drawable, dc_info->gc, 0);
+  if (!dc_info->cr || !dc_info->dc)
+    return;
 
-  gdk_win32_end_direct_draw_libgtk_only (dc_info->data);
-#else
+  ReleaseDC (NULL, dc_info->dc);
   cairo_destroy (dc_info->cr);
-#endif
+  
+  dc_info->cr = NULL;
+  dc_info->dc = NULL;
 }
 
 gboolean
@@ -1014,7 +1002,7 @@ xp_theme_draw (GdkWindow *win, XpThemeElement element, GtkStyle *style,
 			      part_state, &rect, pClip);
 
   release_window_dc (&dc_info);
-  
+
   return TRUE;
 }
 

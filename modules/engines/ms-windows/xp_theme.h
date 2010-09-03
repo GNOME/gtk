@@ -115,19 +115,10 @@ typedef enum
 
 typedef struct
 {
-#if 0
-  GdkDrawable *drawable;
-  GdkGC *gc;
-#else
   cairo_t *cr;
-  cairo_surface_t *crs;
-#endif
-  
+  HDC dc;
   gint x_offset;
   gint y_offset;
-  
-  /*< private >*/
-  gpointer data;
 } XpDCInfo;
 
 HDC get_window_dc (GtkStyle *style,
