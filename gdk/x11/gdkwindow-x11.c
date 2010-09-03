@@ -593,7 +593,6 @@ setup_toplevel_window (GdkWindow *window,
   GdkDisplay *display = gdk_drawable_get_display (window);
   Display *xdisplay = GDK_WINDOW_XDISPLAY (window);
   XID xid = GDK_WINDOW_XID (window);
-  XID xparent = GDK_WINDOW_XID (parent);
   GdkScreenX11 *screen_x11 = GDK_SCREEN_X11 (GDK_WINDOW_SCREEN (parent));
   XSizeHints size_hints;
   long pid;
