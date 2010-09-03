@@ -311,7 +311,11 @@ _gdk_windowing_get_startup_notify_id (GAppLaunchContext *context,
   if (files_count == 0)
     description = g_strdup_printf (_("Starting %s"), g_app_info_get_name (info));
   else if (files_count == 1)
-    description = g_strdup_printf (_("Opening %s"), get_display_name (files->data));
+    {
+      gchar *display_name = get_display_name (files->data);
+      description = g_strdup_printf (_("Opening %s"), display_name);
+      g_free (display_name);
+    }
   else
     description = g_strdup_printf (g_dngettext (GETTEXT_PACKAGE,
 						"Opening %d Item",
