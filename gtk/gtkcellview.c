@@ -73,8 +73,8 @@ static void        gtk_cell_view_set_property             (GObject          *obj
 static void        gtk_cell_view_finalize                 (GObject          *object);
 static void        gtk_cell_view_size_allocate            (GtkWidget        *widget,
                                                            GtkAllocation    *allocation);
-static gboolean    gtk_cell_view_expose                   (GtkWidget        *widget,
-                                                           GdkEventExpose   *event);
+static gboolean    gtk_cell_view_draw                     (GtkWidget        *widget,
+                                                           cairo_t          *cr);
 static void        gtk_cell_view_set_value                (GtkCellView     *cell_view,
                                                            GtkCellRenderer *renderer,
                                                            gchar           *property,
@@ -168,7 +168,7 @@ gtk_cell_view_class_init (GtkCellViewClass *klass)
   gobject_class->set_property = gtk_cell_view_set_property;
   gobject_class->finalize = gtk_cell_view_finalize;
 
-  widget_class->expose_event = gtk_cell_view_expose;
+  widget_class->draw = gtk_cell_view_draw;
   widget_class->size_allocate = gtk_cell_view_size_allocate;
 
   /* properties */
@@ -426,36 +426,30 @@ gtk_cell_view_size_allocate (GtkWidget     *widget,
 }
 
 static gboolean
-gtk_cell_view_expose (GtkWidget      *widget,
-                      GdkEventExpose *event)
+gtk_cell_view_draw (GtkWidget *widget,
+                    cairo_t   *cr)
 {
-  GtkAllocation allocation;
   GList *list;
   GtkCellView *cellview;
   GdkRectangle area;
   GtkCellRendererState state;
   gboolean rtl = (gtk_widget_get_direction(widget) == GTK_TEXT_DIR_RTL);
   GtkPackType packing;
-  cairo_t *cr;
+  int width;
 
   cellview = GTK_CELL_VIEW (widget);
 
-  if (!gtk_widget_is_drawable (widget))
-    return FALSE;
-
-  gtk_widget_get_allocation (widget, &allocation);
-  cr = gdk_cairo_create (event->window);
-  gdk_cairo_region (cr, event->region);
-  cairo_clip (cr);
+  /* render cells */
+  area.x = 0;
+  area.y = 0;
+  area.width = width = gtk_widget_get_allocated_width (widget);
+  area.height = gtk_widget_get_allocated_height (widget);
 
   /* "blank" background */
   if (cellview->priv->background_set)
     {
-      gdk_cairo_rectangle (cr, &allocation);
-      cairo_set_source_rgb (cr,
-			    cellview->priv->background.red / 65535.,
-			    cellview->priv->background.green / 65535.,
-			    cellview->priv->background.blue / 65535.);
+      gdk_cairo_rectangle (cr, &area);
+      gdk_cairo_set_source_color (cr, &cellview->priv->background);
       cairo_fill (cr);
     }
 
@@ -463,16 +457,7 @@ gtk_cell_view_expose (GtkWidget      *widget,
   if (cellview->priv->displayed_row)
     gtk_cell_view_set_cell_data (cellview);
   else if (cellview->priv->model)
-    {
-      cairo_destroy (cr);
-      return FALSE;
-    }
-
-  /* render cells */
-  area = allocation;
-
-  /* we draw on our very own window, initialize x and y to zero */
-  area.y = allocation.y;
+    return FALSE;
 
   if (gtk_widget_get_state (widget) == GTK_STATE_PRELIGHT)
     state = GTK_CELL_RENDERER_PRELIT;
@@ -484,9 +469,9 @@ gtk_cell_view_expose (GtkWidget      *widget,
   for (packing = GTK_PACK_START; packing <= GTK_PACK_END; ++packing)
     {
       if (packing == GTK_PACK_START)
-	area.x = allocation.x + (rtl ? allocation.width : 0);
+	area.x = rtl ? width : 0;
       else
-	area.x = rtl ? allocation.x : (allocation.x + allocation.width);
+	area.x = rtl ? 0 : width;
 
       for (list = cellview->priv->cell_list; list; list = list->next)
 	{
@@ -520,8 +505,6 @@ gtk_cell_view_expose (GtkWidget      *widget,
 	    area.x -= cellview->priv->spacing;
 	}
     }
-
-  cairo_destroy (cr);
 
   return FALSE;
 }
