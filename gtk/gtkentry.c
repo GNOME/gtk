@@ -264,9 +264,10 @@ static void   gtk_entry_size_request         (GtkWidget        *widget,
 static void   gtk_entry_size_allocate        (GtkWidget        *widget,
 					      GtkAllocation    *allocation);
 static void   gtk_entry_draw_frame           (GtkWidget        *widget,
-                                              GdkEventExpose   *event);
+                                              cairo_t          *cr);
 static void   gtk_entry_draw_progress        (GtkWidget        *widget,
-                                              GdkEventExpose   *event);
+                                              cairo_t          *cr,
+                                              GdkWindow        *window);
 static gint   gtk_entry_expose               (GtkWidget        *widget,
 					      GdkEventExpose   *event);
 static gint   gtk_entry_button_press         (GtkWidget        *widget,
@@ -416,8 +417,10 @@ static void         gtk_entry_enter_text               (GtkEntry       *entry,
 static void         gtk_entry_set_positions            (GtkEntry       *entry,
 							gint            current_pos,
 							gint            selection_bound);
-static void         gtk_entry_draw_text                (GtkEntry       *entry);
+static void         gtk_entry_draw_text                (GtkEntry       *entry,
+                                                        cairo_t        *cr);
 static void         gtk_entry_draw_cursor              (GtkEntry       *entry,
+                                                        cairo_t        *cr,
 							CursorType      type);
 static PangoLayout *gtk_entry_ensure_layout            (GtkEntry       *entry,
                                                         gboolean        include_preedit);
@@ -3192,6 +3195,7 @@ should_prelight (GtkEntry             *entry,
 
 static void
 draw_icon (GtkWidget            *widget,
+           cairo_t              *cr,
            GtkEntryIconPosition  icon_pos)
 {
   GtkEntry *entry = GTK_ENTRY (widget);
@@ -3199,7 +3203,6 @@ draw_icon (GtkWidget            *widget,
   EntryIconInfo *icon_info = priv->icons[icon_pos];
   GdkPixbuf *pixbuf;
   gint x, y, width, height;
-  cairo_t *cr;
 
   if (!icon_info)
     return;
@@ -3257,10 +3260,8 @@ draw_icon (GtkWidget            *widget,
       pixbuf = temp_pixbuf;
     }
 
-  cr = gdk_cairo_create (icon_info->window);
   gdk_cairo_set_source_pixbuf (cr, pixbuf, x, y);
   cairo_paint (cr);
-  cairo_destroy (cr);
 
   g_object_unref (pixbuf);
 }
@@ -3268,7 +3269,7 @@ draw_icon (GtkWidget            *widget,
 
 static void
 gtk_entry_draw_frame (GtkWidget      *widget,
-                      GdkEventExpose *event)
+                      cairo_t        *cr)
 {
   GtkEntryPrivate *priv = GTK_ENTRY_GET_PRIVATE (widget);
   GtkStyle *style;
@@ -3306,12 +3307,12 @@ gtk_entry_draw_frame (GtkWidget      *widget,
   state = gtk_widget_has_focus (widget) ?
     GTK_STATE_ACTIVE : gtk_widget_get_state (widget);
 
-  gtk_paint_shadow (style, window,
+  gtk_cairo_paint_shadow (style, cr,
                     state, priv->shadow_type,
-                    &event->area, widget, "entry", x, y, width, height);
+                    widget, "entry", x, y, width, height);
 
 
-  gtk_entry_draw_progress (widget, event);
+  gtk_entry_draw_progress (widget, cr, window);
 
   if (gtk_widget_has_focus (widget) && !priv->interior_focus)
     {
@@ -3320,9 +3321,9 @@ gtk_entry_draw_frame (GtkWidget      *widget,
       width += 2 * priv->focus_width;
       height += 2 * priv->focus_width;
 
-      gtk_paint_focus (style, window,
+      gtk_cairo_paint_focus (style, cr,
                        gtk_widget_get_state (widget),
-		       &event->area, widget, "entry",
+		       widget, "entry",
 		       0, 0, width, height);
     }
 }
@@ -3413,7 +3414,8 @@ get_progress_area (GtkWidget *widget,
 
 static void
 gtk_entry_draw_progress (GtkWidget      *widget,
-                         GdkEventExpose *event)
+                         cairo_t        *cr,
+                         GdkWindow      *window)
 {
   gint x, y, width, height;
   GtkStateType state;
@@ -3423,11 +3425,11 @@ gtk_entry_draw_progress (GtkWidget      *widget,
   if ((width <= 0) || (height <= 0))
     return;
 
-  if (event->window != gtk_widget_get_window (widget))
+  if (window != gtk_widget_get_window (widget))
     {
       gint pos_x, pos_y;
 
-      gdk_window_get_position (event->window, &pos_x, &pos_y);
+      gdk_window_get_position (window, &pos_x, &pos_y);
 
       x -= pos_x;
       y -= pos_y;
@@ -3437,9 +3439,9 @@ gtk_entry_draw_progress (GtkWidget      *widget,
   if (!gtk_widget_get_sensitive (widget))
     state = GTK_STATE_INSENSITIVE;
 
-  gtk_paint_box (gtk_widget_get_style (widget), event->window,
+  gtk_cairo_paint_box (gtk_widget_get_style (widget), cr,
                  state, GTK_SHADOW_OUT,
-                 &event->area, widget, "entry-progress",
+                 widget, "entry-progress",
                  x, y,
                  width, height);
 }
@@ -3452,6 +3454,12 @@ gtk_entry_expose (GtkWidget      *widget,
   GtkStyle *style;
   GtkStateType state;
   GtkEntryPrivate *priv = GTK_ENTRY_GET_PRIVATE (entry);
+  cairo_t *cr;
+  int i;
+
+  cr = gdk_cairo_create (event->window);
+  gdk_cairo_region (cr, event->region);
+  cairo_clip (cr);
 
   style = gtk_widget_get_style (widget);
 
@@ -3459,59 +3467,56 @@ gtk_entry_expose (GtkWidget      *widget,
     GTK_STATE_ACTIVE : gtk_widget_get_state (widget);
 
   if (gtk_widget_get_window (widget) == event->window)
-    {
-      gtk_entry_draw_frame (widget, event);
-    }
-  else if (entry->text_area == event->window)
+    gtk_entry_draw_frame (widget, cr);
+
+  if (entry->text_area == event->window)
     {
       gint width, height;
 
       gdk_drawable_get_size (entry->text_area, &width, &height);
 
-      gtk_paint_flat_box (style, entry->text_area,
+      gtk_cairo_paint_flat_box (style, cr,
 			  state, GTK_SHADOW_NONE,
-			  &event->area, widget, "entry_bg",
+			  widget, "entry_bg",
 			  0, 0, width, height);
 
-      gtk_entry_draw_progress (widget, event);
+      gtk_entry_draw_progress (widget, cr, entry->text_area);
 
       if (entry->dnd_position != -1)
-	gtk_entry_draw_cursor (GTK_ENTRY (widget), CURSOR_DND);
+	gtk_entry_draw_cursor (GTK_ENTRY (widget), cr, CURSOR_DND);
       
-      gtk_entry_draw_text (GTK_ENTRY (widget));
+      gtk_entry_draw_text (GTK_ENTRY (widget), cr);
 
       /* When no text is being displayed at all, don't show the cursor */
       if (gtk_entry_get_display_mode (entry) != DISPLAY_BLANK &&
 	  gtk_widget_has_focus (widget) &&
 	  entry->selection_bound == entry->current_pos && entry->cursor_visible) 
-        gtk_entry_draw_cursor (GTK_ENTRY (widget), CURSOR_STANDARD);
+        gtk_entry_draw_cursor (GTK_ENTRY (widget), cr, CURSOR_STANDARD);
     }
-  else
+
+  for (i = 0; i < MAX_ICONS; i++)
     {
-      int i;
+      EntryIconInfo *icon_info = priv->icons[i];
 
-      for (i = 0; i < MAX_ICONS; i++)
+      if (icon_info != NULL && event->window == icon_info->window)
         {
-          EntryIconInfo *icon_info = priv->icons[i];
+          gint width, height;
 
-          if (icon_info != NULL && event->window == icon_info->window)
-            {
-              gint width, height;
+          gdk_drawable_get_size (icon_info->window, &width, &height);
 
-              gdk_drawable_get_size (icon_info->window, &width, &height);
+          gtk_cairo_paint_flat_box (style, cr,
+                              state, GTK_SHADOW_NONE,
+                              widget, "entry_bg",
+                              0, 0, width, height);
 
-              gtk_paint_flat_box (style, icon_info->window,
-                                  state, GTK_SHADOW_NONE,
-                                  NULL, widget, "entry_bg",
-                                  0, 0, width, height);
+          gtk_entry_draw_progress (widget, cr, icon_info->window);
+          draw_icon (widget, cr, i);
 
-              gtk_entry_draw_progress (widget, event);
-              draw_icon (widget, i);
-
-              break;
-            }
+          break;
         }
     }
+
+  cairo_destroy (cr);
 
   return FALSE;
 }
@@ -5582,10 +5587,10 @@ draw_text_with_color (GtkEntry *entry, cairo_t *cr, GdkColor *default_color)
 }
 
 static void
-gtk_entry_draw_text (GtkEntry *entry)
+gtk_entry_draw_text (GtkEntry *entry,
+                     cairo_t  *cr)
 {
   GtkWidget *widget = GTK_WIDGET (entry);
-  cairo_t *cr;
 
   /* Nothing to display at all */
   if (gtk_entry_get_display_mode (entry) == DISPLAY_BLANK)
@@ -5611,8 +5616,6 @@ gtk_entry_draw_text (GtkEntry *entry)
                          &progress_x, &progress_y,
                          &progress_width, &progress_height);
 
-      cr = gdk_cairo_create (entry->text_area);
-
       /* If the color is the same, or the progress area has a zero
        * size, then we only need to draw once. */
       if ((text_color.pixel == bar_text_color.pixel) ||
@@ -5623,6 +5626,8 @@ gtk_entry_draw_text (GtkEntry *entry)
       else
         {
           gdk_drawable_get_size (entry->text_area, &width, &height);
+
+          cairo_save (cr);
 
           cairo_rectangle (cr, 0, 0, width, height);
           cairo_clip (cr);
@@ -5648,14 +5653,15 @@ gtk_entry_draw_text (GtkEntry *entry)
           cairo_clip (cr);
 
           draw_text_with_color (entry, cr, &bar_text_color);
-        }
 
-      cairo_destroy (cr);
+          cairo_restore (cr);
+        }
     }
 }
 
 static void
 draw_insertion_cursor (GtkEntry      *entry,
+                       cairo_t       *cr,
 		       GdkRectangle  *cursor_location,
 		       gboolean       is_primary,
 		       PangoDirection direction,
@@ -5669,13 +5675,14 @@ draw_insertion_cursor (GtkEntry      *entry,
   else
     text_dir = GTK_TEXT_DIR_RTL;
 
-  gtk_draw_insertion_cursor (widget, entry->text_area, NULL,
+  gtk_cairo_draw_insertion_cursor (widget, cr,
 			     cursor_location,
 			     is_primary, text_dir, draw_arrow);
 }
 
 static void
 gtk_entry_draw_cursor (GtkEntry  *entry,
+                       cairo_t   *cr,
 		       CursorType type)
 {
   GtkWidget *widget = GTK_WIDGET (entry);
@@ -5750,14 +5757,14 @@ gtk_entry_draw_cursor (GtkEntry  *entry,
           cursor_location.width = 0;
           cursor_location.height = text_area_height - inner_border.top - inner_border.bottom;
 
-          draw_insertion_cursor (entry,
+          draw_insertion_cursor (entry, cr,
                                  &cursor_location, TRUE, dir1,
                                  dir2 != PANGO_DIRECTION_NEUTRAL);
       
           if (dir2 != PANGO_DIRECTION_NEUTRAL)
             {
               cursor_location.x = xoffset + x2;
-              draw_insertion_cursor (entry,
+              draw_insertion_cursor (entry, cr,
                                      &cursor_location, FALSE, dir2,
                                      TRUE);
             }
@@ -5766,8 +5773,9 @@ gtk_entry_draw_cursor (GtkEntry  *entry,
         {
           GdkColor cursor_color;
           GdkRectangle rect;
-          cairo_t *cr;
           gint x, y;
+
+          cairo_save (cr);
 
           get_layout_position (entry, &x, &y);
 
@@ -5775,8 +5783,6 @@ gtk_entry_draw_cursor (GtkEntry  *entry,
           rect.y = PANGO_PIXELS (cursor_rect.y) + y;
           rect.width = PANGO_PIXELS (cursor_rect.width);
           rect.height = PANGO_PIXELS (cursor_rect.height);
-
-          cr = gdk_cairo_create (entry->text_area);
 
           _gtk_widget_get_cursor_color (widget, &cursor_color);
           gdk_cairo_set_source_color (cr, &cursor_color);
@@ -5792,7 +5798,7 @@ gtk_entry_draw_cursor (GtkEntry  *entry,
               pango_cairo_show_layout (cr, layout);
             }
 
-          cairo_destroy (cr);
+          cairo_restore (cr);
         }
     }
 }
