@@ -1568,45 +1568,6 @@ ensure_pixbuf_for_gicon (GtkImage     *image,
     }
 }
 
-
-/*
- * Like gdk_rectangle_intersect (dest, src, dest), but make 
- * sure that the origin of dest is moved by an "even" offset. 
- * If necessary grow the intersection by one row or column 
- * to achieve this.
- *
- * This is necessary since we can't pass alignment information
- * for the pixelation pattern down to gdk_pixbuf_saturate_and_pixelate(), 
- * thus we have to makesure that the subimages are properly aligned.
- */
-static gboolean
-rectangle_intersect_even (GdkRectangle *src, 
-			  GdkRectangle *dest)
-{
-  gboolean isect;
-  gint x, y;
-
-  x = dest->x;
-  y = dest->y;
-  isect = gdk_rectangle_intersect (dest, src, dest);
-
-  if ((dest->x - x + dest->y - y) % 2 != 0)
-    {
-      if (dest->x > x)
-	{
-	  dest->x--;
-	  dest->width++;
-	}
-      else
-	{
-	  dest->y--;
-	  dest->height++;
-	}
-    }
-  
-  return isect;
-}
-
 static gint
 gtk_image_expose (GtkWidget      *widget,
 		  GdkEventExpose *event)
@@ -1625,7 +1586,7 @@ gtk_image_expose (GtkWidget      *widget,
     {
       GtkAllocation allocation;
       GtkMisc *misc;
-      GdkRectangle area, image_bound;
+      GdkRectangle image_bound;
       gint x, y;
       gint xpad, ypad;
       gfloat xalign, yalign;
@@ -1634,7 +1595,6 @@ gtk_image_expose (GtkWidget      *widget,
       gboolean needs_state_transform;
 
       misc = GTK_MISC (widget);
-      area = event->area;
 
       /* For stock items and icon sets, we lazily calculate
        * the size; we might get here between a queue_resize()
@@ -1645,9 +1605,6 @@ gtk_image_expose (GtkWidget      *widget,
 	gtk_image_calc_size (image);
 
       gtk_widget_get_allocation (widget, &allocation);
-
-      if (!gdk_rectangle_intersect (&area, &allocation, &area))
-	return FALSE;
 
       gtk_misc_get_alignment (misc, &xalign, &yalign);
       gtk_misc_get_padding (misc, &xpad, &ypad);
@@ -1672,21 +1629,8 @@ gtk_image_expose (GtkWidget      *widget,
           image_bound.width = gdk_pixbuf_get_width (priv->data.pixbuf.pixbuf);
           image_bound.height = gdk_pixbuf_get_height (priv->data.pixbuf.pixbuf);
 
-	  if (rectangle_intersect_even (&area, &image_bound) &&
-	      needs_state_transform)
-	    {
-	      pixbuf = gdk_pixbuf_new_subpixbuf (priv->data.pixbuf.pixbuf,
-						 image_bound.x - x, image_bound.y - y,
-						 image_bound.width, image_bound.height);
-
-	      x = image_bound.x;
-	      y = image_bound.y;
-	    }
-	  else
-	    {
-	      pixbuf = priv->data.pixbuf.pixbuf;
-	      g_object_ref (pixbuf);
-	    }
+          pixbuf = priv->data.pixbuf.pixbuf;
+          g_object_ref (pixbuf);
           break;
 
         case GTK_IMAGE_STOCK:
@@ -1799,8 +1743,7 @@ gtk_image_expose (GtkWidget      *widget,
           break;
         }
 
-      if (pixbuf &&
-          rectangle_intersect_even (&area, &image_bound))
+      if (pixbuf)
         {
           cairo_t *cr;
 
