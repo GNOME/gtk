@@ -3509,7 +3509,7 @@ gtk_entry_expose (GtkWidget      *widget,
               gdk_drawable_get_size (icon_info->window, &width, &height);
 
               gtk_paint_flat_box (style, icon_info->window,
-                                  gtk_widget_get_state (widget), GTK_SHADOW_NONE,
+                                  state, GTK_SHADOW_NONE,
                                   NULL, widget, "entry_bg",
                                   0, 0, width, height);
 
