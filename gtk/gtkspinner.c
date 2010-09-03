@@ -73,8 +73,8 @@ struct _GtkSpinnerPrivate
 static void gtk_spinner_dispose        (GObject         *gobject);
 static void gtk_spinner_map            (GtkWidget       *widget);
 static void gtk_spinner_unmap          (GtkWidget       *widget);
-static gboolean gtk_spinner_expose     (GtkWidget       *widget,
-                                        GdkEventExpose  *event);
+static gboolean gtk_spinner_draw       (GtkWidget       *widget,
+                                        cairo_t         *cr);
 static void gtk_spinner_style_set      (GtkWidget       *widget,
                                         GtkStyle        *prev_style);
 static void gtk_spinner_get_property   (GObject         *object,
@@ -110,7 +110,7 @@ gtk_spinner_class_init (GtkSpinnerClass *klass)
   widget_class = GTK_WIDGET_CLASS(klass);
   widget_class->map = gtk_spinner_map;
   widget_class->unmap = gtk_spinner_unmap;
-  widget_class->expose_event = gtk_spinner_expose;
+  widget_class->draw = gtk_spinner_draw;
   widget_class->style_set = gtk_spinner_style_set;
   widget_class->get_accessible = gtk_spinner_get_accessible;
 
@@ -247,33 +247,27 @@ gtk_spinner_size_request_init (GtkSizeRequestIface *iface)
 
 
 static gboolean
-gtk_spinner_expose (GtkWidget      *widget,
-                    GdkEventExpose *event)
+gtk_spinner_draw (GtkWidget *widget,
+                  cairo_t   *cr)
 {
-  GtkAllocation allocation;
   GtkStateType state_type;
   GtkSpinnerPrivate *priv;
-  int width, height;
 
   priv = GTK_SPINNER (widget)->priv;
-
-  gtk_widget_get_allocation (widget, &allocation);
-  width = allocation.width;
-  height = allocation.height;
 
   state_type = GTK_STATE_NORMAL;
   if (!gtk_widget_is_sensitive (widget))
    state_type = GTK_STATE_INSENSITIVE;
 
-  gtk_paint_spinner (gtk_widget_get_style (widget),
-                     gtk_widget_get_window (widget),
+  gtk_cairo_paint_spinner (gtk_widget_get_style (widget),
+                     cr,
                      state_type,
-                     &event->area,
                      widget,
                      "spinner",
                      priv->current,
-                     event->area.x, event->area.y,
-                     event->area.width, event->area.height);
+                     0, 0,
+                     gtk_widget_get_allocated_width (widget),
+                     gtk_widget_get_allocated_height (widget));
 
   return FALSE;
 }
