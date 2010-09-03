@@ -268,8 +268,8 @@ static void   gtk_entry_draw_frame           (GtkWidget        *widget,
 static void   gtk_entry_draw_progress        (GtkWidget        *widget,
                                               cairo_t          *cr,
                                               GdkWindow        *window);
-static gint   gtk_entry_expose               (GtkWidget        *widget,
-					      GdkEventExpose   *event);
+static gint   gtk_entry_draw                 (GtkWidget        *widget,
+                                              cairo_t          *cr);
 static gint   gtk_entry_button_press         (GtkWidget        *widget,
 					      GdkEventButton   *event);
 static gint   gtk_entry_button_release       (GtkWidget        *widget,
@@ -582,7 +582,7 @@ gtk_entry_class_init (GtkEntryClass *class)
   widget_class->unrealize = gtk_entry_unrealize;
   widget_class->size_request = gtk_entry_size_request;
   widget_class->size_allocate = gtk_entry_size_allocate;
-  widget_class->expose_event = gtk_entry_expose;
+  widget_class->draw = gtk_entry_draw;
   widget_class->enter_notify_event = gtk_entry_enter_notify;
   widget_class->leave_notify_event = gtk_entry_leave_notify;
   widget_class->button_press_event = gtk_entry_button_press;
@@ -3447,29 +3447,24 @@ gtk_entry_draw_progress (GtkWidget      *widget,
 }
 
 static gint
-gtk_entry_expose (GtkWidget      *widget,
-		  GdkEventExpose *event)
+gtk_entry_draw (GtkWidget *widget,
+		cairo_t   *cr)
 {
   GtkEntry *entry = GTK_ENTRY (widget);
   GtkStyle *style;
   GtkStateType state;
   GtkEntryPrivate *priv = GTK_ENTRY_GET_PRIVATE (entry);
-  cairo_t *cr;
   int i;
-
-  cr = gdk_cairo_create (event->window);
-  gdk_cairo_region (cr, event->region);
-  cairo_clip (cr);
 
   style = gtk_widget_get_style (widget);
 
   state = gtk_widget_has_focus (widget) ?
     GTK_STATE_ACTIVE : gtk_widget_get_state (widget);
 
-  if (gtk_widget_get_window (widget) == event->window)
+  if (gtk_cairo_should_draw_window (cr, gtk_widget_get_window (widget)))
     gtk_entry_draw_frame (widget, cr);
 
-  if (entry->text_area == event->window)
+  if (gtk_cairo_should_draw_window (cr, entry->text_area))
     {
       gint width, height;
 
@@ -3498,7 +3493,7 @@ gtk_entry_expose (GtkWidget      *widget,
     {
       EntryIconInfo *icon_info = priv->icons[i];
 
-      if (icon_info != NULL && event->window == icon_info->window)
+      if (icon_info != NULL && gtk_cairo_should_draw_window (cr, icon_info->window))
         {
           gint width, height;
 
@@ -3515,8 +3510,6 @@ gtk_entry_expose (GtkWidget      *widget,
           break;
         }
     }
-
-  cairo_destroy (cr);
 
   return FALSE;
 }
@@ -6748,7 +6741,7 @@ gtk_entry_set_buffer (GtkEntry       *entry,
  * @entry: a #GtkEntry
  *
  * Returns the #GdkWindow which contains the text. This function is
- * useful when drawing something to the entry in an expose-event
+ * useful when drawing something to the entry in a draw
  * callback because it enables the callback to distinguish between
  * the text window and entry's icon windows.
  *
@@ -8178,7 +8171,7 @@ gtk_entry_get_current_icon_drag_source (GtkEntry *entry)
  *
  * Returns the #GdkWindow which contains the entry's icon at
  * @icon_pos. This function is useful when drawing something to the
- * entry in an expose-event callback because it enables the callback
+ * entry in a draw callback because it enables the callback
  * to distinguish between the text window and entry's icon windows.
  *
  * See also gtk_entry_get_text_window().
