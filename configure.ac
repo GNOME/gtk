@@ -243,10 +243,6 @@ AC_ARG_ENABLE(rebuilds,
               [AC_HELP_STRING([--disable-rebuilds],
                               [disable all source autogeneration rules])],,
               [enable_rebuilds=yes])
-AC_ARG_ENABLE(visibility,
-              [AC_HELP_STRING([--disable-visibility],
-                              [do not use ELF visibility attributes])],,
-              [enable_visibility=yes])
 
 AC_ARG_WITH(xinput,
             [AC_HELP_STRING([--with-xinput=@<:@no/yes@:>@], [support XInput])])
@@ -281,11 +277,6 @@ else
   else
     GTK_DEBUG_FLAGS="-DG_DISABLE_CAST_CHECKS"
   fi
-fi
-
-
-if test "x$enable_visibility" = "xno"; then
-  GTK_DEBUG_FLAGS="$GTK_DEBUG_FLAGS -DDISABLE_VISIBILITY"
 fi
 
 
@@ -1746,4 +1737,4 @@ perf/Makefile
 AC_OUTPUT
 
 echo "configuration:
-        target: $gdktarget"
+        target:             $gdktarget"
