@@ -330,8 +330,8 @@ How to compile GTK+ itself
             <arg>--enable-debug=[no|minimum|yes]</arg>
           </group>
           <group>
-            <arg>--disable-visibility</arg>
-            <arg>--enable-visibility</arg>
+            <arg>--disable-Bsymbolic</arg>
+            <arg>--enable-Bsymbolic</arg>
           </group>
           <group>
             <arg>--disable-shm</arg>
@@ -398,7 +398,7 @@ How to compile GTK+ itself
 
       <formalpara>
         <title><systemitem>--enable-debug</systemitem></title>
-        
+
         <para>
          Turns on various amounts of debugging support. Setting this to 'no'
          disables g_assert(), g_return_if_fail(), g_return_val_if_fail() and
@@ -415,15 +415,11 @@ How to compile GTK+ itself
       </formalpara>
 
       <formalpara>
-        <title><systemitem>--disable-visibility</systemitem> and
-          <systemitem>--enable-visibility</systemitem></title>
+        <title><systemitem>--disable-Bsymbolic</systemitem> and
+          <systemitem>--enable-Bsymbolic</systemitem></title>
         <para>
-          The option <systemitem>--disable-visibility</systemitem>
-          turns off the use of ELF visibility attributes for linking
-          optimizations. This makes sense while changing GTK+ itself,
-          since the way in which GTK+ uses visibility attributes
-          forces a full rebuild of all source files for any header
-          modification.
+          The option <systemitem>--disable-Bsymbolic</systemitem>
+          turns off the use of the -Bsymbolic-functions linker flag.
         </para>
       </formalpara>
 
