@@ -231,10 +231,6 @@ popup_menu (GtkStatusIcon *icon,
   gtk_menu_set_screen (GTK_MENU (menu),
                        gtk_status_icon_get_screen (icon));
 
-  gtk_menu_shell_append (GTK_MENU_SHELL (menu), menuitem);
-
-  gtk_widget_show (menuitem);
-
   menuitem = gtk_image_menu_item_new_from_stock (GTK_STOCK_PROPERTIES, NULL);
   g_signal_connect (menuitem, "activate", G_CALLBACK (do_properties), icon);
 
