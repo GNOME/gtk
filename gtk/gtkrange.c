@@ -1708,7 +1708,6 @@ gtk_range_get_stepper_detail (GtkRange *range,
 {
   GtkRangePrivate *priv = range->priv;
   const gchar *stepper_detail;
-  gboolean need_orientation;
   gchar *detail;
   const gchar *position = NULL;
 
