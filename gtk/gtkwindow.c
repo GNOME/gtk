@@ -1638,7 +1638,7 @@ gtk_window_set_focus (GtkWindow *window,
       GtkWidget *widget = window->focus_widget;
       if (widget)
 	{
-	  while (parent = gtk_widget_get_parent (widget))
+	  while ((parent = gtk_widget_get_parent (widget)))
 	    {
 	      widget = parent;
 	      gtk_container_set_focus_child (GTK_CONTAINER (widget), NULL);
