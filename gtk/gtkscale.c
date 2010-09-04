@@ -133,8 +133,8 @@ static void     gtk_scale_get_mark_label_size     (GtkScale        *scale,
 static void     gtk_scale_finalize                (GObject        *object);
 static void     gtk_scale_screen_changed          (GtkWidget      *widget,
                                                    GdkScreen      *old_screen);
-static gboolean gtk_scale_expose                  (GtkWidget      *widget,
-                                                   GdkEventExpose *event);
+static gboolean gtk_scale_draw                    (GtkWidget      *widget,
+                                                   cairo_t        *cr);
 static void     gtk_scale_real_get_layout_offsets (GtkScale       *scale,
                                                    gint           *x,
                                                    gint           *y);
@@ -197,7 +197,7 @@ gtk_scale_class_init (GtkScaleClass *class)
 
   widget_class->style_set = gtk_scale_style_set;
   widget_class->screen_changed = gtk_scale_screen_changed;
-  widget_class->expose_event = gtk_scale_expose;
+  widget_class->draw = gtk_scale_draw;
   widget_class->size_request = gtk_scale_size_request;
 
   range_class->slider_detail = "Xscale";
@@ -994,15 +994,14 @@ find_next_pos (GtkWidget      *widget,
 }
 
 static gboolean
-gtk_scale_expose (GtkWidget      *widget,
-                  GdkEventExpose *event)
+gtk_scale_draw (GtkWidget *widget,
+                cairo_t   *cr)
 {
   GtkScale *scale = GTK_SCALE (widget);
   GtkScalePrivate *priv = scale->priv;
   GtkRange *range = GTK_RANGE (scale);
   GtkStateType state_type;
   GtkStyle *style;
-  GdkWindow *window;
   gint n_marks;
   gint *marks;
   gint focus_padding;
@@ -1020,9 +1019,7 @@ gtk_scale_expose (GtkWidget      *widget,
   /* We need to chain up _first_ so the various geometry members of
    * GtkRange struct are updated.
    */
-  GTK_WIDGET_CLASS (gtk_scale_parent_class)->expose_event (widget, event);
-
-  window = gtk_widget_get_window (widget);
+  GTK_WIDGET_CLASS (gtk_scale_parent_class)->draw (widget, cr);
 
   state_type = GTK_STATE_NORMAL;
   if (!gtk_widget_is_sensitive (widget))
@@ -1030,7 +1027,6 @@ gtk_scale_expose (GtkWidget      *widget,
 
   if (priv->marks)
     {
-      GtkAllocation allocation;
       GtkOrientation orientation;
       GdkRectangle range_rect;
       gint i;
@@ -1044,37 +1040,34 @@ gtk_scale_expose (GtkWidget      *widget,
       orientation = gtk_orientable_get_orientation (GTK_ORIENTABLE (range));
       n_marks = _gtk_range_get_stop_positions (range, &marks);
       layout = gtk_widget_create_pango_layout (widget, NULL);
-      gtk_widget_get_allocation (widget, &allocation);
       gtk_range_get_range_rect (range, &range_rect);
 
-      if (orientation == GTK_ORIENTATION_HORIZONTAL)
-        min_pos_before = min_pos_after = allocation.x;
-      else
-        min_pos_before = min_pos_after = allocation.y;
+      min_pos_before = min_pos_after = 0;
+
       for (m = priv->marks, i = 0; m; m = m->next, i++)
         {
           GtkScaleMark *mark = m->data;
 
           if (orientation == GTK_ORIENTATION_HORIZONTAL)
             {
-              x1 = allocation.x + marks[i];
+              x1 = marks[i];
               if (mark->position == GTK_POS_TOP)
                 {
-                  y1 = allocation.y + range_rect.y;
+                  y1 = range_rect.y;
                   y2 = y1 - slider_width / 2;
                   min_pos = min_pos_before;
-                  max_pos = allocation.x + find_next_pos (widget, m, marks + i, GTK_POS_TOP, 1) - min_sep;
+                  max_pos = find_next_pos (widget, m, marks + i, GTK_POS_TOP, 1) - min_sep;
                 }
               else
                 {
-                  y1 = allocation.y + range_rect.y + range_rect.height;
+                  y1 = range_rect.y + range_rect.height;
                   y2 = y1 + slider_width / 2;
                   min_pos = min_pos_after;
-                  max_pos = allocation.x + find_next_pos (widget, m, marks + i, GTK_POS_TOP, 0) - min_sep;
+                  max_pos = find_next_pos (widget, m, marks + i, GTK_POS_TOP, 0) - min_sep;
                 }
 
-              gtk_paint_vline (style, window, state_type,
-                               NULL, widget, "scale-mark", y1, y2, x1);
+              gtk_cairo_paint_vline (style, cr, state_type,
+                               widget, "scale-mark", y1, y2, x1);
 
               if (mark->markup)
                 {
@@ -1086,8 +1079,8 @@ gtk_scale_expose (GtkWidget      *widget,
                     x3 = min_pos;
                   if (x3 + logical_rect.width > max_pos)
                         x3 = max_pos - logical_rect.width;
-                  if (x3 < allocation.x)
-                     x3 = allocation.x;
+                  if (x3 < 0)
+                     x3 = 0;
                   if (mark->position == GTK_POS_TOP)
                     {
                       y3 = y2 - value_spacing - logical_rect.height;
@@ -1099,8 +1092,8 @@ gtk_scale_expose (GtkWidget      *widget,
                       min_pos_after = x3 + logical_rect.width + min_sep;
                     }
 
-                  gtk_paint_layout (style, window, state_type,
-                                    FALSE, NULL, widget, "scale-mark",
+                  gtk_cairo_paint_layout (style, cr, state_type,
+                                    FALSE, widget, "scale-mark",
                                     x3, y3, layout);
                 }
             }
@@ -1108,22 +1101,22 @@ gtk_scale_expose (GtkWidget      *widget,
             {
               if (mark->position == GTK_POS_LEFT)
                 {
-                  x1 = allocation.x + range_rect.x;
-                  x2 = allocation.x + range_rect.x - slider_width / 2;
+                  x1 = range_rect.x;
+                  x2 = range_rect.x - slider_width / 2;
                   min_pos = min_pos_before;
-                  max_pos = allocation.y + find_next_pos (widget, m, marks + i, GTK_POS_LEFT, 1) - min_sep;
+                  max_pos = find_next_pos (widget, m, marks + i, GTK_POS_LEFT, 1) - min_sep;
                 }
               else
                 {
-                  x1 = allocation.x + range_rect.x + range_rect.width;
-                  x2 = allocation.x + range_rect.x + range_rect.width + slider_width / 2;
+                  x1 = range_rect.x + range_rect.width;
+                  x2 = range_rect.x + range_rect.width + slider_width / 2;
                   min_pos = min_pos_after;
-                  max_pos = allocation.y + find_next_pos (widget, m, marks + i, GTK_POS_LEFT, 0) - min_sep;
+                  max_pos = find_next_pos (widget, m, marks + i, GTK_POS_LEFT, 0) - min_sep;
                 }
-              y1 = allocation.y + marks[i];
+              y1 = marks[i];
 
-              gtk_paint_hline (style, window, state_type,
-                               NULL, widget, "range-mark", x1, x2, y1);
+              gtk_cairo_paint_hline (style, cr, state_type,
+                               widget, "range-mark", x1, x2, y1);
 
               if (mark->markup)
                 {
@@ -1135,8 +1128,8 @@ gtk_scale_expose (GtkWidget      *widget,
                     y3 = min_pos;
                   if (y3 + logical_rect.height > max_pos)
                     y3 = max_pos - logical_rect.height;
-                  if (y3 < allocation.y)
-                    y3 = allocation.y;
+                  if (y3 < 0)
+                    y3 = 0;
                   if (mark->position == GTK_POS_LEFT)
                     {
                       x3 = x2 - value_spacing - logical_rect.width;
@@ -1148,8 +1141,8 @@ gtk_scale_expose (GtkWidget      *widget,
                       min_pos_after = y3 + logical_rect.height + min_sep;
                     }
 
-                  gtk_paint_layout (style, window, state_type,
-                                    FALSE, NULL, widget, "scale-mark",
+                  gtk_cairo_paint_layout (style, cr, state_type,
+                                    FALSE, widget, "scale-mark",
                                     x3, y3, layout);
                 }
             }
@@ -1162,22 +1155,25 @@ gtk_scale_expose (GtkWidget      *widget,
   if (priv->draw_value)
     {
       GtkOrientation orientation;
+      GtkAllocation allocation;
+
       PangoLayout *layout;
       gint x, y;
 
       orientation = gtk_orientable_get_orientation (GTK_ORIENTABLE (range));
       layout = gtk_scale_get_layout (scale);
       gtk_scale_get_layout_offsets (scale, &x, &y);
+      gtk_widget_get_allocation (widget, &allocation);
 
-      gtk_paint_layout (style,
-                        window,
+      gtk_cairo_paint_layout (style,
+                        cr,
                         state_type,
 			FALSE,
-                        NULL,
                         widget,
                         orientation == GTK_ORIENTATION_HORIZONTAL ?
                         "hscale" : "vscale",
-                        x, y,
+                        x - allocation.x,
+                        y - allocation.y,
                         layout);
 
     }
