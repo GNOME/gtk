@@ -1755,10 +1755,10 @@ gtk_range_get_stepper_detail (GtkRange *range,
 static void
 draw_stepper (GtkRange     *range,
               Stepper       stepper,
+              cairo_t      *cr,
               GtkArrowType  arrow_type,
               gboolean      clicked,
-              gboolean      prelighted,
-              GdkRectangle *area)
+              gboolean      prelighted)
 {
   GtkRangePrivate *priv = range->priv;
   GtkAllocation allocation;
@@ -1766,7 +1766,6 @@ draw_stepper (GtkRange     *range,
   GtkShadowType shadow_type;
   GtkStyle *style;
   GtkWidget *widget = GTK_WIDGET (range);
-  GdkRectangle intersection;
   GdkWindow *window;
   gfloat arrow_scaling;
   GdkRectangle *rect;
@@ -1795,14 +1794,7 @@ draw_stepper (GtkRange     *range,
 
   gboolean arrow_sensitive = TRUE;
 
-  /* More to get the right clip region than for efficiency */
-  if (!gdk_rectangle_intersect (area, rect, &intersection))
-    return;
-
   gtk_widget_get_allocation (widget, &allocation);
-
-  intersection.x += allocation.x;
-  intersection.y += allocation.y;
 
   if ((!priv->inverted && (arrow_type == GTK_ARROW_DOWN ||
                             arrow_type == GTK_ARROW_RIGHT)) ||
@@ -1833,12 +1825,12 @@ draw_stepper (GtkRange     *range,
   style = gtk_widget_get_style (widget);
   window = gtk_widget_get_window (widget);
 
-  gtk_paint_box (style, window,
+  gtk_cairo_paint_box (style, cr,
 		 state_type, shadow_type,
-		 &intersection, widget,
+		 widget,
 		 gtk_range_get_stepper_detail (range, stepper),
-                 allocation.x + rect->x,
-                 allocation.y + rect->y,
+                 rect->x,
+                 rect->y,
 		 rect->width,
 		 rect->height);
 
@@ -1846,8 +1838,8 @@ draw_stepper (GtkRange     *range,
 
   arrow_width = rect->width * arrow_scaling;
   arrow_height = rect->height * arrow_scaling;
-  arrow_x = allocation.x + rect->x + (rect->width - arrow_width) / 2;
-  arrow_y = allocation.y + rect->y + (rect->height - arrow_height) / 2;
+  arrow_x = rect->x + (rect->width - arrow_width) / 2;
+  arrow_y = rect->y + (rect->height - arrow_height) / 2;
 
   if (clicked && arrow_sensitive)
     {
@@ -1862,9 +1854,9 @@ draw_stepper (GtkRange     *range,
       arrow_y += arrow_displacement_y;
     }
 
-  gtk_paint_arrow (style, window,
+  gtk_cairo_paint_arrow (style, cr,
                    state_type, shadow_type,
-                   &intersection, widget,
+                   widget,
                    gtk_range_get_stepper_detail (range, stepper),
                    arrow_type,
                    TRUE,
@@ -1882,12 +1874,16 @@ gtk_range_expose (GtkWidget      *widget,
   GtkStateType state;
   GtkShadowType shadow_type;
   GtkStyle *style;
-  GdkRectangle expose_area;	/* Relative to widget->allocation */
-  GdkRectangle area;
   GdkWindow *window;
   gint focus_line_width = 0;
   gint focus_padding = 0;
   gboolean touchscreen;
+  cairo_t *cr;
+
+  cr = gdk_cairo_create (event->window);
+  gdk_cairo_region (cr, event->region);
+  cairo_clip (cr);
+  cairo_translate (cr, widget->allocation.x, widget->allocation.y);
 
   g_object_get (gtk_widget_get_settings (widget),
                 "gtk-touchscreen-mode", &touchscreen,
@@ -1909,10 +1905,6 @@ gtk_range_expose (GtkWidget      *widget,
 
   gtk_widget_get_allocation (widget, &allocation);
 
-  expose_area = event->area;
-  expose_area.x -= allocation.x;
-  expose_area.y -= allocation.y;
-
   gtk_range_calc_marks (range);
   gtk_range_calc_layout (range, priv->adjustment->value);
 
@@ -1922,15 +1914,14 @@ gtk_range_expose (GtkWidget      *widget,
    * range rectangle, not the trough rectangle (the trough
    * rectangle is just for hit detection)
    */
-  /* The gdk_rectangle_intersect is more to get the right
-   * clip region (limited to range_rect) than for efficiency
-   */
-  if (gdk_rectangle_intersect (&expose_area, &priv->range_rect,
-                               &area))
+  cairo_save (cr);
+  gdk_cairo_rectangle (cr, &priv->range_rect);
+  cairo_clip (cr);
+
     {
-      gint     x      = (allocation.x + priv->range_rect.x +
+      gint     x      = (priv->range_rect.x +
                          focus_line_width + focus_padding);
-      gint     y      = (allocation.y + priv->range_rect.y +
+      gint     y      = (priv->range_rect.y +
                          focus_line_width + focus_padding);
       gint     width  = (priv->range_rect.width -
                          2 * (focus_line_width + focus_padding));
@@ -1939,9 +1930,6 @@ gtk_range_expose (GtkWidget      *widget,
       gboolean trough_under_steppers;
       gint     stepper_size;
       gint     stepper_spacing;
-
-      area.x += allocation.x;
-      area.y += allocation.y;
 
       gtk_widget_style_get (GTK_WIDGET (range),
                             "trough-under-steppers", &trough_under_steppers,
@@ -2001,16 +1989,16 @@ gtk_range_expose (GtkWidget      *widget,
 	  if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
 	    trough_change_pos_x = (priv->slider.x +
                                    priv->slider.width / 2 -
-                                   (x - allocation.x));
+                                   x);
 	  else
 	    trough_change_pos_y = (priv->slider.y +
                                    priv->slider.height / 2 -
-                                   (y - allocation.y));
+                                   y);
 
-          gtk_paint_box (style, window,
+          gtk_cairo_paint_box (style, cr,
                          sensitive ? GTK_STATE_ACTIVE : GTK_STATE_INSENSITIVE,
                          GTK_SHADOW_IN,
-                         &area, GTK_WIDGET (range),
+                         GTK_WIDGET (range),
                          should_invert (range) ? "trough-upper" : "trough-lower",
                          x, y,
                          trough_change_pos_x, trough_change_pos_y);
@@ -2020,10 +2008,10 @@ gtk_range_expose (GtkWidget      *widget,
 	  else
 	    trough_change_pos_x = 0;
 
-          gtk_paint_box (style, window,
+          gtk_cairo_paint_box (style, cr,
                          sensitive ? GTK_STATE_ACTIVE : GTK_STATE_INSENSITIVE,
                          GTK_SHADOW_IN,
-                         &area, GTK_WIDGET (range),
+                         GTK_WIDGET (range),
                          should_invert (range) ? "trough-lower" : "trough-upper",
                          x + trough_change_pos_x, y + trough_change_pos_y,
                          width - trough_change_pos_x,
@@ -2047,7 +2035,7 @@ gtk_range_expose (GtkWidget      *widget,
 
 	  if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
 	    {
-	      fill_x     = allocation.x + priv->trough.x;
+	      fill_x     = priv->trough.x;
 	      fill_width = (priv->slider.width +
                             (fill_level - priv->adjustment->lower) /
                             (priv->adjustment->upper -
@@ -2061,7 +2049,7 @@ gtk_range_expose (GtkWidget      *widget,
 	    }
 	  else
 	    {
-	      fill_y      = allocation.y + priv->trough.y;
+	      fill_y      = priv->trough.y;
 	      fill_height = (priv->slider.height +
                              (fill_level - priv->adjustment->lower) /
                              (priv->adjustment->upper -
@@ -2079,23 +2067,25 @@ gtk_range_expose (GtkWidget      *widget,
 	  else
 	    fill_detail = "trough-fill-level";
 
-          gtk_paint_box (style, window,
+          gtk_cairo_paint_box (style, cr,
                          sensitive ? GTK_STATE_ACTIVE : GTK_STATE_INSENSITIVE,
                          GTK_SHADOW_OUT,
-                         &area, GTK_WIDGET (range), fill_detail,
+                         GTK_WIDGET (range), fill_detail,
                          fill_x, fill_y,
                          fill_width, fill_height);
 	}
 
       if (sensitive && gtk_widget_has_focus (widget))
-        gtk_paint_focus (style, window,
+        gtk_cairo_paint_focus (style, cr,
                          gtk_widget_get_state (widget),
-                         &area, widget, "trough",
-                         allocation.x + priv->range_rect.x,
-                         allocation.y + priv->range_rect.y,
+                         widget, "trough",
+                         priv->range_rect.x,
+                         priv->range_rect.y,
                          priv->range_rect.width,
                          priv->range_rect.height);
     }
+
+  cairo_restore (cr);
 
   shadow_type = GTK_SHADOW_OUT;
 
@@ -2112,55 +2102,52 @@ gtk_range_expose (GtkWidget      *widget,
       shadow_type = GTK_SHADOW_IN;
     }
 
-  if (gdk_rectangle_intersect (&expose_area,
-                               &priv->slider,
-                               &area))
-    {
-      area.x += allocation.x;
-      area.y += allocation.y;
+  cairo_save (cr);
+  gdk_cairo_rectangle (cr, &priv->slider);
+  cairo_clip (cr);
 
-      gtk_paint_slider (style,
-                        window,
+    {
+      gtk_cairo_paint_slider (style,
+                        cr,
                         state,
                         shadow_type,
-                        &area,
                         widget,
                         gtk_range_get_slider_detail (range),
-                        allocation.x + priv->slider.x,
-                        allocation.y + priv->slider.y,
+                        priv->slider.x,
+                        priv->slider.y,
                         priv->slider.width,
                         priv->slider.height,
                         priv->orientation);
     }
 
+  cairo_restore (cr);
+
   if (priv->has_stepper_a)
-    draw_stepper (range, STEPPER_A,
+    draw_stepper (range, STEPPER_A, cr,
                   priv->orientation == GTK_ORIENTATION_VERTICAL ? GTK_ARROW_UP : GTK_ARROW_LEFT,
                   priv->grab_location == MOUSE_STEPPER_A,
-                  !touchscreen && priv->mouse_location == MOUSE_STEPPER_A,
-                  &expose_area);
+                  !touchscreen && priv->mouse_location == MOUSE_STEPPER_A);
 
   if (priv->has_stepper_b)
-    draw_stepper (range, STEPPER_B,
+    draw_stepper (range, STEPPER_B, cr,
                   priv->orientation == GTK_ORIENTATION_VERTICAL ? GTK_ARROW_DOWN : GTK_ARROW_RIGHT,
                   priv->grab_location == MOUSE_STEPPER_B,
-                  !touchscreen && priv->mouse_location == MOUSE_STEPPER_B,
-                  &expose_area);
+                  !touchscreen && priv->mouse_location == MOUSE_STEPPER_B);
 
   if (priv->has_stepper_c)
-    draw_stepper (range, STEPPER_C,
+    draw_stepper (range, STEPPER_C, cr,
                   priv->orientation == GTK_ORIENTATION_VERTICAL ? GTK_ARROW_UP : GTK_ARROW_LEFT,
                   priv->grab_location == MOUSE_STEPPER_C,
-                  !touchscreen && priv->mouse_location == MOUSE_STEPPER_C,
-                  &expose_area);
+                  !touchscreen && priv->mouse_location == MOUSE_STEPPER_C);
 
   if (priv->has_stepper_d)
-    draw_stepper (range, STEPPER_D,
+    draw_stepper (range, STEPPER_D, cr,
                   priv->orientation == GTK_ORIENTATION_VERTICAL ? GTK_ARROW_DOWN : GTK_ARROW_RIGHT,
                   priv->grab_location == MOUSE_STEPPER_D,
-                  !touchscreen && priv->mouse_location == MOUSE_STEPPER_D,
-                  &expose_area);
+                  !touchscreen && priv->mouse_location == MOUSE_STEPPER_D);
   
+  cairo_destroy (cr);
+
   return FALSE;
 }
 
