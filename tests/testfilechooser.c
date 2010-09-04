@@ -488,13 +488,11 @@ main (int argc, char **argv)
   gboolean force_rtl = FALSE;
   gboolean multiple = FALSE;
   char *action_arg = NULL;
-  char *backend = NULL;
   char *initial_filename = NULL;
   char *initial_folder = NULL;
   GError *error = NULL;
   GOptionEntry options[] = {
     { "action", 'a', 0, G_OPTION_ARG_STRING, &action_arg, "Filechooser action", "ACTION" },
-    { "backend", 'b', 0, G_OPTION_ARG_STRING, &backend, "Filechooser backend (default: gtk+)", "BACKEND" },
     { "multiple", 'm', 0, G_OPTION_ARG_NONE, &multiple, "Select-multiple", NULL },
     { "right-to-left", 'r', 0, G_OPTION_ARG_NONE, &force_rtl, "Force right-to-left layout.", NULL },
     { "initial-filename", 'f', 0, G_OPTION_ARG_FILENAME, &initial_filename, "Initial filename to select", "FILENAME" },
@@ -534,16 +532,10 @@ main (int argc, char **argv)
       g_free (action_arg);
     }
 
-  if (backend == NULL)
-    backend = g_strdup ("gtk+");
-
   dialog = g_object_new (GTK_TYPE_FILE_CHOOSER_DIALOG,
 			 "action", action,
-			 "file-system-backend", backend,
 			 "select-multiple", multiple,
 			 NULL);
-
-  g_free (backend);
 
   switch (action)
     {
