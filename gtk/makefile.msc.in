@@ -44,39 +44,6 @@ DEFINES = \
 TOUCH = copy makefile.msc+nul
 
 gtkbuiltincache.h: gtk-update-icon-cache.exe
-	cd stock-icons\16
-	copy gtk-go-forward-ltr.png gtk-go-back-rtl.png
-	copy gtk-go-back-ltr.png gtk-go-forward-rtl.png
-	copy gtk-goto-last-ltr.png gtk-goto-first-rtl.png
-	copy gtk-goto-first-ltr.png gtk-goto-last-rtl.png
-	copy gtk-media-rewind-ltr.png gtk-media-forward-rtl.png
-	copy gtk-media-previous-ltr.png gtk-media-next-rtl.png
-	copy gtk-media-next-ltr.png gtk-media-previous-rtl.png
-	copy gtk-media-forward-ltr.png gtk-media-rewind-rtl.png
-	copy gtk-floppy.png gtk-save.png
-	copy gtk-harddisk.png drive-harddisk.png
-	copy gtk-directory.png folder.png
-	copy gtk-directory.png folder-remote.png
-	copy gtk-home.png user-home.png
-	copy gtk-directory.png user-desktop.png
-	copy gtk-file.png text-x-generic.png
-	cd ..\24
-	copy gtk-go-forward-ltr.png gtk-go-back-rtl.png
-	copy gtk-go-back-ltr.png gtk-go-forward-rtl.png
-	copy gtk-goto-last-ltr.png gtk-goto-first-rtl.png
-	copy gtk-goto-first-ltr.png gtk-goto-last-rtl.png
-	copy gtk-media-rewind-ltr.png gtk-media-forward-rtl.png
-	copy gtk-media-previous-ltr.png gtk-media-next-rtl.png
-	copy gtk-media-next-ltr.png gtk-media-previous-rtl.png
-	copy gtk-media-forward-ltr.png gtk-media-rewind-rtl.png
-	copy gtk-floppy.png gtk-save.png
-	copy gtk-harddisk.png drive-harddisk.png
-	copy gtk-directory.png folder.png
-	copy gtk-directory.png folder-remote.png
-	copy gtk-home.png user-home.png
-	copy gtk-directory.png user-desktop.png
-	copy gtk-file.png text-x-generic.png
-	cd ..\..
 	del gtkicontheme.obj
 	gtk-update-icon-cache --force --ignore-theme-index 	\
 	   --source builtin_icons stock-icons > gtkbuiltincache.h
