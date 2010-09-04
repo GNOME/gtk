@@ -189,8 +189,8 @@ static void gtk_range_realize        (GtkWidget        *widget);
 static void gtk_range_unrealize      (GtkWidget        *widget);
 static void gtk_range_map            (GtkWidget        *widget);
 static void gtk_range_unmap          (GtkWidget        *widget);
-static gboolean gtk_range_expose         (GtkWidget        *widget,
-                                      GdkEventExpose   *event);
+static gboolean gtk_range_draw       (GtkWidget        *widget,
+                                      cairo_t          *cr);
 static gboolean gtk_range_button_press   (GtkWidget        *widget,
                                       GdkEventButton   *event);
 static gboolean gtk_range_button_release (GtkWidget        *widget,
@@ -297,7 +297,7 @@ gtk_range_class_init (GtkRangeClass *class)
   widget_class->unrealize = gtk_range_unrealize;  
   widget_class->map = gtk_range_map;
   widget_class->unmap = gtk_range_unmap;
-  widget_class->expose_event = gtk_range_expose;
+  widget_class->draw = gtk_range_draw;
   widget_class->button_press_event = gtk_range_button_press;
   widget_class->button_release_event = gtk_range_button_release;
   widget_class->motion_notify_event = gtk_range_motion_notify;
@@ -1864,10 +1864,9 @@ draw_stepper (GtkRange     *range,
 }
 
 static gboolean
-gtk_range_expose (GtkWidget      *widget,
-		  GdkEventExpose *event)
+gtk_range_draw (GtkWidget      *widget,
+                cairo_t        *cr)
 {
-  GtkAllocation allocation;
   GtkRange *range = GTK_RANGE (widget);
   GtkRangePrivate *priv = range->priv;
   gboolean sensitive;
@@ -1878,12 +1877,6 @@ gtk_range_expose (GtkWidget      *widget,
   gint focus_line_width = 0;
   gint focus_padding = 0;
   gboolean touchscreen;
-  cairo_t *cr;
-
-  cr = gdk_cairo_create (event->window);
-  gdk_cairo_region (cr, event->region);
-  cairo_clip (cr);
-  cairo_translate (cr, widget->allocation.x, widget->allocation.y);
 
   g_object_get (gtk_widget_get_settings (widget),
                 "gtk-touchscreen-mode", &touchscreen,
@@ -1902,8 +1895,6 @@ gtk_range_expose (GtkWidget      *widget,
   if (priv->repaint_id)
     g_source_remove (priv->repaint_id);
   priv->repaint_id = 0;
-
-  gtk_widget_get_allocation (widget, &allocation);
 
   gtk_range_calc_marks (range);
   gtk_range_calc_layout (range, priv->adjustment->value);
@@ -2146,8 +2137,6 @@ gtk_range_expose (GtkWidget      *widget,
                   priv->grab_location == MOUSE_STEPPER_D,
                   !touchscreen && priv->mouse_location == MOUSE_STEPPER_D);
   
-  cairo_destroy (cr);
-
   return FALSE;
 }
 
