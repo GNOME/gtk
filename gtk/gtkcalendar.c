@@ -2880,11 +2880,19 @@ gtk_calendar_expose (GtkWidget	    *widget,
 
   if (gtk_widget_is_drawable (widget))
     {
-      GdkWindow *window;
-
       cr = gdk_cairo_create (event->window);
       gdk_cairo_region (cr, event->region);
       cairo_clip (cr);
+
+      if (event->window == gtk_widget_get_window (widget))
+	{
+          gtk_cairo_paint_shadow (gtk_widget_get_style (widget), cr,
+                            gtk_widget_get_state (widget), GTK_SHADOW_IN,
+			    widget, "calendar",
+			    0, 0,
+                            gtk_widget_get_allocated_width (widget),
+                            gtk_widget_get_allocated_height (widget));
+	}
 
       if (event->window == priv->main_win)
 	calendar_paint_main (calendar, cr);
@@ -2901,17 +2909,6 @@ gtk_calendar_expose (GtkWidget	    *widget,
       
       if (event->window == priv->week_win)
 	calendar_paint_week_numbers (calendar, cr);
-
-      window = gtk_widget_get_window (widget);
-      if (event->window == window)
-	{
-          gtk_cairo_paint_shadow (gtk_widget_get_style (widget), cr,
-                            gtk_widget_get_state (widget), GTK_SHADOW_IN,
-			    widget, "calendar",
-			    0, 0,
-                            gtk_widget_get_allocated_width (widget),
-                            gtk_widget_get_allocated_height (widget));
-	}
 
       cairo_destroy (cr);
     }
