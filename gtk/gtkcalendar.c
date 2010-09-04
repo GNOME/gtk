@@ -351,8 +351,8 @@ static void     gtk_calendar_size_request   (GtkWidget        *widget,
 					     GtkRequisition   *requisition);
 static void     gtk_calendar_size_allocate  (GtkWidget        *widget,
 					     GtkAllocation    *allocation);
-static gboolean gtk_calendar_expose         (GtkWidget        *widget,
-					     GdkEventExpose   *event);
+static gboolean gtk_calendar_draw           (GtkWidget        *widget,
+                                             cairo_t          *cr);
 static gboolean gtk_calendar_button_press   (GtkWidget        *widget,
 					     GdkEventButton   *event);
 static gboolean gtk_calendar_button_release (GtkWidget        *widget,
@@ -447,7 +447,7 @@ gtk_calendar_class_init (GtkCalendarClass *class)
 
   widget_class->realize = gtk_calendar_realize;
   widget_class->unrealize = gtk_calendar_unrealize;
-  widget_class->expose_event = gtk_calendar_expose;
+  widget_class->draw = gtk_calendar_draw;
   widget_class->size_request = gtk_calendar_size_request;
   widget_class->size_allocate = gtk_calendar_size_allocate;
   widget_class->button_press_event = gtk_calendar_button_press;
@@ -2326,6 +2326,10 @@ calendar_paint_header (GtkCalendar *calendar, cairo_t *cr)
   struct tm *tm;
   gchar *str;
 
+  cairo_save (cr);
+  gdk_window_get_position (priv->header_win, &x, &y);
+  cairo_translate (cr, x, y);
+
   if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_LTR) 
     year_left = priv->year_before;
   else
@@ -2410,6 +2414,8 @@ calendar_paint_header (GtkCalendar *calendar, cairo_t *cr)
   pango_cairo_show_layout (cr, layout);
 
   g_object_unref (layout);
+
+  cairo_restore (cr);
 }
 
 static void
@@ -2429,6 +2435,11 @@ calendar_paint_day_names (GtkCalendar *calendar,
   gint focus_width;
   gint calendar_ysep = calendar_get_ysep (calendar);
   gint calendar_xsep = calendar_get_xsep (calendar);
+  int x, y;
+
+  cairo_save (cr);
+  gdk_window_get_position (priv->day_name_win, &x, &y);
+  cairo_translate (cr, x, y);
 
   gtk_widget_style_get (GTK_WIDGET (widget),
 			"focus-line-width", &focus_width,
@@ -2493,6 +2504,8 @@ calendar_paint_day_names (GtkCalendar *calendar,
     }
   
   g_object_unref (layout);
+
+  cairo_restore (cr);
 }
 
 static void
@@ -2501,7 +2514,6 @@ calendar_paint_week_numbers (GtkCalendar *calendar,
 {
   GtkWidget *widget = GTK_WIDGET (calendar);
   GtkCalendarPrivate *priv = GTK_CALENDAR_GET_PRIVATE (calendar);
-
   guint week = 0, year;
   gint row, x_loc, y_loc;
   gint day_height;
@@ -2511,6 +2523,11 @@ calendar_paint_week_numbers (GtkCalendar *calendar,
   gint focus_padding;
   gint focus_width;
   gint calendar_xsep = calendar_get_xsep (calendar);
+  int x, y;
+
+  cairo_save (cr);
+  gdk_window_get_position (priv->week_win, &x, &y);
+  cairo_translate (cr, x, y);
 
   gtk_widget_style_get (GTK_WIDGET (widget),
 			"focus-line-width", &focus_width,
@@ -2582,6 +2599,8 @@ calendar_paint_week_numbers (GtkCalendar *calendar,
     }
   
   g_object_unref (layout);
+
+  cairo_restore (cr);
 }
 
 static void
@@ -2814,11 +2833,17 @@ static void
 calendar_paint_main (GtkCalendar *calendar,
                      cairo_t     *cr)
 {
-  gint row, col;
+  gint row, col, x, y;
   
+  cairo_save (cr);
+  gdk_window_get_position (calendar->priv->main_win, &x, &y);
+  cairo_translate (cr, x, y);
+
   for (col = 0; col < 7; col++)
     for (row = 0; row < 6; row++)
       calendar_paint_day (calendar, cr, row, col);
+
+  cairo_restore (cr);
 }
 
 static void
@@ -2841,7 +2866,14 @@ calendar_paint_arrow (GtkCalendar *calendar,
   GtkWidget *widget = GTK_WIDGET (calendar);
   GtkCalendarPrivate *priv = GTK_CALENDAR_GET_PRIVATE (widget);
   GdkWindow *window;
+  int x, y;
   
+  cairo_save (cr);
+  gdk_window_get_position (priv->arrow_win[arrow], &x, &y);
+  cairo_translate (cr, x, y);
+  gdk_window_get_position (priv->header_win, &x, &y);
+  cairo_translate (cr, x, y);
+
   window = priv->arrow_win[arrow];
   if (window)
     {
@@ -2867,52 +2899,48 @@ calendar_paint_arrow (GtkCalendar *calendar,
 			 GTK_ARROW_RIGHT, TRUE, 
 			 width/2 - 4, height/2 - 4, 8, 8);
     }
+
+  cairo_restore (cr);
 }
 
 static gboolean
-gtk_calendar_expose (GtkWidget	    *widget,
-		     GdkEventExpose *event)
+gtk_calendar_draw (GtkWidget *widget,
+                   cairo_t   *cr)
 {
   GtkCalendar *calendar = GTK_CALENDAR (widget);
   GtkCalendarPrivate *priv = GTK_CALENDAR_GET_PRIVATE (widget);
-  cairo_t *cr;
   int i;
 
-  if (gtk_widget_is_drawable (widget))
+  if (gtk_cairo_should_draw_window (cr, gtk_widget_get_window (widget)))
     {
-      cr = gdk_cairo_create (event->window);
-      gdk_cairo_region (cr, event->region);
-      cairo_clip (cr);
-
-      if (event->window == gtk_widget_get_window (widget))
-	{
-          gtk_cairo_paint_shadow (gtk_widget_get_style (widget), cr,
-                            gtk_widget_get_state (widget), GTK_SHADOW_IN,
-			    widget, "calendar",
-			    0, 0,
-                            gtk_widget_get_allocated_width (widget),
-                            gtk_widget_get_allocated_height (widget));
-	}
-
-      if (event->window == priv->main_win)
-	calendar_paint_main (calendar, cr);
-      
-      if (event->window == priv->header_win)
-	calendar_paint_header (calendar, cr);
-
-      for (i = 0; i < 4; i++)
-	if (event->window == priv->arrow_win[i])
-	  calendar_paint_arrow (calendar, cr, i);
-      
-      if (event->window == priv->day_name_win)
-	calendar_paint_day_names (calendar, cr);
-      
-      if (event->window == priv->week_win)
-	calendar_paint_week_numbers (calendar, cr);
-
-      cairo_destroy (cr);
+      gtk_cairo_paint_shadow (gtk_widget_get_style (widget), cr,
+                        gtk_widget_get_state (widget), GTK_SHADOW_IN,
+                        widget, "calendar",
+                        0, 0,
+                        gtk_widget_get_allocated_width (widget),
+                        gtk_widget_get_allocated_height (widget));
     }
+
+  if (gtk_cairo_should_draw_window (cr, priv->main_win))
+    calendar_paint_main (calendar, cr);
   
+  if (priv->header_win &&
+      gtk_cairo_should_draw_window (cr, priv->header_win))
+    calendar_paint_header (calendar, cr);
+
+  for (i = 0; i < 4; i++)
+    if (priv->arrow_win[i] &&
+        gtk_cairo_should_draw_window (cr, priv->arrow_win[i]))
+      calendar_paint_arrow (calendar, cr, i);
+  
+  if (priv->day_name_win &&
+      gtk_cairo_should_draw_window (cr, priv->day_name_win))
+    calendar_paint_day_names (calendar, cr);
+  
+  if (priv->week_win &&
+      gtk_cairo_should_draw_window (cr, priv->week_win))
+    calendar_paint_week_numbers (calendar, cr);
+
   return FALSE;
 }
 
