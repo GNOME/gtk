@@ -112,6 +112,7 @@ open_test_window (void)
   int i;
 
   test_window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  gtk_window_set_title (GTK_WINDOW (test_window), "Tests");
 
   g_signal_connect (test_window, "delete-event",
                     G_CALLBACK (gtk_main_quit), test_window);
@@ -204,6 +205,7 @@ open_control_window (void)
   GtkWidget *toggle;
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  gtk_window_set_title (GTK_WINDOW (window), "Controls");
 
   g_signal_connect (window, "delete-event",
                     G_CALLBACK (gtk_main_quit), window);
@@ -236,6 +238,173 @@ open_control_window (void)
   gtk_widget_show_all (window);
 }
 
+#define TEST_WIDGET(outer) (gtk_bin_get_child (GTK_BIN (gtk_bin_get_child (GTK_BIN(outer)))))
+
+static GtkWidget*
+create_widget_visible_border (const char *text)
+{
+  GtkWidget *outer_box;
+  GtkWidget *inner_box;
+  GtkWidget *test_widget;
+  GtkWidget *label;
+  GdkColor color;
+
+  outer_box = gtk_event_box_new ();
+  gdk_color_parse ("black", &color);
+  gtk_widget_modify_bg (outer_box, GTK_STATE_NORMAL, &color);
+
+  inner_box = gtk_event_box_new ();
+  gtk_container_set_border_width (GTK_CONTAINER (inner_box), 5);
+  gdk_color_parse ("blue", &color);
+  gtk_widget_modify_bg (inner_box, GTK_STATE_NORMAL, &color);
+
+  gtk_container_add (GTK_CONTAINER (outer_box), inner_box);
+
+
+  test_widget = gtk_event_box_new ();
+  gdk_color_parse ("red", &color);
+  gtk_widget_modify_bg (test_widget, GTK_STATE_NORMAL, &color);
+
+  gtk_container_add (GTK_CONTAINER (inner_box), test_widget);
+
+  label = gtk_label_new (text);
+  gtk_container_add (GTK_CONTAINER (test_widget), label);
+
+  g_assert (TEST_WIDGET (outer_box) == test_widget);
+
+  gtk_widget_show_all (outer_box);
+
+  return outer_box;
+}
+
+static const char*
+enum_to_string (GType enum_type,
+                int   value)
+{
+  GEnumValue *v;
+
+  v = g_enum_get_value (g_type_class_peek (enum_type), value);
+
+  return v->value_nick;
+}
+
+static GtkWidget*
+create_aligned (GtkAlign    h_align,
+                GtkAlign    v_align)
+{
+  GtkWidget *widget;
+  char *label;
+
+  label = g_strdup_printf ("h=%s v=%s",
+                           enum_to_string (GTK_TYPE_ALIGN, h_align),
+                           enum_to_string (GTK_TYPE_ALIGN, v_align));
+
+  widget = create_widget_visible_border (label);
+
+  g_object_set (G_OBJECT (TEST_WIDGET (widget)),
+                "h-align", h_align,
+                "v-align", v_align,
+                NULL);
+
+  return widget;
+}
+
+static void
+open_alignment_window (void)
+{
+  GtkWidget *table;
+  int i;
+  GEnumClass *align_class;
+
+  test_window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  gtk_window_set_title (GTK_WINDOW (test_window), "Alignment");
+
+  g_signal_connect (test_window, "delete-event",
+                    G_CALLBACK (gtk_main_quit), test_window);
+
+  gtk_window_set_resizable (GTK_WINDOW (test_window), TRUE);
+  gtk_window_set_default_size (GTK_WINDOW (test_window), 500, 500);
+
+  align_class = g_type_class_peek (GTK_TYPE_ALIGN);
+
+  table = gtk_table_new (align_class->n_values, align_class->n_values, TRUE);
+
+  gtk_container_add (GTK_CONTAINER (test_window), table);
+
+  for (i = 0; i < align_class->n_values; ++i)
+    {
+      int j;
+      for (j = 0; j < align_class->n_values; ++j)
+        {
+          GtkWidget *child =
+            create_aligned(align_class->values[i].value,
+                           align_class->values[j].value);
+
+          gtk_table_attach (GTK_TABLE (table),
+                            child,
+                            i, i + 1,
+                            j, j + 1,
+                            GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, 0, 0);
+        }
+    }
+
+  gtk_widget_show_all (test_window);
+}
+
+static GtkWidget*
+create_padded (const char *propname)
+{
+  GtkWidget *widget;
+
+  widget = create_widget_visible_border (propname);
+
+  g_object_set (G_OBJECT (TEST_WIDGET (widget)),
+                propname, 15,
+                NULL);
+
+  return widget;
+}
+
+static void
+open_padding_window (void)
+{
+  GtkWidget *table;
+  int i;
+  const char * paddings[] = {
+    "padding-left",
+    "padding-right",
+    "padding-top",
+    "padding-bottom",
+    "padding-all-sides"
+  };
+
+  test_window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  gtk_window_set_title (GTK_WINDOW (test_window), "Padding");
+
+  g_signal_connect (test_window, "delete-event",
+                    G_CALLBACK (gtk_main_quit), test_window);
+
+  gtk_window_set_resizable (GTK_WINDOW (test_window), TRUE);
+
+  table = gtk_table_new (G_N_ELEMENTS (paddings), 1, FALSE);
+
+  gtk_container_add (GTK_CONTAINER (test_window), table);
+
+  for (i = 0; i < (int) G_N_ELEMENTS (paddings); ++i)
+    {
+      GtkWidget *child =
+        create_padded(paddings[i]);
+
+      gtk_table_attach (GTK_TABLE (table),
+                        child,
+                        0, 1,
+                        i, i + 1,
+                        GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, 0, 0);
+    }
+
+  gtk_widget_show_all (test_window);
+}
+
 int
 main (int argc, char *argv[])
 {
@@ -243,6 +412,8 @@ main (int argc, char *argv[])
 
   open_test_window ();
   open_control_window ();
+  open_alignment_window ();
+  open_padding_window ();
 
   gtk_main ();
 
