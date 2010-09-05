@@ -551,6 +551,24 @@ struct _GtkWidgetAuxInfo
 {
   gint width;
   gint height;
+
+  guint   h_align : 4;
+  guint   v_align : 4;
+
+  /* FIXME GtkBorder uses 32-bit ints for each side which is kinda
+   * bloated; 255 (or even 128) already exceeds 99.99% of actual padding
+   * settings, int16 would exceed 100%, int32 is nuts.  GtkBox uses
+   * uint16.
+   *
+   * Just fix GtkBorder itself? The main danger is probably going signed
+   * to unsigned, rather than 32 to 16.
+   */
+  struct {
+    guint16 left;
+    guint16 right;
+    guint16 top;
+    guint16 bottom;
+  } padding;
 };
 
 struct _GtkWidgetShapeInfo
@@ -778,6 +796,27 @@ void             gtk_widget_set_support_multidevice (GtkWidget      *widget,
 
 /* Accessibility support */
 AtkObject*       gtk_widget_get_accessible               (GtkWidget          *widget);
+
+
+/* Padding and alignment */
+GtkAlign gtk_widget_get_h_align                   (GtkWidget           *widget);
+void     gtk_widget_set_h_align                   (GtkWidget           *widget,
+                                                   GtkAlign             align);
+GtkAlign gtk_widget_get_v_align                   (GtkWidget           *widget);
+void     gtk_widget_set_v_align                   (GtkWidget           *widget,
+                                                   GtkAlign             align);
+int      gtk_widget_get_padding_left              (GtkWidget           *widget);
+void     gtk_widget_set_padding_left              (GtkWidget           *widget,
+                                                   int                  padding);
+int      gtk_widget_get_padding_right             (GtkWidget           *widget);
+void     gtk_widget_set_padding_right             (GtkWidget           *widget,
+                                                   int                  padding);
+int      gtk_widget_get_padding_top               (GtkWidget           *widget);
+void     gtk_widget_set_padding_top               (GtkWidget           *widget,
+                                                   int                  padding);
+int      gtk_widget_get_padding_bottom            (GtkWidget           *widget);
+void     gtk_widget_set_padding_bottom            (GtkWidget           *widget,
+                                                   int                  padding);
 
 /* The following functions must not be called on an already
  * realized widget. Because it is possible that somebody

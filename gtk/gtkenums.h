@@ -35,6 +35,36 @@
 
 G_BEGIN_DECLS
 
+/**
+ * GtkAlign:
+ *
+ * @GTK_ALIGN_FILL: stretch to fill all space if possible, center if
+ * no meaningful way to stretch
+ * @GTK_ALIGN_START: snap to left or top side, leaving space on right
+ * or bottom
+ * @GTK_ALIGN_END: snap to right or bottom side, leaving space on left
+ * or top
+ * @GTK_ALIGN_CENTER: center natural width of widget inside the
+ * allocation
+ *
+ * Controls how a widget deals with extra space in a single (x or y)
+ * dimension.
+ *
+ * Alignment only matters if the widget receives a "too large"
+ * allocation, for example if you packed the widget with the "expand"
+ * flag inside a #GtkBox, then the widget might get extra space.  If
+ * you have for example a 16x16 icon inside a 32x32 space, the icon
+ * could be scaled and stretched, it could be centered, or it could be
+ * positioned to one side of the space.
+ */
+typedef enum
+{
+  GTK_ALIGN_FILL,
+  GTK_ALIGN_START,
+  GTK_ALIGN_END,
+  GTK_ALIGN_CENTER
+} GtkAlign;
+
 /* Arrow placement */
 typedef enum
 {
