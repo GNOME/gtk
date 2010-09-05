@@ -30,6 +30,7 @@ noinst_PROGRAMS =  $(TEST_PROGS)	\
 	flicker				\
 	print-editor			\
 	testaccel			\
+	testadjustsize			\
 	testassistant			\
 	testbbox			\
 	testbuttons			\
@@ -117,6 +118,7 @@ testicontheme_DEPENDENCIES = $(TEST_DEPS)
 testiconview_DEPENDENCIES = $(TEST_DEPS)
 testaccel_DEPENDENCIES = $(TEST_DEPS)
 testapplication_DEPENDENCIES = $(TEST_DEPS)
+testadjustsize_DEPENDENCIES = $(TEST_DEPS)
 testassistant_DEPENDENCIES = $(TEST_DEPS)
 testbbox_DEPENDENCIES = $(TEST_DEPS)
 testbuttons_DEPENDENCIES = $(TEST_DEPS)
@@ -179,6 +181,7 @@ flicker_LDADD = $(LDADDS)
 simple_LDADD = $(LDADDS)
 print_editor_LDADD = $(LDADDS)
 testaccel_LDADD = $(LDADDS)
+testadjustsize_LDADD = $(LDADDS)
 testapplication_LDADD = $(LDADDS)
 testassistant_LDADD = $(LDADDS)
 testbbox_LDADD = $(LDADDS)
