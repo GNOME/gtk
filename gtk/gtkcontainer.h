@@ -62,6 +62,8 @@ struct _GtkContainerClass
 {
   GtkWidgetClass parent_class;
 
+  unsigned int handle_border_width : 1;
+
   void    (*add)       		(GtkContainer	 *container,
 				 GtkWidget	 *widget);
   void    (*remove)    		(GtkContainer	 *container,
@@ -193,6 +195,8 @@ void	     gtk_container_child_get_property		(GtkContainer	   *container,
 void    gtk_container_forall		     (GtkContainer *container,
 					      GtkCallback   callback,
 					      gpointer	    callback_data);
+
+void    gtk_container_class_handle_border_width (GtkContainerClass *klass);
 
 /* Non-public methods */
 void	_gtk_container_queue_resize	     (GtkContainer *container);
