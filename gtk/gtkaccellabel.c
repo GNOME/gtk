@@ -120,8 +120,8 @@ static void         gtk_accel_label_get_property (GObject            *object,
 						  GParamSpec         *pspec);
 static void         gtk_accel_label_destroy      (GtkObject          *object);
 static void         gtk_accel_label_finalize     (GObject            *object);
-static gboolean     gtk_accel_label_expose_event (GtkWidget          *widget,
-						  GdkEventExpose     *event);
+static gboolean     gtk_accel_label_draw         (GtkWidget          *widget,
+                                                  cairo_t            *cr);
 static const gchar *gtk_accel_label_get_string   (GtkAccelLabel      *accel_label);
 
 
@@ -152,7 +152,7 @@ gtk_accel_label_class_init (GtkAccelLabelClass *class)
   
   object_class->destroy = gtk_accel_label_destroy;
    
-  widget_class->expose_event = gtk_accel_label_expose_event;
+  widget_class->draw = gtk_accel_label_draw;
 
   class->signal_quote1 = g_strdup ("<:");
   class->signal_quote2 = g_strdup (":>");
@@ -388,8 +388,8 @@ get_first_baseline (PangoLayout *layout)
 }
 
 static gboolean 
-gtk_accel_label_expose_event (GtkWidget      *widget,
-			      GdkEventExpose *event)
+gtk_accel_label_draw (GtkWidget *widget,
+                      cairo_t   *cr)
 {
   GtkAccelLabel *accel_label = GTK_ACCEL_LABEL (widget);
   GtkMisc *misc = GTK_MISC (accel_label);
@@ -420,42 +420,48 @@ gtk_accel_label_expose_event (GtkWidget      *widget,
 
 	  label_layout = gtk_label_get_layout (GTK_LABEL (accel_label));
 
+          cairo_save (cr);
+
+          /* XXX: Mad hack: We modify the label's width so it renders
+           * properly in its draw function that we chain to. */
 	  if (direction == GTK_TEXT_DIR_RTL)
-	    allocation.x += ac_width;
-	  allocation.width -= ac_width;
+	    cairo_translate (cr, ac_width, 0);
 	  if (gtk_label_get_ellipsize (label))
 	    pango_layout_set_width (label_layout,
 				    pango_layout_get_width (label_layout) 
 				    - ac_width * PANGO_SCALE);
 	  
-	  if (GTK_WIDGET_CLASS (gtk_accel_label_parent_class)->expose_event)
-	    GTK_WIDGET_CLASS (gtk_accel_label_parent_class)->expose_event (widget, event);
-	  if (direction == GTK_TEXT_DIR_RTL)
-	    allocation.x -= ac_width;
-	  allocation.width += ac_width;
+          allocation.width -= ac_width;
+          gtk_widget_set_allocation (widget, &allocation);
+	  if (GTK_WIDGET_CLASS (gtk_accel_label_parent_class)->draw)
+	    GTK_WIDGET_CLASS (gtk_accel_label_parent_class)->draw (widget,
+                                                                   cr);
+          allocation.width += ac_width;
+          gtk_widget_set_allocation (widget, &allocation);
 	  if (gtk_label_get_ellipsize (label))
 	    pango_layout_set_width (label_layout,
 				    pango_layout_get_width (label_layout) 
 				    + ac_width * PANGO_SCALE);
 
+          cairo_restore (cr);
+
 	  gtk_misc_get_padding (misc, &xpad, NULL);
 
 	  if (direction == GTK_TEXT_DIR_RTL)
-	    x = allocation.x + xpad;
+	    x = xpad;
 	  else
-	    x = allocation.x + allocation.width - xpad - ac_width;
+	    x = gtk_widget_get_allocated_width (widget) - xpad - ac_width;
 
 	  gtk_label_get_layout_offsets (GTK_LABEL (accel_label), NULL, &y);
 
 	  accel_layout = gtk_widget_create_pango_layout (widget, gtk_accel_label_get_string (accel_label));
 
-	  y += get_first_baseline (label_layout) - get_first_baseline (accel_layout);
+	  y += get_first_baseline (label_layout) - get_first_baseline (accel_layout) - allocation.y;
 
-          gtk_paint_layout (gtk_widget_get_style (widget),
-                            gtk_widget_get_window (widget),
+          gtk_cairo_paint_layout (gtk_widget_get_style (widget),
+                            cr,
                             gtk_widget_get_state (widget),
 			    FALSE,
-                            &event->area,
                             widget,
                             "accellabel",
                             x, y,
@@ -465,8 +471,8 @@ gtk_accel_label_expose_event (GtkWidget      *widget,
 	}
       else
 	{
-	  if (GTK_WIDGET_CLASS (gtk_accel_label_parent_class)->expose_event)
-	    GTK_WIDGET_CLASS (gtk_accel_label_parent_class)->expose_event (widget, event);
+	  if (GTK_WIDGET_CLASS (gtk_accel_label_parent_class)->draw)
+	    GTK_WIDGET_CLASS (gtk_accel_label_parent_class)->draw (widget, cr);
 	}
     }
   
