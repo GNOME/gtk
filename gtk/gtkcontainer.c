@@ -107,6 +107,13 @@ static gint     gtk_container_expose               (GtkWidget         *widget,
 						    GdkEventExpose    *event);
 static void     gtk_container_map                  (GtkWidget         *widget);
 static void     gtk_container_unmap                (GtkWidget         *widget);
+static void     gtk_container_adjust_size_request  (GtkWidget         *widget,
+                                                    GtkOrientation     orientation,
+                                                    gint               for_size,
+                                                    gint              *minimum_size,
+                                                    gint              *natural_size);
+static void     gtk_container_adjust_size_allocation (GtkWidget       *widget,
+                                                      GtkAllocation   *allocation);
 
 static gchar* gtk_container_child_default_composite_name (GtkContainer *container,
 							  GtkWidget    *child);
@@ -233,7 +240,10 @@ gtk_container_class_init (GtkContainerClass *class)
   widget_class->map = gtk_container_map;
   widget_class->unmap = gtk_container_unmap;
   widget_class->focus = gtk_container_focus;
-  
+
+  widget_class->adjust_size_request = gtk_container_adjust_size_request;
+  widget_class->adjust_size_allocation = gtk_container_adjust_size_allocation;
+
   class->add = gtk_container_add_unimplemented;
   class->remove = gtk_container_remove_unimplemented;
   class->check_resize = gtk_container_real_check_resize;
@@ -1518,6 +1528,103 @@ gtk_container_resize_children (GtkContainer *container)
 
   gtk_widget_size_allocate (widget, &allocation);
   gtk_widget_set_allocation (widget, &allocation);
+}
+
+static void
+gtk_container_adjust_size_request (GtkWidget         *widget,
+                                   GtkOrientation     orientation,
+                                   gint               for_size,
+                                   gint              *minimum_size,
+                                   gint              *natural_size)
+{
+  GtkContainer *container;
+
+  container = GTK_CONTAINER (widget);
+
+  if (GTK_CONTAINER_GET_CLASS (widget)->handle_border_width)
+    {
+      int border_width;
+
+      border_width = container->priv->border_width;
+
+      *minimum_size += border_width * 2;
+      *natural_size += border_width * 2;
+    }
+
+  /* chain up last so gtk_widget_set_size_request() values
+   * will have a chance to overwrite our border width.
+   */
+  parent_class->adjust_size_request (widget, orientation, for_size,
+                                     minimum_size, natural_size);
+}
+
+static void
+gtk_container_adjust_size_allocation (GtkWidget         *widget,
+                                      GtkAllocation     *allocation)
+{
+  GtkContainer *container;
+  int border_width;
+
+  container = GTK_CONTAINER (widget);
+
+  parent_class->adjust_size_allocation (widget, allocation);
+
+  if (!GTK_CONTAINER_GET_CLASS (widget)->handle_border_width)
+    return;
+
+  border_width = container->priv->border_width;
+
+  allocation->width -= border_width * 2;
+  allocation->height -= border_width * 2;
+
+  /* If we get a pathological too-small allocation to hold
+   * even the border width, leave all allocation to the actual
+   * widget, and leave x,y unchanged. (GtkWidget's min size is
+   * 1x1 if you're wondering why <1 and not <0)
+   *
+   * As long as we have space, set x,y properly.
+   */
+
+  if (allocation->width < 1)
+    {
+      allocation->width += border_width * 2;
+    }
+  else
+    {
+      allocation->x += border_width;
+    }
+
+  if (allocation->height < 1)
+    {
+      allocation->height += border_width * 2;
+    }
+  else
+    {
+      allocation->y += border_width;
+    }
+}
+
+/**
+ * gtk_container_class_handle_border_width:
+ * @klass: the class struct of a #GtkContainer subclass
+ *
+ * Modifies a subclass of #GtkContainerClass to automatically add and
+ * remove the border-width setting on GtkContainer.  This allows the
+ * subclass to ignore the border width in its size request and
+ * allocate methods. The intent is for a subclass to invoke this
+ * in its class_init function.
+ *
+ * gtk_container_class_handle_border_width() is necessary because it
+ * would break API too badly to make this behavior the default. So
+ * subclasses must "opt in" to the parent class handling border_width
+ * for them.
+ */
+void
+gtk_container_class_handle_border_width (GtkContainerClass *klass)
+{
+  g_return_if_fail (GTK_IS_CONTAINER_CLASS (klass));
+
+  klass->handle_border_width = TRUE;
 }
 
 /**
