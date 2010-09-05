@@ -210,6 +210,57 @@ do_size_request (GtkWidget *widget)
     }
 }
 
+#ifndef G_DISABLE_CHECKS
+static GQuark recursion_check_quark = 0;
+#endif /* G_DISABLE_CHECKS */
+
+static void
+push_recursion_check (GtkSizeRequest  *request,
+                      GtkSizeGroupMode orientation,
+                      gint             for_size)
+{
+#ifndef G_DISABLE_CHECKS
+  const char *previous_method;
+  const char *method;
+
+  if (recursion_check_quark == 0)
+    recursion_check_quark = g_quark_from_static_string ("gtk-size-request-in-progress");
+
+  previous_method = g_object_get_qdata (G_OBJECT (request), recursion_check_quark);
+
+  if (orientation == GTK_SIZE_GROUP_HORIZONTAL)
+    {
+      method = for_size < 0 ? "get_width" : "get_width_for_height";
+    }
+  else
+    {
+      method = for_size < 0 ? "get_height" : "get_height_for_width";
+    }
+
+  if (previous_method != NULL)
+    {
+      g_warning ("%s %p: widget tried to gtk_size_request_%s inside "
+                 " GtkSizeRequest::%s implementation. "
+                 "Should just invoke GTK_SIZE_REQUEST_GET_IFACE(widget)->%s "
+                 "directly rather than using gtk_size_request_%s",
+                 G_OBJECT_TYPE_NAME (request), request,
+                 method, previous_method,
+                 method, method);
+    }
+
+  g_object_set_qdata (G_OBJECT (request), recursion_check_quark, (char*) method);
+#endif /* G_DISABLE_CHECKS */
+}
+
+static void
+pop_recursion_check (GtkSizeRequest  *request,
+                     GtkSizeGroupMode orientation)
+{
+#ifndef G_DISABLE_CHECKS
+  g_object_set_qdata (G_OBJECT (request), recursion_check_quark, NULL);
+#endif
+}
+
 static void
 compute_size_for_orientation (GtkSizeRequest    *request,
                               GtkSizeGroupMode   orientation,
@@ -261,6 +312,7 @@ compute_size_for_orientation (GtkSizeRequest    *request,
       /* Unconditional size request runs but is often unhandled. */
       do_size_request (widget);
 
+      push_recursion_check (request, orientation, for_size);
       if (orientation == GTK_SIZE_GROUP_HORIZONTAL)
         {
           requisition_size = widget->requisition.width;
@@ -281,6 +333,7 @@ compute_size_for_orientation (GtkSizeRequest    *request,
             GTK_SIZE_REQUEST_GET_IFACE (request)->get_height_for_width (request, for_size, 
 									&min_size, &nat_size);
         }
+      pop_recursion_check (request, orientation);
 
       if (min_size > nat_size)
         {
