@@ -473,6 +473,15 @@ struct _GtkWidgetClass
 				       gint        y,
 				       gboolean    keyboard_tooltip,
 				       GtkTooltip *tooltip);
+
+  void         (* adjust_size_request)    (GtkWidget         *widget,
+                                           GtkOrientation     orientation,
+                                           gint               for_size,
+                                           gint              *minimum_size,
+                                           gint              *natural_size);
+  void         (* adjust_size_allocation) (GtkWidget         *widget,
+                                           GtkAllocation     *allocation);
+
   /* Signals without a C default handler class slot:
    * gboolean	(*damage_event)	(GtkWidget      *widget,
    *                             GdkEventExpose *event);
