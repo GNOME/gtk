@@ -7879,17 +7879,17 @@ gtk_widget_get_size_request (GtkWidget *widget,
                              gint      *width,
                              gint      *height)
 {
-  GtkWidgetAuxInfo *aux_info;
+  const GtkWidgetAuxInfo *aux_info;
 
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
-  aux_info = _gtk_widget_get_aux_info (widget, FALSE);
+  aux_info = _gtk_widget_get_aux_info_or_defaults (widget);
 
   if (width)
-    *width = aux_info ? aux_info->width : -1;
+    *width = aux_info->width;
 
   if (height)
-    *height = aux_info ? aux_info->height : -1;
+    *height = aux_info->height;
 }
 
 /**
