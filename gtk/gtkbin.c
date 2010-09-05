@@ -214,10 +214,15 @@ get_child_padding_delta (GtkBin         *bin,
 			 gint           *delta_v)
 {
   GtkBinPrivate *priv = bin->priv;
-  gint hmin, vmin, child_hmin, child_vmin;
+  gint hmin, vmin, hnat, vnat, child_hmin, child_vmin;
 
-  gtk_size_request_get_width (GTK_SIZE_REQUEST (bin), &hmin, NULL);
-  gtk_size_request_get_height (GTK_SIZE_REQUEST (bin), &vmin, NULL);
+  /* we can't use gtk_size_request_get_width() wrapper because we want
+   * our "original" request, not any external adjustments from
+   * set_size_request() or whatever.  we have to ask for natural also
+   * because NULL isn't allowed for the direct vfuncs
+   */
+  GTK_SIZE_REQUEST_GET_IFACE (bin)->get_width(GTK_SIZE_REQUEST (bin), &hmin, &hnat);
+  GTK_SIZE_REQUEST_GET_IFACE (bin)->get_height (GTK_SIZE_REQUEST (bin), &vmin, &vnat);
 
   gtk_size_request_get_width (GTK_SIZE_REQUEST (priv->child), &child_hmin, NULL);
   gtk_size_request_get_height (GTK_SIZE_REQUEST (priv->child), &child_vmin, NULL);

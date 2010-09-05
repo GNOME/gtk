@@ -10840,7 +10840,7 @@ gtk_widget_real_get_height_for_width (GtkSizeRequest *layout,
                                       gint      *minimum_height,
                                       gint      *natural_height)
 {
-  gtk_size_request_get_height (layout, minimum_height, natural_height);
+  GTK_SIZE_REQUEST_GET_IFACE (layout)->get_height(layout, minimum_height, natural_height);
 }
 
 static void
@@ -10848,8 +10848,8 @@ gtk_widget_real_get_width_for_height (GtkSizeRequest *layout,
                                       gint       height,
                                       gint      *minimum_width,
                                       gint      *natural_width)
-{ 
-  gtk_size_request_get_width (layout, minimum_width, natural_width);
+{
+  GTK_SIZE_REQUEST_GET_IFACE (layout)->get_width(layout, minimum_width, natural_width);
 }
 
 static void
