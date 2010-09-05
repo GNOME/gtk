@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-06-10 11:56-0400\n"
-"PO-Revision-Date: 2010-02-24 21:18+0300\n"
+"POT-Creation-Date: 2010-09-05 15:54+0200\n"
+"PO-Revision-Date: 2010-09-05 15:54+0300\n"
 "Last-Translator: Khaled Hosny <khaledhosny@eglug.org>\n"
 "Language-Team: Arabic <doc@arabeyes.org>\n"
 "MIME-Version: 1.0\n"
@@ -21,8 +21,8 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Language: ar\n"
 "Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 "
-"&& n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
-"X-Generator: Virtaal 0.5.2\n"
+"&& n%100<=10 ? 3 : n%100>=11 ? 4 : 5;\n"
+"X-Generator: Virtaal 0.6.1\n"
 
 #: gdk/gdk.c:103
 #, c-format
@@ -76,8 +76,8 @@ msgstr "شاشة"
 
 #. Description of --gdk-debug=FLAGS in --help output
 #: gdk/gdk.c:164
-msgid "Gdk debugging flags to set"
-msgstr "شارات تنقيح Gdk التي ستضبط"
+msgid "GDK debugging flags to set"
+msgstr "شارات تنقيح GDK التي ستضبط"
 
 #. Placeholder in --gdk-debug=FLAGS in --help output
 #. Placeholder in --gdk-no-debug=FLAGS in --help output
@@ -89,8 +89,8 @@ msgstr "شارات"
 
 #. Description of --gdk-no-debug=FLAGS in --help output
 #: gdk/gdk.c:167
-msgid "Gdk debugging flags to unset"
-msgstr "شارات تنقيح Gdk التي ستُصفّر"
+msgid "GDK debugging flags to unset"
+msgstr "شارات تنقيح GDK التي ستُصفّر"
 
 #: gdk/keyname-table.h:3940
 msgctxt "keyboard label"
@@ -277,898 +277,6 @@ msgctxt "keyboard label"
 msgid "Delete"
 msgstr "Delete"
 
-#: gdk-pixbuf/gdk-pixbuf-animation.c:133 gdk-pixbuf/gdk-pixbuf-io.c:982
-#: gdk-pixbuf/gdk-pixbuf-io.c:1242 tests/testfilechooser.c:222
-#, c-format
-msgid "Failed to open file '%s': %s"
-msgstr "فشل فتح الملف '%s': %s"
-
-#: gdk-pixbuf/gdk-pixbuf-animation.c:146 gdk-pixbuf/gdk-pixbuf-io.c:994
-#, c-format
-msgid "Image file '%s' contains no data"
-msgstr "لا يحتوي ملف الصورة '%s' على بيانات"
-
-#: gdk-pixbuf/gdk-pixbuf-animation.c:188 gdk-pixbuf/gdk-pixbuf-io.c:1030
-#: gdk-pixbuf/gdk-pixbuf-io.c:1294 tests/testfilechooser.c:267
-#, c-format
-msgid ""
-"Failed to load image '%s': reason not known, probably a corrupt image file"
-msgstr "فشل تحميل الصورة '%s': السبب مجهول، ربما يكون ملف الصورة تالفًا"
-
-#: gdk-pixbuf/gdk-pixbuf-animation.c:221
-#, c-format
-msgid ""
-"Failed to load animation '%s': reason not known, probably a corrupt "
-"animation file"
-msgstr ""
-"فشل تحميل الرسوم المتحرّكة '%s': السبب مجهول، ربما يكون ملف الرسوم المتحرّكة "
-"تالفًا"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:715
-#, c-format
-msgid "Unable to load image-loading module: %s: %s"
-msgstr "تعذّر تحميل وحدة تحميل الصور: %s: %s"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:730
-#, c-format
-msgid ""
-"Image-loading module %s does not export the proper interface; perhaps it's "
-"from a different GTK version?"
-msgstr ""
-"وحدة تحميل الصور %s لا تصدّر الواجهة الصحيحة؛ قد تكون من إصدارة GTK مغايرة؟"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:739 gdk-pixbuf/gdk-pixbuf-io.c:790
-#, c-format
-msgid "Image type '%s' is not supported"
-msgstr "نوع الصورة '%s' غير مدعوم"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:863
-#, c-format
-msgid "Couldn't recognize the image file format for file '%s'"
-msgstr "تعذّر تمييز صيغة ملف الصور للملف '%s'"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:871
-msgid "Unrecognized image file format"
-msgstr "صيغة ملف صور تعذّر تمييزها"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:1039
-#, c-format
-msgid "Failed to load image '%s': %s"
-msgstr "فشل تحميل الصورة '%s': %s"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:1673 gdk-pixbuf/io-gdip-utils.c:961
-#, c-format
-msgid "Error writing to image file: %s"
-msgstr "فشلت الكتابة في ملف الصورة: %s"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:1718 gdk-pixbuf/gdk-pixbuf-io.c:1848
-#, c-format
-msgid "This build of gdk-pixbuf does not support saving the image format: %s"
-msgstr "بناء gdk-pixbuf هذا لا يدعم الحفظ بصيغة الصور: %s"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:1752
-msgid "Insufficient memory to save image to callback"
-msgstr "ذاكرة غير كافية لحفظ الصورة إلى إعادة النداء (callback)"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:1765
-msgid "Failed to open temporary file"
-msgstr "فشل فتح الملف المؤقّت"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:1791
-msgid "Failed to read from temporary file"
-msgstr "فشلت القراءة من الملف المؤقّت"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:2044
-#, c-format
-msgid "Failed to open '%s' for writing: %s"
-msgstr "فشل فتح '%s' لكتابة: %s"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:2070
-#, c-format
-msgid ""
-"Failed to close '%s' while writing image, all data may not have been saved: %"
-"s"
-msgstr "فشل غلق '%s' أثناء كتابة الصورة، ربما لم تُحفظ كل البيانات: %s"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:2290 gdk-pixbuf/gdk-pixbuf-io.c:2341
-msgid "Insufficient memory to save image into a buffer"
-msgstr "ذاكرة غير كافية لحفظ الصورة في براح"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:2387
-msgid "Error writing to image stream"
-msgstr "فشلت الكتابة في دفق الصور"
-
-#: gdk-pixbuf/gdk-pixbuf-loader.c:330
-#, c-format
-msgid ""
-"Internal error: Image loader module '%s' failed to complete an operation, "
-"but didn't give a reason for the failure"
-msgstr ""
-"خطأ داخلي: فشلت وحدة تحميل الصور '%s' في إنهاء إحدى العمليات، لكنّها لم تعطِ "
-"سببا للفشل"
-
-#: gdk-pixbuf/gdk-pixbuf-loader.c:372
-#, c-format
-msgid "Incremental loading of image type '%s' is not supported"
-msgstr "التحميل التزايدي لنوع الصور '%s' غير مدعوم"
-
-#: gdk-pixbuf/gdk-pixdata.c:147
-msgid "Image header corrupt"
-msgstr "ترويسة الصورة تالفة"
-
-#: gdk-pixbuf/gdk-pixdata.c:152
-msgid "Image format unknown"
-msgstr "صيغة الصورة مجهولة"
-
-#: gdk-pixbuf/gdk-pixdata.c:157 gdk-pixbuf/gdk-pixdata.c:488
-msgid "Image pixel data corrupt"
-msgstr "البيانات البكسلية للصورة تالفة"
-
-#: gdk-pixbuf/gdk-pixdata.c:432
-#, c-format
-msgid "failed to allocate image buffer of %u byte"
-msgid_plural "failed to allocate image buffer of %u bytes"
-msgstr[0] "فشل تحصيص براح للصورة بحجم صفر بايت"
-msgstr[1] "فشل تحصيص براح للصورة بحجم بايت واحد"
-msgstr[2] "فشل تحصيص ذاكرة وسيطة للصورة بحجم بايتين"
-msgstr[3] "فشل تحصيص ذاكرة وسيطة للصورة بحجم %u بايت"
-msgstr[4] "فشل تحصيص ذاكرة وسيطة للصورة بحجم %u بايت"
-msgstr[5] "فشل تحصيص ذاكرة وسيطة للصورة بحجم %u بايت"
-
-#: gdk-pixbuf/io-ani.c:244
-msgid "Unexpected icon chunk in animation"
-msgstr "قطعة أيقونة غير متوقعة في الرسم المتحرّك"
-
-#: gdk-pixbuf/io-ani.c:337
-msgid "Unsupported animation type"
-msgstr "نوع رسوم متحرّكة غير مدعوم"
-
-#: gdk-pixbuf/io-ani.c:348 gdk-pixbuf/io-ani.c:406 gdk-pixbuf/io-ani.c:432
-#: gdk-pixbuf/io-ani.c:455 gdk-pixbuf/io-ani.c:482 gdk-pixbuf/io-ani.c:569
-msgid "Invalid header in animation"
-msgstr "ترويسة غير صالحة في الرسم المتحرّك"
-
-#: gdk-pixbuf/io-ani.c:358 gdk-pixbuf/io-ani.c:380 gdk-pixbuf/io-ani.c:464
-#: gdk-pixbuf/io-ani.c:491 gdk-pixbuf/io-ani.c:542 gdk-pixbuf/io-ani.c:614
-msgid "Not enough memory to load animation"
-msgstr "لا ذاكرة كافية لتحميل الرسوم المتحرّكة"
-
-#: gdk-pixbuf/io-ani.c:398 gdk-pixbuf/io-ani.c:424 gdk-pixbuf/io-ani.c:443
-msgid "Malformed chunk in animation"
-msgstr "قطعة مشوّهة في الرسّم المتحرّك"
-
-#: gdk-pixbuf/io-ani.c:711
-msgid "The ANI image format"
-msgstr "صيغة صور ANI"
-
-#: gdk-pixbuf/io-bmp.c:230 gdk-pixbuf/io-bmp.c:267 gdk-pixbuf/io-bmp.c:338
-#: gdk-pixbuf/io-bmp.c:370 gdk-pixbuf/io-bmp.c:393 gdk-pixbuf/io-bmp.c:496
-msgid "BMP image has bogus header data"
-msgstr "صورة BMP لها بيانات ترويسة زائفة"
-
-#: gdk-pixbuf/io-bmp.c:241 gdk-pixbuf/io-bmp.c:433
-msgid "Not enough memory to load bitmap image"
-msgstr "لا ذاكرة كافية لتحميل الصورة النقطية"
-
-#: gdk-pixbuf/io-bmp.c:319
-msgid "BMP image has unsupported header size"
-msgstr "صورة BMP لها حجم ترويسة غير مدعوم"
-
-#: gdk-pixbuf/io-bmp.c:357
-msgid "Topdown BMP images cannot be compressed"
-msgstr "صور BMP أعلى-أسفل تعذّر ضغطها"
-
-#: gdk-pixbuf/io-bmp.c:717 gdk-pixbuf/io-pnm.c:709
-msgid "Premature end-of-file encountered"
-msgstr "انتهى الملف قبل أوانه"
-
-#: gdk-pixbuf/io-bmp.c:1329
-msgid "Couldn't allocate memory for saving BMP file"
-msgstr "تعذّر تحصيص ذاكرة لحفظ ملف BMP"
-
-#: gdk-pixbuf/io-bmp.c:1370
-msgid "Couldn't write to BMP file"
-msgstr "تعذّر الكتابة في ملف BMP "
-
-#: gdk-pixbuf/io-bmp.c:1423 gdk-pixbuf/io-gdip-bmp.c:82
-msgid "The BMP image format"
-msgstr "صيغة صور BMP"
-
-#: gdk-pixbuf/io-gif.c:222
-#, c-format
-msgid "Failure reading GIF: %s"
-msgstr "خطأ أثناء قراءة GIF: %s"
-
-#: gdk-pixbuf/io-gif.c:496 gdk-pixbuf/io-gif.c:1481 gdk-pixbuf/io-gif.c:1642
-msgid "GIF file was missing some data (perhaps it was truncated somehow?)"
-msgstr "يفتقد ملف GIF بعض البيانات (ربما استقطعت بكيفية ما؟)"
-
-#: gdk-pixbuf/io-gif.c:505
-#, c-format
-msgid "Internal error in the GIF loader (%s)"
-msgstr "خطأ داخلي في محمّل GIF (%s)"
-
-#: gdk-pixbuf/io-gif.c:579
-msgid "Stack overflow"
-msgstr "فيضان المكدّس"
-
-#: gdk-pixbuf/io-gif.c:639
-msgid "GIF image loader cannot understand this image."
-msgstr "لا يستطيع محمّل صور GIF فهم هذه الصورة."
-
-#: gdk-pixbuf/io-gif.c:668
-msgid "Bad code encountered"
-msgstr "وُجِد رمز سيء"
-
-#: gdk-pixbuf/io-gif.c:678
-msgid "Circular table entry in GIF file"
-msgstr "خانة جدول دائرية في ملف GIF"
-
-#: gdk-pixbuf/io-gif.c:866 gdk-pixbuf/io-gif.c:1468 gdk-pixbuf/io-gif.c:1515
-#: gdk-pixbuf/io-gif.c:1630
-msgid "Not enough memory to load GIF file"
-msgstr "لا ذاكرة كافية لتحميل ملف GIF"
-
-#: gdk-pixbuf/io-gif.c:960
-msgid "Not enough memory to composite a frame in GIF file"
-msgstr "لا ذاكرة كافية لتشكيل إطار في ملف GIF"
-
-#: gdk-pixbuf/io-gif.c:1132
-msgid "GIF image is corrupt (incorrect LZW compression)"
-msgstr "صورة GIF تالفة (ضغط LZW غير سليم)"
-
-#: gdk-pixbuf/io-gif.c:1182
-msgid "File does not appear to be a GIF file"
-msgstr "يبدو أن الملف ليس ملف GIF"
-
-#: gdk-pixbuf/io-gif.c:1194
-#, c-format
-msgid "Version %s of the GIF file format is not supported"
-msgstr "إصدارة %s من صيغ ملفات GIF غير مدعومة"
-
-#: gdk-pixbuf/io-gif.c:1303
-msgid ""
-"GIF image has no global colormap, and a frame inside it has no local "
-"colormap."
-msgstr "ليس لصورة GIF مخطط ألوان عام، وليس لإطار بداخلها مخطط ألوان محلي."
-
-#: gdk-pixbuf/io-gif.c:1537
-msgid "GIF image was truncated or incomplete."
-msgstr "صورة GIF مقطّعة أو غير كاملة."
-
-#: gdk-pixbuf/io-gif.c:1693 gdk-pixbuf/io-gdip-gif.c:80
-msgid "The GIF image format"
-msgstr "صيغة صور GIF"
-
-#: gdk-pixbuf/io-ico.c:211 gdk-pixbuf/io-ico.c:225 gdk-pixbuf/io-ico.c:277
-#: gdk-pixbuf/io-ico.c:290 gdk-pixbuf/io-ico.c:359
-msgid "Invalid header in icon"
-msgstr "ترويسة غير صحيحة في الأيقونة"
-
-#: gdk-pixbuf/io-ico.c:240 gdk-pixbuf/io-ico.c:300 gdk-pixbuf/io-ico.c:369
-#: gdk-pixbuf/io-ico.c:432 gdk-pixbuf/io-ico.c:462
-msgid "Not enough memory to load icon"
-msgstr "لا ذاكرة كافية لتحميل الأيقونة"
-
-#: gdk-pixbuf/io-ico.c:322
-msgid "Icon has zero width"
-msgstr "عرض الأيقونة صفر"
-
-#: gdk-pixbuf/io-ico.c:332
-msgid "Icon has zero height"
-msgstr "ارتفاع الأيقونة صفر"
-
-#: gdk-pixbuf/io-ico.c:384
-msgid "Compressed icons are not supported"
-msgstr "الأيقونات المضغوطة غير مدعومة"
-
-#: gdk-pixbuf/io-ico.c:417
-msgid "Unsupported icon type"
-msgstr "نوع أيقونات غير مدعوم"
-
-#: gdk-pixbuf/io-ico.c:511
-msgid "Not enough memory to load ICO file"
-msgstr "لا ذاكرة كافية لتحميل ملف ICO"
-
-#: gdk-pixbuf/io-ico.c:976
-msgid "Image too large to be saved as ICO"
-msgstr "تعذّر حفظ الصورة كـ ICO لأنها كبيرة جدًا"
-
-#: gdk-pixbuf/io-ico.c:987
-msgid "Cursor hotspot outside image"
-msgstr "منطقة المؤشّر النشطة خارج الصورة"
-
-#: gdk-pixbuf/io-ico.c:1010
-#, c-format
-msgid "Unsupported depth for ICO file: %d"
-msgstr "عمق ملف ICO غير مدعوم: %Id"
-
-#: gdk-pixbuf/io-ico.c:1245 gdk-pixbuf/io-gdip-ico.c:59
-msgid "The ICO image format"
-msgstr "صيغة صور ICO"
-
-#: gdk-pixbuf/io-icns.c:347
-#, c-format
-msgid "Error reading ICNS image: %s"
-msgstr "خطأ أثناء قراءة ملف صورة ICNS: %s"
-
-#: gdk-pixbuf/io-icns.c:364
-msgid "Could not decode ICNS file"
-msgstr "تعذّر فك ملف ترميز ملف ICNS"
-
-#: gdk-pixbuf/io-icns.c:397
-msgid "The ICNS image format"
-msgstr "صيغة صور ICNS"
-
-#: gdk-pixbuf/io-jasper.c:75
-msgid "Couldn't allocate memory for stream"
-msgstr "تعذّر تحصيص ذاكرة للتيار"
-
-#: gdk-pixbuf/io-jasper.c:105
-msgid "Couldn't decode image"
-msgstr "تعذّر فك ترميز الصورة"
-
-#: gdk-pixbuf/io-jasper.c:123
-msgid "Transformed JPEG2000 has zero width or height"
-msgstr "صورة JPEG2000 المُحوّلة ذات عرض أو ارتفاع صفري"
-
-#: gdk-pixbuf/io-jasper.c:137
-msgid "Image type currently not supported"
-msgstr "نوع الصورة غير مدعوم حاليا"
-
-#: gdk-pixbuf/io-jasper.c:149 gdk-pixbuf/io-jasper.c:157
-msgid "Couldn't allocate memory for color profile"
-msgstr "تعذّر تحصيص ذاكرة لاحة اللون"
-
-#: gdk-pixbuf/io-jasper.c:183
-msgid "Insufficient memory to open JPEG 2000 file"
-msgstr "لا ذاكرة كافية لفتح ملف JPEG 2000"
-
-#: gdk-pixbuf/io-jasper.c:262
-msgid "Couldn't allocate memory to buffer image data"
-msgstr "تعذّر تحصيص ذاكرة لبراح بيانات الصور"
-
-#: gdk-pixbuf/io-jasper.c:306
-msgid "The JPEG 2000 image format"
-msgstr "صيغة صور JPEG 2000"
-
-#: gdk-pixbuf/io-jpeg.c:117
-#, c-format
-msgid "Error interpreting JPEG image file (%s)"
-msgstr "خطأ في تفسير ملف صورة JPEG (%s)"
-
-#: gdk-pixbuf/io-jpeg.c:528
-msgid ""
-"Insufficient memory to load image, try exiting some applications to free "
-"memory"
-msgstr ""
-"لا ذاكرة كافية لتحميل الصورة، حاوِل الخروج من بعض التطبيقات لتحرير الذاكرة"
-
-#: gdk-pixbuf/io-jpeg.c:569 gdk-pixbuf/io-jpeg.c:775
-#, c-format
-msgid "Unsupported JPEG color space (%s)"
-msgstr "نطاق ألوان JPEG غير مدعوم (%s)"
-
-#: gdk-pixbuf/io-jpeg.c:674 gdk-pixbuf/io-jpeg.c:944 gdk-pixbuf/io-jpeg.c:1177
-#: gdk-pixbuf/io-jpeg.c:1186
-msgid "Couldn't allocate memory for loading JPEG file"
-msgstr "تعذّر تحصيص ذاكرة لتحميل ملف JPEG"
-
-#: gdk-pixbuf/io-jpeg.c:919
-msgid "Transformed JPEG has zero width or height."
-msgstr "صورة JPEG المُحوّلة ذات عرض أو ارتفاع صفري."
-
-#: gdk-pixbuf/io-jpeg.c:1133 gdk-pixbuf/io-gdip-jpeg.c:53
-#, c-format
-msgid ""
-"JPEG quality must be a value between 0 and 100; value '%s' could not be "
-"parsed."
-msgstr "يجب أن تكون جودة JPEG قيمة بين 0 و 100، لذلك تعذّر تحليل القيمة '%s'."
-
-#: gdk-pixbuf/io-jpeg.c:1148 gdk-pixbuf/io-gdip-jpeg.c:68
-#, c-format
-msgid ""
-"JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
-msgstr "يجب أن تكون جودة JPEG قيمة بين 0 و 100، القيمة '%Id' غير مسموح بها."
-
-#: gdk-pixbuf/io-jpeg.c:1310 gdk-pixbuf/io-gdip-jpeg.c:136
-msgid "The JPEG image format"
-msgstr "صيغة صور JPEG"
-
-#: gdk-pixbuf/io-pcx.c:187
-msgid "Couldn't allocate memory for header"
-msgstr "تعذّر تحصيص ذاكرة للترويسة"
-
-#: gdk-pixbuf/io-pcx.c:202 gdk-pixbuf/io-pcx.c:560
-msgid "Couldn't allocate memory for context buffer"
-msgstr "تعذّر تحصيص ذاكرة لبراح السياق"
-
-#: gdk-pixbuf/io-pcx.c:601
-msgid "Image has invalid width and/or height"
-msgstr "ارتفاع الصورة و/أو عرضها غير صحيحين"
-
-#: gdk-pixbuf/io-pcx.c:613 gdk-pixbuf/io-pcx.c:674
-msgid "Image has unsupported bpp"
-msgstr "للصورة bpp غير مدعوم"
-
-#: gdk-pixbuf/io-pcx.c:618 gdk-pixbuf/io-pcx.c:626
-#, c-format
-msgid "Image has unsupported number of %d-bit planes"
-msgstr "للصورة عدد غير مدعوم من مستويات %Id-بت"
-
-#: gdk-pixbuf/io-pcx.c:642
-msgid "Couldn't create new pixbuf"
-msgstr "تعذّر إنشاء pixbuf جديد"
-
-#: gdk-pixbuf/io-pcx.c:650
-msgid "Couldn't allocate memory for line data"
-msgstr "تعذّر تحصيص ذاكرة لبيانات السطر"
-
-#: gdk-pixbuf/io-pcx.c:657
-msgid "Couldn't allocate memory for paletted data"
-msgstr "تعذّر تحصيص ذاكرة للبيانات المرصّفة"
-
-#: gdk-pixbuf/io-pcx.c:704
-msgid "Didn't get all lines of PCX image"
-msgstr "لم يتم تلقي كل سطور صورة PCX"
-
-#: gdk-pixbuf/io-pcx.c:711
-msgid "No palette found at end of PCX data"
-msgstr "لا توجد لوحة ألوان عند نهاية بيانات PCX"
-
-#: gdk-pixbuf/io-pcx.c:756
-msgid "The PCX image format"
-msgstr "صيغة صور PCX"
-
-#: gdk-pixbuf/io-png.c:55
-msgid "Bits per channel of PNG image is invalid."
-msgstr "عدد البتّات لكل قناة في صورة PNG غير صحيحة."
-
-#: gdk-pixbuf/io-png.c:136 gdk-pixbuf/io-png.c:642
-msgid "Transformed PNG has zero width or height."
-msgstr "صورة PNG المُحوّلة ذات عرض أو ارتفاع صفري."
-
-#: gdk-pixbuf/io-png.c:144
-msgid "Bits per channel of transformed PNG is not 8."
-msgstr "عدد البتّات لكل قناة في صورة PNG لا يساوي 8."
-
-#: gdk-pixbuf/io-png.c:153
-msgid "Transformed PNG not RGB or RGBA."
-msgstr "صورة PNG المحوّلة ليست RGB أو RGBA."
-
-#: gdk-pixbuf/io-png.c:162
-msgid "Transformed PNG has unsupported number of channels, must be 3 or 4."
-msgstr "صورة PNG المحولة لها عدد غير مدعوم من القنوات، يجب أن تكون 3 أو 4."
-
-#: gdk-pixbuf/io-png.c:183
-#, c-format
-msgid "Fatal error in PNG image file: %s"
-msgstr "خطأ قاتل في ملف صورة PNG: %s"
-
-#: gdk-pixbuf/io-png.c:316
-msgid "Insufficient memory to load PNG file"
-msgstr "لا ذاكرة كافية لتحميل ملف PNG"
-
-#: gdk-pixbuf/io-png.c:657
-#, c-format
-msgid ""
-"Insufficient memory to store a %ld by %ld image; try exiting some "
-"applications to reduce memory usage"
-msgstr ""
-"ذاكرة غير كافية لتخزين %ld من %ld صورة، حاول الخروج من بعض التطبيقات لتقليل "
-"استخدام الذاكرة"
-
-#: gdk-pixbuf/io-png.c:720
-msgid "Fatal error reading PNG image file"
-msgstr "خطأ قاتل عند قراءة ملف صورة PNG"
-
-#: gdk-pixbuf/io-png.c:769
-#, c-format
-msgid "Fatal error reading PNG image file: %s"
-msgstr "خطأ قاتل عند قراءة ملف صورة PNG: %s"
-
-#: gdk-pixbuf/io-png.c:863
-msgid ""
-"Keys for PNG text chunks must have at least 1 and at most 79 characters."
-msgstr ""
-"يجب أن يكون لمفاتيح قطع PNG النصية محرفًا واحدًا على الأقل و 79 كحد أقصى."
-
-#: gdk-pixbuf/io-png.c:872
-msgid "Keys for PNG text chunks must be ASCII characters."
-msgstr "يجب أن تكون مفاتيح المقاطع النصية لـ PNG محارف أسكي."
-
-#: gdk-pixbuf/io-png.c:886 gdk-pixbuf/io-tiff.c:738
-#, c-format
-msgid "Color profile has invalid length %d."
-msgstr "طول لاحة %d اللون غير سليم. "
-
-#: gdk-pixbuf/io-png.c:899 gdk-pixbuf/io-gdip-png.c:56
-#, c-format
-msgid ""
-"PNG compression level must be a value between 0 and 9; value '%s' could not "
-"be parsed."
-msgstr ""
-"يجب أن يكون مستوى ضغط PNG قيمة بين 0 و 100، لذلك تعذّر تحليل القيمة '%s'."
-
-#: gdk-pixbuf/io-png.c:912 gdk-pixbuf/io-gdip-png.c:68
-#, c-format
-msgid ""
-"PNG compression level must be a value between 0 and 9; value '%d' is not "
-"allowed."
-msgstr ""
-"يجب أن يكون مستوي ضغط PNG قيمة بين 0 و 100، القيمة '%Id' غير مسموح بها."
-
-#: gdk-pixbuf/io-png.c:951
-#, c-format
-msgid "Value for PNG text chunk %s cannot be converted to ISO-8859-1 encoding."
-msgstr "تعذّر تحويل قيمة مقطع PNG النصي %s إلى ترميز ISO-8859-1."
-
-#: gdk-pixbuf/io-png.c:1112 gdk-pixbuf/io-gdip-png.c:133
-msgid "The PNG image format"
-msgstr "صيغة صور PNG"
-
-#: gdk-pixbuf/io-pnm.c:250
-msgid "PNM loader expected to find an integer, but didn't"
-msgstr "توقَّع مُحمّل PNM العثور على رقم صحيح، لكن لم يجده"
-
-#: gdk-pixbuf/io-pnm.c:282
-msgid "PNM file has an incorrect initial byte"
-msgstr "لملف PNM بايت أوَّلي غير سليم"
-
-#: gdk-pixbuf/io-pnm.c:312
-msgid "PNM file is not in a recognized PNM subformat"
-msgstr "ملف PNM ليس في صيغة فرعيّة من PNM يمكن تمييزها"
-
-#: gdk-pixbuf/io-pnm.c:337
-msgid "PNM file has an image width of 0"
-msgstr "ملف PNM له عرض صورة يساوي 0"
-
-#: gdk-pixbuf/io-pnm.c:358
-msgid "PNM file has an image height of 0"
-msgstr "ملف PNM له ارتفاع صورة يساوي 0"
-
-#: gdk-pixbuf/io-pnm.c:381
-msgid "Maximum color value in PNM file is 0"
-msgstr "قيمة اللون القصوى في ملف PNM هي 0"
-
-#: gdk-pixbuf/io-pnm.c:389
-msgid "Maximum color value in PNM file is too large"
-msgstr "قيمة اللون القصوى في ملف PNM كبيرة جدًا"
-
-#: gdk-pixbuf/io-pnm.c:429 gdk-pixbuf/io-pnm.c:459 gdk-pixbuf/io-pnm.c:504
-msgid "Raw PNM image type is invalid"
-msgstr "نوع صورة PNM الخام غير صحيح"
-
-#: gdk-pixbuf/io-pnm.c:654
-msgid "PNM image loader does not support this PNM subformat"
-msgstr "مُحمِّل صور PNM لا يَدعم صيغة PNM الفرعية هذه"
-
-#: gdk-pixbuf/io-pnm.c:741 gdk-pixbuf/io-pnm.c:968
-msgid "Raw PNM formats require exactly one whitespace before sample data"
-msgstr "صيغ PNM الخام تحتاج إلى وَضع فراغ واحد قبل بيانات العيّنة"
-
-#: gdk-pixbuf/io-pnm.c:768
-msgid "Cannot allocate memory for loading PNM image"
-msgstr "تعذّر تحصيص ذاكرة لتحميل صورة PNM"
-
-#: gdk-pixbuf/io-pnm.c:818
-msgid "Insufficient memory to load PNM context struct"
-msgstr "ذاكرة غير كافية لتحميل بنية سياق PNM"
-
-#: gdk-pixbuf/io-pnm.c:869
-msgid "Unexpected end of PNM image data"
-msgstr "نهاية غير متوقّعة لبيانات صورة PNM"
-
-#: gdk-pixbuf/io-pnm.c:997
-msgid "Insufficient memory to load PNM file"
-msgstr "ذاكرة غير كافية لتحميل ملف PNM"
-
-#: gdk-pixbuf/io-pnm.c:1081
-msgid "The PNM/PBM/PGM/PPM image format family"
-msgstr "عائلة صيغ صور PNM/PBM/PGM/PPM"
-
-#: gdk-pixbuf/io-qtif.c:128
-msgid "Input file descriptor is NULL."
-msgstr "واصف ملف الدخل صفري."
-
-#: gdk-pixbuf/io-qtif.c:143
-msgid "Failed to read QTIF header"
-msgstr "فشلت قراءة ترويسة QTIF"
-
-#: gdk-pixbuf/io-qtif.c:152 gdk-pixbuf/io-qtif.c:182 gdk-pixbuf/io-qtif.c:446
-#, c-format
-msgid "QTIF atom size too large (%d bytes)"
-msgstr "حجم ذرة QTIF كبير جدا (%d بايت)"
-
-#: gdk-pixbuf/io-qtif.c:172
-#, c-format
-msgid "Failed to allocate %d bytes for file read buffer"
-msgstr "فشل تحصيص  %d بايت لبراح قراءة الملف"
-
-#: gdk-pixbuf/io-qtif.c:196
-#, c-format
-msgid "File error when reading QTIF atom: %s"
-msgstr "خطأ أثناء قراءة ذرة QTIF:‏ %s"
-
-#: gdk-pixbuf/io-qtif.c:233
-#, c-format
-msgid "Failed to skip the next %d bytes with seek()."
-msgstr "فشل التخطي إلى %d بايت التالية باستخدام ‪seek()‬."
-
-#: gdk-pixbuf/io-qtif.c:257
-msgid "Failed to allocate QTIF context structure."
-msgstr "تعذّر تحصيص ذاكرة لبنية سياق QTIF."
-
-#: gdk-pixbuf/io-qtif.c:317
-msgid "Failed to create GdkPixbufLoader object."
-msgstr "فشلت إنشاء كائن GdkPixbufLoader."
-
-#: gdk-pixbuf/io-qtif.c:421
-msgid "Failed to find an image data atom."
-msgstr "فشل العثور على ذرة بيانات صورة."
-
-#: gdk-pixbuf/io-qtif.c:602
-msgid "The QTIF image format"
-msgstr "صيغة صور QTIF"
-
-#: gdk-pixbuf/io-ras.c:126
-msgid "RAS image has bogus header data"
-msgstr "لصورة RAS بيانات ترويسة زائفة"
-
-#: gdk-pixbuf/io-ras.c:148
-msgid "RAS image has unknown type"
-msgstr "لصورة RAS نوع مجهول"
-
-#: gdk-pixbuf/io-ras.c:156
-msgid "unsupported RAS image variation"
-msgstr "انحراف صورة RAS غير مدعوم"
-
-#: gdk-pixbuf/io-ras.c:171 gdk-pixbuf/io-ras.c:200
-msgid "Not enough memory to load RAS image"
-msgstr "ذاكرة غير كافية لتحميل صورة RAS"
-
-#: gdk-pixbuf/io-ras.c:545
-msgid "The Sun raster image format"
-msgstr "صيغة صور Sun raster"
-
-#: gdk-pixbuf/io-tga.c:154
-msgid "Cannot allocate memory for IOBuffer struct"
-msgstr "تعذّر تحصيص ذاكرة لبنية IOBuffer"
-
-#: gdk-pixbuf/io-tga.c:173
-msgid "Cannot allocate memory for IOBuffer data"
-msgstr "تعذّر تحصيص ذاكرة لبيانات IOBuffer"
-
-#: gdk-pixbuf/io-tga.c:184
-msgid "Cannot realloc IOBuffer data"
-msgstr "تعذّر إعادة تحصيص بيانات IOBuffer"
-
-#: gdk-pixbuf/io-tga.c:214
-msgid "Cannot allocate temporary IOBuffer data"
-msgstr "تعذّر تحصيص بيانات IOBuffer المؤقتة"
-
-#: gdk-pixbuf/io-tga.c:347
-msgid "Cannot allocate new pixbuf"
-msgstr "تعذّر تحصيص pixbuf جديد"
-
-#: gdk-pixbuf/io-tga.c:686
-msgid "Image is corrupted or truncated"
-msgstr "الصورة تالفة أو ناقصة"
-
-#: gdk-pixbuf/io-tga.c:693
-msgid "Cannot allocate colormap structure"
-msgstr "تعذّر تحصيص تركيب مُخطط الألوان"
-
-#: gdk-pixbuf/io-tga.c:700
-msgid "Cannot allocate colormap entries"
-msgstr "تعذّر تحصيص مدخلات مُخطط الألوان"
-
-#: gdk-pixbuf/io-tga.c:722
-msgid "Unexpected bitdepth for colormap entries"
-msgstr "عمق بت غير متوقّع لخانات مُخطط الألوان"
-
-#: gdk-pixbuf/io-tga.c:740
-msgid "Cannot allocate TGA header memory"
-msgstr "تعذّر تحصيص ذاكرة ترويسة TGA"
-
-#: gdk-pixbuf/io-tga.c:773
-msgid "TGA image has invalid dimensions"
-msgstr "صورة TGA لها أبعاد غير سليمة"
-
-#: gdk-pixbuf/io-tga.c:779 gdk-pixbuf/io-tga.c:788 gdk-pixbuf/io-tga.c:798
-#: gdk-pixbuf/io-tga.c:808 gdk-pixbuf/io-tga.c:815
-msgid "TGA image type not supported"
-msgstr "نوع صور TGA غير مدعوم"
-
-#: gdk-pixbuf/io-tga.c:862
-msgid "Cannot allocate memory for TGA context struct"
-msgstr "تعذّر تحصيص ذاكرة لبنية سياق TGA"
-
-#: gdk-pixbuf/io-tga.c:927
-msgid "Excess data in file"
-msgstr "بيانات زائدة في الملف"
-
-#: gdk-pixbuf/io-tga.c:1008
-msgid "The Targa image format"
-msgstr "صيغة صور Targa"
-
-#: gdk-pixbuf/io-tiff.c:165
-msgid "Could not get image width (bad TIFF file)"
-msgstr "تعذّر معرفة عرض الصورة (ملف TIFF رديء)"
-
-#: gdk-pixbuf/io-tiff.c:172
-msgid "Could not get image height (bad TIFF file)"
-msgstr "تعذّر معرفة ارتفاع الصورة (ملف TIFF رديء)"
-
-#: gdk-pixbuf/io-tiff.c:180
-msgid "Width or height of TIFF image is zero"
-msgstr "عرض أو ارتفاع صفري لصورة TIFF"
-
-#: gdk-pixbuf/io-tiff.c:189 gdk-pixbuf/io-tiff.c:198
-msgid "Dimensions of TIFF image too large"
-msgstr "أبعاد صورة TIFF كبيرة جدًا"
-
-#: gdk-pixbuf/io-tiff.c:222 gdk-pixbuf/io-tiff.c:234 gdk-pixbuf/io-tiff.c:561
-msgid "Insufficient memory to open TIFF file"
-msgstr "ذاكرة غير كافية لفتح ملف TIFF"
-
-#: gdk-pixbuf/io-tiff.c:295
-msgid "Failed to load RGB data from TIFF file"
-msgstr "فشل تحميل بيانات RGB من ملف TIFF"
-
-#: gdk-pixbuf/io-tiff.c:351
-msgid "Failed to open TIFF image"
-msgstr "فشل فتح صورة TIFF"
-
-#: gdk-pixbuf/io-tiff.c:363 gdk-pixbuf/io-tiff.c:778
-msgid "TIFFClose operation failed"
-msgstr "فشلت عملية TIFFClose"
-
-#: gdk-pixbuf/io-tiff.c:493 gdk-pixbuf/io-tiff.c:506
-msgid "Failed to load TIFF image"
-msgstr "فشل تحميل صورة TIFF"
-
-#: gdk-pixbuf/io-tiff.c:692
-msgid "Failed to save TIFF image"
-msgstr "فشل حفظ صورة TIFF"
-
-#: gdk-pixbuf/io-tiff.c:727
-msgid "TIFF compression doesn't refer to a valid codec."
-msgstr "ضغط TIFF لا يشير إلى مرمّز صحيح."
-
-#: gdk-pixbuf/io-tiff.c:767
-msgid "Failed to write TIFF data"
-msgstr "فشلت كتابة بيانات TIFF"
-
-#: gdk-pixbuf/io-tiff.c:814
-msgid "Couldn't write to TIFF file"
-msgstr "الكتابة لملف TIFF غير ممكنة"
-
-#: gdk-pixbuf/io-tiff.c:869
-msgid "The TIFF image format"
-msgstr "صيغة صور TIFF"
-
-#: gdk-pixbuf/io-wbmp.c:246
-msgid "Image has zero width"
-msgstr "عرض الصورة صفر"
-
-#: gdk-pixbuf/io-wbmp.c:264
-msgid "Image has zero height"
-msgstr "ارتفاع الصورة صفر"
-
-#: gdk-pixbuf/io-wbmp.c:275
-msgid "Not enough memory to load image"
-msgstr "ذاكرة غير كافية لتحميل الصورة"
-
-#: gdk-pixbuf/io-wbmp.c:334
-msgid "Couldn't save the rest"
-msgstr "تعذّر حفظ الباقي"
-
-#: gdk-pixbuf/io-wbmp.c:375
-msgid "The WBMP image format"
-msgstr "صيغة صور WBMP"
-
-#: gdk-pixbuf/io-xbm.c:295
-msgid "Invalid XBM file"
-msgstr "ملف XBM غير سليم"
-
-#: gdk-pixbuf/io-xbm.c:305
-msgid "Insufficient memory to load XBM image file"
-msgstr "ذاكرة غير كافية لفتح صورة ملف XBM"
-
-#: gdk-pixbuf/io-xbm.c:453
-msgid "Failed to write to temporary file when loading XBM image"
-msgstr "فشلت الكتابة في ملف مؤقّت عند تحميل صورة XBM"
-
-#: gdk-pixbuf/io-xbm.c:492
-msgid "The XBM image format"
-msgstr "صيغة صور XBM"
-
-#: gdk-pixbuf/io-xpm.c:468
-msgid "No XPM header found"
-msgstr "لا توجد ترويسة XPM"
-
-#: gdk-pixbuf/io-xpm.c:477
-msgid "Invalid XPM header"
-msgstr "ترويسة XPM غير صالحة"
-
-#: gdk-pixbuf/io-xpm.c:485
-msgid "XPM file has image width <= 0"
-msgstr "عرض صورة ملف XPM قيمته <= 0"
-
-#: gdk-pixbuf/io-xpm.c:493
-msgid "XPM file has image height <= 0"
-msgstr "ارتفاع صورة ملف XPM قيمته <= 0"
-
-#: gdk-pixbuf/io-xpm.c:501
-msgid "XPM has invalid number of chars per pixel"
-msgstr "ملف XPM له عدد غير صحيح من المحارف لكل بكسل"
-
-#: gdk-pixbuf/io-xpm.c:510
-msgid "XPM file has invalid number of colors"
-msgstr "ملف XPM له عدد غير صحيح من الألوان"
-
-#: gdk-pixbuf/io-xpm.c:522 gdk-pixbuf/io-xpm.c:531 gdk-pixbuf/io-xpm.c:583
-msgid "Cannot allocate memory for loading XPM image"
-msgstr "تعذّر تحصيص ذاكرة لتحميل صورة XPM"
-
-#: gdk-pixbuf/io-xpm.c:545
-msgid "Cannot read XPM colormap"
-msgstr "تعذّر قراءة مخطط ألوان XPM"
-
-#: gdk-pixbuf/io-xpm.c:777
-msgid "Failed to write to temporary file when loading XPM image"
-msgstr "فشلت الكتابة في ملف مؤقت عند تحميل صورة XPM"
-
-#: gdk-pixbuf/io-xpm.c:816
-msgid "The XPM image format"
-msgstr "صيغة صور XPM"
-
-#: gdk-pixbuf/io-gdip-emf.c:59
-msgid "The EMF image format"
-msgstr "صيغة صور EMF"
-
-#: gdk-pixbuf/io-gdip-utils.c:232
-#, c-format
-msgid "Could not allocate memory: %s"
-msgstr "تعذّر تحصيص ذاكرة: %s"
-
-#: gdk-pixbuf/io-gdip-utils.c:257 gdk-pixbuf/io-gdip-utils.c:371
-#: gdk-pixbuf/io-gdip-utils.c:411
-#, c-format
-msgid "Could not create stream: %s"
-msgstr "تعذّر إنشاء الدفق: %s"
-
-#: gdk-pixbuf/io-gdip-utils.c:271
-#, c-format
-msgid "Could not seek stream: %s"
-msgstr "تعذّر الالتماس في الدفق: %s"
-
-#: gdk-pixbuf/io-gdip-utils.c:283
-#, c-format
-msgid "Could not read from stream: %s"
-msgstr "تعذّر القراءة من الدفق: %s"
-
-#: gdk-pixbuf/io-gdip-utils.c:694 gdk-pixbuf/io-gdip-utils.c:825
-msgid "Couldn't load bitmap"
-msgstr "تعذّر تحميل الصورة النقطية"
-
-#: gdk-pixbuf/io-gdip-utils.c:847
-msgid "Couldn't load metafile"
-msgstr "تعذّر تحميل ملف المعلومات الفوقية"
-
-#: gdk-pixbuf/io-gdip-utils.c:1006
-msgid "Unsupported image format for GDI+"
-msgstr "نسق صور لا يدعمه GDI+"
-
-#: gdk-pixbuf/io-gdip-utils.c:1013
-msgid "Couldn't save"
-msgstr "تعذّر الحفظ"
-
-#: gdk-pixbuf/io-gdip-wmf.c:58
-msgid "The WMF image format"
-msgstr "صيغة صور WMF"
-
 #. Description of --sync in --help output
 #: gdk/win32/gdkmain-win32.c:54
 msgid "Don't batch GDI requests"
@@ -1209,12 +317,12 @@ msgstr "اجعل نداءات س متزامنة"
 msgid "Starting %s"
 msgstr "يجري بدء %s"
 
-#: gdk/x11/gdkapplaunchcontext-x11.c:315
+#: gdk/x11/gdkapplaunchcontext-x11.c:317
 #, c-format
 msgid "Opening %s"
 msgstr "يجري فتح %s"
 
-#: gdk/x11/gdkapplaunchcontext-x11.c:318
+#: gdk/x11/gdkapplaunchcontext-x11.c:322
 #, c-format
 msgid "Opening %d Item"
 msgid_plural "Opening %d Items"
@@ -1349,7 +457,7 @@ msgstr "نوع دالة غير سليم في سطر %d: '%s'"
 
 #: gtk/gtkbuilderparser.c:407
 #, c-format
-msgid "Duplicate object id '%s' on line %d (previously on line %d)"
+msgid "Duplicate object ID '%s' on line %d (previously on line %d)"
 msgstr "هوية كائن مكررة '%s'  في سطر %d (السابقة في سطر %d)"
 
 #: gtk/gtkbuilderparser.c:859
@@ -1372,7 +480,7 @@ msgstr "وسم غير معتبر: '%s'"
 #. * text direction of RTL and specify "calendar:YM", then the year
 #. * will appear to the right of the month.
 #.
-#: gtk/gtkcalendar.c:759
+#: gtk/gtkcalendar.c:799
 msgid "calendar:MY"
 msgstr "calendar:MY"
 
@@ -1380,7 +488,7 @@ msgstr "calendar:MY"
 #. * first day of the week to calendar:week_start:1 if you want Monday
 #. * to be the first day of the week, and so on.
 #.
-#: gtk/gtkcalendar.c:797
+#: gtk/gtkcalendar.c:837
 msgid "calendar:week_start:0"
 msgstr "calendar:week_start:7"
 
@@ -1389,7 +497,7 @@ msgstr "calendar:week_start:7"
 #. *
 #. * If you don't understand this, leave it as "2000"
 #.
-#: gtk/gtkcalendar.c:1807
+#: gtk/gtkcalendar.c:1890
 msgctxt "year measurement template"
 msgid "2000"
 msgstr "2000"
@@ -1404,7 +512,7 @@ msgstr "2000"
 #. * digits. That needs support from your system and locale definition
 #. * too.
 #.
-#: gtk/gtkcalendar.c:1838 gtk/gtkcalendar.c:2496
+#: gtk/gtkcalendar.c:1921 gtk/gtkcalendar.c:2584
 #, c-format
 msgctxt "calendar:day:digits"
 msgid "%d"
@@ -1420,7 +528,7 @@ msgstr "%Id"
 #. * digits. That needs support from your system and locale definition
 #. * too.
 #.
-#: gtk/gtkcalendar.c:1870 gtk/gtkcalendar.c:2359
+#: gtk/gtkcalendar.c:1953 gtk/gtkcalendar.c:2447
 #, c-format
 msgctxt "calendar:week:digits"
 msgid "%d"
@@ -1436,7 +544,7 @@ msgstr "%Id"
 #. *
 #. * "%Y" is appropriate for most locales.
 #.
-#: gtk/gtkcalendar.c:2150
+#: gtk/gtkcalendar.c:2235
 msgctxt "calendar year format"
 msgid "%Y"
 msgstr "%Y"
@@ -1472,15 +580,15 @@ msgctxt "progress bar label"
 msgid "%d %%"
 msgstr "%Id ٪"
 
-#: gtk/gtkcolorbutton.c:188 gtk/gtkcolorbutton.c:559
+#: gtk/gtkcolorbutton.c:178 gtk/gtkcolorbutton.c:457
 msgid "Pick a Color"
 msgstr "اختر لونًا"
 
-#: gtk/gtkcolorbutton.c:448
+#: gtk/gtkcolorbutton.c:350
 msgid "Received invalid color data\n"
 msgstr "استُلِمت بيانات لون غير سليمة\n"
 
-#: gtk/gtkcolorsel.c:354
+#: gtk/gtkcolorsel.c:363
 msgid ""
 "Select the color you want from the outer ring. Select the darkness or "
 "lightness of that color using the inner triangle."
@@ -1488,73 +596,73 @@ msgstr ""
 "اختر اللون الذي تريده من الحلقة الخارجية. اختر ظلمة أو إضاءة ذلك اللون "
 "باستخدام المثلث الداخلي."
 
-#: gtk/gtkcolorsel.c:378
+#: gtk/gtkcolorsel.c:387
 msgid ""
 "Click the eyedropper, then click a color anywhere on your screen to select "
 "that color."
 msgstr "انقر القطّارة ثم انقر أيّ لون في أيّ مكان على الشاشة لاختيار ذلك اللون."
 
-#: gtk/gtkcolorsel.c:387
+#: gtk/gtkcolorsel.c:396
 msgid "_Hue:"
 msgstr "ال_تدرج:"
 
-#: gtk/gtkcolorsel.c:388
+#: gtk/gtkcolorsel.c:397
 msgid "Position on the color wheel."
 msgstr "الموقع على عجلة الألوان."
 
-#: gtk/gtkcolorsel.c:390
+#: gtk/gtkcolorsel.c:399
 msgid "_Saturation:"
 msgstr "الت_شبع:"
 
-#: gtk/gtkcolorsel.c:391
+#: gtk/gtkcolorsel.c:400
 msgid "\"Deepness\" of the color."
 msgstr "عمق\" اللون\"."
 
-#: gtk/gtkcolorsel.c:392
+#: gtk/gtkcolorsel.c:401
 msgid "_Value:"
 msgstr "ال_قيمة:"
 
-#: gtk/gtkcolorsel.c:393
+#: gtk/gtkcolorsel.c:402
 msgid "Brightness of the color."
 msgstr "سُطوع اللون."
 
-#: gtk/gtkcolorsel.c:394
+#: gtk/gtkcolorsel.c:403
 msgid "_Red:"
 msgstr "_أحمر:"
 
-#: gtk/gtkcolorsel.c:395
+#: gtk/gtkcolorsel.c:404
 msgid "Amount of red light in the color."
 msgstr "كمية الضوء الأحمر في اللون."
 
-#: gtk/gtkcolorsel.c:396
+#: gtk/gtkcolorsel.c:405
 msgid "_Green:"
 msgstr "أ_خضر:"
 
-#: gtk/gtkcolorsel.c:397
+#: gtk/gtkcolorsel.c:406
 msgid "Amount of green light in the color."
 msgstr "كمية الضوء الأخضر في اللون."
 
-#: gtk/gtkcolorsel.c:398
+#: gtk/gtkcolorsel.c:407
 msgid "_Blue:"
 msgstr "أ_زرق:"
 
-#: gtk/gtkcolorsel.c:399
+#: gtk/gtkcolorsel.c:408
 msgid "Amount of blue light in the color."
 msgstr "كمية الضوء الأزرق في اللون."
 
-#: gtk/gtkcolorsel.c:402
+#: gtk/gtkcolorsel.c:411
 msgid "Op_acity:"
 msgstr "ال_عتامة:"
 
-#: gtk/gtkcolorsel.c:409 gtk/gtkcolorsel.c:419
+#: gtk/gtkcolorsel.c:418 gtk/gtkcolorsel.c:428
 msgid "Transparency of the color."
 msgstr "شفافية اللون."
 
-#: gtk/gtkcolorsel.c:426
+#: gtk/gtkcolorsel.c:435
 msgid "Color _name:"
 msgstr "ا_سم اللون:"
 
-#: gtk/gtkcolorsel.c:440
+#: gtk/gtkcolorsel.c:449
 msgid ""
 "You can enter an HTML-style hexadecimal color value, or simply a color name "
 "such as 'orange' in this entry."
@@ -1562,15 +670,15 @@ msgstr ""
 "يمكنك إدخال قيمة لون بالنظام الست عشري و أسلوب HTML، أو اسم لون بكل بساطة "
 "مثل 'orange' في هذه الخانة."
 
-#: gtk/gtkcolorsel.c:470
+#: gtk/gtkcolorsel.c:479
 msgid "_Palette:"
 msgstr "_لوحة الألوان:"
 
-#: gtk/gtkcolorsel.c:499
+#: gtk/gtkcolorsel.c:508
 msgid "Color Wheel"
 msgstr "عجلة الألوان"
 
-#: gtk/gtkcolorsel.c:958
+#: gtk/gtkcolorsel.c:967
 msgid ""
 "The previously-selected color, for comparison to the color you're selecting "
 "now. You can drag this color to a palette entry, or select this color as "
@@ -1579,7 +687,7 @@ msgstr ""
 "اللون المُختار سابقًا، للمقارنة باللون الذي اخترتَه الآن. يُمكِنك سحب هذا اللون "
 "لخانة لوحة ألوان، أو جعله كاللون الحالي بسحبه للمربع اللوني."
 
-#: gtk/gtkcolorsel.c:961
+#: gtk/gtkcolorsel.c:970
 msgid ""
 "The color you've chosen. You can drag this color to a palette entry to save "
 "it for use in the future."
@@ -1587,21 +695,21 @@ msgstr ""
 "اللون الذي اخترته. تستطيع سحب هذا اللون إلى خانة لوحة الألوان لحفظه حتى "
 "تستخدمه مستقبلًا."
 
-#: gtk/gtkcolorsel.c:966
+#: gtk/gtkcolorsel.c:975
 msgid ""
 "The previously-selected color, for comparison to the color you're selecting "
 "now."
 msgstr "اللون المختار سابقا، لمقارنته مع اللون الذي تختاره الآن."
 
-#: gtk/gtkcolorsel.c:969
+#: gtk/gtkcolorsel.c:978
 msgid "The color you've chosen."
 msgstr "اللون الذي اخترته."
 
-#: gtk/gtkcolorsel.c:1382
+#: gtk/gtkcolorsel.c:1391
 msgid "_Save color here"
 msgstr "ا_حفظ اللون هنا"
 
-#: gtk/gtkcolorsel.c:1587
+#: gtk/gtkcolorsel.c:1596
 msgid ""
 "Click this palette entry to make it the current color. To change this entry, "
 "drag a color swatch here or right-click it and select \"Save color here.\""
@@ -1677,15 +785,15 @@ msgstr "_يمين:"
 msgid "Paper Margins"
 msgstr "حواف الورق"
 
-#: gtk/gtkentry.c:8747 gtk/gtktextview.c:7974
+#: gtk/gtkentry.c:8751 gtk/gtktextview.c:7974
 msgid "Input _Methods"
 msgstr "طرق ال_إدخال"
 
-#: gtk/gtkentry.c:8761 gtk/gtktextview.c:7988
+#: gtk/gtkentry.c:8765 gtk/gtktextview.c:7988
 msgid "_Insert Unicode Control Character"
 msgstr "أ_درج محرف تحكم يونيكود"
 
-#: gtk/gtkentry.c:10140
+#: gtk/gtkentry.c:10144
 msgid "Caps Lock is on"
 msgstr "زر الحروف العالية مفعّل"
 
@@ -1960,21 +1068,21 @@ msgstr "تعذّر وصْل %s"
 
 #. Translators: this is shown in the feedback for Tab-completion in a file
 #. * chooser's text entry, when the user enters an invalid path.
-#: gtk/gtkfilechooserentry.c:698 gtk/gtkfilechooserentry.c:1163
+#: gtk/gtkfilechooserentry.c:700 gtk/gtkfilechooserentry.c:1166
 msgid "Invalid path"
 msgstr "مسار غير صحيح"
 
 #. translators: this text is shown when there are no completions
 #. * for something the user typed in a file chooser entry
 #.
-#: gtk/gtkfilechooserentry.c:1095
+#: gtk/gtkfilechooserentry.c:1098
 msgid "No match"
 msgstr "لا تطابق"
 
 #. translators: this text is shown when there is exactly one completion
 #. * for something the user typed in a file chooser entry
 #.
-#: gtk/gtkfilechooserentry.c:1106
+#: gtk/gtkfilechooserentry.c:1109
 msgid "Sole completion"
 msgstr "مجرد اكتمال"
 
@@ -1982,13 +1090,13 @@ msgstr "مجرد اكتمال"
 #. * entry is a complete filename, but could be continued to find
 #. * a longer match
 #.
-#: gtk/gtkfilechooserentry.c:1122
+#: gtk/gtkfilechooserentry.c:1125
 msgid "Complete, but not unique"
 msgstr "مكتمل، لكن ليس فريدا"
 
 #. Translators: this text is shown while the system is searching
 #. * for possible completions for filenames in a file chooser entry.
-#: gtk/gtkfilechooserentry.c:1154
+#: gtk/gtkfilechooserentry.c:1157
 msgid "Completing..."
 msgstr "يجري الإكمال..."
 
@@ -1996,7 +1104,7 @@ msgstr "يجري الإكمال..."
 #. Translators: this is shown in the feedback for Tab-completion in a
 #. * file chooser's text entry when the user enters something like
 #. * "sftp://blahblah" in an app that only supports local filenames.
-#: gtk/gtkfilechooserentry.c:1176 gtk/gtkfilechooserentry.c:1201
+#: gtk/gtkfilechooserentry.c:1179 gtk/gtkfilechooserentry.c:1204
 msgid "Only local files may be selected"
 msgstr "يتاح اختيار الملفات المحلية فقط"
 
@@ -2004,14 +1112,14 @@ msgstr "يتاح اختيار الملفات المحلية فقط"
 #. Translators: this is shown in the feedback for Tab-completion in a
 #. * file chooser's text entry when the user hasn't entered the first '/'
 #. * after a hostname and yet hits Tab (such as "sftp://blahblah[Tab]")
-#: gtk/gtkfilechooserentry.c:1185
+#: gtk/gtkfilechooserentry.c:1188
 msgid "Incomplete hostname; end it with '/'"
 msgstr "اسم مستضيف غير كامل؛ أضف '/' إلى نهايته"
 
 #. Translators: this is shown in the feedback for Tab-completion in a file
 #. * chooser's text entry when the user enters a path that does not exist
 #. * and then hits Tab
-#: gtk/gtkfilechooserentry.c:1196
+#: gtk/gtkfilechooserentry.c:1199
 msgid "Path does not exist"
 msgstr "المسار غير موجود"
 
@@ -2210,7 +1318,7 @@ msgstr "قيمة _غاما"
 #. Remove this icon source so we don't keep trying to
 #. * load it.
 #.
-#: gtk/gtkiconfactory.c:1401
+#: gtk/gtkiconfactory.c:1354
 #, c-format
 msgid "Error loading icon: %s"
 msgstr "خطأ أثناء تحميل الأيقونة: %s"
@@ -2337,12 +1445,12 @@ msgid "Cl_ear"
 msgstr "ا_مسح"
 
 #. Open Link
-#: gtk/gtklabel.c:5685
+#: gtk/gtklabel.c:5700
 msgid "_Open Link"
 msgstr "ا_فتح الوصلة"
 
 #. Copy Link Address
-#: gtk/gtklabel.c:5697
+#: gtk/gtklabel.c:5712
 msgid "Copy _Link Address"
 msgstr "ا_نسخ عنوان الوصلة"
 
@@ -2384,20 +1492,20 @@ msgstr "شارات تنقيح ج‌ت‌ك+ التي ستُصفّر"
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
 #.
-#: gtk/gtkmain.c:713
+#: gtk/gtkmain.c:731
 msgid "default:LTR"
 msgstr "default:RTL"
 
-#: gtk/gtkmain.c:778
+#: gtk/gtkmain.c:796
 #, c-format
 msgid "Cannot open display: %s"
 msgstr "غير قادر على فتح العرض: %s"
 
-#: gtk/gtkmain.c:815
+#: gtk/gtkmain.c:833
 msgid "GTK+ Options"
 msgstr "خيارات ج‌ت‌ك+"
 
-#: gtk/gtkmain.c:815
+#: gtk/gtkmain.c:833
 msgid "Show GTK+ Options"
 msgstr "اعرض خيارات ج‌ت‌ك+"
 
@@ -2439,11 +1547,10 @@ msgstr "تذكر للأب_د"
 
 #: gtk/gtkmountoperation.c:881
 #, c-format
-msgid "Unknown Application (pid %d)"
+msgid "Unknown Application (PID %d)"
 msgstr "تطبيق مجهول (معرف العملية %d)"
 
 #: gtk/gtkmountoperation.c:1064
-#, c-format
 msgid "Unable to end process"
 msgstr "تعذّر إنهاء العملية"
 
@@ -2453,7 +1560,7 @@ msgstr "أ_نه العملية"
 
 #: gtk/gtkmountoperation-stub.c:64
 #, c-format
-msgid "Cannot kill process with pid %d. Operation is not implemented."
+msgid "Cannot kill process with PID %d. Operation is not implemented."
 msgstr "تعذّر قتل العملية ذات المعرّف %d. العملية غير مدعومة."
 
 #. translators: this string is a name for the 'less' command
@@ -2479,15 +1586,16 @@ msgstr "صدفة زِد"
 
 #: gtk/gtkmountoperation-x11.c:966
 #, c-format
-msgid "Cannot end process with pid %d: %s"
+msgid "Cannot end process with PID %d: %s"
 msgstr "تعذّر قتل العملية ذات المعرف %d: %s"
 
-#: gtk/gtknotebook.c:4704 gtk/gtknotebook.c:7269
+#: gtk/gtknotebook.c:4705 gtk/gtknotebook.c:7311
 #, c-format
 msgid "Page %u"
 msgstr "صفحة %Iu"
 
-#: gtk/gtkpagesetup.c:597 gtk/gtkpapersize.c:826 gtk/gtkpapersize.c:868
+#: gtk/gtkpagesetup.c:597 gtk/gtkpapersize.c:826
+#: gtk/gtkpapersize.c:868
 msgid "Not a valid page setup file"
 msgstr "ملف تثبيت صفحة غير سليم"
 
@@ -2618,7 +1726,6 @@ msgid "Preparing %d"
 msgstr "يحضّر %Id"
 
 #: gtk/gtkprintoperation.c:2256 gtk/gtkprintoperation.c:2875
-#, c-format
 msgid "Preparing"
 msgstr "يحضّر"
 
@@ -2628,22 +1735,18 @@ msgid "Printing %d"
 msgstr "يطبع %Id"
 
 #: gtk/gtkprintoperation.c:2905
-#, c-format
 msgid "Error creating print preview"
 msgstr "حدث خطأ أثناء إنشاء معاينة الطباعة"
 
 #: gtk/gtkprintoperation.c:2908
-#, c-format
 msgid "The most probable reason is that a temporary file could not be created."
 msgstr "السبب الأكثر احتمالاً هو عدم القدرة على إنشاء ملف مؤقت."
 
 #: gtk/gtkprintoperation-unix.c:297 gtk/gtkprintoperation-unix.c:314
-#, c-format
 msgid "Error launching preview"
 msgstr "حدث خطأ أثناء بدء المعاينة"
 
 #: gtk/gtkprintoperation-unix.c:358
-#, c-format
 msgid "Error printing"
 msgstr "حدث خطأ أثناء الطبع"
 
@@ -2661,7 +1764,7 @@ msgstr "نَفَذ الورق"
 
 #. Translators: this is a printer status.
 #: gtk/gtkprintoperation-win32.c:616
-#: modules/printbackends/cups/gtkprintbackendcups.c:2000
+#: modules/printbackends/cups/gtkprintbackendcups.c:1998
 msgid "Paused"
 msgstr "أُلبِث"
 
@@ -2788,42 +1891,42 @@ msgstr "عامّ"
 #. * multiple pages on a sheet when printing
 #.
 #: gtk/gtkprintunixdialog.c:3010
-#: modules/printbackends/cups/gtkprintbackendcups.c:3510
+#: modules/printbackends/cups/gtkprintbackendcups.c:3508
 msgid "Left to right, top to bottom"
 msgstr "اليسار لليمين، الأعلى للأسفل"
 
 #: gtk/gtkprintunixdialog.c:3010
-#: modules/printbackends/cups/gtkprintbackendcups.c:3510
+#: modules/printbackends/cups/gtkprintbackendcups.c:3508
 msgid "Left to right, bottom to top"
 msgstr "اليسار لليمين، الأسفل للأعلى"
 
 #: gtk/gtkprintunixdialog.c:3011
-#: modules/printbackends/cups/gtkprintbackendcups.c:3511
+#: modules/printbackends/cups/gtkprintbackendcups.c:3509
 msgid "Right to left, top to bottom"
 msgstr "اليمين لليسار، الأعلى للأسفل"
 
 #: gtk/gtkprintunixdialog.c:3011
-#: modules/printbackends/cups/gtkprintbackendcups.c:3511
+#: modules/printbackends/cups/gtkprintbackendcups.c:3509
 msgid "Right to left, bottom to top"
 msgstr "اليمين لليسار، الأسفل للأعلى"
 
 #: gtk/gtkprintunixdialog.c:3012
-#: modules/printbackends/cups/gtkprintbackendcups.c:3512
+#: modules/printbackends/cups/gtkprintbackendcups.c:3510
 msgid "Top to bottom, left to right"
 msgstr "الأعلى للأسفل، اليسار لليمين"
 
 #: gtk/gtkprintunixdialog.c:3012
-#: modules/printbackends/cups/gtkprintbackendcups.c:3512
+#: modules/printbackends/cups/gtkprintbackendcups.c:3510
 msgid "Top to bottom, right to left"
 msgstr "الأعلى للأسفل، اليمين لليسار"
 
 #: gtk/gtkprintunixdialog.c:3013
-#: modules/printbackends/cups/gtkprintbackendcups.c:3513
+#: modules/printbackends/cups/gtkprintbackendcups.c:3511
 msgid "Bottom to top, left to right"
 msgstr "الأسفل للأعلى، اليسار لليمين"
 
 #: gtk/gtkprintunixdialog.c:3013
-#: modules/printbackends/cups/gtkprintbackendcups.c:3513
+#: modules/printbackends/cups/gtkprintbackendcups.c:3511
 msgid "Bottom to top, right to left"
 msgstr "الأسفل للأعلى، اليمين لليسار"
 
@@ -2831,7 +1934,7 @@ msgstr "الأسفل للأعلى، اليمين لليسار"
 #. * dialog that controls in what order multiple pages are arranged
 #.
 #: gtk/gtkprintunixdialog.c:3017 gtk/gtkprintunixdialog.c:3030
-#: modules/printbackends/cups/gtkprintbackendcups.c:3545
+#: modules/printbackends/cups/gtkprintbackendcups.c:3543
 msgid "Page Ordering"
 msgstr "ترتيب الصفحات"
 
@@ -3130,10 +2233,10 @@ msgctxt "recent menu label"
 msgid "%d. %s"
 msgstr "%Id. %s"
 
-#: gtk/gtkrecentmanager.c:1020 gtk/gtkrecentmanager.c:1033
-#: gtk/gtkrecentmanager.c:1171 gtk/gtkrecentmanager.c:1181
-#: gtk/gtkrecentmanager.c:1234 gtk/gtkrecentmanager.c:1243
-#: gtk/gtkrecentmanager.c:1258
+#: gtk/gtkrecentmanager.c:1033 gtk/gtkrecentmanager.c:1046
+#: gtk/gtkrecentmanager.c:1184 gtk/gtkrecentmanager.c:1194
+#: gtk/gtkrecentmanager.c:1247 gtk/gtkrecentmanager.c:1256
+#: gtk/gtkrecentmanager.c:1271
 #, c-format
 msgid "Unable to find an item with URI '%s'"
 msgstr "لا يُمكن العثور على عنصر بالعنوان '%s'"
@@ -3668,8 +2771,8 @@ msgstr "الصفة \"%s\" معادة مرتان في نفس العنصر <%s>"
 
 #: gtk/gtktextbufferserialize.c:846
 #, c-format
-msgid "<%s> element has invalid id \"%s\""
-msgstr "العنصر <%s> له رقم  هوية غير صحيح \"%s\""
+msgid "<%s> element has invalid ID \"%s\""
+msgstr "العنصر <%s> له رقم هوية غير صحيح \"%s\""
 
 #: gtk/gtktextbufferserialize.c:856
 #, c-format
@@ -4930,182 +4033,177 @@ msgstr "الاستيثاق مطلوب لطبع هذا المستند على ال
 msgid "Authentication is required to print this document"
 msgstr "الاستيثاق مطلوب لطبع هذا المستند"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1673
+#: modules/printbackends/cups/gtkprintbackendcups.c:1672
 #, c-format
 msgid "Printer '%s' is low on toner."
 msgstr "الطابعة '%s' بها نقص في الحبر."
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1674
+#: modules/printbackends/cups/gtkprintbackendcups.c:1673
 #, c-format
 msgid "Printer '%s' has no toner left."
 msgstr "نفذ الحبر من الطابعة '%s'."
 
 #. Translators: "Developer" like on photo development context
-#: modules/printbackends/cups/gtkprintbackendcups.c:1676
+#: modules/printbackends/cups/gtkprintbackendcups.c:1675
 #, c-format
 msgid "Printer '%s' is low on developer."
 msgstr "مستوى المُظّهِر منخفض في الطابعة  '%s'."
 
 #. Translators: "Developer" like on photo development context
-#: modules/printbackends/cups/gtkprintbackendcups.c:1678
+#: modules/printbackends/cups/gtkprintbackendcups.c:1677
 #, c-format
 msgid "Printer '%s' is out of developer."
 msgstr "نفذت الطابعة  '%s' من المُظّهِر."
 
 #. Translators: "marker" is one color bin of the printer
-#: modules/printbackends/cups/gtkprintbackendcups.c:1680
+#: modules/printbackends/cups/gtkprintbackendcups.c:1679
 #, c-format
 msgid "Printer '%s' is low on at least one marker supply."
 msgstr "الطابعة '%s' بها نقص في واحد من الأقلام على الأقل."
 
 #. Translators: "marker" is one color bin of the printer
-#: modules/printbackends/cups/gtkprintbackendcups.c:1682
+#: modules/printbackends/cups/gtkprintbackendcups.c:1681
 #, c-format
 msgid "Printer '%s' is out of at least one marker supply."
 msgstr "نفذ حبر واحد من أقلام الطابعة '%s' على الأقل."
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1683
+#: modules/printbackends/cups/gtkprintbackendcups.c:1682
 #, c-format
 msgid "The cover is open on printer '%s'."
 msgstr "غطاء الطابعة '%s' مفتوح."
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1684
+#: modules/printbackends/cups/gtkprintbackendcups.c:1683
 #, c-format
 msgid "The door is open on printer '%s'."
 msgstr "باب الطابعة '%s' مفتوح."
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1685
+#: modules/printbackends/cups/gtkprintbackendcups.c:1684
 #, c-format
 msgid "Printer '%s' is low on paper."
 msgstr "الطابعة '%s' بها نقص في الورق."
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1686
+#: modules/printbackends/cups/gtkprintbackendcups.c:1685
 #, c-format
 msgid "Printer '%s' is out of paper."
 msgstr "نفذ الورق من الطابعة '%s'."
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1687
+#: modules/printbackends/cups/gtkprintbackendcups.c:1686
 #, c-format
-msgid "Printer '%s' is currently off-line."
+msgid "Printer '%s' is currently offline."
 msgstr "الطابعة '%s' غير متصلة حاليا."
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1688
-#, c-format
-msgid "Printer '%s' may not be connected."
-msgstr "قد تكون الطابعة '%s' غير متصلة."
-
-#: modules/printbackends/cups/gtkprintbackendcups.c:1689
+#: modules/printbackends/cups/gtkprintbackendcups.c:1687
 #, c-format
 msgid "There is a problem on printer '%s'."
 msgstr "هناك مشكلة بالطابعة '%s'."
 
 #. Translators: this is a printer status.
-#: modules/printbackends/cups/gtkprintbackendcups.c:1997
+#: modules/printbackends/cups/gtkprintbackendcups.c:1995
 msgid "Paused ; Rejecting Jobs"
 msgstr "إيقاف مؤقت ؛ يجري رفض المهام"
 
 #. Translators: this is a printer status.
-#: modules/printbackends/cups/gtkprintbackendcups.c:2003
+#: modules/printbackends/cups/gtkprintbackendcups.c:2001
 msgid "Rejecting Jobs"
 msgstr "يجري رفض المهام"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2779
+#: modules/printbackends/cups/gtkprintbackendcups.c:2777
 msgid "Two Sided"
 msgstr "ذو جانبين"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2780
+#: modules/printbackends/cups/gtkprintbackendcups.c:2778
 msgid "Paper Type"
 msgstr "نوع الورق"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2781
+#: modules/printbackends/cups/gtkprintbackendcups.c:2779
 msgid "Paper Source"
 msgstr "مصدر الورق"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2782
+#: modules/printbackends/cups/gtkprintbackendcups.c:2780
 msgid "Output Tray"
 msgstr "لوحة الخرْج"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2783
+#: modules/printbackends/cups/gtkprintbackendcups.c:2781
 msgid "Resolution"
 msgstr "الميز"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2784
+#: modules/printbackends/cups/gtkprintbackendcups.c:2782
 msgid "GhostScript pre-filtering"
 msgstr "ترشيح مسبق بغوست‌سكربت"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2793
+#: modules/printbackends/cups/gtkprintbackendcups.c:2791
 msgid "One Sided"
 msgstr "أحادي الجانب"
 
 #. Translators: this is an option of "Two Sided"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2795
+#: modules/printbackends/cups/gtkprintbackendcups.c:2793
 msgid "Long Edge (Standard)"
 msgstr "حافة طويلة (قياسي)"
 
 #. Translators: this is an option of "Two Sided"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2797
+#: modules/printbackends/cups/gtkprintbackendcups.c:2795
 msgid "Short Edge (Flip)"
 msgstr "حافة قصيرة (ملفوف)"
 
 #. Translators: this is an option of "Paper Source"
+#: modules/printbackends/cups/gtkprintbackendcups.c:2797
 #: modules/printbackends/cups/gtkprintbackendcups.c:2799
-#: modules/printbackends/cups/gtkprintbackendcups.c:2801
-#: modules/printbackends/cups/gtkprintbackendcups.c:2809
+#: modules/printbackends/cups/gtkprintbackendcups.c:2807
 msgid "Auto Select"
 msgstr "اختيار تلقائي"
 
 #. Translators: this is an option of "Paper Source"
 #. Translators: this is an option of "Resolution"
+#: modules/printbackends/cups/gtkprintbackendcups.c:2801
 #: modules/printbackends/cups/gtkprintbackendcups.c:2803
 #: modules/printbackends/cups/gtkprintbackendcups.c:2805
-#: modules/printbackends/cups/gtkprintbackendcups.c:2807
-#: modules/printbackends/cups/gtkprintbackendcups.c:2811
-#: modules/printbackends/cups/gtkprintbackendcups.c:3297
+#: modules/printbackends/cups/gtkprintbackendcups.c:2809
+#: modules/printbackends/cups/gtkprintbackendcups.c:3295
 msgid "Printer Default"
 msgstr "مبدئي الطابعة"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2813
+#: modules/printbackends/cups/gtkprintbackendcups.c:2811
 msgid "Embed GhostScript fonts only"
 msgstr "ادمج خطوط غوست‌سكربت فقط"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2815
+#: modules/printbackends/cups/gtkprintbackendcups.c:2813
 msgid "Convert to PS level 1"
 msgstr "حوّل إلى بوستسكربت المستوى ١"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2817
+#: modules/printbackends/cups/gtkprintbackendcups.c:2815
 msgid "Convert to PS level 2"
 msgstr "حوّل إلى بوستسكربت المستوى ٢"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2819
+#: modules/printbackends/cups/gtkprintbackendcups.c:2817
 msgid "No pre-filtering"
 msgstr "لا ترشيح مسبق"
 
 #. Translators: "Miscellaneous" is the label for a button, that opens
 #. up an extra panel of settings in a print dialog.
-#: modules/printbackends/cups/gtkprintbackendcups.c:2828
+#: modules/printbackends/cups/gtkprintbackendcups.c:2826
 msgid "Miscellaneous"
 msgstr "متفرقات"
 
 #. Translators: These strings name the possible values of the
 #. * job priority option in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3505
+#: modules/printbackends/cups/gtkprintbackendcups.c:3503
 msgid "Urgent"
 msgstr "عاجِل"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3505
+#: modules/printbackends/cups/gtkprintbackendcups.c:3503
 msgid "High"
 msgstr "عال"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3505
+#: modules/printbackends/cups/gtkprintbackendcups.c:3503
 msgid "Medium"
 msgstr "متوسط"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3505
+#: modules/printbackends/cups/gtkprintbackendcups.c:3503
 msgid "Low"
 msgstr "منخفض"
 
@@ -5113,66 +4211,66 @@ msgstr "منخفض"
 #. Translators, this string is used to label the pages-per-sheet option
 #. * in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3529
+#: modules/printbackends/cups/gtkprintbackendcups.c:3527
 msgid "Pages per Sheet"
 msgstr "الصفحات بكل ورقة"
 
 #. Translators, this string is used to label the job priority option
 #. * in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3566
+#: modules/printbackends/cups/gtkprintbackendcups.c:3564
 msgid "Job Priority"
 msgstr "أولوية المهمة"
 
 #. Translators, this string is used to label the billing info entry
 #. * in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3577
+#: modules/printbackends/cups/gtkprintbackendcups.c:3575
 msgid "Billing Info"
 msgstr "معلومات الدفع"
 
 #. Translators, these strings are names for various 'standard' cover
 #. * pages that the printing system may support.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3592
+#: modules/printbackends/cups/gtkprintbackendcups.c:3590
 msgid "None"
 msgstr "لا شيء"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3592
+#: modules/printbackends/cups/gtkprintbackendcups.c:3590
 msgid "Classified"
 msgstr "مصنّف"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3592
+#: modules/printbackends/cups/gtkprintbackendcups.c:3590
 msgid "Confidential"
 msgstr "سرّي"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3592
+#: modules/printbackends/cups/gtkprintbackendcups.c:3590
 msgid "Secret"
 msgstr "سر"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3592
+#: modules/printbackends/cups/gtkprintbackendcups.c:3590
 msgid "Standard"
 msgstr "معياري"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3592
+#: modules/printbackends/cups/gtkprintbackendcups.c:3590
 msgid "Top Secret"
 msgstr "سرّي للغاية"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3592
+#: modules/printbackends/cups/gtkprintbackendcups.c:3590
 msgid "Unclassified"
 msgstr "غير مصنّف"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the front cover page.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3627
+#: modules/printbackends/cups/gtkprintbackendcups.c:3625
 msgid "Before"
 msgstr "قبل"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the back cover page.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3642
+#: modules/printbackends/cups/gtkprintbackendcups.c:3640
 msgid "After"
 msgstr "بعد"
 
@@ -5180,14 +4278,14 @@ msgstr "بعد"
 #. * a print job is printed. Possible values are 'now', a specified time,
 #. * or 'on hold'
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3662
+#: modules/printbackends/cups/gtkprintbackendcups.c:3660
 msgid "Print at"
 msgstr "إطبع في"
 
 #. Translators: this is the name of the option that allows the user
 #. * to specify a time when a print job will be printed.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3673
+#: modules/printbackends/cups/gtkprintbackendcups.c:3671
 msgid "Print at time"
 msgstr "إطبع في الوقت"
 
@@ -5195,7 +4293,7 @@ msgstr "إطبع في الوقت"
 #. * size. The two placeholders are replaced with the width and height
 #. * in points. E.g: "Custom 230.4x142.9"
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3708
+#: modules/printbackends/cups/gtkprintbackendcups.c:3706
 #, c-format
 msgid "Custom %sx%s"
 msgstr "مخصص %sx%s"
@@ -5286,6 +4384,662 @@ msgstr "اطبع في طابعة اختبار"
 #, c-format
 msgid "Could not get information for file '%s': %s"
 msgstr "تعذّر جلب معلومات الملف '%s': %s"
+
+#: tests/testfilechooser.c:222
+#, c-format
+msgid "Failed to open file '%s': %s"
+msgstr "فشل فتح الملف '%s': %s"
+
+#: tests/testfilechooser.c:267
+#, c-format
+msgid ""
+"Failed to load image '%s': reason not known, probably a corrupt image file"
+msgstr "فشل تحميل الصورة '%s': السبب مجهول، ربما يكون ملف الصورة تالفًا"
+
+#~ msgid "Gdk debugging flags to set"
+#~ msgstr "شارات تنقيح Gdk التي ستضبط"
+
+#~ msgid "Gdk debugging flags to unset"
+#~ msgstr "شارات تنقيح Gdk التي ستُصفّر"
+
+#~ msgid "Image file '%s' contains no data"
+#~ msgstr "لا يحتوي ملف الصورة '%s' على بيانات"
+
+#~ msgid ""
+#~ "Failed to load animation '%s': reason not known, probably a corrupt "
+#~ "animation file"
+#~ msgstr ""
+#~ "فشل تحميل الرسوم المتحرّكة '%s': السبب مجهول، ربما يكون ملف الرسوم "
+#~ "المتحرّكة تالفًا"
+
+#~ msgid "Unable to load image-loading module: %s: %s"
+#~ msgstr "تعذّر تحميل وحدة تحميل الصور: %s: %s"
+
+#~ msgid ""
+#~ "Image-loading module %s does not export the proper interface; perhaps "
+#~ "it's from a different GTK version?"
+#~ msgstr ""
+#~ "وحدة تحميل الصور %s لا تصدّر الواجهة الصحيحة؛ قد تكون من إصدارة GTK مغايرة؟"
+
+#~ msgid "Image type '%s' is not supported"
+#~ msgstr "نوع الصورة '%s' غير مدعوم"
+
+#~ msgid "Couldn't recognize the image file format for file '%s'"
+#~ msgstr "تعذّر تمييز صيغة ملف الصور للملف '%s'"
+
+#~ msgid "Unrecognized image file format"
+#~ msgstr "صيغة ملف صور تعذّر تمييزها"
+
+#~ msgid "Failed to load image '%s': %s"
+#~ msgstr "فشل تحميل الصورة '%s': %s"
+
+#~ msgid "Error writing to image file: %s"
+#~ msgstr "فشلت الكتابة في ملف الصورة: %s"
+
+#~ msgid ""
+#~ "This build of gdk-pixbuf does not support saving the image format: %s"
+#~ msgstr "بناء gdk-pixbuf هذا لا يدعم الحفظ بصيغة الصور: %s"
+
+#~ msgid "Insufficient memory to save image to callback"
+#~ msgstr "ذاكرة غير كافية لحفظ الصورة إلى إعادة النداء (callback)"
+
+#~ msgid "Failed to open temporary file"
+#~ msgstr "فشل فتح الملف المؤقّت"
+
+#~ msgid "Failed to read from temporary file"
+#~ msgstr "فشلت القراءة من الملف المؤقّت"
+
+#~ msgid "Failed to open '%s' for writing: %s"
+#~ msgstr "فشل فتح '%s' لكتابة: %s"
+
+#~ msgid ""
+#~ "Failed to close '%s' while writing image, all data may not have been "
+#~ "saved: %s"
+#~ msgstr "فشل غلق '%s' أثناء كتابة الصورة، ربما لم تُحفظ كل البيانات: %s"
+
+#~ msgid "Insufficient memory to save image into a buffer"
+#~ msgstr "ذاكرة غير كافية لحفظ الصورة في براح"
+
+#~ msgid "Error writing to image stream"
+#~ msgstr "فشلت الكتابة في دفق الصور"
+
+#~ msgid ""
+#~ "Internal error: Image loader module '%s' failed to complete an operation, "
+#~ "but didn't give a reason for the failure"
+#~ msgstr ""
+#~ "خطأ داخلي: فشلت وحدة تحميل الصور '%s' في إنهاء إحدى العمليات، لكنّها لم "
+#~ "تعطِ سببا للفشل"
+
+#~ msgid "Incremental loading of image type '%s' is not supported"
+#~ msgstr "التحميل التزايدي لنوع الصور '%s' غير مدعوم"
+
+#~ msgid "Image header corrupt"
+#~ msgstr "ترويسة الصورة تالفة"
+
+#~ msgid "Image format unknown"
+#~ msgstr "صيغة الصورة مجهولة"
+
+#~ msgid "Image pixel data corrupt"
+#~ msgstr "البيانات البكسلية للصورة تالفة"
+
+#~ msgid "failed to allocate image buffer of %u byte"
+#~ msgid_plural "failed to allocate image buffer of %u bytes"
+#~ msgstr[0] "فشل تحصيص براح للصورة بحجم صفر بايت"
+#~ msgstr[1] "فشل تحصيص براح للصورة بحجم بايت واحد"
+#~ msgstr[2] "فشل تحصيص ذاكرة وسيطة للصورة بحجم بايتين"
+#~ msgstr[3] "فشل تحصيص ذاكرة وسيطة للصورة بحجم %u بايت"
+#~ msgstr[4] "فشل تحصيص ذاكرة وسيطة للصورة بحجم %u بايت"
+#~ msgstr[5] "فشل تحصيص ذاكرة وسيطة للصورة بحجم %u بايت"
+
+#~ msgid "Unexpected icon chunk in animation"
+#~ msgstr "قطعة أيقونة غير متوقعة في الرسم المتحرّك"
+
+#~ msgid "Unsupported animation type"
+#~ msgstr "نوع رسوم متحرّكة غير مدعوم"
+
+#~ msgid "Invalid header in animation"
+#~ msgstr "ترويسة غير صالحة في الرسم المتحرّك"
+
+#~ msgid "Not enough memory to load animation"
+#~ msgstr "لا ذاكرة كافية لتحميل الرسوم المتحرّكة"
+
+#~ msgid "Malformed chunk in animation"
+#~ msgstr "قطعة مشوّهة في الرسّم المتحرّك"
+
+#~ msgid "The ANI image format"
+#~ msgstr "صيغة صور ANI"
+
+#~ msgid "BMP image has bogus header data"
+#~ msgstr "صورة BMP لها بيانات ترويسة زائفة"
+
+#~ msgid "Not enough memory to load bitmap image"
+#~ msgstr "لا ذاكرة كافية لتحميل الصورة النقطية"
+
+#~ msgid "BMP image has unsupported header size"
+#~ msgstr "صورة BMP لها حجم ترويسة غير مدعوم"
+
+#~ msgid "Topdown BMP images cannot be compressed"
+#~ msgstr "صور BMP أعلى-أسفل تعذّر ضغطها"
+
+#~ msgid "Premature end-of-file encountered"
+#~ msgstr "انتهى الملف قبل أوانه"
+
+#~ msgid "Couldn't allocate memory for saving BMP file"
+#~ msgstr "تعذّر تحصيص ذاكرة لحفظ ملف BMP"
+
+#~ msgid "Couldn't write to BMP file"
+#~ msgstr "تعذّر الكتابة في ملف BMP "
+
+#~ msgid "The BMP image format"
+#~ msgstr "صيغة صور BMP"
+
+#~ msgid "Failure reading GIF: %s"
+#~ msgstr "خطأ أثناء قراءة GIF: %s"
+
+#~ msgid "GIF file was missing some data (perhaps it was truncated somehow?)"
+#~ msgstr "يفتقد ملف GIF بعض البيانات (ربما استقطعت بكيفية ما؟)"
+
+#~ msgid "Internal error in the GIF loader (%s)"
+#~ msgstr "خطأ داخلي في محمّل GIF (%s)"
+
+#~ msgid "Stack overflow"
+#~ msgstr "فيضان المكدّس"
+
+#~ msgid "GIF image loader cannot understand this image."
+#~ msgstr "لا يستطيع محمّل صور GIF فهم هذه الصورة."
+
+#~ msgid "Bad code encountered"
+#~ msgstr "وُجِد رمز سيء"
+
+#~ msgid "Circular table entry in GIF file"
+#~ msgstr "خانة جدول دائرية في ملف GIF"
+
+#~ msgid "Not enough memory to load GIF file"
+#~ msgstr "لا ذاكرة كافية لتحميل ملف GIF"
+
+#~ msgid "Not enough memory to composite a frame in GIF file"
+#~ msgstr "لا ذاكرة كافية لتشكيل إطار في ملف GIF"
+
+#~ msgid "GIF image is corrupt (incorrect LZW compression)"
+#~ msgstr "صورة GIF تالفة (ضغط LZW غير سليم)"
+
+#~ msgid "File does not appear to be a GIF file"
+#~ msgstr "يبدو أن الملف ليس ملف GIF"
+
+#~ msgid "Version %s of the GIF file format is not supported"
+#~ msgstr "إصدارة %s من صيغ ملفات GIF غير مدعومة"
+
+#~ msgid ""
+#~ "GIF image has no global colormap, and a frame inside it has no local "
+#~ "colormap."
+#~ msgstr "ليس لصورة GIF مخطط ألوان عام، وليس لإطار بداخلها مخطط ألوان محلي."
+
+#~ msgid "GIF image was truncated or incomplete."
+#~ msgstr "صورة GIF مقطّعة أو غير كاملة."
+
+#~ msgid "The GIF image format"
+#~ msgstr "صيغة صور GIF"
+
+#~ msgid "Invalid header in icon"
+#~ msgstr "ترويسة غير صحيحة في الأيقونة"
+
+#~ msgid "Not enough memory to load icon"
+#~ msgstr "لا ذاكرة كافية لتحميل الأيقونة"
+
+#~ msgid "Icon has zero width"
+#~ msgstr "عرض الأيقونة صفر"
+
+#~ msgid "Icon has zero height"
+#~ msgstr "ارتفاع الأيقونة صفر"
+
+#~ msgid "Compressed icons are not supported"
+#~ msgstr "الأيقونات المضغوطة غير مدعومة"
+
+#~ msgid "Unsupported icon type"
+#~ msgstr "نوع أيقونات غير مدعوم"
+
+#~ msgid "Not enough memory to load ICO file"
+#~ msgstr "لا ذاكرة كافية لتحميل ملف ICO"
+
+#~ msgid "Image too large to be saved as ICO"
+#~ msgstr "تعذّر حفظ الصورة كـ ICO لأنها كبيرة جدًا"
+
+#~ msgid "Cursor hotspot outside image"
+#~ msgstr "منطقة المؤشّر النشطة خارج الصورة"
+
+#~ msgid "Unsupported depth for ICO file: %d"
+#~ msgstr "عمق ملف ICO غير مدعوم: %Id"
+
+#~ msgid "The ICO image format"
+#~ msgstr "صيغة صور ICO"
+
+#~ msgid "Error reading ICNS image: %s"
+#~ msgstr "خطأ أثناء قراءة ملف صورة ICNS: %s"
+
+#~ msgid "Could not decode ICNS file"
+#~ msgstr "تعذّر فك ملف ترميز ملف ICNS"
+
+#~ msgid "The ICNS image format"
+#~ msgstr "صيغة صور ICNS"
+
+#~ msgid "Couldn't allocate memory for stream"
+#~ msgstr "تعذّر تحصيص ذاكرة للتيار"
+
+#~ msgid "Couldn't decode image"
+#~ msgstr "تعذّر فك ترميز الصورة"
+
+#~ msgid "Transformed JPEG2000 has zero width or height"
+#~ msgstr "صورة JPEG2000 المُحوّلة ذات عرض أو ارتفاع صفري"
+
+#~ msgid "Image type currently not supported"
+#~ msgstr "نوع الصورة غير مدعوم حاليا"
+
+#~ msgid "Couldn't allocate memory for color profile"
+#~ msgstr "تعذّر تحصيص ذاكرة لاحة اللون"
+
+#~ msgid "Insufficient memory to open JPEG 2000 file"
+#~ msgstr "لا ذاكرة كافية لفتح ملف JPEG 2000"
+
+#~ msgid "Couldn't allocate memory to buffer image data"
+#~ msgstr "تعذّر تحصيص ذاكرة لبراح بيانات الصور"
+
+#~ msgid "The JPEG 2000 image format"
+#~ msgstr "صيغة صور JPEG 2000"
+
+#~ msgid "Error interpreting JPEG image file (%s)"
+#~ msgstr "خطأ في تفسير ملف صورة JPEG (%s)"
+
+#~ msgid ""
+#~ "Insufficient memory to load image, try exiting some applications to free "
+#~ "memory"
+#~ msgstr ""
+#~ "لا ذاكرة كافية لتحميل الصورة، حاوِل الخروج من بعض التطبيقات لتحرير الذاكرة"
+
+#~ msgid "Unsupported JPEG color space (%s)"
+#~ msgstr "نطاق ألوان JPEG غير مدعوم (%s)"
+
+#~ msgid "Couldn't allocate memory for loading JPEG file"
+#~ msgstr "تعذّر تحصيص ذاكرة لتحميل ملف JPEG"
+
+#~ msgid "Transformed JPEG has zero width or height."
+#~ msgstr "صورة JPEG المُحوّلة ذات عرض أو ارتفاع صفري."
+
+#~ msgid ""
+#~ "JPEG quality must be a value between 0 and 100; value '%s' could not be "
+#~ "parsed."
+#~ msgstr ""
+#~ "يجب أن تكون جودة JPEG قيمة بين 0 و 100، لذلك تعذّر تحليل القيمة '%s'."
+
+#~ msgid ""
+#~ "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
+#~ msgstr "يجب أن تكون جودة JPEG قيمة بين 0 و 100، القيمة '%Id' غير مسموح بها."
+
+#~ msgid "The JPEG image format"
+#~ msgstr "صيغة صور JPEG"
+
+#~ msgid "Couldn't allocate memory for header"
+#~ msgstr "تعذّر تحصيص ذاكرة للترويسة"
+
+#~ msgid "Couldn't allocate memory for context buffer"
+#~ msgstr "تعذّر تحصيص ذاكرة لبراح السياق"
+
+#~ msgid "Image has invalid width and/or height"
+#~ msgstr "ارتفاع الصورة و/أو عرضها غير صحيحين"
+
+#~ msgid "Image has unsupported bpp"
+#~ msgstr "للصورة bpp غير مدعوم"
+
+#~ msgid "Image has unsupported number of %d-bit planes"
+#~ msgstr "للصورة عدد غير مدعوم من مستويات %Id-بت"
+
+#~ msgid "Couldn't create new pixbuf"
+#~ msgstr "تعذّر إنشاء pixbuf جديد"
+
+#~ msgid "Couldn't allocate memory for line data"
+#~ msgstr "تعذّر تحصيص ذاكرة لبيانات السطر"
+
+#~ msgid "Couldn't allocate memory for paletted data"
+#~ msgstr "تعذّر تحصيص ذاكرة للبيانات المرصّفة"
+
+#~ msgid "Didn't get all lines of PCX image"
+#~ msgstr "لم يتم تلقي كل سطور صورة PCX"
+
+#~ msgid "No palette found at end of PCX data"
+#~ msgstr "لا توجد لوحة ألوان عند نهاية بيانات PCX"
+
+#~ msgid "The PCX image format"
+#~ msgstr "صيغة صور PCX"
+
+#~ msgid "Bits per channel of PNG image is invalid."
+#~ msgstr "عدد البتّات لكل قناة في صورة PNG غير صحيحة."
+
+#~ msgid "Transformed PNG has zero width or height."
+#~ msgstr "صورة PNG المُحوّلة ذات عرض أو ارتفاع صفري."
+
+#~ msgid "Bits per channel of transformed PNG is not 8."
+#~ msgstr "عدد البتّات لكل قناة في صورة PNG لا يساوي 8."
+
+#~ msgid "Transformed PNG not RGB or RGBA."
+#~ msgstr "صورة PNG المحوّلة ليست RGB أو RGBA."
+
+#~ msgid "Transformed PNG has unsupported number of channels, must be 3 or 4."
+#~ msgstr "صورة PNG المحولة لها عدد غير مدعوم من القنوات، يجب أن تكون 3 أو 4."
+
+#~ msgid "Fatal error in PNG image file: %s"
+#~ msgstr "خطأ قاتل في ملف صورة PNG: %s"
+
+#~ msgid "Insufficient memory to load PNG file"
+#~ msgstr "لا ذاكرة كافية لتحميل ملف PNG"
+
+#~ msgid ""
+#~ "Insufficient memory to store a %ld by %ld image; try exiting some "
+#~ "applications to reduce memory usage"
+#~ msgstr ""
+#~ "ذاكرة غير كافية لتخزين %ld من %ld صورة، حاول الخروج من بعض التطبيقات "
+#~ "لتقليل استخدام الذاكرة"
+
+#~ msgid "Fatal error reading PNG image file"
+#~ msgstr "خطأ قاتل عند قراءة ملف صورة PNG"
+
+#~ msgid "Fatal error reading PNG image file: %s"
+#~ msgstr "خطأ قاتل عند قراءة ملف صورة PNG: %s"
+
+#~ msgid ""
+#~ "Keys for PNG text chunks must have at least 1 and at most 79 characters."
+#~ msgstr ""
+#~ "يجب أن يكون لمفاتيح قطع PNG النصية محرفًا واحدًا على الأقل و 79 كحد أقصى."
+
+#~ msgid "Keys for PNG text chunks must be ASCII characters."
+#~ msgstr "يجب أن تكون مفاتيح المقاطع النصية لـ PNG محارف أسكي."
+
+#~ msgid "Color profile has invalid length %d."
+#~ msgstr "طول لاحة %d اللون غير سليم. "
+
+#~ msgid ""
+#~ "PNG compression level must be a value between 0 and 9; value '%s' could "
+#~ "not be parsed."
+#~ msgstr ""
+#~ "يجب أن يكون مستوى ضغط PNG قيمة بين 0 و 100، لذلك تعذّر تحليل القيمة '%s'."
+
+#~ msgid ""
+#~ "PNG compression level must be a value between 0 and 9; value '%d' is not "
+#~ "allowed."
+#~ msgstr ""
+#~ "يجب أن يكون مستوي ضغط PNG قيمة بين 0 و 100، القيمة '%Id' غير مسموح بها."
+
+#~ msgid ""
+#~ "Value for PNG text chunk %s cannot be converted to ISO-8859-1 encoding."
+#~ msgstr "تعذّر تحويل قيمة مقطع PNG النصي %s إلى ترميز ISO-8859-1."
+
+#~ msgid "The PNG image format"
+#~ msgstr "صيغة صور PNG"
+
+#~ msgid "PNM loader expected to find an integer, but didn't"
+#~ msgstr "توقَّع مُحمّل PNM العثور على رقم صحيح، لكن لم يجده"
+
+#~ msgid "PNM file has an incorrect initial byte"
+#~ msgstr "لملف PNM بايت أوَّلي غير سليم"
+
+#~ msgid "PNM file is not in a recognized PNM subformat"
+#~ msgstr "ملف PNM ليس في صيغة فرعيّة من PNM يمكن تمييزها"
+
+#~ msgid "PNM file has an image width of 0"
+#~ msgstr "ملف PNM له عرض صورة يساوي 0"
+
+#~ msgid "PNM file has an image height of 0"
+#~ msgstr "ملف PNM له ارتفاع صورة يساوي 0"
+
+#~ msgid "Maximum color value in PNM file is 0"
+#~ msgstr "قيمة اللون القصوى في ملف PNM هي 0"
+
+#~ msgid "Maximum color value in PNM file is too large"
+#~ msgstr "قيمة اللون القصوى في ملف PNM كبيرة جدًا"
+
+#~ msgid "Raw PNM image type is invalid"
+#~ msgstr "نوع صورة PNM الخام غير صحيح"
+
+#~ msgid "PNM image loader does not support this PNM subformat"
+#~ msgstr "مُحمِّل صور PNM لا يَدعم صيغة PNM الفرعية هذه"
+
+#~ msgid "Raw PNM formats require exactly one whitespace before sample data"
+#~ msgstr "صيغ PNM الخام تحتاج إلى وَضع فراغ واحد قبل بيانات العيّنة"
+
+#~ msgid "Cannot allocate memory for loading PNM image"
+#~ msgstr "تعذّر تحصيص ذاكرة لتحميل صورة PNM"
+
+#~ msgid "Insufficient memory to load PNM context struct"
+#~ msgstr "ذاكرة غير كافية لتحميل بنية سياق PNM"
+
+#~ msgid "Unexpected end of PNM image data"
+#~ msgstr "نهاية غير متوقّعة لبيانات صورة PNM"
+
+#~ msgid "Insufficient memory to load PNM file"
+#~ msgstr "ذاكرة غير كافية لتحميل ملف PNM"
+
+#~ msgid "The PNM/PBM/PGM/PPM image format family"
+#~ msgstr "عائلة صيغ صور PNM/PBM/PGM/PPM"
+
+#~ msgid "Input file descriptor is NULL."
+#~ msgstr "واصف ملف الدخل صفري."
+
+#~ msgid "Failed to read QTIF header"
+#~ msgstr "فشلت قراءة ترويسة QTIF"
+
+#~ msgid "QTIF atom size too large (%d bytes)"
+#~ msgstr "حجم ذرة QTIF كبير جدا (%d بايت)"
+
+#~ msgid "Failed to allocate %d bytes for file read buffer"
+#~ msgstr "فشل تحصيص  %d بايت لبراح قراءة الملف"
+
+#~ msgid "File error when reading QTIF atom: %s"
+#~ msgstr "خطأ أثناء قراءة ذرة QTIF:‏ %s"
+
+#~ msgid "Failed to skip the next %d bytes with seek()."
+#~ msgstr "فشل التخطي إلى %d بايت التالية باستخدام ‪seek()‬."
+
+#~ msgid "Failed to allocate QTIF context structure."
+#~ msgstr "تعذّر تحصيص ذاكرة لبنية سياق QTIF."
+
+#~ msgid "Failed to create GdkPixbufLoader object."
+#~ msgstr "فشلت إنشاء كائن GdkPixbufLoader."
+
+#~ msgid "Failed to find an image data atom."
+#~ msgstr "فشل العثور على ذرة بيانات صورة."
+
+#~ msgid "The QTIF image format"
+#~ msgstr "صيغة صور QTIF"
+
+#~ msgid "RAS image has bogus header data"
+#~ msgstr "لصورة RAS بيانات ترويسة زائفة"
+
+#~ msgid "RAS image has unknown type"
+#~ msgstr "لصورة RAS نوع مجهول"
+
+#~ msgid "unsupported RAS image variation"
+#~ msgstr "انحراف صورة RAS غير مدعوم"
+
+#~ msgid "Not enough memory to load RAS image"
+#~ msgstr "ذاكرة غير كافية لتحميل صورة RAS"
+
+#~ msgid "The Sun raster image format"
+#~ msgstr "صيغة صور Sun raster"
+
+#~ msgid "Cannot allocate memory for IOBuffer struct"
+#~ msgstr "تعذّر تحصيص ذاكرة لبنية IOBuffer"
+
+#~ msgid "Cannot allocate memory for IOBuffer data"
+#~ msgstr "تعذّر تحصيص ذاكرة لبيانات IOBuffer"
+
+#~ msgid "Cannot realloc IOBuffer data"
+#~ msgstr "تعذّر إعادة تحصيص بيانات IOBuffer"
+
+#~ msgid "Cannot allocate temporary IOBuffer data"
+#~ msgstr "تعذّر تحصيص بيانات IOBuffer المؤقتة"
+
+#~ msgid "Cannot allocate new pixbuf"
+#~ msgstr "تعذّر تحصيص pixbuf جديد"
+
+#~ msgid "Image is corrupted or truncated"
+#~ msgstr "الصورة تالفة أو ناقصة"
+
+#~ msgid "Cannot allocate colormap structure"
+#~ msgstr "تعذّر تحصيص تركيب مُخطط الألوان"
+
+#~ msgid "Cannot allocate colormap entries"
+#~ msgstr "تعذّر تحصيص مدخلات مُخطط الألوان"
+
+#~ msgid "Unexpected bitdepth for colormap entries"
+#~ msgstr "عمق بت غير متوقّع لخانات مُخطط الألوان"
+
+#~ msgid "Cannot allocate TGA header memory"
+#~ msgstr "تعذّر تحصيص ذاكرة ترويسة TGA"
+
+#~ msgid "TGA image has invalid dimensions"
+#~ msgstr "صورة TGA لها أبعاد غير سليمة"
+
+#~ msgid "TGA image type not supported"
+#~ msgstr "نوع صور TGA غير مدعوم"
+
+#~ msgid "Cannot allocate memory for TGA context struct"
+#~ msgstr "تعذّر تحصيص ذاكرة لبنية سياق TGA"
+
+#~ msgid "Excess data in file"
+#~ msgstr "بيانات زائدة في الملف"
+
+#~ msgid "The Targa image format"
+#~ msgstr "صيغة صور Targa"
+
+#~ msgid "Could not get image width (bad TIFF file)"
+#~ msgstr "تعذّر معرفة عرض الصورة (ملف TIFF رديء)"
+
+#~ msgid "Could not get image height (bad TIFF file)"
+#~ msgstr "تعذّر معرفة ارتفاع الصورة (ملف TIFF رديء)"
+
+#~ msgid "Width or height of TIFF image is zero"
+#~ msgstr "عرض أو ارتفاع صفري لصورة TIFF"
+
+#~ msgid "Dimensions of TIFF image too large"
+#~ msgstr "أبعاد صورة TIFF كبيرة جدًا"
+
+#~ msgid "Insufficient memory to open TIFF file"
+#~ msgstr "ذاكرة غير كافية لفتح ملف TIFF"
+
+#~ msgid "Failed to load RGB data from TIFF file"
+#~ msgstr "فشل تحميل بيانات RGB من ملف TIFF"
+
+#~ msgid "Failed to open TIFF image"
+#~ msgstr "فشل فتح صورة TIFF"
+
+#~ msgid "TIFFClose operation failed"
+#~ msgstr "فشلت عملية TIFFClose"
+
+#~ msgid "Failed to load TIFF image"
+#~ msgstr "فشل تحميل صورة TIFF"
+
+#~ msgid "Failed to save TIFF image"
+#~ msgstr "فشل حفظ صورة TIFF"
+
+#~ msgid "TIFF compression doesn't refer to a valid codec."
+#~ msgstr "ضغط TIFF لا يشير إلى مرمّز صحيح."
+
+#~ msgid "Failed to write TIFF data"
+#~ msgstr "فشلت كتابة بيانات TIFF"
+
+#~ msgid "Couldn't write to TIFF file"
+#~ msgstr "الكتابة لملف TIFF غير ممكنة"
+
+#~ msgid "The TIFF image format"
+#~ msgstr "صيغة صور TIFF"
+
+#~ msgid "Image has zero width"
+#~ msgstr "عرض الصورة صفر"
+
+#~ msgid "Image has zero height"
+#~ msgstr "ارتفاع الصورة صفر"
+
+#~ msgid "Not enough memory to load image"
+#~ msgstr "ذاكرة غير كافية لتحميل الصورة"
+
+#~ msgid "Couldn't save the rest"
+#~ msgstr "تعذّر حفظ الباقي"
+
+#~ msgid "The WBMP image format"
+#~ msgstr "صيغة صور WBMP"
+
+#~ msgid "Invalid XBM file"
+#~ msgstr "ملف XBM غير سليم"
+
+#~ msgid "Insufficient memory to load XBM image file"
+#~ msgstr "ذاكرة غير كافية لفتح صورة ملف XBM"
+
+#~ msgid "Failed to write to temporary file when loading XBM image"
+#~ msgstr "فشلت الكتابة في ملف مؤقّت عند تحميل صورة XBM"
+
+#~ msgid "The XBM image format"
+#~ msgstr "صيغة صور XBM"
+
+#~ msgid "No XPM header found"
+#~ msgstr "لا توجد ترويسة XPM"
+
+#~ msgid "Invalid XPM header"
+#~ msgstr "ترويسة XPM غير صالحة"
+
+#~ msgid "XPM file has image width <= 0"
+#~ msgstr "عرض صورة ملف XPM قيمته <= 0"
+
+#~ msgid "XPM file has image height <= 0"
+#~ msgstr "ارتفاع صورة ملف XPM قيمته <= 0"
+
+#~ msgid "XPM has invalid number of chars per pixel"
+#~ msgstr "ملف XPM له عدد غير صحيح من المحارف لكل بكسل"
+
+#~ msgid "XPM file has invalid number of colors"
+#~ msgstr "ملف XPM له عدد غير صحيح من الألوان"
+
+#~ msgid "Cannot allocate memory for loading XPM image"
+#~ msgstr "تعذّر تحصيص ذاكرة لتحميل صورة XPM"
+
+#~ msgid "Cannot read XPM colormap"
+#~ msgstr "تعذّر قراءة مخطط ألوان XPM"
+
+#~ msgid "Failed to write to temporary file when loading XPM image"
+#~ msgstr "فشلت الكتابة في ملف مؤقت عند تحميل صورة XPM"
+
+#~ msgid "The XPM image format"
+#~ msgstr "صيغة صور XPM"
+
+#~ msgid "The EMF image format"
+#~ msgstr "صيغة صور EMF"
+
+#~ msgid "Could not allocate memory: %s"
+#~ msgstr "تعذّر تحصيص ذاكرة: %s"
+
+#~ msgid "Could not create stream: %s"
+#~ msgstr "تعذّر إنشاء الدفق: %s"
+
+#~ msgid "Could not seek stream: %s"
+#~ msgstr "تعذّر الالتماس في الدفق: %s"
+
+#~ msgid "Could not read from stream: %s"
+#~ msgstr "تعذّر القراءة من الدفق: %s"
+
+#~ msgid "Couldn't load bitmap"
+#~ msgstr "تعذّر تحميل الصورة النقطية"
+
+#~ msgid "Couldn't load metafile"
+#~ msgstr "تعذّر تحميل ملف المعلومات الفوقية"
+
+#~ msgid "Unsupported image format for GDI+"
+#~ msgstr "نسق صور لا يدعمه GDI+"
+
+#~ msgid "Couldn't save"
+#~ msgstr "تعذّر الحفظ"
+
+#~ msgid "The WMF image format"
+#~ msgstr "صيغة صور WMF"
+
+#~ msgid "Printer '%s' may not be connected."
+#~ msgstr "قد تكون الطابعة '%s' غير متصلة."
 
 #~ msgid "(Empty)"
 #~ msgstr "(فارغ)"
