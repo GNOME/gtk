@@ -278,7 +278,14 @@ enum {
   PROP_TOOLTIP_MARKUP,
   PROP_TOOLTIP_TEXT,
   PROP_WINDOW,
-  PROP_DOUBLE_BUFFERED
+  PROP_DOUBLE_BUFFERED,
+  PROP_H_ALIGN,
+  PROP_V_ALIGN,
+  PROP_MARGIN_LEFT,
+  PROP_MARGIN_RIGHT,
+  PROP_MARGIN_TOP,
+  PROP_MARGIN_BOTTOM,
+  PROP_MARGIN
 };
 
 typedef	struct	_GtkStateData	 GtkStateData;
@@ -862,6 +869,140 @@ gtk_widget_class_init (GtkWidgetClass *klass)
                                                          P_("Whether the widget is double buffered"),
                                                          TRUE,
                                                          GTK_PARAM_READWRITE));
+
+  /**
+   * GtkWidget:h-align
+   *
+   * How to distribute horizontal space if widget gets extra space, see #GtkAlign
+   *
+   * Since: 3.0
+   */
+  g_object_class_install_property (gobject_class,
+                                   PROP_H_ALIGN,
+                                   g_param_spec_enum ("h-align",
+                                                      P_("Horizontal Alignment"),
+                                                      P_("How to position in extra horizontal space"),
+                                                      GTK_TYPE_ALIGN,
+                                                      GTK_ALIGN_FILL,
+                                                      GTK_PARAM_READWRITE));
+
+  /**
+   * GtkWidget:v-align
+   *
+   * How to distribute vertical space if widget gets extra space, see #GtkAlign
+   *
+   * Since: 3.0
+   */
+  g_object_class_install_property (gobject_class,
+                                   PROP_V_ALIGN,
+                                   g_param_spec_enum ("v-align",
+                                                      P_("Vertical Alignment"),
+                                                      P_("How to position in extra vertical space"),
+                                                      GTK_TYPE_ALIGN,
+                                                      GTK_ALIGN_FILL,
+                                                      GTK_PARAM_READWRITE));
+
+  /**
+   * GtkWidget:margin-left
+   *
+   * Margin on left side of widget.
+   *
+   * This property adds margin outside of the widget's normal size
+   * request, the margin will be added in addition to the size from
+   * gtk_widget_set_size_request() for example.
+   *
+   * Since: 3.0
+   */
+  g_object_class_install_property (gobject_class,
+                                   PROP_MARGIN_LEFT,
+                                   g_param_spec_int ("margin-left",
+                                                     P_("Margin on Left"),
+                                                     P_("Pixels of extra space on the left side"),
+                                                     0,
+                                                     G_MAXINT16,
+                                                     0,
+                                                     GTK_PARAM_READWRITE));
+
+  /**
+   * GtkWidget:margin-right
+   *
+   * Margin on right side of widget.
+   *
+   * This property adds margin outside of the widget's normal size
+   * request, the margin will be added in addition to the size from
+   * gtk_widget_set_size_request() for example.
+   *
+   * Since: 3.0
+   */
+  g_object_class_install_property (gobject_class,
+                                   PROP_MARGIN_RIGHT,
+                                   g_param_spec_int ("margin-right",
+                                                     P_("Margin on Right"),
+                                                     P_("Pixels of extra space on the right side"),
+                                                     0,
+                                                     G_MAXINT16,
+                                                     0,
+                                                     GTK_PARAM_READWRITE));
+
+  /**
+   * GtkWidget:margin-top
+   *
+   * Margin on top side of widget.
+   *
+   * This property adds margin outside of the widget's normal size
+   * request, the margin will be added in addition to the size from
+   * gtk_widget_set_size_request() for example.
+   *
+   * Since: 3.0
+   */
+  g_object_class_install_property (gobject_class,
+                                   PROP_MARGIN_TOP,
+                                   g_param_spec_int ("margin-top",
+                                                     P_("Margin on Top"),
+                                                     P_("Pixels of extra space on the top side"),
+                                                     0,
+                                                     G_MAXINT16,
+                                                     0,
+                                                     GTK_PARAM_READWRITE));
+
+  /**
+   * GtkWidget:margin-bottom
+   *
+   * Margin on bottom side of widget.
+   *
+   * This property adds margin outside of the widget's normal size
+   * request, the margin will be added in addition to the size from
+   * gtk_widget_set_size_request() for example.
+   *
+   * Since: 3.0
+   */
+  g_object_class_install_property (gobject_class,
+                                   PROP_MARGIN_BOTTOM,
+                                   g_param_spec_int ("margin-bottom",
+                                                     P_("Margin on Bottom"),
+                                                     P_("Pixels of extra space on the bottom side"),
+                                                     0,
+                                                     G_MAXINT16,
+                                                     0,
+                                                     GTK_PARAM_READWRITE));
+
+  /**
+   * GtkWidget:margin
+   *
+   * Sets all four sides' margin at once. If read, returns max
+   * margin on any side.
+   *
+   * Since: 3.0
+   */
+  g_object_class_install_property (gobject_class,
+                                   PROP_MARGIN,
+                                   g_param_spec_int ("margin",
+                                                     P_("All Margins"),
+                                                     P_("Pixels of extra space on all four sides"),
+                                                     0,
+                                                     G_MAXINT16,
+                                                     0,
+                                                     GTK_PARAM_READWRITE));
 
   /**
    * GtkWidget::show:
@@ -2800,6 +2941,32 @@ gtk_widget_set_property (GObject         *object,
     case PROP_DOUBLE_BUFFERED:
       gtk_widget_set_double_buffered (widget, g_value_get_boolean (value));
       break;
+    case PROP_H_ALIGN:
+      gtk_widget_set_h_align (widget, g_value_get_enum (value));
+      break;
+    case PROP_V_ALIGN:
+      gtk_widget_set_v_align (widget, g_value_get_enum (value));
+      break;
+    case PROP_MARGIN_LEFT:
+      gtk_widget_set_margin_left (widget, g_value_get_int (value));
+      break;
+    case PROP_MARGIN_RIGHT:
+      gtk_widget_set_margin_right (widget, g_value_get_int (value));
+      break;
+    case PROP_MARGIN_TOP:
+      gtk_widget_set_margin_top (widget, g_value_get_int (value));
+      break;
+    case PROP_MARGIN_BOTTOM:
+      gtk_widget_set_margin_bottom (widget, g_value_get_int (value));
+      break;
+    case PROP_MARGIN:
+      g_object_freeze_notify (G_OBJECT (widget));
+      gtk_widget_set_margin_left (widget, g_value_get_int (value));
+      gtk_widget_set_margin_right (widget, g_value_get_int (value));
+      gtk_widget_set_margin_top (widget, g_value_get_int (value));
+      gtk_widget_set_margin_bottom (widget, g_value_get_int (value));
+      g_object_thaw_notify (G_OBJECT (widget));
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -2909,6 +3076,40 @@ gtk_widget_get_property (GObject         *object,
       break;
     case PROP_DOUBLE_BUFFERED:
       g_value_set_boolean (value, gtk_widget_get_double_buffered (widget));
+      break;
+    case PROP_H_ALIGN:
+      g_value_set_enum (value, gtk_widget_get_h_align (widget));
+      break;
+    case PROP_V_ALIGN:
+      g_value_set_enum (value, gtk_widget_get_v_align (widget));
+      break;
+    case PROP_MARGIN_LEFT:
+      g_value_set_int (value, gtk_widget_get_margin_left (widget));
+      break;
+    case PROP_MARGIN_RIGHT:
+      g_value_set_int (value, gtk_widget_get_margin_right (widget));
+      break;
+    case PROP_MARGIN_TOP:
+      g_value_set_int (value, gtk_widget_get_margin_top (widget));
+      break;
+    case PROP_MARGIN_BOTTOM:
+      g_value_set_int (value, gtk_widget_get_margin_bottom (widget));
+      break;
+    case PROP_MARGIN:
+      {
+        GtkWidgetAuxInfo *aux_info = _gtk_widget_get_aux_info (widget, FALSE);
+        if (aux_info == NULL)
+          {
+            g_value_set_int (value, 0);
+          }
+        else
+          {
+            g_value_set_int (value, MAX (MAX (aux_info->margin.left,
+                                              aux_info->margin.right),
+                                         MAX (aux_info->margin.top,
+                                              aux_info->margin.bottom)));
+          }
+      }
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -4309,13 +4510,119 @@ gtk_widget_real_size_allocate (GtkWidget     *widget,
 }
 
 static void
+get_span_inside_border (GtkWidget              *widget,
+                        GtkAlign                align,
+                        int                     start_pad,
+                        int                     end_pad,
+                        int                     allocated_outside_size,
+                        int                     natural_inside_size,
+                        int                    *coord_inside_p,
+                        int                    *size_inside_p)
+{
+  int inside_allocated;
+  int content_size;
+  int coord, size;
+
+  inside_allocated = allocated_outside_size - start_pad - end_pad;
+
+  content_size = natural_inside_size;
+  if (content_size > inside_allocated)
+    {
+      /* didn't get full natural size */
+      content_size = inside_allocated;
+    }
+
+  coord = size = 0; /* silence compiler */
+  switch (align)
+    {
+    case GTK_ALIGN_FILL:
+      coord = start_pad;
+      size = inside_allocated;
+      break;
+    case GTK_ALIGN_START:
+      coord = start_pad;
+      size = content_size;
+      break;
+    case GTK_ALIGN_END:
+      coord = allocated_outside_size - end_pad - content_size;
+      size = content_size;
+      break;
+    case GTK_ALIGN_CENTER:
+      coord = start_pad + (inside_allocated - content_size) / 2;
+      size = content_size;
+      break;
+    }
+
+  if (coord_inside_p)
+    *coord_inside_p = coord;
+
+  if (size_inside_p)
+    *size_inside_p = size;
+}
+
+static void
+get_span_inside_border_horizontal (GtkWidget              *widget,
+                                   const GtkWidgetAuxInfo *aux_info,
+                                   int                     allocated_outside_width,
+                                   int                     natural_inside_width,
+                                   int                    *x_inside_p,
+                                   int                    *width_inside_p)
+{
+  get_span_inside_border (widget,
+                          aux_info->h_align,
+                          aux_info->margin.left,
+                          aux_info->margin.right,
+                          allocated_outside_width,
+                          natural_inside_width,
+                          x_inside_p,
+                          width_inside_p);
+}
+
+static void
+get_span_inside_border_vertical (GtkWidget              *widget,
+                                 const GtkWidgetAuxInfo *aux_info,
+                                 int                     allocated_outside_height,
+                                 int                     natural_inside_height,
+                                 int                    *y_inside_p,
+                                 int                    *height_inside_p)
+{
+  get_span_inside_border (widget,
+                          aux_info->v_align,
+                          aux_info->margin.top,
+                          aux_info->margin.bottom,
+                          allocated_outside_height,
+                          natural_inside_height,
+                          y_inside_p,
+                          height_inside_p);
+}
+
+static void
 gtk_widget_real_adjust_size_allocation (GtkWidget         *widget,
                                         GtkAllocation     *allocation)
 {
-  /* We have no adjustments by default for now, but we have this empty
-   * function here so subclasses can chain up in case we do add
-   * something.
-   */
+  const GtkWidgetAuxInfo *aux_info;
+  GtkRequisition min, natural;
+  int x, y, w, h;
+
+  aux_info = _gtk_widget_get_aux_info_or_defaults (widget);
+
+  gtk_size_request_get_size (GTK_SIZE_REQUEST (widget), &min, &natural);
+
+  get_span_inside_border_horizontal (widget,
+                                     aux_info,
+                                     allocation->width,
+                                     natural.width,
+                                     &x, &w);
+  get_span_inside_border_vertical (widget,
+                                   aux_info,
+                                   allocation->height,
+                                   natural.height,
+                                   &y, &h);
+
+  allocation->x += x;
+  allocation->y += y;
+  allocation->width = w;
+  allocation->height = h;
 }
 
 static gboolean
@@ -8028,6 +8335,11 @@ gtk_widget_set_usize_internal (GtkWidget *widget,
  *
  * Widgets can't actually be allocated a size less than 1 by 1, but
  * you can pass 0,0 to this function to mean "as small as possible."
+ *
+ * The size request set here does not include any margin from the
+ * #GtkWidget properties margin-left, margin-right, margin-top, and
+ * margin-bottom, but it does include pretty much all other padding
+ * or border properties set by any subclass of #GtkWidget.
  **/
 void
 gtk_widget_set_size_request (GtkWidget *widget,
@@ -9129,6 +9441,17 @@ gtk_widget_real_adjust_size_request (GtkWidget         *widget,
    * in gtksizerequest.c when calling their size request vfuncs.
    */
   *natural_size = MAX (*natural_size, *minimum_size);
+
+  if (orientation == GTK_ORIENTATION_HORIZONTAL)
+    {
+      *minimum_size += (aux_info->margin.left + aux_info->margin.right);
+      *natural_size += (aux_info->margin.left + aux_info->margin.right);
+    }
+  else
+    {
+      *minimum_size += (aux_info->margin.top + aux_info->margin.bottom);
+      *natural_size += (aux_info->margin.top + aux_info->margin.bottom);
+    }
 }
 
 /**
@@ -9634,7 +9957,10 @@ gtk_widget_propagate_state (GtkWidget           *widget,
 }
 
 static const GtkWidgetAuxInfo default_aux_info = {
-  -1, -1
+  -1, -1,
+  GTK_ALIGN_FILL,
+  GTK_ALIGN_FILL,
+  { 0, 0, 0, 0 }
 };
 
 /*
@@ -11156,8 +11482,165 @@ gtk_widget_size_request_init (GtkSizeRequestIface *iface)
   iface->get_width_for_height = gtk_widget_real_get_width_for_height;
   iface->get_height_for_width = gtk_widget_real_get_height_for_width;  
 }
- 
- 
+
+GtkAlign
+gtk_widget_get_h_align (GtkWidget *widget)
+{
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), GTK_ALIGN_FILL);
+  return _gtk_widget_get_aux_info_or_defaults (widget)->h_align;
+}
+
+void
+gtk_widget_set_h_align (GtkWidget *widget,
+                        GtkAlign   align)
+{
+  GtkWidgetAuxInfo *aux_info;
+
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+
+  aux_info = _gtk_widget_get_aux_info (widget, TRUE);
+
+  if (aux_info->h_align == align)
+    return;
+
+  aux_info->h_align = align;
+  gtk_widget_queue_resize (widget);
+  g_object_notify (G_OBJECT (widget), "h-align");
+}
+
+GtkAlign
+gtk_widget_get_v_align (GtkWidget *widget)
+{
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), GTK_ALIGN_FILL);
+  return _gtk_widget_get_aux_info_or_defaults (widget)->v_align;
+}
+
+void
+gtk_widget_set_v_align (GtkWidget *widget,
+                        GtkAlign   align)
+{
+  GtkWidgetAuxInfo *aux_info;
+
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+
+  aux_info = _gtk_widget_get_aux_info (widget, TRUE);
+
+  if (aux_info->v_align == align)
+    return;
+
+  aux_info->v_align = align;
+  gtk_widget_queue_resize (widget);
+  g_object_notify (G_OBJECT (widget), "v-align");
+}
+
+int
+gtk_widget_get_margin_left (GtkWidget *widget)
+{
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), 0);
+
+  return _gtk_widget_get_aux_info_or_defaults (widget)->margin.left;
+}
+
+void
+gtk_widget_set_margin_left (GtkWidget *widget,
+                            int        margin)
+{
+  GtkWidgetAuxInfo *aux_info;
+
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+  g_return_if_fail (margin <= G_MAXINT16);
+
+  aux_info = _gtk_widget_get_aux_info (widget, TRUE);
+
+  if (aux_info->margin.left == margin)
+    return;
+
+  aux_info->margin.left = margin;
+  gtk_widget_queue_resize (widget);
+  g_object_notify (G_OBJECT (widget), "margin-left");
+}
+
+int
+gtk_widget_get_margin_right (GtkWidget *widget)
+{
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), 0);
+
+  return _gtk_widget_get_aux_info_or_defaults (widget)->margin.right;
+}
+
+void
+gtk_widget_set_margin_right (GtkWidget *widget,
+                             int        margin)
+{
+  GtkWidgetAuxInfo *aux_info;
+
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+  g_return_if_fail (margin <= G_MAXINT16);
+
+  aux_info = _gtk_widget_get_aux_info (widget, TRUE);
+
+  if (aux_info->margin.right == margin)
+    return;
+
+  aux_info->margin.right = margin;
+  gtk_widget_queue_resize (widget);
+  g_object_notify (G_OBJECT (widget), "margin-right");
+}
+
+int
+gtk_widget_get_margin_top (GtkWidget *widget)
+{
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), 0);
+
+  return _gtk_widget_get_aux_info_or_defaults (widget)->margin.top;
+}
+
+void
+gtk_widget_set_margin_top (GtkWidget *widget,
+                           int        margin)
+{
+  GtkWidgetAuxInfo *aux_info;
+
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+  g_return_if_fail (margin <= G_MAXINT16);
+
+  aux_info = _gtk_widget_get_aux_info (widget, TRUE);
+
+  if (aux_info->margin.top == margin)
+    return;
+
+  aux_info->margin.top = margin;
+  gtk_widget_queue_resize (widget);
+  g_object_notify (G_OBJECT (widget), "margin-top");
+}
+
+int
+gtk_widget_get_margin_bottom (GtkWidget *widget)
+{
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), 0);
+
+  return _gtk_widget_get_aux_info_or_defaults (widget)->margin.bottom;
+}
+
+void
+gtk_widget_set_margin_bottom (GtkWidget *widget,
+                              int        margin)
+{
+  GtkWidgetAuxInfo *aux_info;
+
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+  g_return_if_fail (margin <= G_MAXINT16);
+
+  aux_info = _gtk_widget_get_aux_info (widget, TRUE);
+
+  if (aux_info->margin.bottom == margin)
+    return;
+
+  aux_info->margin.bottom = margin;
+  gtk_widget_queue_resize (widget);
+  g_object_notify (G_OBJECT (widget), "margin-bottom");
+}
+
 /**
  * gtk_widget_get_clipboard:
  * @widget: a #GtkWidget
