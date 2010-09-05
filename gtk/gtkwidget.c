@@ -359,6 +359,7 @@ static gint		gtk_widget_event_internal		(GtkWidget	  *widget,
 								 GdkEvent	  *event);
 static gboolean		gtk_widget_real_mnemonic_activate	(GtkWidget	  *widget,
 								 gboolean	   group_cycling);
+static const GtkWidgetAuxInfo* _gtk_widget_get_aux_info_or_defaults (GtkWidget *widget);
 static void		gtk_widget_aux_info_destroy		(GtkWidgetAuxInfo *aux_info);
 static AtkObject*	gtk_widget_real_get_accessible		(GtkWidget	  *widget);
 static void		gtk_widget_accessible_interface_init	(AtkImplementorIface *iface);
@@ -9555,6 +9556,10 @@ gtk_widget_propagate_state (GtkWidget           *widget,
     }
 }
 
+static const GtkWidgetAuxInfo default_aux_info = {
+  -1, -1
+};
+
 /*
  * _gtk_widget_get_aux_info:
  * @widget: a #GtkWidget
@@ -9576,8 +9581,7 @@ _gtk_widget_get_aux_info (GtkWidget *widget,
     {
       aux_info = g_slice_new0 (GtkWidgetAuxInfo);
 
-      aux_info->width = -1;
-      aux_info->height = -1;
+      *aux_info = default_aux_info;
 
       g_object_set_qdata (G_OBJECT (widget), quark_aux_info, aux_info);
     }
@@ -9585,6 +9589,21 @@ _gtk_widget_get_aux_info (GtkWidget *widget,
   return aux_info;
 }
 
+static const GtkWidgetAuxInfo*
+_gtk_widget_get_aux_info_or_defaults (GtkWidget *widget)
+{
+  GtkWidgetAuxInfo *aux_info;
+
+  aux_info = _gtk_widget_get_aux_info (widget, FALSE);
+  if (aux_info == NULL)
+    {
+      return &default_aux_info;
+    }
+  else
+    {
+      return aux_info;
+    }
+}
 
 /*****************************************
  * gtk_widget_aux_info_destroy:
