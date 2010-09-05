@@ -667,35 +667,23 @@ static gint
 get_base_dimension (GtkWidget        *widget,
 		    GtkSizeGroupMode  mode)
 {
-  GtkWidgetAuxInfo *aux_info = _gtk_widget_get_aux_info (widget, FALSE);
-
   if (mode == GTK_SIZE_GROUP_HORIZONTAL)
     {
-      if (aux_info && aux_info->width > 0)
-	return aux_info->width;
-      else
-	{
-	  /* XXX Possibly we should be using natural values and not minimums here. */
-	  gint width;
+      /* XXX Possibly we should be using natural values and not minimums here. */
+      gint width;
 
-	  gtk_size_request_get_width (GTK_SIZE_REQUEST (widget), &width, NULL);
+      gtk_size_request_get_width (GTK_SIZE_REQUEST (widget), &width, NULL);
 
-	  return width;
-	}
+      return width;
     }
   else
     {
-      if (aux_info && aux_info->height > 0)
-	return aux_info->height;
-      else
-	{
-	  /* XXX Possibly we should be using natural values and not minimums here. */
-	  gint height;
+      /* XXX Possibly we should be using natural values and not minimums here. */
+      gint height;
 
-	  gtk_size_request_get_height (GTK_SIZE_REQUEST (widget), &height, NULL);
+      gtk_size_request_get_height (GTK_SIZE_REQUEST (widget), &height, NULL);
 
-	  return height;
-	}
+      return height;
     }
 }
 
@@ -802,31 +790,14 @@ _gtk_size_group_bump_requisition (GtkWidget        *widget,
 
   if (!is_bumping (widget))
     {
-      GtkWidgetAuxInfo *aux_info = 
-	_gtk_widget_get_aux_info (widget, FALSE);
-
       /* Avoid recursion here */
       mark_bumping (widget, TRUE);
 
       if (get_size_groups (widget))
 	{
-	  if (aux_info)
-	    {
-	      if (mode == GTK_SIZE_GROUP_HORIZONTAL)
-		result = compute_dimension (widget, mode, MAX (aux_info->width, widget_requisition));
-	      else 
-		result = compute_dimension (widget, mode, MAX (aux_info->height, widget_requisition));
-	    }
-	  else
-	    result = compute_dimension (widget, mode, widget_requisition);
+          result = compute_dimension (widget, mode, widget_requisition);
 	}
-      else if (aux_info)
-	{
-	  if (mode == GTK_SIZE_GROUP_HORIZONTAL)
-	    result = MAX (aux_info->width, widget_requisition);
-	  else 
-	    result = MAX (aux_info->height, widget_requisition);
-	}
+
       mark_bumping (widget, FALSE);
     }
   return result;
