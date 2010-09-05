@@ -208,8 +208,8 @@ static void gtk_label_style_set         (GtkWidget        *widget,
 					 GtkStyle         *previous_style);
 static void gtk_label_direction_changed (GtkWidget        *widget,
 					 GtkTextDirection  previous_dir);
-static gint gtk_label_expose            (GtkWidget        *widget,
-					 GdkEventExpose   *event);
+static gint gtk_label_draw              (GtkWidget        *widget,
+                                         cairo_t          *cr);
 static gboolean gtk_label_focus         (GtkWidget         *widget,
                                          GtkDirectionType   direction);
 
@@ -398,7 +398,7 @@ gtk_label_class_init (GtkLabelClass *class)
   widget_class->style_set = gtk_label_style_set;
   widget_class->query_tooltip = gtk_label_query_tooltip;
   widget_class->direction_changed = gtk_label_direction_changed;
-  widget_class->expose_event = gtk_label_expose;
+  widget_class->draw = gtk_label_draw;
   widget_class->realize = gtk_label_realize;
   widget_class->unrealize = gtk_label_unrealize;
   widget_class->map = gtk_label_map;
@@ -3907,13 +3907,13 @@ get_layout_location (GtkLabel  *label,
 
 static void
 draw_insertion_cursor (GtkLabel      *label,
+                       cairo_t       *cr,
 		       GdkRectangle  *cursor_location,
 		       gboolean       is_primary,
 		       PangoDirection direction,
 		       gboolean       draw_arrow)
 {
   GtkWidget *widget = GTK_WIDGET (label);
-  GtkAllocation allocation;
   GtkTextDirection text_dir;
 
   if (direction == PANGO_DIRECTION_LTR)
@@ -3921,9 +3921,7 @@ draw_insertion_cursor (GtkLabel      *label,
   else
     text_dir = GTK_TEXT_DIR_RTL;
 
-  gtk_widget_get_allocation (widget, &allocation);
-  gtk_draw_insertion_cursor (widget, gtk_widget_get_window (widget),
-                             &allocation, cursor_location,
+  gtk_cairo_draw_insertion_cursor (widget, cr, cursor_location,
 			     is_primary, text_dir, draw_arrow);
 }
 
@@ -3956,7 +3954,7 @@ get_cursor_direction (GtkLabel *label)
 }
 
 static void
-gtk_label_draw_cursor (GtkLabel  *label, gint xoffset, gint yoffset)
+gtk_label_draw_cursor (GtkLabel  *label, cairo_t *cr, gint xoffset, gint yoffset)
 {
   GtkLabelPrivate *priv = label->priv;
   GtkWidget *widget;
@@ -4016,7 +4014,7 @@ gtk_label_draw_cursor (GtkLabel  *label, gint xoffset, gint yoffset)
       cursor_location.width = 0;
       cursor_location.height = PANGO_PIXELS (cursor1->height);
 
-      draw_insertion_cursor (label,
+      draw_insertion_cursor (label, cr,
 			     &cursor_location, TRUE, dir1,
 			     dir2 != PANGO_DIRECTION_NEUTRAL);
       
@@ -4027,7 +4025,7 @@ gtk_label_draw_cursor (GtkLabel  *label, gint xoffset, gint yoffset)
 	  cursor_location.width = 0;
 	  cursor_location.height = PANGO_PIXELS (cursor2->height);
 
-	  draw_insertion_cursor (label,
+	  draw_insertion_cursor (label, cr,
 				 &cursor_location, FALSE, dir2,
 				 TRUE);
 	}
@@ -4059,31 +4057,34 @@ gtk_label_get_focus_link (GtkLabel *label)
 }
 
 static gint
-gtk_label_expose (GtkWidget      *widget,
-		  GdkEventExpose *event)
+gtk_label_draw (GtkWidget *widget,
+                cairo_t   *cr)
 {
   GtkLabel *label = GTK_LABEL (widget);
   GtkLabelPrivate *priv = label->priv;
   GtkLabelSelectionInfo *info = priv->select_info;
+  GtkAllocation allocation;
   GtkStyle *style;
   GdkWindow *window;
   gint x, y;
 
   gtk_label_ensure_layout (label, FALSE);
 
-  if (gtk_widget_get_visible (widget) && gtk_widget_get_mapped (widget) &&
-      priv->text && (*priv->text != '\0'))
+  if (priv->text && (*priv->text != '\0'))
     {
       get_layout_location (label, &x, &y);
 
       style = gtk_widget_get_style (widget);
       window = gtk_widget_get_window (widget);
+      gtk_widget_get_allocation (widget, &allocation);
 
-      gtk_paint_layout (style,
-                        window,
+      x -= allocation.x;
+      y -= allocation.y;
+
+      gtk_cairo_paint_layout (style,
+                        cr,
                         gtk_widget_get_state (widget),
 			FALSE,
-                        &event->area,
                         widget,
                         "label",
                         x, y,
@@ -4095,7 +4096,6 @@ gtk_label_expose (GtkWidget      *widget,
           gint range[2];
           cairo_region_t *clip;
 	  GtkStateType state;
-          cairo_t *cr;
 
           range[0] = info->selection_anchor;
           range[1] = info->selection_end;
@@ -4111,13 +4111,12 @@ gtk_label_expose (GtkWidget      *widget,
                                                    x, y,
                                                    range,
                                                    1);
-	  cairo_region_intersect (clip, event->region);
 
          /* FIXME should use gtk_paint, but it can't use a clip
            * region
            */
 
-          cr = gdk_cairo_create (event->window);
+          cairo_save (cr);
 
           gdk_cairo_region (cr, clip);
           cairo_clip (cr);
@@ -4133,7 +4132,7 @@ gtk_label_expose (GtkWidget      *widget,
           cairo_move_to (cr, x, y);
           _gtk_pango_fill_layout (cr, priv->layout);
 
-          cairo_destroy (cr);
+          cairo_restore (cr);
           cairo_region_destroy (clip);
         }
       else if (info)
@@ -4149,7 +4148,7 @@ gtk_label_expose (GtkWidget      *widget,
           GdkColor *visited_link_color;
 
           if (info->selectable && gtk_widget_has_focus (widget))
-	    gtk_label_draw_cursor (label, x, y);
+	    gtk_label_draw_cursor (label, cr, x, y);
 
           focus_link = gtk_label_get_focus_link (label);
           active_link = info->active_link;
@@ -4157,15 +4156,10 @@ gtk_label_expose (GtkWidget      *widget,
 
           if (active_link)
             {
-              cairo_t *cr;
-
               range[0] = active_link->start;
               range[1] = active_link->end;
 
-              cr = gdk_cairo_create (event->window);
-
-              gdk_cairo_region (cr, event->region);
-              cairo_clip (cr);
+              cairo_save (cr);
 
               clip = gdk_pango_layout_get_clip_region (priv->layout,
                                                        x, y,
@@ -4195,7 +4189,7 @@ gtk_label_expose (GtkWidget      *widget,
               gdk_color_free (link_color);
               gdk_color_free (visited_link_color);
 
-              cairo_destroy (cr);
+              cairo_restore (cr);
             }
 
           if (focus_link && gtk_widget_has_focus (widget))
@@ -4209,8 +4203,8 @@ gtk_label_expose (GtkWidget      *widget,
                                                        1);
               cairo_region_get_extents (clip, &rect);
 
-              gtk_paint_focus (style, window, gtk_widget_get_state (widget),
-                               &event->area, widget, "label",
+              gtk_cairo_paint_focus (style, cr, gtk_widget_get_state (widget),
+                               widget, "label",
                                rect.x, rect.y, rect.width, rect.height);
 
               cairo_region_destroy (clip);
