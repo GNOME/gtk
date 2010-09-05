@@ -217,6 +217,7 @@ compute_size_for_orientation (GtkSizeRequest    *request,
   SizeRequest      *cached_size;
   GtkWidget        *widget;
   gboolean          found_in_cache = FALSE;
+  int adjusted_min, adjusted_natural;
 
   g_return_if_fail (GTK_IS_SIZE_REQUEST (request));
   g_return_if_fail (minimum_size != NULL || natural_size != NULL);
@@ -312,12 +313,45 @@ compute_size_for_orientation (GtkSizeRequest    *request,
           GTK_PRIVATE_UNSET_FLAG (request, GTK_HEIGHT_REQUEST_NEEDED);
         }
 
+      adjusted_min = cached_size->minimum_size;
+      adjusted_natural = cached_size->natural_size;
+      GTK_WIDGET_GET_CLASS (request)->adjust_size_request (GTK_WIDGET (request),
+                                                           orientation == GTK_SIZE_GROUP_HORIZONTAL ?
+                                                           GTK_ORIENTATION_HORIZONTAL :
+                                                           GTK_ORIENTATION_VERTICAL,
+                                                           cached_size->for_size,
+                                                           &adjusted_min,
+                                                           &adjusted_natural);
+
+      if (adjusted_min < cached_size->minimum_size ||
+          adjusted_natural < cached_size->natural_size)
+        {
+          g_warning ("%s %p adjusted size %s min %d natural %d must not decrease below min %d natural %d",
+                     G_OBJECT_TYPE_NAME (request), request,
+                     orientation == GTK_SIZE_GROUP_VERTICAL ? "vertical" : "horizontal",
+                     adjusted_min, adjusted_natural,
+                     cached_size->minimum_size, cached_size->natural_size);
+          /* don't use the adjustment */
+        }
+      else if (adjusted_min > adjusted_natural)
+        {
+          g_warning ("%s %p adjusted size %s min %d natural %d original min %d natural %d has min greater than natural",
+                     G_OBJECT_TYPE_NAME (request), request,
+                     orientation == GTK_SIZE_GROUP_VERTICAL ? "vertical" : "horizontal",
+                     adjusted_min, adjusted_natural,
+                     cached_size->minimum_size, cached_size->natural_size);
+          /* don't use the adjustment */
+        }
+      else
+        {
+          /* adjustment looks good */
+          cached_size->minimum_size = adjusted_min;
+          cached_size->natural_size = adjusted_natural;
+        }
+
       /* Get size groups to compute the base requisition once one
        * of the values have been cached, then go ahead and update
        * the cache with the sizegroup computed value.
-       *
-       * Note this is also where values from gtk_widget_set_size_request()
-       * are considered.
        */
       group_size =
         _gtk_size_group_bump_requisition (GTK_WIDGET (request),

@@ -315,7 +315,7 @@ static void	gtk_widget_real_unrealize	 (GtkWidget	    *widget);
 static void	gtk_widget_real_size_request	 (GtkWidget	    *widget,
 						  GtkRequisition    *requisition);
 static void	gtk_widget_real_size_allocate	 (GtkWidget	    *widget,
-						  GtkAllocation	    *allocation);
+                                                  GtkAllocation	    *allocation);
 static void	gtk_widget_real_style_set        (GtkWidget         *widget,
                                                   GtkStyle          *previous_style);
 static void	gtk_widget_real_direction_changed(GtkWidget         *widget,
@@ -408,7 +408,16 @@ static void             gtk_widget_real_get_height              (GtkSizeRequest 
                                                                  gint              *natural_size);
 
 static void             gtk_widget_queue_tooltip_query          (GtkWidget *widget);
-     
+
+
+static void             gtk_widget_real_adjust_size_request     (GtkWidget         *widget,
+                                                                 GtkOrientation     orientation,
+                                                                 gint               for_size,
+                                                                 gint              *minimum_size,
+                                                                 gint              *natural_size);
+static void             gtk_widget_real_adjust_size_allocation  (GtkWidget         *widget,
+                                                                 GtkAllocation     *allocation);
+
 static void gtk_widget_set_usize_internal (GtkWidget *widget,
 					   gint       width,
 					   gint       height);
@@ -621,6 +630,9 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   klass->get_accessible = gtk_widget_real_get_accessible;
 
   klass->no_expose_event = NULL;
+
+  klass->adjust_size_request = gtk_widget_real_adjust_size_request;
+  klass->adjust_size_allocation = gtk_widget_real_adjust_size_allocation;
 
   g_object_class_install_property (gobject_class,
 				   PROP_NAME,
@@ -3969,7 +3981,11 @@ gtk_widget_queue_shallow_draw (GtkWidget *widget)
  * @allocation: (inout): position and size to be allocated to @widget
  *
  * This function is only used by #GtkContainer subclasses, to assign a size
- * and position to their child widgets. 
+ * and position to their child widgets.
+ *
+ * In this function, the allocation may be adjusted. It will be forced
+ * to a 1x1 minimum size, and the adjust_size_allocation virtual method
+ * on the child will be used to adjust the allocation.
  **/
 void
 gtk_widget_size_allocate (GtkWidget	*widget,
@@ -3978,6 +3994,7 @@ gtk_widget_size_allocate (GtkWidget	*widget,
   GtkWidgetPrivate *priv;
   GdkRectangle real_allocation;
   GdkRectangle old_allocation;
+  GdkRectangle adjusted_allocation;
   gboolean alloc_needed;
   gboolean size_changed;
   gboolean position_changed;
@@ -4015,6 +4032,27 @@ gtk_widget_size_allocate (GtkWidget	*widget,
 
   old_allocation = priv->allocation;
   real_allocation = *allocation;
+
+  adjusted_allocation = real_allocation;
+  GTK_WIDGET_GET_CLASS (widget)->adjust_size_allocation (widget, &adjusted_allocation);
+
+  if (adjusted_allocation.x < real_allocation.x ||
+      adjusted_allocation.y < real_allocation.y ||
+      (adjusted_allocation.x + adjusted_allocation.width) >
+      (real_allocation.x + real_allocation.width) ||
+      (adjusted_allocation.y + adjusted_allocation.height >
+       real_allocation.y + real_allocation.height))
+    {
+      g_warning ("%s %p attempted to adjust its size allocation from %d,%d %dx%d to %d,%d %dx%d. adjust_size_allocation must keep allocation inside original bounds",
+                 G_OBJECT_TYPE_NAME (widget), widget,
+                 real_allocation.x, real_allocation.y, real_allocation.width, real_allocation.height,
+                 adjusted_allocation.x, adjusted_allocation.y, adjusted_allocation.width, adjusted_allocation.height);
+      adjusted_allocation = real_allocation; /* veto it */
+    }
+  else
+    {
+      real_allocation = adjusted_allocation;
+    }
 
   if (real_allocation.width < 0 || real_allocation.height < 0)
     {
@@ -4268,6 +4306,16 @@ gtk_widget_real_size_allocate (GtkWidget     *widget,
 				allocation->x, allocation->y,
 				allocation->width, allocation->height);
      }
+}
+
+static void
+gtk_widget_real_adjust_size_allocation (GtkWidget         *widget,
+                                        GtkAllocation     *allocation)
+{
+  /* We have no adjustments by default for now, but we have this empty
+   * function here so subclasses can chain up in case we do add
+   * something.
+   */
 }
 
 static gboolean
@@ -9052,6 +9100,35 @@ gtk_widget_real_size_request (GtkWidget         *widget,
 {
   requisition->width  = 0;
   requisition->height = 0;
+}
+
+static void
+gtk_widget_real_adjust_size_request (GtkWidget         *widget,
+                                     GtkOrientation     orientation,
+                                     gint               for_size,
+                                     gint              *minimum_size,
+                                     gint              *natural_size)
+{
+  const GtkWidgetAuxInfo *aux_info;
+
+  aux_info =_gtk_widget_get_aux_info_or_defaults (widget);
+
+  if (orientation == GTK_ORIENTATION_HORIZONTAL &&
+      aux_info->width > 0)
+    {
+      *minimum_size = MAX (*minimum_size, aux_info->width);
+    }
+  else if (orientation == GTK_ORIENTATION_VERTICAL &&
+           aux_info->height > 0)
+    {
+      *minimum_size = MAX (*minimum_size, aux_info->height);
+    }
+
+  /* Fix it if set_size_request made natural size smaller than min size.
+   * This would also silently fix broken widgets, but we warn about them
+   * in gtksizerequest.c when calling their size request vfuncs.
+   */
+  *natural_size = MAX (*natural_size, *minimum_size);
 }
 
 /**
