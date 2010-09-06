@@ -1591,19 +1591,13 @@ gtk_icon_view_expose (GtkWidget *widget,
   for (icons = icon_view->priv->items; icons; icons = icons->next) 
     {
       GtkIconViewItem *item = icons->data;
-      GdkRectangle area;
       
       cairo_save (cr);
 
       cairo_rectangle (cr, item->x, item->y, item->width, item->height);
       cairo_clip (cr);
 
-      area.x = item->x;
-      area.y = item->y;
-      area.width = item->width;
-      area.height = item->height;
-	
-      if (cairo_region_contains_rectangle (expose->region, &area) != CAIRO_REGION_OVERLAP_OUT)
+      if (gdk_cairo_get_clip_rectangle (cr, NULL))
         {
           gtk_icon_view_paint_item (icon_view, cr, item,
                                     item->x, item->y,
