@@ -130,8 +130,8 @@ static void     gtk_paned_map                   (GtkWidget        *widget);
 static void     gtk_paned_unmap                 (GtkWidget        *widget);
 static void     gtk_paned_state_changed         (GtkWidget        *widget,
                                                  GtkStateType      previous_state);
-static gboolean gtk_paned_expose                (GtkWidget        *widget,
-						 GdkEventExpose   *event);
+static gboolean gtk_paned_draw                  (GtkWidget        *widget,
+						 cairo_t          *cr);
 static gboolean gtk_paned_enter                 (GtkWidget        *widget,
 						 GdkEventCrossing *event);
 static gboolean gtk_paned_leave                 (GtkWidget        *widget,
@@ -235,7 +235,7 @@ gtk_paned_class_init (GtkPanedClass *class)
   widget_class->unrealize = gtk_paned_unrealize;
   widget_class->map = gtk_paned_map;
   widget_class->unmap = gtk_paned_unmap;
-  widget_class->expose_event = gtk_paned_expose;
+  widget_class->draw = gtk_paned_draw;
   widget_class->focus = gtk_paned_focus;
   widget_class->enter_notify_event = gtk_paned_enter;
   widget_class->leave_notify_event = gtk_paned_leave;
@@ -1125,8 +1125,8 @@ gtk_paned_unmap (GtkWidget *widget)
 }
 
 static gboolean
-gtk_paned_expose (GtkWidget      *widget,
-		  GdkEventExpose *event)
+gtk_paned_draw (GtkWidget *widget,
+                cairo_t   *cr)
 {
   GtkPaned *paned = GTK_PANED (widget);
   GtkPanedPrivate *priv = paned->priv;
@@ -1136,6 +1136,9 @@ gtk_paned_expose (GtkWidget      *widget,
       priv->child2 && gtk_widget_get_visible (priv->child2))
     {
       GtkStateType state;
+      GtkAllocation allocation;
+
+      gtk_widget_get_allocation (widget, &allocation);
       
       if (gtk_widget_is_focus (widget))
 	state = GTK_STATE_SELECTED;
@@ -1144,17 +1147,19 @@ gtk_paned_expose (GtkWidget      *widget,
       else
 	state = gtk_widget_get_state (widget);
 
-      gtk_paint_handle (gtk_widget_get_style (widget),
-                        gtk_widget_get_window (widget),
+      gtk_cairo_paint_handle (gtk_widget_get_style (widget),
+                        cr,
 			state, GTK_SHADOW_NONE,
-			&priv->handle_pos, widget, "paned",
-			priv->handle_pos.x, priv->handle_pos.y,
-			priv->handle_pos.width, priv->handle_pos.height,
+			widget, "paned",
+			priv->handle_pos.x - allocation.x,
+                        priv->handle_pos.y - allocation.y,
+			priv->handle_pos.width,
+                        priv->handle_pos.height,
 			!priv->orientation);
     }
 
   /* Chain up to draw children */
-  GTK_WIDGET_CLASS (gtk_paned_parent_class)->expose_event (widget, event);
+  GTK_WIDGET_CLASS (gtk_paned_parent_class)->draw (widget, cr);
   
   return FALSE;
 }
