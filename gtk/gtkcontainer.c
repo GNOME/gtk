@@ -302,6 +302,9 @@ static void     gtk_container_add_unimplemented    (GtkContainer      *container
 static void     gtk_container_remove_unimplemented (GtkContainer      *container,
 						    GtkWidget         *widget);
 static void     gtk_container_real_check_resize    (GtkContainer      *container);
+static void     gtk_container_compute_expand       (GtkWidget         *widget,
+                                                    gboolean          *hexpand_p,
+                                                    gboolean          *vexpand_p);
 static gboolean gtk_container_focus                (GtkWidget         *widget,
 						    GtkDirectionType   direction);
 static void     gtk_container_real_set_focus_child (GtkContainer      *container,
@@ -443,6 +446,7 @@ gtk_container_class_init (GtkContainerClass *class)
   gobject_class->get_property = gtk_container_get_property;
 
   widget_class->destroy = gtk_container_destroy;
+  widget_class->compute_expand = gtk_container_compute_expand;
   widget_class->show_all = gtk_container_show_all;
   widget_class->hide_all = gtk_container_hide_all;
   widget_class->draw = gtk_container_draw;
@@ -2067,6 +2071,53 @@ _gtk_container_child_composite_name (GtkContainer *container,
     }
   
   return NULL;
+}
+
+typedef struct {
+  gboolean hexpand;
+  gboolean vexpand;
+} ComputeExpandData;
+
+static void
+gtk_container_compute_expand_callback (GtkWidget *widget,
+				       gpointer   client_data)
+{
+  ComputeExpandData *data = client_data;
+
+  /* note that we don't get_expand on the child if we already know we
+   * have to expand, so we only recurse into children until we find
+   * one that expands and then we basically don't do any more
+   * work. This means that we can leave some children in a
+   * need_compute_expand state, which is fine, as long as GtkWidget
+   * doesn't rely on an invariant that "if a child has
+   * need_compute_expand, its parents also do"
+   *
+   * gtk_widget_compute_expand() always returns FALSE if the
+   * child is !visible so that's taken care of.
+   */
+  data->hexpand = data->hexpand ||
+    gtk_widget_compute_expand (widget, GTK_ORIENTATION_HORIZONTAL);
+
+  data->vexpand = data->vexpand ||
+    gtk_widget_compute_expand (widget, GTK_ORIENTATION_VERTICAL);
+}
+
+static void
+gtk_container_compute_expand (GtkWidget         *widget,
+                              gboolean          *hexpand_p,
+                              gboolean          *vexpand_p)
+{
+  ComputeExpandData data;
+
+  data.hexpand = FALSE;
+  data.vexpand = FALSE;
+
+  gtk_container_forall (GTK_CONTAINER (widget),
+                        gtk_container_compute_expand_callback,
+                        &data);
+
+  *hexpand_p = data.hexpand;
+  *vexpand_p = data.vexpand;
 }
 
 static void

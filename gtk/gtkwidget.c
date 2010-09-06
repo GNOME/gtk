@@ -272,6 +272,15 @@ struct _GtkWidgetPrivate
   guint width_request_needed  : 1;
   guint height_request_needed : 1;
 
+  /* Expand-related flags */
+  guint need_compute_expand   : 1; /* Need to recompute computed_[hv]_expand */
+  guint computed_hexpand      : 1; /* computed results (composite of child flags) */
+  guint computed_vexpand      : 1;
+  guint hexpand               : 1; /* application-forced expand */
+  guint vexpand               : 1;
+  guint hexpand_set           : 1; /* whether to use application-forced  */
+  guint vexpand_set           : 1; /* instead of computing from children */
+
   /* The widget's name. If the widget does not have a name
    *  (the name is NULL), then its name (as returned by
    *  "gtk_widget_get_name") is its class's name.
@@ -410,7 +419,12 @@ enum {
   PROP_MARGIN_RIGHT,
   PROP_MARGIN_TOP,
   PROP_MARGIN_BOTTOM,
-  PROP_MARGIN
+  PROP_MARGIN,
+  PROP_HEXPAND,
+  PROP_VEXPAND,
+  PROP_HEXPAND_SET,
+  PROP_VEXPAND_SET,
+  PROP_EXPAND
 };
 
 typedef	struct	_GtkStateData	 GtkStateData;
@@ -1178,6 +1192,81 @@ gtk_widget_class_init (GtkWidgetClass *klass)
                   NULL, NULL,
                   _gtk_marshal_VOID__VOID,
                   G_TYPE_NONE, 0);
+
+  /**
+   * GtkWidget:hexpand
+   *
+   * Whether to expand horizontally. See gtk_widget_set_hexpand().
+   *
+   * Since: 3.0
+   */
+  g_object_class_install_property (gobject_class,
+                                   PROP_HEXPAND,
+                                   g_param_spec_boolean ("hexpand",
+                                                         P_("Horizontal Expand"),
+                                                         P_("Whether widget wants more horizontal space"),
+                                                         FALSE,
+                                                         GTK_PARAM_READWRITE));
+
+  /**
+   * GtkWidget:hexpand-set
+   *
+   * Whether to use the GtkWidget:hexpand property. See gtk_widget_get_hexpand_set().
+   *
+   * Since: 3.0
+   */
+  g_object_class_install_property (gobject_class,
+                                   PROP_HEXPAND_SET,
+                                   g_param_spec_boolean ("hexpand-set",
+                                                         P_("Horizontal Expand Set"),
+                                                         P_("Whether to use the hexpand property"),
+                                                         FALSE,
+                                                         GTK_PARAM_READWRITE));
+
+  /**
+   * GtkWidget:vexpand
+   *
+   * Whether to expand vertically. See gtk_widget_set_vexpand().
+   *
+   * Since: 3.0
+   */
+  g_object_class_install_property (gobject_class,
+                                   PROP_VEXPAND,
+                                   g_param_spec_boolean ("vexpand",
+                                                         P_("Vertical Expand"),
+                                                         P_("Whether widget wants more vertical space"),
+                                                         FALSE,
+                                                         GTK_PARAM_READWRITE));
+
+  /**
+   * GtkWidget:vexpand-set
+   *
+   * Whether to use the GtkWidget:vexpand property. See gtk_widget_get_vexpand_set().
+   *
+   * Since: 3.0
+   */
+  g_object_class_install_property (gobject_class,
+                                   PROP_VEXPAND_SET,
+                                   g_param_spec_boolean ("vexpand-set",
+                                                         P_("Vertical Expand Set"),
+                                                         P_("Whether to use the vexpand property"),
+                                                         FALSE,
+                                                         GTK_PARAM_READWRITE));
+
+  /**
+   * GtkWidget:expand
+   *
+   * Whether to expand in both directions. Setting this sets both GtkWidget:hexpand and GtkWidget:vexpand
+   *
+   * Since: 3.0
+   */
+  g_object_class_install_property (gobject_class,
+                                   PROP_EXPAND,
+                                   g_param_spec_boolean ("expand",
+                                                         P_("Expand Both"),
+                                                         P_("Whether widget wants to expand in both directions"),
+                                                         FALSE,
+                                                         GTK_PARAM_READWRITE));
 
   /**
    * GtkWidget::show:
@@ -3146,6 +3235,24 @@ gtk_widget_set_property (GObject         *object,
       gtk_widget_set_margin_bottom (widget, g_value_get_int (value));
       g_object_thaw_notify (G_OBJECT (widget));
       break;
+    case PROP_HEXPAND:
+      gtk_widget_set_hexpand (widget, g_value_get_boolean (value));
+      break;
+    case PROP_HEXPAND_SET:
+      gtk_widget_set_hexpand_set (widget, g_value_get_boolean (value));
+      break;
+    case PROP_VEXPAND:
+      gtk_widget_set_vexpand (widget, g_value_get_boolean (value));
+      break;
+    case PROP_VEXPAND_SET:
+      gtk_widget_set_vexpand_set (widget, g_value_get_boolean (value));
+      break;
+    case PROP_EXPAND:
+      g_object_freeze_notify (G_OBJECT (widget));
+      gtk_widget_set_hexpand (widget, g_value_get_boolean (value));
+      gtk_widget_set_vexpand (widget, g_value_get_boolean (value));
+      g_object_thaw_notify (G_OBJECT (widget));
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -3290,6 +3397,23 @@ gtk_widget_get_property (GObject         *object,
           }
       }
       break;
+    case PROP_HEXPAND:
+      g_value_set_boolean (value, gtk_widget_get_hexpand (widget));
+      break;
+    case PROP_HEXPAND_SET:
+      g_value_set_boolean (value, gtk_widget_get_hexpand_set (widget));
+      break;
+    case PROP_VEXPAND:
+      g_value_set_boolean (value, gtk_widget_get_vexpand (widget));
+      break;
+    case PROP_VEXPAND_SET:
+      g_value_set_boolean (value, gtk_widget_get_vexpand_set (widget));
+      break;
+    case PROP_EXPAND:
+      g_value_set_boolean (value,
+                           gtk_widget_get_hexpand (widget) &&
+                           gtk_widget_get_vexpand (widget));
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -3325,6 +3449,15 @@ gtk_widget_init (GtkWidget *widget)
   priv->width_request_needed = TRUE;
   priv->height_request_needed = TRUE;
   priv->alloc_needed = TRUE;
+
+  /* this will be set to TRUE if the widget gets a child or if the
+   * expand flag is set on the widget, but until one of those happen
+   * we know the expand is already properly FALSE.
+   *
+   * We really want to default FALSE here to avoid computing expand
+   * all over the place while initially building a widget tree.
+   */
+  priv->need_compute_expand = FALSE;
 
   priv->style = gtk_widget_get_default_style ();
   g_object_ref (priv->style);
@@ -3559,13 +3692,26 @@ gtk_widget_unparent (GtkWidget *widget)
   old_parent = priv->parent;
   priv->parent = NULL;
   gtk_widget_set_parent_window (widget, NULL);
+
+  /* parent may no longer expand if the removed
+   * child was expand=TRUE and could therefore
+   * be forcing it to.
+   */
+  if (gtk_widget_get_visible (widget) &&
+      (priv->need_compute_expand ||
+       priv->computed_hexpand ||
+       priv->computed_vexpand))
+    {
+      gtk_widget_queue_compute_expand (old_parent);
+    }
+
   g_signal_emit (widget, widget_signals[PARENT_SET], 0, old_parent);
   if (toplevel)
     {
       _gtk_widget_propagate_hierarchy_changed (widget, toplevel);
       g_object_unref (toplevel);
     }
-      
+
   g_object_notify (G_OBJECT (widget), "parent");
   g_object_thaw_notify (G_OBJECT (widget));
   if (!priv->parent)
@@ -3654,6 +3800,17 @@ gtk_widget_show (GtkWidget *widget)
       g_object_ref (widget);
       if (!gtk_widget_is_toplevel (widget))
 	gtk_widget_queue_resize (widget);
+
+      /* see comment in set_parent() for why this should and can be
+       * conditional
+       */
+      if (widget->priv->need_compute_expand ||
+          widget->priv->computed_hexpand ||
+          widget->priv->computed_vexpand)
+        {
+          gtk_widget_queue_compute_expand (widget);
+        }
+
       g_signal_emit (widget, widget_signals[SHOW], 0);
       g_object_notify (G_OBJECT (widget), "visible");
       g_object_unref (widget);
@@ -3739,6 +3896,14 @@ gtk_widget_hide (GtkWidget *widget)
       g_object_ref (widget);
       if (toplevel != widget && gtk_widget_is_toplevel (toplevel))
 	_gtk_window_unset_focus_and_default (GTK_WINDOW (toplevel), widget);
+
+      /* a parent may now be expand=FALSE since we're hidden. */
+      if (widget->priv->need_compute_expand ||
+          widget->priv->computed_hexpand ||
+          widget->priv->computed_vexpand)
+        {
+          gtk_widget_queue_compute_expand (widget);
+        }
 
       g_signal_emit (widget, widget_signals[HIDE], 0);
       if (!gtk_widget_is_toplevel (widget))
@@ -7200,6 +7365,24 @@ gtk_widget_set_parent (GtkWidget *widget,
 	gtk_widget_map (widget);
 
       gtk_widget_queue_resize (widget);
+    }
+
+  /* child may cause parent's expand to change, if the child is
+   * expanded. If child is not expanded, then it can't modify the
+   * parent's expand. If the child becomes expanded later then it will
+   * queue compute_expand then. This optimization plus defaulting
+   * newly-constructed widgets to need_compute_expand=FALSE should
+   * mean that initially building a widget tree doesn't have to keep
+   * walking up setting need_compute_expand on parents over and over.
+   *
+   * We can't change a parent to need to expand unless we're visible.
+   */
+  if (gtk_widget_get_visible (widget) &&
+      (priv->need_compute_expand ||
+       priv->computed_hexpand ||
+       priv->computed_vexpand))
+    {
+      gtk_widget_queue_compute_expand (parent);
     }
 }
 
@@ -10987,6 +11170,424 @@ gtk_widget_ref_accessible (AtkImplementor *implementor)
   if (accessible)
     g_object_ref (accessible);
   return accessible;
+}
+
+/*
+ * Expand flag management
+ */
+
+static void
+gtk_widget_update_computed_expand (GtkWidget *widget)
+{
+  GtkWidgetPrivate *priv;
+
+  priv = widget->priv;
+
+  if (priv->need_compute_expand)
+    {
+      gboolean h, v;
+
+      if (priv->hexpand_set)
+        h = priv->hexpand;
+      else
+        h = FALSE;
+
+      if (priv->vexpand_set)
+        v = priv->vexpand;
+      else
+        v = FALSE;
+
+      /* we don't need to use compute_expand if both expands are
+       * forced by the app
+       */
+      if (!(priv->hexpand_set && priv->vexpand_set))
+        {
+          if (GTK_WIDGET_GET_CLASS (widget)->compute_expand != NULL)
+            {
+              gboolean ignored;
+
+              GTK_WIDGET_GET_CLASS (widget)->compute_expand (widget,
+                                                             priv->hexpand_set ? &ignored : &h,
+                                                             priv->vexpand_set ? &ignored : &v);
+            }
+        }
+
+      priv->need_compute_expand = FALSE;
+      priv->computed_hexpand = h != FALSE;
+      priv->computed_vexpand = v != FALSE;
+    }
+}
+
+void
+gtk_widget_queue_compute_expand (GtkWidget *widget)
+{
+  GtkWidget *parent;
+  gboolean changed_anything;
+
+  if (widget->priv->need_compute_expand)
+    return;
+
+  changed_anything = FALSE;
+  parent = widget;
+  while (parent != NULL)
+    {
+      if (!parent->priv->need_compute_expand)
+        {
+          parent->priv->need_compute_expand = TRUE;
+          changed_anything = TRUE;
+        }
+
+      /* Note: if we had an invariant that "if a child needs to
+       * compute expand, its parents also do" then we could stop going
+       * up when we got to a parent that already needed to
+       * compute. However, in general we compute expand lazily (as
+       * soon as we see something in a subtree that is expand, we know
+       * we're expanding) and so this invariant does not hold and we
+       * have to always walk all the way up in case some ancestor
+       * is not currently need_compute_expand.
+       */
+
+      parent = parent->priv->parent;
+    }
+
+  /* recomputing expand always requires
+   * a relayout as well
+   */
+  if (changed_anything)
+    gtk_widget_queue_resize (widget);
+}
+
+/**
+ * gtk_widget_compute_expand:
+ * @widget: the widget
+ * @orientation: expand direction
+ *
+ * Computes whether a container should give this widget extra space
+ * when possible. Containers should check this, rather than
+ * looking at gtk_widget_get_hexpand() or gtk_widget_get_vexpand().
+ *
+ * This function already checks whether the widget is visible, so
+ * visibility does not need to be checked separately. Non-visible
+ * widgets are not expanded.
+ *
+ * The computed expand value uses either the expand setting explicitly
+ * set on the widget itself, or, if none has been explicitly set,
+ * the widget may expand if some of its children do.
+ *
+ * Return value: whether widget tree rooted here should be expanded
+ */
+gboolean
+gtk_widget_compute_expand (GtkWidget     *widget,
+                           GtkOrientation orientation)
+{
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
+
+  /* We never make a widget expand if not even showing. */
+  if (!gtk_widget_get_visible (widget))
+    return FALSE;
+
+  gtk_widget_update_computed_expand (widget);
+
+  if (orientation == GTK_ORIENTATION_HORIZONTAL)
+    {
+      return widget->priv->computed_hexpand;
+    }
+  else
+    {
+      return widget->priv->computed_vexpand;
+    }
+}
+
+static void
+gtk_widget_set_expand (GtkWidget     *widget,
+                       GtkOrientation orientation,
+                       gboolean       expand)
+{
+  const char *expand_prop;
+  const char *expand_set_prop;
+  gboolean was_both;
+  GtkWidgetPrivate *priv;
+
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+
+  priv = widget->priv;
+
+  expand = expand != FALSE;
+
+  was_both = priv->hexpand && priv->vexpand;
+
+  if (orientation == GTK_ORIENTATION_HORIZONTAL)
+    {
+      if (priv->hexpand_set &&
+          priv->hexpand == expand)
+        return;
+
+      priv->hexpand_set = TRUE;
+      priv->hexpand = expand;
+
+      expand_prop = "hexpand";
+      expand_set_prop = "hexpand-set";
+    }
+  else
+    {
+      if (priv->vexpand_set &&
+          priv->vexpand == expand)
+        return;
+
+      priv->vexpand_set = TRUE;
+      priv->vexpand = expand;
+
+      expand_prop = "vexpand";
+      expand_set_prop = "vexpand-set";
+    }
+
+  gtk_widget_queue_compute_expand (widget);
+
+  g_object_freeze_notify (G_OBJECT (widget));
+  g_object_notify (G_OBJECT (widget), expand_prop);
+  g_object_notify (G_OBJECT (widget), expand_set_prop);
+  if (was_both != (priv->hexpand && priv->vexpand))
+    g_object_notify (G_OBJECT (widget), "expand");
+  g_object_thaw_notify (G_OBJECT (widget));
+}
+
+static void
+gtk_widget_set_expand_set (GtkWidget      *widget,
+                           GtkOrientation  orientation,
+                           gboolean        set)
+{
+  GtkWidgetPrivate *priv;
+  const char *prop;
+
+  priv = widget->priv;
+
+  set = set != FALSE;
+
+  if (orientation == GTK_ORIENTATION_HORIZONTAL)
+    {
+      if (set == priv->hexpand_set)
+        return;
+
+      priv->hexpand_set = set;
+      prop = "hexpand-set";
+    }
+  else
+    {
+      if (set == priv->vexpand_set)
+        return;
+
+      priv->vexpand_set = set;
+      prop = "vexpand-set";
+    }
+
+  gtk_widget_queue_compute_expand (widget);
+
+  g_object_notify (G_OBJECT (widget), prop);
+}
+
+/**
+ * gtk_widget_get_hexpand:
+ * @widget: the widget
+ *
+ * Gets whether the widget would like any available extra horizontal
+ * space. When a user resizes a #GtkWindow, widgets with expand=TRUE
+ * generally receive the extra space. For example, a list or
+ * scrollable area or document in your window would often be set to
+ * expand.
+ *
+ * Containers should use gtk_widget_compute_expand() rather than
+ * this function, to see whether a widget, or any of its children,
+ * has the expand flag set. If any child of a widget wants to
+ * expand, the parent may ask to expand also.
+ *
+ * This function only looks at the widget's own hexpand flag, rather
+ * than computing whether the entire widget tree rooted at this widget
+ * wants to expand.
+ *
+ * Return value: whether hexpand flag is set
+ */
+gboolean
+gtk_widget_get_hexpand (GtkWidget *widget)
+{
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
+
+  return widget->priv->hexpand;
+}
+
+/**
+ * gtk_widget_set_hexpand:
+ * @widget: the widget
+ * @expand: whether to expand
+ *
+ * Sets whether the widget would like any available extra horizontal
+ * space. When a user resizes a #GtkWindow, widgets with expand=TRUE
+ * generally receive the extra space. For example, a list or
+ * scrollable area or document in your window would often be set to
+ * expand.
+ *
+ * Call this function to set the expand flag if you would like your
+ * widget to become larger horizontally when the window has extra
+ * room.
+ *
+ * By default, widgets automatically expand if any of their children
+ * want to expand. (To see if a widget will automatically expand given
+ * its current children and state, call gtk_widget_compute_expand(). A
+ * container can decide how the expandability of children affects the
+ * expansion of the container by overriding the compute_expand virtual
+ * method on #GtkWidget.).
+ *
+ * Setting hexpand explicitly with this function will override the
+ * automatic expand behavior.
+ *
+ * This function forces the widget to expand or not to expand,
+ * regardless of children.  The override occurs because
+ * gtk_widget_set_hexpand() sets the hexpand-set property (see
+ * gtk_widget_set_hexpand_set()) which causes the widget's hexpand
+ * value to be used, rather than looking at children and widget state.
+ */
+void
+gtk_widget_set_hexpand (GtkWidget      *widget,
+                        gboolean        expand)
+{
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+
+  gtk_widget_set_expand (widget, GTK_ORIENTATION_HORIZONTAL, expand);
+}
+
+/**
+ * gtk_widget_get_hexpand_set:
+ * @widget: the widget
+ *
+ * Gets whether gtk_widget_set_hexpand() has been used to
+ * explicitly set the expand flag on this widget.
+ *
+ * If hexpand is set, then it overrides any computed
+ * expand value based on child widgets. If hexpand is not
+ * set, then the expand value depends on whether any
+ * children of the widget would like to expand.
+ *
+ * There are few reasons to use this function, but it's here
+ * for completeness and consistency.
+ *
+ * Return value: whether hexpand has been explicitly set
+ */
+gboolean
+gtk_widget_get_hexpand_set (GtkWidget      *widget)
+{
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
+
+  return widget->priv->hexpand_set;
+}
+
+/**
+ * gtk_widget_set_hexpand_set:
+ * @widget: the widget
+ * @set: value for hexpand-set property
+ *
+ * Sets whether the hexpand flag (see gtk_widget_get_hexpand()) will
+ * be used.
+ *
+ * The hexpand-set property will be set automatically when you call
+ * gtk_widget_set_hexpand() to set hexpand, so the most likely
+ * reason to use this function would be to unset an explicit expand
+ * flag.
+ *
+ * If hexpand is set, then it overrides any computed
+ * expand value based on child widgets. If hexpand is not
+ * set, then the expand value depends on whether any
+ * children of the widget would like to expand.
+ *
+ * There are few reasons to use this function, but it's here
+ * for completeness and consistency.
+ *
+ * Return value: whether hexpand has been explicitly set
+ */
+void
+gtk_widget_set_hexpand_set (GtkWidget      *widget,
+                            gboolean        set)
+{
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+
+  gtk_widget_set_expand_set (widget, GTK_ORIENTATION_HORIZONTAL, set);
+}
+
+
+/**
+ * gtk_widget_get_vexpand:
+ * @widget: the widget
+ *
+ * Gets whether the widget would like any available extra vertical
+ * space.
+ *
+ * See gtk_widget_get_hexpand() for more detail.
+ *
+ * Return value: whether vexpand flag is set
+ */
+gboolean
+gtk_widget_get_vexpand (GtkWidget *widget)
+{
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
+
+  return widget->priv->vexpand;
+}
+
+/**
+ * gtk_widget_set_vexpand:
+ * @widget: the widget
+ * @expand: whether to expand
+ *
+ * Sets whether the widget would like any available extra vertical
+ * space.
+ *
+ * See gtk_widget_set_hexpand() for more detail.
+ */
+void
+gtk_widget_set_vexpand (GtkWidget      *widget,
+                        gboolean        expand)
+{
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+
+  gtk_widget_set_expand (widget, GTK_ORIENTATION_VERTICAL, expand);
+}
+
+/**
+ * gtk_widget_get_vexpand_set:
+ * @widget: the widget
+ *
+ * Gets whether gtk_widget_set_vexpand() has been used to
+ * explicitly set the expand flag on this widget.
+ *
+ * See gtk_widget_get_hexpand_set() for more detail.
+ *
+ * Return value: whether vexpand has been explicitly set
+ */
+gboolean
+gtk_widget_get_vexpand_set (GtkWidget      *widget)
+{
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
+
+  return widget->priv->vexpand_set;
+}
+
+/**
+ * gtk_widget_set_vexpand_set:
+ * @widget: the widget
+ * @set: value for vexpand-set property
+ *
+ * Sets whether the vexpand flag (see gtk_widget_get_vexpand()) will
+ * be used.
+ *
+ * See gtk_widget_set_hexpand_set() for more detail.
+ *
+ * Return value: whether vexpand has been explicitly set
+ */
+void
+gtk_widget_set_vexpand_set (GtkWidget      *widget,
+                            gboolean        set)
+{
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+
+  gtk_widget_set_expand_set (widget, GTK_ORIENTATION_VERTICAL, set);
 }
 
 /*
