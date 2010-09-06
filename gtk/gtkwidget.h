@@ -947,6 +947,8 @@ GtkRequisition *gtk_requisition_new      (void) G_GNUC_MALLOC;
 GtkRequisition *gtk_requisition_copy     (const GtkRequisition *requisition);
 void            gtk_requisition_free     (GtkRequisition       *requisition);
 
+GdkEventExpose *  _gtk_cairo_get_event                    (cairo_t     *cr);
+
 void              _gtk_widget_set_has_default             (GtkWidget    *widget,
                                                            gboolean      has_default);
 void              _gtk_widget_set_has_grab                (GtkWidget    *widget,

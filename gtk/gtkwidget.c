@@ -5070,14 +5070,21 @@ gtk_widget_real_mnemonic_activate (GtkWidget *widget,
   return TRUE;
 }
 
-static const cairo_user_data_key_t window_key;
+static const cairo_user_data_key_t event_key;
 
-static GdkWindow *
-gtk_cairo_get_window (cairo_t *cr)
+GdkEventExpose *
+_gtk_cairo_get_event (cairo_t *cr)
 {
   g_return_val_if_fail (cr != NULL, NULL);
 
-  return cairo_get_user_data (cr, &window_key);
+  return cairo_get_user_data (cr, &event_key);
+}
+
+static void
+gtk_cairo_set_event (cairo_t        *cr,
+                     GdkEventExpose *event)
+{
+  cairo_set_user_data (cr, &event_key, event, NULL);
 }
 
 /**
@@ -5101,23 +5108,17 @@ gboolean
 gtk_cairo_should_draw_window (cairo_t *cr,
                               GdkWindow *window)
 {
-  GdkWindow *cairo_window;
+  GdkEventExpose *event;
 
   g_return_val_if_fail (cr != NULL, FALSE);
   g_return_val_if_fail (GDK_IS_WINDOW (window), FALSE);
 
-  cairo_window = gtk_cairo_get_window (cr);
+  event = _gtk_cairo_get_event (cr);
   
-  return cairo_window == NULL ||
-         cairo_window == window;
+  return event == NULL ||
+         event->window == window;
 }
 
-static void
-gtk_cairo_set_window (cairo_t   *cr,
-                      GdkWindow *window)
-{
-  cairo_set_user_data (cr, &window_key, window, NULL);
-}
 static gboolean
 gtk_widget_real_expose_event (GtkWidget      *widget,
 			      GdkEventExpose *expose)
@@ -5130,7 +5131,7 @@ gtk_widget_real_expose_event (GtkWidget      *widget,
     return FALSE;
 
   cr = gdk_cairo_create (expose->window);
-  gtk_cairo_set_window (cr, expose->window);
+  gtk_cairo_set_event (cr, expose);
 
   gdk_cairo_region (cr, expose->region);
   cairo_clip (cr);
@@ -5171,7 +5172,7 @@ gtk_widget_real_expose_event (GtkWidget      *widget,
 
   /* unset here, so if someone keeps a reference to cr we
    * don't leak the window. */
-  gtk_cairo_set_window (cr, NULL);
+  gtk_cairo_set_event (cr, NULL);
   cairo_destroy (cr);
 
   return result;
