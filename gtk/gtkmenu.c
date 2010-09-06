@@ -177,11 +177,9 @@ static void     gtk_menu_realize           (GtkWidget        *widget);
 static void     gtk_menu_unrealize         (GtkWidget        *widget);
 static void     gtk_menu_size_allocate     (GtkWidget        *widget,
 					    GtkAllocation    *allocation);
-static void     gtk_menu_paint             (GtkWidget        *widget,
-					    GdkEventExpose   *expose);
 static void     gtk_menu_show              (GtkWidget        *widget);
-static gboolean gtk_menu_expose            (GtkWidget        *widget,
-					    GdkEventExpose   *event);
+static gboolean gtk_menu_draw              (GtkWidget        *widget,
+                                            cairo_t          *cr);
 static gboolean gtk_menu_key_press         (GtkWidget        *widget,
 					    GdkEventKey      *event);
 static gboolean gtk_menu_scroll            (GtkWidget        *widget,
@@ -480,7 +478,7 @@ gtk_menu_class_init (GtkMenuClass *class)
   widget_class->unrealize = gtk_menu_unrealize;
   widget_class->size_allocate = gtk_menu_size_allocate;
   widget_class->show = gtk_menu_show;
-  widget_class->expose_event = gtk_menu_expose;
+  widget_class->draw = gtk_menu_draw;
   widget_class->scroll_event = gtk_menu_scroll;
   widget_class->key_press_event = gtk_menu_key_press;
   widget_class->button_press_event = gtk_menu_button_press;
@@ -2904,9 +2902,9 @@ get_arrows_visible_area (GtkMenu      *menu,
   *arrow_space = scroll_arrow_height - 2 * style->ythickness;
 }
 
-static void
-gtk_menu_paint (GtkWidget      *widget,
-		GdkEventExpose *event)
+static gboolean
+gtk_menu_draw (GtkWidget *widget,
+	       cairo_t   *cr)
 {
   GtkMenu *menu;
   GtkMenuPrivate *priv;
@@ -2917,8 +2915,6 @@ gtk_menu_paint (GtkWidget      *widget,
   GdkWindow *window;
   gint arrow_space;
   
-  g_return_if_fail (GTK_IS_MENU (widget));
-
   menu = GTK_MENU (widget);
   priv = gtk_menu_get_private (menu);
 
@@ -2927,7 +2923,7 @@ gtk_menu_paint (GtkWidget      *widget,
 
   get_arrows_visible_area (menu, &border, &upper, &lower, &arrow_space);
 
-  if (event->window == window)
+  if (gtk_cairo_should_draw_window (cr, gtk_widget_get_window (widget)))
     {
       gfloat arrow_scaling;
       gint arrow_size;
@@ -2935,30 +2931,32 @@ gtk_menu_paint (GtkWidget      *widget,
       gtk_widget_style_get (widget, "arrow-scaling", &arrow_scaling, NULL);
       arrow_size = arrow_scaling * arrow_space;
 
-      gtk_paint_box (style,
-                     window,
+      gtk_cairo_paint_box (style,
+		     cr,
 		     GTK_STATE_NORMAL,
 		     GTK_SHADOW_OUT,
-		     &event->area, widget, "menu",
-		     0, 0, -1, -1);
+		     widget, "menu",
+		     0, 0,
+                     gtk_widget_get_allocated_width (widget),
+                     gtk_widget_get_allocated_height (widget));
 
       if (menu->upper_arrow_visible && !menu->tearoff_active)
 	{
-          gtk_paint_box (style,
-                         window,
+	  gtk_cairo_paint_box (style,
+			 cr,
 			 priv->upper_arrow_state,
                          GTK_SHADOW_OUT,
-			 &event->area, widget, "menu_scroll_arrow_up",
+			 widget, "menu_scroll_arrow_up",
                          upper.x,
                          upper.y,
                          upper.width,
                          upper.height);
 
-          gtk_paint_arrow (style,
-                           window,
+	  gtk_cairo_paint_arrow (style,
+			   cr,
 			   priv->upper_arrow_state,
 			   GTK_SHADOW_OUT,
-			   &event->area, widget, "menu_scroll_arrow_up",
+			   widget, "menu_scroll_arrow_up",
 			   GTK_ARROW_UP,
 			   TRUE,
                            upper.x + (upper.width - arrow_size) / 2,
@@ -2968,21 +2966,21 @@ gtk_menu_paint (GtkWidget      *widget,
 
       if (menu->lower_arrow_visible && !menu->tearoff_active)
 	{
-          gtk_paint_box (style,
-                         window,
+	  gtk_cairo_paint_box (style,
+			 cr,
 			 priv->lower_arrow_state,
                          GTK_SHADOW_OUT,
-			 &event->area, widget, "menu_scroll_arrow_down",
+			 widget, "menu_scroll_arrow_down",
                          lower.x,
                          lower.y,
                          lower.width,
                          lower.height);
 
-          gtk_paint_arrow (style,
-                           window,
+	  gtk_cairo_paint_arrow (style,
+			   cr,
 			   priv->lower_arrow_state,
 			   GTK_SHADOW_OUT,
-			   &event->area, widget, "menu_scroll_arrow_down",
+			   widget, "menu_scroll_arrow_down",
 			   GTK_ARROW_DOWN,
 			   TRUE,
                            lower.x + (lower.width - arrow_size) / 2,
@@ -2990,9 +2988,17 @@ gtk_menu_paint (GtkWidget      *widget,
 			   arrow_size, arrow_size);
 	}
     }
-  else if (event->window == menu->bin_window)
+  
+  if (gtk_cairo_should_draw_window (cr, menu->bin_window))
     {
+      int xoff, yoff;
       gint y = -border.y + menu->scroll_offset;
+      
+      cairo_save (cr);
+      gdk_window_get_position (menu->view_window, &xoff, &yoff);
+      cairo_translate (cr, xoff, yoff);
+      gdk_window_get_position (menu->bin_window, &xoff, &yoff);
+      cairo_translate (cr, xoff, yoff);
 
       if (!menu->tearoff_active)
         {
@@ -3002,30 +3008,19 @@ gtk_menu_paint (GtkWidget      *widget,
           y -= arrow_border.top;
         }
 
-      gtk_paint_box (style,
-		     menu->bin_window,
+      gtk_cairo_paint_box (style,
+		     cr,
 		     GTK_STATE_NORMAL,
 		     GTK_SHADOW_OUT,
-		     &event->area, widget, "menu",
+		     widget, "menu",
 		     - border.x, y,
 		     border.width, border.height);
+
+      cairo_restore (cr);
     }
-}
 
-static gboolean
-gtk_menu_expose (GtkWidget	*widget,
-		 GdkEventExpose *event)
-{
-  g_return_val_if_fail (GTK_IS_MENU (widget), FALSE);
-  g_return_val_if_fail (event != NULL, FALSE);
+  GTK_WIDGET_CLASS (gtk_menu_parent_class)->draw (widget, cr);
 
-  if (gtk_widget_is_drawable (widget))
-    {
-      gtk_menu_paint (widget, event);
-
-      GTK_WIDGET_CLASS (gtk_menu_parent_class)->expose_event (widget, event);
-    }
-  
   return FALSE;
 }
 
