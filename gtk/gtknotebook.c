@@ -2249,32 +2249,7 @@ gtk_notebook_expose (GtkWidget      *widget,
   GtkNotebookPrivate *priv = notebook->priv;
   gint i;
 
-  if (event->window == priv->drag_window)
-    {
-      GdkRectangle area = { 0, };
-      cairo_t *cr;
-
-      /* FIXME: This is a workaround to make tabs reordering work better
-       * with engines with rounded tabs. If the drag window background
-       * isn't set, the rounded corners would be black.
-       *
-       * Ideally, these corners should be made transparent, Either by using
-       * ARGB visuals or shape windows.
-       */
-      cr = gdk_cairo_create (priv->drag_window);
-      gdk_cairo_set_source_color (cr, &gtk_widget_get_style(widget)->bg [GTK_STATE_NORMAL]);
-      cairo_paint (cr);
-      cairo_destroy (cr);
-
-      gdk_drawable_get_size (priv->drag_window,
-			     &area.width, &area.height);
-      gtk_notebook_draw_tab (notebook,
-			     priv->cur_page,
-			     &area);
-      gtk_container_propagate_expose (GTK_CONTAINER (notebook),
-				      priv->cur_page->tab_label, event);
-    }
-  else if (gtk_widget_is_drawable (widget))
+  if (gtk_widget_is_drawable (widget))
     {
       gtk_notebook_paint (widget, &event->area);
       if (priv->show_tabs)
@@ -2309,6 +2284,32 @@ gtk_notebook_expose (GtkWidget      *widget,
       }
     }
 
+  if (event->window == priv->drag_window)
+    {
+      GdkRectangle area = { 0, };
+      cairo_t *cr;
+
+      /* FIXME: This is a workaround to make tabs reordering work better
+       * with engines with rounded tabs. If the drag window background
+       * isn't set, the rounded corners would be black.
+       *
+       * Ideally, these corners should be made transparent, Either by using
+       * ARGB visuals or shape windows.
+       */
+      cr = gdk_cairo_create (priv->drag_window);
+      gdk_cairo_set_source_color (cr, &gtk_widget_get_style (widget)->bg [GTK_STATE_NORMAL]);
+      cairo_paint (cr);
+      cairo_destroy (cr);
+
+      gdk_drawable_get_size (priv->drag_window,
+			     &area.width, &area.height);
+      gtk_notebook_draw_tab (notebook,
+			     priv->cur_page,
+			     &area);
+      gtk_container_propagate_expose (GTK_CONTAINER (notebook),
+				      priv->cur_page->tab_label, event);
+    }
+  
   return FALSE;
 }
 
