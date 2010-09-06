@@ -839,9 +839,10 @@ gtk_file_chooser_default_init (GtkFileChooserInterface *iface)
    * Since: 2.18
    */
   g_object_interface_install_property (g_iface,
-				       g_param_spec_pointer ("root-uris",
+				       g_param_spec_boxed ("root-uris",
 							   P_("Root URIs"),
 							   P_("The URIs, if any, to use as the root for all access in the file chooser."),
+							   G_TYPE_STRV,
 							   GTK_PARAM_READWRITE));
 }
 
@@ -963,7 +964,7 @@ gtk_file_chooser_get_local_only (GtkFileChooser *chooser)
 /**
  * gtk_file_chooser_set_root_uris:
  * @chooser: a #GtkFileChooser
- * @root_uri: The root URI, or %NULL to allow access to everything.
+ * @root_uris: A %NULL-terminated array of strings with the root URIs, or %NULL to allow access to everything.
  *
  * Sets the URIs that will be the roots of the file chooser. The file
  * chooser will not display or allow access to files outside of these URIs.
@@ -985,7 +986,7 @@ gtk_file_chooser_get_local_only (GtkFileChooser *chooser)
  **/
 void
 gtk_file_chooser_set_root_uris (GtkFileChooser *chooser,
-			        GSList         *root_uris)
+			        const gchar   **root_uris)
 {
   g_return_if_fail (GTK_IS_FILE_CHOOSER (chooser));
 
@@ -1012,14 +1013,16 @@ gtk_file_chooser_set_root_uris (GtkFileChooser *chooser,
  *
  * See gtk_file_chooser_set_root_uris()
  *
- * Return value: The root URIs, or %NULL.
+ * Return value: A %NULL-terminated array of strings with the URIs of the roots,
+ * or simply %NULL if there are no roots set for the @chooser.  You should free
+ * this array with g_strfreev().
  *
  * Since: 2.18
  **/
-GSList *
+gchar **
 gtk_file_chooser_get_root_uris (GtkFileChooser *chooser)
 {
-  GSList *root_uris;
+  gchar **root_uris;
 
   g_return_val_if_fail (GTK_IS_FILE_CHOOSER (chooser), NULL);
 
@@ -2860,16 +2863,16 @@ uri_has_prefix (const char *uri, const char *prefix)
 }
 
 gboolean
-_gtk_file_chooser_uri_has_prefix (const char *uri, GSList *prefixes)
+_gtk_file_chooser_uri_is_in_roots_list (const char *uri, GSList *roots)
 {
   GSList *l;
 
   g_return_val_if_fail (uri != NULL, FALSE);
 
-  if (prefixes == NULL)
-    return TRUE; /* No prefix means all URIs are good */
+  if (roots == NULL)
+    return TRUE; /* No roots means all URIs are good */
 
-  for (l = prefixes; l != NULL; l = l->next)
+  for (l = roots; l; l = l->next)
     {
       const char *prefix = l->data;
 
@@ -2880,18 +2883,36 @@ _gtk_file_chooser_uri_has_prefix (const char *uri, GSList *prefixes)
   return FALSE;
 }
 
+static gboolean
+uri_is_in_roots_strv (const char *uri, gchar **roots)
+{
+  gchar **r;
+
+  if (!roots)
+    return TRUE; /* No roots means all URIs are good */
+
+  for (r = roots; *r; r++)
+    if (uri_has_prefix (uri, *r))
+      return TRUE;
+
+  return FALSE;
+}
+
 gboolean
 _gtk_file_chooser_is_uri_in_roots (GtkFileChooser *chooser,
 				   const char     *uri)
 {
-  GSList *root_uris;
+  gchar **root_uris;
+  gboolean is_in_roots;
 
   g_return_val_if_fail (GTK_IS_FILE_CHOOSER (chooser), FALSE);
   g_return_val_if_fail (uri != NULL, FALSE);
 
   root_uris = gtk_file_chooser_get_root_uris (chooser);
+  is_in_roots = uri_is_in_roots_strv (uri, root_uris);
+  g_strfreev (root_uris);
 
-  return _gtk_file_chooser_uri_has_prefix (uri, root_uris);
+  return is_in_roots;
 }
 
 gboolean
@@ -2914,12 +2935,16 @@ _gtk_file_chooser_is_file_in_roots (GtkFileChooser *chooser,
 GSList *
 _gtk_file_chooser_get_visible_roots (GtkFileChooser *chooser)
 {
-  GSList *l, *results = NULL;
+  GSList *results = NULL;
   GtkFileSystem *file_system = _gtk_file_chooser_get_file_system (chooser);
+  gchar **root_uris;
+  gchar **r;
 
-  for (l = gtk_file_chooser_get_root_uris (chooser); l != NULL; l = l->next)
+  root_uris = gtk_file_chooser_get_root_uris (chooser);
+
+  for (r = root_uris; r && *r; r++)
     {
-      GFile *file = g_file_new_for_uri ((char *)l->data);
+      GFile *file = g_file_new_for_uri (*r);
       gboolean skip = FALSE;
       GtkFileSystemVolume *volume;
       GFileInfo *file_info;
@@ -2985,6 +3010,8 @@ _gtk_file_chooser_get_visible_roots (GtkFileChooser *chooser)
 
       results = g_slist_append (results, file);
     }
+
+  g_strfreev (root_uris);
 
   return results;
 }

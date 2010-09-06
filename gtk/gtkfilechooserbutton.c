@@ -918,11 +918,12 @@ gtk_file_chooser_button_set_property (GObject      *object,
 
       if (!_gtk_file_chooser_is_file_in_roots (filechooser, gtk_file_chooser_get_current_folder_file (filechooser)))
         {
-          GSList *root_uris = gtk_file_chooser_get_root_uris (filechooser);
+	  char **root_uris = gtk_file_chooser_get_root_uris (filechooser);
 
-          GFile *file = g_file_new_for_uri (root_uris == NULL
+          GFile *file = g_file_new_for_uri ((root_uris == NULL || *root_uris == NULL)
                                             ? "file:///"
-                                            : (char *)root_uris->data);
+                                            : root_uris[0]);
+	  g_strfreev (root_uris);
 
           gtk_file_chooser_set_current_folder_file (filechooser, file, NULL);
           model_update_current_folder (button, file);
@@ -1869,7 +1870,6 @@ model_add_volumes (GtkFileChooserButton *button,
   GtkListStore *store;
   gint pos;
   gboolean local_only;
-  GSList *root_uris;
   GtkFileSystem *file_system;
   GtkFileChooser *filechooser;
   GSList *l;
@@ -1881,7 +1881,6 @@ model_add_volumes (GtkFileChooserButton *button,
   pos = model_get_type_position (button, ROW_TYPE_VOLUME);
   filechooser = GTK_FILE_CHOOSER (button->priv->dialog);
   local_only = gtk_file_chooser_get_local_only (filechooser);
-  root_uris = gtk_file_chooser_get_root_uris (filechooser);
   file_system = button->priv->fs;
 
   for (l = volumes; l; l = l->next)
@@ -1902,9 +1901,8 @@ model_add_volumes (GtkFileChooserButton *button,
           _gtk_file_system_volume_is_mounted (volume) &&
           !g_file_is_native (base_file))
         skip = TRUE;
-      else if (root_uris != NULL &&
-               (base_file == NULL ||
-                !_gtk_file_chooser_is_file_in_roots (filechooser, base_file)))
+      else if (base_file == NULL ||
+	       !_gtk_file_chooser_is_file_in_roots (filechooser, base_file))
         skip = TRUE;
 
       if (base_file != NULL)
@@ -2184,13 +2182,11 @@ model_remove_rows (GtkFileChooserButton *button,
 
 /* Filter Model */
 static inline gboolean
-test_if_file_is_visible (GtkFileSystem *fs,
+test_if_file_is_visible (GtkFileChooserButton *button,
 			 GFile         *file,
 			 gboolean       local_only,
-			 GSList        *root_uris,
 			 gboolean       is_folder)
 {
-  char *uri;
   gboolean result;
 
   if (!file)
@@ -2199,9 +2195,7 @@ test_if_file_is_visible (GtkFileSystem *fs,
   if (local_only && !g_file_is_native (file))
     return FALSE;
 
-  uri = g_file_get_uri (file);
-  result = _gtk_file_chooser_uri_has_prefix (uri, root_uris);
-  g_free (uri);
+  result = _gtk_file_chooser_is_file_in_roots (GTK_FILE_CHOOSER (button), file);
 
   if (!result)
     return FALSE;
@@ -2222,12 +2216,10 @@ filter_model_visible_func (GtkTreeModel *model,
   gchar type;
   gpointer data;
   gboolean local_only, retval, is_folder;
-  GSList *root_uris;
 
   type = ROW_TYPE_INVALID;
   data = NULL;
   local_only = gtk_file_chooser_get_local_only (GTK_FILE_CHOOSER (priv->dialog));
-  root_uris = gtk_file_chooser_get_root_uris (GTK_FILE_CHOOSER (priv->dialog));
 
   gtk_tree_model_get (model, iter,
 		      TYPE_COLUMN, &type,
@@ -2243,8 +2235,7 @@ filter_model_visible_func (GtkTreeModel *model,
     case ROW_TYPE_SPECIAL:
     case ROW_TYPE_SHORTCUT:
     case ROW_TYPE_BOOKMARK:
-      retval = test_if_file_is_visible (priv->fs, data, local_only, root_uris,
-										is_folder);
+      retval = test_if_file_is_visible (button, data, local_only, is_folder);
       break;
     case ROW_TYPE_VOLUME:
       {

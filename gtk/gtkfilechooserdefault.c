@@ -1962,6 +1962,7 @@ shortcuts_append_roots (GtkFileChooserDefault *impl)
 
       shortcuts_insert_file (impl, start_row + n, SHORTCUT_TYPE_FILE,
                              NULL, file, NULL, FALSE, SHORTCUTS_ROOTS);
+      g_object_unref (file);
       n++;
     }
 
@@ -5302,22 +5303,34 @@ set_extra_widget (GtkFileChooserDefault *impl,
     gtk_widget_hide (impl->extra_align);
 }
 
+static GSList *
+strv_to_slist (const gchar **strv)
+{
+  const gchar **s;
+  GSList *list;
+
+  list = NULL;
+  for (s = strv; s && *s; s++)
+    list = g_slist_prepend (list, g_strdup (*s));
+
+  list = g_slist_reverse (list);
+
+  return list;
+}
+
 static void
 set_root_uris (GtkFileChooserDefault *impl,
-               GSList                *root_uris)
+               const gchar          **root_uris)
 {
   GtkTreeIter iter;
   GFile *list_selected = NULL;
   ShortcutType shortcut_type = -1;
   gboolean local_only;
 
-  if (root_uris == impl->root_uris)
-    return;
-
   g_slist_foreach (impl->root_uris, (GFunc)g_free, NULL);
   g_slist_free (impl->root_uris);
 
-  impl->root_uris = root_uris;
+  impl->root_uris = strv_to_slist (root_uris);
 
   local_only = gtk_file_chooser_get_local_only (GTK_FILE_CHOOSER (impl));
 
@@ -5618,11 +5631,11 @@ gtk_file_chooser_default_set_property (GObject      *object,
       break;
 
     case GTK_FILE_CHOOSER_PROP_LOCAL_ONLY:
-      set_root_uris (impl,
-                     g_value_get_boolean (value)
-                     ? g_slist_append (NULL, g_strdup ("file://"))
-                     : NULL);
-      break;
+      {
+	const char *local_only_uris[] = { "file:///", NULL };
+	set_root_uris (impl, g_value_get_boolean (value) ? local_only_uris : NULL);
+	break;
+      }
 
     case GTK_FILE_CHOOSER_PROP_PREVIEW_WIDGET:
       set_preview_widget (impl, g_value_get_object (value));
@@ -5688,13 +5701,43 @@ gtk_file_chooser_default_set_property (GObject      *object,
       break;
 
     case GTK_FILE_CHOOSER_PROP_ROOT_URIS:
-      set_root_uris (impl, (GSList *)g_value_get_pointer (value));
+      set_root_uris (impl, (const gchar **) g_value_get_boxed (value));
       break;
 
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
     }
+}
+
+static gchar **
+slist_to_strv (GSList *list)
+{
+  int n;
+  gchar **strv;
+  int i;
+  GSList *l;
+
+  n = g_slist_length (list);
+
+  if (n == 0)
+    return NULL;
+
+  strv = g_new (char *, n + 1);
+
+  i = 0;
+  for (l = list; l; l = l->next)
+    {
+      gchar *s;
+
+      s = l->data;
+      strv[i] = g_strdup (s);
+      i++;
+    }
+
+  strv[i] = NULL;
+
+  return strv;
 }
 
 static void
@@ -5770,8 +5813,13 @@ gtk_file_chooser_default_get_property (GObject    *object,
       break;
 
     case GTK_FILE_CHOOSER_PROP_ROOT_URIS:
-      g_value_set_pointer (value, impl->root_uris);
-      break;
+      {
+	char **strv;
+
+	strv = slist_to_strv (impl->root_uris);
+	g_value_set_boxed (value, strv);
+	g_strfreev (strv);
+      }
 
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -9572,7 +9620,7 @@ recent_idle_load (gpointer data)
           GtkRecentInfo *info = walk->data;
           const char *uri = gtk_recent_info_get_uri (info);
 
-          if (_gtk_file_chooser_is_uri_in_roots (GTK_FILE_CHOOSER (impl), uri))
+          if (_gtk_file_chooser_uri_is_in_roots_list (uri, impl->root_uris))
             {
               /* We'll sort this later, so prepend for efficiency. */
               load_data->items = g_list_prepend(load_data->items, info);
