@@ -70,10 +70,8 @@ static void gtk_menu_bar_size_request      (GtkWidget       *widget,
 					    GtkRequisition  *requisition);
 static void gtk_menu_bar_size_allocate     (GtkWidget       *widget,
 					    GtkAllocation   *allocation);
-static void gtk_menu_bar_paint             (GtkWidget       *widget,
-					    GdkRectangle    *area);
-static gint gtk_menu_bar_expose            (GtkWidget       *widget,
-					    GdkEventExpose  *event);
+static gint gtk_menu_bar_draw              (GtkWidget       *widget,
+                                            cairo_t         *cr);
 static void gtk_menu_bar_hierarchy_changed (GtkWidget       *widget,
 					    GtkWidget       *old_toplevel);
 static gint gtk_menu_bar_get_popup_delay   (GtkMenuShell    *menu_shell);
@@ -102,7 +100,7 @@ gtk_menu_bar_class_init (GtkMenuBarClass *class)
 
   widget_class->size_request = gtk_menu_bar_size_request;
   widget_class->size_allocate = gtk_menu_bar_size_allocate;
-  widget_class->expose_event = gtk_menu_bar_expose;
+  widget_class->draw = gtk_menu_bar_draw;
   widget_class->hierarchy_changed = gtk_menu_bar_hierarchy_changed;
   
   menu_shell_class->submenu_placement = GTK_TOP_BOTTOM;
@@ -517,44 +515,24 @@ gtk_menu_bar_size_allocate (GtkWidget     *widget,
     }
 }
 
-static void
-gtk_menu_bar_paint (GtkWidget    *widget,
-                    GdkRectangle *area)
-{
-  g_return_if_fail (GTK_IS_MENU_BAR (widget));
-
-  if (gtk_widget_is_drawable (widget))
-    {
-      GtkAllocation allocation;
-      guint border;
-
-      border = gtk_container_get_border_width (GTK_CONTAINER (widget));
-      gtk_widget_get_allocation (widget, &allocation);
-
-      gtk_paint_box (gtk_widget_get_style (widget),
-                     gtk_widget_get_window (widget),
-                     gtk_widget_get_state (widget),
-                     get_shadow_type (GTK_MENU_BAR (widget)),
-		     area, widget, "menubar",
-		     border, border,
-                     allocation.width - border * 2,
-                     allocation.height - border * 2);
-    }
-}
-
 static gint
-gtk_menu_bar_expose (GtkWidget      *widget,
-		     GdkEventExpose *event)
+gtk_menu_bar_draw (GtkWidget *widget,
+		   cairo_t   *cr)
 {
-  g_return_val_if_fail (GTK_IS_MENU_BAR (widget), FALSE);
-  g_return_val_if_fail (event != NULL, FALSE);
+  int border;
 
-  if (gtk_widget_is_drawable (widget))
-    {
-      gtk_menu_bar_paint (widget, &event->area);
+  border = gtk_container_get_border_width (GTK_CONTAINER (widget));
 
-      GTK_WIDGET_CLASS (gtk_menu_bar_parent_class)->expose_event (widget, event);
-    }
+  gtk_cairo_paint_box (gtk_widget_get_style (widget),
+                 cr,
+                 gtk_widget_get_state (widget),
+                 get_shadow_type (GTK_MENU_BAR (widget)),
+                 widget, "menubar",
+                 border, border,
+                 gtk_widget_get_allocated_width (widget) - border * 2,
+                 gtk_widget_get_allocated_height (widget) - border * 2);
+
+  GTK_WIDGET_CLASS (gtk_menu_bar_parent_class)->draw (widget, cr);
 
   return FALSE;
 }
