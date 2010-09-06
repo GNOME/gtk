@@ -282,6 +282,12 @@ compute_size_for_orientation (GtkSizeRequest    *request,
 									&min_size, &nat_size);
         }
 
+      if (min_size > nat_size)
+        {
+          g_warning ("%s %p reported min size %d and natural size %d; natural size must be >= min size",
+                     G_OBJECT_TYPE_NAME (request), request, min_size, nat_size);
+        }
+
       /* Support for dangling "size-request" signals and forward derived
        * classes that will not default to a ->get_width() that
        * returns the values in the ->requisition cache.
