@@ -302,9 +302,10 @@ static gint gtk_text_view_focus_out_event      (GtkWidget        *widget,
                                                 GdkEventFocus    *event);
 static gint gtk_text_view_motion_event         (GtkWidget        *widget,
                                                 GdkEventMotion   *event);
-static gint gtk_text_view_expose_event         (GtkWidget        *widget,
-                                                GdkEventExpose   *expose);
-static void gtk_text_view_draw_focus           (GtkWidget        *widget);
+static gint gtk_text_view_draw                 (GtkWidget        *widget,
+                                                cairo_t          *cr);
+static void gtk_text_view_draw_focus           (GtkWidget        *widget,
+                                                cairo_t          *cr);
 static gboolean gtk_text_view_focus            (GtkWidget        *widget,
                                                 GtkDirectionType  direction);
 static void gtk_text_view_move_focus           (GtkWidget        *widget,
@@ -592,7 +593,7 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
   widget_class->focus_in_event = gtk_text_view_focus_in_event;
   widget_class->focus_out_event = gtk_text_view_focus_out_event;
   widget_class->motion_notify_event = gtk_text_view_motion_event;
-  widget_class->expose_event = gtk_text_view_expose_event;
+  widget_class->draw = gtk_text_view_draw;
   widget_class->focus = gtk_text_view_focus;
 
   /* need to override the base class function via override_class_handler,
@@ -4781,14 +4782,12 @@ gtk_text_view_motion_event (GtkWidget *widget, GdkEventMotion *event)
 
 static void
 gtk_text_view_paint (GtkWidget      *widget,
-                     GdkRectangle   *area,
-                     GdkEventExpose *event)
+                     cairo_t        *cr)
 {
   GtkTextView *text_view;
   GtkTextViewPrivate *priv;
   GList *child_exposes;
   GList *tmp_list;
-  cairo_t *cr;
   
   text_view = GTK_TEXT_VIEW (widget);
   priv = text_view->priv;
@@ -4818,11 +4817,7 @@ gtk_text_view_paint (GtkWidget      *widget,
 
   child_exposes = NULL;
 
-  cr = gdk_cairo_create (priv->text_window->bin_window);
-
-  gdk_cairo_region (cr, event->region);
-  cairo_clip (cr);
-
+  cairo_save (cr);
   cairo_translate (cr, -priv->xoffset, -priv->yoffset);
 
   gtk_text_layout_draw (priv->layout,
@@ -4830,16 +4825,16 @@ gtk_text_view_paint (GtkWidget      *widget,
                         cr,
                         &child_exposes);
 
-  cairo_destroy (cr);
+  cairo_restore (cr);
 
   tmp_list = child_exposes;
   while (tmp_list != NULL)
     {
       GtkWidget *child = tmp_list->data;
   
-      gtk_container_propagate_expose (GTK_CONTAINER (text_view),
-                                      child,
-                                      event);
+      gtk_container_propagate_draw (GTK_CONTAINER (text_view),
+                                    child,
+                                    cr);
 
       g_object_unref (child);
       
@@ -4849,20 +4844,29 @@ gtk_text_view_paint (GtkWidget      *widget,
   g_list_free (child_exposes);
 }
 
-static gint
-gtk_text_view_expose_event (GtkWidget *widget, GdkEventExpose *event)
+static gboolean
+gtk_text_view_draw (GtkWidget *widget,
+                    cairo_t   *cr)
 {
   GSList *tmp_list;
+  GdkWindow *window;
   
-  if (event->window == gtk_text_view_get_window (GTK_TEXT_VIEW (widget),
-                                                 GTK_TEXT_WINDOW_TEXT))
-    {
-      DV(g_print (">Exposed ("G_STRLOC")\n"));
-      gtk_text_view_paint (widget, &event->area, event);
-    }
+  if (gtk_cairo_should_draw_window (cr, gtk_widget_get_window (widget)))
+    gtk_text_view_draw_focus (widget, cr);
 
-  if (event->window == gtk_widget_get_window (widget))
-    gtk_text_view_draw_focus (widget);
+  window = gtk_text_view_get_window (GTK_TEXT_VIEW (widget),
+                                     GTK_TEXT_WINDOW_TEXT);
+  if (gtk_cairo_should_draw_window (cr, window))
+    {
+      int x, y;
+
+      DV(g_print (">Exposed ("G_STRLOC")\n"));
+      cairo_save (cr);
+      gdk_window_get_position (window, &x, &y);
+      cairo_translate (cr, x, y);
+      gtk_text_view_paint (widget, cr);
+      cairo_restore (cr);
+    }
 
   /* Propagate exposes to all unanchored children. 
    * Anchored children are handled in gtk_text_view_paint(). 
@@ -4876,9 +4880,9 @@ gtk_text_view_expose_event (GtkWidget *widget, GdkEventExpose *event)
        * child->window
        */
       if (!vc->anchor)
-        gtk_container_propagate_expose (GTK_CONTAINER (widget),
-                                        vc->widget,
-                                        event);
+        gtk_container_propagate_draw (GTK_CONTAINER (widget),
+                                      vc->widget,
+                                      cr);
       
       tmp_list = tmp_list->next;
     }
@@ -4887,10 +4891,9 @@ gtk_text_view_expose_event (GtkWidget *widget, GdkEventExpose *event)
 }
 
 static void
-gtk_text_view_draw_focus (GtkWidget *widget)
+gtk_text_view_draw_focus (GtkWidget *widget,
+                          cairo_t   *cr)
 {
-  GtkAllocation allocation;
-  GdkWindow *window;
   gboolean interior_focus;
 
   /* We clear the focus if we are in interior focus mode. */
@@ -4898,24 +4901,14 @@ gtk_text_view_draw_focus (GtkWidget *widget)
 			"interior-focus", &interior_focus,
 			NULL);
   
-  if (gtk_widget_is_drawable (widget))
-    {
-      window = gtk_widget_get_window (widget);
-
-      if (gtk_widget_has_focus (widget) && !interior_focus)
-        {
-          gtk_widget_get_allocation (widget, &allocation);
-          gtk_paint_focus (gtk_widget_get_style (widget),
-                           window,
-                           gtk_widget_get_state (widget),
-                           NULL, widget, "textview",
-                           0, 0,
-                           allocation.width, allocation.height);
-        }
-      else
-        {
-          gdk_window_clear (window);
-        }
+  if (gtk_widget_has_focus (widget) && !interior_focus)
+    {          
+      gtk_cairo_paint_focus (gtk_widget_get_style (widget), cr,
+                       gtk_widget_get_state (widget),
+                       widget, "textview",
+                       0, 0,
+                       gtk_widget_get_allocated_width (widget),
+                       gtk_widget_get_allocated_height (widget));
     }
 }
 
