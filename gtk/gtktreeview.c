@@ -5079,7 +5079,7 @@ gtk_tree_view_expose (GtkWidget      *widget,
       return retval;
     }
 
-  else if (event->window == tree_view->priv->header_window)
+  if (event->window == tree_view->priv->header_window)
     {
       GList *list;
       
@@ -5096,12 +5096,14 @@ gtk_tree_view_expose (GtkWidget      *widget,
 					    event);
 	}
     }
-  else if (event->window == tree_view->priv->drag_window)
+  
+  if (event->window == tree_view->priv->drag_window)
     {
       gtk_container_propagate_expose (GTK_CONTAINER (tree_view),
 				      tree_view->priv->drag_column->button,
 				      event);
     }
+
   return TRUE;
 }
 
