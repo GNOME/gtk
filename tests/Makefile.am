@@ -90,6 +90,7 @@ noinst_PROGRAMS =  $(TEST_PROGS)	\
 	testactions			\
 	testgrouping			\
 	testtooltips			\
+	testexpand			\
 	testexpander			\
 	testvolumebutton
 
@@ -176,6 +177,7 @@ testgrouping_DEPENDENCIES = $(TEST_DEPS)
 testtooltips_DEPENDENCIES = $(TEST_DEPS)
 testvolumebutton_DEPENDENCIES = $(TEST_DEPS)
 testwindows_DEPENDENCIES = $(TEST_DEPS)
+testexpand_DEPENDENCIES = $(TEST_DEPS)
 testexpander_DEPENDENCIES = $(TEST_DEPS)
 
 flicker_LDADD = $(LDADDS)
@@ -247,6 +249,7 @@ testgrouping_LDADD = $(LDADDS)
 testtooltips_LDADD = $(LDADDS)
 testvolumebutton_LDADD = $(LDADDS)
 testwindows_LDADD = $(LDADDS)
+testexpand_LDADD = $(LDADDS)
 testexpander_LDADD = $(LDADDS)
 
 testentrycompletion_SOURCES = 	\
@@ -358,6 +361,8 @@ testoffscreenwindow_SOURCES =	\
 
 testwindows_SOURCES = 	\
 	testwindows.c
+
+testexpand_SOURCES = testexpand.c
 
 testexpander_SOURCES = testexpander.c
 
