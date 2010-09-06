@@ -19,6 +19,7 @@
 
 
 #include "config.h"
+#include <math.h>
 #include <string.h>
 #include <gdk/gdkkeysyms.h>
 
@@ -169,8 +170,8 @@ static void     gtk_tree_view_size_request         (GtkWidget        *widget,
 						    GtkRequisition   *requisition);
 static void     gtk_tree_view_size_allocate        (GtkWidget        *widget,
 						    GtkAllocation    *allocation);
-static gboolean gtk_tree_view_expose               (GtkWidget        *widget,
-						    GdkEventExpose   *event);
+static gboolean gtk_tree_view_draw                 (GtkWidget        *widget,
+                                                    cairo_t          *cr);
 static gboolean gtk_tree_view_key_press            (GtkWidget        *widget,
 						    GdkEventKey      *event);
 static gboolean gtk_tree_view_key_release          (GtkWidget        *widget,
@@ -526,7 +527,7 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
   widget_class->grab_broken_event = gtk_tree_view_grab_broken;
   /*widget_class->configure_event = gtk_tree_view_configure;*/
   widget_class->motion_notify_event = gtk_tree_view_motion;
-  widget_class->expose_event = gtk_tree_view_expose;
+  widget_class->draw = gtk_tree_view_draw;
   widget_class->key_press_event = gtk_tree_view_key_press;
   widget_class->key_release_event = gtk_tree_view_key_release;
   widget_class->enter_notify_event = gtk_tree_view_enter_notify;
@@ -4327,8 +4328,8 @@ gtk_tree_view_draw_grid_lines (GtkTreeView    *tree_view,
  * FIXME: It's not...
  */
 static gboolean
-gtk_tree_view_bin_expose (GtkWidget      *widget,
-			  GdkEventExpose *event)
+gtk_tree_view_bin_draw (GtkWidget      *widget,
+			cairo_t        *cr)
 {
   GtkTreeView *tree_view = GTK_TREE_VIEW (widget);
   GtkTreePath *path;
@@ -4347,6 +4348,7 @@ gtk_tree_view_bin_expose (GtkWidget      *widget,
   gint depth;
   GdkRectangle background_area;
   GdkRectangle cell_area;
+  GdkRectangle clip;
   guint flags;
   gint highlight_x;
   gint expander_cell_width;
@@ -4366,7 +4368,6 @@ gtk_tree_view_bin_expose (GtkWidget      *widget,
   gint grid_line_width;
   gboolean got_pointer = FALSE;
   gboolean draw_vgrid_lines, draw_hgrid_lines;
-  cairo_t *cr;
 
   rtl = (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL);
 
@@ -4377,14 +4378,9 @@ gtk_tree_view_bin_expose (GtkWidget      *widget,
 			"focus-line-width", &focus_line_width,
 			NULL);
 
-  cr = gdk_cairo_create (event->window);
-  gdk_cairo_region (cr, event->region);
-  cairo_clip (cr);
-
   if (tree_view->priv->tree == NULL)
     {
       draw_empty_focus (tree_view, cr);
-      cairo_destroy (cr);
       return TRUE;
     }
 
@@ -4392,13 +4388,18 @@ gtk_tree_view_bin_expose (GtkWidget      *widget,
 
   style = gtk_widget_get_style (widget);
 
-  new_y = TREE_WINDOW_Y_TO_RBTREE_Y (tree_view, event->area.y);
+  gdk_drawable_get_size (tree_view->priv->bin_window,
+                         &bin_window_width, &bin_window_height);
+  cairo_rectangle (cr, 0, 0, bin_window_width, bin_window_height);
+  cairo_clip (cr);
+  if (!gdk_cairo_get_clip_rectangle (cr, &clip))
+    return TRUE;
+
+  new_y = TREE_WINDOW_Y_TO_RBTREE_Y (tree_view, clip.y);
 
   if (new_y < 0)
     new_y = 0;
   y_offset = -_gtk_rbtree_find_offset (tree_view->priv->tree, new_y, &tree, &node);
-  gdk_drawable_get_size (tree_view->priv->bin_window,
-                         &bin_window_width, &bin_window_height);
 
   if (tree_view->priv->height < bin_window_height)
     {
@@ -4414,10 +4415,7 @@ gtk_tree_view_bin_expose (GtkWidget      *widget,
     }
 
   if (node == NULL)
-    {
-      cairo_destroy (cr);
-      return TRUE;
-    }
+    return TRUE;
 
   /* find the path for the node */
   path = _gtk_tree_view_find_path ((GtkTreeView *)widget,
@@ -4496,7 +4494,7 @@ gtk_tree_view_bin_expose (GtkWidget      *widget,
       highlight_x = 0; /* should match x coord of first cell */
       expander_cell_width = 0;
 
-      background_area.y = y_offset + event->area.y;
+      background_area.y = y_offset + clip.y;
       background_area.height = max_height;
 
       flags = 0;
@@ -4539,8 +4537,8 @@ gtk_tree_view_bin_expose (GtkWidget      *widget,
 	  if (!column->visible)
             continue;
 
-	  if (cell_offset > event->area.x + event->area.width ||
-	      cell_offset + column->width < event->area.x)
+	  if (cell_offset > clip.x + clip.width ||
+	      cell_offset + column->width < clip.x)
 	    {
 	      cell_offset += column->width;
 	      continue;
@@ -4589,7 +4587,7 @@ gtk_tree_view_bin_expose (GtkWidget      *widget,
 	      cell_area.height -= grid_line_width;
 	    }
 
-	  if (cairo_region_contains_rectangle (event->region, &background_area) == CAIRO_REGION_OVERLAP_OUT)
+	  if (!gdk_rectangle_intersect (&clip, &background_area, NULL))
 	    {
 	      cell_offset += column->width;
 	      continue;
@@ -4758,7 +4756,7 @@ gtk_tree_view_bin_expose (GtkWidget      *widget,
                                          background_area.x + background_area.width,
 			                 background_area.y);
 
-	      if (y_offset + max_height >= event->area.height)
+	      if (y_offset + max_height >= clip.height)
                 gtk_tree_view_draw_line (tree_view, cr,
                                          GTK_TREE_VIEW_GRID_LINE,
                                          background_area.x, background_area.y + max_height,
@@ -5007,7 +5005,7 @@ gtk_tree_view_bin_expose (GtkWidget      *widget,
 	  while (!done);
 	}
     }
-  while (y_offset < event->area.height);
+  while (y_offset < clip.height);
 
 done:
   gtk_tree_view_draw_grid_lines (tree_view, cr, n_visible_columns);
@@ -5021,25 +5019,30 @@ done:
   if (drag_dest_path)
     gtk_tree_path_free (drag_dest_path);
 
-  cairo_destroy (cr);
-
   return FALSE;
 }
 
 static gboolean
-gtk_tree_view_expose (GtkWidget      *widget,
-		      GdkEventExpose *event)
+gtk_tree_view_draw (GtkWidget *widget,
+                    cairo_t   *cr)
 {
   GtkTreeView *tree_view = GTK_TREE_VIEW (widget);
 
-  if (event->window == tree_view->priv->bin_window)
+  if (gtk_cairo_should_draw_window (cr, tree_view->priv->bin_window))
     {
-      gboolean retval;
       GList *tmp_list;
+      int x, y;
 
-      retval = gtk_tree_view_bin_expose (widget, event);
+      cairo_save (cr);
 
-      /* We can't just chain up to Container::expose as it will try to send the
+      gdk_window_get_position (tree_view->priv->bin_window, &x, &y);
+      cairo_translate (cr, x, y);
+
+      gtk_tree_view_bin_draw (widget, cr);
+
+      cairo_restore (cr);
+
+      /* We can't just chain up to Container::draw as it will try to send the
        * event to the headers, so we handle propagating it to our children
        * (eg. widgets being edited) ourselves.
        */
@@ -5049,13 +5052,11 @@ gtk_tree_view_expose (GtkWidget      *widget,
 	  GtkTreeViewChild *child = tmp_list->data;
 	  tmp_list = tmp_list->next;
 
-	  gtk_container_propagate_expose (GTK_CONTAINER (tree_view), child->widget, event);
+	  gtk_container_propagate_draw (GTK_CONTAINER (tree_view), child->widget, cr);
 	}
-
-      return retval;
     }
 
-  if (event->window == tree_view->priv->header_window)
+  if (gtk_cairo_should_draw_window (cr, tree_view->priv->header_window))
     {
       GList *list;
       
@@ -5067,17 +5068,18 @@ gtk_tree_view_expose (GtkWidget      *widget,
 	    continue;
 
 	  if (column->visible)
-	    gtk_container_propagate_expose (GTK_CONTAINER (tree_view),
-					    column->button,
-					    event);
+	    gtk_container_propagate_draw (GTK_CONTAINER (tree_view),
+					  column->button,
+					  cr);
 	}
     }
   
-  if (event->window == tree_view->priv->drag_window)
+  if (tree_view->priv->drag_window &&
+      gtk_cairo_should_draw_window (cr, tree_view->priv->drag_window))
     {
-      gtk_container_propagate_expose (GTK_CONTAINER (tree_view),
-				      tree_view->priv->drag_column->button,
-				      event);
+      gtk_container_propagate_draw (GTK_CONTAINER (tree_view),
+                                    tree_view->priv->drag_column->button,
+                                    cr);
     }
 
   return TRUE;
