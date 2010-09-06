@@ -305,8 +305,7 @@ static void                 gtk_icon_view_paint_item                     (GtkIco
 									  gint                    y,
 									  gboolean                draw_focus);
 static void                 gtk_icon_view_paint_rubberband               (GtkIconView            *icon_view,
-								          cairo_t *cr,
-									  GdkRectangle           *area);
+								          cairo_t                *cr);
 static void                 gtk_icon_view_queue_draw_path                (GtkIconView *icon_view,
 									  GtkTreePath *path);
 static void                 gtk_icon_view_queue_draw_item                (GtkIconView            *icon_view,
@@ -1677,18 +1676,7 @@ gtk_icon_view_expose (GtkWidget *widget,
     }
   
   if (icon_view->priv->doing_rubberband)
-    {
-      cairo_rectangle_int_t rectangle;
-      gint n_rectangles;
-      
-      n_rectangles = cairo_region_num_rectangles (expose->region);
-      
-      while (n_rectangles--)
-        {
-          cairo_region_get_rectangle (expose->region, n_rectangles, &rectangle);
-	  gtk_icon_view_paint_rubberband (icon_view, cr, &rectangle);
-        }
-    }
+    gtk_icon_view_paint_rubberband (icon_view, cr);
 
   cairo_destroy (cr);
 
@@ -3312,21 +3300,18 @@ gtk_icon_view_paint_item (GtkIconView     *icon_view,
 
 static void
 gtk_icon_view_paint_rubberband (GtkIconView     *icon_view,
-				cairo_t         *cr,
-				GdkRectangle    *area)
+				cairo_t         *cr)
 {
   GdkRectangle rect;
-  GdkRectangle rubber_rect;
   GdkColor *fill_color_gdk;
   guchar fill_color_alpha;
 
-  rubber_rect.x = MIN (icon_view->priv->rubberband_x1, icon_view->priv->rubberband_x2);
-  rubber_rect.y = MIN (icon_view->priv->rubberband_y1, icon_view->priv->rubberband_y2);
-  rubber_rect.width = ABS (icon_view->priv->rubberband_x1 - icon_view->priv->rubberband_x2) + 1;
-  rubber_rect.height = ABS (icon_view->priv->rubberband_y1 - icon_view->priv->rubberband_y2) + 1;
+  cairo_save (cr);
 
-  if (!gdk_rectangle_intersect (&rubber_rect, area, &rect))
-    return;
+  rect.x = MIN (icon_view->priv->rubberband_x1, icon_view->priv->rubberband_x2);
+  rect.y = MIN (icon_view->priv->rubberband_y1, icon_view->priv->rubberband_y2);
+  rect.width = ABS (icon_view->priv->rubberband_x1 - icon_view->priv->rubberband_x2) + 1;
+  rect.height = ABS (icon_view->priv->rubberband_y1 - icon_view->priv->rubberband_y2) + 1;
 
   gtk_widget_style_get (GTK_WIDGET (icon_view),
                         "selection-box-color", &fill_color_gdk,
@@ -3336,29 +3321,21 @@ gtk_icon_view_paint_rubberband (GtkIconView     *icon_view,
   if (!fill_color_gdk)
     fill_color_gdk = gdk_color_copy (&gtk_widget_get_style (GTK_WIDGET (icon_view))->base[GTK_STATE_SELECTED]);
 
-  cairo_set_source_rgba (cr,
-			 fill_color_gdk->red / 65535.,
-			 fill_color_gdk->green / 65535.,
-			 fill_color_gdk->blue / 65535.,
-			 fill_color_alpha / 255.);
+  gdk_cairo_set_source_color (cr, fill_color_gdk);
 
-  cairo_save (cr);
   gdk_cairo_rectangle (cr, &rect);
   cairo_clip (cr);
-  cairo_paint (cr);
 
-  /* Draw the border without alpha */
-  cairo_set_source_rgb (cr,
-			fill_color_gdk->red / 65535.,
-			fill_color_gdk->green / 65535.,
-			fill_color_gdk->blue / 65535.);
+  cairo_paint_with_alpha (cr, fill_color_alpha / 255.);
+
   cairo_rectangle (cr, 
-		   rubber_rect.x + 0.5, rubber_rect.y + 0.5,
-		   rubber_rect.width - 1, rubber_rect.height - 1);
+		   rect.x + 0.5, rect.y + 0.5,
+		   rect.width - 1, rect.height - 1);
   cairo_stroke (cr);
-  cairo_restore (cr);
 
   gdk_color_free (fill_color_gdk);
+
+  cairo_restore (cr);
 }
 
 static void
