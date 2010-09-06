@@ -103,8 +103,8 @@ static void gtk_layout_size_request       (GtkWidget      *widget,
                                            GtkRequisition *requisition);
 static void gtk_layout_size_allocate      (GtkWidget      *widget,
                                            GtkAllocation  *allocation);
-static gint gtk_layout_expose             (GtkWidget      *widget,
-                                           GdkEventExpose *event);
+static gint gtk_layout_draw               (GtkWidget      *widget,
+                                           cairo_t        *cr);
 static void gtk_layout_add                (GtkContainer   *container,
 					   GtkWidget      *widget);
 static void gtk_layout_remove             (GtkContainer   *container,
@@ -660,7 +660,7 @@ gtk_layout_class_init (GtkLayoutClass *class)
   widget_class->map = gtk_layout_map;
   widget_class->size_request = gtk_layout_size_request;
   widget_class->size_allocate = gtk_layout_size_allocate;
-  widget_class->expose_event = gtk_layout_expose;
+  widget_class->draw = gtk_layout_draw;
   widget_class->style_set = gtk_layout_style_set;
 
   container_class->add = gtk_layout_add;
@@ -1042,17 +1042,15 @@ gtk_layout_size_allocate (GtkWidget     *widget,
   gtk_layout_set_adjustment_upper (priv->vadjustment, MAX (allocation->height, priv->height), TRUE);
 }
 
-static gint 
-gtk_layout_expose (GtkWidget      *widget,
-                   GdkEventExpose *event)
+static gboolean
+gtk_layout_draw (GtkWidget *widget,
+                 cairo_t   *cr)
 {
   GtkLayout *layout = GTK_LAYOUT (widget);
   GtkLayoutPrivate *priv = layout->priv;
 
-  if (event->window != priv->bin_window)
-    return FALSE;
-
-  GTK_WIDGET_CLASS (gtk_layout_parent_class)->expose_event (widget, event);
+  if (gtk_cairo_should_draw_window (cr, priv->bin_window))
+    GTK_WIDGET_CLASS (gtk_layout_parent_class)->draw (widget, cr);
 
   return FALSE;
 }
