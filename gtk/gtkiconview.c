@@ -261,8 +261,8 @@ static void             gtk_icon_view_size_request              (GtkWidget      
 								 GtkRequisition     *requisition);
 static void             gtk_icon_view_size_allocate             (GtkWidget          *widget,
 								 GtkAllocation      *allocation);
-static gboolean         gtk_icon_view_expose                    (GtkWidget          *widget,
-								 GdkEventExpose     *expose);
+static gboolean         gtk_icon_view_draw                      (GtkWidget          *widget,
+                                                                 cairo_t            *cr);
 static gboolean         gtk_icon_view_motion                    (GtkWidget          *widget,
 								 GdkEventMotion     *event);
 static gboolean         gtk_icon_view_button_press              (GtkWidget          *widget,
@@ -514,7 +514,7 @@ gtk_icon_view_class_init (GtkIconViewClass *klass)
   widget_class->get_accessible = gtk_icon_view_get_accessible;
   widget_class->size_request = gtk_icon_view_size_request;
   widget_class->size_allocate = gtk_icon_view_size_allocate;
-  widget_class->expose_event = gtk_icon_view_expose;
+  widget_class->draw = gtk_icon_view_draw;
   widget_class->motion_notify_event = gtk_icon_view_motion;
   widget_class->button_press_event = gtk_icon_view_button_press;
   widget_class->button_release_event = gtk_icon_view_button_release;
@@ -1554,28 +1554,32 @@ gtk_icon_view_size_allocate (GtkWidget      *widget,
 }
 
 static gboolean
-gtk_icon_view_expose (GtkWidget *widget,
-		      GdkEventExpose *expose)
+gtk_icon_view_draw (GtkWidget *widget,
+                    cairo_t   *cr)
 {
   GtkIconView *icon_view;
   GList *icons;
-  cairo_t *cr;
   GtkTreePath *path;
   gint dest_index;
   GtkIconViewDropPosition dest_pos;
   GtkIconViewItem *dest_item = NULL;
+  int x, y;
 
   icon_view = GTK_ICON_VIEW (widget);
 
-  if (expose->window != icon_view->priv->bin_window)
+  if (!gtk_cairo_should_draw_window (cr, icon_view->priv->bin_window))
     return FALSE;
 
+  cairo_save (cr);
+
+  gdk_window_get_position (icon_view->priv->bin_window, &x, &y);
+  cairo_translate (cr, x, y);
+      
   /* If a layout has been scheduled, do it now so that all
    * cell view items have valid sizes before we proceed. */
   if (icon_view->priv->layout_idle_id != 0)
     gtk_icon_view_layout (icon_view);
 
-  cr = gdk_cairo_create (icon_view->priv->bin_window);
   cairo_set_line_width (cr, 1.);
 
   gtk_icon_view_get_drag_dest_item (icon_view, &path, &dest_pos);
@@ -1672,9 +1676,9 @@ gtk_icon_view_expose (GtkWidget *widget,
   if (icon_view->priv->doing_rubberband)
     gtk_icon_view_paint_rubberband (icon_view, cr);
 
-  cairo_destroy (cr);
+  cairo_restore (cr);
 
-  GTK_WIDGET_CLASS (gtk_icon_view_parent_class)->expose_event (widget, expose);
+  GTK_WIDGET_CLASS (gtk_icon_view_parent_class)->draw (widget, cr);
 
   return TRUE;
 }
