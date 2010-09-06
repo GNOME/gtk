@@ -106,8 +106,6 @@ GSList *       _gtk_file_chooser_list_shortcut_folder_files (GtkFileChooser *cho
 
 GSList *       _gtk_file_chooser_list_shortcut_folder_files (GtkFileChooser *chooser);
 
-gboolean       _gtk_file_chooser_is_uri_in_roots (GtkFileChooser *chooser,
-						  const char     *uri);
 gboolean       _gtk_file_chooser_is_file_in_roots (GtkFileChooser *chooser,
 						   GFile          *file);
 GSList *       _gtk_file_chooser_get_visible_roots (GtkFileChooser *chooser);

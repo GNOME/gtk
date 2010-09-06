@@ -2898,15 +2898,12 @@ uri_is_in_roots_strv (const char *uri, gchar **roots)
   return FALSE;
 }
 
-gboolean
-_gtk_file_chooser_is_uri_in_roots (GtkFileChooser *chooser,
-				   const char     *uri)
+static gboolean
+is_uri_in_roots (GtkFileChooser *chooser,
+		 const char     *uri)
 {
   gchar **root_uris;
   gboolean is_in_roots;
-
-  g_return_val_if_fail (GTK_IS_FILE_CHOOSER (chooser), FALSE);
-  g_return_val_if_fail (uri != NULL, FALSE);
 
   root_uris = gtk_file_chooser_get_root_uris (chooser);
   is_in_roots = uri_is_in_roots_strv (uri, root_uris);
@@ -2926,7 +2923,7 @@ _gtk_file_chooser_is_file_in_roots (GtkFileChooser *chooser,
   g_return_val_if_fail (file != NULL, FALSE);
 
   uri = g_file_get_uri (file);
-  result = _gtk_file_chooser_is_uri_in_roots (chooser, uri);
+  result = is_uri_in_roots (chooser, uri);
   g_free (uri);
 
   return result;
