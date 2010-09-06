@@ -6172,8 +6172,8 @@ gtk_combo_box_get_height (GtkSizeRequest      *widget,
 
   /* Combo box is height-for-width only 
    * (so we always just reserve enough height for the minimum width) */
-  gtk_size_request_get_width (widget, &min_width, NULL);
-  gtk_size_request_get_height_for_width (widget, min_width, minimum_size, natural_size);
+  GTK_SIZE_REQUEST_GET_IFACE (widget)->get_width (widget, &min_width, NULL);
+  GTK_SIZE_REQUEST_GET_IFACE (widget)->get_height_for_width (widget, min_width, minimum_size, natural_size);
 }
 
 static void
@@ -6184,7 +6184,7 @@ gtk_combo_box_get_width_for_height (GtkSizeRequest        *widget,
 {
   /* Combo box is height-for-width only 
    * (so we assume we always reserved enough height for the minimum width) */
-  gtk_size_request_get_width (widget, minimum_size, natural_size);
+  GTK_SIZE_REQUEST_GET_IFACE (widget)->get_width (widget, minimum_size, natural_size);
 }
 
 
