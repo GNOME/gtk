@@ -1527,8 +1527,8 @@ gtk_wrap_box_get_width (GtkSizeRequest      *widget,
       /* Return the width for the minimum height */
       gint min_height;
 
-      gtk_size_request_get_height (widget, &min_height, NULL);
-      gtk_size_request_get_width_for_height (widget, min_height, &min_width, &nat_width);
+      GTK_SIZE_REQUEST_GET_IFACE (widget)->get_height (widget, &min_height, NULL);
+      GTK_SIZE_REQUEST_GET_IFACE (widget)->get_width_for_height (widget, min_height, &min_width, &nat_width);
 
     }
 
@@ -1559,8 +1559,8 @@ gtk_wrap_box_get_height (GtkSizeRequest      *widget,
       /* Return the height for the minimum width */
       gint min_width;
 
-      gtk_size_request_get_width (widget, &min_width, NULL);
-      gtk_size_request_get_height_for_width (widget, min_width, &min_height, &nat_height);
+      GTK_SIZE_REQUEST_GET_IFACE (widget)->get_width (widget, &min_width, NULL);
+      GTK_SIZE_REQUEST_GET_IFACE (widget)->get_height_for_width (widget, min_width, &min_height, &nat_height);
     }
   else /* GTK_ORIENTATION_VERTICAL */
     {
@@ -1637,7 +1637,7 @@ gtk_wrap_box_get_height_for_width (GtkSizeRequest      *widget,
       gint min_width;
 
       /* Make sure its no smaller than the minimum */
-      gtk_size_request_get_width (widget, &min_width, NULL);
+      GTK_SIZE_REQUEST_GET_IFACE (widget)->get_width (widget, &min_width, NULL);
 
       border_width = gtk_container_get_border_width (GTK_CONTAINER (widget));
 
@@ -1771,7 +1771,7 @@ gtk_wrap_box_get_height_for_width (GtkSizeRequest      *widget,
   else /* GTK_ORIENTATION_VERTICAL */
     {
       /* Return the minimum height */
-      gtk_size_request_get_height (widget, &min_height, &nat_height);
+      GTK_SIZE_REQUEST_GET_IFACE (widget)->get_height (widget, &min_height, &nat_height);
     }
 
   if (minimum_height)
@@ -1803,14 +1803,14 @@ gtk_wrap_box_get_width_for_height (GtkSizeRequest      *widget,
   if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
     {
       /* Return the minimum width */
-      gtk_size_request_get_width (widget, &min_width, &nat_width);
+      GTK_SIZE_REQUEST_GET_IFACE (widget)->get_width (widget, &min_width, &nat_width);
     }
   else /* GTK_ORIENTATION_VERTICAL */
     {
       gint min_height;
 
       /* Make sure its no smaller than the minimum */
-      gtk_size_request_get_height (widget, &min_height, NULL);
+      GTK_SIZE_REQUEST_GET_IFACE (widget)->get_height (widget, &min_height, NULL);
 
       border_width = gtk_container_get_border_width (GTK_CONTAINER (widget));
 

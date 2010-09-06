@@ -3150,8 +3150,8 @@ gtk_menu_get_height (GtkSizeRequest      *widget,
   gint min_width;
 
   /* Menus are height-for-width only, just return the height for the minimum width */
-  gtk_size_request_get_width (widget, &min_width, NULL);
-  gtk_size_request_get_height_for_width (widget, min_width, minimum_size, natural_size);
+  GTK_SIZE_REQUEST_GET_IFACE (widget)->get_width (widget, &min_width, NULL);
+  GTK_SIZE_REQUEST_GET_IFACE (widget)->get_height_for_width (widget, min_width, minimum_size, natural_size);
 }
 
 static void
