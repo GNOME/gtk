@@ -3290,8 +3290,10 @@ toolbar_content_expose (ToolbarContent *content,
 {
   GtkWidget *widget;
 
-  if (!content->is_placeholder)
-    widget = GTK_WIDGET (content->item);
+  if (content->is_placeholder)
+    return;
+  
+  widget = GTK_WIDGET (content->item);
 
   if (widget)
     gtk_container_propagate_expose (container, widget, expose);
