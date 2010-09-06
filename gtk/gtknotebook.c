@@ -2282,12 +2282,9 @@ gtk_notebook_expose (GtkWidget      *widget,
 	  GtkNotebookPage *page;
 	  GList *pages;
 
-	  pages = priv->children;
-
-	  while (pages)
-	    {
+	  for (pages = priv->children; pages; pages = pages->next)
+            {
 	      page = GTK_NOTEBOOK_PAGE (pages);
-	      pages = pages->next;
 
 	      if (gtk_widget_get_window (page->tab_label) == event->window &&
 		  gtk_widget_is_drawable (page->tab_label))
