@@ -256,27 +256,27 @@ struct _GtkWidget
    *  GtkObject pointer.
    */
   GtkObject object;
-  
-  /* 16 bits of internally used private flags.
-   * this will be packed into the same 4 byte alignment frame that
-   * state and saved_state go. we therefore don't waste any new
-   * space on this.
+
+  /* internally used private flags. */
+  guint GSEAL (private_flags) : 16;
+
+  /* The state of the widget. There are only
+   *  5 widget states (defined in "gtkenums.h")
+   * so 3 bits.
    */
-  guint16 GSEAL (private_flags);
-  
-  /* The state of the widget. There are actually only
-   *  5 widget states (defined in "gtkenums.h").
-   */
-  guint8 GSEAL (state);
-  
+  guint GSEAL (state) : 3;
+
   /* The saved state of the widget. When a widget's state
    *  is changed to GTK_STATE_INSENSITIVE via
    *  "gtk_widget_set_state" or "gtk_widget_set_sensitive"
    *  the old state is kept around in this field. The state
    *  will be restored once the widget gets sensitive again.
    */
-  guint8 GSEAL (saved_state);
-  
+  guint GSEAL (saved_state) : 3;
+
+  /* unused bits in our 32-bit block */
+  guint GSEAL (reserved) : 10;
+
   /* The widget's name. If the widget does not have a name
    *  (the name is NULL), then its name (as returned by
    *  "gtk_widget_get_name") is its class's name.
