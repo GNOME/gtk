@@ -4752,9 +4752,6 @@ gtk_notebook_paint (GtkWidget    *widget,
   gboolean is_rtl;
   gint tab_pos;
    
-  if (!gtk_widget_is_drawable (widget))
-    return;
-
   notebook = GTK_NOTEBOOK (widget);
   priv = notebook->priv;
   is_rtl = gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL;
