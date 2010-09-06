@@ -159,8 +159,8 @@ static void     gtk_info_bar_get_property (GObject        *object,
                                            GParamSpec     *pspec);
 static void     gtk_info_bar_style_set    (GtkWidget      *widget,
                                            GtkStyle       *prev_style);
-static gboolean gtk_info_bar_expose       (GtkWidget      *widget,
-                                           GdkEventExpose *event);
+static gboolean gtk_info_bar_draw         (GtkWidget      *widget,
+                                           cairo_t        *cr);
 static void     gtk_info_bar_buildable_interface_init     (GtkBuildableIface *iface);
 static GObject *gtk_info_bar_buildable_get_internal_child (GtkBuildable  *buildable,
                                                            GtkBuilder    *builder,
@@ -296,8 +296,8 @@ gtk_info_bar_close (GtkInfoBar *info_bar)
 }
 
 static gboolean
-gtk_info_bar_expose (GtkWidget      *widget,
-                     GdkEventExpose *event)
+gtk_info_bar_draw (GtkWidget      *widget,
+                   cairo_t        *cr)
 {
   GtkInfoBarPrivate *priv = GTK_INFO_BAR (widget)->priv;
   const char* type_detail[] = {
@@ -310,26 +310,23 @@ gtk_info_bar_expose (GtkWidget      *widget,
 
   if (priv->message_type != GTK_MESSAGE_OTHER)
     {
-      GtkAllocation allocation;
       const char *detail;
 
       detail = type_detail[priv->message_type];
 
-      gtk_widget_get_allocation (widget, &allocation);
-
-      gtk_paint_box (gtk_widget_get_style (widget),
-                     gtk_widget_get_window (widget),
+      gtk_cairo_paint_box (gtk_widget_get_style (widget),
+                     cr,
                      GTK_STATE_NORMAL,
                      GTK_SHADOW_OUT,
-                     NULL,
                      widget,
                      detail,
-                     allocation.x, allocation.y,
-                     allocation.width, allocation.height);
+                     0, 0,
+                     gtk_widget_get_allocated_width (widget),
+                     gtk_widget_get_allocated_height (widget));
     }
 
-  if (GTK_WIDGET_CLASS (gtk_info_bar_parent_class)->expose_event)
-    GTK_WIDGET_CLASS (gtk_info_bar_parent_class)->expose_event (widget, event);
+  if (GTK_WIDGET_CLASS (gtk_info_bar_parent_class)->draw)
+    GTK_WIDGET_CLASS (gtk_info_bar_parent_class)->draw (widget, cr);
 
   return FALSE;
 }
@@ -349,7 +346,7 @@ gtk_info_bar_class_init (GtkInfoBarClass *klass)
   object_class->finalize = gtk_info_bar_finalize;
 
   widget_class->style_set = gtk_info_bar_style_set;
-  widget_class->expose_event = gtk_info_bar_expose;
+  widget_class->draw = gtk_info_bar_draw;
 
   klass->close = gtk_info_bar_close;
 
