@@ -106,8 +106,8 @@ static void     gtk_container_children_callback    (GtkWidget         *widget,
 						    gpointer           client_data);
 static void     gtk_container_show_all             (GtkWidget         *widget);
 static void     gtk_container_hide_all             (GtkWidget         *widget);
-static gint     gtk_container_expose               (GtkWidget         *widget,
-						    GdkEventExpose    *event);
+static gint     gtk_container_draw                 (GtkWidget         *widget,
+                                                    cairo_t           *cr);
 static void     gtk_container_map                  (GtkWidget         *widget);
 static void     gtk_container_unmap                (GtkWidget         *widget);
 static void     gtk_container_adjust_size_request  (GtkWidget         *widget,
@@ -239,7 +239,7 @@ gtk_container_class_init (GtkContainerClass *class)
 
   widget_class->show_all = gtk_container_show_all;
   widget_class->hide_all = gtk_container_hide_all;
-  widget_class->expose_event = gtk_container_expose;
+  widget_class->draw = gtk_container_draw;
   widget_class->map = gtk_container_map;
   widget_class->unmap = gtk_container_unmap;
   widget_class->focus = gtk_container_focus;
@@ -2757,41 +2757,34 @@ gtk_container_hide_all (GtkWidget *widget)
 
 
 static void
-gtk_container_expose_child (GtkWidget *child,
-			    gpointer   client_data)
+gtk_container_draw_child (GtkWidget *child,
+			  gpointer   client_data)
 {
   struct {
     GtkWidget *container;
-    GdkEventExpose *event;
+    cairo_t *cr;
   } *data = client_data;
   
-  gtk_container_propagate_expose (GTK_CONTAINER (data->container),
-				  child,
-				  data->event);
+  gtk_container_propagate_draw (GTK_CONTAINER (data->container),
+				child,
+				data->cr);
 }
 
 static gint 
-gtk_container_expose (GtkWidget      *widget,
-		      GdkEventExpose *event)
+gtk_container_draw (GtkWidget *widget,
+                    cairo_t   *cr)
 {
   struct {
     GtkWidget *container;
-    GdkEventExpose *event;
+    cairo_t *cr;
   } data;
 
-  g_return_val_if_fail (GTK_IS_CONTAINER (widget), FALSE);
-  g_return_val_if_fail (event != NULL, FALSE);
-
+  data.container = widget;
+  data.cr = cr;
   
-  if (gtk_widget_is_drawable (widget))
-    {
-      data.container = widget;
-      data.event = event;
-      
-      gtk_container_forall (GTK_CONTAINER (widget),
-			    gtk_container_expose_child,
-			    &data);
-    }   
+  gtk_container_forall (GTK_CONTAINER (widget),
+                        gtk_container_draw_child,
+			&data);
   
   return FALSE;
 }
@@ -2830,6 +2823,33 @@ gtk_container_unmap (GtkWidget *widget)
     gtk_container_forall (GTK_CONTAINER (widget),
 			  (GtkCallback)gtk_widget_unmap,
 			  NULL);
+}
+
+void
+gtk_container_propagate_draw (GtkContainer   *container,
+                              GtkWidget      *child,
+                              cairo_t        *cr)
+{
+  GdkEventExpose *event;
+
+  g_return_if_fail (GTK_IS_CONTAINER (container));
+  g_return_if_fail (GTK_IS_WIDGET (child));
+  g_return_if_fail (cr != NULL);
+
+  g_assert (gtk_widget_get_parent (child) == GTK_WIDGET (container));
+
+  event = _gtk_cairo_get_event (cr);
+  if (event)
+    {
+      gtk_container_propagate_expose (container, child, event);
+    }
+  else
+    {
+      /* XXX: Needs gtk_widget_draw(), but can only happen once
+       * that function exists */
+      g_assert_not_reached ();
+    }
+
 }
 
 /**

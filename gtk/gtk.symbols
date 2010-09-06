@@ -880,6 +880,7 @@ gtk_container_get_focus_hadjustment
 gtk_container_get_focus_vadjustment
 gtk_container_get_resize_mode
 gtk_container_get_type G_GNUC_CONST
+gtk_container_propagate_draw
 gtk_container_propagate_expose
 gtk_container_remove
 gtk_container_resize_children
