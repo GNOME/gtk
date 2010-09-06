@@ -3226,7 +3226,7 @@ shortcuts_compute_drop_position (GtkFileChooserDefault   *impl,
        * "drop into".  So, we cook GTK+'s idea of where things should
        * be dropped into just "before" or "after".
        */
-      if (pos == GTK_TREE_VIEW_DROP_BEFORE || pos == GTK_TREE_VIEW_DROP_INTO_OR_BEFORE)
+      if (*pos == GTK_TREE_VIEW_DROP_BEFORE || *pos == GTK_TREE_VIEW_DROP_INTO_OR_BEFORE)
 	*pos = GTK_TREE_VIEW_DROP_BEFORE;
       else
 	*pos = GTK_TREE_VIEW_DROP_AFTER;
