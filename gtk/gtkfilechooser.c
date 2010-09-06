@@ -2989,12 +2989,15 @@ _gtk_file_chooser_get_visible_roots (GtkFileChooser *chooser)
 
           if (fs_root != NULL)
             {
-              if (_gtk_file_chooser_is_file_in_roots (GTK_FILE_CHOOSER (chooser), fs_root))
+	      char *fs_root_uri = g_file_get_uri (fs_root);
+
+              if (uri_is_in_roots_strv (fs_root_uri, root_uris))
                 {
 		  /* This is going to be listed already. Ignore it for now. */
                   skip = TRUE;
                 }
 
+	      g_free (fs_root_uri);
               g_object_unref (fs_root);
             }
         }
