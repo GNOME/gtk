@@ -70,8 +70,8 @@ static void     gtk_separator_tool_item_size_request      (GtkWidget            
                                                            GtkRequisition            *requisition);
 static void     gtk_separator_tool_item_size_allocate     (GtkWidget                 *widget,
                                                            GtkAllocation             *allocation);
-static gboolean gtk_separator_tool_item_expose            (GtkWidget                 *widget,
-                                                           GdkEventExpose            *event);
+static gboolean gtk_separator_tool_item_draw              (GtkWidget                 *widget,
+                                                           cairo_t                   *cr);
 static void     gtk_separator_tool_item_add               (GtkContainer              *container,
                                                            GtkWidget                 *child);
 static gint     get_space_size                            (GtkToolItem               *tool_item);
@@ -120,7 +120,7 @@ gtk_separator_tool_item_class_init (GtkSeparatorToolItemClass *class)
   object_class->get_property = gtk_separator_tool_item_get_property;
   widget_class->size_request = gtk_separator_tool_item_size_request;
   widget_class->size_allocate = gtk_separator_tool_item_size_allocate;
-  widget_class->expose_event = gtk_separator_tool_item_expose;
+  widget_class->draw = gtk_separator_tool_item_draw;
   widget_class->realize = gtk_separator_tool_item_realize;
   widget_class->unrealize = gtk_separator_tool_item_unrealize;
   widget_class->map = gtk_separator_tool_item_map;
@@ -340,8 +340,8 @@ gtk_separator_tool_item_button_event (GtkWidget      *widget,
 }
 
 static gboolean
-gtk_separator_tool_item_expose (GtkWidget      *widget,
-                                GdkEventExpose *event)
+gtk_separator_tool_item_draw (GtkWidget *widget,
+                              cairo_t   *cr)
 {
   GtkAllocation allocation;
   GtkToolbar *toolbar = NULL;
@@ -356,8 +356,7 @@ gtk_separator_tool_item_expose (GtkWidget      *widget,
         toolbar = GTK_TOOLBAR (parent);
 
       gtk_widget_get_allocation (widget, &allocation);
-      _gtk_toolbar_paint_space_line (widget, toolbar,
-                                     &(event->area), &allocation);
+      _gtk_toolbar_paint_space_line (widget, toolbar, cr);
     }
 
   return FALSE;

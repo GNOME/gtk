@@ -3618,14 +3618,14 @@ _gtk_toolbar_get_default_space_size (void)
 void
 _gtk_toolbar_paint_space_line (GtkWidget           *widget,
 			       GtkToolbar          *toolbar,
-			       const GdkRectangle  *area,
-			       const GtkAllocation *allocation)
+                               cairo_t             *cr)
 {
   GtkToolbarPrivate *priv = toolbar->priv;
   GtkOrientation orientation;
   GtkStateType  state;
   GtkStyle     *style;
   GdkWindow    *window;
+  int width, height;
   const double start_fraction = (SPACE_LINE_START / SPACE_LINE_DIVISION);
   const double end_fraction = (SPACE_LINE_END / SPACE_LINE_DIVISION);
 
@@ -3636,6 +3636,8 @@ _gtk_toolbar_paint_space_line (GtkWidget           *widget,
   style = gtk_widget_get_style (widget);
   window = gtk_widget_get_window (widget);
   state = gtk_widget_get_state (widget);
+  width = gtk_widget_get_allocated_width (widget);
+  height = gtk_widget_get_allocated_height (widget);
 
   if (orientation == GTK_ORIENTATION_HORIZONTAL)
     {
@@ -3648,20 +3650,20 @@ _gtk_toolbar_paint_space_line (GtkWidget           *widget,
                             NULL);
 
       if (wide_separators)
-        gtk_paint_box (style, window,
+        gtk_cairo_paint_box (style, cr,
                        state, GTK_SHADOW_ETCHED_OUT,
-                       area, widget, "vseparator",
-                       allocation->x + (allocation->width - separator_width) / 2,
-                       allocation->y + allocation->height * start_fraction,
+                       widget, "vseparator",
+                       (width - separator_width) / 2,
+                       height * start_fraction,
                        separator_width,
-                       allocation->height * (end_fraction - start_fraction));
+                       height * (end_fraction - start_fraction));
       else
-        gtk_paint_vline (style, window,
-                         state, area, widget,
+        gtk_cairo_paint_vline (style, cr,
+                         state, widget,
                          "toolbar",
-                         allocation->y + allocation->height * start_fraction,
-                         allocation->y + allocation->height * end_fraction,
-                         allocation->x + (allocation->width - style->xthickness) / 2);
+                         height * start_fraction,
+                         height * end_fraction,
+                         (width - style->xthickness) / 2);
     }
   else
     {
@@ -3674,20 +3676,20 @@ _gtk_toolbar_paint_space_line (GtkWidget           *widget,
                             NULL);
 
       if (wide_separators)
-        gtk_paint_box (style, window,
+        gtk_cairo_paint_box (style, cr,
                        state, GTK_SHADOW_ETCHED_OUT,
-                       area, widget, "hseparator",
-                       allocation->x + allocation->width * start_fraction,
-                       allocation->y + (allocation->height - separator_height) / 2,
-                       allocation->width * (end_fraction - start_fraction),
+                       widget, "hseparator",
+                       width * start_fraction,
+                       (height - separator_height) / 2,
+                       width * (end_fraction - start_fraction),
                        separator_height);
       else
-        gtk_paint_hline (style, window,
-                         state, area, widget,
+        gtk_cairo_paint_hline (style, cr,
+                         state, widget,
                          "toolbar",
-                         allocation->x + allocation->width * start_fraction,
-                         allocation->x + allocation->width * end_fraction,
-                         allocation->y + (allocation->height - style->ythickness) / 2);
+                         width * start_fraction,
+                         width * end_fraction,
+                         (height - style->ythickness) / 2);
     }
 }
 
