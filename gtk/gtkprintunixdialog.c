@@ -3866,7 +3866,6 @@ gtk_print_unix_dialog_new (const gchar *title,
   result = g_object_new (GTK_TYPE_PRINT_UNIX_DIALOG,
                          "transient-for", parent,
                          "title", _title,
-                         "has-separator", FALSE,
                          NULL);
 
   return result;
