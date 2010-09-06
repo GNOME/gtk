@@ -4876,9 +4876,7 @@ gtk_notebook_draw_tab (GtkNotebook     *notebook,
 		       GdkRectangle    *area)
 {
   GtkNotebookPrivate *priv;
-  GdkRectangle page_area;
   GtkStateType state_type;
-  GtkPositionType gap_side;
   GdkWindow *window;
   GtkWidget *widget;
   
@@ -4895,13 +4893,6 @@ gtk_notebook_draw_tab (GtkNotebook     *notebook,
   else
     window = gtk_widget_get_window (widget);
 
-  page_area.x = page->allocation.x;
-  page_area.y = page->allocation.y;
-  page_area.width = page->allocation.width;
-  page_area.height = page->allocation.height;
-
-  gap_side = get_tab_gap_pos (notebook);
-
   if (priv->cur_page == page)
     state_type = GTK_STATE_NORMAL;
   else 
@@ -4910,9 +4901,11 @@ gtk_notebook_draw_tab (GtkNotebook     *notebook,
   gtk_paint_extension (gtk_widget_get_style (widget), window,
                        state_type, GTK_SHADOW_OUT,
                        area, widget, "tab",
-                       page_area.x, page_area.y,
-                       page_area.width, page_area.height,
-                       gap_side);
+                       page->allocation.x,
+                       page->allocation.y,
+                       page->allocation.width,
+                       page->allocation.height,
+                       get_tab_gap_pos (notebook));
 
   if (gtk_widget_has_focus (widget) &&
       priv->cur_page == page)
