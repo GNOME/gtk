@@ -112,8 +112,7 @@ gboolean       _gtk_file_chooser_is_file_in_roots (GtkFileChooser *chooser,
 						   GFile          *file);
 GSList *       _gtk_file_chooser_get_visible_roots (GtkFileChooser *chooser);
 
-gboolean       _gtk_file_chooser_uri_has_prefix (const char   *uri,
-                                                 GSList *prefixes);
+gboolean       _gtk_file_chooser_uri_is_in_roots_list (const char *uri, GSList *roots);
 
 /* GtkFileChooserDialog private */
 
