@@ -1495,8 +1495,7 @@ gtk_expander_get_width_for_height (GtkSizeRequest *widget,
 				   gint      *minimum_width,
 				   gint      *natural_width)
 {
-  gtk_size_request_get_width (widget, minimum_width, natural_width);
-  //GTK_SIZE_REQUEST_GET_IFACE (widget)->get_width (widget, minimum_width, natural_width);
+  GTK_SIZE_REQUEST_GET_IFACE (widget)->get_width (widget, minimum_width, natural_width);
 }
 
 
