@@ -4229,7 +4229,7 @@ invalidate_empty_focus (GtkTreeView *tree_view)
  * is empty.
  */
 static void
-draw_empty_focus (GtkTreeView *tree_view, GdkRectangle *clip_area)
+draw_empty_focus (GtkTreeView *tree_view, cairo_t *cr)
 {
   GtkWidget *widget = GTK_WIDGET (tree_view);
   gint w, h;
@@ -4243,10 +4243,9 @@ draw_empty_focus (GtkTreeView *tree_view, GdkRectangle *clip_area)
   h -= 2;
 
   if (w > 0 && h > 0)
-    gtk_paint_focus (gtk_widget_get_style (widget),
-		     tree_view->priv->bin_window,
+    gtk_cairo_paint_focus (gtk_widget_get_style (widget),
+                     cr,
 		     gtk_widget_get_state (widget),
-		     clip_area,
 		     widget,
 		     NULL,
 		     1, 1, w, h);
@@ -4397,21 +4396,18 @@ gtk_tree_view_bin_expose (GtkWidget      *widget,
 			"focus-line-width", &focus_line_width,
 			NULL);
 
-  if (tree_view->priv->tree == NULL)
-    {
-      draw_empty_focus (tree_view, &event->area);
-      return TRUE;
-    }
-
-  /* clip event->area to the visible area */
-  if (event->area.height < 0)
-    return TRUE;
-
-  validate_visible_area (tree_view);
-
   cr = gdk_cairo_create (event->window);
   gdk_cairo_region (cr, event->region);
   cairo_clip (cr);
+
+  if (tree_view->priv->tree == NULL)
+    {
+      draw_empty_focus (tree_view, cr);
+      cairo_destroy (cr);
+      return TRUE;
+    }
+
+  validate_visible_area (tree_view);
 
   style = gtk_widget_get_style (widget);
 
