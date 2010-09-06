@@ -492,6 +492,9 @@ struct _GtkWidgetClass
 				       GtkTooltip *tooltip);
 
   /*< public >*/
+  void         (* compute_expand)     (GtkWidget  *widget,
+                                       gboolean   *hexpand_p,
+                                       gboolean   *vexpand_p);
 
   void         (* adjust_size_request)    (GtkWidget         *widget,
                                            GtkOrientation     orientation,
@@ -751,6 +754,25 @@ GtkClipboard *gtk_widget_get_clipboard   (GtkWidget *widget,
 					  GdkAtom    selection);
 GdkPixmap *   gtk_widget_get_snapshot    (GtkWidget    *widget,
                                           GdkRectangle *clip_rect);
+
+
+/* Expand flags and related support */
+gboolean gtk_widget_get_hexpand          (GtkWidget      *widget);
+void     gtk_widget_set_hexpand          (GtkWidget      *widget,
+                                          gboolean        expand);
+gboolean gtk_widget_get_hexpand_set      (GtkWidget      *widget);
+void     gtk_widget_set_hexpand_set      (GtkWidget      *widget,
+                                          gboolean        set);
+gboolean gtk_widget_get_vexpand          (GtkWidget      *widget);
+void     gtk_widget_set_vexpand          (GtkWidget      *widget,
+                                          gboolean        expand);
+gboolean gtk_widget_get_vexpand_set      (GtkWidget      *widget);
+void     gtk_widget_set_vexpand_set      (GtkWidget      *widget,
+                                          gboolean        set);
+void     gtk_widget_queue_compute_expand (GtkWidget      *widget);
+gboolean gtk_widget_compute_expand       (GtkWidget      *widget,
+                                          GtkOrientation  orientation);
+
 
 /* Multidevice support */
 gboolean         gtk_widget_get_support_multidevice (GtkWidget      *widget);
