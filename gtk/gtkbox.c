@@ -141,6 +141,10 @@ struct _GtkBoxChild
 static void gtk_box_size_allocate         (GtkWidget              *widget,
                                            GtkAllocation          *allocation);
 
+static void gtk_box_compute_expand     (GtkWidget      *widget,
+                                        gboolean       *hexpand,
+                                        gboolean       *vexpand);
+
 static void gtk_box_set_property       (GObject        *object,
                                         guint           prop_id,
                                         const GValue   *value,
@@ -149,7 +153,6 @@ static void gtk_box_get_property       (GObject        *object,
                                         guint           prop_id,
                                         GValue         *value,
                                         GParamSpec     *pspec);
-
 static void gtk_box_add                (GtkContainer   *container,
                                         GtkWidget      *widget);
 static void gtk_box_remove             (GtkContainer   *container,
@@ -207,6 +210,7 @@ gtk_box_class_init (GtkBoxClass *class)
   object_class->get_property = gtk_box_get_property;
 
   widget_class->size_allocate = gtk_box_size_allocate;
+  widget_class->compute_expand = gtk_box_compute_expand;
 
   container_class->add = gtk_box_add;
   container_class->remove = gtk_box_remove;
@@ -391,7 +395,7 @@ count_expand_children (GtkBox *box,
       if (gtk_widget_get_visible (child->widget))
 	{
 	  *visible_children += 1;
-	  if (child->expand)
+	  if (child->expand || gtk_widget_compute_expand (child->widget, private->orientation))
 	    *expand_children += 1;
 	}
     }
@@ -569,7 +573,7 @@ gtk_box_size_allocate (GtkWidget     *widget,
 	    {
 	      child_size = sizes[i].minimum_size + child->padding * 2;
 
-	      if (child->expand)
+	      if (child->expand || gtk_widget_compute_expand (child->widget, private->orientation))
 		{
 		  child_size += extra;
 
@@ -638,6 +642,56 @@ gtk_box_size_allocate (GtkWidget     *widget,
 
 	  i++;
 	}
+    }
+}
+
+static void
+gtk_box_compute_expand (GtkWidget      *widget,
+                        gboolean       *hexpand_p,
+                        gboolean       *vexpand_p)
+{
+  GtkBoxPrivate  *private = GTK_BOX (widget)->priv;
+  GList       *children;
+  GtkBoxChild *child;
+  gboolean our_expand;
+  gboolean opposite_expand;
+  GtkOrientation opposite_orientation;
+
+  if (private->orientation == GTK_ORIENTATION_HORIZONTAL)
+    opposite_orientation = GTK_ORIENTATION_VERTICAL;
+  else
+    opposite_orientation = GTK_ORIENTATION_HORIZONTAL;
+
+  our_expand = FALSE;
+  opposite_expand = FALSE;
+
+  for (children = private->children; children; children = children->next)
+    {
+      child = children->data;
+
+      /* we don't recurse into children anymore as soon as we know
+       * expand=TRUE in an orientation
+       */
+
+      if (child->expand || (!our_expand && gtk_widget_compute_expand (child->widget, private->orientation)))
+        our_expand = TRUE;
+
+      if (!opposite_expand && gtk_widget_compute_expand (child->widget, opposite_orientation))
+        opposite_expand = TRUE;
+
+      if (our_expand && opposite_expand)
+        break;
+    }
+
+  if (private->orientation == GTK_ORIENTATION_HORIZONTAL)
+    {
+      *hexpand_p = our_expand;
+      *vexpand_p = opposite_expand;
+    }
+  else
+    {
+      *hexpand_p = opposite_expand;
+      *vexpand_p = our_expand;
     }
 }
 
@@ -1050,7 +1104,7 @@ gtk_box_compute_size_for_opposing_orientation (GtkBox *box,
 		{
 		  child_size = sizes[i].minimum_size + child->padding * 2;
 
-		  if (child->expand)
+		  if (child->expand || gtk_widget_compute_expand (child->widget, private->orientation))
 		    {
 		      child_size += extra;
 
@@ -1547,8 +1601,20 @@ gtk_box_set_child_packing (GtkBox      *box,
   gtk_widget_freeze_child_notify (child);
   if (list)
     {
-      child_info->expand = expand != FALSE;
-      gtk_widget_child_notify (child, "expand");
+      gboolean expanded;
+
+      expanded = expand != FALSE;
+
+      /* avoid setting expand if unchanged, since queue_compute_expand
+       * can be expensive-ish
+       */
+      if (child_info->expand != expanded)
+        {
+          child_info->expand = expand != FALSE;
+          gtk_widget_queue_compute_expand (GTK_WIDGET (box));
+          gtk_widget_child_notify (child, "expand");
+        }
+
       child_info->fill = fill != FALSE;
       gtk_widget_child_notify (child, "fill");
       child_info->padding = padding;
