@@ -1852,6 +1852,19 @@ shortcuts_append_recent (GtkFileChooserDefault *impl)
   impl->changing_folder = old_changing_folders;
 }
 
+static gboolean
+is_file_in_roots (GtkFileChooserDefault *impl, GFile *file)
+{
+  char *uri;
+  gboolean result;
+
+  uri = g_file_get_uri (file);
+  result = _gtk_file_chooser_uri_is_in_roots_list (uri, impl->root_uris);
+  g_free (uri);
+
+  return result;
+}
+
 /* Appends an item for the user's home directory to the shortcuts model */
 static void
 shortcuts_append_home (GtkFileChooserDefault *impl)
@@ -1882,7 +1895,7 @@ shortcuts_append_home (GtkFileChooserDefault *impl)
 
   home = g_file_new_for_path (home_path);
 
-  if (_gtk_file_chooser_is_file_in_roots (GTK_FILE_CHOOSER (impl), home))
+  if (is_file_in_roots (impl, home))
     {
       shortcuts_insert_file (impl, start_row, SHORTCUT_TYPE_FILE, NULL, home,
                              NULL, FALSE, SHORTCUTS_HOME);
@@ -1931,7 +1944,7 @@ shortcuts_append_desktop (GtkFileChooserDefault *impl)
 
   file = g_file_new_for_path (name);
 
-  if (_gtk_file_chooser_is_file_in_roots (GTK_FILE_CHOOSER (impl), file))
+  if (is_file_in_roots (impl, file))
     {
       shortcuts_insert_file (impl, start_row, SHORTCUT_TYPE_FILE, NULL,
                              file, _("Desktop"), FALSE, SHORTCUTS_DESKTOP);
@@ -2021,7 +2034,7 @@ shortcuts_append_bookmarks (GtkFileChooserDefault *impl,
       if (local_only && !g_file_is_native (file))
         continue;
 
-      if (!_gtk_file_chooser_is_file_in_roots (GTK_FILE_CHOOSER (impl), file))
+      if (!is_file_in_roots (impl, file))
         continue;
 
       if (shortcut_find_position (impl, file) != -1)
@@ -2157,8 +2170,7 @@ shortcuts_add_volumes (GtkFileChooserDefault *impl)
         skip = TRUE;
       else if (impl->root_uris != NULL &&
                (base_file == NULL ||
-                !_gtk_file_chooser_is_file_in_roots (GTK_FILE_CHOOSER (impl),
-						     base_file)))
+                !is_file_in_roots (impl, base_file)))
         skip = TRUE;
 
       if (base_file != NULL)
@@ -2339,8 +2351,7 @@ shortcuts_add_custom_folders (GtkFileChooserDefault *impl)
     {
       GFile *file = (GFile *)l->data;
 
-      if (impl->root_uris != NULL &&
-          _gtk_file_chooser_is_file_in_roots (GTK_FILE_CHOOSER (impl), file))
+      if (is_file_in_roots (impl, file))
         {
           int pos = shortcuts_get_pos_for_shortcut_folder (impl,
                                                            impl->num_shortcuts);
@@ -5543,8 +5554,7 @@ set_root_uris (GtkFileChooserDefault *impl,
               g_object_unref (home_file);
             }
         }
-      else if (impl->root_uris != NULL &&
-               !_gtk_file_chooser_is_file_in_roots (GTK_FILE_CHOOSER (impl), impl->current_folder))
+      else if (!is_file_in_roots (impl, impl->current_folder))
         {
           /*
            * If we are pointing to a folder outside of the root URI,
@@ -7466,8 +7476,7 @@ update_current_folder_get_info_cb (GCancellable *cancellable,
       parent_file = g_file_get_parent (data->file);
 
       /* get parent path and try to change the folder to that */
-      if (parent_file &&
-          _gtk_file_chooser_is_file_in_roots (GTK_FILE_CHOOSER (impl), parent_file))
+      if (parent_file && is_file_in_roots (impl, parent_file))
         {
 	  g_object_unref (data->file);
 	  data->file = parent_file;
@@ -7617,7 +7626,7 @@ gtk_file_chooser_default_update_current_folder (GtkFileChooser    *chooser,
       return FALSE;
     }
 
-  if (!_gtk_file_chooser_is_file_in_roots (GTK_FILE_CHOOSER (impl), file))
+  if (!is_file_in_roots (impl, file))
     {
       g_set_error_literal (error,
                            GTK_FILE_CHOOSER_ERROR,
@@ -8191,7 +8200,7 @@ add_shortcut_get_info_cb (GCancellable *cancellable,
   g_object_ref (data->file);
   data->impl->shortcuts = g_slist_append (data->impl->shortcuts, data->file);
 
-  if (_gtk_file_chooser_is_file_in_roots (GTK_FILE_CHOOSER (data->impl), data->file))
+  if (is_file_in_roots (data->impl, data->file))
     {
       shortcuts_insert_file (data->impl, pos, SHORTCUT_TYPE_FILE, NULL,
                              data->file, NULL, FALSE, SHORTCUTS_SHORTCUTS);
@@ -9173,7 +9182,7 @@ search_add_hit (GtkFileChooserDefault *impl,
     return;
 
   if (!g_file_is_native (file) ||
-      !_gtk_file_chooser_is_file_in_roots (GTK_FILE_CHOOSER (impl), file))
+      !is_file_in_roots (impl, file))
     {
       g_object_unref (file);
       return;
