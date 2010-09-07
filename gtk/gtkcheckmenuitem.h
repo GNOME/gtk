@@ -63,7 +63,7 @@ struct _GtkCheckMenuItemClass
 
   void (* toggled)	  (GtkCheckMenuItem *check_menu_item);
   void (* draw_indicator) (GtkCheckMenuItem *check_menu_item,
-			   GdkRectangle	    *area);
+			   cairo_t          *cr);
 
   /* Padding for future expansion */
   void (*_gtk_reserved1) (void);

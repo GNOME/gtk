@@ -55,15 +55,13 @@ enum {
   PROP_DRAW_AS_RADIO
 };
 
-static gint gtk_check_menu_item_expose               (GtkWidget             *widget,
-						      GdkEventExpose        *event);
+static gint gtk_check_menu_item_draw                 (GtkWidget             *widget,
+                                                      cairo_t               *cr);
 static void gtk_check_menu_item_activate             (GtkMenuItem           *menu_item);
 static void gtk_check_menu_item_toggle_size_request  (GtkMenuItem           *menu_item,
 						      gint                  *requisition);
-static void gtk_check_menu_item_draw_indicator       (GtkCheckMenuItem      *check_menu_item,
-						      GdkRectangle          *area);
 static void gtk_real_check_menu_item_draw_indicator  (GtkCheckMenuItem      *check_menu_item,
-						      GdkRectangle          *area);
+						      cairo_t               *cr);
 static void gtk_check_menu_item_set_property         (GObject               *object,
 						      guint                  prop_id,
 						      const GValue          *value,
@@ -134,7 +132,7 @@ gtk_check_menu_item_class_init (GtkCheckMenuItemClass *klass)
                                                              13,
                                                              GTK_PARAM_READABLE));
 
-  widget_class->expose_event = gtk_check_menu_item_expose;
+  widget_class->draw = gtk_check_menu_item_draw;
   
   menu_item_class->activate = gtk_check_menu_item_activate;
   menu_item_class->hide_on_activate = FALSE;
@@ -418,13 +416,16 @@ gtk_check_menu_item_init (GtkCheckMenuItem *check_menu_item)
 }
 
 static gint
-gtk_check_menu_item_expose (GtkWidget      *widget,
-			    GdkEventExpose *event)
+gtk_check_menu_item_draw (GtkWidget *widget,
+                          cairo_t   *cr)
 {
-  if (GTK_WIDGET_CLASS (gtk_check_menu_item_parent_class)->expose_event)
-    GTK_WIDGET_CLASS (gtk_check_menu_item_parent_class)->expose_event (widget, event);
+  GtkCheckMenuItem *check_menu_item = GTK_CHECK_MENU_ITEM (widget);
 
-  gtk_check_menu_item_draw_indicator (GTK_CHECK_MENU_ITEM (widget), &event->area);
+  if (GTK_WIDGET_CLASS (gtk_check_menu_item_parent_class)->draw)
+    GTK_WIDGET_CLASS (gtk_check_menu_item_parent_class)->draw (widget, cr);
+
+  if (GTK_CHECK_MENU_ITEM_GET_CLASS (check_menu_item)->draw_indicator)
+    GTK_CHECK_MENU_ITEM_GET_CLASS (check_menu_item)->draw_indicator (check_menu_item, cr);
 
   return FALSE;
 }
@@ -448,16 +449,8 @@ gtk_check_menu_item_activate (GtkMenuItem *menu_item)
 }
 
 static void
-gtk_check_menu_item_draw_indicator (GtkCheckMenuItem *check_menu_item,
-				    GdkRectangle     *area)
-{
-  if (GTK_CHECK_MENU_ITEM_GET_CLASS (check_menu_item)->draw_indicator)
-    GTK_CHECK_MENU_ITEM_GET_CLASS (check_menu_item)->draw_indicator (check_menu_item, area);
-}
-
-static void
 gtk_real_check_menu_item_draw_indicator (GtkCheckMenuItem *check_menu_item,
-					 GdkRectangle     *area)
+					 cairo_t          *cr)
 {
   GtkCheckMenuItemPrivate *priv = check_menu_item->priv;
   GtkWidget *widget;
@@ -493,17 +486,17 @@ gtk_real_check_menu_item_draw_indicator (GtkCheckMenuItem *check_menu_item,
 
       if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_LTR)
 	{
-          x = allocation.x + offset + horizontal_padding +
+          x = offset + horizontal_padding +
 	    (toggle_size - toggle_spacing - indicator_size) / 2;
 	}
       else 
 	{
-          x = allocation.x + allocation.width -
+          x = allocation.width -
 	    offset - horizontal_padding - toggle_size + toggle_spacing +
 	    (toggle_size - toggle_spacing - indicator_size) / 2;
 	}
 
-      y = allocation.y + (allocation.height - indicator_size) / 2;
+      y = (allocation.height - indicator_size) / 2;
 
       if (priv->active ||
 	  priv->always_show_toggle ||
@@ -526,16 +519,16 @@ gtk_real_check_menu_item_draw_indicator (GtkCheckMenuItem *check_menu_item,
 
 	  if (priv->draw_as_radio)
 	    {
-              gtk_paint_option (style, window,
+              gtk_cairo_paint_option (style, cr,
 				state_type, shadow_type,
-				area, widget, "option",
+				widget, "option",
 				x, y, indicator_size, indicator_size);
 	    }
 	  else
 	    {
-              gtk_paint_check (style, window,
+              gtk_cairo_paint_check (style, cr,
 			       state_type, shadow_type,
-			       area, widget, "check",
+			       widget, "check",
 			       x, y, indicator_size, indicator_size);
 	    }
 	}
