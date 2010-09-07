@@ -136,7 +136,9 @@ GdkWindow*            gtk_button_get_event_window   (GtkButton      *button);
 void _gtk_button_set_depressed             (GtkButton          *button,
 					    gboolean            depressed);
 void _gtk_button_paint                     (GtkButton          *button,
-					    const GdkRectangle *area,
+                                            cairo_t            *cr,
+                                            int                 width,
+                                            int                 height,
 					    GtkStateType        state_type,
 					    GtkShadowType       shadow_type,
 					    const gchar        *main_detail,

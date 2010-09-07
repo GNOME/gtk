@@ -128,7 +128,7 @@ static void gtk_button_unmap (GtkWidget * widget);
 static void gtk_button_style_set (GtkWidget * widget, GtkStyle * prev_style);
 static void gtk_button_size_allocate (GtkWidget * widget,
 				      GtkAllocation * allocation);
-static gint gtk_button_expose (GtkWidget * widget, GdkEventExpose * event);
+static gint gtk_button_draw (GtkWidget * widget, cairo_t *cr);
 static gint gtk_button_button_press (GtkWidget * widget,
 				     GdkEventButton * event);
 static gint gtk_button_button_release (GtkWidget * widget,
@@ -215,7 +215,7 @@ gtk_button_class_init (GtkButtonClass *klass)
   widget_class->unmap = gtk_button_unmap;
   widget_class->style_set = gtk_button_style_set;
   widget_class->size_allocate = gtk_button_size_allocate;
-  widget_class->expose_event = gtk_button_expose;
+  widget_class->draw = gtk_button_draw;
   widget_class->button_press_event = gtk_button_button_press;
   widget_class->button_release_event = gtk_button_button_release;
   widget_class->grab_broken_event = gtk_button_grab_broken;
@@ -1534,14 +1534,15 @@ gtk_button_size_allocate (GtkWidget     *widget,
 
 void
 _gtk_button_paint (GtkButton          *button,
-		   const GdkRectangle *area,
+		   cairo_t            *cr,
+                   int                 width,
+                   int                 height,
 		   GtkStateType        state_type,
 		   GtkShadowType       shadow_type,
 		   const gchar        *main_detail,
 		   const gchar        *default_detail)
 {
   GtkWidget *widget;
-  gint width, height;
   gint x, y;
   GtkBorder default_border;
   GtkBorder default_outside_border;
@@ -1564,17 +1565,15 @@ _gtk_button_paint (GtkButton          *button,
   style = gtk_widget_get_style (widget);
   window = gtk_widget_get_window (widget);
 
-  x = allocation.x;
-  y = allocation.y;
-  width = allocation.width;
-  height = allocation.height;
+  x = 0;
+  y = 0;
 
   if (gtk_widget_has_default (widget) &&
       GTK_BUTTON (widget)->relief == GTK_RELIEF_NORMAL)
     {
-      gtk_paint_box (style, window,
+      gtk_cairo_paint_box (style, cr,
                      GTK_STATE_NORMAL, GTK_SHADOW_IN,
-                     area, widget, "buttondefault",
+                     widget, "buttondefault",
                      x, y, width, height);
 
       x += default_border.left;
@@ -1600,9 +1599,9 @@ _gtk_button_paint (GtkButton          *button,
 
   if (button->relief != GTK_RELIEF_NONE || button->depressed ||
       gtk_widget_get_state(widget) == GTK_STATE_PRELIGHT)
-    gtk_paint_box (style, window,
+    gtk_cairo_paint_box (style, cr,
                    state_type,
-                   shadow_type, area, widget, "button",
+                   shadow_type, widget, "button",
                    x, y, width, height);
    
   if (gtk_widget_has_focus (widget))
@@ -1638,28 +1637,27 @@ _gtk_button_paint (GtkButton          *button,
           y += child_displacement_y;
         }
 
-      gtk_paint_focus (style, window,
+      gtk_cairo_paint_focus (style, cr,
                        gtk_widget_get_state (widget),
-                       area, widget, "button",
+                       widget, "button",
                        x, y, width, height);
     }
 }
 
 static gboolean
-gtk_button_expose (GtkWidget      *widget,
-		   GdkEventExpose *event)
+gtk_button_draw (GtkWidget *widget,
+		 cairo_t   *cr)
 {
-  if (gtk_widget_is_drawable (widget))
-    {
-      GtkButton *button = GTK_BUTTON (widget);
-      
-      _gtk_button_paint (button, &event->area,
-			 gtk_widget_get_state (widget),
-			 button->depressed ? GTK_SHADOW_IN : GTK_SHADOW_OUT,
-			 "button", "buttondefault");
+  GtkButton *button = GTK_BUTTON (widget);
+  
+  _gtk_button_paint (button, cr, 
+                     gtk_widget_get_allocated_width (widget),
+                     gtk_widget_get_allocated_height (widget),
+                     gtk_widget_get_state (widget),
+                     button->depressed ? GTK_SHADOW_IN : GTK_SHADOW_OUT,
+                     "button", "buttondefault");
 
-      GTK_WIDGET_CLASS (gtk_button_parent_class)->expose_event (widget, event);
-    }
+  GTK_WIDGET_CLASS (gtk_button_parent_class)->draw (widget, cr);
 
   return FALSE;
 }

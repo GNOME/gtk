@@ -52,8 +52,8 @@ enum {
 };
 
 
-static gint gtk_toggle_button_expose        (GtkWidget            *widget,
-					     GdkEventExpose       *event);
+static gint gtk_toggle_button_draw         (GtkWidget            *widget,
+					    cairo_t              *cr);
 static gboolean gtk_toggle_button_mnemonic_activate  (GtkWidget            *widget,
                                                       gboolean              group_cycling);
 static void gtk_toggle_button_pressed       (GtkButton            *button);
@@ -98,7 +98,7 @@ gtk_toggle_button_class_init (GtkToggleButtonClass *class)
   gobject_class->set_property = gtk_toggle_button_set_property;
   gobject_class->get_property = gtk_toggle_button_get_property;
 
-  widget_class->expose_event = gtk_toggle_button_expose;
+  widget_class->draw = gtk_toggle_button_draw;
   widget_class->mnemonic_activate = gtk_toggle_button_mnemonic_activate;
 
   button_class->pressed = gtk_toggle_button_pressed;
@@ -416,34 +416,34 @@ gtk_toggle_button_get_inconsistent (GtkToggleButton *toggle_button)
 }
 
 static gint
-gtk_toggle_button_expose (GtkWidget      *widget,
-			  GdkEventExpose *event)
+gtk_toggle_button_draw (GtkWidget *widget,
+			cairo_t   *cr)
 {
-  if (gtk_widget_is_drawable (widget))
-    {
-      GtkWidget *child = gtk_bin_get_child (GTK_BIN (widget));
-      GtkButton *button = GTK_BUTTON (widget);
-      GtkStateType state_type;
-      GtkShadowType shadow_type;
+  GtkWidget *child = gtk_bin_get_child (GTK_BIN (widget));
+  GtkButton *button = GTK_BUTTON (widget);
+  GtkStateType state_type;
+  GtkShadowType shadow_type;
 
-      state_type = gtk_widget_get_state (widget);
-      
-      if (GTK_TOGGLE_BUTTON (widget)->inconsistent)
-        {
-          if (state_type == GTK_STATE_ACTIVE)
-            state_type = GTK_STATE_NORMAL;
-          shadow_type = GTK_SHADOW_ETCHED_IN;
-        }
-      else
-	shadow_type = button->depressed ? GTK_SHADOW_IN : GTK_SHADOW_OUT;
-
-      _gtk_button_paint (button, &event->area, state_type, shadow_type,
-			 "togglebutton", "togglebuttondefault");
-
-      if (child)
-	gtk_container_propagate_expose (GTK_CONTAINER (widget), child, event);
-    }
+  state_type = gtk_widget_get_state (widget);
   
+  if (GTK_TOGGLE_BUTTON (widget)->inconsistent)
+    {
+      if (state_type == GTK_STATE_ACTIVE)
+        state_type = GTK_STATE_NORMAL;
+      shadow_type = GTK_SHADOW_ETCHED_IN;
+    }
+  else
+    shadow_type = button->depressed ? GTK_SHADOW_IN : GTK_SHADOW_OUT;
+
+  _gtk_button_paint (button, cr,
+                     gtk_widget_get_allocated_width (widget),
+                     gtk_widget_get_allocated_height (widget),
+                     state_type, shadow_type,
+                     "togglebutton", "togglebuttondefault");
+
+  if (child)
+    gtk_container_propagate_draw (GTK_CONTAINER (widget), child, cr);
+
   return FALSE;
 }
 
