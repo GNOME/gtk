@@ -41,8 +41,8 @@ struct _GtkTearoffMenuItemPrivate
 
 static void gtk_tearoff_menu_item_size_request (GtkWidget             *widget,
 				                GtkRequisition        *requisition);
-static gboolean gtk_tearoff_menu_item_expose   (GtkWidget             *widget,
-					      GdkEventExpose        *event);
+static gboolean gtk_tearoff_menu_item_draw   (GtkWidget             *widget,
+					      cairo_t               *cr);
 static void gtk_tearoff_menu_item_activate   (GtkMenuItem           *menu_item);
 static void gtk_tearoff_menu_item_parent_set (GtkWidget             *widget,
 					      GtkWidget             *previous);
@@ -64,7 +64,7 @@ gtk_tearoff_menu_item_class_init (GtkTearoffMenuItemClass *klass)
   widget_class = (GtkWidgetClass*) klass;
   menu_item_class = (GtkMenuItemClass*) klass;
 
-  widget_class->expose_event = gtk_tearoff_menu_item_expose;
+  widget_class->draw = gtk_tearoff_menu_item_draw;
   widget_class->size_request = gtk_tearoff_menu_item_size_request;
   widget_class->parent_set = gtk_tearoff_menu_item_parent_set;
 
@@ -112,16 +112,14 @@ gtk_tearoff_menu_item_size_request (GtkWidget      *widget,
 }
 
 static gboolean
-gtk_tearoff_menu_item_expose (GtkWidget      *widget,
-			    GdkEventExpose *event)
+gtk_tearoff_menu_item_draw (GtkWidget *widget,
+                            cairo_t   *cr)
 {
-  GtkAllocation allocation;
   GtkMenuItem *menu_item;
   GtkShadowType shadow_type;
   GtkStateType state;
   GtkStyle *style;
-  gint width, height;
-  gint x, y;
+  gint x, y, width, height;
   gint right_max;
   guint border_width;
   GtkArrowType arrow_type;
@@ -138,11 +136,10 @@ gtk_tearoff_menu_item_expose (GtkWidget      *widget,
       direction = gtk_widget_get_direction (widget);
 
       border_width = gtk_container_get_border_width (GTK_CONTAINER (menu_item));
-      gtk_widget_get_allocation (widget, &allocation);
-      x = allocation.x + border_width;
-      y = allocation.y + border_width;
-      width = allocation.width - border_width * 2;
-      height = allocation.height - border_width * 2;
+      x = border_width;
+      y = border_width;
+      width = gtk_widget_get_allocated_width (widget) - border_width * 2;
+      height = gtk_widget_get_allocated_height (widget) - border_width * 2;
       right_max = x + width;
 
       state = gtk_widget_get_state (widget);
@@ -154,11 +151,11 @@ gtk_tearoff_menu_item_expose (GtkWidget      *widget,
 	  gtk_widget_style_get (widget,
 				"selected-shadow-type", &selected_shadow_type,
 				NULL);
-          gtk_paint_box (style,
-                         window,
+          gtk_cairo_paint_box (style,
+                         cr,
 			 GTK_STATE_PRELIGHT,
 			 selected_shadow_type,
-			 &event->area, widget, "menuitem",
+			 widget, "menuitem",
 			 x, y, width, height);
 	}
 
@@ -198,9 +195,9 @@ gtk_tearoff_menu_item_expose (GtkWidget      *widget,
 	    }
 
 
-          gtk_paint_arrow (style, window,
+          gtk_cairo_paint_arrow (style, cr,
                            state, shadow_type,
-			   NULL, widget, "tearoffmenuitem",
+			   widget, "tearoffmenuitem",
 			   arrow_type, FALSE,
 			   arrow_x, y + height / 2 - 5, 
 			   ARROW_SIZE, ARROW_SIZE);
@@ -219,8 +216,8 @@ gtk_tearoff_menu_item_expose (GtkWidget      *widget,
 	    x2 = MAX (right_max - x - TEAR_LENGTH, 0);
 	  }
 
-          gtk_paint_hline (style, window, GTK_STATE_NORMAL,
-			   NULL, widget, "tearoffmenuitem",
+          gtk_cairo_paint_hline (style, cr, GTK_STATE_NORMAL,
+			   widget, "tearoffmenuitem",
                            x1, x2, y + (height - style->ythickness) / 2);
 	  x += 2 * TEAR_LENGTH;
 	}
