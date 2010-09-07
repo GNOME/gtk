@@ -5442,15 +5442,15 @@ gdk_window_get_pointer (GdkWindow	  *window,
  * gdk_window_get_device_position:
  * @window: a #GdkWindow.
  * @device: #GdkDevice to query to.
- * @x: return location for the X coordinate of @device, or %NULL.
- * @y: return location for the Y coordinate of @device, or %NULL.
- * @mask: return location for the modifier mask, or %NULL.
+ * @x: (out) (allow-none): return location for the X coordinate of @device, or %NULL.
+ * @y: (out) (allow-none): return location for the Y coordinate of @device, or %NULL.
+ * @mask: (out) (allow-none): return location for the modifier mask, or %NULL.
  *
  * Obtains the current device position and modifier state.
  * The position is given in coordinates relative to the upper left
  * corner of @window.
  *
- * Returns: The window underneath @device (as with
+ * Return value: (transfer none): The window underneath @device (as with
  * gdk_display_get_window_at_device_position()), or %NULL if the
  * window is not known to GDK.
  *
