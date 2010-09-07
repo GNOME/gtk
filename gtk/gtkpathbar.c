@@ -355,8 +355,6 @@ gtk_path_bar_size_request (GtkWidget      *widget,
   border_width = gtk_container_get_border_width (GTK_CONTAINER (widget));
   requisition->width += border_width * 2;
   requisition->height += border_width * 2;
-
-  widget->requisition = *requisition;
 }
 
 static void

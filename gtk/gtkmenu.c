@@ -2047,8 +2047,9 @@ gtk_menu_set_tearoff_hints (GtkMenu *menu,
 
   if (gtk_widget_get_visible (menu->tearoff_scrollbar))
     {
-      gtk_widget_size_request (menu->tearoff_scrollbar, NULL);
-      width += menu->tearoff_scrollbar->requisition.width;
+      GtkRequisition requisition;
+      gtk_widget_size_request (menu->tearoff_scrollbar, &requisition);
+      width += requisition.width;
     }
 
   geometry_hints.min_width = width;

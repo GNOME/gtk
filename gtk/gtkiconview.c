@@ -39,6 +39,7 @@
 #include "gtkentry.h"
 #include "gtkcombobox.h"
 #include "gtktextbuffer.h"
+#include "gtksizerequest.h"
 #include "gtktreednd.h"
 #include "gtkprivate.h"
 
@@ -2803,6 +2804,7 @@ gtk_icon_view_layout (GtkIconView *icon_view)
   gint y = 0, maximum_width = 0;
   GList *icons;
   GtkWidget *widget;
+  GtkRequisition requisition;
   gint row;
   gint item_width;
 
@@ -2862,8 +2864,10 @@ gtk_icon_view_layout (GtkIconView *icon_view)
   gtk_icon_view_set_adjustment_upper (icon_view->priv->vadjustment, 
 				      icon_view->priv->height);
 
-  if (icon_view->priv->width != widget->requisition.width ||
-      icon_view->priv->height != widget->requisition.height)
+  gtk_size_request_get_size (GTK_SIZE_REQUEST (widget), &requisition, NULL);
+
+  if (icon_view->priv->width != requisition.width ||
+      icon_view->priv->height != requisition.height)
     gtk_widget_queue_resize_no_redraw (widget);
 
   if (gtk_widget_get_realized (GTK_WIDGET (icon_view)))

@@ -47,6 +47,7 @@
 #include "config.h"
 #include <math.h>
 #include "gtkarrow.h"
+#include "gtksizerequest.h"
 #include "gtkprivate.h"
 #include "gtkintl.h"
 
@@ -76,8 +77,17 @@ static void     gtk_arrow_get_property (GObject        *object,
 static gboolean gtk_arrow_expose       (GtkWidget      *widget,
                                         GdkEventExpose *event);
 
+static void     gtk_arrow_size_request_init (GtkSizeRequestIface *iface);
+static void     gtk_arrow_get_width         (GtkSizeRequest      *widget,
+					     gint                *minimum_size,
+					     gint                *natural_size);
+static void     gtk_arrow_get_height        (GtkSizeRequest      *widget,
+					     gint                *minimum_size,
+					     gint                *natural_size);
 
-G_DEFINE_TYPE (GtkArrow, gtk_arrow, GTK_TYPE_MISC)
+G_DEFINE_TYPE_WITH_CODE (GtkArrow, gtk_arrow, GTK_TYPE_MISC,
+			 G_IMPLEMENT_INTERFACE (GTK_TYPE_SIZE_REQUEST,
+						gtk_arrow_size_request_init))
 
 
 static void
@@ -176,7 +186,6 @@ static void
 gtk_arrow_init (GtkArrow *arrow)
 {
   GtkArrowPrivate *priv;
-  gint xpad, ypad;
 
   arrow->priv = G_TYPE_INSTANCE_GET_PRIVATE (arrow,
                                              GTK_TYPE_ARROW,
@@ -185,13 +194,49 @@ gtk_arrow_init (GtkArrow *arrow)
 
   gtk_widget_set_has_window (GTK_WIDGET (arrow), FALSE);
 
-  gtk_misc_get_padding (GTK_MISC (arrow), &xpad, &ypad);
-  GTK_WIDGET (arrow)->requisition.width = MIN_ARROW_SIZE + xpad * 2;
-  GTK_WIDGET (arrow)->requisition.height = MIN_ARROW_SIZE + ypad * 2;
-
   priv->arrow_type = GTK_ARROW_RIGHT;
   priv->shadow_type = GTK_SHADOW_OUT;
 }
+
+static void
+gtk_arrow_size_request_init (GtkSizeRequestIface *iface)
+{
+  iface->get_width  = gtk_arrow_get_width;
+  iface->get_height = gtk_arrow_get_height;
+}
+
+static void
+gtk_arrow_get_width (GtkSizeRequest      *widget,
+		     gint                *minimum_size,
+		     gint                *natural_size)
+{
+  gint xpad;
+
+  gtk_misc_get_padding (GTK_MISC (widget), &xpad, NULL);
+
+  if (minimum_size)
+    *minimum_size = MIN_ARROW_SIZE + xpad * 2;
+
+  if (natural_size)
+    *natural_size = MIN_ARROW_SIZE + xpad * 2;
+}
+
+static void
+gtk_arrow_get_height (GtkSizeRequest      *widget,
+		      gint                *minimum_size,
+		      gint                *natural_size)
+{
+  gint ypad;
+
+  gtk_misc_get_padding (GTK_MISC (widget), NULL, &ypad);
+
+  if (minimum_size)
+    *minimum_size = MIN_ARROW_SIZE + ypad * 2;
+
+  if (natural_size)
+    *natural_size = MIN_ARROW_SIZE + ypad * 2;
+}
+
 
 /**
  * gtk_arrow_new:

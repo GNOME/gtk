@@ -196,18 +196,14 @@ get_cache (GtkSizeRequest *widget,
   return cache;
 }
 
-
 static void
-do_size_request (GtkWidget *widget)
+do_size_request (GtkWidget      *widget,
+		 GtkRequisition *requisition)
 {
-  if (GTK_WIDGET_REQUEST_NEEDED (widget))
-    {
-      gtk_widget_ensure_style (widget);
-      GTK_PRIVATE_UNSET_FLAG (widget, GTK_REQUEST_NEEDED);
-      g_signal_emit_by_name (widget,
-                             "size-request",
-                             &widget->requisition);
-    }
+  /* Now we dont bother caching the deprecated "size-request" returns,
+   * just unconditionally invoke here just in case we run into legacy stuff */
+  gtk_widget_ensure_style (widget);
+  g_signal_emit_by_name (widget, "size-request", requisition);
 }
 
 static void
@@ -255,15 +251,16 @@ compute_size_for_orientation (GtkSizeRequest    *request,
 
   if (!found_in_cache)
     {
+      GtkRequisition requisition = { 0, 0 };
       gint min_size = 0, nat_size = 0;
       gint group_size, requisition_size;
 
       /* Unconditional size request runs but is often unhandled. */
-      do_size_request (widget);
+      do_size_request (widget, &requisition);
 
       if (orientation == GTK_SIZE_GROUP_HORIZONTAL)
         {
-          requisition_size = widget->requisition.width;
+          requisition_size = requisition.width;
 
           if (for_size < 0)
             GTK_SIZE_REQUEST_GET_IFACE (request)->get_width (request, &min_size, &nat_size);
@@ -273,7 +270,7 @@ compute_size_for_orientation (GtkSizeRequest    *request,
         }
       else
         {
-          requisition_size = widget->requisition.height;
+          requisition_size = requisition.height;
 
           if (for_size < 0)
             GTK_SIZE_REQUEST_GET_IFACE (request)->get_height (request, &min_size, &nat_size);
@@ -288,9 +285,8 @@ compute_size_for_orientation (GtkSizeRequest    *request,
                      G_OBJECT_TYPE_NAME (request), request, min_size, nat_size);
         }
 
-      /* Support for dangling "size-request" signals and forward derived
-       * classes that will not default to a ->get_width() that
-       * returns the values in the ->requisition cache.
+      /* Support for dangling "size-request" signal implementations on
+       * legacy widgets
        */
       min_size = MAX (min_size, requisition_size);
       nat_size = MAX (nat_size, requisition_size);

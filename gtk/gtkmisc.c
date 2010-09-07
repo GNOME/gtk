@@ -268,7 +268,6 @@ gtk_misc_set_padding (GtkMisc *misc,
 		      gint     ypad)
 {
   GtkMiscPrivate *priv;
-  GtkRequisition *requisition;
 
   g_return_if_fail (GTK_IS_MISC (misc));
 
@@ -288,15 +287,8 @@ gtk_misc_set_padding (GtkMisc *misc,
       if (ypad != priv->ypad)
 	g_object_notify (G_OBJECT (misc), "ypad");
 
-      requisition = &(GTK_WIDGET (misc)->requisition);
-      requisition->width -= priv->xpad * 2;
-      requisition->height -= priv->ypad * 2;
-
       priv->xpad = xpad;
       priv->ypad = ypad;
-
-      requisition->width += priv->xpad * 2;
-      requisition->height += priv->ypad * 2;
 
       if (gtk_widget_is_drawable (GTK_WIDGET (misc)))
 	gtk_widget_queue_resize (GTK_WIDGET (misc));

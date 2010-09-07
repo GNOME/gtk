@@ -33,6 +33,7 @@
 #include "gtkiconfactory.h"
 #include "gtkstock.h"
 #include "gtkicontheme.h"
+#include "gtksizerequest.h"
 #include "gtkintl.h"
 #include "gtkprivate.h"
 
@@ -150,6 +151,8 @@ struct _GtkImagePrivate
                                                * only used with GTK_IMAGE_GICON, GTK_IMAGE_ICON_NAME */
   gint                  pixel_size;
   guint                 need_calc_size : 1;
+  gint                  required_width;
+  gint                  required_height;
 };
 
 
@@ -1820,9 +1823,9 @@ gtk_image_expose (GtkWidget      *widget,
 	xalign = 1.0 - xalign;
 
       x = floor (widget->allocation.x + xpad
-		 + ((widget->allocation.width - widget->requisition.width) * xalign));
+		 + ((widget->allocation.width - priv->required_width) * xalign));
       y = floor (widget->allocation.y + ypad
-		 + ((widget->allocation.height - widget->requisition.height) * yalign));
+		 + ((widget->allocation.height - priv->required_height) * yalign));
       mask_x = x;
       mask_y = y;
       
@@ -2230,7 +2233,7 @@ gtk_image_calc_size (GtkImage *image)
 
   /* We update stock/icon set on every size request, because
    * the theme could have affected the size; for other kinds of
-   * image, we just update the requisition when the image data
+   * image, we just update the required width/height when the image data
    * is set.
    */
   switch (priv->storage_type)
@@ -2272,8 +2275,8 @@ gtk_image_calc_size (GtkImage *image)
 
       gtk_misc_get_padding (GTK_MISC (image), &xpad, &ypad);
 
-      widget->requisition.width = gdk_pixbuf_get_width (pixbuf) + xpad * 2;
-      widget->requisition.height = gdk_pixbuf_get_height (pixbuf) + ypad * 2;
+      priv->required_width = gdk_pixbuf_get_width (pixbuf) + xpad * 2;
+      priv->required_height = gdk_pixbuf_get_height (pixbuf) + ypad * 2;
 
       g_object_unref (pixbuf);
     }
@@ -2284,13 +2287,15 @@ gtk_image_size_request (GtkWidget      *widget,
                         GtkRequisition *requisition)
 {
   GtkImage *image;
+  GtkImagePrivate *priv;
   
   image = GTK_IMAGE (widget);
+  priv  = image->priv;
 
   gtk_image_calc_size (image);
 
-  /* Chain up to default that simply reads current requisition */
-  GTK_WIDGET_CLASS (gtk_image_parent_class)->size_request (widget, requisition);
+  requisition->width  = priv->required_width;
+  requisition->height = priv->required_height;
 }
 
 static void
@@ -2326,13 +2331,14 @@ gtk_image_update_size (GtkImage *image,
                        gint      image_width,
                        gint      image_height)
 {
-  GtkWidget *widget = GTK_WIDGET (image);
-  gint xpad, ypad;
+  GtkWidget       *widget = GTK_WIDGET (image);
+  GtkImagePrivate *priv = image->priv;
+  gint             xpad, ypad;
 
   gtk_misc_get_padding (GTK_MISC (image), &xpad, &ypad);
 
-  widget->requisition.width = image_width + xpad * 2;
-  widget->requisition.height = image_height + ypad * 2;
+  priv->required_width  = image_width + xpad * 2;
+  priv->required_height = image_height + ypad * 2;
 
   if (gtk_widget_get_visible (widget))
     gtk_widget_queue_resize (widget);

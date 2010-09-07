@@ -2856,8 +2856,6 @@ gtk_widget_init (GtkWidget *widget)
   widget->state = GTK_STATE_NORMAL;
   widget->saved_state = GTK_STATE_NORMAL;
   widget->name = NULL;
-  widget->requisition.width = 0;
-  widget->requisition.height = 0;
   widget->allocation.x = -1;
   widget->allocation.y = -1;
   widget->allocation.width = 1;
@@ -2871,7 +2869,6 @@ gtk_widget_init (GtkWidget *widget)
   gtk_widget_set_double_buffered (widget, TRUE);
 
   GTK_PRIVATE_SET_FLAG (widget, GTK_REDRAW_ON_ALLOC);
-  GTK_PRIVATE_SET_FLAG (widget, GTK_REQUEST_NEEDED);
   GTK_PRIVATE_SET_FLAG (widget, GTK_WIDTH_REQUEST_NEEDED);
   GTK_PRIVATE_SET_FLAG (widget, GTK_HEIGHT_REQUEST_NEEDED);
   GTK_PRIVATE_SET_FLAG (widget, GTK_ALLOC_NEEDED);
@@ -3783,12 +3780,6 @@ gtk_widget_size_request (GtkWidget	*widget,
 {
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
-#ifdef G_ENABLE_DEBUG
-  if (requisition == &widget->requisition)
-    g_warning ("gtk_widget_size_request() called on child widget with request equal\n"
-               "to widget->requisition. gtk_widget_set_usize() may not work properly.");
-#endif /* G_ENABLE_DEBUG */
-
   gtk_size_request_get_size (GTK_SIZE_REQUEST (widget), requisition, NULL);
 }
 
@@ -3927,7 +3918,8 @@ gtk_widget_size_allocate (GtkWidget	*widget,
 #endif /* G_ENABLE_DEBUG */
  
   alloc_needed = GTK_WIDGET_ALLOC_NEEDED (widget);
-  if (!GTK_WIDGET_REQUEST_NEEDED (widget))      /* Preserve request/allocate ordering */
+  if (!GTK_WIDGET_WIDTH_REQUEST_NEEDED (widget) &&
+      !GTK_WIDGET_HEIGHT_REQUEST_NEEDED (widget))      /* Preserve request/allocate ordering */
     GTK_PRIVATE_UNSET_FLAG (widget, GTK_ALLOC_NEEDED);
 
   old_allocation = widget->allocation;
@@ -8887,8 +8879,8 @@ static void
 gtk_widget_real_size_request (GtkWidget         *widget,
 			      GtkRequisition    *requisition)
 {
-  requisition->width = widget->requisition.width;
-  requisition->height = widget->requisition.height;
+  requisition->width  = 0;
+  requisition->height = 0;
 }
 
 /**
@@ -10809,14 +10801,11 @@ gtk_widget_real_get_width (GtkSizeRequest *widget,
 			   gint           *minimum_size,
 			   gint           *natural_size)
 {
-  /* Set the initial values so that unimplemented classes will fall back
-   * on the "size-request" collected values (see gtksizegroup.c:do_size_request()).
-   */
   if (minimum_size)
-    *minimum_size = GTK_WIDGET (widget)->requisition.width;
+    *minimum_size = 0;
 
   if (natural_size)
-    *natural_size = GTK_WIDGET (widget)->requisition.width;
+    *natural_size = 0;
 }
 
 static void
@@ -10824,14 +10813,11 @@ gtk_widget_real_get_height (GtkSizeRequest *widget,
 			    gint           *minimum_size,
 			    gint           *natural_size)
 {
-  /* Set the initial values so that unimplemented classes will fall back
-   * on the "size-request" collected values (see gtksizegroup.c:do_size_request()).
-   */
   if (minimum_size)
-    *minimum_size = GTK_WIDGET (widget)->requisition.height;
+    *minimum_size = 0;
 
   if (natural_size)
-    *natural_size = GTK_WIDGET (widget)->requisition.height;
+    *natural_size = 0;
 }
 
 static void
@@ -11373,6 +11359,10 @@ gtk_widget_set_allocation (GtkWidget           *widget,
  * Normally, gtk_widget_size_request() should be used.
  *
  * Since: 2.20
+ *
+ * Deprecated: 3.0: The #GtkRequisition cache on the widget was
+ * removed, If you need to cache sizes across requests and allocations,
+ * add an explicit cache to the widget in question instead.
  */
 void
 gtk_widget_get_requisition (GtkWidget      *widget,
@@ -11381,7 +11371,7 @@ gtk_widget_get_requisition (GtkWidget      *widget,
   g_return_if_fail (GTK_IS_WIDGET (widget));
   g_return_if_fail (requisition != NULL);
 
-  *requisition = widget->requisition;
+  gtk_size_request_get_size (GTK_SIZE_REQUEST (widget), requisition, NULL);
 }
 
 /**

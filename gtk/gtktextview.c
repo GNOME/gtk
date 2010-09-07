@@ -40,6 +40,7 @@
 #include "gtkseparatormenuitem.h"
 #include "gtksettings.h"
 #include "gtkstock.h"
+#include "gtksizerequest.h"
 #include "gtktextbufferrichtext.h"
 #include "gtktextdisplay.h"
 #include "gtktextview.h"
@@ -3933,7 +3934,7 @@ changed_handler (GtkTextLayout     *layout,
     GtkRequisition old_req;
     GtkRequisition new_req;
 
-    old_req = widget->requisition;
+    gtk_size_request_get_size (GTK_SIZE_REQUEST (widget), &old_req, NULL);
 
     /* Use this instead of gtk_widget_size_request wrapper
      * to avoid the optimization which just returns widget->requisition

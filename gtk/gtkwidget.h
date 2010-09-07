@@ -294,10 +294,6 @@ struct _GtkWidget
    */
   GtkStyle *GSEAL (style);
   
-  /* The widget's desired size.
-   */
-  GtkRequisition GSEAL (requisition);
-  
   /* The widget's allocated size.
    */
   GtkAllocation GSEAL (allocation);

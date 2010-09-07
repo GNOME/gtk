@@ -32,6 +32,7 @@
 #include "gtkmain.h"
 #include "gtkmarshalers.h"
 #include "gtkwindow.h"
+#include "gtksizerequest.h"
 #include "gtkprivate.h"
 #include "gtkintl.h"
 
@@ -406,6 +407,7 @@ gtk_handle_box_realize (GtkWidget *widget)
   GtkHandleBoxPrivate *priv = hb->priv;
   GtkWidget *child;
   GdkWindowAttr attributes;
+  GtkRequisition requisition;
   gint attributes_mask;
 
   gtk_widget_set_realized (widget, TRUE);
@@ -443,10 +445,12 @@ gtk_handle_box_realize (GtkWidget *widget)
   if (child)
     gtk_widget_set_parent_window (child, priv->bin_window);
   
+  gtk_size_request_get_size (GTK_SIZE_REQUEST (widget), &requisition, NULL);
+
   attributes.x = 0;
   attributes.y = 0;
-  attributes.width = widget->requisition.width;
-  attributes.height = widget->requisition.height;
+  attributes.width = requisition.width;
+  attributes.height = requisition.height;
   attributes.window_type = GDK_WINDOW_TOPLEVEL;
   attributes.wclass = GDK_INPUT_OUTPUT;
   attributes.visual = gtk_widget_get_visual (widget);

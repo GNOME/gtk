@@ -58,8 +58,9 @@
 #include "gtkscrolledwindow.h"
 #include "gtkintl.h"
 #include "gtkaccessible.h"
-#include "gtkprivate.h"
 #include "gtkbuildable.h"
+#include "gtksizerequest.h"
+#include "gtkprivate.h"
 
 struct _GtkFontSelectionPrivate
 {
@@ -1168,7 +1169,7 @@ gtk_font_selection_update_preview (GtkFontSelection *fontsel)
   GtkFontSelectionPrivate *priv = fontsel->priv;
   GtkRcStyle *rc_style;
   gint new_height;
-  GtkRequisition old_requisition;
+  GtkRequisition old_requisition, new_requisition;
   GtkWidget *preview_entry = priv->preview_entry;
   const gchar *text;
 
@@ -1180,10 +1181,10 @@ gtk_font_selection_update_preview (GtkFontSelection *fontsel)
   gtk_widget_modify_style (preview_entry, rc_style);
   g_object_unref (rc_style);
 
-  gtk_widget_size_request (preview_entry, NULL);
+  gtk_size_request_get_size (GTK_SIZE_REQUEST (preview_entry), &new_requisition, NULL);
   
   /* We don't ever want to be over MAX_PREVIEW_HEIGHT pixels high. */
-  new_height = CLAMP (preview_entry->requisition.height, INITIAL_PREVIEW_HEIGHT, MAX_PREVIEW_HEIGHT);
+  new_height = CLAMP (new_requisition.height, INITIAL_PREVIEW_HEIGHT, MAX_PREVIEW_HEIGHT);
 
   if (new_height > old_requisition.height || new_height < old_requisition.height - 30)
     gtk_widget_set_size_request (preview_entry, -1, new_height);

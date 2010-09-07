@@ -189,7 +189,6 @@ gtk_ruler_class_init (GtkRulerClass *class)
 static void
 gtk_ruler_init (GtkRuler *ruler)
 {
-  GtkWidget *widget = GTK_WIDGET (ruler);
   GtkRulerPrivate *priv;
 
   ruler->priv = G_TYPE_INSTANCE_GET_PRIVATE (ruler,
@@ -198,9 +197,6 @@ gtk_ruler_init (GtkRuler *ruler)
   priv = ruler->priv;
 
   priv->orientation = GTK_ORIENTATION_HORIZONTAL;
-
-  widget->requisition.width  = widget->style->xthickness * 2 + 1;
-  widget->requisition.height = widget->style->ythickness * 2 + RULER_WIDTH;
 
   priv->backing_store = NULL;
   priv->xsrc = 0;

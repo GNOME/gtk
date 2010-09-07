@@ -95,7 +95,6 @@ gtk_separator_class_init (GtkSeparatorClass *class)
 static void
 gtk_separator_init (GtkSeparator *separator)
 {
-  GtkWidget *widget = GTK_WIDGET (separator);
   GtkSeparatorPrivate *private;
 
   separator->priv = G_TYPE_INSTANCE_GET_PRIVATE (separator,
@@ -106,9 +105,6 @@ gtk_separator_init (GtkSeparator *separator)
   gtk_widget_set_has_window (GTK_WIDGET (separator), FALSE);
 
   private->orientation = GTK_ORIENTATION_HORIZONTAL;
-
-  widget->requisition.width  = 1;
-  widget->requisition.height = widget->style->ythickness;
 }
 
 static void

@@ -43,6 +43,7 @@
 #include "gtkframe.h"
 #include "gtktreemodelsort.h"
 #include "gtktooltip.h"
+#include "gtksizerequest.h"
 #include "gtkprivate.h"
 
 #define GTK_TREE_VIEW_PRIORITY_VALIDATE (GDK_PRIORITY_REDRAW + 5)
@@ -5323,7 +5324,10 @@ gtk_tree_view_key_press (GtkWidget   *widget,
           if (event->keyval == (rtl ? GDK_Right : GDK_Left)
               || event->keyval == (rtl ? GDK_KP_Right : GDK_KP_Left))
             {
+	      GtkRequisition button_req;
               gint old_width = column->resized_width;
+
+	      gtk_size_request_get_size (GTK_SIZE_REQUEST (column->button), &button_req, NULL);
 
               column->resized_width = MAX (column->resized_width,
                                            column->width);
@@ -5332,7 +5336,7 @@ gtk_tree_view_key_press (GtkWidget   *widget,
                 column->resized_width = 0;
 
               if (column->min_width == -1)
-                column->resized_width = MAX (column->button->requisition.width,
+                column->resized_width = MAX (button_req.width,
                                              column->resized_width);
               else
                 column->resized_width = MAX (column->min_width,
@@ -10486,6 +10490,7 @@ gtk_tree_view_new_column_width (GtkTreeView *tree_view,
 				gint      *x)
 {
   GtkTreeViewColumn *column;
+  GtkRequisition button_req;
   gint width;
   gboolean rtl;
 
@@ -10498,8 +10503,10 @@ gtk_tree_view_new_column_width (GtkTreeView *tree_view,
  
   /* Clamp down the value */
   if (column->min_width == -1)
-    width = MAX (column->button->requisition.width,
-		 width);
+    {
+      gtk_size_request_get_size (GTK_SIZE_REQUEST (column->button), &button_req, NULL);
+      width = MAX (button_req.width, width);
+    }
   else
     width = MAX (column->min_width,
 		 width);
