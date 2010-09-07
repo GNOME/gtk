@@ -57,8 +57,6 @@ static void     gtk_event_box_size_request  (GtkWidget        *widget,
                                              GtkRequisition   *requisition);
 static void     gtk_event_box_size_allocate (GtkWidget        *widget,
                                              GtkAllocation    *allocation);
-static void     gtk_event_box_paint         (GtkWidget        *widget,
-                                             GdkRectangle     *area);
 static gboolean gtk_event_box_expose        (GtkWidget        *widget,
                                              GdkEventExpose   *event);
 static void     gtk_event_box_set_property  (GObject          *object,
@@ -564,30 +562,20 @@ gtk_event_box_size_allocate (GtkWidget     *widget,
     gtk_widget_size_allocate (child, &child_allocation);
 }
 
-static void
-gtk_event_box_paint (GtkWidget    *widget,
-		     GdkRectangle *area)
-{
-  if (!gtk_widget_get_app_paintable (widget))
-    gtk_paint_flat_box (gtk_widget_get_style (widget),
-                        gtk_widget_get_window (widget),
-			gtk_widget_get_state (widget),
-                        GTK_SHADOW_NONE,
-			area, widget, "eventbox",
-			0, 0, -1, -1);
-}
-
 static gboolean
 gtk_event_box_expose (GtkWidget      *widget,
 		     GdkEventExpose *event)
 {
-  if (gtk_widget_is_drawable (widget))
-    {
-      if (gtk_widget_get_has_window (widget))
-	gtk_event_box_paint (widget, &event->area);
-
-      GTK_WIDGET_CLASS (gtk_event_box_parent_class)->expose_event (widget, event);
-    }
+  if (gtk_widget_get_has_window (widget) &&
+      !gtk_widget_get_app_paintable (widget))
+    gtk_paint_flat_box (gtk_widget_get_style (widget),
+                        gtk_widget_get_window (widget),
+			gtk_widget_get_state (widget),
+                        GTK_SHADOW_NONE,
+			&event->area, widget, "eventbox",
+			0, 0, -1, -1);
+  
+  GTK_WIDGET_CLASS (gtk_event_box_parent_class)->expose_event (widget, event);
 
   return FALSE;
 }
