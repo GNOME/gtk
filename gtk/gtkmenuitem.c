@@ -90,8 +90,6 @@ static gboolean gtk_menu_item_enter      (GtkWidget        *widget,
                                           GdkEventCrossing *event);
 static gboolean gtk_menu_item_leave      (GtkWidget        *widget,
                                           GdkEventCrossing *event);
-static void gtk_menu_item_paint          (GtkWidget        *widget,
-					  GdkRectangle     *area);
 static gint gtk_menu_item_expose         (GtkWidget        *widget,
 					  GdkEventExpose   *event);
 static void gtk_menu_item_parent_set     (GtkWidget        *widget,
@@ -1507,9 +1505,9 @@ gtk_menu_item_leave (GtkWidget        *widget,
   return gtk_widget_event (gtk_widget_get_parent (widget), (GdkEvent*) event);
 }
 
-static void
-gtk_menu_item_paint (GtkWidget    *widget,
-		     GdkRectangle *area)
+static gboolean
+gtk_menu_item_expose (GtkWidget      *widget,
+		      GdkEventExpose *event)
 {
   GtkAllocation allocation;
   GtkMenuItem *menu_item;
@@ -1547,7 +1545,7 @@ gtk_menu_item_paint (GtkWidget    *widget,
                          window,
 			 GTK_STATE_PRELIGHT,
 			 selected_shadow_type,
-			 area, widget, "menuitem",
+			 &event->area, widget, "menuitem",
 			 x, y, width, height);
 	}
   
@@ -1586,7 +1584,7 @@ gtk_menu_item_paint (GtkWidget    *widget,
 
 	  gtk_paint_arrow (style, window,
 			   state_type, shadow_type, 
-			   area, widget, "menuitem", 
+			   &event->area, widget, "menuitem", 
 			   arrow_type, TRUE,
 			   arrow_x, arrow_y,
 			   arrow_size, arrow_size);
@@ -1606,31 +1604,18 @@ gtk_menu_item_paint (GtkWidget    *widget,
           if (wide_separators)
             gtk_paint_box (style, window,
                            GTK_STATE_NORMAL, GTK_SHADOW_ETCHED_OUT,
-                           area, widget, "hseparator",
+                           &event->area, widget, "hseparator",
                            allocation.x + horizontal_padding + style->xthickness,
                            allocation.y + (allocation.height - separator_height - style->ythickness) / 2,
                            allocation.width - 2 * (horizontal_padding + style->xthickness),
                            separator_height);
           else
             gtk_paint_hline (style, window,
-                             GTK_STATE_NORMAL, area, widget, "menuitem",
+                             GTK_STATE_NORMAL, &event->area, widget, "menuitem",
                              allocation.x + horizontal_padding + style->xthickness,
                              allocation.x + allocation.width - horizontal_padding - style->xthickness - 1,
                              allocation.y + (allocation.height - style->ythickness) / 2);
 	}
-    }
-}
-
-static gint
-gtk_menu_item_expose (GtkWidget      *widget,
-		      GdkEventExpose *event)
-{
-  g_return_val_if_fail (GTK_IS_MENU_ITEM (widget), FALSE);
-  g_return_val_if_fail (event != NULL, FALSE);
-
-  if (gtk_widget_is_drawable (widget))
-    {
-      gtk_menu_item_paint (widget, &event->area);
 
       GTK_WIDGET_CLASS (gtk_menu_item_parent_class)->expose_event (widget, event);
     }
