@@ -1061,7 +1061,7 @@ gtk_builder_connect_signals (GtkBuilder *builder,
 /**
  * gtk_builder_connect_signals_full:
  * @builder: a #GtkBuilder
- * @func: the function used to connect the signals
+ * @func: (scope call): the function used to connect the signals
  * @user_data: arbitrary data that will be passed to the connection function
  *
  * This function can be thought of the interpreted language binding

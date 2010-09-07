@@ -696,7 +696,7 @@ gtk_dialog_add_action_widget (GtkDialog *dialog,
  * appended to the end of the dialog's action area. The button widget is 
  * returned, but usually you don't need it.
  *
- * Return value: the button widget that was added
+ * Return value: (transfer full): the button widget that was added
  **/
 GtkWidget*
 gtk_dialog_add_button (GtkDialog   *dialog,
@@ -1132,7 +1132,7 @@ _gtk_dialog_set_ignore_separator (GtkDialog *dialog,
  * Gets the widget button that uses the given response ID in the action area
  * of a dialog.
  *
- * Returns: the @widget button that uses the given @response_id, or %NULL.
+ * Returns: (transfer none):the @widget button that uses the given @response_id, or %NULL.
  *
  * Since: 2.20
  */
