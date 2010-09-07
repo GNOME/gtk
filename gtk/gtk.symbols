@@ -300,7 +300,6 @@ gtk_ui_manager_item_type_get_type G_GNUC_CONST
 gtk_spin_button_update_policy_get_type G_GNUC_CONST
 gtk_notebook_tab_get_type G_GNUC_CONST
 gtk_number_up_layout_get_type G_GNUC_CONST
-gtk_anchor_type_get_type G_GNUC_CONST
 gtk_arrow_type_get_type G_GNUC_CONST
 gtk_arrow_placement_get_type G_GNUC_CONST
 gtk_assistant_page_type_get_type G_GNUC_CONST
@@ -387,7 +386,6 @@ gtk_tool_palette_drag_targets_get_type G_GNUC_CONST
 gtk_tree_model_flags_get_type G_GNUC_CONST
 gtk_tree_view_grid_lines_get_type G_GNUC_CONST
 gtk_update_type_get_type G_GNUC_CONST
-gtk_visibility_get_type G_GNUC_CONST
 gtk_object_flags_get_type G_GNUC_CONST
 gtk_accel_flags_get_type G_GNUC_CONST
 gtk_icon_size_get_type G_GNUC_CONST
@@ -2597,6 +2595,7 @@ gtk_radio_action_join_group
 #if IN_FILE(__GTK_RADIO_BUTTON_C__)
 gtk_radio_button_get_group
 gtk_radio_button_get_type G_GNUC_CONST
+gtk_radio_button_join_group
 gtk_radio_button_new
 gtk_radio_button_new_from_widget
 gtk_radio_button_new_with_label
@@ -4496,6 +4495,7 @@ gtk_wrap_box_get_type G_GNUC_CONST
 gtk_wrap_box_get_vertical_spacing
 gtk_wrap_box_insert_child_with_padding
 gtk_wrap_box_new
+gtk_wrap_box_packing_get_type
 gtk_wrap_box_reorder_child
 gtk_wrap_box_set_allocation_mode
 gtk_wrap_box_set_horizontal_spacing
