@@ -86,7 +86,8 @@ GtkWidget* gtk_radio_button_new_with_mnemonic_from_widget (GtkRadioButton *radio
 GSList*    gtk_radio_button_get_group                     (GtkRadioButton *radio_button);
 void       gtk_radio_button_set_group                     (GtkRadioButton *radio_button,
                                                            GSList         *group);
-
+void            gtk_radio_button_join_group        (GtkRadioButton        *radio_button,
+                                                    GtkRadioButton        *group_source);
 G_END_DECLS
 
 #endif /* __GTK_RADIO_BUTTON_H__ */
