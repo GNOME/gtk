@@ -777,22 +777,27 @@ gtk_viewport_expose (GtkWidget      *widget,
     {
       GtkViewport *viewport = GTK_VIEWPORT (widget);
       GtkViewportPrivate *priv = viewport->priv;
+      int width, height;
 
       if (event->window == gtk_widget_get_window (widget))
         {
+          gdk_drawable_get_size (gtk_widget_get_window (widget),
+                                 &width, &height);
           gtk_paint_shadow (gtk_widget_get_style (widget),
                             gtk_widget_get_window (widget),
                             GTK_STATE_NORMAL, priv->shadow_type,
                             &event->area, widget, "viewport",
-                            0, 0, -1, -1);
+                            0, 0, width, height);
         }
       
       if (event->window == priv->bin_window)
 	{
+          gdk_drawable_get_size (priv->bin_window,
+                                 &width, &height);
           gtk_paint_flat_box(gtk_widget_get_style (widget), priv->bin_window,
 			     GTK_STATE_NORMAL, GTK_SHADOW_NONE,
 			     &event->area, widget, "viewportbin",
-			     0, 0, -1, -1);
+			     0, 0, width, height);
 
 	  GTK_WIDGET_CLASS (gtk_viewport_parent_class)->expose_event (widget, event);
 	}
