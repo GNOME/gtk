@@ -750,13 +750,6 @@ gtk_viewport_realize (GtkWidget *widget)
   gtk_style_set_background (style, window, GTK_STATE_NORMAL);
   gtk_style_set_background (style, priv->bin_window, GTK_STATE_NORMAL);
 
-  /* Call paint here to allow a theme to set the background without flashing
-   */
-  gtk_paint_flat_box(style, priv->bin_window, GTK_STATE_NORMAL,
-		     GTK_SHADOW_NONE,
-		     NULL, widget, "viewportbin",
-		     0, 0, -1, -1);
-   
   gdk_window_show (priv->bin_window);
   gdk_window_show (priv->view_window);
 }
