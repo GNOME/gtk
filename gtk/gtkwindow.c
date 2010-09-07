@@ -2159,16 +2159,6 @@ gtk_window_remove_embedded_xid (GtkWindow *window, GdkNativeWindow xid)
 			   (GDestroyNotify) g_list_free : NULL);
 }
 
-void       
-_gtk_window_reposition (GtkWindow *window,
-			gint       x,
-			gint       y)
-{
-  g_return_if_fail (GTK_IS_WINDOW (window));
-
-  gtk_window_move (window, x, y);
-}
-
 static void
 gtk_window_dispose (GObject *object)
 {

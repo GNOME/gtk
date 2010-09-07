@@ -370,7 +370,7 @@ gtk_decorated_window_motion_notify (GtkWidget       *widget,
       dx = x - deco->last_x;
       dy = y - deco->last_y;
 
-      _gtk_window_reposition (window, win_x + dx, win_y + dy);
+      gtk_window_move (window, win_x + dx, win_y + dy);
     }
 
   if (deco->resize != RESIZE_NONE)
@@ -554,14 +554,14 @@ gtk_decorated_window_window_state (GtkWidget	       *widget,
 	  _gtk_window_constrain_size (window, w, h, &w, &h);
 	  if (w != deco->last_w || h != deco->last_h)
 	    {
-	      _gtk_window_reposition (window, DECORATION_BORDER_LEFT, DECORATION_BORDER_TOP);
+	      gtk_window_move (window, DECORATION_BORDER_LEFT, DECORATION_BORDER_TOP);
 	      gdk_window_resize (widget->window, w, h);
 	      deco->maximized = TRUE;
 	    }
 	}
       else
 	{
-	  _gtk_window_reposition (window, deco->last_x, deco->last_y);
+	  gtk_window_move (window, deco->last_x, deco->last_y);
 	  _gtk_window_constrain_size (window, deco->last_w, deco->last_h,
 				      &deco->last_w, &deco->last_h);
 	  gdk_window_resize (widget->window, deco->last_w, deco->last_h);
