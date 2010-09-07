@@ -1083,9 +1083,9 @@ gtk_scrolled_window_screen_changed (GtkWidget *widget,
 		     GUINT_TO_POINTER (window_placement_connection));
 }
 
-static void
-gtk_scrolled_window_paint (GtkWidget    *widget,
-			   GdkRectangle *area)
+static gboolean
+gtk_scrolled_window_expose (GtkWidget      *widget,
+			    GdkEventExpose *event)
 {
   GtkScrolledWindow *scrolled_window = GTK_SCROLLED_WINDOW (widget);
   GtkScrolledWindowPrivate *priv = scrolled_window->priv;
@@ -1127,24 +1127,14 @@ gtk_scrolled_window_paint (GtkWidget    *widget,
       gtk_paint_shadow (style,
                         gtk_widget_get_window (widget),
 			GTK_STATE_NORMAL, priv->shadow_type,
-			area, widget, "scrolled_window",
+			&event->area, widget, "scrolled_window",
                         allocation.x + relative_allocation.x,
                         allocation.y + relative_allocation.y,
 			relative_allocation.width,
 			relative_allocation.height);
     }
-}
 
-static gboolean
-gtk_scrolled_window_expose (GtkWidget      *widget,
-			    GdkEventExpose *event)
-{
-  if (gtk_widget_is_drawable (widget))
-    {
-      gtk_scrolled_window_paint (widget, &event->area);
-
-      GTK_WIDGET_CLASS (gtk_scrolled_window_parent_class)->expose_event (widget, event);
-    }
+  GTK_WIDGET_CLASS (gtk_scrolled_window_parent_class)->expose_event (widget, event);
 
   return FALSE;
 }
