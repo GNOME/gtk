@@ -90,8 +90,8 @@ static gboolean gtk_menu_item_enter      (GtkWidget        *widget,
                                           GdkEventCrossing *event);
 static gboolean gtk_menu_item_leave      (GtkWidget        *widget,
                                           GdkEventCrossing *event);
-static gint gtk_menu_item_expose         (GtkWidget        *widget,
-					  GdkEventExpose   *event);
+static gboolean gtk_menu_item_draw       (GtkWidget        *widget,
+                                          cairo_t          *cr);
 static void gtk_menu_item_parent_set     (GtkWidget        *widget,
 					  GtkWidget        *previous_parent);
 
@@ -192,7 +192,7 @@ gtk_menu_item_class_init (GtkMenuItemClass *klass)
   object_class->destroy = gtk_menu_item_destroy;
 
   widget_class->size_allocate = gtk_menu_item_size_allocate;
-  widget_class->expose_event = gtk_menu_item_expose;
+  widget_class->draw = gtk_menu_item_draw;
   widget_class->realize = gtk_menu_item_realize;
   widget_class->unrealize = gtk_menu_item_unrealize;
   widget_class->map = gtk_menu_item_map;
@@ -1506,33 +1506,32 @@ gtk_menu_item_leave (GtkWidget        *widget,
 }
 
 static gboolean
-gtk_menu_item_expose (GtkWidget      *widget,
-		      GdkEventExpose *event)
+gtk_menu_item_draw (GtkWidget *widget,
+                    cairo_t   *cr)
 {
-  GtkAllocation allocation;
   GtkMenuItem *menu_item;
   GtkStateType state_type;
   GtkShadowType shadow_type, selected_shadow_type;
   GtkStyle *style;
   GtkWidget *child;
   GdkWindow *window;
-  gint width, height;
-  gint x, y;
+  gint x, y, w, h, width, height;
   guint border_width = gtk_container_get_border_width (GTK_CONTAINER (widget));
 
   if (gtk_widget_is_drawable (widget))
     {
       menu_item = GTK_MENU_ITEM (widget);
 
-      gtk_widget_get_allocation (widget, &allocation);
       state_type = gtk_widget_get_state (widget);
       style = gtk_widget_get_style (widget);
       window = gtk_widget_get_window (widget);
+      width = gtk_widget_get_allocated_width (widget);
+      height = gtk_widget_get_allocated_height (widget);
 
-      x = allocation.x + border_width;
-      y = allocation.y + border_width;
-      width = allocation.width - border_width * 2;
-      height = allocation.height - border_width * 2;
+      x = border_width;
+      y = border_width;
+      w = width - border_width * 2;
+      h = height - border_width * 2;
 
       child = gtk_bin_get_child (GTK_BIN (menu_item));
       
@@ -1541,12 +1540,12 @@ gtk_menu_item_expose (GtkWidget      *widget,
 	  gtk_widget_style_get (widget,
 				"selected-shadow-type", &selected_shadow_type,
 				NULL);
-	  gtk_paint_box (style,
-                         window,
+	  gtk_cairo_paint_box (style,
+                         cr,
 			 GTK_STATE_PRELIGHT,
 			 selected_shadow_type,
-			 &event->area, widget, "menuitem",
-			 x, y, width, height);
+			 widget, "menuitem",
+			 x, y, w, h);
 	}
   
       if (menu_item->submenu && menu_item->show_submenu_indicator)
@@ -1571,7 +1570,7 @@ gtk_menu_item_expose (GtkWidget      *widget,
 
 	  if (direction == GTK_TEXT_DIR_LTR)
 	    {
-	      arrow_x = x + width - horizontal_padding - arrow_size;
+	      arrow_x = x + w - horizontal_padding - arrow_size;
 	      arrow_type = GTK_ARROW_RIGHT;
 	    }
 	  else
@@ -1580,11 +1579,11 @@ gtk_menu_item_expose (GtkWidget      *widget,
 	      arrow_type = GTK_ARROW_LEFT;
 	    }
 
-	  arrow_y = y + (height - arrow_size) / 2;
+	  arrow_y = y + (h - arrow_size) / 2;
 
-	  gtk_paint_arrow (style, window,
+	  gtk_cairo_paint_arrow (style, cr,
 			   state_type, shadow_type, 
-			   &event->area, widget, "menuitem", 
+			   widget, "menuitem", 
 			   arrow_type, TRUE,
 			   arrow_x, arrow_y,
 			   arrow_size, arrow_size);
@@ -1602,22 +1601,22 @@ gtk_menu_item_expose (GtkWidget      *widget,
                                 NULL);
 
           if (wide_separators)
-            gtk_paint_box (style, window,
+            gtk_cairo_paint_box (style, cr,
                            GTK_STATE_NORMAL, GTK_SHADOW_ETCHED_OUT,
-                           &event->area, widget, "hseparator",
-                           allocation.x + horizontal_padding + style->xthickness,
-                           allocation.y + (allocation.height - separator_height - style->ythickness) / 2,
-                           allocation.width - 2 * (horizontal_padding + style->xthickness),
+                           widget, "hseparator",
+                           horizontal_padding + style->xthickness,
+                           (height - separator_height - style->ythickness) / 2,
+                           width - 2 * (horizontal_padding + style->xthickness),
                            separator_height);
           else
-            gtk_paint_hline (style, window,
-                             GTK_STATE_NORMAL, &event->area, widget, "menuitem",
-                             allocation.x + horizontal_padding + style->xthickness,
-                             allocation.x + allocation.width - horizontal_padding - style->xthickness - 1,
-                             allocation.y + (allocation.height - style->ythickness) / 2);
+            gtk_cairo_paint_hline (style, cr,
+                             GTK_STATE_NORMAL, widget, "menuitem",
+                             horizontal_padding + style->xthickness,
+                             width - horizontal_padding - style->xthickness - 1,
+                             (height - style->ythickness) / 2);
 	}
 
-      GTK_WIDGET_CLASS (gtk_menu_item_parent_class)->expose_event (widget, event);
+      GTK_WIDGET_CLASS (gtk_menu_item_parent_class)->draw (widget, cr);
     }
 
   return FALSE;
