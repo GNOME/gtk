@@ -87,8 +87,6 @@ static void gtk_viewport_set_scroll_adjustments	  (GtkViewport	    *viewport,
 						   GtkAdjustment    *vadjustment);
 static void gtk_viewport_realize                  (GtkWidget        *widget);
 static void gtk_viewport_unrealize                (GtkWidget        *widget);
-static void gtk_viewport_paint                    (GtkWidget        *widget,
-						   GdkRectangle     *area);
 static gint gtk_viewport_expose                   (GtkWidget        *widget,
 						   GdkEventExpose   *event);
 static void gtk_viewport_add                      (GtkContainer     *container,
@@ -771,37 +769,25 @@ gtk_viewport_unrealize (GtkWidget *widget)
   GTK_WIDGET_CLASS (gtk_viewport_parent_class)->unrealize (widget);
 }
 
-static void
-gtk_viewport_paint (GtkWidget    *widget,
-		    GdkRectangle *area)
+static gint
+gtk_viewport_expose (GtkWidget      *widget,
+		     GdkEventExpose *event)
 {
   if (gtk_widget_is_drawable (widget))
     {
       GtkViewport *viewport = GTK_VIEWPORT (widget);
       GtkViewportPrivate *priv = viewport->priv;
 
-      gtk_paint_shadow (gtk_widget_get_style (widget),
-                        gtk_widget_get_window (widget),
-			GTK_STATE_NORMAL, priv->shadow_type,
-			area, widget, "viewport",
-			0, 0, -1, -1);
-    }
-}
-
-static gint
-gtk_viewport_expose (GtkWidget      *widget,
-		     GdkEventExpose *event)
-{
-  GtkViewport *viewport;
-
-  if (gtk_widget_is_drawable (widget))
-    {
-      viewport = GTK_VIEWPORT (widget);
-      GtkViewportPrivate *priv = viewport->priv;
-
       if (event->window == gtk_widget_get_window (widget))
-	gtk_viewport_paint (widget, &event->area);
-      else if (event->window == priv->bin_window)
+        {
+          gtk_paint_shadow (gtk_widget_get_style (widget),
+                            gtk_widget_get_window (widget),
+                            GTK_STATE_NORMAL, priv->shadow_type,
+                            &event->area, widget, "viewport",
+                            0, 0, -1, -1);
+        }
+      
+      if (event->window == priv->bin_window)
 	{
           gtk_paint_flat_box(gtk_widget_get_style (widget), priv->bin_window,
 			     GTK_STATE_NORMAL, GTK_SHADOW_NONE,
