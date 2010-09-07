@@ -3896,7 +3896,6 @@ void
 gtk_widget_size_allocate (GtkWidget	*widget,
 			  GtkAllocation *allocation)
 {
-  GtkWidgetAuxInfo *aux_info;
   GdkRectangle real_allocation;
   GdkRectangle old_allocation;
   gboolean alloc_needed;
@@ -3933,15 +3932,6 @@ gtk_widget_size_allocate (GtkWidget	*widget,
 
   old_allocation = widget->allocation;
   real_allocation = *allocation;
-  aux_info =_gtk_widget_get_aux_info (widget, FALSE);
-  
-  if (aux_info)
-    {
-      if (aux_info->x_set)
-	real_allocation.x = aux_info->x;
-      if (aux_info->y_set)
-	real_allocation.y = aux_info->y;
-    }
 
   if (real_allocation.width < 0 || real_allocation.height < 0)
     {

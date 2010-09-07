@@ -540,13 +540,8 @@ struct _GtkWidgetClass
 
 struct _GtkWidgetAuxInfo
 {
-  gint x;
-  gint y;
   gint width;
   gint height;
-
-  guint x_set : 1;
-  guint y_set : 1;
 };
 
 struct _GtkWidgetShapeInfo
