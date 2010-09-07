@@ -57,8 +57,8 @@ static void     gtk_event_box_size_request  (GtkWidget        *widget,
                                              GtkRequisition   *requisition);
 static void     gtk_event_box_size_allocate (GtkWidget        *widget,
                                              GtkAllocation    *allocation);
-static gboolean gtk_event_box_expose        (GtkWidget        *widget,
-                                             GdkEventExpose   *event);
+static gboolean gtk_event_box_draw          (GtkWidget        *widget,
+                                             cairo_t          *cr);
 static void     gtk_event_box_set_property  (GObject          *object,
                                              guint             prop_id,
                                              const GValue     *value,
@@ -85,7 +85,7 @@ gtk_event_box_class_init (GtkEventBoxClass *class)
   widget_class->unmap = gtk_event_box_unmap;
   widget_class->size_request = gtk_event_box_size_request;
   widget_class->size_allocate = gtk_event_box_size_allocate;
-  widget_class->expose_event = gtk_event_box_expose;
+  widget_class->draw = gtk_event_box_draw;
 
   g_object_class_install_property (gobject_class,
                                    PROP_VISIBLE_WINDOW,
@@ -563,19 +563,21 @@ gtk_event_box_size_allocate (GtkWidget     *widget,
 }
 
 static gboolean
-gtk_event_box_expose (GtkWidget      *widget,
-		     GdkEventExpose *event)
+gtk_event_box_draw (GtkWidget      *widget,
+                    cairo_t        *cr)
 {
   if (gtk_widget_get_has_window (widget) &&
       !gtk_widget_get_app_paintable (widget))
-    gtk_paint_flat_box (gtk_widget_get_style (widget),
-                        gtk_widget_get_window (widget),
+    gtk_cairo_paint_flat_box (gtk_widget_get_style (widget),
+                        cr,
 			gtk_widget_get_state (widget),
                         GTK_SHADOW_NONE,
-			&event->area, widget, "eventbox",
-			0, 0, -1, -1);
+			widget, "eventbox",
+			0, 0,
+                        gtk_widget_get_allocated_width (widget),
+                        gtk_widget_get_allocated_height (widget));
   
-  GTK_WIDGET_CLASS (gtk_event_box_parent_class)->expose_event (widget, event);
+  GTK_WIDGET_CLASS (gtk_event_box_parent_class)->draw (widget, cr);
 
   return FALSE;
 }
