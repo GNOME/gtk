@@ -161,8 +161,6 @@ gtk_tearoff_menu_item_expose (GtkWidget      *widget,
 			 &event->area, widget, "menuitem",
 			 x, y, width, height);
 	}
-      else
-	gdk_window_clear_area (window, area->x, area->y, area->width, area->height);
 
       parent = gtk_widget_get_parent (widget);
       if (GTK_IS_MENU (parent) && GTK_MENU (parent)->torn_off)
