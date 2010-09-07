@@ -1548,104 +1548,100 @@ _gtk_button_paint (GtkButton          *button,
   gboolean interior_focus;
   gint focus_width;
   gint focus_pad;
+  GtkAllocation allocation;
+  GdkWindow *window;
+  GtkStyle *style;
 
   widget = GTK_WIDGET (button);
 
-  if (gtk_widget_is_drawable (widget))
+  gtk_button_get_props (button, &default_border, &default_outside_border, NULL, &interior_focus);
+  gtk_widget_style_get (widget,
+                        "focus-line-width", &focus_width,
+                        "focus-padding", &focus_pad,
+                        NULL); 
+
+  gtk_widget_get_allocation (widget, &allocation);
+  style = gtk_widget_get_style (widget);
+  window = gtk_widget_get_window (widget);
+
+  x = allocation.x;
+  y = allocation.y;
+  width = allocation.width;
+  height = allocation.height;
+
+  if (gtk_widget_has_default (widget) &&
+      GTK_BUTTON (widget)->relief == GTK_RELIEF_NORMAL)
     {
-      GtkAllocation allocation;
-      GdkWindow *window;
-      GtkStyle *style;
+      gtk_paint_box (style, window,
+                     GTK_STATE_NORMAL, GTK_SHADOW_IN,
+                     area, widget, "buttondefault",
+                     x, y, width, height);
 
-      gtk_button_get_props (button, &default_border, &default_outside_border, NULL, &interior_focus);
+      x += default_border.left;
+      y += default_border.top;
+      width -= default_border.left + default_border.right;
+      height -= default_border.top + default_border.bottom;
+    }
+  else if (gtk_widget_get_can_default (widget))
+    {
+      x += default_outside_border.left;
+      y += default_outside_border.top;
+      width -= default_outside_border.left + default_outside_border.right;
+      height -= default_outside_border.top + default_outside_border.bottom;
+    }
+   
+  if (!interior_focus && gtk_widget_has_focus (widget))
+    {
+      x += focus_width + focus_pad;
+      y += focus_width + focus_pad;
+      width -= 2 * (focus_width + focus_pad);
+      height -= 2 * (focus_width + focus_pad);
+    }
+
+  if (button->relief != GTK_RELIEF_NONE || button->depressed ||
+      gtk_widget_get_state(widget) == GTK_STATE_PRELIGHT)
+    gtk_paint_box (style, window,
+                   state_type,
+                   shadow_type, area, widget, "button",
+                   x, y, width, height);
+   
+  if (gtk_widget_has_focus (widget))
+    {
+      gint child_displacement_x;
+      gint child_displacement_y;
+      gboolean displace_focus;
+      
       gtk_widget_style_get (widget,
-			    "focus-line-width", &focus_width,
-			    "focus-padding", &focus_pad,
-			    NULL); 
+                            "child-displacement-y", &child_displacement_y,
+                            "child-displacement-x", &child_displacement_x,
+                            "displace-focus", &displace_focus,
+                            NULL);
 
-      gtk_widget_get_allocation (widget, &allocation);
-      style = gtk_widget_get_style (widget);
-      window = gtk_widget_get_window (widget);
+      if (interior_focus)
+        {
+          x += style->xthickness + focus_pad;
+          y += style->ythickness + focus_pad;
+          width -= 2 * (style->xthickness + focus_pad);
+          height -=  2 * (style->ythickness + focus_pad);
+        }
+      else
+        {
+          x -= focus_width + focus_pad;
+          y -= focus_width + focus_pad;
+          width += 2 * (focus_width + focus_pad);
+          height += 2 * (focus_width + focus_pad);
+        }
 
-      x = allocation.x;
-      y = allocation.y;
-      width = allocation.width;
-      height = allocation.height;
+      if (button->depressed && displace_focus)
+        {
+          x += child_displacement_x;
+          y += child_displacement_y;
+        }
 
-      if (gtk_widget_has_default (widget) &&
-	  GTK_BUTTON (widget)->relief == GTK_RELIEF_NORMAL)
-	{
-	  gtk_paint_box (style, window,
-			 GTK_STATE_NORMAL, GTK_SHADOW_IN,
-			 area, widget, "buttondefault",
-			 x, y, width, height);
-
-	  x += default_border.left;
-	  y += default_border.top;
-	  width -= default_border.left + default_border.right;
-	  height -= default_border.top + default_border.bottom;
-	}
-      else if (gtk_widget_get_can_default (widget))
-	{
-	  x += default_outside_border.left;
-	  y += default_outside_border.top;
-	  width -= default_outside_border.left + default_outside_border.right;
-	  height -= default_outside_border.top + default_outside_border.bottom;
-	}
-       
-      if (!interior_focus && gtk_widget_has_focus (widget))
-	{
-	  x += focus_width + focus_pad;
-	  y += focus_width + focus_pad;
-	  width -= 2 * (focus_width + focus_pad);
-	  height -= 2 * (focus_width + focus_pad);
-	}
-
-      if (button->relief != GTK_RELIEF_NONE || button->depressed ||
-	  gtk_widget_get_state(widget) == GTK_STATE_PRELIGHT)
-        gtk_paint_box (style, window,
-		       state_type,
-		       shadow_type, area, widget, "button",
-		       x, y, width, height);
-       
-      if (gtk_widget_has_focus (widget))
-	{
-	  gint child_displacement_x;
-	  gint child_displacement_y;
-	  gboolean displace_focus;
-	  
-	  gtk_widget_style_get (widget,
-				"child-displacement-y", &child_displacement_y,
-				"child-displacement-x", &child_displacement_x,
-				"displace-focus", &displace_focus,
-				NULL);
-
-	  if (interior_focus)
-	    {
-	      x += style->xthickness + focus_pad;
-	      y += style->ythickness + focus_pad;
-	      width -= 2 * (style->xthickness + focus_pad);
-	      height -=  2 * (style->ythickness + focus_pad);
-	    }
-	  else
-	    {
-	      x -= focus_width + focus_pad;
-	      y -= focus_width + focus_pad;
-	      width += 2 * (focus_width + focus_pad);
-	      height += 2 * (focus_width + focus_pad);
-	    }
-
-	  if (button->depressed && displace_focus)
-	    {
-	      x += child_displacement_x;
-	      y += child_displacement_y;
-	    }
-
-          gtk_paint_focus (style, window,
-                           gtk_widget_get_state (widget),
-			   area, widget, "button",
-			   x, y, width, height);
-	}
+      gtk_paint_focus (style, window,
+                       gtk_widget_get_state (widget),
+                       area, widget, "button",
+                       x, y, width, height);
     }
 }
 
