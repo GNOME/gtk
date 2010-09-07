@@ -1822,7 +1822,9 @@ gdk_keymap_map_virtual_modifiers (GdkKeymap       *keymap,
 
   keymap = GET_EFFECTIVE_KEYMAP (keymap);
   keymap_x11 = GDK_KEYMAP_X11 (keymap);
-  get_xkb (keymap_x11);
+
+  if (KEYMAP_USE_XKB (keymap))
+    get_xkb (keymap_x11);
 
   retval = TRUE;
 
