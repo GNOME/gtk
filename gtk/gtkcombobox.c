@@ -286,8 +286,8 @@ static void     gtk_combo_box_forall               (GtkContainer     *container,
                                                     gboolean          include_internals,
                                                     GtkCallback       callback,
                                                     gpointer          callback_data);
-static gboolean gtk_combo_box_expose_event         (GtkWidget        *widget,
-                                                    GdkEventExpose   *event);
+static gboolean gtk_combo_box_draw                 (GtkWidget        *widget,
+                                                    cairo_t          *cr);
 static gboolean gtk_combo_box_scroll_event         (GtkWidget        *widget,
                                                     GdkEventScroll   *event);
 static void     gtk_combo_box_set_active_internal  (GtkComboBox      *combo_box,
@@ -514,7 +514,7 @@ gtk_combo_box_class_init (GtkComboBoxClass *klass)
 
   widget_class = (GtkWidgetClass *)klass;
   widget_class->size_allocate = gtk_combo_box_size_allocate;
-  widget_class->expose_event = gtk_combo_box_expose_event;
+  widget_class->draw = gtk_combo_box_draw;
   widget_class->scroll_event = gtk_combo_box_scroll_event;
   widget_class->mnemonic_activate = gtk_combo_box_mnemonic_activate;
   widget_class->grab_focus = gtk_combo_box_grab_focus;
@@ -2486,39 +2486,35 @@ gtk_combo_box_child_hide (GtkWidget *widget,
 }
 
 static gboolean
-gtk_combo_box_expose_event (GtkWidget      *widget,
-                            GdkEventExpose *event)
+gtk_combo_box_draw (GtkWidget *widget,
+                    cairo_t   *cr)
 {
   GtkComboBox *combo_box = GTK_COMBO_BOX (widget);
   GtkComboBoxPrivate *priv = combo_box->priv;
 
-  if (gtk_widget_is_drawable (widget) &&
-      GTK_SHADOW_NONE != priv->shadow_type)
+  if (priv->shadow_type != GTK_SHADOW_NONE)
     {
-      GtkAllocation allocation;
-
-      gtk_widget_get_allocation (widget, &allocation);
-
-      gtk_paint_shadow (gtk_widget_get_style (widget),
-                        gtk_widget_get_window (widget),
+      gtk_cairo_paint_shadow (gtk_widget_get_style (widget),
+                        cr,
                         GTK_STATE_NORMAL, priv->shadow_type,
-                        NULL, widget, "combobox",
-                        allocation.x, allocation.y,
-                        allocation.width, allocation.height);
+                        widget, "combobox",
+                        0, 0,
+                        gtk_widget_get_allocated_width (widget),
+                        gtk_widget_get_allocated_height (widget));
     }
 
-  gtk_container_propagate_expose (GTK_CONTAINER (widget),
-				  priv->button, event);
+  gtk_container_propagate_draw (GTK_CONTAINER (widget),
+				priv->button, cr);
 
   if (priv->tree_view && priv->cell_view_frame)
     {
-      gtk_container_propagate_expose (GTK_CONTAINER (widget),
-				      priv->cell_view_frame, event);
+      gtk_container_propagate_draw (GTK_CONTAINER (widget),
+				    priv->cell_view_frame, cr);
     }
 
-  gtk_container_propagate_expose (GTK_CONTAINER (widget),
-                                  gtk_bin_get_child (GTK_BIN (widget)),
-                                  event);
+  gtk_container_propagate_draw (GTK_CONTAINER (widget),
+                                gtk_bin_get_child (GTK_BIN (widget)),
+                                cr);
 
   return FALSE;
 }
