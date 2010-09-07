@@ -87,8 +87,8 @@ static void gtk_viewport_set_scroll_adjustments	  (GtkViewport	    *viewport,
 						   GtkAdjustment    *vadjustment);
 static void gtk_viewport_realize                  (GtkWidget        *widget);
 static void gtk_viewport_unrealize                (GtkWidget        *widget);
-static gint gtk_viewport_expose                   (GtkWidget        *widget,
-						   GdkEventExpose   *event);
+static gint gtk_viewport_draw                     (GtkWidget        *widget,
+						   cairo_t          *cr);
 static void gtk_viewport_add                      (GtkContainer     *container,
 						   GtkWidget        *widget);
 static void gtk_viewport_size_allocate            (GtkWidget        *widget,
@@ -131,7 +131,7 @@ gtk_viewport_class_init (GtkViewportClass *class)
   
   widget_class->realize = gtk_viewport_realize;
   widget_class->unrealize = gtk_viewport_unrealize;
-  widget_class->expose_event = gtk_viewport_expose;
+  widget_class->draw = gtk_viewport_draw;
   widget_class->size_allocate = gtk_viewport_size_allocate;
   widget_class->style_set = gtk_viewport_style_set;
   
@@ -770,36 +770,36 @@ gtk_viewport_unrealize (GtkWidget *widget)
 }
 
 static gint
-gtk_viewport_expose (GtkWidget      *widget,
-		     GdkEventExpose *event)
+gtk_viewport_draw (GtkWidget *widget,
+                   cairo_t   *cr)
 {
   if (gtk_widget_is_drawable (widget))
     {
       GtkViewport *viewport = GTK_VIEWPORT (widget);
       GtkViewportPrivate *priv = viewport->priv;
-      int width, height;
+      int x, y, w, h;
 
-      if (event->window == gtk_widget_get_window (widget))
+      if (gtk_cairo_should_draw_window (cr, gtk_widget_get_window (widget)))
         {
           gdk_drawable_get_size (gtk_widget_get_window (widget),
-                                 &width, &height);
-          gtk_paint_shadow (gtk_widget_get_style (widget),
-                            gtk_widget_get_window (widget),
+                                 &w, &h);
+          gtk_cairo_paint_shadow (gtk_widget_get_style (widget),
+                            cr,
                             GTK_STATE_NORMAL, priv->shadow_type,
-                            &event->area, widget, "viewport",
-                            0, 0, width, height);
+                            widget, "viewport",
+                            0, 0, w, h);
         }
       
-      if (event->window == priv->bin_window)
+      if (gtk_cairo_should_draw_window (cr, priv->bin_window))
 	{
-          gdk_drawable_get_size (priv->bin_window,
-                                 &width, &height);
-          gtk_paint_flat_box(gtk_widget_get_style (widget), priv->bin_window,
-			     GTK_STATE_NORMAL, GTK_SHADOW_NONE,
-			     &event->area, widget, "viewportbin",
-			     0, 0, width, height);
+          gdk_window_get_position (priv->bin_window, &x, &y);
+          gdk_drawable_get_size (priv->bin_window, &w, &h);
+          gtk_cairo_paint_flat_box (gtk_widget_get_style (widget), cr,
+			      GTK_STATE_NORMAL, GTK_SHADOW_NONE,
+			      widget, "viewportbin",
+			      x, y, w, h);
 
-	  GTK_WIDGET_CLASS (gtk_viewport_parent_class)->expose_event (widget, event);
+	  GTK_WIDGET_CLASS (gtk_viewport_parent_class)->draw (widget, cr);
 	}
     }
 
