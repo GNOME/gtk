@@ -122,8 +122,8 @@ static void     gtk_scrolled_window_get_property       (GObject           *objec
 
 static void     gtk_scrolled_window_screen_changed     (GtkWidget         *widget,
                                                         GdkScreen         *previous_screen);
-static gboolean gtk_scrolled_window_expose             (GtkWidget         *widget,
-                                                        GdkEventExpose    *event);
+static gboolean gtk_scrolled_window_draw               (GtkWidget         *widget,
+                                                        cairo_t           *cr);
 static void     gtk_scrolled_window_size_allocate      (GtkWidget         *widget,
                                                         GtkAllocation     *allocation);
 static gboolean gtk_scrolled_window_scroll_event       (GtkWidget         *widget,
@@ -225,7 +225,7 @@ gtk_scrolled_window_class_init (GtkScrolledWindowClass *class)
   object_class->destroy = gtk_scrolled_window_destroy;
 
   widget_class->screen_changed = gtk_scrolled_window_screen_changed;
-  widget_class->expose_event = gtk_scrolled_window_expose;
+  widget_class->draw = gtk_scrolled_window_draw;
   widget_class->size_allocate = gtk_scrolled_window_size_allocate;
   widget_class->scroll_event = gtk_scrolled_window_scroll_event;
   widget_class->focus = gtk_scrolled_window_focus;
@@ -1084,23 +1084,20 @@ gtk_scrolled_window_screen_changed (GtkWidget *widget,
 }
 
 static gboolean
-gtk_scrolled_window_expose (GtkWidget      *widget,
-			    GdkEventExpose *event)
+gtk_scrolled_window_draw (GtkWidget *widget,
+                          cairo_t   *cr)
 {
   GtkScrolledWindow *scrolled_window = GTK_SCROLLED_WINDOW (widget);
   GtkScrolledWindowPrivate *priv = scrolled_window->priv;
 
   if (priv->shadow_type != GTK_SHADOW_NONE)
     {
-      GtkAllocation allocation;
       GtkAllocation relative_allocation;
       GtkStyle *style;
       gboolean scrollbars_within_bevel;
 
       style = gtk_widget_get_style (widget);
       gtk_widget_style_get (widget, "scrollbars-within-bevel", &scrollbars_within_bevel, NULL);
-
-      gtk_widget_get_allocation (widget, &allocation);
 
       if (!scrollbars_within_bevel)
         {
@@ -1120,21 +1117,21 @@ gtk_scrolled_window_expose (GtkWidget      *widget,
 
           relative_allocation.x = border_width;
           relative_allocation.y = border_width;
-          relative_allocation.width = allocation.width - 2 * border_width;
-          relative_allocation.height = allocation.height - 2 * border_width;
+          relative_allocation.width = gtk_widget_get_allocated_width (widget) - 2 * border_width;
+          relative_allocation.height = gtk_widget_get_allocated_height (widget) - 2 * border_width;
         }
 
-      gtk_paint_shadow (style,
-                        gtk_widget_get_window (widget),
+      gtk_cairo_paint_shadow (style,
+                        cr,
 			GTK_STATE_NORMAL, priv->shadow_type,
-			&event->area, widget, "scrolled_window",
-                        allocation.x + relative_allocation.x,
-                        allocation.y + relative_allocation.y,
+			widget, "scrolled_window",
+                        relative_allocation.x,
+                        relative_allocation.y,
 			relative_allocation.width,
 			relative_allocation.height);
     }
 
-  GTK_WIDGET_CLASS (gtk_scrolled_window_parent_class)->expose_event (widget, event);
+  GTK_WIDGET_CLASS (gtk_scrolled_window_parent_class)->draw (widget, cr);
 
   return FALSE;
 }
