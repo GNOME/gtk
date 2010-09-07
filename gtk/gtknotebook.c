@@ -4938,67 +4938,63 @@ gtk_notebook_draw_arrow (GtkNotebook      *notebook,
   GdkRectangle arrow_rect;
   GtkArrowType arrow;
   gboolean is_rtl, left;
+  gint scroll_arrow_hlength;
+  gint scroll_arrow_vlength;
+  gint arrow_size;
 
   widget = GTK_WIDGET (notebook);
 
-  if (gtk_widget_is_drawable (widget))
+  gtk_notebook_get_arrow_rect (notebook, &arrow_rect, nbarrow);
+
+  is_rtl = gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL;
+  left = (ARROW_IS_LEFT (nbarrow) && !is_rtl) ||
+         (!ARROW_IS_LEFT (nbarrow) && is_rtl); 
+
+  gtk_widget_style_get (widget,
+                        "scroll-arrow-hlength", &scroll_arrow_hlength,
+                        "scroll-arrow-vlength", &scroll_arrow_vlength,
+                        NULL);
+
+  if (priv->in_child == nbarrow)
     {
-      gint scroll_arrow_hlength;
-      gint scroll_arrow_vlength;
-      gint arrow_size;
-
-      gtk_notebook_get_arrow_rect (notebook, &arrow_rect, nbarrow);
-
-      is_rtl = gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL;
-      left = (ARROW_IS_LEFT (nbarrow) && !is_rtl) ||
-             (!ARROW_IS_LEFT (nbarrow) && is_rtl); 
-
-      gtk_widget_style_get (widget,
-                            "scroll-arrow-hlength", &scroll_arrow_hlength,
-                            "scroll-arrow-vlength", &scroll_arrow_vlength,
-                            NULL);
-
-      if (priv->in_child == nbarrow)
-        {
-          if (priv->click_child == nbarrow)
-            state_type = GTK_STATE_ACTIVE;
-          else
-            state_type = GTK_STATE_PRELIGHT;
-        }
-      else
-        state_type = gtk_widget_get_state (widget);
-
       if (priv->click_child == nbarrow)
-        shadow_type = GTK_SHADOW_IN;
+        state_type = GTK_STATE_ACTIVE;
       else
-        shadow_type = GTK_SHADOW_OUT;
-
-      if (priv->focus_tab &&
-	  !gtk_notebook_search_page (notebook, priv->focus_tab,
-				     left ? STEP_PREV : STEP_NEXT, TRUE))
-	{
-	  shadow_type = GTK_SHADOW_ETCHED_IN;
-	  state_type = GTK_STATE_INSENSITIVE;
-	}
-      
-      if (priv->tab_pos == GTK_POS_LEFT ||
-	  priv->tab_pos == GTK_POS_RIGHT)
-        {
-          arrow = (ARROW_IS_LEFT (nbarrow) ? GTK_ARROW_UP : GTK_ARROW_DOWN);
-          arrow_size = scroll_arrow_vlength;
-        }
-      else
-        {
-          arrow = (ARROW_IS_LEFT (nbarrow) ? GTK_ARROW_LEFT : GTK_ARROW_RIGHT);
-          arrow_size = scroll_arrow_hlength;
-        }
-     
-      gtk_cairo_paint_arrow (gtk_widget_get_style (widget),
-                       cr, state_type, 
-		       shadow_type, widget, "notebook",
-		       arrow, TRUE, arrow_rect.x, arrow_rect.y, 
-		       arrow_size, arrow_size);
+        state_type = GTK_STATE_PRELIGHT;
     }
+  else
+    state_type = gtk_widget_get_state (widget);
+
+  if (priv->click_child == nbarrow)
+    shadow_type = GTK_SHADOW_IN;
+  else
+    shadow_type = GTK_SHADOW_OUT;
+
+  if (priv->focus_tab &&
+      !gtk_notebook_search_page (notebook, priv->focus_tab,
+                                 left ? STEP_PREV : STEP_NEXT, TRUE))
+    {
+      shadow_type = GTK_SHADOW_ETCHED_IN;
+      state_type = GTK_STATE_INSENSITIVE;
+    }
+  
+  if (priv->tab_pos == GTK_POS_LEFT ||
+      priv->tab_pos == GTK_POS_RIGHT)
+    {
+      arrow = (ARROW_IS_LEFT (nbarrow) ? GTK_ARROW_UP : GTK_ARROW_DOWN);
+      arrow_size = scroll_arrow_vlength;
+    }
+  else
+    {
+      arrow = (ARROW_IS_LEFT (nbarrow) ? GTK_ARROW_LEFT : GTK_ARROW_RIGHT);
+      arrow_size = scroll_arrow_hlength;
+    }
+ 
+  gtk_cairo_paint_arrow (gtk_widget_get_style (widget),
+                   cr, state_type, 
+                   shadow_type, widget, "notebook",
+                   arrow, TRUE, arrow_rect.x, arrow_rect.y, 
+                   arrow_size, arrow_size);
 }
 
 /* Private GtkNotebook Size Allocate Functions:
