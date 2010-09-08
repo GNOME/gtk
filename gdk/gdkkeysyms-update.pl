@@ -63,7 +63,10 @@ die "Could not open file keysymdef.h: $!\n" unless open(IN_KEYSYMDEF, "<:utf8", 
 # Output: gtk+/gdk/gdkkeysyms.h
 die "Could not open file gdkkeysyms.h: $!\n" unless open(OUT_GDKKEYSYMS, ">:utf8", "gdkkeysyms.h");
 
-print OUT_GDKKEYSYMS<<EOF;
+# Output: gtk+/gdk/gdkkeysyms-compat.h
+die "Could not open file gdkkeysyms-compat.h: $!\n" unless open(OUT_GDKKEYSYMS_COMPAT, ">:utf8", "gdkkeysyms-compat.h");
+
+my $LICENSE_HEADER= <<EOF;
 /* GDK - The GIMP Drawing Kit
  * Copyright (C) 1995-1997 Peter Mattis, Spencer Kimball and Josh MacDonald
  * Copyright (C) 2005, 2006, 2007, 2009 GNOME Foundation
@@ -84,6 +87,13 @@ print OUT_GDKKEYSYMS<<EOF;
  * Boston, MA 02111-1307, USA.
  */
 
+EOF
+
+print OUT_GDKKEYSYMS $LICENSE_HEADER;
+print OUT_GDKKEYSYMS_COMPAT $LICENSE_HEADER;
+
+print OUT_GDKKEYSYMS<<EOF;
+
 /*
  * File auto-generated from script http://git.gnome.org/cgit/gtk+/tree/gdk/gdkkeysyms-update.pl
  * using the input file
@@ -102,9 +112,24 @@ print OUT_GDKKEYSYMS<<EOF;
 #ifndef __GDK_KEYSYMS_H__
 #define __GDK_KEYSYMS_H__
 
+/* For GTK 2, we include compatibility defines by default. */
+#include <gdk/gdkkeysyms-compat.h> 
 
 EOF
 
+print OUT_GDKKEYSYMS_COMPAT<<EOF;
+/*
+ * Compatibility version of gdkkeysyms.h.
+ *
+ * In GTK3, keysyms changed to have a KEY_ prefix.  This is a compatibility header
+ * your application can include to gain access to the old names as well.  Consider
+ * porting to the new names instead.
+ */
+
+#ifndef __GDK_KEYSYMS_COMPAT_H__
+#define __GDK_KEYSYMS_COMPAT_H__
+
+EOF
 
 while (<IN_KEYSYMDEF>)
 {
@@ -119,9 +144,14 @@ while (<IN_KEYSYMDEF>)
 	$_ = $keysymelements[2];
 	die "Internal error, was expecting \"0x*\", found: $_\n" if ( ! /^0x/ );
 
-	$keysymelements[1] =~ s/^XK_/GDK_/g;
+	my $element = $keysymelements[1];
+	my $binding = $element;
+	$binding =~ s/^XK_/GDK_KEY_/g;
+	my $compat_binding = $element;
+	$compat_binding =~ s/^XK_/GDK_/g;
 
-	printf OUT_GDKKEYSYMS "#define %s 0x%03x\n", $keysymelements[1], hex($keysymelements[2]);
+	printf OUT_GDKKEYSYMS "#define %s 0x%03x\n", $binding, hex($keysymelements[2]);
+	printf OUT_GDKKEYSYMS_COMPAT "#define %s 0x%03x\n", $compat_binding, hex($keysymelements[2]);
 }
 
 close IN_KEYSYMDEF;
@@ -162,9 +192,14 @@ while (<IN_XF86KEYSYM>)
 	$_ = $keysymelements[2];
 	die "Internal error, was expecting \"0x*\", found: $_\n" if ( ! /^0x/ );
 
-	$keysymelements[1] =~ s/^XF86XK_/GDK_/g;
+	my $element = $keysymelements[1];
+	my $binding = $element;
+	$binding =~ s/^XF86XK_/GDK_KEY_/g;
+	my $compat_binding = $element;
+	$compat_binding =~ s/^XF86XK_/GDK_/g;
 
-	printf OUT_GDKKEYSYMS "#define %s 0x%03x\n", $keysymelements[1], hex($keysymelements[2]);
+	printf OUT_GDKKEYSYMS "#define %s 0x%03x\n", $binding, hex($keysymelements[2]);
+	printf OUT_GDKKEYSYMS_COMPAT "#define %s 0x%03x\n", $compat_binding, hex($keysymelements[2]);
 }
 
 close IN_XF86KEYSYM;
@@ -175,4 +210,9 @@ print OUT_GDKKEYSYMS<<EOF;
 #endif /* __GDK_KEYSYMS_H__ */
 EOF
 
-printf "We just finished converting keysymdef.h to gdkkeysyms.h\nThank you\n";
+print OUT_GDKKEYSYMS_COMPAT<<EOF;
+
+#endif /* __GDK_KEYSYMS_COMPAT_H__ */
+EOF
+
+printf "We just finished converting keysymdef.h to gdkkeysyms.h and gdkkeysyms-compat.h\nThank you\n";

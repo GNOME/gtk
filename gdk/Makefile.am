@@ -88,6 +88,7 @@ gdk_public_h_sources =				\
 	gdkinput.h				\
 	gdkkeys.h				\
 	gdkkeysyms.h				\
+	gdkkeysyms-compat.h			\
 	gdkpango.h				\
 	gdkpixbuf.h				\
 	gdkpixmap.h				\
@@ -190,7 +191,7 @@ libgdk_win32_2_0_la_LDFLAGS = -Wl,win32/rc/gdk-win32-res.o -export-symbols $(src
 if HAVE_INTROSPECTION
 
 introspection_files = 		\
-	$(gdk_public_h_sources)	\
+	$(filter-out gdkkeysyms-compat.h, $(gdk_public_h_sources))	\
 	$(gdk_c_sources)	\
         gdkenumtypes.c		\
         gdkenumtypes.h
