@@ -1418,7 +1418,6 @@ gtk_handle_box_motion (GtkWidget      *widget,
 			 handle_box_signals[SIGNAL_CHILD_DETACHED],
 			 0,
 			 child);
-	  gtk_handle_box_draw_ghost (hb);
 	  
 	  gtk_widget_queue_resize (widget);
 	}
