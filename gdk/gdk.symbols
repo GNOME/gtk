@@ -288,6 +288,7 @@ gdk_visual_type_get_type G_GNUC_CONST
 #if IN_FILE(__GDK_CAIRO_C__)
 gdk_cairo_create
 gdk_cairo_reset_clip
+gdk_cairo_get_clip_rectangle
 gdk_cairo_set_source_color
 gdk_cairo_set_source_pixbuf
 gdk_cairo_set_source_window
