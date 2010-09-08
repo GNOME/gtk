@@ -2195,6 +2195,7 @@
 #define GDK_Blue 0x1008ffa6
 #define GDK_Suspend 0x1008ffa7
 #define GDK_Hibernate 0x1008ffa8
+#define GDK_TouchpadToggle 0x1008ffa9
 #define GDK_Switch_VT_1 0x1008fe01
 #define GDK_Switch_VT_2 0x1008fe02
 #define GDK_Switch_VT_3 0x1008fe03
