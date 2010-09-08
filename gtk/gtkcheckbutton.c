@@ -381,81 +381,76 @@ gtk_real_check_button_draw_indicator (GtkCheckButton *check_button,
   gint focus_pad;
   guint border_width;
   gboolean interior_focus;
+  GtkAllocation allocation;
+  GtkStyle *style;
+  GdkWindow *window;
 
   widget = GTK_WIDGET (check_button);
+  button = GTK_BUTTON (check_button);
+  toggle_button = GTK_TOGGLE_BUTTON (check_button);
 
-  if (gtk_widget_is_drawable (widget))
+  gtk_widget_get_allocation (widget, &allocation);
+  style = gtk_widget_get_style (widget);
+  window = gtk_widget_get_window (widget);
+
+  gtk_widget_style_get (widget, 
+                        "interior-focus", &interior_focus,
+                        "focus-line-width", &focus_width, 
+                        "focus-padding", &focus_pad, 
+                        NULL);
+
+  _gtk_check_button_get_props (check_button, &indicator_size, &indicator_spacing);
+
+  border_width = gtk_container_get_border_width (GTK_CONTAINER (widget));
+
+  x = allocation.x + indicator_spacing + border_width;
+  y = allocation.y + (allocation.height - indicator_size) / 2;
+
+  child = gtk_bin_get_child (GTK_BIN (check_button));
+  if (!interior_focus || !(child && gtk_widget_get_visible (child)))
+    x += focus_width + focus_pad;      
+
+  if (toggle_button->inconsistent)
+    shadow_type = GTK_SHADOW_ETCHED_IN;
+  else if (toggle_button->active)
+    shadow_type = GTK_SHADOW_IN;
+  else
+    shadow_type = GTK_SHADOW_OUT;
+
+  if (button->activate_timeout || (button->button_down && button->in_button))
+    state_type = GTK_STATE_ACTIVE;
+  else if (button->in_button)
+    state_type = GTK_STATE_PRELIGHT;
+  else if (!gtk_widget_is_sensitive (widget))
+    state_type = GTK_STATE_INSENSITIVE;
+  else
+    state_type = GTK_STATE_NORMAL;
+  
+  if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL)
+    x = allocation.x + allocation.width - (indicator_size + x - allocation.x);
+
+  if (gtk_widget_get_state (widget) == GTK_STATE_PRELIGHT)
     {
-      GtkAllocation allocation;
-      GtkStyle *style;
-      GdkWindow *window;
+      GdkRectangle restrict_area;
+      GdkRectangle new_area;
 
-      button = GTK_BUTTON (check_button);
-      toggle_button = GTK_TOGGLE_BUTTON (check_button);
+      restrict_area.x = allocation.x + border_width;
+      restrict_area.y = allocation.y + border_width;
+      restrict_area.width = allocation.width - (2 * border_width);
+      restrict_area.height = allocation.height - (2 * border_width);
 
-      gtk_widget_get_allocation (widget, &allocation);
-      style = gtk_widget_get_style (widget);
-      window = gtk_widget_get_window (widget);
-
-      gtk_widget_style_get (widget, 
-			    "interior-focus", &interior_focus,
-			    "focus-line-width", &focus_width, 
-			    "focus-padding", &focus_pad, 
-			    NULL);
-
-      _gtk_check_button_get_props (check_button, &indicator_size, &indicator_spacing);
-
-      border_width = gtk_container_get_border_width (GTK_CONTAINER (widget));
-
-      x = allocation.x + indicator_spacing + border_width;
-      y = allocation.y + (allocation.height - indicator_size) / 2;
-
-      child = gtk_bin_get_child (GTK_BIN (check_button));
-      if (!interior_focus || !(child && gtk_widget_get_visible (child)))
-	x += focus_width + focus_pad;      
-
-      if (toggle_button->inconsistent)
-	shadow_type = GTK_SHADOW_ETCHED_IN;
-      else if (toggle_button->active)
-	shadow_type = GTK_SHADOW_IN;
-      else
-	shadow_type = GTK_SHADOW_OUT;
-
-      if (button->activate_timeout || (button->button_down && button->in_button))
-	state_type = GTK_STATE_ACTIVE;
-      else if (button->in_button)
-	state_type = GTK_STATE_PRELIGHT;
-      else if (!gtk_widget_is_sensitive (widget))
-	state_type = GTK_STATE_INSENSITIVE;
-      else
-	state_type = GTK_STATE_NORMAL;
-      
-      if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL)
-	x = allocation.x + allocation.width - (indicator_size + x - allocation.x);
-
-      if (gtk_widget_get_state (widget) == GTK_STATE_PRELIGHT)
-	{
-	  GdkRectangle restrict_area;
-	  GdkRectangle new_area;
-
-	  restrict_area.x = allocation.x + border_width;
-	  restrict_area.y = allocation.y + border_width;
-	  restrict_area.width = allocation.width - (2 * border_width);
-	  restrict_area.height = allocation.height - (2 * border_width);
-
-	  if (gdk_rectangle_intersect (area, &restrict_area, &new_area))
-	    {
-              gtk_paint_flat_box (style, window, GTK_STATE_PRELIGHT,
-				  GTK_SHADOW_ETCHED_OUT, 
-				  area, widget, "checkbutton",
-				  new_area.x, new_area.y,
-				  new_area.width, new_area.height);
-	    }
-	}
-
-      gtk_paint_check (style, window,
-		       state_type, shadow_type,
-		       area, widget, "checkbutton",
-		       x, y, indicator_size, indicator_size);
+      if (gdk_rectangle_intersect (area, &restrict_area, &new_area))
+        {
+          gtk_paint_flat_box (style, window, GTK_STATE_PRELIGHT,
+                              GTK_SHADOW_ETCHED_OUT, 
+                              area, widget, "checkbutton",
+                              new_area.x, new_area.y,
+                              new_area.width, new_area.height);
+        }
     }
+
+  gtk_paint_check (style, window,
+                   state_type, shadow_type,
+                   area, widget, "checkbutton",
+                   x, y, indicator_size, indicator_size);
 }
