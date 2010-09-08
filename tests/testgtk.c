@@ -335,7 +335,7 @@ create_alpha_window (GtkWidget *widget)
  * Composited non-toplevel window
  */
 
-/* The expose event handler for the event box.
+/* The draw event handler for the event box.
  *
  * This function simply draws a transparency onto a widget on the area
  * for which it receives expose events.  This is intended to give the
@@ -348,16 +348,11 @@ create_alpha_window (GtkWidget *widget)
  * default background colour).
  */
 static gboolean
-transparent_expose (GtkWidget *widget,
-                    GdkEventExpose *event)
+transparent_draw (GtkWidget *widget,
+                  cairo_t   *cr)
 {
-  cairo_t *cr;
-
-  cr = gdk_cairo_create (gtk_widget_get_window (widget));
   cairo_set_operator (cr, CAIRO_OPERATOR_CLEAR);
-  gdk_cairo_region (cr, event->region);
-  cairo_fill (cr);
-  cairo_destroy (cr);
+  cairo_paint (cr);
 
   return FALSE;
 }
@@ -374,19 +369,14 @@ transparent_expose (GtkWidget *widget,
  * called before then GTK would just blindly paint over our work.
  */
 static gboolean
-window_expose_event (GtkWidget *widget,
-                     GdkEventExpose *event)
+window_draw (GtkWidget *widget,
+             cairo_t   *cr)
 {
   GtkAllocation allocation;
-  cairo_region_t *region;
   GtkWidget *child;
-  cairo_t *cr;
 
   /* get our child (in this case, the event box) */ 
   child = gtk_bin_get_child (GTK_BIN (widget));
-
-  /* create a cairo context to draw to the window */
-  cr = gdk_cairo_create (gtk_widget_get_window (widget));
 
   gtk_widget_get_allocation (child, &allocation);
 
@@ -395,18 +385,8 @@ window_expose_event (GtkWidget *widget,
                                allocation.x,
                                allocation.y);
 
-  /* draw no more than our expose event intersects our child */
-  region = cairo_region_create_rectangle (&allocation);
-  cairo_region_intersect (region, event->region);
-  gdk_cairo_region (cr, region);
-  cairo_clip (cr);
-
   /* composite, with a 50% opacity */
-  cairo_set_operator (cr, CAIRO_OPERATOR_OVER);
   cairo_paint_with_alpha (cr, 0.5);
-
-  /* we're done */
-  cairo_destroy (cr);
 
   return FALSE;
 }
@@ -439,8 +419,8 @@ create_composited_window (GtkWidget *widget)
        * that "transparency" is the background colour for a widget.
        */
       gtk_widget_set_app_paintable (GTK_WIDGET (event), TRUE);
-      g_signal_connect (event, "expose-event",
-                        G_CALLBACK (transparent_expose), NULL);
+      g_signal_connect (event, "draw",
+                        G_CALLBACK (transparent_draw), NULL);
 
       /* put them inside one another */
       gtk_container_set_border_width (GTK_CONTAINER (window), 10);
@@ -460,8 +440,8 @@ create_composited_window (GtkWidget *widget)
        * note that we do _after so that the normal (red) background is drawn
        * by gtk before our compositing occurs.
        */
-      g_signal_connect_after (window, "expose-event",
-                              G_CALLBACK (window_expose_event), NULL);
+      g_signal_connect_after (window, "draw",
+                              G_CALLBACK (window_draw), NULL);
     }
 
   if (!gtk_widget_get_visible (window))
