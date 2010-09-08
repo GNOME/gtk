@@ -64,27 +64,22 @@ scale_changed_cb (GtkRange *range,
 }
 
 static gboolean
-ebox_expose_event_cb (GtkWidget      *widget,
-                      GdkEventExpose *event,
-                      gpointer        data)
+ebox_draw_cb (GtkWidget *widget,
+              cairo_t   *cr,
+              gpointer   data)
 {
   PangoLayout *layout;
   const double dashes[] = { 6, 18 };
-  GtkAllocation allocation, label_allocation;
+  GtkAllocation label_allocation;
   GtkRequisition minimum_size, natural_size;
   GtkWidget *label = data;
-  cairo_t *cr;
   gint x, y;
 
-  cr = gdk_cairo_create (gtk_widget_get_window (widget));
   cairo_translate (cr, -0.5, -0.5);
   cairo_set_line_width (cr, 1);
 
-  gtk_widget_get_allocation (widget, &allocation);
-
   cairo_set_source_rgb (cr, 1, 1, 1);
-  cairo_rectangle (cr, 0, 0, allocation.width, allocation.height);
-  cairo_fill (cr);
+  cairo_paint (cr);
 
   gtk_widget_translate_coordinates (label, widget, 0, 0, &x, &y);
   layout = gtk_widget_create_pango_layout (widget, "");
@@ -122,8 +117,6 @@ ebox_expose_event_cb (GtkWidget      *widget,
   cairo_set_source_rgb (cr, 0.2, 0.8, 0.2);
   cairo_set_dash (cr, dashes, 2, 12.5);
   cairo_stroke (cr);
-
-  cairo_destroy (cr);
 
   return FALSE;
 }
@@ -169,7 +162,7 @@ main (int argc, char *argv[])
 
   g_signal_connect (combo, "changed", G_CALLBACK (combo_changed_cb), label);
   g_signal_connect (scale, "value-changed", G_CALLBACK (scale_changed_cb), label);
-  g_signal_connect (ebox, "expose-event", G_CALLBACK (ebox_expose_event_cb), label);
+  g_signal_connect (ebox, "draw", G_CALLBACK (ebox_draw_cb), label);
 
   gtk_widget_show_all (window);
 
