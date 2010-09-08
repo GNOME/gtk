@@ -149,8 +149,7 @@ static void     gtk_handle_box_remove        (GtkContainer   *container,
                                               GtkWidget      *widget);
 static void     gtk_handle_box_draw_ghost    (GtkHandleBox   *hb);
 static void     gtk_handle_box_paint         (GtkWidget      *widget,
-                                              GdkEventExpose *event,
-                                              GdkRectangle   *area);
+                                              GdkEventExpose *event);
 static gboolean gtk_handle_box_expose        (GtkWidget      *widget,
                                               GdkEventExpose *event);
 static gboolean gtk_handle_box_button_press  (GtkWidget      *widget,
@@ -789,17 +788,6 @@ gtk_handle_box_draw_ghost (GtkHandleBox *hb)
 		      allocation.width / 2);
 }
 
-static void
-draw_textured_frame (GtkWidget *widget, GdkWindow *window, GdkRectangle *rect, GtkShadowType shadow,
-		     GdkRectangle *clip, GtkOrientation orientation)
-{
-   gtk_paint_handle (gtk_widget_get_style (widget), window,
-                     GTK_STATE_NORMAL, shadow,
-		     clip, widget, "handlebox",
-		     rect->x, rect->y, rect->width, rect->height, 
-		     orientation);
-}
-
 void
 gtk_handle_box_set_shadow_type (GtkHandleBox  *handle_box,
 				GtkShadowType  type)
@@ -929,8 +917,7 @@ gtk_handle_box_get_child_detached (GtkHandleBox *handle_box)
 
 static void
 gtk_handle_box_paint (GtkWidget      *widget,
-                      GdkEventExpose *event,
-		      GdkRectangle   *area)
+                      GdkEventExpose *event)
 {
   GtkHandleBox *hb = GTK_HANDLE_BOX (widget);
   GtkHandleBoxPrivate *priv = hb->priv;
@@ -938,7 +925,6 @@ gtk_handle_box_paint (GtkWidget      *widget,
   GtkWidget *child;
   gint width, height;
   GdkRectangle rect;
-  GdkRectangle dest;
   gint handle_position;
   GtkOrientation handle_orientation;
 
@@ -946,28 +932,12 @@ gtk_handle_box_paint (GtkWidget      *widget,
 
   gdk_drawable_get_size (priv->bin_window, &width, &height);
 
-  if (!event)
-    gtk_paint_box (gtk_widget_get_style (widget),
-		   priv->bin_window,
-		   gtk_widget_get_state (widget),
-		   priv->shadow_type,
-		   area, widget, "handlebox_bin",
-		   0, 0, -1, -1);
-  else
-   gtk_paint_box (gtk_widget_get_style (widget),
-		  priv->bin_window,
-		  gtk_widget_get_state (widget),
-		  priv->shadow_type,
-		  &event->area, widget, "handlebox_bin",
-		  0, 0, -1, -1);
-
-/* We currently draw the handle _above_ the relief of the handlebox.
- * it could also be drawn on the same level...
-
-		 priv->handle_position == GTK_POS_LEFT ? DRAG_HANDLE_SIZE : 0,
-		 priv->handle_position == GTK_POS_TOP ? DRAG_HANDLE_SIZE : 0,
-		 width,
-		 height);*/
+  gtk_paint_box (gtk_widget_get_style (widget),
+                 priv->bin_window,
+                 gtk_widget_get_state (widget),
+                 priv->shadow_type,
+                 &event->area, widget, "handlebox_bin",
+                 0, 0, -1, -1);
 
   switch (handle_position)
     {
@@ -1004,11 +974,12 @@ gtk_handle_box_paint (GtkWidget      *widget,
       break;
     }
 
-  if (gdk_rectangle_intersect (event ? &event->area : area, &rect, &dest))
-    draw_textured_frame (widget, priv->bin_window, &rect,
-			 GTK_SHADOW_OUT,
-			 event ? &event->area : area,
-			 handle_orientation);
+  if (gdk_rectangle_intersect (&event->area, &rect, NULL))
+    gtk_paint_handle (gtk_widget_get_style (widget), priv->bin_window,
+                      GTK_STATE_NORMAL, GTK_SHADOW_OUT,
+		      &event->area, widget, "handlebox",
+		      rect.x, rect.y, rect.width, rect.height, 
+		      handle_orientation);
 
   child = gtk_bin_get_child (bin);
   if (child != NULL && gtk_widget_get_visible (child))
@@ -1033,7 +1004,7 @@ gtk_handle_box_expose (GtkWidget      *widget,
 	    gtk_handle_box_draw_ghost (hb);
 	}
       else
-	gtk_handle_box_paint (widget, event, NULL);
+	gtk_handle_box_paint (widget, event);
     }
   
   return FALSE;
