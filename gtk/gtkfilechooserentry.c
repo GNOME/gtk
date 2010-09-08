@@ -882,26 +882,23 @@ gtk_file_chooser_entry_unmap (GtkWidget *widget)
 }
 
 static gboolean
-completion_feedback_window_expose_event_cb (GtkWidget      *widget,
-					    GdkEventExpose *event,
-					    gpointer        data)
+completion_feedback_window_draw_cb (GtkWidget *widget,
+                                    cairo_t   *cr,
+                                    gpointer   data)
 {
   /* Stolen from gtk_tooltip_paint_window() */
 
   GtkFileChooserEntry *chooser_entry = GTK_FILE_CHOOSER_ENTRY (data);
-  GtkAllocation allocation;
 
-  gtk_widget_get_allocation (chooser_entry->completion_feedback_window, &allocation);
-
-  gtk_paint_flat_box (gtk_widget_get_style (chooser_entry->completion_feedback_window),
-                      gtk_widget_get_window (chooser_entry->completion_feedback_window),
+  gtk_cairo_paint_flat_box (gtk_widget_get_style (chooser_entry->completion_feedback_window),
+                      cr,
 		      GTK_STATE_NORMAL,
 		      GTK_SHADOW_OUT,
-		      NULL,
 		      chooser_entry->completion_feedback_window,
 		      "tooltip",
 		      0, 0,
-                      allocation.width, allocation.height);
+                      gtk_widget_get_allocated_width (widget),
+                      gtk_widget_get_allocated_height (widget));
 
   return FALSE;
 }
@@ -954,8 +951,8 @@ create_completion_feedback_window (GtkFileChooserEntry *chooser_entry)
   gtk_container_add (GTK_CONTAINER (chooser_entry->completion_feedback_window), alignment);
   gtk_widget_show (alignment);
 
-  g_signal_connect (chooser_entry->completion_feedback_window, "expose-event",
-		    G_CALLBACK (completion_feedback_window_expose_event_cb), chooser_entry);
+  g_signal_connect (chooser_entry->completion_feedback_window, "draw",
+		    G_CALLBACK (completion_feedback_window_draw_cb), chooser_entry);
   g_signal_connect (chooser_entry->completion_feedback_window, "realize",
 		    G_CALLBACK (completion_feedback_window_realize_cb), chooser_entry);
   /* FIXME: connect to motion-notify-event, and *show* the cursor when the mouse moves */
