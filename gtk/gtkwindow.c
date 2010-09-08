@@ -6660,7 +6660,7 @@ gtk_window_compute_hints (GtkWindow   *window,
        */
       gtk_widget_get_child_requisition (geometry_info->widget, &child_requisition);
 
-      gtk_widget_get_requisition (widget, &requisition);
+      gtk_size_request_get_size (widget, &requisition, NULL);
       extra_width = requisition.width - child_requisition.width;
       extra_height = requisition.height - child_requisition.height;
     }
