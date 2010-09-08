@@ -265,7 +265,9 @@ struct _GtkTextLineDisplay
   guint cursor_at_line_end : 1;
 };
 
+#ifdef GTK_COMPILATION
 extern PangoAttrType gtk_text_attr_appearance_type;
+#endif
 
 GType         gtk_text_layout_get_type    (void) G_GNUC_CONST;
 

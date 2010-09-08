@@ -3274,6 +3274,7 @@ gtk_text_buffer_set_text
 
 #if IN_HEADER(__GTK_TEXT_TYPES_H__)
 #if IN_FILE(__GTK_TEXT_TYPES_C__)
+gtk_text_unknown_char_utf8_gtk_tests_only
 gtk_text_byte_begins_utf8_char
 #endif
 #endif
@@ -4539,16 +4540,4 @@ gtk_info_bar_response
 gtk_info_bar_set_message_type
 gtk_info_bar_get_message_type
 #endif
-#endif
-
-#ifdef INCLUDE_VARIABLES
-gtk_text_attr_appearance_type
-gtk_text_char_type
-gtk_text_child_type
-gtk_text_left_mark_type
-gtk_text_pixbuf_type
-gtk_text_right_mark_type
-gtk_text_toggle_off_type
-gtk_text_toggle_on_type
-gtk_text_unknown_char_utf8
 #endif

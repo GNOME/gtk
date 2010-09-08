@@ -2389,8 +2389,8 @@ copy_segment (GString *string,
       if (copy)
         {
           g_string_append_len (string,
-                               gtk_text_unknown_char_utf8,
-                               3);
+                               _gtk_text_unknown_char_utf8,
+                               GTK_TEXT_UNKNOWN_CHAR_UTF8_LEN);
 
         }
     }

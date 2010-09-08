@@ -134,9 +134,10 @@ _gtk_pixbuf_segment_new (GdkPixbuf *pixbuf)
 
   seg->next = NULL;
 
-  seg->byte_count = 3; /* We convert to the 0xFFFC "unknown character",
-                        * a 3-byte sequence in UTF-8
-                        */
+  /* We convert to the 0xFFFC "unknown character",
+   * a 3-byte sequence in UTF-8.
+   */
+  seg->byte_count = GTK_TEXT_UNKNOWN_CHAR_UTF8_LEN;
   seg->char_count = 1;
 
   seg->body.pixbuf.pixbuf = pixbuf;
