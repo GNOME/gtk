@@ -307,21 +307,16 @@ close_app (GtkWidget *widget, gpointer data)
         return TRUE;
 }
 
-static int
-expose_cb (GtkWidget *drawing_area, GdkEventExpose *evt, gpointer data)
+static gboolean
+draw_cb (GtkWidget *drawing_area, cairo_t *cr, gpointer data)
 {
         GdkPixbuf *pixbuf;
-        cairo_t *cr;
          
         pixbuf = (GdkPixbuf *) g_object_get_data (G_OBJECT (drawing_area),
 						  "pixbuf");
 
-        cr = gdk_cairo_create (evt->window);
         gdk_cairo_set_source_pixbuf (cr, pixbuf, 0, 0);
-        gdk_cairo_rectangle (cr, &evt->area);
-        cairo_fill (cr);
-
-        cairo_destroy (cr);
+        cairo_paint (cr);
 
         return FALSE;
 }
@@ -377,8 +372,8 @@ main (int argc, char **argv)
         gtk_widget_set_size_request (GTK_WIDGET (drawing_area),
                                      gdk_pixbuf_get_width (pixbuf),
                                      gdk_pixbuf_get_height (pixbuf));
-        g_signal_connect (drawing_area, "expose_event",
-			  G_CALLBACK (expose_cb), NULL);
+        g_signal_connect (drawing_area, "draw",
+			  G_CALLBACK (draw_cb), NULL);
 
         g_signal_connect (drawing_area, "configure_event",
 			  G_CALLBACK (configure_cb), NULL);
