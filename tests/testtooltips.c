@@ -216,8 +216,6 @@ drawing_area_expose (GtkWidget      *drawing_area,
 
   window =  gtk_widget_get_window (drawing_area);
 
-  gdk_window_get_pointer (window, NULL, NULL, NULL);
-
   cr = gdk_cairo_create (window);
 
   gtk_widget_get_allocation (drawing_area, &allocation);
