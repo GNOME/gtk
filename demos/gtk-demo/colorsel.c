@@ -15,28 +15,16 @@ static GtkWidget *frame;
 /* Expose callback for the drawing area
  */
 static gboolean
-expose_event_callback (GtkWidget      *widget, 
-                       GdkEventExpose *event, 
-                       gpointer        data)
+draw_callback (GtkWidget *widget, 
+               cairo_t   *cr,
+               gpointer   data)
 {
-  GdkWindow *window;
+  GtkStyle *style;
 
-  window = gtk_widget_get_window (widget);
-  if (window)
-    {
-      GtkStyle *style;
-      cairo_t *cr;
+  style = gtk_widget_get_style (widget);
 
-      style = gtk_widget_get_style (widget);
-
-      cr = gdk_cairo_create (window);
-
-      gdk_cairo_set_source_color (cr, &style->bg[GTK_STATE_NORMAL]);
-      gdk_cairo_rectangle (cr, &event->area);
-      cairo_fill (cr);
-
-      cairo_destroy (cr);
-    }
+  gdk_cairo_set_source_color (cr, &style->bg[GTK_STATE_NORMAL]);
+  cairo_paint (cr);
 
   return TRUE;
 }
@@ -112,8 +100,8 @@ do_colorsel (GtkWidget *do_widget)
 
       da = gtk_drawing_area_new ();
 
-      g_signal_connect (da, "expose_event",
-			G_CALLBACK (expose_event_callback), NULL);
+      g_signal_connect (da, "draw",
+			G_CALLBACK (draw_callback), NULL);
 
       /* set a minimum size */
       gtk_widget_set_size_request (da, 200, 200);
