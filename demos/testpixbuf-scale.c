@@ -32,30 +32,27 @@ overall_changed_cb (GtkAdjustment *adjustment, gpointer data)
 }
 
 gboolean
-expose_cb (GtkWidget *widget, GdkEventExpose *event, gpointer data)
+draw_cb (GtkWidget *widget, cairo_t *cr, gpointer data)
 {
-  GtkAllocation allocation;
   GdkPixbuf *dest;
-  cairo_t *cr;
+  int width, height;
 
-  dest = gdk_pixbuf_new (GDK_COLORSPACE_RGB, FALSE, 8, event->area.width, event->area.height);
+  width = gtk_widget_get_allocated_width (widget);
+  height = gtk_widget_get_allocated_height (widget);
 
-  gtk_widget_get_allocation (widget, &allocation);
+  dest = gdk_pixbuf_new (GDK_COLORSPACE_RGB, FALSE, 8, width, height);
+
   gdk_pixbuf_composite_color (pixbuf, dest,
-			      0, 0, event->area.width, event->area.height,
-			      -event->area.x, -event->area.y,
-                              (double) allocation.width / gdk_pixbuf_get_width (pixbuf),
-                              (double) allocation.height / gdk_pixbuf_get_height (pixbuf),
+			      0, 0, width, height,
+			      0, 0,
+                              (double) width / gdk_pixbuf_get_width (pixbuf),
+                              (double) height / gdk_pixbuf_get_height (pixbuf),
 			      interp_type, overall_alpha,
-			      event->area.x, event->area.y, 16, 0xaaaaaa, 0x555555);
-
-  cr = gdk_cairo_create (event->window);
+			      0, 0, 16, 0xaaaaaa, 0x555555);
 
   gdk_cairo_set_source_pixbuf (cr, dest, 0, 0);
-  gdk_cairo_rectangle (cr, &event->area);
-  cairo_fill (cr);
+  cairo_paint (cr);
 
-  cairo_destroy (cr);
   g_object_unref (dest);
   
   return TRUE;
@@ -144,8 +141,8 @@ main(int argc, char **argv)
 	darea = gtk_drawing_area_new ();
 	gtk_box_pack_start (GTK_BOX (vbox), darea, TRUE, TRUE, 0);
 
-	g_signal_connect (darea, "expose_event",
-			  G_CALLBACK (expose_cb), NULL);
+	g_signal_connect (darea, "draw",
+			  G_CALLBACK (draw_cb), NULL);
 
 	gtk_window_set_default_size (GTK_WINDOW (window),
 				     gdk_pixbuf_get_width (pixbuf),
