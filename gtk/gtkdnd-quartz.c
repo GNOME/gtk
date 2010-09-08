@@ -332,7 +332,7 @@ gtk_drag_get_source_widget (GdkDragContext *context)
 }
 
 /*************************************************************
- * gtk_drag_highlight_expose:
+ * gtk_drag_highlight_draw:
  *     Callback for expose_event for highlighted widgets.
  *   arguments:
  *     widget:
@@ -342,50 +342,25 @@ gtk_drag_get_source_widget (GdkDragContext *context)
  *************************************************************/
 
 static gboolean
-gtk_drag_highlight_expose (GtkWidget      *widget,
-			   GdkEventExpose *event,
-			   gpointer        data)
+gtk_drag_highlight_draw (GtkWidget *widget,
+                         cairo_t   *cr,
+			 gpointer   data)
 {
-  gint x, y, width, height;
-  
-  if (gtk_widget_is_drawable (widget))
-    {
-      cairo_t *cr;
-      GdkWindow *window = gtk_widget_get_window (widget);
-      
-      if (!gtk_widget_get_has_window (widget))
-	{
-          GtkAllocation allocation;
+  int width = gtk_widget_get_allocated_width (widget);
+  int height = gtk_widget_get_allocated_height (widget);
 
-          gtk_widget_get_allocation (widget, &allocation);
+  gtk_cairo_paint_shadow (gtk_widget_get_style (widget), cr,
+                    GTK_STATE_NORMAL, GTK_SHADOW_OUT,
+                    widget, "dnd",
+                    0, 0, width, height);
 
-	  x = allocation.x;
-	  y = allocation.y;
-	  width = allocation.width;
-	  height = allocation.height;
-	}
-      else
-	{
-	  x = 0;
-	  y = 0;
-	  gdk_drawable_get_size (window, &width, &height);
-	}
-      
-      gtk_paint_shadow (gtk_widget_get_style (widget), window,
-		        GTK_STATE_NORMAL, GTK_SHADOW_OUT,
-		        NULL, widget, "dnd",
-			x, y, width, height);
-
-      cr = gdk_cairo_create (window);
-      cairo_set_source_rgb (cr, 0.0, 0.0, 0.0); /* black */
-      cairo_set_line_width (cr, 1.0);
-      cairo_rectangle (cr,
-		       x + 0.5, y + 0.5,
-		       width - 1, height - 1);
-      cairo_stroke (cr);
-      cairo_destroy (cr);
-    }
-
+  cairo_set_source_rgb (cr, 0.0, 0.0, 0.0); /* black */
+  cairo_set_line_width (cr, 1.0);
+  cairo_rectangle (cr,
+                   0.5, 0.5,
+                   width - 1, height - 1);
+  cairo_stroke (cr);
+ 
   return FALSE;
 }
 
@@ -402,8 +377,8 @@ gtk_drag_highlight (GtkWidget  *widget)
 {
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
-  g_signal_connect_after (widget, "expose-event",
-			  G_CALLBACK (gtk_drag_highlight_expose),
+  g_signal_connect_after (widget, "draw",
+			  G_CALLBACK (gtk_drag_highlight_draw),
 			  NULL);
 
   gtk_widget_queue_draw (widget);
@@ -423,7 +398,7 @@ gtk_drag_unhighlight (GtkWidget *widget)
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
   g_signal_handlers_disconnect_by_func (widget,
-					gtk_drag_highlight_expose,
+					gtk_drag_highlight_draw,
 					NULL);
   
   gtk_widget_queue_draw (widget);
