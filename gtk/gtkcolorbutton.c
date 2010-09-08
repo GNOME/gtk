@@ -263,25 +263,15 @@ gtk_color_button_get_checkered (void)
 
 /* Handle exposure events for the color picker's drawing area */
 static gint
-expose_event (GtkWidget      *widget, 
-              GdkEventExpose *event, 
-              gpointer        data)
+gtk_color_button_draw_cb (GtkWidget *widget, 
+                          cairo_t   *cr,
+                          gpointer   data)
 {
   GtkColorButton *color_button = GTK_COLOR_BUTTON (data);
-  GtkAllocation allocation;
   cairo_pattern_t *checkered;
-  cairo_t *cr;
-
-  cr = gdk_cairo_create (event->window);
-
-  gtk_widget_get_allocation (widget, &allocation);
-  gdk_cairo_rectangle (cr, &allocation);
-  cairo_clip (cr);
 
   if (gtk_color_button_has_alpha (color_button))
     {
-      cairo_save (cr);
-
       cairo_set_source_rgb (cr, CHECK_DARK, CHECK_DARK, CHECK_DARK);
       cairo_paint (cr);
 
@@ -291,8 +281,6 @@ expose_event (GtkWidget      *widget,
       checkered = gtk_color_button_get_checkered ();
       cairo_mask (cr, checkered);
       cairo_pattern_destroy (checkered);
-
-      cairo_restore (cr);
 
       cairo_set_source_rgba (cr,
                              color_button->priv->color.red / 65535.,
@@ -314,8 +302,6 @@ expose_event (GtkWidget      *widget,
       cairo_mask (cr, checkered);
       cairo_pattern_destroy (checkered);
     }
-
-  cairo_destroy (cr);
 
   return FALSE;
 }
@@ -451,8 +437,8 @@ gtk_color_button_init (GtkColorButton *color_button)
   g_object_unref (layout);
 
   gtk_widget_set_size_request (color_button->priv->draw_area, rect.width - 2, rect.height - 2);
-  g_signal_connect (color_button->priv->draw_area, "expose-event",
-                    G_CALLBACK (expose_event), color_button);
+  g_signal_connect (color_button->priv->draw_area, "draw",
+                    G_CALLBACK (gtk_color_button_draw_cb), color_button);
   gtk_container_add (GTK_CONTAINER (frame), color_button->priv->draw_area);
   gtk_widget_show (color_button->priv->draw_area);
 
