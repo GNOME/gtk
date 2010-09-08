@@ -260,36 +260,36 @@ gtk_tool_item_group_tool_shell_init (GtkToolShellIface *iface)
 }
 
 static gboolean
-gtk_tool_item_group_header_expose_event_cb (GtkWidget      *widget,
-                                            GdkEventExpose *event,
-                                            gpointer        data)
+gtk_tool_item_group_header_draw_cb (GtkWidget *widget,
+                                    cairo_t   *cr,
+                                    gpointer   data)
 {
-  GtkAllocation allocation;
   GtkToolItemGroup *group = GTK_TOOL_ITEM_GROUP (data);
   GtkToolItemGroupPrivate* priv = group->priv;
   GtkExpanderStyle expander_style;
   GtkOrientation orientation;
-  gint x, y;
+  gint x, y, width, height;
   GtkTextDirection direction;
 
   orientation = gtk_tool_shell_get_orientation (GTK_TOOL_SHELL (group));
   expander_style = priv->expander_style;
   direction = gtk_widget_get_direction (widget);
+  width = gtk_widget_get_allocated_width (widget);
+  height = gtk_widget_get_allocated_height (widget);
 
-  gtk_widget_get_allocation (widget, &allocation);
   if (GTK_ORIENTATION_VERTICAL == orientation)
     {
       if (GTK_TEXT_DIR_RTL == direction)
-        x = allocation.x + allocation.width - priv->expander_size / 2;
+        x = width - priv->expander_size / 2;
       else
-        x = allocation.x + priv->expander_size / 2;
+        x = priv->expander_size / 2;
 
-      y = allocation.y + allocation.height / 2;
+      y = height / 2;
     }
   else
     {
-      x = allocation.x + allocation.width / 2;
-      y = allocation.y + priv->expander_size / 2;
+      x = width / 2;
+      y = priv->expander_size / 2;
 
       /* Unfortunatly gtk_paint_expander() doesn't support rotated drawing
        * modes. Luckily the following shady arithmetics produce the desired
@@ -297,10 +297,10 @@ gtk_tool_item_group_header_expose_event_cb (GtkWidget      *widget,
       expander_style = GTK_EXPANDER_EXPANDED - expander_style;
     }
 
-  gtk_paint_expander (gtk_widget_get_style (widget),
-                      gtk_widget_get_window (widget),
+  gtk_cairo_paint_expander (gtk_widget_get_style (widget),
+                      cr,
                       gtk_widget_get_state (priv->header),
-                      &event->area, GTK_WIDGET (group),
+                      GTK_WIDGET (group),
                       "tool-palette-header", x, y,
                       expander_style);
 
@@ -409,8 +409,8 @@ gtk_tool_item_group_init (GtkToolItemGroup *group)
 
   gtk_tool_item_group_header_adjust_style (group);
 
-  g_signal_connect_after (alignment, "expose-event",
-                          G_CALLBACK (gtk_tool_item_group_header_expose_event_cb),
+  g_signal_connect_after (alignment, "draw",
+                          G_CALLBACK (gtk_tool_item_group_header_draw_cb),
                           group);
   g_signal_connect_after (alignment, "size-request",
                           G_CALLBACK (gtk_tool_item_group_header_size_request_cb),
