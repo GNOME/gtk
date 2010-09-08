@@ -588,57 +588,54 @@ gtk_frame_paint (GtkWidget    *widget,
   GdkWindow *window;
   gint x, y, width, height;
 
-  if (gtk_widget_is_drawable (widget))
+  frame = GTK_FRAME (widget);
+  priv = frame->priv;
+
+  style = gtk_widget_get_style (widget);
+  window = gtk_widget_get_window (widget);
+  state = gtk_widget_get_state (widget);
+
+  x = priv->child_allocation.x - style->xthickness;
+  y = priv->child_allocation.y - style->ythickness;
+  width = priv->child_allocation.width + 2 * style->xthickness;
+  height =  priv->child_allocation.height + 2 * style->ythickness;
+
+  if (priv->label_widget)
     {
-      frame = GTK_FRAME (widget);
-      priv = frame->priv;
+      gfloat xalign;
+      gint height_extra;
+      gint x2;
 
-      style = gtk_widget_get_style (widget);
-      window = gtk_widget_get_window (widget);
-      state = gtk_widget_get_state (widget);
+      if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_LTR)
+        xalign = priv->label_xalign;
+      else
+        xalign = 1 - priv->label_xalign;
 
-      x = priv->child_allocation.x - style->xthickness;
-      y = priv->child_allocation.y - style->ythickness;
-      width = priv->child_allocation.width + 2 * style->xthickness;
-      height =  priv->child_allocation.height + 2 * style->ythickness;
+      height_extra = MAX (0, priv->label_allocation.height - style->ythickness)
+                     - priv->label_yalign * priv->label_allocation.height;
+      y -= height_extra;
+      height += height_extra;
 
-      if (priv->label_widget)
-	{
-	  gfloat xalign;
-	  gint height_extra;
-	  gint x2;
-
-	  if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_LTR)
-	    xalign = priv->label_xalign;
-	  else
-	    xalign = 1 - priv->label_xalign;
-
-          height_extra = MAX (0, priv->label_allocation.height - style->ythickness)
-                         - priv->label_yalign * priv->label_allocation.height;
-	  y -= height_extra;
-	  height += height_extra;
-
-          x2 = style->xthickness + (priv->child_allocation.width - priv->label_allocation.width - 2 * LABEL_PAD - 2 * LABEL_SIDE_PAD) * xalign + LABEL_SIDE_PAD;
-	  /* If the label is completely over or under the frame we can omit the gap */
-	  if (priv->label_yalign == 0.0 || priv->label_yalign == 1.0)
-	    gtk_paint_shadow (style, window,
-			      state, priv->shadow_type,
-			      area, widget, "frame",
-			      x, y, width, height);
-	  else
-	    gtk_paint_shadow_gap (style, window,
-				  state, priv->shadow_type,
-				  area, widget, "frame",
-				  x, y, width, height,
-				  GTK_POS_TOP,
-				  x2, priv->label_allocation.width + 2 * LABEL_PAD);
-	}
-       else
-	 gtk_paint_shadow (style, window,
-			   state, priv->shadow_type,
-			   area, widget, "frame",
-			   x, y, width, height);
+      x2 = style->xthickness + (priv->child_allocation.width - priv->label_allocation.width - 2 * LABEL_PAD - 2 * LABEL_SIDE_PAD) * xalign + LABEL_SIDE_PAD;
+      /* If the label is completely over or under the frame we can omit the gap */
+      if (priv->label_yalign == 0.0 || priv->label_yalign == 1.0)
+        gtk_paint_shadow (style, window,
+                          state, priv->shadow_type,
+                          area, widget, "frame",
+                          x, y, width, height);
+      else
+        gtk_paint_shadow_gap (style, window,
+                              state, priv->shadow_type,
+                              area, widget, "frame",
+                              x, y, width, height,
+                              GTK_POS_TOP,
+                              x2, priv->label_allocation.width + 2 * LABEL_PAD);
     }
+   else
+     gtk_paint_shadow (style, window,
+                       state, priv->shadow_type,
+                       area, widget, "frame",
+                       x, y, width, height);
 }
 
 static gboolean
