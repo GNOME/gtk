@@ -511,7 +511,6 @@ gtk_spinner_accessible_get_type (void)
               (GInterfaceFinalizeFunc) NULL,
               NULL
       };
-      GType type;
       GType parent_atk_type;
       GTypeInfo tinfo = { 0 };
       GTypeQuery query;
