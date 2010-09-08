@@ -329,10 +329,8 @@ static void gtk_window_real_activate_focus   (GtkWindow         *window);
 static void gtk_window_move_focus            (GtkWindow         *window,
                                               GtkDirectionType   dir);
 static void gtk_window_keys_changed          (GtkWindow         *window);
-static void gtk_window_paint                 (GtkWidget         *widget,
-					      GdkRectangle      *area);
-static gint gtk_window_expose                (GtkWidget         *widget,
-					      GdkEventExpose    *event);
+static gint gtk_window_draw                  (GtkWidget         *widget,
+					      cairo_t           *cr);
 static void gtk_window_unset_transient_for         (GtkWindow  *window);
 static void gtk_window_transient_parent_realized   (GtkWidget  *parent,
 						    GtkWidget  *window);
@@ -554,7 +552,7 @@ gtk_window_class_init (GtkWindowClass *klass)
   widget_class->focus_out_event = gtk_window_focus_out_event;
   widget_class->client_event = gtk_window_client_event;
   widget_class->focus = gtk_window_focus;
-  widget_class->expose_event = gtk_window_expose;
+  widget_class->draw = gtk_window_draw;
 
   container_class->check_resize = gtk_window_check_resize;
 
@@ -6666,25 +6664,21 @@ gtk_window_compute_hints (GtkWindow   *window,
  * Redrawing functions *
  ***********************/
 
-static void
-gtk_window_paint (GtkWidget     *widget,
-		  GdkRectangle *area)
-{
-  gtk_paint_flat_box (gtk_widget_get_style (widget),
-                      gtk_widget_get_window (widget),
-                      GTK_STATE_NORMAL,
-		      GTK_SHADOW_NONE, area, widget, "base", 0, 0, -1, -1);
-}
-
-static gint
-gtk_window_expose (GtkWidget      *widget,
-		   GdkEventExpose *event)
+static gboolean
+gtk_window_draw (GtkWidget *widget,
+		 cairo_t   *cr)
 {
   if (!gtk_widget_get_app_paintable (widget))
-    gtk_window_paint (widget, &event->area);
+    gtk_cairo_paint_flat_box (gtk_widget_get_style (widget),
+                        cr,
+                        GTK_STATE_NORMAL,
+                        GTK_SHADOW_NONE, widget, "base",
+                        0, 0,
+                        gtk_widget_get_allocated_width (widget),
+                        gtk_widget_get_allocated_height (widget));
   
-  if (GTK_WIDGET_CLASS (gtk_window_parent_class)->expose_event)
-    return GTK_WIDGET_CLASS (gtk_window_parent_class)->expose_event (widget, event);
+  if (GTK_WIDGET_CLASS (gtk_window_parent_class)->draw)
+    return GTK_WIDGET_CLASS (gtk_window_parent_class)->draw (widget, cr);
 
   return FALSE;
 }
