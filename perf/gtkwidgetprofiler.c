@@ -20,7 +20,7 @@ struct _GtkWidgetProfilerPrivate {
 
   GTimer *timer;
 
-  gulong toplevel_expose_event_id;
+  gulong toplevel_draw_id;
   gulong toplevel_property_notify_event_id;
 
   GdkAtom profiler_atom;
@@ -96,8 +96,8 @@ reset_state (GtkWidgetProfiler *profiler)
 
   if (priv->toplevel)
     {
-      g_signal_handler_disconnect (priv->toplevel, priv->toplevel_expose_event_id);
-      priv->toplevel_expose_event_id = 0;
+      g_signal_handler_disconnect (priv->toplevel, priv->toplevel_draw_id);
+      priv->toplevel_draw_id = 0;
 
       g_signal_handler_disconnect (priv->toplevel, priv->toplevel_property_notify_event_id);
       priv->toplevel_property_notify_event_id = 0;
@@ -197,7 +197,7 @@ toplevel_property_notify_event_cb (GtkWidget *widget, GdkEventProperty *event, g
 }
 
 static gboolean
-toplevel_idle_after_expose_cb (gpointer data)
+toplevel_idle_after_draw_cb (gpointer data)
 {
   GtkWidgetProfiler *profiler;
   GtkWidgetProfilerPrivate *priv;
@@ -217,13 +217,13 @@ toplevel_idle_after_expose_cb (gpointer data)
 }
 
 static gboolean
-toplevel_expose_event_cb (GtkWidget *widget, GdkEventExpose *event, gpointer data)
+toplevel_draw_cb (GtkWidget *widget, cairo_t *cr, gpointer data)
 {
   GtkWidgetProfiler *profiler;
 
   profiler = GTK_WIDGET_PROFILER (data);
 
-  gdk_threads_add_idle_full (G_PRIORITY_HIGH, toplevel_idle_after_expose_cb, profiler, NULL);
+  gdk_threads_add_idle_full (G_PRIORITY_HIGH, toplevel_idle_after_draw_cb, profiler, NULL);
   return FALSE;
 }
 
@@ -235,8 +235,8 @@ instrument_toplevel (GtkWidgetProfiler *profiler,
 
   priv = profiler->priv;
 
-  priv->toplevel_expose_event_id = g_signal_connect (toplevel, "expose-event",
-						     G_CALLBACK (toplevel_expose_event_cb), profiler);
+  priv->toplevel_draw_id = g_signal_connect (toplevel, "draw",
+					     G_CALLBACK (toplevel_draw_cb), profiler);
 
   gtk_widget_add_events (toplevel, GDK_PROPERTY_CHANGE_MASK);
   priv->toplevel_property_notify_event_id = g_signal_connect (toplevel, "property-notify-event",
