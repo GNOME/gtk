@@ -20,26 +20,29 @@ combo_changed_cb (GtkWidget *combo,
 }
 
 static gboolean
-layout_expose_handler (GtkWidget      *widget,
-                       GdkEventExpose *event)
+layout_draw_handler (GtkWidget *widget,
+                     cairo_t   *cr)
 {
   GtkLayout *layout = GTK_LAYOUT (widget);
   GdkWindow *bin_window = gtk_layout_get_bin_window (layout);
-  cairo_t *cr;
+  GdkRectangle clip;
 
-  gint i,j;
+  gint i, j, x, y;
   gint imin, imax, jmin, jmax;
 
-  if (event->window != bin_window)
+  if (!gtk_cairo_should_draw_window (cr, bin_window))
     return FALSE;
 
-  imin = (event->area.x) / 10;
-  imax = (event->area.x + event->area.width + 9) / 10;
+  gdk_window_get_position (bin_window, &x, &y);
+  cairo_translate (cr, x, y);
 
-  jmin = (event->area.y) / 10;
-  jmax = (event->area.y + event->area.height + 9) / 10;
+  gdk_cairo_get_clip_rectangle (cr, &clip);
 
-  cr = gdk_cairo_create (bin_window);
+  imin = (clip.x) / 10;
+  imax = (clip.x + clip.width + 9) / 10;
+
+  jmin = (clip.y) / 10;
+  jmax = (clip.y + clip.height + 9) / 10;
 
   for (i = imin; i < imax; i++)
     for (j = jmin; j < jmax; j++)
@@ -49,8 +52,6 @@ layout_expose_handler (GtkWidget      *widget,
                            1 + i % 10, 1 + j % 10);
 
   cairo_fill (cr);
-
-  cairo_destroy (cr);
 
   return FALSE;
 }
@@ -103,8 +104,8 @@ create_layout (GtkWidget *vbox)
   gtk_layout_set_vadjustment (layout, vadjustment);
 
   gtk_widget_set_events (layout_widget, GDK_EXPOSURE_MASK);
-  g_signal_connect (layout, "expose_event",
-		    G_CALLBACK (layout_expose_handler),
+  g_signal_connect (layout, "draw",
+		    G_CALLBACK (layout_draw_handler),
                     NULL);
 
   gtk_layout_set_size (layout, 1600, 128000);
