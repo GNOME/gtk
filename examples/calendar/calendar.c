@@ -160,7 +160,7 @@ static void calendar_set_flags( CalendarData *calendar )
 	options = options + (1 << i);
       }
   if (calendar->window)
-    gtk_calendar_display_options (GTK_CALENDAR (calendar->window), options);
+    gtk_calendar_set_display_options (GTK_CALENDAR (calendar->window), options);
 }
 
 static void calendar_toggle_flag( GtkWidget    *toggle,
