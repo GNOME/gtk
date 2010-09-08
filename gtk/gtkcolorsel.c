@@ -677,7 +677,9 @@ gtk_color_selection_grab_broken (GtkWidget          *widget,
  *
  */
 
-static void color_sample_draw_sample (GtkColorSelection *colorsel, int which);
+static void color_sample_draw_sample (GtkColorSelection *colorsel,
+                                      int                which,
+                                      cairo_t *          cr);
 static void color_sample_update_samples (GtkColorSelection *colorsel);
 
 static void
@@ -836,13 +838,14 @@ color_sample_drag_handle (GtkWidget        *widget,
 
 /* which = 0 means draw old sample, which = 1 means draw new */
 static void
-color_sample_draw_sample (GtkColorSelection *colorsel, int which)
+color_sample_draw_sample (GtkColorSelection *colorsel,
+                          int                which,
+                          cairo_t           *cr)
 {
-  GtkAllocation allocation;
   GtkWidget *da;
-  gint x, y, wid, heig, goff;
+  gint x, y, goff;
   GtkColorSelectionPrivate *priv;
-  cairo_t *cr;
+  int width, height;
   
   g_return_if_fail (colorsel != NULL);
   priv = colorsel->private_data;
@@ -865,25 +868,21 @@ color_sample_draw_sample (GtkColorSelection *colorsel, int which)
       goff =  old_sample_allocation.width % 32;
     }
 
-  cr = gdk_cairo_create (gtk_widget_get_window (da));
-
-  gtk_widget_get_allocation (da, &allocation);
-  wid = allocation.width;
-  heig = allocation.height;
-
   /* Below needs tweaking for non-power-of-two */  
+  width = gtk_widget_get_allocated_width (da);
+  height = gtk_widget_get_allocated_height (da);
   
   if (priv->has_opacity)
     {
       /* Draw checks in background */
 
       cairo_set_source_rgb (cr, 0.5, 0.5, 0.5);
-      cairo_rectangle (cr, 0, 0, wid, heig);
+      cairo_rectangle (cr, 0, 0, width, height);
       cairo_fill (cr);
 
       cairo_set_source_rgb (cr, 0.75, 0.75, 0.75);
-      for (x = goff & -CHECK_SIZE; x < goff + wid; x += CHECK_SIZE)
-	for (y = 0; y < heig; y += CHECK_SIZE)
+      for (x = goff & -CHECK_SIZE; x < goff + width; x += CHECK_SIZE)
+	for (y = 0; y < height; y += CHECK_SIZE)
 	  if ((x / CHECK_SIZE + y / CHECK_SIZE) % 2 == 0)
 	    cairo_rectangle (cr, x - goff, y, CHECK_SIZE, CHECK_SIZE);
       cairo_fill (cr);
@@ -908,10 +907,8 @@ color_sample_draw_sample (GtkColorSelection *colorsel, int which)
 			       priv->color[COLORSEL_OPACITY] : 1.0);
     }
 
-  cairo_rectangle (cr, 0, 0, wid, heig);
+  cairo_rectangle (cr, 0, 0, width, height);
   cairo_fill (cr);
-
-  cairo_destroy (cr);
 }
 
 
@@ -924,21 +921,21 @@ color_sample_update_samples (GtkColorSelection *colorsel)
 }
 
 static gboolean
-color_old_sample_expose (GtkWidget         *da,
-			 GdkEventExpose    *event,
-			 GtkColorSelection *colorsel)
+color_old_sample_draw (GtkWidget         *da,
+                       cairo_t           *cr,
+                       GtkColorSelection *colorsel)
 {
-  color_sample_draw_sample (colorsel, 0);
+  color_sample_draw_sample (colorsel, 0, cr);
   return FALSE;
 }
 
 
 static gboolean
-color_cur_sample_expose (GtkWidget         *da,
-			 GdkEventExpose    *event,
-			 GtkColorSelection *colorsel)
+color_cur_sample_draw (GtkWidget         *da,
+                       cairo_t           *cr,
+                       GtkColorSelection *colorsel)
 {
-  color_sample_draw_sample (colorsel, 1);
+  color_sample_draw_sample (colorsel, 1, cr);
   return FALSE;
 }
 
@@ -1024,11 +1021,11 @@ color_sample_new (GtkColorSelection *colorsel)
   gtk_box_pack_start (GTK_BOX (priv->sample_area), priv->cur_sample,
 		      TRUE, TRUE, 0);
   
-  g_signal_connect (priv->old_sample, "expose-event",
-		    G_CALLBACK (color_old_sample_expose),
+  g_signal_connect (priv->old_sample, "draw",
+		    G_CALLBACK (color_old_sample_draw),
 		    colorsel);
-  g_signal_connect (priv->cur_sample, "expose-event",
-		    G_CALLBACK (color_cur_sample_expose),
+  g_signal_connect (priv->cur_sample, "draw",
+		    G_CALLBACK (color_cur_sample_draw),
 		    colorsel);
   
   color_sample_setup_dnd (colorsel, priv->old_sample);
@@ -1070,41 +1067,28 @@ palette_get_color (GtkWidget *drawing_area, gdouble *color)
   color[3] = 1.0;
 }
 
-static void
-palette_paint (GtkWidget    *drawing_area,
-	       GdkRectangle *area,
-	       gpointer      data)
+static gboolean
+palette_draw (GtkWidget *drawing_area,
+               cairo_t   *cr,
+	       gpointer   data)
 {
-  GdkWindow *window;
-  cairo_t *cr;
   gint focus_width;
 
-  window = gtk_widget_get_window (drawing_area);
-
-  if (window == NULL)
-    return;
-
-  cr = gdk_cairo_create (window);
-
   gdk_cairo_set_source_color (cr, &gtk_widget_get_style (drawing_area)->bg[GTK_STATE_NORMAL]);
-  gdk_cairo_rectangle (cr, area);
-  cairo_fill (cr);
+  cairo_paint (cr);
   
   if (gtk_widget_has_focus (drawing_area))
     {
-      GtkAllocation allocation;
-
       set_focus_line_attributes (drawing_area, cr, &focus_width);
 
-      gtk_widget_get_allocation (drawing_area, &allocation);
       cairo_rectangle (cr,
                        focus_width / 2., focus_width / 2.,
-                       allocation.width - focus_width,
-                       allocation.height - focus_width);
+                       gtk_widget_get_allocated_width (drawing_area) - focus_width,
+                       gtk_widget_get_allocated_height (drawing_area) - focus_width);
       cairo_stroke (cr);
     }
 
-  cairo_destroy (cr);
+  return FALSE;
 }
 
 static void
@@ -1346,19 +1330,6 @@ palette_set_color (GtkWidget         *drawing_area,
   new_color[3] = 1.0;
   
   g_object_set_data_full (G_OBJECT (drawing_area), I_("color_val"), new_color, (GDestroyNotify)g_free);
-}
-
-static gboolean
-palette_expose (GtkWidget      *drawing_area,
-		GdkEventExpose *event,
-		gpointer        data)
-{
-  if (gtk_widget_get_window (drawing_area) == NULL)
-    return FALSE;
-  
-  palette_paint (drawing_area, &(event->area), data);
-  
-  return FALSE;
 }
 
 static void
@@ -1604,8 +1575,8 @@ palette_new (GtkColorSelection *colorsel)
                          | GDK_ENTER_NOTIFY_MASK
                          | GDK_LEAVE_NOTIFY_MASK);
   
-  g_signal_connect (retval, "expose-event",
-		    G_CALLBACK (palette_expose), colorsel);
+  g_signal_connect (retval, "draw",
+		    G_CALLBACK (palette_draw), colorsel);
   g_signal_connect (retval, "button-press-event",
 		    G_CALLBACK (palette_press), colorsel);
   g_signal_connect (retval, "button-release-event",
