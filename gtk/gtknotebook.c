@@ -7111,8 +7111,6 @@ gtk_notebook_popup_disable  (GtkNotebook *notebook)
  * gtk_notebook_get_menu_label
  * gtk_notebook_set_menu_label
  * gtk_notebook_set_menu_label_text
- * gtk_notebook_set_tab_label_packing
- * gtk_notebook_query_tab_label_packing
  * gtk_notebook_get_tab_reorderable
  * gtk_notebook_set_tab_reorderable
  * gtk_notebook_get_tab_detachable
@@ -7746,7 +7744,7 @@ gtk_notebook_get_tab_detachable (GtkNotebook *notebook,
  * notebook or widget.
  *
  * Note that 2 notebooks must share a common group identificator
- * (see gtk_notebook_set_group_id ()) to allow automatic tabs
+ * (see gtk_notebook_set_group()) to allow automatic tabs
  * interchange between them.
  *
  * If you want a widget to interact with a notebook through DnD
