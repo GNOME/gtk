@@ -96,19 +96,12 @@ load_pixbufs (GError **error)
 
 /* Expose callback for the drawing area */
 static gint
-expose_cb (GtkWidget      *widget,
-           GdkEventExpose *event,
-           gpointer        data)
+draw_cb (GtkWidget *widget,
+         cairo_t   *cr,
+         gpointer   data)
 {
-  cairo_t *cr;
-
-  cr = gdk_cairo_create (event->window);
-
   gdk_cairo_set_source_pixbuf (cr, frame, 0, 0);
-  gdk_cairo_rectangle (cr, &event->area);
-  cairo_fill (cr);
-
-  cairo_destroy (cr);
+  cairo_paint (cr);
 
   return TRUE;
 }
@@ -246,8 +239,8 @@ do_pixbufs (GtkWidget *do_widget)
 
           da = gtk_drawing_area_new ();
 
-          g_signal_connect (da, "expose-event",
-                            G_CALLBACK (expose_cb), NULL);
+          g_signal_connect (da, "draw",
+                            G_CALLBACK (draw_cb), NULL);
 
           gtk_container_add (GTK_CONTAINER (window), da);
 
