@@ -1,23 +1,16 @@
 #include <gtk/gtk.h>
 
 static gboolean
-da_expose (GtkWidget *widget,
-           GdkEventExpose *event,
-           gpointer user_data)
+da_draw (GtkWidget *widget,
+         cairo_t   *cr,
+         gpointer   user_data)
 {
   GtkOffscreenWindow *offscreen = (GtkOffscreenWindow *)user_data;
-  cairo_surface_t *surface;
-  cairo_t *cr;
 
-  if (gtk_widget_is_drawable (widget))
-    {
-      surface = gtk_offscreen_window_get_surface (offscreen);
-
-      cr = gdk_cairo_create (gtk_widget_get_window (widget));
-      cairo_set_source_surface (cr, surface, 50, 50);
-      cairo_paint (cr);
-      cairo_destroy (cr);
-    }
+  cairo_set_source_surface (cr,
+                            gtk_offscreen_window_get_surface (offscreen),
+                            50, 50);
+  cairo_paint (cr);
 
   return FALSE;
 }
@@ -73,8 +66,8 @@ main (int argc, char **argv)
   gtk_container_add (GTK_CONTAINER (window), da);
 
   g_signal_connect (da,
-                    "expose-event",
-                    G_CALLBACK (da_expose),
+                    "draw",
+                    G_CALLBACK (da_draw),
                     offscreen);
 
   g_signal_connect (offscreen,
