@@ -1771,28 +1771,21 @@ status_window_get (GtkWidget *toplevel)
 /* Draw the background (normally white) and border for the status window
  */
 static gboolean
-on_status_window_expose_event (GtkWidget      *widget,
-			       GdkEventExpose *event)
+on_status_window_draw (GtkWidget *widget,
+                       cairo_t   *cr)
 {
-  GtkAllocation allocation;
   GtkStyle *style;
-  cairo_t *cr;
 
   style = gtk_widget_get_style (widget);
-  gtk_widget_get_allocation (widget, &allocation);
-
-  cr = gdk_cairo_create (gtk_widget_get_window (widget));
 
   gdk_cairo_set_source_color (cr, &style->base[GTK_STATE_NORMAL]);
-  cairo_rectangle (cr,
-                   0, 0,
-                   allocation.width, allocation.height);
-  cairo_fill (cr);
+  cairo_paint (cr);
 
   gdk_cairo_set_source_color (cr, &style->text[GTK_STATE_NORMAL]);
   cairo_rectangle (cr, 
                    0, 0,
-                   allocation.width - 1, allocation.height - 1);
+                   gtk_widget_get_allocated_width (widget) - 1,
+                   gtk_widget_get_allocated_height (widget) - 1);
   cairo_fill (cr);
 
   return FALSE;
@@ -1841,8 +1834,8 @@ status_window_make_window (StatusWindow *status_window)
 		    G_CALLBACK (on_status_window_style_set), status_label);
   gtk_container_add (GTK_CONTAINER (window), status_label);
   
-  g_signal_connect (window, "expose-event",
-		    G_CALLBACK (on_status_window_expose_event), NULL);
+  g_signal_connect (window, "draw",
+		    G_CALLBACK (on_status_window_draw), NULL);
   
   gtk_window_set_screen (GTK_WINDOW (status_window->window),
 			 gtk_widget_get_screen (status_window->toplevel));
