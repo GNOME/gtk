@@ -119,7 +119,7 @@ static gboolean gtk_radio_button_focus          (GtkWidget           *widget,
 						 GtkDirectionType     direction);
 static void     gtk_radio_button_clicked        (GtkButton           *button);
 static void     gtk_radio_button_draw_indicator (GtkCheckButton      *check_button,
-						 GdkRectangle        *area);
+						 cairo_t             *cr);
 static void     gtk_radio_button_set_property   (GObject             *object,
 						 guint                prop_id,
 						 const GValue        *value,
@@ -872,7 +872,7 @@ gtk_radio_button_clicked (GtkButton *button)
 
 static void
 gtk_radio_button_draw_indicator (GtkCheckButton *check_button,
-				 GdkRectangle   *area)
+				 cairo_t        *cr)
 {
   GtkAllocation allocation;
   GtkWidget *widget;
@@ -909,8 +909,8 @@ gtk_radio_button_draw_indicator (GtkCheckButton *check_button,
 
   gtk_widget_get_allocation (widget, &allocation);
 
-  x = allocation.x + indicator_spacing + border_width;
-  y = allocation.y + (allocation.height - indicator_size) / 2;
+  x = indicator_spacing + border_width;
+  y = (allocation.height - indicator_size) / 2;
 
   child = gtk_bin_get_child (GTK_BIN (check_button));
   if (!interior_focus || !(child && gtk_widget_get_visible (child)))
@@ -933,31 +933,21 @@ gtk_radio_button_draw_indicator (GtkCheckButton *check_button,
     state_type = GTK_STATE_NORMAL;
 
   if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL)
-    x = allocation.x + allocation.width - (indicator_size + x - allocation.x);
+    x = allocation.width - (indicator_size + x);
 
   if (gtk_widget_get_state (widget) == GTK_STATE_PRELIGHT)
     {
-      GdkRectangle restrict_area;
-      GdkRectangle new_area;
-
-      restrict_area.x = allocation.x + border_width;
-      restrict_area.y = allocation.y + border_width;
-      restrict_area.width = allocation.width - (2 * border_width);
-      restrict_area.height = allocation.height - (2 * border_width);
-
-      if (gdk_rectangle_intersect (area, &restrict_area, &new_area))
-        {
-          gtk_paint_flat_box (style, window,
-                              GTK_STATE_PRELIGHT,
-                              GTK_SHADOW_ETCHED_OUT, 
-                              area, widget, "checkbutton",
-                              new_area.x, new_area.y,
-                              new_area.width, new_area.height);
-        }
+      gtk_cairo_paint_flat_box (style, cr,
+                          GTK_STATE_PRELIGHT,
+                          GTK_SHADOW_ETCHED_OUT, 
+                          widget, "checkbutton",
+                          border_width, border_width,
+                          allocation.width - (2 * border_width),
+                          allocation.height - (2 * border_width));
     }
 
-  gtk_paint_option (style, window,
+  gtk_cairo_paint_option (style, cr,
                     state_type, shadow_type,
-                    area, widget, "radiobutton",
+                    widget, "radiobutton",
                     x, y, indicator_size, indicator_size);
 }

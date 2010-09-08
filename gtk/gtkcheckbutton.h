@@ -58,7 +58,7 @@ struct _GtkCheckButtonClass
   GtkToggleButtonClass parent_class;
 
   void (* draw_indicator) (GtkCheckButton *check_button,
-			   GdkRectangle   *area);
+			   cairo_t        *cr);
 
   /* Padding for future expansion */
   void (*_gtk_reserved1) (void);
