@@ -127,24 +127,20 @@ build_option_menu (gchar           *items[],
 
 
 static gboolean
-on_alpha_window_expose (GtkWidget      *widget,
-			GdkEventExpose *expose)
+on_alpha_window_draw (GtkWidget *widget,
+                      cairo_t   *cr)
 {
-  GtkAllocation allocation;
-  cairo_t *cr;
   cairo_pattern_t *pattern;
-  int radius;
+  int radius, width, height;
 
-  cr = gdk_cairo_create (gtk_widget_get_window (widget));
-
-  gtk_widget_get_allocation (widget, &allocation);
-
-  radius = MIN (allocation.width, allocation.height) / 2;
-  pattern = cairo_pattern_create_radial (allocation.width / 2,
-                                         allocation.height / 2,
+  width = gtk_widget_get_allocated_width (widget);
+  height = gtk_widget_get_allocated_height (widget);
+  radius = MIN (width, height) / 2;
+  pattern = cairo_pattern_create_radial (width / 2,
+                                         height / 2,
 					 0.0,
-                                         allocation.width / 2,
-                                         allocation.height / 2,
+                                         width / 2,
+                                         height / 2,
 					 radius * 1.33);
 
   if (gdk_screen_get_rgba_visual (gtk_widget_get_screen (widget)) &&
@@ -166,8 +162,6 @@ on_alpha_window_expose (GtkWidget      *widget,
   
   cairo_set_operator (cr, CAIRO_OPERATOR_OVER);
   cairo_paint (cr);
-
-  cairo_destroy (cr);
 
   return FALSE;
 }
@@ -299,8 +293,8 @@ create_alpha_window (GtkWidget *widget)
 					    NULL);
 
       gtk_widget_set_app_paintable (window, TRUE);
-      g_signal_connect (window, "expose-event",
-			G_CALLBACK (on_alpha_window_expose), NULL);
+      g_signal_connect (window, "draw",
+			G_CALLBACK (on_alpha_window_draw), NULL);
 
       content_area = gtk_dialog_get_content_area (GTK_DIALOG (window));
       
