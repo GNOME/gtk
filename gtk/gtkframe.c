@@ -67,10 +67,8 @@ static void gtk_frame_get_property (GObject     *object,
 				    guint        param_id,
 				    GValue      *value,
 				    GParamSpec  *pspec);
-static void gtk_frame_paint         (GtkWidget      *widget,
-				     GdkRectangle   *area);
-static gint gtk_frame_expose        (GtkWidget      *widget,
-				     GdkEventExpose *event);
+static gboolean gtk_frame_draw      (GtkWidget      *widget,
+				     cairo_t        *cr);
 static void gtk_frame_size_allocate (GtkWidget      *widget,
 				     GtkAllocation  *allocation);
 static void gtk_frame_remove        (GtkContainer   *container,
@@ -172,7 +170,7 @@ gtk_frame_class_init (GtkFrameClass *class)
                                                         GTK_TYPE_WIDGET,
                                                         GTK_PARAM_READWRITE));
 
-  widget_class->expose_event = gtk_frame_expose;
+  widget_class->draw = gtk_frame_draw;
   widget_class->size_allocate = gtk_frame_size_allocate;
 
   container_class->remove = gtk_frame_remove;
@@ -577,26 +575,26 @@ gtk_frame_get_shadow_type (GtkFrame *frame)
   return frame->priv->shadow_type;
 }
 
-static void
-gtk_frame_paint (GtkWidget    *widget,
-		 GdkRectangle *area)
+static gboolean
+gtk_frame_draw (GtkWidget *widget,
+		cairo_t   *cr)
 {
   GtkFrame *frame;
   GtkFramePrivate *priv;
   GtkStateType state;
   GtkStyle *style;
-  GdkWindow *window;
   gint x, y, width, height;
+  GtkAllocation allocation;
 
   frame = GTK_FRAME (widget);
   priv = frame->priv;
 
   style = gtk_widget_get_style (widget);
-  window = gtk_widget_get_window (widget);
   state = gtk_widget_get_state (widget);
+  gtk_widget_get_allocation (widget, &allocation);
 
-  x = priv->child_allocation.x - style->xthickness;
-  y = priv->child_allocation.y - style->ythickness;
+  x = priv->child_allocation.x - allocation.x - style->xthickness;
+  y = priv->child_allocation.y - allocation.y - style->ythickness;
   width = priv->child_allocation.width + 2 * style->xthickness;
   height =  priv->child_allocation.height + 2 * style->ythickness;
 
@@ -619,35 +617,25 @@ gtk_frame_paint (GtkWidget    *widget,
       x2 = style->xthickness + (priv->child_allocation.width - priv->label_allocation.width - 2 * LABEL_PAD - 2 * LABEL_SIDE_PAD) * xalign + LABEL_SIDE_PAD;
       /* If the label is completely over or under the frame we can omit the gap */
       if (priv->label_yalign == 0.0 || priv->label_yalign == 1.0)
-        gtk_paint_shadow (style, window,
+        gtk_cairo_paint_shadow (style, cr,
                           state, priv->shadow_type,
-                          area, widget, "frame",
+                          widget, "frame",
                           x, y, width, height);
       else
-        gtk_paint_shadow_gap (style, window,
+        gtk_cairo_paint_shadow_gap (style, cr,
                               state, priv->shadow_type,
-                              area, widget, "frame",
+                              widget, "frame",
                               x, y, width, height,
                               GTK_POS_TOP,
                               x2, priv->label_allocation.width + 2 * LABEL_PAD);
     }
    else
-     gtk_paint_shadow (style, window,
+     gtk_cairo_paint_shadow (style, cr,
                        state, priv->shadow_type,
-                       area, widget, "frame",
+                       widget, "frame",
                        x, y, width, height);
-}
 
-static gboolean
-gtk_frame_expose (GtkWidget      *widget,
-		  GdkEventExpose *event)
-{
-  if (gtk_widget_is_drawable (widget))
-    {
-      gtk_frame_paint (widget, &event->area);
-
-      GTK_WIDGET_CLASS (gtk_frame_parent_class)->expose_event (widget, event);
-    }
+  GTK_WIDGET_CLASS (gtk_frame_parent_class)->draw (widget, cr);
 
   return FALSE;
 }
