@@ -205,23 +205,14 @@ query_tooltip_drawing_area_cb (GtkWidget  *widget,
 }
 
 static gboolean
-drawing_area_expose (GtkWidget      *drawing_area,
-		     GdkEventExpose *event,
-		     gpointer        data)
+drawing_area_draw (GtkWidget *drawing_area,
+		   cairo_t   *cr,
+		   gpointer   data)
 {
-  GtkAllocation allocation;
-  GdkWindow *window;
   gint i;
-  cairo_t *cr;
 
-  window =  gtk_widget_get_window (drawing_area);
-
-  cr = gdk_cairo_create (window);
-
-  gtk_widget_get_allocation (drawing_area, &allocation);
-  cairo_rectangle (cr, 0, 0, allocation.width, allocation.height);
   cairo_set_source_rgb (cr, 1.0, 1.0, 1.0);
-  cairo_fill (cr);
+  cairo_paint (cr);
 
   for (i = 0; i < G_N_ELEMENTS (rectangles); i++)
     {
@@ -235,8 +226,6 @@ drawing_area_expose (GtkWidget      *drawing_area,
       cairo_set_source_rgba (cr, r->r, r->g, r->b, 0.5);
       cairo_fill (cr);
     }
-
-  cairo_destroy (cr);
 
   return FALSE;
 }
@@ -402,8 +391,8 @@ main (int argc, char *argv[])
   drawing_area = gtk_drawing_area_new ();
   gtk_widget_set_size_request (drawing_area, 320, 240);
   g_object_set (drawing_area, "has-tooltip", TRUE, NULL);
-  g_signal_connect (drawing_area, "expose_event",
-		    G_CALLBACK (drawing_area_expose), NULL);
+  g_signal_connect (drawing_area, "draw",
+		    G_CALLBACK (drawing_area_draw), NULL);
   g_signal_connect (drawing_area, "query-tooltip",
 		    G_CALLBACK (query_tooltip_drawing_area_cb), NULL);
   gtk_box_pack_start (GTK_BOX (box), drawing_area, FALSE, FALSE, 2);
