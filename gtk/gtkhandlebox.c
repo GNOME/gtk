@@ -147,11 +147,8 @@ static void     gtk_handle_box_add           (GtkContainer   *container,
                                               GtkWidget      *widget);
 static void     gtk_handle_box_remove        (GtkContainer   *container,
                                               GtkWidget      *widget);
-static void     gtk_handle_box_draw_ghost    (GtkHandleBox   *hb);
-static void     gtk_handle_box_paint         (GtkWidget      *widget,
-                                              GdkEventExpose *event);
-static gboolean gtk_handle_box_expose        (GtkWidget      *widget,
-                                              GdkEventExpose *event);
+static gboolean gtk_handle_box_draw          (GtkWidget      *widget,
+                                              cairo_t        *cr);
 static gboolean gtk_handle_box_button_press  (GtkWidget      *widget,
                                               GdkEventButton *event);
 static gboolean gtk_handle_box_motion        (GtkWidget      *widget,
@@ -230,7 +227,7 @@ gtk_handle_box_class_init (GtkHandleBoxClass *class)
   widget_class->style_set = gtk_handle_box_style_set;
   widget_class->size_request = gtk_handle_box_size_request;
   widget_class->size_allocate = gtk_handle_box_size_allocate;
-  widget_class->expose_event = gtk_handle_box_expose;
+  widget_class->draw = gtk_handle_box_draw;
   widget_class->button_press_event = gtk_handle_box_button_press;
   widget_class->delete_event = gtk_handle_box_delete_event;
 
@@ -728,9 +725,9 @@ gtk_handle_box_size_allocate (GtkWidget     *widget,
 }
 
 static void
-gtk_handle_box_draw_ghost (GtkHandleBox *hb)
+gtk_handle_box_draw_ghost (GtkHandleBox *hb,
+                           cairo_t      *cr)
 {
-  GtkAllocation allocation;
   GtkWidget *widget = GTK_WIDGET (hb);
   GtkStateType state;
   GtkStyle *style;
@@ -739,24 +736,27 @@ gtk_handle_box_draw_ghost (GtkHandleBox *hb)
   guint y;
   guint width;
   guint height;
+  gint allocation_width;
+  gint allocation_height;
   gint handle_position;
 
-  gtk_widget_get_allocation (widget, &allocation);
-
   handle_position = effective_handle_position (hb);
+  allocation_width = gtk_widget_get_allocated_width (widget);
+  allocation_height = gtk_widget_get_allocated_height (widget);
+
   if (handle_position == GTK_POS_LEFT ||
       handle_position == GTK_POS_RIGHT)
     {
-      x = handle_position == GTK_POS_LEFT ? 0 : allocation.width - DRAG_HANDLE_SIZE;
+      x = handle_position == GTK_POS_LEFT ? 0 : allocation_width - DRAG_HANDLE_SIZE;
       y = 0;
       width = DRAG_HANDLE_SIZE;
-      height = allocation.height;
+      height = allocation_height;
     }
   else
     {
       x = 0;
-      y = handle_position == GTK_POS_TOP ? 0 : allocation.height - DRAG_HANDLE_SIZE;
-      width = allocation.width;
+      y = handle_position == GTK_POS_TOP ? 0 : allocation_height - DRAG_HANDLE_SIZE;
+      width = allocation_width;
       height = DRAG_HANDLE_SIZE;
     }
 
@@ -764,28 +764,32 @@ gtk_handle_box_draw_ghost (GtkHandleBox *hb)
   window = gtk_widget_get_window (widget);
   state = gtk_widget_get_state (widget);
 
-  gtk_paint_shadow (style, window,
-		    state, GTK_SHADOW_ETCHED_IN,
-		    NULL, widget, "handle",
+  gtk_cairo_paint_shadow (style,
+		    cr,
+		    state,
+		    GTK_SHADOW_ETCHED_IN,
+		    widget, "handle",
 		    x,
 		    y,
 		    width,
 		    height);
    if (handle_position == GTK_POS_LEFT ||
        handle_position == GTK_POS_RIGHT)
-     gtk_paint_hline (style, window,
-                      state,
-		      NULL, widget, "handlebox",
+     gtk_cairo_paint_hline (style,
+		      cr,
+		      state,
+		      widget, "handlebox",
 		      handle_position == GTK_POS_LEFT ? DRAG_HANDLE_SIZE : 0,
-		      handle_position == GTK_POS_LEFT ? allocation.width : allocation.width - DRAG_HANDLE_SIZE,
-		      allocation.height / 2);
+		      handle_position == GTK_POS_LEFT ? allocation_width : allocation_width - DRAG_HANDLE_SIZE,
+		      allocation_height / 2);
    else
-     gtk_paint_vline (style, window,
-                      state,
-		      NULL, widget, "handlebox",
+     gtk_cairo_paint_vline (style,
+		      cr,
+		      state,
+		      widget, "handlebox",
 		      handle_position == GTK_POS_TOP ? DRAG_HANDLE_SIZE : 0,
-		      handle_position == GTK_POS_TOP ? allocation.height : allocation.height - DRAG_HANDLE_SIZE,
-		      allocation.width / 2);
+		      handle_position == GTK_POS_TOP ? allocation_height : allocation_height - DRAG_HANDLE_SIZE,
+		      allocation_width / 2);
 }
 
 void
@@ -917,27 +921,34 @@ gtk_handle_box_get_child_detached (GtkHandleBox *handle_box)
 
 static void
 gtk_handle_box_paint (GtkWidget      *widget,
-                      GdkEventExpose *event)
+                      cairo_t        *cr)
 {
   GtkHandleBox *hb = GTK_HANDLE_BOX (widget);
   GtkHandleBoxPrivate *priv = hb->priv;
   GtkBin *bin = GTK_BIN (widget);
   GtkWidget *child;
-  gint width, height;
+  gint x, y, width, height;
   GdkRectangle rect;
   gint handle_position;
   GtkOrientation handle_orientation;
 
   handle_position = effective_handle_position (hb);
 
+  cairo_save (cr);
+
+  gdk_window_get_origin (gtk_widget_get_window (widget), &x, &y);
+  cairo_translate (cr, -x, -y);
+  gdk_window_get_origin (priv->bin_window, &x, &y);
+  cairo_translate (cr, x, y);
+
   gdk_drawable_get_size (priv->bin_window, &width, &height);
 
-  gtk_paint_box (gtk_widget_get_style (widget),
-                 priv->bin_window,
+  gtk_cairo_paint_box (gtk_widget_get_style (widget),
+                 cr,
                  gtk_widget_get_state (widget),
                  priv->shadow_type,
-                 &event->area, widget, "handlebox_bin",
-                 0, 0, -1, -1);
+                 widget, "handlebox_bin",
+                 0, 0, width, height);
 
   switch (handle_position)
     {
@@ -974,38 +985,34 @@ gtk_handle_box_paint (GtkWidget      *widget,
       break;
     }
 
-  if (gdk_rectangle_intersect (&event->area, &rect, NULL))
-    gtk_paint_handle (gtk_widget_get_style (widget), priv->bin_window,
-                      GTK_STATE_NORMAL, GTK_SHADOW_OUT,
-		      &event->area, widget, "handlebox",
-		      rect.x, rect.y, rect.width, rect.height, 
-		      handle_orientation);
+  gtk_cairo_paint_handle (gtk_widget_get_style (widget), cr,
+                    GTK_STATE_NORMAL, GTK_SHADOW_OUT,
+                    widget, "handlebox",
+                    rect.x, rect.y, rect.width, rect.height, 
+                    handle_orientation);
+
+  cairo_restore (cr);
 
   child = gtk_bin_get_child (bin);
   if (child != NULL && gtk_widget_get_visible (child))
-    GTK_WIDGET_CLASS (gtk_handle_box_parent_class)->expose_event (widget, event);
+    GTK_WIDGET_CLASS (gtk_handle_box_parent_class)->draw (widget, cr);
 }
 
 static gboolean
-gtk_handle_box_expose (GtkWidget      *widget,
-		       GdkEventExpose *event)
+gtk_handle_box_draw (GtkWidget *widget,
+		     cairo_t   *cr)
 {
-  GtkHandleBox *hb;
-  GtkHandleBoxPrivate *priv;
+  GtkHandleBox *hb = GTK_HANDLE_BOX (widget);
+  GtkHandleBoxPrivate *priv = hb->priv;
 
-  if (gtk_widget_is_drawable (widget))
+  if (gtk_cairo_should_draw_window (cr, gtk_widget_get_window (widget)))
     {
-      hb = GTK_HANDLE_BOX (widget);
-      priv = hb->priv;
-
-      if (event->window == gtk_widget_get_window (widget))
-	{
-	  if (priv->child_detached)
-	    gtk_handle_box_draw_ghost (hb);
-	}
-      else
-	gtk_handle_box_paint (widget, event);
+      if (priv->child_detached)
+        gtk_handle_box_draw_ghost (hb, cr);
     }
+
+  if (gtk_cairo_should_draw_window (cr, priv->bin_window))
+    gtk_handle_box_paint (widget, cr);
   
   return FALSE;
 }
