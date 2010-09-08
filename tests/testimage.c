@@ -78,13 +78,13 @@ idle_func (gpointer data)
 }
 
 static gboolean
-anim_image_expose (GtkWidget      *widget,
-                   GdkEventExpose *eevent,
-                   gpointer        data)
+anim_image_draw (GtkWidget *widget,
+                 cairo_t   *cr,
+                 gpointer   data)
 {
   g_print ("start busyness\n");
 
-  g_signal_handlers_disconnect_by_func (widget, anim_image_expose, data);
+  g_signal_handlers_disconnect_by_func (widget, anim_image_draw, data);
 
   /* produce high load */
   g_idle_add_full (G_PRIORITY_DEFAULT,
@@ -199,8 +199,8 @@ main (int argc, char **argv)
       gtk_table_attach_defaults (GTK_TABLE (table), image, 2, 3, 5, 6);
 
       /* produce high load */
-      g_signal_connect_after (image, "expose-event",
-                              G_CALLBACK (anim_image_expose),
+      g_signal_connect_after (image, "draw",
+                              G_CALLBACK (anim_image_draw),
                               NULL);
     }
 
