@@ -90,7 +90,8 @@ static void       gtk_tooltip_init                 (GtkTooltip      *tooltip);
 static void       gtk_tooltip_dispose              (GObject         *object);
 
 static void       gtk_tooltip_window_style_set     (GtkTooltip      *tooltip);
-static gboolean   gtk_tooltip_paint_window         (GtkTooltip      *tooltip);
+static gboolean   gtk_tooltip_paint_window         (GtkTooltip      *tooltip,
+                                                    cairo_t         *cr);
 static void       gtk_tooltip_window_hide          (GtkWidget       *widget,
 						    gpointer         user_data);
 static void       gtk_tooltip_display_closed       (GdkDisplay      *display,
@@ -151,7 +152,7 @@ gtk_tooltip_init (GtkTooltip *tooltip)
 
   g_signal_connect_swapped (tooltip->window, "style-set",
 			    G_CALLBACK (gtk_tooltip_window_style_set), tooltip);
-  g_signal_connect_swapped (tooltip->window, "expose-event",
+  g_signal_connect_swapped (tooltip->window, "draw",
 			    G_CALLBACK (gtk_tooltip_paint_window), tooltip);
 
   tooltip->box = gtk_hbox_new (FALSE, style->xthickness);
@@ -517,20 +518,18 @@ gtk_tooltip_window_style_set (GtkTooltip *tooltip)
 }
 
 static gboolean
-gtk_tooltip_paint_window (GtkTooltip *tooltip)
+gtk_tooltip_paint_window (GtkTooltip *tooltip,
+                          cairo_t    *cr)
 {
-  GtkAllocation allocation;
-
-  gtk_widget_get_allocation (tooltip->window, &allocation);
-  gtk_paint_flat_box (gtk_widget_get_style (tooltip->window),
-		      gtk_widget_get_window (tooltip->window),
+  gtk_cairo_paint_flat_box (gtk_widget_get_style (tooltip->window),
+		      cr,
 		      GTK_STATE_NORMAL,
 		      GTK_SHADOW_OUT,
-		      NULL,
 		      tooltip->window,
 		      "tooltip",
 		      0, 0,
-                      allocation.width, allocation.height);
+                      gtk_widget_get_allocated_width (tooltip->window),
+                      gtk_widget_get_allocated_height (tooltip->window));
 
   return FALSE;
 }
