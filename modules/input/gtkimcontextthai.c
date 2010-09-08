@@ -111,31 +111,31 @@ static gboolean
 is_context_lost_key(guint keyval)
 {
   return ((keyval & 0xFF00) == 0xFF00) &&
-         (keyval == GDK_BackSpace ||
-          keyval == GDK_Tab ||
-          keyval == GDK_Linefeed ||
-          keyval == GDK_Clear ||
-          keyval == GDK_Return ||
-          keyval == GDK_Pause ||
-          keyval == GDK_Scroll_Lock ||
-          keyval == GDK_Sys_Req ||
-          keyval == GDK_Escape ||
-          keyval == GDK_Delete ||
-          (GDK_Home <= keyval && keyval <= GDK_Begin) || /* IsCursorkey */
-          (GDK_KP_Space <= keyval && keyval <= GDK_KP_Delete) || /* IsKeypadKey, non-chars only */
-          (GDK_Select <= keyval && keyval <= GDK_Break) || /* IsMiscFunctionKey */
-          (GDK_F1 <= keyval && keyval <= GDK_F35)); /* IsFunctionKey */
+         (keyval == GDK_KEY_BackSpace ||
+          keyval == GDK_KEY_Tab ||
+          keyval == GDK_KEY_Linefeed ||
+          keyval == GDK_KEY_Clear ||
+          keyval == GDK_KEY_Return ||
+          keyval == GDK_KEY_Pause ||
+          keyval == GDK_KEY_Scroll_Lock ||
+          keyval == GDK_KEY_Sys_Req ||
+          keyval == GDK_KEY_Escape ||
+          keyval == GDK_KEY_Delete ||
+          (GDK_KEY_Home <= keyval && keyval <= GDK_KEY_Begin) || /* IsCursorkey */
+          (GDK_KEY_KP_Space <= keyval && keyval <= GDK_KEY_KP_Delete) || /* IsKeypadKey, non-chars only */
+          (GDK_KEY_Select <= keyval && keyval <= GDK_KEY_Break) || /* IsMiscFunctionKey */
+          (GDK_KEY_F1 <= keyval && keyval <= GDK_KEY_F35)); /* IsFunctionKey */
 }
 
 static gboolean
 is_context_intact_key(guint keyval)
 {
   return (((keyval & 0xFF00) == 0xFF00) &&
-           ((GDK_Shift_L <= keyval && keyval <= GDK_Hyper_R) || /* IsModifierKey */
-            (keyval == GDK_Mode_switch) ||
-            (keyval == GDK_Num_Lock))) ||
+           ((GDK_KEY_Shift_L <= keyval && keyval <= GDK_KEY_Hyper_R) || /* IsModifierKey */
+            (keyval == GDK_KEY_Mode_switch) ||
+            (keyval == GDK_KEY_Num_Lock))) ||
          (((keyval & 0xFE00) == 0xFE00) &&
-          (GDK_ISO_Lock <= keyval && keyval <= GDK_ISO_Last_Group_Lock));
+          (GDK_KEY_ISO_Lock <= keyval && keyval <= GDK_KEY_ISO_Last_Group_Lock));
 }
 
 static gboolean

@@ -2278,7 +2278,7 @@ void create_labels (GtkWidget *widget)
 					  "but this _word is <span foreground=\"purple\"><big>purple</big></span>\n"
 					  "<span underline=\"double\">We like <sup>superscript</sup> and <sub>subscript</sub> too</span>");
 
-      g_assert (gtk_label_get_mnemonic_keyval (GTK_LABEL (label)) == GDK_s);
+      g_assert (gtk_label_get_mnemonic_keyval (GTK_LABEL (label)) == GDK_KEY_s);
       
       gtk_container_add (GTK_CONTAINER (frame), label);
       gtk_box_pack_start (GTK_BOX (vbox), frame, FALSE, FALSE, 0);
@@ -3511,7 +3511,7 @@ create_menus (GtkWidget *widget)
       gtk_widget_add_accelerator (menuitem,
 				  "activate",
 				  accel_group,
-				  GDK_F1,
+				  GDK_KEY_F1,
 				  0,
 				  GTK_ACCEL_VISIBLE);
       menuitem = gtk_check_menu_item_new_with_label ("Accelerator Locked");
@@ -3520,7 +3520,7 @@ create_menus (GtkWidget *widget)
       gtk_widget_add_accelerator (menuitem,
 				  "activate",
 				  accel_group,
-				  GDK_F2,
+				  GDK_KEY_F2,
 				  0,
 				  GTK_ACCEL_VISIBLE | GTK_ACCEL_LOCKED);
       menuitem = gtk_check_menu_item_new_with_label ("Accelerators Frozen");
@@ -3529,13 +3529,13 @@ create_menus (GtkWidget *widget)
       gtk_widget_add_accelerator (menuitem,
 				  "activate",
 				  accel_group,
-				  GDK_F2,
+				  GDK_KEY_F2,
 				  0,
 				  GTK_ACCEL_VISIBLE);
       gtk_widget_add_accelerator (menuitem,
 				  "activate",
 				  accel_group,
-				  GDK_F3,
+				  GDK_KEY_F3,
 				  0,
 				  GTK_ACCEL_VISIBLE);
       

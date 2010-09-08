@@ -482,10 +482,10 @@ add_tab_bindings (GtkBindingSet    *binding_set,
 		  GdkModifierType   modifiers,
 		  GtkDirectionType  direction)
 {
-  gtk_binding_entry_add_signal (binding_set, GDK_Tab, modifiers,
+  gtk_binding_entry_add_signal (binding_set, GDK_KEY_Tab, modifiers,
                                 "move_focus_out", 1,
                                 GTK_TYPE_DIRECTION_TYPE, direction);
-  gtk_binding_entry_add_signal (binding_set, GDK_KP_Tab, modifiers,
+  gtk_binding_entry_add_signal (binding_set, GDK_KEY_KP_Tab, modifiers,
                                 "move_focus_out", 1,
                                 GTK_TYPE_DIRECTION_TYPE, direction);
 }
@@ -495,7 +495,7 @@ add_arrow_bindings (GtkBindingSet    *binding_set,
 		    guint             keysym,
 		    GtkDirectionType  direction)
 {
-  guint keypad_keysym = keysym - GDK_Left + GDK_KP_Left;
+  guint keypad_keysym = keysym - GDK_KEY_Left + GDK_KEY_KP_Left;
   
   gtk_binding_entry_add_signal (binding_set, keysym, GDK_CONTROL_MASK,
                                 "move_focus_out", 1,
@@ -511,7 +511,7 @@ add_reorder_bindings (GtkBindingSet    *binding_set,
 		      GtkDirectionType  direction,
 		      gboolean          move_to_last)
 {
-  guint keypad_keysym = keysym - GDK_Left + GDK_KP_Left;
+  guint keypad_keysym = keysym - GDK_KEY_Left + GDK_KEY_KP_Left;
 
   gtk_binding_entry_add_signal (binding_set, keysym, GDK_MOD1_MASK,
 				"reorder_tab", 2,
@@ -978,62 +978,62 @@ gtk_notebook_class_init (GtkNotebookClass *class)
  
   binding_set = gtk_binding_set_by_class (class);
   gtk_binding_entry_add_signal (binding_set,
-                                GDK_space, 0,
+                                GDK_KEY_space, 0,
                                 "select-page", 1, 
                                 G_TYPE_BOOLEAN, FALSE);
   gtk_binding_entry_add_signal (binding_set,
-                                GDK_KP_Space, 0,
+                                GDK_KEY_KP_Space, 0,
                                 "select-page", 1, 
                                 G_TYPE_BOOLEAN, FALSE);
   
   gtk_binding_entry_add_signal (binding_set,
-                                GDK_Home, 0,
+                                GDK_KEY_Home, 0,
                                 "focus-tab", 1, 
                                 GTK_TYPE_NOTEBOOK_TAB, GTK_NOTEBOOK_TAB_FIRST);
   gtk_binding_entry_add_signal (binding_set,
-                                GDK_KP_Home, 0,
+                                GDK_KEY_KP_Home, 0,
                                 "focus-tab", 1, 
                                 GTK_TYPE_NOTEBOOK_TAB, GTK_NOTEBOOK_TAB_FIRST);
   gtk_binding_entry_add_signal (binding_set,
-                                GDK_End, 0,
+                                GDK_KEY_End, 0,
                                 "focus-tab", 1, 
                                 GTK_TYPE_NOTEBOOK_TAB, GTK_NOTEBOOK_TAB_LAST);
   gtk_binding_entry_add_signal (binding_set,
-                                GDK_KP_End, 0,
+                                GDK_KEY_KP_End, 0,
                                 "focus-tab", 1, 
                                 GTK_TYPE_NOTEBOOK_TAB, GTK_NOTEBOOK_TAB_LAST);
 
   gtk_binding_entry_add_signal (binding_set,
-                                GDK_Page_Up, GDK_CONTROL_MASK,
+                                GDK_KEY_Page_Up, GDK_CONTROL_MASK,
                                 "change-current-page", 1,
                                 G_TYPE_INT, -1);
   gtk_binding_entry_add_signal (binding_set,
-                                GDK_Page_Down, GDK_CONTROL_MASK,
+                                GDK_KEY_Page_Down, GDK_CONTROL_MASK,
                                 "change-current-page", 1,
                                 G_TYPE_INT, 1);
 
   gtk_binding_entry_add_signal (binding_set,
-                                GDK_Page_Up, GDK_CONTROL_MASK | GDK_MOD1_MASK,
+                                GDK_KEY_Page_Up, GDK_CONTROL_MASK | GDK_MOD1_MASK,
                                 "change-current-page", 1,
                                 G_TYPE_INT, -1);
   gtk_binding_entry_add_signal (binding_set,
-                                GDK_Page_Down, GDK_CONTROL_MASK | GDK_MOD1_MASK,
+                                GDK_KEY_Page_Down, GDK_CONTROL_MASK | GDK_MOD1_MASK,
                                 "change-current-page", 1,
                                 G_TYPE_INT, 1);
 
-  add_arrow_bindings (binding_set, GDK_Up, GTK_DIR_UP);
-  add_arrow_bindings (binding_set, GDK_Down, GTK_DIR_DOWN);
-  add_arrow_bindings (binding_set, GDK_Left, GTK_DIR_LEFT);
-  add_arrow_bindings (binding_set, GDK_Right, GTK_DIR_RIGHT);
+  add_arrow_bindings (binding_set, GDK_KEY_Up, GTK_DIR_UP);
+  add_arrow_bindings (binding_set, GDK_KEY_Down, GTK_DIR_DOWN);
+  add_arrow_bindings (binding_set, GDK_KEY_Left, GTK_DIR_LEFT);
+  add_arrow_bindings (binding_set, GDK_KEY_Right, GTK_DIR_RIGHT);
 
-  add_reorder_bindings (binding_set, GDK_Up, GTK_DIR_UP, FALSE);
-  add_reorder_bindings (binding_set, GDK_Down, GTK_DIR_DOWN, FALSE);
-  add_reorder_bindings (binding_set, GDK_Left, GTK_DIR_LEFT, FALSE);
-  add_reorder_bindings (binding_set, GDK_Right, GTK_DIR_RIGHT, FALSE);
-  add_reorder_bindings (binding_set, GDK_Home, GTK_DIR_LEFT, TRUE);
-  add_reorder_bindings (binding_set, GDK_Home, GTK_DIR_UP, TRUE);
-  add_reorder_bindings (binding_set, GDK_End, GTK_DIR_RIGHT, TRUE);
-  add_reorder_bindings (binding_set, GDK_End, GTK_DIR_DOWN, TRUE);
+  add_reorder_bindings (binding_set, GDK_KEY_Up, GTK_DIR_UP, FALSE);
+  add_reorder_bindings (binding_set, GDK_KEY_Down, GTK_DIR_DOWN, FALSE);
+  add_reorder_bindings (binding_set, GDK_KEY_Left, GTK_DIR_LEFT, FALSE);
+  add_reorder_bindings (binding_set, GDK_KEY_Right, GTK_DIR_RIGHT, FALSE);
+  add_reorder_bindings (binding_set, GDK_KEY_Home, GTK_DIR_LEFT, TRUE);
+  add_reorder_bindings (binding_set, GDK_KEY_Home, GTK_DIR_UP, TRUE);
+  add_reorder_bindings (binding_set, GDK_KEY_End, GTK_DIR_RIGHT, TRUE);
+  add_reorder_bindings (binding_set, GDK_KEY_End, GTK_DIR_DOWN, TRUE);
 
   add_tab_bindings (binding_set, GDK_CONTROL_MASK, GTK_DIR_TAB_FORWARD);
   add_tab_bindings (binding_set, GDK_CONTROL_MASK | GDK_SHIFT_MASK, GTK_DIR_TAB_BACKWARD);

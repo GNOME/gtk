@@ -21,7 +21,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include <gdk/gdkkeysyms.h>
+#include <gdk/gdkkeysyms-compat.h>
 #include "gtkprivate.h"
 #include "gtkaccelgroup.h"
 #include "gtkimcontextsimple.h"

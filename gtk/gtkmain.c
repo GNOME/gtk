@@ -1713,7 +1713,7 @@ gtk_main_do_event (GdkEvent *event)
       /* Catch alt press to enable auto-mnemonics;
        * menus are handled elsewhere
        */
-      if ((event->key.keyval == GDK_Alt_L || event->key.keyval == GDK_Alt_R) &&
+      if ((event->key.keyval == GDK_KEY_Alt_L || event->key.keyval == GDK_KEY_Alt_R) &&
           !GTK_IS_MENU_SHELL (grab_widget))
         {
           gboolean auto_mnemonics;

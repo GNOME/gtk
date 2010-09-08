@@ -413,10 +413,10 @@ add_tab_bindings (GtkBindingSet    *binding_set,
 		  GdkModifierType   modifiers,
 		  GtkDirectionType  direction)
 {
-  gtk_binding_entry_add_signal (binding_set, GDK_Tab, modifiers,
+  gtk_binding_entry_add_signal (binding_set, GDK_KEY_Tab, modifiers,
                                 "move-focus", 1,
                                 GTK_TYPE_DIRECTION_TYPE, direction);
-  gtk_binding_entry_add_signal (binding_set, GDK_KP_Tab, modifiers,
+  gtk_binding_entry_add_signal (binding_set, GDK_KEY_KP_Tab, modifiers,
                                 "move-focus", 1,
                                 GTK_TYPE_DIRECTION_TYPE, direction);
 }
@@ -426,7 +426,7 @@ add_arrow_bindings (GtkBindingSet    *binding_set,
 		    guint             keysym,
 		    GtkDirectionType  direction)
 {
-  guint keypad_keysym = keysym - GDK_Left + GDK_KP_Left;
+  guint keypad_keysym = keysym - GDK_KEY_Left + GDK_KEY_KP_Left;
   
   gtk_binding_entry_add_signal (binding_set, keysym, 0,
                                 "move-focus", 1,
@@ -907,22 +907,22 @@ gtk_window_class_init (GtkWindowClass *klass)
 
   binding_set = gtk_binding_set_by_class (klass);
 
-  gtk_binding_entry_add_signal (binding_set, GDK_space, 0,
+  gtk_binding_entry_add_signal (binding_set, GDK_KEY_space, 0,
                                 "activate-focus", 0);
-  gtk_binding_entry_add_signal (binding_set, GDK_KP_Space, 0,
+  gtk_binding_entry_add_signal (binding_set, GDK_KEY_KP_Space, 0,
                                 "activate-focus", 0);
   
-  gtk_binding_entry_add_signal (binding_set, GDK_Return, 0,
+  gtk_binding_entry_add_signal (binding_set, GDK_KEY_Return, 0,
                                 "activate-default", 0);
-  gtk_binding_entry_add_signal (binding_set, GDK_ISO_Enter, 0,
+  gtk_binding_entry_add_signal (binding_set, GDK_KEY_ISO_Enter, 0,
                                 "activate-default", 0);
-  gtk_binding_entry_add_signal (binding_set, GDK_KP_Enter, 0,
+  gtk_binding_entry_add_signal (binding_set, GDK_KEY_KP_Enter, 0,
                                 "activate-default", 0);
 
-  add_arrow_bindings (binding_set, GDK_Up, GTK_DIR_UP);
-  add_arrow_bindings (binding_set, GDK_Down, GTK_DIR_DOWN);
-  add_arrow_bindings (binding_set, GDK_Left, GTK_DIR_LEFT);
-  add_arrow_bindings (binding_set, GDK_Right, GTK_DIR_RIGHT);
+  add_arrow_bindings (binding_set, GDK_KEY_Up, GTK_DIR_UP);
+  add_arrow_bindings (binding_set, GDK_KEY_Down, GTK_DIR_DOWN);
+  add_arrow_bindings (binding_set, GDK_KEY_Left, GTK_DIR_LEFT);
+  add_arrow_bindings (binding_set, GDK_KEY_Right, GTK_DIR_RIGHT);
 
   add_tab_bindings (binding_set, 0, GTK_DIR_TAB_FORWARD);
   add_tab_bindings (binding_set, GDK_CONTROL_MASK, GTK_DIR_TAB_FORWARD);
@@ -5129,8 +5129,8 @@ _gtk_window_query_nonaccels (GtkWindow      *window,
   if (!accel_mods)
     {
       static const guint bindings[] = {
-	GDK_space, GDK_KP_Space, GDK_Return, GDK_ISO_Enter, GDK_KP_Enter, GDK_Up, GDK_KP_Up, GDK_Down, GDK_KP_Down,
-	GDK_Left, GDK_KP_Left, GDK_Right, GDK_KP_Right, GDK_Tab, GDK_KP_Tab, GDK_ISO_Left_Tab,
+	GDK_KEY_space, GDK_KEY_KP_Space, GDK_KEY_Return, GDK_KEY_ISO_Enter, GDK_KEY_KP_Enter, GDK_KEY_Up, GDK_KEY_KP_Up, GDK_KEY_Down, GDK_KEY_KP_Down,
+	GDK_KEY_Left, GDK_KEY_KP_Left, GDK_KEY_Right, GDK_KEY_KP_Right, GDK_KEY_Tab, GDK_KEY_KP_Tab, GDK_KEY_ISO_Left_Tab,
       };
       guint i;
       
@@ -8511,8 +8511,8 @@ add_to_key_hash (GtkWindow      *window,
    */
   if (modifiers & GDK_SHIFT_MASK)
     {
-      if (keyval == GDK_Tab)
-	keyval = GDK_ISO_Left_Tab;
+      if (keyval == GDK_KEY_Tab)
+	keyval = GDK_KEY_ISO_Left_Tab;
       else
 	keyval = gdk_keyval_to_upper (keyval);
     }

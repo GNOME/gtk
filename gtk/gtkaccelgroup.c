@@ -963,22 +963,22 @@ gtk_accelerator_valid (guint		  keyval,
 		       GdkModifierType	  modifiers)
 {
   static const guint invalid_accelerator_vals[] = {
-    GDK_Shift_L, GDK_Shift_R, GDK_Shift_Lock, GDK_Caps_Lock, GDK_ISO_Lock,
-    GDK_Control_L, GDK_Control_R, GDK_Meta_L, GDK_Meta_R,
-    GDK_Alt_L, GDK_Alt_R, GDK_Super_L, GDK_Super_R, GDK_Hyper_L, GDK_Hyper_R,
-    GDK_ISO_Level3_Shift, GDK_ISO_Next_Group, GDK_ISO_Prev_Group,
-    GDK_ISO_First_Group, GDK_ISO_Last_Group,
-    GDK_Mode_switch, GDK_Num_Lock, GDK_Multi_key,
-    GDK_Scroll_Lock, GDK_Sys_Req, 
-    GDK_Tab, GDK_ISO_Left_Tab, GDK_KP_Tab,
-    GDK_First_Virtual_Screen, GDK_Prev_Virtual_Screen,
-    GDK_Next_Virtual_Screen, GDK_Last_Virtual_Screen,
-    GDK_Terminate_Server, GDK_AudibleBell_Enable,
+    GDK_KEY_Shift_L, GDK_KEY_Shift_R, GDK_KEY_Shift_Lock, GDK_KEY_Caps_Lock, GDK_KEY_ISO_Lock,
+    GDK_KEY_Control_L, GDK_KEY_Control_R, GDK_KEY_Meta_L, GDK_KEY_Meta_R,
+    GDK_KEY_Alt_L, GDK_KEY_Alt_R, GDK_KEY_Super_L, GDK_KEY_Super_R, GDK_KEY_Hyper_L, GDK_KEY_Hyper_R,
+    GDK_KEY_ISO_Level3_Shift, GDK_KEY_ISO_Next_Group, GDK_KEY_ISO_Prev_Group,
+    GDK_KEY_ISO_First_Group, GDK_KEY_ISO_Last_Group,
+    GDK_KEY_Mode_switch, GDK_KEY_Num_Lock, GDK_KEY_Multi_key,
+    GDK_KEY_Scroll_Lock, GDK_KEY_Sys_Req, 
+    GDK_KEY_Tab, GDK_KEY_ISO_Left_Tab, GDK_KEY_KP_Tab,
+    GDK_KEY_First_Virtual_Screen, GDK_KEY_Prev_Virtual_Screen,
+    GDK_KEY_Next_Virtual_Screen, GDK_KEY_Last_Virtual_Screen,
+    GDK_KEY_Terminate_Server, GDK_KEY_AudibleBell_Enable,
     0
   };
   static const guint invalid_unmodified_vals[] = {
-    GDK_Up, GDK_Down, GDK_Left, GDK_Right,
-    GDK_KP_Up, GDK_KP_Down, GDK_KP_Left, GDK_KP_Right,
+    GDK_KEY_Up, GDK_KEY_Down, GDK_KEY_Left, GDK_KEY_Right,
+    GDK_KEY_KP_Up, GDK_KEY_KP_Down, GDK_KEY_KP_Left, GDK_KEY_KP_Right,
     0
   };
   const guint *ac_val;

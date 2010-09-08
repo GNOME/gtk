@@ -104,8 +104,8 @@ static guint16 inuktitut_compose_seqs[] = {
   SYL('v', 0x1555, 0x155d, 2) /* as f */
   SYL('y', 0x1528, 0x153e, 2) /* As j */
 
-  SYL(GDK_lstroke, 0x15a0, 0x15a6, 3) /* l- */
-  SYL(GDK_eng, 0x158f, 0x1595, 3)     /* ng */
+  SYL(GDK_KEY_lstroke, 0x15a0, 0x15a6, 3) /* l- */
+  SYL(GDK_KEY_eng, 0x158f, 0x1595, 3)     /* ng */
 };
 
 static void

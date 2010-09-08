@@ -328,39 +328,39 @@ gtk_menu_shell_class_init (GtkMenuShellClass *klass)
 
   binding_set = gtk_binding_set_by_class (klass);
   gtk_binding_entry_add_signal (binding_set,
-				GDK_Escape, 0,
+				GDK_KEY_Escape, 0,
 				"cancel", 0);
   gtk_binding_entry_add_signal (binding_set,
-				GDK_Return, 0,
+				GDK_KEY_Return, 0,
 				"activate-current", 1,
 				G_TYPE_BOOLEAN,
 				TRUE);
   gtk_binding_entry_add_signal (binding_set,
-				GDK_ISO_Enter, 0,
+				GDK_KEY_ISO_Enter, 0,
 				"activate-current", 1,
 				G_TYPE_BOOLEAN,
 				TRUE);
   gtk_binding_entry_add_signal (binding_set,
-				GDK_KP_Enter, 0,
+				GDK_KEY_KP_Enter, 0,
 				"activate-current", 1,
 				G_TYPE_BOOLEAN,
 				TRUE);
   gtk_binding_entry_add_signal (binding_set,
-				GDK_space, 0,
+				GDK_KEY_space, 0,
 				"activate-current", 1,
 				G_TYPE_BOOLEAN,
 				FALSE);
   gtk_binding_entry_add_signal (binding_set,
-				GDK_KP_Space, 0,
+				GDK_KEY_KP_Space, 0,
 				"activate-current", 1,
 				G_TYPE_BOOLEAN,
 				FALSE);
   gtk_binding_entry_add_signal (binding_set,
-				GDK_F10, 0,
+				GDK_KEY_F10, 0,
 				"cycle-focus", 1,
                                 GTK_TYPE_DIRECTION_TYPE, GTK_DIR_TAB_FORWARD);
   gtk_binding_entry_add_signal (binding_set,
-				GDK_F10, GDK_SHIFT_MASK,
+				GDK_KEY_F10, GDK_SHIFT_MASK,
 				"cycle-focus", 1,
                                 GTK_TYPE_DIRECTION_TYPE, GTK_DIR_TAB_BACKWARD);
 

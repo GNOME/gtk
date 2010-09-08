@@ -166,32 +166,32 @@ gtk_hsv_class_init (GtkHSVClass *class)
 
   binding_set = gtk_binding_set_by_class (class);
 
-  gtk_binding_entry_add_signal (binding_set, GDK_Up, 0,
+  gtk_binding_entry_add_signal (binding_set, GDK_KEY_Up, 0,
                                 "move", 1,
                                 G_TYPE_ENUM, GTK_DIR_UP);
-  gtk_binding_entry_add_signal (binding_set, GDK_KP_Up, 0,
+  gtk_binding_entry_add_signal (binding_set, GDK_KEY_KP_Up, 0,
                                 "move", 1,
                                 G_TYPE_ENUM, GTK_DIR_UP);
   
-  gtk_binding_entry_add_signal (binding_set, GDK_Down, 0,
+  gtk_binding_entry_add_signal (binding_set, GDK_KEY_Down, 0,
                                 "move", 1,
                                 G_TYPE_ENUM, GTK_DIR_DOWN);
-  gtk_binding_entry_add_signal (binding_set, GDK_KP_Down, 0,
+  gtk_binding_entry_add_signal (binding_set, GDK_KEY_KP_Down, 0,
                                 "move", 1,
                                 G_TYPE_ENUM, GTK_DIR_DOWN);
 
   
-  gtk_binding_entry_add_signal (binding_set, GDK_Right, 0,
+  gtk_binding_entry_add_signal (binding_set, GDK_KEY_Right, 0,
                                 "move", 1,
                                 G_TYPE_ENUM, GTK_DIR_RIGHT);
-  gtk_binding_entry_add_signal (binding_set, GDK_KP_Right, 0,
+  gtk_binding_entry_add_signal (binding_set, GDK_KEY_KP_Right, 0,
                                 "move", 1,
                                 G_TYPE_ENUM, GTK_DIR_RIGHT);
   
-  gtk_binding_entry_add_signal (binding_set, GDK_Left, 0,
+  gtk_binding_entry_add_signal (binding_set, GDK_KEY_Left, 0,
                                 "move", 1,
                                 G_TYPE_ENUM, GTK_DIR_LEFT);
-  gtk_binding_entry_add_signal (binding_set, GDK_KP_Left, 0,
+  gtk_binding_entry_add_signal (binding_set, GDK_KEY_KP_Left, 0,
                                 "move", 1,
                                 G_TYPE_ENUM, GTK_DIR_LEFT);
 

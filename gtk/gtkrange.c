@@ -2339,7 +2339,7 @@ gtk_range_key_press (GtkWidget   *widget,
   device = gdk_device_get_associated_device (device);
 
   if (device == priv->grab_device &&
-      event->keyval == GDK_Escape &&
+      event->keyval == GDK_KEY_Escape &&
       priv->grab_location != MOUSE_OUTSIDE)
     {
       stop_scrolling (range);

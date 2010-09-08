@@ -617,53 +617,53 @@ gtk_combo_box_class_init (GtkComboBoxClass *klass)
   /* key bindings */
   binding_set = gtk_binding_set_by_class (widget_class);
 
-  gtk_binding_entry_add_signal (binding_set, GDK_Down, GDK_MOD1_MASK,
+  gtk_binding_entry_add_signal (binding_set, GDK_KEY_Down, GDK_MOD1_MASK,
 				"popup", 0);
-  gtk_binding_entry_add_signal (binding_set, GDK_KP_Down, GDK_MOD1_MASK,
+  gtk_binding_entry_add_signal (binding_set, GDK_KEY_KP_Down, GDK_MOD1_MASK,
 				"popup", 0);
 
-  gtk_binding_entry_add_signal (binding_set, GDK_Up, GDK_MOD1_MASK,
+  gtk_binding_entry_add_signal (binding_set, GDK_KEY_Up, GDK_MOD1_MASK,
 				"popdown", 0);
-  gtk_binding_entry_add_signal (binding_set, GDK_KP_Up, GDK_MOD1_MASK,
+  gtk_binding_entry_add_signal (binding_set, GDK_KEY_KP_Up, GDK_MOD1_MASK,
 				"popdown", 0);
-  gtk_binding_entry_add_signal (binding_set, GDK_Escape, 0,
+  gtk_binding_entry_add_signal (binding_set, GDK_KEY_Escape, 0,
 				"popdown", 0);
 
-  gtk_binding_entry_add_signal (binding_set, GDK_Up, 0,
+  gtk_binding_entry_add_signal (binding_set, GDK_KEY_Up, 0,
 				"move-active", 1,
 				GTK_TYPE_SCROLL_TYPE, GTK_SCROLL_STEP_UP);
-  gtk_binding_entry_add_signal (binding_set, GDK_KP_Up, 0,
+  gtk_binding_entry_add_signal (binding_set, GDK_KEY_KP_Up, 0,
 				"move-active", 1,
 				GTK_TYPE_SCROLL_TYPE, GTK_SCROLL_STEP_UP);
-  gtk_binding_entry_add_signal (binding_set, GDK_Page_Up, 0,
+  gtk_binding_entry_add_signal (binding_set, GDK_KEY_Page_Up, 0,
 				"move-active", 1,
 				GTK_TYPE_SCROLL_TYPE, GTK_SCROLL_PAGE_UP);
-  gtk_binding_entry_add_signal (binding_set, GDK_KP_Page_Up, 0,
+  gtk_binding_entry_add_signal (binding_set, GDK_KEY_KP_Page_Up, 0,
 				"move-active", 1,
 				GTK_TYPE_SCROLL_TYPE, GTK_SCROLL_PAGE_UP);
-  gtk_binding_entry_add_signal (binding_set, GDK_Home, 0,
+  gtk_binding_entry_add_signal (binding_set, GDK_KEY_Home, 0,
 				"move-active", 1,
 				GTK_TYPE_SCROLL_TYPE, GTK_SCROLL_START);
-  gtk_binding_entry_add_signal (binding_set, GDK_KP_Home, 0,
+  gtk_binding_entry_add_signal (binding_set, GDK_KEY_KP_Home, 0,
 				"move-active", 1,
 				GTK_TYPE_SCROLL_TYPE, GTK_SCROLL_START);
 
-  gtk_binding_entry_add_signal (binding_set, GDK_Down, 0,
+  gtk_binding_entry_add_signal (binding_set, GDK_KEY_Down, 0,
 				"move-active", 1,
 				GTK_TYPE_SCROLL_TYPE, GTK_SCROLL_STEP_DOWN);
-  gtk_binding_entry_add_signal (binding_set, GDK_KP_Down, 0,
+  gtk_binding_entry_add_signal (binding_set, GDK_KEY_KP_Down, 0,
 				"move-active", 1,
 				GTK_TYPE_SCROLL_TYPE, GTK_SCROLL_STEP_DOWN);
-  gtk_binding_entry_add_signal (binding_set, GDK_Page_Down, 0,
+  gtk_binding_entry_add_signal (binding_set, GDK_KEY_Page_Down, 0,
 				"move-active", 1,
 				GTK_TYPE_SCROLL_TYPE, GTK_SCROLL_PAGE_DOWN);
-  gtk_binding_entry_add_signal (binding_set, GDK_KP_Page_Down, 0,
+  gtk_binding_entry_add_signal (binding_set, GDK_KEY_KP_Page_Down, 0,
 				"move-active", 1,
 				GTK_TYPE_SCROLL_TYPE, GTK_SCROLL_PAGE_DOWN);
-  gtk_binding_entry_add_signal (binding_set, GDK_End, 0,
+  gtk_binding_entry_add_signal (binding_set, GDK_KEY_End, 0,
 				"move-active", 1,
 				GTK_TYPE_SCROLL_TYPE, GTK_SCROLL_END);
-  gtk_binding_entry_add_signal (binding_set, GDK_KP_End, 0,
+  gtk_binding_entry_add_signal (binding_set, GDK_KEY_KP_End, 0,
 				"move-active", 1,
 				GTK_TYPE_SCROLL_TYPE, GTK_SCROLL_END);
 
@@ -3986,8 +3986,8 @@ gtk_combo_box_list_key_press (GtkWidget   *widget,
   GtkComboBox *combo_box = GTK_COMBO_BOX (data);
   GtkTreeIter iter;
 
-  if (event->keyval == GDK_Return || event->keyval == GDK_ISO_Enter || event->keyval == GDK_KP_Enter ||
-      event->keyval == GDK_space || event->keyval == GDK_KP_Space) 
+  if (event->keyval == GDK_KEY_Return || event->keyval == GDK_KEY_ISO_Enter || event->keyval == GDK_KEY_KP_Enter ||
+      event->keyval == GDK_KEY_space || event->keyval == GDK_KEY_KP_Space) 
   {
     GtkTreeModel *model = NULL;
     
@@ -5503,7 +5503,7 @@ gtk_cell_editable_key_press (GtkWidget   *widget,
 {
   GtkComboBox *combo_box = GTK_COMBO_BOX (data);
 
-  if (event->keyval == GDK_Escape)
+  if (event->keyval == GDK_KEY_Escape)
     {
       g_object_set (combo_box,
                     "editing-canceled", TRUE,
@@ -5513,9 +5513,9 @@ gtk_cell_editable_key_press (GtkWidget   *widget,
       
       return TRUE;
     }
-  else if (event->keyval == GDK_Return ||
-           event->keyval == GDK_ISO_Enter ||
-           event->keyval == GDK_KP_Enter)
+  else if (event->keyval == GDK_KEY_Return ||
+           event->keyval == GDK_KEY_ISO_Enter ||
+           event->keyval == GDK_KEY_KP_Enter)
     {
       gtk_cell_editable_editing_done (GTK_CELL_EDITABLE (combo_box));
       gtk_cell_editable_remove_widget (GTK_CELL_EDITABLE (combo_box));

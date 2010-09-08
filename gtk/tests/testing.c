@@ -62,7 +62,7 @@ test_button_keys (void)
   g_assert (button != NULL);
   gtk_widget_grab_focus (button);
   g_assert (gtk_widget_has_focus (button));
-  simsuccess = gtk_test_widget_send_key (button, GDK_Return, 0);
+  simsuccess = gtk_test_widget_send_key (button, GDK_KEY_Return, 0);
   g_assert (simsuccess == TRUE);
   while (gtk_events_pending ())
     gtk_main_iteration ();

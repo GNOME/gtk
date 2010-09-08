@@ -155,7 +155,7 @@ translate_key_event (GdkDisplay           *display,
   event->key.group = _gdk_x11_get_group_for_state (display, xevent->xkey.state);
   event->key.hardware_keycode = xevent->xkey.keycode;
 
-  event->key.keyval = GDK_VoidSymbol;
+  event->key.keyval = GDK_KEY_VoidSymbol;
 
   gdk_keymap_translate_keyboard_state (keymap,
 				       event->key.hardware_keycode,
@@ -175,7 +175,7 @@ translate_key_event (GdkDisplay           *display,
    */
   event->key.string = NULL;
 
-  if (event->key.keyval != GDK_VoidSymbol)
+  if (event->key.keyval != GDK_KEY_VoidSymbol)
     c = gdk_keyval_to_unicode (event->key.keyval);
 
   if (c)
@@ -209,13 +209,13 @@ translate_key_event (GdkDisplay           *display,
       if (event->key.string)
 	event->key.length = bytes_written;
     }
-  else if (event->key.keyval == GDK_Escape)
+  else if (event->key.keyval == GDK_KEY_Escape)
     {
       event->key.length = 1;
       event->key.string = g_strdup ("\033");
     }
-  else if (event->key.keyval == GDK_Return ||
-	  event->key.keyval == GDK_KP_Enter)
+  else if (event->key.keyval == GDK_KEY_Return ||
+	  event->key.keyval == GDK_KEY_KP_Enter)
     {
       event->key.length = 1;
       event->key.string = g_strdup ("\r");

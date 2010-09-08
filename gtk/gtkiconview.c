@@ -1010,70 +1010,70 @@ gtk_icon_view_class_init (GtkIconViewClass *klass)
 		  G_TYPE_INT);
 
   /* Key bindings */
-  gtk_binding_entry_add_signal (binding_set, GDK_a, GDK_CONTROL_MASK, 
+  gtk_binding_entry_add_signal (binding_set, GDK_KEY_a, GDK_CONTROL_MASK, 
 				"select-all", 0);
-  gtk_binding_entry_add_signal (binding_set, GDK_a, GDK_CONTROL_MASK | GDK_SHIFT_MASK, 
+  gtk_binding_entry_add_signal (binding_set, GDK_KEY_a, GDK_CONTROL_MASK | GDK_SHIFT_MASK, 
 				"unselect-all", 0);
-  gtk_binding_entry_add_signal (binding_set, GDK_space, GDK_CONTROL_MASK, 
+  gtk_binding_entry_add_signal (binding_set, GDK_KEY_space, GDK_CONTROL_MASK, 
 				"toggle-cursor-item", 0);
-  gtk_binding_entry_add_signal (binding_set, GDK_KP_Space, GDK_CONTROL_MASK,
+  gtk_binding_entry_add_signal (binding_set, GDK_KEY_KP_Space, GDK_CONTROL_MASK,
 				"toggle-cursor-item", 0);
 
-  gtk_binding_entry_add_signal (binding_set, GDK_space, 0, 
+  gtk_binding_entry_add_signal (binding_set, GDK_KEY_space, 0, 
 				"activate-cursor-item", 0);
-  gtk_binding_entry_add_signal (binding_set, GDK_KP_Space, 0,
+  gtk_binding_entry_add_signal (binding_set, GDK_KEY_KP_Space, 0,
 				"activate-cursor-item", 0);
-  gtk_binding_entry_add_signal (binding_set, GDK_Return, 0, 
+  gtk_binding_entry_add_signal (binding_set, GDK_KEY_Return, 0, 
 				"activate-cursor-item", 0);
-  gtk_binding_entry_add_signal (binding_set, GDK_ISO_Enter, 0, 
+  gtk_binding_entry_add_signal (binding_set, GDK_KEY_ISO_Enter, 0, 
 				"activate-cursor-item", 0);
-  gtk_binding_entry_add_signal (binding_set, GDK_KP_Enter, 0, 
+  gtk_binding_entry_add_signal (binding_set, GDK_KEY_KP_Enter, 0, 
 				"activate-cursor-item", 0);
 
-  gtk_icon_view_add_move_binding (binding_set, GDK_Up, 0,
+  gtk_icon_view_add_move_binding (binding_set, GDK_KEY_Up, 0,
 				  GTK_MOVEMENT_DISPLAY_LINES, -1);
-  gtk_icon_view_add_move_binding (binding_set, GDK_KP_Up, 0,
-				  GTK_MOVEMENT_DISPLAY_LINES, -1);
-
-  gtk_icon_view_add_move_binding (binding_set, GDK_Down, 0,
-				  GTK_MOVEMENT_DISPLAY_LINES, 1);
-  gtk_icon_view_add_move_binding (binding_set, GDK_KP_Down, 0,
-				  GTK_MOVEMENT_DISPLAY_LINES, 1);
-
-  gtk_icon_view_add_move_binding (binding_set, GDK_p, GDK_CONTROL_MASK,
+  gtk_icon_view_add_move_binding (binding_set, GDK_KEY_KP_Up, 0,
 				  GTK_MOVEMENT_DISPLAY_LINES, -1);
 
-  gtk_icon_view_add_move_binding (binding_set, GDK_n, GDK_CONTROL_MASK,
+  gtk_icon_view_add_move_binding (binding_set, GDK_KEY_Down, 0,
+				  GTK_MOVEMENT_DISPLAY_LINES, 1);
+  gtk_icon_view_add_move_binding (binding_set, GDK_KEY_KP_Down, 0,
 				  GTK_MOVEMENT_DISPLAY_LINES, 1);
 
-  gtk_icon_view_add_move_binding (binding_set, GDK_Home, 0,
+  gtk_icon_view_add_move_binding (binding_set, GDK_KEY_p, GDK_CONTROL_MASK,
+				  GTK_MOVEMENT_DISPLAY_LINES, -1);
+
+  gtk_icon_view_add_move_binding (binding_set, GDK_KEY_n, GDK_CONTROL_MASK,
+				  GTK_MOVEMENT_DISPLAY_LINES, 1);
+
+  gtk_icon_view_add_move_binding (binding_set, GDK_KEY_Home, 0,
 				  GTK_MOVEMENT_BUFFER_ENDS, -1);
-  gtk_icon_view_add_move_binding (binding_set, GDK_KP_Home, 0,
+  gtk_icon_view_add_move_binding (binding_set, GDK_KEY_KP_Home, 0,
 				  GTK_MOVEMENT_BUFFER_ENDS, -1);
 
-  gtk_icon_view_add_move_binding (binding_set, GDK_End, 0,
+  gtk_icon_view_add_move_binding (binding_set, GDK_KEY_End, 0,
 				  GTK_MOVEMENT_BUFFER_ENDS, 1);
-  gtk_icon_view_add_move_binding (binding_set, GDK_KP_End, 0,
+  gtk_icon_view_add_move_binding (binding_set, GDK_KEY_KP_End, 0,
 				  GTK_MOVEMENT_BUFFER_ENDS, 1);
 
-  gtk_icon_view_add_move_binding (binding_set, GDK_Page_Up, 0,
+  gtk_icon_view_add_move_binding (binding_set, GDK_KEY_Page_Up, 0,
 				  GTK_MOVEMENT_PAGES, -1);
-  gtk_icon_view_add_move_binding (binding_set, GDK_KP_Page_Up, 0,
+  gtk_icon_view_add_move_binding (binding_set, GDK_KEY_KP_Page_Up, 0,
 				  GTK_MOVEMENT_PAGES, -1);
 
-  gtk_icon_view_add_move_binding (binding_set, GDK_Page_Down, 0,
+  gtk_icon_view_add_move_binding (binding_set, GDK_KEY_Page_Down, 0,
 				  GTK_MOVEMENT_PAGES, 1);
-  gtk_icon_view_add_move_binding (binding_set, GDK_KP_Page_Down, 0,
+  gtk_icon_view_add_move_binding (binding_set, GDK_KEY_KP_Page_Down, 0,
 				  GTK_MOVEMENT_PAGES, 1);
 
-  gtk_icon_view_add_move_binding (binding_set, GDK_Right, 0, 
+  gtk_icon_view_add_move_binding (binding_set, GDK_KEY_Right, 0, 
 				  GTK_MOVEMENT_VISUAL_POSITIONS, 1);
-  gtk_icon_view_add_move_binding (binding_set, GDK_Left, 0, 
+  gtk_icon_view_add_move_binding (binding_set, GDK_KEY_Left, 0, 
 				  GTK_MOVEMENT_VISUAL_POSITIONS, -1);
 
-  gtk_icon_view_add_move_binding (binding_set, GDK_KP_Right, 0, 
+  gtk_icon_view_add_move_binding (binding_set, GDK_KEY_KP_Right, 0, 
 				  GTK_MOVEMENT_VISUAL_POSITIONS, 1);
-  gtk_icon_view_add_move_binding (binding_set, GDK_KP_Left, 0, 
+  gtk_icon_view_add_move_binding (binding_set, GDK_KEY_KP_Left, 0, 
 				  GTK_MOVEMENT_VISUAL_POSITIONS, -1);
 }
 
@@ -2303,7 +2303,7 @@ gtk_icon_view_key_press (GtkWidget      *widget,
 
   if (icon_view->priv->doing_rubberband)
     {
-      if (event->keyval == GDK_Escape)
+      if (event->keyval == GDK_KEY_Escape)
 	gtk_icon_view_stop_rubberbanding (icon_view);
 
       return TRUE;

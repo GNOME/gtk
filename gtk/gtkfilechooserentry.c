@@ -1248,7 +1248,7 @@ gtk_file_chooser_entry_key_press_event (GtkWidget *widget,
 
   /* This is a bit evil -- it makes Tab never leave the entry. It basically
    * makes it 'safe' for people to hit. */
-  if (event->keyval == GDK_Tab && !control_pressed)
+  if (event->keyval == GDK_KEY_Tab && !control_pressed)
     {
       if (chooser_entry->has_completion)
 	gtk_editable_set_position (editable, gtk_entry_get_text_length (entry));

@@ -270,7 +270,7 @@ create_accel_label (void)
 
   info = new_widget_info ("accel-label", box, SMALL);
 
-  gtk_widget_add_accelerator (button, "activate", accel_group, GDK_Q, GDK_CONTROL_MASK,
+  gtk_widget_add_accelerator (button, "activate", accel_group, GDK_KEY_Q, GDK_CONTROL_MASK,
 			      GTK_ACCEL_VISIBLE | GTK_ACCEL_LOCKED);
 
   return info;

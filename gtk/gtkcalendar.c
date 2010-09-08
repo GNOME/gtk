@@ -3367,8 +3367,8 @@ gtk_calendar_key_press (GtkWidget   *widget,
 
   switch (event->keyval)
     {
-    case GDK_KP_Left:
-    case GDK_Left:
+    case GDK_KEY_KP_Left:
+    case GDK_KEY_Left:
       return_val = TRUE;
       if (event->state & GDK_CONTROL_MASK)
 	calendar_set_month_prev (calendar);
@@ -3380,8 +3380,8 @@ gtk_calendar_key_press (GtkWidget   *widget,
 				   priv->focus_col);
 	}
       break;
-    case GDK_KP_Right:
-    case GDK_Right:
+    case GDK_KEY_KP_Right:
+    case GDK_KEY_Right:
       return_val = TRUE;
       if (event->state & GDK_CONTROL_MASK)
 	calendar_set_month_next (calendar);
@@ -3393,8 +3393,8 @@ gtk_calendar_key_press (GtkWidget   *widget,
 				   priv->focus_col);
 	}
       break;
-    case GDK_KP_Up:
-    case GDK_Up:
+    case GDK_KEY_KP_Up:
+    case GDK_KEY_Up:
       return_val = TRUE;
       if (event->state & GDK_CONTROL_MASK)
 	calendar_set_year_prev (calendar);
@@ -3411,8 +3411,8 @@ gtk_calendar_key_press (GtkWidget   *widget,
 				   priv->focus_col);
 	}
       break;
-    case GDK_KP_Down:
-    case GDK_Down:
+    case GDK_KEY_KP_Down:
+    case GDK_KEY_Down:
       return_val = TRUE;
       if (event->state & GDK_CONTROL_MASK)
 	calendar_set_year_next (calendar);
@@ -3427,8 +3427,8 @@ gtk_calendar_key_press (GtkWidget   *widget,
 				   priv->focus_col);
 	}
       break;
-    case GDK_KP_Space:
-    case GDK_space:
+    case GDK_KEY_KP_Space:
+    case GDK_KEY_space:
       row = priv->focus_row;
       col = priv->focus_col;
       

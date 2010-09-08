@@ -259,12 +259,12 @@ gtk_cell_renderer_spin_key_press_event (GtkWidget   *widget,
 {
   if (event->state == 0)
     {
-      if (event->keyval == GDK_Up)
+      if (event->keyval == GDK_KEY_Up)
 	{
 	  gtk_spin_button_spin (GTK_SPIN_BUTTON (widget), GTK_SPIN_STEP_FORWARD, 1);
 	  return TRUE;
 	}
-      else if (event->keyval == GDK_Down)
+      else if (event->keyval == GDK_KEY_Down)
 	{
 	  gtk_spin_button_spin (GTK_SPIN_BUTTON (widget), GTK_SPIN_STEP_BACKWARD, 1);
 	  return TRUE;

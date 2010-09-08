@@ -1581,85 +1581,85 @@ gtk_entry_class_init (GtkEntryClass *class)
   binding_set = gtk_binding_set_by_class (class);
 
   /* Moving the insertion point */
-  add_move_binding (binding_set, GDK_Right, 0,
+  add_move_binding (binding_set, GDK_KEY_Right, 0,
 		    GTK_MOVEMENT_VISUAL_POSITIONS, 1);
   
-  add_move_binding (binding_set, GDK_Left, 0,
+  add_move_binding (binding_set, GDK_KEY_Left, 0,
 		    GTK_MOVEMENT_VISUAL_POSITIONS, -1);
 
-  add_move_binding (binding_set, GDK_KP_Right, 0,
+  add_move_binding (binding_set, GDK_KEY_KP_Right, 0,
 		    GTK_MOVEMENT_VISUAL_POSITIONS, 1);
   
-  add_move_binding (binding_set, GDK_KP_Left, 0,
+  add_move_binding (binding_set, GDK_KEY_KP_Left, 0,
 		    GTK_MOVEMENT_VISUAL_POSITIONS, -1);
   
-  add_move_binding (binding_set, GDK_Right, GDK_CONTROL_MASK,
+  add_move_binding (binding_set, GDK_KEY_Right, GDK_CONTROL_MASK,
 		    GTK_MOVEMENT_WORDS, 1);
 
-  add_move_binding (binding_set, GDK_Left, GDK_CONTROL_MASK,
+  add_move_binding (binding_set, GDK_KEY_Left, GDK_CONTROL_MASK,
 		    GTK_MOVEMENT_WORDS, -1);
 
-  add_move_binding (binding_set, GDK_KP_Right, GDK_CONTROL_MASK,
+  add_move_binding (binding_set, GDK_KEY_KP_Right, GDK_CONTROL_MASK,
 		    GTK_MOVEMENT_WORDS, 1);
 
-  add_move_binding (binding_set, GDK_KP_Left, GDK_CONTROL_MASK,
+  add_move_binding (binding_set, GDK_KEY_KP_Left, GDK_CONTROL_MASK,
 		    GTK_MOVEMENT_WORDS, -1);
   
-  add_move_binding (binding_set, GDK_Home, 0,
+  add_move_binding (binding_set, GDK_KEY_Home, 0,
 		    GTK_MOVEMENT_DISPLAY_LINE_ENDS, -1);
 
-  add_move_binding (binding_set, GDK_End, 0,
+  add_move_binding (binding_set, GDK_KEY_End, 0,
 		    GTK_MOVEMENT_DISPLAY_LINE_ENDS, 1);
 
-  add_move_binding (binding_set, GDK_KP_Home, 0,
+  add_move_binding (binding_set, GDK_KEY_KP_Home, 0,
 		    GTK_MOVEMENT_DISPLAY_LINE_ENDS, -1);
 
-  add_move_binding (binding_set, GDK_KP_End, 0,
+  add_move_binding (binding_set, GDK_KEY_KP_End, 0,
 		    GTK_MOVEMENT_DISPLAY_LINE_ENDS, 1);
   
-  add_move_binding (binding_set, GDK_Home, GDK_CONTROL_MASK,
+  add_move_binding (binding_set, GDK_KEY_Home, GDK_CONTROL_MASK,
 		    GTK_MOVEMENT_BUFFER_ENDS, -1);
 
-  add_move_binding (binding_set, GDK_End, GDK_CONTROL_MASK,
+  add_move_binding (binding_set, GDK_KEY_End, GDK_CONTROL_MASK,
 		    GTK_MOVEMENT_BUFFER_ENDS, 1);
 
-  add_move_binding (binding_set, GDK_KP_Home, GDK_CONTROL_MASK,
+  add_move_binding (binding_set, GDK_KEY_KP_Home, GDK_CONTROL_MASK,
 		    GTK_MOVEMENT_BUFFER_ENDS, -1);
 
-  add_move_binding (binding_set, GDK_KP_End, GDK_CONTROL_MASK,
+  add_move_binding (binding_set, GDK_KEY_KP_End, GDK_CONTROL_MASK,
 		    GTK_MOVEMENT_BUFFER_ENDS, 1);
 
   /* Select all
    */
-  gtk_binding_entry_add_signal (binding_set, GDK_a, GDK_CONTROL_MASK,
+  gtk_binding_entry_add_signal (binding_set, GDK_KEY_a, GDK_CONTROL_MASK,
                                 "move-cursor", 3,
                                 GTK_TYPE_MOVEMENT_STEP, GTK_MOVEMENT_BUFFER_ENDS,
                                 G_TYPE_INT, -1,
 				G_TYPE_BOOLEAN, FALSE);
-  gtk_binding_entry_add_signal (binding_set, GDK_a, GDK_CONTROL_MASK,
+  gtk_binding_entry_add_signal (binding_set, GDK_KEY_a, GDK_CONTROL_MASK,
                                 "move-cursor", 3,
                                 GTK_TYPE_MOVEMENT_STEP, GTK_MOVEMENT_BUFFER_ENDS,
                                 G_TYPE_INT, 1,
 				G_TYPE_BOOLEAN, TRUE);  
 
-  gtk_binding_entry_add_signal (binding_set, GDK_slash, GDK_CONTROL_MASK,
+  gtk_binding_entry_add_signal (binding_set, GDK_KEY_slash, GDK_CONTROL_MASK,
                                 "move-cursor", 3,
                                 GTK_TYPE_MOVEMENT_STEP, GTK_MOVEMENT_BUFFER_ENDS,
                                 G_TYPE_INT, -1,
 				G_TYPE_BOOLEAN, FALSE);
-  gtk_binding_entry_add_signal (binding_set, GDK_slash, GDK_CONTROL_MASK,
+  gtk_binding_entry_add_signal (binding_set, GDK_KEY_slash, GDK_CONTROL_MASK,
                                 "move-cursor", 3,
                                 GTK_TYPE_MOVEMENT_STEP, GTK_MOVEMENT_BUFFER_ENDS,
                                 G_TYPE_INT, 1,
 				G_TYPE_BOOLEAN, TRUE);  
   /* Unselect all 
    */
-  gtk_binding_entry_add_signal (binding_set, GDK_backslash, GDK_CONTROL_MASK,
+  gtk_binding_entry_add_signal (binding_set, GDK_KEY_backslash, GDK_CONTROL_MASK,
                                 "move-cursor", 3,
                                 GTK_TYPE_MOVEMENT_STEP, GTK_MOVEMENT_VISUAL_POSITIONS,
                                 G_TYPE_INT, 0,
 				G_TYPE_BOOLEAN, FALSE);
-  gtk_binding_entry_add_signal (binding_set, GDK_a, GDK_SHIFT_MASK | GDK_CONTROL_MASK,
+  gtk_binding_entry_add_signal (binding_set, GDK_KEY_a, GDK_SHIFT_MASK | GDK_CONTROL_MASK,
                                 "move-cursor", 3,
                                 GTK_TYPE_MOVEMENT_STEP, GTK_MOVEMENT_VISUAL_POSITIONS,
                                 G_TYPE_INT, 0,
@@ -1667,66 +1667,66 @@ gtk_entry_class_init (GtkEntryClass *class)
 
   /* Activate
    */
-  gtk_binding_entry_add_signal (binding_set, GDK_Return, 0,
+  gtk_binding_entry_add_signal (binding_set, GDK_KEY_Return, 0,
 				"activate", 0);
-  gtk_binding_entry_add_signal (binding_set, GDK_ISO_Enter, 0,
+  gtk_binding_entry_add_signal (binding_set, GDK_KEY_ISO_Enter, 0,
 				"activate", 0);
-  gtk_binding_entry_add_signal (binding_set, GDK_KP_Enter, 0,
+  gtk_binding_entry_add_signal (binding_set, GDK_KEY_KP_Enter, 0,
 				"activate", 0);
   
   /* Deleting text */
-  gtk_binding_entry_add_signal (binding_set, GDK_Delete, 0,
+  gtk_binding_entry_add_signal (binding_set, GDK_KEY_Delete, 0,
 				"delete-from-cursor", 2,
 				G_TYPE_ENUM, GTK_DELETE_CHARS,
 				G_TYPE_INT, 1);
 
-  gtk_binding_entry_add_signal (binding_set, GDK_KP_Delete, 0,
+  gtk_binding_entry_add_signal (binding_set, GDK_KEY_KP_Delete, 0,
 				"delete-from-cursor", 2,
 				G_TYPE_ENUM, GTK_DELETE_CHARS,
 				G_TYPE_INT, 1);
   
-  gtk_binding_entry_add_signal (binding_set, GDK_BackSpace, 0,
+  gtk_binding_entry_add_signal (binding_set, GDK_KEY_BackSpace, 0,
 				"backspace", 0);
 
   /* Make this do the same as Backspace, to help with mis-typing */
-  gtk_binding_entry_add_signal (binding_set, GDK_BackSpace, GDK_SHIFT_MASK,
+  gtk_binding_entry_add_signal (binding_set, GDK_KEY_BackSpace, GDK_SHIFT_MASK,
 				"backspace", 0);
 
-  gtk_binding_entry_add_signal (binding_set, GDK_Delete, GDK_CONTROL_MASK,
+  gtk_binding_entry_add_signal (binding_set, GDK_KEY_Delete, GDK_CONTROL_MASK,
 				"delete-from-cursor", 2,
 				G_TYPE_ENUM, GTK_DELETE_WORD_ENDS,
 				G_TYPE_INT, 1);
 
-  gtk_binding_entry_add_signal (binding_set, GDK_KP_Delete, GDK_CONTROL_MASK,
+  gtk_binding_entry_add_signal (binding_set, GDK_KEY_KP_Delete, GDK_CONTROL_MASK,
 				"delete-from-cursor", 2,
 				G_TYPE_ENUM, GTK_DELETE_WORD_ENDS,
 				G_TYPE_INT, 1);
   
-  gtk_binding_entry_add_signal (binding_set, GDK_BackSpace, GDK_CONTROL_MASK,
+  gtk_binding_entry_add_signal (binding_set, GDK_KEY_BackSpace, GDK_CONTROL_MASK,
 				"delete-from-cursor", 2,
 				G_TYPE_ENUM, GTK_DELETE_WORD_ENDS,
 				G_TYPE_INT, -1);
 
   /* Cut/copy/paste */
 
-  gtk_binding_entry_add_signal (binding_set, GDK_x, GDK_CONTROL_MASK,
+  gtk_binding_entry_add_signal (binding_set, GDK_KEY_x, GDK_CONTROL_MASK,
 				"cut-clipboard", 0);
-  gtk_binding_entry_add_signal (binding_set, GDK_c, GDK_CONTROL_MASK,
+  gtk_binding_entry_add_signal (binding_set, GDK_KEY_c, GDK_CONTROL_MASK,
 				"copy-clipboard", 0);
-  gtk_binding_entry_add_signal (binding_set, GDK_v, GDK_CONTROL_MASK,
+  gtk_binding_entry_add_signal (binding_set, GDK_KEY_v, GDK_CONTROL_MASK,
 				"paste-clipboard", 0);
 
-  gtk_binding_entry_add_signal (binding_set, GDK_Delete, GDK_SHIFT_MASK,
+  gtk_binding_entry_add_signal (binding_set, GDK_KEY_Delete, GDK_SHIFT_MASK,
 				"cut-clipboard", 0);
-  gtk_binding_entry_add_signal (binding_set, GDK_Insert, GDK_CONTROL_MASK,
+  gtk_binding_entry_add_signal (binding_set, GDK_KEY_Insert, GDK_CONTROL_MASK,
 				"copy-clipboard", 0);
-  gtk_binding_entry_add_signal (binding_set, GDK_Insert, GDK_SHIFT_MASK,
+  gtk_binding_entry_add_signal (binding_set, GDK_KEY_Insert, GDK_SHIFT_MASK,
 				"paste-clipboard", 0);
 
   /* Overwrite */
-  gtk_binding_entry_add_signal (binding_set, GDK_Insert, 0,
+  gtk_binding_entry_add_signal (binding_set, GDK_KEY_Insert, 0,
 				"toggle-overwrite", 0);
-  gtk_binding_entry_add_signal (binding_set, GDK_KP_Insert, 0,
+  gtk_binding_entry_add_signal (binding_set, GDK_KEY_KP_Insert, 0,
 				"toggle-overwrite", 0);
 
   /**
@@ -4104,10 +4104,10 @@ gtk_entry_key_press (GtkWidget   *widget,
 	}
     }
 
-  if (event->keyval == GDK_Return || 
-      event->keyval == GDK_KP_Enter || 
-      event->keyval == GDK_ISO_Enter || 
-      event->keyval == GDK_Escape)
+  if (event->keyval == GDK_KEY_Return || 
+      event->keyval == GDK_KEY_KP_Enter || 
+      event->keyval == GDK_KEY_ISO_Enter || 
+      event->keyval == GDK_KEY_Escape)
     {
       GtkEntryCompletion *completion = gtk_entry_get_completion (entry);
       
@@ -4513,7 +4513,7 @@ gtk_cell_editable_key_press_event (GtkEntry    *entry,
 				   GdkEventKey *key_event,
 				   gpointer     data)
 {
-  if (key_event->keyval == GDK_Escape)
+  if (key_event->keyval == GDK_KEY_Escape)
     {
       entry->editing_canceled = TRUE;
       gtk_cell_editable_editing_done (GTK_CELL_EDITABLE (entry));
@@ -4523,7 +4523,7 @@ gtk_cell_editable_key_press_event (GtkEntry    *entry,
     }
 
   /* override focus */
-  if (key_event->keyval == GDK_Up || key_event->keyval == GDK_Down)
+  if (key_event->keyval == GDK_KEY_Up || key_event->keyval == GDK_KEY_Down)
     {
       gtk_cell_editable_editing_done (GTK_CELL_EDITABLE (entry));
       gtk_cell_editable_remove_widget (GTK_CELL_EDITABLE (entry));
@@ -9215,16 +9215,16 @@ gtk_entry_completion_timeout (gpointer data)
 static inline gboolean
 keyval_is_cursor_move (guint keyval)
 {
-  if (keyval == GDK_Up || keyval == GDK_KP_Up)
+  if (keyval == GDK_KEY_Up || keyval == GDK_KEY_KP_Up)
     return TRUE;
 
-  if (keyval == GDK_Down || keyval == GDK_KP_Down)
+  if (keyval == GDK_KEY_Down || keyval == GDK_KEY_KP_Down)
     return TRUE;
 
-  if (keyval == GDK_Page_Up)
+  if (keyval == GDK_KEY_Page_Up)
     return TRUE;
 
-  if (keyval == GDK_Page_Down)
+  if (keyval == GDK_KEY_Page_Down)
     return TRUE;
 
   return FALSE;
@@ -9250,21 +9250,21 @@ gtk_entry_completion_key_press (GtkWidget   *widget,
     {
       GtkTreePath *path = NULL;
       
-      if (event->keyval == GDK_Up || event->keyval == GDK_KP_Up)
+      if (event->keyval == GDK_KEY_Up || event->keyval == GDK_KEY_KP_Up)
         {
 	  if (completion->priv->current_selected < 0)
 	    completion->priv->current_selected = matches + actions - 1;
 	  else
 	    completion->priv->current_selected--;
         }
-      else if (event->keyval == GDK_Down || event->keyval == GDK_KP_Down)
+      else if (event->keyval == GDK_KEY_Down || event->keyval == GDK_KEY_KP_Down)
         {
           if (completion->priv->current_selected < matches + actions - 1)
 	    completion->priv->current_selected++;
 	  else
             completion->priv->current_selected = -1;
         }
-      else if (event->keyval == GDK_Page_Up)
+      else if (event->keyval == GDK_KEY_Page_Up)
 	{
 	  if (completion->priv->current_selected < 0)
 	    completion->priv->current_selected = matches + actions - 1;
@@ -9283,7 +9283,7 @@ gtk_entry_completion_key_press (GtkWidget   *widget,
 		completion->priv->current_selected = matches - 1;
 	    }
 	}
-      else if (event->keyval == GDK_Page_Down)
+      else if (event->keyval == GDK_KEY_Page_Down)
 	{
 	  if (completion->priv->current_selected < 0)
 	    completion->priv->current_selected = 0;
@@ -9370,11 +9370,11 @@ gtk_entry_completion_key_press (GtkWidget   *widget,
 
       return TRUE;
     }
-  else if (event->keyval == GDK_Escape ||
-           event->keyval == GDK_Left ||
-           event->keyval == GDK_KP_Left ||
-           event->keyval == GDK_Right ||
-           event->keyval == GDK_KP_Right) 
+  else if (event->keyval == GDK_KEY_Escape ||
+           event->keyval == GDK_KEY_Left ||
+           event->keyval == GDK_KEY_KP_Left ||
+           event->keyval == GDK_KEY_Right ||
+           event->keyval == GDK_KEY_KP_Right) 
     {
       gboolean retval = TRUE;
 
@@ -9389,7 +9389,7 @@ gtk_entry_completion_key_press (GtkWidget   *widget,
       else if (completion->priv->inline_selection)
         {
           /* Escape rejects the tentative completion */
-          if (event->keyval == GDK_Escape)
+          if (event->keyval == GDK_KEY_Escape)
             {
               if (completion->priv->completion_prefix)
                 gtk_entry_set_text (GTK_ENTRY (completion->priv->entry), 
@@ -9400,9 +9400,9 @@ gtk_entry_completion_key_press (GtkWidget   *widget,
 
           /* Move the cursor to the end for Right/Esc, to the
              beginning for Left */
-          if (event->keyval == GDK_Right ||
-              event->keyval == GDK_KP_Right ||
-              event->keyval == GDK_Escape)
+          if (event->keyval == GDK_KEY_Right ||
+              event->keyval == GDK_KEY_KP_Right ||
+              event->keyval == GDK_KEY_Escape)
             gtk_editable_set_position (GTK_EDITABLE (widget), -1);
           else
             gtk_editable_set_position (GTK_EDITABLE (widget), 0);
@@ -9417,11 +9417,11 @@ keypress_completion_out:
 
       return retval;
     }
-  else if (event->keyval == GDK_Tab || 
-	   event->keyval == GDK_KP_Tab ||
-	   event->keyval == GDK_ISO_Left_Tab) 
+  else if (event->keyval == GDK_KEY_Tab || 
+	   event->keyval == GDK_KEY_KP_Tab ||
+	   event->keyval == GDK_KEY_ISO_Left_Tab) 
     {
-      GtkDirectionType dir = event->keyval == GDK_ISO_Left_Tab ? 
+      GtkDirectionType dir = event->keyval == GDK_KEY_ISO_Left_Tab ? 
 	GTK_DIR_TAB_BACKWARD : GTK_DIR_TAB_FORWARD;
       
       _gtk_entry_reset_im_context (GTK_ENTRY (widget));
@@ -9434,9 +9434,9 @@ keypress_completion_out:
 
       return TRUE;
     }
-  else if (event->keyval == GDK_ISO_Enter ||
-           event->keyval == GDK_KP_Enter ||
-	   event->keyval == GDK_Return)
+  else if (event->keyval == GDK_KEY_ISO_Enter ||
+           event->keyval == GDK_KEY_KP_Enter ||
+	   event->keyval == GDK_KEY_Return)
     {
       GtkTreeIter iter;
       GtkTreeModel *model = NULL;

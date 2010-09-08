@@ -181,7 +181,7 @@ add_scroll_binding (GtkBindingSet  *binding_set,
 		    GtkScrollType   scroll,
 		    gboolean        horizontal)
 {
-  guint keypad_keyval = keyval - GDK_Left + GDK_KP_Left;
+  guint keypad_keyval = keyval - GDK_KEY_Left + GDK_KEY_KP_Left;
   
   gtk_binding_entry_add_signal (binding_set, keyval, mask,
                                 "scroll-child", 2,
@@ -198,10 +198,10 @@ add_tab_bindings (GtkBindingSet    *binding_set,
 		  GdkModifierType   modifiers,
 		  GtkDirectionType  direction)
 {
-  gtk_binding_entry_add_signal (binding_set, GDK_Tab, modifiers,
+  gtk_binding_entry_add_signal (binding_set, GDK_KEY_Tab, modifiers,
                                 "move-focus-out", 1,
                                 GTK_TYPE_DIRECTION_TYPE, direction);
-  gtk_binding_entry_add_signal (binding_set, GDK_KP_Tab, modifiers,
+  gtk_binding_entry_add_signal (binding_set, GDK_KEY_KP_Tab, modifiers,
                                 "move-focus-out", 1,
                                 GTK_TYPE_DIRECTION_TYPE, direction);
 }
@@ -365,20 +365,20 @@ gtk_scrolled_window_class_init (GtkScrolledWindowClass *class)
   
   binding_set = gtk_binding_set_by_class (class);
 
-  add_scroll_binding (binding_set, GDK_Left,  GDK_CONTROL_MASK, GTK_SCROLL_STEP_BACKWARD, TRUE);
-  add_scroll_binding (binding_set, GDK_Right, GDK_CONTROL_MASK, GTK_SCROLL_STEP_FORWARD,  TRUE);
-  add_scroll_binding (binding_set, GDK_Up,    GDK_CONTROL_MASK, GTK_SCROLL_STEP_BACKWARD, FALSE);
-  add_scroll_binding (binding_set, GDK_Down,  GDK_CONTROL_MASK, GTK_SCROLL_STEP_FORWARD,  FALSE);
+  add_scroll_binding (binding_set, GDK_KEY_Left,  GDK_CONTROL_MASK, GTK_SCROLL_STEP_BACKWARD, TRUE);
+  add_scroll_binding (binding_set, GDK_KEY_Right, GDK_CONTROL_MASK, GTK_SCROLL_STEP_FORWARD,  TRUE);
+  add_scroll_binding (binding_set, GDK_KEY_Up,    GDK_CONTROL_MASK, GTK_SCROLL_STEP_BACKWARD, FALSE);
+  add_scroll_binding (binding_set, GDK_KEY_Down,  GDK_CONTROL_MASK, GTK_SCROLL_STEP_FORWARD,  FALSE);
 
-  add_scroll_binding (binding_set, GDK_Page_Up,   GDK_CONTROL_MASK, GTK_SCROLL_PAGE_BACKWARD, TRUE);
-  add_scroll_binding (binding_set, GDK_Page_Down, GDK_CONTROL_MASK, GTK_SCROLL_PAGE_FORWARD,  TRUE);
-  add_scroll_binding (binding_set, GDK_Page_Up,   0,                GTK_SCROLL_PAGE_BACKWARD, FALSE);
-  add_scroll_binding (binding_set, GDK_Page_Down, 0,                GTK_SCROLL_PAGE_FORWARD,  FALSE);
+  add_scroll_binding (binding_set, GDK_KEY_Page_Up,   GDK_CONTROL_MASK, GTK_SCROLL_PAGE_BACKWARD, TRUE);
+  add_scroll_binding (binding_set, GDK_KEY_Page_Down, GDK_CONTROL_MASK, GTK_SCROLL_PAGE_FORWARD,  TRUE);
+  add_scroll_binding (binding_set, GDK_KEY_Page_Up,   0,                GTK_SCROLL_PAGE_BACKWARD, FALSE);
+  add_scroll_binding (binding_set, GDK_KEY_Page_Down, 0,                GTK_SCROLL_PAGE_FORWARD,  FALSE);
 
-  add_scroll_binding (binding_set, GDK_Home, GDK_CONTROL_MASK, GTK_SCROLL_START, TRUE);
-  add_scroll_binding (binding_set, GDK_End,  GDK_CONTROL_MASK, GTK_SCROLL_END,   TRUE);
-  add_scroll_binding (binding_set, GDK_Home, 0,                GTK_SCROLL_START, FALSE);
-  add_scroll_binding (binding_set, GDK_End,  0,                GTK_SCROLL_END,   FALSE);
+  add_scroll_binding (binding_set, GDK_KEY_Home, GDK_CONTROL_MASK, GTK_SCROLL_START, TRUE);
+  add_scroll_binding (binding_set, GDK_KEY_End,  GDK_CONTROL_MASK, GTK_SCROLL_END,   TRUE);
+  add_scroll_binding (binding_set, GDK_KEY_Home, 0,                GTK_SCROLL_START, FALSE);
+  add_scroll_binding (binding_set, GDK_KEY_End,  0,                GTK_SCROLL_END,   FALSE);
 
   add_tab_bindings (binding_set, GDK_CONTROL_MASK, GTK_DIR_TAB_FORWARD);
   add_tab_bindings (binding_set, GDK_CONTROL_MASK | GDK_SHIFT_MASK, GTK_DIR_TAB_BACKWARD);

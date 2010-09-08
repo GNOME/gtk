@@ -1098,217 +1098,217 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
 		  G_TYPE_BOOLEAN, 0);
 
   /* Key bindings */
-  gtk_tree_view_add_move_binding (binding_set, GDK_Up, 0, TRUE,
+  gtk_tree_view_add_move_binding (binding_set, GDK_KEY_Up, 0, TRUE,
 				  GTK_MOVEMENT_DISPLAY_LINES, -1);
-  gtk_tree_view_add_move_binding (binding_set, GDK_KP_Up, 0, TRUE,
-				  GTK_MOVEMENT_DISPLAY_LINES, -1);
-
-  gtk_tree_view_add_move_binding (binding_set, GDK_Down, 0, TRUE,
-				  GTK_MOVEMENT_DISPLAY_LINES, 1);
-  gtk_tree_view_add_move_binding (binding_set, GDK_KP_Down, 0, TRUE,
-				  GTK_MOVEMENT_DISPLAY_LINES, 1);
-
-  gtk_tree_view_add_move_binding (binding_set, GDK_p, GDK_CONTROL_MASK, FALSE,
+  gtk_tree_view_add_move_binding (binding_set, GDK_KEY_KP_Up, 0, TRUE,
 				  GTK_MOVEMENT_DISPLAY_LINES, -1);
 
-  gtk_tree_view_add_move_binding (binding_set, GDK_n, GDK_CONTROL_MASK, FALSE,
+  gtk_tree_view_add_move_binding (binding_set, GDK_KEY_Down, 0, TRUE,
+				  GTK_MOVEMENT_DISPLAY_LINES, 1);
+  gtk_tree_view_add_move_binding (binding_set, GDK_KEY_KP_Down, 0, TRUE,
 				  GTK_MOVEMENT_DISPLAY_LINES, 1);
 
-  gtk_tree_view_add_move_binding (binding_set, GDK_Home, 0, TRUE,
+  gtk_tree_view_add_move_binding (binding_set, GDK_KEY_p, GDK_CONTROL_MASK, FALSE,
+				  GTK_MOVEMENT_DISPLAY_LINES, -1);
+
+  gtk_tree_view_add_move_binding (binding_set, GDK_KEY_n, GDK_CONTROL_MASK, FALSE,
+				  GTK_MOVEMENT_DISPLAY_LINES, 1);
+
+  gtk_tree_view_add_move_binding (binding_set, GDK_KEY_Home, 0, TRUE,
 				  GTK_MOVEMENT_BUFFER_ENDS, -1);
-  gtk_tree_view_add_move_binding (binding_set, GDK_KP_Home, 0, TRUE,
+  gtk_tree_view_add_move_binding (binding_set, GDK_KEY_KP_Home, 0, TRUE,
 				  GTK_MOVEMENT_BUFFER_ENDS, -1);
 
-  gtk_tree_view_add_move_binding (binding_set, GDK_End, 0, TRUE,
+  gtk_tree_view_add_move_binding (binding_set, GDK_KEY_End, 0, TRUE,
 				  GTK_MOVEMENT_BUFFER_ENDS, 1);
-  gtk_tree_view_add_move_binding (binding_set, GDK_KP_End, 0, TRUE,
+  gtk_tree_view_add_move_binding (binding_set, GDK_KEY_KP_End, 0, TRUE,
 				  GTK_MOVEMENT_BUFFER_ENDS, 1);
 
-  gtk_tree_view_add_move_binding (binding_set, GDK_Page_Up, 0, TRUE,
+  gtk_tree_view_add_move_binding (binding_set, GDK_KEY_Page_Up, 0, TRUE,
 				  GTK_MOVEMENT_PAGES, -1);
-  gtk_tree_view_add_move_binding (binding_set, GDK_KP_Page_Up, 0, TRUE,
+  gtk_tree_view_add_move_binding (binding_set, GDK_KEY_KP_Page_Up, 0, TRUE,
 				  GTK_MOVEMENT_PAGES, -1);
 
-  gtk_tree_view_add_move_binding (binding_set, GDK_Page_Down, 0, TRUE,
+  gtk_tree_view_add_move_binding (binding_set, GDK_KEY_Page_Down, 0, TRUE,
 				  GTK_MOVEMENT_PAGES, 1);
-  gtk_tree_view_add_move_binding (binding_set, GDK_KP_Page_Down, 0, TRUE,
+  gtk_tree_view_add_move_binding (binding_set, GDK_KEY_KP_Page_Down, 0, TRUE,
 				  GTK_MOVEMENT_PAGES, 1);
 
 
-  gtk_binding_entry_add_signal (binding_set, GDK_Right, 0, "move-cursor", 2,
+  gtk_binding_entry_add_signal (binding_set, GDK_KEY_Right, 0, "move-cursor", 2,
 				G_TYPE_ENUM, GTK_MOVEMENT_VISUAL_POSITIONS,
 				G_TYPE_INT, 1);
 
-  gtk_binding_entry_add_signal (binding_set, GDK_Left, 0, "move-cursor", 2,
+  gtk_binding_entry_add_signal (binding_set, GDK_KEY_Left, 0, "move-cursor", 2,
 				G_TYPE_ENUM, GTK_MOVEMENT_VISUAL_POSITIONS,
 				G_TYPE_INT, -1);
 
-  gtk_binding_entry_add_signal (binding_set, GDK_KP_Right, 0, "move-cursor", 2,
+  gtk_binding_entry_add_signal (binding_set, GDK_KEY_KP_Right, 0, "move-cursor", 2,
 				G_TYPE_ENUM, GTK_MOVEMENT_VISUAL_POSITIONS,
 				G_TYPE_INT, 1);
 
-  gtk_binding_entry_add_signal (binding_set, GDK_KP_Left, 0, "move-cursor", 2,
+  gtk_binding_entry_add_signal (binding_set, GDK_KEY_KP_Left, 0, "move-cursor", 2,
 				G_TYPE_ENUM, GTK_MOVEMENT_VISUAL_POSITIONS,
 				G_TYPE_INT, -1);
 
-  gtk_binding_entry_add_signal (binding_set, GDK_Right, GDK_CONTROL_MASK,
+  gtk_binding_entry_add_signal (binding_set, GDK_KEY_Right, GDK_CONTROL_MASK,
                                 "move-cursor", 2,
 				G_TYPE_ENUM, GTK_MOVEMENT_VISUAL_POSITIONS,
 				G_TYPE_INT, 1);
 
-  gtk_binding_entry_add_signal (binding_set, GDK_Left, GDK_CONTROL_MASK,
+  gtk_binding_entry_add_signal (binding_set, GDK_KEY_Left, GDK_CONTROL_MASK,
                                 "move-cursor", 2,
 				G_TYPE_ENUM, GTK_MOVEMENT_VISUAL_POSITIONS,
 				G_TYPE_INT, -1);
 
-  gtk_binding_entry_add_signal (binding_set, GDK_KP_Right, GDK_CONTROL_MASK,
+  gtk_binding_entry_add_signal (binding_set, GDK_KEY_KP_Right, GDK_CONTROL_MASK,
                                 "move-cursor", 2,
 				G_TYPE_ENUM, GTK_MOVEMENT_VISUAL_POSITIONS,
 				G_TYPE_INT, 1);
 
-  gtk_binding_entry_add_signal (binding_set, GDK_KP_Left, GDK_CONTROL_MASK,
+  gtk_binding_entry_add_signal (binding_set, GDK_KEY_KP_Left, GDK_CONTROL_MASK,
                                 "move-cursor", 2,
 				G_TYPE_ENUM, GTK_MOVEMENT_VISUAL_POSITIONS,
 				G_TYPE_INT, -1);
 
-  gtk_binding_entry_add_signal (binding_set, GDK_space, GDK_CONTROL_MASK, "toggle-cursor-row", 0);
-  gtk_binding_entry_add_signal (binding_set, GDK_KP_Space, GDK_CONTROL_MASK, "toggle-cursor-row", 0);
+  gtk_binding_entry_add_signal (binding_set, GDK_KEY_space, GDK_CONTROL_MASK, "toggle-cursor-row", 0);
+  gtk_binding_entry_add_signal (binding_set, GDK_KEY_KP_Space, GDK_CONTROL_MASK, "toggle-cursor-row", 0);
 
-  gtk_binding_entry_add_signal (binding_set, GDK_a, GDK_CONTROL_MASK, "select-all", 0);
-  gtk_binding_entry_add_signal (binding_set, GDK_slash, GDK_CONTROL_MASK, "select-all", 0);
+  gtk_binding_entry_add_signal (binding_set, GDK_KEY_a, GDK_CONTROL_MASK, "select-all", 0);
+  gtk_binding_entry_add_signal (binding_set, GDK_KEY_slash, GDK_CONTROL_MASK, "select-all", 0);
 
-  gtk_binding_entry_add_signal (binding_set, GDK_A, GDK_CONTROL_MASK | GDK_SHIFT_MASK, "unselect-all", 0);
-  gtk_binding_entry_add_signal (binding_set, GDK_backslash, GDK_CONTROL_MASK, "unselect-all", 0);
+  gtk_binding_entry_add_signal (binding_set, GDK_KEY_A, GDK_CONTROL_MASK | GDK_SHIFT_MASK, "unselect-all", 0);
+  gtk_binding_entry_add_signal (binding_set, GDK_KEY_backslash, GDK_CONTROL_MASK, "unselect-all", 0);
 
-  gtk_binding_entry_add_signal (binding_set, GDK_space, GDK_SHIFT_MASK, "select-cursor-row", 1,
+  gtk_binding_entry_add_signal (binding_set, GDK_KEY_space, GDK_SHIFT_MASK, "select-cursor-row", 1,
 				G_TYPE_BOOLEAN, TRUE);
-  gtk_binding_entry_add_signal (binding_set, GDK_KP_Space, GDK_SHIFT_MASK, "select-cursor-row", 1,
+  gtk_binding_entry_add_signal (binding_set, GDK_KEY_KP_Space, GDK_SHIFT_MASK, "select-cursor-row", 1,
 				G_TYPE_BOOLEAN, TRUE);
 
-  gtk_binding_entry_add_signal (binding_set, GDK_space, 0, "select-cursor-row", 1,
+  gtk_binding_entry_add_signal (binding_set, GDK_KEY_space, 0, "select-cursor-row", 1,
 				G_TYPE_BOOLEAN, TRUE);
-  gtk_binding_entry_add_signal (binding_set, GDK_KP_Space, 0, "select-cursor-row", 1,
+  gtk_binding_entry_add_signal (binding_set, GDK_KEY_KP_Space, 0, "select-cursor-row", 1,
 				G_TYPE_BOOLEAN, TRUE);
-  gtk_binding_entry_add_signal (binding_set, GDK_Return, 0, "select-cursor-row", 1,
+  gtk_binding_entry_add_signal (binding_set, GDK_KEY_Return, 0, "select-cursor-row", 1,
 				G_TYPE_BOOLEAN, TRUE);
-  gtk_binding_entry_add_signal (binding_set, GDK_ISO_Enter, 0, "select-cursor-row", 1,
+  gtk_binding_entry_add_signal (binding_set, GDK_KEY_ISO_Enter, 0, "select-cursor-row", 1,
 				G_TYPE_BOOLEAN, TRUE);
-  gtk_binding_entry_add_signal (binding_set, GDK_KP_Enter, 0, "select-cursor-row", 1,
+  gtk_binding_entry_add_signal (binding_set, GDK_KEY_KP_Enter, 0, "select-cursor-row", 1,
 				G_TYPE_BOOLEAN, TRUE);
 
   /* expand and collapse rows */
-  gtk_binding_entry_add_signal (binding_set, GDK_plus, 0, "expand-collapse-cursor-row", 3,
+  gtk_binding_entry_add_signal (binding_set, GDK_KEY_plus, 0, "expand-collapse-cursor-row", 3,
 				G_TYPE_BOOLEAN, TRUE,
 				G_TYPE_BOOLEAN, TRUE,
 				G_TYPE_BOOLEAN, FALSE);
 
-  gtk_binding_entry_add_signal (binding_set, GDK_asterisk, 0,
+  gtk_binding_entry_add_signal (binding_set, GDK_KEY_asterisk, 0,
                                 "expand-collapse-cursor-row", 3,
                                 G_TYPE_BOOLEAN, TRUE,
                                 G_TYPE_BOOLEAN, TRUE,
                                 G_TYPE_BOOLEAN, TRUE);
-  gtk_binding_entry_add_signal (binding_set, GDK_KP_Multiply, 0,
+  gtk_binding_entry_add_signal (binding_set, GDK_KEY_KP_Multiply, 0,
                                 "expand-collapse-cursor-row", 3,
                                 G_TYPE_BOOLEAN, TRUE,
                                 G_TYPE_BOOLEAN, TRUE,
                                 G_TYPE_BOOLEAN, TRUE);
 
-  gtk_binding_entry_add_signal (binding_set, GDK_slash, 0,
+  gtk_binding_entry_add_signal (binding_set, GDK_KEY_slash, 0,
                                 "expand-collapse-cursor-row", 3,
                                 G_TYPE_BOOLEAN, TRUE,
                                 G_TYPE_BOOLEAN, FALSE,
                                 G_TYPE_BOOLEAN, FALSE);
-  gtk_binding_entry_add_signal (binding_set, GDK_KP_Divide, 0,
+  gtk_binding_entry_add_signal (binding_set, GDK_KEY_KP_Divide, 0,
                                 "expand-collapse-cursor-row", 3,
                                 G_TYPE_BOOLEAN, TRUE,
                                 G_TYPE_BOOLEAN, FALSE,
                                 G_TYPE_BOOLEAN, FALSE);
 
   /* Not doable on US keyboards */
-  gtk_binding_entry_add_signal (binding_set, GDK_plus, GDK_SHIFT_MASK, "expand-collapse-cursor-row", 3,
+  gtk_binding_entry_add_signal (binding_set, GDK_KEY_plus, GDK_SHIFT_MASK, "expand-collapse-cursor-row", 3,
 				G_TYPE_BOOLEAN, TRUE,
 				G_TYPE_BOOLEAN, TRUE,
 				G_TYPE_BOOLEAN, TRUE);
-  gtk_binding_entry_add_signal (binding_set, GDK_KP_Add, 0, "expand-collapse-cursor-row", 3,
+  gtk_binding_entry_add_signal (binding_set, GDK_KEY_KP_Add, 0, "expand-collapse-cursor-row", 3,
 				G_TYPE_BOOLEAN, TRUE,
 				G_TYPE_BOOLEAN, TRUE,
 				G_TYPE_BOOLEAN, FALSE);
-  gtk_binding_entry_add_signal (binding_set, GDK_KP_Add, GDK_SHIFT_MASK, "expand-collapse-cursor-row", 3,
+  gtk_binding_entry_add_signal (binding_set, GDK_KEY_KP_Add, GDK_SHIFT_MASK, "expand-collapse-cursor-row", 3,
 				G_TYPE_BOOLEAN, TRUE,
 				G_TYPE_BOOLEAN, TRUE,
 				G_TYPE_BOOLEAN, TRUE);
-  gtk_binding_entry_add_signal (binding_set, GDK_KP_Add, GDK_SHIFT_MASK, "expand-collapse-cursor-row", 3,
+  gtk_binding_entry_add_signal (binding_set, GDK_KEY_KP_Add, GDK_SHIFT_MASK, "expand-collapse-cursor-row", 3,
 				G_TYPE_BOOLEAN, TRUE,
 				G_TYPE_BOOLEAN, TRUE,
 				G_TYPE_BOOLEAN, TRUE);
-  gtk_binding_entry_add_signal (binding_set, GDK_Right, GDK_SHIFT_MASK,
+  gtk_binding_entry_add_signal (binding_set, GDK_KEY_Right, GDK_SHIFT_MASK,
                                 "expand-collapse-cursor-row", 3,
 				G_TYPE_BOOLEAN, FALSE,
 				G_TYPE_BOOLEAN, TRUE,
 				G_TYPE_BOOLEAN, TRUE);
-  gtk_binding_entry_add_signal (binding_set, GDK_KP_Right, GDK_SHIFT_MASK,
+  gtk_binding_entry_add_signal (binding_set, GDK_KEY_KP_Right, GDK_SHIFT_MASK,
                                 "expand-collapse-cursor-row", 3,
 				G_TYPE_BOOLEAN, FALSE,
 				G_TYPE_BOOLEAN, TRUE,
 				G_TYPE_BOOLEAN, TRUE);
-  gtk_binding_entry_add_signal (binding_set, GDK_Right,
+  gtk_binding_entry_add_signal (binding_set, GDK_KEY_Right,
                                 GDK_CONTROL_MASK | GDK_SHIFT_MASK,
                                 "expand-collapse-cursor-row", 3,
 				G_TYPE_BOOLEAN, FALSE,
 				G_TYPE_BOOLEAN, TRUE,
 				G_TYPE_BOOLEAN, TRUE);
-  gtk_binding_entry_add_signal (binding_set, GDK_KP_Right,
+  gtk_binding_entry_add_signal (binding_set, GDK_KEY_KP_Right,
                                 GDK_CONTROL_MASK | GDK_SHIFT_MASK,
                                 "expand-collapse-cursor-row", 3,
 				G_TYPE_BOOLEAN, FALSE,
 				G_TYPE_BOOLEAN, TRUE,
 				G_TYPE_BOOLEAN, TRUE);
 
-  gtk_binding_entry_add_signal (binding_set, GDK_minus, 0, "expand-collapse-cursor-row", 3,
+  gtk_binding_entry_add_signal (binding_set, GDK_KEY_minus, 0, "expand-collapse-cursor-row", 3,
 				G_TYPE_BOOLEAN, TRUE,
 				G_TYPE_BOOLEAN, FALSE,
 				G_TYPE_BOOLEAN, FALSE);
-  gtk_binding_entry_add_signal (binding_set, GDK_minus, GDK_SHIFT_MASK, "expand-collapse-cursor-row", 3,
+  gtk_binding_entry_add_signal (binding_set, GDK_KEY_minus, GDK_SHIFT_MASK, "expand-collapse-cursor-row", 3,
 				G_TYPE_BOOLEAN, TRUE,
 				G_TYPE_BOOLEAN, FALSE,
 				G_TYPE_BOOLEAN, TRUE);
-  gtk_binding_entry_add_signal (binding_set, GDK_KP_Subtract, 0, "expand-collapse-cursor-row", 3,
+  gtk_binding_entry_add_signal (binding_set, GDK_KEY_KP_Subtract, 0, "expand-collapse-cursor-row", 3,
 				G_TYPE_BOOLEAN, TRUE,
 				G_TYPE_BOOLEAN, FALSE,
 				G_TYPE_BOOLEAN, FALSE);
-  gtk_binding_entry_add_signal (binding_set, GDK_KP_Subtract, GDK_SHIFT_MASK, "expand-collapse-cursor-row", 3,
+  gtk_binding_entry_add_signal (binding_set, GDK_KEY_KP_Subtract, GDK_SHIFT_MASK, "expand-collapse-cursor-row", 3,
 				G_TYPE_BOOLEAN, TRUE,
 				G_TYPE_BOOLEAN, FALSE,
 				G_TYPE_BOOLEAN, TRUE);
-  gtk_binding_entry_add_signal (binding_set, GDK_Left, GDK_SHIFT_MASK,
+  gtk_binding_entry_add_signal (binding_set, GDK_KEY_Left, GDK_SHIFT_MASK,
                                 "expand-collapse-cursor-row", 3,
 				G_TYPE_BOOLEAN, FALSE,
 				G_TYPE_BOOLEAN, FALSE,
 				G_TYPE_BOOLEAN, TRUE);
-  gtk_binding_entry_add_signal (binding_set, GDK_KP_Left, GDK_SHIFT_MASK,
+  gtk_binding_entry_add_signal (binding_set, GDK_KEY_KP_Left, GDK_SHIFT_MASK,
                                 "expand-collapse-cursor-row", 3,
 				G_TYPE_BOOLEAN, FALSE,
 				G_TYPE_BOOLEAN, FALSE,
 				G_TYPE_BOOLEAN, TRUE);
-  gtk_binding_entry_add_signal (binding_set, GDK_Left,
+  gtk_binding_entry_add_signal (binding_set, GDK_KEY_Left,
                                 GDK_CONTROL_MASK | GDK_SHIFT_MASK,
                                 "expand-collapse-cursor-row", 3,
 				G_TYPE_BOOLEAN, FALSE,
 				G_TYPE_BOOLEAN, FALSE,
 				G_TYPE_BOOLEAN, TRUE);
-  gtk_binding_entry_add_signal (binding_set, GDK_KP_Left,
+  gtk_binding_entry_add_signal (binding_set, GDK_KEY_KP_Left,
                                 GDK_CONTROL_MASK | GDK_SHIFT_MASK,
                                 "expand-collapse-cursor-row", 3,
 				G_TYPE_BOOLEAN, FALSE,
 				G_TYPE_BOOLEAN, FALSE,
 				G_TYPE_BOOLEAN, TRUE);
 
-  gtk_binding_entry_add_signal (binding_set, GDK_BackSpace, 0, "select-cursor-parent", 0);
-  gtk_binding_entry_add_signal (binding_set, GDK_BackSpace, GDK_CONTROL_MASK, "select-cursor-parent", 0);
+  gtk_binding_entry_add_signal (binding_set, GDK_KEY_BackSpace, 0, "select-cursor-parent", 0);
+  gtk_binding_entry_add_signal (binding_set, GDK_KEY_BackSpace, GDK_CONTROL_MASK, "select-cursor-parent", 0);
 
-  gtk_binding_entry_add_signal (binding_set, GDK_f, GDK_CONTROL_MASK, "start-interactive-search", 0);
+  gtk_binding_entry_add_signal (binding_set, GDK_KEY_f, GDK_CONTROL_MASK, "start-interactive-search", 0);
 
-  gtk_binding_entry_add_signal (binding_set, GDK_F, GDK_CONTROL_MASK, "start-interactive-search", 0);
+  gtk_binding_entry_add_signal (binding_set, GDK_KEY_F, GDK_CONTROL_MASK, "start-interactive-search", 0);
 
   g_type_class_add_private (o_class, sizeof (GtkTreeViewPrivate));
 }
@@ -5332,7 +5332,7 @@ gtk_tree_view_key_press (GtkWidget   *widget,
 
   if (tree_view->priv->rubber_band_status)
     {
-      if (event->keyval == GDK_Escape)
+      if (event->keyval == GDK_KEY_Escape)
 	gtk_tree_view_stop_rubber_band (tree_view);
 
       return TRUE;
@@ -5340,7 +5340,7 @@ gtk_tree_view_key_press (GtkWidget   *widget,
 
   if (GTK_TREE_VIEW_FLAG_SET (tree_view, GTK_TREE_VIEW_IN_COLUMN_DRAG))
     {
-      if (event->keyval == GDK_Escape)
+      if (event->keyval == GDK_KEY_Escape)
 	{
 	  tree_view->priv->cur_reorder = NULL;
 	  gtk_tree_view_button_release_drag_column (widget, NULL);
@@ -5367,8 +5367,8 @@ gtk_tree_view_key_press (GtkWidget   *widget,
 
       if (focus_column &&
           (event->state & GDK_SHIFT_MASK) && (event->state & GDK_MOD1_MASK) &&
-          (event->keyval == GDK_Left || event->keyval == GDK_KP_Left
-           || event->keyval == GDK_Right || event->keyval == GDK_KP_Right))
+          (event->keyval == GDK_KEY_Left || event->keyval == GDK_KEY_KP_Left
+           || event->keyval == GDK_KEY_Right || event->keyval == GDK_KEY_KP_Right))
         {
           GtkTreeViewColumn *column = GTK_TREE_VIEW_COLUMN (focus_column->data);
 
@@ -5378,8 +5378,8 @@ gtk_tree_view_key_press (GtkWidget   *widget,
               return TRUE;
             }
 
-          if (event->keyval == (rtl ? GDK_Right : GDK_Left)
-              || event->keyval == (rtl ? GDK_KP_Right : GDK_KP_Left))
+          if (event->keyval == (rtl ? GDK_KEY_Right : GDK_KEY_Left)
+              || event->keyval == (rtl ? GDK_KEY_KP_Right : GDK_KEY_KP_Left))
             {
 	      GtkRequisition button_req;
               gint old_width = column->resized_width;
@@ -5412,8 +5412,8 @@ gtk_tree_view_key_press (GtkWidget   *widget,
               else
                 gtk_widget_error_bell (widget);
             }
-          else if (event->keyval == (rtl ? GDK_Left : GDK_Right)
-                   || event->keyval == (rtl ? GDK_KP_Left : GDK_KP_Right))
+          else if (event->keyval == (rtl ? GDK_KEY_Left : GDK_KEY_Right)
+                   || event->keyval == (rtl ? GDK_KEY_KP_Left : GDK_KEY_KP_Right))
             {
               gint old_width = column->resized_width;
 
@@ -5438,15 +5438,15 @@ gtk_tree_view_key_press (GtkWidget   *widget,
 
       if (focus_column &&
           (event->state & GDK_MOD1_MASK) &&
-          (event->keyval == GDK_Left || event->keyval == GDK_KP_Left
-           || event->keyval == GDK_Right || event->keyval == GDK_KP_Right
-           || event->keyval == GDK_Home || event->keyval == GDK_KP_Home
-           || event->keyval == GDK_End || event->keyval == GDK_KP_End))
+          (event->keyval == GDK_KEY_Left || event->keyval == GDK_KEY_KP_Left
+           || event->keyval == GDK_KEY_Right || event->keyval == GDK_KEY_KP_Right
+           || event->keyval == GDK_KEY_Home || event->keyval == GDK_KEY_KP_Home
+           || event->keyval == GDK_KEY_End || event->keyval == GDK_KEY_KP_End))
         {
           GtkTreeViewColumn *column = GTK_TREE_VIEW_COLUMN (focus_column->data);
 
-          if (event->keyval == (rtl ? GDK_Right : GDK_Left)
-              || event->keyval == (rtl ? GDK_KP_Right : GDK_KP_Left))
+          if (event->keyval == (rtl ? GDK_KEY_Right : GDK_KEY_Left)
+              || event->keyval == (rtl ? GDK_KEY_KP_Right : GDK_KEY_KP_Left))
             {
               GtkTreeViewColumn *col;
               col = gtk_tree_view_get_drop_column (tree_view, column, DROP_LEFT);
@@ -5455,8 +5455,8 @@ gtk_tree_view_key_press (GtkWidget   *widget,
               else
                 gtk_widget_error_bell (widget);
             }
-          else if (event->keyval == (rtl ? GDK_Left : GDK_Right)
-                   || event->keyval == (rtl ? GDK_KP_Left : GDK_KP_Right))
+          else if (event->keyval == (rtl ? GDK_KEY_Left : GDK_KEY_Right)
+                   || event->keyval == (rtl ? GDK_KEY_KP_Left : GDK_KEY_KP_Right))
             {
               GtkTreeViewColumn *col;
               col = gtk_tree_view_get_drop_column (tree_view, column, DROP_RIGHT);
@@ -5465,7 +5465,7 @@ gtk_tree_view_key_press (GtkWidget   *widget,
               else
                 gtk_widget_error_bell (widget);
             }
-          else if (event->keyval == GDK_Home || event->keyval == GDK_KP_Home)
+          else if (event->keyval == GDK_KEY_Home || event->keyval == GDK_KEY_KP_Home)
             {
               GtkTreeViewColumn *col;
               col = gtk_tree_view_get_drop_column (tree_view, column, DROP_HOME);
@@ -5474,7 +5474,7 @@ gtk_tree_view_key_press (GtkWidget   *widget,
               else
                 gtk_widget_error_bell (widget);
             }
-          else if (event->keyval == GDK_End || event->keyval == GDK_KP_End)
+          else if (event->keyval == GDK_KEY_End || event->keyval == GDK_KEY_KP_End)
             {
               GtkTreeViewColumn *col;
               col = gtk_tree_view_get_drop_column (tree_view, column, DROP_END);
@@ -14439,10 +14439,10 @@ gtk_tree_view_search_key_press_event (GtkWidget *widget,
 
   /* close window and cancel the search */
   if (!tree_view->priv->search_custom_entry_set
-      && (event->keyval == GDK_Escape ||
-          event->keyval == GDK_Tab ||
-	    event->keyval == GDK_KP_Tab ||
-	    event->keyval == GDK_ISO_Left_Tab))
+      && (event->keyval == GDK_KEY_Escape ||
+          event->keyval == GDK_KEY_Tab ||
+	    event->keyval == GDK_KEY_KP_Tab ||
+	    event->keyval == GDK_KEY_ISO_Left_Tab))
     {
       gtk_tree_view_search_dialog_hide (widget, tree_view,
                                         gdk_event_get_device ((GdkEvent *) event));
@@ -14450,7 +14450,7 @@ gtk_tree_view_search_key_press_event (GtkWidget *widget,
     }
 
   /* select previous matching iter */
-  if (event->keyval == GDK_Up || event->keyval == GDK_KP_Up)
+  if (event->keyval == GDK_KEY_Up || event->keyval == GDK_KEY_KP_Up)
     {
       if (!gtk_tree_view_search_move (widget, tree_view, TRUE))
         gtk_widget_error_bell (widget);
@@ -14459,7 +14459,7 @@ gtk_tree_view_search_key_press_event (GtkWidget *widget,
     }
 
   if (((event->state & (GTK_DEFAULT_ACCEL_MOD_MASK | GDK_SHIFT_MASK)) == (GTK_DEFAULT_ACCEL_MOD_MASK | GDK_SHIFT_MASK))
-      && (event->keyval == GDK_g || event->keyval == GDK_G))
+      && (event->keyval == GDK_KEY_g || event->keyval == GDK_KEY_G))
     {
       if (!gtk_tree_view_search_move (widget, tree_view, TRUE))
         gtk_widget_error_bell (widget);
@@ -14468,7 +14468,7 @@ gtk_tree_view_search_key_press_event (GtkWidget *widget,
     }
 
   /* select next matching iter */
-  if (event->keyval == GDK_Down || event->keyval == GDK_KP_Down)
+  if (event->keyval == GDK_KEY_Down || event->keyval == GDK_KEY_KP_Down)
     {
       if (!gtk_tree_view_search_move (widget, tree_view, FALSE))
         gtk_widget_error_bell (widget);
@@ -14477,7 +14477,7 @@ gtk_tree_view_search_key_press_event (GtkWidget *widget,
     }
 
   if (((event->state & (GTK_DEFAULT_ACCEL_MOD_MASK | GDK_SHIFT_MASK)) == GTK_DEFAULT_ACCEL_MOD_MASK)
-      && (event->keyval == GDK_g || event->keyval == GDK_G))
+      && (event->keyval == GDK_KEY_g || event->keyval == GDK_KEY_G))
     {
       if (!gtk_tree_view_search_move (widget, tree_view, FALSE))
         gtk_widget_error_bell (widget);

@@ -2469,24 +2469,24 @@ gtk_widget_class_init (GtkWidgetClass *klass)
                   G_TYPE_BOOLEAN, 1, G_TYPE_UINT);
 
   binding_set = gtk_binding_set_by_class (klass);
-  gtk_binding_entry_add_signal (binding_set, GDK_F10, GDK_SHIFT_MASK,
+  gtk_binding_entry_add_signal (binding_set, GDK_KEY_F10, GDK_SHIFT_MASK,
                                 "popup-menu", 0);
-  gtk_binding_entry_add_signal (binding_set, GDK_Menu, 0,
+  gtk_binding_entry_add_signal (binding_set, GDK_KEY_Menu, 0,
                                 "popup-menu", 0);  
 
-  gtk_binding_entry_add_signal (binding_set, GDK_F1, GDK_CONTROL_MASK,
+  gtk_binding_entry_add_signal (binding_set, GDK_KEY_F1, GDK_CONTROL_MASK,
                                 "show-help", 1,
                                 GTK_TYPE_WIDGET_HELP_TYPE,
                                 GTK_WIDGET_HELP_TOOLTIP);
-  gtk_binding_entry_add_signal (binding_set, GDK_KP_F1, GDK_CONTROL_MASK,
+  gtk_binding_entry_add_signal (binding_set, GDK_KEY_KP_F1, GDK_CONTROL_MASK,
                                 "show-help", 1,
                                 GTK_TYPE_WIDGET_HELP_TYPE,
                                 GTK_WIDGET_HELP_TOOLTIP);
-  gtk_binding_entry_add_signal (binding_set, GDK_F1, GDK_SHIFT_MASK,
+  gtk_binding_entry_add_signal (binding_set, GDK_KEY_F1, GDK_SHIFT_MASK,
                                 "show-help", 1,
                                 GTK_TYPE_WIDGET_HELP_TYPE,
                                 GTK_WIDGET_HELP_WHATS_THIS);  
-  gtk_binding_entry_add_signal (binding_set, GDK_KP_F1, GDK_SHIFT_MASK,
+  gtk_binding_entry_add_signal (binding_set, GDK_KEY_KP_F1, GDK_SHIFT_MASK,
                                 "show-help", 1,
                                 GTK_TYPE_WIDGET_HELP_TYPE,
                                 GTK_WIDGET_HELP_WHATS_THIS);

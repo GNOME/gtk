@@ -454,8 +454,8 @@ grab_key_callback (GtkWidget            *widget,
 				       NULL, NULL, NULL, &consumed_modifiers);
 
   accel_key = gdk_keyval_to_lower (event->keyval);
-  if (accel_key == GDK_ISO_Left_Tab) 
-    accel_key = GDK_Tab;
+  if (accel_key == GDK_KEY_ISO_Left_Tab) 
+    accel_key = GDK_KEY_Tab;
 
   accel_mods = event->state & gtk_accelerator_get_default_mod_mask ();
 
@@ -473,9 +473,9 @@ grab_key_callback (GtkWidget            *widget,
     {
       switch (event->keyval)
 	{
-	case GDK_Escape:
+	case GDK_KEY_Escape:
 	  goto out; /* cancel */
-	case GDK_BackSpace:
+	case GDK_KEY_BackSpace:
 	  /* clear the accelerator on Backspace */
 	  cleared = TRUE;
 	  goto out;
