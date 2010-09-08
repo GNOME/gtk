@@ -1991,12 +1991,10 @@ paint_page (GtkWidget *widget,
 
 static gboolean
 draw_collate_cb (GtkWidget          *widget,
-                 GdkEventExpose     *event,
+                 cairo_t            *cr,
                  GtkPrintUnixDialog *dialog)
 {
-  GtkAllocation allocation;
   GtkSettings *settings;
-  cairo_t *cr;
   gint size;
   gfloat scale;
   gboolean collate, reverse, rtl;
@@ -2017,12 +2015,6 @@ draw_collate_cb (GtkWidget          *widget,
   scale = size / 48.0;
   text_x = rtl ? 4 : 11;
 
-  cr = gdk_cairo_create (gtk_widget_get_window (widget));
-
-  gtk_widget_get_allocation (widget, &allocation);
-  cairo_translate (cr, allocation.x, allocation.y);
-  gtk_widget_set_allocation (widget, &allocation);
-
   if (copies == 1)
     {
       paint_page (widget, cr, scale, rtl ? 40: 15, 5, reverse ? "1" : "2", text_x);
@@ -2036,8 +2028,6 @@ draw_collate_cb (GtkWidget          *widget,
       paint_page (widget, cr, scale, rtl ? 5 : 50, 5, reverse ? "1" : "2", text_x);
       paint_page (widget, cr, scale, rtl ? 15 : 40, 15, collate == reverse ? "2" : "1", text_x);
     }
-
-  cairo_destroy (cr);
 
   return TRUE;
 }
@@ -2295,7 +2285,7 @@ create_main_page (GtkPrintUnixDialog *dialog)
   gtk_table_attach (GTK_TABLE (table), image,
                     1, 2, 1, 3, GTK_FILL, 0,
                     0, 0);
-  g_signal_connect (image, "expose-event",
+  g_signal_connect (image, "draw",
                     G_CALLBACK (draw_collate_cb), dialog);
 
   label = gtk_label_new (_("General"));
