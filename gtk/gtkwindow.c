@@ -4774,9 +4774,6 @@ gtk_window_realize (GtkWidget *widget)
   if (priv->frame)
     gtk_style_set_background (style, priv->frame, GTK_STATE_NORMAL);
 
-  /* This is a bad hack to set the window background. */
-  gtk_window_paint (widget, NULL);
-  
   if (priv->transient_parent &&
       gtk_widget_get_realized (GTK_WIDGET (priv->transient_parent)))
     gdk_window_set_transient_for (gdk_window,
