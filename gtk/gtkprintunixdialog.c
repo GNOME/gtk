@@ -2576,13 +2576,11 @@ dialog_get_number_up_layout (GtkPrintUnixDialog *dialog)
 
 static gboolean
 draw_page_cb (GtkWidget          *widget,
-              GdkEventExpose     *event,
+              cairo_t            *cr,
               GtkPrintUnixDialog *dialog)
 {
   GtkPrintUnixDialogPrivate *priv = dialog->priv;
-  GtkAllocation allocation;
   GtkStyle *style;
-  cairo_t *cr;
   gdouble ratio;
   gint w, h, tmp, shadow_offset;
   gint pages_x, pages_y, i, x, y, layout_w, layout_h;
@@ -2596,6 +2594,7 @@ draw_page_cb (GtkWidget          *widget,
   GtkNumberUpLayout number_up_layout;
   gint start_x, end_x, start_y, end_y;
   gint dx, dy;
+  gint width, height;
   gboolean horizontal;
   GtkPageSetup *page_setup;
   gdouble paper_width, paper_height;
@@ -2609,8 +2608,8 @@ draw_page_cb (GtkWidget          *widget,
     (orientation == GTK_PAGE_ORIENTATION_REVERSE_LANDSCAPE);
 
   number_up_layout = dialog_get_number_up_layout (dialog);
-
-  cr = gdk_cairo_create (gtk_widget_get_window (widget));
+  width = gtk_widget_get_allocated_width (widget);
+  height = gtk_widget_get_allocated_height (widget);
 
   cairo_save (cr);
 
@@ -2692,9 +2691,8 @@ draw_page_cb (GtkWidget          *widget,
 
   style = gtk_widget_get_style (widget);
 
-  gtk_widget_get_allocation (widget, &allocation);
-  pos_x = allocation.x + (allocation.width - w) / 2;
-  pos_y = allocation.y + (allocation.height - h) / 2 - 10;
+  pos_x = (width - w) / 2;
+  pos_y = (height - h) / 2 - 10;
   cairo_translate (cr, pos_x, pos_y);
 
   shadow_offset = 3;
@@ -2904,13 +2902,12 @@ draw_page_cb (GtkWidget          *widget,
 
       ltr = gtk_widget_get_direction (GTK_WIDGET (dialog)) == GTK_TEXT_DIR_LTR;
 
-      gtk_widget_get_allocation (widget, &allocation);
       if (ltr)
         cairo_translate (cr, pos_x - layout_w / PANGO_SCALE - 2 * RULER_DISTANCE,
-                             allocation.y + (allocation.height - layout_h / PANGO_SCALE) / 2);
+                             (height - layout_h / PANGO_SCALE) / 2);
       else
         cairo_translate (cr, pos_x + w + shadow_offset + 2 * RULER_DISTANCE,
-                             allocation.y + (allocation.height - layout_h / PANGO_SCALE) / 2);
+                             (height - layout_h / PANGO_SCALE) / 2);
 
       pango_cairo_show_layout (cr, layout);
 
@@ -2926,7 +2923,7 @@ draw_page_cb (GtkWidget          *widget,
       g_free (text);
       pango_layout_get_size (layout, &layout_w, &layout_h);
 
-      cairo_translate (cr, allocation.x + (allocation.width - layout_w / PANGO_SCALE) / 2,
+      cairo_translate (cr, (width - layout_w / PANGO_SCALE) / 2,
                            pos_y + h + shadow_offset + 2 * RULER_DISTANCE);
 
       pango_cairo_show_layout (cr, layout);
@@ -2978,8 +2975,6 @@ draw_page_cb (GtkWidget          *widget,
       cairo_line_to (cr, pos_x + w + 0.5, pos_y + h + shadow_offset + RULER_DISTANCE + RULER_RADIUS);
       cairo_stroke (cr);
     }
-
-  cairo_destroy (cr);
 
   return TRUE;
 }
@@ -3515,7 +3510,7 @@ create_page_setup_page (GtkPrintUnixDialog *dialog)
   gtk_widget_set_has_window (draw, FALSE);
   priv->page_layout_preview = draw;
   gtk_widget_set_size_request (draw, 350, 200);
-  g_signal_connect (draw, "expose-event", G_CALLBACK (draw_page_cb), dialog);
+  g_signal_connect (draw, "draw", G_CALLBACK (draw_page_cb), dialog);
   gtk_widget_show (draw);
 
   gtk_box_pack_start (GTK_BOX (hbox2), draw, TRUE, FALSE, 0);
