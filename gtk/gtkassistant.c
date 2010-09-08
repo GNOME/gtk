@@ -125,8 +125,8 @@ static void     gtk_assistant_map                (GtkWidget         *widget);
 static void     gtk_assistant_unmap              (GtkWidget         *widget);
 static gboolean gtk_assistant_delete_event       (GtkWidget         *widget,
 						  GdkEventAny       *event);
-static gboolean gtk_assistant_expose             (GtkWidget         *widget,
-						  GdkEventExpose    *event);
+static gboolean gtk_assistant_draw               (GtkWidget         *widget,
+						  cairo_t           *cr);
 static gboolean gtk_assistant_focus              (GtkWidget         *widget,
 						  GtkDirectionType   direction);
 static void     gtk_assistant_add                (GtkContainer      *container,
@@ -217,7 +217,7 @@ gtk_assistant_class_init (GtkAssistantClass *class)
   widget_class->map = gtk_assistant_map;
   widget_class->unmap = gtk_assistant_unmap;
   widget_class->delete_event = gtk_assistant_delete_event;
-  widget_class->expose_event = gtk_assistant_expose;
+  widget_class->draw = gtk_assistant_draw;
   widget_class->focus = gtk_assistant_focus;
   widget_class->get_accessible = gtk_assistant_get_accessible;
 
@@ -1380,18 +1380,17 @@ gtk_assistant_delete_event (GtkWidget   *widget,
 }
 
 static void
-assistant_paint_colored_box (GtkWidget *widget)
+assistant_paint_colored_box (GtkWidget *widget,
+                             cairo_t   *cr)
 {
   GtkAssistant *assistant = GTK_ASSISTANT (widget);
   GtkAssistantPrivate *priv = assistant->priv;
   GtkAllocation allocation, action_area_allocation, header_image_allocation;
   GtkStyle *style;
   gint border_width, header_padding, content_padding;
-  cairo_t *cr;
   gint content_x, content_width;
   gboolean rtl;
 
-  cr   = gdk_cairo_create (gtk_widget_get_window (widget));
   rtl  = (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL);
   border_width = gtk_container_get_border_width (GTK_CONTAINER (widget));
 
@@ -1438,33 +1437,26 @@ assistant_paint_colored_box (GtkWidget *widget)
 		   allocation.height - 2 * border_width - action_area_allocation.height -
 		   header_image_allocation.height - 2 * content_padding - 2 * header_padding - ACTION_AREA_SPACING);
   cairo_fill (cr);
-
-  cairo_destroy (cr);
 }
 
 static gboolean
-gtk_assistant_expose (GtkWidget      *widget,
-		      GdkEventExpose *event)
+gtk_assistant_draw (GtkWidget *widget,
+		    cairo_t   *cr)
 {
   GtkAssistant *assistant = GTK_ASSISTANT (widget);
   GtkAssistantPrivate *priv = assistant->priv;
-  GtkContainer *container;
+  GtkContainer *container = GTK_CONTAINER (widget);
 
-  if (gtk_widget_is_drawable (widget))
+  assistant_paint_colored_box (widget, cr);
+
+  gtk_container_propagate_draw (container, priv->header_image, cr);
+  gtk_container_propagate_draw (container, priv->sidebar_image, cr);
+  gtk_container_propagate_draw (container, priv->action_area, cr);
+
+  if (priv->current_page)
     {
-      container = GTK_CONTAINER (widget);
-
-      assistant_paint_colored_box (widget);
-
-      gtk_container_propagate_expose (container, priv->header_image, event);
-      gtk_container_propagate_expose (container, priv->sidebar_image, event);
-      gtk_container_propagate_expose (container, priv->action_area, event);
-
-      if (priv->current_page)
-	{
-	  gtk_container_propagate_expose (container, priv->current_page->page, event);
-	  gtk_container_propagate_expose (container, priv->current_page->title, event);
-	}
+      gtk_container_propagate_draw (container, priv->current_page->page, cr);
+      gtk_container_propagate_draw (container, priv->current_page->title, cr);
     }
 
   return FALSE;
