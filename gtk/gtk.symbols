@@ -1849,6 +1849,8 @@ gtk_list_store_swap
 
 #if IN_HEADER(__GTK_MAIN_H__)
 #if IN_FILE(__GTK_MAIN_C__)
+gtk_get_debug_flags
+gtk_set_debug_flags
 gtk_get_option_group
 gtk_get_current_event
 gtk_get_current_event_device
@@ -4540,7 +4542,6 @@ gtk_info_bar_get_message_type
 #endif
 
 #ifdef INCLUDE_VARIABLES
-gtk_debug_flags
 gtk_text_attr_appearance_type
 gtk_text_char_type
 gtk_text_child_type

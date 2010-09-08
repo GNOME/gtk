@@ -370,7 +370,7 @@ is_segment_start (GtkTextRealIter *real)
 static void
 check_invariants (const GtkTextIter *iter)
 {
-  if (gtk_debug_flags & GTK_DEBUG_TEXT)
+  if (gtk_get_debug_flags () & GTK_DEBUG_TEXT)
     _gtk_text_iter_check (iter);
 }
 #else

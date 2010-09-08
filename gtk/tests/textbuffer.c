@@ -1326,7 +1326,7 @@ int
 main (int argc, char** argv)
 {
   /* First, we turn on btree debugging. */
-  gtk_debug_flags |= GTK_DEBUG_TEXT;
+  gtk_set_debug_flags (gtk_get_debug_flags () | GTK_DEBUG_TEXT);
 
   gtk_test_init (&argc, &argv);
   pixbuf_init ();

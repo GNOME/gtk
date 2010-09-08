@@ -3896,7 +3896,7 @@ gtk_widget_size_allocate (GtkWidget	*widget,
   g_return_if_fail (GTK_IS_WIDGET (widget));
  
 #ifdef G_ENABLE_DEBUG
-  if (gtk_debug_flags & GTK_DEBUG_GEOMETRY)
+  if (gtk_get_debug_flags () & GTK_DEBUG_GEOMETRY)
     {
       gint depth;
       GtkWidget *parent;

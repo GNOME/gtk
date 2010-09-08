@@ -485,7 +485,7 @@ gtk_print_job_get_surface (GtkPrintJob  *job,
   
 #ifdef G_ENABLE_DEBUG 
   /* If we are debugging printing don't delete the tmp files */
-  if (!(gtk_debug_flags & GTK_DEBUG_PRINTING))
+  if (!(gtk_get_debug_flags () & GTK_DEBUG_PRINTING))
 #endif /* G_ENABLE_DEBUG */
   g_unlink (filename);
   g_free (filename);

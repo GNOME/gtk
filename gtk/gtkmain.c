@@ -192,7 +192,7 @@ static GList *quit_functions = NULL;	   /* A list of quit functions.
 					    */
 static GSList *key_snoopers = NULL;
 
-guint gtk_debug_flags = 0;		   /* Global GTK debug flag */
+static guint debug_flags = 0;		   /* Global GTK debug flag */
 
 #ifdef G_ENABLE_DEBUG
 static const GDebugKey gtk_debug_keys[] = {
@@ -477,9 +477,9 @@ static gboolean g_fatal_warnings = FALSE;
 static gboolean
 gtk_arg_debug_cb (const char *key, const char *value, gpointer user_data)
 {
-  gtk_debug_flags |= g_parse_debug_string (value,
-					   gtk_debug_keys,
-					   G_N_ELEMENTS (gtk_debug_keys));
+  debug_flags |= g_parse_debug_string (value,
+				       gtk_debug_keys,
+				       G_N_ELEMENTS (gtk_debug_keys));
 
   return TRUE;
 }
@@ -487,9 +487,9 @@ gtk_arg_debug_cb (const char *key, const char *value, gpointer user_data)
 static gboolean
 gtk_arg_no_debug_cb (const char *key, const char *value, gpointer user_data)
 {
-  gtk_debug_flags &= ~g_parse_debug_string (value,
-					    gtk_debug_keys,
-					    G_N_ELEMENTS (gtk_debug_keys));
+  debug_flags &= ~g_parse_debug_string (value,
+					gtk_debug_keys,
+					G_N_ELEMENTS (gtk_debug_keys));
 
   return TRUE;
 }
@@ -727,9 +727,9 @@ do_pre_parse_initialization (int    *argc,
   env_string = g_getenv ("GTK_DEBUG");
   if (env_string != NULL)
     {
-      gtk_debug_flags = g_parse_debug_string (env_string,
-					      gtk_debug_keys,
-					      G_N_ELEMENTS (gtk_debug_keys));
+      debug_flags = g_parse_debug_string (env_string,
+					  gtk_debug_keys,
+					  G_N_ELEMENTS (gtk_debug_keys));
       env_string = NULL;
     }
 #endif	/* G_ENABLE_DEBUG */
@@ -776,7 +776,7 @@ do_post_parse_initialization (int    *argc,
       g_log_set_always_fatal (fatal_mask);
     }
 
-  if (gtk_debug_flags & GTK_DEBUG_UPDATES)
+  if (debug_flags & GTK_DEBUG_UPDATES)
     gdk_window_set_debug_updates (TRUE);
 
   {
@@ -860,6 +860,28 @@ post_parse_hook (GOptionContext *context,
   return TRUE;
 }
 
+
+/**
+ * gtk_get_debug_flags:
+ *
+ * Returns the GTK+ debug flags setting.
+ */
+guint
+gtk_get_debug_flags (void)
+{
+  return debug_flags;
+}
+
+/**
+ * gtk_set_debug_flags:
+ *
+ * Sets the GTK+ debug flags.
+ */
+void
+gtk_set_debug_flags (guint flags)
+{
+  debug_flags = flags;
+}
 
 /**
  * gtk_get_option_group:
