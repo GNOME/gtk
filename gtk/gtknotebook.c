@@ -3239,9 +3239,9 @@ gtk_notebook_style_set  (GtkWidget *widget,
 }
 
 static gboolean
-on_drag_icon_expose (GtkWidget      *widget,
-		     GdkEventExpose *event,
-		     gpointer        data)
+on_drag_icon_draw (GtkWidget *widget,
+		   cairo_t   *cr,
+		   gpointer   data)
 {
   GtkWidget *notebook, *child;
   GtkRequisition requisition;
@@ -3254,15 +3254,15 @@ on_drag_icon_expose (GtkWidget      *widget,
                              &requisition, NULL);
   gap_pos = get_tab_gap_pos (GTK_NOTEBOOK (notebook));
 
-  gtk_paint_extension (gtk_widget_get_style (notebook),
-                       gtk_widget_get_window (widget),
+  gtk_cairo_paint_extension (gtk_widget_get_style (notebook),
+                       cr,
 		       GTK_STATE_NORMAL, GTK_SHADOW_OUT,
-		       NULL, widget, "tab",
+		       widget, "tab",
 		       0, 0,
 		       requisition.width, requisition.height,
 		       gap_pos);
   if (child)
-    gtk_container_propagate_expose (GTK_CONTAINER (widget), child, event);
+    gtk_container_propagate_draw (GTK_CONTAINER (widget), child, cr);
 
   return TRUE;
 }
@@ -3299,8 +3299,8 @@ gtk_notebook_drag_begin (GtkWidget        *widget,
 			       priv->detached_tab->allocation.height);
   g_object_unref (tab_label);
 
-  g_signal_connect (G_OBJECT (priv->dnd_window), "expose-event",
-		    G_CALLBACK (on_drag_icon_expose), notebook);
+  g_signal_connect (G_OBJECT (priv->dnd_window), "draw",
+		    G_CALLBACK (on_drag_icon_draw), notebook);
 
   gtk_drag_set_icon_widget (context, priv->dnd_window, -2, -2);
 }
