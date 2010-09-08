@@ -43,7 +43,3 @@ gboolean            _gdk_native_windows = FALSE;
 gboolean            _gdk_enable_multidevice = FALSE;
 
 GSList             *_gdk_displays = NULL;
-
-GMutex              *gdk_threads_mutex = NULL;          /* Global GDK lock */
-GCallback            gdk_threads_lock = NULL;
-GCallback            gdk_threads_unlock = NULL;

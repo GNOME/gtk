@@ -151,13 +151,6 @@ void gdk_notify_startup_complete_with_id (const gchar* startup_id);
 /* Threading
  */
 
-#if !defined (GDK_DISABLE_DEPRECATED) || defined (GDK_COMPILATION)
-GDKVAR GMutex *gdk_threads_mutex; /* private */
-#endif
-
-GDKVAR GCallback gdk_threads_lock;
-GDKVAR GCallback gdk_threads_unlock;
-
 void     gdk_threads_enter                    (void);
 void     gdk_threads_leave                    (void);
 void     gdk_threads_init                     (void);
@@ -187,19 +180,8 @@ guint    gdk_threads_add_timeout_seconds      (guint          interval,
                                                GSourceFunc    function,
                                                gpointer       data);
 
-#ifdef	G_THREADS_ENABLED
-#  define GDK_THREADS_ENTER()	G_STMT_START {	\
-      if (gdk_threads_lock)                 	\
-        (*gdk_threads_lock) ();			\
-   } G_STMT_END
-#  define GDK_THREADS_LEAVE()	G_STMT_START { 	\
-      if (gdk_threads_unlock)                 	\
-        (*gdk_threads_unlock) ();		\
-   } G_STMT_END
-#else	/* !G_THREADS_ENABLED */
-#  define GDK_THREADS_ENTER()
-#  define GDK_THREADS_LEAVE()
-#endif	/* !G_THREADS_ENABLED */
+#define GDK_THREADS_ENTER() gdk_threads_enter()
+#define GDK_THREADS_LEAVE() gdk_threads_leave()
 
 G_END_DECLS
 

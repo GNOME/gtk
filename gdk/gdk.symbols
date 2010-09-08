@@ -1093,12 +1093,6 @@ gdk_window_impl_get_type G_GNUC_CONST
 #endif
 #endif
 
-#ifdef INCLUDE_VARIABLES
-gdk_threads_mutex
-gdk_threads_lock
-gdk_threads_unlock
-#endif
-
 #ifdef GDK_WINDOWING_X11
 #ifdef INCLUDE_VARIABLES
 gdk_display
