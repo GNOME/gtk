@@ -51,19 +51,12 @@ scribble_configure_event (GtkWidget         *widget,
 
 /* Redraw the screen from the surface */
 static gboolean
-scribble_expose_event (GtkWidget      *widget,
-                       GdkEventExpose *event,
-                       gpointer        data)
+scribble_draw (GtkWidget *widget,
+               cairo_t   *cr,
+               gpointer   data)
 {
-  cairo_t *cr;
-
-  cr = gdk_cairo_create (gtk_widget_get_window (widget));
-  
   cairo_set_source_surface (cr, surface, 0, 0);
-  gdk_cairo_rectangle (cr, &event->area);
-  cairo_fill (cr);
-
-  cairo_destroy (cr);
+  cairo_paint (cr);
 
   return FALSE;
 }
@@ -144,45 +137,38 @@ scribble_motion_notify_event (GtkWidget      *widget,
 
 
 static gboolean
-checkerboard_expose (GtkWidget      *da,
-                     GdkEventExpose *event,
-                     gpointer        data)
+checkerboard_draw (GtkWidget *da,
+                   cairo_t   *cr,
+                   gpointer   data)
 {
-  GtkAllocation allocation;
-  gint i, j, xcount, ycount;
-  cairo_t *cr;
+  gint i, j, xcount, ycount, width, height;
 
 #define CHECK_SIZE 10
 #define SPACING 2
 
-  /* At the start of an expose handler, a clip region of event->area
-   * is set on the window, and event->area has been cleared to the
+  /* At the start of a draw handler, a clip region has been set on
+   * the Cairo context, and the contents have been cleared to the
    * widget's background color. The docs for
    * gdk_window_begin_paint_region() give more details on how this
    * works.
    */
 
-  cr = gdk_cairo_create (gtk_widget_get_window (da));
-  gdk_cairo_rectangle (cr, &event->area);
-  cairo_clip (cr);
-
-  gtk_widget_get_allocation (da, &allocation);
   xcount = 0;
+  width = gtk_widget_get_allocated_width (da);
+  height = gtk_widget_get_allocated_height (da);
   i = SPACING;
-  while (i < allocation.width)
+  while (i < width)
     {
       j = SPACING;
       ycount = xcount % 2; /* start with even/odd depending on row */
-      while (j < allocation.height)
+      while (j < height)
         {
           if (ycount % 2)
             cairo_set_source_rgb (cr, 0.45777, 0, 0.45777);
           else
             cairo_set_source_rgb (cr, 1, 1, 1);
 
-          /* If we're outside event->area, this will do nothing.
-           * It might be mildly more efficient if we handled
-           * the clipping ourselves, but again we're feeling lazy.
+          /* If we're outside the clip, this will do nothing.
            */
           cairo_rectangle (cr, i, j, CHECK_SIZE, CHECK_SIZE);
           cairo_fill (cr);
@@ -194,8 +180,6 @@ checkerboard_expose (GtkWidget      *da,
       i += CHECK_SIZE + SPACING;
       ++xcount;
     }
-
-  cairo_destroy (cr);
 
   /* return TRUE because we've handled this event, so no
    * further processing is required.
@@ -255,8 +239,8 @@ do_drawingarea (GtkWidget *do_widget)
 
       gtk_container_add (GTK_CONTAINER (frame), da);
 
-      g_signal_connect (da, "expose-event",
-                        G_CALLBACK (checkerboard_expose), NULL);
+      g_signal_connect (da, "draw",
+                        G_CALLBACK (checkerboard_draw), NULL);
 
       /*
        * Create the scribble area
@@ -279,8 +263,8 @@ do_drawingarea (GtkWidget *do_widget)
 
       /* Signals used to handle backing surface */
 
-      g_signal_connect (da, "expose-event",
-                        G_CALLBACK (scribble_expose_event), NULL);
+      g_signal_connect (da, "draw",
+                        G_CALLBACK (scribble_draw), NULL);
       g_signal_connect (da,"configure-event",
                         G_CALLBACK (scribble_configure_event), NULL);
 
