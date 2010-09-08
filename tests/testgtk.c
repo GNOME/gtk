@@ -10333,14 +10333,14 @@ create_main_window (void)
   if (gtk_micro_version > 0)
     sprintf (buffer,
 	     "Gtk+ v%d.%d.%d",
-	     gtk_major_version,
-	     gtk_minor_version,
-	     gtk_micro_version);
+	     gtk_major_version (),
+	     gtk_minor_version (),
+	     gtk_micro_version ());
   else
     sprintf (buffer,
 	     "Gtk+ v%d.%d",
-	     gtk_major_version,
-	     gtk_minor_version);
+	     gtk_major_version (),
+	     gtk_minor_version ());
 
   label = gtk_label_new (buffer);
   gtk_box_pack_start (GTK_BOX (box1), label, FALSE, FALSE, 0);
