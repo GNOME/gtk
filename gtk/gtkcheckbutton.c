@@ -135,59 +135,55 @@ gtk_check_button_paint (GtkWidget    *widget,
 			GdkRectangle *area)
 {
   GtkCheckButton *check_button = GTK_CHECK_BUTTON (widget);
-  
-  if (gtk_widget_is_drawable (widget))
+  gint border_width;
+  gint interior_focus;
+  gint focus_width;
+  gint focus_pad;
+      
+  gtk_widget_style_get (widget,
+                        "interior-focus", &interior_focus,
+                        "focus-line-width", &focus_width,
+                        "focus-padding", &focus_pad,
+                        NULL);
+
+  gtk_check_button_draw_indicator (check_button, area);
+
+  border_width = gtk_container_get_border_width (GTK_CONTAINER (widget));
+  if (gtk_widget_has_focus (widget))
     {
-      gint border_width;
-      gint interior_focus;
-      gint focus_width;
-      gint focus_pad;
-	  
-      gtk_widget_style_get (widget,
-			    "interior-focus", &interior_focus,
-			    "focus-line-width", &focus_width,
-			    "focus-padding", &focus_pad,
-			    NULL);
+      GtkStateType state;
+      GtkStyle *style;
+      GtkWidget *child = gtk_bin_get_child (GTK_BIN (widget));
+      GdkWindow *window;
 
-      gtk_check_button_draw_indicator (check_button, area);
+      style = gtk_widget_get_style (widget);
+      window = gtk_widget_get_window (widget);
+      state = gtk_widget_get_state (widget);
 
-      border_width = gtk_container_get_border_width (GTK_CONTAINER (widget));
-      if (gtk_widget_has_focus (widget))
-	{
-          GtkStateType state;
-          GtkStyle *style;
-	  GtkWidget *child = gtk_bin_get_child (GTK_BIN (widget));
-          GdkWindow *window;
+      if (interior_focus && child && gtk_widget_get_visible (child))
+        {
+          GtkAllocation child_allocation;
 
-          style = gtk_widget_get_style (widget);
-          window = gtk_widget_get_window (widget);
-          state = gtk_widget_get_state (widget);
+          gtk_widget_get_allocation (child, &child_allocation);
+          gtk_paint_focus (style, window, state,
+                           area, widget, "checkbutton",
+                           child_allocation.x - focus_width - focus_pad,
+                           child_allocation.y - focus_width - focus_pad,
+                           child_allocation.width + 2 * (focus_width + focus_pad),
+                           child_allocation.height + 2 * (focus_width + focus_pad));
+        }
+      else
+        {
+          GtkAllocation allocation;
 
-	  if (interior_focus && child && gtk_widget_get_visible (child))
-            {
-              GtkAllocation child_allocation;
-
-              gtk_widget_get_allocation (child, &child_allocation);
-              gtk_paint_focus (style, window, state,
-                               area, widget, "checkbutton",
-                               child_allocation.x - focus_width - focus_pad,
-                               child_allocation.y - focus_width - focus_pad,
-                               child_allocation.width + 2 * (focus_width + focus_pad),
-                               child_allocation.height + 2 * (focus_width + focus_pad));
-            }
-	  else
-            {
-              GtkAllocation allocation;
-
-              gtk_widget_get_allocation (widget, &allocation);
-              gtk_paint_focus (style, window, state,
-                               area, widget, "checkbutton",
-                               allocation.x + border_width,
-                               allocation.y + border_width,
-                               allocation.width - 2 * border_width,
-                               allocation.height - 2 * border_width);
-            }
-	}
+          gtk_widget_get_allocation (widget, &allocation);
+          gtk_paint_focus (style, window, state,
+                           area, widget, "checkbutton",
+                           allocation.x + border_width,
+                           allocation.y + border_width,
+                           allocation.width - 2 * border_width,
+                           allocation.height - 2 * border_width);
+        }
     }
 }
 
