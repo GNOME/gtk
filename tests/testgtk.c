@@ -2329,22 +2329,19 @@ on_rotated_text_unrealize (GtkWidget *widget)
 }
 
 static gboolean
-on_rotated_text_expose (GtkWidget      *widget,
-			GdkEventExpose *event,
-			GdkPixbuf      *tile_pixbuf)
+on_rotated_text_draw (GtkWidget *widget,
+                      cairo_t   *cr,
+	              GdkPixbuf *tile_pixbuf)
 {
-  GtkAllocation allocation;
   static const gchar *words[] = { "The", "grand", "old", "Duke", "of", "York",
                                   "had", "10,000", "men" };
   int n_words;
   int i;
+  int width, height;
   double radius;
   PangoLayout *layout;
   PangoContext *context;
   PangoFontDescription *desc;
-  cairo_t *cr;
-
-  cr = gdk_cairo_create (event->window);
 
   if (tile_pixbuf)
     {
@@ -2354,13 +2351,13 @@ on_rotated_text_expose (GtkWidget      *widget,
   else
     cairo_set_source_rgb (cr, 0, 0, 0);
 
-  gtk_widget_get_allocation (widget, &allocation);
-
-  radius = MIN (allocation.width, allocation.height) / 2.;
+  width = gtk_widget_get_allocated_width (widget);
+  height = gtk_widget_get_allocated_height (widget);
+  radius = MIN (width, height) / 2.;
 
   cairo_translate (cr,
-                   radius + (allocation.width - 2 * radius) / 2,
-                   radius + (allocation.height - 2 * radius) / 2);
+                   radius + (width - 2 * radius) / 2,
+                   radius + (height - 2 * radius) / 2);
   cairo_scale (cr, radius / DEFAULT_TEXT_RADIUS, radius / DEFAULT_TEXT_RADIUS);
 
   context = gtk_widget_get_pango_context (widget);
@@ -2389,7 +2386,6 @@ on_rotated_text_expose (GtkWidget      *widget,
     }
   
   g_object_unref (layout);
-  cairo_destroy (cr);
 
   return FALSE;
 }
@@ -2430,8 +2426,8 @@ create_rotated_text (GtkWidget *widget)
 
       tile_pixbuf = gdk_pixbuf_new_from_file ("marble.xpm", NULL);
       
-      g_signal_connect (drawing_area, "expose-event",
-			G_CALLBACK (on_rotated_text_expose), tile_pixbuf);
+      g_signal_connect (drawing_area, "draw",
+			G_CALLBACK (on_rotated_text_draw), tile_pixbuf);
       g_signal_connect (drawing_area, "unrealize",
 			G_CALLBACK (on_rotated_text_unrealize), NULL);
 
