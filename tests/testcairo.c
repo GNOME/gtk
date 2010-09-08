@@ -115,15 +115,17 @@ draw_3circles (cairo_t *cr,
   cairo_fill (cr);
 }
 
-static void
-draw (cairo_t *cr,
-      int      width,
-      int      height)
+static gboolean
+on_draw (GtkWidget *widget,
+         cairo_t   *cr)
 {
   cairo_surface_t *overlay, *punch, *circles;
   cairo_t *overlay_cr, *punch_cr, *circles_cr;
+  int width, height;
 
   /* Fill the background */
+  width = gtk_widget_get_allocated_width (widget);
+  height = gtk_widget_get_allocated_height (widget);
   double radius = 0.5 * (width < height ? width : height) - 10;
   double xc = width / 2.;
   double yc = height / 2.;
@@ -131,20 +133,14 @@ draw (cairo_t *cr,
   overlay = cairo_surface_create_similar (cairo_get_target (cr),
 					  CAIRO_CONTENT_COLOR_ALPHA,
 					  width, height);
-  if (overlay == NULL)
-    return;
 
   punch = cairo_surface_create_similar (cairo_get_target (cr),
 					CAIRO_CONTENT_ALPHA,
 					width, height);
-  if (punch == NULL)
-    return;
 
   circles = cairo_surface_create_similar (cairo_get_target (cr),
 					  CAIRO_CONTENT_COLOR_ALPHA,
 					  width, height);
-  if (circles == NULL)
-    return;
     
   fill_checks (cr, 0, 0, width, height);
 
@@ -188,22 +184,6 @@ draw (cairo_t *cr,
   cairo_surface_destroy (overlay);
   cairo_surface_destroy (punch);
   cairo_surface_destroy (circles);
-}
-
-static gboolean
-on_expose_event (GtkWidget      *widget,
-		 GdkEventExpose *event,
-		 gpointer        data)
-{
-  GtkAllocation allocation;
-  cairo_t *cr;
-
-  cr = gdk_cairo_create (gtk_widget_get_window (widget));
-
-  gtk_widget_get_allocation (widget, &allocation);
-  draw (cr, allocation.width, allocation.height);
-
-  cairo_destroy (cr);
 
   return FALSE;
 }
@@ -223,8 +203,8 @@ main (int argc, char **argv)
   darea = gtk_drawing_area_new ();
   gtk_container_add (GTK_CONTAINER (window), darea);
 
-  g_signal_connect (darea, "expose-event",
-		    G_CALLBACK (on_expose_event), NULL);
+  g_signal_connect (darea, "draw",
+		    G_CALLBACK (on_draw), NULL);
   g_signal_connect (window, "destroy-event",
 		    G_CALLBACK (gtk_main_quit), NULL);
 
