@@ -23,6 +23,7 @@
  */
 
 #include "config.h"
+#include <math.h>
 #include <string.h>
 
 #include "gtkintl.h"
@@ -31,6 +32,7 @@
 
 #include "x11/gdkx.h"
 #include <X11/Xatom.h>
+#include <cairo-xlib.h>
 
 #define SYSTEM_TRAY_REQUEST_DOCK    0
 #define SYSTEM_TRAY_BEGIN_MESSAGE   1
@@ -85,8 +87,8 @@ static void     gtk_tray_icon_style_set (GtkWidget   *widget,
 					 GtkStyle    *previous_style);
 static gboolean gtk_tray_icon_delete    (GtkWidget   *widget,
 					 GdkEventAny *event);
-static gboolean gtk_tray_icon_expose    (GtkWidget      *widget,
-					 GdkEventExpose *event);
+static gboolean gtk_tray_icon_draw      (GtkWidget   *widget,
+                                         cairo_t     *cr);
 
 static void gtk_tray_icon_clear_manager_window     (GtkTrayIcon *icon);
 static void gtk_tray_icon_update_manager_window    (GtkTrayIcon *icon);
@@ -112,7 +114,7 @@ gtk_tray_icon_class_init (GtkTrayIconClass *class)
   widget_class->realize = gtk_tray_icon_realize;
   widget_class->style_set = gtk_tray_icon_style_set;
   widget_class->delete_event = gtk_tray_icon_delete;
-  widget_class->expose_event = gtk_tray_icon_expose;
+  widget_class->draw = gtk_tray_icon_draw;
 
   g_object_class_install_property (gobject_class,
 				   PROP_ORIENTATION,
@@ -307,60 +309,64 @@ gtk_tray_icon_get_property (GObject    *object,
 }
 
 static gboolean
-gtk_tray_icon_expose (GtkWidget      *widget, 
-		      GdkEventExpose *event)
+gtk_tray_icon_draw (GtkWidget *widget, 
+		    cairo_t   *cr)
 {
   GtkTrayIcon *icon = GTK_TRAY_ICON (widget);
-  GtkAllocation allocation;
   GtkWidget *focus_child;
   GdkWindow *window;
-  gint border_width, x, y, width, height;
+  gint border_width;
   gboolean retval = FALSE;
+  cairo_surface_t *target;
 
   window = gtk_widget_get_window (widget);
+  target = cairo_get_group_target (cr);
 
-  if (icon->priv->manager_visual_rgba)
+  if (icon->priv->manager_visual_rgba ||
+      cairo_surface_get_type (target) != CAIRO_SURFACE_TYPE_XLIB ||
+      cairo_xlib_surface_get_drawable (target) != GDK_WINDOW_XID (window))
     {
       /* Clear to transparent */
-      cairo_t *cr = gdk_cairo_create (window);
       cairo_set_source_rgba (cr, 0, 0, 0, 0);
       cairo_set_operator (cr, CAIRO_OPERATOR_SOURCE);
-      gdk_cairo_region (cr, event->region);
-      cairo_fill (cr);
-      cairo_destroy (cr);
+      cairo_paint (cr);
     }
   else
     {
+      double x1, y1, x2, y2;
+
+      cairo_clip_extents (cr, &x1, &x2, &y1, &y2);
       /* Clear to parent-relative pixmap
        * We need to use direct X access here because GDK doesn't know about
        * the parent realtive pixmap. */
+      cairo_surface_flush (target);
+
       XClearArea (GDK_WINDOW_XDISPLAY (window),
                   GDK_WINDOW_XID (window),
-                  event->area.x, event->area.y,
-		  event->area.width, event->area.height,
+                  floor (x1), floor (y1),
+                  ceil (x2) - floor (x1), ceil (y2) - floor (y1),
                   False);
+      cairo_surface_mark_dirty_rectangle (target, 
+                                          floor (x1), floor (y1),
+                                          ceil (x2) - floor (x1),
+                                          ceil (y2) - floor (y1));
     }
 
-  if (GTK_WIDGET_CLASS (gtk_tray_icon_parent_class)->expose_event)
-    retval = GTK_WIDGET_CLASS (gtk_tray_icon_parent_class)->expose_event (widget, event);
+  if (GTK_WIDGET_CLASS (gtk_tray_icon_parent_class)->draw)
+    retval = GTK_WIDGET_CLASS (gtk_tray_icon_parent_class)->draw (widget, cr);
 
   focus_child = gtk_container_get_focus_child (GTK_CONTAINER (widget));
   if (focus_child && gtk_widget_has_focus (focus_child))
     {
-      gtk_widget_get_allocation (widget, &allocation);
       border_width = gtk_container_get_border_width (GTK_CONTAINER (widget));
 
-      x = allocation.x + border_width;
-      y = allocation.y + border_width;
-
-      width  = allocation.width  - 2 * border_width;
-      height = allocation.height - 2 * border_width;
-
-      gtk_paint_focus (gtk_widget_get_style (widget),
-                       window,
+      gtk_cairo_paint_focus (gtk_widget_get_style (widget),
+                       cr,
                        gtk_widget_get_state (widget),
-                       &event->area, widget, "tray_icon",
-                       x, y, width, height);
+                       widget, "tray_icon",
+                       border_width, border_width,
+                       gtk_widget_get_allocated_width (widget) - 2 * border_width,
+                       gtk_widget_get_allocated_height (widget) - 2 * border_width);
     }
 
   return retval;
