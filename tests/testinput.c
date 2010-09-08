@@ -104,16 +104,11 @@ configure_event (GtkWidget *widget, GdkEventConfigure *event)
 }
 
 /* Refill the screen from the backing surface */
-static gint
-expose_event (GtkWidget *widget, GdkEventExpose *event)
+static gboolean
+draw (GtkWidget *widget, cairo_t *cr)
 {
-  cairo_t *cr = gdk_cairo_create (gtk_widget_get_window (widget));
-
   cairo_set_source_surface (cr, surface, 0, 0);
-  gdk_cairo_region (cr, event->region);
-  cairo_fill (cr);
-
-  cairo_destroy (cr);
+  cairo_paint (cr);
 
   return FALSE;
 }
@@ -325,8 +320,8 @@ main (int argc, char *argv[])
 
   /* Signals used to handle backing surface */
 
-  g_signal_connect (drawing_area, "expose_event",
-		    G_CALLBACK (expose_event), NULL);
+  g_signal_connect (drawing_area, "draw",
+		    G_CALLBACK (draw), NULL);
   g_signal_connect (drawing_area, "configure_event",
 		    G_CALLBACK (configure_event), NULL);
 
