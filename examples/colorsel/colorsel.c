@@ -97,7 +97,7 @@ gint main( gint   argc,
   /* Attach to the "delete" and "destroy" events so we can exit */
 
   g_signal_connect (GTK_OBJECT (window), "delete_event",
-                    GTK_SIGNAL_FUNC (destroy_window), (gpointer) window);
+                    G_CALLBACK (destroy_window), (gpointer) window);
   
   /* Create drawingarea, set size and catch button events */
 
@@ -113,7 +113,7 @@ gint main( gint   argc,
   gtk_widget_set_events (drawingarea, GDK_BUTTON_PRESS_MASK);
 
   g_signal_connect (GTK_OBJECT (drawingarea), "event", 
-	            GTK_SIGNAL_FUNC (area_event), (gpointer) drawingarea);
+	            G_CALLBACK (area_event), (gpointer) drawingarea);
   
   /* Add drawingarea to window, then show them both */
 
