@@ -91,39 +91,32 @@ create_fancy_attr_list_for_layout (PangoLayout *layout)
 }
 
 static gboolean
-rotated_text_expose_event (GtkWidget      *widget,
-			   GdkEventExpose *event,
-			   gpointer	   data)
+rotated_text_draw (GtkWidget *widget,
+                   cairo_t   *cr,
+		   gpointer   data)
 {
 #define RADIUS 150
 #define N_WORDS 5
 #define FONT "Serif 18"
 
-  GtkAllocation allocation;
-
   PangoContext *context;
   PangoLayout *layout;
   PangoFontDescription *desc;
 
-  cairo_t *cr;
   cairo_pattern_t *pattern;
 
   PangoAttrList *attrs;
 
-  int width;
-  int height;
   double device_radius;
+  int width, height;
   int i;
-
-  gtk_widget_get_allocation (widget, &allocation);
-  width = allocation.width;
-  height = allocation.height;
 
   /* Create a cairo context and set up a transformation matrix so that the user
    * space coordinates for the centered square where we draw are [-RADIUS, RADIUS],
    * [-RADIUS, RADIUS].
    * We first center, then change the scale. */
-  cr = gdk_cairo_create (gtk_widget_get_window (widget));
+  width = gtk_widget_get_allocated_width (widget);
+  height = gtk_widget_get_allocated_height (widget);
   device_radius = MIN (width, height) / 2.;
   cairo_translate (cr,
 		   device_radius + (width - 2 * device_radius) / 2,
@@ -173,7 +166,6 @@ rotated_text_expose_event (GtkWidget      *widget,
   g_object_unref (layout);
   g_object_unref (context);
   cairo_pattern_destroy (pattern);
-  cairo_destroy (cr);
   
   return FALSE;
 }
@@ -209,8 +201,8 @@ do_rotated_text (GtkWidget *do_widget)
       /* This overrides the background color from the theme */
       gtk_widget_modify_bg (drawing_area, GTK_STATE_NORMAL, &white);
 
-      g_signal_connect (drawing_area, "expose-event",
-			G_CALLBACK (rotated_text_expose_event), NULL);
+      g_signal_connect (drawing_area, "draw",
+			G_CALLBACK (rotated_text_draw), NULL);
 
       /* And a label */
 
