@@ -1732,15 +1732,6 @@ gtk_invisible_set_screen
 #endif
 #endif
 
-#if IN_HEADER(__GTK_ITEM_H__)
-#if IN_FILE(__GTK_ITEM_C__)
-gtk_item_deselect
-gtk_item_get_type G_GNUC_CONST
-gtk_item_select
-gtk_item_toggle
-#endif
-#endif
-
 #if IN_HEADER(__GTK_LABEL_H__)
 #if IN_FILE(__GTK_LABEL_C__)
 gtk_label_get_angle

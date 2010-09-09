@@ -369,7 +369,6 @@ that is, GUI components such as #GtkButton or #GtkTextView.
       <title>Abstract Base Classes</title>
       <xi:include href="xml/gtkbin.xml" />
       <xi:include href="xml/gtkcontainer.xml" />
-      <xi:include href="xml/gtkitem.xml" />
       <xi:include href="xml/gtkmenushell.xml" />
       <xi:include href="xml/gtkmisc.xml" />
       <xi:include href="xml/gtkobject.xml" />

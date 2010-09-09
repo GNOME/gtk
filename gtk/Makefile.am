@@ -230,7 +230,6 @@ gtk_public_h_sources =          \
 	gtkimmulticontext.h	\
 	gtkinfobar.h		\
 	gtkinvisible.h		\
-	gtkitem.h		\
 	gtklabel.h		\
 	gtklayout.h             \
 	gtklinkbutton.h		\
@@ -497,7 +496,6 @@ gtk_base_c_sources =            \
 	gtkimmulticontext.c	\
 	gtkinfobar.c		\
 	gtkinvisible.c		\
-	gtkitem.c		\
 	gtkkeyhash.c		\
 	gtklabel.c		\
 	gtklayout.c		\

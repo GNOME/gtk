@@ -31,8 +31,7 @@
 #ifndef __GTK_MENU_ITEM_H__
 #define __GTK_MENU_ITEM_H__
 
-
-#include <gtk/gtkitem.h>
+#include <gtk/gtkbin.h>
 
 
 G_BEGIN_DECLS
@@ -50,7 +49,7 @@ typedef struct _GtkMenuItemClass  GtkMenuItemClass;
 
 struct _GtkMenuItem
 {
-  GtkItem item;
+  GtkBin bin;
 
   GtkWidget *GSEAL (submenu);
   GdkWindow *GSEAL (event_window);
@@ -70,7 +69,7 @@ struct _GtkMenuItem
 
 struct _GtkMenuItemClass
 {
-  GtkItemClass parent_class;
+  GtkBinClass parent_class;
   
   /* If the following flag is true, then we should always hide
    * the menu when the MenuItem is activated. Otherwise, the 
@@ -90,9 +89,14 @@ struct _GtkMenuItemClass
 				 const gchar *label);
   G_CONST_RETURN gchar *(* get_label) (GtkMenuItem *menu_item);
 
+  void (* select)               (GtkMenuItem *menu_item);
+  void (* deselect)             (GtkMenuItem *menu_item);
+
   /* Padding for future expansion */
   void (*_gtk_reserved1) (void);
   void (*_gtk_reserved2) (void);
+  void (*_gtk_reserved3) (void);
+  void (*_gtk_reserved4) (void);
 };
 
 

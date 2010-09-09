@@ -113,7 +113,6 @@
 #include <gtk/gtkimmulticontext.h>
 #include <gtk/gtkinfobar.h>
 #include <gtk/gtkinvisible.h>
-#include <gtk/gtkitem.h>
 #include <gtk/gtklabel.h>
 #include <gtk/gtklayout.h>
 #include <gtk/gtklinkbutton.h>

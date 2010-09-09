@@ -1079,7 +1079,7 @@ gtk_menu_shell_remove (GtkContainer *container,
   
   if (widget == menu_shell->active_menu_item)
     {
-      gtk_item_deselect (GTK_ITEM (menu_shell->active_menu_item));
+      g_signal_emit_by_name (menu_shell->active_menu_item, "deselect");
       menu_shell->active_menu_item = NULL;
     }
 
