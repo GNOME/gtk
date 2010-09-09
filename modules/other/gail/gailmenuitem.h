@@ -20,7 +20,8 @@
 #ifndef __GAIL_MENU_ITEM_H__
 #define __GAIL_MENU_ITEM_H__
 
-#include <gail/gailitem.h>
+#include <gail/gailcontainer.h>
+#include <libgail-util/gailtextutil.h>
 
 G_BEGIN_DECLS
 
@@ -36,7 +37,11 @@ typedef struct _GailMenuItemClass              GailMenuItemClass;
 
 struct _GailMenuItem
 {
-  GailItem parent;
+  GailContainer parent;
+
+  GailTextUtil *textutil;
+
+  gchar *text;
 
   gchar    *click_keybinding;
   gchar    *click_description;
@@ -47,7 +52,7 @@ GType gail_menu_item_get_type (void);
 
 struct _GailMenuItemClass
 {
-  GailItemClass parent_class;
+  GailContainerClass parent_class;
 };
 
 AtkObject* gail_menu_item_new (GtkWidget *widget);
