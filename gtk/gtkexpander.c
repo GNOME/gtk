@@ -451,7 +451,8 @@ gtk_expander_realize (GtkWidget *widget)
     {
       GtkRequisition label_requisition;
 
-      gtk_widget_get_child_requisition (priv->label_widget, &label_requisition);
+      gtk_size_request_get_size (GTK_SIZE_REQUEST (priv->label_widget),
+                                 &label_requisition, NULL);
       label_height = label_requisition.height;
     }
   else

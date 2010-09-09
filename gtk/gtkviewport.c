@@ -443,8 +443,9 @@ viewport_set_hadjustment_values (GtkViewport *viewport,
   if (child && gtk_widget_get_visible (child))
     {
       GtkRequisition child_requisition;
-      
-      gtk_widget_get_child_requisition (child, &child_requisition);
+
+      gtk_size_request_get_size (GTK_SIZE_REQUEST (child),
+                                 &child_requisition, NULL);
       hadjustment->upper = MAX (child_requisition.width, view_allocation.width);
     }
   else

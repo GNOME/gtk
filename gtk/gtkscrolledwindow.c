@@ -1346,8 +1346,8 @@ gtk_scrolled_window_relative_allocation (GtkWidget     *widget,
       GtkRequisition vscrollbar_requisition;
       gboolean is_rtl;
 
-      gtk_widget_get_child_requisition (priv->vscrollbar,
-					&vscrollbar_requisition);
+      gtk_size_request_get_size (GTK_SIZE_REQUEST (priv->vscrollbar),
+                                 &vscrollbar_requisition, NULL);
       is_rtl = gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL;
   
       if ((!is_rtl && 
@@ -1363,8 +1363,9 @@ gtk_scrolled_window_relative_allocation (GtkWidget     *widget,
   if (priv->hscrollbar_visible)
     {
       GtkRequisition hscrollbar_requisition;
-      gtk_widget_get_child_requisition (priv->hscrollbar,
-					&hscrollbar_requisition);
+
+      gtk_size_request_get_size (GTK_SIZE_REQUEST (priv->hscrollbar),
+                                 &hscrollbar_requisition, NULL);
 
       if (priv->real_window_placement == GTK_CORNER_BOTTOM_LEFT ||
 	  priv->real_window_placement == GTK_CORNER_BOTTOM_RIGHT)
@@ -1466,8 +1467,9 @@ gtk_scrolled_window_size_allocate (GtkWidget     *widget,
   if (priv->hscrollbar_visible)
     {
       GtkRequisition hscrollbar_requisition;
-      gtk_widget_get_child_requisition (priv->hscrollbar,
-					&hscrollbar_requisition);
+
+      gtk_size_request_get_size (GTK_SIZE_REQUEST (priv->hscrollbar),
+                                 &hscrollbar_requisition, NULL);
 
       if (!gtk_widget_get_visible (priv->hscrollbar))
 	gtk_widget_show (priv->hscrollbar);
@@ -1517,8 +1519,8 @@ gtk_scrolled_window_size_allocate (GtkWidget     *widget,
       if (!gtk_widget_get_visible (priv->vscrollbar))
 	gtk_widget_show (priv->vscrollbar);
 
-      gtk_widget_get_child_requisition (priv->vscrollbar,
-					&vscrollbar_requisition);
+      gtk_size_request_get_size (GTK_SIZE_REQUEST (priv->vscrollbar),
+                                 &vscrollbar_requisition, NULL);
 
       if ((gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL && 
 	   (priv->real_window_placement == GTK_CORNER_TOP_RIGHT ||

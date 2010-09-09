@@ -53,6 +53,7 @@
 #include "gtkseparatormenuitem.h"
 #include "gtkselection.h"
 #include "gtksettings.h"
+#include "gtksizerequest.h"
 #include "gtkspinbutton.h"
 #include "gtkstock.h"
 #include "gtktextutil.h"
@@ -2990,7 +2991,8 @@ gtk_entry_get_text_area_size (GtkEntry *entry,
   gint frame_height;
   gint xborder, yborder;
 
-  gtk_widget_get_child_requisition (widget, &requisition);
+  gtk_size_request_get_size (GTK_SIZE_REQUEST (widget),
+                             &requisition, NULL);
   gtk_widget_get_allocation (widget, &allocation);
   _gtk_entry_get_borders (entry, &xborder, &yborder);
 
@@ -3044,7 +3046,8 @@ get_widget_window_size (GtkEntry *entry,
   GtkRequisition requisition;
   GtkWidget *widget = GTK_WIDGET (entry);
 
-  gtk_widget_get_child_requisition (widget, &requisition);
+  gtk_size_request_get_size (GTK_SIZE_REQUEST (widget),
+                             &requisition, NULL);
   gtk_widget_get_allocation (widget, &allocation);
 
   if (x)
@@ -3106,10 +3109,6 @@ gtk_entry_size_allocate (GtkWidget     *widget,
 
   if (gtk_widget_get_realized (widget))
     {
-      /* We call gtk_widget_get_child_requisition, since we want (for
-       * backwards compatibility reasons) the realization here to
-       * be affected by the usize of the entry, if set
-       */
       gint x, y, width, height;
       GtkEntryCompletion* completion;
 

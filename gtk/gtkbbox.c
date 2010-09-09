@@ -45,9 +45,13 @@
  */
 
 #include "config.h"
+
 #include "gtkbbox.h"
+
 #include "gtkorientable.h"
 #include "gtkprivate.h"
+#include "gtksizerequest.h"
+
 #include "gtkintl.h"
 
 
@@ -474,7 +478,8 @@ gtk_button_box_child_requisition (GtkWidget  *widget,
           if (is_secondary)
             nsecondaries++;
 
-          gtk_widget_get_child_requisition (child, &child_requisition);
+          gtk_size_request_get_size (GTK_SIZE_REQUEST (child),
+                                     &child_requisition, NULL);
 
           if (homogeneous || (child_requisition.width + ipad_w < avg_w * 1.5))
             {

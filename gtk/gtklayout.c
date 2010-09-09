@@ -29,9 +29,13 @@
  */
 
 #include "config.h"
-#include "gdkconfig.h"
 
 #include "gtklayout.h"
+
+#include "gdkconfig.h"
+
+#include "gtksizerequest.h"
+
 #include "gtkprivate.h"
 #include "gtkintl.h"
 #include "gtkmarshalers.h"
@@ -1124,7 +1128,9 @@ gtk_layout_allocate_child (GtkLayout      *layout,
 
   allocation.x = child->x;
   allocation.y = child->y;
-  gtk_widget_get_child_requisition (child->widget, &requisition);
+
+  gtk_size_request_get_size (GTK_SIZE_REQUEST (child->widget),
+                             &requisition, NULL);
   allocation.width = requisition.width;
   allocation.height = requisition.height;
   

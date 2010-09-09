@@ -645,7 +645,10 @@ gtk_handle_box_size_allocate (GtkWidget     *widget,
   child = gtk_bin_get_child (bin);
 
   if (child)
-    gtk_widget_get_child_requisition (child, &child_requisition);
+    {
+      gtk_size_request_get_size (GTK_SIZE_REQUEST (child),
+                                 &child_requisition, NULL);
+    }
   else
     {
       child_requisition.width = 0;
@@ -1379,7 +1382,10 @@ gtk_handle_box_motion (GtkWidget      *widget,
 	  priv->child_detached = TRUE;
 
 	  if (child)
-	    gtk_widget_get_child_requisition (child, &child_requisition);
+            {
+              gtk_size_request_get_size (GTK_SIZE_REQUEST (child),
+                                         &child_requisition, NULL);
+            }
 	  else
 	    {
 	      child_requisition.width = 0;

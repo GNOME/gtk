@@ -1173,8 +1173,9 @@ gtk_font_selection_update_preview (GtkFontSelection *fontsel)
   GtkWidget *preview_entry = priv->preview_entry;
   const gchar *text;
 
-  gtk_widget_get_child_requisition (preview_entry, &old_requisition);
-  
+  gtk_size_request_get_size (GTK_SIZE_REQUEST (preview_entry),
+                             &old_requisition, NULL);
+
   rc_style = gtk_rc_style_new ();
   rc_style->font_desc = gtk_font_selection_get_font_description (fontsel);
   

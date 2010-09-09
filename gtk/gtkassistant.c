@@ -58,6 +58,7 @@
 #include "gtkimage.h"
 #include "gtklabel.h"
 #include "gtksizegroup.h"
+#include "gtksizerequest.h"
 #include "gtkstock.h"
 
 #include "gtkintl.h"
@@ -1224,7 +1225,8 @@ gtk_assistant_size_allocate (GtkWidget      *widget,
   border_width = gtk_container_get_border_width (GTK_CONTAINER (widget));
 
   /* Header */
-  gtk_widget_get_child_requisition (priv->header_image, &header_requisition);
+  gtk_size_request_get_size (GTK_SIZE_REQUEST (priv->header_image),
+                             &header_requisition, NULL);
 
   header_allocation.x = border_width + header_padding;
   header_allocation.y = border_width + header_padding;
@@ -1234,7 +1236,8 @@ gtk_assistant_size_allocate (GtkWidget      *widget,
   gtk_widget_size_allocate (priv->header_image, &header_allocation);
 
   /* Action area */
-  gtk_widget_get_child_requisition (priv->action_area, &action_requisition);
+  gtk_size_request_get_size (GTK_SIZE_REQUEST (priv->action_area),
+                             &action_requisition, NULL);
 
   child_allocation.x = border_width;
   child_allocation.y = allocation->height - border_width - action_requisition.height;
@@ -1247,7 +1250,8 @@ gtk_assistant_size_allocate (GtkWidget      *widget,
   gtk_widget_get_allocation (priv->action_area, &action_area_allocation);
 
   /* Sidebar */
-  gtk_widget_get_child_requisition (priv->sidebar_image, &sidebar_requisition);
+  gtk_size_request_get_size (GTK_SIZE_REQUEST (priv->sidebar_image),
+                             &sidebar_requisition, NULL);
 
   if (rtl)
     child_allocation.x = allocation->width - border_width - sidebar_requisition.width;

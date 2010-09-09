@@ -44,7 +44,11 @@
  */
 
 #include "config.h"
+
 #include "gtkaspectframe.h"
+
+#include "gtksizerequest.h"
+
 #include "gtkprivate.h"
 #include "gtkintl.h"
 
@@ -348,7 +352,8 @@ gtk_aspect_frame_compute_child_allocation (GtkFrame      *frame,
 	{
 	  GtkRequisition child_requisition;
 
-	  gtk_widget_get_child_requisition (child, &child_requisition);
+          gtk_size_request_get_size (GTK_SIZE_REQUEST (child),
+                                     &child_requisition, NULL);
 	  if (child_requisition.height != 0)
 	    {
 	      ratio = ((gdouble) child_requisition.width /

@@ -32,6 +32,8 @@
 
 #include "config.h"
 
+#include "gtktoolbar.h"
+
 #include <math.h>
 #include <string.h>
 
@@ -51,7 +53,7 @@
 #include "gtkseparatormenuitem.h"
 #include "gtkseparatortoolitem.h"
 #include "gtkstock.h"
-#include "gtktoolbar.h"
+#include "gtksizerequest.h"
 #include "gtktoolshell.h"
 #include "gtkvbox.h"
 #include "gtkprivate.h"
@@ -1454,10 +1456,10 @@ gtk_toolbar_size_allocate (GtkWidget     *widget,
     }
   
   border_width += get_internal_padding (toolbar);
-  
-  gtk_widget_get_child_requisition (GTK_WIDGET (priv->arrow_button),
-				    &arrow_requisition);
-  
+
+  gtk_size_request_get_size (GTK_SIZE_REQUEST (priv->arrow_button),
+                             &arrow_requisition, NULL);
+
   shadow_type = get_shadow_type (toolbar);
 
   if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)

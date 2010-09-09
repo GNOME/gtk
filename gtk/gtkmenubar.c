@@ -25,16 +25,20 @@
  */
 
 #include "config.h"
+
+#include "gtkmenubar.h"
+
 #include "gdk/gdkkeysyms.h"
 #include "gtkbindings.h"
 #include "gtkmain.h"
 #include "gtkmarshalers.h"
-#include "gtkmenubar.h"
 #include "gtkmenuitem.h"
 #include "gtkmenuprivate.h"
 #include "gtksettings.h"
-#include "gtkintl.h"
+#include "gtksizerequest.h"
 #include "gtkwindow.h"
+
+#include "gtkintl.h"
 #include "gtkprivate.h"
 
 #define BORDER_SPACING  0
@@ -424,8 +428,9 @@ gtk_menu_bar_size_allocate (GtkWidget     *widget,
 	      
 	      gtk_menu_item_toggle_size_request (GTK_MENU_ITEM (child),
 						 &toggle_size);
-	      gtk_widget_get_child_requisition (child, &child_requisition);
-	    
+              gtk_size_request_get_size (GTK_SIZE_REQUEST (child),
+                                         &child_requisition, NULL);
+
 	      if (priv->child_pack_direction == GTK_PACK_DIRECTION_LTR ||
 		  priv->child_pack_direction == GTK_PACK_DIRECTION_RTL)
 		child_requisition.width += toggle_size;
@@ -474,8 +479,9 @@ gtk_menu_bar_size_allocate (GtkWidget     *widget,
 	      
 	      gtk_menu_item_toggle_size_request (GTK_MENU_ITEM (child),
 						 &toggle_size);
-	      gtk_widget_get_child_requisition (child, &child_requisition);
-	      
+              gtk_size_request_get_size (GTK_SIZE_REQUEST (child),
+                                         &child_requisition, NULL);
+
 	      if (priv->child_pack_direction == GTK_PACK_DIRECTION_LTR ||
 		  priv->child_pack_direction == GTK_PACK_DIRECTION_RTL)
 		child_requisition.width += toggle_size;

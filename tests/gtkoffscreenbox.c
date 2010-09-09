@@ -528,7 +528,8 @@ gtk_offscreen_box_size_allocate (GtkWidget     *widget,
       GtkRequisition child_requisition;
       GtkAllocation child_allocation;
 
-      gtk_widget_get_child_requisition (offscreen_box->child1, &child_requisition);
+      gtk_size_request_get_size (GTK_SIZE_REQUEST (offscreen_box->child1),
+                                 &child_requisition, NULL);
       child_allocation.x = child_requisition.width * (CHILD1_SIZE_SCALE - 1.0) / 2;
       child_allocation.y = start_y + child_requisition.height * (CHILD1_SIZE_SCALE - 1.0) / 2;
       child_allocation.width = MAX (1, (gint) allocation->width - 2 * border_width);
@@ -552,7 +553,8 @@ gtk_offscreen_box_size_allocate (GtkWidget     *widget,
       GtkRequisition child_requisition;
       GtkAllocation child_allocation;
 
-      gtk_widget_get_child_requisition (offscreen_box->child2, &child_requisition);
+      gtk_size_request_get_size (GTK_SIZE_REQUEST (offscreen_box->child2),
+                                 &child_requisition, NULL);
       child_allocation.x = child_requisition.width * (CHILD2_SIZE_SCALE - 1.0) / 2;
       child_allocation.y = start_y + child_requisition.height * (CHILD2_SIZE_SCALE - 1.0) / 2;
       child_allocation.width = MAX (1, (gint) allocation->width - 2 * border_width);

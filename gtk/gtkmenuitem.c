@@ -1394,7 +1394,8 @@ gtk_menu_item_size_allocate (GtkWidget     *widget,
       child_allocation.x += allocation->x;
       child_allocation.y += allocation->y;
 
-      gtk_widget_get_child_requisition (child, &child_requisition);
+      gtk_size_request_get_size (GTK_SIZE_REQUEST (child),
+                                 &child_requisition, NULL);
       if (menu_item->submenu && menu_item->show_submenu_indicator) 
 	{
 	  if (direction == GTK_TEXT_DIR_RTL)

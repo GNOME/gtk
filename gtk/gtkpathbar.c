@@ -19,8 +19,11 @@
  */
 
 #include "config.h"
-#include <string.h>
+
 #include "gtkpathbar.h"
+
+#include <string.h>
+
 #include "gtktogglebutton.h"
 #include "gtkalignment.h"
 #include "gtkarrow.h"
@@ -33,6 +36,7 @@
 #include "gtkhbox.h"
 #include "gtkmain.h"
 #include "gtkmarshalers.h"
+#include "gtksizerequest.h"
 
 
 enum {
@@ -493,7 +497,8 @@ gtk_path_bar_size_allocate (GtkWidget     *widget,
     {
       child = BUTTON_DATA (list->data)->button;
 
-      gtk_widget_get_child_requisition (child, &child_requisition);
+      gtk_size_request_get_size (GTK_SIZE_REQUEST (child),
+                                 &child_requisition, NULL);
 
       width += child_requisition.width + path_bar->spacing;
       if (list == path_bar->fake_root)
@@ -523,7 +528,8 @@ gtk_path_bar_size_allocate (GtkWidget     *widget,
        * button, then count backwards.
        */
       /* Count down the path chain towards the end. */
-      gtk_widget_get_child_requisition (BUTTON_DATA (first_button->data)->button, &child_requisition);
+      gtk_size_request_get_size (GTK_SIZE_REQUEST (BUTTON_DATA (first_button->data)->button),
+                                 &child_requisition, NULL);
 
       width = child_requisition.width;
       list = first_button->prev;
@@ -531,7 +537,8 @@ gtk_path_bar_size_allocate (GtkWidget     *widget,
 	{
 	  child = BUTTON_DATA (list->data)->button;
 
-	  gtk_widget_get_child_requisition (child, &child_requisition);
+          gtk_size_request_get_size (GTK_SIZE_REQUEST (child),
+                                     &child_requisition, NULL);
 
 	  if (width + child_requisition.width +
 	      path_bar->spacing + slider_space > allocation_width)
@@ -550,7 +557,8 @@ gtk_path_bar_size_allocate (GtkWidget     *widget,
 	{
 	  child = BUTTON_DATA (first_button->next->data)->button;
 
-	  gtk_widget_get_child_requisition (child, &child_requisition);
+          gtk_size_request_get_size (GTK_SIZE_REQUEST (child),
+                                     &child_requisition, NULL);
 
 	  if (width + child_requisition.width + path_bar->spacing + slider_space > allocation_width)
 	    {
@@ -597,7 +605,8 @@ gtk_path_bar_size_allocate (GtkWidget     *widget,
       button_data = BUTTON_DATA (list->data);
       child = button_data->button;
 
-      gtk_widget_get_child_requisition (child, &child_requisition);
+      gtk_size_request_get_size (GTK_SIZE_REQUEST (child),
+                                 &child_requisition, NULL);
 
       child_allocation.width = MIN (child_requisition.width,
 				    allocation_width - (path_bar->spacing + path_bar->slider_width) * 2);

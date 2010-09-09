@@ -27,16 +27,18 @@
 
 #include "config.h"
 
+#include "gtknotebook.h"
+
 #include <stdio.h>
 #include <string.h>
 
 #include <gdk/gdkkeysyms.h>
 
-#include "gtknotebook.h"
 #include "gtkmain.h"
 #include "gtkmenu.h"
 #include "gtkmenuitem.h"
 #include "gtklabel.h"
+#include "gtksizerequest.h"
 #include "gtkintl.h"
 #include "gtkmarshalers.h"
 #include "gtkbindings.h"
@@ -2199,7 +2201,8 @@ gtk_notebook_size_allocate (GtkWidget     *widget,
 		  widget_allocation.y = allocation->y + border_width;
 		  is_rtl = gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL;
 
-		  gtk_widget_get_child_requisition (priv->action_widget[i], &requisition);
+                  gtk_size_request_get_size (GTK_SIZE_REQUEST (priv->action_widget[i]),
+                                             &requisition, NULL);
 
 		  switch (tab_pos)
 		    {
@@ -5912,7 +5915,8 @@ gtk_notebook_page_allocate (GtkNotebook     *notebook,
   xthickness = style->xthickness;
   ythickness = style->ythickness;
 
-  gtk_widget_get_child_requisition (page->tab_label, &tab_requisition);
+  gtk_size_request_get_size (GTK_SIZE_REQUEST (page->tab_label),
+                             &tab_requisition, NULL);
   gtk_widget_style_get (widget,
 			"focus-line-width", &focus_width,
 			"tab-curvature", &tab_curvature,

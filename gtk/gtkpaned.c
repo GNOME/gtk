@@ -26,13 +26,16 @@
 
 #include "config.h"
 
+#include "gtkpaned.h"
+
 #include "gdk/gdkkeysyms.h"
 #include "gtkbindings.h"
 #include "gtkmain.h"
 #include "gtkmarshalers.h"
 #include "gtkorientable.h"
-#include "gtkpaned.h"
+#include "gtksizerequest.h"
 #include "gtkwindow.h"
+
 #include "gtkprivate.h"
 #include "gtkintl.h"
 
@@ -884,8 +887,10 @@ gtk_paned_size_allocate (GtkWidget     *widget,
 
       gtk_widget_style_get (widget, "handle-size", &handle_size, NULL);
 
-      gtk_widget_get_child_requisition (priv->child1, &child1_requisition);
-      gtk_widget_get_child_requisition (priv->child2, &child2_requisition);
+      gtk_size_request_get_size (GTK_SIZE_REQUEST (priv->child1),
+                                 &child1_requisition, NULL);
+      gtk_size_request_get_size (GTK_SIZE_REQUEST (priv->child2),
+                                 &child2_requisition, NULL);
 
       old_handle_pos = priv->handle_pos;
 

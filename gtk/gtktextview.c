@@ -3309,11 +3309,13 @@ gtk_text_view_size_request (GtkWidget      *widget,
           GtkRequisition child_req;
           GtkRequisition old_req;
 
-          gtk_widget_get_child_requisition (child->widget, &old_req);
-          
+          gtk_size_request_get_size (GTK_SIZE_REQUEST (child->widget),
+                                     &old_req, NULL);
+
           gtk_widget_size_request (child->widget, &child_req);
 
-          gtk_widget_get_child_requisition (child->widget, &child_req);
+          gtk_size_request_get_size (GTK_SIZE_REQUEST (child->widget),
+                                     &child_req, NULL);
 
           /* Invalidate layout lines if required */
           if (priv->layout &&
@@ -3358,7 +3360,8 @@ gtk_text_view_compute_child_allocation (GtkTextView      *text_view,
   allocation->x = vc->from_left_of_buffer - text_view->priv->xoffset;
   allocation->y = buffer_y - text_view->priv->yoffset;
 
-  gtk_widget_get_child_requisition (vc->widget, &req);
+  gtk_size_request_get_size (GTK_SIZE_REQUEST (vc->widget),
+                             &req, NULL);
   allocation->width = req.width;
   allocation->height = req.height;
 }
@@ -3459,8 +3462,9 @@ gtk_text_view_allocate_children (GtkTextView *text_view)
           allocation.x = child->x;
           allocation.y = child->y;
 
-          gtk_widget_get_child_requisition (child->widget, &child_req);
-          
+          gtk_size_request_get_size (GTK_SIZE_REQUEST (child->widget),
+                                     &child_req, NULL);
+
           allocation.width = child_req.width;
           allocation.height = child_req.height;
           
