@@ -1651,27 +1651,23 @@ create_statusbar (GtkWidget *widget)
 #define DEFAULT_GEOMETRY "10x10"
 
 static gboolean
-gridded_geometry_expose (GtkWidget      *widget,
-			 GdkEventExpose *event)
+gridded_geometry_draw (GtkWidget *widget,
+                       cairo_t   *cr)
 {
-  GtkAllocation allocation;
   GtkStateType state;
   GtkStyle *style;
-  cairo_t *cr;
-  int i, j;
+  int i, j, width, height;
 
-  gtk_widget_get_allocation (widget, &allocation);
   style = gtk_widget_get_style (widget);
   state = gtk_widget_get_state (widget);
+  width = gtk_widget_get_allocated_width (widget);
+  height = gtk_widget_get_allocated_height (widget);
 
-  cr = gdk_cairo_create (gtk_widget_get_window (widget));
-
-  cairo_rectangle (cr, 0, 0, allocation.width, allocation.height);
   gdk_cairo_set_source_color (cr, &style->base[state]);
-  cairo_fill (cr);
+  cairo_paint (cr);
 
-  for (i = 0 ; i * GRID_SIZE < allocation.width; i++)
-    for (j = 0 ; j * GRID_SIZE < allocation.height; j++)
+  for (i = 0 ; i * GRID_SIZE < width; i++)
+    for (j = 0 ; j * GRID_SIZE < height; j++)
       {
 	if ((i + j) % 2 == 0)
 	  cairo_rectangle (cr, i * GRID_SIZE, j * GRID_SIZE, GRID_SIZE, GRID_SIZE);
@@ -1679,8 +1675,6 @@ gridded_geometry_expose (GtkWidget      *widget,
 
   gdk_cairo_set_source_color (cr, &style->text[state]);
   cairo_fill (cr);
-
-  cairo_destroy (cr);
 
   return FALSE;
 }
@@ -1743,8 +1737,8 @@ gridded_geometry_response (GtkDialog *dialog,
       gtk_container_set_border_width (GTK_CONTAINER (box), 7);
       
       drawing_area = gtk_drawing_area_new ();
-      g_signal_connect (drawing_area, "expose_event",
-			G_CALLBACK (gridded_geometry_expose), NULL);
+      g_signal_connect (drawing_area, "draw",
+			G_CALLBACK (gridded_geometry_draw), NULL);
       gtk_box_pack_start (GTK_BOX (box), drawing_area, TRUE, TRUE, 0);
 
       /* Gross hack to work around bug 68668... if we set the size request
