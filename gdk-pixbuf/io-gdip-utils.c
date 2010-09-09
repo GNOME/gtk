@@ -43,38 +43,6 @@ struct _GdipContext {
 };
 typedef struct _GdipContext GdipContext;
 
-static GdiplusStartupFunc GdiplusStartup;
-static GdipCreateBitmapFromStreamFunc GdipCreateBitmapFromStream;
-static GdipBitmapGetPixelFunc GdipBitmapGetPixel;
-static GdipGetImageHeightFunc GdipGetImageHeight;
-static GdipDisposeImageFunc GdipDisposeImage;
-static GdipGetImageFlagsFunc GdipGetImageFlags;
-static GdipGetImageWidthFunc GdipGetImageWidth;
-static GdipImageGetFrameCountFunc GdipImageGetFrameCount;
-static GdipImageSelectActiveFrameFunc GdipImageSelectActiveFrame;
-static GdipGetPropertyItemSizeFunc GdipGetPropertyItemSize;
-static GdipGetPropertyItemFunc GdipGetPropertyItem;
-static GdipGetPropertyCountFunc GdipGetPropertyCount;
-static GdipGetPropertyIdListFunc GdipGetPropertyIdList;
-static GdipCreateBitmapFromScan0Func GdipCreateBitmapFromScan0;
-static GdipSaveImageToStreamFunc GdipSaveImageToStream;
-static GdipBitmapSetPixelFunc GdipBitmapSetPixel;
-static GdipDrawImageIFunc GdipDrawImageI;
-static GdipGetImageGraphicsContextFunc GdipGetImageGraphicsContext;
-static GdipFlushFunc GdipFlush;
-static GdipGraphicsClearFunc GdipGraphicsClear;
-static GdipBitmapSetResolutionFunc GdipBitmapSetResolution;
-static GdipGetImageHorizontalResolutionFunc GdipGetImageHorizontalResolution;
-static GdipGetImageVerticalResolutionFunc GdipGetImageVerticalResolution;
-static GdipLoadImageFromStreamFunc GdipLoadImageFromStream;
-static GdipDeleteGraphicsFunc GdipDeleteGraphics;
-static GdipGetImageEncodersFunc GdipGetImageEncoders;
-static GdipGetImageEncodersSizeFunc GdipGetImageEncodersSize;
-static GdipBitmapLockBitsFunc GdipBitmapLockBits;
-static GdipBitmapUnlockBitsFunc GdipBitmapUnlockBits;
-static GdipGetImagePixelFormatFunc GdipGetImagePixelFormat;
-static GdipCloneBitmapAreaIFunc GdipCloneBitmapAreaI;
-
 DEFINE_GUID(FrameDimensionTime, 0x6aedbd6d,0x3fb5,0x418a,0x83,0xa6,0x7f,0x45,0x22,0x9d,0xc8,0x72);
 DEFINE_GUID(FrameDimensionPage, 0x7462dc86,0x6180,0x4c7e,0x8e,0x3f,0xee,0x73,0x33,0xa7,0xa4,0x83);
 
@@ -131,58 +99,12 @@ gdip_init (void)
 {
   GdiplusStartupInput input;
   ULONG_PTR gdiplusToken = 0;
-  static HINSTANCE gdipluslib = NULL;
+  static gboolean beenhere = FALSE;
 
-  if (!gdipluslib)
-    gdipluslib = LoadLibrary ("gdiplus.dll");
-  else
+  if (beenhere)
     return TRUE; /* gdip_init() is idempotent */
 
-  if (!gdipluslib)
-    return FALSE;
-
-#define LOOKUP(func) \
-  G_STMT_START { \
-    func = (func##Func) GetProcAddress (gdipluslib, #func); \
-    if (!func) {\
-      g_warning ("Couldn't find GDI+ function %s\n", #func); \
-      return FALSE; \
-    } \
-  } G_STMT_END
-
-  LOOKUP (GdiplusStartup);
-  LOOKUP (GdipCreateBitmapFromStream);
-  LOOKUP (GdipBitmapGetPixel);
-  LOOKUP (GdipGetImageHeight);
-  LOOKUP (GdipDisposeImage);
-  LOOKUP (GdipGetImageFlags);
-  LOOKUP (GdipGetImageWidth);
-  LOOKUP (GdipImageGetFrameCount);
-  LOOKUP (GdipImageSelectActiveFrame);
-  LOOKUP (GdipGetPropertyItemSize);
-  LOOKUP (GdipGetPropertyItem);
-  LOOKUP (GdipGetPropertyCount);
-  LOOKUP (GdipGetPropertyIdList);
-  LOOKUP (GdipCreateBitmapFromScan0);
-  LOOKUP (GdipSaveImageToStream);
-  LOOKUP (GdipBitmapSetPixel);
-  LOOKUP (GdipDrawImageI);
-  LOOKUP (GdipGetImageGraphicsContext);
-  LOOKUP (GdipFlush);
-  LOOKUP (GdipGraphicsClear);
-  LOOKUP (GdipBitmapSetResolution);
-  LOOKUP (GdipGetImageHorizontalResolution);
-  LOOKUP (GdipGetImageVerticalResolution);
-  LOOKUP (GdipLoadImageFromStream);
-  LOOKUP (GdipDeleteGraphics);
-  LOOKUP (GdipGetImageEncoders);
-  LOOKUP (GdipGetImageEncodersSize);
-  LOOKUP (GdipBitmapLockBits);
-  LOOKUP (GdipBitmapUnlockBits);
-  LOOKUP (GdipGetImagePixelFormat);
-  LOOKUP (GdipCloneBitmapAreaI);
-
-#undef LOOKUP
+  beenhere = TRUE;
 
   input.GdiplusVersion = 1;
   input.DebugEventCallback = NULL;

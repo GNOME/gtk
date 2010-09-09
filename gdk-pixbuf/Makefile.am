@@ -206,6 +206,15 @@ libpixbufloader_qtif_la_LIBADD = $(module_libs)
 
 if BUILD_GDIPLUS_LOADERS
 
+# MinGW doesn't come with any import library for gdiplus.dll, so
+# create a partial one that's enough for our use.
+
+libgdiplus = libgdiplus.dll.a
+gdiplus_ldflag = -Wl,$(libgdiplus)
+
+libgdiplus.dll.a: gdiplus.def
+	$(DLLTOOL) --kill-at --dllname gdiplus.dll --input-def gdiplus.def --output-lib $@
+
 if INCLUDE_GDIPLUS
 
 # When building the GDI+ loader statically, we put the "common" objects
@@ -258,7 +267,7 @@ GDIPLUS_LIBS = \
 	libpixbufloader-gdip-jpeg.la \
 	libpixbufloader-gdip-tiff.la
 
-libpixbufloader_gdip_ico_la_LDFLAGS = -avoid-version -module -no-undefined
+libpixbufloader_gdip_ico_la_LDFLAGS = -avoid-version -module -no-undefined $(gdiplus_ldflag)
 libpixbufloader_gdip_ico_la_SOURCES = 	\
 	io-gdip-native.h		\
 	io-gdip-propertytags.h		\
@@ -269,7 +278,7 @@ libpixbufloader_gdip_ico_la_SOURCES = 	\
 	io-gdip-ico.c
 libpixbufloader_gdip_ico_la_LIBADD = $(module_libs) $(libole32)
 
-libpixbufloader_gdip_wmf_la_LDFLAGS = -avoid-version -module -no-undefined
+libpixbufloader_gdip_wmf_la_LDFLAGS = -avoid-version -module -no-undefined $(gdiplus_ldflag)
 libpixbufloader_gdip_wmf_la_SOURCES = 	\
 	io-gdip-native.h		\
 	io-gdip-propertytags.h		\
@@ -280,7 +289,7 @@ libpixbufloader_gdip_wmf_la_SOURCES = 	\
 	io-gdip-wmf.c
 libpixbufloader_gdip_wmf_la_LIBADD = $(module_libs) $(libole32)
 
-libpixbufloader_gdip_emf_la_LDFLAGS = -avoid-version -module -no-undefined
+libpixbufloader_gdip_emf_la_LDFLAGS = -avoid-version -module -no-undefined $(gdiplus_ldflag)
 libpixbufloader_gdip_emf_la_SOURCES = 	\
 	io-gdip-native.h		\
 	io-gdip-propertytags.h		\
@@ -291,7 +300,7 @@ libpixbufloader_gdip_emf_la_SOURCES = 	\
 	io-gdip-emf.c
 libpixbufloader_gdip_emf_la_LIBADD = $(module_libs) $(libole32)
 
-libpixbufloader_gdip_bmp_la_LDFLAGS = -avoid-version -module -no-undefined
+libpixbufloader_gdip_bmp_la_LDFLAGS = -avoid-version -module -no-undefined $(gdiplus_ldflag)
 libpixbufloader_gdip_bmp_la_SOURCES = 	\
 	io-gdip-native.h		\
 	io-gdip-propertytags.h		\
@@ -302,7 +311,7 @@ libpixbufloader_gdip_bmp_la_SOURCES = 	\
 	io-gdip-bmp.c
 libpixbufloader_gdip_bmp_la_LIBADD = $(module_libs) $(libole32)
 
-libpixbufloader_gdip_gif_la_LDFLAGS = -avoid-version -module -no-undefined
+libpixbufloader_gdip_gif_la_LDFLAGS = -avoid-version -module -no-undefined $(gdiplus_ldflag)
 libpixbufloader_gdip_gif_la_SOURCES = 	\
 	io-gdip-native.h		\
 	io-gdip-propertytags.h		\
@@ -313,7 +322,7 @@ libpixbufloader_gdip_gif_la_SOURCES = 	\
 	io-gdip-gif.c
 libpixbufloader_gdip_gif_la_LIBADD = $(module_libs) $(libole32)
 
-libpixbufloader_gdip_jpeg_la_LDFLAGS = -avoid-version -module -no-undefined
+libpixbufloader_gdip_jpeg_la_LDFLAGS = -avoid-version -module -no-undefined $(gdiplus_ldflag)
 libpixbufloader_gdip_jpeg_la_SOURCES = 	\
 	io-gdip-native.h		\
 	io-gdip-propertytags.h		\
@@ -324,7 +333,7 @@ libpixbufloader_gdip_jpeg_la_SOURCES = 	\
 	io-gdip-jpeg.c
 libpixbufloader_gdip_jpeg_la_LIBADD = $(module_libs) $(libole32)
 
-libpixbufloader_gdip_tiff_la_LDFLAGS = -avoid-version -module -no-undefined
+libpixbufloader_gdip_tiff_la_LDFLAGS = -avoid-version -module -no-undefined $(gdiplus_ldflag)
 libpixbufloader_gdip_tiff_la_SOURCES = 	\
 	io-gdip-native.h		\
 	io-gdip-propertytags.h		\
@@ -557,11 +566,12 @@ libgdk_pixbuf_2_0_la_LDFLAGS = \
 	-version-info $(LT_VERSION_INFO)	\
 	$(LIBTOOL_EXPORT_OPTIONS)		\
 	$(no_undefined)				\
-	$(gdk_pixbuf_symbols)
+	$(gdk_pixbuf_symbols)			\
+	$(gdiplus_ldflag)
 
 
 libgdk_pixbuf_2_0_la_LIBADD = pixops/libpixops.la $(builtin_objs) $(GDK_PIXBUF_DEP_LIBS) $(libole32)
-libgdk_pixbuf_2_0_la_DEPENDENCIES = pixops/libpixops.la $(builtin_objs) $(gdk_pixbuf_def) $(gdk_pixbuf_win32_res)
+libgdk_pixbuf_2_0_la_DEPENDENCIES = pixops/libpixops.la $(builtin_objs) $(gdk_pixbuf_def) $(gdk_pixbuf_win32_res) $(libgdiplus)
 
 gdk_pixbuf_headers = 			\
 	gdk-pixbuf.h			\
@@ -673,7 +683,8 @@ EXTRA_DIST +=					\
 	gdk-pixbuf-marshal.list			\
 	gdk-pixbuf-enum-types.c.template	\
 	gdk-pixbuf-enum-types.h.template	\
-	gen-color-table.pl
+	gen-color-table.pl			\
+	gdiplus.def
 
 if HAVE_INTROSPECTION
 

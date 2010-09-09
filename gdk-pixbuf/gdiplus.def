@@ -1,0 +1,26 @@
+EXPORTS
+	GdiplusStartup@12
+	GdipCreateBitmapFromStream@8
+	GdipBitmapGetPixel@16
+	GdipGetImageWidth@8
+	GdipGetImageHeight@8
+	GdipDisposeImage@4
+	GdipGetImageFlags@8
+	GdipImageGetFrameCount@12
+	GdipImageSelectActiveFrame@12
+	GdipGetPropertyItemSize@12
+	GdipGetPropertyItem@16
+	GdipCreateBitmapFromScan0@24
+	GdipSaveImageToStream@16
+	GdipGetImageEncoders@12
+	GdipGetImageEncodersSize@8
+	GdipBitmapSetPixel@16
+	GdipDrawImageI@16
+	GdipGetImageGraphicsContext@8
+	GdipFlush@8
+	GdipGraphicsClear@8
+	GdipBitmapSetResolution@12
+	GdipGetImageHorizontalResolution@8
+	GdipGetImageVerticalResolution@8
+	GdipLoadImageFromStream@8
+	GdipDeleteGraphics@4
