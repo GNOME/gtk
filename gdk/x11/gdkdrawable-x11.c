@@ -97,7 +97,7 @@ _gdk_x11_drawable_update_size (GdkDrawable *drawable)
     {
       int width, height;
       
-      gdk_drawable_get_size (drawable, &width, &height);
+      gdk_drawable_get_size (impl->wrapper, &width, &height);
       cairo_xlib_surface_set_size (impl->cairo_surface, width, height);
     }
 }
