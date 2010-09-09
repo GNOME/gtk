@@ -349,11 +349,11 @@ gtk_win32_embed_widget_focus (GtkWidget        *widget,
       if (window->focus_widget)
 	{
 	  /* Wrapped off the end, clear the focus setting for the toplevel */
-	  parent = window->focus_widget->parent;
+	  parent = gtk_widget_get_parent (window->focus_widget);
 	  while (parent)
 	    {
 	      gtk_container_set_focus_child (GTK_CONTAINER (parent), NULL);
-	      parent = GTK_WIDGET (parent)->parent;
+	      parent = gtk_widget_get_parent (GTK_WIDGET (parent));
 	    }
 	  
 	  gtk_window_set_focus (GTK_WINDOW (container), NULL);

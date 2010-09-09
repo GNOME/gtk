@@ -893,7 +893,7 @@ gtk_selection_add_target (GtkWidget	    *widget,
   list = gtk_selection_target_list_get (widget, selection);
   gtk_target_list_add (list, target, 0, info);
 #ifdef GDK_WINDOWING_WIN32
-  gdk_win32_selection_add_targets (widget->window, selection, 1, &target);
+  gdk_win32_selection_add_targets (gtk_widget_get_window (widget), selection, 1, &target);
 #endif
 }
 
@@ -929,7 +929,7 @@ gtk_selection_add_targets (GtkWidget            *widget,
 
     for (i = 0; i < ntargets; ++i)
       atoms[i] = gdk_atom_intern (targets[i].target, FALSE);
-    gdk_win32_selection_add_targets (widget->window, selection, ntargets, atoms);
+    gdk_win32_selection_add_targets (gtk_widget_get_window (widget), selection, ntargets, atoms);
     g_free (atoms);
   }
 #endif
