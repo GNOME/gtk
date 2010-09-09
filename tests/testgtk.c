@@ -454,29 +454,6 @@ create_composited_window (GtkWidget *widget)
  * Big windows and guffaw scrolling
  */
 
-static gboolean
-pattern_expose (GtkWidget      *widget,
-		GdkEventExpose *event,
-		gpointer        data)
-{
-  GdkColor *color;
-  GdkWindow *window = event->window;
-
-  color = g_object_get_data (G_OBJECT (window), "pattern-color");
-  if (color)
-    {
-      cairo_t *cr = gdk_cairo_create (window);
-
-      gdk_cairo_set_source_color (cr, color);
-      gdk_cairo_rectangle (cr, &event->area);
-      cairo_fill (cr);
-
-      cairo_destroy (cr);
-    }
-
-  return FALSE;
-}
-
 static void
 pattern_set_bg (GtkWidget   *widget,
 		GdkWindow   *child,
@@ -488,8 +465,8 @@ pattern_set_bg (GtkWidget   *widget,
     { 0, 0xaaaa, 0xaaaa, 0xffff }
   };
     
-  g_object_set_data (G_OBJECT (child), "pattern-color", (gpointer) &colors[level]);
   gdk_window_set_user_data (child, widget);
+  gdk_window_set_background (child, &colors[level]);
 }
 
 static void
@@ -643,9 +620,6 @@ create_big_windows (GtkWidget *widget)
       
       g_signal_connect (darea, "realize",
                         G_CALLBACK (pattern_realize),
-                        NULL);
-      g_signal_connect (darea, "expose_event",
-                        G_CALLBACK (pattern_expose),
                         NULL);
 
       eventbox = gtk_event_box_new ();
