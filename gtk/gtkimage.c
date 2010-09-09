@@ -1736,6 +1736,7 @@ gtk_image_draw (GtkWidget *widget,
 	  break;
 	  
         case GTK_IMAGE_EMPTY:
+        default:
           g_assert_not_reached ();
           pixbuf = NULL;
           break;
