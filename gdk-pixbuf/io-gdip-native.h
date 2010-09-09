@@ -224,41 +224,32 @@ typedef struct _GpRect GpRect;
 #define IStream_SetSize(This,size) (This)->lpVtbl->SetSize(This,size)
 #endif
 
-typedef GpStatus (WINGDIPAPI* GdiplusStartupFunc) (gpointer, const gpointer, gpointer);
-typedef GpStatus (WINGDIPAPI* GdipCreateBitmapFromStreamFunc) (gpointer, GpBitmap**);
-typedef GpStatus (WINGDIPAPI* GdipBitmapGetPixelFunc) (GpBitmap*, gint x, gint y, ARGB*);
-typedef GpStatus (WINGDIPAPI* GdipGetImageWidthFunc) (GpImage*, guint*);
-typedef GpStatus (WINGDIPAPI* GdipGetImageHeightFunc) (GpImage*, guint*);
-typedef GpStatus (WINGDIPAPI* GdipDisposeImageFunc) (GpImage*);
-typedef GpStatus (WINGDIPAPI* GdipGetImageFlagsFunc) (GpImage *, guint*);
-typedef GpStatus (WINGDIPAPI* GdipImageGetFrameCountFunc) (GpImage *image, const GUID* dimensionID, UINT* count);
-typedef GpStatus (WINGDIPAPI* GdipImageSelectActiveFrameFunc) (GpImage *image, const GUID* dimensionID, UINT frameIndex);
-typedef GpStatus (WINGDIPAPI* GdipGetPropertyItemSizeFunc) (GpImage *image, int propId, guint* size);
-typedef GpStatus (WINGDIPAPI* GdipGetPropertyItemFunc) (GpImage *image, int propId, guint propSize, PropertyItem* buffer);
-typedef GpStatus (WINGDIPAPI* GdipGetPropertyCountFunc) (GpImage *image, guint* numOfProperty);
-typedef GpStatus (WINGDIPAPI* GdipGetPropertyIdListFunc) (GpImage *image, guint numOfProperty, PROPID* list);
-typedef GpStatus (WINGDIPAPI* GdipCreateBitmapFromScan0Func) (INT width, INT height, INT stride, PixelFormat format, BYTE* scan0, 
-                                                              GpBitmap** bitmap);
-typedef GpStatus (WINGDIPAPI* GdipSaveImageToStreamFunc) (GpImage *image, IStream* stream, const CLSID* clsidEncoder, 
-                                                          const EncoderParameters* encoderParams);
-
-typedef GpStatus (WINGDIPAPI* GdipGetImageEncodersFunc) (UINT numEncoders, UINT size, ImageCodecInfo *encoders);
-typedef GpStatus (WINGDIPAPI* GdipGetImageEncodersSizeFunc) (UINT *numEncoders, UINT *size);
-typedef GpStatus (WINGDIPAPI* GdipBitmapSetPixelFunc) (GpBitmap* bitmap, INT x, INT y, ARGB color);
-
-typedef GpStatus (WINGDIPAPI* GdipDrawImageIFunc) (GpGraphics *graphics, GpImage *image, INT x, INT y);
-typedef GpStatus (WINGDIPAPI* GdipGetImageGraphicsContextFunc) (GpImage *image, GpGraphics **graphics);
-typedef GpStatus (WINGDIPAPI* GdipFlushFunc) (GpGraphics *graphics, INT intention);
-typedef GpStatus (WINGDIPAPI* GdipGraphicsClearFunc) (GpGraphics *graphics, ARGB color);
-typedef GpStatus (WINGDIPAPI* GdipBitmapSetResolutionFunc) (GpBitmap* bitmap, float xdpi, float ydpi);
-typedef GpStatus (WINGDIPAPI* GdipGetImageHorizontalResolutionFunc) (GpImage *image, float *resolution);
-typedef GpStatus (WINGDIPAPI* GdipGetImageVerticalResolutionFunc) (GpImage *image, float *resolution);
-typedef GpStatus (WINGDIPAPI* GdipLoadImageFromStreamFunc) (IStream* stream, GpImage **image);
-typedef GpStatus (WINGDIPAPI* GdipDeleteGraphicsFunc) (GpGraphics *graphics);
-
-typedef GpStatus (WINGDIPAPI* GdipBitmapLockBitsFunc) (GpBitmap* bitmap, const GpRect* rect, UINT flags, PixelFormat format, BitmapData* lockedBitmapData);
-typedef GpStatus (WINGDIPAPI* GdipBitmapUnlockBitsFunc) (GpBitmap* bitmap, BitmapData* lockedBitmapData);
-typedef GpStatus (WINGDIPAPI* GdipGetImagePixelFormatFunc) (GpImage *image, PixelFormat *format);
-typedef GpStatus (WINGDIPAPI* GdipCloneBitmapAreaIFunc) (INT x, INT y, INT width, INT height, PixelFormat format, GpBitmap *srcBitmap, GpBitmap **dstBitmap);
+GpStatus WINGDIPAPI GdiplusStartup (gpointer, const gpointer, gpointer);
+GpStatus WINGDIPAPI GdipCreateBitmapFromStream (gpointer, GpBitmap**);
+GpStatus WINGDIPAPI GdipBitmapGetPixel (GpBitmap*, gint x, gint y, ARGB*);
+GpStatus WINGDIPAPI GdipGetImageWidth (GpImage*, guint*);
+GpStatus WINGDIPAPI GdipGetImageHeight (GpImage*, guint*);
+GpStatus WINGDIPAPI GdipDisposeImage (GpImage*);
+GpStatus WINGDIPAPI GdipGetImageFlags (GpImage *, guint*);
+GpStatus WINGDIPAPI GdipImageGetFrameCount (GpImage *image, const GUID* dimensionID, UINT* count);
+GpStatus WINGDIPAPI GdipImageSelectActiveFrame (GpImage *image, const GUID* dimensionID, UINT frameIndex);
+GpStatus WINGDIPAPI GdipGetPropertyItemSize (GpImage *image, int propId, guint* size);
+GpStatus WINGDIPAPI GdipGetPropertyItem (GpImage *image, int propId, guint propSize, PropertyItem* buffer);
+GpStatus WINGDIPAPI GdipCreateBitmapFromScan0 (INT width, INT height, INT stride, PixelFormat format, BYTE* scan0, 
+                                               GpBitmap** bitmap);
+GpStatus WINGDIPAPI GdipSaveImageToStream (GpImage *image, IStream* stream, const CLSID* clsidEncoder, 
+                                           const EncoderParameters* encoderParams);
+GpStatus WINGDIPAPI GdipGetImageEncoders (UINT numEncoders, UINT size, ImageCodecInfo *encoders);
+GpStatus WINGDIPAPI GdipGetImageEncodersSize (UINT *numEncoders, UINT *size);
+GpStatus WINGDIPAPI GdipBitmapSetPixel (GpBitmap* bitmap, INT x, INT y, ARGB color);
+GpStatus WINGDIPAPI GdipDrawImageI (GpGraphics *graphics, GpImage *image, INT x, INT y);
+GpStatus WINGDIPAPI GdipGetImageGraphicsContext (GpImage *image, GpGraphics **graphics);
+GpStatus WINGDIPAPI GdipFlush (GpGraphics *graphics, INT intention);
+GpStatus WINGDIPAPI GdipGraphicsClear (GpGraphics *graphics, ARGB color);
+GpStatus WINGDIPAPI GdipBitmapSetResolution (GpBitmap* bitmap, float xdpi, float ydpi);
+GpStatus WINGDIPAPI GdipGetImageHorizontalResolution (GpImage *image, float *resolution);
+GpStatus WINGDIPAPI GdipGetImageVerticalResolution (GpImage *image, float *resolution);
+GpStatus WINGDIPAPI GdipLoadImageFromStream (IStream* stream, GpImage **image);
+GpStatus WINGDIPAPI GdipDeleteGraphics (GpGraphics *graphics);
 
 #endif
