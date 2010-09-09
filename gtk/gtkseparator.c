@@ -64,8 +64,8 @@ static void       gtk_separator_get_property (GObject        *object,
 
 static void       gtk_separator_size_request (GtkWidget      *widget,
                                               GtkRequisition *requisition);
-static gboolean   gtk_separator_expose       (GtkWidget      *widget,
-                                              GdkEventExpose *event);
+static gboolean   gtk_separator_draw         (GtkWidget      *widget,
+                                              cairo_t        *cr);
 
 
 G_DEFINE_TYPE_WITH_CODE (GtkSeparator, gtk_separator, GTK_TYPE_WIDGET,
@@ -83,7 +83,7 @@ gtk_separator_class_init (GtkSeparatorClass *class)
   object_class->get_property = gtk_separator_get_property;
 
   widget_class->size_request = gtk_separator_size_request;
-  widget_class->expose_event = gtk_separator_expose;
+  widget_class->draw         = gtk_separator_draw;
 
   g_object_class_override_property (object_class,
                                     PROP_ORIENTATION,
@@ -186,21 +186,18 @@ gtk_separator_size_request (GtkWidget      *widget,
 }
 
 static gboolean
-gtk_separator_expose (GtkWidget      *widget,
-                      GdkEventExpose *event)
+gtk_separator_draw (GtkWidget    *widget,
+                    cairo_t      *cr)
 {
   GtkSeparator *separator = GTK_SEPARATOR (widget);
   GtkSeparatorPrivate *private = separator->priv;
-  GtkAllocation allocation;
   GtkStateType state;
   GtkStyle *style;
   GdkWindow *window;
   gboolean wide_separators;
-  gint     separator_width;
-  gint     separator_height;
-
-  if (!gtk_widget_is_drawable (widget))
-    return FALSE;
+  gint separator_width;
+  gint separator_height;
+  int width, height;
 
   style = gtk_widget_get_style (widget);
   gtk_widget_style_get (widget,
@@ -211,43 +208,38 @@ gtk_separator_expose (GtkWidget      *widget,
 
   window = gtk_widget_get_window (widget);
   state = gtk_widget_get_state (widget);
-  gtk_widget_get_allocation (widget, &allocation);
+  width = gtk_widget_get_allocated_width (widget);
+  height = gtk_widget_get_allocated_height (widget);
 
   if (private->orientation == GTK_ORIENTATION_HORIZONTAL)
     {
       if (wide_separators)
-        gtk_paint_box (style, window,
-                       state, GTK_SHADOW_ETCHED_OUT,
-                       &event->area, widget, "hseparator",
-                       allocation.x,
-                       allocation.y + (allocation.height - separator_height) / 2,
-                       allocation.width,
-                       separator_height);
+        gtk_cairo_paint_box (style, cr,
+                       gtk_widget_get_state (widget), GTK_SHADOW_ETCHED_OUT,
+                       widget, "hseparator",
+                       0, (height - separator_height) / 2,
+                       width, separator_height);
       else
-        gtk_paint_hline (style, window,
-                         state,
-                         &event->area, widget, "hseparator",
-                         allocation.x,
-                         allocation.x + allocation.width - 1,
-                         allocation.y + (allocation.height - style->ythickness) / 2);
+        gtk_cairo_paint_hline (style, cr,
+                         gtk_widget_get_state (widget),
+                         widget, "hseparator",
+                         0, width - 1,
+                         (height - style->ythickness) / 2);
     }
   else
     {
       if (wide_separators)
-        gtk_paint_box (style, window,
-                       state, GTK_SHADOW_ETCHED_OUT,
-                       &event->area, widget, "vseparator",
-                       allocation.x + (allocation.width - separator_width) / 2,
-                       allocation.y,
-                       separator_width,
-                       allocation.height);
+        gtk_cairo_paint_box (style, cr,
+                       gtk_widget_get_state (widget), GTK_SHADOW_ETCHED_OUT,
+                       widget, "vseparator",
+                       (width - separator_width) / 2, 0,
+                       separator_width, height);
       else
-        gtk_paint_vline (style, window,
-                         state,
-                         &event->area, widget, "vseparator",
-                         allocation.y,
-                         allocation.y + allocation.height - 1,
-                         allocation.x + (allocation.width - style->xthickness) / 2);
+        gtk_cairo_paint_vline (style, cr,
+                         gtk_widget_get_state (widget),
+                         widget, "vseparator",
+                         0, height - 1,
+                         (width - style->xthickness) / 2);
     }
 
   return FALSE;
