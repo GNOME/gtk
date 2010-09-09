@@ -433,6 +433,7 @@ typedef struct
 {
   GtkPrintOperation *op;
   GtkPrintOperationPreview *preview;
+  GtkPrintContext   *context;
   GtkWidget         *spin;
   GtkWidget         *area;
   gint               page;
@@ -441,15 +442,26 @@ typedef struct
 } PreviewOp;
 
 static gboolean
-preview_expose (GtkWidget      *widget,
-		GdkEventExpose *event,
-		gpointer        data)
+preview_draw (GtkWidget *widget,
+              cairo_t   *cr,
+              gpointer   data)
 {
   PreviewOp *pop = data;
+  cairo_t *prev_cr;
+  double dpi_x, dpi_y;
 
-  gdk_window_clear (gtk_widget_get_window (pop->area));
+  prev_cr = gtk_print_context_get_cairo_context (pop->context);
+  cairo_reference (prev_cr);
+  dpi_x = gtk_print_context_get_dpi_x (pop->context);
+  dpi_y = gtk_print_context_get_dpi_y (pop->context);
+
+  gtk_print_context_set_cairo_context (pop->context,
+                                       cr, dpi_x, dpi_y);
   gtk_print_operation_preview_render_page (pop->preview,
 					   pop->page - 1);
+  gtk_print_context_set_cairo_context (pop->context,
+                                       prev_cr, dpi_x, dpi_y);
+  cairo_destroy (prev_cr);
 
   return TRUE;
 }
@@ -467,8 +479,8 @@ preview_ready (GtkPrintOperationPreview *preview,
   gtk_spin_button_set_range (GTK_SPIN_BUTTON (pop->spin), 
 			     1.0, n_pages);
 
-  g_signal_connect (pop->area, "expose_event",
-		    G_CALLBACK (preview_expose),
+  g_signal_connect (pop->area, "draw",
+		    G_CALLBACK (preview_draw),
 		    pop);
 
   gtk_widget_queue_draw (pop->area);
@@ -569,18 +581,16 @@ preview_cb (GtkPrintOperation        *op,
   gtk_widget_set_size_request (GTK_WIDGET (da), width, height);
   gtk_box_pack_start (GTK_BOX (vbox), da, TRUE, TRUE, 0);
 
-  gtk_widget_set_double_buffered (da, FALSE);
-
   gtk_widget_realize (da);
 
   cr = gdk_cairo_create (gtk_widget_get_window (da));
-
   /* TODO: What dpi to use here? This will be used for pagination.. */
   gtk_print_context_set_cairo_context (context, cr, 72, 72);
   cairo_destroy (cr);
   
   pop->op = g_object_ref (op);
   pop->preview = preview;
+  pop->context = context;
   pop->spin = page;
   pop->area = da;
   pop->page = 1;
