@@ -1452,7 +1452,6 @@ render_icon_name_pixbuf (GtkIconSource    *icon_source,
       names[1] = icon_source->source.icon_name;
       names[2] = NULL;
 
-      g_print ("choose icon for %s\n", names[0]);
       info = gtk_icon_theme_choose_icon (icon_theme,
                                                names,
                                                pixel_size, GTK_ICON_LOOKUP_USE_BUILTIN);
@@ -1465,7 +1464,6 @@ render_icon_name_pixbuf (GtkIconSource    *icon_source,
     }
   else
     {
-      g_print ("load icon for %s\n", icon_source->source.icon_name);
       tmp_pixbuf = gtk_icon_theme_load_icon (icon_theme,
                                              icon_source->source.icon_name,
                                              pixel_size, 0,
