@@ -4086,47 +4086,34 @@ gtk_tree_view_update_rubber_band (GtkTreeView *tree_view)
 
 static void
 gtk_tree_view_paint_rubber_band (GtkTreeView  *tree_view,
-				GdkRectangle *area)
+                                 cairo_t      *cr)
 {
-  GtkStyle *style;
-  cairo_t *cr;
   GdkRectangle rect;
-  GdkRectangle rubber_rect;
+  GtkStyle *style;
 
-  rubber_rect.x = MIN (tree_view->priv->press_start_x, tree_view->priv->rubber_band_x);
-  rubber_rect.y = MIN (tree_view->priv->press_start_y, tree_view->priv->rubber_band_y) - tree_view->priv->dy;
-  rubber_rect.width = ABS (tree_view->priv->press_start_x - tree_view->priv->rubber_band_x) + 1;
-  rubber_rect.height = ABS (tree_view->priv->press_start_y - tree_view->priv->rubber_band_y) + 1;
+  cairo_save (cr);
 
-  if (!gdk_rectangle_intersect (&rubber_rect, area, &rect))
-    return;
+  rect.x = MIN (tree_view->priv->press_start_x, tree_view->priv->rubber_band_x);
+  rect.y = MIN (tree_view->priv->press_start_y, tree_view->priv->rubber_band_y) - tree_view->priv->dy;
+  rect.width = ABS (tree_view->priv->press_start_x - tree_view->priv->rubber_band_x) + 1;
+  rect.height = ABS (tree_view->priv->press_start_y - tree_view->priv->rubber_band_y) + 1;
 
-  cr = gdk_cairo_create (tree_view->priv->bin_window);
   cairo_set_line_width (cr, 1.0);
 
   style = gtk_widget_get_style (GTK_WIDGET (tree_view));
 
-  cairo_set_source_rgba (cr,
-                         style->fg[GTK_STATE_NORMAL].red / 65535.,
-                         style->fg[GTK_STATE_NORMAL].green / 65535.,
-                         style->fg[GTK_STATE_NORMAL].blue / 65535.,
-			 .25);
+  gdk_cairo_set_source_color (cr, &style->fg[GTK_STATE_NORMAL]);
 
   gdk_cairo_rectangle (cr, &rect);
   cairo_clip (cr);
-  cairo_paint (cr);
-
-  cairo_set_source_rgb (cr,
-                        style->fg[GTK_STATE_NORMAL].red / 65535.,
-                        style->fg[GTK_STATE_NORMAL].green / 65535.,
-                        style->fg[GTK_STATE_NORMAL].blue / 65535.);
+  cairo_paint_with_alpha (cr, 0.25);
 
   cairo_rectangle (cr,
-		   rubber_rect.x + 0.5, rubber_rect.y + 0.5,
-		   rubber_rect.width - 1, rubber_rect.height - 1);
+		   rect.x + 0.5, rect.y + 0.5,
+		   rect.width - 1, rect.height - 1);
   cairo_stroke (cr);
 
-  cairo_destroy (cr);
+  cairo_restore (cr);
 }
 
 static gboolean
@@ -5026,18 +5013,7 @@ done:
   gtk_tree_view_draw_grid_lines (tree_view, cr, n_visible_columns);
 
   if (tree_view->priv->rubber_band_status == RUBBER_BAND_ACTIVE)
-    {
-      GdkRectangle rectangle;
-      gint n_rectangles;
- 
-      n_rectangles = cairo_region_num_rectangles (event->region);
- 
-      while (n_rectangles--)
-        {
-          cairo_region_get_rectangle (event->region, n_rectangles, &rectangle);
-          gtk_tree_view_paint_rubber_band (tree_view, &rectangle);
-        }
-    }
+    gtk_tree_view_paint_rubber_band (tree_view, cr);
 
   if (cursor_path)
     gtk_tree_path_free (cursor_path);
