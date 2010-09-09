@@ -2821,12 +2821,12 @@ static void
 gtk_icon_view_layout (GtkIconView *icon_view)
 {
   GtkAllocation allocation;
-  GtkRequisition requisition;
   GtkWidget *widget;
   GList *icons;
   gint y = 0, maximum_width = 0;
   gint row;
   gint item_width;
+  gboolean size_changed = FALSE;
 
   if (icon_view->priv->layout_idle_id != 0)
     {
@@ -2872,22 +2872,25 @@ gtk_icon_view_layout (GtkIconView *icon_view)
   while (icons != NULL);
 
   if (maximum_width != icon_view->priv->width)
-    icon_view->priv->width = maximum_width;
+    {
+      icon_view->priv->width = maximum_width;
+      size_changed = TRUE;
+    }
 
   y += icon_view->priv->margin;
   
   if (y != icon_view->priv->height)
-    icon_view->priv->height = y;
+    {
+      icon_view->priv->height = y;
+      size_changed = TRUE;
+    }
 
   gtk_icon_view_set_adjustment_upper (icon_view->priv->hadjustment, 
 				      icon_view->priv->width);
   gtk_icon_view_set_adjustment_upper (icon_view->priv->vadjustment, 
 				      icon_view->priv->height);
 
-  gtk_size_request_get_size (GTK_SIZE_REQUEST (widget), &requisition, NULL);
-
-  if (icon_view->priv->width != requisition.width ||
-      icon_view->priv->height != requisition.height)
+  if (size_changed)
     gtk_widget_queue_resize_no_redraw (widget);
 
   gtk_widget_get_allocation (widget, &allocation);

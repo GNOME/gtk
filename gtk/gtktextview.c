@@ -134,6 +134,18 @@ struct _GtkTextViewPrivate
   gint width;           /* Width and height of the buffer */
   gint height;
 
+  /* This is used to monitor the overall size request 
+   * and decide whether we need to queue resizes when
+   * the buffer content changes. 
+   *
+   * FIXME: This could be done in a simpler way by 
+   * consulting the above width/height of the buffer + some
+   * padding values, however all of this request code needs
+   * to be changed to use GtkSizeRequestIface and deserves
+   * more attention.
+   */
+  GtkRequisition cached_size_request;
+
   /* The virtual cursor position is normally the same as the
    * actual (strong) cursor position, except in two circumstances:
    *
@@ -3319,6 +3331,10 @@ gtk_text_view_size_request (GtkWidget      *widget,
 
       tmp_list = g_slist_next (tmp_list);
     }
+
+  /* Cache the requested size of the text view so we can 
+   * compare it in the changed_handler() */
+  priv->cached_size_request = *requisition;
 }
 
 static void
@@ -3935,10 +3951,8 @@ changed_handler (GtkTextLayout     *layout,
     }
 
   {
-    GtkRequisition old_req;
+    GtkRequisition old_req = priv->cached_size_request;
     GtkRequisition new_req;
-
-    gtk_size_request_get_size (GTK_SIZE_REQUEST (widget), &old_req, NULL);
 
     /* Use this instead of gtk_widget_size_request wrapper
      * to avoid the optimization which just returns widget->requisition
