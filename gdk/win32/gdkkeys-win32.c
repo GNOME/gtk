@@ -83,154 +83,154 @@ handle_special (guint  vk,
   switch (vk)
     {
     case VK_CANCEL:
-      *ksymp = GDK_Cancel; break;
+      *ksymp = GDK_KEY_Cancel; break;
     case VK_BACK:
-      *ksymp = GDK_BackSpace; break;
+      *ksymp = GDK_KEY_BackSpace; break;
     case VK_TAB:
       if (shift & 0x1)
-	*ksymp = GDK_ISO_Left_Tab;
+	*ksymp = GDK_KEY_ISO_Left_Tab;
       else
-	*ksymp = GDK_Tab;
+	*ksymp = GDK_KEY_Tab;
       break;
     case VK_CLEAR:
-      *ksymp = GDK_Clear; break;
+      *ksymp = GDK_KEY_Clear; break;
     case VK_RETURN:
-      *ksymp = GDK_Return; break;
+      *ksymp = GDK_KEY_Return; break;
     case VK_SHIFT:
     case VK_LSHIFT:
-      *ksymp = GDK_Shift_L; break;
+      *ksymp = GDK_KEY_Shift_L; break;
     case VK_CONTROL:
     case VK_LCONTROL:
-      *ksymp = GDK_Control_L; break;
+      *ksymp = GDK_KEY_Control_L; break;
     case VK_MENU:
     case VK_LMENU:
-      *ksymp = GDK_Alt_L; break;
+      *ksymp = GDK_KEY_Alt_L; break;
     case VK_PAUSE:
-      *ksymp = GDK_Pause; break;
+      *ksymp = GDK_KEY_Pause; break;
     case VK_ESCAPE:
-      *ksymp = GDK_Escape; break;
+      *ksymp = GDK_KEY_Escape; break;
     case VK_PRIOR:
-      *ksymp = GDK_Prior; break;
+      *ksymp = GDK_KEY_Prior; break;
     case VK_NEXT:
-      *ksymp = GDK_Next; break;
+      *ksymp = GDK_KEY_Next; break;
     case VK_END:
-      *ksymp = GDK_End; break;
+      *ksymp = GDK_KEY_End; break;
     case VK_HOME:
-      *ksymp = GDK_Home; break;
+      *ksymp = GDK_KEY_Home; break;
     case VK_LEFT:
-      *ksymp = GDK_Left; break;
+      *ksymp = GDK_KEY_Left; break;
     case VK_UP:
-      *ksymp = GDK_Up; break;
+      *ksymp = GDK_KEY_Up; break;
     case VK_RIGHT:
-      *ksymp = GDK_Right; break;
+      *ksymp = GDK_KEY_Right; break;
     case VK_DOWN:
-      *ksymp = GDK_Down; break;
+      *ksymp = GDK_KEY_Down; break;
     case VK_SELECT:
-      *ksymp = GDK_Select; break;
+      *ksymp = GDK_KEY_Select; break;
     case VK_PRINT:
-      *ksymp = GDK_Print; break;
+      *ksymp = GDK_KEY_Print; break;
     case VK_EXECUTE:
-      *ksymp = GDK_Execute; break;
+      *ksymp = GDK_KEY_Execute; break;
     case VK_INSERT:
-      *ksymp = GDK_Insert; break;
+      *ksymp = GDK_KEY_Insert; break;
     case VK_DELETE:
-      *ksymp = GDK_Delete; break;
+      *ksymp = GDK_KEY_Delete; break;
     case VK_HELP:
-      *ksymp = GDK_Help; break;
+      *ksymp = GDK_KEY_Help; break;
     case VK_LWIN:
-      *ksymp = GDK_Meta_L; break;
+      *ksymp = GDK_KEY_Meta_L; break;
     case VK_RWIN:
-      *ksymp = GDK_Meta_R; break;
+      *ksymp = GDK_KEY_Meta_R; break;
     case VK_APPS:
-      *ksymp = GDK_Menu; break;
+      *ksymp = GDK_KEY_Menu; break;
     case VK_MULTIPLY:
-      *ksymp = GDK_KP_Multiply; break;
+      *ksymp = GDK_KEY_KP_Multiply; break;
     case VK_ADD:
-      *ksymp = GDK_KP_Add; break;
+      *ksymp = GDK_KEY_KP_Add; break;
     case VK_SEPARATOR:
-      *ksymp = GDK_KP_Separator; break;
+      *ksymp = GDK_KEY_KP_Separator; break;
     case VK_SUBTRACT:
-      *ksymp = GDK_KP_Subtract; break;
+      *ksymp = GDK_KEY_KP_Subtract; break;
     case VK_DIVIDE:
-      *ksymp = GDK_KP_Divide; break;
+      *ksymp = GDK_KEY_KP_Divide; break;
     case VK_NUMPAD0:
-      *ksymp = GDK_KP_0; break;
+      *ksymp = GDK_KEY_KP_0; break;
     case VK_NUMPAD1:
-      *ksymp = GDK_KP_1; break;
+      *ksymp = GDK_KEY_KP_1; break;
     case VK_NUMPAD2:
-      *ksymp = GDK_KP_2; break;
+      *ksymp = GDK_KEY_KP_2; break;
     case VK_NUMPAD3:
-      *ksymp = GDK_KP_3; break;
+      *ksymp = GDK_KEY_KP_3; break;
     case VK_NUMPAD4:
-      *ksymp = GDK_KP_4; break;
+      *ksymp = GDK_KEY_KP_4; break;
     case VK_NUMPAD5:
-      *ksymp = GDK_KP_5; break;
+      *ksymp = GDK_KEY_KP_5; break;
     case VK_NUMPAD6:
-      *ksymp = GDK_KP_6; break;
+      *ksymp = GDK_KEY_KP_6; break;
     case VK_NUMPAD7:
-      *ksymp = GDK_KP_7; break;
+      *ksymp = GDK_KEY_KP_7; break;
     case VK_NUMPAD8:
-      *ksymp = GDK_KP_8; break;
+      *ksymp = GDK_KEY_KP_8; break;
     case VK_NUMPAD9:
-      *ksymp = GDK_KP_9; break;
+      *ksymp = GDK_KEY_KP_9; break;
     case VK_F1:
-      *ksymp = GDK_F1; break;
+      *ksymp = GDK_KEY_F1; break;
     case VK_F2:
-      *ksymp = GDK_F2; break;
+      *ksymp = GDK_KEY_F2; break;
     case VK_F3:
-      *ksymp = GDK_F3; break;
+      *ksymp = GDK_KEY_F3; break;
     case VK_F4:
-      *ksymp = GDK_F4; break;
+      *ksymp = GDK_KEY_F4; break;
     case VK_F5:
-      *ksymp = GDK_F5; break;
+      *ksymp = GDK_KEY_F5; break;
     case VK_F6:
-      *ksymp = GDK_F6; break;
+      *ksymp = GDK_KEY_F6; break;
     case VK_F7:
-      *ksymp = GDK_F7; break;
+      *ksymp = GDK_KEY_F7; break;
     case VK_F8:
-      *ksymp = GDK_F8; break;
+      *ksymp = GDK_KEY_F8; break;
     case VK_F9:
-      *ksymp = GDK_F9; break;
+      *ksymp = GDK_KEY_F9; break;
     case VK_F10:
-      *ksymp = GDK_F10; break;
+      *ksymp = GDK_KEY_F10; break;
     case VK_F11:
-      *ksymp = GDK_F11; break;
+      *ksymp = GDK_KEY_F11; break;
     case VK_F12:
-      *ksymp = GDK_F12; break;
+      *ksymp = GDK_KEY_F12; break;
     case VK_F13:
-      *ksymp = GDK_F13; break;
+      *ksymp = GDK_KEY_F13; break;
     case VK_F14:
-      *ksymp = GDK_F14; break;
+      *ksymp = GDK_KEY_F14; break;
     case VK_F15:
-      *ksymp = GDK_F15; break;
+      *ksymp = GDK_KEY_F15; break;
     case VK_F16:
-      *ksymp = GDK_F16; break;
+      *ksymp = GDK_KEY_F16; break;
     case VK_F17:
-      *ksymp = GDK_F17; break;
+      *ksymp = GDK_KEY_F17; break;
     case VK_F18:
-      *ksymp = GDK_F18; break;
+      *ksymp = GDK_KEY_F18; break;
     case VK_F19:
-      *ksymp = GDK_F19; break;
+      *ksymp = GDK_KEY_F19; break;
     case VK_F20:
-      *ksymp = GDK_F20; break;
+      *ksymp = GDK_KEY_F20; break;
     case VK_F21:
-      *ksymp = GDK_F21; break;
+      *ksymp = GDK_KEY_F21; break;
     case VK_F22:
-      *ksymp = GDK_F22; break;
+      *ksymp = GDK_KEY_F22; break;
     case VK_F23:
-      *ksymp = GDK_F23; break;
+      *ksymp = GDK_KEY_F23; break;
     case VK_F24:
-      *ksymp = GDK_F24; break;
+      *ksymp = GDK_KEY_F24; break;
     case VK_NUMLOCK:
-      *ksymp = GDK_Num_Lock; break;
+      *ksymp = GDK_KEY_Num_Lock; break;
     case VK_SCROLL:
-      *ksymp = GDK_Scroll_Lock; break;
+      *ksymp = GDK_KEY_Scroll_Lock; break;
     case VK_RSHIFT:
-      *ksymp = GDK_Shift_R; break;
+      *ksymp = GDK_KEY_Shift_R; break;
     case VK_RCONTROL:
-      *ksymp = GDK_Control_R; break;
+      *ksymp = GDK_KEY_Control_R; break;
     case VK_RMENU:
-      *ksymp = GDK_Alt_R; break;
+      *ksymp = GDK_KEY_Alt_R; break;
     }
 }
 
@@ -283,39 +283,39 @@ handle_dead (guint  keysym,
   switch (keysym)
     {
     case '"': /* 0x022 */
-      *ksymp = GDK_dead_diaeresis; break;
+      *ksymp = GDK_KEY_dead_diaeresis; break;
     case '\'': /* 0x027 */
-      *ksymp = GDK_dead_acute; break;
-    case GDK_asciicircum: /* 0x05e */
-      *ksymp = GDK_dead_circumflex; break;
-    case GDK_grave:	/* 0x060 */
-      *ksymp = GDK_dead_grave; break;
-    case GDK_asciitilde: /* 0x07e */
-      *ksymp = GDK_dead_tilde; break;
-    case GDK_diaeresis: /* 0x0a8 */
-      *ksymp = GDK_dead_diaeresis; break;
-    case GDK_degree: /* 0x0b0 */
-      *ksymp = GDK_dead_abovering; break;
-    case GDK_acute:	/* 0x0b4 */
-      *ksymp = GDK_dead_acute; break;
-    case GDK_periodcentered: /* 0x0b7 */
-      *ksymp = GDK_dead_abovedot; break;
-    case GDK_cedilla: /* 0x0b8 */
-      *ksymp = GDK_dead_cedilla; break;
-    case GDK_breve:	/* 0x1a2 */
-      *ksymp = GDK_dead_breve; break;
-    case GDK_ogonek: /* 0x1b2 */
-      *ksymp = GDK_dead_ogonek; break;
-    case GDK_caron:	/* 0x1b7 */
-      *ksymp = GDK_dead_caron; break;
-    case GDK_doubleacute: /* 0x1bd */
-      *ksymp = GDK_dead_doubleacute; break;
-    case GDK_abovedot: /* 0x1ff */
-      *ksymp = GDK_dead_abovedot; break;
+      *ksymp = GDK_KEY_dead_acute; break;
+    case GDK_KEY_asciicircum: /* 0x05e */
+      *ksymp = GDK_KEY_dead_circumflex; break;
+    case GDK_KEY_grave:	/* 0x060 */
+      *ksymp = GDK_KEY_dead_grave; break;
+    case GDK_KEY_asciitilde: /* 0x07e */
+      *ksymp = GDK_KEY_dead_tilde; break;
+    case GDK_KEY_diaeresis: /* 0x0a8 */
+      *ksymp = GDK_KEY_dead_diaeresis; break;
+    case GDK_KEY_degree: /* 0x0b0 */
+      *ksymp = GDK_KEY_dead_abovering; break;
+    case GDK_KEY_acute:	/* 0x0b4 */
+      *ksymp = GDK_KEY_dead_acute; break;
+    case GDK_KEY_periodcentered: /* 0x0b7 */
+      *ksymp = GDK_KEY_dead_abovedot; break;
+    case GDK_KEY_cedilla: /* 0x0b8 */
+      *ksymp = GDK_KEY_dead_cedilla; break;
+    case GDK_KEY_breve:	/* 0x1a2 */
+      *ksymp = GDK_KEY_dead_breve; break;
+    case GDK_KEY_ogonek: /* 0x1b2 */
+      *ksymp = GDK_KEY_dead_ogonek; break;
+    case GDK_KEY_caron:	/* 0x1b7 */
+      *ksymp = GDK_KEY_dead_caron; break;
+    case GDK_KEY_doubleacute: /* 0x1bd */
+      *ksymp = GDK_KEY_dead_doubleacute; break;
+    case GDK_KEY_abovedot: /* 0x1ff */
+      *ksymp = GDK_KEY_dead_abovedot; break;
     case 0x1000384: /* Greek tonos */
-      *ksymp = GDK_dead_acute; break;
-    case GDK_Greek_accentdieresis: /* 0x7ae */
-      *ksymp = GDK_Greek_accentdieresis; break;
+      *ksymp = GDK_KEY_dead_acute; break;
+    case GDK_KEY_Greek_accentdieresis: /* 0x7ae */
+      *ksymp = GDK_KEY_Greek_accentdieresis; break;
     default:
       /* By default use the keysym as such. This takes care of for
        * instance the dead U+09CD (BENGALI VIRAMA) on the ekushey
@@ -354,7 +354,7 @@ update_keymap (void)
 	keysym_tab[vk*4+0] =
 	  keysym_tab[vk*4+1] =
 	  keysym_tab[vk*4+2] =
-	  keysym_tab[vk*4+3] = GDK_VoidSymbol;
+	  keysym_tab[vk*4+3] = GDK_KEY_VoidSymbol;
       else
 	{
 	  gint shift;
@@ -434,7 +434,7 @@ update_keymap (void)
 		    }
 		}
 	      if (*ksymp == 0)
-		*ksymp = GDK_VoidSymbol;
+		*ksymp = GDK_KEY_VoidSymbol;
 	    }
 	  key_state[vk] = 0;
 
@@ -442,9 +442,9 @@ update_keymap (void)
 	   * the mapping with Control+Alt is different.
 	   */
 	  if (!_gdk_keyboard_has_altgr)
-	    if ((keysym_tab[vk*4 + 2] != GDK_VoidSymbol &&
+	    if ((keysym_tab[vk*4 + 2] != GDK_KEY_VoidSymbol &&
 		 keysym_tab[vk*4] != keysym_tab[vk*4 + 2]) ||
-		(keysym_tab[vk*4 + 3] != GDK_VoidSymbol &&
+		(keysym_tab[vk*4 + 3] != GDK_KEY_VoidSymbol &&
 		 keysym_tab[vk*4 + 1] != keysym_tab[vk*4 + 3]))
 	      _gdk_keyboard_has_altgr = TRUE;
 	  
@@ -472,8 +472,8 @@ update_keymap (void)
 		  if (ToAsciiEx (vk, scancode, key_state,
 				 (LPWORD) chars, 0, _gdk_input_locale) == 1)
 		    {
-		      if (chars[0] >= GDK_space &&
-			  chars[0] <= GDK_asciitilde &&
+		      if (chars[0] >= GDK_KEY_space &&
+			  chars[0] <= GDK_KEY_asciitilde &&
 			  chars[0] == keysym_tab[vk*4 + 1])
 			{
 			  /* CapsLock acts as ShiftLock */
@@ -735,7 +735,7 @@ gdk_keymap_lookup_key (GdkKeymap          *keymap,
   
   sym = keysym_tab[key->keycode*4 + key->group*2 + key->level];
   
-  if (sym == GDK_VoidSymbol)
+  if (sym == GDK_KEY_VoidSymbol)
     return 0;
   else
     return sym;
@@ -804,23 +804,23 @@ gdk_keymap_translate_keyboard_state (GdkKeymap       *keymap,
    * the key for those.
    */
   if (shift_level == 1 &&
-      keyvals[group*2 + 1] == GDK_VoidSymbol &&
-      keyvals[group*2] != GDK_VoidSymbol)
+      keyvals[group*2 + 1] == GDK_KEY_VoidSymbol &&
+      keyvals[group*2] != GDK_KEY_VoidSymbol)
     {
       shift_level = 0;
       ignore_shift = TRUE;
     }
 
   if (group == 1 &&
-      keyvals[2 + shift_level] == GDK_VoidSymbol &&
-      keyvals[0 + shift_level] != GDK_VoidSymbol)
+      keyvals[2 + shift_level] == GDK_KEY_VoidSymbol &&
+      keyvals[0 + shift_level] != GDK_KEY_VoidSymbol)
     {
       group = 0;
       ignore_group = TRUE;
     }
 
-  if (keyvals[group *2 + shift_level] == GDK_VoidSymbol &&
-      keyvals[0 + 0] != GDK_VoidSymbol)
+  if (keyvals[group *2 + shift_level] == GDK_KEY_VoidSymbol &&
+      keyvals[0 + 0] != GDK_KEY_VoidSymbol)
     {
       shift_level = 0;
       group = 0;
@@ -831,11 +831,11 @@ gdk_keymap_translate_keyboard_state (GdkKeymap       *keymap,
   /* See whether the group and shift level actually mattered
    * to know what to put in consumed_modifiers
    */
-  if (keyvals[group*2 + 1] == GDK_VoidSymbol ||
+  if (keyvals[group*2 + 1] == GDK_KEY_VoidSymbol ||
       keyvals[group*2 + 0] == keyvals[group*2 + 1])
     ignore_shift = TRUE;
 
-  if (keyvals[2 + shift_level] == GDK_VoidSymbol ||
+  if (keyvals[2 + shift_level] == GDK_KEY_VoidSymbol ||
       keyvals[0 + shift_level] == keyvals[2 + shift_level])
     ignore_group = TRUE;
 
@@ -875,7 +875,7 @@ gdk_keymap_translate_keyboard_state (GdkKeymap       *keymap,
 			     group, shift_level, tmp_modifiers, gdk_keyval_name (tmp_keyval)));
 #endif
 
-  return tmp_keyval != GDK_VoidSymbol;
+  return tmp_keyval != GDK_KEY_VoidSymbol;
 }
 
 void

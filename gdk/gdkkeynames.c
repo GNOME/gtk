@@ -98,5 +98,5 @@ gdk_keyval_from_name (const gchar *keyval_name)
   if (found != NULL)
     return found->keyval;
   else
-    return GDK_VoidSymbol;
+    return GDK_KEY_VoidSymbol;
 }

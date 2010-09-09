@@ -125,7 +125,7 @@ gdk_keymap_init (GdkKeymap *keymap)
  * @upper: (out): return location for uppercase version of @symbol
  *
  * Obtains the upper- and lower-case versions of the keyval @symbol.
- * Examples of keyvals are #GDK_a, #GDK_Enter, #GDK_F1, etc.
+ * Examples of keyvals are #GDK_KEY_a, #GDK_KEY_Enter, #GDK_KEY_F1, etc.
  *
  **/
 void
@@ -149,101 +149,101 @@ gdk_keyval_convert_case (guint symbol,
   switch (symbol >> 8)
     {
     case 0: /* Latin 1 */
-      if ((symbol >= GDK_A) && (symbol <= GDK_Z))
-	xlower += (GDK_a - GDK_A);
-      else if ((symbol >= GDK_a) && (symbol <= GDK_z))
-	xupper -= (GDK_a - GDK_A);
-      else if ((symbol >= GDK_Agrave) && (symbol <= GDK_Odiaeresis))
-	xlower += (GDK_agrave - GDK_Agrave);
-      else if ((symbol >= GDK_agrave) && (symbol <= GDK_odiaeresis))
-	xupper -= (GDK_agrave - GDK_Agrave);
-      else if ((symbol >= GDK_Ooblique) && (symbol <= GDK_Thorn))
-	xlower += (GDK_oslash - GDK_Ooblique);
-      else if ((symbol >= GDK_oslash) && (symbol <= GDK_thorn))
-	xupper -= (GDK_oslash - GDK_Ooblique);
+      if ((symbol >= GDK_KEY_A) && (symbol <= GDK_KEY_Z))
+	xlower += (GDK_KEY_a - GDK_KEY_A);
+      else if ((symbol >= GDK_KEY_a) && (symbol <= GDK_KEY_z))
+	xupper -= (GDK_KEY_a - GDK_KEY_A);
+      else if ((symbol >= GDK_KEY_Agrave) && (symbol <= GDK_KEY_Odiaeresis))
+	xlower += (GDK_KEY_agrave - GDK_KEY_Agrave);
+      else if ((symbol >= GDK_KEY_agrave) && (symbol <= GDK_KEY_odiaeresis))
+	xupper -= (GDK_KEY_agrave - GDK_KEY_Agrave);
+      else if ((symbol >= GDK_KEY_Ooblique) && (symbol <= GDK_KEY_Thorn))
+	xlower += (GDK_KEY_oslash - GDK_KEY_Ooblique);
+      else if ((symbol >= GDK_KEY_oslash) && (symbol <= GDK_KEY_thorn))
+	xupper -= (GDK_KEY_oslash - GDK_KEY_Ooblique);
       break;
       
     case 1: /* Latin 2 */
       /* Assume the KeySym is a legal value (ignore discontinuities) */
-      if (symbol == GDK_Aogonek)
-	xlower = GDK_aogonek;
-      else if (symbol >= GDK_Lstroke && symbol <= GDK_Sacute)
-	xlower += (GDK_lstroke - GDK_Lstroke);
-      else if (symbol >= GDK_Scaron && symbol <= GDK_Zacute)
-	xlower += (GDK_scaron - GDK_Scaron);
-      else if (symbol >= GDK_Zcaron && symbol <= GDK_Zabovedot)
-	xlower += (GDK_zcaron - GDK_Zcaron);
-      else if (symbol == GDK_aogonek)
-	xupper = GDK_Aogonek;
-      else if (symbol >= GDK_lstroke && symbol <= GDK_sacute)
-	xupper -= (GDK_lstroke - GDK_Lstroke);
-      else if (symbol >= GDK_scaron && symbol <= GDK_zacute)
-	xupper -= (GDK_scaron - GDK_Scaron);
-      else if (symbol >= GDK_zcaron && symbol <= GDK_zabovedot)
-	xupper -= (GDK_zcaron - GDK_Zcaron);
-      else if (symbol >= GDK_Racute && symbol <= GDK_Tcedilla)
-	xlower += (GDK_racute - GDK_Racute);
-      else if (symbol >= GDK_racute && symbol <= GDK_tcedilla)
-	xupper -= (GDK_racute - GDK_Racute);
+      if (symbol == GDK_KEY_Aogonek)
+	xlower = GDK_KEY_aogonek;
+      else if (symbol >= GDK_KEY_Lstroke && symbol <= GDK_KEY_Sacute)
+	xlower += (GDK_KEY_lstroke - GDK_KEY_Lstroke);
+      else if (symbol >= GDK_KEY_Scaron && symbol <= GDK_KEY_Zacute)
+	xlower += (GDK_KEY_scaron - GDK_KEY_Scaron);
+      else if (symbol >= GDK_KEY_Zcaron && symbol <= GDK_KEY_Zabovedot)
+	xlower += (GDK_KEY_zcaron - GDK_KEY_Zcaron);
+      else if (symbol == GDK_KEY_aogonek)
+	xupper = GDK_KEY_Aogonek;
+      else if (symbol >= GDK_KEY_lstroke && symbol <= GDK_KEY_sacute)
+	xupper -= (GDK_KEY_lstroke - GDK_KEY_Lstroke);
+      else if (symbol >= GDK_KEY_scaron && symbol <= GDK_KEY_zacute)
+	xupper -= (GDK_KEY_scaron - GDK_KEY_Scaron);
+      else if (symbol >= GDK_KEY_zcaron && symbol <= GDK_KEY_zabovedot)
+	xupper -= (GDK_KEY_zcaron - GDK_KEY_Zcaron);
+      else if (symbol >= GDK_KEY_Racute && symbol <= GDK_KEY_Tcedilla)
+	xlower += (GDK_KEY_racute - GDK_KEY_Racute);
+      else if (symbol >= GDK_KEY_racute && symbol <= GDK_KEY_tcedilla)
+	xupper -= (GDK_KEY_racute - GDK_KEY_Racute);
       break;
       
     case 2: /* Latin 3 */
       /* Assume the KeySym is a legal value (ignore discontinuities) */
-      if (symbol >= GDK_Hstroke && symbol <= GDK_Hcircumflex)
-	xlower += (GDK_hstroke - GDK_Hstroke);
-      else if (symbol >= GDK_Gbreve && symbol <= GDK_Jcircumflex)
-	xlower += (GDK_gbreve - GDK_Gbreve);
-      else if (symbol >= GDK_hstroke && symbol <= GDK_hcircumflex)
-	xupper -= (GDK_hstroke - GDK_Hstroke);
-      else if (symbol >= GDK_gbreve && symbol <= GDK_jcircumflex)
-	xupper -= (GDK_gbreve - GDK_Gbreve);
-      else if (symbol >= GDK_Cabovedot && symbol <= GDK_Scircumflex)
-	xlower += (GDK_cabovedot - GDK_Cabovedot);
-      else if (symbol >= GDK_cabovedot && symbol <= GDK_scircumflex)
-	xupper -= (GDK_cabovedot - GDK_Cabovedot);
+      if (symbol >= GDK_KEY_Hstroke && symbol <= GDK_KEY_Hcircumflex)
+	xlower += (GDK_KEY_hstroke - GDK_KEY_Hstroke);
+      else if (symbol >= GDK_KEY_Gbreve && symbol <= GDK_KEY_Jcircumflex)
+	xlower += (GDK_KEY_gbreve - GDK_KEY_Gbreve);
+      else if (symbol >= GDK_KEY_hstroke && symbol <= GDK_KEY_hcircumflex)
+	xupper -= (GDK_KEY_hstroke - GDK_KEY_Hstroke);
+      else if (symbol >= GDK_KEY_gbreve && symbol <= GDK_KEY_jcircumflex)
+	xupper -= (GDK_KEY_gbreve - GDK_KEY_Gbreve);
+      else if (symbol >= GDK_KEY_Cabovedot && symbol <= GDK_KEY_Scircumflex)
+	xlower += (GDK_KEY_cabovedot - GDK_KEY_Cabovedot);
+      else if (symbol >= GDK_KEY_cabovedot && symbol <= GDK_KEY_scircumflex)
+	xupper -= (GDK_KEY_cabovedot - GDK_KEY_Cabovedot);
       break;
       
     case 3: /* Latin 4 */
       /* Assume the KeySym is a legal value (ignore discontinuities) */
-      if (symbol >= GDK_Rcedilla && symbol <= GDK_Tslash)
-	xlower += (GDK_rcedilla - GDK_Rcedilla);
-      else if (symbol >= GDK_rcedilla && symbol <= GDK_tslash)
-	xupper -= (GDK_rcedilla - GDK_Rcedilla);
-      else if (symbol == GDK_ENG)
-	xlower = GDK_eng;
-      else if (symbol == GDK_eng)
-	xupper = GDK_ENG;
-      else if (symbol >= GDK_Amacron && symbol <= GDK_Umacron)
-	xlower += (GDK_amacron - GDK_Amacron);
-      else if (symbol >= GDK_amacron && symbol <= GDK_umacron)
-	xupper -= (GDK_amacron - GDK_Amacron);
+      if (symbol >= GDK_KEY_Rcedilla && symbol <= GDK_KEY_Tslash)
+	xlower += (GDK_KEY_rcedilla - GDK_KEY_Rcedilla);
+      else if (symbol >= GDK_KEY_rcedilla && symbol <= GDK_KEY_tslash)
+	xupper -= (GDK_KEY_rcedilla - GDK_KEY_Rcedilla);
+      else if (symbol == GDK_KEY_ENG)
+	xlower = GDK_KEY_eng;
+      else if (symbol == GDK_KEY_eng)
+	xupper = GDK_KEY_ENG;
+      else if (symbol >= GDK_KEY_Amacron && symbol <= GDK_KEY_Umacron)
+	xlower += (GDK_KEY_amacron - GDK_KEY_Amacron);
+      else if (symbol >= GDK_KEY_amacron && symbol <= GDK_KEY_umacron)
+	xupper -= (GDK_KEY_amacron - GDK_KEY_Amacron);
       break;
       
     case 6: /* Cyrillic */
       /* Assume the KeySym is a legal value (ignore discontinuities) */
-      if (symbol >= GDK_Serbian_DJE && symbol <= GDK_Serbian_DZE)
-	xlower -= (GDK_Serbian_DJE - GDK_Serbian_dje);
-      else if (symbol >= GDK_Serbian_dje && symbol <= GDK_Serbian_dze)
-	xupper += (GDK_Serbian_DJE - GDK_Serbian_dje);
-      else if (symbol >= GDK_Cyrillic_YU && symbol <= GDK_Cyrillic_HARDSIGN)
-	xlower -= (GDK_Cyrillic_YU - GDK_Cyrillic_yu);
-      else if (symbol >= GDK_Cyrillic_yu && symbol <= GDK_Cyrillic_hardsign)
-	xupper += (GDK_Cyrillic_YU - GDK_Cyrillic_yu);
+      if (symbol >= GDK_KEY_Serbian_DJE && symbol <= GDK_KEY_Serbian_DZE)
+	xlower -= (GDK_KEY_Serbian_DJE - GDK_KEY_Serbian_dje);
+      else if (symbol >= GDK_KEY_Serbian_dje && symbol <= GDK_KEY_Serbian_dze)
+	xupper += (GDK_KEY_Serbian_DJE - GDK_KEY_Serbian_dje);
+      else if (symbol >= GDK_KEY_Cyrillic_YU && symbol <= GDK_KEY_Cyrillic_HARDSIGN)
+	xlower -= (GDK_KEY_Cyrillic_YU - GDK_KEY_Cyrillic_yu);
+      else if (symbol >= GDK_KEY_Cyrillic_yu && symbol <= GDK_KEY_Cyrillic_hardsign)
+	xupper += (GDK_KEY_Cyrillic_YU - GDK_KEY_Cyrillic_yu);
       break;
       
     case 7: /* Greek */
       /* Assume the KeySym is a legal value (ignore discontinuities) */
-      if (symbol >= GDK_Greek_ALPHAaccent && symbol <= GDK_Greek_OMEGAaccent)
-	xlower += (GDK_Greek_alphaaccent - GDK_Greek_ALPHAaccent);
-      else if (symbol >= GDK_Greek_alphaaccent && symbol <= GDK_Greek_omegaaccent &&
-	       symbol != GDK_Greek_iotaaccentdieresis &&
-	       symbol != GDK_Greek_upsilonaccentdieresis)
-	xupper -= (GDK_Greek_alphaaccent - GDK_Greek_ALPHAaccent);
-      else if (symbol >= GDK_Greek_ALPHA && symbol <= GDK_Greek_OMEGA)
-	xlower += (GDK_Greek_alpha - GDK_Greek_ALPHA);
-      else if (symbol >= GDK_Greek_alpha && symbol <= GDK_Greek_omega &&
-	       symbol != GDK_Greek_finalsmallsigma)
-	xupper -= (GDK_Greek_alpha - GDK_Greek_ALPHA);
+      if (symbol >= GDK_KEY_Greek_ALPHAaccent && symbol <= GDK_KEY_Greek_OMEGAaccent)
+	xlower += (GDK_KEY_Greek_alphaaccent - GDK_KEY_Greek_ALPHAaccent);
+      else if (symbol >= GDK_KEY_Greek_alphaaccent && symbol <= GDK_KEY_Greek_omegaaccent &&
+	       symbol != GDK_KEY_Greek_iotaaccentdieresis &&
+	       symbol != GDK_KEY_Greek_upsilonaccentdieresis)
+	xupper -= (GDK_KEY_Greek_alphaaccent - GDK_KEY_Greek_ALPHAaccent);
+      else if (symbol >= GDK_KEY_Greek_ALPHA && symbol <= GDK_KEY_Greek_OMEGA)
+	xlower += (GDK_KEY_Greek_alpha - GDK_KEY_Greek_ALPHA);
+      else if (symbol >= GDK_KEY_Greek_alpha && symbol <= GDK_KEY_Greek_omega &&
+	       symbol != GDK_KEY_Greek_finalsmallsigma)
+	xupper -= (GDK_KEY_Greek_alpha - GDK_KEY_Greek_ALPHA);
       break;
     }
 
