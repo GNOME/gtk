@@ -11616,6 +11616,8 @@ gtk_widget_get_requisition (GtkWidget      *widget,
  * by calling gtk_widget_set_has_window(). This is usually done in the
  * widget's init() function.
  *
+ * <note><para>This function does not add any reference to @window.</para></note>
+ *
  * Since: 2.18
  */
 void
