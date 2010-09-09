@@ -57,9 +57,6 @@ struct _GtkHandleBoxPrivate
 
   /* Variables used during a drag
    */
-  gint            deskoff_x;      /* Offset between root relative coords */
-  gint            deskoff_y;      /* and deskrelative coords             */
-
   gint            orig_x;
   gint            orig_y;
 
@@ -1144,13 +1141,11 @@ gtk_handle_box_button_press (GtkWidget      *widget,
 	    {
 	      GtkWidget *invisible = gtk_handle_box_get_invisible ();
               GdkWindow *window;
-	      gint desk_x, desk_y;
 	      gint root_x, root_y;
 	      gint width, height;
 
               gtk_invisible_set_screen (GTK_INVISIBLE (invisible),
                                         gtk_widget_get_screen (GTK_WIDGET (hb)));
-	      gdk_window_get_deskrelative_origin (priv->bin_window, &desk_x, &desk_y);
 	      gdk_window_get_origin (priv->bin_window, &root_x, &root_y);
 	      gdk_drawable_get_size (priv->bin_window, &width, &height);
 
@@ -1161,9 +1156,6 @@ gtk_handle_box_button_press (GtkWidget      *widget,
 	      priv->float_allocation.y = root_y - event->y_root;
 	      priv->float_allocation.width = width;
 	      priv->float_allocation.height = height;
-
-	      priv->deskoff_x = desk_x - root_x;
-	      priv->deskoff_y = desk_y - root_y;
 
               window = gtk_widget_get_window (widget);
 	      if (gdk_window_is_viewable (window))
@@ -1353,8 +1345,6 @@ gtk_handle_box_motion (GtkWidget      *widget,
       gint width, height;
 
       gdk_drawable_get_size (priv->float_window, &width, &height);
-      new_x += priv->deskoff_x;
-      new_y += priv->deskoff_y;
 
       switch (handle_position)
 	{
