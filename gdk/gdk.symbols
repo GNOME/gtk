@@ -1091,9 +1091,3 @@ gdk_app_launch_context_set_icon_name
 gdk_window_impl_get_type G_GNUC_CONST
 #endif
 #endif
-
-#ifdef GDK_WINDOWING_X11
-#ifdef INCLUDE_VARIABLES
-gdk_display
-#endif
-#endif

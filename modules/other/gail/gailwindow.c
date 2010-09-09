@@ -664,10 +664,10 @@ get_window_desktop (Window window)
 
   if (_net_wm_desktop == None)
     _net_wm_desktop =
-		XInternAtom (gdk_display, "_NET_WM_DESKTOP", False);
+		XInternAtom (GDK_DISPLAY_XDISPLAY (gdk_display_get_default ()), "_NET_WM_DESKTOP", False);
 
   gdk_error_trap_push ();
-  result = XGetWindowProperty (gdk_display, window, _net_wm_desktop,
+  result = XGetWindowProperty (GDK_DISPLAY_XDISPLAY (gdk_display_get_default ()), window, _net_wm_desktop,
                                0, G_MAXLONG,
                                False, XA_CARDINAL,
                                &ret_type, &format, &nitems,
@@ -718,11 +718,11 @@ get_stacked_windows (GailScreenInfo *info)
 
   if (_net_client_list_stacking == None)
     _net_client_list_stacking =
-		XInternAtom (gdk_display, "_NET_CLIENT_LIST_STACKING", False);
+		XInternAtom (GDK_DISPLAY_XDISPLAY (gdk_display_get_default ()), "_NET_CLIENT_LIST_STACKING", False);
 
   gdk_error_trap_push ();
   ret_type = None;
-  result = XGetWindowProperty (gdk_display,
+  result = XGetWindowProperty (GDK_DISPLAY_XDISPLAY (gdk_display_get_default ()),
                                GDK_WINDOW_XWINDOW (info->root_window),
                                _net_client_list_stacking,
                                0, G_MAXLONG,
@@ -919,11 +919,11 @@ init_gail_screen (GdkScreen *screen,
 
   get_stacked_windows (&gail_screens [screen_n]);
 
-  XGetWindowAttributes (gdk_display,
+  XGetWindowAttributes (GDK_DISPLAY_XDISPLAY (gdk_display_get_default ()),
 			GDK_WINDOW_XWINDOW (gail_screens [screen_n].root_window),
 			&attrs); 
 
-  XSelectInput (gdk_display,
+  XSelectInput (GDK_DISPLAY_XDISPLAY (gdk_display_get_default ()),
 		GDK_WINDOW_XWINDOW (gail_screens [screen_n].root_window),
 		attrs.your_event_mask | PropertyChangeMask);
            

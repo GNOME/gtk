@@ -1968,12 +1968,7 @@ _gdk_windowing_set_default_display (GdkDisplay *display)
   const gchar *startup_id;
   
   if (!display)
-    {
-      gdk_display = NULL;
-      return;
-    }
-
-  gdk_display = GDK_DISPLAY_XDISPLAY (display);
+    return;
 
   g_free (display_x11->startup_notification_id);
   display_x11->startup_notification_id = NULL;

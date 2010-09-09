@@ -34,10 +34,6 @@
 
 G_BEGIN_DECLS
 
-#ifndef GDK_MULTIHEAD_SAFE
-extern Display          *gdk_display;
-#endif
-
 Display *gdk_x11_drawable_get_xdisplay    (GdkDrawable *drawable);
 XID      gdk_x11_drawable_get_xid         (GdkDrawable *drawable);
 GdkDrawable *gdk_x11_window_get_drawable_impl (GdkWindow *window);
@@ -66,10 +62,6 @@ gint     gdk_x11_get_default_screen       (void);
 #define GDK_COLORMAP_XCOLORMAP(cmap)  (gdk_x11_colormap_get_xcolormap (cmap))
 #define GDK_CURSOR_XDISPLAY(cursor)   (gdk_x11_cursor_get_xdisplay (cursor))
 #define GDK_CURSOR_XCURSOR(cursor)    (gdk_x11_cursor_get_xcursor (cursor))
-
-#ifndef GDK_MULTIHEAD_SAFE
-#define GDK_DISPLAY()                 gdk_display
-#endif
 
 #ifdef GDK_COMPILATION
 
