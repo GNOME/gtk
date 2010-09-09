@@ -3,11 +3,45 @@ Overview of Changes from GTK+ 2.90.6 to 2.90.7
 
 * Various deprecated APIs have been removed:
  - the GtkWidget::draw-border style property
+ - the GtkEntry::state-hint style property
+ - the GtkTreeView::row-ending-details style property
+ - the GtkRange::trough-side-details style property
+ - the GtkRange::stepper-position-details style property
+ - the GtkRange::activate-slider style property
  - the GTK_CALENDAR_WEEK_START_MONDAY option
  - the GtkFrame::shadow and GtkHandleBox::shadow properties
  - the GtkTextView::page-horizontally signal
  - the GDK_WINDOW_DIALOG window type
  - the GTK_SELECTION_EXTENDED selection mode
+ - the GtkProgressBarOrientation, GtkAnchorType and GtkVisibility
+   enumerations
+ - GtkDialog separators, including the GtkDialog::has-separator
+   property, including setter/getter, the GTK_DIALOG_NO_SEPARATOR
+   flag and the GtkMessageDialog::use-separator style property
+ - gtk_status_icon_set/get_blinking
+ - gdk_window_et_deskrelative_origin
+ - The GtkItem class has been removed. Its functionality has
+   been merged into is sole subclass, GtkMenuItem
+
+* The GtkIconView::orientation property has been renamed
+  to 'item-orientation'
+
+* GtkProgressBar and GtkCellRendererProgress implement GtkOrientable
+  now, and their 'orientation' property have been split into
+  a 'orientation' property of type GtkOrientation and a boolean
+  'inverted' property
+
+* GDK no longer exports variables: gdk_threads_lock, gdk_threads_unlock,
+  gdk_threads_mutex and gdk_display are no longer available
+
+* GTK no longer exports variables: gtk_major_version, gtk_minor_version,
+  gtk_micro_version, gtk_binary_age, gtk_interface_age have been
+  converted to functions. gtk_debug_flags has a getter and a setter.
+  Misc. variables that had been exported by the semi-private text
+  API have been removed.
+
+* All GDK keysym names have been changed from GDK_keysym to GDK_KEY_keysym;
+  the previous names are still available in gdkkeysyms-compat.h.
 
 * GtkWrapBox is a new container, which distributes its children
   over multiple rows/columns
@@ -43,6 +77,12 @@ Overview of Changes from GTK+ 2.90.6 to 2.90.7
  627912 misprint in the desc. of "hover-expand" and "hover-selection"...
  628160 introspection: Update to new scanner API
  628308 docs referencing non existing icons
+ 628656 _gdk_windowing_get_startup_notify_id memory leak
+ 628807 Add more "reserved for expansion" fields to GtkWidgetClass
+ 628808 Warn if a widget requests minimum size > natural size
+ 628884 Use a bitfield for Widget::private_flags, ::state, ::saved_state
+ 628935 add gtk_radio_button_join_group method for bindings
+ 629110 gtk_spinner_accessible_get_type always returns null
 
 * Translation updates
  Arabic
