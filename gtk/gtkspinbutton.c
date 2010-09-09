@@ -116,8 +116,8 @@ static void gtk_spin_button_size_request   (GtkWidget          *widget,
 					    GtkRequisition     *requisition);
 static void gtk_spin_button_size_allocate  (GtkWidget          *widget,
 					    GtkAllocation      *allocation);
-static gint gtk_spin_button_expose         (GtkWidget          *widget,
-					    GdkEventExpose     *event);
+static gint gtk_spin_button_draw           (GtkWidget          *widget,
+                                            cairo_t            *cr);
 static gint gtk_spin_button_button_press   (GtkWidget          *widget,
 					    GdkEventButton     *event);
 static gint gtk_spin_button_button_release (GtkWidget          *widget,
@@ -137,7 +137,7 @@ static void gtk_spin_button_state_changed  (GtkWidget          *widget,
 static void gtk_spin_button_style_set      (GtkWidget          *widget,
                                             GtkStyle           *previous_style);
 static void gtk_spin_button_draw_arrow     (GtkSpinButton      *spin_button, 
-					    GdkRectangle       *area,
+					    cairo_t            *cr,
 					    GtkArrowType        arrow_type);
 static gboolean gtk_spin_button_timer          (GtkSpinButton      *spin_button);
 static void gtk_spin_button_stop_spinning  (GtkSpinButton      *spin);
@@ -206,7 +206,7 @@ gtk_spin_button_class_init (GtkSpinButtonClass *class)
   widget_class->unrealize = gtk_spin_button_unrealize;
   widget_class->size_request = gtk_spin_button_size_request;
   widget_class->size_allocate = gtk_spin_button_size_allocate;
-  widget_class->expose_event = gtk_spin_button_expose;
+  widget_class->draw = gtk_spin_button_draw;
   widget_class->scroll_event = gtk_spin_button_scroll;
   widget_class->button_press_event = gtk_spin_button_button_press;
   widget_class->button_release_event = gtk_spin_button_button_release;
@@ -783,41 +783,42 @@ gtk_spin_button_size_allocate (GtkWidget     *widget,
 }
 
 static gint
-gtk_spin_button_expose (GtkWidget      *widget,
-			GdkEventExpose *event)
+gtk_spin_button_draw (GtkWidget      *widget,
+                      cairo_t        *cr)
 {
   GtkSpinButton *spin = GTK_SPIN_BUTTON (widget);
   GtkSpinButtonPrivate *priv = spin->priv;
 
-  if (gtk_widget_is_drawable (widget))
+  GTK_WIDGET_CLASS (gtk_spin_button_parent_class)->draw (widget, cr);
+
+  if (gtk_cairo_should_draw_window (cr, priv->panel))
     {
-      if (event->window == priv->panel)
-	{
-	  GtkShadowType shadow_type;
+      GtkShadowType shadow_type;
+      int x, y;
 
-	  shadow_type = spin_button_get_shadow_type (spin);
+      shadow_type = spin_button_get_shadow_type (spin);
 
-	  if (shadow_type != GTK_SHADOW_NONE)
-	    {
-	      gint width, height;
-              GtkStateType state;
+      gdk_window_get_position (priv->panel, &x, &y);
+      cairo_translate (cr, x, y);
 
-              state = gtk_widget_has_focus (widget) ?
-                GTK_STATE_ACTIVE : gtk_widget_get_state (widget);
+      if (shadow_type != GTK_SHADOW_NONE)
+        {
+          gint width, height;
+          GtkStateType state;
 
-	      gdk_drawable_get_size (priv->panel, &width, &height);
+          state = gtk_widget_has_focus (widget) ?
+            GTK_STATE_ACTIVE : gtk_widget_get_state (widget);
 
-              gtk_paint_box (gtk_widget_get_style (widget), priv->panel,
-			     state, shadow_type,
-			     &event->area, widget, "spinbutton",
-			     0, 0, width, height);
-	    }
+          gdk_drawable_get_size (priv->panel, &width, &height);
 
-	  gtk_spin_button_draw_arrow (spin, &event->area, GTK_ARROW_UP);
-	  gtk_spin_button_draw_arrow (spin, &event->area, GTK_ARROW_DOWN);
-	}
-      else
-	GTK_WIDGET_CLASS (gtk_spin_button_parent_class)->expose_event (widget, event);
+          gtk_cairo_paint_box (gtk_widget_get_style (widget), cr,
+                         state, shadow_type,
+                         widget, "spinbutton",
+                         0, 0, width, height);
+        }
+
+      gtk_spin_button_draw_arrow (spin, cr, GTK_ARROW_UP);
+      gtk_spin_button_draw_arrow (spin, cr, GTK_ARROW_DOWN);
     }
   
   return FALSE;
@@ -851,10 +852,11 @@ spin_button_at_limit (GtkSpinButton *spin_button,
 
 static void
 gtk_spin_button_draw_arrow (GtkSpinButton *spin_button, 
-			    GdkRectangle  *area,
+			    cairo_t       *cr,
 			    GtkArrowType   arrow_type)
 {
   GtkSpinButtonPrivate *priv;
+  GtkRequisition requisition;
   GtkStateType state_type;
   GtkShadowType shadow_type;
   GtkStyle *style;
@@ -870,100 +872,95 @@ gtk_spin_button_draw_arrow (GtkSpinButton *spin_button,
   priv = spin_button->priv;
   widget = GTK_WIDGET (spin_button);
 
-  if (gtk_widget_is_drawable (widget))
+  style = gtk_widget_get_style (widget);
+  gtk_size_request_get_size (GTK_SIZE_REQUEST (widget), &requisition, NULL);
+
+  width = spin_button_get_arrow_size (spin_button) + 2 * style->xthickness;
+
+  if (arrow_type == GTK_ARROW_UP)
     {
-      GtkRequisition requisition;
+      x = 0;
+      y = 0;
 
-      style = gtk_widget_get_style (widget);
-      gtk_size_request_get_size (GTK_SIZE_REQUEST (widget), &requisition, NULL);
-
-      width = spin_button_get_arrow_size (spin_button) + 2 * style->xthickness;
-
-      if (arrow_type == GTK_ARROW_UP)
-	{
-	  x = 0;
-	  y = 0;
-
-	  height = requisition.height / 2;
-	}
-      else
-	{
-	  x = 0;
-	  y = requisition.height / 2;
-
-	  height = (requisition.height + 1) / 2;
-	}
-
-      if (spin_button_at_limit (spin_button, arrow_type))
-	{
-	  shadow_type = GTK_SHADOW_OUT;
-	  state_type = GTK_STATE_INSENSITIVE;
-	}
-      else
-	{
-	  if (priv->click_child == arrow_type)
-	    {
-	      state_type = GTK_STATE_ACTIVE;
-	      shadow_type = GTK_SHADOW_IN;
-	    }
-	  else
-	    {
-	      if (priv->in_child == arrow_type &&
-		  priv->click_child == NO_ARROW)
-		{
-		  state_type = GTK_STATE_PRELIGHT;
-		}
-	      else
-		{
-		  state_type = gtk_widget_get_state (widget);
-		}
-	      
-	      shadow_type = GTK_SHADOW_OUT;
-	    }
-	}
-
-      gtk_paint_box (style, priv->panel,
-		     state_type, shadow_type,
-		     area, widget,
-		     (arrow_type == GTK_ARROW_UP)? "spinbutton_up" : "spinbutton_down",
-		     x, y, width, height);
-
-      height = requisition.height;
-
-      if (arrow_type == GTK_ARROW_DOWN)
-	{
-	  y = height / 2;
-	  height = height - y - 2;
-	}
-      else
-	{
-	  y = 2;
-	  height = height / 2 - 2;
-	}
-
-      width -= 3;
-
-      if (widget && gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL)
-	x = 2;
-      else
-	x = 1;
-
-      w = width / 2;
-      w -= w % 2 - 1; /* force odd */
-      h = (w + 1) / 2;
-      
-      x += (width - w) / 2;
-      y += (height - h) / 2;
-      
-      height = h;
-      width = w;
-
-      gtk_paint_arrow (style, priv->panel,
-		       state_type, shadow_type, 
-		       area, widget, "spinbutton",
-		       arrow_type, TRUE, 
-		       x, y, width, height);
+      height = requisition.height / 2;
     }
+  else
+    {
+      x = 0;
+      y = requisition.height / 2;
+
+      height = (requisition.height + 1) / 2;
+    }
+
+  if (spin_button_at_limit (spin_button, arrow_type))
+    {
+      shadow_type = GTK_SHADOW_OUT;
+      state_type = GTK_STATE_INSENSITIVE;
+    }
+  else
+    {
+      if (priv->click_child == arrow_type)
+        {
+          state_type = GTK_STATE_ACTIVE;
+          shadow_type = GTK_SHADOW_IN;
+        }
+      else
+        {
+          if (priv->in_child == arrow_type &&
+              priv->click_child == NO_ARROW)
+            {
+              state_type = GTK_STATE_PRELIGHT;
+            }
+          else
+            {
+              state_type = gtk_widget_get_state (widget);
+            }
+          
+          shadow_type = GTK_SHADOW_OUT;
+        }
+    }
+  
+  gtk_cairo_paint_box (style, cr,
+                 state_type, shadow_type,
+                 widget,
+                 (arrow_type == GTK_ARROW_UP)? "spinbutton_up" : "spinbutton_down",
+                 x, y, width, height);
+
+  height = requisition.height;
+
+  if (arrow_type == GTK_ARROW_DOWN)
+    {
+      y = height / 2;
+      height = height - y - 2;
+    }
+  else
+    {
+      y = 2;
+      height = height / 2 - 2;
+    }
+
+  width -= 3;
+
+  if (widget && gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL)
+    x = 2;
+  else
+    x = 1;
+
+  w = width / 2;
+  w -= w % 2 - 1; /* force odd */
+  h = (w + 1) / 2;
+  
+  x += (width - w) / 2;
+  y += (height - h) / 2;
+  
+  height = h;
+  width = w;
+
+  gtk_cairo_paint_arrow (style, cr,
+                   state_type, shadow_type, 
+                   widget, "spinbutton",
+                   arrow_type, TRUE, 
+                   x, y, width, height);
 }
 
 static gint
