@@ -5147,7 +5147,6 @@ create_cursors (GtkWidget *widget)
 
       frame =
 	g_object_new (gtk_frame_get_type (),
-			"GtkFrame::shadow", GTK_SHADOW_ETCHED_IN,
 			"GtkFrame::label_xalign", 0.5,
 			"GtkFrame::label", "Cursor Area",
 			"GtkContainer::border_width", 10,
