@@ -70,7 +70,7 @@ struct _GtkItemClass
 
 
 GType gtk_item_get_type (void) G_GNUC_CONST;
-#if !defined(GTK_DISABLE_DEPRECATED) && !defined(GTK_COMPILATION)
+#if !defined(GTK_DISABLE_DEPRECATED) || defined(GTK_COMPILATION)
 void  gtk_item_select   (GtkItem *item);
 void  gtk_item_deselect (GtkItem *item);
 void  gtk_item_toggle   (GtkItem *item);
