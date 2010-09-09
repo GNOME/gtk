@@ -9087,27 +9087,21 @@ create_selection_test (GtkWidget *widget)
 static int scroll_test_pos = 0.0;
 
 static gint
-scroll_test_expose (GtkWidget *widget, GdkEventExpose *event,
-		    GtkAdjustment *adj)
+scroll_test_draw (GtkWidget     *widget,
+                  cairo_t       *cr,
+                  GtkAdjustment *adj)
 {
-  GdkWindow *window;
   gint i,j;
   gint imin, imax, jmin, jmax;
-  cairo_t *cr;
+  GdkRectangle clip;
   
-  imin = (event->area.x) / 10;
-  imax = (event->area.x + event->area.width + 9) / 10;
+  gdk_cairo_get_clip_rectangle (cr, &clip);
 
-  jmin = ((int)adj->value + event->area.y) / 10;
-  jmax = ((int)adj->value + event->area.y + event->area.height + 9) / 10;
+  imin = (clip.x) / 10;
+  imax = (clip.x + clip.width + 9) / 10;
 
-  window = gtk_widget_get_window (widget);
-
-  gdk_window_clear_area (window,
-			 event->area.x, event->area.y,
-			 event->area.width, event->area.height);
-
-  cr = gdk_cairo_create (window);
+  jmin = ((int)adj->value + clip.y) / 10;
+  jmax = ((int)adj->value + clip.y + clip.height + 9) / 10;
 
   for (i=imin; i<imax; i++)
     for (j=jmin; j<jmax; j++)
@@ -9115,8 +9109,6 @@ scroll_test_expose (GtkWidget *widget, GdkEventExpose *event,
 	cairo_rectangle (cr, 10*i, 10*j - (int)adj->value, 1+i%10, 1+j%10);
 
   cairo_fill (cr);
-
-  cairo_destroy (cr);
 
   return TRUE;
 }
@@ -9213,8 +9205,8 @@ create_scroll_test (GtkWidget *widget)
       gtk_box_pack_start (GTK_BOX (hbox), scrollbar, FALSE, FALSE, 0);
       gtk_widget_show (scrollbar);
 
-      g_signal_connect (drawing_area, "expose_event",
-			G_CALLBACK (scroll_test_expose), adj);
+      g_signal_connect (drawing_area, "draw",
+			G_CALLBACK (scroll_test_draw), adj);
       g_signal_connect (drawing_area, "configure_event",
 			G_CALLBACK (scroll_test_configure), adj);
       g_signal_connect (drawing_area, "scroll_event",
