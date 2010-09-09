@@ -4951,42 +4951,26 @@ create_spins (GtkWidget *widget)
  */
 
 static gint
-cursor_expose_event (GtkWidget *widget,
-		     GdkEvent  *event,
-		     gpointer   user_data)
+cursor_draw (GtkWidget *widget,
+	     cairo_t   *cr,
+	     gpointer   user_data)
 {
-  GtkAllocation allocation;
-  GtkDrawingArea *darea;
-  GdkDrawable *drawable;
-  guint max_width;
-  guint max_height;
-  cairo_t *cr;
+  int width, height;
 
-  g_return_val_if_fail (widget != NULL, TRUE);
-  g_return_val_if_fail (GTK_IS_DRAWING_AREA (widget), TRUE);
-
-  darea = GTK_DRAWING_AREA (widget);
-  drawable = gtk_widget_get_window (widget);
-
-  gtk_widget_get_allocation (widget, &allocation);
-  max_width = allocation.width;
-  max_height = allocation.height;
-
-  cr = gdk_cairo_create (drawable);
+  width = gtk_widget_get_allocated_width (widget);
+  height = gtk_widget_get_allocated_height (widget);
 
   cairo_set_source_rgb (cr, 1, 1, 1);
-  cairo_rectangle (cr, 0, 0, max_width, max_height / 2);
+  cairo_rectangle (cr, 0, 0, width, height / 2);
   cairo_fill (cr);
 
   cairo_set_source_rgb (cr, 0, 0, 0);
-  cairo_rectangle (cr, 0, max_height / 2, max_width, max_height / 2);
+  cairo_rectangle (cr, 0, height / 2, width, height / 2);
   cairo_fill (cr);
 
   gdk_cairo_set_source_color (cr, &gtk_widget_get_style (widget)->bg[GTK_STATE_NORMAL]);
-  cairo_rectangle (cr, max_width / 3, max_height / 3, max_width / 3, max_height / 3);
+  cairo_rectangle (cr, width / 3, height / 3, width / 3, height / 3);
   cairo_fill (cr);
-
-  cairo_destroy (cr);
 
   return TRUE;
 }
@@ -5158,8 +5142,8 @@ create_cursors (GtkWidget *widget)
       gtk_widget_set_size_request (darea, 80, 80);
       gtk_container_add (GTK_CONTAINER (frame), darea);
       g_signal_connect (darea,
-			"expose_event",
-			G_CALLBACK (cursor_expose_event),
+			"draw",
+			G_CALLBACK (cursor_draw),
 			NULL);
       gtk_widget_set_events (darea, GDK_EXPOSURE_MASK | GDK_BUTTON_PRESS_MASK);
       g_signal_connect (darea,
