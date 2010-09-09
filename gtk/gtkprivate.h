@@ -114,6 +114,28 @@ gboolean _gtk_fnmatch (const char *pattern,
 #define GTK_DEFAULT_ACCEL_MOD_MASK GDK_META_MASK
 #endif
 
+
+/* With GtkSizeRequest, a widget may be requested
+ * its width for 2 or maximum 3 heights in one resize
+ */
+#define GTK_SIZE_REQUEST_CACHED_SIZES 3
+
+typedef struct
+{
+  guint  age;
+  gint   for_size;
+  gint   minimum_size;
+  gint   natural_size;
+} SizeRequest;
+
+typedef struct {
+  SizeRequest widths[GTK_SIZE_REQUEST_CACHED_SIZES];
+  SizeRequest heights[GTK_SIZE_REQUEST_CACHED_SIZES];
+  guint8      cached_width_age;
+  guint8      cached_height_age;
+} SizeRequestCache;
+
+
 G_END_DECLS
 
 #endif /* __GTK_PRIVATE_H__ */

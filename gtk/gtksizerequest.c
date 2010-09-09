@@ -98,34 +98,10 @@
 #include "gtkprivate.h"
 #include "gtkintl.h"
 
-/* With GtkSizeRequest, a widget may be requested
- * its width for 2 or maximum 3 heights in one resize
- */
-#define N_CACHED_SIZES 3
-
-typedef struct
-{
-  guint  age;
-  gint   for_size;
-  gint   minimum_size;
-  gint   natural_size;
-} SizeRequest;
-
-typedef struct {
-  SizeRequest widths[N_CACHED_SIZES];
-  SizeRequest heights[N_CACHED_SIZES];
-  guint8      cached_width_age;
-  guint8      cached_height_age;
-} SizeRequestCache;
-
-static GQuark quark_cache = 0;
-
-
 typedef GtkSizeRequestIface GtkSizeRequestInterface;
-G_DEFINE_INTERFACE_WITH_CODE (GtkSizeRequest,
-                              gtk_size_request,
-                              GTK_TYPE_WIDGET,
-                              quark_cache = g_quark_from_static_string ("gtk-size-request-cache"));
+G_DEFINE_INTERFACE (GtkSizeRequest,
+		    gtk_size_request,
+		    GTK_TYPE_WIDGET);
 
 
 static void
@@ -149,7 +125,7 @@ get_cached_size (gint           for_size,
 
   *result = &cached_sizes[0];
 
-  for (i = 0; i < N_CACHED_SIZES; i++)
+  for (i = 0; i < GTK_SIZE_REQUEST_CACHED_SIZES; i++)
     {
       SizeRequest *cs;
 
@@ -167,33 +143,6 @@ get_cached_size (gint           for_size,
     }
 
   return FALSE;
-}
-
-static void
-destroy_cache (SizeRequestCache *cache)
-{
-  g_slice_free (SizeRequestCache, cache);
-}
-
-static SizeRequestCache *
-get_cache (GtkSizeRequest *widget,
-           gboolean        create)
-{
-  SizeRequestCache *cache;
-
-  cache = g_object_get_qdata (G_OBJECT (widget), quark_cache);
-  if (!cache && create)
-    {
-      cache = g_slice_new0 (SizeRequestCache);
-
-      cache->cached_width_age  = 1;
-      cache->cached_height_age = 1;
-
-      g_object_set_qdata_full (G_OBJECT (widget), quark_cache, cache,
-                               (GDestroyNotify)destroy_cache);
-    }
-
-  return cache;
 }
 
 static void
@@ -222,7 +171,7 @@ compute_size_for_orientation (GtkSizeRequest    *request,
   g_return_if_fail (minimum_size != NULL || natural_size != NULL);
 
   widget = GTK_WIDGET (request);
-  cache  = get_cache (request, TRUE);
+  cache  = _gtk_widget_peek_request_cache (widget);
 
   if (orientation == GTK_SIZE_GROUP_HORIZONTAL)
     {
@@ -232,7 +181,7 @@ compute_size_for_orientation (GtkSizeRequest    *request,
         found_in_cache = get_cached_size (for_size, cache->widths, &cached_size);
       else
         {
-          memset (cache->widths, 0, N_CACHED_SIZES * sizeof (SizeRequest));
+          memset (cache->widths, 0, GTK_SIZE_REQUEST_CACHED_SIZES * sizeof (SizeRequest));
           cache->cached_width_age = 1;
         }
     }
@@ -244,7 +193,7 @@ compute_size_for_orientation (GtkSizeRequest    *request,
         found_in_cache = get_cached_size (for_size, cache->heights, &cached_size);
       else
         {
-          memset (cache->heights, 0, N_CACHED_SIZES * sizeof (SizeRequest));
+          memset (cache->heights, 0, GTK_SIZE_REQUEST_CACHED_SIZES * sizeof (SizeRequest));
           cache->cached_height_age = 1;
         }
     }

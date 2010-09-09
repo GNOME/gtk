@@ -168,6 +168,9 @@ struct _GtkWidgetPrivate
    */
   GtkAllocation allocation;
 
+  /* The widget's requested sizes */
+  SizeRequestCache requests;
+
   /* The widget's window or its parent window if it does
    *  not have a window. (Which will be indicated by the
    *  GTK_NO_WINDOW flag being set).
@@ -9069,6 +9072,21 @@ _gtk_widget_peek_colormap (void)
   if (colormap_stack)
     return (GdkColormap*) colormap_stack->data;
   return NULL;
+}
+
+/**
+ * _gtk_widget_peek_request_cache:
+ * 
+ * Returns the address of the widget's request cache (strictly for
+ * internal use in gtksizerequest.c)
+ * 
+ * Return value: the address of @widget's size request cache.
+ **/
+gpointer
+_gtk_widget_peek_request_cache (GtkWidget *widget)
+{
+  /* Don't bother slowing things down with the return_if_fail guards here */
+  return &widget->priv->requests;
 }
 
 /*
