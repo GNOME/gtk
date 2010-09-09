@@ -37,6 +37,8 @@
 #include "gdkprivate-win32.h"
 #include "gdkinput-win32.h"
 
+#define WINTAB32_DLL "Wintab32.dll"
+
 #define PACKETDATA (PK_CONTEXT | PK_CURSOR | PK_BUTTONS | PK_X | PK_Y  | PK_NORMAL_PRESSURE | PK_ORIENTATION)
 /* We want everything in absolute mode */
 #define PACKETMODE (0)
@@ -334,12 +336,14 @@ _gdk_input_wintab_init_check (void)
   BOOL active;
   DWORD physid;
   AXIS axis_x, axis_y, axis_npressure, axis_or[3];
-  int i, k;
+  int i, k, n;
   int devix, cursorix;
   wchar_t devname[100], csrname[100];
   gchar *devname_utf8, *csrname_utf8;
   BOOL defcontext_done;
   HMODULE wintab32;
+  char *wintab32_dll_path;
+  char dummy;
 
   if (wintab_initialized)
     return;
@@ -351,7 +355,25 @@ _gdk_input_wintab_init_check (void)
   if (_gdk_input_ignore_wintab)
     return;
 
-  if ((wintab32 = LoadLibrary ("wintab32.dll")) == NULL)
+  n = GetSystemDirectory (&dummy, 0);
+
+  if (n <= 0)
+    return;
+
+  wintab32_dll_path = g_malloc (n + 1 + strlen (WINTAB32_DLL));
+  k = GetSystemDirectory (wintab32_dll_path, n);
+  
+  if (k == 0 || k > n)
+    {
+      g_free (wintab32_dll_path);
+      return;
+    }
+
+  if (!G_IS_DIR_SEPARATOR (wintab32_dll_path[strlen (wintab32_dll_path) -1]))
+    strcat (wintab32_dll_path, G_DIR_SEPARATOR_S);
+  strcat (wintab32_dll_path, WINTAB32_DLL);
+
+  if ((wintab32 = LoadLibrary (wintab32_dll_path)) == NULL)
     return;
 
   if ((p_WTInfoA = (t_WTInfoA) GetProcAddress (wintab32, "WTInfoA")) == NULL)
