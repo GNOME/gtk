@@ -523,6 +523,8 @@ gdk_window_finalize (GObject *object)
 	_gdk_window_destroy (window, TRUE);
     }
 
+  gdk_window_drop_cairo_surface (obj);
+
   if (obj->impl)
     {
       g_object_unref (obj->impl);
@@ -1027,8 +1029,7 @@ recompute_visible_regions_internal (GdkWindowObject *private,
                                                private->width,
                                                private->height)))
     {
-      cairo_surface_destroy (private->cairo_surface);
-      private->cairo_surface = NULL;
+      gdk_window_drop_cairo_surface (private);
     }
 }
 
@@ -3664,6 +3665,7 @@ gdk_window_drop_cairo_surface (GdkWindowObject *private)
       cairo_surface_finish (private->cairo_surface);
       cairo_surface_set_user_data (private->cairo_surface, &gdk_window_cairo_key,
 				   NULL, NULL);
+      private->cairo_surface = NULL;
     }
 }
 
