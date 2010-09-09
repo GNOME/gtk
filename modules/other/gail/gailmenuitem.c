@@ -22,6 +22,7 @@
 #include <gdk/gdkkeysyms.h>
 #include "gailmenuitem.h"
 #include "gailsubmenuitem.h"
+#include <libgail-util/gailmisc.h>
 
 #define KEYBINDING_SEPARATOR ";"
 
