@@ -213,7 +213,7 @@ static const GDebugKey gtk_debug_keys[] = {
 #endif /* G_ENABLE_DEBUG */
 
 /**
- * gtk_major_version:
+ * gtk_get_major_version:
  *
  * Returns the major version number of the GTK+ library.  (e.g. in GTK+ version
  * 3.1.5 this is 3.) 
@@ -223,16 +223,18 @@ static const GDebugKey gtk_debug_keys[] = {
  * macro, which represents the major version of the GTK+ headers you
  * have included when compiling your code.
  *
- * Returns the major version number of the GTK+ library.
+ * Returns: the major version number of the GTK+ library.
+ *
+ * Since: 3.0
  */
 guint
-gtk_major_version (void)
+gtk_get_major_version (void)
 {
   return GTK_MAJOR_VERSION;
 }
 
 /**
- * gtk_minor_version:
+ * gtk_get_minor_version:
  *
  * Returns the minor version number of the GTK+ library.  (e.g. in GTK+ version
  * 3.1.5 this is 1.) 
@@ -242,16 +244,18 @@ gtk_major_version (void)
  * #GTK_MINOR_VERSION macro, which represents the minor version of the
  * GTK+ headers you have included when compiling your code.
  *
- * Returns the minor version number of the GTK+ library.
+ * Returns: the minor version number of the GTK+ library.
+ *
+ * Since: 3.0
  */
 guint
-gtk_minor_version (void)
+gtk_get_minor_version (void)
 {
   return GTK_MINOR_VERSION;
 }
 
 /**
- * gtk_micro_version:
+ * gtk_get_micro_version:
  *
  * Returns the micro version number of the GTK+ library.  (e.g. in GTK+ version
  * 3.1.5 this is 5.) 
@@ -261,16 +265,18 @@ gtk_minor_version (void)
  * #GTK_MICRO_VERSION macro, which represents the micro version of the
  * GTK+ headers you have included when compiling your code.
  *
- * Returns the micro version number of the GTK+ library.
+ * Returns: the micro version number of the GTK+ library.
+ *
+ * Since: 3.0
  */
 guint
-gtk_micro_version (void)
+gtk_get_micro_version (void)
 {
   return GTK_MICRO_VERSION;
 }
 
 /**
- * gtk_binary_age:
+ * gtk_get_binary_age:
  *
  * Returns the binary age as passed to
  * <application>libtool</application> when building the GTK+ library
@@ -278,16 +284,18 @@ gtk_micro_version (void)
  * <application>libtool</application> means nothing to you, don't
  * worry about it.
  *
- * Returns the binary age of the GTK+ library.
+ * Returns: the binary age of the GTK+ library.
+ *
+ * Since: 3.0
  */
 guint
-gtk_binary_age (void)
+gtk_get_binary_age (void)
 {
   return GTK_BINARY_AGE;
 }
 
 /**
- * gtk_interface_age:
+ * gtk_get_interface_age:
  *
  * Returns the interface age as passed to
  * <application>libtool</application> when building the GTK+ library
@@ -295,10 +303,12 @@ gtk_binary_age (void)
  * <application>libtool</application> means nothing to you, don't
  * worry about it.
  *
- * Returns the interface age of the GTK+ library.
+ * Returns: the interface age of the GTK+ library.
+ *
+ * Since: 3.0
  */
 guint
-gtk_interface_age (void)
+gtk_get_interface_age (void)
 {
   return GTK_INTERFACE_AGE;
 }

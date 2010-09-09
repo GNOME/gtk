@@ -1853,11 +1853,11 @@ gtk_events_pending
 gtk_disable_setlocale
 gtk_distribute_natural_allocation
 gtk_set_locale
-gtk_binary_age
-gtk_interface_age
-gtk_major_version
-gtk_minor_version
-gtk_micro_version
+gtk_get_major_version
+gtk_get_minor_version
+gtk_get_micro_version
+gtk_get_binary_age
+gtk_get_interface_age
 gtk_check_version
 gtk_get_default_language
 gtk_get_event_widget
