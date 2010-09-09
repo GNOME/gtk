@@ -5292,7 +5292,6 @@ gtk_widget_real_grab_focus (GtkWidget *focus_widget)
 {
   if (gtk_widget_get_can_focus (focus_widget))
     {
-      GtkWidgetPrivate *priv;
       GtkWidget *toplevel;
       GtkWidget *widget;
       
@@ -5304,7 +5303,6 @@ gtk_widget_real_grab_focus (GtkWidget *focus_widget)
       if (gtk_widget_is_toplevel (toplevel) && GTK_IS_WINDOW (toplevel))
 	{
           widget = gtk_window_get_focus (GTK_WINDOW (toplevel));
-          priv = widget->priv;
 
 	  if (widget == focus_widget)
 	    {
