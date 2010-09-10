@@ -5677,7 +5677,7 @@ draw_insertion_cursor (GtkEntry      *entry,
   else
     text_dir = GTK_TEXT_DIR_RTL;
 
-  gtk_cairo_draw_insertion_cursor (widget, cr,
+  gtk_draw_insertion_cursor (widget, cr,
 			     cursor_location,
 			     is_primary, text_dir, draw_arrow);
 }

@@ -924,9 +924,9 @@ gtk_text_layout_draw (GtkTextLayout *layout,
  	      cursor_location.width = 0;
  	      cursor_location.height = cursor->height;
 
-	      gtk_cairo_draw_insertion_cursor (widget, cr, &cursor_location,
-                                               cursor->is_strong,
-                                               dir, have_strong && have_weak);
+	      gtk_draw_insertion_cursor (widget, cr, &cursor_location,
+                                         cursor->is_strong,
+                                         dir, have_strong && have_weak);
 
               cursor_list = cursor_list->next;
             }

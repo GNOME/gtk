@@ -670,18 +670,11 @@ void          _gtk_style_shade               (const GdkColor     *a,
                                               gdouble             k);
 
 void   gtk_draw_insertion_cursor    (GtkWidget          *widget,
-                                     GdkDrawable        *drawable,
-                                     const GdkRectangle *area,
+                                     cairo_t            *cr,
                                      const GdkRectangle *location,
                                      gboolean            is_primary,
                                      GtkTextDirection    direction,
                                      gboolean            draw_arrow);
-void   gtk_cairo_draw_insertion_cursor (GtkWidget          *widget,
-                                        cairo_t            *cr,
-                                        const GdkRectangle *location,
-                                        gboolean            is_primary,
-                                        GtkTextDirection    direction,
-                                        gboolean            draw_arrow);
 void   _gtk_widget_get_cursor_color (GtkWidget          *widget,
 				     GdkColor           *color);
 
