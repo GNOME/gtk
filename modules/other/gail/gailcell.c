@@ -296,6 +296,9 @@ atk_action_interface_init (AtkActionIface *iface)
   iface->get_keybinding = gail_cell_action_get_keybinding;
 }
 
+/*
+ * Deprecated: 2.22: The action interface is added for all cells now.
+ */
 void
 gail_cell_type_add_action_interface (GType type)
 {
