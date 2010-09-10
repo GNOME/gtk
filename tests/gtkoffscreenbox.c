@@ -17,8 +17,8 @@ static void        gtk_offscreen_box_size_allocate (GtkWidget       *widget,
                                                     GtkAllocation   *allocation);
 static gboolean    gtk_offscreen_box_damage        (GtkWidget       *widget,
                                                     GdkEventExpose  *event);
-static gboolean    gtk_offscreen_box_expose        (GtkWidget       *widget,
-                                                    GdkEventExpose  *offscreen);
+static gboolean    gtk_offscreen_box_draw          (GtkWidget       *widget,
+                                                    cairo_t         *cr);
 
 static void        gtk_offscreen_box_add           (GtkContainer    *container,
                                                     GtkWidget       *child);
@@ -117,7 +117,7 @@ gtk_offscreen_box_class_init (GtkOffscreenBoxClass *klass)
   widget_class->unrealize = gtk_offscreen_box_unrealize;
   widget_class->size_request = gtk_offscreen_box_size_request;
   widget_class->size_allocate = gtk_offscreen_box_size_allocate;
-  widget_class->expose_event = gtk_offscreen_box_expose;
+  widget_class->draw = gtk_offscreen_box_draw;
 
   g_signal_override_class_closure (g_signal_lookup ("damage-event", GTK_TYPE_WIDGET),
                                    GTK_TYPE_OFFSCREEN_BOX,
@@ -586,88 +586,73 @@ gtk_offscreen_box_damage (GtkWidget      *widget,
 }
 
 static gboolean
-gtk_offscreen_box_expose (GtkWidget      *widget,
-			  GdkEventExpose *event)
+gtk_offscreen_box_draw (GtkWidget *widget,
+                        cairo_t   *cr)
 {
   GtkOffscreenBox *offscreen_box = GTK_OFFSCREEN_BOX (widget);
   GdkWindow *window;
 
-  if (gtk_widget_is_drawable (widget))
+  window = gtk_widget_get_window (widget);
+  if (gtk_cairo_should_draw_window (cr, window))
     {
-      window = gtk_widget_get_window (widget);
-      if (event->window == window)
-	{
-          cairo_surface_t *surface;
-          GtkAllocation child_area;
-          cairo_t *cr;
-	  int start_y = 0;
+      cairo_surface_t *surface;
+      GtkAllocation child_area;
 
-	  if (offscreen_box->child1 && gtk_widget_get_visible (offscreen_box->child1))
-	    {
-	      surface = gdk_offscreen_window_get_surface (offscreen_box->offscreen_window1);
-              gtk_widget_get_allocation (offscreen_box->child1, &child_area);
+      if (offscreen_box->child1 && gtk_widget_get_visible (offscreen_box->child1))
+        {
+          surface = gdk_offscreen_window_get_surface (offscreen_box->offscreen_window1);
 
-	      cr = gdk_cairo_create (window);
+          cairo_set_source_surface (cr, surface, 0, 0);
+          cairo_paint (cr);
 
-              cairo_set_source_surface (cr, surface, 0, 0);
-              cairo_paint (cr);
+          gtk_widget_get_allocation (offscreen_box->child1, &child_area);
+          cairo_translate (cr, 0, child_area.height);
+        }
 
-              cairo_destroy (cr);
+      if (offscreen_box->child2 && gtk_widget_get_visible (offscreen_box->child2))
+        {
+          surface = gdk_offscreen_window_get_surface (offscreen_box->offscreen_window2);
+          gtk_widget_get_allocation (offscreen_box->child2, &child_area);
 
-              start_y += child_area.height;
-	    }
+          /* transform */
+          cairo_translate (cr, child_area.width / 2, child_area.height / 2);
+          cairo_rotate (cr, offscreen_box->angle);
+          cairo_translate (cr, -child_area.width / 2, -child_area.height / 2);
 
-	  if (offscreen_box->child2 && gtk_widget_get_visible (offscreen_box->child2))
-	    {
-              gint w, h;
+          /* paint */
+          cairo_set_source_surface (cr, surface, 0, 0);
+          cairo_paint (cr);
+        }
+    }
+  else if (gtk_cairo_should_draw_window (cr, offscreen_box->offscreen_window1))
+    {
+      gint w, h;
 
-	      surface = gdk_offscreen_window_get_surface (offscreen_box->offscreen_window2);
-              gtk_widget_get_allocation (offscreen_box->child2, &child_area);
+      gdk_drawable_get_size (offscreen_box->offscreen_window1, &w, &h);
+      gtk_cairo_paint_flat_box (gtk_widget_get_style (widget), cr,
+                          GTK_STATE_NORMAL, GTK_SHADOW_NONE,
+                          widget, "blah",
+                          0, 0, w, h);
 
-	      cr = gdk_cairo_create (window);
+      if (offscreen_box->child1)
+        gtk_container_propagate_draw (GTK_CONTAINER (widget),
+                                      offscreen_box->child1,
+                                      cr);
+    }
+  else if (gtk_cairo_should_draw_window (cr, offscreen_box->offscreen_window2))
+    {
+      gint w, h;
 
-              /* transform */
-	      cairo_translate (cr, 0, start_y);
-	      cairo_translate (cr, child_area.width / 2, child_area.height / 2);
-	      cairo_rotate (cr, offscreen_box->angle);
-	      cairo_translate (cr, -child_area.width / 2, -child_area.height / 2);
+      gdk_drawable_get_size (offscreen_box->offscreen_window2, &w, &h);
+      gtk_cairo_paint_flat_box (gtk_widget_get_style (widget), cr,
+                          GTK_STATE_NORMAL, GTK_SHADOW_NONE,
+                          widget, "blah",
+                          0, 0, w, h);
 
-              /* clip */
-              gdk_drawable_get_size (offscreen_box->offscreen_window2, &w, &h);
-              cairo_rectangle (cr, 0, 0, w, h);
-              cairo_clip (cr);
-
-              /* paint */
-	      cairo_set_source_surface (cr, surface, 0, 0);
-	      cairo_paint (cr);
-
-              cairo_destroy (cr);
-	    }
-	}
-      else if (event->window == offscreen_box->offscreen_window1)
-	{
-	  gtk_paint_flat_box (gtk_widget_get_style (widget), event->window,
-			      GTK_STATE_NORMAL, GTK_SHADOW_NONE,
-			      &event->area, widget, "blah",
-			      0, 0, -1, -1);
-
-	  if (offscreen_box->child1)
-	    gtk_container_propagate_expose (GTK_CONTAINER (widget),
-					    offscreen_box->child1,
-                                            event);
-	}
-      else if (event->window == offscreen_box->offscreen_window2)
-	{
-	  gtk_paint_flat_box (gtk_widget_get_style (widget), event->window,
-			      GTK_STATE_NORMAL, GTK_SHADOW_NONE,
-			      &event->area, widget, "blah",
-			      0, 0, -1, -1);
-
-	  if (offscreen_box->child2)
-	    gtk_container_propagate_expose (GTK_CONTAINER (widget),
-					    offscreen_box->child2,
-                                            event);
-	}
+      if (offscreen_box->child2)
+        gtk_container_propagate_draw (GTK_CONTAINER (widget),
+                                      offscreen_box->child2,
+                                      cr);
     }
 
   return FALSE;
