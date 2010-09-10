@@ -45,8 +45,8 @@ static void     gtk_rotated_bin_size_allocate (GtkWidget       *widget,
                                                GtkAllocation   *allocation);
 static gboolean gtk_rotated_bin_damage        (GtkWidget       *widget,
                                                GdkEventExpose  *event);
-static gboolean gtk_rotated_bin_expose        (GtkWidget       *widget,
-                                               GdkEventExpose  *offscreen);
+static gboolean gtk_rotated_bin_draw          (GtkWidget       *widget,
+                                               cairo_t         *cr);
 
 static void     gtk_rotated_bin_add           (GtkContainer    *container,
                                                GtkWidget       *child);
@@ -150,7 +150,7 @@ gtk_rotated_bin_class_init (GtkRotatedBinClass *klass)
   widget_class->unrealize = gtk_rotated_bin_unrealize;
   widget_class->size_request = gtk_rotated_bin_size_request;
   widget_class->size_allocate = gtk_rotated_bin_size_allocate;
-  widget_class->expose_event = gtk_rotated_bin_expose;
+  widget_class->draw = gtk_rotated_bin_draw;
 
   g_signal_override_class_closure (g_signal_lookup ("damage-event", GTK_TYPE_WIDGET),
                                    GTK_TYPE_ROTATED_BIN,
@@ -470,8 +470,8 @@ gtk_rotated_bin_damage (GtkWidget      *widget,
 }
 
 static gboolean
-gtk_rotated_bin_expose (GtkWidget      *widget,
-                        GdkEventExpose *event)
+gtk_rotated_bin_draw (GtkWidget *widget,
+                      cairo_t   *cr)
 {
   GtkRotatedBin *bin = GTK_ROTATED_BIN (widget);
   GdkWindow *window;
@@ -479,56 +479,50 @@ gtk_rotated_bin_expose (GtkWidget      *widget,
   gdouble s, c;
   gdouble w, h;
 
-  if (gtk_widget_is_drawable (widget))
+  window = gtk_widget_get_window (widget);
+  if (gtk_cairo_should_draw_window (cr, window))
     {
-      window = gtk_widget_get_window (widget);
-      if (event->window == window)
+      cairo_surface_t *surface;
+      GtkAllocation child_area;
+
+      if (bin->child && gtk_widget_get_visible (bin->child))
         {
-          cairo_surface_t *surface;
-          GtkAllocation child_area;
-          cairo_t *cr;
+          surface = gdk_offscreen_window_get_surface (bin->offscreen_window);
+          gtk_widget_get_allocation (bin->child, &child_area);
 
-          if (bin->child && gtk_widget_get_visible (bin->child))
-            {
-              surface = gdk_offscreen_window_get_surface (bin->offscreen_window);
-              gtk_widget_get_allocation (bin->child, &child_area);
+          /* transform */
+          s = sin (bin->angle);
+          c = cos (bin->angle);
+          w = c * child_area.width + s * child_area.height;
+          h = s * child_area.width + c * child_area.height;
 
-              cr = gdk_cairo_create (window);
+          cairo_translate (cr, (w - child_area.width) / 2, (h - child_area.height) / 2);
+          cairo_translate (cr, child_area.width / 2, child_area.height / 2);
+          cairo_rotate (cr, bin->angle);
+          cairo_translate (cr, -child_area.width / 2, -child_area.height / 2);
 
-              /* transform */
-              s = sin (bin->angle);
-              c = cos (bin->angle);
-              w = c * child_area.width + s * child_area.height;
-              h = s * child_area.width + c * child_area.height;
-
-              cairo_translate (cr, (w - child_area.width) / 2, (h - child_area.height) / 2);
-              cairo_translate (cr, child_area.width / 2, child_area.height / 2);
-              cairo_rotate (cr, bin->angle);
-              cairo_translate (cr, -child_area.width / 2, -child_area.height / 2);
-
-              /* clip */
-              gdk_drawable_get_size (bin->offscreen_window, &width, &height);
-              cairo_rectangle (cr, 0, 0, width, height);
-              cairo_clip (cr);
-              /* paint */
-              cairo_set_source_surface (cr, surface, 0, 0);
-              cairo_paint (cr);
-
-              cairo_destroy (cr);
-            }
+          /* clip */
+          gdk_drawable_get_size (bin->offscreen_window, &width, &height);
+          cairo_rectangle (cr, 0, 0, width, height);
+          cairo_clip (cr);
+          /* paint */
+          cairo_set_source_surface (cr, surface, 0, 0);
+          cairo_paint (cr);
         }
-      else if (event->window == bin->offscreen_window)
-        {
-          gtk_paint_flat_box (gtk_widget_get_style (widget), event->window,
-                              GTK_STATE_NORMAL, GTK_SHADOW_NONE,
-                              &event->area, widget, "blah",
-                              0, 0, -1, -1);
+    }
+  if (gtk_cairo_should_draw_window (cr, bin->offscreen_window))
+    {
+      gdk_drawable_get_size (bin->offscreen_window, &width, &height);
 
-          if (bin->child)
-            gtk_container_propagate_expose (GTK_CONTAINER (widget),
-                                            bin->child,
-                                            event);
-        }
+      gtk_cairo_paint_flat_box (gtk_widget_get_style (widget), cr,
+                          GTK_STATE_NORMAL, GTK_SHADOW_NONE,
+                          widget, "blah",
+                          0, 0, width, height);
+
+      if (bin->child)
+        gtk_container_propagate_draw (GTK_CONTAINER (widget),
+                                      bin->child,
+                                      cr);
     }
 
   return FALSE;
