@@ -2206,10 +2206,12 @@ gtk_invisible_set_screen
 
 #if IN_HEADER(__GTK_ITEM_H__)
 #if IN_FILE(__GTK_ITEM_C__)
-gtk_item_deselect
 gtk_item_get_type G_GNUC_CONST
+#ifndef GTK_DISABLE_DEPRECATED
+gtk_item_deselect
 gtk_item_select
 gtk_item_toggle
+#endif
 #endif
 #endif
 
