@@ -342,8 +342,6 @@ static gboolean gtk_widget_real_show_help        (GtkWidget         *widget,
 static void	gtk_widget_dispatch_child_properties_changed	(GtkWidget        *object,
 								 guint             n_pspecs,
 								 GParamSpec      **pspecs);
-static gboolean		gtk_widget_real_expose_event    	(GtkWidget        *widget,
-								 GdkEventExpose   *event);
 static gboolean		gtk_widget_real_key_press_event   	(GtkWidget        *widget,
 								 GdkEventKey      *event);
 static gboolean		gtk_widget_real_key_release_event 	(GtkWidget        *widget,
@@ -629,7 +627,6 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   klass->motion_notify_event = NULL;
   klass->delete_event = NULL;
   klass->destroy_event = NULL;
-  klass->expose_event = gtk_widget_real_expose_event;
   klass->key_press_event = gtk_widget_real_key_press_event;
   klass->key_release_event = gtk_widget_real_key_release_event;
   klass->enter_notify_event = NULL;
@@ -1608,33 +1605,6 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		  G_TYPE_FROM_CLASS (gobject_class),
 		  G_SIGNAL_RUN_LAST,
 		  G_STRUCT_OFFSET (GtkWidgetClass, destroy_event),
-		  _gtk_boolean_handled_accumulator, NULL,
-		  _gtk_marshal_BOOLEAN__BOXED,
-		  G_TYPE_BOOLEAN, 1,
-		  GDK_TYPE_EVENT | G_SIGNAL_TYPE_STATIC_SCOPE);
-
-  /**
-   * GtkWidget::expose-event:
-   * @widget: the object which received the signal.
-   * @event: (type Gdk.EventExpose): the #GdkEventExpose which triggered
-   *   this signal.
-   *
-   * The ::expose-event signal is emitted when an area of a previously
-   * obscured #GdkWindow is made visible and needs to be redrawn.
-   * #GTK_NO_WINDOW widgets will get a synthesized event from their parent 
-   * widget.
-   *
-   * To receive this signal, the #GdkWindow associated to the widget needs
-   * to enable the #GDK_EXPOSURE_MASK mask.
-   * 
-   * Returns: %TRUE to stop other handlers from being invoked for the event. 
-   *   %FALSE to propagate the event further.
-   */
-  widget_signals[EXPOSE_EVENT] =
-    g_signal_new (I_("expose-event"),
-		  G_TYPE_FROM_CLASS (gobject_class),
-		  G_SIGNAL_RUN_LAST,
-		  G_STRUCT_OFFSET (GtkWidgetClass, expose_event),
 		  _gtk_boolean_handled_accumulator, NULL,
 		  _gtk_marshal_BOOLEAN__BOXED,
 		  G_TYPE_BOOLEAN, 1,
@@ -5150,59 +5120,6 @@ _gtk_widget_draw_internal (GtkWidget *widget,
 }
 
 static gboolean
-gtk_widget_real_expose_event (GtkWidget      *widget,
-			      GdkEventExpose *expose)
-{
-  GdkWindow *window, *w;
-  gboolean result = FALSE;
-  cairo_t *cr;
-  int x, y;
-
-  if (!gtk_widget_is_drawable (widget))
-    return FALSE;
-
-  cr = gdk_cairo_create (expose->window);
-  gtk_cairo_set_event (cr, expose);
-
-  gdk_cairo_region (cr, expose->region);
-  cairo_clip (cr);
-
-  if (!gtk_widget_get_has_window (widget))
-    {
-      x = widget->priv->allocation.x;
-      y = widget->priv->allocation.y;
-    }
-  else
-    {
-      x = 0;
-      y = 0;
-    }
-
-  /* translate cairo context properly */
-  window = gtk_widget_get_window (widget);
-
-  for (w = expose->window; w && w != window; w = gdk_window_get_parent (w))
-    {
-      int wx, wy;
-      gdk_window_get_position (w, &wx, &wy);
-      x -= wx;
-      y -= wy;
-    }
-
-  if (w)
-    cairo_translate (cr, x, y);
-
-  _gtk_widget_draw_internal (widget, cr, w != NULL);
-
-  /* unset here, so if someone keeps a reference to cr we
-   * don't leak the window. */
-  gtk_cairo_set_event (cr, NULL);
-  cairo_destroy (cr);
-
-  return result;
-}
-
-static gboolean
 gtk_widget_real_key_press_event (GtkWidget         *widget,
 				 GdkEventKey       *event)
 {
@@ -5296,12 +5213,55 @@ gint
 gtk_widget_send_expose (GtkWidget *widget,
 			GdkEvent  *event)
 {
+  GdkWindow *window, *w;
+  gboolean result = FALSE;
+  cairo_t *cr;
+  int x, y;
+
   g_return_val_if_fail (GTK_IS_WIDGET (widget), TRUE);
   g_return_val_if_fail (gtk_widget_get_realized (widget), TRUE);
   g_return_val_if_fail (event != NULL, TRUE);
   g_return_val_if_fail (event->type == GDK_EXPOSE, TRUE);
 
-  return gtk_widget_event_internal (widget, event);
+  cr = gdk_cairo_create (event->expose.window);
+  gtk_cairo_set_event (cr, &event->expose);
+
+  gdk_cairo_region (cr, event->expose.region);
+  cairo_clip (cr);
+
+  if (!gtk_widget_get_has_window (widget))
+    {
+      x = widget->priv->allocation.x;
+      y = widget->priv->allocation.y;
+    }
+  else
+    {
+      x = 0;
+      y = 0;
+    }
+
+  /* translate cairo context properly */
+  window = gtk_widget_get_window (widget);
+
+  for (w = event->expose.window; w && w != window; w = gdk_window_get_parent (w))
+    {
+      int wx, wy;
+      gdk_window_get_position (w, &wx, &wy);
+      x -= wx;
+      y -= wy;
+    }
+
+  if (w)
+    cairo_translate (cr, x, y);
+
+  _gtk_widget_draw_internal (widget, cr, w != NULL);
+
+  /* unset here, so if someone keeps a reference to cr we
+   * don't leak the window. */
+  gtk_cairo_set_event (cr, NULL);
+  cairo_destroy (cr);
+
+  return result;
 }
 
 static gboolean
@@ -6677,7 +6637,7 @@ gtk_widget_set_mapped (GtkWidget *widget,
  * @app_paintable: %TRUE if the application will paint on the widget
  *
  * Sets whether the application intends to draw on the widget in
- * an #GtkWidget::expose-event handler. 
+ * an #GtkWidget::draw handler. 
  *
  * This is a hint to the widget and does not affect the behavior of 
  * the GTK+ core; many widgets ignore this flag entirely. For widgets 
@@ -6715,7 +6675,7 @@ gtk_widget_set_app_paintable (GtkWidget *widget,
  * @widget: a #GtkWidget
  *
  * Determines whether the application intends to draw on the widget in
- * an #GtkWidget::expose-event handler.
+ * an #GtkWidget::draw handler.
  *
  * See gtk_widget_set_app_paintable()
  *

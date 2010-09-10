@@ -375,8 +375,6 @@ struct _GtkWidgetClass
 					 GdkEventAny	     *event);
   gboolean (* destroy_event)		(GtkWidget	     *widget,
 					 GdkEventAny	     *event);
-  gboolean (* expose_event)		(GtkWidget	     *widget,
-					 GdkEventExpose      *event);
   gboolean (* key_press_event)		(GtkWidget	     *widget,
 					 GdkEventKey	     *event);
   gboolean (* key_release_event)	(GtkWidget	     *widget,
