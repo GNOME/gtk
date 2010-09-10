@@ -2831,6 +2831,9 @@ gtk_container_propagate_draw (GtkContainer   *container,
                               cairo_t        *cr)
 {
   GdkEventExpose *event;
+  GtkAllocation allocation;
+  GdkWindow *window, *w;
+  int x, y;
 
   g_return_if_fail (GTK_IS_CONTAINER (container));
   g_return_if_fail (GTK_IS_WIDGET (child));
@@ -2841,15 +2844,54 @@ gtk_container_propagate_draw (GtkContainer   *container,
   event = _gtk_cairo_get_event (cr);
   if (event)
     {
-      gtk_container_propagate_expose (container, child, event);
+      if (gtk_widget_get_has_window (child) ||
+          gtk_widget_get_window (child) != event->window)
+        return;
+    }
+
+  cairo_save (cr);
+
+  /* translate coordinates. Ugly business, that. */
+  if (!gtk_widget_get_has_window (GTK_WIDGET (container)))
+    {
+      gtk_widget_get_allocation (GTK_WIDGET (container), &allocation);
+      x = -allocation.x;
+      y = -allocation.y;
     }
   else
     {
-      /* XXX: Needs gtk_widget_draw(), but can only happen once
-       * that function exists */
-      g_assert_not_reached ();
+      x = 0;
+      y = 0;
     }
 
+  window = gtk_widget_get_window (GTK_WIDGET (container));
+  
+  for (w = gtk_widget_get_window (child); w && w != window; w = gdk_window_get_parent (w))
+    {
+      int wx, wy;
+      gdk_window_get_position (w, &wx, &wy);
+      x += wx;
+      y += wy;
+    }
+
+  if (w == NULL)
+    {
+      x = 0;
+      y = 0;
+    }
+
+  if (!gtk_widget_get_has_window (child))
+    {
+      gtk_widget_get_allocation (child, &allocation);
+      x += allocation.x;
+      y += allocation.y;
+    }
+
+  cairo_translate (cr, x, y);
+
+  _gtk_widget_draw_internal (child, cr, TRUE);
+
+  cairo_restore (cr);
 }
 
 /**
