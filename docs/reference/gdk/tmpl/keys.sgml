@@ -11,13 +11,12 @@ They appear in the <structfield>keyval</structfield> field of the
 #GdkEventKey structure, which is passed to signal handlers for the
 "key-press-event" and "key-release-event" signals.
 The complete list of key values can be found in the <filename>&lt;gdk/gdkkeysyms.h&gt;</filename>
-header file. <filename>&lt;gdk/gdkkeysyms.h&gt;</filename> is not included in <filename>&lt;gdk/gdk.h&gt;</filename>, 
-it must be included independently, because the file is quite large.
+header file.
 </para>
 <para>
 Key values are regularly updated from the upstream X.org X11 implementation,
-so new values are added regularly. They will be prefixed with GDK_ rather than
-XF86XK_ or XK_ (for older symbols).
+so new values are added regularly. They will be prefixed with GDK_KEY_ rather
+than XF86XK_ or XK_ (for older symbols).
 </para>
 <para>
 Key values can be converted into a string representation using
@@ -30,7 +29,7 @@ gdk_keyval_is_lower(). Key values can be converted to upper or lower case
 using gdk_keyval_to_upper() and gdk_keyval_to_lower().
 </para>
 <para>
-When it makes sense, key values can be converted to and from 
+When it makes sense, key values can be converted to and from
 Unicode characters with gdk_keyval_to_unicode() and gdk_unicode_to_keyval().
 </para>
 
@@ -270,7 +269,7 @@ Returns: %PANGO_DIRECTION_LTR or %PANGO_DIRECTION_RTL.
 <para>
 Converts a key value into a symbolic name.
 The names are the same as those in the <filename>&lt;gdk/gdkkeysyms.h&gt;</filename> header file
-but without the leading "GDK_".
+but without the leading "GDK_KEY_".
 </para>
 
 @keyval: a key value.
