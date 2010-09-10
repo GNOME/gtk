@@ -41,8 +41,8 @@ static void     gtk_mirror_bin_size_allocate (GtkWidget       *widget,
                                                GtkAllocation   *allocation);
 static gboolean gtk_mirror_bin_damage        (GtkWidget       *widget,
                                                GdkEventExpose  *event);
-static gboolean gtk_mirror_bin_expose        (GtkWidget       *widget,
-                                               GdkEventExpose  *offscreen);
+static gboolean gtk_mirror_bin_draw          (GtkWidget       *widget,
+                                              cairo_t         *cr);
 
 static void     gtk_mirror_bin_add           (GtkContainer    *container,
                                                GtkWidget       *child);
@@ -88,7 +88,7 @@ gtk_mirror_bin_class_init (GtkMirrorBinClass *klass)
   widget_class->unrealize = gtk_mirror_bin_unrealize;
   widget_class->size_request = gtk_mirror_bin_size_request;
   widget_class->size_allocate = gtk_mirror_bin_size_allocate;
-  widget_class->expose_event = gtk_mirror_bin_expose;
+  widget_class->draw = gtk_mirror_bin_draw;
 
   g_signal_override_class_closure (g_signal_lookup ("damage-event", GTK_TYPE_WIDGET),
                                    GTK_TYPE_MIRROR_BIN,
@@ -376,78 +376,63 @@ gtk_mirror_bin_damage (GtkWidget      *widget,
 }
 
 static gboolean
-gtk_mirror_bin_expose (GtkWidget      *widget,
-                        GdkEventExpose *event)
+gtk_mirror_bin_draw (GtkWidget *widget,
+                     cairo_t   *cr)
 {
   GtkMirrorBin *bin = GTK_MIRROR_BIN (widget);
   GdkWindow *window;
   gint width, height;
 
-  if (gtk_widget_is_drawable (widget))
+  window = gtk_widget_get_window (widget);
+  if (gtk_cairo_should_draw_window (cr, window))
     {
-      window = gtk_widget_get_window (widget);
-      if (event->window == window)
+      cairo_surface_t *surface;
+      cairo_matrix_t matrix;
+      cairo_pattern_t *mask;
+
+      if (bin->child && gtk_widget_get_visible (bin->child))
         {
-          cairo_surface_t *surface;
-          cairo_t *cr;
-          cairo_matrix_t matrix;
-          cairo_pattern_t *mask;
+          surface = gdk_offscreen_window_get_surface (bin->offscreen_window);
+          gdk_drawable_get_size (bin->offscreen_window, &width, &height);
 
-          if (bin->child && gtk_widget_get_visible (bin->child))
-            {
-              surface = gdk_offscreen_window_get_surface (bin->offscreen_window);
-              gdk_drawable_get_size (bin->offscreen_window, &width, &height);
+          /* paint the offscreen child */
+          cairo_set_source_surface (cr, surface, 0, 0);
+          cairo_paint (cr);
 
-              cr = gdk_cairo_create (window);
+          cairo_matrix_init (&matrix, 1.0, 0.0, 0.3, 1.0, 0.0, 0.0);
+          cairo_matrix_scale (&matrix, 1.0, -1.0);
+          cairo_matrix_translate (&matrix, -10, - 3 * height - 10);
+          cairo_transform (cr, &matrix);
 
-              cairo_save (cr);
+          cairo_set_source_surface (cr, surface, 0, height);
 
-              cairo_rectangle (cr, 0, 0, width, height);
-              cairo_clip (cr);
+          /* create linear gradient as mask-pattern to fade out the source */
+          mask = cairo_pattern_create_linear (0.0, height, 0.0, 2*height);
+          cairo_pattern_add_color_stop_rgba (mask, 0.0,  0.0, 0.0, 0.0, 0.0);
+          cairo_pattern_add_color_stop_rgba (mask, 0.25, 0.0, 0.0, 0.0, 0.01);
+          cairo_pattern_add_color_stop_rgba (mask, 0.5,  0.0, 0.0, 0.0, 0.25);
+          cairo_pattern_add_color_stop_rgba (mask, 0.75, 0.0, 0.0, 0.0, 0.5);
+          cairo_pattern_add_color_stop_rgba (mask, 1.0,  0.0, 0.0, 0.0, 1.0);
 
-              /* paint the offscreen child */
-              cairo_set_source_surface (cr, surface, 0, 0);
-              cairo_paint (cr);
+          /* paint the reflection */
+          cairo_mask (cr, mask);
 
-              cairo_restore (cr);
-
-              cairo_matrix_init (&matrix, 1.0, 0.0, 0.3, 1.0, 0.0, 0.0);
-              cairo_matrix_scale (&matrix, 1.0, -1.0);
-              cairo_matrix_translate (&matrix, -10, - 3 * height - 10);
-              cairo_transform (cr, &matrix);
-
-              cairo_rectangle (cr, 0, height, width, height);
-              cairo_clip (cr);
-
-              cairo_set_source_surface (cr, surface, 0, height);
-
-              /* create linear gradient as mask-pattern to fade out the source */
-              mask = cairo_pattern_create_linear (0.0, height, 0.0, 2*height);
-              cairo_pattern_add_color_stop_rgba (mask, 0.0,  0.0, 0.0, 0.0, 0.0);
-              cairo_pattern_add_color_stop_rgba (mask, 0.25, 0.0, 0.0, 0.0, 0.01);
-              cairo_pattern_add_color_stop_rgba (mask, 0.5,  0.0, 0.0, 0.0, 0.25);
-              cairo_pattern_add_color_stop_rgba (mask, 0.75, 0.0, 0.0, 0.0, 0.5);
-              cairo_pattern_add_color_stop_rgba (mask, 1.0,  0.0, 0.0, 0.0, 1.0);
-
-              /* paint the reflection */
-              cairo_mask (cr, mask);
-
-              cairo_pattern_destroy (mask);
-              cairo_destroy (cr);
-            }
+          cairo_pattern_destroy (mask);
         }
-      else if (event->window == bin->offscreen_window)
-        {
-          gtk_paint_flat_box (gtk_widget_get_style (widget), event->window,
-                              GTK_STATE_NORMAL, GTK_SHADOW_NONE,
-                              &event->area, widget, "blah",
-                              0, 0, -1, -1);
+    }
+  else if (gtk_cairo_should_draw_window (cr, bin->offscreen_window))
+    {
+      gdk_drawable_get_size (bin->offscreen_window, &width, &height);
 
-          if (bin->child)
-            gtk_container_propagate_expose (GTK_CONTAINER (widget),
-                                            bin->child,
-                                            event);
-        }
+      gtk_cairo_paint_flat_box (gtk_widget_get_style (widget), cr,
+                          GTK_STATE_NORMAL, GTK_SHADOW_NONE,
+                          widget, "blah",
+                          0, 0, width, height);
+
+      if (bin->child)
+        gtk_container_propagate_draw (GTK_CONTAINER (widget),
+                                      bin->child,
+                                      cr);
     }
 
   return FALSE;
