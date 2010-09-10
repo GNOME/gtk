@@ -2931,7 +2931,7 @@ gtk_menu_draw (GtkWidget *widget,
       gtk_widget_style_get (widget, "arrow-scaling", &arrow_scaling, NULL);
       arrow_size = arrow_scaling * arrow_space;
 
-      gtk_cairo_paint_box (style,
+      gtk_paint_box (style,
 		     cr,
 		     GTK_STATE_NORMAL,
 		     GTK_SHADOW_OUT,
@@ -2942,7 +2942,7 @@ gtk_menu_draw (GtkWidget *widget,
 
       if (menu->upper_arrow_visible && !menu->tearoff_active)
 	{
-	  gtk_cairo_paint_box (style,
+	  gtk_paint_box (style,
 			 cr,
 			 priv->upper_arrow_state,
                          GTK_SHADOW_OUT,
@@ -2952,7 +2952,7 @@ gtk_menu_draw (GtkWidget *widget,
                          upper.width,
                          upper.height);
 
-	  gtk_cairo_paint_arrow (style,
+	  gtk_paint_arrow (style,
 			   cr,
 			   priv->upper_arrow_state,
 			   GTK_SHADOW_OUT,
@@ -2966,7 +2966,7 @@ gtk_menu_draw (GtkWidget *widget,
 
       if (menu->lower_arrow_visible && !menu->tearoff_active)
 	{
-	  gtk_cairo_paint_box (style,
+	  gtk_paint_box (style,
 			 cr,
 			 priv->lower_arrow_state,
                          GTK_SHADOW_OUT,
@@ -2976,7 +2976,7 @@ gtk_menu_draw (GtkWidget *widget,
                          lower.width,
                          lower.height);
 
-	  gtk_cairo_paint_arrow (style,
+	  gtk_paint_arrow (style,
 			   cr,
 			   priv->lower_arrow_state,
 			   GTK_SHADOW_OUT,
@@ -3008,7 +3008,7 @@ gtk_menu_draw (GtkWidget *widget,
           y -= arrow_border.top;
         }
 
-      gtk_cairo_paint_box (style,
+      gtk_paint_box (style,
 		     cr,
 		     GTK_STATE_NORMAL,
 		     GTK_SHADOW_OUT,

@@ -2494,7 +2494,7 @@ gtk_combo_box_draw (GtkWidget *widget,
 
   if (priv->shadow_type != GTK_SHADOW_NONE)
     {
-      gtk_cairo_paint_shadow (gtk_widget_get_style (widget),
+      gtk_paint_shadow (gtk_widget_get_style (widget),
                         cr,
                         GTK_STATE_NORMAL, priv->shadow_type,
                         widget, "combobox",

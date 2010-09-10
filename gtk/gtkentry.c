@@ -3307,7 +3307,7 @@ gtk_entry_draw_frame (GtkWidget      *widget,
   state = gtk_widget_has_focus (widget) ?
     GTK_STATE_ACTIVE : gtk_widget_get_state (widget);
 
-  gtk_cairo_paint_shadow (style, cr,
+  gtk_paint_shadow (style, cr,
                     state, priv->shadow_type,
                     widget, "entry", x, y, width, height);
 
@@ -3321,7 +3321,7 @@ gtk_entry_draw_frame (GtkWidget      *widget,
       width += 2 * priv->focus_width;
       height += 2 * priv->focus_width;
 
-      gtk_cairo_paint_focus (style, cr,
+      gtk_paint_focus (style, cr,
                        gtk_widget_get_state (widget),
 		       widget, "entry",
 		       0, 0, width, height);
@@ -3439,7 +3439,7 @@ gtk_entry_draw_progress (GtkWidget      *widget,
   if (!gtk_widget_get_sensitive (widget))
     state = GTK_STATE_INSENSITIVE;
 
-  gtk_cairo_paint_box (gtk_widget_get_style (widget), cr,
+  gtk_paint_box (gtk_widget_get_style (widget), cr,
                  state, GTK_SHADOW_OUT,
                  widget, "entry-progress",
                  x, y,
@@ -3474,7 +3474,7 @@ gtk_entry_draw (GtkWidget *widget,
       gdk_window_get_position (entry->text_area, &x, &y);
       cairo_translate (cr, x, y);
 
-      gtk_cairo_paint_flat_box (style, cr,
+      gtk_paint_flat_box (style, cr,
 			  state, GTK_SHADOW_NONE,
 			  widget, "entry_bg",
 			  0, 0, width, height);
@@ -3509,7 +3509,7 @@ gtk_entry_draw (GtkWidget *widget,
           gdk_window_get_position (icon_info->window, &x, &y);
           cairo_translate (cr, x, y);
 
-          gtk_cairo_paint_flat_box (style, cr,
+          gtk_paint_flat_box (style, cr,
                               state, GTK_SHADOW_NONE,
                               widget, "entry_bg",
                               0, 0, width, height);

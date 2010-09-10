@@ -1571,7 +1571,7 @@ _gtk_button_paint (GtkButton          *button,
   if (gtk_widget_has_default (widget) &&
       GTK_BUTTON (widget)->relief == GTK_RELIEF_NORMAL)
     {
-      gtk_cairo_paint_box (style, cr,
+      gtk_paint_box (style, cr,
                      GTK_STATE_NORMAL, GTK_SHADOW_IN,
                      widget, "buttondefault",
                      x, y, width, height);
@@ -1599,7 +1599,7 @@ _gtk_button_paint (GtkButton          *button,
 
   if (button->relief != GTK_RELIEF_NONE || button->depressed ||
       gtk_widget_get_state(widget) == GTK_STATE_PRELIGHT)
-    gtk_cairo_paint_box (style, cr,
+    gtk_paint_box (style, cr,
                    state_type,
                    shadow_type, widget, "button",
                    x, y, width, height);
@@ -1637,7 +1637,7 @@ _gtk_button_paint (GtkButton          *button,
           y += child_displacement_y;
         }
 
-      gtk_cairo_paint_focus (style, cr,
+      gtk_paint_focus (style, cr,
                        gtk_widget_get_state (widget),
                        widget, "button",
                        x, y, width, height);

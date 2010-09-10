@@ -514,7 +514,7 @@ gtk_rotated_bin_draw (GtkWidget *widget,
     {
       gdk_drawable_get_size (bin->offscreen_window, &width, &height);
 
-      gtk_cairo_paint_flat_box (gtk_widget_get_style (widget), cr,
+      gtk_paint_flat_box (gtk_widget_get_style (widget), cr,
                           GTK_STATE_NORMAL, GTK_SHADOW_NONE,
                           widget, "blah",
                           0, 0, width, height);

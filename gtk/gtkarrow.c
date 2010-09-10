@@ -364,7 +364,7 @@ gtk_arrow_draw (GtkWidget *widget,
         shadow_type = GTK_SHADOW_ETCHED_IN;
     }
 
-  gtk_cairo_paint_arrow (gtk_widget_get_style (widget), cr,
+  gtk_paint_arrow (gtk_widget_get_style (widget), cr,
                    state, shadow_type,
                    widget, "arrow",
                    effective_arrow_type, TRUE,

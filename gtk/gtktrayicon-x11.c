@@ -360,7 +360,7 @@ gtk_tray_icon_draw (GtkWidget *widget,
     {
       border_width = gtk_container_get_border_width (GTK_CONTAINER (widget));
 
-      gtk_cairo_paint_focus (gtk_widget_get_style (widget),
+      gtk_paint_focus (gtk_widget_get_style (widget),
                        cr,
                        gtk_widget_get_state (widget),
                        widget, "tray_icon",

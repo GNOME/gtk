@@ -1003,7 +1003,7 @@ gtk_statusbar_draw (GtkWidget *widget,
       get_grip_rect (statusbar, FALSE, &rect);
 
       style = gtk_widget_get_style (widget);
-      gtk_cairo_paint_resize_grip (style,
+      gtk_paint_resize_grip (style,
                              cr,
                              gtk_widget_get_state (widget),
                              widget,

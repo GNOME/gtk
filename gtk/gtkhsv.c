@@ -1190,7 +1190,7 @@ paint_triangle (GtkHSV      *hsv,
 			    "focus-padding", &focus_pad,
 			    NULL);
 
-      gtk_cairo_paint_focus (gtk_widget_get_style (widget),
+      gtk_paint_focus (gtk_widget_get_style (widget),
                        cr,
 		       gtk_widget_get_state (widget),
 		       widget, detail,
@@ -1213,7 +1213,7 @@ gtk_hsv_draw (GtkWidget      *widget,
   paint_triangle (hsv, cr);
 
   if (gtk_widget_has_focus (widget) && priv->focus_on_ring)
-    gtk_cairo_paint_focus (gtk_widget_get_style (widget),
+    gtk_paint_focus (gtk_widget_get_style (widget),
                      cr,
 		     gtk_widget_get_state (widget),
 		     widget, NULL,

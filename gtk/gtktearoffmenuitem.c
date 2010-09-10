@@ -147,7 +147,7 @@ gtk_tearoff_menu_item_draw (GtkWidget *widget,
       gtk_widget_style_get (widget,
                             "selected-shadow-type", &selected_shadow_type,
                             NULL);
-      gtk_cairo_paint_box (style,
+      gtk_paint_box (style,
                      cr,
                      GTK_STATE_PRELIGHT,
                      selected_shadow_type,
@@ -191,7 +191,7 @@ gtk_tearoff_menu_item_draw (GtkWidget *widget,
         }
 
 
-      gtk_cairo_paint_arrow (style, cr,
+      gtk_paint_arrow (style, cr,
                        state, shadow_type,
                        widget, "tearoffmenuitem",
                        arrow_type, FALSE,
@@ -212,7 +212,7 @@ gtk_tearoff_menu_item_draw (GtkWidget *widget,
         x2 = MAX (right_max - x - TEAR_LENGTH, 0);
       }
 
-      gtk_cairo_paint_hline (style, cr, GTK_STATE_NORMAL,
+      gtk_paint_hline (style, cr, GTK_STATE_NORMAL,
                        widget, "tearoffmenuitem",
                        x1, x2, y + (height - style->ythickness) / 2);
       x += 2 * TEAR_LENGTH;

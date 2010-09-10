@@ -3254,7 +3254,7 @@ on_drag_icon_draw (GtkWidget *widget,
                              &requisition, NULL);
   gap_pos = get_tab_gap_pos (GTK_NOTEBOOK (notebook));
 
-  gtk_cairo_paint_extension (gtk_widget_get_style (notebook),
+  gtk_paint_extension (gtk_widget_get_style (notebook),
                        cr,
 		       GTK_STATE_NORMAL, GTK_SHADOW_OUT,
 		       widget, "tab",
@@ -4783,7 +4783,7 @@ gtk_notebook_paint (GtkWidget    *widget,
 
   if (priv->show_border && (!priv->show_tabs || !priv->children))
     {
-      gtk_cairo_paint_box (gtk_widget_get_style (widget), cr,
+      gtk_paint_box (gtk_widget_get_style (widget), cr,
 		     GTK_STATE_NORMAL, GTK_SHADOW_OUT,
 		     widget, "notebook",
 		     x, y, width, height);
@@ -4846,7 +4846,7 @@ gtk_notebook_paint (GtkWidget    *widget,
 	  break;
 	}
     }
-  gtk_cairo_paint_box_gap (gtk_widget_get_style (widget), cr,
+  gtk_paint_box_gap (gtk_widget_get_style (widget), cr,
 		     GTK_STATE_NORMAL, GTK_SHADOW_OUT,
 		     widget, "notebook",
 		     x, y, width, height,
@@ -4905,7 +4905,7 @@ gtk_notebook_draw_tab (GtkNotebook     *notebook,
   else 
     state_type = GTK_STATE_ACTIVE;
 
-  gtk_cairo_paint_extension (gtk_widget_get_style (widget), cr,
+  gtk_paint_extension (gtk_widget_get_style (widget), cr,
                        state_type, GTK_SHADOW_OUT,
                        widget, "tab",
                        page->allocation.x,
@@ -4923,7 +4923,7 @@ gtk_notebook_draw_tab (GtkNotebook     *notebook,
       gtk_widget_get_allocation (page->tab_label, &allocation);
       gtk_widget_style_get (widget, "focus-line-width", &focus_width, NULL);
 
-      gtk_cairo_paint_focus (gtk_widget_get_style (widget), cr,
+      gtk_paint_focus (gtk_widget_get_style (widget), cr,
                        gtk_widget_get_state (widget), widget, "tab",
                        allocation.x - focus_width,
                        allocation.y - focus_width,
@@ -4996,7 +4996,7 @@ gtk_notebook_draw_arrow (GtkNotebook      *notebook,
       arrow_size = scroll_arrow_hlength;
     }
  
-  gtk_cairo_paint_arrow (gtk_widget_get_style (widget),
+  gtk_paint_arrow (gtk_widget_get_style (widget),
                    cr, state_type, 
                    shadow_type, widget, "notebook",
                    arrow, TRUE, arrow_rect.x, arrow_rect.y, 

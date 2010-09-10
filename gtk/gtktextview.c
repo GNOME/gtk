@@ -4903,7 +4903,7 @@ gtk_text_view_draw_focus (GtkWidget *widget,
   
   if (gtk_widget_has_focus (widget) && !interior_focus)
     {          
-      gtk_cairo_paint_focus (gtk_widget_get_style (widget), cr,
+      gtk_paint_focus (gtk_widget_get_style (widget), cr,
                        gtk_widget_get_state (widget),
                        widget, "textview",
                        0, 0,

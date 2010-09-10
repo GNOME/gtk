@@ -557,7 +557,7 @@ gtk_cell_renderer_progress_render (GtkCellRenderer      *cell,
    * but some engines don't paint anything with that detail for
    * non-GtkProgressBar widgets.
    */
-  gtk_cairo_paint_box (style,
+  gtk_paint_box (style,
                        cr,
                        GTK_STATE_NORMAL, GTK_SHADOW_IN, 
                        widget, NULL,
@@ -604,7 +604,7 @@ gtk_cell_renderer_progress_render (GtkCellRenderer      *cell,
       clip.y = bar_position;
     }
 
-  gtk_cairo_paint_box (style,
+  gtk_paint_box (style,
                        cr,
                        GTK_STATE_SELECTED, GTK_SHADOW_OUT,
                        widget, "bar",
@@ -633,7 +633,7 @@ gtk_cell_renderer_progress_render (GtkCellRenderer      *cell,
       gdk_cairo_rectangle (cr, &clip);
       cairo_clip (cr);
 
-      gtk_cairo_paint_layout (style, cr,
+      gtk_paint_layout (style, cr,
                               GTK_STATE_SELECTED,
                               FALSE, widget, "progressbar",
                               x_pos, y_pos, 
@@ -658,7 +658,7 @@ gtk_cell_renderer_progress_render (GtkCellRenderer      *cell,
           gdk_cairo_rectangle (cr, &clip);
           cairo_clip (cr);
 
-          gtk_cairo_paint_layout (style, cr,
+          gtk_paint_layout (style, cr,
                                   GTK_STATE_NORMAL,
                                   FALSE, widget, "progressbar",
                                   x_pos, y_pos,
@@ -684,7 +684,7 @@ gtk_cell_renderer_progress_render (GtkCellRenderer      *cell,
           gdk_cairo_rectangle (cr, &clip);
           cairo_clip (cr);
 
-          gtk_cairo_paint_layout (style, cr,
+          gtk_paint_layout (style, cr,
                                   GTK_STATE_NORMAL,
                                   FALSE, widget, "progressbar",
                                   x_pos, y_pos,

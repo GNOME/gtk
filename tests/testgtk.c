@@ -2565,7 +2565,7 @@ grippy_button_press (GtkWidget *area, GdkEventButton *event, GdkWindowEdge edge)
 static gboolean
 grippy_draw (GtkWidget *area, cairo_t *cr, GdkWindowEdge edge)
 {
-  gtk_cairo_paint_resize_grip (gtk_widget_get_style (area),
+  gtk_paint_resize_grip (gtk_widget_get_style (area),
                          cr,
 			 gtk_widget_get_state (area),
 			 area,

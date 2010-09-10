@@ -617,12 +617,12 @@ gtk_frame_draw (GtkWidget *widget,
       x2 = style->xthickness + (priv->child_allocation.width - priv->label_allocation.width - 2 * LABEL_PAD - 2 * LABEL_SIDE_PAD) * xalign + LABEL_SIDE_PAD;
       /* If the label is completely over or under the frame we can omit the gap */
       if (priv->label_yalign == 0.0 || priv->label_yalign == 1.0)
-        gtk_cairo_paint_shadow (style, cr,
+        gtk_paint_shadow (style, cr,
                           state, priv->shadow_type,
                           widget, "frame",
                           x, y, width, height);
       else
-        gtk_cairo_paint_shadow_gap (style, cr,
+        gtk_paint_shadow_gap (style, cr,
                               state, priv->shadow_type,
                               widget, "frame",
                               x, y, width, height,
@@ -630,7 +630,7 @@ gtk_frame_draw (GtkWidget *widget,
                               x2, priv->label_allocation.width + 2 * LABEL_PAD);
     }
    else
-     gtk_cairo_paint_shadow (style, cr,
+     gtk_paint_shadow (style, cr,
                        state, priv->shadow_type,
                        widget, "frame",
                        x, y, width, height);

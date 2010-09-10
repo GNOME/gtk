@@ -568,7 +568,7 @@ gtk_event_box_draw (GtkWidget      *widget,
 {
   if (gtk_widget_get_has_window (widget) &&
       !gtk_widget_get_app_paintable (widget))
-    gtk_cairo_paint_flat_box (gtk_widget_get_style (widget),
+    gtk_paint_flat_box (gtk_widget_get_style (widget),
                         cr,
 			gtk_widget_get_state (widget),
                         GTK_SHADOW_NONE,

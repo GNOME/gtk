@@ -1825,7 +1825,7 @@ draw_stepper (GtkRange     *range,
   style = gtk_widget_get_style (widget);
   window = gtk_widget_get_window (widget);
 
-  gtk_cairo_paint_box (style, cr,
+  gtk_paint_box (style, cr,
 		 state_type, shadow_type,
 		 widget,
 		 gtk_range_get_stepper_detail (range, stepper),
@@ -1854,7 +1854,7 @@ draw_stepper (GtkRange     *range,
       arrow_y += arrow_displacement_y;
     }
 
-  gtk_cairo_paint_arrow (style, cr,
+  gtk_paint_arrow (style, cr,
                    state_type, shadow_type,
                    widget,
                    gtk_range_get_stepper_detail (range, stepper),
@@ -1986,7 +1986,7 @@ gtk_range_draw (GtkWidget      *widget,
                                    priv->slider.height / 2 -
                                    y);
 
-          gtk_cairo_paint_box (style, cr,
+          gtk_paint_box (style, cr,
                          sensitive ? GTK_STATE_ACTIVE : GTK_STATE_INSENSITIVE,
                          GTK_SHADOW_IN,
                          GTK_WIDGET (range),
@@ -1999,7 +1999,7 @@ gtk_range_draw (GtkWidget      *widget,
 	  else
 	    trough_change_pos_x = 0;
 
-          gtk_cairo_paint_box (style, cr,
+          gtk_paint_box (style, cr,
                          sensitive ? GTK_STATE_ACTIVE : GTK_STATE_INSENSITIVE,
                          GTK_SHADOW_IN,
                          GTK_WIDGET (range),
@@ -2058,7 +2058,7 @@ gtk_range_draw (GtkWidget      *widget,
 	  else
 	    fill_detail = "trough-fill-level";
 
-          gtk_cairo_paint_box (style, cr,
+          gtk_paint_box (style, cr,
                          sensitive ? GTK_STATE_ACTIVE : GTK_STATE_INSENSITIVE,
                          GTK_SHADOW_OUT,
                          GTK_WIDGET (range), fill_detail,
@@ -2067,7 +2067,7 @@ gtk_range_draw (GtkWidget      *widget,
 	}
 
       if (sensitive && gtk_widget_has_focus (widget))
-        gtk_cairo_paint_focus (style, cr,
+        gtk_paint_focus (style, cr,
                          gtk_widget_get_state (widget),
                          widget, "trough",
                          priv->range_rect.x,
@@ -2098,7 +2098,7 @@ gtk_range_draw (GtkWidget      *widget,
   cairo_clip (cr);
 
     {
-      gtk_cairo_paint_slider (style,
+      gtk_paint_slider (style,
                         cr,
                         state,
                         shadow_type,

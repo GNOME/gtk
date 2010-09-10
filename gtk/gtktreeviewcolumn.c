@@ -3510,7 +3510,7 @@ _gtk_tree_view_column_cell_draw_focus (GtkTreeViewColumn  *tree_column,
       cell_state = flags & GTK_CELL_RENDERER_SELECTED ? GTK_STATE_SELECTED :
 	      (flags & GTK_CELL_RENDERER_PRELIT ? GTK_STATE_PRELIGHT :
 	      (flags & GTK_CELL_RENDERER_INSENSITIVE ? GTK_STATE_INSENSITIVE : GTK_STATE_NORMAL));
-      gtk_cairo_paint_focus (gtk_widget_get_style (tree_column->tree_view),
+      gtk_paint_focus (gtk_widget_get_style (tree_column->tree_view),
                              cr,
                              cell_state,
                              tree_column->tree_view,

@@ -458,7 +458,7 @@ gtk_accel_label_draw (GtkWidget *widget,
 
 	  y += get_first_baseline (label_layout) - get_first_baseline (accel_layout) - allocation.y;
 
-          gtk_cairo_paint_layout (gtk_widget_get_style (widget),
+          gtk_paint_layout (gtk_widget_get_style (widget),
                             cr,
                             gtk_widget_get_state (widget),
 			    FALSE,

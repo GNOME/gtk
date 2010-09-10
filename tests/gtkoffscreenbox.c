@@ -629,7 +629,7 @@ gtk_offscreen_box_draw (GtkWidget *widget,
       gint w, h;
 
       gdk_drawable_get_size (offscreen_box->offscreen_window1, &w, &h);
-      gtk_cairo_paint_flat_box (gtk_widget_get_style (widget), cr,
+      gtk_paint_flat_box (gtk_widget_get_style (widget), cr,
                           GTK_STATE_NORMAL, GTK_SHADOW_NONE,
                           widget, "blah",
                           0, 0, w, h);
@@ -644,7 +644,7 @@ gtk_offscreen_box_draw (GtkWidget *widget,
       gint w, h;
 
       gdk_drawable_get_size (offscreen_box->offscreen_window2, &w, &h);
-      gtk_cairo_paint_flat_box (gtk_widget_get_style (widget), cr,
+      gtk_paint_flat_box (gtk_widget_get_style (widget), cr,
                           GTK_STATE_NORMAL, GTK_SHADOW_NONE,
                           widget, "blah",
                           0, 0, w, h);

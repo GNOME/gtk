@@ -781,7 +781,7 @@ gtk_viewport_draw (GtkWidget *widget,
     {
       gdk_drawable_get_size (gtk_widget_get_window (widget),
                              &w, &h);
-      gtk_cairo_paint_shadow (gtk_widget_get_style (widget),
+      gtk_paint_shadow (gtk_widget_get_style (widget),
                         cr,
                         GTK_STATE_NORMAL, priv->shadow_type,
                         widget, "viewport",
@@ -792,7 +792,7 @@ gtk_viewport_draw (GtkWidget *widget,
     {
       gdk_window_get_position (priv->bin_window, &x, &y);
       gdk_drawable_get_size (priv->bin_window, &w, &h);
-      gtk_cairo_paint_flat_box (gtk_widget_get_style (widget), cr,
+      gtk_paint_flat_box (gtk_widget_get_style (widget), cr,
                           GTK_STATE_NORMAL, GTK_SHADOW_NONE,
                           widget, "viewportbin",
                           x, y, w, h);

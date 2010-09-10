@@ -4081,7 +4081,7 @@ gtk_label_draw (GtkWidget *widget,
       x -= allocation.x;
       y -= allocation.y;
 
-      gtk_cairo_paint_layout (style,
+      gtk_paint_layout (style,
                         cr,
                         gtk_widget_get_state (widget),
 			FALSE,
@@ -4203,7 +4203,7 @@ gtk_label_draw (GtkWidget *widget,
                                                        1);
               cairo_region_get_extents (clip, &rect);
 
-              gtk_cairo_paint_focus (style, cr, gtk_widget_get_state (widget),
+              gtk_paint_focus (style, cr, gtk_widget_get_state (widget),
                                widget, "label",
                                rect.x, rect.y, rect.width, rect.height);
 

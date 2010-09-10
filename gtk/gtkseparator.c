@@ -214,13 +214,13 @@ gtk_separator_draw (GtkWidget    *widget,
   if (private->orientation == GTK_ORIENTATION_HORIZONTAL)
     {
       if (wide_separators)
-        gtk_cairo_paint_box (style, cr,
+        gtk_paint_box (style, cr,
                        gtk_widget_get_state (widget), GTK_SHADOW_ETCHED_OUT,
                        widget, "hseparator",
                        0, (height - separator_height) / 2,
                        width, separator_height);
       else
-        gtk_cairo_paint_hline (style, cr,
+        gtk_paint_hline (style, cr,
                          gtk_widget_get_state (widget),
                          widget, "hseparator",
                          0, width - 1,
@@ -229,13 +229,13 @@ gtk_separator_draw (GtkWidget    *widget,
   else
     {
       if (wide_separators)
-        gtk_cairo_paint_box (style, cr,
+        gtk_paint_box (style, cr,
                        gtk_widget_get_state (widget), GTK_SHADOW_ETCHED_OUT,
                        widget, "vseparator",
                        (width - separator_width) / 2, 0,
                        separator_width, height);
       else
-        gtk_cairo_paint_vline (style, cr,
+        gtk_paint_vline (style, cr,
                          gtk_widget_get_state (widget),
                          widget, "vseparator",
                          0, height - 1,

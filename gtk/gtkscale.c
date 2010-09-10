@@ -1066,7 +1066,7 @@ gtk_scale_draw (GtkWidget *widget,
                   max_pos = find_next_pos (widget, m, marks + i, GTK_POS_TOP, 0) - min_sep;
                 }
 
-              gtk_cairo_paint_vline (style, cr, state_type,
+              gtk_paint_vline (style, cr, state_type,
                                widget, "scale-mark", y1, y2, x1);
 
               if (mark->markup)
@@ -1092,7 +1092,7 @@ gtk_scale_draw (GtkWidget *widget,
                       min_pos_after = x3 + logical_rect.width + min_sep;
                     }
 
-                  gtk_cairo_paint_layout (style, cr, state_type,
+                  gtk_paint_layout (style, cr, state_type,
                                     FALSE, widget, "scale-mark",
                                     x3, y3, layout);
                 }
@@ -1115,7 +1115,7 @@ gtk_scale_draw (GtkWidget *widget,
                 }
               y1 = marks[i];
 
-              gtk_cairo_paint_hline (style, cr, state_type,
+              gtk_paint_hline (style, cr, state_type,
                                widget, "range-mark", x1, x2, y1);
 
               if (mark->markup)
@@ -1141,7 +1141,7 @@ gtk_scale_draw (GtkWidget *widget,
                       min_pos_after = y3 + logical_rect.height + min_sep;
                     }
 
-                  gtk_cairo_paint_layout (style, cr, state_type,
+                  gtk_paint_layout (style, cr, state_type,
                                     FALSE, widget, "scale-mark",
                                     x3, y3, layout);
                 }
@@ -1165,7 +1165,7 @@ gtk_scale_draw (GtkWidget *widget,
       gtk_scale_get_layout_offsets (scale, &x, &y);
       gtk_widget_get_allocation (widget, &allocation);
 
-      gtk_cairo_paint_layout (style,
+      gtk_paint_layout (style,
                         cr,
                         state_type,
 			FALSE,

@@ -890,7 +890,7 @@ completion_feedback_window_draw_cb (GtkWidget *widget,
 
   GtkFileChooserEntry *chooser_entry = GTK_FILE_CHOOSER_ENTRY (data);
 
-  gtk_cairo_paint_flat_box (gtk_widget_get_style (chooser_entry->completion_feedback_window),
+  gtk_paint_flat_box (gtk_widget_get_style (chooser_entry->completion_feedback_window),
                       cr,
 		      GTK_STATE_NORMAL,
 		      GTK_SHADOW_OUT,

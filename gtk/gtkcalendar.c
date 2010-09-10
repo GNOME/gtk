@@ -2343,7 +2343,7 @@ calendar_paint_header (GtkCalendar *calendar, cairo_t *cr)
   max_month_width = priv->max_month_width;
   max_year_width = priv->max_year_width;
 
-  gtk_cairo_paint_shadow (style, cr,
+  gtk_paint_shadow (style, cr,
 		    GTK_STATE_NORMAL, GTK_SHADOW_OUT,
 		    widget, "calendar",
 		    0, 0, header_width, priv->header_h);
@@ -2814,7 +2814,7 @@ calendar_paint_day (GtkCalendar *calendar,
       else
 	state = GTK_STATE_NORMAL;
 
-      gtk_cairo_paint_focus (style, cr,
+      gtk_paint_focus (style, cr,
 	               state, widget, "calendar-day",
 		       day_rect.x,     day_rect.y, 
 		       day_rect.width, day_rect.height);
@@ -2889,12 +2889,12 @@ calendar_paint_arrow (GtkCalendar *calendar,
       
       gdk_drawable_get_size (window, &width, &height);
       if (arrow == ARROW_MONTH_LEFT || arrow == ARROW_YEAR_LEFT)
-        gtk_cairo_paint_arrow (style, cr, state,
+        gtk_paint_arrow (style, cr, state,
 			 GTK_SHADOW_OUT, widget, "calendar",
 			 GTK_ARROW_LEFT, TRUE, 
 			 width/2 - 3, height/2 - 4, 8, 8);
       else 
-        gtk_cairo_paint_arrow (style, cr, state,
+        gtk_paint_arrow (style, cr, state,
 			 GTK_SHADOW_OUT, widget, "calendar",
 			 GTK_ARROW_RIGHT, TRUE, 
 			 width/2 - 4, height/2 - 4, 8, 8);
@@ -2913,7 +2913,7 @@ gtk_calendar_draw (GtkWidget *widget,
 
   if (gtk_cairo_should_draw_window (cr, gtk_widget_get_window (widget)))
     {
-      gtk_cairo_paint_shadow (gtk_widget_get_style (widget), cr,
+      gtk_paint_shadow (gtk_widget_get_style (widget), cr,
                         gtk_widget_get_state (widget), GTK_SHADOW_IN,
                         widget, "calendar",
                         0, 0,

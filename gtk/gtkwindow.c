@@ -6669,7 +6669,7 @@ gtk_window_draw (GtkWidget *widget,
 		 cairo_t   *cr)
 {
   if (!gtk_widget_get_app_paintable (widget))
-    gtk_cairo_paint_flat_box (gtk_widget_get_style (widget),
+    gtk_paint_flat_box (gtk_widget_get_style (widget),
                         cr,
                         GTK_STATE_NORMAL,
                         GTK_SHADOW_NONE, widget, "base",

@@ -1147,7 +1147,7 @@ gtk_paned_draw (GtkWidget *widget,
       else
 	state = gtk_widget_get_state (widget);
 
-      gtk_cairo_paint_handle (gtk_widget_get_style (widget),
+      gtk_paint_handle (gtk_widget_get_style (widget),
                         cr,
 			state, GTK_SHADOW_NONE,
 			widget, "paned",

@@ -937,7 +937,7 @@ gtk_radio_button_draw_indicator (GtkCheckButton *check_button,
 
   if (gtk_widget_get_state (widget) == GTK_STATE_PRELIGHT)
     {
-      gtk_cairo_paint_flat_box (style, cr,
+      gtk_paint_flat_box (style, cr,
                           GTK_STATE_PRELIGHT,
                           GTK_SHADOW_ETCHED_OUT, 
                           widget, "checkbutton",
@@ -946,7 +946,7 @@ gtk_radio_button_draw_indicator (GtkCheckButton *check_button,
                           allocation.height - (2 * border_width));
     }
 
-  gtk_cairo_paint_option (style, cr,
+  gtk_paint_option (style, cr,
                     state_type, shadow_type,
                     widget, "radiobutton",
                     x, y, indicator_size, indicator_size);

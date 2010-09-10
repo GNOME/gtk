@@ -259,7 +259,7 @@ gtk_spinner_draw (GtkWidget *widget,
   if (!gtk_widget_is_sensitive (widget))
    state_type = GTK_STATE_INSENSITIVE;
 
-  gtk_cairo_paint_spinner (gtk_widget_get_style (widget),
+  gtk_paint_spinner (gtk_widget_get_style (widget),
                      cr,
                      state_type,
                      widget,

@@ -314,7 +314,7 @@ gtk_info_bar_draw (GtkWidget      *widget,
 
       detail = type_detail[priv->message_type];
 
-      gtk_cairo_paint_box (gtk_widget_get_style (widget),
+      gtk_paint_box (gtk_widget_get_style (widget),
                      cr,
                      GTK_STATE_NORMAL,
                      GTK_SHADOW_OUT,

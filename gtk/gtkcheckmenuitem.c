@@ -519,14 +519,14 @@ gtk_real_check_menu_item_draw_indicator (GtkCheckMenuItem *check_menu_item,
 
 	  if (priv->draw_as_radio)
 	    {
-              gtk_cairo_paint_option (style, cr,
+              gtk_paint_option (style, cr,
 				state_type, shadow_type,
 				widget, "option",
 				x, y, indicator_size, indicator_size);
 	    }
 	  else
 	    {
-              gtk_cairo_paint_check (style, cr,
+              gtk_paint_check (style, cr,
 			       state_type, shadow_type,
 			       widget, "check",
 			       x, y, indicator_size, indicator_size);

@@ -1121,7 +1121,7 @@ gtk_scrolled_window_draw (GtkWidget *widget,
           relative_allocation.height = gtk_widget_get_allocated_height (widget) - 2 * border_width;
         }
 
-      gtk_cairo_paint_shadow (style,
+      gtk_paint_shadow (style,
                         cr,
 			GTK_STATE_NORMAL, priv->shadow_type,
 			widget, "scrolled_window",

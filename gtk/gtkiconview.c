@@ -1625,7 +1625,7 @@ gtk_icon_view_draw (GtkWidget *widget,
       switch (dest_pos)
 	{
 	case GTK_ICON_VIEW_DROP_INTO:
-	  gtk_cairo_paint_focus (style,
+	  gtk_paint_focus (style,
                                  cr,
                                  state,
                                  widget,
@@ -1634,7 +1634,7 @@ gtk_icon_view_draw (GtkWidget *widget,
                                  dest_item->width, dest_item->height);
 	  break;
 	case GTK_ICON_VIEW_DROP_ABOVE:
-	  gtk_cairo_paint_focus (style,
+	  gtk_paint_focus (style,
                                  cr,
                                  state,
                                  widget,
@@ -1643,7 +1643,7 @@ gtk_icon_view_draw (GtkWidget *widget,
                                  dest_item->width, 2);
 	  break;
 	case GTK_ICON_VIEW_DROP_LEFT:
-	  gtk_cairo_paint_focus (style,
+	  gtk_paint_focus (style,
                                  cr,
                                  state,
                                  widget,
@@ -1652,7 +1652,7 @@ gtk_icon_view_draw (GtkWidget *widget,
                                  2, dest_item->height);
 	  break;
 	case GTK_ICON_VIEW_DROP_BELOW:
-	  gtk_cairo_paint_focus (style,
+	  gtk_paint_focus (style,
                                  cr,
                                  state,
                                  widget,
@@ -1661,7 +1661,7 @@ gtk_icon_view_draw (GtkWidget *widget,
                                  dest_item->width, 2);
 	  break;
 	case GTK_ICON_VIEW_DROP_RIGHT:
-	  gtk_cairo_paint_focus (style,
+	  gtk_paint_focus (style,
                                  cr,
                                  state,
                                  widget,
@@ -3217,7 +3217,7 @@ gtk_icon_view_paint_item (GtkIconView     *icon_view,
 
   if (item->selected)
     {
-      gtk_cairo_paint_flat_box (style,
+      gtk_paint_flat_box (style,
                           cr,
                           GTK_STATE_SELECTED,
                           GTK_SHADOW_NONE,
@@ -3267,7 +3267,7 @@ gtk_icon_view_paint_item (GtkIconView     *icon_view,
 
           if (i == icon_view->priv->cursor_cell)
             {
-              gtk_cairo_paint_focus (style,
+              gtk_paint_focus (style,
                                cr,
                                GTK_STATE_NORMAL,
                                widget,
@@ -3284,7 +3284,7 @@ gtk_icon_view_paint_item (GtkIconView     *icon_view,
        * around the whole item.
        */
       if (icon_view->priv->cursor_cell < 0)
-        gtk_cairo_paint_focus (style,
+        gtk_paint_focus (style,
                          cr,
                          GTK_STATE_NORMAL,
                          widget,

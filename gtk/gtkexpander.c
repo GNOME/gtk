@@ -767,7 +767,7 @@ gtk_expander_paint_prelight (GtkExpander *expander, cairo_t *cr)
   area.height = MAX (area.height, expander_size + 2 * expander_spacing);
   area.height += !interior_focus ? (focus_width + focus_pad) * 2 : 0;
 
-  gtk_cairo_paint_flat_box (gtk_widget_get_style (widget),
+  gtk_paint_flat_box (gtk_widget_get_style (widget),
                       cr,
 		      GTK_STATE_PRELIGHT,
 		      GTK_SHADOW_ETCHED_OUT,
@@ -797,7 +797,7 @@ gtk_expander_paint (GtkExpander *expander, cairo_t *cr)
       gtk_expander_paint_prelight (expander, cr);
     }
 
-  gtk_cairo_paint_expander (gtk_widget_get_style (widget),
+  gtk_paint_expander (gtk_widget_get_style (widget),
 		      cr,
 		      state,
 		      widget,
@@ -886,7 +886,7 @@ gtk_expander_paint_focus (GtkExpander *expander,
       height = rect.height + 2 * focus_pad;
     }
 
-  gtk_cairo_paint_focus (gtk_widget_get_style (widget),
+  gtk_paint_focus (gtk_widget_get_style (widget),
                    cr,
                    gtk_widget_get_state (widget),
 		   widget, "expander",

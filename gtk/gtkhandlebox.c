@@ -764,7 +764,7 @@ gtk_handle_box_draw_ghost (GtkHandleBox *hb,
   window = gtk_widget_get_window (widget);
   state = gtk_widget_get_state (widget);
 
-  gtk_cairo_paint_shadow (style,
+  gtk_paint_shadow (style,
 		    cr,
 		    state,
 		    GTK_SHADOW_ETCHED_IN,
@@ -775,7 +775,7 @@ gtk_handle_box_draw_ghost (GtkHandleBox *hb,
 		    height);
    if (handle_position == GTK_POS_LEFT ||
        handle_position == GTK_POS_RIGHT)
-     gtk_cairo_paint_hline (style,
+     gtk_paint_hline (style,
 		      cr,
 		      state,
 		      widget, "handlebox",
@@ -783,7 +783,7 @@ gtk_handle_box_draw_ghost (GtkHandleBox *hb,
 		      handle_position == GTK_POS_LEFT ? allocation_width : allocation_width - DRAG_HANDLE_SIZE,
 		      allocation_height / 2);
    else
-     gtk_cairo_paint_vline (style,
+     gtk_paint_vline (style,
 		      cr,
 		      state,
 		      widget, "handlebox",
@@ -936,7 +936,7 @@ gtk_handle_box_paint (GtkWidget      *widget,
 
   gdk_drawable_get_size (priv->bin_window, &width, &height);
 
-  gtk_cairo_paint_box (gtk_widget_get_style (widget),
+  gtk_paint_box (gtk_widget_get_style (widget),
                  cr,
                  gtk_widget_get_state (widget),
                  priv->shadow_type,
@@ -978,7 +978,7 @@ gtk_handle_box_paint (GtkWidget      *widget,
       break;
     }
 
-  gtk_cairo_paint_handle (gtk_widget_get_style (widget), cr,
+  gtk_paint_handle (gtk_widget_get_style (widget), cr,
                     GTK_STATE_NORMAL, GTK_SHADOW_OUT,
                     widget, "handlebox",
                     rect.x, rect.y, rect.width, rect.height, 

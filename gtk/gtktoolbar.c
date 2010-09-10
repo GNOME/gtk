@@ -822,7 +822,7 @@ gtk_toolbar_draw (GtkWidget *widget,
 
   border_width = gtk_container_get_border_width (GTK_CONTAINER (widget));
 
-  gtk_cairo_paint_box (gtk_widget_get_style (widget),
+  gtk_paint_box (gtk_widget_get_style (widget),
                  cr,
                  gtk_widget_get_state (widget),
                  get_shadow_type (toolbar),
@@ -3650,7 +3650,7 @@ _gtk_toolbar_paint_space_line (GtkWidget           *widget,
                             NULL);
 
       if (wide_separators)
-        gtk_cairo_paint_box (style, cr,
+        gtk_paint_box (style, cr,
                        state, GTK_SHADOW_ETCHED_OUT,
                        widget, "vseparator",
                        (width - separator_width) / 2,
@@ -3658,7 +3658,7 @@ _gtk_toolbar_paint_space_line (GtkWidget           *widget,
                        separator_width,
                        height * (end_fraction - start_fraction));
       else
-        gtk_cairo_paint_vline (style, cr,
+        gtk_paint_vline (style, cr,
                          state, widget,
                          "toolbar",
                          height * start_fraction,
@@ -3676,7 +3676,7 @@ _gtk_toolbar_paint_space_line (GtkWidget           *widget,
                             NULL);
 
       if (wide_separators)
-        gtk_cairo_paint_box (style, cr,
+        gtk_paint_box (style, cr,
                        state, GTK_SHADOW_ETCHED_OUT,
                        widget, "hseparator",
                        width * start_fraction,
@@ -3684,7 +3684,7 @@ _gtk_toolbar_paint_space_line (GtkWidget           *widget,
                        width * (end_fraction - start_fraction),
                        separator_height);
       else
-        gtk_cairo_paint_hline (style, cr,
+        gtk_paint_hline (style, cr,
                          state, widget,
                          "toolbar",
                          width * start_fraction,

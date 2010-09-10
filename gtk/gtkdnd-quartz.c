@@ -349,7 +349,7 @@ gtk_drag_highlight_draw (GtkWidget *widget,
   int width = gtk_widget_get_allocated_width (widget);
   int height = gtk_widget_get_allocated_height (widget);
 
-  gtk_cairo_paint_shadow (gtk_widget_get_style (widget), cr,
+  gtk_paint_shadow (gtk_widget_get_style (widget), cr,
                     GTK_STATE_NORMAL, GTK_SHADOW_OUT,
                     widget, "dnd",
                     0, 0, width, height);

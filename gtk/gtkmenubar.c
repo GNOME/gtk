@@ -523,7 +523,7 @@ gtk_menu_bar_draw (GtkWidget *widget,
 
   border = gtk_container_get_border_width (GTK_CONTAINER (widget));
 
-  gtk_cairo_paint_box (gtk_widget_get_style (widget),
+  gtk_paint_box (gtk_widget_get_style (widget),
                  cr,
                  gtk_widget_get_state (widget),
                  get_shadow_type (GTK_MENU_BAR (widget)),

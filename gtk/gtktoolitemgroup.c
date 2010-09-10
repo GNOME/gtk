@@ -297,7 +297,7 @@ gtk_tool_item_group_header_draw_cb (GtkWidget *widget,
       expander_style = GTK_EXPANDER_EXPANDED - expander_style;
     }
 
-  gtk_cairo_paint_expander (gtk_widget_get_style (widget),
+  gtk_paint_expander (gtk_widget_get_style (widget),
                       cr,
                       gtk_widget_get_state (priv->header),
                       GTK_WIDGET (group),

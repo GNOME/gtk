@@ -163,7 +163,7 @@ gtk_check_button_paint (GtkWidget    *widget,
           GtkAllocation child_allocation;
 
           gtk_widget_get_allocation (child, &child_allocation);
-          gtk_cairo_paint_focus (style, cr, state,
+          gtk_paint_focus (style, cr, state,
                            widget, "checkbutton",
                            child_allocation.x - allocation.x - focus_width - focus_pad,
                            child_allocation.y - allocation.y - focus_width - focus_pad,
@@ -172,7 +172,7 @@ gtk_check_button_paint (GtkWidget    *widget,
         }
       else
         {
-          gtk_cairo_paint_focus (style, cr, state,
+          gtk_paint_focus (style, cr, state,
                            widget, "checkbutton",
                            border_width,
                            border_width,
@@ -420,7 +420,7 @@ gtk_real_check_button_draw_indicator (GtkCheckButton *check_button,
   if (gtk_widget_get_state (widget) == GTK_STATE_PRELIGHT)
     {
 
-      gtk_cairo_paint_flat_box (style, cr, GTK_STATE_PRELIGHT,
+      gtk_paint_flat_box (style, cr, GTK_STATE_PRELIGHT,
                           GTK_SHADOW_ETCHED_OUT, 
                           widget, "checkbutton",
                           border_width, border_width,
@@ -428,7 +428,7 @@ gtk_real_check_button_draw_indicator (GtkCheckButton *check_button,
                           allocation.height - (2 * border_width));
     }
 
-  gtk_cairo_paint_check (style, cr,
+  gtk_paint_check (style, cr,
                    state_type, shadow_type,
                    widget, "checkbutton",
                    x, y, indicator_size, indicator_size);

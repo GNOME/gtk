@@ -701,7 +701,7 @@ gtk_ruler_real_draw_ticks (GtkRuler *ruler,
 
   gdk_cairo_set_source_color (cr, &style->fg[gtk_widget_get_state (widget)]);
 
-  gtk_cairo_paint_box (style, cr,
+  gtk_paint_box (style, cr,
                        GTK_STATE_NORMAL, GTK_SHADOW_OUT,
                        widget,
                        priv->orientation == GTK_ORIENTATION_HORIZONTAL ?
@@ -822,7 +822,7 @@ gtk_ruler_real_draw_ticks (GtkRuler *ruler,
                   pango_layout_set_text (layout, unit_str, -1);
                   pango_layout_get_extents (layout, &logical_rect, NULL);
 
-                  gtk_cairo_paint_layout (style,
+                  gtk_paint_layout (style,
                                           cr,
                                           gtk_widget_get_state (widget),
                                           FALSE,
@@ -838,7 +838,7 @@ gtk_ruler_real_draw_ticks (GtkRuler *ruler,
                       pango_layout_set_text (layout, unit_str + j, 1);
                       pango_layout_get_extents (layout, NULL, &logical_rect);
 
-                      gtk_cairo_paint_layout (style,
+                      gtk_paint_layout (style,
                                               cr,
                                               gtk_widget_get_state (widget),
                                               FALSE,

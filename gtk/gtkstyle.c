@@ -2498,7 +2498,7 @@ gtk_default_draw_box (GtkStyle      *style,
       return;
     }
 
-  gtk_cairo_paint_shadow (style, cr, state_type, shadow_type, widget, detail,
+  gtk_paint_shadow (style, cr, state_type, shadow_type, widget, detail,
                           x, y, width, height);
 
   if (detail && strcmp (detail, "optionmenu") == 0)
@@ -2514,7 +2514,7 @@ gtk_default_draw_box (GtkStyle      *style,
       else 
 	vline_x = x + width - (indicator_size.width + indicator_spacing.left + indicator_spacing.right) - style->xthickness;
 
-      gtk_cairo_paint_vline (style, cr, state_type, widget,
+      gtk_paint_vline (style, cr, state_type, widget,
                              detail,
                              y + style->ythickness + 1,
                              y + height - style->ythickness - 3,
@@ -3667,7 +3667,7 @@ gtk_default_draw_slider (GtkStyle      *style,
                          gint           height,
                          GtkOrientation orientation)
 {
-  gtk_cairo_paint_box (style, cr, state_type, shadow_type,
+  gtk_paint_box (style, cr, state_type, shadow_type,
                        widget, detail, x, y, width, height);
 
   if (detail &&
@@ -3675,11 +3675,11 @@ gtk_default_draw_slider (GtkStyle      *style,
        strcmp ("vscale", detail) == 0))
     {
       if (orientation == GTK_ORIENTATION_HORIZONTAL)
-        gtk_cairo_paint_vline (style, cr, state_type, widget, detail, 
+        gtk_paint_vline (style, cr, state_type, widget, detail, 
                                y + style->ythickness, 
                                y + height - style->ythickness - 1, x + width / 2);
       else
-        gtk_cairo_paint_hline (style, cr, state_type, widget, detail, 
+        gtk_paint_hline (style, cr, state_type, widget, detail, 
                                x + style->xthickness, 
                                x + width - style->xthickness - 1, y + height / 2);
     }
@@ -3728,7 +3728,7 @@ gtk_default_draw_handle (GtkStyle      *style,
   gint xthick, ythick;
   GdkColor light, dark;
   
-  gtk_cairo_paint_box (style, cr, state_type, shadow_type, widget, 
+  gtk_paint_box (style, cr, state_type, shadow_type, widget, 
                        detail, x, y, width, height);
   
   if (detail && !strcmp (detail, "paned"))
@@ -4504,7 +4504,7 @@ hls_to_rgb (gdouble *h,
 
 
 /**
- * gtk_cairo_paint_hline:
+ * gtk_paint_hline:
  * @style: a #GtkStyle
  * @cr: a #caio_t
  * @state_type: a state
@@ -4518,14 +4518,14 @@ hls_to_rgb (gdouble *h,
  * using the given style and state.
  **/ 
 void 
-gtk_cairo_paint_hline (GtkStyle           *style,
-                       cairo_t            *cr,
-                       GtkStateType        state_type,
-                       GtkWidget          *widget,
-                       const gchar        *detail,
-                       gint                x1,
-                       gint                x2,
-                       gint                y)
+gtk_paint_hline (GtkStyle           *style,
+                 cairo_t            *cr,
+                 GtkStateType        state_type,
+                 GtkWidget          *widget,
+                 const gchar        *detail,
+                 gint                x1,
+                 gint                x2,
+                 gint                y)
 {
   g_return_if_fail (GTK_IS_STYLE (style));
   g_return_if_fail (cr != NULL);
@@ -4541,7 +4541,7 @@ gtk_cairo_paint_hline (GtkStyle           *style,
 }
 
 /**
- * gtk_cairo_paint_vline:
+ * gtk_paint_vline:
  * @style: a #GtkStyle
  * @cr: a #cairo_t
  * @state_type: a state
@@ -4555,14 +4555,14 @@ gtk_cairo_paint_hline (GtkStyle           *style,
  * using the given style and state.
  */
 void
-gtk_cairo_paint_vline (GtkStyle           *style,
-                       cairo_t            *cr,
-                       GtkStateType        state_type,
-                       GtkWidget          *widget,
-                       const gchar        *detail,
-                       gint                y1_,
-                       gint                y2_,
-                       gint                x)
+gtk_paint_vline (GtkStyle           *style,
+                 cairo_t            *cr,
+                 GtkStateType        state_type,
+                 GtkWidget          *widget,
+                 const gchar        *detail,
+                 gint                y1_,
+                 gint                y2_,
+                 gint                x)
 {
   g_return_if_fail (GTK_IS_STYLE (style));
   g_return_if_fail (cr != NULL);
@@ -4578,7 +4578,7 @@ gtk_cairo_paint_vline (GtkStyle           *style,
 }
 
 /**
- * gtk_cairo_paint_shadow:
+ * gtk_paint_shadow:
  * @style: a #GtkStyle
  * @cr: a #cairo_t
  * @state_type: a state
@@ -4594,16 +4594,16 @@ gtk_cairo_paint_vline (GtkStyle           *style,
  * using the given style and state and shadow type.
  */
 void
-gtk_cairo_paint_shadow (GtkStyle           *style,
-                        cairo_t            *cr,
-                        GtkStateType        state_type,
-                        GtkShadowType       shadow_type,
-                        GtkWidget          *widget,
-                        const gchar        *detail,
-                        gint                x,
-                        gint                y,
-                        gint                width,
-                        gint                height)
+gtk_paint_shadow (GtkStyle           *style,
+                  cairo_t            *cr,
+                  GtkStateType        state_type,
+                  GtkShadowType       shadow_type,
+                  GtkWidget          *widget,
+                  const gchar        *detail,
+                  gint                x,
+                  gint                y,
+                  gint                width,
+                  gint                height)
 {
   g_return_if_fail (GTK_IS_STYLE (style));
   g_return_if_fail (GTK_STYLE_GET_CLASS (style)->draw_shadow != NULL);
@@ -4621,7 +4621,7 @@ gtk_cairo_paint_shadow (GtkStyle           *style,
 }
 
 /**
- * gtk_cairo_paint_arrow:
+ * gtk_paint_arrow:
  * @style: a #GtkStyle
  * @cr: a #cairo_t
  * @state_type: a state
@@ -4639,18 +4639,18 @@ gtk_cairo_paint_shadow (GtkStyle           *style,
  * parameters. @arrow_type determines the direction of the arrow.
  */
 void
-gtk_cairo_paint_arrow (GtkStyle           *style,
-                       cairo_t            *cr,
-                       GtkStateType        state_type,
-                       GtkShadowType       shadow_type,
-                       GtkWidget          *widget,
-                       const gchar        *detail,
-                       GtkArrowType        arrow_type,
-                       gboolean            fill,
-                       gint                x,
-                       gint                y,
-                       gint                width,
-                       gint                height)
+gtk_paint_arrow (GtkStyle           *style,
+                 cairo_t            *cr,
+                 GtkStateType        state_type,
+                 GtkShadowType       shadow_type,
+                 GtkWidget          *widget,
+                 const gchar        *detail,
+                 GtkArrowType        arrow_type,
+                 gboolean            fill,
+                 gint                x,
+                 gint                y,
+                 gint                width,
+                 gint                height)
 {
   g_return_if_fail (GTK_IS_STYLE (style));
   g_return_if_fail (GTK_STYLE_GET_CLASS (style)->draw_arrow != NULL);
@@ -4668,7 +4668,7 @@ gtk_cairo_paint_arrow (GtkStyle           *style,
 }
 
 /**
- * gtk_cairo_paint_diamond:
+ * gtk_paint_diamond:
  * @style: a #GtkStyle
  * @cr: a #cairo_t
  * @state_type: a state
@@ -4684,16 +4684,16 @@ gtk_cairo_paint_arrow (GtkStyle           *style,
  * parameters.
  */
 void
-gtk_cairo_paint_diamond (GtkStyle           *style,
-                         cairo_t            *cr,
-                         GtkStateType        state_type,
-                         GtkShadowType       shadow_type,
-                         GtkWidget          *widget,
-                         const gchar        *detail,
-                         gint                x,
-                         gint                y,
-                         gint                width,
-                         gint                height)
+gtk_paint_diamond (GtkStyle           *style,
+                   cairo_t            *cr,
+                   GtkStateType        state_type,
+                   GtkShadowType       shadow_type,
+                   GtkWidget          *widget,
+                   const gchar        *detail,
+                   gint                x,
+                   gint                y,
+                   gint                width,
+                   gint                height)
 {
   g_return_if_fail (GTK_IS_STYLE (style));
   g_return_if_fail (GTK_STYLE_GET_CLASS (style)->draw_diamond != NULL);
@@ -4711,7 +4711,7 @@ gtk_cairo_paint_diamond (GtkStyle           *style,
 }
 
 /**
- * gtk_cairo_paint_box:
+ * gtk_paint_box:
  * @style: a #GtkStyle
  * @cr: a #cairo_t
  * @state_type: a state
@@ -4726,16 +4726,16 @@ gtk_cairo_paint_diamond (GtkStyle           *style,
  * Draws a box on @cr with the given parameters.
  */
 void
-gtk_cairo_paint_box (GtkStyle           *style,
-                     cairo_t            *cr,
-                     GtkStateType        state_type,
-                     GtkShadowType       shadow_type,
-                     GtkWidget          *widget,
-                     const gchar        *detail,
-                     gint                x,
-                     gint                y,
-                     gint                width,
-                     gint                height)
+gtk_paint_box (GtkStyle           *style,
+               cairo_t            *cr,
+               GtkStateType        state_type,
+               GtkShadowType       shadow_type,
+               GtkWidget          *widget,
+               const gchar        *detail,
+               gint                x,
+               gint                y,
+               gint                width,
+               gint                height)
 {
   g_return_if_fail (GTK_IS_STYLE (style));
   g_return_if_fail (GTK_STYLE_GET_CLASS (style)->draw_box != NULL);
@@ -4751,7 +4751,7 @@ gtk_cairo_paint_box (GtkStyle           *style,
 }
 
 /**
- * gtk_cairo_paint_flat_box:
+ * gtk_paint_flat_box:
  * @style: a #GtkStyle
  * @cr: a #cairo_t
  * @state_type: a state
@@ -4768,16 +4768,16 @@ gtk_cairo_paint_box (GtkStyle           *style,
  * Draws a flat box on @cr with the given parameters.
  */
 void
-gtk_cairo_paint_flat_box (GtkStyle           *style,
-                          cairo_t            *cr,
-                          GtkStateType        state_type,
-                          GtkShadowType       shadow_type,
-                          GtkWidget          *widget,
-                          const gchar        *detail,
-                          gint                x,
-                          gint                y,
-                          gint                width,
-                          gint                height)
+gtk_paint_flat_box (GtkStyle           *style,
+                    cairo_t            *cr,
+                    GtkStateType        state_type,
+                    GtkShadowType       shadow_type,
+                    GtkWidget          *widget,
+                    const gchar        *detail,
+                    gint                x,
+                    gint                y,
+                    gint                width,
+                    gint                height)
 {
   g_return_if_fail (GTK_IS_STYLE (style));
   g_return_if_fail (GTK_STYLE_GET_CLASS (style)->draw_flat_box != NULL);
@@ -4795,7 +4795,7 @@ gtk_cairo_paint_flat_box (GtkStyle           *style,
 }
 
 /**
- * gtk_cairo_paint_check:
+ * gtk_paint_check:
  * @style: a #GtkStyle
  * @cr: a #cairo_t
  * @state_type: a state
@@ -4811,16 +4811,16 @@ gtk_cairo_paint_flat_box (GtkStyle           *style,
  * the given parameters.
  */
 void
-gtk_cairo_paint_check (GtkStyle           *style,
-                       cairo_t            *cr,
-                       GtkStateType        state_type,
-                       GtkShadowType       shadow_type,
-                       GtkWidget          *widget,
-                       const gchar        *detail,
-                       gint                x,
-                       gint                y,
-                       gint                width,
-                       gint                height)
+gtk_paint_check (GtkStyle           *style,
+                 cairo_t            *cr,
+                 GtkStateType        state_type,
+                 GtkShadowType       shadow_type,
+                 GtkWidget          *widget,
+                 const gchar        *detail,
+                 gint                x,
+                 gint                y,
+                 gint                width,
+                 gint                height)
 {
   g_return_if_fail (GTK_IS_STYLE (style));
   g_return_if_fail (GTK_STYLE_GET_CLASS (style)->draw_check != NULL);
@@ -4836,7 +4836,7 @@ gtk_cairo_paint_check (GtkStyle           *style,
 }
 
 /**
- * gtk_cairo_paint_option:
+ * gtk_paint_option:
  * @style: a #GtkStyle
  * @cr: a #cairo_t
  * @state_type: a state
@@ -4852,16 +4852,16 @@ gtk_cairo_paint_check (GtkStyle           *style,
  * the given parameters.
  */
 void
-gtk_cairo_paint_option (GtkStyle           *style,
-                        cairo_t            *cr,
-                        GtkStateType        state_type,
-                        GtkShadowType       shadow_type,
-                        GtkWidget          *widget,
-                        const gchar        *detail,
-                        gint                x,
-                        gint                y,
-                        gint                width,
-                        gint                height)
+gtk_paint_option (GtkStyle           *style,
+                  cairo_t            *cr,
+                  GtkStateType        state_type,
+                  GtkShadowType       shadow_type,
+                  GtkWidget          *widget,
+                  const gchar        *detail,
+                  gint                x,
+                  gint                y,
+                  gint                width,
+                  gint                height)
 {
   g_return_if_fail (GTK_IS_STYLE (style));
   g_return_if_fail (GTK_STYLE_GET_CLASS (style)->draw_option != NULL);
@@ -4877,7 +4877,7 @@ gtk_cairo_paint_option (GtkStyle           *style,
 }
 
 /**
- * gtk_cairo_paint_tab:
+ * gtk_paint_tab:
  * @style: a #GtkStyle
  * @cr: a #cairo_t
  * @state_type: a state
@@ -4893,16 +4893,16 @@ gtk_cairo_paint_option (GtkStyle           *style,
  * in the given rectangle on @cr using the given parameters.
  */ 
 void
-gtk_cairo_paint_tab (GtkStyle           *style,
-                     cairo_t            *cr,
-                     GtkStateType        state_type,
-                     GtkShadowType       shadow_type,
-                     GtkWidget          *widget,
-                     const gchar        *detail,
-                     gint                x,
-                     gint                y,
-                     gint                width,
-                     gint                height)
+gtk_paint_tab (GtkStyle           *style,
+               cairo_t            *cr,
+               GtkStateType        state_type,
+               GtkShadowType       shadow_type,
+               GtkWidget          *widget,
+               const gchar        *detail,
+               gint                x,
+               gint                y,
+               gint                width,
+               gint                height)
 {
   g_return_if_fail (GTK_IS_STYLE (style));
   g_return_if_fail (GTK_STYLE_GET_CLASS (style)->draw_tab != NULL);
@@ -4918,7 +4918,7 @@ gtk_cairo_paint_tab (GtkStyle           *style,
 }
 
 /**
- * gtk_cairo_paint_shadow_gap:
+ * gtk_paint_shadow_gap:
  * @style: a #GtkStyle
  * @cr: a #cairo_t
  * @state_type: a state
@@ -4938,19 +4938,19 @@ gtk_cairo_paint_tab (GtkStyle           *style,
  * gap in one side.
 */
 void
-gtk_cairo_paint_shadow_gap (GtkStyle           *style,
-                            cairo_t            *cr,
-                            GtkStateType        state_type,
-                            GtkShadowType       shadow_type,
-                            GtkWidget          *widget,
-                            const gchar        *detail,
-                            gint                x,
-                            gint                y,
-                            gint                width,
-                            gint                height,
-                            GtkPositionType     gap_side,
-                            gint                gap_x,
-                            gint                gap_width)
+gtk_paint_shadow_gap (GtkStyle           *style,
+                      cairo_t            *cr,
+                      GtkStateType        state_type,
+                      GtkShadowType       shadow_type,
+                      GtkWidget          *widget,
+                      const gchar        *detail,
+                      gint                x,
+                      gint                y,
+                      gint                width,
+                      gint                height,
+                      GtkPositionType     gap_side,
+                      gint                gap_x,
+                      gint                gap_width)
 {
   g_return_if_fail (GTK_IS_STYLE (style));
   g_return_if_fail (GTK_STYLE_GET_CLASS (style)->draw_shadow_gap != NULL);
@@ -4968,7 +4968,7 @@ gtk_cairo_paint_shadow_gap (GtkStyle           *style,
 }
 
 /**
- * gtk_cairo_paint_box_gap:
+ * gtk_paint_box_gap:
  * @style: a #GtkStyle
  * @cr: a #cairo_t
  * @state_type: a state
@@ -4987,19 +4987,19 @@ gtk_cairo_paint_shadow_gap (GtkStyle           *style,
  * leaving a gap in one side.
  */
 void
-gtk_cairo_paint_box_gap (GtkStyle           *style,
-                         cairo_t            *cr,
-                         GtkStateType        state_type,
-                         GtkShadowType       shadow_type,
-                         GtkWidget          *widget,
-                         const gchar        *detail,
-                         gint                x,
-                         gint                y,
-                         gint                width,
-                         gint                height,
-                         GtkPositionType     gap_side,
-                         gint                gap_x,
-                         gint                gap_width)
+gtk_paint_box_gap (GtkStyle           *style,
+                   cairo_t            *cr,
+                   GtkStateType        state_type,
+                   GtkShadowType       shadow_type,
+                   GtkWidget          *widget,
+                   const gchar        *detail,
+                   gint                x,
+                   gint                y,
+                   gint                width,
+                   gint                height,
+                   GtkPositionType     gap_side,
+                   gint                gap_x,
+                   gint                gap_width)
 {
   g_return_if_fail (GTK_IS_STYLE (style));
   g_return_if_fail (GTK_STYLE_GET_CLASS (style)->draw_box_gap != NULL);
@@ -5017,7 +5017,7 @@ gtk_cairo_paint_box_gap (GtkStyle           *style,
 }
 
 /**
- * gtk_cairo_paint_extension: 
+ * gtk_paint_extension: 
  * @style: a #GtkStyle
  * @cr: a #cairo_t
  * @state_type: a state
@@ -5033,17 +5033,17 @@ gtk_cairo_paint_box_gap (GtkStyle           *style,
  * Draws an extension, i.e. a notebook tab.
  **/
 void
-gtk_cairo_paint_extension (GtkStyle           *style,
-                           cairo_t            *cr,
-                           GtkStateType        state_type,
-                           GtkShadowType       shadow_type,
-                           GtkWidget          *widget,
-                           const gchar        *detail,
-                           gint                x,
-                           gint                y,
-                           gint                width,
-                           gint                height,
-                           GtkPositionType     gap_side)
+gtk_paint_extension (GtkStyle           *style,
+                     cairo_t            *cr,
+                     GtkStateType        state_type,
+                     GtkShadowType       shadow_type,
+                     GtkWidget          *widget,
+                     const gchar        *detail,
+                     gint                x,
+                     gint                y,
+                     gint                width,
+                     gint                height,
+                     GtkPositionType     gap_side)
 {
   g_return_if_fail (GTK_IS_STYLE (style));
   g_return_if_fail (GTK_STYLE_GET_CLASS (style)->draw_extension != NULL);
@@ -5061,7 +5061,7 @@ gtk_cairo_paint_extension (GtkStyle           *style,
 }
 
 /**
- * gtk_cairo_paint_focus:
+ * gtk_paint_focus:
  * @style: a #GtkStyle
  * @cr: a #cairo_t
  * @state_type: a state
@@ -5076,15 +5076,15 @@ gtk_cairo_paint_extension (GtkStyle           *style,
  * given style.
  */
 void
-gtk_cairo_paint_focus (GtkStyle           *style,
-                       cairo_t            *cr,
-                       GtkStateType        state_type,
-                       GtkWidget          *widget,
-                       const gchar        *detail,
-                       gint                x,
-                       gint                y,
-                       gint                width,
-                       gint                height)
+gtk_paint_focus (GtkStyle           *style,
+                 cairo_t            *cr,
+                 GtkStateType        state_type,
+                 GtkWidget          *widget,
+                 const gchar        *detail,
+                 gint                x,
+                 gint                y,
+                 gint                width,
+                 gint                height)
 {
   g_return_if_fail (GTK_IS_STYLE (style));
   g_return_if_fail (GTK_STYLE_GET_CLASS (style)->draw_focus != NULL);
@@ -5102,7 +5102,7 @@ gtk_cairo_paint_focus (GtkStyle           *style,
 }
 
 /**
- * gtk_cairo_paint_slider:
+ * gtk_paint_slider:
  * @style: a #GtkStyle
  * @cr: a #cairo_t
  * @state_type: a state
@@ -5119,17 +5119,17 @@ gtk_cairo_paint_focus (GtkStyle           *style,
  * given style and orientation.
  **/
 void
-gtk_cairo_paint_slider (GtkStyle           *style,
-                        cairo_t            *cr,
-                        GtkStateType        state_type,
-                        GtkShadowType       shadow_type,
-                        GtkWidget          *widget,
-                        const gchar        *detail,
-                        gint                x,
-                        gint                y,
-                        gint                width,
-                        gint                height,
-                        GtkOrientation      orientation)
+gtk_paint_slider (GtkStyle           *style,
+                  cairo_t            *cr,
+                  GtkStateType        state_type,
+                  GtkShadowType       shadow_type,
+                  GtkWidget          *widget,
+                  const gchar        *detail,
+                  gint                x,
+                  gint                y,
+                  gint                width,
+                  gint                height,
+                  GtkOrientation      orientation)
 {
   g_return_if_fail (GTK_IS_STYLE (style));
   g_return_if_fail (GTK_STYLE_GET_CLASS (style)->draw_slider != NULL);
@@ -5147,7 +5147,7 @@ gtk_cairo_paint_slider (GtkStyle           *style,
 }
 
 /**
- * gtk_cairo_paint_handle:
+ * gtk_paint_handle:
  * @style: a #GtkStyle
  * @cr: a #cairo_t
  * @state_type: a state
@@ -5163,17 +5163,17 @@ gtk_cairo_paint_slider (GtkStyle           *style,
  * Draws a handle as used in #GtkHandleBox and #GtkPaned.
  **/
 void
-gtk_cairo_paint_handle (GtkStyle           *style,
-                        cairo_t            *cr,
-                        GtkStateType        state_type,
-                        GtkShadowType       shadow_type,
-                        GtkWidget          *widget,
-                        const gchar        *detail,
-                        gint                x,
-                        gint                y,
-                        gint                width,
-                        gint                height,
-                        GtkOrientation      orientation)
+gtk_paint_handle (GtkStyle           *style,
+                  cairo_t            *cr,
+                  GtkStateType        state_type,
+                  GtkShadowType       shadow_type,
+                  GtkWidget          *widget,
+                  const gchar        *detail,
+                  gint                x,
+                  gint                y,
+                  gint                width,
+                  gint                height,
+                  GtkOrientation      orientation)
 {
   g_return_if_fail (GTK_IS_STYLE (style));
   g_return_if_fail (GTK_STYLE_GET_CLASS (style)->draw_handle != NULL);
@@ -5191,7 +5191,7 @@ gtk_cairo_paint_handle (GtkStyle           *style,
 }
 
 /**
- * gtk_cairo_paint_expander:
+ * gtk_paint_expander:
  * @style: a #GtkStyle
  * @cr: a #cairo_t
  * @state_type: a state
@@ -5214,14 +5214,14 @@ gtk_cairo_paint_handle (GtkStyle           *style,
  * expanded position.
  **/
 void
-gtk_cairo_paint_expander (GtkStyle           *style,
-                          cairo_t            *cr,
-                          GtkStateType        state_type,
-                          GtkWidget          *widget,
-                          const gchar        *detail,
-                          gint                x,
-                          gint                y,
-                          GtkExpanderStyle    expander_style)
+gtk_paint_expander (GtkStyle           *style,
+                    cairo_t            *cr,
+                    GtkStateType        state_type,
+                    GtkWidget          *widget,
+                    const gchar        *detail,
+                    gint                x,
+                    gint                y,
+                    GtkExpanderStyle    expander_style)
 {
   g_return_if_fail (GTK_IS_STYLE (style));
   g_return_if_fail (GTK_STYLE_GET_CLASS (style)->draw_expander != NULL);
@@ -5237,7 +5237,7 @@ gtk_cairo_paint_expander (GtkStyle           *style,
 }
 
 /**
- * gtk_cairo_paint_layout:
+ * gtk_paint_layout:
  * @style: a #GtkStyle
  * @cr: a #cairo_t
  * @state_type: a state
@@ -5252,15 +5252,15 @@ gtk_cairo_paint_expander (GtkStyle           *style,
  * Draws a layout on @cr using the given parameters.
  **/
 void
-gtk_cairo_paint_layout (GtkStyle           *style,
-                        cairo_t            *cr,
-                        GtkStateType        state_type,
-                        gboolean            use_text,
-                        GtkWidget          *widget,
-                        const gchar        *detail,
-                        gint                x,
-                        gint                y,
-                        PangoLayout        *layout)
+gtk_paint_layout (GtkStyle           *style,
+                  cairo_t            *cr,
+                  GtkStateType        state_type,
+                  gboolean            use_text,
+                  GtkWidget          *widget,
+                  const gchar        *detail,
+                  gint                x,
+                  gint                y,
+                  PangoLayout        *layout)
 {
   g_return_if_fail (GTK_IS_STYLE (style));
   g_return_if_fail (GTK_STYLE_GET_CLASS (style)->draw_layout != NULL);
@@ -5276,7 +5276,7 @@ gtk_cairo_paint_layout (GtkStyle           *style,
 }
 
 /**
- * gtk_cairo_paint_resize_grip:
+ * gtk_paint_resize_grip:
  * @style: a #GtkStyle
  * @cr: a #cairo_t
  * @state_type: a state
@@ -5292,16 +5292,16 @@ gtk_cairo_paint_layout (GtkStyle           *style,
  * parameters. 
  */
 void
-gtk_cairo_paint_resize_grip (GtkStyle           *style,
-                             cairo_t            *cr,
-                             GtkStateType        state_type,
-                             GtkWidget          *widget,
-                             const gchar        *detail,
-                             GdkWindowEdge       edge,
-                             gint                x,
-                             gint                y,
-                             gint                width,
-                             gint                height)
+gtk_paint_resize_grip (GtkStyle           *style,
+                       cairo_t            *cr,
+                       GtkStateType        state_type,
+                       GtkWidget          *widget,
+                       const gchar        *detail,
+                       GdkWindowEdge       edge,
+                       gint                x,
+                       gint                y,
+                       gint                width,
+                       gint                height)
 {
   g_return_if_fail (GTK_IS_STYLE (style));
   g_return_if_fail (GTK_STYLE_GET_CLASS (style)->draw_resize_grip != NULL);
@@ -5316,7 +5316,7 @@ gtk_cairo_paint_resize_grip (GtkStyle           *style,
 }
 
 /**
- * gtk_cairo_paint_spinner:
+ * gtk_paint_spinner:
  * @style: a #GtkStyle
  * @cr: a #cairo_t
  * @state_type: a state
@@ -5331,16 +5331,16 @@ gtk_cairo_paint_resize_grip (GtkStyle           *style,
  * Draws a spinner on @window using the given parameters.
  */
 void
-gtk_cairo_paint_spinner (GtkStyle           *style,
-                         cairo_t            *cr,
-                         GtkStateType        state_type,
-                         GtkWidget          *widget,
-                         const gchar        *detail,
-                         guint               step,
-                         gint                x,
-                         gint                y,
-                         gint                width,
-                         gint                height)
+gtk_paint_spinner (GtkStyle           *style,
+                   cairo_t            *cr,
+                   GtkStateType        state_type,
+                   GtkWidget          *widget,
+                   const gchar        *detail,
+                   guint               step,
+                   gint                x,
+                   gint                y,
+                   gint                width,
+                   gint                height)
 {
   g_return_if_fail (GTK_IS_STYLE (style));
   g_return_if_fail (cr != NULL);

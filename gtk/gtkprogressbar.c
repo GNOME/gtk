@@ -685,7 +685,7 @@ gtk_progress_bar_paint_activity (GtkProgressBar *pbar,
       area.width = width - 2 * style->xthickness;
     }
 
-  gtk_cairo_paint_box (style,
+  gtk_paint_box (style,
                  cr,
                  GTK_STATE_PRELIGHT, GTK_SHADOW_OUT,
                  widget, "bar",
@@ -731,7 +731,7 @@ gtk_progress_bar_paint_continuous (GtkProgressBar *pbar,
         area.y = height - amount - area.y;
     }
 
-  gtk_cairo_paint_box (style,
+  gtk_paint_box (style,
                  cr,
                  GTK_STATE_PRELIGHT, GTK_SHADOW_OUT,
                  widget, "bar",
@@ -838,7 +838,7 @@ gtk_progress_bar_paint_text (GtkProgressBar *pbar,
       cairo_save (cr);
       gdk_cairo_rectangle (cr, &start_clip);
       cairo_clip (cr);
-      gtk_cairo_paint_layout (style,
+      gtk_paint_layout (style,
                         cr,
                         GTK_STATE_NORMAL,
                         FALSE,
@@ -854,7 +854,7 @@ gtk_progress_bar_paint_text (GtkProgressBar *pbar,
       cairo_save (cr);
       gdk_cairo_rectangle (cr, &end_clip);
       cairo_clip (cr);
-      gtk_cairo_paint_layout (style,
+      gtk_paint_layout (style,
                         cr,
                         GTK_STATE_NORMAL,
                         FALSE,
@@ -868,7 +868,7 @@ gtk_progress_bar_paint_text (GtkProgressBar *pbar,
   cairo_save (cr);
   gdk_cairo_rectangle (cr, &prelight_clip);
   cairo_clip (cr);
-  gtk_cairo_paint_layout (style,
+  gtk_paint_layout (style,
                     cr,
                     GTK_STATE_PRELIGHT,
                     FALSE,
@@ -905,7 +905,7 @@ gtk_progress_bar_draw (GtkWidget      *widget,
   width = gtk_widget_get_allocated_width (widget);
   height = gtk_widget_get_allocated_height (widget);
 
-  gtk_cairo_paint_box (style,
+  gtk_paint_box (style,
                  cr,
                  GTK_STATE_NORMAL, GTK_SHADOW_IN,
                  widget, "trough",

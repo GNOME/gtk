@@ -4227,7 +4227,7 @@ draw_empty_focus (GtkTreeView *tree_view, cairo_t *cr)
   h -= 2;
 
   if (w > 0 && h > 0)
-    gtk_cairo_paint_focus (gtk_widget_get_style (widget),
+    gtk_paint_focus (gtk_widget_get_style (widget),
                      cr,
 		     gtk_widget_get_state (widget),
 		     widget,
@@ -4403,7 +4403,7 @@ gtk_tree_view_bin_draw (GtkWidget      *widget,
 
   if (tree_view->priv->height < bin_window_height)
     {
-      gtk_cairo_paint_flat_box (style,
+      gtk_paint_flat_box (style,
                           cr,
                           gtk_widget_get_state (widget),
                           GTK_SHADOW_NONE,
@@ -4665,7 +4665,7 @@ gtk_tree_view_bin_draw (GtkWidget      *widget,
 	  else
 	    g_snprintf (new_detail, 127, "%s_middle", detail);
 
-	  gtk_cairo_paint_flat_box (style,
+	  gtk_paint_flat_box (style,
 			      cr,
 			      state,
 			      GTK_SHADOW_NONE,
@@ -4697,7 +4697,7 @@ gtk_tree_view_bin_draw (GtkWidget      *widget,
 	      expander_cell_width = cell_area.width;
 
 	      if (is_separator)
-		gtk_cairo_paint_hline (style,
+		gtk_paint_hline (style,
 				 cr,
 				 state,
 				 widget,
@@ -4731,7 +4731,7 @@ gtk_tree_view_bin_draw (GtkWidget      *widget,
 	  else
 	    {
 	      if (is_separator)
-		gtk_cairo_paint_hline (style,
+		gtk_paint_hline (style,
 				 cr,
 				 state,
 				 widget,
@@ -4882,7 +4882,7 @@ gtk_tree_view_bin_draw (GtkWidget      *widget,
 	      gdk_drawable_get_size (tree_view->priv->bin_window,
 				     &width, NULL);
 
-	      gtk_cairo_paint_focus (style,
+	      gtk_paint_focus (style,
 			       cr,
 			       gtk_widget_get_state (widget),
 			       widget,
@@ -4936,7 +4936,7 @@ gtk_tree_view_bin_draw (GtkWidget      *widget,
 	      tmp_height = ROW_HEIGHT (tree_view, BACKGROUND_HEIGHT (node));
 	    }
 
-	  gtk_cairo_paint_focus (style,
+	  gtk_paint_focus (style,
 			   cr,
 			   focus_rect_state,
 			   widget,
@@ -9551,7 +9551,7 @@ gtk_tree_view_draw_arrow (GtkTreeView *tree_view,
   else
     expander_style = GTK_EXPANDER_COLLAPSED;
 
-  gtk_cairo_paint_expander (gtk_widget_get_style (widget),
+  gtk_paint_expander (gtk_widget_get_style (widget),
                       cr,
                       state,
                       widget,
@@ -13830,7 +13830,7 @@ gtk_tree_view_create_row_drag_icon (GtkTreeView  *tree_view,
       if (gtk_tree_view_column_cell_is_visible (column))
 	{
 	  if (is_separator)
-	    gtk_cairo_paint_hline (style,
+	    gtk_paint_hline (style,
                                    cr,
                                    GTK_STATE_NORMAL,
                                    widget,

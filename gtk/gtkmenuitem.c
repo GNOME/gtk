@@ -1536,7 +1536,7 @@ gtk_menu_item_draw (GtkWidget *widget,
       gtk_widget_style_get (widget,
                             "selected-shadow-type", &selected_shadow_type,
                             NULL);
-      gtk_cairo_paint_box (style,
+      gtk_paint_box (style,
                      cr,
                      GTK_STATE_PRELIGHT,
                      selected_shadow_type,
@@ -1577,7 +1577,7 @@ gtk_menu_item_draw (GtkWidget *widget,
 
       arrow_y = y + (h - arrow_size) / 2;
 
-      gtk_cairo_paint_arrow (style, cr,
+      gtk_paint_arrow (style, cr,
                        state_type, shadow_type, 
                        widget, "menuitem", 
                        arrow_type, TRUE,
@@ -1597,7 +1597,7 @@ gtk_menu_item_draw (GtkWidget *widget,
                             NULL);
 
       if (wide_separators)
-        gtk_cairo_paint_box (style, cr,
+        gtk_paint_box (style, cr,
                        GTK_STATE_NORMAL, GTK_SHADOW_ETCHED_OUT,
                        widget, "hseparator",
                        horizontal_padding + style->xthickness,
@@ -1605,7 +1605,7 @@ gtk_menu_item_draw (GtkWidget *widget,
                        width - 2 * (horizontal_padding + style->xthickness),
                        separator_height);
       else
-        gtk_cairo_paint_hline (style, cr,
+        gtk_paint_hline (style, cr,
                          GTK_STATE_NORMAL, widget, "menuitem",
                          horizontal_padding + style->xthickness,
                          width - horizontal_padding - style->xthickness - 1,
