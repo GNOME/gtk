@@ -296,11 +296,6 @@ atk_action_interface_init (AtkActionIface *iface)
   iface->get_keybinding = gail_cell_action_get_keybinding;
 }
 
-void
-gail_cell_type_add_action_interface (GType type)
-{
-}
-
 gboolean
 gail_cell_add_action (GailCell    *cell,
 		      const gchar *action_name,

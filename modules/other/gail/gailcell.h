@@ -80,9 +80,6 @@ gboolean gail_cell_remove_state          (GailCell        *cell,
                                           AtkStateType    state_type,
                                           gboolean        emit_signal);
 
-void     gail_cell_type_add_action_interface 
-                                         (GType           type);
-
 gboolean gail_cell_add_action            (GailCell        *cell,
 		                          const gchar     *action_name,
 		                          const gchar     *action_description,
