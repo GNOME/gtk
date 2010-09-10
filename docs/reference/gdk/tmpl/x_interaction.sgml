@@ -41,6 +41,8 @@ The current display.
 
 @Returns: an Xlib <type>Display*</type>.
 
+@Deprecated: 2.22: Use gdk_display_get_default ()
+
 
 <!-- ##### MACRO GDK_WINDOW_XDISPLAY ##### -->
 <para>

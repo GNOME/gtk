@@ -34,7 +34,7 @@
 
 G_BEGIN_DECLS
 
-#ifndef GDK_MULTIHEAD_SAFE
+#if !defined (GDK_DISABLE_DEPRECATED) && !defined (GDK_MULTIHEAD_SAFE) && defined (GDK_COMPILATION)
 extern Display          *gdk_display;
 #endif
 
@@ -75,7 +75,7 @@ gint     gdk_x11_get_default_screen       (void);
 #define GDK_IMAGE_XDISPLAY(image)     (gdk_x11_image_get_xdisplay (image))
 #define GDK_IMAGE_XIMAGE(image)       (gdk_x11_image_get_ximage (image))
 
-#ifndef GDK_MULTIHEAD_SAFE
+#if !defined (GDK_DISABLE_DEPRECATED) && !defined (GDK_MULTIHEAD_SAFE) && defined (GDK_COMPILATION)
 #define GDK_DISPLAY()                 gdk_display
 #endif
 
