@@ -1545,19 +1545,6 @@ gtk_default_render_icon (GtkStyle            *style,
 }
 
 static void
-sanitize_size (GdkWindow *window,
-	       gint      *width,
-	       gint      *height)
-{
-  if ((*width == -1) && (*height == -1))
-    gdk_drawable_get_size (window, width, height);
-  else if (*width == -1)
-    gdk_drawable_get_size (window, width, NULL);
-  else if (*height == -1)
-    gdk_drawable_get_size (window, NULL, height);
-}
-
-static void
 _cairo_draw_line (cairo_t  *cr,
                   GdkColor *color,
                   gint      x1,
@@ -4516,63 +4503,6 @@ hls_to_rgb (gdouble *h,
 }
 
 
-static cairo_t *
-gtk_style_cairo_create (GdkWindow *window, const GdkRectangle *area)
-{
-  cairo_t *cr;
-
-  cr = gdk_cairo_create (window);
-
-  if (area)
-    {
-      gdk_cairo_rectangle (cr, area);
-      cairo_clip (cr);
-    }
-
-  return cr;
-}
-
-/**
- * gtk_paint_hline:
- * @style: a #GtkStyle
- * @window: a #GdkWindow
- * @state_type: a state
- * @area: (allow-none): rectangle to which the output is clipped, or %NULL if the
- *        output should not be clipped
- * @widget: (allow-none): the widget
- * @detail: (allow-none): a style detail
- * @x1: the starting x coordinate
- * @x2: the ending x coordinate
- * @y: the y coordinate
- *
- * Draws a horizontal line from (@x1, @y) to (@x2, @y) in @window
- * using the given style and state.
- **/ 
-void 
-gtk_paint_hline (GtkStyle           *style,
-                 GdkWindow          *window,
-                 GtkStateType        state_type,
-                 const GdkRectangle *area,
-                 GtkWidget          *widget,
-                 const gchar        *detail,
-                 gint                x1,
-                 gint                x2,
-                 gint                y)
-{
-  cairo_t *cr;
-
-  g_return_if_fail (GTK_IS_STYLE (style));
-  g_return_if_fail (GTK_STYLE_GET_CLASS (style)->draw_hline != NULL);
-
-  cr = gtk_style_cairo_create (window, area);
-
-  gtk_cairo_paint_hline (style, cr, state_type,
-                         widget, detail,
-                         x1, x2, y);
-
-  cairo_destroy (cr);
-}
-
 /**
  * gtk_cairo_paint_hline:
  * @style: a #GtkStyle
@@ -4611,47 +4541,6 @@ gtk_cairo_paint_hline (GtkStyle           *style,
 }
 
 /**
- * gtk_paint_vline:
- * @style: a #GtkStyle
- * @window: a #GdkWindow
- * @state_type: a state
- * @area: (allow-none): rectangle to which the output is clipped, or %NULL if the
- *        output should not be clipped
- * @widget: (allow-none): the widget
- * @detail: (allow-none): a style detail
- * @y1_: the starting y coordinate
- * @y2_: the ending y coordinate
- * @x: the x coordinate
- *
- * Draws a vertical line from (@x, @y1_) to (@x, @y2_) in @window
- * using the given style and state.
- */
-void
-gtk_paint_vline (GtkStyle           *style,
-                 GdkWindow          *window,
-                 GtkStateType        state_type,
-                 const GdkRectangle *area,
-                 GtkWidget          *widget,
-                 const gchar        *detail,
-                 gint                y1_,
-                 gint                y2_,
-                 gint                x)
-{
-  cairo_t *cr;
-
-  g_return_if_fail (GTK_IS_STYLE (style));
-  g_return_if_fail (GTK_STYLE_GET_CLASS (style)->draw_vline != NULL);
-
-  cr = gtk_style_cairo_create (window, area);
-
-  GTK_STYLE_GET_CLASS (style)->draw_vline (style, cr, state_type,
-                                           widget, detail,
-                                           y1_, y2_, x);
-
-  cairo_destroy (cr);
-}
-
-/**
  * gtk_cairo_paint_vline:
  * @style: a #GtkStyle
  * @cr: a #cairo_t
@@ -4686,53 +4575,6 @@ gtk_cairo_paint_vline (GtkStyle           *style,
                                            y1_, y2_, x);
 
   cairo_restore (cr);
-}
-
-/**
- * gtk_paint_shadow:
- * @style: a #GtkStyle
- * @window: a #GdkWindow
- * @state_type: a state
- * @shadow_type: type of shadow to draw
- * @area: (allow-none): clip rectangle or %NULL if the
- *        output should not be clipped
- * @widget: (allow-none): the widget
- * @detail: (allow-none): a style detail
- * @x: x origin of the rectangle
- * @y: y origin of the rectangle
- * @width: width of the rectangle
- * @height: width of the rectangle
- *
- * Draws a shadow around the given rectangle in @window 
- * using the given style and state and shadow type.
- */
-void
-gtk_paint_shadow (GtkStyle           *style,
-                  GdkWindow          *window,
-                  GtkStateType        state_type,
-                  GtkShadowType       shadow_type,
-                  const GdkRectangle *area,
-                  GtkWidget          *widget,
-                  const gchar        *detail,
-                  gint                x,
-                  gint                y,
-                  gint                width,
-                  gint                height)
-{
-  cairo_t *cr;
-
-  g_return_if_fail (GTK_IS_STYLE (style));
-  g_return_if_fail (GTK_STYLE_GET_CLASS (style)->draw_shadow != NULL);
-
-  sanitize_size (window, &width, &height);
-
-  cr = gtk_style_cairo_create (window, area);
-
-  gtk_cairo_paint_shadow (style, cr, state_type, shadow_type,
-                          widget, detail,
-                          x, y, width, height);
-
-  cairo_destroy (cr);
 }
 
 /**
@@ -4776,57 +4618,6 @@ gtk_cairo_paint_shadow (GtkStyle           *style,
                                             x, y, width, height);
 
   cairo_restore (cr);
-}
-
-/**
- * gtk_paint_arrow:
- * @style: a #GtkStyle
- * @window: a #GdkWindow
- * @state_type: a state
- * @shadow_type: the type of shadow to draw
- * @area: (allow-none): clip rectangle, or %NULL if the
- *        output should not be clipped
- * @widget: (allow-none): the widget
- * @detail: (allow-none): a style detail
- * @arrow_type: the type of arrow to draw
- * @fill: %TRUE if the arrow tip should be filled
- * @x: x origin of the rectangle to draw the arrow in
- * @y: y origin of the rectangle to draw the arrow in
- * @width: width of the rectangle to draw the arrow in
- * @height: height of the rectangle to draw the arrow in
- * 
- * Draws an arrow in the given rectangle on @window using the given 
- * parameters. @arrow_type determines the direction of the arrow.
- */
-void
-gtk_paint_arrow (GtkStyle           *style,
-                 GdkWindow          *window,
-                 GtkStateType        state_type,
-                 GtkShadowType       shadow_type,
-                 const GdkRectangle *area,
-                 GtkWidget          *widget,
-                 const gchar        *detail,
-                 GtkArrowType        arrow_type,
-                 gboolean            fill,
-                 gint                x,
-                 gint                y,
-                 gint                width,
-                 gint                height)
-{
-  cairo_t *cr;
-
-  g_return_if_fail (GTK_IS_STYLE (style));
-  g_return_if_fail (GTK_STYLE_GET_CLASS (style)->draw_arrow != NULL);
-
-  sanitize_size (window, &width, &height);
-
-  cr = gtk_style_cairo_create (window, area);
-
-  gtk_cairo_paint_arrow (style, cr, state_type, shadow_type,
-                         widget, detail,
-                         arrow_type, fill, x, y, width, height);
-
-  cairo_destroy (cr);
 }
 
 /**
@@ -4877,53 +4668,6 @@ gtk_cairo_paint_arrow (GtkStyle           *style,
 }
 
 /**
- * gtk_paint_diamond:
- * @style: a #GtkStyle
- * @window: a #GdkWindow
- * @state_type: a state
- * @shadow_type: the type of shadow to draw
- * @area: (allow-none): clip rectangle, or %NULL if the
- *        output should not be clipped
- * @widget: (allow-none): the widget
- * @detail: (allow-none): a style detail
- * @x: x origin of the rectangle to draw the diamond in
- * @y: y origin of the rectangle to draw the diamond in
- * @width: width of the rectangle to draw the diamond in
- * @height: height of the rectangle to draw the diamond in
- *
- * Draws a diamond in the given rectangle on @window using the given
- * parameters.
- */
-void
-gtk_paint_diamond (GtkStyle           *style,
-                   GdkWindow          *window,
-                   GtkStateType        state_type,
-                   GtkShadowType       shadow_type,
-                   const GdkRectangle *area,
-                   GtkWidget          *widget,
-                   const gchar        *detail,
-                   gint                x,
-                   gint                y,
-                   gint                width,
-                   gint                height)
-{
-  cairo_t *cr;
-
-  g_return_if_fail (GTK_IS_STYLE (style));
-  g_return_if_fail (GTK_STYLE_GET_CLASS (style)->draw_diamond != NULL);
-
-  sanitize_size (window, &width, &height);
-  
-  cr = gtk_style_cairo_create (window, area);
-
-  gtk_cairo_paint_diamond (style, cr, state_type, shadow_type,
-                           widget, detail,
-                           x, y, width, height);
-
-  cairo_destroy (cr);
-}
-
-/**
  * gtk_cairo_paint_diamond:
  * @style: a #GtkStyle
  * @cr: a #cairo_t
@@ -4967,52 +4711,6 @@ gtk_cairo_paint_diamond (GtkStyle           *style,
 }
 
 /**
- * gtk_paint_box:
- * @style: a #GtkStyle
- * @window: a #GdkWindow
- * @state_type: a state
- * @shadow_type: the type of shadow to draw
- * @area: (allow-none): clip rectangle, or %NULL if the
- *        output should not be clipped
- * @widget: (allow-none): the widget
- * @detail: (allow-none): a style detail
- * @x: x origin of the box
- * @y: y origin of the box
- * @width: the width of the box
- * @height: the height of the box
- * 
- * Draws a box on @window with the given parameters.
- */
-void
-gtk_paint_box (GtkStyle           *style,
-               GdkWindow          *window,
-               GtkStateType        state_type,
-               GtkShadowType       shadow_type,
-               const GdkRectangle *area,
-               GtkWidget          *widget,
-               const gchar        *detail,
-               gint                x,
-               gint                y,
-               gint                width,
-               gint                height)
-{
-  cairo_t *cr;
-
-  g_return_if_fail (GTK_IS_STYLE (style));
-  g_return_if_fail (GTK_STYLE_GET_CLASS (style)->draw_box != NULL);
-
-  sanitize_size (window, &width, &height);
-
-  cr = gtk_style_cairo_create (window, area);
-
-  gtk_cairo_paint_box (style, cr, state_type, shadow_type,
-                       widget, detail,
-                       x, y, width, height);
-
-  cairo_destroy (cr);
-}
-
-/**
  * gtk_cairo_paint_box:
  * @style: a #GtkStyle
  * @cr: a #cairo_t
@@ -5050,52 +4748,6 @@ gtk_cairo_paint_box (GtkStyle           *style,
                                          x, y, width, height);
 
   cairo_restore (cr);
-}
-
-/**
- * gtk_paint_flat_box:
- * @style: a #GtkStyle
- * @window: a #GdkWindow
- * @state_type: a state
- * @shadow_type: the type of shadow to draw
- * @area: (allow-none): clip rectangle, or %NULL if the
- *        output should not be clipped
- * @widget: (allow-none): the widget
- * @detail: (allow-none): a style detail
- * @x: x origin of the box
- * @y: y origin of the box
- * @width: the width of the box
- * @height: the height of the box
- * 
- * Draws a flat box on @window with the given parameters.
- */
-void
-gtk_paint_flat_box (GtkStyle           *style,
-                    GdkWindow          *window,
-                    GtkStateType        state_type,
-                    GtkShadowType       shadow_type,
-                    const GdkRectangle *area,
-                    GtkWidget          *widget,
-                    const gchar        *detail,
-                    gint                x,
-                    gint                y,
-                    gint                width,
-                    gint                height)
-{
-  cairo_t *cr;
-
-  g_return_if_fail (GTK_IS_STYLE (style));
-  g_return_if_fail (GTK_STYLE_GET_CLASS (style)->draw_flat_box != NULL);
-
-  sanitize_size (window, &width, &height);
-
-  cr = gtk_style_cairo_create (window, area);
-
-  gtk_cairo_paint_flat_box (style, cr, state_type, shadow_type,
-                            widget, detail,
-                            x, y, width, height);
-
-  cairo_destroy (cr);
 }
 
 /**
@@ -5143,51 +4795,6 @@ gtk_cairo_paint_flat_box (GtkStyle           *style,
 }
 
 /**
- * gtk_paint_check:
- * @style: a #GtkStyle
- * @window: a #GdkWindow
- * @state_type: a state
- * @shadow_type: the type of shadow to draw
- * @area: (allow-none): clip rectangle, or %NULL if the
- *        output should not be clipped
- * @widget: (allow-none): the widget
- * @detail: (allow-none): a style detail
- * @x: x origin of the rectangle to draw the check in
- * @y: y origin of the rectangle to draw the check in
- * @width: the width of the rectangle to draw the check in
- * @height: the height of the rectangle to draw the check in
- * 
- * Draws a check button indicator in the given rectangle on @window with 
- * the given parameters.
- */
-void
-gtk_paint_check (GtkStyle           *style,
-                 GdkWindow          *window,
-                 GtkStateType        state_type,
-                 GtkShadowType       shadow_type,
-                 const GdkRectangle *area,
-                 GtkWidget          *widget,
-                 const gchar        *detail,
-                 gint                x,
-                 gint                y,
-                 gint                width,
-                 gint                height)
-{
-  cairo_t *cr;
-
-  g_return_if_fail (GTK_IS_STYLE (style));
-  g_return_if_fail (GTK_STYLE_GET_CLASS (style)->draw_check != NULL);
-
-  cr = gtk_style_cairo_create (window, area);
-
-  gtk_cairo_paint_check (style, cr, state_type, shadow_type,
-                         widget, detail,
-                         x, y, width, height);
-
-  cairo_destroy (cr);
-}
-
-/**
  * gtk_cairo_paint_check:
  * @style: a #GtkStyle
  * @cr: a #cairo_t
@@ -5226,51 +4833,6 @@ gtk_cairo_paint_check (GtkStyle           *style,
                                            x, y, width, height);
 
   cairo_restore (cr);
-}
-
-/**
- * gtk_paint_option:
- * @style: a #GtkStyle
- * @window: a #GdkWindow
- * @state_type: a state
- * @shadow_type: the type of shadow to draw
- * @area: (allow-none): clip rectangle, or %NULL if the
- *        output should not be clipped
- * @widget: (allow-none): the widget
- * @detail: (allow-none): a style detail
- * @x: x origin of the rectangle to draw the option in
- * @y: y origin of the rectangle to draw the option in
- * @width: the width of the rectangle to draw the option in
- * @height: the height of the rectangle to draw the option in
- *
- * Draws a radio button indicator in the given rectangle on @window with 
- * the given parameters.
- */
-void
-gtk_paint_option (GtkStyle           *style,
-                  GdkWindow          *window,
-                  GtkStateType        state_type,
-                  GtkShadowType       shadow_type,
-                  const GdkRectangle *area,
-                  GtkWidget          *widget,
-                  const gchar        *detail,
-                  gint                x,
-                  gint                y,
-                  gint                width,
-                  gint                height)
-{
-  cairo_t *cr;
-
-  g_return_if_fail (GTK_IS_STYLE (style));
-  g_return_if_fail (GTK_STYLE_GET_CLASS (style)->draw_option != NULL);
-
-  cr = gtk_style_cairo_create (window, area);
-
-  gtk_cairo_paint_option (style, cr, state_type, shadow_type,
-                          widget, detail,
-                          x, y, width, height);
-
-  cairo_destroy (cr);
 }
 
 /**
@@ -5315,51 +4877,6 @@ gtk_cairo_paint_option (GtkStyle           *style,
 }
 
 /**
- * gtk_paint_tab:
- * @style: a #GtkStyle
- * @window: a #GdkWindow
- * @state_type: a state
- * @shadow_type: the type of shadow to draw
- * @area: (allow-none): clip rectangle, or %NULL if the
- *        output should not be clipped
- * @widget: (allow-none): the widget
- * @detail: (allow-none): a style detail
- * @x: x origin of the rectangle to draw the tab in
- * @y: y origin of the rectangle to draw the tab in
- * @width: the width of the rectangle to draw the tab in
- * @height: the height of the rectangle to draw the tab in
- *
- * Draws an option menu tab (i.e. the up and down pointing arrows)
- * in the given rectangle on @window using the given parameters.
- */ 
-void
-gtk_paint_tab (GtkStyle           *style,
-               GdkWindow          *window,
-               GtkStateType        state_type,
-               GtkShadowType       shadow_type,
-               const GdkRectangle *area,
-               GtkWidget          *widget,
-               const gchar        *detail,
-               gint                x,
-               gint                y,
-               gint                width,
-               gint                height)
-{
-  cairo_t *cr;
-
-  g_return_if_fail (GTK_IS_STYLE (style));
-  g_return_if_fail (GTK_STYLE_GET_CLASS (style)->draw_tab != NULL);
-
-  cr = gtk_style_cairo_create (window, area);
-
-  gtk_cairo_paint_tab (style, cr, state_type, shadow_type,
-                       widget, detail,
-                       x, y, width, height);
-
-  cairo_destroy (cr);
-}
-
-/**
  * gtk_cairo_paint_tab:
  * @style: a #GtkStyle
  * @cr: a #cairo_t
@@ -5399,61 +4916,6 @@ gtk_cairo_paint_tab (GtkStyle           *style,
 
   cairo_restore (cr);
 }
-
-/**
- * gtk_paint_shadow_gap:
- * @style: a #GtkStyle
- * @window: a #GdkWindow
- * @state_type: a state
- * @shadow_type: type of shadow to draw
- * @area: (allow-none): clip rectangle, or %NULL if the
- *        output should not be clipped
- * @widget: (allow-none): the widget
- * @detail: (allow-none): a style detail
- * @x: x origin of the rectangle
- * @y: y origin of the rectangle
- * @width: width of the rectangle
- * @height: width of the rectangle
- * @gap_side: side in which to leave the gap
- * @gap_x: starting position of the gap
- * @gap_width: width of the gap
- *
- * Draws a shadow around the given rectangle in @window 
- * using the given style and state and shadow type, leaving a 
- * gap in one side.
-*/
-void
-gtk_paint_shadow_gap (GtkStyle           *style,
-                      GdkWindow          *window,
-                      GtkStateType        state_type,
-                      GtkShadowType       shadow_type,
-                      const GdkRectangle *area,
-                      GtkWidget          *widget,
-                      const gchar        *detail,
-                      gint                x,
-                      gint                y,
-                      gint                width,
-                      gint                height,
-                      GtkPositionType     gap_side,
-                      gint                gap_x,
-                      gint                gap_width)
-{
-  cairo_t *cr;
-
-  g_return_if_fail (GTK_IS_STYLE (style));
-  g_return_if_fail (GTK_STYLE_GET_CLASS (style)->draw_shadow_gap != NULL);
-
-  sanitize_size (window, &width, &height);
-  
-  cr = gtk_style_cairo_create (window, area);
-
-  gtk_cairo_paint_shadow_gap (style, cr, state_type, shadow_type,
-                              widget, detail,
-                              x, y, width, height, gap_side, gap_x, gap_width);
-
-  cairo_destroy (cr);
-}
-
 
 /**
  * gtk_cairo_paint_shadow_gap:
@@ -5503,60 +4965,6 @@ gtk_cairo_paint_shadow_gap (GtkStyle           *style,
                                                 x, y, width, height, gap_side, gap_x, gap_width);
 
   cairo_restore (cr);
-}
-
-
-/**
- * gtk_paint_box_gap:
- * @style: a #GtkStyle
- * @window: a #GdkWindow
- * @state_type: a state
- * @shadow_type: type of shadow to draw
- * @area: (allow-none): clip rectangle, or %NULL if the
- *        output should not be clipped
- * @widget: (allow-none): the widget
- * @detail: (allow-none): a style detail
- * @x: x origin of the rectangle
- * @y: y origin of the rectangle
- * @width: width of the rectangle
- * @height: width of the rectangle
- * @gap_side: side in which to leave the gap
- * @gap_x: starting position of the gap
- * @gap_width: width of the gap
- *
- * Draws a box in @window using the given style and state and shadow type, 
- * leaving a gap in one side.
- */
-void
-gtk_paint_box_gap (GtkStyle           *style,
-                   GdkWindow          *window,
-                   GtkStateType        state_type,
-                   GtkShadowType       shadow_type,
-                   const GdkRectangle *area,
-                   GtkWidget          *widget,
-                   const gchar        *detail,
-                   gint                x,
-                   gint                y,
-                   gint                width,
-                   gint                height,
-                   GtkPositionType     gap_side,
-                   gint                gap_x,
-                   gint                gap_width)
-{
-  cairo_t *cr;
-
-  g_return_if_fail (GTK_IS_STYLE (style));
-  g_return_if_fail (GTK_STYLE_GET_CLASS (style)->draw_box_gap != NULL);
-
-  sanitize_size (window, &width, &height);
-
-  cr = gtk_style_cairo_create (window, area);
-
-  gtk_cairo_paint_box_gap (style, cr, state_type, shadow_type,
-                           widget, detail,
-                           x, y, width, height, gap_side, gap_x, gap_width);
-
-  cairo_destroy (cr);
 }
 
 /**
@@ -5609,54 +5017,6 @@ gtk_cairo_paint_box_gap (GtkStyle           *style,
 }
 
 /**
- * gtk_paint_extension: 
- * @style: a #GtkStyle
- * @window: a #GdkWindow
- * @state_type: a state
- * @shadow_type: type of shadow to draw
- * @area: (allow-none): clip rectangle, or %NULL if the
- *        output should not be clipped
- * @widget: (allow-none): the widget
- * @detail: (allow-none): a style detail
- * @x: x origin of the extension
- * @y: y origin of the extension
- * @width: width of the extension
- * @height: width of the extension
- * @gap_side: the side on to which the extension is attached
- * 
- * Draws an extension, i.e. a notebook tab.
- **/
-void
-gtk_paint_extension (GtkStyle           *style,
-                     GdkWindow          *window,
-                     GtkStateType        state_type,
-                     GtkShadowType       shadow_type,
-                     const GdkRectangle *area,
-                     GtkWidget          *widget,
-                     const gchar        *detail,
-                     gint                x,
-                     gint                y,
-                     gint                width,
-                     gint                height,
-                     GtkPositionType     gap_side)
-{
-  cairo_t *cr;
-
-  g_return_if_fail (GTK_IS_STYLE (style));
-  g_return_if_fail (GTK_STYLE_GET_CLASS (style)->draw_extension != NULL);
-
-  sanitize_size (window, &width, &height);
-
-  cr = gtk_style_cairo_create (window, area);
-
-  gtk_cairo_paint_extension (style, cr, state_type, shadow_type,
-                             widget, detail,
-                             x, y, width, height, gap_side);
-
-  cairo_destroy (cr);
-}
-
-/**
  * gtk_cairo_paint_extension: 
  * @style: a #GtkStyle
  * @cr: a #cairo_t
@@ -5701,51 +5061,6 @@ gtk_cairo_paint_extension (GtkStyle           *style,
 }
 
 /**
- * gtk_paint_focus:
- * @style: a #GtkStyle
- * @window: a #GdkWindow
- * @state_type: a state
- * @area: (allow-none):  clip rectangle, or %NULL if the
- *        output should not be clipped
- * @widget: (allow-none): the widget
- * @detail: (allow-none): a style detail
- * @x: the x origin of the rectangle around which to draw a focus indicator
- * @y: the y origin of the rectangle around which to draw a focus indicator
- * @width: the width of the rectangle around which to draw a focus indicator
- * @height: the height of the rectangle around which to draw a focus indicator
- *
- * Draws a focus indicator around the given rectangle on @window using the
- * given style.
- */
-void
-gtk_paint_focus (GtkStyle           *style,
-                 GdkWindow          *window,
-		 GtkStateType        state_type,
-                 const GdkRectangle *area,
-                 GtkWidget          *widget,
-                 const gchar        *detail,
-                 gint                x,
-                 gint                y,
-                 gint                width,
-                 gint                height)
-{
-  cairo_t *cr;
-
-  g_return_if_fail (GTK_IS_STYLE (style));
-  g_return_if_fail (GTK_STYLE_GET_CLASS (style)->draw_focus != NULL);
-
-  sanitize_size (window, &width, &height);
-
-  cr = gtk_style_cairo_create (window, area);
-
-  gtk_cairo_paint_focus (style, cr, state_type,
-                         widget, detail,
-                         x, y, width, height);
-
-  cairo_destroy (cr);
-}
-
-/**
  * gtk_cairo_paint_focus:
  * @style: a #GtkStyle
  * @cr: a #cairo_t
@@ -5784,55 +5099,6 @@ gtk_cairo_paint_focus (GtkStyle           *style,
                                            x, y, width, height);
 
   cairo_restore (cr);
-}
-
-/**
- * gtk_paint_slider:
- * @style: a #GtkStyle
- * @window: a #GdkWindow
- * @state_type: a state
- * @shadow_type: a shadow
- * @area: (allow-none): clip rectangle, or %NULL if the
- *        output should not be clipped
- * @widget: (allow-none): the widget
- * @detail: (allow-none): a style detail
- * @x: the x origin of the rectangle in which to draw a slider
- * @y: the y origin of the rectangle in which to draw a slider
- * @width: the width of the rectangle in which to draw a slider
- * @height: the height of the rectangle in which to draw a slider
- * @orientation: the orientation to be used
- *
- * Draws a slider in the given rectangle on @window using the
- * given style and orientation.
- **/
-void
-gtk_paint_slider (GtkStyle           *style,
-                  GdkWindow          *window,
-                  GtkStateType        state_type,
-                  GtkShadowType       shadow_type,
-                  const GdkRectangle *area,
-                  GtkWidget          *widget,
-                  const gchar        *detail,
-                  gint                x,
-                  gint                y,
-                  gint                width,
-                  gint                height,
-                  GtkOrientation      orientation)
-{
-  cairo_t *cr;
-
-  g_return_if_fail (GTK_IS_STYLE (style));
-  g_return_if_fail (GTK_STYLE_GET_CLASS (style)->draw_slider != NULL);
-
-  sanitize_size (window, &width, &height);
-
-  cr = gtk_style_cairo_create (window, area);
-
-  GTK_STYLE_GET_CLASS (style)->draw_slider (style, cr, state_type, shadow_type,
-                                            widget, detail,
-                                            x, y, width, height, orientation);
-
-  cairo_destroy (cr);
 }
 
 /**
@@ -5881,54 +5147,6 @@ gtk_cairo_paint_slider (GtkStyle           *style,
 }
 
 /**
- * gtk_paint_handle:
- * @style: a #GtkStyle
- * @window: a #GdkWindow
- * @state_type: a state
- * @shadow_type: type of shadow to draw
- * @area: (allow-none): clip rectangle, or %NULL if the
- *        output should not be clipped
- * @widget: (allow-none): the widget
- * @detail: (allow-none): a style detail
- * @x: x origin of the handle
- * @y: y origin of the handle
- * @width: with of the handle
- * @height: height of the handle
- * @orientation: the orientation of the handle
- * 
- * Draws a handle as used in #GtkHandleBox and #GtkPaned.
- **/
-void
-gtk_paint_handle (GtkStyle           *style,
-                  GdkWindow          *window,
-                  GtkStateType        state_type,
-                  GtkShadowType       shadow_type,
-                  const GdkRectangle *area,
-                  GtkWidget          *widget,
-                  const gchar        *detail,
-                  gint                x,
-                  gint                y,
-                  gint                width,
-                  gint                height,
-                  GtkOrientation      orientation)
-{
-  cairo_t *cr;
-
-  g_return_if_fail (GTK_IS_STYLE (style));
-  g_return_if_fail (GTK_STYLE_GET_CLASS (style)->draw_handle != NULL);
-
-  sanitize_size (window, &width, &height);
-
-  cr = gtk_style_cairo_create (window, area);
-
-  gtk_cairo_paint_handle (style, cr, state_type, shadow_type,
-                          widget, detail,
-                          x, y, width, height, orientation);
-
-  cairo_destroy (cr);
-}
-
-/**
  * gtk_cairo_paint_handle:
  * @style: a #GtkStyle
  * @cr: a #cairo_t
@@ -5970,56 +5188,6 @@ gtk_cairo_paint_handle (GtkStyle           *style,
                                             x, y, width, height, orientation);
 
   cairo_restore (cr);
-}
-
-/**
- * gtk_paint_expander:
- * @style: a #GtkStyle
- * @window: a #GdkWindow
- * @state_type: a state
- * @area: (allow-none): clip rectangle, or %NULL if the
- *        output should not be clipped
- * @widget: (allow-none): the widget
- * @detail: (allow-none): a style detail
- * @x: the x position to draw the expander at
- * @y: the y position to draw the expander at
- * @expander_style: the style to draw the expander in; determines
- *   whether the expander is collapsed, expanded, or in an
- *   intermediate state.
- * 
- * Draws an expander as used in #GtkTreeView. @x and @y specify the
- * center the expander. The size of the expander is determined by the
- * "expander-size" style property of @widget.  (If widget is not
- * specified or doesn't have an "expander-size" property, an
- * unspecified default size will be used, since the caller doesn't
- * have sufficient information to position the expander, this is
- * likely not useful.) The expander is expander_size pixels tall
- * in the collapsed position and expander_size pixels wide in the
- * expanded position.
- **/
-void
-gtk_paint_expander (GtkStyle           *style,
-                    GdkWindow          *window,
-                    GtkStateType        state_type,
-                    const GdkRectangle *area,
-                    GtkWidget          *widget,
-                    const gchar        *detail,
-                    gint                x,
-                    gint                y,
-		    GtkExpanderStyle    expander_style)
-{
-  cairo_t *cr;
-
-  g_return_if_fail (GTK_IS_STYLE (style));
-  g_return_if_fail (GTK_STYLE_GET_CLASS (style)->draw_expander != NULL);
-
-  cr = gtk_style_cairo_create (window, area);
-
-  gtk_cairo_paint_expander (style, cr, state_type,
-                            widget, detail,
-                            x, y, expander_style);
-
-  cairo_destroy (cr);
 }
 
 /**
@@ -6069,49 +5237,6 @@ gtk_cairo_paint_expander (GtkStyle           *style,
 }
 
 /**
- * gtk_paint_layout:
- * @style: a #GtkStyle
- * @window: a #GdkWindow
- * @state_type: a state
- * @use_text: whether to use the text or foreground
- *            graphics context of @style
- * @area: (allow-none): clip rectangle, or %NULL if the
- *        output should not be clipped
- * @widget: (allow-none): the widget
- * @detail: (allow-none): a style detail
- * @x: x origin
- * @y: y origin
- * @layout: the layout to draw
- *
- * Draws a layout on @window using the given parameters.
- **/
-void
-gtk_paint_layout (GtkStyle           *style,
-                  GdkWindow          *window,
-                  GtkStateType        state_type,
-                  gboolean            use_text,
-                  const GdkRectangle *area,
-                  GtkWidget          *widget,
-                  const gchar        *detail,
-                  gint                x,
-                  gint                y,
-                  PangoLayout        *layout)
-{
-  cairo_t *cr;
-
-  g_return_if_fail (GTK_IS_STYLE (style));
-  g_return_if_fail (GTK_STYLE_GET_CLASS (style)->draw_layout != NULL);
-
-  cr = gtk_style_cairo_create (window, area);
-
-  gtk_cairo_paint_layout (style, cr, state_type, use_text,
-                          widget, detail,
-                          x, y, layout);
-
-  cairo_destroy (cr);
-}
-
-/**
  * gtk_cairo_paint_layout:
  * @style: a #GtkStyle
  * @cr: a #cairo_t
@@ -6148,51 +5273,6 @@ gtk_cairo_paint_layout (GtkStyle           *style,
                                             x, y, layout);
 
   cairo_restore (cr);
-}
-
-/**
- * gtk_paint_resize_grip:
- * @style: a #GtkStyle
- * @window: a #GdkWindow
- * @state_type: a state
- * @area: (allow-none): clip rectangle, or %NULL if the
- *        output should not be clipped
- * @widget: (allow-none): the widget
- * @detail: (allow-none): a style detail
- * @edge: the edge in which to draw the resize grip
- * @x: the x origin of the rectangle in which to draw the resize grip
- * @y: the y origin of the rectangle in which to draw the resize grip
- * @width: the width of the rectangle in which to draw the resize grip
- * @height: the height of the rectangle in which to draw the resize grip
- *
- * Draws a resize grip in the given rectangle on @window using the given
- * parameters. 
- */
-void
-gtk_paint_resize_grip (GtkStyle           *style,
-                       GdkWindow          *window,
-                       GtkStateType        state_type,
-                       const GdkRectangle *area,
-                       GtkWidget          *widget,
-                       const gchar        *detail,
-                       GdkWindowEdge       edge,
-                       gint                x,
-                       gint                y,
-                       gint                width,
-                       gint                height)
-
-{
-  cairo_t *cr;
-
-  g_return_if_fail (GTK_IS_STYLE (style));
-  g_return_if_fail (GTK_STYLE_GET_CLASS (style)->draw_resize_grip != NULL);
-
-  cr = gtk_style_cairo_create (window, area);
-
-  GTK_STYLE_GET_CLASS (style)->draw_resize_grip (style, cr, state_type,
-                                                 widget, detail,
-                                                 edge, x, y, width, height);
-  cairo_destroy (cr);
 }
 
 /**
@@ -6233,52 +5313,6 @@ gtk_cairo_paint_resize_grip (GtkStyle           *style,
                                                  widget, detail,
                                                  edge, x, y, width, height);
   cairo_restore (cr);
-}
-
-/**
- * gtk_paint_spinner:
- * @style: a #GtkStyle
- * @window: a #GdkWindow
- * @state_type: a state
- * @area: (allow-none): clip rectangle, or %NULL if the
- *        output should not be clipped
- * @widget: (allow-none): the widget (may be %NULL)
- * @detail: (allow-none): a style detail (may be %NULL)
- * @step: the nth step, a value between 0 and #GtkSpinner:num-steps
- * @x: the x origin of the rectangle in which to draw the spinner
- * @y: the y origin of the rectangle in which to draw the spinner
- * @width: the width of the rectangle in which to draw the spinner
- * @height: the height of the rectangle in which to draw the spinner
- *
- * Draws a spinner on @window using the given parameters.
- *
- * Since: 2.20
- */
-void
-gtk_paint_spinner (GtkStyle           *style,
-		   GdkWindow          *window,
-		   GtkStateType        state_type,
-                   const GdkRectangle *area,
-                   GtkWidget          *widget,
-                   const gchar        *detail,
-		   guint               step,
-		   gint                x,
-		   gint                y,
-		   gint                width,
-		   gint                height)
-{
-  cairo_t *cr;
-
-  g_return_if_fail (GTK_IS_STYLE (style));
-  g_return_if_fail (GTK_STYLE_GET_CLASS (style)->draw_spinner != NULL);
-
-  cr = gtk_style_cairo_create (window, area);
-
-  gtk_cairo_paint_spinner (style, cr, state_type,
-                           widget, detail,
-			   step, x, y, width, height);
-
-  cairo_destroy (cr);
 }
 
 /**
