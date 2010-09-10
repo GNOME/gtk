@@ -2825,6 +2825,30 @@ gtk_container_unmap (GtkWidget *widget)
 			  NULL);
 }
 
+/**
+ * gtk_container_propagate_draw:
+ * @container: a #GtkContainer
+ * @child: a child of @container
+ * @cr: Cairo context as passed to the container. If you want to use @cr
+ *   in container's draw function, consider using cairo_save() and 
+ *   cairo_restore() before calling this function.
+ *
+ * When a container receives a call to the draw function, it must send
+ * synthetic #GtkWidget::draw calls to all children that don't have their
+ * own #GdkWindows. This function provides a convenient way of doing this.
+ * A container, when it receives a call to its #GtkWidget::draw function,
+ * calls gtk_container_propagate_draw() once for each child, passing in
+ * the @cr the container received.
+ *
+ * gtk_container_propagate_draw() takes care of translating the origin of @cr,
+ * and deciding whether the draw needs to be sent to the child. It is a
+ * convenient and optimized way of getting the same effect as calling
+ * gtk_widget_draw() on the child directly.
+ * 
+ * In most cases, a container can simply either inherit the
+ * #GtkWidget::draw implementation from #GtkContainer, or do some drawing 
+ * and then chain to the ::draw implementation from #GtkContainer.
+ **/
 void
 gtk_container_propagate_draw (GtkContainer   *container,
                               GtkWidget      *child,
@@ -2892,57 +2916,6 @@ gtk_container_propagate_draw (GtkContainer   *container,
   _gtk_widget_draw_internal (child, cr, TRUE);
 
   cairo_restore (cr);
-}
-
-/**
- * gtk_container_propagate_expose:
- * @container: a #GtkContainer
- * @child: a child of @container
- * @event: a expose event sent to container
- *
- * When a container receives an expose event, it must send synthetic
- * expose events to all children that don't have their own #GdkWindows.
- * This function provides a convenient way of doing this. A container,
- * when it receives an expose event, calls gtk_container_propagate_expose() 
- * once for each child, passing in the event the container received.
- *
- * gtk_container_propagate_expose() takes care of deciding whether
- * an expose event needs to be sent to the child, intersecting
- * the event's area with the child area, and sending the event.
- * 
- * In most cases, a container can simply either simply inherit the
- * #GtkWidget::expose implementation from #GtkContainer, or, do some drawing 
- * and then chain to the ::expose implementation from #GtkContainer.
- **/
-void
-gtk_container_propagate_expose (GtkContainer   *container,
-				GtkWidget      *child,
-				GdkEventExpose *event)
-{
-  GdkEvent *child_event;
-
-  g_return_if_fail (GTK_IS_CONTAINER (container));
-  g_return_if_fail (GTK_IS_WIDGET (child));
-  g_return_if_fail (event != NULL);
-
-  g_assert (gtk_widget_get_parent (child) == GTK_WIDGET (container));
-
-  if (gtk_widget_is_drawable (child) &&
-      !gtk_widget_get_has_window (child) &&
-      gtk_widget_get_window (child) == event->window)
-    {
-      child_event = gdk_event_new (GDK_EXPOSE);
-      child_event->expose = *event;
-      g_object_ref (child_event->expose.window);
-
-      child_event->expose.region = gtk_widget_region_intersect (child, event->region);
-      if (!cairo_region_is_empty (child_event->expose.region))
-	{
-	  cairo_region_get_extents (child_event->expose.region, &child_event->expose.area);
-	  gtk_widget_send_expose (child, child_event);
-	}
-      gdk_event_free (child_event);
-    }
 }
 
 gboolean
