@@ -1615,6 +1615,8 @@ gtk_style_context_set_screen (GtkStyleContext *context,
   priv->screen = screen;
 
   g_object_notify (G_OBJECT (context), "screen");
+
+  gtk_style_context_invalidate (context);
 }
 
 GdkScreen *
