@@ -30,6 +30,8 @@
 #include "gtkwidget.h"
 #include "gtktypeutils.h"
 #include "gtkprivate.h"
+#include "gtkcssprovider.h"
+#include "gtkversion.h"
 
 #ifdef GDK_WINDOWING_X11
 #include "x11/gdkx.h"
@@ -1339,6 +1341,46 @@ gtk_settings_finalize (GObject *object)
   G_OBJECT_CLASS (gtk_settings_parent_class)->finalize (object);
 }
 
+static void
+settings_init_style (GtkSettings *settings)
+{
+  static GtkCssProvider *css_provider = NULL;
+  GtkCssProvider *default_provider;
+
+  /* Add provider for user file */
+  if (G_UNLIKELY (!css_provider))
+    {
+      GFile *home_dir, *css_file;
+      gchar *filename;
+
+      css_provider = gtk_css_provider_new ();
+      home_dir = g_file_new_for_path (g_get_home_dir ());
+
+      filename = g_strdup_printf (".gtk-%d.0.css", GTK_MAJOR_VERSION);
+      css_file = g_file_get_child (home_dir, filename);
+      g_free (filename);
+
+      if (g_file_query_exists (css_file, NULL))
+        gtk_css_provider_load_from_file (css_provider, css_file, NULL);
+
+      g_object_unref (home_dir);
+      g_object_unref (css_file);
+    }
+
+  gtk_style_context_add_provider_for_screen (settings->screen,
+                                             GTK_STYLE_PROVIDER (css_provider),
+                                             GTK_STYLE_PROVIDER_PRIORITY_USER);
+
+  default_provider = gtk_css_provider_get_default ();
+  gtk_style_context_add_provider_for_screen (settings->screen,
+                                             GTK_STYLE_PROVIDER (default_provider),
+                                             GTK_STYLE_PROVIDER_PRIORITY_FALLBACK);
+
+  gtk_style_context_add_provider_for_screen (settings->screen,
+                                             GTK_STYLE_PROVIDER (settings),
+                                             GTK_STYLE_PROVIDER_PRIORITY_SETTINGS);
+}
+
 /**
  * gtk_settings_get_for_screen:
  * @screen: a #GdkScreen.
@@ -1364,7 +1406,7 @@ gtk_settings_get_for_screen (GdkScreen *screen)
       g_object_set_data_full (G_OBJECT (screen), I_("gtk-settings"), 
 			      settings, g_object_unref);
 
-      gtk_rc_reparse_all_for_settings (settings, TRUE);
+      settings_init_style (settings);
       settings_update_double_click (settings);
 #ifdef GDK_WINDOWING_X11
       settings_update_cursor_theme (settings);
