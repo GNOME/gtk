@@ -506,20 +506,7 @@ struct _GtkWidgetAuxInfo
   guint   h_align : 4;
   guint   v_align : 4;
 
-  /* FIXME GtkBorder uses 32-bit ints for each side which is kinda
-   * bloated; 255 (or even 128) already exceeds 99.99% of actual padding
-   * settings, int16 would exceed 100%, int32 is nuts.  GtkBox uses
-   * uint16.
-   *
-   * Just fix GtkBorder itself? The main danger is probably going signed
-   * to unsigned, rather than 32 to 16.
-   */
-  struct {
-    guint16 left;
-    guint16 right;
-    guint16 top;
-    guint16 bottom;
-  } padding;
+  GtkBorder padding;
 };
 
 struct _GtkWidgetShapeInfo
