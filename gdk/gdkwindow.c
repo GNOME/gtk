@@ -10427,10 +10427,10 @@ _gdk_synthesize_crossing_events_for_geometry_change (GdkWindow *changed_window)
       !toplevel_priv->synthesize_crossing_event_queued)
     {
       toplevel_priv->synthesize_crossing_event_queued = TRUE;
-      g_idle_add_full (GDK_PRIORITY_EVENTS - 1,
-		       do_synthesize_crossing_event,
-		       g_object_ref (toplevel),
-		       g_object_unref);
+      gdk_threads_add_idle_full (GDK_PRIORITY_EVENTS - 1,
+                                 do_synthesize_crossing_event,
+                                 g_object_ref (toplevel),
+                                 g_object_unref);
     }
 }
 
