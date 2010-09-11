@@ -748,7 +748,7 @@ gtk_style_set_get_valist (GtkStyleSet   *set,
         }
       else if (G_VALUE_TYPE (val) == GTK_TYPE_GRADIENT)
         {
-          g_return_val_if_fail (node->property_type == GDK_TYPE_CAIRO_PATTERN, FALSE);
+          g_return_if_fail (node->property_type == GDK_TYPE_CAIRO_PATTERN);
 
           if (!resolve_gradient (set, val))
             val = &node->default_value;
