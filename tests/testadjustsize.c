@@ -354,7 +354,7 @@ open_alignment_window (void)
 }
 
 static GtkWidget*
-create_padded (const char *propname)
+create_margined (const char *propname)
 {
   GtkWidget *widget;
 
@@ -368,34 +368,34 @@ create_padded (const char *propname)
 }
 
 static void
-open_padding_window (void)
+open_margin_window (void)
 {
   GtkWidget *table;
   int i;
-  const char * paddings[] = {
-    "padding-left",
-    "padding-right",
-    "padding-top",
-    "padding-bottom",
-    "padding-all-sides"
+  const char * margins[] = {
+    "margin-left",
+    "margin-right",
+    "margin-top",
+    "margin-bottom",
+    "margin"
   };
 
   test_window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-  gtk_window_set_title (GTK_WINDOW (test_window), "Padding");
+  gtk_window_set_title (GTK_WINDOW (test_window), "Margin");
 
   g_signal_connect (test_window, "delete-event",
                     G_CALLBACK (gtk_main_quit), test_window);
 
   gtk_window_set_resizable (GTK_WINDOW (test_window), TRUE);
 
-  table = gtk_table_new (G_N_ELEMENTS (paddings), 1, FALSE);
+  table = gtk_table_new (G_N_ELEMENTS (margins), 1, FALSE);
 
   gtk_container_add (GTK_CONTAINER (test_window), table);
 
-  for (i = 0; i < (int) G_N_ELEMENTS (paddings); ++i)
+  for (i = 0; i < (int) G_N_ELEMENTS (margins); ++i)
     {
       GtkWidget *child =
-        create_padded(paddings[i]);
+        create_margined(margins[i]);
 
       gtk_table_attach (GTK_TABLE (table),
                         child,
@@ -415,7 +415,7 @@ main (int argc, char *argv[])
   open_test_window ();
   open_control_window ();
   open_alignment_window ();
-  open_padding_window ();
+  open_margin_window ();
 
   gtk_main ();
 

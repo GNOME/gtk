@@ -281,11 +281,11 @@ enum {
   PROP_DOUBLE_BUFFERED,
   PROP_H_ALIGN,
   PROP_V_ALIGN,
-  PROP_PADDING_LEFT,
-  PROP_PADDING_RIGHT,
-  PROP_PADDING_TOP,
-  PROP_PADDING_BOTTOM,
-  PROP_PADDING_ALL_SIDES
+  PROP_MARGIN_LEFT,
+  PROP_MARGIN_RIGHT,
+  PROP_MARGIN_TOP,
+  PROP_MARGIN_BOTTOM,
+  PROP_MARGIN
 };
 
 typedef	struct	_GtkStateData	 GtkStateData;
@@ -903,20 +903,20 @@ gtk_widget_class_init (GtkWidgetClass *klass)
                                                       GTK_PARAM_READWRITE));
 
   /**
-   * GtkWidget:padding-left
+   * GtkWidget:margin-left
    *
-   * Padding on left side of widget.
+   * Margin on left side of widget.
    *
-   * This property adds padding outside of the widget's normal size
-   * request, the padding will be added in addition to the size from
+   * This property adds margin outside of the widget's normal size
+   * request, the margin will be added in addition to the size from
    * gtk_widget_set_size_request() for example.
    *
    * Since: 3.0
    */
   g_object_class_install_property (gobject_class,
-                                   PROP_PADDING_LEFT,
-                                   g_param_spec_int ("padding-left",
-                                                     P_("Padding on Left"),
+                                   PROP_MARGIN_LEFT,
+                                   g_param_spec_int ("margin-left",
+                                                     P_("Margin on Left"),
                                                      P_("Pixels of extra space on the left side"),
                                                      0,
                                                      G_MAXINT16,
@@ -924,20 +924,20 @@ gtk_widget_class_init (GtkWidgetClass *klass)
                                                      GTK_PARAM_READWRITE));
 
   /**
-   * GtkWidget:padding-right
+   * GtkWidget:margin-right
    *
-   * Padding on right side of widget.
+   * Margin on right side of widget.
    *
-   * This property adds padding outside of the widget's normal size
-   * request, the padding will be added in addition to the size from
+   * This property adds margin outside of the widget's normal size
+   * request, the margin will be added in addition to the size from
    * gtk_widget_set_size_request() for example.
    *
    * Since: 3.0
    */
   g_object_class_install_property (gobject_class,
-                                   PROP_PADDING_RIGHT,
-                                   g_param_spec_int ("padding-right",
-                                                     P_("Padding on Right"),
+                                   PROP_MARGIN_RIGHT,
+                                   g_param_spec_int ("margin-right",
+                                                     P_("Margin on Right"),
                                                      P_("Pixels of extra space on the right side"),
                                                      0,
                                                      G_MAXINT16,
@@ -945,20 +945,20 @@ gtk_widget_class_init (GtkWidgetClass *klass)
                                                      GTK_PARAM_READWRITE));
 
   /**
-   * GtkWidget:padding-top
+   * GtkWidget:margin-top
    *
-   * Padding on top side of widget.
+   * Margin on top side of widget.
    *
-   * This property adds padding outside of the widget's normal size
-   * request, the padding will be added in addition to the size from
+   * This property adds margin outside of the widget's normal size
+   * request, the margin will be added in addition to the size from
    * gtk_widget_set_size_request() for example.
    *
    * Since: 3.0
    */
   g_object_class_install_property (gobject_class,
-                                   PROP_PADDING_TOP,
-                                   g_param_spec_int ("padding-top",
-                                                     P_("Padding on Top"),
+                                   PROP_MARGIN_TOP,
+                                   g_param_spec_int ("margin-top",
+                                                     P_("Margin on Top"),
                                                      P_("Pixels of extra space on the top side"),
                                                      0,
                                                      G_MAXINT16,
@@ -966,20 +966,20 @@ gtk_widget_class_init (GtkWidgetClass *klass)
                                                      GTK_PARAM_READWRITE));
 
   /**
-   * GtkWidget:padding-bottom
+   * GtkWidget:margin-bottom
    *
-   * Padding on bottom side of widget.
+   * Margin on bottom side of widget.
    *
-   * This property adds padding outside of the widget's normal size
-   * request, the padding will be added in addition to the size from
+   * This property adds margin outside of the widget's normal size
+   * request, the margin will be added in addition to the size from
    * gtk_widget_set_size_request() for example.
    *
    * Since: 3.0
    */
   g_object_class_install_property (gobject_class,
-                                   PROP_PADDING_BOTTOM,
-                                   g_param_spec_int ("padding-bottom",
-                                                     P_("Padding on Bottom"),
+                                   PROP_MARGIN_BOTTOM,
+                                   g_param_spec_int ("margin-bottom",
+                                                     P_("Margin on Bottom"),
                                                      P_("Pixels of extra space on the bottom side"),
                                                      0,
                                                      G_MAXINT16,
@@ -987,17 +987,17 @@ gtk_widget_class_init (GtkWidgetClass *klass)
                                                      GTK_PARAM_READWRITE));
 
   /**
-   * GtkWidget:padding-all-sides
+   * GtkWidget:margin
    *
-   * Sets all four sides' padding at once. If read, returns max
-   * padding on any side.
+   * Sets all four sides' margin at once. If read, returns max
+   * margin on any side.
    *
    * Since: 3.0
    */
   g_object_class_install_property (gobject_class,
-                                   PROP_PADDING_ALL_SIDES,
-                                   g_param_spec_int ("padding-all-sides",
-                                                     P_("All Paddings"),
+                                   PROP_MARGIN,
+                                   g_param_spec_int ("margin",
+                                                     P_("All Margins"),
                                                      P_("Pixels of extra space on all four sides"),
                                                      0,
                                                      G_MAXINT16,
@@ -2947,24 +2947,24 @@ gtk_widget_set_property (GObject         *object,
     case PROP_V_ALIGN:
       gtk_widget_set_v_align (widget, g_value_get_enum (value));
       break;
-    case PROP_PADDING_LEFT:
-      gtk_widget_set_padding_left (widget, g_value_get_int (value));
+    case PROP_MARGIN_LEFT:
+      gtk_widget_set_margin_left (widget, g_value_get_int (value));
       break;
-    case PROP_PADDING_RIGHT:
-      gtk_widget_set_padding_right (widget, g_value_get_int (value));
+    case PROP_MARGIN_RIGHT:
+      gtk_widget_set_margin_right (widget, g_value_get_int (value));
       break;
-    case PROP_PADDING_TOP:
-      gtk_widget_set_padding_top (widget, g_value_get_int (value));
+    case PROP_MARGIN_TOP:
+      gtk_widget_set_margin_top (widget, g_value_get_int (value));
       break;
-    case PROP_PADDING_BOTTOM:
-      gtk_widget_set_padding_bottom (widget, g_value_get_int (value));
+    case PROP_MARGIN_BOTTOM:
+      gtk_widget_set_margin_bottom (widget, g_value_get_int (value));
       break;
-    case PROP_PADDING_ALL_SIDES:
+    case PROP_MARGIN:
       g_object_freeze_notify (G_OBJECT (widget));
-      gtk_widget_set_padding_left (widget, g_value_get_int (value));
-      gtk_widget_set_padding_right (widget, g_value_get_int (value));
-      gtk_widget_set_padding_top (widget, g_value_get_int (value));
-      gtk_widget_set_padding_bottom (widget, g_value_get_int (value));
+      gtk_widget_set_margin_left (widget, g_value_get_int (value));
+      gtk_widget_set_margin_right (widget, g_value_get_int (value));
+      gtk_widget_set_margin_top (widget, g_value_get_int (value));
+      gtk_widget_set_margin_bottom (widget, g_value_get_int (value));
       g_object_thaw_notify (G_OBJECT (widget));
       break;
     default:
@@ -3083,19 +3083,19 @@ gtk_widget_get_property (GObject         *object,
     case PROP_V_ALIGN:
       g_value_set_enum (value, gtk_widget_get_v_align (widget));
       break;
-    case PROP_PADDING_LEFT:
-      g_value_set_int (value, gtk_widget_get_padding_left (widget));
+    case PROP_MARGIN_LEFT:
+      g_value_set_int (value, gtk_widget_get_margin_left (widget));
       break;
-    case PROP_PADDING_RIGHT:
-      g_value_set_int (value, gtk_widget_get_padding_right (widget));
+    case PROP_MARGIN_RIGHT:
+      g_value_set_int (value, gtk_widget_get_margin_right (widget));
       break;
-    case PROP_PADDING_TOP:
-      g_value_set_int (value, gtk_widget_get_padding_top (widget));
+    case PROP_MARGIN_TOP:
+      g_value_set_int (value, gtk_widget_get_margin_top (widget));
       break;
-    case PROP_PADDING_BOTTOM:
-      g_value_set_int (value, gtk_widget_get_padding_bottom (widget));
+    case PROP_MARGIN_BOTTOM:
+      g_value_set_int (value, gtk_widget_get_margin_bottom (widget));
       break;
-    case PROP_PADDING_ALL_SIDES:
+    case PROP_MARGIN:
       {
         GtkWidgetAuxInfo *aux_info = _gtk_widget_get_aux_info (widget, FALSE);
         if (aux_info == NULL)
@@ -3104,10 +3104,10 @@ gtk_widget_get_property (GObject         *object,
           }
         else
           {
-            g_value_set_int (value, MAX (MAX (aux_info->padding.left,
-                                              aux_info->padding.right),
-                                         MAX (aux_info->padding.top,
-                                              aux_info->padding.bottom)));
+            g_value_set_int (value, MAX (MAX (aux_info->margin.left,
+                                              aux_info->margin.right),
+                                         MAX (aux_info->margin.top,
+                                              aux_info->margin.bottom)));
           }
       }
       break;
@@ -4570,8 +4570,8 @@ get_span_inside_border_horizontal (GtkWidget              *widget,
 {
   get_span_inside_border (widget,
                           aux_info->h_align,
-                          aux_info->padding.left,
-                          aux_info->padding.right,
+                          aux_info->margin.left,
+                          aux_info->margin.right,
                           allocated_outside_width,
                           natural_inside_width,
                           x_inside_p,
@@ -4588,8 +4588,8 @@ get_span_inside_border_vertical (GtkWidget              *widget,
 {
   get_span_inside_border (widget,
                           aux_info->v_align,
-                          aux_info->padding.top,
-                          aux_info->padding.bottom,
+                          aux_info->margin.top,
+                          aux_info->margin.bottom,
                           allocated_outside_height,
                           natural_inside_height,
                           y_inside_p,
@@ -8336,10 +8336,10 @@ gtk_widget_set_usize_internal (GtkWidget *widget,
  * Widgets can't actually be allocated a size less than 1 by 1, but
  * you can pass 0,0 to this function to mean "as small as possible."
  *
- * The size request set here does not include any padding from the
- * #GtkWidget properties padding-left, padding-right, padding-top, and
- * padding-bottom, but it does include pretty much all other padding
- * properties set by any subclass of #GtkWidget.
+ * The size request set here does not include any margin from the
+ * #GtkWidget properties margin-left, margin-right, margin-top, and
+ * margin-bottom, but it does include pretty much all other padding
+ * or border properties set by any subclass of #GtkWidget.
  **/
 void
 gtk_widget_set_size_request (GtkWidget *widget,
@@ -9444,13 +9444,13 @@ gtk_widget_real_adjust_size_request (GtkWidget         *widget,
 
   if (orientation == GTK_ORIENTATION_HORIZONTAL)
     {
-      *minimum_size += (aux_info->padding.left + aux_info->padding.right);
-      *natural_size += (aux_info->padding.left + aux_info->padding.right);
+      *minimum_size += (aux_info->margin.left + aux_info->margin.right);
+      *natural_size += (aux_info->margin.left + aux_info->margin.right);
     }
   else
     {
-      *minimum_size += (aux_info->padding.top + aux_info->padding.bottom);
-      *natural_size += (aux_info->padding.top + aux_info->padding.bottom);
+      *minimum_size += (aux_info->margin.top + aux_info->margin.bottom);
+      *natural_size += (aux_info->margin.top + aux_info->margin.bottom);
     }
 }
 
@@ -11534,111 +11534,111 @@ gtk_widget_set_v_align (GtkWidget *widget,
 }
 
 int
-gtk_widget_get_padding_left (GtkWidget *widget)
+gtk_widget_get_margin_left (GtkWidget *widget)
 {
   g_return_val_if_fail (GTK_IS_WIDGET (widget), 0);
 
-  return _gtk_widget_get_aux_info_or_defaults (widget)->padding.left;
+  return _gtk_widget_get_aux_info_or_defaults (widget)->margin.left;
 }
 
 void
-gtk_widget_set_padding_left (GtkWidget *widget,
-                             int        padding)
+gtk_widget_set_margin_left (GtkWidget *widget,
+                            int        margin)
 {
   GtkWidgetAuxInfo *aux_info;
 
   g_return_if_fail (GTK_IS_WIDGET (widget));
-  g_return_if_fail (padding <= G_MAXINT16);
+  g_return_if_fail (margin <= G_MAXINT16);
 
   aux_info = _gtk_widget_get_aux_info (widget, TRUE);
 
-  if (aux_info->padding.left == padding)
+  if (aux_info->margin.left == margin)
     return;
 
-  aux_info->padding.left = padding;
+  aux_info->margin.left = margin;
   gtk_widget_queue_resize (widget);
-  g_object_notify (G_OBJECT (widget), "padding-left");
+  g_object_notify (G_OBJECT (widget), "margin-left");
 }
 
 int
-gtk_widget_get_padding_right (GtkWidget *widget)
+gtk_widget_get_margin_right (GtkWidget *widget)
 {
   g_return_val_if_fail (GTK_IS_WIDGET (widget), 0);
 
-  return _gtk_widget_get_aux_info_or_defaults (widget)->padding.right;
+  return _gtk_widget_get_aux_info_or_defaults (widget)->margin.right;
 }
 
 void
-gtk_widget_set_padding_right (GtkWidget *widget,
-                              int        padding)
+gtk_widget_set_margin_right (GtkWidget *widget,
+                             int        margin)
 {
   GtkWidgetAuxInfo *aux_info;
 
   g_return_if_fail (GTK_IS_WIDGET (widget));
-  g_return_if_fail (padding <= G_MAXINT16);
+  g_return_if_fail (margin <= G_MAXINT16);
 
   aux_info = _gtk_widget_get_aux_info (widget, TRUE);
 
-  if (aux_info->padding.right == padding)
+  if (aux_info->margin.right == margin)
     return;
 
-  aux_info->padding.right = padding;
+  aux_info->margin.right = margin;
   gtk_widget_queue_resize (widget);
-  g_object_notify (G_OBJECT (widget), "padding-right");
+  g_object_notify (G_OBJECT (widget), "margin-right");
 }
 
 int
-gtk_widget_get_padding_top (GtkWidget *widget)
+gtk_widget_get_margin_top (GtkWidget *widget)
 {
   g_return_val_if_fail (GTK_IS_WIDGET (widget), 0);
 
-  return _gtk_widget_get_aux_info_or_defaults (widget)->padding.top;
+  return _gtk_widget_get_aux_info_or_defaults (widget)->margin.top;
 }
 
 void
-gtk_widget_set_padding_top (GtkWidget *widget,
-                            int        padding)
+gtk_widget_set_margin_top (GtkWidget *widget,
+                           int        margin)
 {
   GtkWidgetAuxInfo *aux_info;
 
   g_return_if_fail (GTK_IS_WIDGET (widget));
-  g_return_if_fail (padding <= G_MAXINT16);
+  g_return_if_fail (margin <= G_MAXINT16);
 
   aux_info = _gtk_widget_get_aux_info (widget, TRUE);
 
-  if (aux_info->padding.top == padding)
+  if (aux_info->margin.top == margin)
     return;
 
-  aux_info->padding.top = padding;
+  aux_info->margin.top = margin;
   gtk_widget_queue_resize (widget);
-  g_object_notify (G_OBJECT (widget), "padding-top");
+  g_object_notify (G_OBJECT (widget), "margin-top");
 }
 
 int
-gtk_widget_get_padding_bottom (GtkWidget *widget)
+gtk_widget_get_margin_bottom (GtkWidget *widget)
 {
   g_return_val_if_fail (GTK_IS_WIDGET (widget), 0);
 
-  return _gtk_widget_get_aux_info_or_defaults (widget)->padding.bottom;
+  return _gtk_widget_get_aux_info_or_defaults (widget)->margin.bottom;
 }
 
 void
-gtk_widget_set_padding_bottom (GtkWidget *widget,
-                               int        padding)
+gtk_widget_set_margin_bottom (GtkWidget *widget,
+                              int        margin)
 {
   GtkWidgetAuxInfo *aux_info;
 
   g_return_if_fail (GTK_IS_WIDGET (widget));
-  g_return_if_fail (padding <= G_MAXINT16);
+  g_return_if_fail (margin <= G_MAXINT16);
 
   aux_info = _gtk_widget_get_aux_info (widget, TRUE);
 
-  if (aux_info->padding.bottom == padding)
+  if (aux_info->margin.bottom == margin)
     return;
 
-  aux_info->padding.bottom = padding;
+  aux_info->margin.bottom = margin;
   gtk_widget_queue_resize (widget);
-  g_object_notify (G_OBJECT (widget), "padding-bottom");
+  g_object_notify (G_OBJECT (widget), "margin-bottom");
 }
 
 /**

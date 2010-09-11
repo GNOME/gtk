@@ -506,7 +506,7 @@ struct _GtkWidgetAuxInfo
   guint   h_align : 4;
   guint   v_align : 4;
 
-  GtkBorder padding;
+  GtkBorder margin;
 };
 
 struct _GtkWidgetShapeInfo
@@ -736,25 +736,26 @@ void             gtk_widget_set_support_multidevice (GtkWidget      *widget,
 AtkObject*       gtk_widget_get_accessible               (GtkWidget          *widget);
 
 
-/* Padding and alignment */
-GtkAlign gtk_widget_get_h_align                   (GtkWidget           *widget);
-void     gtk_widget_set_h_align                   (GtkWidget           *widget,
-                                                   GtkAlign             align);
-GtkAlign gtk_widget_get_v_align                   (GtkWidget           *widget);
-void     gtk_widget_set_v_align                   (GtkWidget           *widget,
-                                                   GtkAlign             align);
-int      gtk_widget_get_padding_left              (GtkWidget           *widget);
-void     gtk_widget_set_padding_left              (GtkWidget           *widget,
-                                                   int                  padding);
-int      gtk_widget_get_padding_right             (GtkWidget           *widget);
-void     gtk_widget_set_padding_right             (GtkWidget           *widget,
-                                                   int                  padding);
-int      gtk_widget_get_padding_top               (GtkWidget           *widget);
-void     gtk_widget_set_padding_top               (GtkWidget           *widget,
-                                                   int                  padding);
-int      gtk_widget_get_padding_bottom            (GtkWidget           *widget);
-void     gtk_widget_set_padding_bottom            (GtkWidget           *widget,
-                                                   int                  padding);
+/* Margin and alignment */
+GtkAlign gtk_widget_get_h_align       (GtkWidget *widget);
+void     gtk_widget_set_h_align       (GtkWidget *widget,
+                                       GtkAlign   align);
+GtkAlign gtk_widget_get_v_align       (GtkWidget *widget);
+void     gtk_widget_set_v_align       (GtkWidget *widget,
+                                       GtkAlign   align);
+int      gtk_widget_get_margin_left   (GtkWidget *widget);
+void     gtk_widget_set_margin_left   (GtkWidget *widget,
+                                       int        margin);
+int      gtk_widget_get_margin_right  (GtkWidget *widget);
+void     gtk_widget_set_margin_right  (GtkWidget *widget,
+                                       int        margin);
+int      gtk_widget_get_margin_top    (GtkWidget *widget);
+void     gtk_widget_set_margin_top    (GtkWidget *widget,
+                                       int        margin);
+int      gtk_widget_get_margin_bottom (GtkWidget *widget);
+void     gtk_widget_set_margin_bottom (GtkWidget *widget,
+                                       int        margin);
+
 
 /* The following functions must not be called on an already
  * realized widget. Because it is possible that somebody
