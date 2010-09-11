@@ -63,6 +63,11 @@ static int gdk_initialized = 0;			    /* 1 if the library is initialized,
 
 static gchar  *gdk_progclass = NULL;
 
+static GMutex *gdk_threads_mutex = NULL;            /* Global GDK lock */
+
+static GCallback gdk_threads_lock = NULL;
+static GCallback gdk_threads_unlock = NULL;
+
 #ifdef G_ENABLE_DEBUG
 static const GDebugKey gdk_debug_keys[] = {
   {"events",	    GDK_DEBUG_EVENTS},
@@ -71,9 +76,7 @@ static const GDebugKey gdk_debug_keys[] = {
   {"xim",	    GDK_DEBUG_XIM},
   {"nograbs",       GDK_DEBUG_NOGRABS},
   {"colormap",	    GDK_DEBUG_COLORMAP},
-  {"gc",	    GDK_DEBUG_GC},
   {"pixmap",	    GDK_DEBUG_PIXMAP},
-  {"image",	    GDK_DEBUG_IMAGE},
   {"input",	    GDK_DEBUG_INPUT},
   {"cursor",	    GDK_DEBUG_CURSOR},
   {"multihead",	    GDK_DEBUG_MULTIHEAD},
@@ -384,13 +387,15 @@ gdk_init (int *argc, char ***argv)
 void
 gdk_threads_enter (void)
 {
-  GDK_THREADS_ENTER ();
+  if (gdk_threads_lock)
+    (*gdk_threads_lock) ();
 }
 
 void
 gdk_threads_leave (void)
 {
-  GDK_THREADS_LEAVE ();
+  if (gdk_threads_unlock)
+    (*gdk_threads_unlock) ();
 }
 
 static void

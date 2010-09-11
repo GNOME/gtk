@@ -44,7 +44,7 @@ WINUSERAPI HWND WINAPI GetAncestor(HWND,UINT);
 GdkNativeWindow
 _gtk_plug_windowing_get_id (GtkPlug *plug)
 {
-  return (GdkNativeWindow) GDK_WINDOW_HWND (GTK_WIDGET (plug)->window);
+  return (GdkNativeWindow) GDK_WINDOW_HWND (gtk_widget_get_window (GTK_WIDGET (plug)));
 }
 
 void
@@ -56,7 +56,7 @@ _gtk_plug_windowing_realize_toplevel (GtkPlug *plug)
     {
       _gtk_win32_embed_send (priv->socket_window,
 			     GTK_WIN32_EMBED_PARENT_NOTIFY,
-			     (WPARAM) GDK_WINDOW_HWND (GTK_WIDGET (plug)->window),
+			     (WPARAM) GDK_WINDOW_HWND (gtk_widget_get_window (GTK_WIDGET (plug))),
 			     GTK_WIN32_EMBED_PROTOCOL_VERSION);
       _gtk_win32_embed_send (priv->socket_window,
 			     GTK_WIN32_EMBED_EVENT_PLUG_MAPPED, 0, 0);

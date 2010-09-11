@@ -143,7 +143,7 @@ static void     gtk_tree_store_move                    (GtkTreeStore           *
 static inline void
 validate_tree (GtkTreeStore *tree_store)
 {
-  if (gtk_debug_flags & GTK_DEBUG_TREE)
+  if (gtk_get_debug_flags () & GTK_DEBUG_TREE)
     {
       g_assert (G_NODE (tree_store->root)->parent == NULL);
 

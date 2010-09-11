@@ -59,7 +59,7 @@ _gtk_rbnode_new (GtkRBTree *tree,
 static void
 _gtk_rbnode_free (GtkRBNode *node)
 {
-  if (gtk_debug_flags & GTK_DEBUG_TREE)
+  if (gtk_get_debug_flags () & GTK_DEBUG_TREE)
     {
       node->left = (gpointer) 0xdeadbeef;
       node->right = (gpointer) 0xdeadbeef;
@@ -384,7 +384,7 @@ _gtk_rbtree_remove (GtkRBTree *tree)
   gint height = tree->root->offset;
 
 #ifdef G_ENABLE_DEBUG  
-  if (gtk_debug_flags & GTK_DEBUG_TREE)
+  if (gtk_get_debug_flags () & GTK_DEBUG_TREE)
     _gtk_rbtree_test (G_STRLOC, tree);
 #endif
   
@@ -417,7 +417,7 @@ _gtk_rbtree_remove (GtkRBTree *tree)
   _gtk_rbtree_free (tree);
 
 #ifdef G_ENABLE_DEBUG  
-  if (gtk_debug_flags & GTK_DEBUG_TREE)
+  if (gtk_get_debug_flags () & GTK_DEBUG_TREE)
     _gtk_rbtree_test (G_STRLOC, tmp_tree);
 #endif
 }
@@ -435,7 +435,7 @@ _gtk_rbtree_insert_after (GtkRBTree *tree,
   GtkRBTree *tmp_tree;  
 
 #ifdef G_ENABLE_DEBUG  
-  if (gtk_debug_flags & GTK_DEBUG_TREE)
+  if (gtk_get_debug_flags () & GTK_DEBUG_TREE)
     {
       g_print ("\n\n_gtk_rbtree_insert_after: %p\n", current);
       _gtk_rbtree_debug_spew (tree);
@@ -496,7 +496,7 @@ _gtk_rbtree_insert_after (GtkRBTree *tree,
   _gtk_rbtree_insert_fixup (tree, node);
 
 #ifdef G_ENABLE_DEBUG  
-  if (gtk_debug_flags & GTK_DEBUG_TREE)
+  if (gtk_get_debug_flags () & GTK_DEBUG_TREE)
     {
       g_print ("_gtk_rbtree_insert_after finished...\n");
       _gtk_rbtree_debug_spew (tree);
@@ -520,7 +520,7 @@ _gtk_rbtree_insert_before (GtkRBTree *tree,
   GtkRBTree *tmp_tree;
 
 #ifdef G_ENABLE_DEBUG  
-  if (gtk_debug_flags & GTK_DEBUG_TREE)
+  if (gtk_get_debug_flags () & GTK_DEBUG_TREE)
     {
       g_print ("\n\n_gtk_rbtree_insert_before: %p\n", current);
       _gtk_rbtree_debug_spew (tree);
@@ -582,7 +582,7 @@ _gtk_rbtree_insert_before (GtkRBTree *tree,
   _gtk_rbtree_insert_fixup (tree, node);
 
 #ifdef G_ENABLE_DEBUG  
-  if (gtk_debug_flags & GTK_DEBUG_TREE)
+  if (gtk_get_debug_flags () & GTK_DEBUG_TREE)
     {
       g_print ("_gtk_rbtree_insert_before finished...\n");
       _gtk_rbtree_debug_spew (tree);
@@ -639,7 +639,7 @@ _gtk_rbtree_node_set_height (GtkRBTree *tree,
 	}
     }
 #ifdef G_ENABLE_DEBUG  
-  if (gtk_debug_flags & GTK_DEBUG_TREE)
+  if (gtk_get_debug_flags () & GTK_DEBUG_TREE)
     _gtk_rbtree_test (G_STRLOC, tree);
 #endif
 }
@@ -1119,7 +1119,7 @@ _gtk_rbtree_remove_node (GtkRBTree *tree,
 
   
 #ifdef G_ENABLE_DEBUG
-  if (gtk_debug_flags & GTK_DEBUG_TREE)
+  if (gtk_get_debug_flags () & GTK_DEBUG_TREE)
     {
       g_print ("\n\n_gtk_rbtree_remove_node: %p\n", node);
       _gtk_rbtree_debug_spew (tree);
@@ -1133,7 +1133,7 @@ _gtk_rbtree_remove_node (GtkRBTree *tree,
   g_return_if_fail (x == tree->root);
 
 #ifdef G_ENABLE_DEBUG  
-  if (gtk_debug_flags & GTK_DEBUG_TREE)
+  if (gtk_get_debug_flags () & GTK_DEBUG_TREE)
     _gtk_rbtree_test (G_STRLOC, tree);
 #endif
   
@@ -1262,7 +1262,7 @@ _gtk_rbtree_remove_node (GtkRBTree *tree,
   _gtk_rbnode_free (y);
 
 #ifdef G_ENABLE_DEBUG  
-  if (gtk_debug_flags & GTK_DEBUG_TREE)
+  if (gtk_get_debug_flags () & GTK_DEBUG_TREE)
     {
       g_print ("_gtk_rbtree_remove_node finished...\n");
       _gtk_rbtree_debug_spew (tree);

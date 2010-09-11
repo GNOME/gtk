@@ -179,12 +179,6 @@ static gint  gtk_invoke_key_snoopers	 (GtkWidget	     *grab_widget,
 
 static GtkWindowGroup *gtk_main_get_window_group (GtkWidget   *widget);
 
-const guint gtk_major_version = GTK_MAJOR_VERSION;
-const guint gtk_minor_version = GTK_MINOR_VERSION;
-const guint gtk_micro_version = GTK_MICRO_VERSION;
-const guint gtk_binary_age = GTK_BINARY_AGE;
-const guint gtk_interface_age = GTK_INTERFACE_AGE;
-
 static guint gtk_main_loop_level = 0;
 static gint pre_initialized = FALSE;
 static gint gtk_initialized = FALSE;
@@ -198,7 +192,7 @@ static GList *quit_functions = NULL;	   /* A list of quit functions.
 					    */
 static GSList *key_snoopers = NULL;
 
-guint gtk_debug_flags = 0;		   /* Global GTK debug flag */
+static guint debug_flags = 0;		   /* Global GTK debug flag */
 
 #ifdef G_ENABLE_DEBUG
 static const GDebugKey gtk_debug_keys[] = {
@@ -217,6 +211,107 @@ static const GDebugKey gtk_debug_keys[] = {
   {"size-request", GTK_DEBUG_SIZE_REQUEST},
 };
 #endif /* G_ENABLE_DEBUG */
+
+/**
+ * gtk_get_major_version:
+ *
+ * Returns the major version number of the GTK+ library.  (e.g. in GTK+ version
+ * 3.1.5 this is 3.) 
+ *
+ * This function is in the library, so it represents the GTK+ library
+ * your code is running against. Contrast with the #GTK_MAJOR_VERSION
+ * macro, which represents the major version of the GTK+ headers you
+ * have included when compiling your code.
+ *
+ * Returns: the major version number of the GTK+ library.
+ *
+ * Since: 3.0
+ */
+guint
+gtk_get_major_version (void)
+{
+  return GTK_MAJOR_VERSION;
+}
+
+/**
+ * gtk_get_minor_version:
+ *
+ * Returns the minor version number of the GTK+ library.  (e.g. in GTK+ version
+ * 3.1.5 this is 1.) 
+ *
+ * This function is in the library, so it represents the GTK+ library
+ * your code is are running against. Contrast with the
+ * #GTK_MINOR_VERSION macro, which represents the minor version of the
+ * GTK+ headers you have included when compiling your code.
+ *
+ * Returns: the minor version number of the GTK+ library.
+ *
+ * Since: 3.0
+ */
+guint
+gtk_get_minor_version (void)
+{
+  return GTK_MINOR_VERSION;
+}
+
+/**
+ * gtk_get_micro_version:
+ *
+ * Returns the micro version number of the GTK+ library.  (e.g. in GTK+ version
+ * 3.1.5 this is 5.) 
+ *
+ * This function is in the library, so it represents the GTK+ library
+ * your code is are running against. Contrast with the
+ * #GTK_MICRO_VERSION macro, which represents the micro version of the
+ * GTK+ headers you have included when compiling your code.
+ *
+ * Returns: the micro version number of the GTK+ library.
+ *
+ * Since: 3.0
+ */
+guint
+gtk_get_micro_version (void)
+{
+  return GTK_MICRO_VERSION;
+}
+
+/**
+ * gtk_get_binary_age:
+ *
+ * Returns the binary age as passed to
+ * <application>libtool</application> when building the GTK+ library
+ * the process is running against. If
+ * <application>libtool</application> means nothing to you, don't
+ * worry about it.
+ *
+ * Returns: the binary age of the GTK+ library.
+ *
+ * Since: 3.0
+ */
+guint
+gtk_get_binary_age (void)
+{
+  return GTK_BINARY_AGE;
+}
+
+/**
+ * gtk_get_interface_age:
+ *
+ * Returns the interface age as passed to
+ * <application>libtool</application> when building the GTK+ library
+ * the process is running against. If
+ * <application>libtool</application> means nothing to you, don't
+ * worry about it.
+ *
+ * Returns: the interface age of the GTK+ library.
+ *
+ * Since: 3.0
+ */
+guint
+gtk_get_interface_age (void)
+{
+  return GTK_INTERFACE_AGE;
+}
 
 /**
  * gtk_check_version:
@@ -392,9 +487,9 @@ static gboolean g_fatal_warnings = FALSE;
 static gboolean
 gtk_arg_debug_cb (const char *key, const char *value, gpointer user_data)
 {
-  gtk_debug_flags |= g_parse_debug_string (value,
-					   gtk_debug_keys,
-					   G_N_ELEMENTS (gtk_debug_keys));
+  debug_flags |= g_parse_debug_string (value,
+				       gtk_debug_keys,
+				       G_N_ELEMENTS (gtk_debug_keys));
 
   return TRUE;
 }
@@ -402,9 +497,9 @@ gtk_arg_debug_cb (const char *key, const char *value, gpointer user_data)
 static gboolean
 gtk_arg_no_debug_cb (const char *key, const char *value, gpointer user_data)
 {
-  gtk_debug_flags &= ~g_parse_debug_string (value,
-					    gtk_debug_keys,
-					    G_N_ELEMENTS (gtk_debug_keys));
+  debug_flags &= ~g_parse_debug_string (value,
+					gtk_debug_keys,
+					G_N_ELEMENTS (gtk_debug_keys));
 
   return TRUE;
 }
@@ -642,9 +737,9 @@ do_pre_parse_initialization (int    *argc,
   env_string = g_getenv ("GTK_DEBUG");
   if (env_string != NULL)
     {
-      gtk_debug_flags = g_parse_debug_string (env_string,
-					      gtk_debug_keys,
-					      G_N_ELEMENTS (gtk_debug_keys));
+      debug_flags = g_parse_debug_string (env_string,
+					  gtk_debug_keys,
+					  G_N_ELEMENTS (gtk_debug_keys));
       env_string = NULL;
     }
 #endif	/* G_ENABLE_DEBUG */
@@ -691,7 +786,7 @@ do_post_parse_initialization (int    *argc,
       g_log_set_always_fatal (fatal_mask);
     }
 
-  if (gtk_debug_flags & GTK_DEBUG_UPDATES)
+  if (debug_flags & GTK_DEBUG_UPDATES)
     gdk_window_set_debug_updates (TRUE);
 
   {
@@ -775,6 +870,28 @@ post_parse_hook (GOptionContext *context,
   return TRUE;
 }
 
+
+/**
+ * gtk_get_debug_flags:
+ *
+ * Returns the GTK+ debug flags setting.
+ */
+guint
+gtk_get_debug_flags (void)
+{
+  return debug_flags;
+}
+
+/**
+ * gtk_set_debug_flags:
+ *
+ * Sets the GTK+ debug flags.
+ */
+void
+gtk_set_debug_flags (guint flags)
+{
+  debug_flags = flags;
+}
 
 /**
  * gtk_get_option_group:
@@ -1606,7 +1723,7 @@ gtk_main_do_event (GdkEvent *event)
       /* Catch alt press to enable auto-mnemonics;
        * menus are handled elsewhere
        */
-      if ((event->key.keyval == GDK_Alt_L || event->key.keyval == GDK_Alt_R) &&
+      if ((event->key.keyval == GDK_KEY_Alt_L || event->key.keyval == GDK_KEY_Alt_R) &&
           !GTK_IS_MENU_SHELL (grab_widget))
         {
           gboolean auto_mnemonics;

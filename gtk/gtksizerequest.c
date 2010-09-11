@@ -98,34 +98,10 @@
 #include "gtkprivate.h"
 #include "gtkintl.h"
 
-/* With GtkSizeRequest, a widget may be requested
- * its width for 2 or maximum 3 heights in one resize
- */
-#define N_CACHED_SIZES 3
-
-typedef struct
-{
-  guint  age;
-  gint   for_size;
-  gint   minimum_size;
-  gint   natural_size;
-} SizeRequest;
-
-typedef struct {
-  SizeRequest widths[N_CACHED_SIZES];
-  SizeRequest heights[N_CACHED_SIZES];
-  guint8      cached_width_age;
-  guint8      cached_height_age;
-} SizeRequestCache;
-
-static GQuark quark_cache = 0;
-
-
 typedef GtkSizeRequestIface GtkSizeRequestInterface;
-G_DEFINE_INTERFACE_WITH_CODE (GtkSizeRequest,
-                              gtk_size_request,
-                              GTK_TYPE_WIDGET,
-                              quark_cache = g_quark_from_static_string ("gtk-size-request-cache"));
+G_DEFINE_INTERFACE (GtkSizeRequest,
+		    gtk_size_request,
+		    GTK_TYPE_WIDGET);
 
 
 static void
@@ -149,7 +125,7 @@ get_cached_size (gint           for_size,
 
   *result = &cached_sizes[0];
 
-  for (i = 0; i < N_CACHED_SIZES; i++)
+  for (i = 0; i < GTK_SIZE_REQUEST_CACHED_SIZES; i++)
     {
       SizeRequest *cs;
 
@@ -170,44 +146,13 @@ get_cached_size (gint           for_size,
 }
 
 static void
-destroy_cache (SizeRequestCache *cache)
+do_size_request (GtkWidget      *widget,
+		 GtkRequisition *requisition)
 {
-  g_slice_free (SizeRequestCache, cache);
-}
-
-static SizeRequestCache *
-get_cache (GtkSizeRequest *widget,
-           gboolean        create)
-{
-  SizeRequestCache *cache;
-
-  cache = g_object_get_qdata (G_OBJECT (widget), quark_cache);
-  if (!cache && create)
-    {
-      cache = g_slice_new0 (SizeRequestCache);
-
-      cache->cached_width_age  = 1;
-      cache->cached_height_age = 1;
-
-      g_object_set_qdata_full (G_OBJECT (widget), quark_cache, cache,
-                               (GDestroyNotify)destroy_cache);
-    }
-
-  return cache;
-}
-
-
-static void
-do_size_request (GtkWidget *widget)
-{
-  if (GTK_WIDGET_REQUEST_NEEDED (widget))
-    {
-      gtk_widget_ensure_style (widget);
-      GTK_PRIVATE_UNSET_FLAG (widget, GTK_REQUEST_NEEDED);
-      g_signal_emit_by_name (widget,
-                             "size-request",
-                             &widget->requisition);
-    }
+  /* Now we dont bother caching the deprecated "size-request" returns,
+   * just unconditionally invoke here just in case we run into legacy stuff */
+  gtk_widget_ensure_style (widget);
+  g_signal_emit_by_name (widget, "size-request", requisition);
 }
 
 #ifndef G_DISABLE_CHECKS
@@ -278,7 +223,7 @@ compute_size_for_orientation (GtkSizeRequest    *request,
   g_return_if_fail (minimum_size != NULL || natural_size != NULL);
 
   widget = GTK_WIDGET (request);
-  cache  = get_cache (request, TRUE);
+  cache  = _gtk_widget_peek_request_cache (widget);
 
   if (orientation == GTK_SIZE_GROUP_HORIZONTAL)
     {
@@ -288,7 +233,7 @@ compute_size_for_orientation (GtkSizeRequest    *request,
         found_in_cache = get_cached_size (for_size, cache->widths, &cached_size);
       else
         {
-          memset (cache->widths, 0, N_CACHED_SIZES * sizeof (SizeRequest));
+          memset (cache->widths, 0, GTK_SIZE_REQUEST_CACHED_SIZES * sizeof (SizeRequest));
           cache->cached_width_age = 1;
         }
     }
@@ -300,23 +245,24 @@ compute_size_for_orientation (GtkSizeRequest    *request,
         found_in_cache = get_cached_size (for_size, cache->heights, &cached_size);
       else
         {
-          memset (cache->heights, 0, N_CACHED_SIZES * sizeof (SizeRequest));
+          memset (cache->heights, 0, GTK_SIZE_REQUEST_CACHED_SIZES * sizeof (SizeRequest));
           cache->cached_height_age = 1;
         }
     }
 
   if (!found_in_cache)
     {
+      GtkRequisition requisition = { 0, 0 };
       gint min_size = 0, nat_size = 0;
       gint group_size, requisition_size;
 
       /* Unconditional size request runs but is often unhandled. */
-      do_size_request (widget);
+      do_size_request (widget, &requisition);
 
       push_recursion_check (request, orientation, for_size);
       if (orientation == GTK_SIZE_GROUP_HORIZONTAL)
         {
-          requisition_size = widget->requisition.width;
+          requisition_size = requisition.width;
 
           if (for_size < 0)
             GTK_SIZE_REQUEST_GET_IFACE (request)->get_width (request, &min_size, &nat_size);
@@ -326,7 +272,7 @@ compute_size_for_orientation (GtkSizeRequest    *request,
         }
       else
         {
-          requisition_size = widget->requisition.height;
+          requisition_size = requisition.height;
 
           if (for_size < 0)
             GTK_SIZE_REQUEST_GET_IFACE (request)->get_height (request, &min_size, &nat_size);
@@ -342,9 +288,8 @@ compute_size_for_orientation (GtkSizeRequest    *request,
                      G_OBJECT_TYPE_NAME (request), request, min_size, nat_size);
         }
 
-      /* Support for dangling "size-request" signals and forward derived
-       * classes that will not default to a ->get_width() that
-       * returns the values in the ->requisition cache.
+      /* Support for dangling "size-request" signal implementations on
+       * legacy widgets
        */
       min_size = MAX (min_size, requisition_size);
       nat_size = MAX (nat_size, requisition_size);

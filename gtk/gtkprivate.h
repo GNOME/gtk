@@ -47,9 +47,8 @@ typedef enum
   PRIVATE_GTK_CHILD_VISIBLE         = 1 <<  10,  /* If widget should be mapped when parent is mapped */
   PRIVATE_GTK_REDRAW_ON_ALLOC       = 1 <<  11,  /* If we should queue a draw on the entire widget when it is reallocated */
   PRIVATE_GTK_ALLOC_NEEDED          = 1 <<  12,  /* If we we should allocate even if the allocation is the same */
-  PRIVATE_GTK_REQUEST_NEEDED        = 1 <<  13,  /* Whether we need to call gtk_widget_size_request */
-  PRIVATE_GTK_WIDTH_REQUEST_NEEDED  = 1 <<  14,  /* Whether we need to call gtk_extended_layout_get_desired_width */
-  PRIVATE_GTK_HEIGHT_REQUEST_NEEDED = 1 <<  15   /* Whether we need to call gtk_extended_layout_get_desired_height */
+  PRIVATE_GTK_WIDTH_REQUEST_NEEDED  = 1 <<  13,  /* Whether we need to call gtk_extended_layout_get_desired_width */
+  PRIVATE_GTK_HEIGHT_REQUEST_NEEDED = 1 <<  14   /* Whether we need to call gtk_extended_layout_get_desired_height */
 } GtkPrivateFlags;
 
 /* Macros for extracting a widgets private_flags from GtkWidget.
@@ -67,7 +66,6 @@ typedef enum
 #define GTK_WIDGET_CHILD_VISIBLE(obj)         ((GTK_PRIVATE_FLAGS (obj) & PRIVATE_GTK_CHILD_VISIBLE) != 0)
 #define GTK_WIDGET_REDRAW_ON_ALLOC(obj)       ((GTK_PRIVATE_FLAGS (obj) & PRIVATE_GTK_REDRAW_ON_ALLOC) != 0)
 #define GTK_WIDGET_ALLOC_NEEDED(obj)          ((GTK_PRIVATE_FLAGS (obj) & PRIVATE_GTK_ALLOC_NEEDED) != 0)
-#define GTK_WIDGET_REQUEST_NEEDED(obj)        ((GTK_PRIVATE_FLAGS (obj) & PRIVATE_GTK_REQUEST_NEEDED) != 0)
 #define GTK_WIDGET_WIDTH_REQUEST_NEEDED(obj)  ((GTK_PRIVATE_FLAGS (obj) & PRIVATE_GTK_WIDTH_REQUEST_NEEDED) != 0)
 #define GTK_WIDGET_HEIGHT_REQUEST_NEEDED(obj) ((GTK_PRIVATE_FLAGS (obj) & PRIVATE_GTK_HEIGHT_REQUEST_NEEDED) != 0)
 
@@ -115,6 +113,28 @@ gboolean _gtk_fnmatch (const char *pattern,
 #else
 #define GTK_DEFAULT_ACCEL_MOD_MASK GDK_META_MASK
 #endif
+
+
+/* With GtkSizeRequest, a widget may be requested
+ * its width for 2 or maximum 3 heights in one resize
+ */
+#define GTK_SIZE_REQUEST_CACHED_SIZES 3
+
+typedef struct
+{
+  guint  age;
+  gint   for_size;
+  gint   minimum_size;
+  gint   natural_size;
+} SizeRequest;
+
+typedef struct {
+  SizeRequest widths[GTK_SIZE_REQUEST_CACHED_SIZES];
+  SizeRequest heights[GTK_SIZE_REQUEST_CACHED_SIZES];
+  guint8      cached_width_age;
+  guint8      cached_height_age;
+} SizeRequestCache;
+
 
 G_END_DECLS
 

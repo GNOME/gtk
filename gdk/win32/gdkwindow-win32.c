@@ -1959,14 +1959,6 @@ gdk_win32_window_get_root_coords (GdkWindow *window,
   return 1;
 }
 
-static gboolean
-gdk_win32_window_get_deskrelative_origin (GdkWindow *window,
-					  gint      *x,
-					  gint      *y)
-{
-  return gdk_win32_window_get_root_coords (window, 0, 0, x, y);
-}
-
 static void
 gdk_win32_window_restack_under (GdkWindow *window,
 				GList *native_siblings)
@@ -3527,7 +3519,6 @@ gdk_window_impl_iface_init (GdkWindowImplIface *iface)
   iface->get_root_coords = gdk_win32_window_get_root_coords;
   iface->shape_combine_region = gdk_win32_window_shape_combine_region;
   iface->input_shape_combine_region = gdk_win32_input_shape_combine_region;
-  iface->get_deskrelative_origin = gdk_win32_window_get_deskrelative_origin;
   iface->set_static_gravities = gdk_win32_window_set_static_gravities;
   iface->queue_antiexpose = _gdk_win32_window_queue_antiexpose;
   iface->translate = _gdk_win32_window_translate;

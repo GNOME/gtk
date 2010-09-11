@@ -1910,7 +1910,7 @@ given item, and perform the cast. Some common ones you will see are:</para>
   G_OBJECT (object)
   GTK_WIDGET (widget)
   GTK_OBJECT (object)
-  GTK_SIGNAL_FUNC (function)
+  G_CALLBACK (function)
   GTK_CONTAINER (container)
   GTK_WINDOW (window)
   GTK_BOX (box)
@@ -5369,8 +5369,8 @@ widget.</para>
 the widget both looks and operates by using the function</para>
 
 <programlisting role="C">
-void gtk_calendar_display_options( GtkCalendar               *calendar,
-                                   GtkCalendarDisplayOptions  flags );
+void gtk_calendar_set_display_options( GtkCalendar               *calendar,
+                                       GtkCalendarDisplayOptions  flags );
 </programlisting>
 
 <para>The <literal>flags</literal> argument can be formed by combining either of the
@@ -5403,14 +5403,6 @@ year.</para>
 <listitem><para>this option specifies that the
 number for each week should be displayed down the left side of the
 calendar. (eg. Jan 1 = Week 1,Dec 31 = Week 52).</para>
-</listitem>
-</varlistentry>
-<varlistentry>
-<term><literal>GTK_CALENDAR_WEEK_START_MONDAY</literal></term>
-<listitem><para>this option states that the
-calander week will start on Monday instead of Sunday which is the
-default. This only affects the order in which days are displayed from
-left to right.</para>
 </listitem>
 </varlistentry>
 </variablelist>
@@ -5678,7 +5670,7 @@ static void calendar_set_flags( CalendarData *calendar )
 	options = options + (1 &lt;&lt; i);
       }
   if (calendar-&gt;window)
-    gtk_calendar_display_options (GTK_CALENDAR (calendar-&gt;window), options);
+    gtk_calendar_set_display_options (GTK_CALENDAR (calendar-&gt;window), options);
 }
 
 static void calendar_toggle_flag( GtkWidget    *toggle,
@@ -6153,7 +6145,7 @@ gint main( gint   argc,
   gtk_widget_set_events (drawingarea, GDK_BUTTON_PRESS_MASK);
 
   g_signal_connect (GTK_OBJECT (drawingarea), "event", 
-	            GTK_SIGNAL_FUNC (area_event), (gpointer) drawingarea);
+	            G_CALLBACK (area_event), (gpointer) drawingarea);
   
   /* Add drawingarea to window, then show them both */
 
@@ -7650,7 +7642,7 @@ the toolbar widget.</para>
                              "Closes this app",     /* this button's tooltip */
                              "Private",             /* tooltip private info */
                              iconw,                 /* icon widget */
-                             GTK_SIGNAL_FUNC (delete_event), /* a signal */
+                             G_CALLBACK (delete_event), /* a signal */
                              NULL);
   gtk_toolbar_append_space (GTK_TOOLBAR (toolbar)); /* space after item */
 </programlisting>
@@ -7674,7 +7666,7 @@ widget, so that we can work with it in the normal way.</para>
                     "Only icons in toolbar",       /* tooltip */
                     "Private",                     /* tooltip private string */
                     iconw,                         /* icon */
-                    GTK_SIGNAL_FUNC (radio_event), /* signal */
+                    G_CALLBACK (radio_event), /* signal */
                     toolbar);                      /* data for signal */
   gtk_toolbar_append_space (GTK_TOOLBAR (toolbar));
 </programlisting>
@@ -7700,7 +7692,7 @@ tutorial).</para>
                                 "Only texts in toolbar",
                                 "Private",
                                 iconw,
-                                GTK_SIGNAL_FUNC (radio_event),
+                                G_CALLBACK (radio_event),
                                 toolbar);
   gtk_toolbar_append_space (GTK_TOOLBAR (toolbar));
                                           
@@ -7713,7 +7705,7 @@ tutorial).</para>
                                 "Icons and text in toolbar",
                                 "Private",
                                 iconw,
-                                GTK_SIGNAL_FUNC (radio_event),
+                                G_CALLBACK (radio_event),
                                 toolbar);
   gtk_toolbar_append_space (GTK_TOOLBAR (toolbar));
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (both_button), TRUE);
@@ -7734,7 +7726,7 @@ between them).</para>
                                 "Toolbar with or without tips",
                                 "Private",
                                 iconw,
-                                GTK_SIGNAL_FUNC (toggle_event),
+                                G_CALLBACK (toggle_event),
                                 toolbar);
   gtk_toolbar_append_space (GTK_TOOLBAR (toolbar));
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (tooltips_button), TRUE);
@@ -15073,10 +15065,10 @@ gtk_dial_set_adjustment (GtkDial      *dial,
   g_object_ref (GTK_OBJECT (dial-&gt;adjustment));
 
   g_signal_connect (GTK_OBJECT (adjustment), "changed",
-		    GTK_SIGNAL_FUNC (gtk_dial_adjustment_changed),
+		    G_CALLBACK (gtk_dial_adjustment_changed),
 		    (gpointer) dial);
   g_signal_connect (GTK_OBJECT (adjustment), "value_changed",
-		    GTK_SIGNAL_FUNC (gtk_dial_adjustment_value_changed),
+		    G_CALLBACK (gtk_dial_adjustment_value_changed),
 		    (gpointer) dial);
 
   dial-&gt;old_value = adjustment-&gt;value;

@@ -14,7 +14,6 @@
 #include <gail/gailframe.h>
 #include <gail/gailimage.h>
 #include <gail/gailimagecell.h>
-#include <gail/gailitem.h>
 #include <gail/gaillabel.h>
 #include <gail/gailmenu.h>
 #include <gail/gailmenushell.h>

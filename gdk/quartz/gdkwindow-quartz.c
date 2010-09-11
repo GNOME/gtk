@@ -1830,14 +1830,6 @@ gdk_window_quartz_get_root_coords (GdkWindow *window,
   return TRUE;
 }
 
-static gboolean
-gdk_window_quartz_get_deskrelative_origin (GdkWindow *window,
-                                           gint      *x,
-                                           gint      *y)
-{
-  return gdk_window_get_origin (window, x, y);
-}
-
 void
 gdk_window_get_root_origin (GdkWindow *window,
 			    gint      *x,
@@ -3057,7 +3049,6 @@ gdk_window_impl_iface_init (GdkWindowImplIface *iface)
   iface->get_geometry = gdk_window_quartz_get_geometry;
   iface->get_root_coords = gdk_window_quartz_get_root_coords;
   iface->get_device_state = gdk_window_quartz_get_device_state;
-  iface->get_deskrelative_origin = gdk_window_quartz_get_deskrelative_origin;
   iface->shape_combine_region = gdk_window_quartz_shape_combine_region;
   iface->input_shape_combine_region = gdk_window_quartz_input_shape_combine_region;
   iface->set_static_gravities = gdk_window_quartz_set_static_gravities;

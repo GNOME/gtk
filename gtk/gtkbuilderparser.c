@@ -835,7 +835,7 @@ start_element (GMarkupParseContext *context,
   ParserData *data = (ParserData*)user_data;
 
 #ifdef GTK_ENABLE_DEBUG
-  if (gtk_debug_flags & GTK_DEBUG_BUILDER)
+  if (gtk_get_debug_flags () & GTK_DEBUG_BUILDER)
     {
       GString *tags = g_string_new ("");
       int i;

@@ -459,7 +459,7 @@ static void
 _gtk_file_chooser_default_class_init (GtkFileChooserDefaultClass *class)
 {
   static const guint quick_bookmark_keyvals[10] = {
-    GDK_1, GDK_2, GDK_3, GDK_4, GDK_5, GDK_6, GDK_7, GDK_8, GDK_9, GDK_0
+    GDK_KEY_1, GDK_KEY_2, GDK_KEY_3, GDK_KEY_4, GDK_KEY_5, GDK_KEY_6, GDK_KEY_7, GDK_KEY_8, GDK_KEY_9, GDK_KEY_0
   };
   GObjectClass *gobject_class = G_OBJECT_CLASS (class);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (class);
@@ -583,74 +583,74 @@ _gtk_file_chooser_default_class_init (GtkFileChooserDefaultClass *class)
   binding_set = gtk_binding_set_by_class (class);
 
   gtk_binding_entry_add_signal (binding_set,
-				GDK_l, GDK_CONTROL_MASK,
+				GDK_KEY_l, GDK_CONTROL_MASK,
 				"location-toggle-popup",
 				0);
 
   gtk_binding_entry_add_signal (binding_set,
-				GDK_slash, 0,
+				GDK_KEY_slash, 0,
 				"location-popup",
 				1, G_TYPE_STRING, "/");
   gtk_binding_entry_add_signal (binding_set,
-				GDK_KP_Divide, 0,
+				GDK_KEY_KP_Divide, 0,
 				"location-popup",
 				1, G_TYPE_STRING, "/");
 
 #ifdef G_OS_UNIX
   gtk_binding_entry_add_signal (binding_set,
-				GDK_asciitilde, 0,
+				GDK_KEY_asciitilde, 0,
 				"location-popup",
 				1, G_TYPE_STRING, "~");
 #endif
 
   gtk_binding_entry_add_signal (binding_set,
-				GDK_v, GDK_CONTROL_MASK,
+				GDK_KEY_v, GDK_CONTROL_MASK,
 				"location-popup-on-paste",
 				0);
   gtk_binding_entry_add_signal (binding_set,
-				GDK_Up, GDK_MOD1_MASK,
+				GDK_KEY_Up, GDK_MOD1_MASK,
 				"up-folder",
 				0);
   gtk_binding_entry_add_signal (binding_set,
-		  		GDK_BackSpace, 0,
+		  		GDK_KEY_BackSpace, 0,
 				"up-folder",
 				0);
   gtk_binding_entry_add_signal (binding_set,
-				GDK_KP_Up, GDK_MOD1_MASK,
+				GDK_KEY_KP_Up, GDK_MOD1_MASK,
 				"up-folder",
 				0);
 
   gtk_binding_entry_add_signal (binding_set,
-				GDK_Down, GDK_MOD1_MASK,
+				GDK_KEY_Down, GDK_MOD1_MASK,
 				"down-folder",
 				0);
   gtk_binding_entry_add_signal (binding_set,
-				GDK_KP_Down, GDK_MOD1_MASK,
+				GDK_KEY_KP_Down, GDK_MOD1_MASK,
 				"down-folder",
 				0);
 
   gtk_binding_entry_add_signal (binding_set,
-				GDK_Home, GDK_MOD1_MASK,
+				GDK_KEY_Home, GDK_MOD1_MASK,
 				"home-folder",
 				0);
   gtk_binding_entry_add_signal (binding_set,
-				GDK_KP_Home, GDK_MOD1_MASK,
+				GDK_KEY_KP_Home, GDK_MOD1_MASK,
 				"home-folder",
 				0);
   gtk_binding_entry_add_signal (binding_set,
-				GDK_d, GDK_MOD1_MASK,
+				GDK_KEY_d, GDK_MOD1_MASK,
 				"desktop-folder",
 				0);
   gtk_binding_entry_add_signal (binding_set,
-				GDK_h, GDK_CONTROL_MASK,
+				GDK_KEY_h, GDK_CONTROL_MASK,
                                 "show-hidden",
                                 0);
   gtk_binding_entry_add_signal (binding_set,
-                                GDK_s, GDK_MOD1_MASK,
+                                GDK_KEY_s, GDK_MOD1_MASK,
                                 "search-shortcut",
                                 0);
   gtk_binding_entry_add_signal (binding_set,
-                                GDK_r, GDK_MOD1_MASK,
+                                GDK_KEY_r, GDK_MOD1_MASK,
                                 "recent-shortcut",
                                 0);
 
@@ -3327,9 +3327,9 @@ shortcuts_key_press_event_after_cb (GtkWidget             *tree_view,
   GtkWidget *entry;
 
   /* don't screw up focus switching with Tab */
-  if (event->keyval == GDK_Tab
-      || event->keyval == GDK_KP_Tab
-      || event->keyval == GDK_ISO_Left_Tab
+  if (event->keyval == GDK_KEY_Tab
+      || event->keyval == GDK_KEY_KP_Tab
+      || event->keyval == GDK_KEY_ISO_Left_Tab
       || event->length < 1)
     return FALSE;
 
@@ -3732,10 +3732,10 @@ key_is_left_or_right (GdkEventKey *event)
 
   modifiers = gtk_accelerator_get_default_mod_mask ();
 
-  return ((event->keyval == GDK_Right
-	   || event->keyval == GDK_KP_Right
-	   || event->keyval == GDK_Left
-	   || event->keyval == GDK_KP_Left)
+  return ((event->keyval == GDK_KEY_Right
+	   || event->keyval == GDK_KEY_KP_Right
+	   || event->keyval == GDK_KEY_Left
+	   || event->keyval == GDK_KEY_KP_Left)
 	  && (event->state & modifiers) == 0);
 }
 
@@ -3755,10 +3755,10 @@ browse_files_key_press_event_cb (GtkWidget   *widget,
 
   modifiers = gtk_accelerator_get_default_mod_mask ();
 
-  if ((event->keyval == GDK_slash
-       || event->keyval == GDK_KP_Divide
+  if ((event->keyval == GDK_KEY_slash
+       || event->keyval == GDK_KEY_KP_Divide
 #ifdef G_OS_UNIX
-       || event->keyval == GDK_asciitilde
+       || event->keyval == GDK_KEY_asciitilde
 #endif
        ) && ! (event->state & (~GDK_SHIFT_MASK & modifiers)))
     {
@@ -3772,11 +3772,11 @@ browse_files_key_press_event_cb (GtkWidget   *widget,
       return TRUE;
     }
 
-  if ((event->keyval == GDK_Return
-       || event->keyval == GDK_ISO_Enter
-       || event->keyval == GDK_KP_Enter
-       || event->keyval == GDK_space
-       || event->keyval == GDK_KP_Space)
+  if ((event->keyval == GDK_KEY_Return
+       || event->keyval == GDK_KEY_ISO_Enter
+       || event->keyval == GDK_KEY_KP_Enter
+       || event->keyval == GDK_KEY_space
+       || event->keyval == GDK_KEY_KP_Space)
       && ((event->state & modifiers) == 0)
       && !(impl->action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER ||
 	   impl->action == GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER))
@@ -9693,16 +9693,16 @@ shortcuts_key_press_event_cb (GtkWidget             *widget,
       return TRUE;
     }
 
-  if ((event->keyval == GDK_BackSpace
-      || event->keyval == GDK_Delete
-      || event->keyval == GDK_KP_Delete)
+  if ((event->keyval == GDK_KEY_BackSpace
+      || event->keyval == GDK_KEY_Delete
+      || event->keyval == GDK_KEY_KP_Delete)
       && (event->state & modifiers) == 0)
     {
       remove_selected_bookmarks (impl);
       return TRUE;
     }
 
-  if ((event->keyval == GDK_F2)
+  if ((event->keyval == GDK_KEY_F2)
       && (event->state & modifiers) == 0)
     {
       rename_selected_bookmark (impl);

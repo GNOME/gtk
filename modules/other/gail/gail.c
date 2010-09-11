@@ -75,7 +75,6 @@ GAIL_IMPLEMENT_FACTORY (GAIL_TYPE_OBJECT, GailObject, gail_object, GTK_TYPE_OBJE
 GAIL_IMPLEMENT_FACTORY (GAIL_TYPE_WIDGET, GailWidget, gail_widget, GTK_TYPE_WIDGET)
 GAIL_IMPLEMENT_FACTORY (GAIL_TYPE_CONTAINER, GailContainer, gail_container, GTK_TYPE_CONTAINER)
 GAIL_IMPLEMENT_FACTORY (GAIL_TYPE_BUTTON, GailButton, gail_button, GTK_TYPE_BUTTON)
-GAIL_IMPLEMENT_FACTORY (GAIL_TYPE_ITEM, GailItem, gail_item, GTK_TYPE_ITEM)
 GAIL_IMPLEMENT_FACTORY_WITH_FUNC (GAIL_TYPE_MENU_ITEM, GailMenuItem, gail_menu_item, gail_menu_item_new)
 GAIL_IMPLEMENT_FACTORY (GAIL_TYPE_TOGGLE_BUTTON, GailToggleButton, gail_toggle_button, GTK_TYPE_TOGGLE_BUTTON)
 GAIL_IMPLEMENT_FACTORY (GAIL_TYPE_IMAGE, GailImage, gail_image, GTK_TYPE_IMAGE)
@@ -699,7 +698,6 @@ gail_focus_tracker_init (void)
        * We cannot be sure that the classes exist so we make sure that they do.
        */
       g_type_class_ref (GTK_TYPE_WIDGET);
-      g_type_class_ref (GTK_TYPE_ITEM);
       g_type_class_ref (GTK_TYPE_MENU_SHELL);
       g_type_class_ref (GTK_TYPE_NOTEBOOK);
 
@@ -716,7 +714,7 @@ gail_focus_tracker_init (void)
        * a menu item in a menu.
        */
       g_signal_add_emission_hook (
-             g_signal_lookup ("select", GTK_TYPE_ITEM), 0,
+             g_signal_lookup ("select", GTK_TYPE_MENU_ITEM), 0,
              gail_select_watcher, NULL, (GDestroyNotify) NULL);
 
       /*
@@ -724,7 +722,7 @@ gail_focus_tracker_init (void)
        * move from a menu item in a menu to the parent menu.
        */
       g_signal_add_emission_hook (
-             g_signal_lookup ("deselect", GTK_TYPE_ITEM), 0,
+             g_signal_lookup ("deselect", GTK_TYPE_MENU_ITEM), 0,
              gail_deselect_watcher, NULL, (GDestroyNotify) NULL);
 
       /*
@@ -874,7 +872,6 @@ gail_accessibility_module_init (void)
   GAIL_WIDGET_SET_FACTORY (GTK_TYPE_WIDGET, gail_widget);
   GAIL_WIDGET_SET_FACTORY (GTK_TYPE_CONTAINER, gail_container);
   GAIL_WIDGET_SET_FACTORY (GTK_TYPE_BUTTON, gail_button);
-  GAIL_WIDGET_SET_FACTORY (GTK_TYPE_ITEM, gail_item);
   GAIL_WIDGET_SET_FACTORY (GTK_TYPE_MENU_ITEM, gail_menu_item);
   GAIL_WIDGET_SET_FACTORY (GTK_TYPE_TOGGLE_BUTTON, gail_toggle_button);
   GAIL_WIDGET_SET_FACTORY (GTK_TYPE_IMAGE, gail_image);

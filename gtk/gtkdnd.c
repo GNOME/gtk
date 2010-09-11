@@ -4219,36 +4219,36 @@ gtk_drag_key_cb (GtkWidget         *widget,
     {
       switch (event->keyval)
 	{
-	case GDK_Escape:
+	case GDK_KEY_Escape:
 	  gtk_drag_cancel (info, GTK_DRAG_RESULT_USER_CANCELLED, event->time);
 	  return TRUE;
 
-	case GDK_space:
-	case GDK_Return:
-        case GDK_ISO_Enter:
-	case GDK_KP_Enter:
-	case GDK_KP_Space:
+	case GDK_KEY_space:
+	case GDK_KEY_Return:
+        case GDK_KEY_ISO_Enter:
+	case GDK_KEY_KP_Enter:
+	case GDK_KEY_KP_Space:
 	  gtk_drag_end (info, event->time);
 	  gtk_drag_drop (info, event->time);
 	  return TRUE;
 
-	case GDK_Up:
-	case GDK_KP_Up:
+	case GDK_KEY_Up:
+	case GDK_KEY_KP_Up:
 	  dy = (state & GDK_MOD1_MASK) ? -BIG_STEP : -SMALL_STEP;
 	  break;
 	  
-	case GDK_Down:
-	case GDK_KP_Down:
+	case GDK_KEY_Down:
+	case GDK_KEY_KP_Down:
 	  dy = (state & GDK_MOD1_MASK) ? BIG_STEP : SMALL_STEP;
 	  break;
 	  
-	case GDK_Left:
-	case GDK_KP_Left:
+	case GDK_KEY_Left:
+	case GDK_KEY_KP_Left:
 	  dx = (state & GDK_MOD1_MASK) ? -BIG_STEP : -SMALL_STEP;
 	  break;
 	  
-	case GDK_Right:
-	case GDK_KP_Right:
+	case GDK_KEY_Right:
+	case GDK_KEY_KP_Right:
 	  dx = (state & GDK_MOD1_MASK) ? BIG_STEP : SMALL_STEP;
 	  break;
 	}

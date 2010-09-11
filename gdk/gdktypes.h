@@ -38,16 +38,6 @@
 #include <glib-object.h>
 #include <cairo.h>
 
-#ifdef G_OS_WIN32
-#  ifdef GDK_COMPILATION
-#    define GDKVAR __declspec(dllexport)
-#  else
-#    define GDKVAR extern __declspec(dllimport)
-#  endif
-#else
-#  define GDKVAR extern
-#endif
-
 /* The system specific file gdkconfig.h contains such configuration
  * settings that are needed not only when compiling GDK (or GTK)
  * itself, but also occasionally when compiling programs that use GDK

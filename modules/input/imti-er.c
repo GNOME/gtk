@@ -140,8 +140,8 @@ ti_er_register_type (GTypeModule *module)
 static guint16 ti_er_compose_seqs[] = {
   /* do punctuation and numerals here */
 
-  '\'',   0, 0, 0, 0, 0, GDK_dead_grave,  /* hopefully this has no side effects */
-  '\'', '\'', 0, 0, 0, 0, GDK_apostrophe,
+  '\'',   0, 0, 0, 0, 0, GDK_KEY_dead_grave,  /* hopefully this has no side effects */
+  '\'', '\'', 0, 0, 0, 0, GDK_KEY_apostrophe,
   '\'', '1', 0, 0, 0, 0, 0x1369,
   '\'', '1', '0', 0, 0, 0, 0x1372,
   '\'', '1', '0', '0', 0, 0, 0x137b,
@@ -430,8 +430,8 @@ static guint16 ti_er_compose_seqs[] = {
   SYLW('x', 0x1238)
   SYL('y', 0x12e8)
   SYLW('z', 0x12d8)
-  GDK_Shift_L, GDK_space, 0, 0, 0, 0, 0x1361,
-  GDK_Shift_R, GDK_space, 0, 0, 0, 0, 0x1361,
+  GDK_KEY_Shift_L, GDK_KEY_space, 0, 0, 0, 0, 0x1361,
+  GDK_KEY_Shift_R, GDK_KEY_space, 0, 0, 0, 0, 0x1361,
 };
 
 static void

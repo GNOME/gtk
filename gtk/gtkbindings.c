@@ -131,8 +131,8 @@ binding_key_hash_insert_entry (GtkKeyHash      *key_hash,
    */
   if (entry->modifiers & GDK_SHIFT_MASK)
     {
-      if (keyval == GDK_Tab)
-	keyval = GDK_ISO_Left_Tab;
+      if (keyval == GDK_KEY_Tab)
+	keyval = GDK_KEY_ISO_Left_Tab;
       else
 	keyval = gdk_keyval_to_upper (keyval);
     }

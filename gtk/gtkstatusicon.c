@@ -1702,11 +1702,11 @@ gtk_status_icon_key_press (GtkStatusIcon  *status_icon,
   state = event->state & gtk_accelerator_get_default_mod_mask ();
   keyval = event->keyval;
   if (state == 0 &&
-      (keyval == GDK_Return ||
-       keyval == GDK_KP_Enter ||
-       keyval == GDK_ISO_Enter ||
-       keyval == GDK_space ||
-       keyval == GDK_KP_Space))
+      (keyval == GDK_KEY_Return ||
+       keyval == GDK_KEY_KP_Enter ||
+       keyval == GDK_KEY_ISO_Enter ||
+       keyval == GDK_KEY_space ||
+       keyval == GDK_KEY_KP_Space))
     {
       emit_activate_signal (status_icon);
       return TRUE;

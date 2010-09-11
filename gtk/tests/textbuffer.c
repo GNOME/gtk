@@ -1211,8 +1211,9 @@ test_utf8 (void)
   gunichar ch;
 
   /* Check UTF8 unknown char thing */
-  g_assert (g_utf8_strlen (gtk_text_unknown_char_utf8, 3) == 1);
-  ch = g_utf8_get_char (gtk_text_unknown_char_utf8);
+  g_assert (GTK_TEXT_UNKNOWN_CHAR_UTF8_LEN == 3);
+  g_assert (g_utf8_strlen (gtk_text_unknown_char_utf8_gtk_tests_only (), 3) == 1);
+  ch = g_utf8_get_char (gtk_text_unknown_char_utf8_gtk_tests_only ());
   g_assert (ch == GTK_TEXT_UNKNOWN_CHAR);
 }
 
@@ -1326,7 +1327,7 @@ int
 main (int argc, char** argv)
 {
   /* First, we turn on btree debugging. */
-  gtk_debug_flags |= GTK_DEBUG_TEXT;
+  gtk_set_debug_flags (gtk_get_debug_flags () | GTK_DEBUG_TEXT);
 
   gtk_test_init (&argc, &argv);
   pixbuf_init ();

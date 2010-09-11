@@ -54,7 +54,7 @@ typedef enum {
 #ifdef G_ENABLE_DEBUG
 
 #define GTK_NOTE(type,action)                G_STMT_START { \
-    if (gtk_debug_flags & GTK_DEBUG_##type)                 \
+    if (gtk_get_debug_flags () & GTK_DEBUG_##type)		    \
        { action; };                          } G_STMT_END
 
 #else /* !G_ENABLE_DEBUG */
@@ -63,17 +63,8 @@ typedef enum {
 
 #endif /* G_ENABLE_DEBUG */
 
-#ifdef G_OS_WIN32
-#  ifdef GTK_COMPILATION
-#    define GTKVAR __declspec(dllexport)
-#  else
-#    define GTKVAR extern __declspec(dllimport)
-#  endif
-#else
-#  define GTKVAR extern
-#endif
-
-GTKVAR guint gtk_debug_flags;
+guint gtk_get_debug_flags (void);
+void  gtk_set_debug_flags  (guint flags);
 
 G_END_DECLS
 

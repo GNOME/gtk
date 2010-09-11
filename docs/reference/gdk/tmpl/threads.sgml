@@ -300,13 +300,6 @@ Leaves a critical region begun with gdk_threads_enter().
 @void: 
 
 
-<!-- ##### VARIABLE gdk_threads_mutex ##### -->
-<para>
-The #GMutex used to implement the critical region for
-gdk_threads_enter()/gdk_threads_leave(). 
-</para>
-
-
 <!-- ##### FUNCTION gdk_threads_set_lock_functions ##### -->
 <para>
 

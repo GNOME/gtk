@@ -488,7 +488,7 @@ gtk_info_bar_class_init (GtkInfoBarClass *klass)
 
   binding_set = gtk_binding_set_by_class (klass);
 
-  gtk_binding_entry_add_signal (binding_set, GDK_Escape, 0, "close", 0);
+  gtk_binding_entry_add_signal (binding_set, GDK_KEY_Escape, 0, "close", 0);
 
   g_type_class_add_private (object_class, sizeof (GtkInfoBarPrivate));
 }

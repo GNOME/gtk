@@ -2310,7 +2310,7 @@ gtk_text_layout_get_line_display (GtkTextLayout *layout,
                                      size_only, FALSE);
                   add_pixbuf_attrs (layout, display, style,
                                     seg, attrs, layout_byte_offset);
-                  memcpy (text + layout_byte_offset, gtk_text_unknown_char_utf8,
+                  memcpy (text + layout_byte_offset, _gtk_text_unknown_char_utf8,
                           seg->byte_count);
                   layout_byte_offset += seg->byte_count;
                   buffer_byte_offset += seg->byte_count;
@@ -2325,7 +2325,7 @@ gtk_text_layout_get_line_display (GtkTextLayout *layout,
                                      size_only, FALSE);
                   add_child_attrs (layout, display, style,
                                    seg, attrs, layout_byte_offset);
-                  memcpy (text + layout_byte_offset, gtk_text_unknown_char_utf8,
+                  memcpy (text + layout_byte_offset, _gtk_text_unknown_char_utf8,
                           seg->byte_count);
                   layout_byte_offset += seg->byte_count;
                   buffer_byte_offset += seg->byte_count;

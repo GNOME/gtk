@@ -1006,7 +1006,6 @@ gdk_drag_context_get_type
 <TITLE>X Window System Interaction</TITLE>
 <FILE>x_interaction</FILE>
 GDK_ROOT_WINDOW
-GDK_DISPLAY
 GDK_WINDOW_XDISPLAY
 GDK_WINDOW_XID
 GDK_PIXMAP_XDISPLAY
@@ -1077,7 +1076,6 @@ gdk_x11_get_xatom_name
 gdk_x11_get_xatom_name_for_display
 
 <SUBSECTION Private>
-gdk_display
 GDK_HAVE_WCHAR_H
 GDK_HAVE_WCTYPE_H
 gdk_x11_pixmap_get_drawable_impl

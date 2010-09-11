@@ -206,7 +206,7 @@ gtk_dialog_class_init (GtkDialogClass *class)
 
   binding_set = gtk_binding_set_by_class (class);
   
-  gtk_binding_entry_add_signal (binding_set, GDK_Escape, 0, "close", 0);
+  gtk_binding_entry_add_signal (binding_set, GDK_KEY_Escape, 0, "close", 0);
 }
 
 static void

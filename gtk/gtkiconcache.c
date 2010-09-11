@@ -130,7 +130,7 @@ _gtk_icon_cache_new_for_path (const gchar *path)
   info.flags = CHECK_OFFSETS|CHECK_STRINGS;
 
 #ifdef G_ENABLE_DEBUG
-  if (gtk_debug_flags & GTK_DEBUG_ICONTHEME)
+  if (gtk_get_debug_flags () & GTK_DEBUG_ICONTHEME)
     {
       if (!_gtk_icon_cache_validate (&info))
         {

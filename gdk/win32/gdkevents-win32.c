@@ -966,7 +966,7 @@ fill_key_event_string (GdkEvent *event)
    */
   
   c = 0;
-  if (event->key.keyval != GDK_VoidSymbol)
+  if (event->key.keyval != GDK_KEY_VoidSymbol)
     c = gdk_keyval_to_unicode (event->key.keyval);
 
   if (c)
@@ -1003,13 +1003,13 @@ fill_key_event_string (GdkEvent *event)
       if (event->key.string)
 	event->key.length = bytes_written;
     }
-  else if (event->key.keyval == GDK_Escape)
+  else if (event->key.keyval == GDK_KEY_Escape)
     {
       event->key.length = 1;
       event->key.string = g_strdup ("\033");
     }
-  else if (event->key.keyval == GDK_Return ||
-	   event->key.keyval == GDK_KP_Enter)
+  else if (event->key.keyval == GDK_KEY_Return ||
+	   event->key.keyval == GDK_KEY_KP_Enter)
     {
       event->key.length = 1;
       event->key.string = g_strdup ("\r");
@@ -2063,7 +2063,7 @@ gdk_event_translate (MSG  *msg,
 			     GDK_KEY_PRESS : GDK_KEY_RELEASE);
       event->key.window = window;
       event->key.time = _gdk_win32_get_next_tick (msg->time);
-      event->key.keyval = GDK_VoidSymbol;
+      event->key.keyval = GDK_KEY_VoidSymbol;
       event->key.string = NULL;
       event->key.length = 0;
       event->key.hardware_keycode = msg->wParam;

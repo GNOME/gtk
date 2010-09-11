@@ -298,7 +298,7 @@ add_arrow_bindings (GtkBindingSet   *binding_set,
 		    guint            keysym,
 		    GtkDirectionType dir)
 {
-  guint keypad_keysym = keysym - GDK_Left + GDK_KP_Left;
+  guint keypad_keysym = keysym - GDK_KEY_Left + GDK_KEY_KP_Left;
   
   gtk_binding_entry_add_signal (binding_set, keysym, 0,
                                 "move-focus", 1,
@@ -314,11 +314,11 @@ add_ctrl_tab_bindings (GtkBindingSet    *binding_set,
 		       GtkDirectionType  direction)
 {
   gtk_binding_entry_add_signal (binding_set,
-				GDK_Tab, GDK_CONTROL_MASK | modifiers,
+				GDK_KEY_Tab, GDK_CONTROL_MASK | modifiers,
 				"move-focus", 1,
 				GTK_TYPE_DIRECTION_TYPE, direction);
   gtk_binding_entry_add_signal (binding_set,
-				GDK_KP_Tab, GDK_CONTROL_MASK | modifiers,
+				GDK_KEY_KP_Tab, GDK_CONTROL_MASK | modifiers,
 				"move-focus", 1,
 				GTK_TYPE_DIRECTION_TYPE, direction);
 }
@@ -581,21 +581,21 @@ gtk_toolbar_class_init (GtkToolbarClass *klass)
 
   binding_set = gtk_binding_set_by_class (klass);
   
-  add_arrow_bindings (binding_set, GDK_Left, GTK_DIR_LEFT);
-  add_arrow_bindings (binding_set, GDK_Right, GTK_DIR_RIGHT);
-  add_arrow_bindings (binding_set, GDK_Up, GTK_DIR_UP);
-  add_arrow_bindings (binding_set, GDK_Down, GTK_DIR_DOWN);
+  add_arrow_bindings (binding_set, GDK_KEY_Left, GTK_DIR_LEFT);
+  add_arrow_bindings (binding_set, GDK_KEY_Right, GTK_DIR_RIGHT);
+  add_arrow_bindings (binding_set, GDK_KEY_Up, GTK_DIR_UP);
+  add_arrow_bindings (binding_set, GDK_KEY_Down, GTK_DIR_DOWN);
   
-  gtk_binding_entry_add_signal (binding_set, GDK_KP_Home, 0,
+  gtk_binding_entry_add_signal (binding_set, GDK_KEY_KP_Home, 0,
                                 "focus-home-or-end", 1,
 				G_TYPE_BOOLEAN, TRUE);
-  gtk_binding_entry_add_signal (binding_set, GDK_Home, 0,
+  gtk_binding_entry_add_signal (binding_set, GDK_KEY_Home, 0,
                                 "focus-home-or-end", 1,
 				G_TYPE_BOOLEAN, TRUE);
-  gtk_binding_entry_add_signal (binding_set, GDK_KP_End, 0,
+  gtk_binding_entry_add_signal (binding_set, GDK_KEY_KP_End, 0,
                                 "focus-home-or-end", 1,
 				G_TYPE_BOOLEAN, FALSE);
-  gtk_binding_entry_add_signal (binding_set, GDK_End, 0,
+  gtk_binding_entry_add_signal (binding_set, GDK_KEY_End, 0,
                                 "focus-home-or-end", 1,
 				G_TYPE_BOOLEAN, FALSE);
   

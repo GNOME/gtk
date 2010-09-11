@@ -190,6 +190,9 @@ gail_range_get_maximum_value (AtkValue		*obj,
                               GValue		*value)
 {
   GailRange *range;
+  GtkRange *gtk_range;
+  GtkAdjustment *gtk_adjustment;
+  gdouble max = 0;
 
   g_return_if_fail (GAIL_IS_RANGE (obj));
 
@@ -199,8 +202,20 @@ gail_range_get_maximum_value (AtkValue		*obj,
      * Adjustment has not been specified
      */
     return;
-
+ 
   atk_value_get_maximum_value (ATK_VALUE (range->adjustment), value);
+
+  gtk_range = GTK_RANGE (gtk_accessible_get_widget (GTK_ACCESSIBLE (range)));
+  g_return_if_fail (gtk_range);
+
+  gtk_adjustment = gtk_range_get_adjustment (gtk_range);
+  max = g_value_get_double (value);
+  max -=  gtk_adjustment_get_page_size (gtk_adjustment);
+
+  if (gtk_range_get_restrict_to_fill_level (gtk_range))
+    max = MIN (max, gtk_range_get_fill_level (gtk_range));
+
+  g_value_set_double (value, max);
 }
 
 static void	 
@@ -460,7 +475,7 @@ gail_range_get_keybinding (AtkAction *action,
     if (GTK_IS_LABEL (label))
      {
       key_val = gtk_label_get_mnemonic_keyval (GTK_LABEL (label));
-      if (key_val != GDK_VoidSymbol)
+      if (key_val != GDK_KEY_VoidSymbol)
          return_value = gtk_accelerator_name (key_val, GDK_MOD1_MASK);
       }
     g_free (range->activate_keybinding);

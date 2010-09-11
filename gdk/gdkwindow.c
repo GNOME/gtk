@@ -7674,50 +7674,6 @@ gdk_window_coords_from_parent (GdkWindow *window,
 }
 
 /**
- * gdk_window_get_deskrelative_origin:
- * @window: a toplevel #GdkWindow
- * @x: return location for X coordinate
- * @y: return location for Y coordinate
- *
- * This gets the origin of a #GdkWindow relative to
- * an Enlightenment-window-manager desktop. As long as you don't
- * assume that the user's desktop/workspace covers the entire
- * root window (i.e. you don't assume that the desktop begins
- * at root window coordinate 0,0) this function is not necessary.
- * It's deprecated for that reason.
- *
- * Return value: not meaningful
- **/
-gboolean
-gdk_window_get_deskrelative_origin (GdkWindow *window,
-				    gint      *x,
-				    gint      *y)
-{
-  GdkWindowObject *private;
-  GdkWindowImplIface *impl_iface;
-  gboolean return_val = FALSE;
-  gint tx = 0;
-  gint ty = 0;
-
-  g_return_val_if_fail (GDK_IS_WINDOW (window), FALSE);
-
-  private = (GdkWindowObject *) window;
-
-  if (!GDK_WINDOW_DESTROYED (window))
-    {
-      impl_iface = GDK_WINDOW_IMPL_GET_IFACE (private->impl);
-      return_val = impl_iface->get_deskrelative_origin (window, &tx, &ty);
-
-      if (x)
-	*x = tx + private->abs_x;
-      if (y)
-	*y = ty + private->abs_y;
-    }
-
-  return return_val;
-}
-
-/**
  * gdk_window_shape_combine_mask:
  * @window: a #GdkWindow
  * @mask: shape mask
@@ -9866,10 +9822,10 @@ _gdk_synthesize_crossing_events_for_geometry_change (GdkWindow *changed_window)
     {
       toplevel_priv->synthesize_crossing_event_queued = TRUE;
 
-      g_idle_add_full (GDK_PRIORITY_EVENTS - 1,
-		       do_synthesize_crossing_event,
-		       g_object_ref (toplevel),
-		       g_object_unref);
+      gdk_threads_add_idle_full (GDK_PRIORITY_EVENTS - 1,
+                                 do_synthesize_crossing_event,
+                                 g_object_ref (toplevel),
+                                 g_object_unref);
     }
 }
 

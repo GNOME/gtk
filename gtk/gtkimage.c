@@ -33,6 +33,7 @@
 #include "gtkiconfactory.h"
 #include "gtkstock.h"
 #include "gtkicontheme.h"
+#include "gtksizerequest.h"
 #include "gtkintl.h"
 #include "gtkprivate.h"
 
@@ -150,6 +151,8 @@ struct _GtkImagePrivate
                                                * only used with GTK_IMAGE_GICON, GTK_IMAGE_ICON_NAME */
   gint                  pixel_size;
   guint                 need_calc_size : 1;
+  gint                  required_width;
+  gint                  required_height;
 };
 
 
@@ -1518,13 +1521,15 @@ animation_timeout (gpointer data)
   delay = gdk_pixbuf_animation_iter_get_delay_time (priv->data.anim.iter);
   if (delay >= 0)
     {
+      GtkWidget *widget = GTK_WIDGET (image);
+
       priv->data.anim.frame_timeout =
         gdk_threads_add_timeout (delay, animation_timeout, image);
 
-      gtk_widget_queue_draw (GTK_WIDGET (image));
+      gtk_widget_queue_draw (widget);
 
-      if (gtk_widget_is_drawable (GTK_WIDGET (image)))
-        gdk_window_process_updates (GTK_WIDGET (image)->window, TRUE);
+      if (gtk_widget_is_drawable (widget))
+        gdk_window_process_updates (gtk_widget_get_window (widget), TRUE);
     }
 
   return FALSE;
@@ -1789,6 +1794,7 @@ gtk_image_expose (GtkWidget      *widget,
   if (gtk_widget_get_mapped (widget) &&
       priv->storage_type != GTK_IMAGE_EMPTY)
     {
+      GtkAllocation allocation;
       GtkMisc *misc;
       GdkRectangle area, image_bound;
       gint x, y, mask_x, mask_y;
@@ -1809,8 +1815,10 @@ gtk_image_expose (GtkWidget      *widget,
        */
       if (priv->need_calc_size)
 	gtk_image_calc_size (image);
-      
-      if (!gdk_rectangle_intersect (&area, &widget->allocation, &area))
+
+      gtk_widget_get_allocation (widget, &allocation);
+
+      if (!gdk_rectangle_intersect (&area, &allocation, &area))
 	return FALSE;
 
       gtk_misc_get_alignment (misc, &xalign, &yalign);
@@ -1819,10 +1827,8 @@ gtk_image_expose (GtkWidget      *widget,
       if (gtk_widget_get_direction (widget) != GTK_TEXT_DIR_LTR)
 	xalign = 1.0 - xalign;
 
-      x = floor (widget->allocation.x + xpad
-		 + ((widget->allocation.width - widget->requisition.width) * xalign));
-      y = floor (widget->allocation.y + ypad
-		 + ((widget->allocation.height - widget->requisition.height) * yalign));
+      x = floor (allocation.x + xpad + ((allocation.width - priv->required_width) * xalign));
+      y = floor (allocation.y + ypad + ((allocation.height - priv->required_height) * yalign));
       mask_x = x;
       mask_y = y;
       
@@ -1898,7 +1904,7 @@ gtk_image_expose (GtkWidget      *widget,
         case GTK_IMAGE_ICON_SET:
           pixbuf =
             gtk_icon_set_render_icon (priv->data.icon_set.icon_set,
-                                      widget->style,
+                                      gtk_widget_get_style (widget),
                                       gtk_widget_get_direction (widget),
                                       gtk_widget_get_state (widget),
                                       priv->icon_size,
@@ -2007,8 +2013,8 @@ gtk_image_expose (GtkWidget      *widget,
                   gtk_icon_source_set_size (source,
                                             GTK_ICON_SIZE_SMALL_TOOLBAR);
                   gtk_icon_source_set_size_wildcarded (source, FALSE);
-                  
-                  rendered = gtk_style_render_icon (widget->style,
+
+                  rendered = gtk_style_render_icon (gtk_widget_get_style (widget),
                                                     source,
                                                     gtk_widget_get_direction (widget),
                                                     gtk_widget_get_state (widget),
@@ -2025,7 +2031,7 @@ gtk_image_expose (GtkWidget      *widget,
 
               if (pixbuf)
                 {
-                  cairo_t *cr = gdk_cairo_create (widget->window);
+                  cairo_t *cr = gdk_cairo_create (gtk_widget_get_window (widget));
                   gdk_cairo_set_source_pixbuf (cr, pixbuf, x, y);
                   gdk_cairo_rectangle (cr, &image_bound);
                   cairo_fill (cr);
@@ -2040,7 +2046,7 @@ gtk_image_expose (GtkWidget      *widget,
               switch (priv->storage_type)
                 {
                 case GTK_IMAGE_PIXMAP:
-                  cr = gdk_cairo_create (widget->window);
+                  cr = gdk_cairo_create (gtk_widget_get_window (widget));
 
                   if (mask)
                     {
@@ -2063,7 +2069,6 @@ gtk_image_expose (GtkWidget      *widget,
 
                   cairo_destroy (cr);
                   break;
-              
                 case GTK_IMAGE_PIXBUF:
                 case GTK_IMAGE_STOCK:
                 case GTK_IMAGE_ICON_SET:
@@ -2230,7 +2235,7 @@ gtk_image_calc_size (GtkImage *image)
 
   /* We update stock/icon set on every size request, because
    * the theme could have affected the size; for other kinds of
-   * image, we just update the requisition when the image data
+   * image, we just update the required width/height when the image data
    * is set.
    */
   switch (priv->storage_type)
@@ -2244,7 +2249,7 @@ gtk_image_calc_size (GtkImage *image)
       
     case GTK_IMAGE_ICON_SET:
       pixbuf = gtk_icon_set_render_icon (priv->data.icon_set.icon_set,
-                                         widget->style,
+                                         gtk_widget_get_style (widget),
                                          gtk_widget_get_direction (widget),
                                          gtk_widget_get_state (widget),
                                          priv->icon_size,
@@ -2272,8 +2277,8 @@ gtk_image_calc_size (GtkImage *image)
 
       gtk_misc_get_padding (GTK_MISC (image), &xpad, &ypad);
 
-      widget->requisition.width = gdk_pixbuf_get_width (pixbuf) + xpad * 2;
-      widget->requisition.height = gdk_pixbuf_get_height (pixbuf) + ypad * 2;
+      priv->required_width = gdk_pixbuf_get_width (pixbuf) + xpad * 2;
+      priv->required_height = gdk_pixbuf_get_height (pixbuf) + ypad * 2;
 
       g_object_unref (pixbuf);
     }
@@ -2284,13 +2289,15 @@ gtk_image_size_request (GtkWidget      *widget,
                         GtkRequisition *requisition)
 {
   GtkImage *image;
+  GtkImagePrivate *priv;
   
   image = GTK_IMAGE (widget);
+  priv  = image->priv;
 
   gtk_image_calc_size (image);
 
-  /* Chain up to default that simply reads current requisition */
-  GTK_WIDGET_CLASS (gtk_image_parent_class)->size_request (widget, requisition);
+  requisition->width  = priv->required_width;
+  requisition->height = priv->required_height;
 }
 
 static void
@@ -2326,13 +2333,14 @@ gtk_image_update_size (GtkImage *image,
                        gint      image_width,
                        gint      image_height)
 {
-  GtkWidget *widget = GTK_WIDGET (image);
-  gint xpad, ypad;
+  GtkWidget       *widget = GTK_WIDGET (image);
+  GtkImagePrivate *priv = image->priv;
+  gint             xpad, ypad;
 
   gtk_misc_get_padding (GTK_MISC (image), &xpad, &ypad);
 
-  widget->requisition.width = image_width + xpad * 2;
-  widget->requisition.height = image_height + ypad * 2;
+  priv->required_width  = image_width + xpad * 2;
+  priv->required_height = image_height + ypad * 2;
 
   if (gtk_widget_get_visible (widget))
     gtk_widget_queue_resize (widget);

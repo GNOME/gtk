@@ -93,9 +93,6 @@ struct _GdkWindowImplIface
 					 gint             y,
                                          gint            *root_x,
                                          gint            *root_y);
-  gint         (* get_deskrelative_origin) (GdkWindow       *window,
-                                         gint            *x,
-                                         gint            *y);
   gboolean     (* get_device_state)     (GdkWindow       *window,
                                          GdkDevice       *device,
                                          gint            *x,

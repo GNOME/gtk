@@ -577,7 +577,7 @@ translate_keyboard_string (GdkEventKey *event)
    */
   event->string = NULL;
 
-  if (event->keyval != GDK_VoidSymbol)
+  if (event->keyval != GDK_KEY_VoidSymbol)
     c = gdk_keyval_to_unicode (event->keyval);
 
   if (c)
@@ -611,13 +611,13 @@ translate_keyboard_string (GdkEventKey *event)
       if (event->string)
 	event->length = bytes_written;
     }
-  else if (event->keyval == GDK_Escape)
+  else if (event->keyval == GDK_KEY_Escape)
     {
       event->length = 1;
       event->string = g_strdup ("\033");
     }
-  else if (event->keyval == GDK_Return ||
-	  event->keyval == GDK_KP_Enter)
+  else if (event->keyval == GDK_KEY_Return ||
+	  event->keyval == GDK_KEY_KP_Enter)
     {
       event->length = 1;
       event->string = g_strdup ("\r");
@@ -924,7 +924,7 @@ gdk_device_manager_xi2_translate_event (GdkEventTranslator *translator,
                                       GUINT_TO_POINTER (xev->deviceid));
         gdk_event_set_device (event, device);
 
-        event->key.keyval = GDK_VoidSymbol;
+        event->key.keyval = GDK_KEY_VoidSymbol;
 
         gdk_keymap_translate_keyboard_state (keymap,
                                              event->key.hardware_keycode,

@@ -1324,7 +1324,7 @@ gail_entry_get_keybinding (AtkAction *action,
         if (GTK_IS_LABEL (label))
           {
             key_val = gtk_label_get_mnemonic_keyval (GTK_LABEL (label)); 
-            if (key_val != GDK_VoidSymbol)
+            if (key_val != GDK_KEY_VoidSymbol)
               return_value = gtk_accelerator_name (key_val, GDK_MOD1_MASK);
           }
         g_free (entry->activate_keybinding);

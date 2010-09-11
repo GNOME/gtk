@@ -104,7 +104,6 @@ gtk/gtkimmodule.c
 gtk/gtkimmulticontext.c
 gtk/gtkinfobar.c
 gtk/gtkinvisible.c
-gtk/gtkitem.c
 gtk/gtklabel.c
 gtk/gtklayout.c
 gtk/gtklinkbutton.c

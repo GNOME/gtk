@@ -2762,58 +2762,6 @@ gdk_window_x11_get_root_coords (GdkWindow *window,
   return return_val;
 }
 
-static gboolean
-gdk_window_x11_get_deskrelative_origin (GdkWindow *window,
-					gint      *x,
-					gint      *y)
-{
-  gboolean return_val = FALSE;
-  gint num_children, format_return;
-  Window win, *child, parent, root;
-  Atom type_return;
-  Atom atom;
-  gulong number_return, bytes_after_return;
-  guchar *data_return;
-  
-  atom = gdk_x11_get_xatom_by_name_for_display (GDK_WINDOW_DISPLAY (window),
-						"ENLIGHTENMENT_DESKTOP");
-  win = GDK_WINDOW_XID (window);
-  
-  while (XQueryTree (GDK_WINDOW_XDISPLAY (window), win, &root, &parent,
-		     &child, (unsigned int *)&num_children))
-    {
-      if ((child) && (num_children > 0))
-	XFree (child);
-      
-      if (!parent)
-	break;
-      else
-	win = parent;
-      
-      if (win == root)
-	break;
-      
-      data_return = NULL;
-      XGetWindowProperty (GDK_WINDOW_XDISPLAY (window), win, atom, 0, 0,
-			  False, XA_CARDINAL, &type_return, &format_return,
-			  &number_return, &bytes_after_return, &data_return);
-      
-      if (type_return == XA_CARDINAL)
-	{
-	  XFree (data_return);
-	  break;
-	}
-    }
-  
-  return_val = XTranslateCoordinates (GDK_WINDOW_XDISPLAY (window),
-				      GDK_WINDOW_XID (window),
-				      win,
-				      0, 0, x, y,
-				      &root);
-  
-  return return_val;
-}
-
 /**
  * gdk_window_get_root_origin:
  * @window: a toplevel #GdkWindow
@@ -5558,7 +5506,6 @@ gdk_window_impl_iface_init (GdkWindowImplIface *iface)
   iface->get_geometry = gdk_window_x11_get_geometry;
   iface->get_root_coords = gdk_window_x11_get_root_coords;
   iface->get_device_state = gdk_window_x11_get_device_state;
-  iface->get_deskrelative_origin = gdk_window_x11_get_deskrelative_origin;
   iface->shape_combine_region = gdk_window_x11_shape_combine_region;
   iface->input_shape_combine_region = gdk_window_x11_input_shape_combine_region;
   iface->set_static_gravities = gdk_window_x11_set_static_gravities;

@@ -51,6 +51,8 @@ enum {
   ACTIVATE_ITEM,
   TOGGLE_SIZE_REQUEST,
   TOGGLE_SIZE_ALLOCATE,
+  SELECT,
+  DESELECT,
   LAST_SIGNAL
 };
 
@@ -84,6 +86,10 @@ static void gtk_menu_item_realize        (GtkWidget        *widget);
 static void gtk_menu_item_unrealize      (GtkWidget        *widget);
 static void gtk_menu_item_map            (GtkWidget        *widget);
 static void gtk_menu_item_unmap          (GtkWidget        *widget);
+static gboolean gtk_menu_item_enter      (GtkWidget        *widget,
+                                          GdkEventCrossing *event);
+static gboolean gtk_menu_item_leave      (GtkWidget        *widget,
+                                          GdkEventCrossing *event);
 static void gtk_menu_item_paint          (GtkWidget        *widget,
 					  GdkRectangle     *area);
 static gint gtk_menu_item_expose         (GtkWidget        *widget,
@@ -92,8 +98,8 @@ static void gtk_menu_item_parent_set     (GtkWidget        *widget,
 					  GtkWidget        *previous_parent);
 
 
-static void gtk_real_menu_item_select               (GtkItem     *item);
-static void gtk_real_menu_item_deselect             (GtkItem     *item);
+static void gtk_real_menu_item_select               (GtkMenuItem *item);
+static void gtk_real_menu_item_deselect             (GtkMenuItem *item);
 static void gtk_real_menu_item_activate             (GtkMenuItem *item);
 static void gtk_real_menu_item_activate_item        (GtkMenuItem *item);
 static void gtk_real_menu_item_toggle_size_request  (GtkMenuItem *menu_item,
@@ -162,7 +168,7 @@ static guint menu_item_signals[LAST_SIGNAL] = { 0 };
 
 static GtkBuildableIface *parent_buildable_iface;
 
-G_DEFINE_TYPE_WITH_CODE (GtkMenuItem, gtk_menu_item, GTK_TYPE_ITEM,
+G_DEFINE_TYPE_WITH_CODE (GtkMenuItem, gtk_menu_item, GTK_TYPE_BIN,
 			 G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE,
 						gtk_menu_item_buildable_interface_init)
 			 G_IMPLEMENT_INTERFACE (GTK_TYPE_ACTIVATABLE,
@@ -180,7 +186,6 @@ gtk_menu_item_class_init (GtkMenuItemClass *klass)
   GtkObjectClass *object_class = GTK_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
   GtkContainerClass *container_class = GTK_CONTAINER_CLASS (klass);
-  GtkItemClass *item_class = GTK_ITEM_CLASS (klass);
 
   gobject_class->dispose      = gtk_menu_item_dispose;
   gobject_class->set_property = gtk_menu_item_set_property;
@@ -194,6 +199,8 @@ gtk_menu_item_class_init (GtkMenuItemClass *klass)
   widget_class->unrealize = gtk_menu_item_unrealize;
   widget_class->map = gtk_menu_item_map;
   widget_class->unmap = gtk_menu_item_unmap;
+  widget_class->enter_notify_event = gtk_menu_item_enter;
+  widget_class->leave_notify_event = gtk_menu_item_leave;
   widget_class->show_all = gtk_menu_item_show_all;
   widget_class->hide_all = gtk_menu_item_hide_all;
   widget_class->mnemonic_activate = gtk_menu_item_mnemonic_activate;
@@ -202,15 +209,14 @@ gtk_menu_item_class_init (GtkMenuItemClass *klass)
   
   container_class->forall = gtk_menu_item_forall;
 
-  item_class->select      = gtk_real_menu_item_select;
-  item_class->deselect    = gtk_real_menu_item_deselect;
-
   klass->activate             = gtk_real_menu_item_activate;
   klass->activate_item        = gtk_real_menu_item_activate_item;
   klass->toggle_size_request  = gtk_real_menu_item_toggle_size_request;
   klass->toggle_size_allocate = gtk_real_menu_item_toggle_size_allocate;
   klass->set_label            = gtk_real_menu_item_set_label;
   klass->get_label            = gtk_real_menu_item_get_label;
+  klass->select               = gtk_real_menu_item_select;
+  klass->deselect             = gtk_real_menu_item_deselect;
 
   klass->hide_on_activate = TRUE;
 
@@ -252,6 +258,24 @@ gtk_menu_item_class_init (GtkMenuItemClass *klass)
 		  _gtk_marshal_VOID__INT,
 		  G_TYPE_NONE, 1,
 		  G_TYPE_INT);
+
+  menu_item_signals[SELECT] =
+    g_signal_new (I_("select"),
+                  G_OBJECT_CLASS_TYPE (gobject_class),
+                  G_SIGNAL_RUN_FIRST,
+                  G_STRUCT_OFFSET (GtkMenuItemClass, select),
+                  NULL, NULL,
+                  _gtk_marshal_VOID__VOID,
+                  G_TYPE_NONE, 0);
+
+  menu_item_signals[DESELECT] =
+    g_signal_new (I_("deselect"),
+                  G_OBJECT_CLASS_TYPE (gobject_class),
+                  G_SIGNAL_RUN_FIRST,
+                  G_STRUCT_OFFSET (GtkMenuItemClass, deselect),
+                  NULL, NULL,
+                  _gtk_marshal_VOID__VOID,
+                  G_TYPE_NONE, 0);
 
   /**
    * GtkMenuItem:right-justified:
@@ -955,8 +979,6 @@ gtk_menu_item_get_height_for_width (GtkSizeRequest      *request,
     *natural_size = nat_height;
 }
 
-
-
 static void
 gtk_menu_item_buildable_interface_init (GtkBuildableIface *iface)
 {
@@ -965,7 +987,7 @@ gtk_menu_item_buildable_interface_init (GtkBuildableIface *iface)
   iface->custom_finished = gtk_menu_item_buildable_custom_finished;
 }
 
-static void 
+static void
 gtk_menu_item_buildable_add_child (GtkBuildable *buildable,
 				   GtkBuilder   *builder,
 				   GObject      *child,
@@ -1230,7 +1252,7 @@ gtk_menu_item_select (GtkMenuItem *menu_item)
 
   g_return_if_fail (GTK_IS_MENU_ITEM (menu_item));
 
-  gtk_item_select (GTK_ITEM (menu_item));
+  g_signal_emit (menu_item, menu_item_signals[SELECT], 0);
 
   /* Enable themeing of the parent menu item depending on whether
    * something is selected in its submenu
@@ -1252,7 +1274,7 @@ gtk_menu_item_deselect (GtkMenuItem *menu_item)
 
   g_return_if_fail (GTK_IS_MENU_ITEM (menu_item));
 
-  gtk_item_deselect (GTK_ITEM (menu_item));
+  g_signal_emit (menu_item, menu_item_signals[DESELECT], 0);
 
   /* Enable themeing of the parent menu item depending on whether
    * something is selected in its submenu
@@ -1466,6 +1488,24 @@ gtk_menu_item_unmap (GtkWidget *widget)
   GTK_WIDGET_CLASS (gtk_menu_item_parent_class)->unmap (widget);
 }
 
+static gboolean
+gtk_menu_item_enter (GtkWidget        *widget,
+                     GdkEventCrossing *event)
+{
+  g_return_val_if_fail (event != NULL, FALSE);
+
+  return gtk_widget_event (gtk_widget_get_parent (widget), (GdkEvent *) event);
+}
+
+static gboolean
+gtk_menu_item_leave (GtkWidget        *widget,
+                     GdkEventCrossing *event)
+{
+  g_return_val_if_fail (event != NULL, FALSE);
+
+  return gtk_widget_event (gtk_widget_get_parent (widget), (GdkEvent*) event);
+}
+
 static void
 gtk_menu_item_paint (GtkWidget    *widget,
 		     GdkRectangle *area)
@@ -1598,16 +1638,11 @@ gtk_menu_item_expose (GtkWidget      *widget,
 }
 
 static void
-gtk_real_menu_item_select (GtkItem *item)
+gtk_real_menu_item_select (GtkMenuItem *menu_item)
 {
-  GtkMenuItem *menu_item;
   gboolean touchscreen_mode;
 
-  g_return_if_fail (GTK_IS_MENU_ITEM (item));
-
-  menu_item = GTK_MENU_ITEM (item);
-
-  g_object_get (gtk_widget_get_settings (GTK_WIDGET (item)),
+  g_object_get (gtk_widget_get_settings (GTK_WIDGET (menu_item)),
                 "gtk-touchscreen-mode", &touchscreen_mode,
                 NULL);
 
@@ -1624,14 +1659,8 @@ gtk_real_menu_item_select (GtkItem *item)
 }
 
 static void
-gtk_real_menu_item_deselect (GtkItem *item)
+gtk_real_menu_item_deselect (GtkMenuItem *menu_item)
 {
-  GtkMenuItem *menu_item;
-
-  g_return_if_fail (GTK_IS_MENU_ITEM (item));
-
-  menu_item = GTK_MENU_ITEM (item);
-
   if (menu_item->submenu)
     _gtk_menu_item_popdown_submenu (GTK_WIDGET (menu_item));
 

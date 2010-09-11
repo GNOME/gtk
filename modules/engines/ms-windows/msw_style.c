@@ -926,7 +926,7 @@ is_combo_box_child (GtkWidget *w)
   if (w == NULL)
     return FALSE;
 
-  for (tmp = w->parent; tmp; tmp = tmp->parent)
+  for (tmp = gtk_widget_get_parent (w); tmp; tmp = gtk_widget_get_parent (tmp))
     {
       if (GTK_IS_COMBO_BOX (tmp))
 	return TRUE;
@@ -954,7 +954,7 @@ combo_box_draw_arrow (GtkStyle *style,
 
       dc = get_window_dc (style, window, state, &dc_info, area->x, area->y, area->width,
 			  area->height, &rect);
-      border = (GTK_TOGGLE_BUTTON (widget->parent)->
+      border = (GTK_TOGGLE_BUTTON (gtk_widget_get_parent (widget))->
 		active ? DFCS_PUSHED | DFCS_FLAT : 0);
 
       InflateRect (&rect, 1, 1);
@@ -1477,13 +1477,16 @@ draw_arrow (GtkStyle *style,
 	    }
 	}
       /* probably a gtk combo box on a toolbar */
-      else if (0		/* widget->parent && GTK_IS_BUTTON
-				   (widget->parent) */ )
+      else if (0		/* gtk_widget_get_parent (widget) && GTK_IS_BUTTON
+				   (gtk_widget_get_parent (widget)) */ )
 	{
+	  GtkAllocation allocation;
+
+	  gtk_widget_get_allocation (widget, &allocation);
 	  if (xp_theme_draw
 	      (window, XP_THEME_ELEMENT_COMBOBUTTON, style, x - 3,
-	       widget->allocation.y + 1, width + 5,
-	       widget->allocation.height - 4, state, area))
+	       allocation.y + 1, width + 5,
+	       allocation.height - 4, state, area))
 	    {
 	      return;
 	    }
@@ -1550,7 +1553,7 @@ is_toolbar_child (GtkWidget *wid)
       if (GTK_IS_TOOLBAR (wid) || GTK_IS_HANDLE_BOX (wid))
 	return TRUE;
       else
-	wid = wid->parent;
+	wid = gtk_widget_get_parent (wid);
     }
 
   return FALSE;
@@ -1564,7 +1567,7 @@ is_menu_tool_button_child (GtkWidget *wid)
       if (GTK_IS_MENU_TOOL_BUTTON (wid))
 	return TRUE;
       else
-	wid = wid->parent;
+	wid = gtk_widget_get_parent (wid);
     }
   return FALSE;
 }
@@ -1728,7 +1731,7 @@ draw_tool_button (GdkWindow *window, GtkWidget *widget, GtkStyle *style,
     }
   else if (state_type == GTK_STATE_ACTIVE)
     {
-      if (is_toggled && !is_menu_tool_button_child (widget->parent))
+      if (is_toggled && !is_menu_tool_button_child (gtk_widget_get_parent (widget)))
 	{
 	  SetTextColor (dc, GetSysColor (COLOR_3DHILIGHT));
 	  SetBkColor (dc, GetSysColor (COLOR_BTNFACE));
@@ -1837,7 +1840,7 @@ draw_box (GtkStyle *style,
   if (detail &&
       (!strcmp (detail, "button") || !strcmp (detail, "buttondefault")))
     {
-      if (GTK_IS_TREE_VIEW (widget->parent))
+      if (GTK_IS_TREE_VIEW (gtk_widget_get_parent (widget)))
       {
         if (xp_theme_draw
 	      (window, XP_THEME_ELEMENT_LIST_HEADER, style, x, y,
@@ -1859,7 +1862,7 @@ draw_box (GtkStyle *style,
 	      release_window_dc (&dc_info);
 	    }
 	}
-      else if (is_toolbar_child (widget->parent)
+      else if (is_toolbar_child (gtk_widget_get_parent (widget))
 	       || (!GTK_IS_BUTTON (widget) ||
 		   (GTK_RELIEF_NONE == gtk_button_get_relief (GTK_BUTTON (widget)))))
 	{
@@ -2214,9 +2217,12 @@ draw_tab (GtkStyle *style,
 
   if (detail && !strcmp (detail, "optionmenutab"))
     {
+      GtkAllocation allocation;
+
+      gtk_widget_get_allocation (widget, &allocation);
       if (xp_theme_draw (window, XP_THEME_ELEMENT_COMBOBUTTON,
-			 style, x - 5, widget->allocation.y + 1,
-			 width + 10, widget->allocation.height - 2,
+			 style, x - 5, allocation.y + 1,
+			 width + 10, allocation.height - 2,
 			 state, area))
 	{
 	  return;
@@ -2361,6 +2367,9 @@ draw_themed_tab_button (GtkStyle *style,
   GdkRectangle draw_rect, clip_rect;
   GdkPixbufRotation rotation = GDK_PIXBUF_ROTATE_NONE;
   cairo_t *cr;
+  GtkAllocation allocation;
+
+  gtk_widget_get_allocation (widget, &allocation);
 
   if (gap_side == GTK_POS_TOP)
     {
@@ -2386,7 +2395,7 @@ draw_themed_tab_button (GtkStyle *style,
 	}
 
       /* If we are currently drawing the right-most tab, and if that tab is the selected tab... */
-      widget_right = widget->allocation.x + widget->allocation.width - border_width - 2;
+      widget_right = allocation.x + allocation.width - border_width - 2;
 
       if (draw_rect.x + draw_rect.width >= widget_right)
 	{
@@ -2416,7 +2425,7 @@ draw_themed_tab_button (GtkStyle *style,
 	}
 
       /* If we are currently drawing the right-most tab, and if that tab is the selected tab... */
-      widget_right = widget->allocation.x + widget->allocation.width - border_width - 2;
+      widget_right = allocation.x + allocation.width - border_width - 2;
 
       if (draw_rect.x + draw_rect.width >= widget_right)
 	{
@@ -2449,7 +2458,7 @@ draw_themed_tab_button (GtkStyle *style,
 	}
 
       /* If we are currently drawing the bottom-most tab, and if that tab is the selected tab... */
-      widget_bottom = widget->allocation.x + widget->allocation.height - border_width - 2;
+      widget_bottom = allocation.x + allocation.height - border_width - 2;
 
       if (draw_rect.y + draw_rect.height >= widget_bottom)
 	{
@@ -2482,7 +2491,7 @@ draw_themed_tab_button (GtkStyle *style,
 	}
 
       /* If we are currently drawing the bottom-most tab, and if that tab is the selected tab... */
-      widget_bottom = widget->allocation.x + widget->allocation.height - border_width - 2;
+      widget_bottom = allocation.x + allocation.height - border_width - 2;
 
       if (draw_rect.y + draw_rect.height >= widget_bottom)
 	{
@@ -2549,7 +2558,7 @@ draw_themed_tab_button (GtkStyle *style,
       //       pixel at the top.  There may be a better solution than this if someone
       //       has time to discover it.
       if (gap_side == GTK_POS_BOTTOM && state_type == GTK_STATE_NORMAL
-	  && x == widget->allocation.x)
+	  && x == allocation.x)
 	{
 	  int rowstride = gdk_pixbuf_get_rowstride (pixbuf);
 	  int n_channels = gdk_pixbuf_get_n_channels (pixbuf);
@@ -3340,7 +3349,7 @@ draw_focus (GtkStyle *style,
     {
       return;
     }
-  if (GTK_IS_TREE_VIEW (widget->parent)	/* list view bheader */)
+  if (GTK_IS_TREE_VIEW (gtk_widget_get_parent (widget))	/* list view bheader */)
     {
       return;
     }
@@ -3374,12 +3383,12 @@ draw_layout (GtkStyle *style,
    */
   if (xp_theme_is_active () && detail && !strcmp (detail, "label"))
     {
-      if (widget->parent != NULL)
+      if (gtk_widget_get_parent (widget) != NULL)
 	{
-	  if (GTK_IS_NOTEBOOK (widget->parent))
+	  if (GTK_IS_NOTEBOOK (gtk_widget_get_parent (widget)))
 	    {
 	      int side;
-	      notebook = GTK_NOTEBOOK (widget->parent);
+	      notebook = GTK_NOTEBOOK (gtk_widget_get_parent (widget));
 	      side = gtk_notebook_get_tab_pos (notebook);
 
 	      if (side == GTK_POS_TOP || side == GTK_POS_BOTTOM)

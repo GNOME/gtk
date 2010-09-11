@@ -628,7 +628,7 @@ gtk_label_class_init (GtkLabelClass *class)
 						      P_("The mnemonic accelerator key for this label"),
 						      0,
 						      G_MAXUINT,
-						      GDK_VoidSymbol,
+						      GDK_KEY_VoidSymbol,
 						      GTK_PARAM_READABLE));
   g_object_class_install_property (gobject_class,
                                    PROP_MNEMONIC_WIDGET,
@@ -791,113 +791,113 @@ gtk_label_class_init (GtkLabelClass *class)
   binding_set = gtk_binding_set_by_class (class);
 
   /* Moving the insertion point */
-  add_move_binding (binding_set, GDK_Right, 0,
+  add_move_binding (binding_set, GDK_KEY_Right, 0,
 		    GTK_MOVEMENT_VISUAL_POSITIONS, 1);
   
-  add_move_binding (binding_set, GDK_Left, 0,
+  add_move_binding (binding_set, GDK_KEY_Left, 0,
 		    GTK_MOVEMENT_VISUAL_POSITIONS, -1);
 
-  add_move_binding (binding_set, GDK_KP_Right, 0,
+  add_move_binding (binding_set, GDK_KEY_KP_Right, 0,
 		    GTK_MOVEMENT_VISUAL_POSITIONS, 1);
   
-  add_move_binding (binding_set, GDK_KP_Left, 0,
+  add_move_binding (binding_set, GDK_KEY_KP_Left, 0,
 		    GTK_MOVEMENT_VISUAL_POSITIONS, -1);
   
-  add_move_binding (binding_set, GDK_f, GDK_CONTROL_MASK,
+  add_move_binding (binding_set, GDK_KEY_f, GDK_CONTROL_MASK,
 		    GTK_MOVEMENT_LOGICAL_POSITIONS, 1);
   
-  add_move_binding (binding_set, GDK_b, GDK_CONTROL_MASK,
+  add_move_binding (binding_set, GDK_KEY_b, GDK_CONTROL_MASK,
 		    GTK_MOVEMENT_LOGICAL_POSITIONS, -1);
   
-  add_move_binding (binding_set, GDK_Right, GDK_CONTROL_MASK,
+  add_move_binding (binding_set, GDK_KEY_Right, GDK_CONTROL_MASK,
 		    GTK_MOVEMENT_WORDS, 1);
 
-  add_move_binding (binding_set, GDK_Left, GDK_CONTROL_MASK,
+  add_move_binding (binding_set, GDK_KEY_Left, GDK_CONTROL_MASK,
 		    GTK_MOVEMENT_WORDS, -1);
 
-  add_move_binding (binding_set, GDK_KP_Right, GDK_CONTROL_MASK,
+  add_move_binding (binding_set, GDK_KEY_KP_Right, GDK_CONTROL_MASK,
 		    GTK_MOVEMENT_WORDS, 1);
 
-  add_move_binding (binding_set, GDK_KP_Left, GDK_CONTROL_MASK,
+  add_move_binding (binding_set, GDK_KEY_KP_Left, GDK_CONTROL_MASK,
 		    GTK_MOVEMENT_WORDS, -1);
 
   /* select all */
-  gtk_binding_entry_add_signal (binding_set, GDK_a, GDK_CONTROL_MASK,
+  gtk_binding_entry_add_signal (binding_set, GDK_KEY_a, GDK_CONTROL_MASK,
 				"move-cursor", 3,
 				G_TYPE_ENUM, GTK_MOVEMENT_PARAGRAPH_ENDS,
 				G_TYPE_INT, -1,
 				G_TYPE_BOOLEAN, FALSE);
 
-  gtk_binding_entry_add_signal (binding_set, GDK_a, GDK_CONTROL_MASK,
+  gtk_binding_entry_add_signal (binding_set, GDK_KEY_a, GDK_CONTROL_MASK,
 				"move-cursor", 3,
 				G_TYPE_ENUM, GTK_MOVEMENT_PARAGRAPH_ENDS,
 				G_TYPE_INT, 1,
 				G_TYPE_BOOLEAN, TRUE);
 
-  gtk_binding_entry_add_signal (binding_set, GDK_slash, GDK_CONTROL_MASK,
+  gtk_binding_entry_add_signal (binding_set, GDK_KEY_slash, GDK_CONTROL_MASK,
 				"move-cursor", 3,
 				G_TYPE_ENUM, GTK_MOVEMENT_PARAGRAPH_ENDS,
 				G_TYPE_INT, -1,
 				G_TYPE_BOOLEAN, FALSE);
 
-  gtk_binding_entry_add_signal (binding_set, GDK_slash, GDK_CONTROL_MASK,
+  gtk_binding_entry_add_signal (binding_set, GDK_KEY_slash, GDK_CONTROL_MASK,
 				"move-cursor", 3,
 				G_TYPE_ENUM, GTK_MOVEMENT_PARAGRAPH_ENDS,
 				G_TYPE_INT, 1,
 				G_TYPE_BOOLEAN, TRUE);
 
   /* unselect all */
-  gtk_binding_entry_add_signal (binding_set, GDK_a, GDK_SHIFT_MASK | GDK_CONTROL_MASK,
+  gtk_binding_entry_add_signal (binding_set, GDK_KEY_a, GDK_SHIFT_MASK | GDK_CONTROL_MASK,
 				"move-cursor", 3,
 				G_TYPE_ENUM, GTK_MOVEMENT_PARAGRAPH_ENDS,
 				G_TYPE_INT, 0,
 				G_TYPE_BOOLEAN, FALSE);
 
-  gtk_binding_entry_add_signal (binding_set, GDK_backslash, GDK_CONTROL_MASK,
+  gtk_binding_entry_add_signal (binding_set, GDK_KEY_backslash, GDK_CONTROL_MASK,
 				"move-cursor", 3,
 				G_TYPE_ENUM, GTK_MOVEMENT_PARAGRAPH_ENDS,
 				G_TYPE_INT, 0,
 				G_TYPE_BOOLEAN, FALSE);
 
-  add_move_binding (binding_set, GDK_f, GDK_MOD1_MASK,
+  add_move_binding (binding_set, GDK_KEY_f, GDK_MOD1_MASK,
 		    GTK_MOVEMENT_WORDS, 1);
 
-  add_move_binding (binding_set, GDK_b, GDK_MOD1_MASK,
+  add_move_binding (binding_set, GDK_KEY_b, GDK_MOD1_MASK,
 		    GTK_MOVEMENT_WORDS, -1);
 
-  add_move_binding (binding_set, GDK_Home, 0,
+  add_move_binding (binding_set, GDK_KEY_Home, 0,
 		    GTK_MOVEMENT_DISPLAY_LINE_ENDS, -1);
 
-  add_move_binding (binding_set, GDK_End, 0,
+  add_move_binding (binding_set, GDK_KEY_End, 0,
 		    GTK_MOVEMENT_DISPLAY_LINE_ENDS, 1);
 
-  add_move_binding (binding_set, GDK_KP_Home, 0,
+  add_move_binding (binding_set, GDK_KEY_KP_Home, 0,
 		    GTK_MOVEMENT_DISPLAY_LINE_ENDS, -1);
 
-  add_move_binding (binding_set, GDK_KP_End, 0,
+  add_move_binding (binding_set, GDK_KEY_KP_End, 0,
 		    GTK_MOVEMENT_DISPLAY_LINE_ENDS, 1);
   
-  add_move_binding (binding_set, GDK_Home, GDK_CONTROL_MASK,
+  add_move_binding (binding_set, GDK_KEY_Home, GDK_CONTROL_MASK,
 		    GTK_MOVEMENT_BUFFER_ENDS, -1);
 
-  add_move_binding (binding_set, GDK_End, GDK_CONTROL_MASK,
+  add_move_binding (binding_set, GDK_KEY_End, GDK_CONTROL_MASK,
 		    GTK_MOVEMENT_BUFFER_ENDS, 1);
 
-  add_move_binding (binding_set, GDK_KP_Home, GDK_CONTROL_MASK,
+  add_move_binding (binding_set, GDK_KEY_KP_Home, GDK_CONTROL_MASK,
 		    GTK_MOVEMENT_BUFFER_ENDS, -1);
 
-  add_move_binding (binding_set, GDK_KP_End, GDK_CONTROL_MASK,
+  add_move_binding (binding_set, GDK_KEY_KP_End, GDK_CONTROL_MASK,
 		    GTK_MOVEMENT_BUFFER_ENDS, 1);
 
   /* copy */
-  gtk_binding_entry_add_signal (binding_set, GDK_c, GDK_CONTROL_MASK,
+  gtk_binding_entry_add_signal (binding_set, GDK_KEY_c, GDK_CONTROL_MASK,
 				"copy-clipboard", 0);
 
-  gtk_binding_entry_add_signal (binding_set, GDK_Return, 0,
+  gtk_binding_entry_add_signal (binding_set, GDK_KEY_Return, 0,
 				"activate-current-link", 0);
-  gtk_binding_entry_add_signal (binding_set, GDK_ISO_Enter, 0,
+  gtk_binding_entry_add_signal (binding_set, GDK_KEY_ISO_Enter, 0,
 				"activate-current-link", 0);
-  gtk_binding_entry_add_signal (binding_set, GDK_KP_Enter, 0,
+  gtk_binding_entry_add_signal (binding_set, GDK_KEY_KP_Enter, 0,
 				"activate-current-link", 0);
 
   gtk_settings_install_property (g_param_spec_boolean ("gtk-label-select-on-focus",
@@ -1085,7 +1085,7 @@ gtk_label_init (GtkLabel *label)
   priv->pattern_set = FALSE;
   priv->track_links = TRUE;
 
-  priv->mnemonic_keyval = GDK_VoidSymbol;
+  priv->mnemonic_keyval = GDK_KEY_VoidSymbol;
   priv->layout = NULL;
   priv->text = NULL;
   priv->attrs = NULL;
@@ -1527,7 +1527,7 @@ gtk_label_setup_mnemonic (GtkLabel *label,
   
   mnemonic_menu = g_object_get_data (G_OBJECT (label), "gtk-mnemonic-menu");
   
-  if (last_key != GDK_VoidSymbol)
+  if (last_key != GDK_KEY_VoidSymbol)
     {
       if (priv->mnemonic_window)
 	{
@@ -1545,7 +1545,7 @@ gtk_label_setup_mnemonic (GtkLabel *label,
 	}
     }
   
-  if (priv->mnemonic_keyval == GDK_VoidSymbol)
+  if (priv->mnemonic_keyval == GDK_KEY_VoidSymbol)
       goto done;
 
   connect_mnemonics_visible_notify (GTK_LABEL (widget));
@@ -1806,7 +1806,7 @@ gtk_label_get_mnemonic_widget (GtkLabel *label)
 guint
 gtk_label_get_mnemonic_keyval (GtkLabel *label)
 {
-  g_return_val_if_fail (GTK_IS_LABEL (label), GDK_VoidSymbol);
+  g_return_val_if_fail (GTK_IS_LABEL (label), GDK_KEY_VoidSymbol);
 
   return label->priv->mnemonic_keyval;
 }
@@ -1945,7 +1945,7 @@ gtk_label_recalculate (GtkLabel *label)
   gtk_label_compose_effective_attrs (label);
 
   if (!priv->use_underline)
-    priv->mnemonic_keyval = GDK_VoidSymbol;
+    priv->mnemonic_keyval = GDK_KEY_VoidSymbol;
 
   if (keyval != priv->mnemonic_keyval)
     {
@@ -2452,7 +2452,7 @@ gtk_label_set_markup_internal (GtkLabel    *label,
   if (accel_char != 0)
     priv->mnemonic_keyval = gdk_keyval_to_lower (gdk_unicode_to_keyval (accel_char));
   else
-    priv->mnemonic_keyval = GDK_VoidSymbol;
+    priv->mnemonic_keyval = GDK_KEY_VoidSymbol;
 }
 
 /**
@@ -4232,7 +4232,7 @@ separate_uline_pattern (const gchar  *str,
   gchar *dest;
   gchar *pattern_dest;
 
-  *accel_key = GDK_VoidSymbol;
+  *accel_key = GDK_KEY_VoidSymbol;
   *new_str = g_new (gchar, strlen (str) + 1);
   *pattern = g_new (gchar, g_utf8_strlen (str, -1) + 1);
 
@@ -4265,7 +4265,7 @@ separate_uline_pattern (const gchar  *str,
 	  else
 	    {
 	      *pattern_dest++ = '_';
-	      if (*accel_key == GDK_VoidSymbol)
+	      if (*accel_key == GDK_KEY_VoidSymbol)
 		*accel_key = gdk_keyval_to_lower (gdk_unicode_to_keyval (c));
 	    }
 
@@ -4302,7 +4302,7 @@ gtk_label_set_uline_text_internal (GtkLabel    *label,
 				   const gchar *str)
 {
   GtkLabelPrivate *priv = label->priv;
-  guint accel_key = GDK_VoidSymbol;
+  guint accel_key = GDK_KEY_VoidSymbol;
   gchar *new_str;
   gchar *pattern;
 

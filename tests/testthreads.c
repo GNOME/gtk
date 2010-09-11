@@ -65,7 +65,7 @@ counter (void *data)
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   gtk_window_set_title (GTK_WINDOW (window), name);
-  gtk_widget_set_usize (window, 100, 50);
+  gtk_widget_set_size_request (window, 100, 50);
 
   vbox = gtk_vbox_new (FALSE, 0);
 

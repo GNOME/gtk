@@ -100,11 +100,6 @@
  * <application>Qt</application>, allowing the same level of integration
  * when embedding a <application>Qt</application> widget in GTK or vice versa.
  *
- * A socket can also be used to swallow arbitrary
- * pre-existing top-level windows using gtk_socket_steal(),
- * though the integration when this is done will not be as close
- * as between a #GtkPlug and a #GtkSocket.
- *
  * <note>
  * The #GtkPlug and #GtkSocket widgets are currently not available
  * on all platforms supported by GTK+.

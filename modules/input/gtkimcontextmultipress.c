@@ -410,7 +410,7 @@ load_config (GtkImContextMultipress *self)
 
       keyval = gdk_keyval_from_name (keys[i]);
 
-      if (keyval == GDK_VoidSymbol)
+      if (keyval == GDK_KEY_VoidSymbol)
         {
           g_warning ("Error while trying to read the %s configuration file: "
                      "invalid key name \"%s\"",

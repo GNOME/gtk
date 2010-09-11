@@ -114,6 +114,20 @@
   </section>
 
   <section>
+    <title>Replace GDK_&lt;keyname&gt; with GDK_KEY_&lt;keyname&gt;</title>
+
+    <para>
+      Key constants have gained a <literal>_KEY</literal>, prefix.
+      For example, <literal>GDK_a</literal> is now
+      <literal>GDK_KEY_a</literal>.  In GTK+ 2, the old names continue
+      to be available.  In GTK+ 3 however, the old names will require
+      an explicit include of the
+      <literal>gdkkeysyms-compat.h</literal> header.
+    </para>
+
+  </section>
+
+  <section>
     <title>Use cairo for drawing</title>
     <para>
       In GTK+ 3, the GDK drawing API (which closely mimics the X

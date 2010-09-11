@@ -753,7 +753,7 @@ _gtk_text_btree_delete (GtkTextIter *start,
 
   tree = _gtk_text_iter_get_btree (start);
  
-  if (gtk_debug_flags & GTK_DEBUG_TEXT)
+  if (gtk_get_debug_flags () & GTK_DEBUG_TEXT)
     _gtk_text_btree_check (tree);
   
   /* Broadcast the need for redisplay before we break the iterators */
@@ -1075,7 +1075,7 @@ _gtk_text_btree_delete (GtkTextIter *start,
   chars_changed (tree);
   segments_changed (tree);
 
-  if (gtk_debug_flags & GTK_DEBUG_TEXT)
+  if (gtk_get_debug_flags () & GTK_DEBUG_TEXT)
     _gtk_text_btree_check (tree);
 
   /* Re-initialize our iterators */
@@ -1357,7 +1357,7 @@ find_line_by_y (GtkTextBTree *tree, BTreeView *view,
 {
   gint current_y = 0;
 
-  if (gtk_debug_flags & GTK_DEBUG_TEXT)
+  if (gtk_get_debug_flags () & GTK_DEBUG_TEXT)
     _gtk_text_btree_check (tree);
 
   if (node->level == 0)
@@ -2009,7 +2009,7 @@ _gtk_text_btree_tag (const GtkTextIter *start_orig,
 
   queue_tag_redisplay (tree, tag, &start, &end);
 
-  if (gtk_debug_flags & GTK_DEBUG_TEXT)
+  if (gtk_get_debug_flags () & GTK_DEBUG_TEXT)
     _gtk_text_btree_check (tree);
 }
 
@@ -2389,8 +2389,8 @@ copy_segment (GString *string,
       if (copy)
         {
           g_string_append_len (string,
-                               gtk_text_unknown_char_utf8,
-                               3);
+                               _gtk_text_unknown_char_utf8,
+                               GTK_TEXT_UNKNOWN_CHAR_UTF8_LEN);
 
         }
     }
@@ -2734,7 +2734,7 @@ real_set_mark (GtkTextBTree      *tree,
   
   iter = *where;
 
-  if (gtk_debug_flags & GTK_DEBUG_TEXT)
+  if (gtk_get_debug_flags () & GTK_DEBUG_TEXT)
     _gtk_text_iter_check (&iter);
   
   if (mark != NULL)
@@ -2791,7 +2791,7 @@ real_set_mark (GtkTextBTree      *tree,
                              mark);
     }
 
-  if (gtk_debug_flags & GTK_DEBUG_TEXT)
+  if (gtk_get_debug_flags () & GTK_DEBUG_TEXT)
     _gtk_text_iter_check (&iter);
   
   /* Link mark into new location */
@@ -2806,10 +2806,10 @@ real_set_mark (GtkTextBTree      *tree,
 
   redisplay_mark_if_visible (mark);
 
-  if (gtk_debug_flags & GTK_DEBUG_TEXT)
+  if (gtk_get_debug_flags () & GTK_DEBUG_TEXT)
     _gtk_text_iter_check (&iter);
 
-  if (gtk_debug_flags & GTK_DEBUG_TEXT)
+  if (gtk_get_debug_flags () & GTK_DEBUG_TEXT)
     _gtk_text_btree_check (tree);
   
   return mark;
@@ -4327,7 +4327,7 @@ _gtk_text_line_next_could_contain_tag (GtkTextLine  *line,
 
   g_return_val_if_fail (line != NULL, NULL);
 
-  if (gtk_debug_flags & GTK_DEBUG_TEXT)
+  if (gtk_get_debug_flags () & GTK_DEBUG_TEXT)
     _gtk_text_btree_check (tree);
 
   if (tag == NULL)
@@ -4490,7 +4490,7 @@ _gtk_text_line_previous_could_contain_tag (GtkTextLine  *line,
 
   g_return_val_if_fail (line != NULL, NULL);
 
-  if (gtk_debug_flags & GTK_DEBUG_TEXT)
+  if (gtk_get_debug_flags () & GTK_DEBUG_TEXT)
     _gtk_text_btree_check (tree);
 
   if (tag == NULL)
@@ -5262,7 +5262,7 @@ _gtk_text_btree_validate (GtkTextBTree *tree,
       if (new_height)
         *new_height = state.new_height;
 
-      if (gtk_debug_flags & GTK_DEBUG_TEXT)
+      if (gtk_get_debug_flags () & GTK_DEBUG_TEXT)
         _gtk_text_btree_check (tree);
 
       return TRUE;
@@ -5971,7 +5971,7 @@ post_insert_fixup (GtkTextBTree *tree,
       gtk_text_btree_rebalance (tree, node);
     }
 
-  if (gtk_debug_flags & GTK_DEBUG_TEXT)
+  if (gtk_get_debug_flags () & GTK_DEBUG_TEXT)
     _gtk_text_btree_check (tree);
 }
 
@@ -6537,7 +6537,7 @@ gtk_text_btree_link_segment (GtkTextLineSegment *seg,
   cleanup_line (line);
   segments_changed (tree);
 
-  if (gtk_debug_flags & GTK_DEBUG_TEXT)
+  if (gtk_get_debug_flags () & GTK_DEBUG_TEXT)
     _gtk_text_btree_check (tree);
 }
 

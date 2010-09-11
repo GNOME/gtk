@@ -851,7 +851,7 @@ gtk_im_context_ime_set_preedit_font (GtkIMContext *context)
       PangoLanguage *pango_lang = pango_language_from_string (lang);
       PangoFontset *fontset =
 	pango_context_load_fontset (pango_context,
-				    widget->style->font_desc,
+				    gtk_widget_get_style (widget)->font_desc,
 				    pango_lang);
       gunichar *sample =
 	g_utf8_to_ucs4 (pango_language_get_sample_string (pango_lang),
@@ -873,7 +873,7 @@ gtk_im_context_ime_set_preedit_font (GtkIMContext *context)
       g_object_unref (fontset);
     }
   else
-    font = pango_context_load_font (pango_context, widget->style->font_desc);
+    font = pango_context_load_font (pango_context, gtk_widget_get_style (widget)->font_desc);
 
   if (!font)
     goto ERROR_OUT;

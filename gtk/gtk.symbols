@@ -1732,15 +1732,6 @@ gtk_invisible_set_screen
 #endif
 #endif
 
-#if IN_HEADER(__GTK_ITEM_H__)
-#if IN_FILE(__GTK_ITEM_C__)
-gtk_item_deselect
-gtk_item_get_type G_GNUC_CONST
-gtk_item_select
-gtk_item_toggle
-#endif
-#endif
-
 #if IN_HEADER(__GTK_LABEL_H__)
 #if IN_FILE(__GTK_LABEL_C__)
 gtk_label_get_angle
@@ -1849,6 +1840,8 @@ gtk_list_store_swap
 
 #if IN_HEADER(__GTK_MAIN_H__)
 #if IN_FILE(__GTK_MAIN_C__)
+gtk_get_debug_flags
+gtk_set_debug_flags
 gtk_get_option_group
 gtk_get_current_event
 gtk_get_current_event_device
@@ -1860,6 +1853,11 @@ gtk_events_pending
 gtk_disable_setlocale
 gtk_distribute_natural_allocation
 gtk_set_locale
+gtk_get_major_version
+gtk_get_minor_version
+gtk_get_micro_version
+gtk_get_binary_age
+gtk_get_interface_age
 gtk_check_version
 gtk_get_default_language
 gtk_get_event_widget
@@ -3267,6 +3265,7 @@ gtk_text_buffer_set_text
 
 #if IN_HEADER(__GTK_TEXT_TYPES_H__)
 #if IN_FILE(__GTK_TEXT_TYPES_C__)
+gtk_text_unknown_char_utf8_gtk_tests_only
 gtk_text_byte_begins_utf8_char
 #endif
 #endif
@@ -4532,22 +4531,4 @@ gtk_info_bar_response
 gtk_info_bar_set_message_type
 gtk_info_bar_get_message_type
 #endif
-#endif
-
-#ifdef INCLUDE_VARIABLES
-gtk_binary_age
-gtk_interface_age
-gtk_major_version
-gtk_minor_version
-gtk_micro_version
-gtk_debug_flags
-gtk_text_attr_appearance_type
-gtk_text_char_type
-gtk_text_child_type
-gtk_text_left_mark_type
-gtk_text_pixbuf_type
-gtk_text_right_mark_type
-gtk_text_toggle_off_type
-gtk_text_toggle_on_type
-gtk_text_unknown_char_utf8
 #endif

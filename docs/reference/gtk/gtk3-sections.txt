@@ -1833,24 +1833,6 @@ gtk_invisible_get_type
 </SECTION>
 
 <SECTION>
-<FILE>gtkitem</FILE>
-<TITLE>GtkItem</TITLE>
-GtkItem
-gtk_item_select
-gtk_item_deselect
-gtk_item_toggle
-<SUBSECTION Standard>
-GTK_ITEM
-GTK_IS_ITEM
-GTK_TYPE_ITEM
-GTK_ITEM_CLASS
-GTK_IS_ITEM_CLASS
-GTK_ITEM_GET_CLASS
-<SUBSECTION Private>
-gtk_item_get_type
-</SECTION>
-
-<SECTION>
 <FILE>gtklabel</FILE>
 <TITLE>GtkLabel</TITLE>
 GtkLabel
@@ -4970,6 +4952,7 @@ GTK_IS_WIDGET_CLASS
 GTK_WIDGET_GET_CLASS
 GTK_TYPE_REQUISITION
 <SUBSECTION Private>
+GtkWidgetPrivate
 gtk_widget_get_type
 gtk_requisition_get_type
 </SECTION>
@@ -5089,6 +5072,7 @@ GTK_IS_WINDOW_CLASS
 GTK_WINDOW_GET_CLASS
 
 <SUBSECTION Private>
+GtkWindowPrivate
 gtk_window_get_type
 GtkWindowGeometryInfo
 gtk_window_remove_embedded_xid

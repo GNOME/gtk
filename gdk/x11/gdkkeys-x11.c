@@ -163,7 +163,7 @@ gdk_keymap_x11_init (GdkKeymapX11 *keymap)
   keymap->num_lock_mask = 0;
   keymap->sun_keypad = FALSE;
   keymap->group_switch_mask = 0;
-  keymap->lock_keysym = GDK_Caps_Lock;
+  keymap->lock_keysym = GDK_KEY_Caps_Lock;
   keymap->have_direction = FALSE;
   keymap->current_serial = 0;
 
@@ -396,8 +396,8 @@ update_keymaps (GdkKeymapX11 *keymap_x11)
 	  /* Check both groups */
 	  for (i = 0 ; i < 2 ; i++)
 	    {
-	      if (get_symbol (syms, keymap_x11, i, 0) == GDK_Tab)
-		set_symbol (syms, keymap_x11, i, 1, GDK_ISO_Left_Tab);
+	      if (get_symbol (syms, keymap_x11, i, 0) == GDK_KEY_Tab)
+		set_symbol (syms, keymap_x11, i, 1, GDK_KEY_ISO_Left_Tab);
 	    }
 
           /*
@@ -423,7 +423,7 @@ update_keymaps (GdkKeymapX11 *keymap_x11)
 
       keymap_x11->mod_keymap = XGetModifierMapping (xdisplay);
 
-      keymap_x11->lock_keysym = GDK_VoidSymbol;
+      keymap_x11->lock_keysym = GDK_KEY_VoidSymbol;
       keymap_x11->group_switch_mask = 0;
       keymap_x11->num_lock_mask = 0;
 
@@ -452,14 +452,14 @@ update_keymaps (GdkKeymapX11 *keymap_x11)
 	  mask = 0;
 	  for (j = 0; j < keymap_x11->keysyms_per_keycode; j++)
 	    {
-	      if (syms[j] == GDK_Meta_L ||
-		  syms[j] == GDK_Meta_R)
+	      if (syms[j] == GDK_KEY_Meta_L ||
+		  syms[j] == GDK_KEY_Meta_R)
 		mask |= GDK_META_MASK;
-	      else if (syms[j] == GDK_Hyper_L ||
-		       syms[j] == GDK_Hyper_R)
+	      else if (syms[j] == GDK_KEY_Hyper_L ||
+		       syms[j] == GDK_KEY_Hyper_R)
 		mask |= GDK_HYPER_MASK;
-	      else if (syms[j] == GDK_Super_L ||
-		       syms[j] == GDK_Super_R)
+	      else if (syms[j] == GDK_KEY_Super_L ||
+		       syms[j] == GDK_KEY_Super_R)
 		mask |= GDK_SUPER_MASK;
 	    }
 
@@ -481,11 +481,11 @@ update_keymaps (GdkKeymapX11 *keymap_x11)
                */
 	      for (j = 0; j < keymap_x11->keysyms_per_keycode; j++)
 		{
-		  if (syms[j] == GDK_Caps_Lock)
-		    keymap_x11->lock_keysym = GDK_Caps_Lock;
-		  else if (syms[j] == GDK_Shift_Lock &&
-			   keymap_x11->lock_keysym == GDK_VoidSymbol)
-		    keymap_x11->lock_keysym = GDK_Shift_Lock;
+		  if (syms[j] == GDK_KEY_Caps_Lock)
+		    keymap_x11->lock_keysym = GDK_KEY_Caps_Lock;
+		  else if (syms[j] == GDK_KEY_Shift_Lock &&
+			   keymap_x11->lock_keysym == GDK_KEY_VoidSymbol)
+		    keymap_x11->lock_keysym = GDK_KEY_Shift_Lock;
 		}
               break;
 
@@ -502,12 +502,12 @@ update_keymaps (GdkKeymapX11 *keymap_x11)
               /* Find the Mode_Switch and Num_Lock modifiers. */
               for (j = 0; j < keymap_x11->keysyms_per_keycode; j++)
                 {
-                  if (syms[j] == GDK_Mode_switch)
+                  if (syms[j] == GDK_KEY_Mode_switch)
                     {
                       /* This modifier swaps groups */
                       keymap_x11->group_switch_mask |= mask;
                     }
-                  else if (syms[j] == GDK_Num_Lock)
+                  else if (syms[j] == GDK_KEY_Num_Lock)
                     {
                       /* This modifier is used for Num_Lock */
                       keymap_x11->num_lock_mask |= mask;
@@ -1366,7 +1366,7 @@ translate_keysym (GdkKeymapX11   *keymap_x11,
   gint num_lock_index;
 
   shift_modifiers = GDK_SHIFT_MASK;
-  if (keymap_x11->lock_keysym == GDK_Shift_Lock)
+  if (keymap_x11->lock_keysym == GDK_KEY_Shift_Lock)
     shift_modifiers |= GDK_LOCK_MASK;
 
   /* Fall back to the first group if the passed in group is empty
@@ -1416,7 +1416,7 @@ translate_keysym (GdkKeymapX11   *keymap_x11,
   
       tmp_keyval = SYM (keymap_x11, group, shift_level);
       
-      if (keymap_x11->lock_keysym == GDK_Caps_Lock && (state & GDK_LOCK_MASK) != 0)
+      if (keymap_x11->lock_keysym == GDK_KEY_Caps_Lock && (state & GDK_LOCK_MASK) != 0)
 	{
 	  guint upper = gdk_keyval_to_upper (tmp_keyval);
 	  if (upper != tmp_keyval)
@@ -1614,13 +1614,13 @@ gdk_keyval_name (guint	      keyval)
 {
   switch (keyval)
     {
-    case GDK_Page_Up:
+    case GDK_KEY_Page_Up:
       return "Page_Up";
-    case GDK_Page_Down:
+    case GDK_KEY_Page_Down:
       return "Page_Down";
-    case GDK_KP_Page_Up:
+    case GDK_KEY_KP_Page_Up:
       return "KP_Page_Up";
-    case GDK_KP_Page_Down:
+    case GDK_KEY_KP_Page_Down:
       return "KP_Page_Down";
     }
   
