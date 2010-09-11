@@ -416,10 +416,10 @@ struct _GtkStyleClass
  */
 struct _GtkBorder
 {
-  gint left;
-  gint right;
-  gint top;
-  gint bottom;
+  gint16 left;
+  gint16 right;
+  gint16 top;
+  gint16 bottom;
 };
 
 GType     gtk_style_get_type                 (void) G_GNUC_CONST;
