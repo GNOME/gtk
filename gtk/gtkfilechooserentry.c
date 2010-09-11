@@ -104,7 +104,7 @@ enum
 
 #define COMPLETION_FEEDBACK_TIMEOUT_MS 2000
 
-static void     gtk_file_chooser_entry_iface_init     (GtkEditableClass *iface);
+static void     gtk_file_chooser_entry_iface_init     (GtkEditableInterface *iface);
 
 static void     gtk_file_chooser_entry_finalize       (GObject          *object);
 static void     gtk_file_chooser_entry_dispose        (GObject          *object);
@@ -168,7 +168,7 @@ static void remove_completion_feedback (GtkFileChooserEntry *chooser_entry);
 static void pop_up_completion_feedback (GtkFileChooserEntry *chooser_entry,
 					const gchar         *feedback);
 
-static GtkEditableClass *parent_editable_iface;
+static GtkEditableInterface *parent_editable_iface;
 
 G_DEFINE_TYPE_WITH_CODE (GtkFileChooserEntry, _gtk_file_chooser_entry, GTK_TYPE_ENTRY,
 			 G_IMPLEMENT_INTERFACE (GTK_TYPE_EDITABLE,
@@ -193,7 +193,7 @@ _gtk_file_chooser_entry_class_init (GtkFileChooserEntryClass *class)
 }
 
 static void
-gtk_file_chooser_entry_iface_init (GtkEditableClass *iface)
+gtk_file_chooser_entry_iface_init (GtkEditableInterface *iface)
 {
   parent_editable_iface = g_type_interface_peek_parent (iface);
 

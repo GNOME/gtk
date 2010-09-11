@@ -271,7 +271,7 @@ struct _MaskEntryClass
 };
 
 
-static void mask_entry_editable_init (GtkEditableClass *iface);
+static void mask_entry_editable_init (GtkEditableInterface *iface);
 
 G_DEFINE_TYPE_WITH_CODE (MaskEntry, mask_entry, GTK_TYPE_ENTRY,
 			 G_IMPLEMENT_INTERFACE (GTK_TYPE_EDITABLE,
@@ -316,7 +316,7 @@ mask_entry_class_init (MaskEntryClass *klass)
 
 
 static void
-mask_entry_editable_init (GtkEditableClass *iface)
+mask_entry_editable_init (GtkEditableInterface *iface)
 {
   iface->changed = mask_entry_changed;
 }

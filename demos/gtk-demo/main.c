@@ -279,7 +279,7 @@ static gchar *types[] =
   "GtkTreeStore ",
   "GtkEntry ",
   "GtkEditable ",
-  "GtkEditableClass ",
+  "GtkEditableInterface ",
   "GdkPixmap ",
   "GdkEventConfigure ",
   "GdkEventMotion ",

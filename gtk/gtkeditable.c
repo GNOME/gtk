@@ -44,7 +44,7 @@ gtk_editable_get_type (void)
     {
       const GTypeInfo editable_info =
       {
-	sizeof (GtkEditableClass),  /* class_size */
+	sizeof (GtkEditableInterface),  /* class_size */
 	gtk_editable_base_init,	    /* base_init */
 	NULL,			    /* base_finalize */
       };
@@ -85,7 +85,7 @@ gtk_editable_base_init (gpointer g_class)
       g_signal_new (I_("insert-text"),
 		    GTK_TYPE_EDITABLE,
 		    G_SIGNAL_RUN_LAST,
-		    G_STRUCT_OFFSET (GtkEditableClass, insert_text),
+		    G_STRUCT_OFFSET (GtkEditableInterface, insert_text),
 		    NULL, NULL,
 		    _gtk_marshal_VOID__STRING_INT_POINTER,
 		    G_TYPE_NONE, 3,
@@ -112,7 +112,7 @@ gtk_editable_base_init (gpointer g_class)
       g_signal_new (I_("delete-text"),
 		    GTK_TYPE_EDITABLE,
 		    G_SIGNAL_RUN_LAST,
-		    G_STRUCT_OFFSET (GtkEditableClass, delete_text),
+		    G_STRUCT_OFFSET (GtkEditableInterface, delete_text),
 		    NULL, NULL,
 		    _gtk_marshal_VOID__INT_INT,
 		    G_TYPE_NONE, 2,
@@ -134,7 +134,7 @@ gtk_editable_base_init (gpointer g_class)
       g_signal_new (I_("changed"),
 		    GTK_TYPE_EDITABLE,
 		    G_SIGNAL_RUN_LAST,
-		    G_STRUCT_OFFSET (GtkEditableClass, changed),
+		    G_STRUCT_OFFSET (GtkEditableInterface, changed),
 		    NULL, NULL,
 		    _gtk_marshal_VOID__VOID,
 		    G_TYPE_NONE, 0);
@@ -168,7 +168,7 @@ gtk_editable_insert_text (GtkEditable *editable,
   if (new_text_length < 0)
     new_text_length = strlen (new_text);
   
-  GTK_EDITABLE_GET_CLASS (editable)->do_insert_text (editable, new_text, new_text_length, position);
+  GTK_EDITABLE_GET_IFACE (editable)->do_insert_text (editable, new_text, new_text_length, position);
 }
 
 /**
@@ -191,7 +191,7 @@ gtk_editable_delete_text (GtkEditable *editable,
 {
   g_return_if_fail (GTK_IS_EDITABLE (editable));
 
-  GTK_EDITABLE_GET_CLASS (editable)->do_delete_text (editable, start_pos, end_pos);
+  GTK_EDITABLE_GET_IFACE (editable)->do_delete_text (editable, start_pos, end_pos);
 }
 
 /**
@@ -218,7 +218,7 @@ gtk_editable_get_chars (GtkEditable *editable,
 {
   g_return_val_if_fail (GTK_IS_EDITABLE (editable), NULL);
 
-  return GTK_EDITABLE_GET_CLASS (editable)->get_chars (editable, start_pos, end_pos);
+  return GTK_EDITABLE_GET_IFACE (editable)->get_chars (editable, start_pos, end_pos);
 }
 
 /**
@@ -240,7 +240,7 @@ gtk_editable_set_position (GtkEditable      *editable,
 {
   g_return_if_fail (GTK_IS_EDITABLE (editable));
 
-  GTK_EDITABLE_GET_CLASS (editable)->set_position (editable, position);
+  GTK_EDITABLE_GET_IFACE (editable)->set_position (editable, position);
 }
 
 /**
@@ -259,7 +259,7 @@ gtk_editable_get_position (GtkEditable *editable)
 {
   g_return_val_if_fail (GTK_IS_EDITABLE (editable), 0);
 
-  return GTK_EDITABLE_GET_CLASS (editable)->get_position (editable);
+  return GTK_EDITABLE_GET_IFACE (editable)->get_position (editable);
 }
 
 /**
@@ -286,7 +286,7 @@ gtk_editable_get_selection_bounds (GtkEditable *editable,
   
   g_return_val_if_fail (GTK_IS_EDITABLE (editable), FALSE);
 
-  result = GTK_EDITABLE_GET_CLASS (editable)->get_selection_bounds (editable, &tmp_start, &tmp_end);
+  result = GTK_EDITABLE_GET_IFACE (editable)->get_selection_bounds (editable, &tmp_start, &tmp_end);
 
   if (start_pos)
     *start_pos = MIN (tmp_start, tmp_end);
@@ -335,7 +335,7 @@ gtk_editable_select_region (GtkEditable *editable,
 {
   g_return_if_fail (GTK_IS_EDITABLE (editable));
   
-  GTK_EDITABLE_GET_CLASS (editable)->set_selection_bounds (editable, start_pos, end_pos);
+  GTK_EDITABLE_GET_IFACE (editable)->set_selection_bounds (editable, start_pos, end_pos);
 }
 
 /**
