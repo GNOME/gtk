@@ -28,6 +28,7 @@
 #include "gtkthemingengine.h"
 #include "gtkintl.h"
 #include "gtkwidget.h"
+#include "gtkwindow.h"
 #include "gtkprivate.h"
 #include "gtkanimationdescription.h"
 #include "gtktimeline.h"
@@ -118,6 +119,8 @@ enum {
 };
 
 guint signals[LAST_SIGNAL] = { 0 };
+
+static GQuark provider_list_quark = 0;
 
 static void gtk_style_context_finalize (GObject *object);
 
@@ -484,24 +487,55 @@ gtk_style_context_impl_get_property (GObject    *object,
     }
 }
 
+GList *
+find_next_candidate (GList *local,
+                     GList *global)
+{
+  if (local && global)
+    {
+      GtkStyleProviderData *local_data, *global_data;
+
+      local_data = local->data;
+      global_data = global->data;
+
+      if (local_data->priority >= global_data->priority)
+        return local;
+      else
+        return global;
+    }
+  else if (local)
+    return local;
+  else if (global)
+    return global;
+
+  return NULL;
+}
+
 static void
 rebuild_properties (GtkStyleContext *context)
 {
   GtkStyleContextPrivate *priv;
-  GList *list;
+  GList *elem, *list, *global_list = NULL;
 
   priv = context->priv;
   list = priv->providers;
 
+  if (priv->screen)
+    global_list = g_object_get_qdata (G_OBJECT (priv->screen), provider_list_quark);
+
   gtk_style_set_clear (priv->store);
 
-  while (list)
+  while ((elem = find_next_candidate (list, global_list)) != NULL)
     {
       GtkStyleProviderData *data;
       GtkStyleSet *provider_style;
 
-      data = list->data;
-      list = list->next;
+      data = elem->data;
+
+      if (elem == list)
+        list = list->next;
+      else
+        global_list = global_list->next;
 
       provider_style = gtk_style_provider_get_style (data->provider,
                                                      priv->widget_path);
@@ -525,7 +559,7 @@ static void
 rebuild_icon_factories (GtkStyleContext *context)
 {
   GtkStyleContextPrivate *priv;
-  GList *providers;
+  GList *elem, *list, *global_list = NULL;
 
   priv = context->priv;
 
@@ -533,12 +567,26 @@ rebuild_icon_factories (GtkStyleContext *context)
   g_slist_free (priv->icon_factories);
   priv->icon_factories = NULL;
 
-  for (providers = priv->providers_last; providers; providers = providers->prev)
+  list = priv->providers_last;
+
+  if (priv->screen)
+    {
+      global_list = g_object_get_qdata (G_OBJECT (priv->screen), provider_list_quark);
+      global_list = g_list_last (global_list);
+    }
+
+  while ((elem = find_next_candidate (list, global_list)) != NULL)
     {
       GtkIconFactory *factory;
       GtkStyleProviderData *data;
 
-      data = providers->data;
+      data = elem->data;
+
+      if (elem == list)
+        list = list->prev;
+      else
+        global_list = global_list->prev;
+
       factory = gtk_style_provider_get_icon_factory (data->provider,
 						     priv->widget_path);
 
@@ -547,28 +595,22 @@ rebuild_icon_factories (GtkStyleContext *context)
     }
 }
 
-void
-gtk_style_context_add_provider (GtkStyleContext  *context,
-                                GtkStyleProvider *provider,
-                                guint             priority)
+static void
+style_provider_add (GList            **list,
+                    GtkStyleProvider  *provider,
+                    guint              priority)
 {
-  GtkStyleContextPrivate *priv;
   GtkStyleProviderData *new_data;
   gboolean added = FALSE;
-  GList *list;
+  GList *l = *list;
 
-  g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
-  g_return_if_fail (GTK_IS_STYLE_PROVIDER (provider));
-
-  priv = context->priv;
   new_data = style_provider_data_new (provider, priority);
-  list = priv->providers;
 
-  while (list)
+  while (l)
     {
       GtkStyleProviderData *data;
 
-      data = list->data;
+      data = l->data;
 
       /* Provider was already attached to the style
        * context, remove in order to add the new data
@@ -577,11 +619,11 @@ gtk_style_context_add_provider (GtkStyleContext  *context,
         {
           GList *link;
 
-          link = list;
-          list = list->next;
+          link = l;
+          l = l->next;
 
           /* Remove and free link */
-          priv->providers = g_list_remove_link (priv->providers, link);
+          *list = g_list_remove_link (*list, link);
           style_provider_data_free (link->data);
           g_list_free_1 (link);
 
@@ -591,24 +633,59 @@ gtk_style_context_add_provider (GtkStyleContext  *context,
       if (!added &&
           data->priority > priority)
         {
-          priv->providers = g_list_insert_before (priv->providers, list, new_data);
+          *list = g_list_insert_before (*list, l, new_data);
           added = TRUE;
         }
 
-      list = list->next;
+      l = l->next;
     }
 
   if (!added)
-    priv->providers = g_list_append (priv->providers, new_data);
+    *list = g_list_append (*list, new_data);
+}
 
+static gboolean
+style_provider_remove (GList            **list,
+                       GtkStyleProvider  *provider)
+{
+  GList *l = *list;
+
+  while (l)
+    {
+      GtkStyleProviderData *data;
+
+      data = l->data;
+
+      if (data->provider == provider)
+        {
+          *list = g_list_remove_link (*list, l);
+          style_provider_data_free (l->data);
+          g_list_free_1 (l);
+
+          return TRUE;
+        }
+
+      l = l->next;
+    }
+
+  return FALSE;
+}
+
+void
+gtk_style_context_add_provider (GtkStyleContext  *context,
+                                GtkStyleProvider *provider,
+                                guint             priority)
+{
+  GtkStyleContextPrivate *priv;
+
+  g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
+  g_return_if_fail (GTK_IS_STYLE_PROVIDER (provider));
+
+  priv = context->priv;
+  style_provider_add (&priv->providers, provider, priority);
   priv->providers_last = g_list_last (priv->providers);
 
-  if (priv->widget_path)
-    {
-      rebuild_properties (context);
-      clear_property_cache (context);
-      rebuild_icon_factories (context);
-    }
+  gtk_style_context_invalidate (context);
 }
 
 void
@@ -616,45 +693,81 @@ gtk_style_context_remove_provider (GtkStyleContext  *context,
                                    GtkStyleProvider *provider)
 {
   GtkStyleContextPrivate *priv;
-  gboolean removed = FALSE;
-  GList *list;
 
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
   g_return_if_fail (GTK_IS_STYLE_PROVIDER (provider));
 
   priv = context->priv;
-  list = priv->providers;
 
-  while (list)
-    {
-      GtkStyleProviderData *data;
-
-      data = list->data;
-
-      if (data->provider == provider)
-        {
-          priv->providers = g_list_remove_link (priv->providers, list);
-          style_provider_data_free (list->data);
-          g_list_free_1 (list);
-
-          removed = TRUE;
-
-          break;
-        }
-
-      list = list->next;
-    }
-
-  if (removed)
+  if (style_provider_remove (&priv->providers, provider))
     {
       priv->providers_last = g_list_last (priv->providers);
 
-      if (priv->widget_path)
-        {
-          rebuild_properties (context);
-          clear_property_cache (context);
-	  rebuild_icon_factories (context);
-        }
+      gtk_style_context_invalidate (context);
+    }
+}
+
+static void
+reset_toplevels (GdkScreen *screen)
+{
+  GList *list, *toplevels;
+
+  toplevels = gtk_window_list_toplevels ();
+  g_list_foreach (toplevels, (GFunc)g_object_ref, NULL);
+
+  for (list = toplevels; list; list = list->next)
+    {
+      if (gtk_widget_get_screen (list->data) == screen)
+        gtk_widget_reset_style (list->data);
+
+      g_object_unref (list->data);
+    }
+
+  g_list_free (toplevels);
+}
+
+void
+gtk_style_context_add_provider_for_screen (GdkScreen        *screen,
+                                           GtkStyleProvider *provider,
+                                           guint             priority)
+{
+  GList *providers, *list;
+
+  g_return_if_fail (GDK_IS_SCREEN (screen));
+  g_return_if_fail (GTK_IS_STYLE_PROVIDER (provider));
+
+  if (G_UNLIKELY (!provider_list_quark))
+    provider_list_quark = g_quark_from_static_string ("gtk-provider-list-quark");
+
+  list = providers = g_object_get_qdata (G_OBJECT (screen), provider_list_quark);
+  style_provider_add (&list, provider, priority);
+
+  if (list != providers)
+    g_object_set_qdata (G_OBJECT (screen), provider_list_quark, list);
+
+  reset_toplevels (screen);
+}
+
+void
+gtk_style_context_remove_provider_for_screen (GdkScreen        *screen,
+                                              GtkStyleProvider *provider)
+{
+  GList *providers, *list;
+
+  g_return_if_fail (GDK_IS_SCREEN (screen));
+  g_return_if_fail (GTK_IS_STYLE_PROVIDER (provider));
+
+  if (G_UNLIKELY (!provider_list_quark))
+    return;
+
+  list = providers = g_object_get_qdata (G_OBJECT (screen), provider_list_quark);
+
+  if (style_provider_remove (&list, provider))
+    {
+      if (list != providers)
+        g_object_set_qdata (G_OBJECT (screen), provider_list_quark, list);
+
+      reset_toplevels (screen);
     }
 }
 
@@ -833,9 +946,7 @@ gtk_style_context_set_path (GtkStyleContext *context,
   if (path)
     {
       priv->widget_path = gtk_widget_path_copy (path);
-      rebuild_properties (context);
-      clear_property_cache (context);
-      rebuild_icon_factories (context);
+      gtk_style_context_invalidate (context);
     }
 }
 
@@ -1040,7 +1151,7 @@ gtk_style_context_set_class (GtkStyleContext *context,
       if (priv->widget_path)
         {
           gtk_widget_path_iter_add_class (priv->widget_path, 0, class_name);
-          rebuild_properties (context);
+          gtk_style_context_invalidate (context);
         }
     }
 }
@@ -1074,7 +1185,7 @@ gtk_style_context_unset_class (GtkStyleContext *context,
       if (priv->widget_path)
         {
           gtk_widget_path_iter_remove_class (priv->widget_path, 0, class_name);
-          rebuild_properties (context);
+          gtk_style_context_invalidate (context);
         }
     }
 }
@@ -1192,7 +1303,7 @@ gtk_style_context_set_region (GtkStyleContext *context,
       if (priv->widget_path)
         {
           gtk_widget_path_iter_add_region (priv->widget_path, 0, class_name, flags);
-          rebuild_properties (context);
+          gtk_style_context_invalidate (context);
         }
     }
 }
@@ -1226,7 +1337,7 @@ gtk_style_context_unset_region (GtkStyleContext    *context,
       if (priv->widget_path)
         {
           gtk_widget_path_iter_remove_region (priv->widget_path, 0, class_name);
-          rebuild_properties (context);
+          gtk_style_context_invalidate (context);
         }
     }
 }

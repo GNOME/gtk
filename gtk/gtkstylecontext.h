@@ -51,6 +51,12 @@ struct GtkStyleContextClass
 
 GType gtk_style_context_get_type (void) G_GNUC_CONST;
 
+void gtk_style_context_add_provider_for_screen    (GdkScreen        *screen,
+                                                   GtkStyleProvider *provider,
+                                                   guint             priority);
+void gtk_style_context_remove_provider_for_screen (GdkScreen        *screen,
+                                                   GtkStyleProvider *provider);
+
 void gtk_style_context_add_provider    (GtkStyleContext  *context,
                                         GtkStyleProvider *provider,
                                         guint             priority);
