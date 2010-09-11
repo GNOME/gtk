@@ -1941,6 +1941,7 @@ gtk_rc_property_parse_border (const GParamSpec *pspec,
   GtkBorder border;
   GScanner *scanner;
   gboolean success = FALSE;
+  int left, right, top, bottom;
 
   g_return_val_if_fail (G_IS_PARAM_SPEC (pspec), FALSE);
   g_return_val_if_fail (G_VALUE_HOLDS_BOXED (property_value), FALSE);
@@ -1948,11 +1949,15 @@ gtk_rc_property_parse_border (const GParamSpec *pspec,
   scanner = gtk_rc_scanner_new ();
   g_scanner_input_text (scanner, gstring->str, gstring->len);
 
-  if (get_braced_int (scanner, TRUE, FALSE, &border.left) &&
-      get_braced_int (scanner, FALSE, FALSE, &border.right) &&
-      get_braced_int (scanner, FALSE, FALSE, &border.top) &&
-      get_braced_int (scanner, FALSE, TRUE, &border.bottom))
+  if (get_braced_int (scanner, TRUE, FALSE, &left) &&
+      get_braced_int (scanner, FALSE, FALSE, &right) &&
+      get_braced_int (scanner, FALSE, FALSE, &top) &&
+      get_braced_int (scanner, FALSE, TRUE, &bottom))
     {
+      border.left = left;
+      border.right = right;
+      border.top = top;
+      border.bottom = bottom;
       g_value_set_boxed (property_value, &border);
       success = TRUE;
     }
