@@ -13402,13 +13402,12 @@ gtk_widget_get_style_context (GtkWidget *widget)
       gtk_style_context_add_provider (context,
                                       GTK_STYLE_PROVIDER (settings),
                                       GTK_STYLE_PROVIDER_PRIORITY_SETTINGS);
+      gtk_style_context_set_screen (context,
+                                    gtk_widget_get_screen (widget));
 
       path = gtk_widget_get_path (widget);
       gtk_style_context_set_path (context, path);
       gtk_widget_path_free (path);
-
-      gtk_style_context_set_screen (context,
-                                    gtk_widget_get_screen (widget));
     }
 
   return context;
