@@ -5776,14 +5776,10 @@ gtk_widget_device_is_shadowed (GtkWidget *widget,
       !gtk_widget_is_ancestor (widget, grab_widget))
     return TRUE;
 
-  if (group->grabs)
-    {
-      grab_widget = group->grabs->data;
-
-      if (widget != grab_widget &&
-          !gtk_widget_is_ancestor (widget, grab_widget))
-        return TRUE;
-    }
+  grab_widget = gtk_window_group_get_current_grab (group);
+  if (grab_widget && widget != grab_widget &&
+      !gtk_widget_is_ancestor (widget, grab_widget))
+    return TRUE;
 
   return FALSE;
 }
