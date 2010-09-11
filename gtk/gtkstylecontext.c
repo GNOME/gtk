@@ -97,7 +97,9 @@ struct GtkStyleContextPrivate
 
   GSList *animation_regions;
   GSList *animations;
-  gboolean animations_invalidated;
+
+  guint animations_invalidated : 1;
+  guint invalidating_context : 1;
 
   GtkThemingEngine *theming_engine;
 
@@ -109,6 +111,13 @@ enum {
   PROP_SCREEN,
   PROP_DIRECTION
 };
+
+enum {
+  CHANGED,
+  LAST_SIGNAL
+};
+
+guint signals[LAST_SIGNAL] = { 0 };
 
 static void gtk_style_context_finalize (GObject *object);
 
@@ -132,6 +141,15 @@ gtk_style_context_class_init (GtkStyleContextClass *klass)
   object_class->finalize = gtk_style_context_finalize;
   object_class->set_property = gtk_style_context_impl_set_property;
   object_class->get_property = gtk_style_context_impl_get_property;
+
+  signals[CHANGED] =
+    g_signal_new (I_("changed"),
+		  G_TYPE_FROM_CLASS (object_class),
+		  G_SIGNAL_RUN_FIRST,
+		  G_STRUCT_OFFSET (GtkStyleContextClass, changed),
+		  NULL, NULL,
+                  g_cclosure_marshal_VOID__VOID,
+                  G_TYPE_NONE, 0);
 
   g_object_class_install_property (object_class,
 				   PROP_SCREEN,
@@ -1796,6 +1814,33 @@ store_animation_region (GtkStyleContext *context,
           g_array_append_val (info->rectangles, rect);
         }
     }
+}
+
+void
+gtk_style_context_invalidate (GtkStyleContext *context)
+{
+  GtkStyleContextPrivate *priv;
+
+  g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
+
+  priv = context->priv;
+
+  /* Avoid reentrancy */
+  if (priv->invalidating_context)
+    return;
+
+  if (!priv->widget_path)
+    return;
+
+  priv->invalidating_context = TRUE;
+
+  rebuild_properties (context);
+  clear_property_cache (context);
+  rebuild_icon_factories (context);
+
+  g_signal_emit (context, signals[CHANGED], 0);
+
+  priv->invalidating_context = FALSE;
 }
 
 /* Paint methods */

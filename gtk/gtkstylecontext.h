@@ -45,6 +45,8 @@ struct GtkStyleContext
 struct GtkStyleContextClass
 {
   GObjectClass parent_class;
+
+  void (* changed) (GtkStyleContext *context);
 };
 
 GType gtk_style_context_get_type (void) G_GNUC_CONST;
@@ -159,6 +161,9 @@ void gtk_style_context_state_transition_update (GtkStyleContext *context,
                                                 GtkStateType     state);
 void gtk_style_context_state_transition_stop   (GtkStyleContext *context,
                                                 gpointer         identifier);
+
+void gtk_style_context_invalidate (GtkStyleContext *context);
+
 
 /* Paint methods */
 void gtk_render_check (GtkStyleContext *context,
