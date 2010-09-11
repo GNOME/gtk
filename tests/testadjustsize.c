@@ -72,15 +72,17 @@ on_expose_alignment (GtkWidget      *widget,
                      void           *data)
 {
   cairo_t *cr;
+  GtkAllocation allocation;
 
   cr = gdk_cairo_create (event->window);
 
   cairo_set_source_rgb (cr, 1.0, 0.0, 0.0);
+  gtk_widget_get_allocation (widget, &allocation);
   cairo_rectangle (cr,
-                   widget->allocation.x,
-                   widget->allocation.y,
-                   widget->allocation.width,
-                   widget->allocation.height);
+                   allocation.x,
+                   allocation.y,
+                   allocation.width,
+                   allocation.height);
   cairo_fill (cr);
 
   cairo_destroy (cr);
