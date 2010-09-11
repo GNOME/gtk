@@ -8125,17 +8125,33 @@ _gtk_widget_propagate_screen_changed (GtkWidget    *widget,
 }
 
 static void
-reset_rc_styles_recurse (GtkWidget *widget, gpointer data)
+reset_style_recurse (GtkWidget *widget, gpointer data)
 {
+  GtkStyleContext *context;
+
+#if 0
   if (widget->priv->rc_style)
     gtk_widget_reset_rc_style (widget);
+#endif
+
+  context = g_object_get_qdata (G_OBJECT (widget),
+                                quark_style_context);
+  if (context)
+    gtk_style_context_invalidate (context);
 
   if (GTK_IS_CONTAINER (widget))
     gtk_container_forall (GTK_CONTAINER (widget),
-			  reset_rc_styles_recurse,
+			  reset_style_recurse,
 			  NULL);
 }
 
+void
+gtk_widget_reset_style (GtkWidget *widget)
+{
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+
+  reset_style_recurse (widget, NULL);
+}
 
 /**
  * gtk_widget_reset_rc_styles:
@@ -8152,7 +8168,7 @@ gtk_widget_reset_rc_styles (GtkWidget *widget)
 {
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
-  reset_rc_styles_recurse (widget, NULL);
+  reset_style_recurse (widget, NULL);
 }
 
 /**

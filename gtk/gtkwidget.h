@@ -803,6 +803,8 @@ gchar* gtk_widget_get_composite_name	(GtkWidget	*widget);
 /* Descend recursively and set rc-style on all widgets without user styles */
 void       gtk_widget_reset_rc_styles   (GtkWidget      *widget);
 
+void       gtk_widget_reset_style       (GtkWidget      *widget);
+
 /* Push/pop pairs, to change default values upon a widget's creation.
  * This will override the values that got set by the
  * gtk_widget_set_default_* () functions.
