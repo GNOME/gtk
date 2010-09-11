@@ -705,10 +705,13 @@ gtk_style_update_from_context (GtkStyle *style)
                          "padding", &padding,
                          NULL);
 
-  style->xthickness = padding->left;
-  style->ythickness = padding->top;
+  if (padding)
+    {
+      style->xthickness = padding->left;
+      style->ythickness = padding->top;
 
-  gtk_border_free (padding);
+      gtk_border_free (padding);
+    }
 }
 
 static void
