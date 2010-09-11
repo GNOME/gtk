@@ -4198,6 +4198,7 @@ gtk_widget_create_pango_context
 gtk_widget_create_pango_layout
 gtk_widget_destroy
 gtk_widget_destroyed
+gtk_widget_draw
 gtk_widget_ensure_style
 gtk_widget_error_bell
 gtk_widget_event

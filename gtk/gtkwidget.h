@@ -550,6 +550,8 @@ void	   gtk_widget_unmap		  (GtkWidget	       *widget);
 void	   gtk_widget_realize		  (GtkWidget	       *widget);
 void	   gtk_widget_unrealize		  (GtkWidget	       *widget);
 
+void       gtk_widget_draw                (GtkWidget           *widget,
+                                           cairo_t             *cr);
 /* Queuing draws */
 void	   gtk_widget_queue_draw	  (GtkWidget	       *widget);
 void	   gtk_widget_queue_draw_area	  (GtkWidget	       *widget,

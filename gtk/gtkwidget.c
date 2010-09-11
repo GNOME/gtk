@@ -5119,6 +5119,53 @@ _gtk_widget_draw_internal (GtkWidget *widget,
     }
 }
 
+/**
+ * gtk_widget_draw:
+ * @widget: the widget to draw. It must be drawable (see 
+ *   gtk_widget_is_drawable()) and a size must have been allocated.
+ * @cr: a cairo context to draw to
+ *
+ * Draws @widget to @cr. The top left corner of the widget will be
+ * drawn to the currently set origin point of @cr.
+ *
+ * You should pass a cairo context as @cr argument that is in an
+ * original state. Otherwise the resulting drawing is undefined. For
+ * example changing the operator using cairo_set_operator() or the
+ * line width using cairo_set_line_width() might have unwanted side
+ * effects.
+ * You may however change the context's transform matrix - like with
+ * cairo_scale(), cairo_translate() or cairo_set_matrix() and clip
+ * region with cairo_clip() prior to calling this function. Also, it
+ * is fine to modify the context with cairo_save() and
+ * cairo_push_group() prior to calling this function.
+ *
+ * <note><para>Special purpose widgets may contain special code for
+ * rendering to the screen and might appear differently on screen
+ * and when rendered using gtk_widget_draw().</para></note>
+ **/
+void
+gtk_widget_draw (GtkWidget *widget,
+                 cairo_t   *cr)
+{
+  GdkEventExpose *tmp_event;
+
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+  g_return_if_fail (cr != NULL);
+
+  cairo_save (cr);
+  /* We have to reset the event here so that draw functions can call
+   * gtk_widget_draw() on random other widgets and get the desired
+   * effect: Drawing all contents, not just the current window.
+   */
+  tmp_event = _gtk_cairo_get_event (cr);
+  gtk_cairo_set_event (cr, NULL);
+
+  _gtk_widget_draw_internal (widget, cr, TRUE);
+
+  gtk_cairo_set_event (cr, tmp_event);
+  cairo_restore (cr);
+}
+
 static gboolean
 gtk_widget_real_key_press_event (GtkWidget         *widget,
 				 GdkEventKey       *event)
