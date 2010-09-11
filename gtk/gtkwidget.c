@@ -445,6 +445,7 @@ enum {
   COMPOSITED_CHANGED,
   QUERY_TOOLTIP,
   DRAG_FAILED,
+  STYLE_UPDATED,
   LAST_SIGNAL
 };
 
@@ -531,6 +532,7 @@ static gboolean gtk_widget_real_query_tooltip    (GtkWidget         *widget,
 						  gint               y,
 						  gboolean           keyboard_tip,
 						  GtkTooltip        *tooltip);
+static void     gtk_widget_real_style_updated    (GtkWidget         *widget);
 static gboolean gtk_widget_real_show_help        (GtkWidget         *widget,
                                                   GtkWidgetHelpType  help_type);
 
@@ -863,6 +865,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   klass->can_activate_accel = gtk_widget_real_can_activate_accel;
   klass->grab_broken_event = NULL;
   klass->query_tooltip = gtk_widget_real_query_tooltip;
+  klass->style_updated = gtk_widget_real_style_updated;
 
   klass->show_help = gtk_widget_real_show_help;
 
@@ -1498,6 +1501,15 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		  _gtk_marshal_VOID__OBJECT,
 		  G_TYPE_NONE, 1,
 		  GTK_TYPE_STYLE);
+
+  widget_signals[STYLE_UPDATED] =
+    g_signal_new (I_("style-updated"),
+                  G_TYPE_FROM_CLASS (gobject_class),
+                  G_SIGNAL_RUN_FIRST,
+                  G_STRUCT_OFFSET (GtkWidgetClass, style_updated),
+                  NULL, NULL,
+                  g_cclosure_marshal_VOID__VOID,
+                  G_TYPE_NONE, 0);
 
   /**
    * GtkWidget::direction-changed:
@@ -6217,6 +6229,17 @@ gtk_widget_real_query_tooltip (GtkWidget  *widget,
     }
 
   return FALSE;
+}
+
+static void
+gtk_widget_real_style_updated (GtkWidget *widget)
+{
+  GtkStyleContext *context;
+
+  context = g_object_get_qdata (G_OBJECT (widget),
+                                quark_style_context);
+  if (context)
+    gtk_style_context_invalidate (context);
 }
 
 static gboolean
@@ -13293,6 +13316,15 @@ gtk_widget_get_path (GtkWidget *widget)
   return path;
 }
 
+static void
+style_context_changed (GtkStyleContext *context,
+                       gpointer         user_data)
+{
+  GtkWidget *widget = user_data;
+
+  g_signal_emit (widget, widget_signals[STYLE_UPDATED], 0);
+}
+
 GtkStyleContext *
 gtk_widget_get_style_context (GtkWidget *widget)
 {
@@ -13314,6 +13346,8 @@ gtk_widget_get_style_context (GtkWidget *widget)
                               "direction", gtk_widget_get_direction (widget),
                               NULL);
 
+      g_signal_connect (context, "changed",
+                        G_CALLBACK (style_context_changed), widget);
 
       g_object_set_qdata_full (G_OBJECT (widget),
                                quark_style_context, context,

@@ -416,6 +416,8 @@ struct _GtkWidgetClass
                                            gint              *allocated_pos,
                                            gint              *allocated_size);
 
+  void         (* style_updated)          (GtkWidget *widget);
+
   /*< private >*/
 
   /* Padding for future expansion */
