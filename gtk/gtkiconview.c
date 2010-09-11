@@ -3239,10 +3239,10 @@ gtk_icon_view_paint_item (GtkIconView     *icon_view,
       cell_area.x = x - item->x + cell_area.x;
       cell_area.y = y - item->y + cell_area.y;
 
-      gtk_cell_renderer_render_cairo (info->cell,
-                                      cr,
-                                      widget,
-                                      &cell_area, &cell_area, flags);
+      gtk_cell_renderer_render (info->cell,
+                                cr,
+                                widget,
+                                &cell_area, &cell_area, flags);
     }
 
   if (draw_focus &&

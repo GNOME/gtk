@@ -489,11 +489,11 @@ gtk_cell_view_draw (GtkWidget *widget,
 	      (packing == GTK_PACK_END && !rtl))
 	    area.x -= area.width;
 
-	  gtk_cell_renderer_render_cairo (info->cell,
-                                          cr,
-                                          widget,
-                                          /* FIXME! */
-                                          &area, &area, state);
+	  gtk_cell_renderer_render (info->cell,
+                                    cr,
+                                    widget,
+                                    /* FIXME! */
+                                    &area, &area, state);
 
 	  if ((packing == GTK_PACK_START && !rtl) ||
 	      (packing == GTK_PACK_END && rtl))

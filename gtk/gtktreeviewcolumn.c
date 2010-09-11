@@ -2825,12 +2825,12 @@ gtk_tree_view_column_cell_process_action (GtkTreeViewColumn  *tree_column,
       /* RENDER */
       if (action == CELL_ACTION_RENDER)
 	{
-	  gtk_cell_renderer_render_cairo (info->cell,
-                                          cr,
-                                          tree_column->tree_view,
-                                          &rtl_background_area,
-                                          &rtl_cell_area,
-                                          flags);
+	  gtk_cell_renderer_render (info->cell,
+                                    cr,
+                                    tree_column->tree_view,
+                                    &rtl_background_area,
+                                    &rtl_cell_area,
+                                    flags);
 	}
       /* FOCUS */
       else if (action == CELL_ACTION_FOCUS)
@@ -2993,12 +2993,12 @@ gtk_tree_view_column_cell_process_action (GtkTreeViewColumn  *tree_column,
       /* RENDER */
       if (action == CELL_ACTION_RENDER)
 	{
-	  gtk_cell_renderer_render_cairo (info->cell,
-                                          cr,
-                                          tree_column->tree_view,
-                                          &rtl_background_area,
-                                          &rtl_cell_area,
-                                          flags);
+	  gtk_cell_renderer_render (info->cell,
+                                    cr,
+                                    tree_column->tree_view,
+                                    &rtl_background_area,
+                                    &rtl_cell_area,
+                                    flags);
 	}
       /* FOCUS */
       else if (action == CELL_ACTION_FOCUS)

@@ -612,7 +612,7 @@ gtk_cell_renderer_get_size (GtkCellRenderer    *cell,
 }
 
 /**
- * gtk_cell_renderer_render_cairo:
+ * gtk_cell_renderer_render:
  * @cell: a #GtkCellRenderer
  * @cr: a cairo context to draw to
  * @widget: the widget owning @window
@@ -630,12 +630,12 @@ gtk_cell_renderer_get_size (GtkCellRenderer    *cell,
  * @window.
  **/
 void
-gtk_cell_renderer_render_cairo (GtkCellRenderer      *cell,
-                                cairo_t              *cr,
-                                GtkWidget            *widget,
-                                const GdkRectangle   *background_area,
-                                const GdkRectangle   *cell_area,
-                                GtkCellRendererState  flags)
+gtk_cell_renderer_render (GtkCellRenderer      *cell,
+                          cairo_t              *cr,
+                          GtkWidget            *widget,
+                          const GdkRectangle   *background_area,
+                          const GdkRectangle   *cell_area,
+                          GtkCellRendererState  flags)
 {
   gboolean selected = FALSE;
   GtkCellRendererPrivate *priv = cell->priv;
