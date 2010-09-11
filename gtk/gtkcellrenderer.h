@@ -119,13 +119,6 @@ void             gtk_cell_renderer_get_size       (GtkCellRenderer      *cell,
 						   gint                 *width,
 						   gint                 *height);
 #endif
-void             gtk_cell_renderer_render         (GtkCellRenderer      *cell,
-						   GdkWindow            *window,
-						   GtkWidget            *widget,
-						   const GdkRectangle   *background_area,
-						   const GdkRectangle   *cell_area,
-						   const GdkRectangle   *expose_area,
-						   GtkCellRendererState  flags);
 void             gtk_cell_renderer_render_cairo   (GtkCellRenderer      *cell,
                                                    cairo_t              *cr,
 						   GtkWidget            *widget,
