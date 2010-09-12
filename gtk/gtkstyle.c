@@ -4227,13 +4227,14 @@ gtk_default_draw_layout (GtkStyle        *style,
   else
     cairo_translate (cr, x, y);
 
+  cairo_new_path (cr);
+
   if (state_type == GTK_STATE_INSENSITIVE)
     {
-      cairo_save (cr);
       gdk_cairo_set_source_color (cr, &style->white);
       cairo_move_to (cr, 1, 1);
       _gtk_pango_fill_layout (cr, layout);
-      cairo_restore (cr);
+      cairo_new_path (cr);
     }
 
   gc = use_text ? &style->text[state_type] : &style->fg[state_type];
