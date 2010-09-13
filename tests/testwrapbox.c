@@ -276,6 +276,9 @@ create_window (void)
   gtk_box_pack_start (GTK_BOX (hbox), frame, TRUE, TRUE, 0);
 
   swindow = gtk_scrolled_window_new (NULL, NULL);
+  gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (swindow),
+				  GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
+  
   gtk_widget_show (swindow);
   gtk_container_add (GTK_CONTAINER (frame), swindow);
 
