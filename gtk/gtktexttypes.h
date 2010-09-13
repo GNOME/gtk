@@ -62,7 +62,7 @@ extern G_GNUC_INTERNAL const GtkTextLineSegmentClass gtk_text_child_type;
 #define GTK_TEXT_UNKNOWN_CHAR 0xFFFC
 #define GTK_TEXT_UNKNOWN_CHAR_UTF8_LEN 3
 const gchar *gtk_text_unknown_char_utf8_gtk_tests_only (void);
-const gchar _gtk_text_unknown_char_utf8[GTK_TEXT_UNKNOWN_CHAR_UTF8_LEN+1];
+extern const gchar _gtk_text_unknown_char_utf8[GTK_TEXT_UNKNOWN_CHAR_UTF8_LEN+1];
 
 gboolean gtk_text_byte_begins_utf8_char (const gchar *byte);
 
