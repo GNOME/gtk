@@ -18,8 +18,12 @@
  */
 
 #include "config.h"
-#include <string.h>
+
 #include "gtktreeviewcolumn.h"
+
+#include <string.h>
+
+#include "gtkcellsizerequest.h"
 #include "gtktreeview.h"
 #include "gtktreeprivate.h"
 #include "gtkcelllayout.h"
@@ -2611,6 +2615,7 @@ gtk_tree_view_column_cell_get_size (GtkTreeViewColumn  *tree_column,
 				    gint               *width,
 				    gint               *height)
 {
+  GtkRequisition min_size;
   GList *list;
   gboolean first_cell = TRUE;
   gint focus_line_width;
@@ -2628,8 +2633,6 @@ gtk_tree_view_column_cell_get_size (GtkTreeViewColumn  *tree_column,
     {
       GtkTreeViewColumnCellInfo *info = (GtkTreeViewColumnCellInfo *) list->data;
       gboolean visible;
-      gint new_height = 0;
-      gint new_width = 0;
       g_object_get (info->cell, "visible", &visible, NULL);
 
       if (visible == FALSE)
@@ -2638,17 +2641,13 @@ gtk_tree_view_column_cell_get_size (GtkTreeViewColumn  *tree_column,
       if (first_cell == FALSE && width)
 	*width += tree_column->spacing;
 
-      gtk_cell_renderer_get_size (info->cell,
-				  tree_column->tree_view,
-				  cell_area,
-				  x_offset,
-				  y_offset,
-				  &new_width,
-				  &new_height);
+      gtk_cell_size_request_get_size (GTK_CELL_SIZE_REQUEST (info->cell),
+                                      GTK_WIDGET (tree_column->tree_view),
+                                      &min_size, NULL);
 
       if (height)
-	* height = MAX (*height, new_height + focus_line_width * 2);
-      info->requested_width = MAX (info->requested_width, new_width + focus_line_width * 2);
+	* height = MAX (*height, min_size.height + focus_line_width * 2);
+      info->requested_width = MAX (info->requested_width, min_size.width + focus_line_width * 2);
       if (width)
 	* width += info->requested_width;
       first_cell = FALSE;
@@ -2839,34 +2838,38 @@ gtk_tree_view_column_cell_process_action (GtkTreeViewColumn  *tree_column,
       /* FOCUS */
       else if (action == CELL_ACTION_FOCUS)
 	{
-	  gint x_offset, y_offset, width, height;
+          gint x_offset, y_offset;
+          GtkRequisition min_size;
 
-	  gtk_cell_renderer_get_size (info->cell,
-				      tree_column->tree_view,
-				      &rtl_cell_area,
-				      &x_offset, &y_offset,
-				      &width, &height);
+          gtk_cell_size_request_get_size (GTK_CELL_SIZE_REQUEST (info->cell),
+                                          tree_column->tree_view,
+                                          &min_size, NULL);
+
+          _gtk_cell_renderer_calc_offset (info->cell, &rtl_cell_area,
+                                          gtk_widget_get_direction (tree_column->tree_view),
+                                          min_size.width, min_size.height,
+                                          &x_offset, &y_offset);
 
 	  if (special_cells > 1)
 	    {
 	      if (info->has_focus)
 	        {
 		  min_x = rtl_cell_area.x + x_offset;
-		  max_x = min_x + width;
+                  max_x = min_x + min_size.width;
 		  min_y = rtl_cell_area.y + y_offset;
-		  max_y = min_y + height;
+                  max_y = min_y + min_size.height;
 		}
 	    }
 	  else
 	    {
 	      if (min_x > (rtl_cell_area.x + x_offset))
 		min_x = rtl_cell_area.x + x_offset;
-	      if (max_x < rtl_cell_area.x + x_offset + width)
-		max_x = rtl_cell_area.x + x_offset + width;
+              if (max_x < rtl_cell_area.x + x_offset + min_size.width)
+                max_x = rtl_cell_area.x + x_offset + min_size.width;
 	      if (min_y > (rtl_cell_area.y + y_offset))
 		min_y = rtl_cell_area.y + y_offset;
-	      if (max_y < rtl_cell_area.y + y_offset + height)
-		max_y = rtl_cell_area.y + y_offset + height;
+              if (max_y < rtl_cell_area.y + y_offset + min_size.height)
+                max_y = rtl_cell_area.y + y_offset + min_size.height;
 	    }
 	}
       /* EVENT */
@@ -3004,34 +3007,38 @@ gtk_tree_view_column_cell_process_action (GtkTreeViewColumn  *tree_column,
       /* FOCUS */
       else if (action == CELL_ACTION_FOCUS)
 	{
-	  gint x_offset, y_offset, width, height;
+          gint x_offset, y_offset;
+          GtkRequisition min_size;
 
-	  gtk_cell_renderer_get_size (info->cell,
-				      tree_column->tree_view,
-				      &rtl_cell_area,
-				      &x_offset, &y_offset,
-				      &width, &height);
+          gtk_cell_size_request_get_size (GTK_CELL_SIZE_REQUEST (info->cell),
+                                          tree_column->tree_view,
+                                          &min_size, NULL);
+
+          _gtk_cell_renderer_calc_offset (info->cell, &rtl_cell_area,
+                                          gtk_widget_get_direction (tree_column->tree_view),
+                                          min_size.width, min_size.height,
+                                          &x_offset, &y_offset);
 
 	  if (special_cells > 1)
 	    {
 	      if (info->has_focus)
 	        {
 		  min_x = rtl_cell_area.x + x_offset;
-		  max_x = min_x + width;
+                  max_x = min_x + min_size.width;
 		  min_y = rtl_cell_area.y + y_offset;
-		  max_y = min_y + height;
+                  max_y = min_y + min_size.height;
 		}
 	    }
 	  else
 	    {
 	      if (min_x > (rtl_cell_area.x + x_offset))
 		min_x = rtl_cell_area.x + x_offset;
-	      if (max_x < rtl_cell_area.x + x_offset + width)
-		max_x = rtl_cell_area.x + x_offset + width;
+              if (max_x < rtl_cell_area.x + x_offset + min_size.width)
+                max_x = rtl_cell_area.x + x_offset + min_size.width;
 	      if (min_y > (rtl_cell_area.y + y_offset))
 		min_y = rtl_cell_area.y + y_offset;
-	      if (max_y < rtl_cell_area.y + y_offset + height)
-		max_y = rtl_cell_area.y + y_offset + height;
+              if (max_y < rtl_cell_area.y + y_offset + min_size.height)
+                max_y = rtl_cell_area.y + y_offset + min_size.height;
 	    }
 	}
       /* EVENT */

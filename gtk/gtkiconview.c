@@ -29,6 +29,7 @@
 #include "gtkcellrenderer.h"
 #include "gtkcellrenderertext.h"
 #include "gtkcellrendererpixbuf.h"
+#include "gtkcellsizerequest.h"
 #include "gtkmarshalers.h"
 #include "gtkbindings.h"
 #include "gtkdnd.h"
@@ -2963,24 +2964,22 @@ adjust_wrap_width (GtkIconView     *icon_view,
 {
   GtkIconViewCellInfo *text_info;
   GtkIconViewCellInfo *pixbuf_info;
-  gint pixbuf_width, wrap_width;
-      
+  gint wrap_width;
+
   if (icon_view->priv->text_cell != -1 &&
       icon_view->priv->pixbuf_cell != -1)
     {
+      GtkRequisition min_size;
       gint item_width;
 
       text_info = g_list_nth_data (icon_view->priv->cell_list,
 				   icon_view->priv->text_cell);
       pixbuf_info = g_list_nth_data (icon_view->priv->cell_list,
 				     icon_view->priv->pixbuf_cell);
-      
-      gtk_cell_renderer_get_size (pixbuf_info->cell, 
-				  GTK_WIDGET (icon_view), 
-				  NULL, NULL, NULL,
-				  &pixbuf_width, 
-				  NULL);
-	  
+
+      gtk_cell_size_request_get_size (GTK_CELL_SIZE_REQUEST (pixbuf_info->cell),
+                                      GTK_WIDGET (icon_view),
+                                      &min_size, NULL);
 
       if (icon_view->priv->item_width > 0)
 	item_width = icon_view->priv->item_width;
@@ -2991,9 +2990,9 @@ adjust_wrap_width (GtkIconView     *icon_view,
         wrap_width = item_width;
       else {
         if (item->width == -1 && item_width <= 0)
-          wrap_width = MAX (2 * pixbuf_width, 50);
+          wrap_width = MAX (2 * min_size.width, 50);
         else
-          wrap_width = item_width - pixbuf_width - icon_view->priv->spacing;
+          wrap_width = item_width - min_size.width - icon_view->priv->spacing;
         }
 
       wrap_width -= icon_view->priv->item_padding * 2;
@@ -3007,6 +3006,7 @@ static void
 gtk_icon_view_calculate_item_size (GtkIconView     *icon_view,
 				   GtkIconViewItem *item)
 {
+  GtkRequisition min_size;
   gint spacing;
   GList *l;
 
@@ -3038,11 +3038,12 @@ gtk_icon_view_calculate_item_size (GtkIconView     *icon_view,
       
       if (!gtk_cell_renderer_get_visible (info->cell))
 	continue;
-      
-      gtk_cell_renderer_get_size (info->cell, GTK_WIDGET (icon_view), 
-				  NULL, NULL, NULL,
-				  &item->box[info->position].width, 
-				  &item->box[info->position].height);
+
+      gtk_cell_size_request_get_size (GTK_CELL_SIZE_REQUEST (info->cell),
+                                      GTK_WIDGET (icon_view),
+                                      &min_size, NULL);
+      item->box[info->position].width = min_size.width;
+      item->box[info->position].height = min_size.height;
 
       if (icon_view->priv->item_orientation == GTK_ORIENTATION_HORIZONTAL)
 	{
@@ -3066,6 +3067,7 @@ gtk_icon_view_calculate_item_size2 (GtkIconView     *icon_view,
 				    GtkIconViewItem *item,
 				    gint            *max_height)
 {
+  GtkRequisition min_size;
   GdkRectangle cell_area;
   gint spacing;
   GList *l;
@@ -3094,7 +3096,7 @@ gtk_icon_view_calculate_item_size2 (GtkIconView     *icon_view,
     for (l = icon_view->priv->cell_list, i = 0; l; l = l->next, i++)
       {
 	GtkIconViewCellInfo *info = (GtkIconViewCellInfo *)l->data;
-	
+
 	if (info->pack == (k ? GTK_PACK_START : GTK_PACK_END))
 	  continue;
 
@@ -3118,14 +3120,20 @@ gtk_icon_view_calculate_item_size2 (GtkIconView     *icon_view,
 	    cell_area.width = item->width - 2 * icon_view->priv->item_padding;
 	    cell_area.height = max_height[i];
 	  }
-	
-	gtk_cell_renderer_get_size (info->cell, GTK_WIDGET (icon_view), 
-				    &cell_area,
-				    &item->box[info->position].x, &item->box[info->position].y,
-				    &item->box[info->position].width, &item->box[info->position].height);
-	
+
+        gtk_cell_size_request_get_size (GTK_CELL_SIZE_REQUEST (info->cell),
+                                        GTK_WIDGET (icon_view),
+                                        &min_size, NULL);
+        item->box[info->position].width  = min_size.width;
+        item->box[info->position].height = min_size.height;
+
+        _gtk_cell_renderer_calc_offset (info->cell, &cell_area,
+                                        gtk_widget_get_direction (GTK_WIDGET (icon_view)),
+                                        item->box[info->position].width, item->box[info->position].height,
+                                        &item->box[info->position].x, &item->box[info->position].y);
 	item->box[info->position].x += cell_area.x;
 	item->box[info->position].y += cell_area.y;
+
 	if (icon_view->priv->item_orientation == GTK_ORIENTATION_HORIZONTAL)
 	  {
 	    item->before[info->position] = item->box[info->position].x - cell_area.x;
