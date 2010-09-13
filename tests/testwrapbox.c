@@ -39,8 +39,6 @@ static gint           items_type       = SIMPLE_ITEMS;
 static GtkOrientation text_orientation = GTK_ORIENTATION_HORIZONTAL;
 static gboolean       items_xexpand    = TRUE;
 static gboolean       items_yexpand    = TRUE;
-static gboolean       items_xfill      = TRUE;
-static gboolean       items_yfill      = TRUE;
 
 
 static void
@@ -65,9 +63,7 @@ populate_wrapbox_simple (GtkWrapBox *wrapbox)
 
       gtk_wrap_box_insert_child (GTK_WRAP_BOX (wrapbox), frame, -1,
                                  (items_xexpand ? GTK_WRAP_BOX_H_EXPAND : 0) |
-                                 (items_yexpand ? GTK_WRAP_BOX_V_EXPAND : 0) |
-                                 (items_xfill   ? GTK_WRAP_BOX_H_FILL : 0) |
-                                 (items_yfill   ? GTK_WRAP_BOX_V_FILL : 0));
+                                 (items_yexpand ? GTK_WRAP_BOX_V_EXPAND : 0)); 
 
       g_free (text);
     }
@@ -106,9 +102,7 @@ populate_wrapbox_wrappy (GtkWrapBox *wrapbox)
 
       gtk_wrap_box_insert_child (GTK_WRAP_BOX (wrapbox), frame, -1,
                                  (items_xexpand ? GTK_WRAP_BOX_H_EXPAND : 0) |
-                                 (items_yexpand ? GTK_WRAP_BOX_V_EXPAND : 0) |
-                                 (items_xfill   ? GTK_WRAP_BOX_H_FILL : 0) |
-                                 (items_yfill   ? GTK_WRAP_BOX_V_FILL : 0));
+                                 (items_yexpand ? GTK_WRAP_BOX_V_EXPAND : 0));
     }
 }
 
@@ -133,9 +127,7 @@ populate_wrapbox_stock (GtkWrapBox *wrapbox)
 
       gtk_wrap_box_insert_child (GTK_WRAP_BOX (wrapbox), widget, -1,
                                  (items_xexpand ? GTK_WRAP_BOX_H_EXPAND : 0) |
-                                 (items_yexpand ? GTK_WRAP_BOX_V_EXPAND : 0) |
-                                 (items_xfill   ? GTK_WRAP_BOX_H_FILL : 0) |
-                                 (items_yfill   ? GTK_WRAP_BOX_V_FILL : 0));
+                                 (items_yexpand ? GTK_WRAP_BOX_V_EXPAND : 0));
     }
 }
 
@@ -421,7 +413,7 @@ create_window (void)
                     G_CALLBACK (text_orientation_changed), wrapbox);
 
 
-  /* Add expand/fill options */
+  /* Add expand options */
   hbox = gtk_hbox_new (FALSE, 2);
   gtk_widget_show (hbox);
 
@@ -436,22 +428,6 @@ create_window (void)
                     G_CALLBACK (child_option_toggled), &items_xexpand);
 
 
-  widget = gtk_check_button_new_with_label ("X Fill");
-  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), TRUE);
-  gtk_widget_show (widget);
-
-  gtk_widget_set_tooltip_text (widget, "Set whether the items fill their allotted size horizontally");
-  gtk_box_pack_start (GTK_BOX (hbox), widget, FALSE, FALSE, 0);
-
-  g_signal_connect (G_OBJECT (widget), "toggled",
-                    G_CALLBACK (child_option_toggled), &items_xfill);
-
-  gtk_box_pack_start (GTK_BOX (items_cntl), hbox, FALSE, FALSE, 0);
-
-
-  hbox = gtk_hbox_new (FALSE, 2);
-  gtk_widget_show (hbox);
-
   widget = gtk_check_button_new_with_label ("Y Expand");
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), TRUE);
   gtk_widget_show (widget);
@@ -461,17 +437,6 @@ create_window (void)
 
   g_signal_connect (G_OBJECT (widget), "toggled",
                     G_CALLBACK (child_option_toggled), &items_yexpand);
-
-
-  widget = gtk_check_button_new_with_label ("Y Fill");
-  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), TRUE);
-  gtk_widget_show (widget);
-
-  gtk_widget_set_tooltip_text (widget, "Set whether the items fill their allotted size vertically");
-  gtk_box_pack_start (GTK_BOX (hbox), widget, FALSE, FALSE, 0);
-
-  g_signal_connect (G_OBJECT (widget), "toggled",
-                    G_CALLBACK (child_option_toggled), &items_yfill);
 
   gtk_box_pack_start (GTK_BOX (items_cntl), hbox, FALSE, FALSE, 0);
 

@@ -781,54 +781,13 @@ allocate_child (GtkWrapBox      *box,
       child_allocation.height = item_size;
     }
 
-  request_mode = gtk_size_request_get_request_mode (GTK_SIZE_REQUEST (child->widget));
-  if (!(child->packing & GTK_WRAP_BOX_H_FILL))
-    {
-      gint width, height;
-
-      if (!(child->packing & GTK_WRAP_BOX_V_FILL) && request_mode == GTK_SIZE_REQUEST_WIDTH_FOR_HEIGHT)
-        {
-          gtk_size_request_get_height (GTK_SIZE_REQUEST (child->widget), NULL, &height);
-
-          height = MIN (child_allocation.height, height);
-        }
-      else
-        height = child_allocation.height;
-
-      if (request_mode == GTK_SIZE_REQUEST_WIDTH_FOR_HEIGHT)
-        gtk_size_request_get_width_for_height (GTK_SIZE_REQUEST (child->widget),
-                                               height, NULL, &width);
-      else
-        gtk_size_request_get_width (GTK_SIZE_REQUEST (child->widget), NULL, &width);
-
-      width = MIN (child_allocation.width, width);
-      child_allocation.x     = child_allocation.x + (child_allocation.width - width) / 2;
-      child_allocation.width = width;
-    }
-
-  if (!(child->packing & GTK_WRAP_BOX_V_FILL))
-    {
-      gint height;
-
-      /* Note here child_allocation.width is already changed if (!(child->packing & GTK_WRAP_BOX_H_FILL)) */
-      if (request_mode == GTK_SIZE_REQUEST_HEIGHT_FOR_WIDTH)
-        gtk_size_request_get_height_for_width (GTK_SIZE_REQUEST (child->widget),
-                                               child_allocation.width, NULL, &height);
-      else
-        gtk_size_request_get_height (GTK_SIZE_REQUEST (child->widget), NULL, &height);
-
-      height = MIN (child_allocation.height, height);
-      child_allocation.y      = child_allocation.y + (child_allocation.height - height) / 2;
-      child_allocation.height = height;
-    }
-
   gtk_widget_size_allocate (child->widget, &child_allocation);
 }
 
 /* fit_aligned_item_requests() helper */
 static gint
-gather_aligned_item_requests (GtkWrapBox       *box, 
-                              GtkOrientation    orientation, 
+gather_aligned_item_requests (GtkWrapBox       *box,
+                              GtkOrientation    orientation,
                               gint              line_length,
                               gint              item_spacing,
                               gint              n_children,
