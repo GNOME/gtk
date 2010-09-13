@@ -4211,7 +4211,9 @@ gtk_widget_get_accessible
 gtk_widget_get_allocation
 gtk_widget_get_ancestor
 gtk_widget_get_app_paintable
+#ifndef GTK_DISABLE_DEPRECATED
 gtk_widget_get_child_requisition
+#endif
 gtk_widget_get_child_visible
 gtk_widget_get_clipboard
 gtk_widget_get_colormap

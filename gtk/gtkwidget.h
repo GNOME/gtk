@@ -550,8 +550,10 @@ void	   gtk_widget_size_request	  (GtkWidget	       *widget,
 					   GtkRequisition      *requisition);
 void	   gtk_widget_size_allocate	  (GtkWidget	       *widget,
 					   GtkAllocation       *allocation);
+#ifndef GTK_DISABLE_DEPRECATED
 void       gtk_widget_get_child_requisition (GtkWidget	       *widget,
 					     GtkRequisition    *requisition);
+#endif
 void	   gtk_widget_add_accelerator	  (GtkWidget           *widget,
 					   const gchar         *accel_signal,
 					   GtkAccelGroup       *accel_group,
