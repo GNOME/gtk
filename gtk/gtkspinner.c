@@ -53,8 +53,6 @@
  */
 
 
-G_DEFINE_TYPE (GtkSpinner, gtk_spinner, GTK_TYPE_DRAWING_AREA);
-
 #define SPINNER_SIZE 12
 
 enum {
@@ -71,8 +69,6 @@ struct _GtkSpinnerPrivate
   guint timeout;
 };
 
-static void gtk_spinner_class_init     (GtkSpinnerClass *klass);
-static void gtk_spinner_init           (GtkSpinner      *spinner);
 static void gtk_spinner_dispose        (GObject         *gobject);
 static void gtk_spinner_realize        (GtkWidget       *widget);
 static void gtk_spinner_unrealize      (GtkWidget       *widget);
@@ -94,6 +90,8 @@ static void gtk_spinner_set_active     (GtkSpinner      *spinner,
                                         gboolean         active);
 static AtkObject *gtk_spinner_get_accessible      (GtkWidget *widget);
 static GType      gtk_spinner_accessible_get_type (void);
+
+G_DEFINE_TYPE (GtkSpinner, gtk_spinner, GTK_TYPE_DRAWING_AREA);
 
 static void
 gtk_spinner_class_init (GtkSpinnerClass *klass)
