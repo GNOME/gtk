@@ -30,6 +30,7 @@
 #include <X11/Xutil.h>
 #include <X11/Xatom.h>
 #include <X11/extensions/shape.h>
+#include <X11/extensions/Xcomposite.h>
 
 #include <string.h>
 
@@ -537,6 +538,7 @@ gdk_window_cache_new (GdkScreen *screen)
   GdkWindow *root_window = gdk_screen_get_root_window (screen);
   GdkChildInfoX11 *children;
   guint nchildren, i;
+  Window cow;
   
   GdkWindowCache *result = g_new (GdkWindowCache, 1);
 
@@ -584,6 +586,20 @@ gdk_window_cache_new (GdkScreen *screen)
     }
 
   g_free (children);
+
+  /*
+   * Add the composite overlay window to the cache, as this can be a reasonable
+   * Xdnd proxy as well.
+   * This is only done when the screen is composited in order to avoid mapping
+   * the COW. We assume that the CM is using the COW (which is true for pretty
+   * much any CM currently in use).
+   */
+  if (gdk_screen_is_composited (screen))
+    {
+      cow = XCompositeGetOverlayWindow (xdisplay, GDK_WINDOW_XWINDOW (root_window));
+      gdk_window_cache_add (result, cow, 0, 0, gdk_screen_get_width (screen), gdk_screen_get_height (screen), TRUE);
+      XCompositeReleaseOverlayWindow (xdisplay, GDK_WINDOW_XWINDOW (root_window));
+    }
 
   return result;
 }
