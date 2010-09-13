@@ -2712,14 +2712,26 @@ gtk_default_draw_flat_box (GtkStyle      *style,
   
   if (detail)
     {
+      int trimmed_len = strlen (detail);
+
+      if (g_str_has_prefix (detail, "cell_"))
+        {
+          if (g_str_has_suffix (detail, "_start"))
+            trimmed_len -= 6;
+          else if (g_str_has_suffix (detail, "_middle"))
+            trimmed_len -= 7;
+          else if (g_str_has_suffix (detail, "_end"))
+            trimmed_len -= 4;
+        }
+
       if (state_type == GTK_STATE_SELECTED)
         {
           if (!strcmp ("text", detail))
             gc1 = &style->bg[GTK_STATE_SELECTED];
-          else if (!strcmp ("cell_even", detail) ||
-                   !strcmp ("cell_odd", detail) ||
-                   !strcmp ("cell_even_ruled", detail) ||
-		   !strcmp ("cell_even_ruled_sorted", detail))
+          else if (!strncmp ("cell_even", detail, trimmed_len) ||
+                   !strncmp ("cell_odd", detail, trimmed_len) ||
+                   !strncmp ("cell_even_ruled", detail, trimmed_len) ||
+		   !strncmp ("cell_even_ruled_sorted", detail, trimmed_len))
             {
 	      /* This has to be really broken; alex made me do it. -jrb */
 	      if (widget && gtk_widget_has_focus (widget))
@@ -2727,8 +2739,8 @@ gtk_default_draw_flat_box (GtkStyle      *style,
 	      else
 	        gc1 = &style->base[GTK_STATE_ACTIVE];
             }
-	  else if (!strcmp ("cell_odd_ruled", detail) ||
-		   !strcmp ("cell_odd_ruled_sorted", detail))
+	  else if (!strncmp ("cell_odd_ruled", detail, trimmed_len) ||
+		   !strncmp ("cell_odd_ruled_sorted", detail, trimmed_len))
 	    {
 	      if (widget && gtk_widget_has_focus (widget))
 	        freeme = get_darkened (&style->base[state_type], 1);
@@ -2753,9 +2765,9 @@ gtk_default_draw_flat_box (GtkStyle      *style,
            * for that row.
            */
 
-          else if (!strcmp ("cell_even", detail) ||
-                   !strcmp ("cell_odd", detail) ||
-                   !strcmp ("cell_even_ruled", detail))
+          else if (!strncmp ("cell_even", detail, trimmed_len) ||
+                   !strncmp ("cell_odd", detail, trimmed_len) ||
+                   !strncmp ("cell_even_ruled", detail, trimmed_len))
             {
 	      GdkColor *color = NULL;
 
@@ -2773,7 +2785,7 @@ gtk_default_draw_flat_box (GtkStyle      *style,
 	      else
 	        gc1 = &style->base[state_type];
             }
-	  else if (!strcmp ("cell_odd_ruled", detail))
+	  else if (!strncmp ("cell_odd_ruled", detail, trimmed_len))
 	    {
 	      GdkColor *color = NULL;
 
@@ -2804,13 +2816,13 @@ gtk_default_draw_flat_box (GtkStyle      *style,
 		  gc1 = freeme;
 		}
 	    }
-          else if (!strcmp ("cell_even_sorted", detail) ||
-                   !strcmp ("cell_odd_sorted", detail) ||
-                   !strcmp ("cell_even_ruled_sorted", detail))
+          else if (!strncmp ("cell_even_sorted", detail, trimmed_len) ||
+                   !strncmp ("cell_odd_sorted", detail, trimmed_len) ||
+                   !strncmp ("cell_even_ruled_sorted", detail, trimmed_len))
             {
 	      GdkColor *color = NULL;
 
-	      if (!strcmp ("cell_odd_sorted", detail))
+	      if (!strncmp ("cell_odd_sorted", detail, trimmed_len))
 	        gtk_widget_style_get (widget,
 		                      "odd-row-color", &color,
 				      NULL);
@@ -2832,7 +2844,7 @@ gtk_default_draw_flat_box (GtkStyle      *style,
                   gc1 = freeme;
 		}
             }
-          else if (!strcmp ("cell_odd_ruled_sorted", detail))
+          else if (!strncmp ("cell_odd_ruled_sorted", detail, trimmed_len))
             {
 	      GdkColor *color = NULL;
 
