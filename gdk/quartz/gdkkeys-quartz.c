@@ -114,54 +114,54 @@ const static struct {
   guint keyval;
   unsigned int modmask; /* So we can tell when a mod key is pressed/released */
 } known_keys[] = {
-  {  54, GDK_Meta_R,    NSCommandKeyMask },
-  {  55, GDK_Meta_L,    NSCommandKeyMask },
-  {  56, GDK_Shift_L,   NSShiftKeyMask },
-  {  57, GDK_Caps_Lock, NSAlphaShiftKeyMask },
-  {  58, GDK_Alt_L,     NSAlternateKeyMask },
-  {  59, GDK_Control_L, NSControlKeyMask },
-  {  60, GDK_Shift_R,   NSShiftKeyMask },
-  {  61, GDK_Alt_R,     NSAlternateKeyMask },
-  {  62, GDK_Control_R, NSControlKeyMask },
-  { 122, GDK_F1, 0 },
-  { 120, GDK_F2, 0 },
-  {  99, GDK_F3, 0 },
-  { 118, GDK_F4, 0 },
-  {  96, GDK_F5, 0 },
-  {  97, GDK_F6, 0 },
-  {  98, GDK_F7, 0 },
-  { 100, GDK_F8, 0 },
-  { 101, GDK_F9, 0 },
-  { 109, GDK_F10, 0 },
-  { 103, GDK_F11, 0 },
-  { 111, GDK_F12, 0 },
-  { 105, GDK_F13, 0 },
-  { 107, GDK_F14, 0 },
-  { 113, GDK_F15, 0 },
-  { 106, GDK_F16, 0 }
+  {  54, GDK_KEY_Meta_R,    NSCommandKeyMask },
+  {  55, GDK_KEY_Meta_L,    NSCommandKeyMask },
+  {  56, GDK_KEY_Shift_L,   NSShiftKeyMask },
+  {  57, GDK_KEY_Caps_Lock, NSAlphaShiftKeyMask },
+  {  58, GDK_KEY_Alt_L,     NSAlternateKeyMask },
+  {  59, GDK_KEY_Control_L, NSControlKeyMask },
+  {  60, GDK_KEY_Shift_R,   NSShiftKeyMask },
+  {  61, GDK_KEY_Alt_R,     NSAlternateKeyMask },
+  {  62, GDK_KEY_Control_R, NSControlKeyMask },
+  { 122, GDK_KEY_F1, 0 },
+  { 120, GDK_KEY_F2, 0 },
+  {  99, GDK_KEY_F3, 0 },
+  { 118, GDK_KEY_F4, 0 },
+  {  96, GDK_KEY_F5, 0 },
+  {  97, GDK_KEY_F6, 0 },
+  {  98, GDK_KEY_F7, 0 },
+  { 100, GDK_KEY_F8, 0 },
+  { 101, GDK_KEY_F9, 0 },
+  { 109, GDK_KEY_F10, 0 },
+  { 103, GDK_KEY_F11, 0 },
+  { 111, GDK_KEY_F12, 0 },
+  { 105, GDK_KEY_F13, 0 },
+  { 107, GDK_KEY_F14, 0 },
+  { 113, GDK_KEY_F15, 0 },
+  { 106, GDK_KEY_F16, 0 }
 };
 
 const static struct {
   guint keycode;
   guint normal_keyval, keypad_keyval;
 } known_numeric_keys[] = {
-  { 65, GDK_period, GDK_KP_Decimal },
-  { 67, GDK_asterisk, GDK_KP_Multiply },
-  { 69, GDK_plus, GDK_KP_Add },
-  { 75, GDK_slash, GDK_KP_Divide },
-  { 76, 0x01000003, GDK_KP_Enter },
-  { 78, GDK_minus, GDK_KP_Subtract },
-  { 81, GDK_equal, GDK_KP_Equal },
-  { 82, GDK_0, GDK_KP_0 },
-  { 83, GDK_1, GDK_KP_1 },
-  { 84, GDK_2, GDK_KP_2 },
-  { 85, GDK_3, GDK_KP_3 },
-  { 86, GDK_4, GDK_KP_4 },
-  { 87, GDK_5, GDK_KP_5 },
-  { 88, GDK_6, GDK_KP_6 },
-  { 89, GDK_7, GDK_KP_7 },
-  { 91, GDK_8, GDK_KP_8 },
-  { 92, GDK_9, GDK_KP_9 }
+  { 65, GDK_KEY_period, GDK_KEY_KP_Decimal },
+  { 67, GDK_KEY_asterisk, GDK_KEY_KP_Multiply },
+  { 69, GDK_KEY_plus, GDK_KEY_KP_Add },
+  { 75, GDK_KEY_slash, GDK_KEY_KP_Divide },
+  { 76, 0x01000003, GDK_KEY_KP_Enter },
+  { 78, GDK_KEY_minus, GDK_KEY_KP_Subtract },
+  { 81, GDK_KEY_equal, GDK_KEY_KP_Equal },
+  { 82, GDK_KEY_0, GDK_KEY_KP_0 },
+  { 83, GDK_KEY_1, GDK_KEY_KP_1 },
+  { 84, GDK_KEY_2, GDK_KEY_KP_2 },
+  { 85, GDK_KEY_3, GDK_KEY_KP_3 },
+  { 86, GDK_KEY_4, GDK_KEY_KP_4 },
+  { 87, GDK_KEY_5, GDK_KEY_KP_5 },
+  { 88, GDK_KEY_6, GDK_KEY_KP_6 },
+  { 89, GDK_KEY_7, GDK_KEY_KP_7 },
+  { 91, GDK_KEY_8, GDK_KEY_KP_8 },
+  { 92, GDK_KEY_9, GDK_KEY_KP_9 }
 };
 
 /* These values aren't covered by gdk_unicode_to_keyval */
@@ -169,20 +169,20 @@ const static struct {
   gunichar ucs_value;
   guint keyval;
 } special_ucs_table [] = {
-  { 0x0001, GDK_Home },
-  { 0x0003, GDK_Return },
-  { 0x0004, GDK_End },
-  { 0x0008, GDK_BackSpace },
-  { 0x0009, GDK_Tab },
-  { 0x000b, GDK_Page_Up },
-  { 0x000c, GDK_Page_Down },
-  { 0x000d, GDK_Return },
-  { 0x001b, GDK_Escape },
-  { 0x001c, GDK_Left },
-  { 0x001d, GDK_Right },
-  { 0x001e, GDK_Up },
-  { 0x001f, GDK_Down },
-  { 0x007f, GDK_Delete }
+  { 0x0001, GDK_KEY_Home },
+  { 0x0003, GDK_KEY_Return },
+  { 0x0004, GDK_KEY_End },
+  { 0x0008, GDK_KEY_BackSpace },
+  { 0x0009, GDK_KEY_Tab },
+  { 0x000b, GDK_KEY_Page_Up },
+  { 0x000c, GDK_KEY_Page_Down },
+  { 0x000d, GDK_KEY_Return },
+  { 0x001b, GDK_KEY_Escape },
+  { 0x001c, GDK_KEY_Left },
+  { 0x001d, GDK_KEY_Right },
+  { 0x001e, GDK_KEY_Up },
+  { 0x001f, GDK_KEY_Down },
+  { 0x007f, GDK_KEY_Delete }
 };
 
 static void
@@ -361,8 +361,8 @@ maybe_update_keymap (void)
 		      /* Special-case shift-tab since GTK+ expects
 		       * GDK_ISO_Left_Tab for that.
 		       */
-		      if (found && p[j] == GDK_Tab && modifiers[j] == shiftKey)
-			p[j] = GDK_ISO_Left_Tab;
+		      if (found && p[j] == GDK_KEY_Tab && modifiers[j] == shiftKey)
+			p[j] = GDK_KEY_ISO_Left_Tab;
 		      
 		      if (!found)
                         {

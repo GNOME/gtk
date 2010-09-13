@@ -952,7 +952,7 @@ fill_key_event (GdkWindow    *window,
   event->key.state = get_keyboard_modifiers_from_ns_event (nsevent);
   event->key.hardware_keycode = [nsevent keyCode];
   event->key.group = ([nsevent modifierFlags] & NSAlternateKeyMask) ? 1 : 0;
-  event->key.keyval = GDK_VoidSymbol;
+  event->key.keyval = GDK_KEY_VoidSymbol;
 
   device_manager = GDK_DEVICE_MANAGER_CORE (_gdk_display->device_manager);
   gdk_event_set_device (event, device_manager->core_keyboard);
@@ -976,23 +976,23 @@ fill_key_event (GdkWindow    *window,
 
       switch (event->key.keyval)
         {
-        case GDK_Meta_R:
-        case GDK_Meta_L:
+        case GDK_KEY_Meta_R:
+        case GDK_KEY_Meta_L:
           mask = GDK_MOD1_MASK;
           break;
-        case GDK_Shift_R:
-        case GDK_Shift_L:
+        case GDK_KEY_Shift_R:
+        case GDK_KEY_Shift_L:
           mask = GDK_SHIFT_MASK;
           break;
-        case GDK_Caps_Lock:
+        case GDK_KEY_Caps_Lock:
           mask = GDK_LOCK_MASK;
           break;
-        case GDK_Alt_R:
-        case GDK_Alt_L:
+        case GDK_KEY_Alt_R:
+        case GDK_KEY_Alt_L:
           mask = GDK_MOD5_MASK;
           break;
-        case GDK_Control_R:
-        case GDK_Control_L:
+        case GDK_KEY_Control_R:
+        case GDK_KEY_Control_L:
           mask = GDK_CONTROL_MASK;
           break;
         default:
@@ -1010,7 +1010,7 @@ fill_key_event (GdkWindow    *window,
   event->key.string = NULL;
 
   /* Fill in ->string since apps depend on it, taken from the x11 backend. */
-  if (event->key.keyval != GDK_VoidSymbol)
+  if (event->key.keyval != GDK_KEY_VoidSymbol)
     c = gdk_keyval_to_unicode (event->key.keyval);
 
   if (c)
@@ -1027,13 +1027,13 @@ fill_key_event (GdkWindow    *window,
       if (event->key.string)
 	event->key.length = bytes_written;
     }
-  else if (event->key.keyval == GDK_Escape)
+  else if (event->key.keyval == GDK_KEY_Escape)
     {
       event->key.length = 1;
       event->key.string = g_strdup ("\033");
     }
-  else if (event->key.keyval == GDK_Return ||
-	  event->key.keyval == GDK_KP_Enter)
+  else if (event->key.keyval == GDK_KEY_Return ||
+	  event->key.keyval == GDK_KEY_KP_Enter)
     {
       event->key.length = 1;
       event->key.string = g_strdup ("\r");
