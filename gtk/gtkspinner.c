@@ -93,7 +93,7 @@ static AtkObject *gtk_spinner_get_accessible      (GtkWidget *widget);
 static GType      gtk_spinner_accessible_get_type (void);
 static void gtk_spinner_size_request_init (GtkSizeRequestIface *iface);
 
-G_DEFINE_TYPE_WITH_CODE (GtkSpinner, gtk_spinner, GTK_TYPE_DRAWING_AREA,
+G_DEFINE_TYPE_WITH_CODE (GtkSpinner, gtk_spinner, GTK_TYPE_WIDGET,
 			 G_IMPLEMENT_INTERFACE (GTK_TYPE_SIZE_REQUEST,
 						gtk_spinner_size_request_init))
 
