@@ -623,7 +623,7 @@ gdk_event_send_clientmessage_toall (GdkEvent *event)
  * Return value: the core pointer device; this is owned by the
  *   display and should not be freed.
  *
- * Deprecated: 3.0: Use gdk_display_get_client_pointer() instead, or
+ * Deprecated: 3.0: Use gdk_device_manager_get_client_pointer() instead, or
  *             gdk_event_get_device() if a #GdkEvent with pointer device
  *             information is available.
  **/
@@ -644,7 +644,7 @@ gdk_device_get_core_pointer (void)
  *
  * Since: 2.2
  *
- * Deprecated: 3.0: Use gdk_display_get_client_pointer() instead, or
+ * Deprecated: 3.0: Use gdk_device_manager_get_client_pointer() instead, or
  *             gdk_event_get_device() if a #GdkEvent with device
  *             information is available.
  **/
