@@ -1,5 +1,5 @@
 # gtk+-properties ja.po.
-# Copyright (C) 1998,2000-2009 Free Software Foundation, Inc.
+# Copyright (C) 1998,2000-2010 Free Software Foundation, Inc.
 # Yasuhiro SHIRASAKI <yasuhiro@awa.tohoku.ac.jp>, 1998.
 # Yukihiro Nakai <nakai@gnome.gr.jp>, 2000-2001.
 # Takayuki KUSANO <AE5T-KSN@asahi-net.or.jp>, 2002, 2009-2010.
@@ -13,8 +13,8 @@ msgstr ""
 "Project-Id-Version: gtk+-properties gtk-2-22\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk%"
 "2b&component=general\n"
-"POT-Creation-Date: 2010-09-12 11:27+0000\n"
-"PO-Revision-Date: 2010-09-13 01:58+0900\n"
+"POT-Creation-Date: 2010-09-13 16:22+0000\n"
+"PO-Revision-Date: 2010-09-14 01:36+0900\n"
 "Last-Translator: Takayuki KUSANO <AE5T-KSN@asahi-net.or.jp>\n"
 "Language-Team: Japanese <gnome-translation@gnome.gr.jp>\n"
 "MIME-Version: 1.0\n"
@@ -652,13 +652,12 @@ msgid "Layout style"
 msgstr "配置スタイル"
 
 #: ../gtk/gtkbbox.c:138
-#, fuzzy
 msgid ""
 "How to lay out the buttons in the box. Possible values are: default, spread, "
 "edge, start and end"
 msgstr ""
-"ボックス内にどのようにボタンを配置するか (設定可能な値: default, spread, "
-"edge, start, end)"
+"ボックス内にどのようにボタンを配置するか。設定可能な値: default, spread, "
+"edge, start, end"
 
 #: ../gtk/gtkbbox.c:146
 msgid "Secondary"
@@ -699,8 +698,7 @@ msgstr "展張"
 #: ../gtk/gtkbox.c:149
 msgid "Whether the child should receive extra space when the parent grows"
 msgstr ""
-"親ウィジェットが大きくなった際に子ウィジェットも余白のスペースを占めるかどう"
-"か"
+"親ウィジェットが大きくなった際に子ウィジェットに追加のスペースが付くかどうか"
 
 #: ../gtk/gtkbox.c:155 ../gtk/gtktoolitemgroup.c:1610
 msgid "Fill"
@@ -797,7 +795,7 @@ msgstr "マウスでクリックした時にボタンにフォーカスを当て
 
 #: ../gtk/gtkbutton.c:251
 msgid "Border relief"
-msgstr "枠のスタイル"
+msgstr "枠の縁"
 
 #: ../gtk/gtkbutton.c:252
 msgid "The border relief style"
@@ -982,34 +980,28 @@ msgid "If TRUE, details are shown"
 msgstr "TRUE にすると詳細情報を表示します"
 
 #: ../gtk/gtkcalendar.c:586
-#, fuzzy
 msgid "Inner border"
 msgstr "内側の境界線"
 
 #: ../gtk/gtkcalendar.c:587
-#, fuzzy
 msgid "Inner border space"
-msgstr "内側の境界線"
+msgstr "内側の境界線の空間"
 
 #: ../gtk/gtkcalendar.c:598
-#, fuzzy
 msgid "Vertical separation"
-msgstr "垂直オプション"
+msgstr ""
 
 #: ../gtk/gtkcalendar.c:599
-#, fuzzy
 msgid "Space between day headers and main area"
-msgstr "展張矢印の周りの間隔"
+msgstr "日のヘッダとメインエリアの間のスペース"
 
 #: ../gtk/gtkcalendar.c:610
-#, fuzzy
 msgid "Horizontal separation"
-msgstr "水平オプション"
+msgstr ""
 
 #: ../gtk/gtkcalendar.c:611
-#, fuzzy
 msgid "Space between week headers and main area"
-msgstr "ダイアログに格納されている各要素の間隔です"
+msgstr "週のヘッダとメインエリアの間のスペース"
 
 #: ../gtk/gtkcelleditable.c:43
 msgid "Editing Canceled"
@@ -2643,14 +2635,12 @@ msgid "A widget to display in place of the usual expander label"
 msgstr "通常の展張ラベルとして表示するウィジェット"
 
 #: ../gtk/gtkexpander.c:239
-#, fuzzy
 msgid "Label fill"
-msgstr "タブの埋め込み"
+msgstr "ラベルのフィル"
 
 #: ../gtk/gtkexpander.c:240
-#, fuzzy
 msgid "Whether the label widget should fill all available horizontal space"
-msgstr "子ウィジェットのすべてを同じ大きさにするかどうか"
+msgstr "ラベルが水平方向の利用可能な領域すべてを満たすよう拡がるかどうか"
 
 #: ../gtk/gtkexpander.c:246 ../gtk/gtktoolitemgroup.c:1578
 #: ../gtk/gtktreeview.c:780
@@ -3055,9 +3045,8 @@ msgid ""
 msgstr "各アイテムのテキストとアイコンをどのように配置するか"
 
 #: ../gtk/gtkiconview.c:749
-#, fuzzy
 msgid "Item Orientation"
-msgstr "向き"
+msgstr "アイテムの向き"
 
 #: ../gtk/gtkiconview.c:766 ../gtk/gtktreeview.c:615
 #: ../gtk/gtktreeviewcolumn.c:308
@@ -3722,13 +3711,12 @@ msgid "The image"
 msgstr "画像"
 
 #: ../gtk/gtkmessagedialog.c:322
-#, fuzzy
 msgid "Message area"
-msgstr "メッセージの種類"
+msgstr "メッセージエリア"
 
 #: ../gtk/gtkmessagedialog.c:323
 msgid "GtkVBox that holds the dialog's primary and secondary labels"
-msgstr ""
+msgstr "ダイアログのプライマリとセカンダリのラベルを保持する GtkVBox"
 
 #: ../gtk/gtkmisc.c:83
 msgid "Y align"
@@ -3900,7 +3888,7 @@ msgstr "子のタブを展張するかどうか"
 
 #: ../gtk/gtknotebook.c:716
 msgid "Tab fill"
-msgstr "タブの埋め込み"
+msgstr "タブのフィル"
 
 #: ../gtk/gtknotebook.c:717
 msgid "Whether the child's tab should fill the allocated area or not"
@@ -4497,7 +4485,7 @@ msgstr "横向きのプログレス・バーの幅 (最小値)"
 
 #: ../gtk/gtkprogressbar.c:235
 msgid "The minimum horizontal width of the progress bar"
-msgstr "横向きのプログレス・バーの最小幅です"
+msgstr "横向きのプログレス・バーの幅の最小値です"
 
 #: ../gtk/gtkprogressbar.c:247
 msgid "Min horizontal bar height"
@@ -4505,7 +4493,7 @@ msgstr "横向きのプログレス・バーの高さ (最小値)"
 
 #: ../gtk/gtkprogressbar.c:248
 msgid "Minimum horizontal height of the progress bar"
-msgstr "横向きのプログレス・バーの最小高です"
+msgstr "横向きのプログレス・バーの高さの最小値です"
 
 #: ../gtk/gtkprogressbar.c:260
 msgid "Min vertical bar width"
@@ -4513,7 +4501,7 @@ msgstr "縦向きのプログレス・バーの幅 (最小値)"
 
 #: ../gtk/gtkprogressbar.c:261
 msgid "The minimum vertical width of the progress bar"
-msgstr "縦向きのプログレス・バーの最小幅です"
+msgstr "縦向きのプログレス・バーの幅の最小値です"
 
 #: ../gtk/gtkprogressbar.c:273
 msgid "Min vertical bar height"
@@ -4521,7 +4509,7 @@ msgstr "縦向きのプログレス・バーの高さ (最小値)\""
 
 #: ../gtk/gtkprogressbar.c:274
 msgid "The minimum vertical height of the progress bar"
-msgstr "縦向きのプログレス・バーの最小高です"
+msgstr "縦向きのプログレス・バーの高さの最小値です"
 
 #: ../gtk/gtkradioaction.c:111
 msgid "The value"
@@ -4718,15 +4706,14 @@ msgid "Arrow scaling with regard to scroll button size"
 msgstr "矢印の大きさをスクロール・ボタンの大きさに合わせるかどうか"
 
 #: ../gtk/gtkrange.c:590
-#, fuzzy
 msgid "Stepper Position Details"
-msgstr "位置の設定"
+msgstr "ステッパ位置の詳細"
 
 #: ../gtk/gtkrange.c:591
 msgid ""
 "When TRUE, the detail string for rendering the steppers is suffixed with "
 "position information"
-msgstr ""
+msgstr "TRUE ならば、ステッパの描画を表す詳細な文字列に位置情報が付加されます"
 
 #: ../gtk/gtkrecentaction.c:616 ../gtk/gtkrecentchoosermenu.c:227
 msgid "Show Numbers"
@@ -6342,7 +6329,7 @@ msgstr "スペーサは垂直線か単なる空白か"
 
 #: ../gtk/gtktoolbar.c:616
 msgid "Button relief"
-msgstr "ボタンのレリーフ"
+msgstr "ボタンの縁"
 
 #: ../gtk/gtktoolbar.c:617
 msgid "Type of bevel around toolbar buttons"
@@ -6421,7 +6408,6 @@ msgid "Collapsed"
 msgstr "畳まれている"
 
 #: ../gtk/gtktoolitemgroup.c:1558
-#, fuzzy
 msgid "Whether the group has been collapsed and items are hidden"
 msgstr "グループが畳まれて、アイテムが隠れているかどうか"
 
@@ -6434,77 +6420,61 @@ msgid "Ellipsize for item group headers"
 msgstr "アイテムグループのヘッダを省略記号で置き換える"
 
 #: ../gtk/gtktoolitemgroup.c:1571
-#, fuzzy
 msgid "Header Relief"
-msgstr "ヘッダの画像"
+msgstr "ヘッダの縁"
 
 #: ../gtk/gtktoolitemgroup.c:1572
-#, fuzzy
 msgid "Relief of the group header button"
-msgstr "列のヘッダ・ボタンを表示する"
+msgstr "グループヘッダのボタンの縁"
 
 #: ../gtk/gtktoolitemgroup.c:1587
-#, fuzzy
 msgid "Header Spacing"
-msgstr "ヘッダのパディング"
+msgstr "ヘッダの間隔"
 
 #: ../gtk/gtktoolitemgroup.c:1588
-#, fuzzy
 msgid "Spacing between expander arrow and caption"
-msgstr "展張矢印の周りの間隔"
+msgstr "展張矢印とキャプションの間隔"
 
 #: ../gtk/gtktoolitemgroup.c:1604
-#, fuzzy
 msgid "Whether the item should receive extra space when the group grows"
-msgstr ""
-"ツールバーが大きくなった際にアイテムも余白のスペースを受け取るべきかどうかで"
-"す"
+msgstr "グループ大きくなった際にアイテムに余白のスペースが付くかどうかです"
 
 #: ../gtk/gtktoolitemgroup.c:1611
-#, fuzzy
 msgid "Whether the item should fill the available space"
-msgstr "子ウィジェットのすべてを同じ大きさにするかどうか"
+msgstr "アイテムが利用可能なスペースいっぱいに拡がるかどうか"
 
 #: ../gtk/gtktoolitemgroup.c:1617
 msgid "New Row"
 msgstr "新しい行"
 
 #: ../gtk/gtktoolitemgroup.c:1618
-#, fuzzy
 msgid "Whether the item should start a new row"
-msgstr "番号を付けてアイテムを表示するかどうか"
+msgstr "アイテムが新しい行を開始するかどうか"
 
 #: ../gtk/gtktoolitemgroup.c:1625
-#, fuzzy
 msgid "Position of the item within this group"
-msgstr "ルーラでマークを付ける位置"
+msgstr "このグループでのアイテムの位置"
 
 #: ../gtk/gtktoolpalette.c:992
-#, fuzzy
 msgid "Size of icons in this tool palette"
-msgstr "ツールバーに配置するアイコンの大きさ"
+msgstr "このツールパレットでのアイコンの大きさ"
 
 #: ../gtk/gtktoolpalette.c:1022
-#, fuzzy
 msgid "Style of items in the tool palette"
-msgstr "ツールバー周りのに縁取りのスタイル"
+msgstr "このツールパレットでのアイテムのスタイル"
 
 #: ../gtk/gtktoolpalette.c:1038
 msgid "Exclusive"
 msgstr ""
 
 #: ../gtk/gtktoolpalette.c:1039
-#, fuzzy
 msgid "Whether the item group should be the only expanded at a given time"
-msgstr "番号を付けてアイテムを表示するかどうか"
+msgstr "このアイテムグループが与えられた時間で展開される唯一のものかどうか"
 
 #: ../gtk/gtktoolpalette.c:1054
-#, fuzzy
 msgid ""
 "Whether the item group should receive extra space when the palette grows"
-msgstr ""
-"親ウィジェットが大きくなった際に子ウィジェットも余白のスペースを占めるかどう"
-"か"
+msgstr "パレットが大きくなった際にアイテムグループに余白が追加されるかどうか"
 
 #: ../gtk/gtktreemodelsort.c:278
 msgid "TreeModelSort Model"
@@ -7412,6 +7382,230 @@ msgstr "IM ステータスのスタイル"
 #: ../modules/input/gtkimcontextxim.c:344
 msgid "How to draw the input method statusbar"
 msgstr "入力メソッドのステータスバーのスタイルです"
+
+# FIXME: display はディスプレイと訳すべきか? display のままがいいか?
+#~ msgid "Device Display"
+#~ msgstr "デバイスのディスプレイ"
+
+#~ msgid "Display which the device belongs to"
+#~ msgstr "デバイスが属するディスプレイ"
+
+#~ msgid "Device manager"
+#~ msgstr "デバイスマネージャ"
+
+#~ msgid "Device manager which the device belongs to"
+#~ msgstr "デバイスが属するデバイスマネージャ"
+
+#~ msgid "Device name"
+#~ msgstr "デバイス名"
+
+#~ msgid "Device type"
+#~ msgstr "デバイスの種類"
+
+#~ msgid "Device role in the device manager"
+#~ msgstr "デバイスマネージャでのデバイスの役割"
+
+#~ msgid "Associated device"
+#~ msgstr "関連したデバイス"
+
+#~ msgid "Associated pointer or keyboard with this device"
+#~ msgstr "このデバイスに関連したポインタやキーボード"
+
+#~ msgid "Input source"
+#~ msgstr "入力の種類"
+
+#~ msgid "Source type for the device"
+#~ msgstr "このデバイスの入力の種類です"
+
+#~ msgid "Input mode for the device"
+#~ msgstr "デバイスの入力モード"
+
+#~ msgid "Whether the device has a cursor"
+#~ msgstr "デバイスにはカーソルがあるかどうか"
+
+#~ msgid "Whether there is a visible cursor following device motion"
+#~ msgstr "デバイスの動きに追従する表示されるカーソルかあるかどうか"
+
+#~ msgid "Number of axes in the device"
+#~ msgstr "デバイスの軸の数"
+
+#~ msgid "Display"
+#~ msgstr "ディスプレイ"
+
+#~ msgid "Display for the device manager"
+#~ msgstr "デバイスマネージャのディスプレイ"
+
+#~ msgid "Device ID"
+#~ msgstr "デバイスID"
+
+#~ msgid "Device identifier"
+#~ msgstr "デバイス識別子"
+
+#~ msgid "License Type"
+#~ msgstr "ライセンスの種類"
+
+#~ msgid "The license type of the program"
+#~ msgstr "このプログラムのライセンスの種類です"
+
+#~ msgid ""
+#~ "How to lay out the buttons in the box. Possible values are: spread, edge, "
+#~ "start and end"
+#~ msgstr ""
+#~ "ボックス内にどのようにボタンを配置するか。設定可能な値: spread、edge、"
+#~ "start、end"
+
+#~ msgid "Invert the direction in which the progress bar grows"
+#~ msgstr "プログレス・バーが延びていく方向を反転する"
+
+#~ msgid "The adjustment that holds the value of the spin button"
+#~ msgstr "スピンボタンの値を格納するアジャストメント"
+
+#~ msgid "Whether to keep all text in a single paragraph"
+#~ msgstr "単一の段落にあるすべてのテキストを保持するかどうか"
+
+#~ msgid "The maximum width of the cell, in characters"
+#~ msgstr "セルの最大幅 (文字数) です"
+
+#~ msgid "Whether to give the color an alpha value"
+#~ msgstr "色にアルファ値を設定するかどうか"
+
+#~ msgid "Invisible character set"
+#~ msgstr "隠し文字の設定"
+
+#~ msgid "Whether the invisible character has been set"
+#~ msgstr "隠し文字を設定するかどうか"
+
+#~ msgid "Allow folder creation"
+#~ msgstr "フォルダの作成を許可"
+
+#~ msgid "Mask bitmap to use with GdkPixmap"
+#~ msgstr "GdkPixmap で使用するマスクのビットマップ"
+
+#~ msgid "Whether tabs should be shown"
+#~ msgstr "タブを表示するかどうか"
+
+#~ msgid "Whether the border should be shown"
+#~ msgstr "境界線を表示するかどうか"
+
+#~ msgid "Whether to expand the child's tab"
+#~ msgstr "子のタブを展張するかどうか"
+
+#~ msgid "Whether the child's tab should fill the allocated area"
+#~ msgstr "子のタブが確保した領域一杯に拡がるかどうか"
+
+#~ msgid "Whether the tab is reorderable by user action"
+#~ msgstr "ユーザの操作で、タブの並べ替えを可能にするかどうか"
+
+#~ msgid "Whether the plug is embedded"
+#~ msgstr "プラグを埋め込むかどうか"
+
+#~ msgid "Manual Capabilities"
+#~ msgstr "手動のケイパビリティ"
+
+#~ msgid "X spacing"
+#~ msgstr "X方向の間隔"
+
+#~ msgid "Y spacing"
+#~ msgstr "Y方向の間隔"
+
+#~ msgid "Minimum horizontal bar width"
+#~ msgstr "横向きのプログレス・バーの最小幅"
+
+#~ msgid "Minimum horizontal bar height"
+#~ msgstr "横向きのプログレス・バーの最小高"
+
+#~ msgid "Minimum vertical bar width"
+#~ msgstr "縦向きのプログレス・バーの最小幅"
+
+#~ msgid "Minimum vertical bar height"
+#~ msgstr "縦向きのプログレス・バーの最小高"
+
+#~ msgid "Application prefers a dark theme"
+#~ msgstr "アプリケーションが暗いテーマを好む"
+
+#~ msgid "Whether the application prefers to have a dark theme."
+#~ msgstr "アプリケーションが暗いテーマを好んで選択するかどうか"
+
+#~ msgid "Whether the status icon is visible"
+#~ msgstr "ステータス・アイコンを表示するかどうか"
+
+#~ msgid "Whether the status icon is embedded"
+#~ msgstr "ステータス・アイコンを埋め込むかどうか"
+
+#~ msgid "Whether the toggle action should be active"
+#~ msgstr "トグル操作をアクティブにするかどうか"
+
+#~ msgid "If the toggle button should be pressed in"
+#~ msgstr "トグル・ボタンを押下されたか"
+
+#~ msgid "Foreground color for symbolic icons"
+#~ msgstr "シンボリックアイコンの前景色"
+
+#~ msgid "Error color"
+#~ msgstr "エラーの色"
+
+#~ msgid "Error color for symbolic icons"
+#~ msgstr "シンボリックアイコンのエラーを表す色です"
+
+#~ msgid "Warning color"
+#~ msgstr "警告の色"
+
+#~ msgid "Warning color for symbolic icons"
+#~ msgstr "シンボリックアイコンの警告を表すの色です"
+
+#~ msgid "Success color"
+#~ msgstr "成功の色"
+
+#~ msgid "Success color for symbolic icons"
+#~ msgstr "シンボリックアイコンで成功を表す色です"
+
+#~ msgid "Padding that should be put around icons in the tray"
+#~ msgstr "トレイ中のアイコンのまわりにパディングを付けるかどうか"
+
+#~ msgid "Whether the widget is double buffered"
+#~ msgstr "ウィジェットがダブルバッファかどうか"
+
+#~ msgid "How to position in extra horizontal space"
+#~ msgstr "水平方向の追加されたスペース中にどう配置するか"
+
+#~ msgid "How to position in extra vertical space"
+#~ msgstr "垂直方向の追加されたスペース中にどう配置するか"
+
+#~ msgid "Margin on Left"
+#~ msgstr "左マージン"
+
+#~ msgid "Pixels of extra space on the left side"
+#~ msgstr "左側の追加スペースのピクセル数<"
+
+#~ msgid "Margin on Right"
+#~ msgstr "右マージン"
+
+#~ msgid "Pixels of extra space on the right side"
+#~ msgstr "右側の追加スペースのピクセル数"
+
+#~ msgid "Margin on Top"
+#~ msgstr "上のマージン"
+
+#~ msgid "Pixels of extra space on the top side"
+#~ msgstr "上側の追加スペースのピクセル数"
+
+#~ msgid "Margin on Bottom"
+#~ msgstr "下のマージン<"
+
+#~ msgid "Pixels of extra space on the bottom side"
+#~ msgstr "下側の追加スペースのピクセル数<"
+
+#~ msgid "All Margins"
+#~ msgstr "すべてのマージン"
+
+#~ msgid "Pixels of extra space on all four sides"
+#~ msgstr "四方向すべての追加スペースのピクセル数"
+
+#~ msgid "Window dragging"
+#~ msgstr "ウィンドウのドラッグ"
+
+#~ msgid "Whether windows can be dragged by clicking on empty areas"
+#~ msgstr "空白の領域をクリックすることでウィンドウをドラッグできるかどうか"
 
 #~ msgid "Loop"
 #~ msgstr "ループ"
