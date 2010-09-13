@@ -634,67 +634,67 @@ append_keyval_symbol (guint    accelerator_key,
 #ifdef GDK_WINDOWING_QUARTZ
   switch (accelerator_key)
   {
-  case GDK_Return:
+  case GDK_KEY_Return:
     /* U+21A9 LEFTWARDS ARROW WITH HOOK */
     g_string_append (gstring, "\xe2\x86\xa9");
     return TRUE;
 
-  case GDK_ISO_Enter:
+  case GDK_KEY_ISO_Enter:
     /* U+2324 UP ARROWHEAD BETWEEN TWO HORIZONTAL BARS */
     g_string_append (gstring, "\xe2\x8c\xa4");
     return TRUE;
 
-  case GDK_Left:
+  case GDK_KEY_Left:
     /* U+2190 LEFTWARDS ARROW */
     g_string_append (gstring, "\xe2\x86\x90");
     return TRUE;
 
-  case GDK_Up:
+  case GDK_KEY_Up:
     /* U+2191 UPWARDS ARROW */
     g_string_append (gstring, "\xe2\x86\x91");
     return TRUE;
 
-  case GDK_Right:
+  case GDK_KEY_Right:
     /* U+2192 RIGHTWARDS ARROW */
     g_string_append (gstring, "\xe2\x86\x92");
     return TRUE;
 
-  case GDK_Down:
+  case GDK_KEY_Down:
     /* U+2193 DOWNWARDS ARROW */
     g_string_append (gstring, "\xe2\x86\x93");
     return TRUE;
 
-  case GDK_Page_Up:
+  case GDK_KEY_Page_Up:
     /* U+21DE UPWARDS ARROW WITH DOUBLE STROKE */
     g_string_append (gstring, "\xe2\x87\x9e");
     return TRUE;
 
-  case GDK_Page_Down:
+  case GDK_KEY_Page_Down:
     /* U+21DF DOWNWARDS ARROW WITH DOUBLE STROKE */
     g_string_append (gstring, "\xe2\x87\x9f");
     return TRUE;
 
-  case GDK_Home:
+  case GDK_KEY_Home:
     /* U+2196 NORTH WEST ARROW */
     g_string_append (gstring, "\xe2\x86\x96");
     return TRUE;
 
-  case GDK_End:
+  case GDK_KEY_End:
     /* U+2198 SOUTH EAST ARROW */
     g_string_append (gstring, "\xe2\x86\x98");
     return TRUE;
 
-  case GDK_Escape:
+  case GDK_KEY_Escape:
     /* U+238B BROKEN CIRCLE WITH NORTHWEST ARROW */
     g_string_append (gstring, "\xe2\x8e\x8b");
     return TRUE;
 
-  case GDK_BackSpace:
+  case GDK_KEY_BackSpace:
     /* U+232B ERASE TO THE LEFT */
     g_string_append (gstring, "\xe2\x8c\xab");
     return TRUE;
 
-  case GDK_Delete:
+  case GDK_KEY_Delete:
     /* U+2326 ERASE TO THE RIGHT */
     g_string_append (gstring, "\xe2\x8c\xa6");
     return TRUE;
