@@ -349,7 +349,8 @@ gtk_mirror_bin_size_allocate (GtkWidget     *widget,
       GtkRequisition child_requisition;
       GtkAllocation child_allocation;
 
-      gtk_widget_get_child_requisition (bin->child, &child_requisition);
+      gtk_size_request_get_size (GTK_SIZE_REQUEST (bin->child),
+                                 &child_requisition, NULL);
       child_allocation.x = 0;
       child_allocation.y = 0;
       child_allocation.height = child_requisition.height;
