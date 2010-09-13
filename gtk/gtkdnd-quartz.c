@@ -355,27 +355,32 @@ gtk_drag_highlight_expose (GtkWidget      *widget,
   if (gtk_widget_is_drawable (widget))
     {
       cairo_t *cr;
+      GdkWindow *window = gtk_widget_get_window (widget);
       
       if (!gtk_widget_get_has_window (widget))
 	{
-	  x = widget->allocation.x;
-	  y = widget->allocation.y;
-	  width = widget->allocation.width;
-	  height = widget->allocation.height;
+          GtkAllocation allocation;
+
+          gtk_widget_get_allocation (widget, &allocation);
+
+	  x = allocation.x;
+	  y = allocation.y;
+	  width = allocation.width;
+	  height = allocation.height;
 	}
       else
 	{
 	  x = 0;
 	  y = 0;
-	  gdk_drawable_get_size (widget->window, &width, &height);
+	  gdk_drawable_get_size (window, &width, &height);
 	}
       
-      gtk_paint_shadow (widget->style, widget->window,
+      gtk_paint_shadow (gtk_widget_get_style (widget), window,
 		        GTK_STATE_NORMAL, GTK_SHADOW_OUT,
 		        NULL, widget, "dnd",
 			x, y, width, height);
 
-      cr = gdk_cairo_create (widget->window);
+      cr = gdk_cairo_create (window);
       cairo_set_source_rgb (cr, 0.0, 0.0, 0.0); /* black */
       cairo_set_line_width (cr, 1.0);
       cairo_rectangle (cr,
@@ -432,9 +437,10 @@ static NSWindow *
 get_toplevel_nswindow (GtkWidget *widget)
 {
   GtkWidget *toplevel = gtk_widget_get_toplevel (widget);
+  GdkWindow *window = gtk_widget_get_window (toplevel);
   
-  if (gtk_widget_is_toplevel (toplevel) && toplevel->window)
-    return [gdk_quartz_window_get_nsview (toplevel->window) window];
+  if (gtk_widget_is_toplevel (toplevel) && window)
+    return [gdk_quartz_window_get_nsview (window) window];
   else
     return NULL;
 }
@@ -683,18 +689,23 @@ gtk_drag_find_widget (GtkWidget       *widget,
    * our coordinates to be relative to widget->window and
    * recurse.
    */  
-  new_allocation = widget->allocation;
+  gtk_widget_get_allocation (widget, &new_allocation);
 
-  if (widget->parent)
+  if (gtk_widget_get_parent (widget))
     {
       gint tx, ty;
-      GdkWindow *window = widget->window;
+      GdkWindow *window = gtk_widget_get_window (widget);
+      GdkWindow *parent_window;
+      GtkAllocation allocation;
+
+      parent_window = gtk_widget_get_window (gtk_widget_get_parent (widget));
 
       /* Compute the offset from allocation-relative to
        * window-relative coordinates.
        */
-      allocation_to_window_x = widget->allocation.x;
-      allocation_to_window_y = widget->allocation.y;
+      gtk_widget_get_allocation (widget, &allocation);
+      allocation_to_window_x = allocation.x;
+      allocation_to_window_y = allocation.y;
 
       if (gtk_widget_get_has_window (widget))
 	{
@@ -710,7 +721,7 @@ gtk_drag_find_widget (GtkWidget       *widget,
       new_allocation.x = 0 + allocation_to_window_x;
       new_allocation.y = 0 + allocation_to_window_y;
       
-      while (window && window != widget->parent->window)
+      while (window && window != parent_window)
 	{
 	  GdkRectangle window_rect = { 0, 0, 0, 0 };
 	  
@@ -970,7 +981,7 @@ _gtk_drag_dest_handle_event (GtkWidget *toplevel,
 	      }
 	  }
 
-	gdk_window_get_position (toplevel->window, &tx, &ty);
+	gdk_window_get_position (gtk_widget_get_window (toplevel), &tx, &ty);
 	
 	data.x = event->dnd.x_root - tx;
 	data.y = event->dnd.y_root - ty;
