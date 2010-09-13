@@ -34,6 +34,7 @@
 #include "gtkintl.h"
 #include "gtkaccessible.h"
 #include "gtkimage.h"
+#include "gtksizerequest.h"
 #include "gtkspinner.h"
 #include "gtkstyle.h"
 
@@ -90,8 +91,11 @@ static void gtk_spinner_set_active     (GtkSpinner      *spinner,
                                         gboolean         active);
 static AtkObject *gtk_spinner_get_accessible      (GtkWidget *widget);
 static GType      gtk_spinner_accessible_get_type (void);
+static void gtk_spinner_size_request_init (GtkSizeRequestIface *iface);
 
-G_DEFINE_TYPE (GtkSpinner, gtk_spinner, GTK_TYPE_DRAWING_AREA);
+G_DEFINE_TYPE_WITH_CODE (GtkSpinner, gtk_spinner, GTK_TYPE_DRAWING_AREA,
+			 G_IMPLEMENT_INTERFACE (GTK_TYPE_SIZE_REQUEST,
+						gtk_spinner_size_request_init))
 
 static void
 gtk_spinner_class_init (GtkSpinnerClass *klass)
@@ -213,6 +217,38 @@ gtk_spinner_init (GtkSpinner *spinner)
   gtk_widget_set_has_window (GTK_WIDGET (spinner), FALSE);
 }
 
+static void
+gtk_spinner_get_width (GtkSizeRequest *widget,
+                       gint           *minimum_size,
+                       gint           *natural_size)
+{
+  if (minimum_size)
+    *minimum_size = SPINNER_SIZE;
+
+  if (natural_size)
+    *natural_size = SPINNER_SIZE;
+}
+
+static void
+gtk_spinner_get_height (GtkSizeRequest *widget,
+                        gint           *minimum_size,
+                        gint           *natural_size)
+{
+  if (minimum_size)
+    *minimum_size = SPINNER_SIZE;
+
+  if (natural_size)
+    *natural_size = SPINNER_SIZE;
+}
+
+static void
+gtk_spinner_size_request_init (GtkSizeRequestIface *iface)
+{
+  iface->get_width  = gtk_spinner_get_width;
+  iface->get_height = gtk_spinner_get_height;
+}
+
+
 static gboolean
 gtk_spinner_expose (GtkWidget      *widget,
                     GdkEventExpose *event)
@@ -227,9 +263,6 @@ gtk_spinner_expose (GtkWidget      *widget,
   gtk_widget_get_allocation (widget, &allocation);
   width = allocation.width;
   height = allocation.height;
-
-  if ((width < SPINNER_SIZE) || (height < SPINNER_SIZE))
-    gtk_widget_set_size_request (widget, SPINNER_SIZE, SPINNER_SIZE);
 
   state_type = GTK_STATE_NORMAL;
   if (!gtk_widget_is_sensitive (widget))
