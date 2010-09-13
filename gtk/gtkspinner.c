@@ -55,6 +55,8 @@
 
 G_DEFINE_TYPE (GtkSpinner, gtk_spinner, GTK_TYPE_DRAWING_AREA);
 
+#define SPINNER_SIZE 12
+
 enum {
   PROP_0,
   PROP_ACTIVE
@@ -228,8 +230,8 @@ gtk_spinner_expose (GtkWidget      *widget,
   width = allocation.width;
   height = allocation.height;
 
-  if ((width < 12) || (height <12))
-    gtk_widget_set_size_request (widget, 12, 12);
+  if ((width < SPINNER_SIZE) || (height < SPINNER_SIZE))
+    gtk_widget_set_size_request (widget, SPINNER_SIZE, SPINNER_SIZE);
 
   state_type = GTK_STATE_NORMAL;
   if (!gtk_widget_is_sensitive (widget))
