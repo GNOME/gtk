@@ -41,8 +41,6 @@ static gboolean       items_xexpand    = TRUE;
 static gboolean       items_yexpand    = TRUE;
 static gboolean       items_xfill      = TRUE;
 static gboolean       items_yfill      = TRUE;
-static gint           items_xpad       = 0;
-static gint           items_ypad       = 0;
 
 
 static void
@@ -63,14 +61,13 @@ populate_wrapbox_simple (GtkWrapBox *wrapbox)
       gtk_container_add (GTK_CONTAINER (frame), widget);
 
       if (text_orientation == GTK_ORIENTATION_VERTICAL)
-	gtk_label_set_angle (GTK_LABEL (widget), 90);
+        gtk_label_set_angle (GTK_LABEL (widget), 90);
 
-      gtk_wrap_box_insert_child_with_padding (GTK_WRAP_BOX (wrapbox), frame, -1,
-					      items_xpad, items_ypad,
-					      (items_xexpand ? GTK_WRAP_BOX_H_EXPAND : 0) |
-					      (items_yexpand ? GTK_WRAP_BOX_V_EXPAND : 0) |
-					      (items_xfill   ? GTK_WRAP_BOX_H_FILL : 0) |
-					      (items_yfill   ? GTK_WRAP_BOX_V_FILL : 0));
+      gtk_wrap_box_insert_child (GTK_WRAP_BOX (wrapbox), frame, -1,
+                                 (items_xexpand ? GTK_WRAP_BOX_H_EXPAND : 0) |
+                                 (items_yexpand ? GTK_WRAP_BOX_V_EXPAND : 0) |
+                                 (items_xfill   ? GTK_WRAP_BOX_H_FILL : 0) |
+                                 (items_yfill   ? GTK_WRAP_BOX_V_FILL : 0));
 
       g_free (text);
     }
@@ -99,7 +96,7 @@ populate_wrapbox_wrappy (GtkWrapBox *wrapbox)
       gtk_widget_show (frame);
 
       if (text_orientation == GTK_ORIENTATION_VERTICAL)
-	gtk_label_set_angle (GTK_LABEL (widget), 90);
+        gtk_label_set_angle (GTK_LABEL (widget), 90);
 
       gtk_container_add (GTK_CONTAINER (frame), widget);
 
@@ -107,12 +104,11 @@ populate_wrapbox_wrappy (GtkWrapBox *wrapbox)
       gtk_label_set_line_wrap_mode (GTK_LABEL (widget), PANGO_WRAP_WORD);
       gtk_label_set_width_chars (GTK_LABEL (widget), 10);
 
-      gtk_wrap_box_insert_child_with_padding (GTK_WRAP_BOX (wrapbox), frame, -1,
-					      items_xpad, items_ypad, 
-					      (items_xexpand ? GTK_WRAP_BOX_H_EXPAND : 0) |
-					      (items_yexpand ? GTK_WRAP_BOX_V_EXPAND : 0) |
-					      (items_xfill   ? GTK_WRAP_BOX_H_FILL : 0) |
-					      (items_yfill   ? GTK_WRAP_BOX_V_FILL : 0));
+      gtk_wrap_box_insert_child (GTK_WRAP_BOX (wrapbox), frame, -1,
+                                 (items_xexpand ? GTK_WRAP_BOX_H_EXPAND : 0) |
+                                 (items_yexpand ? GTK_WRAP_BOX_V_EXPAND : 0) |
+                                 (items_xfill   ? GTK_WRAP_BOX_H_FILL : 0) |
+                                 (items_yfill   ? GTK_WRAP_BOX_V_FILL : 0));
     }
 }
 
@@ -135,12 +131,11 @@ populate_wrapbox_stock (GtkWrapBox *wrapbox)
       widget = gtk_button_new_from_stock (stock_id);
       gtk_widget_show (widget);
 
-      gtk_wrap_box_insert_child_with_padding (GTK_WRAP_BOX (wrapbox), widget, -1,
-					      items_xpad, items_ypad, 
-					      (items_xexpand ? GTK_WRAP_BOX_H_EXPAND : 0) |
-					      (items_yexpand ? GTK_WRAP_BOX_V_EXPAND : 0) |
-					      (items_xfill   ? GTK_WRAP_BOX_H_FILL : 0) |
-					      (items_yfill   ? GTK_WRAP_BOX_V_FILL : 0));
+      gtk_wrap_box_insert_child (GTK_WRAP_BOX (wrapbox), widget, -1,
+                                 (items_xexpand ? GTK_WRAP_BOX_H_EXPAND : 0) |
+                                 (items_yexpand ? GTK_WRAP_BOX_V_EXPAND : 0) |
+                                 (items_xfill   ? GTK_WRAP_BOX_H_FILL : 0) |
+                                 (items_yfill   ? GTK_WRAP_BOX_V_FILL : 0));
     }
 }
 
@@ -170,7 +165,7 @@ populate_items (GtkWrapBox *wrapbox)
 
 static void
 mode_changed (GtkComboBox   *box,
-	      GtkWrapBox    *wrapbox)
+              GtkWrapBox    *wrapbox)
 {
   GtkWrapAllocationMode mode = gtk_combo_box_get_active (box);
   
@@ -179,7 +174,7 @@ mode_changed (GtkComboBox   *box,
 
 static void
 spreading_changed (GtkComboBox   *box,
-		   GtkWrapBox    *wrapbox)
+                   GtkWrapBox    *wrapbox)
 {
   GtkWrapBoxSpreading spreading = gtk_combo_box_get_active (box);
   
@@ -188,7 +183,7 @@ spreading_changed (GtkComboBox   *box,
 
 static void
 orientation_changed (GtkComboBox   *box,
-		     GtkWrapBox *wrapbox)
+                     GtkWrapBox *wrapbox)
 {
   GtkOrientation orientation = gtk_combo_box_get_active (box);
 
@@ -197,7 +192,7 @@ orientation_changed (GtkComboBox   *box,
 
 static void
 line_length_changed (GtkSpinButton *spin,
-		     GtkWrapBox *wrapbox)
+                     GtkWrapBox *wrapbox)
 {
   gint length = gtk_spin_button_get_value_as_int (spin);
   
@@ -206,7 +201,7 @@ line_length_changed (GtkSpinButton *spin,
 
 static void
 spacing_changed (GtkSpinButton *button,
-		 gpointer       data)
+                 gpointer       data)
 {
   GtkOrientation orientation = GPOINTER_TO_INT (data);
   gint           state = gtk_spin_button_get_value_as_int (button);
@@ -220,7 +215,7 @@ spacing_changed (GtkSpinButton *button,
 
 static void
 items_changed (GtkComboBox   *box,
-	       GtkWrapBox *wrapbox)
+               GtkWrapBox *wrapbox)
 {
   items_type = gtk_combo_box_get_active (box);
 
@@ -229,7 +224,7 @@ items_changed (GtkComboBox   *box,
 
 static void
 text_orientation_changed (GtkComboBox   *box,
-			  GtkWrapBox *wrapbox)
+                          GtkWrapBox *wrapbox)
 {
   text_orientation = gtk_combo_box_get_active (box);
   
@@ -238,18 +233,9 @@ text_orientation_changed (GtkComboBox   *box,
 
 static void
 child_option_toggled (GtkToggleButton *button,
-		      gboolean        *state)
+                      gboolean        *state)
 {
   *state = gtk_toggle_button_get_active (button);
-
-  populate_items (the_wrapbox);
-}
-
-static void
-child_padding_changed (GtkSpinButton *button,
-		       gint          *state)
-{
-  *state = gtk_spin_button_get_value_as_int (button);
 
   populate_items (the_wrapbox);
 }
@@ -277,13 +263,13 @@ create_window (void)
 
   swindow = gtk_scrolled_window_new (NULL, NULL);
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (swindow),
-				  GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
+                                  GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
   
   gtk_widget_show (swindow);
   gtk_container_add (GTK_CONTAINER (frame), swindow);
 
   wrapbox = gtk_wrap_box_new (INITIAL_ALLOCATION_MODE, INITIAL_SPREADING, 
-			      INITIAL_HSPACING, INITIAL_VSPACING);
+                              INITIAL_HSPACING, INITIAL_VSPACING);
   the_wrapbox = (GtkWrapBox *)wrapbox;
   gtk_wrap_box_set_minimum_line_children (GTK_WRAP_BOX (wrapbox), INITIAL_MINIMUM_LENGTH);
   gtk_widget_show (wrapbox);
@@ -310,7 +296,7 @@ create_window (void)
   gtk_box_pack_start (GTK_BOX (wrapbox_cntl), widget, FALSE, FALSE, 0);
 
   g_signal_connect (G_OBJECT (widget), "changed",
-		    G_CALLBACK (mode_changed), wrapbox);
+                    G_CALLBACK (mode_changed), wrapbox);
 
   /* Add Spreading control */
   widget = gtk_combo_box_new_text ();
@@ -325,7 +311,7 @@ create_window (void)
   gtk_box_pack_start (GTK_BOX (wrapbox_cntl), widget, FALSE, FALSE, 0);
 
   g_signal_connect (G_OBJECT (widget), "changed",
-		    G_CALLBACK (spreading_changed), wrapbox);
+                    G_CALLBACK (spreading_changed), wrapbox);
 
   /* Add Orientation control */
   widget = gtk_combo_box_new_text ();
@@ -338,7 +324,7 @@ create_window (void)
   gtk_box_pack_start (GTK_BOX (wrapbox_cntl), widget, FALSE, FALSE, 0);
 
   g_signal_connect (G_OBJECT (widget), "changed",
-		    G_CALLBACK (orientation_changed), wrapbox);
+                    G_CALLBACK (orientation_changed), wrapbox);
 
   /* Add minimum line length in items control */
   widget = gtk_spin_button_new_with_range (1, 10, 1);
@@ -349,9 +335,9 @@ create_window (void)
   gtk_box_pack_start (GTK_BOX (wrapbox_cntl), widget, FALSE, FALSE, 0);
 
   g_signal_connect (G_OBJECT (widget), "changed",
-		    G_CALLBACK (line_length_changed), wrapbox);
+                    G_CALLBACK (line_length_changed), wrapbox);
   g_signal_connect (G_OBJECT (widget), "value-changed",
-		    G_CALLBACK (line_length_changed), wrapbox);
+                    G_CALLBACK (line_length_changed), wrapbox);
 
   /* Add horizontal/vertical spacing controls */
   hbox = gtk_hbox_new (FALSE, 2);
@@ -369,9 +355,9 @@ create_window (void)
   gtk_box_pack_start (GTK_BOX (hbox), widget, FALSE, FALSE, 0);
 
   g_signal_connect (G_OBJECT (widget), "changed",
-		    G_CALLBACK (spacing_changed), GINT_TO_POINTER (GTK_ORIENTATION_HORIZONTAL));
+                    G_CALLBACK (spacing_changed), GINT_TO_POINTER (GTK_ORIENTATION_HORIZONTAL));
   g_signal_connect (G_OBJECT (widget), "value-changed",
-		    G_CALLBACK (spacing_changed), GINT_TO_POINTER (GTK_ORIENTATION_HORIZONTAL));
+                    G_CALLBACK (spacing_changed), GINT_TO_POINTER (GTK_ORIENTATION_HORIZONTAL));
 
   gtk_box_pack_start (GTK_BOX (wrapbox_cntl), hbox, FALSE, FALSE, 0);
 
@@ -390,9 +376,9 @@ create_window (void)
   gtk_box_pack_start (GTK_BOX (hbox), widget, FALSE, FALSE, 0);
 
   g_signal_connect (G_OBJECT (widget), "changed",
-		    G_CALLBACK (spacing_changed), GINT_TO_POINTER (GTK_ORIENTATION_VERTICAL));
+                    G_CALLBACK (spacing_changed), GINT_TO_POINTER (GTK_ORIENTATION_VERTICAL));
   g_signal_connect (G_OBJECT (widget), "value-changed",
-		    G_CALLBACK (spacing_changed), GINT_TO_POINTER (GTK_ORIENTATION_VERTICAL));
+                    G_CALLBACK (spacing_changed), GINT_TO_POINTER (GTK_ORIENTATION_VERTICAL));
 
   gtk_box_pack_start (GTK_BOX (wrapbox_cntl), hbox, FALSE, FALSE, 0);
 
@@ -418,7 +404,7 @@ create_window (void)
   gtk_box_pack_start (GTK_BOX (items_cntl), widget, FALSE, FALSE, 0);
 
   g_signal_connect (G_OBJECT (widget), "changed",
-		    G_CALLBACK (items_changed), wrapbox);
+                    G_CALLBACK (items_changed), wrapbox);
 
 
   /* Add Text Orientation control */
@@ -432,7 +418,7 @@ create_window (void)
   gtk_box_pack_start (GTK_BOX (items_cntl), widget, FALSE, FALSE, 0);
 
   g_signal_connect (G_OBJECT (widget), "changed",
-		    G_CALLBACK (text_orientation_changed), wrapbox);
+                    G_CALLBACK (text_orientation_changed), wrapbox);
 
 
   /* Add expand/fill options */
@@ -447,7 +433,7 @@ create_window (void)
   gtk_box_pack_start (GTK_BOX (hbox), widget, FALSE, FALSE, 0);
 
   g_signal_connect (G_OBJECT (widget), "toggled",
-		    G_CALLBACK (child_option_toggled), &items_xexpand);
+                    G_CALLBACK (child_option_toggled), &items_xexpand);
 
 
   widget = gtk_check_button_new_with_label ("X Fill");
@@ -458,7 +444,7 @@ create_window (void)
   gtk_box_pack_start (GTK_BOX (hbox), widget, FALSE, FALSE, 0);
 
   g_signal_connect (G_OBJECT (widget), "toggled",
-		    G_CALLBACK (child_option_toggled), &items_xfill);
+                    G_CALLBACK (child_option_toggled), &items_xfill);
 
   gtk_box_pack_start (GTK_BOX (items_cntl), hbox, FALSE, FALSE, 0);
 
@@ -474,7 +460,7 @@ create_window (void)
   gtk_box_pack_start (GTK_BOX (hbox), widget, FALSE, FALSE, 0);
 
   g_signal_connect (G_OBJECT (widget), "toggled",
-		    G_CALLBACK (child_option_toggled), &items_yexpand);
+                    G_CALLBACK (child_option_toggled), &items_yexpand);
 
 
   widget = gtk_check_button_new_with_label ("Y Fill");
@@ -485,50 +471,7 @@ create_window (void)
   gtk_box_pack_start (GTK_BOX (hbox), widget, FALSE, FALSE, 0);
 
   g_signal_connect (G_OBJECT (widget), "toggled",
-		    G_CALLBACK (child_option_toggled), &items_yfill);
-
-  gtk_box_pack_start (GTK_BOX (items_cntl), hbox, FALSE, FALSE, 0);
-
-
-  /* Add x/y padding options */
-  hbox = gtk_hbox_new (FALSE, 2);
-  gtk_widget_show (hbox);
-
-  widget = gtk_label_new ("X Padding");
-  gtk_widget_show (widget);
-  gtk_box_pack_start (GTK_BOX (hbox), widget, TRUE, TRUE, 0);
-
-  widget = gtk_spin_button_new_with_range (0, 30, 1);
-  gtk_widget_show (widget);
-
-  gtk_widget_set_tooltip_text (widget, "Set the horizontal padding values for children");
-  gtk_box_pack_start (GTK_BOX (hbox), widget, FALSE, FALSE, 0);
-
-  g_signal_connect (G_OBJECT (widget), "changed",
-		    G_CALLBACK (child_padding_changed), &items_xpad);
-  g_signal_connect (G_OBJECT (widget), "value-changed",
-		    G_CALLBACK (child_padding_changed), &items_xpad);
-
-  gtk_box_pack_start (GTK_BOX (items_cntl), hbox, FALSE, FALSE, 0);
-
-
-  hbox = gtk_hbox_new (FALSE, 2);
-  gtk_widget_show (hbox);
-
-  widget = gtk_label_new ("Y Padding");
-  gtk_widget_show (widget);
-  gtk_box_pack_start (GTK_BOX (hbox), widget, TRUE, TRUE, 0);
-
-  widget = gtk_spin_button_new_with_range (0, 30, 1);
-  gtk_widget_show (widget);
-
-  gtk_widget_set_tooltip_text (widget, "Set the vertical padding values for children");
-  gtk_box_pack_start (GTK_BOX (hbox), widget, FALSE, FALSE, 0);
-
-  g_signal_connect (G_OBJECT (widget), "changed",
-		    G_CALLBACK (child_padding_changed), &items_ypad);
-  g_signal_connect (G_OBJECT (widget), "value-changed",
-		    G_CALLBACK (child_padding_changed), &items_ypad);
+                    G_CALLBACK (child_option_toggled), &items_yfill);
 
   gtk_box_pack_start (GTK_BOX (items_cntl), hbox, FALSE, FALSE, 0);
 

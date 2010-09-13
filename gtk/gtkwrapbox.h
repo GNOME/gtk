@@ -82,12 +82,10 @@ void                  gtk_wrap_box_set_natural_line_children (GtkWrapBox        
                                                               guint                 n_children);
 guint                 gtk_wrap_box_get_natural_line_children (GtkWrapBox           *layout);
 
-void                  gtk_wrap_box_insert_child_with_padding (GtkWrapBox           *layout,
+void                  gtk_wrap_box_insert_child              (GtkWrapBox           *layout,
                                                               GtkWidget            *widget,
                                                               gint                  index,
-                                                              guint                 horizontal_padding,
-                                                              guint                 vertical_padding,
-							      GtkWrapBoxPacking     packing);
+                                                              GtkWrapBoxPacking     packing);
 
 void                  gtk_wrap_box_reorder_child             (GtkWrapBox           *layout,
                                                               GtkWidget            *widget,
