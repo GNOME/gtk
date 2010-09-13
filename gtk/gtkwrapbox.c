@@ -763,7 +763,6 @@ allocate_child (GtkWrapBox      *box,
   GtkWrapBoxPrivate  *priv   = box->priv;
   GtkAllocation       widget_allocation;
   GtkAllocation       child_allocation;
-  GtkSizeRequestMode  request_mode;
 
   gtk_widget_get_allocation (GTK_WIDGET (box), &widget_allocation);
 
