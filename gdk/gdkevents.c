@@ -1033,13 +1033,15 @@ gdk_event_get_device (const GdkEvent *event)
       {
         GdkDisplay *display;
         GdkDevice *core_pointer;
+        GdkDeviceManager *device_manager;
 
         g_warning ("Event with type %d not holding a GdkDevice. "
                    "It is most likely synthesized outside Gdk/GTK+\n",
                    event->type);
 
         display = gdk_drawable_get_display (event->any.window);
-        core_pointer = gdk_display_get_core_pointer (display);
+        device_manager = gdk_display_get_device_manager (display);
+        core_pointer = gdk_device_manager_get_client_pointer (device_manager);
 
         if (event->type == GDK_KEY_PRESS ||
             event->type == GDK_KEY_RELEASE)

@@ -454,6 +454,7 @@ update_context_from_dragging_info (id <NSDraggingInfo> sender)
 
 - (NSDragOperation)draggingEntered:(id <NSDraggingInfo>)sender
 {
+  GdkDeviceManager device_manager;
   GdkEvent *event;
   GdkWindow *window;
 
@@ -465,8 +466,9 @@ update_context_from_dragging_info (id <NSDraggingInfo> sender)
 
   window = [[self contentView] gdkWindow];
 
+  device_manager = gdk_display_get_device_manager (gdk_display_get_default ());
   gdk_drag_context_set_device (current_context,
-                               gdk_display_get_core_pointer (gdk_display_get_default ()));
+                               gdk_device_manager_get_client_pointer (device_manager));
 
   event = gdk_event_new (GDK_DRAG_ENTER);
   event->dnd.window = g_object_ref (window);

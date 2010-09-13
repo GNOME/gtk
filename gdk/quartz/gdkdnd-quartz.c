@@ -149,15 +149,18 @@ GdkDragContext *
 gdk_drag_begin (GdkWindow     *window,
 		GList         *targets)
 {
+  GdkDeviceManager *device_manager;
+
   g_assert (_gdk_quartz_drag_source_context == NULL);
   
   /* Create fake context */
   _gdk_quartz_drag_source_context = gdk_drag_context_new ();
   _gdk_quartz_drag_source_context->is_source = TRUE;
 
+  device_manager = gdk_display_get_device_manager (gdk_display_get_default ());
   gdk_drag_context_set_device (_gdk_quartz_drag_source_context,
-                               gdk_display_get_core_pointer (gdk_display_get_default ()));
-  
+                               gdk_device_manager_get_client_pointer (device_manager));
+
   return _gdk_quartz_drag_source_context;
 }
 

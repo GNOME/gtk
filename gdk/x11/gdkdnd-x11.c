@@ -2828,6 +2828,7 @@ xdnd_enter_filter (GdkXEvent *xev,
 		   GdkEvent  *event,
 		   gpointer   cb_data)
 {
+  GdkDeviceManager *device_manager;
   GdkDisplay *display;
   GdkDisplayX11 *display_x11;
   XEvent *xevent = (XEvent *)xev;
@@ -2879,7 +2880,8 @@ xdnd_enter_filter (GdkXEvent *xev,
   PRIVATE_DATA(new_context)->version = version;
 
   /* FIXME: Should extend DnD protocol to have device info */
-  gdk_drag_context_set_device (new_context, gdk_display_get_core_pointer (display));
+  device_manager = gdk_display_get_device_manager (display);
+  gdk_drag_context_set_device (new_context, gdk_device_manager_get_client_pointer (device_manager));
 
   new_context->source_window = gdk_window_lookup_for_display (display, source_window);
   if (new_context->source_window)
@@ -3168,7 +3170,8 @@ gdk_drag_begin (GdkWindow     *window,
   GdkDragContext *new_context;
   GdkDisplay *display;
   GdkDevice *device;
-  
+  GdkDeviceManager *device_manager;
+
   g_return_val_if_fail (window != NULL, NULL);
   g_return_val_if_fail (GDK_WINDOW_IS_X11 (window), NULL);
 
@@ -3183,7 +3186,8 @@ gdk_drag_begin (GdkWindow     *window,
   new_context->actions = 0;
 
   display = gdk_drawable_get_display (GDK_DRAWABLE (window));
-  device = gdk_display_get_core_pointer (display);
+  device_manager = gdk_display_get_device_manager (display);
+  device = gdk_device_manager_get_client_pointer (device_manager);
   gdk_drag_context_set_device (new_context, device);
 
   return new_context;

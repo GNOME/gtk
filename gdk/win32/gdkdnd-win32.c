@@ -1212,6 +1212,7 @@ target_context_new (GdkWindow *window)
   target_drag_context *result;
   GdkDragContextPrivateWin32 *private;
   GdkDevice *device;
+  GdkDeviceManager device_manager;
 
   result = g_new0 (target_drag_context, 1);
 
@@ -1221,7 +1222,8 @@ target_context_new (GdkWindow *window)
   result->context->protocol = GDK_DRAG_PROTO_OLE2;
   result->context->is_source = FALSE;
 
-  device = gdk_display_get_core_pointer (_gdk_display);
+  device_manager = gdk_display_get_device_manager (_gtk_display);
+  device = gdk_device_manager_get_client_pointer (device_manager);
   gdk_drag_context_set_device (result->context, device);
 
   result->context->source_window = NULL;
@@ -1260,7 +1262,8 @@ source_context_new (GdkWindow *window,
   result->context->protocol = GDK_DRAG_PROTO_OLE2;
   result->context->is_source = TRUE;
 
-  device = gdk_display_get_core_pointer (_gdk_display);
+  device_manager = gdk_display_get_device_manager (_gtk_display);
+  device = gdk_device_manager_get_client_pointer (device_manager);
   gdk_drag_context_set_device (result->context, device);
 
   result->context->source_window = window;
@@ -1475,6 +1478,7 @@ gdk_dropfiles_filter (GdkXEvent *xev,
   gint nfiles, i;
   gchar *fileName, *linkedFile;
   GdkDevice *device;
+  GdkDeviceManager *device_manager;
 
   if (msg->message == WM_DROPFILES)
     {
@@ -1484,7 +1488,8 @@ gdk_dropfiles_filter (GdkXEvent *xev,
       context->protocol = GDK_DRAG_PROTO_WIN32_DROPFILES;
       context->is_source = FALSE;
 
-      device = gdk_display_get_core_pointer (_gdk_display);
+      device_manager = gdk_display_get_device_manager (_gtk_display);
+      device = gdk_device_manager_get_client_pointer (device_manager);
       gdk_drag_context_set_device (context, device);
 
       context->source_window = _gdk_root;
@@ -1701,6 +1706,7 @@ local_send_enter (GdkDragContext *context,
   GdkDragContextPrivateWin32 *private;
   GdkDragContext *new_context;
   GdkDevice *device;
+  GdkDeviceManager *device_manager;
 
   GDK_NOTE (DND, g_print ("local_send_enter: context=%p current_dest_drag=%p\n",
 			  context,
@@ -1718,7 +1724,8 @@ local_send_enter (GdkDragContext *context,
   new_context->protocol = GDK_DRAG_PROTO_LOCAL;
   new_context->is_source = FALSE;
 
-  device = gdk_display_get_core_pointer (_gdk_display);
+  device_manager = gdk_display_get_device_manager (_gtk_display);
+  device = gdk_device_manager_get_client_pointer (device_manager);
   gdk_drag_context_set_device (new_context, device);
 
   new_context->source_window = context->source_window;
@@ -1852,12 +1859,14 @@ gdk_drag_begin (GdkWindow *window,
     {
       GdkDragContext *new_context;
       GdkDevice *device;
+      GdkDeviceManager device_manager;
 
       g_return_val_if_fail (window != NULL, NULL);
 
       new_context = gdk_drag_context_new ();
 
-      device = gdk_display_get_core_pointer (_gdk_display);
+      device_manager = gdk_display_get_device_manager (_gtk_display);
+      device = gdk_device_manager_get_client_pointer (device_manager);
       gdk_drag_context_set_device (new_context, device);
 
       new_context->is_source = TRUE;
