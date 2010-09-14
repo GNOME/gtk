@@ -85,8 +85,8 @@ static void     gtk_ruler_size_allocate   (GtkWidget      *widget,
                                            GtkAllocation  *allocation);
 static gboolean gtk_ruler_motion_notify   (GtkWidget      *widget,
                                            GdkEventMotion *event);
-static gboolean gtk_ruler_expose          (GtkWidget      *widget,
-                                           GdkEventExpose *event);
+static gboolean gtk_ruler_draw            (GtkWidget      *widget,
+                                           cairo_t        *cr);
 static void     gtk_ruler_make_pixmap     (GtkRuler       *ruler);
 static void     gtk_ruler_draw_ticks      (GtkRuler       *ruler);
 static void     gtk_ruler_real_draw_ticks (GtkRuler       *ruler,
@@ -122,7 +122,7 @@ gtk_ruler_class_init (GtkRulerClass *class)
   widget_class->size_request = gtk_ruler_size_request;
   widget_class->size_allocate = gtk_ruler_size_allocate;
   widget_class->motion_notify_event = gtk_ruler_motion_notify;
-  widget_class->expose_event = gtk_ruler_expose;
+  widget_class->draw = gtk_ruler_draw;
 
   class->draw_ticks = gtk_ruler_real_draw_ticks;
   class->draw_pos = gtk_ruler_real_draw_pos;
@@ -605,26 +605,17 @@ gtk_ruler_motion_notify (GtkWidget      *widget,
 }
 
 static gboolean
-gtk_ruler_expose (GtkWidget      *widget,
-		  GdkEventExpose *event)
+gtk_ruler_draw (GtkWidget *widget,
+                cairo_t   *cr)
 {
-  if (gtk_widget_is_drawable (widget))
-    {
-      GtkRuler *ruler = GTK_RULER (widget);
-      GtkRulerPrivate *priv = ruler->priv;
-      cairo_t *cr;
+  GtkRuler *ruler = GTK_RULER (widget);
+  GtkRulerPrivate *priv = ruler->priv;
 
-      cr = gdk_cairo_create (gtk_widget_get_window (widget));
-      cairo_set_source_surface (cr, priv->backing_store, 0, 0);
-      gdk_cairo_region (cr, event->region);
-      cairo_fill (cr);
-      
-      if (GTK_RULER_GET_CLASS (ruler)->draw_pos)
-         GTK_RULER_GET_CLASS (ruler)->draw_pos (ruler,
-                                                cr);
-
-      cairo_destroy (cr);
-    }
+  cairo_set_source_surface (cr, priv->backing_store, 0, 0);
+  cairo_paint (cr);
+  
+  if (GTK_RULER_GET_CLASS (ruler)->draw_pos)
+     GTK_RULER_GET_CLASS (ruler)->draw_pos (ruler, cr);
 
   return FALSE;
 }
