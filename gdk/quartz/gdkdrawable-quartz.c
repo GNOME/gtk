@@ -285,8 +285,6 @@ gdk_quartz_drawable_release_context (GdkDrawable  *drawable,
           [window_impl->view unlockFocus];
         }
     }
-  else if (GDK_IS_PIXMAP_IMPL_QUARTZ (drawable))
-    CGContextRelease (cg_context);
 }
 
 void
