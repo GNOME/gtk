@@ -1509,7 +1509,7 @@ static gboolean
 gtk_menu_item_draw (GtkWidget *widget,
                     cairo_t   *cr)
 {
-  GtkMenuItem *menu_item;
+  GtkMenuItem *menu_item = GTK_MENU_ITEM (widget);
   GtkStateType state_type;
   GtkShadowType shadow_type, selected_shadow_type;
   GtkStyle *style;
@@ -1518,106 +1518,101 @@ gtk_menu_item_draw (GtkWidget *widget,
   gint x, y, w, h, width, height;
   guint border_width = gtk_container_get_border_width (GTK_CONTAINER (widget));
 
-  if (gtk_widget_is_drawable (widget))
-    {
-      menu_item = GTK_MENU_ITEM (widget);
+  state_type = gtk_widget_get_state (widget);
+  style = gtk_widget_get_style (widget);
+  window = gtk_widget_get_window (widget);
+  width = gtk_widget_get_allocated_width (widget);
+  height = gtk_widget_get_allocated_height (widget);
 
-      state_type = gtk_widget_get_state (widget);
-      style = gtk_widget_get_style (widget);
-      window = gtk_widget_get_window (widget);
-      width = gtk_widget_get_allocated_width (widget);
-      height = gtk_widget_get_allocated_height (widget);
+  x = border_width;
+  y = border_width;
+  w = width - border_width * 2;
+  h = height - border_width * 2;
 
-      x = border_width;
-      y = border_width;
-      w = width - border_width * 2;
-      h = height - border_width * 2;
-
-      child = gtk_bin_get_child (GTK_BIN (menu_item));
-      
-      if (child && state_type == GTK_STATE_PRELIGHT)
-	{
-	  gtk_widget_style_get (widget,
-				"selected-shadow-type", &selected_shadow_type,
-				NULL);
-	  gtk_cairo_paint_box (style,
-                         cr,
-			 GTK_STATE_PRELIGHT,
-			 selected_shadow_type,
-			 widget, "menuitem",
-			 x, y, w, h);
-	}
+  child = gtk_bin_get_child (GTK_BIN (menu_item));
   
-      if (menu_item->submenu && menu_item->show_submenu_indicator)
-	{
-	  gint arrow_x, arrow_y;
-	  gint arrow_size;
-	  guint horizontal_padding;
-	  GtkTextDirection direction;
-	  GtkArrowType arrow_type;
-
-	  direction = gtk_widget_get_direction (widget);
-      
- 	  gtk_widget_style_get (widget,
- 				"horizontal-padding", &horizontal_padding,
- 				NULL);
-
-	  get_arrow_size (widget, child, &arrow_size);
-
-	  shadow_type = GTK_SHADOW_OUT;
-	  if (state_type == GTK_STATE_PRELIGHT)
-	    shadow_type = GTK_SHADOW_IN;
-
-	  if (direction == GTK_TEXT_DIR_LTR)
-	    {
-	      arrow_x = x + w - horizontal_padding - arrow_size;
-	      arrow_type = GTK_ARROW_RIGHT;
-	    }
-	  else
-	    {
-	      arrow_x = x + horizontal_padding;
-	      arrow_type = GTK_ARROW_LEFT;
-	    }
-
-	  arrow_y = y + (h - arrow_size) / 2;
-
-	  gtk_cairo_paint_arrow (style, cr,
-			   state_type, shadow_type, 
-			   widget, "menuitem", 
-			   arrow_type, TRUE,
-			   arrow_x, arrow_y,
-			   arrow_size, arrow_size);
-	}
-      else if (!child)
-	{
-          gboolean wide_separators;
-          gint     separator_height;
-	  guint    horizontal_padding;
-
-	  gtk_widget_style_get (widget,
-                                "wide-separators",    &wide_separators,
-                                "separator-height",   &separator_height,
-                                "horizontal-padding", &horizontal_padding,
-                                NULL);
-
-          if (wide_separators)
-            gtk_cairo_paint_box (style, cr,
-                           GTK_STATE_NORMAL, GTK_SHADOW_ETCHED_OUT,
-                           widget, "hseparator",
-                           horizontal_padding + style->xthickness,
-                           (height - separator_height - style->ythickness) / 2,
-                           width - 2 * (horizontal_padding + style->xthickness),
-                           separator_height);
-          else
-            gtk_cairo_paint_hline (style, cr,
-                             GTK_STATE_NORMAL, widget, "menuitem",
-                             horizontal_padding + style->xthickness,
-                             width - horizontal_padding - style->xthickness - 1,
-                             (height - style->ythickness) / 2);
-	}
-
-      GTK_WIDGET_CLASS (gtk_menu_item_parent_class)->draw (widget, cr);
+  if (child && state_type == GTK_STATE_PRELIGHT)
+    {
+      gtk_widget_style_get (widget,
+                            "selected-shadow-type", &selected_shadow_type,
+                            NULL);
+      gtk_cairo_paint_box (style,
+                     cr,
+                     GTK_STATE_PRELIGHT,
+                     selected_shadow_type,
+                     widget, "menuitem",
+                     x, y, w, h);
     }
+
+  if (menu_item->submenu && menu_item->show_submenu_indicator)
+    {
+      gint arrow_x, arrow_y;
+      gint arrow_size;
+      guint horizontal_padding;
+      GtkTextDirection direction;
+      GtkArrowType arrow_type;
+
+      direction = gtk_widget_get_direction (widget);
+  
+      gtk_widget_style_get (widget,
+                            "horizontal-padding", &horizontal_padding,
+                            NULL);
+
+      get_arrow_size (widget, child, &arrow_size);
+
+      shadow_type = GTK_SHADOW_OUT;
+      if (state_type == GTK_STATE_PRELIGHT)
+        shadow_type = GTK_SHADOW_IN;
+
+      if (direction == GTK_TEXT_DIR_LTR)
+        {
+          arrow_x = x + w - horizontal_padding - arrow_size;
+          arrow_type = GTK_ARROW_RIGHT;
+        }
+      else
+        {
+          arrow_x = x + horizontal_padding;
+          arrow_type = GTK_ARROW_LEFT;
+        }
+
+      arrow_y = y + (h - arrow_size) / 2;
+
+      gtk_cairo_paint_arrow (style, cr,
+                       state_type, shadow_type, 
+                       widget, "menuitem", 
+                       arrow_type, TRUE,
+                       arrow_x, arrow_y,
+                       arrow_size, arrow_size);
+    }
+  else if (!child)
+    {
+      gboolean wide_separators;
+      gint     separator_height;
+      guint    horizontal_padding;
+
+      gtk_widget_style_get (widget,
+                            "wide-separators",    &wide_separators,
+                            "separator-height",   &separator_height,
+                            "horizontal-padding", &horizontal_padding,
+                            NULL);
+
+      if (wide_separators)
+        gtk_cairo_paint_box (style, cr,
+                       GTK_STATE_NORMAL, GTK_SHADOW_ETCHED_OUT,
+                       widget, "hseparator",
+                       horizontal_padding + style->xthickness,
+                       (height - separator_height - style->ythickness) / 2,
+                       width - 2 * (horizontal_padding + style->xthickness),
+                       separator_height);
+      else
+        gtk_cairo_paint_hline (style, cr,
+                         GTK_STATE_NORMAL, widget, "menuitem",
+                         horizontal_padding + style->xthickness,
+                         width - horizontal_padding - style->xthickness - 1,
+                         (height - style->ythickness) / 2);
+    }
+
+  GTK_WIDGET_CLASS (gtk_menu_item_parent_class)->draw (widget, cr);
 
   return FALSE;
 }
