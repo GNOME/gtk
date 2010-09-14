@@ -694,6 +694,9 @@ void                  gtk_widget_set_window             (GtkWidget    *widget,
                                                          GdkWindow    *window);
 GdkWindow           * gtk_widget_get_window             (GtkWidget    *widget);
 
+int                   gtk_widget_get_allocated_width    (GtkWidget     *widget);
+int                   gtk_widget_get_allocated_height   (GtkWidget     *widget);
+
 void                  gtk_widget_get_allocation         (GtkWidget     *widget,
                                                          GtkAllocation *allocation);
 void                  gtk_widget_set_allocation         (GtkWidget     *widget,
