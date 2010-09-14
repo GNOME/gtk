@@ -1,3 +1,65 @@
+Overview of Changes from GTK+ 2.21.7 to 2.21.8
+==============================================
+
+* Deprecations:
+ - Various style properties have been deprecated:
+   GtkEntry::state-hint
+   GtkTreeView::row-ending-details
+   GtkRange::trough-side-details
+   GtkRange::stepper-position-details
+   GtkRange::activate-slider
+ - The GtkIconView::orientation property has been deprecated
+   and renamed to item-orientation
+ - Separator-related API in GtkDialog
+ - API related to blinking status icons
+ - The keysym names have been renamed from GDK_... to GDK_KEY_...
+ - The GtkItem class
+ - The gdk_display variable and the GDK_DISPLAY macro
+
+* GTK+ now uses standard icon names for stock icons, where applicable
+
+* Win32:
+ - Fixes to the MS Windows theme engine
+
+* Directfb:
+ - Many fixes
+
+* Bugs fixed:
+ 414712 gtk_container_set_focus_child leaks widget
+ 601731 Drag and Drop from Workspace to Activities Overview
+ 628049 Native windows don't work very well
+ 628110 gtranslator inserts unwanted line breaks
+ 628291 Drawing artifacts when used with a cairo 1.9.*
+ 628308 docs referencing non existing icons
+ 628656 _gdk_windowing_get_startup_notify_id memory leak
+ 628932 key typing causes core dump in VNC environment
+ 629093 [patch] prefix GDK key names
+ 629277 Hanging because do_syntheszie_crossing_event...
+
+* Updated translations:
+ Arabic
+ Basque
+ British English
+ Estonian
+ French
+ Galician
+ German
+ Hebrew
+ Hungarian
+ Indonesian
+ Italian
+ Japanese
+ Kazakh
+ Korean
+ Norwegian bokmål
+ Polish
+ Portuguese
+ Slovian
+ Spanish
+ Swedish
+ Tradition Chinese
+
+
 Overview of Changes from GTK+ 2.21.6 to 2.21.7
 ==============================================
 
