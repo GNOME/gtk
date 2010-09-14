@@ -1529,7 +1529,8 @@ gtk_combo_box_menu_position_below (GtkMenu  *menu,
   if (GTK_SHADOW_NONE != combo_box->priv->shadow_type)
     sx -= gtk_widget_get_style (GTK_WIDGET (combo_box))->xthickness;
 
-  gtk_widget_size_request (GTK_WIDGET (menu), &req);
+  gtk_size_request_get_size (GTK_SIZE_REQUEST (menu),
+                             &req, NULL);
 
   if (gtk_widget_get_direction (GTK_WIDGET (combo_box)) == GTK_TEXT_DIR_LTR)
     *x = sx;
@@ -1705,14 +1706,16 @@ gtk_combo_box_list_position (GtkComboBox *combo_box,
   hpolicy = vpolicy = GTK_POLICY_NEVER;
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (priv->scrolled_window),
 				  hpolicy, vpolicy);
-  gtk_widget_size_request (priv->scrolled_window, &popup_req);
+  gtk_size_request_get_size (GTK_SIZE_REQUEST (priv->scrolled_window),
+                             &popup_req, NULL);
 
   if (popup_req.width > *width)
     {
       hpolicy = GTK_POLICY_ALWAYS;
       gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (priv->scrolled_window),
 				      hpolicy, vpolicy);
-      gtk_widget_size_request (priv->scrolled_window, &popup_req);
+      gtk_size_request_get_size (GTK_SIZE_REQUEST (priv->scrolled_window),
+                                 &popup_req, NULL);
     }
 
   *height = popup_req.height;
@@ -2168,7 +2171,8 @@ gtk_combo_box_update_requested_width (GtkComboBox *combo_box,
 }
 
 #define GTK_COMBO_BOX_SIZE_ALLOCATE_BUTTON 					\
-  gtk_widget_size_request (combo_box->priv->button, &req); 			\
+  gtk_size_request_get_size (GTK_SIZE_REQUEST (combo_box->priv->button),	\
+                             &req, NULL); 					\
   										\
   if (is_rtl) 									\
     child.x = allocation->x + shadow_width;					\
@@ -2254,7 +2258,8 @@ gtk_combo_box_size_allocate (GtkWidget     *widget,
 
 
           /* handle the children */
-          gtk_widget_size_request (priv->arrow, &req);
+          gtk_size_request_get_size (GTK_SIZE_REQUEST (priv->arrow),
+                                     &req, NULL);
           child.width = req.width;
           if (!is_rtl)
             child.x += width - req.width;
@@ -2263,7 +2268,8 @@ gtk_combo_box_size_allocate (GtkWidget     *widget,
           gtk_widget_size_allocate (priv->arrow, &child);
           if (is_rtl)
             child.x += req.width;
-          gtk_widget_size_request (priv->separator, &req);
+          gtk_size_request_get_size (GTK_SIZE_REQUEST (priv->separator),
+                                     &req, NULL);
           child.width = req.width;
           if (!is_rtl)
             child.x -= req.width;
@@ -2910,7 +2916,8 @@ gtk_cell_view_menu_item_new (GtkComboBox  *combo_box,
   gtk_tree_path_free (path);
 
   gtk_combo_box_sync_cells (combo_box, GTK_CELL_LAYOUT (cell_view));
-  gtk_widget_size_request (cell_view, &req);
+  gtk_size_request_get_size (GTK_SIZE_REQUEST (cell_view),
+                             &req, NULL);
   gtk_widget_show (cell_view);
   
   return item;

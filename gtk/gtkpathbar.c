@@ -334,8 +334,9 @@ gtk_path_bar_size_request (GtkWidget      *widget,
   for (list = path_bar->button_list; list; list = list->next)
     {
       button_data = BUTTON_DATA (list->data);
-      gtk_widget_size_request (button_data->button, &child_requisition);
-      
+      gtk_size_request_get_size (GTK_SIZE_REQUEST (button_data->button),
+                                 &child_requisition, NULL);
+
       if (button_data->type == NORMAL_BUTTON)
 	/* Use 2*Height as button width because of ellipsized label.  */
 	requisition->width = MAX (child_requisition.height * 2, requisition->width);
@@ -353,8 +354,10 @@ gtk_path_bar_size_request (GtkWidget      *widget,
   if (path_bar->button_list && path_bar->button_list->next != NULL)
     requisition->width += (path_bar->spacing + path_bar->slider_width) * 2;
 
-  gtk_widget_size_request (path_bar->up_slider_button, &child_requisition);
-  gtk_widget_size_request (path_bar->down_slider_button, &child_requisition);
+  gtk_size_request_get_size (GTK_SIZE_REQUEST (path_bar->up_slider_button),
+                             &child_requisition, NULL);
+  gtk_size_request_get_size (GTK_SIZE_REQUEST (path_bar->down_slider_button),
+                             &child_requisition, NULL);
 
   border_width = gtk_container_get_border_width (GTK_CONTAINER (widget));
   requisition->width += border_width * 2;

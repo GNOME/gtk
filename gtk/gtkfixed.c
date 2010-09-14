@@ -352,7 +352,8 @@ gtk_fixed_size_request (GtkWidget      *widget,
 
       if (gtk_widget_get_visible (child->widget))
 	{
-          gtk_widget_size_request (child->widget, &child_requisition);
+          gtk_size_request_get_size (GTK_SIZE_REQUEST (child->widget),
+                                     &child_requisition, NULL);
 
           requisition->height = MAX (requisition->height,
                                      child->y +

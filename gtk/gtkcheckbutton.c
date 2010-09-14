@@ -238,8 +238,9 @@ gtk_check_button_size_request (GtkWidget      *widget,
       if (child && gtk_widget_get_visible (child))
 	{
 	  GtkRequisition child_requisition;
-	  
-	  gtk_widget_size_request (child, &child_requisition);
+
+          gtk_size_request_get_size (GTK_SIZE_REQUEST (child),
+                                     &child_requisition, NULL);
 
 	  requisition->width += child_requisition.width + indicator_spacing;
 	  requisition->height += child_requisition.height;

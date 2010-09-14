@@ -8508,7 +8508,8 @@ popup_position_func (GtkMenu   *menu,
   gtk_menu_set_monitor (menu, monitor_num);
 
   gdk_screen_get_monitor_geometry (screen, monitor_num, &monitor);
-  gtk_widget_size_request (entry->popup_menu, &menu_req);
+  gtk_size_request_get_size (GTK_SIZE_REQUEST (entry->popup_menu),
+                             &menu_req, NULL);
   gdk_drawable_get_size (entry->text_area, NULL, &height);
   gtk_entry_get_cursor_locations (entry, CURSOR_STANDARD, &strong_x, NULL);
   _gtk_entry_effective_inner_border (entry, &inner_border);

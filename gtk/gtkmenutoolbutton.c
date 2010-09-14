@@ -22,12 +22,15 @@
 #include "config.h"
 
 #include "gtkmenutoolbutton.h"
+
 #include "gtktogglebutton.h"
 #include "gtkarrow.h"
 #include "gtkhbox.h"
 #include "gtkvbox.h"
 #include "gtkmenu.h"
 #include "gtkmain.h"
+#include "gtksizerequest.h"
+
 #include "gtkprivate.h"
 #include "gtkintl.h"
 
@@ -267,7 +270,8 @@ menu_position_func (GtkMenu           *menu,
   GdkScreen *screen;
   GdkWindow *window;
 
-  gtk_widget_size_request (GTK_WIDGET (priv->menu), &menu_req);
+  gtk_size_request_get_size (GTK_SIZE_REQUEST (priv->menu),
+                             &menu_req, NULL);
 
   orientation = gtk_tool_item_get_orientation (GTK_TOOL_ITEM (button));
   direction = gtk_widget_get_direction (widget);
@@ -307,7 +311,8 @@ menu_position_func (GtkMenu           *menu,
   else 
     {
       gdk_window_get_origin (GTK_BUTTON (priv->arrow_button)->event_window, x, y);
-      gtk_widget_size_request (priv->arrow_button, &req);
+      gtk_size_request_get_size (GTK_SIZE_REQUEST (priv->arrow_button),
+                                 &req, NULL);
 
       gtk_widget_get_allocation (priv->arrow_button, &arrow_allocation);
 

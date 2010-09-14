@@ -995,7 +995,8 @@ gtk_layout_size_request (GtkWidget     *widget,
       
       tmp_list = tmp_list->next;
 
-      gtk_widget_size_request (child->widget, &child_requisition);
+      gtk_size_request_get_size (GTK_SIZE_REQUEST (child->widget),
+                                 &child_requisition, NULL);
     }
 }
 

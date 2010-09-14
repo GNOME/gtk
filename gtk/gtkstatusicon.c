@@ -28,14 +28,16 @@
  */
 
 #include "config.h"
-#include <string.h>
 
 #include "gtkstatusicon.h"
+
+#include <string.h>
 
 #include "gtkintl.h"
 #include "gtkiconfactory.h"
 #include "gtkmain.h"
 #include "gtkmarshalers.h"
+#include "gtksizerequest.h"
 #include "gtktrayicon.h"
 
 #include "gtkprivate.h"
@@ -2379,7 +2381,8 @@ gtk_status_icon_position_menu (GtkMenu  *menu,
 
   gdk_window_get_origin (window, x, y);
 
-  gtk_widget_size_request (GTK_WIDGET (menu), &menu_req);
+  gtk_size_request_get_size (GTK_SIZE_REQUEST (menu),
+                             &menu_req, NULL);
 
   gtk_widget_get_allocation (widget, &allocation);
   if (_gtk_tray_icon_get_orientation (tray_icon) == GTK_ORIENTATION_VERTICAL)

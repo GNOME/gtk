@@ -2475,7 +2475,8 @@ create_rotated_text (GtkWidget *widget)
       gtk_widget_show_all (gtk_bin_get_child (GTK_BIN (window)));
       
       gtk_widget_set_size_request (drawing_area, DEFAULT_TEXT_RADIUS * 2, DEFAULT_TEXT_RADIUS * 2);
-      gtk_widget_size_request (window, &requisition);
+      gtk_size_request_get_size (GTK_SIZE_REQUEST (window),
+                                 &requisition, NULL);
       gtk_widget_set_size_request (drawing_area, -1, -1);
       gtk_window_resize (GTK_WINDOW (window), requisition.width, requisition.height);
     }

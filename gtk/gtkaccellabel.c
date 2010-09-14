@@ -405,7 +405,8 @@ gtk_accel_label_expose_event (GtkWidget      *widget,
 
       ac_width = gtk_accel_label_get_accel_width (accel_label);
       gtk_widget_get_allocation (widget, &allocation);
-      gtk_widget_size_request (widget, &requisition);
+      gtk_size_request_get_size (GTK_SIZE_REQUEST (widget),
+                                 &requisition, NULL);
 
       if (allocation.width >= requisition.width + ac_width)
 	{

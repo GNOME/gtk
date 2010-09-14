@@ -24,6 +24,8 @@
 
 #include "config.h"
 
+#include "gtklinkbutton.h"
+
 #include <string.h>
 
 #include "gtkclipboard.h"
@@ -33,11 +35,10 @@
 #include "gtkmain.h"
 #include "gtkmenu.h"
 #include "gtkmenuitem.h"
+#include "gtksizerequest.h"
 #include "gtkstock.h"
 #include "gtkshow.h"
 #include "gtktooltip.h"
-
-#include "gtklinkbutton.h"
 
 #include "gtkintl.h"
 
@@ -368,7 +369,8 @@ popup_position_func (GtkMenu  *menu,
 
   gdk_window_get_origin (gtk_widget_get_window (widget), x, y);
 
-  gtk_widget_size_request (priv->popup_menu, &req);
+  gtk_size_request_get_size (GTK_SIZE_REQUEST (priv->popup_menu),
+                             &req, NULL);
 
   gtk_widget_get_allocation (widget, &allocation);
   *x += allocation.width / 2;

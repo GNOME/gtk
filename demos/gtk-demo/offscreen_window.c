@@ -392,7 +392,8 @@ gtk_rotated_bin_size_request (GtkWidget      *widget,
   child_requisition.height = 0;
 
   if (bin->child && gtk_widget_get_visible (bin->child))
-    gtk_widget_size_request (bin->child, &child_requisition);
+    gtk_size_request_get_size (GTK_SIZE_REQUEST (bin->child),
+                               &child_requisition, NULL);
 
   s = sin (bin->angle);
   c = cos (bin->angle);

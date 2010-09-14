@@ -365,7 +365,8 @@ gtk_tool_palette_size_request (GtkWidget      *widget,
       if (!group->widget)
         continue;
 
-      gtk_widget_size_request (GTK_WIDGET (group->widget), &child_requisition);
+      gtk_size_request_get_size (GTK_SIZE_REQUEST (group->widget),
+                                 &child_requisition, NULL);
 
       if (GTK_ORIENTATION_VERTICAL == palette->priv->orientation)
         {

@@ -57,6 +57,7 @@
 #include "gtkscrolledwindow.h"
 #include "gtkseparatormenuitem.h"
 #include "gtksizegroup.h"
+#include "gtksizerequest.h"
 #include "gtktable.h"
 #include "gtktreemodelsort.h"
 #include "gtktreemodelfilter.h"
@@ -945,7 +946,8 @@ set_default_size (GtkRecentChooserDefault *impl)
   height = (impl->icon_size + font_size) * NUM_LINES;
 
   /* Use at least the requisition size... */
-  gtk_widget_size_request (widget, &req);
+  gtk_size_request_get_size (GTK_SIZE_REQUEST (widget),
+                             &req, NULL);
   width = MAX (width, req.width);
   height = MAX (height, req.height);
 
@@ -1847,7 +1849,8 @@ popup_position_func (GtkMenu   *menu,
   gdk_window_get_origin (gtk_widget_get_window (widget),
                          x, y);
 
-  gtk_widget_size_request (GTK_WIDGET (menu), &req);
+  gtk_size_request_get_size (GTK_SIZE_REQUEST (menu),
+                             &req, NULL);
 
   gtk_widget_get_allocation (widget, &allocation);
   *x += (allocation.width - req.width) / 2;

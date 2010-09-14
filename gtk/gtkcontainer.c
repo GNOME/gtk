@@ -25,16 +25,19 @@
  */
 
 #include "config.h"
+
+#include "gtkcontainer.h"
+
 #include <stdarg.h>
 #include <string.h>
 #include <stdlib.h>
 
-#include "gtkcontainer.h"
 #include "gtkbuildable.h"
 #include "gtkbuilderprivate.h"
 #include "gtkprivate.h"
 #include "gtkmain.h"
 #include "gtkmarshalers.h"
+#include "gtksizerequest.h"
 #include "gtkwindow.h"
 #include "gtkintl.h"
 #include "gtktoolbar.h"
@@ -1482,8 +1485,9 @@ gtk_container_real_check_resize (GtkContainer *container)
   GtkWidget *widget = GTK_WIDGET (container);
   GtkAllocation allocation;
   GtkRequisition requisition;
-  
-  gtk_widget_size_request (widget, &requisition);
+
+  gtk_size_request_get_size (GTK_SIZE_REQUEST (widget),
+                             &requisition, NULL);
   gtk_widget_get_allocation (widget, &allocation);
 
   if (requisition.width > allocation.width ||

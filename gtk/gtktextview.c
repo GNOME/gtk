@@ -3312,8 +3312,6 @@ gtk_text_view_size_request (GtkWidget      *widget,
           gtk_size_request_get_size (GTK_SIZE_REQUEST (child->widget),
                                      &old_req, NULL);
 
-          gtk_widget_size_request (child->widget, &child_req);
-
           gtk_size_request_get_size (GTK_SIZE_REQUEST (child->widget),
                                      &child_req, NULL);
 
@@ -3327,8 +3325,9 @@ gtk_text_view_size_request (GtkWidget      *widget,
       else
         {
           GtkRequisition child_req;
-          
-          gtk_widget_size_request (child->widget, &child_req);
+
+          gtk_size_request_get_size (GTK_SIZE_REQUEST (child->widget),
+                                     &child_req, NULL);
         }
 
       tmp_list = g_slist_next (tmp_list);
@@ -8098,8 +8097,9 @@ popup_position_func (GtkMenu   *menu,
                                    &cursor_rect);
 
   gtk_text_view_get_visible_rect (text_view, &onscreen_rect);
-  
-  gtk_widget_size_request (text_view->priv->popup_menu, &req);
+
+  gtk_size_request_get_size (GTK_SIZE_REQUEST (text_view->priv->popup_menu),
+                             &req, NULL);
 
   gtk_widget_get_allocation (widget, &allocation);
 

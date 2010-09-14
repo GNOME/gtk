@@ -20,13 +20,16 @@
  */
 
 #include "config.h"
-#include "gtkfilechooserprivate.h"
+
 #include "gtkfilechooserdialog.h"
+
+#include "gtkfilechooserprivate.h"
 #include "gtkfilechooserwidget.h"
 #include "gtkfilechooserutils.h"
 #include "gtkfilechooserembed.h"
 #include "gtkfilechoosersettings.h"
 #include "gtkfilesystem.h"
+#include "gtksizerequest.h"
 #include "gtktypebuiltins.h"
 #include "gtkintl.h"
 
@@ -196,8 +199,10 @@ file_chooser_widget_default_size_changed (GtkWidget            *widget,
     {
       /* Force a size request of everything before we start.  This will make sure
        * that widget->requisition is meaningful. */
-      gtk_widget_size_request (GTK_WIDGET (dialog), &req);
-      gtk_widget_size_request (widget, &widget_req);
+      gtk_size_request_get_size (GTK_SIZE_REQUEST (dialog),
+                                 &req, NULL);
+      gtk_size_request_get_size (GTK_SIZE_REQUEST (widget),
+                                 &widget_req, NULL);
     }
 
   _gtk_file_chooser_embed_get_default_size (GTK_FILE_CHOOSER_EMBED (priv->widget),

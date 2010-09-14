@@ -21,6 +21,8 @@
 
 #include "config.h"
 
+#include "gtkfilechooserdefault.h"
+
 #include "gdk/gdkkeysyms.h"
 #include "gtkalignment.h"
 #include "gtkbindings.h"
@@ -33,7 +35,6 @@
 #include "gtkentry.h"
 #include "gtkexpander.h"
 #include "gtkfilechooserprivate.h"
-#include "gtkfilechooserdefault.h"
 #include "gtkfilechooserdialog.h"
 #include "gtkfilechooserembed.h"
 #include "gtkfilechooserentry.h"
@@ -61,6 +62,7 @@
 #include "gtkscrolledwindow.h"
 #include "gtkseparatormenuitem.h"
 #include "gtksizegroup.h"
+#include "gtksizerequest.h"
 #include "gtkstock.h"
 #include "gtktable.h"
 #include "gtktooltip.h"
@@ -4107,7 +4109,8 @@ popup_position_func (GtkMenu   *menu,
 
   gdk_window_get_origin (gtk_widget_get_window (widget), x, y);
 
-  gtk_widget_size_request (GTK_WIDGET (menu), &req);
+  gtk_size_request_get_size (GTK_SIZE_REQUEST (menu),
+                             &req, NULL);
 
   gtk_widget_get_allocation (widget, &allocation);
   *x += (allocation.width - req.width) / 2;
@@ -7849,20 +7852,23 @@ gtk_file_chooser_default_get_default_size (GtkFileChooserEmbed *chooser_embed,
 	  impl->preview_widget &&
 	  gtk_widget_get_visible (impl->preview_widget))
 	{
-	  gtk_widget_size_request (impl->preview_box, &req);
+          gtk_size_request_get_size (GTK_SIZE_REQUEST (impl->preview_box),
+                                     &req, NULL);
 	  *default_width += PREVIEW_HBOX_SPACING + req.width;
 	}
 
       if (impl->extra_widget &&
 	  gtk_widget_get_visible (impl->extra_widget))
 	{
-	  gtk_widget_size_request (impl->extra_align, &req);
+          gtk_size_request_get_size (GTK_SIZE_REQUEST (impl->extra_align),
+                                     &req, NULL);
 	  *default_height += gtk_box_get_spacing (GTK_BOX (chooser_embed)) + req.height;
 	}
     }
   else
     {
-      gtk_widget_size_request (GTK_WIDGET (impl), &req);
+      gtk_size_request_get_size (GTK_SIZE_REQUEST (impl),
+                                 &req, NULL);
       *default_width = req.width;
       *default_height = req.height;
     }

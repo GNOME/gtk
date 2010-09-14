@@ -22,12 +22,14 @@
 
 #include "config.h"
 
+#include "gtktoolitem.h"
+
 #include <string.h>
 
-#include "gtktoolitem.h"
 #include "gtkmarshalers.h"
 #include "gtktoolshell.h"
 #include "gtkseparatormenuitem.h"
+#include "gtksizerequest.h"
 #include "gtkactivatable.h"
 #include "gtkintl.h"
 #include "gtkmain.h"
@@ -500,7 +502,8 @@ gtk_tool_item_size_request (GtkWidget      *widget,
   child = gtk_bin_get_child (GTK_BIN (widget));
   if (child && gtk_widget_get_visible (child))
     {
-      gtk_widget_size_request (child, requisition);
+      gtk_size_request_get_size (GTK_SIZE_REQUEST (child),
+                                 requisition, NULL);
     }
   else
     {

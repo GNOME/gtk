@@ -442,8 +442,8 @@ gtk_image_menu_item_size_request (GtkWidget      *widget,
     {
       GtkRequisition child_requisition;
 
-      gtk_widget_size_request (priv->image,
-                               &child_requisition);
+      gtk_size_request_get_size (GTK_SIZE_REQUEST (priv->image),
+                                 &child_requisition, NULL);
 
       child_width = child_requisition.width;
       child_height = child_requisition.height;

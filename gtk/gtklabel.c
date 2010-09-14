@@ -6137,7 +6137,8 @@ popup_position_func (GtkMenu   *menu,
   *x += allocation.x;
   *y += allocation.y;
 
-  gtk_widget_size_request (GTK_WIDGET (menu), &req);
+  gtk_size_request_get_size (GTK_SIZE_REQUEST (menu),
+                             &req, NULL);
 
   gtk_widget_get_allocation (widget, &allocation);
 

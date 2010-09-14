@@ -1851,10 +1851,10 @@ gtk_scrolled_window_get_size (GtkSizeRequest *widget,
   natural_req.width = 0;
   natural_req.height = 0;
 
-  gtk_widget_size_request (priv->hscrollbar,
-			   &hscrollbar_requisition);
-  gtk_widget_size_request (priv->vscrollbar,
-			   &vscrollbar_requisition);
+  gtk_size_request_get_size (GTK_SIZE_REQUEST (priv->hscrollbar),
+                             &hscrollbar_requisition, NULL);
+  gtk_size_request_get_size (GTK_SIZE_REQUEST (priv->vscrollbar),
+                             &vscrollbar_requisition, NULL);
 
   child = gtk_bin_get_child (bin);
   if (child && gtk_widget_get_visible (child))

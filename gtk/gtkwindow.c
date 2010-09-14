@@ -4828,7 +4828,8 @@ gtk_window_realize (GtkWidget *widget)
       GtkRequisition requisition;
       GtkAllocation allocation = { 0, 0, 200, 200 };
 
-      gtk_widget_size_request (widget, &requisition);
+      gtk_size_request_get_size (GTK_SIZE_REQUEST (widget),
+                                 &requisition, NULL);
       if (requisition.width || requisition.height)
 	{
 	  /* non-empty window */
@@ -6032,8 +6033,9 @@ gtk_window_compute_configure_request (GtkWindow    *window,
   widget = GTK_WIDGET (window);
 
   screen = gtk_window_check_screen (window);
-  
-  gtk_widget_size_request (widget, NULL);
+
+  gtk_size_request_get_size (GTK_SIZE_REQUEST (widget),
+                             NULL, NULL);
   gtk_window_compute_configure_request_size (window, (guint *)&w, (guint *)&h);
   
   gtk_window_compute_hints (window, &new_geometry, &new_flags);
@@ -6711,8 +6713,8 @@ gtk_window_constrain_size (GtkWindow   *window,
 }
 
 /* Compute the set of geometry hints and flags for a window
- * based on the application set geometry, and requisiition
- * of the window. gtk_widget_size_request() must have been
+ * based on the application set geometry, and requisition
+ * of the window. gtk_size_request_get_size() must have been
  * called first.
  */
 static void

@@ -26,15 +26,18 @@
  */
 
 #include "config.h"
+
+#include "gtksocket.h"
+
 #include <string.h>
 
 #include "gdk/gdkkeysyms.h"
 #include "gtkmain.h"
 #include "gtkmarshalers.h"
+#include "gtksizerequest.h"
 #include "gtkwindow.h"
 #include "gtkplug.h"
 #include "gtkprivate.h"
-#include "gtksocket.h"
 #include "gtksocketprivate.h"
 #include "gtkdnd.h"
 #include "gtkintl.h"
@@ -457,7 +460,8 @@ gtk_socket_size_request (GtkWidget      *widget,
 
   if (socket->plug_widget)
     {
-      gtk_widget_size_request (socket->plug_widget, requisition);
+      gtk_size_request_get_size (GTK_SIZE_REQUEST (socket->plug_widget),
+                                 requisition, NULL);
     }
   else
     {

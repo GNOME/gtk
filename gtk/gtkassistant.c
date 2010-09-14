@@ -1157,11 +1157,13 @@ gtk_assistant_size_request (GtkWidget      *widget,
       GtkAssistantPage *page = list->data;
       gint w, h;
 
-      gtk_widget_size_request (page->page, &child_requisition);
+      gtk_size_request_get_size (GTK_SIZE_REQUEST (page->page),
+                                 &child_requisition, NULL);
       width  = MAX (width,  child_requisition.width);
       height = MAX (height, child_requisition.height);
 
-      gtk_widget_size_request (page->title, &child_requisition);
+      gtk_size_request_get_size (GTK_SIZE_REQUEST (page->title),
+                                 &child_requisition, NULL);
       w = child_requisition.width;
       h = child_requisition.height;
 
@@ -1177,16 +1179,19 @@ gtk_assistant_size_request (GtkWidget      *widget,
       list = list->next;
     }
 
-  gtk_widget_size_request (priv->sidebar_image, &child_requisition);
+  gtk_size_request_get_size (GTK_SIZE_REQUEST (priv->sidebar_image),
+                             &child_requisition, NULL);
   width  += child_requisition.width;
   height  = MAX (height, child_requisition.height);
 
   gtk_widget_set_size_request (priv->header_image, header_width, header_height);
-  gtk_widget_size_request (priv->header_image, &child_requisition);
+  gtk_size_request_get_size (GTK_SIZE_REQUEST (priv->header_image),
+                             &child_requisition, NULL);
   width   = MAX (width, header_width) + 2 * header_padding;
   height += header_height + 2 * header_padding;
 
-  gtk_widget_size_request (priv->action_area, &child_requisition);
+  gtk_size_request_get_size (GTK_SIZE_REQUEST (priv->action_area),
+                             &child_requisition, NULL);
   width   = MAX (width, child_requisition.width);
   height += child_requisition.height + ACTION_AREA_SPACING;
 

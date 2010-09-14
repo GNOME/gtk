@@ -805,7 +805,8 @@ gtk_paned_size_request (GtkWidget      *widget,
 
   if (priv->child1 && gtk_widget_get_visible (priv->child1))
     {
-      gtk_widget_size_request (priv->child1, &child_requisition);
+      gtk_size_request_get_size (GTK_SIZE_REQUEST (priv->child1),
+                                 &child_requisition, NULL);
 
       requisition->height = child_requisition.height;
       requisition->width = child_requisition.width;
@@ -813,7 +814,8 @@ gtk_paned_size_request (GtkWidget      *widget,
 
   if (priv->child2 && gtk_widget_get_visible (priv->child2))
     {
-      gtk_widget_size_request (priv->child2, &child_requisition);
+      gtk_size_request_get_size (GTK_SIZE_REQUEST (priv->child2),
+                                 &child_requisition, NULL);
 
       if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
         {

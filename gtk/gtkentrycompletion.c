@@ -18,7 +18,9 @@
  */
 
 #include "config.h"
+
 #include "gtkentrycompletion.h"
+
 #include "gtkentryprivate.h"
 #include "gtkcelllayout.h"
 
@@ -28,6 +30,7 @@
 #include "gtktreeselection.h"
 #include "gtktreeview.h"
 #include "gtkscrolledwindow.h"
+#include "gtksizerequest.h"
 #include "gtkvbox.h"
 #include "gtkwindow.h"
 #include "gtkentry.h"
@@ -1449,9 +1452,11 @@ _gtk_entry_completion_resize_popup (GtkEntryCompletion *completion)
   else
     gtk_widget_hide (completion->priv->action_view);
 
-  gtk_widget_size_request (completion->priv->popup_window, &popup_req);
-  gtk_widget_size_request (completion->priv->entry, &entry_req);
-  
+  gtk_size_request_get_size (GTK_SIZE_REQUEST (completion->priv->popup_window),
+                             &popup_req, NULL);
+  gtk_size_request_get_size (GTK_SIZE_REQUEST (completion->priv->entry),
+                             &entry_req, NULL);
+
   if (x < monitor.x)
     x = monitor.x;
   else if (x + popup_req.width > monitor.x + monitor.width)

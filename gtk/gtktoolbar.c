@@ -928,8 +928,9 @@ gtk_toolbar_size_request (GtkWidget      *widget,
   
   if (priv->show_arrow)
     {
-      gtk_widget_size_request (priv->arrow_button, &arrow_requisition);
-      
+      gtk_size_request_get_size (GTK_SIZE_REQUEST (priv->arrow_button),
+                                 &arrow_requisition, NULL);
+
       if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
 	long_req = arrow_requisition.width;
       else
@@ -2325,9 +2326,9 @@ gtk_toolbar_set_drop_highlight_item (GtkToolbar  *toolbar,
   
   g_assert (content);
   g_assert (toolbar_content_is_placeholder (content));
-  
-  gtk_widget_size_request (GTK_WIDGET (priv->highlight_tool_item),
-			   &requisition);
+
+  gtk_size_request_get_size (GTK_SIZE_REQUEST (priv->highlight_tool_item),
+                             &requisition, NULL);
 
   toolbar_content_set_expand (content, gtk_tool_item_get_expand (tool_item));
   
@@ -2590,10 +2591,12 @@ menu_position_func (GtkMenu  *menu,
   GdkRectangle monitor;
   gint monitor_num;
   GdkScreen *screen;
-  
-  gtk_widget_size_request (priv->arrow_button, &req);
-  gtk_widget_size_request (GTK_WIDGET (menu), &menu_req);
-  
+
+  gtk_size_request_get_size (GTK_SIZE_REQUEST (priv->arrow_button),
+                             &req, NULL);
+  gtk_size_request_get_size (GTK_SIZE_REQUEST (menu),
+                             &menu_req, NULL);
+
   screen = gtk_widget_get_screen (GTK_WIDGET (menu));
   monitor_num = gdk_screen_get_monitor_at_window (screen,
                                                   gtk_widget_get_window (priv->arrow_button));
@@ -3322,8 +3325,8 @@ toolbar_content_size_request (ToolbarContent *content,
 			      GtkToolbar     *toolbar,
 			      GtkRequisition *requisition)
 {
-  gtk_widget_size_request (GTK_WIDGET (content->item),
-                           requisition);
+  gtk_size_request_get_size (GTK_SIZE_REQUEST (content->item),
+                             requisition, NULL);
   if (content->is_placeholder &&
       content->disappearing)
     {

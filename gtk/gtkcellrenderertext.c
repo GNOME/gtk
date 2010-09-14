@@ -18,11 +18,15 @@
  */
 
 #include "config.h"
-#include <stdlib.h>
+
 #include "gtkcellrenderertext.h"
+
+#include <stdlib.h>
+
 #include "gtkeditable.h"
 #include "gtkcellsizerequest.h"
 #include "gtkentry.h"
+#include "gtksizerequest.h"
 #include "gtkmarshalers.h"
 #include "gtkintl.h"
 #include "gtkprivate.h"
@@ -1928,8 +1932,9 @@ gtk_cell_renderer_text_start_editing (GtkCellRenderer      *cell,
   g_object_set_data_full (G_OBJECT (priv->entry), I_(GTK_CELL_RENDERER_TEXT_PATH), g_strdup (path), g_free);
   
   gtk_editable_select_region (GTK_EDITABLE (priv->entry), 0, -1);
-  
-  gtk_widget_size_request (priv->entry, &requisition);
+
+  gtk_size_request_get_size (GTK_SIZE_REQUEST (priv->entry),
+                             &requisition, NULL);
   if (requisition.height < cell_area->height)
     {
       GtkBorder *style_border;

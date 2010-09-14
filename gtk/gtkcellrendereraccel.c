@@ -18,15 +18,19 @@
  */
 
 #include "config.h"
+
+#include "gtkcellrendereraccel.h"
+
+#include "gdk/gdkkeysyms.h"
+
 #include "gtkintl.h"
 #include "gtkaccelgroup.h"
 #include "gtkmarshalers.h"
-#include "gtkcellrendereraccel.h"
 #include "gtklabel.h"
 #include "gtkeventbox.h"
 #include "gtkmain.h"
+#include "gtksizerequest.h"
 #include "gtkprivate.h"
-#include "gdk/gdkkeysyms.h"
 
 
 static void gtk_cell_renderer_accel_get_property (GObject         *object,
@@ -413,7 +417,8 @@ gtk_cell_renderer_accel_get_size (GtkCellRenderer *cell,
   if (priv->sizing_label == NULL)
     priv->sizing_label = gtk_label_new (_("New accelerator..."));
 
-  gtk_widget_size_request (priv->sizing_label, &requisition);
+  gtk_size_request_get_size (GTK_SIZE_REQUEST (priv->sizing_label),
+                             &requisition, NULL);
 
   GTK_CELL_RENDERER_CLASS (gtk_cell_renderer_accel_parent_class)->get_size (cell, widget, cell_area,
                                                                             x_offset, y_offset, width, height);

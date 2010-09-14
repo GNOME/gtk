@@ -26,12 +26,14 @@
  */
 
 #include "config.h"
+
+#include "gtkcolorsel.h"
+
 #include <math.h>
 #include <string.h>
 
 #include "gdkconfig.h"
 #include "gdk/gdkkeysyms.h"
-#include "gtkcolorsel.h"
 #include "gtkhsv.h"
 #include "gtkwindow.h"
 #include "gtkselection.h"
@@ -57,6 +59,7 @@
 #include "gtksettings.h"
 #include "gtkstock.h"
 #include "gtkaccessible.h"
+#include "gtksizerequest.h"
 #include "gtkprivate.h"
 #include "gtkintl.h"
 
@@ -1357,7 +1360,8 @@ popup_position_func (GtkMenu   *menu,
   gdk_window_get_origin (gtk_widget_get_window (widget),
                          &root_x, &root_y);
 
-  gtk_widget_size_request (GTK_WIDGET (menu), &req);
+  gtk_size_request_get_size (GTK_SIZE_REQUEST (menu),
+                             &req, NULL);
   gtk_widget_get_allocation (widget, &allocation);
 
   /* Put corner of menu centered on color cell */

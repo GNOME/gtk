@@ -581,7 +581,10 @@ gtk_handle_box_size_request (GtkWidget      *widget,
    * won't have any useful hint for our size otherwise.
    */
   if (child)
-    gtk_widget_size_request (child, &child_requisition);
+    {
+      gtk_size_request_get_size (GTK_SIZE_REQUEST (child),
+                                 &child_requisition, NULL);
+    }
   else
     {
       child_requisition.width = 0;

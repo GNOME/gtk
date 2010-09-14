@@ -21,10 +21,11 @@
 
 #include "config.h"
 
+#include "gtktooltip.h"
+
 #include <math.h>
 #include <string.h>
 
-#include "gtktooltip.h"
 #include "gtkintl.h"
 #include "gtkwindow.h"
 #include "gtkmain.h"
@@ -32,6 +33,7 @@
 #include "gtkimage.h"
 #include "gtkhbox.h"
 #include "gtkalignment.h"
+#include "gtksizerequest.h"
 
 
 #undef DEBUG_TOOLTIP
@@ -937,7 +939,8 @@ gtk_tooltip_position (GtkTooltip *tooltip,
 
   screen = gtk_widget_get_screen (new_tooltip_widget);
 
-  gtk_widget_size_request (GTK_WIDGET (tooltip->current_window), &requisition);
+  gtk_size_request_get_size (GTK_SIZE_REQUEST (tooltip->current_window),
+                             &requisition, NULL);
 
   monitor_num = gdk_screen_get_monitor_at_point (screen,
                                                  tooltip->last_x,

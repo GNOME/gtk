@@ -37,7 +37,7 @@ The #GtkFileChooserButton supports the #GtkFileChooserAction<!--
 <para>
 The #GtkFileChooserButton will ellipsize the label,
 and thus will thus request little horizontal space.  To give the button
-more space, you should call gtk_widget_size_request(),
+more space, you should call gtk_size_request_get_size(),
 gtk_file_chooser_button_set_width_chars(), or pack the button in
 such a way that other interface elements give space to the widget.
 </para>

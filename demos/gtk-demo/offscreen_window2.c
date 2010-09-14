@@ -316,7 +316,8 @@ gtk_mirror_bin_size_request (GtkWidget      *widget,
   child_requisition.height = 0;
 
   if (bin->child && gtk_widget_get_visible (bin->child))
-    gtk_widget_size_request (bin->child, &child_requisition);
+    gtk_size_request_get_size (GTK_SIZE_REQUEST (bin->child),
+                               &child_requisition, NULL);
 
   border_width = gtk_container_get_border_width (GTK_CONTAINER (widget));
   requisition->width = border_width * 2 + child_requisition.width + 10;

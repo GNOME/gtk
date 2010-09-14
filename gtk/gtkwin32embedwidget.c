@@ -189,7 +189,8 @@ gtk_win32_embed_widget_realize (GtkWidget *widget)
       GtkRequisition requisition;
       GtkAllocation allocation = { 0, 0, 200, 200 };
 
-      gtk_widget_size_request (widget, &requisition);
+      gtk_size_request_get_size (GTK_SIZE_REQUEST (widget),
+                                 &requisition, NULL);
       if (requisition.width || requisition.height)
 	{
 	  /* non-empty window */

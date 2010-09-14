@@ -1856,8 +1856,9 @@ gtk_notebook_size_request (GtkWidget      *widget,
       if (gtk_widget_get_visible (page->child))
 	{
 	  vis_pages++;
-	  gtk_widget_size_request (page->child, &child_requisition);
-	  
+          gtk_size_request_get_size (GTK_SIZE_REQUEST (page->child),
+                                     &child_requisition, NULL);
+
 	  requisition->width = MAX (requisition->width,
 					   child_requisition.width);
 	  requisition->height = MAX (requisition->height,
@@ -1913,8 +1914,8 @@ gtk_notebook_size_request (GtkWidget      *widget,
 		  if (!gtk_widget_get_visible (page->tab_label))
 		    gtk_widget_show (page->tab_label);
 
-		  gtk_widget_size_request (page->tab_label,
-					   &child_requisition);
+                  gtk_size_request_get_size (GTK_SIZE_REQUEST (page->tab_label),
+                                             &child_requisition, NULL);
 
                   page->requisition.width = child_requisition.width + 2 * style->xthickness;
 		  page->requisition.height = child_requisition.height + 2 * style->ythickness;
@@ -1949,7 +1950,8 @@ gtk_notebook_size_request (GtkWidget      *widget,
                 {
                   if (priv->action_widget[i])
                     {
-                      gtk_widget_size_request (priv->action_widget[i], &action_widget_requisition[i]);
+                      gtk_size_request_get_size (GTK_SIZE_REQUEST (priv->action_widget[i]),
+                                                 &action_widget_requisition[i], NULL);
                       action_widget_requisition[i].width += style->xthickness;
                       action_widget_requisition[i].height += style->ythickness;
                     }
@@ -2711,7 +2713,8 @@ popup_position_func (GtkMenu  *menu,
   gdk_window_get_origin (gtk_widget_get_window (w), x, y);
 
   gtk_widget_get_allocation (w, &allocation);
-  gtk_widget_size_request (GTK_WIDGET (menu), &requisition);
+  gtk_size_request_get_size (GTK_SIZE_REQUEST (menu),
+                             &requisition, NULL);
 
   if (gtk_widget_get_direction (w) == GTK_TEXT_DIR_RTL)
     *x += allocation.x + allocation.width - requisition.width;
@@ -3331,7 +3334,8 @@ on_drag_icon_expose (GtkWidget      *widget,
   notebook = GTK_WIDGET (data);
   child = gtk_bin_get_child (GTK_BIN (widget));
 
-  gtk_widget_size_request (widget, &requisition);
+  gtk_size_request_get_size (GTK_SIZE_REQUEST (widget),
+                             &requisition, NULL);
   gap_pos = get_tab_gap_pos (GTK_NOTEBOOK (notebook));
 
   gtk_paint_extension (gtk_widget_get_style (notebook),

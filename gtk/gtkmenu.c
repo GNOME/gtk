@@ -2051,7 +2051,9 @@ gtk_menu_set_tearoff_hints (GtkMenu *menu,
   if (gtk_widget_get_visible (menu->tearoff_scrollbar))
     {
       GtkRequisition requisition;
-      gtk_widget_size_request (menu->tearoff_scrollbar, &requisition);
+
+      gtk_size_request_get_size (GTK_SIZE_REQUEST (menu->tearoff_scrollbar),
+                                 &requisition, NULL);
       width += requisition.width;
     }
 
@@ -2203,8 +2205,9 @@ gtk_menu_set_tearoff_state (GtkMenu  *menu,
 
 	  /* Update menu->requisition
 	   */
-	  gtk_widget_size_request (GTK_WIDGET (menu), NULL);
-  
+          gtk_size_request_get_size (GTK_SIZE_REQUEST (menu),
+                                     NULL, NULL);
+
 	  gtk_menu_set_tearoff_hints (menu, width);
 	    
 	  gtk_widget_realize (menu->tearoff_window);
@@ -5452,7 +5455,8 @@ child_at (GtkMenu *menu,
 	{
 	  GtkRequisition child_requisition;
 
-	  gtk_widget_size_request (children->data, &child_requisition);
+          gtk_size_request_get_size (GTK_SIZE_REQUEST (children->data),
+                                     &child_requisition, NULL);
 
 	  if (_gtk_menu_item_is_selectable (children->data) &&
 	      child_offset >= lower &&
