@@ -71,8 +71,8 @@ struct _GtkSpinnerPrivate
 };
 
 static void gtk_spinner_dispose        (GObject         *gobject);
-static void gtk_spinner_realize        (GtkWidget       *widget);
-static void gtk_spinner_unrealize      (GtkWidget       *widget);
+static void gtk_spinner_map            (GtkWidget       *widget);
+static void gtk_spinner_unmap          (GtkWidget       *widget);
 static gboolean gtk_spinner_expose     (GtkWidget       *widget,
                                         GdkEventExpose  *event);
 static void gtk_spinner_screen_changed (GtkWidget       *widget,
@@ -110,9 +110,9 @@ gtk_spinner_class_init (GtkSpinnerClass *klass)
   gobject_class->set_property = gtk_spinner_set_property;
 
   widget_class = GTK_WIDGET_CLASS(klass);
+  widget_class->map = gtk_spinner_map;
+  widget_class->unmap = gtk_spinner_unmap;
   widget_class->expose_event = gtk_spinner_expose;
-  widget_class->realize = gtk_spinner_realize;
-  widget_class->unrealize = gtk_spinner_unrealize;
   widget_class->screen_changed = gtk_spinner_screen_changed;
   widget_class->style_set = gtk_spinner_style_set;
   widget_class->get_accessible = gtk_spinner_get_accessible;
@@ -320,31 +320,27 @@ gtk_spinner_remove_timeout (GtkSpinner *spinner)
 }
 
 static void
-gtk_spinner_realize (GtkWidget *widget)
+gtk_spinner_map (GtkWidget *widget)
 {
-  GtkSpinnerPrivate *priv;
+  GtkSpinner *spinner = GTK_SPINNER (widget);
+  GtkSpinnerPrivate *priv = spinner->priv;
 
-  priv = GTK_SPINNER (widget)->priv;
-
-  GTK_WIDGET_CLASS (gtk_spinner_parent_class)->realize (widget);
+  GTK_WIDGET_CLASS (gtk_spinner_parent_class)->map (widget);
 
   if (priv->active)
-    gtk_spinner_add_timeout (GTK_SPINNER (widget));
+    gtk_spinner_add_timeout (spinner);
 }
 
 static void
-gtk_spinner_unrealize (GtkWidget *widget)
+gtk_spinner_unmap (GtkWidget *widget)
 {
-  GtkSpinnerPrivate *priv;
-
-  priv = GTK_SPINNER (widget)->priv;
+  GtkSpinner *spinner = GTK_SPINNER (widget);
+  GtkSpinnerPrivate *priv = spinner->priv;
 
   if (priv->timeout != 0)
-    {
-      gtk_spinner_remove_timeout (GTK_SPINNER (widget));
-    }
+    gtk_spinner_remove_timeout (spinner);
 
-  GTK_WIDGET_CLASS (gtk_spinner_parent_class)->unrealize (widget);
+  GTK_WIDGET_CLASS (gtk_spinner_parent_class)->unmap (widget);
 }
 
 static void
