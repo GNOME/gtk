@@ -927,19 +927,12 @@ gtk_handle_box_paint (GtkWidget      *widget,
   GtkHandleBoxPrivate *priv = hb->priv;
   GtkBin *bin = GTK_BIN (widget);
   GtkWidget *child;
-  gint x, y, width, height;
+  gint width, height;
   GdkRectangle rect;
   gint handle_position;
   GtkOrientation handle_orientation;
 
   handle_position = effective_handle_position (hb);
-
-  cairo_save (cr);
-
-  gdk_window_get_origin (gtk_widget_get_window (widget), &x, &y);
-  cairo_translate (cr, -x, -y);
-  gdk_window_get_origin (priv->bin_window, &x, &y);
-  cairo_translate (cr, x, y);
 
   gdk_drawable_get_size (priv->bin_window, &width, &height);
 
@@ -991,8 +984,6 @@ gtk_handle_box_paint (GtkWidget      *widget,
                     rect.x, rect.y, rect.width, rect.height, 
                     handle_orientation);
 
-  cairo_restore (cr);
-
   child = gtk_bin_get_child (bin);
   if (child != NULL && gtk_widget_get_visible (child))
     GTK_WIDGET_CLASS (gtk_handle_box_parent_class)->draw (widget, cr);
@@ -1010,8 +1001,7 @@ gtk_handle_box_draw (GtkWidget *widget,
       if (priv->child_detached)
         gtk_handle_box_draw_ghost (hb, cr);
     }
-
-  if (gtk_cairo_should_draw_window (cr, priv->bin_window))
+  else if (gtk_cairo_should_draw_window (cr, priv->bin_window))
     gtk_handle_box_paint (widget, cr);
   
   return FALSE;

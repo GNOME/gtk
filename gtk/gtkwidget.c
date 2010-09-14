@@ -5124,16 +5124,20 @@ gtk_cairo_should_draw_window (cairo_t *cr,
  */
 void
 _gtk_widget_draw_internal (GtkWidget *widget,
-                           cairo_t   *cr)
+                           cairo_t   *cr,
+                           gboolean   clip_to_size)
 {
   if (!gtk_widget_is_drawable (widget))
     return;
 
-  cairo_rectangle (cr, 
-                   0, 0,
-                   widget->priv->allocation.width,
-                   widget->priv->allocation.height);
-  cairo_clip (cr);
+  if (clip_to_size)
+    {
+      cairo_rectangle (cr, 
+                       0, 0,
+                       widget->priv->allocation.width,
+                       widget->priv->allocation.height);
+      cairo_clip (cr);
+    }
 
   if (gdk_cairo_get_clip_rectangle (cr, NULL))
     {
@@ -5149,9 +5153,10 @@ static gboolean
 gtk_widget_real_expose_event (GtkWidget      *widget,
 			      GdkEventExpose *expose)
 {
-  GdkWindow *window;
+  GdkWindow *window, *w;
   gboolean result = FALSE;
   cairo_t *cr;
+  int x, y;
 
   if (!gtk_widget_is_drawable (widget))
     return FALSE;
@@ -5162,37 +5167,32 @@ gtk_widget_real_expose_event (GtkWidget      *widget,
   gdk_cairo_region (cr, expose->region);
   cairo_clip (cr);
 
-  /* translate cairo context properly */
-  window = gtk_widget_get_window (widget);
-  if (window != expose->window)
-    {
-      int x, y;
-
-      if (gdk_window_get_parent (expose->window) == window)
-        {
-          gdk_window_get_position (expose->window, &x, &y);
-        }
-      else
-        {
-          int ex, ey;
-          gdk_window_get_origin (expose->window, &ex, &ey);
-          gdk_window_get_origin (window, &x, &y);
-          x = ex - x;
-          y = ey - y;
-        }
-
-      cairo_translate (cr, -x, -y);
-    }
-
-
   if (!gtk_widget_get_has_window (widget))
     {
-      cairo_translate (cr,
-                       widget->priv->allocation.x,
-                       widget->priv->allocation.y);
+      x = widget->priv->allocation.x;
+      y = widget->priv->allocation.y;
+    }
+  else
+    {
+      x = 0;
+      y = 0;
     }
 
-  _gtk_widget_draw_internal (widget, cr);
+  /* translate cairo context properly */
+  window = gtk_widget_get_window (widget);
+
+  for (w = expose->window; w && w != window; w = gdk_window_get_parent (w))
+    {
+      int wx, wy;
+      gdk_window_get_position (w, &wx, &wy);
+      x -= wx;
+      y -= wy;
+    }
+
+  if (w)
+    cairo_translate (cr, x, y);
+
+  _gtk_widget_draw_internal (widget, cr, w != NULL);
 
   /* unset here, so if someone keeps a reference to cr we
    * don't leak the window. */
