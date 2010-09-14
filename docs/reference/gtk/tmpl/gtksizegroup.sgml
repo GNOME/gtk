@@ -44,6 +44,15 @@ vertical size from the vertical requisition of all widgets that can be
 reached from the widget by a chain of size groups of type
 %GTK_SIZE_GROUP_VERTICAL or %GTK_SIZE_GROUP_BOTH.
 </para>
+<para>
+Note that only non-contextual sizes of every widget are ever consulted
+by size groups (since size groups have no knowledge of what size a widget
+will be allocated in one dimension, it cannot derive how much height
+a widget will receive for a given width). When grouping widgets that
+trade height for width in mode %GTK_SIZE_GROUP_VERTICAL or %GTK_SIZE_GROUP_BOTH: 
+the height for the minimum width will be the requested height for all 
+widgets in the group.
+</para>
 <refsect2 id="GtkSizeGroup-BUILDER-UI">
 <title>GtkSizeGroup as GtkBuildable</title>
 <para>
