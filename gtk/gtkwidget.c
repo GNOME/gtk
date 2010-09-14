@@ -5119,6 +5119,32 @@ gtk_cairo_should_draw_window (cairo_t *cr,
          event->window == window;
 }
 
+/* code shared by gtk_container_propagate_draw() and
+ * gtk_widget_draw()
+ */
+void
+_gtk_widget_draw_internal (GtkWidget *widget,
+                           cairo_t   *cr)
+{
+  if (!gtk_widget_is_drawable (widget))
+    return;
+
+  cairo_rectangle (cr, 
+                   0, 0,
+                   widget->priv->allocation.width,
+                   widget->priv->allocation.height);
+  cairo_clip (cr);
+
+  if (gdk_cairo_get_clip_rectangle (cr, NULL))
+    {
+      gboolean result;
+
+      g_signal_emit (widget, widget_signals[DRAW], 
+                     0, cr,
+                     &result);
+    }
+}
+
 static gboolean
 gtk_widget_real_expose_event (GtkWidget      *widget,
 			      GdkEventExpose *expose)
@@ -5166,9 +5192,7 @@ gtk_widget_real_expose_event (GtkWidget      *widget,
                        widget->priv->allocation.y);
     }
 
-  g_signal_emit (widget, widget_signals[DRAW], 
-                 0, cr,
-                 &result);
+  _gtk_widget_draw_internal (widget, cr);
 
   /* unset here, so if someone keeps a reference to cr we
    * don't leak the window. */
