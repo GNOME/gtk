@@ -298,12 +298,10 @@ gtk_dialog_init (GtkDialog *dialog)
                     FALSE, TRUE, 0);
   gtk_widget_show (dialog->action_area);
 
-  dialog->separator = gtk_hseparator_new ();
-  gtk_box_pack_end (GTK_BOX (dialog->vbox), dialog->separator, FALSE, TRUE, 0);
-  gtk_widget_show (dialog->separator);
+  dialog->separator = NULL;
 
   gtk_window_set_type_hint (GTK_WINDOW (dialog),
-			    GDK_WINDOW_TYPE_HINT_DIALOG);
+                            GDK_WINDOW_TYPE_HINT_DIALOG);
   gtk_window_set_position (GTK_WINDOW (dialog), GTK_WIN_POS_CENTER_ON_PARENT);
 }
 
