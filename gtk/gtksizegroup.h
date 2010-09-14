@@ -94,9 +94,10 @@ GSList *         gtk_size_group_get_widgets   (GtkSizeGroup     *size_group);
 
 
 
-gint _gtk_size_group_bump_requisition      (GtkWidget        *widget,
+void _gtk_size_group_bump_requisition      (GtkWidget        *widget,
 					    GtkSizeGroupMode  mode,
-					    gint              widget_requisition);
+					    gint             *minimum,
+					    gint             *natural);
 void _gtk_size_group_queue_resize          (GtkWidget        *widget);
 
 

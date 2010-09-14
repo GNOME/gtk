@@ -31,7 +31,8 @@
 
 struct _GtkSizeGroupPrivate
 {
-  GtkRequisition  requisition;
+  GtkRequisition  minimum_req;
+  GtkRequisition  natural_req;
 
   GSList         *widgets;
 
@@ -662,39 +663,16 @@ gtk_size_group_get_widgets (GtkSizeGroup *size_group)
   return size_group->priv->widgets;
 }
 
-static gint
-get_base_dimension (GtkWidget        *widget,
-		    GtkSizeGroupMode  mode)
-{
-  if (mode == GTK_SIZE_GROUP_HORIZONTAL)
-    {
-      /* XXX Possibly we should be using natural values and not minimums here. */
-      gint width;
-
-      gtk_size_request_get_width (GTK_SIZE_REQUEST (widget), &width, NULL);
-
-      return width;
-    }
-  else
-    {
-      /* XXX Possibly we should be using natural values and not minimums here. */
-      gint height;
-
-      gtk_size_request_get_height (GTK_SIZE_REQUEST (widget), &height, NULL);
-
-      return height;
-    }
-}
-
-static gint
+static void
 compute_dimension (GtkWidget        *widget,
 		   GtkSizeGroupMode  mode,
-		   gint              widget_requisition)
+		   gint             *minimum, /* in-out */
+		   gint             *natural) /* in-out */
 {
   GSList *widgets = NULL;
   GSList *groups = NULL;
   GSList *tmp_list;
-  gint result = 0;
+  gint    min_result = 0, nat_result = 0;
 
   add_widget_to_closure (widget, mode, &groups, &widgets);
 
@@ -705,7 +683,8 @@ compute_dimension (GtkWidget        *widget,
   
   if (!groups)
     {
-      result = widget_requisition;
+      min_result = *minimum;
+      nat_result = *natural;
     }
   else
     {
@@ -713,26 +692,40 @@ compute_dimension (GtkWidget        *widget,
       GtkSizeGroupPrivate *priv = group->priv;
 
       if (mode == GTK_SIZE_GROUP_HORIZONTAL && priv->have_width)
-	result = priv->requisition.width;
+	{
+	  min_result = priv->minimum_req.width;
+	  nat_result = priv->natural_req.width;
+	}
       else if (mode == GTK_SIZE_GROUP_VERTICAL && priv->have_height)
-	result = priv->requisition.height;
+	{
+	  min_result = priv->minimum_req.height;
+	  nat_result = priv->natural_req.height;
+	}
       else
 	{
 	  tmp_list = widgets;
 	  while (tmp_list)
 	    {
 	      GtkWidget *tmp_widget = tmp_list->data;
-	      gint dimension;
+	      gint min_dimension, nat_dimension;
 
 	      if (tmp_widget == widget)
-		dimension = widget_requisition;
+		{
+		  min_dimension = *minimum;
+		  nat_dimension = *natural;
+		}
 	      else
-		dimension = get_base_dimension (tmp_widget, mode);
+		{
+		  if (mode == GTK_SIZE_GROUP_HORIZONTAL)
+		    gtk_size_request_get_width (GTK_SIZE_REQUEST (tmp_widget), &min_dimension, &nat_dimension);
+		  else
+		    gtk_size_request_get_height (GTK_SIZE_REQUEST (tmp_widget), &min_dimension, &nat_dimension);
+		}
 
 	      if (gtk_widget_get_mapped (tmp_widget) || !priv->ignore_hidden)
 		{
-		  if (dimension > result)
-		    result = dimension;
+		  min_result = MAX (min_result, min_dimension);
+		  nat_result = MAX (nat_result, nat_dimension);
 		}
 
 	      tmp_list = tmp_list->next;
@@ -747,12 +740,15 @@ compute_dimension (GtkWidget        *widget,
 	      if (mode == GTK_SIZE_GROUP_HORIZONTAL)
 		{
 		  tmp_priv->have_width = TRUE;
-		  tmp_priv->requisition.width = result;
+		  tmp_priv->minimum_req.width = min_result;
+		  tmp_priv->natural_req.width = nat_result;
 		}
 	      else
 		{
 		  tmp_priv->have_height = TRUE;
-		  tmp_priv->requisition.height = result;
+
+		  tmp_priv->minimum_req.height = min_result;
+		  tmp_priv->natural_req.height = nat_result;
 		}
 	      
 	      tmp_list = tmp_list->next;
@@ -765,7 +761,8 @@ compute_dimension (GtkWidget        *widget,
   g_slist_free (widgets);
   g_slist_free (groups);
 
-  return result;
+  *minimum = min_result;
+  *natural = nat_result;
 }
 
 /**
@@ -773,33 +770,32 @@ compute_dimension (GtkWidget        *widget,
  * @widget: a #GtkWidget
  * @mode: either %GTK_SIZE_GROUP_HORIZONTAL or %GTK_SIZE_GROUP_VERTICAL, depending
  *        on the dimension in which to bump the size.
+ * @minimum: a pointer to the widget's minimum size
+ * @natural: a pointer to the widget's natural size
  *
  * Refreshes the sizegroup while returning the groups requested
  * value in the dimension @mode.
  *
- * This function is used to update sizegroup minimum size information
- * in multiple passes from the new #GtkSizeRequest manager.
+ * This function is used both to update sizegroup minimum and natural size 
+ * information and widget minimum and natural sizes in multiple passes from 
+ * the #GtkSizeRequest apis.
  */
-gint
+void
 _gtk_size_group_bump_requisition (GtkWidget        *widget,
 				  GtkSizeGroupMode  mode,
-				  gint              widget_requisition)
+				  gint             *minimum,
+				  gint             *natural)
 {
-  gint result = widget_requisition;
-
   if (!is_bumping (widget))
     {
       /* Avoid recursion here */
       mark_bumping (widget, TRUE);
 
       if (get_size_groups (widget))
-	{
-          result = compute_dimension (widget, mode, widget_requisition);
-	}
+	compute_dimension (widget, mode, minimum, natural);
 
       mark_bumping (widget, FALSE);
     }
-  return result;
 }
 
 

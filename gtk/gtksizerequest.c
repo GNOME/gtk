@@ -254,7 +254,7 @@ compute_size_for_orientation (GtkSizeRequest    *request,
     {
       GtkRequisition requisition = { 0, 0 };
       gint min_size = 0, nat_size = 0;
-      gint group_size, requisition_size;
+      gint requisition_size;
 
       /* Unconditional size request runs but is often unhandled. */
       do_size_request (widget, &requisition);
@@ -349,16 +349,13 @@ compute_size_for_orientation (GtkSizeRequest    *request,
           cached_size->natural_size = adjusted_natural;
         }
 
-      /* Get size groups to compute the base requisition once one
-       * of the values have been cached, then go ahead and update
-       * the cache with the sizegroup computed value.
+      /* Update size-groups with our request and update our cached requests 
+       * with the size-group values in a single pass.
        */
-      group_size =
-        _gtk_size_group_bump_requisition (GTK_WIDGET (request),
-                                          orientation, cached_size->minimum_size);
-
-      cached_size->minimum_size = MAX (cached_size->minimum_size, group_size);
-      cached_size->natural_size = MAX (cached_size->natural_size, group_size);
+      _gtk_size_group_bump_requisition (GTK_WIDGET (request),
+					orientation, 
+					&cached_size->minimum_size,
+					&cached_size->natural_size);
     }
 
   if (minimum_size)
