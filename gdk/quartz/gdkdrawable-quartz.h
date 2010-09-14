@@ -23,6 +23,8 @@
 
 #include <gdk/gdkdrawable.h>
 
+#include <AppKit/AppKit.h>
+
 G_BEGIN_DECLS
 
 /* Drawable implementation for Quartz
