@@ -684,7 +684,9 @@ gtk_cell_view_get_desired_height_for_width_of_row
 gtk_cell_view_get_desired_width_of_row
 gtk_cell_view_get_displayed_row
 gtk_cell_view_get_model
+#ifndef GTK_DISABLE_DEPRECATED
 gtk_cell_view_get_size_of_row
+#endif
 gtk_cell_view_get_type G_GNUC_CONST
 gtk_cell_view_new
 gtk_cell_view_new_with_markup
