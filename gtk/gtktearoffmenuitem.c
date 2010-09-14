@@ -127,100 +127,95 @@ gtk_tearoff_menu_item_draw (GtkWidget *widget,
   GtkWidget *parent;
   GdkWindow *window;
 
-  if (gtk_widget_is_drawable (widget))
+  menu_item = GTK_MENU_ITEM (widget);
+  style = gtk_widget_get_style (widget);
+  window = gtk_widget_get_window (widget);
+  direction = gtk_widget_get_direction (widget);
+  state = gtk_widget_get_state (widget);
+
+  border_width = gtk_container_get_border_width (GTK_CONTAINER (menu_item));
+  x = border_width;
+  y = border_width;
+  width = gtk_widget_get_allocated_width (widget) - border_width * 2;
+  height = gtk_widget_get_allocated_height (widget) - border_width * 2;
+  right_max = x + width;
+
+  if (state == GTK_STATE_PRELIGHT)
     {
-      menu_item = GTK_MENU_ITEM (widget);
+      gint selected_shadow_type;
+      
+      gtk_widget_style_get (widget,
+                            "selected-shadow-type", &selected_shadow_type,
+                            NULL);
+      gtk_cairo_paint_box (style,
+                     cr,
+                     GTK_STATE_PRELIGHT,
+                     selected_shadow_type,
+                     widget, "menuitem",
+                     x, y, width, height);
+    }
 
-      style = gtk_widget_get_style (widget);
-      window = gtk_widget_get_window (widget);
-      direction = gtk_widget_get_direction (widget);
-
-      border_width = gtk_container_get_border_width (GTK_CONTAINER (menu_item));
-      x = border_width;
-      y = border_width;
-      width = gtk_widget_get_allocated_width (widget) - border_width * 2;
-      height = gtk_widget_get_allocated_height (widget) - border_width * 2;
-      right_max = x + width;
-
-      state = gtk_widget_get_state (widget);
+  parent = gtk_widget_get_parent (widget);
+  if (GTK_IS_MENU (parent) && GTK_MENU (parent)->torn_off)
+    {
+      gint arrow_x;
 
       if (state == GTK_STATE_PRELIGHT)
-	{
-	  gint selected_shadow_type;
-	  
-	  gtk_widget_style_get (widget,
-				"selected-shadow-type", &selected_shadow_type,
-				NULL);
-          gtk_cairo_paint_box (style,
-                         cr,
-			 GTK_STATE_PRELIGHT,
-			 selected_shadow_type,
-			 widget, "menuitem",
-			 x, y, width, height);
-	}
+        shadow_type = GTK_SHADOW_IN;
+      else
+        shadow_type = GTK_SHADOW_OUT;
 
-      parent = gtk_widget_get_parent (widget);
-      if (GTK_IS_MENU (parent) && GTK_MENU (parent)->torn_off)
-	{
-	  gint arrow_x;
-
-          if (state == GTK_STATE_PRELIGHT)
-	    shadow_type = GTK_SHADOW_IN;
-	  else
-	    shadow_type = GTK_SHADOW_OUT;
-
-	  if (menu_item->toggle_size > ARROW_SIZE)
-	    {
-	      if (direction == GTK_TEXT_DIR_LTR) {
-		arrow_x = x + (menu_item->toggle_size - ARROW_SIZE)/2;
-		arrow_type = GTK_ARROW_LEFT;
-	      }
-	      else {
-		arrow_x = x + width - menu_item->toggle_size + (menu_item->toggle_size - ARROW_SIZE)/2; 
-		arrow_type = GTK_ARROW_RIGHT;	    
-	      }
-	      x += menu_item->toggle_size + BORDER_SPACING;
-	    }
-	  else
-	    {
-	      if (direction == GTK_TEXT_DIR_LTR) {
-		arrow_x = ARROW_SIZE / 2;
-		arrow_type = GTK_ARROW_LEFT;
-	      }
-	      else {
-		arrow_x = x + width - 2 * ARROW_SIZE + ARROW_SIZE / 2; 
-		arrow_type = GTK_ARROW_RIGHT;	    
-	      }
-	      x += 2 * ARROW_SIZE;
-	    }
+      if (menu_item->toggle_size > ARROW_SIZE)
+        {
+          if (direction == GTK_TEXT_DIR_LTR) {
+            arrow_x = x + (menu_item->toggle_size - ARROW_SIZE)/2;
+            arrow_type = GTK_ARROW_LEFT;
+          }
+          else {
+            arrow_x = x + width - menu_item->toggle_size + (menu_item->toggle_size - ARROW_SIZE)/2; 
+            arrow_type = GTK_ARROW_RIGHT;	    
+          }
+          x += menu_item->toggle_size + BORDER_SPACING;
+        }
+      else
+        {
+          if (direction == GTK_TEXT_DIR_LTR) {
+            arrow_x = ARROW_SIZE / 2;
+            arrow_type = GTK_ARROW_LEFT;
+          }
+          else {
+            arrow_x = x + width - 2 * ARROW_SIZE + ARROW_SIZE / 2; 
+            arrow_type = GTK_ARROW_RIGHT;	    
+          }
+          x += 2 * ARROW_SIZE;
+        }
 
 
-          gtk_cairo_paint_arrow (style, cr,
-                           state, shadow_type,
-			   widget, "tearoffmenuitem",
-			   arrow_type, FALSE,
-			   arrow_x, y + height / 2 - 5, 
-			   ARROW_SIZE, ARROW_SIZE);
-	}
+      gtk_cairo_paint_arrow (style, cr,
+                       state, shadow_type,
+                       widget, "tearoffmenuitem",
+                       arrow_type, FALSE,
+                       arrow_x, y + height / 2 - 5, 
+                       ARROW_SIZE, ARROW_SIZE);
+    }
 
-      while (x < right_max)
-	{
-	  gint x1, x2;
+  while (x < right_max)
+    {
+      gint x1, x2;
 
-	  if (direction == GTK_TEXT_DIR_LTR) {
-	    x1 = x;
-	    x2 = MIN (x + TEAR_LENGTH, right_max);
-	  }
-	  else {
-	    x1 = right_max - x;
-	    x2 = MAX (right_max - x - TEAR_LENGTH, 0);
-	  }
+      if (direction == GTK_TEXT_DIR_LTR) {
+        x1 = x;
+        x2 = MIN (x + TEAR_LENGTH, right_max);
+      }
+      else {
+        x1 = right_max - x;
+        x2 = MAX (right_max - x - TEAR_LENGTH, 0);
+      }
 
-          gtk_cairo_paint_hline (style, cr, GTK_STATE_NORMAL,
-			   widget, "tearoffmenuitem",
-                           x1, x2, y + (height - style->ythickness) / 2);
-	  x += 2 * TEAR_LENGTH;
-	}
+      gtk_cairo_paint_hline (style, cr, GTK_STATE_NORMAL,
+                       widget, "tearoffmenuitem",
+                       x1, x2, y + (height - style->ythickness) / 2);
+      x += 2 * TEAR_LENGTH;
     }
 
   return FALSE;
