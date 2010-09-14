@@ -51,7 +51,13 @@ will be allocated in one dimension, it cannot derive how much height
 a widget will receive for a given width). When grouping widgets that
 trade height for width in mode %GTK_SIZE_GROUP_VERTICAL or %GTK_SIZE_GROUP_BOTH: 
 the height for the minimum width will be the requested height for all 
-widgets in the group.
+widgets in the group. The same is of course true when horizontally grouping
+width for height widgets.
+</para>
+<para>
+Widgets that trade height-for-width should set a reasonably large minimum width
+by way of GtkLabel:width-chars for instance. Widgets with static sizes as well 
+as widgets that grow (such as ellipsizing text) need no such considerations.
 </para>
 <refsect2 id="GtkSizeGroup-BUILDER-UI">
 <title>GtkSizeGroup as GtkBuildable</title>
