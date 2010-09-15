@@ -4367,6 +4367,18 @@ gtk_widget_get_mapped
 gtk_widget_get_support_multidevice
 gtk_widget_set_support_multidevice
 gtk_widget_device_is_shadowed
+gtk_widget_get_h_align
+gtk_widget_set_h_align
+gtk_widget_get_v_align
+gtk_widget_set_v_align
+gtk_widget_get_margin_left
+gtk_widget_set_margin_left
+gtk_widget_get_margin_right
+gtk_widget_set_margin_right
+gtk_widget_get_margin_top
+gtk_widget_set_margin_top
+gtk_widget_get_margin_bottom
+gtk_widget_set_margin_bottom
 #endif
 #endif
 
