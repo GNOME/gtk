@@ -442,6 +442,12 @@ create_window (void)
 
   populate_items (GTK_WRAP_BOX (wrapbox));
 
+  /* This line was added only for the convenience of reproducing
+   * a height-for-width inside GtkScrolledWindow bug (bug 629778).
+   *   -Tristan
+   */
+  gtk_window_set_default_size (GTK_WINDOW (window), 390, -1);
+
   return window;
 }
 
