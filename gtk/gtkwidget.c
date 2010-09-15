@@ -11533,7 +11533,7 @@ gtk_widget_set_v_align (GtkWidget *widget,
   g_object_notify (G_OBJECT (widget), "v-align");
 }
 
-int
+gint
 gtk_widget_get_margin_left (GtkWidget *widget)
 {
   g_return_val_if_fail (GTK_IS_WIDGET (widget), 0);
@@ -11543,7 +11543,7 @@ gtk_widget_get_margin_left (GtkWidget *widget)
 
 void
 gtk_widget_set_margin_left (GtkWidget *widget,
-                            int        margin)
+                            gint       margin)
 {
   GtkWidgetAuxInfo *aux_info;
 
@@ -11560,7 +11560,7 @@ gtk_widget_set_margin_left (GtkWidget *widget,
   g_object_notify (G_OBJECT (widget), "margin-left");
 }
 
-int
+gint
 gtk_widget_get_margin_right (GtkWidget *widget)
 {
   g_return_val_if_fail (GTK_IS_WIDGET (widget), 0);
@@ -11570,7 +11570,7 @@ gtk_widget_get_margin_right (GtkWidget *widget)
 
 void
 gtk_widget_set_margin_right (GtkWidget *widget,
-                             int        margin)
+                             gint       margin)
 {
   GtkWidgetAuxInfo *aux_info;
 
@@ -11587,7 +11587,7 @@ gtk_widget_set_margin_right (GtkWidget *widget,
   g_object_notify (G_OBJECT (widget), "margin-right");
 }
 
-int
+gint
 gtk_widget_get_margin_top (GtkWidget *widget)
 {
   g_return_val_if_fail (GTK_IS_WIDGET (widget), 0);
@@ -11597,7 +11597,7 @@ gtk_widget_get_margin_top (GtkWidget *widget)
 
 void
 gtk_widget_set_margin_top (GtkWidget *widget,
-                           int        margin)
+                           gint       margin)
 {
   GtkWidgetAuxInfo *aux_info;
 
@@ -11614,7 +11614,7 @@ gtk_widget_set_margin_top (GtkWidget *widget,
   g_object_notify (G_OBJECT (widget), "margin-top");
 }
 
-int
+gint
 gtk_widget_get_margin_bottom (GtkWidget *widget)
 {
   g_return_val_if_fail (GTK_IS_WIDGET (widget), 0);
@@ -11624,7 +11624,7 @@ gtk_widget_get_margin_bottom (GtkWidget *widget)
 
 void
 gtk_widget_set_margin_bottom (GtkWidget *widget,
-                              int        margin)
+                              gint       margin)
 {
   GtkWidgetAuxInfo *aux_info;
 

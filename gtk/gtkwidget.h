@@ -747,18 +747,18 @@ void     gtk_widget_set_h_align       (GtkWidget *widget,
 GtkAlign gtk_widget_get_v_align       (GtkWidget *widget);
 void     gtk_widget_set_v_align       (GtkWidget *widget,
                                        GtkAlign   align);
-int      gtk_widget_get_margin_left   (GtkWidget *widget);
+gint     gtk_widget_get_margin_left   (GtkWidget *widget);
 void     gtk_widget_set_margin_left   (GtkWidget *widget,
-                                       int        margin);
-int      gtk_widget_get_margin_right  (GtkWidget *widget);
+                                       gint       margin);
+gint     gtk_widget_get_margin_right  (GtkWidget *widget);
 void     gtk_widget_set_margin_right  (GtkWidget *widget,
-                                       int        margin);
-int      gtk_widget_get_margin_top    (GtkWidget *widget);
+                                       gint       margin);
+gint     gtk_widget_get_margin_top    (GtkWidget *widget);
 void     gtk_widget_set_margin_top    (GtkWidget *widget,
-                                       int        margin);
-int      gtk_widget_get_margin_bottom (GtkWidget *widget);
+                                       gint       margin);
+gint     gtk_widget_get_margin_bottom (GtkWidget *widget);
 void     gtk_widget_set_margin_bottom (GtkWidget *widget,
-                                       int        margin);
+                                       gint       margin);
 
 
 /* The following functions must not be called on an already
