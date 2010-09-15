@@ -27,6 +27,7 @@
 
 #include "gtkmain.h"
 #include "gtkmarshalers.h"
+#include "gtksizerequest.h"
 #include "gtkwin32embedwidget.h"
 #include "gtkintl.h"
 #include "gtkprivate.h"
@@ -81,8 +82,6 @@ gtk_win32_embed_widget_init (GtkWin32EmbedWidget *embed_widget)
   GtkWindow *window;
 
   window = GTK_WINDOW (embed_widget);
-
-  window->type = GTK_WINDOW_TOPLEVEL;
 
   _gtk_widget_set_is_toplevel (GTK_WIDGET (embed_widget), TRUE);
   gtk_container_set_resize_mode (GTK_CONTAINER (embed_widget), GTK_RESIZE_QUEUE);
@@ -209,9 +208,8 @@ gtk_win32_embed_widget_realize (GtkWidget *widget)
   gtk_widget_get_allocation (widget, &allocation);
 
   attributes.window_type = GDK_WINDOW_CHILD;
-  attributes.title = window->title;
-  attributes.wmclass_name = window->wmclass_name;
-  attributes.wmclass_class = window->wmclass_class;
+  attributes.title = gtk_window_get_title (window);
+  _gtk_window_get_wmclass (window, &attributes.wmclass_name, &attributes.wmclass_class);
   attributes.width = allocation.width;
   attributes.height = allocation.height;
   attributes.wclass = GDK_INPUT_OUTPUT;
@@ -230,8 +228,8 @@ gtk_win32_embed_widget_realize (GtkWidget *widget)
 			    GDK_FOCUS_CHANGE_MASK);
 
   attributes_mask = GDK_WA_VISUAL | GDK_WA_COLORMAP;
-  attributes_mask |= (window->title ? GDK_WA_TITLE : 0);
-  attributes_mask |= (window->wmclass_name ? GDK_WA_WMCLASS : 0);
+  attributes_mask |= (gtk_window_get_title (window) ? GDK_WA_TITLE : 0);
+  attributes_mask |= (attributes.wmclass_name ? GDK_WA_WMCLASS : 0);
 
   gdk_window = gdk_window_new (embed_widget->parent_window,
                                &attributes, attributes_mask);
@@ -347,10 +345,10 @@ gtk_win32_embed_widget_focus (GtkWidget        *widget,
       if (gtk_widget_child_focus (old_focus_child, direction))
 	return TRUE;
 
-      if (window->focus_widget)
+      if (gtk_window_get_focus (window))
 	{
 	  /* Wrapped off the end, clear the focus setting for the toplevel */
-	  parent = gtk_widget_get_parent (window->focus_widget);
+	  parent = gtk_widget_get_parent (gtk_window_get_focus (window));
 	  while (parent)
 	    {
 	      gtk_container_set_focus_child (GTK_CONTAINER (parent), NULL);
