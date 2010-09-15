@@ -29,7 +29,7 @@
 #ifndef __GTK_SPINNER_H__
 #define __GTK_SPINNER_H__
 
-#include <gtk/gtkdrawingarea.h>
+#include <gtk/gtkwidget.h>
 
 G_BEGIN_DECLS
 
@@ -46,7 +46,7 @@ typedef struct _GtkSpinnerPrivate  GtkSpinnerPrivate;
 
 struct _GtkSpinner
 {
-  GtkDrawingArea parent;
+  GtkWidget parent;
 
   /* <private> */
   GtkSpinnerPrivate *priv;
@@ -54,7 +54,7 @@ struct _GtkSpinner
 
 struct _GtkSpinnerClass
 {
-  GtkDrawingAreaClass parent_class;
+  GtkWidgetClass parent_class;
 };
 
 GType      gtk_spinner_get_type  (void) G_GNUC_CONST;
