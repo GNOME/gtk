@@ -564,6 +564,7 @@ gail_text_cell_get_character_extents (AtkText          *text,
                                       AtkCoordType     coords)
 {
   GailRendererCell *gail_renderer; 
+  GtkRequisition min_size;
   GtkCellRendererText *gtk_renderer;
   GdkRectangle rendered_rect;
   GtkWidget *widget;
@@ -571,7 +572,7 @@ gail_text_cell_get_character_extents (AtkText          *text,
   PangoRectangle char_rect;
   PangoLayout *layout;
   gchar *renderer_text;
-  gint x_offset, y_offset, index, cell_height, cell_width;
+  gint x_offset, y_offset, index;
   gint xpad, ypad;
 
   if (!GAIL_TEXT_CELL (text)->cell_text)
@@ -604,8 +605,15 @@ gail_text_cell_get_character_extents (AtkText          *text,
   gail_cell_parent_get_cell_area (GAIL_CELL_PARENT (parent), GAIL_CELL (text),
                                   &rendered_rect);
 
-  gtk_cell_renderer_get_size (GTK_CELL_RENDERER (gtk_renderer), widget,
-    &rendered_rect, &x_offset, &y_offset, &cell_width, &cell_height);
+  gtk_cell_size_request_get_size (GTK_CELL_SIZE_REQUEST (gtk_renderer),
+                                  widget,
+                                  &min_size, NULL);
+
+  _gtk_cell_renderer_calc_offset (GTK_CELL_RENDERER (gtk_renderer), &rendered_rect,
+                                  gtk_widget_get_direction (widget),
+                                  min_size.width, min_size.height,
+                                  &x_offset, &y_offset);
+
   layout = create_pango_layout (gtk_renderer, widget);
 
   index = g_utf8_offset_to_pointer (renderer_text, offset) - renderer_text;
@@ -633,6 +641,7 @@ gail_text_cell_get_offset_at_point (AtkText          *text,
   AtkObject *parent;
   GailRendererCell *gail_renderer; 
   GtkCellRendererText *gtk_renderer;
+  GtkRequisition min_size;
   GtkWidget *widget;
   GdkRectangle rendered_rect;
   PangoLayout *layout;
@@ -662,8 +671,14 @@ gail_text_cell_get_offset_at_point (AtkText          *text,
   g_return_val_if_fail (GAIL_IS_CELL_PARENT (parent), -1);
   gail_cell_parent_get_cell_area (GAIL_CELL_PARENT (parent), GAIL_CELL (text),
                                   &rendered_rect);
-  gtk_cell_renderer_get_size (GTK_CELL_RENDERER (gtk_renderer), widget,
-     &rendered_rect, &x_offset, &y_offset, NULL, NULL);
+
+  gtk_cell_size_request_get_size (GTK_CELL_SIZE_REQUEST (gtk_renderer),
+                                  widget,
+                                  &min_size, NULL);
+  _gtk_cell_renderer_calc_offset (GTK_CELL_RENDERER (gtk_renderer), &rendered_rect,
+                                  gtk_widget_get_direction (widget),
+                                  min_size.width, min_size.height,
+                                  &x_offset, &y_offset);
 
   layout = create_pango_layout (gtk_renderer, widget);
 
