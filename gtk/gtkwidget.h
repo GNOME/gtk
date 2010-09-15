@@ -546,8 +546,10 @@ void	   gtk_widget_queue_draw_area	  (GtkWidget	       *widget,
 					   gint                 height);
 void	   gtk_widget_queue_resize	  (GtkWidget	       *widget);
 void	   gtk_widget_queue_resize_no_redraw (GtkWidget *widget);
+#ifndef GTK_DISABLE_DEPRECATED
 void	   gtk_widget_size_request	  (GtkWidget	       *widget,
 					   GtkRequisition      *requisition);
+#endif
 void	   gtk_widget_size_allocate	  (GtkWidget	       *widget,
 					   GtkAllocation       *allocation);
 #ifndef GTK_DISABLE_DEPRECATED

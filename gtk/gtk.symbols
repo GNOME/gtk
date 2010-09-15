@@ -4340,7 +4340,9 @@ gtk_widget_show
 gtk_widget_show_all
 gtk_widget_show_now
 gtk_widget_size_allocate
+#ifndef GTK_DISABLE_DEPRECATED
 gtk_widget_size_request
+#endif
 gtk_widget_style_attach
 gtk_widget_style_get G_GNUC_NULL_TERMINATED
 gtk_widget_style_get_property
