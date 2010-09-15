@@ -96,7 +96,7 @@ gdk_quartz_ref_cairo_surface (GdkDrawable *drawable)
     {
       int width, height;
 
-      gdk_drawable_get_size (drawable, &width, &height);
+      gdk_drawable_get_size (impl->wrapper, &width, &height);
       impl->cairo_surface = gdk_quartz_create_cairo_surface (drawable,
                                                              width, height);
     }
