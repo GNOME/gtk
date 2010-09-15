@@ -5150,6 +5150,7 @@ gtk_widget_draw (GtkWidget *widget,
   GdkEventExpose *tmp_event;
 
   g_return_if_fail (GTK_IS_WIDGET (widget));
+  g_return_if_fail (!GTK_WIDGET_ALLOC_NEEDED (widget));
   g_return_if_fail (cr != NULL);
 
   cairo_save (cr);
