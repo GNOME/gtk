@@ -291,21 +291,21 @@ enum_to_string (GType enum_type,
 }
 
 static GtkWidget*
-create_aligned (GtkAlign    h_align,
-                GtkAlign    v_align)
+create_aligned (GtkAlign halign,
+                GtkAlign valign)
 {
   GtkWidget *widget;
   char *label;
 
   label = g_strdup_printf ("h=%s v=%s",
-                           enum_to_string (GTK_TYPE_ALIGN, h_align),
-                           enum_to_string (GTK_TYPE_ALIGN, v_align));
+                           enum_to_string (GTK_TYPE_ALIGN, halign),
+                           enum_to_string (GTK_TYPE_ALIGN, valign));
 
   widget = create_widget_visible_border (label);
 
   g_object_set (G_OBJECT (TEST_WIDGET (widget)),
-                "h-align", h_align,
-                "v-align", v_align,
+                "halign", halign,
+                "valign", valign,
                 NULL);
 
   return widget;

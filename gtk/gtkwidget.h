@@ -266,30 +266,47 @@ struct _GtkWidget
 
 /**
  * GtkWidgetClass:
- * @parent_class:
- * @activate_signal:
- * @set_scroll_adjustments_signal:
- *
- * <structfield>activate_signal</structfield>
- * The signal to emit when a widget of this class is activated,
- * gtk_widget_activate() handles the emission. Implementation of this
- * signal is optional.
- *
- *
- * <structfield>set_scroll_adjustment_signal</structfield>
- * This signal is emitted  when a widget of this class is added
- * to a scrolling aware parent, gtk_widget_set_scroll_adjustments()
- * handles the emission.
- * Implementation of this signal is optional.
+ * @parent_class: The object class structure needs to be the first
+ *   element in the widget class structure in order for the class mechanism
+ *   to work correctly. This allows a GtkWidgetClass pointer to be cast to
+ *   a GtkObjectClass pointer.
+ * @activate_signal: The signal to emit when a widget of this class is
+ *   activated, gtk_widget_activate() handles the emission.
+ *   Implementation of this signal is optional.
+ * @set_scroll_adjustments_signal: This signal is emitted  when a widget of
+ *   this class is added to a scrolling aware parent,
+ *   gtk_widget_set_scroll_adjustments() handles the emission.
+ *   Implementation of this signal is optional.
+ * @adjust_size_request: Convert an initial size request from a widget's
+ *   #GtkSizeRequest virtual method implementations into a size request to
+ *   be used by parent containers in laying out the widget.
+ *   adjust_size_request adjusts <emphasis>from</emphasis> a child widget's
+ *   original request <emphasis>to</emphasis> what a parent container should
+ *   use for layout. The @for_size argument will be -1 if the request should
+ *   not be for a particular size in the opposing orientation, i.e. if the
+ *   request is not height-for-width or width-for-height. If @for_size is
+ *   greater than -1, it is the proposed allocation in the opposing
+ *   orientation that we need the request for. Implementations of
+ *   adjust_size_request should chain up to the default implementation,
+ *   which applies #GtkWidget's margin properties and imposes any values
+ *   from gtk_widget_set_size_request(). Chaining up should be last,
+ *   <emphasis>after</emphasis> your subclass adjusts the request, so
+ *   #GtkWidget can apply constraints and add the margin properly.
+ * @adjust_size_allocation: Convert an initial size allocation assigned
+ *   by a #GtkContainer using gtk_widget_size_allocate(), into an actual
+ *   size allocation to be used by the widget. adjust_size_allocation
+ *   adjusts <emphasis>to</emphasis> a child widget's actual allocation
+ *   <emphasis>from</emphasis> what a parent container computed for the
+ *   child. The adjusted allocation must be entirely within the original
+ *   allocation. In any custom implementation, chain up to the default
+ *   #GtkWidget implementation of this method, which applies the margin
+ *   and alignment properties of #GtkWidget. Chain up
+ *   <emphasis>before</emphasis> performing your own adjustments so your
+ *   own adjustments remove more allocation after the #GtkWidget base
+ *   class has already removed margin and alignment.
  */
 struct _GtkWidgetClass
 {
-  /* The object class structure needs to be the first
-   *  element in the widget class structure in order for
-   *  the class mechanism to work correctly. This allows a
-   *  GtkWidgetClass pointer to be cast to a GtkObjectClass
-   *  pointer.
-   */
   GtkObjectClass parent_class;
 
   /*< public >*/
@@ -474,6 +491,8 @@ struct _GtkWidgetClass
 				       gboolean    keyboard_tooltip,
 				       GtkTooltip *tooltip);
 
+  /*< public >*/
+
   void         (* adjust_size_request)    (GtkWidget         *widget,
                                            GtkOrientation     orientation,
                                            gint               for_size,
@@ -481,6 +500,8 @@ struct _GtkWidgetClass
                                            gint              *natural_size);
   void         (* adjust_size_allocation) (GtkWidget         *widget,
                                            GtkAllocation     *allocation);
+
+  /*< private >*/
 
   /* Signals without a C default handler class slot:
    * gboolean	(*damage_event)	(GtkWidget      *widget,
@@ -503,8 +524,8 @@ struct _GtkWidgetAuxInfo
   gint width;
   gint height;
 
-  guint   h_align : 4;
-  guint   v_align : 4;
+  guint   halign : 4;
+  guint   valign : 4;
 
   GtkBorder margin;
 };
@@ -741,11 +762,11 @@ AtkObject*       gtk_widget_get_accessible               (GtkWidget          *wi
 
 
 /* Margin and alignment */
-GtkAlign gtk_widget_get_h_align       (GtkWidget *widget);
-void     gtk_widget_set_h_align       (GtkWidget *widget,
+GtkAlign gtk_widget_get_halign        (GtkWidget *widget);
+void     gtk_widget_set_halign        (GtkWidget *widget,
                                        GtkAlign   align);
-GtkAlign gtk_widget_get_v_align       (GtkWidget *widget);
-void     gtk_widget_set_v_align       (GtkWidget *widget,
+GtkAlign gtk_widget_get_valign        (GtkWidget *widget);
+void     gtk_widget_set_valign        (GtkWidget *widget,
                                        GtkAlign   align);
 gint     gtk_widget_get_margin_left   (GtkWidget *widget);
 void     gtk_widget_set_margin_left   (GtkWidget *widget,

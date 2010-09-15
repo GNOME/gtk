@@ -4945,6 +4945,10 @@ gtk_requisition_free
 
 <SUBSECTION>
 GtkAlign
+gtk_widget_get_halign
+gtk_widget_set_halign
+gtk_widget_get_valign
+gtk_widget_set_valign
 gtk_widget_get_margin_left
 gtk_widget_set_margin_left
 gtk_widget_get_margin_right

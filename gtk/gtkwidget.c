@@ -279,8 +279,8 @@ enum {
   PROP_TOOLTIP_TEXT,
   PROP_WINDOW,
   PROP_DOUBLE_BUFFERED,
-  PROP_H_ALIGN,
-  PROP_V_ALIGN,
+  PROP_HALIGN,
+  PROP_VALIGN,
   PROP_MARGIN_LEFT,
   PROP_MARGIN_RIGHT,
   PROP_MARGIN_TOP,
@@ -871,15 +871,15 @@ gtk_widget_class_init (GtkWidgetClass *klass)
                                                          GTK_PARAM_READWRITE));
 
   /**
-   * GtkWidget:h-align
+   * GtkWidget:halign:
    *
    * How to distribute horizontal space if widget gets extra space, see #GtkAlign
    *
    * Since: 3.0
    */
   g_object_class_install_property (gobject_class,
-                                   PROP_H_ALIGN,
-                                   g_param_spec_enum ("h-align",
+                                   PROP_HALIGN,
+                                   g_param_spec_enum ("halign",
                                                       P_("Horizontal Alignment"),
                                                       P_("How to position in extra horizontal space"),
                                                       GTK_TYPE_ALIGN,
@@ -887,15 +887,15 @@ gtk_widget_class_init (GtkWidgetClass *klass)
                                                       GTK_PARAM_READWRITE));
 
   /**
-   * GtkWidget:v-align
+   * GtkWidget:valign:
    *
    * How to distribute vertical space if widget gets extra space, see #GtkAlign
    *
    * Since: 3.0
    */
   g_object_class_install_property (gobject_class,
-                                   PROP_V_ALIGN,
-                                   g_param_spec_enum ("v-align",
+                                   PROP_VALIGN,
+                                   g_param_spec_enum ("valign",
                                                       P_("Vertical Alignment"),
                                                       P_("How to position in extra vertical space"),
                                                       GTK_TYPE_ALIGN,
@@ -2941,11 +2941,11 @@ gtk_widget_set_property (GObject         *object,
     case PROP_DOUBLE_BUFFERED:
       gtk_widget_set_double_buffered (widget, g_value_get_boolean (value));
       break;
-    case PROP_H_ALIGN:
-      gtk_widget_set_h_align (widget, g_value_get_enum (value));
+    case PROP_HALIGN:
+      gtk_widget_set_halign (widget, g_value_get_enum (value));
       break;
-    case PROP_V_ALIGN:
-      gtk_widget_set_v_align (widget, g_value_get_enum (value));
+    case PROP_VALIGN:
+      gtk_widget_set_valign (widget, g_value_get_enum (value));
       break;
     case PROP_MARGIN_LEFT:
       gtk_widget_set_margin_left (widget, g_value_get_int (value));
@@ -3077,11 +3077,11 @@ gtk_widget_get_property (GObject         *object,
     case PROP_DOUBLE_BUFFERED:
       g_value_set_boolean (value, gtk_widget_get_double_buffered (widget));
       break;
-    case PROP_H_ALIGN:
-      g_value_set_enum (value, gtk_widget_get_h_align (widget));
+    case PROP_HALIGN:
+      g_value_set_enum (value, gtk_widget_get_halign (widget));
       break;
-    case PROP_V_ALIGN:
-      g_value_set_enum (value, gtk_widget_get_v_align (widget));
+    case PROP_VALIGN:
+      g_value_set_enum (value, gtk_widget_get_valign (widget));
       break;
     case PROP_MARGIN_LEFT:
       g_value_set_int (value, gtk_widget_get_margin_left (widget));
@@ -4185,8 +4185,10 @@ gtk_widget_queue_shallow_draw (GtkWidget *widget)
  * and position to their child widgets.
  *
  * In this function, the allocation may be adjusted. It will be forced
- * to a 1x1 minimum size, and the adjust_size_allocation virtual method
- * on the child will be used to adjust the allocation.
+ * to a 1x1 minimum size, and the adjust_size_allocation virtual
+ * method on the child will be used to adjust the allocation. Standard
+ * adjustments include removing the widget's margins, and applying the
+ * widget's #GtkWidget:halign and #GtkWidget:valign properties.
  **/
 void
 gtk_widget_size_allocate (GtkWidget	*widget,
@@ -4569,7 +4571,7 @@ get_span_inside_border_horizontal (GtkWidget              *widget,
                                    int                    *width_inside_p)
 {
   get_span_inside_border (widget,
-                          aux_info->h_align,
+                          aux_info->halign,
                           aux_info->margin.left,
                           aux_info->margin.right,
                           allocated_outside_width,
@@ -4587,7 +4589,7 @@ get_span_inside_border_vertical (GtkWidget              *widget,
                                  int                    *height_inside_p)
 {
   get_span_inside_border (widget,
-                          aux_info->v_align,
+                          aux_info->valign,
                           aux_info->margin.top,
                           aux_info->margin.bottom,
                           allocated_outside_height,
@@ -11484,31 +11486,31 @@ gtk_widget_size_request_init (GtkSizeRequestIface *iface)
 }
 
 /**
- * gtk_widget_get_h_align:
+ * gtk_widget_get_halign:
  * @widget: a #GtkWidget
  *
- * Gets the value of the #GtkWidget:h-align property.
+ * Gets the value of the #GtkWidget:halign property.
  *
  * Returns: the horizontal alignment of @widget
  */
 GtkAlign
-gtk_widget_get_h_align (GtkWidget *widget)
+gtk_widget_get_halign (GtkWidget *widget)
 {
   g_return_val_if_fail (GTK_IS_WIDGET (widget), GTK_ALIGN_FILL);
-  return _gtk_widget_get_aux_info_or_defaults (widget)->h_align;
+  return _gtk_widget_get_aux_info_or_defaults (widget)->halign;
 }
 
 /**
- * gtk_widget_set_h_align:
+ * gtk_widget_set_halign:
  * @widget: a #GtkWidget
  * @align: the horizontal alignment
  *
  * Sets the horizontal alignment of @widget.
- * See the #GtkWidget:h-align property.
+ * See the #GtkWidget:halign property.
  */
 void
-gtk_widget_set_h_align (GtkWidget *widget,
-                        GtkAlign   align)
+gtk_widget_set_halign (GtkWidget *widget,
+                       GtkAlign   align)
 {
   GtkWidgetAuxInfo *aux_info;
 
@@ -11516,40 +11518,40 @@ gtk_widget_set_h_align (GtkWidget *widget,
 
   aux_info = _gtk_widget_get_aux_info (widget, TRUE);
 
-  if (aux_info->h_align == align)
+  if (aux_info->halign == align)
     return;
 
-  aux_info->h_align = align;
+  aux_info->halign = align;
   gtk_widget_queue_resize (widget);
-  g_object_notify (G_OBJECT (widget), "h-align");
+  g_object_notify (G_OBJECT (widget), "halign");
 }
 
 /**
- * gtk_widget_get_v_align:
+ * gtk_widget_get_valign:
  * @widget: a #GtkWidget
  *
- * Gets the value of the #GtkWidget:v-align property.
+ * Gets the value of the #GtkWidget:valign property.
  *
  * Returns: the vertical alignment of @widget
  */
 GtkAlign
-gtk_widget_get_v_align (GtkWidget *widget)
+gtk_widget_get_valign (GtkWidget *widget)
 {
   g_return_val_if_fail (GTK_IS_WIDGET (widget), GTK_ALIGN_FILL);
-  return _gtk_widget_get_aux_info_or_defaults (widget)->v_align;
+  return _gtk_widget_get_aux_info_or_defaults (widget)->valign;
 }
 
 /**
- * gtk_widget_set_v_align:
+ * gtk_widget_set_valign:
  * @widget: a #GtkWidget
  * @align: the vertical alignment
  *
  * Sets the vertical alignment of @widget.
- * See the #GtkWidget:h-align property.
+ * See the #GtkWidget:valign property.
  */
 void
-gtk_widget_set_v_align (GtkWidget *widget,
-                        GtkAlign   align)
+gtk_widget_set_valign (GtkWidget *widget,
+                       GtkAlign   align)
 {
   GtkWidgetAuxInfo *aux_info;
 
@@ -11557,12 +11559,12 @@ gtk_widget_set_v_align (GtkWidget *widget,
 
   aux_info = _gtk_widget_get_aux_info (widget, TRUE);
 
-  if (aux_info->v_align == align)
+  if (aux_info->valign == align)
     return;
 
-  aux_info->v_align = align;
+  aux_info->valign = align;
   gtk_widget_queue_resize (widget);
-  g_object_notify (G_OBJECT (widget), "v-align");
+  g_object_notify (G_OBJECT (widget), "valign");
 }
 
 /**
@@ -12202,6 +12204,21 @@ gtk_widget_get_has_tooltip (GtkWidget *widget)
  *
  * Retrieves the widget's allocation.
  *
+ * Note, when implementing a #GtkContainer: a widget's allocation will
+ * be its "adjusted" allocation, that is, the widget's parent
+ * container typically calls gtk_widget_size_allocate() with an
+ * allocation, and that allocation is then adjusted (to handle margin
+ * and alignment for example) before assignment to the widget.
+ * gtk_widget_get_allocation() returns the adjusted allocation that
+ * was actually assigned to the widget. The adjusted allocation is
+ * guaranteed to be completely contained within the
+ * gtk_widget_size_allocate() allocation, however. So a #GtkContainer
+ * is guaranteed that its children stay inside the assigned bounds,
+ * but not that they have exactly the bounds the container assigned.
+ * There is no way to get the original allocation assigned by
+ * gtk_widget_size_allocate(), since it isn't stored; if a container
+ * implementation needs that information it will have to track it itself.
+ *
  * Since: 2.18
  */
 void
@@ -12225,6 +12242,13 @@ gtk_widget_get_allocation (GtkWidget     *widget,
  *
  * Sets the widget's allocation.  This should not be used
  * directly, but from within a widget's size_allocate method.
+ *
+ * The allocation set should be the "adjusted" or actual
+ * allocation. If you're implementing a #GtkContainer, you want to use
+ * gtk_widget_size_allocate() instead of gtk_widget_set_allocation().
+ * The GtkWidgetClass::adjust_size_allocation virtual method adjusts the
+ * allocation inside gtk_widget_size_allocate() to create an adjusted
+ * allocation.
  *
  * Since: 2.18
  */

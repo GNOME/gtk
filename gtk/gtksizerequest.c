@@ -87,6 +87,33 @@
  * width. By following this rule any widget that handles height-for-width
  * or width-for-height requests will always be allocated at least
  * enough space to fit its own content.
+ *
+ * Often a widget needs to get its own request during size request or
+ * allocation, for example when computing height it may need to also
+ * compute width, or when deciding how to use an allocation the widget may
+ * need to know its natural size. In these cases, the widget should be
+ * careful to call its virtual methods directly, like this:
+ * <example>
+ *   <title>Widget calling its own size request method.</title>
+ *   <programlisting>
+ * GTK_SIZE_REQUEST_GET_IFACE(widget)-&gt;get_width(GTK_SIZE_REQUEST(widget), &min, &natural);
+ *   </programlisting>
+ * </example>
+ *
+ * It will not work to use the wrapper functions, such as
+ * gtk_size_request_get_width(), inside your own size request
+ * implementation. These return a request adjusted by #GtkSizeGroup
+ * and by the GtkWidgetClass::adjust_size_request virtual method. If a
+ * widget used the wrappers inside its virtual method implementations,
+ * then the adjustments (such as widget margins) would be applied
+ * twice. GTK+ therefore does not allow this and will warn if you try
+ * to do it.
+ *
+ * Of course if you are getting the size request for
+ * <emphasis>another</emphasis> widget, such as a child of a
+ * container, you <emphasis>must</emphasis> use the wrapper APIs;
+ * otherwise, you would not properly consider widget margins,
+ * #GtkSizeGroup, and so forth.
  * </para>
  * </refsect2>
  */
@@ -420,6 +447,12 @@ gtk_size_request_get_request_mode (GtkSizeRequest *widget)
  * <note><para>This call is specific to height-for-width
  * requests.</para></note>
  *
+ * The returned request will be modified by the
+ * GtkWidgetClass::adjust_size_request virtual method and by any
+ * #GtkSizeGroup that have been applied. That is, the returned request
+ * is the one that should be used for layout, not necessarily the one
+ * returned by the widget itself.
+ *
  * Since: 3.0
  */
 void
@@ -441,6 +474,12 @@ gtk_size_request_get_width (GtkSizeRequest *widget,
  * Retrieves a widget's initial minimum and natural height.
  *
  * <note><para>This call is specific to width-for-height requests.</para></note>
+ *
+ * The returned request will be modified by the
+ * GtkWidgetClass::adjust_size_request virtual method and by any
+ * #GtkSizeGroup that have been applied. That is, the returned request
+ * is the one that should be used for layout, not necessarily the one
+ * returned by the widget itself.
  *
  * Since: 3.0
  */
@@ -465,6 +504,12 @@ gtk_size_request_get_height (GtkSizeRequest *widget,
  * Retrieves a widget's minimum and natural width if it would be given
  * the specified @height.
  *
+ * The returned request will be modified by the
+ * GtkWidgetClass::adjust_size_request virtual method and by any
+ * #GtkSizeGroup that have been applied. That is, the returned request
+ * is the one that should be used for layout, not necessarily the one
+ * returned by the widget itself.
+ *
  * Since: 3.0
  */
 void
@@ -486,6 +531,12 @@ gtk_size_request_get_width_for_height (GtkSizeRequest *widget,
  *
  * Retrieves a widget's minimum and natural height if it would be given
  * the specified @width.
+ *
+ * The returned request will be modified by the
+ * GtkWidgetClass::adjust_size_request virtual method and by any
+ * #GtkSizeGroup that have been applied. That is, the returned request
+ * is the one that should be used for layout, not necessarily the one
+ * returned by the widget itself.
  *
  * Since: 3.0
  */
