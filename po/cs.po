@@ -15,83 +15,84 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-07-11 18:54+0200\n"
-"PO-Revision-Date: 2010-07-11 18:52+0200\n"
+"POT-Creation-Date: 2010-09-15 20:01+0200\n"
+"PO-Revision-Date: 2010-09-15 19:23+0200\n"
 "Last-Translator: Petr Kovar <pknbe@volny.cz>\n"
 "Language-Team: Czech <gnome-cs-list@gnome.org>\n"
+"Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
 "X-Generator: Lokalize 1.0\n"
 
-#: ../gdk/gdk.c:102
+#: ../gdk/gdk.c:104
 #, c-format
 msgid "Error parsing option --gdk-debug"
 msgstr "Chyba při analýze přepínače --gdk-debug"
 
-#: ../gdk/gdk.c:122
+#: ../gdk/gdk.c:124
 #, c-format
 msgid "Error parsing option --gdk-no-debug"
 msgstr "Chyba při analýze přepínače --gdk-no-debug"
 
 #. Description of --class=CLASS in --help output
-#: ../gdk/gdk.c:150
+#: ../gdk/gdk.c:152
 msgid "Program class as used by the window manager"
 msgstr "Třída programu používaná správcem oken"
 
 #. Placeholder in --class=CLASS in --help output
-#: ../gdk/gdk.c:151
+#: ../gdk/gdk.c:153
 msgid "CLASS"
 msgstr "TŘÍDA"
 
 #. Description of --name=NAME in --help output
-#: ../gdk/gdk.c:153
+#: ../gdk/gdk.c:155
 msgid "Program name as used by the window manager"
 msgstr "Název programu používaný správcem oken"
 
 #. Placeholder in --name=NAME in --help output
-#: ../gdk/gdk.c:154
+#: ../gdk/gdk.c:156
 msgid "NAME"
 msgstr "NÁZEV"
 
 #. Description of --display=DISPLAY in --help output
-#: ../gdk/gdk.c:156
+#: ../gdk/gdk.c:158
 msgid "X display to use"
 msgstr "Displej X, který použije"
 
 #. Placeholder in --display=DISPLAY in --help output
-#: ../gdk/gdk.c:157
+#: ../gdk/gdk.c:159
 msgid "DISPLAY"
 msgstr "DISPLEJ"
 
 #. Description of --screen=SCREEN in --help output
-#: ../gdk/gdk.c:159
+#: ../gdk/gdk.c:161
 msgid "X screen to use"
 msgstr "Obrazovka X, kterou použije"
 
 #. Placeholder in --screen=SCREEN in --help output
-#: ../gdk/gdk.c:160
+#: ../gdk/gdk.c:162
 msgid "SCREEN"
 msgstr "OBRAZOVKA"
 
 #. Description of --gdk-debug=FLAGS in --help output
-#: ../gdk/gdk.c:163
-msgid "Gdk debugging flags to set"
-msgstr "Ladicí příznaky Gdk, které nastaví"
+#: ../gdk/gdk.c:165
+msgid "GDK debugging flags to set"
+msgstr "Ladicí příznaky GDK, které nastaví"
 
 #. Placeholder in --gdk-debug=FLAGS in --help output
 #. Placeholder in --gdk-no-debug=FLAGS in --help output
 #. Placeholder in --gtk-debug=FLAGS in --help output
 #. Placeholder in --gtk-no-debug=FLAGS in --help output
-#: ../gdk/gdk.c:164 ../gdk/gdk.c:167 ../gtk/gtkmain.c:438 ../gtk/gtkmain.c:441
+#: ../gdk/gdk.c:166 ../gdk/gdk.c:169 ../gtk/gtkmain.c:533 ../gtk/gtkmain.c:536
 msgid "FLAGS"
 msgstr "PŘÍZNAKY"
 
 #. Description of --gdk-no-debug=FLAGS in --help output
-#: ../gdk/gdk.c:166
-msgid "Gdk debugging flags to unset"
-msgstr "Ladicí příznaky Gdk, jejichž nastavení zruší"
+#: ../gdk/gdk.c:168
+msgid "GDK debugging flags to unset"
+msgstr "Ladicí příznaky GDK, jejichž nastavení zruší"
 
 #: ../gdk/keyname-table.h:3940
 msgctxt "keyboard label"
@@ -308,22 +309,17 @@ msgstr "Velikost palety v osmibitovém režimu"
 msgid "COLORS"
 msgstr "BARVY"
 
-#. Description of --sync in --help output
-#: ../gdk/x11/gdkmain-x11.c:93
-msgid "Make X calls synchronous"
-msgstr "Provede volání X synchronně"
-
 #: ../gdk/x11/gdkapplaunchcontext-x11.c:312
 #, c-format
 msgid "Starting %s"
 msgstr "Spouští se %s"
 
-#: ../gdk/x11/gdkapplaunchcontext-x11.c:314
+#: ../gdk/x11/gdkapplaunchcontext-x11.c:316
 #, c-format
 msgid "Opening %s"
 msgstr "Otevírá se %s"
 
-#: ../gdk/x11/gdkapplaunchcontext-x11.c:317
+#: ../gdk/x11/gdkapplaunchcontext-x11.c:321
 #, c-format
 msgid "Opening %d Item"
 msgid_plural "Opening %d Items"
@@ -331,50 +327,63 @@ msgstr[0] "Otevírání %d položky"
 msgstr[1] "Otevírání %d položek"
 msgstr[2] "Otevírání %d položek"
 
-#: ../gtk/gtkaboutdialog.c:240
+#. Description of --sync in --help output
+#: ../gdk/x11/gdkmain-x11.c:93
+msgid "Make X calls synchronous"
+msgstr "Provede volání X synchronně"
+
+#. Translators: this is the license preamble; the string at the end
+#. * contains the URL of the license.
+#.
+#: ../gtk/gtkaboutdialog.c:124
+#, c-format
+msgid "This program comes with ABSOLUTELY NO WARRANTY; for details, visit %s"
+msgstr ""
+
+#: ../gtk/gtkaboutdialog.c:264
 msgid "Could not show link"
 msgstr "Nelze zobrazit odkaz"
 
-#: ../gtk/gtkaboutdialog.c:363 ../gtk/gtkaboutdialog.c:2226
+#: ../gtk/gtkaboutdialog.c:390 ../gtk/gtkaboutdialog.c:2293
 msgid "License"
 msgstr "Licence"
 
-#: ../gtk/gtkaboutdialog.c:364
+#: ../gtk/gtkaboutdialog.c:391
 msgid "The license of the program"
 msgstr "Licence programu"
 
 #. Add the credits button
-#: ../gtk/gtkaboutdialog.c:627
+#: ../gtk/gtkaboutdialog.c:685
 msgid "C_redits"
 msgstr "Zá_sluhy"
 
 #. Add the license button
-#: ../gtk/gtkaboutdialog.c:641
+#: ../gtk/gtkaboutdialog.c:699
 msgid "_License"
 msgstr "_Licence"
 
-#: ../gtk/gtkaboutdialog.c:900
+#: ../gtk/gtkaboutdialog.c:964
 #, c-format
 msgid "About %s"
 msgstr "O aplikaci %s"
 
-#: ../gtk/gtkaboutdialog.c:2143
+#: ../gtk/gtkaboutdialog.c:2211
 msgid "Credits"
 msgstr "Zásluhy"
 
-#: ../gtk/gtkaboutdialog.c:2176
+#: ../gtk/gtkaboutdialog.c:2243
 msgid "Written by"
 msgstr "Napsali"
 
-#: ../gtk/gtkaboutdialog.c:2179
+#: ../gtk/gtkaboutdialog.c:2246
 msgid "Documented by"
 msgstr "Zdokumentovali"
 
-#: ../gtk/gtkaboutdialog.c:2191
+#: ../gtk/gtkaboutdialog.c:2258
 msgid "Translated by"
 msgstr "Přeložili"
 
-#: ../gtk/gtkaboutdialog.c:2195
+#: ../gtk/gtkaboutdialog.c:2262
 msgid "Artwork by"
 msgstr "Grafika"
 
@@ -383,7 +392,7 @@ msgstr "Grafika"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: ../gtk/gtkaccellabel.c:157
+#: ../gtk/gtkaccellabel.c:166
 msgctxt "keyboard label"
 msgid "Shift"
 msgstr "Shift"
@@ -393,7 +402,7 @@ msgstr "Shift"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: ../gtk/gtkaccellabel.c:163
+#: ../gtk/gtkaccellabel.c:172
 msgctxt "keyboard label"
 msgid "Ctrl"
 msgstr "Ctrl"
@@ -403,7 +412,7 @@ msgstr "Ctrl"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: ../gtk/gtkaccellabel.c:169
+#: ../gtk/gtkaccellabel.c:178
 msgctxt "keyboard label"
 msgid "Alt"
 msgstr "Alt"
@@ -413,7 +422,7 @@ msgstr "Alt"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: ../gtk/gtkaccellabel.c:767
+#: ../gtk/gtkaccellabel.c:783
 msgctxt "keyboard label"
 msgid "Super"
 msgstr "Super"
@@ -423,7 +432,7 @@ msgstr "Super"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: ../gtk/gtkaccellabel.c:780
+#: ../gtk/gtkaccellabel.c:796
 msgctxt "keyboard label"
 msgid "Hyper"
 msgstr "Hyper"
@@ -433,17 +442,17 @@ msgstr "Hyper"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: ../gtk/gtkaccellabel.c:794
+#: ../gtk/gtkaccellabel.c:810
 msgctxt "keyboard label"
 msgid "Meta"
 msgstr "Meta"
 
-#: ../gtk/gtkaccellabel.c:811
+#: ../gtk/gtkaccellabel.c:826
 msgctxt "keyboard label"
 msgid "Space"
 msgstr "Mezerník"
 
-#: ../gtk/gtkaccellabel.c:814
+#: ../gtk/gtkaccellabel.c:829
 msgctxt "keyboard label"
 msgid "Backslash"
 msgstr "Zpětné lomítko"
@@ -455,7 +464,7 @@ msgstr "Neplatná funkce typu na řádku %d: \"%s\""
 
 #: ../gtk/gtkbuilderparser.c:407
 #, c-format
-msgid "Duplicate object id '%s' on line %d (previously on line %d)"
+msgid "Duplicate object ID '%s' on line %d (previously on line %d)"
 msgstr "Duplicitní ID objektu \"%s\" na řádku %d (dříve na řádku %d)"
 
 #: ../gtk/gtkbuilderparser.c:859
@@ -478,7 +487,7 @@ msgstr "Neobsloužená značka: \"%s\""
 #. * text direction of RTL and specify "calendar:YM", then the year
 #. * will appear to the right of the month.
 #.
-#: ../gtk/gtkcalendar.c:830
+#: ../gtk/gtkcalendar.c:886
 msgid "calendar:MY"
 msgstr "calendar:MY"
 
@@ -486,7 +495,7 @@ msgstr "calendar:MY"
 #. * first day of the week to calendar:week_start:1 if you want Monday
 #. * to be the first day of the week, and so on.
 #.
-#: ../gtk/gtkcalendar.c:868
+#: ../gtk/gtkcalendar.c:924
 msgid "calendar:week_start:0"
 msgstr "calendar:week_start:1"
 
@@ -495,7 +504,7 @@ msgstr "calendar:week_start:1"
 #. *
 #. * If you don't understand this, leave it as "2000"
 #.
-#: ../gtk/gtkcalendar.c:1878
+#: ../gtk/gtkcalendar.c:2014
 msgctxt "year measurement template"
 msgid "2000"
 msgstr "2000"
@@ -510,7 +519,7 @@ msgstr "2000"
 #. * digits. That needs support from your system and locale definition
 #. * too.
 #.
-#: ../gtk/gtkcalendar.c:1909 ../gtk/gtkcalendar.c:2567
+#: ../gtk/gtkcalendar.c:2045 ../gtk/gtkcalendar.c:2725
 #, c-format
 msgctxt "calendar:day:digits"
 msgid "%d"
@@ -526,7 +535,7 @@ msgstr "%d"
 #. * digits. That needs support from your system and locale definition
 #. * too.
 #.
-#: ../gtk/gtkcalendar.c:1941 ../gtk/gtkcalendar.c:2430
+#: ../gtk/gtkcalendar.c:2077 ../gtk/gtkcalendar.c:2584
 #, c-format
 msgctxt "calendar:week:digits"
 msgid "%d"
@@ -542,7 +551,7 @@ msgstr "%d"
 #. *
 #. * "%Y" is appropriate for most locales.
 #.
-#: ../gtk/gtkcalendar.c:2221
+#: ../gtk/gtkcalendar.c:2369
 msgctxt "calendar year format"
 msgid "%Y"
 msgstr "%Y"
@@ -550,7 +559,7 @@ msgstr "%Y"
 #. This label is displayed in a treeview cell displaying
 #. * a disabled accelerator key combination.
 #.
-#: ../gtk/gtkcellrendereraccel.c:255
+#: ../gtk/gtkcellrendereraccel.c:272
 msgctxt "Accelerator"
 msgid "Disabled"
 msgstr "Vypnuto"
@@ -559,7 +568,7 @@ msgstr "Vypnuto"
 #. * an accelerator key combination that is not valid according
 #. * to gtk_accelerator_valid().
 #.
-#: ../gtk/gtkcellrendereraccel.c:265
+#: ../gtk/gtkcellrendereraccel.c:282
 msgctxt "Accelerator"
 msgid "Invalid"
 msgstr "Neplatné"
@@ -568,25 +577,25 @@ msgstr "Neplatné"
 #. * an accelerator when the cell is clicked to change the
 #. * acelerator.
 #.
-#: ../gtk/gtkcellrendereraccel.c:400 ../gtk/gtkcellrendereraccel.c:651
+#: ../gtk/gtkcellrendereraccel.c:418 ../gtk/gtkcellrendereraccel.c:676
 msgid "New accelerator..."
 msgstr "Nová klávesová zkratka..."
 
-#: ../gtk/gtkcellrendererprogress.c:360 ../gtk/gtkcellrendererprogress.c:447
+#: ../gtk/gtkcellrendererprogress.c:363 ../gtk/gtkcellrendererprogress.c:453
 #, c-format
 msgctxt "progress bar label"
 msgid "%d %%"
 msgstr "%d %%"
 
-#: ../gtk/gtkcolorbutton.c:187 ../gtk/gtkcolorbutton.c:558
+#: ../gtk/gtkcolorbutton.c:176 ../gtk/gtkcolorbutton.c:459
 msgid "Pick a Color"
 msgstr "Vybrat barvu"
 
-#: ../gtk/gtkcolorbutton.c:447
+#: ../gtk/gtkcolorbutton.c:350
 msgid "Received invalid color data\n"
 msgstr "Přijata neplatná data barvy\n"
 
-#: ../gtk/gtkcolorsel.c:355
+#: ../gtk/gtkcolorsel.c:366
 msgid ""
 "Select the color you want from the outer ring. Select the darkness or "
 "lightness of that color using the inner triangle."
@@ -594,73 +603,74 @@ msgstr ""
 "Vyberte požadovanou barvu z vnějšího kruhu. Tmavost nebo světlost barvy "
 "vyberte pomocí vnitřního trojúhelníku."
 
-#: ../gtk/gtkcolorsel.c:379
+#: ../gtk/gtkcolorsel.c:390
 msgid ""
 "Click the eyedropper, then click a color anywhere on your screen to select "
 "that color."
 msgstr "Klikněte na kapátko, pak vyberte barvu kliknutím kdekoli na obrazovce."
 
-#: ../gtk/gtkcolorsel.c:388
+#: ../gtk/gtkcolorsel.c:399
 msgid "_Hue:"
 msgstr "_Odstín:"
 
-#: ../gtk/gtkcolorsel.c:389
+#: ../gtk/gtkcolorsel.c:400
 msgid "Position on the color wheel."
 msgstr "Pozice na barevném kotouči."
 
-#: ../gtk/gtkcolorsel.c:391
+#: ../gtk/gtkcolorsel.c:402
 msgid "_Saturation:"
 msgstr "_Sytost:"
 
-#: ../gtk/gtkcolorsel.c:392
+#: ../gtk/gtkcolorsel.c:403
+#, fuzzy
 msgid "Intensity of the color."
-msgstr "Intenzita barvy."
+msgstr "Průhlednost barvy."
 
-#: ../gtk/gtkcolorsel.c:393
+#: ../gtk/gtkcolorsel.c:404
 msgid "_Value:"
 msgstr "_Hodnota:"
 
-#: ../gtk/gtkcolorsel.c:394
+#: ../gtk/gtkcolorsel.c:405
 msgid "Brightness of the color."
 msgstr "Jas barvy."
 
-#: ../gtk/gtkcolorsel.c:395
+#: ../gtk/gtkcolorsel.c:406
 msgid "_Red:"
 msgstr "Če_rvená:"
 
-#: ../gtk/gtkcolorsel.c:396
+#: ../gtk/gtkcolorsel.c:407
 msgid "Amount of red light in the color."
 msgstr "Množství červeného světla v barvě."
 
-#: ../gtk/gtkcolorsel.c:397
+#: ../gtk/gtkcolorsel.c:408
 msgid "_Green:"
 msgstr "_Zelená:"
 
-#: ../gtk/gtkcolorsel.c:398
+#: ../gtk/gtkcolorsel.c:409
 msgid "Amount of green light in the color."
 msgstr "Množství zeleného světla v barvě."
 
-#: ../gtk/gtkcolorsel.c:399
+#: ../gtk/gtkcolorsel.c:410
 msgid "_Blue:"
 msgstr "_Modrá:"
 
-#: ../gtk/gtkcolorsel.c:400
+#: ../gtk/gtkcolorsel.c:411
 msgid "Amount of blue light in the color."
 msgstr "Množství modrého světla v barvě."
 
-#: ../gtk/gtkcolorsel.c:403
+#: ../gtk/gtkcolorsel.c:414
 msgid "Op_acity:"
 msgstr "_Krytí:"
 
-#: ../gtk/gtkcolorsel.c:410 ../gtk/gtkcolorsel.c:420
+#: ../gtk/gtkcolorsel.c:421 ../gtk/gtkcolorsel.c:431
 msgid "Transparency of the color."
 msgstr "Průhlednost barvy."
 
-#: ../gtk/gtkcolorsel.c:427
+#: ../gtk/gtkcolorsel.c:438
 msgid "Color _name:"
 msgstr "_Název barvy:"
 
-#: ../gtk/gtkcolorsel.c:441
+#: ../gtk/gtkcolorsel.c:452
 msgid ""
 "You can enter an HTML-style hexadecimal color value, or simply a color name "
 "such as 'orange' in this entry."
@@ -668,15 +678,15 @@ msgstr ""
 "Můžete zadat hexadecimální hodnotu barvy ve stylu HTML, nebo jednoduše název "
 "barvy, například \"orange\"."
 
-#: ../gtk/gtkcolorsel.c:471
+#: ../gtk/gtkcolorsel.c:482
 msgid "_Palette:"
 msgstr "_Paleta:"
 
-#: ../gtk/gtkcolorsel.c:500
+#: ../gtk/gtkcolorsel.c:511
 msgid "Color Wheel"
 msgstr "Barevný kotouč"
 
-#: ../gtk/gtkcolorsel.c:959
+#: ../gtk/gtkcolorsel.c:975
 msgid ""
 "The previously-selected color, for comparison to the color you're selecting "
 "now. You can drag this color to a palette entry, or select this color as "
@@ -686,7 +696,7 @@ msgstr ""
 "barvu můžete přetáhnout do položky palety nebo vybrat jako aktuální "
 "přetažením na ukazatel druhé barvy."
 
-#: ../gtk/gtkcolorsel.c:962
+#: ../gtk/gtkcolorsel.c:978
 msgid ""
 "The color you've chosen. You can drag this color to a palette entry to save "
 "it for use in the future."
@@ -694,21 +704,21 @@ msgstr ""
 "Barva, kterou jste vybrali. Tuto barvu můžete přetáhnout do položky palety, "
 "a tím ji uložit pro budoucí použití."
 
-#: ../gtk/gtkcolorsel.c:967
+#: ../gtk/gtkcolorsel.c:983
 msgid ""
 "The previously-selected color, for comparison to the color you're selecting "
 "now."
 msgstr "Dříve vybraná barva, pro porovnání s barvou, kterou vybíráte nyní."
 
-#: ../gtk/gtkcolorsel.c:970
+#: ../gtk/gtkcolorsel.c:986
 msgid "The color you've chosen."
 msgstr "Barva, kterou jste vybrali."
 
-#: ../gtk/gtkcolorsel.c:1383
+#: ../gtk/gtkcolorsel.c:1409
 msgid "_Save color here"
 msgstr "_Uložit barvu zde"
 
-#: ../gtk/gtkcolorsel.c:1588
+#: ../gtk/gtkcolorsel.c:1614
 msgid ""
 "Click this palette entry to make it the current color. To change this entry, "
 "drag a color swatch here or right-click it and select \"Save color here.\""
@@ -717,7 +727,7 @@ msgstr ""
 "palety změnit, přetáhněte na její místo jinou barvu, nebo klikněte pravým "
 "tlačítkem myši a vyberte \"Uložit barvu zde\"."
 
-#: ../gtk/gtkcolorseldialog.c:170
+#: ../gtk/gtkcolorseldialog.c:189
 msgid "Color Selection"
 msgstr "Výběr barvy"
 
@@ -727,93 +737,97 @@ msgstr "Výběr barvy"
 #. * Do *not* translate it to "predefinito:mm", if it
 #. * it isn't default:mm or default:inch it will not work
 #.
-#: ../gtk/gtkcustompaperunixdialog.c:117
+#: ../gtk/gtkcustompaperunixdialog.c:116
 msgid "default:mm"
 msgstr "default:mm"
 
 #. And show the custom paper dialog
-#: ../gtk/gtkcustompaperunixdialog.c:372 ../gtk/gtkprintunixdialog.c:3225
+#: ../gtk/gtkcustompaperunixdialog.c:374 ../gtk/gtkprintunixdialog.c:3248
 msgid "Manage Custom Sizes"
 msgstr "Spravovat vlastní velikosti"
 
-#: ../gtk/gtkcustompaperunixdialog.c:532 ../gtk/gtkpagesetupunixdialog.c:791
+#: ../gtk/gtkcustompaperunixdialog.c:534 ../gtk/gtkpagesetupunixdialog.c:790
 msgid "inch"
 msgstr "palec"
 
-#: ../gtk/gtkcustompaperunixdialog.c:534 ../gtk/gtkpagesetupunixdialog.c:789
+#: ../gtk/gtkcustompaperunixdialog.c:536 ../gtk/gtkpagesetupunixdialog.c:788
 msgid "mm"
 msgstr "mm"
 
-#: ../gtk/gtkcustompaperunixdialog.c:579
+#: ../gtk/gtkcustompaperunixdialog.c:581
 msgid "Margins from Printer..."
 msgstr "Okraje z tiskárny..."
 
-#: ../gtk/gtkcustompaperunixdialog.c:745
+#: ../gtk/gtkcustompaperunixdialog.c:747
 #, c-format
 msgid "Custom Size %d"
 msgstr "Vlastní velikost %d"
 
-#: ../gtk/gtkcustompaperunixdialog.c:1053
+#: ../gtk/gtkcustompaperunixdialog.c:1059
 msgid "_Width:"
 msgstr "Šíř_ka:"
 
-#: ../gtk/gtkcustompaperunixdialog.c:1065
+#: ../gtk/gtkcustompaperunixdialog.c:1071
 msgid "_Height:"
 msgstr "_Výška:"
 
-#: ../gtk/gtkcustompaperunixdialog.c:1077
+#: ../gtk/gtkcustompaperunixdialog.c:1083
 msgid "Paper Size"
 msgstr "Rozměry papíru"
 
-#: ../gtk/gtkcustompaperunixdialog.c:1086
+#: ../gtk/gtkcustompaperunixdialog.c:1092
 msgid "_Top:"
 msgstr "_Horní:"
 
-#: ../gtk/gtkcustompaperunixdialog.c:1098
+#: ../gtk/gtkcustompaperunixdialog.c:1104
 msgid "_Bottom:"
 msgstr "_Dolní:"
 
-#: ../gtk/gtkcustompaperunixdialog.c:1110
+#: ../gtk/gtkcustompaperunixdialog.c:1116
 msgid "_Left:"
 msgstr "_Levý:"
 
-#: ../gtk/gtkcustompaperunixdialog.c:1122
+#: ../gtk/gtkcustompaperunixdialog.c:1128
 msgid "_Right:"
 msgstr "P_ravý:"
 
-#: ../gtk/gtkcustompaperunixdialog.c:1163
+#: ../gtk/gtkcustompaperunixdialog.c:1169
 msgid "Paper Margins"
 msgstr "Okraje papíru"
 
-#: ../gtk/gtkentry.c:8611 ../gtk/gtktextview.c:8012
+#: ../gtk/gtkentry.c:8614 ../gtk/gtktextview.c:8265
 msgid "Input _Methods"
 msgstr "Vstupní _metody"
 
-#: ../gtk/gtkentry.c:8625 ../gtk/gtktextview.c:8026
+#: ../gtk/gtkentry.c:8628 ../gtk/gtktextview.c:8279
 msgid "_Insert Unicode Control Character"
 msgstr "Vloži_t řídící znak Unicode"
 
-#: ../gtk/gtkentry.c:10020
+#: ../gtk/gtkentry.c:10027
 msgid "Caps Lock and Num Lock are on"
-msgstr "Funkce Caps Lock a Num Lock jsou zapnuty"
+msgstr ""
 
-#: ../gtk/gtkentry.c:10022
+#: ../gtk/gtkentry.c:10029
+#, fuzzy
 msgid "Num Lock is on"
-msgstr "Funkce Num Lock je zapnuta"
+msgstr "Funkce Caps Lock je zapnuta"
 
-#: ../gtk/gtkentry.c:10024
+#: ../gtk/gtkentry.c:10031
 msgid "Caps Lock is on"
 msgstr "Funkce Caps Lock je zapnuta"
 
-#: ../gtk/gtkfilechooserbutton.c:63
+#. **************** *
+#. *  Private Macros  *
+#. * ****************
+#: ../gtk/gtkfilechooserbutton.c:61
 msgid "Select A File"
 msgstr "Zvolte soubor"
 
-#: ../gtk/gtkfilechooserbutton.c:64 ../gtk/gtkfilechooserdefault.c:1837
+#: ../gtk/gtkfilechooserbutton.c:62 ../gtk/gtkfilechooserdefault.c:1812
 msgid "Desktop"
 msgstr "Pracovní plocha"
 
-#: ../gtk/gtkfilechooserbutton.c:65
+#: ../gtk/gtkfilechooserbutton.c:63
 msgid "(None)"
 msgstr "(Žádný)"
 
@@ -821,27 +835,27 @@ msgstr "(Žádný)"
 msgid "Other..."
 msgstr "Jiné..."
 
-#: ../gtk/gtkfilechooserdefault.c:146
+#: ../gtk/gtkfilechooserdefault.c:148
 msgid "Type name of new folder"
 msgstr "Zadání názvu nové složky"
 
-#: ../gtk/gtkfilechooserdefault.c:963
+#: ../gtk/gtkfilechooserdefault.c:938
 msgid "Could not retrieve information about the file"
 msgstr "O souboru nelze získat informace"
 
-#: ../gtk/gtkfilechooserdefault.c:974
+#: ../gtk/gtkfilechooserdefault.c:949
 msgid "Could not add a bookmark"
 msgstr "Nelze přidat záložku"
 
-#: ../gtk/gtkfilechooserdefault.c:985
+#: ../gtk/gtkfilechooserdefault.c:960
 msgid "Could not remove bookmark"
 msgstr "Nelze odstranit záložku"
 
-#: ../gtk/gtkfilechooserdefault.c:996
+#: ../gtk/gtkfilechooserdefault.c:971
 msgid "The folder could not be created"
 msgstr "Složku nelze vytvořit"
 
-#: ../gtk/gtkfilechooserdefault.c:1009
+#: ../gtk/gtkfilechooserdefault.c:984
 msgid ""
 "The folder could not be created, as a file with the same name already "
 "exists.  Try using a different name for the folder, or rename the file first."
@@ -849,11 +863,11 @@ msgstr ""
 "Složku nelze vytvořit, protože již existuje soubor se stejným názvem. Zkuste "
 "pro složku použít jiný název, nebo nejprve přejmenovat soubor."
 
-#: ../gtk/gtkfilechooserdefault.c:1020
+#: ../gtk/gtkfilechooserdefault.c:995
 msgid "Invalid file name"
 msgstr "Neplatný název souboru"
 
-#: ../gtk/gtkfilechooserdefault.c:1030
+#: ../gtk/gtkfilechooserdefault.c:1005
 msgid "The folder contents could not be displayed"
 msgstr "Obsah složky nelze zobrazit"
 
@@ -861,200 +875,200 @@ msgstr "Obsah složky nelze zobrazit"
 #. * is a hostname. Nautilus and the panel contain the same string
 #. * to translate.
 #.
-#: ../gtk/gtkfilechooserdefault.c:1580
+#: ../gtk/gtkfilechooserdefault.c:1555
 #, c-format
 msgid "%1$s on %2$s"
 msgstr "%1$s na %2$s"
 
-#: ../gtk/gtkfilechooserdefault.c:1756
+#: ../gtk/gtkfilechooserdefault.c:1731
 msgid "Search"
 msgstr "Hledat"
 
-#: ../gtk/gtkfilechooserdefault.c:1780 ../gtk/gtkfilechooserdefault.c:9452
+#: ../gtk/gtkfilechooserdefault.c:1755 ../gtk/gtkfilechooserdefault.c:9289
 msgid "Recently Used"
 msgstr "Naposledy použité"
 
-#: ../gtk/gtkfilechooserdefault.c:2420
+#: ../gtk/gtkfilechooserdefault.c:2409
 msgid "Select which types of files are shown"
 msgstr "Výběr zobrazených typů souborů"
 
-#: ../gtk/gtkfilechooserdefault.c:2779
+#: ../gtk/gtkfilechooserdefault.c:2768
 #, c-format
 msgid "Add the folder '%s' to the bookmarks"
 msgstr "Přidá složku \"%s\" mezi záložky"
 
-#: ../gtk/gtkfilechooserdefault.c:2823
+#: ../gtk/gtkfilechooserdefault.c:2812
 #, c-format
 msgid "Add the current folder to the bookmarks"
 msgstr "Přidá aktuální složku mezi záložky"
 
-#: ../gtk/gtkfilechooserdefault.c:2825
+#: ../gtk/gtkfilechooserdefault.c:2814
 #, c-format
 msgid "Add the selected folders to the bookmarks"
 msgstr "Přidá zvolené složky mezi záložky"
 
-#: ../gtk/gtkfilechooserdefault.c:2863
+#: ../gtk/gtkfilechooserdefault.c:2852
 #, c-format
 msgid "Remove the bookmark '%s'"
 msgstr "Odstraní záložku \"%s\""
 
-#: ../gtk/gtkfilechooserdefault.c:2865
+#: ../gtk/gtkfilechooserdefault.c:2854
 #, c-format
 msgid "Bookmark '%s' cannot be removed"
 msgstr "Záložka \"%s\" nemůže být odstraněna"
 
-#: ../gtk/gtkfilechooserdefault.c:2872 ../gtk/gtkfilechooserdefault.c:3896
+#: ../gtk/gtkfilechooserdefault.c:2861 ../gtk/gtkfilechooserdefault.c:3725
 msgid "Remove the selected bookmark"
 msgstr "Odstraní zvolenou záložku"
 
-#: ../gtk/gtkfilechooserdefault.c:3592
+#: ../gtk/gtkfilechooserdefault.c:3421
 msgid "Remove"
 msgstr "Odstranit"
 
-#: ../gtk/gtkfilechooserdefault.c:3601
+#: ../gtk/gtkfilechooserdefault.c:3430
 msgid "Rename..."
 msgstr "Přejmenovat..."
 
 #. Accessible object name for the file chooser's shortcuts pane
-#: ../gtk/gtkfilechooserdefault.c:3764
+#: ../gtk/gtkfilechooserdefault.c:3593
 msgid "Places"
 msgstr "Místa"
 
 #. Column header for the file chooser's shortcuts pane
-#: ../gtk/gtkfilechooserdefault.c:3821
+#: ../gtk/gtkfilechooserdefault.c:3650
 msgid "_Places"
 msgstr "_Místa"
 
-#: ../gtk/gtkfilechooserdefault.c:3877
+#: ../gtk/gtkfilechooserdefault.c:3706
 msgid "_Add"
 msgstr "_Přidat"
 
-#: ../gtk/gtkfilechooserdefault.c:3884
+#: ../gtk/gtkfilechooserdefault.c:3713
 msgid "Add the selected folder to the Bookmarks"
 msgstr "Přidá zvolenou složku mezi záložky"
 
-#: ../gtk/gtkfilechooserdefault.c:3889
+#: ../gtk/gtkfilechooserdefault.c:3718
 msgid "_Remove"
 msgstr "O_dstranit"
 
-#: ../gtk/gtkfilechooserdefault.c:4024
+#: ../gtk/gtkfilechooserdefault.c:3860
 msgid "Could not select file"
 msgstr "Nelze vybrat soubor"
 
-#: ../gtk/gtkfilechooserdefault.c:4199
+#: ../gtk/gtkfilechooserdefault.c:4035
 msgid "_Add to Bookmarks"
 msgstr "_Přidat mezi záložky"
 
-#: ../gtk/gtkfilechooserdefault.c:4212
+#: ../gtk/gtkfilechooserdefault.c:4048
 msgid "Show _Hidden Files"
 msgstr "Zobrazovat _skryté soubory"
 
-#: ../gtk/gtkfilechooserdefault.c:4219
+#: ../gtk/gtkfilechooserdefault.c:4055
 msgid "Show _Size Column"
 msgstr "Z_obrazovat sloupec Velikost"
 
-#: ../gtk/gtkfilechooserdefault.c:4439
+#: ../gtk/gtkfilechooserdefault.c:4281
 msgid "Files"
 msgstr "Soubory"
 
-#: ../gtk/gtkfilechooserdefault.c:4490
+#: ../gtk/gtkfilechooserdefault.c:4332
 msgid "Name"
 msgstr "Název"
 
-#: ../gtk/gtkfilechooserdefault.c:4513
+#: ../gtk/gtkfilechooserdefault.c:4355
 msgid "Size"
 msgstr "Velikost"
 
-#: ../gtk/gtkfilechooserdefault.c:4527
+#: ../gtk/gtkfilechooserdefault.c:4369
 msgid "Modified"
 msgstr "Změněno"
 
 #. Label
-#: ../gtk/gtkfilechooserdefault.c:4782 ../gtk/gtkprinteroptionwidget.c:801
+#: ../gtk/gtkfilechooserdefault.c:4624 ../gtk/gtkprinteroptionwidget.c:801
 msgid "_Name:"
 msgstr "_Název:"
 
-#: ../gtk/gtkfilechooserdefault.c:4825
+#: ../gtk/gtkfilechooserdefault.c:4667
 msgid "_Browse for other folders"
 msgstr "Procházet _jiné složky"
 
-#: ../gtk/gtkfilechooserdefault.c:5097
+#: ../gtk/gtkfilechooserdefault.c:4937
 msgid "Type a file name"
 msgstr "Zadání názvu souboru"
 
 #. Create Folder
-#: ../gtk/gtkfilechooserdefault.c:5138
+#: ../gtk/gtkfilechooserdefault.c:4980
 msgid "Create Fo_lder"
 msgstr "V_ytvořit složku"
 
-#: ../gtk/gtkfilechooserdefault.c:5148
+#: ../gtk/gtkfilechooserdefault.c:4990
 msgid "_Location:"
 msgstr "_Umístění:"
 
-#: ../gtk/gtkfilechooserdefault.c:5352
+#: ../gtk/gtkfilechooserdefault.c:5194
 msgid "Save in _folder:"
 msgstr "U_ložit do složky:"
 
-#: ../gtk/gtkfilechooserdefault.c:5354
+#: ../gtk/gtkfilechooserdefault.c:5196
 msgid "Create in _folder:"
 msgstr "Vytvořit ve složc_e:"
 
-#: ../gtk/gtkfilechooserdefault.c:6417
+#: ../gtk/gtkfilechooserdefault.c:6248
 #, c-format
 msgid "Could not read the contents of %s"
 msgstr "Nelze přečíst obsah %s"
 
-#: ../gtk/gtkfilechooserdefault.c:6421
+#: ../gtk/gtkfilechooserdefault.c:6252
 msgid "Could not read the contents of the folder"
 msgstr "Nelze přečíst obsah složky"
 
-#: ../gtk/gtkfilechooserdefault.c:6514 ../gtk/gtkfilechooserdefault.c:6582
-#: ../gtk/gtkfilechooserdefault.c:6727
+#: ../gtk/gtkfilechooserdefault.c:6345 ../gtk/gtkfilechooserdefault.c:6413
+#: ../gtk/gtkfilechooserdefault.c:6558
 msgid "Unknown"
 msgstr "Neznámé"
 
-#: ../gtk/gtkfilechooserdefault.c:6529
+#: ../gtk/gtkfilechooserdefault.c:6360
 msgid "%H:%M"
 msgstr "%H:%M"
 
-#: ../gtk/gtkfilechooserdefault.c:6531
+#: ../gtk/gtkfilechooserdefault.c:6362
 msgid "Yesterday at %H:%M"
 msgstr "Včera v %H:%M"
 
-#: ../gtk/gtkfilechooserdefault.c:7197
+#: ../gtk/gtkfilechooserdefault.c:7028
 msgid "Cannot change to folder because it is not local"
 msgstr "Nelze přejít do složky, protože není místní"
 
-#: ../gtk/gtkfilechooserdefault.c:7794 ../gtk/gtkfilechooserdefault.c:7815
+#: ../gtk/gtkfilechooserdefault.c:7625 ../gtk/gtkfilechooserdefault.c:7646
 #, c-format
 msgid "Shortcut %s already exists"
 msgstr "Zkratka %s již existuje"
 
-#: ../gtk/gtkfilechooserdefault.c:7905
+#: ../gtk/gtkfilechooserdefault.c:7736
 #, c-format
 msgid "Shortcut %s does not exist"
 msgstr "Zkratka %s neexistuje"
 
-#: ../gtk/gtkfilechooserdefault.c:8160 ../gtk/gtkprintunixdialog.c:479
+#: ../gtk/gtkfilechooserdefault.c:7997 ../gtk/gtkprintunixdialog.c:480
 #, c-format
 msgid "A file named \"%s\" already exists.  Do you want to replace it?"
 msgstr "Soubor nazvaný \"%s\" již existuje. Chcete jej nahradit?"
 
-#: ../gtk/gtkfilechooserdefault.c:8163 ../gtk/gtkprintunixdialog.c:483
+#: ../gtk/gtkfilechooserdefault.c:8000 ../gtk/gtkprintunixdialog.c:484
 #, c-format
 msgid ""
 "The file already exists in \"%s\".  Replacing it will overwrite its contents."
 msgstr "V \"%s\" již tento soubor existuje. Jeho nahrazení přepíše celý obsah."
 
-#: ../gtk/gtkfilechooserdefault.c:8168 ../gtk/gtkprintunixdialog.c:490
+#: ../gtk/gtkfilechooserdefault.c:8005 ../gtk/gtkprintunixdialog.c:491
 msgid "_Replace"
 msgstr "Na_hradit"
 
-#: ../gtk/gtkfilechooserdefault.c:8820
+#: ../gtk/gtkfilechooserdefault.c:8658
 msgid "Could not start the search process"
 msgstr "Nelze spustit proces hledání"
 
-#: ../gtk/gtkfilechooserdefault.c:8821
+#: ../gtk/gtkfilechooserdefault.c:8659
 msgid ""
 "The program was not able to create a connection to the indexer daemon.  "
 "Please make sure it is running."
@@ -1062,36 +1076,36 @@ msgstr ""
 "Program nebyl schopen vytvořit spojení s indexovacím démonem. Ujistěte se "
 "prosím, že běží."
 
-#: ../gtk/gtkfilechooserdefault.c:8835
+#: ../gtk/gtkfilechooserdefault.c:8673
 msgid "Could not send the search request"
 msgstr "Nelze odeslat vyhledávací požadavek"
 
-#: ../gtk/gtkfilechooserdefault.c:9024
+#: ../gtk/gtkfilechooserdefault.c:8861
 msgid "Search:"
 msgstr "Hledat:"
 
-#: ../gtk/gtkfilechooserdefault.c:9628
+#: ../gtk/gtkfilechooserdefault.c:9466
 #, c-format
 msgid "Could not mount %s"
 msgstr "Nelze připojit %s"
 
 #. Translators: this is shown in the feedback for Tab-completion in a file
 #. * chooser's text entry, when the user enters an invalid path.
-#: ../gtk/gtkfilechooserentry.c:697 ../gtk/gtkfilechooserentry.c:1162
+#: ../gtk/gtkfilechooserentry.c:702 ../gtk/gtkfilechooserentry.c:1172
 msgid "Invalid path"
 msgstr "Neplatná cesta"
 
 #. translators: this text is shown when there are no completions
 #. * for something the user typed in a file chooser entry
 #.
-#: ../gtk/gtkfilechooserentry.c:1094
+#: ../gtk/gtkfilechooserentry.c:1104
 msgid "No match"
 msgstr "Žádná shoda"
 
 #. translators: this text is shown when there is exactly one completion
 #. * for something the user typed in a file chooser entry
 #.
-#: ../gtk/gtkfilechooserentry.c:1105
+#: ../gtk/gtkfilechooserentry.c:1115
 msgid "Sole completion"
 msgstr "Jediné dokončení"
 
@@ -1099,13 +1113,13 @@ msgstr "Jediné dokončení"
 #. * entry is a complete filename, but could be continued to find
 #. * a longer match
 #.
-#: ../gtk/gtkfilechooserentry.c:1121
+#: ../gtk/gtkfilechooserentry.c:1131
 msgid "Complete, but not unique"
 msgstr "Dokončené, ale nikoliv jedinečné"
 
 #. Translators: this text is shown while the system is searching
 #. * for possible completions for filenames in a file chooser entry.
-#: ../gtk/gtkfilechooserentry.c:1153
+#: ../gtk/gtkfilechooserentry.c:1163
 msgid "Completing..."
 msgstr "Dokončování..."
 
@@ -1113,7 +1127,7 @@ msgstr "Dokončování..."
 #. Translators: this is shown in the feedback for Tab-completion in a
 #. * file chooser's text entry when the user enters something like
 #. * "sftp://blahblah" in an app that only supports local filenames.
-#: ../gtk/gtkfilechooserentry.c:1175 ../gtk/gtkfilechooserentry.c:1200
+#: ../gtk/gtkfilechooserentry.c:1185 ../gtk/gtkfilechooserentry.c:1210
 msgid "Only local files may be selected"
 msgstr "Vybrány mohou být pouze místní soubory"
 
@@ -1121,14 +1135,14 @@ msgstr "Vybrány mohou být pouze místní soubory"
 #. Translators: this is shown in the feedback for Tab-completion in a
 #. * file chooser's text entry when the user hasn't entered the first '/'
 #. * after a hostname and yet hits Tab (such as "sftp://blahblah[Tab]")
-#: ../gtk/gtkfilechooserentry.c:1184
+#: ../gtk/gtkfilechooserentry.c:1194
 msgid "Incomplete hostname; end it with '/'"
 msgstr "Neúplný název počítače, je nutné ho zakončit znakem \"/\""
 
 #. Translators: this is shown in the feedback for Tab-completion in a file
 #. * chooser's text entry when the user enters a path that does not exist
 #. * and then hits Tab
-#: ../gtk/gtkfilechooserentry.c:1195
+#: ../gtk/gtkfilechooserentry.c:1205
 msgid "Path does not exist"
 msgstr "Cesta neexistuje"
 
@@ -1142,59 +1156,59 @@ msgstr "Chyba při vytváření složky \"%s\": %s"
 #. * token for the fake "File System" volume.  So, we'll return a pointer to
 #. * this particular string.
 #.
-#: ../gtk/gtkfilesystem.c:50
+#: ../gtk/gtkfilesystem.c:48
 msgid "File System"
 msgstr "Systém souborů"
 
-#: ../gtk/gtkfontbutton.c:143 ../gtk/gtkfontbutton.c:265
+#: ../gtk/gtkfontbutton.c:142 ../gtk/gtkfontbutton.c:266
 msgid "Pick a Font"
 msgstr "Vybrat písmo"
 
 #. Initialize fields
-#: ../gtk/gtkfontbutton.c:259
+#: ../gtk/gtkfontbutton.c:260
 msgid "Sans 12"
 msgstr "Sans 12"
 
-#: ../gtk/gtkfontbutton.c:784
+#: ../gtk/gtkfontbutton.c:785
 msgid "Font"
 msgstr "Písmo"
 
 #. This is the default text shown in the preview entry, though the user
 #. can set it. Remember that some fonts only have capital letters.
-#: ../gtk/gtkfontsel.c:74
+#: ../gtk/gtkfontsel.c:104
 msgid "abcdefghijk ABCDEFGHIJK"
 msgstr "přikrášlený žluťoučký kůň PŘIKRÁŠLENÝ ŽLUŤOUČKÝ KŮŇ"
 
-#: ../gtk/gtkfontsel.c:330
+#: ../gtk/gtkfontsel.c:371
 msgid "_Family:"
 msgstr "_Rodina:"
 
-#: ../gtk/gtkfontsel.c:336
+#: ../gtk/gtkfontsel.c:377
 msgid "_Style:"
 msgstr "_Styl:"
 
-#: ../gtk/gtkfontsel.c:342
+#: ../gtk/gtkfontsel.c:383
 msgid "Si_ze:"
 msgstr "_Velikost:"
 
 #. create the text entry widget
-#: ../gtk/gtkfontsel.c:519
+#: ../gtk/gtkfontsel.c:560
 msgid "_Preview:"
 msgstr "_Náhled:"
 
-#: ../gtk/gtkfontsel.c:1598
+#: ../gtk/gtkfontsel.c:1661
 msgid "Font Selection"
 msgstr "Výběr písma"
 
 #. Remove this icon source so we don't keep trying to
 #. * load it.
 #.
-#: ../gtk/gtkiconfactory.c:1399
+#: ../gtk/gtkiconfactory.c:1356
 #, c-format
 msgid "Error loading icon: %s"
 msgstr "Chyba při načítání ikony: %s"
 
-#: ../gtk/gtkicontheme.c:1362
+#: ../gtk/gtkicontheme.c:1353
 #, c-format
 msgid ""
 "Could not find the icon '%s'. The '%s' theme\n"
@@ -1207,12 +1221,12 @@ msgstr ""
 "Získat ho je možné z:\n"
 "\t%s"
 
-#: ../gtk/gtkicontheme.c:1542
+#: ../gtk/gtkicontheme.c:1533
 #, c-format
 msgid "Icon '%s' not present in theme"
 msgstr "V motivu není obsažena ikona \"%s\""
 
-#: ../gtk/gtkicontheme.c:3073
+#: ../gtk/gtkicontheme.c:3045
 msgid "Failed to load icon"
 msgstr "Nelze načíst ikonu"
 
@@ -1220,62 +1234,62 @@ msgstr "Nelze načíst ikonu"
 msgid "Simple"
 msgstr "Jednoduché"
 
-#: ../gtk/gtkimmulticontext.c:562
+#: ../gtk/gtkimmulticontext.c:588
 msgctxt "input method menu"
 msgid "System"
 msgstr "Systémová"
 
-#: ../gtk/gtkimmulticontext.c:572
+#: ../gtk/gtkimmulticontext.c:598
 msgctxt "input method menu"
 msgid "None"
 msgstr "Žádná"
 
-#: ../gtk/gtkimmulticontext.c:655
+#: ../gtk/gtkimmulticontext.c:681
 #, c-format
 msgctxt "input method menu"
 msgid "System (%s)"
 msgstr "Systémová (%s)"
 
 #. Open Link
-#: ../gtk/gtklabel.c:6071
+#: ../gtk/gtklabel.c:6224
 msgid "_Open Link"
 msgstr "_Otevřít odkaz"
 
 #. Copy Link Address
-#: ../gtk/gtklabel.c:6083
+#: ../gtk/gtklabel.c:6236
 msgid "Copy _Link Address"
 msgstr "Ko_pírovat adresu odkazu"
 
-#: ../gtk/gtklinkbutton.c:427
+#: ../gtk/gtklinkbutton.c:432
 msgid "Copy URL"
 msgstr "Kopírovat URL"
 
-#: ../gtk/gtklinkbutton.c:585
+#: ../gtk/gtklinkbutton.c:590
 msgid "Invalid URI"
 msgstr "Neplatné URI"
 
 #. Description of --gtk-module=MODULES in --help output
-#: ../gtk/gtkmain.c:431
+#: ../gtk/gtkmain.c:526
 msgid "Load additional GTK+ modules"
 msgstr "Načte přídavné moduly GTK+"
 
 #. Placeholder in --gtk-module=MODULES in --help output
-#: ../gtk/gtkmain.c:432
+#: ../gtk/gtkmain.c:527
 msgid "MODULES"
 msgstr "MODULY"
 
 #. Description of --g-fatal-warnings in --help output
-#: ../gtk/gtkmain.c:434
+#: ../gtk/gtkmain.c:529
 msgid "Make all warnings fatal"
 msgstr "Učiní všechna varování kritickými"
 
 #. Description of --gtk-debug=FLAGS in --help output
-#: ../gtk/gtkmain.c:437
+#: ../gtk/gtkmain.c:532
 msgid "GTK+ debugging flags to set"
 msgstr "Ladicí příznaky GTK+, které nastaví"
 
 #. Description of --gtk-no-debug=FLAGS in --help output
-#: ../gtk/gtkmain.c:440
+#: ../gtk/gtkmain.c:535
 msgid "GTK+ debugging flags to unset"
 msgstr "Ladicí příznaky GTK+, jejichž nastavení zruší"
 
@@ -1284,76 +1298,76 @@ msgstr "Ladicí příznaky GTK+, jejichž nastavení zruší"
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
 #.
-#: ../gtk/gtkmain.c:703
+#: ../gtk/gtkmain.c:798
 msgid "default:LTR"
 msgstr "default:LTR"
 
-#: ../gtk/gtkmain.c:768
+#: ../gtk/gtkmain.c:863
 #, c-format
 msgid "Cannot open display: %s"
 msgstr "Nelze otevřít displej: %s"
 
-#: ../gtk/gtkmain.c:805
+#: ../gtk/gtkmain.c:922
 msgid "GTK+ Options"
 msgstr "Přepínače GTK+"
 
-#: ../gtk/gtkmain.c:805
+#: ../gtk/gtkmain.c:922
 msgid "Show GTK+ Options"
 msgstr "Zobrazit přepínače GTK+"
 
-#: ../gtk/gtkmountoperation.c:488
+#: ../gtk/gtkmountoperation.c:491
 msgid "Co_nnect"
 msgstr "_Připojit"
 
-#: ../gtk/gtkmountoperation.c:555
+#: ../gtk/gtkmountoperation.c:558
 msgid "Connect _anonymously"
 msgstr "Připojit se _anonymně"
 
-#: ../gtk/gtkmountoperation.c:564
+#: ../gtk/gtkmountoperation.c:567
 msgid "Connect as u_ser:"
 msgstr "Připojit se jako _uživatel:"
 
-#: ../gtk/gtkmountoperation.c:602
+#: ../gtk/gtkmountoperation.c:605
 msgid "_Username:"
 msgstr "Uživat_elské jméno:"
 
-#: ../gtk/gtkmountoperation.c:607
+#: ../gtk/gtkmountoperation.c:610
 msgid "_Domain:"
 msgstr "_Doména:"
 
-#: ../gtk/gtkmountoperation.c:613
+#: ../gtk/gtkmountoperation.c:616
 msgid "_Password:"
 msgstr "_Heslo:"
 
-#: ../gtk/gtkmountoperation.c:631
+#: ../gtk/gtkmountoperation.c:634
 msgid "Forget password _immediately"
 msgstr "Zapo_menout heslo okamžitě"
 
-#: ../gtk/gtkmountoperation.c:641
+#: ../gtk/gtkmountoperation.c:644
 msgid "Remember password until you _logout"
 msgstr "Pamat_ovat si heslo až do odhlášení"
 
-#: ../gtk/gtkmountoperation.c:651
+#: ../gtk/gtkmountoperation.c:654
 msgid "Remember _forever"
 msgstr "Pama_tovat si navždy"
 
-#: ../gtk/gtkmountoperation.c:880
+#: ../gtk/gtkmountoperation.c:883
 #, c-format
-msgid "Unknown Application (pid %d)"
-msgstr "Neznámá aplikace (pid %d)"
+msgid "Unknown Application (PID %d)"
+msgstr "Neznámá aplikace (PID %d)"
 
-#: ../gtk/gtkmountoperation.c:1063
+#: ../gtk/gtkmountoperation.c:1066
 msgid "Unable to end process"
 msgstr "Není možné ukončit proces"
 
-#: ../gtk/gtkmountoperation.c:1100
+#: ../gtk/gtkmountoperation.c:1103
 msgid "_End Process"
 msgstr "Ukončit proc_es"
 
 #: ../gtk/gtkmountoperation-stub.c:64
 #, c-format
-msgid "Cannot kill process with pid %d. Operation is not implemented."
-msgstr "Nelze zabít proces s pid %d. Operace není implementována."
+msgid "Cannot kill process with PID %d. Operation is not implemented."
+msgstr "Nelze zabít proces s PID %d. Operace není implementována."
 
 #. translators: this string is a name for the 'less' command
 #: ../gtk/gtkmountoperation-x11.c:862
@@ -1378,28 +1392,28 @@ msgstr "Z Shell"
 
 #: ../gtk/gtkmountoperation-x11.c:963
 #, c-format
-msgid "Cannot end process with pid %d: %s"
-msgstr "Nelze ukončit proces s pid %d: %s"
+msgid "Cannot end process with PID %d: %s"
+msgstr "Nelze ukončit proces s PID %d: %s"
 
-#: ../gtk/gtknotebook.c:4629 ../gtk/gtknotebook.c:7058
+#: ../gtk/gtknotebook.c:4710 ../gtk/gtknotebook.c:7268
 #, c-format
 msgid "Page %u"
 msgstr "Strana %u"
 
-#: ../gtk/gtkpagesetup.c:596 ../gtk/gtkpapersize.c:825
-#: ../gtk/gtkpapersize.c:867
+#: ../gtk/gtkpagesetup.c:596 ../gtk/gtkpapersize.c:817
+#: ../gtk/gtkpapersize.c:859
 msgid "Not a valid page setup file"
 msgstr "Neplatný soubor vzhledu stránky"
 
-#: ../gtk/gtkpagesetupunixdialog.c:180
+#: ../gtk/gtkpagesetupunixdialog.c:179
 msgid "Any Printer"
 msgstr "Libovolná tiskárna"
 
-#: ../gtk/gtkpagesetupunixdialog.c:180
+#: ../gtk/gtkpagesetupunixdialog.c:179
 msgid "For portable documents"
 msgstr "Pro přenositelné dokumenty"
 
-#: ../gtk/gtkpagesetupunixdialog.c:810
+#: ../gtk/gtkpagesetupunixdialog.c:809
 #, c-format
 msgid ""
 "Margins:\n"
@@ -1414,39 +1428,39 @@ msgstr ""
 " Horní: %s %s\n"
 " Dolní: %s %s"
 
-#: ../gtk/gtkpagesetupunixdialog.c:859 ../gtk/gtkprintunixdialog.c:3276
+#: ../gtk/gtkpagesetupunixdialog.c:858 ../gtk/gtkprintunixdialog.c:3299
 msgid "Manage Custom Sizes..."
 msgstr "Spravovat vlastní velikosti..."
 
-#: ../gtk/gtkpagesetupunixdialog.c:907
+#: ../gtk/gtkpagesetupunixdialog.c:909
 msgid "_Format for:"
 msgstr "_Formát pro:"
 
-#: ../gtk/gtkpagesetupunixdialog.c:929 ../gtk/gtkprintunixdialog.c:3448
+#: ../gtk/gtkpagesetupunixdialog.c:931 ../gtk/gtkprintunixdialog.c:3471
 msgid "_Paper size:"
 msgstr "_Velikost papíru:"
 
-#: ../gtk/gtkpagesetupunixdialog.c:960
+#: ../gtk/gtkpagesetupunixdialog.c:962
 msgid "_Orientation:"
 msgstr "_Orientace:"
 
-#: ../gtk/gtkpagesetupunixdialog.c:1024 ../gtk/gtkprintunixdialog.c:3510
+#: ../gtk/gtkpagesetupunixdialog.c:1026 ../gtk/gtkprintunixdialog.c:3533
 msgid "Page Setup"
 msgstr "Vzhled stránky"
 
-#: ../gtk/gtkpathbar.c:151
+#: ../gtk/gtkpathbar.c:155
 msgid "Up Path"
 msgstr "Nahoru v cestě"
 
-#: ../gtk/gtkpathbar.c:153
+#: ../gtk/gtkpathbar.c:157
 msgid "Down Path"
 msgstr "Dolů v cestě"
 
-#: ../gtk/gtkpathbar.c:1480
+#: ../gtk/gtkpathbar.c:1504
 msgid "File System Root"
 msgstr "Kořen systému souborů"
 
-#: ../gtk/gtkprintbackend.c:748
+#: ../gtk/gtkprintbackend.c:745
 msgid "Authentication"
 msgstr "Ověření"
 
@@ -1455,8 +1469,9 @@ msgid "Not available"
 msgstr "Nedostupné"
 
 #: ../gtk/gtkprinteroptionwidget.c:794
+#, fuzzy
 msgid "Select a folder"
-msgstr "Zvolte složku"
+msgstr "Zvolte soubor"
 
 #: ../gtk/gtkprinteroptionwidget.c:813
 msgid "_Save in folder:"
@@ -1466,75 +1481,75 @@ msgstr "Uložit do složk_y:"
 #. * jobs. %s gets replaced by the application name, %d gets replaced
 #. * by the job number.
 #.
-#: ../gtk/gtkprintoperation.c:189
+#: ../gtk/gtkprintoperation.c:190
 #, c-format
 msgid "%s job #%d"
 msgstr "%s: úloha č. %d"
 
-#: ../gtk/gtkprintoperation.c:1694
+#: ../gtk/gtkprintoperation.c:1695
 msgctxt "print operation status"
 msgid "Initial state"
 msgstr "Počáteční stav"
 
-#: ../gtk/gtkprintoperation.c:1695
+#: ../gtk/gtkprintoperation.c:1696
 msgctxt "print operation status"
 msgid "Preparing to print"
 msgstr "Připravuje se tisk"
 
-#: ../gtk/gtkprintoperation.c:1696
+#: ../gtk/gtkprintoperation.c:1697
 msgctxt "print operation status"
 msgid "Generating data"
 msgstr "Vytváření dat"
 
-#: ../gtk/gtkprintoperation.c:1697
+#: ../gtk/gtkprintoperation.c:1698
 msgctxt "print operation status"
 msgid "Sending data"
 msgstr "Odesílání dat"
 
-#: ../gtk/gtkprintoperation.c:1698
+#: ../gtk/gtkprintoperation.c:1699
 msgctxt "print operation status"
 msgid "Waiting"
 msgstr "Čeká se"
 
-#: ../gtk/gtkprintoperation.c:1699
+#: ../gtk/gtkprintoperation.c:1700
 msgctxt "print operation status"
 msgid "Blocking on issue"
 msgstr "Blokováno původcem problému"
 
-#: ../gtk/gtkprintoperation.c:1700
+#: ../gtk/gtkprintoperation.c:1701
 msgctxt "print operation status"
 msgid "Printing"
 msgstr "Tiskne se"
 
-#: ../gtk/gtkprintoperation.c:1701
+#: ../gtk/gtkprintoperation.c:1702
 msgctxt "print operation status"
 msgid "Finished"
 msgstr "Hotovo"
 
-#: ../gtk/gtkprintoperation.c:1702
+#: ../gtk/gtkprintoperation.c:1703
 msgctxt "print operation status"
 msgid "Finished with error"
 msgstr "Hotovo, došlo k chybě"
 
-#: ../gtk/gtkprintoperation.c:2269
+#: ../gtk/gtkprintoperation.c:2270
 #, c-format
 msgid "Preparing %d"
 msgstr "Připravuje se %d"
 
-#: ../gtk/gtkprintoperation.c:2271 ../gtk/gtkprintoperation.c:2901
+#: ../gtk/gtkprintoperation.c:2272 ../gtk/gtkprintoperation.c:2902
 msgid "Preparing"
 msgstr "Připravuje se"
 
-#: ../gtk/gtkprintoperation.c:2274
+#: ../gtk/gtkprintoperation.c:2275
 #, c-format
 msgid "Printing %d"
 msgstr "Tiskne se %d"
 
-#: ../gtk/gtkprintoperation.c:2931
+#: ../gtk/gtkprintoperation.c:2932
 msgid "Error creating print preview"
 msgstr "Chyba při vytváření náhledu tisku"
 
-#: ../gtk/gtkprintoperation.c:2934
+#: ../gtk/gtkprintoperation.c:2935
 msgid "The most probable reason is that a temporary file could not be created."
 msgstr "Nejpravděpodobnější příčinou je nemožnost vytvoření dočasného souboru."
 
@@ -1542,7 +1557,7 @@ msgstr "Nejpravděpodobnější příčinou je nemožnost vytvoření dočasnéh
 msgid "Error launching preview"
 msgstr "Chyba spouštění náhledu"
 
-#: ../gtk/gtkprintoperation-unix.c:470 ../gtk/gtkprintoperation-win32.c:1446
+#: ../gtk/gtkprintoperation-unix.c:470 ../gtk/gtkprintoperation-win32.c:1447
 msgid "Application"
 msgstr "Aplikace"
 
@@ -1568,82 +1583,82 @@ msgstr "Je potřeba zásah uživatele"
 msgid "Custom size"
 msgstr "Vlastní velikost"
 
-#: ../gtk/gtkprintoperation-win32.c:1538
+#: ../gtk/gtkprintoperation-win32.c:1539
 msgid "No printer found"
 msgstr "Nebyla nalezena žádná tiskárna"
 
-#: ../gtk/gtkprintoperation-win32.c:1565
+#: ../gtk/gtkprintoperation-win32.c:1566
 msgid "Invalid argument to CreateDC"
 msgstr "Neplatný argument ke CreateDC"
 
-#: ../gtk/gtkprintoperation-win32.c:1601 ../gtk/gtkprintoperation-win32.c:1828
+#: ../gtk/gtkprintoperation-win32.c:1602 ../gtk/gtkprintoperation-win32.c:1829
 msgid "Error from StartDoc"
 msgstr "Chyba ze StartDoc"
 
-#: ../gtk/gtkprintoperation-win32.c:1683 ../gtk/gtkprintoperation-win32.c:1706
-#: ../gtk/gtkprintoperation-win32.c:1754
+#: ../gtk/gtkprintoperation-win32.c:1684 ../gtk/gtkprintoperation-win32.c:1707
+#: ../gtk/gtkprintoperation-win32.c:1755
 msgid "Not enough free memory"
 msgstr "Nedostatek volné paměti"
 
-#: ../gtk/gtkprintoperation-win32.c:1759
+#: ../gtk/gtkprintoperation-win32.c:1760
 msgid "Invalid argument to PrintDlgEx"
 msgstr "Neplatný argument pro PrintDlgEx"
 
-#: ../gtk/gtkprintoperation-win32.c:1764
+#: ../gtk/gtkprintoperation-win32.c:1765
 msgid "Invalid pointer to PrintDlgEx"
 msgstr "Neplatný ukazatel na PrintDlgEx"
 
-#: ../gtk/gtkprintoperation-win32.c:1769
+#: ../gtk/gtkprintoperation-win32.c:1770
 msgid "Invalid handle to PrintDlgEx"
 msgstr "Neplatná obsluha na PrintDlgEx"
 
-#: ../gtk/gtkprintoperation-win32.c:1774
+#: ../gtk/gtkprintoperation-win32.c:1775
 msgid "Unspecified error"
 msgstr "Neurčená chyba"
 
-#: ../gtk/gtkprintunixdialog.c:613
+#: ../gtk/gtkprintunixdialog.c:618
 msgid "Getting printer information failed"
 msgstr "Získávání informací o tiskárně selhalo"
 
-#: ../gtk/gtkprintunixdialog.c:1861
+#: ../gtk/gtkprintunixdialog.c:1873
 msgid "Getting printer information..."
 msgstr "Získávají se informace o tiskárně..."
 
-#: ../gtk/gtkprintunixdialog.c:2131
+#: ../gtk/gtkprintunixdialog.c:2149
 msgid "Printer"
 msgstr "Tiskárna"
 
 #. Translators: this is the header for the location column in the print dialog
-#: ../gtk/gtkprintunixdialog.c:2141
+#: ../gtk/gtkprintunixdialog.c:2159
 msgid "Location"
 msgstr "Umístění"
 
 #. Translators: this is the header for the printer status column in the print dialog
-#: ../gtk/gtkprintunixdialog.c:2152
+#: ../gtk/gtkprintunixdialog.c:2170
 msgid "Status"
 msgstr "Stav"
 
-#: ../gtk/gtkprintunixdialog.c:2178
+#: ../gtk/gtkprintunixdialog.c:2196
 msgid "Range"
 msgstr "Rozsah"
 
-#: ../gtk/gtkprintunixdialog.c:2182
+#: ../gtk/gtkprintunixdialog.c:2200
 msgid "_All Pages"
 msgstr "Vše_chny strany"
 
-#: ../gtk/gtkprintunixdialog.c:2189
+#: ../gtk/gtkprintunixdialog.c:2207
 msgid "C_urrent Page"
 msgstr "Aktuá_lní strana"
 
-#: ../gtk/gtkprintunixdialog.c:2199
+#: ../gtk/gtkprintunixdialog.c:2217
 msgid "Se_lection"
 msgstr "_Výběr"
 
-#: ../gtk/gtkprintunixdialog.c:2208
+#: ../gtk/gtkprintunixdialog.c:2226
 msgid "Pag_es:"
 msgstr "St_rany:"
 
-#: ../gtk/gtkprintunixdialog.c:2209
+#: ../gtk/gtkprintunixdialog.c:2227
 msgid ""
 "Specify one or more page ranges,\n"
 " e.g. 1-3,7,11"
@@ -1651,28 +1666,28 @@ msgstr ""
 "Zadejte prosím jeden nebo více rozsahů stran,\n"
 "např. 1-3,7,11"
 
-#: ../gtk/gtkprintunixdialog.c:2219
+#: ../gtk/gtkprintunixdialog.c:2237
 msgid "Pages"
 msgstr "Strany"
 
-#: ../gtk/gtkprintunixdialog.c:2232
+#: ../gtk/gtkprintunixdialog.c:2250
 msgid "Copies"
 msgstr "Kopie"
 
 #. FIXME chpe: too much space between Copies and spinbutton, put those 2 in a hbox and make it span 2 columns
-#: ../gtk/gtkprintunixdialog.c:2237
+#: ../gtk/gtkprintunixdialog.c:2255
 msgid "Copie_s:"
 msgstr "_Kopie:"
 
-#: ../gtk/gtkprintunixdialog.c:2255
+#: ../gtk/gtkprintunixdialog.c:2273
 msgid "C_ollate"
 msgstr "S_etřídit"
 
-#: ../gtk/gtkprintunixdialog.c:2263
+#: ../gtk/gtkprintunixdialog.c:2281
 msgid "_Reverse"
 msgstr "O_brátit"
 
-#: ../gtk/gtkprintunixdialog.c:2283
+#: ../gtk/gtkprintunixdialog.c:2301
 msgid "General"
 msgstr "Obecné"
 
@@ -1682,42 +1697,42 @@ msgstr "Obecné"
 #. Translators: These strings name the possible arrangements of
 #. * multiple pages on a sheet when printing
 #.
-#: ../gtk/gtkprintunixdialog.c:3009
+#: ../gtk/gtkprintunixdialog.c:3032
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:3508
 msgid "Left to right, top to bottom"
 msgstr "Zleva doprava, shora dolů"
 
-#: ../gtk/gtkprintunixdialog.c:3009
+#: ../gtk/gtkprintunixdialog.c:3032
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:3508
 msgid "Left to right, bottom to top"
 msgstr "Zleva doprava, zdola nahoru"
 
-#: ../gtk/gtkprintunixdialog.c:3010
+#: ../gtk/gtkprintunixdialog.c:3033
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:3509
 msgid "Right to left, top to bottom"
 msgstr "Zprava doleva, shora dolů"
 
-#: ../gtk/gtkprintunixdialog.c:3010
+#: ../gtk/gtkprintunixdialog.c:3033
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:3509
 msgid "Right to left, bottom to top"
 msgstr "Zprava doleva, zdola nahoru"
 
-#: ../gtk/gtkprintunixdialog.c:3011
+#: ../gtk/gtkprintunixdialog.c:3034
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:3510
 msgid "Top to bottom, left to right"
 msgstr "Shora dolů, zleva doprava"
 
-#: ../gtk/gtkprintunixdialog.c:3011
+#: ../gtk/gtkprintunixdialog.c:3034
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:3510
 msgid "Top to bottom, right to left"
 msgstr "Shora dolů, zprava doleva"
 
-#: ../gtk/gtkprintunixdialog.c:3012
+#: ../gtk/gtkprintunixdialog.c:3035
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:3511
 msgid "Bottom to top, left to right"
 msgstr "Zdola nahoru, zleva doprava"
 
-#: ../gtk/gtkprintunixdialog.c:3012
+#: ../gtk/gtkprintunixdialog.c:3035
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:3511
 msgid "Bottom to top, right to left"
 msgstr "Zdola nahoru, zprava doleva"
@@ -1725,125 +1740,125 @@ msgstr "Zdola nahoru, zprava doleva"
 #. Translators, this string is used to label the option in the print
 #. * dialog that controls in what order multiple pages are arranged
 #.
-#: ../gtk/gtkprintunixdialog.c:3016 ../gtk/gtkprintunixdialog.c:3029
+#: ../gtk/gtkprintunixdialog.c:3039 ../gtk/gtkprintunixdialog.c:3052
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:3543
 msgid "Page Ordering"
 msgstr "Řazení stran"
 
-#: ../gtk/gtkprintunixdialog.c:3045
+#: ../gtk/gtkprintunixdialog.c:3068
 msgid "Left to right"
 msgstr "Zleva doprava"
 
-#: ../gtk/gtkprintunixdialog.c:3046
+#: ../gtk/gtkprintunixdialog.c:3069
 msgid "Right to left"
 msgstr "Zprava doleva"
 
-#: ../gtk/gtkprintunixdialog.c:3058
+#: ../gtk/gtkprintunixdialog.c:3081
 msgid "Top to bottom"
 msgstr "Shora dolů"
 
-#: ../gtk/gtkprintunixdialog.c:3059
+#: ../gtk/gtkprintunixdialog.c:3082
 msgid "Bottom to top"
 msgstr "Zdola nahoru"
 
-#: ../gtk/gtkprintunixdialog.c:3299
+#: ../gtk/gtkprintunixdialog.c:3322
 msgid "Layout"
 msgstr "Rozvržení"
 
-#: ../gtk/gtkprintunixdialog.c:3303
+#: ../gtk/gtkprintunixdialog.c:3326
 msgid "T_wo-sided:"
 msgstr "Obo_ustranné:"
 
-#: ../gtk/gtkprintunixdialog.c:3318
+#: ../gtk/gtkprintunixdialog.c:3341
 msgid "Pages per _side:"
 msgstr "Strá_nek na stranu papíru:"
 
-#: ../gtk/gtkprintunixdialog.c:3335
+#: ../gtk/gtkprintunixdialog.c:3358
 msgid "Page or_dering:"
 msgstr "Ř_azení stran:"
 
-#: ../gtk/gtkprintunixdialog.c:3351
+#: ../gtk/gtkprintunixdialog.c:3374
 msgid "_Only print:"
 msgstr "Tisknout p_ouze:"
 
 #. In enum order
-#: ../gtk/gtkprintunixdialog.c:3366
+#: ../gtk/gtkprintunixdialog.c:3389
 msgid "All sheets"
 msgstr "Všechny listy"
 
-#: ../gtk/gtkprintunixdialog.c:3367
+#: ../gtk/gtkprintunixdialog.c:3390
 msgid "Even sheets"
 msgstr "Sudé listy"
 
-#: ../gtk/gtkprintunixdialog.c:3368
+#: ../gtk/gtkprintunixdialog.c:3391
 msgid "Odd sheets"
 msgstr "Liché listy"
 
-#: ../gtk/gtkprintunixdialog.c:3371
+#: ../gtk/gtkprintunixdialog.c:3394
 msgid "Sc_ale:"
 msgstr "_Měřítko:"
 
-#: ../gtk/gtkprintunixdialog.c:3398
+#: ../gtk/gtkprintunixdialog.c:3421
 msgid "Paper"
 msgstr "Papír"
 
-#: ../gtk/gtkprintunixdialog.c:3402
+#: ../gtk/gtkprintunixdialog.c:3425
 msgid "Paper _type:"
 msgstr "Typ _papíru:"
 
-#: ../gtk/gtkprintunixdialog.c:3417
+#: ../gtk/gtkprintunixdialog.c:3440
 msgid "Paper _source:"
 msgstr "Z_droj papíru:"
 
-#: ../gtk/gtkprintunixdialog.c:3432
+#: ../gtk/gtkprintunixdialog.c:3455
 msgid "Output t_ray:"
 msgstr "Vý_stupní zásobník:"
 
-#: ../gtk/gtkprintunixdialog.c:3472
+#: ../gtk/gtkprintunixdialog.c:3495
 msgid "Or_ientation:"
 msgstr "_Orientace:"
 
 #. In enum order
-#: ../gtk/gtkprintunixdialog.c:3487
+#: ../gtk/gtkprintunixdialog.c:3510
 msgid "Portrait"
 msgstr "Na výšku"
 
-#: ../gtk/gtkprintunixdialog.c:3488
+#: ../gtk/gtkprintunixdialog.c:3511
 msgid "Landscape"
 msgstr "Na šířku"
 
-#: ../gtk/gtkprintunixdialog.c:3489
+#: ../gtk/gtkprintunixdialog.c:3512
 msgid "Reverse portrait"
 msgstr "Obráceně na výšku"
 
-#: ../gtk/gtkprintunixdialog.c:3490
+#: ../gtk/gtkprintunixdialog.c:3513
 msgid "Reverse landscape"
 msgstr "Obráceně na šířku"
 
-#: ../gtk/gtkprintunixdialog.c:3535
+#: ../gtk/gtkprintunixdialog.c:3558
 msgid "Job Details"
 msgstr "Podrobnosti k úloze"
 
-#: ../gtk/gtkprintunixdialog.c:3541
+#: ../gtk/gtkprintunixdialog.c:3564
 msgid "Pri_ority:"
 msgstr "Pr_iorita:"
 
-#: ../gtk/gtkprintunixdialog.c:3556
+#: ../gtk/gtkprintunixdialog.c:3579
 msgid "_Billing info:"
 msgstr "Účtovací in_formace:"
 
-#: ../gtk/gtkprintunixdialog.c:3574
+#: ../gtk/gtkprintunixdialog.c:3597
 msgid "Print Document"
 msgstr "Vytisknout dokument"
 
 #. Translators: this is one of the choices for the print at option
 #. * in the print dialog
 #.
-#: ../gtk/gtkprintunixdialog.c:3583
+#: ../gtk/gtkprintunixdialog.c:3606
 msgid "_Now"
 msgstr "N_yní"
 
-#: ../gtk/gtkprintunixdialog.c:3594
+#: ../gtk/gtkprintunixdialog.c:3617
 msgid "A_t:"
 msgstr "_V:"
 
@@ -1851,7 +1866,7 @@ msgstr "_V:"
 #. * You can remove the am/pm values below for your locale if they are not
 #. * supported.
 #.
-#: ../gtk/gtkprintunixdialog.c:3600
+#: ../gtk/gtkprintunixdialog.c:3623
 msgid ""
 "Specify the time of print,\n"
 " e.g. 15:30, 2:35 pm, 14:15:20, 11:46:30 am, 4 pm"
@@ -1859,121 +1874,121 @@ msgstr ""
 "Upřesněte čas tisku,\n"
 " např. 15:30, 14:35, 14:15:20, 11:46:30, 16:00"
 
-#: ../gtk/gtkprintunixdialog.c:3610
+#: ../gtk/gtkprintunixdialog.c:3633
 msgid "Time of print"
 msgstr "Čas tisku"
 
-#: ../gtk/gtkprintunixdialog.c:3626
+#: ../gtk/gtkprintunixdialog.c:3649
 msgid "On _hold"
 msgstr "S posečká_ním"
 
-#: ../gtk/gtkprintunixdialog.c:3627
+#: ../gtk/gtkprintunixdialog.c:3650
 msgid "Hold the job until it is explicitly released"
 msgstr "Posečkat s úlohou, dokud není výslovně odeslána"
 
-#: ../gtk/gtkprintunixdialog.c:3647
+#: ../gtk/gtkprintunixdialog.c:3670
 msgid "Add Cover Page"
 msgstr "Přidat krycí stranu"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the front cover page.
 #.
-#: ../gtk/gtkprintunixdialog.c:3656
+#: ../gtk/gtkprintunixdialog.c:3679
 msgid "Be_fore:"
 msgstr "Pře_d:"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the back cover page.
 #.
-#: ../gtk/gtkprintunixdialog.c:3674
+#: ../gtk/gtkprintunixdialog.c:3697
 msgid "_After:"
 msgstr "Z_a:"
 
 #. Translators: this is the tab label for the notebook tab containing
 #. * job-specific options in the print dialog
 #.
-#: ../gtk/gtkprintunixdialog.c:3692
+#: ../gtk/gtkprintunixdialog.c:3715
 msgid "Job"
 msgstr "Úloha"
 
-#: ../gtk/gtkprintunixdialog.c:3758
+#: ../gtk/gtkprintunixdialog.c:3781
 msgid "Advanced"
 msgstr "Pokročilé"
 
 #. Translators: this will appear as tab label in print dialog.
-#: ../gtk/gtkprintunixdialog.c:3793
+#: ../gtk/gtkprintunixdialog.c:3819
 msgid "Image Quality"
 msgstr "Kvalita obrazu"
 
 #. Translators: this will appear as tab label in print dialog.
-#: ../gtk/gtkprintunixdialog.c:3797
+#: ../gtk/gtkprintunixdialog.c:3823
 msgid "Color"
 msgstr "Barva"
 
 #. Translators: this will appear as tab label in print dialog.
 #. It's a typographical term, as in "Binding and finishing"
-#: ../gtk/gtkprintunixdialog.c:3802
+#: ../gtk/gtkprintunixdialog.c:3828
 msgid "Finishing"
 msgstr "Dokončování"
 
-#: ../gtk/gtkprintunixdialog.c:3812
+#: ../gtk/gtkprintunixdialog.c:3838
 msgid "Some of the settings in the dialog conflict"
 msgstr "Některá nastavení v dialogu jsou v konfliktu"
 
-#: ../gtk/gtkprintunixdialog.c:3835
+#: ../gtk/gtkprintunixdialog.c:3861
 msgid "Print"
 msgstr "Tisk"
 
-#: ../gtk/gtkrc.c:2837
+#: ../gtk/gtkrc.c:2834
 #, c-format
 msgid "Unable to find include file: \"%s\""
 msgstr "Nelze nalézt vložený soubor: \"%s\""
 
-#: ../gtk/gtkrc.c:3467 ../gtk/gtkrc.c:3470
+#: ../gtk/gtkrc.c:3470 ../gtk/gtkrc.c:3473
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "Nelze nalézt soubor obrázku v pixmap_path: \"%s\""
 
-#: ../gtk/gtkrecentaction.c:169 ../gtk/gtkrecentaction.c:177
-#: ../gtk/gtkrecentchoosermenu.c:614 ../gtk/gtkrecentchoosermenu.c:622
+#: ../gtk/gtkrecentaction.c:165 ../gtk/gtkrecentaction.c:173
+#: ../gtk/gtkrecentchoosermenu.c:615 ../gtk/gtkrecentchoosermenu.c:623
 #, c-format
 msgid "This function is not implemented for widgets of class '%s'"
 msgstr "Tato funkce není implementována pro \"widgety\" třídy \"%s\""
 
-#: ../gtk/gtkrecentchooserdefault.c:481
+#: ../gtk/gtkrecentchooserdefault.c:482
 msgid "Select which type of documents are shown"
 msgstr "Výběr zobrazených typů dokumentů"
 
-#: ../gtk/gtkrecentchooserdefault.c:1134 ../gtk/gtkrecentchooserdefault.c:1171
+#: ../gtk/gtkrecentchooserdefault.c:1139 ../gtk/gtkrecentchooserdefault.c:1176
 #, c-format
 msgid "No item for URI '%s' found"
 msgstr "Nenalezena žádná položka u URI \"%s\""
 
-#: ../gtk/gtkrecentchooserdefault.c:1298
+#: ../gtk/gtkrecentchooserdefault.c:1303
 msgid "Untitled filter"
 msgstr "Filtr bez názvu"
 
-#: ../gtk/gtkrecentchooserdefault.c:1651
+#: ../gtk/gtkrecentchooserdefault.c:1656
 msgid "Could not remove item"
 msgstr "Nelze odstranit položku"
 
-#: ../gtk/gtkrecentchooserdefault.c:1695
+#: ../gtk/gtkrecentchooserdefault.c:1700
 msgid "Could not clear list"
 msgstr "Nelze vymazat seznam"
 
-#: ../gtk/gtkrecentchooserdefault.c:1779
+#: ../gtk/gtkrecentchooserdefault.c:1784
 msgid "Copy _Location"
 msgstr "Kopírovat _umístění"
 
-#: ../gtk/gtkrecentchooserdefault.c:1792
+#: ../gtk/gtkrecentchooserdefault.c:1797
 msgid "_Remove From List"
 msgstr "_Odstranit ze seznamu"
 
-#: ../gtk/gtkrecentchooserdefault.c:1801
+#: ../gtk/gtkrecentchooserdefault.c:1806
 msgid "_Clear List"
 msgstr "Vy_mazat seznam"
 
-#: ../gtk/gtkrecentchooserdefault.c:1815
+#: ../gtk/gtkrecentchooserdefault.c:1820
 msgid "Show _Private Resources"
 msgstr "Zo_brazovat soukromé zdroje"
 
@@ -1987,21 +2002,21 @@ msgstr "Zo_brazovat soukromé zdroje"
 #. * user appended or prepended custom menu items to the
 #. * recent chooser menu widget.
 #.
-#: ../gtk/gtkrecentchoosermenu.c:368
+#: ../gtk/gtkrecentchoosermenu.c:369
 msgid "No items found"
 msgstr "Nebyly nalezeny žádné položky"
 
-#: ../gtk/gtkrecentchoosermenu.c:534 ../gtk/gtkrecentchoosermenu.c:590
+#: ../gtk/gtkrecentchoosermenu.c:535 ../gtk/gtkrecentchoosermenu.c:591
 #, c-format
 msgid "No recently used resource found with URI `%s'"
 msgstr "Nenalezeny žádné naposledy použité zdroje s URI \"%s\""
 
-#: ../gtk/gtkrecentchoosermenu.c:801
+#: ../gtk/gtkrecentchoosermenu.c:802
 #, c-format
 msgid "Open '%s'"
 msgstr "Otevřít \"%s\""
 
-#: ../gtk/gtkrecentchoosermenu.c:831
+#: ../gtk/gtkrecentchoosermenu.c:832
 msgid "Unknown item"
 msgstr "Neznámá položka"
 
@@ -2010,7 +2025,7 @@ msgstr "Neznámá položka"
 #. * the %s is the name of the item. Please keep the _ in front
 #. * of the number to give these menu items a mnemonic.
 #.
-#: ../gtk/gtkrecentchoosermenu.c:842
+#: ../gtk/gtkrecentchoosermenu.c:843
 #, c-format
 msgctxt "recent menu label"
 msgid "_%d. %s"
@@ -2019,26 +2034,26 @@ msgstr "_%d. %s"
 #. This is the format that is used for items in a recent files menu.
 #. * The %d is the number of the item, the %s is the name of the item.
 #.
-#: ../gtk/gtkrecentchoosermenu.c:847
+#: ../gtk/gtkrecentchoosermenu.c:848
 #, c-format
 msgctxt "recent menu label"
 msgid "%d. %s"
 msgstr "%d. %s"
 
-#: ../gtk/gtkrecentmanager.c:967 ../gtk/gtkrecentmanager.c:980
-#: ../gtk/gtkrecentmanager.c:1118 ../gtk/gtkrecentmanager.c:1128
-#: ../gtk/gtkrecentmanager.c:1181 ../gtk/gtkrecentmanager.c:1190
-#: ../gtk/gtkrecentmanager.c:1205
+#: ../gtk/gtkrecentmanager.c:980 ../gtk/gtkrecentmanager.c:993
+#: ../gtk/gtkrecentmanager.c:1131 ../gtk/gtkrecentmanager.c:1141
+#: ../gtk/gtkrecentmanager.c:1194 ../gtk/gtkrecentmanager.c:1203
+#: ../gtk/gtkrecentmanager.c:1218
 #, c-format
 msgid "Unable to find an item with URI '%s'"
 msgstr "Nelze nalézt položku s URI \"%s\""
 
-#: ../gtk/gtkspinner.c:457
+#: ../gtk/gtkspinner.c:488
 msgctxt "throbbing progress animation widget"
 msgid "Spinner"
 msgstr "Animace průběhu"
 
-#: ../gtk/gtkspinner.c:458
+#: ../gtk/gtkspinner.c:489
 msgid "Provides visual indication of progress"
 msgstr "Poskytuje vizuální indikaci průběhu"
 
@@ -2092,8 +2107,9 @@ msgid "_Cancel"
 msgstr "_Zrušit"
 
 #: ../gtk/gtkstock.c:326
+#, fuzzy
 msgctxt "Stock label"
-msgid "_CD-Rom"
+msgid "_CD-ROM"
 msgstr "_CD-ROM"
 
 #: ../gtk/gtkstock.c:327
@@ -2152,391 +2168,398 @@ msgid "_Edit"
 msgstr "_Upravit"
 
 #: ../gtk/gtkstock.c:338
+#, fuzzy
+msgctxt "Stock label"
+msgid "_File"
+msgstr "_Soubory"
+
+#: ../gtk/gtkstock.c:339
 msgctxt "Stock label"
 msgid "_Find"
 msgstr "_Hledat"
 
-#: ../gtk/gtkstock.c:339
+#: ../gtk/gtkstock.c:340
 msgctxt "Stock label"
 msgid "Find and _Replace"
 msgstr "Hledat a nah_radit"
 
-#: ../gtk/gtkstock.c:340
+#: ../gtk/gtkstock.c:341
 msgctxt "Stock label"
 msgid "_Floppy"
 msgstr "_Disketa"
 
-#: ../gtk/gtkstock.c:341
+#: ../gtk/gtkstock.c:342
 msgctxt "Stock label"
 msgid "_Fullscreen"
 msgstr "_Celá obrazovka"
 
-#: ../gtk/gtkstock.c:342
+#: ../gtk/gtkstock.c:343
 msgctxt "Stock label"
 msgid "_Leave Fullscreen"
 msgstr "_Opustit celou obrazovku"
 
 #. This is a navigation label as in "go to the bottom of the page"
-#: ../gtk/gtkstock.c:344
+#: ../gtk/gtkstock.c:345
 msgctxt "Stock label, navigation"
 msgid "_Bottom"
 msgstr "_Dolů"
 
 #. This is a navigation label as in "go to the first page"
-#: ../gtk/gtkstock.c:346
+#: ../gtk/gtkstock.c:347
 msgctxt "Stock label, navigation"
 msgid "_First"
 msgstr "P_rvní"
 
 #. This is a navigation label as in "go to the last page"
-#: ../gtk/gtkstock.c:348
+#: ../gtk/gtkstock.c:349
 msgctxt "Stock label, navigation"
 msgid "_Last"
 msgstr "Po_slední"
 
 #. This is a navigation label as in "go to the top of the page"
-#: ../gtk/gtkstock.c:350
+#: ../gtk/gtkstock.c:351
 msgctxt "Stock label, navigation"
 msgid "_Top"
 msgstr "N_ahoru"
 
 #. This is a navigation label as in "go back"
-#: ../gtk/gtkstock.c:352
+#: ../gtk/gtkstock.c:353
 msgctxt "Stock label, navigation"
 msgid "_Back"
 msgstr "_Zpět"
 
 #. This is a navigation label as in "go down"
-#: ../gtk/gtkstock.c:354
+#: ../gtk/gtkstock.c:355
 msgctxt "Stock label, navigation"
 msgid "_Down"
 msgstr "_Níž"
 
 #. This is a navigation label as in "go forward"
-#: ../gtk/gtkstock.c:356
+#: ../gtk/gtkstock.c:357
 msgctxt "Stock label, navigation"
 msgid "_Forward"
 msgstr "_Vpřed"
 
 #. This is a navigation label as in "go up"
-#: ../gtk/gtkstock.c:358
+#: ../gtk/gtkstock.c:359
 msgctxt "Stock label, navigation"
 msgid "_Up"
 msgstr "_Výš"
 
-#: ../gtk/gtkstock.c:359
+#: ../gtk/gtkstock.c:360
+#, fuzzy
 msgctxt "Stock label"
-msgid "_Harddisk"
+msgid "_Hard Disk"
 msgstr "_Pevný disk"
 
-#: ../gtk/gtkstock.c:360
+#: ../gtk/gtkstock.c:361
 msgctxt "Stock label"
 msgid "_Help"
 msgstr "_Nápověda"
 
-#: ../gtk/gtkstock.c:361
+#: ../gtk/gtkstock.c:362
 msgctxt "Stock label"
 msgid "_Home"
 msgstr "_Domů"
 
-#: ../gtk/gtkstock.c:362
+#: ../gtk/gtkstock.c:363
 msgctxt "Stock label"
 msgid "Increase Indent"
 msgstr "Zvětšit odsazení"
 
-#: ../gtk/gtkstock.c:363
+#: ../gtk/gtkstock.c:364
 msgctxt "Stock label"
 msgid "Decrease Indent"
 msgstr "Zmenšit odsazení"
 
-#: ../gtk/gtkstock.c:364
+#: ../gtk/gtkstock.c:365
 msgctxt "Stock label"
 msgid "_Index"
 msgstr "_Index"
 
-#: ../gtk/gtkstock.c:365
+#: ../gtk/gtkstock.c:366
 msgctxt "Stock label"
 msgid "_Information"
 msgstr "_Informace"
 
-#: ../gtk/gtkstock.c:366
+#: ../gtk/gtkstock.c:367
 msgctxt "Stock label"
 msgid "_Italic"
 msgstr "_Kurzíva"
 
-#: ../gtk/gtkstock.c:367
+#: ../gtk/gtkstock.c:368
 msgctxt "Stock label"
 msgid "_Jump to"
 msgstr "_Přejít na"
 
 #. This is about text justification, "centered text"
-#: ../gtk/gtkstock.c:369
+#: ../gtk/gtkstock.c:370
 msgctxt "Stock label"
 msgid "_Center"
 msgstr "Na _střed"
 
 #. This is about text justification
-#: ../gtk/gtkstock.c:371
+#: ../gtk/gtkstock.c:372
 msgctxt "Stock label"
 msgid "_Fill"
 msgstr "_Vyplnit"
 
 #. This is about text justification, "left-justified text"
-#: ../gtk/gtkstock.c:373
+#: ../gtk/gtkstock.c:374
 msgctxt "Stock label"
 msgid "_Left"
 msgstr "Do_leva"
 
 #. This is about text justification, "right-justified text"
-#: ../gtk/gtkstock.c:375
+#: ../gtk/gtkstock.c:376
 msgctxt "Stock label"
 msgid "_Right"
 msgstr "Do_prava"
 
 #. Media label, as in "fast forward"
-#: ../gtk/gtkstock.c:378
+#: ../gtk/gtkstock.c:379
 msgctxt "Stock label, media"
 msgid "_Forward"
 msgstr "_Vpřed"
 
 #. Media label, as in "next song"
-#: ../gtk/gtkstock.c:380
+#: ../gtk/gtkstock.c:381
 msgctxt "Stock label, media"
 msgid "_Next"
 msgstr "_Následující"
 
 #. Media label, as in "pause music"
-#: ../gtk/gtkstock.c:382
+#: ../gtk/gtkstock.c:383
 msgctxt "Stock label, media"
 msgid "P_ause"
 msgstr "_Pozastavit"
 
 #. Media label, as in "play music"
-#: ../gtk/gtkstock.c:384
+#: ../gtk/gtkstock.c:385
 msgctxt "Stock label, media"
 msgid "_Play"
 msgstr "Pře_hrát"
 
 #. Media label, as in  "previous song"
-#: ../gtk/gtkstock.c:386
+#: ../gtk/gtkstock.c:387
 msgctxt "Stock label, media"
 msgid "Pre_vious"
 msgstr "_Předchozí"
 
 #. Media label
-#: ../gtk/gtkstock.c:388
+#: ../gtk/gtkstock.c:389
 msgctxt "Stock label, media"
 msgid "_Record"
 msgstr "_Zaznamenávat"
 
 #. Media label
-#: ../gtk/gtkstock.c:390
+#: ../gtk/gtkstock.c:391
 msgctxt "Stock label, media"
 msgid "R_ewind"
 msgstr "Pře_točit"
 
 #. Media label
-#: ../gtk/gtkstock.c:392
+#: ../gtk/gtkstock.c:393
 msgctxt "Stock label, media"
 msgid "_Stop"
 msgstr "Za_stavit"
 
-#: ../gtk/gtkstock.c:393
+#: ../gtk/gtkstock.c:394
 msgctxt "Stock label"
 msgid "_Network"
 msgstr "_Síť"
 
-#: ../gtk/gtkstock.c:394
+#: ../gtk/gtkstock.c:395
 msgctxt "Stock label"
 msgid "_New"
 msgstr "_Nový"
 
-#: ../gtk/gtkstock.c:395
+#: ../gtk/gtkstock.c:396
 msgctxt "Stock label"
 msgid "_No"
 msgstr "_Ne"
 
-#: ../gtk/gtkstock.c:396
+#: ../gtk/gtkstock.c:397
 msgctxt "Stock label"
 msgid "_OK"
 msgstr "_Budiž"
 
-#: ../gtk/gtkstock.c:397
+#: ../gtk/gtkstock.c:398
 msgctxt "Stock label"
 msgid "_Open"
 msgstr "_Otevřít"
 
 #. Page orientation
-#: ../gtk/gtkstock.c:399
+#: ../gtk/gtkstock.c:400
 msgctxt "Stock label"
 msgid "Landscape"
 msgstr "Na šířku"
 
 #. Page orientation
-#: ../gtk/gtkstock.c:401
+#: ../gtk/gtkstock.c:402
 msgctxt "Stock label"
 msgid "Portrait"
 msgstr "Na výšku"
 
 #. Page orientation
-#: ../gtk/gtkstock.c:403
+#: ../gtk/gtkstock.c:404
 msgctxt "Stock label"
 msgid "Reverse landscape"
 msgstr "Obráceně na šířku"
 
 #. Page orientation
-#: ../gtk/gtkstock.c:405
+#: ../gtk/gtkstock.c:406
 msgctxt "Stock label"
 msgid "Reverse portrait"
 msgstr "Obráceně na výšku"
 
-#: ../gtk/gtkstock.c:406
+#: ../gtk/gtkstock.c:407
 msgctxt "Stock label"
 msgid "Page Set_up"
 msgstr "_Vzhled stránky"
 
-#: ../gtk/gtkstock.c:407
+#: ../gtk/gtkstock.c:408
 msgctxt "Stock label"
 msgid "_Paste"
 msgstr "V_ložit"
 
-#: ../gtk/gtkstock.c:408
+#: ../gtk/gtkstock.c:409
 msgctxt "Stock label"
 msgid "_Preferences"
 msgstr "_Nastavení"
 
-#: ../gtk/gtkstock.c:409
+#: ../gtk/gtkstock.c:410
 msgctxt "Stock label"
 msgid "_Print"
 msgstr "_Tisk"
 
-#: ../gtk/gtkstock.c:410
+#: ../gtk/gtkstock.c:411
 msgctxt "Stock label"
 msgid "Print Pre_view"
 msgstr "Ná_hled tisku"
 
-#: ../gtk/gtkstock.c:411
+#: ../gtk/gtkstock.c:412
 msgctxt "Stock label"
 msgid "_Properties"
 msgstr "_Vlastnosti"
 
-#: ../gtk/gtkstock.c:412
+#: ../gtk/gtkstock.c:413
 msgctxt "Stock label"
 msgid "_Quit"
 msgstr "U_končit"
 
-#: ../gtk/gtkstock.c:413
+#: ../gtk/gtkstock.c:414
 msgctxt "Stock label"
 msgid "_Redo"
 msgstr "Zn_ovu"
 
-#: ../gtk/gtkstock.c:414
+#: ../gtk/gtkstock.c:415
 msgctxt "Stock label"
 msgid "_Refresh"
 msgstr "Ob_novit"
 
-#: ../gtk/gtkstock.c:415
+#: ../gtk/gtkstock.c:416
 msgctxt "Stock label"
 msgid "_Remove"
 msgstr "O_dstranit"
 
-#: ../gtk/gtkstock.c:416
+#: ../gtk/gtkstock.c:417
 msgctxt "Stock label"
 msgid "_Revert"
 msgstr "_Vrátit"
 
-#: ../gtk/gtkstock.c:417
+#: ../gtk/gtkstock.c:418
 msgctxt "Stock label"
 msgid "_Save"
 msgstr "_Uložit"
 
-#: ../gtk/gtkstock.c:418
+#: ../gtk/gtkstock.c:419
 msgctxt "Stock label"
 msgid "Save _As"
 msgstr "Uložit _jako"
 
-#: ../gtk/gtkstock.c:419
+#: ../gtk/gtkstock.c:420
 msgctxt "Stock label"
 msgid "Select _All"
 msgstr "V_ybrat vše"
 
-#: ../gtk/gtkstock.c:420
+#: ../gtk/gtkstock.c:421
 msgctxt "Stock label"
 msgid "_Color"
 msgstr "_Barva"
 
-#: ../gtk/gtkstock.c:421
+#: ../gtk/gtkstock.c:422
 msgctxt "Stock label"
 msgid "_Font"
 msgstr "_Písmo"
 
 #. Sorting direction
-#: ../gtk/gtkstock.c:423
+#: ../gtk/gtkstock.c:424
 msgctxt "Stock label"
 msgid "_Ascending"
 msgstr "_Vzestupně"
 
 #. Sorting direction
-#: ../gtk/gtkstock.c:425
+#: ../gtk/gtkstock.c:426
 msgctxt "Stock label"
 msgid "_Descending"
 msgstr "_Sestupně"
 
-#: ../gtk/gtkstock.c:426
+#: ../gtk/gtkstock.c:427
 msgctxt "Stock label"
 msgid "_Spell Check"
 msgstr "_Kontrola pravopisu"
 
-#: ../gtk/gtkstock.c:427
+#: ../gtk/gtkstock.c:428
 msgctxt "Stock label"
 msgid "_Stop"
 msgstr "Za_stavit"
 
 #. Font variant
-#: ../gtk/gtkstock.c:429
+#: ../gtk/gtkstock.c:430
 msgctxt "Stock label"
 msgid "_Strikethrough"
 msgstr "_Přeškrtnuté"
 
-#: ../gtk/gtkstock.c:430
+#: ../gtk/gtkstock.c:431
 msgctxt "Stock label"
 msgid "_Undelete"
 msgstr "_Zrušit smazání"
 
 #. Font variant
-#: ../gtk/gtkstock.c:432
+#: ../gtk/gtkstock.c:433
 msgctxt "Stock label"
 msgid "_Underline"
 msgstr "Po_dtržené"
 
-#: ../gtk/gtkstock.c:433
+#: ../gtk/gtkstock.c:434
 msgctxt "Stock label"
 msgid "_Undo"
 msgstr "_Zpět"
 
-#: ../gtk/gtkstock.c:434
+#: ../gtk/gtkstock.c:435
 msgctxt "Stock label"
 msgid "_Yes"
 msgstr "_Ano"
 
 #. Zoom
-#: ../gtk/gtkstock.c:436
+#: ../gtk/gtkstock.c:437
 msgctxt "Stock label"
 msgid "_Normal Size"
 msgstr "_Normální velikost"
 
 #. Zoom
-#: ../gtk/gtkstock.c:438
+#: ../gtk/gtkstock.c:439
 msgctxt "Stock label"
 msgid "Best _Fit"
 msgstr "Při_způsobit velikost"
 
-#: ../gtk/gtkstock.c:439
+#: ../gtk/gtkstock.c:440
 msgctxt "Stock label"
 msgid "Zoom _In"
 msgstr "Z_většit"
 
-#: ../gtk/gtkstock.c:440
+#: ../gtk/gtkstock.c:441
 msgctxt "Stock label"
 msgid "Zoom _Out"
 msgstr "Z_menšit"
@@ -2563,8 +2586,8 @@ msgstr "V prvku <%s> byl dvakrát nalezen atribut \"%s\""
 
 #: ../gtk/gtktextbufferserialize.c:845
 #, c-format
-msgid "<%s> element has invalid id \"%s\""
-msgstr "Prvek <%s> má neplatné \"id\" \"%s\""
+msgid "<%s> element has invalid ID \"%s\""
+msgstr "Prvek <%s> má neplatné ID \"%s\""
 
 #: ../gtk/gtktextbufferserialize.c:855
 #, c-format
@@ -2581,77 +2604,77 @@ msgstr "Atribut \"%s\" provedl dvakrát opakování na stejném prvku <%s>"
 msgid "Attribute \"%s\" is invalid on <%s> element in this context"
 msgstr "V tomto kontextu je atribut \"%s\" v prvku <%s> neplatný"
 
-#: ../gtk/gtktextbufferserialize.c:1021
+#: ../gtk/gtktextbufferserialize.c:1024
 #, c-format
 msgid "Tag \"%s\" has not been defined."
 msgstr "Značka \"%s\" nebyla definována."
 
-#: ../gtk/gtktextbufferserialize.c:1033
+#: ../gtk/gtktextbufferserialize.c:1036
 msgid "Anonymous tag found and tags can not be created."
 msgstr "Nalezena anonymní značka, značky nemohly být vytvořeny."
 
-#: ../gtk/gtktextbufferserialize.c:1044
+#: ../gtk/gtktextbufferserialize.c:1047
 #, c-format
 msgid "Tag \"%s\" does not exist in buffer and tags can not be created."
 msgstr ""
 "Značka \"%s\" ve vyrovnávací paměti neexistuje, značky nemohly být vytvořeny."
 
-#: ../gtk/gtktextbufferserialize.c:1143 ../gtk/gtktextbufferserialize.c:1218
-#: ../gtk/gtktextbufferserialize.c:1319 ../gtk/gtktextbufferserialize.c:1393
+#: ../gtk/gtktextbufferserialize.c:1146 ../gtk/gtktextbufferserialize.c:1221
+#: ../gtk/gtktextbufferserialize.c:1324 ../gtk/gtktextbufferserialize.c:1398
 #, c-format
 msgid "Element <%s> is not allowed below <%s>"
 msgstr "Prvek <%s> není povolen pod <%s>"
 
-#: ../gtk/gtktextbufferserialize.c:1174
+#: ../gtk/gtktextbufferserialize.c:1177
 #, c-format
 msgid "\"%s\" is not a valid attribute type"
 msgstr "\"%s\" není platným typem atributu"
 
-#: ../gtk/gtktextbufferserialize.c:1182
+#: ../gtk/gtktextbufferserialize.c:1185
 #, c-format
 msgid "\"%s\" is not a valid attribute name"
 msgstr "\"%s\" není platným názvem atributu"
 
-#: ../gtk/gtktextbufferserialize.c:1192
+#: ../gtk/gtktextbufferserialize.c:1195
 #, c-format
 msgid ""
 "\"%s\" could not be converted to a value of type \"%s\" for attribute \"%s\""
 msgstr "\"%s\" nemohlo být převedeno na hodnotu typu \"%s\" atributu \"%s\""
 
-#: ../gtk/gtktextbufferserialize.c:1201
+#: ../gtk/gtktextbufferserialize.c:1204
 #, c-format
 msgid "\"%s\" is not a valid value for attribute \"%s\""
 msgstr "\"%s\" není platnou hodnotou atributu \"%s\""
 
-#: ../gtk/gtktextbufferserialize.c:1284
+#: ../gtk/gtktextbufferserialize.c:1289
 #, c-format
 msgid "Tag \"%s\" already defined"
 msgstr "Značka \"%s\" již byla definována"
 
-#: ../gtk/gtktextbufferserialize.c:1295
+#: ../gtk/gtktextbufferserialize.c:1300
 #, c-format
 msgid "Tag \"%s\" has invalid priority \"%s\""
 msgstr "Značka \"%s\" má nesprávnou prioritu \"%s\""
 
-#: ../gtk/gtktextbufferserialize.c:1348
+#: ../gtk/gtktextbufferserialize.c:1353
 #, c-format
 msgid "Outermost element in text must be <text_view_markup> not <%s>"
 msgstr "Nejkrajnější prvek v textu musí být <text_view_markup>, nikoliv <%s>"
 
-#: ../gtk/gtktextbufferserialize.c:1357 ../gtk/gtktextbufferserialize.c:1373
+#: ../gtk/gtktextbufferserialize.c:1362 ../gtk/gtktextbufferserialize.c:1378
 #, c-format
 msgid "A <%s> element has already been specified"
 msgstr "Prvek <%s> již zadán byl"
 
-#: ../gtk/gtktextbufferserialize.c:1379
+#: ../gtk/gtktextbufferserialize.c:1384
 msgid "A <text> element can't occur before a <tags> element"
 msgstr "Prvek <text> se nemůže vyskytovat před prvkem <tags>"
 
-#: ../gtk/gtktextbufferserialize.c:1778
+#: ../gtk/gtktextbufferserialize.c:1784
 msgid "Serialized data is malformed"
 msgstr "Serializovaná data jsou chybná"
 
-#: ../gtk/gtktextbufferserialize.c:1856
+#: ../gtk/gtktextbufferserialize.c:1862
 msgid ""
 "Serialized data is malformed. First section isn't GTKTEXTBUFFERCONTENTS-0001"
 msgstr ""
@@ -2702,53 +2725,53 @@ msgstr "ZWNJ - nespojovač n_ulové šířky"
 msgid "Unable to locate theme engine in module_path: \"%s\","
 msgstr "Nelze nalézt systém motivů v module_path: \"%s\","
 
-#: ../gtk/gtkuimanager.c:1504
+#: ../gtk/gtkuimanager.c:1505
 #, c-format
 msgid "Unexpected start tag '%s' on line %d char %d"
 msgstr "Neočekávaná počáteční značka \"%s\" na řádku %d, znak %d"
 
-#: ../gtk/gtkuimanager.c:1594
+#: ../gtk/gtkuimanager.c:1595
 #, c-format
 msgid "Unexpected character data on line %d char %d"
 msgstr "Neočekávaná data znaků na řádku %d, znak %d"
 
-#: ../gtk/gtkuimanager.c:2426
+#: ../gtk/gtkuimanager.c:2427
 msgid "Empty"
 msgstr "Prázdný"
 
-#: ../gtk/gtkvolumebutton.c:82
+#: ../gtk/gtkvolumebutton.c:83
 msgid "Volume"
 msgstr "Hlasitost"
 
-#: ../gtk/gtkvolumebutton.c:84
+#: ../gtk/gtkvolumebutton.c:85
 msgid "Turns volume down or up"
 msgstr "Sníží nebo zvýší hlasitost"
 
-#: ../gtk/gtkvolumebutton.c:87
+#: ../gtk/gtkvolumebutton.c:88
 msgid "Adjusts the volume"
 msgstr "Změní hlasitost"
 
-#: ../gtk/gtkvolumebutton.c:90 ../gtk/gtkvolumebutton.c:93
+#: ../gtk/gtkvolumebutton.c:94 ../gtk/gtkvolumebutton.c:97
 msgid "Volume Down"
 msgstr "Snížit hlasitost"
 
-#: ../gtk/gtkvolumebutton.c:92
+#: ../gtk/gtkvolumebutton.c:96
 msgid "Decreases the volume"
 msgstr "Sníží hlasitost"
 
-#: ../gtk/gtkvolumebutton.c:96 ../gtk/gtkvolumebutton.c:99
+#: ../gtk/gtkvolumebutton.c:100 ../gtk/gtkvolumebutton.c:103
 msgid "Volume Up"
 msgstr "Zvýšit hlasitost"
 
-#: ../gtk/gtkvolumebutton.c:98
+#: ../gtk/gtkvolumebutton.c:102
 msgid "Increases the volume"
 msgstr "Zvýší hlasitost"
 
-#: ../gtk/gtkvolumebutton.c:156
+#: ../gtk/gtkvolumebutton.c:160
 msgid "Muted"
 msgstr "Ztlumeno"
 
-#: ../gtk/gtkvolumebutton.c:160
+#: ../gtk/gtkvolumebutton.c:164
 msgid "Full Volume"
 msgstr "Maximální hlasitost"
 
@@ -2757,7 +2780,7 @@ msgstr "Maximální hlasitost"
 #. * Translate the "%d" to "%Id" if you want to use localised digits,
 #. * or otherwise translate the "%d" to "%d".
 #.
-#: ../gtk/gtkvolumebutton.c:173
+#: ../gtk/gtkvolumebutton.c:177
 #, c-format
 msgctxt "volume percentage"
 msgid "%d %%"
@@ -3821,8 +3844,8 @@ msgstr "Je vyžadováno ověření, aby bylo možné vytisknout dokument \"%s\""
 #, c-format
 msgid "Authentication is required to print this document on printer %s"
 msgstr ""
-"Je vyžadováno ověření, aby bylo možné tento dokument vytisknout na tiskárně %"
-"s"
+"Je vyžadováno ověření, aby bylo možné tento dokument vytisknout na tiskárně "
+"%s"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1051
 msgid "Authentication is required to print this document"
@@ -3884,7 +3907,7 @@ msgstr "Tiskárně \"%s\" došel papír."
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1686
 #, c-format
-msgid "Printer '%s' is currently off-line."
+msgid "Printer '%s' is currently offline."
 msgstr "Tiskárna \"%s\" není v tomto okamžiku připojena."
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1687
@@ -3895,12 +3918,12 @@ msgstr "Na tiskárně \"%s\" se vyskytla chyba."
 #. Translators: this is a printer status.
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1995
 msgid "Paused ; Rejecting Jobs"
-msgstr "Pozastaveno ; odmítání úloh"
+msgstr "Pozastaveno ; Úlohy se odmítají"
 
 #. Translators: this is a printer status.
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:2001
 msgid "Rejecting Jobs"
-msgstr "Odmítání úloh"
+msgstr "Úlohy se odmítají"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:2777
 msgid "Two Sided"
@@ -4193,653 +4216,6 @@ msgstr ""
 "Nelze načíst obrázek \"%s\": důvod není znám, pravděpodobně poškozený soubor "
 "obrázku"
 
-#~ msgid "Image file '%s' contains no data"
-#~ msgstr "Soubor obrázku \"%s\" neobsahuje data"
-
-#~ msgid ""
-#~ "Failed to load animation '%s': reason not known, probably a corrupt "
-#~ "animation file"
-#~ msgstr ""
-#~ "Nelze načíst animaci \"%s\": důvod není znám, pravděpodobně poškozený "
-#~ "soubor animace"
-
-#~ msgid "Unable to load image-loading module: %s: %s"
-#~ msgstr "Nelze načíst modul pro čtení obrázků: %s: %s"
-
-#~ msgid ""
-#~ "Image-loading module %s does not export the proper interface; perhaps "
-#~ "it's from a different GTK version?"
-#~ msgstr ""
-#~ "Modul pro čtení obrázků %s neexportuje správné rozhraní; možná je z jiné "
-#~ "verze GTK?"
-
-#~ msgid "Image type '%s' is not supported"
-#~ msgstr "Typ obrázku \"%s\" není podporován"
-
-#~ msgid "Couldn't recognize the image file format for file '%s'"
-#~ msgstr "Nelze rozpoznat formát obrázku u souboru \"%s\""
-
-#~ msgid "Unrecognized image file format"
-#~ msgstr "Nerozpoznaný formát obrázku"
-
-#~ msgid "Failed to load image '%s': %s"
-#~ msgstr "Nelze načíst obrázek \"%s\": %s"
-
-#~ msgid "Error writing to image file: %s"
-#~ msgstr "Chyba při zápisu do souboru obrázku: %s"
-
-#~ msgid ""
-#~ "This build of gdk-pixbuf does not support saving the image format: %s"
-#~ msgstr ""
-#~ "Toto sestavení gdk-pixbuf nepodporuje ukládání obrázku ve formátu: %s"
-
-#~ msgid "Insufficient memory to save image to callback"
-#~ msgstr "Nedostatek paměti k uložení obrázku pro zpětné volání"
-
-#~ msgid "Failed to open temporary file"
-#~ msgstr "Nelze otevřít dočasný soubor"
-
-#~ msgid "Failed to read from temporary file"
-#~ msgstr "Z dočasného souboru nelze číst"
-
-#~ msgid "Failed to open '%s' for writing: %s"
-#~ msgstr "Nelze otevřít \"%s\" k zápisu: %s"
-
-#~ msgid ""
-#~ "Failed to close '%s' while writing image, all data may not have been "
-#~ "saved: %s"
-#~ msgstr ""
-#~ "Nelze zavřít \"%s\" během zápisu obrázku, možná nejsou uložena všechna "
-#~ "data: %s"
-
-#~ msgid "Insufficient memory to save image into a buffer"
-#~ msgstr "Nedostatek paměti k uložení obrázku do vyrovnávací paměti"
-
-#~ msgid "Error writing to image stream"
-#~ msgstr "Chyba při zápisu do obrazového proudu"
-
-#~ msgid ""
-#~ "Internal error: Image loader module '%s' failed to complete an operation, "
-#~ "but didn't give a reason for the failure"
-#~ msgstr ""
-#~ "Interní chyba: Modulu pro načítání obrázku \"%s\" se nezdařilo dokončit "
-#~ "operaci, ale k tomuto selhání neudal důvod"
-
-#~ msgid "Incremental loading of image type '%s' is not supported"
-#~ msgstr "Postupné načítání obrázku typu \"%s\" není podporováno"
-
-#~ msgid "Image header corrupt"
-#~ msgstr "Záhlaví obrázku je poškozeno"
-
-#~ msgid "Image format unknown"
-#~ msgstr "Neznámý formát obrázku"
-
-#~ msgid "Image pixel data corrupt"
-#~ msgstr "Data pixelů obrázku jsou poškozena"
-
-#~ msgid "failed to allocate image buffer of %u byte"
-#~ msgid_plural "failed to allocate image buffer of %u bytes"
-#~ msgstr[0] "nelze alokovat paměť pro obrázek o velikosti %u bajt"
-#~ msgstr[1] "nelze alokovat paměť pro obrázek o velikosti %u bajty"
-#~ msgstr[2] "nelze alokovat paměť pro obrázek o velikosti %u bajtů"
-
-#~ msgid "Unexpected icon chunk in animation"
-#~ msgstr "Neočekávaný blok ikony v animaci"
-
-#~ msgid "Unsupported animation type"
-#~ msgstr "Nepodporovaný typ animace"
-
-#~ msgid "Invalid header in animation"
-#~ msgstr "Neplatné záhlaví v animaci"
-
-#~ msgid "Not enough memory to load animation"
-#~ msgstr "Nedostatek paměti k načtení animace"
-
-#~ msgid "Malformed chunk in animation"
-#~ msgstr "Chybně vytvořený blok v animaci"
-
-#~ msgid "The ANI image format"
-#~ msgstr "Formát obrázku ANI"
-
-#~ msgid "BMP image has bogus header data"
-#~ msgstr "Obrázek formátu BMP má neplatná data v záhlaví"
-
-#~ msgid "Not enough memory to load bitmap image"
-#~ msgstr "Nedostatek paměti k načtení rastrového obrázku"
-
-#~ msgid "BMP image has unsupported header size"
-#~ msgstr "Obrázek BMP má nepodporovanou velikost záhlaví"
-
-#~ msgid "Topdown BMP images cannot be compressed"
-#~ msgstr "Obrázky BMP shora dolů nelze komprimovat"
-
-#~ msgid "Premature end-of-file encountered"
-#~ msgstr "Nalezen předčasný konec souboru"
-
-#~ msgid "Couldn't allocate memory for saving BMP file"
-#~ msgstr "Nelze alokovat paměť k uložení souboru BMP"
-
-#~ msgid "Couldn't write to BMP file"
-#~ msgstr "Nelze zapisovat do souboru BMP"
-
-#~ msgid "The BMP image format"
-#~ msgstr "Formát obrázku BMP"
-
-#~ msgid "Failure reading GIF: %s"
-#~ msgstr "Chyba při čtení formátu GIF: %s"
-
-#~ msgid "GIF file was missing some data (perhaps it was truncated somehow?)"
-#~ msgstr ""
-#~ "V souboru GIF chybí některá data (možná byl nějakým způsobem zkrácen?)"
-
-#~ msgid "Internal error in the GIF loader (%s)"
-#~ msgstr "Interní chyba v zavaděči GIF (%s)"
-
-#~ msgid "Stack overflow"
-#~ msgstr "Přetečení zásobníku"
-
-#~ msgid "GIF image loader cannot understand this image."
-#~ msgstr "Zavaděč obrázků GIF nerozumí tomuto obrázku."
-
-#~ msgid "Bad code encountered"
-#~ msgstr "Nalezen chybný kód"
-
-#~ msgid "Circular table entry in GIF file"
-#~ msgstr "Cyklická položka tabulky v souboru GIF"
-
-#~ msgid "Not enough memory to load GIF file"
-#~ msgstr "Nedostatek paměti k načtení obrázku GIF"
-
-#~ msgid "Not enough memory to composite a frame in GIF file"
-#~ msgstr "Nedostatek paměti ke složení políčka v souboru GIF"
-
-#~ msgid "GIF image is corrupt (incorrect LZW compression)"
-#~ msgstr "Obrázek GIF je poškozen (chybná komprese LZW)"
-
-#~ msgid "File does not appear to be a GIF file"
-#~ msgstr "Soubor nevypadá jako soubor GIF"
-
-#~ msgid "Version %s of the GIF file format is not supported"
-#~ msgstr "Verze %s formátu souborů GIF není podporována"
-
-#~ msgid ""
-#~ "GIF image has no global colormap, and a frame inside it has no local "
-#~ "colormap."
-#~ msgstr ""
-#~ "Obrázek GIF neobsahuje globální mapu barev a políčko v něm neobsahuje "
-#~ "lokální mapu."
-
-#~ msgid "GIF image was truncated or incomplete."
-#~ msgstr "Obrázek GIF byl zkrácen nebo není úplný."
-
-#~ msgid "The GIF image format"
-#~ msgstr "Formát obrázku GIF"
-
-#~ msgid "Invalid header in icon"
-#~ msgstr "Neplatné záhlaví ikony"
-
-#~ msgid "Not enough memory to load icon"
-#~ msgstr "Nedostatek paměti k načtení ikony"
-
-#~ msgid "Icon has zero width"
-#~ msgstr "Ikona má nulovou šířku"
-
-#~ msgid "Icon has zero height"
-#~ msgstr "Ikona má nulovou výšku"
-
-#~ msgid "Compressed icons are not supported"
-#~ msgstr "Komprimované ikony nejsou podporovány"
-
-#~ msgid "Unsupported icon type"
-#~ msgstr "Nepodporovaný typ ikony"
-
-#~ msgid "Not enough memory to load ICO file"
-#~ msgstr "Nedostatek paměti k načtení souboru ICO"
-
-#~ msgid "Image too large to be saved as ICO"
-#~ msgstr "Obrázek je příliš velký, aby mohl být uložen jako ICO"
-
-#~ msgid "Cursor hotspot outside image"
-#~ msgstr "Aktivní bod kurzoru mimo obrázek"
-
-#~ msgid "Unsupported depth for ICO file: %d"
-#~ msgstr "Nepodporovaná hloubka souboru ICO: %d"
-
-#~ msgid "The ICO image format"
-#~ msgstr "Formát obrázku ICO"
-
-#~ msgid "Error reading ICNS image: %s"
-#~ msgstr "Chyba při čtení obrázku ICNS: %s"
-
-#~ msgid "Could not decode ICNS file"
-#~ msgstr "Nelze dekódovat soubor ICNS"
-
-#~ msgid "The ICNS image format"
-#~ msgstr "Formát obrázku ICNS"
-
-#~ msgid "Couldn't allocate memory for stream"
-#~ msgstr "Nelze alokovat paměť proudu"
-
-#~ msgid "Couldn't decode image"
-#~ msgstr "Nelze dekódovat obrázek"
-
-#~ msgid "Transformed JPEG2000 has zero width or height"
-#~ msgstr "Transformovaný obrázek JPEG2000 má nulovou výšku nebo šířku"
-
-#~ msgid "Image type currently not supported"
-#~ msgstr "Typ obrázku v současnosti není podporován"
-
-#~ msgid "Couldn't allocate memory for color profile"
-#~ msgstr "Nelze alokovat paměť profilu barev"
-
-#~ msgid "Insufficient memory to open JPEG 2000 file"
-#~ msgstr "Nedostatek paměti k otevření souboru JPEG 2000"
-
-#~ msgid "Couldn't allocate memory to buffer image data"
-#~ msgstr "Nelze alokovat paměť k načtení obrazových dat do vyrovnávací paměti"
-
-#~ msgid "The JPEG 2000 image format"
-#~ msgstr "Formát obrázku JPEG 2000"
-
-#~ msgid "Error interpreting JPEG image file (%s)"
-#~ msgstr "Chyba při interpretaci souboru obrázku JPEG (%s)"
-
-#~ msgid ""
-#~ "Insufficient memory to load image, try exiting some applications to free "
-#~ "memory"
-#~ msgstr ""
-#~ "Nedostatek paměti k načtení obrázku, zkuste prosím uvolnit paměť "
-#~ "ukončením několika aplikací"
-
-#~ msgid "Unsupported JPEG color space (%s)"
-#~ msgstr "Nepodporovaný prostor barev JPEG (%s)"
-
-#~ msgid "Couldn't allocate memory for loading JPEG file"
-#~ msgstr "Nelze alokovat paměť k načtení souboru JPEG"
-
-#~ msgid "Transformed JPEG has zero width or height."
-#~ msgstr "Transformovaný obrázek JPEG má nulovou výšku nebo šířku."
-
-#~ msgid ""
-#~ "JPEG quality must be a value between 0 and 100; value '%s' could not be "
-#~ "parsed."
-#~ msgstr ""
-#~ "Kvalita JPEG musí být hodnota mezi 0 a 100; hodnotu \"%s\" nebylo možné "
-#~ "zpracovat."
-
-#~ msgid ""
-#~ "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
-#~ msgstr ""
-#~ "Kvalita JPEG musí být hodnota mezi 0 a 100; hodnota \"%d\" není povolena."
-
-#~ msgid "The JPEG image format"
-#~ msgstr "Formát obrázku JPEG"
-
-#~ msgid "Couldn't allocate memory for header"
-#~ msgstr "Nelze alokovat paměť pro záhlaví"
-
-#~ msgid "Couldn't allocate memory for context buffer"
-#~ msgstr "Nelze alokovat paměť pro vyrovnávací paměť kontextu"
-
-#~ msgid "Image has invalid width and/or height"
-#~ msgstr "Obrázek má nulovou šířku a/nebo výšku"
-
-#~ msgid "Image has unsupported bpp"
-#~ msgstr "Obrázek má nepodporované bpp"
-
-#~ msgid "Image has unsupported number of %d-bit planes"
-#~ msgstr "Obrázek má nepodporovaný počet %dbitových rovin"
-
-#~ msgid "Couldn't create new pixbuf"
-#~ msgstr "Nelze vytvořit nový pixbuf"
-
-#~ msgid "Couldn't allocate memory for line data"
-#~ msgstr "Nelze alokovat paměť pro data řádků"
-
-#~ msgid "Couldn't allocate memory for paletted data"
-#~ msgstr "Nelze alokovat paměť pro data palety"
-
-#~ msgid "Didn't get all lines of PCX image"
-#~ msgstr "Nezískány všechny řádky obrázku PCX"
-
-#~ msgid "No palette found at end of PCX data"
-#~ msgstr "Na konci dat PCX nenalezena paleta"
-
-#~ msgid "The PCX image format"
-#~ msgstr "Formát obrázku PCX"
-
-#~ msgid "Bits per channel of PNG image is invalid."
-#~ msgstr "Počet bitů na kanál obrázku PNG není platný."
-
-#~ msgid "Transformed PNG has zero width or height."
-#~ msgstr "Transformovaný obrázek PNG má nulovou výšku nebo šířku."
-
-#~ msgid "Bits per channel of transformed PNG is not 8."
-#~ msgstr "Počet bitů na kanál transformovaného obrázku PNG není 8."
-
-#~ msgid "Transformed PNG not RGB or RGBA."
-#~ msgstr "Transformovaný obrázek PNG není RGB nebo RGBA."
-
-#~ msgid "Transformed PNG has unsupported number of channels, must be 3 or 4."
-#~ msgstr ""
-#~ "Transformovaný obrázek PNG má nepodporovaný počet kanálů, musí být 3 nebo "
-#~ "4."
-
-#~ msgid "Fatal error in PNG image file: %s"
-#~ msgstr "Kritická chyba v souboru obrázku PNG: %s"
-
-#~ msgid "Insufficient memory to load PNG file"
-#~ msgstr "Nedostatek paměti k načtení souboru PNG"
-
-#~ msgid ""
-#~ "Insufficient memory to store a %ld by %ld image; try exiting some "
-#~ "applications to reduce memory usage"
-#~ msgstr ""
-#~ "Nedostatek paměti k uložení obrázku %ld krát %ld; zkuste prosím uvolnit "
-#~ "paměť ukončením několika aplikací"
-
-#~ msgid "Fatal error reading PNG image file"
-#~ msgstr "Kritická chyba při čtení souboru obrázku PNG"
-
-#~ msgid "Fatal error reading PNG image file: %s"
-#~ msgstr "Kritická chyba při čtení souboru obrázku PNG: %s"
-
-#~ msgid ""
-#~ "Keys for PNG text chunks must have at least 1 and at most 79 characters."
-#~ msgstr "Klíče textových bloků PNG musí mít alespoň 1 a nejvýše 79 znaků."
-
-#~ msgid "Keys for PNG text chunks must be ASCII characters."
-#~ msgstr "Klíče textových bloků PNG musí být znaky ASCII."
-
-#~ msgid "Color profile has invalid length %d."
-#~ msgstr "Profil barev má neplatnou délku %d."
-
-#~ msgid ""
-#~ "PNG compression level must be a value between 0 and 9; value '%s' could "
-#~ "not be parsed."
-#~ msgstr ""
-#~ "Úroveň komprese PNG musí být hodnota mezi 0 a 9; hodnotu \"%s\" nebylo "
-#~ "možné zpracovat."
-
-#~ msgid ""
-#~ "PNG compression level must be a value between 0 and 9; value '%d' is not "
-#~ "allowed."
-#~ msgstr ""
-#~ "Úroveň komprese PNG musí být hodnota mezi 0 a 9; hodnota \"%d\" není "
-#~ "povolena."
-
-#~ msgid ""
-#~ "Value for PNG text chunk %s cannot be converted to ISO-8859-1 encoding."
-#~ msgstr ""
-#~ "Hodnotu textového bloku PNG %s nelze převést do kódování ISO-8859-1."
-
-#~ msgid "The PNG image format"
-#~ msgstr "Formát obrázku PNG"
-
-#~ msgid "PNM loader expected to find an integer, but didn't"
-#~ msgstr "Zavaděč PNM očekával celé číslo, ale nenašel ho"
-
-#~ msgid "PNM file has an incorrect initial byte"
-#~ msgstr "Soubor PNM obsahuje nesprávný počáteční bajt"
-
-#~ msgid "PNM file is not in a recognized PNM subformat"
-#~ msgstr "Soubor PNM není v rozpoznaném podřazeném formátu PNM"
-
-#~ msgid "PNM file has an image width of 0"
-#~ msgstr "Soubor PNM má šířku obrázku 0"
-
-#~ msgid "PNM file has an image height of 0"
-#~ msgstr "Soubor PNM má výšku obrázku 0"
-
-#~ msgid "Maximum color value in PNM file is 0"
-#~ msgstr "Maximální hodnota barvy v souboru PNM je 0"
-
-#~ msgid "Maximum color value in PNM file is too large"
-#~ msgstr "Maximální hodnota barvy v souboru PNM je příliš vysoká"
-
-#~ msgid "Raw PNM image type is invalid"
-#~ msgstr "Typ obrázku raw PNM není platný"
-
-#~ msgid "PNM image loader does not support this PNM subformat"
-#~ msgstr "Zavaděč obrázků PNM nepodporuje tento podřazený formát PNM"
-
-#~ msgid "Raw PNM formats require exactly one whitespace before sample data"
-#~ msgstr "Formáty raw PNM vyžadují přesně jednu mezeru před daty vzorků"
-
-#~ msgid "Cannot allocate memory for loading PNM image"
-#~ msgstr "Nelze alokovat paměť k načtení obrázku PNM"
-
-#~ msgid "Insufficient memory to load PNM context struct"
-#~ msgstr "Nedostatek paměti k načtení struktury kontextu PNM"
-
-#~ msgid "Unexpected end of PNM image data"
-#~ msgstr "Neočekávaný konec dat obrázku PNM"
-
-#~ msgid "Insufficient memory to load PNM file"
-#~ msgstr "Nedostatek paměti k načtení souboru PNM"
-
-#~ msgid "The PNM/PBM/PGM/PPM image format family"
-#~ msgstr "Rodina formátů obrázků PNM/PBM/PGM/PPM"
-
-#~ msgid "Input file descriptor is NULL."
-#~ msgstr "Vstupní popisovač souboru je nulový."
-
-#~ msgid "Failed to read QTIF header"
-#~ msgstr "Nezdařilo se čtení záhlaví QTIF"
-
-#~ msgid "QTIF atom size too large (%d bytes)"
-#~ msgstr "Velikost QTIF atom je příliš vysoká (%d bajtů)"
-
-#~ msgid "Failed to allocate %d bytes for file read buffer"
-#~ msgstr "Nelze alokovat %d bajtů pro vyrovnávací paměť čtení souboru"
-
-#~ msgid "File error when reading QTIF atom: %s"
-#~ msgstr "Chyba při čtení QTIF atom: %s"
-
-#~ msgid "Failed to skip the next %d bytes with seek()."
-#~ msgstr "Nezdařilo se přeskočit dalších %d bajtů pomocí seek()."
-
-#~ msgid "Failed to allocate QTIF context structure."
-#~ msgstr "Nezdařila se alokace struktury kontextu QTIF."
-
-#~ msgid "Failed to create GdkPixbufLoader object."
-#~ msgstr "Nezdařilo se vytvoření objektu GdkPixbufLoader."
-
-#~ msgid "Failed to find an image data atom."
-#~ msgstr "Nelze nalézt atom obrazových dat."
-
-#~ msgid "The QTIF image format"
-#~ msgstr "Formát obrázku QTIF"
-
-#~ msgid "RAS image has bogus header data"
-#~ msgstr "Obrázek RAS má neplatná data v záhlaví"
-
-#~ msgid "RAS image has unknown type"
-#~ msgstr "Obrázek RAS má neznámý typ"
-
-#~ msgid "unsupported RAS image variation"
-#~ msgstr "nepodporovaná variace obrázku RAS"
-
-#~ msgid "Not enough memory to load RAS image"
-#~ msgstr "Nedostatek paměti k načtení obrázku RAS"
-
-#~ msgid "The Sun raster image format"
-#~ msgstr "Formát obrázku Sun raster"
-
-#~ msgid "Cannot allocate memory for IOBuffer struct"
-#~ msgstr "Nelze alokovat paměť pro strukturu IOBuffer"
-
-#~ msgid "Cannot allocate memory for IOBuffer data"
-#~ msgstr "Nelze alokovat paměť pro data IOBuffer"
-
-#~ msgid "Cannot realloc IOBuffer data"
-#~ msgstr "Nelze přealokovat data IOBuffer"
-
-#~ msgid "Cannot allocate temporary IOBuffer data"
-#~ msgstr "Nelze alokovat dočasná data pro IOBuffer"
-
-#~ msgid "Cannot allocate new pixbuf"
-#~ msgstr "Nelze alokovat nový pixbuf"
-
-#~ msgid "Image is corrupted or truncated"
-#~ msgstr "Obrázek je zkrácený nebo poškozený"
-
-#~ msgid "Cannot allocate colormap structure"
-#~ msgstr "Nelze alokovat strukturu pro mapu barev"
-
-#~ msgid "Cannot allocate colormap entries"
-#~ msgstr "Nelze alokovat položky mapy barev"
-
-#~ msgid "Unexpected bitdepth for colormap entries"
-#~ msgstr "Neočekávaná bitová hloubka položek map barev"
-
-#~ msgid "Cannot allocate TGA header memory"
-#~ msgstr "Nelze alokovat paměť pro záhlaví TGA"
-
-#~ msgid "TGA image has invalid dimensions"
-#~ msgstr "Obrázek TGA má neplatné rozměry"
-
-#~ msgid "TGA image type not supported"
-#~ msgstr "Typ obrázku TGA není podporován"
-
-#~ msgid "Cannot allocate memory for TGA context struct"
-#~ msgstr "Nelze alokovat paměť pro strukturu kontextu TGA"
-
-#~ msgid "Excess data in file"
-#~ msgstr "V souboru jsou přebytečná data"
-
-#~ msgid "The Targa image format"
-#~ msgstr "Formát obrázku Targa"
-
-#~ msgid "Could not get image width (bad TIFF file)"
-#~ msgstr "Nelze získat šířku obrázku (chybný soubor TIFF)"
-
-#~ msgid "Could not get image height (bad TIFF file)"
-#~ msgstr "Nelze získat výšku obrázku (chybný soubor TIFF)"
-
-#~ msgid "Width or height of TIFF image is zero"
-#~ msgstr "Výška nebo šířka obrázku TIFF je 0"
-
-#~ msgid "Dimensions of TIFF image too large"
-#~ msgstr "Rozměry obrázku TIFF jsou příliš velké"
-
-#~ msgid "Insufficient memory to open TIFF file"
-#~ msgstr "Nedostatek paměti k otevření souboru TIFF"
-
-#~ msgid "Failed to load RGB data from TIFF file"
-#~ msgstr "Nelze načíst data RGB ze souboru TIFF"
-
-#~ msgid "Failed to open TIFF image"
-#~ msgstr "Nelze otevřít obrázek TIFF"
-
-#~ msgid "TIFFClose operation failed"
-#~ msgstr "Operace TIFFClose selhala"
-
-#~ msgid "Failed to load TIFF image"
-#~ msgstr "Nelze načíst obrázek TIFF"
-
-#~ msgid "Failed to save TIFF image"
-#~ msgstr "Ukládání obrázku TIFF selhalo"
-
-#~ msgid "TIFF compression doesn't refer to a valid codec."
-#~ msgstr "Komprese TIFF neodkazuje na platný kodek."
-
-#~ msgid "Failed to write TIFF data"
-#~ msgstr "Zápis dat TIFF selhal"
-
-#~ msgid "Couldn't write to TIFF file"
-#~ msgstr "Nelze zapisovat do souboru TIFF"
-
-#~ msgid "The TIFF image format"
-#~ msgstr "Formát obrázku TIFF"
-
-#~ msgid "Image has zero width"
-#~ msgstr "Obrázek má nulovou šířku"
-
-#~ msgid "Image has zero height"
-#~ msgstr "Obrázek má nulovou výšku"
-
-#~ msgid "Not enough memory to load image"
-#~ msgstr "Nedostatek paměti k načtení obrázku"
-
-#~ msgid "Couldn't save the rest"
-#~ msgstr "Nelze uložit zbývající část"
-
-#~ msgid "The WBMP image format"
-#~ msgstr "Formát obrázku WBMP"
-
-#~ msgid "Invalid XBM file"
-#~ msgstr "Neplatný soubor XBM"
-
-#~ msgid "Insufficient memory to load XBM image file"
-#~ msgstr "Nedostatek paměti k načtení souboru obrázku XBM"
-
-#~ msgid "Failed to write to temporary file when loading XBM image"
-#~ msgstr "Při načítání obrázku XBM se nezdařil zápis do dočasného souboru"
-
-#~ msgid "The XBM image format"
-#~ msgstr "Formát obrázku XBM"
-
-#~ msgid "No XPM header found"
-#~ msgstr "Nebylo nalezeno záhlaví XPM"
-
-#~ msgid "Invalid XPM header"
-#~ msgstr "Neplatné záhlaví XPM"
-
-#~ msgid "XPM file has image width <= 0"
-#~ msgstr "Soubor XPM má šířku obrázku <= 0"
-
-#~ msgid "XPM file has image height <= 0"
-#~ msgstr "Soubor XPM má výšku obrázku <= 0"
-
-#~ msgid "XPM has invalid number of chars per pixel"
-#~ msgstr "XPM obsahuje neplatný počet znaků na pixel"
-
-#~ msgid "XPM file has invalid number of colors"
-#~ msgstr "Soubor XPM má neplatný počet barev"
-
-#~ msgid "Cannot allocate memory for loading XPM image"
-#~ msgstr "Nelze alokovat paměť k načtení obrázku XPM"
-
-#~ msgid "Cannot read XPM colormap"
-#~ msgstr "Nelze načíst mapu barev XPM"
-
-#~ msgid "Failed to write to temporary file when loading XPM image"
-#~ msgstr "Při načítání obrázku XPM se nezdařil zápis do dočasného souboru"
-
-#~ msgid "The XPM image format"
-#~ msgstr "Formát obrázku XPM"
-
-#~ msgid "The EMF image format"
-#~ msgstr "Formát obrázku EMF"
-
-#~ msgid "Could not allocate memory: %s"
-#~ msgstr "Nelze alokovat paměť: %s"
-
-#~ msgid "Could not create stream: %s"
-#~ msgstr "Nelze vytvořit proud: %s"
-
-#~ msgid "Could not seek stream: %s"
-#~ msgstr "Nelze nalézt proud: %s"
-
-#~ msgid "Could not read from stream: %s"
-#~ msgstr "Z proudu nelze číst: %s"
-
-#~ msgid "Couldn't load bitmap"
-#~ msgstr "Nelze načíst rastrový obrázek"
-
-#~ msgid "Couldn't load metafile"
-#~ msgstr "Nelze načíst metasoubor"
-
-#~ msgid "Unsupported image format for GDI+"
-#~ msgstr "Nepodporovaný formát obrázku GDI+"
-
-#~ msgid "Couldn't save"
-#~ msgstr "Nelze uložit"
-
-#~ msgid "The WMF image format"
-#~ msgstr "Formát obrázku WMF"
-
 #~ msgid "\"Deepness\" of the color."
 #~ msgstr "\"Hloubka\" barvy."
 
@@ -4848,9 +4224,6 @@ msgstr ""
 
 #~ msgid "Fol_ders"
 #~ msgstr "_Složky"
-
-#~ msgid "_Files"
-#~ msgstr "_Soubory"
 
 #~ msgid "Folder unreadable: %s"
 #~ msgstr "Složka nečitelná: %s"
@@ -5008,6 +4381,3 @@ msgstr ""
 
 #~ msgid "--- No Tip ---"
 #~ msgstr "--- Bez rady ---"
-
-#~ msgid "Printer '%s' may not be connected."
-#~ msgstr "Tiskárna \"%s\" nemůže být připojena."
