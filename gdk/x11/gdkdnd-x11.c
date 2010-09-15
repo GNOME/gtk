@@ -570,6 +570,7 @@ gdk_window_cache_new (GdkScreen *screen)
 
   g_free (children);
 
+#ifdef HAVE_XCOMPOSITE
   /*
    * Add the composite overlay window to the cache, as this can be a reasonable
    * Xdnd proxy as well.
@@ -583,6 +584,7 @@ gdk_window_cache_new (GdkScreen *screen)
       gdk_window_cache_add (result, cow, 0, 0, gdk_screen_get_width (screen), gdk_screen_get_height (screen), TRUE);
       XCompositeReleaseOverlayWindow (xdisplay, GDK_WINDOW_XWINDOW (root_window));
     }
+#endif
 
   return result;
 }
