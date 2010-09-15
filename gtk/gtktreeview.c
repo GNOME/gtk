@@ -4407,11 +4407,11 @@ gtk_tree_view_bin_expose (GtkWidget      *widget,
   if (event->area.height < 0)
     return TRUE;
 
+  validate_visible_area (tree_view);
+
   cr = gdk_cairo_create (event->window);
   gdk_cairo_region (cr, event->region);
   cairo_clip (cr);
-
-  validate_visible_area (tree_view);
 
   style = gtk_widget_get_style (widget);
 
