@@ -2694,21 +2694,18 @@ gtk_entry_map (GtkWidget *widget)
   EntryIconInfo *icon_info = NULL;
   gint i;
 
-  if (gtk_widget_get_realized (widget) && !gtk_widget_get_mapped (widget))
+  GTK_WIDGET_CLASS (gtk_entry_parent_class)->map (widget);
+
+  for (i = 0; i < MAX_ICONS; i++)
     {
-      GTK_WIDGET_CLASS (gtk_entry_parent_class)->map (widget);
-
-      for (i = 0; i < MAX_ICONS; i++)
+      if ((icon_info = priv->icons[i]) != NULL)
         {
-          if ((icon_info = priv->icons[i]) != NULL)
-            {
-              if (icon_info->pixbuf != NULL && icon_info->window != NULL)
-                gdk_window_show (icon_info->window);
-            }
+          if (icon_info->pixbuf != NULL && icon_info->window != NULL)
+            gdk_window_show (icon_info->window);
         }
-
-      update_cursors (widget);
     }
+
+  update_cursors (widget);
 }
 
 static void
@@ -2718,19 +2715,16 @@ gtk_entry_unmap (GtkWidget *widget)
   EntryIconInfo *icon_info = NULL;
   gint i;
 
-  if (gtk_widget_get_mapped (widget))
+  for (i = 0; i < MAX_ICONS; i++)
     {
-      for (i = 0; i < MAX_ICONS; i++)
+      if ((icon_info = priv->icons[i]) != NULL)
         {
-          if ((icon_info = priv->icons[i]) != NULL)
-            {
-              if (icon_info->pixbuf != NULL && icon_info->window != NULL)
-                gdk_window_hide (icon_info->window);
-            }
+          if (icon_info->pixbuf != NULL && icon_info->window != NULL)
+            gdk_window_hide (icon_info->window);
         }
-
-      GTK_WIDGET_CLASS (gtk_entry_parent_class)->unmap (widget);
     }
+
+  GTK_WIDGET_CLASS (gtk_entry_parent_class)->unmap (widget);
 }
 
 static void
