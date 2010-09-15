@@ -4943,6 +4943,17 @@ gtk_requisition_new
 gtk_requisition_copy
 gtk_requisition_free
 
+<SUBSECTION>
+GtkAlign
+gtk_widget_get_margin_left
+gtk_widget_set_margin_left
+gtk_widget_get_margin_right
+gtk_widget_set_margin_right
+gtk_widget_get_margin_top
+gtk_widget_set_margin_top
+gtk_widget_get_margin_bottom
+gtk_widget_set_margin_bottom
+
 <SUBSECTION Standard>
 GTK_WIDGET
 GTK_IS_WIDGET

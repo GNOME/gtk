@@ -11483,6 +11483,14 @@ gtk_widget_size_request_init (GtkSizeRequestIface *iface)
   iface->get_height_for_width = gtk_widget_real_get_height_for_width;  
 }
 
+/**
+ * gtk_widget_get_h_align:
+ * @widget: a #GtkWidget
+ *
+ * Gets the value of the #GtkWidget:h-align property.
+ *
+ * Returns: the horizontal alignment of @widget
+ */
 GtkAlign
 gtk_widget_get_h_align (GtkWidget *widget)
 {
@@ -11490,6 +11498,14 @@ gtk_widget_get_h_align (GtkWidget *widget)
   return _gtk_widget_get_aux_info_or_defaults (widget)->h_align;
 }
 
+/**
+ * gtk_widget_set_h_align:
+ * @widget: a #GtkWidget
+ * @align: the horizontal alignment
+ *
+ * Sets the horizontal alignment of @widget.
+ * See the #GtkWidget:h-align property.
+ */
 void
 gtk_widget_set_h_align (GtkWidget *widget,
                         GtkAlign   align)
@@ -11508,6 +11524,14 @@ gtk_widget_set_h_align (GtkWidget *widget,
   g_object_notify (G_OBJECT (widget), "h-align");
 }
 
+/**
+ * gtk_widget_get_v_align:
+ * @widget: a #GtkWidget
+ *
+ * Gets the value of the #GtkWidget:v-align property.
+ *
+ * Returns: the vertical alignment of @widget
+ */
 GtkAlign
 gtk_widget_get_v_align (GtkWidget *widget)
 {
@@ -11515,6 +11539,14 @@ gtk_widget_get_v_align (GtkWidget *widget)
   return _gtk_widget_get_aux_info_or_defaults (widget)->v_align;
 }
 
+/**
+ * gtk_widget_set_v_align:
+ * @widget: a #GtkWidget
+ * @align: the vertical alignment
+ *
+ * Sets the vertical alignment of @widget.
+ * See the #GtkWidget:h-align property.
+ */
 void
 gtk_widget_set_v_align (GtkWidget *widget,
                         GtkAlign   align)
@@ -11533,6 +11565,14 @@ gtk_widget_set_v_align (GtkWidget *widget,
   g_object_notify (G_OBJECT (widget), "v-align");
 }
 
+/**
+ * gtk_widget_get_margin_left:
+ * @widget: a #GtkWidget
+ *
+ * Gets the value of the #GtkWidget:margin-left property.
+ *
+ * Returns: The left margin of @widget
+ */
 gint
 gtk_widget_get_margin_left (GtkWidget *widget)
 {
@@ -11541,6 +11581,14 @@ gtk_widget_get_margin_left (GtkWidget *widget)
   return _gtk_widget_get_aux_info_or_defaults (widget)->margin.left;
 }
 
+/**
+ * gtk_widget_set_margin_left:
+ * @widget: a #GtkWidget
+ * @margin: the left margin
+ *
+ * Sets the left margin of @widget.
+ * See the #GtkWidget:margin-left property.
+ */
 void
 gtk_widget_set_margin_left (GtkWidget *widget,
                             gint       margin)
@@ -11560,6 +11608,14 @@ gtk_widget_set_margin_left (GtkWidget *widget,
   g_object_notify (G_OBJECT (widget), "margin-left");
 }
 
+/**
+ * gtk_widget_get_margin_right:
+ * @widget: a #GtkWidget
+ *
+ * Gets the value of the #GtkWidget:margin-right property.
+ *
+ * Returns: The left margin of @widget
+ */
 gint
 gtk_widget_get_margin_right (GtkWidget *widget)
 {
@@ -11568,6 +11624,14 @@ gtk_widget_get_margin_right (GtkWidget *widget)
   return _gtk_widget_get_aux_info_or_defaults (widget)->margin.right;
 }
 
+/**
+ * gtk_widget_set_margin_right:
+ * @widget: a #GtkWidget
+ * @margin: the right margin
+ *
+ * Sets the right margin of @widget.
+ * See the #GtkWidget:margin-right property.
+ */
 void
 gtk_widget_set_margin_right (GtkWidget *widget,
                              gint       margin)
@@ -11587,6 +11651,14 @@ gtk_widget_set_margin_right (GtkWidget *widget,
   g_object_notify (G_OBJECT (widget), "margin-right");
 }
 
+/**
+ * gtk_widget_get_margin_top:
+ * @widget: a #GtkWidget
+ *
+ * Gets the value of the #GtkWidget:margin-top property.
+ *
+ * Returns: The top margin of @widget
+ */
 gint
 gtk_widget_get_margin_top (GtkWidget *widget)
 {
@@ -11595,6 +11667,14 @@ gtk_widget_get_margin_top (GtkWidget *widget)
   return _gtk_widget_get_aux_info_or_defaults (widget)->margin.top;
 }
 
+/**
+ * gtk_widget_set_margin_top:
+ * @widget: a #GtkWidget
+ * @margin: the top margin
+ *
+ * Sets the top margin of @widget.
+ * See the #GtkWidget:margin-top property.
+ */
 void
 gtk_widget_set_margin_top (GtkWidget *widget,
                            gint       margin)
@@ -11614,6 +11694,14 @@ gtk_widget_set_margin_top (GtkWidget *widget,
   g_object_notify (G_OBJECT (widget), "margin-top");
 }
 
+/**
+ * gtk_widget_get_margin_bottom:
+ * @widget: a #GtkWidget
+ *
+ * Gets the value of the #GtkWidget:margin-bottom property.
+ *
+ * Returns: The bottom margin of @widget
+ */
 gint
 gtk_widget_get_margin_bottom (GtkWidget *widget)
 {
@@ -11622,6 +11710,14 @@ gtk_widget_get_margin_bottom (GtkWidget *widget)
   return _gtk_widget_get_aux_info_or_defaults (widget)->margin.bottom;
 }
 
+/**
+ * gtk_widget_set_margin_bottom:
+ * @widget: a #GtkWidget
+ * @margin: the bottom margin
+ *
+ * Sets the bottom margin of @widget.
+ * See the #GtkWidget:margin-bottom property.
+ */
 void
 gtk_widget_set_margin_bottom (GtkWidget *widget,
                               gint       margin)
