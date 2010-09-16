@@ -16,7 +16,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk%"
 "2b&component=general\n"
 "POT-Creation-Date: 2010-09-13 19:48+0000\n"
-"PO-Revision-Date: 2010-09-15 16:06+0800\n"
+"PO-Revision-Date: 2010-09-16 15:45+0000\n"
 "Last-Translator: Aron Xu <happyaron.xu@gmail.com>\n"
 "Language-Team: Chinese (simplified) <i18n-zh@googlegroups.com>\n"
 "MIME-Version: 1.0\n"
@@ -2231,7 +2231,7 @@ msgstr "找不到 URI 为“%s”的一项"
 #: ../gtk/gtkspinner.c:458
 msgctxt "throbbing progress animation widget"
 msgid "Spinner"
-msgstr ""
+msgstr "自旋动画(Spinner)"
 
 #: ../gtk/gtkspinner.c:459
 msgid "Provides visual indication of progress"
