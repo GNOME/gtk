@@ -395,6 +395,59 @@ cairo_destroy (cr);
   </section>
 
   <section>
+    <title>Replace GdkPixmap by cairo surfaces</title>
+    <para>
+      The #GdkPixmap object and related functions have been removed.
+       In the cairo-centric world of GTK+ 3, cairo surfaces
+      take over the role of pixmaps.
+    </para>
+    <para>
+      FIXME: example
+    </para>
+  </section>
+
+  <section>
+    <title>Replace colormaps by visuals</title>
+    <para>
+      For drawing with cairo, it is not necessary to allocate colors, and
+      a #GdkVisual provides enough information for cairo to handle colors
+      in 'native' surfaces. Therefore, #GdkColormap and related functions
+      have been removed in GTK+ 3, and visuals are used instead. The
+      colormap-handling functions of #GtkWidget (gtk_widget_set_colormap(),
+      etc) have been removed and gtk_window_set_visual() has been added.
+    </para>
+    <para>
+      FIXME: example
+    </para>
+  </section>
+
+  <section>
+    <title>The GtkWidget::draw signal</title>
+    <para>
+      The GtkWidget #GtkWidget::expose-event signal has been replaced by
+      a new #GtkWidget::draw signal, which takes a #cairo_t instead of
+      an expose event. The cairo context is being set up so that the origin
+      at (0, 0) coincides with the upper left corner of the widget, and
+      is properly clipped. The widget is expected to draw itself with its
+      allocated size, which is available via the new
+      gtk_widget_get_allocated_width() and gtk_widget_get_allocated_height().
+      It is not necessary to check for GTK_WIDGET_IS_DRAWABLE(), since GTK+
+      already does this check before emitting the ::draw signal.
+      There are some special considerations for widgets with multiple windows,
+      which are explained here <link linkend="FIXME">FIXME: link</link>.
+    </para>
+    <para>
+      All GtkStyle drawing functions (gtk_paint_box(), etc) have been changed
+      to take a #cairo_t instead of a window and a clip area. ::draw
+      implementations will usually just use the cairo context that has been
+      passed in for this.
+    </para>
+    <para>
+      FIXME: example
+    </para>
+  </section>
+
+  <section>
     <title>GtkProgressBar orientation</title>
 
     <para>
