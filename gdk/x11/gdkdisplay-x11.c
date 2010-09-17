@@ -2484,7 +2484,8 @@ gdk_display_supports_composite (GdkDisplay *display)
  * Returns the list of available input devices attached to @display.
  * The list is statically allocated and should not be freed.
  *
- * Return value: a list of #GdkDevice
+ * Return value: (transfer none) (element-type GdkDevice):
+ *     a list of #GdkDevice
  *
  * Since: 2.2
  *

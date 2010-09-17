@@ -99,7 +99,7 @@ gdk_drag_get_protocol (GdkNativeWindow  xid,
  *
  * Retrieves the list of targets of the context.
  *
- * Return value: a #GList of targets
+ * Return value: (transfer none) (element-type GdkAtom): a #GList of targets
  *
  * Since: 2.22
  **/

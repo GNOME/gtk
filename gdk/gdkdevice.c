@@ -830,7 +830,8 @@ gdk_device_get_n_axes (GdkDevice *device)
  * Returns a #GList of #GdkAtom<!-- -->s, containing the labels for
  * the axes that @device currently has.
  *
- * Returns: A #GList of #GdkAtom<!-- -->s, free with g_list_free().
+ * Returns: (transfer container) (element-type GdkAtom):
+ *     A #GList of #GdkAtom<!-- -->s, free with g_list_free().
  *
  * Since: 3.0
  **/

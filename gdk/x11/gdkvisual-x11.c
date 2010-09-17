@@ -521,8 +521,8 @@ gdk_query_visual_types (GdkVisualType **visual_types,
  *
  * Call g_list_free() on the return value when you're finished with it.
  * 
- * Return value: a list of visuals; the list must be freed, but not its 
- * contents
+ * Return value: (transfer container) (element-type GdkVisual):
+ *     a list of visuals; the list must be freed, but not its contents
  *
  * Since: 2.2
  **/

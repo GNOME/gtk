@@ -3614,7 +3614,8 @@ gdk_x11_window_set_user_time (GdkWindow *window,
 /**
  * gdk_window_set_icon_list:
  * @window: The #GdkWindow toplevel window to set the icon of.
- * @pixbufs: A list of pixbufs, of different sizes.
+ * @pixbufs: (transfer none) (element-type GdkPixbuf):
+ *     A list of pixbufs, of different sizes.
  *
  * Sets a list of icons for the window. One of these will be used
  * to represent the window when it has been iconified. The icon is
