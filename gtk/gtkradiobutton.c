@@ -267,8 +267,8 @@ gtk_radio_button_get_property (GObject    *object,
 /**
  * gtk_radio_button_set_group:
  * @radio_button: a #GtkRadioButton.
- * @group: an existing radio button group, such as one returned from
- *  gtk_radio_button_get_group().
+ * @group: (transfer none) (element-type GtkRadioButton): an existing radio
+ *     button group, such as one returned from gtk_radio_button_get_group().
  *
  * Sets a #GtkRadioButton's group. It should be noted that this does not change
  * the layout of your interface in any way, so if you are changing the group,

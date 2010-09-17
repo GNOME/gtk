@@ -2480,9 +2480,10 @@ chain_widget_destroyed (GtkWidget *widget,
 }
 
 /**
- * gtk_container_set_focus_chain: 
+ * gtk_container_set_focus_chain:
  * @container: a #GtkContainer
- * @focusable_widgets: the new focus chain
+ * @focusable_widgets: (transfer none) (element-type GtkWidget):
+ *     the new focus chain
  *
  * Sets a focus chain, overriding the one computed automatically by GTK+.
  * 

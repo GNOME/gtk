@@ -4850,16 +4850,18 @@ gtk_widget_remove_accelerator (GtkWidget      *widget,
 }
 
 /**
- * gtk_widget_list_accel_closures
+ * gtk_widget_list_accel_closures:
  * @widget:  widget to list accelerator closures for
- * @returns: a newly allocated #GList of closures
  *
  * Lists the closures used by @widget for accelerator group connections
  * with gtk_accel_group_connect_by_path() or gtk_accel_group_connect().
  * The closures can be used to monitor accelerator changes on @widget,
- * by connecting to the @GtkAccelGroup::accel-changed signal of the 
- * #GtkAccelGroup of a closure which can be found out with 
+ * by connecting to the @GtkAccelGroup::accel-changed signal of the
+ * #GtkAccelGroup of a closure which can be found out with
  * gtk_accel_group_from_accel_closure().
+ *
+ * Return value: (transfer container) (element-type GClosure):
+ *     a newly allocated #GList of closures
  */
 GList*
 gtk_widget_list_accel_closures (GtkWidget *widget)
