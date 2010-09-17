@@ -337,7 +337,7 @@ gtk_get_interface_age (void)
  * This function is primarily for GTK+ modules; the module
  * can call this function to check that it wasn't loaded
  * into an incompatible version of GTK+. However, such a
- * a check isn't completely reliable, since the module may be
+ * check isn't completely reliable, since the module may be
  * linked against an old version of GTK+ and calling the
  * old version of gtk_check_version(), but still get loaded
  * into an application using a newer version of GTK+.
