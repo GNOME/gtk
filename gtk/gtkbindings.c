@@ -801,7 +801,8 @@ gtk_binding_entry_remove (GtkBindingSet	 *binding_set,
  * @keyval:       key value
  * @modifiers:    key modifier
  * @signal_name:  signal name to be bound
- * @binding_args: list of #GtkBindingArg signal arguments
+ * @binding_args: (transfer none) (element-type GtkBindingArg):
+ *     list of #GtkBindingArg signal arguments
  *
  * Override or install a new key binding for @keyval with @modifiers on
  * @binding_set.
