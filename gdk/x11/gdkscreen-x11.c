@@ -1363,7 +1363,7 @@ gdk_screen_get_active_window (GdkScreen *screen)
 }
 
 /**
- * gdk_screen_get_window_stack
+ * gdk_screen_get_window_stack:
  * @screen: a #GdkScreen
  *
  * Returns a #GList of #GdkWindow<!-- -->s representing the current
