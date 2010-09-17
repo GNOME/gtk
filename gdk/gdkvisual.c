@@ -37,7 +37,8 @@
  *
  * Call g_list_free() on the return value when you're finished with it.
  * 
- * Return value: a list of visuals; the list must be freed, but not its contents
+ * Return value: (transfer container) (element-type GdkVisual):
+ *     a list of visuals; the list must be freed, but not its contents
  **/
 GList*
 gdk_list_visuals (void)

@@ -2461,7 +2461,8 @@ gdk_window_get_effective_toplevel (GdkWindow *window)
  * The returned list must be freed, but the elements in the
  * list need not be.
  *
- * Return value: list of child windows inside @window
+ * Return value: (transfer container) (element-type GdkWindow):
+ *     list of child windows inside @window
  **/
 GList*
 gdk_window_get_children (GdkWindow *window)
@@ -2481,7 +2482,8 @@ gdk_window_get_children (GdkWindow *window)
  * Like gdk_window_get_children(), but does not copy the list of
  * children, so the list does not need to be freed.
  *
- * Return value: a reference to the list of child windows in @window
+ * Return value: (transfer none) (element-type GdkWindow):
+ *     a reference to the list of child windows in @window
  **/
 GList *
 gdk_window_peek_children (GdkWindow *window)
@@ -2610,7 +2612,8 @@ gdk_window_remove_filter (GdkWindow     *window,
  * The returned list should be freed with g_list_free(), but
  * its elements need not be freed.
  *
- * Return value: list of toplevel windows, free with g_list_free()
+ * Return value: (transfer container) (element-type GdkWindow):
+ *     list of toplevel windows, free with g_list_free()
  *
  * Since: 2.2
  **/

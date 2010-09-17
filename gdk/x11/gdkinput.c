@@ -143,7 +143,7 @@ gdk_device_dispose (GObject *object)
  * Returns the list of available input devices for the default display.
  * The list is statically allocated and should not be freed.
  *
- * Return value: a list of #GdkDevice
+ * Return value: (transfer none) (element-type GdkDevice): a list of #GdkDevice
  **/
 GList *
 gdk_devices_list (void)
