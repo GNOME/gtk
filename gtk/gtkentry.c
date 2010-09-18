@@ -236,7 +236,7 @@ typedef enum
   DISPLAY_BLANK         /* In invisible mode, nothing shown at all */
 } DisplayMode;
 
-/* GObject, GtkObject methods
+/* GObject methods
  */
 static void   gtk_entry_editable_init        (GtkEditableInterface *iface);
 static void   gtk_entry_cell_editable_init   (GtkCellEditableIface *iface);
@@ -249,11 +249,11 @@ static void   gtk_entry_get_property         (GObject          *object,
                                               GValue           *value,
                                               GParamSpec       *pspec);
 static void   gtk_entry_finalize             (GObject          *object);
-static void   gtk_entry_destroy              (GtkObject        *object);
 static void   gtk_entry_dispose              (GObject          *object);
 
 /* GtkWidget methods
  */
+static void   gtk_entry_destroy              (GtkWidget        *widget);
 static void   gtk_entry_realize              (GtkWidget        *widget);
 static void   gtk_entry_unrealize            (GtkWidget        *widget);
 static void   gtk_entry_map                  (GtkWidget        *widget);
@@ -564,17 +564,16 @@ gtk_entry_class_init (GtkEntryClass *class)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (class);
   GtkWidgetClass *widget_class;
-  GtkObjectClass *gtk_object_class;
   GtkBindingSet *binding_set;
 
   widget_class = (GtkWidgetClass*) class;
-  gtk_object_class = (GtkObjectClass *)class;
 
   gobject_class->dispose = gtk_entry_dispose;
   gobject_class->finalize = gtk_entry_finalize;
   gobject_class->set_property = gtk_entry_set_property;
   gobject_class->get_property = gtk_entry_get_property;
 
+  widget_class->destroy = gtk_entry_destroy;
   widget_class->map = gtk_entry_map;
   widget_class->unmap = gtk_entry_unmap;
   widget_class->realize = gtk_entry_realize;
@@ -609,8 +608,6 @@ gtk_entry_class_init (GtkEntryClass *class)
   widget_class->drag_data_delete = gtk_entry_drag_data_delete;
 
   widget_class->popup_menu = gtk_entry_popup_menu;
-
-  gtk_object_class->destroy = gtk_entry_destroy;
 
   class->move_cursor = gtk_entry_move_cursor;
   class->insert_at_cursor = gtk_entry_insert_at_cursor;
@@ -2425,9 +2422,9 @@ emit_changed (GtkEntry *entry)
 }
 
 static void
-gtk_entry_destroy (GtkObject *object)
+gtk_entry_destroy (GtkWidget *widget)
 {
-  GtkEntry *entry = GTK_ENTRY (object);
+  GtkEntry *entry = GTK_ENTRY (widget);
 
   entry->current_pos = entry->selection_bound = 0;
   _gtk_entry_reset_im_context (entry);
@@ -2445,7 +2442,7 @@ gtk_entry_destroy (GtkObject *object)
       entry->recompute_idle = 0;
     }
 
-  GTK_OBJECT_CLASS (gtk_entry_parent_class)->destroy (object);
+  GTK_WIDGET_CLASS (gtk_entry_parent_class)->destroy (widget);
 }
 
 static void

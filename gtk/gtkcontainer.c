@@ -80,7 +80,7 @@ static void     gtk_container_base_class_init      (GtkContainerClass *klass);
 static void     gtk_container_base_class_finalize  (GtkContainerClass *klass);
 static void     gtk_container_class_init           (GtkContainerClass *klass);
 static void     gtk_container_init                 (GtkContainer      *container);
-static void     gtk_container_destroy              (GtkObject         *object);
+static void     gtk_container_destroy              (GtkWidget         *widget);
 static void     gtk_container_set_property         (GObject         *object,
 						    guint            prop_id,
 						    const GValue    *value,
@@ -224,7 +224,6 @@ static void
 gtk_container_class_init (GtkContainerClass *class)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (class);
-  GtkObjectClass *object_class = GTK_OBJECT_CLASS (class);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (class);
 
   parent_class = g_type_class_peek_parent (class);
@@ -235,8 +234,7 @@ gtk_container_class_init (GtkContainerClass *class)
   gobject_class->set_property = gtk_container_set_property;
   gobject_class->get_property = gtk_container_get_property;
 
-  object_class->destroy = gtk_container_destroy;
-
+  widget_class->destroy = gtk_container_destroy;
   widget_class->show_all = gtk_container_show_all;
   widget_class->hide_all = gtk_container_hide_all;
   widget_class->draw = gtk_container_draw;
@@ -281,7 +279,7 @@ gtk_container_class_init (GtkContainerClass *class)
 						      GTK_PARAM_WRITABLE));
   container_signals[ADD] =
     g_signal_new (I_("add"),
-		  G_OBJECT_CLASS_TYPE (object_class),
+		  G_OBJECT_CLASS_TYPE (gobject_class),
 		  G_SIGNAL_RUN_FIRST,
 		  G_STRUCT_OFFSET (GtkContainerClass, add),
 		  NULL, NULL,
@@ -290,7 +288,7 @@ gtk_container_class_init (GtkContainerClass *class)
 		  GTK_TYPE_WIDGET);
   container_signals[REMOVE] =
     g_signal_new (I_("remove"),
-		  G_OBJECT_CLASS_TYPE (object_class),
+		  G_OBJECT_CLASS_TYPE (gobject_class),
 		  G_SIGNAL_RUN_FIRST,
 		  G_STRUCT_OFFSET (GtkContainerClass, remove),
 		  NULL, NULL,
@@ -299,7 +297,7 @@ gtk_container_class_init (GtkContainerClass *class)
 		  GTK_TYPE_WIDGET);
   container_signals[CHECK_RESIZE] =
     g_signal_new (I_("check-resize"),
-		  G_OBJECT_CLASS_TYPE (object_class),
+		  G_OBJECT_CLASS_TYPE (gobject_class),
 		  G_SIGNAL_RUN_LAST,
 		  G_STRUCT_OFFSET (GtkContainerClass, check_resize),
 		  NULL, NULL,
@@ -307,7 +305,7 @@ gtk_container_class_init (GtkContainerClass *class)
 		  G_TYPE_NONE, 0);
   container_signals[SET_FOCUS_CHILD] =
     g_signal_new (I_("set-focus-child"),
-		  G_OBJECT_CLASS_TYPE (object_class),
+		  G_OBJECT_CLASS_TYPE (gobject_class),
 		  G_SIGNAL_RUN_FIRST,
 		  G_STRUCT_OFFSET (GtkContainerClass, set_focus_child),
 		  NULL, NULL,
@@ -1083,9 +1081,9 @@ gtk_container_init (GtkContainer *container)
 }
 
 static void
-gtk_container_destroy (GtkObject *object)
+gtk_container_destroy (GtkWidget *widget)
 {
-  GtkContainer *container = GTK_CONTAINER (object);
+  GtkContainer *container = GTK_CONTAINER (widget);
   GtkContainerPrivate *priv = container->priv;
 
   if (GTK_CONTAINER_RESIZE_PENDING (container))
@@ -1105,7 +1103,7 @@ gtk_container_destroy (GtkObject *object)
 
   gtk_container_foreach (container, (GtkCallback) gtk_widget_destroy, NULL);
 
-  GTK_OBJECT_CLASS (parent_class)->destroy (object);
+  GTK_WIDGET_CLASS (parent_class)->destroy (widget);
 }
 
 static void

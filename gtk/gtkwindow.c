@@ -285,8 +285,8 @@ struct _GtkWindowGroupPrivate
 };
 
 static void gtk_window_dispose            (GObject           *object);
-static void gtk_window_destroy            (GtkObject         *object);
 static void gtk_window_finalize           (GObject           *object);
+static void gtk_window_destroy            (GtkWidget         *widget);
 static void gtk_window_show               (GtkWidget         *widget);
 static void gtk_window_hide               (GtkWidget         *widget);
 static void gtk_window_map                (GtkWidget         *widget);
@@ -509,12 +509,10 @@ static void
 gtk_window_class_init (GtkWindowClass *klass)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
-  GtkObjectClass *object_class;
   GtkWidgetClass *widget_class;
   GtkContainerClass *container_class;
   GtkBindingSet *binding_set;
-  
-  object_class = (GtkObjectClass*) klass;
+
   widget_class = (GtkWidgetClass*) klass;
   container_class = (GtkContainerClass*) klass;
   
@@ -528,9 +526,8 @@ gtk_window_class_init (GtkWindowClass *klass)
 
   gobject_class->set_property = gtk_window_set_property;
   gobject_class->get_property = gtk_window_get_property;
-  
-  object_class->destroy = gtk_window_destroy;
 
+  widget_class->destroy = gtk_window_destroy;
   widget_class->show = gtk_window_show;
   widget_class->hide = gtk_window_hide;
   widget_class->map = gtk_window_map;
@@ -4310,9 +4307,9 @@ gtk_window_reshow_with_initial_size (GtkWindow *window)
 }
 
 static void
-gtk_window_destroy (GtkObject *object)
+gtk_window_destroy (GtkWidget *widget)
 {
-  GtkWindow *window = GTK_WINDOW (object);
+  GtkWindow *window = GTK_WINDOW (widget);
   GtkWindowPrivate *priv = window->priv;
 
   toplevel_list = g_slist_remove (toplevel_list, window);
@@ -4334,7 +4331,7 @@ gtk_window_destroy (GtkObject *object)
 
    gtk_window_free_key_hash (window);
 
-   GTK_OBJECT_CLASS (gtk_window_parent_class)->destroy (object);
+  GTK_WIDGET_CLASS (gtk_window_parent_class)->destroy (widget);
 }
 
 static void

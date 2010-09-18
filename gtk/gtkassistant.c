@@ -114,7 +114,7 @@ struct _GtkAssistantPrivate
 
 static void     gtk_assistant_class_init         (GtkAssistantClass *class);
 static void     gtk_assistant_init               (GtkAssistant      *assistant);
-static void     gtk_assistant_destroy            (GtkObject         *object);
+static void     gtk_assistant_destroy            (GtkWidget         *widget);
 static void     gtk_assistant_style_set          (GtkWidget         *widget,
 						  GtkStyle          *old_style);
 static void     gtk_assistant_size_request       (GtkWidget         *widget,
@@ -200,17 +200,14 @@ static void
 gtk_assistant_class_init (GtkAssistantClass *class)
 {
   GObjectClass *gobject_class;
-  GtkObjectClass *object_class;
   GtkWidgetClass *widget_class;
   GtkContainerClass *container_class;
 
   gobject_class   = (GObjectClass *) class;
-  object_class    = (GtkObjectClass *) class;
   widget_class    = (GtkWidgetClass *) class;
   container_class = (GtkContainerClass *) class;
 
-  object_class->destroy = gtk_assistant_destroy;
-
+  widget_class->destroy = gtk_assistant_destroy;
   widget_class->style_set = gtk_assistant_style_set;
   widget_class->size_request = gtk_assistant_size_request;
   widget_class->size_allocate = gtk_assistant_size_allocate;
@@ -1005,9 +1002,9 @@ remove_page (GtkAssistant *assistant,
 }
 
 static void
-gtk_assistant_destroy (GtkObject *object)
+gtk_assistant_destroy (GtkWidget *widget)
 {
-  GtkAssistant *assistant = GTK_ASSISTANT (object);
+  GtkAssistant *assistant = GTK_ASSISTANT (widget);
   GtkAssistantPrivate *priv = assistant->priv;
 
   if (priv->header_image)
@@ -1056,9 +1053,9 @@ gtk_assistant_destroy (GtkObject *object)
   priv->current_page = NULL;
 
   while (priv->pages)
-    remove_page (GTK_ASSISTANT (object), priv->pages);
-      
-  GTK_OBJECT_CLASS (gtk_assistant_parent_class)->destroy (object);
+    remove_page (assistant, priv->pages);
+
+  GTK_WIDGET_CLASS (gtk_assistant_parent_class)->destroy (widget);
 }
 
 static GList*

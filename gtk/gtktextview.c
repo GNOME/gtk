@@ -260,7 +260,6 @@ enum
   PROP_IM_MODULE
 };
 
-static void gtk_text_view_destroy              (GtkObject        *object);
 static void gtk_text_view_finalize             (GObject          *object);
 static void gtk_text_view_set_property         (GObject         *object,
 						guint            prop_id,
@@ -270,6 +269,7 @@ static void gtk_text_view_get_property         (GObject         *object,
 						guint            prop_id,
 						GValue          *value,
 						GParamSpec      *pspec);
+static void gtk_text_view_destroy              (GtkWidget        *widget);
 static void gtk_text_view_size_request         (GtkWidget        *widget,
                                                 GtkRequisition   *requisition);
 static void gtk_text_view_size_allocate        (GtkWidget        *widget,
@@ -563,7 +563,6 @@ static void
 gtk_text_view_class_init (GtkTextViewClass *klass)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
-  GtkObjectClass *object_class = GTK_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
   GtkContainerClass *container_class = GTK_CONTAINER_CLASS (klass);
   GtkBindingSet *binding_set;
@@ -572,10 +571,9 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
    */
   gobject_class->set_property = gtk_text_view_set_property;
   gobject_class->get_property = gtk_text_view_get_property;
-
-  object_class->destroy = gtk_text_view_destroy;
   gobject_class->finalize = gtk_text_view_finalize;
 
+  widget_class->destroy = gtk_text_view_destroy;
   widget_class->realize = gtk_text_view_realize;
   widget_class->unrealize = gtk_text_view_unrealize;
   widget_class->style_set = gtk_text_view_style_set;
@@ -1090,7 +1088,7 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
    */
   signals[SELECT_ALL] =
     g_signal_new_class_handler (I_("select-all"),
-                                G_OBJECT_CLASS_TYPE (object_class),
+                                G_OBJECT_CLASS_TYPE (gobject_class),
                                 G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
                                 G_CALLBACK (gtk_text_view_select_all),
                                 NULL, NULL,
@@ -1109,7 +1107,7 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
    */ 
   signals[TOGGLE_CURSOR_VISIBLE] =
     g_signal_new_class_handler (I_("toggle-cursor-visible"),
-                                G_OBJECT_CLASS_TYPE (object_class),
+                                G_OBJECT_CLASS_TYPE (gobject_class),
                                 G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
                                 G_CALLBACK (gtk_text_view_toggle_cursor_visible),
                                 NULL, NULL,
@@ -1132,7 +1130,7 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
    */
   signals[PREEDIT_CHANGED] =
     g_signal_new_class_handler (I_("preedit-changed"),
-                                G_OBJECT_CLASS_TYPE (object_class),
+                                G_OBJECT_CLASS_TYPE (gobject_class),
                                 G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
                                 NULL,
                                 NULL, NULL,
@@ -3009,12 +3007,12 @@ gtk_text_view_remove_validate_idles (GtkTextView *text_view)
 }
 
 static void
-gtk_text_view_destroy (GtkObject *object)
+gtk_text_view_destroy (GtkWidget *widget)
 {
   GtkTextView *text_view;
   GtkTextViewPrivate *priv;
 
-  text_view = GTK_TEXT_VIEW (object);
+  text_view = GTK_TEXT_VIEW (widget);
   priv = text_view->priv;
 
   gtk_text_view_remove_validate_idles (text_view);
@@ -3033,7 +3031,7 @@ gtk_text_view_destroy (GtkObject *object)
       priv->im_spot_idle = 0;
     }
 
-  GTK_OBJECT_CLASS (gtk_text_view_parent_class)->destroy (object);
+  GTK_WIDGET_CLASS (gtk_text_view_parent_class)->destroy (widget);
 }
 
 static void

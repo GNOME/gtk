@@ -106,7 +106,7 @@ static void gtk_spin_button_get_property   (GObject         *object,
 					    guint            prop_id,
 					    GValue          *value,
 					    GParamSpec      *pspec);
-static void gtk_spin_button_destroy        (GtkObject          *object);
+static void gtk_spin_button_destroy        (GtkWidget          *widget);
 static void gtk_spin_button_map            (GtkWidget          *widget);
 static void gtk_spin_button_unmap          (GtkWidget          *widget);
 static void gtk_spin_button_realize        (GtkWidget          *widget);
@@ -187,7 +187,6 @@ static void
 gtk_spin_button_class_init (GtkSpinButtonClass *class)
 {
   GObjectClass     *gobject_class = G_OBJECT_CLASS (class);
-  GtkObjectClass   *object_class = GTK_OBJECT_CLASS (class);
   GtkWidgetClass   *widget_class = GTK_WIDGET_CLASS (class);
   GtkEntryClass    *entry_class = GTK_ENTRY_CLASS (class);
   GtkBindingSet    *binding_set;
@@ -196,7 +195,7 @@ gtk_spin_button_class_init (GtkSpinButtonClass *class)
   gobject_class->set_property = gtk_spin_button_set_property;
   gobject_class->get_property = gtk_spin_button_get_property;
 
-  object_class->destroy = gtk_spin_button_destroy;
+  widget_class->destroy = gtk_spin_button_destroy;
   widget_class->map = gtk_spin_button_map;
   widget_class->unmap = gtk_spin_button_unmap;
   widget_class->realize = gtk_spin_button_realize;
@@ -539,11 +538,11 @@ gtk_spin_button_finalize (GObject *object)
 }
 
 static void
-gtk_spin_button_destroy (GtkObject *object)
+gtk_spin_button_destroy (GtkWidget *widget)
 {
-  gtk_spin_button_stop_spinning (GTK_SPIN_BUTTON (object));
+  gtk_spin_button_stop_spinning (GTK_SPIN_BUTTON (widget));
 
-  GTK_OBJECT_CLASS (gtk_spin_button_parent_class)->destroy (object);
+  GTK_WIDGET_CLASS (gtk_spin_button_parent_class)->destroy (widget);
 }
 
 static void

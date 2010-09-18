@@ -207,10 +207,8 @@ static void     gtk_file_chooser_button_get_property       (GObject          *ob
 							    GParamSpec       *pspec);
 static void     gtk_file_chooser_button_finalize           (GObject          *object);
 
-/* GtkObject Functions */
-static void     gtk_file_chooser_button_destroy            (GtkObject        *object);
-
 /* GtkWidget Functions */
+static void     gtk_file_chooser_button_destroy            (GtkWidget        *widget);
 static void     gtk_file_chooser_button_drag_data_received (GtkWidget        *widget,
 							    GdkDragContext   *context,
 							    gint              x,
@@ -317,11 +315,9 @@ static void
 gtk_file_chooser_button_class_init (GtkFileChooserButtonClass * class)
 {
   GObjectClass *gobject_class;
-  GtkObjectClass *gtkobject_class;
   GtkWidgetClass *widget_class;
 
   gobject_class = G_OBJECT_CLASS (class);
-  gtkobject_class = GTK_OBJECT_CLASS (class);
   widget_class = GTK_WIDGET_CLASS (class);
 
   gobject_class->constructor = gtk_file_chooser_button_constructor;
@@ -329,8 +325,7 @@ gtk_file_chooser_button_class_init (GtkFileChooserButtonClass * class)
   gobject_class->get_property = gtk_file_chooser_button_get_property;
   gobject_class->finalize = gtk_file_chooser_button_finalize;
 
-  gtkobject_class->destroy = gtk_file_chooser_button_destroy;
-
+  widget_class->destroy = gtk_file_chooser_button_destroy;
   widget_class->drag_data_received = gtk_file_chooser_button_drag_data_received;
   widget_class->show_all = gtk_file_chooser_button_show_all;
   widget_class->hide_all = gtk_file_chooser_button_hide_all;
@@ -883,13 +878,13 @@ gtk_file_chooser_button_finalize (GObject *object)
 }
 
 /* ********************* *
- *  GtkObject Functions  *
+ *  GtkWidget Functions  *
  * ********************* */
 
 static void
-gtk_file_chooser_button_destroy (GtkObject *object)
+gtk_file_chooser_button_destroy (GtkWidget *widget)
 {
-  GtkFileChooserButton *button = GTK_FILE_CHOOSER_BUTTON (object);
+  GtkFileChooserButton *button = GTK_FILE_CHOOSER_BUTTON (widget);
   GtkFileChooserButtonPrivate *priv = button->priv;
   GtkTreeIter iter;
   GSList *l;
@@ -949,13 +944,8 @@ gtk_file_chooser_button_destroy (GtkObject *object)
       priv->fs = NULL;
     }
 
-  GTK_OBJECT_CLASS (gtk_file_chooser_button_parent_class)->destroy (object);
+  GTK_WIDGET_CLASS (gtk_file_chooser_button_parent_class)->destroy (widget);
 }
-
-
-/* ********************* *
- *  GtkWidget Functions  *
- * ********************* */
 
 struct DndSelectFolderData
 {

@@ -158,10 +158,8 @@ static void     gtk_tree_view_get_property         (GObject         *object,
 						    GValue          *value,
 						    GParamSpec      *pspec);
 
-/* gtkobject signals */
-static void     gtk_tree_view_destroy              (GtkObject        *object);
-
 /* gtkwidget signals */
+static void     gtk_tree_view_destroy              (GtkWidget        *widget);
 static void     gtk_tree_view_realize              (GtkWidget        *widget);
 static void     gtk_tree_view_unrealize            (GtkWidget        *widget);
 static void     gtk_tree_view_map                  (GtkWidget        *widget);
@@ -495,7 +493,6 @@ static void
 gtk_tree_view_class_init (GtkTreeViewClass *class)
 {
   GObjectClass *o_class;
-  GtkObjectClass *object_class;
   GtkWidgetClass *widget_class;
   GtkContainerClass *container_class;
   GtkBindingSet *binding_set;
@@ -503,7 +500,6 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
   binding_set = gtk_binding_set_by_class (class);
 
   o_class = (GObjectClass *) class;
-  object_class = (GtkObjectClass *) class;
   widget_class = (GtkWidgetClass *) class;
   container_class = (GtkContainerClass *) class;
 
@@ -512,10 +508,8 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
   o_class->get_property = gtk_tree_view_get_property;
   o_class->finalize = gtk_tree_view_finalize;
 
-  /* GtkObject signals */
-  object_class->destroy = gtk_tree_view_destroy;
-
   /* GtkWidget signals */
+  widget_class->destroy = gtk_tree_view_destroy;
   widget_class->map = gtk_tree_view_map;
   widget_class->realize = gtk_tree_view_realize;
   widget_class->unrealize = gtk_tree_view_unrealize;
@@ -1021,7 +1015,7 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
 
   tree_view_signals[MOVE_CURSOR] =
     g_signal_new (I_("move-cursor"),
-		  G_TYPE_FROM_CLASS (object_class),
+		  G_TYPE_FROM_CLASS (o_class),
 		  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
 		  G_STRUCT_OFFSET (GtkTreeViewClass, move_cursor),
 		  NULL, NULL,
@@ -1032,7 +1026,7 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
 
   tree_view_signals[SELECT_ALL] =
     g_signal_new (I_("select-all"),
-		  G_TYPE_FROM_CLASS (object_class),
+		  G_TYPE_FROM_CLASS (o_class),
 		  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
 		  G_STRUCT_OFFSET (GtkTreeViewClass, select_all),
 		  NULL, NULL,
@@ -1041,7 +1035,7 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
 
   tree_view_signals[UNSELECT_ALL] =
     g_signal_new (I_("unselect-all"),
-		  G_TYPE_FROM_CLASS (object_class),
+		  G_TYPE_FROM_CLASS (o_class),
 		  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
 		  G_STRUCT_OFFSET (GtkTreeViewClass, unselect_all),
 		  NULL, NULL,
@@ -1050,7 +1044,7 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
 
   tree_view_signals[SELECT_CURSOR_ROW] =
     g_signal_new (I_("select-cursor-row"),
-		  G_TYPE_FROM_CLASS (object_class),
+		  G_TYPE_FROM_CLASS (o_class),
 		  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
 		  G_STRUCT_OFFSET (GtkTreeViewClass, select_cursor_row),
 		  NULL, NULL,
@@ -1060,7 +1054,7 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
 
   tree_view_signals[TOGGLE_CURSOR_ROW] =
     g_signal_new (I_("toggle-cursor-row"),
-		  G_TYPE_FROM_CLASS (object_class),
+		  G_TYPE_FROM_CLASS (o_class),
 		  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
 		  G_STRUCT_OFFSET (GtkTreeViewClass, toggle_cursor_row),
 		  NULL, NULL,
@@ -1069,7 +1063,7 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
 
   tree_view_signals[EXPAND_COLLAPSE_CURSOR_ROW] =
     g_signal_new (I_("expand-collapse-cursor-row"),
-		  G_TYPE_FROM_CLASS (object_class),
+		  G_TYPE_FROM_CLASS (o_class),
 		  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
 		  G_STRUCT_OFFSET (GtkTreeViewClass, expand_collapse_cursor_row),
 		  NULL, NULL,
@@ -1081,7 +1075,7 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
 
   tree_view_signals[SELECT_CURSOR_PARENT] =
     g_signal_new (I_("select-cursor-parent"),
-		  G_TYPE_FROM_CLASS (object_class),
+		  G_TYPE_FROM_CLASS (o_class),
 		  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
 		  G_STRUCT_OFFSET (GtkTreeViewClass, select_cursor_parent),
 		  NULL, NULL,
@@ -1090,7 +1084,7 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
 
   tree_view_signals[START_INTERACTIVE_SEARCH] =
     g_signal_new (I_("start-interactive-search"),
-		  G_TYPE_FROM_CLASS (object_class),
+		  G_TYPE_FROM_CLASS (o_class),
 		  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
 		  G_STRUCT_OFFSET (GtkTreeViewClass, start_interactive_search),
 		  NULL, NULL,
@@ -1568,7 +1562,7 @@ gtk_tree_view_buildable_get_internal_child (GtkBuildable      *buildable,
 						       childname);
 }
 
-/* GtkObject Methods
+/* GtkWidget Methods
  */
 
 static void
@@ -1586,9 +1580,9 @@ gtk_tree_view_free_rbtree (GtkTreeView *tree_view)
 }
 
 static void
-gtk_tree_view_destroy (GtkObject *object)
+gtk_tree_view_destroy (GtkWidget *widget)
 {
-  GtkTreeView *tree_view = GTK_TREE_VIEW (object);
+  GtkTreeView *tree_view = GTK_TREE_VIEW (widget);
   GList *list;
 
   gtk_tree_view_stop_editing (tree_view, TRUE);
@@ -1702,13 +1696,8 @@ gtk_tree_view_destroy (GtkObject *object)
       tree_view->priv->vadjustment = NULL;
     }
 
-  GTK_OBJECT_CLASS (gtk_tree_view_parent_class)->destroy (object);
+  GTK_WIDGET_CLASS (gtk_tree_view_parent_class)->destroy (widget);
 }
-
-
-
-/* GtkWidget Methods
- */
 
 /* GtkWidget::map helper */
 static void

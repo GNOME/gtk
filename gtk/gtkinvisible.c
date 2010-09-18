@@ -42,7 +42,7 @@ enum {
   LAST_ARG
 };
 
-static void gtk_invisible_destroy       (GtkObject         *object);
+static void gtk_invisible_destroy       (GtkWidget         *widget);
 static void gtk_invisible_realize       (GtkWidget         *widget);
 static void gtk_invisible_style_set     (GtkWidget         *widget,
 					 GtkStyle          *previous_style);
@@ -68,19 +68,17 @@ static void
 gtk_invisible_class_init (GtkInvisibleClass *class)
 {
   GObjectClass	 *gobject_class;
-  GtkObjectClass *object_class;
   GtkWidgetClass *widget_class;
 
   widget_class = (GtkWidgetClass*) class;
-  object_class = (GtkObjectClass*) class;
   gobject_class = (GObjectClass*) class;
 
   widget_class->realize = gtk_invisible_realize;
   widget_class->style_set = gtk_invisible_style_set;
   widget_class->show = gtk_invisible_show;
   widget_class->size_allocate = gtk_invisible_size_allocate;
+  widget_class->destroy = gtk_invisible_destroy;
 
-  object_class->destroy = gtk_invisible_destroy;
   gobject_class->set_property = gtk_invisible_set_property;
   gobject_class->get_property = gtk_invisible_get_property;
   gobject_class->constructor = gtk_invisible_constructor;
@@ -116,9 +114,9 @@ gtk_invisible_init (GtkInvisible *invisible)
 }
 
 static void
-gtk_invisible_destroy (GtkObject *object)
+gtk_invisible_destroy (GtkWidget *widget)
 {
-  GtkInvisible *invisible = GTK_INVISIBLE (object);
+  GtkInvisible *invisible = GTK_INVISIBLE (widget);
   GtkInvisiblePrivate *priv = invisible->priv;
 
   if (priv->has_user_ref_count)
@@ -127,7 +125,7 @@ gtk_invisible_destroy (GtkObject *object)
       g_object_unref (invisible);
     }
 
-  GTK_OBJECT_CLASS (gtk_invisible_parent_class)->destroy (object);  
+  GTK_WIDGET_CLASS (gtk_invisible_parent_class)->destroy (widget);
 }
 
 /**

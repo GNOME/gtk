@@ -61,7 +61,7 @@ enum {
 
 static GtkActivatableIface *parent_activatable_iface;
 
-static void gtk_image_menu_item_destroy              (GtkObject        *object);
+static void gtk_image_menu_item_destroy              (GtkWidget        *widget);
 static void gtk_image_menu_item_size_request         (GtkWidget        *widget,
                                                       GtkRequisition   *requisition);
 static void gtk_image_menu_item_size_allocate        (GtkWidget        *widget,
@@ -111,13 +111,11 @@ static void
 gtk_image_menu_item_class_init (GtkImageMenuItemClass *klass)
 {
   GObjectClass *gobject_class = (GObjectClass*) klass;
-  GtkObjectClass *object_class = (GtkObjectClass*) klass;
   GtkWidgetClass *widget_class = (GtkWidgetClass*) klass;
   GtkMenuItemClass *menu_item_class = (GtkMenuItemClass*) klass;
   GtkContainerClass *container_class = (GtkContainerClass*) klass;
 
-  object_class->destroy = gtk_image_menu_item_destroy;
-
+  widget_class->destroy = gtk_image_menu_item_destroy;
   widget_class->screen_changed = gtk_image_menu_item_screen_changed;
   widget_class->size_request = gtk_image_menu_item_size_request;
   widget_class->size_allocate = gtk_image_menu_item_size_allocate;
@@ -197,7 +195,7 @@ gtk_image_menu_item_class_init (GtkImageMenuItemClass *klass)
 						       TRUE,
 						       GTK_PARAM_READWRITE));
 
-  g_type_class_add_private (object_class, sizeof (GtkImageMenuItemPrivate));
+  g_type_class_add_private (klass, sizeof (GtkImageMenuItemPrivate));
 }
 
 static void
@@ -309,16 +307,16 @@ gtk_image_menu_item_map (GtkWidget *widget)
 }
 
 static void
-gtk_image_menu_item_destroy (GtkObject *object)
+gtk_image_menu_item_destroy (GtkWidget *widget)
 {
-  GtkImageMenuItem *image_menu_item = GTK_IMAGE_MENU_ITEM (object);
+  GtkImageMenuItem *image_menu_item = GTK_IMAGE_MENU_ITEM (widget);
   GtkImageMenuItemPrivate *priv = image_menu_item->priv;
 
   if (priv->image)
     gtk_container_remove (GTK_CONTAINER (image_menu_item),
                           priv->image);
 
-  GTK_OBJECT_CLASS (gtk_image_menu_item_parent_class)->destroy (object);
+  GTK_WIDGET_CLASS (gtk_image_menu_item_parent_class)->destroy (widget);
 }
 
 static void

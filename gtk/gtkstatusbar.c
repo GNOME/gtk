@@ -116,10 +116,10 @@ static void     gtk_statusbar_buildable_interface_init    (GtkBuildableIface *if
 static GObject *gtk_statusbar_buildable_get_internal_child (GtkBuildable *buildable,
                                                             GtkBuilder   *builder,
                                                             const gchar  *childname);
-static void     gtk_statusbar_destroy           (GtkObject         *object);
 static void     gtk_statusbar_update            (GtkStatusbar      *statusbar,
 						 guint              context_id,
 						 const gchar       *text);
+static void     gtk_statusbar_destroy           (GtkWidget         *widget);
 static void     gtk_statusbar_size_allocate     (GtkWidget         *widget,
 						 GtkAllocation     *allocation);
 static void     gtk_statusbar_realize           (GtkWidget         *widget);
@@ -163,18 +163,15 @@ static void
 gtk_statusbar_class_init (GtkStatusbarClass *class)
 {
   GObjectClass *gobject_class;
-  GtkObjectClass *object_class;
   GtkWidgetClass *widget_class;
 
   gobject_class = (GObjectClass *) class;
-  object_class = (GtkObjectClass *) class;
   widget_class = (GtkWidgetClass *) class;
 
   gobject_class->set_property = gtk_statusbar_set_property;
   gobject_class->get_property = gtk_statusbar_get_property;
 
-  object_class->destroy = gtk_statusbar_destroy;
-
+  widget_class->destroy = gtk_statusbar_destroy;
   widget_class->realize = gtk_statusbar_realize;
   widget_class->unrealize = gtk_statusbar_unrealize;
   widget_class->map = gtk_statusbar_map;
@@ -691,9 +688,9 @@ gtk_statusbar_get_message_area (GtkStatusbar *statusbar)
 }
 
 static void
-gtk_statusbar_destroy (GtkObject *object)
+gtk_statusbar_destroy (GtkWidget *widget)
 {
-  GtkStatusbar *statusbar = GTK_STATUSBAR (object);
+  GtkStatusbar *statusbar = GTK_STATUSBAR (widget);
   GtkStatusbarPrivate *priv = statusbar->priv;
   GSList *list;
 
@@ -713,7 +710,7 @@ gtk_statusbar_destroy (GtkObject *object)
   g_slist_free (priv->keys);
   priv->keys = NULL;
 
-  GTK_OBJECT_CLASS (gtk_statusbar_parent_class)->destroy (object);
+  GTK_WIDGET_CLASS (gtk_statusbar_parent_class)->destroy (widget);
 }
 
 static void

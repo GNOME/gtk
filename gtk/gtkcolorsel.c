@@ -159,7 +159,7 @@ struct _GtkColorSelectionPrivate
 };
 
 
-static void gtk_color_selection_destroy		(GtkObject		 *object);
+static void gtk_color_selection_destroy		(GtkWidget		 *widget);
 static void gtk_color_selection_finalize        (GObject		 *object);
 static void update_color			(GtkColorSelection	 *colorsel);
 static void gtk_color_selection_set_property    (GObject                 *object,
@@ -289,7 +289,6 @@ static void
 gtk_color_selection_class_init (GtkColorSelectionClass *klass)
 {
   GObjectClass *gobject_class;
-  GtkObjectClass *object_class;
   GtkWidgetClass *widget_class;
   
   gobject_class = G_OBJECT_CLASS (klass);
@@ -297,10 +296,8 @@ gtk_color_selection_class_init (GtkColorSelectionClass *klass)
   gobject_class->set_property = gtk_color_selection_set_property;
   gobject_class->get_property = gtk_color_selection_get_property;
 
-  object_class = GTK_OBJECT_CLASS (klass);
-  object_class->destroy = gtk_color_selection_destroy;
-  
   widget_class = GTK_WIDGET_CLASS (klass);
+  widget_class->destroy = gtk_color_selection_destroy;
   widget_class->realize = gtk_color_selection_realize;
   widget_class->unrealize = gtk_color_selection_unrealize;
   widget_class->show_all = gtk_color_selection_show_all;
@@ -337,7 +334,7 @@ gtk_color_selection_class_init (GtkColorSelectionClass *klass)
   
   color_selection_signals[COLOR_CHANGED] =
     g_signal_new (I_("color-changed"),
-		  G_OBJECT_CLASS_TYPE (object_class),
+		  G_OBJECT_CLASS_TYPE (gobject_class),
 		  G_SIGNAL_RUN_FIRST,
 		  G_STRUCT_OFFSET (GtkColorSelectionClass, color_changed),
 		  NULL, NULL,
@@ -605,12 +602,12 @@ gtk_color_selection_get_property (GObject     *object,
     }
 }
 
-/* GtkObject methods */
+/* GtkWidget methods */
 
 static void
-gtk_color_selection_destroy (GtkObject *object)
+gtk_color_selection_destroy (GtkWidget *widget)
 {
-  GtkColorSelection *cselection = GTK_COLOR_SELECTION (object);
+  GtkColorSelection *cselection = GTK_COLOR_SELECTION (widget);
   GtkColorSelectionPrivate *priv = cselection->private_data;
 
   if (priv->dropper_grab_widget)
@@ -619,10 +616,8 @@ gtk_color_selection_destroy (GtkObject *object)
       priv->dropper_grab_widget = NULL;
     }
 
-  GTK_OBJECT_CLASS (gtk_color_selection_parent_class)->destroy (object);
+  GTK_WIDGET_CLASS (gtk_color_selection_parent_class)->destroy (widget);
 }
-
-/* GtkWidget methods */
 
 static void
 gtk_color_selection_realize (GtkWidget *widget)

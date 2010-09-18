@@ -150,6 +150,8 @@ struct _GtkWidgetPrivate
   /* unused bits in our 32-bit block */
   guint reserved : 10;
 
+  guint in_destruction : 1;
+
   /* The widget's name. If the widget does not have a name
    *  (the name is NULL), then its name (as returned by
    *  "gtk_widget_get_name") is its class's name.
@@ -184,6 +186,7 @@ struct _GtkWidgetPrivate
 };
 
 enum {
+  DESTROY,
   SHOW,
   HIDE,
   MAP,
@@ -513,8 +516,8 @@ gtk_widget_get_type (void)
 	NULL /* interface data */
       };
 
-      widget_type = g_type_register_static (GTK_TYPE_OBJECT, "GtkWidget",
-                                           &widget_info, G_TYPE_FLAG_ABSTRACT);
+      widget_type = g_type_register_static (G_TYPE_INITIALLY_UNOWNED, "GtkWidget",
+                                            &widget_info, G_TYPE_FLAG_ABSTRACT);
 
       g_type_add_interface_static (widget_type, ATK_TYPE_IMPLEMENTOR,
                                    &accessibility_info) ;
@@ -1036,6 +1039,23 @@ gtk_widget_class_init (GtkWidgetClass *klass)
                                                      G_MAXINT16,
                                                      0,
                                                      GTK_PARAM_READWRITE));
+
+   /**
+    * GtkWidget::destroy:
+    * @object: the object which received the signal
+    *
+    * Signals that all holders of a reference to the widget should release
+    * the reference that they hold. May result in finalization of the widget
+    * if all references are released.
+    */
+  widget_signals[DESTROY] =
+    g_signal_new (I_("destroy"),
+                  G_TYPE_FROM_CLASS (gobject_class),
+                  G_SIGNAL_RUN_CLEANUP | G_SIGNAL_NO_RECURSE | G_SIGNAL_NO_HOOKS,
+                  G_STRUCT_OFFSET (GtkWidgetClass, destroy),
+                  NULL, NULL,
+                  _gtk_marshal_VOID__VOID,
+                  G_TYPE_NONE, 0);
 
   /**
    * GtkWidget::show:
@@ -3432,8 +3452,9 @@ gtk_widget_unparent (GtkWidget *widget)
  * gtk_widget_destroy:
  * @widget: a #GtkWidget
  *
- * Destroys a widget. Equivalent to gtk_object_destroy(), except that
- * you don't have to cast the widget to #GtkObject. When a widget is
+ * Destroys a widget.
+ *
+ * When a widget is
  * destroyed, it will break any references it holds to other objects.
  * If the widget is inside a container, the widget will be removed
  * from the container. If the widget is a toplevel (derived from
@@ -3452,7 +3473,8 @@ gtk_widget_destroy (GtkWidget *widget)
 {
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
-  gtk_object_destroy ((GtkObject*) widget);
+  if (!widget->priv->in_destruction)
+    g_object_run_dispose (G_OBJECT (widget));
 }
 
 /**
@@ -9344,7 +9366,14 @@ gtk_widget_dispose (GObject *object)
   GTK_WIDGET_UNSET_FLAGS (widget, GTK_VISIBLE);
   if (gtk_widget_get_realized (widget))
     gtk_widget_unrealize (widget);
-  
+
+  if (!priv->in_destruction)
+    {
+      priv->in_destruction = TRUE;
+      g_signal_emit (object, widget_signals[DESTROY], 0);
+      priv->in_destruction = FALSE;
+    }
+
   G_OBJECT_CLASS (gtk_widget_parent_class)->dispose (object);
 }
 
@@ -9367,8 +9396,6 @@ gtk_widget_real_destroy (GtkObject *object)
   g_object_unref (priv->style);
   priv->style = gtk_widget_get_default_style ();
   g_object_ref (priv->style);
-
-  GTK_OBJECT_CLASS (gtk_widget_parent_class)->destroy (object);
 }
 
 static void
@@ -9393,6 +9420,12 @@ gtk_widget_finalize (GObject *object)
   accessible = g_object_get_qdata (G_OBJECT (widget), quark_accessible_object);
   if (accessible)
     g_object_unref (accessible);
+
+  if (g_object_is_floating (object))
+    g_warning ("A floating object was finalized. This means that someone\n"
+               "called g_object_unref() on an object that had only a floating\n"
+               "reference; the initial floating reference is not owned by anyone\n"
+               "and must be removed with g_object_ref_sink().");
 
   G_OBJECT_CLASS (gtk_widget_parent_class)->finalize (object);
 }

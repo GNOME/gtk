@@ -114,7 +114,7 @@ enum {
 };
 
 
-static void     gtk_radio_button_destroy        (GtkObject           *object);
+static void     gtk_radio_button_destroy        (GtkWidget           *widget);
 static gboolean gtk_radio_button_focus          (GtkWidget           *widget,
 						 GtkDirectionType     direction);
 static void     gtk_radio_button_clicked        (GtkButton           *button);
@@ -137,13 +137,11 @@ static void
 gtk_radio_button_class_init (GtkRadioButtonClass *class)
 {
   GObjectClass *gobject_class;
-  GtkObjectClass *object_class;
   GtkButtonClass *button_class;
   GtkCheckButtonClass *check_button_class;
   GtkWidgetClass *widget_class;
 
   gobject_class = G_OBJECT_CLASS (class);
-  object_class = (GtkObjectClass*) class;
   widget_class = (GtkWidgetClass*) class;
   button_class = (GtkButtonClass*) class;
   check_button_class = (GtkCheckButtonClass*) class;
@@ -163,8 +161,7 @@ gtk_radio_button_class_init (GtkRadioButtonClass *class)
 							P_("The radio button whose group this widget belongs to."),
 							GTK_TYPE_RADIO_BUTTON,
 							GTK_PARAM_WRITABLE));
-  object_class->destroy = gtk_radio_button_destroy;
-
+  widget_class->destroy = gtk_radio_button_destroy;
   widget_class->focus = gtk_radio_button_focus;
 
   button_class->clicked = gtk_radio_button_clicked;
@@ -187,7 +184,7 @@ gtk_radio_button_class_init (GtkRadioButtonClass *class)
    * Since: 2.4
    */
   group_changed_signal = g_signal_new (I_("group-changed"),
-				       G_OBJECT_CLASS_TYPE (object_class),
+				       G_OBJECT_CLASS_TYPE (gobject_class),
 				       G_SIGNAL_RUN_FIRST,
 				       G_STRUCT_OFFSET (GtkRadioButtonClass, group_changed),
 				       NULL, NULL,
@@ -561,10 +558,10 @@ gtk_radio_button_get_group (GtkRadioButton *radio_button)
 
 
 static void
-gtk_radio_button_destroy (GtkObject *object)
+gtk_radio_button_destroy (GtkWidget *widget)
 {
   GtkWidget *old_group_singleton = NULL;
-  GtkRadioButton *radio_button = GTK_RADIO_BUTTON (object);
+  GtkRadioButton *radio_button = GTK_RADIO_BUTTON (widget);
   GtkRadioButtonPrivate *priv = radio_button->priv;
   GtkRadioButton *tmp_button;
   GSList *tmp_list;
@@ -594,7 +591,7 @@ gtk_radio_button_destroy (GtkObject *object)
   if (was_in_group)
     g_signal_emit (radio_button, group_changed_signal, 0);
 
-  GTK_OBJECT_CLASS (gtk_radio_button_parent_class)->destroy (object);
+  GTK_WIDGET_CLASS (gtk_radio_button_parent_class)->destroy (widget);
 }
 
 static void

@@ -221,7 +221,7 @@ static void     gtk_combo_box_cell_layout_init     (GtkCellLayoutIface *iface);
 static void     gtk_combo_box_cell_editable_init   (GtkCellEditableIface *iface);
 static void     gtk_combo_box_dispose              (GObject          *object);
 static void     gtk_combo_box_finalize             (GObject          *object);
-static void     gtk_combo_box_destroy              (GtkObject        *object);
+static void     gtk_combo_box_destroy              (GtkWidget        *widget);
 
 static void     gtk_combo_box_set_property         (GObject         *object,
                                                     guint            prop_id,
@@ -496,7 +496,6 @@ static void
 gtk_combo_box_class_init (GtkComboBoxClass *klass)
 {
   GObjectClass *object_class;
-  GtkObjectClass *gtk_object_class;
   GtkContainerClass *container_class;
   GtkWidgetClass *widget_class;
   GtkBindingSet *binding_set;
@@ -520,9 +519,7 @@ gtk_combo_box_class_init (GtkComboBoxClass *klass)
   widget_class->get_preferred_height = gtk_combo_box_get_preferred_height;
   widget_class->get_preferred_height_for_width = gtk_combo_box_get_preferred_height_for_width;
   widget_class->get_preferred_width_for_height = gtk_combo_box_get_preferred_width_for_height;
-
-  gtk_object_class = (GtkObjectClass *)klass;
-  gtk_object_class->destroy = gtk_combo_box_destroy;
+  widget_class->destroy = gtk_combo_box_destroy;
 
   object_class = (GObjectClass *)klass;
   object_class->dispose = gtk_combo_box_dispose;
@@ -5420,9 +5417,9 @@ gtk_combo_box_grab_focus (GtkWidget *widget)
 }
 
 static void
-gtk_combo_box_destroy (GtkObject *object)
+gtk_combo_box_destroy (GtkWidget *widget)
 {
-  GtkComboBox *combo_box = GTK_COMBO_BOX (object);
+  GtkComboBox *combo_box = GTK_COMBO_BOX (widget);
 
   if (combo_box->priv->popup_idle_id > 0)
     {
@@ -5439,7 +5436,7 @@ gtk_combo_box_destroy (GtkObject *object)
   combo_box->priv->row_separator_data = NULL;
   combo_box->priv->row_separator_destroy = NULL;
 
-  GTK_OBJECT_CLASS (gtk_combo_box_parent_class)->destroy (object);
+  GTK_WIDGET_CLASS (gtk_combo_box_parent_class)->destroy (widget);
   combo_box->priv->cell_view = NULL;
 }
 

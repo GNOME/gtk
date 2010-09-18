@@ -255,7 +255,7 @@ struct _GtkWidget
    *  allows a GtkWidget pointer to be cast to a
    *  GtkObject pointer.
    */
-  GtkObject object;
+  GInitiallyUnowned object;
 
   /* internally used private flags. */
   guint GSEAL (private_flags) : 16;
@@ -306,7 +306,7 @@ struct _GtkWidget
  */
 struct _GtkWidgetClass
 {
-  GtkObjectClass parent_class;
+  GInitiallyUnownedClass parent_class;
 
   /*< public >*/
   
@@ -322,6 +322,7 @@ struct _GtkWidgetClass
 					     GParamSpec **pspecs);
 
   /* basics */
+  void (* destroy)             (GtkWidget        *widget);
   void (* show)		       (GtkWidget        *widget);
   void (* show_all)            (GtkWidget        *widget);
   void (* hide)		       (GtkWidget        *widget);

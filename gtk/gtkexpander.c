@@ -78,8 +78,7 @@ static void gtk_expander_get_property (GObject          *object,
 				       GValue           *value,
 				       GParamSpec       *pspec);
 
-static void gtk_expander_destroy (GtkObject *object);
-
+static void     gtk_expander_destroy        (GtkWidget        *widget);
 static void     gtk_expander_realize        (GtkWidget        *widget);
 static void     gtk_expander_unrealize      (GtkWidget        *widget);
 static void     gtk_expander_size_allocate  (GtkWidget        *widget,
@@ -157,20 +156,17 @@ static void
 gtk_expander_class_init (GtkExpanderClass *klass)
 {
   GObjectClass *gobject_class;
-  GtkObjectClass *object_class;
   GtkWidgetClass *widget_class;
   GtkContainerClass *container_class;
 
   gobject_class   = (GObjectClass *) klass;
-  object_class    = (GtkObjectClass *) klass;
   widget_class    = (GtkWidgetClass *) klass;
   container_class = (GtkContainerClass *) klass;
 
   gobject_class->set_property = gtk_expander_set_property;
   gobject_class->get_property = gtk_expander_get_property;
 
-  object_class->destroy = gtk_expander_destroy;
-
+  widget_class->destroy              = gtk_expander_destroy;
   widget_class->realize              = gtk_expander_realize;
   widget_class->unrealize            = gtk_expander_unrealize;
   widget_class->size_allocate        = gtk_expander_size_allocate;
@@ -414,17 +410,17 @@ gtk_expander_get_property (GObject    *object,
 }
 
 static void
-gtk_expander_destroy (GtkObject *object)
+gtk_expander_destroy (GtkWidget *widget)
 {
-  GtkExpanderPrivate *priv = GTK_EXPANDER (object)->priv;
-  
+  GtkExpanderPrivate *priv = GTK_EXPANDER (widget)->priv;
+
   if (priv->animation_timeout)
     {
       g_source_remove (priv->animation_timeout);
       priv->animation_timeout = 0;
     }
-  
-  GTK_OBJECT_CLASS (gtk_expander_parent_class)->destroy (object);
+
+  GTK_WIDGET_CLASS (gtk_expander_parent_class)->destroy (widget);
 }
 
 static void

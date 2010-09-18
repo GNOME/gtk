@@ -109,7 +109,6 @@ enum
   LAST_SIGNAL
 };
 
-static void     gtk_scrolled_window_destroy            (GtkObject         *object);
 static void     gtk_scrolled_window_set_property       (GObject           *object,
                                                         guint              prop_id,
                                                         const GValue      *value,
@@ -119,6 +118,7 @@ static void     gtk_scrolled_window_get_property       (GObject           *objec
                                                         GValue            *value,
                                                         GParamSpec        *pspec);
 
+static void     gtk_scrolled_window_destroy            (GtkWidget         *widget);
 static void     gtk_scrolled_window_screen_changed     (GtkWidget         *widget,
                                                         GdkScreen         *previous_screen);
 static gboolean gtk_scrolled_window_draw               (GtkWidget         *widget,
@@ -206,20 +206,17 @@ static void
 gtk_scrolled_window_class_init (GtkScrolledWindowClass *class)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (class);
-  GtkObjectClass *object_class;
   GtkWidgetClass *widget_class;
   GtkContainerClass *container_class;
   GtkBindingSet *binding_set;
 
-  object_class = (GtkObjectClass*) class;
   widget_class = (GtkWidgetClass*) class;
   container_class = (GtkContainerClass*) class;
 
   gobject_class->set_property = gtk_scrolled_window_set_property;
   gobject_class->get_property = gtk_scrolled_window_get_property;
 
-  object_class->destroy = gtk_scrolled_window_destroy;
-
+  widget_class->destroy = gtk_scrolled_window_destroy;
   widget_class->screen_changed = gtk_scrolled_window_screen_changed;
   widget_class->draw = gtk_scrolled_window_draw;
   widget_class->size_allocate = gtk_scrolled_window_size_allocate;
@@ -345,7 +342,7 @@ gtk_scrolled_window_class_init (GtkScrolledWindowClass *class)
 
   signals[SCROLL_CHILD] =
     g_signal_new (I_("scroll-child"),
-                  G_TYPE_FROM_CLASS (object_class),
+                  G_TYPE_FROM_CLASS (gobject_class),
                   G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
                   G_STRUCT_OFFSET (GtkScrolledWindowClass, scroll_child),
                   NULL, NULL,
@@ -355,7 +352,7 @@ gtk_scrolled_window_class_init (GtkScrolledWindowClass *class)
 		  G_TYPE_BOOLEAN);
   signals[MOVE_FOCUS_OUT] =
     g_signal_new (I_("move-focus-out"),
-                  G_TYPE_FROM_CLASS (object_class),
+                  G_TYPE_FROM_CLASS (gobject_class),
                   G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
                   G_STRUCT_OFFSET (GtkScrolledWindowClass, move_focus_out),
                   NULL, NULL,
@@ -910,9 +907,9 @@ gtk_scrolled_window_get_shadow_type (GtkScrolledWindow *scrolled_window)
 }
 
 static void
-gtk_scrolled_window_destroy (GtkObject *object)
+gtk_scrolled_window_destroy (GtkWidget *widget)
 {
-  GtkScrolledWindow *scrolled_window = GTK_SCROLLED_WINDOW (object);
+  GtkScrolledWindow *scrolled_window = GTK_SCROLLED_WINDOW (widget);
   GtkScrolledWindowPrivate *priv = scrolled_window->priv;
 
   if (priv->hscrollbar)
@@ -936,7 +933,7 @@ gtk_scrolled_window_destroy (GtkObject *object)
       priv->vscrollbar = NULL;
     }
 
-  GTK_OBJECT_CLASS (gtk_scrolled_window_parent_class)->destroy (object);
+  GTK_WIDGET_CLASS (gtk_scrolled_window_parent_class)->destroy (widget);
 }
 
 static void

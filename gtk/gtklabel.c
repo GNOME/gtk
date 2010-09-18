@@ -197,8 +197,8 @@ static void gtk_label_get_property      (GObject          *object,
 					 guint             prop_id,
 					 GValue           *value,
 					 GParamSpec       *pspec);
-static void gtk_label_destroy           (GtkObject        *object);
 static void gtk_label_finalize          (GObject          *object);
+static void gtk_label_destroy           (GtkWidget        *widget);
 static void gtk_label_size_allocate     (GtkWidget        *widget,
                                          GtkAllocation    *allocation);
 static void gtk_label_state_changed     (GtkWidget        *widget,
@@ -379,7 +379,6 @@ static void
 gtk_label_class_init (GtkLabelClass *class)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (class);
-  GtkObjectClass *object_class = GTK_OBJECT_CLASS (class);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (class);
   GtkBindingSet *binding_set;
 
@@ -387,8 +386,7 @@ gtk_label_class_init (GtkLabelClass *class)
   gobject_class->get_property = gtk_label_get_property;
   gobject_class->finalize = gtk_label_finalize;
 
-  object_class->destroy = gtk_label_destroy;
-
+  widget_class->destroy = gtk_label_destroy;
   widget_class->size_allocate = gtk_label_size_allocate;
   widget_class->state_changed = gtk_label_state_changed;
   widget_class->style_set = gtk_label_style_set;
@@ -516,7 +514,7 @@ gtk_label_class_init (GtkLabelClass *class)
      */
     signals[ACTIVATE_CURRENT_LINK] =
       g_signal_new_class_handler ("activate-current-link",
-                                  G_TYPE_FROM_CLASS (object_class),
+                                  G_TYPE_FROM_CLASS (gobject_class),
                                   G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
                                   G_CALLBACK (gtk_label_activate_current_link),
                                   NULL, NULL,
@@ -538,7 +536,7 @@ gtk_label_class_init (GtkLabelClass *class)
      */
     signals[ACTIVATE_LINK] =
       g_signal_new ("activate-link",
-                    G_TYPE_FROM_CLASS (object_class),
+                    G_TYPE_FROM_CLASS (gobject_class),
                     G_SIGNAL_RUN_LAST,
                     G_STRUCT_OFFSET (GtkLabelClass, activate_link),
                     _gtk_boolean_handled_accumulator, NULL,
@@ -2951,13 +2949,13 @@ gtk_label_get_line_wrap_mode (GtkLabel *label)
 }
 
 static void
-gtk_label_destroy (GtkObject *object)
+gtk_label_destroy (GtkWidget *widget)
 {
-  GtkLabel *label = GTK_LABEL (object);
+  GtkLabel *label = GTK_LABEL (widget);
 
   gtk_label_set_mnemonic_widget (label, NULL);
 
-  GTK_OBJECT_CLASS (gtk_label_parent_class)->destroy (object);
+  GTK_WIDGET_CLASS (gtk_label_parent_class)->destroy (widget);
 }
 
 static void

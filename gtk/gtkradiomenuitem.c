@@ -44,7 +44,7 @@ enum {
 };
 
 
-static void gtk_radio_menu_item_destroy        (GtkObject             *object);
+static void gtk_radio_menu_item_destroy        (GtkWidget             *widget);
 static void gtk_radio_menu_item_activate       (GtkMenuItem           *menu_item);
 static void gtk_radio_menu_item_set_property   (GObject               *object,
 						guint                  prop_id,
@@ -346,15 +346,19 @@ static void
 gtk_radio_menu_item_class_init (GtkRadioMenuItemClass *klass)
 {
   GObjectClass *gobject_class;  
-  GtkObjectClass *object_class;
+  GtkWidgetClass *widget_class;
   GtkMenuItemClass *menu_item_class;
 
   gobject_class = G_OBJECT_CLASS (klass);
-  object_class = GTK_OBJECT_CLASS (klass);
+  widget_class = GTK_WIDGET_CLASS (klass);
   menu_item_class = GTK_MENU_ITEM_CLASS (klass);
 
   gobject_class->set_property = gtk_radio_menu_item_set_property;
   gobject_class->get_property = gtk_radio_menu_item_get_property;
+
+  widget_class->destroy = gtk_radio_menu_item_destroy;
+
+  menu_item_class->activate = gtk_radio_menu_item_activate;
 
   /**
    * GtkRadioMenuItem:group:
@@ -371,10 +375,6 @@ gtk_radio_menu_item_class_init (GtkRadioMenuItemClass *klass)
 							GTK_TYPE_RADIO_MENU_ITEM,
 							GTK_PARAM_WRITABLE));
 
-  object_class->destroy = gtk_radio_menu_item_destroy;
-
-  menu_item_class->activate = gtk_radio_menu_item_activate;
-
   /**
    * GtkStyle::group-changed:
    * @style: the object which received the signal
@@ -389,7 +389,7 @@ gtk_radio_menu_item_class_init (GtkRadioMenuItemClass *klass)
    * Since: 2.4
    */
   group_changed_signal = g_signal_new (I_("group-changed"),
-				       G_OBJECT_CLASS_TYPE (object_class),
+				       G_OBJECT_CLASS_TYPE (gobject_class),
 				       G_SIGNAL_RUN_FIRST,
 				       G_STRUCT_OFFSET (GtkRadioMenuItemClass, group_changed),
 				       NULL, NULL,
@@ -414,9 +414,9 @@ gtk_radio_menu_item_init (GtkRadioMenuItem *radio_menu_item)
 }
 
 static void
-gtk_radio_menu_item_destroy (GtkObject *object)
+gtk_radio_menu_item_destroy (GtkWidget *widget)
 {
-  GtkRadioMenuItem *radio_menu_item = GTK_RADIO_MENU_ITEM (object);
+  GtkRadioMenuItem *radio_menu_item = GTK_RADIO_MENU_ITEM (widget);
   GtkRadioMenuItemPrivate *priv = radio_menu_item->priv;
   GtkWidget *old_group_singleton = NULL;
   GtkRadioMenuItem *tmp_menu_item;
@@ -447,7 +447,7 @@ gtk_radio_menu_item_destroy (GtkObject *object)
   if (was_in_group)
     g_signal_emit (radio_menu_item, group_changed_signal, 0);
 
-  GTK_OBJECT_CLASS (gtk_radio_menu_item_parent_class)->destroy (object);
+  GTK_WIDGET_CLASS (gtk_radio_menu_item_parent_class)->destroy (widget);
 }
 
 static void

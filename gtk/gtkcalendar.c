@@ -335,7 +335,7 @@ struct _GtkCalendarPrivate
 #define GTK_CALENDAR_GET_PRIVATE(widget)  (GTK_CALENDAR (widget)->priv)
 
 static void gtk_calendar_finalize     (GObject      *calendar);
-static void gtk_calendar_destroy      (GtkObject    *calendar);
+static void gtk_calendar_destroy      (GtkWidget    *widget);
 static void gtk_calendar_set_property (GObject      *object,
 				       guint         prop_id,
 				       const GValue *value,
@@ -432,19 +432,16 @@ static void
 gtk_calendar_class_init (GtkCalendarClass *class)
 {
   GObjectClass   *gobject_class;
-  GtkObjectClass   *object_class;
   GtkWidgetClass *widget_class;
 
   gobject_class = (GObjectClass*)  class;
-  object_class = (GtkObjectClass*)  class;
   widget_class = (GtkWidgetClass*) class;
   
   gobject_class->set_property = gtk_calendar_set_property;
   gobject_class->get_property = gtk_calendar_get_property;
   gobject_class->finalize = gtk_calendar_finalize;
 
-  object_class->destroy = gtk_calendar_destroy;
-
+  widget_class->destroy = gtk_calendar_destroy;
   widget_class->realize = gtk_calendar_realize;
   widget_class->unrealize = gtk_calendar_unrealize;
   widget_class->draw = gtk_calendar_draw;
@@ -1376,11 +1373,11 @@ gtk_calendar_finalize (GObject *object)
 }
 
 static void
-gtk_calendar_destroy (GtkObject *object)
+gtk_calendar_destroy (GtkWidget *widget)
 {
-  GtkCalendarPrivate *priv = GTK_CALENDAR_GET_PRIVATE (object);
+  GtkCalendarPrivate *priv = GTK_CALENDAR_GET_PRIVATE (widget);
 
-  calendar_stop_spinning (GTK_CALENDAR (object));
+  calendar_stop_spinning (GTK_CALENDAR (widget));
 
   /* Call the destroy function for the extra display callback: */
   if (priv->detail_func_destroy && priv->detail_func_user_data)
@@ -1390,7 +1387,7 @@ gtk_calendar_destroy (GtkObject *object)
       priv->detail_func_destroy = NULL;
     }
 
-  GTK_OBJECT_CLASS (gtk_calendar_parent_class)->destroy (object);
+  GTK_WIDGET_CLASS (gtk_calendar_parent_class)->destroy (widget);
 }
 
 

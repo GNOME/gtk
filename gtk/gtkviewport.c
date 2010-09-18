@@ -72,7 +72,6 @@ enum {
 
 
 static void gtk_viewport_finalize                 (GObject          *object);
-static void gtk_viewport_destroy                  (GtkObject        *object);
 static void gtk_viewport_set_property             (GObject         *object,
 						   guint            prop_id,
 						   const GValue    *value,
@@ -84,6 +83,7 @@ static void gtk_viewport_get_property             (GObject         *object,
 static void gtk_viewport_set_scroll_adjustments	  (GtkViewport	    *viewport,
 						   GtkAdjustment    *hadjustment,
 						   GtkAdjustment    *vadjustment);
+static void gtk_viewport_destroy                  (GtkWidget        *widget);
 static void gtk_viewport_realize                  (GtkWidget        *widget);
 static void gtk_viewport_unrealize                (GtkWidget        *widget);
 static gint gtk_viewport_draw                     (GtkWidget        *widget,
@@ -110,12 +110,10 @@ G_DEFINE_TYPE (GtkViewport, gtk_viewport, GTK_TYPE_BIN)
 static void
 gtk_viewport_class_init (GtkViewportClass *class)
 {
-  GtkObjectClass *object_class;
   GObjectClass   *gobject_class;
   GtkWidgetClass *widget_class;
   GtkContainerClass *container_class;
 
-  object_class = (GtkObjectClass*) class;
   gobject_class = G_OBJECT_CLASS (class);
   widget_class = (GtkWidgetClass*) class;
   container_class = (GtkContainerClass*) class;
@@ -123,8 +121,8 @@ gtk_viewport_class_init (GtkViewportClass *class)
   gobject_class->finalize = gtk_viewport_finalize;
   gobject_class->set_property = gtk_viewport_set_property;
   gobject_class->get_property = gtk_viewport_get_property;
-  object_class->destroy = gtk_viewport_destroy;
-  
+
+  widget_class->destroy = gtk_viewport_destroy;
   widget_class->realize = gtk_viewport_realize;
   widget_class->unrealize = gtk_viewport_unrealize;
   widget_class->draw = gtk_viewport_draw;
@@ -315,14 +313,14 @@ gtk_viewport_finalize (GObject *object)
 }
 
 static void
-gtk_viewport_destroy (GtkObject *object)
+gtk_viewport_destroy (GtkWidget *widget)
 {
-  GtkViewport *viewport = GTK_VIEWPORT (object);
+  GtkViewport *viewport = GTK_VIEWPORT (widget);
 
   viewport_disconnect_adjustment (viewport, GTK_ORIENTATION_HORIZONTAL);
   viewport_disconnect_adjustment (viewport, GTK_ORIENTATION_VERTICAL);
 
-  GTK_OBJECT_CLASS (gtk_viewport_parent_class)->destroy (object);
+  GTK_WIDGET_CLASS (gtk_viewport_parent_class)->destroy (widget);
 }
 
 /**

@@ -109,7 +109,7 @@ struct _GtkButtonPrivate
   GtkAction      *action;
 };
 
-static void gtk_button_destroy        (GtkObject          *object);
+static void gtk_button_destroy        (GtkWidget          *widget);
 static void gtk_button_dispose        (GObject            *object);
 static void gtk_button_set_property   (GObject            *object,
                                        guint               prop_id,
@@ -189,12 +189,10 @@ static void
 gtk_button_class_init (GtkButtonClass *klass)
 {
   GObjectClass *gobject_class;
-  GtkObjectClass *object_class;
   GtkWidgetClass *widget_class;
   GtkContainerClass *container_class;
 
   gobject_class = G_OBJECT_CLASS (klass);
-  object_class = (GtkObjectClass*) klass;
   widget_class = (GtkWidgetClass*) klass;
   container_class = (GtkContainerClass*) klass;
   
@@ -203,10 +201,9 @@ gtk_button_class_init (GtkButtonClass *klass)
   gobject_class->set_property = gtk_button_set_property;
   gobject_class->get_property = gtk_button_get_property;
 
-  object_class->destroy = gtk_button_destroy;
-
   widget_class->get_preferred_width  = gtk_button_get_preferred_width;
   widget_class->get_preferred_height = gtk_button_get_preferred_height;
+  widget_class->destroy = gtk_button_destroy;
   widget_class->screen_changed = gtk_button_screen_changed;
   widget_class->realize = gtk_button_realize;
   widget_class->unrealize = gtk_button_unrealize;
@@ -358,7 +355,7 @@ gtk_button_class_init (GtkButtonClass *klass)
    */ 
   button_signals[PRESSED] =
     g_signal_new (I_("pressed"),
-		  G_OBJECT_CLASS_TYPE (object_class),
+		  G_OBJECT_CLASS_TYPE (gobject_class),
 		  G_SIGNAL_RUN_FIRST,
 		  G_STRUCT_OFFSET (GtkButtonClass, pressed),
 		  NULL, NULL,
@@ -375,7 +372,7 @@ gtk_button_class_init (GtkButtonClass *klass)
    */ 
   button_signals[RELEASED] =
     g_signal_new (I_("released"),
-		  G_OBJECT_CLASS_TYPE (object_class),
+		  G_OBJECT_CLASS_TYPE (gobject_class),
 		  G_SIGNAL_RUN_FIRST,
 		  G_STRUCT_OFFSET (GtkButtonClass, released),
 		  NULL, NULL,
@@ -390,7 +387,7 @@ gtk_button_class_init (GtkButtonClass *klass)
    */ 
   button_signals[CLICKED] =
     g_signal_new (I_("clicked"),
-		  G_OBJECT_CLASS_TYPE (object_class),
+		  G_OBJECT_CLASS_TYPE (gobject_class),
 		  G_SIGNAL_RUN_FIRST | G_SIGNAL_ACTION,
 		  G_STRUCT_OFFSET (GtkButtonClass, clicked),
 		  NULL, NULL,
@@ -407,7 +404,7 @@ gtk_button_class_init (GtkButtonClass *klass)
    */ 
   button_signals[ENTER] =
     g_signal_new (I_("enter"),
-		  G_OBJECT_CLASS_TYPE (object_class),
+		  G_OBJECT_CLASS_TYPE (gobject_class),
 		  G_SIGNAL_RUN_FIRST,
 		  G_STRUCT_OFFSET (GtkButtonClass, enter),
 		  NULL, NULL,
@@ -424,7 +421,7 @@ gtk_button_class_init (GtkButtonClass *klass)
    */ 
   button_signals[LEAVE] =
     g_signal_new (I_("leave"),
-		  G_OBJECT_CLASS_TYPE (object_class),
+		  G_OBJECT_CLASS_TYPE (gobject_class),
 		  G_SIGNAL_RUN_FIRST,
 		  G_STRUCT_OFFSET (GtkButtonClass, leave),
 		  NULL, NULL,
@@ -442,7 +439,7 @@ gtk_button_class_init (GtkButtonClass *klass)
    */
   button_signals[ACTIVATE] =
     g_signal_new (I_("activate"),
-		  G_OBJECT_CLASS_TYPE (object_class),
+		  G_OBJECT_CLASS_TYPE (gobject_class),
 		  G_SIGNAL_RUN_FIRST | G_SIGNAL_ACTION,
 		  G_STRUCT_OFFSET (GtkButtonClass, activate),
 		  NULL, NULL,
@@ -587,17 +584,17 @@ gtk_button_init (GtkButton *button)
 }
 
 static void
-gtk_button_destroy (GtkObject *object)
+gtk_button_destroy (GtkWidget *widget)
 {
-  GtkButton *button = GTK_BUTTON (object);
-  
+  GtkButton *button = GTK_BUTTON (widget);
+
   if (button->label_text)
     {
       g_free (button->label_text);
       button->label_text = NULL;
     }
 
-  GTK_OBJECT_CLASS (gtk_button_parent_class)->destroy (object);
+  GTK_WIDGET_CLASS (gtk_button_parent_class)->destroy (widget);
 }
 
 static GObject*

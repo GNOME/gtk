@@ -165,7 +165,7 @@ static void gtk_image_style_set    (GtkWidget      *widget,
 				    GtkStyle       *prev_style);
 static void gtk_image_screen_changed (GtkWidget    *widget,
 				      GdkScreen    *prev_screen);
-static void gtk_image_destroy      (GtkObject      *object);
+static void gtk_image_destroy      (GtkWidget      *widget);
 static void gtk_image_reset        (GtkImage       *image);
 static void gtk_image_calc_size    (GtkImage       *image);
 
@@ -205,21 +205,16 @@ static void
 gtk_image_class_init (GtkImageClass *class)
 {
   GObjectClass *gobject_class;
-  GtkObjectClass *object_class;
   GtkWidgetClass *widget_class;
 
   gobject_class = G_OBJECT_CLASS (class);
   
   gobject_class->set_property = gtk_image_set_property;
   gobject_class->get_property = gtk_image_get_property;
-  
-  object_class = GTK_OBJECT_CLASS (class);
-  
-  object_class->destroy = gtk_image_destroy;
 
   widget_class = GTK_WIDGET_CLASS (class);
-  
   widget_class->draw = gtk_image_draw;
+  widget_class->destroy = gtk_image_destroy;
   widget_class->size_request = gtk_image_size_request;
   widget_class->unmap = gtk_image_unmap;
   widget_class->unrealize = gtk_image_unrealize;
@@ -335,7 +330,7 @@ gtk_image_class_init (GtkImageClass *class)
                                                       GTK_IMAGE_EMPTY,
                                                       GTK_PARAM_READABLE));
 
-  g_type_class_add_private (object_class, sizeof (GtkImagePrivate));
+  g_type_class_add_private (class, sizeof (GtkImagePrivate));
 }
 
 static void
@@ -359,13 +354,13 @@ gtk_image_init (GtkImage *image)
 }
 
 static void
-gtk_image_destroy (GtkObject *object)
+gtk_image_destroy (GtkWidget *widget)
 {
-  GtkImage *image = GTK_IMAGE (object);
+  GtkImage *image = GTK_IMAGE (widget);
 
   gtk_image_reset (image);
-  
-  GTK_OBJECT_CLASS (gtk_image_parent_class)->destroy (object);
+
+  GTK_WIDGET_CLASS (gtk_image_parent_class)->destroy (widget);
 }
 
 static void 

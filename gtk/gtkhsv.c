@@ -85,7 +85,7 @@ enum {
   LAST_SIGNAL
 };
 
-static void     gtk_hsv_destroy        (GtkObject        *object);
+static void     gtk_hsv_destroy        (GtkWidget        *widget);
 static void     gtk_hsv_map            (GtkWidget        *widget);
 static void     gtk_hsv_unmap          (GtkWidget        *widget);
 static void     gtk_hsv_realize        (GtkWidget        *widget);
@@ -118,18 +118,15 @@ static void
 gtk_hsv_class_init (GtkHSVClass *class)
 {
   GObjectClass   *gobject_class;
-  GtkObjectClass *object_class;
   GtkWidgetClass *widget_class;
   GtkHSVClass    *hsv_class;
   GtkBindingSet  *binding_set;
   
   gobject_class = (GObjectClass *) class;
-  object_class = (GtkObjectClass *) class;
   widget_class = (GtkWidgetClass *) class;
   hsv_class = GTK_HSV_CLASS (class);
-  
-  object_class->destroy = gtk_hsv_destroy;
-  
+
+  widget_class->destroy = gtk_hsv_destroy;
   widget_class->map = gtk_hsv_map;
   widget_class->unmap = gtk_hsv_unmap;                                      
   widget_class->realize = gtk_hsv_realize;
@@ -147,7 +144,7 @@ gtk_hsv_class_init (GtkHSVClass *class)
   
   hsv_signals[CHANGED] =
     g_signal_new (I_("changed"),
-		  G_OBJECT_CLASS_TYPE (object_class),
+		  G_OBJECT_CLASS_TYPE (gobject_class),
 		  G_SIGNAL_RUN_FIRST,
 		  G_STRUCT_OFFSET (GtkHSVClass, changed),
 		  NULL, NULL,
@@ -156,7 +153,7 @@ gtk_hsv_class_init (GtkHSVClass *class)
 
   hsv_signals[MOVE] =
     g_signal_new (I_("move"),
-		  G_OBJECT_CLASS_TYPE (object_class),
+		  G_OBJECT_CLASS_TYPE (gobject_class),
 		  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
 		  G_STRUCT_OFFSET (GtkHSVClass, move),
 		  NULL, NULL,
@@ -221,9 +218,9 @@ gtk_hsv_init (GtkHSV *hsv)
 
 /* Destroy handler for the HSV color selector */
 static void
-gtk_hsv_destroy (GtkObject *object)
+gtk_hsv_destroy (GtkWidget *widget)
 {
-  GTK_OBJECT_CLASS (gtk_hsv_parent_class)->destroy (object);
+  GTK_WIDGET_CLASS (gtk_hsv_parent_class)->destroy (widget);
 }
 
 /* Default signal handlers */

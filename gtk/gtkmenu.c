@@ -171,7 +171,7 @@ static void     gtk_menu_get_child_property(GtkContainer     *container,
                                             guint             property_id,
                                             GValue           *value,
                                             GParamSpec       *pspec);
-static void     gtk_menu_destroy           (GtkObject        *object);
+static void     gtk_menu_destroy           (GtkWidget        *widget);
 static void     gtk_menu_realize           (GtkWidget        *widget);
 static void     gtk_menu_unrealize         (GtkWidget        *widget);
 static void     gtk_menu_size_allocate     (GtkWidget        *widget,
@@ -459,7 +459,6 @@ static void
 gtk_menu_class_init (GtkMenuClass *class)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (class);
-  GtkObjectClass *object_class = GTK_OBJECT_CLASS (class);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (class);
   GtkContainerClass *container_class = GTK_CONTAINER_CLASS (class);
   GtkMenuShellClass *menu_shell_class = GTK_MENU_SHELL_CLASS (class);
@@ -468,8 +467,7 @@ gtk_menu_class_init (GtkMenuClass *class)
   gobject_class->set_property = gtk_menu_set_property;
   gobject_class->get_property = gtk_menu_get_property;
 
-  object_class->destroy = gtk_menu_destroy;
-  
+  widget_class->destroy = gtk_menu_destroy;
   widget_class->realize = gtk_menu_realize;
   widget_class->unrealize = gtk_menu_unrealize;
   widget_class->size_allocate = gtk_menu_size_allocate;
@@ -505,7 +503,7 @@ gtk_menu_class_init (GtkMenuClass *class)
 
   menu_signals[MOVE_SCROLL] =
     g_signal_new_class_handler (I_("move-scroll"),
-                                G_OBJECT_CLASS_TYPE (object_class),
+                                G_OBJECT_CLASS_TYPE (gobject_class),
                                 G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
                                 G_CALLBACK (gtk_menu_real_move_scroll),
                                 NULL, NULL,
@@ -1082,15 +1080,15 @@ gtk_menu_init (GtkMenu *menu)
 }
 
 static void
-gtk_menu_destroy (GtkObject *object)
+gtk_menu_destroy (GtkWidget *widget)
 {
-  GtkMenu *menu = GTK_MENU (object);
+  GtkMenu *menu = GTK_MENU (widget);
   GtkMenuAttachData *data;
   GtkMenuPrivate *priv; 
 
   gtk_menu_remove_scroll_timeout (menu);
   
-  data = g_object_get_data (G_OBJECT (object), attach_data_key);
+  data = g_object_get_data (G_OBJECT (widget), attach_data_key);
   if (data)
     gtk_menu_detach (menu);
   
@@ -1106,7 +1104,7 @@ gtk_menu_destroy (GtkObject *object)
   if (menu->needs_destruction_ref_count)
     {
       menu->needs_destruction_ref_count = FALSE;
-      g_object_ref (object);
+      g_object_ref (widget);
     }
   
   if (menu->accel_group)
@@ -1142,7 +1140,7 @@ gtk_menu_destroy (GtkObject *object)
       priv->position_func_data_destroy = NULL;
     }
 
-  GTK_OBJECT_CLASS (gtk_menu_parent_class)->destroy (object);
+  GTK_WIDGET_CLASS (gtk_menu_parent_class)->destroy (widget);
 }
 
 static void
@@ -5111,7 +5109,7 @@ gtk_menu_reparent (GtkMenu   *menu,
                    GtkWidget *new_parent,
                    gboolean   unrealize)
 {
-  GtkObject *object = GTK_OBJECT (menu);
+  GObject *object = G_OBJECT (menu);
   GtkWidget *widget = GTK_WIDGET (menu);
   gboolean was_floating = g_object_is_floating (object);
 
@@ -5125,10 +5123,10 @@ gtk_menu_reparent (GtkMenu   *menu,
       g_object_unref (object);
     }
   else
-    gtk_widget_reparent (GTK_WIDGET (menu), new_parent);
-  
+    gtk_widget_reparent (widget, new_parent);
+
   if (was_floating)
-    g_object_force_floating (G_OBJECT (object));
+    g_object_force_floating (object);
   else
     g_object_unref (object);
 }

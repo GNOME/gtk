@@ -262,8 +262,7 @@ static void     gtk_notebook_query_tab_label_packing (GtkNotebook  *notebook,
                                                       gboolean     *fill,
                                                       GtkPackType  *pack_type);
 
-/*** GtkObject Methods ***/
-static void gtk_notebook_destroy             (GtkObject        *object);
+/*** GObject Methods ***/
 static void gtk_notebook_set_property	     (GObject         *object,
 					      guint            prop_id,
 					      const GValue    *value,
@@ -274,6 +273,7 @@ static void gtk_notebook_get_property	     (GObject         *object,
 					      GParamSpec      *pspec);
 
 /*** GtkWidget Methods ***/
+static void gtk_notebook_destroy             (GtkWidget        *widget);
 static void gtk_notebook_map                 (GtkWidget        *widget);
 static void gtk_notebook_unmap               (GtkWidget        *widget);
 static void gtk_notebook_realize             (GtkWidget        *widget);
@@ -537,15 +537,14 @@ static void
 gtk_notebook_class_init (GtkNotebookClass *class)
 {
   GObjectClass   *gobject_class = G_OBJECT_CLASS (class);
-  GtkObjectClass *object_class = GTK_OBJECT_CLASS (class);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (class);
   GtkContainerClass *container_class = GTK_CONTAINER_CLASS (class);
   GtkBindingSet *binding_set;
   
   gobject_class->set_property = gtk_notebook_set_property;
   gobject_class->get_property = gtk_notebook_get_property;
-  object_class->destroy = gtk_notebook_destroy;
 
+  widget_class->destroy = gtk_notebook_destroy;
   widget_class->map = gtk_notebook_map;
   widget_class->unmap = gtk_notebook_unmap;
   widget_class->realize = gtk_notebook_realize;
@@ -1453,36 +1452,11 @@ gtk_notebook_new (void)
   return g_object_new (GTK_TYPE_NOTEBOOK, NULL);
 }
 
-/* Private GtkObject Methods :
- * 
- * gtk_notebook_destroy
- * gtk_notebook_set_arg
- * gtk_notebook_get_arg
+/* Private GObject Methods :
+ *
+ * gtk_notebook_set_property
+ * gtk_notebook_get_property
  */
-static void
-gtk_notebook_destroy (GtkObject *object)
-{
-  GtkNotebook *notebook = GTK_NOTEBOOK (object);
-  GtkNotebookPrivate *priv = notebook->priv;
-
-  if (priv->menu)
-    gtk_notebook_popup_disable (notebook);
-
-  if (priv->source_targets)
-    {
-      gtk_target_list_unref (priv->source_targets);
-      priv->source_targets = NULL;
-    }
-
-  if (priv->switch_tab_timer)
-    {
-      g_source_remove (priv->switch_tab_timer);
-      priv->switch_tab_timer = 0;
-    }
-
-  GTK_OBJECT_CLASS (gtk_notebook_parent_class)->destroy (object);
-}
-
 static void
 gtk_notebook_set_property (GObject         *object,
 			   guint            prop_id,
@@ -1564,7 +1538,8 @@ gtk_notebook_get_property (GObject         *object,
 }
 
 /* Private GtkWidget Methods :
- * 
+ *
+ * gtk_notebook_destroy
  * gtk_notebook_map
  * gtk_notebook_unmap
  * gtk_notebook_realize
@@ -1588,6 +1563,30 @@ gtk_notebook_get_property (GObject         *object,
  * gtk_notebook_drag_data_get
  * gtk_notebook_drag_data_received
  */
+static void
+gtk_notebook_destroy (GtkWidget *widget)
+{
+  GtkNotebook *notebook = GTK_NOTEBOOK (widget);
+  GtkNotebookPrivate *priv = notebook->priv;
+
+  if (priv->menu)
+    gtk_notebook_popup_disable (notebook);
+
+  if (priv->source_targets)
+    {
+      gtk_target_list_unref (priv->source_targets);
+      priv->source_targets = NULL;
+    }
+
+  if (priv->switch_tab_timer)
+    {
+      g_source_remove (priv->switch_tab_timer);
+      priv->switch_tab_timer = 0;
+    }
+
+  GTK_WIDGET_CLASS (gtk_notebook_parent_class)->destroy (widget);
+}
+
 static gboolean
 gtk_notebook_get_event_window_position (GtkNotebook  *notebook,
 					GdkRectangle *rectangle)

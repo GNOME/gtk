@@ -180,7 +180,7 @@ static void gtk_range_get_property   (GObject          *object,
                                       guint             prop_id,
                                       GValue           *value,
                                       GParamSpec       *pspec);
-static void gtk_range_destroy        (GtkObject        *object);
+static void gtk_range_destroy        (GtkWidget        *widget);
 static void gtk_range_size_request   (GtkWidget        *widget,
                                       GtkRequisition   *requisition);
 static void gtk_range_size_allocate  (GtkWidget        *widget,
@@ -279,18 +279,15 @@ static void
 gtk_range_class_init (GtkRangeClass *class)
 {
   GObjectClass   *gobject_class;
-  GtkObjectClass *object_class;
   GtkWidgetClass *widget_class;
 
   gobject_class = G_OBJECT_CLASS (class);
-  object_class = (GtkObjectClass*) class;
   widget_class = (GtkWidgetClass*) class;
 
   gobject_class->set_property = gtk_range_set_property;
   gobject_class->get_property = gtk_range_get_property;
 
-  object_class->destroy = gtk_range_destroy;
-
+  widget_class->destroy = gtk_range_destroy;
   widget_class->size_request = gtk_range_size_request;
   widget_class->size_allocate = gtk_range_size_allocate;
   widget_class->realize = gtk_range_realize;
@@ -1510,9 +1507,9 @@ should_invert (GtkRange *range)
 }
 
 static void
-gtk_range_destroy (GtkObject *object)
+gtk_range_destroy (GtkWidget *widget)
 {
-  GtkRange *range = GTK_RANGE (object);
+  GtkRange *range = GTK_RANGE (widget);
   GtkRangePrivate *priv = range->priv;
 
   gtk_range_remove_step_timer (range);
@@ -1543,7 +1540,7 @@ gtk_range_destroy (GtkObject *object)
       priv->n_marks = 0;
     }
 
-  GTK_OBJECT_CLASS (gtk_range_parent_class)->destroy (object);
+  GTK_WIDGET_CLASS (gtk_range_parent_class)->destroy (widget);
 }
 
 static void

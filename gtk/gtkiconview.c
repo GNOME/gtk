@@ -245,11 +245,8 @@ static void             gtk_icon_view_get_property              (GObject        
 								 guint               prop_id,
 								 GValue             *value,
 								 GParamSpec         *pspec);
-
-/* GtkObject vfuncs */
-static void             gtk_icon_view_destroy                   (GtkObject          *object);
-
 /* GtkWidget vfuncs */
+static void             gtk_icon_view_destroy                   (GtkWidget          *widget);
 static void             gtk_icon_view_realize                   (GtkWidget          *widget);
 static void             gtk_icon_view_unrealize                 (GtkWidget          *widget);
 static void             gtk_icon_view_style_set                 (GtkWidget        *widget,
@@ -487,7 +484,6 @@ static void
 gtk_icon_view_class_init (GtkIconViewClass *klass)
 {
   GObjectClass *gobject_class;
-  GtkObjectClass *object_class;
   GtkWidgetClass *widget_class;
   GtkContainerClass *container_class;
   GtkBindingSet *binding_set;
@@ -497,7 +493,6 @@ gtk_icon_view_class_init (GtkIconViewClass *klass)
   g_type_class_add_private (klass, sizeof (GtkIconViewPrivate));
 
   gobject_class = (GObjectClass *) klass;
-  object_class = (GtkObjectClass *) klass;
   widget_class = (GtkWidgetClass *) klass;
   container_class = (GtkContainerClass *) klass;
 
@@ -505,8 +500,7 @@ gtk_icon_view_class_init (GtkIconViewClass *klass)
   gobject_class->set_property = gtk_icon_view_set_property;
   gobject_class->get_property = gtk_icon_view_get_property;
 
-  object_class->destroy = gtk_icon_view_destroy;
-  
+  widget_class->destroy = gtk_icon_view_destroy;
   widget_class->realize = gtk_icon_view_realize;
   widget_class->unrealize = gtk_icon_view_unrealize;
   widget_class->style_set = gtk_icon_view_style_set;
@@ -1136,46 +1130,6 @@ gtk_icon_view_init (GtkIconView *icon_view)
   icon_view->priv->draw_focus = TRUE;
 }
 
-static void
-gtk_icon_view_destroy (GtkObject *object)
-{
-  GtkIconView *icon_view;
-
-  icon_view = GTK_ICON_VIEW (object);
-  
-  gtk_icon_view_stop_editing (icon_view, TRUE);
-
-  gtk_icon_view_set_model (icon_view, NULL);
-  
-  if (icon_view->priv->layout_idle_id != 0)
-    {
-      g_source_remove (icon_view->priv->layout_idle_id);
-      icon_view->priv->layout_idle_id = 0;
-    }
-
-  if (icon_view->priv->scroll_to_path != NULL)
-    {
-      gtk_tree_row_reference_free (icon_view->priv->scroll_to_path);
-      icon_view->priv->scroll_to_path = NULL;
-    }
-
-  remove_scroll_timeout (icon_view);
-
-  if (icon_view->priv->hadjustment != NULL)
-    {
-      g_object_unref (icon_view->priv->hadjustment);
-      icon_view->priv->hadjustment = NULL;
-    }
-
-  if (icon_view->priv->vadjustment != NULL)
-    {
-      g_object_unref (icon_view->priv->vadjustment);
-      icon_view->priv->vadjustment = NULL;
-    }
-  
-  GTK_OBJECT_CLASS (gtk_icon_view_parent_class)->destroy (object);
-}
-
 /* GObject methods */
 static void
 gtk_icon_view_finalize (GObject *object)
@@ -1317,7 +1271,45 @@ gtk_icon_view_get_property (GObject      *object,
     }
 }
 
-/* GtkWidget signals */
+/* GtkWidget methods */
+static void
+gtk_icon_view_destroy (GtkWidget *widget)
+{
+  GtkIconView *icon_view = GTK_ICON_VIEW (widget);
+
+  gtk_icon_view_stop_editing (icon_view, TRUE);
+
+  gtk_icon_view_set_model (icon_view, NULL);
+
+  if (icon_view->priv->layout_idle_id != 0)
+    {
+      g_source_remove (icon_view->priv->layout_idle_id);
+      icon_view->priv->layout_idle_id = 0;
+    }
+
+  if (icon_view->priv->scroll_to_path != NULL)
+    {
+      gtk_tree_row_reference_free (icon_view->priv->scroll_to_path);
+      icon_view->priv->scroll_to_path = NULL;
+    }
+
+  remove_scroll_timeout (icon_view);
+
+  if (icon_view->priv->hadjustment != NULL)
+    {
+      g_object_unref (icon_view->priv->hadjustment);
+      icon_view->priv->hadjustment = NULL;
+    }
+
+  if (icon_view->priv->vadjustment != NULL)
+    {
+      g_object_unref (icon_view->priv->vadjustment);
+      icon_view->priv->vadjustment = NULL;
+    }
+
+  GTK_WIDGET_CLASS (gtk_icon_view_parent_class)->destroy (widget);
+}
+
 static void
 gtk_icon_view_realize (GtkWidget *widget)
 {
