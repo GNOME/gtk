@@ -28,7 +28,6 @@
 #include <string.h> /* strcmp */
 
 #include "gtktypeutils.h"
-#include "gtkobject.h"
 #include "gtkintl.h"
 
 

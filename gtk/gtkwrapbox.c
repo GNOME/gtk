@@ -37,6 +37,7 @@
 #include "gtkwrapbox.h"
 #include "gtkprivate.h"
 #include "gtkintl.h"
+#include "gtktypeutils.h"
 
 
 typedef struct _GtkWrapBoxChild  GtkWrapBoxChild;

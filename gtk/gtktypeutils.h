@@ -46,7 +46,6 @@ GType gtk_identifier_get_type (void) G_GNUC_CONST;
  * provide some fundamental function signatures
  */
 typedef struct _GtkArg	       	     GtkArg;
-typedef struct _GtkObject   	     GtkObject; /* object forward declaration */
 
 /**
  * GtkFunction:
@@ -60,14 +59,14 @@ typedef gboolean (*GtkFunction)	    (gpointer      data);
 
 /**
  * GtkCallbackMarshal:
- * @object: #GtkObject*
+ * @object: #GObject*
  * @data: #gpointer
  * @n_args: #guint
  * @args: #GtkArg*
  *
  * Defines a function pointer.
  */
-typedef void (*GtkCallbackMarshal)  (GtkObject    *object,
+typedef void (*GtkCallbackMarshal)  (GObject      *object,
 				     gpointer      data,
 				     guint         n_args,
 				     GtkArg       *args);
@@ -107,7 +106,7 @@ struct _GtkArg
     gfloat float_data;
     gdouble double_data;
     gchar *string_data;
-    GtkObject *object_data;
+    GObject *object_data;
     gpointer pointer_data;
 
     /* structured values */

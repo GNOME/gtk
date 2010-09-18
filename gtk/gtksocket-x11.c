@@ -37,6 +37,7 @@
 #include "gtksocket.h"
 #include "gtksocketprivate.h"
 #include "gtkdnd.h"
+#include "gtkdebug.h"
 
 #include "x11/gdkx.h"
 

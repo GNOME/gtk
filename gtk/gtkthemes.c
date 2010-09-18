@@ -33,6 +33,7 @@
 #include "gtkthemes.h"
 #include "gtkrc.h"
 #include "gtkintl.h"
+#include "gtkdebug.h"
 
 
 typedef struct _GtkThemeEngineClass GtkThemeEngineClass;

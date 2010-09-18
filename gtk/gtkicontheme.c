@@ -39,6 +39,7 @@
 #endif /* G_OS_WIN32 */
 
 #include "gtkicontheme.h"
+#include "gtkdebug.h"
 #include "gtkiconfactory.h"
 #include "gtkiconcache.h"
 #include "gtkbuiltincache.h"

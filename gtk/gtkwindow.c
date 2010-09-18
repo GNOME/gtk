@@ -989,7 +989,7 @@ gtk_window_init (GtkWindow *window)
   gtk_widget_set_has_window (GTK_WIDGET (window), TRUE);
   _gtk_widget_set_is_toplevel (GTK_WIDGET (window), TRUE);
 
-  GTK_PRIVATE_SET_FLAG (window, GTK_ANCHORED);
+  _gtk_widget_set_anchored (GTK_WIDGET (window), TRUE);
 
   gtk_container_set_resize_mode (GTK_CONTAINER (window), GTK_RESIZE_QUEUE);
 
@@ -4382,7 +4382,7 @@ gtk_window_show (GtkWidget *widget)
   GtkContainer *container = GTK_CONTAINER (window);
   gboolean need_resize;
 
-  GTK_WIDGET_SET_FLAGS (widget, GTK_VISIBLE);
+  _gtk_widget_set_visible_flag (widget, TRUE);
 
   need_resize = _gtk_container_get_need_resize (container) || !gtk_widget_get_realized (widget);
   _gtk_container_set_need_resize (container, FALSE);
@@ -4464,7 +4464,7 @@ gtk_window_hide (GtkWidget *widget)
   GtkWindow *window = GTK_WINDOW (widget);
   GtkWindowPrivate *priv = window->priv;
 
-  GTK_WIDGET_UNSET_FLAGS (widget, GTK_VISIBLE);
+  _gtk_widget_set_visible_flag (widget, FALSE);
   gtk_widget_unmap (widget);
 
   if (priv->modal)

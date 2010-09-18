@@ -418,7 +418,7 @@ _gtk_plug_remove_from_socket (GtkPlug   *plug,
   priv = plug->priv;
   widget = GTK_WIDGET (plug);
 
-  if (GTK_WIDGET_IN_REPARENT (widget))
+  if (_gtk_widget_get_in_reparent (widget))
     return;
 
   g_object_ref (plug);
@@ -428,12 +428,12 @@ _gtk_plug_remove_from_socket (GtkPlug   *plug,
   window = gtk_widget_get_window (widget);
 
   gdk_window_hide (window);
-  GTK_PRIVATE_SET_FLAG (plug, GTK_IN_REPARENT);
+  _gtk_widget_set_in_reparent (widget, TRUE);
   gdk_window_reparent (window,
 		       gtk_widget_get_root_window (widget),
 		       0, 0);
   gtk_widget_unparent (GTK_WIDGET (plug));
-  GTK_PRIVATE_UNSET_FLAG (plug, GTK_IN_REPARENT);
+  _gtk_widget_set_in_reparent (widget, FALSE);
   
   socket_->plug_widget = NULL;
   if (socket_->plug_window != NULL)

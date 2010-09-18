@@ -122,6 +122,7 @@
 #include <config.h>
 #include "gtksizerequest.h"
 #include "gtksizegroup.h"
+#include "gtkdebug.h"
 #include "gtkprivate.h"
 #include "gtkintl.h"
 
@@ -282,7 +283,7 @@ compute_size_for_orientation (GtkWidget         *request,
     {
       cached_size = &cache->widths[0];
 
-      if (!GTK_WIDGET_WIDTH_REQUEST_NEEDED (request))
+      if (!_gtk_widget_get_width_request_needed (widget))
         found_in_cache = get_cached_size (cache, orientation, for_size, &cached_size);
       else
         {
@@ -295,7 +296,7 @@ compute_size_for_orientation (GtkWidget         *request,
     {
       cached_size = &cache->heights[0];
 
-      if (!GTK_WIDGET_HEIGHT_REQUEST_NEEDED (request))
+      if (!_gtk_widget_get_height_request_needed (widget))
         found_in_cache = get_cached_size (cache, orientation, for_size, &cached_size);
       else
         {
@@ -354,9 +355,9 @@ compute_size_for_orientation (GtkWidget         *request,
       cached_size->for_size     = for_size;
 
       if (orientation == GTK_SIZE_GROUP_HORIZONTAL)
-	GTK_PRIVATE_UNSET_FLAG (request, GTK_WIDTH_REQUEST_NEEDED);
+          _gtk_widget_set_width_request_needed (widget, FALSE);
       else
-	GTK_PRIVATE_UNSET_FLAG (request, GTK_HEIGHT_REQUEST_NEEDED);
+          _gtk_widget_set_height_request_needed (widget, FALSE);
 
       adjusted_min = cached_size->minimum_size;
       adjusted_natural = cached_size->natural_size;

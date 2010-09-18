@@ -2067,13 +2067,6 @@ gtk_notebook_set_action_widget
 #endif
 #endif
 
-#if IN_HEADER(__GTK_OBJECT_H__)
-#if IN_FILE(__GTK_OBJECT_C__)
-gtk_object_destroy
-gtk_object_get_type G_GNUC_CONST
-#endif
-#endif
-
 #if IN_HEADER(__GTK_OFFSCREEN_WINDOW_H__)
 #if IN_FILE(__GTK_OFFSCREEN_WINDOW_C__)
 gtk_offscreen_window_get_type G_GNUC_CONST
@@ -4361,6 +4354,7 @@ gtk_widget_get_margin_top
 gtk_widget_set_margin_top
 gtk_widget_get_margin_bottom
 gtk_widget_set_margin_bottom
+gtk_widget_in_destruction
 #endif
 #endif
 

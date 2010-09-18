@@ -27,6 +27,7 @@
 #include "gtkimcontextsimple.h"
 #include "gtksettings.h"
 #include "gtkwidget.h"
+#include "gtkdebug.h"
 #include "gtkintl.h"
 
 

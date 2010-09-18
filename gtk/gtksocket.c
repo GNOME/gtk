@@ -40,6 +40,7 @@
 #include "gtkprivate.h"
 #include "gtksocketprivate.h"
 #include "gtkdnd.h"
+#include "gtkdebug.h"
 #include "gtkintl.h"
 
 
@@ -309,7 +310,7 @@ gtk_socket_add_id (GtkSocket      *socket,
 		   GdkNativeWindow window_id)
 {
   g_return_if_fail (GTK_IS_SOCKET (socket));
-  g_return_if_fail (GTK_WIDGET_ANCHORED (socket));
+  g_return_if_fail (_gtk_widget_get_anchored (GTK_WIDGET (socket)));
 
   if (!gtk_widget_get_realized (GTK_WIDGET (socket)))
     gtk_widget_realize (GTK_WIDGET (socket));
@@ -334,7 +335,7 @@ GdkNativeWindow
 gtk_socket_get_id (GtkSocket *socket)
 {
   g_return_val_if_fail (GTK_IS_SOCKET (socket), 0);
-  g_return_val_if_fail (GTK_WIDGET_ANCHORED (socket), 0);
+  g_return_val_if_fail (_gtk_widget_get_anchored (GTK_WIDGET (socket)), 0);
 
   if (!gtk_widget_get_realized (GTK_WIDGET (socket)))
     gtk_widget_realize (GTK_WIDGET (socket));

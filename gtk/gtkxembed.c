@@ -23,6 +23,7 @@
 #include "gtkmain.h"
 #include "gtkprivate.h"
 #include "gtkxembed.h"
+#include "gtkdebug.h"
 
 
 typedef struct _GtkXEmbedMessage GtkXEmbedMessage;

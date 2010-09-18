@@ -1283,7 +1283,7 @@ gtk_combo_box_remove (GtkContainer *container,
   gtk_widget_unparent (widget);
   _gtk_bin_set_child (GTK_BIN (container), NULL);
 
-  if (GTK_OBJECT_FLAGS (combo_box) & GTK_IN_DESTRUCTION)
+  if (gtk_widget_in_destruction (combo_box))
     return;
 
   gtk_widget_queue_resize (GTK_WIDGET (container));
@@ -3964,12 +3964,12 @@ gtk_combo_box_menu_key_press (GtkWidget   *widget,
 {
   GtkComboBox *combo_box = GTK_COMBO_BOX (data);
 
-  if (!gtk_bindings_activate_event (GTK_OBJECT (widget), event))
+  if (!gtk_bindings_activate_event (G_OBJECT (widget), event))
     {
       /* The menu hasn't managed the
        * event, forward it to the combobox
        */
-      gtk_bindings_activate_event (GTK_OBJECT (combo_box), event);
+      gtk_bindings_activate_event (G_OBJECT (combo_box), event);
     }
 
   return TRUE;
@@ -4003,12 +4003,12 @@ gtk_combo_box_list_key_press (GtkWidget   *widget,
     return TRUE;
   }
 
-  if (!gtk_bindings_activate_event (GTK_OBJECT (widget), event))
+  if (!gtk_bindings_activate_event (G_OBJECT (widget), event))
     {
       /* The list hasn't managed the
        * event, forward it to the combobox
        */
-      gtk_bindings_activate_event (GTK_OBJECT (combo_box), event);
+      gtk_bindings_activate_event (G_OBJECT (combo_box), event);
     }
 
   return TRUE;

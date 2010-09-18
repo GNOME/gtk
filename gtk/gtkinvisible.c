@@ -263,7 +263,7 @@ gtk_invisible_style_set (GtkWidget *widget,
 static void
 gtk_invisible_show (GtkWidget *widget)
 {
-  GTK_WIDGET_SET_FLAGS (widget, GTK_VISIBLE);
+  _gtk_widget_set_visible_flag (widget, TRUE);
   gtk_widget_map (widget);
 }
 

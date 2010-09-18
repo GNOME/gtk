@@ -246,6 +246,7 @@
 #include "gtkbuilder.h"
 #include "gtkbuildable.h"
 #include "gtkbuilderprivate.h"
+#include "gtkdebug.h"
 #include "gtkmain.h"
 #include "gtkintl.h"
 #include "gtkprivate.h"

@@ -1086,7 +1086,7 @@ gtk_container_destroy (GtkWidget *widget)
   GtkContainer *container = GTK_CONTAINER (widget);
   GtkContainerPrivate *priv = container->priv;
 
-  if (GTK_CONTAINER_RESIZE_PENDING (container))
+  if (_gtk_widget_get_resize_pending (GTK_WIDGET (container)))
     _gtk_container_dequeue_resize_handler (container);
 
   if (priv->focus_child)
@@ -1278,10 +1278,10 @@ void
 _gtk_container_dequeue_resize_handler (GtkContainer *container)
 {
   g_return_if_fail (GTK_IS_CONTAINER (container));
-  g_return_if_fail (GTK_CONTAINER_RESIZE_PENDING (container));
+  g_return_if_fail (_gtk_widget_get_resize_pending (GTK_WIDGET (container)));
 
   container_resize_queue = g_slist_remove (container_resize_queue, container);
-  GTK_PRIVATE_UNSET_FLAG (container, GTK_RESIZE_PENDING);
+  _gtk_widget_set_resize_pending (GTK_WIDGET (container), FALSE);
 }
 
 /**
@@ -1392,7 +1392,7 @@ gtk_container_idle_sizer (gpointer data)
       widget = slist->data;
       g_slist_free_1 (slist);
 
-      GTK_PRIVATE_UNSET_FLAG (widget, GTK_RESIZE_PENDING);
+      _gtk_widget_set_resize_pending (widget, FALSE);
       gtk_container_check_resize (GTK_CONTAINER (widget));
     }
 
@@ -1418,9 +1418,9 @@ _gtk_container_queue_resize (GtkContainer *container)
   
   while (TRUE)
     {
-      GTK_PRIVATE_SET_FLAG (widget, GTK_ALLOC_NEEDED);
-      GTK_PRIVATE_SET_FLAG (widget, GTK_WIDTH_REQUEST_NEEDED);
-      GTK_PRIVATE_SET_FLAG (widget, GTK_HEIGHT_REQUEST_NEEDED);
+      _gtk_widget_set_alloc_needed (widget, TRUE);
+      _gtk_widget_set_width_request_needed (widget, TRUE);
+      _gtk_widget_set_height_request_needed (widget, TRUE);
 
       if ((resize_container && widget == GTK_WIDGET (resize_container)) ||
 	  !(parent = gtk_widget_get_parent (widget)))
@@ -1438,9 +1438,9 @@ _gtk_container_queue_resize (GtkContainer *container)
 	  switch (resize_container->priv->resize_mode)
 	    {
 	    case GTK_RESIZE_QUEUE:
-	      if (!GTK_CONTAINER_RESIZE_PENDING (resize_container))
+	      if (!_gtk_widget_get_resize_pending (GTK_WIDGET (resize_container)))
 		{
-		  GTK_PRIVATE_SET_FLAG (resize_container, GTK_RESIZE_PENDING);
+		  _gtk_widget_set_resize_pending (GTK_WIDGET (resize_container), TRUE);
 		  if (container_resize_queue == NULL)
 		    gdk_threads_add_idle_full (GTK_PRIORITY_RESIZE,
 				     gtk_container_idle_sizer,

@@ -608,7 +608,7 @@ gtk_expander_size_allocate (GtkWidget     *widget,
   child_ypad     = 2 * border_width + priv->spacing + (interior_focus ? 0 : 2 * focus_width + 2 * focus_pad);
   top_min_height = 2 * expander_spacing + expander_size;
 
-  child_visible = (child && GTK_WIDGET_CHILD_VISIBLE (child));
+  child_visible = (child && gtk_widget_get_child_visible (child));
 
   if (priv->label_widget && gtk_widget_get_visible (priv->label_widget))
     {
@@ -1103,7 +1103,7 @@ focus_in_site (GtkExpander      *expander,
       {
 	GtkWidget *child = gtk_bin_get_child (GTK_BIN (expander));
 
-	if (child && GTK_WIDGET_CHILD_VISIBLE (child))
+	if (child && gtk_widget_get_child_visible (child))
 	  return gtk_widget_child_focus (child, direction);
 	else
 	  return FALSE;
@@ -1312,7 +1312,7 @@ gtk_expander_get_preferred_width (GtkWidget *widget,
       *natural_size += label_nat;
     }
 
-  if (child && GTK_WIDGET_CHILD_VISIBLE (child))
+  if (child && gtk_widget_get_child_visible (child))
     {
       gint child_min, child_nat;
 
@@ -1382,7 +1382,7 @@ gtk_expander_get_preferred_height (GtkWidget *widget,
       *natural_size += extra;
     }
 
-  if (child && GTK_WIDGET_CHILD_VISIBLE (child))
+  if (child && gtk_widget_get_child_visible (child))
     {
       gint child_min, child_nat;
 
@@ -1457,7 +1457,7 @@ gtk_expander_get_preferred_height_for_width (GtkWidget *widget,
       *natural_height += extra;
     }
 
-  if (child && GTK_WIDGET_CHILD_VISIBLE (child))
+  if (child && gtk_widget_get_child_visible (child))
     {
       gint child_min, child_nat;
 

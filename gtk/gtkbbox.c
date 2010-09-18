@@ -51,6 +51,7 @@
 #include "gtkorientable.h"
 #include "gtkprivate.h"
 #include "gtksizerequest.h"
+#include "gtktypeutils.h"
 
 #include "gtkintl.h"
 

@@ -39,6 +39,7 @@
 #include "gtkiconfactory.h"
 #include "gtksettings.h"	/* _gtk_settings_parse_convert() */
 #include "gtkintl.h"
+#include "gtkdebug.h"
 #include "gtkspinner.h"
 
 

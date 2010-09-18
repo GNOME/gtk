@@ -160,7 +160,7 @@ static void gtk_tree_view_column_buildable_init                 (GtkBuildableIfa
 
 static guint tree_column_signals[LAST_SIGNAL] = { 0 };
 
-G_DEFINE_TYPE_WITH_CODE (GtkTreeViewColumn, gtk_tree_view_column, GTK_TYPE_OBJECT,
+G_DEFINE_TYPE_WITH_CODE (GtkTreeViewColumn, gtk_tree_view_column, G_TYPE_INITIALLY_UNOWNED,
 			 G_IMPLEMENT_INTERFACE (GTK_TYPE_CELL_LAYOUT,
 						gtk_tree_view_column_cell_layout_init)
 			 G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE,

@@ -39,6 +39,7 @@
 #include "gtkhsv.h"
 #include "gtkbindings.h"
 #include "gtkmarshalers.h"
+#include "gtktypeutils.h"
 #include "gtkintl.h"
 
 /* Default width/height */

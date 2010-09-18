@@ -908,7 +908,7 @@ gtk_menu_shell_key_press (GtkWidget   *widget,
   if (!(menu_shell->active_menu_item || priv->in_unselectable_item) && menu_shell->parent_menu_shell)
     return gtk_widget_event (menu_shell->parent_menu_shell, (GdkEvent *)event);
 
-  if (gtk_bindings_activate_event (GTK_OBJECT (widget), event))
+  if (gtk_bindings_activate_event (G_OBJECT (widget), event))
     return TRUE;
 
   g_object_get (gtk_widget_get_settings (widget),

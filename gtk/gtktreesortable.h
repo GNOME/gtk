@@ -25,6 +25,7 @@
 #define __GTK_TREE_SORTABLE_H__
 
 
+#include <gtk/gtkenums.h>
 #include <gtk/gtktreemodel.h>
 #include <gtk/gtktypeutils.h>
 

@@ -407,9 +407,9 @@ unmap_and_remap_cb (GtkButton *button,
 }
 
 static void
-kill_dependent (GtkWindow *win, GtkObject *dep)
+kill_dependent (GtkWindow *win, GtkWidget *dep)
 {
-  gtk_object_destroy (dep);
+  gtk_widget_destroy (dep);
   g_object_unref (dep);
 }
 

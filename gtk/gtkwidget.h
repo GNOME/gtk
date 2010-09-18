@@ -33,7 +33,6 @@
 
 #include <gdk/gdk.h>
 #include <gtk/gtkaccelgroup.h>
-#include <gtk/gtkobject.h>
 #include <gtk/gtkadjustment.h>
 #include <gtk/gtkstyle.h>
 #include <gtk/gtksettings.h>
@@ -249,16 +248,7 @@ struct _GtkRequisition
  */
 struct _GtkWidget
 {
-  /* The object structure needs to be the first
-   *  element in the widget structure in order for
-   *  the object mechanism to work correctly. This
-   *  allows a GtkWidget pointer to be cast to a
-   *  GtkObject pointer.
-   */
-  GInitiallyUnowned object;
-
-  /* internally used private flags. */
-  guint GSEAL (private_flags) : 16;
+  GInitiallyUnowned parent_instance;
 
   GtkWidgetPrivate *priv;
 };
@@ -268,7 +258,7 @@ struct _GtkWidget
  * @parent_class: The object class structure needs to be the first
  *   element in the widget class structure in order for the class mechanism
  *   to work correctly. This allows a GtkWidgetClass pointer to be cast to
- *   a GtkObjectClass pointer.
+ *   a GObjectClass pointer.
  * @activate_signal: The signal to emit when a widget of this class is
  *   activated, gtk_widget_activate() handles the emission.
  *   Implementation of this signal is optional.
@@ -1029,6 +1019,8 @@ gpointer     _gtk_widget_peek_request_cache (GtkWidget *widget);
 void         _gtk_widget_buildable_finish_accelerator (GtkWidget *widget,
 						       GtkWidget *toplevel,
 						       gpointer   user_data);
+
+gboolean     gtk_widget_in_destruction (GtkWidget *widget);
 
 G_END_DECLS
 

@@ -97,9 +97,9 @@ notify_multiple_cb (GtkWidget  *dialog,
 
 static void
 kill_dependent (GtkWindow *win,
-		GtkObject *dep)
+		GtkWidget *dep)
 {
-  gtk_object_destroy (dep);
+  gtk_widget_destroy (dep);
   g_object_unref (dep);
 }
 

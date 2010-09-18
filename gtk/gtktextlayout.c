@@ -222,7 +222,7 @@ gtk_text_layout_class_init (GtkTextLayoutClass *klass)
                   _gtk_marshal_VOID__OBJECT_INT_INT,
                   G_TYPE_NONE,
                   3,
-                  GTK_TYPE_OBJECT,
+                  G_TYPE_OBJECT,
                   G_TYPE_INT,
                   G_TYPE_INT);
   

@@ -1931,7 +1931,7 @@ gtk_grab_notify_foreach (GtkWidget *child,
 
   if (is_shadowed)
     {
-      GTK_PRIVATE_SET_FLAG (child, GTK_SHADOWED);
+      _gtk_widget_set_shadowed (child, TRUE);
       if (!was_shadowed && devices &&
 	  gtk_widget_is_sensitive (child))
         synth_crossing_for_grab_notify (child, info->new_grab_widget,
@@ -1940,7 +1940,7 @@ gtk_grab_notify_foreach (GtkWidget *child,
     }
   else
     {
-      GTK_PRIVATE_UNSET_FLAG (child, GTK_SHADOWED);
+      _gtk_widget_set_shadowed (child, FALSE);
       if (was_shadowed && devices &&
           gtk_widget_is_sensitive (child))
         synth_crossing_for_grab_notify (info->old_grab_widget, child,
@@ -2240,25 +2240,25 @@ gtk_quit_destroy (GtkQuitFunction *quitf)
 }
 
 static gint
-gtk_quit_destructor (GtkObject **object_p)
+gtk_quit_destructor (GtkWidget **object_p)
 {
   if (*object_p)
-    gtk_object_destroy (*object_p);
+    gtk_widget_destroy (*object_p);
   g_free (object_p);
 
   return FALSE;
 }
 
 void
-gtk_quit_add_destroy (guint              main_level,
-		      GtkObject         *object)
+gtk_quit_add_destroy (guint      main_level,
+		      GtkWidget *object)
 {
-  GtkObject **object_p;
+  GtkWidget **object_p;
 
   g_return_if_fail (main_level > 0);
-  g_return_if_fail (GTK_IS_OBJECT (object));
+  g_return_if_fail (GTK_IS_WIDGET (object));
 
-  object_p = g_new (GtkObject*, 1);
+  object_p = g_new (GtkWidget*, 1);
   *object_p = object;
   g_signal_connect (object,
 		    "destroy",

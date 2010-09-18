@@ -2252,7 +2252,7 @@ create_rotated_label (GtkWidget *widget)
 			     gtk_widget_get_screen (widget));
 
       g_signal_connect (window, "response",
-			G_CALLBACK (gtk_object_destroy), NULL);
+			G_CALLBACK (gtk_widget_destroy), NULL);
       g_signal_connect (window, "destroy",
 			G_CALLBACK (gtk_widget_destroyed), &window);
 
@@ -2382,7 +2382,7 @@ create_rotated_text (GtkWidget *widget)
 			     gtk_widget_get_screen (widget));
 
       g_signal_connect (window, "response",
-			G_CALLBACK (gtk_object_destroy), NULL);
+			G_CALLBACK (gtk_widget_destroy), NULL);
       g_signal_connect (window, "destroy",
 			G_CALLBACK (gtk_widget_destroyed), &window);
 
@@ -3676,7 +3676,7 @@ create_key_lookup (GtkWidget *widget)
 
       window_ptr = &window;
       g_object_add_weak_pointer (G_OBJECT (window), window_ptr);
-      g_signal_connect (window, "response", G_CALLBACK (gtk_object_destroy), NULL);
+      g_signal_connect (window, "response", G_CALLBACK (gtk_widget_destroy), NULL);
 
       gtk_widget_show_all (window);
     }

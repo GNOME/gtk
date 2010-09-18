@@ -71,7 +71,6 @@ static guint focus_notify_handler = 0;
 static guint focus_tracker_id = 0;
 static GQuark quark_focus_object = 0;
 
-GAIL_IMPLEMENT_FACTORY (GAIL_TYPE_OBJECT, GailObject, gail_object, GTK_TYPE_OBJECT)
 GAIL_IMPLEMENT_FACTORY (GAIL_TYPE_WIDGET, GailWidget, gail_widget, GTK_TYPE_WIDGET)
 GAIL_IMPLEMENT_FACTORY (GAIL_TYPE_CONTAINER, GailContainer, gail_container, GTK_TYPE_CONTAINER)
 GAIL_IMPLEMENT_FACTORY (GAIL_TYPE_BUTTON, GailButton, gail_button, GTK_TYPE_BUTTON)
@@ -906,9 +905,6 @@ gail_accessibility_module_init (void)
   GAIL_WIDGET_SET_FACTORY (GTK_TYPE_CHECK_MENU_ITEM, gail_check_menu_item);
   GAIL_WIDGET_SET_FACTORY (GTK_TYPE_RADIO_MENU_ITEM, gail_radio_menu_item);
   GAIL_WIDGET_SET_FACTORY (GTK_TYPE_EXPANDER, gail_expander);
-
-  /* LIBGNOMECANVAS SUPPORT */
-  GAIL_WIDGET_SET_FACTORY (GTK_TYPE_OBJECT, gail_object);
 
   atk_focus_tracker_init (gail_focus_tracker_init);
   focus_tracker_id = atk_add_focus_tracker (gail_focus_tracker);

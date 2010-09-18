@@ -31,7 +31,6 @@
 #ifndef __GTK_ADJUSTMENT_H__
 #define __GTK_ADJUSTMENT_H__
 
-#include <gtk/gtkobject.h>
 #include <gdk/gdk.h>
 
 G_BEGIN_DECLS

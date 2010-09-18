@@ -31,50 +31,29 @@
 
 G_BEGIN_DECLS
 
-/* The private flags that are used in the private_flags member of GtkWidget.
- */
-typedef enum
-{
-  PRIVATE_GTK_USER_STYLE            = 1 <<  0,
-  PRIVATE_GTK_RESIZE_PENDING        = 1 <<  2,
-  PRIVATE_GTK_HAS_POINTER           = 1 <<  3,   /* If the pointer is above a window belonging to the widget */
-  PRIVATE_GTK_SHADOWED		    = 1 <<  4,   /* If there is a grab in effect shadowing the widget */
-  PRIVATE_GTK_HAS_SHAPE_MASK	    = 1 <<  5,
-  PRIVATE_GTK_IN_REPARENT           = 1 <<  6,
-  PRIVATE_GTK_DIRECTION_SET         = 1 <<  7,   /* If the reading direction is not DIR_NONE */
-  PRIVATE_GTK_DIRECTION_LTR         = 1 <<  8,   /* If the reading direction is DIR_LTR */
-  PRIVATE_GTK_ANCHORED              = 1 <<  9,   /* If widget has a GtkWindow ancestor */
-  PRIVATE_GTK_CHILD_VISIBLE         = 1 <<  10,  /* If widget should be mapped when parent is mapped */
-  PRIVATE_GTK_REDRAW_ON_ALLOC       = 1 <<  11,  /* If we should queue a draw on the entire widget when it is reallocated */
-  PRIVATE_GTK_ALLOC_NEEDED          = 1 <<  12,  /* If we we should allocate even if the allocation is the same */
-  PRIVATE_GTK_WIDTH_REQUEST_NEEDED  = 1 <<  13,  /* Whether we need to call gtk_extended_layout_get_desired_width */
-  PRIVATE_GTK_HEIGHT_REQUEST_NEEDED = 1 <<  14   /* Whether we need to call gtk_extended_layout_get_desired_height */
-} GtkPrivateFlags;
-
-/* Macros for extracting a widgets private_flags from GtkWidget.
- */
-#define GTK_PRIVATE_FLAGS(wid)                (GTK_WIDGET (wid)->private_flags)
-#define GTK_WIDGET_USER_STYLE(obj)            ((GTK_PRIVATE_FLAGS (obj) & PRIVATE_GTK_USER_STYLE) != 0)
-#define GTK_CONTAINER_RESIZE_PENDING(obj)     ((GTK_PRIVATE_FLAGS (obj) & PRIVATE_GTK_RESIZE_PENDING) != 0)
-#define GTK_WIDGET_HAS_POINTER(obj)           ((GTK_PRIVATE_FLAGS (obj) & PRIVATE_GTK_HAS_POINTER) != 0)
-#define GTK_WIDGET_SHADOWED(obj)              ((GTK_PRIVATE_FLAGS (obj) & PRIVATE_GTK_SHADOWED) != 0)
-#define GTK_WIDGET_HAS_SHAPE_MASK(obj)        ((GTK_PRIVATE_FLAGS (obj) & PRIVATE_GTK_HAS_SHAPE_MASK) != 0)
-#define GTK_WIDGET_IN_REPARENT(obj)           ((GTK_PRIVATE_FLAGS (obj) & PRIVATE_GTK_IN_REPARENT) != 0)
-#define GTK_WIDGET_DIRECTION_SET(obj)         ((GTK_PRIVATE_FLAGS (obj) & PRIVATE_GTK_DIRECTION_SET) != 0)
-#define GTK_WIDGET_DIRECTION_LTR(obj)         ((GTK_PRIVATE_FLAGS (obj) & PRIVATE_GTK_DIRECTION_LTR) != 0)
-#define GTK_WIDGET_ANCHORED(obj)              ((GTK_PRIVATE_FLAGS (obj) & PRIVATE_GTK_ANCHORED) != 0)
-#define GTK_WIDGET_CHILD_VISIBLE(obj)         ((GTK_PRIVATE_FLAGS (obj) & PRIVATE_GTK_CHILD_VISIBLE) != 0)
-#define GTK_WIDGET_REDRAW_ON_ALLOC(obj)       ((GTK_PRIVATE_FLAGS (obj) & PRIVATE_GTK_REDRAW_ON_ALLOC) != 0)
-#define GTK_WIDGET_ALLOC_NEEDED(obj)          ((GTK_PRIVATE_FLAGS (obj) & PRIVATE_GTK_ALLOC_NEEDED) != 0)
-#define GTK_WIDGET_WIDTH_REQUEST_NEEDED(obj)  ((GTK_PRIVATE_FLAGS (obj) & PRIVATE_GTK_WIDTH_REQUEST_NEEDED) != 0)
-#define GTK_WIDGET_HEIGHT_REQUEST_NEEDED(obj) ((GTK_PRIVATE_FLAGS (obj) & PRIVATE_GTK_HEIGHT_REQUEST_NEEDED) != 0)
-
-/* Macros for setting and clearing private widget flags.
- * we use a preprocessor string concatenation here for a clear
- * flags/private_flags distinction at the cost of single flag operations.
- */
-#define GTK_PRIVATE_SET_FLAG(wid,flag)    G_STMT_START{ (GTK_PRIVATE_FLAGS (wid) |= (PRIVATE_ ## flag)); }G_STMT_END
-#define GTK_PRIVATE_UNSET_FLAG(wid,flag)  G_STMT_START{ (GTK_PRIVATE_FLAGS (wid) &= ~(PRIVATE_ ## flag)); }G_STMT_END
+void         _gtk_widget_set_visible_flag   (GtkWidget *widget,
+                                             gboolean   visible);
+gboolean     _gtk_widget_get_resize_pending (GtkWidget *widget);
+void         _gtk_widget_set_resize_pending (GtkWidget *widget,
+                                             gboolean   resize_pending);
+gboolean     _gtk_widget_get_in_reparent    (GtkWidget *widget);
+void         _gtk_widget_set_in_reparent    (GtkWidget *widget,
+                                             gboolean   in_reparent);
+gboolean     _gtk_widget_get_anchored       (GtkWidget *widget);
+void         _gtk_widget_set_anchored       (GtkWidget *widget,
+                                             gboolean   anchored);
+gboolean     _gtk_widget_get_shadowed       (GtkWidget *widget);
+void         _gtk_widget_set_shadowed       (GtkWidget *widget,
+                                             gboolean   shadowed);
+gboolean     _gtk_widget_get_alloc_needed   (GtkWidget *widget);
+void         _gtk_widget_set_alloc_needed   (GtkWidget *widget,
+                                             gboolean   alloc_needed);
+gboolean     _gtk_widget_get_width_request_needed  (GtkWidget *widget);
+void         _gtk_widget_set_width_request_needed  (GtkWidget *widget,
+                                                    gboolean   width_request_needed);
+gboolean     _gtk_widget_get_height_request_needed (GtkWidget *widget);
+void         _gtk_widget_set_height_request_needed (GtkWidget *widget,
+                                                    gboolean   height_request_needed);
 
 #ifdef G_OS_WIN32
 

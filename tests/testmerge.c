@@ -264,7 +264,7 @@ toggle_merge (GtkWidget    *button,
 					   "could not merge %s: %s", merge_ids[mergenum].filename,
 					   err->message);
 
-	  g_signal_connect (dialog, "response", G_CALLBACK (gtk_object_destroy), NULL);
+	  g_signal_connect (dialog, "response", G_CALLBACK (gtk_widget_destroy), NULL);
 	  gtk_widget_show (dialog);
 
 	  g_clear_error (&err);

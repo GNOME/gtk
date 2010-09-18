@@ -3437,7 +3437,7 @@ gtk_text_view_allocate_children (GtkTextView *text_view)
            * get in the way. Invalidating the layout around the anchor
            * achieves this.
 	   */ 
-	  if (GTK_WIDGET_ALLOC_NEEDED (child->widget))
+	  if (_gtk_widget_get_alloc_needed (child->widget))
 	    {
 	      GtkTextIter end = child_loc;
 	      gtk_text_iter_forward_char (&end);

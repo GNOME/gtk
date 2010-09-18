@@ -32,6 +32,7 @@
 #include "gtkcellrendererspinner.h"
 #include "gtkiconfactory.h"
 #include "gtkicontheme.h"
+#include "gtktypeutils.h"
 #include "gtkintl.h"
 
 

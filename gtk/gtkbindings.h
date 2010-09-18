@@ -1,7 +1,7 @@
 /* GTK - The GIMP Toolkit
  * Copyright (C) 1995-1997 Peter Mattis, Spencer Kimball and Josh MacDonald
  *
- * GtkBindingSet: Keybinding manager for GtkObjects.
+ * GtkBindingSet: Keybinding manager for GObjects.
  * Copyright (C) 1998 Tim Janik
  *
  * This library is free software; you can redistribute it and/or
@@ -36,8 +36,7 @@
 
 
 #include <gdk/gdk.h>
-#include <gtk/gtkobject.h>
-
+#include <gtk/gtkenums.h>
 
 G_BEGIN_DECLS
 
@@ -101,15 +100,15 @@ struct _GtkBindingSignal
 GtkBindingSet*	gtk_binding_set_new	(const gchar	*set_name);
 GtkBindingSet*	gtk_binding_set_by_class(gpointer	 object_class);
 GtkBindingSet*	gtk_binding_set_find	(const gchar	*set_name);
-gboolean gtk_bindings_activate		(GtkObject	*object,
+gboolean gtk_bindings_activate		(GObject	*object,
 					 guint		 keyval,
 					 GdkModifierType modifiers);
-gboolean gtk_bindings_activate_event    (GtkObject      *object,
+gboolean gtk_bindings_activate_event    (GObject        *object,
 					 GdkEventKey    *event);
 gboolean gtk_binding_set_activate	(GtkBindingSet	*binding_set,
 					 guint		 keyval,
 					 GdkModifierType modifiers,
-					 GtkObject	*object);
+					 GObject	*object);
 
 void	 gtk_binding_entry_skip         (GtkBindingSet  *binding_set,
                                          guint           keyval,

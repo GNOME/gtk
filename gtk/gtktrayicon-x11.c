@@ -29,6 +29,8 @@
 #include "gtkintl.h"
 #include "gtkprivate.h"
 #include "gtktrayicon.h"
+#include "gtktestutils.h"
+#include "gtkdebug.h"
 
 #include "x11/gdkx.h"
 #include <X11/Xatom.h>

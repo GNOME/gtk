@@ -1702,7 +1702,7 @@ gtk_notebook_map (GtkWidget *widget)
     {
       if (priv->action_widget[i] &&
           gtk_widget_get_visible (priv->action_widget[i]) &&
-          GTK_WIDGET_CHILD_VISIBLE (priv->action_widget[i]) &&
+          gtk_widget_get_child_visible (priv->action_widget[i]) &&
           !gtk_widget_get_mapped (priv->action_widget[i]))
         gtk_widget_map (priv->action_widget[i]);
     }
@@ -4527,10 +4527,9 @@ gtk_notebook_real_remove (GtkNotebook *notebook,
   GList * next_list;
   gint need_resize = FALSE;
   GtkWidget *tab_label;
-
   gboolean destroying;
 
-  destroying = GTK_OBJECT_FLAGS (notebook) & GTK_IN_DESTRUCTION;
+  destroying = gtk_widget_in_destruction (notebook);
 
   next_list = gtk_notebook_search_page (notebook, list, STEP_NEXT, TRUE);
   if (!next_list)

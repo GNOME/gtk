@@ -28,6 +28,7 @@
 #include "gtkviewport.h"
 #include "gtkintl.h"
 #include "gtkmarshalers.h"
+#include "gtktypeutils.h"
 #include "gtkprivate.h"
 
 

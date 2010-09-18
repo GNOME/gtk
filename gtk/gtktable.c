@@ -28,6 +28,7 @@
 
 #include "gtktable.h"
 
+#include "gtktypebuiltins.h"
 #include "gtkprivate.h"
 #include "gtkintl.h"
 

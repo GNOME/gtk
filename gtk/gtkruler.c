@@ -31,6 +31,7 @@
 
 #include "gtkorientable.h"
 #include "gtkruler.h"
+#include "gtktypeutils.h"
 #include "gtkprivate.h"
 #include "gtkintl.h"
 

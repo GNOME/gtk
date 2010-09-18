@@ -1139,7 +1139,7 @@ static gboolean
 gtk_scale_button_key_release (GtkWidget   *widget,
 			      GdkEventKey *event)
 {
-  return gtk_bindings_activate_event (GTK_OBJECT (widget), event);
+  return gtk_bindings_activate_event (G_OBJECT (widget), event);
 }
 
 /* This is called when the grab is broken for
@@ -1386,10 +1386,10 @@ cb_dock_key_release (GtkWidget   *widget,
       return TRUE;
     }
 
-  if (!gtk_bindings_activate_event (GTK_OBJECT (widget), event))
+  if (!gtk_bindings_activate_event (G_OBJECT (widget), event))
     {
       /* The popup hasn't managed the event, pass onto the button */
-      gtk_bindings_activate_event (GTK_OBJECT (user_data), event);
+      gtk_bindings_activate_event (G_OBJECT (user_data), event);
     }
 
   return TRUE;

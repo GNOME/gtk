@@ -27,6 +27,7 @@
 #include "gtkrc.h"
 #include "gtkintl.h"
 #include "gtkwidget.h"
+#include "gtktypeutils.h"
 #include "gtkprivate.h"
 
 #ifdef GDK_WINDOWING_X11

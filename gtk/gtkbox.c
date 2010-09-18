@@ -78,6 +78,7 @@
 #include "gtkbox.h"
 #include "gtkorientable.h"
 #include "gtksizerequest.h"
+#include "gtktypeutils.h"
 #include "gtkprivate.h"
 #include "gtkintl.h"
 

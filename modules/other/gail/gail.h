@@ -19,7 +19,6 @@
 #include <gail/gailmenushell.h>
 #include <gail/gailmenuitem.h>
 #include <gail/gailnotebook.h>
-#include <gail/gailobject.h>
 #include <gail/gailpaned.h>
 #include <gail/gailprogressbar.h>
 #include <gail/gailradiobutton.h>

@@ -33,6 +33,7 @@
 
 
 #include <gdk/gdk.h>
+#include <gtk/gtktypeutils.h>
 #include <gtk/gtkwidget.h>
 #ifdef G_PLATFORM_WIN32
 #include <gtk/gtkbox.h>
@@ -144,7 +145,7 @@ void       gtk_device_grab_remove  (GtkWidget          *widget,
 void	   gtk_init_add		   (GtkFunction	       function,
 				    gpointer	       data);
 void	   gtk_quit_add_destroy	   (guint	       main_level,
-				    GtkObject	      *object);
+				    GtkWidget	      *object);
 guint	   gtk_quit_add		   (guint	       main_level,
 				    GtkFunction	       function,
 				    gpointer	       data);

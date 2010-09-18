@@ -186,9 +186,9 @@ real_queue_resize (GtkWidget *widget)
 {
   GtkWidget *parent;
 
-  GTK_PRIVATE_SET_FLAG (widget, GTK_ALLOC_NEEDED);
-  GTK_PRIVATE_SET_FLAG (widget, GTK_WIDTH_REQUEST_NEEDED);
-  GTK_PRIVATE_SET_FLAG (widget, GTK_HEIGHT_REQUEST_NEEDED);
+  _gtk_widget_set_alloc_needed (widget, TRUE);
+  _gtk_widget_set_width_request_needed (widget, TRUE);
+  _gtk_widget_set_height_request_needed (widget, TRUE);
 
   parent = gtk_widget_get_parent (widget);
   if (parent)
