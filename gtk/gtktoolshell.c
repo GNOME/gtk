@@ -233,7 +233,7 @@ gtk_tool_shell_get_ellipsize_mode (GtkToolShell *shell)
  * call this function directly, but rely on gtk_tool_item_get_text_size_group()
  * instead.
  *
- * Return value: the current text size group of @shell
+ * Return value: (transfer none): the current text size group of @shell
  *
  * Since: 2.20
  **/

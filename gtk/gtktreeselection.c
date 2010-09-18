@@ -275,7 +275,7 @@ gtk_tree_selection_set_select_function (GtkTreeSelection     *selection,
 }
 
 /**
- * gtk_tree_selection_get_select_function:
+ * gtk_tree_selection_get_select_function: (skip)
  * @selection: A #GtkTreeSelection.
  *
  * Returns the current selection function.
@@ -293,7 +293,7 @@ gtk_tree_selection_get_select_function (GtkTreeSelection *selection)
 }
 
 /**
- * gtk_tree_selection_get_user_data:
+ * gtk_tree_selection_get_user_data: (skip)
  * @selection: A #GtkTreeSelection.
  *
  * Returns the user data for the selection function.
@@ -314,7 +314,7 @@ gtk_tree_selection_get_user_data (GtkTreeSelection *selection)
  * 
  * Returns the tree view associated with @selection.
  * 
- * Return value: A #GtkTreeView
+ * Return value: (transfer none): A #GtkTreeView
  **/
 GtkTreeView *
 gtk_tree_selection_get_tree_view (GtkTreeSelection *selection)
@@ -585,7 +585,7 @@ model_changed (gpointer data)
 /**
  * gtk_tree_selection_selected_foreach:
  * @selection: A #GtkTreeSelection.
- * @func: The function to call for each selected node.
+ * @func: (scope call): The function to call for each selected node.
  * @data: user data to pass to the function.
  *
  * Calls a function for each selected node. Note that you cannot modify
