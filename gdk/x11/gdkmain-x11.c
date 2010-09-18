@@ -85,8 +85,7 @@ static int	    gdk_x_io_error		 (Display     *display);
 
 /* Private variable declarations
  */
-static GSList *gdk_error_traps = NULL;               /* List of error traps */
-static GSList *gdk_error_trap_free_list = NULL;      /* Free list */
+static GQueue gdk_error_traps;
 
 const GOptionEntry _gdk_windowing_args[] = {
   { "sync", 0, 0, G_OPTION_ARG_NONE, &_gdk_synchronize, 
@@ -98,7 +97,8 @@ void
 _gdk_windowing_init (void)
 {
   _gdk_x11_initialize_locale ();
-  
+
+  g_queue_init (&gdk_error_traps);
   XSetErrorHandler (gdk_x_error);
   XSetIOErrorHandler (gdk_x_io_error);
 
@@ -401,28 +401,15 @@ gdk_x_io_error (Display *display)
 void
 gdk_error_trap_push (void)
 {
-  GSList *node;
   GdkErrorTrap *trap;
 
-  if (gdk_error_trap_free_list)
-    {
-      node = gdk_error_trap_free_list;
-      gdk_error_trap_free_list = gdk_error_trap_free_list->next;
-    }
-  else
-    {
-      node = g_slist_alloc ();
-      node->data = g_new (GdkErrorTrap, 1);
-    }
+  trap = g_slice_new (GdkErrorTrap);
 
-  node->next = gdk_error_traps;
-  gdk_error_traps = node;
-
-  trap = node->data;
   trap->old_handler = XSetErrorHandler (gdk_x_error);
   trap->error_code = _gdk_error_code;
   trap->error_warnings = _gdk_error_warnings;
 
+  g_queue_push_head (&gdk_error_traps, trap);
   _gdk_error_code = 0;
   _gdk_error_warnings = 0;
 }
@@ -430,24 +417,20 @@ gdk_error_trap_push (void)
 gint
 gdk_error_trap_pop (void)
 {
-  GSList *node;
   GdkErrorTrap *trap;
   gint result;
 
-  g_return_val_if_fail (gdk_error_traps != NULL, 0);
+  trap = g_queue_pop_head (&gdk_error_traps);
 
-  node = gdk_error_traps;
-  gdk_error_traps = gdk_error_traps->next;
-
-  node->next = gdk_error_trap_free_list;
-  gdk_error_trap_free_list = node;
+  g_return_val_if_fail (trap != NULL, 0);
 
   result = _gdk_error_code;
 
-  trap = node->data;
   _gdk_error_code = trap->error_code;
   _gdk_error_warnings = trap->error_warnings;
   XSetErrorHandler (trap->old_handler);
+
+  g_slice_free (GdkErrorTrap, trap);
 
   return result;
 }
