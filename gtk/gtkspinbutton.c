@@ -98,7 +98,6 @@ enum
 
 static void gtk_spin_button_editable_init  (GtkEditableInterface *iface);
 static void gtk_spin_button_finalize       (GObject            *object);
-static void gtk_spin_button_destroy        (GtkObject          *object);
 static void gtk_spin_button_set_property   (GObject         *object,
 					    guint            prop_id,
 					    const GValue    *value,
@@ -107,6 +106,7 @@ static void gtk_spin_button_get_property   (GObject         *object,
 					    guint            prop_id,
 					    GValue          *value,
 					    GParamSpec      *pspec);
+static void gtk_spin_button_destroy        (GtkObject          *object);
 static void gtk_spin_button_map            (GtkWidget          *widget);
 static void gtk_spin_button_unmap          (GtkWidget          *widget);
 static void gtk_spin_button_realize        (GtkWidget          *widget);
@@ -193,12 +193,10 @@ gtk_spin_button_class_init (GtkSpinButtonClass *class)
   GtkBindingSet    *binding_set;
 
   gobject_class->finalize = gtk_spin_button_finalize;
-
   gobject_class->set_property = gtk_spin_button_set_property;
   gobject_class->get_property = gtk_spin_button_get_property;
 
   object_class->destroy = gtk_spin_button_destroy;
-
   widget_class->map = gtk_spin_button_map;
   widget_class->unmap = gtk_spin_button_unmap;
   widget_class->realize = gtk_spin_button_realize;
@@ -544,7 +542,7 @@ static void
 gtk_spin_button_destroy (GtkObject *object)
 {
   gtk_spin_button_stop_spinning (GTK_SPIN_BUTTON (object));
-  
+
   GTK_OBJECT_CLASS (gtk_spin_button_parent_class)->destroy (object);
 }
 
@@ -1785,7 +1783,7 @@ gtk_spin_button_new_with_range (gdouble min,
 				gdouble max,
 				gdouble step)
 {
-  GtkObject *adj;
+  GObject *adj;
   GtkSpinButton *spin;
   gint digits;
 

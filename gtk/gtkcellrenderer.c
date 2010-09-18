@@ -112,8 +112,7 @@ enum {
 
 static guint  cell_renderer_signals[LAST_SIGNAL] = { 0 };
 
-
-G_DEFINE_ABSTRACT_TYPE(GtkCellRenderer, gtk_cell_renderer, GTK_TYPE_OBJECT)
+G_DEFINE_ABSTRACT_TYPE(GtkCellRenderer, gtk_cell_renderer, G_TYPE_INITIALLY_UNOWNED)
 
 static void
 gtk_cell_renderer_init (GtkCellRenderer *cell)

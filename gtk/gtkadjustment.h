@@ -31,9 +31,8 @@
 #ifndef __GTK_ADJUSTMENT_H__
 #define __GTK_ADJUSTMENT_H__
 
-
-#include <gdk/gdk.h>
 #include <gtk/gtkobject.h>
+#include <gdk/gdk.h>
 
 G_BEGIN_DECLS
 
@@ -50,7 +49,7 @@ typedef struct _GtkAdjustmentClass  GtkAdjustmentClass;
 
 struct _GtkAdjustment
 {
-  GtkObject parent_instance;
+  GInitiallyUnowned parent_instance;
 
   gdouble GSEAL (lower);
   gdouble GSEAL (upper);
@@ -62,7 +61,7 @@ struct _GtkAdjustment
 
 struct _GtkAdjustmentClass
 {
-  GtkObjectClass parent_class;
+  GInitiallyUnownedClass parent_class;
 
   void (* changed)	 (GtkAdjustment *adjustment);
   void (* value_changed) (GtkAdjustment *adjustment);
@@ -76,7 +75,7 @@ struct _GtkAdjustmentClass
 
 
 GType	   gtk_adjustment_get_type		(void) G_GNUC_CONST;
-GtkObject* gtk_adjustment_new			(gdouble	  value,
+GObject*   gtk_adjustment_new			(gdouble	  value,
 						 gdouble	  lower,
 						 gdouble	  upper,
 						 gdouble	  step_increment,

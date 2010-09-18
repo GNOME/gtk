@@ -546,7 +546,7 @@ gtk_scale_new_with_range (GtkOrientation orientation,
                           gdouble        max,
                           gdouble        step)
 {
-  GtkObject *adj;
+  GObject *adj;
   gint digits;
 
   g_return_val_if_fail (min < max, NULL);

@@ -580,7 +580,7 @@ gtk_scale_button_new (GtkIconSize   size,
 		      const gchar **icons)
 {
   GtkScaleButton *button;
-  GtkObject *adj;
+  GObject *adj;
 
   adj = gtk_adjustment_new (min, min, max, step, 10 * step, 0);
 

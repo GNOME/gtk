@@ -41,13 +41,13 @@ typedef enum {
 
 struct _GtkFileFilterClass
 {
-  GtkObjectClass parent_class;
+  GInitiallyUnownedClass parent_class;
 };
 
 struct _GtkFileFilter
 {
-  GtkObject parent_instance;
-  
+  GInitiallyUnowned parent_instance;
+
   gchar *name;
   GSList *rules;
 
@@ -74,7 +74,7 @@ struct _FilterRule
 static void gtk_file_filter_finalize   (GObject            *object);
 
 
-G_DEFINE_TYPE (GtkFileFilter, gtk_file_filter, GTK_TYPE_OBJECT)
+G_DEFINE_TYPE (GtkFileFilter, gtk_file_filter, G_TYPE_INITIALLY_UNOWNED)
 
 static void
 gtk_file_filter_init (GtkFileFilter *object)

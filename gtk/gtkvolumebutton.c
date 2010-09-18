@@ -69,7 +69,7 @@ static void
 gtk_volume_button_init (GtkVolumeButton *button)
 {
   GtkScaleButton *sbutton = GTK_SCALE_BUTTON (button);
-  GtkObject *adj;
+  GObject *adj;
   GtkWidget *minus_button, *plus_button;
   const char *icons[] = {
 	"audio-volume-muted",

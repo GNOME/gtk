@@ -102,7 +102,7 @@ gtk_vscale_new_with_range (gdouble min,
                            gdouble max,
                            gdouble step)
 {
-  GtkObject *adj;
+  GObject *adj;
   GtkScale *scale;
   gint digits;
 

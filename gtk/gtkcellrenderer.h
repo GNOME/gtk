@@ -58,7 +58,7 @@ typedef struct _GtkCellRendererClass         GtkCellRendererClass;
 
 struct _GtkCellRenderer
 {
-  GtkObject parent;
+  GInitiallyUnowned parent_instance;
 
   /* <private> */
   GtkCellRendererPrivate *priv;
@@ -66,7 +66,7 @@ struct _GtkCellRenderer
 
 struct _GtkCellRendererClass
 {
-  GtkObjectClass parent_class;
+  GInitiallyUnownedClass parent_class;
 
   /* vtable - not signals */
   GtkSizeRequestMode (* get_request_mode)                (GtkCellRenderer      *cell);

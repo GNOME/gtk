@@ -41,8 +41,8 @@ typedef enum {
 
 struct _GtkRecentFilter
 {
-  GtkObject parent_instance;
-  
+  GInitiallyUnowned parent_instance;
+
   gchar *name;
   GSList *rules;
   
@@ -51,7 +51,7 @@ struct _GtkRecentFilter
 
 struct _GtkRecentFilterClass
 {
-  GtkObjectClass parent_class;
+  GInitiallyUnownedClass parent_class;
 };
 
 struct _FilterRule
@@ -75,7 +75,7 @@ struct _FilterRule
   } u;
 };
 
-G_DEFINE_TYPE (GtkRecentFilter, gtk_recent_filter, GTK_TYPE_OBJECT)
+G_DEFINE_TYPE (GtkRecentFilter, gtk_recent_filter, G_TYPE_INITIALLY_UNOWNED)
 
 
 static void
