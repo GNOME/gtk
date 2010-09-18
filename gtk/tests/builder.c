@@ -1844,17 +1844,7 @@ test_value_from_string (void)
                              GTK_BUILDER_ERROR_INVALID_VALUE));
   g_error_free (error);
   error = NULL;
-  
-  g_assert (gtk_builder_value_from_string_type (builder, GTK_TYPE_WIDGET_FLAGS, "mapped", &value, &error) == TRUE);
-  g_assert (G_VALUE_HOLDS_FLAGS (&value));
-  g_assert (g_value_get_flags (&value) == GTK_MAPPED);
-  g_value_unset (&value);
 
-  g_assert (gtk_builder_value_from_string_type (builder, GTK_TYPE_WIDGET_FLAGS, "GTK_VISIBLE | GTK_REALIZED", &value, &error) == TRUE);
-  g_assert (G_VALUE_HOLDS_FLAGS (&value));
-  g_assert (g_value_get_flags (&value) == (GTK_VISIBLE | GTK_REALIZED));
-  g_value_unset (&value);
-  
   g_assert (gtk_builder_value_from_string_type (builder, GTK_TYPE_WINDOW_TYPE, "foobar", &value, &error) == FALSE);
   g_value_unset (&value);
   g_assert (g_error_matches (error,
