@@ -900,7 +900,7 @@ LDADDS =								\
 
 if HAVE_INTROSPECTION
 introspection_files = \
-    $(gtkinclude_HEADERS) \
+    $(filter-out gtktextlayout.h, $(gtkinclude_HEADERS)) \
     $(gtk_all_c_sources) \
     gtktypebuiltins.h \
     gtktypebuiltins.c
