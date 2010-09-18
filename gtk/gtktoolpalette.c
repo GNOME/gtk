@@ -1560,7 +1560,7 @@ gtk_tool_palette_get_expand (GtkToolPalette   *palette,
  * Gets the item at position (x, y).
  * See gtk_tool_palette_get_drop_group().
  *
- * Returns: the #GtkToolItem at position or %NULL if there is no such item
+ * Returns: (transfer none): the #GtkToolItem at position or %NULL if there is no such item
  *
  * Since: 2.20
  */
@@ -1592,7 +1592,7 @@ gtk_tool_palette_get_drop_item (GtkToolPalette *palette,
  *
  * Gets the group at position (x, y).
  *
- * Returns: the #GtkToolItemGroup at position or %NULL
+ * Returns: (transfer none): the #GtkToolItemGroup at position or %NULL
  *     if there is no such group
  *
  * Since: 2.20
@@ -1643,7 +1643,7 @@ gtk_tool_palette_get_drop_group (GtkToolPalette *palette,
  * Get the dragged item from the selection.
  * This could be a #GtkToolItem or a #GtkToolItemGroup.
  *
- * Returns: the dragged item in selection
+ * Returns: (transfer none): the dragged item in selection
  *
  * Since: 2.20
  */
@@ -1873,7 +1873,7 @@ _gtk_tool_palette_child_set_drag_source (GtkWidget *child,
  *
  * Gets the target entry for a dragged #GtkToolItem.
  *
- * Returns: the #GtkTargetEntry for a dragged item.
+ * Returns: (transfer none): the #GtkTargetEntry for a dragged item.
  *
  * Since: 2.20
  */
@@ -1888,7 +1888,7 @@ gtk_tool_palette_get_drag_target_item (void)
  *
  * Get the target entry for a dragged #GtkToolItemGroup.
  *
- * Returns: the #GtkTargetEntry for a dragged group
+ * Returns: (transfer none): the #GtkTargetEntry for a dragged group
  *
  * Since: 2.20
  */
@@ -1912,7 +1912,7 @@ _gtk_tool_palette_set_expanding_child (GtkToolPalette *palette,
  *
  * Gets the horizontal adjustment of the tool palette.
  *
- * Returns: the horizontal adjustment of @palette
+ * Returns: (transfer none): the horizontal adjustment of @palette
  *
  * Since: 2.20
  */
@@ -1930,7 +1930,7 @@ gtk_tool_palette_get_hadjustment (GtkToolPalette *palette)
  *
  * Gets the vertical adjustment of the tool palette.
  *
- * Returns: the vertical adjustment of @palette
+ * Returns: (transfer none): the vertical adjustment of @palette
  *
  * Since: 2.20
  */

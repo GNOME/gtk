@@ -929,7 +929,7 @@ gtk_ui_manager_get_toplevels (GtkUIManager         *self,
  * Looks up an action by following a path. See gtk_ui_manager_get_widget()
  * for more information about paths.
  * 
- * Return value: the action whose proxy widget is found by following the path, 
+ * Return value: (transfer none): the action whose proxy widget is found by following the path, 
  *     or %NULL if no widget was found.
  *
  * Since: 2.4

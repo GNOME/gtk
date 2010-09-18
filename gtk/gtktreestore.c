@@ -292,7 +292,7 @@ gtk_tree_store_new (gint n_columns,
  *
  * Non vararg creation function.  Used primarily by language bindings.
  *
- * Return value: a new #GtkTreeStore
+ * Return value: (transfer full): a new #GtkTreeStore
  **/
 GtkTreeStore *
 gtk_tree_store_newv (gint   n_columns,
