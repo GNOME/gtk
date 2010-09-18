@@ -52,8 +52,8 @@
 
 #include <gdk/gdkdeviceprivate.h>
 
-typedef struct _GdkPredicate  GdkPredicate;
-typedef struct _GdkErrorTrap  GdkErrorTrap;
+typedef struct _GdkPredicate        GdkPredicate;
+typedef struct _GdkGlobalErrorTrap  GdkGlobalErrorTrap;
 
 struct _GdkPredicate
 {
@@ -61,11 +61,14 @@ struct _GdkPredicate
   gpointer data;
 };
 
-struct _GdkErrorTrap
+/* non-GDK previous error handler */
+static int (*_gdk_old_error_handler) (Display *, XErrorEvent *);
+/* number of times we've pushed the GDK error handler */
+static int _gdk_error_handler_push_count = 0;
+
+struct _GdkGlobalErrorTrap
 {
-  int (*old_handler) (Display *, XErrorEvent *);
-  gint error_warnings;
-  gint error_code;
+  GSList *displays;
 };
 
 /* 
@@ -286,72 +289,6 @@ _gdk_windowing_exit (void)
 
 /*
  *--------------------------------------------------------------
- * gdk_x_error
- *
- *   The X error handling routine.
- *
- * Arguments:
- *   "display" is the X display the error originated from.
- *   "error" is the XErrorEvent that we are handling.
- *
- * Results:
- *   Either we were expecting some sort of error to occur,
- *   in which case we set the "_gdk_error_code" flag, or this
- *   error was unexpected, in which case we will print an
- *   error message and exit. (Since trying to continue will
- *   most likely simply lead to more errors).
- *
- * Side effects:
- *
- *--------------------------------------------------------------
- */
-
-static int
-gdk_x_error (Display	 *display,
-	     XErrorEvent *error)
-{
-  if (error->error_code)
-    {
-      if (_gdk_error_warnings)
-	{
-	  gchar buf[64];
-          gchar *msg;
-
-	  XGetErrorText (display, error->error_code, buf, 63);
-
-          msg =
-            g_strdup_printf ("The program '%s' received an X Window System error.\n"
-                             "This probably reflects a bug in the program.\n"
-                             "The error was '%s'.\n"
-                             "  (Details: serial %ld error_code %d request_code %d minor_code %d)\n"
-                             "  (Note to programmers: normally, X errors are reported asynchronously;\n"
-                             "   that is, you will receive the error a while after causing it.\n"
-                             "   To debug your program, run it with the --sync command line\n"
-                             "   option to change this behavior. You can then get a meaningful\n"
-                             "   backtrace from your debugger if you break on the gdk_x_error() function.)",
-                             g_get_prgname (),
-                             buf,
-                             error->serial,
-                             error->error_code,
-                             error->request_code,
-                             error->minor_code);
-
-#ifdef G_ENABLE_DEBUG
-	  g_error ("%s", msg);
-#else /* !G_ENABLE_DEBUG */
-	  g_fprintf (stderr, "%s\n", msg);
-
-	  exit (1);
-#endif /* G_ENABLE_DEBUG */
-	}
-      _gdk_error_code = error->error_code;
-    }
-
-  return 0;
-}
-
-/*
- *--------------------------------------------------------------
  * gdk_x_io_error
  *
  *   The X I/O error handling routine.
@@ -398,41 +335,210 @@ gdk_x_io_error (Display *display)
   exit(1);
 }
 
+/* X error handler. Keep the name the same because people are used to
+ * breaking on it in the debugger.
+ */
+static int
+gdk_x_error (Display	 *xdisplay,
+	     XErrorEvent *error)
+{
+  if (error->error_code)
+    {
+      GdkDisplay *error_display;
+      GdkDisplayManager *manager;
+      GSList *displays;
+
+      /* Figure out which GdkDisplay if any got the error. */
+      error_display = NULL;
+      manager = gdk_display_manager_get ();
+      displays = gdk_display_manager_list_displays (manager);
+      while (displays != NULL)
+        {
+          GdkDisplayX11 *gdk_display = displays->data;
+
+          if (xdisplay == gdk_display->xdisplay)
+            {
+              error_display = GDK_DISPLAY_OBJECT (gdk_display);
+              g_slist_free (displays);
+              displays = NULL;
+            }
+          else
+            {
+              displays = g_slist_delete_link (displays, displays);
+            }
+        }
+
+      if (error_display == NULL)
+        {
+          /* Error on an X display not opened by GDK. Ignore. */
+
+          return 0;
+        }
+      else
+        {
+          _gdk_x11_display_error_event (error_display, error);
+        }
+    }
+
+  return 0;
+}
+
+void
+_gdk_x11_error_handler_push (void)
+{
+  _gdk_old_error_handler = XSetErrorHandler (gdk_x_error);
+
+  if (_gdk_error_handler_push_count > 0)
+    {
+      if (_gdk_old_error_handler != gdk_x_error)
+        g_warning ("XSetErrorHandler() called with a GDK error trap pushed. Don't do that.");
+    }
+
+  _gdk_error_handler_push_count += 1;
+}
+
+void
+_gdk_x11_error_handler_pop  (void)
+{
+  g_return_if_fail (_gdk_error_handler_push_count > 0);
+
+  _gdk_error_handler_push_count -= 1;
+
+  if (_gdk_error_handler_push_count == 0)
+    {
+      XSetErrorHandler (_gdk_old_error_handler);
+      _gdk_old_error_handler = NULL;
+    }
+}
+
+/**
+ * gdk_error_trap_push:
+ *
+ * This function allows X errors to be trapped instead of the normal
+ * behavior of exiting the application. It should only be used if it
+ * is not possible to avoid the X error in any other way. Errors are
+ * ignored on all #GdkDisplay currently known to the
+ * #GdkDisplayManager. If you don't care which error happens and just
+ * want to ignore everything, pop with gdk_error_trap_pop_ignored().
+ * If you need the error code, use gdk_error_trap_pop() which may have
+ * to block and wait for the error to arrive from the X server.
+ *
+ * This API exists on all platforms but only does anything on X.
+ *
+ * You can use gdk_x11_display_error_trap_push() to ignore errors
+ * on only a single display.
+ *
+ * <example>
+ * <title>Trapping an X error</title>
+ * <programlisting>
+ * gdk_error_trap_push (<!-- -->);
+ *
+ *  // ... Call the X function which may cause an error here ...
+ *
+ *
+ * if (gdk_error_trap_pop (<!-- -->))
+ *  {
+ *    // ... Handle the error here ...
+ *  }
+ * </programlisting>
+ * </example>
+ *
+ */
 void
 gdk_error_trap_push (void)
 {
-  GdkErrorTrap *trap;
+  GdkGlobalErrorTrap *trap;
+  GdkDisplayManager *manager;
+  GSList *tmp_list;
 
-  trap = g_slice_new (GdkErrorTrap);
+  trap = g_slice_new (GdkGlobalErrorTrap);
+  manager = gdk_display_manager_get ();
+  trap->displays = gdk_display_manager_list_displays (manager);
 
-  trap->old_handler = XSetErrorHandler (gdk_x_error);
-  trap->error_code = _gdk_error_code;
-  trap->error_warnings = _gdk_error_warnings;
+  g_slist_foreach (trap->displays, (GFunc) g_object_ref, NULL);
+  for (tmp_list = trap->displays;
+       tmp_list != NULL;
+       tmp_list = tmp_list->next)
+    {
+      gdk_x11_display_error_trap_push (tmp_list->data);
+    }
 
   g_queue_push_head (&gdk_error_traps, trap);
-  _gdk_error_code = 0;
-  _gdk_error_warnings = 0;
 }
 
-gint
-gdk_error_trap_pop (void)
+static gint
+gdk_error_trap_pop_internal (gboolean need_code)
 {
-  GdkErrorTrap *trap;
+  GdkGlobalErrorTrap *trap;
   gint result;
+  GSList *tmp_list;
 
   trap = g_queue_pop_head (&gdk_error_traps);
 
-  g_return_val_if_fail (trap != NULL, 0);
+  g_return_val_if_fail (trap != NULL, Success);
 
-  result = _gdk_error_code;
+  result = Success;
+  for (tmp_list = trap->displays;
+       tmp_list != NULL;
+       tmp_list = tmp_list->next)
+    {
+      gint code = Success;
 
-  _gdk_error_code = trap->error_code;
-  _gdk_error_warnings = trap->error_warnings;
-  XSetErrorHandler (trap->old_handler);
+      if (need_code)
+        code = gdk_x11_display_error_trap_pop (tmp_list->data);
+      else
+        gdk_x11_display_error_trap_pop_ignored (tmp_list->data);
 
-  g_slice_free (GdkErrorTrap, trap);
+      /* we use the error on the last display listed, why not. */
+      if (code != Success)
+        result = code;
+    }
+
+  g_slist_foreach (trap->displays, (GFunc) g_object_unref, NULL);
+  g_slist_free (trap->displays);
+
+  g_slice_free (GdkGlobalErrorTrap, trap);
 
   return result;
+}
+
+/**
+ * gdk_error_trap_pop_ignored:
+ *
+ * Removes an error trap pushed with gdk_error_trap_push(), but
+ * without bothering to wait and see whether an error occurred.  If an
+ * error arrives later asynchronously that was triggered while the
+ * trap was pushed, that error will be ignored.
+ *
+ * Since: 3.0
+ */
+void
+gdk_error_trap_pop_ignored (void)
+{
+  gdk_error_trap_pop_internal (FALSE);
+}
+
+/**
+ * gdk_error_trap_pop:
+ *
+ * Removes an error trap pushed with gdk_error_trap_push().
+ * May block until an error has been definitively received
+ * or not received from the X server. gdk_error_trap_pop_ignored()
+ * is preferred if you don't need to know whether an error
+ * occurred, because it never has to block. If you don't
+ * need the return value of gdk_error_trap_pop(), use
+ * gdk_error_trap_pop_ignored().
+ *
+ * Prior to GDK 3.0, this function would not automatically
+ * sync for you, so you had to gdk_flush() if your last
+ * call to Xlib was not a blocking round trip.
+ *
+ * Return value: X error code or 0 on success
+ */
+gint
+gdk_error_trap_pop (void)
+{
+  return gdk_error_trap_pop_internal (TRUE);
 }
 
 gchar *

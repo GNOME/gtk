@@ -164,6 +164,12 @@ G_CONST_RETURN gchar *gdk_x11_get_xatom_name    (Atom         xatom);
 
 void	    gdk_x11_display_grab	      (GdkDisplay *display);
 void	    gdk_x11_display_ungrab	      (GdkDisplay *display);
+
+void                           gdk_x11_display_error_trap_push        (GdkDisplay *display);
+/* warn unused because you could use pop_ignored otherwise */
+G_GNUC_WARN_UNUSED_RESULT gint gdk_x11_display_error_trap_pop         (GdkDisplay *display);
+void                           gdk_x11_display_error_trap_pop_ignored (GdkDisplay *display);
+
 void        gdk_x11_register_standard_event_type (GdkDisplay *display,
 						  gint        event_base,
 						  gint        n_events);

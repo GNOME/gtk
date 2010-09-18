@@ -141,6 +141,8 @@ struct _GdkDisplayX11
 
   /* The offscreen window that has the pointer in it (if any) */
   GdkWindow *active_offscreen_window;
+
+  GSList *error_traps;
 };
 
 struct _GdkDisplayX11Class
@@ -149,8 +151,10 @@ struct _GdkDisplayX11Class
 };
 
 GType      _gdk_display_x11_get_type            (void);
-GdkScreen *_gdk_x11_display_screen_for_xrootwin (GdkDisplay *display,
-						 Window      xrootwin);
+GdkScreen *_gdk_x11_display_screen_for_xrootwin (GdkDisplay  *display,
+						 Window       xrootwin);
+void       _gdk_x11_display_error_event         (GdkDisplay  *display,
+                                                 XErrorEvent *error);
 
 G_END_DECLS
 

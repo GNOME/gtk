@@ -88,8 +88,6 @@ typedef enum {
 
 extern GList            *_gdk_default_filters;
 extern GdkWindow  	*_gdk_parent_root;
-extern gint		 _gdk_error_code;
-extern gint		 _gdk_error_warnings;
 
 extern guint _gdk_debug_flags;
 extern gboolean _gdk_native_windows;

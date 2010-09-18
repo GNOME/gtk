@@ -24,6 +24,7 @@
 
 #include "config.h"
 
+#include <glib/gprintf.h>
 #include <stdlib.h>
 #include <string.h>
 #include <errno.h>
@@ -67,6 +68,23 @@
 #include <X11/extensions/Xrandr.h>
 #endif
 
+typedef struct _GdkErrorTrap  GdkErrorTrap;
+
+struct _GdkErrorTrap
+{
+  /* Next sequence when trap was pushed, i.e. first sequence to
+   * ignore
+   */
+  gulong start_sequence;
+
+  /* Next sequence when trap was popped, i.e. first sequence
+   * to not ignore. 0 if trap is still active.
+   */
+  gulong end_sequence;
+
+  /* Most recent error code within the sequence */
+  int error_code;
+};
 
 static void   gdk_display_x11_dispose            (GObject            *object);
 static void   gdk_display_x11_finalize           (GObject            *object);
@@ -2656,4 +2674,251 @@ gdk_x11_register_standard_event_type (GdkDisplay *display,
   event_type->n_events = n_events;
 
   display_x11->event_types = g_slist_prepend (display_x11->event_types, event_type);
+}
+
+/* compare X sequence numbers handling wraparound */
+#define SEQUENCE_COMPARE(a,op,b) (((long) (a) - (long) (b)) op 0)
+
+/* delivers an error event from the error handler in gdkmain-x11.c */
+void
+_gdk_x11_display_error_event (GdkDisplay  *display,
+                              XErrorEvent *error)
+{
+  GdkDisplayX11 *display_x11;
+  GSList *tmp_list;
+  gboolean ignore;
+
+  display_x11 = GDK_DISPLAY_X11 (display);
+
+  ignore = FALSE;
+  for (tmp_list = display_x11->error_traps;
+       tmp_list != NULL;
+       tmp_list = tmp_list->next)
+    {
+      GdkErrorTrap *trap;
+
+      trap = tmp_list->data;
+
+      if (SEQUENCE_COMPARE (trap->start_sequence, <=, error->serial) &&
+          (trap->end_sequence == 0 ||
+           SEQUENCE_COMPARE (trap->end_sequence, >, error->serial)))
+        {
+          ignore = TRUE;
+          trap->error_code = error->error_code;
+        }
+    }
+
+  if (!ignore)
+    {
+      gchar buf[64];
+      gchar *msg;
+
+      XGetErrorText (display_x11->xdisplay, error->error_code, buf, 63);
+
+      msg =
+        g_strdup_printf ("The program '%s' received an X Window System error.\n"
+                         "This probably reflects a bug in the program.\n"
+                         "The error was '%s'.\n"
+                         "  (Details: serial %ld error_code %d request_code %d minor_code %d)\n"
+                         "  (Note to programmers: normally, X errors are reported asynchronously;\n"
+                         "   that is, you will receive the error a while after causing it.\n"
+                         "   To debug your program, run it with the --sync command line\n"
+                         "   option to change this behavior. You can then get a meaningful\n"
+                         "   backtrace from your debugger if you break on the gdk_x_error() function.)",
+                         g_get_prgname (),
+                         buf,
+                         error->serial,
+                         error->error_code,
+                         error->request_code,
+                         error->minor_code);
+
+#ifdef G_ENABLE_DEBUG
+      g_error ("%s", msg);
+#else /* !G_ENABLE_DEBUG */
+      g_fprintf (stderr, "%s\n", msg);
+
+      exit (1);
+#endif /* G_ENABLE_DEBUG */
+    }
+}
+
+static void
+delete_outdated_error_traps (GdkDisplayX11 *display_x11)
+{
+  GSList *tmp_list;
+  gulong processed_sequence;
+
+  processed_sequence = XLastKnownRequestProcessed (display_x11->xdisplay);
+
+  tmp_list = display_x11->error_traps;
+  while (tmp_list != NULL)
+    {
+      GdkErrorTrap *trap = tmp_list->data;
+
+      if (trap->end_sequence != 0 &&
+          SEQUENCE_COMPARE (trap->end_sequence, <, processed_sequence))
+        {
+          GSList *free_me = tmp_list;
+
+          tmp_list = tmp_list->next;
+          display_x11->error_traps =
+            g_slist_delete_link (display_x11->error_traps, free_me);
+          g_slice_free (GdkErrorTrap, trap);
+        }
+      else
+        {
+          tmp_list = tmp_list->next;
+        }
+    }
+}
+
+/**
+ * gdk_x11_display_error_trap_push:
+ *
+ * Begins a range of X requests for which X error events will be
+ * ignored. Unignored errors (when no trap is pushed) will abort the
+ * application.
+ *
+ * See also gdk_error_trap_push() to push a trap on all displays.
+ *
+ * Since: 3.0
+ */
+void
+gdk_x11_display_error_trap_push (GdkDisplay *display)
+{
+  GdkDisplayX11 *display_x11;
+  GdkErrorTrap *trap;
+
+  display_x11 = GDK_DISPLAY_X11 (display);
+
+  delete_outdated_error_traps (display_x11);
+
+  /* set up the Xlib callback to tell us about errors */
+  _gdk_x11_error_handler_push ();
+
+  trap = g_slice_new0 (GdkErrorTrap);
+
+  trap->start_sequence = XNextRequest (display_x11->xdisplay);
+  trap->error_code = Success;
+
+  display_x11->error_traps =
+    g_slist_prepend (display_x11->error_traps, trap);
+}
+
+static gint
+gdk_x11_display_error_trap_pop_internal (GdkDisplay *display,
+                                         gboolean    need_code)
+{
+  GdkDisplayX11 *display_x11;
+  GdkErrorTrap *trap;
+  GSList *tmp_list;
+  int result;
+
+  display_x11 = GDK_DISPLAY_X11 (display);
+
+  g_return_val_if_fail (display_x11->error_traps != NULL, Success);
+
+  /* Find the first trap that hasn't been popped already */
+  trap = NULL; /* quiet gcc */
+  for (tmp_list = display_x11->error_traps;
+       tmp_list != NULL;
+       tmp_list = tmp_list->next)
+    {
+      trap = tmp_list->data;
+
+      if (trap->end_sequence == 0)
+        break;
+    }
+
+  g_return_val_if_fail (trap != NULL, Success);
+  g_assert (trap->end_sequence == 0);
+
+  /* May need to sync to fill in trap->error_code if we care about
+   * getting an error code.
+   */
+  if (need_code)
+    {
+      gulong processed_sequence;
+      gulong next_sequence;
+
+      next_sequence = XNextRequest (display_x11->xdisplay);
+      processed_sequence = XLastKnownRequestProcessed (display_x11->xdisplay);
+
+      /* If our last request was already processed, there is no point
+       * in syncing. i.e. if last request was a round trip (or even if
+       * we got an event with the serial of a non-round-trip)
+       */
+      if ((next_sequence - 1) != processed_sequence)
+        {
+          XSync (display_x11->xdisplay, False);
+        }
+
+      result = trap->error_code;
+    }
+  else
+    {
+      result = Success;
+    }
+
+  /* record end of trap, giving us a range of
+   * error sequences we'll ignore.
+   */
+  trap->end_sequence = XNextRequest (display_x11->xdisplay);
+
+  /* remove the Xlib callback */
+  _gdk_x11_error_handler_pop ();
+
+  /* we may already be outdated */
+  delete_outdated_error_traps (display_x11);
+
+  return result;
+}
+
+/**
+ * gdk_x11_display_error_trap_pop:
+ * @display: the display
+ *
+ * Pops the error trap pushed by gdk_x11_display_error_trap_push().
+ * Will XSync() if necessary and will always block until
+ * the error is known to have occurred or not occurred,
+ * so the error code can be returned.
+ *
+ * If you don't need to use the return value,
+ * gdk_x11_display_error_trap_pop_ignored() would be more efficient.
+ *
+ * See gdk_error_trap_pop() for the all-displays-at-once
+ * equivalent.
+ *
+ * Since: 3.0
+ *
+ * Return value: X error code or 0 on success
+ */
+gint
+gdk_x11_display_error_trap_pop (GdkDisplay *display)
+{
+  g_return_val_if_fail (GDK_IS_DISPLAY_X11 (display), Success);
+
+  return gdk_x11_display_error_trap_pop_internal (display, TRUE);
+}
+
+/**
+ * gdk_x11_display_error_trap_pop_ignored:
+ * @display: the display
+ *
+ * Pops the error trap pushed by gdk_x11_display_error_trap_push().
+ * Does not block to see if an error occurred; merely records the
+ * range of requests to ignore errors for, and ignores those errors
+ * if they arrive asynchronously.
+ *
+ * See gdk_error_trap_pop_ignored() for the all-displays-at-once
+ * equivalent.
+ *
+ * Since: 3.0
+ */
+void
+gdk_x11_display_error_trap_pop_ignored (GdkDisplay *display)
+{
+  g_return_if_fail (GDK_IS_DISPLAY_X11 (display));
+
+  gdk_x11_display_error_trap_pop_internal (display, FALSE);
 }

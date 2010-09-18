@@ -215,6 +215,11 @@ gdk_error_trap_pop (void)
 }
 
 void
+gdk_error_trap_pop_ignored (void)
+{
+}
+
+void
 gdk_notify_startup_complete (void)
 {
 }

@@ -56,6 +56,11 @@ gdk_error_trap_pop (void)
   return 0;
 }
 
+void
+gdk_error_trap_pop_ignored (void)
+{
+}
+
 gchar *
 gdk_get_display (void)
 {

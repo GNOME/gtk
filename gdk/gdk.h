@@ -81,8 +81,11 @@ void                 gdk_set_program_class (const char *program_class);
 
 /* Push and pop error handlers for X errors
  */
-void      gdk_error_trap_push           (void);
-gint      gdk_error_trap_pop            (void);
+void                           gdk_error_trap_push        (void);
+/* warn unused because you could use pop_ignored otherwise */
+G_GNUC_WARN_UNUSED_RESULT gint gdk_error_trap_pop         (void);
+void                           gdk_error_trap_pop_ignored (void);
+
 
 gchar*	                  gdk_get_display		(void);
 G_CONST_RETURN gchar*	  gdk_get_display_arg_name	(void);

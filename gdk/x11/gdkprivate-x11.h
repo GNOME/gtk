@@ -60,6 +60,8 @@ struct _GdkVisualPrivate
   GdkScreen *screen;
 };
 
+void _gdk_x11_error_handler_push (void);
+void _gdk_x11_error_handler_pop  (void);
 
 void _gdk_xid_table_insert (GdkDisplay *display,
 			    XID        *xid,

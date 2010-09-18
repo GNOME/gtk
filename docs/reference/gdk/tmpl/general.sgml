@@ -326,42 +326,6 @@ available.
 
 @void: 
 
-
-<!-- ##### FUNCTION gdk_error_trap_push ##### -->
-<para>
-This function allows X errors to be trapped instead of the normal behavior
-of exiting the application. It should only be used if it is not possible to
-avoid the X error in any other way.
-</para>
-<example>
-<title>Trapping an X error</title>
-<programlisting>
-  gdk_error_trap_push (<!-- -->);
-
-  /* ... Call the X function which may cause an error here ... */
-
-  /* Flush the X queue to catch errors now. */
-  gdk_flush (<!-- -->);
-
-  if (gdk_error_trap_pop (<!-- -->))
-    {
-      /* ... Handle the error here ... */
-    }
-</programlisting>
-</example>
-
-@void: 
-
-
-<!-- ##### FUNCTION gdk_error_trap_pop ##### -->
-<para>
-Removes the X error trap installed with gdk_error_trap_push().
-</para>
-
-@void: 
-@Returns: the X error code, or 0 if no error occurred.
-
-
 <!-- ##### MACRO GDK_WINDOWING_X11 ##### -->
 <para>
 This macro is defined if GDK is configured to use the X11 backend.
