@@ -291,7 +291,7 @@ _gdk_windowing_exit (void)
  *   The X error handling routine.
  *
  * Arguments:
- *   "display" is the X display the error orignated from.
+ *   "display" is the X display the error originated from.
  *   "error" is the XErrorEvent that we are handling.
  *
  * Results:
@@ -316,7 +316,7 @@ gdk_x_error (Display	 *display,
 	{
 	  gchar buf[64];
           gchar *msg;
-          
+
 	  XGetErrorText (display, error->error_code, buf, 63);
 
           msg =
@@ -331,12 +331,12 @@ gdk_x_error (Display	 *display,
                              "   backtrace from your debugger if you break on the gdk_x_error() function.)",
                              g_get_prgname (),
                              buf,
-                             error->serial, 
-                             error->error_code, 
+                             error->serial,
+                             error->error_code,
                              error->request_code,
                              error->minor_code);
-          
-#ifdef G_ENABLE_DEBUG	  
+
+#ifdef G_ENABLE_DEBUG
 	  g_error ("%s", msg);
 #else /* !G_ENABLE_DEBUG */
 	  g_fprintf (stderr, "%s\n", msg);
@@ -346,7 +346,7 @@ gdk_x_error (Display	 *display,
 	}
       _gdk_error_code = error->error_code;
     }
-  
+
   return 0;
 }
 
@@ -398,16 +398,6 @@ gdk_x_io_error (Display *display)
   exit(1);
 }
 
-/*************************************************************
- * gdk_error_trap_push:
- *     Push an error trap. X errors will be trapped until
- *     the corresponding gdk_error_pop(), which will return
- *     the error code, if any.
- *   arguments:
- *     
- *   results:
- *************************************************************/
-
 void
 gdk_error_trap_push (void)
 {
@@ -427,7 +417,7 @@ gdk_error_trap_push (void)
 
   node->next = gdk_error_traps;
   gdk_error_traps = node;
-  
+
   trap = node->data;
   trap->old_handler = XSetErrorHandler (gdk_x_error);
   trap->error_code = _gdk_error_code;
@@ -436,15 +426,6 @@ gdk_error_trap_push (void)
   _gdk_error_code = 0;
   _gdk_error_warnings = 0;
 }
-
-/*************************************************************
- * gdk_error_trap_pop:
- *     Pop an error trap added with gdk_error_push()
- *   arguments:
- *     
- *   results:
- *     0, if no error occured, otherwise the error code.
- *************************************************************/
 
 gint
 gdk_error_trap_pop (void)
@@ -460,14 +441,14 @@ gdk_error_trap_pop (void)
 
   node->next = gdk_error_trap_free_list;
   gdk_error_trap_free_list = node;
-  
+
   result = _gdk_error_code;
-  
+
   trap = node->data;
   _gdk_error_code = trap->error_code;
   _gdk_error_warnings = trap->error_warnings;
   XSetErrorHandler (trap->old_handler);
-  
+
   return result;
 }
 
