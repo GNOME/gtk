@@ -634,6 +634,8 @@ gtk_tree_path_get_indices (GtkTreePath *path)
  * Return value: (array length=depth) (transfer none): The current indices, or %NULL.
  *
  * Since: 3.0
+ *
+ * Rename to: gtk_tree_path_get_indices
  **/
 gint *
 gtk_tree_path_get_indices_with_depth (GtkTreePath *path, gint *depth)
