@@ -5995,9 +5995,9 @@ gtk_icon_view_get_item_row (GtkIconView *icon_view,
 {
   GtkIconViewItem *item;
 
-  g_return_val_if_fail (GTK_IS_ICON_VIEW (icon_view), FALSE);
-  g_return_val_if_fail (icon_view->priv->model != NULL, FALSE);
-  g_return_val_if_fail (path != NULL, FALSE);
+  g_return_val_if_fail (GTK_IS_ICON_VIEW (icon_view), -1);
+  g_return_val_if_fail (icon_view->priv->model != NULL, -1);
+  g_return_val_if_fail (path != NULL, -1);
 
   item = g_list_nth_data (icon_view->priv->items,
                           gtk_tree_path_get_indices(path)[0]);
@@ -6026,9 +6026,9 @@ gtk_icon_view_get_item_column (GtkIconView *icon_view,
 {
   GtkIconViewItem *item;
 
-  g_return_val_if_fail (GTK_IS_ICON_VIEW (icon_view), FALSE);
-  g_return_val_if_fail (icon_view->priv->model != NULL, FALSE);
-  g_return_val_if_fail (path != NULL, FALSE);
+  g_return_val_if_fail (GTK_IS_ICON_VIEW (icon_view), -1);
+  g_return_val_if_fail (icon_view->priv->model != NULL, -1);
+  g_return_val_if_fail (path != NULL, -1);
 
   item = g_list_nth_data (icon_view->priv->items,
                           gtk_tree_path_get_indices(path)[0]);

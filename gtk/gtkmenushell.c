@@ -1819,7 +1819,7 @@ _gtk_menu_shell_get_grab_device (GtkMenuShell  *menu_shell)
 {
   GtkMenuShellPrivate *priv;
 
-  g_return_val_if_fail (GTK_IS_MENU_SHELL (menu_shell), FALSE);
+  g_return_val_if_fail (GTK_IS_MENU_SHELL (menu_shell), NULL);
 
   priv = GTK_MENU_SHELL_GET_PRIVATE (menu_shell);
 
