@@ -62,7 +62,8 @@ struct _GdkPredicate
 };
 
 /* non-GDK previous error handler */
-static int (*_gdk_old_error_handler) (Display *, XErrorEvent *);
+typedef int (*GdkXErrorHandler) (Display *, XErrorEvent *);
+static GdkXErrorHandler _gdk_old_error_handler;
 /* number of times we've pushed the GDK error handler */
 static int _gdk_error_handler_push_count = 0;
 
@@ -386,12 +387,18 @@ gdk_x_error (Display	 *xdisplay,
 void
 _gdk_x11_error_handler_push (void)
 {
-  _gdk_old_error_handler = XSetErrorHandler (gdk_x_error);
+  GdkXErrorHandler previous;
+
+  previous = XSetErrorHandler (gdk_x_error);
 
   if (_gdk_error_handler_push_count > 0)
     {
-      if (_gdk_old_error_handler != gdk_x_error)
+      if (previous != gdk_x_error)
         g_warning ("XSetErrorHandler() called with a GDK error trap pushed. Don't do that.");
+    }
+  else
+    {
+      _gdk_old_error_handler = previous;
     }
 
   _gdk_error_handler_push_count += 1;

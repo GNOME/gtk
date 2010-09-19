@@ -1911,6 +1911,21 @@ gdk_display_x11_finalize (GObject *object)
 
   XCloseDisplay (display_x11->xdisplay);
 
+  /* error traps */
+  while (display_x11->error_traps != NULL)
+    {
+      GdkErrorTrap *trap = display_x11->error_traps->data;
+
+      display_x11->error_traps =
+        g_slist_delete_link (display_x11->error_traps,
+                             display_x11->error_traps);
+
+      if (trap->end_sequence == 0)
+        g_warning ("Display finalized with an unpopped error trap");
+
+      g_slice_free (GdkErrorTrap, trap);
+    }
+
   G_OBJECT_CLASS (_gdk_display_x11_parent_class)->finalize (object);
 }
 
