@@ -1154,7 +1154,8 @@ _gdk_input_init (GdkDisplay *display)
       if (device->source == GDK_SOURCE_KEYBOARD)
         continue;
 
-      display_x11->input_devices = g_list_prepend (display_x11->input_devices, l->data);
+      display_x11->input_devices = g_list_prepend (display_x11->input_devices,
+                                                   g_object_ref (l->data));
     }
 
   g_list_free (list);
@@ -1176,7 +1177,8 @@ _gdk_input_init (GdkDisplay *display)
     }
 
   /* Add the core pointer to the devices list */
-  display_x11->input_devices = g_list_prepend (display_x11->input_devices, display->core_pointer);
+  display_x11->input_devices = g_list_prepend (display_x11->input_devices,
+                                               g_object_ref (display->core_pointer));
 
   g_list_free (list);
 }
@@ -1449,8 +1451,7 @@ gdk_display_open (const gchar *display_name)
     _gdk_x11_screen_setup (display_x11->screens[i]);
 
   g_signal_emit_by_name (display, "opened");
-  g_signal_emit_by_name (gdk_display_manager_get(),
-			 "display_opened", display);
+  g_signal_emit_by_name (gdk_display_manager_get (), "display-opened", display);
 
   return display;
 }

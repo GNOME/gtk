@@ -37,7 +37,7 @@ struct _GdkDeviceManagerXIPrivate
 };
 
 static void gdk_device_manager_xi_constructed  (GObject      *object);
-static void gdk_device_manager_xi_finalize     (GObject      *object);
+static void gdk_device_manager_xi_dispose      (GObject      *object);
 static void gdk_device_manager_xi_set_property (GObject      *object,
                                                 guint         prop_id,
                                                 const GValue *value,
@@ -72,7 +72,7 @@ gdk_device_manager_xi_class_init (GdkDeviceManagerXIClass *klass)
   GdkDeviceManagerClass *device_manager_class = GDK_DEVICE_MANAGER_CLASS (klass);
 
   object_class->constructed = gdk_device_manager_xi_constructed;
-  object_class->finalize = gdk_device_manager_xi_finalize;
+  object_class->dispose = gdk_device_manager_xi_dispose;
   object_class->set_property = gdk_device_manager_xi_set_property;
   object_class->get_property = gdk_device_manager_xi_get_property;
 
@@ -279,7 +279,7 @@ gdk_device_manager_xi_constructed (GObject *object)
           priv->devices = g_list_prepend (priv->devices, device);
           g_hash_table_insert (priv->id_table,
                                GINT_TO_POINTER (devices[i].id),
-                               device);
+                               g_object_ref (device));
         }
     }
 
@@ -294,7 +294,7 @@ gdk_device_manager_xi_constructed (GObject *object)
 }
 
 static void
-gdk_device_manager_xi_finalize (GObject *object)
+gdk_device_manager_xi_dispose (GObject *object)
 {
   GdkDeviceManagerXIPrivate *priv;
 
@@ -302,12 +302,17 @@ gdk_device_manager_xi_finalize (GObject *object)
 
   g_list_foreach (priv->devices, (GFunc) g_object_unref, NULL);
   g_list_free (priv->devices);
+  priv->devices = NULL;
 
-  g_hash_table_destroy (priv->id_table);
+  if (priv->id_table != NULL)
+    {
+      g_hash_table_destroy (priv->id_table);
+      priv->id_table = NULL;
+    }
 
   gdk_window_remove_filter (NULL, window_input_info_filter, object);
 
-  G_OBJECT_CLASS (gdk_device_manager_xi_parent_class)->finalize (object);
+  G_OBJECT_CLASS (gdk_device_manager_xi_parent_class)->dispose (object);
 }
 
 static void

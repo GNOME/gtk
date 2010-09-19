@@ -278,7 +278,7 @@ gdk_display_dispose (GObject *object)
 
   _gdk_displays = g_slist_remove (_gdk_displays, object);
 
-  if (gdk_display_get_default() == display)
+  if (gdk_display_get_default () == display)
     {
       if (_gdk_displays)
         gdk_display_manager_set_default_display (gdk_display_manager_get(),
@@ -289,7 +289,13 @@ gdk_display_dispose (GObject *object)
     }
 
   if (device_manager)
-    g_signal_handlers_disconnect_by_func (device_manager, device_removed_cb, object);
+    {
+      /* this is to make it drop devices which may require using the X
+       * display and therefore can't be cleaned up in finalize.
+       * It will also disconnect device_removed_cb
+       */
+      g_object_run_dispose (G_OBJECT (display->device_manager));
+    }
 
   G_OBJECT_CLASS (gdk_display_parent_class)->dispose (object);
 }

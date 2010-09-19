@@ -53,6 +53,8 @@ _gdk_device_manager_new (GdkDisplay *display)
             {
               GdkDeviceManagerXI2 *device_manager_xi2;
 
+              GDK_NOTE (INPUT, g_print ("Creating XI2 device manager\n"));
+
               device_manager_xi2 = g_object_new (GDK_TYPE_DEVICE_MANAGER_XI2,
                                                  "display", display,
                                                  NULL);
@@ -62,13 +64,19 @@ _gdk_device_manager_new (GdkDisplay *display)
             }
           else
 #endif /* XINPUT_2 */
-            return g_object_new (GDK_TYPE_DEVICE_MANAGER_XI,
-                                 "display", display,
-                                 "event-base", firstevent,
-                                 NULL);
+            {
+              GDK_NOTE (INPUT, g_print ("Creating XI device manager\n"));
+
+              return g_object_new (GDK_TYPE_DEVICE_MANAGER_XI,
+                                   "display", display,
+                                   "event-base", firstevent,
+                                   NULL);
+            }
         }
 #endif /* XINPUT_2 || XINPUT_XFREE */
     }
+
+  GDK_NOTE (INPUT, g_print ("Creating core device manager\n"));
 
   return g_object_new (GDK_TYPE_DEVICE_MANAGER_CORE,
                        "display", display,

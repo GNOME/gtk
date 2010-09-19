@@ -766,7 +766,7 @@ _gdk_device_set_associated_device (GdkDevice *device,
   GdkDevicePrivate *priv;
 
   g_return_if_fail (GDK_IS_DEVICE (device));
-  g_return_if_fail (GDK_IS_DEVICE (associated));
+  g_return_if_fail (associated == NULL || GDK_IS_DEVICE (associated));
 
   priv = device->priv;
 

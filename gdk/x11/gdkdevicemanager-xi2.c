@@ -33,7 +33,7 @@
 
 
 static void    gdk_device_manager_xi2_constructed (GObject *object);
-static void    gdk_device_manager_xi2_finalize    (GObject *object);
+static void    gdk_device_manager_xi2_dispose     (GObject *object);
 
 static GList * gdk_device_manager_xi2_list_devices (GdkDeviceManager *device_manager,
                                                     GdkDeviceType     type);
@@ -63,7 +63,7 @@ gdk_device_manager_xi2_class_init (GdkDeviceManagerXI2Class *klass)
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
   object_class->constructed = gdk_device_manager_xi2_constructed;
-  object_class->finalize = gdk_device_manager_xi2_finalize;
+  object_class->dispose = gdk_device_manager_xi2_dispose;
 
   device_manager_class->list_devices = gdk_device_manager_xi2_list_devices;
   device_manager_class->get_client_pointer = gdk_device_manager_xi2_get_client_pointer;
@@ -258,7 +258,7 @@ add_device (GdkDeviceManagerXI2 *device_manager,
 
   g_hash_table_replace (device_manager->id_table,
                         GINT_TO_POINTER (dev->deviceid),
-                        device);
+                        g_object_ref (device));
 
   if (dev->use == XIMasterPointer || dev->use == XIMasterKeyboard)
     device_manager->master_devices = g_list_append (device_manager->master_devices, device);
@@ -373,7 +373,7 @@ gdk_device_manager_xi2_constructed (GObject *object)
 }
 
 static void
-gdk_device_manager_xi2_finalize (GObject *object)
+gdk_device_manager_xi2_dispose (GObject *object)
 {
   GdkDeviceManagerXI2 *device_manager_xi2;
 
@@ -381,16 +381,23 @@ gdk_device_manager_xi2_finalize (GObject *object)
 
   g_list_foreach (device_manager_xi2->master_devices, (GFunc) g_object_unref, NULL);
   g_list_free (device_manager_xi2->master_devices);
+  device_manager_xi2->master_devices = NULL;
 
   g_list_foreach (device_manager_xi2->slave_devices, (GFunc) g_object_unref, NULL);
   g_list_free (device_manager_xi2->slave_devices);
+  device_manager_xi2->slave_devices = NULL;
 
   g_list_foreach (device_manager_xi2->floating_devices, (GFunc) g_object_unref, NULL);
   g_list_free (device_manager_xi2->floating_devices);
+  device_manager_xi2->floating_devices = NULL;
 
-  g_hash_table_destroy (device_manager_xi2->id_table);
+  if (device_manager_xi2->id_table)
+    {
+      g_hash_table_destroy (device_manager_xi2->id_table);
+      device_manager_xi2->id_table = NULL;
+    }
 
-  G_OBJECT_CLASS (gdk_device_manager_xi2_parent_class)->finalize (object);
+  G_OBJECT_CLASS (gdk_device_manager_xi2_parent_class)->dispose (object);
 }
 
 static GList *

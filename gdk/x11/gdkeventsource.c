@@ -312,6 +312,11 @@ gdk_event_source_dispatch (GSource     *source,
 static void
 gdk_event_source_finalize (GSource *source)
 {
+  GdkEventSource *event_source = (GdkEventSource *)source;
+
+  g_list_free (event_source->translators);
+  event_source->translators = NULL;
+
   event_sources = g_list_remove (event_sources, source);
 }
 
