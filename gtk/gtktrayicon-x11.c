@@ -695,7 +695,7 @@ gtk_tray_icon_send_manager_message (GtkTrayIcon *icon,
   XSendEvent (display,
 	      icon->priv->manager_window, False, NoEventMask, (XEvent *)&ev);
   gdk_display_sync (gtk_widget_get_display (widget));
-  gdk_error_trap_pop ();
+  gdk_error_trap_pop_ignored ();
 }
 
 static void
@@ -952,7 +952,7 @@ _gtk_tray_icon_send_message (GtkTrayIcon *icon,
 		  StructureNotifyMask, (XEvent *)&ev);
     }
   gdk_display_sync (gtk_widget_get_display (GTK_WIDGET (icon)));
-  gdk_error_trap_pop ();
+  gdk_error_trap_pop_ignored ();
 
   return stamp;
 }

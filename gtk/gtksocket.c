@@ -543,7 +543,7 @@ gtk_socket_size_allocate (GtkWidget     *widget,
  	    }
 	  
 	  gdk_display_sync (gtk_widget_get_display (widget));
-	  gdk_error_trap_pop ();
+	  gdk_error_trap_pop_ignored ();
 	}
     }
 }
@@ -863,7 +863,7 @@ _gtk_socket_add_window (GtkSocket       *socket,
 	{
 	  g_warning (G_STRLOC ": Can't add non-GtkPlug to GtkSocket");
 	  socket->plug_window = NULL;
-	  gdk_error_trap_pop ();
+	  gdk_error_trap_pop_ignored ();
 	  
 	  return;
 	}
@@ -882,7 +882,7 @@ _gtk_socket_add_window (GtkSocket       *socket,
 	  socket->plug_window = gdk_window_foreign_new_for_display (display, xid);
 	  if (!socket->plug_window) /* was deleted before we could get it */
 	    {
-	      gdk_error_trap_pop ();
+	      gdk_error_trap_pop_ignored ();
 	      return;
 	    }
 	}
@@ -919,7 +919,7 @@ _gtk_socket_add_window (GtkSocket       *socket,
 				 protocol, TRUE);
 
       gdk_display_sync (display);
-      gdk_error_trap_pop ();
+      gdk_error_trap_pop_ignored ();
 
       gdk_window_add_filter (socket->plug_window,
 			     _gtk_socket_windowing_filter_func,

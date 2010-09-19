@@ -2298,10 +2298,10 @@ _gtk_selection_request (GtkWidget *widget,
 						 event->time);
 	  g_free (mult_atoms);
 	  g_slice_free (GtkIncrInfo, info);
-          gdk_error_trap_pop ();
+          gdk_error_trap_pop_ignored ();
 	  return TRUE;
 	}
-      gdk_error_trap_pop ();
+      gdk_error_trap_pop_ignored ();
 
       /* This is annoying; the ICCCM doesn't specify the property type
        * used for the property contents, so the autoconversion for

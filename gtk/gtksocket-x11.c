@@ -120,7 +120,7 @@ _gtk_socket_windowing_size_request (GtkSocket *socket)
     }
   socket->have_size = TRUE;
   
-  gdk_error_trap_pop ();
+  gdk_error_trap_pop_ignored ();
 }
 
 void
@@ -152,7 +152,7 @@ _gtk_socket_windowing_send_key_event (GtkSocket *socket,
 	      (mask_key_presses ? KeyPressMask : NoEventMask),
 	      (XEvent *)&xkey);
   gdk_display_sync (gdk_screen_get_display (screen));
-  gdk_error_trap_pop ();
+  gdk_error_trap_pop_ignored ();
 }
 
 void
@@ -229,7 +229,7 @@ _gtk_socket_windowing_send_configure_event (GtkSocket *socket)
    */
   gdk_error_trap_push ();
   gdk_window_get_origin (socket->plug_window, &x, &y);
-  gdk_error_trap_pop ();
+  gdk_error_trap_pop_ignored ();
 
   gtk_widget_get_allocation (GTK_WIDGET(socket), &allocation);
   xconfigure.x = x;
@@ -246,7 +246,7 @@ _gtk_socket_windowing_send_configure_event (GtkSocket *socket)
 	      GDK_WINDOW_XWINDOW (socket->plug_window),
 	      False, NoEventMask, (XEvent *)&xconfigure);
   gdk_display_sync (gtk_widget_get_display (GTK_WIDGET (socket)));
-  gdk_error_trap_pop ();
+  gdk_error_trap_pop_ignored ();
 }
 
 void
@@ -306,14 +306,14 @@ xembed_get_info (GdkWindow     *window,
   unsigned long *data_long;
   int status;
   
-  gdk_error_trap_push();
+  gdk_error_trap_push ();
   status = XGetWindowProperty (GDK_DISPLAY_XDISPLAY (display),
 			       GDK_WINDOW_XWINDOW (window),
 			       xembed_info_atom,
 			       0, 2, False,
 			       xembed_info_atom, &type, &format,
 			       &nitems, &bytes_after, &data);
-  gdk_error_trap_pop();
+  gdk_error_trap_pop_ignored ();
 
   if (status != Success)
     return FALSE;		/* Window vanished? */
@@ -576,7 +576,7 @@ _gtk_socket_windowing_filter_func (GdkXEvent *gdk_xevent,
 					 protocol, TRUE);
 
 	      gdk_display_sync (display);
-	      gdk_error_trap_pop ();
+	      gdk_error_trap_pop_ignored ();
 	      return_val = GDK_FILTER_REMOVE;
 	    }
 	  else if (xevent->xproperty.atom == gdk_x11_get_xatom_by_name_for_display (display, "_XEMBED_INFO"))
@@ -597,7 +597,7 @@ _gtk_socket_windowing_filter_func (GdkXEvent *gdk_xevent,
 			  gdk_error_trap_push ();
 			  gdk_window_show (socket->plug_window);
 			  gdk_flush ();
-			  gdk_error_trap_pop ();
+			  gdk_error_trap_pop_ignored ();
 			  
 			  _gtk_socket_unmap_notify (socket);
 			}

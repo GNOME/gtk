@@ -167,7 +167,7 @@ _gtk_xembed_send_message (GdkWindow        *recipient,
 	      GDK_WINDOW_XWINDOW (recipient),
 	      False, NoEventMask, (XEvent *)&xclient);
   gdk_display_sync (display);
-  gdk_error_trap_pop ();
+  gdk_error_trap_pop_ignored ();
 }
 
 /**
