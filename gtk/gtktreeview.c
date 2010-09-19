@@ -15129,7 +15129,7 @@ gtk_tree_view_get_row_separator_func (GtkTreeView *tree_view)
 /**
  * gtk_tree_view_set_row_separator_func:
  * @tree_view: a #GtkTreeView
- * @func: a #GtkTreeViewRowSeparatorFunc
+ * @func: (allow-none): a #GtkTreeViewRowSeparatorFunc
  * @data: (allow-none): user data to pass to @func, or %NULL
  * @destroy: (allow-none): destroy notifier for @data, or %NULL
  * 
