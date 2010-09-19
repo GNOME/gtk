@@ -346,15 +346,15 @@ gtk_dialog_map (GtkWidget *widget)
           g_signal_emit_by_name (window, "move_focus", GTK_DIR_TAB_FORWARD);
 
           focus = gtk_window_get_focus (window);
+          if (GTK_IS_LABEL (focus) &&
+              !gtk_label_get_current_uri (GTK_LABEL (focus)))
+            gtk_label_select_region (GTK_LABEL (focus), 0, 0);
+
           if (first_focus == NULL)
             first_focus = focus;
           else if (first_focus == focus)
-            {
-              if (GTK_IS_LABEL (focus) &&
-                  !gtk_label_get_current_uri (GTK_LABEL (focus)))
-                gtk_label_select_region (GTK_LABEL (focus), 0, 0);
-              break;
-            }
+            break;
+
           if (!GTK_IS_LABEL (focus))
             break;
         }
