@@ -41,6 +41,10 @@
  * area. The values range from 0 (top or left) to 1 (bottom or right).
  * Of course, if the scale settings are both set to 1, the alignment settings
  * have no effect.
+ *
+ * Note that the desired effect can in most cases be achieved by using the
+ * #GtkWidget:halign, #GtkWidget:valign and #GtkWidget:margin properties
+ * on the child widget.
  */
 
 #include "config.h"
