@@ -589,7 +589,9 @@ gtk_cell_renderer_get_alignment
 gtk_cell_renderer_get_fixed_size
 gtk_cell_renderer_get_padding
 gtk_cell_renderer_get_sensitive
+#ifndef GTK_DISABLE_DEPRECATED
 gtk_cell_renderer_get_size
+#endif
 gtk_cell_renderer_get_type G_GNUC_CONST
 gtk_cell_renderer_get_visible
 gtk_cell_renderer_render

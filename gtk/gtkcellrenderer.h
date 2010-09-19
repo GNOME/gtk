@@ -111,6 +111,7 @@ struct _GtkCellRendererClass
 
 GType            gtk_cell_renderer_get_type       (void) G_GNUC_CONST;
 
+#ifndef GTK_DISABLE_DEPRECATED
 void             gtk_cell_renderer_get_size       (GtkCellRenderer      *cell,
 						   GtkWidget            *widget,
 						   const GdkRectangle   *cell_area,
@@ -118,6 +119,7 @@ void             gtk_cell_renderer_get_size       (GtkCellRenderer      *cell,
 						   gint                 *y_offset,
 						   gint                 *width,
 						   gint                 *height);
+#endif
 void             gtk_cell_renderer_render         (GtkCellRenderer      *cell,
 						   GdkWindow            *window,
 						   GtkWidget            *widget,
