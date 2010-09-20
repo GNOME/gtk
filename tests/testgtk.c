@@ -8697,7 +8697,9 @@ find_widget (GtkWidget *widget, FindWidgetData *data)
       while (window != gtk_widget_get_window (gtk_widget_get_parent (widget)))
 	{
 	  gint tx, ty, twidth, theight;
-	  gdk_drawable_get_size (window, &twidth, &theight);
+	  
+          twidth = gdk_window_get_width (window);
+          theight = gdk_window_get_height (window);
 
 	  if (new_allocation.x < 0)
 	    {
