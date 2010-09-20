@@ -3075,15 +3075,10 @@ gdk_window_end_paint (GdkWindow *window)
        composited->parent;
        composited = composited->parent)
     {
-      int width, height;
-
-      gdk_drawable_get_size (GDK_DRAWABLE (composited->parent),
-			     &width, &height);
-
       clip_box.x += composited->x;
       clip_box.y += composited->y;
-      clip_box.width = MIN (clip_box.width, width - clip_box.x);
-      clip_box.height = MIN (clip_box.height, height - clip_box.y);
+      clip_box.width = MIN (clip_box.width, composited->parent->width - clip_box.x);
+      clip_box.height = MIN (clip_box.height, composited->parent->height - clip_box.y);
 
       if (composited->composited)
 	{
@@ -4318,9 +4313,8 @@ gdk_window_invalidate_rect_full (GdkWindow          *window,
     {
       window_rect.x = 0;
       window_rect.y = 0;
-      gdk_drawable_get_size (GDK_DRAWABLE (window),
-			     &window_rect.width,
-			     &window_rect.height);
+      window_rect.width = private->width;
+      window_rect.height = private->height;
       rect = &window_rect;
     }
 
@@ -6880,11 +6874,11 @@ gdk_window_set_device_cursor (GdkWindow *window,
  *
  * <note>
  * If @window is not a toplevel, it is <emphasis>much</emphasis> better
- * to call gdk_window_get_position() and gdk_drawable_get_size() instead,
- * because it avoids the roundtrip to the X server and because
- * gdk_drawable_get_size() supports the full 32-bit coordinate space,
- * whereas gdk_window_get_geometry() is restricted to the 16-bit
- * coordinates of X11.
+ * to call gdk_window_get_position(), gdk_window_get_width() and
+ * gdk_window_get_height() instead, because it avoids the roundtrip to
+ * the X server and because these functions support the full 32-bit
+ * coordinate space, whereas gdk_window_get_geometry() is restricted to
+ * the 16-bit coordinates of X11.
  *</note>
  **/
 void

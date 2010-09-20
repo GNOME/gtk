@@ -1255,7 +1255,8 @@ _gdk_device_translate_window_coord (GdkDevice *device,
     }
 
   window_private = (GdkWindowObject *) window;
-  gdk_drawable_get_size (window, &window_width, &window_height);
+  window_width = gdk_window_get_width (window);
+  window_height = gdk_window_get_height (window);
 
   x_resolution = axis_info_x->resolution;
   y_resolution = axis_info_y->resolution;
