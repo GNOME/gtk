@@ -696,7 +696,8 @@ gtk_drag_find_widget (GtkWidget       *widget,
 	{
 	  GdkRectangle window_rect = { 0, 0, 0, 0 };
 	  
-	  gdk_drawable_get_size (window, &window_rect.width, &window_rect.height);
+          window_rect.width = gdk_window_get_width (window);
+          window_rect.height = gdk_window_get_height (window);
 
 	  gdk_rectangle_intersect (&new_allocation, &window_rect, &new_allocation);
 
