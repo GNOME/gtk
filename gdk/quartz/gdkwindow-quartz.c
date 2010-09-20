@@ -1246,9 +1246,8 @@ move_resize_window_internal (GdkWindow *window,
       old_visible.x = -private->x;
       old_visible.y = -private->y;
 
-      gdk_drawable_get_size (GDK_DRAWABLE (private->parent),
-                             &old_visible.width,
-                             &old_visible.height);
+      old_visible.width = private->width;
+      old_visible.height = private->height;
     }
 
   if (x != -1)
