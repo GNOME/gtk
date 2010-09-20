@@ -237,15 +237,16 @@ static void
 save_window (GString *s,
 	     GdkWindow *window)
 {
-  gint x, y, w, h;
+  gint x, y;
   GdkColor *color;
 
   gdk_window_get_position (window, &x, &y);
-  gdk_drawable_get_size (GDK_DRAWABLE (window), &w, &h);
   color = g_object_get_data (G_OBJECT (window), "color");
   
   g_string_append_printf (s, "%d,%d %dx%d (%d,%d,%d) %d %d\n",
-			  x, y, w, h,
+			  x, y,
+                          gdk_window_get_width (window),
+                          gdk_window_get_height (window),
 			  color->red, color->green, color->blue,
 			  gdk_window_has_native (window),
 			  g_list_length (gdk_window_peek_children (window)));
@@ -438,7 +439,8 @@ manual_clicked (GtkWidget *button,
     return;
 
   gdk_window_get_position (selected->data, &x, &y);
-  gdk_drawable_get_size (selected->data, &w, &h);
+  w = gdk_window_get_width (selected->data);
+  h = gdk_window_get_height (selected->data);
 
   dialog = gtk_dialog_new_with_buttons ("Select new position and size",
 					GTK_WINDOW (main_window),
@@ -642,10 +644,8 @@ smaller_window_clicked (GtkWidget *button,
     {
       window = l->data;
       
-      gdk_drawable_get_size (GDK_DRAWABLE (window), &w, &h);
-      
-      w -= 10;
-      h -= 10;
+      w = gdk_window_get_width (window) - 10;
+      h = gdk_window_get_height (window) - 10;
       if (w < 1)
 	w = 1;
       if (h < 1)
@@ -671,10 +671,8 @@ larger_window_clicked (GtkWidget *button,
     {
       window = l->data;
       
-      gdk_drawable_get_size (GDK_DRAWABLE (window), &w, &h);
-      
-      w += 10;
-      h += 10;
+      w = gdk_window_get_width (window) + 10;
+      h = gdk_window_get_height (window) + 10;
       
       gdk_window_resize (window, w, h);
     }
