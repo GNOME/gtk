@@ -109,8 +109,9 @@ gdk_device_manager_xi_get_type
 
 #if IN_HEADER(__GDK_H__)
 #if IN_FILE(__GDK_MAIN_X11_C__)
-gdk_error_trap_pop
 gdk_error_trap_push
+gdk_error_trap_pop
+gdk_error_trap_pop_ignored
 gdk_get_display
 #endif
 #endif
@@ -1028,6 +1029,9 @@ gdk_x11_lookup_xdisplay
 gdk_x11_display_broadcast_startup_message
 gdk_x11_display_get_startup_notification_id
 gdk_x11_register_standard_event_type
+gdk_x11_display_error_trap_push
+gdk_x11_display_error_trap_pop
+gdk_x11_display_error_trap_pop_ignored
 #endif
 
 #if IN_FILE(__GDK_DRAWABLE_X11_C__)
