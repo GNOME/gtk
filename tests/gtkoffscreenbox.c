@@ -626,13 +626,12 @@ gtk_offscreen_box_draw (GtkWidget *widget,
     }
   else if (gtk_cairo_should_draw_window (cr, offscreen_box->offscreen_window1))
     {
-      gint w, h;
-
-      gdk_drawable_get_size (offscreen_box->offscreen_window1, &w, &h);
       gtk_paint_flat_box (gtk_widget_get_style (widget), cr,
                           GTK_STATE_NORMAL, GTK_SHADOW_NONE,
                           widget, "blah",
-                          0, 0, w, h);
+                          0, 0,
+                          gdk_window_get_width (offscreen_box->offscreen_window1),
+                          gdk_window_get_height (offscreen_box->offscreen_window1));
 
       if (offscreen_box->child1)
         gtk_container_propagate_draw (GTK_CONTAINER (widget),
@@ -641,13 +640,12 @@ gtk_offscreen_box_draw (GtkWidget *widget,
     }
   else if (gtk_cairo_should_draw_window (cr, offscreen_box->offscreen_window2))
     {
-      gint w, h;
-
-      gdk_drawable_get_size (offscreen_box->offscreen_window2, &w, &h);
       gtk_paint_flat_box (gtk_widget_get_style (widget), cr,
                           GTK_STATE_NORMAL, GTK_SHADOW_NONE,
                           widget, "blah",
-                          0, 0, w, h);
+                          0, 0,
+                          gdk_window_get_width (offscreen_box->offscreen_window2),
+                          gdk_window_get_height (offscreen_box->offscreen_window2));
 
       if (offscreen_box->child2)
         gtk_container_propagate_draw (GTK_CONTAINER (widget),
