@@ -1358,8 +1358,8 @@ gtk_menu_tearoff_bg_copy (GtkMenu *menu)
       menu->saved_scroll_offset = menu->scroll_offset;
 
       window = gtk_widget_get_window (menu->tearoff_window);
-
-      gdk_drawable_get_size (window, &width, &height);
+      width = gdk_window_get_width (window);
+      height = gdk_window_get_height (window);
 
       surface = gdk_window_create_similar_surface (window,
                                                    CAIRO_CONTENT_COLOR,
@@ -2145,7 +2145,7 @@ void
 gtk_menu_set_tearoff_state (GtkMenu  *menu,
 			    gboolean  torn_off)
 {
-  gint            width, height;
+  gint height;
   GtkMenuPrivate *priv;
   
   g_return_if_fail (GTK_IS_MENU (menu));
@@ -2192,8 +2192,7 @@ gtk_menu_set_tearoff_state (GtkMenu  *menu,
 	      menu->tearoff_hbox = gtk_hbox_new (FALSE, FALSE);
 	      gtk_container_add (GTK_CONTAINER (menu->tearoff_window), menu->tearoff_hbox);
 
-              gdk_drawable_get_size (gtk_widget_get_window (GTK_WIDGET (menu)),
-                                     &width, &height);
+              height = gdk_window_get_height (gtk_widget_get_window (GTK_WIDGET (menu)));
               menu->tearoff_adjustment =
 		GTK_ADJUSTMENT (gtk_adjustment_new (0,
 						    0,
@@ -2218,15 +2217,12 @@ gtk_menu_set_tearoff_state (GtkMenu  *menu,
 	  
 	  gtk_menu_reparent (menu, menu->tearoff_hbox, FALSE);
 
-          gdk_drawable_get_size (gtk_widget_get_window (GTK_WIDGET (menu)),
-                                 &width, NULL);
-
 	  /* Update menu->requisition
 	   */
           gtk_size_request_get_size (GTK_SIZE_REQUEST (menu),
                                      NULL, NULL);
 
-	  gtk_menu_set_tearoff_hints (menu, width);
+	  gtk_menu_set_tearoff_hints (menu, gdk_window_get_width (gtk_widget_get_window (GTK_WIDGET (menu))));
 	    
 	  gtk_widget_realize (menu->tearoff_window);
 	  gtk_menu_position (menu);
@@ -2852,8 +2848,8 @@ get_arrows_visible_area (GtkMenu      *menu,
   border_width = gtk_container_get_border_width (GTK_CONTAINER (widget));
   border->x = border_width + style->xthickness + horizontal_padding;
   border->y = border_width + style->ythickness + vertical_padding;
-  gdk_drawable_get_size (gtk_widget_get_window (widget),
-                         &border->width, &border->height);
+  border->width = gdk_window_get_width (gtk_widget_get_window (widget));
+  border->height = gdk_window_get_height (gtk_widget_get_window (widget));
 
   switch (arrow_placement)
     {
@@ -3546,7 +3542,8 @@ definitely_within_item (GtkWidget *widget,
   GdkWindow *window = GTK_MENU_ITEM (widget)->event_window;
   int w, h;
 
-  gdk_drawable_get_size (window, &w, &h);
+  w = gdk_window_get_width (window);
+  h = gdk_window_get_height (window);
   
   return
     check_threshold (widget, 0, 0, x, y) &&
@@ -3632,13 +3629,10 @@ gtk_menu_motion_notify (GtkWidget      *widget,
       /* The menu is now sensitive to enter events on its items, but
        * was previously sensitive.  So we fake an enter event.
        */
-      gint width, height;
-      
       menu_shell->ignore_enter = FALSE; 
       
-      gdk_drawable_get_size (event->window, &width, &height);
-      if (event->x >= 0 && event->x < width &&
-	  event->y >= 0 && event->y < height)
+      if (event->x >= 0 && event->x < gdk_window_get_width (event->window) &&
+	  event->y >= 0 && event->y < gdk_window_get_height (event->window))
 	{
 	  GdkEvent *send_event = gdk_event_new (GDK_ENTER_NOTIFY);
 	  gboolean result;
@@ -3696,7 +3690,7 @@ gtk_menu_scroll_by (GtkMenu *menu,
   GtkBorder arrow_border;
   GtkWidget *widget;
   gint offset;
-  gint view_width, view_height;
+  gint view_height;
   gboolean double_arrows;
 
   widget = GTK_WIDGET (menu);
@@ -3720,8 +3714,7 @@ gtk_menu_scroll_by (GtkMenu *menu,
   if ((menu->scroll_offset >= 0) && (offset < 0))
     offset = 0;
 
-  gdk_drawable_get_size (gtk_widget_get_window (widget),
-                         &view_width, &view_height);
+  view_height = gdk_window_get_height (gtk_widget_get_window (widget));
 
   if (menu->scroll_offset == 0 &&
       view_height >= priv->requested_height)
@@ -3866,8 +3859,8 @@ get_arrows_sensitive_area (GtkMenu      *menu,
   gint scroll_arrow_height;
 
   window = gtk_widget_get_window (widget);
-
-  gdk_drawable_get_size (window, &width, &height);
+  width = gdk_window_get_width (window);
+  height = gdk_window_get_height (window);
 
   gtk_widget_style_get (widget,
                         "vertical-padding", &vertical_padding,
@@ -4441,13 +4434,12 @@ gtk_menu_set_submenu_navigation_region (GtkMenu          *menu,
 
   window = gtk_widget_get_window (menu_item->submenu);
   gdk_window_get_origin (window, &submenu_left, &submenu_top);
-  gdk_drawable_get_size (window, &width, &height);
 
-  submenu_right = submenu_left + width;
-  submenu_bottom = submenu_top + height;
+  submenu_right = submenu_left + gdk_window_get_width (window);
+  submenu_bottom = submenu_top + gdk_window_get_height (window);
 
-  gdk_drawable_get_size (gtk_widget_get_window (event_widget),
-                         &width, &height);
+  width = gdk_window_get_width (gtk_widget_get_window (event_widget));
+  height = gdk_window_get_height (gtk_widget_get_window (event_widget));
 
   if (event->x >= 0 && event->x < width)
     {
@@ -5033,8 +5025,8 @@ gtk_menu_scroll_item_visible (GtkMenuShell *menu_shell,
       gboolean double_arrows;
       
       y = menu->scroll_offset;
-      gdk_drawable_get_size (gtk_widget_get_window (widget),
-                             &width, &height);
+      width = gdk_window_get_width (gtk_widget_get_window (widget));
+      height = gdk_window_get_height (gtk_widget_get_window (widget));
 
       gtk_widget_style_get (widget,
 			    "vertical-padding", &vertical_padding,
