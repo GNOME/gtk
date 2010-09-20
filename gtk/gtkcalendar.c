@@ -2878,7 +2878,6 @@ calendar_paint_arrow (GtkCalendar *calendar,
   if (window)
     {
       GtkStyle *style;
-      gint width, height;
       gint state;
 
       style = gtk_widget_get_style (widget);
@@ -2887,17 +2886,20 @@ calendar_paint_arrow (GtkCalendar *calendar,
       gdk_cairo_set_source_color (cr, &style->bg[state]);
       cairo_paint (cr);
       
-      gdk_drawable_get_size (window, &width, &height);
       if (arrow == ARROW_MONTH_LEFT || arrow == ARROW_YEAR_LEFT)
         gtk_paint_arrow (style, cr, state,
 			 GTK_SHADOW_OUT, widget, "calendar",
 			 GTK_ARROW_LEFT, TRUE, 
-			 width/2 - 3, height/2 - 4, 8, 8);
+			 gdk_window_get_width (window) / 2 - 3,
+                         gdk_window_get_height (window) / 2 - 4,
+                         8, 8);
       else 
         gtk_paint_arrow (style, cr, state,
 			 GTK_SHADOW_OUT, widget, "calendar",
 			 GTK_ARROW_RIGHT, TRUE, 
-			 width/2 - 4, height/2 - 4, 8, 8);
+			 gdk_window_get_width (window) / 2 - 4,
+                         gdk_window_get_height (window) / 2 - 4,
+			 8, 8);
     }
 
   cairo_restore (cr);
