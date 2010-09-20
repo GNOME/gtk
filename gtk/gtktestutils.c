@@ -201,9 +201,9 @@ gtk_test_spin_button_click (GtkSpinButton  *spinner,
 
   if (panel)
     {
-      gint width, height, pos;
-      gdk_drawable_get_size (panel, &width, &height);
-      pos = upwards ? 0 : height - 1;
+      gint width, pos;
+      width = gdk_window_get_width (panel);
+      pos = upwards ? 0 : gdk_window_get_height (panel) - 1;
       b1res = gdk_test_simulate_button (panel, width - 1, pos, button, 0, GDK_BUTTON_PRESS);
       b2res = gdk_test_simulate_button (panel, width - 1, pos, button, 0, GDK_BUTTON_RELEASE);
     }
