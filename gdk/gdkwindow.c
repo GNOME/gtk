@@ -223,10 +223,6 @@ static void             gdk_window_drop_cairo_surface (GdkWindowObject *private)
 static void             gdk_window_set_cairo_clip    (GdkDrawable *drawable,
 						      cairo_t *cr);
 
-static void   gdk_window_real_get_size  (GdkDrawable     *drawable,
-					 gint            *width,
-					 gint            *height);
-
 static cairo_region_t*   gdk_window_get_clip_region        (GdkDrawable *drawable);
 static cairo_region_t*   gdk_window_get_visible_region     (GdkDrawable *drawable);
 
@@ -371,7 +367,6 @@ gdk_window_class_init (GdkWindowObjectClass *klass)
   object_class->set_property = gdk_window_set_property;
   object_class->get_property = gdk_window_get_property;
 
-  drawable_class->get_size = gdk_window_real_get_size;
   drawable_class->ref_cairo_surface = gdk_window_ref_cairo_surface;
   drawable_class->create_cairo_surface = gdk_window_create_cairo_surface;
   drawable_class->set_cairo_clip = gdk_window_set_cairo_clip;
@@ -3577,19 +3572,6 @@ gdk_window_clear_region_internal (GdkWindow *window,
     gdk_window_clear_backing_region (window, region);
   else
     gdk_window_clear_backing_region_direct (window, region);
-}
-
-static void
-gdk_window_real_get_size (GdkDrawable *drawable,
-			  gint *width,
-			  gint *height)
-{
-  GdkWindowObject *private = (GdkWindowObject *)drawable;
-
-  if (width)
-    *width = private->width;
-  if (height)
-    *height = private->height;
 }
 
 static void

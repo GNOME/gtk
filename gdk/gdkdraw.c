@@ -48,33 +48,6 @@ gdk_drawable_init (GdkDrawable *drawable)
 {
 }
 
-/* Manipulation of drawables
- */
-
-/**
- * gdk_drawable_get_size:
- * @drawable: a #GdkDrawable
- * @width: (out) (allow-none): location to store drawable's width, or %NULL
- * @height: (out) (allow-none): location to store drawable's height, or %NULL
- *
- * Fills *@width and *@height with the size of @drawable.
- * @width or @height can be %NULL if you only want the other one.
- *
- * On the X11 platform, if @drawable is a #GdkWindow, the returned
- * size is the size reported in the most-recently-processed configure
- * event, rather than the current size on the X server.
- * 
- **/
-void
-gdk_drawable_get_size (GdkDrawable *drawable,
-		       gint        *width,
-		       gint        *height)
-{
-  g_return_if_fail (GDK_IS_DRAWABLE (drawable));
-
-  GDK_DRAWABLE_GET_CLASS (drawable)->get_size (drawable, width, height);  
-}
-
 /**
  * gdk_drawable_get_clip_region:
  * @drawable: a #GdkDrawable

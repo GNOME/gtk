@@ -56,10 +56,6 @@ struct _GdkDrawableClass
 {
   GObjectClass parent_class;
   
-  void (*get_size)       (GdkDrawable  *drawable,
-                          gint         *width,
-                          gint         *height);
-
   cairo_region_t*   (*get_clip_region)    (GdkDrawable  *drawable);
   cairo_region_t*   (*get_visible_region) (GdkDrawable  *drawable);
 
@@ -84,12 +80,6 @@ struct _GdkDrawableClass
 };
 
 GType           gdk_drawable_get_type     (void) G_GNUC_CONST;
-
-/* Manipulation of drawables
- */
-void            gdk_drawable_get_size     (GdkDrawable	  *drawable,
-					   gint	          *width,
-					   gint  	  *height);
 
 cairo_region_t *gdk_drawable_get_clip_region    (GdkDrawable *drawable);
 cairo_region_t *gdk_drawable_get_visible_region (GdkDrawable *drawable);

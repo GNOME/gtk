@@ -521,7 +521,6 @@ gdk_drag_get_protocol
 #if IN_HEADER(__GDK_DRAWABLE_H__)
 #if IN_FILE(__GDK_DRAW_C__)
 gdk_drawable_get_clip_region
-gdk_drawable_get_size
 gdk_drawable_get_type G_GNUC_CONST
 gdk_drawable_get_visible_region
 #endif
