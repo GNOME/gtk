@@ -431,6 +431,8 @@ gdk_window_get_cursor
 gdk_window_get_user_data
 gdk_window_get_geometry
 gdk_window_set_geometry_hints
+gdk_window_get_width
+gdk_window_get_height
 gdk_window_set_icon_list
 gdk_window_set_modal_hint
 gdk_window_get_modal_hint

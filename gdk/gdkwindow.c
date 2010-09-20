@@ -7007,6 +7007,54 @@ gdk_window_get_geometry (GdkWindow *window,
 }
 
 /**
+ * gdk_window_get_width:
+ * @window: a #GdkWindow
+ *
+ * Returns the width of the given @window.
+ *
+ * On the X11 platform the returned size is the size reported in the
+ * most-recently-processed configure event, rather than the current
+ * size on the X server.
+ * 
+ * Returns: The width of @window
+ */
+int
+gdk_window_get_width (GdkWindow *window)
+{
+  GdkWindowObject *private;
+
+  g_return_val_if_fail (GDK_IS_WINDOW (window), 0);
+
+  private = (GdkWindowObject *) window;
+
+  return private->width;
+}
+
+/**
+ * gdk_window_get_height:
+ * @window: a #GdkWindow
+ *
+ * Returns the height of the given @window.
+ *
+ * On the X11 platform the returned size is the size reported in the
+ * most-recently-processed configure event, rather than the current
+ * size on the X server.
+ * 
+ * Returns: The height of @window
+ */
+int
+gdk_window_get_height (GdkWindow *window)
+{
+  GdkWindowObject *private;
+
+  g_return_val_if_fail (GDK_IS_WINDOW (window), 0);
+
+  private = (GdkWindowObject *) window;
+
+  return private->height;
+}
+
+/**
  * gdk_window_get_origin:
  * @window: a #GdkWindow
  * @x: return location for X coordinate

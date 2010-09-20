@@ -694,6 +694,8 @@ void	      gdk_window_get_geometry	 (GdkWindow	  *window,
 					  gint		  *width,
 					  gint		  *height,
 					  gint		  *depth);
+int           gdk_window_get_width       (GdkWindow       *window);
+int           gdk_window_get_height      (GdkWindow       *window);
 void	      gdk_window_get_position	 (GdkWindow	  *window,
 					  gint		  *x,
 					  gint		  *y);

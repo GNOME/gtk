@@ -560,6 +560,7 @@ gdk_window_get_cursor
 gdk_window_get_display
 gdk_window_get_focus_on_map
 gdk_window_get_geometry
+gdk_window_get_height
 gdk_window_get_modal_hint
 gdk_window_get_origin
 gdk_window_get_root_coords
@@ -567,6 +568,7 @@ gdk_window_set_support_multidevice
 gdk_window_get_support_multidevice
 gdk_window_get_screen
 gdk_window_get_visual
+gdk_window_get_width
 gdk_window_has_native
 gdk_window_set_background
 gdk_window_set_background_pattern
