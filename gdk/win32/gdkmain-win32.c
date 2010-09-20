@@ -1045,17 +1045,14 @@ _gdk_win32_cairo_region_to_string (const cairo_region_t *rgn)
 gchar *
 _gdk_win32_drawable_description (GdkDrawable *d)
 {
-  gint width, height, depth;
-
   g_return_val_if_fail (GDK_IS_DRAWABLE (d), NULL);
-
-  gdk_drawable_get_size (d, &width, &height);
-  depth = gdk_visual_get_depth (gdk_window_get_visual (GDK_WINDOW (d)));
 
   return static_printf ("%s:%p:%dx%dx%d",
 			G_OBJECT_TYPE_NAME (d),
 			GDK_DRAWABLE_HANDLE (d),
-			width, height, depth);
+			gdk_window_get_width (GDK_WINDOW (d)),
+                        gdk_window_get_height (GDK_WINDOW (d)),
+                        gdk_visual_get_depth (gdk_window_get_visual (GDK_WINDOW (d))));
 }
 
 #endif /* G_ENABLE_DEBUG */
