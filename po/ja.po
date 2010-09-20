@@ -16,8 +16,8 @@ msgstr ""
 "Project-Id-Version: gtk+ master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk%"
 "2b&component=general\n"
-"POT-Creation-Date: 2010-09-13 01:48+0000\n"
-"PO-Revision-Date: 2010-09-13 21:10+0900\n"
+"POT-Creation-Date: 2010-09-20 07:21+0000\n"
+"PO-Revision-Date: 2010-09-12 19:02+0900\n"
 "Last-Translator: Takayuki KUSANO <AE5T-KSN@asahi-net.or.jp>\n"
 "Language-Team: Japanese <gnome-translation@gnome.gr.jp>\n"
 "MIME-Version: 1.0\n"
@@ -327,7 +327,7 @@ msgid_plural "Opening %d Items"
 msgstr[0] "%d 個のアイテムを開いています"
 
 #. Description of --sync in --help output
-#: ../gdk/x11/gdkmain-x11.c:93
+#: ../gdk/x11/gdkmain-x11.c:96
 msgid "Make X calls synchronous"
 msgstr "Xの呼び出しと同期する"
 
@@ -337,7 +337,7 @@ msgstr "Xの呼び出しと同期する"
 #: ../gtk/gtkaboutdialog.c:124
 #, c-format
 msgid "This program comes with ABSOLUTELY NO WARRANTY; for details, visit %s"
-msgstr "このプログラムは完全に無保証です。詳しくは %s をご覧ください"
+msgstr ""
 
 #: ../gtk/gtkaboutdialog.c:264
 msgid "Could not show link"
@@ -421,7 +421,7 @@ msgstr "Alt"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: ../gtk/gtkaccellabel.c:782
+#: ../gtk/gtkaccellabel.c:783
 msgctxt "keyboard label"
 msgid "Super"
 msgstr "Super"
@@ -431,7 +431,7 @@ msgstr "Super"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: ../gtk/gtkaccellabel.c:795
+#: ../gtk/gtkaccellabel.c:796
 msgctxt "keyboard label"
 msgid "Hyper"
 msgstr "Hyper"
@@ -441,17 +441,17 @@ msgstr "Hyper"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: ../gtk/gtkaccellabel.c:809
+#: ../gtk/gtkaccellabel.c:810
 msgctxt "keyboard label"
 msgid "Meta"
 msgstr "Meta"
 
-#: ../gtk/gtkaccellabel.c:825
+#: ../gtk/gtkaccellabel.c:826
 msgctxt "keyboard label"
 msgid "Space"
 msgstr "Space"
 
-#: ../gtk/gtkaccellabel.c:828
+#: ../gtk/gtkaccellabel.c:829
 msgctxt "keyboard label"
 msgid "Backslash"
 msgstr "\\"
@@ -558,7 +558,7 @@ msgstr "%Y"
 #. This label is displayed in a treeview cell displaying
 #. * a disabled accelerator key combination.
 #.
-#: ../gtk/gtkcellrendereraccel.c:268
+#: ../gtk/gtkcellrendereraccel.c:272
 msgctxt "Accelerator"
 msgid "Disabled"
 msgstr "無効"
@@ -567,7 +567,7 @@ msgstr "無効"
 #. * an accelerator key combination that is not valid according
 #. * to gtk_accelerator_valid().
 #.
-#: ../gtk/gtkcellrendereraccel.c:278
+#: ../gtk/gtkcellrendereraccel.c:282
 msgctxt "Accelerator"
 msgid "Invalid"
 msgstr "無効"
@@ -576,7 +576,7 @@ msgstr "無効"
 #. * an accelerator when the cell is clicked to change the
 #. * acelerator.
 #.
-#: ../gtk/gtkcellrendereraccel.c:414 ../gtk/gtkcellrendereraccel.c:671
+#: ../gtk/gtkcellrendereraccel.c:418 ../gtk/gtkcellrendereraccel.c:676
 msgid "New accelerator..."
 msgstr "新しいアクセラレータ..."
 
@@ -594,82 +594,83 @@ msgstr "色の選択"
 msgid "Received invalid color data\n"
 msgstr "受け取った無効な色のデータ\n"
 
-#: ../gtk/gtkcolorsel.c:363
+#: ../gtk/gtkcolorsel.c:366
 msgid ""
 "Select the color you want from the outer ring. Select the darkness or "
 "lightness of that color using the inner triangle."
 msgstr ""
-"外側の輪から希望する色を、内側の三角で色の暗さ・明るさをそれぞれ選択して下さ"
-"い"
+"外側の輪から希望する色を、内側の三角で色の暗さ・明るさをそれぞれ選択してくだ"
+"さい"
 
-#: ../gtk/gtkcolorsel.c:387
+#: ../gtk/gtkcolorsel.c:390
 msgid ""
 "Click the eyedropper, then click a color anywhere on your screen to select "
 "that color."
 msgstr ""
 "スポイトをクリックして、画面上の好きな場所をクリックして色を選択してください"
 
-#: ../gtk/gtkcolorsel.c:396
+#: ../gtk/gtkcolorsel.c:399
 msgid "_Hue:"
 msgstr "色相(_H):"
 
-#: ../gtk/gtkcolorsel.c:397
+#: ../gtk/gtkcolorsel.c:400
 msgid "Position on the color wheel."
 msgstr "色の輪における位置です"
 
-#: ../gtk/gtkcolorsel.c:399
+#: ../gtk/gtkcolorsel.c:402
 msgid "_Saturation:"
 msgstr "彩度(_S):"
 
-#: ../gtk/gtkcolorsel.c:400
+#: ../gtk/gtkcolorsel.c:403
+#, fuzzy
 msgid "Intensity of the color."
-msgstr "色の彩度(鮮やかさ)です。"
+msgstr "色の透明度です"
 
-#: ../gtk/gtkcolorsel.c:401
+#: ../gtk/gtkcolorsel.c:404
 msgid "_Value:"
 msgstr "明度(_V):"
 
-#: ../gtk/gtkcolorsel.c:402
+#: ../gtk/gtkcolorsel.c:405
 msgid "Brightness of the color."
-msgstr "色の明るさです。"
+msgstr "色の明るさです"
 
-#: ../gtk/gtkcolorsel.c:403
+#: ../gtk/gtkcolorsel.c:406
 msgid "_Red:"
 msgstr "赤(_R):"
 
-#: ../gtk/gtkcolorsel.c:404
+#: ../gtk/gtkcolorsel.c:407
 msgid "Amount of red light in the color."
 msgstr "選択した色の赤成分の量です"
 
-#: ../gtk/gtkcolorsel.c:405
+#: ../gtk/gtkcolorsel.c:408
 msgid "_Green:"
 msgstr "緑(_G):"
 
-#: ../gtk/gtkcolorsel.c:406
+#: ../gtk/gtkcolorsel.c:409
 msgid "Amount of green light in the color."
 msgstr "選択した色の緑成分の量です"
 
-#: ../gtk/gtkcolorsel.c:407
+#: ../gtk/gtkcolorsel.c:410
 msgid "_Blue:"
 msgstr "青(_B):"
 
-#: ../gtk/gtkcolorsel.c:408
+#: ../gtk/gtkcolorsel.c:411
 msgid "Amount of blue light in the color."
 msgstr "選択した色の青成分の量です"
 
-#: ../gtk/gtkcolorsel.c:411
+#: ../gtk/gtkcolorsel.c:414
 msgid "Op_acity:"
 msgstr "不透明度(_A):"
 
-#: ../gtk/gtkcolorsel.c:418 ../gtk/gtkcolorsel.c:428
+#: ../gtk/gtkcolorsel.c:421 ../gtk/gtkcolorsel.c:431
 msgid "Transparency of the color."
 msgstr "色の透明度です"
 
-#: ../gtk/gtkcolorsel.c:435
+#: ../gtk/gtkcolorsel.c:438
 msgid "Color _name:"
 msgstr "色の名称(_N):"
 
-#: ../gtk/gtkcolorsel.c:449
+#: ../gtk/gtkcolorsel.c:452
 msgid ""
 "You can enter an HTML-style hexadecimal color value, or simply a color name "
 "such as 'orange' in this entry."
@@ -677,15 +678,15 @@ msgstr ""
 "このエントリに HTML 形式で 16進数の値、または色の名前 (例: 'orange') を入力で"
 "きます"
 
-#: ../gtk/gtkcolorsel.c:479
+#: ../gtk/gtkcolorsel.c:482
 msgid "_Palette:"
 msgstr "パレット(_P):"
 
-#: ../gtk/gtkcolorsel.c:508
+#: ../gtk/gtkcolorsel.c:511
 msgid "Color Wheel"
 msgstr "色ホイール"
 
-#: ../gtk/gtkcolorsel.c:972
+#: ../gtk/gtkcolorsel.c:975
 msgid ""
 "The previously-selected color, for comparison to the color you're selecting "
 "now. You can drag this color to a palette entry, or select this color as "
@@ -695,7 +696,7 @@ msgstr ""
 "色をパレットのエントリにドラッグしたり、他の見本の横にドラッグして現在の色と"
 "して選択できます"
 
-#: ../gtk/gtkcolorsel.c:975
+#: ../gtk/gtkcolorsel.c:978
 msgid ""
 "The color you've chosen. You can drag this color to a palette entry to save "
 "it for use in the future."
@@ -703,21 +704,21 @@ msgstr ""
 "選択した色で、この色を将来使用する色として保存するためパレットのエントリにド"
 "ラッグできます"
 
-#: ../gtk/gtkcolorsel.c:980
+#: ../gtk/gtkcolorsel.c:983
 msgid ""
 "The previously-selected color, for comparison to the color you're selecting "
 "now."
 msgstr "前に選択した色です。今選択している色との比較です。"
 
-#: ../gtk/gtkcolorsel.c:983
+#: ../gtk/gtkcolorsel.c:986
 msgid "The color you've chosen."
 msgstr "選択した色です。"
 
-#: ../gtk/gtkcolorsel.c:1405
+#: ../gtk/gtkcolorsel.c:1409
 msgid "_Save color here"
 msgstr "ここに色を保存する(_S)"
 
-#: ../gtk/gtkcolorsel.c:1610
+#: ../gtk/gtkcolorsel.c:1614
 msgid ""
 "Click this palette entry to make it the current color. To change this entry, "
 "drag a color swatch here or right-click it and select \"Save color here.\""
@@ -794,23 +795,24 @@ msgstr "右側(_R):"
 msgid "Paper Margins"
 msgstr "用紙のマージン"
 
-#: ../gtk/gtkentry.c:8620 ../gtk/gtktextview.c:8261
+#: ../gtk/gtkentry.c:8614 ../gtk/gtktextview.c:8265
 msgid "Input _Methods"
 msgstr "入力メソッド(_M)"
 
-#: ../gtk/gtkentry.c:8634 ../gtk/gtktextview.c:8275
+#: ../gtk/gtkentry.c:8628 ../gtk/gtktextview.c:8279
 msgid "_Insert Unicode Control Character"
 msgstr "Unicode 制御文字の挿入(_I)"
 
-#: ../gtk/gtkentry.c:10033
+#: ../gtk/gtkentry.c:10027
 msgid "Caps Lock and Num Lock are on"
-msgstr "Caps Lock と Num Lock が ON です"
+msgstr ""
 
-#: ../gtk/gtkentry.c:10035
+#: ../gtk/gtkentry.c:10029
+#, fuzzy
 msgid "Num Lock is on"
-msgstr "Num Lock が ON です"
+msgstr "Caps Lock が ON です"
 
-#: ../gtk/gtkentry.c:10037
+#: ../gtk/gtkentry.c:10031
 msgid "Caps Lock is on"
 msgstr "Caps Lock が ON です"
 
@@ -821,7 +823,7 @@ msgstr "Caps Lock が ON です"
 msgid "Select A File"
 msgstr "ファイルの選択"
 
-#: ../gtk/gtkfilechooserbutton.c:62 ../gtk/gtkfilechooserdefault.c:1810
+#: ../gtk/gtkfilechooserbutton.c:62 ../gtk/gtkfilechooserdefault.c:1812
 msgid "Desktop"
 msgstr "デスクトップ"
 
@@ -833,27 +835,27 @@ msgstr "(なし)"
 msgid "Other..."
 msgstr "その他..."
 
-#: ../gtk/gtkfilechooserdefault.c:146
+#: ../gtk/gtkfilechooserdefault.c:148
 msgid "Type name of new folder"
 msgstr "新しいフォルダの種類"
 
-#: ../gtk/gtkfilechooserdefault.c:936
+#: ../gtk/gtkfilechooserdefault.c:938
 msgid "Could not retrieve information about the file"
 msgstr "ファイルに関する情報を取得できませんでした"
 
-#: ../gtk/gtkfilechooserdefault.c:947
+#: ../gtk/gtkfilechooserdefault.c:949
 msgid "Could not add a bookmark"
 msgstr "ブックマークを追加できませんでした"
 
-#: ../gtk/gtkfilechooserdefault.c:958
+#: ../gtk/gtkfilechooserdefault.c:960
 msgid "Could not remove bookmark"
 msgstr "ブックマークを削除できませんでした"
 
-#: ../gtk/gtkfilechooserdefault.c:969
+#: ../gtk/gtkfilechooserdefault.c:971
 msgid "The folder could not be created"
 msgstr "フォルダを生成できませんでした"
 
-#: ../gtk/gtkfilechooserdefault.c:982
+#: ../gtk/gtkfilechooserdefault.c:984
 msgid ""
 "The folder could not be created, as a file with the same name already "
 "exists.  Try using a different name for the folder, or rename the file first."
@@ -861,11 +863,11 @@ msgstr ""
 "同名のフォルダが既に存在しているので、そのフォルダを生成できませんでした。別"
 "の名前にするか、ファイル名を変更するなどして、もう一度実行してください。"
 
-#: ../gtk/gtkfilechooserdefault.c:993
+#: ../gtk/gtkfilechooserdefault.c:995
 msgid "Invalid file name"
 msgstr "無効なファイル名です"
 
-#: ../gtk/gtkfilechooserdefault.c:1003
+#: ../gtk/gtkfilechooserdefault.c:1005
 msgid "The folder contents could not be displayed"
 msgstr "フォルダの内容を表示できませんでした"
 
@@ -873,200 +875,200 @@ msgstr "フォルダの内容を表示できませんでした"
 #. * is a hostname. Nautilus and the panel contain the same string
 #. * to translate.
 #.
-#: ../gtk/gtkfilechooserdefault.c:1553
+#: ../gtk/gtkfilechooserdefault.c:1555
 #, c-format
 msgid "%1$s on %2$s"
 msgstr "%2$s:%1$s"
 
-#: ../gtk/gtkfilechooserdefault.c:1729
+#: ../gtk/gtkfilechooserdefault.c:1731
 msgid "Search"
 msgstr "検索"
 
-#: ../gtk/gtkfilechooserdefault.c:1753 ../gtk/gtkfilechooserdefault.c:9284
+#: ../gtk/gtkfilechooserdefault.c:1755 ../gtk/gtkfilechooserdefault.c:9289
 msgid "Recently Used"
 msgstr "最近開いたファイル"
 
-#: ../gtk/gtkfilechooserdefault.c:2407
+#: ../gtk/gtkfilechooserdefault.c:2409
 msgid "Select which types of files are shown"
 msgstr "表示するファイルの種類を選択してください"
 
-#: ../gtk/gtkfilechooserdefault.c:2766
+#: ../gtk/gtkfilechooserdefault.c:2768
 #, c-format
 msgid "Add the folder '%s' to the bookmarks"
 msgstr "'%s' というフォルダをブックマークへ追加します"
 
-#: ../gtk/gtkfilechooserdefault.c:2810
+#: ../gtk/gtkfilechooserdefault.c:2812
 #, c-format
 msgid "Add the current folder to the bookmarks"
 msgstr "このフォルダをブックマークへ追加します"
 
-#: ../gtk/gtkfilechooserdefault.c:2812
+#: ../gtk/gtkfilechooserdefault.c:2814
 #, c-format
 msgid "Add the selected folders to the bookmarks"
 msgstr "指定したフォルダをブックマークへ追加します"
 
-#: ../gtk/gtkfilechooserdefault.c:2850
+#: ../gtk/gtkfilechooserdefault.c:2852
 #, c-format
 msgid "Remove the bookmark '%s'"
 msgstr "'%s' というブックマークを削除します"
 
-#: ../gtk/gtkfilechooserdefault.c:2852
+#: ../gtk/gtkfilechooserdefault.c:2854
 #, c-format
 msgid "Bookmark '%s' cannot be removed"
 msgstr "ブックマーク '%s'を削除できません"
 
-#: ../gtk/gtkfilechooserdefault.c:2859 ../gtk/gtkfilechooserdefault.c:3723
+#: ../gtk/gtkfilechooserdefault.c:2861 ../gtk/gtkfilechooserdefault.c:3725
 msgid "Remove the selected bookmark"
 msgstr "指定したブックマークを削除します"
 
-#: ../gtk/gtkfilechooserdefault.c:3419
+#: ../gtk/gtkfilechooserdefault.c:3421
 msgid "Remove"
 msgstr "削除"
 
-#: ../gtk/gtkfilechooserdefault.c:3428
+#: ../gtk/gtkfilechooserdefault.c:3430
 msgid "Rename..."
 msgstr "ファイル名の変更..."
 
 #. Accessible object name for the file chooser's shortcuts pane
-#: ../gtk/gtkfilechooserdefault.c:3591
+#: ../gtk/gtkfilechooserdefault.c:3593
 msgid "Places"
 msgstr "場所"
 
 #. Column header for the file chooser's shortcuts pane
-#: ../gtk/gtkfilechooserdefault.c:3648
+#: ../gtk/gtkfilechooserdefault.c:3650
 msgid "_Places"
 msgstr "場所(_P)"
 
-#: ../gtk/gtkfilechooserdefault.c:3704
+#: ../gtk/gtkfilechooserdefault.c:3706
 msgid "_Add"
 msgstr "追加(_A)"
 
-#: ../gtk/gtkfilechooserdefault.c:3711
+#: ../gtk/gtkfilechooserdefault.c:3713
 msgid "Add the selected folder to the Bookmarks"
 msgstr "指定したフォルダをブックマークへ追加します"
 
-#: ../gtk/gtkfilechooserdefault.c:3716
+#: ../gtk/gtkfilechooserdefault.c:3718
 msgid "_Remove"
 msgstr "削除(_R)"
 
-#: ../gtk/gtkfilechooserdefault.c:3858
+#: ../gtk/gtkfilechooserdefault.c:3860
 msgid "Could not select file"
 msgstr "ファイルを選択できませんでした"
 
-#: ../gtk/gtkfilechooserdefault.c:4033
+#: ../gtk/gtkfilechooserdefault.c:4035
 msgid "_Add to Bookmarks"
 msgstr "ブックマークへ追加(_A)"
 
-#: ../gtk/gtkfilechooserdefault.c:4046
+#: ../gtk/gtkfilechooserdefault.c:4048
 msgid "Show _Hidden Files"
 msgstr "隠しファイルを表示する(_H)"
 
-#: ../gtk/gtkfilechooserdefault.c:4053
+#: ../gtk/gtkfilechooserdefault.c:4055
 msgid "Show _Size Column"
 msgstr "サイズを表示する(_S)"
 
-#: ../gtk/gtkfilechooserdefault.c:4278
+#: ../gtk/gtkfilechooserdefault.c:4281
 msgid "Files"
 msgstr "ファイル"
 
-#: ../gtk/gtkfilechooserdefault.c:4329
+#: ../gtk/gtkfilechooserdefault.c:4332
 msgid "Name"
 msgstr "名前"
 
-#: ../gtk/gtkfilechooserdefault.c:4352
+#: ../gtk/gtkfilechooserdefault.c:4355
 msgid "Size"
 msgstr "サイズ"
 
-#: ../gtk/gtkfilechooserdefault.c:4366
+#: ../gtk/gtkfilechooserdefault.c:4369
 msgid "Modified"
 msgstr "最終変更日"
 
 #. Label
-#: ../gtk/gtkfilechooserdefault.c:4621 ../gtk/gtkprinteroptionwidget.c:801
+#: ../gtk/gtkfilechooserdefault.c:4624 ../gtk/gtkprinteroptionwidget.c:801
 msgid "_Name:"
 msgstr "名前(_N):"
 
-#: ../gtk/gtkfilechooserdefault.c:4664
+#: ../gtk/gtkfilechooserdefault.c:4667
 msgid "_Browse for other folders"
 msgstr "他のフォルダ(_B)"
 
-#: ../gtk/gtkfilechooserdefault.c:4936
+#: ../gtk/gtkfilechooserdefault.c:4937
 msgid "Type a file name"
 msgstr "ファイル名を入力してください"
 
 #. Create Folder
-#: ../gtk/gtkfilechooserdefault.c:4977
+#: ../gtk/gtkfilechooserdefault.c:4980
 msgid "Create Fo_lder"
 msgstr "フォルダの作成(_L)"
 
-#: ../gtk/gtkfilechooserdefault.c:4987
+#: ../gtk/gtkfilechooserdefault.c:4990
 msgid "_Location:"
 msgstr "場所(_L):"
 
-#: ../gtk/gtkfilechooserdefault.c:5191
+#: ../gtk/gtkfilechooserdefault.c:5194
 msgid "Save in _folder:"
 msgstr "フォルダの中に保存(_F):"
 
-#: ../gtk/gtkfilechooserdefault.c:5193
+#: ../gtk/gtkfilechooserdefault.c:5196
 msgid "Create in _folder:"
 msgstr "フォルダの中に作成(_F):"
 
-#: ../gtk/gtkfilechooserdefault.c:6245
+#: ../gtk/gtkfilechooserdefault.c:6248
 #, c-format
 msgid "Could not read the contents of %s"
 msgstr "%s の内容を読み込めませんでしtqあ"
 
-#: ../gtk/gtkfilechooserdefault.c:6249
+#: ../gtk/gtkfilechooserdefault.c:6252
 msgid "Could not read the contents of the folder"
 msgstr "フォルダの内容を読み込めませんでした"
 
-#: ../gtk/gtkfilechooserdefault.c:6342 ../gtk/gtkfilechooserdefault.c:6410
-#: ../gtk/gtkfilechooserdefault.c:6555
+#: ../gtk/gtkfilechooserdefault.c:6345 ../gtk/gtkfilechooserdefault.c:6413
+#: ../gtk/gtkfilechooserdefault.c:6558
 msgid "Unknown"
 msgstr "不明"
 
-#: ../gtk/gtkfilechooserdefault.c:6357
+#: ../gtk/gtkfilechooserdefault.c:6360
 msgid "%H:%M"
 msgstr "%H:%M"
 
-#: ../gtk/gtkfilechooserdefault.c:6359
+#: ../gtk/gtkfilechooserdefault.c:6362
 msgid "Yesterday at %H:%M"
 msgstr "昨日の %H:%M"
 
-#: ../gtk/gtkfilechooserdefault.c:7025
+#: ../gtk/gtkfilechooserdefault.c:7028
 msgid "Cannot change to folder because it is not local"
 msgstr "ローカルではないので、フォルダを変更できません"
 
-#: ../gtk/gtkfilechooserdefault.c:7622 ../gtk/gtkfilechooserdefault.c:7643
+#: ../gtk/gtkfilechooserdefault.c:7625 ../gtk/gtkfilechooserdefault.c:7646
 #, c-format
 msgid "Shortcut %s already exists"
 msgstr "ショートカット %s は既にあります"
 
-#: ../gtk/gtkfilechooserdefault.c:7733
+#: ../gtk/gtkfilechooserdefault.c:7736
 #, c-format
 msgid "Shortcut %s does not exist"
 msgstr "ショートカット %s はありません"
 
-#: ../gtk/gtkfilechooserdefault.c:7991 ../gtk/gtkprintunixdialog.c:480
+#: ../gtk/gtkfilechooserdefault.c:7997 ../gtk/gtkprintunixdialog.c:480
 #, c-format
 msgid "A file named \"%s\" already exists.  Do you want to replace it?"
 msgstr "\"%s\" というファイルは既に存在します。上書きしてもよろしいですか?"
 
-#: ../gtk/gtkfilechooserdefault.c:7994 ../gtk/gtkprintunixdialog.c:484
+#: ../gtk/gtkfilechooserdefault.c:8000 ../gtk/gtkprintunixdialog.c:484
 #, c-format
 msgid ""
 "The file already exists in \"%s\".  Replacing it will overwrite its contents."
 msgstr "\"%s\" にファイルが既に存在しています。すべての内容を上書きします。"
 
-#: ../gtk/gtkfilechooserdefault.c:7999 ../gtk/gtkprintunixdialog.c:491
+#: ../gtk/gtkfilechooserdefault.c:8005 ../gtk/gtkprintunixdialog.c:491
 msgid "_Replace"
 msgstr "置き換える(_R)"
 
-#: ../gtk/gtkfilechooserdefault.c:8652
+#: ../gtk/gtkfilechooserdefault.c:8658
 msgid "Could not start the search process"
 msgstr "検索処理を開始できませんでした"
 
-#: ../gtk/gtkfilechooserdefault.c:8653
+#: ../gtk/gtkfilechooserdefault.c:8659
 msgid ""
 "The program was not able to create a connection to the indexer daemon.  "
 "Please make sure it is running."
@@ -1074,36 +1076,36 @@ msgstr ""
 "検索用のインデックスを生成するデーモンに接続できませんでした。デーモンが実行"
 "中か確認してください。"
 
-#: ../gtk/gtkfilechooserdefault.c:8667
+#: ../gtk/gtkfilechooserdefault.c:8673
 msgid "Could not send the search request"
 msgstr "検索結果をプログラム側に送信できませんでした"
 
-#: ../gtk/gtkfilechooserdefault.c:8856
+#: ../gtk/gtkfilechooserdefault.c:8861
 msgid "Search:"
 msgstr "検索:"
 
-#: ../gtk/gtkfilechooserdefault.c:9460
+#: ../gtk/gtkfilechooserdefault.c:9466
 #, c-format
 msgid "Could not mount %s"
 msgstr "%s をマウントできませんでした"
 
 #. Translators: this is shown in the feedback for Tab-completion in a file
 #. * chooser's text entry, when the user enters an invalid path.
-#: ../gtk/gtkfilechooserentry.c:699 ../gtk/gtkfilechooserentry.c:1168
+#: ../gtk/gtkfilechooserentry.c:702 ../gtk/gtkfilechooserentry.c:1172
 msgid "Invalid path"
 msgstr "パスが間違っています"
 
 #. translators: this text is shown when there are no completions
 #. * for something the user typed in a file chooser entry
 #.
-#: ../gtk/gtkfilechooserentry.c:1100
+#: ../gtk/gtkfilechooserentry.c:1104
 msgid "No match"
 msgstr "該当するものはありません"
 
 #. translators: this text is shown when there is exactly one completion
 #. * for something the user typed in a file chooser entry
 #.
-#: ../gtk/gtkfilechooserentry.c:1111
+#: ../gtk/gtkfilechooserentry.c:1115
 msgid "Sole completion"
 msgstr "一つだけ該当するものがあります"
 
@@ -1111,13 +1113,13 @@ msgstr "一つだけ該当するものがあります"
 #. * entry is a complete filename, but could be continued to find
 #. * a longer match
 #.
-#: ../gtk/gtkfilechooserentry.c:1127
+#: ../gtk/gtkfilechooserentry.c:1131
 msgid "Complete, but not unique"
 msgstr "該当するものがありますが、これ以上の補完は不可です"
 
 #. Translators: this text is shown while the system is searching
 #. * for possible completions for filenames in a file chooser entry.
-#: ../gtk/gtkfilechooserentry.c:1159
+#: ../gtk/gtkfilechooserentry.c:1163
 msgid "Completing..."
 msgstr "ファイル名の補完中..."
 
@@ -1125,7 +1127,7 @@ msgstr "ファイル名の補完中..."
 #. Translators: this is shown in the feedback for Tab-completion in a
 #. * file chooser's text entry when the user enters something like
 #. * "sftp://blahblah" in an app that only supports local filenames.
-#: ../gtk/gtkfilechooserentry.c:1181 ../gtk/gtkfilechooserentry.c:1206
+#: ../gtk/gtkfilechooserentry.c:1185 ../gtk/gtkfilechooserentry.c:1210
 msgid "Only local files may be selected"
 msgstr "指定できるのはローカルにあるファイルだけです"
 
@@ -1133,14 +1135,14 @@ msgstr "指定できるのはローカルにあるファイルだけです"
 #. Translators: this is shown in the feedback for Tab-completion in a
 #. * file chooser's text entry when the user hasn't entered the first '/'
 #. * after a hostname and yet hits Tab (such as "sftp://blahblah[Tab]")
-#: ../gtk/gtkfilechooserentry.c:1190
+#: ../gtk/gtkfilechooserentry.c:1194
 msgid "Incomplete hostname; end it with '/'"
 msgstr "ホスト名が不完全です ('/' で終わっていません)"
 
 #. Translators: this is shown in the feedback for Tab-completion in a file
 #. * chooser's text entry when the user enters a path that does not exist
 #. * and then hits Tab
-#: ../gtk/gtkfilechooserentry.c:1201
+#: ../gtk/gtkfilechooserentry.c:1205
 msgid "Path does not exist"
 msgstr "パスがありません"
 
@@ -1194,7 +1196,7 @@ msgstr "サイズ(_Z):"
 msgid "_Preview:"
 msgstr "プレビュー(_P):"
 
-#: ../gtk/gtkfontsel.c:1660
+#: ../gtk/gtkfontsel.c:1661
 msgid "Font Selection"
 msgstr "フォントの選択"
 
@@ -1249,20 +1251,20 @@ msgid "System (%s)"
 msgstr "システム (%s)"
 
 #. Open Link
-#: ../gtk/gtklabel.c:6223
+#: ../gtk/gtklabel.c:6224
 msgid "_Open Link"
 msgstr "リンクを開く(_O)"
 
 #. Copy Link Address
-#: ../gtk/gtklabel.c:6235
+#: ../gtk/gtklabel.c:6236
 msgid "Copy _Link Address"
 msgstr "リンクのアドレスをコピー(_L)"
 
-#: ../gtk/gtklinkbutton.c:430
+#: ../gtk/gtklinkbutton.c:432
 msgid "Copy URL"
 msgstr "URL のコピー"
 
-#: ../gtk/gtklinkbutton.c:588
+#: ../gtk/gtklinkbutton.c:590
 msgid "Invalid URI"
 msgstr "URI が間違っています"
 
@@ -1393,7 +1395,7 @@ msgstr "zsh"
 msgid "Cannot end process with PID %d: %s"
 msgstr "PID %d のプロセスを終了できません: %s"
 
-#: ../gtk/gtknotebook.c:4703 ../gtk/gtknotebook.c:7260
+#: ../gtk/gtknotebook.c:4710 ../gtk/gtknotebook.c:7268
 #, c-format
 msgid "Page %u"
 msgstr "%u ページ"
@@ -1446,15 +1448,15 @@ msgstr "用紙の向き(_O):"
 msgid "Page Setup"
 msgstr "ページの設定"
 
-#: ../gtk/gtkpathbar.c:151
+#: ../gtk/gtkpathbar.c:155
 msgid "Up Path"
 msgstr "上のパス"
 
-#: ../gtk/gtkpathbar.c:153
+#: ../gtk/gtkpathbar.c:157
 msgid "Down Path"
 msgstr "下のパス"
 
-#: ../gtk/gtkpathbar.c:1492
+#: ../gtk/gtkpathbar.c:1504
 msgid "File System Root"
 msgstr "ファイル・システムのルート"
 
@@ -1467,8 +1469,9 @@ msgid "Not available"
 msgstr "利用できません"
 
 #: ../gtk/gtkprinteroptionwidget.c:794
+#, fuzzy
 msgid "Select a folder"
-msgstr "フォルダの選択"
+msgstr "ファイルの選択"
 
 #: ../gtk/gtkprinteroptionwidget.c:813
 msgid "_Save in folder:"
@@ -1554,7 +1557,7 @@ msgstr "作業用のファイルを生成できないことが一番考えられ
 msgid "Error launching preview"
 msgstr "プレビューを起動する際にエラー"
 
-#: ../gtk/gtkprintoperation-unix.c:470 ../gtk/gtkprintoperation-win32.c:1446
+#: ../gtk/gtkprintoperation-unix.c:470 ../gtk/gtkprintoperation-win32.c:1447
 msgid "Application"
 msgstr "アプリケーション"
 
@@ -1580,36 +1583,36 @@ msgstr "ユーザの操作が必要です"
 msgid "Custom size"
 msgstr "その他のサイズ"
 
-#: ../gtk/gtkprintoperation-win32.c:1538
+#: ../gtk/gtkprintoperation-win32.c:1539
 msgid "No printer found"
 msgstr "プリンタが見つかりません"
 
-#: ../gtk/gtkprintoperation-win32.c:1565
+#: ../gtk/gtkprintoperation-win32.c:1566
 msgid "Invalid argument to CreateDC"
 msgstr "CreateDC() の引数が無効です"
 
-#: ../gtk/gtkprintoperation-win32.c:1601 ../gtk/gtkprintoperation-win32.c:1828
+#: ../gtk/gtkprintoperation-win32.c:1602 ../gtk/gtkprintoperation-win32.c:1829
 msgid "Error from StartDoc"
 msgstr "StartDoc() でエラー"
 
-#: ../gtk/gtkprintoperation-win32.c:1683 ../gtk/gtkprintoperation-win32.c:1706
-#: ../gtk/gtkprintoperation-win32.c:1754
+#: ../gtk/gtkprintoperation-win32.c:1684 ../gtk/gtkprintoperation-win32.c:1707
+#: ../gtk/gtkprintoperation-win32.c:1755
 msgid "Not enough free memory"
 msgstr "メモリが足りません"
 
-#: ../gtk/gtkprintoperation-win32.c:1759
+#: ../gtk/gtkprintoperation-win32.c:1760
 msgid "Invalid argument to PrintDlgEx"
 msgstr "PrintDlgEx() の引数が無効です"
 
-#: ../gtk/gtkprintoperation-win32.c:1764
+#: ../gtk/gtkprintoperation-win32.c:1765
 msgid "Invalid pointer to PrintDlgEx"
 msgstr "PrintDlgEx() を指すポインタが無効です"
 
-#: ../gtk/gtkprintoperation-win32.c:1769
+#: ../gtk/gtkprintoperation-win32.c:1770
 msgid "Invalid handle to PrintDlgEx"
 msgstr "PrintDlgEx() のハンドラが無効です"
 
-#: ../gtk/gtkprintoperation-win32.c:1774
+#: ../gtk/gtkprintoperation-win32.c:1775
 msgid "Unspecified error"
 msgstr "原因不明のエラー"
 
@@ -1952,40 +1955,40 @@ msgstr "pixmap_path に画像ファイルが見つかりません: \"%s\""
 msgid "This function is not implemented for widgets of class '%s'"
 msgstr "この関数は '%s' クラスのウィジットでは実装されていません"
 
-#: ../gtk/gtkrecentchooserdefault.c:481
+#: ../gtk/gtkrecentchooserdefault.c:482
 msgid "Select which type of documents are shown"
 msgstr "表示するファイルの種類を選択してください"
 
-#: ../gtk/gtkrecentchooserdefault.c:1137 ../gtk/gtkrecentchooserdefault.c:1174
+#: ../gtk/gtkrecentchooserdefault.c:1139 ../gtk/gtkrecentchooserdefault.c:1176
 #, c-format
 msgid "No item for URI '%s' found"
 msgstr "URI '%s' のアイテムはありません"
 
-#: ../gtk/gtkrecentchooserdefault.c:1301
+#: ../gtk/gtkrecentchooserdefault.c:1303
 msgid "Untitled filter"
 msgstr "タイトルなしのフィルタ"
 
-#: ../gtk/gtkrecentchooserdefault.c:1654
+#: ../gtk/gtkrecentchooserdefault.c:1656
 msgid "Could not remove item"
 msgstr "アイテムを削除できませんでした"
 
-#: ../gtk/gtkrecentchooserdefault.c:1698
+#: ../gtk/gtkrecentchooserdefault.c:1700
 msgid "Could not clear list"
 msgstr "一覧をクリアできませんでした"
 
-#: ../gtk/gtkrecentchooserdefault.c:1782
+#: ../gtk/gtkrecentchooserdefault.c:1784
 msgid "Copy _Location"
 msgstr "場所のコピー(_L)"
 
-#: ../gtk/gtkrecentchooserdefault.c:1795
+#: ../gtk/gtkrecentchooserdefault.c:1797
 msgid "_Remove From List"
 msgstr "一覧から削除する(_R)"
 
-#: ../gtk/gtkrecentchooserdefault.c:1804
+#: ../gtk/gtkrecentchooserdefault.c:1806
 msgid "_Clear List"
 msgstr "一覧のクリア(_C)"
 
-#: ../gtk/gtkrecentchooserdefault.c:1818
+#: ../gtk/gtkrecentchooserdefault.c:1820
 msgid "Show _Private Resources"
 msgstr "個人的なリソースを表示する(_P)"
 
@@ -2045,12 +2048,12 @@ msgstr "%d: %s"
 msgid "Unable to find an item with URI '%s'"
 msgstr "URI '%s' のアイテムが見つかりません"
 
-#: ../gtk/gtkspinner.c:459
+#: ../gtk/gtkspinner.c:488
 msgctxt "throbbing progress animation widget"
 msgid "Spinner"
 msgstr "スピナー"
 
-#: ../gtk/gtkspinner.c:460
+#: ../gtk/gtkspinner.c:489
 msgid "Provides visual indication of progress"
 msgstr "進行している様子を視覚的に表します"
 
@@ -2104,6 +2107,7 @@ msgid "_Cancel"
 msgstr "キャンセル(_C)"
 
 #: ../gtk/gtkstock.c:326
+#, fuzzy
 msgctxt "Stock label"
 msgid "_CD-ROM"
 msgstr "CD-ROM(_C)"
@@ -2164,6 +2168,7 @@ msgid "_Edit"
 msgstr "編集(_E)"
 
 #: ../gtk/gtkstock.c:338
+#, fuzzy
 msgctxt "Stock label"
 msgid "_File"
 msgstr "ファイル(_F)"
@@ -2242,6 +2247,7 @@ msgid "_Up"
 msgstr "上へ(_U)"
 
 #: ../gtk/gtkstock.c:360
+#, fuzzy
 msgctxt "Stock label"
 msgid "_Hard Disk"
 msgstr "ハードディスク(_H)"
@@ -4400,7 +4406,7 @@ msgstr ""
 #~ "Image-loading module %s does not export the proper interface; perhaps "
 #~ "it's from a different GTK version?"
 #~ msgstr ""
-#~ "画像ロード・モジュール %s は正しいインターフェースをエキスポートしていませ"
+#~ "画像ロード・モジュール %s は正しいインターフェースをエクスポートしていませ"
 #~ "ん。GTK+ の別のバージョンのモジュールかも?"
 
 #~ msgid "Image type '%s' is not supported"
