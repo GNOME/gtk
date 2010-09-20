@@ -3980,7 +3980,8 @@ gtk_widget_queue_draw_area (GtkWidget *widget,
 	  x -= wx - priv->allocation.x;
 	  y -= wy - priv->allocation.y;
 
-	  gdk_drawable_get_size (priv->window, &wwidth, &wheight);
+          wwidth = gdk_window_get_width (priv->window);
+          wheight = gdk_window_get_height (priv->window);
 
 	  if (x + width <= 0 || y + height <= 0 ||
 	      x >= wwidth || y >= wheight)
