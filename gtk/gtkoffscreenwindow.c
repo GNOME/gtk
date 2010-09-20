@@ -316,13 +316,10 @@ gtk_offscreen_window_get_pixbuf (GtkOffscreenWindow *offscreen)
 
   if (surface != NULL)
     {
-      gint width, height;
-
-      gdk_drawable_get_size (window, &width, &height);
-
       pixbuf = gdk_pixbuf_get_from_surface (NULL, surface,
                                             0, 0, 0, 0,
-                                            width, height);
+                                            gdk_window_get_width (window),
+                                            gdk_window_get_height (window));
     }
 
   return pixbuf;
