@@ -2992,7 +2992,7 @@ gtk_entry_get_text_area_size (GtkEntry *entry,
   _gtk_entry_get_borders (entry, &xborder, &yborder);
 
   if (gtk_widget_get_realized (widget))
-    gdk_drawable_get_size (gtk_widget_get_window (widget), NULL, &frame_height);
+    frame_height = gdk_window_get_height (gtk_widget_get_window (widget));
   else
     frame_height = requisition.height;
 
@@ -3212,7 +3212,8 @@ draw_icon (GtkWidget            *widget,
   if (icon_info->pixbuf == NULL)
     return;
 
-  gdk_drawable_get_size (icon_info->window, &width, &height);
+  width = gdk_window_get_width (icon_info->window);
+  height = gdk_window_get_height (icon_info->window);
 
   /* size_allocate hasn't been called yet. These are the default values.
    */
@@ -3279,7 +3280,8 @@ gtk_entry_draw_frame (GtkWidget      *widget,
 
   window = gtk_widget_get_window (widget);
 
-  gdk_drawable_get_size (window, &width, &height);
+  width = gdk_window_get_width (window);
+  height = gdk_window_get_height (window);
 
   /* Fix a problem with some themes which assume that entry->text_area's
    * width equals widget->window's width
@@ -3368,10 +3370,10 @@ get_progress_area (GtkWidget *widget,
   *x = progress_border.left;
   *y = progress_border.top;
 
-  gdk_drawable_get_size (gtk_widget_get_window (widget), width, height);
-
-  *width -= progress_border.left + progress_border.right;
-  *height -= progress_border.top + progress_border.bottom;
+  *width = gdk_window_get_width (gtk_widget_get_window (widget))
+           - progress_border.left - progress_border.right;
+  *height = gdk_window_get_height (gtk_widget_get_window (widget))
+            - progress_border.top - progress_border.bottom;
 
   if (gtk_widget_has_focus (widget) && !private->interior_focus)
     {
@@ -3466,18 +3468,19 @@ gtk_entry_draw (GtkWidget *widget,
 
   if (gtk_cairo_should_draw_window (cr, entry->text_area))
     {
-      gint x, y, width, height;
+      gint x, y;
 
       cairo_save (cr);
 
-      gdk_drawable_get_size (entry->text_area, &width, &height);
       gdk_window_get_position (entry->text_area, &x, &y);
       cairo_translate (cr, x, y);
 
       gtk_paint_flat_box (style, cr,
 			  state, GTK_SHADOW_NONE,
 			  widget, "entry_bg",
-			  0, 0, width, height);
+			  0, 0,
+                          gdk_window_get_width (entry->text_area),
+                          gdk_window_get_height (entry->text_area));
 
       gtk_entry_draw_progress (widget, cr, entry->text_area);
 
@@ -3501,18 +3504,19 @@ gtk_entry_draw (GtkWidget *widget,
 
       if (icon_info != NULL && gtk_cairo_should_draw_window (cr, icon_info->window))
         {
-          gint x, y, width, height;
+          gint x, y;
 
           cairo_save (cr);
 
-          gdk_drawable_get_size (icon_info->window, &width, &height);
           gdk_window_get_position (icon_info->window, &x, &y);
           cairo_translate (cr, x, y);
 
           gtk_paint_flat_box (style, cr,
                               state, GTK_SHADOW_NONE,
                               widget, "entry_bg",
-                              0, 0, width, height);
+                              0, 0,
+                              gdk_window_get_width (icon_info->window),
+                              gdk_window_get_height (icon_info->window));
 
           gtk_entry_draw_progress (widget, cr, icon_info->window);
           draw_icon (widget, cr, i);
@@ -3853,15 +3857,12 @@ gtk_entry_button_release (GtkWidget      *widget,
 
       if (event->window == icon_info->window)
         {
-          gint width, height;
-
-          gdk_drawable_get_size (icon_info->window, &width, &height);
-
           icon_info->pressed = FALSE;
 
           if (should_prelight (entry, i) &&
               event->x >= 0 && event->y >= 0 &&
-              event->x < width && event->y < height)
+              event->x < gdk_window_get_width (icon_info->window) &&
+              event->y < gdk_window_get_height (icon_info->window))
             {
               icon_info->prelight = TRUE;
               gtk_widget_queue_draw (widget);
@@ -4003,12 +4004,9 @@ gtk_entry_motion_notify (GtkWidget      *widget,
     }
   else
     {
-      gint height;
-      gdk_drawable_get_size (entry->text_area, NULL, &height);
-
       if (event->y < 0)
 	tmp_pos = 0;
-      else if (event->y >= height)
+      else if (event->y >= gdk_window_get_height (entry->text_area))
 	tmp_pos = gtk_entry_buffer_get_length (get_buffer (entry));
       else
 	tmp_pos = gtk_entry_find_position (entry, event->x + entry->scroll_offset);
@@ -5628,7 +5626,8 @@ gtk_entry_draw_text (GtkEntry *entry,
     }
   else
     {
-      gdk_drawable_get_size (entry->text_area, &width, &height);
+      width = gdk_window_get_width (entry->text_area);
+      height = gdk_window_get_height (entry->text_area);
 
       cairo_save (cr);
 
@@ -5706,7 +5705,7 @@ gtk_entry_draw_cursor (GtkEntry  *entry,
 
   xoffset = inner_border.left - entry->scroll_offset;
 
-  gdk_drawable_get_size (entry->text_area, NULL, &text_area_height);
+  text_area_height = gdk_window_get_height (entry->text_area);
 
   layout = gtk_entry_ensure_layout (entry, TRUE);
   text = pango_layout_get_text (layout);
@@ -5976,7 +5975,7 @@ gtk_entry_adjust_scroll (GtkEntry *entry)
 
   _gtk_entry_effective_inner_border (entry, &inner_border);
 
-  gdk_drawable_get_size (entry->text_area, &text_area_width, NULL);
+  text_area_width = gdk_window_get_width (entry->text_area);
   text_area_width -= inner_border.left + inner_border.right;
   if (text_area_width < 0)
     text_area_width = 0;
@@ -8504,7 +8503,7 @@ popup_position_func (GtkMenu   *menu,
   gdk_screen_get_monitor_geometry (screen, monitor_num, &monitor);
   gtk_size_request_get_size (GTK_SIZE_REQUEST (entry->popup_menu),
                              &menu_req, NULL);
-  gdk_drawable_get_size (entry->text_area, NULL, &height);
+  height = gdk_window_get_height (entry->text_area);
   gtk_entry_get_cursor_locations (entry, CURSOR_STANDARD, &strong_x, NULL);
   _gtk_entry_effective_inner_border (entry, &inner_border);
 
