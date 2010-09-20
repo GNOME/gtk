@@ -1352,8 +1352,8 @@ post_unmap (GdkWindow *window)
 	  GdkRectangle invalid_rect;
       
 	  gdk_window_get_position (window, &invalid_rect.x, &invalid_rect.y);
-	  gdk_drawable_get_size (GDK_DRAWABLE (window),
-				 &invalid_rect.width, &invalid_rect.height);
+	  invalid_rect.width = gdk_window_get_width (window);
+	  invalid_rect.height = gdk_window_get_height (window);
 	  gdk_window_invalidate_rect ((GdkWindow *)private->parent,
 				      &invalid_rect, TRUE);
 	}
@@ -2862,7 +2862,8 @@ gdk_window_get_frame_extents (GdkWindow    *window,
   /* Refine our fallback answer a bit using local information */
   rect->x = private->x;
   rect->y = private->y;
-  gdk_drawable_get_size ((GdkDrawable *)private, &rect->width, &rect->height);
+  rect->width = private->width;
+  rect->height = private->height;
 
   impl = GDK_WINDOW_IMPL_X11 (private->impl);
   if (GDK_WINDOW_DESTROYED (private) || impl->override_redirect)
@@ -5168,9 +5169,8 @@ emulate_resize_drag (GdkWindow     *window,
   mv_resize->moveresize_y = root_y;
   mv_resize->moveresize_window = g_object_ref (window);
 
-  gdk_drawable_get_size (window,
-			 &mv_resize->moveresize_orig_width,
-			 &mv_resize->moveresize_orig_height);
+  mv_resize->moveresize_orig_width = gdk_window_get_width (window);
+  mv_resize->moveresize_orig_height = gdk_window_get_height (window);
 
   mv_resize->moveresize_geom_mask = 0;
   gdk_window_get_geometry_hints (window,

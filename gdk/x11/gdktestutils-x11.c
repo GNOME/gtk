@@ -102,15 +102,16 @@ gdk_test_simulate_key (GdkWindow      *window,
   g_return_val_if_fail (window != NULL, FALSE);
   if (!GDK_WINDOW_IS_MAPPED (window))
     return FALSE;
+
   screen = gdk_window_get_screen (window);
+  priv = (GdkWindowObject *)window;
+
   if (x < 0 && y < 0)
     {
-      gdk_drawable_get_size (window, &x, &y);
-      x /= 2;
-      y /= 2;
+      x = priv->width / 2;
+      y = priv->height / 2;
     }
 
-  priv = (GdkWindowObject *)window;
   /* Convert to impl coordinates */
   x = x + priv->abs_x;
   y = y + priv->abs_y;
@@ -208,15 +209,16 @@ gdk_test_simulate_button (GdkWindow      *window,
 
   if (!GDK_WINDOW_IS_MAPPED (window))
     return FALSE;
+
   screen = gdk_window_get_screen (window);
+  priv = (GdkWindowObject *)window;
+
   if (x < 0 && y < 0)
     {
-      gdk_drawable_get_size (window, &x, &y);
-      x /= 2;
-      y /= 2;
+      x = priv->width / 2;
+      y = priv->height / 2;
     }
 
-  priv = (GdkWindowObject *)window;
   /* Convert to impl coordinates */
   x = x + priv->abs_x;
   y = y + priv->abs_y;

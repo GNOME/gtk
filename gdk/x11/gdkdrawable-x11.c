@@ -95,10 +95,9 @@ _gdk_x11_drawable_update_size (GdkDrawable *drawable)
   
   if (impl->cairo_surface)
     {
-      int width, height;
-      
-      gdk_drawable_get_size (impl->wrapper, &width, &height);
-      cairo_xlib_surface_set_size (impl->cairo_surface, width, height);
+      cairo_xlib_surface_set_size (impl->cairo_surface,
+                                   gdk_window_get_width (impl->wrapper),
+                                   gdk_window_get_height (impl->wrapper));
     }
 }
 
@@ -230,11 +229,9 @@ gdk_x11_ref_cairo_surface (GdkDrawable *drawable)
 
   if (!impl->cairo_surface)
     {
-      int width, height;
-  
-      gdk_drawable_get_size (impl->wrapper, &width, &height);
-
-      impl->cairo_surface = gdk_x11_create_cairo_surface (drawable, width, height);
+      impl->cairo_surface = gdk_x11_create_cairo_surface (drawable,
+                                                          gdk_window_get_width (impl->wrapper),
+                                                          gdk_window_get_height (impl->wrapper));
       
       if (impl->cairo_surface)
 	cairo_surface_set_user_data (impl->cairo_surface, &gdk_x11_cairo_key,

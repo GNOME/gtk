@@ -736,7 +736,8 @@ translate_axes (GdkDevice       *device,
   axes = g_new0 (gdouble, n_axes);
   vals = valuators->values;
 
-  gdk_drawable_get_size (GDK_DRAWABLE (window), &width, &height);
+  width = gdk_window_get_width (window);
+  height = gdk_window_get_height (window);
 
   for (i = 0; i < valuators->mask_len * 8; i++)
     {
