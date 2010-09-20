@@ -36,17 +36,11 @@
 #include "gdkpixbuf.h"
 
 
-static cairo_region_t *  gdk_drawable_real_get_visible_region     (GdkDrawable  *drawable);
-     
-
 G_DEFINE_ABSTRACT_TYPE (GdkDrawable, gdk_drawable, G_TYPE_OBJECT)
 
 static void
 gdk_drawable_class_init (GdkDrawableClass *klass)
 {
-  /* Default implementation for clip and visible region is the same */
-  klass->get_clip_region = gdk_drawable_real_get_visible_region;
-  klass->get_visible_region = gdk_drawable_real_get_visible_region;
 }
 
 static void
@@ -121,19 +115,6 @@ gdk_drawable_get_visible_region (GdkDrawable *drawable)
   g_return_val_if_fail (GDK_IS_DRAWABLE (drawable), NULL);
 
   return GDK_DRAWABLE_GET_CLASS (drawable)->get_visible_region (drawable);
-}
-
-static cairo_region_t *
-gdk_drawable_real_get_visible_region (GdkDrawable *drawable)
-{
-  GdkRectangle rect;
-
-  rect.x = 0;
-  rect.y = 0;
-
-  gdk_drawable_get_size (drawable, &rect.width, &rect.height);
-
-  return cairo_region_create_rectangle (&rect);
 }
 
 /**
