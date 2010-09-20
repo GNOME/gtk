@@ -140,7 +140,8 @@ take_window_shot (Window   child,
 
   window = gdk_window_foreign_new (xid);
 
-  gdk_drawable_get_size (window, &width, &height);
+  width = gdk_window_get_width (window);
+  height = gdk_window_get_height (window);
   gdk_window_get_origin (window, &x_orig, &y_orig);
 
   if (x_orig < 0)
