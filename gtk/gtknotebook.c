@@ -2965,7 +2965,8 @@ get_pointer_position (GtkNotebook *notebook)
     return POINTER_BETWEEN;
 
   gdk_window_get_position (priv->event_window, &wx, &wy);
-  gdk_drawable_get_size (GDK_DRAWABLE (priv->event_window), &width, &height);
+  width = gdk_window_get_width (priv->event_window);
+  height = gdk_window_get_height (priv->event_window);
 
   if (priv->tab_pos == GTK_POS_TOP ||
       priv->tab_pos == GTK_POS_BOTTOM)
@@ -3046,7 +3047,8 @@ check_threshold (GtkNotebook *notebook,
   dnd_threshold *= DND_THRESHOLD_MULTIPLIER;
 
   gdk_window_get_position (priv->event_window, &rectangle.x, &rectangle.y);
-  gdk_drawable_get_size (GDK_DRAWABLE (priv->event_window), &rectangle.width, &rectangle.height);
+  rectangle.width = gdk_window_get_width (priv->event_window);
+  rectangle.height = gdk_window_get_height (priv->event_window);
 
   rectangle.x -= dnd_threshold;
   rectangle.width += 2 * dnd_threshold;
