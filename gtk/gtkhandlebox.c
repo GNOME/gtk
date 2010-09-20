@@ -934,7 +934,8 @@ gtk_handle_box_paint (GtkWidget      *widget,
 
   handle_position = effective_handle_position (hb);
 
-  gdk_drawable_get_size (priv->bin_window, &width, &height);
+  width = gdk_window_get_width (priv->bin_window);
+  height = gdk_window_get_height (priv->bin_window);
 
   gtk_paint_box (gtk_widget_get_style (widget),
                  cr,
@@ -1113,31 +1114,28 @@ gtk_handle_box_button_press (GtkWidget      *widget,
 	      GtkWidget *invisible = gtk_handle_box_get_invisible ();
               GdkWindow *window;
 	      gint root_x, root_y;
-	      gint width, height;
 
               gtk_invisible_set_screen (GTK_INVISIBLE (invisible),
                                         gtk_widget_get_screen (GTK_WIDGET (hb)));
 	      gdk_window_get_origin (priv->bin_window, &root_x, &root_y);
-	      gdk_drawable_get_size (priv->bin_window, &width, &height);
 
 	      priv->orig_x = event->x_root;
 	      priv->orig_y = event->y_root;
 
 	      priv->float_allocation.x = root_x - event->x_root;
 	      priv->float_allocation.y = root_y - event->y_root;
-	      priv->float_allocation.width = width;
-	      priv->float_allocation.height = height;
+	      priv->float_allocation.width = gdk_window_get_width (priv->bin_window);
+	      priv->float_allocation.height = gdk_window_get_height (priv->bin_window);
 
               window = gtk_widget_get_window (widget);
 	      if (gdk_window_is_viewable (window))
 		{
 		  gdk_window_get_origin (window, &root_x, &root_y);
-		  gdk_drawable_get_size (window, &width, &height);
 
 		  priv->attach_allocation.x = root_x;
 		  priv->attach_allocation.y = root_y;
-		  priv->attach_allocation.width = width;
-		  priv->attach_allocation.height = height;
+		  priv->attach_allocation.width = gdk_window_get_width (window);
+		  priv->attach_allocation.height = gdk_window_get_height (window);
 		}
 	      else
 		{
@@ -1315,7 +1313,8 @@ gtk_handle_box_motion (GtkWidget      *widget,
     {
       gint width, height;
 
-      gdk_drawable_get_size (priv->float_window, &width, &height);
+      width = gdk_window_get_width (priv->float_window);
+      height = gdk_window_get_height (priv->float_window);
 
       switch (handle_position)
 	{
@@ -1342,8 +1341,6 @@ gtk_handle_box_motion (GtkWidget      *widget,
 	}
       else
 	{
-	  gint width;
-	  gint height;
           guint border_width;
 	  GtkRequisition child_requisition;
 
