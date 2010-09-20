@@ -56,12 +56,21 @@ test_error_trapping (GdkDisplay *gdk_display)
 
   XSync (d, TRUE);
 
-  /* verify that we can catch with nested traps */
+  /* verify that we can catch with nested traps; inner-most
+   * active trap gets the error */
   gdk_error_trap_push ();
   gdk_error_trap_push ();
   XSetCloseDownMode (d, 12345);
   error = gdk_error_trap_pop ();
   g_assert (error == BadValue);
+  error = gdk_error_trap_pop ();
+  g_assert (error == Success);
+
+  gdk_error_trap_push ();
+  XSetCloseDownMode (d, 12345);
+  gdk_error_trap_push ();
+  error = gdk_error_trap_pop ();
+  g_assert (error == Success);
   error = gdk_error_trap_pop ();
   g_assert (error == BadValue);
 

@@ -2721,6 +2721,7 @@ _gdk_x11_display_error_event (GdkDisplay  *display,
         {
           ignore = TRUE;
           trap->error_code = error->error_code;
+          break; /* only innermost trap gets the error code */
         }
     }
 
