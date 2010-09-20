@@ -475,7 +475,6 @@ gtk_rotated_bin_draw (GtkWidget *widget,
 {
   GtkRotatedBin *bin = GTK_ROTATED_BIN (widget);
   GdkWindow *window;
-  gint width, height;
   gdouble s, c;
   gdouble w, h;
 
@@ -502,8 +501,10 @@ gtk_rotated_bin_draw (GtkWidget *widget,
           cairo_translate (cr, -child_area.width / 2, -child_area.height / 2);
 
           /* clip */
-          gdk_drawable_get_size (bin->offscreen_window, &width, &height);
-          cairo_rectangle (cr, 0, 0, width, height);
+          cairo_rectangle (cr,
+                           0, 0,
+                           gdk_window_get_width (bin->offscreen_window),
+                           gdk_window_get_height (bin->offscreen_window));
           cairo_clip (cr);
           /* paint */
           cairo_set_source_surface (cr, surface, 0, 0);
@@ -512,12 +513,12 @@ gtk_rotated_bin_draw (GtkWidget *widget,
     }
   if (gtk_cairo_should_draw_window (cr, bin->offscreen_window))
     {
-      gdk_drawable_get_size (bin->offscreen_window, &width, &height);
-
       gtk_paint_flat_box (gtk_widget_get_style (widget), cr,
                           GTK_STATE_NORMAL, GTK_SHADOW_NONE,
                           widget, "blah",
-                          0, 0, width, height);
+                          0, 0,
+                          gdk_window_get_width (bin->offscreen_window),
+                          gdk_window_get_height (bin->offscreen_window));
 
       if (bin->child)
         gtk_container_propagate_draw (GTK_CONTAINER (widget),

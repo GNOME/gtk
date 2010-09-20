@@ -381,7 +381,6 @@ gtk_mirror_bin_draw (GtkWidget *widget,
 {
   GtkMirrorBin *bin = GTK_MIRROR_BIN (widget);
   GdkWindow *window;
-  gint width, height;
 
   window = gtk_widget_get_window (widget);
   if (gtk_cairo_should_draw_window (cr, window))
@@ -389,11 +388,12 @@ gtk_mirror_bin_draw (GtkWidget *widget,
       cairo_surface_t *surface;
       cairo_matrix_t matrix;
       cairo_pattern_t *mask;
+      int height;
 
       if (bin->child && gtk_widget_get_visible (bin->child))
         {
           surface = gdk_offscreen_window_get_surface (bin->offscreen_window);
-          gdk_drawable_get_size (bin->offscreen_window, &width, &height);
+          height = gdk_window_get_height (bin->offscreen_window);
 
           /* paint the offscreen child */
           cairo_set_source_surface (cr, surface, 0, 0);
@@ -422,12 +422,12 @@ gtk_mirror_bin_draw (GtkWidget *widget,
     }
   else if (gtk_cairo_should_draw_window (cr, bin->offscreen_window))
     {
-      gdk_drawable_get_size (bin->offscreen_window, &width, &height);
-
       gtk_paint_flat_box (gtk_widget_get_style (widget), cr,
                           GTK_STATE_NORMAL, GTK_SHADOW_NONE,
                           widget, "blah",
-                          0, 0, width, height);
+                          0, 0,
+                          gdk_window_get_width (bin->offscreen_window),
+                          gdk_window_get_height (bin->offscreen_window));
 
       if (bin->child)
         gtk_container_propagate_draw (GTK_CONTAINER (widget),
