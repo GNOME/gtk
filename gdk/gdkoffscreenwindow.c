@@ -454,8 +454,6 @@ gdk_offscreen_window_show (GdkWindow *window,
   GdkWindowObject *private = (GdkWindowObject *)window;
   GdkRectangle area = { 0, 0, private->width, private->height };
 
-  gdk_window_clear_area (window, 0, 0,
-			 private->width, private->height);
   gdk_window_invalidate_rect (window, &area, FALSE);
 }
 
