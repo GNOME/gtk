@@ -1092,8 +1092,7 @@ _gdk_windowing_window_destroy_foreign (GdkWindow *window)
   XSendEvent (GDK_WINDOW_XDISPLAY (window),
 	      GDK_WINDOW_XID (window),
 	      False, 0, (XEvent *)&xclient);
-  gdk_display_sync (GDK_WINDOW_DISPLAY (window));
-  gdk_error_trap_pop ();
+  gdk_error_trap_pop_ignored ();
 }
 
 static GdkWindow *
@@ -2955,7 +2954,7 @@ gdk_window_get_frame_extents (GdkWindow    *window,
   if (vroots)
     XFree (vroots);
 
-  gdk_error_trap_pop ();
+  gdk_error_trap_pop_ignored ();
 }
 
 void
@@ -3191,7 +3190,6 @@ _gdk_windowing_window_at_device_position (GdkDisplay      *display,
 	  gdk_error_trap_push ();
 	  XQueryPointer (xdisplay, xwindow,
 			 &root, &child, &rootx, &rooty, &winx, &winy, &xmask);
-	  gdk_flush ();
 	  if (gdk_error_trap_pop ())
 	    continue;
 	  if (child != None) 
@@ -3232,7 +3230,6 @@ _gdk_windowing_window_at_device_position (GdkDisplay      *display,
 	  gdk_error_trap_push ();
 	  XQueryPointer (xdisplay, xwindow,
 			 &root, &xwindow, &rootx, &rooty, &winx, &winy, &xmask);
-	  gdk_flush ();
 	  if (gdk_error_trap_pop ())
 	    break;
 	  if (get_toplevel && xwindow_last != root &&

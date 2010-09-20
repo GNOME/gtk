@@ -1522,7 +1522,7 @@ gdk_event_send_client_message_to_all_recurse (GdkDisplay *display,
   result = send || found;
 
  out:
-  gdk_error_trap_pop ();
+  gdk_error_trap_pop_ignored ();
 
   return result;
 }
@@ -1755,7 +1755,6 @@ fetch_net_wm_check_window (GdkScreen *screen)
 
   /* Find out if this WM goes away, so we can reset everything. */
   XSelectInput (screen_x11->xdisplay, *xwindow, StructureNotifyMask);
-  gdk_display_sync (display);
 
   error = gdk_error_trap_pop ();
   if (!error)
@@ -2083,9 +2082,7 @@ gdk_x11_screen_get_window_manager_name (GdkScreen *screen)
                               &n_items, &bytes_after,
                               (guchar **)&name);
 
-          gdk_display_sync (screen_x11->display);
-
-          gdk_error_trap_pop ();
+          gdk_error_trap_pop_ignored ();
 
           if (name != NULL)
             {

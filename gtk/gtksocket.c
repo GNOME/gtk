@@ -541,8 +541,7 @@ gtk_socket_size_allocate (GtkWidget     *widget,
 			g_message ("GtkSocket - sending synthetic configure: %d %d",
 				   allocation->width, allocation->height));
  	    }
-	  
-	  gdk_display_sync (gtk_widget_get_display (widget));
+
 	  gdk_error_trap_pop_ignored ();
 	}
     }
@@ -918,7 +917,6 @@ _gtk_socket_add_window (GtkSocket       *socket,
 	gtk_drag_dest_set_proxy (GTK_WIDGET (socket), socket->plug_window, 
 				 protocol, TRUE);
 
-      gdk_display_sync (display);
       gdk_error_trap_pop_ignored ();
 
       gdk_window_add_filter (socket->plug_window,

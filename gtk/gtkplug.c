@@ -683,7 +683,6 @@ gtk_plug_realize (GtkWidget *widget)
 	{
 	  gdk_error_trap_push ();
 	  gdk_window_destroy (gdk_window);
-	  gdk_flush ();
 	  gdk_error_trap_pop_ignored ();
 	  gdk_window = gdk_window_new (gtk_widget_get_root_window (widget),
                                    &attributes, attributes_mask);

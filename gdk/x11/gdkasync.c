@@ -655,7 +655,7 @@ _gdk_x11_get_window_child_info (GdkDisplay       *display,
 				       win_has_wm_state ? wm_state_atom : None,
 				       &has_wm_state,
 				       &state.children, &state.nchildren);
-  gdk_error_trap_pop ();
+  gdk_error_trap_pop_ignored ();
   if (!result)
     {
       g_free (state.children);

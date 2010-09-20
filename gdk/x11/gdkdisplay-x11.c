@@ -265,7 +265,7 @@ gdk_check_wm_desktop_changed (GdkWindow *window)
                       0, G_MAXLONG, False, XA_CARDINAL, &type,
                       &format, &nitems,
                       &bytes_after, &data);
-  gdk_error_trap_pop ();
+  gdk_error_trap_pop_ignored ();
 
   if (type != None)
     {
@@ -306,7 +306,7 @@ gdk_check_wm_state_changed (GdkWindow *window)
 		      gdk_x11_get_xatom_by_name_for_display (display, "_NET_WM_STATE"),
 		      0, G_MAXLONG, False, XA_ATOM, &type, &format, &nitems,
 		      &bytes_after, &data);
-  gdk_error_trap_pop ();
+  gdk_error_trap_pop_ignored ();
 
   if (type != None)
     {
@@ -735,7 +735,7 @@ gdk_display_x11_translate_event (GdkEventTranslator *translator,
 		  event->configure.x = tx;
 		  event->configure.y = ty;
 		}
-	      gdk_error_trap_pop ();
+	      gdk_error_trap_pop_ignored ();
 	    }
 	  else
 	    {
@@ -1347,7 +1347,6 @@ gdk_display_open (const gchar *display_name)
     XQueryPointer (display_x11->xdisplay, 
 		   GDK_SCREEN_X11 (display_x11->default_screen)->xroot_window,
 		   &root, &child, &rootx, &rooty, &winx, &winy, &xmask);
-    gdk_flush ();
     if (G_UNLIKELY (gdk_error_trap_pop () == BadWindow)) 
       {
 	g_warning ("Connection to display %s appears to be untrusted. Pointer and keyboard grabs and inter-client communication may not work as expected.", gdk_display_get_name (display));
@@ -2413,7 +2412,7 @@ gdk_display_store_clipboard (GdkDisplay    *display,
 			 GDK_WINDOW_XID (clipboard_window), time_);
       
     }
-  gdk_error_trap_pop ();
+  gdk_error_trap_pop_ignored ();
 
 }
 

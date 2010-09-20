@@ -622,8 +622,7 @@ gdk_window_cache_destroy (GdkWindowCache *cache)
   g_list_foreach (cache->children, (GFunc)free_cache_child,
       gdk_screen_get_display (cache->screen));
 
-  gdk_flush ();
-  gdk_error_trap_pop ();
+  gdk_error_trap_pop_ignored ();
 
   g_list_free (cache->children);
   g_hash_table_destroy (cache->child_hash);
@@ -769,7 +768,7 @@ get_client_window_at_coords (GdkWindowCache *cache,
       tmp_list = tmp_list->next;
     }
 
-  gdk_error_trap_pop ();
+  gdk_error_trap_pop_ignored ();
   
   if (retval)
     return retval;
@@ -2626,7 +2625,7 @@ xdnd_check_dest (GdkDisplay *display,
 	}
     }
 
-  gdk_error_trap_pop ();
+  gdk_error_trap_pop_ignored ();
   
   return retval ? (proxy ? proxy : win) : None;
 }
@@ -2693,7 +2692,7 @@ xdnd_read_actions (GdkDragContext *context)
       if (data)
 	XFree (data);
       
-      gdk_error_trap_pop ();
+      gdk_error_trap_pop_ignored ();
     }
   else
     {
@@ -2767,8 +2766,7 @@ xdnd_manage_source_filter (GdkDragContext *context,
 	   */
 	}
       
-      gdk_display_sync (gdk_drawable_get_display (window));
-      gdk_error_trap_pop ();  
+      gdk_error_trap_pop_ignored ();  
     }
 }
 
@@ -3285,7 +3283,7 @@ _gdk_drag_get_protocol_for_display (GdkDisplay      *display,
 	}
 #endif      
 
-      gdk_error_trap_pop ();
+      gdk_error_trap_pop_ignored ();
 
       if (rootwin)
 	{
