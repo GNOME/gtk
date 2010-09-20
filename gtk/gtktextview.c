@@ -6292,21 +6292,20 @@ drag_scan_timeout (gpointer data)
   GtkTextView *text_view;
   GtkTextViewPrivate *priv;
   GtkTextIter newplace;
-  gint x, y, width, height;
+  gint x, y;
   gdouble pointer_xoffset, pointer_yoffset;
 
   text_view = GTK_TEXT_VIEW (data);
   priv = text_view->priv;
 
   get_iter_at_pointer (text_view, priv->dnd_device, &newplace, &x, &y);
-  gdk_drawable_get_size (priv->text_window->bin_window, &width, &height);
 
   gtk_text_buffer_move_mark (get_buffer (text_view),
                              priv->dnd_mark,
                              &newplace);
 
-  pointer_xoffset = (gdouble) x / width;
-  pointer_yoffset = (gdouble) y / height;
+  pointer_xoffset = (gdouble) x / gdk_window_get_width (priv->text_window->bin_window);
+  pointer_yoffset = (gdouble) y / gdk_window_get_height (priv->text_window->bin_window);
 
   if (check_scroll (pointer_xoffset, priv->hadjustment) ||
       check_scroll (pointer_yoffset, priv->vadjustment))
