@@ -873,28 +873,6 @@ setup_system_styles (GtkStyle *style)
     }
 }
 
-static gboolean
-sanitize_size (GdkWindow *window, gint *width, gint *height)
-{
-  gboolean set_bg = FALSE;
-
-  if ((*width == -1) && (*height == -1))
-    {
-      set_bg = GDK_IS_WINDOW (window);
-      gdk_drawable_get_size (window, width, height);
-    }
-  else if (*width == -1)
-    {
-      gdk_drawable_get_size (window, width, NULL);
-    }
-  else if (*height == -1)
-    {
-      gdk_drawable_get_size (window, NULL, height);
-    }
-
-  return set_bg;
-}
-
 static XpThemeElement
 map_gtk_progress_bar_to_xp (GtkProgressBar *progress_bar, gboolean trough)
 {
@@ -1366,8 +1344,6 @@ draw_arrow (GtkStyle *style,
 
   name = gtk_widget_get_name (widget);
 
-  sanitize_size (window, &width, &height);
-
   if (GTK_IS_ARROW (widget) && is_combo_box_child (widget) && xp_theme_is_active ())
     return;
 
@@ -1452,8 +1428,6 @@ draw_arrow (GtkStyle *style,
 
 	  if (widget)
 	    {
-	      sanitize_size (window, &width, &height);
-
 	      dc = get_window_dc (style, window, state, &dc_info,
 				  box_x, box_y, box_width, box_height, &rect);
 	      DrawFrameControl (dc, &rect, DFC_SCROLL,
@@ -2028,7 +2002,6 @@ draw_box (GtkStyle *style,
 	      RECT rect;
 	      XpDCInfo dc_info;
 
-	      sanitize_size (window, &width, &height);
 	      dc = get_window_dc (style, window, state_type, &dc_info, x, y, width, height, &rect);
 
 	      SetTextColor (dc, GetSysColor (COLOR_3DHILIGHT));
@@ -2104,7 +2077,6 @@ draw_box (GtkStyle *style,
 	       || strcmp (detail, "toolbar") == 0
 	       || strcmp (detail, "menubar") == 0))
     {
-      sanitize_size (window, &width, &height);
       if (xp_theme_draw (window, XP_THEME_ELEMENT_REBAR,
 			 style, x, y, width, height, state_type, area))
 	{
@@ -2175,8 +2147,6 @@ draw_box (GtkStyle *style,
       gint vline_x;
 
       option_menu_get_props (widget, &indicator_size, &indicator_spacing);
-
-      sanitize_size (window, &width, &height);
 
       if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL)
 	{
@@ -2932,8 +2902,6 @@ draw_shadow (GtkStyle *style,
 	  HGDIOBJ old_pen = NULL;
 	  GtkPositionType pos;
 
-	  sanitize_size (window, &width, &height);
-
 	  if (is_handlebox)
 	    {
 	      pos = gtk_handle_box_get_handle_position (GTK_HANDLE_BOX (widget));
@@ -3221,8 +3189,6 @@ draw_handle (GtkStyle *style,
     {
       XpThemeElement hndl;
 
-      sanitize_size (window, &width, &height);
-
       if (GTK_IS_HANDLE_BOX (widget))
 	{
 	  GtkPositionType pos;
@@ -3276,8 +3242,6 @@ draw_handle (GtkStyle *style,
       gint xthick, ythick;
       GdkColor *light, *dark, *shadow;
       GdkRectangle dest;
-
-      sanitize_size (window, &width, &height);
 
       gtk_paint_box (style, window, state_type, shadow_type, area,
 		     widget, detail, x, y, width, height);
