@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: gtk+-properties gtk-2-22\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk%"
 "2b&component=general\n"
-"POT-Creation-Date: 2010-09-13 16:22+0000\n"
+"POT-Creation-Date: 2010-09-19 15:42+0000\n"
 "PO-Revision-Date: 2010-09-14 01:36+0900\n"
 "Last-Translator: Takayuki KUSANO <AE5T-KSN@asahi-net.or.jp>\n"
 "Language-Team: Japanese <gnome-translation@gnome.gr.jp>\n"
@@ -4283,7 +4283,7 @@ msgstr "印刷プロセスを非同期に実行する場合は TRUE です"
 
 #: ../gtk/gtkprintoperation.c:1208 ../gtk/gtkprintoperation.c:1209
 msgid "Export filename"
-msgstr "ファイル名のエキスポート"
+msgstr "ファイル名のエクスポート"
 
 #: ../gtk/gtkprintoperation.c:1223
 msgid "Status"

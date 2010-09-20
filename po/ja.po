@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: gtk+ master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk%"
 "2b&component=general\n"
-"POT-Creation-Date: 2010-09-12 11:26+0000\n"
+"POT-Creation-Date: 2010-09-19 15:42+0000\n"
 "PO-Revision-Date: 2010-09-12 19:02+0900\n"
 "Last-Translator: Takayuki KUSANO <AE5T-KSN@asahi-net.or.jp>\n"
 "Language-Team: Japanese <gnome-translation@gnome.gr.jp>\n"
@@ -591,8 +591,8 @@ msgid ""
 "Select the color you want from the outer ring. Select the darkness or "
 "lightness of that color using the inner triangle."
 msgstr ""
-"外側の輪から希望する色を、内側の三角で色の暗さ・明るさをそれぞれ選択して下さ"
-"い"
+"外側の輪から希望する色を、内側の三角で色の暗さ・明るさをそれぞれ選択してくだ"
+"さい"
 
 #: ../gtk/gtkcolorsel.c:387
 msgid ""
@@ -863,7 +863,7 @@ msgstr "%2$s:%1$s"
 msgid "Search"
 msgstr "検索"
 
-#: ../gtk/gtkfilechooserdefault.c:1782 ../gtk/gtkfilechooserdefault.c:9458
+#: ../gtk/gtkfilechooserdefault.c:1782 ../gtk/gtkfilechooserdefault.c:9457
 msgid "Recently Used"
 msgstr "最近開いたファイル"
 
@@ -971,7 +971,7 @@ msgstr "名前(_N):"
 msgid "_Browse for other folders"
 msgstr "他のフォルダ(_B)"
 
-#: ../gtk/gtkfilechooserdefault.c:5099
+#: ../gtk/gtkfilechooserdefault.c:5097
 msgid "Type a file name"
 msgstr "ファイル名を入力してください"
 
@@ -1059,7 +1059,7 @@ msgstr ""
 msgid "Could not send the search request"
 msgstr "検索結果をプログラム側に送信できませんでした"
 
-#: ../gtk/gtkfilechooserdefault.c:9030
+#: ../gtk/gtkfilechooserdefault.c:9029
 msgid "Search:"
 msgstr "検索:"
 
@@ -4434,7 +4434,7 @@ msgstr ""
 #~ "Image-loading module %s does not export the proper interface; perhaps "
 #~ "it's from a different GTK version?"
 #~ msgstr ""
-#~ "画像ロード・モジュール %s は正しいインターフェースをエキスポートしていませ"
+#~ "画像ロード・モジュール %s は正しいインターフェースをエクスポートしていませ"
 #~ "ん。GTK+ の別のバージョンのモジュールかも?"
 
 #~ msgid "Image type '%s' is not supported"
