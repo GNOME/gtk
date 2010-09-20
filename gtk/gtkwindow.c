@@ -3990,8 +3990,8 @@ gtk_window_get_size (GtkWindow *window,
 
   if (gtk_widget_get_mapped (GTK_WIDGET (window)))
     {
-      gdk_drawable_get_size (gtk_widget_get_window (GTK_WIDGET (window)),
-                             &w, &h);
+      w = gdk_window_get_width (gtk_widget_get_window (GTK_WIDGET (window)));
+      h = gdk_window_get_height (gtk_widget_get_window (GTK_WIDGET (window)));
     }
   else
     {
