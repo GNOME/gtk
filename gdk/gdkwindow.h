@@ -527,12 +527,6 @@ void          gdk_window_reparent              (GdkWindow     *window,
                                                 GdkWindow     *new_parent,
                                                 gint           x,
                                                 gint           y);
-void          gdk_window_clear                 (GdkWindow     *window);
-void          gdk_window_clear_area            (GdkWindow     *window,
-                                                gint           x,
-                                                gint           y,
-                                                gint           width,
-                                                gint           height);
 void          gdk_window_raise                 (GdkWindow     *window);
 void          gdk_window_lower                 (GdkWindow     *window);
 void          gdk_window_restack               (GdkWindow     *window,

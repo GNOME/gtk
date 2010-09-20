@@ -372,8 +372,6 @@ gdk_window_flush
 gdk_window_has_native
 gdk_window_ensure_native
 gdk_window_reparent
-gdk_window_clear
-gdk_window_clear_area
 gdk_window_raise
 gdk_window_lower
 gdk_window_restack

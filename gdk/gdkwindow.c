@@ -3572,25 +3572,6 @@ gdk_window_clear_backing_region_direct (GdkWindow *window,
 }
 
 
-/**
- * gdk_window_clear:
- * @window: a #GdkWindow
- *
- * Clears an entire @window to the background pattern.
- **/
-void
-gdk_window_clear (GdkWindow *window)
-{
-  gint width, height;
-
-  g_return_if_fail (GDK_IS_WINDOW (window));
-
-  gdk_drawable_get_size (GDK_DRAWABLE (window), &width, &height);
-
-  gdk_window_clear_area (window, 0, 0,
-			 width, height);
-}
-
 static void
 gdk_window_clear_region_internal (GdkWindow *window,
 				  cairo_region_t *region)
@@ -3601,47 +3582,6 @@ gdk_window_clear_region_internal (GdkWindow *window,
     gdk_window_clear_backing_region (window, region);
   else
     gdk_window_clear_backing_region_direct (window, region);
-}
-
-/**
- * gdk_window_clear_area:
- * @window: a #GdkWindow
- * @x: x coordinate of rectangle to clear
- * @y: y coordinate of rectangle to clear
- * @width: width of rectangle to clear
- * @height: height of rectangle to clear
- *
- * Clears an area of @window to the background pattern.
- **/
-void
-gdk_window_clear_area (GdkWindow *window,
-		       gint       x,
-		       gint       y,
-		       gint       width,
-		       gint       height)
-{
-  GdkRectangle rect;
-  cairo_region_t *region;
-
-  g_return_if_fail (GDK_IS_WINDOW (window));
-
-  if (GDK_WINDOW_DESTROYED (window))
-    return;
-
-  /* Terminate early to avoid weird interpretation of
-     zero width/height by XClearArea */
-  if (width == 0 || height == 0)
-    return;
-
-  rect.x = x;
-  rect.y = y;
-  rect.width = width;
-  rect.height = height;
-
-  region = cairo_region_create_rectangle (&rect);
-  gdk_window_clear_region_internal (window,
-				    region);
-  cairo_region_destroy (region);
 }
 
 static void
@@ -6705,8 +6645,7 @@ gdk_window_set_background (GdkWindow      *window,
  * background form its parent window.
  *
  * The windowing system will normally fill a window with its background
- * when the window is obscured then exposed, and when you call
- * gdk_window_clear().
+ * when the window is obscured then exposed.
  */
 void
 gdk_window_set_background_pattern (GdkWindow *window,
