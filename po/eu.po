@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk_new_eu\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-09-08 12:11+0200\n"
+"POT-Creation-Date: 2010-09-21 15:08+0200\n"
 "PO-Revision-Date: 2010-09-08 12:12+0200\n"
 "Last-Translator: Iñaki Larrañaga Murgoitio <dooteo@euskalgnu.org>\n"
 "Language-Team: Basque <itzulpena@euskalgnu.org>\n"
@@ -517,7 +517,7 @@ msgstr "%1$s, %2$s"
 msgid "Search"
 msgstr "Bilatu"
 
-#: ../gtk/gtkfilechooserdefault.c:1782 ../gtk/gtkfilechooserdefault.c:9458
+#: ../gtk/gtkfilechooserdefault.c:1782 ../gtk/gtkfilechooserdefault.c:9457
 msgid "Recently Used"
 msgstr "Duela gutxi erabilita"
 
@@ -625,7 +625,7 @@ msgstr "_Izena:"
 msgid "_Browse for other folders"
 msgstr "_Arakatu beste karpetak"
 
-#: ../gtk/gtkfilechooserdefault.c:5099
+#: ../gtk/gtkfilechooserdefault.c:5097
 msgid "Type a file name"
 msgstr "Idatzi fitxategi-izena"
 
@@ -715,7 +715,7 @@ msgstr ""
 msgid "Could not send the search request"
 msgstr "Ezin izan da bilaketako eskaera bidali"
 
-#: ../gtk/gtkfilechooserdefault.c:9030
+#: ../gtk/gtkfilechooserdefault.c:9029
 msgid "Search:"
 msgstr "Bilatu:"
 
