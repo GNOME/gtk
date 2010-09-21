@@ -510,9 +510,9 @@ gdk_x11_screen_get_monitor_output (GdkScreen *screen,
 
 /**
  * gdk_screen_get_monitor_geometry:
- * @screen : a #GdkScreen
+ * @screen: a #GdkScreen
  * @monitor_num: the monitor number, between 0 and gdk_screen_get_n_monitors (screen)
- * @dest : a #GdkRectangle to be filled with the monitor geometry
+ * @dest: a #GdkRectangle to be filled with the monitor geometry
  *
  * Retrieves the #GdkRectangle representing the size and position of
  * the individual monitor within the entire screen area.
@@ -1261,12 +1261,12 @@ _gdk_x11_screen_process_owner_change (GdkScreen *screen,
 
 /**
  * _gdk_windowing_substitute_screen_number:
- * @display_name : The name of a display, in the form used by 
- *                 gdk_display_open (). If %NULL a default value
- *                 will be used. On X11, this is derived from the DISPLAY
- *                 environment variable.
- * @screen_number : The number of a screen within the display
- *                  referred to by @display_name.
+ * @display_name: The name of a display, in the form used by 
+ *                gdk_display_open (). If %NULL a default value
+ *                will be used. On X11, this is derived from the DISPLAY
+ *                environment variable.
+ * @screen_number: The number of a screen within the display
+ *                 referred to by @display_name.
  *
  * Modifies a @display_name to make @screen_number the default
  * screen when the display is opened.
