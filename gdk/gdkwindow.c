@@ -2352,7 +2352,7 @@ gdk_window_get_position (GdkWindow *window,
  * gdk_window_get_parent() will most likely not do what you expect if
  * there are offscreen windows in the hierarchy.
  *
- * Return value: parent of @window
+ * Return value: (transfer none): parent of @window
  **/
 GdkWindow*
 gdk_window_get_parent (GdkWindow *window)
@@ -2372,7 +2372,7 @@ gdk_window_get_parent (GdkWindow *window)
  *
  * See also: gdk_offscreen_window_get_embedder()
  *
- * Return value: effective parent of @window
+ * Return value: (transfer none): effective parent of @window
  *
  * Since: 2.22
  **/
@@ -2406,7 +2406,7 @@ gdk_window_get_effective_parent (GdkWindow *window)
  * gdk_window_get_toplevel() will most likely not do what you expect
  * if there are offscreen windows in the hierarchy.
  *
- * Return value: the toplevel window containing @window
+ * Return value: (transfer none): the toplevel window containing @window
  **/
 GdkWindow *
 gdk_window_get_toplevel (GdkWindow *window)
@@ -2438,7 +2438,7 @@ gdk_window_get_toplevel (GdkWindow *window)
  *
  * See also: gdk_offscreen_window_get_embedder()
  *
- * Return value: the effective toplevel window containing @window
+ * Return value: (transfer none): the effective toplevel window containing @window
  *
  * Since: 2.22
  **/

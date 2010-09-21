@@ -4238,7 +4238,7 @@ gdk_window_set_keep_below (GdkWindow *window, gboolean setting)
  * 
  * Returns the group leader window for @window. See gdk_window_set_group().
  * 
- * Return value: the group leader window for @window
+ * Return value: (transfer none): the group leader window for @window
  *
  * Since: 2.4
  **/
