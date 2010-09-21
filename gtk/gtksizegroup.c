@@ -25,7 +25,6 @@
 #include "gtkprivate.h"
 #include "gtksizegroup.h"
 #include "gtkbuildable.h"
-#include "gtksizerequest.h"
 
 
 
@@ -717,9 +716,9 @@ compute_dimension (GtkWidget        *widget,
 	      else
 		{
 		  if (mode == GTK_SIZE_GROUP_HORIZONTAL)
-		    gtk_size_request_get_width (GTK_SIZE_REQUEST (tmp_widget), &min_dimension, &nat_dimension);
+		    gtk_widget_get_preferred_width (tmp_widget, &min_dimension, &nat_dimension);
 		  else
-		    gtk_size_request_get_height (GTK_SIZE_REQUEST (tmp_widget), &min_dimension, &nat_dimension);
+		    gtk_widget_get_preferred_height (tmp_widget, &min_dimension, &nat_dimension);
 		}
 
 	      if (gtk_widget_get_mapped (tmp_widget) || !priv->ignore_hidden)
@@ -778,7 +777,7 @@ compute_dimension (GtkWidget        *widget,
  *
  * This function is used both to update sizegroup minimum and natural size 
  * information and widget minimum and natural sizes in multiple passes from 
- * the #GtkSizeRequest apis.
+ * the size request apis.
  */
 void
 _gtk_size_group_bump_requisition (GtkWidget        *widget,

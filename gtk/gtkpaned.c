@@ -33,7 +33,6 @@
 #include "gtkmain.h"
 #include "gtkmarshalers.h"
 #include "gtkorientable.h"
-#include "gtksizerequest.h"
 #include "gtkwindow.h"
 
 #include "gtkprivate.h"
@@ -805,8 +804,8 @@ gtk_paned_size_request (GtkWidget      *widget,
 
   if (priv->child1 && gtk_widget_get_visible (priv->child1))
     {
-      gtk_size_request_get_size (GTK_SIZE_REQUEST (priv->child1),
-                                 &child_requisition, NULL);
+      gtk_widget_get_preferred_size (priv->child1,
+                                     &child_requisition, NULL);
 
       requisition->height = child_requisition.height;
       requisition->width = child_requisition.width;
@@ -814,8 +813,8 @@ gtk_paned_size_request (GtkWidget      *widget,
 
   if (priv->child2 && gtk_widget_get_visible (priv->child2))
     {
-      gtk_size_request_get_size (GTK_SIZE_REQUEST (priv->child2),
-                                 &child_requisition, NULL);
+      gtk_widget_get_preferred_size (priv->child2,
+                                     &child_requisition, NULL);
 
       if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
         {
@@ -889,10 +888,8 @@ gtk_paned_size_allocate (GtkWidget     *widget,
 
       gtk_widget_style_get (widget, "handle-size", &handle_size, NULL);
 
-      gtk_size_request_get_size (GTK_SIZE_REQUEST (priv->child1),
-                                 &child1_requisition, NULL);
-      gtk_size_request_get_size (GTK_SIZE_REQUEST (priv->child2),
-                                 &child2_requisition, NULL);
+      gtk_widget_get_preferred_size (priv->child1, &child1_requisition, NULL);
+      gtk_widget_get_preferred_size (priv->child2, &child2_requisition, NULL);
 
       old_handle_pos = priv->handle_pos;
 

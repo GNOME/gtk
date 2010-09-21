@@ -1920,8 +1920,7 @@ gtk_cell_renderer_text_start_editing (GtkCellRenderer      *cell,
   
   gtk_editable_select_region (GTK_EDITABLE (priv->entry), 0, -1);
 
-  gtk_size_request_get_size (GTK_SIZE_REQUEST (priv->entry),
-                             &requisition, NULL);
+  gtk_widget_get_preferred_size (priv->entry, &requisition, NULL);
   if (requisition.height < cell_area->height)
     {
       GtkBorder *style_border;

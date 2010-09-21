@@ -459,8 +459,7 @@ gtk_socket_size_request (GtkWidget      *widget,
 
   if (socket->plug_widget)
     {
-      gtk_size_request_get_size (GTK_SIZE_REQUEST (socket->plug_widget),
-                                 requisition, NULL);
+      gtk_widget_get_preferred_size (socket->plug_widget, requisition, NULL);
     }
   else
     {

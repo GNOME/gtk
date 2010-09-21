@@ -199,10 +199,10 @@ file_chooser_widget_default_size_changed (GtkWidget            *widget,
     {
       /* Force a size request of everything before we start.  This will make sure
        * that widget->requisition is meaningful. */
-      gtk_size_request_get_size (GTK_SIZE_REQUEST (dialog),
-                                 &req, NULL);
-      gtk_size_request_get_size (GTK_SIZE_REQUEST (widget),
-                                 &widget_req, NULL);
+      gtk_widget_get_preferred_size (GTK_WIDGET (dialog),
+                                     &req, NULL);
+      gtk_widget_get_preferred_size (widget,
+                                     &widget_req, NULL);
     }
 
   _gtk_file_chooser_embed_get_default_size (GTK_FILE_CHOOSER_EMBED (priv->widget),

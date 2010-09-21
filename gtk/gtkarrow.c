@@ -77,17 +77,14 @@ static void     gtk_arrow_get_property (GObject        *object,
 static gboolean gtk_arrow_draw         (GtkWidget      *widget,
                                         cairo_t        *cr);
 
-static void     gtk_arrow_size_request_init (GtkSizeRequestIface *iface);
-static void     gtk_arrow_get_width         (GtkSizeRequest      *widget,
-					     gint                *minimum_size,
-					     gint                *natural_size);
-static void     gtk_arrow_get_height        (GtkSizeRequest      *widget,
-					     gint                *minimum_size,
-					     gint                *natural_size);
+static void     gtk_arrow_get_preferred_width         (GtkWidget           *widget,
+                                                       gint                *minimum_size,
+                                                       gint                *natural_size);
+static void     gtk_arrow_get_preferred_height        (GtkWidget           *widget,
+                                                       gint                *minimum_size,
+                                                       gint                *natural_size);
 
-G_DEFINE_TYPE_WITH_CODE (GtkArrow, gtk_arrow, GTK_TYPE_MISC,
-			 G_IMPLEMENT_INTERFACE (GTK_TYPE_SIZE_REQUEST,
-						gtk_arrow_size_request_init))
+G_DEFINE_TYPE (GtkArrow, gtk_arrow, GTK_TYPE_MISC)
 
 
 static void
@@ -103,6 +100,8 @@ gtk_arrow_class_init (GtkArrowClass *class)
   gobject_class->get_property = gtk_arrow_get_property;
 
   widget_class->draw = gtk_arrow_draw;
+  widget_class->get_preferred_width  = gtk_arrow_get_preferred_width;
+  widget_class->get_preferred_height = gtk_arrow_get_preferred_height;
 
   g_object_class_install_property (gobject_class,
                                    PROP_ARROW_TYPE,
@@ -199,16 +198,9 @@ gtk_arrow_init (GtkArrow *arrow)
 }
 
 static void
-gtk_arrow_size_request_init (GtkSizeRequestIface *iface)
-{
-  iface->get_width  = gtk_arrow_get_width;
-  iface->get_height = gtk_arrow_get_height;
-}
-
-static void
-gtk_arrow_get_width (GtkSizeRequest      *widget,
-		     gint                *minimum_size,
-		     gint                *natural_size)
+gtk_arrow_get_preferred_width (GtkWidget *widget,
+                               gint      *minimum_size,
+                               gint      *natural_size)
 {
   gint xpad;
 
@@ -222,9 +214,9 @@ gtk_arrow_get_width (GtkSizeRequest      *widget,
 }
 
 static void
-gtk_arrow_get_height (GtkSizeRequest      *widget,
-		      gint                *minimum_size,
-		      gint                *natural_size)
+gtk_arrow_get_preferred_height (GtkWidget *widget,
+                                gint      *minimum_size,
+                                gint      *natural_size)
 {
   gint ypad;
 

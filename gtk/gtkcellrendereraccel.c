@@ -417,8 +417,7 @@ gtk_cell_renderer_accel_get_size (GtkCellRenderer *cell,
   if (priv->sizing_label == NULL)
     priv->sizing_label = gtk_label_new (_("New accelerator..."));
 
-  gtk_size_request_get_size (GTK_SIZE_REQUEST (priv->sizing_label),
-                             &requisition, NULL);
+  gtk_widget_get_preferred_size (priv->sizing_label, &requisition, NULL);
 
   GTK_CELL_RENDERER_CLASS (gtk_cell_renderer_accel_parent_class)->get_size (cell, widget, cell_area,
                                                                             x_offset, y_offset, width, height);

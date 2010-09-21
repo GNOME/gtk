@@ -34,8 +34,6 @@
 
 #include "gdkconfig.h"
 
-#include "gtksizerequest.h"
-
 #include "gtkprivate.h"
 #include "gtkintl.h"
 #include "gtkmarshalers.h"
@@ -993,8 +991,7 @@ gtk_layout_size_request (GtkWidget     *widget,
       
       tmp_list = tmp_list->next;
 
-      gtk_size_request_get_size (GTK_SIZE_REQUEST (child->widget),
-                                 &child_requisition, NULL);
+      gtk_widget_get_preferred_size (child->widget, &child_requisition, NULL);
     }
 }
 
@@ -1126,8 +1123,7 @@ gtk_layout_allocate_child (GtkLayout      *layout,
   allocation.x = child->x;
   allocation.y = child->y;
 
-  gtk_size_request_get_size (GTK_SIZE_REQUEST (child->widget),
-                             &requisition, NULL);
+  gtk_widget_get_preferred_size (child->widget, &requisition, NULL);
   allocation.width = requisition.width;
   allocation.height = requisition.height;
   

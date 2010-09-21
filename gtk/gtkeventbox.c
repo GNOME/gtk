@@ -501,8 +501,7 @@ gtk_event_box_size_request (GtkWidget      *widget,
     {
       GtkRequisition child_requisition;
 
-      gtk_size_request_get_size (GTK_SIZE_REQUEST (child),
-                                 &child_requisition, NULL);
+      gtk_widget_get_preferred_size (child, &child_requisition, NULL);
 
       requisition->width += child_requisition.width;
       requisition->height += child_requisition.height;

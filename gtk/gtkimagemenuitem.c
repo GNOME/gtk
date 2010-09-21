@@ -36,7 +36,6 @@
 #include "gtkcontainer.h"
 #include "gtkwindow.h"
 #include "gtkactivatable.h"
-#include "gtksizerequest.h"
 
 #include "gtkintl.h"
 #include "gtkprivate.h"
@@ -346,8 +345,7 @@ gtk_image_menu_item_toggle_size_request (GtkMenuItem *menu_item,
       GtkRequisition image_requisition;
       guint toggle_spacing;
 
-      gtk_size_request_get_size (GTK_SIZE_REQUEST (priv->image),
-                                 &image_requisition, NULL);
+      gtk_widget_get_preferred_size (priv->image, &image_requisition, NULL);
 
       gtk_widget_style_get (GTK_WIDGET (menu_item),
 			    "toggle-spacing", &toggle_spacing,
@@ -442,8 +440,7 @@ gtk_image_menu_item_size_request (GtkWidget      *widget,
     {
       GtkRequisition child_requisition;
 
-      gtk_size_request_get_size (GTK_SIZE_REQUEST (priv->image),
-                                 &child_requisition, NULL);
+      gtk_widget_get_preferred_size (priv->image, &child_requisition, NULL);
 
       child_width = child_requisition.width;
       child_height = child_requisition.height;
@@ -501,8 +498,7 @@ gtk_image_menu_item_size_allocate (GtkWidget     *widget,
        * come up with a solution that's really better.
        */
 
-      gtk_size_request_get_size (GTK_SIZE_REQUEST (priv->image),
-                                 &child_requisition, NULL);
+      gtk_widget_get_preferred_size (priv->image, &child_requisition, NULL);
 
       gtk_widget_get_allocation (widget, &widget_allocation);
 

@@ -131,7 +131,6 @@ gtk_separator_menu_item_get_type
 gtk_separator_tool_item_get_type
 gtk_settings_get_type
 gtk_size_group_get_type
-gtk_size_request_get_type
 gtk_socket_get_type
 gtk_spin_button_get_type
 gtk_spinner_get_type

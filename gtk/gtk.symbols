@@ -3042,13 +3042,12 @@ gtk_size_group_set_mode
 
 #if IN_HEADER(__GTK_SIZE_REQUEST_H__)
 #if IN_FILE(__GTK_SIZE_REQUEST_C__)
-gtk_size_request_get_height
-gtk_size_request_get_height_for_width
-gtk_size_request_get_request_mode
-gtk_size_request_get_size
-gtk_size_request_get_type G_GNUC_CONST
-gtk_size_request_get_width
-gtk_size_request_get_width_for_height
+gtk_widget_get_preferred_height
+gtk_widget_get_preferred_height_for_width
+gtk_widget_get_preferred
+gtk_widget_get_preferred_size
+gtk_widget_get_preferred_width
+gtk_widget_get_preferred_width_for_height
 #endif
 #endif
 

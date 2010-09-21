@@ -41,7 +41,6 @@
 #include "gtkhbox.h"
 #include "gtkvscrollbar.h"
 #include "gtksettings.h"
-#include "gtksizerequest.h"
 #include "gtkprivate.h"
 #include "gtkintl.h"
 
@@ -260,17 +259,16 @@ static gboolean gtk_menu_real_can_activate_accel (GtkWidget *widget,
 static void _gtk_menu_refresh_accel_paths (GtkMenu *menu,
 					   gboolean group_changed);
 
-static void gtk_menu_size_request_init          (GtkSizeRequestIface *iface);
-static void gtk_menu_get_width                  (GtkSizeRequest      *widget,
-						 gint                *minimum_size,
-						 gint                *natural_size);
-static void gtk_menu_get_height                 (GtkSizeRequest      *widget,
-						 gint                *minimum_size,
-						 gint                *natural_size);
-static void gtk_menu_get_height_for_width       (GtkSizeRequest      *widget,
-						 gint                 for_size,
-						 gint                *minimum_size,
-						 gint                *natural_size);
+static void gtk_menu_get_preferred_width            (GtkWidget           *widget,
+                                                     gint                *minimum_size,
+                                                     gint                *natural_size);
+static void gtk_menu_get_preferred_height           (GtkWidget           *widget,
+                                                     gint                *minimum_size,
+                                                     gint                *natural_size);
+static void gtk_menu_get_preferred_height_for_width (GtkWidget           *widget,
+                                                     gint                 for_size,
+                                                     gint                *minimum_size,
+                                                     gint                *natural_size);
 
 
 static const gchar attach_data_key[] = "gtk-menu-attach-data";
@@ -283,9 +281,7 @@ gtk_menu_get_private (GtkMenu *menu)
   return G_TYPE_INSTANCE_GET_PRIVATE (menu, GTK_TYPE_MENU, GtkMenuPrivate);
 }
 
-G_DEFINE_TYPE_WITH_CODE (GtkMenu, gtk_menu, GTK_TYPE_MENU_SHELL,
-			 G_IMPLEMENT_INTERFACE (GTK_TYPE_SIZE_REQUEST,
-						gtk_menu_size_request_init))
+G_DEFINE_TYPE (GtkMenu, gtk_menu, GTK_TYPE_MENU_SHELL)
 
 static void
 menu_queue_resize (GtkMenu *menu)
@@ -492,6 +488,9 @@ gtk_menu_class_init (GtkMenuClass *class)
   widget_class->focus = gtk_menu_focus;
   widget_class->can_activate_accel = gtk_menu_real_can_activate_accel;
   widget_class->grab_notify = gtk_menu_grab_notify;
+  widget_class->get_preferred_width = gtk_menu_get_preferred_width;
+  widget_class->get_preferred_height = gtk_menu_get_preferred_height;
+  widget_class->get_preferred_height_for_width = gtk_menu_get_preferred_height_for_width;
 
   container_class->remove = gtk_menu_remove;
   container_class->get_child_property = gtk_menu_get_child_property;
@@ -1660,7 +1659,7 @@ gtk_menu_popup_for_device (GtkMenu             *menu,
     /* Instead of trusting the menu position function to queue a resize when the
      * menu goes out of bounds, invalidate the cached size here. */
     gtk_widget_queue_resize (GTK_WIDGET (menu));
-    gtk_size_request_get_size (GTK_SIZE_REQUEST (menu->toplevel), &tmp_request, NULL);
+    gtk_widget_get_preferred_size (menu->toplevel, &tmp_request, NULL);
     
     tmp_allocation.width = tmp_request.width;
     tmp_allocation.height = tmp_request.height;
@@ -2070,8 +2069,8 @@ gtk_menu_set_tearoff_hints (GtkMenu *menu,
     {
       GtkRequisition requisition;
 
-      gtk_size_request_get_size (GTK_SIZE_REQUEST (menu->tearoff_scrollbar),
-                                 &requisition, NULL);
+      gtk_widget_get_preferred_size (menu->tearoff_scrollbar,
+                                     &requisition, NULL);
       width += requisition.width;
     }
 
@@ -2219,8 +2218,8 @@ gtk_menu_set_tearoff_state (GtkMenu  *menu,
 
 	  /* Update menu->requisition
 	   */
-          gtk_size_request_get_size (GTK_SIZE_REQUEST (menu),
-                                     NULL, NULL);
+          gtk_widget_get_preferred_size (GTK_WIDGET (menu),
+                                         NULL, NULL);
 
 	  gtk_menu_set_tearoff_hints (menu, gdk_window_get_width (gtk_widget_get_window (GTK_WIDGET (menu))));
 	    
@@ -2619,8 +2618,8 @@ calculate_line_heights (GtkMenu *menu,
 
       part = avail_width / (r - l);
 
-      gtk_size_request_get_height_for_width (GTK_SIZE_REQUEST (child), part,
-					     &child_min, &child_nat);
+      gtk_widget_get_preferred_height_for_width (child, part,
+                                                 &child_min, &child_nat);
 
       gtk_menu_item_toggle_size_request (GTK_MENU_ITEM (child), &toggle_size);
       
@@ -3031,19 +3030,10 @@ gtk_menu_show (GtkWidget *widget)
 }
 
 
-
 static void 
-gtk_menu_size_request_init (GtkSizeRequestIface *iface)
-{
-  iface->get_width            = gtk_menu_get_width;
-  iface->get_height           = gtk_menu_get_height;
-  iface->get_height_for_width = gtk_menu_get_height_for_width;
-}
-
-static void 
-gtk_menu_get_width (GtkSizeRequest      *widget,
-		    gint                *minimum_size,
-		    gint                *natural_size)
+gtk_menu_get_preferred_width (GtkWidget *widget,
+                              gint      *minimum_size,
+                              gint      *natural_size)
 {
   GtkMenu        *menu;
   GtkMenuShell   *menu_shell;
@@ -3091,7 +3081,7 @@ gtk_menu_get_width (GtkSizeRequest      *widget,
        */
 
        GTK_MENU_ITEM (child)->show_submenu_indicator = TRUE;
-       gtk_size_request_get_width (GTK_SIZE_REQUEST (child), &child_min, &child_nat);
+       gtk_widget_get_preferred_width (child, &child_min, &child_nat);
 
        gtk_menu_item_toggle_size_request (GTK_MENU_ITEM (child), &toggle_size);
        max_toggle_size = MAX (max_toggle_size, toggle_size);
@@ -3156,22 +3146,22 @@ gtk_menu_get_width (GtkSizeRequest      *widget,
 }
 
 static void 
-gtk_menu_get_height (GtkSizeRequest      *widget,
-		     gint                *minimum_size,
-		     gint                *natural_size)
+gtk_menu_get_preferred_height (GtkWidget *widget,
+                               gint      *minimum_size,
+                               gint      *natural_size)
 {
   gint min_width;
 
   /* Menus are height-for-width only, just return the height for the minimum width */
-  GTK_SIZE_REQUEST_GET_IFACE (widget)->get_width (widget, &min_width, NULL);
-  GTK_SIZE_REQUEST_GET_IFACE (widget)->get_height_for_width (widget, min_width, minimum_size, natural_size);
+  GTK_WIDGET_GET_CLASS (widget)->get_preferred_width (widget, &min_width, NULL);
+  GTK_WIDGET_GET_CLASS (widget)->get_preferred_height_for_width (widget, min_width, minimum_size, natural_size);
 }
 
 static void
-gtk_menu_get_height_for_width (GtkSizeRequest      *widget,
-			       gint                 for_size,
-			       gint                *minimum_size,
-			       gint                *natural_size)
+gtk_menu_get_preferred_height_for_width (GtkWidget *widget,
+                                         gint       for_size,
+                                         gint      *minimum_size,
+                                         gint      *natural_size)
 {
   GtkMenu        *menu = GTK_MENU (widget);
   GtkMenuPrivate *private = gtk_menu_get_private (menu);
@@ -4542,7 +4532,7 @@ gtk_menu_position (GtkMenu *menu)
   /* Get the minimum height for minimum width to figure out 
    * the right place to popup the menu. 
    */
-  gtk_size_request_get_size (GTK_SIZE_REQUEST (widget), &requisition, NULL);
+  gtk_widget_get_preferred_size (widget, &requisition, NULL);
 
   if (pointer_screen != screen)
     {
@@ -5461,8 +5451,8 @@ child_at (GtkMenu *menu,
 	{
 	  GtkRequisition child_requisition;
 
-          gtk_size_request_get_size (GTK_SIZE_REQUEST (children->data),
-                                     &child_requisition, NULL);
+          gtk_widget_get_preferred_size (children->data,
+                                         &child_requisition, NULL);
 
 	  if (_gtk_menu_item_is_selectable (children->data) &&
 	      child_offset >= lower &&

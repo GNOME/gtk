@@ -44,7 +44,6 @@
 #include "gtkframe.h"
 #include "gtktreemodelsort.h"
 #include "gtktooltip.h"
-#include "gtksizerequest.h"
 #include "gtkprivate.h"
 
 #define GTK_TREE_VIEW_PRIORITY_VALIDATE (GDK_PRIORITY_REDRAW + 5)
@@ -1972,8 +1971,7 @@ gtk_tree_view_size_request_columns (GtkTreeView *tree_view)
 
           column = list->data;
 
-          gtk_size_request_get_size (GTK_SIZE_REQUEST (column->button),
-                                     &requisition, NULL);
+          gtk_widget_get_preferred_size (column->button, &requisition, NULL);
 	  column->button_request = requisition.width;
           tree_view->priv->header_height = MAX (tree_view->priv->header_height, requisition.height);
         }
@@ -2066,8 +2064,7 @@ gtk_tree_view_size_request (GtkWidget      *widget,
       tmp_list = tmp_list->next;
 
       if (gtk_widget_get_visible (child->widget))
-        gtk_size_request_get_size (GTK_SIZE_REQUEST (child->widget),
-                                   &child_requisition, NULL);
+        gtk_widget_get_preferred_size (child->widget, &child_requisition, NULL);
     }
 }
 
@@ -5349,7 +5346,7 @@ gtk_tree_view_key_press (GtkWidget   *widget,
 	      GtkRequisition button_req;
               gint old_width = column->resized_width;
 
-	      gtk_size_request_get_size (GTK_SIZE_REQUEST (column->button), &button_req, NULL);
+	      gtk_widget_get_preferred_size (column->button, &button_req, NULL);
 
               column->resized_width = MAX (column->resized_width,
                                            column->width);
@@ -6154,8 +6151,8 @@ validate_visible_area (GtkTreeView *tree_view)
        * same when we get our next size_allocate.  If we don't do this, we'll be
        * in an inconsistent state if we call top_row_to_dy. */
 
-      gtk_size_request_get_size (GTK_SIZE_REQUEST (tree_view),
-                                 &requisition, NULL);
+      gtk_widget_get_preferred_size (GTK_WIDGET (tree_view),
+                                     &requisition, NULL);
       tree_view->priv->hadjustment->upper = MAX (tree_view->priv->hadjustment->upper, (gfloat)requisition.width);
       tree_view->priv->vadjustment->upper = MAX (tree_view->priv->vadjustment->upper, (gfloat)requisition.height);
       gtk_adjustment_changed (tree_view->priv->hadjustment);
@@ -6343,8 +6340,8 @@ do_validate_rows (GtkTreeView *tree_view, gboolean queue_resize)
        * same when we get our next size_allocate.  If we don't do this, we'll be
        * in an inconsistent state when we call top_row_to_dy. */
 
-      gtk_size_request_get_size (GTK_SIZE_REQUEST (tree_view),
-                                 &requisition, NULL);
+      gtk_widget_get_preferred_size (GTK_WIDGET (tree_view),
+                                     &requisition, NULL);
       tree_view->priv->hadjustment->upper = MAX (tree_view->priv->hadjustment->upper, (gfloat)requisition.width);
       tree_view->priv->vadjustment->upper = MAX (tree_view->priv->vadjustment->upper, (gfloat)requisition.height);
       gtk_adjustment_changed (tree_view->priv->hadjustment);
@@ -6407,8 +6404,8 @@ do_presize_handler (GtkTreeView *tree_view)
     {
       GtkRequisition requisition;
 
-      gtk_size_request_get_size (GTK_SIZE_REQUEST (tree_view),
-                                 &requisition, NULL);
+      gtk_widget_get_preferred_size (GTK_WIDGET (tree_view),
+                                     &requisition, NULL);
 
       tree_view->priv->hadjustment->upper = MAX (tree_view->priv->hadjustment->upper, (gfloat)requisition.width);
       tree_view->priv->vadjustment->upper = MAX (tree_view->priv->vadjustment->upper, (gfloat)requisition.height);
@@ -10534,7 +10531,7 @@ gtk_tree_view_new_column_width (GtkTreeView *tree_view,
   /* Clamp down the value */
   if (column->min_width == -1)
     {
-      gtk_size_request_get_size (GTK_SIZE_REQUEST (column->button), &button_req, NULL);
+      gtk_widget_get_preferred_size (column->button, &button_req, NULL);
       width = MAX (button_req.width, width);
     }
   else
@@ -14210,8 +14207,7 @@ gtk_tree_view_search_position_func (GtkTreeView *tree_view,
   gdk_window_get_origin (tree_window, &tree_x, &tree_y);
   tree_width = gdk_window_get_width (tree_window);
   tree_height = gdk_window_get_height (tree_window);
-  gtk_size_request_get_size (GTK_SIZE_REQUEST (search_dialog),
-                             &requisition, NULL);
+  gtk_widget_get_preferred_size (search_dialog, &requisition, NULL);
 
   if (tree_x + tree_width > gdk_screen_get_width (screen))
     x = gdk_screen_get_width (screen) - requisition.width;
@@ -14828,8 +14824,8 @@ gtk_tree_view_real_start_editing (GtkTreeView       *tree_view,
   gtk_tree_view_real_set_cursor (tree_view, path, FALSE, TRUE);
   cell_area->y += pre_val - (int)tree_view->priv->vadjustment->value;
 
-  gtk_size_request_get_size (GTK_SIZE_REQUEST (cell_editable),
-                             &requisition, NULL);
+  gtk_widget_get_preferred_size (GTK_WIDGET (cell_editable),
+                                 &requisition, NULL);
 
   GTK_TREE_VIEW_SET_FLAG (tree_view, GTK_TREE_VIEW_DRAW_KEYFOCUS);
 

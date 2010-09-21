@@ -59,7 +59,6 @@
 #include "gtkintl.h"
 #include "gtkaccessible.h"
 #include "gtkbuildable.h"
-#include "gtksizerequest.h"
 #include "gtkprivate.h"
 
 struct _GtkFontSelectionPrivate
@@ -1173,8 +1172,7 @@ gtk_font_selection_update_preview (GtkFontSelection *fontsel)
   GtkWidget *preview_entry = priv->preview_entry;
   const gchar *text;
 
-  gtk_size_request_get_size (GTK_SIZE_REQUEST (preview_entry),
-                             &old_requisition, NULL);
+  gtk_widget_get_preferred_size (preview_entry, &old_requisition, NULL);
 
   rc_style = gtk_rc_style_new ();
   rc_style->font_desc = gtk_font_selection_get_font_description (fontsel);
@@ -1182,7 +1180,7 @@ gtk_font_selection_update_preview (GtkFontSelection *fontsel)
   gtk_widget_modify_style (preview_entry, rc_style);
   g_object_unref (rc_style);
 
-  gtk_size_request_get_size (GTK_SIZE_REQUEST (preview_entry), &new_requisition, NULL);
+  gtk_widget_get_preferred_size (preview_entry, &new_requisition, NULL);
   
   /* We don't ever want to be over MAX_PREVIEW_HEIGHT pixels high. */
   new_height = CLAMP (new_requisition.height, INITIAL_PREVIEW_HEIGHT, MAX_PREVIEW_HEIGHT);

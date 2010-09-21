@@ -1486,8 +1486,8 @@ gtk_container_real_check_resize (GtkContainer *container)
   GtkAllocation allocation;
   GtkRequisition requisition;
 
-  gtk_size_request_get_size (GTK_SIZE_REQUEST (widget),
-                             &requisition, NULL);
+  gtk_widget_get_preferred_size (widget,
+                                 &requisition, NULL);
   gtk_widget_get_allocation (widget, &allocation);
 
   if (requisition.width > allocation.width ||

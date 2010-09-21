@@ -25,9 +25,9 @@
 /**
  * SECTION:gtksizerequest
  * @Short_Description: Height-for-width geometry management
- * @Title: GtkSizeRequest
+ * @Title: GtkWidget     
  *
- * The GtkSizeRequest interface is GTK+'s height-for-width (and width-for-height)
+ * The GtkWidget      interface is GTK+'s height-for-width (and width-for-height)
  * geometry management system. Height-for-width means that a widget can
  * change how much vertical space it needs, depending on the amount
  * of horizontal space that it is given (and similar for width-for-height).
@@ -36,14 +36,14 @@
  *
  * GTK+'s traditional two-pass <link linkend="size-allocation">size-allocation</link>
  * algorithm does not allow this flexibility. #GtkWidget provides a default
- * implementation of the #GtkSizeRequest interface for existing widgets,
+ * implementation of the #GtkWidget      interface for existing widgets,
  * which always requests the same height, regardless of the available width.
  *
  * <refsect2>
- * <title>Implementing GtkSizeRequest</title>
+ * <title>Implementing GtkWidget     </title>
  * <para>
  * Some important things to keep in mind when implementing
- * the GtkSizeRequest interface and when using it in container
+ * the GtkWidget      interface and when using it in container
  * implementations.
  *
  * The geometry management system will query a logical hierarchy in
@@ -54,12 +54,12 @@
  * For instance when queried in the normal height-for-width mode:
  * First the default minimum and natural width for each widget
  * in the interface will computed and collectively returned to
- * the toplevel by way of gtk_size_request_get_width().
+ * the toplevel by way of gtk_widget_get_preferred_width().
  * Next, the toplevel will use the minimum width to query for the
  * minimum height contextual to that width using
- * gtk_size_request_get_height_for_width(), which will also be a
- * highly recursive operation. This minimum-for-minimum size can be
- * used to set the minimum size constraint on the toplevel.
+ * gtk_widget_get_preferred_height_for_width(), which will also
+ * be a highly recursive operation. This minimum-for-minimum size can
+ * be used to set the minimum size constraint on the toplevel.
  *
  * When allocating, each container can use the minimum and natural
  * sizes reported by their children to allocate natural sizes and
@@ -67,7 +67,7 @@
  *
  * That means that the request operation at allocation time will
  * usually fire again in contexts of different allocated sizes than
- * the ones originally queried for. #GtkSizeRequest caches a
+ * the ones originally queried for. #GtkWidget      caches a
  * small number of results to avoid re-querying for the same
  * allocated size in one allocation cycle.
  *
@@ -124,18 +124,6 @@
 #include "gtksizegroup.h"
 #include "gtkprivate.h"
 #include "gtkintl.h"
-
-typedef GtkSizeRequestIface GtkSizeRequestInterface;
-G_DEFINE_INTERFACE (GtkSizeRequest,
-		    gtk_size_request,
-		    GTK_TYPE_WIDGET);
-
-
-static void
-gtk_size_request_default_init (GtkSizeRequestInterface *iface)
-{
-}
-
 
 /* looks for a cached size request for this for_size. If not
  * found, returns the oldest entry so it can be overwritten
@@ -225,7 +213,7 @@ static GQuark recursion_check_quark = 0;
 #endif /* G_DISABLE_CHECKS */
 
 static void
-push_recursion_check (GtkSizeRequest  *request,
+push_recursion_check (GtkWidget       *request,
                       GtkSizeGroupMode orientation,
                       gint             for_size)
 {
@@ -249,10 +237,10 @@ push_recursion_check (GtkSizeRequest  *request,
 
   if (previous_method != NULL)
     {
-      g_warning ("%s %p: widget tried to gtk_size_request_%s inside "
-                 " GtkSizeRequest::%s implementation. "
-                 "Should just invoke GTK_SIZE_REQUEST_GET_IFACE(widget)->%s "
-                 "directly rather than using gtk_size_request_%s",
+      g_warning ("%s %p: widget tried to gtk_widget_%s inside "
+                 " GtkWidget     ::%s implementation. "
+                 "Should just invoke GTK_WIDGET_GET_CLASS(widget)->%s "
+                 "directly rather than using gtk_widget_%s",
                  G_OBJECT_TYPE_NAME (request), request,
                  method, previous_method,
                  method, method);
@@ -263,7 +251,7 @@ push_recursion_check (GtkSizeRequest  *request,
 }
 
 static void
-pop_recursion_check (GtkSizeRequest  *request,
+pop_recursion_check (GtkWidget       *request,
                      GtkSizeGroupMode orientation)
 {
 #ifndef G_DISABLE_CHECKS
@@ -272,7 +260,7 @@ pop_recursion_check (GtkSizeRequest  *request,
 }
 
 static void
-compute_size_for_orientation (GtkSizeRequest    *request,
+compute_size_for_orientation (GtkWidget         *request,
                               GtkSizeGroupMode   orientation,
                               gint               for_size,
                               gint              *minimum_size,
@@ -284,7 +272,7 @@ compute_size_for_orientation (GtkSizeRequest    *request,
   gboolean          found_in_cache = FALSE;
   int adjusted_min, adjusted_natural;
 
-  g_return_if_fail (GTK_IS_SIZE_REQUEST (request));
+  g_return_if_fail (GTK_IS_WIDGET (request));
   g_return_if_fail (minimum_size != NULL || natural_size != NULL);
 
   widget = GTK_WIDGET (request);
@@ -332,20 +320,20 @@ compute_size_for_orientation (GtkSizeRequest    *request,
           requisition_size = requisition.width;
 
           if (for_size < 0)
-            GTK_SIZE_REQUEST_GET_IFACE (request)->get_width (request, &min_size, &nat_size);
+            GTK_WIDGET_GET_CLASS (request)->get_preferred_width (request, &min_size, &nat_size);
           else
-            GTK_SIZE_REQUEST_GET_IFACE (request)->get_width_for_height (request, for_size, 
-									&min_size, &nat_size);
+            GTK_WIDGET_GET_CLASS (request)->get_preferred_width_for_height (request, for_size, 
+                                                                                  &min_size, &nat_size);
         }
       else
         {
           requisition_size = requisition.height;
 
           if (for_size < 0)
-            GTK_SIZE_REQUEST_GET_IFACE (request)->get_height (request, &min_size, &nat_size);
+            GTK_WIDGET_GET_CLASS (request)->get_preferred_height (request, &min_size, &nat_size);
           else
-            GTK_SIZE_REQUEST_GET_IFACE (request)->get_height_for_width (request, for_size, 
-									&min_size, &nat_size);
+            GTK_WIDGET_GET_CLASS (request)->get_preferred_height_for_width (request, for_size, 
+                                                                                  &min_size, &nat_size);
         }
       pop_recursion_check (request, orientation);
 
@@ -436,8 +424,8 @@ compute_size_for_orientation (GtkSizeRequest    *request,
 }
 
 /**
- * gtk_size_request_get_request_mode:
- * @widget: a #GtkSizeRequest instance
+ * gtk_widget_get_preferred:
+ * @widget: a #GtkWidget instance
  *
  * Gets whether the widget prefers a height-for-width layout
  * or a width-for-height layout.
@@ -452,23 +440,23 @@ compute_size_for_orientation (GtkSizeRequest    *request,
  * Since: 3.0
  */
 GtkSizeRequestMode
-gtk_size_request_get_request_mode (GtkSizeRequest *widget)
+gtk_widget_get_request_mode (GtkWidget *widget)
 {
-  GtkSizeRequestIface *iface;
+  GtkWidgetClass *klass;
 
-  g_return_val_if_fail (GTK_IS_SIZE_REQUEST (widget), GTK_SIZE_REQUEST_HEIGHT_FOR_WIDTH);
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), GTK_SIZE_REQUEST_HEIGHT_FOR_WIDTH);
 
-  iface = GTK_SIZE_REQUEST_GET_IFACE (widget);
-  if (iface->get_request_mode)
-    return iface->get_request_mode (widget);
+  klass = GTK_WIDGET_GET_CLASS (widget);
+  if (klass->get_request_mode)
+    return klass->get_request_mode (widget);
 
   /* By default widgets are height-for-width. */
   return GTK_SIZE_REQUEST_HEIGHT_FOR_WIDTH;
 }
 
 /**
- * gtk_size_request_get_width:
- * @widget: a #GtkSizeRequest instance
+ * gtk_widget_get_preferred_width:
+ * @widget: a #GtkWidget instance
  * @minimum_width: (out) (allow-none): location to store the minimum width, or %NULL
  * @natural_width: (out) (allow-none): location to store the natural width, or %NULL
  *
@@ -486,9 +474,9 @@ gtk_size_request_get_request_mode (GtkSizeRequest *widget)
  * Since: 3.0
  */
 void
-gtk_size_request_get_width (GtkSizeRequest *widget,
-			    gint           *minimum_width,
-			    gint           *natural_width)
+gtk_widget_get_preferred_width (GtkWidget *widget,
+                                gint      *minimum_width,
+                                gint      *natural_width)
 {
   compute_size_for_orientation (widget, GTK_SIZE_GROUP_HORIZONTAL,
                                 -1, minimum_width, natural_width);
@@ -496,8 +484,8 @@ gtk_size_request_get_width (GtkSizeRequest *widget,
 
 
 /**
- * gtk_size_request_get_height:
- * @widget: a #GtkSizeRequest instance
+ * gtk_widget_get_preferred_height:
+ * @widget: a #GtkWidget instance
  * @minimum_height: (out) (allow-none): location to store the minimum height, or %NULL
  * @natural_height: (out) (allow-none): location to store the natural height, or %NULL
  *
@@ -514,9 +502,9 @@ gtk_size_request_get_width (GtkSizeRequest *widget,
  * Since: 3.0
  */
 void
-gtk_size_request_get_height (GtkSizeRequest *widget,
-			     gint           *minimum_height,
-			     gint           *natural_height)
+gtk_widget_get_preferred_height (GtkWidget *widget,
+                                 gint      *minimum_height,
+                                 gint      *natural_height)
 {
   compute_size_for_orientation (widget, GTK_SIZE_GROUP_VERTICAL,
                                 -1, minimum_height, natural_height);
@@ -525,8 +513,8 @@ gtk_size_request_get_height (GtkSizeRequest *widget,
 
 
 /**
- * gtk_size_request_get_width_for_height:
- * @widget: a #GtkSizeRequest instance
+ * gtk_widget_get_preferred_width_for_height:
+ * @widget: a #GtkWidget instance
  * @height: the height which is available for allocation
  * @minimum_width: (out) (allow-none): location for storing the minimum width, or %NULL
  * @natural_width: (out) (allow-none): location for storing the natural width, or %NULL
@@ -543,18 +531,18 @@ gtk_size_request_get_height (GtkSizeRequest *widget,
  * Since: 3.0
  */
 void
-gtk_size_request_get_width_for_height (GtkSizeRequest *widget,
-				       gint            height,
-				       gint           *minimum_width,
-				       gint           *natural_width)
+gtk_widget_get_preferred_width_for_height (GtkWidget *widget,
+                                           gint       height,
+                                           gint      *minimum_width,
+                                           gint      *natural_width)
 {
   compute_size_for_orientation (widget, GTK_SIZE_GROUP_HORIZONTAL,
                                 height, minimum_width, natural_width);
 }
 
 /**
- * gtk_size_request_get_height_for_width:
- * @widget: a #GtkSizeRequest instance
+ * gtk_widget_get_preferred_height_for_width:
+ * @widget: a #GtkWidget instance
  * @width: the width which is available for allocation
  * @minimum_height: (out) (allow-none): location for storing the minimum height, or %NULL
  * @natural_height: (out) (allow-none): location for storing the natural height, or %NULL
@@ -571,18 +559,18 @@ gtk_size_request_get_width_for_height (GtkSizeRequest *widget,
  * Since: 3.0
  */
 void
-gtk_size_request_get_height_for_width (GtkSizeRequest *widget,
-				       gint            width,
-				       gint           *minimum_height,
-				       gint           *natural_height)
+gtk_widget_get_preferred_height_for_width (GtkWidget *widget,
+                                           gint       width,
+                                           gint      *minimum_height,
+                                           gint      *natural_height)
 {
   compute_size_for_orientation (widget, GTK_SIZE_GROUP_VERTICAL,
                                 width, minimum_height, natural_height);
 }
 
 /**
- * gtk_size_request_get_size:
- * @widget: a #GtkSizeRequest instance
+ * gtk_widget_get_preferred_size:
+ * @widget: a #GtkWidget instance
  * @minimum_size: (out) (allow-none): location for storing the minimum size, or %NULL
  * @natural_size: (out) (allow-none): location for storing the natural size, or %NULL
  *
@@ -595,49 +583,49 @@ gtk_size_request_get_height_for_width (GtkSizeRequest *widget,
  * Since: 3.0
  */
 void
-gtk_size_request_get_size (GtkSizeRequest    *widget,
-			   GtkRequisition    *minimum_size,
-			   GtkRequisition    *natural_size)
+gtk_widget_get_preferred_size (GtkWidget      *widget,
+                               GtkRequisition *minimum_size,
+                               GtkRequisition *natural_size)
 {
   gint min_width, nat_width;
   gint min_height, nat_height;
 
-  g_return_if_fail (GTK_IS_SIZE_REQUEST (widget));
+  g_return_if_fail (GTK_IS_WIDGET (widget));
 
-  if (gtk_size_request_get_request_mode (widget) == GTK_SIZE_REQUEST_HEIGHT_FOR_WIDTH)
+  if (gtk_widget_get_request_mode (widget) == GTK_SIZE_REQUEST_HEIGHT_FOR_WIDTH)
     {
-      gtk_size_request_get_width (widget, &min_width, &nat_width);
+      gtk_widget_get_preferred_width (widget, &min_width, &nat_width);
 
       if (minimum_size)
 	{
 	  minimum_size->width = min_width;
-	  gtk_size_request_get_height_for_width (widget, min_width,
-						 &minimum_size->height, NULL);
+	  gtk_widget_get_preferred_height_for_width (widget, min_width,
+                                                     &minimum_size->height, NULL);
 	}
 
       if (natural_size)
 	{
 	  natural_size->width = nat_width;
-	  gtk_size_request_get_height_for_width (widget, nat_width,
-						 NULL, &natural_size->height);
+	  gtk_widget_get_preferred_height_for_width (widget, nat_width,
+                                                     NULL, &natural_size->height);
 	}
     }
   else /* GTK_SIZE_REQUEST_WIDTH_FOR_HEIGHT */
     {
-      gtk_size_request_get_height (widget, &min_height, &nat_height);
+      gtk_widget_get_preferred_height (widget, &min_height, &nat_height);
 
       if (minimum_size)
 	{
 	  minimum_size->height = min_height;
-	  gtk_size_request_get_width_for_height (widget, min_height,
-						 &minimum_size->width, NULL);
+	  gtk_widget_get_preferred_width_for_height (widget, min_height,
+                                                     &minimum_size->width, NULL);
 	}
 
       if (natural_size)
 	{
 	  natural_size->height = nat_height;
-	  gtk_size_request_get_width_for_height (widget, nat_height,
-						 NULL, &natural_size->width);
+	  gtk_widget_get_preferred_width_for_height (widget, nat_height,
+                                                     NULL, &natural_size->width);
 	}
     }
 }

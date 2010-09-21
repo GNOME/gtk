@@ -34,7 +34,6 @@
 #include "gtkintl.h"
 #include "gtkaccessible.h"
 #include "gtkimage.h"
-#include "gtksizerequest.h"
 #include "gtkspinner.h"
 #include "gtkstyle.h"
 
@@ -87,13 +86,17 @@ static void gtk_spinner_set_property   (GObject         *object,
                                         GParamSpec      *pspec);
 static void gtk_spinner_set_active     (GtkSpinner      *spinner,
                                         gboolean         active);
+static void gtk_spinner_get_preferred_width (GtkWidget  *widget,
+                                        gint            *minimum_size,
+                                        gint            *natural_size);
+static void gtk_spinner_get_preferred_height (GtkWidget *widget,
+                                        gint            *minimum_size,
+                                        gint            *natural_size);
+
 static AtkObject *gtk_spinner_get_accessible      (GtkWidget *widget);
 static GType      gtk_spinner_accessible_get_type (void);
-static void gtk_spinner_size_request_init (GtkSizeRequestIface *iface);
 
-G_DEFINE_TYPE_WITH_CODE (GtkSpinner, gtk_spinner, GTK_TYPE_WIDGET,
-			 G_IMPLEMENT_INTERFACE (GTK_TYPE_SIZE_REQUEST,
-						gtk_spinner_size_request_init))
+G_DEFINE_TYPE (GtkSpinner, gtk_spinner, GTK_TYPE_WIDGET)
 
 static void
 gtk_spinner_class_init (GtkSpinnerClass *klass)
@@ -113,6 +116,8 @@ gtk_spinner_class_init (GtkSpinnerClass *klass)
   widget_class->draw = gtk_spinner_draw;
   widget_class->style_set = gtk_spinner_style_set;
   widget_class->get_accessible = gtk_spinner_get_accessible;
+  widget_class->get_preferred_width = gtk_spinner_get_preferred_width;
+  widget_class->get_preferred_height = gtk_spinner_get_preferred_height;
 
   /* GtkSpinner:active:
    *
@@ -215,9 +220,9 @@ gtk_spinner_init (GtkSpinner *spinner)
 }
 
 static void
-gtk_spinner_get_width (GtkSizeRequest *widget,
-                       gint           *minimum_size,
-                       gint           *natural_size)
+gtk_spinner_get_preferred_width (GtkWidget *widget,
+                                 gint      *minimum_size,
+                                 gint      *natural_size)
 {
   if (minimum_size)
     *minimum_size = SPINNER_SIZE;
@@ -227,9 +232,9 @@ gtk_spinner_get_width (GtkSizeRequest *widget,
 }
 
 static void
-gtk_spinner_get_height (GtkSizeRequest *widget,
-                        gint           *minimum_size,
-                        gint           *natural_size)
+gtk_spinner_get_preferred_height (GtkWidget *widget,
+                                  gint      *minimum_size,
+                                  gint      *natural_size)
 {
   if (minimum_size)
     *minimum_size = SPINNER_SIZE;
@@ -237,14 +242,6 @@ gtk_spinner_get_height (GtkSizeRequest *widget,
   if (natural_size)
     *natural_size = SPINNER_SIZE;
 }
-
-static void
-gtk_spinner_size_request_init (GtkSizeRequestIface *iface)
-{
-  iface->get_width  = gtk_spinner_get_width;
-  iface->get_height = gtk_spinner_get_height;
-}
-
 
 static gboolean
 gtk_spinner_draw (GtkWidget *widget,

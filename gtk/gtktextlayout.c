@@ -1614,8 +1614,7 @@ add_child_attrs (GtkTextLayout      *layout,
           /* Found it */
           GtkRequisition req;
 
-          gtk_size_request_get_size (GTK_SIZE_REQUEST (child),
-                                     &req, NULL);
+          gtk_widget_get_preferred_size (child, &req, NULL);
 
           width = req.width;
           height = req.height;

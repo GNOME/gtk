@@ -135,7 +135,7 @@ main(int argc, char **argv)
 	gtk_widget_show_all (vbox);
 
 	/* Compute the size without the drawing area, so we know how big to make the default size */
-        gtk_size_request_get_size (GTK_SIZE_REQUEST (vbox),
+        gtk_widget_get_preferred_size ( (vbox),
                                    &scratch_requisition, NULL);
 
 	darea = gtk_drawing_area_new ();

@@ -554,8 +554,8 @@ gtk_tool_item_group_size_request (GtkWidget      *widget,
 
   if (priv->children && gtk_tool_item_group_get_label_widget (group))
     {
-      gtk_size_request_get_size (GTK_SIZE_REQUEST (priv->header),
-                                 requisition, NULL);
+      gtk_widget_get_preferred_size (priv->header,
+                                     requisition, NULL);
       gtk_widget_show (priv->header);
     }
   else
@@ -688,8 +688,8 @@ gtk_tool_item_group_real_size_query (GtkWidget      *widget,
                   GtkRequisition req = {0, 0};
                   guint width;
 
-                  gtk_size_request_get_size (GTK_SIZE_REQUEST (child->item),
-                                             &req, NULL);
+                  gtk_widget_get_preferred_size (GTK_WIDGET (child->item),
+                                                 &req, NULL);
 
                   width = udiv (req.width, item_size.width);
                   col += width;
@@ -747,8 +747,8 @@ gtk_tool_item_group_real_size_query (GtkWidget      *widget,
                   GtkRequisition req = {0, 0};
                   guint width;
 
-                  gtk_size_request_get_size (GTK_SIZE_REQUEST (child->item),
-                                             &req, NULL);
+                  gtk_widget_get_preferred_size (GTK_WIDGET (child->item),
+                                                 &req, NULL);
 
                   width = udiv (req.width, item_size.width);
 
@@ -803,8 +803,8 @@ gtk_tool_item_group_real_size_query (GtkWidget      *widget,
                       GtkRequisition req = {0, 0};
                       guint width;
 
-                      gtk_size_request_get_size (GTK_SIZE_REQUEST (child->item),
-                                                 &req, NULL);
+                      gtk_widget_get_preferred_size (GTK_WIDGET (child->item),
+                                                     &req, NULL);
 
                       width = udiv (req.width, item_size.width);
                       col += width;
@@ -836,8 +836,8 @@ gtk_tool_item_group_real_size_query (GtkWidget      *widget,
     {
       GtkRequisition child_requisition;
 
-      gtk_size_request_get_size (GTK_SIZE_REQUEST (priv->header),
-                                 &child_requisition, NULL);
+      gtk_widget_get_preferred_size (priv->header,
+                                     &child_requisition, NULL);
 
       if (GTK_ORIENTATION_VERTICAL == orientation)
         inquery->height += child_requisition.height;
@@ -887,8 +887,8 @@ gtk_tool_item_group_real_size_allocate (GtkWidget     *widget,
   /* place the header widget */
   if (gtk_widget_get_visible (priv->header))
     {
-      gtk_size_request_get_size (GTK_SIZE_REQUEST (priv->header),
-                                 &child_requisition, NULL);
+      gtk_widget_get_preferred_size (priv->header,
+                                     &child_requisition, NULL);
 
       if (GTK_ORIENTATION_VERTICAL == orientation)
         {
@@ -972,8 +972,8 @@ gtk_tool_item_group_real_size_allocate (GtkWidget     *widget,
 
           if (!child->homogeneous)
             {
-              gtk_size_request_get_size (GTK_SIZE_REQUEST (child->item),
-                                         &child_requisition, NULL);
+              gtk_widget_get_preferred_size (GTK_WIDGET (child->item),
+                                             &child_requisition, NULL);
               child_requisition.width = MIN (child_requisition.width, item_area.width);
             }
 
@@ -2303,8 +2303,8 @@ _gtk_tool_item_group_item_size_request (GtkToolItemGroup *group,
       if (!child->homogeneous && child->expand)
           new_row = TRUE;
 
-      gtk_size_request_get_size (GTK_SIZE_REQUEST (child->item),
-                                 &child_requisition, NULL);
+      gtk_widget_get_preferred_size (GTK_WIDGET (child->item),
+                                     &child_requisition, NULL);
 
       if (!homogeneous_only || child->homogeneous)
         item_size->width = MAX (item_size->width, child_requisition.width);
@@ -2390,8 +2390,8 @@ _gtk_tool_item_group_get_size_for_limit (GtkToolItemGroup *group,
   GtkRequisition requisition;
   GtkToolItemGroupPrivate* priv = group->priv;
 
-  gtk_size_request_get_size (GTK_SIZE_REQUEST (group),
-                             &requisition, NULL);
+  gtk_widget_get_preferred_size (GTK_WIDGET (group),
+                                 &requisition, NULL);
 
   if (!priv->collapsed || priv->animation_timeout)
     {

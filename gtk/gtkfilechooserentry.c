@@ -1023,8 +1023,8 @@ show_completion_feedback_window (GtkFileChooserEntry *chooser_entry)
   GtkAllocation entry_allocation;
   int feedback_x, feedback_y;
 
-  gtk_size_request_get_size (GTK_SIZE_REQUEST (chooser_entry->completion_feedback_window),
-                             &feedback_req, NULL);
+  gtk_widget_get_preferred_size (chooser_entry->completion_feedback_window,
+                                 &feedback_req, NULL);
 
   gdk_window_get_origin (gtk_widget_get_window (widget), &entry_x, &entry_y);
   gtk_widget_get_allocation (widget, &entry_allocation);

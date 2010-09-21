@@ -1352,8 +1352,8 @@ popup_position_func (GtkMenu   *menu,
   gdk_window_get_origin (gtk_widget_get_window (widget),
                          &root_x, &root_y);
 
-  gtk_size_request_get_size (GTK_SIZE_REQUEST (menu),
-                             &req, NULL);
+  gtk_widget_get_preferred_size (GTK_WIDGET (menu),
+                                 &req, NULL);
   gtk_widget_get_allocation (widget, &allocation);
 
   /* Put corner of menu centered on color cell */

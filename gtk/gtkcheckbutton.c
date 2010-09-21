@@ -29,7 +29,6 @@
 #include "gtkcheckbutton.h"
 
 #include "gtklabel.h"
-#include "gtksizerequest.h"
 
 #include "gtkprivate.h"
 #include "gtkintl.h"
@@ -230,8 +229,7 @@ gtk_check_button_size_request (GtkWidget      *widget,
 	{
 	  GtkRequisition child_requisition;
 
-          gtk_size_request_get_size (GTK_SIZE_REQUEST (child),
-                                     &child_requisition, NULL);
+          gtk_widget_get_preferred_size (child, &child_requisition, NULL);
 
 	  requisition->width += child_requisition.width + indicator_spacing;
 	  requisition->height += child_requisition.height;
@@ -286,8 +284,7 @@ gtk_check_button_size_allocate (GtkWidget     *widget,
 	  GtkRequisition child_requisition;
           guint border_width = gtk_container_get_border_width (GTK_CONTAINER (widget));
 
-          gtk_size_request_get_size (GTK_SIZE_REQUEST (child),
-                                     &child_requisition, NULL);
+          gtk_widget_get_preferred_size (child, &child_requisition, NULL);
 
 	  child_allocation.width = MIN (child_requisition.width,
 					allocation->width -

@@ -502,8 +502,7 @@ gtk_tool_item_size_request (GtkWidget      *widget,
   child = gtk_bin_get_child (GTK_BIN (widget));
   if (child && gtk_widget_get_visible (child))
     {
-      gtk_size_request_get_size (GTK_SIZE_REQUEST (child),
-                                 requisition, NULL);
+      gtk_widget_get_preferred_size (child, requisition, NULL);
     }
   else
     {

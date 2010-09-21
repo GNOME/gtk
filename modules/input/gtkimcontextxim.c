@@ -1695,7 +1695,7 @@ on_status_toplevel_configure (GtkWidget         *toplevel,
 
       gdk_window_get_frame_extents (gtk_widget_get_window (toplevel),
                                     &rect);
-      gtk_size_request_get_size (GTK_SIZE_REQUEST (status_window->window),
+      gtk_widget_get_preferred_size ( (status_window->window),
                                  &requisition, NULL);
 
       if (rect.y + rect.height + requisition.height < height)

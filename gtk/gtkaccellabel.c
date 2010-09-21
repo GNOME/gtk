@@ -125,19 +125,14 @@ static gboolean     gtk_accel_label_draw         (GtkWidget          *widget,
 static const gchar *gtk_accel_label_get_string   (GtkAccelLabel      *accel_label);
 
 
-static void         gtk_accel_label_size_request_init (GtkSizeRequestIface *iface);
-static void         gtk_accel_label_get_width         (GtkSizeRequest      *widget,
-						       gint                *min_width,
-						       gint                *nat_width);
+static void         gtk_accel_label_get_preferred_width (GtkWidget           *widget,
+                                                         gint                *min_width,
+                                                         gint                *nat_width);
 
 #define GTK_ACCEL_LABEL_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), GTK_TYPE_ACCEL_LABEL, GtkAccelLabelPrivate))
 
 
-static GtkSizeRequestIface *parent_size_request_iface;
-
-G_DEFINE_TYPE_WITH_CODE (GtkAccelLabel, gtk_accel_label, GTK_TYPE_LABEL,
-			 G_IMPLEMENT_INTERFACE (GTK_TYPE_SIZE_REQUEST,
-						gtk_accel_label_size_request_init))
+G_DEFINE_TYPE (GtkAccelLabel, gtk_accel_label, GTK_TYPE_LABEL)
 
 static void
 gtk_accel_label_class_init (GtkAccelLabelClass *class)
@@ -153,6 +148,7 @@ gtk_accel_label_class_init (GtkAccelLabelClass *class)
   object_class->destroy = gtk_accel_label_destroy;
    
   widget_class->draw = gtk_accel_label_draw;
+  widget_class->get_preferred_width = gtk_accel_label_get_preferred_width;
 
   class->signal_quote1 = g_strdup ("<:");
   class->signal_quote2 = g_strdup (":>");
@@ -349,22 +345,15 @@ gtk_accel_label_get_accel_width (GtkAccelLabel *accel_label)
 }
 
 static void
-gtk_accel_label_size_request_init (GtkSizeRequestIface *iface)
-{
-  parent_size_request_iface = g_type_interface_peek_parent (iface);
-  iface->get_width = gtk_accel_label_get_width;
-}
-
-static void
-gtk_accel_label_get_width (GtkSizeRequest  *widget,
-			   gint            *min_width,
-			   gint            *nat_width)
+gtk_accel_label_get_preferred_width (GtkWidget       *widget,
+                                     gint            *min_width,
+                                     gint            *nat_width)
 {
   GtkAccelLabel *accel_label = GTK_ACCEL_LABEL (widget);
   PangoLayout   *layout;
   gint           width;
 
-  parent_size_request_iface->get_width (widget, min_width, nat_width);
+  GTK_WIDGET_CLASS (gtk_accel_label_parent_class)->get_preferred_width (widget, min_width, nat_width);
 
   layout = gtk_widget_create_pango_layout (GTK_WIDGET (widget), 
 					   gtk_accel_label_get_string (accel_label));
@@ -405,8 +394,7 @@ gtk_accel_label_draw (GtkWidget *widget,
 
       ac_width = gtk_accel_label_get_accel_width (accel_label);
       gtk_widget_get_allocation (widget, &allocation);
-      gtk_size_request_get_size (GTK_SIZE_REQUEST (widget),
-                                 &requisition, NULL);
+      gtk_widget_get_preferred_size (widget, &requisition, NULL);
 
       if (allocation.width >= requisition.width + ac_width)
 	{

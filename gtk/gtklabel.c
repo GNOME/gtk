@@ -49,7 +49,6 @@
 #include "gtkimage.h"
 #include "gtkshow.h"
 #include "gtktooltip.h"
-#include "gtksizerequest.h"
 #include "gtkprivate.h"
 
 
@@ -331,30 +330,27 @@ static void          gtk_label_get_link_colors  (GtkWidget  *widget,
 static void          emit_activate_link         (GtkLabel     *label,
                                                  GtkLabelLink *link);
 
-static void               gtk_label_size_request_init     (GtkSizeRequestIface *iface);
-static GtkSizeRequestMode gtk_label_get_request_mode      (GtkSizeRequest      *widget);
-static void               gtk_label_get_width             (GtkSizeRequest      *widget,
-							   gint                *minimum_size,
-							   gint                *natural_size);
-static void               gtk_label_get_height            (GtkSizeRequest      *widget,
-							   gint                *minimum_size,
-							   gint                *natural_size);
-static void               gtk_label_get_width_for_height  (GtkSizeRequest      *widget,
-							   gint                 height,
-							   gint                *minimum_width,
-							   gint                *natural_width);
-static void               gtk_label_get_height_for_width  (GtkSizeRequest      *widget,
-							   gint                 width,
-							   gint                *minimum_height,
-							   gint                *natural_height);
+static GtkSizeRequestMode gtk_label_get_request_mode                (GtkWidget           *widget);
+static void               gtk_label_get_preferred_width             (GtkWidget           *widget,
+                                                                     gint                *minimum_size,
+                                                                     gint                *natural_size);
+static void               gtk_label_get_preferred_height            (GtkWidget           *widget,
+                                                                     gint                *minimum_size,
+                                                                     gint                *natural_size);
+static void               gtk_label_get_preferred_width_for_height  (GtkWidget           *widget,
+                                                                     gint                 height,
+                                                                     gint                *minimum_width,
+                                                                     gint                *natural_width);
+static void               gtk_label_get_preferred_height_for_width  (GtkWidget           *widget,
+                                                                     gint                 width,
+                                                                     gint                *minimum_height,
+                                                                     gint                *natural_height);
 
 static GtkBuildableIface *buildable_parent_iface = NULL;
 
 G_DEFINE_TYPE_WITH_CODE (GtkLabel, gtk_label, GTK_TYPE_MISC,
 			 G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE,
-						gtk_label_buildable_interface_init)
-                         G_IMPLEMENT_INTERFACE (GTK_TYPE_SIZE_REQUEST,
-                                                gtk_label_size_request_init));
+						gtk_label_buildable_interface_init))
 
 static void
 add_move_binding (GtkBindingSet  *binding_set,
@@ -414,6 +410,11 @@ gtk_label_class_init (GtkLabelClass *class)
   widget_class->grab_focus = gtk_label_grab_focus;
   widget_class->popup_menu = gtk_label_popup_menu;
   widget_class->focus = gtk_label_focus;
+  widget_class->get_request_mode = gtk_label_get_request_mode;
+  widget_class->get_preferred_width = gtk_label_get_preferred_width;
+  widget_class->get_preferred_height = gtk_label_get_preferred_height;
+  widget_class->get_preferred_width_for_height = gtk_label_get_preferred_width_for_height;
+  widget_class->get_preferred_height_for_width = gtk_label_get_preferred_height_for_width;
 
   class->move_cursor = gtk_label_move_cursor;
   class->copy_clipboard = gtk_label_copy_clipboard;
@@ -3353,20 +3354,10 @@ get_single_line_height (GtkWidget   *widget,
   return ascent + descent;
 }
 
-static void
-gtk_label_size_request_init (GtkSizeRequestIface *iface)
-{
-  iface->get_request_mode     = gtk_label_get_request_mode;
-  iface->get_width            = gtk_label_get_width;
-  iface->get_height           = gtk_label_get_height;
-  iface->get_width_for_height = gtk_label_get_width_for_height;
-  iface->get_height_for_width = gtk_label_get_height_for_width;
-}
-
 static GtkSizeRequestMode
-gtk_label_get_request_mode (GtkSizeRequest *layout)
+gtk_label_get_request_mode (GtkWidget *widget)
 {
-  GtkLabel *label = GTK_LABEL (layout);
+  GtkLabel *label = GTK_LABEL (widget);
   gdouble   angle = gtk_label_get_angle (label);
 
   if (angle == 90 || angle == 270)
@@ -3419,10 +3410,10 @@ get_size_for_allocation (GtkLabel        *label,
 }
 
 static void
-gtk_label_get_size (GtkSizeRequest *widget,
-		    GtkOrientation  orientation,
-		    gint           *minimum_size,
-		    gint           *natural_size)
+gtk_label_get_preferred_size (GtkWidget      *widget,
+                              GtkOrientation  orientation,
+                              gint           *minimum_size,
+                              gint           *natural_size)
 {
   GtkLabel      *label = GTK_LABEL (widget);
   GtkLabelPrivate  *priv = label->priv;
@@ -3567,26 +3558,26 @@ gtk_label_get_size (GtkSizeRequest *widget,
 
 
 static void
-gtk_label_get_width (GtkSizeRequest *widget,
-		     gint           *minimum_size,
-		     gint           *natural_size)
+gtk_label_get_preferred_width (GtkWidget *widget,
+                               gint      *minimum_size,
+                               gint      *natural_size)
 {
-  gtk_label_get_size (widget, GTK_ORIENTATION_HORIZONTAL, minimum_size, natural_size);
+  gtk_label_get_preferred_size (widget, GTK_ORIENTATION_HORIZONTAL, minimum_size, natural_size);
 }
 
 static void
-gtk_label_get_height (GtkSizeRequest *widget,
-		      gint           *minimum_size,
-		      gint           *natural_size)
+gtk_label_get_preferred_height (GtkWidget *widget,
+                                gint      *minimum_size,
+                                gint      *natural_size)
 {
-  gtk_label_get_size (widget, GTK_ORIENTATION_VERTICAL, minimum_size, natural_size);
+  gtk_label_get_preferred_size (widget, GTK_ORIENTATION_VERTICAL, minimum_size, natural_size);
 }
 
 static void
-gtk_label_get_width_for_height (GtkSizeRequest *widget,
-                                gint            height,
-                                gint           *minimum_width,
-                                gint           *natural_width)
+gtk_label_get_preferred_width_for_height (GtkWidget *widget,
+                                          gint       height,
+                                          gint      *minimum_width,
+                                          gint      *natural_width)
 {
   GtkLabel *label = GTK_LABEL (widget);
   GtkLabelPrivate *priv = label->priv;
@@ -3611,14 +3602,14 @@ gtk_label_get_width_for_height (GtkSizeRequest *widget,
         *natural_width += xpad * 2;
     }
   else
-    GTK_SIZE_REQUEST_GET_IFACE (widget)->get_width (widget, minimum_width, natural_width);
+    GTK_WIDGET_GET_CLASS (widget)->get_preferred_width (widget, minimum_width, natural_width);
 }
 
 static void
-gtk_label_get_height_for_width (GtkSizeRequest *widget,
-                                gint            width,
-                                gint           *minimum_height,
-                                gint           *natural_height)
+gtk_label_get_preferred_height_for_width (GtkWidget *widget,
+                                          gint       width,
+                                          gint      *minimum_height,
+                                          gint      *natural_height)
 {
   GtkLabel *label = GTK_LABEL (widget);
   GtkLabelPrivate *priv = label->priv;
@@ -3643,7 +3634,7 @@ gtk_label_get_height_for_width (GtkSizeRequest *widget,
         *natural_height += ypad * 2;
     }
   else
-    GTK_SIZE_REQUEST_GET_IFACE (widget)->get_height (widget, minimum_height, natural_height);
+    GTK_WIDGET_GET_CLASS (widget)->get_preferred_height (widget, minimum_height, natural_height);
 }
 
 static void
@@ -6127,8 +6118,8 @@ popup_position_func (GtkMenu   *menu,
   *x += allocation.x;
   *y += allocation.y;
 
-  gtk_size_request_get_size (GTK_SIZE_REQUEST (menu),
-                             &req, NULL);
+  gtk_widget_get_preferred_size (GTK_WIDGET (menu),
+                                 &req, NULL);
 
   gtk_widget_get_allocation (widget, &allocation);
 

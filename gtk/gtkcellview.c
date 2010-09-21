@@ -24,9 +24,9 @@
 #include "gtkintl.h"
 #include "gtkcellrenderertext.h"
 #include "gtkcellrendererpixbuf.h"
-#include "gtksizerequest.h"
 #include "gtkcellsizerequest.h"
 #include "gtkprivate.h"
+#include "gtksizerequest.h"
 #include <gobject/gmarshal.h>
 #include "gtkbuildable.h"
 
@@ -121,18 +121,17 @@ static void       gtk_cell_view_buildable_custom_tag_end       (GtkBuildable  	 
 								const gchar   	      *tagname,
 								gpointer      	      *data);
 
-static void       gtk_cell_view_size_request_init              (GtkSizeRequestIface   *iface);
-static void       gtk_cell_view_get_width                      (GtkSizeRequest        *widget,
+static void       gtk_cell_view_get_preferred_width            (GtkWidget             *widget,
 								gint                  *minimum_size,
 								gint                  *natural_size);
-static void       gtk_cell_view_get_height                     (GtkSizeRequest        *widget,
+static void       gtk_cell_view_get_preferred_height           (GtkWidget             *widget,
 								gint                  *minimum_size,
 								gint                  *natural_size);
-static void       gtk_cell_view_get_width_for_height           (GtkSizeRequest        *widget,
+static void       gtk_cell_view_get_preferred_width_for_height (GtkWidget             *widget,
 								gint                   avail_size,
 								gint                  *minimum_size,
 								gint                  *natural_size);
-static void       gtk_cell_view_get_height_for_width           (GtkSizeRequest        *widget,
+static void       gtk_cell_view_get_preferred_height_for_width (GtkWidget             *widget,
 								gint                   avail_size,
 								gint                  *minimum_size,
 								gint                  *natural_size);
@@ -153,9 +152,7 @@ G_DEFINE_TYPE_WITH_CODE (GtkCellView, gtk_cell_view, GTK_TYPE_WIDGET,
 			 G_IMPLEMENT_INTERFACE (GTK_TYPE_CELL_LAYOUT,
 						gtk_cell_view_cell_layout_init)
 			 G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE,
-						gtk_cell_view_buildable_init)
-                         G_IMPLEMENT_INTERFACE (GTK_TYPE_SIZE_REQUEST,
-						gtk_cell_view_size_request_init))
+						gtk_cell_view_buildable_init))
 
 
 static void
@@ -168,8 +165,12 @@ gtk_cell_view_class_init (GtkCellViewClass *klass)
   gobject_class->set_property = gtk_cell_view_set_property;
   gobject_class->finalize = gtk_cell_view_finalize;
 
-  widget_class->draw = gtk_cell_view_draw;
-  widget_class->size_allocate = gtk_cell_view_size_allocate;
+  widget_class->draw                           = gtk_cell_view_draw;
+  widget_class->size_allocate                  = gtk_cell_view_size_allocate;
+  widget_class->get_preferred_width            = gtk_cell_view_get_preferred_width;
+  widget_class->get_preferred_height           = gtk_cell_view_get_preferred_height;
+  widget_class->get_preferred_width_for_height = gtk_cell_view_get_preferred_width_for_height;
+  widget_class->get_preferred_height_for_width = gtk_cell_view_get_preferred_height_for_width;
 
   /* properties */
   g_object_class_install_property (gobject_class,
@@ -1048,13 +1049,13 @@ gtk_cell_view_get_desired_width_of_row (GtkCellView     *cell_view,
   cell_view->priv->displayed_row =
     gtk_tree_row_reference_new (cell_view->priv->model, path);
 
-  gtk_cell_view_get_width (GTK_SIZE_REQUEST (cell_view), minimum_size, natural_size);
+  gtk_cell_view_get_preferred_width (GTK_WIDGET (cell_view), minimum_size, natural_size);
 
   gtk_tree_row_reference_free (cell_view->priv->displayed_row);
   cell_view->priv->displayed_row = tmp;
 
   /* Restore active size (this will restore the cellrenderer info->width/requested_width's) */
-  gtk_cell_view_get_width (GTK_SIZE_REQUEST (cell_view), NULL, NULL);
+  gtk_cell_view_get_preferred_width (GTK_WIDGET (cell_view), NULL, NULL);
 }
 
 
@@ -1090,13 +1091,13 @@ gtk_cell_view_get_desired_height_for_width_of_row (GtkCellView     *cell_view,
     gtk_tree_row_reference_new (cell_view->priv->model, path);
 
   /* Then get the collective height_for_width based on the cached values */
-  gtk_cell_view_get_height_for_width (GTK_SIZE_REQUEST (cell_view), avail_size, minimum_size, natural_size);
+  gtk_cell_view_get_preferred_height_for_width (GTK_WIDGET (cell_view), avail_size, minimum_size, natural_size);
 
   gtk_tree_row_reference_free (cell_view->priv->displayed_row);
   cell_view->priv->displayed_row = tmp;
 
   /* Restore active size (this will restore the cellrenderer info->width/requested_width's) */
-  gtk_cell_view_get_width (GTK_SIZE_REQUEST (cell_view), NULL, NULL);
+  gtk_cell_view_get_preferred_width (GTK_WIDGET (cell_view), NULL, NULL);
 }
 
 /**
@@ -1189,18 +1190,9 @@ gtk_cell_view_buildable_custom_tag_end (GtkBuildable *buildable,
 }
 
 static void
-gtk_cell_view_size_request_init (GtkSizeRequestIface *iface)
-{
-  iface->get_width            = gtk_cell_view_get_width;
-  iface->get_height           = gtk_cell_view_get_height;
-  iface->get_width_for_height = gtk_cell_view_get_width_for_height;
-  iface->get_height_for_width = gtk_cell_view_get_height_for_width;
-}
-
-static void
-gtk_cell_view_get_width  (GtkSizeRequest      *widget,
-			  gint                *minimum_size,
-			  gint                *natural_size)
+gtk_cell_view_get_preferred_width  (GtkWidget *widget,
+                                    gint      *minimum_size,
+                                    gint      *natural_size)
 {
   GList *list;
   gint cell_min, cell_nat;
@@ -1227,7 +1219,7 @@ gtk_cell_view_get_width  (GtkSizeRequest      *widget,
 	    }
 
 	  gtk_cell_size_request_get_width (GTK_CELL_SIZE_REQUEST (info->cell),
-					   GTK_WIDGET (cellview), &cell_min, &cell_nat);
+                                           GTK_WIDGET (cellview), &cell_min, &cell_nat);
 	  
 	  info->requested_width = cell_min;
 	  info->natural_width   = cell_nat;
@@ -1247,34 +1239,34 @@ gtk_cell_view_get_width  (GtkSizeRequest      *widget,
 }
 
 static void       
-gtk_cell_view_get_height (GtkSizeRequest      *widget,
-			  gint                *minimum_size,
-			  gint                *natural_size)
+gtk_cell_view_get_preferred_height (GtkWidget *widget,
+                                    gint      *minimum_size,
+                                    gint      *natural_size)
 {
   gint minimum_width;
 
   /* CellViews only need to respond to height-for-width mode (cellview is pretty much
    * an implementation detail of GtkComboBox) */
-  gtk_cell_view_get_width (widget, &minimum_width, NULL);
-  gtk_cell_view_get_height_for_width (widget, minimum_width, minimum_size, natural_size);
+  gtk_cell_view_get_preferred_width (widget, &minimum_width, NULL);
+  gtk_cell_view_get_preferred_height_for_width (widget, minimum_width, minimum_size, natural_size);
 }
 
 static void       
-gtk_cell_view_get_width_for_height (GtkSizeRequest      *widget,
-				    gint                 for_size,
-				    gint                *minimum_size,
-				    gint                *natural_size)
+gtk_cell_view_get_preferred_width_for_height (GtkWidget *widget,
+                                              gint       for_size,
+                                              gint      *minimum_size,
+                                              gint      *natural_size)
 {
   /* CellViews only need to respond to height-for-width mode (cellview is pretty much
    * an implementation detail of GtkComboBox) */
-  gtk_cell_view_get_width (widget, minimum_size, natural_size);
+  gtk_cell_view_get_preferred_width (widget, minimum_size, natural_size);
 }
 
 static void       
-gtk_cell_view_get_height_for_width (GtkSizeRequest      *widget,
-				    gint                 for_size,
-				    gint                *minimum_size,
-				    gint                *natural_size)
+gtk_cell_view_get_preferred_height_for_width (GtkWidget *widget,
+                                              gint       for_size,
+                                              gint      *minimum_size,
+                                              gint      *natural_size)
 {
   GtkCellView      *cellview = GTK_CELL_VIEW (widget);
   GList            *list;
@@ -1303,9 +1295,9 @@ gtk_cell_view_get_height_for_width (GtkSizeRequest      *widget,
 	  GtkRequestedSize requested;
 
 	  gtk_cell_size_request_get_width (GTK_CELL_SIZE_REQUEST (info->cell),
-					   GTK_WIDGET (cellview), 
-					   &requested.minimum_size, 
-					   &requested.natural_size);
+                                           GTK_WIDGET (cellview), 
+                                           &requested.minimum_size, 
+                                           &requested.natural_size);
 
 	  requested.data = info;
 	  g_array_append_val (array, requested);
@@ -1359,8 +1351,8 @@ gtk_cell_view_get_height_for_width (GtkSizeRequest      *widget,
 
 	  /* Get the height for the real width of this cell */
 	  gtk_cell_size_request_get_height_for_width (GTK_CELL_SIZE_REQUEST (info->cell),
-						      GTK_WIDGET (widget),
-						      cell_width, &cell_minimum, &cell_natural);
+                                                      GTK_WIDGET (widget),
+                                                      cell_width, &cell_minimum, &cell_natural);
 
 	  minimum = MAX (minimum, cell_minimum);
 	  natural = MAX (natural, cell_natural);

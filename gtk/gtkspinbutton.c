@@ -40,7 +40,6 @@
 #include "gtkmain.h"
 #include "gtkmarshalers.h"
 #include "gtksettings.h"
-#include "gtksizerequest.h"
 #include "gtkprivate.h"
 #include "gtkintl.h"
 
@@ -594,7 +593,7 @@ gtk_spin_button_realize (GtkWidget *widget)
 
   arrow_size = spin_button_get_arrow_size (spin_button);
 
-  gtk_size_request_get_size (GTK_SIZE_REQUEST (spin_button), &requisition, NULL);
+  gtk_widget_get_preferred_size (widget, &requisition, NULL);
   gtk_widget_get_allocation (widget, &allocation);
 
   gtk_widget_set_events (widget, gtk_widget_get_events (widget) |
@@ -754,7 +753,7 @@ gtk_spin_button_size_allocate (GtkWidget     *widget,
   arrow_size = spin_button_get_arrow_size (spin);
   panel_width = arrow_size + 2 * gtk_widget_get_style (widget)->xthickness;
 
-  gtk_size_request_get_size (GTK_SIZE_REQUEST (widget), &requisition, NULL);
+  gtk_widget_get_preferred_size (widget, &requisition, NULL);
 
   gtk_widget_set_allocation (widget, allocation);
 
@@ -872,7 +871,7 @@ gtk_spin_button_draw_arrow (GtkSpinButton *spin_button,
   widget = GTK_WIDGET (spin_button);
 
   style = gtk_widget_get_style (widget);
-  gtk_size_request_get_size (GTK_SIZE_REQUEST (widget), &requisition, NULL);
+  gtk_widget_get_preferred_size (widget, &requisition, NULL);
 
   width = spin_button_get_arrow_size (spin_button) + 2 * style->xthickness;
 
@@ -979,7 +978,7 @@ gtk_spin_button_enter_notify (GtkWidget        *widget,
       device = gdk_event_get_device ((GdkEvent *) event);
       gdk_window_get_device_position (priv->panel, device, &x, &y, NULL);
 
-      gtk_size_request_get_size (GTK_SIZE_REQUEST (widget), &requisition, NULL);
+      gtk_widget_get_preferred_size (widget, &requisition, NULL);
 
       if (y <= requisition.height / 2)
 	priv->in_child = GTK_ARROW_UP;
@@ -1160,7 +1159,7 @@ gtk_spin_button_button_press (GtkWidget      *widget,
 	  if (GTK_ENTRY (widget)->editable)
 	    gtk_spin_button_update (spin);
 	  
-	  gtk_size_request_get_size (GTK_SIZE_REQUEST (widget), &requisition, NULL);
+	  gtk_widget_get_preferred_size (widget, &requisition, NULL);
 
 	  if (event->y <= requisition.height / 2)
 	    {
@@ -1208,7 +1207,7 @@ gtk_spin_button_button_release (GtkWidget      *widget,
 	{
 	  GtkRequisition requisition;
 
-	  gtk_size_request_get_size (GTK_SIZE_REQUEST (widget), &requisition, NULL);
+	  gtk_widget_get_preferred_size (widget, &requisition, NULL);
 
 	  if (event->y >= 0 && event->x >= 0 && 
 	      event->y <= requisition.height &&
@@ -1259,7 +1258,7 @@ gtk_spin_button_motion_notify (GtkWidget      *widget,
 
       gdk_event_request_motions (event);
 
-      gtk_size_request_get_size (GTK_SIZE_REQUEST (widget), &requisition, NULL);
+      gtk_widget_get_preferred_size (widget, &requisition, NULL);
 
       if (y <= requisition.height / 2 &&
 	  priv->in_child == GTK_ARROW_DOWN)

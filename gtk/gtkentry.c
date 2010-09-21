@@ -53,7 +53,6 @@
 #include "gtkseparatormenuitem.h"
 #include "gtkselection.h"
 #include "gtksettings.h"
-#include "gtksizerequest.h"
 #include "gtkspinbutton.h"
 #include "gtkstock.h"
 #include "gtktextutil.h"
@@ -2986,8 +2985,7 @@ gtk_entry_get_text_area_size (GtkEntry *entry,
   gint frame_height;
   gint xborder, yborder;
 
-  gtk_size_request_get_size (GTK_SIZE_REQUEST (widget),
-                             &requisition, NULL);
+  gtk_widget_get_preferred_size (widget, &requisition, NULL);
   gtk_widget_get_allocation (widget, &allocation);
   _gtk_entry_get_borders (entry, &xborder, &yborder);
 
@@ -3041,8 +3039,7 @@ get_widget_window_size (GtkEntry *entry,
   GtkRequisition requisition;
   GtkWidget *widget = GTK_WIDGET (entry);
 
-  gtk_size_request_get_size (GTK_SIZE_REQUEST (widget),
-                             &requisition, NULL);
+  gtk_widget_get_preferred_size (widget, &requisition, NULL);
   gtk_widget_get_allocation (widget, &allocation);
 
   if (x)
@@ -8501,8 +8498,8 @@ popup_position_func (GtkMenu   *menu,
   gtk_menu_set_monitor (menu, monitor_num);
 
   gdk_screen_get_monitor_geometry (screen, monitor_num, &monitor);
-  gtk_size_request_get_size (GTK_SIZE_REQUEST (entry->popup_menu),
-                             &menu_req, NULL);
+  gtk_widget_get_preferred_size (entry->popup_menu,
+                                 &menu_req, NULL);
   height = gdk_window_get_height (entry->text_area);
   gtk_entry_get_cursor_locations (entry, CURSOR_STANDARD, &strong_x, NULL);
   _gtk_entry_effective_inner_border (entry, &inner_border);

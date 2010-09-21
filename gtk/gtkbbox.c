@@ -451,8 +451,8 @@ gtk_button_box_child_requisition (GtkWidget  *widget,
       if (gtk_widget_get_visible (child))
         {
           nchildren += 1;
-          gtk_size_request_get_size (GTK_SIZE_REQUEST (child),
-                                     &child_requisition, NULL);
+          gtk_widget_get_preferred_size (child,
+                                         &child_requisition, NULL);
           avg_w += child_requisition.width + ipad_w;
           avg_h += child_requisition.height + ipad_h;
         }
@@ -479,8 +479,7 @@ gtk_button_box_child_requisition (GtkWidget  *widget,
           if (is_secondary)
             nsecondaries++;
 
-          gtk_size_request_get_size (GTK_SIZE_REQUEST (child),
-                                     &child_requisition, NULL);
+          gtk_widget_get_preferred_size (child, &child_requisition, NULL);
 
           if (homogeneous || (child_requisition.width + ipad_w < avg_w * 1.5))
             {

@@ -28,14 +28,6 @@
 
 G_BEGIN_DECLS
 
-#define GTK_TYPE_SIZE_REQUEST            (gtk_size_request_get_type ())
-#define GTK_SIZE_REQUEST(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_SIZE_REQUEST, GtkSizeRequest))
-#define GTK_SIZE_REQUEST_CLASS(klass)    ((GtkSizeRequestIface*)g_type_interface_peek ((klass), GTK_TYPE_SIZE_REQUEST))
-#define GTK_IS_SIZE_REQUEST(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_SIZE_REQUEST))
-#define GTK_SIZE_REQUEST_GET_IFACE(obj)  (G_TYPE_INSTANCE_GET_INTERFACE ((obj), GTK_TYPE_SIZE_REQUEST, GtkSizeRequestIface))
-
-typedef struct _GtkSizeRequest           GtkSizeRequest;
-typedef struct _GtkSizeRequestIface      GtkSizeRequestIface;
 typedef struct _GtkRequestedSize         GtkRequestedSize;
 
 /**
@@ -56,55 +48,10 @@ struct _GtkRequestedSize
 };
 
 
-struct _GtkSizeRequestIface
-{
-  GTypeInterface g_iface;
-
-  /* virtual table */
-  GtkSizeRequestMode (* get_request_mode)     (GtkSizeRequest  *widget);
-
-  void               (* get_height)           (GtkSizeRequest  *widget,
-					       gint            *minimum_height,
-					       gint            *natural_height);
-  void               (* get_width_for_height) (GtkSizeRequest  *widget,
-					       gint             height,
-					       gint            *minimum_width,
-					       gint            *natural_width);
-  void               (* get_width)            (GtkSizeRequest  *widget,
-					       gint            *minimum_width,
-					       gint            *natural_width);
-  void               (* get_height_for_width) (GtkSizeRequest  *widget,
-					       gint             width,
-					       gint            *minimum_height,
-					       gint            *natural_height);
-};
-
-GType               gtk_size_request_get_type             (void) G_GNUC_CONST;
-
-GtkSizeRequestMode  gtk_size_request_get_request_mode     (GtkSizeRequest *widget);
-void                gtk_size_request_get_width            (GtkSizeRequest *widget,
-							   gint           *minimum_width,
-							   gint           *natural_width);
-void                gtk_size_request_get_height_for_width (GtkSizeRequest *widget,
-							   gint            width,
-							   gint           *minimum_height,
-							   gint           *natural_height);
-void                gtk_size_request_get_height           (GtkSizeRequest *widget,
-							   gint           *minimum_height,
-							   gint           *natural_height);
-void                gtk_size_request_get_width_for_height (GtkSizeRequest *widget,
-							   gint            height,
-							   gint           *minimum_width,
-							   gint           *natural_width);
-void                gtk_size_request_get_size             (GtkSizeRequest *widget,
-							   GtkRequisition *minimum_size,
-							   GtkRequisition *natural_size);
-
-
 /* General convenience function to aid in allocating natural sizes */
-gint                gtk_distribute_natural_allocation     (gint              extra_space,
-							   guint             n_requested_sizes,
-							   GtkRequestedSize *sizes);
+gint                gtk_distribute_natural_allocation               (gint              extra_space,
+                                                                     guint             n_requested_sizes,
+                                                                     GtkRequestedSize *sizes);
 
 
 G_END_DECLS

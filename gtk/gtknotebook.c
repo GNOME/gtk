@@ -38,7 +38,6 @@
 #include "gtkmenu.h"
 #include "gtkmenuitem.h"
 #include "gtklabel.h"
-#include "gtksizerequest.h"
 #include "gtkintl.h"
 #include "gtkmarshalers.h"
 #include "gtkbindings.h"
@@ -1844,8 +1843,8 @@ gtk_notebook_size_request (GtkWidget      *widget,
       if (gtk_widget_get_visible (page->child))
 	{
 	  vis_pages++;
-          gtk_size_request_get_size (GTK_SIZE_REQUEST (page->child),
-                                     &child_requisition, NULL);
+          gtk_widget_get_preferred_size (page->child,
+                                         &child_requisition, NULL);
 
 	  requisition->width = MAX (requisition->width,
 					   child_requisition.width);
@@ -1902,8 +1901,8 @@ gtk_notebook_size_request (GtkWidget      *widget,
 		  if (!gtk_widget_get_visible (page->tab_label))
 		    gtk_widget_show (page->tab_label);
 
-                  gtk_size_request_get_size (GTK_SIZE_REQUEST (page->tab_label),
-                                             &child_requisition, NULL);
+                  gtk_widget_get_preferred_size (page->tab_label,
+                                                 &child_requisition, NULL);
 
                   page->requisition.width = child_requisition.width + 2 * style->xthickness;
 		  page->requisition.height = child_requisition.height + 2 * style->ythickness;
@@ -1938,8 +1937,8 @@ gtk_notebook_size_request (GtkWidget      *widget,
                 {
                   if (priv->action_widget[i])
                     {
-                      gtk_size_request_get_size (GTK_SIZE_REQUEST (priv->action_widget[i]),
-                                                 &action_widget_requisition[i], NULL);
+                      gtk_widget_get_preferred_size (priv->action_widget[i],
+                                                     &action_widget_requisition[i], NULL);
                       action_widget_requisition[i].width += style->xthickness;
                       action_widget_requisition[i].height += style->ythickness;
                     }
@@ -2191,8 +2190,8 @@ gtk_notebook_size_allocate (GtkWidget     *widget,
 		  widget_allocation.y = allocation->y + border_width;
 		  is_rtl = gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL;
 
-                  gtk_size_request_get_size (GTK_SIZE_REQUEST (priv->action_widget[i]),
-                                             &requisition, NULL);
+                  gtk_widget_get_preferred_size (priv->action_widget[i],
+                                                 &requisition, NULL);
 
 		  switch (tab_pos)
 		    {
@@ -2666,8 +2665,8 @@ popup_position_func (GtkMenu  *menu,
   gdk_window_get_origin (gtk_widget_get_window (w), x, y);
 
   gtk_widget_get_allocation (w, &allocation);
-  gtk_size_request_get_size (GTK_SIZE_REQUEST (menu),
-                             &requisition, NULL);
+  gtk_widget_get_preferred_size (GTK_WIDGET (menu),
+                                 &requisition, NULL);
 
   if (gtk_widget_get_direction (w) == GTK_TEXT_DIR_RTL)
     *x += allocation.x + allocation.width - requisition.width;
@@ -3252,8 +3251,8 @@ on_drag_icon_draw (GtkWidget *widget,
   notebook = GTK_WIDGET (data);
   child = gtk_bin_get_child (GTK_BIN (widget));
 
-  gtk_size_request_get_size (GTK_SIZE_REQUEST (widget),
-                             &requisition, NULL);
+  gtk_widget_get_preferred_size (widget,
+                                 &requisition, NULL);
   gap_pos = get_tab_gap_pos (GTK_NOTEBOOK (notebook));
 
   gtk_paint_extension (gtk_widget_get_style (notebook),
@@ -5828,8 +5827,7 @@ gtk_notebook_page_allocate (GtkNotebook     *notebook,
   xthickness = style->xthickness;
   ythickness = style->ythickness;
 
-  gtk_size_request_get_size (GTK_SIZE_REQUEST (page->tab_label),
-                             &tab_requisition, NULL);
+  gtk_widget_get_preferred_size (page->tab_label, &tab_requisition, NULL);
   gtk_widget_style_get (widget,
 			"focus-line-width", &focus_width,
 			"tab-curvature", &tab_curvature,

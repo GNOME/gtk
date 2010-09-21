@@ -938,8 +938,8 @@ gtk_tooltip_position (GtkTooltip *tooltip,
 
   screen = gtk_widget_get_screen (new_tooltip_widget);
 
-  gtk_size_request_get_size (GTK_SIZE_REQUEST (tooltip->current_window),
-                             &requisition, NULL);
+  gtk_widget_get_preferred_size (GTK_WIDGET (tooltip->current_window),
+                                 &requisition, NULL);
 
   monitor_num = gdk_screen_get_monitor_at_point (screen,
                                                  tooltip->last_x,

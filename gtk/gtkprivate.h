@@ -115,7 +115,7 @@ gboolean _gtk_fnmatch (const char *pattern,
 #endif
 
 
-/* With GtkSizeRequest, a widget may be requested
+/* With GtkWidget     , a widget may be requested
  * its width for 2 or maximum 3 heights in one resize
  * (Note this define is limited by the bitfield sizes
  * defined on the SizeRequestCache structure).

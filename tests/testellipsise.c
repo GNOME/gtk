@@ -84,8 +84,7 @@ ebox_draw_cb (GtkWidget *widget,
   gtk_widget_translate_coordinates (label, widget, 0, 0, &x, &y);
   layout = gtk_widget_create_pango_layout (widget, "");
 
-  gtk_size_request_get_size (GTK_SIZE_REQUEST (label), 
-			     &minimum_size, &natural_size); 
+  gtk_widget_get_preferred_size (label, &minimum_size, &natural_size); 
 
   pango_layout_set_markup (layout,
     "<span color='#c33'>\342\227\217 requisition</span>\n"

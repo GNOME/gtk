@@ -31,7 +31,7 @@
 #include "gtkprivate.h"
 #include "gtkintl.h"
 #include "gtkbuildable.h"
-#include "gtksizerequest.h"
+
 
 #define LABEL_PAD 1
 #define LABEL_SIDE_PAD 2
@@ -90,18 +90,17 @@ static void gtk_frame_buildable_add_child           (GtkBuildable *buildable,
 						     GObject      *child,
 						     const gchar  *type);
 
-static void gtk_frame_size_request_init             (GtkSizeRequestIface *iface);
-static void gtk_frame_get_width                     (GtkSizeRequest      *widget,
+static void gtk_frame_get_preferred_width           (GtkWidget           *widget,
                                                      gint                *minimum_size,
 						     gint                *natural_size);
-static void gtk_frame_get_height                    (GtkSizeRequest      *widget,
+static void gtk_frame_get_preferred_height          (GtkWidget           *widget,
 						     gint                *minimum_size,
 						     gint                *natural_size);
-static void gtk_frame_get_height_for_width          (GtkSizeRequest      *layout,
+static void gtk_frame_get_preferred_height_for_width(GtkWidget           *layout,
 						     gint                 width,
 						     gint                *minimum_height,
 						     gint                *natural_height);
-static void gtk_frame_get_width_for_height          (GtkSizeRequest      *layout,
+static void gtk_frame_get_preferred_width_for_height(GtkWidget           *layout,
 						     gint                 width,
 						     gint                *minimum_height,
 						     gint                *natural_height);
@@ -109,9 +108,7 @@ static void gtk_frame_get_width_for_height          (GtkSizeRequest      *layout
 
 G_DEFINE_TYPE_WITH_CODE (GtkFrame, gtk_frame, GTK_TYPE_BIN,
 			 G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE,
-						gtk_frame_buildable_init)
-                         G_IMPLEMENT_INTERFACE (GTK_TYPE_SIZE_REQUEST,
-                                                gtk_frame_size_request_init))
+						gtk_frame_buildable_init))
 
 static void
 gtk_frame_class_init (GtkFrameClass *class)
@@ -170,8 +167,12 @@ gtk_frame_class_init (GtkFrameClass *class)
                                                         GTK_TYPE_WIDGET,
                                                         GTK_PARAM_READWRITE));
 
-  widget_class->draw = gtk_frame_draw;
-  widget_class->size_allocate = gtk_frame_size_allocate;
+  widget_class->draw                           = gtk_frame_draw;
+  widget_class->size_allocate                  = gtk_frame_size_allocate;
+  widget_class->get_preferred_width            = gtk_frame_get_preferred_width;
+  widget_class->get_preferred_height           = gtk_frame_get_preferred_height;
+  widget_class->get_preferred_height_for_width = gtk_frame_get_preferred_height_for_width;
+  widget_class->get_preferred_width_for_height = gtk_frame_get_preferred_width_for_height;
 
   container_class->remove = gtk_frame_remove;
   container_class->forall = gtk_frame_forall;
@@ -681,12 +682,12 @@ gtk_frame_size_allocate (GtkWidget     *widget,
       else
 	xalign = 1 - priv->label_xalign;
 
-      gtk_size_request_get_width (GTK_SIZE_REQUEST (priv->label_widget), NULL, &nat_width);
+      gtk_widget_get_preferred_width (priv->label_widget, NULL, &nat_width);
       width = new_allocation.width - 2 * LABEL_PAD - 2 * LABEL_SIDE_PAD;
       width = MIN (width, nat_width);
 
-      gtk_size_request_get_height_for_width (GTK_SIZE_REQUEST (priv->label_widget), width,
-					     &height, NULL);
+      gtk_widget_get_preferred_height_for_width (priv->label_widget, width,
+                                                 &height, NULL);
 
 
       priv->label_allocation.x = priv->child_allocation.x + LABEL_SIDE_PAD +
@@ -732,7 +733,7 @@ gtk_frame_real_compute_child_allocation (GtkFrame      *frame,
     {
       gint nat_width, width, height;
 
-      gtk_size_request_get_width (GTK_SIZE_REQUEST (priv->label_widget), NULL, &nat_width);
+      gtk_widget_get_preferred_width (priv->label_widget, NULL, &nat_width);
 
       width = allocation.width;
       width -= 2 * LABEL_PAD + 2 * LABEL_SIDE_PAD;
@@ -740,8 +741,8 @@ gtk_frame_real_compute_child_allocation (GtkFrame      *frame,
 
       width = MIN (width, nat_width);
 
-      gtk_size_request_get_height_for_width (GTK_SIZE_REQUEST (priv->label_widget), width,
-					     &height, NULL);
+      gtk_widget_get_preferred_height_for_width (priv->label_widget, width,
+                                                 &height, NULL);
 
       top_margin = MAX (height, style->ythickness);
     }
@@ -759,10 +760,10 @@ gtk_frame_real_compute_child_allocation (GtkFrame      *frame,
 }
 
 static void
-gtk_frame_get_size (GtkSizeRequest *request,
-		    GtkOrientation  orientation,
-		    gint           *minimum_size,
-		    gint           *natural_size)
+gtk_frame_get_preferred_size (GtkWidget      *request,
+                              GtkOrientation  orientation,
+                              gint           *minimum_size,
+                              gint           *natural_size)
 {
   GtkFrame *frame = GTK_FRAME (request);
   GtkFramePrivate *priv = frame->priv;
@@ -780,15 +781,15 @@ gtk_frame_get_size (GtkSizeRequest *request,
     {
       if (orientation == GTK_ORIENTATION_HORIZONTAL)
         {
-          gtk_size_request_get_width (GTK_SIZE_REQUEST (priv->label_widget),
-				      &child_min, &child_nat);
+          gtk_widget_get_preferred_width (priv->label_widget,
+                                          &child_min, &child_nat);
           minimum = child_min + 2 * LABEL_PAD + 2 * LABEL_SIDE_PAD;
           natural = child_nat + 2 * LABEL_PAD + 2 * LABEL_SIDE_PAD;
         }
       else
         {
-          gtk_size_request_get_height (GTK_SIZE_REQUEST (priv->label_widget),
-				       &child_min, &child_nat);
+          gtk_widget_get_preferred_height (priv->label_widget,
+                                           &child_min, &child_nat);
           minimum = MAX (0, child_min - style->ythickness);
           natural = MAX (0, child_nat - style->ythickness);
         }
@@ -804,15 +805,15 @@ gtk_frame_get_size (GtkSizeRequest *request,
     {
       if (orientation == GTK_ORIENTATION_HORIZONTAL)
         {
-          gtk_size_request_get_width (GTK_SIZE_REQUEST (child),
-				      &child_min, &child_nat);
+          gtk_widget_get_preferred_width (child,
+                                          &child_min, &child_nat);
           minimum = MAX (minimum, child_min);
           natural = MAX (natural, child_nat);
         }
       else
         {
-          gtk_size_request_get_height (GTK_SIZE_REQUEST (child),
-				       &child_min, &child_nat);
+          gtk_widget_get_preferred_height (child,
+                                           &child_min, &child_nat);
           minimum += child_min;
           natural += child_nat;
         }
@@ -839,27 +840,27 @@ gtk_frame_get_size (GtkSizeRequest *request,
 }
 
 static void
-gtk_frame_get_width (GtkSizeRequest *widget,
-		     gint           *minimum_size,
-		     gint           *natural_size)
+gtk_frame_get_preferred_width (GtkWidget *widget,
+                               gint      *minimum_size,
+                               gint      *natural_size)
 {
-  gtk_frame_get_size (widget, GTK_ORIENTATION_HORIZONTAL, minimum_size, natural_size);
+  gtk_frame_get_preferred_size (widget, GTK_ORIENTATION_HORIZONTAL, minimum_size, natural_size);
 }
 
 static void
-gtk_frame_get_height (GtkSizeRequest *widget,
-		      gint           *minimum_size,
-		      gint           *natural_size)
+gtk_frame_get_preferred_height (GtkWidget *widget,
+                                gint      *minimum_size,
+                                gint      *natural_size)
 {
-  gtk_frame_get_size (widget, GTK_ORIENTATION_VERTICAL, minimum_size, natural_size);
+  gtk_frame_get_preferred_size (widget, GTK_ORIENTATION_VERTICAL, minimum_size, natural_size);
 }
 
 
 static void
-gtk_frame_get_height_for_width (GtkSizeRequest *request,
-				gint            width,
-				gint           *minimum_height,
-				gint           *natural_height)
+gtk_frame_get_preferred_height_for_width (GtkWidget *request,
+                                          gint       width,
+                                          gint      *minimum_height,
+                                          gint      *natural_height)
 {
   GtkWidget *widget = GTK_WIDGET (request);
   GtkWidget *child;
@@ -882,8 +883,8 @@ gtk_frame_get_height_for_width (GtkSizeRequest *request,
 
   if (priv->label_widget && gtk_widget_get_visible (priv->label_widget))
     {
-      gtk_size_request_get_height_for_width (GTK_SIZE_REQUEST (priv->label_widget),
-					     label_width, &child_min, &child_nat);
+      gtk_widget_get_preferred_height_for_width (priv->label_widget,
+                                                 label_width, &child_min, &child_nat);
       minimum += child_min;
       natural += child_nat;
     }
@@ -891,8 +892,8 @@ gtk_frame_get_height_for_width (GtkSizeRequest *request,
   child = gtk_bin_get_child (bin);
   if (child && gtk_widget_get_visible (child))
     {
-      gtk_size_request_get_height_for_width (GTK_SIZE_REQUEST (child),
-					     width, &child_min, &child_nat);
+      gtk_widget_get_preferred_height_for_width (child,
+                                                 width, &child_min, &child_nat);
       minimum += child_min;
       natural += child_nat;
     }
@@ -905,19 +906,11 @@ gtk_frame_get_height_for_width (GtkSizeRequest *request,
 }
 
 static void
-gtk_frame_get_width_for_height (GtkSizeRequest *widget,
-				gint       height,
-				gint      *minimum_width,
-				gint      *natural_width)
+gtk_frame_get_preferred_width_for_height (GtkWidget *widget,
+                                          gint       height,
+                                          gint      *minimum_width,
+                                          gint      *natural_width)
 {
-  GTK_SIZE_REQUEST_GET_IFACE (widget)->get_width (widget, minimum_width, natural_width);
+  GTK_WIDGET_GET_CLASS (widget)->get_preferred_width (widget, minimum_width, natural_width);
 }
 
-static void
-gtk_frame_size_request_init (GtkSizeRequestIface *iface)
-{
-  iface->get_width            = gtk_frame_get_width;
-  iface->get_height           = gtk_frame_get_height;
-  iface->get_height_for_width = gtk_frame_get_height_for_width;
-  iface->get_width_for_height = gtk_frame_get_width_for_height;
-}

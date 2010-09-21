@@ -40,7 +40,6 @@
 #include "gtkseparatormenuitem.h"
 #include "gtksettings.h"
 #include "gtkstock.h"
-#include "gtksizerequest.h"
 #include "gtktextbufferrichtext.h"
 #include "gtktextdisplay.h"
 #include "gtktextview.h"
@@ -141,7 +140,7 @@ struct _GtkTextViewPrivate
    * FIXME: This could be done in a simpler way by 
    * consulting the above width/height of the buffer + some
    * padding values, however all of this request code needs
-   * to be changed to use GtkSizeRequestIface and deserves
+   * to be changed to use GtkWidget     Iface and deserves
    * more attention.
    */
   GtkRequisition cached_size_request;
@@ -3310,11 +3309,9 @@ gtk_text_view_size_request (GtkWidget      *widget,
           GtkRequisition child_req;
           GtkRequisition old_req;
 
-          gtk_size_request_get_size (GTK_SIZE_REQUEST (child->widget),
-                                     &old_req, NULL);
+          gtk_widget_get_preferred_size (child->widget, &old_req, NULL);
 
-          gtk_size_request_get_size (GTK_SIZE_REQUEST (child->widget),
-                                     &child_req, NULL);
+          gtk_widget_get_preferred_size (child->widget, &child_req, NULL);
 
           /* Invalidate layout lines if required */
           if (priv->layout &&
@@ -3327,8 +3324,8 @@ gtk_text_view_size_request (GtkWidget      *widget,
         {
           GtkRequisition child_req;
 
-          gtk_size_request_get_size (GTK_SIZE_REQUEST (child->widget),
-                                     &child_req, NULL);
+          gtk_widget_get_preferred_size (child->widget,
+                                         &child_req, NULL);
         }
 
       tmp_list = g_slist_next (tmp_list);
@@ -3360,8 +3357,7 @@ gtk_text_view_compute_child_allocation (GtkTextView      *text_view,
   allocation->x = vc->from_left_of_buffer - text_view->priv->xoffset;
   allocation->y = buffer_y - text_view->priv->yoffset;
 
-  gtk_size_request_get_size (GTK_SIZE_REQUEST (vc->widget),
-                             &req, NULL);
+  gtk_widget_get_preferred_size (vc->widget, &req, NULL);
   allocation->width = req.width;
   allocation->height = req.height;
 }
@@ -3462,8 +3458,7 @@ gtk_text_view_allocate_children (GtkTextView *text_view)
           allocation.x = child->x;
           allocation.y = child->y;
 
-          gtk_size_request_get_size (GTK_SIZE_REQUEST (child->widget),
-                                     &child_req, NULL);
+          gtk_widget_get_preferred_size (child->widget, &child_req, NULL);
 
           allocation.width = child_req.width;
           allocation.height = child_req.height;
@@ -8091,8 +8086,8 @@ popup_position_func (GtkMenu   *menu,
 
   gtk_text_view_get_visible_rect (text_view, &onscreen_rect);
 
-  gtk_size_request_get_size (GTK_SIZE_REQUEST (text_view->priv->popup_menu),
-                             &req, NULL);
+  gtk_widget_get_preferred_size (text_view->priv->popup_menu,
+                                 &req, NULL);
 
   gtk_widget_get_allocation (widget, &allocation);
 

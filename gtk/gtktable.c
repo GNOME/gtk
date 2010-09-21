@@ -29,7 +29,6 @@
 #include "gtktable.h"
 
 #include "gtkprivate.h"
-#include "gtksizerequest.h"
 #include "gtkintl.h"
 
 
@@ -1039,8 +1038,7 @@ gtk_table_size_request_init (GtkTable *table)
       children = children->next;
       
       if (gtk_widget_get_visible (child->widget))
-        gtk_size_request_get_size (GTK_SIZE_REQUEST (child->widget),
-                                   NULL, NULL);
+        gtk_widget_get_preferred_size (child->widget, NULL, NULL);
 
       if (child->left_attach == (child->right_attach - 1) && child->xexpand)
 	priv->cols[child->left_attach].expand = TRUE;
@@ -1069,8 +1067,7 @@ gtk_table_size_request_pass1 (GtkTable *table)
 	{
 	  GtkRequisition child_requisition;
 
-          gtk_size_request_get_size (GTK_SIZE_REQUEST (child->widget),
-                                     &child_requisition, NULL);
+          gtk_widget_get_preferred_size (child->widget, &child_requisition, NULL);
 
 	  /* Child spans a single column.
 	   */
@@ -1140,8 +1137,8 @@ gtk_table_size_request_pass3 (GtkTable *table)
 	    {
 	      GtkRequisition child_requisition;
 
-              gtk_size_request_get_size (GTK_SIZE_REQUEST (child->widget),
-                                         &child_requisition, NULL);
+              gtk_widget_get_preferred_size (child->widget,
+                                             &child_requisition, NULL);
 
 	      /* Check and see if there is already enough space
 	       *  for the child.
@@ -1192,8 +1189,8 @@ gtk_table_size_request_pass3 (GtkTable *table)
 	    {
 	      GtkRequisition child_requisition;
 
-              gtk_size_request_get_size (GTK_SIZE_REQUEST (child->widget),
-                                         &child_requisition, NULL);
+              gtk_widget_get_preferred_size (child->widget,
+                                             &child_requisition, NULL);
 
 	      /* Check and see if there is already enough space
 	       *  for the child.
@@ -1670,8 +1667,8 @@ gtk_table_size_allocate_pass2 (GtkTable *table)
 	  GtkRequisition child_requisition;
           guint border_width;
 
-          gtk_size_request_get_size (GTK_SIZE_REQUEST (child->widget),
-                                     &child_requisition, NULL);
+          gtk_widget_get_preferred_size (child->widget,
+                                         &child_requisition, NULL);
 
           gtk_widget_get_allocation (GTK_WIDGET (table), &table_allocation);
           border_width = gtk_container_get_border_width (GTK_CONTAINER (table));

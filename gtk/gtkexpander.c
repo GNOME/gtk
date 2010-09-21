@@ -27,7 +27,6 @@
 
 #include "gtklabel.h"
 #include "gtkbuildable.h"
-#include "gtksizerequest.h"
 #include "gtkcontainer.h"
 #include "gtkmarshalers.h"
 #include "gtkmain.h"
@@ -134,28 +133,25 @@ static void gtk_expander_buildable_add_child      (GtkBuildable *buildable,
 						   const gchar  *type);
 
 
-/* GtkSizeRequest */
-static void  gtk_expander_size_request_init     (GtkSizeRequestIface *iface);
-static void  gtk_expander_get_width             (GtkSizeRequest      *widget,
-						 gint                *minimum_size,
-						 gint                *natural_size);
-static void  gtk_expander_get_height            (GtkSizeRequest      *widget,
-						 gint                *minimum_size,
-						 gint                *natural_size);
-static void  gtk_expander_get_height_for_width  (GtkSizeRequest      *layout,
-						 gint                 width,
-						 gint                *minimum_height,
-						 gint                *natural_height);
-static void  gtk_expander_get_width_for_height  (GtkSizeRequest      *layout,
-						 gint                 width,
-						 gint                *minimum_height,
-						 gint                *natural_height);
+/* GtkWidget      */
+static void  gtk_expander_get_preferred_width             (GtkWidget           *widget,
+                                                           gint                *minimum_size,
+                                                           gint                *natural_size);
+static void  gtk_expander_get_preferred_height            (GtkWidget           *widget,
+                                                           gint                *minimum_size,
+                                                           gint                *natural_size);
+static void  gtk_expander_get_preferred_height_for_width  (GtkWidget           *layout,
+                                                           gint                 width,
+                                                           gint                *minimum_height,
+                                                           gint                *natural_height);
+static void  gtk_expander_get_preferred_width_for_height  (GtkWidget           *layout,
+                                                           gint                 width,
+                                                           gint                *minimum_height,
+                                                           gint                *natural_height);
 
 G_DEFINE_TYPE_WITH_CODE (GtkExpander, gtk_expander, GTK_TYPE_BIN,
 			 G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE,
-						gtk_expander_buildable_init)
-                         G_IMPLEMENT_INTERFACE (GTK_TYPE_SIZE_REQUEST,
-                                                gtk_expander_size_request_init))
+						gtk_expander_buildable_init))
 
 static void
 gtk_expander_class_init (GtkExpanderClass *klass)
@@ -190,6 +186,10 @@ gtk_expander_class_init (GtkExpanderClass *klass)
   widget_class->state_changed        = gtk_expander_state_changed;
   widget_class->drag_motion          = gtk_expander_drag_motion;
   widget_class->drag_leave           = gtk_expander_drag_leave;
+  widget_class->get_preferred_width            = gtk_expander_get_preferred_width;
+  widget_class->get_preferred_height           = gtk_expander_get_preferred_height;
+  widget_class->get_preferred_height_for_width = gtk_expander_get_preferred_height_for_width;
+  widget_class->get_preferred_width_for_height = gtk_expander_get_preferred_width_for_height;
 
   container_class->add    = gtk_expander_add;
   container_class->remove = gtk_expander_remove;
@@ -451,8 +451,8 @@ gtk_expander_realize (GtkWidget *widget)
     {
       GtkRequisition label_requisition;
 
-      gtk_size_request_get_size (GTK_SIZE_REQUEST (priv->label_widget),
-                                 &label_requisition, NULL);
+      gtk_widget_get_preferred_size (priv->label_widget,
+                                     &label_requisition, NULL);
       label_height = label_requisition.height;
     }
   else
@@ -620,7 +620,7 @@ gtk_expander_size_allocate (GtkWidget     *widget,
       gint          natural_label_width;
       gboolean ltr;
 
-      gtk_size_request_get_width (GTK_SIZE_REQUEST (priv->label_widget), NULL, &natural_label_width);
+      gtk_widget_get_preferred_width (priv->label_widget, NULL, &natural_label_width);
 
       if (priv->label_fill)
         label_allocation.width = allocation->width - label_xpad;
@@ -630,8 +630,8 @@ gtk_expander_size_allocate (GtkWidget     *widget,
 
       /* We distribute the minimum height to the label widget and prioritize
        * the child widget giving it the remaining height */
-      gtk_size_request_get_height_for_width (GTK_SIZE_REQUEST (priv->label_widget),
-					     label_allocation.width, &label_height, NULL);
+      gtk_widget_get_preferred_height_for_width (priv->label_widget,
+                                                 label_allocation.width, &label_height, NULL);
 
       ltr = gtk_widget_get_direction (widget) != GTK_TEXT_DIR_RTL;
 
@@ -1272,19 +1272,10 @@ gtk_expander_activate (GtkExpander *expander)
 }
 
 
-static void
-gtk_expander_size_request_init (GtkSizeRequestIface *iface)
-{
-  iface->get_width            = gtk_expander_get_width;
-  iface->get_height           = gtk_expander_get_height;
-  iface->get_height_for_width = gtk_expander_get_height_for_width;
-  iface->get_width_for_height = gtk_expander_get_width_for_height;
-}
-
 static void     
-gtk_expander_get_width (GtkSizeRequest      *widget,
-			gint                *minimum_size,
-			gint                *natural_size)
+gtk_expander_get_preferred_width (GtkWidget *widget,
+                                  gint      *minimum_size,
+                                  gint      *natural_size)
 {
   GtkExpander *expander;
   GtkWidget *child;
@@ -1318,8 +1309,8 @@ gtk_expander_get_width (GtkSizeRequest      *widget,
     {
       gint label_min, label_nat;
 
-      gtk_size_request_get_width (GTK_SIZE_REQUEST (priv->label_widget), 
-				  &label_min, &label_nat);
+      gtk_widget_get_preferred_width (priv->label_widget, 
+                                      &label_min, &label_nat);
 
       *minimum_size += label_min;
       *natural_size += label_nat;
@@ -1329,8 +1320,8 @@ gtk_expander_get_width (GtkSizeRequest      *widget,
     {
       gint child_min, child_nat;
 
-      gtk_size_request_get_width (GTK_SIZE_REQUEST (child), 
-				  &child_min, &child_nat);
+      gtk_widget_get_preferred_width (child, 
+                                      &child_min, &child_nat);
 
       *minimum_size = MAX (*minimum_size, child_min);
       *natural_size = MAX (*natural_size, child_nat);
@@ -1342,9 +1333,9 @@ gtk_expander_get_width (GtkSizeRequest      *widget,
 }
 
 static void
-gtk_expander_get_height (GtkSizeRequest      *widget,
-			 gint                *minimum_size,
-			 gint                *natural_size)
+gtk_expander_get_preferred_height (GtkWidget *widget,
+                                   gint      *minimum_size,
+                                   gint      *natural_size)
 {  
   GtkExpander *expander;
   GtkWidget *child;
@@ -1378,8 +1369,8 @@ gtk_expander_get_height (GtkSizeRequest      *widget,
     {
       gint label_min, label_nat;
 
-      gtk_size_request_get_height (GTK_SIZE_REQUEST (priv->label_widget), 
-				   &label_min, &label_nat);
+      gtk_widget_get_preferred_height (priv->label_widget, 
+                                       &label_min, &label_nat);
       
       *minimum_size += label_min;
       *natural_size += label_nat;
@@ -1399,8 +1390,8 @@ gtk_expander_get_height (GtkSizeRequest      *widget,
     {
       gint child_min, child_nat;
 
-      gtk_size_request_get_height (GTK_SIZE_REQUEST (child), 
-				   &child_min, &child_nat);
+      gtk_widget_get_preferred_height (child, 
+                                       &child_min, &child_nat);
 
       *minimum_size += child_min + priv->spacing;
       *natural_size += child_nat + priv->spacing;
@@ -1412,10 +1403,10 @@ gtk_expander_get_height (GtkSizeRequest      *widget,
 }
 
 static void
-gtk_expander_get_height_for_width (GtkSizeRequest *widget,
-				   gint            width,
-				   gint           *minimum_height,
-				   gint           *natural_height)
+gtk_expander_get_preferred_height_for_width (GtkWidget *widget,
+                                             gint       width,
+                                             gint      *minimum_height,
+                                             gint      *natural_height)
 {
   GtkExpander *expander;
   GtkWidget *child;
@@ -1452,9 +1443,9 @@ gtk_expander_get_height_for_width (GtkSizeRequest *widget,
     {
       gint label_min, label_nat;
 
-      gtk_size_request_get_height_for_width (GTK_SIZE_REQUEST (priv->label_widget), 
-					     MAX (width - label_xpad, 1), 
-					     &label_min, &label_nat);
+      gtk_widget_get_preferred_height_for_width (priv->label_widget, 
+                                                 MAX (width - label_xpad, 1), 
+                                                 &label_min, &label_nat);
       
       *minimum_height += label_min;
       *natural_height += label_nat;
@@ -1474,9 +1465,9 @@ gtk_expander_get_height_for_width (GtkSizeRequest *widget,
     {
       gint child_min, child_nat;
 
-      gtk_size_request_get_height_for_width (GTK_SIZE_REQUEST (child), 
-					     MAX (width - 2 * border_width, 1), 
-					     &child_min, &child_nat);
+      gtk_widget_get_preferred_height_for_width (child, 
+                                                 MAX (width - 2 * border_width, 1), 
+                                                 &child_min, &child_nat);
 
       *minimum_height += child_min + priv->spacing;
       *natural_height += child_nat + priv->spacing;
@@ -1487,12 +1478,12 @@ gtk_expander_get_height_for_width (GtkSizeRequest *widget,
 }
 
 static void
-gtk_expander_get_width_for_height (GtkSizeRequest *widget,
-				   gint       height,
-				   gint      *minimum_width,
-				   gint      *natural_width)
+gtk_expander_get_preferred_width_for_height (GtkWidget *widget,
+                                             gint       height,
+                                             gint      *minimum_width,
+                                             gint      *natural_width)
 {
-  GTK_SIZE_REQUEST_GET_IFACE (widget)->get_width (widget, minimum_width, natural_width);
+  GTK_WIDGET_GET_CLASS (widget)->get_preferred_width (widget, minimum_width, natural_width);
 }
 
 

@@ -37,7 +37,6 @@
 #include "gtkprivate.h"
 #include "gtkbuildable.h"
 #include "gtkactivatable.h"
-#include "gtksizerequest.h"
 #include "gtkintl.h"
 
 
@@ -127,17 +126,16 @@ static void gtk_real_menu_item_set_label (GtkMenuItem     *menu_item,
 					  const gchar     *label);
 static G_CONST_RETURN gchar * gtk_real_menu_item_get_label (GtkMenuItem *menu_item);
 
-static void gtk_menu_item_size_request_init          (GtkSizeRequestIface *iface);
-static void gtk_menu_item_get_width                  (GtkSizeRequest      *widget,
-						      gint                *minimum_size,
-						      gint                *natural_size);
-static void gtk_menu_item_get_height                 (GtkSizeRequest      *widget,
-						      gint                *minimum_size,
-						      gint                *natural_size);
-static void gtk_menu_item_get_height_for_width       (GtkSizeRequest      *widget,
-						      gint                 for_size,
-						      gint                *minimum_size,
-						      gint                *natural_size);
+static void gtk_menu_item_get_preferred_width            (GtkWidget           *widget,
+                                                          gint                *minimum_size,
+                                                          gint                *natural_size);
+static void gtk_menu_item_get_preferred_height           (GtkWidget           *widget,
+                                                          gint                *minimum_size,
+                                                          gint                *natural_size);
+static void gtk_menu_item_get_preferred_height_for_width (GtkWidget           *widget,
+                                                          gint                 for_size,
+                                                          gint                *minimum_size,
+                                                          gint                *natural_size);
 
 static void gtk_menu_item_buildable_interface_init (GtkBuildableIface   *iface);
 static void gtk_menu_item_buildable_add_child      (GtkBuildable        *buildable,
@@ -170,9 +168,7 @@ G_DEFINE_TYPE_WITH_CODE (GtkMenuItem, gtk_menu_item, GTK_TYPE_BIN,
 			 G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE,
 						gtk_menu_item_buildable_interface_init)
 			 G_IMPLEMENT_INTERFACE (GTK_TYPE_ACTIVATABLE,
-						gtk_menu_item_activatable_interface_init)
-			 G_IMPLEMENT_INTERFACE (GTK_TYPE_SIZE_REQUEST,
-						gtk_menu_item_size_request_init))
+						gtk_menu_item_activatable_interface_init))
 
 #define GET_PRIVATE(object)  \
   (G_TYPE_INSTANCE_GET_PRIVATE ((object), GTK_TYPE_MENU_ITEM, GtkMenuItemPrivate))
@@ -204,6 +200,9 @@ gtk_menu_item_class_init (GtkMenuItemClass *klass)
   widget_class->mnemonic_activate = gtk_menu_item_mnemonic_activate;
   widget_class->parent_set = gtk_menu_item_parent_set;
   widget_class->can_activate_accel = gtk_menu_item_can_activate_accel;
+  widget_class->get_preferred_width = gtk_menu_item_get_preferred_width;
+  widget_class->get_preferred_height = gtk_menu_item_get_preferred_height;
+  widget_class->get_preferred_height_for_width = gtk_menu_item_get_preferred_height_for_width;
   
   container_class->forall = gtk_menu_item_forall;
 
@@ -660,17 +659,9 @@ get_minimum_width (GtkWidget *widget)
 }
 
 static void 
-gtk_menu_item_size_request_init (GtkSizeRequestIface *iface)
-{
-  iface->get_width            = gtk_menu_item_get_width;
-  iface->get_height           = gtk_menu_item_get_height;
-  iface->get_height_for_width = gtk_menu_item_get_height_for_width;
-}
-
-static void 
-gtk_menu_item_get_width (GtkSizeRequest      *request,
-			 gint                *minimum_size,
-			 gint                *natural_size)
+gtk_menu_item_get_preferred_width (GtkWidget *request,
+                                   gint      *minimum_size,
+                                   gint      *natural_size)
 {
   GtkMenuItem *menu_item;
   GtkBin *bin;
@@ -720,7 +711,7 @@ gtk_menu_item_get_width (GtkSizeRequest      *request,
     {
       gint child_min, child_nat;
 
-      gtk_size_request_get_width (GTK_SIZE_REQUEST (child), &child_min, &child_nat);
+      gtk_widget_get_preferred_width (child, &child_min, &child_nat);
 
       if (menu_item->submenu && menu_item->show_submenu_indicator)
 	{
@@ -762,9 +753,9 @@ gtk_menu_item_get_width (GtkSizeRequest      *request,
 }
 
 static void 
-gtk_menu_item_get_height (GtkSizeRequest      *request,
-			  gint                *minimum_size,
-			  gint                *natural_size)
+gtk_menu_item_get_preferred_height (GtkWidget *request,
+                                    gint      *minimum_size,
+                                    gint      *natural_size)
 {
   GtkMenuItem *menu_item;
   GtkBin *bin;
@@ -816,7 +807,7 @@ gtk_menu_item_get_height (GtkSizeRequest      *request,
     {
       gint child_min, child_nat;
       
-      gtk_size_request_get_height (GTK_SIZE_REQUEST (child), &child_min, &child_nat);
+      gtk_widget_get_preferred_height (child, &child_min, &child_nat);
 
       min_height += child_min;
       nat_height += child_nat;
@@ -863,10 +854,10 @@ gtk_menu_item_get_height (GtkSizeRequest      *request,
 }
 
 static void
-gtk_menu_item_get_height_for_width (GtkSizeRequest      *request,
-				    gint                 for_size,
-				    gint                *minimum_size,
-				    gint                *natural_size)
+gtk_menu_item_get_preferred_height_for_width (GtkWidget *request,
+                                              gint       for_size,
+                                              gint      *minimum_size,
+                                              gint      *natural_size)
 {
   GtkMenuItem *menu_item;
   GtkBin *bin;
@@ -941,7 +932,10 @@ gtk_menu_item_get_height_for_width (GtkSizeRequest      *request,
 	  avail_size -= arrow_spacing;
 	}
 
-      gtk_size_request_get_height_for_width (GTK_SIZE_REQUEST (child), avail_size, &child_min, &child_nat);
+      gtk_widget_get_preferred_height_for_width (child,
+                                                 avail_size,
+                                                 &child_min,
+                                                 &child_nat);
 
       min_height += child_min;
       nat_height += child_nat;
@@ -1392,8 +1386,7 @@ gtk_menu_item_size_allocate (GtkWidget     *widget,
       child_allocation.x += allocation->x;
       child_allocation.y += allocation->y;
 
-      gtk_size_request_get_size (GTK_SIZE_REQUEST (child),
-                                 &child_requisition, NULL);
+      gtk_widget_get_preferred_size (child, &child_requisition, NULL);
       if (menu_item->submenu && menu_item->show_submenu_indicator) 
 	{
 	  if (direction == GTK_TEXT_DIR_RTL)
@@ -1999,7 +1992,7 @@ gtk_menu_item_position_menu (GtkMenu  *menu,
 
   direction = gtk_widget_get_direction (widget);
 
-  gtk_size_request_get_size (GTK_SIZE_REQUEST (menu), &requisition, NULL);
+  gtk_widget_get_preferred_size (GTK_WIDGET (menu), &requisition, NULL);
   twidth = requisition.width;
   theight = requisition.height;
 

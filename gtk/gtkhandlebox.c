@@ -32,7 +32,6 @@
 #include "gtkmain.h"
 #include "gtkmarshalers.h"
 #include "gtkwindow.h"
-#include "gtksizerequest.h"
 #include "gtkprivate.h"
 #include "gtkintl.h"
 
@@ -448,7 +447,7 @@ gtk_handle_box_realize (GtkWidget *widget)
   if (child)
     gtk_widget_set_parent_window (child, priv->bin_window);
   
-  gtk_size_request_get_size (GTK_SIZE_REQUEST (widget), &requisition, NULL);
+  gtk_widget_get_preferred_size (widget, &requisition, NULL);
 
   attributes.x = 0;
   attributes.y = 0;
@@ -575,8 +574,7 @@ gtk_handle_box_size_request (GtkWidget      *widget,
    */
   if (child)
     {
-      gtk_size_request_get_size (GTK_SIZE_REQUEST (child),
-                                 &child_requisition, NULL);
+      gtk_widget_get_preferred_size (child, &child_requisition, NULL);
     }
   else
     {
@@ -642,8 +640,7 @@ gtk_handle_box_size_allocate (GtkWidget     *widget,
 
   if (child)
     {
-      gtk_size_request_get_size (GTK_SIZE_REQUEST (child),
-                                 &child_requisition, NULL);
+      gtk_widget_get_preferred_size (child, &child_requisition, NULL);
     }
   else
     {
@@ -1348,8 +1345,7 @@ gtk_handle_box_motion (GtkWidget      *widget,
 
 	  if (child)
             {
-              gtk_size_request_get_size (GTK_SIZE_REQUEST (child),
-                                         &child_requisition, NULL);
+              gtk_widget_get_preferred_size (child, &child_requisition, NULL);
             }
 	  else
 	    {

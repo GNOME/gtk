@@ -4109,8 +4109,8 @@ popup_position_func (GtkMenu   *menu,
 
   gdk_window_get_origin (gtk_widget_get_window (widget), x, y);
 
-  gtk_size_request_get_size (GTK_SIZE_REQUEST (menu),
-                             &req, NULL);
+  gtk_widget_get_preferred_size (GTK_WIDGET (menu),
+                                 &req, NULL);
 
   gtk_widget_get_allocation (widget, &allocation);
   *x += (allocation.width - req.width) / 2;
@@ -7852,23 +7852,23 @@ gtk_file_chooser_default_get_default_size (GtkFileChooserEmbed *chooser_embed,
 	  impl->preview_widget &&
 	  gtk_widget_get_visible (impl->preview_widget))
 	{
-          gtk_size_request_get_size (GTK_SIZE_REQUEST (impl->preview_box),
-                                     &req, NULL);
+          gtk_widget_get_preferred_size (impl->preview_box,
+                                         &req, NULL);
 	  *default_width += PREVIEW_HBOX_SPACING + req.width;
 	}
 
       if (impl->extra_widget &&
 	  gtk_widget_get_visible (impl->extra_widget))
 	{
-          gtk_size_request_get_size (GTK_SIZE_REQUEST (impl->extra_align),
-                                     &req, NULL);
+          gtk_widget_get_preferred_size (impl->extra_align,
+                                         &req, NULL);
 	  *default_height += gtk_box_get_spacing (GTK_BOX (chooser_embed)) + req.height;
 	}
     }
   else
     {
-      gtk_size_request_get_size (GTK_SIZE_REQUEST (impl),
-                                 &req, NULL);
+      gtk_widget_get_preferred_size (GTK_WIDGET (impl),
+                                     &req, NULL);
       *default_width = req.width;
       *default_height = req.height;
     }

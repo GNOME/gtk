@@ -1453,10 +1453,10 @@ _gtk_entry_completion_resize_popup (GtkEntryCompletion *completion)
   else
     gtk_widget_hide (completion->priv->action_view);
 
-  gtk_size_request_get_size (GTK_SIZE_REQUEST (completion->priv->popup_window),
-                             &popup_req, NULL);
-  gtk_size_request_get_size (GTK_SIZE_REQUEST (completion->priv->entry),
-                             &entry_req, NULL);
+  gtk_widget_get_preferred_size (completion->priv->popup_window,
+                                 &popup_req, NULL);
+  gtk_widget_get_preferred_size (completion->priv->entry,
+                                 &entry_req, NULL);
 
   if (x < monitor.x)
     x = monitor.x;

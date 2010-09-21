@@ -368,6 +368,20 @@ static gint		gtk_widget_event_internal		(GtkWidget	  *widget,
 								 GdkEvent	  *event);
 static gboolean		gtk_widget_real_mnemonic_activate	(GtkWidget	  *widget,
 								 gboolean	   group_cycling);
+static void             gtk_widget_real_get_width               (GtkWidget        *widget,
+                                                                 gint             *minimum_size,
+                                                                 gint             *natural_size);
+static void             gtk_widget_real_get_height              (GtkWidget        *widget,
+                                                                 gint             *minimum_size,
+                                                                 gint             *natural_size);
+static void             gtk_widget_real_get_height_for_width    (GtkWidget        *widget,
+                                                                 gint              width,
+                                                                 gint             *minimum_height,
+                                                                 gint             *natural_height);
+static void             gtk_widget_real_get_width_for_height    (GtkWidget        *widget,
+                                                                 gint              height,
+                                                                 gint             *minimum_width,
+                                                                 gint             *natural_width);
 static const GtkWidgetAuxInfo* _gtk_widget_get_aux_info_or_defaults (GtkWidget *widget);
 static void		gtk_widget_aux_info_destroy		(GtkWidgetAuxInfo *aux_info);
 static AtkObject*	gtk_widget_real_get_accessible		(GtkWidget	  *widget);
@@ -408,11 +422,10 @@ static void             gtk_widget_buildable_custom_finished    (GtkBuildable   
 static void             gtk_widget_buildable_parser_finished    (GtkBuildable     *buildable,
                                                                  GtkBuilder       *builder);
 
-static void             gtk_widget_size_request_init            (GtkSizeRequestIface *iface);
-static void             gtk_widget_real_get_width               (GtkSizeRequest    *widget,
+static void             gtk_widget_real_get_width               (GtkWidget         *widget,
                                                                  gint              *minimum_size,
                                                                  gint              *natural_size);
-static void             gtk_widget_real_get_height              (GtkSizeRequest    *widget,
+static void             gtk_widget_real_get_height              (GtkWidget         *widget,
                                                                  gint              *minimum_size,
                                                                  gint              *natural_size);
 
@@ -500,13 +513,6 @@ gtk_widget_get_type (void)
 	NULL /* interface data */
       };
 
-      const GInterfaceInfo layout_info =
-      {
-	(GInterfaceInitFunc) gtk_widget_size_request_init,
-	(GInterfaceFinalizeFunc) NULL,
-	NULL /* interface data */
-      };
-
       widget_type = g_type_register_static (GTK_TYPE_OBJECT, "GtkWidget",
                                            &widget_info, G_TYPE_FLAG_ABSTRACT);
 
@@ -514,8 +520,6 @@ gtk_widget_get_type (void)
                                    &accessibility_info) ;
       g_type_add_interface_static (widget_type, GTK_TYPE_BUILDABLE,
                                    &buildable_info) ;
-      g_type_add_interface_static (widget_type, GTK_TYPE_SIZE_REQUEST,
-                                   &layout_info) ;
     }
 
   return widget_type;
@@ -610,6 +614,10 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   klass->unrealize = gtk_widget_real_unrealize;
   klass->size_request = gtk_widget_real_size_request;
   klass->size_allocate = gtk_widget_real_size_allocate;
+  klass->get_preferred_width = gtk_widget_real_get_width;
+  klass->get_preferred_height = gtk_widget_real_get_height;
+  klass->get_preferred_width_for_height = gtk_widget_real_get_width_for_height;
+  klass->get_preferred_height_for_width = gtk_widget_real_get_height_for_width;  
   klass->state_changed = NULL;
   klass->parent_set = NULL;
   klass->hierarchy_changed = NULL;
@@ -4090,7 +4098,7 @@ gtk_widget_queue_resize_no_redraw (GtkWidget *widget)
  * Also remember that the size request is not necessarily the size
  * a widget will actually be allocated.
  *
- * Deprecated: 3.0: Use gtk_size_request_get_size() instead.
+ * Deprecated: 3.0: Use gtk_widget_get_preferred_size() instead.
  **/
 void
 gtk_widget_size_request (GtkWidget	*widget,
@@ -4098,7 +4106,7 @@ gtk_widget_size_request (GtkWidget	*widget,
 {
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
-  gtk_size_request_get_size (GTK_SIZE_REQUEST (widget), requisition, NULL);
+  gtk_widget_get_preferred_size (widget, requisition, NULL);
 }
 
 /**
@@ -4126,13 +4134,13 @@ gtk_widget_size_request (GtkWidget	*widget,
  * gtk_widget_size_request().
  *
  *
- * Deprecated: 3.0: Use gtk_size_request_get_size() instead.
+ * Deprecated: 3.0: Use gtk_widget_get_preferred_size() instead.
  **/
 void
 gtk_widget_get_child_requisition (GtkWidget	 *widget,
 				  GtkRequisition *requisition)
 {
-  gtk_size_request_get_size (GTK_SIZE_REQUEST (widget), requisition, NULL);
+  gtk_widget_get_preferred_size (widget, requisition, NULL);
 }
 
 static gboolean
@@ -4627,7 +4635,7 @@ gtk_widget_real_adjust_size_allocation (GtkWidget         *widget,
 
   aux_info = _gtk_widget_get_aux_info_or_defaults (widget);
 
-  gtk_size_request_get_size (GTK_SIZE_REQUEST (widget), &min, &natural);
+  gtk_widget_get_preferred_size (widget, &min, &natural);
 
   get_span_inside_border_horizontal (widget,
                                      aux_info,
@@ -8550,7 +8558,7 @@ gtk_widget_set_size_request (GtkWidget *widget,
  * @height indicates that that dimension has not been set explicitly
  * and the natural requisition of the widget will be used intead. See
  * gtk_widget_set_size_request(). To get the size a widget will
- * actually request, call gtk_size_request_get_size() instead of
+ * actually request, call gtk_size_request_get_preferred_size() instead of
  * this function.
  **/
 void
@@ -11214,13 +11222,10 @@ gtk_widget_buildable_custom_finished (GtkBuildable *buildable,
     }
 }
 
-/*
- * GtkSizeRequest implementation
- */
 static void
-gtk_widget_real_get_width (GtkSizeRequest *widget,
-			   gint           *minimum_size,
-			   gint           *natural_size)
+gtk_widget_real_get_width (GtkWidget *widget,
+			   gint      *minimum_size,
+			   gint      *natural_size)
 {
   if (minimum_size)
     *minimum_size = 0;
@@ -11230,9 +11235,9 @@ gtk_widget_real_get_width (GtkSizeRequest *widget,
 }
 
 static void
-gtk_widget_real_get_height (GtkSizeRequest *widget,
-			    gint           *minimum_size,
-			    gint           *natural_size)
+gtk_widget_real_get_height (GtkWidget *widget,
+			    gint      *minimum_size,
+			    gint      *natural_size)
 {
   if (minimum_size)
     *minimum_size = 0;
@@ -11242,30 +11247,21 @@ gtk_widget_real_get_height (GtkSizeRequest *widget,
 }
 
 static void
-gtk_widget_real_get_height_for_width (GtkSizeRequest *layout,
+gtk_widget_real_get_height_for_width (GtkWidget *widget,
                                       gint       width,
                                       gint      *minimum_height,
                                       gint      *natural_height)
 {
-  GTK_SIZE_REQUEST_GET_IFACE (layout)->get_height(layout, minimum_height, natural_height);
+  GTK_WIDGET_GET_CLASS (widget)->get_preferred_height (widget, minimum_height, natural_height);
 }
 
 static void
-gtk_widget_real_get_width_for_height (GtkSizeRequest *layout,
+gtk_widget_real_get_width_for_height (GtkWidget *widget,
                                       gint       height,
                                       gint      *minimum_width,
                                       gint      *natural_width)
 {
-  GTK_SIZE_REQUEST_GET_IFACE (layout)->get_width(layout, minimum_width, natural_width);
-}
-
-static void
-gtk_widget_size_request_init (GtkSizeRequestIface *iface)
-{
-  iface->get_width            = gtk_widget_real_get_width;
-  iface->get_height           = gtk_widget_real_get_height;
-  iface->get_width_for_height = gtk_widget_real_get_width_for_height;
-  iface->get_height_for_width = gtk_widget_real_get_height_for_width;  
+  GTK_WIDGET_GET_CLASS (widget)->get_preferred_width (widget, minimum_width, natural_width);
 }
 
 /**
@@ -12112,7 +12108,7 @@ gtk_widget_get_requisition (GtkWidget      *widget,
   g_return_if_fail (GTK_IS_WIDGET (widget));
   g_return_if_fail (requisition != NULL);
 
-  gtk_size_request_get_size (GTK_SIZE_REQUEST (widget), requisition, NULL);
+  gtk_widget_get_preferred_size (widget, requisition, NULL);
 }
 
 /**

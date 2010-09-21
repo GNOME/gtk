@@ -53,7 +53,6 @@
 #include "gtkseparatormenuitem.h"
 #include "gtkseparatortoolitem.h"
 #include "gtkstock.h"
-#include "gtksizerequest.h"
 #include "gtktoolshell.h"
 #include "gtkvbox.h"
 #include "gtkprivate.h"
@@ -923,8 +922,8 @@ gtk_toolbar_size_request (GtkWidget      *widget,
   
   if (priv->show_arrow)
     {
-      gtk_size_request_get_size (GTK_SIZE_REQUEST (priv->arrow_button),
-                                 &arrow_requisition, NULL);
+      gtk_widget_get_preferred_size (priv->arrow_button,
+                                     &arrow_requisition, NULL);
 
       if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
 	long_req = arrow_requisition.width;
@@ -1453,8 +1452,8 @@ gtk_toolbar_size_allocate (GtkWidget     *widget,
   
   border_width += get_internal_padding (toolbar);
 
-  gtk_size_request_get_size (GTK_SIZE_REQUEST (priv->arrow_button),
-                             &arrow_requisition, NULL);
+  gtk_widget_get_preferred_size (priv->arrow_button,
+                                 &arrow_requisition, NULL);
 
   shadow_type = get_shadow_type (toolbar);
 
@@ -2322,8 +2321,8 @@ gtk_toolbar_set_drop_highlight_item (GtkToolbar  *toolbar,
   g_assert (content);
   g_assert (toolbar_content_is_placeholder (content));
 
-  gtk_size_request_get_size (GTK_SIZE_REQUEST (priv->highlight_tool_item),
-                             &requisition, NULL);
+  gtk_widget_get_preferred_size (GTK_WIDGET (priv->highlight_tool_item),
+                                 &requisition, NULL);
 
   toolbar_content_set_expand (content, gtk_tool_item_get_expand (tool_item));
   
@@ -2587,10 +2586,10 @@ menu_position_func (GtkMenu  *menu,
   gint monitor_num;
   GdkScreen *screen;
 
-  gtk_size_request_get_size (GTK_SIZE_REQUEST (priv->arrow_button),
-                             &req, NULL);
-  gtk_size_request_get_size (GTK_SIZE_REQUEST (menu),
-                             &menu_req, NULL);
+  gtk_widget_get_preferred_size (priv->arrow_button,
+                                 &req, NULL);
+  gtk_widget_get_preferred_size (GTK_WIDGET (menu),
+                                 &menu_req, NULL);
 
   screen = gtk_widget_get_screen (GTK_WIDGET (menu));
   monitor_num = gdk_screen_get_monitor_at_window (screen,
@@ -3322,8 +3321,8 @@ toolbar_content_size_request (ToolbarContent *content,
 			      GtkToolbar     *toolbar,
 			      GtkRequisition *requisition)
 {
-  gtk_size_request_get_size (GTK_SIZE_REQUEST (content->item),
-                             requisition, NULL);
+  gtk_widget_get_preferred_size (GTK_WIDGET (content->item),
+                                 requisition, NULL);
   if (content->is_placeholder &&
       content->disappearing)
     {

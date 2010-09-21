@@ -48,7 +48,6 @@
 #include "gtkmarshalers.h"
 #include "gtkplug.h"
 #include "gtkbuildable.h"
-#include "gtksizerequest.h"
 
 #ifdef GDK_WINDOWING_X11
 #include "x11/gdkx.h"
@@ -432,19 +431,16 @@ static void gtk_window_buildable_custom_finished (GtkBuildable  *buildable,
 						      gpointer       user_data);
 
 
-static void gtk_window_size_request_init      (GtkSizeRequestIface *iface);
-static void gtk_window_get_width              (GtkSizeRequest      *widget,
+static void gtk_window_get_preferred_width    (GtkWidget           *widget,
 					       gint                *minimum_size,
 					       gint                *natural_size);
-static void gtk_window_get_height             (GtkSizeRequest      *widget,
+static void gtk_window_get_preferred_height   (GtkWidget           *widget,
 					       gint                *minimum_size,
 					       gint                *natural_size);
 
 G_DEFINE_TYPE_WITH_CODE (GtkWindow, gtk_window, GTK_TYPE_BIN,
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE,
-						gtk_window_buildable_interface_init)
-			 G_IMPLEMENT_INTERFACE (GTK_TYPE_SIZE_REQUEST,
-						gtk_window_size_request_init))
+						gtk_window_buildable_interface_init))
 
 static void
 add_tab_bindings (GtkBindingSet    *binding_set,
@@ -553,6 +549,8 @@ gtk_window_class_init (GtkWindowClass *klass)
   widget_class->client_event = gtk_window_client_event;
   widget_class->focus = gtk_window_focus;
   widget_class->draw = gtk_window_draw;
+  widget_class->get_preferred_width = gtk_window_get_preferred_width;
+  widget_class->get_preferred_height = gtk_window_get_preferred_height;
 
   container_class->check_resize = gtk_window_check_resize;
 
@@ -4658,8 +4656,7 @@ gtk_window_realize (GtkWidget *widget)
       GtkRequisition requisition;
       GtkAllocation allocation = { 0, 0, 200, 200 };
 
-      gtk_size_request_get_size (GTK_SIZE_REQUEST (widget),
-                                 &requisition, NULL);
+      gtk_widget_get_preferred_size (widget, &requisition, NULL);
       if (requisition.width || requisition.height)
 	{
 	  /* non-empty window */
@@ -5503,18 +5500,10 @@ gtk_window_real_set_focus (GtkWindow *window,
 }
 
 
-static void
-gtk_window_size_request_init (GtkSizeRequestIface *iface)
-{
-  iface->get_width  = gtk_window_get_width;
-  iface->get_height = gtk_window_get_height;
-}
-
-
 static void 
-gtk_window_get_width (GtkSizeRequest      *widget,
-		      gint                *minimum_size,
-		      gint                *natural_size)
+gtk_window_get_preferred_width (GtkWidget *widget,
+                                gint      *minimum_size,
+                                gint      *natural_size)
 {
   GtkWindow *window;
   GtkWidget *child;
@@ -5530,7 +5519,7 @@ gtk_window_get_width (GtkSizeRequest      *widget,
   if (child && gtk_widget_get_visible (child))
     {
       gint child_min, child_nat;
-      gtk_size_request_get_width (GTK_SIZE_REQUEST (child), &child_min, &child_nat);
+      gtk_widget_get_preferred_width (child, &child_min, &child_nat);
 
       *minimum_size += child_min;
       *natural_size += child_nat;
@@ -5538,9 +5527,9 @@ gtk_window_get_width (GtkSizeRequest      *widget,
 }
 
 static void 
-gtk_window_get_height (GtkSizeRequest      *widget,
-		       gint                *minimum_size,
-		       gint                *natural_size)
+gtk_window_get_preferred_height (GtkWidget *widget,
+                                 gint      *minimum_size,
+                                 gint      *natural_size)
 {
   GtkWindow *window;
   GtkWidget *child;
@@ -5556,7 +5545,7 @@ gtk_window_get_height (GtkSizeRequest      *widget,
   if (child && gtk_widget_get_visible (child))
     {
       gint child_min, child_nat;
-      gtk_size_request_get_height (GTK_SIZE_REQUEST (child), &child_min, &child_nat);
+      gtk_widget_get_preferred_height (child, &child_min, &child_nat);
 
       *minimum_size += child_min;
       *natural_size += child_nat;
@@ -5633,8 +5622,7 @@ gtk_window_compute_configure_request_size (GtkWindow *window,
 
   if (priv->need_default_size)
     {
-      gtk_size_request_get_size (GTK_SIZE_REQUEST (widget),
-                                 &requisition, NULL);
+      gtk_widget_get_preferred_size (widget, &requisition, NULL);
 
       /* Default to requisition */
       *width = requisition.width;
@@ -5860,8 +5848,7 @@ gtk_window_compute_configure_request (GtkWindow    *window,
 
   screen = gtk_window_check_screen (window);
 
-  gtk_size_request_get_size (GTK_SIZE_REQUEST (widget),
-                             NULL, NULL);
+  gtk_widget_get_preferred_size (widget, NULL, NULL);
   gtk_window_compute_configure_request_size (window, (guint *)&w, (guint *)&h);
   
   gtk_window_compute_hints (window, &new_geometry, &new_flags);
@@ -6540,7 +6527,7 @@ gtk_window_constrain_size (GtkWindow   *window,
 
 /* Compute the set of geometry hints and flags for a window
  * based on the application set geometry, and requisition
- * of the window. gtk_size_request_get_size() must have been
+ * of the window. gtk_size_request_get_preferred_size() must have been
  * called first.
  */
 static void
@@ -6557,7 +6544,7 @@ gtk_window_compute_hints (GtkWindow   *window,
 
   widget = GTK_WIDGET (window);
 
-  gtk_size_request_get_size (GTK_SIZE_REQUEST (widget), &requisition, NULL);
+  gtk_widget_get_preferred_size (widget, &requisition, NULL);
   geometry_info = gtk_window_get_geometry_info (GTK_WINDOW (widget), FALSE);
 
   if (geometry_info)
@@ -6587,11 +6574,11 @@ gtk_window_compute_hints (GtkWindow   *window,
        *
        * Finding these answers would be a bit of a mess here. (Bug #68668)
        */
-      gtk_size_request_get_size (GTK_SIZE_REQUEST (geometry_info->widget),
-                                 &child_requisition, NULL);
+      gtk_widget_get_preferred_size (geometry_info->widget,
+                                     &child_requisition, NULL);
 
-      gtk_size_request_get_size (GTK_SIZE_REQUEST (widget),
-                                 &requisition, NULL);
+      gtk_widget_get_preferred_size (widget,
+                                     &requisition, NULL);
       extra_width = requisition.width - child_requisition.width;
       extra_height = requisition.height - child_requisition.height;
     }

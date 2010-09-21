@@ -2382,8 +2382,8 @@ gtk_status_icon_position_menu (GtkMenu  *menu,
 
   gdk_window_get_origin (window, x, y);
 
-  gtk_size_request_get_size (GTK_SIZE_REQUEST (menu),
-                             &menu_req, NULL);
+  gtk_widget_get_preferred_size (GTK_WIDGET (menu),
+                                 &menu_req, NULL);
 
   gtk_widget_get_allocation (widget, &allocation);
   if (_gtk_tray_icon_get_orientation (tray_icon) == GTK_ORIENTATION_VERTICAL)

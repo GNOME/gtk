@@ -351,6 +351,24 @@ struct _GtkWidgetClass
   gboolean (* draw)	       (GtkWidget	 *widget,
                                 cairo_t          *cr);
   
+  /* size requests */
+  GtkSizeRequestMode (* get_request_mode)               (GtkWidget      *widget);
+
+  void               (* get_preferred_height)           (GtkWidget       *widget,
+                                                         gint            *minimum_height,
+                                                         gint            *natural_height);
+  void               (* get_preferred_width_for_height) (GtkWidget       *widget,
+                                                         gint             height,
+                                                         gint            *minimum_width,
+                                                         gint            *natural_width);
+  void               (* get_preferred_width)            (GtkWidget       *widget,
+                                                         gint            *minimum_width,
+                                                         gint            *natural_width);
+  void               (* get_preferred_height_for_width) (GtkWidget       *widget,
+                                                         gint             width,
+                                                         gint            *minimum_height,
+                                                         gint            *natural_height);
+
   /* Mnemonics */
   gboolean (* mnemonic_activate) (GtkWidget    *widget,
 				  gboolean      group_cycling);
@@ -567,6 +585,26 @@ void	   gtk_widget_size_request	  (GtkWidget	       *widget,
 #endif
 void	   gtk_widget_size_allocate	  (GtkWidget	       *widget,
 					   GtkAllocation       *allocation);
+
+GtkSizeRequestMode  gtk_widget_get_request_mode               (GtkWidget      *widget);
+void                gtk_widget_get_preferred_width            (GtkWidget      *widget,
+                                                               gint           *minimum_width,
+                                                               gint           *natural_width);
+void                gtk_widget_get_preferred_height_for_width (GtkWidget      *widget,
+                                                               gint            width,
+                                                               gint           *minimum_height,
+                                                               gint           *natural_height);
+void                gtk_widget_get_preferred_height           (GtkWidget      *widget,
+                                                               gint           *minimum_height,
+                                                               gint           *natural_height);
+void                gtk_widget_get_preferred_width_for_height (GtkWidget      *widget,
+                                                               gint            height,
+                                                               gint           *minimum_width,
+                                                               gint           *natural_width);
+void                gtk_widget_get_preferred_size             (GtkWidget      *widget,
+                                                               GtkRequisition *minimum_size,
+                                                               GtkRequisition *natural_size);
+
 #ifndef GTK_DISABLE_DEPRECATED
 void       gtk_widget_get_child_requisition (GtkWidget	       *widget,
 					     GtkRequisition    *requisition);

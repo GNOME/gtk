@@ -6290,16 +6290,14 @@ gtk_orientable_get_type
 <SECTION>
 <FILE>gtksizerequest</FILE>
 <TITLE>GtkSizeRequest</TITLE>
-GtkSizeRequest
-GtkSizeRequestIface
 GtkSizeRequestMode
 GtkRequestedSize
-gtk_size_request_get_height
-gtk_size_request_get_width
-gtk_size_request_get_height_for_width
-gtk_size_request_get_width_for_height
-gtk_size_request_get_request_mode
-gtk_size_request_get_size
+gtk_widget_get_preferred_height
+gtk_widget_get_preferred_width
+gtk_widget_get_preferred_height_for_width
+gtk_widget_get_preferred_width_for_height
+gtk_widget_get_request_mode
+gtk_widget_get_preferred_size
 gtk_distribute_natural_allocation
 
 <SUBSECTION Standard>
@@ -6310,7 +6308,7 @@ GTK_IS_SIZE_REQUEST
 GTK_TYPE_SIZE_REQUEST
 
 <SUBSECTION Private>
-gtk_size_request_get_type
+gtk_widget_get_type
 </SECTION>
 
 <SECTION>

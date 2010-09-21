@@ -26,7 +26,6 @@
 
 #include "config.h"
 #include "gtkviewport.h"
-#include "gtksizerequest.h"
 #include "gtkintl.h"
 #include "gtkmarshalers.h"
 #include "gtkprivate.h"
@@ -95,21 +94,18 @@ static void gtk_viewport_size_allocate            (GtkWidget        *widget,
 						   GtkAllocation    *allocation);
 static void gtk_viewport_adjustment_value_changed (GtkAdjustment    *adjustment,
 						   gpointer          data);
-static void gtk_viewport_style_set                (GtkWidget *widget,
-			                           GtkStyle  *previous_style);
+static void gtk_viewport_style_set                (GtkWidget        *widget,
+			                           GtkStyle         *previous_style);
 
-static void gtk_viewport_size_request_init        (GtkSizeRequestIface *iface);
-static void gtk_viewport_get_width                (GtkSizeRequest       *widget,
-						   gint                 *minimum_size,
-						   gint                 *natural_size);
-static void gtk_viewport_get_height               (GtkSizeRequest       *widget,
-						   gint                 *minimum_size,
-						   gint                 *natural_size);
+static void gtk_viewport_get_preferred_width      (GtkWidget        *widget,
+						   gint             *minimum_size,
+						   gint             *natural_size);
+static void gtk_viewport_get_preferred_height     (GtkWidget        *widget,
+						   gint             *minimum_size,
+						   gint             *natural_size);
 
 
-G_DEFINE_TYPE_WITH_CODE (GtkViewport, gtk_viewport, GTK_TYPE_BIN,
-			 G_IMPLEMENT_INTERFACE (GTK_TYPE_SIZE_REQUEST,
-						gtk_viewport_size_request_init))
+G_DEFINE_TYPE (GtkViewport, gtk_viewport, GTK_TYPE_BIN)
 
 static void
 gtk_viewport_class_init (GtkViewportClass *class)
@@ -134,6 +130,8 @@ gtk_viewport_class_init (GtkViewportClass *class)
   widget_class->draw = gtk_viewport_draw;
   widget_class->size_allocate = gtk_viewport_size_allocate;
   widget_class->style_set = gtk_viewport_style_set;
+  widget_class->get_preferred_width = gtk_viewport_get_preferred_width;
+  widget_class->get_preferred_height = gtk_viewport_get_preferred_height;
   
   container_class->add = gtk_viewport_add;
 
@@ -445,10 +443,10 @@ viewport_set_hadjustment_values (GtkViewport *viewport,
     {
       gint minimum_width;
 
-      gtk_size_request_get_width_for_height (GTK_SIZE_REQUEST (child),
-                                             view_allocation.height,
-                                             &minimum_width,
-                                             NULL);
+      gtk_widget_get_preferred_width_for_height (child,
+                                                 view_allocation.height,
+                                                 &minimum_width,
+                                                 NULL);
       hadjustment->upper = MAX (minimum_width, view_allocation.width);
     }
   else
@@ -487,10 +485,10 @@ viewport_set_vadjustment_values (GtkViewport *viewport,
     {
       gint minimum_height;
 
-      gtk_size_request_get_height_for_width (GTK_SIZE_REQUEST (child),
-                                             view_allocation.width,
-                                             &minimum_height,
-                                             NULL);
+      gtk_widget_get_preferred_height_for_width (child,
+                                                 view_allocation.width,
+                                                 &minimum_height,
+                                                 NULL);
 
       vadjustment->upper = MAX (minimum_height, view_allocation.height);
     }
@@ -941,17 +939,10 @@ gtk_viewport_style_set (GtkWidget *widget,
 
 
 static void
-gtk_viewport_size_request_init (GtkSizeRequestIface *iface)
-{
-  iface->get_width  = gtk_viewport_get_width;
-  iface->get_height = gtk_viewport_get_height;
-}
-
-static void
-gtk_viewport_get_size (GtkSizeRequest *widget,
-		       GtkOrientation  orientation,
-		       gint           *minimum_size,
-		       gint           *natural_size)
+gtk_viewport_get_preferred_size (GtkWidget      *widget,
+                                 GtkOrientation  orientation,
+                                 gint           *minimum_size,
+                                 gint           *natural_size)
 {
   GtkViewport *viewport = GTK_VIEWPORT (widget);
   GtkViewportPrivate *priv = viewport->priv;
@@ -981,9 +972,9 @@ gtk_viewport_get_size (GtkSizeRequest *widget,
   if (child && gtk_widget_get_visible (child))
     {
       if (orientation == GTK_ORIENTATION_HORIZONTAL)
-	gtk_size_request_get_width (GTK_SIZE_REQUEST (child), &child_min, &child_nat);
+	gtk_widget_get_preferred_width (child, &child_min, &child_nat);
       else
-	gtk_size_request_get_height (GTK_SIZE_REQUEST (child), &child_min, &child_nat);
+	gtk_widget_get_preferred_height (child, &child_min, &child_nat);
 
       minimum += child_min;
       natural += child_nat;
@@ -997,17 +988,17 @@ gtk_viewport_get_size (GtkSizeRequest *widget,
 }
 
 static void
-gtk_viewport_get_width (GtkSizeRequest *widget,
-			gint           *minimum_size,
-			gint           *natural_size)
+gtk_viewport_get_preferred_width (GtkWidget *widget,
+                                  gint      *minimum_size,
+                                  gint      *natural_size)
 {
-  gtk_viewport_get_size (widget, GTK_ORIENTATION_HORIZONTAL, minimum_size, natural_size);
+  gtk_viewport_get_preferred_size (widget, GTK_ORIENTATION_HORIZONTAL, minimum_size, natural_size);
 }
 
 static void
-gtk_viewport_get_height (GtkSizeRequest *widget,
-			 gint           *minimum_size,
-			 gint           *natural_size)
+gtk_viewport_get_preferred_height (GtkWidget *widget,
+                                   gint      *minimum_size,
+                                   gint      *natural_size)
 {
-  gtk_viewport_get_size (widget, GTK_ORIENTATION_VERTICAL, minimum_size, natural_size);
+  gtk_viewport_get_preferred_size (widget, GTK_ORIENTATION_VERTICAL, minimum_size, natural_size);
 }

@@ -70,8 +70,7 @@ gtk_offscreen_window_size_request (GtkWidget *widget,
     {
       GtkRequisition child_req;
 
-      gtk_size_request_get_size (GTK_SIZE_REQUEST (child),
-                                 &child_req, NULL);
+      gtk_widget_get_preferred_size (child, &child_req, NULL);
 
       requisition->width += child_req.width;
       requisition->height += child_req.height;
@@ -172,8 +171,7 @@ gtk_offscreen_window_resize (GtkWidget *widget)
   GtkAllocation allocation = { 0, 0 };
   GtkRequisition requisition;
 
-  gtk_size_request_get_size (GTK_SIZE_REQUEST (widget),
-                             &requisition, NULL);
+  gtk_widget_get_preferred_size (widget, &requisition, NULL);
 
   allocation.width  = requisition.width;
   allocation.height = requisition.height;

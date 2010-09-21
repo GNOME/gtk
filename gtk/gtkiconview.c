@@ -1450,8 +1450,8 @@ gtk_icon_view_size_request (GtkWidget      *widget,
       tmp_list = tmp_list->next;
 
       if (gtk_widget_get_visible (child->widget))
-        gtk_size_request_get_size (GTK_SIZE_REQUEST (child->widget),
-                                   &child_requisition, NULL);
+        gtk_widget_get_preferred_size (child->widget,
+                                       &child_requisition, NULL);
     }
 }
 

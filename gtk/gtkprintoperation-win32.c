@@ -1411,8 +1411,8 @@ create_application_page (GtkPrintOperation *op)
   const char *tab_label;
 
   /* Make the template the size of the custom widget size request */
-  gtk_size_request_get_size (GTK_SIZE_REQUEST (op->priv->custom_widget),
-                             &requisition, NULL);
+  gtk_widget_get_preferred_size (op->priv->custom_widget,
+                                 &requisition, NULL);
 
   base_units = GetDialogBaseUnits ();
   baseunitX = LOWORD (base_units);
