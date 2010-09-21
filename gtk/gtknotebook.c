@@ -285,8 +285,6 @@ static void gtk_notebook_size_allocate       (GtkWidget        *widget,
 					      GtkAllocation    *allocation);
 static gint gtk_notebook_expose              (GtkWidget        *widget,
 					      GdkEventExpose   *event);
-static gboolean gtk_notebook_scroll          (GtkWidget        *widget,
-                                              GdkEventScroll   *event);
 static gint gtk_notebook_button_press        (GtkWidget        *widget,
 					      GdkEventButton   *event);
 static gint gtk_notebook_button_release      (GtkWidget        *widget,
@@ -561,7 +559,6 @@ gtk_notebook_class_init (GtkNotebookClass *class)
   widget_class->size_request = gtk_notebook_size_request;
   widget_class->size_allocate = gtk_notebook_size_allocate;
   widget_class->expose_event = gtk_notebook_expose;
-  widget_class->scroll_event = gtk_notebook_scroll;
   widget_class->button_press_event = gtk_notebook_button_press;
   widget_class->button_release_event = gtk_notebook_button_release;
   widget_class->popup_menu = gtk_notebook_popup_menu;
@@ -1784,8 +1781,7 @@ gtk_notebook_realize (GtkWidget *widget)
   attributes.event_mask = gtk_widget_get_events (widget);
   attributes.event_mask |= (GDK_BUTTON_PRESS_MASK |
 			    GDK_BUTTON_RELEASE_MASK | GDK_KEY_PRESS_MASK |
-			    GDK_POINTER_MOTION_MASK | GDK_LEAVE_NOTIFY_MASK |
-			    GDK_SCROLL_MASK);
+			    GDK_POINTER_MOTION_MASK | GDK_LEAVE_NOTIFY_MASK);
   attributes_mask = GDK_WA_X | GDK_WA_Y;
 
   priv->event_window = gdk_window_new (gtk_widget_get_parent_window (widget),
@@ -2546,49 +2542,6 @@ get_widget_coordinates (GtkWidget *widget,
     }
   else
     return FALSE;
-}
-
-static gboolean
-gtk_notebook_scroll (GtkWidget      *widget,
-                     GdkEventScroll *event)
-{
-  GtkNotebook *notebook = GTK_NOTEBOOK (widget);
-  GtkNotebookPrivate *priv = notebook->priv;
-  GtkWidget *child, *event_widget;
-  gint i;
-
-  if (!priv->cur_page)
-    return FALSE;
-
-  child = priv->cur_page->child;
-  event_widget = gtk_get_event_widget ((GdkEvent *)event);
-
-  /* ignore scroll events from the content of the page */
-  if (!event_widget || gtk_widget_is_ancestor (event_widget, child) || event_widget == child)
-    return FALSE;
-
-  /* nor from the action area */
-  for (i = 0; i < 2; i++)
-    {
-      if (event_widget == priv->action_widget[i] ||
-          (priv->action_widget[i] &&
-           gtk_widget_is_ancestor (event_widget, priv->action_widget[i])))
-        return FALSE;
-    }
-
-  switch (event->direction)
-    {
-    case GDK_SCROLL_RIGHT:
-    case GDK_SCROLL_DOWN:
-      gtk_notebook_next_page (notebook);
-      break;
-    case GDK_SCROLL_LEFT:
-    case GDK_SCROLL_UP:
-      gtk_notebook_prev_page (notebook);
-      break;
-    }
-
-  return TRUE;
 }
 
 static GList*
