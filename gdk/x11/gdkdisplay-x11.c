@@ -2751,7 +2751,7 @@ _gdk_x11_display_error_event (GdkDisplay  *display,
 #ifdef G_ENABLE_DEBUG
       g_error ("%s", msg);
 #else /* !G_ENABLE_DEBUG */
-      g_fprintf (stderr, "%s\n", msg);
+      g_warning ("%s\n", msg);
 
       exit (1);
 #endif /* G_ENABLE_DEBUG */
