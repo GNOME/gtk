@@ -1994,7 +1994,7 @@ gtk_tool_item_group_get_label (GtkToolItemGroup *group)
  * Gets the label widget of @group.
  * See gtk_tool_item_group_set_label_widget().
  *
- * Returns: the label widget of @group
+ * Returns: (transfer none): the label widget of @group
  *
  * Since: 2.20
  */
@@ -2199,7 +2199,7 @@ gtk_tool_item_group_get_n_items (GtkToolItemGroup *group)
  *
  * Gets the tool item at @index in group.
  *
- * Returns: the #GtkToolItem at index
+ * Returns: (transfer none): the #GtkToolItem at index
  *
  * Since: 2.20
  */
@@ -2224,7 +2224,7 @@ gtk_tool_item_group_get_nth_item (GtkToolItemGroup *group,
  *
  * Gets the tool item at position (x, y).
  *
- * Returns: the #GtkToolItem at position (x, y)
+ * Returns: (transfer none): the #GtkToolItem at position (x, y)
  *
  * Since: 2.20
  */

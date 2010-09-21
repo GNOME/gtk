@@ -66,12 +66,12 @@ struct _GtkApplicationClass
   GApplicationClass parent_class;
 
   /*< vfuncs >*/
-  GtkWindow *(* create_window) (GtkApplication *application);
-  void       (* activated)     (GtkApplication *application,
+  GtkWindow *(* create_window) (GtkApplication *app);
+  void       (* activated)     (GtkApplication *app,
                                 GVariant       *args);
-  void       (* action)        (GtkApplication *application,
+  void       (* action)        (GtkApplication *app,
                                 const gchar    *action_name);
-  gboolean   (* quit)          (GtkApplication *application);
+  gboolean   (* quit)          (GtkApplication *app);
 			       
 
   /* Padding for future expansion */

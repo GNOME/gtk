@@ -972,7 +972,7 @@ gdk_event_set_device (GdkEvent  *event,
  * If the event contains a "device" field, this function will return
  * it, else it will return %NULL.
  *
- * Returns: a #GdkDevice, or %NULL.
+ * Returns: (transfer none): a #GdkDevice, or %NULL.
  *
  * Since: 3.0
  **/

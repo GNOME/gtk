@@ -140,11 +140,10 @@ Sets the group of a radio menu item, or changes it.
 
 <!-- ##### FUNCTION gtk_radio_menu_item_get_group ##### -->
 <para>
-Returns the group to which the radio menu item belongs, as a #GList of
-#GtkRadioMenuItem. The list belongs to GTK+ and should not be freed.
+
 </para>
 
-@radio_menu_item: a #GtkRadioMenuItem.
-@Returns: the group of @radio_menu_item.
+@radio_menu_item:
+@Returns:
 
 

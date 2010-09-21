@@ -221,12 +221,11 @@ drops.
 
 <!-- ##### FUNCTION gtk_drag_get_source_widget ##### -->
 <para>
-Determines the source widget for a drag.
+
 </para>
 
-@context: a (destination side) drag context.
-@Returns: if the drag is occurring within a single application,
-          a pointer to the source widget. Otherwise, %NULL.
+@context:
+@Returns:
 
 
 <!-- ##### FUNCTION gtk_drag_highlight ##### -->

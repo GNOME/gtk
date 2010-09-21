@@ -595,7 +595,8 @@ gtk_menu_tool_button_set_menu (GtkMenuToolButton *button,
  *
  * Gets the #GtkMenu associated with #GtkMenuToolButton.
  *
- * Return value: the #GtkMenu associated with #GtkMenuToolButton
+ * Return value: (transfer none): the #GtkMenu associated
+ *     with #GtkMenuToolButton
  *
  * Since: 2.6
  **/

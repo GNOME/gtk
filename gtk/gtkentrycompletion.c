@@ -1012,7 +1012,7 @@ gtk_entry_completion_new (void)
  *
  * Gets the entry @completion has been attached to.
  *
- * Return value: The entry @completion has been attached to.
+ * Return value: (transfer none): The entry @completion has been attached to.
  *
  * Since: 2.4
  */
@@ -1076,7 +1076,8 @@ gtk_entry_completion_set_model (GtkEntryCompletion *completion,
  * Returns the model the #GtkEntryCompletion is using as data source.
  * Returns %NULL if the model is unset.
  *
- * Return value: A #GtkTreeModel, or %NULL if none is currently being used.
+ * Return value: (transfer none): A #GtkTreeModel, or %NULL if none
+ *     is currently being used.
  *
  * Since: 2.4
  */
@@ -1087,7 +1088,7 @@ gtk_entry_completion_get_model (GtkEntryCompletion *completion)
 
   if (!completion->priv->filter_model)
     return NULL;
-  
+
   return gtk_tree_model_filter_get_model (completion->priv->filter_model);
 }
 

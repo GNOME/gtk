@@ -1009,17 +1009,16 @@ gtk_drag_get_data (GtkWidget      *widget,
 }
 
 
-/*************************************************************
+/**
  * gtk_drag_get_source_widget:
- *     Get the widget the was the source of this drag, if
- *     the drag originated from this application.
- *   arguments:
- *     context: The drag context for this drag
- *   results:
- *     The source widget, or NULL if the drag originated from
- *     a different application.
- *************************************************************/
-
+ * @context: a (destination side) drag context
+ *
+ * Determines the source widget for a drag.
+ *
+ * Return value: (transfer none): if the drag is occurring
+ *     within a single application, a pointer to the source widget.
+ *     Otherwise, %NULL.
+ */
 GtkWidget *
 gtk_drag_get_source_widget (GdkDragContext *context)
 {
@@ -1692,7 +1691,7 @@ _gtk_drag_dest_handle_event (GtkWidget *toplevel,
  * @context: drag context
  * @target_list: (allow-none): list of droppable targets, or %NULL to use
  *    gtk_drag_dest_get_target_list (@widget).
- * 
+ *
  * Looks for a match between @context->targets and the
  * @dest_target_list, returning the first matching target, otherwise
  * returning %GDK_NONE. @dest_target_list should usually be the return
@@ -1700,7 +1699,7 @@ _gtk_drag_dest_handle_event (GtkWidget *toplevel,
  * have different valid targets for different parts of the widget; in
  * that case, they will have to implement a drag_motion handler that
  * passes the correct target list to this function.
- * 
+ *
  * Return value: first target that the source offers and the dest can accept, or %GDK_NONE
  **/
 GdkAtom
@@ -2561,7 +2560,7 @@ gtk_drag_begin_internal (GtkWidget         *widget,
  * @actions: A bitmask of the allowed drag actions for this drag.
  * @button: The button the user clicked to start the drag.
  * @event: The event that triggered the start of the drag.
- * 
+ *
  * Initiates a drag on the source side. The function
  * only needs to be used when the application is
  * starting drags itself, and is not needed when
@@ -2573,23 +2572,23 @@ gtk_drag_begin_internal (GtkWidget         *widget,
  * used by GTK+ to get information about the start position of the drag, for
  * example if the @event is a GDK_MOTION_NOTIFY.
  *
- * Generally there are three cases when you want to start a drag by hand by calling
- * this function:
+ * Generally there are three cases when you want to start a drag by hand by
+ * calling this function:
  *
- * 1. During a button-press-event handler, if you want to start a drag immediately
- * when the user presses the mouse button.  Pass the @event that you have in your
- * button-press-event handler.
+ * 1. During a button-press-event handler, if you want to start a drag
+ * immediately when the user presses the mouse button.  Pass the @event
+ * that you have in your button-press-event handler.
  *
- * 2. During a motion-notify-event handler, if you want to start a drag when the mouse
- * moves past a certain threshold distance after a button-press.  Pass the @event that you
- * have in your motion-notify-event handler.
+ * 2. During a motion-notify-event handler, if you want to start a drag
+ * when the mouse moves past a certain threshold distance after a button-press.
+ * Pass the @event that you have in your motion-notify-event handler.
  *
  * 3. During a timeout handler, if you want to start a drag after the mouse
  * button is held down for some time.  Try to save the last event that you got
  * from the mouse, using gdk_event_copy(), and pass it to this function
- * (remember to free the event with gdk_event_free() when you are done).  If you
- * can really not pass a real event, pass #NULL instead.
- * 
+ * (remember to free the event with gdk_event_free() when you are done).
+ * If you can really not pass a real event, pass #NULL instead.
+ *
  * Return value: the context for this drag.
  **/
 GdkDragContext *

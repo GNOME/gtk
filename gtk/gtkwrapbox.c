@@ -1984,7 +1984,7 @@ gtk_wrap_box_get_width_for_height (GtkSizeRequest      *widget,
 
 /**
  * gtk_wrap_box_new:
- * @allocation_mode: The #GtkWrapAllocationMode to use
+ * @mode: The #GtkWrapAllocationMode to use
  * @spreading: The #GtkWrapBoxSpreading policy to use
  * @horizontal_spacing: The horizontal spacing to add between children
  * @vertical_spacing: The vertical spacing to add between children

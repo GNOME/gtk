@@ -408,7 +408,7 @@ gtk_radio_button_join_group (GtkRadioButton *radio_button,
  * Creates a new #GtkRadioButton. To be of any practical value, a widget should
  * then be packed into the radio button.
  *
- * Returns: a new radio button.
+ * Returns: a new radio button
  */
 GtkWidget*
 gtk_radio_button_new (GSList *group)
@@ -431,7 +431,7 @@ gtk_radio_button_new (GSList *group)
  *
  * Creates a new #GtkRadioButton with a text label.
  *
- * Returns: a new radio button.
+ * Returns: (transfer full): a new radio button.
  */
 GtkWidget*
 gtk_radio_button_new_with_label (GSList      *group,
@@ -453,13 +453,14 @@ gtk_radio_button_new_with_label (GSList      *group,
  * @group: the radio button group
  * @label: the text of the button, with an underscore in front of the
  *         mnemonic character
- * @returns: a new #GtkRadioButton
  *
- * Creates a new #GtkRadioButton containing a label, adding it to the same 
- * group as @group. The label will be created using 
- * gtk_label_new_with_mnemonic(), so underscores in @label indicate the 
+ * Creates a new #GtkRadioButton containing a label, adding it to the same
+ * group as @group. The label will be created using
+ * gtk_label_new_with_mnemonic(), so underscores in @label indicate the
  * mnemonic for the button.
- **/
+ *
+ * Returns: (transfer full): a new #GtkRadioButton
+ */
 GtkWidget*
 gtk_radio_button_new_with_mnemonic (GSList      *group,
 				    const gchar *label)
@@ -481,10 +482,11 @@ gtk_radio_button_new_with_mnemonic (GSList      *group,
  * gtk_radio_button_new_from_widget:
  * @radio_group_member: an existing #GtkRadioButton.
  *
- * Creates a new #GtkRadioButton, adding it to the same group as @radio_group_member.
- * As with gtk_radio_button_new(), a widget should be packed into the radio button.
+ * Creates a new #GtkRadioButton, adding it to the same group as
+ * @radio_group_member. As with gtk_radio_button_new(), a widget
+ * should be packed into the radio button.
  *
- * Returns: a new radio button.
+ * Returns: (transfer full): a new radio button.
  */
 GtkWidget*
 gtk_radio_button_new_from_widget (GtkRadioButton *radio_group_member)
@@ -500,10 +502,10 @@ gtk_radio_button_new_from_widget (GtkRadioButton *radio_group_member)
  * @radio_group_member: widget to get radio group from or %NULL
  * @label: a text string to display next to the radio button.
  *
- * Creates a new #GtkRadioButton with a text label, adding it to the same group
- * as @radio_group_member.
+ * Creates a new #GtkRadioButton with a text label, adding it to
+ * the same group as @radio_group_member.
  *
- * Returns: a new radio button.
+ * Returns: (transfer none): a new radio button.
  */
 GtkWidget*
 gtk_radio_button_new_with_label_from_widget (GtkRadioButton *radio_group_member,
@@ -520,11 +522,12 @@ gtk_radio_button_new_with_label_from_widget (GtkRadioButton *radio_group_member,
  * @radio_group_member: (allow-none): widget to get radio group from or %NULL
  * @label: the text of the button, with an underscore in front of the
  *         mnemonic character
- * @returns: a new #GtkRadioButton
  *
  * Creates a new #GtkRadioButton containing a label. The label
  * will be created using gtk_label_new_with_mnemonic(), so underscores
  * in @label indicate the mnemonic for the button.
+ *
+ * Returns: (transfer full): a new #GtkRadioButton
  **/
 GtkWidget*
 gtk_radio_button_new_with_mnemonic_from_widget (GtkRadioButton *radio_group_member,

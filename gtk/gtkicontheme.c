@@ -1485,27 +1485,28 @@ gtk_icon_theme_error_quark (void)
  * @icon_theme: a #GtkIconTheme
  * @icon_name: the name of the icon to lookup
  * @size: the desired icon size. The resulting icon may not be
- *        exactly this size; see gtk_icon_info_load_icon().
+ *     exactly this size; see gtk_icon_info_load_icon().
  * @flags: flags modifying the behavior of the icon lookup
- * @error: (allow-none): Location to store error information on failure, or %NULL.
- * 
+ * @error: (allow-none): Location to store error information on failure,
+ *     or %NULL.
+ *
  * Looks up an icon in an icon theme, scales it to the given size
  * and renders it into a pixbuf. This is a convenience function;
  * if more details about the icon are needed, use
  * gtk_icon_theme_lookup_icon() followed by gtk_icon_info_load_icon().
  *
  * Note that you probably want to listen for icon theme changes and
- * update the icon. This is usually done by connecting to the 
+ * update the icon. This is usually done by connecting to the
  * GtkWidget::style-set signal. If for some reason you do not want to
  * update the icon when the icon theme changes, you should consider
  * using gdk_pixbuf_copy() to make a private copy of the pixbuf
- * returned by this function. Otherwise GTK+ may need to keep the old 
+ * returned by this function. Otherwise GTK+ may need to keep the old
  * icon theme loaded, which would be a waste of memory.
- * 
- * Return value: the rendered icon; this may be a newly created icon
- *  or a new reference to an internal icon, so you must not modify
- *  the icon. Use g_object_unref() to release your reference to the
- *  icon. %NULL if the icon isn't found.
+ *
+ * Return value: (transfer full): the rendered icon; this may be a
+ *     newly created icon or a new reference to an internal icon, so
+ *     you must not modify the icon. Use g_object_unref() to release
+ *     your reference to the icon. %NULL if the icon isn't found.
  *
  * Since: 2.4
  **/
@@ -3006,8 +3007,9 @@ icon_info_ensure_scale_and_pixbuf (GtkIconInfo  *icon_info,
 /**
  * gtk_icon_info_load_icon:
  * @icon_info: a #GtkIconInfo structure from gtk_icon_theme_lookup_icon()
- * @error: (allow-none): location to store error information on failure, or %NULL.
- * 
+ * @error: (allow-none): location to store error information on failure,
+ *     or %NULL.
+ *
  * Renders an icon previously looked up in an icon theme using
  * gtk_icon_theme_lookup_icon(); the size will be based on the size
  * passed to gtk_icon_theme_lookup_icon(). Note that the resulting
@@ -3018,12 +3020,12 @@ icon_info_ensure_scale_and_pixbuf (GtkIconInfo  *icon_info,
  * up too far. (This maintains sharpness.). This behaviour can be changed
  * by passing the %GTK_ICON_LOOKUP_FORCE_SIZE flag when obtaining
  * the #GtkIconInfo. If this flag has been specified, the pixbuf
- * returned by this function will be scaled to the exact size. 
- * 
- * Return value: the rendered icon; this may be a newly created icon
- *  or a new reference to an internal icon, so you must not modify
- *  the icon. Use g_object_unref() to release your reference to the
- *  icon.
+ * returned by this function will be scaled to the exact size.
+ *
+ * Return value: (transfer full): the rendered icon; this may be a newly
+ *     created icon or a new reference to an internal icon, so you must
+ *     not modify the icon. Use g_object_unref() to release your reference
+ *     to the icon.
  *
  * Since: 2.4
  **/
@@ -3091,7 +3093,7 @@ gdk_color_to_css (GdkColor *color)
  * See the <ulink url="http://www.freedesktop.org/wiki/SymbolicIcons">Symbolic Icons spec</ulink>
  * for more information about symbolic icons.
  *
- * Return value: a #GdkPixbuf representing the loaded icon
+ * Return value: (transfer full): a #GdkPixbuf representing the loaded icon
  *
  * Since: 3.0
  **/
@@ -3208,7 +3210,7 @@ gtk_icon_info_load_symbolic (GtkIconInfo  *icon_info,
  *
  * See gtk_icon_info_load_symbolic() for more details.
  *
- * Return value: a #GdkPixbuf representing the loaded icon
+ * Return value: (transfer full): a #GdkPixbuf representing the loaded icon
  *
  * Since: 3.0
  **/

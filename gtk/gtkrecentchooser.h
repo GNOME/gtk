@@ -124,8 +124,8 @@ struct _GtkRecentChooserIface
   GSList *          (* list_filters)       (GtkRecentChooser  *chooser);
   void              (* set_sort_func)      (GtkRecentChooser  *chooser,
   					    GtkRecentSortFunc  sort_func,
-  					    gpointer           data,
-  					    GDestroyNotify     destroy);
+  					    gpointer           sort_data,
+  					    GDestroyNotify     data_destroy);
 
   /*
    * Signals

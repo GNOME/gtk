@@ -98,10 +98,10 @@ gtk_page_setup_new (void)
 /**
  * gtk_page_setup_copy:
  * @other: the #GtkPageSetup to copy
- * 
+ *
  * Copies a #GtkPageSetup.
- * 
- * Return value: a copy of @other
+ *
+ * Return value: (transfer full): a copy of @other
  *
  * Since: 2.10
  */

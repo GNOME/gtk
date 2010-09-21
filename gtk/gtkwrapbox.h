@@ -58,36 +58,36 @@ GtkWidget            *gtk_wrap_box_new                       (GtkWrapAllocationM
                                                               GtkWrapBoxSpreading   spreading,
                                                               guint                 horizontal_spacing,
                                                               guint                 vertical_spacing);
-void                  gtk_wrap_box_set_allocation_mode       (GtkWrapBox           *layout,
+void                  gtk_wrap_box_set_allocation_mode       (GtkWrapBox           *box,
                                                               GtkWrapAllocationMode mode);
-GtkWrapAllocationMode gtk_wrap_box_get_allocation_mode       (GtkWrapBox           *layout);
+GtkWrapAllocationMode gtk_wrap_box_get_allocation_mode       (GtkWrapBox           *box);
 
-void                  gtk_wrap_box_set_spreading             (GtkWrapBox           *layout,
+void                  gtk_wrap_box_set_spreading             (GtkWrapBox           *box,
                                                               GtkWrapBoxSpreading   spreading);
-GtkWrapBoxSpreading   gtk_wrap_box_get_spreading             (GtkWrapBox           *layout);
+GtkWrapBoxSpreading   gtk_wrap_box_get_spreading             (GtkWrapBox           *box);
 
-void                  gtk_wrap_box_set_vertical_spacing      (GtkWrapBox           *layout,
+void                  gtk_wrap_box_set_vertical_spacing      (GtkWrapBox           *box,
                                                               guint                 spacing);
-guint                 gtk_wrap_box_get_vertical_spacing      (GtkWrapBox           *layout);
+guint                 gtk_wrap_box_get_vertical_spacing      (GtkWrapBox           *box);
 
-void                  gtk_wrap_box_set_horizontal_spacing    (GtkWrapBox           *layout,
+void                  gtk_wrap_box_set_horizontal_spacing    (GtkWrapBox           *box,
                                                               guint                 spacing);
-guint                 gtk_wrap_box_get_horizontal_spacing    (GtkWrapBox           *layout);
+guint                 gtk_wrap_box_get_horizontal_spacing    (GtkWrapBox           *box);
 
-void                  gtk_wrap_box_set_minimum_line_children (GtkWrapBox           *layout,
+void                  gtk_wrap_box_set_minimum_line_children (GtkWrapBox           *box,
                                                               guint                 n_children);
-guint                 gtk_wrap_box_get_minimum_line_children (GtkWrapBox           *layout);
+guint                 gtk_wrap_box_get_minimum_line_children (GtkWrapBox           *box);
 
-void                  gtk_wrap_box_set_natural_line_children (GtkWrapBox           *layout,
+void                  gtk_wrap_box_set_natural_line_children (GtkWrapBox           *box,
                                                               guint                 n_children);
-guint                 gtk_wrap_box_get_natural_line_children (GtkWrapBox           *layout);
+guint                 gtk_wrap_box_get_natural_line_children (GtkWrapBox           *box);
 
-void                  gtk_wrap_box_insert_child              (GtkWrapBox           *layout,
+void                  gtk_wrap_box_insert_child              (GtkWrapBox           *box,
                                                               GtkWidget            *widget,
                                                               gint                  index,
                                                               GtkWrapBoxPacking     packing);
 
-void                  gtk_wrap_box_reorder_child             (GtkWrapBox           *layout,
+void                  gtk_wrap_box_reorder_child             (GtkWrapBox           *box,
                                                               GtkWidget            *widget,
                                                               guint                 index);
 

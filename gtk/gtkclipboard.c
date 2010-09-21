@@ -563,22 +563,23 @@ gtk_clipboard_set_contents (GtkClipboard         *clipboard,
 
 /**
  * gtk_clipboard_set_with_data:
- * @clipboard:  a #GtkClipboard
- * @targets:    array containing information about the available forms for the
- *              clipboard data
- * @n_targets:  number of elements in @targets
- * @get_func:   function to call to get the actual clipboard data
- * @clear_func: when the clipboard contents are set again, this function will
- *              be called, and @get_func will not be subsequently called.
- * @user_data:  user data to pass to @get_func and @clear_func.
- * 
+ * @clipboard: a #GtkClipboard
+ * @targets: array containing information about the available forms for the
+ *     clipboard data
+ * @n_targets: number of elements in @targets
+ * @get_func: (scope async): function to call to get the actual clipboard data
+ * @clear_func: (scope async): when the clipboard contents are set again,
+ *     this function will be called, and @get_func will not be subsequently
+ *     called.
+ * @user_data: user data to pass to @get_func and @clear_func.
+ *
  * Virtually sets the contents of the specified clipboard by providing
  * a list of supported formats for the clipboard data and a function
  * to call to get the actual data when it is requested.
- * 
- * Return value: %TRUE if setting the clipboard data succeeded. If setting
- *               the clipboard data failed the provided callback functions
- *               will be ignored.
+ *
+ * Return value: %TRUE if setting the clipboard data succeeded.
+ *    If setting the clipboard data failed the provided callback
+ *    functions will be ignored.
  **/
 gboolean
 gtk_clipboard_set_with_data (GtkClipboard          *clipboard,
@@ -599,27 +600,28 @@ gtk_clipboard_set_with_data (GtkClipboard          *clipboard,
 
 /**
  * gtk_clipboard_set_with_owner:
- * @clipboard:  a #GtkClipboard
- * @targets:    array containing information about the available forms for the
- *              clipboard data
- * @n_targets:  number of elements in @targets
- * @get_func:   function to call to get the actual clipboard data
- * @clear_func: when the clipboard contents are set again, this function will
- *              be called, and @get_func will not be subsequently called.
- * @owner:      an object that "owns" the data. This object will be passed
- *              to the callbacks when called. 
- * 
+ * @clipboard: a #GtkClipboard
+ * @targets: array containing information about the available forms for
+ *     the clipboard data
+ * @n_targets: number of elements in @targets
+ * @get_func: (scope async): function to call to get the actual clipboard data
+ * @clear_func: (scope async): when the clipboard contents are set again,
+ *     this function will be called, and @get_func will not be subsequently
+ *     called
+ * @owner: an object that "owns" the data. This object will be passed
+ *     to the callbacks when called
+ *
  * Virtually sets the contents of the specified clipboard by providing
  * a list of supported formats for the clipboard data and a function
  * to call to get the actual data when it is requested.
  *
  * The difference between this function and gtk_clipboard_set_with_data()
  * is that instead of an generic @user_data pointer, a #GObject is passed
- * in. 
- * 
- * Return value: %TRUE if setting the clipboard data succeeded. If setting
- *               the clipboard data failed the provided callback functions
- *               will be ignored.
+ * in.
+ *
+ * Return value: %TRUE if setting the clipboard data succeeded.
+ *     If setting the clipboard data failed the provided callback
+ *     functions will be ignored.
  **/
 gboolean
 gtk_clipboard_set_with_owner (GtkClipboard          *clipboard,
@@ -642,13 +644,14 @@ gtk_clipboard_set_with_owner (GtkClipboard          *clipboard,
 /**
  * gtk_clipboard_get_owner:
  * @clipboard: a #GtkClipboard
- * 
- * If the clipboard contents callbacks were set with 
- * gtk_clipboard_set_with_owner(), and the gtk_clipboard_set_with_data() or 
- * gtk_clipboard_clear() has not subsequently called, returns the owner set 
+ *
+ * If the clipboard contents callbacks were set with
+ * gtk_clipboard_set_with_owner(), and the gtk_clipboard_set_with_data() or
+ * gtk_clipboard_clear() has not subsequently called, returns the owner set
  * by gtk_clipboard_set_with_owner().
- * 
- * Return value: the owner of the clipboard, if any; otherwise %NULL.
+ *
+ * Return value: (transfer none): the owner of the clipboard, if any;
+ *     otherwise %NULL.
  **/
 GObject *
 gtk_clipboard_get_owner (GtkClipboard *clipboard)
@@ -874,14 +877,13 @@ selection_received (GtkWidget            *widget,
 /**
  * gtk_clipboard_request_contents:
  * @clipboard: a #GtkClipboard
- * @target:    an atom representing the form into which the clipboard
- *             owner should convert the selection.
- * @callback:  A function to call when the results are received
- *             (or the retrieval fails). If the retrieval fails
- *             the length field of @selection_data will be
- *             negative.
+ * @target: an atom representing the form into which the clipboard
+ *     owner should convert the selection.
+ * @callback: (scope async): A function to call when the results are received
+ *     (or the retrieval fails). If the retrieval fails the length field of
+ *     @selection_data will be negative.
  * @user_data: user data to pass to @callback
- * 
+ *
  * Requests the contents of clipboard as the given target.
  * When the results of the result are later received the supplied callback
  * will be called.
@@ -957,14 +959,13 @@ request_text_received_func (GtkClipboard     *clipboard,
 /**
  * gtk_clipboard_request_text:
  * @clipboard: a #GtkClipboard
- * @callback:  a function to call when the text is received,
- *             or the retrieval fails. (It will always be called
- *             one way or the other.)
+ * @callback: (scope async): a function to call when the text is received,
+ *     or the retrieval fails. (It will always be called one way or the other.)
  * @user_data: user data to pass to @callback.
- * 
+ *
  * Requests the contents of the clipboard as text. When the text is
  * later received, it will be converted to UTF-8 if necessary, and
- * @callback will be called. 
+ * @callback will be called.
  *
  * The @text parameter to @callback will contain the resulting text if
  * the request succeeded, or %NULL if it failed. This could happen for
@@ -1021,10 +1022,9 @@ request_rich_text_received_func (GtkClipboard     *clipboard,
 /**
  * gtk_clipboard_request_rich_text:
  * @clipboard: a #GtkClipboard
- * @buffer:    a #GtkTextBuffer
- * @callback:  a function to call when the text is received,
- *             or the retrieval fails. (It will always be called
- *             one way or the other.)
+ * @buffer: a #GtkTextBuffer
+ * @callback: (scope async): a function to call when the text is received,
+ *     or the retrieval fails. (It will always be called one way or the other.)
  * @user_data: user data to pass to @callback.
  *
  * Requests the contents of the clipboard as rich text. When the rich
@@ -1114,19 +1114,18 @@ request_image_received_func (GtkClipboard     *clipboard,
 /**
  * gtk_clipboard_request_image:
  * @clipboard: a #GtkClipboard
- * @callback:  a function to call when the image is received,
- *             or the retrieval fails. (It will always be called
- *             one way or the other.)
+ * @callback: (scope async): a function to call when the image is received,
+ *     or the retrieval fails. (It will always be called one way or the other.)
  * @user_data: user data to pass to @callback.
- * 
+ *
  * Requests the contents of the clipboard as image. When the image is
  * later received, it will be converted to a #GdkPixbuf, and
- * @callback will be called. 
+ * @callback will be called.
  *
- * The @pixbuf parameter to @callback will contain the resulting 
- * #GdkPixbuf if the request succeeded, or %NULL if it failed. This 
- * could happen for various reasons, in particular if the clipboard 
- * was empty or if the contents of the clipboard could not be 
+ * The @pixbuf parameter to @callback will contain the resulting
+ * #GdkPixbuf if the request succeeded, or %NULL if it failed. This
+ * could happen for various reasons, in particular if the clipboard
+ * was empty or if the contents of the clipboard could not be
  * converted into an image.
  *
  * Since: 2.6
@@ -1169,11 +1168,10 @@ request_uris_received_func (GtkClipboard     *clipboard,
 /**
  * gtk_clipboard_request_uris:
  * @clipboard: a #GtkClipboard
- * @callback:  a function to call when the URIs are received,
- *             or the retrieval fails. (It will always be called
- *             one way or the other.)
+ * @callback: (scope async): a function to call when the URIs are received,
+ *     or the retrieval fails. (It will always be called one way or the other.)
  * @user_data: user data to pass to @callback.
- * 
+ *
  * Requests the contents of the clipboard as URIs. When the URIs are
  * later received @callback will be called.
  *
@@ -1223,13 +1221,13 @@ request_targets_received_func (GtkClipboard     *clipboard,
 /**
  * gtk_clipboard_request_targets:
  * @clipboard: a #GtkClipboard
- * @callback:  a function to call when the targets are received,
- *             or the retrieval fails. (It will always be called
- *             one way or the other.)
+ * @callback: (scope async): a function to call when the targets are
+ *     received, or the retrieval fails. (It will always be called
+ *     one way or the other.)
  * @user_data: user data to pass to @callback.
- * 
- * Requests the contents of the clipboard as list of supported targets. 
- * When the list is later received, @callback will be called. 
+ *
+ * Requests the contents of the clipboard as list of supported targets.
+ * When the list is later received, @callback will be called.
  *
  * The @targets parameter to @callback will contain the resulting targets if
  * the request succeeded, or %NULL if it failed.
@@ -1466,18 +1464,18 @@ clipboard_image_received_func (GtkClipboard *clipboard,
 /**
  * gtk_clipboard_wait_for_image:
  * @clipboard: a #GtkClipboard
- * 
+ *
  * Requests the contents of the clipboard as image and converts
  * the result to a #GdkPixbuf. This function waits for
  * the data to be received using the main loop, so events,
  * timeouts, etc, may be dispatched during the wait.
- * 
- * Return value: a newly-allocated #GdkPixbuf object which must
- *               be disposed with g_object_unref(), or %NULL if 
- *               retrieving the selection data failed. (This 
- *               could happen for various reasons, in particular 
- *               if the clipboard was empty or if the contents of 
- *               the clipboard could not be converted into an image.)
+ *
+ * Return value: (transfer full): a newly-allocated #GdkPixbuf
+ *     object which must be disposed with g_object_unref(), or
+ *     %NULL if retrieving the selection data failed. (This could
+ *     happen for various reasons, in particular if the clipboard
+ *     was empty or if the contents of the clipboard could not be
+ *     converted into an image.)
  *
  * Since: 2.6
  **/
@@ -1568,7 +1566,7 @@ gtk_clipboard_wait_for_uris (GtkClipboard *clipboard)
  *
  * Gets the #GdkDisplay associated with @clipboard
  *
- * Return value: the #GdkDisplay associated with @clipboard
+ * Return value: (transfer none): the #GdkDisplay associated with @clipboard
  *
  * Since: 2.2
  **/

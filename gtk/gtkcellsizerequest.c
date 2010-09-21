@@ -266,8 +266,6 @@ gtk_cell_size_request_get_height_for_width (GtkCellSizeRequest *cell,
  * gtk_cell_size_request_get_size:
  * @cell: a #GtkCellSizeRequest instance
  * @widget: the #GtkWidget this cell will be rendering to
- * @request_natural: Whether to base the contextual request off of the
- *     base natural or the base minimum
  * @minimum_size: (out) (allow-none): location for storing the minimum size, or %NULL
  * @natural_size: (out) (allow-none): location for storing the natural size, or %NULL
  *

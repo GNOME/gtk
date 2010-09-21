@@ -125,10 +125,10 @@ static GtkWidget * gtk_ui_manager_real_get_widget (GtkUIManager      *manager,
                                                    const gchar       *path);
 static GtkAction * gtk_ui_manager_real_get_action (GtkUIManager      *manager,
                                                    const gchar       *path);
-static void        queue_update                   (GtkUIManager      *self);
-static void        dirty_all_nodes                (GtkUIManager      *self);
+static void        queue_update                   (GtkUIManager      *manager);
+static void        dirty_all_nodes                (GtkUIManager      *manager);
 static void        mark_node_dirty                (GNode             *node);
-static GNode     * get_child_node                 (GtkUIManager      *self,
+static GNode     * get_child_node                 (GtkUIManager      *manager,
                                                    GNode             *parent,
 						   GNode             *sibling,
                                                    const gchar       *childname,
@@ -136,7 +136,7 @@ static GNode     * get_child_node                 (GtkUIManager      *self,
                                                    NodeType           node_type,
                                                    gboolean           create,
                                                    gboolean           top);
-static GNode     * get_node                       (GtkUIManager      *self,
+static GNode     * get_node                       (GtkUIManager      *manager,
                                                    const gchar       *path,
                                                    NodeType           node_type,
                                                    gboolean           create);
@@ -237,7 +237,7 @@ gtk_ui_manager_class_init (GtkUIManagerClass *klass)
 
   /**
    * GtkUIManager::add-widget:
-   * @merge: a #GtkUIManager
+   * @manager: a #GtkUIManager
    * @widget: the added widget
    *
    * The ::add-widget signal is emitted for each generated menubar and toolbar.
@@ -258,7 +258,7 @@ gtk_ui_manager_class_init (GtkUIManagerClass *klass)
 
   /**
    * GtkUIManager::actions-changed:
-   * @merge: a #GtkUIManager
+   * @manager: a #GtkUIManager
    *
    * The ::actions-changed signal is emitted whenever the set of actions
    * changes.
@@ -276,7 +276,7 @@ gtk_ui_manager_class_init (GtkUIManagerClass *klass)
   
   /**
    * GtkUIManager::connect-proxy:
-   * @uimanager: the ui manager
+   * @manager: the ui manager
    * @action: the action
    * @proxy: the proxy
    *
@@ -302,7 +302,7 @@ gtk_ui_manager_class_init (GtkUIManagerClass *klass)
 
   /**
    * GtkUIManager::disconnect-proxy:
-   * @uimanager: the ui manager
+   * @manager: the ui manager
    * @action: the action
    * @proxy: the proxy
    *
@@ -324,7 +324,7 @@ gtk_ui_manager_class_init (GtkUIManagerClass *klass)
 
   /**
    * GtkUIManager::pre-activate:
-   * @uimanager: the ui manager
+   * @manager: the ui manager
    * @action: the action
    *
    * The ::pre-activate signal is emitted just before the @action
@@ -347,7 +347,7 @@ gtk_ui_manager_class_init (GtkUIManagerClass *klass)
 
   /**
    * GtkUIManager::post-activate:
-   * @uimanager: the ui manager
+   * @manager: the ui manager
    * @action: the action
    *
    * The ::post-activate signal is emitted just after the @action
@@ -380,25 +380,25 @@ gtk_ui_manager_class_init (GtkUIManagerClass *klass)
 
 
 static void
-gtk_ui_manager_init (GtkUIManager *self)
+gtk_ui_manager_init (GtkUIManager *manager)
 {
   guint merge_id;
   GNode *node;
 
-  self->private_data = G_TYPE_INSTANCE_GET_PRIVATE (self,
-                                                    GTK_TYPE_UI_MANAGER,
-                                                    GtkUIManagerPrivate);
+  manager->private_data = G_TYPE_INSTANCE_GET_PRIVATE (manager,
+                                                       GTK_TYPE_UI_MANAGER,
+                                                       GtkUIManagerPrivate);
 
-  self->private_data->accel_group = gtk_accel_group_new ();
+  manager->private_data->accel_group = gtk_accel_group_new ();
 
-  self->private_data->root_node = NULL;
-  self->private_data->action_groups = NULL;
+  manager->private_data->root_node = NULL;
+  manager->private_data->action_groups = NULL;
 
-  self->private_data->last_merge_id = 0;
-  self->private_data->add_tearoffs = FALSE;
+  manager->private_data->last_merge_id = 0;
+  manager->private_data->add_tearoffs = FALSE;
 
-  merge_id = gtk_ui_manager_new_merge_id (self);
-  node = get_child_node (self, NULL, NULL, "ui", 2,
+  merge_id = gtk_ui_manager_new_merge_id (manager);
+  node = get_child_node (manager, NULL, NULL, "ui", 2,
 			 NODE_TYPE_ROOT, TRUE, FALSE);
   node_prepend_ui_reference (node, merge_id, 0);
 }
@@ -406,27 +406,27 @@ gtk_ui_manager_init (GtkUIManager *self)
 static void
 gtk_ui_manager_finalize (GObject *object)
 {
-  GtkUIManager *self = GTK_UI_MANAGER (object);
+  GtkUIManager *manager = GTK_UI_MANAGER (object);
   
-  if (self->private_data->update_tag != 0)
+  if (manager->private_data->update_tag != 0)
     {
-      g_source_remove (self->private_data->update_tag);
-      self->private_data->update_tag = 0;
+      g_source_remove (manager->private_data->update_tag);
+      manager->private_data->update_tag = 0;
     }
   
-  g_node_traverse (self->private_data->root_node, 
+  g_node_traverse (manager->private_data->root_node, 
 		   G_POST_ORDER, G_TRAVERSE_ALL, -1,
 		   (GNodeTraverseFunc)free_node, NULL);
-  g_node_destroy (self->private_data->root_node);
-  self->private_data->root_node = NULL;
+  g_node_destroy (manager->private_data->root_node);
+  manager->private_data->root_node = NULL;
   
-  g_list_foreach (self->private_data->action_groups,
+  g_list_foreach (manager->private_data->action_groups,
                   (GFunc) g_object_unref, NULL);
-  g_list_free (self->private_data->action_groups);
-  self->private_data->action_groups = NULL;
+  g_list_free (manager->private_data->action_groups);
+  manager->private_data->action_groups = NULL;
 
-  g_object_unref (self->private_data->accel_group);
-  self->private_data->accel_group = NULL;
+  g_object_unref (manager->private_data->accel_group);
+  manager->private_data->accel_group = NULL;
 
   G_OBJECT_CLASS (gtk_ui_manager_parent_class)->finalize (object);
 }
@@ -446,15 +446,15 @@ gtk_ui_manager_buildable_add_child (GtkBuildable  *buildable,
 				    GObject       *child,
 				    const gchar   *type)
 {
-  GtkUIManager *self = GTK_UI_MANAGER (buildable);
+  GtkUIManager *manager = GTK_UI_MANAGER (buildable);
   guint pos;
 
   g_return_if_fail (GTK_IS_ACTION_GROUP (child));
 
-  pos = g_list_length (self->private_data->action_groups);
+  pos = g_list_length (manager->private_data->action_groups);
 
   g_object_ref (child);
-  gtk_ui_manager_insert_action_group (self,
+  gtk_ui_manager_insert_action_group (manager,
 				      GTK_ACTION_GROUP (child),
 				      pos);
 }
@@ -512,12 +512,12 @@ gtk_ui_manager_set_property (GObject         *object,
 			     const GValue    *value,
 			     GParamSpec      *pspec)
 {
-  GtkUIManager *self = GTK_UI_MANAGER (object);
+  GtkUIManager *manager = GTK_UI_MANAGER (object);
  
   switch (prop_id)
     {
     case PROP_ADD_TEAROFFS:
-      gtk_ui_manager_set_add_tearoffs (self, g_value_get_boolean (value));
+      gtk_ui_manager_set_add_tearoffs (manager, g_value_get_boolean (value));
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -531,15 +531,15 @@ gtk_ui_manager_get_property (GObject         *object,
 			     GValue          *value,
 			     GParamSpec      *pspec)
 {
-  GtkUIManager *self = GTK_UI_MANAGER (object);
+  GtkUIManager *manager = GTK_UI_MANAGER (object);
 
   switch (prop_id)
     {
     case PROP_ADD_TEAROFFS:
-      g_value_set_boolean (value, self->private_data->add_tearoffs);
+      g_value_set_boolean (value, manager->private_data->add_tearoffs);
       break;
     case PROP_UI:
-      g_value_take_string (value, gtk_ui_manager_get_ui (self));
+      g_value_take_string (value, gtk_ui_manager_get_ui (manager));
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -548,16 +548,16 @@ gtk_ui_manager_get_property (GObject         *object,
 }
 
 static GtkWidget *
-gtk_ui_manager_real_get_widget (GtkUIManager *self,
+gtk_ui_manager_real_get_widget (GtkUIManager *manager,
                                 const gchar  *path)
 {
   GNode *node;
 
   /* ensure that there are no pending updates before we get the
    * widget */
-  gtk_ui_manager_ensure_update (self);
+  gtk_ui_manager_ensure_update (manager);
 
-  node = get_node (self, path, NODE_TYPE_UNDECIDED, FALSE);
+  node = get_node (manager, path, NODE_TYPE_UNDECIDED, FALSE);
 
   if (node == NULL)
     return NULL;
@@ -566,16 +566,16 @@ gtk_ui_manager_real_get_widget (GtkUIManager *self,
 }
 
 static GtkAction *
-gtk_ui_manager_real_get_action (GtkUIManager *self,
+gtk_ui_manager_real_get_action (GtkUIManager *manager,
                                 const gchar  *path)
 {
   GNode *node;
 
   /* ensure that there are no pending updates before we get
    * the action */
-  gtk_ui_manager_ensure_update (self);
+  gtk_ui_manager_ensure_update (manager);
 
-  node = get_node (self, path, NODE_TYPE_UNDECIDED, FALSE);
+  node = get_node (manager, path, NODE_TYPE_UNDECIDED, FALSE);
 
   if (node == NULL)
     return NULL;
@@ -602,7 +602,7 @@ gtk_ui_manager_new (void)
 
 /**
  * gtk_ui_manager_get_add_tearoffs:
- * @self: a #GtkUIManager
+ * @manager: a #GtkUIManager
  * 
  * Returns whether menus generated by this #GtkUIManager
  * will have tearoff menu items. 
@@ -612,17 +612,17 @@ gtk_ui_manager_new (void)
  * Since: 2.4
  **/
 gboolean 
-gtk_ui_manager_get_add_tearoffs (GtkUIManager *self)
+gtk_ui_manager_get_add_tearoffs (GtkUIManager *manager)
 {
-  g_return_val_if_fail (GTK_IS_UI_MANAGER (self), FALSE);
+  g_return_val_if_fail (GTK_IS_UI_MANAGER (manager), FALSE);
   
-  return self->private_data->add_tearoffs;
+  return manager->private_data->add_tearoffs;
 }
 
 
 /**
  * gtk_ui_manager_set_add_tearoffs:
- * @self: a #GtkUIManager
+ * @manager: a #GtkUIManager
  * @add_tearoffs: whether tearoff menu items are added
  * 
  * Sets the "add_tearoffs" property, which controls whether menus 
@@ -634,20 +634,20 @@ gtk_ui_manager_get_add_tearoffs (GtkUIManager *self)
  * Since: 2.4
  **/
 void 
-gtk_ui_manager_set_add_tearoffs (GtkUIManager *self,
+gtk_ui_manager_set_add_tearoffs (GtkUIManager *manager,
 				 gboolean      add_tearoffs)
 {
-  g_return_if_fail (GTK_IS_UI_MANAGER (self));
+  g_return_if_fail (GTK_IS_UI_MANAGER (manager));
 
   add_tearoffs = add_tearoffs != FALSE;
 
-  if (add_tearoffs != self->private_data->add_tearoffs)
+  if (add_tearoffs != manager->private_data->add_tearoffs)
     {
-      self->private_data->add_tearoffs = add_tearoffs;
+      manager->private_data->add_tearoffs = add_tearoffs;
       
-      dirty_all_nodes (self);
+      dirty_all_nodes (manager);
 
-      g_object_notify (G_OBJECT (self), "add-tearoffs");
+      g_object_notify (G_OBJECT (manager), "add-tearoffs");
     }
 }
 
@@ -655,50 +655,50 @@ static void
 cb_proxy_connect_proxy (GtkActionGroup *group, 
                         GtkAction      *action,
                         GtkWidget      *proxy, 
-                        GtkUIManager *self)
+                        GtkUIManager *manager)
 {
-  g_signal_emit (self, ui_manager_signals[CONNECT_PROXY], 0, action, proxy);
+  g_signal_emit (manager, ui_manager_signals[CONNECT_PROXY], 0, action, proxy);
 }
 
 static void
 cb_proxy_disconnect_proxy (GtkActionGroup *group, 
                            GtkAction      *action,
                            GtkWidget      *proxy, 
-                           GtkUIManager *self)
+                           GtkUIManager *manager)
 {
-  g_signal_emit (self, ui_manager_signals[DISCONNECT_PROXY], 0, action, proxy);
+  g_signal_emit (manager, ui_manager_signals[DISCONNECT_PROXY], 0, action, proxy);
 }
 
 static void
 cb_proxy_pre_activate (GtkActionGroup *group, 
                        GtkAction      *action,
-                       GtkUIManager   *self)
+                       GtkUIManager   *manager)
 {
-  g_signal_emit (self, ui_manager_signals[PRE_ACTIVATE], 0, action);
+  g_signal_emit (manager, ui_manager_signals[PRE_ACTIVATE], 0, action);
 }
 
 static void
 cb_proxy_post_activate (GtkActionGroup *group, 
                         GtkAction      *action,
-                        GtkUIManager   *self)
+                        GtkUIManager   *manager)
 {
-  g_signal_emit (self, ui_manager_signals[POST_ACTIVATE], 0, action);
+  g_signal_emit (manager, ui_manager_signals[POST_ACTIVATE], 0, action);
 }
 
 /**
  * gtk_ui_manager_insert_action_group:
- * @self: a #GtkUIManager object
+ * @manager: a #GtkUIManager object
  * @action_group: the action group to be inserted
  * @pos: the position at which the group will be inserted.
  * 
  * Inserts an action group into the list of action groups associated 
- * with @self. Actions in earlier groups hide actions with the same 
+ * with @manager. Actions in earlier groups hide actions with the same 
  * name in later groups. 
  *
  * Since: 2.4
  **/
 void
-gtk_ui_manager_insert_action_group (GtkUIManager   *self,
+gtk_ui_manager_insert_action_group (GtkUIManager   *manager,
 				    GtkActionGroup *action_group, 
 				    gint            pos)
 {
@@ -707,15 +707,15 @@ gtk_ui_manager_insert_action_group (GtkUIManager   *self,
   const char *group_name;
 #endif 
 
-  g_return_if_fail (GTK_IS_UI_MANAGER (self));
+  g_return_if_fail (GTK_IS_UI_MANAGER (manager));
   g_return_if_fail (GTK_IS_ACTION_GROUP (action_group));
-  g_return_if_fail (g_list_find (self->private_data->action_groups, 
+  g_return_if_fail (g_list_find (manager->private_data->action_groups, 
 				 action_group) == NULL);
 
 #ifdef G_ENABLE_DEBUG
   group_name  = gtk_action_group_get_name (action_group);
 
-  for (l = self->private_data->action_groups; l; l = l->next) 
+  for (l = manager->private_data->action_groups; l; l = l->next) 
     {
       GtkActionGroup *group = l->data;
 
@@ -729,62 +729,62 @@ gtk_ui_manager_insert_action_group (GtkUIManager   *self,
 #endif /* G_ENABLE_DEBUG */
 
   g_object_ref (action_group);
-  self->private_data->action_groups = 
-    g_list_insert (self->private_data->action_groups, action_group, pos);
+  manager->private_data->action_groups = 
+    g_list_insert (manager->private_data->action_groups, action_group, pos);
   g_object_connect (action_group,
-		    "object-signal::connect-proxy", G_CALLBACK (cb_proxy_connect_proxy), self,
-		    "object-signal::disconnect-proxy", G_CALLBACK (cb_proxy_disconnect_proxy), self,
-		    "object-signal::pre-activate", G_CALLBACK (cb_proxy_pre_activate), self,
-		    "object-signal::post-activate", G_CALLBACK (cb_proxy_post_activate), self,
+		    "object-signal::connect-proxy", G_CALLBACK (cb_proxy_connect_proxy), manager,
+		    "object-signal::disconnect-proxy", G_CALLBACK (cb_proxy_disconnect_proxy), manager,
+		    "object-signal::pre-activate", G_CALLBACK (cb_proxy_pre_activate), manager,
+		    "object-signal::post-activate", G_CALLBACK (cb_proxy_post_activate), manager,
 		    NULL);
 
   /* dirty all nodes, as action bindings may change */
-  dirty_all_nodes (self);
+  dirty_all_nodes (manager);
 
-  g_signal_emit (self, ui_manager_signals[ACTIONS_CHANGED], 0);
+  g_signal_emit (manager, ui_manager_signals[ACTIONS_CHANGED], 0);
 }
 
 /**
  * gtk_ui_manager_remove_action_group:
- * @self: a #GtkUIManager object
+ * @manager: a #GtkUIManager object
  * @action_group: the action group to be removed
  * 
  * Removes an action group from the list of action groups associated 
- * with @self.
+ * with @manager.
  *
  * Since: 2.4
  **/
 void
-gtk_ui_manager_remove_action_group (GtkUIManager   *self,
+gtk_ui_manager_remove_action_group (GtkUIManager   *manager,
 				    GtkActionGroup *action_group)
 {
-  g_return_if_fail (GTK_IS_UI_MANAGER (self));
+  g_return_if_fail (GTK_IS_UI_MANAGER (manager));
   g_return_if_fail (GTK_IS_ACTION_GROUP (action_group));
-  g_return_if_fail (g_list_find (self->private_data->action_groups, 
+  g_return_if_fail (g_list_find (manager->private_data->action_groups, 
 				 action_group) != NULL);
 
-  self->private_data->action_groups =
-    g_list_remove (self->private_data->action_groups, action_group);
+  manager->private_data->action_groups =
+    g_list_remove (manager->private_data->action_groups, action_group);
 
   g_object_disconnect (action_group,
-                       "any-signal::connect-proxy", G_CALLBACK (cb_proxy_connect_proxy), self,
-                       "any-signal::disconnect-proxy", G_CALLBACK (cb_proxy_disconnect_proxy), self,
-                       "any-signal::pre-activate", G_CALLBACK (cb_proxy_pre_activate), self,
-                       "any-signal::post-activate", G_CALLBACK (cb_proxy_post_activate), self, 
+                       "any-signal::connect-proxy", G_CALLBACK (cb_proxy_connect_proxy), manager,
+                       "any-signal::disconnect-proxy", G_CALLBACK (cb_proxy_disconnect_proxy), manager,
+                       "any-signal::pre-activate", G_CALLBACK (cb_proxy_pre_activate), manager,
+                       "any-signal::post-activate", G_CALLBACK (cb_proxy_post_activate), manager, 
                        NULL);
   g_object_unref (action_group);
 
   /* dirty all nodes, as action bindings may change */
-  dirty_all_nodes (self);
+  dirty_all_nodes (manager);
 
-  g_signal_emit (self, ui_manager_signals[ACTIONS_CHANGED], 0);
+  g_signal_emit (manager, ui_manager_signals[ACTIONS_CHANGED], 0);
 }
 
 /**
  * gtk_ui_manager_get_action_groups:
- * @self: a #GtkUIManager object
+ * @manager: a #GtkUIManager object
  * 
- * Returns the list of action groups associated with @self.
+ * Returns the list of action groups associated with @manager.
  *
  * Return value:  (element-type GtkActionGroup) (transfer none): a #GList of
  *   action groups. The list is owned by GTK+
@@ -793,34 +793,34 @@ gtk_ui_manager_remove_action_group (GtkUIManager   *self,
  * Since: 2.4
  **/
 GList *
-gtk_ui_manager_get_action_groups (GtkUIManager *self)
+gtk_ui_manager_get_action_groups (GtkUIManager *manager)
 {
-  g_return_val_if_fail (GTK_IS_UI_MANAGER (self), NULL);
+  g_return_val_if_fail (GTK_IS_UI_MANAGER (manager), NULL);
 
-  return self->private_data->action_groups;
+  return manager->private_data->action_groups;
 }
 
 /**
  * gtk_ui_manager_get_accel_group:
- * @self: a #GtkUIManager object
+ * @manager: a #GtkUIManager object
  * 
- * Returns the #GtkAccelGroup associated with @self.
+ * Returns the #GtkAccelGroup associated with @manager.
  *
  * Return value: (transfer none): the #GtkAccelGroup.
  *
  * Since: 2.4
  **/
 GtkAccelGroup *
-gtk_ui_manager_get_accel_group (GtkUIManager *self)
+gtk_ui_manager_get_accel_group (GtkUIManager *manager)
 {
-  g_return_val_if_fail (GTK_IS_UI_MANAGER (self), NULL);
+  g_return_val_if_fail (GTK_IS_UI_MANAGER (manager), NULL);
 
-  return self->private_data->accel_group;
+  return manager->private_data->accel_group;
 }
 
 /**
  * gtk_ui_manager_get_widget:
- * @self: a #GtkUIManager
+ * @manager: a #GtkUIManager
  * @path: a path
  * 
  * Looks up a widget by following a path. 
@@ -830,7 +830,7 @@ gtk_ui_manager_get_accel_group (GtkUIManager *self)
  * (e.g. "popup"). The root element ("/ui") can be omitted in the path.
  *
  * Note that the widget found by following a path that ends in a &lt;menu&gt;
- * element is the menuitem to which the menu is attached, not the menu itself.
+ * element is the menuitem to which the menu is attached, not the menu itmanager.
  *
  * Also note that the widgets constructed by a ui manager are not tied to 
  * the lifecycle of the ui manager. If you add the widgets returned by this 
@@ -843,13 +843,13 @@ gtk_ui_manager_get_accel_group (GtkUIManager *self)
  * Since: 2.4
  **/
 GtkWidget *
-gtk_ui_manager_get_widget (GtkUIManager *self,
+gtk_ui_manager_get_widget (GtkUIManager *manager,
 			   const gchar  *path)
 {
-  g_return_val_if_fail (GTK_IS_UI_MANAGER (self), NULL);
+  g_return_val_if_fail (GTK_IS_UI_MANAGER (manager), NULL);
   g_return_val_if_fail (path != NULL, NULL);
 
-  return GTK_UI_MANAGER_GET_CLASS (self)->get_widget (self, path);
+  return GTK_UI_MANAGER_GET_CLASS (manager)->get_widget (manager, path);
 }
 
 typedef struct {
@@ -886,7 +886,7 @@ collect_toplevels (GNode   *node,
 
 /**
  * gtk_ui_manager_get_toplevels:
- * @self: a #GtkUIManager
+ * @manager: a #GtkUIManager
  * @types: specifies the types of toplevel widgets to include. Allowed
  *   types are #GTK_UI_MANAGER_MENUBAR, #GTK_UI_MANAGER_TOOLBAR and
  *   #GTK_UI_MANAGER_POPUP.
@@ -899,12 +899,12 @@ collect_toplevels (GNode   *node,
  * Since: 2.4
  **/
 GSList *
-gtk_ui_manager_get_toplevels (GtkUIManager         *self,
+gtk_ui_manager_get_toplevels (GtkUIManager         *manager,
 			      GtkUIManagerItemType  types)
 {
   ToplevelData data;
 
-  g_return_val_if_fail (GTK_IS_UI_MANAGER (self), NULL);
+  g_return_val_if_fail (GTK_IS_UI_MANAGER (manager), NULL);
   g_return_val_if_fail ((~(GTK_UI_MANAGER_MENUBAR | 
 			   GTK_UI_MANAGER_TOOLBAR |
 			   GTK_UI_MANAGER_POPUP) & types) == 0, NULL);
@@ -913,7 +913,7 @@ gtk_ui_manager_get_toplevels (GtkUIManager         *self,
   data.types = types;
   data.list = NULL;
 
-  g_node_children_foreach (self->private_data->root_node, 
+  g_node_children_foreach (manager->private_data->root_node, 
 			   G_TRAVERSE_ALL, 
 			   collect_toplevels, &data);
 
@@ -923,7 +923,7 @@ gtk_ui_manager_get_toplevels (GtkUIManager         *self,
 
 /**
  * gtk_ui_manager_get_action:
- * @self: a #GtkUIManager
+ * @manager: a #GtkUIManager
  * @path: a path
  * 
  * Looks up an action by following a path. See gtk_ui_manager_get_widget()
@@ -935,13 +935,13 @@ gtk_ui_manager_get_toplevels (GtkUIManager         *self,
  * Since: 2.4
  **/
 GtkAction *
-gtk_ui_manager_get_action (GtkUIManager *self,
+gtk_ui_manager_get_action (GtkUIManager *manager,
 			   const gchar  *path)
 {
-  g_return_val_if_fail (GTK_IS_UI_MANAGER (self), NULL);
+  g_return_val_if_fail (GTK_IS_UI_MANAGER (manager), NULL);
   g_return_val_if_fail (path != NULL, NULL);
 
-  return GTK_UI_MANAGER_GET_CLASS (self)->get_action (self, path);
+  return GTK_UI_MANAGER_GET_CLASS (manager)->get_action (manager, path);
 }
 
 static gboolean
@@ -962,7 +962,7 @@ node_is_dead (GNode *node)
 }
 
 static GNode *
-get_child_node (GtkUIManager *self, 
+get_child_node (GtkUIManager *manager, 
 		GNode        *parent,
 		GNode        *sibling,
 		const gchar  *childname, 
@@ -1042,9 +1042,9 @@ get_child_node (GtkUIManager *self,
   else
     {
       /* handle root node */
-      if (self->private_data->root_node)
+      if (manager->private_data->root_node)
 	{
-	  child = self->private_data->root_node;
+	  child = manager->private_data->root_node;
 	  if (strncmp (NODE_INFO (child)->name, childname, childname_length) != 0)
 	    g_warning ("root node name '%s' doesn't match '%s'",
 		       childname, NODE_INFO (child)->name);
@@ -1060,7 +1060,7 @@ get_child_node (GtkUIManager *self,
 	  mnode->name = g_strndup (childname, childname_length);
 	  mnode->dirty = TRUE;
 	  
-	  child = self->private_data->root_node = g_node_new (mnode);
+	  child = manager->private_data->root_node = g_node_new (mnode);
 	}
     }
 
@@ -1068,7 +1068,7 @@ get_child_node (GtkUIManager *self,
 }
 
 static GNode *
-get_node (GtkUIManager *self, 
+get_node (GtkUIManager *manager, 
 	  const gchar  *path,
 	  NodeType      node_type, 
 	  gboolean      create)
@@ -1093,7 +1093,7 @@ get_node (GtkUIManager *self,
       else
 	length = strlen (pos);
 
-      node = get_child_node (self, parent, NULL, pos, length, NODE_TYPE_UNDECIDED,
+      node = get_child_node (manager, parent, NULL, pos, length, NODE_TYPE_UNDECIDED,
 			     create, FALSE);
       if (!node)
 	return NULL;
@@ -1136,7 +1136,7 @@ free_node (GNode *node)
 
 /**
  * gtk_ui_manager_new_merge_id:
- * @self: a #GtkUIManager
+ * @manager: a #GtkUIManager
  * 
  * Returns an unused merge id, suitable for use with 
  * gtk_ui_manager_add_ui().
@@ -1146,11 +1146,11 @@ free_node (GNode *node)
  * Since: 2.4
  **/
 guint
-gtk_ui_manager_new_merge_id (GtkUIManager *self)
+gtk_ui_manager_new_merge_id (GtkUIManager *manager)
 {
-  self->private_data->last_merge_id++;
+  manager->private_data->last_merge_id++;
 
-  return self->private_data->last_merge_id;
+  return manager->private_data->last_merge_id;
 }
 
 static void
@@ -1219,7 +1219,7 @@ struct _ParseContext
   ParseState state;
   ParseState prev_state;
 
-  GtkUIManager *self;
+  GtkUIManager *manager;
 
   GNode *current;
 
@@ -1235,7 +1235,7 @@ start_element_handler (GMarkupParseContext *context,
 		       GError             **error)
 {
   ParseContext *ctx = user_data;
-  GtkUIManager *self = ctx->self;
+  GtkUIManager *manager = ctx->manager;
 
   gint i;
   const gchar *node_name;
@@ -1302,7 +1302,7 @@ start_element_handler (GMarkupParseContext *context,
       if (ctx->state == STATE_ROOT && !strcmp (element_name, "accelerator"))
 	{
 	  ctx->state = STATE_ACCELERATOR;
-	  ctx->current = get_child_node (self, ctx->current, NULL,
+	  ctx->current = get_child_node (manager, ctx->current, NULL,
 					 node_name, strlen (node_name),
 					 NODE_TYPE_ACCELERATOR,
 					 TRUE, FALSE);
@@ -1318,7 +1318,7 @@ start_element_handler (GMarkupParseContext *context,
       if (ctx->state == STATE_START && !strcmp (element_name, "ui"))
 	{
 	  ctx->state = STATE_ROOT;
-	  ctx->current = self->private_data->root_node;
+	  ctx->current = manager->private_data->root_node;
 	  raise_error = FALSE;
 
 	  node_prepend_ui_reference (ctx->current, ctx->merge_id, action_quark);
@@ -1328,7 +1328,7 @@ start_element_handler (GMarkupParseContext *context,
       if (ctx->state == STATE_ROOT && !strcmp (element_name, "menubar"))
 	{
 	  ctx->state = STATE_MENU;
-	  ctx->current = get_child_node (self, ctx->current, NULL,
+	  ctx->current = get_child_node (manager, ctx->current, NULL,
 					 node_name, strlen (node_name),
 					 NODE_TYPE_MENUBAR,
 					 TRUE, FALSE);
@@ -1342,7 +1342,7 @@ start_element_handler (GMarkupParseContext *context,
 	}
       else if (ctx->state == STATE_MENU && !strcmp (element_name, "menu"))
 	{
-	  ctx->current = get_child_node (self, ctx->current, NULL,
+	  ctx->current = get_child_node (manager, ctx->current, NULL,
 					 node_name, strlen (node_name),
 					 NODE_TYPE_MENU,
 					 TRUE, top);
@@ -1357,7 +1357,7 @@ start_element_handler (GMarkupParseContext *context,
 	{
 	  ctx->state = STATE_MENU;
 	  
-	  ctx->current = get_child_node (self, g_node_last_child (ctx->current), NULL,
+	  ctx->current = get_child_node (manager, g_node_last_child (ctx->current), NULL,
 					 node_name, strlen (node_name),
 					 NODE_TYPE_MENU,
 					 TRUE, top);
@@ -1373,7 +1373,7 @@ start_element_handler (GMarkupParseContext *context,
 	  GNode *node;
 
 	  ctx->state = STATE_MENUITEM;
-	  node = get_child_node (self, ctx->current, NULL,
+	  node = get_child_node (manager, ctx->current, NULL,
 				 node_name, strlen (node_name),
 				 NODE_TYPE_MENUITEM,
 				 TRUE, top);
@@ -1392,7 +1392,7 @@ start_element_handler (GMarkupParseContext *context,
       if (ctx->state == STATE_ROOT && !strcmp (element_name, "popup"))
 	{
 	  ctx->state = STATE_MENU;
-	  ctx->current = get_child_node (self, ctx->current, NULL,
+	  ctx->current = get_child_node (manager, ctx->current, NULL,
 					 node_name, strlen (node_name),
 					 NODE_TYPE_POPUP,
 					 TRUE, FALSE);
@@ -1410,12 +1410,12 @@ start_element_handler (GMarkupParseContext *context,
 	       !strcmp (element_name, "placeholder"))
 	{
 	  if (ctx->state == STATE_TOOLBAR)
-	    ctx->current = get_child_node (self, ctx->current, NULL,
+	    ctx->current = get_child_node (manager, ctx->current, NULL,
 					   node_name, strlen (node_name),
 					   NODE_TYPE_TOOLBAR_PLACEHOLDER,
 					   TRUE, top);
 	  else
-	    ctx->current = get_child_node (self, ctx->current, NULL,
+	    ctx->current = get_child_node (manager, ctx->current, NULL,
 					   node_name, strlen (node_name),
 					   NODE_TYPE_MENU_PLACEHOLDER,
 					   TRUE, top);
@@ -1443,7 +1443,7 @@ start_element_handler (GMarkupParseContext *context,
 	    }
 	  else
 	    length = strlen (node_name);
-	  node = get_child_node (self, ctx->current, NULL,
+	  node = get_child_node (manager, ctx->current, NULL,
 				 node_name, length,
 				 NODE_TYPE_SEPARATOR,
 				 TRUE, top);
@@ -1462,7 +1462,7 @@ start_element_handler (GMarkupParseContext *context,
       if (ctx->state == STATE_ROOT && !strcmp (element_name, "toolbar"))
 	{
 	  ctx->state = STATE_TOOLBAR;
-	  ctx->current = get_child_node (self, ctx->current, NULL,
+	  ctx->current = get_child_node (manager, ctx->current, NULL,
 					 node_name, strlen (node_name),
 					 NODE_TYPE_TOOLBAR,
 					 TRUE, FALSE);
@@ -1478,7 +1478,7 @@ start_element_handler (GMarkupParseContext *context,
 	  GNode *node;
 
 	  ctx->state = STATE_TOOLITEM;
-	  node = get_child_node (self, ctx->current, NULL,
+	  node = get_child_node (manager, ctx->current, NULL,
 				node_name, strlen (node_name),
 				 NODE_TYPE_TOOLITEM,
 				 TRUE, top);
@@ -1559,7 +1559,7 @@ cleanup (GMarkupParseContext *context,
   /* should also walk through the tree and get rid of nodes related to
    * this UI file's tag */
 
-  gtk_ui_manager_remove_ui (ctx->self, ctx->merge_id);
+  gtk_ui_manager_remove_ui (ctx->manager, ctx->merge_id);
 }
 
 static gboolean
@@ -1607,7 +1607,7 @@ static const GMarkupParser ui_parser = {
 };
 
 static guint
-add_ui_from_string (GtkUIManager *self,
+add_ui_from_string (GtkUIManager *manager,
 		    const gchar  *buffer, 
 		    gssize        length,
 		    gboolean      needs_root,
@@ -1617,9 +1617,9 @@ add_ui_from_string (GtkUIManager *self,
   GMarkupParseContext *context;
 
   ctx.state = STATE_START;
-  ctx.self = self;
+  ctx.manager = manager;
   ctx.current = NULL;
-  ctx.merge_id = gtk_ui_manager_new_merge_id (self);
+  ctx.merge_id = gtk_ui_manager_new_merge_id (manager);
 
   context = g_markup_parse_context_new (&ui_parser, 0, &ctx, NULL);
 
@@ -1639,9 +1639,9 @@ add_ui_from_string (GtkUIManager *self,
 
   g_markup_parse_context_free (context);
 
-  queue_update (self);
+  queue_update (manager);
 
-  g_object_notify (G_OBJECT (self), "ui");
+  g_object_notify (G_OBJECT (manager), "ui");
 
   return ctx.merge_id;
 
@@ -1654,13 +1654,13 @@ add_ui_from_string (GtkUIManager *self,
 
 /**
  * gtk_ui_manager_add_ui_from_string:
- * @self: a #GtkUIManager object
+ * @manager: a #GtkUIManager object
  * @buffer: the string to parse
  * @length: the length of @buffer (may be -1 if @buffer is nul-terminated)
  * @error: return location for an error
  * 
  * Parses a string containing a <link linkend="XML-UI">UI definition</link> and 
- * merges it with the current contents of @self. An enclosing &lt;ui&gt; 
+ * merges it with the current contents of @manager. An enclosing &lt;ui&gt; 
  * element is added if it is missing.
  * 
  * Return value: The merge id for the merged UI. The merge id can be used
@@ -1670,7 +1670,7 @@ add_ui_from_string (GtkUIManager *self,
  * Since: 2.4
  **/
 guint
-gtk_ui_manager_add_ui_from_string (GtkUIManager *self,
+gtk_ui_manager_add_ui_from_string (GtkUIManager *manager,
 				   const gchar  *buffer, 
 				   gssize        length,
 				   GError      **error)
@@ -1679,7 +1679,7 @@ gtk_ui_manager_add_ui_from_string (GtkUIManager *self,
   const gchar *p;
   const gchar *end;
 
-  g_return_val_if_fail (GTK_IS_UI_MANAGER (self), 0);
+  g_return_val_if_fail (GTK_IS_UI_MANAGER (manager), 0);
   g_return_val_if_fail (buffer != NULL, 0);
 
   if (length < 0)
@@ -1693,17 +1693,17 @@ gtk_ui_manager_add_ui_from_string (GtkUIManager *self,
   if (end - p >= 4 && strncmp (p, "<ui>", 4) == 0)
     needs_root = FALSE;
   
-  return add_ui_from_string (self, buffer, length, needs_root, error);
+  return add_ui_from_string (manager, buffer, length, needs_root, error);
 }
 
 /**
  * gtk_ui_manager_add_ui_from_file:
- * @self: a #GtkUIManager object
+ * @manager: a #GtkUIManager object
  * @filename: the name of the file to parse 
  * @error: return location for an error
  * 
  * Parses a file containing a <link linkend="XML-UI">UI definition</link> and 
- * merges it with the current contents of @self. 
+ * merges it with the current contents of @manager. 
  * 
  * Return value: The merge id for the merged UI. The merge id can be used
  *   to unmerge the UI with gtk_ui_manager_remove_ui(). If an error occurred,
@@ -1712,7 +1712,7 @@ gtk_ui_manager_add_ui_from_string (GtkUIManager *self,
  * Since: 2.4
  **/
 guint
-gtk_ui_manager_add_ui_from_file (GtkUIManager *self,
+gtk_ui_manager_add_ui_from_file (GtkUIManager *manager,
 				 const gchar  *filename,
 				 GError      **error)
 {
@@ -1720,12 +1720,12 @@ gtk_ui_manager_add_ui_from_file (GtkUIManager *self,
   gsize length;
   guint res;
 
-  g_return_val_if_fail (GTK_IS_UI_MANAGER (self), 0);
+  g_return_val_if_fail (GTK_IS_UI_MANAGER (manager), 0);
 
   if (!g_file_get_contents (filename, &buffer, &length, error))
     return 0;
 
-  res = add_ui_from_string (self, buffer, length, FALSE, error);
+  res = add_ui_from_string (manager, buffer, length, FALSE, error);
   g_free (buffer);
 
   return res;
@@ -1733,7 +1733,7 @@ gtk_ui_manager_add_ui_from_file (GtkUIManager *self,
 
 /**
  * gtk_ui_manager_add_ui:
- * @self: a #GtkUIManager
+ * @manager: a #GtkUIManager
  * @merge_id: the merge id for the merged UI, see gtk_ui_manager_new_merge_id()
  * @path: a path
  * @name: the name for the added UI element
@@ -1742,7 +1742,7 @@ gtk_ui_manager_add_ui_from_file (GtkUIManager *self,
  * @top: if %TRUE, the UI element is added before its siblings, otherwise it
  *   is added after its siblings.
  *
- * Adds a UI element to the current contents of @self. 
+ * Adds a UI element to the current contents of @manager. 
  *
  * If @type is %GTK_UI_MANAGER_AUTO, GTK+ inserts a menuitem, toolitem or 
  * separator if such an element can be inserted at the place determined by 
@@ -1755,7 +1755,7 @@ gtk_ui_manager_add_ui_from_file (GtkUIManager *self,
  * Since: 2.4
  **/
 void
-gtk_ui_manager_add_ui (GtkUIManager        *self,
+gtk_ui_manager_add_ui (GtkUIManager        *manager,
 		       guint                merge_id,
 		       const gchar         *path,
 		       const gchar         *name,
@@ -1769,11 +1769,11 @@ gtk_ui_manager_add_ui (GtkUIManager        *self,
   NodeType node_type;
   GQuark action_quark = 0;
 
-  g_return_if_fail (GTK_IS_UI_MANAGER (self));  
+  g_return_if_fail (GTK_IS_UI_MANAGER (manager));  
   g_return_if_fail (merge_id > 0);
   g_return_if_fail (name != NULL || type == GTK_UI_MANAGER_SEPARATOR);
 
-  node = get_node (self, path, NODE_TYPE_UNDECIDED, FALSE);
+  node = get_node (manager, path, NODE_TYPE_UNDECIDED, FALSE);
   sibling = NULL;
 
   if (node == NULL)
@@ -1872,7 +1872,7 @@ gtk_ui_manager_add_ui (GtkUIManager        *self,
       return;
     }
    
-  child = get_child_node (self, node, sibling,
+  child = get_child_node (manager, node, sibling,
 			  name, name ? strlen (name) : 0,
 			  node_type, TRUE, top);
 
@@ -1887,9 +1887,9 @@ gtk_ui_manager_add_ui (GtkUIManager        *self,
   if (NODE_INFO (child)->action_name == 0)
     NODE_INFO (child)->action_name = action_quark;
 
-  queue_update (self);
+  queue_update (manager);
 
-  g_object_notify (G_OBJECT (self), "ui");      
+  g_object_notify (G_OBJECT (manager), "ui");      
 }
 
 static gboolean
@@ -1905,26 +1905,26 @@ remove_ui (GNode   *node,
 
 /**
  * gtk_ui_manager_remove_ui:
- * @self: a #GtkUIManager object
+ * @manager: a #GtkUIManager object
  * @merge_id: a merge id as returned by gtk_ui_manager_add_ui_from_string()
  * 
- * Unmerges the part of @self<!-- -->s content identified by @merge_id.
+ * Unmerges the part of @manager<!-- -->s content identified by @merge_id.
  *
  * Since: 2.4
  **/
 void
-gtk_ui_manager_remove_ui (GtkUIManager *self, 
+gtk_ui_manager_remove_ui (GtkUIManager *manager, 
 			  guint         merge_id)
 {
-  g_return_if_fail (GTK_IS_UI_MANAGER (self));
+  g_return_if_fail (GTK_IS_UI_MANAGER (manager));
 
-  g_node_traverse (self->private_data->root_node, 
+  g_node_traverse (manager->private_data->root_node, 
 		   G_POST_ORDER, G_TRAVERSE_ALL, -1,
 		   remove_ui, GUINT_TO_POINTER (merge_id));
 
-  queue_update (self);
+  queue_update (manager);
 
-  g_object_notify (G_OBJECT (self), "ui");      
+  g_object_notify (G_OBJECT (manager), "ui");      
 }
 
 /* -------------------- Updates -------------------- */
@@ -2253,7 +2253,7 @@ update_smart_separators (GtkWidget *proxy)
 }
 
 static void
-update_node (GtkUIManager *self, 
+update_node (GtkUIManager *manager, 
 	     GNode        *node,
 	     gboolean      in_popup,
              gboolean      popup_accels)
@@ -2304,7 +2304,7 @@ update_node (GtkUIManager *self,
   
   ref = info->uifiles->data;
   action_name = g_quark_to_string (ref->action_quark);
-  action = get_action_by_name (self, action_name);
+  action = get_action_by_name (manager, action_name);
   
   info->dirty = FALSE;
   
@@ -2324,7 +2324,7 @@ update_node (GtkUIManager *self,
     }
   
   if (action)
-    gtk_action_set_accel_group (action, self->private_data->accel_group);
+    gtk_action_set_accel_group (action, manager->private_data->accel_group);
   
   /* If the widget already has a proxy and the action hasn't changed, then
    * we only have to update the tearoff menu items.
@@ -2343,7 +2343,7 @@ update_node (GtkUIManager *self,
 	  siblings = gtk_container_get_children (GTK_CONTAINER (menu));
 	  if (siblings != NULL && GTK_IS_TEAROFF_MENU_ITEM (siblings->data))
 	    {
-	      if (self->private_data->add_tearoffs && !in_popup)
+	      if (manager->private_data->add_tearoffs && !in_popup)
 		gtk_widget_show (GTK_WIDGET (siblings->data));
 	      else
 		gtk_widget_hide (GTK_WIDGET (siblings->data));
@@ -2363,7 +2363,7 @@ update_node (GtkUIManager *self,
 	  g_object_ref_sink (info->proxy);
 	  gtk_widget_set_name (info->proxy, info->name);
 	  gtk_widget_show (info->proxy);
-	  g_signal_emit (self, ui_manager_signals[ADD_WIDGET], 0, info->proxy);
+	  g_signal_emit (manager, ui_manager_signals[ADD_WIDGET], 0, info->proxy);
 	}
       break;
     case NODE_TYPE_POPUP:
@@ -2476,7 +2476,7 @@ update_node (GtkUIManager *self,
 	siblings = gtk_container_get_children (GTK_CONTAINER (menu));
 	if (siblings != NULL && GTK_IS_TEAROFF_MENU_ITEM (siblings->data))
 	  {
-	    if (self->private_data->add_tearoffs && !in_popup)
+	    if (manager->private_data->add_tearoffs && !in_popup)
 	      gtk_widget_show (GTK_WIDGET (siblings->data));
 	    else
 	      gtk_widget_hide (GTK_WIDGET (siblings->data));
@@ -2496,7 +2496,7 @@ update_node (GtkUIManager *self,
 	  g_object_ref_sink (info->proxy);
 	  gtk_widget_set_name (info->proxy, info->name);
 	  gtk_widget_show (info->proxy);
-	  g_signal_emit (self, ui_manager_signals[ADD_WIDGET], 0, info->proxy);
+	  g_signal_emit (manager, ui_manager_signals[ADD_WIDGET], 0, info->proxy);
 	}
       break;
     case NODE_TYPE_MENU_PLACEHOLDER:
@@ -2782,7 +2782,7 @@ update_node (GtkUIManager *self,
       
       current = child;
       child = current->next;
-      update_node (self, current, in_popup, popup_accels);
+      update_node (manager, current, in_popup, popup_accels);
     }
   
   if (info->proxy) 
@@ -2810,7 +2810,7 @@ update_node (GtkUIManager *self,
 }
 
 static gboolean
-do_updates (GtkUIManager *self)
+do_updates (GtkUIManager *manager)
 {
   /* this function needs to check through the tree for dirty nodes.
    * For such nodes, it needs to do the following:
@@ -2824,36 +2824,36 @@ do_updates (GtkUIManager *self)
    *    the proxy is reconnected to the new action (or a new proxy widget
    *    is created and added to the parent container).
    */
-  update_node (self, self->private_data->root_node, FALSE, FALSE);
+  update_node (manager, manager->private_data->root_node, FALSE, FALSE);
 
-  self->private_data->update_tag = 0;
+  manager->private_data->update_tag = 0;
 
   return FALSE;
 }
 
 static gboolean
-do_updates_idle (GtkUIManager *self)
+do_updates_idle (GtkUIManager *manager)
 {
-  do_updates (self);
+  do_updates (manager);
 
   return FALSE;
 }
 
 static void
-queue_update (GtkUIManager *self)
+queue_update (GtkUIManager *manager)
 {
-  if (self->private_data->update_tag != 0)
+  if (manager->private_data->update_tag != 0)
     return;
 
-  self->private_data->update_tag = gdk_threads_add_idle (
+  manager->private_data->update_tag = gdk_threads_add_idle (
 					       (GSourceFunc)do_updates_idle, 
-					       self);
+					       manager);
 }
 
 
 /**
  * gtk_ui_manager_ensure_update:
- * @self: a #GtkUIManager
+ * @manager: a #GtkUIManager
  * 
  * Makes sure that all pending updates to the UI have been completed.
  *
@@ -2874,12 +2874,12 @@ queue_update (GtkUIManager *self)
  * Since: 2.4
  **/
 void
-gtk_ui_manager_ensure_update (GtkUIManager *self)
+gtk_ui_manager_ensure_update (GtkUIManager *manager)
 {
-  if (self->private_data->update_tag != 0)
+  if (manager->private_data->update_tag != 0)
     {
-      g_source_remove (self->private_data->update_tag);
-      do_updates (self);
+      g_source_remove (manager->private_data->update_tag);
+      do_updates (manager);
     }
 }
 
@@ -2892,12 +2892,12 @@ dirty_traverse_func (GNode   *node,
 }
 
 static void
-dirty_all_nodes (GtkUIManager *self)
+dirty_all_nodes (GtkUIManager *manager)
 {
-  g_node_traverse (self->private_data->root_node,
+  g_node_traverse (manager->private_data->root_node,
 		   G_PRE_ORDER, G_TRAVERSE_ALL, -1,
 		   dirty_traverse_func, NULL);
-  queue_update (self);
+  queue_update (manager);
 }
 
 static void
@@ -2949,7 +2949,7 @@ close_tag_format (NodeType type)
 }
 
 static void
-print_node (GtkUIManager *self,
+print_node (GtkUIManager *manager,
 	    GNode        *node,
 	    gint          indent_level,
 	    GString      *buffer)
@@ -2979,7 +2979,7 @@ print_node (GtkUIManager *self,
   g_string_append (buffer, close_fmt ? ">\n" : "/>\n");
 
   for (child = node->children; child != NULL; child = child->next)
-    print_node (self, child, indent_level + 2, buffer);
+    print_node (manager, child, indent_level + 2, buffer);
 
   if (close_fmt)
     g_string_append_printf (buffer, close_fmt, indent_level, "");
@@ -3002,7 +3002,7 @@ gtk_ui_manager_buildable_custom_tag_start (GtkBuildable  *buildable,
 
       ctx = g_new0 (ParseContext, 1);
       ctx->state = STATE_START;
-      ctx->self = GTK_UI_MANAGER (buildable);
+      ctx->manager = GTK_UI_MANAGER (buildable);
       ctx->current = NULL;
       ctx->merge_id = gtk_ui_manager_new_merge_id (GTK_UI_MANAGER (buildable));
 
@@ -3030,7 +3030,7 @@ gtk_ui_manager_buildable_custom_tag_end (GtkBuildable *buildable,
 
 /**
  * gtk_ui_manager_get_ui:
- * @self: a #GtkUIManager
+ * @manager: a #GtkUIManager
  * 
  * Creates a <link linkend="XML-UI">UI definition</link> of the merged UI.
  * 
@@ -3040,15 +3040,15 @@ gtk_ui_manager_buildable_custom_tag_end (GtkBuildable *buildable,
  * Since: 2.4
  **/
 gchar *
-gtk_ui_manager_get_ui (GtkUIManager *self)
+gtk_ui_manager_get_ui (GtkUIManager *manager)
 {
   GString *buffer;
 
   buffer = g_string_new (NULL);
 
-  gtk_ui_manager_ensure_update (self); 
+  gtk_ui_manager_ensure_update (manager); 
  
-  print_node (self, self->private_data->root_node, 0, buffer);  
+  print_node (manager, manager->private_data->root_node, 0, buffer);  
 
   return g_string_free (buffer, FALSE);
 }
