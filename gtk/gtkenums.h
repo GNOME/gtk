@@ -560,26 +560,19 @@ typedef enum {
 /**
  * GtkWrapBoxSpreading:
  * @GTK_WRAP_BOX_SPREAD_START:  Children are allocated no more than their natural size
- *                              in the layout's orientation and any extra space is left trailing at 
- *                              the end of each line.
+ *                              in the given orientation and any extra space is left trailing at 
+ *                              the end of each row/column.
  * @GTK_WRAP_BOX_SPREAD_END:    Children are allocated no more than their natural size
- *                              in the layout's orientation and any extra space skipped at the beginning
- *                              of each line.
+ *                              in the given orientation and any extra space skipped at the beginning
+ *                              of each row/column.
  * @GTK_WRAP_BOX_SPREAD_EVEN:   Children are allocated no more than their natural size
- *                              in the layout's orientation and any extra space is evenly distributed
+ *                              in the given orientation and any extra space is evenly distributed
  *                              as empty space between children.
- * @GTK_WRAP_BOX_SPREAD_EXPAND: Items share the extra space evenly (or among children that 'expand' when
- *                              in %GTK_WRAP_ALLOCATE_FREE mode.
+ * @GTK_WRAP_BOX_SPREAD_EXPAND: Extra space is given to children which asked to expand in the given
+ *                              orientation (or columns/rows which contain children who asked to expand).
+ *                              If no children asked to expand; extra space is distributed evenly.
  *
- * Describes how an #GtkWrapBox deals with extra space when allocating children.
- *
- * The box always tries to fit as many children at their natural size 
- * in the given orentation as possible with the exception of fitting "minimum-line-children"
- * items into the available size. When the available size is larger than
- * the size needed to fit a given number of children at their natural size
- * then extra space is available to distribute among children. The
- * #GtkWrapBoxSpreading option describes what to do with this space.
- *
+ * Describes how a #GtkWrapBox deals with extra space in a given orientation when allocating children.
  */
 typedef enum {
   GTK_WRAP_BOX_SPREAD_START = 0,

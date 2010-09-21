@@ -55,16 +55,21 @@ struct _GtkWrapBoxClass
 GType                 gtk_wrap_box_get_type                  (void) G_GNUC_CONST;
 
 GtkWidget            *gtk_wrap_box_new                       (GtkWrapAllocationMode mode,
-                                                              GtkWrapBoxSpreading   spreading,
+                                                              GtkWrapBoxSpreading   horizontal_spreading,
+							      GtkWrapBoxSpreading   vertical_spreading,
                                                               guint                 horizontal_spacing,
                                                               guint                 vertical_spacing);
 void                  gtk_wrap_box_set_allocation_mode       (GtkWrapBox           *box,
                                                               GtkWrapAllocationMode mode);
 GtkWrapAllocationMode gtk_wrap_box_get_allocation_mode       (GtkWrapBox           *box);
 
-void                  gtk_wrap_box_set_spreading             (GtkWrapBox           *box,
+void                  gtk_wrap_box_set_horizontal_spreading  (GtkWrapBox           *box,
                                                               GtkWrapBoxSpreading   spreading);
-GtkWrapBoxSpreading   gtk_wrap_box_get_spreading             (GtkWrapBox           *box);
+GtkWrapBoxSpreading   gtk_wrap_box_get_horizontal_spreading  (GtkWrapBox           *box);
+
+void                  gtk_wrap_box_set_vertical_spreading    (GtkWrapBox           *box,
+                                                              GtkWrapBoxSpreading   spreading);
+GtkWrapBoxSpreading   gtk_wrap_box_get_vertical_spreading    (GtkWrapBox           *box);
 
 void                  gtk_wrap_box_set_vertical_spacing      (GtkWrapBox           *box,
                                                               guint                 spacing);

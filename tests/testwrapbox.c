@@ -34,7 +34,7 @@ enum {
 #define INITIAL_HSPACING        2
 #define INITIAL_VSPACING        2
 
-static GtkWrapBox *the_wrapbox       = NULL;
+static GtkWrapBox    *the_wrapbox       = NULL;
 static gint           items_type       = SIMPLE_ITEMS;
 static GtkOrientation text_orientation = GTK_ORIENTATION_HORIZONTAL;
 static gboolean       items_xexpand    = TRUE;
@@ -165,12 +165,21 @@ mode_changed (GtkComboBox   *box,
 }
 
 static void
-spreading_changed (GtkComboBox   *box,
-                   GtkWrapBox    *wrapbox)
+horizontal_spreading_changed (GtkComboBox   *box,
+			      GtkWrapBox    *wrapbox)
 {
   GtkWrapBoxSpreading spreading = gtk_combo_box_get_active (box);
   
-  gtk_wrap_box_set_spreading (wrapbox, spreading);
+  gtk_wrap_box_set_horizontal_spreading (wrapbox, spreading);
+}
+
+static void
+vertical_spreading_changed (GtkComboBox   *box,
+			    GtkWrapBox    *wrapbox)
+{
+  GtkWrapBoxSpreading spreading = gtk_combo_box_get_active (box);
+  
+  gtk_wrap_box_set_vertical_spreading (wrapbox, spreading);
 }
 
 static void
@@ -260,8 +269,8 @@ create_window (void)
   gtk_widget_show (swindow);
   gtk_container_add (GTK_CONTAINER (frame), swindow);
 
-  wrapbox = gtk_wrap_box_new (INITIAL_ALLOCATION_MODE, INITIAL_SPREADING, 
-                              INITIAL_HSPACING, INITIAL_VSPACING);
+  wrapbox = gtk_wrap_box_new (INITIAL_ALLOCATION_MODE, INITIAL_SPREADING,
+			      INITIAL_SPREADING, INITIAL_HSPACING, INITIAL_VSPACING);
   the_wrapbox = (GtkWrapBox *)wrapbox;
   gtk_wrap_box_set_minimum_line_children (GTK_WRAP_BOX (wrapbox), INITIAL_MINIMUM_LENGTH);
   gtk_widget_show (wrapbox);
@@ -290,7 +299,7 @@ create_window (void)
   g_signal_connect (G_OBJECT (widget), "changed",
                     G_CALLBACK (mode_changed), wrapbox);
 
-  /* Add Spreading control */
+  /* Add Spreading controls */
   widget = gtk_combo_box_new_text ();
   gtk_combo_box_append_text (GTK_COMBO_BOX (widget), "Spread Start");
   gtk_combo_box_append_text (GTK_COMBO_BOX (widget), "Spread End");
@@ -299,11 +308,25 @@ create_window (void)
   gtk_combo_box_set_active (GTK_COMBO_BOX (widget), INITIAL_SPREADING);
   gtk_widget_show (widget);
 
-  gtk_widget_set_tooltip_text (widget, "Set the wrapbox spread mode");
+  gtk_widget_set_tooltip_text (widget, "Set the horizontal spreading mode");
   gtk_box_pack_start (GTK_BOX (wrapbox_cntl), widget, FALSE, FALSE, 0);
 
   g_signal_connect (G_OBJECT (widget), "changed",
-                    G_CALLBACK (spreading_changed), wrapbox);
+                    G_CALLBACK (horizontal_spreading_changed), wrapbox);
+
+  widget = gtk_combo_box_new_text ();
+  gtk_combo_box_append_text (GTK_COMBO_BOX (widget), "Spread Start");
+  gtk_combo_box_append_text (GTK_COMBO_BOX (widget), "Spread End");
+  gtk_combo_box_append_text (GTK_COMBO_BOX (widget), "Spread Even");
+  gtk_combo_box_append_text (GTK_COMBO_BOX (widget), "Spread Expand");
+  gtk_combo_box_set_active (GTK_COMBO_BOX (widget), INITIAL_SPREADING);
+  gtk_widget_show (widget);
+
+  gtk_widget_set_tooltip_text (widget, "Set the vertical spreading mode");
+  gtk_box_pack_start (GTK_BOX (wrapbox_cntl), widget, FALSE, FALSE, 0);
+
+  g_signal_connect (G_OBJECT (widget), "changed",
+                    G_CALLBACK (vertical_spreading_changed), wrapbox);
 
   /* Add Orientation control */
   widget = gtk_combo_box_new_text ();
