@@ -605,9 +605,9 @@ gail_text_cell_get_character_extents (AtkText          *text,
   gail_cell_parent_get_cell_area (GAIL_CELL_PARENT (parent), GAIL_CELL (text),
                                   &rendered_rect);
 
-  gtk_cell_size_request_get_size (GTK_CELL_SIZE_REQUEST (gtk_renderer),
-                                  widget,
-                                  &min_size, NULL);
+  gtk_cell_renderer_get_preferred_size (GTK_CELL_RENDERER (gtk_renderer),
+                                        widget,
+                                        &min_size, NULL);
 
   _gtk_cell_renderer_calc_offset (GTK_CELL_RENDERER (gtk_renderer), &rendered_rect,
                                   gtk_widget_get_direction (widget),
@@ -672,9 +672,9 @@ gail_text_cell_get_offset_at_point (AtkText          *text,
   gail_cell_parent_get_cell_area (GAIL_CELL_PARENT (parent), GAIL_CELL (text),
                                   &rendered_rect);
 
-  gtk_cell_size_request_get_size (GTK_CELL_SIZE_REQUEST (gtk_renderer),
-                                  widget,
-                                  &min_size, NULL);
+  gtk_cell_renderer_get_preferred_size (GTK_CELL_RENDERER (gtk_renderer),
+                                        widget,
+                                        &min_size, NULL);
   _gtk_cell_renderer_calc_offset (GTK_CELL_RENDERER (gtk_renderer), &rendered_rect,
                                   gtk_widget_get_direction (widget),
                                   min_size.width, min_size.height,

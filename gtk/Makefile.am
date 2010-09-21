@@ -179,7 +179,6 @@ gtk_public_h_sources =          \
 	gtkcellrendererspinner.h\
 	gtkcellrenderertext.h	\
 	gtkcellrenderertoggle.h	\
-	gtkcellsizerequest.h	\
 	gtkcellview.h		\
 	gtkcheckbutton.h	\
 	gtkcheckmenuitem.h	\
@@ -440,7 +439,6 @@ gtk_base_c_sources =            \
 	gtkcellrendererspinner.c\
 	gtkcellrenderertext.c	\
 	gtkcellrenderertoggle.c	\
-	gtkcellsizerequest.c	\
 	gtkcellview.c		\
 	gtkcheckbutton.c	\
 	gtkcheckmenuitem.c	\

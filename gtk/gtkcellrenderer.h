@@ -69,33 +69,52 @@ struct _GtkCellRendererClass
   GtkObjectClass parent_class;
 
   /* vtable - not signals */
-  void             (* get_size)      (GtkCellRenderer      *cell,
-				      GtkWidget            *widget,
-				      GdkRectangle         *cell_area,
-				      gint                 *x_offset,
-				      gint                 *y_offset,
-				      gint                 *width,
-				      gint                 *height);
-  void             (* render)        (GtkCellRenderer      *cell,
-                                      cairo_t              *cr,
-				      GtkWidget            *widget,
-				      const GdkRectangle   *background_area,
-				      const GdkRectangle   *cell_area,
-				      GtkCellRendererState  flags);
-  gboolean         (* activate)      (GtkCellRenderer      *cell,
-				      GdkEvent             *event,
-				      GtkWidget            *widget,
-				      const gchar          *path,
-				      GdkRectangle         *background_area,
-				      GdkRectangle         *cell_area,
-				      GtkCellRendererState  flags);
-  GtkCellEditable *(* start_editing) (GtkCellRenderer      *cell,
-				      GdkEvent             *event,
-				      GtkWidget            *widget,
-				      const gchar          *path,
-				      GdkRectangle         *background_area,
-				      GdkRectangle         *cell_area,
-				      GtkCellRendererState  flags);
+  GtkSizeRequestMode (* get_request_mode)                (GtkCellRenderer      *cell);
+  void               (* get_preferred_width)             (GtkCellRenderer      *cell,
+                                                          GtkWidget            *widget,
+                                                          gint                 *minimum_size,
+                                                          gint                 *natural_size);
+  void               (* get_preferred_height_for_width)  (GtkCellRenderer      *cell,
+                                                          GtkWidget            *widget,
+                                                          gint                  width,
+                                                          gint                 *minimum_height,
+                                                          gint                 *natural_height);
+  void               (* get_preferred_height)            (GtkCellRenderer      *cell,
+                                                          GtkWidget            *widget,
+                                                          gint                 *minimum_size,
+                                                          gint                 *natural_size);
+  void               (* get_preferred_width_for_height)  (GtkCellRenderer      *cell,
+                                                          GtkWidget            *widget,
+                                                          gint                  height,
+                                                          gint                 *minimum_width,
+                                                          gint                 *natural_width);
+  void               (* get_size)                        (GtkCellRenderer      *cell,
+                                                          GtkWidget            *widget,
+                                                          GdkRectangle         *cell_area,
+                                                          gint                 *x_offset,
+                                                          gint                 *y_offset,
+                                                          gint                 *width,
+                                                          gint                 *height);
+  void               (* render)                          (GtkCellRenderer      *cell,
+                                                          cairo_t              *cr,
+                                                          GtkWidget            *widget,
+                                                          const GdkRectangle   *background_area,
+                                                          const GdkRectangle   *cell_area,
+                                                          GtkCellRendererState  flags);
+  gboolean           (* activate)                        (GtkCellRenderer      *cell,
+                                                          GdkEvent             *event,
+                                                          GtkWidget            *widget,
+                                                          const gchar          *path,
+                                                          GdkRectangle         *background_area,
+                                                          GdkRectangle         *cell_area,
+                                                          GtkCellRendererState  flags);
+  GtkCellEditable *  (* start_editing)                   (GtkCellRenderer      *cell,
+                                                          GdkEvent             *event,
+                                                          GtkWidget            *widget,
+                                                          const gchar          *path,
+                                                          GdkRectangle         *background_area,
+                                                          GdkRectangle         *cell_area,
+                                                          GtkCellRendererState  flags);
 
   /* Signals */
   void (* editing_canceled) (GtkCellRenderer *cell);
@@ -108,8 +127,31 @@ struct _GtkCellRendererClass
   void (*_gtk_reserved2) (void);
 };
 
-GType            gtk_cell_renderer_get_type       (void) G_GNUC_CONST;
+GType              gtk_cell_renderer_get_type       (void) G_GNUC_CONST;
 
+GtkSizeRequestMode gtk_cell_renderer_get_request_mode               (GtkCellRenderer    *cell);
+void               gtk_cell_renderer_get_preferred_width            (GtkCellRenderer    *cell,
+                                                                     GtkWidget          *widget,
+                                                                     gint               *minimum_size,
+                                                                     gint               *natural_size);
+void               gtk_cell_renderer_get_preferred_height_for_width (GtkCellRenderer    *cell,
+                                                                     GtkWidget          *widget,
+                                                                     gint                width,
+                                                                     gint               *minimum_height,
+                                                                     gint               *natural_height);
+void               gtk_cell_renderer_get_preferred_height           (GtkCellRenderer    *cell,
+                                                                     GtkWidget          *widget,
+                                                                     gint               *minimum_size,
+                                                                     gint               *natural_size);
+void               gtk_cell_renderer_get_preferred_width_for_height (GtkCellRenderer    *cell,
+                                                                     GtkWidget          *widget,
+                                                                     gint                height,
+                                                                     gint               *minimum_width,
+                                                                     gint               *natural_width);
+void               gtk_cell_renderer_get_preferred_size             (GtkCellRenderer    *cell,
+                                                                     GtkWidget          *widget,
+                                                                     GtkRequisition     *minimum_size,
+                                                                     GtkRequisition     *natural_size);
 #ifndef GTK_DISABLE_DEPRECATED
 void             gtk_cell_renderer_get_size       (GtkCellRenderer      *cell,
 						   GtkWidget            *widget,

@@ -29,7 +29,6 @@
 #include "gtkcellrenderer.h"
 #include "gtkcellrenderertext.h"
 #include "gtkcellrendererpixbuf.h"
-#include "gtkcellsizerequest.h"
 #include "gtkmarshalers.h"
 #include "gtkbindings.h"
 #include "gtkdnd.h"
@@ -2969,9 +2968,9 @@ adjust_wrap_width (GtkIconView     *icon_view,
       pixbuf_info = g_list_nth_data (icon_view->priv->cell_list,
 				     icon_view->priv->pixbuf_cell);
 
-      gtk_cell_size_request_get_size (GTK_CELL_SIZE_REQUEST (pixbuf_info->cell),
-                                      GTK_WIDGET (icon_view),
-                                      &min_size, NULL);
+      gtk_cell_renderer_get_preferred_size (pixbuf_info->cell,
+                                            GTK_WIDGET (icon_view),
+                                            &min_size, NULL);
 
       if (icon_view->priv->item_width > 0)
 	item_width = icon_view->priv->item_width;
@@ -3031,9 +3030,9 @@ gtk_icon_view_calculate_item_size (GtkIconView     *icon_view,
       if (!gtk_cell_renderer_get_visible (info->cell))
 	continue;
 
-      gtk_cell_size_request_get_size (GTK_CELL_SIZE_REQUEST (info->cell),
-                                      GTK_WIDGET (icon_view),
-                                      &min_size, NULL);
+      gtk_cell_renderer_get_preferred_size (info->cell,
+                                            GTK_WIDGET (icon_view),
+                                            &min_size, NULL);
       item->box[info->position].width = min_size.width;
       item->box[info->position].height = min_size.height;
 
@@ -3113,9 +3112,9 @@ gtk_icon_view_calculate_item_size2 (GtkIconView     *icon_view,
 	    cell_area.height = max_height[i];
 	  }
 
-        gtk_cell_size_request_get_size (GTK_CELL_SIZE_REQUEST (info->cell),
-                                        GTK_WIDGET (icon_view),
-                                        &min_size, NULL);
+        gtk_cell_renderer_get_preferred_size (info->cell,
+                                              GTK_WIDGET (icon_view),
+                                              &min_size, NULL);
         item->box[info->position].width  = min_size.width;
         item->box[info->position].height = min_size.height;
 

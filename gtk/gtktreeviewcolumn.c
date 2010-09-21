@@ -23,7 +23,6 @@
 
 #include <string.h>
 
-#include "gtkcellsizerequest.h"
 #include "gtktreeview.h"
 #include "gtktreeprivate.h"
 #include "gtkcelllayout.h"
@@ -2641,9 +2640,9 @@ gtk_tree_view_column_cell_get_size (GtkTreeViewColumn  *tree_column,
       if (first_cell == FALSE && width)
 	*width += tree_column->spacing;
 
-      gtk_cell_size_request_get_size (GTK_CELL_SIZE_REQUEST (info->cell),
-                                      GTK_WIDGET (tree_column->tree_view),
-                                      &min_size, NULL);
+      gtk_cell_renderer_get_preferred_size (info->cell,
+                                            GTK_WIDGET (tree_column->tree_view),
+                                            &min_size, NULL);
 
       if (height)
 	* height = MAX (*height, min_size.height + focus_line_width * 2);
@@ -2838,9 +2837,9 @@ gtk_tree_view_column_cell_process_action (GtkTreeViewColumn  *tree_column,
           gint x_offset, y_offset;
           GtkRequisition min_size;
 
-          gtk_cell_size_request_get_size (GTK_CELL_SIZE_REQUEST (info->cell),
-                                          tree_column->tree_view,
-                                          &min_size, NULL);
+          gtk_cell_renderer_get_preferred_size (info->cell,
+                                                tree_column->tree_view,
+                                                &min_size, NULL);
 
           _gtk_cell_renderer_calc_offset (info->cell, &rtl_cell_area,
                                           gtk_widget_get_direction (tree_column->tree_view),
@@ -3006,9 +3005,9 @@ gtk_tree_view_column_cell_process_action (GtkTreeViewColumn  *tree_column,
           gint x_offset, y_offset;
           GtkRequisition min_size;
 
-          gtk_cell_size_request_get_size (GTK_CELL_SIZE_REQUEST (info->cell),
-                                          tree_column->tree_view,
-                                          &min_size, NULL);
+          gtk_cell_renderer_get_preferred_size (info->cell,
+                                                tree_column->tree_view,
+                                                &min_size, NULL);
 
           _gtk_cell_renderer_calc_offset (info->cell, &rtl_cell_area,
                                           gtk_widget_get_direction (tree_column->tree_view),

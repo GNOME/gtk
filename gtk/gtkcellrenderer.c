@@ -19,12 +19,12 @@
 
 #include "config.h"
 #include "gtkcellrenderer.h"
-#include "gtkcellsizerequest.h"
 #include "gtkintl.h"
 #include "gtkmarshalers.h"
 #include "gtkprivate.h"
 #include "gtktreeprivate.h"
 
+#define DEBUG_CELL_SIZE_REQUEST 0
 
 static void gtk_cell_renderer_init          (GtkCellRenderer      *cell);
 static void gtk_cell_renderer_class_init    (GtkCellRendererClass *class);
@@ -39,26 +39,25 @@ static void gtk_cell_renderer_set_property  (GObject              *object,
 static void set_cell_bg_color               (GtkCellRenderer      *cell,
 					     GdkColor             *color);
 
-/* Fallback GtkCellSizeRequest implementation to use remaining ->get_size() implementations */
-static void gtk_cell_renderer_cell_size_request_init   (GtkCellSizeRequestIface *iface);
-static void gtk_cell_renderer_get_width                (GtkCellSizeRequest      *cell,
-							GtkWidget               *widget,
-							gint                    *minimum_size,
-							gint                    *natural_size);
-static void gtk_cell_renderer_get_height               (GtkCellSizeRequest      *cell,
-							GtkWidget               *widget,
-							gint                    *minimum_size,
-							gint                    *natural_size);
-static void gtk_cell_renderer_get_height_for_width     (GtkCellSizeRequest      *cell,
-							GtkWidget               *widget,
-							gint                     width,
-							gint                    *minimum_height,
-							gint                    *natural_height);
-static void gtk_cell_renderer_get_width_for_height     (GtkCellSizeRequest      *cell,
-							GtkWidget               *widget,
-							gint                     height,
-							gint                    *minimum_width,
-							gint                    *natural_width);
+/* Fallback GtkCellRenderer    implementation to use remaining ->get_size() implementations */
+static void gtk_cell_renderer_real_get_preferred_width           (GtkCellRenderer         *cell,
+                                                                  GtkWidget               *widget,
+                                                                  gint                    *minimum_size,
+                                                                  gint                    *natural_size);
+static void gtk_cell_renderer_real_get_preferred_height          (GtkCellRenderer         *cell,
+                                                                  GtkWidget               *widget,
+                                                                  gint                    *minimum_size,
+                                                                  gint                    *natural_size);
+static void gtk_cell_renderer_real_get_preferred_height_for_width(GtkCellRenderer         *cell,
+                                                                  GtkWidget               *widget,
+                                                                  gint                     width,
+                                                                  gint                    *minimum_height,
+                                                                  gint                    *natural_height);
+static void gtk_cell_renderer_real_get_preferred_width_for_height(GtkCellRenderer         *cell,
+                                                                  GtkWidget               *widget,
+                                                                  gint                     height,
+                                                                  gint                    *minimum_width,
+                                                                  gint                    *natural_width);
 
 
 
@@ -114,47 +113,7 @@ enum {
 static guint  cell_renderer_signals[LAST_SIGNAL] = { 0 };
 
 
-/* Do a manual _get_type() here to avoid a deadlock implementing
- * the interface which we are a prerequisite of.
- */
-GType
-gtk_cell_renderer_get_type (void)
-{
-  static GType cell_renderer_type = 0;
-
-  if (G_UNLIKELY (cell_renderer_type == 0))
-    {
-      const GTypeInfo cell_renderer_info =
-      {
-	sizeof (GtkCellRendererClass),
-	NULL,		/* base_init */
-	NULL,           /* base_finalize */
-	(GClassInitFunc) gtk_cell_renderer_class_init,
-	NULL,		/* class_finalize */
-	NULL,		/* class_init */
-	sizeof (GtkCellRenderer),
-	0,		/* n_preallocs */
-	(GInstanceInitFunc) gtk_cell_renderer_init,
-	NULL,		/* value_table */
-      };
-
-      const GInterfaceInfo cell_size_request_info =
-      {
-	(GInterfaceInitFunc) gtk_cell_renderer_cell_size_request_init,
-	(GInterfaceFinalizeFunc) NULL,
-	NULL /* interface data */
-      };
-
-      cell_renderer_type = g_type_register_static (GTK_TYPE_OBJECT, "GtkCellRenderer",
-						   &cell_renderer_info, G_TYPE_FLAG_ABSTRACT);
-
-      g_type_add_interface_static (cell_renderer_type, GTK_TYPE_CELL_SIZE_REQUEST,
-                                   &cell_size_request_info) ;
-    }
-
-  return cell_renderer_type;
-}
-
+G_DEFINE_ABSTRACT_TYPE(GtkCellRenderer, gtk_cell_renderer, GTK_TYPE_OBJECT)
 
 static void
 gtk_cell_renderer_init (GtkCellRenderer *cell)
@@ -190,6 +149,10 @@ gtk_cell_renderer_class_init (GtkCellRendererClass *class)
 
   class->render = NULL;
   class->get_size = NULL;
+  class->get_preferred_width            = gtk_cell_renderer_real_get_preferred_width;
+  class->get_preferred_height           = gtk_cell_renderer_real_get_preferred_height;
+  class->get_preferred_width_for_height = gtk_cell_renderer_real_get_preferred_width_for_height;
+  class->get_preferred_height_for_width = gtk_cell_renderer_real_get_preferred_height_for_width;
 
   /**
    * GtkCellRenderer::editing-canceled:
@@ -582,7 +545,7 @@ set_cell_bg_color (GtkCellRenderer *cell,
  * in @x_offset and @y_offset are inclusive of the xpad and ypad properties.
  *
  *
- * Deprecated: 3.0: Use gtk_cell_size_request_get_size() instead.
+ * Deprecated: 3.0: Use gtk_cell_renderer_get_preferred_size() instead.
  **/
 void
 gtk_cell_renderer_get_size (GtkCellRenderer    *cell,
@@ -597,8 +560,7 @@ gtk_cell_renderer_get_size (GtkCellRenderer    *cell,
 
   g_return_if_fail (GTK_IS_CELL_RENDERER (cell));
 
-  gtk_cell_size_request_get_size (GTK_CELL_SIZE_REQUEST (cell),
-				  widget, &request, NULL);
+  gtk_cell_renderer_get_preferred_size (cell, widget, &request, NULL);
 
   if (width)
     *width = request.width;
@@ -1093,21 +1055,11 @@ gtk_cell_renderer_stop_editing (GtkCellRenderer *cell,
 }
 
 static void
-gtk_cell_renderer_cell_size_request_init (GtkCellSizeRequestIface *iface)
-{
-  iface->get_width     = gtk_cell_renderer_get_width;
-  iface->get_height    = gtk_cell_renderer_get_height;
-
-  iface->get_width_for_height  = gtk_cell_renderer_get_width_for_height;
-  iface->get_height_for_width  = gtk_cell_renderer_get_height_for_width;
-}
-
-static void
-gtk_cell_renderer_get_desired_size (GtkCellSizeRequest   *cell,
-				    GtkWidget         *widget,
-				    GtkOrientation     orientation,
-				    gint              *minimum_size,
-				    gint              *natural_size)
+gtk_cell_renderer_real_get_preferred_size (GtkCellRenderer   *cell,
+                                           GtkWidget         *widget,
+                                           GtkOrientation     orientation,
+                                           gint              *minimum_size,
+                                           gint              *natural_size)
 {
   GtkRequisition min_req;
 
@@ -1140,46 +1092,46 @@ gtk_cell_renderer_get_desired_size (GtkCellSizeRequest   *cell,
 }
 
 static void
-gtk_cell_renderer_get_width (GtkCellSizeRequest   *cell,
-			     GtkWidget         *widget,
-			     gint              *minimum_size,
-			     gint              *natural_size)
+gtk_cell_renderer_real_get_preferred_width (GtkCellRenderer *cell,
+                                            GtkWidget       *widget,
+                                            gint            *minimum_size,
+                                            gint            *natural_size)
 {
-  gtk_cell_renderer_get_desired_size (cell, widget, GTK_ORIENTATION_HORIZONTAL, 
-				      minimum_size, natural_size);
+  gtk_cell_renderer_real_get_preferred_size (cell, widget, GTK_ORIENTATION_HORIZONTAL, 
+                                             minimum_size, natural_size);
 }
 
 static void
-gtk_cell_renderer_get_height (GtkCellSizeRequest   *cell,
-			      GtkWidget         *widget,
-			      gint              *minimum_size,
-			      gint              *natural_size)
+gtk_cell_renderer_real_get_preferred_height (GtkCellRenderer *cell,
+                                             GtkWidget       *widget,
+                                             gint            *minimum_size,
+                                             gint            *natural_size)
 {
-  gtk_cell_renderer_get_desired_size (cell, widget, GTK_ORIENTATION_VERTICAL, 
-				      minimum_size, natural_size);
+  gtk_cell_renderer_real_get_preferred_size (cell, widget, GTK_ORIENTATION_VERTICAL, 
+                                             minimum_size, natural_size);
 }
 
 
 static void
-gtk_cell_renderer_get_height_for_width (GtkCellSizeRequest *cell,
-					GtkWidget       *widget,
-					gint             width,
-					gint            *minimum_height,
-					gint            *natural_height)
+gtk_cell_renderer_real_get_preferred_height_for_width (GtkCellRenderer *cell,
+                                                       GtkWidget       *widget,
+                                                       gint             width,
+                                                       gint            *minimum_height,
+                                                       gint            *natural_height)
 {
   /* Fall back on the height reported from ->get_size() */
-  gtk_cell_size_request_get_height (cell, widget, minimum_height, natural_height);
+  gtk_cell_renderer_get_preferred_height (cell, widget, minimum_height, natural_height);
 }
 
 static void
-gtk_cell_renderer_get_width_for_height (GtkCellSizeRequest *cell,
-					GtkWidget       *widget,
-					gint             height,
-					gint            *minimum_width,
-					gint            *natural_width)
+gtk_cell_renderer_real_get_preferred_width_for_height (GtkCellRenderer *cell,
+                                                       GtkWidget       *widget,
+                                                       gint             height,
+                                                       gint            *minimum_width,
+                                                       gint            *natural_width)
 {
   /* Fall back on the width reported from ->get_size() */
-  gtk_cell_size_request_get_width (cell, widget, minimum_width, natural_width);
+  gtk_cell_renderer_get_preferred_width (cell, widget, minimum_width, natural_width);
 }
 
 /* An internal convenience function for some containers to peek at the
@@ -1217,5 +1169,293 @@ _gtk_cell_renderer_calc_offset    (GtkCellRenderer      *cell,
       *y_offset = (priv->yalign *
 		   (cell_area->height - height));
       *y_offset = MAX (*y_offset, 0);
+    }
+}
+
+/**
+ * gtk_cell_renderer_get_request_mode:
+ * @cell: a #GtkCellRenderer    instance
+ *
+ * Gets whether the cell renderer prefers a height-for-width layout
+ * or a width-for-height layout.
+ *
+ * Returns: The #GtkSizeRequestMode preferred by this renderer.
+ *
+ * Since: 3.0
+ */
+GtkSizeRequestMode
+gtk_cell_renderer_get_request_mode (GtkCellRenderer *cell)
+{
+  GtkCellRendererClass *klass;
+
+  g_return_val_if_fail (GTK_IS_CELL_RENDERER (cell), FALSE);
+
+  klass = GTK_CELL_RENDERER_GET_CLASS (cell);
+  if (klass->get_request_mode)
+    return klass->get_request_mode (cell);
+
+  /* By default cell renderers are height-for-width. */
+  return GTK_SIZE_REQUEST_HEIGHT_FOR_WIDTH;
+}
+
+/**
+ * gtk_cell_renderer_get_preferred_width:
+ * @cell: a #GtkCellRenderer instance
+ * @widget: the #GtkWidget this cell will be rendering to
+ * @minimum_size: location to store the minimum size, or %NULL
+ * @natural_size: location to store the natural size, or %NULL
+ *
+ * Retreives a renderer's natural size when rendered to @widget.
+ *
+ * Since: 3.0
+ */
+void
+gtk_cell_renderer_get_preferred_width (GtkCellRenderer *cell,
+                                       GtkWidget       *widget,
+                                       gint            *minimum_size,
+                                       gint            *natural_size)
+{
+  GtkCellRendererClass *klass;
+  gint width;
+
+  g_return_if_fail (GTK_IS_CELL_RENDERER (cell));
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+  g_return_if_fail (NULL != minimum_size || NULL != natural_size);
+
+  gtk_cell_renderer_get_fixed_size (GTK_CELL_RENDERER (cell), &width, NULL);
+
+  if (width < 0)
+    {
+      klass = GTK_CELL_RENDERER_GET_CLASS (cell);
+      klass->get_preferred_width (cell, widget, minimum_size, natural_size);
+    }
+  else
+    {
+      if (minimum_size)
+	*minimum_size = width;
+      if (natural_size)
+	*natural_size = width;
+    }
+
+#if DEBUG_CELL_SIZE_REQUEST
+  g_message ("%s returning minimum width: %d and natural width: %d",
+	     G_OBJECT_TYPE_NAME (cell), 
+	     minimum_size ? *minimum_size : 20000, 
+	     natural_size ? *natural_size : 20000);
+#endif
+}
+
+
+/**
+ * gtk_cell_renderer_get_preferred_height:
+ * @cell: a #GtkCellRenderer instance
+ * @widget: the #GtkWidget this cell will be rendering to
+ * @minimum_size: location to store the minimum size, or %NULL
+ * @natural_size: location to store the natural size, or %NULL
+ *
+ * Retreives a renderer's natural size when rendered to @widget.
+ *
+ * Since: 3.0
+ */
+void
+gtk_cell_renderer_get_preferred_height (GtkCellRenderer *cell,
+                                        GtkWidget       *widget,
+                                        gint            *minimum_size,
+                                        gint            *natural_size)
+{
+  GtkCellRendererClass *klass;
+  gint height;
+
+  g_return_if_fail (GTK_IS_CELL_RENDERER (cell));
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+  g_return_if_fail (NULL != minimum_size || NULL != natural_size);
+
+  gtk_cell_renderer_get_fixed_size (GTK_CELL_RENDERER (cell), NULL, &height);
+
+  if (height < 0)
+    {
+      klass = GTK_CELL_RENDERER_GET_CLASS (cell);
+      klass->get_preferred_height (cell, widget, minimum_size, natural_size);
+    }
+  else
+    {
+      if (minimum_size)
+	*minimum_size = height;
+      if (natural_size)
+	*natural_size = height;
+    }
+
+#if DEBUG_CELL_SIZE_REQUEST
+  g_message ("%s returning minimum height: %d and natural height: %d",
+	     G_OBJECT_TYPE_NAME (cell), 
+	     minimum_size ? *minimum_size : 20000, 
+	     natural_size ? *natural_size : 20000);
+#endif
+}
+
+
+/**
+ * gtk_cell_renderer_get_preferred_width_for_height:
+ * @cell: a #GtkCellRenderer instance
+ * @widget: the #GtkWidget this cell will be rendering to
+ * @height: the size which is available for allocation
+ * @minimum_width: location for storing the minimum size, or %NULL
+ * @natural_width: location for storing the preferred size, or %NULL
+ *
+ * Retreives a cell renderers's minimum and natural width if it were rendered to 
+ * @widget with the specified @height.
+ *
+ * Since: 3.0
+ */
+void
+gtk_cell_renderer_get_preferred_width_for_height (GtkCellRenderer *cell,
+                                                  GtkWidget       *widget,
+                                                  gint             height,
+                                                  gint            *minimum_width,
+                                                  gint            *natural_width)
+{
+  GtkCellRendererClass *klass;
+  gint width;
+
+  g_return_if_fail (GTK_IS_CELL_RENDERER (cell));
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+  g_return_if_fail (NULL != minimum_width || NULL != natural_width);
+
+  gtk_cell_renderer_get_fixed_size (GTK_CELL_RENDERER (cell), &width, NULL);
+
+  if (width < 0)
+    {
+      klass = GTK_CELL_RENDERER_GET_CLASS (cell);
+      klass->get_preferred_width_for_height (cell, widget, height, minimum_width, natural_width);
+    }
+  else
+    {
+      if (minimum_width)
+	*minimum_width = width;
+      if (natural_width)
+	*natural_width = width;
+    }
+
+#if DEBUG_CELL_SIZE_REQUEST
+  g_message ("%s width for height: %d is minimum %d and natural: %d",
+	     G_OBJECT_TYPE_NAME (cell), height,
+	     minimum_width ? *minimum_width : 20000, 
+	     natural_width ? *natural_width : 20000);
+#endif
+}
+
+/**
+ * gtk_cell_renderer_get_preferred_height_for_width:
+ * @cell: a #GtkCellRenderer instance
+ * @widget: the #GtkWidget this cell will be rendering to
+ * @width: the size which is available for allocation
+ * @minimum_height: location for storing the minimum size, or %NULL
+ * @natural_height: location for storing the preferred size, or %NULL
+ *
+ * Retreives a cell renderers's minimum and natural height if it were rendered to 
+ * @widget with the specified @width.
+ *
+ * Since: 3.0
+ */
+void
+gtk_cell_renderer_get_preferred_height_for_width (GtkCellRenderer *cell,
+                                                  GtkWidget       *widget,
+                                                  gint             width,
+                                                  gint            *minimum_height,
+                                                  gint            *natural_height)
+{
+  GtkCellRendererClass *klass;
+  gint height;
+
+  g_return_if_fail (GTK_IS_CELL_RENDERER (cell));
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+  g_return_if_fail (NULL != minimum_height || NULL != natural_height);
+
+  gtk_cell_renderer_get_fixed_size (GTK_CELL_RENDERER (cell), NULL, &height);
+
+  if (height < 0)
+    {
+      klass = GTK_CELL_RENDERER_GET_CLASS (cell);
+      klass->get_preferred_height_for_width (cell, widget, width, minimum_height, natural_height);
+    }
+  else
+    {
+      if (minimum_height)
+	*minimum_height = height;
+      if (natural_height)
+	*natural_height = height;
+    }
+
+#if DEBUG_CELL_SIZE_REQUEST
+  g_message ("%s height for width: %d is minimum %d and natural: %d",
+	     G_OBJECT_TYPE_NAME (cell), width,
+	     minimum_height ? *minimum_height : 20000, 
+	     natural_height ? *natural_height : 20000);
+#endif
+}
+
+/**
+ * gtk_cell_renderer_get_preferred_size:
+ * @cell: a #GtkCellRenderer instance
+ * @widget: the #GtkWidget this cell will be rendering to
+ * @request_natural: Whether to base the contextual request off of the
+ *     base natural or the base minimum
+ * @minimum_size: (out) (allow-none): location for storing the minimum size, or %NULL
+ * @natural_size: (out) (allow-none): location for storing the natural size, or %NULL
+ *
+ * Retrieves the minimum and natural size of a cell taking
+ * into account the widget's preference for height-for-width management.
+ *
+ * If request_natural is specified, the non-contextual natural value will
+ * be used to make the contextual request; otherwise the minimum will be used.
+ *
+ * Since: 3.0
+ */
+void
+gtk_cell_renderer_get_preferred_size (GtkCellRenderer *cell,
+                                      GtkWidget       *widget,
+                                      GtkRequisition  *minimum_size,
+                                      GtkRequisition  *natural_size)
+{
+  gint min_width, nat_width;
+  gint min_height, nat_height;
+
+  g_return_if_fail (GTK_IS_CELL_RENDERER (cell));
+
+  if (gtk_cell_renderer_get_request_mode (cell) == GTK_SIZE_REQUEST_HEIGHT_FOR_WIDTH)
+    {
+      gtk_cell_renderer_get_preferred_width (cell, widget, &min_width, &nat_width);
+
+      if (minimum_size)
+	{
+	  minimum_size->width = min_width;
+	  gtk_cell_renderer_get_preferred_height_for_width (cell, widget, min_width,
+                                                            &minimum_size->height, NULL);
+	}
+
+      if (natural_size)
+	{
+	  natural_size->width = nat_width;
+	  gtk_cell_renderer_get_preferred_height_for_width (cell, widget, nat_width,
+                                                            NULL, &natural_size->height);
+	}
+    }
+  else /* GTK_SIZE_REQUEST_WIDTH_FOR_HEIGHT */
+    {
+      gtk_cell_renderer_get_preferred_height (cell, widget, &min_height, &nat_height);
+
+      if (minimum_size)
+	{
+	  minimum_size->height = min_height;
+	  gtk_cell_renderer_get_preferred_width_for_height (cell, widget, min_height,
+                                                            &minimum_size->width, NULL);
+	}
+
+      if (natural_size)
+	{
+	  natural_size->height = nat_height;
+	  gtk_cell_renderer_get_preferred_width_for_height (cell, widget, nat_height,
+                                                            NULL, &natural_size->width);
+	}
     }
 }

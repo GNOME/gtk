@@ -24,7 +24,6 @@
 #include "gtkintl.h"
 #include "gtkcellrenderertext.h"
 #include "gtkcellrendererpixbuf.h"
-#include "gtkcellsizerequest.h"
 #include "gtkprivate.h"
 #include "gtksizerequest.h"
 #include <gobject/gmarshal.h>
@@ -1218,8 +1217,8 @@ gtk_cell_view_get_preferred_width  (GtkWidget *widget,
 	      natural += cellview->priv->spacing;
 	    }
 
-	  gtk_cell_size_request_get_width (GTK_CELL_SIZE_REQUEST (info->cell),
-                                           GTK_WIDGET (cellview), &cell_min, &cell_nat);
+	  gtk_cell_renderer_get_preferred_width (info->cell,
+                                                 GTK_WIDGET (cellview), &cell_min, &cell_nat);
 	  
 	  info->requested_width = cell_min;
 	  info->natural_width   = cell_nat;
@@ -1294,10 +1293,10 @@ gtk_cell_view_get_preferred_height_for_width (GtkWidget *widget,
         {
 	  GtkRequestedSize requested;
 
-	  gtk_cell_size_request_get_width (GTK_CELL_SIZE_REQUEST (info->cell),
-                                           GTK_WIDGET (cellview), 
-                                           &requested.minimum_size, 
-                                           &requested.natural_size);
+	  gtk_cell_renderer_get_preferred_width (GTK_CELL_RENDERER (info->cell),
+                                                 GTK_WIDGET (cellview), 
+                                                 &requested.minimum_size, 
+                                                 &requested.natural_size);
 
 	  requested.data = info;
 	  g_array_append_val (array, requested);
@@ -1350,9 +1349,9 @@ gtk_cell_view_get_preferred_height_for_width (GtkWidget *widget,
 	    }
 
 	  /* Get the height for the real width of this cell */
-	  gtk_cell_size_request_get_height_for_width (GTK_CELL_SIZE_REQUEST (info->cell),
-                                                      GTK_WIDGET (widget),
-                                                      cell_width, &cell_minimum, &cell_natural);
+	  gtk_cell_renderer_get_preferred_height_for_width (GTK_CELL_RENDERER (info->cell),
+                                                            GTK_WIDGET (widget),
+                                                            cell_width, &cell_minimum, &cell_natural);
 
 	  minimum = MAX (minimum, cell_minimum);
 	  natural = MAX (natural, cell_natural);

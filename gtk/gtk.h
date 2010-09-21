@@ -63,7 +63,6 @@
 #include <gtk/gtkcellrendererspinner.h>
 #include <gtk/gtkcellrenderertext.h>
 #include <gtk/gtkcellrenderertoggle.h>
-#include <gtk/gtkcellsizerequest.h>
 #include <gtk/gtkcellview.h>
 #include <gtk/gtkcheckbutton.h>
 #include <gtk/gtkcheckmenuitem.h>

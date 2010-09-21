@@ -24,7 +24,6 @@
 #include <stdlib.h>
 
 #include "gtkeditable.h"
-#include "gtkcellsizerequest.h"
 #include "gtkentry.h"
 #include "gtksizerequest.h"
 #include "gtkmarshalers.h"
@@ -58,20 +57,19 @@ static GtkCellEditable *gtk_cell_renderer_text_start_editing (GtkCellRenderer   
 							      GdkRectangle         *cell_area,
 							      GtkCellRendererState  flags);
 
-static void       gtk_cell_renderer_text_cell_size_request_init (GtkCellSizeRequestIface  *iface);
-static void       gtk_cell_renderer_text_get_width              (GtkCellSizeRequest       *cell,
-							        GtkWidget                 *widget,
-							        gint                      *minimal_size,
-							        gint                      *natural_size);
-static void       gtk_cell_renderer_text_get_height            (GtkCellSizeRequest        *cell,
-							        GtkWidget                 *widget,
-							        gint                      *minimal_size,
-							        gint                      *natural_size);
-static void       gtk_cell_renderer_text_get_height_for_width  (GtkCellSizeRequest        *cell,
-								GtkWidget                 *widget,
-								gint                       width,
-								gint                      *minimum_height,
-								gint                      *natural_height);
+static void       gtk_cell_renderer_text_get_preferred_width            (GtkCellRenderer       *cell,
+                                                                         GtkWidget             *widget,
+                                                                         gint                  *minimal_size,
+                                                                         gint                  *natural_size);
+static void       gtk_cell_renderer_text_get_preferred_height           (GtkCellRenderer       *cell,
+                                                                         GtkWidget             *widget,
+                                                                         gint                  *minimal_size,
+                                                                         gint                  *natural_size);
+static void       gtk_cell_renderer_text_get_preferred_height_for_width (GtkCellRenderer       *cell,
+                                                                         GtkWidget             *widget,
+                                                                         gint                   width,
+                                                                         gint                  *minimum_height,
+                                                                         gint                  *natural_height);
 
 enum {
   EDITED,
@@ -183,9 +181,7 @@ struct _GtkCellRendererTextPrivate
   gulong entry_menu_popdown_timeout;
 };
 
-G_DEFINE_TYPE_WITH_CODE (GtkCellRendererText, gtk_cell_renderer_text, GTK_TYPE_CELL_RENDERER,
-                         G_IMPLEMENT_INTERFACE (GTK_TYPE_CELL_SIZE_REQUEST,
-                                                gtk_cell_renderer_text_cell_size_request_init))
+G_DEFINE_TYPE (GtkCellRendererText, gtk_cell_renderer_text, GTK_TYPE_CELL_RENDERER)
 
 static void
 gtk_cell_renderer_text_init (GtkCellRendererText *celltext)
@@ -225,6 +221,9 @@ gtk_cell_renderer_text_class_init (GtkCellRendererTextClass *class)
 
   cell_class->render = gtk_cell_renderer_text_render;
   cell_class->start_editing = gtk_cell_renderer_text_start_editing;
+  cell_class->get_preferred_width = gtk_cell_renderer_text_get_preferred_width;
+  cell_class->get_preferred_height = gtk_cell_renderer_text_get_preferred_height;
+  cell_class->get_preferred_height_for_width = gtk_cell_renderer_text_get_preferred_height_for_width;
 
   g_object_class_install_property (object_class,
                                    PROP_TEXT,
@@ -2012,18 +2011,10 @@ gtk_cell_renderer_text_set_fixed_height_from_font (GtkCellRendererText *renderer
 }
 
 static void
-gtk_cell_renderer_text_cell_size_request_init (GtkCellSizeRequestIface *iface)
-{
-  iface->get_width            = gtk_cell_renderer_text_get_width;
-  iface->get_height           = gtk_cell_renderer_text_get_height;
-  iface->get_height_for_width = gtk_cell_renderer_text_get_height_for_width;
-}
-
-static void
-gtk_cell_renderer_text_get_width (GtkCellSizeRequest *cell,
-				  GtkWidget          *widget,
-				  gint               *minimum_size,
-				  gint               *natural_size)
+gtk_cell_renderer_text_get_preferred_width (GtkCellRenderer *cell,
+                                            GtkWidget       *widget,
+                                            gint            *minimum_size,
+                                            gint            *natural_size)
 {
   GtkCellRendererTextPrivate    *priv;
   GtkCellRendererText        *celltext;
@@ -2049,7 +2040,7 @@ gtk_cell_renderer_text_get_width (GtkCellSizeRequest *cell,
 
   style = gtk_widget_get_style (widget);
 
-  gtk_cell_renderer_get_padding (GTK_CELL_RENDERER (cell), &xpad, NULL);
+  gtk_cell_renderer_get_padding (cell, &xpad, NULL);
 
   layout = get_layout (celltext, widget, NULL, 0);
 
@@ -2114,11 +2105,11 @@ gtk_cell_renderer_text_get_width (GtkCellSizeRequest *cell,
 }
 
 static void
-gtk_cell_renderer_text_get_height_for_width (GtkCellSizeRequest *cell,
-					     GtkWidget          *widget,
-					     gint                width,
-					     gint               *minimum_height,
-					     gint               *natural_height)
+gtk_cell_renderer_text_get_preferred_height_for_width (GtkCellRenderer *cell,
+                                                       GtkWidget       *widget,
+                                                       gint             width,
+                                                       gint            *minimum_height,
+                                                       gint            *natural_height)
 {
   GtkCellRendererTextPrivate    *priv;
   GtkCellRendererText        *celltext;
@@ -2129,7 +2120,7 @@ gtk_cell_renderer_text_get_height_for_width (GtkCellSizeRequest *cell,
   celltext = GTK_CELL_RENDERER_TEXT (cell);
   priv = celltext->priv;
 
-  gtk_cell_renderer_get_padding (GTK_CELL_RENDERER (cell), &xpad, &ypad);
+  gtk_cell_renderer_get_padding (cell, &xpad, &ypad);
 
   layout = get_layout (celltext, widget, NULL, 0);
 
@@ -2146,10 +2137,10 @@ gtk_cell_renderer_text_get_height_for_width (GtkCellSizeRequest *cell,
 }
 
 static void
-gtk_cell_renderer_text_get_height (GtkCellSizeRequest *cell,
-				   GtkWidget          *widget,
-				   gint               *minimum_size,
-				   gint               *natural_size)
+gtk_cell_renderer_text_get_preferred_height (GtkCellRenderer *cell,
+                                             GtkWidget       *widget,
+                                             gint            *minimum_size,
+                                             gint            *natural_size)
 {
   gint min_width;
 
@@ -2160,8 +2151,8 @@ gtk_cell_renderer_text_get_height (GtkCellSizeRequest *cell,
    * Note this code path wont be followed by GtkTreeView which is
    * height-for-width specifically.
    */
-  gtk_cell_size_request_get_width (cell, widget, &min_width, NULL);
-  gtk_cell_renderer_text_get_height_for_width (cell, widget, min_width,
-					       minimum_size, natural_size);
+  gtk_cell_renderer_get_preferred_width (cell, widget, &min_width, NULL);
+  gtk_cell_renderer_text_get_preferred_height_for_width (cell, widget, min_width,
+                                                         minimum_size, natural_size);
 }
 
