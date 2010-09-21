@@ -477,18 +477,6 @@ if test "$gtk_ok" = "yes"; then
 	    [Define if _NL_PAPER_WIDTH is available])
 fi
 
-# sigsetjmp is a macro on some platforms, so AC_CHECK_FUNCS is not reliable
-AC_MSG_CHECKING(for sigsetjmp)
-AC_TRY_LINK([#include <setjmp.h>], [
-sigjmp_buf env;
-sigsetjmp(env, 0);
-], gtk_ok=yes, gtk_ok=no)
-AC_MSG_RESULT($gtk_ok)
-if test "$gtk_ok" = "yes"; then
-  AC_DEFINE(HAVE_SIGSETJMP, 1,
-            [Define to 1 if sigsetjmp is available])
-fi
-
 # i18n stuff
 ALL_LINGUAS="`grep -v '^#' "$srcdir/po/LINGUAS" | tr '\n' ' '`"
 AM_GLIB_GNU_GETTEXT
