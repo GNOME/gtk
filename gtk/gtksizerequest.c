@@ -144,29 +144,67 @@ gtk_size_request_default_init (GtkSizeRequestInterface *iface)
  * the Clutter toolkit.
  */
 static gboolean
-get_cached_size (gint           for_size,
-		 SizeRequest   *cached_sizes,
-		 SizeRequest  **result)
+get_cached_size (SizeRequestCache  *cache,
+		 GtkSizeGroupMode   orientation,
+		 gint               for_size,
+		 SizeRequest      **result)
 {
-  guint i;
+  guint i, n_sizes;
+  SizeRequest  *cached_sizes;
 
-  *result = &cached_sizes[0];
-
-  for (i = 0; i < GTK_SIZE_REQUEST_CACHED_SIZES; i++)
+  if (orientation == GTK_SIZE_GROUP_HORIZONTAL)
     {
-      SizeRequest *cs;
+      cached_sizes = cache->widths;
+      n_sizes = cache->cached_widths;
+    }
+  else
+    {
+      cached_sizes = cache->heights;
+      n_sizes = cache->cached_widths;
+    }
 
-      cs = &cached_sizes[i];
+  /* Search for an already cached size */
+  for (i = 0; i < n_sizes; i++)
+    {
+      if (cached_sizes[i].for_size == for_size)
+	{
+	  *result = &cached_sizes[i];
+	  return TRUE;
+	}
+    }
 
-      if (cs->age > 0 && cs->for_size == for_size)
-        {
-          *result = cs;
-          return TRUE;
-        }
-      else if (cs->age < (*result)->age)
-        {
-          *result = cs;
-        }
+  /* If not found, pull a new size from the cache, the returned size cache
+   * will immediately be used to cache the new computed size so we go ahead
+   * and increment the last_cached_width/height right away */
+  if (orientation == GTK_SIZE_GROUP_HORIZONTAL)
+    {
+      if (cache->cached_widths < GTK_SIZE_REQUEST_CACHED_SIZES)
+	{
+	  cache->cached_widths++;
+	  cache->last_cached_width = cache->cached_widths - 1;
+	}
+      else
+	{
+	  if (++cache->last_cached_width == GTK_SIZE_REQUEST_CACHED_SIZES)
+	    cache->last_cached_width = 0;
+	}
+
+      *result = &cache->widths[cache->last_cached_width];
+    }
+  else /* GTK_SIZE_GROUP_VERTICAL */
+    {
+      if (cache->cached_heights < GTK_SIZE_REQUEST_CACHED_SIZES)
+	{
+	  cache->cached_heights++;
+	  cache->last_cached_height = cache->cached_heights - 1;
+	}
+      else
+	{
+	  if (++cache->last_cached_height == GTK_SIZE_REQUEST_CACHED_SIZES)
+	    cache->last_cached_height = 0;
+	}
+
+      *result = &cache->heights[cache->last_cached_height];
     }
 
   return FALSE;
@@ -257,11 +295,12 @@ compute_size_for_orientation (GtkSizeRequest    *request,
       cached_size = &cache->widths[0];
 
       if (!GTK_WIDGET_WIDTH_REQUEST_NEEDED (request))
-        found_in_cache = get_cached_size (for_size, cache->widths, &cached_size);
+        found_in_cache = get_cached_size (cache, orientation, for_size, &cached_size);
       else
         {
           memset (cache->widths, 0, GTK_SIZE_REQUEST_CACHED_SIZES * sizeof (SizeRequest));
-          cache->cached_width_age = 1;
+          cache->cached_widths = 1;
+          cache->last_cached_width = 0;
         }
     }
   else
@@ -269,11 +308,12 @@ compute_size_for_orientation (GtkSizeRequest    *request,
       cached_size = &cache->heights[0];
 
       if (!GTK_WIDGET_HEIGHT_REQUEST_NEEDED (request))
-        found_in_cache = get_cached_size (for_size, cache->heights, &cached_size);
+        found_in_cache = get_cached_size (cache, orientation, for_size, &cached_size);
       else
         {
           memset (cache->heights, 0, GTK_SIZE_REQUEST_CACHED_SIZES * sizeof (SizeRequest));
-          cache->cached_height_age = 1;
+          cache->cached_heights = 1;
+          cache->last_cached_height = 0;
         }
     }
 
@@ -326,19 +366,9 @@ compute_size_for_orientation (GtkSizeRequest    *request,
       cached_size->for_size     = for_size;
 
       if (orientation == GTK_SIZE_GROUP_HORIZONTAL)
-        {
-          cached_size->age = cache->cached_width_age;
-          cache->cached_width_age++;
-
-          GTK_PRIVATE_UNSET_FLAG (request, GTK_WIDTH_REQUEST_NEEDED);
-        }
+	GTK_PRIVATE_UNSET_FLAG (request, GTK_WIDTH_REQUEST_NEEDED);
       else
-        {
-          cached_size->age = cache->cached_height_age;
-          cache->cached_height_age++;
-
-          GTK_PRIVATE_UNSET_FLAG (request, GTK_HEIGHT_REQUEST_NEEDED);
-        }
+	GTK_PRIVATE_UNSET_FLAG (request, GTK_HEIGHT_REQUEST_NEEDED);
 
       adjusted_min = cached_size->minimum_size;
       adjusted_natural = cached_size->natural_size;

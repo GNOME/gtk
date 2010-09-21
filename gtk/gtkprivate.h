@@ -117,12 +117,13 @@ gboolean _gtk_fnmatch (const char *pattern,
 
 /* With GtkSizeRequest, a widget may be requested
  * its width for 2 or maximum 3 heights in one resize
+ * (Note this define is limited by the bitfield sizes
+ * defined on the SizeRequestCache structure).
  */
 #define GTK_SIZE_REQUEST_CACHED_SIZES 3
 
 typedef struct
 {
-  guint  age;
   gint   for_size;
   gint   minimum_size;
   gint   natural_size;
@@ -131,8 +132,10 @@ typedef struct
 typedef struct {
   SizeRequest widths[GTK_SIZE_REQUEST_CACHED_SIZES];
   SizeRequest heights[GTK_SIZE_REQUEST_CACHED_SIZES];
-  guint8      cached_width_age;
-  guint8      cached_height_age;
+  guint       cached_widths : 2;
+  guint       cached_heights : 2;
+  guint       last_cached_width : 2;
+  guint       last_cached_height : 2;
 } SizeRequestCache;
 
 
