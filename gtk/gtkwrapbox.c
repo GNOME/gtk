@@ -878,12 +878,12 @@ fit_aligned_item_requests (GtkWrapBox       *box,
                            gint              n_children)
 {
   GtkRequestedSize  *sizes, *try_sizes;
-  gint               natural_line_size, try_line_size, try_length;
+  gint               try_line_size, try_length;
 
   sizes = g_new0 (GtkRequestedSize, *line_length);
 
   /* get the sizes for the initial guess */
-  try_line_size = natural_line_size = 
+  try_line_size = 
     gather_aligned_item_requests (box, orientation, *line_length, item_spacing, n_children, sizes);
 
   /* Try columnizing the whole thing and adding an item to the end of the line;
@@ -894,10 +894,8 @@ fit_aligned_item_requests (GtkWrapBox       *box,
       try_line_size = gather_aligned_item_requests (box, orientation, try_length, item_spacing, 
                                                     n_children, try_sizes);
 
-      if (try_line_size < avail_size)
+      if (try_line_size <= avail_size)
         {
-          natural_line_size = try_line_size;
-          
           *line_length = try_length;
 
           g_free (sizes);
@@ -932,7 +930,7 @@ gtk_wrap_box_size_allocate (GtkWidget     *widget,
 
   gtk_widget_set_allocation (widget, allocation);
 
-  min_items    = MAX (1, priv->minimum_line_children);
+  min_items = MAX (1, priv->minimum_line_children);
 
   if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
     {
@@ -1566,7 +1564,7 @@ get_largest_line_length (GtkWrapBox      *box,
                          gint            *nat_size)
 {
   GtkWrapBoxPrivate *priv = box->priv;
-  GList             *list;
+  GList             *list, *l;
   gint               max_min_size = 0;
   gint               max_nat_size = 0;
   gint               spacing;
@@ -1580,14 +1578,13 @@ get_largest_line_length (GtkWrapBox      *box,
    */
   for (list = priv->children; list; list = list->next)
     {
-      GList *l;
       gint   line_min = 0;
       gint   line_nat = 0;
       gint   i;
 
       for (l = list, i = 0; l && i < line_length; l = l->next)
         {
-          GtkWrapBoxChild *child = list->data;
+          GtkWrapBoxChild *child = l->data;
           gint             child_min, child_nat;
 
           if (!gtk_widget_get_visible (child->widget))
@@ -1600,12 +1597,6 @@ get_largest_line_length (GtkWrapBox      *box,
             gtk_size_request_get_height (GTK_SIZE_REQUEST (child->widget),
                                          &child_min, &child_nat);
 
-          if (i > 0)
-            {
-              line_min += spacing;
-              line_nat += spacing;
-            }
-
           line_min += child_min;
           line_nat += child_nat;
 
@@ -1615,6 +1606,77 @@ get_largest_line_length (GtkWrapBox      *box,
       max_min_size = MAX (max_min_size, line_min);
       max_nat_size = MAX (max_nat_size, line_nat);
     }
+
+  max_min_size += (line_length - 1) * spacing;
+  max_nat_size += (line_length - 1) * spacing;
+
+  if (min_size)
+    *min_size = max_min_size;
+
+  if (nat_size)
+    *nat_size = max_nat_size;
+}
+
+/* Gets the largest minimum and natural length of
+ * 'line_length' consecutive items when aligned into rows/columns */
+static void
+get_largest_aligned_line_length (GtkWrapBox      *box,
+				 GtkOrientation   orientation,
+				 gint             line_length,
+				 gint            *min_size,
+				 gint            *nat_size)
+{
+  GtkWrapBoxPrivate *priv = box->priv;
+  GList             *list;
+  gint               max_min_size = 0;
+  gint               max_nat_size = 0;
+  gint               spacing, i;
+  GtkRequestedSize  *aligned_item_sizes;
+
+  if (orientation == GTK_ORIENTATION_HORIZONTAL)
+    spacing = priv->horizontal_spacing;
+  else
+    spacing = priv->vertical_spacing;
+
+  aligned_item_sizes = g_new0 (GtkRequestedSize, line_length);
+
+  /* Get the largest sizes of each index in the line.
+   */
+  for (list = priv->children, i = 0; list; list = list->next)
+    {
+      GtkWrapBoxChild *child = list->data;
+      gint             child_min, child_nat;
+      
+      if (!gtk_widget_get_visible (child->widget))
+	continue;
+
+      if (orientation == GTK_ORIENTATION_HORIZONTAL)
+	gtk_size_request_get_width (GTK_SIZE_REQUEST (child->widget),
+				    &child_min, &child_nat);
+      else /* GTK_ORIENTATION_VERTICAL */
+	gtk_size_request_get_height (GTK_SIZE_REQUEST (child->widget),
+				     &child_min, &child_nat);
+
+      aligned_item_sizes[i % line_length].minimum_size = 
+	MAX (aligned_item_sizes[i % line_length].minimum_size, child_min);
+
+      aligned_item_sizes[i % line_length].natural_size = 
+	MAX (aligned_item_sizes[i % line_length].natural_size, child_nat);
+
+      i++;
+    }
+
+  /* Add up the largest indexes */
+  for (i = 0; i < line_length; i++)
+    {
+      max_min_size += aligned_item_sizes[i].minimum_size;
+      max_nat_size += aligned_item_sizes[i].natural_size;
+    }
+
+  g_free (aligned_item_sizes);
+
+  max_min_size += (line_length - 1) * spacing;
+  max_nat_size += (line_length - 1) * spacing;
 
   if (min_size)
     *min_size = max_min_size;
@@ -1635,16 +1697,19 @@ gtk_wrap_box_get_width (GtkSizeRequest      *widget,
   gint               min_items, nat_items;
   gint               min_width, nat_width;
 
-  min_items = MAX (1,         priv->minimum_line_children);
+  min_items = MAX (1, priv->minimum_line_children);
   nat_items = MAX (min_items, priv->natural_line_children);
 
   if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
     {
       min_width    = nat_width = 0;
 
-      if (priv->mode == GTK_WRAP_ALLOCATE_FREE)
+      if (priv->mode == GTK_WRAP_ALLOCATE_FREE ||
+	  priv->mode == GTK_WRAP_ALLOCATE_ALIGNED)
         {
-          if (priv->minimum_line_children <= 1)
+	  /* In FREE and ALIGNED modes; horizontally oriented boxes
+	   * need enough width for the widest row */
+          if (min_items == 1)
             {
               get_average_item_size (box, GTK_ORIENTATION_HORIZONTAL,
                                      &min_item_width, &nat_item_width);
@@ -1652,7 +1717,7 @@ gtk_wrap_box_get_width (GtkSizeRequest      *widget,
               min_width += min_item_width;
               nat_width += nat_item_width;
             }
-          else
+          else if (priv->mode == GTK_WRAP_ALLOCATE_FREE)
             {
               gint min_line_length, nat_line_length;
 
@@ -1666,8 +1731,22 @@ gtk_wrap_box_get_width (GtkSizeRequest      *widget,
               min_width += min_line_length;
               nat_width += nat_line_length;
             }
+	  else /* GTK_WRAP_MODE_ALIGNED */
+	    {
+              gint min_line_length, nat_line_length;
+
+              get_largest_aligned_line_length (box, GTK_ORIENTATION_HORIZONTAL, min_items,
+					       &min_line_length, &nat_line_length);
+
+              if (nat_items > min_items)
+                get_largest_aligned_line_length (box, GTK_ORIENTATION_HORIZONTAL, nat_items,
+						 NULL, &nat_line_length);
+
+              min_width += min_line_length;
+              nat_width += nat_line_length;
+	    }
         }
-      else /* In ALIGNED or HOMOGENEOUS modes; horizontally oriented boxs
+      else /* In HOMOGENEOUS mode; horizontally oriented boxs
             * give the same width to all children */
         {
           get_average_item_size (box, GTK_ORIENTATION_HORIZONTAL,
@@ -1708,7 +1787,7 @@ gtk_wrap_box_get_height (GtkSizeRequest      *widget,
   gint               min_items, nat_items;
   gint               min_height, nat_height;
 
-  min_items = MAX (1,         priv->minimum_line_children);
+  min_items = MAX (1, priv->minimum_line_children);
   nat_items = MAX (min_items, priv->natural_line_children);
 
   if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
@@ -1723,9 +1802,12 @@ gtk_wrap_box_get_height (GtkSizeRequest      *widget,
     {
       min_height   = nat_height = 0;
 
-      if (priv->mode == GTK_WRAP_ALLOCATE_FREE)
+      if (priv->mode == GTK_WRAP_ALLOCATE_FREE ||
+	  priv->mode == GTK_WRAP_ALLOCATE_ALIGNED)
         {
-          if (priv->minimum_line_children <= 1)
+	  /* In FREE and ALIGNED modes; vertically oriented boxes
+	   * need enough height for the tallest column */
+          if (min_items == 1)
             {
               get_average_item_size (box, GTK_ORIENTATION_VERTICAL,
                                      &min_item_height, &nat_item_height);
@@ -1733,7 +1815,7 @@ gtk_wrap_box_get_height (GtkSizeRequest      *widget,
               min_height += min_item_height;
               nat_height += nat_item_height;
             }
-          else
+          else if (priv->mode == GTK_WRAP_ALLOCATE_FREE)
             {
               gint min_line_length, nat_line_length;
 
@@ -1747,9 +1829,24 @@ gtk_wrap_box_get_height (GtkSizeRequest      *widget,
               min_height += min_line_length;
               nat_height += nat_line_length;
             }
+	  else /* GTK_WRAP_ALLOCATE_ALIGNED */
+	    {
+              gint min_line_length, nat_line_length;
+
+              get_largest_aligned_line_length (box, GTK_ORIENTATION_VERTICAL, min_items,
+					       &min_line_length, &nat_line_length);
+
+              if (nat_items > min_items)
+                get_largest_aligned_line_length (box, GTK_ORIENTATION_VERTICAL, nat_items,
+						 NULL, &nat_line_length);
+
+              min_height += min_line_length;
+              nat_height += nat_line_length;
+	    }
+
         }
-      else /* In ALIGNED or HOMOGENEOUS modes; horizontally oriented boxs
-            * give the same width to all children */
+      else /* In HOMOGENEOUS mode; vertically oriented boxs
+            * give the same height to all children */
         {
           get_average_item_size (box, GTK_ORIENTATION_VERTICAL,
                                  &min_item_height, &nat_item_height);
