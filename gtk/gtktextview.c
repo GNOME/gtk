@@ -4853,12 +4853,9 @@ gtk_text_view_draw (GtkWidget *widget,
                                      GTK_TEXT_WINDOW_TEXT);
   if (gtk_cairo_should_draw_window (cr, window))
     {
-      int x, y;
-
       DV(g_print (">Exposed ("G_STRLOC")\n"));
       cairo_save (cr);
-      gdk_window_get_position (window, &x, &y);
-      cairo_translate (cr, x, y);
+      gtk_cairo_transform_to_window (cr, widget, window);
       gtk_text_view_paint (widget, cr);
       cairo_restore (cr);
     }
