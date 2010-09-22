@@ -43,7 +43,9 @@ G_BEGIN_DECLS
 /* Returns a list of GdkDevice * */
 GList *    gdk_devices_list            (void);
 
+#ifndef GTK_DISABLE_DEPRECATED
 GdkDevice *gdk_device_get_core_pointer (void);
+#endif
 
 #endif /* GDK_MULTIHEAD_SAFE */
 
