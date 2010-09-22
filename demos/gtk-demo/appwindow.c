@@ -68,25 +68,6 @@ activate_radio_action (GtkAction *action, GtkRadioAction *current)
 }
 
 static void
-activate_email (GtkAboutDialog *about,
-		const gchar    *link,
-		gpointer        data)
-{
-  gchar *text;
-  text = g_strdup_printf ("send mail to %s", link);
-  g_print ("%s\n", text);
-  g_free (text);
-}
-
-static void
-activate_url (GtkAboutDialog *about,
-	      const gchar    *link,
-	      gpointer        data)
-{
-  g_print ("show url %s\n", link);
-}
-
-static void
 about_cb (GtkAction *action,
 	  GtkWidget *window)
 {
@@ -120,8 +101,6 @@ about_cb (GtkAction *action,
       g_object_unref (pixbuf);
     }
 
-  gtk_about_dialog_set_email_hook (activate_email, NULL, NULL);
-  gtk_about_dialog_set_url_hook (activate_url, NULL, NULL);
   gtk_show_about_dialog (GTK_WINDOW (window),
 			 "program-name", "GTK+ Code Demos",
 			 "version", g_strdup_printf ("%s,\nRunning against GTK+ %d.%d.%d",
