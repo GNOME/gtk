@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.gtk-2-18.gu\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk%2b&component=general\n"
-"POT-Creation-Date: 2010-03-22 07:18+0000\n"
-"PO-Revision-Date: 2010-03-22 13:03+0530\n"
+"POT-Creation-Date: 2010-09-12 09:30+0000\n"
+"PO-Revision-Date: 2010-09-22 17:01+0530\n"
 "Last-Translator: Sweta Kothari <swkothar@redhat.com>\n"
 "Language-Team: Gujarati\n"
 "MIME-Version: 1.0\n"
@@ -423,6 +423,13 @@ msgstr "ચિત્ર માટેનુ બંધારણ જાણીતુ
 #: ../gdk-pixbuf/gdk-pixdata.c:157 ../gdk-pixbuf/gdk-pixdata.c:488
 msgid "Image pixel data corrupt"
 msgstr "ચિત્ર માટેની પિક્સેલ માહિતી બગડેલી છે"
+
+#: ../gdk-pixbuf/gdk-pixdata.c:432
+#, c-format
+msgid "failed to allocate image buffer of %u byte"
+msgid_plural "failed to allocate image buffer of %u bytes"
+msgstr[0] ""
+msgstr[1] ""
 
 #: ../gdk-pixbuf/io-ani.c:244
 msgid "Unexpected icon chunk in animation"
@@ -1181,6 +1188,14 @@ msgstr "%s શરૂ કરી રહ્યા છે"
 #, c-format
 msgid "Opening %s"
 msgstr "'%s' ખોલી રહ્યા છે"
+
+#: ../gdk/x11/gdkapplaunchcontext-x11.c:316
+#, fuzzy, c-format
+#| msgid "Opening %s"
+msgid "Opening %d Item"
+msgid_plural "Opening %d Items"
+msgstr[0] "'%s' ખોલી રહ્યા છે"
+msgstr[1] "'%s' ખોલી રહ્યા છે"
 
 #: ../gtk/gtkaboutdialog.c:182
 msgid "Could not show link"
@@ -3244,7 +3259,7 @@ msgstr "પાછળ કરો (_B)"
 #: ../gtk/gtkstock.c:329
 msgctxt "Stock label, navigation"
 msgid "_Down"
-msgstr "નીચે (_D)"
+msgstr "નીચે કરો (_D)"
 
 #. This is a navigation label as in "go forward"
 #: ../gtk/gtkstock.c:331
