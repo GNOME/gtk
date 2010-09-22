@@ -707,13 +707,13 @@ gtk_style_context_remove_provider (GtkStyleContext  *context,
     }
 }
 
-static void
-reset_toplevels (GdkScreen *screen)
+void
+gtk_style_context_reset_widgets (GdkScreen *screen)
 {
   GList *list, *toplevels;
 
   toplevels = gtk_window_list_toplevels ();
-  g_list_foreach (toplevels, (GFunc)g_object_ref, NULL);
+  g_list_foreach (toplevels, (GFunc) g_object_ref, NULL);
 
   for (list = toplevels; list; list = list->next)
     {
@@ -745,7 +745,7 @@ gtk_style_context_add_provider_for_screen (GdkScreen        *screen,
   if (list != providers)
     g_object_set_qdata (G_OBJECT (screen), provider_list_quark, list);
 
-  reset_toplevels (screen);
+  gtk_style_context_reset_widgets (screen);
 }
 
 void
@@ -767,7 +767,7 @@ gtk_style_context_remove_provider_for_screen (GdkScreen        *screen,
       if (list != providers)
         g_object_set_qdata (G_OBJECT (screen), provider_list_quark, list);
 
-      reset_toplevels (screen);
+      gtk_style_context_reset_widgets (screen);
     }
 }
 

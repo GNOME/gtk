@@ -169,7 +169,7 @@ void gtk_style_context_state_transition_stop   (GtkStyleContext *context,
                                                 gpointer         identifier);
 
 void gtk_style_context_invalidate (GtkStyleContext *context);
-
+void gtk_style_context_reset_widgets (GdkScreen *screen);
 
 /* Paint methods */
 void gtk_render_check (GtkStyleContext *context,
