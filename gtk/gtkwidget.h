@@ -979,6 +979,9 @@ gboolean   gtk_widget_get_has_tooltip       (GtkWidget   *widget);
 
 gboolean   gtk_cairo_should_draw_window     (cairo_t     *cr,
                                              GdkWindow   *window);
+void       gtk_cairo_transform_to_window    (cairo_t     *cr,
+                                             GtkWidget   *widget,
+                                             GdkWindow   *window);
 
 GType           gtk_requisition_get_type (void) G_GNUC_CONST;
 GtkRequisition *gtk_requisition_new      (void) G_GNUC_MALLOC;

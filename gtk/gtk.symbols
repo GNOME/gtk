@@ -4237,6 +4237,7 @@ gtk_widget_get_tooltip_markup
 gtk_widget_get_tooltip_text
 gtk_widget_get_tooltip_window
 gtk_widget_get_toplevel
+gtk_cairo_transform_to_window
 gtk_widget_get_type G_GNUC_CONST
 gtk_widget_get_visible
 gtk_widget_get_visual

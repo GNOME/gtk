@@ -5246,6 +5246,77 @@ gtk_widget_event (GtkWidget *widget,
   return gtk_widget_event_internal (widget, event);
 }
 
+/* Returns TRUE if a translation should be done */
+static gboolean
+gtk_widget_get_translation_to_window (GtkWidget      *widget,
+                                      GdkWindow      *window,
+                                      int            *x,
+                                      int            *y)
+{
+  GdkWindow *w, *widget_window;
+
+  if (!gtk_widget_get_has_window (widget))
+    {
+      *x = -widget->priv->allocation.x;
+      *y = -widget->priv->allocation.y;
+    }
+  else
+    {
+      *x = 0;
+      *y = 0;
+    }
+
+  widget_window = gtk_widget_get_window (widget);
+
+  for (w = window; w && w != widget_window; w = gdk_window_get_parent (w))
+    {
+      int wx, wy;
+      gdk_window_get_position (w, &wx, &wy);
+      *x += wx;
+      *y += wy;
+    }
+
+  if (w == NULL) 
+    { 
+      *x = 0;
+      *y = 0;
+      return FALSE;
+    }
+
+  return TRUE;
+}
+
+
+/**
+ * gtk_cairo_transform_to_window:
+ * @cr: the cairo context to transform
+ * @widget: the widget the context is currently centered for
+ * @window: the window to transform the context to
+ *
+ * Transforms the given cairo context @cr that from @widget-relative
+ * coordinates to @window-relative coordinates.
+ * If the @widget's window is not an ancestor of @window, no
+ * modification will be applied.
+ *
+ * This is the inverse to the transformation GTK applies when
+ * preparing an expose event to be emitted with the GtkWidget::draw
+ * signal. It is intended to help porting multiwindow widgets from
+ * GTK 2 to the rendering architecture of GTK 3.
+ **/
+void
+gtk_cairo_transform_to_window (cairo_t   *cr,
+                               GtkWidget *widget,
+                               GdkWindow *window)
+{
+  int x, y;
+
+  g_return_if_fail (cr != NULL);
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+  g_return_if_fail (GDK_IS_WINDOW (window));
+
+  if (gtk_widget_get_translation_to_window (widget, window, &x, &y))
+    cairo_translate (cr, x, y);
+}
 
 /**
  * gtk_widget_send_expose:
@@ -5270,10 +5341,10 @@ gint
 gtk_widget_send_expose (GtkWidget *widget,
 			GdkEvent  *event)
 {
-  GdkWindow *window, *w;
   gboolean result = FALSE;
   cairo_t *cr;
   int x, y;
+  gboolean do_clip;
 
   g_return_val_if_fail (GTK_IS_WIDGET (widget), TRUE);
   g_return_val_if_fail (gtk_widget_get_realized (widget), TRUE);
@@ -5286,32 +5357,12 @@ gtk_widget_send_expose (GtkWidget *widget,
   gdk_cairo_region (cr, event->expose.region);
   cairo_clip (cr);
 
-  if (!gtk_widget_get_has_window (widget))
-    {
-      x = widget->priv->allocation.x;
-      y = widget->priv->allocation.y;
-    }
-  else
-    {
-      x = 0;
-      y = 0;
-    }
+  do_clip = gtk_widget_get_translation_to_window (widget,
+                                                  event->expose.window,
+                                                  &x, &y);
+  cairo_translate (cr, -x, -y);
 
-  /* translate cairo context properly */
-  window = gtk_widget_get_window (widget);
-
-  for (w = event->expose.window; w && w != window; w = gdk_window_get_parent (w))
-    {
-      int wx, wy;
-      gdk_window_get_position (w, &wx, &wy);
-      x -= wx;
-      y -= wy;
-    }
-
-  if (w)
-    cairo_translate (cr, x, y);
-
-  _gtk_widget_draw_internal (widget, cr, w != NULL);
+  _gtk_widget_draw_internal (widget, cr, do_clip);
 
   /* unset here, so if someone keeps a reference to cr we
    * don't leak the window. */
