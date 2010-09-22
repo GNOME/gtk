@@ -207,6 +207,7 @@ static void    settings_update_font_options      (GtkSettings           *setting
 static gboolean settings_update_fontconfig       (GtkSettings           *settings);
 #endif
 static void    settings_update_color_scheme      (GtkSettings *settings);
+static void    settings_update_theme             (GtkSettings *settings);
 
 static void    merge_color_scheme                (GtkSettings           *settings, 
 						  const GValue          *value, 
@@ -1556,6 +1557,10 @@ gtk_settings_notify (GObject    *object,
       break;
     case PROP_COLOR_SCHEME:
       settings_update_color_scheme (settings);
+      gtk_style_context_reset_widgets (settings->screen);
+      break;
+    case PROP_THEME_NAME:
+      settings_update_theme (settings);
       break;
 #ifdef GDK_WINDOWING_X11
     case PROP_XFT_DPI:
@@ -2592,6 +2597,49 @@ settings_update_color_scheme (GtkSettings *settings)
           g_value_unset (&value);
         }
    }
+}
+
+static void
+settings_update_theme (GtkSettings *settings)
+{
+  static GQuark quark_theme_name = 0;
+  GtkCssProvider *provider, *new_provider = NULL;
+  gboolean prefer_dark_theme;
+  gchar *theme_name;
+
+  if (G_UNLIKELY (!quark_theme_name))
+    quark_theme_name = g_quark_from_static_string ("gtk-settings-theme-name");
+
+  provider = g_object_get_qdata (G_OBJECT (settings), quark_theme_name);
+
+  g_object_get (settings,
+                "gtk-theme-name", &theme_name,
+                "gtk-application-prefer-dark-theme", &prefer_dark_theme,
+                NULL);
+
+  if (theme_name && *theme_name)
+    {
+      gchar *variant = NULL;
+
+      if (prefer_dark_theme)
+        variant = "dark";
+
+      new_provider = gtk_css_provider_get_named (theme_name, variant);
+      g_free (theme_name);
+    }
+
+  if (new_provider != provider)
+    {
+      if (provider)
+        gtk_style_context_remove_provider_for_screen (settings->screen, provider);
+
+      if (new_provider)
+        gtk_style_context_add_provider_for_screen (settings->screen, new_provider,
+                                                   GTK_STYLE_PROVIDER_PRIORITY_SETTINGS + 1);
+
+      g_object_set_qdata_full (G_OBJECT (settings), quark_theme_name,
+                              new_provider, (GDestroyNotify) g_object_unref);
+    }
 }
 
 static gboolean
