@@ -1,5 +1,4 @@
 /*** BEGIN file-header ***/
-#undef GTK_DISABLE_DEPRECATED
 #include "gtk.h"
 #include "gtkprivate.h"
 
