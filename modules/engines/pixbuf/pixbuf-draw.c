@@ -23,8 +23,6 @@
 #include <math.h>
 #include <string.h>
 
-#undef GDK_DISABLE_DEPRECATED
-
 #include "pixbuf.h"
 #include "pixbuf-rc-style.h"
 #include "pixbuf-style.h"
