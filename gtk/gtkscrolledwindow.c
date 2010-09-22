@@ -259,7 +259,7 @@ gtk_scrolled_window_class_init (GtkScrolledWindowClass *class)
                                                       P_("Horizontal Scrollbar Policy"),
                                                       P_("When the horizontal scrollbar is displayed"),
 						      GTK_TYPE_POLICY_TYPE,
-						      GTK_POLICY_ALWAYS,
+						      GTK_POLICY_AUTOMATIC,
                                                       GTK_PARAM_READABLE | GTK_PARAM_WRITABLE));
   g_object_class_install_property (gobject_class,
                                    PROP_VSCROLLBAR_POLICY,
@@ -267,7 +267,7 @@ gtk_scrolled_window_class_init (GtkScrolledWindowClass *class)
                                                       P_("Vertical Scrollbar Policy"),
                                                       P_("When the vertical scrollbar is displayed"),
 						      GTK_TYPE_POLICY_TYPE,
-						      GTK_POLICY_ALWAYS,
+						      GTK_POLICY_AUTOMATIC,
                                                       GTK_PARAM_READABLE | GTK_PARAM_WRITABLE));
 
   g_object_class_install_property (gobject_class,
@@ -400,8 +400,8 @@ gtk_scrolled_window_init (GtkScrolledWindow *scrolled_window)
 
   priv->hscrollbar = NULL;
   priv->vscrollbar = NULL;
-  priv->hscrollbar_policy = GTK_POLICY_ALWAYS;
-  priv->vscrollbar_policy = GTK_POLICY_ALWAYS;
+  priv->hscrollbar_policy = GTK_POLICY_AUTOMATIC;
+  priv->vscrollbar_policy = GTK_POLICY_AUTOMATIC;
   priv->hscrollbar_visible = FALSE;
   priv->vscrollbar_visible = FALSE;
   priv->focus_out = FALSE;
