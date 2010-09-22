@@ -2772,7 +2772,7 @@ delete_outdated_error_traps (GdkDisplayX11 *display_x11)
       GdkErrorTrap *trap = tmp_list->data;
 
       if (trap->end_sequence != 0 &&
-          SEQUENCE_COMPARE (trap->end_sequence, <, processed_sequence))
+          SEQUENCE_COMPARE (trap->end_sequence, <=, processed_sequence))
         {
           GSList *free_me = tmp_list;
 
