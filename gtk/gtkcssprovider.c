@@ -2080,8 +2080,25 @@ gtk_css_provider_get_default (void)
   return provider;
 }
 
+static gchar *
+css_provider_get_theme_dir (void)
+{
+  const gchar *var;
+  gchar *path;
+
+  var = g_getenv ("GTK_DATA_PREFIX");
+
+  if (var)
+    path = g_build_filename (var, "share", "themes", NULL);
+  else
+    path = g_build_filename (GTK_DATA_PREFIX, "share", "themes", NULL);
+
+  return path;
+}
+
 GtkCssProvider *
-gtk_css_provider_get_named (const gchar *name)
+gtk_css_provider_get_named (const gchar *name,
+                            const gchar *variant)
 {
   static GHashTable *themes = NULL;
   GtkCssProvider *provider;
@@ -2093,9 +2110,60 @@ gtk_css_provider_get_named (const gchar *name)
 
   if (!provider)
     {
-      
+      const gchar *home_dir;
+      gchar *subpath, *path = NULL;
 
-      g_hash_table_insert (themes, g_strdup (name), provider);
+      if (variant)
+        subpath = g_strdup_printf ("gtk-%d.0" G_DIR_SEPARATOR_S "gtk-%s.css", GTK_MAJOR_VERSION, variant);
+      else
+        subpath = g_strdup_printf ("gtk-%d.0" G_DIR_SEPARATOR_S "gtk.css", GTK_MAJOR_VERSION);
+
+      /* First look in the users home directory
+       */
+      home_dir = g_get_home_dir ();
+      if (home_dir)
+        {
+          path = g_build_filename (home_dir, ".themes", name, subpath, NULL);
+
+          if (!g_file_test (path, G_FILE_TEST_EXISTS))
+            {
+              g_free (path);
+              path = NULL;
+            }
+        }
+
+      if (!path)
+        {
+          gchar *theme_dir = css_provider_get_theme_dir ();
+          path = g_build_filename (theme_dir, name, subpath, NULL);
+          g_free (theme_dir);
+
+          if (!g_file_test (path, G_FILE_TEST_EXISTS))
+            {
+              g_free (path);
+              path = NULL;
+            }
+        }
+
+      if (path)
+        {
+          GtkCssProvider *provider;
+          GError *error = NULL;
+
+          provider = gtk_css_provider_new ();
+          gtk_css_provider_load_from_path (provider, path, &error);
+
+          if (error)
+            {
+              g_warning ("Could not load named theme \"%s\": %s", name, error->message);
+              g_error_free (error);
+
+              g_object_unref (provider);
+              provider = NULL;
+            }
+          else
+            g_hash_table_insert (themes, g_strdup (name), provider);
+        }
     }
 
   return provider;

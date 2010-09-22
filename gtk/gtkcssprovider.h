@@ -62,6 +62,8 @@ gboolean         gtk_css_provider_load_from_path (GtkCssProvider  *css_provider,
 
 GtkCssProvider * gtk_css_provider_get_default (void);
 
+GtkCssProvider * gtk_css_provider_get_named (const gchar *name,
+                                             const gchar *variant);
 
 G_END_DECLS
 
