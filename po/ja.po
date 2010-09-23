@@ -13,10 +13,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: gtk+ master\n"
+"Project-Id-Version: gtk+ gtk-2-22\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk%"
 "2b&component=general\n"
-"POT-Creation-Date: 2010-09-19 15:42+0000\n"
+"POT-Creation-Date: 2010-09-23 15:06+0000\n"
 "PO-Revision-Date: 2010-09-12 19:02+0900\n"
 "Last-Translator: Takayuki KUSANO <AE5T-KSN@asahi-net.or.jp>\n"
 "Language-Team: Japanese <gnome-translation@gnome.gr.jp>\n"
@@ -3803,7 +3803,7 @@ msgstr "ROC 8k"
 #: ../gtk/updateiconcache.c:492 ../gtk/updateiconcache.c:552
 #, c-format
 msgid "different idatas found for symlinked '%s' and '%s'\n"
-msgstr "シンボリック・リンクの '%s' と '%s' で別の idata が見つかりました\n"
+msgstr "シンボリックリンクの '%s' と '%s' で別の idata が見つかりました\n"
 
 #: ../gtk/updateiconcache.c:1374
 #, c-format
