@@ -2986,14 +2986,10 @@ gtk_menu_draw (GtkWidget *widget,
   
   if (gtk_cairo_should_draw_window (cr, menu->bin_window))
     {
-      int xoff, yoff;
       gint y = -border.y + menu->scroll_offset;
       
       cairo_save (cr);
-      gdk_window_get_position (menu->view_window, &xoff, &yoff);
-      cairo_translate (cr, xoff, yoff);
-      gdk_window_get_position (menu->bin_window, &xoff, &yoff);
-      cairo_translate (cr, xoff, yoff);
+      gtk_cairo_transform_to_window (cr, widget, menu->bin_window);
 
       if (!menu->tearoff_active)
         {
