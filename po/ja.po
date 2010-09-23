@@ -16,8 +16,8 @@ msgstr ""
 "Project-Id-Version: gtk+ master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk%"
 "2b&component=general\n"
-"POT-Creation-Date: 2010-09-20 07:21+0000\n"
-"PO-Revision-Date: 2010-09-12 19:02+0900\n"
+"POT-Creation-Date: 2010-09-23 17:05+0000\n"
+"PO-Revision-Date: 2010-09-24 02:16+0900\n"
 "Last-Translator: Takayuki KUSANO <AE5T-KSN@asahi-net.or.jp>\n"
 "Language-Team: Japanese <gnome-translation@gnome.gr.jp>\n"
 "MIME-Version: 1.0\n"
@@ -337,52 +337,52 @@ msgstr "Xの呼び出しと同期する"
 #: ../gtk/gtkaboutdialog.c:124
 #, c-format
 msgid "This program comes with ABSOLUTELY NO WARRANTY; for details, visit %s"
-msgstr ""
+msgstr "このプログラムは「完全に無保証」です。詳細は %s を参照してください"
 
-#: ../gtk/gtkaboutdialog.c:264
-msgid "Could not show link"
-msgstr "リンクを表示できませんでした"
-
-#: ../gtk/gtkaboutdialog.c:390 ../gtk/gtkaboutdialog.c:2293
+#: ../gtk/gtkaboutdialog.c:362 ../gtk/gtkaboutdialog.c:2250
 msgid "License"
 msgstr "ライセンス"
 
-#: ../gtk/gtkaboutdialog.c:391
+#: ../gtk/gtkaboutdialog.c:363
 msgid "The license of the program"
 msgstr "プログラムのライセンス"
 
 #. Add the credits button
-#: ../gtk/gtkaboutdialog.c:685
+#: ../gtk/gtkaboutdialog.c:644
 msgid "C_redits"
 msgstr "クレジット(_R)"
 
 #. Add the license button
-#: ../gtk/gtkaboutdialog.c:699
+#: ../gtk/gtkaboutdialog.c:658
 msgid "_License"
 msgstr "ライセンス(_L)"
 
-#: ../gtk/gtkaboutdialog.c:964
+#: ../gtk/gtkaboutdialog.c:862
+msgid "Could not show link"
+msgstr "リンクを表示できませんでした"
+
+#: ../gtk/gtkaboutdialog.c:955
 #, c-format
 msgid "About %s"
 msgstr "%s について"
 
-#: ../gtk/gtkaboutdialog.c:2211
+#: ../gtk/gtkaboutdialog.c:2168
 msgid "Credits"
 msgstr "クレジット"
 
-#: ../gtk/gtkaboutdialog.c:2243
+#: ../gtk/gtkaboutdialog.c:2200
 msgid "Written by"
 msgstr "開発担当"
 
-#: ../gtk/gtkaboutdialog.c:2246
+#: ../gtk/gtkaboutdialog.c:2203
 msgid "Documented by"
 msgstr "ドキュメント担当"
 
-#: ../gtk/gtkaboutdialog.c:2258
+#: ../gtk/gtkaboutdialog.c:2215
 msgid "Translated by"
 msgstr "翻訳担当"
 
-#: ../gtk/gtkaboutdialog.c:2262
+#: ../gtk/gtkaboutdialog.c:2219
 msgid "Artwork by"
 msgstr "アートワーク担当"
 
@@ -622,9 +622,8 @@ msgid "_Saturation:"
 msgstr "彩度(_S):"
 
 #: ../gtk/gtkcolorsel.c:403
-#, fuzzy
 msgid "Intensity of the color."
-msgstr "色の透明度です"
+msgstr "色の強度(彩度)です。"
 
 #: ../gtk/gtkcolorsel.c:404
 msgid "_Value:"
@@ -795,24 +794,23 @@ msgstr "右側(_R):"
 msgid "Paper Margins"
 msgstr "用紙のマージン"
 
-#: ../gtk/gtkentry.c:8614 ../gtk/gtktextview.c:8265
+#: ../gtk/gtkentry.c:8615 ../gtk/gtktextview.c:8265
 msgid "Input _Methods"
 msgstr "入力メソッド(_M)"
 
-#: ../gtk/gtkentry.c:8628 ../gtk/gtktextview.c:8279
+#: ../gtk/gtkentry.c:8629 ../gtk/gtktextview.c:8279
 msgid "_Insert Unicode Control Character"
 msgstr "Unicode 制御文字の挿入(_I)"
 
-#: ../gtk/gtkentry.c:10027
-msgid "Caps Lock and Num Lock are on"
-msgstr ""
-
 #: ../gtk/gtkentry.c:10029
-#, fuzzy
-msgid "Num Lock is on"
-msgstr "Caps Lock が ON です"
+msgid "Caps Lock and Num Lock are on"
+msgstr "Caps Lock と Num Lock がオンになっています"
 
 #: ../gtk/gtkentry.c:10031
+msgid "Num Lock is on"
+msgstr "Num Lock が ON です"
+
+#: ../gtk/gtkentry.c:10033
 msgid "Caps Lock is on"
 msgstr "Caps Lock が ON です"
 
@@ -1221,12 +1219,12 @@ msgstr ""
 "次からコピーを取得できます:\n"
 "\t%s"
 
-#: ../gtk/gtkicontheme.c:1533
+#: ../gtk/gtkicontheme.c:1534
 #, c-format
 msgid "Icon '%s' not present in theme"
 msgstr "テーマの中にアイコン '%s' はありません"
 
-#: ../gtk/gtkicontheme.c:3045
+#: ../gtk/gtkicontheme.c:3047
 msgid "Failed to load icon"
 msgstr "アイコンの読み込みに失敗しました"
 
@@ -1260,11 +1258,11 @@ msgstr "リンクを開く(_O)"
 msgid "Copy _Link Address"
 msgstr "リンクのアドレスをコピー(_L)"
 
-#: ../gtk/gtklinkbutton.c:432
+#: ../gtk/gtklinkbutton.c:428
 msgid "Copy URL"
 msgstr "URL のコピー"
 
-#: ../gtk/gtklinkbutton.c:590
+#: ../gtk/gtklinkbutton.c:580
 msgid "Invalid URI"
 msgstr "URI が間違っています"
 
@@ -1395,7 +1393,7 @@ msgstr "zsh"
 msgid "Cannot end process with PID %d: %s"
 msgstr "PID %d のプロセスを終了できません: %s"
 
-#: ../gtk/gtknotebook.c:4710 ../gtk/gtknotebook.c:7268
+#: ../gtk/gtknotebook.c:4663 ../gtk/gtknotebook.c:7221
 #, c-format
 msgid "Page %u"
 msgstr "%u ページ"
@@ -1469,9 +1467,8 @@ msgid "Not available"
 msgstr "利用できません"
 
 #: ../gtk/gtkprinteroptionwidget.c:794
-#, fuzzy
 msgid "Select a folder"
-msgstr "ファイルの選択"
+msgstr "フォルダの選択"
 
 #: ../gtk/gtkprinteroptionwidget.c:813
 msgid "_Save in folder:"
@@ -2107,7 +2104,6 @@ msgid "_Cancel"
 msgstr "キャンセル(_C)"
 
 #: ../gtk/gtkstock.c:326
-#, fuzzy
 msgctxt "Stock label"
 msgid "_CD-ROM"
 msgstr "CD-ROM(_C)"
@@ -2168,7 +2164,6 @@ msgid "_Edit"
 msgstr "編集(_E)"
 
 #: ../gtk/gtkstock.c:338
-#, fuzzy
 msgctxt "Stock label"
 msgid "_File"
 msgstr "ファイル(_F)"
@@ -2247,7 +2242,6 @@ msgid "_Up"
 msgstr "上へ(_U)"
 
 #: ../gtk/gtkstock.c:360
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Hard Disk"
 msgstr "ハードディスク(_H)"
@@ -3611,7 +3605,7 @@ msgstr "ROC 8k"
 #: ../gtk/updateiconcache.c:492 ../gtk/updateiconcache.c:552
 #, c-format
 msgid "different idatas found for symlinked '%s' and '%s'\n"
-msgstr "シンボリック・リンクの '%s' と '%s' で別の idata が見つかりました\n"
+msgstr "シンボリックリンクの '%s' と '%s' で別の idata が見つかりました\n"
 
 #: ../gtk/updateiconcache.c:1374
 #, c-format
