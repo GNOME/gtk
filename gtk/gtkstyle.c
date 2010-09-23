@@ -1365,7 +1365,7 @@ gtk_style_real_set_background (GtkStyle    *style,
  * @source: the #GtkIconSource specifying the icon to render
  * @direction: a text direction
  * @state: a state
- * @size: (type int) the size to render the icon at. A size of
+ * @size: (type int): the size to render the icon at. A size of
  *     (GtkIconSize)-1 means render at the size of the source and
  *     don't scale.
  * @widget: (allow-none): the widget
