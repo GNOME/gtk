@@ -36,6 +36,16 @@ m4_define([pango_required_version], [1.20])
 m4_define([atk_required_version], [1.29.2])
 m4_define([cairo_required_version], [1.9.10])
 m4_define([gdk_pixbuf_required_version], [2.21.0])
+GLIB_REQUIRED_VERSION=glib_required_version
+PANGO_REQUIRED_VERSION=pango_required_version
+ATK_REQUIRED_VERSION=atk_required_version
+CAIRO_REQUIRED_VERSION=cairo_required_version
+GDK_PIXBUF_REQUIRED_VERSION=gdk_pixbuf_required_version
+AC_SUBST(GLIB_REQUIRED_VERSION)
+AC_SUBST(PANGO_REQUIRED_VERSION)
+AC_SUBST(ATK_REQUIRED_VERSION)
+AC_SUBST(CAIRO_REQUIRED_VERSION)
+AC_SUBST(GDK_PIXBUF_REQUIRED_VERSION)
 
 
 AC_INIT([gtk+], [gtk_version],
