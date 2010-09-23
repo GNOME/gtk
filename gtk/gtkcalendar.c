@@ -2315,7 +2315,7 @@ calendar_paint_header (GtkCalendar *calendar, cairo_t *cr)
   GtkAllocation allocation;
   GtkStyle *style;
   char buffer[255];
-  int x, y;
+  gint x, y;
   gint header_width;
   gint max_month_width;
   gint max_year_width;
@@ -2327,8 +2327,7 @@ calendar_paint_header (GtkCalendar *calendar, cairo_t *cr)
   gchar *str;
 
   cairo_save (cr);
-  gdk_window_get_position (priv->header_win, &x, &y);
-  cairo_translate (cr, x, y);
+  gtk_cairo_transform_to_window (cr, widget, priv->header_win);
 
   if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_LTR) 
     year_left = priv->year_before;
@@ -2435,11 +2434,9 @@ calendar_paint_day_names (GtkCalendar *calendar,
   gint focus_width;
   gint calendar_ysep = calendar_get_ysep (calendar);
   gint calendar_xsep = calendar_get_xsep (calendar);
-  int x, y;
 
   cairo_save (cr);
-  gdk_window_get_position (priv->day_name_win, &x, &y);
-  cairo_translate (cr, x, y);
+  gtk_cairo_transform_to_window (cr, widget, priv->day_name_win);
 
   gtk_widget_style_get (GTK_WIDGET (widget),
 			"focus-line-width", &focus_width,
@@ -2523,11 +2520,9 @@ calendar_paint_week_numbers (GtkCalendar *calendar,
   gint focus_padding;
   gint focus_width;
   gint calendar_xsep = calendar_get_xsep (calendar);
-  int x, y;
 
   cairo_save (cr);
-  gdk_window_get_position (priv->week_win, &x, &y);
-  cairo_translate (cr, x, y);
+  gtk_cairo_transform_to_window (cr, widget, priv->week_win);
 
   gtk_widget_style_get (GTK_WIDGET (widget),
 			"focus-line-width", &focus_width,
@@ -2833,11 +2828,12 @@ static void
 calendar_paint_main (GtkCalendar *calendar,
                      cairo_t     *cr)
 {
-  gint row, col, x, y;
+  gint row, col;
   
   cairo_save (cr);
-  gdk_window_get_position (calendar->priv->main_win, &x, &y);
-  cairo_translate (cr, x, y);
+  gtk_cairo_transform_to_window (cr,
+                                 GTK_WIDGET (calendar),
+                                 calendar->priv->main_win);
 
   for (col = 0; col < 7; col++)
     for (row = 0; row < 6; row++)
@@ -2866,13 +2862,9 @@ calendar_paint_arrow (GtkCalendar *calendar,
   GtkWidget *widget = GTK_WIDGET (calendar);
   GtkCalendarPrivate *priv = GTK_CALENDAR_GET_PRIVATE (widget);
   GdkWindow *window;
-  int x, y;
   
   cairo_save (cr);
-  gdk_window_get_position (priv->arrow_win[arrow], &x, &y);
-  cairo_translate (cr, x, y);
-  gdk_window_get_position (priv->header_win, &x, &y);
-  cairo_translate (cr, x, y);
+  gtk_cairo_transform_to_window (cr, widget, priv->arrow_win[arrow]);
 
   window = priv->arrow_win[arrow];
   if (window)
