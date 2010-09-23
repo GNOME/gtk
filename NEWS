@@ -1,3 +1,26 @@
+Overview of Changes from GTK+ 2.21.8 to 2.22.0
+==============================================
+
+* Lower the gobject-introspection requirement to 0.9.3
+
+* Bug fixes
+ 629748 Fails to build without XComposite
+
+* Translation updates
+ Basque
+ Brazilian
+ Czech
+ Danish
+ Dutch
+ German
+ Greek
+ Gujarati
+ Indonesian
+ Japanese
+ Simplified Chinese
+ Uighur
+
+
 Overview of Changes from GTK+ 2.21.7 to 2.21.8
 ==============================================
 
