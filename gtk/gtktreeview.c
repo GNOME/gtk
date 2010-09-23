@@ -13764,7 +13764,7 @@ gtk_tree_view_get_dest_row_at_pos (GtkTreeView             *tree_view,
  * Creates a #GdkPixmap representation of the row at @path.
  * This image is used for a drag icon.
  *
- * Return value: (transfer none): a newly-allocated pixmap of the drag icon.
+ * Return value: (transfer full): a newly-allocated pixmap of the drag icon.
  **/
 GdkPixmap *
 gtk_tree_view_create_row_drag_icon (GtkTreeView  *tree_view,
