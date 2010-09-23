@@ -2296,7 +2296,8 @@ gtk_notebook_draw (GtkWidget *widget,
   if (priv->operation == DRAG_OPERATION_REORDER &&
       gtk_cairo_should_draw_window (cr, priv->drag_window))
     {
-      int x, y;
+      cairo_save (cr);
+      gtk_cairo_transform_to_window (cr, widget, priv->drag_window);
 
       /* FIXME: This is a workaround to make tabs reordering work better
        * with engines with rounded tabs. If the drag window background
@@ -2305,10 +2306,6 @@ gtk_notebook_draw (GtkWidget *widget,
        * Ideally, these corners should be made transparent, Either by using
        * ARGB visuals or shape windows.
        */
-      cairo_save (cr);
-      gdk_window_get_position (priv->drag_window, &x, &y);
-      cairo_translate (cr, x - allocation.x, y - allocation.y);
-
       gdk_cairo_set_source_color (cr, &gtk_widget_get_style (widget)->bg [GTK_STATE_NORMAL]);
       cairo_paint (cr);
 
