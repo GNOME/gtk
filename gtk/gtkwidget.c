@@ -7822,7 +7822,7 @@ gtk_widget_create_pango_layout (GtkWidget   *widget,
  * the application and should not be modified. The pixbuf should be freed
  * after use with g_object_unref().
  *
- * Return value: (transferi full): a new pixbuf, or %NULL if the
+ * Return value: (transfer full): a new pixbuf, or %NULL if the
  *     stock ID wasn't known
  **/
 GdkPixbuf*
