@@ -793,12 +793,10 @@ gtk_spin_button_draw (GtkWidget      *widget,
   if (gtk_cairo_should_draw_window (cr, priv->panel))
     {
       GtkShadowType shadow_type;
-      int x, y;
 
       shadow_type = spin_button_get_shadow_type (spin);
 
-      gdk_window_get_position (priv->panel, &x, &y);
-      cairo_translate (cr, x, y);
+      gtk_cairo_transform_to_window (cr, widget, priv->panel);
 
       if (shadow_type != GTK_SHADOW_NONE)
         {
