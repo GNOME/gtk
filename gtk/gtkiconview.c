@@ -1562,7 +1562,6 @@ gtk_icon_view_draw (GtkWidget *widget,
   gint dest_index;
   GtkIconViewDropPosition dest_pos;
   GtkIconViewItem *dest_item = NULL;
-  int x, y;
 
   icon_view = GTK_ICON_VIEW (widget);
 
@@ -1571,8 +1570,7 @@ gtk_icon_view_draw (GtkWidget *widget,
 
   cairo_save (cr);
 
-  gdk_window_get_position (icon_view->priv->bin_window, &x, &y);
-  cairo_translate (cr, x, y);
+  gtk_cairo_transform_to_window (cr, widget, icon_view->priv->bin_window);
       
   /* If a layout has been scheduled, do it now so that all
    * cell view items have valid sizes before we proceed. */
