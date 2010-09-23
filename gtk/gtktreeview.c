@@ -5022,12 +5022,10 @@ gtk_tree_view_draw (GtkWidget *widget,
   if (gtk_cairo_should_draw_window (cr, tree_view->priv->bin_window))
     {
       GList *tmp_list;
-      int x, y;
 
       cairo_save (cr);
 
-      gdk_window_get_position (tree_view->priv->bin_window, &x, &y);
-      cairo_translate (cr, x, y);
+      gtk_cairo_transform_to_window (cr, widget, tree_view->priv->bin_window);
 
       gtk_tree_view_bin_draw (widget, cr);
 
