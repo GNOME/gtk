@@ -3465,12 +3465,9 @@ gtk_entry_draw (GtkWidget *widget,
 
   if (gtk_cairo_should_draw_window (cr, entry->text_area))
     {
-      gint x, y;
-
       cairo_save (cr);
 
-      gdk_window_get_position (entry->text_area, &x, &y);
-      cairo_translate (cr, x, y);
+      gtk_cairo_transform_to_window (cr, widget, entry->text_area);
 
       gtk_paint_flat_box (style, cr,
 			  state, GTK_SHADOW_NONE,
@@ -3501,12 +3498,9 @@ gtk_entry_draw (GtkWidget *widget,
 
       if (icon_info != NULL && gtk_cairo_should_draw_window (cr, icon_info->window))
         {
-          gint x, y;
-
           cairo_save (cr);
 
-          gdk_window_get_position (icon_info->window, &x, &y);
-          cairo_translate (cr, x, y);
+          gtk_cairo_transform_to_window (cr, widget, icon_info->window);
 
           gtk_paint_flat_box (style, cr,
                               state, GTK_SHADOW_NONE,
