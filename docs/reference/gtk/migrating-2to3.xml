@@ -45,10 +45,6 @@
         <listitem>for low-level, UNIX-specific printing functions</listitem>
       </varlistentry>
       <varlistentry>
-        <term><filename>gdk-pixbuf/gdk-pixbuf.h</filename></term>
-        <listitem>for GdkPixbuf</listitem>
-      </varlistentry>
-      <varlistentry>
         <term><filename>gdk/gdk.h</filename></term>
         <listitem>for GDK</listitem>
       </varlistentry>
@@ -57,8 +53,8 @@
         <listitem>for GDK functions that are X11-specific</listitem>
       </varlistentry>
       <varlistentry>
-        <term><filename>gdk/gdkkeysyms.h</filename></term>
-        <listitem>if you need the GDK keysym definitions</listitem>
+        <term><filename>gdk/gdkwin32.h</filename></term>
+        <listitem>for GDK functions that are Windows-specific</listitem>
       </varlistentry>
     </variablelist>
     (these relative paths are assuming that you are using the include
@@ -70,7 +66,7 @@
     you can use defines to disable inclusion of individual headers,
     as follows:
     <programlisting>
-    make CFLAGS+="-DG_DISABLE_SINGLE_INCLUDES -DGDK_PIXBUF_DISABLE_SINGLE_INCLUDES -DGTK_DISABLE_SINGLE_INCLUDES"
+    make CFLAGS+="-DGTK_DISABLE_SINGLE_INCLUDES"
     </programlisting>
   </para>
   </section>
@@ -90,7 +86,7 @@
     you can use defines to remove deprecated symbols from the header files,
     as follows:
     <programlisting>
-    make CFLAGS+="-DG_DISABLE_DEPRECATED -DGDK_PIXBUF_DISABLE_DEPRECATED -DGDK_DISABLE_DEPRECATED -DGTK_DISABLE_DEPRECATED"
+    make CFLAGS+="-DGDK_DISABLE_DEPRECATED -DGTK_DISABLE_DEPRECATED"
     </programlisting>
   </para>
   </section>
@@ -117,12 +113,11 @@
     <title>Replace GDK_&lt;keyname&gt; with GDK_KEY_&lt;keyname&gt;</title>
 
     <para>
-      Key constants have gained a <literal>_KEY</literal>, prefix.
+      Key constants have gained a <literal>_KEY_</literal> infix.
       For example, <literal>GDK_a</literal> is now
       <literal>GDK_KEY_a</literal>.  In GTK+ 2, the old names continue
       to be available.  In GTK+ 3 however, the old names will require
-      an explicit include of the
-      <literal>gdkkeysyms-compat.h</literal> header.
+      an explicit include of the <literal>gdkkeysyms-compat.h</literal> header.
     </para>
 
   </section>
@@ -136,7 +131,7 @@
     </para>
     <para>
       The #GdkGC and #GdkImage objects, as well as all the functions using
-      them are gone. This includes the <literal>gdk_draw_</literal> family
+      them, are gone. This includes the <literal>gdk_draw</literal> family
       of functions like gdk_draw_rectangle() and gdk_draw_drawable(). As
       #GdkGC is roughly equivalent to #cairo_t and #GdkImage was used for
       drawing images to GdkDrawables, which cairo supports automatically,
@@ -250,7 +245,7 @@ cairo_destroy (cr);
         </para>
       </example>
     <section>
-      <title>what should you be aware of ?</title>
+      <title>What should you be aware of ?</title>
       <formalpara><title>No more stippling</title>
         <para>
           Stippling is the usage of a bi-level mask, called a #GdkBitmap.
@@ -321,7 +316,7 @@ cairo_destroy (cr);
           development to be able to change your code.
         </para>
       </formalpara>
-      <formalpara><title>Using pango_cairo_show_layout() instead of gdk_draw_layout_with_colors()</title>
+      <formalpara><title>Using pango_cairo_show_layout(<!-- -->) instead of gdk_draw_layout_with_colors(<!-- -->)</title>
         <para>
           GDK provided a way to ignore the color attributes of text and use
           a hardcoded text color with the gdk_draw_layout_with_colors()
@@ -428,13 +423,56 @@ cairo_destroy (cr);
       a new #GtkWidget::draw signal, which takes a #cairo_t instead of
       an expose event. The cairo context is being set up so that the origin
       at (0, 0) coincides with the upper left corner of the widget, and
-      is properly clipped. The widget is expected to draw itself with its
-      allocated size, which is available via the new
-      gtk_widget_get_allocated_width() and gtk_widget_get_allocated_height().
-      It is not necessary to check for GTK_WIDGET_IS_DRAWABLE(), since GTK+
-      already does this check before emitting the ::draw signal.
-      There are some special considerations for widgets with multiple windows,
-      which are explained here <link linkend="FIXME">FIXME: link</link>.
+      is properly clipped.
+    </para>
+    <note><para>In other words, the cairo context of the draw signal is set
+      up in 'widget coordinates', which is different from traditional expose
+      event handlers, which always assume 'window coordinates'.
+    </para></note>
+    <para>
+      The widget is expected to draw itself with its allocated size, which
+      is available via the new gtk_widget_get_allocated_width() and
+      gtk_widget_get_allocated_height() functions. It is not necessary to
+      check for GTK_WIDGET_IS_DRAWABLE(), since GTK+ already does this check
+      before emitting the ::draw signal.
+    </para>
+    <para>
+      There are some special considerations for widgets with multiple windows.
+      Expose events are window-specific, and widgets with multiple windows
+      could expect to get an expose event for each window that needs to be
+      redrawn. Therefore, multi-window expose event handlers typically look
+      like this:
+      <informalexample><programlisting>
+      if (event->window == widget->window1)
+        {
+           /* ... draw window1 ... */
+        }
+      else if (event->window == widget->window2)
+        {
+           /* ... draw window2 ... */
+        }
+      ...
+      </programlisting></informalexample>
+      In contrast, the ::draw signal handler may have to draw multiple
+      windows in one call. GTK+ has a convenience function
+      gtk_cairo_should_draw_window() that can be used to find out if
+      a window needs to be drawn. With that, the example above would look
+      like this (note that the 'else' is gone):
+      <informalexample><programlisting>
+      if (gtk_cairo_should_draw_window (cr, widget->window1)
+        {
+           /* ... draw window1 ... */
+        }
+      if (gtk_cairo_should_draw_window (cr, widget->window2)
+        {
+           /* ... draw window2 ... */
+        }
+      ...
+      </programlisting></informalexample>
+      Another convenience function that can help when implementing
+      ::draw for multi-window widgets is gtk_cairo_transform_to_window(),
+      which transforms a cairo context from widget-relative coordinates
+      to window-relative coordinates.
     </para>
     <para>
       All GtkStyle drawing functions (gtk_paint_box(), etc) have been changed
