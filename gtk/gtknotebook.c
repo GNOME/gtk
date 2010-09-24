@@ -7593,6 +7593,8 @@ gtk_notebook_reorder_child (GtkNotebook *notebook,
  * Notebooks with the same name will be able to exchange tabs
  * via drag and drop. A notebook with a %NULL group name will
  * not be able to exchange tabs with any other notebook.
+ *
+ * Since: 2.24
  */
 void
 gtk_notebook_set_group_name (GtkNotebook *notebook,
@@ -7623,7 +7625,7 @@ gtk_notebook_set_group_name (GtkNotebook *notebook,
  * Return Value: (transfer none): the group name,
  *     or %NULL if none is set.
  *
- * Since: 2.12
+ * Since: 2.24
  **/
 const gchar *
 gtk_notebook_get_group_name (GtkNotebook *notebook)
