@@ -203,6 +203,9 @@ static void                 display_credits_dialog          (GtkWidget          
 static void                 display_license_dialog          (GtkWidget          *button,
                                                              gpointer            data);
 static void                 close_cb                        (GtkAboutDialog     *about);
+static gboolean             gtk_about_dialog_activate_link  (GtkAboutDialog     *about,
+                                                             const gchar        *uri);
+
 static void                 default_url_hook                (GtkAboutDialog     *about,
                                                              const gchar        *uri,
                                                              gpointer            user_data);
@@ -266,6 +269,13 @@ default_email_hook (GtkAboutDialog *about,
   g_free (uri);
 }
 
+enum {
+  ACTIVATE_LINK,
+  LAST_SIGNAL
+};
+
+static guint signals[LAST_SIGNAL] = { 0 };
+
 G_DEFINE_TYPE (GtkAboutDialog, gtk_about_dialog, GTK_TYPE_DIALOG)
 
 static void
@@ -283,6 +293,30 @@ gtk_about_dialog_class_init (GtkAboutDialogClass *klass)
   object_class->finalize = gtk_about_dialog_finalize;
 
   widget_class->show = gtk_about_dialog_show;
+
+  klass->activate_link = gtk_about_dialog_activate_link;
+
+  /**
+   * GtkAboutDialog::activate-link:
+   * @label: The object on which the signal was emitted
+   * @uri: the URI that is activated
+   *
+   * The signal which gets emitted to activate a URI.
+   * Applications may connect to it to override the default behaviour,
+   * which is to call gtk_show_uri().
+   *
+   * Returns: %TRUE if the link has been activated
+   *
+   * Since: 2.24
+   */
+  signals[ACTIVATE_LINK] =
+    g_signal_new ("activate-link",
+                  G_TYPE_FROM_CLASS (object_class),
+                  G_SIGNAL_RUN_LAST,
+                  G_STRUCT_OFFSET (GtkAboutDialogClass, activate_link),
+                  _gtk_boolean_handled_accumulator, NULL,
+                  _gtk_marshal_BOOLEAN__STRING,
+                  G_TYPE_BOOLEAN, 1, G_TYPE_STRING);
 
   /**
    * GtkAboutDialog:program-name:
@@ -542,6 +576,17 @@ website_clicked (GtkLabel       *label,
   return TRUE;
 }
 
+static gboolean
+emit_activate_link (GtkAboutDialog *about,
+                    const gchar    *uri)
+{
+  gboolean handled = FALSE;
+
+  g_signal_emit (about, signals[ACTIVATE_LINK], 0, uri, &handled);
+
+  return TRUE;
+}
+
 static void
 gtk_about_dialog_init (GtkAboutDialog *about)
 {
@@ -608,8 +653,8 @@ gtk_about_dialog_init (GtkAboutDialog *about)
   gtk_widget_set_no_show_all (button, TRUE);
   gtk_label_set_selectable (GTK_LABEL (button), TRUE);
   gtk_box_pack_start (GTK_BOX (hbox), button, FALSE, FALSE, 0);
-  g_signal_connect (button, "activate-link",
-                    G_CALLBACK (website_clicked), about);
+  g_signal_connect_swapped (button, "activate-link",
+                            G_CALLBACK (emit_activate_link), about);
 
   gtk_widget_show (vbox);
   gtk_widget_show (priv->logo_image);
@@ -814,6 +859,34 @@ gtk_about_dialog_get_property (GObject    *object,
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
     }
+}
+
+static gboolean
+gtk_about_dialog_activate_link (GtkAboutDialog *about,
+                                const gchar    *uri)
+{
+  if (g_str_has_prefix (uri, "mailto:"))
+    {
+      gchar *email;
+
+      email = g_uri_unescape_string (uri + strlen ("mailto:"), NULL);
+
+      if (activate_email_hook_set)
+        activate_email_hook (about, email, activate_email_hook_data);
+      else
+        default_email_hook (about, email, NULL);
+
+      g_free (email);
+    }
+  else
+    {
+      if (activate_url_hook_set)
+        activate_url_hook (about, uri, activate_url_hook_data);
+      else
+        default_url_hook (about, uri, NULL);
+    }
+
+  return TRUE;
 }
 
 static void
@@ -1788,52 +1861,18 @@ follow_if_link (GtkAboutDialog *about,
 {
   GSList *tags = NULL, *tagp = NULL;
   GtkAboutDialogPrivate *priv = (GtkAboutDialogPrivate *)about->private_data;
-  gchar *url = NULL;
-  GtkAboutDialogActivateLinkFunc email_hook, url_hook;
-  gpointer email_hook_data, url_hook_data;
-
-  if (activate_email_hook_set)
-    {
-      email_hook = activate_email_hook;
-      email_hook_data = activate_email_hook_data;
-    }
-  else
-    {
-      email_hook = default_email_hook;
-      email_hook_data = NULL;
-    }
-
-  if (activate_url_hook_set)
-    {
-      url_hook = activate_url_hook;
-      url_hook_data = activate_url_hook_data;
-    }
-  else
-    {
-      url_hook = default_url_hook;
-      url_hook_data = NULL;
-    }
+  gchar *uri = NULL;
 
   tags = gtk_text_iter_get_tags (iter);
-  for (tagp = tags; tagp != NULL && !url; tagp = tagp->next)
+  for (tagp = tags; tagp != NULL && !uri; tagp = tagp->next)
     {
       GtkTextTag *tag = tagp->data;
 
-      if (email_hook != NULL)
-        {
-          url = g_object_get_data (G_OBJECT (tag), "email");
-          if (url)
-            email_hook (about, url, email_hook_data);
-        }
+      uri = g_object_get_data (G_OBJECT (tag), "uri");
+      if (uri)
+        emit_activate_link (about, uri);
 
-      if (!url && url_hook != NULL)
-        {
-          url = g_object_get_data (G_OBJECT (tag), "url");
-          if (url)
-            url_hook (about, url, url_hook_data);
-        }
-
-      if (url && !g_slist_find_custom (priv->visited_links, url, (GCompareFunc)strcmp))
+      if (uri && !g_slist_find_custom (priv->visited_links, uri, (GCompareFunc)strcmp))
         {
           GdkColor *style_visited_link_color;
           GdkColor color;
@@ -1852,7 +1891,7 @@ follow_if_link (GtkAboutDialog *about,
 
           g_object_set (G_OBJECT (tag), "foreground-gdk", &color, NULL);
 
-          priv->visited_links = g_slist_prepend (priv->visited_links, g_strdup (url));
+          priv->visited_links = g_slist_prepend (priv->visited_links, g_strdup (uri));
         }
     }
 
@@ -1939,10 +1978,9 @@ set_cursor_if_appropriate (GtkAboutDialog *about,
   for (tagp = tags;  tagp != NULL;  tagp = tagp->next)
     {
       GtkTextTag *tag = tagp->data;
-      gchar *email = g_object_get_data (G_OBJECT (tag), "email");
-      gchar *url = g_object_get_data (G_OBJECT (tag), "url");
+      gchar *uri = g_object_get_data (G_OBJECT (tag), "uri");
 
-      if (email != NULL || url != NULL)
+      if (uri != NULL)
         {
           hovering_over_link = TRUE;
           break;
@@ -2011,16 +2049,12 @@ text_view_new (GtkAboutDialog  *about,
   GtkWidget *view;
   GtkTextView *text_view;
   GtkTextBuffer *buffer;
-  gboolean linkify_email, linkify_urls;
   GdkColor *style_link_color;
   GdkColor *style_visited_link_color;
   GdkColor color;
   GdkColor link_color;
   GdkColor visited_link_color;
   GtkAboutDialogPrivate *priv = (GtkAboutDialogPrivate *)about->private_data;
-
-  linkify_email = (!activate_email_hook_set || activate_email_hook != NULL);
-  linkify_urls = (!activate_url_hook_set || activate_url_hook != NULL);
 
   gtk_widget_ensure_style (GTK_WIDGET (about));
   gtk_widget_style_get (GTK_WIDGET (about),
@@ -2073,9 +2107,9 @@ text_view_new (GtkAboutDialog  *about,
       q0  = *p;
       while (*q0)
         {
-          q1 = linkify_email ? strchr (q0, '<') : NULL;
+          q1 = strchr (q0, '<');
           q2 = q1 ? strchr (q1, '>') : NULL;
-          r1 = linkify_urls ? strstr (q0, "http://") : NULL;
+          r1 = strstr (q0, "http://");
           if (r1)
             {
               r2 = strpbrk (r1, " \n\t");
@@ -2095,6 +2129,7 @@ text_view_new (GtkAboutDialog  *about,
             {
               GtkTextIter end;
               gchar *link;
+              gchar *uri;
               const gchar *link_type;
               GtkTextTag *tag;
 
@@ -2103,13 +2138,13 @@ text_view_new (GtkAboutDialog  *about,
                   gtk_text_buffer_insert_at_cursor (buffer, q0, (q1 - q0) + 1);
                   gtk_text_buffer_get_end_iter (buffer, &end);
                   q1++;
-                  link_type = I_("email");
+                  link_type = "email";
                 }
               else
                 {
                   gtk_text_buffer_insert_at_cursor (buffer, q0, q1 - q0);
                   gtk_text_buffer_get_end_iter (buffer, &end);
-                  link_type = I_("url");
+                  link_type = "uri";
                 }
 
               q0 = q2;
@@ -2125,7 +2160,19 @@ text_view_new (GtkAboutDialog  *about,
                                                 "foreground-gdk", &color,
                                                 "underline", PANGO_UNDERLINE_SINGLE,
                                                 NULL);
-              g_object_set_data_full (G_OBJECT (tag), link_type, g_strdup (link), g_free);
+              if (strcmp (link_type, "email") == 0)
+                {
+                  gchar *escaped;
+
+                  escaped = g_uri_escape_string (link, NULL, FALSE);
+                  uri = g_strconcat ("mailto:", escaped, NULL);
+                  g_free (escaped);
+                }
+              else
+                {
+                  uri = g_strdup (link);
+                }
+              g_object_set_data_full (G_OBJECT (tag), I_("uri"), uri, g_free);
               gtk_text_buffer_insert_with_tags (buffer, &end, link, -1, tag, NULL);
 
               g_free (link);
@@ -2336,6 +2383,8 @@ gtk_about_dialog_new (void)
  * Return value: the previous email hook.
  *
  * Since: 2.6
+ *
+ * Deprecated: 2.24: Use the #GtkAboutDialog::activate-link signal
  */
 GtkAboutDialogActivateLinkFunc
 gtk_about_dialog_set_email_hook (GtkAboutDialogActivateLinkFunc func,
@@ -2372,6 +2421,8 @@ gtk_about_dialog_set_email_hook (GtkAboutDialogActivateLinkFunc func,
  * Return value: the previous URL hook.
  *
  * Since: 2.6
+ *
+ * Deprecated: 2.24: Use the #GtkAboutDialog::activate-link signal
  */
 GtkAboutDialogActivateLinkFunc
 gtk_about_dialog_set_url_hook (GtkAboutDialogActivateLinkFunc func,

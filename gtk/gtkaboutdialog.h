@@ -61,11 +61,13 @@ struct _GtkAboutDialogClass
 {
   GtkDialogClass parent_class;
 
+  gboolean (*activate_link) (GtkAboutDialog *dialog,
+                             const gchar    *uri);
+
   /* Padding for future expansion */
   void (*_gtk_reserved1) (void);
   void (*_gtk_reserved2) (void);
   void (*_gtk_reserved3) (void);
-  void (*_gtk_reserved4) (void);
 };
 
 GType                  gtk_about_dialog_get_type               (void) G_GNUC_CONST;
@@ -139,12 +141,14 @@ typedef void (* GtkAboutDialogActivateLinkFunc) (GtkAboutDialog *about,
 						 const gchar    *link_,
 						 gpointer        data);
 
+#ifndef GTK_DISABLE_DEPRECATED
 GtkAboutDialogActivateLinkFunc gtk_about_dialog_set_email_hook (GtkAboutDialogActivateLinkFunc func,
 								gpointer                       data,
 								GDestroyNotify                 destroy);
 GtkAboutDialogActivateLinkFunc gtk_about_dialog_set_url_hook   (GtkAboutDialogActivateLinkFunc func,
 								gpointer                       data,
 								GDestroyNotify                 destroy);
+#endif
 
 G_END_DECLS
 

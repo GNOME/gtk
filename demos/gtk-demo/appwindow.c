@@ -126,8 +126,6 @@ about_cb (GtkAction *action,
       g_object_unref (pixbuf);
     }
 
-  gtk_about_dialog_set_email_hook (activate_email, NULL, NULL);
-  gtk_about_dialog_set_url_hook (activate_url, NULL, NULL);
   gtk_show_about_dialog (GTK_WINDOW (window),
 			 "program-name", "GTK+ Code Demos",
 			 "version", PACKAGE_VERSION,

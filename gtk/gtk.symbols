@@ -51,12 +51,14 @@ gtk_about_dialog_set_authors
 gtk_about_dialog_set_comments
 gtk_about_dialog_set_copyright
 gtk_about_dialog_set_documenters
-gtk_about_dialog_set_email_hook
 gtk_about_dialog_set_license
 gtk_about_dialog_set_logo
 gtk_about_dialog_set_logo_icon_name
 gtk_about_dialog_set_translator_credits
+#ifndef GTK_DISABLE_DEPRECATED
+gtk_about_dialog_set_email_hook
 gtk_about_dialog_set_url_hook
+#endif
 gtk_about_dialog_set_version
 gtk_about_dialog_set_website
 gtk_about_dialog_set_website_label
@@ -2327,7 +2329,9 @@ gtk_link_button_new
 gtk_link_button_new_with_label
 gtk_link_button_get_uri
 gtk_link_button_set_uri
+#ifndef GTK_DISABLE_DEPRECATED
 gtk_link_button_set_uri_hook
+#endif
 gtk_link_button_get_visited
 gtk_link_button_set_visited
 #endif

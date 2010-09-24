@@ -75,9 +75,11 @@ G_CONST_RETURN gchar *gtk_link_button_get_uri           (GtkLinkButton *link_but
 void                  gtk_link_button_set_uri           (GtkLinkButton *link_button,
 						         const gchar   *uri);
 
+#ifndef GTK_DISABLE_DEPRECATED
 GtkLinkButtonUriFunc  gtk_link_button_set_uri_hook      (GtkLinkButtonUriFunc func,
 							 gpointer             data,
 							 GDestroyNotify       destroy);
+#endif
 
 gboolean              gtk_link_button_get_visited       (GtkLinkButton *link_button);
 void                  gtk_link_button_set_visited       (GtkLinkButton *link_button,

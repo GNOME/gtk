@@ -716,6 +716,8 @@ gtk_link_button_get_uri (GtkLinkButton *link_button)
  * Return value: the previously set hook function.
  *
  * Since: 2.10
+ *
+ * Deprecated: 2.24: Use the #GtkButton::clicked signal instead
  */
 GtkLinkButtonUriFunc
 gtk_link_button_set_uri_hook (GtkLinkButtonUriFunc func,
