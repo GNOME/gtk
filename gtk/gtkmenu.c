@@ -77,6 +77,8 @@ struct _GtkMenuPrivate
   gint y;
   gboolean initially_pushed_in;
 
+  GDestroyNotify position_func_data_destroy;
+
   /* info used for the table */
   guint *heights;
   gint heights_length;
@@ -1136,6 +1138,13 @@ gtk_menu_destroy (GtkObject *object)
       priv->title = NULL;
     }
 
+  if (priv->position_func_data_destroy)
+    {
+      priv->position_func_data_destroy (menu->position_func_data);
+      menu->position_func_data = NULL;
+      priv->position_func_data_destroy = NULL;
+    }
+
   GTK_OBJECT_CLASS (gtk_menu_parent_class)->destroy (object);
 }
 
@@ -1409,18 +1418,24 @@ popup_grab_on_window (GdkWindow *window,
  * gtk_menu_popup_for_device:
  * @menu: a #GtkMenu.
  * @device: (allow-none): a #GdkDevice
- * @parent_menu_shell: (allow-none): the menu shell containing the triggering menu item, or %NULL
- * @parent_menu_item: (allow-none): the menu item whose activation triggered the popup, or %NULL
- * @func: (allow-none): a user supplied function used to position the menu, or %NULL
- * @data: (allow-none): user supplied data to be passed to @func.
- * @button: the mouse button which was pressed to initiate the event.
- * @activate_time: the time at which the activation event occurred.
+ * @parent_menu_shell: (allow-none): the menu shell containing the triggering
+ *     menu item, or %NULL
+ * @parent_menu_item: (allow-none): the menu item whose activation triggered
+ *     the popup, or %NULL
+ * @func: (allow-none): a user supplied function used to position the menu,
+ *     or %NULL
+ * @data: (allow-none): user supplied data to be passed to @func
+ * @destroy: (allow-none): destroy notify for @data
+ * @button: the mouse button which was pressed to initiate the event
+ * @activate_time: the time at which the activation event occurred
  *
- * Displays a menu and makes it available for selection.  Applications can use
- * this function to display context-sensitive menus, and will typically supply
- * %NULL for the @parent_menu_shell, @parent_menu_item, @func and @data
- * parameters. The default menu positioning function will position the menu
- * at the current position of @device (or its corresponding pointer).
+ * Displays a menu and makes it available for selection.
+ *
+ * Applications can use this function to display context-sensitive menus,
+ * and will typically supply %NULL for the @parent_menu_shell,
+ * @parent_menu_item, @func, @data and @destroy parameters. The default
+ * menu positioning function will position the menu at the current position
+ * of @device (or its corresponding pointer).
  *
  * The @button parameter should be the mouse button pressed to initiate
  * the menu popup. If the menu popup was initiated by something other than
@@ -1443,6 +1458,7 @@ gtk_menu_popup_for_device (GtkMenu             *menu,
                            GtkWidget           *parent_menu_item,
                            GtkMenuPositionFunc  func,
                            gpointer             data,
+                           GDestroyNotify       destroy,
                            guint                button,
                            guint32              activate_time)
 {
@@ -1457,7 +1473,25 @@ gtk_menu_popup_for_device (GtkMenu             *menu,
   GdkDevice *keyboard, *pointer;
 
   g_return_if_fail (GTK_IS_MENU (menu));
-  g_return_if_fail (GDK_IS_DEVICE (device));
+  g_return_if_fail (device == NULL || GDK_IS_DEVICE (device));
+
+  if (device == NULL)
+    device = gtk_get_current_event_device ();
+
+  if (device == NULL)
+    {
+      GdkDisplay *display;
+      GdkDeviceManager *device_manager;
+      GList *devices;
+
+      display = gtk_widget_get_display (GTK_WIDGET (menu));
+      device_manager = gdk_display_get_device_manager (display);
+      devices = gdk_device_manager_list_devices (device_manager, GDK_DEVICE_TYPE_MASTER);
+
+      device = devices->data;
+
+      g_list_free (devices);
+    }
 
   widget = GTK_WIDGET (menu);
   menu_shell = GTK_MENU_SHELL (menu);
@@ -1602,6 +1636,7 @@ gtk_menu_popup_for_device (GtkMenu             *menu,
   menu->parent_menu_item = parent_menu_item;
   menu->position_func = func;
   menu->position_func_data = data;
+  priv->position_func_data_destroy = destroy;
   menu_shell->activate_time = activate_time;
 
   /* We need to show the menu here rather in the init function because
@@ -1713,27 +1748,11 @@ gtk_menu_popup (GtkMenu		    *menu,
 
   g_return_if_fail (GTK_IS_MENU (menu));
 
-  device = gtk_get_current_event_device ();
-
-  if (!device)
-    {
-      GdkDisplay *display;
-      GdkDeviceManager *device_manager;
-      GList *devices;
-
-      display = gtk_widget_get_display (GTK_WIDGET (menu));
-      device_manager = gdk_display_get_device_manager (display);
-      devices = gdk_device_manager_list_devices (device_manager, GDK_DEVICE_TYPE_MASTER);
-
-      device = devices->data;
-
-      g_list_free (devices);
-    }
-
-  gtk_menu_popup_for_device (menu, device,
+  gtk_menu_popup_for_device (menu,
+                             NULL,
                              parent_menu_shell,
                              parent_menu_item,
-                             func, data,
+                             func, data, NULL,
                              button, activate_time);
 }
 

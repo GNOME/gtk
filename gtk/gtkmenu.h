@@ -139,9 +139,9 @@ void       gtk_menu_popup_for_device      (GtkMenu             *menu,
                                            GtkWidget           *parent_menu_item,
                                            GtkMenuPositionFunc  func,
                                            gpointer             data,
+                                           GDestroyNotify       destroy,
                                            guint                button,
                                            guint32              activate_time);
-
 
 /* Position the menu according to its position function. Called
  * from gtkmenuitem.c when a menu-item changes its allocation
