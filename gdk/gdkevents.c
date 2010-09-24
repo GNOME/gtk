@@ -540,7 +540,8 @@ gdk_event_free (GdkEvent *event)
     case GDK_DRAG_STATUS:
     case GDK_DROP_START:
     case GDK_DROP_FINISHED:
-      g_object_unref (event->dnd.context);
+      if (event->dnd.context != NULL)
+        g_object_unref (event->dnd.context);
       break;
 
     case GDK_BUTTON_PRESS:
