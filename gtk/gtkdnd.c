@@ -119,40 +119,38 @@ struct _GtkDragSourceInfo
 
   guint              update_idle;      /* Idle function to update the drag */
   guint              drop_timeout;     /* Timeout for aborting drop */
-  guint              destroy_icon : 1; /* If true, destroy icon_window
-      				        */
-  guint              have_grab : 1;    /* Do we still have the pointer grab
-				        */
+  guint              destroy_icon : 1; /* If true, destroy icon_window */
+  guint              have_grab : 1;    /* Do we still have the pointer grab */
   GdkPixbuf         *icon_pixbuf;
   GdkCursor         *drag_cursors[6];
 };
 
-struct _GtkDragDestSite 
+struct _GtkDragDestSite
 {
   GtkDestDefaults    flags;
   GtkTargetList     *target_list;
   GdkDragAction      actions;
   GdkWindow         *proxy_window;
   GdkDragProtocol    proxy_protocol;
-  guint              do_proxy : 1;
+  guint              do_proxy     : 1;
   guint              proxy_coords : 1;
-  guint              have_drag : 1;
+  guint              have_drag    : 1;
   guint              track_motion : 1;
 };
-  
-struct _GtkDragDestInfo 
+
+struct _GtkDragDestInfo
 {
-  GtkWidget         *widget;	   /* Widget in which drag is in */
-  GdkDragContext    *context;	   /* Drag context */
-  GtkDragSourceInfo *proxy_source; /* Set if this is a proxy drag */
-  GtkSelectionData  *proxy_data;   /* Set while retrieving proxied data */
-  guint              dropped : 1;     /* Set after we receive a drop */
-  guint32            proxy_drop_time; /* Timestamp for proxied drop */
+  GtkWidget         *widget;              /* Widget in which drag is in */
+  GdkDragContext    *context;             /* Drag context */
+  GtkDragSourceInfo *proxy_source;        /* Set if this is a proxy drag */
+  GtkSelectionData  *proxy_data;          /* Set while retrieving proxied data */
+  guint32            proxy_drop_time;     /* Timestamp for proxied drop */
   guint              proxy_drop_wait : 1; /* Set if we are waiting for a
-					   * status reply before sending
-					   * a proxied drop on.
-					   */
-  gint               drop_x, drop_y; /* Position of drop */
+                                           * status reply before sending
+                                           * a proxied drop on.
+                                           */
+  guint              dropped : 1;         /* Set after we receive a drop */
+  gint               drop_x, drop_y;      /* Position of drop */
 };
 
 #define DROP_ABORT_TIME 300000
@@ -1295,7 +1293,7 @@ gtk_drag_dest_set (GtkWidget            *widget,
   
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
-  site = g_new (GtkDragDestSite, 1);
+  site = g_slice_new0 (GtkDragDestSite);
 
   site->flags = flags;
   site->have_drag = FALSE;
@@ -1988,9 +1986,7 @@ gtk_drag_proxy_begin (GtkWidget       *widget,
 static void
 gtk_drag_dest_info_destroy (gpointer data)
 {
-  GtkDragDestInfo *info = data;
-
-  g_free (info);
+  g_slice_free (GtkDragDestInfo, data);
 }
 
 static GtkDragDestInfo *
@@ -2005,15 +2001,10 @@ gtk_drag_get_dest_info (GdkDragContext *context,
   info = g_object_get_qdata (G_OBJECT (context), info_quark);
   if (!info && create)
     {
-      info = g_new (GtkDragDestInfo, 1);
-      info->widget = NULL;
+      info = g_slice_new0 (GtkDragDestInfo);
       info->context = context;
-      info->proxy_source = NULL;
-      info->proxy_data = NULL;
-      info->dropped = FALSE;
-      info->proxy_drop_wait = FALSE;
       g_object_set_qdata_full (G_OBJECT (context), info_quark,
-			       info, gtk_drag_dest_info_destroy);
+                               info, gtk_drag_dest_info_destroy);
     }
 
   return info;
@@ -2076,7 +2067,7 @@ gtk_drag_dest_site_destroy (gpointer data)
   if (site->target_list)
     gtk_target_list_unref (site->target_list);
 
-  g_free (site);
+  g_slice_free (GtkDragDestSite, site);
 }
 
 /*
@@ -2643,7 +2634,7 @@ gtk_drag_source_set (GtkWidget            *widget,
     }
   else
     {
-      site = g_new0 (GtkDragSourceSite, 1);
+      site = g_slice_new0 (GtkDragSourceSite);
 
       site->icon_type = GTK_IMAGE_EMPTY;
       
@@ -2678,7 +2669,7 @@ gtk_drag_source_set (GtkWidget            *widget,
  *************************************************************/
 
 void 
-gtk_drag_source_unset (GtkWidget        *widget)
+gtk_drag_source_unset (GtkWidget *widget)
 {
   GtkDragSourceSite *site;
 
@@ -3595,14 +3586,14 @@ gtk_drag_drop_finished (GtkDragSourceInfo *info,
 	  gtk_drag_source_info_destroy (info);
 	}
       else
-	{
-	  GtkDragAnim *anim = g_new (GtkDragAnim, 1);
-	  anim->info = info;
-	  anim->step = 0;
-	  
-	  anim->n_steps = MAX (info->cur_x - info->start_x,
-			       info->cur_y - info->start_y) / ANIM_STEP_LENGTH;
-	  anim->n_steps = CLAMP (anim->n_steps, ANIM_MIN_STEPS, ANIM_MAX_STEPS);
+        {
+          GtkDragAnim *anim = g_slice_new0 (GtkDragAnim);
+          anim->info = info;
+          anim->step = 0;
+
+          anim->n_steps = MAX (info->cur_x - info->start_x,
+               info->cur_y - info->start_y) / ANIM_STEP_LENGTH;
+          anim->n_steps = CLAMP (anim->n_steps, ANIM_MIN_STEPS, ANIM_MAX_STEPS);
 
 	  info->cur_screen = gtk_widget_get_screen (info->widget);
 
@@ -3611,7 +3602,7 @@ gtk_drag_drop_finished (GtkDragSourceInfo *info,
 				   0, 0, TRUE);
 
 	  gtk_drag_update_icon (info);
-	  
+
 	  /* Mark the context as dead, so if the destination decides
 	   * to respond really late, we still are OK.
 	   */
@@ -3772,7 +3763,7 @@ gtk_drag_source_site_destroy (gpointer data)
     gtk_target_list_unref (site->target_list);
 
   gtk_drag_source_unset_icon (site);
-  g_free (site);
+  g_slice_free (GtkDragSourceSite, site);
 }
 
 static void
@@ -3839,34 +3830,38 @@ gtk_drag_selection_get (GtkWidget        *widget,
 static gboolean
 gtk_drag_anim_timeout (gpointer data)
 {
-  GtkDragAnim *anim = data;
+  GtkDragAnim *anim;
+  GtkDragSourceInfo *info;
   gint x, y;
   gboolean retval;
+
+  anim = data;
+  info = anim->info;
 
   if (anim->step == anim->n_steps)
     {
       gtk_drag_source_info_destroy (anim->info);
-      g_free (anim);
+      g_slice_free (GtkDragAnim, anim);
 
       retval = FALSE;
     }
   else
     {
-      x = (anim->info->start_x * (anim->step + 1) +
-	   anim->info->cur_x * (anim->n_steps - anim->step - 1)) / anim->n_steps;
-      y = (anim->info->start_y * (anim->step + 1) +
-	   anim->info->cur_y * (anim->n_steps - anim->step - 1)) / anim->n_steps;
-      if (anim->info->icon_window)
-	{
-	  GtkWidget *icon_window;
-	  gint hot_x, hot_y;
-	  
-	  gtk_drag_get_icon (anim->info, &icon_window, &hot_x, &hot_y);	  
-	  gtk_window_move (GTK_WINDOW (icon_window), 
-			   x - hot_x, 
-			   y - hot_y);
-	}
-  
+      x = (info->start_x * (anim->step + 1) +
+           info->cur_x * (anim->n_steps - anim->step - 1)) / anim->n_steps;
+      y = (info->start_y * (anim->step + 1) +
+           info->cur_y * (anim->n_steps - anim->step - 1)) / anim->n_steps;
+      if (info->icon_window)
+        {
+          GtkWidget *icon_window;
+          gint hot_x, hot_y;
+
+          gtk_drag_get_icon (info, &icon_window, &hot_x, &hot_y);
+          gtk_window_move (GTK_WINDOW (icon_window),
+                           x - hot_x,
+                           y - hot_y);
+        }
+
       anim->step++;
 
       retval = TRUE;
