@@ -78,6 +78,8 @@ window_creation_function (GtkNotebook *source_notebook,
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   notebook = gtk_notebook_new ();
+  g_signal_connect (notebook, "create-window",
+                    G_CALLBACK (window_creation_function), NULL);
 
   gtk_notebook_set_group_name (GTK_NOTEBOOK (notebook),
 			       gtk_notebook_get_group_name (source_notebook));
@@ -150,6 +152,8 @@ create_notebook (gchar           **labels,
   gint count = 0;
 
   notebook = gtk_notebook_new ();
+  g_signal_connect (notebook, "create-window",
+                    G_CALLBACK (window_creation_function), NULL);
 
   gtk_notebook_set_tab_pos (GTK_NOTEBOOK (notebook), pos);
   gtk_notebook_set_scrollable (GTK_NOTEBOOK (notebook), TRUE);
@@ -192,6 +196,8 @@ create_notebook_with_notebooks (gchar           **labels,
   gint count = 0;
 
   notebook = gtk_notebook_new ();
+  g_signal_connect (notebook, "create-window",
+                    G_CALLBACK (window_creation_function), NULL);
 
   gtk_notebook_set_tab_pos (GTK_NOTEBOOK (notebook), pos);
   gtk_notebook_set_scrollable (GTK_NOTEBOOK (notebook), TRUE);
@@ -251,8 +257,6 @@ main (gint argc, gchar *argv[])
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   table = gtk_table_new (3, 2, FALSE);
-
-  gtk_notebook_set_window_creation_hook (window_creation_function, NULL, NULL);
 
   gtk_table_attach_defaults (GTK_TABLE (table),
 			     create_notebook (tabs1, GROUP_A, PACK_ALTERNATE, GTK_POS_TOP),
