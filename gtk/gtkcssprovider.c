@@ -23,8 +23,10 @@
 #include <stdlib.h>
 #include <gtk/gtk.h>
 #include <gtkstyleprovider.h>
+#include <gdk-pixbuf/gdk-pixbuf.h>
 
 #include "gtkanimationdescription.h"
+#include "gtk9slice.h"
 #include "gtkcssprovider.h"
 
 typedef struct GtkCssProviderPrivate GtkCssProviderPrivate;
@@ -125,8 +127,9 @@ static void gtk_css_style_provider_iface_init (GtkStyleProviderIface *iface);
 
 static void css_provider_apply_scope (GtkCssProvider *css_provider,
                                       ParserScope     scope);
-static gboolean css_provider_parse_value (const gchar *value_str,
-                                          GValue      *value);
+static gboolean css_provider_parse_value (GtkCssProvider *css_provider,
+                                          const gchar    *value_str,
+                                          GValue         *value);
 
 G_DEFINE_TYPE_EXTENDED (GtkCssProvider, gtk_css_provider, G_TYPE_OBJECT, 0,
                         G_IMPLEMENT_INTERFACE (GTK_TYPE_STYLE_PROVIDER,
@@ -696,7 +699,7 @@ gtk_css_provider_get_style_property (GtkStyleProvider *provider,
           val_str = g_value_get_string (val);
           found = TRUE;
 
-          css_provider_parse_value (val_str, value);
+          css_provider_parse_value (GTK_CSS_PROVIDER (provider), val_str, value);
           break;
         }
     }
@@ -1564,9 +1567,188 @@ gradient_parse (const gchar *str)
   return gradient;
 }
 
+static gchar *
+url_parse_str (const gchar  *str,
+               gchar       **end_ptr)
+{
+  gchar *path, *chr;
+
+  if (!g_str_has_prefix (str, "url"))
+    {
+      *end_ptr = (gchar *) str;
+      return NULL;
+    }
+
+  str += strlen ("url");
+  SKIP_SPACES (str);
+
+  if (*str != '(')
+    {
+      *end_ptr = (gchar *) str;
+      return NULL;
+    }
+
+  chr = strchr (str, ')');
+
+  if (!chr)
+    {
+      *end_ptr = (gchar *) str;
+      return NULL;
+    }
+
+  str++;
+  SKIP_SPACES (str);
+
+  path = g_strndup (str, chr - str);
+  g_strstrip (path);
+
+  *end_ptr = chr + 1;
+
+  return path;
+}
+
+static Gtk9Slice *
+slice_parse_str (GtkCssProvider  *css_provider,
+                 const gchar     *str,
+                 gchar          **end_ptr)
+{
+  gdouble distance_top, distance_bottom;
+  gdouble distance_left, distance_right;
+  GtkSliceSideModifier mods[2];
+  GError *error = NULL;
+  GdkPixbuf *pixbuf;
+  gchar *path;
+  gint i = 0;
+
+  SKIP_SPACES (str);
+
+  /* Parse image url */
+  path = url_parse_str (str, end_ptr);
+
+  if (!path)
+      return NULL;
+
+  if (!g_path_is_absolute (path))
+    {
+      GtkCssProviderPrivate *priv;
+      gchar *dirname, *full_path;
+
+      priv = css_provider->priv;
+
+      /* Use relative path to the current CSS file path, if any */
+      dirname = g_path_get_dirname (priv->filename);
+
+      full_path = g_build_filename (dirname, path, NULL);
+      g_free (path);
+      path = full_path;
+    }
+
+  str = *end_ptr;
+  SKIP_SPACES (str);
+
+  /* Parse top/left/bottom/right distances */
+  distance_top = g_strtod (str, end_ptr);
+
+  str = *end_ptr;
+  SKIP_SPACES (str);
+
+  distance_right = g_strtod (str, end_ptr);
+
+  str = *end_ptr;
+  SKIP_SPACES (str);
+
+  distance_bottom = g_strtod (str, end_ptr);
+
+  str = *end_ptr;
+  SKIP_SPACES (str);
+
+  distance_left = g_strtod (str, end_ptr);
+
+  str = *end_ptr;
+  SKIP_SPACES (str);
+
+  while (*str && i < 2)
+    {
+      if (g_str_has_prefix (str, "stretch"))
+        {
+          str += strlen ("stretch");
+          mods[i] = GTK_SLICE_STRETCH;
+        }
+      else if (g_str_has_prefix (str, "repeat"))
+        {
+          str += strlen ("repeat");
+          mods[i] = GTK_SLICE_REPEAT;
+        }
+      else
+        {
+          g_free (path);
+          *end_ptr = (gchar *) str;
+          return NULL;
+        }
+
+      SKIP_SPACES (str);
+      i++;
+    }
+
+  *end_ptr = (gchar *) str;
+
+  if (*str != '\0')
+    {
+      g_free (path);
+      return NULL;
+    }
+
+  if (i != 2)
+    {
+      /* Fill in second modifier, same as the first */
+      mods[1] = mods[1];
+    }
+
+  pixbuf = gdk_pixbuf_new_from_file (path, &error);
+  g_free (path);
+
+  if (error)
+    {
+      g_warning ("Pixbuf could not be loaded: %s\n", error->message);
+      g_error_free (error);
+      *end_ptr = (gchar *) str;
+      return NULL;
+    }
+
+  return gtk_9slice_new (pixbuf,
+                         distance_top, distance_bottom,
+                         distance_left, distance_right,
+                         mods[0], mods[1]);
+}
+
+static Gtk9Slice *
+slice_parse (GtkCssProvider *css_provider,
+             const gchar    *str)
+{
+  Gtk9Slice *slice;
+  gchar *end;
+
+  slice = slice_parse_str (css_provider, str, &end);
+
+  if (*end != '\0')
+    {
+      g_warning ("Error parsing sliced image \"%s\", stopped at char %ld : '%c'",
+                 str, end - str, *end);
+
+      if (slice)
+        {
+          gtk_9slice_unref (slice);
+          slice = NULL;
+        }
+    }
+
+  return slice;
+}
+
 static gboolean
-css_provider_parse_value (const gchar *value_str,
-                          GValue      *value)
+css_provider_parse_value (GtkCssProvider *css_provider,
+                          const gchar    *value_str,
+                          GValue         *value)
 {
   GType type;
   gboolean parsed = TRUE;
@@ -1679,6 +1861,17 @@ css_provider_parse_value (const gchar *value_str,
           g_value_init (value, GTK_TYPE_GRADIENT);
           g_value_take_boxed (value, gradient);
         }
+      else
+        parsed = FALSE;
+    }
+  else if (type == GTK_TYPE_9SLICE)
+    {
+      Gtk9Slice *slice;
+
+      slice = slice_parse (css_provider, value_str);
+
+      if (slice)
+        g_value_take_boxed (value, slice);
       else
         parsed = FALSE;
     }
@@ -1814,7 +2007,7 @@ parse_rule (GtkCssProvider *css_provider,
               g_hash_table_insert (priv->cur_properties, prop, val);
             }
           else if ((parse_func && (parse_func) (value_str, val, &error)) ||
-                   (!parse_func && css_provider_parse_value (value_str, val)))
+                   (!parse_func && css_provider_parse_value (css_provider, value_str, val)))
             g_hash_table_insert (priv->cur_properties, prop, val);
           else
             {
