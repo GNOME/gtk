@@ -24,6 +24,50 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
  */
 
+/**
+ * SECTION:gtkeditable
+ * @Short_description: Interface for text-editing widgets
+ * @Title: GtkEditable
+ *
+ * The #GtkEditable interface is an interface which should be implemented by
+ * text editing widgets, such as #GtkEntry and #GtkText. It contains functions
+ * for generically manipulating an editable widget, a large number of action
+ * signals used for key bindings, and several signals that an application can
+ * connect to to modify the behavior of a widget.
+ *
+ * As an example of the latter usage, by connecting
+ * the following handler to "insert_text", an application
+ * can convert all entry into a widget into uppercase.
+ *
+ * <example>
+ * <title>Forcing entry to uppercase.</title>
+ * <programlisting>
+ * #include &lt;ctype.h&gt;
+ *
+ * void
+ * insert_text_handler (GtkEditable &ast;editable,
+ *                      const gchar &ast;text,
+ *                      gint         length,
+ *                      gint        &ast;position,
+ *                      gpointer     data)
+ * {
+ *   int i;
+ *   gchar &ast;result = g_utf8_strup (text, length);
+ *
+ *   g_signal_handlers_block_by_func (editable,
+ *                                (gpointer) insert_text_handler, data);
+ *   gtk_editable_insert_text (editable, result, length, position);
+ *   g_signal_handlers_unblock_by_func (editable,
+ *                                      (gpointer) insert_text_handler, data);
+ *
+ *   g_signal_stop_emission_by_name (editable, "insert_text");
+ *
+ *   g_free (result);
+ * }
+ * </programlisting>
+ * </example>
+ */
+
 #include "config.h"
 #include <string.h>
 
