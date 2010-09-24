@@ -2167,7 +2167,8 @@ gtk_css_provider_load_from_path (GtkCssProvider  *css_provider,
 {
   GtkCssProviderPrivate *priv;
   GError *internal_error = NULL;
-  gchar *data;
+  GMappedFile *mapped_file;
+  const gchar *data;
   gsize length;
 
   g_return_val_if_fail (GTK_IS_CSS_PROVIDER (css_provider), FALSE);
@@ -2175,12 +2176,20 @@ gtk_css_provider_load_from_path (GtkCssProvider  *css_provider,
 
   priv = css_provider->priv;
 
-  if (g_file_get_contents (path, &data, &length,
-                           &internal_error))
+  mapped_file = g_mapped_file_new (path, FALSE, &internal_error);
+
+  if (internal_error)
     {
       g_propagate_error (error, internal_error);
       return FALSE;
     }
+
+  length = g_mapped_file_get_length (mapped_file);
+  data = g_mapped_file_get_contents (mapped_file);
+
+  /* FIXME: Set error */
+  if (!data)
+    return FALSE;
 
   if (priv->selectors_info->len > 0)
     g_ptr_array_remove_range (priv->selectors_info, 0, priv->selectors_info->len);
@@ -2194,7 +2203,7 @@ gtk_css_provider_load_from_path (GtkCssProvider  *css_provider,
 
   parse_stylesheet (css_provider);
 
-  g_free (data);
+  g_mapped_file_unref (mapped_file);
 
   return TRUE;
 }
