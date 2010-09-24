@@ -765,7 +765,7 @@ gtk_dialog_add_action_widget (GtkDialog *dialog,
  * appended to the end of the dialog's action area. The button widget is
  * returned, but usually you don't need it.
  *
- * Return value: (transfer none): the button widget that was added
+ * Return value: (transfer none): the #GtkButton widget that was added
  **/
 GtkWidget*
 gtk_dialog_add_button (GtkDialog   *dialog,
