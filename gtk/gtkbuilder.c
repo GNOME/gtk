@@ -1028,7 +1028,7 @@ gtk_builder_add_from_string (GtkBuilder   *builder,
  * @builder: a #GtkBuilder
  * @buffer: the string to parse
  * @length: the length of @buffer (may be -1 if @buffer is nul-terminated)
- * @object_ids: (array zero-teminated=1) (element-type utf8): nul-terminated array of objects to build
+ * @object_ids: (array zero-terminated=1) (element-type utf8): nul-terminated array of objects to build
  * @error: (allow-none): return location for an error, or %NULL
  *
  * Parses a string containing a <link linkend="BUILDER-UI">GtkBuilder 
