@@ -267,7 +267,7 @@ gtk_about_dialog_class_init (GtkAboutDialogClass *klass)
    *
    * Returns: %TRUE if the link has been activated
    *
-   * Since: 3.0
+   * Since: 2.24
    */
   signals[ACTIVATE_LINK] =
     g_signal_new ("activate-link",
