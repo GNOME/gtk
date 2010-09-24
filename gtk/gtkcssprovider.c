@@ -2112,6 +2112,9 @@ gtk_css_provider_load_from_data (GtkCssProvider *css_provider,
   priv->scanner->input_name = "-";
   g_scanner_input_text (priv->scanner, data, (guint) length);
 
+  g_free (priv->filename);
+  priv->filename = NULL;
+
   parse_stylesheet (css_provider);
 
   return TRUE;
