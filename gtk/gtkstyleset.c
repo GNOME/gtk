@@ -27,6 +27,7 @@
 #include "gtkprivate.h"
 #include "gtkthemingengine.h"
 #include "gtkanimationdescription.h"
+#include "gtk9slice.h"
 #include "gtkintl.h"
 
 typedef struct GtkStyleSetPrivate GtkStyleSetPrivate;
@@ -90,6 +91,7 @@ gtk_style_set_class_init (GtkStyleSetClass *klass)
   gtk_style_set_register_property ("border", G_TYPE_INT, NULL, NULL);
 
   gtk_style_set_register_property ("background-image", GDK_TYPE_CAIRO_PATTERN, NULL, NULL);
+  gtk_style_set_register_property ("border-image", GTK_TYPE_9SLICE, NULL, NULL);
 
   g_value_init (&val, GTK_TYPE_THEMING_ENGINE);
   g_value_set_object (&val, (GObject *) gtk_theming_engine_load (NULL));
