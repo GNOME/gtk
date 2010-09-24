@@ -26,6 +26,7 @@
 #include <gtk/gtkstylecontext.h>
 #include <gtk/gtkintl.h>
 
+#include "gtk9slice.h"
 #include "gtkpango.h"
 
 typedef struct GtkThemingEnginePrivate GtkThemingEnginePrivate;
@@ -961,15 +962,26 @@ gtk_theming_engine_render_frame (GtkThemingEngine *engine,
   GtkStateFlags flags;
   GdkColor lighter, darker;
   GdkColor *bg_color;
+  Gtk9Slice *slice;
 
-  cairo_save (cr);
   flags = gtk_theming_engine_get_state (engine);
 
-  cairo_set_line_width (cr, 1);
-
   gtk_theming_engine_get (engine, flags,
+                          "border-image", &slice,
                           "background-color", &bg_color,
                           NULL);
+
+  if (slice)
+    {
+      gtk_9slice_render (slice, cr, x, y, width, height);
+      gtk_9slice_unref (slice);
+      gdk_color_free (bg_color);
+      return;
+    }
+
+  cairo_save (cr);
+  cairo_set_line_width (cr, 1);
+
   color_shade (bg_color, 0.7, &darker);
   color_shade (bg_color, 1.3, &lighter);
 
