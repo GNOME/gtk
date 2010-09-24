@@ -642,6 +642,8 @@ gtk_notebook_class_init (GtkNotebookClass *class)
    * GtkNotebook:group-name:
    *
    * Group name for tab drag and drop.
+   *
+   * Since: 2.24
    */
   g_object_class_install_property (gobject_class,
 				   PROP_GROUP_NAME,
