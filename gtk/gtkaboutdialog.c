@@ -2102,9 +2102,17 @@ text_view_new (GtkAboutDialog  *about,
                                                 "underline", PANGO_UNDERLINE_SINGLE,
                                                 NULL);
               if (strcmp (link_type, "email") == 0)
-                 uri = g_strconcat ("mailto:", link, NULL);
+                {
+                  gchar *escaped;
+
+                  escaped = g_uri_escape_string (link, NULL, FALSE);
+                  uri = g_strconcat ("mailto:", escaped, NULL);
+                  g_free (escaped);
+                }
               else
-                 uri = g_strdup (link);
+                {
+                  uri = g_strdup (link);
+                }
               g_object_set_data_full (G_OBJECT (tag), I_("uri"), uri, g_free);
               gtk_text_buffer_insert_with_tags (buffer, &end, link, -1, tag, NULL);
 
