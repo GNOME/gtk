@@ -94,7 +94,7 @@ struct _GtkNotebookPrivate
   gint           mouse_y;
   gint           pressed_button;
 
-  gpointer       group;
+  GQuark         group;
 
   guint          dnd_timer;
   guint          switch_tab_timer;
@@ -173,7 +173,7 @@ enum {
   PROP_SCROLLABLE,
   PROP_PAGE,
   PROP_ENABLE_POPUP,
-  PROP_GROUP,
+  PROP_GROUP_NAME
 };
 
 enum {
@@ -639,18 +639,17 @@ gtk_notebook_class_init (GtkNotebookClass *class)
  							 GTK_PARAM_READWRITE));
 
   /**
-   * GtkNotebook:group:
-   *  
-   * Group for tabs drag and drop.
+   * GtkNotebook:group-name:
    *
-   * Since: 2.12
-   */    
+   * Group name for tab drag and drop.
+   */
   g_object_class_install_property (gobject_class,
-				   PROP_GROUP,
-				   g_param_spec_pointer ("group",
-							 P_("Group"),
-							 P_("Group for tabs drag and drop"),
-							 GTK_PARAM_READWRITE));
+				   PROP_GROUP_NAME,
+				   g_param_spec_string ("group-name",
+							P_("Group Name"),
+							P_("Group name for tab drag and drop"),
+                                                        NULL,
+							GTK_PARAM_READWRITE));
 
   gtk_container_class_install_child_property (container_class,
 					      CHILD_PROP_TAB_LABEL,
@@ -1073,7 +1072,7 @@ gtk_notebook_init (GtkNotebook *notebook)
   priv->has_after_previous  = 0;
   priv->has_after_next      = 1;
 
-  priv->group = NULL;
+  priv->group = 0;
   priv->pressed_button = -1;
   priv->dnd_timer = 0;
   priv->switch_tab_timer = 0;
@@ -1517,8 +1516,8 @@ gtk_notebook_set_property (GObject         *object,
     case PROP_TAB_POS:
       gtk_notebook_set_tab_pos (notebook, g_value_get_enum (value));
       break;
-    case PROP_GROUP:
-      gtk_notebook_set_group (notebook, g_value_get_pointer (value));
+    case PROP_GROUP_NAME:
+      gtk_notebook_set_group_name (notebook, g_value_get_string (value));
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -1555,8 +1554,8 @@ gtk_notebook_get_property (GObject         *object,
     case PROP_TAB_POS:
       g_value_set_enum (value, priv->tab_pos);
       break;
-    case PROP_GROUP:
-      g_value_set_pointer (value, priv->group);
+    case PROP_GROUP_NAME:
+      g_value_set_string (value, gtk_notebook_get_group_name (notebook));
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -3451,19 +3450,19 @@ gtk_notebook_drag_motion (GtkWidget      *widget,
 
   if (target == tab_target)
     {
-      gpointer widget_group, source_widget_group;
-      GtkWidget *source_widget;
+      GQuark group, source_group;
+      GtkNotebook *source;
+      GtkWidget *source_child;
 
-      source_widget = gtk_drag_get_source_widget (context);
-      g_assert (source_widget);
+      source = GTK_NOTEBOOK (gtk_drag_get_source_widget (context));
+      source_child = source->priv->cur_page->child;
 
-      widget_group = gtk_notebook_get_group (notebook);
-      source_widget_group = gtk_notebook_get_group (GTK_NOTEBOOK (source_widget));
+      group = notebook->priv->group;
+      source_group = source->priv->group;
 
-      if (widget_group && source_widget_group &&
-	  widget_group == source_widget_group &&
-	  !(widget == GTK_NOTEBOOK (source_widget)->priv->cur_page->child ||
-	    gtk_widget_is_ancestor (widget, GTK_NOTEBOOK (source_widget)->priv->cur_page->child)))
+      if (group != 0 && group == source_group &&
+	  !(widget == source_child ||
+            gtk_widget_is_ancestor (widget, source_child)))
 	{
 	  gdk_drag_status (context, GDK_ACTION_MOVE, time);
 	  return TRUE;
@@ -7585,51 +7584,53 @@ gtk_notebook_reorder_child (GtkNotebook *notebook,
 }
 
 /**
- * gtk_notebook_set_group:
+ * gtk_notebook_set_group_name:
  * @notebook: a #GtkNotebook
- * @group: (allow-none): a pointer to identify the notebook group, or %NULL to unset it
+ * @name: (allow-none): the name of the notebook group, or %NULL to unset it
  *
- * Sets a group identificator pointer for @notebook, notebooks sharing
- * the same group identificator pointer will be able to exchange tabs
- * via drag and drop. A notebook with a %NULL group identificator will
+ * Sets a group name for @notebook.
+ *
+ * Notebooks with the same name will be able to exchange tabs
+ * via drag and drop. A notebook with a %NULL group name will
  * not be able to exchange tabs with any other notebook.
- * 
- * Since: 2.12
  */
 void
-gtk_notebook_set_group (GtkNotebook *notebook,
-			gpointer     group)
+gtk_notebook_set_group_name (GtkNotebook *notebook,
+                             const gchar *group_name)
 {
   GtkNotebookPrivate *priv;
+  GQuark *group;
 
   g_return_if_fail (GTK_IS_NOTEBOOK (notebook));
 
   priv = notebook->priv;
 
+  group = g_quark_from_string (group_name);
+
   if (priv->group != group)
     {
       priv->group = group;
-      g_object_notify (G_OBJECT (notebook), "group");
+      g_object_notify (G_OBJECT (notebook), "group-name");
     }
 }
 
 /**
- * gtk_notebook_get_group:
+ * gtk_notebook_get_group_name:
  * @notebook: a #GtkNotebook
  *
- * Gets the current group identificator pointer for @notebook.
+ * Gets the current group name for @notebook.
  *
- * Return Value: (transfer none): the group identificator,
+ * Return Value: (transfer none): the group name,
  *     or %NULL if none is set.
  *
  * Since: 2.12
  **/
-gpointer
-gtk_notebook_get_group (GtkNotebook *notebook)
+const gchar *
+gtk_notebook_get_group_name (GtkNotebook *notebook)
 {
   g_return_val_if_fail (GTK_IS_NOTEBOOK (notebook), NULL);
 
-  return notebook->priv->group;
+  return g_quark_to_string (notebook->priv->group);
 }
 
 /**

@@ -136,9 +136,9 @@ void gtk_notebook_remove_page       (GtkNotebook *notebook,
  *           Tabs drag and drop                            *
  ***********************************************************/
 
-void gtk_notebook_set_group                (GtkNotebook    *notebook,
-                                            gpointer        group);
-gpointer gtk_notebook_get_group            (GtkNotebook *notebook);
+void         gtk_notebook_set_group_name (GtkNotebook *notebook,
+                                          const gchar *group_name);
+const gchar *gtk_notebook_get_group_name (GtkNotebook *notebook);
 
 
 

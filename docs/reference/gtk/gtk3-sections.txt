@@ -2222,8 +2222,8 @@ gtk_notebook_get_tab_detachable
 gtk_notebook_get_tab_hborder
 gtk_notebook_get_tab_vborder
 gtk_notebook_set_current_page
-gtk_notebook_set_group
-gtk_notebook_get_group
+gtk_notebook_set_group_name
+gtk_notebook_get_group_name
 gtk_notebook_set_action_widget
 gtk_notebook_get_action_widget
 <SUBSECTION Standard>
