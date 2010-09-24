@@ -467,10 +467,6 @@ static void gtk_notebook_buildable_add_child      (GtkBuildable *buildable,
 						   GObject      *child,
 						   const gchar  *type);
 
-static GtkNotebookWindowCreationFunc window_creation_hook = NULL;
-static gpointer window_creation_hook_data;
-static GDestroyNotify window_creation_hook_destroy = NULL;
-
 static guint notebook_signals[LAST_SIGNAL] = { 0 };
 
 G_DEFINE_TYPE_WITH_CODE (GtkNotebook, gtk_notebook, GTK_TYPE_CONTAINER,
@@ -957,9 +953,6 @@ gtk_notebook_class_init (GtkNotebookClass *class)
    * responsible for moving/resizing the window and adding the 
    * necessary properties to the notebook (e.g. the 
    * #GtkNotebook:group ).
-   *
-   * The default handler uses the global window creation hook,
-   * if one has been set with gtk_notebook_set_window_creation_hook().
    *
    * Returns: a #GtkNotebook that @page should be added to, or %NULL.
    *
@@ -3367,9 +3360,6 @@ gtk_notebook_create_window (GtkNotebook *notebook,
                             gint         x,
                             gint         y)
 {
-  if (window_creation_hook)
-    return (* window_creation_hook) (notebook, page, x, y, window_creation_hook_data);
-
   return NULL;
 }
 
@@ -7592,30 +7582,6 @@ gtk_notebook_reorder_child (GtkNotebook *notebook,
 		 0,
 		 child,
 		 position);
-}
-
-/**
- * gtk_notebook_set_window_creation_hook:
- * @func: (allow-none): the #GtkNotebookWindowCreationFunc, or %NULL
- * @data: user data for @func
- * @destroy: (allow-none): Destroy notifier for @data, or %NULL
- *
- * Installs a global function used to create a window
- * when a detached tab is dropped in an empty area.
- * 
- * Since: 2.10
- **/
-void
-gtk_notebook_set_window_creation_hook (GtkNotebookWindowCreationFunc  func,
-				       gpointer                       data,
-                                       GDestroyNotify                 destroy)
-{
-  if (window_creation_hook_destroy)
-    window_creation_hook_destroy (window_creation_hook_data);
-
-  window_creation_hook = func;
-  window_creation_hook_data = data;
-  window_creation_hook_destroy = destroy;
 }
 
 /**

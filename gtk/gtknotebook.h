@@ -100,12 +100,6 @@ struct _GtkNotebookClass
   void (*_gtk_reserved1) (void);
 };
 
-typedef GtkNotebook* (*GtkNotebookWindowCreationFunc) (GtkNotebook *source,
-                                                       GtkWidget   *page,
-                                                       gint         x,
-                                                       gint         y,
-                                                       gpointer     data);
-
 /***********************************************************
  *           Creation, insertion, deletion                 *
  ***********************************************************/
@@ -142,11 +136,8 @@ void gtk_notebook_remove_page       (GtkNotebook *notebook,
  *           Tabs drag and drop                            *
  ***********************************************************/
 
-void gtk_notebook_set_window_creation_hook (GtkNotebookWindowCreationFunc  func,
-					    gpointer                       data,
-                                            GDestroyNotify                 destroy);
-void gtk_notebook_set_group                (GtkNotebook *notebook,
-					    gpointer     group);
+void gtk_notebook_set_group                (GtkNotebook    *notebook,
+                                            gpointer        group);
 gpointer gtk_notebook_get_group            (GtkNotebook *notebook);
 
 

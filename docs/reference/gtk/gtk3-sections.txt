@@ -2226,8 +2226,6 @@ gtk_notebook_set_group
 gtk_notebook_get_group
 gtk_notebook_set_action_widget
 gtk_notebook_get_action_widget
-GtkNotebookWindowCreationFunc
-gtk_notebook_set_window_creation_hook
 <SUBSECTION Standard>
 GTK_NOTEBOOK
 GTK_IS_NOTEBOOK
