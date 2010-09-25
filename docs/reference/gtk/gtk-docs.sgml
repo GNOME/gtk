@@ -4,7 +4,6 @@
 <!ENTITY % local.common.attrib "xmlns:xi  CDATA  #FIXED 'http://www.w3.org/2003/XInclude'">
 <!ENTITY version SYSTEM "version.xml">
 ]>
-<!--ENTITY index-Objects-Grouped SYSTEM "objects_grouped.sgml"-->
 <book id="index" xmlns:xi="http://www.w3.org/2003/XInclude">
   <bookinfo>
     <title>GTK+ Reference Manual</title>
@@ -142,7 +141,6 @@ that is, GUI components such as #GtkButton or #GtkTextView.
     <xi:include href="xml/gtkstyle.xml" />
     <xi:include href="xml/gtkselection.xml" />
     <xi:include href="xml/gtkfeatures.xml" />
-    <xi:include href="xml/gtktypeutils.xml" />
     <xi:include href="xml/gtktesting.xml" />
     <xi:include href="xml/filesystem.xml" />
   </part>
@@ -282,7 +280,7 @@ that is, GUI components such as #GtkButton or #GtkTextView.
     </chapter>
 
     <chapter id="SelectorWidgets">
-      <title>Selectors (File/Font/Color/Input Devices)</title>
+      <title>Selectors (Color/File/Font)</title>
       <xi:include href="xml/gtkcolorbutton.xml" />
       <xi:include href="xml/gtkcolorseldlg.xml" />
       <xi:include href="xml/gtkcolorsel.xml" />
