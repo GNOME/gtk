@@ -427,6 +427,15 @@ cairo_destroy (cr);
   </section>
 
   <section>
+    <title>GtkScrolledWindow policy</title>
+
+    <para>
+     The default values for the #GtkScrolledWindow:hscrollbar-policy and
+     #GtkScrolledWindow:vscrollbar-policy properties have been changed from
+     'never' to 'automatic'. If your application was relying on the default
+     value, you will have explicitly set it explicitly.
+  </section>
+  <section>
     <title>Prevent mixed linkage</title>
     <para>
       Linking against GTK+ 2.x and GTK+ 3 in the same process is problematic
