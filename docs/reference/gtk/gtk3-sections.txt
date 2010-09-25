@@ -5147,9 +5147,12 @@ gtk_device_grab_add
 gtk_device_grab_remove
 
 <SUBSECTION>
+GtkFunction
 gtk_init_add
 gtk_quit_add_destroy
 gtk_quit_add
+GtkCallbackMarshal
+GtkArg
 gtk_quit_add_full
 gtk_quit_remove
 gtk_quit_remove_by_data
@@ -5452,17 +5455,6 @@ gtk_drag_source_get_target_list
 gtk_drag_source_add_text_targets
 gtk_drag_source_add_image_targets
 gtk_drag_source_add_uri_targets
-</SECTION>
-
-<SECTION>
-<FILE>gtktypeutils</FILE>
-<TITLE>Types</TITLE>
-GtkFunction
-GtkCallbackMarshal
-GtkArg
-<SUBSECTION Private>
-GTK_TYPE_IDENTIFIER
-gtk_identifier_get_type
 </SECTION>
 
 <SECTION>
