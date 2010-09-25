@@ -383,85 +383,80 @@ gtk_accel_label_draw (GtkWidget *widget,
   GtkAccelLabel *accel_label = GTK_ACCEL_LABEL (widget);
   GtkMisc *misc = GTK_MISC (accel_label);
   GtkTextDirection direction;
+  guint ac_width;
+  GtkAllocation allocation;
+  GtkRequisition requisition;
 
   direction = gtk_widget_get_direction (widget);
+  ac_width = gtk_accel_label_get_accel_width (accel_label);
+  gtk_widget_get_allocation (widget, &allocation);
+  gtk_widget_get_preferred_size (widget, &requisition, NULL);
 
-  if (gtk_widget_is_drawable (widget)) 
+  if (allocation.width >= requisition.width + ac_width)
     {
-      guint ac_width;
-      GtkAllocation allocation;
-      GtkRequisition requisition;
+      PangoLayout *label_layout;
+      PangoLayout *accel_layout;
+      GtkLabel *label = GTK_LABEL (widget);
 
-      ac_width = gtk_accel_label_get_accel_width (accel_label);
-      gtk_widget_get_allocation (widget, &allocation);
-      gtk_widget_get_preferred_size (widget, &requisition, NULL);
+      gint x;
+      gint y;
+      gint xpad;
 
-      if (allocation.width >= requisition.width + ac_width)
-	{
-	  PangoLayout *label_layout;
-	  PangoLayout *accel_layout;
-	  GtkLabel *label = GTK_LABEL (widget);
+      label_layout = gtk_label_get_layout (GTK_LABEL (accel_label));
 
-	  gint x;
-	  gint y;
-	  gint xpad;
+      cairo_save (cr);
 
-	  label_layout = gtk_label_get_layout (GTK_LABEL (accel_label));
+      /* XXX: Mad hack: We modify the label's width so it renders
+       * properly in its draw function that we chain to. */
+      if (direction == GTK_TEXT_DIR_RTL)
+        cairo_translate (cr, ac_width, 0);
+      if (gtk_label_get_ellipsize (label))
+        pango_layout_set_width (label_layout,
+                                pango_layout_get_width (label_layout) 
+                                - ac_width * PANGO_SCALE);
+      
+      allocation.width -= ac_width;
+      gtk_widget_set_allocation (widget, &allocation);
+      if (GTK_WIDGET_CLASS (gtk_accel_label_parent_class)->draw)
+        GTK_WIDGET_CLASS (gtk_accel_label_parent_class)->draw (widget,
+                                                               cr);
+      allocation.width += ac_width;
+      gtk_widget_set_allocation (widget, &allocation);
+      if (gtk_label_get_ellipsize (label))
+        pango_layout_set_width (label_layout,
+                                pango_layout_get_width (label_layout) 
+                                + ac_width * PANGO_SCALE);
 
-          cairo_save (cr);
+      cairo_restore (cr);
 
-          /* XXX: Mad hack: We modify the label's width so it renders
-           * properly in its draw function that we chain to. */
-	  if (direction == GTK_TEXT_DIR_RTL)
-	    cairo_translate (cr, ac_width, 0);
-	  if (gtk_label_get_ellipsize (label))
-	    pango_layout_set_width (label_layout,
-				    pango_layout_get_width (label_layout) 
-				    - ac_width * PANGO_SCALE);
-	  
-          allocation.width -= ac_width;
-          gtk_widget_set_allocation (widget, &allocation);
-	  if (GTK_WIDGET_CLASS (gtk_accel_label_parent_class)->draw)
-	    GTK_WIDGET_CLASS (gtk_accel_label_parent_class)->draw (widget,
-                                                                   cr);
-          allocation.width += ac_width;
-          gtk_widget_set_allocation (widget, &allocation);
-	  if (gtk_label_get_ellipsize (label))
-	    pango_layout_set_width (label_layout,
-				    pango_layout_get_width (label_layout) 
-				    + ac_width * PANGO_SCALE);
+      gtk_misc_get_padding (misc, &xpad, NULL);
 
-          cairo_restore (cr);
-
-	  gtk_misc_get_padding (misc, &xpad, NULL);
-
-	  if (direction == GTK_TEXT_DIR_RTL)
-	    x = xpad;
-	  else
-	    x = gtk_widget_get_allocated_width (widget) - xpad - ac_width;
-
-	  gtk_label_get_layout_offsets (GTK_LABEL (accel_label), NULL, &y);
-
-	  accel_layout = gtk_widget_create_pango_layout (widget, gtk_accel_label_get_string (accel_label));
-
-	  y += get_first_baseline (label_layout) - get_first_baseline (accel_layout) - allocation.y;
-
-          gtk_paint_layout (gtk_widget_get_style (widget),
-                            cr,
-                            gtk_widget_get_state (widget),
-			    FALSE,
-                            widget,
-                            "accellabel",
-                            x, y,
-                            accel_layout);                            
-
-          g_object_unref (accel_layout);
-	}
+      if (direction == GTK_TEXT_DIR_RTL)
+        x = xpad;
       else
-	{
-	  if (GTK_WIDGET_CLASS (gtk_accel_label_parent_class)->draw)
-	    GTK_WIDGET_CLASS (gtk_accel_label_parent_class)->draw (widget, cr);
-	}
+        x = gtk_widget_get_allocated_width (widget) - xpad - ac_width;
+
+      gtk_label_get_layout_offsets (GTK_LABEL (accel_label), NULL, &y);
+
+      accel_layout = gtk_widget_create_pango_layout (widget, gtk_accel_label_get_string (accel_label));
+
+      y += get_first_baseline (label_layout) - get_first_baseline (accel_layout) - allocation.y;
+
+      gtk_paint_layout (gtk_widget_get_style (widget),
+                        cr,
+                        gtk_widget_get_state (widget),
+                        FALSE,
+                        widget,
+                        "accellabel",
+                        x, y,
+                        accel_layout);                            
+
+      g_object_unref (accel_layout);
+    }
+  else
+    {
+      if (GTK_WIDGET_CLASS (gtk_accel_label_parent_class)->draw)
+        GTK_WIDGET_CLASS (gtk_accel_label_parent_class)->draw (widget, cr);
     }
   
   return FALSE;
