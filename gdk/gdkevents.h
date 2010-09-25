@@ -568,13 +568,21 @@ void	  gdk_set_show_events		(gboolean	 show_events);
 gboolean  gdk_get_show_events		(void);
 
 #ifndef GDK_MULTIHEAD_SAFE
-void gdk_add_client_message_filter (GdkAtom       message_type,
-				    GdkFilterFunc func,
-				    gpointer      data);
 
-gboolean gdk_setting_get (const gchar *name,
-			  GValue      *value); 
+gboolean gdk_setting_get                           (const gchar *name,
+                                                    GValue          *value);
+void gdk_add_client_message_filter                 (GdkAtom          message_type,
+                                                    GdkFilterFunc    func,
+                                                    gpointer         data);
+gboolean gdk_event_send_client_message             (GdkEvent        *event,
+                                                    GdkNativeWindow  winid);
+void     gdk_event_send_clientmessage_toall        (GdkEvent        *event);
+
 #endif /* GDK_MULTIHEAD_SAFE */
+
+gboolean gdk_event_send_client_message_for_display (GdkDisplay      *display,
+                                                    GdkEvent        *event,
+                                                    GdkNativeWindow  winid);
 
 G_END_DECLS
 

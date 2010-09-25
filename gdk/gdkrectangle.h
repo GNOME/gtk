@@ -8,7 +8,7 @@
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	 See the GNU
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public
@@ -24,40 +24,28 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
-#ifndef __GDK_H__
-#define __GDK_H__
+#if !defined (__GDK_H_INSIDE__) && !defined (GDK_COMPILATION)
+#error "Only <gdk/gdk.h> can be included directly."
+#endif
 
-#define __GDK_H_INSIDE__
+#ifndef __GDK_RECTANGLE_H__
+#define __GDK_RECTANGLE_H__
 
-#include <gdk/gdkapplaunchcontext.h>
-#include <gdk/gdkcairo.h>
-#include <gdk/gdkcolor.h>
-#include <gdk/gdkcursor.h>
-#include <gdk/gdkdevice.h>
-#include <gdk/gdkdevicemanager.h>
-#include <gdk/gdkdisplay.h>
-#include <gdk/gdkdisplaymanager.h>
-#include <gdk/gdkdnd.h>
-#include <gdk/gdkdrawable.h>
-#include <gdk/gdkenumtypes.h>
-#include <gdk/gdkevents.h>
-#include <gdk/gdkinput.h>
-#include <gdk/gdkkeys.h>
-#include <gdk/gdkkeysyms.h>
-#include <gdk/gdkmain.h>
-#include <gdk/gdkpango.h>
-#include <gdk/gdkpixbuf.h>
-#include <gdk/gdkproperty.h>
-#include <gdk/gdkrectangle.h>
-#include <gdk/gdkscreen.h>
-#include <gdk/gdkselection.h>
-#include <gdk/gdkspawn.h>
-#include <gdk/gdktestutils.h>
-#include <gdk/gdkthreads.h>
-#include <gdk/gdktypes.h>
-#include <gdk/gdkvisual.h>
-#include <gdk/gdkwindow.h>
+G_BEGIN_DECLS
 
-#undef __GDK_H_INSIDE__
+/* Rectangle utilities
+ */
+gboolean gdk_rectangle_intersect (const GdkRectangle *src1,
+                                  const GdkRectangle *src2,
+                                  GdkRectangle       *dest);
+void     gdk_rectangle_union     (const GdkRectangle *src1,
+                                  const GdkRectangle *src2,
+                                  GdkRectangle       *dest);
 
-#endif /* __GDK_H__ */
+GType gdk_rectangle_get_type (void) G_GNUC_CONST;
+
+#define GDK_TYPE_RECTANGLE (gdk_rectangle_get_type ())
+
+G_END_DECLS
+
+#endif /* __GDK__RECTANGLE_H__ */

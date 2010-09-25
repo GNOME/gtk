@@ -85,14 +85,17 @@ gdk_public_h_sources =				\
 	gdkkeys.h				\
 	gdkkeysyms.h				\
 	gdkkeysyms-compat.h			\
+	gdkmain.h				\
 	gdkpango.h				\
 	gdkpixbuf.h				\
 	gdkprivate.h				\
 	gdkproperty.h				\
+	gdkrectangle.h				\
 	gdkscreen.h				\
 	gdkselection.h				\
 	gdkspawn.h				\
 	gdktestutils.h				\
+	gdkthreads.h				\
 	gdktypes.h				\
 	gdkvisual.h				\
 	gdkwindow.h
