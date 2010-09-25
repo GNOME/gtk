@@ -396,9 +396,6 @@ cairo_destroy (cr);
        In the cairo-centric world of GTK+ 3, cairo surfaces
       take over the role of pixmaps.
     </para>
-    <para>
-      FIXME: example
-    </para>
   </section>
 
   <section>
@@ -411,9 +408,44 @@ cairo_destroy (cr);
       colormap-handling functions of #GtkWidget (gtk_widget_set_colormap(),
       etc) have been removed and gtk_window_set_visual() has been added.
     </para>
-    <para>
-      FIXME: example
+    <example><title>Setting up a translucent window</title>
+    <para>You might have a screen-changed handler like the following
+     to set up a translucent window with an alpha-channel:
     </para>
+    <programlisting>
+static void
+on_alpha_screen_changed (GtkWidget *widget,
+                         GdkScreen *old_screen,
+                         GtkWidget *label)
+{
+  GdkScreen *screen = gtk_widget_get_screen (widget);
+  GdkColormap *colormap = gdk_screen_get_rgba_colormap (screen);
+
+  if (colormap == NULL)
+    colormap = gdk_screen_get_default_colormap (screen);
+
+  gtk_widget_set_colormap (widget, colormap);
+}
+    </programlisting>
+    <para>
+    With visuals instead of colormaps, this will look as follows:
+    </para>
+    <programlisting>
+static void
+on_alpha_screen_changed (GtkWindow *window,
+                         GdkScreen *old_screen,
+                         GtkWidget *label)
+{
+  GdkScreen *screen = gtk_widget_get_screen (GTK_WIDGET (window));
+  GdkVisual *visual = gdk_screen_get_rgba_visual (screen);
+
+  if (visual == NULL)
+    visual = gdk_screen_get_system_visual (screen);
+
+  gtk_window_set_visual (window, visual);
+}
+    </programlisting>
+    </example>
   </section>
 
   <section>
@@ -480,9 +512,35 @@ cairo_destroy (cr);
       implementations will usually just use the cairo context that has been
       passed in for this.
     </para>
-    <para>
-      FIXME: example
-    </para>
+    <example><title>A simple ::draw function</title>
+    <programlisting>
+gboolean
+gtk_arrow_draw (GtkWidget *widget,
+                cairo_t   *cr)
+{
+  gint x, y;
+  gint width, height;
+  gint extent;
+
+  width = gtk_widget_get_allocated_width (widget);
+  height = gtk_widget_get_allocated_height (widget);
+
+  extent = MIN (width - 2 * PAD, height - 2 * PAD);
+  x = PAD;
+  y = PAD;
+
+  gtk_paint_arrow (gtk_widget_get_style (widget),
+                   cr,
+                   gtk_widget_get_state (widget),
+                   GTK_SHADOW_OUT,
+                   widget,
+                   "arrow",
+                   widget->priv->arrow_type,
+                   TRUE,
+                   x, y, extent, extent);
+}
+    </programlisting>
+    </example>
   </section>
 
   <section>
