@@ -81,21 +81,17 @@ canvas_item_draw (const CanvasItem *item,
 }
 
 static gboolean
-canvas_expose_event (GtkWidget      *widget,
-                     GdkEventExpose *event)
+canvas_draw (GtkWidget *widget,
+             cairo_t   *cr)
 {
   GtkAllocation allocation;
-  cairo_t *cr;
   GList *iter;
-
-  cr = gdk_cairo_create (gtk_widget_get_window (widget));
-  gdk_cairo_region (cr, event->region);
-  cairo_clip (cr);
-
-  gtk_widget_get_allocation (widget, &allocation);
+  gint width, height;
 
   cairo_set_source_rgb (cr, 1, 1, 1);
-  cairo_rectangle (cr, 0, 0, allocation.width, allocation.height);
+  width = gtk_widget_get_allocated_width (widget);
+  height = gtk_widget_get_allocated_height (widget);
+  cairo_rectangle (cr, 0, 0, width, height);
   cairo_fill (cr);
 
   for (iter = canvas_items; iter; iter = iter->next)
@@ -103,8 +99,6 @@ canvas_expose_event (GtkWidget      *widget,
 
   if (drop_item)
     canvas_item_draw (drop_item, cr, TRUE);
-
-  cairo_destroy (cr);
 
   return TRUE;
 }
@@ -572,7 +566,7 @@ do_toolpalette (GtkWidget *do_widget)
       gtk_widget_set_app_paintable (contents, TRUE);
 
       g_object_connect (contents,
-                        "signal::expose-event", canvas_expose_event, NULL,
+                        "signal::draw", canvas_draw, NULL,
                         "signal::drag-data-received", passive_canvas_drag_data_received, NULL,
                         NULL);
 
@@ -600,7 +594,7 @@ do_toolpalette (GtkWidget *do_widget)
       gtk_widget_set_app_paintable (contents, TRUE);
 
       g_object_connect (contents,
-                        "signal::expose-event", canvas_expose_event, NULL,
+                        "signal::draw", canvas_draw, NULL,
                         "signal::drag-motion", interactive_canvas_drag_motion, NULL,
                         "signal::drag-data-received", interactive_canvas_drag_data_received, NULL,
                         "signal::drag-leave", interactive_canvas_drag_leave, NULL,
