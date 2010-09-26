@@ -67,25 +67,12 @@ create_button (void)
 }
 
 static gboolean
-on_expose_alignment (GtkWidget      *widget,
-                     GdkEventExpose *event,
-                     void           *data)
+on_draw_alignment (GtkWidget      *widget,
+                   cairo_t        *cr,
+                   void           *data)
 {
-  cairo_t *cr;
-  GtkAllocation allocation;
-
-  cr = gdk_cairo_create (event->window);
-
   cairo_set_source_rgb (cr, 1.0, 0.0, 0.0);
-  gtk_widget_get_allocation (widget, &allocation);
-  cairo_rectangle (cr,
-                   allocation.x,
-                   allocation.y,
-                   allocation.width,
-                   allocation.height);
-  cairo_fill (cr);
-
-  cairo_destroy (cr);
+  cairo_paint (cr);
 
   return FALSE;
 }
@@ -100,8 +87,8 @@ create_alignment (void)
   /* make the alignment visible */
   gtk_widget_set_redraw_on_allocate (alignment, TRUE);
   g_signal_connect (G_OBJECT (alignment),
-                    "expose-event",
-                    G_CALLBACK (on_expose_alignment),
+                    "draw",
+                    G_CALLBACK (on_draw_alignment),
                     NULL);
 
   return alignment;
