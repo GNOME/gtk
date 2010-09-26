@@ -7603,7 +7603,7 @@ gtk_notebook_set_group_name (GtkNotebook *notebook,
                              const gchar *group_name)
 {
   GtkNotebookPrivate *priv;
-  GQuark *group;
+  GQuark group;
 
   g_return_if_fail (GTK_IS_NOTEBOOK (notebook));
 
