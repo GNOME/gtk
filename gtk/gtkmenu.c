@@ -1744,8 +1744,6 @@ gtk_menu_popup (GtkMenu		    *menu,
 		guint		     button,
 		guint32		     activate_time)
 {
-  GdkDevice *device;
-
   g_return_if_fail (GTK_IS_MENU (menu));
 
   gtk_menu_popup_for_device (menu,
