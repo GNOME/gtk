@@ -1582,9 +1582,7 @@ gtk_image_draw (GtkWidget *widget,
   
   if (priv->storage_type != GTK_IMAGE_EMPTY)
     {
-      GtkAllocation allocation;
       GtkMisc *misc;
-      GdkRectangle image_bound;
       gint x, y;
       gint xpad, ypad;
       gfloat xalign, yalign;
@@ -1602,31 +1600,21 @@ gtk_image_draw (GtkWidget *widget,
       if (priv->need_calc_size)
 	gtk_image_calc_size (image);
 
-      gtk_widget_get_allocation (widget, &allocation);
-
       gtk_misc_get_alignment (misc, &xalign, &yalign);
       gtk_misc_get_padding (misc, &xpad, &ypad);
 
       if (gtk_widget_get_direction (widget) != GTK_TEXT_DIR_LTR)
 	xalign = 1.0 - xalign;
 
-      x = floor (allocation.x + xpad + ((allocation.width - priv->required_width) * xalign));
-      y = floor (allocation.y + ypad + ((allocation.height - priv->required_height) * yalign));
+      x = floor (xpad + ((gtk_widget_get_allocated_width (widget) - priv->required_width) * xalign));
+      y = floor (ypad + ((gtk_widget_get_allocated_height (widget) - priv->required_height) * yalign));
       
-      image_bound.x = x;
-      image_bound.y = y;      
-      image_bound.width = 0;
-      image_bound.height = 0;      
-
       needs_state_transform = gtk_widget_get_state (widget) != GTK_STATE_NORMAL;
       
       switch (priv->storage_type)
         {
 
         case GTK_IMAGE_PIXBUF:
-          image_bound.width = gdk_pixbuf_get_width (priv->data.pixbuf.pixbuf);
-          image_bound.height = gdk_pixbuf_get_height (priv->data.pixbuf.pixbuf);
-
           pixbuf = priv->data.pixbuf.pixbuf;
           g_object_ref (pixbuf);
           break;
@@ -1636,11 +1624,6 @@ gtk_image_draw (GtkWidget *widget,
                                            priv->data.stock.stock_id,
                                            priv->icon_size,
                                            NULL);
-          if (pixbuf)
-            {              
-              image_bound.width = gdk_pixbuf_get_width (pixbuf);
-              image_bound.height = gdk_pixbuf_get_height (pixbuf);
-            }
 
           /* already done */
           needs_state_transform = FALSE;
@@ -1655,12 +1638,6 @@ gtk_image_draw (GtkWidget *widget,
                                       priv->icon_size,
                                       widget,
                                       NULL);
-
-          if (pixbuf)
-            {
-              image_bound.width = gdk_pixbuf_get_width (pixbuf);
-              image_bound.height = gdk_pixbuf_get_height (pixbuf);
-            }
 
           /* already done */
           needs_state_transform = FALSE;
@@ -1679,9 +1656,6 @@ gtk_image_draw (GtkWidget *widget,
                                    image);
               }
 
-            image_bound.width = gdk_pixbuf_animation_get_width (priv->data.anim.anim);
-            image_bound.height = gdk_pixbuf_animation_get_height (priv->data.anim.anim);
-                  
             /* don't advance the anim iter here, or we could get frame changes between two
              * exposes of different areas.
              */
@@ -1708,8 +1682,6 @@ gtk_image_draw (GtkWidget *widget,
 	  if (pixbuf)
 	    {
 	      g_object_ref (pixbuf);
-	      image_bound.width = gdk_pixbuf_get_width (pixbuf);
-	      image_bound.height = gdk_pixbuf_get_height (pixbuf);
 	    }
 	  break;
 
@@ -1730,8 +1702,6 @@ gtk_image_draw (GtkWidget *widget,
 	  if (pixbuf)
 	    {
 	      g_object_ref (pixbuf);
-	      image_bound.width = gdk_pixbuf_get_width (pixbuf);
-	      image_bound.height = gdk_pixbuf_get_height (pixbuf);
 	    }
 	  break;
 	  
@@ -1775,8 +1745,7 @@ gtk_image_draw (GtkWidget *widget,
             }
 
           gdk_cairo_set_source_pixbuf (cr, pixbuf, x, y);
-          gdk_cairo_rectangle (cr, &image_bound);
-          cairo_fill (cr);
+          cairo_paint (cr);
 
           g_object_unref (pixbuf);
         }
