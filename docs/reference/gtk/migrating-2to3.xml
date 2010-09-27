@@ -579,10 +579,11 @@ gtk_arrow_draw (GtkWidget *widget,
     <title>GtkScrolledWindow policy</title>
 
     <para>
-     The default values for the #GtkScrolledWindow:hscrollbar-policy and
-     #GtkScrolledWindow:vscrollbar-policy properties have been changed from
-     'never' to 'automatic'. If your application was relying on the default
-     value, you will have explicitly set it explicitly.
+      The default values for the #GtkScrolledWindow:hscrollbar-policy and
+      #GtkScrolledWindow:vscrollbar-policy properties have been changed from
+      'never' to 'automatic'. If your application was relying on the default
+      value, you will have explicitly set it explicitly.
+    </para>
   </section>
   <section>
     <title>Prevent mixed linkage</title>
