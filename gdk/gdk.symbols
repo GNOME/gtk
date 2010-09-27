@@ -307,6 +307,7 @@ gdk_cairo_reset_clip
 gdk_cairo_set_source_color
 gdk_cairo_set_source_pixbuf
 gdk_cairo_set_source_pixmap
+gdk_cairo_set_source_window
 gdk_cairo_rectangle
 gdk_cairo_region
 #endif
