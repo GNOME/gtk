@@ -317,7 +317,7 @@ _cairo_write_to_cups (void                *closure,
 	}    
 
       GTK_NOTE (PRINTING,
-                g_print ("CUPS Backend: Wrote %i bytes to temp file\n", written));
+                g_print ("CUPS Backend: Wrote %"G_GSIZE_FORMAT" bytes to temp file\n", written));
 
       data += written;
       length -= written;
