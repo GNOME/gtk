@@ -43,7 +43,7 @@ int main( int   argc,
   gtk_container_add (GTK_CONTAINER (vbox), frame);
   gtk_widget_show (frame);
 
-  adjustment = GTK_ADJUSTMENT (gtk_adjustment_new (0, 0, 100, 0.01, 0.1, 0));
+  adjustment = gtk_adjustment_new (0, 0, 100, 0.01, 0.1, 0);
 
   dial = gtk_dial_new (adjustment);
   gtk_dial_set_update_policy (GTK_DIAL (dial), GTK_UPDATE_DELAYED);

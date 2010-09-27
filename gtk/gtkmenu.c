@@ -2190,13 +2190,11 @@ gtk_menu_set_tearoff_state (GtkMenu  *menu,
 	      gtk_container_add (GTK_CONTAINER (menu->tearoff_window), menu->tearoff_hbox);
 
               height = gdk_window_get_height (gtk_widget_get_window (GTK_WIDGET (menu)));
-              menu->tearoff_adjustment =
-		GTK_ADJUSTMENT (gtk_adjustment_new (0,
-						    0,
-						    priv->requested_height,
-						    MENU_SCROLL_STEP2,
-						    height/2,
-						    height));
+              menu->tearoff_adjustment = gtk_adjustment_new (0,
+                                                             0, priv->requested_height,
+                                                             MENU_SCROLL_STEP2,
+                                                             height/2,
+                                                             height);
 	      g_object_connect (menu->tearoff_adjustment,
 				"signal::value-changed", gtk_menu_scrollbar_changed, menu,
 				NULL);

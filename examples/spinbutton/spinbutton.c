@@ -92,8 +92,7 @@ int main( int   argc,
   gtk_misc_set_alignment (GTK_MISC (label), 0, 0.5);
   gtk_box_pack_start (GTK_BOX (vbox2), label, FALSE, TRUE, 0);
 
-  adj = (GtkAdjustment *) gtk_adjustment_new (1.0, 1.0, 31.0, 1.0,
-					      5.0, 0.0);
+  adj = gtk_adjustment_new (1.0, 1.0, 31.0, 1.0, 5.0, 0.0);
   spinner = gtk_spin_button_new (adj, 0, 0);
   gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), TRUE);
   gtk_box_pack_start (GTK_BOX (vbox2), spinner, FALSE, TRUE, 0);
@@ -105,8 +104,7 @@ int main( int   argc,
   gtk_misc_set_alignment (GTK_MISC (label), 0, 0.5);
   gtk_box_pack_start (GTK_BOX (vbox2), label, FALSE, TRUE, 0);
 
-  adj = (GtkAdjustment *) gtk_adjustment_new (1.0, 1.0, 12.0, 1.0,
-					      5.0, 0.0);
+  adj = gtk_adjustment_new (1.0, 1.0, 12.0, 1.0, 5.0, 0.0);
   spinner = gtk_spin_button_new (adj, 0, 0);
   gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), TRUE);
   gtk_box_pack_start (GTK_BOX (vbox2), spinner, FALSE, TRUE, 0);
@@ -118,8 +116,7 @@ int main( int   argc,
   gtk_misc_set_alignment (GTK_MISC (label), 0, 0.5);
   gtk_box_pack_start (GTK_BOX (vbox2), label, FALSE, TRUE, 0);
 
-  adj = (GtkAdjustment *) gtk_adjustment_new (1998.0, 0.0, 2100.0,
-					      1.0, 100.0, 0.0);
+  adj = gtk_adjustment_new (1998.0, 0.0, 2100.0, 1.0, 100.0, 0.0);
   spinner = gtk_spin_button_new (adj, 0, 0);
   gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
   gtk_widget_set_size_request (spinner, 55, -1);
@@ -142,8 +139,7 @@ int main( int   argc,
   gtk_misc_set_alignment (GTK_MISC (label), 0, 0.5);
   gtk_box_pack_start (GTK_BOX (vbox2), label, FALSE, TRUE, 0);
 
-  adj = (GtkAdjustment *) gtk_adjustment_new (0.0, -10000.0, 10000.0,
-					      0.5, 100.0, 0.0);
+  adj = gtk_adjustment_new (0.0, -10000.0, 10000.0, 0.5, 100.0, 0.0);
   spinner1 = gtk_spin_button_new (adj, 1.0, 2);
   gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner1), TRUE);
   gtk_widget_set_size_request (spinner1, 100, -1);
@@ -156,7 +152,7 @@ int main( int   argc,
   gtk_misc_set_alignment (GTK_MISC (label), 0, 0.5);
   gtk_box_pack_start (GTK_BOX (vbox2), label, FALSE, TRUE, 0);
 
-  adj = (GtkAdjustment *) gtk_adjustment_new (2, 1, 5, 1, 1, 0);
+  adj = gtk_adjustment_new (2, 1, 5, 1, 1, 0);
   spinner2 = gtk_spin_button_new (adj, 0.0, 0);
   gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner2), TRUE);
   g_signal_connect (adj, "value-changed",

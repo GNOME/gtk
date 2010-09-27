@@ -822,7 +822,7 @@ gtk_range_set_adjustment (GtkRange      *range,
   priv = range->priv;
 
   if (!adjustment)
-    adjustment = (GtkAdjustment*) gtk_adjustment_new (0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
+    adjustment = gtk_adjustment_new (0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
   else
     g_return_if_fail (GTK_IS_ADJUSTMENT (adjustment));
 

@@ -123,7 +123,7 @@ main(int argc, char **argv)
 	label = gtk_label_new ("Overall Alpha:");
 	gtk_box_pack_start (GTK_BOX (hbox), label, FALSE, FALSE, 0);
 
-	adjustment = GTK_ADJUSTMENT (gtk_adjustment_new (overall_alpha, 0, 255, 1, 10, 0));
+	adjustment = gtk_adjustment_new (overall_alpha, 0, 255, 1, 10, 0);
 	g_signal_connect (adjustment, "value_changed",
 			  G_CALLBACK (overall_changed_cb), NULL);
 	

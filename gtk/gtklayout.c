@@ -227,7 +227,7 @@ gtk_layout_get_vadjustment (GtkLayout *layout)
 static GtkAdjustment *
 new_default_adjustment (void)
 {
-  return GTK_ADJUSTMENT (gtk_adjustment_new (0.0, 0.0, 0.0, 0.0, 0.0, 0.0));
+  return gtk_adjustment_new (0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
 }
 
 static void           

@@ -715,14 +715,13 @@ property_widget (GObject    *object,
 
   if (type == G_TYPE_PARAM_INT)
     {
-      adj = GTK_ADJUSTMENT (gtk_adjustment_new (G_PARAM_SPEC_INT (spec)->default_value,
-						G_PARAM_SPEC_INT (spec)->minimum,
-						G_PARAM_SPEC_INT (spec)->maximum,
-						1,
-						MAX ((G_PARAM_SPEC_INT (spec)->maximum -
-						      G_PARAM_SPEC_INT (spec)->minimum) / 10, 1),
-						0.0));
-      
+      adj = gtk_adjustment_new (G_PARAM_SPEC_INT (spec)->default_value,
+                                G_PARAM_SPEC_INT (spec)->minimum,
+                                G_PARAM_SPEC_INT (spec)->maximum,
+                                1,
+                                MAX ((G_PARAM_SPEC_INT (spec)->maximum - G_PARAM_SPEC_INT (spec)->minimum) / 10, 1),
+                                0.0);
+
       prop_edit = gtk_spin_button_new (adj, 1.0, 0);
       
       g_object_connect_property (object, spec, 
@@ -735,15 +734,13 @@ property_widget (GObject    *object,
     }
   else if (type == G_TYPE_PARAM_UINT)
     {
-      adj = GTK_ADJUSTMENT (
-			    gtk_adjustment_new (G_PARAM_SPEC_UINT (spec)->default_value,
-						G_PARAM_SPEC_UINT (spec)->minimum,
-						G_PARAM_SPEC_UINT (spec)->maximum,
-						1,
-						MAX ((G_PARAM_SPEC_UINT (spec)->maximum -
-						      G_PARAM_SPEC_UINT (spec)->minimum) / 10, 1),
-						0.0));
-      
+      adj = gtk_adjustment_new (G_PARAM_SPEC_UINT (spec)->default_value,
+                                G_PARAM_SPEC_UINT (spec)->minimum,
+                                G_PARAM_SPEC_UINT (spec)->maximum,
+                                1,
+                                MAX ((G_PARAM_SPEC_UINT (spec)->maximum - G_PARAM_SPEC_UINT (spec)->minimum) / 10, 1),
+                                0.0);
+
       prop_edit = gtk_spin_button_new (adj, 1.0, 0);
       
       g_object_connect_property (object, spec, 
@@ -756,15 +753,13 @@ property_widget (GObject    *object,
     }
   else if (type == G_TYPE_PARAM_FLOAT)
     {
+      adj = gtk_adjustment_new (G_PARAM_SPEC_FLOAT (spec)->default_value,
+                                G_PARAM_SPEC_FLOAT (spec)->minimum,
+                                G_PARAM_SPEC_FLOAT (spec)->maximum,
+                                0.1,
+                                MAX ((G_PARAM_SPEC_FLOAT (spec)->maximum - G_PARAM_SPEC_FLOAT (spec)->minimum) / 10, 0.1),
+                                0.0);
 
-      adj = GTK_ADJUSTMENT (gtk_adjustment_new (G_PARAM_SPEC_FLOAT (spec)->default_value,
-						G_PARAM_SPEC_FLOAT (spec)->minimum,
-						G_PARAM_SPEC_FLOAT (spec)->maximum,
-						0.1,
-						MAX ((G_PARAM_SPEC_FLOAT (spec)->maximum -
-						      G_PARAM_SPEC_FLOAT (spec)->minimum) / 10, 0.1),
-						0.0));
-      
       prop_edit = gtk_spin_button_new (adj, 0.1, 2);
       
       g_object_connect_property (object, spec, 
@@ -777,14 +772,13 @@ property_widget (GObject    *object,
     }
   else if (type == G_TYPE_PARAM_DOUBLE)
     {
-      adj = GTK_ADJUSTMENT (gtk_adjustment_new (G_PARAM_SPEC_DOUBLE (spec)->default_value,
-						G_PARAM_SPEC_DOUBLE (spec)->minimum,
-						G_PARAM_SPEC_DOUBLE (spec)->maximum,
-						0.1,
-						MAX ((G_PARAM_SPEC_DOUBLE (spec)->maximum -
-						      G_PARAM_SPEC_DOUBLE (spec)->minimum) / 10, 0.1),
-						0.0));
-      
+      adj = gtk_adjustment_new (G_PARAM_SPEC_DOUBLE (spec)->default_value,
+                                G_PARAM_SPEC_DOUBLE (spec)->minimum,
+                                G_PARAM_SPEC_DOUBLE (spec)->maximum,
+                                0.1,
+                                MAX ((G_PARAM_SPEC_DOUBLE (spec)->maximum - G_PARAM_SPEC_DOUBLE (spec)->minimum) / 10, 0.1),
+                                0.0);
+
       prop_edit = gtk_spin_button_new (adj, 0.1, 2);
       
       g_object_connect_property (object, spec, 

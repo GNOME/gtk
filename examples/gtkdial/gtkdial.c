@@ -129,7 +129,7 @@ gtk_dial_new (GtkAdjustment *adjustment)
   dial = g_object_new (gtk_dial_get_type (), NULL);
 
   if (!adjustment)
-    adjustment = (GtkAdjustment*) gtk_adjustment_new (0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
+    adjustment = gtk_adjustment_new (0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
 
   gtk_dial_set_adjustment (dial, adjustment);
 

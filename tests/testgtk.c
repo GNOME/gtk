@@ -608,12 +608,12 @@ create_big_windows (GtkWidget *widget)
 
       darea = gtk_drawing_area_new ();
 
-      hadj = (GtkAdjustment *)gtk_adjustment_new (0, 0, PATTERN_SIZE, 10, 100, 100);
+      hadj = gtk_adjustment_new (0, 0, PATTERN_SIZE, 10, 100, 100);
       g_signal_connect (hadj, "value_changed",
 			G_CALLBACK (pattern_hadj_changed), darea);
       g_object_set_data (G_OBJECT (hadj), "old-value", &current_x);
-      
-      vadj = (GtkAdjustment *)gtk_adjustment_new (0, 0, PATTERN_SIZE, 10, 100, 100);
+
+      vadj = gtk_adjustment_new (0, 0, PATTERN_SIZE, 10, 100, 100);
       g_signal_connect (vadj, "value_changed",
 			G_CALLBACK (pattern_vadj_changed), darea);
       g_object_set_data (G_OBJECT (vadj), "old-value", &current_y);
@@ -4779,8 +4779,8 @@ create_spins (GtkWidget *widget)
       label = gtk_label_new ("Time :");
       gtk_misc_set_alignment (GTK_MISC (label), 0, 0.5);
       gtk_box_pack_start (GTK_BOX (vbox2), label, FALSE, TRUE, 0);
-      
-      adj = (GtkAdjustment *) gtk_adjustment_new (0, 0, 1410, 30, 60, 0);
+
+      adj = gtk_adjustment_new (0, 0, 1410, 30, 60, 0);
       spinner = gtk_spin_button_new (adj, 0, 0);
       gtk_editable_set_editable (GTK_EDITABLE (spinner), FALSE);
       g_signal_connect (spinner,
@@ -4797,8 +4797,8 @@ create_spins (GtkWidget *widget)
       label = gtk_label_new ("Month :");
       gtk_misc_set_alignment (GTK_MISC (label), 0, 0.5);
       gtk_box_pack_start (GTK_BOX (vbox2), label, FALSE, TRUE, 0);
-      
-      adj = (GtkAdjustment *) gtk_adjustment_new (1.0, 1.0, 12.0, 1.0,
+
+      adj = gtk_adjustment_new (1.0, 1.0, 12.0, 1.0,
 						  5.0, 0.0);
       spinner = gtk_spin_button_new (adj, 0, 0);
       gtk_spin_button_set_update_policy (GTK_SPIN_BUTTON (spinner),
@@ -4822,7 +4822,7 @@ create_spins (GtkWidget *widget)
       gtk_misc_set_alignment (GTK_MISC (label), 0, 0.5);
       gtk_box_pack_start (GTK_BOX (vbox2), label, FALSE, TRUE, 0);
 
-      adj = (GtkAdjustment *) gtk_adjustment_new (0, 0, 255, 1, 16, 0);
+      adj = gtk_adjustment_new (0, 0, 255, 1, 16, 0);
       spinner = gtk_spin_button_new (adj, 0, 0);
       gtk_editable_set_editable (GTK_EDITABLE (spinner), TRUE);
       g_signal_connect (spinner,
@@ -4854,7 +4854,7 @@ create_spins (GtkWidget *widget)
       gtk_misc_set_alignment (GTK_MISC (label), 0, 0.5);
       gtk_box_pack_start (GTK_BOX (vbox2), label, FALSE, TRUE, 0);
 
-      adj = (GtkAdjustment *) gtk_adjustment_new (0.0, -10000.0, 10000.0,
+      adj = gtk_adjustment_new (0.0, -10000.0, 10000.0,
 						  0.5, 100.0, 0.0);
       spinner1 = gtk_spin_button_new (adj, 1.0, 2);
       gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner1), TRUE);
@@ -4867,7 +4867,7 @@ create_spins (GtkWidget *widget)
       gtk_misc_set_alignment (GTK_MISC (label), 0, 0.5);
       gtk_box_pack_start (GTK_BOX (vbox2), label, FALSE, TRUE, 0);
 
-      adj = (GtkAdjustment *) gtk_adjustment_new (2, 1, 15, 1, 1, 0);
+      adj = gtk_adjustment_new (2, 1, 15, 1, 1, 0);
       spinner2 = gtk_spin_button_new (adj, 0.0, 0);
       g_signal_connect (adj, "value_changed",
 			G_CALLBACK (change_digits),
@@ -5121,11 +5121,11 @@ create_cursors (GtkWidget *widget)
       label = gtk_label_new ("Cursor Value : ");
       gtk_misc_set_alignment (GTK_MISC (label), 0, 0.5);
       gtk_box_pack_start (GTK_BOX (hbox), label, FALSE, TRUE, 0);
-      
-      adj = (GtkAdjustment *) gtk_adjustment_new (0,
-						  0, 152,
-						  2,
-						  10, 0);
+
+      adj = gtk_adjustment_new (0,
+                                0, 152,
+                                2,
+                                10, 0);
       spinner = gtk_spin_button_new (adj, 0, 0);
       gtk_box_pack_start (GTK_BOX (hbox), spinner, TRUE, TRUE, 0);
 
@@ -8145,16 +8145,14 @@ window_controls (GtkWidget *window)
 		    G_CALLBACK (configure_event_callback),
 		    label);
 
-  adj = (GtkAdjustment *) gtk_adjustment_new (10.0, -2000.0, 2000.0, 1.0,
-                                              5.0, 0.0);
+  adj = gtk_adjustment_new (10.0, -2000.0, 2000.0, 1.0, 5.0, 0.0);
   spin = gtk_spin_button_new (adj, 0, 0);
 
   gtk_box_pack_start (GTK_BOX (vbox), spin, FALSE, FALSE, 0);
 
   g_object_set_data (G_OBJECT (control_window), "spin1", spin);
 
-  adj = (GtkAdjustment *) gtk_adjustment_new (10.0, -2000.0, 2000.0, 1.0,
-                                              5.0, 0.0);
+  adj = gtk_adjustment_new (10.0, -2000.0, 2000.0, 1.0, 5.0, 0.0);
   spin = gtk_spin_button_new (adj, 0, 0);
 
   gtk_box_pack_start (GTK_BOX (vbox), spin, FALSE, FALSE, 0);
@@ -9200,7 +9198,7 @@ create_scroll_test (GtkWidget *widget)
 
       gtk_widget_set_events (drawing_area, GDK_EXPOSURE_MASK | GDK_SCROLL_MASK);
 
-      adj = GTK_ADJUSTMENT (gtk_adjustment_new (0.0, 0.0, 1000.0, 1.0, 180.0, 200.0));
+      adj = gtk_adjustment_new (0.0, 0.0, 1000.0, 1.0, 180.0, 200.0);
       scroll_test_pos = 0.0;
 
       scrollbar = gtk_vscrollbar_new (adj);

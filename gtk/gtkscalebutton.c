@@ -411,7 +411,7 @@ gtk_scale_button_init (GtkScaleButton *button)
 		    G_CALLBACK (cb_button_release), button);
   gtk_box_pack_end (GTK_BOX (priv->box), priv->minus_button, FALSE, FALSE, 0);
 
-  priv->adjustment = GTK_ADJUSTMENT (gtk_adjustment_new (0.0, 0.0, 100.0, 2, 20, 0));
+  priv->adjustment = gtk_adjustment_new (0.0, 0.0, 100.0, 2, 20, 0);
   g_object_ref_sink (priv->adjustment);
 
   /* the scale */
@@ -704,8 +704,9 @@ gtk_scale_button_set_adjustment	(GtkScaleButton *button,
 				 GtkAdjustment  *adjustment)
 {
   g_return_if_fail (GTK_IS_SCALE_BUTTON (button));
+
   if (!adjustment)
-    adjustment = (GtkAdjustment*) gtk_adjustment_new (0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
+    adjustment = gtk_adjustment_new (0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
   else
     g_return_if_fail (GTK_IS_ADJUSTMENT (adjustment));
 

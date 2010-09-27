@@ -7408,11 +7408,11 @@ gtk_text_view_set_scroll_adjustments (GtkTextView   *text_view,
   if (hadj)
     g_return_if_fail (GTK_IS_ADJUSTMENT (hadj));
   else
-    hadj = GTK_ADJUSTMENT (gtk_adjustment_new (0.0, 0.0, 0.0, 0.0, 0.0, 0.0));
+    hadj = gtk_adjustment_new (0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
   if (vadj)
     g_return_if_fail (GTK_IS_ADJUSTMENT (vadj));
   else
-    vadj = GTK_ADJUSTMENT (gtk_adjustment_new (0.0, 0.0, 0.0, 0.0, 0.0, 0.0));
+    vadj = gtk_adjustment_new (0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
 
   if (priv->hadjustment && (priv->hadjustment != hadj))
     {

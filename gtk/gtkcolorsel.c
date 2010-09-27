@@ -432,7 +432,7 @@ gtk_color_selection_init (GtkColorSelection *colorsel)
   priv->opacity_label = gtk_label_new_with_mnemonic (_("Op_acity:")); 
   gtk_misc_set_alignment (GTK_MISC (priv->opacity_label), 0.0, 0.5); 
   gtk_table_attach_defaults (GTK_TABLE (table), priv->opacity_label, 0, 1, 4, 5); 
-  adjust = GTK_ADJUSTMENT (gtk_adjustment_new (0.0, 0.0, 255.0, 1.0, 1.0, 0.0)); 
+  adjust = gtk_adjustment_new (0.0, 0.0, 255.0, 1.0, 1.0, 0.0);
   g_object_set_data (G_OBJECT (adjust), I_("COLORSEL"), colorsel); 
   priv->opacity_slider = gtk_hscale_new (adjust);
   gtk_widget_set_tooltip_text (priv->opacity_slider,
@@ -2102,16 +2102,16 @@ make_label_spinbutton (GtkColorSelection *colorsel,
 
   if (channel_type == COLORSEL_HUE)
     {
-      adjust = GTK_ADJUSTMENT (gtk_adjustment_new (0.0, 0.0, 360.0, 1.0, 1.0, 0.0));
+      adjust = gtk_adjustment_new (0.0, 0.0, 360.0, 1.0, 1.0, 0.0);
     }
   else if (channel_type == COLORSEL_SATURATION ||
 	   channel_type == COLORSEL_VALUE)
     {
-      adjust = GTK_ADJUSTMENT (gtk_adjustment_new (0.0, 0.0, 100.0, 1.0, 1.0, 0.0));
+      adjust = gtk_adjustment_new (0.0, 0.0, 100.0, 1.0, 1.0, 0.0);
     }
   else
     {
-      adjust = GTK_ADJUSTMENT (gtk_adjustment_new (0.0, 0.0, 255.0, 1.0, 1.0, 0.0));
+      adjust = gtk_adjustment_new (0.0, 0.0, 255.0, 1.0, 1.0, 0.0);
     }
   g_object_set_data (G_OBJECT (adjust), I_("COLORSEL"), colorsel);
   *spinbutton = gtk_spin_button_new (adjust, 10.0, 0);

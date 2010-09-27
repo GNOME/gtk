@@ -35,13 +35,12 @@ main (int argc, char **argv)
         gtk_container_add (GTK_CONTAINER (window), mainbox);
 
 	for (max = 9; max <= 999999999; max = max * 10 + 9) {
-		GtkAdjustment *adj =
-			GTK_ADJUSTMENT (gtk_adjustment_new (max,
-							    1, max,
-							    1,
-							    (max + 1) / 10,
-							    0.0));
-     
+                GtkAdjustment *adj = gtk_adjustment_new (max,
+                                                         1, max,
+                                                         1,
+                                                         (max + 1) / 10,
+                                                         0.0);
+
 		GtkWidget *spin = gtk_spin_button_new (adj, 1.0, 0);
 		GtkWidget *hbox = gtk_hbox_new (FALSE, 2);
 		

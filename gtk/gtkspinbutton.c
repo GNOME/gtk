@@ -422,7 +422,7 @@ gtk_spin_button_set_property (GObject      *object,
     case PROP_ADJUSTMENT:
       adjustment = GTK_ADJUSTMENT (g_value_get_object (value));
       if (!adjustment)
-	adjustment = (GtkAdjustment*) gtk_adjustment_new (0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
+	adjustment = gtk_adjustment_new (0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
       gtk_spin_button_set_adjustment (spin_button, adjustment);
       break;
     case PROP_CLIMB_RATE:
@@ -526,7 +526,7 @@ gtk_spin_button_init (GtkSpinButton *spin_button)
   priv->snap_to_ticks = FALSE;
 
   gtk_spin_button_set_adjustment (spin_button,
-	  (GtkAdjustment*) gtk_adjustment_new (0, 0, 0, 0, 0, 0));
+                                  gtk_adjustment_new (0, 0, 0, 0, 0, 0));
 }
 
 static void
