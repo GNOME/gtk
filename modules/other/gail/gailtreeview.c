@@ -203,7 +203,7 @@ static void             model_row_changed               (GtkTreeModel           
 static void             column_visibility_changed       (GObject                *object,
                                                          GParamSpec             *param,
                                                          gpointer               user_data);
-static void             column_destroy                  (GtkObject              *obj); 
+static void             column_destroy                  (GObject                *obj); 
 static void             model_row_inserted              (GtkTreeModel           *tree_model,
                                                          GtkTreePath            *path,
                                                          GtkTreeIter            *iter,
@@ -2816,7 +2816,7 @@ column_visibility_changed (GObject    *object,
  * and if so we get rid of it.
  */
 static void
-column_destroy (GtkObject *obj)
+column_destroy (GObject *obj)
 {
   GtkTreeViewColumn *tv_col = GTK_TREE_VIEW_COLUMN (obj);
   AtkObject *header;
