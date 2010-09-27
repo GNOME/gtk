@@ -5959,7 +5959,7 @@ create_range_controls (GtkWidget *widget)
   GtkWidget *scrollbar;
   GtkWidget *scale;
   GtkWidget *separator;
-  GObject *adjustment;
+  GtkAdjustment *adjustment;
   GtkWidget *hbox;
 
   if (!window)

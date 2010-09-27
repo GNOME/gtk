@@ -2584,12 +2584,12 @@ but some cases will be shown in later examples where you may need to
 create one yourself. You create an adjustment using:</para>
 
 <programlisting role="C">
-GtkObject *gtk_adjustment_new( gdouble value,
-                               gdouble lower,
-                               gdouble upper,
-                               gdouble step_increment,
-                               gdouble page_increment,
-                               gdouble page_size );
+GtkAdjustment *gtk_adjustment_new( gdouble value,
+                                   gdouble lower,
+                                   gdouble upper,
+                                   gdouble step_increment,
+                                   gdouble page_increment,
+                                   gdouble page_size );
 </programlisting>
 
 <para>The <literal>value</literal> argument is the initial value you want to give to the
@@ -3151,7 +3151,7 @@ static void create_range_controls( void )
     GtkWidget *opt, *menu, *item;
     GtkWidget *label;
     GtkWidget *scale;
-    GtkObject *adj1, *adj2;
+    GtkAdjustment *adj1, *adj2;
 
     /* Standard window-creating stuff */
     window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
@@ -4732,12 +4732,12 @@ button can take. This makes for a powerful Spin Button widget.</para>
 function, which illustrates the information that it holds:</para>
 
 <programlisting role="C">
-GtkObject *gtk_adjustment_new( gdouble value,
-                               gdouble lower,
-                               gdouble upper,
-                               gdouble step_increment,
-                               gdouble page_increment,
-                               gdouble page_size );
+GtkAdjustment *gtk_adjustment_new( gdouble value,
+                                   gdouble lower,
+                                   gdouble upper,
+                                   gdouble step_increment,
+                                   gdouble page_increment,
+                                   gdouble page_size );
 </programlisting>
 
 <para>These attributes of an Adjustment are used by the Spin Button in the
@@ -5030,9 +5030,8 @@ int main( int   argc,
   label = gtk_label_new ("Day :");
   gtk_misc_set_alignment (GTK_MISC (label), 0, 0.5);
   gtk_box_pack_start (GTK_BOX (vbox2), label, FALSE, TRUE, 0);
-  
-  adj = (GtkAdjustment *) gtk_adjustment_new (1.0, 1.0, 31.0, 1.0,
-					      5.0, 0.0);
+
+  adj = gtk_adjustment_new (1.0, 1.0, 31.0, 1.0, 5.0, 0.0);
   spinner = gtk_spin_button_new (adj, 0, 0);
   gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), TRUE);
   gtk_box_pack_start (GTK_BOX (vbox2), spinner, FALSE, TRUE, 0);
@@ -5043,9 +5042,8 @@ int main( int   argc,
   label = gtk_label_new ("Month :");
   gtk_misc_set_alignment (GTK_MISC (label), 0, 0.5);
   gtk_box_pack_start (GTK_BOX (vbox2), label, FALSE, TRUE, 0);
-  
-  adj = (GtkAdjustment *) gtk_adjustment_new (1.0, 1.0, 12.0, 1.0,
-					      5.0, 0.0);
+
+  adj = gtk_adjustment_new (1.0, 1.0, 12.0, 1.0, 5.0, 0.0);
   spinner = gtk_spin_button_new (adj, 0, 0);
   gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), TRUE);
   gtk_box_pack_start (GTK_BOX (vbox2), spinner, FALSE, TRUE, 0);
@@ -5056,9 +5054,8 @@ int main( int   argc,
   label = gtk_label_new ("Year :");
   gtk_misc_set_alignment (GTK_MISC (label), 0, 0.5);
   gtk_box_pack_start (GTK_BOX (vbox2), label, FALSE, TRUE, 0);
-  
-  adj = (GtkAdjustment *) gtk_adjustment_new (1998.0, 0.0, 2100.0,
-					      1.0, 100.0, 0.0);
+
+  adj = gtk_adjustment_new (1998.0, 0.0, 2100.0, 1.0, 100.0, 0.0);
   spinner = gtk_spin_button_new (adj, 0, 0);
   gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
   gtk_widget_set_size_request (spinner, 55, -1);
@@ -5080,9 +5077,8 @@ int main( int   argc,
   label = gtk_label_new ("Value :");
   gtk_misc_set_alignment (GTK_MISC (label), 0, 0.5);
   gtk_box_pack_start (GTK_BOX (vbox2), label, FALSE, TRUE, 0);
-  
-  adj = (GtkAdjustment *) gtk_adjustment_new (0.0, -10000.0, 10000.0,
-					      0.5, 100.0, 0.0);
+
+  adj = gtk_adjustment_new (0.0, -10000.0, 10000.0, 0.5, 100.0, 0.0);
   spinner1 = gtk_spin_button_new (adj, 1.0, 2);
   gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner1), TRUE);
   gtk_widget_set_size_request (spinner1, 100, -1);
@@ -5094,8 +5090,8 @@ int main( int   argc,
   label = gtk_label_new ("Digits :");
   gtk_misc_set_alignment (GTK_MISC (label), 0, 0.5);
   gtk_box_pack_start (GTK_BOX (vbox2), label, FALSE, TRUE, 0);
-  
-  adj = (GtkAdjustment *) gtk_adjustment_new (2, 1, 5, 1, 1, 0);
+
+  adj = gtk_adjustment_new (2, 1, 5, 1, 1, 0);
   spinner2 = gtk_spin_button_new (adj, 0.0, 0);
   gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner2), TRUE);
   g_signal_connect (adj, "value_changed",
@@ -11796,7 +11792,7 @@ gtk_dial_new (GtkAdjustment *adjustment)
   dial = gtk_type_new (gtk_dial_get_type ());
 
   if (!adjustment)
-    adjustment = (GtkAdjustment*) gtk_adjustment_new (0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
+    adjustment = gtk_adjustment_new (0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
 
   gtk_dial_set_adjustment (dial, adjustment);
 
@@ -15002,7 +14998,7 @@ gtk_dial_new (GtkAdjustment *adjustment)
   dial = g_object_new (gtk_dial_get_type (), NULL);
 
   if (!adjustment)
-    adjustment = (GtkAdjustment*) gtk_adjustment_new (0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
+    adjustment = gtk_adjustment_new (0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
 
   gtk_dial_set_adjustment (dial, adjustment);
 
@@ -15590,9 +15586,9 @@ int main( int   argc,
   gtk_frame_set_shadow_type (GTK_FRAME (frame), GTK_SHADOW_IN);
   gtk_container_add (GTK_CONTAINER (vbox), frame);
   gtk_widget_show (frame); 
- 
-  adjustment = GTK_ADJUSTMENT (gtk_adjustment_new (0, 0, 100, 0.01, 0.1, 0));
-  
+
+  adjustment = gtk_adjustment_new (0, 0, 100, 0.01, 0.1, 0);
+
   dial = gtk_dial_new (adjustment);
   gtk_dial_set_update_policy (GTK_DIAL (dial), GTK_UPDATE_DELAYED);
   /*  gtk_widget_set_size_request (dial, 100, 100); */

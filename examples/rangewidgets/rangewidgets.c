@@ -87,7 +87,7 @@ static void create_range_controls( void )
     GtkWidget *opt, *menu, *item;
     GtkWidget *label;
     GtkWidget *scale;
-    GtkObject *adj1, *adj2;
+    GtkAdjustment *adj1, *adj2;
 
     /* Standard window-creating stuff */
     window = gtk_window_new (GTK_WINDOW_TOPLEVEL);

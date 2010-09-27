@@ -327,7 +327,7 @@ set_columns_type (GtkTreeView *tree_view, ColumnsType type)
   GtkCellRenderer *rend;
   GdkPixbuf *pixbuf;
   GtkWidget *image;
-  GObject *adjustment;
+  GtkAdjustment *adjustment;
 
   current_column_type = type;
   

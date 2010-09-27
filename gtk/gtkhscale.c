@@ -83,7 +83,7 @@ gtk_hscale_new_with_range (gdouble min,
                            gdouble max,
                            gdouble step)
 {
-  GObject *adj;
+  GtkAdjustment *adj;
   GtkScale *scale;
   gint digits;
 

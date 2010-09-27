@@ -318,7 +318,7 @@ gtk_adjustment_dispatch_properties_changed (GObject     *object,
     }
 }
 
-GObject *
+GtkAdjustment *
 gtk_adjustment_new (gdouble value,
 		    gdouble lower,
 		    gdouble upper,

@@ -1782,7 +1782,7 @@ gtk_spin_button_new_with_range (gdouble min,
 				gdouble max,
 				gdouble step)
 {
-  GObject *adj;
+  GtkAdjustment *adj;
   GtkSpinButton *spin;
   gint digits;
 
@@ -1801,7 +1801,7 @@ gtk_spin_button_new_with_range (gdouble min,
       digits = MAX_DIGITS;
   }
 
-  gtk_spin_button_configure (spin, GTK_ADJUSTMENT (adj), step, digits);
+  gtk_spin_button_configure (spin, adj, step, digits);
 
   gtk_spin_button_set_numeric (spin, TRUE);
 
