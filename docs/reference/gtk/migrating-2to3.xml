@@ -585,6 +585,35 @@ gtk_arrow_draw (GtkWidget *widget,
       value, you will have explicitly set it explicitly.
     </para>
   </section>
+
+  <section>
+    <title>GtkObject is gone</title>
+
+    <para>
+      GtkObject has been removed in GTK+ 3. Its remaining functionality,
+      the ::destroy signal, has been moved to GtkWidget. If you have non-widget
+      classes that are directly derived from GtkObject, you have to make
+      them derive from #GInitiallyUnowned (or, if you don't need the floating
+      functionality, #GObject). If you have widgets that override the
+      destroy class handler, you have to adust your class_init function,
+      since destroy is now a member of GtkWidgetClass:
+      <informalexample><programlisting>
+      GtkObjectClass *object_class = GTK_OBJECT_CLASS (class);
+
+      object_class->destroy = my_destroy;
+      </programlisting></informalexample>
+      becomes
+      <informalexample><programlisting>
+      GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (class);
+
+      widget_class->destroy = my_destroy;
+      </programlisting></informalexample>
+      In the unlikely case that you have a non-widget class that is derived
+      from GtkObject and makes use of the destroy functionality, you have
+      to implement ::destroy yourself.
+    </para>
+  </section>
+
   <section>
     <title>Prevent mixed linkage</title>
     <para>
