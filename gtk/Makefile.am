@@ -367,6 +367,7 @@ gtk_private_h_sources =		\
 	gtkfilesystem.h		\
 	gtkfilesystemmodel.h	\
 	gtkiconcache.h		\
+	gtkimcontextsimpleseqs.h   \
 	gtkintl.h		\
 	gtkkeyhash.h		\
 	gtkmenuprivate.h	\
@@ -720,8 +721,7 @@ gtk_built_public_sources =			\
 # built headers that don't get installed
 gtk_built_private_headers =			\
 	gtkmarshalers.h				\
-	gtkbuiltincache.h			\
-	gtkimcontextsimpleseqs.h
+	gtkbuiltincache.h
 
 gtk_built_sources =				\
 	gtktypebuiltins.c			\
