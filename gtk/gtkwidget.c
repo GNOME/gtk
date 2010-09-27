@@ -4685,23 +4685,44 @@ gtk_widget_real_adjust_size_allocation (GtkWidget         *widget,
                                         GtkAllocation     *allocation)
 {
   const GtkWidgetAuxInfo *aux_info;
-  GtkRequisition min, natural;
+  gint natural_width;
+  gint natural_height;
   int x, y, w, h;
 
   aux_info = _gtk_widget_get_aux_info_or_defaults (widget);
 
-  gtk_widget_get_preferred_size (widget, &min, &natural);
+  if (gtk_widget_get_request_mode (widget) == GTK_SIZE_REQUEST_HEIGHT_FOR_WIDTH)
+    {
+      gtk_widget_get_preferred_width (widget, NULL, &natural_width);
+      get_span_inside_border_horizontal (widget,
+					 aux_info,
+					 allocation->width,
+					 natural_width,
+					 &x, &w);
 
-  get_span_inside_border_horizontal (widget,
-                                     aux_info,
-                                     allocation->width,
-                                     natural.width,
-                                     &x, &w);
-  get_span_inside_border_vertical (widget,
-                                   aux_info,
-                                   allocation->height,
-                                   natural.height,
-                                   &y, &h);
+      gtk_widget_get_preferred_height_for_width (widget, w, NULL, &natural_height);
+      get_span_inside_border_vertical (widget,
+				       aux_info,
+				       allocation->height,
+				       natural_height,
+				       &y, &h);
+    }
+  else /* GTK_SIZE_REQUEST_WIDTH_FOR_HEIGHT */
+    {
+      gtk_widget_get_preferred_height (widget, NULL, &natural_height);
+      get_span_inside_border_vertical (widget,
+				       aux_info,
+				       allocation->height,
+				       natural_height,
+				       &y, &h);
+
+      gtk_widget_get_preferred_width_for_height (widget, h, NULL, &natural_width);
+      get_span_inside_border_horizontal (widget,
+					 aux_info,
+					 allocation->width,
+					 natural_width,
+					 &x, &w);
+    }
 
   allocation->x += x;
   allocation->y += y;

@@ -394,6 +394,40 @@ open_margin_window (void)
   gtk_widget_show_all (test_window);
 }
 
+static void
+open_valigned_label_window (void)
+{
+  GtkWidget *window, *box, *label, *frame;
+
+  window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+
+  g_signal_connect (test_window, "delete-event",
+                    G_CALLBACK (gtk_main_quit), test_window);
+
+  box = gtk_vbox_new (FALSE, 0);
+  gtk_widget_show (box);
+  gtk_container_add (GTK_CONTAINER (window), box);
+
+
+  label = gtk_label_new ("Some wrapping text with width-chars = 15 and max-width-chars = 35");
+  gtk_label_set_line_wrap  (GTK_LABEL (label), TRUE);
+  gtk_label_set_width_chars  (GTK_LABEL (label), 15);
+  gtk_label_set_max_width_chars  (GTK_LABEL (label), 35);
+
+  gtk_widget_show (label);
+
+  frame  = gtk_frame_new (NULL);
+  gtk_widget_show (frame);
+  gtk_container_add (GTK_CONTAINER (frame), label);
+
+  gtk_widget_set_valign (frame, GTK_ALIGN_CENTER);
+  gtk_widget_set_halign (frame, GTK_ALIGN_FILL);
+
+  gtk_box_pack_start (GTK_BOX (box), frame, TRUE, TRUE, 0);
+
+  gtk_window_present (GTK_WINDOW (window));
+}
+
 int
 main (int argc, char *argv[])
 {
@@ -403,6 +437,7 @@ main (int argc, char *argv[])
   open_control_window ();
   open_alignment_window ();
   open_margin_window ();
+  open_valigned_label_window ();
 
   gtk_main ();
 
