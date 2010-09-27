@@ -38,6 +38,13 @@
 #endif
 
 
+/**
+ * SECTION:gtkaccelmap
+ * @Short_description: Loadable keyboard accelerator specifications
+ * @Title: Accelerator Maps
+ */
+
+
 /* --- structures --- */
 struct _GtkAccelMap
 {
