@@ -2240,28 +2240,6 @@ GtkNotebookPrivate
 </SECTION>
 
 <SECTION>
-<FILE>gtkobject</FILE>
-<TITLE>GtkObject</TITLE>
-GtkObject
-GtkObjectFlags
-GTK_OBJECT_FLAGS
-gtk_object_destroy
-<SUBSECTION Standard>
-GTK_OBJECT
-GTK_IS_OBJECT
-GTK_TYPE_OBJECT
-GTK_OBJECT_CLASS
-GTK_IS_OBJECT_CLASS
-GTK_OBJECT_GET_CLASS
-
-<SUBSECTION Private>
-gtk_object_get_type
-GTK_ARG_READWRITE
-GTK_OBJECT_SET_FLAGS
-GTK_OBJECT_UNSET_FLAGS
-</SECTION>
-
-<SECTION>
 <FILE>gtkoffscreenwindow</FILE>
 <TITLE>GtkOffscreenWindow</TITLE>
 GtkOffscreenWindow

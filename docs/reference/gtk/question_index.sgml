@@ -95,10 +95,10 @@ from functions?
 <answer>
 
 <para>
-See the documentation for #GObject and #GtkObject. For #GObject note 
-specifically g_object_ref() and g_object_unref(). #GtkObject is a subclass 
-of #GObject so the same points apply, except that it has a "floating" state 
-(explained in its documentation).
+See the documentation for #GObject and #GInitiallyUnowned. For #GObject note
+specifically g_object_ref() and g_object_unref(). #GInitiallyUnowned is a
+subclass of #GObject so the same points apply, except that it has a "floating"
+state (explained in its documentation).
 </para>
 
 <para>
@@ -115,7 +115,7 @@ url="http://bugzilla.gnome.org">http://bugzilla.gnome.org</ulink>.)
 <qandaentry>
 <question>
 <para>
-Why does my program leak memory, if I destroy a widget immediately 
+Why does my program leak memory, if I destroy a widget immediately
 after creating it ?
 </para>
 </question>
@@ -127,27 +127,26 @@ If <structname>GtkFoo</structname> isn't a toplevel window, then
  foo = gtk_foo_new (<!-- -->);
  gtk_widget_destroy (foo);
 </programlisting></informalexample>
-is a memory leak, because no one assumed the initial floating 
-reference. If you are using a widget and you aren't immediately 
-packing it into a container, then you probably want standard 
+is a memory leak, because no one assumed the initial floating
+reference. If you are using a widget and you aren't immediately
+packing it into a container, then you probably want standard
 reference counting, not floating reference counting.
 </para>
 
 <para>
-To to get this, you must acquire a reference to the widget and drop the 
-floating reference (<quote>ref and sink</quote> in GTK+ parlance) after 
+To to get this, you must acquire a reference to the widget and drop the
+floating reference (<quote>ref and sink</quote> in GTK+ parlance) after
 creating it:
 <informalexample><programlisting>
  foo = gtk_foo_new (<!-- -->);
- g_object_ref (foo); 
- gtk_object_sink (GTK_OBJECT (foo));
+ g_object_ref_sink (foo);
 </programlisting></informalexample>
 When you want to get rid of the widget, you must call gtk_widget_destroy()
-to break any external connections to the widget before dropping your 
+to break any external connections to the widget before dropping your
 reference:
 <informalexample><programlisting>
- gtk_widget_destroy (foo); 
- g_object_unref (foo); 
+ gtk_widget_destroy (foo);
+ g_object_unref (foo);
 </programlisting></informalexample>
 When you immediately add a widget to a container, it takes care of
 assuming the initial floating reference and you don't have to worry
