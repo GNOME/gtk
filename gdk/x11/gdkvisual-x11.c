@@ -279,10 +279,22 @@ _gdk_visual_init (GdkScreen *screen)
 
 #ifdef G_ENABLE_DEBUG 
   if (_gdk_debug_flags & GDK_DEBUG_MISC)
-    for (i = 0; i < nvisuals; i++)
-      g_message ("visual: %s: %d",
-		 visual_names[visuals[i]->visual.type],
-		 visuals[i]->visual.depth);
+    {
+      static const gchar *const visual_names[] =
+      {
+        "static gray",
+        "grayscale",
+        "static color",
+        "pseudo color",
+        "true color",
+        "direct color",
+      };
+
+      for (i = 0; i < nvisuals; i++)
+        g_message ("visual: %s: %d",
+                   visual_names[visuals[i]->type],
+                   visuals[i]->depth);
+    }
 #endif /* G_ENABLE_DEBUG */
 
   screen_x11->navailable_depths = 0;
