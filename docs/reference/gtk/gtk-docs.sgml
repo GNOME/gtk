@@ -203,6 +203,7 @@
     
     <chapter id="LayoutContainers">
       <title>Layout Containers</title>
+      <xi:include href="xml/gtkgrid.xml" />
       <xi:include href="xml/gtkalignment.xml" />
       <xi:include href="xml/gtkaspectframe.xml" />
       <xi:include href="xml/gtkbox.xml" />

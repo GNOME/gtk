@@ -4528,3 +4528,20 @@ gtk_info_bar_set_message_type
 gtk_info_bar_get_message_type
 #endif
 #endif
+
+#if IN_HEADER(__GTK_GRID_H__)
+#if IN_FILE(__GTK_GRID_c__)
+gtk_grid_get_type G_GNUC_CONST
+gtk_grid_new
+gtk_grid_attach
+gtk_grid_attach_next_to
+gtk_grid_set_row_homogeneous
+gtk_grid_get_row_homogeneous
+gtk_grid_set_row_spacing
+gtk_grid_get_row_spacing
+gtk_grid_set_column_homogeneous
+gtk_grid_get_column_homogeneous
+gtk_grid_set_column_spacing
+gtk_grid_get_column_spacing
+#endif
+#endif

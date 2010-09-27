@@ -61,6 +61,7 @@ gtk_font_button_get_type
 gtk_font_selection_dialog_get_type
 gtk_font_selection_get_type
 gtk_frame_get_type
+gtk_grid_get_type
 gtk_handle_box_get_type
 gtk_hbox_get_type
 gtk_hbutton_box_get_type
