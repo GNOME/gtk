@@ -2720,7 +2720,7 @@ uposition_configure (GtkWidget *window)
 
 static void
 uposition_stop_configure (GtkToggleButton *toggle,
-			  GtkObject       *window)
+			  GObject         *window)
 {
   if (toggle->active)
     g_signal_handlers_block_by_func (window, G_CALLBACK (uposition_configure), NULL);
