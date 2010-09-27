@@ -261,7 +261,7 @@ start_progressive_loading (GtkWidget *image)
 }
 
 static void
-cleanup_callback (GtkObject *object,
+cleanup_callback (GObject   *object,
 		  gpointer   data)
 {
   if (load_timeout)

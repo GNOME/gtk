@@ -186,7 +186,7 @@ timeout (gpointer data)
 static guint timeout_id;
 
 static void
-cleanup_callback (GtkObject *object,
+cleanup_callback (GObject   *object,
                   gpointer   data)
 {
   g_source_remove (timeout_id);

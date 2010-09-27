@@ -173,7 +173,7 @@ static guint timeout_id;
 
 /* Destroy handler for the window */
 static void
-destroy_cb (GtkObject *object, gpointer data)
+destroy_cb (GObject *object, gpointer data)
 {
 	g_source_remove (timeout_id);
 	timeout_id = 0;

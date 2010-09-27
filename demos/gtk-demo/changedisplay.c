@@ -585,7 +585,7 @@ destroy_info (ChangeDisplayInfo *info)
 }
 
 static void
-destroy_cb (GtkObject          *object,
+destroy_cb (GObject            *object,
 	    ChangeDisplayInfo **info)
 {
   destroy_info (*info);
