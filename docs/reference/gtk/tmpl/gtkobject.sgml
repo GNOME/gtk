@@ -265,6 +265,7 @@ reference holders to release their references, it does not free the object.
 </para>
 
 @object: the object to destroy.
+@Deprecated: 2.24: Use gtk_widget_destroy() instead (if @object is a widget)
 
 
 <!-- ##### FUNCTION gtk_object_get ##### -->
