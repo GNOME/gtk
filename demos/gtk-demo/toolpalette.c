@@ -84,15 +84,10 @@ static gboolean
 canvas_draw (GtkWidget *widget,
              cairo_t   *cr)
 {
-  GtkAllocation allocation;
   GList *iter;
-  gint width, height;
 
   cairo_set_source_rgb (cr, 1, 1, 1);
-  width = gtk_widget_get_allocated_width (widget);
-  height = gtk_widget_get_allocated_height (widget);
-  cairo_rectangle (cr, 0, 0, width, height);
-  cairo_fill (cr);
+  cairo_paint (cr);
 
   for (iter = canvas_items; iter; iter = iter->next)
     canvas_item_draw (iter->data, cr, FALSE);
