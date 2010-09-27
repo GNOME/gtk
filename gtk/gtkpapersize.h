@@ -36,12 +36,53 @@ typedef struct _GtkPaperSize GtkPaperSize;
 #define GTK_TYPE_PAPER_SIZE    (gtk_paper_size_get_type ())
 
 /* Common names, from PWG 5101.1-2002 PWG: Standard for Media Standardized Names */
+/**
+ * GTK_PAPER_NAME_A3:
+ *
+ * Name for the A4 paper size.
+ */
 #define GTK_PAPER_NAME_A3 "iso_a3"
+
+/**
+ * GTK_PAPER_NAME_A4:
+ *
+ * Name for the A4 paper size.
+ */
 #define GTK_PAPER_NAME_A4 "iso_a4"
+
+/**
+ * GTK_PAPER_NAME_A5:
+ *
+ * Name for the A5 paper size.
+ */
 #define GTK_PAPER_NAME_A5 "iso_a5"
+
+/**
+ * GTK_PAPER_NAME_B5:
+ *
+ * Name for the B5 paper size.
+ */
 #define GTK_PAPER_NAME_B5 "iso_b5"
+
+/**
+ * GTK_PAPER_NAME_LETTER:
+ *
+ * Name for the Letter paper size.
+ */
 #define GTK_PAPER_NAME_LETTER "na_letter"
+
+/**
+ * GTK_PAPER_NAME_EXECUTIVE:
+ *
+ * Name for the Executive paper size.
+ */
 #define GTK_PAPER_NAME_EXECUTIVE "na_executive"
+
+/**
+ * GTK_PAPER_NAME_LEGAL:
+ *
+ * Name for the Legal paper size.
+ */
 #define GTK_PAPER_NAME_LEGAL "na_legal"
 
 GType gtk_paper_size_get_type (void) G_GNUC_CONST;
