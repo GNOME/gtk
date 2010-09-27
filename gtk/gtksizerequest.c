@@ -425,7 +425,7 @@ compute_size_for_orientation (GtkWidget         *request,
 }
 
 /**
- * gtk_widget_get_preferred:
+ * gtk_widget_get_request_mode:
  * @widget: a #GtkWidget instance
  *
  * Gets whether the widget prefers a height-for-width layout
