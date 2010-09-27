@@ -4067,8 +4067,7 @@ gtk_label_draw (GtkWidget *widget,
       window = gtk_widget_get_window (widget);
       gtk_widget_get_allocation (widget, &allocation);
 
-      x -= allocation.x;
-      y -= allocation.y;
+      cairo_translate (cr, -allocation.x, -allocation.y);
 
       gtk_paint_layout (style,
                         cr,
