@@ -41,6 +41,16 @@ typedef struct _GtkAccelMap      GtkAccelMap;
 typedef struct _GtkAccelMapClass GtkAccelMapClass;
 
 /* --- notifier --- */
+/**
+ * GtkAccelMapForeach:
+ * @data: User data passed to gtk_accel_map_foreach() or
+ *  gtk_accel_map_foreach_unfiltered()
+ * @accel_path: Accel path of the current accelerator
+ * @accel_key: Key of the current accelerator
+ * @accel_mods: Modifiers of the current accelerator
+ * @changed: Changed flag of the accelerator (if %TRUE, accelerator has changed
+ *  during runtime and would need to be saved during an accelerator dump)
+ */
 typedef void (*GtkAccelMapForeach)		(gpointer	 data,
 						 const gchar	*accel_path,
 						 guint           accel_key,
