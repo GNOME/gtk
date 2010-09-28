@@ -191,8 +191,6 @@ void       gtk_window_set_geometry_hints       (GtkWindow           *window,
 void	   gtk_window_set_screen	       (GtkWindow	    *window,
 						GdkScreen	    *screen);
 GdkScreen* gtk_window_get_screen	       (GtkWindow	    *window);
-void	   gtk_window_set_visual               (GtkWindow	    *window,
-						GdkVisual           *visual);
 
 gboolean   gtk_window_is_active                (GtkWindow           *window);
 gboolean   gtk_window_has_toplevel_focus       (GtkWindow           *window);
@@ -382,7 +380,6 @@ void            _gtk_window_set_is_toplevel        (GtkWindow *window,
 void            _gtk_window_get_wmclass            (GtkWindow  *window,
                                                     gchar     **wmclass_name,
                                                     gchar     **wmclass_class);
-GdkVisual *     _gtk_window_get_visual             (GtkWindow  *window);
 
 typedef void (*GtkWindowKeysForeachFunc) (GtkWindow      *window,
 					  guint           keyval,

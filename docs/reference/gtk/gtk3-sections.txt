@@ -4963,7 +4963,6 @@ gtk_window_get_gravity
 gtk_window_set_position
 gtk_window_set_transient_for
 gtk_window_set_destroy_with_parent
-gtk_window_set_visual
 gtk_window_set_screen
 gtk_window_get_screen
 gtk_window_is_active
