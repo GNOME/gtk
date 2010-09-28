@@ -2161,6 +2161,8 @@ gdk_window_get_window_type (GdkWindow *window)
  * Gets the #GdkVisual describing the pixel format of @window.
  * 
  * Return value: a #GdkVisual
+ *
+ * Since: 2.24
  **/
 GdkVisual*
 gdk_window_get_visual (GdkWindow *window)
@@ -2181,6 +2183,8 @@ gdk_window_get_visual (GdkWindow *window)
  * Gets the #GdkScreen associated with a #GdkWindow.
  * 
  * Return value: the #GdkScreen associated with @window
+ *
+ * Since: 2.24
  **/
 GdkScreen*
 gdk_window_get_screen (GdkWindow *window)
@@ -2201,6 +2205,8 @@ gdk_window_get_screen (GdkWindow *window)
  * Gets the #GdkDisplay associated with a #GdkWindow.
  * 
  * Return value: the #GdkDisplay associated with @window
+ *
+ * Since: 2.24
  **/
 GdkDisplay *
 gdk_window_get_display (GdkWindow *window)
@@ -6930,8 +6936,10 @@ gdk_window_get_geometry (GdkWindow *window,
  * On the X11 platform the returned size is the size reported in the
  * most-recently-processed configure event, rather than the current
  * size on the X server.
- * 
+ *
  * Returns: The width of @window
+ *
+ * Since: 2.24
  */
 int
 gdk_window_get_width (GdkWindow *window)
@@ -6954,8 +6962,10 @@ gdk_window_get_width (GdkWindow *window)
  * On the X11 platform the returned size is the size reported in the
  * most-recently-processed configure event, rather than the current
  * size on the X server.
- * 
+ *
  * Returns: The height of @window
+ *
+ * Since: 2.24
  */
 int
 gdk_window_get_height (GdkWindow *window)

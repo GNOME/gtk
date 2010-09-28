@@ -310,21 +310,22 @@ gdk_cairo_set_source_pixbuf (cairo_t         *cr,
  * @window: a #GdkWindow
  * @x: X coordinate of location to place upper left corner of @window
  * @y: Y coordinate of location to place upper left corner of @window
- * 
+ *
  * Sets the given window as the source pattern for the Cairo context.
  * The pattern has an extend mode of %CAIRO_EXTEND_NONE and is aligned
  * so that the origin of @window is @x, @y. The window contains all its
  * subwindows when rendering.
+ *
  * Note that the contents of @window are undefined outside of the
  * visible part of @window, so use this function with care.
  *
- * Since: 2.10
- **/
+ * Since: 2.24
+ */
 void
 gdk_cairo_set_source_window (cairo_t   *cr,
-			     GdkWindow *window,
-			     double     x,
-			     double     y)
+                             GdkWindow *window,
+                             double     x,
+                             double     y)
 {
   cairo_surface_t *surface;
   
