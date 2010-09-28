@@ -3390,7 +3390,7 @@ toolbar_content_get_state (ToolbarContent *content)
 static gboolean
 toolbar_content_child_visible (ToolbarContent *content)
 {
-  return gtk_widget_get_child_visible (content->item);
+  return gtk_widget_get_child_visible (GTK_WIDGET (content->item));
 }
 
 static void
