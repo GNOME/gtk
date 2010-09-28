@@ -244,6 +244,7 @@ endif # HAVE_INTROSPECTION
 
 if OS_WIN32
 install-def-file: gdk.def
+	mkdir -p $(DESTDIR)$(libdir)
 	$(INSTALL) $(srcdir)/gdk.def $(DESTDIR)$(libdir)/gdk-win32-3.0.def
 uninstall-def-file:
 	-rm $(DESTDIR)$(libdir)/gdk-win32-3.0.def
@@ -259,6 +260,7 @@ gdk-win32-$(GTK_API_VERSION).lib: libgdk-win32-$(GTK_API_VERSION).la gdk.def
 	lib -machine:@LIB_EXE_MACHINE_FLAG@ -name:libgdk-win32-$(GTK_API_VERSION)-@LT_CURRENT_MINUS_AGE@.dll -def:gdk.def -out:$@
 
 install-ms-lib:
+	mkdir -p $(DESTDIR)$(libdir)
 	$(INSTALL) gdk-win32-$(GTK_API_VERSION).lib $(DESTDIR)$(libdir)
 
 uninstall-ms-lib:
