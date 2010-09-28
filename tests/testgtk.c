@@ -261,7 +261,7 @@ on_alpha_screen_changed (GtkWindow *window,
       gtk_label_set_markup (GTK_LABEL (label), "<b>Screen supports alpha</b>");
     }
 
-  gtk_window_set_visual (window, visual);
+  gtk_widget_set_visual (GTK_WIDGET (window), visual);
 }
 
 static void
