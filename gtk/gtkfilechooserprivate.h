@@ -278,6 +278,8 @@ struct _GtkFileChooserDefault
   gint sort_column;
   GtkSortType sort_order;
 
+  GSettings *settings;
+
 #if 0
   GdkDragContext *shortcuts_drag_context;
   GSource *shortcuts_drag_outside_idle;

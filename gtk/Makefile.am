@@ -362,7 +362,6 @@ gtk_private_h_sources =		\
 	gtkfilechooserembed.h	\
 	gtkfilechooserentry.h	\
 	gtkfilechooserprivate.h	\
-	gtkfilechoosersettings.h \
 	gtkfilechooserutils.h	\
 	gtkfilesystem.h		\
 	gtkfilesystemmodel.h	\
@@ -463,7 +462,6 @@ gtk_base_c_sources =            \
 	gtkfilechooserdialog.c	\
 	gtkfilechooserembed.c	\
 	gtkfilechooserentry.c	\
-	gtkfilechoosersettings.c \
 	gtkfilechooserutils.c	\
 	gtkfilechooserwidget.c	\
 	gtkfilefilter.c		\
@@ -1308,6 +1306,10 @@ EXTRA_DIST +=                   \
 	gtktypebuiltins.c.template      \
 	gtktypebuiltins.h.template
 
+gsettings_SCHEMAS = \
+	org.gtk.Settings.FileChooser.gschema.xml
+
+@GSETTINGS_RULES@
 
 install-data-local:
 

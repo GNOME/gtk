@@ -1477,6 +1477,12 @@ if test -n "$export_dynamic"; then
   GTK_DEP_LIBS=`echo $GTK_DEP_LIBS | sed -e "s/$export_dynamic//"`
 fi
 
+#############
+# GSettings #
+#############
+
+GLIB_GSETTINGS
+
 ##################################################
 # GObject introspection
 ##################################################

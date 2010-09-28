@@ -38,7 +38,6 @@
 #include "gtkfilechooserdialog.h"
 #include "gtkfilechooserembed.h"
 #include "gtkfilechooserentry.h"
-#include "gtkfilechoosersettings.h"
 #include "gtkfilechooserutils.h"
 #include "gtkfilechooser.h"
 #include "gtkfilesystem.h"
@@ -249,6 +248,15 @@ typedef enum {
 #define PREVIEW_HBOX_SPACING 12
 #define NUM_LINES 45
 #define NUM_CHARS 60
+
+#define SETTINGS_KEY_LOCATION_MODE       "location-mode"
+#define SETTINGS_KEY_SHOW_HIDDEN         "show-hidden"
+#define SETTINGS_KEY_EXPAND_FOLDERS      "expand-folders"
+#define SETTINGS_KEY_SHOW_SIZE_COLUMN    "show-size-column"
+#define SETTINGS_KEY_SORT_COLUMN         "sort-column"
+#define SETTINGS_KEY_SORT_ORDER          "sort-order"
+#define SETTINGS_KEY_WINDOW_POSITION     "window-position"
+#define SETTINGS_KEY_WINDOW_SIZE         "window-size"
 
 static void gtk_file_chooser_default_iface_init       (GtkFileChooserIface        *iface);
 static void gtk_file_chooser_embed_default_iface_init (GtkFileChooserEmbedIface   *iface);
@@ -5739,9 +5747,19 @@ set_sort_column (GtkFileChooserDefault *impl)
 }
 
 static void
+settings_ensure (GtkFileChooserDefault *impl)
+{
+  if (impl->settings != NULL)
+    return;
+
+  impl->settings = g_settings_new_with_path ("org.gtk.Settings.FileChooser",
+                                             "/org/gtk/settings/file-chooser/");
+  g_settings_delay (impl->settings);
+}
+
+static void
 settings_load (GtkFileChooserDefault *impl)
 {
-  GtkFileChooserSettings *settings;
   LocationMode location_mode;
   gboolean show_hidden;
   gboolean expand_folders;
@@ -5749,16 +5767,14 @@ settings_load (GtkFileChooserDefault *impl)
   gint sort_column;
   GtkSortType sort_order;
 
-  settings = _gtk_file_chooser_settings_new ();
+  settings_ensure (impl);
 
-  location_mode = _gtk_file_chooser_settings_get_location_mode (settings);
-  show_hidden = _gtk_file_chooser_settings_get_show_hidden (settings);
-  expand_folders = _gtk_file_chooser_settings_get_expand_folders (settings);
-  show_size_column = _gtk_file_chooser_settings_get_show_size_column (settings);
-  sort_column = _gtk_file_chooser_settings_get_sort_column (settings);
-  sort_order = _gtk_file_chooser_settings_get_sort_order (settings);
-
-  g_object_unref (settings);
+  expand_folders = g_settings_get_boolean (impl->settings, SETTINGS_KEY_EXPAND_FOLDERS);
+  location_mode = g_settings_get_enum (impl->settings, SETTINGS_KEY_LOCATION_MODE);
+  show_hidden = g_settings_get_boolean (impl->settings, SETTINGS_KEY_SHOW_HIDDEN);
+  show_size_column = g_settings_get_boolean (impl->settings, SETTINGS_KEY_SHOW_SIZE_COLUMN);
+  sort_column = g_settings_get_enum (impl->settings, SETTINGS_KEY_SORT_COLUMN);
+  sort_order = g_settings_get_enum (impl->settings, SETTINGS_KEY_SORT_ORDER);
 
   location_mode_set (impl, location_mode, TRUE);
 
@@ -5780,7 +5796,7 @@ settings_load (GtkFileChooserDefault *impl)
 }
 
 static void
-save_dialog_geometry (GtkFileChooserDefault *impl, GtkFileChooserSettings *settings)
+save_dialog_geometry (GtkFileChooserDefault *impl)
 {
   GtkWindow *toplevel;
   int x, y, width, height;
@@ -5801,29 +5817,30 @@ save_dialog_geometry (GtkFileChooserDefault *impl, GtkFileChooserSettings *setti
   gtk_window_get_position (toplevel, &x, &y);
   gtk_window_get_size (toplevel, &width, &height);
 
-  _gtk_file_chooser_settings_set_geometry (settings, x, y, width, height);
+  g_settings_set (impl->settings, "window-position", "(ii)", x, y);
+  g_settings_set (impl->settings, "window-size", "(ii)", width, height);
 }
 
 static void
 settings_save (GtkFileChooserDefault *impl)
 {
-  GtkFileChooserSettings *settings;
+  settings_ensure (impl);
 
-  settings = _gtk_file_chooser_settings_new ();
+  g_settings_set_enum (impl->settings, SETTINGS_KEY_LOCATION_MODE, impl->location_mode);
+  g_settings_set_boolean (impl->settings, SETTINGS_KEY_EXPAND_FOLDERS, impl->expand_folders);
+  g_settings_set_boolean (impl->settings, SETTINGS_KEY_SHOW_HIDDEN,
+                          gtk_file_chooser_get_show_hidden (GTK_FILE_CHOOSER (impl)));
+  g_settings_set_boolean (impl->settings, SETTINGS_KEY_SHOW_SIZE_COLUMN, impl->show_size_column);
+  g_settings_set_enum (impl->settings, SETTINGS_KEY_SORT_COLUMN, impl->sort_column);
+  g_settings_set_enum (impl->settings, SETTINGS_KEY_SORT_ORDER, impl->sort_order);
 
-  _gtk_file_chooser_settings_set_location_mode (settings, impl->location_mode);
-  _gtk_file_chooser_settings_set_show_hidden (settings, gtk_file_chooser_get_show_hidden (GTK_FILE_CHOOSER (impl)));
-  _gtk_file_chooser_settings_set_expand_folders (settings, impl->expand_folders);
-  _gtk_file_chooser_settings_set_show_size_column (settings, impl->show_size_column);
-  _gtk_file_chooser_settings_set_sort_column (settings, impl->sort_column);
-  _gtk_file_chooser_settings_set_sort_order (settings, impl->sort_order);
+  save_dialog_geometry (impl);
 
-  save_dialog_geometry (impl, settings);
+  /* Now apply the settings */
+  g_settings_apply (impl->settings);
 
-  /* NULL GError */
-  _gtk_file_chooser_settings_save (settings, NULL);
-
-  g_object_unref (settings);
+  g_object_unref (impl->settings);
+  impl->settings = NULL;
 }
 
 /* GtkWidget::realize method */
@@ -7853,12 +7870,12 @@ gtk_file_chooser_default_get_default_size (GtkFileChooserEmbed *chooser_embed,
       || impl->action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER
       || impl->expand_folders)
     {
-      GtkFileChooserSettings *settings;
       int x, y, width, height;
 
-      settings = _gtk_file_chooser_settings_new ();
-      _gtk_file_chooser_settings_get_geometry (settings, &x, &y, &width, &height);
-      g_object_unref (settings);
+      settings_ensure (impl);
+
+      g_settings_get (impl->settings, SETTINGS_KEY_WINDOW_POSITION, "(ii)", &x, &y);
+      g_settings_get (impl->settings, SETTINGS_KEY_WINDOW_SIZE, "(ii)", &width, &height);
 
       if (x >= 0 && y >= 0 && width > 0 && height > 0)
 	{

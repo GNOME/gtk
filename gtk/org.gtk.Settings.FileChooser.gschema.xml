@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Copyright © 2010 Christian Persch
+
+  This program is free software; you can redistribute it and/or modify
+  it under the terms of the GNU Lesser General Public License as published by
+  the Free Software Foundation; either version 2.1, or (at your option)
+  any later version.
+
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+
+  You should have received a copy of the GNU Lesser General Public License
+  along with this program; if not, write to the Free Software
+  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+-->
+<schemalist>
+
+  <enum id='org.gtk.Settings.FileChooser.LocationMode'>
+    <value nick='path-bar' value='0'/>
+    <value nick='filename-entry' value='1'/>
+  </enum>
+
+  <enum id='org.gtk.Settings.FileChooser.SortColumn'>
+    <value nick='name' value='0'/>
+    <value nick='size' value='1'/>
+    <value nick='modified' value='2'/>
+  </enum>
+
+  <enum id='org.gtk.Settings.FileChooser.SortOrder'>
+    <value nick='ascending' value='0'/>
+    <value nick='descending' value='1'/>
+  </enum>
+
+  <schema id='org.gtk.Settings.FileChooser'>
+    <key name='location-mode' enum='org.gtk.Settings.FileChooser.LocationMode'>
+      <default>'path-bar'</default>
+    </key>
+    <key name='show-hidden' type='b'>
+      <default>false</default>
+    </key>
+    <key name='expand-folders' type='b'>
+      <default>false</default>
+    </key>
+    <key name='show-size-column' type='b'>
+      <default>true</default>
+    </key>
+    <key name='sort-column' enum='org.gtk.Settings.FileChooser.SortColumn'>
+      <default>'name'</default>
+    </key>
+    <key name='sort-order' enum='org.gtk.Settings.FileChooser.SortOrder'>
+      <default>'ascending'</default>
+    </key>
+    <key name='window-position' type='(ii)'>
+      <default>(-1, -1)</default>
+    </key>
+    <key name='window-size' type='(ii)'>
+      <default>(-1, -1)</default>
+    </key>
+  </schema>
+
+</schemalist>
