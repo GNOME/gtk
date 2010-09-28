@@ -1283,7 +1283,7 @@ gtk_combo_box_remove (GtkContainer *container,
   gtk_widget_unparent (widget);
   _gtk_bin_set_child (GTK_BIN (container), NULL);
 
-  if (gtk_widget_in_destruction (combo_box))
+  if (gtk_widget_in_destruction (GTK_WIDGET (combo_box)))
     return;
 
   gtk_widget_queue_resize (GTK_WIDGET (container));
