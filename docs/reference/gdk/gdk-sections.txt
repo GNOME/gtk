@@ -656,6 +656,11 @@ gdk_window_new
 gdk_window_destroy
 gdk_window_ref
 gdk_window_unref
+gdk_window_get_display
+gdk_window_get_screen
+gdk_window_get_visual
+gdk_window_get_width
+gdk_window_get_height
 gdk_window_get_window_type
 gdk_window_at_pointer
 gdk_window_show

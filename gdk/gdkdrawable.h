@@ -250,18 +250,19 @@ gpointer        gdk_drawable_get_data     (GdkDrawable    *drawable,
 					   const gchar    *key);
 #endif /* GDK_DISABLE_DEPRECATED */
 
-void            gdk_drawable_get_size     (GdkDrawable	  *drawable,
-					   gint	          *width,
-					   gint  	  *height);
 void	        gdk_drawable_set_colormap (GdkDrawable	  *drawable,
 					   GdkColormap	  *colormap);
 GdkColormap*    gdk_drawable_get_colormap (GdkDrawable	  *drawable);
-GdkVisual*      gdk_drawable_get_visual   (GdkDrawable	  *drawable);
 gint            gdk_drawable_get_depth    (GdkDrawable	  *drawable);
+
+#ifndef GDK_DISABLE_DEPRECATED
+void            gdk_drawable_get_size     (GdkDrawable	  *drawable,
+					   gint	          *width,
+					   gint  	  *height);
+GdkVisual*      gdk_drawable_get_visual   (GdkDrawable	  *drawable);
 GdkScreen*	gdk_drawable_get_screen   (GdkDrawable    *drawable);
 GdkDisplay*	gdk_drawable_get_display  (GdkDrawable    *drawable);
 
-#ifndef GDK_DISABLE_DEPRECATED
 GdkDrawable*    gdk_drawable_ref          (GdkDrawable    *drawable);
 void            gdk_drawable_unref        (GdkDrawable    *drawable);
 #endif /* GDK_DISABLE_DEPRECATED */

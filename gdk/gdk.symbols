@@ -564,15 +564,15 @@ gdk_drawable_unref
 gdk_draw_string
 gdk_draw_text
 gdk_draw_text_wc
-#endif
-gdk_drawable_get_depth
 gdk_drawable_get_display
-gdk_drawable_get_image
 gdk_drawable_get_screen
 gdk_drawable_get_size
+gdk_drawable_get_visual
+#endif
+gdk_drawable_get_depth
+gdk_drawable_get_image
 gdk_drawable_get_type G_GNUC_CONST
 gdk_drawable_get_visible_region
-gdk_drawable_get_visual
 gdk_drawable_set_colormap
 gdk_draw_arc
 gdk_draw_drawable
@@ -756,6 +756,11 @@ gdk_pointer_grab
 gdk_window_beep
 gdk_window_geometry_changed
 gdk_window_ensure_native
+gdk_window_get_screen
+gdk_window_get_display
+gdk_window_get_visual
+gdk_window_get_width
+gdk_window_get_height
 #endif
 #endif
 

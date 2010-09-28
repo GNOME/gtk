@@ -335,6 +335,13 @@ GdkWindow*    gdk_window_new                   (GdkWindow     *parent,
 void          gdk_window_destroy               (GdkWindow     *window);
 GdkWindowType gdk_window_get_window_type       (GdkWindow     *window);
 gboolean      gdk_window_is_destroyed          (GdkWindow     *window);
+
+GdkScreen*    gdk_window_get_screen            (GdkWindow     *window);
+GdkDisplay*   gdk_window_get_display           (GdkWindow     *window);
+GdkVisual*    gdk_window_get_visual            (GdkWindow     *window);
+int           gdk_window_get_width             (GdkWindow     *window);
+int           gdk_window_get_height            (GdkWindow     *window);
+
 GdkWindow*    gdk_window_at_pointer            (gint          *win_x,
                                                 gint          *win_y);
 void          gdk_window_show                  (GdkWindow     *window);
@@ -720,7 +727,6 @@ void       gdk_window_remove_redirection     (GdkWindow     *window);
 #define gdk_window_get_type            gdk_window_get_window_type
 #define gdk_window_get_colormap        gdk_drawable_get_colormap
 #define gdk_window_set_colormap        gdk_drawable_set_colormap
-#define gdk_window_get_visual          gdk_drawable_get_visual
 #define gdk_window_ref                 g_object_ref
 #define gdk_window_unref               g_object_unref
 

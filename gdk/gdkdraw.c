@@ -151,8 +151,9 @@ gdk_drawable_get_data (GdkDrawable   *drawable,
  * On the X11 platform, if @drawable is a #GdkWindow, the returned
  * size is the size reported in the most-recently-processed configure
  * event, rather than the current size on the X server.
- * 
- **/
+ *
+ * Deprecated: 2.24: Use gdk_window_get_width() and gdk_window_get_height()
+ */
 void
 gdk_drawable_get_size (GdkDrawable *drawable,
 		       gint        *width,
@@ -170,7 +171,9 @@ gdk_drawable_get_size (GdkDrawable *drawable,
  * Gets the #GdkVisual describing the pixel format of @drawable.
  * 
  * Return value: a #GdkVisual
- **/
+ *
+ * Deprecated: 2.24: Use gdk_window_get_visual()
+ */
 GdkVisual*
 gdk_drawable_get_visual (GdkDrawable *drawable)
 {
@@ -205,9 +208,11 @@ gdk_drawable_get_depth (GdkDrawable *drawable)
  * Return value: the #GdkScreen associated with @drawable
  *
  * Since: 2.2
+ *
+ * Deprecated: 2.24: Use gdk_window_get_screen() instead
  **/
 GdkScreen*
-gdk_drawable_get_screen(GdkDrawable *drawable)
+gdk_drawable_get_screen (GdkDrawable *drawable)
 {
   g_return_val_if_fail (GDK_IS_DRAWABLE (drawable), NULL);
 
@@ -223,15 +228,17 @@ gdk_drawable_get_screen(GdkDrawable *drawable)
  * Return value: the #GdkDisplay associated with @drawable
  *
  * Since: 2.2
+ *
+ * Deprecated: 2.24: Use gdk_window_get_display() instead
  **/
 GdkDisplay*
 gdk_drawable_get_display (GdkDrawable *drawable)
 {
   g_return_val_if_fail (GDK_IS_DRAWABLE (drawable), NULL);
-  
+
   return gdk_screen_get_display (gdk_drawable_get_screen (drawable));
 }
-	
+
 /**
  * gdk_drawable_set_colormap:
  * @drawable: a #GdkDrawable

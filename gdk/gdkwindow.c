@@ -11215,6 +11215,110 @@ gdk_window_create_similar_surface (GdkWindow *     window,
   return surface;
 }
 
+/**
+ * gdk_window_get_screen:
+ * @window: a #GdkWindow
+ *
+ * Gets the #GdkScreen associated with a #GdkWindow.
+ *
+ * Return value: the #GdkScreen associated with @window
+ */
+GdkScreen*
+gdk_window_get_screen (GdkWindow *window)
+{
+  g_return_val_if_fail (GDK_IS_WINDOW (window), NULL);
+
+  return gdk_drawable_get_screen (GDK_DRAWABLE (window));
+}
+
+/**
+ * gdk_window_get_display:
+ * @window: a #GdkWindow
+ *
+ * Gets the #GdkDisplay associated with a #GdkWindow.
+ *
+ * Return value: the #GdkDisplay associated with @window
+ *
+ * Since: 2.24
+ */
+GdkDisplay *
+gdk_window_get_display (GdkWindow *window)
+{
+  g_return_val_if_fail (GDK_IS_WINDOW (window), NULL);
+
+  return gdk_drawable_get_display (GDK_DRAWABLE (window));
+}
+
+/**
+ * gdk_window_get_visual:
+ * @window: a #GdkWindow
+ *
+ * Gets the #GdkVisual describing the pixel format of @window.
+ *
+ * Return value: a #GdkVisual
+ *
+ * Since: 2.24
+ */
+GdkVisual*
+gdk_window_get_visual (GdkWindow *window)
+{
+  g_return_val_if_fail (GDK_IS_WINDOW (window), NULL);
+
+  return gdk_drawable_get_visual (GDK_DRAWABLE (window));
+}
+
+/**
+ * gdk_window_get_width:
+ * @window: a #GdkWindow
+ *
+ * Returns the width of the given @window.
+ *
+ * On the X11 platform the returned size is the size reported in the
+ * most-recently-processed configure event, rather than the current
+ * size on the X server.
+ *
+ * Returns: The width of @window
+ *
+ * Since: 2.24
+ */
+int
+gdk_window_get_width (GdkWindow *window)
+{
+  gint width, height;
+
+  g_return_val_if_fail (GDK_IS_WINDOW (window), 0);
+
+  gdk_drawable_get_size (GDK_DRAWABLE (window), &width, &height);
+
+  return width;
+}
+
+/**
+ * gdk_window_get_height:
+ * @window: a #GdkWindow
+ *
+ * Returns the height of the given @window.
+ *
+ * On the X11 platform the returned size is the size reported in the
+ * most-recently-processed configure event, rather than the current
+ * size on the X server.
+ *
+ * Returns: The height of @window
+ *
+ * Since: 2.24
+ */
+int
+gdk_window_get_height (GdkWindow *window)
+{
+  gint width, height;
+
+  g_return_val_if_fail (GDK_IS_WINDOW (window), 0);
+
+  gdk_drawable_get_size (GDK_DRAWABLE (window), &width, &height);
+
+  return height;
+}
+
 
 #define __GDK_WINDOW_C__
 #include "gdkaliasdef.c"
