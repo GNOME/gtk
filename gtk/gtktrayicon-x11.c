@@ -849,7 +849,7 @@ gtk_tray_icon_set_visual (GtkTrayIcon *icon)
   if (visual == NULL)
     visual = gdk_screen_get_system_visual (screen);
 
-  gtk_window_set_visual (GTK_WINDOW (icon), visual);
+  gtk_widget_set_visual (GTK_WIDGET (icon), visual);
 }
 
 static void
