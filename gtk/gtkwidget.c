@@ -507,6 +507,7 @@ static GQuark		quark_mnemonic_labels = 0;
 static GQuark		quark_tooltip_markup = 0;
 static GQuark		quark_has_tooltip = 0;
 static GQuark		quark_tooltip_window = 0;
+static GQuark		quark_visual = 0;
 GParamSpecPool         *_gtk_widget_child_property_pool = NULL;
 GObjectNotifyContext   *_gtk_widget_child_property_notify_context = NULL;
 
@@ -619,6 +620,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   quark_tooltip_markup = g_quark_from_static_string ("gtk-tooltip-markup");
   quark_has_tooltip = g_quark_from_static_string ("gtk-has-tooltip");
   quark_tooltip_window = g_quark_from_static_string ("gtk-tooltip-window");
+  quark_visual = g_quark_from_static_string ("gtk-widget-visual");
 
   style_property_spec_pool = g_param_spec_pool_new (FALSE);
   _gtk_widget_child_property_pool = g_param_spec_pool_new (TRUE);
@@ -8956,6 +8958,36 @@ gtk_widget_get_ancestor (GtkWidget *widget,
 }
 
 /**
+ * gtk_widget_set_visual:
+ * @widget: a #GtkWidget
+ * @visual: visual to be used or %NULL to unset a previous one
+ * 
+ * Sets the visual that should be used for by widget and its children for
+ * creating #GdkWindows. The visual must be on the same #GdkScreen as
+ * returned by gdk_widget_get_screen(), so handling the
+ * GtkWidget::screen-changed signal is necessary.
+ *
+ * Setting a new @visual will not cause @widget to recreate its windows,
+ * so you should call this function before @widget is realized.
+ **/
+void
+gtk_widget_set_visual (GtkWidget *widget,
+                       GdkVisual *visual)
+{
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+  g_return_if_fail (visual == NULL || GDK_IS_VISUAL (visual));
+  if (visual)
+    {
+      g_return_if_fail (gtk_widget_get_screen (widget) == gdk_visual_get_screen (visual));
+    }
+
+  g_object_set_qdata_full (G_OBJECT (widget), 
+                           quark_visual,
+                           g_object_ref (visual),
+                           g_object_unref);
+}
+
+/**
  * gtk_widget_get_visual:
  * @widget: a #GtkWidget
  * 
@@ -8967,20 +8999,31 @@ GdkVisual*
 gtk_widget_get_visual (GtkWidget *widget)
 {
   GtkWidget *w;
+  GdkVisual *visual;
+  GdkScreen *screen;
 
   g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
 
+  if (gtk_widget_get_has_window (widget) &&
+      widget->priv->window)
+    return gdk_window_get_visual (widget->priv->window);
+
+  screen = gtk_widget_get_screen (widget);
+
   for (w = widget; w != NULL; w = w->priv->parent)
     {
-      if (gtk_widget_get_has_window (w) &&
-          w->priv->window)
-        return gdk_window_get_visual (w->priv->window);
+      visual = g_object_get_qdata (G_OBJECT (w), quark_visual);
+      if (visual)
+        {
+          if (gdk_visual_get_screen (visual) == screen)
+            return visual;
 
-      if (GTK_IS_WINDOW (w))
-        return _gtk_window_get_visual (GTK_WINDOW (w));
+          g_warning ("Ignoring visual set on widget `%s' that is not on the correct screen.",
+                     gtk_widget_get_name (widget));
+        }
     }
 
-  return gdk_screen_get_system_visual (gdk_screen_get_default ());
+  return gdk_screen_get_system_visual (screen);
 }
 
 /**

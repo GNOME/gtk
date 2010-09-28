@@ -634,6 +634,8 @@ GtkWidget*   gtk_widget_get_toplevel	(GtkWidget	*widget);
 GtkWidget*   gtk_widget_get_ancestor	(GtkWidget	*widget,
 					 GType		 widget_type);
 GdkVisual*   gtk_widget_get_visual	(GtkWidget	*widget);
+void         gtk_widget_set_visual	(GtkWidget	*widget,
+                                         GdkVisual      *visual);
 
 GdkScreen *   gtk_widget_get_screen      (GtkWidget *widget);
 gboolean      gtk_widget_has_screen      (GtkWidget *widget);
