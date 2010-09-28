@@ -4529,7 +4529,7 @@ gtk_notebook_real_remove (GtkNotebook *notebook,
   GtkWidget *tab_label;
   gboolean destroying;
 
-  destroying = gtk_widget_in_destruction (notebook);
+  destroying = gtk_widget_in_destruction (GTK_WIDGET (notebook));
 
   next_list = gtk_notebook_search_page (notebook, list, STEP_NEXT, TRUE);
   if (!next_list)
