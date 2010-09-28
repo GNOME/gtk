@@ -12378,6 +12378,7 @@ gtk_widget_in_destruction (GtkWidget *widget)
   return widget->priv->in_destruction;
 }
 
+gboolean
 _gtk_widget_get_resize_pending (GtkWidget *widget)
 {
   return widget->priv->resize_pending;
