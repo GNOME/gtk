@@ -24,16 +24,13 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
-#include <config.h>
+#include "config.h"
+
 #include <math.h>
-#include "gdk.h"
+
 #include "gdkwindow.h"
 #include "gdkinternals.h"
 #include "gdkwindowimpl.h"
-#include "gdkdrawable.h"
-#include "gdktypes.h"
-#include "gdkscreen.h"
-#include "gdkcolor.h"
 
 
 /* LIMITATIONS:
@@ -51,7 +48,6 @@ struct _GdkOffscreenWindow
   GdkDrawable parent_instance;
 
   GdkWindow *wrapper;
-  GdkScreen *screen;
 
   cairo_surface_t *surface;
   GdkWindow *embedder;
@@ -138,7 +134,6 @@ gdk_offscreen_window_ref_cairo_surface (GdkDrawable *drawable)
 
 void
 _gdk_offscreen_window_new (GdkWindow     *window,
-			   GdkScreen     *screen,
 			   GdkWindowAttr *attributes,
 			   gint           attributes_mask)
 {
@@ -158,8 +153,6 @@ _gdk_offscreen_window_new (GdkWindow     *window,
   private->impl = g_object_new (GDK_TYPE_OFFSCREEN_WINDOW, NULL);
   offscreen = GDK_OFFSCREEN_WINDOW (private->impl);
   offscreen->wrapper = window;
-
-  offscreen->screen = screen;
 
   offscreen->surface = gdk_window_create_similar_surface ((GdkWindow *)private->parent,
                                                           CAIRO_CONTENT_COLOR,

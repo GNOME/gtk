@@ -552,7 +552,6 @@ GdkWindow *_gdk_window_get_input_window_for_event (GdkWindow *native_window,
  *****************************/
 GType gdk_offscreen_window_get_type (void);
 void       _gdk_offscreen_window_new                 (GdkWindow     *window,
-						      GdkScreen     *screen,
 						      GdkWindowAttr *attributes,
 						      gint           attributes_mask);
 

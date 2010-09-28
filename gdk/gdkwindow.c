@@ -1386,7 +1386,7 @@ gdk_window_new (GdkWindow     *parent,
 
   if (gdk_window_is_offscreen (private))
     {
-      _gdk_offscreen_window_new (window, screen, attributes, attributes_mask);
+      _gdk_offscreen_window_new (window, attributes, attributes_mask);
       private->impl_window = private;
     }
   else if (native)
