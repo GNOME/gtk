@@ -11715,7 +11715,7 @@ gtk_tree_view_scroll_to_cell (GtkTreeView       *tree_view,
    */
   if (!gtk_widget_get_visible (GTK_WIDGET (tree_view)) ||
       !gtk_widget_get_realized (GTK_WIDGET (tree_view)) ||
-      _gtk_widget_get_alloc_needed (tree_view) ||
+      _gtk_widget_get_alloc_needed (GTK_WIDGET (tree_view)) ||
       GTK_RBNODE_FLAG_SET (tree_view->priv->tree->root, GTK_RBNODE_DESCENDANTS_INVALID))
     {
       if (tree_view->priv->scroll_to_path)
