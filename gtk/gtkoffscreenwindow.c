@@ -22,7 +22,7 @@
 
 #include "gtkoffscreenwindow.h"
 
-#include "gtksizerequest.h"
+#include "gtkprivate.h"
 
 /**
  * SECTION:gtkoffscreenwindow
