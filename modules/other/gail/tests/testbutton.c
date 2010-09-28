@@ -65,7 +65,7 @@ _check_object (AtkObject *obj)
     g_assert (GTK_IS_ACCESSIBLE (atk_button));
     widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (atk_button));
     g_assert (GTK_IS_BUTTON (widget));
-    g_signal_connect (GTK_OBJECT (widget),
+    g_signal_connect (widget,
                       "pressed",
                       G_CALLBACK (button_pressed_handler),
                       NULL);

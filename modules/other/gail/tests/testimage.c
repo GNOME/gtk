@@ -53,13 +53,13 @@ static void _check_arrows (AtkObject *obj)
 		gtk_box_pack_start(GTK_BOX (content_area), md->arrow2, TRUE,TRUE, 0);
 		gtk_box_pack_start(GTK_BOX (content_area), md->arrow3, TRUE,TRUE, 0);
 		gtk_box_pack_start(GTK_BOX (content_area), md->arrow4, TRUE,TRUE, 0);
-		g_signal_connect(GTK_OBJECT(md->dialog), "destroy",
+		g_signal_connect(md->dialog, "destroy",
                                  G_CALLBACK (destroy), md->dialog);
 
 	        md->image = GTK_IMAGE(gtk_image_new_from_file("circles.xbm"));
 		gtk_box_pack_start(GTK_BOX (content_area), GTK_WIDGET(md->image), TRUE,TRUE, 0);
 		md->close_button = gtk_button_new_from_stock(GTK_STOCK_CLOSE);
-		g_signal_connect(GTK_OBJECT(md->close_button), "clicked",
+		g_signal_connect(md->close_button, "clicked",
                                  G_CALLBACK (destroy), md->dialog);
 
 		gtk_box_pack_start(GTK_BOX (action_area), md->close_button, TRUE,TRUE, 0);

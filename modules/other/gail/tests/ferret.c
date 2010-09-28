@@ -964,7 +964,7 @@ _print_action (AtkAction *aobject)
 
         nv->atkobj = ATK_OBJECT(aobject);
         nv->action_num = j;
-        nv->signal_id = g_signal_connect (GTK_OBJECT (nv->button),
+        nv->signal_id = g_signal_connect (nv->button,
           "clicked", G_CALLBACK (_action_cb), nv);
 
         g_free(label_str);
@@ -1597,10 +1597,10 @@ _create_notebook (void)
   tab = nbook_tabs[VALUE];
   _add_notebook_page (notebook, tab->main_box, &tab->page, "<b>_Value</b>");
 
-  g_signal_connect (GTK_OBJECT (notebook),
-                      "switch-page",
-                      G_CALLBACK (_update_current_page),
-                      NULL);
+  g_signal_connect (notebook,
+                    "switch-page",
+                    G_CALLBACK (_update_current_page),
+                    NULL);
 }
 
 static void
@@ -1667,9 +1667,9 @@ _create_window (void)
         window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
         gtk_widget_set_name (window, "Ferret Window");
 
-        g_signal_connect (GTK_OBJECT (window), "destroy",
-                           G_CALLBACK (gtk_widget_destroyed),
-                           &window);
+        g_signal_connect (window, "destroy",
+                          G_CALLBACK (gtk_widget_destroyed),
+                          &window);
 
         gtk_window_set_title (GTK_WINDOW (window), "GTK+ Ferret Output");
         gtk_window_set_default_size (GTK_WINDOW (window), 333, 550);
@@ -1724,7 +1724,7 @@ _add_menu(GtkWidget ** menu, GtkWidget ** menuitem, gchar * name,
       GTK_CHECK_MENU_ITEM(*menuitem), init_value);
     gtk_menu_shell_append (GTK_MENU_SHELL (*menu), *menuitem);
     gtk_widget_show(*menuitem);
-    g_signal_connect(GTK_OBJECT(*menuitem), "toggled", func, NULL);
+    g_signal_connect(*menuitem, "toggled", func, NULL);
 }
 
 int

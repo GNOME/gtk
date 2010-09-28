@@ -572,7 +572,7 @@ _create_select_tests_window (AtkObject    *obj,
                                 FALSE);
       gtk_window_set_position (GTK_WINDOW(md[window_no]->selecttestsWindow),
                                GTK_WIN_POS_CENTER); 
-      g_signal_connect (GTK_OBJECT(md[window_no]->selecttestsWindow), 
+      g_signal_connect (md[window_no]->selecttestsWindow, 
                         "destroy",
                         G_CALLBACK (_destroy),
                         &md[window_no]->selecttestsWindow);
@@ -601,7 +601,7 @@ _create_select_tests_window (AtkObject    *obj,
       testcb[window_no].runtest = runtest;
       testcb[window_no].obj = obj;
       testcb[window_no].win_num = window_no; 
-      g_signal_connect (GTK_OBJECT (md[window_no]->button), 
+      g_signal_connect (md[window_no]->button, 
                         "clicked",
                         G_CALLBACK (_testselectioncb),
                         (gpointer)&testcb[window_no]);
@@ -674,7 +674,7 @@ add_test (gint   window,
 	  gtk_widget_show (listoftests[window][testcount[window]].parameterLabel[i]);
 	  gtk_widget_show (listoftests[window][testcount[window]].parameterInput[i]);
         }
-      g_signal_connect (GTK_OBJECT (listoftests[window][testcount[window]].toggleButton),
+      g_signal_connect (listoftests[window][testcount[window]].toggleButton,
                         "toggled",
                         G_CALLBACK (_toggle_selectedcb),
                         (gpointer)&(listoftests[window][testcount[window]]));
