@@ -193,14 +193,14 @@ static void
 msgbox_yes_cb (GtkWidget *widget, gboolean *result)
 {
   *result = 0;
-  gtk_object_destroy (GTK_OBJECT (gtk_widget_get_toplevel (widget)));
+  gtk_widget_destroy (gtk_widget_get_toplevel (widget));
 }
 
 static void
 msgbox_no_cb (GtkWidget *widget, gboolean *result)
 {
   *result = 1;
-  gtk_object_destroy (GTK_OBJECT (gtk_widget_get_toplevel (widget)));
+  gtk_widget_destroy (gtk_widget_get_toplevel (widget));
 }
 
 static gboolean
@@ -209,7 +209,7 @@ msgbox_key_press_cb (GtkWidget *widget, GdkEventKey *event, gpointer data)
   if (event->keyval == GDK_Escape)
     {
       g_signal_stop_emission_by_name (widget, "key_press_event");
-      gtk_object_destroy (GTK_OBJECT (widget));
+      gtk_widget_destroy (widget);
       return TRUE;
     }
 
