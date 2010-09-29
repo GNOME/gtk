@@ -1983,8 +1983,6 @@ _gdk_window_destroy_hierarchy (GdkWindow *window,
 
 	  gdk_window_free_paint_stack (window);
 
-          gdk_window_set_background_pattern (window, NULL);
-
           if (private->background)
             {
               cairo_pattern_destroy (private->background);
