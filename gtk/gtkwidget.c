@@ -5402,10 +5402,10 @@ gtk_cairo_transform_to_window (cairo_t   *cr,
  * @event: a expose #GdkEvent
  * 
  * Very rarely-used function. This function is used to emit
- * an expose event signals on a widget. This function is not
- * normally used directly. The only time it is used is when
- * propagating an expose event to a child %NO_WINDOW widget, and
- * that is normally done using gtk_container_propagate_expose().
+ * an expose event on a widget. This function is not normally used
+ * directly. The only time it is used is when propagating an expose
+ * event to a child %NO_WINDOW widget, and that is normally done
+ * using gtk_container_propagate_draw().
  *
  * If you want to force an area of a window to be redrawn, 
  * use gdk_window_invalidate_rect() or gdk_window_invalidate_region().

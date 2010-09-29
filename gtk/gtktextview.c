@@ -4866,7 +4866,7 @@ gtk_text_view_draw (GtkWidget *widget,
     {
       GtkTextViewChild *vc = tmp_list->data;
 
-      /* propagate_expose checks that event->window matches
+      /* propagate_draw checks that event->window matches
        * child->window
        */
       if (!vc->anchor)

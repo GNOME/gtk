@@ -122,9 +122,6 @@ GList*   gtk_container_get_children     (GtkContainer       *container);
 void     gtk_container_propagate_draw   (GtkContainer   *container,
 					 GtkWidget      *child,
 					 cairo_t        *cr);
-void     gtk_container_propagate_expose (GtkContainer   *container,
-					 GtkWidget      *child,
-					 GdkEventExpose *event);
 
 void     gtk_container_set_focus_chain  (GtkContainer   *container,
                                          GList          *focusable_widgets);
