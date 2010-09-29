@@ -223,7 +223,6 @@ static gchar *types[] =
   "FALSE",
   "TRUE",
   "FILE ",
-  "GtkObject ",
   "GtkColorSelection ",
   "GtkWidget ",
   "GtkButton ",
