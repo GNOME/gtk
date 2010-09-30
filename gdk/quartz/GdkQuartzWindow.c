@@ -454,7 +454,7 @@ update_context_from_dragging_info (id <NSDraggingInfo> sender)
 
 - (NSDragOperation)draggingEntered:(id <NSDraggingInfo>)sender
 {
-  GdkDeviceManager device_manager;
+  GdkDeviceManager *device_manager;
   GdkEvent *event;
   GdkWindow *window;
 
