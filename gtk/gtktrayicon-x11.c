@@ -335,23 +335,24 @@ gtk_tray_icon_draw (GtkWidget *widget,
     }
   else
     {
-      double x1, y1, x2, y2;
+      GdkRectangle clip;
 
-      cairo_clip_extents (cr, &x1, &x2, &y1, &y2);
-      /* Clear to parent-relative pixmap
-       * We need to use direct X access here because GDK doesn't know about
-       * the parent realtive pixmap. */
-      cairo_surface_flush (target);
+      if (gdk_cairo_get_clip_rectangle (cr, &clip))
+        {
+          /* Clear to parent-relative pixmap
+           * We need to use direct X access here because GDK doesn't know about
+           * the parent realtive pixmap. */
+          cairo_surface_flush (target);
 
-      XClearArea (GDK_WINDOW_XDISPLAY (window),
-                  GDK_WINDOW_XID (window),
-                  floor (x1), floor (y1),
-                  ceil (x2) - floor (x1), ceil (y2) - floor (y1),
-                  False);
-      cairo_surface_mark_dirty_rectangle (target, 
-                                          floor (x1), floor (y1),
-                                          ceil (x2) - floor (x1),
-                                          ceil (y2) - floor (y1));
+          XClearArea (GDK_WINDOW_XDISPLAY (window),
+                      GDK_WINDOW_XID (window),
+                      clip.x, clip.y,
+                      clip.width, clip.height,
+                      False);
+          cairo_surface_mark_dirty_rectangle (target, 
+                                              clip.x, clip.y,
+                                              clip.width, clip.height);
+        }
     }
 
   if (GTK_WIDGET_CLASS (gtk_tray_icon_parent_class)->draw)
