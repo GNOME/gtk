@@ -1565,8 +1565,12 @@ _gtk_folder_class_init (GtkFolderClass *class)
 static void
 _gtk_folder_init (GtkFolder *folder)
 {
-  GtkFolderPrivate *priv = folder->priv;
+  GtkFolderPrivate *priv;
 
+  folder->priv = G_TYPE_INSTANCE_GET_PRIVATE (folder,
+                                              GTK_TYPE_FOLDER,
+                                              GtkFolderPrivate);
+  priv = folder->priv;
   priv->children = g_hash_table_new_full (g_file_hash,
 					  (GEqualFunc) g_file_equal,
 					  (GDestroyNotify) g_object_unref,
