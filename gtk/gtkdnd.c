@@ -3248,6 +3248,11 @@ _gtk_cairo_surface_extents (cairo_surface_t *surface,
  * Sets @surface as the icon for a given drag. GTK+ retains
  * references for the arguments, and will release them when
  * they are no longer needed.
+ *
+ * To position the surface realtive to the mouse, use
+ * cairo_surface_set_device_offset() on @usrface. The mouse
+ * cursor will be positioned at the (0,0) coordinate of the
+ * surface.
  **/
 void 
 gtk_drag_set_icon_surface (GdkDragContext    *context,
