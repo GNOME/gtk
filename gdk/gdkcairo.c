@@ -425,7 +425,7 @@ gdk_cairo_region_create_from_surface (cairo_surface_t *surface)
       image = cairo_image_surface_create (CAIRO_FORMAT_A1,
                                           extents.width, extents.height);
       cr = cairo_create (image);
-      cairo_set_source_surface (cr, surface, extents.x, extents.y);
+      cairo_set_source_surface (cr, surface, -extents.x, -extents.y);
       cairo_paint (cr);
       cairo_destroy (cr);
     }
