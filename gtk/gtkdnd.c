@@ -3290,6 +3290,8 @@ gtk_drag_set_icon_surface (GdkDragContext    *context,
       cairo_t *cr;
 
       region = gdk_cairo_region_create_from_surface (surface);
+      cairo_region_translate (region, -extents.x, -extents.y);
+
       gtk_widget_shape_combine_region (window, region);
       cairo_region_destroy (region);
 
@@ -3302,7 +3304,7 @@ gtk_drag_set_icon_surface (GdkDragContext    *context,
       
       cr = cairo_create (saturated);
       cairo_push_group_with_content (cr, CAIRO_CONTENT_COLOR_ALPHA);
-      cairo_set_source_surface (cr, surface, extents.x, extents.y);
+      cairo_set_source_surface (cr, surface, -extents.x, -extents.y);
       cairo_paint (cr);
       cairo_set_operator (cr, CAIRO_OPERATOR_SATURATE);
       cairo_paint (cr);
