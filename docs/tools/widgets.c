@@ -919,7 +919,6 @@ create_statusbar (void)
   widget = gtk_statusbar_new ();
   align = gtk_alignment_new (0.5, 1.0, 1.0, 0.0);
   gtk_container_add (GTK_CONTAINER (align), widget);
-  gtk_statusbar_set_has_resize_grip (GTK_STATUSBAR (widget), TRUE);
   gtk_statusbar_push (GTK_STATUSBAR (widget), 0, "Hold on...");
 
   gtk_box_pack_end (GTK_BOX (vbox), align, FALSE, FALSE, 0);

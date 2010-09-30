@@ -821,22 +821,6 @@ mark_set_callback (GtkTextBuffer     *buffer,
 }
 
 static void
-update_resize_grip (GtkWidget           *widget,
-		    GdkEventWindowState *event,
-		    GtkStatusbar        *statusbar)
-{
-  if (event->changed_mask & (GDK_WINDOW_STATE_MAXIMIZED | 
-			     GDK_WINDOW_STATE_FULLSCREEN))
-    {
-      gboolean maximized;
-
-      maximized = event->new_window_state & (GDK_WINDOW_STATE_MAXIMIZED | 
-					     GDK_WINDOW_STATE_FULLSCREEN);
-      gtk_statusbar_set_has_resize_grip (statusbar, !maximized);
-    }
-}
-
-static void
 create_window (void)
 {
   GtkWidget *bar;
@@ -935,13 +919,7 @@ create_window (void)
 			   G_CALLBACK (mark_set_callback),
 			   NULL,
 			   0);
-  
-  g_signal_connect_object (main_window, 
-			   "window_state_event", 
-			   G_CALLBACK (update_resize_grip),
-			   statusbar,
-			   0);
-  
+
   update_ui ();
   
   gtk_widget_show_all (main_window);
