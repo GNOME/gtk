@@ -1714,9 +1714,6 @@ generate_button_event (GdkEventType type,
   event->button.device = _gdk_display->core_pointer;
 
   append_event (event);
-
-  if (type == GDK_BUTTON_PRESS)
-    _gdk_event_button_generate (_gdk_display, event);
 }
 
 static void
