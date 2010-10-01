@@ -37,15 +37,14 @@ G_BEGIN_DECLS
 
 /**
  * GtkAlign:
- *
  * @GTK_ALIGN_FILL: stretch to fill all space if possible, center if
- * no meaningful way to stretch
+ *     no meaningful way to stretch
  * @GTK_ALIGN_START: snap to left or top side, leaving space on right
- * or bottom
+ *     or bottom
  * @GTK_ALIGN_END: snap to right or bottom side, leaving space on left
- * or top
+ *     or top
  * @GTK_ALIGN_CENTER: center natural width of widget inside the
- * allocation
+ *     allocation
  *
  * Controls how a widget deals with extra space in a single (x or y)
  * dimension.

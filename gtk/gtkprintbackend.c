@@ -589,7 +589,11 @@ gtk_print_backend_set_list_done (GtkPrintBackend *backend)
 /**
  * gtk_print_backend_get_printer_list:
  *
+ * Returns the current list of printers.
+ *
  * Return value: (element-type GtkPrinter) (transfer container):
+ *   A list of #GtkPrinter objects. The list should be freed
+ *   with g_list_free().
  */
 GList *
 gtk_print_backend_get_printer_list (GtkPrintBackend *backend)

@@ -37,9 +37,6 @@ gtk_about_dialog_get_logo
 gtk_about_dialog_set_logo
 gtk_about_dialog_get_logo_icon_name
 gtk_about_dialog_set_logo_icon_name
-GtkAboutDialogActivateLinkFunc
-gtk_about_dialog_set_email_hook
-gtk_about_dialog_set_url_hook
 gtk_show_about_dialog
 <SUBSECTION Standard>
 GTK_ABOUT_DIALOG
@@ -875,6 +872,8 @@ gtk_container_unset_focus_chain
 gtk_container_class_find_child_property
 gtk_container_class_install_child_property
 gtk_container_class_list_child_properties
+gtk_container_class_handle_border_width
+
 <SUBSECTION Standard>
 GTK_CONTAINER
 GTK_IS_CONTAINER
@@ -1675,7 +1674,6 @@ GtkImage
 GtkImageType
 gtk_image_get_icon_set
 gtk_image_get_pixbuf
-gtk_image_get_pixmap
 gtk_image_get_stock
 gtk_image_get_animation
 gtk_image_get_icon_name
@@ -1684,7 +1682,6 @@ gtk_image_get_storage_type
 gtk_image_new_from_file
 gtk_image_new_from_icon_set
 gtk_image_new_from_pixbuf
-gtk_image_new_from_pixmap
 gtk_image_new_from_stock
 gtk_image_new_from_animation
 gtk_image_new_from_icon_name
@@ -1692,7 +1689,6 @@ gtk_image_new_from_gicon
 gtk_image_set_from_file
 gtk_image_set_from_icon_set
 gtk_image_set_from_pixbuf
-gtk_image_set_from_pixmap
 gtk_image_set_from_stock
 gtk_image_set_from_animation
 gtk_image_set_from_icon_name
@@ -2371,6 +2367,7 @@ gtk_radio_button_new_with_mnemonic
 gtk_radio_button_new_with_mnemonic_from_widget
 gtk_radio_button_set_group
 gtk_radio_button_get_group
+gtk_radio_button_join_group
 <SUBSECTION Standard>
 GTK_RADIO_BUTTON
 GTK_IS_RADIO_BUTTON
@@ -4355,6 +4352,16 @@ gtk_cell_renderer_set_alignment
 gtk_cell_renderer_get_padding
 gtk_cell_renderer_set_padding
 
+<SUBSECTION Width-for-height>
+gtk_cell_renderer_get_preferred_height
+gtk_cell_renderer_get_preferred_height_for_width
+gtk_cell_renderer_get_preferred_size
+gtk_cell_renderer_get_preferred_width
+gtk_cell_renderer_get_preferred_width_for_height
+gtk_cell_renderer_get_request_mode
+gtk_cell_view_get_desired_height_for_width_of_row
+gtk_cell_view_get_desired_width_of_row
+
 <SUBSECTION Standard>
 GTK_CELL_RENDERER
 GTK_IS_CELL_RENDERER
@@ -4722,19 +4729,15 @@ gtk_vseparator_get_type
 <TITLE>GtkWidget</TITLE>
 GtkWidget
 GtkWidgetClass
-GtkWidgetFlags
-GTK_WIDGET_FLAGS
-GTK_WIDGET_SET_FLAGS
-GTK_WIDGET_UNSET_FLAGS
 GtkCallback
 GtkRequisition
 GtkAllocation
 GtkSelectionData
 GtkWidgetAuxInfo
-GtkWidgetShapeInfo
 GtkWidgetHelpType
 gtk_widget_new
 gtk_widget_destroy
+gtk_widget_in_destruction
 gtk_widget_destroyed
 gtk_widget_unparent
 gtk_widget_show
@@ -5157,12 +5160,12 @@ GTKMAIN_C_VAR
 <SECTION>
 <FILE>gtkfeatures</FILE>
 <TITLE>Feature Test Macros</TITLE>
-gtk_major_version
-gtk_minor_version
-gtk_micro_version
-gtk_binary_age
-gtk_interface_age
-gtk_check_version
+gtk_get_major_version
+gtk_get_minor_version
+gtk_get_micro_version
+gtk_get_binary_age
+gtk_get_interface_age
+gtk_get_check_version
 
 <SUBSECTION>
 GTK_MAJOR_VERSION
@@ -5412,7 +5415,6 @@ gtk_drag_unhighlight
 <SUBSECTION Source Side>
 gtk_drag_begin
 gtk_drag_set_icon_widget
-gtk_drag_set_icon_pixmap
 gtk_drag_set_icon_pixbuf
 gtk_drag_set_icon_stock
 gtk_drag_set_icon_surface
@@ -5420,7 +5422,6 @@ gtk_drag_set_icon_name
 gtk_drag_set_icon_default
 gtk_drag_check_threshold
 gtk_drag_source_set
-gtk_drag_source_set_icon
 gtk_drag_source_set_icon_pixbuf
 gtk_drag_source_set_icon_stock
 gtk_drag_source_set_icon_name
@@ -5456,7 +5457,6 @@ gtk_binding_set_add_path
 <FILE>gtkenums</FILE>
 <TITLE>Standard Enumerations</TITLE>
 GtkAccelFlags
-GtkAnchorType
 GtkArrowPlacement
 GtkArrowType
 GtkAttachOptions
@@ -5487,7 +5487,6 @@ GtkSubmenuDirection
 GtkSubmenuPlacement
 GtkToolbarStyle
 GtkUpdateType
-GtkVisibility
 GtkWindowPosition
 GtkWindowType
 GtkSortType
@@ -6321,16 +6320,18 @@ GtkApplicationPrivate
 <FILE>gtkwrapbox</FILE>
 <TITLE>GtkWrapBox</TITLE>
 GtkWrapBox
-
 gtk_wrap_box_new
+GtkWrapBoxPacking
 gtk_wrap_box_insert_child
 gtk_wrap_box_reorder_child
 GtkWrapAllocationMode
 gtk_wrap_box_set_allocation_mode
 gtk_wrap_box_get_allocation_mode
 GtkWrapBoxSpreading
-gtk_wrap_box_set_spreading
-gtk_Wrap_box_get_spreading
+gtk_wrap_box_set_vertical_spreading
+gtk_wrap_box_get_vertical_spreading
+gtk_wrap_box_set_horizontal_spreading
+gtk_wrap_box_get_horizontal_spreading
 gtk_wrap_box_set_vertical_spacing
 gtk_wrap_box_get_vertical_spacing
 gtk_wrap_box_set_horizontal_spacing

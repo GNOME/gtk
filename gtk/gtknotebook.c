@@ -7546,7 +7546,8 @@ gtk_notebook_reorder_child (GtkNotebook *notebook,
 /**
  * gtk_notebook_set_group_name:
  * @notebook: a #GtkNotebook
- * @name: (allow-none): the name of the notebook group, or %NULL to unset it
+ * @group_name: (allow-none): the name of the notebook group,
+ *     or %NULL to unset it
  *
  * Sets a group name for @notebook.
  *
