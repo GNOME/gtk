@@ -1582,9 +1582,6 @@ add_pixbuf_attrs (GtkTextLayout      *layout,
   attr->start_index = start;
   attr->end_index = start + seg->byte_count;
   pango_attr_list_insert (attrs, attr);
-
-  display->shaped_objects =
-    g_slist_append (display->shaped_objects, pixbuf->pixbuf);
 }
 
 static void
@@ -1643,8 +1640,6 @@ add_child_attrs (GtkTextLayout      *layout,
       widget = NULL;
     }
 
-  display->shaped_objects = g_slist_append (display->shaped_objects, widget);
-  
   logical_rect.x = 0;
   logical_rect.y = -height * PANGO_SCALE;
   logical_rect.width = width * PANGO_SCALE;
@@ -2510,8 +2505,7 @@ gtk_text_layout_free_line_display (GtkTextLayout      *layout,
           g_slist_foreach (display->cursors, (GFunc)g_free, NULL);
           g_slist_free (display->cursors);
         }
-      g_slist_free (display->shaped_objects);
-      
+
       if (display->pg_bg_color)
         gdk_color_free (display->pg_bg_color);
 
