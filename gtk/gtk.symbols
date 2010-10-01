@@ -293,6 +293,7 @@ gtk_assistant_commit
 
 #if IN_HEADER(__GTK_TYPE_BUILTINS_H__)
 #if IN_FILE(__GTK_TYPE_BUILTINS_C__)
+gtk_align_get_type G_GNUC_CONST
 gtk_pack_direction_get_type G_GNUC_CONST
 gtk_ui_manager_item_type_get_type G_GNUC_CONST
 gtk_spin_button_update_policy_get_type G_GNUC_CONST
@@ -324,7 +325,6 @@ gtk_icon_view_drop_position_get_type G_GNUC_CONST
 gtk_sensitivity_type_get_type G_GNUC_CONST
 gtk_window_type_get_type G_GNUC_CONST
 gtk_wrap_mode_get_type G_GNUC_CONST
-gtk_widget_flags_get_type G_GNUC_CONST
 gtk_widget_help_type_get_type G_GNUC_CONST
 gtk_window_position_get_type G_GNUC_CONST
 gtk_tree_view_column_sizing_get_type G_GNUC_CONST
@@ -356,7 +356,6 @@ gtk_print_duplex_get_type G_GNUC_CONST
 gtk_print_error_get_type G_GNUC_CONST
 gtk_recent_filter_flags_get_type G_GNUC_CONST
 gtk_print_operation_action_get_type G_GNUC_CONST
-gtk_private_flags_get_type G_GNUC_CONST
 gtk_rc_flags_get_type G_GNUC_CONST
 gtk_rc_token_type_get_type G_GNUC_CONST
 gtk_recent_chooser_error_get_type G_GNUC_CONST
@@ -384,7 +383,6 @@ gtk_tool_palette_drag_targets_get_type G_GNUC_CONST
 gtk_tree_model_flags_get_type G_GNUC_CONST
 gtk_tree_view_grid_lines_get_type G_GNUC_CONST
 gtk_update_type_get_type G_GNUC_CONST
-gtk_object_flags_get_type G_GNUC_CONST
 gtk_accel_flags_get_type G_GNUC_CONST
 gtk_icon_size_get_type G_GNUC_CONST
 gtk_file_chooser_error_get_type G_GNUC_CONST
@@ -864,6 +862,7 @@ gtk_container_child_type
 gtk_container_class_find_child_property
 gtk_container_class_install_child_property
 gtk_container_class_list_child_properties
+gtk_container_class_handle_border_width
 gtk_container_forall
 gtk_container_foreach
 gtk_container_get_border_width
@@ -3027,17 +3026,6 @@ gtk_size_group_set_mode
 #endif
 #endif
 
-#if IN_HEADER(__GTK_SIZE_REQUEST_H__)
-#if IN_FILE(__GTK_SIZE_REQUEST_C__)
-gtk_widget_get_preferred_height
-gtk_widget_get_preferred_height_for_width
-gtk_widget_get_preferred
-gtk_widget_get_preferred_size
-gtk_widget_get_preferred_width
-gtk_widget_get_preferred_width_for_height
-#endif
-#endif
-
 #if IN_HEADER(__GTK_SHOW_H__)
 #if IN_FILE(__GTK_SHOW_C__)
 gtk_show_uri
@@ -4234,6 +4222,7 @@ gtk_cairo_transform_to_window
 gtk_widget_get_type G_GNUC_CONST
 gtk_widget_get_visible
 gtk_widget_get_visual
+gtk_widget_get_request_mode
 gtk_widget_grab_default
 gtk_widget_grab_focus
 gtk_widget_has_default
@@ -4356,6 +4345,11 @@ gtk_widget_set_margin_top
 gtk_widget_get_margin_bottom
 gtk_widget_set_margin_bottom
 gtk_widget_in_destruction
+gtk_widget_get_preferred_height
+gtk_widget_get_preferred_height_for_width
+gtk_widget_get_preferred_size
+gtk_widget_get_preferred_width
+gtk_widget_get_preferred_width_for_height
 #endif
 #endif
 
@@ -4484,7 +4478,8 @@ gtk_wrap_box_get_allocation_mode
 gtk_wrap_box_get_horizontal_spacing
 gtk_wrap_box_get_minimum_line_children
 gtk_wrap_box_get_natural_line_children
-gtk_wrap_box_get_spreading
+gtk_wrap_box_get_horizontal_spreading
+gtk_wrap_box_get_vertical_spreading
 gtk_wrap_box_get_type G_GNUC_CONST
 gtk_wrap_box_get_vertical_spacing
 gtk_wrap_box_insert_child
@@ -4495,7 +4490,8 @@ gtk_wrap_box_set_allocation_mode
 gtk_wrap_box_set_horizontal_spacing
 gtk_wrap_box_set_minimum_line_children
 gtk_wrap_box_set_natural_line_children
-gtk_wrap_box_set_spreading
+gtk_wrap_box_set_horizontal_spreading
+gtk_wrap_box_set_vertical_spreading
 gtk_wrap_box_set_vertical_spacing
 gtk_wrap_box_spreading_get_type
 #endif
