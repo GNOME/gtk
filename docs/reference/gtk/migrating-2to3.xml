@@ -393,9 +393,57 @@ cairo_destroy (cr);
     <title>Replace GdkPixmap by cairo surfaces</title>
     <para>
       The #GdkPixmap object and related functions have been removed.
-       In the cairo-centric world of GTK+ 3, cairo surfaces
-      take over the role of pixmaps.
+      In the cairo-centric world of GTK+ 3, cairo surfaces take over
+      the role of pixmaps.
     </para>
+    <example>
+      <title>Creating custom cursors</title>
+      <para>
+        One place where pixmaps were commonly used is to create custom
+        cursors:
+      <programlisting>
+GdkCursor *cursor;
+GdkPixmap *pixmap;
+cairo_t *cr;
+GdkColor fg = { 0, 0, 0, 0 };
+
+pixmap = gdk_pixmap_new (NULL, 1, 1, 1);
+
+cr = gdk_cairo_create (pixmap);
+cairo_rectangle (cr, 0, 0, 1, 1);
+cairo_fill (cr);
+cairo_destroy (cr);
+
+cursor = gdk_cursor_new_from_pixmap (pixmap, pixmap, &amp;fg, &amp;fg, 0, 0);
+
+g_object_unref (pixmap);
+      </programlisting>
+      The same can be achieved without pixmaps, by drawing onto
+      an image surface:
+      <programlisting>
+GdkCursor *cursor;
+cairo_surface_t *s;
+cairo_t *cr;
+GdkPixbuf *pixbuf;
+
+s = cairo_image_surface_create (CAIRO_FORMAT_A1, 3, 3);
+cr = cairo_create (s);
+cairo_arc (cr, 1.5, 1.5, 1.5, 0, 2 * M_PI);
+cairo_fill (cr);
+cairo_destroy (cr);
+
+pixbuf = gdk_pixbuf_get_from_surface (NULL, s,
+                                      0, 0, 0, 0,
+                                      3, 3);
+
+cairo_surface_destroy (s);
+
+cursor = gdk_cursor_new_from_pixbuf (display, pixbuf, 0, 0);
+
+g_object_unref (pixbuf);
+      </programlisting>
+      </para>
+    </example>
   </section>
 
   <section>
