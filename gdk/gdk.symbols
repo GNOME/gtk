@@ -943,12 +943,6 @@ gdk_x11_xatom_to_atom
 gdk_x11_xatom_to_atom_for_display
 #endif
 
-#if IN_FILE(__GDK_COLOR_X11_C__)
-gdk_x11_colormap_foreign_new
-gdk_x11_colormap_get_xcolormap
-gdk_x11_colormap_get_xdisplay
-#endif
-
 #if IN_FILE(__GDK_CURSOR_X11_C__)
 gdk_x11_cursor_get_xcursor
 gdk_x11_cursor_get_xdisplay
