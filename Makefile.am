@@ -7,6 +7,7 @@ SUBDIRS = po po-properties $(SRC_SUBDIRS) docs m4macros build
 ACLOCAL_AMFLAGS = -I m4 ${ACLOCAL_FLAGS}
 
 EXTRA_DIST +=			\
+	autogen.sh		\
 	HACKING			\
 	makecopyright		\
 	NEWS.pre-1-0		\
