@@ -65,7 +65,6 @@ G_BEGIN_DECLS
  */
 typedef struct _GdkPoint	      GdkPoint;
 typedef cairo_rectangle_int_t	      GdkRectangle;
-typedef struct _GdkSpan	              GdkSpan;
 
 typedef struct _GdkAtom            *GdkAtom;
 
@@ -252,12 +251,6 @@ struct _GdkPoint
   gint y;
 };
 
-struct _GdkSpan
-{
-  gint x;
-  gint y;
-  gint width;
-};
 
 G_END_DECLS
 
